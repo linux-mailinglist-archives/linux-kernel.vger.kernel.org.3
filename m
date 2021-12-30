@@ -2,97 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBEC1481DE4
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 16:58:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 363B8481DE8
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 16:59:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240435AbhL3P6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 10:58:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59076 "EHLO
+        id S240531AbhL3P74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 10:59:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236262AbhL3P6D (ORCPT
+        with ESMTP id S236262AbhL3P7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 10:58:03 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9084EC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 07:58:02 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id m18so21615057qtk.3
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 07:58:02 -0800 (PST)
+        Thu, 30 Dec 2021 10:59:54 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819DAC061574;
+        Thu, 30 Dec 2021 07:59:54 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id f134-20020a1c1f8c000000b00345c05bc12dso13545811wmf.3;
+        Thu, 30 Dec 2021 07:59:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=JS+FiKSeT5f12gRyVzfSR3kPguW23wtXqyvRjIMFpqI=;
-        b=mY4GeSgx7uJKI8pLh6VENQs/UsOw59UxMLfMIP92SxOTvBd3AtvzG84MJMmKy8rQPM
-         l6uOY/iTCJ5208cHc8x/gVcl2Sfw0BXV1It7s/zUrRFRlmpQUba1zuur1jHWnHymD7OZ
-         MBFDUhLa5hsEr2NPIoX0oYa6bhi4Wkf+qVCA07asQzJIxyXbsNut3qw0GqiCJcH5NHaj
-         Ifb0GyPQq06hi9W5IygEOWdFg+ojHEM61XH9WWkShFe+ePHNwnjGJ9euNw23bsJ+mpO6
-         9S04byKVRDWja/EJY9/dDdbIQSpWLz4Evr7ATnRNG6sDycKG1IYtWzvLuo1DSrXyfN3W
-         qr0A==
+        bh=8ElIR6SV1fiPS3Db/Lzyt+T8zyl4XcGvw2nOq8Z4FEE=;
+        b=NQlx2zcOwB4ZlmjL8sh8qtALR9ZAIL7hqYDT012U86kTOdj2R7cb2rY/RR3nCj+19G
+         dscWE1hNfj7ypnj4wqHsgHxT9nS1x0Jzt9rxEFTuD1Dgl/SLa0UJdsuPqIZAiRO3J2ew
+         Rhqdg5uKBDhFwpZ2I3irFWdI3AIQSRCfvHPcA5M7wzqEQZRbANWDfJjYoeCeopfuaRqk
+         yULVdN7mK6LMkOfWZ8VfZo4omTmLH0haX/fCracCKeBDxC4mwcwxNQk0/Lx8ZIfcrrPv
+         xJmLNAuqbg1VY6TRv06psO8PXtdB3nwT6JK+6ccRMZeLukBUYlw+du50lMkaGTBiUkwL
+         NeJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=JS+FiKSeT5f12gRyVzfSR3kPguW23wtXqyvRjIMFpqI=;
-        b=UDib1v7FOtlZueZmQU1GNDd+zFj26vOZxld4AqAuHx/qvtRqTVn4JG0KTPO/wEw12T
-         BIq1GpmlympPKYpwhUr4yDw4R0oVK8Pq4fsKh10b+HPyVtJq5KJnsYImthYWKPzu6or0
-         w5UHimG0z37pak1ZHZhWq1lhMAQOWgaUOppv59eIR+gjyMKidFgkks3px6GH8POeiPXI
-         ul+aBtPFvCq76JNjmdt6uC2WKTULL1ib7hFn6fpfoe61DubdmRp70kx3L0Zv50vw9Vmo
-         3X79flrAjF9k0/2hpaN7MqGkmCDWaRgnizmL3dCXzt+oEu7pujQ9H1mWe0bsHVnELr0e
-         +u9w==
-X-Gm-Message-State: AOAM530Pj4Eyqo0FcTicRkzhmIaP98NFbwLVJDcHPRlqlHuFrN/kPMf/
-        qEdsKygtWtPLw4aLSsr0Jr0=
-X-Google-Smtp-Source: ABdhPJxcBEOdjQ+MgEJANgHQuPK0IPhBHynueDf+BM9DEl4Um31/Zb9ZnZS3E2MR8vMZpjZjYhXWqg==
-X-Received: by 2002:a05:622a:3d1:: with SMTP id k17mr23980588qtx.335.1640879881789;
-        Thu, 30 Dec 2021 07:58:01 -0800 (PST)
-Received: from localhost.localdomain (071-085-241-167.res.spectrum.com. [71.85.241.167])
-        by smtp.gmail.com with ESMTPSA id k9sm20495402qta.48.2021.12.30.07.58.00
+        bh=8ElIR6SV1fiPS3Db/Lzyt+T8zyl4XcGvw2nOq8Z4FEE=;
+        b=g0wOItTvjnhWn1mWg78v6uxBdny8tVkbXLN1qAw2U2AJQCSjjvkfVWk/8P7c/UsJ7P
+         AexuJG5dOtViqSAd3HnaOoq3eSSijzhD/NA854RT4tj1uzVqaenZXxvFTIK53YPH6act
+         3UGfAyk7QyeE8IkZUPxRIGl/h0YHLzglwn+dLe55EKWnULBXPeYR7x1A6ddNN2jBTDQ3
+         1s1TrqNqF6FmJozorJOHEr1OM/ztJIqWs/wygxzGXBhWM+l7wbI0a9I7D5uvCmol2Pn8
+         v5bSDxKYG2dJRtS8Wgc6vldoi3GqaUWb+MvGQnlANuY4j3JjAtA3FnFd8OJmuNVuHciz
+         IqGg==
+X-Gm-Message-State: AOAM533rJtvMPn6Zw8lcwhdWZT06yd6yY2iYL4Ny338cpDWgBeyzLww3
+        X+oDWWgs9/cBatO/PiWkfROXBZeTmnUwQr9p
+X-Google-Smtp-Source: ABdhPJwlVTezB17og28kivWq3KhIcT1izqy5mOu9TzI+W/ETJQFvP+0PwaMlPC0ejKF9v5U4hlBUdA==
+X-Received: by 2002:a05:600c:1c9f:: with SMTP id k31mr26653681wms.170.1640879993149;
+        Thu, 30 Dec 2021 07:59:53 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id m17sm28645320wms.25.2021.12.30.07.59.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Dec 2021 07:58:01 -0800 (PST)
-From:   hasheddan <georgedanielmangum@gmail.com>
-Cc:     georgedanielmangum@gmail.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        Guo Ren <guoren@kernel.org>,
-        Vincent Chen <vincent.chen@sifive.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Atish Patra <atish.patra@wdc.com>,
-        Andreas Schwab <schwab@suse.de>, Zihao Yu <yuzihao@ict.ac.cn>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] riscv/entry: fix misspelling of instruction
-Date:   Thu, 30 Dec 2021 10:57:11 -0500
-Message-Id: <20211230155714.1019859-1-georgedanielmangum@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 30 Dec 2021 07:59:52 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        ntfs3@lists.linux.dev
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] fs/ntfs3: remove redundant assignment to variable frame
+Date:   Thu, 30 Dec 2021 15:59:52 +0000
+Message-Id: <20211230155952.379721-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes spelling from instruciton to instruction in comment in entry.S.
+Variable frame is assigned a value that is never read. The
+assignment is redundant and can be removed. Cleans up the
+clang-scan build warning:
 
-Signed-off-by: hasheddan <georgedanielmangum@gmail.com>
+fs/ntfs3/file.c:995:3: warning: Value stored to 'frame' is
+never read [deadcode.DeadStores]
+                frame = pos >> frame_bits;
+
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- arch/riscv/kernel/entry.S | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/ntfs3/file.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-index ed29e9c8f660..728c521dcc85 100644
---- a/arch/riscv/kernel/entry.S
-+++ b/arch/riscv/kernel/entry.S
-@@ -568,7 +568,7 @@ ENTRY(excp_vect_table)
- 	RISCV_PTR do_trap_ecall_s
- 	RISCV_PTR do_trap_unknown
- 	RISCV_PTR do_trap_ecall_m
--	/* instruciton page fault */
-+	/* instruction page fault */
- 	ALT_PAGE_FAULT(RISCV_PTR do_page_fault)
- 	RISCV_PTR do_page_fault   /* load page fault */
- 	RISCV_PTR do_trap_unknown
+diff --git a/fs/ntfs3/file.c b/fs/ntfs3/file.c
+index 3bae76930e68..27c32692513c 100644
+--- a/fs/ntfs3/file.c
++++ b/fs/ntfs3/file.c
+@@ -992,7 +992,6 @@ static ssize_t ntfs_compress_write(struct kiocb *iocb, struct iov_iter *from)
+ 		if (bytes > count)
+ 			bytes = count;
+ 
+-		frame = pos >> frame_bits;
+ 		frame_vbo = pos & ~(frame_size - 1);
+ 		index = frame_vbo >> PAGE_SHIFT;
+ 
 -- 
-2.25.1
+2.33.1
 

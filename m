@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1689481A3C
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 08:22:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 244F0481A3D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 08:22:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237704AbhL3HWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 02:22:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57878 "EHLO
+        id S237689AbhL3HWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 02:22:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237643AbhL3HVb (ORCPT
+        with ESMTP id S237682AbhL3HVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 02:21:31 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A5EC06179C
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 23:21:31 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id c5-20020a25f305000000b0060bbdf755f7so25225942ybs.14
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 23:21:31 -0800 (PST)
+        Thu, 30 Dec 2021 02:21:34 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222FAC061747
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 23:21:34 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id a9-20020a251a09000000b0060b2c94d515so27973927yba.20
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 23:21:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=qNKIUlySFfRYFL3LsJVvo5UF9vFYVSjFaW2mryRhEhE=;
-        b=gHS0SjBZ6BRQWd+TXVtPnKnWfJcnbY9nHdxIBK+Z7QvS0Q95E+qgPT9Ya5sOks/WiY
-         4Zem4Fto7v+P7JwneQD9j1lXQ1LbUplJc3+2O8g7ONNy81WKHt6g4Ml2Xs6SkZX025Z8
-         iDaQa1a1oP6oKjK3egsAXlt8/rJJBzky6vTRmNPGr87FjpRJRfHd7Vw8b0rPq6C+Um49
-         gbfuwDDOX85qnbbek6UG5obuNQVIjsV0KggtY7T91qLF3UQqN2wlemYjCnF94P7r25UG
-         J1D0DqMFHrItaIXAV0wQ5/imijprO7coWMKhIMUA/pLbQUWgXl1bEwwvk7ZoGd/ysO4o
-         rk6Q==
+        bh=ue3Sc4M2PULu8G7idSi+UKsFDq60wD74fexukfC/fcc=;
+        b=RgPIJ3CxdVKGxX2ivNN+mgiAZhGMJAf1uHegdL57m4nmFBiLW3Qn3c+ZILE9tq9Air
+         xst/+qnStFVCVDhPXd/IPYhpO6+twqIagXmvBSogWBbWSATGCxRP/c6vJZ1On8xt67+M
+         +feHKWUZtWQ7d4J3af5NGYMfnl/axYLQ+162n+io4k8+8CF32Ehr/wotZ/Gff/l695X4
+         8GVqDKz3Q968rvD/nBwJc9Lr5yg0ntqZwjoxXGuzSSU3X4iuwOdjxDlRRaGT16cF47Wd
+         z1CaKAW6EtsSkJrW0ulwWiq0ciymoN6H0bwPRV+Dar41+Vf1FDKvAXg1SQTcz5aLCSfj
+         kf9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=qNKIUlySFfRYFL3LsJVvo5UF9vFYVSjFaW2mryRhEhE=;
-        b=0/otvvlnDBEgSe1Qvv2ips19kSXoFmlT7jLvev7tEuYaBxrNjuMQ05ugsxwlQ2/+Z9
-         1yIfMqOVuRI8GKuAuxZ/oiID425fWoMsiQPfbIsyuQEQLwteur8v1+aeu/G8r4fX/d94
-         8OGQxJSkNw2c+6ly25tSSwtSgExQ/MrdhJqVLjTRzKgXdZQjz/JzsoQSzER0pSrEfE4G
-         6vWMoMLJTUbdZF+II0wi4f6tz+D3LS1LsNM/Jm9Xq7ClUyKj6ALys8h3zGQ02IEN2tLS
-         enONNwLfzT0mLDFoNnWlRmWI5EnHoJiPGdNmySutqmLMd9k0IoXdbW4aPJf8mvJn7/lO
-         ZoOg==
-X-Gm-Message-State: AOAM533s00VxwkF85ttVjbjDMUKTr4YrsnKxC+zZHBoa3RJgtL/II7nZ
-        wRwzekFOJcK9igc9Bm9FQWD+hzj8KAcM
-X-Google-Smtp-Source: ABdhPJx57wn5jbgLGLHvQD+JHSSIIVUaMPZPQ5HbrR5jNwrjUX9bWwqhME1VrhI9+q+Qzab4hM5N5+dYdEIJ
+        bh=ue3Sc4M2PULu8G7idSi+UKsFDq60wD74fexukfC/fcc=;
+        b=NPpj9s00ix+M48zAgFh+4xJd81BrKmShkM3MCznRIDt//4tzwgRifPNknyL26Z6OLa
+         PFWwosLmhtLY+idKIip6OPMa4PFYCU1wNJXUpXWEKCM1J1YAfCbv22oDzBWd5Y6yGJ8r
+         9/qyppDJ+7PxIUY7NBsrCH317OdNpG3ylkGzB19ZiHpVB/FJiU6kuZQL8pElN0yysBfD
+         66BWfynllvFPVo6p1tQZRjXANkN4pGXLpdmm/VgfBDxLHH/SxZZ5fmPsREWKF4vTnXSd
+         ewZdllXZzQzL1aXFtTJ3yfuOG8VeGGfaK+gmv43tXGaiFXvb6jZO8vUgGVh0okscBHG2
+         elsQ==
+X-Gm-Message-State: AOAM530BwUkJ4hWejCOScPb1n2aOIAd6nHR31NY8+c16OcjZRwQ6klqJ
+        IyjhTiZFOBL6ZxeSmCtHLCcQnSA2FDR7
+X-Google-Smtp-Source: ABdhPJyIaLxKF2hCbxmhSNGy06maxPg4IbLH5POO5tfbw+284KED4uP0dg5+jywJRRp01yc2Rq36s6WeqcaB
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:31c4:9539:dba1:a82b])
- (user=irogers job=sendgmr) by 2002:a25:abc7:: with SMTP id
- v65mr13083631ybi.280.1640848890846; Wed, 29 Dec 2021 23:21:30 -0800 (PST)
-Date:   Wed, 29 Dec 2021 23:20:03 -0800
+ (user=irogers job=sendgmr) by 2002:a05:6902:702:: with SMTP id
+ k2mr470352ybt.66.1640848893417; Wed, 29 Dec 2021 23:21:33 -0800 (PST)
+Date:   Wed, 29 Dec 2021 23:20:04 -0800
 In-Reply-To: <20211230072030.302559-1-irogers@google.com>
-Message-Id: <20211230072030.302559-23-irogers@google.com>
+Message-Id: <20211230072030.302559-24-irogers@google.com>
 Mime-Version: 1.0
 References: <20211230072030.302559-1-irogers@google.com>
 X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
-Subject: [PATCH v3 21/48] perf cpumap: Add some comments to cpu_aggr_map
+Subject: [PATCH v3 22/48] perf cpumap: Trim the cpu_aggr_map
 From:   Ian Rogers <irogers@google.com>
 To:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
         Namhyung Kim <namhyung@kernel.org>,
@@ -79,51 +79,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move cpu_aggr_map__empty_new to be with other cpu_aggr_map function.
+cpu_aggr_map__new removes duplicates, when this happens shrink the
+array.
 
 Reviewed-by: James Clark <james.clark@arm.com>
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/cpumap.h | 10 +++++++++-
+ tools/perf/util/cpumap.c | 10 +++++++++-
  1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/cpumap.h b/tools/perf/util/cpumap.h
-index 832fc53f3c11..8acef8ff8753 100644
---- a/tools/perf/util/cpumap.h
-+++ b/tools/perf/util/cpumap.h
-@@ -24,16 +24,18 @@ struct aggr_cpu_id {
- 	int core;
- };
- 
-+/** A collection of aggr_cpu_id values, the "built" version is sorted and uniqued. */
- struct cpu_aggr_map {
- 	refcount_t refcnt;
-+	/** Number of valid entries. */
- 	int nr;
-+	/** The entries. */
- 	struct aggr_cpu_id map[];
- };
- 
- struct perf_record_cpu_map_data;
- 
- struct perf_cpu_map *perf_cpu_map__empty_new(int nr);
--struct cpu_aggr_map *cpu_aggr_map__empty_new(int nr);
- 
- struct perf_cpu_map *cpu_map__new_data(struct perf_record_cpu_map_data *data);
- size_t cpu_map__snprint(struct perf_cpu_map *map, char *buf, size_t size);
-@@ -67,6 +69,12 @@ int cpu__get_die_id(int cpu);
-  */
- int cpu__get_core_id(int cpu);
- 
-+/**
-+ * cpu_aggr_map__empty_new - Create a cpu_aggr_map of size nr with every entry
-+ * being empty.
-+ */
-+struct cpu_aggr_map *cpu_aggr_map__empty_new(int nr);
+diff --git a/tools/perf/util/cpumap.c b/tools/perf/util/cpumap.c
+index 8a72ee996722..3061b4369ab5 100644
+--- a/tools/perf/util/cpumap.c
++++ b/tools/perf/util/cpumap.c
+@@ -185,7 +185,15 @@ struct cpu_aggr_map *cpu_aggr_map__new(const struct perf_cpu_map *cpus,
+ 			c->nr++;
+ 		}
+ 	}
+-
++	/* Trim. */
++	if (c->nr != cpus->nr) {
++		struct cpu_aggr_map *trimmed_c =
++			realloc(c,
++				sizeof(struct cpu_aggr_map) + sizeof(struct aggr_cpu_id) * c->nr);
 +
- typedef struct aggr_cpu_id (*aggr_cpu_id_get_t)(int cpu, void *data);
++		if (trimmed_c)
++			c = trimmed_c;
++	}
+ 	/* ensure we process id in increasing order */
+ 	qsort(c->map, c->nr, sizeof(struct aggr_cpu_id), aggr_cpu_id__cmp);
  
- /**
 -- 
 2.34.1.448.ga2b2bfdf31-goog
 

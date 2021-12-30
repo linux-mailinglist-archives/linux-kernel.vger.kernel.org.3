@@ -2,101 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F0DA4819F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 07:33:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C25FD4819F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 07:34:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236502AbhL3GdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 01:33:01 -0500
-Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:47827 "EHLO
-        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236346AbhL3Gc7 (ORCPT
+        id S235418AbhL3Gex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 01:34:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47544 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229514AbhL3Gev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 01:32:59 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R801e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V0JrawZ_1640845976;
-Received: from 30.21.164.60(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0V0JrawZ_1640845976)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 30 Dec 2021 14:32:57 +0800
-Message-ID: <1aaf9c11-0d8e-b92d-5c92-46e50a6e8d4e@linux.alibaba.com>
-Date:   Thu, 30 Dec 2021 14:33:43 +0800
+        Thu, 30 Dec 2021 01:34:51 -0500
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69FF8C061574;
+        Wed, 29 Dec 2021 22:34:51 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id l11so21820493qke.11;
+        Wed, 29 Dec 2021 22:34:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aHf0SEKvzcJGlMghKnXLnXPdfTHRbi2dF8lcRvloMiQ=;
+        b=Hs/o8PIWhtOumRTlwHRAEYXYHSEjHe5O5SgYUawcpQ3DF1R7mBZMSVvvswt5TwtktO
+         TCvLEGQ4af+EGmjbmTprpbLiJFVSN9a/jO+L+UIpGsLNikY+VNctkwvWs9hzX9WxfRVm
+         nxpjbwt9KKyNKRjJseiP8nho5ED6xq7bXjojDOAYQ3bbBasiAZJ5mpo9mBqYmRZRolk9
+         t068dS/rmm7kIEBKHL+swiVSIr4zPX1VBEmfSmPpfXCg39CjZkJqdN/SMvI66QXp5hdd
+         PptHl0sjkIWPRim6kmvIgZ8dUXwA/98NSW45zetXkkjPqKzEk63G+mR2p8CGPWoyrfdX
+         Dsuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aHf0SEKvzcJGlMghKnXLnXPdfTHRbi2dF8lcRvloMiQ=;
+        b=nrod+CtrvLDra3ryI4wAR+1NNljy530gFTwBLn8e3/c7XvSMauwP4DIYWVGT1dKUnX
+         TXD7GVd6JTb4qUzhTiiY671+epCNZTdUU8wtZm+6H6GsrSPuT95xiqrp2zIcslfbNihk
+         rhm0V/bMmy5o4TeQ5H3sDXaNlYJHx+YTGVE4QltIxajiKfPsRaIu7p2fzXTSWSKxT9/I
+         FhE/37N5ItLve8UwYjsIoP0jqKN0hnJHpEhdFlF6U62yYL7SuEllHNAPzidi75J7DZko
+         Sn1lKHXnIRIeSsq24HAkOUu6xI6yun8LknJy2V0vljwfnDnxE7SulJZ1UEoCmkqlmrir
+         hWYg==
+X-Gm-Message-State: AOAM5309/5dsqzZl899RZzT8AmRqNIBaoavDedw9sDr6bQDCcCXCsgiz
+        JaWrL3KEvgtuek14TuFKx7nWycV3vNA=
+X-Google-Smtp-Source: ABdhPJwF12SeRWfAaPL6mK/XQ2TJcuLN2vtNRvIO2KLuZRX0t9l2Ey/HkAkFuXolMM/sTmDjg0fwHQ==
+X-Received: by 2002:a37:c50:: with SMTP id 77mr21257625qkm.717.1640846090605;
+        Wed, 29 Dec 2021 22:34:50 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id g27sm16005722qts.69.2021.12.29.22.34.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Dec 2021 22:34:50 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: luo.penghao@zte.com.cn
+To:     Trond Myklebust <trond.myklebust@hammerspace.com>
+Cc:     Anna Schumaker <anna.schumaker@netapp.com>,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        luo penghao <luo.penghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux] nfs: Remove unnecessary ret assignment
+Date:   Thu, 30 Dec 2021 06:34:44 +0000
+Message-Id: <20211230063444.586292-1-luo.penghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: mmotm 2021-12-29-20-07 uploaded (mm/damon)
-To:     Randy Dunlap <rdunlap@infradead.org>, akpm@linux-foundation.org,
-        broonie@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        SeongJae Park <sj@kernel.org>
-References: <20211230040740.SbquJAFf5%akpm@linux-foundation.org>
- <a57f9bc4-2c1b-f819-17a6-2e1d2f9dd173@infradead.org>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <a57f9bc4-2c1b-f819-17a6-2e1d2f9dd173@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: luo penghao <luo.penghao@zte.com.cn>
 
-On 12/30/2021 2:27 PM, Randy Dunlap wrote:
-> Hi--
-> 
-> On 12/29/21 20:07, akpm@linux-foundation.org wrote:
->> The mm-of-the-moment snapshot 2021-12-29-20-07 has been uploaded to
->>
->>     https://www.ozlabs.org/~akpm/mmotm/
->>
->> mmotm-readme.txt says
->>
->> README for mm-of-the-moment:
->>
->> https://www.ozlabs.org/~akpm/mmotm/
->>
->> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
->> more than once a week.
->>
->> You will need quilt to apply these patches to the latest Linus release (5.x
->> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
->> https://ozlabs.org/~akpm/mmotm/series
->>
->> The file broken-out.tar.gz contains two datestamp files: .DATE and
->> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
->> followed by the base kernel version against which this patch series is to
->> be applied.
-> 
-> 
-> On i386:
-> 
-> ../mm/damon/vaddr.c: In function ‘damon_hugetlb_mkold’:
-> ../mm/damon/vaddr.c:402:17: warning: unused variable ‘h’ [-Wunused-variable]
->    struct hstate *h = hstate_vma(vma);
+Subsequent if judgments will assign new values to ret, so the
+statement here should be deleted
 
-Ah, thanks for report, I think below changes can fix the warning. And 
-I'll send a new version to address this warning.
+The clang_analyzer complains as follows:
 
-diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
-index bcdc602..25bff8a 100644
---- a/mm/damon/vaddr.c
-+++ b/mm/damon/vaddr.c
-@@ -397,7 +397,6 @@ static void damon_hugetlb_mkold(pte_t *pte, struct 
-mm_struct *mm,
-                                 struct vm_area_struct *vma, unsigned 
-long addr)
-  {
-         bool referenced = false;
--       struct hstate *h = hstate_vma(vma);
-         pte_t entry = huge_ptep_get(pte);
-         struct page *page = pte_page(entry);
+fs/nfs/callback.c:
 
-@@ -414,7 +413,7 @@ static void damon_hugetlb_mkold(pte_t *pte, struct 
-mm_struct *mm,
-         }
+Value stored to 'ret' is never read
 
-  #ifdef CONFIG_MMU_NOTIFIER
--       if (mmu_notifier_clear_young(mm, addr, addr + huge_page_size(h)))
-+       if (mmu_notifier_clear_young(mm, addr, addr + 
-huge_page_size(hstate_vma(vma))))
-                 referenced = true;
-  #endif /* CONFIG_MMU_NOTIFIER */
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: luo penghao <luo.penghao@zte.com.cn>
+---
+ fs/nfs/callback.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/fs/nfs/callback.c b/fs/nfs/callback.c
+index 86d856d..1c1c82a 100644
+--- a/fs/nfs/callback.c
++++ b/fs/nfs/callback.c
+@@ -209,7 +209,6 @@ static int nfs_callback_up_net(int minorversion, struct svc_serv *serv,
+ 		goto err_bind;
+ 	}
+ 
+-	ret = 0;
+ 	if (!IS_ENABLED(CONFIG_NFS_V4_1) || minorversion == 0)
+ 		ret = nfs4_callback_up_net(serv, net);
+ 	else if (xprt->ops->bc_setup)
+-- 
+2.15.2
+
+

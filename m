@@ -2,123 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 327E8481BBA
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 12:29:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8195F481BB9
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 12:25:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235359AbhL3L3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 06:29:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56222 "EHLO
+        id S238962AbhL3LZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 06:25:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbhL3L3u (ORCPT
+        with ESMTP id S238841AbhL3LZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 06:29:50 -0500
-X-Greylist: delayed 592 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 30 Dec 2021 03:29:50 PST
-Received: from smtp-bc0f.mail.infomaniak.ch (smtp-bc0f.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc0f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E00C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 03:29:50 -0800 (PST)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4JPm5P291czMqGcQ;
-        Thu, 30 Dec 2021 12:19:53 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4JPm5K5jgszlkSYb;
-        Thu, 30 Dec 2021 12:19:49 +0100 (CET)
-Message-ID: <9281f237-3b26-f828-c4bd-2f039174be7f@digikod.net>
-Date:   Thu, 30 Dec 2021 12:24:29 +0100
-MIME-Version: 1.0
-User-Agent: 
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Cc:     viro@zeniv.linux.org.uk, keescook@chromium.org, yzaikin@google.com,
-        nixiaoming@huawei.com, ebiederm@xmission.com, steve@sk2.org,
-        andriy.shevchenko@linux.intel.com, jlayton@kernel.org,
-        bfields@fieldses.org, Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211129205548.605569-1-mcgrof@kernel.org>
- <20211129205548.605569-5-mcgrof@kernel.org>
- <d20861d0-8432-76d7-bcda-1b80401e0a22@digikod.net>
- <YcDYtcJG+ON1bowf@bombadil.infradead.org>
- <20211229164624.bbf08e1ed4350e97282344e2@linux-foundation.org>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [PATCH 4/9] sysctl: move maxolduid as a sysctl specific const
-In-Reply-To: <20211229164624.bbf08e1ed4350e97282344e2@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Thu, 30 Dec 2021 06:25:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76560C061574;
+        Thu, 30 Dec 2021 03:25:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 170E46167E;
+        Thu, 30 Dec 2021 11:25:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74E03C36AE9;
+        Thu, 30 Dec 2021 11:25:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640863549;
+        bh=F0EzMjdjS2x7XL3rHnxGr+iR7j35Qs3LzSjdlDQxNAw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HVIGh4zq+lUzsLr9ny8Q6AUCIgYi1s8ThjzrRvddjW5UPABIfEskFJpZHymDtWtz2
+         +ptcI0NLacYCr5VxJbExezhZsafEtrfvknws7NxY+xSiDr/LmlOGn7B1+XjKjWOP+p
+         pOhjuzyhcggSPhPKzQ+7lcKuXkzesmeunGPFjYRECEWpHvyhH2DfOKJl1M0G5vxImn
+         r1UkoiIAQAVWXtUFKYljNfoPVlg2qSmgfTb9UEh0Wc55n9AsplsgToOijbl69H5XZx
+         yeC7Du5bu4Gjj0doUK+RDeVJxyqrKioBE87/5aUtIcFWHEmzMcw5Njb7XfkYvH/AH5
+         N/tMnupRHG1kg==
+Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1n2tZ5-00F3zS-F4; Thu, 30 Dec 2021 11:25:47 +0000
+Date:   Thu, 30 Dec 2021 11:25:46 +0000
+Message-ID: <87czlez64l.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH/RFC] drivers/irqchip: add irq-inverter
+In-Reply-To: <9df5e85b-79e6-b796-e5ce-bc47d2cbed67@cogentembedded.com>
+References: <20211228165642.2514766-1-nikita.yoush@cogentembedded.com>
+        <87h7aszj70.wl-maz@kernel.org>
+        <b5e0ff57-885a-051b-4c4c-a02b005fa1f1@cogentembedded.com>
+        <87fsqbznc2.wl-maz@kernel.org>
+        <37db485e-b832-9ff1-4d21-606eeeba871c@cogentembedded.com>
+        <87ee5uz8hk.wl-maz@kernel.org>
+        <9df5e85b-79e6-b796-e5ce-bc47d2cbed67@cogentembedded.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: nikita.yoush@cogentembedded.com, tglx@linutronix.de, geert+renesas@glider.be, magnus.damm@gmail.com, linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 30 Dec 2021 10:53:30 +0000,
+Nikita Yushchenko <nikita.yoush@cogentembedded.com> wrote:
+> 
+> >>>>> The right way to do it is to use the existing API by exposing the
+> >>>>> inverter (there are existing examples in the tree, using the
+> >>>>> hierarchical model)...
+> >>> 
+> >>> A much simpler version can be written in a few minutes, see below...
+> >> 
+> >> Can something like that be used if the parent domain is not
+> >> hierarchical (i.e. does not provide alloc(), but provides map()
+> >> instead)?
+> > 
+> > No. This definitely relies on the parent being hierarchical, as that's
+> > exactly what it was designed for the first place.
+> 
+> Is supporting hierarchical API now mandatory for kernel irqchips?
 
+It isn't. But you are definitely giving me some ideas now.
 
-On 30/12/2021 01:46, Andrew Morton wrote:
-> On Mon, 20 Dec 2021 11:25:41 -0800 Luis Chamberlain <mcgrof@kernel.org> wrote:
 > 
->> On Fri, Dec 17, 2021 at 05:15:01PM +0100, Mickaël Salaün wrote:
->>>> diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
->>>> index 7dec3d5a9ed4..675b625fa898 100644
->>>> --- a/fs/proc/proc_sysctl.c
->>>> +++ b/fs/proc/proc_sysctl.c
->>>> @@ -26,7 +26,7 @@ static const struct file_operations proc_sys_dir_file_operations;
->>>>    static const struct inode_operations proc_sys_dir_operations;
->>>>    /* shared constants to be used in various sysctls */
->>>> -const int sysctl_vals[] = { -1, 0, 1, 2, 4, 100, 200, 1000, 3000, INT_MAX };
->>>> +const int sysctl_vals[] = { -1, 0, 1, 2, 4, 100, 200, 1000, 65535, INT_MAX };
->>>
->>> The new SYSCTL_MAXOLDUID uses the index 10 of sysctl_vals[] but the same
->>> commit replaces index 8 (SYSCTL_THREE_THOUSAND used by
->>> vm.watermark_scale_factor) instead of adding a new entry.
->>>
->>> It should be:
->>> +const int sysctl_vals[] = { -1, 0, 1, 2, 4, 100, 200, 1000, 3000, INT_MAX,
->>> 65535 };
->>
->> Can you send a proper patch which properly fixes this and identifies
->> the commit name with a Fixes tag. Since thi sis on Andrew's tree no
->> commit ID is required given that they are ephemeral.
+> If yes, then perhaps you can at least document it somewhere?
+> E.g. declare irq_domain.map() as deprecated?
 > 
-> I did this:
-> 
-> From: Andrew Morton <akpm@linux-foundation.org>
-> Subject: sysctl-move-maxolduid-as-a-sysctl-specific-const-fix
-> 
-> fix sysctl_vals[], per Mickaël.
-> 
-> Cc: Mickaël Salaün <mic@digikonet>
+> If no, then I'd like to discuss a solution for irq_inverter that can
+> work for non-hierarchical case.
 
-Except a typo in my email
+You are still missing the point. Any active element on the interrupt
+path that changes the signal without multiplexing must be described in
+the hierarchical model. Anything else is wrong, and I am not
+interested in reinventing that particular wheel (it was painful enough
+to kill all these hacks years ago, and I'm not doing it again).
 
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Moving these GPIO chips into the hierarchical model isn't rocket
+science, as there is plenty of support for that already, and is the
+right thing to do.
 
-Thanks!
+	M.
 
-> Cc: Al Viro <viro@zeniv.linux.org.uk>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Antti Palosaari <crope@iki.fi>
-> Cc: Eric Biederman <ebiederm@xmission.com>
-> Cc: Iurii Zaikin <yzaikin@google.com>
-> Cc: "J. Bruce Fields" <bfields@fieldses.org>
-> Cc: Jeff Layton <jlayton@kernel.org>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Lukas Middendorf <kernel@tuxforce.de>
-> Cc: Stephen Kitt <steve@sk2.org>
-> Cc: Xiaoming Ni <nixiaoming@huawei.com>
-> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> ---
-> 
->   fs/proc/proc_sysctl.c |    2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> --- a/fs/proc/proc_sysctl.c~sysctl-move-maxolduid-as-a-sysctl-specific-const-fix
-> +++ a/fs/proc/proc_sysctl.c
-> @@ -26,7 +26,7 @@ static const struct file_operations proc
->   static const struct inode_operations proc_sys_dir_operations;
->   
->   /* shared constants to be used in various sysctls */
-> -const int sysctl_vals[] = { -1, 0, 1, 2, 4, 100, 200, 1000, 65535, INT_MAX };
-> +const int sysctl_vals[] = { -1, 0, 1, 2, 4, 100, 200, 1000, 3000, INT_MAX, 65535 };
->   EXPORT_SYMBOL(sysctl_vals);
->   
->   const unsigned long sysctl_long_vals[] = { 0, 1, LONG_MAX };
-> _
-> 
+-- 
+Without deviation from the norm, progress is not possible.

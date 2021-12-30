@@ -2,79 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E732F481891
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:33:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D418481895
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:34:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234863AbhL3Cd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 21:33:27 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:54466 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234683AbhL3CdW (ORCPT
+        id S234683AbhL3Ce5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 21:34:57 -0500
+Received: from relay02.th.seeweb.it ([5.144.164.163]:38041 "EHLO
+        relay02.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233074AbhL3Cez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 21:33:22 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C8FA615DB;
-        Thu, 30 Dec 2021 02:33:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFAF9C36AE7;
-        Thu, 30 Dec 2021 02:33:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640831601;
-        bh=uvcU7NWQhw7eLa9PH40G7TjraiSheXYdZ13KSXUqqSA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BkQuGnZ4PPyxCSZPMr2zci0kKLBUM0laf2V1o0TSTCNmr2VxqIJN+tMhQVw9vpABJ
-         TAO1y2ypDeSFdUk5gHcHr43X3cu8Y/8xo/GPpphm2v8nUEx/1rAreKrqCAAtdU1CA5
-         MofQ53itdcJb19R6gcYoWbLmOEuYtBaJJk+KbVmh1mprLSttjU/wqssCoHaqsLZGhK
-         lzbRt6N2tVHqaOnhwRuVnb2LOkB73GqZEMyafhYziJ+7oWpaR26yMyTt3fG6JLOhHN
-         yJjV6YmPC605FAZ7RQIZNZyCwlX7mkGxzcr8bMgPTbQP9En1O3ZnoweOmewaBtI/4m
-         ifovYtLd0mVMQ==
-Date:   Wed, 29 Dec 2021 18:33:20 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        Wed, 29 Dec 2021 21:34:55 -0500
+Received: from localhost.localdomain (83.6.168.106.neoplus.adsl.tpnet.pl [83.6.168.106])
+        by m-r1.th.seeweb.it (Postfix) with ESMTPA id EA0C51F535;
+        Thu, 30 Dec 2021 03:34:52 +0100 (CET)
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+To:     ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fjes: Check possible NULL pointer returned by vzalloc
-Message-ID: <20211229183320.5631b317@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20211229102140.1776466-1-jiasheng@iscas.ac.cn>
-References: <20211229102140.1776466-1-jiasheng@iscas.ac.cn>
+Subject: [RFC PATCH] regulator: qcom_smd: Align probe function with rpmh-regulator
+Date:   Thu, 30 Dec 2021 03:34:42 +0100
+Message-Id: <20211230023442.1123424-1-konrad.dybcio@somainline.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Dec 2021 18:21:40 +0800 Jiasheng Jiang wrote:
-> As the possible alloc failure of the vzalloc(), the 'hw->hw_info.trace'
-> could be NULL pointer.
-> Therefore it should be better to check it to guarantee the complete
-> success of the initiation.
-> 
-> Fixes: 8cdc3f6c5d22 ("fjes: Hardware initialization routine")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->  drivers/net/fjes/fjes_hw.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/net/fjes/fjes_hw.c b/drivers/net/fjes/fjes_hw.c
-> index 065bb0a40b1d..4c83f637a135 100644
-> --- a/drivers/net/fjes/fjes_hw.c
-> +++ b/drivers/net/fjes/fjes_hw.c
-> @@ -329,6 +329,9 @@ int fjes_hw_init(struct fjes_hw *hw)
->  	ret = fjes_hw_setup(hw);
->  
->  	hw->hw_info.trace = vzalloc(FJES_DEBUG_BUFFER_SIZE);
-> +	if (!hw->hw_info.trace)
-> +		return -ENOMEM;
-> +
->  	hw->hw_info.trace_size = FJES_DEBUG_BUFFER_SIZE;
->  
->  	return ret;
+The RPMh regulator driver is much newer and gets more attention, which in
+consequence makes it do a few things better. Update qcom_smd-regulator's
+probe function to mimic what rpmh-regulator does to address a couple of
+issues:
 
-The rest of this driver is clearly written expecting that
-hw_info.trace may be NULL. This change is unnecessary at 
-best and may even introduce a regression.
+- Probe defer now works correctly, before it used to, well,
+  kinda just die.. This fixes reliable probing on (at least) PM8994,
+  because Linux apparently cannot deal with supply map dependencies yet..
 
-Please do bare minimum of sanity checking your patches.
-Your submissions are consistently of very low quality.
+- Regulator data is now matched more sanely: regulator data is matched
+  against each individual regulator node name and throwing an -EINVAL if
+  data is missing, instead of just assuming everything is fine and
+  iterating over all subsequent array members.
+
+- status = "disabled" will now work for disabling individual regulators in
+  DT. Previously it didn't seem to do much if anything at all.
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+---
+ drivers/regulator/qcom_smd-regulator.c | 100 +++++++++++++++++--------
+ 1 file changed, 70 insertions(+), 30 deletions(-)
+
+diff --git a/drivers/regulator/qcom_smd-regulator.c b/drivers/regulator/qcom_smd-regulator.c
+index 8bac024dde8b..9fc666107a06 100644
+--- a/drivers/regulator/qcom_smd-regulator.c
++++ b/drivers/regulator/qcom_smd-regulator.c
+@@ -9,6 +9,7 @@
+ #include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/regulator/driver.h>
++#include <linux/regulator/of_regulator.h>
+ #include <linux/soc/qcom/smd-rpm.h>
+ 
+ struct qcom_rpm_reg {
+@@ -1239,52 +1240,91 @@ static const struct of_device_id rpm_of_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, rpm_of_match);
+ 
+-static int rpm_reg_probe(struct platform_device *pdev)
++/**
++ * rpm_regulator_init_vreg() - initialize all attributes of a qcom_smd-regulator
++ * @vreg:		Pointer to the individual qcom_smd-regulator resource
++ * @dev:		Pointer to the top level qcom_smd-regulator PMIC device
++ * @node:		Pointer to the individual qcom_smd-regulator resource
++ *			device node
++ * @rpm:		Pointer to the rpm bus node
++ * @pmic_rpm_data:	Pointer to a null-terminated array of qcom_smd-regulator
++ *			resources defined for the top level PMIC device
++ *
++ * Return: 0 on success, errno on failure
++ */
++static int rpm_regulator_init_vreg(struct qcom_rpm_reg *vreg, struct device *dev,
++				   struct device_node *node, struct qcom_smd_rpm *rpm,
++				   const struct rpm_regulator_data *pmic_rpm_data)
+ {
+-	const struct rpm_regulator_data *reg;
+-	const struct of_device_id *match;
+-	struct regulator_config config = { };
++	struct regulator_config config = {};
++	const struct rpm_regulator_data *rpm_data;
+ 	struct regulator_dev *rdev;
++	int ret;
++
++	for (rpm_data = pmic_rpm_data; rpm_data->name; rpm_data++)
++		if (of_node_name_eq(node, rpm_data->name))
++			break;
++
++	if (!rpm_data->name) {
++		dev_err(dev, "Unknown regulator %pOFn\n", node);
++		return -EINVAL;
++	}
++
++	vreg->dev	= dev;
++	vreg->rpm	= rpm;
++	vreg->type	= rpm_data->type;
++	vreg->id	= rpm_data->id;
++
++	memcpy(&vreg->desc, rpm_data->desc, sizeof(vreg->desc));
++	vreg->desc.name = rpm_data->name;
++	vreg->desc.supply_name = rpm_data->supply;
++	vreg->desc.owner = THIS_MODULE;
++	vreg->desc.type = REGULATOR_VOLTAGE;
++	vreg->desc.of_match = rpm_data->name;
++
++	config.dev		= dev;
++	config.of_node		= node;
++	config.driver_data	= vreg;
++
++	rdev = devm_regulator_register(dev, &vreg->desc, &config);
++	if (IS_ERR(rdev)) {
++		ret = PTR_ERR(rdev);
++		dev_err(dev, "%pOFn: devm_regulator_register() failed, ret=%d\n", node, ret);
++		return ret;
++	}
++
++	return 0;
++}
++
++static int rpm_reg_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	const struct rpm_regulator_data *vreg_data;
++	struct device_node *node;
+ 	struct qcom_rpm_reg *vreg;
+ 	struct qcom_smd_rpm *rpm;
++	int ret;
+ 
+ 	rpm = dev_get_drvdata(pdev->dev.parent);
+ 	if (!rpm) {
+-		dev_err(&pdev->dev, "unable to retrieve handle to rpm\n");
++		dev_err(&pdev->dev, "Unable to retrieve handle to rpm\n");
+ 		return -ENODEV;
+ 	}
+ 
+-	match = of_match_device(rpm_of_match, &pdev->dev);
+-	if (!match) {
+-		dev_err(&pdev->dev, "failed to match device\n");
++	vreg_data = of_device_get_match_data(dev);
++	if (!vreg_data)
+ 		return -ENODEV;
+-	}
+ 
+-	for (reg = match->data; reg->name; reg++) {
++	for_each_available_child_of_node(dev->of_node, node) {
+ 		vreg = devm_kzalloc(&pdev->dev, sizeof(*vreg), GFP_KERNEL);
+ 		if (!vreg)
+ 			return -ENOMEM;
+ 
+-		vreg->dev = &pdev->dev;
+-		vreg->type = reg->type;
+-		vreg->id = reg->id;
+-		vreg->rpm = rpm;
+-
+-		memcpy(&vreg->desc, reg->desc, sizeof(vreg->desc));
+-
+-		vreg->desc.id = -1;
+-		vreg->desc.owner = THIS_MODULE;
+-		vreg->desc.type = REGULATOR_VOLTAGE;
+-		vreg->desc.name = reg->name;
+-		vreg->desc.supply_name = reg->supply;
+-		vreg->desc.of_match = reg->name;
+-
+-		config.dev = &pdev->dev;
+-		config.driver_data = vreg;
+-		rdev = devm_regulator_register(&pdev->dev, &vreg->desc, &config);
+-		if (IS_ERR(rdev)) {
+-			dev_err(&pdev->dev, "failed to register %s\n", reg->name);
+-			return PTR_ERR(rdev);
++		ret = rpm_regulator_init_vreg(vreg, dev, node, rpm, vreg_data);
++
++		if (ret < 0) {
++			of_node_put(node);
++			return ret;
+ 		}
+ 	}
+ 
+-- 
+2.34.1
+

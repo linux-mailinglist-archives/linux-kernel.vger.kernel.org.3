@@ -2,80 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9960E481830
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 02:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 893B248183E
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 02:48:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234161AbhL3BqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 20:46:10 -0500
-Received: from smtp23.cstnet.cn ([159.226.251.23]:46772 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233692AbhL3BqJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 20:46:09 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-03 (Coremail) with SMTP id rQCowAD3xpFID81hIxjlBA--.16947S2;
-        Thu, 30 Dec 2021 09:45:44 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     qiang.zhao@nxp.com, leoyang.li@nxp.com
-Cc:     linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] soc: fsl: qe: Check of ioremap return value
-Date:   Thu, 30 Dec 2021 09:45:43 +0800
-Message-Id: <20211230014543.1799867-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S234190AbhL3Bsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 20:48:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41828 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232602AbhL3Bsj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 20:48:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1D7C061574;
+        Wed, 29 Dec 2021 17:48:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86D2E6153E;
+        Thu, 30 Dec 2021 01:48:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9B23C36AE1;
+        Thu, 30 Dec 2021 01:48:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640828918;
+        bh=81MO7TacqQe8I5ko0Q8CwbDD4h/99BabB8aCDnWo0lQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jV/ycMyovnmu9pbcNLGboBsGNIaWSzFTvzZh+Mx9BwCcRQ4wkFdLiGVgRkSKcn1av
+         ACLs6uhvkNBtfi0XHerEvqHG9aDTvnP0DnkZJ23UYJg1+rpYpog6ujNkprLhWymjWQ
+         hVule2DRwuMYA/yBJYRWrQwKgFOWg5pmJP5humJTKlsctrnxGtyKKZV5MSDWgxD4iF
+         I5CuYOMx73K52jL6eCERvW0K/qJG/CffLHmjFLJmfkBjIdmKueJ2GntN8tpN5P6Axu
+         +/iJu6EgjHsacUxqabHsXc98pimqrGXyEBPg4rn/eSXczdd7VTgu9//4yKsbFR5Bjg
+         v0Y95G8jR3CDw==
+Received: by mail-ed1-f51.google.com with SMTP id z29so92390390edl.7;
+        Wed, 29 Dec 2021 17:48:37 -0800 (PST)
+X-Gm-Message-State: AOAM530OpLJ1IYviklCTU8VkdA4pUW5FJ1KdT+R3XO0MKZs3RJLmTmzG
+        dtm/uwS2c5wclM3VztcRc9KsNAhfDVWfcqgCzoA=
+X-Google-Smtp-Source: ABdhPJzYCdRT3l8EecUhPG5EkJz2cutHHKG9LloyzIQNKSKV94+pfG1Ig6YswCjGB6BOha4SzAwDhMxmrauWo4kartQ=
+X-Received: by 2002:a5d:6989:: with SMTP id g9mr22454231wru.12.1640828906053;
+ Wed, 29 Dec 2021 17:48:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowAD3xpFID81hIxjlBA--.16947S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7GF4rXw4xGF17Aw4DXFyUAwb_yoWktrXEka
-        nFqF9rWw1F93ZakF1DtrW7A34v9a1xXr12qr40q343AasF9w17JF98Zrn3A3WkWFWkWF9F
-        ka1UX34jyw17WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbcAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
-        KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
-        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
-        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
-        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-        IxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfU5kucDUUUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+ <20211227164317.4146918-3-schnelle@linux.ibm.com> <CAMuHMdXk6VcDryekkMJ3aGFnw4LLWOWMi8M2PwjT81PsOsOBMQ@mail.gmail.com>
+ <d406b93a-0f76-d056-3380-65d459d05ea9@gmail.com> <CAK8P3a2j-OFUUp+haHoV4PyL-On4EASZ9+59SDqNqmL8Gv_k7Q@mail.gmail.com>
+ <1f90f145-219e-1cad-6162-9959d43a27ad@gmail.com>
+In-Reply-To: <1f90f145-219e-1cad-6162-9959d43a27ad@gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Wed, 29 Dec 2021 20:48:23 -0500
+X-Gmail-Original-Message-ID: <CAK8P3a3NqU-3nUZ9ve=QyPPB5Uep3eK+_hicjjSiP8VuL4FYfA@mail.gmail.com>
+Message-ID: <CAK8P3a3NqU-3nUZ9ve=QyPPB5Uep3eK+_hicjjSiP8VuL4FYfA@mail.gmail.com>
+Subject: Re: [RFC 02/32] Kconfig: introduce HAS_IOPORT option and select it as necessary
+To:     Michael Schmitz <schmitzmic@gmail.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Chris Zankel <chris@zankel.net>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Brian Cain <bcain@codeaurora.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, openrisc@lists.librecores.org,
+        linux-s390@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        Greg Ungerer <gerg@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the possible failure of the ioremap(), the par_io could be NULL.
-Therefore it should be better to check it and return error in order to
-guarantee the success of the initiation.
-But, I also notice that all the caller like mpc85xx_qe_par_io_init() in
-`arch/powerpc/platforms/85xx/common.c` don't check the return value of
-the par_io_init().
-Actually, par_io_init() needs to check to handle the potential error.
-I will submit another patch to fix that.
-Anyway, par_io_init() itsely should be fixed.
+On Tue, Dec 28, 2021 at 11:15 PM Michael Schmitz <schmitzmic@gmail.com> wrote:
+> Am 29.12.2021 um 16:41 schrieb Arnd Bergmann:
+> > On Tue, Dec 28, 2021 at 8:20 PM Michael Schmitz <schmitzmic@gmail.com> wrote:
+> I'd hope not - we spent some effort to make sure setting ATARI_ROM_ISA
+> does not affect other m68k platforms when e.g. building multiplatform
+> kernels.
 
-Fixes: 7aa1aa6ecec2 ("QE: Move QE from arch/powerpc to drivers/soc")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/soc/fsl/qe/qe_io.c | 2 ++
- 1 file changed, 2 insertions(+)
+Ok
 
-diff --git a/drivers/soc/fsl/qe/qe_io.c b/drivers/soc/fsl/qe/qe_io.c
-index e277c827bdf3..a5e2d0e5ab51 100644
---- a/drivers/soc/fsl/qe/qe_io.c
-+++ b/drivers/soc/fsl/qe/qe_io.c
-@@ -35,6 +35,8 @@ int par_io_init(struct device_node *np)
- 	if (ret)
- 		return ret;
- 	par_io = ioremap(res.start, resource_size(&res));
-+	if (!par_io)
-+		return -ENOMEM;
- 
- 	if (!of_property_read_u32(np, "num-ports", &num_ports))
- 		num_par_io_ports = num_ports;
--- 
-2.25.1
+> Replacing inb() by readb() without any address translation won't do much
+> good for m68k though - addresses in the traditional ISA I/O port range
+> would hit the (unmapped) zero page.
 
+Correct, this is exactly the problem that Niklas is trying to solve here:
+we do have drivers that hit this bug, and on s390 clang actually produces
+a compile-time error for drivers that cause a NULL pointer dereference
+this way.
+
+What some other architectures do is to rely on inb()/outb() to have a
+zero-based offset, and use an io_offset in PCI buses to ensure that a
+low port number on the bus gets translated into a pointer value for the
+virtual mapping in the kernel, which is then represented as an unsigned
+int.
+
+As this is indistinguishable from architectures that just don't have
+a base address for I/O ports (we unfortunately picked 0 as the default
+PCI_IOBASE value), my suggestion was to start marking architectures
+that may have this problem as using HAS_IOPORT in order to keep
+the existing behavior unchanged. If m68k does not suffer from this,
+making HAS_IOPORT conditional on those config options that actually
+need it would of course be best.
+
+         Arnd

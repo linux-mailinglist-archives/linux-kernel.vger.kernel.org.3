@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 467A2481A55
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 08:24:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B1D5481A57
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 08:24:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237623AbhL3HXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 02:23:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57900 "EHLO
+        id S238109AbhL3HXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 02:23:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237403AbhL3HWf (ORCPT
+        with ESMTP id S237711AbhL3HWh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 02:22:35 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3987C061748
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 23:22:34 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id c5-20020a25f305000000b0060bbdf755f7so25228887ybs.14
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 23:22:34 -0800 (PST)
+        Thu, 30 Dec 2021 02:22:37 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC2EC061763
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 23:22:37 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id u130-20020a254788000000b0060a9645f781so30257448yba.19
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 23:22:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=nzKeKFAPBZ6rzV0NFigpy2eDVIi9FKR8HBRsYCkfB/U=;
-        b=UsntoWcISBfoeUdNkLtrkqLUCXuV3C/cSCX/5Y8o/iLgg/RnXmD9ffJx2/3iJFFAiR
-         E9jN91+rDWflo53Ca44K7pMJOnOFdSn/F0o2YdLW+qFnBjEGt9hU4LgsHuHAYvCt09Y+
-         RVanx7aw6p86GEW39zC3HrZjzIH9ExVTp/GX55VPjF9/WTETfPAiO2OYYhKJ4SORVii/
-         cnyXDwLHR2X8gx2KccxG9IsjhzQQkzkAt3M+BgAPPrNi4S9jPcVhCACQVNEyLafg6JGY
-         IX6SKhcIaHVeS8g6PfOWxtev4/4/J3ZFoxo9fG9qfjIICMoRZHkA6SXhwN6bVVqXS116
-         42oQ==
+        bh=on9cMkVsbDIIWgmJUXNGZPB7xxaMgvNoxu0hM4zjpQ4=;
+        b=sQovDeSS1jmqBxyi8qxJA+KJCHl0AO0LQutJiPf1kHryt/x0gH4bjxri2JsVCBPicu
+         nRLqgEPUcnDXxQihf5alINa23pgAV3UpQPVPSM9DyzZv7Ul6K1ERcTDvkyY4FGzIfssJ
+         LeSLcbVvmAM9/jD4nJeYrtx3SMM2OgZs3GZD7ZabjfJ6EZin/unbSFqWcTNca5Q532wq
+         svLlxXJlSCgicDaH4twPedwjgrimmZo6ocAzh0yED6ASiT74eqBTRjgRwuWnBlonGnLG
+         jPXmsMiRgsUVaqjuC73QMBbcCgyRBQ7H540aQX16AaHAqwH+SXvLBbqOdKNnu/mMoOPJ
+         0t2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=nzKeKFAPBZ6rzV0NFigpy2eDVIi9FKR8HBRsYCkfB/U=;
-        b=LEtNp8fo24U9pLl2qByWpsyIVU/0yY0fB4qOiYde6uFzg3+EIPVPh4EVvzqmVj5E0O
-         iK280sR3GRforpuQoGOOg0I3L46tU48bSMSjRlq1/xZeMp0lyoanmypLZSDIKvrsecqi
-         B/vX0Rd9fcSbqEtJOtqvXFROSPZqDwF9GfcqBSC+GPXpnVUXJnDU26LcYJsEhV5f//C6
-         t9Sl3w50IyXg8ap+pr/2+hJVRVVabmS1K+YmMVRUeJQxPKqvMm/Yg+XWTGuIoZnuHbMG
-         NDospD0Pi3fCIp2ix/qbOfoOve3R0P0az318fZfYHpX3hfNvYgwy50OumPZWirMzwGJP
-         UvEQ==
-X-Gm-Message-State: AOAM530kcricgDVgaKNAccAlnyp2XIr2C4J5yUT7XFBXlWZZowvCh0/C
-        p0aMKJ2MLSWjFOlNOtdvSO1QjNki9Wty
-X-Google-Smtp-Source: ABdhPJzuD97DHHQINTddZQ7U07a5i/EHI+5mizcIFnBjhQnvGYZsTgq57fB9oUk9fU7E8+4CAaVUZrl3Zrbf
+        bh=on9cMkVsbDIIWgmJUXNGZPB7xxaMgvNoxu0hM4zjpQ4=;
+        b=MW95c1aZsI8TKO4l3CuucYs4gVD9XUSxNdtHKV+kjfw6OmFnj5fjKNegBxE/jtm0/W
+         RuG5w2LUc7YaRiMz2BpID0g/Qx+828hTwGLUvJjXP3MAnqXxkCBIs10mFWod5HF/DO4G
+         zMSOiqObMPHkeTsHWxZCV/lHf73aTwzy/r8ZXK6tcibB7kFg9m1WAm0sakRAVNxEH9vD
+         t5C7CiTqUX2n2lzu+M9DqWTJdpZ0uMD80xno5touAeaYZJmd3eF7a5DuGn7ryVpCSRHG
+         183G6kVPre8parZl8TnwmBNauz/wN4qLD8LRjJKxfXOIm5nGlDazyX4Npuo/C2C9asIE
+         IAjg==
+X-Gm-Message-State: AOAM533QfRGQ0iyBnBKEoiVWLjGcFCszfTk0zCjx1j2lzIMv5hd5afR1
+        zgxfL4bjHpyoTrHfY0DzBgAPclbHP0Jq
+X-Google-Smtp-Source: ABdhPJzqq/QW5bQnoe90buoTODwyR2SzuN0kDoT9thVbRJhpcfDXrVUv+7YeJTwa7LJD/r1+V+Jdxh6BSnki
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:31c4:9539:dba1:a82b])
- (user=irogers job=sendgmr) by 2002:a25:cad1:: with SMTP id
- a200mr22061820ybg.183.1640848954194; Wed, 29 Dec 2021 23:22:34 -0800 (PST)
-Date:   Wed, 29 Dec 2021 23:20:28 -0800
+ (user=irogers job=sendgmr) by 2002:a25:3716:: with SMTP id
+ e22mr22191982yba.57.1640848956645; Wed, 29 Dec 2021 23:22:36 -0800 (PST)
+Date:   Wed, 29 Dec 2021 23:20:29 -0800
 In-Reply-To: <20211230072030.302559-1-irogers@google.com>
-Message-Id: <20211230072030.302559-48-irogers@google.com>
+Message-Id: <20211230072030.302559-49-irogers@google.com>
 Mime-Version: 1.0
 References: <20211230072030.302559-1-irogers@google.com>
 X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
-Subject: [PATCH v3 46/48] perf script: Fix flipped index and cpu
+Subject: [PATCH v3 47/48] perf stat: Correct first_shadow_cpu to return index
 From:   Ian Rogers <irogers@google.com>
 To:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
         Namhyung Kim <namhyung@kernel.org>,
@@ -79,26 +79,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-perf_counts are accessed by the densely packed index.
+perf_stat__update_shadow_stats and perf_stat__print_shadow_stats use a
+cpu map index rather than a CPU, but first_shadow_cpu is returning the
+wrong value for this. Change first_shadow_cpu to
+first_shadow_cpu_map_idx to make things agree.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-script.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/perf/util/stat-display.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-index ce9c3c5d881d..935a6edcdcdc 100644
---- a/tools/perf/builtin-script.c
-+++ b/tools/perf/builtin-script.c
-@@ -2131,7 +2131,7 @@ static void __process_stat(struct evsel *counter, u64 tstamp)
- 		perf_cpu_map__for_each_cpu(cpu, idx, evsel__cpus(counter)) {
- 			struct perf_counts_values *counts;
+diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+index 0f192360b6c6..ba95379efcfb 100644
+--- a/tools/perf/util/stat-display.c
++++ b/tools/perf/util/stat-display.c
+@@ -327,24 +327,23 @@ static void print_metric_header(struct perf_stat_config *config,
+ 		fprintf(os->fh, "%*s ", config->metric_only_len, unit);
+ }
  
--			counts = perf_counts(counter->counts, cpu, thread);
-+			counts = perf_counts(counter->counts, idx, thread);
+-static int first_shadow_cpu(struct perf_stat_config *config,
+-			    struct evsel *evsel, const struct aggr_cpu_id *id)
++static int first_shadow_cpu_map_idx(struct perf_stat_config *config,
++				struct evsel *evsel, const struct aggr_cpu_id *id)
+ {
+-	struct perf_cpu_map *cpus;
++	struct perf_cpu_map *cpus = evsel__cpus(evsel);
+ 	int cpu, idx;
  
- 			printf("%3d %8d %15" PRIu64 " %15" PRIu64 " %15" PRIu64 " %15" PRIu64 " %s\n",
- 				cpu,
+ 	if (config->aggr_mode == AGGR_NONE)
+-		return id->cpu;
++		return perf_cpu_map__idx(cpus, id->cpu);
+ 
+ 	if (!config->aggr_get_id)
+ 		return 0;
+ 
+-	cpus = evsel__cpus(evsel);
+ 	perf_cpu_map__for_each_cpu(cpu, idx, cpus) {
+ 		struct aggr_cpu_id cpu_id = config->aggr_get_id(config, cpu);
+ 
+ 		if (aggr_cpu_id__equal(&cpu_id, id))
+-			return cpu;
++			return idx;
+ 	}
+ 	return 0;
+ }
+@@ -503,7 +502,7 @@ static void printout(struct perf_stat_config *config, struct aggr_cpu_id id, int
+ 	}
+ 
+ 	perf_stat__print_shadow_stats(config, counter, uval,
+-				first_shadow_cpu(config, counter, &id),
++				first_shadow_cpu_map_idx(config, counter, &id),
+ 				&out, &config->metric_events, st);
+ 	if (!config->csv_output && !config->metric_only) {
+ 		print_noise(config, counter, noise);
+@@ -532,7 +531,7 @@ static void aggr_update_shadow(struct perf_stat_config *config,
+ 				val += perf_counts(counter->counts, idx, 0)->val;
+ 			}
+ 			perf_stat__update_shadow_stats(counter, val,
+-					first_shadow_cpu(config, counter, &id),
++					first_shadow_cpu_map_idx(config, counter, &id),
+ 					&rt_stat);
+ 		}
+ 	}
 -- 
 2.34.1.448.ga2b2bfdf31-goog
 

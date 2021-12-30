@@ -2,104 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74190481C8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 14:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E4C481C95
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 14:40:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239475AbhL3NfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 08:35:10 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:45880 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232187AbhL3NfJ (ORCPT
+        id S239606AbhL3NkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 08:40:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56640 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239507AbhL3NkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 08:35:09 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 30 Dec 2021 08:40:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8433CC061574;
+        Thu, 30 Dec 2021 05:40:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4A3B921114;
-        Thu, 30 Dec 2021 13:35:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1640871308; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nNJvjKHb4Y8WpSKSBpjur0q65UAXxFw+5COgWD3TSkQ=;
-        b=ySTCD4dzHT45RWhvm7QKBRXvojUln4DCqNdWMBXkEJoaegCuRFsAR1OzSprt57oEJVjE0u
-        KO/aG0o5Vk5yQ3Wr7Od4TWiGvaispaTGb1LDa5VorvGCPfNWDdgTLq/B6MX3T/2knHsgB1
-        VXuuVECwYuEPBxFi/TNduP7ZF7IfwPg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1640871308;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nNJvjKHb4Y8WpSKSBpjur0q65UAXxFw+5COgWD3TSkQ=;
-        b=AmFlXTRzy0H4/OaxTx2mk/5o34KXQR4/K1ufxQ1NQqL0YZ7N4xXpSnG7RiWOafbZyYmlwK
-        88yGNI746BKVjjBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D791713BC5;
-        Thu, 30 Dec 2021 13:35:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 5kS7MIu1zWH5SAAAMHmgww
-        (envelope-from <hare@suse.de>); Thu, 30 Dec 2021 13:35:07 +0000
-Subject: Re: [PATCH v3 2/3] ahci: Use macro PCI_DEVICE_ID_AMD_HUDSON2_SATA_IDE
-To:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211229161119.1006-1-pmenzel@molgen.mpg.de>
- <20211229161119.1006-2-pmenzel@molgen.mpg.de>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <f16c35bc-43fe-5b06-e867-81a75ffaf675@suse.de>
-Date:   Thu, 30 Dec 2021 14:35:07 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38AD8B81C68;
+        Thu, 30 Dec 2021 13:40:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D571DC36AEC;
+        Thu, 30 Dec 2021 13:40:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640871608;
+        bh=QYKwUTX7hFMpTo0elK0xCFZEfzVC8y3dGIC3VctZu8U=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=IqwpYn9RsnPHJBh+of+VKEAymU0JWAkGn1EtEHi2zLsQanFFPhiyxEcRlHmw4cy02
+         XCZLMxyaSQ8acR3pUnK7vyinZLeAMsnGSUr+6xRRXCZyYw4/8YeTRGFs+EO/oWyYSp
+         cJnPk21BerOanSZL/wxNspIY+Z0PKnO02sCxJ/Be/epoqzsdPtEB5DgWRGyY/A4NYc
+         EnKgZ4jbTgK0TXunT0HDidabssLsecz8YPmgW18Ui+HRHGtOe/IDo9YQU2/jeCuaNk
+         2ZNG9yI5qevdKjGPLoXforQTkdT8MaGw89Ew0O/9GvhA7sLRZCBUO5jJXu3pKOd0hq
+         FqTl7IYia0ExQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BDA6DC395E4;
+        Thu, 30 Dec 2021 13:40:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20211229161119.1006-2-pmenzel@molgen.mpg.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] fsl/fman: Fix missing put_device() call in fman_port_probe
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164087160877.13913.3977817078027535723.git-patchwork-notify@kernel.org>
+Date:   Thu, 30 Dec 2021 13:40:08 +0000
+References: <20211230122628.22619-1-linmq006@gmail.com>
+In-Reply-To: <20211230122628.22619-1-linmq006@gmail.com>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     madalin.bucur@nxp.com, davem@davemloft.net, kuba@kernel.org,
+        igal.liberman@freescale.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/29/21 5:11 PM, Paul Menzel wrote:
-> Use the defined macro from `include/linux/pci_ids.h`.
-> 
-> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> ---
->   drivers/ata/ahci.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
-> index 1e1167e725a4..6a2432e4adda 100644
-> --- a/drivers/ata/ahci.c
-> +++ b/drivers/ata/ahci.c
-> @@ -436,7 +436,7 @@ static const struct pci_device_id ahci_pci_tbl[] = {
->   		.class_mask = 0xffffff,
->   		board_ahci_al },
->   	/* AMD */
-> -	{ PCI_VDEVICE(AMD, 0x7800), board_ahci }, /* AMD Hudson-2 */
-> +	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_HUDSON2_SATA_IDE), board_ahci },
->   	{ PCI_VDEVICE(AMD, 0x7900), board_ahci }, /* AMD CZ */
->   	{ PCI_VDEVICE(AMD, 0x7901), board_ahci_mobile }, /* AMD Green Sardine */
->   	/* AMD is using RAID class only for ahci controllers */
-> 
-Weelll ... there are defines for AMD Hudson-2 and similar in the pci_ids 
-file, yet these definitions are not used here.
-I'd vote keeping the style for all entries, ie either convert all 
-entries here to use #defines, or stay with the numeral.
+Hello:
 
-But we shouldn't mix them.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Cheers,
+On Thu, 30 Dec 2021 12:26:27 +0000 you wrote:
+> The reference taken by 'of_find_device_by_node()' must be released when
+> not needed anymore.
+> Add the corresponding 'put_device()' in the and error handling paths.
+> 
+> Fixes: 18a6c85fcc78 ("fsl/fman: Add FMan Port Support")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> 
+> [...]
 
-Hannes
+Here is the summary with links:
+  - fsl/fman: Fix missing put_device() call in fman_port_probe
+    https://git.kernel.org/netdev/net/c/bf2b09fedc17
+
+You are awesome, thank you!
 -- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

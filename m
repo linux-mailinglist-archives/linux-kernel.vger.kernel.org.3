@@ -2,152 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31301481982
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 06:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A6DE481988
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 06:12:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbhL3FLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 00:11:41 -0500
-Received: from mga14.intel.com ([192.55.52.115]:35537 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229448AbhL3FLk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 00:11:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640841100; x=1672377100;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jGrukeZg0EnufbaBzokUAOG2AsNay8I/4mG6rT6SVeg=;
-  b=K3YXWz8uExwg+fh7ehDryyd7mjFCpR7pyIkDBLlIv8TCoi9/2ss7Pv2f
-   H2rt5ObseKJoG+6NJajM8swpEcb6aQd1F4VtNYLAm79D3t70Y2W3fK06w
-   DejREXULHbmwAmQxbdLzMV5Df7e9g+LpKIcMHDoVTEQ+UR5j0/z89xEW1
-   Pq92VTmhhUsnIFk8gBGMmGaGU0raHiHfqwLCGrXTiLUxe7eA7L6b1wdE+
-   fb5HSdpCXicX5+TFSkbRuPIgB72SibstlDzYI7UatIf6JLTpxvFlxSixp
-   sXr8jawmmrjaIXihszu2oan+q5P67Z7QMmtTqlnA4xGgEFWoAzC7Cesro
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10212"; a="241827313"
-X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
-   d="scan'208";a="241827313"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 21:11:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
-   d="scan'208";a="619270892"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 29 Dec 2021 21:11:38 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n2niz-0009mn-Mz; Thu, 30 Dec 2021 05:11:37 +0000
+        id S236117AbhL3FMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 00:12:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230014AbhL3FLz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 00:11:55 -0500
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15ACC061574;
+        Wed, 29 Dec 2021 21:11:54 -0800 (PST)
+Received: by mail-pj1-x1041.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so22155689pjp.0;
+        Wed, 29 Dec 2021 21:11:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=2qrH/Q7lBhgBs5n1zVO/B/67KzCmyY6Nm+oaWRXQUfQ=;
+        b=HlD8egyoFHZ/+jS6QxT0P/ByOaMcnWZq/oyv7wctNgWnUTtPjFcSgGSoN65LtS2YJb
+         FDPq147Eee2GpuoCuws+6HCODa8oi8MdSnJGXm++KDopoM6CKYK/3tsDHAzrWowAo0cO
+         TCDbaQt+Ij6L9t8laCrvJLoLUsq3xIusWJ5VrbDaQtHr2Oln+lUKDDP8P3CsU5nEb4W3
+         u2K+fXrkXDhHgIIoe22yvxPJmvqP4E8Jmj07yiF99ejYQgwS7n47U1Y6Vo39MR+yJud7
+         evwVQmazSi+/KHtRBcPWMKkbBD6db8TqI+mSqLG2KX4UXDq2or2q+dkWfrDZsmaJJSso
+         2PoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=2qrH/Q7lBhgBs5n1zVO/B/67KzCmyY6Nm+oaWRXQUfQ=;
+        b=wE51ZOX3xp+dq8M/egmwJxVX0/lLIsdFLsVa86umI47RkCE6o/OiOVj/4NAjWOX1HY
+         8jY1/5RqFKoP7oQohONHcsm8kj/d2ZBg5+olqlH+y3pT7RNlH5M4Dila1UGF771yDrOw
+         UEeLmu9qdTsVkqLet3SPHx4Q/5iuitYj2K3XIpQWrVFM9DSnDjNn2QvNd/m+92fY3n21
+         F5/Vm2zxfbkbi4KkgXXmhYRDs3ch8dQE0swnzjgY0bqInNlZYJPk+P9NCv6vtG1RsSHw
+         xGRC1hUf4h9kabv2ou3N/pl9Z0EXMEdO9kezmxqZ2hcl8NJ/jWM+QDP3rpxVq2C7gH6l
+         qU/Q==
+X-Gm-Message-State: AOAM530DM/wd8F5eCvNrfXiGxiSrwJ/k4yiAp/Mms8XGl8GGKwxOt8cK
+        8MrudNUGo8uC1Y9pgivsV/w=
+X-Google-Smtp-Source: ABdhPJxtAwmczCvw5kzAiXwk4Avbf6mtvcOWKCOoVnJb5N/Ob2UW/+MTdAD8OznFSZbZcieKZRcm9Q==
+X-Received: by 2002:a17:903:4094:b0:149:8070:1c1b with SMTP id z20-20020a170903409400b0014980701c1bmr17099176plc.152.1640841114381;
+        Wed, 29 Dec 2021 21:11:54 -0800 (PST)
+Received: from slim.das-security.cn ([103.84.139.54])
+        by smtp.gmail.com with ESMTPSA id e21sm10365925pjr.4.2021.12.29.21.11.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Dec 2021 21:11:54 -0800 (PST)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org, axboe@kernel.dk,
+        stern@rowland.harvard.edu, jj251510319013@gmail.com,
+        dan.carpenter@oracle.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH v3 2/2] usb: gadget: clear related members when goto fail
 Date:   Thu, 30 Dec 2021 13:11:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Goldwyn Rodrigues <rgoldwyn@suse.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [goldwynr:iomap 23/33] fs/btrfs/file.c:1704:29: error: 'bi'
- redeclared as different kind of symbol
-Message-ID: <202112301347.2emBGOuh-lkp@intel.com>
+Message-Id: <20211230051132.21056-3-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211230051132.21056-1-hbh25y@gmail.com>
+References: <20211230051132.21056-1-hbh25y@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/goldwynr/linux iomap
-head:   30c74a8c201365178cae26d0d7aefa120c3245ab
-commit: 31240db6a699e846f0d73f27d4b32d0e95bb08dc [23/33] btrfs: Set extents delalloc in iomap_end
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20211230/202112301347.2emBGOuh-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/goldwynr/linux/commit/31240db6a699e846f0d73f27d4b32d0e95bb08dc
-        git remote add goldwynr https://github.com/goldwynr/linux
-        git fetch --no-tags goldwynr iomap
-        git checkout 31240db6a699e846f0d73f27d4b32d0e95bb08dc
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash fs/btrfs/
+dev->config and dev->hs_config and dev->dev need to be cleaned if
+dev_config fails to avoid UAF.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-Note: the goldwynr/iomap HEAD 30c74a8c201365178cae26d0d7aefa120c3245ab builds fine.
-      It only hurts bisectability.
-
-All errors (new ones prefixed by >>):
-
-   fs/btrfs/file.c: In function 'btrfs_buffered_iomap_end':
->> fs/btrfs/file.c:1704:29: error: 'bi' redeclared as different kind of symbol
-    1704 |         struct btrfs_iomap *bi = iomap->private;
-         |                             ^~
-   fs/btrfs/file.c:1701:69: note: previous definition of 'bi' with type 'struct btrfs_iomap *'
-    1701 |                 loff_t length, ssize_t written, struct btrfs_iomap *bi)
-         |                                                 ~~~~~~~~~~~~~~~~~~~~^~
->> fs/btrfs/file.c:1704:34: error: 'iomap' undeclared (first use in this function)
-    1704 |         struct btrfs_iomap *bi = iomap->private;
-         |                                  ^~~~~
-   fs/btrfs/file.c:1704:34: note: each undeclared identifier is reported only once for each function it appears in
-
-
-vim +/bi +1704 fs/btrfs/file.c
-
-  1699	
-  1700	static int btrfs_buffered_iomap_end(struct inode *inode, loff_t pos,
-  1701			loff_t length, ssize_t written, struct btrfs_iomap *bi)
-  1702	{
-  1703		struct btrfs_fs_info *fs_info = btrfs_sb(inode->i_sb);
-> 1704		struct btrfs_iomap *bi = iomap->private;
-  1705		int ret = 0;
-  1706		size_t release_bytes = 0;
-  1707		u64 start = round_down(pos, fs_info->sectorsize);
-  1708		u64 written_block_end = round_up(pos + written, fs_info->sectorsize) - 1;
-  1709		u64 block_end = round_up(pos + length, fs_info->sectorsize) - 1;
-  1710	
-  1711	        int extra_bits = 0;
-  1712	
-  1713	        if (written == 0) {
-  1714	                release_bytes = bi->reserved_bytes;
-  1715	        } else if (written < length) {
-  1716	                release_bytes = block_end - written_block_end + 1;
-  1717	        }
-  1718	
-  1719	        if (bi->metadata_only)
-  1720	                extra_bits |= EXTENT_NORESERVE;
-  1721	
-  1722	        clear_extent_bit(&BTRFS_I(inode)->io_tree, start, written_block_end,
-  1723	                         EXTENT_DELALLOC | EXTENT_DO_ACCOUNTING | EXTENT_DEFRAG,
-  1724	                         0, 0, &bi->cached_state);
-  1725	
-  1726	        ret = btrfs_set_extent_delalloc(BTRFS_I(inode), start,
-  1727	                        written_block_end, extra_bits, &bi->cached_state);
-  1728	
-  1729	        /* In case of error, release everything in btrfs_iomap_release() */
-  1730	        if (ret < 0)
-  1731	                release_bytes = bi->reserved_bytes;
-  1732	
-  1733		/*
-  1734		 * If we have not locked the extent range, because the range's
-  1735		 * start offset is >= i_size, we might still have a non-NULL
-  1736		 * cached extent state, acquired while marking the extent range
-  1737		 * as delalloc. Therefore free any possible cached extent state
-  1738		 * to avoid a memory leak.
-  1739		 */
-  1740		if (bi->extents_locked)
-  1741			unlock_extent_cached(&BTRFS_I(inode)->io_tree,
-  1742					bi->lockstart, bi->lockend,
-  1743					&bi->cached_state);
-  1744		else
-  1745			free_extent_state(bi->cached_state);
-  1746	
-  1747		btrfs_delalloc_release_extents(BTRFS_I(inode), bi->reserved_bytes);
-  1748		if (bi->metadata_only)
-  1749			btrfs_check_nocow_unlock(BTRFS_I(inode));
-  1750	
-  1751		btrfs_iomap_release(inode, pos, release_bytes, bi);
-  1752	
-  1753		return 0;
-  1754	}
-  1755	
-
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/usb/gadget/legacy/inode.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
+index eaad03c0252f..d2e88f3b9131 100644
+--- a/drivers/usb/gadget/legacy/inode.c
++++ b/drivers/usb/gadget/legacy/inode.c
+@@ -1847,7 +1847,7 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
+ 		total = le16_to_cpu(dev->hs_config->wTotalLength);
+ 		if (!is_valid_config(dev->hs_config, total) ||
+ 				total > length - USB_DT_DEVICE_SIZE)
+-			goto fail;
++			goto fail1;
+ 		kbuf += total;
+ 		length -= total;
+ 	} else {
+@@ -1858,12 +1858,12 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
+ 
+ 	/* device descriptor (tweaked for paranoia) */
+ 	if (length != USB_DT_DEVICE_SIZE)
+-		goto fail;
++		goto fail1;
+ 	dev->dev = (void *)kbuf;
+ 	if (dev->dev->bLength != USB_DT_DEVICE_SIZE
+ 			|| dev->dev->bDescriptorType != USB_DT_DEVICE
+ 			|| dev->dev->bNumConfigurations != 1)
+-		goto fail;
++		goto fail2;
+ 	dev->dev->bcdUSB = cpu_to_le16 (0x0200);
+ 
+ 	/* triggers gadgetfs_bind(); then we can enumerate. */
+@@ -1875,6 +1875,9 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
+ 
+ 	value = usb_gadget_probe_driver(&gadgetfs_driver);
+ 	if (value != 0) {
++		dev->dev = NULL;
++		dev->hs_config = NULL;
++		dev->config = NULL;
+ 		kfree (dev->buf);
+ 		dev->buf = NULL;
+ 	} else {
+@@ -1892,7 +1895,12 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
+ 	}
+ 	return value;
+ 
++fail2:
++	dev->dev = NULL;
++fail1:
++	dev->hs_config = NULL;
+ fail:
++	dev->config = NULL;
+ 	spin_unlock_irq (&dev->lock);
+ 	pr_debug ("%s: %s fail %zd, %p\n", shortname, __func__, value, dev);
+ 	kfree (dev->buf);
+-- 
+2.25.1
+

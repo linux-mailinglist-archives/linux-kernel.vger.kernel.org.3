@@ -2,103 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC6448186A
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:15:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 833E1481878
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:20:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231612AbhL3CPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 21:15:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47660 "EHLO
+        id S234559AbhL3CUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 21:20:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbhL3CPO (ORCPT
+        with ESMTP id S234411AbhL3CUY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 21:15:14 -0500
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4BBC061574;
-        Wed, 29 Dec 2021 18:15:13 -0800 (PST)
-Received: by mail-pg1-x542.google.com with SMTP id i8so11674015pgt.13;
-        Wed, 29 Dec 2021 18:15:13 -0800 (PST)
+        Wed, 29 Dec 2021 21:20:24 -0500
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F8FC061574;
+        Wed, 29 Dec 2021 18:20:23 -0800 (PST)
+Received: by mail-ed1-x543.google.com with SMTP id x15so92767564edv.1;
+        Wed, 29 Dec 2021 18:20:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=xpvE1IguZ73rofYZc01aCygHY7BN+tTWzJIv0Gtd82E=;
-        b=GrI9HoeRHdZp8AdKRUqZP+QPD7/9avC3/bRchOOjd9BgCllh5mbfmP0haO2l0EE5jv
-         GIBXKlwoDj5cahZqFPuMD/rrLIl9tx45qMh3e+5740qDCQWTpMkE1/McbDkH0nZGyH5L
-         1YWof/gEbyz90jz8iXjWBiB8UyH+kD0phY9FYqBPZiU4VM6n+yAE+D4ZsSqIEgMce/af
-         OKNV+FRYaR3oK867yoCfKNLuJ84CGDHvi7zCxxaVDCwlbmpQYvQ9NAi41LHEL5Fjp65j
-         s4dHV/I1c9/CcXQ8WkpHU0UgMeWclPcVl2IAJY3OJYHq/bSfItABzuNKfzX7nupNH/cf
-         Yxyw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hiEx9cUv2eMNzaWLRDEcUcL8OSIJpA5IG99OfRArXu8=;
+        b=V4gKDpUZcyC/9VpK0cwWVTupek56v/K05xfnKOzQ+bD96Q1su291S1gbk7U2XUaKPS
+         jcoJqPY9ztT7BjtKG/1kkWeeVKt4X7mVAl1oClBNv9cGT+hoMIZmqwlrI/FKQi10rYWe
+         aRf0EKL2Fd+FvmrSe5OPh1UtisAcwu012fo+dXg58gmrCLYE6k7C0EbTBVXGJ7NhJAls
+         2X90GegTqcYKCiu+Oik7/71sUwVg9fnYlCxocYeR+nTqIbCdWWspx1htE+D2x036fPN4
+         aV47ZJYP4eN6czTwGGZv08GcyzwFyvg8ubzYDYyMCXwfmouHZXdHT7Hn5jp99pRUq0MY
+         IB5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=xpvE1IguZ73rofYZc01aCygHY7BN+tTWzJIv0Gtd82E=;
-        b=YX2UQLzY7tDu6YbUFGMW68234onBMrPv0Y5Bz1w157C9mt4KJ4ELoOhhdVRhEqmZam
-         lN65kmAiqaes2ap+jcaqxFotsR26jH2pkvLLCz84L/isH95Up5Rp9sp1EgcEV5iKsO1c
-         D7iUO8pEwLoc2KYZTucEmivNrMunyGNJDcpVLn5AfFY8/vDNmlIeNRxR7yu4oeAShIcI
-         4Yy592lkrmaymwt3+N2RfVeJxXc+cckbGAWhLTHqd1GLauP8Dd/WSYV7xOwA0wa9F1U4
-         NY/p6p1tnAqoo/p/1fGRQ2QF6XVPCm7KzCK2rtcGflbd/jXUTf+xdCOX7A4XpKjcBsjo
-         fPQw==
-X-Gm-Message-State: AOAM531hFXE0ADIhfTtGwu/Bv+0IMq5tZ4o9LroG+z33fGhZ4k75cKiz
-        vnMYv8PwKWD7pAF5zXRIWFRMUKK/s0m3Fze9/4E=
-X-Google-Smtp-Source: ABdhPJzVrSBoQSYWKWynnfHjgdsdnTVrUhoKk15ZISolD0ziaZdbCtqCRXlUIR7nilGABbcZYZcUzw==
-X-Received: by 2002:aa7:910e:0:b0:4bb:8470:249b with SMTP id 14-20020aa7910e000000b004bb8470249bmr28316802pfh.23.1640830513315;
-        Wed, 29 Dec 2021 18:15:13 -0800 (PST)
-Received: from [0.0.0.0] (ec2-54-176-189-104.us-west-1.compute.amazonaws.com. [54.176.189.104])
-        by smtp.gmail.com with ESMTPSA id x33sm26609030pfh.212.2021.12.29.18.15.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Dec 2021 18:15:13 -0800 (PST)
-Subject: Re: [PATCH] usb: gadget: use after free in dev_config
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, axboe@kernel.dk,
-        dan.carpenter@oracle.com, jj251510319013@gmail.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211228092126.29510-1-hbh25y@gmail.com>
- <YczPGL/1Er/vh+X6@rowland.harvard.edu>
-From:   Hangyu Hua <hbh25y@gmail.com>
-Message-ID: <dc9d169f-deae-e0a1-4509-a105898f45c0@gmail.com>
-Date:   Thu, 30 Dec 2021 10:15:02 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hiEx9cUv2eMNzaWLRDEcUcL8OSIJpA5IG99OfRArXu8=;
+        b=fofOcE33ZkTGDZp1yAL3CFCyBRSt84bEH+drKHuIl/sOpHVSFu514gfvZZ9kiKfnIr
+         b0WWRF4Cia4/0cnqSignS1RLGGRdrGN+Ux1Y5lH3JB4tplNvVk4r26HPx4fQO/MT23V6
+         th7/ZDvIbtH/XxaRXrwxivfXj3Aux2zw0dvtutPSEeFt4jxHNTzdZqeuMN+m5YCRjKlN
+         QvuN4atkC+KYLKDN7tF/M78NVXsI4IFzJZ3OeM/IzzuOc3701RNwQ2b33vG7SI/JdW7K
+         ouZdN1eQaEm451+PfpceWIUU2aCQxabEvqtuL2JbQW12GHWo8BrsbeBp0QBPlRDdg6eZ
+         zfbA==
+X-Gm-Message-State: AOAM532MMNx5CVxGqZk1TWZv4v9UNC99Qdj7FWfwOKrOMYvTxf8R6Bo4
+        YCby+UrD/bSDpTOYaM+BptB6GVYxKYLcwmUWtRk=
+X-Google-Smtp-Source: ABdhPJzEF0vetISaVS8USQar00SVVZb5xFxrEJyCn6tK2L1VaY/y08YFNOb4wOogYVHqHp8aZj9qBz852zOuCjM7/6Y=
+X-Received: by 2002:a17:907:2da3:: with SMTP id gt35mr23678763ejc.704.1640830822347;
+ Wed, 29 Dec 2021 18:20:22 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YczPGL/1Er/vh+X6@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20211227062035.3224982-1-imagedong@tencent.com> <20211229130927.2370f098@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <20211229130927.2370f098@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Thu, 30 Dec 2021 10:17:12 +0800
+Message-ID: <CADxym3ZJPG8HxEXt6vTEeegCtZZRKjGWGJ_3rWjrzNijKBa-uQ@mail.gmail.com>
+Subject: Re: [PATCH] net: bpf: handle return value of BPF_CGROUP_RUN_PROG_INET4_POST_BIND()
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Menglong Dong <imagedong@tencent.com>,
+        Andrey Ignatov <rdna@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank for your suggesions. I will break this up into two separate 
-patches later. And i think it's necessary to clear up dev->config and
-dev->hs_config and dev->dev. For example, dev->hs_config is used in
-ep0_read() which may lead a UAF.
+On Thu, Dec 30, 2021 at 5:09 AM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Mon, 27 Dec 2021 14:20:35 +0800 menglong8.dong@gmail.com wrote:
+> > From: Menglong Dong <imagedong@tencent.com>
+> >
+> > The return value of BPF_CGROUP_RUN_PROG_INET4_POST_BIND() in
+> > __inet_bind() is not handled properly. While the return value
+> > is non-zero, it will set inet_saddr and inet_rcv_saddr to 0 and
+> > exit:
+> >
+> >       err = BPF_CGROUP_RUN_PROG_INET4_POST_BIND(sk);
+> >       if (err) {
+> >               inet->inet_saddr = inet->inet_rcv_saddr = 0;
+> >               goto out_release_sock;
+> >       }
+> >
+> > Let's take UDP for example and see what will happen. For UDP
+> > socket, it will be added to 'udp_prot.h.udp_table->hash' and
+> > 'udp_prot.h.udp_table->hash2' after the sk->sk_prot->get_port()
+> > called success. If 'inet->inet_rcv_saddr' is specified here,
+> > then 'sk' will be in the 'hslot2' of 'hash2' that it don't belong
+> > to (because inet_saddr is changed to 0), and UDP packet received
+> > will not be passed to this sock. If 'inet->inet_rcv_saddr' is not
+> > specified here, the sock will work fine, as it can receive packet
+> > properly, which is wired, as the 'bind()' is already failed.
+> >
+> > I'm not sure what should do here, maybe we should unhash the sock
+> > for UDP? Therefor, user can try to bind another port?
+>
+> Enumarating the L4 unwind paths in L3 code seems like a fairly clear
+> layering violation. A new callback to undo ->sk_prot->get_port() may
+> be better.
 
-Thanks.
+Yeah, it seems there isn't an easier way to solve this problem, a new
+callback is needed.
 
-On 2021/12/30 上午5:11, Alan Stern wrote:
-> On Tue, Dec 28, 2021 at 05:21:26PM +0800, Hangyu Hua wrote:
->> There are two bugs:
-> 
-> You should break this up into two separate patches, one for each bug.
-> 
->> dev->buf does not need to be released if it already exists before
->> executing dev_config.
-> 
-> That's right.  The call to dev_config should fail without changing any
-> of the stored values.
-> 
->> dev->config and dev->hs_config and dev->dev need to be cleaned if
->> dev_config fails to avoid UAF.
-> 
-> Do they really need to be cleared?  I think if dev_config fails then
-> those pointers never get used, so it doesn't matter what they contain.
-> 
-> Of course, clearing them doesn't hurt, but it would be best to clear
-> all of them in the "fail:" part of the routine.  And then you would
-> want to change the pathway where usb_gadget_probe_driver fails, to make
-> it go to "fail:" also.
-> 
-> Alan Stern
-> 
+>
+> Does IPv6 no need as similar change?
+>
+
+IPv6 nedd change too. This patch is just to get some suggestions :/
+
+> You need to provide a selftest to validate the expected behavior.
+
+I'll add it.
+
+Thanks!
+Menglong Dong
+
+>
+> > diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+> > index 04067b249bf3..9e5710f40a39 100644
+> > --- a/net/ipv4/af_inet.c
+> > +++ b/net/ipv4/af_inet.c
+> > @@ -530,7 +530,14 @@ int __inet_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
+> >               if (!(flags & BIND_FROM_BPF)) {
+> >                       err = BPF_CGROUP_RUN_PROG_INET4_POST_BIND(sk);
+> >                       if (err) {
+> > +                             if (sk->sk_prot == &udp_prot)
+> > +                                     sk->sk_prot->unhash(sk);
+> > +                             else if (sk->sk_prot == &tcp_prot)
+> > +                                     inet_put_port(sk);
+> > +
+> >                               inet->inet_saddr = inet->inet_rcv_saddr = 0;
+> > +                             err = -EPERM;
+> > +
+> >                               goto out_release_sock;
+> >                       }
+> >               }
+>

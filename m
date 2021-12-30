@@ -2,110 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 241D2481BBE
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 12:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84370481BC2
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 12:36:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239042AbhL3LdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 06:33:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56984 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239025AbhL3LdN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 06:33:13 -0500
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87EBCC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 03:33:12 -0800 (PST)
-Received: by mail-qv1-xf2b.google.com with SMTP id q3so21793618qvc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 03:33:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0NAb92aP3BvHX/H/r7xcS0pDvxqvrorYUGqTqAdSQus=;
-        b=A9gJExEihB/bAGFoBMIBq18odmtsTOCydFD2wgMeuWGTGJ3MFb6CqvVl7rmzJptGby
-         45SuFMl4GHtVNDMdIEezv4fpEfhXmJWSJrmsNZXt3EZoL1QFT8BwszUdJU/g1l0d9pHc
-         XtSfHGfHRgiJnZUfSf1P8TaYErGPK/0gGC4qCSS4pMTeiZ/qCt9wrah1f3VMqO3ggNkS
-         dswRWt+db55IzbzIJv8SjnWR4GmbqGK/FxMNjdrLVWiLweC/IO5OvCL0FxEWkOcRSzbH
-         XcGQkyC9oC5gGhYxbOgXfe5uTOTmSpAq2Ugm9FDxN/nDaK6pjirB2SUKVmxPcgzk+MNA
-         vIig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0NAb92aP3BvHX/H/r7xcS0pDvxqvrorYUGqTqAdSQus=;
-        b=cHlvGuNouB/oE+C4lVVKEXxajPzeU8bkjgoJwhOqejMDrsQR+26Sbaz2mvdQGvWr4v
-         hb3YLJcxUk4lCzZ0QfM1OZdyv1RnKulBHiTC+H387SmkEm77t80TIVwJQTxqHCJpxpbt
-         mkN9ZLfLvVOJGf3K5ZAgc2Q7w7kegr0vD6bj5bhVxE42vfZY01trDp94KD32hRexGaKQ
-         C0QXTfqenR5LSkFcMGpdOCcab/B66oUKJjC4Krje76HL//avygbN5D7svF08P2ab1Do6
-         ZyYMBOOgJj8IbFLxVYXW1LiRnQlehnv5TgVplSFztZnVsM2uNQMecU3ialRg5kfc668o
-         4lUg==
-X-Gm-Message-State: AOAM532Hd58BM/kWnA8UH9oJmBo1aVPl8OnZzzFRqHxkHZIM+FfKSHiX
-        fbw0P802Z1cOxipke4G4ZYI=
-X-Google-Smtp-Source: ABdhPJym1DmSfFDOm0+uJkMnhCuNXQ/vZE1Hb0Km0uMhLyBPVYS1yLSZhyh+rXnBWdszqWcIzY3AJg==
-X-Received: by 2002:a05:6214:2344:: with SMTP id hu4mr11691004qvb.55.1640863991767;
-        Thu, 30 Dec 2021 03:33:11 -0800 (PST)
-Received: from localhost.localdomain ([181.23.70.139])
-        by smtp.gmail.com with ESMTPSA id v5sm20348559qkp.126.2021.12.30.03.33.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Dec 2021 03:33:11 -0800 (PST)
-From:   Gaston Gonzalez <gascoar@gmail.com>
-To:     linux-staging@lists.linux.dev
-Cc:     gregkh@linuxfoundation.org, nsaenz@kernel.org,
-        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com,
-        juerg.haefliger@canonical.com, rdunlap@infradead.org,
-        dave.stevenson@raspberrypi.com, stefan.wahren@i2se.com,
-        unixbhaskar@gmail.com, mitaliborkar810@gmail.com,
-        phil@raspberrypi.com, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        gascoar@gmail.com
-Subject: [PATCH v2 3/3] staging: vc04_services: update TODO file
-Date:   Thu, 30 Dec 2021 08:31:29 -0300
-Message-Id: <3f560a75063a0bb744bb34c410e49f792d2c3d21.1640776340.git.gascoar@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1640776340.git.gascoar@gmail.com>
-References: <cover.1640776340.git.gascoar@gmail.com>
+        id S238929AbhL3Lgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 06:36:48 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:57882 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235195AbhL3Lgr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 06:36:47 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 436E51EC04FB;
+        Thu, 30 Dec 2021 12:36:42 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1640864202;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=AVrysX5wSe1p4jfVYyywrt1X33OJViyHDBCWQ71sm6E=;
+        b=sPkBnDbB411OC5zaCV34PbPt58vHOA4yIQ9+JL7+notweJCeXFZ8D+H3zBsYJLswxqN7eY
+        OiFnpupneTNGz7IMQ5xqA0E2m8FndT1gzxeDigbg6cdcXQoF1TKxUdohKhhCYeJVCeFtyD
+        yUkZXexBsvyiywJ3xJ7E1eTJbWmWDd4=
+Date:   Thu, 30 Dec 2021 12:36:44 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
+        rric@kernel.org, Smita.KoralahalliChannabasappa@amd.com,
+        william.roche@oracle.com
+Subject: Re: [PATCH v2 1/2] EDAC/amd64: Check register values from all UMCs
+Message-ID: <Yc2ZzMT+Mg5xCvjI@zn.tnic>
+References: <20211215155309.2711917-1-yazen.ghannam@amd.com>
+ <20211215155309.2711917-2-yazen.ghannam@amd.com>
+ <YbotciKVDsH1Fl1H@zn.tnic>
+ <YbtkcppejpW8gHqY@yaz-ubuntu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YbtkcppejpW8gHqY@yaz-ubuntu>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are no struct typedef remaining inside vc04_services/. Hence, remove the
-task from the TODO file.
+On Thu, Dec 16, 2021 at 04:08:18PM +0000, Yazen Ghannam wrote:
+> No, that's a good question. And actually the assumption is incorrect. It is
+> allowed to have different DIMM types in a system though all DIMMs on a single
+> UMC must match.
 
-While at it, fix the items sequential numbering.
+Oh fun, really?!
 
-Signed-off-by: Gaston Gonzalez <gascoar@gmail.com>
----
- drivers/staging/vc04_services/interface/TODO | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+So a single system can have DDR4 *and* DDR5 on the same board?!
 
-diff --git a/drivers/staging/vc04_services/interface/TODO b/drivers/staging/vc04_services/interface/TODO
-index 39810ce017cd..241ca004735c 100644
---- a/drivers/staging/vc04_services/interface/TODO
-+++ b/drivers/staging/vc04_services/interface/TODO
-@@ -80,11 +80,7 @@ vchiq-core.ko and vchiq-dev.ko. This would also ease the upstreaming process.
- 
- The code in vchiq_bcm2835_arm.c should fit in the generic platform file.
- 
--12) Get rid of all the struct typedefs
--
--Most structs are typedefd, it's not encouraged in the kernel.
--
--13) Get rid of all non essential global structures and create a proper per
-+11) Get rid of all non essential global structures and create a proper per
- device structure
- 
- The first thing one generally sees in a probe function is a memory allocation
-@@ -92,6 +88,6 @@ for all the device specific data. This structure is then passed all over the
- driver. This is good practice since it makes the driver work regardless of the
- number of devices probed.
- 
--14) Clean up Sparse warnings from __user annotations. See
-+12) Clean up Sparse warnings from __user annotations. See
- vchiq_irq_queue_bulk_tx_rx(). Ensure that the address of "&waiter->bulk_waiter"
- is never disclosed to userspace.
+So then that
+
+	pvt->dram_type
+
+is insufficient to store the DIMM type for a pvt. If you have multiple
+UMCs on a pvt and all have different type DIMMs, then you need the
+relevant DIMM type when you dump it in sysfs...
+
+Which then means, you need ->dram_type to be per UMC...
+
+And also, I'm assuming the hw already enforces that DIMMs on a single
+UMC must match - it simply won't boot if they don't so you don't have to
+enforce that, at least.
+
+> Do you recommend a follow up patch or should this one be reworked?
+
+This one is insufficient, I'm afraid.
+
+One way to address this is, you could use pvt->umc at the places where
+dram_type is used and assign directly to the dimm->mtype thing. But then
+you'd need a way to map each struct dimm_info *dimm to the UMC so that
+you can determine the correct DIMM type.
+
+Which would make pvt->dram_type redundant and can be removed.
+
+Or you might have a better idea...
+
+HTH.
+
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

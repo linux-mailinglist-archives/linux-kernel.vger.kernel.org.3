@@ -2,26 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B0F481FA6
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:15:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 553F3481FA7
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:15:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240621AbhL3TPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 14:15:16 -0500
-Received: from out2.migadu.com ([188.165.223.204]:60347 "EHLO out2.migadu.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237142AbhL3TPM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 14:15:12 -0500
+        id S240698AbhL3TPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 14:15:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46260 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240485AbhL3TPN (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 14:15:13 -0500
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37C3C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 11:15:12 -0800 (PST)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1640891710;
+        t=1640891711;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/m7yWk0TB8ReTTBYiN5UEq4jCzWx0qUSGwpwtza3XBc=;
-        b=iZqQLEZg8az84o+hGCTf27CTTdVUXqmU9oKKU346aO4d6J4lpaAxPuOy32SzKmF1jucO9W
-        nVID7GC78ESQSJKqCOibjqlVu1SviTs2hisQNNyhUqrjdIrKSnPZ29KJYYWA7kcTwNJl0A
-        yZor+HjsFVKu46EX5vdemovzHxSU0C8=
+        bh=zMk+i6psUWRrJkriJ76ixSA3XRodREnil0b2HWyShlc=;
+        b=hTVLkp46w7va4oaaJgM9hXUVBdrR+YwrRD1olLu1I9WemCknUMTqQKD//fIngzwPeSzuE9
+        R5n5ScEBoP1oX/8B8oIalASl5PRJPRweDrw7/IuK062jCumYtzWQiyPFB39ZAdDyzr6zEI
+        5XLxP8toHqfnKUWkgZWotmqKDtHEHR0=
 From:   andrey.konovalov@linux.dev
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
@@ -39,9 +43,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Evgenii Stepanov <eugenis@google.com>,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm v5 22/39] kasan, fork: reset pointer tags of vmapped stacks
-Date:   Thu, 30 Dec 2021 20:14:47 +0100
-Message-Id: <0a01ad4e71a0861702922ceda87a34a1b4313aca.1640891329.git.andreyknvl@google.com>
+Subject: [PATCH mm v5 23/39] kasan, arm64: reset pointer tags of vmapped stacks
+Date:   Thu, 30 Dec 2021 20:14:48 +0100
+Message-Id: <c2d4db71b1c8019845719fb40b95dc749aeff25a.1640891329.git.andreyknvl@google.com>
 In-Reply-To: <cover.1640891329.git.andreyknvl@google.com>
 References: <cover.1640891329.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -58,7 +62,7 @@ Once tag-based KASAN modes start tagging vmalloc() allocations,
 kernel stacks start getting tagged if CONFIG_VMAP_STACK is enabled.
 
 Reset the tag of kernel stack pointers after allocation in
-alloc_thread_stack_node().
+arch_alloc_vmap_stack().
 
 For SW_TAGS KASAN, when CONFIG_KASAN_STACK is enabled, the
 instrumentation can't handle the SP register being tagged.
@@ -71,28 +75,35 @@ Note, that the memory for the stack allocation still gets tagged to
 catch vmalloc-into-stack out-of-bounds accesses.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-Reviewed-by: Alexander Potapenko <glider@google.com>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 
 ---
 
 Changes v2->v3:
-- Update patch description.
+- Add this patch.
 ---
- kernel/fork.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/include/asm/vmap_stack.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 40f7a6c2a710..5fdb74c7db83 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -254,6 +254,7 @@ static unsigned long *alloc_thread_stack_node(struct task_struct *tsk, int node)
- 	 * so cache the vm_struct.
- 	 */
- 	if (stack) {
-+		stack = kasan_reset_tag(stack);
- 		tsk->stack_vm_area = find_vm_area(stack);
- 		tsk->stack = stack;
- 	}
+diff --git a/arch/arm64/include/asm/vmap_stack.h b/arch/arm64/include/asm/vmap_stack.h
+index 894e031b28d2..20873099c035 100644
+--- a/arch/arm64/include/asm/vmap_stack.h
++++ b/arch/arm64/include/asm/vmap_stack.h
+@@ -17,10 +17,13 @@
+  */
+ static inline unsigned long *arch_alloc_vmap_stack(size_t stack_size, int node)
+ {
++	void *p;
++
+ 	BUILD_BUG_ON(!IS_ENABLED(CONFIG_VMAP_STACK));
+ 
+-	return __vmalloc_node(stack_size, THREAD_ALIGN, THREADINFO_GFP, node,
++	p = __vmalloc_node(stack_size, THREAD_ALIGN, THREADINFO_GFP, node,
+ 			__builtin_return_address(0));
++	return kasan_reset_tag(p);
+ }
+ 
+ #endif /* __ASM_VMAP_STACK_H */
 -- 
 2.25.1
 

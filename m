@@ -2,143 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DEE3481C40
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 13:54:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B179481C41
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 13:54:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235446AbhL3Myu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 07:54:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46620 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbhL3Myt (ORCPT
+        id S239415AbhL3Myz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 07:54:55 -0500
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:32883 "EHLO
+        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235469AbhL3Myy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 07:54:49 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3A4C061574;
-        Thu, 30 Dec 2021 04:54:48 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id j18so50295780wrd.2;
-        Thu, 30 Dec 2021 04:54:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=YFsE9Hzd6Rw74/QWXyvFaT9SGHT235vGJZ7VH+X9Vqg=;
-        b=j1/mXzn1nmea5RST1mMajHuWCuVWhRqN+Lg+syW8EQjxxsP+3z/R93jwf8vgZWbZsm
-         OcuVJ9XUPFPEAU9OtCF+ZwU71OGyQMuKXNmj1Jk9ebfSFlPExhHPMigoSVaJforhf6qJ
-         MSrs2D6cozE43KuJe0O/r6SMBFCRBNmFMatKgoEH7XYm3mCx1BNX77iTI1GUfR0p3gq4
-         tvNKAQZL15557qK/KTsRBQpJFU/bA6CtoGsG0s1HKrGsDf+LMsoSvwqw8ZP6GhC+jaNe
-         hzqABqGTxll+o+q2ZW6rBTvjBRH1TaQ20zt2ZjIiL9k2BhLcnof9T1QFjiAB6uUXAa6m
-         I6nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=YFsE9Hzd6Rw74/QWXyvFaT9SGHT235vGJZ7VH+X9Vqg=;
-        b=LjxXxg/CDf7ZJ9poQDKh99O58i1YMr/qgmLIvdvTO609bVtBDiw2yWsvThbSshXz5x
-         sfzlqjBzs/CDNOg2F8A1oVbvvnnp95pGbbk0btjKnPk9Bah/aC49OlLHJ+3w1YNuoYyO
-         UBKgsKtBvGmoX/98WKSVbDajOVEwhJYkxfZyLtchMkuLPVc9tAH7Y8ypG0V5rHbKjo8g
-         S4BFNI3RiPKkOQkC+InDBENo/XEMJjDL9e93WRxVzg8hqggq5qK6eGvpSgPY4VVaA0HJ
-         3geSvLzB4J4xwwErEg6Y285ShyWpJJJz0TMuobQHXvX0dfOhabMsAmx1exCo9pyn+5jy
-         r9nQ==
-X-Gm-Message-State: AOAM533rrdOX6yO/zit2n2/tRaEUJ6c51bM8hHPhNOmfNnri970PLZ9b
-        qSY2C6FLABl9L0oDF3Gr9LA=
-X-Google-Smtp-Source: ABdhPJzPDe29tdWKwhekT4d7Z3/ncbk+zLexQx66U+rHmm1/X9HvJuKxKAeY5PKXovwjJaFWy4VXjw==
-X-Received: by 2002:a5d:6b8f:: with SMTP id n15mr24876182wrx.189.1640868886447;
-        Thu, 30 Dec 2021 04:54:46 -0800 (PST)
-Received: from [192.168.1.145] ([207.188.161.251])
-        by smtp.gmail.com with ESMTPSA id j3sm23485981wrt.14.2021.12.30.04.54.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Dec 2021 04:54:45 -0800 (PST)
-Message-ID: <20cf2c1e-d55b-5780-8c6e-4d8beaca5a65@gmail.com>
-Date:   Thu, 30 Dec 2021 13:54:44 +0100
+        Thu, 30 Dec 2021 07:54:54 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3A9k1gvK0++LUHey9J9vbD5QRzkn2cJEfYwER7XOP?=
+ =?us-ascii?q?LsXnJhzom1mMCx2oYWW2DPP6JYDTwcoxxYYW2oEgDvpCAzYA2QQE+nZ1PZyIT+?=
+ =?us-ascii?q?JCdXbx1DW+pYnjMdpWbJK5fAnR3huDodKjYdVeB4Ef9WlTdhSMkj/jRHOGkULS?=
+ =?us-ascii?q?s1h1ZHmeIdg9w0HqPpMZp2uaEsfDha++8kYuaT//3YDdJ6BYoWo4g0J9vnTs01?=
+ =?us-ascii?q?BjEVJz0iXRlDRxDlAe2e3D4l/vzL4npR5fzatE88uJX24/+IL+FEmPxp3/BC/u?=
+ =?us-ascii?q?lm7rhc0AMKlLQFVjTzCQGHfH4214b+XdaPqUTbZLwbW9VljGIlpZ1wcpEsZiYS?=
+ =?us-ascii?q?AEzP6SKlv51vxxwSnsvbPIcouOvzX+X9Jb7I1f9W2HjxPFiE1AwFZYF4esxCmZ?=
+ =?us-ascii?q?LndQbIi0MahzGjuay6La6UfV3wJx6as7xM+s3vnBm0CGcDvs8R53Ha7vF6MUe3?=
+ =?us-ascii?q?zoqgM1KW/HEaKIkhZBHBPjbS0QQYRFOUst4wrfu1iS5aTBG7kmbv+wx7nS78eC?=
+ =?us-ascii?q?465C1WPK9RzBAbZw9cp6km1/7?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A+U345qMLNUXkAsBcTkujsMiBIKoaSvp033AC?=
+ =?us-ascii?q?zEpxSQNYf4ixiqmV7bwmPHjP+VEssRAb6LS90MvpewK+yXcb2/hyAV7JZmfbUV?=
+ =?us-ascii?q?WTXf1fBOfZskbd88OXzJ8V6U9PG5IOeuEYJ2IK/voTeGKDYqAdKODuytHeuQ81?=
+ =?us-ascii?q?p00dOD2CEpsQmzuRdDzrd3GeHzM2eutGKHP03KMuzFedkFssH7WG7xI+LpD+Tr?=
+ =?us-ascii?q?Pw5evbiSBtPW9c1ODit1yVAcXBYn6lNhx1aUIz/V78ywKo8mzEz5TmtPf+wgTX?=
+ =?us-ascii?q?1m/N4/1t6avc9uc=3D?=
+X-IronPort-AV: E=Sophos;i="5.88,248,1635199200"; 
+   d="scan'208";a="12997224"
+Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 13:54:53 +0100
+Date:   Thu, 30 Dec 2021 13:54:52 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Goldwyn Rodrigues <rgoldwyn@suse.com>
+cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [goldwynr:iomap 27/33] fs/btrfs/file.c:1517:19-21: ERROR: reference
+ preceded by free on line 1516 (fwd)
+Message-ID: <alpine.DEB.2.22.394.2112301354190.15550@hadrien>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v16 2/7] arm64: dts: mt8183: add svs device information
-Content-Language: en-US
-To:     Roger Lu <roger.lu@mediatek.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        YT Lee <yt.lee@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20210428065440.3704-1-roger.lu@mediatek.com>
- <20210428065440.3704-3-roger.lu@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20210428065440.3704-3-roger.lu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 28/04/2021 08:54, Roger Lu wrote:
-> add compitable/reg/irq/clock/efuse setting in svs node
-> 
-> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-> ---
->   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 18 ++++++++++++++++++
->   1 file changed, 18 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> index 80519a145f13..441d617ece43 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> @@ -657,6 +657,18 @@
->   			status = "disabled";
->   		};
->   
-> +		svs: svs@1100b000 {
-> +			compatible = "mediatek,mt8183-svs";
-> +			reg = <0 0x1100b000 0 0x1000>;
-> +			interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_LOW>;
-> +			clocks = <&infracfg CLK_INFRA_THERM>;
-> +			clock-names = "main";
-> +			nvmem-cells = <&svs_calibration>,
-> +				      <&thermal_calibration>;
-> +			nvmem-cell-names = "svs-calibration-data",
-> +					   "t-calibration-data";
-> +		};
-> +
->   		pwm0: pwm@1100e000 {
->   			compatible = "mediatek,mt8183-disp-pwm";
->   			reg = <0 0x1100e000 0 0x1000>;
-> @@ -941,9 +953,15 @@
->   			reg = <0 0x11f10000 0 0x1000>;
->   			#address-cells = <1>;
->   			#size-cells = <1>;
+---------- Forwarded message ----------
+Date: Thu, 30 Dec 2021 19:59:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: kbuild@lists.01.org
+Cc: lkp@intel.com, Julia Lawall <julia.lawall@lip6.fr>
+Subject: [goldwynr:iomap 27/33] fs/btrfs/file.c:1517:19-21: ERROR: reference
+    preceded by free on line 1516
 
-Please add a new line between the different calibartion data, to improve 
-readability.
+CC: kbuild-all@lists.01.org
+CC: linux-kernel@vger.kernel.org
+TO: Goldwyn Rodrigues <rgoldwyn@suse.com>
 
-Regards,
-Matthias
+tree:   https://github.com/goldwynr/linux iomap
+head:   30c74a8c201365178cae26d0d7aefa120c3245ab
+commit: f3623890897fee87c24f37ae01a2f1a5c35a39d9 [27/33] btrfs: use srcmap for read-before-write cases
+:::::: branch date: 13 hours ago
+:::::: commit date: 18 hours ago
+config: i386-randconfig-c001-20211228 (https://download.01.org/0day-ci/archive/20211230/202112301901.eLLE2zEp-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
 
-> +			thermal_calibration: calib@180 {
-> +				reg = <0x180 0xc>;
-> +			};
->   			mipi_tx_calibration: calib@190 {
->   				reg = <0x190 0xc>;
->   			};
-> +			svs_calibration: calib@580 {
-> +				reg = <0x580 0x64>;
-> +			};
->   		};
->   
->   		u3phy: usb-phy@11f40000 {
-> 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Julia Lawall <julia.lawall@lip6.fr>
+
+
+cocci warnings: (new ones prefixed by >>)
+>> fs/btrfs/file.c:1517:19-21: ERROR: reference preceded by free on line 1516
+
+vim +1517 fs/btrfs/file.c
+
+e95dc238df949a Goldwyn Rodrigues 2021-05-11  1489
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1490  static int btrfs_buffered_iomap_begin(struct inode *inode, loff_t pos,
+f4ecee4435f363 Goldwyn Rodrigues 2021-04-21  1491  		loff_t length, unsigned flags, struct iomap *iomap,
+f4ecee4435f363 Goldwyn Rodrigues 2021-04-21  1492  		struct iomap *srcmap)
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1493  {
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1494  	int ret;
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1495  	size_t write_bytes = length;
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1496  	struct btrfs_fs_info *fs_info = btrfs_sb(inode->i_sb);
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1497  	size_t sector_offset = pos & (fs_info->sectorsize - 1);
+f4ecee4435f363 Goldwyn Rodrigues 2021-04-21  1498  	struct btrfs_iomap *bi;
+f3623890897fee Goldwyn Rodrigues 2021-04-21  1499  	loff_t end = pos + length;
+f4ecee4435f363 Goldwyn Rodrigues 2021-04-21  1500
+f4ecee4435f363 Goldwyn Rodrigues 2021-04-21  1501  	bi = kzalloc(sizeof(struct btrfs_iomap), GFP_NOFS);
+f4ecee4435f363 Goldwyn Rodrigues 2021-04-21  1502  	if (!bi)
+f4ecee4435f363 Goldwyn Rodrigues 2021-04-21  1503  		return -ENOMEM;
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1504
+f3623890897fee Goldwyn Rodrigues 2021-04-21  1505  	if ((pos & (PAGE_SIZE - 1) || end & (PAGE_SIZE - 1))) {
+f3623890897fee Goldwyn Rodrigues 2021-04-21  1506  		loff_t isize = i_size_read(inode);
+f3623890897fee Goldwyn Rodrigues 2021-04-21  1507  		if (pos >= isize) {
+f3623890897fee Goldwyn Rodrigues 2021-04-21  1508  			srcmap->addr = IOMAP_NULL_ADDR;
+f3623890897fee Goldwyn Rodrigues 2021-04-21  1509  			srcmap->type = IOMAP_HOLE;
+f3623890897fee Goldwyn Rodrigues 2021-04-21  1510  			srcmap->offset = isize;
+f3623890897fee Goldwyn Rodrigues 2021-04-21  1511  			srcmap->length = end - isize;
+f3623890897fee Goldwyn Rodrigues 2021-04-21  1512  		} else {
+f3623890897fee Goldwyn Rodrigues 2021-04-21  1513  			bi->em = btrfs_get_extent(BTRFS_I(inode), NULL, 0,
+f3623890897fee Goldwyn Rodrigues 2021-04-21  1514  					pos - sector_offset, length);
+f3623890897fee Goldwyn Rodrigues 2021-04-21  1515  			if (IS_ERR(bi->em)) {
+f3623890897fee Goldwyn Rodrigues 2021-04-21 @1516  				kfree(bi);
+f3623890897fee Goldwyn Rodrigues 2021-04-21 @1517  				return PTR_ERR(bi->em);
+f3623890897fee Goldwyn Rodrigues 2021-04-21  1518  			}
+f3623890897fee Goldwyn Rodrigues 2021-04-21  1519  			btrfs_em_to_iomap(inode, bi->em, srcmap,
+f3623890897fee Goldwyn Rodrigues 2021-04-21  1520  					pos - sector_offset);
+f3623890897fee Goldwyn Rodrigues 2021-04-21  1521  		}
+f3623890897fee Goldwyn Rodrigues 2021-04-21  1522  	}
+f3623890897fee Goldwyn Rodrigues 2021-04-21  1523
+f3623890897fee Goldwyn Rodrigues 2021-04-21  1524  	if ((srcmap->type != IOMAP_HOLE) &&
+f3623890897fee Goldwyn Rodrigues 2021-04-21  1525  			(end > srcmap->offset + srcmap->length))
+f3623890897fee Goldwyn Rodrigues 2021-04-21  1526  			write_bytes = srcmap->offset + srcmap->length - pos;
+f3623890897fee Goldwyn Rodrigues 2021-04-21  1527
+f3623890897fee Goldwyn Rodrigues 2021-04-21  1528
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1529  	ret = btrfs_check_data_free_space(BTRFS_I(inode),
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1530  			&bi->data_reserved, pos, write_bytes);
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1531  	if (ret < 0) {
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1532  		/*
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1533  		 * If we don't have to COW at the offset, reserve
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1534  		 * metadata only. write_bytes may get smaller than
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1535  		 * requested here.
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1536  		 */
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1537  		if (btrfs_check_nocow_lock(BTRFS_I(inode), pos,
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1538  					&write_bytes) > 0)
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1539  			bi->metadata_only = true;
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1540  		else
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1541  			return ret;
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1542  	}
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1543
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1544  	bi->reserved_bytes = round_up(write_bytes + sector_offset,
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1545  			fs_info->sectorsize);
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1546  	WARN_ON(bi->reserved_bytes == 0);
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1547  	ret = btrfs_delalloc_reserve_metadata(BTRFS_I(inode),
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1548  			bi->reserved_bytes);
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1549  	if (ret) {
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1550  		if (!bi->metadata_only)
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1551  			btrfs_free_reserved_data_space(BTRFS_I(inode),
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1552  					bi->data_reserved, pos,
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1553  					write_bytes);
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1554  		else
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1555  			btrfs_check_nocow_unlock(BTRFS_I(inode));
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1556  		return ret;
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1557  	}
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1558
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1559  	if (pos < inode->i_size) {
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1560  		bi->lockstart = round_down(pos, fs_info->sectorsize);
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1561  		bi->lockend = round_up(pos + write_bytes, fs_info->sectorsize) - 1;
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1562  		btrfs_lock_and_flush_ordered_range(BTRFS_I(inode),
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1563  				bi->lockstart, bi->lockend,
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1564  				&bi->cached_state);
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1565  		bi->extents_locked = true;
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1566  	}
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1567
+f4ecee4435f363 Goldwyn Rodrigues 2021-04-21  1568  	iomap->private = bi;
+f4ecee4435f363 Goldwyn Rodrigues 2021-04-21  1569  	iomap->length = round_up(write_bytes + sector_offset,
+f4ecee4435f363 Goldwyn Rodrigues 2021-04-21  1570  			         fs_info->sectorsize);
+f4ecee4435f363 Goldwyn Rodrigues 2021-04-21  1571  	iomap->offset = round_down(pos, fs_info->sectorsize);
+f4ecee4435f363 Goldwyn Rodrigues 2021-04-21  1572  	iomap->addr = IOMAP_NULL_ADDR;
+f4ecee4435f363 Goldwyn Rodrigues 2021-04-21  1573  	iomap->type = IOMAP_DELALLOC;
+f4ecee4435f363 Goldwyn Rodrigues 2021-04-21  1574  	iomap->bdev = fs_info->fs_devices->latest_dev->bdev;
+f4ecee4435f363 Goldwyn Rodrigues 2021-04-21  1575  	iomap->page_ops = &btrfs_iomap_page_ops;
+f4ecee4435f363 Goldwyn Rodrigues 2021-04-21  1576
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1577  	return 0;
+b192ee8d4db510 Goldwyn Rodrigues 2021-04-21  1578
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

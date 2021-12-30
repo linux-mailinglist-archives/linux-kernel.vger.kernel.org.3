@@ -2,89 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C75481DD9
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 16:52:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6287A481DDC
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 16:53:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240056AbhL3PwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 10:52:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57734 "EHLO
+        id S240088AbhL3Pxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 10:53:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232051AbhL3PwE (ORCPT
+        with ESMTP id S232051AbhL3Pxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 10:52:04 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD21C061574;
-        Thu, 30 Dec 2021 07:52:04 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id r17so51212288wrc.3;
-        Thu, 30 Dec 2021 07:52:04 -0800 (PST)
+        Thu, 30 Dec 2021 10:53:49 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3716C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 07:53:49 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id b22so21670367pfb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 07:53:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kfSEh+kMWcMB2oG20OjNOZJx52OyGLAU5iACdztgHAM=;
-        b=LSe1c8wx29G4o6EHIysvSVoWfm8jbpRdfXqi/Sn96bwLYHcxEIPZj+58H5hzp9nxxN
-         zel2M2/KB4eyjXt473MV8NzT/+bnQNccGzNvt+IR6EIUxDlgEamcQg9KFgUR+vclHNYG
-         cW8NC4dpSq3YrXfs+ZCCTBs1h9Gyzci6VIhMzoAtJfMawtLoJYA6qEx4OCQVbQUsTpEF
-         BPzqxwzjN8IVp2ZT/Pe826g61sr1VpRPs+a3oRuZc0BOXwTQkx/YZ9MZ3oFpYZMRKBHB
-         5otKQqiTb35RreN0x2M1D2qwsK8Ik1t9fCBvKMyMd3MoF5kibR2ZnUxOJ7kIbMT+orCv
-         JN5w==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fcSYNuva57n7+RnRM9rr3l2aKQTdRJZrel3PVRDc1lY=;
+        b=IJrlJgNd68JU2aUjwQjpEYSJi9psL6tTrpM33svuR4K6mxHJ5yIY9vZLAvrkbIpYKj
+         9qV6hYIFzZN7fNIs6ucwcx2HP89qp8O6QfigtMOivWkDNUniXMJt4Stc6Myz//AXY/AB
+         6Ebw/b/ADbqu5vV9YQOg3kfv0Qu/tkvR5PoRTp+QTuTFfWoaNT2JbrMqOhpn7RuhJyFp
+         YiOzyGxWRG/Pz9dayQPXf7vZOJSt0N2XO+TG/9ORrWnKJ2BJ6k6F4Ymzy4a9tGTUBKwT
+         y/JMW+trI7bi6/pbP3vzp25ARjqUTNZA3We6o7RKHAkgTXoodsmBIj4meTloVG5fEh80
+         GS0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kfSEh+kMWcMB2oG20OjNOZJx52OyGLAU5iACdztgHAM=;
-        b=08mZJ0x9bOh3YfNLVybTcqMJ7GYPTVpsop2oQE5RzfuJd6nZXpmDvXlvHX9XKfBoaS
-         bE5+MXKfadD1NSRORUPNveLwvkhqBy6T6/wK+Fbe1qpgAHXx2oYwrcBISrf/e+xCZe9H
-         KEGcQG6fu6YmB0hhsV8ji6rlPkmBJkoNn+v3rnHmgChwYVDdDDxO89OVnt9n2AWxXjVf
-         ZkkAippTb+JIsS14Z4Q+74biOAzQ9gq2LVuIysC4pVw5I6qwk3v9J+psjaRHWJotnftk
-         TJ+QY+wFA/OipVp1hvPTU5OVteAtYUkyu4TSTW581S3p4x+JgxXHu1T9cvP/8o9JAeic
-         +2RQ==
-X-Gm-Message-State: AOAM532rCRajOgNghkQAlIMSWK2QgyA2Y6n8Xk0SUz1J65ptT06uIp1p
-        U4+TLbUsoS4a9QDs55Yp4yONvoY/C0OpExSH
-X-Google-Smtp-Source: ABdhPJyBVYh0Oove2VBiz9Jd/MdVtDP9KyAEL3OOxOiMXWn2lKi2LyJM0+xNP1ys/VrHP42WIlCNVA==
-X-Received: by 2002:a5d:4dca:: with SMTP id f10mr25977728wru.595.1640879523053;
-        Thu, 30 Dec 2021 07:52:03 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id l12sm29750798wmq.2.2021.12.30.07.52.02
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fcSYNuva57n7+RnRM9rr3l2aKQTdRJZrel3PVRDc1lY=;
+        b=xzXiJfYdCgEerBrt2Cebpa3M4YLt0Agco3kLFkU4jcp7LjLcqo4ut9FMR0T1J96HTz
+         zuh6DBBhV7lFSrxJewhHA6ymsc2/06KbX8JCJCMgQaV1qm5v4AWAXPdZioaOinAaSErt
+         tMxSW/3WzTOXJ4iUo1wNmRhwKytiAXe0fY0HrReLeJEZl8UHcysxdH2+u4nzuEG9QeN4
+         0G4FEamZarQKv8uh9WuYAXANQOki3/0EZEmA9V4hQghcXg36aB+WK9eoE/AYq8IB4vkF
+         A3MJFkL9Yz6MXwGggIZ/BU//JqbyhTYR2HNAUUZILmIiLMS3feqdjUstNzgHe+E48HW9
+         ZrvQ==
+X-Gm-Message-State: AOAM5321UtCCS05l3jBmSQqorT2mHJ+ZN8hjWe225u8qdOjcIkyMd5HS
+        1lpQUOTY1v9qZdv9nHf3tzs=
+X-Google-Smtp-Source: ABdhPJxDjMGStn4l9DdX1W+2e7/z92qOtnCCzyxn+ensNfAlIjFuGx4dpJ1h2qGycXvr3YNbzyZyow==
+X-Received: by 2002:aa7:8e44:0:b0:4ad:55c6:6376 with SMTP id d4-20020aa78e44000000b004ad55c66376mr32230187pfr.71.1640879629441;
+        Thu, 30 Dec 2021 07:53:49 -0800 (PST)
+Received: from localhost.localdomain (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
+        by smtp.gmail.com with ESMTPSA id 22sm28057209pfv.173.2021.12.30.07.53.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Dec 2021 07:52:02 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Sam Ravnborg <sam@ravnborg.org>, Zheyu Ma <zheyuma97@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] video: fbdev: asiliantfb: remove redundant assignment to variable Ftarget
-Date:   Thu, 30 Dec 2021 15:52:01 +0000
-Message-Id: <20211230155202.355336-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        Thu, 30 Dec 2021 07:53:49 -0800 (PST)
+Date:   Fri, 31 Dec 2021 04:53:44 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: pi433: add docs to packet_format and
+ tx_start_condition enum
+Message-ID: <20211230155344.GA5404@localhost.localdomain>
+References: <20211229094713.GA28795@localhost.localdomain>
+ <Yc2QrMecuVQFRcBZ@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yc2QrMecuVQFRcBZ@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable Ftarget is being initialized with a value that is never read,
-it is being re-assigned a different value a little later on. The
-assignment is redundant and can be removed.
+On Thu, Dec 30, 2021 at 11:57:48AM +0100, Greg KH wrote:
+> > +/*
+> > + * Defines the packet format used.
+> 
+> What "Defines"?  This is an odd sentence.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/video/fbdev/asiliantfb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Noted. I will change that.
 
-diff --git a/drivers/video/fbdev/asiliantfb.c b/drivers/video/fbdev/asiliantfb.c
-index 84c56f525889..f8ef62542f7f 100644
---- a/drivers/video/fbdev/asiliantfb.c
-+++ b/drivers/video/fbdev/asiliantfb.c
-@@ -110,7 +110,7 @@ static const struct fb_ops asiliantfb_ops = {
- static void asiliant_calc_dclk2(u32 *ppixclock, u8 *dclk2_m, u8 *dclk2_n, u8 *dclk2_div)
- {
- 	unsigned pixclock = *ppixclock;
--	unsigned Ftarget = 1000000 * (1000000 / pixclock);
-+	unsigned Ftarget;
- 	unsigned n;
- 	unsigned best_error = 0xffffffff;
- 	unsigned best_m = 0xffffffff,
--- 
-2.33.1
+> > + * In both modes the length of the payload is limited to 255 bytes if AES
+> > + * is not enabled or 64 bytes otherwise.
+> 
+> What does this have to do with the format type?
+> 
 
+The rationale was that I wanted the developer to know straight away how
+much info would be possible to transfer given the combination of
+encryption + packet_format settings. 
+
+But now that you mentioned it, I can see that this info/obs could be 
+misplaced. I will remove it.
+
+> > +    /* at least one byte in the FIFO */
+> >  	fifo_not_empty
+> >  };
+> 
+> Also, always run your patches through scripts/checkpatch.pl before
+> sending them out.  I couldn't take this patch for that reason alone :(
+>
+
+My apologies, I will be extra careful next time.
+
+thanks,
+
+Paulo A.

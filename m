@@ -2,19 +2,15 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AEB4481FA5
+	by mail.lfdr.de (Postfix) with ESMTP id 66B0F481FA6
 	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:15:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233850AbhL3TPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 14:15:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240258AbhL3TPL (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 14:15:11 -0500
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7316BC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 11:15:11 -0800 (PST)
+        id S240621AbhL3TPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 14:15:16 -0500
+Received: from out2.migadu.com ([188.165.223.204]:60347 "EHLO out2.migadu.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237142AbhL3TPM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 14:15:12 -0500
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
         t=1640891710;
@@ -22,10 +18,10 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lRncW5DK5eaCSNy60b+4mgX3vZ6DGA+/MNVQYyqgQzQ=;
-        b=A4V/+lRWMssw4RadXP8AikldfX5CuaRin31MpeAUjpHav/z4BWVy62xflnpl2J5tl79mJY
-        wUd6olq1wAOFy5do/xv4FE/EXtJ8e3cV0gV3UJP9/wLV8i42860amj4+qtowrYhEZrLmde
-        p364fSUbMhm5jJwYQkd3/4SkqUmW1rM=
+        bh=/m7yWk0TB8ReTTBYiN5UEq4jCzWx0qUSGwpwtza3XBc=;
+        b=iZqQLEZg8az84o+hGCTf27CTTdVUXqmU9oKKU346aO4d6J4lpaAxPuOy32SzKmF1jucO9W
+        nVID7GC78ESQSJKqCOibjqlVu1SviTs2hisQNNyhUqrjdIrKSnPZ29KJYYWA7kcTwNJl0A
+        yZor+HjsFVKu46EX5vdemovzHxSU0C8=
 From:   andrey.konovalov@linux.dev
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
@@ -43,9 +39,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Evgenii Stepanov <eugenis@google.com>,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm v5 21/39] kasan, vmalloc: reset tags in vmalloc functions
-Date:   Thu, 30 Dec 2021 20:14:46 +0100
-Message-Id: <344dc280b602b93927ad353d728c55eb21f0c6bf.1640891329.git.andreyknvl@google.com>
+Subject: [PATCH mm v5 22/39] kasan, fork: reset pointer tags of vmapped stacks
+Date:   Thu, 30 Dec 2021 20:14:47 +0100
+Message-Id: <0a01ad4e71a0861702922ceda87a34a1b4313aca.1640891329.git.andreyknvl@google.com>
 In-Reply-To: <cover.1640891329.git.andreyknvl@google.com>
 References: <cover.1640891329.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -58,86 +54,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-In preparation for adding vmalloc support to SW/HW_TAGS KASAN,
-reset pointer tags in functions that use pointer values in
-range checks.
+Once tag-based KASAN modes start tagging vmalloc() allocations,
+kernel stacks start getting tagged if CONFIG_VMAP_STACK is enabled.
 
-vread() is a special case here. Despite the untagging of the addr
-pointer in its prologue, the accesses performed by vread() are checked.
+Reset the tag of kernel stack pointers after allocation in
+alloc_thread_stack_node().
 
-Instead of accessing the virtual mappings though addr directly, vread()
-recovers the physical address via page_address(vmalloc_to_page()) and
-acceses that. And as page_address() recovers the pointer tag, the
-accesses get checked.
+For SW_TAGS KASAN, when CONFIG_KASAN_STACK is enabled, the
+instrumentation can't handle the SP register being tagged.
+
+For HW_TAGS KASAN, there's no instrumentation-related issues. However,
+the impact of having a tagged SP register needs to be properly evaluated,
+so keep it non-tagged for now.
+
+Note, that the memory for the stack allocation still gets tagged to
+catch vmalloc-into-stack out-of-bounds accesses.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+Reviewed-by: Alexander Potapenko <glider@google.com>
 
 ---
 
-Changes v1->v2:
-- Clarified the description of untagging in vread().
+Changes v2->v3:
+- Update patch description.
 ---
- mm/vmalloc.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ kernel/fork.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index f3c729d4e130..52336b034fbb 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -74,7 +74,7 @@ static const bool vmap_allow_huge = false;
- 
- bool is_vmalloc_addr(const void *x)
- {
--	unsigned long addr = (unsigned long)x;
-+	unsigned long addr = (unsigned long)kasan_reset_tag(x);
- 
- 	return addr >= VMALLOC_START && addr < VMALLOC_END;
- }
-@@ -632,7 +632,7 @@ int is_vmalloc_or_module_addr(const void *x)
- 	 * just put it in the vmalloc space.
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 40f7a6c2a710..5fdb74c7db83 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -254,6 +254,7 @@ static unsigned long *alloc_thread_stack_node(struct task_struct *tsk, int node)
+ 	 * so cache the vm_struct.
  	 */
- #if defined(CONFIG_MODULES) && defined(MODULES_VADDR)
--	unsigned long addr = (unsigned long)x;
-+	unsigned long addr = (unsigned long)kasan_reset_tag(x);
- 	if (addr >= MODULES_VADDR && addr < MODULES_END)
- 		return 1;
- #endif
-@@ -806,6 +806,8 @@ static struct vmap_area *find_vmap_area_exceed_addr(unsigned long addr)
- 	struct vmap_area *va = NULL;
- 	struct rb_node *n = vmap_area_root.rb_node;
- 
-+	addr = (unsigned long)kasan_reset_tag((void *)addr);
-+
- 	while (n) {
- 		struct vmap_area *tmp;
- 
-@@ -827,6 +829,8 @@ static struct vmap_area *__find_vmap_area(unsigned long addr)
- {
- 	struct rb_node *n = vmap_area_root.rb_node;
- 
-+	addr = (unsigned long)kasan_reset_tag((void *)addr);
-+
- 	while (n) {
- 		struct vmap_area *va;
- 
-@@ -2145,7 +2149,7 @@ EXPORT_SYMBOL_GPL(vm_unmap_aliases);
- void vm_unmap_ram(const void *mem, unsigned int count)
- {
- 	unsigned long size = (unsigned long)count << PAGE_SHIFT;
--	unsigned long addr = (unsigned long)mem;
-+	unsigned long addr = (unsigned long)kasan_reset_tag(mem);
- 	struct vmap_area *va;
- 
- 	might_sleep();
-@@ -3411,6 +3415,8 @@ long vread(char *buf, char *addr, unsigned long count)
- 	unsigned long buflen = count;
- 	unsigned long n;
- 
-+	addr = kasan_reset_tag(addr);
-+
- 	/* Don't allow overflow */
- 	if ((unsigned long) addr + count < count)
- 		count = -(unsigned long) addr;
+ 	if (stack) {
++		stack = kasan_reset_tag(stack);
+ 		tsk->stack_vm_area = find_vm_area(stack);
+ 		tsk->stack = stack;
+ 	}
 -- 
 2.25.1
 

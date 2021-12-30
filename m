@@ -2,165 +2,487 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EA0C481B29
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 10:33:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD72481B2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 10:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238368AbhL3JdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 04:33:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238389AbhL3JdR (ORCPT
+        id S234990AbhL3Jfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 04:35:38 -0500
+Received: from mail-sh.amlogic.com ([58.32.228.43]:13328 "EHLO
+        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234584AbhL3Jfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 04:33:17 -0500
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8620DC061401;
-        Thu, 30 Dec 2021 01:33:17 -0800 (PST)
-Received: by mail-pl1-x644.google.com with SMTP id w24so17852588ply.12;
-        Thu, 30 Dec 2021 01:33:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=hLhOt4oAKEoBQ8Mh83vcTQErz7uX8CzDjKjnYPRBdKw=;
-        b=TjZFYY6aMR6riflOoKrCejyNab82OH6OFe5xmQCvrj1Ou95VB5wdiqBP0a1KM+M8aQ
-         VVZ4Lr+Mc8DGhOgq5p0Hbr1nLBu/6wLqQxqhgKA1CfijnJk6aLCqp44tqXFXUlyLWMfm
-         YV/K4Hog2KLFk6PnzG2qODTF5Txb4tXKj4Tx1UCovClQESZc8nilmCdN0994EQQmvYgF
-         YMpGIu8ho6GjlG/7ToRV5AhApKgOq26n9sdo/rrpaEUwnN4n6qxDTAn0HYHOcHj+eez4
-         KJPswjLnr2r+mToLukpuWZ3tbJgDQtIqOBfct7m2Uk/67bXl+dSZe1/ZEV53j0LvAQoZ
-         Fs1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=hLhOt4oAKEoBQ8Mh83vcTQErz7uX8CzDjKjnYPRBdKw=;
-        b=JsgEmJXfo+jf3fLkYFn5LUJMudAKnkqGuPj9CAsKZRhNMFypsctWdZorC8r0aupR0R
-         CULCjfiHFn7KttVx530S9l1jLfrq43y36e5SC2M0nuxJ4lL2EtEBj2mMfm2rItDiuxTQ
-         CG3VZql6XsyuoNdCivEKpEvqpYngsw5Rjyh+XO4B/8w6j3xePOpw8gRiQfaS+Istl0nm
-         niqZFrztX45wP5Bo5vfEzQXWssqm1QT0qeBXVl7cwyMzY7DhqIDm7u9yGRNmcfmkwJor
-         Q8rQcbPSoCvWCdGep8INZ6t5Mqq0N9osej9Avwb9Dj6Cj7bUb2Qlj7rnyDbIJ1R1JXfA
-         WmrQ==
-X-Gm-Message-State: AOAM531pgvGVwmMnZdGLTaN7TtK+GC6ZLmj+Hej2JkObyWMokkU2MgHL
-        ojHrJP5OnWa/TVsUmK9JMpA=
-X-Google-Smtp-Source: ABdhPJxlPxVRcx3M5gcSjYd6AAzcuxgZwfM/7FrYYkG14UdtPr3Z3v7FOBuP1VfLqaqFaxskxHOZTQ==
-X-Received: by 2002:a17:903:32c7:b0:149:7657:bbaf with SMTP id i7-20020a17090332c700b001497657bbafmr21373356plr.156.1640856797104;
-        Thu, 30 Dec 2021 01:33:17 -0800 (PST)
-Received: from localhost.localdomain ([43.132.141.9])
-        by smtp.gmail.com with ESMTPSA id f4sm23231052pfj.25.2021.12.30.01.33.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Dec 2021 01:33:16 -0800 (PST)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     rostedt@goodmis.org, dsahern@kernel.org
-Cc:     mingo@redhat.com, davem@davemloft.net, kuba@kernel.org,
-        nhorman@tuxdriver.com, edumazet@google.com,
-        yoshfuji@linux-ipv6.org, jonathan.lemon@gmail.com, alobakin@pm.me,
-        keescook@chromium.org, pabeni@redhat.com, talalahmad@google.com,
-        haokexin@gmail.com, imagedong@tencent.com, atenart@kernel.org,
-        bigeasy@linutronix.de, weiwan@google.com, arnd@arndb.de,
-        vvs@virtuozzo.com, cong.wang@bytedance.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        mengensun@tencent.com, mungerjiang@tencent.com
-Subject: [PATCH net-next 3/3] net: skb: use kfree_skb_with_reason() in __udp4_lib_rcv()
-Date:   Thu, 30 Dec 2021 17:32:40 +0800
-Message-Id: <20211230093240.1125937-4-imagedong@tencent.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20211230093240.1125937-1-imagedong@tencent.com>
-References: <20211230093240.1125937-1-imagedong@tencent.com>
+        Thu, 30 Dec 2021 04:35:36 -0500
+Received: from [10.18.29.173] (10.18.29.173) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Thu, 30 Dec
+ 2021 17:35:34 +0800
+Message-ID: <290bd079-5627-60b0-a177-ad5608ce1211@amlogic.com>
+Date:   Thu, 30 Dec 2021 17:35:33 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH V2 4/6] tty: serial: meson: The UART baud rate calculation
+ is described using the common clock code. Also added S4 chip uart Compatible.
+Content-Language: en-US
+To:     Vyacheslav <adeep@lexina.in>, <linux-serial@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+References: <20211229135350.9659-1-yu.tu@amlogic.com>
+ <20211229135350.9659-5-yu.tu@amlogic.com>
+ <fca61771-3b0d-d306-39bf-7b271dc148d9@lexina.in>
+From:   Yu Tu <yu.tu@amlogic.com>
+In-Reply-To: <fca61771-3b0d-d306-39bf-7b271dc148d9@lexina.in>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.18.29.173]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+Hi Vyacheslav,
+	Thank you very much for your reply.
 
-Replace kfree_skb() with kfree_skb_with_reason() in __udp4_lib_rcv.
-New drop reason 'SKB_DROP_REASON_UDP_CSUM' is added for udp csum
-error.
-
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
----
- include/linux/skbuff.h     |  1 +
- include/trace/events/skb.h |  1 +
- net/ipv4/udp.c             | 10 ++++++++--
- 3 files changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 43cb3b75b5af..f0c6949fd19c 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -317,6 +317,7 @@ enum skb_drop_reason {
- 	SKB_DROP_REASON_PKT_TOO_SMALL,
- 	SKB_DROP_REASON_TCP_CSUM,
- 	SKB_DROP_REASON_TCP_FILTER,
-+	SKB_DROP_REASON_UDP_CSUM,
- 	SKB_DROP_REASON_MAX,
- };
- 
-diff --git a/include/trace/events/skb.h b/include/trace/events/skb.h
-index c6f4ecf6781e..f616547dddc6 100644
---- a/include/trace/events/skb.h
-+++ b/include/trace/events/skb.h
-@@ -15,6 +15,7 @@
- 	EM(SKB_DROP_REASON_PKT_TOO_SMALL, PKT_TOO_SMALL)	\
- 	EM(SKB_DROP_REASON_TCP_CSUM, TCP_CSUM)			\
- 	EM(SKB_DROP_REASON_TCP_FILTER, TCP_FILTER)		\
-+	EM(SKB_DROP_REASON_UDP_CSUM, UDP_CSUM)			\
- 	EMe(SKB_DROP_REASON_MAX, HAHA_MAX)
- 
- #undef EM
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index f376c777e8fc..463a5adcaacf 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -2410,6 +2410,9 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
- 	__be32 saddr, daddr;
- 	struct net *net = dev_net(skb->dev);
- 	bool refcounted;
-+	int drop_reason;
-+
-+	drop_reason = SKB_DROP_REASON_NOT_SPECIFIED;
- 
- 	/*
- 	 *  Validate the packet.
-@@ -2465,6 +2468,7 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
- 	if (udp_lib_checksum_complete(skb))
- 		goto csum_error;
- 
-+	drop_reason = SKB_DROP_REASON_NO_SOCKET;
- 	__UDP_INC_STATS(net, UDP_MIB_NOPORTS, proto == IPPROTO_UDPLITE);
- 	icmp_send(skb, ICMP_DEST_UNREACH, ICMP_PORT_UNREACH, 0);
- 
-@@ -2472,10 +2476,11 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
- 	 * Hmm.  We got an UDP packet to a port to which we
- 	 * don't wanna listen.  Ignore it.
- 	 */
--	kfree_skb(skb);
-+	kfree_skb_with_reason(skb, drop_reason);
- 	return 0;
- 
- short_packet:
-+	drop_reason = SKB_DROP_REASON_PKT_TOO_SMALL;
- 	net_dbg_ratelimited("UDP%s: short packet: From %pI4:%u %d/%d to %pI4:%u\n",
- 			    proto == IPPROTO_UDPLITE ? "Lite" : "",
- 			    &saddr, ntohs(uh->source),
-@@ -2488,6 +2493,7 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
- 	 * RFC1122: OK.  Discards the bad packet silently (as far as
- 	 * the network is concerned, anyway) as per 4.1.3.4 (MUST).
- 	 */
-+	drop_reason = SKB_DROP_REASON_UDP_CSUM;
- 	net_dbg_ratelimited("UDP%s: bad checksum. From %pI4:%u to %pI4:%u ulen %d\n",
- 			    proto == IPPROTO_UDPLITE ? "Lite" : "",
- 			    &saddr, ntohs(uh->source), &daddr, ntohs(uh->dest),
-@@ -2495,7 +2501,7 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
- 	__UDP_INC_STATS(net, UDP_MIB_CSUMERRORS, proto == IPPROTO_UDPLITE);
- drop:
- 	__UDP_INC_STATS(net, UDP_MIB_INERRORS, proto == IPPROTO_UDPLITE);
--	kfree_skb(skb);
-+	kfree_skb_with_reason(skb, drop_reason);
- 	return 0;
- }
- 
--- 
-2.30.2
-
+On 2021/12/30 3:07, Vyacheslav wrote:
+> [ EXTERNAL EMAIL ]
+> 
+> 
+> 
+> 29.12.2021 16:53, Yu Tu пишет:
+>> Using the common Clock code to describe the UART baud rate clock makes
+>> it easier for the UART driver to be compatible with the baud rate
+>> requirements of the UART IP on different meson chips
+>>
+>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+>> ---
+>>   drivers/tty/serial/Kconfig      |   1 +
+>>   drivers/tty/serial/meson_uart.c | 303 ++++++++++++++++++++++++++------
+>>   2 files changed, 249 insertions(+), 55 deletions(-)
+>>
+>> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+>> index 780908d43557..32e238173036 100644
+>> --- a/drivers/tty/serial/Kconfig
+>> +++ b/drivers/tty/serial/Kconfig
+>> @@ -198,6 +198,7 @@ config SERIAL_KGDB_NMI
+>>   config SERIAL_MESON
+>>       tristate "Meson serial port support"
+>>       depends on ARCH_MESON
+>> +    depends on COMMON_CLK
+>>       select SERIAL_CORE
+>>       help
+>>         This enables the driver for the on-chip UARTs of the Amlogic
+>> diff --git a/drivers/tty/serial/meson_uart.c 
+>> b/drivers/tty/serial/meson_uart.c
+>> index 99efe62a1507..9b07e3534969 100644
+>> --- a/drivers/tty/serial/meson_uart.c
+>> +++ b/drivers/tty/serial/meson_uart.c
+>> @@ -6,6 +6,7 @@
+>>    */
+>>   #include <linux/clk.h>
+>> +#include <linux/clk-provider.h>
+>>   #include <linux/console.h>
+>>   #include <linux/delay.h>
+>>   #include <linux/init.h>
+>> @@ -65,9 +66,7 @@
+>>   #define AML_UART_RECV_IRQ(c)        ((c) & 0xff)
+>>   /* AML_UART_REG5 bits */
+>> -#define AML_UART_BAUD_MASK        0x7fffff
+>>   #define AML_UART_BAUD_USE        BIT(23)
+>> -#define AML_UART_BAUD_XTAL        BIT(24)
+>>   #define AML_UART_PORT_NUM        12
+>>   #define AML_UART_PORT_OFFSET        6
+>> @@ -76,6 +75,21 @@
+>>   #define AML_UART_POLL_USEC        5
+>>   #define AML_UART_TIMEOUT_USEC        10000
+>> +struct meson_uart_data {
+>> +    struct uart_port    port;
+>> +    struct clk        *pclk;
+>> +    struct clk        *baud_clk;
+>> +    struct clk_divider    baud_div;
+>> +    struct clk_mux        use_xtal_mux;
+>> +    struct clk_mux        xtal_clk_sel_mux;
+>> +    struct clk_mux        xtal2_clk_sel_mux;
+>> +    struct clk_fixed_factor    xtal_div2;
+>> +    struct clk_fixed_factor    xtal_div3;
+>> +    struct clk_fixed_factor    clk81_div4;
+>> +    bool            no_clk81_input;
+>> +    bool            has_xtal_clk_sel;
+>> +};
+>> +
+>>   static struct uart_driver meson_uart_driver;
+>>   static struct uart_port *meson_ports[AML_UART_PORT_NUM];
+>> @@ -270,14 +284,11 @@ static void meson_uart_reset(struct uart_port 
+>> *port)
+>>   static int meson_uart_startup(struct uart_port *port)
+>>   {
+>>       u32 val;
+>> -    int ret = 0;
+>> +    int ret;
+>> -    val = readl(port->membase + AML_UART_CONTROL);
+>> -    val |= AML_UART_CLEAR_ERR;
+>> -    writel(val, port->membase + AML_UART_CONTROL);
+>> -    val &= ~AML_UART_CLEAR_ERR;
+>> -    writel(val, port->membase + AML_UART_CONTROL);
+>> +    meson_uart_reset(port);
+>> +    val = readl(port->membase + AML_UART_CONTROL);
+>>       val |= (AML_UART_RX_EN | AML_UART_TX_EN);
+>>       writel(val, port->membase + AML_UART_CONTROL);
+>> @@ -295,19 +306,17 @@ static int meson_uart_startup(struct uart_port 
+>> *port)
+>>   static void meson_uart_change_speed(struct uart_port *port, unsigned 
+>> long baud)
+>>   {
+>> +    struct meson_uart_data *private_data = port->private_data;
+>>       u32 val;
+>>       while (!meson_uart_tx_empty(port))
+>>           cpu_relax();
+>> -    if (port->uartclk == 24000000) {
+>> -        val = ((port->uartclk / 3) / baud) - 1;
+>> -        val |= AML_UART_BAUD_XTAL;
+>> -    } else {
+>> -        val = ((port->uartclk * 10 / (baud * 4) + 5) / 10) - 1;
+>> -    }
+>> +    val = readl(port->membase + AML_UART_REG5);
+>>       val |= AML_UART_BAUD_USE;
+>>       writel(val, port->membase + AML_UART_REG5);
+>> +
+>> +    clk_set_rate(private_data->baud_clk, baud);
+>>   }
+>>   static void meson_uart_set_termios(struct uart_port *port,
+>> @@ -397,11 +406,27 @@ static int meson_uart_verify_port(struct 
+>> uart_port *port,
+>>   static void meson_uart_release_port(struct uart_port *port)
+>>   {
+>> -    /* nothing to do */
+>> +    struct meson_uart_data *private_data = port->private_data;
+>> +
+>> +    clk_disable_unprepare(private_data->baud_clk);
+>> +    clk_disable_unprepare(private_data->pclk);
+>>   }
+>>   static int meson_uart_request_port(struct uart_port *port)
+>>   {
+>> +    struct meson_uart_data *private_data = port->private_data;
+>> +    int ret;
+>> +
+>> +    ret = clk_prepare_enable(private_data->pclk);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    ret = clk_prepare_enable(private_data->baud_clk);
+>> +    if (ret) {
+>> +        clk_disable_unprepare(private_data->pclk);
+>> +        return ret;
+>> +    }
+>> +
+>>       return 0;
+>>   }
+>> @@ -629,56 +654,175 @@ static struct uart_driver meson_uart_driver = {
+>>       .cons        = MESON_SERIAL_CONSOLE,
+>>   };
+>> -static inline struct clk *meson_uart_probe_clock(struct device *dev,
+>> -                         const char *id)
+>> +static int meson_uart_register_clk(struct uart_port *port,
+>> +                   const char *name_suffix,
+>> +                   const struct clk_parent_data *parent_data,
+>> +                   unsigned int num_parents,
+>> +                   const struct clk_ops *ops,
+>> +                   struct clk_hw *hw)
+>>   {
+>> -    struct clk *clk = NULL;
+>> +    struct clk_init_data init = { };
+>> +    char clk_name[32];
+>>       int ret;
+>> -    clk = devm_clk_get(dev, id);
+>> -    if (IS_ERR(clk))
+>> -        return clk;
+>> +    snprintf(clk_name, sizeof(clk_name), "%s#%s", dev_name(port->dev),
+>> +         name_suffix);
+>> -    ret = clk_prepare_enable(clk);
+>> -    if (ret) {
+>> -        dev_err(dev, "couldn't enable clk\n");
+>> -        return ERR_PTR(ret);
+>> -    }
+>> +    init.name = clk_name;
+>> +    init.ops = ops;
+>> +    init.flags = CLK_SET_RATE_PARENT;
+>> +    init.parent_data = parent_data;
+>> +    init.num_parents = num_parents;
+>> +
+>> +    hw->init = &init;
+>> -    devm_add_action_or_reset(dev,
+>> -            (void(*)(void *))clk_disable_unprepare,
+>> -            clk);
+>> +    ret = devm_clk_hw_register(port->dev, hw);
+>> +    if (ret)
+>> +        return dev_err_probe(port->dev, ret,
+>> +                     "Failed to register the '%s' clock\n",
+>> +                     clk_name);
+>> -    return clk;
+>> +    return ret;
+>>   }
+>> -static int meson_uart_probe_clocks(struct platform_device *pdev,
+>> -                   struct uart_port *port)
+>> -{
+>> -    struct clk *clk_xtal = NULL;
+>> -    struct clk *clk_pclk = NULL;
+>> -    struct clk *clk_baud = NULL;
+>> +static int meson_uart_probe_clocks(struct uart_port *port,
+>> +                   bool register_clk81_div4)
+>> +{
+>> +    struct meson_uart_data *private_data = port->private_data;
+>> +    struct clk_parent_data use_xtal_mux_parents[2] = {
+>> +        { .index = -1, },
+>> +        { .index = -1, },
+>> +    };
+>> +    struct clk_parent_data xtal_clk_sel_mux_parents[2] = { };
+>> +    struct clk_parent_data xtal2_clk_sel_mux_parents[2] = { };
+>> +    struct clk_parent_data xtal_div_parent = { .fw_name = "xtal", };
+>> +    struct clk_parent_data clk81_div_parent = { .fw_name = "baud", };
+>> +    struct clk_parent_data baud_div_parent = { };
+>> +    struct clk *clk_baud, *clk_xtal;
+>> +    int ret;
+>> -    clk_pclk = meson_uart_probe_clock(&pdev->dev, "pclk");
+>> -    if (IS_ERR(clk_pclk))
+>> -        return PTR_ERR(clk_pclk);
+>> +    private_data->pclk = devm_clk_get(port->dev, "pclk");
+>> +    if (IS_ERR(private_data->pclk))
+>> +        return dev_err_probe(port->dev, PTR_ERR(private_data->pclk),
+>> +                     "Failed to get the 'pclk' clock\n");
+>> +
+>> +    clk_baud = devm_clk_get(port->dev, "baud");
+>> +    if (IS_ERR(clk_baud))
+>> +        return dev_err_probe(port->dev, PTR_ERR(clk_baud),
+>> +                     "Failed to get the 'baud' clock\n");
+>> -    clk_xtal = meson_uart_probe_clock(&pdev->dev, "xtal");
+>> +    clk_xtal = devm_clk_get(port->dev, "xtal");
+>>       if (IS_ERR(clk_xtal))
+>> -        return PTR_ERR(clk_xtal);
+>> +        return dev_err_probe(port->dev, PTR_ERR(clk_xtal),
+>> +                     "Failed to get the 'xtal' clock\n");
+>> +
+>> +    private_data->xtal_div3.mult = 1;
+>> +    private_data->xtal_div3.div = 3;
+>> +    ret = meson_uart_register_clk(port, "xtal_div3", &xtal_div_parent,
+>> +                      1, &clk_fixed_factor_ops,
+>> +                      &private_data->xtal_div3.hw);
+>> +    if (ret)
+>> +        return ret;
+>> -    clk_baud = meson_uart_probe_clock(&pdev->dev, "baud");
+>> -    if (IS_ERR(clk_baud))
+>> -        return PTR_ERR(clk_baud);
+>> +    if (register_clk81_div4) {
+>> +        private_data->clk81_div4.mult = 1;
+>> +        private_data->clk81_div4.div = 4;
+>> +        ret = meson_uart_register_clk(port, "clk81_div4",
+>> +                          &clk81_div_parent, 1,
+>> +                          &clk_fixed_factor_ops,
+>> +                          &private_data->clk81_div4.hw);
+>> +        if (ret)
+>> +            return ret;
+>> +
+>> +        use_xtal_mux_parents[0].hw = &private_data->clk81_div4.hw;
+>> +    }
+>> -    port->uartclk = clk_get_rate(clk_baud);
+>> +    if (private_data->has_xtal_clk_sel) {
+>> +        private_data->xtal_div2.mult = 1;
+>> +        private_data->xtal_div2.div = 2;
+>> +        ret = meson_uart_register_clk(port, "xtal_div2",
+>> +                          &xtal_div_parent, 1,
+>> +                          &clk_fixed_factor_ops,
+>> +                          &private_data->xtal_div2.hw);
+>> +        if (ret)
+>> +            return ret;
+>> +
+>> +        xtal_clk_sel_mux_parents[0].hw = &private_data->xtal_div3.hw;
+>> +        xtal_clk_sel_mux_parents[1].fw_name = "xtal";
+>> +
+>> +        private_data->xtal_clk_sel_mux.reg = port->membase + 
+>> AML_UART_REG5;
+>> +        private_data->xtal_clk_sel_mux.mask = 0x1;
+>> +        private_data->xtal_clk_sel_mux.shift = 26;
+>> +        private_data->xtal_clk_sel_mux.flags = CLK_MUX_ROUND_CLOSEST;
+>> +        ret = meson_uart_register_clk(port, "xtal_clk_sel",
+>> +                          xtal_clk_sel_mux_parents,
+>> +                          ARRAY_SIZE(xtal_clk_sel_mux_parents),
+>> +                          &clk_mux_ops,
+>> +                          &private_data->xtal_clk_sel_mux.hw);
+>> +        if (ret)
+>> +            return ret;
+>> +
+>> +        xtal2_clk_sel_mux_parents[0].hw = 
+>> &private_data->xtal_clk_sel_mux.hw;
+>> +        xtal2_clk_sel_mux_parents[1].hw = &private_data->xtal_div2.hw;
+>> +
+>> +        private_data->xtal2_clk_sel_mux.reg = port->membase + 
+>> AML_UART_REG5;
+>> +        private_data->xtal2_clk_sel_mux.mask = 0x1;
+>> +        private_data->xtal2_clk_sel_mux.shift = 27;
+>> +        private_data->xtal2_clk_sel_mux.flags = CLK_MUX_ROUND_CLOSEST;
+>> +        ret = meson_uart_register_clk(port, "xtal2_clk_sel",
+>> +                          xtal2_clk_sel_mux_parents,
+>> +                          ARRAY_SIZE(xtal2_clk_sel_mux_parents),
+>> +                          &clk_mux_ops,
+>> +                          &private_data->xtal2_clk_sel_mux.hw);
+>> +        if (ret)
+>> +            return ret;
+>> +
+>> +        use_xtal_mux_parents[1].hw = 
+>> &private_data->xtal2_clk_sel_mux.hw;
+>> +    } else {
+>> +        use_xtal_mux_parents[1].hw = &private_data->xtal_div3.hw;
+>> +    }
+>> +
+>> +    private_data->use_xtal_mux.reg = port->membase + AML_UART_REG5;
+>> +    private_data->use_xtal_mux.mask = 0x1;
+>> +    private_data->use_xtal_mux.shift = 24;
+>> +    private_data->use_xtal_mux.flags = CLK_MUX_ROUND_CLOSEST;
+>> +    ret = meson_uart_register_clk(port, "use_xtal", 
+>> use_xtal_mux_parents,
+>> +                      ARRAY_SIZE(use_xtal_mux_parents),
+>> +                      &clk_mux_ops,
+>> +                      &private_data->use_xtal_mux.hw);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    baud_div_parent.hw = &private_data->use_xtal_mux.hw;
+>> +
+>> +    private_data->baud_div.reg = port->membase + AML_UART_REG5;
+>> +    private_data->baud_div.shift = 0;
+>> +    private_data->baud_div.width = 23;
+>> +    private_data->baud_div.flags = CLK_DIVIDER_ROUND_CLOSEST;
+>> +    ret = meson_uart_register_clk(port, "baud_div",
+>> +                      &baud_div_parent, 1,
+>> +                      &clk_divider_ops,
+>> +                      &private_data->baud_div.hw);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    private_data->baud_clk = devm_clk_hw_get_clk(port->dev,
+>> +                             &private_data->baud_div.hw,
+>> +                             "baud_rate");
+>> +    if (IS_ERR(private_data->baud_clk))
+>> +        return dev_err_probe(port->dev,
+>> +                     PTR_ERR(private_data->baud_clk),
+>> +                     "Failed to request the 'baud_rate' clock\n");
+>>       return 0;
+>>   }
+>>   static int meson_uart_probe(struct platform_device *pdev)
+>>   {
+>> +    struct meson_uart_data *private_data;
+>>       struct resource *res_mem, *res_irq;
+>> +    struct clk *clk_baud, *clk_xtal;
+>> +    bool register_clk81_div4;
+>>       struct uart_port *port;
+>>       int ret = 0;
+>>       int id = -1;
+>> @@ -711,18 +855,37 @@ static int meson_uart_probe(struct 
+>> platform_device *pdev)
+>>           return -EBUSY;
+>>       }
+>> -    port = devm_kzalloc(&pdev->dev, sizeof(struct uart_port), 
+>> GFP_KERNEL);
+>> -    if (!port)
+>> +    private_data = devm_kzalloc(&pdev->dev, sizeof(*private_data),
+>> +                    GFP_KERNEL);
+>> +    if (!private_data)
+>>           return -ENOMEM;
+>> +    if (device_get_match_data(&pdev->dev))
+>> +        private_data->has_xtal_clk_sel = true;
+>> +
+>> +    private_data->pclk = devm_clk_get(&pdev->dev, "pclk");
+>> +    if (IS_ERR(private_data->pclk))
+>> +        return dev_err_probe(&pdev->dev, PTR_ERR(private_data->pclk),
+>> +                     "Failed to get the 'pclk' clock\n");
+>> +
+>> +    clk_baud = devm_clk_get(&pdev->dev, "baud");
+>> +    if (IS_ERR(clk_baud))
+>> +        return dev_err_probe(&pdev->dev, PTR_ERR(clk_baud),
+>> +                     "Failed to get the 'baud' clock\n");
+>> +
+>> +    clk_xtal = devm_clk_get(&pdev->dev, "xtal");
+>> +    if (IS_ERR(clk_xtal))
+>> +        return dev_err_probe(&pdev->dev, PTR_ERR(clk_xtal),
+>> +                     "Failed to get the 'xtal' clock\n");
+>> +
+>> +    register_clk81_div4 = clk_get_rate(clk_xtal) != 
+>> clk_get_rate(clk_baud);
+>> +
+>> +    port = &private_data->port;
+>> +
+>>       port->membase = devm_ioremap_resource(&pdev->dev, res_mem);
+>>       if (IS_ERR(port->membase))
+>>           return PTR_ERR(port->membase);
+>> -    ret = meson_uart_probe_clocks(pdev, port);
+>> -    if (ret)
+>> -        return ret;
+>> -
+>>       port->iotype = UPIO_MEM;
+>>       port->mapbase = res_mem->start;
+>>       port->mapsize = resource_size(res_mem);
+>> @@ -735,6 +898,12 @@ static int meson_uart_probe(struct 
+>> platform_device *pdev)
+>>       port->x_char = 0;
+>>       port->ops = &meson_uart_ops;
+>>       port->fifosize = 64;
+>> +    port->uartclk = clk_get_rate(clk_baud);
+>> +    port->private_data = private_data;
+>> +
+>> +    ret = meson_uart_probe_clocks(port, register_clk81_div4);
+>> +    if (ret)
+>> +        return ret;
+>>       meson_ports[pdev->id] = port;
+>>       platform_set_drvdata(pdev, port);
+>> @@ -761,10 +930,34 @@ static int meson_uart_remove(struct 
+>> platform_device *pdev)
+>>   }
+>>   static const struct of_device_id meson_uart_dt_match[] = {
+>> -    { .compatible = "amlogic,meson6-uart" },
+>> -    { .compatible = "amlogic,meson8-uart" },
+>> -    { .compatible = "amlogic,meson8b-uart" },
+>> -    { .compatible = "amlogic,meson-gx-uart" },
+> 
+> You can't drop used item without patch for dts files.
+> 
+> arch/arm64/boot/dts/amlogic$ grep amlogic,meson-gx-uart *|wc -l
+> 16
+> You're right. I was thoughtless. I'm going to add this delete. Delete 
+after changing DTS.
+>> +    {
+>> +        .compatible = "amlogic,meson6-uart",
+>> +        .data = (void *)false,
+>> +    },
+>> +    {
+>> +        .compatible = "amlogic,meson8-uart",
+>> +        .data = (void *)false,
+>> +    },
+>> +    {
+>> +        .compatible = "amlogic,meson8b-uart",
+>> +        .data = (void *)false,
+>> +    },
+>> +    {
+>> +        .compatible = "amlogic,meson-gxbb-uart",
+>> +        .data = (void *)false,
+>> +    },
+>> +    {
+>> +        .compatible = "amlogic,meson-gxl-uart",
+>> +        .data = (void *)true,
+>> +    },
+>> +    {
+>> +        .compatible = "amlogic,meson-g12a-uart",
+>> +        .data = (void *)true,
+>> +    },
+>> +    {
+>> +        .compatible = "amlogic,meson-s4-uart",
+>> +        .data = (void *)true,
+>> +    },
+>>       { /* sentinel */ },
+>>   };
+>>   MODULE_DEVICE_TABLE(of, meson_uart_dt_match);
+> 

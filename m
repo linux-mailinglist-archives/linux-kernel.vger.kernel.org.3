@@ -2,95 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58341481D99
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 16:09:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D55E481D9B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 16:10:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234936AbhL3PJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 10:09:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233976AbhL3PJG (ORCPT
+        id S235766AbhL3PJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 10:09:58 -0500
+Received: from www262.sakura.ne.jp ([202.181.97.72]:55257 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231786AbhL3PJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 10:09:06 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429A4C06173E;
-        Thu, 30 Dec 2021 07:09:06 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id a203-20020a1c7fd4000000b003457874263aso16196203wmd.2;
-        Thu, 30 Dec 2021 07:09:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sf/3KqcCBGZ0jjyoE9sxhd/PuBCJYLVQgneAgtveI+Q=;
-        b=VrLKSJJHDL2DA29VZEX7N3edD3i7J1oADh0QdE+Ge+67lM+yQkAOci75Oz2ljErixb
-         JGWYKOGDUm81Gr6QLvLWyvaiEWCS9H7/kchC8IP3E52+Wsm5Wniu2I9z3T0LgHkPWT2k
-         CYbmpkhZXP1xP/aGCwh0RRl768aTvEWeyotCQfaHpj2oDihdO8fPQ9qywBgnMO0sNP5L
-         XJwkIpZihkbNfjsPPljHiv2BHjV70T1/6IY/dbtMMokE9kEBKsSbFUEWmzn8jmfUZma0
-         N4hvkcBYVHlX834+yXrVnuS5yY+0RPM/ffnmu46nSi/88lDqu2Pwg6o/D6hbY4Dkqt4j
-         ZLNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sf/3KqcCBGZ0jjyoE9sxhd/PuBCJYLVQgneAgtveI+Q=;
-        b=vdpApFK2VaaSvv/LCImS07IOeSIzA0U2hJZjlBLVAU7FFN7p5aLGrvznRrb10jRhp4
-         1chXtF9i86f8fu00/gZ+Gbg4MHrdJjnZ+oIW+kI1c+V9xKERfHw2yHhZOmna1BmsahbD
-         +6+FHoVouprmUEWwM9D6qFiHaZF8foHCeDMSFRZQ33tyK3p6IWzpR7Ha2x5KzxxjIIQi
-         v6bVBQ2jzcT6GOe0gA5JhcqHRD+gPG5TqgjPfHMxvDY/9EL+Hz7okvaFYCGz/2vGyorQ
-         uBlj3fHnp93A0zRbeMWNWnQPu0l5lxZGUnIAKjQJz4yt5DnXrwgMsEAvrzzl5FDZExWa
-         8NgA==
-X-Gm-Message-State: AOAM5311Ba5oqChdLBtVqB/mtCoHmfnAnHreKWr4K7voMiR6s1cBZVWg
-        Wso/IG+UbcX2vtONwxnZQLB1WG7bt0H95aKh
-X-Google-Smtp-Source: ABdhPJwkiMs/OeTQoco6BR7K7opw58ewBVj+GETPXIuGVQyoCDEIJ0BNvZTdWtwtYsATV6WazqvGwg==
-X-Received: by 2002:a1c:3b86:: with SMTP id i128mr26609703wma.50.1640876944798;
-        Thu, 30 Dec 2021 07:09:04 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id l4sm27466631wry.85.2021.12.30.07.09.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Dec 2021 07:09:04 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Stefan Berger <stefanb@linux.ibm.com>
-Cc:     kernel-janitors@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] lib/oid_registry.c: remove redundant assignment to variable num
-Date:   Thu, 30 Dec 2021 15:09:03 +0000
-Message-Id: <20211230150903.190860-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        Thu, 30 Dec 2021 10:09:57 -0500
+Received: from fsav115.sakura.ne.jp (fsav115.sakura.ne.jp [27.133.134.242])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 1BUF9Nfg031254;
+        Fri, 31 Dec 2021 00:09:23 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav115.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp);
+ Fri, 31 Dec 2021 00:09:23 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 1BUF9Mdr031172
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 31 Dec 2021 00:09:23 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Message-ID: <f80074eb-58bc-7db7-d945-ef18f7617c4e@i-love.sakura.ne.jp>
+Date:   Fri, 31 Dec 2021 00:09:24 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [lockdep] UAF read in print_name().
+Content-Language: en-US
+To:     Waiman Long <longman@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Christoph Hellwig <hch@lst.de>
+References: <77f05c15-81b6-bddd-9650-80d5f23fe330@i-love.sakura.ne.jp>
+ <015af849-3571-e9ac-692f-d803aa19f566@redhat.com>
+From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+In-Reply-To: <015af849-3571-e9ac-692f-d803aa19f566@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable num is being assigned a value that is never read, it
-is being re-assigned a value in both paths of the following if
-statement. The assignment is redundant and can be removed.
+On 2021/12/29 12:25, Waiman Long wrote:
+> On 12/28/21 05:49, Tetsuo Handa wrote:
+>> Hello.
+>>
+>> I found using linux-next-20211210 that reading /proc/lockdep after lockdep splat
+>> triggers UAF read access. I think this is a side effect of zapping dependency
+>> information when loop driver's WQ is destroyed. You might want to xchg() the pointer
+>> with a dummy struct containing a static string.
+>>
+>> difference before lockdep splat and after lockdep splat
+>> ----------------------------------------
+>> 8635c8636
+>> < ffff88811561cd28 OPS:      26 FD:  122 BD:    1 +.+.: (wq_completion)loop0
+>> ---
+>>> ffff88811561cd28 OPS:      31 FD:  439 BD:    1 +.+.:  M>^MM-^AM-^HM-^?M-^?
+> 
+> Thanks for reporting.
+> 
+> Yes, listing locking classes by /proc/lockdep is racy as all_lock_classes is accessed
+> without lock protection. OTOH, we probably can't fix this race as lock hold time will be
+> too long for this case. Atomically xchg the class name is a possible workaround, but we
+> also need to add additional checks as the iteration may also be redirected to
+> free_lock_classes leading to an endless iteration loop.
 
-Cleans up clang-scan warning:
-lib/oid_registry.c:149:3: warning: Value stored to 'num' is never
-read [deadcode.DeadStores]
-                num = 0;
+Thanks for responding. But is this bug really unfixable?
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Please see the following result.
+
+----------------------------------------
+[root@localhost ~]# uname -r
+5.16.0-rc4-next-20211210
+[root@localhost ~]# grep loop /proc/lockdep
+[root@localhost ~]# truncate -s 100m testfile
+[root@localhost ~]# losetup -f testfile
+[root@localhost ~]# grep loop /proc/lockdep
+ffffffffa02b73c8 OPS:      17 FD:   34 BD:    1 +.+.: loop_ctl_mutex
+ffff888106fb0528 OPS:     114 FD:  183 BD:    1 +.+.: (wq_completion)loop0
+[root@localhost ~]# losetup -D
+[root@localhost ~]# grep loop /proc/lockdep
+ffffffffa02b73c8 OPS:      17 FD:   34 BD:    1 +.+.: loop_ctl_mutex
+ffffffffa02b7328 OPS:       1 FD:    1 BD:    1 +.+.: loop_validate_mutex
+[root@localhost ~]# losetup -f testfile
+[root@localhost ~]# grep loop /proc/lockdep
+ffffffffa02b73c8 OPS:      18 FD:   34 BD:    1 +.+.: loop_ctl_mutex
+ffffffffa02b7328 OPS:       1 FD:    1 BD:    1 +.+.: loop_validate_mutex
+ffff888106fb1128 OPS:     118 FD:  183 BD:    1 +.+.: (wq_completion)loop0
+[root@localhost ~]# losetup -D
+[root@localhost ~]# grep loop /proc/lockdep
+ffffffffa02b73c8 OPS:      18 FD:   34 BD:    1 +.+.: loop_ctl_mutex
+ffffffffa02b7328 OPS:       2 FD:    1 BD:    1 +.+.: loop_validate_mutex
+[root@localhost ~]# grep debug_locks /proc/lockdep_stats
+ debug_locks:                             1
+[root@localhost ~]#
+----------------------------------------
+
+We can confirm that the "(wq_completion)loop0" entry disappears when WQ for /dev/loop0 is destroyed.
+
+Then, please see the following reproducer for this lockdep problem. As you can see, there is 10
+seconds between lockdep complained and /proc/lockdep is read. 10 seconds should be enough time
+for erasing the "(wq_completion)loop0" entry.
+
+----------------------------------------
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
+#include <linux/loop.h>
+#include <sys/sendfile.h>
+
+int main(int argc, char *argv[])
+{
+	const int file_fd = open("testfile", O_RDWR | O_CREAT, 0600);
+	ftruncate(file_fd, 1048576);
+	char filename[128] = { };
+	const int loop_num = ioctl(open("/dev/loop-control", 3),  LOOP_CTL_GET_FREE, 0);
+	snprintf(filename, sizeof(filename) - 1, "/dev/loop%d", loop_num);
+	const int loop_fd_1 = open(filename, O_RDWR);
+	ioctl(loop_fd_1, LOOP_SET_FD, file_fd);
+	const int loop_fd_2 = open(filename, O_RDWR);
+	ioctl(loop_fd_1, LOOP_CLR_FD, 0);
+	const int sysfs_fd = open("/sys/power/resume", O_RDWR);
+	sendfile(file_fd, sysfs_fd, 0, 1048576);
+	sendfile(loop_fd_2, file_fd, 0, 1048576);
+	write(sysfs_fd, "700", 3);
+	system("/bin/cat /proc/lockdep > /tmp/lockdep-before-splat"); // Save before "zap on release" forgets the dependency.
+	close(loop_fd_2);
+	close(loop_fd_1); // Lockdep complains the circular dependency and turns off.
+	close(file_fd);
+	sleep(10);
+	system("/bin/cat /proc/lockdep > /tmp/lockdep-after-splat"); // Save after "zap on release" forgot the dependency.
+	return 0;
+}
+----------------------------------------
+
+If we compare the content of /proc/lockdep before and after, we can confirm that
+the "(wq_completion)loop0" entry does not disappear even after loop device was
+destroyed. (The 'k' is POISON_FREE read out as a string.)
+
+----------------------------------------
+# diff /tmp/lockdep-before-splat /tmp/lockdep-after-splat | tail | cat -v
 ---
- lib/oid_registry.c | 1 -
- 1 file changed, 1 deletion(-)
+> ffffffffa02b7328 OPS:       3 FD:    1 BD:   15 +.+.: loop_validate_mutex
+7403c7411
+< ffffffff826612d8 OPS:       4 FD:  337 BD:    1 .+.+: kn->active#135
+---
+> ffffffff826612d8 OPS:       4 FD:  338 BD:    1 .+.+: kn->active#135
+7411c7419
+< ffff88810422b528 OPS:      22 FD:  183 BD:    1 +.+.: (wq_completion)loop0
+---
+> ffff88810422b528 OPS:      32 FD:  435 BD:    1 +.+.: kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkM-%M-;M-;M-;M-;M-;M-;M-;M-;
+----------------------------------------
 
-diff --git a/lib/oid_registry.c b/lib/oid_registry.c
-index e592d48b1974..fe6705cfd780 100644
---- a/lib/oid_registry.c
-+++ b/lib/oid_registry.c
-@@ -146,7 +146,6 @@ int sprint_oid(const void *data, size_t datasize, char *buffer, size_t bufsize)
- 	bufsize -= count;
- 
- 	while (v < end) {
--		num = 0;
- 		n = *v++;
- 		if (!(n & 0x80)) {
- 			num = n;
--- 
-2.33.1
+Isn't this a bug that lockdep stopped erasing the dependency chain because
+lockdep was already turned off before start reading /proc/lockdep ?
+
+
+
+By the way, this "zap on destroy" behavior made it difficult to find a reproducer
+because "at least once during the lifetime of the kernel" part of
+
+  The validator achieves perfect, mathematical 'closure' (proof of locking
+  correctness) in the sense that for every simple, standalone single-task
+  locking sequence that occurred at least once during the lifetime of the
+  kernel, the validator proves it with a 100% certainty that no
+  combination and timing of these locking sequences can cause any class of
+  lock related deadlock. [*]
+
+in Documentation/locking/lockdep-design.txt became no longer applicable?
 

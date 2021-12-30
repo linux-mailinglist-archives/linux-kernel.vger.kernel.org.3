@@ -2,80 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF368481AD5
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 09:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 140F8481ADB
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 09:48:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237905AbhL3Irl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 03:47:41 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:50432 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S237864AbhL3Irk (ORCPT
+        id S237938AbhL3Isi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 03:48:38 -0500
+Received: from lucky1.263xmail.com ([211.157.147.133]:52410 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234737AbhL3Ish (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 03:47:40 -0500
-X-UUID: 6b8f2e3ef4594a449d334620498e0d0e-20211230
-X-UUID: 6b8f2e3ef4594a449d334620498e0d0e-20211230
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <trevor.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2103254407; Thu, 30 Dec 2021 16:47:36 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 30 Dec 2021 16:47:35 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 30 Dec 2021 16:47:35 +0800
-From:   Trevor Wu <trevor.wu@mediatek.com>
-To:     <broonie@kernel.org>, <tiwai@suse.com>, <matthias.bgg@gmail.com>
-CC:     <trevor.wu@mediatek.com>, <alsa-devel@alsa-project.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] ASoC: mediatek: mt8195: add playback support to PCM1_BE dai_link
-Date:   Thu, 30 Dec 2021 16:47:31 +0800
-Message-ID: <20211230084731.31372-3-trevor.wu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20211230084731.31372-1-trevor.wu@mediatek.com>
-References: <20211230084731.31372-1-trevor.wu@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+        Thu, 30 Dec 2021 03:48:37 -0500
+Received: from localhost (unknown [192.168.167.16])
+        by lucky1.263xmail.com (Postfix) with ESMTP id EFD68D845D;
+        Thu, 30 Dec 2021 16:48:28 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-SKE-CHECKED: 1
+X-ANTISPAM-LEVEL: 2
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P12624T140277015766784S1640854098676227_;
+        Thu, 30 Dec 2021 16:48:28 +0800 (CST)
+X-IP-DOMAINF: 1
+X-RL-SENDER: yifeng.zhao@rock-chips.com
+X-SENDER: zyf@rock-chips.com
+X-LOGIN-NAME: yifeng.zhao@rock-chips.com
+X-FST-TO: heiko@sntech.de
+X-RCPT-COUNT: 17
+X-LOCAL-RCPT-COUNT: 4
+X-MUTI-DOMAIN-COUNT: 0
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-UNIQUE-TAG: <fc6286ea7d86f55f6b48c5286f6faf08>
+X-System-Flag: 0
+From:   Yifeng Zhao <yifeng.zhao@rock-chips.com>
+To:     heiko@sntech.de
+Cc:     robh+dt@kernel.org, jbx6244@gmail.com, devicetree@vger.kernel.org,
+        vkoul@kernel.org, michael.riesch@wolfvision.net,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, kishon@ti.com,
+        p.zabel@pengutronix.de, cl@rock-chips.com,
+        kever.yang@rock-chips.com, lee.jones@linaro.org,
+        wulf@rock-chips.com, Yifeng Zhao <yifeng.zhao@rock-chips.com>
+Subject: [PATCH v7 0/4] Add Naneng combo PHY support for RK3568
+Date:   Thu, 30 Dec 2021 16:48:11 +0800
+Message-Id: <20211230084815.28110-1-yifeng.zhao@rock-chips.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PCM1_BE should be a dai_link for both playback and capture.
-In the patch, the missing DPCM playback support is added.
 
-Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
----
- sound/soc/mediatek/mt8195/mt8195-mt6359-rt1011-rt5682.c | 1 +
- sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c | 1 +
- 2 files changed, 2 insertions(+)
+This phy can be used as pcie-phy, usb3-phy, sata-phy or sgmii-phy.
 
-diff --git a/sound/soc/mediatek/mt8195/mt8195-mt6359-rt1011-rt5682.c b/sound/soc/mediatek/mt8195/mt8195-mt6359-rt1011-rt5682.c
-index 8adbd46c4bc4..5443a29da7b1 100644
---- a/sound/soc/mediatek/mt8195/mt8195-mt6359-rt1011-rt5682.c
-+++ b/sound/soc/mediatek/mt8195/mt8195-mt6359-rt1011-rt5682.c
-@@ -1045,6 +1045,7 @@ static struct snd_soc_dai_link mt8195_mt6359_rt1011_rt5682_dai_links[] = {
- 		.dai_fmt = SND_SOC_DAIFMT_I2S |
- 			SND_SOC_DAIFMT_NB_NF |
- 			SND_SOC_DAIFMT_CBS_CFS,
-+		.dpcm_playback = 1,
- 		.dpcm_capture = 1,
- 		SND_SOC_DAILINK_REG(PCM1_BE),
- 	},
-diff --git a/sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c b/sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c
-index 20b351faeaff..29c2d3407cc7 100644
---- a/sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c
-+++ b/sound/soc/mediatek/mt8195/mt8195-mt6359-rt1019-rt5682.c
-@@ -1191,6 +1191,7 @@ static struct snd_soc_dai_link mt8195_mt6359_rt1019_rt5682_dai_links[] = {
- 		.dai_fmt = SND_SOC_DAIFMT_I2S |
- 			SND_SOC_DAIFMT_NB_NF |
- 			SND_SOC_DAIFMT_CBS_CFS,
-+		.dpcm_playback = 1,
- 		.dpcm_capture = 1,
- 		SND_SOC_DAILINK_REG(PCM1_BE),
- 	},
+Changes in v7:
+- remove u3otg0_port_en, u3otg1_port_en and pipe_sgmii_mac_sel
+- rename regs
+
+Changes in v5:
+- modify description for ssc and ext-refclk
+- remove apb reset
+- add rockchip_combphy_updatel()
+- restyle
+
+Changes in v4:
+- restyle
+- remove some minItems
+- add more properties
+- remove reset-names
+- move #phy-cells
+- add rockchip,rk3568-pipe-grf
+- add rockchip,rk3568-pipe-phy-grf
+- add devm_reset_control_array_get()
+- remove clk structure
+- change refclk DT parse
+- change dev_err message
+- add dot to phrase
+- add ext_refclk variable
+- add enable_ssc variable
+- rename rockchip_combphy_param_write
+- remove param_read
+- replace rockchip-naneng-combphy driver name
+- rename node name
+
+Changes in v3:
+- Using api devm_reset_control_get_optional_exclusive and dev_err_probe.
+- Remove apb_rst.
+- Redefine registers address.
+- Move pipe_phy_grf0 to rk3568.dtsi
+
+Changes in v2:
+- Fix dtschema/dtc warnings/errors
+- Using api devm_platform_get_and_ioremap_resource.
+- Modify rockchip_combphy_set_Mode.
+- Add some PHY registers definition.
+- Move phy0 to rk3568.dtsi
+
+Johan Jonker (1):
+  dt-bindings: mfd: syscon: add naneng combo phy register compatible
+
+Yifeng Zhao (3):
+  dt-bindings: phy: rockchip: Add Naneng combo PHY bindings
+  phy: rockchip: add naneng combo phy for RK3568
+  arm64: dts: rockchip: add naneng combo phy nodes for rk3568
+
+ .../devicetree/bindings/mfd/syscon.yaml       |   2 +
+ .../phy/phy-rockchip-naneng-combphy.yaml      | 109 ++++
+ arch/arm64/boot/dts/rockchip/rk3568.dtsi      |  21 +
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi      |  47 ++
+ drivers/phy/rockchip/Kconfig                  |   8 +
+ drivers/phy/rockchip/Makefile                 |   1 +
+ .../rockchip/phy-rockchip-naneng-combphy.c    | 589 ++++++++++++++++++
+ 7 files changed, 777 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/phy/phy-rockchip-naneng-combphy.yaml
+ create mode 100644 drivers/phy/rockchip/phy-rockchip-naneng-combphy.c
+
 -- 
-2.18.0
+2.17.1
+
+
 

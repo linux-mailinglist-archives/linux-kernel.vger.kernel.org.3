@@ -2,81 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28CCB481DF2
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 17:08:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC2A481DF8
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 17:10:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240785AbhL3QIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 11:08:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33136 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238908AbhL3QIi (ORCPT
+        id S240965AbhL3QJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 11:09:59 -0500
+Received: from mail-qv1-f46.google.com ([209.85.219.46]:38571 "EHLO
+        mail-qv1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240660AbhL3QJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 11:08:38 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27E7C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 08:08:37 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id d201so49682865ybc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 08:08:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=KpVasdcvO2084v9jKVAkwMz4o0Bdb19/FCor2U/5oeM=;
-        b=g8o2h2RQcqNo/F+3DYQfaJEsouH/CqW+llScFI+0y/YK9gshPwoSnBA7u+fxrgE5mE
-         LIYxPuNLOS4V24zLsyUSlMBWaltD8K88+j8rjh1OGXrTk+5yCckAdxE40dkz3ZA2qjDf
-         pP74lReWCH0oiCqFf+mX4H2HIK/WMnUXAMGrRwmNhufvLVo9G0TSAZ00+bI/hhN0Qw6f
-         ibdw6+bmk9rS8/AmIRqdp0QRTTdDwRjLtTvAxrPlODMeab9dKj/aH2uIgJm3UNRp8xRq
-         OSteVQSFB/SB2W41XfTndznnl5PcD/nAK09nfV/srz8zHZtOtsf+cG0lBc00bjWBOVF6
-         6YaQ==
+        Thu, 30 Dec 2021 11:09:59 -0500
+Received: by mail-qv1-f46.google.com with SMTP id o10so22476531qvc.5;
+        Thu, 30 Dec 2021 08:09:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=KpVasdcvO2084v9jKVAkwMz4o0Bdb19/FCor2U/5oeM=;
-        b=G/zcNpPOWp5lZ/FX1SPuM+FIcBWDhcj5Gr2MC63A8lRWSJN6cwfoHm7Kzwxg2H73LO
-         JQ8LkWO/himtHtXeA5RLV+7OiPxqpsV3Nk0kdkBYNdBZ49XYpkd3D1X/4UfJ5Y6Q95Qb
-         5D1sP2DWMYNNZZuQnN3m4Qns0RgpZqCYMluxv23MHEGmKFVw1vzHzxHGRZ7kNoDTGgFK
-         KWWUih4ZCbsjl+kc6lXw8eTKZHvKJ2boLSI8QkG91R3LoMTBzf6KH7JRHNUVETLwc/a8
-         uHjocOUxQYTwbyj2hw/AUuHCYI+tpU8T6DV8i/UhuK9nR1bu5UXK/REtJzVtH6vePpF3
-         5Q2w==
-X-Gm-Message-State: AOAM53240hOJCCaih12luNuXmkNkmnXr8GD7PH4SWDUsTG/NjyJksBoU
-        zTPvj6ahiKOJXClWR9I+DmqsxFlwITLMpghv/A==
-X-Google-Smtp-Source: ABdhPJwuSjN7xfoyLu1r1dQt30WYWXddHE0I+3dzQKxwPhzuycpakWPgAPiRrrYt6R9lB0Z+hLKjWp3HLc3CnoYu6Ig=
-X-Received: by 2002:a25:cec6:: with SMTP id x189mr30595254ybe.470.1640880516931;
- Thu, 30 Dec 2021 08:08:36 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ezClZAHT1R+O8T1YXwhFSh7VZXrZAFgQTaj9xuZLzog=;
+        b=oqQLStt5X0evvIZJRzAPpSgruG3BhDY2s1T/JU6CgGlSq7IbfR/5lpGT9XhuCl0yKK
+         RPTFAG/7xUal9BF8OyjzPp4E3P2ElKixocuUhB0Ec0a2QuFdV9vPD70j5xlxo+shTB+T
+         GTOo9TTQxq2jDpJvAKb2YHHnBDO9hZh507dTZCMFObJxgiEDSaBpWb47OowMNZDDTtjZ
+         v54s2rGIf9sYhhM4V/alNdRBO5/Uxp7k1H0xhe0bBJygdYZg3IVvl8JOS6mhNEdGsj9d
+         2cvHqu3jJ0EzeL4AabIoo914yadDR/ehBavEgUXYXT3dQ5QCwDCqCMznqKTxuxlmzyFz
+         zqmQ==
+X-Gm-Message-State: AOAM5338OB/SMNLpqxoasU67b3xe3mJjB4ihQEW5EcJoFH5cHnD4ijpr
+        6ILOZgnzYvne+iq3g/devDVm7nj6iiw14EdUHgo=
+X-Google-Smtp-Source: ABdhPJyN6mgj3ogQflSFsdGVVT7vwczPwYi2O0a40J14P8I3C0lWzPd9RpcwRZHoFFXgvBijaWrWvKG/9zU0e4uodnU=
+X-Received: by 2002:a05:6214:20a2:: with SMTP id 2mr27959264qvd.52.1640880598311;
+ Thu, 30 Dec 2021 08:09:58 -0800 (PST)
 MIME-Version: 1.0
-Sender: anera.lenneh@gmail.com
-Received: by 2002:a05:7110:4b09:b0:11e:f454:286b with HTTP; Thu, 30 Dec 2021
- 08:08:36 -0800 (PST)
-From:   Mrs Aisha Gaddafi <aishagarddaff@gmail.com>
-Date:   Thu, 30 Dec 2021 08:08:36 -0800
-X-Google-Sender-Auth: 7y8Zq0ZzNomh2WVyIrjYFGYVx2Q
-Message-ID: <CAKsGGvO9_2GzH0HZ-OhHRhj1gj+ku_UTm3-=WH_r0OwgE-2pZg@mail.gmail.com>
-Subject: Urgent Message From Mrs Aisha Gaddafi.
-To:     undisclosed-recipients:;
+References: <1640761407-2028-1-git-send-email-quic_manafm@quicinc.com>
+In-Reply-To: <1640761407-2028-1-git-send-email-quic_manafm@quicinc.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 30 Dec 2021 17:09:47 +0100
+Message-ID: <CAJZ5v0hApA+fnuRmT_xDdJiqmkGfrfku=8rNG7G_YohGYZm5nw@mail.gmail.com>
+Subject: Re: [PATCH v2] thermal/core: Clear all mitigation when thermal zone
+ is disabled
+To:     Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Friend,
-Greetings and Nice Day.
-Assalamu Alaikum
+On Wed, Dec 29, 2021 at 8:03 AM Manaf Meethalavalappu Pallikunhi
+<quic_manafm@quicinc.com> wrote:
+>
+> Whenever a thermal zone is in trip violated state, there is a chance
+> that the same thermal zone mode can be disabled either via thermal
+> core API or via thermal zone sysfs. Once it is disabled, the framework
+> bails out any re-evaluation of thermal zone. It leads to a case where
+> if it is already in mitigation state, it will stay the same state
+> until it is re-enabled.
 
+You seem to be arguing that disabling a thermal zone should prevent it
+from throttling anything, which is reasonable, but I'm not sure if the
+change below is sufficient for that.
 
-May i  use this medium to open a mutual communication with you seeking
-your acceptance towards investing in your country under your
-management as my partner, My name is Aisha  Gaddafi and presently
-living in Oman, i am a Widow and single Mother with three Children,
-the only biological Daughter of late Libyan President (Late Colonel
-Muammar Gaddafi) and presently i am under political asylum protection
-by the Omani Government.
+> To avoid above mentioned issue, on thermal zone disable request
+> reset thermal zone and clear mitigation for each trip explicitly.
+>
+> Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+> ---
+>  drivers/thermal/thermal_core.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 51374f4..5f4e35b 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -427,6 +427,7 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
+>                                         enum thermal_device_mode mode)
+>  {
+>         int ret = 0;
+> +       int trip;
 
-I have funds worth "EIGHT Million Five Hundred Thousand United State
-Dollars" -$8.500.000.00 US Dollars which i want to entrust on you for
-investment project in your country.If you are willing to handle this
-project on my behalf, kindly reply urgent to enable me provide you
-more details to start the transfer process.
-I shall appreciate your urgent response through my email address.
+This can be declared in the block in which it is used.
 
-Best Regards
-Mrs Aisha Gaddafi
+>
+>         mutex_lock(&tz->lock);
+>
+> @@ -449,8 +450,14 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
+>
+>         if (mode == THERMAL_DEVICE_ENABLED)
+
+The coding style asks for braces here if they are used after the else.
+
+>                 thermal_notify_tz_enable(tz->id);
+> -       else
+> +       else {
+> +               /* make sure all previous throttlings are cleared */
+> +               thermal_zone_device_init(tz);
+> +               for (trip = 0; trip < tz->trips; trip++)
+> +                       handle_thermal_trip(tz, trip);
+
+So I'm not sure if this makes the throttling go away in all cases (eg.
+what if the current temperature is still above the given trip at this
+point?).
+
+> +
+>                 thermal_notify_tz_disable(tz->id);
+> +       }
+>
+>         return ret;
+>  }
+>

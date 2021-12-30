@@ -2,94 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63632481986
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 06:11:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31301481982
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 06:11:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbhL3FLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 00:11:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57892 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbhL3FLv (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 00:11:51 -0500
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E71AC061574;
-        Wed, 29 Dec 2021 21:11:51 -0800 (PST)
-Received: by mail-pj1-x1043.google.com with SMTP id v16so20384012pjn.1;
-        Wed, 29 Dec 2021 21:11:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=EmxtRCBMu2tl5deRcbELWxHEnqJDX4005AuwU/ExKFE=;
-        b=cwFr7pePmZ1OSxQreJRsjeft07oYlRELfu6jlBs2W5N0BVQ2YHy814Omn7LgcFaNH1
-         mueUvptlujnJExax2RwRnHRVD54OGtXju+ZeKRYrXFjsYsj7yxRxx35V/qdfAvskreN0
-         QbfGfrhrLQ8gWtwl/mMX2J7n2RdcNde2XsrlBzBRf9dxpA5QadEcdkR3zZ8Ww96+81k1
-         zhiw0Gh3RlGBLeN0VTPOWgN6e39ILM/8Fw6dzwLQI5dHdhbBznOFVAbSe2NSaNI39FdS
-         m8qJBeTYfSWczA8itB/jxy10nMY7OtN/egyw4L6EoJygd0jGCC8RryAoeDAWjfIegvEz
-         ENJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=EmxtRCBMu2tl5deRcbELWxHEnqJDX4005AuwU/ExKFE=;
-        b=Gielxm1BzZdo2occXl61DfxyvUOxb8Ofa1tahMRB4M1C3hdMcPkwDZ7G8WolpzINjS
-         2zD82ZDMD4GcO4Zg/eA6vwY3dQYkWBOtXeMET9ZZ1LS62ILM6KdfXSGPD1Nwl99XiUx6
-         El+yDvFCxPNEAE/2uKTLjdLNqmaMllcWHllWJHRnKEhRVIiUZWPi37Pkp5os6jkrYaUh
-         +Tf7YWOiEk+GXT74dVlZS6LpwzWC1TaAeuzyou4RKPi3Aksj40wG8VBUxf7+kAgZlXTY
-         iRdjniCcE00icsr7npPpQOuyrwsveLM8A4DlF0q6oTzoF5ftAJDF2rlTK9ZqcUJqdCOX
-         aNsg==
-X-Gm-Message-State: AOAM5313hcdmKA3+5NPMC/sibXivHLvAtkl0g5/34eoRKnZUSuZkibQU
-        FHSya56u6R0LBHMIES696Nw=
-X-Google-Smtp-Source: ABdhPJxRnUv3bGDRbyONTrwj2fITEPmpDqjrSYnNvc3moaFQuDdZ4V8Q1Bd+xZgmb1wiyga5kleDbg==
-X-Received: by 2002:a17:902:8c83:b0:149:8ef6:b2ff with SMTP id t3-20020a1709028c8300b001498ef6b2ffmr12190337plo.32.1640841111214;
-        Wed, 29 Dec 2021 21:11:51 -0800 (PST)
-Received: from slim.das-security.cn ([103.84.139.54])
-        by smtp.gmail.com with ESMTPSA id e21sm10365925pjr.4.2021.12.29.21.11.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Dec 2021 21:11:51 -0800 (PST)
-From:   Hangyu Hua <hbh25y@gmail.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org, axboe@kernel.dk,
-        stern@rowland.harvard.edu, jj251510319013@gmail.com,
-        dan.carpenter@oracle.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH v3 1/2] usb: gadget: don't release an existing dev->buf
-Date:   Thu, 30 Dec 2021 13:11:31 +0800
-Message-Id: <20211230051132.21056-2-hbh25y@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211230051132.21056-1-hbh25y@gmail.com>
-References: <20211230051132.21056-1-hbh25y@gmail.com>
+        id S229625AbhL3FLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 00:11:41 -0500
+Received: from mga14.intel.com ([192.55.52.115]:35537 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229448AbhL3FLk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 00:11:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640841100; x=1672377100;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jGrukeZg0EnufbaBzokUAOG2AsNay8I/4mG6rT6SVeg=;
+  b=K3YXWz8uExwg+fh7ehDryyd7mjFCpR7pyIkDBLlIv8TCoi9/2ss7Pv2f
+   H2rt5ObseKJoG+6NJajM8swpEcb6aQd1F4VtNYLAm79D3t70Y2W3fK06w
+   DejREXULHbmwAmQxbdLzMV5Df7e9g+LpKIcMHDoVTEQ+UR5j0/z89xEW1
+   Pq92VTmhhUsnIFk8gBGMmGaGU0raHiHfqwLCGrXTiLUxe7eA7L6b1wdE+
+   fb5HSdpCXicX5+TFSkbRuPIgB72SibstlDzYI7UatIf6JLTpxvFlxSixp
+   sXr8jawmmrjaIXihszu2oan+q5P67Z7QMmtTqlnA4xGgEFWoAzC7Cesro
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10212"; a="241827313"
+X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
+   d="scan'208";a="241827313"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 21:11:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
+   d="scan'208";a="619270892"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 29 Dec 2021 21:11:38 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n2niz-0009mn-Mz; Thu, 30 Dec 2021 05:11:37 +0000
+Date:   Thu, 30 Dec 2021 13:11:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Goldwyn Rodrigues <rgoldwyn@suse.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [goldwynr:iomap 23/33] fs/btrfs/file.c:1704:29: error: 'bi'
+ redeclared as different kind of symbol
+Message-ID: <202112301347.2emBGOuh-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dev->buf does not need to be released if it already exists before
-executing dev_config.
+tree:   https://github.com/goldwynr/linux iomap
+head:   30c74a8c201365178cae26d0d7aefa120c3245ab
+commit: 31240db6a699e846f0d73f27d4b32d0e95bb08dc [23/33] btrfs: Set extents delalloc in iomap_end
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20211230/202112301347.2emBGOuh-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/goldwynr/linux/commit/31240db6a699e846f0d73f27d4b32d0e95bb08dc
+        git remote add goldwynr https://github.com/goldwynr/linux
+        git fetch --no-tags goldwynr iomap
+        git checkout 31240db6a699e846f0d73f27d4b32d0e95bb08dc
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash fs/btrfs/
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+Note: the goldwynr/iomap HEAD 30c74a8c201365178cae26d0d7aefa120c3245ab builds fine.
+      It only hurts bisectability.
+
+All errors (new ones prefixed by >>):
+
+   fs/btrfs/file.c: In function 'btrfs_buffered_iomap_end':
+>> fs/btrfs/file.c:1704:29: error: 'bi' redeclared as different kind of symbol
+    1704 |         struct btrfs_iomap *bi = iomap->private;
+         |                             ^~
+   fs/btrfs/file.c:1701:69: note: previous definition of 'bi' with type 'struct btrfs_iomap *'
+    1701 |                 loff_t length, ssize_t written, struct btrfs_iomap *bi)
+         |                                                 ~~~~~~~~~~~~~~~~~~~~^~
+>> fs/btrfs/file.c:1704:34: error: 'iomap' undeclared (first use in this function)
+    1704 |         struct btrfs_iomap *bi = iomap->private;
+         |                                  ^~~~~
+   fs/btrfs/file.c:1704:34: note: each undeclared identifier is reported only once for each function it appears in
+
+
+vim +/bi +1704 fs/btrfs/file.c
+
+  1699	
+  1700	static int btrfs_buffered_iomap_end(struct inode *inode, loff_t pos,
+  1701			loff_t length, ssize_t written, struct btrfs_iomap *bi)
+  1702	{
+  1703		struct btrfs_fs_info *fs_info = btrfs_sb(inode->i_sb);
+> 1704		struct btrfs_iomap *bi = iomap->private;
+  1705		int ret = 0;
+  1706		size_t release_bytes = 0;
+  1707		u64 start = round_down(pos, fs_info->sectorsize);
+  1708		u64 written_block_end = round_up(pos + written, fs_info->sectorsize) - 1;
+  1709		u64 block_end = round_up(pos + length, fs_info->sectorsize) - 1;
+  1710	
+  1711	        int extra_bits = 0;
+  1712	
+  1713	        if (written == 0) {
+  1714	                release_bytes = bi->reserved_bytes;
+  1715	        } else if (written < length) {
+  1716	                release_bytes = block_end - written_block_end + 1;
+  1717	        }
+  1718	
+  1719	        if (bi->metadata_only)
+  1720	                extra_bits |= EXTENT_NORESERVE;
+  1721	
+  1722	        clear_extent_bit(&BTRFS_I(inode)->io_tree, start, written_block_end,
+  1723	                         EXTENT_DELALLOC | EXTENT_DO_ACCOUNTING | EXTENT_DEFRAG,
+  1724	                         0, 0, &bi->cached_state);
+  1725	
+  1726	        ret = btrfs_set_extent_delalloc(BTRFS_I(inode), start,
+  1727	                        written_block_end, extra_bits, &bi->cached_state);
+  1728	
+  1729	        /* In case of error, release everything in btrfs_iomap_release() */
+  1730	        if (ret < 0)
+  1731	                release_bytes = bi->reserved_bytes;
+  1732	
+  1733		/*
+  1734		 * If we have not locked the extent range, because the range's
+  1735		 * start offset is >= i_size, we might still have a non-NULL
+  1736		 * cached extent state, acquired while marking the extent range
+  1737		 * as delalloc. Therefore free any possible cached extent state
+  1738		 * to avoid a memory leak.
+  1739		 */
+  1740		if (bi->extents_locked)
+  1741			unlock_extent_cached(&BTRFS_I(inode)->io_tree,
+  1742					bi->lockstart, bi->lockend,
+  1743					&bi->cached_state);
+  1744		else
+  1745			free_extent_state(bi->cached_state);
+  1746	
+  1747		btrfs_delalloc_release_extents(BTRFS_I(inode), bi->reserved_bytes);
+  1748		if (bi->metadata_only)
+  1749			btrfs_check_nocow_unlock(BTRFS_I(inode));
+  1750	
+  1751		btrfs_iomap_release(inode, pos, release_bytes, bi);
+  1752	
+  1753		return 0;
+  1754	}
+  1755	
+
 ---
- drivers/usb/gadget/legacy/inode.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
-index 3b58f4fc0a80..eaad03c0252f 100644
---- a/drivers/usb/gadget/legacy/inode.c
-+++ b/drivers/usb/gadget/legacy/inode.c
-@@ -1826,8 +1826,9 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
- 	spin_lock_irq (&dev->lock);
- 	value = -EINVAL;
- 	if (dev->buf) {
-+		spin_unlock_irq(&dev->lock);
- 		kfree(kbuf);
--		goto fail;
-+		return value;
- 	}
- 	dev->buf = kbuf;
- 
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

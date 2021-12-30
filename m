@@ -2,77 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D8094818F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 04:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4340E4818F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 04:33:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235370AbhL3DaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 22:30:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35908 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231751AbhL3DaY (ORCPT
+        id S235271AbhL3Dde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 22:33:34 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:30374 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231751AbhL3Ddd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 22:30:24 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D06C061574;
-        Wed, 29 Dec 2021 19:30:24 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id mj19so20207091pjb.3;
-        Wed, 29 Dec 2021 19:30:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:date:subject:from:to:cc:message-id:thread-topic
-         :mime-version:content-transfer-encoding;
-        bh=Gy0Q5xGwq5Uuhmk1X6IQ/CwspJtjLZrIpG+7QYLBdEE=;
-        b=PKrbPVRw408D6HvLxhV6TfKvibxuPw3M8bmY8GgRScj3HRSVBcPNIGPKc1lIVLO1k9
-         sMZee5dkyOQEZsxjnGxyTIuG92/xrrQHofedlVzrxnxGkGT8SMkHbtijLrezOf5FkP0Z
-         tFcgnFsD+qnPsvpFIEEYTelgdqTsci2TdXA/Geb1Jsti/DNoljuYiL8T24Iy9ylpTfSE
-         lchgWOlsRJiFk7aadoivTAZJWNRLUzknHcuPKuy8HOzSNCaCy11K+yG1MDbUF2D47VtZ
-         r9Z7hXipjsnmdplcVBSyDRJtoJtnm4YQhDZWtkhERv5iWj/O5vSknoMiRnWdgN/ZGle+
-         g19w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:user-agent:date:subject:from:to:cc:message-id
-         :thread-topic:mime-version:content-transfer-encoding;
-        bh=Gy0Q5xGwq5Uuhmk1X6IQ/CwspJtjLZrIpG+7QYLBdEE=;
-        b=X1a+VFjgUndXJ1V6EG9pNVe3WZY5BRAynDAr2Wwn7VDk90+gSjbqyOqGRM/1oLXymg
-         6VSTRXi2OB/4pBqvJR7Hf3Zk4ZqdClpBsebT9V/cKYh6L8bwvnP4FGMsVcw/SzI3OQ7L
-         BpV3P7D1cIIiEvTjQPVLRONxLeuT5GdqPKq1kWvAGhVvp8Vj3jKm93fzuI+KLdM+gTTr
-         Y5S5dokerFD3DFe3v/3SMWJJVTxVvr0uj6QNhY/2xRCX0/8Lqwy2agG0ewxgp2UVL5VS
-         7ubAzi0GELhbnCLbTkoJYwhSmhIe7g7uBcpb/y4i/ROI+60veiVPclHVYPWf9XGOWHjM
-         L9CA==
-X-Gm-Message-State: AOAM530GX/EmZoapdwEc9hfy6HgWCEHVwFiM2Yq2UypbNVUequhwbyeO
-        xC5gyQCqy0916DgAvZlmKMlbCVqqfhtJdemh
-X-Google-Smtp-Source: ABdhPJwgSkhe2FFJrcw/JiUY+JiLYzo6FZb6ff3FH84FdEe4wVDYb0I5AMML8GlSmQ1ETXmncO7TNw==
-X-Received: by 2002:a17:902:82c3:b0:149:9715:21c4 with SMTP id u3-20020a17090282c300b00149971521c4mr8990110plz.157.1640835024214;
-        Wed, 29 Dec 2021 19:30:24 -0800 (PST)
-Received: from [30.135.82.251] ([23.98.35.75])
-        by smtp.gmail.com with ESMTPSA id x31sm26635184pfh.116.2021.12.29.19.30.22
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 29 Dec 2021 19:30:24 -0800 (PST)
-User-Agent: Microsoft-MacOutlook/16.56.21121100
-Date:   Thu, 30 Dec 2021 11:30:21 +0800
-Subject: [Resource Leak] Missing closing files in
- testing/selftests/timens/procfs.c
-From:   Ryan Cai <ycaibb@gmail.com>
-To:     <shuah@kernel.org>
-CC:     <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Message-ID: <764C5A0D-30D7-4E76-B284-C868754F8A1C@gmail.com>
-Thread-Topic: [Resource Leak] Missing closing files in
- testing/selftests/timens/procfs.c
-Mime-version: 1.0
-Content-type: text/plain;
-        charset="UTF-8"
-Content-transfer-encoding: 7bit
+        Wed, 29 Dec 2021 22:33:33 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BU1gZjK032632;
+        Thu, 30 Dec 2021 03:33:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=OHLEHEuvQsUOBNtNyJQmOyXSioS+90Zvl0tvlsDoTU0=;
+ b=RllvalWBpM0OEw9Lw53QcKM68/wy52D2UVTBHwewgtGPARokjxC0Nwha/kru19E40Cb6
+ vk00AKqTu6RQxY+bD4iw+SXY+8jmdO4lkqfsXZVasVjPwNLXftLrE3osdrDe12BnSpR1
+ pFWmV5+0ncOxZPWFHfJ7O/OlhGRhfTtO9eIiaw2wQtnY/QcsMbP7fn0TVqpf+9XPILjn
+ XYlSSQ4/rT+7Ia66TM3DqWmR2DB8ZXwlmY1FotXxBxbZHbJ0KHsWO/NhDITFm422dEnC
+ /xHd3mKiSbpq81c2F2YG2Pof4XZiAUZMIYd2PH4HxIaIm52qS4hHiJmnbdAEI1uTrbiN qA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d84jm7rnx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Dec 2021 03:33:31 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BU3TAZp028118;
+        Thu, 30 Dec 2021 03:33:31 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d84jm7rnm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Dec 2021 03:33:31 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BU3RmC2005025;
+        Thu, 30 Dec 2021 03:33:29 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma05fra.de.ibm.com with ESMTP id 3d5tx9f0c9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Dec 2021 03:33:29 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BU3XQuv45941026
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 Dec 2021 03:33:26 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EF2AC4C05C;
+        Thu, 30 Dec 2021 03:33:25 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4AF724C040;
+        Thu, 30 Dec 2021 03:33:25 +0000 (GMT)
+Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.171.80.242])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Thu, 30 Dec 2021 03:33:25 +0000 (GMT)
+Date:   Thu, 30 Dec 2021 04:33:22 +0100
+From:   Halil Pasic <pasic@linux.ibm.com>
+To:     Tony Krowiak <akrowiak@linux.ibm.com>
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, jjherne@linux.ibm.com, freude@linux.ibm.com,
+        borntraeger@de.ibm.com, cohuck@redhat.com, mjrosato@linux.ibm.com,
+        alex.williamson@redhat.com, kwankhede@nvidia.com,
+        fiuczy@linux.ibm.com, Halil Pasic <pasic@linux.ibm.com>
+Subject: Re: [PATCH v17 08/15] s390/vfio-ap: keep track of active guests
+Message-ID: <20211230043322.2ba19bbd.pasic@linux.ibm.com>
+In-Reply-To: <20211021152332.70455-9-akrowiak@linux.ibm.com>
+References: <20211021152332.70455-1-akrowiak@linux.ibm.com>
+        <20211021152332.70455-9-akrowiak@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ZqUoopOEfZB5AT4ANfgbYC8bGqj_COhY
+X-Proofpoint-ORIG-GUID: 64LDbmE7XijYeAVbRy85Qnc3eVZAZjlw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-30_01,2021-12-29_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ suspectscore=0 adultscore=0 lowpriorityscore=0 clxscore=1015 phishscore=0
+ spamscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112300015
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Kernel maintainers,
-              1. In read_proc_uptime, the file opened at Line 75 may not closed when going to Line 84 and 87.
-              Location: https://github.com/torvalds/linux/blob/5bfc75d92efd494db37f5c4c173d3639d4772966/tools/testing/selftests/timens/procfs.c#L75-L87
+On Thu, 21 Oct 2021 11:23:25 -0400
+Tony Krowiak <akrowiak@linux.ibm.com> wrote:
 
-              Can I send I a patch?
+> The vfio_ap device driver registers for notification when the pointer to
+> the KVM object for a guest is set. Let's store the KVM pointer as well as
+> the pointer to the mediated device when the KVM pointer is set.
 
-Best,
-Ryan
+[..]
 
+
+> struct ap_matrix_dev {
+>         ...
+>         struct rw_semaphore guests_lock;
+>         struct list_head guests;
+>        ...
+> }
+> 
+> The 'guests_lock' field is a r/w semaphore to control access to the
+> 'guests' field. The 'guests' field is a list of ap_guest
+> structures containing the KVM and matrix_mdev pointers for each active
+> guest. An ap_guest structure will be stored into the list whenever the
+> vfio_ap device driver is notified that the KVM pointer has been set and
+> removed when notified that the KVM pointer has been cleared.
+> 
+
+Is this about the field or about the list including all the nodes? This
+reads lie guests_lock only protects the head element, which makes no
+sense to me. Because of how these lists work.
+
+The narrowest scope that could make sense is all the list_head stuff
+in the entire list. I.e. one would only need the lock to traverse or
+manipulate the list, while the payload would still be subject to
+the matrix_dev->lock mutex.
+
+[..]
+
+> +struct ap_guest {
+> +	struct kvm *kvm;
+> +	struct list_head node;
+> +};
+> +
+>  /**
+>   * struct ap_matrix_dev - Contains the data for the matrix device.
+>   *
+> @@ -39,6 +44,9 @@
+>   *		single ap_matrix_mdev device. It's quite coarse but we don't
+>   *		expect much contention.
+>   * @vfio_ap_drv: the vfio_ap device driver
+> + * @guests_lock: r/w semaphore for protecting access to @guests
+> + * @guests:	list of guests (struct ap_guest) using AP devices bound to the
+> + *		vfio_ap device driver.
+
+Please compare the above. Also if it is only about the access to the
+list, then you could drop the lock right after create, and not keep it
+till the very end of vfio_ap_mdev_set_kvm(). Right?
+
+In any case I'm skeptical about this whole struct ap_guest business. To
+me, it looks like something that just makes things more obscure and
+complicated without any real benefit.
+
+Regards,
+Halil
+
+>   */
+>  struct ap_matrix_dev {
+>  	struct device device;
+> @@ -47,6 +55,8 @@ struct ap_matrix_dev {
+>  	struct list_head mdev_list;
+>  	struct mutex lock;
+>  	struct ap_driver  *vfio_ap_drv;
+> +	struct rw_semaphore guests_lock;
+> +	struct list_head guests;
+>  };
+>  
+>  extern struct ap_matrix_dev *matrix_dev;
 

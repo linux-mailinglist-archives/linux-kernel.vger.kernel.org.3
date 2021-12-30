@@ -2,115 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2E4481DD4
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 16:49:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1C75481DD9
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 16:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240048AbhL3PtG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 30 Dec 2021 10:49:06 -0500
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:40021 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232051AbhL3PtF (ORCPT
+        id S240056AbhL3PwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 10:52:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57734 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232051AbhL3PwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 10:49:05 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id AF2581C0005;
-        Thu, 30 Dec 2021 15:49:02 +0000 (UTC)
-Date:   Thu, 30 Dec 2021 16:49:01 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm@kernel.org, soc@kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [GIT PULL 2/2] memory: omap: drivers for v5.17
-Message-ID: <20211230164901.4fbf8cc3@xps13>
-In-Reply-To: <20211224111124.6097-2-krzysztof.kozlowski@canonical.com>
-References: <20211224111124.6097-1-krzysztof.kozlowski@canonical.com>
-        <20211224111124.6097-2-krzysztof.kozlowski@canonical.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Thu, 30 Dec 2021 10:52:04 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD21C061574;
+        Thu, 30 Dec 2021 07:52:04 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id r17so51212288wrc.3;
+        Thu, 30 Dec 2021 07:52:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kfSEh+kMWcMB2oG20OjNOZJx52OyGLAU5iACdztgHAM=;
+        b=LSe1c8wx29G4o6EHIysvSVoWfm8jbpRdfXqi/Sn96bwLYHcxEIPZj+58H5hzp9nxxN
+         zel2M2/KB4eyjXt473MV8NzT/+bnQNccGzNvt+IR6EIUxDlgEamcQg9KFgUR+vclHNYG
+         cW8NC4dpSq3YrXfs+ZCCTBs1h9Gyzci6VIhMzoAtJfMawtLoJYA6qEx4OCQVbQUsTpEF
+         BPzqxwzjN8IVp2ZT/Pe826g61sr1VpRPs+a3oRuZc0BOXwTQkx/YZ9MZ3oFpYZMRKBHB
+         5otKQqiTb35RreN0x2M1D2qwsK8Ik1t9fCBvKMyMd3MoF5kibR2ZnUxOJ7kIbMT+orCv
+         JN5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kfSEh+kMWcMB2oG20OjNOZJx52OyGLAU5iACdztgHAM=;
+        b=08mZJ0x9bOh3YfNLVybTcqMJ7GYPTVpsop2oQE5RzfuJd6nZXpmDvXlvHX9XKfBoaS
+         bE5+MXKfadD1NSRORUPNveLwvkhqBy6T6/wK+Fbe1qpgAHXx2oYwrcBISrf/e+xCZe9H
+         KEGcQG6fu6YmB0hhsV8ji6rlPkmBJkoNn+v3rnHmgChwYVDdDDxO89OVnt9n2AWxXjVf
+         ZkkAippTb+JIsS14Z4Q+74biOAzQ9gq2LVuIysC4pVw5I6qwk3v9J+psjaRHWJotnftk
+         TJ+QY+wFA/OipVp1hvPTU5OVteAtYUkyu4TSTW581S3p4x+JgxXHu1T9cvP/8o9JAeic
+         +2RQ==
+X-Gm-Message-State: AOAM532rCRajOgNghkQAlIMSWK2QgyA2Y6n8Xk0SUz1J65ptT06uIp1p
+        U4+TLbUsoS4a9QDs55Yp4yONvoY/C0OpExSH
+X-Google-Smtp-Source: ABdhPJyBVYh0Oove2VBiz9Jd/MdVtDP9KyAEL3OOxOiMXWn2lKi2LyJM0+xNP1ys/VrHP42WIlCNVA==
+X-Received: by 2002:a5d:4dca:: with SMTP id f10mr25977728wru.595.1640879523053;
+        Thu, 30 Dec 2021 07:52:03 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id l12sm29750798wmq.2.2021.12.30.07.52.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Dec 2021 07:52:02 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Sam Ravnborg <sam@ravnborg.org>, Zheyu Ma <zheyuma97@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] video: fbdev: asiliantfb: remove redundant assignment to variable Ftarget
+Date:   Thu, 30 Dec 2021 15:52:01 +0000
+Message-Id: <20211230155202.355336-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof, Arnd, Olof,
+Variable Ftarget is being initialized with a value that is never read,
+it is being re-assigned a different value a little later on. The
+assignment is redundant and can be removed.
 
-krzysztof.kozlowski@canonical.com wrote on Fri, 24 Dec 2021 12:11:24
-+0100:
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/video/fbdev/asiliantfb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Hi Arnd and Olof,
-> 
-> Separate topic branch for omap-gpmc driver. This includes changes to
-> mtd-nand-omap2 driver (acked by Miquel) *which will conflict NAND tree*:
-> 
-> 1. The "of_device_id omap_nand_ids" is moved to header
->    ../platform_data/mtd-nand-omap2.h.
-> 2. New compatible is added to above "of_device_id omap_nand_ids".
-> 
-> One way to avoid pushing this conflict to Linus, would be if Miquel would
-> actually pull this request instead of soc tree.
+diff --git a/drivers/video/fbdev/asiliantfb.c b/drivers/video/fbdev/asiliantfb.c
+index 84c56f525889..f8ef62542f7f 100644
+--- a/drivers/video/fbdev/asiliantfb.c
++++ b/drivers/video/fbdev/asiliantfb.c
+@@ -110,7 +110,7 @@ static const struct fb_ops asiliantfb_ops = {
+ static void asiliant_calc_dclk2(u32 *ppixclock, u8 *dclk2_m, u8 *dclk2_n, u8 *dclk2_div)
+ {
+ 	unsigned pixclock = *ppixclock;
+-	unsigned Ftarget = 1000000 * (1000000 / pixclock);
++	unsigned Ftarget;
+ 	unsigned n;
+ 	unsigned best_error = 0xffffffff;
+ 	unsigned best_m = 0xffffffff,
+-- 
+2.33.1
 
-Sorry for the mess, I didn't spot the conflict when sending my Ack to
-Krysztof.
-
-I will pull this to simplify the handling.
-
-Thanks,
-Miquèl
-
-> 
-> Proper resolution looks like:
-> ----------------------------------------------------------------
-> diff --git a/include/linux/platform_data/mtd-nand-omap2.h b/include/linux/platform_data/mtd-nand-omap2.h
-> index 92f011805ad4..8c2f1f185353 100644
-> --- a/include/linux/platform_data/mtd-nand-omap2.h
-> +++ b/include/linux/platform_data/mtd-nand-omap2.h
-> @@ -65,6 +65,7 @@ struct gpmc_nand_regs {
->  
->  static const struct of_device_id omap_nand_ids[] = {
->  	{ .compatible = "ti,omap2-nand", },
-> +	{ .compatible = "ti,am64-nand", },
->  	{},
->  };
-> ----------------------------------------------------------------
-> 
-> Best regards,
-> Krzysztof
-> 
-> 
-> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
-> 
->   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-omap-5.17
-> 
-> for you to fetch changes up to dbcb124acebd8148e9e858a231f1798956dd3ca6:
-> 
->   mtd: rawnand: omap2: Select GPMC device driver for ARCH_K3 (2021-12-22 16:51:43 +0100)
-> 
-> ----------------------------------------------------------------
-> Memory controller drivers for v5.14 - OMAP GPMC
-> 
-> 1. Add support for AM64 SoC.
-> 2. Minor improvement: use platform_get_irq().
-> 
-> ----------------------------------------------------------------
-> Lad Prabhakar (1):
->       memory: omap-gpmc: Use platform_get_irq() to get the interrupt
-> 
-> Roger Quadros (4):
->       dt-bindings: memory-controllers: ti,gpmc: Add compatible for AM64
->       memory: omap-gpmc: Add support for GPMC on AM64 SoC
->       memory: omap-gpmc: Use a compatible match table when checking for NAND controller
->       mtd: rawnand: omap2: Select GPMC device driver for ARCH_K3
-> 
->  .../bindings/memory-controllers/ti,gpmc.yaml       | 23 +++++++++-
->  drivers/memory/omap-gpmc.c                         | 50 ++++++++++++++--------
->  drivers/mtd/nand/raw/Kconfig                       |  1 +
->  drivers/mtd/nand/raw/omap2.c                       |  5 +--
->  include/linux/platform_data/mtd-nand-omap2.h       |  9 +++-
->  5 files changed, 65 insertions(+), 23 deletions(-)

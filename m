@@ -2,87 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B80AC4819E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 07:24:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B29914819E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 07:27:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236374AbhL3GXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 01:23:43 -0500
-Received: from mga05.intel.com ([192.55.52.43]:20917 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236346AbhL3GXm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 01:23:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640845422; x=1672381422;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mFdkGzu2R04RemsC2jcxSWBPpDqoYLYuq/x1Z7YiY1Y=;
-  b=IT5ZOkbUBDWztdYVZ58nI0f1DEPLIJEtVGCbGcSW/AE+Fms2NrA7UcIR
-   sOY6a86qOk0y/hk2VNuUqp9Jlaql1v4uxTa5zkYQm0RatcQul3W7yk0bf
-   1P/il6mw/k3z756SySQDHfNFzYh6J8QWFfc1+64QM8FQQto8nFt00TRLw
-   PFmy42Bxm2d+WMza1MQh3loHWoB9MLhAYCDRyao1r+kt3ucNC6fRskSqT
-   XLE+hf76ZnXbVugkd1pZKHdMDNMLpwvgFeNiAaRDlu9ePsCmxS8UTznVN
-   Y/bI/GD8iI8fjg1GevE2nTF8Z5JWVxDnLSf4DdLp4XYPgpVBCoznucT6u
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10212"; a="327956748"
-X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
-   d="scan'208";a="327956748"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 22:23:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,247,1635231600"; 
-   d="scan'208";a="510787335"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 29 Dec 2021 22:23:41 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n2oqi-0009qG-HA; Thu, 30 Dec 2021 06:23:40 +0000
-Date:   Thu, 30 Dec 2021 14:22:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Goldwyn Rodrigues <rgoldwyn@suse.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [goldwynr:iomap 25/33] fs/btrfs/file.c:1781:24: sparse: sparse:
- symbol 'btrfs_buffered_iomap_ops' was not declared. Should it be static?
-Message-ID: <202112301434.DN0qgOT0-lkp@intel.com>
+        id S236400AbhL3G06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 01:26:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236346AbhL3G05 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 01:26:57 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B330C061574;
+        Wed, 29 Dec 2021 22:26:57 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id m25so20868705qtq.13;
+        Wed, 29 Dec 2021 22:26:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LXwPadLSFVyvCah/M8sg90LtD8LX6hnEtvNkUP/6f18=;
+        b=Xhr8y7bcZ3G1W9mpXC5Nn2rORqV0B8y1bdDmn7MhkodJWwYZ0UwYmPLxQVDsKUsB64
+         xVpME2bsmaC7IIfj5j2Z9d/NqV5mxwq+FRCUyQ0OtsFEhvBsZ0FCx5V2bVQK9UvdrWIK
+         LPxeZRWTi0c25XvjuZb+huwW0f/77/JQ4eTlmKuN6ONO8g8Ae2RlZBf3T6tsUh3rnhjz
+         A1EG5icdUd8dhxmtbxRidQPmCf9Xm7NmAgGX4/0ehGJBnxVKA6DB5R41CAyOrVcGUAUw
+         MkmVGuNcY1VI8niZI6W1gQUxKRCLAFsArP5nqpYMg3KpnF0ARYX+AMO1dpyGeKu/9Ojr
+         C1jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LXwPadLSFVyvCah/M8sg90LtD8LX6hnEtvNkUP/6f18=;
+        b=Z1L++1jNIvg0ZFVY0iNHUKSE9lYZrw7qSvKmFIXDCSsSA8NWemLFXbYXTHrsVmNNDr
+         8ObiWpn49c4/MWJ97zLFtmZSNWjbk8JnHZSTFq0WiqXNef6tdz0jVy+qrd+H455o8gwp
+         Ng/AIxsYYAhexisE8wmAVV2rftX1oWh9e98X0M8ZidonblMWuRA5UOCdHInt1HpyTY99
+         ZdlKt+jNbYDpmxK8TLBwBC67ur+8U2xH96N3Un53WvVTga9pEvvujwHXD2WfybeH5Uib
+         AWCgMSfpjWeJ9lVBDLc1Tom2Kxqx6ya1LJKwEgusrvHWe6lQPobX9XgDJpdRpazCMxS0
+         lKPQ==
+X-Gm-Message-State: AOAM531BZ8K5rSx9MKYxhWrzwtehfFjBmjpbnpYOHfSjCg/KWU+CSPJZ
+        Iy321yHJ9UURruXHY0LDQmk=
+X-Google-Smtp-Source: ABdhPJwFzmRXw+dujE4X9DnqppToPXo1Jmev6tVW7nhhOXF4cMdpZLH9j+BzqfOi17VWiVdB0vp1qA==
+X-Received: by 2002:a05:622a:d1:: with SMTP id p17mr25284218qtw.207.1640845616499;
+        Wed, 29 Dec 2021 22:26:56 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id r23sm10230969qkk.24.2021.12.29.22.26.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Dec 2021 22:26:56 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: luo.penghao@zte.com.cn
+To:     "David S . Miller" <davem@davemloft.net>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        luo penghao <luo.penghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux] ethtool: Remove redundant ret assignments
+Date:   Thu, 30 Dec 2021 06:26:44 +0000
+Message-Id: <20211230062644.586079-1-luo.penghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/goldwynr/linux iomap
-head:   30c74a8c201365178cae26d0d7aefa120c3245ab
-commit: f4ecee4435f363df5a0fc93124ddddae5f79d9d0 [25/33] btrfs: Switch to iomap_file_buffered_write()
-config: i386-randconfig-s001-20211228 (https://download.01.org/0day-ci/archive/20211230/202112301434.DN0qgOT0-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/goldwynr/linux/commit/f4ecee4435f363df5a0fc93124ddddae5f79d9d0
-        git remote add goldwynr https://github.com/goldwynr/linux
-        git fetch --no-tags goldwynr iomap
-        git checkout f4ecee4435f363df5a0fc93124ddddae5f79d9d0
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash fs/btrfs/
+From: luo penghao <luo.penghao@zte.com.cn>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The assignment here will be overwritten, so it should be deleted
 
+The clang_analyzer complains as follows:
 
-sparse warnings: (new ones prefixed by >>)
->> fs/btrfs/file.c:1781:24: sparse: sparse: symbol 'btrfs_buffered_iomap_ops' was not declared. Should it be static?
+net/ethtool/netlink.c:
 
-vim +/btrfs_buffered_iomap_ops +1781 fs/btrfs/file.c
+Value stored to 'ret' is never read
 
-  1780	
-> 1781	const struct iomap_ops btrfs_buffered_iomap_ops = {
-  1782		.iomap_begin = btrfs_buffered_iomap_begin,
-  1783		.iomap_end = btrfs_buffered_iomap_end,
-  1784	};
-  1785	
-
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: luo penghao <luo.penghao@zte.com.cn>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ net/ethtool/netlink.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/net/ethtool/netlink.c b/net/ethtool/netlink.c
+index b3729bd..5e23462 100644
+--- a/net/ethtool/netlink.c
++++ b/net/ethtool/netlink.c
+@@ -633,7 +633,6 @@ static void ethnl_default_notify(struct net_device *dev, unsigned int cmd,
+ 	if (ret < 0)
+ 		goto err_cleanup;
+ 	reply_len = ret + ethnl_reply_header_size();
+-	ret = -ENOMEM;
+ 	skb = genlmsg_new(reply_len, GFP_KERNEL);
+ 	if (!skb)
+ 		goto err_cleanup;
+-- 
+2.15.2
+
+

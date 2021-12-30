@@ -2,102 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9316B481859
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:06:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F20481863
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:12:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234361AbhL3CGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 21:06:37 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:47122 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232768AbhL3CGg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 21:06:36 -0500
-X-UUID: 7c7ca415807944d3bf537f505d520a59-20211230
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=sPOTvMuDJjvlDzy7nqG24GE8k+hFonDBmuW7nB8SSCA=;
-        b=HudQ/kUfDno2Ih1Z6V+bVFQ4AOGSI6DrObbZ3T3M+HkBvBGCNRlWqQasPC3clArbHRlWPZALrcEXwYB6910i5/BY2hmwp+l1dSf6Zv6iELf3SAWB4GSS5R9bzjGvISagU5YMMjViO3zrzqpNvJhUN92fdKzC5NTbHYzGBRjLnlM=;
-X-UUID: 7c7ca415807944d3bf537f505d520a59-20211230
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 158729606; Thu, 30 Dec 2021 10:06:33 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 30 Dec 2021 10:06:31 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 30 Dec 2021 10:06:30 +0800
-Message-ID: <75b2773d1d170f42bae0774dbc58d1458cb25502.camel@mediatek.com>
-Subject: Re: [PATCH v2 3/5] phy: mediatek: add helpers to update bits of
- registers
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Vinod Koul <vkoul@kernel.org>
-CC:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Date:   Thu, 30 Dec 2021 10:06:31 +0800
-In-Reply-To: <047803b9-d09f-d4f8-a674-317cc19dd055@collabora.com>
-References: <20211218082802.5256-1-chunfeng.yun@mediatek.com>
-         <20211218082802.5256-3-chunfeng.yun@mediatek.com>
-         <047803b9-d09f-d4f8-a674-317cc19dd055@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        id S234401AbhL3CMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 21:12:02 -0500
+Received: from smtp23.cstnet.cn ([159.226.251.23]:50512 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232758AbhL3CMB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 21:12:01 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowAA3UJJaFc1hMUHlBA--.8478S2;
+        Thu, 30 Dec 2021 10:11:39 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     yokota@netlab.is.tsukuba.ac.jp, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] scsi: nsp_cs: Check of ioremap return value
+Date:   Thu, 30 Dec 2021 10:11:37 +0800
+Message-Id: <20211230021137.1823352-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowAA3UJJaFc1hMUHlBA--.8478S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7GF47JF1rZFyfJryDWF17Wrg_yoWDJrb_ua
+        yj9347JrZxWr10kw17Jr4SkryYyFZ8ZF1q9FyrKFyY939rZF1UCF18Xwn8Wwnru398Ja4D
+        WwsFqF1rAw13AjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb48FF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
+        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4U
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbYhF7UUUU
+        U==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIxLTEyLTI0IGF0IDExOjEwICswMTAwLCBBbmdlbG9HaW9hY2NoaW5vIERlbCBS
-ZWdubyB3cm90ZToNCj4gSWwgMTgvMTIvMjEgMDk6MjgsIENodW5mZW5nIFl1biBoYSBzY3JpdHRv
-Og0KPiA+IEFkZCB0aHJlZSBoZWxwZXJzIG10a19waHlfY2xlYXIvc2V0L3VwZGF0ZV9iaXRzKCkg
-Zm9yIHJlZ2lzdGVycw0KPiA+IG9wZXJhdGlvbg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IENo
-dW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4NCj4gPiAtLS0NCj4gPiB2Mjog
-bmV3IHBhdGNoLCBhZGQgcmVnaXN0ZXIgYWNjZXNzIGhlbHBlcnMsDQo+ID4gICAgICBBZGQgdXBk
-YXRlbCgpIG1hY3JvIHN1Z2dlc3RlZCBieSBWaW5vZCwgaGVyZSBhZGQgbW9yZSBvbmVzDQo+ID4g
-aW5zdGVhZC4NCj4gPiAtLS0NCj4gPiAgIGRyaXZlcnMvcGh5L21lZGlhdGVrL3BoeS1tdGstaW8u
-aCB8IDM4DQo+ID4gKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKw0KPiA+ICAgMSBmaWxl
-IGNoYW5nZWQsIDM4IGluc2VydGlvbnMoKykNCj4gPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2
-ZXJzL3BoeS9tZWRpYXRlay9waHktbXRrLWlvLmgNCj4gPiANCj4gPiBkaWZmIC0tZ2l0IGEvZHJp
-dmVycy9waHkvbWVkaWF0ZWsvcGh5LW10ay1pby5oDQo+ID4gYi9kcml2ZXJzL3BoeS9tZWRpYXRl
-ay9waHktbXRrLWlvLmgNCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPiA+IGluZGV4IDAwMDAw
-MDAwMDAwMC4uNTAwZmNkYWIxNjVkDQo+ID4gLS0tIC9kZXYvbnVsbA0KPiA+ICsrKyBiL2RyaXZl
-cnMvcGh5L21lZGlhdGVrL3BoeS1tdGstaW8uaA0KPiA+IEBAIC0wLDAgKzEsMzggQEANCj4gPiAr
-LyogU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAgKi8NCj4gPiArLyoNCj4gPiArICog
-Q29weXJpZ2h0IChDKSAyMDIxIE1lZGlhVGVrIEluYy4NCj4gPiArICoNCj4gPiArICogQXV0aG9y
-OiBDaHVuZmVuZyBZdW4gPGNodW5mZW5nLnl1bkBtZWRpYXRlay5jb20+DQo+ID4gKyAqLw0KPiA+
-ICsNCj4gPiArI2lmbmRlZiBfX1BIWV9NVEtfSF9fDQo+ID4gKyNkZWZpbmUgX19QSFlfTVRLX0hf
-Xw0KPiA+ICsNCj4gPiArI2luY2x1ZGUgPGxpbnV4L2lvLmg+DQo+ID4gKw0KPiA+ICtzdGF0aWMg
-aW5saW5lIHZvaWQgbXRrX3BoeV9jbGVhcl9iaXRzKHZvaWQgX19pb21lbSAqcmVnLCB1MzIgYml0
-cykNCj4gPiArew0KPiA+ICsJdTMyIHRtcCA9IHJlYWRsKHJlZyk7DQo+ID4gKw0KPiA+ICsJdG1w
-ICY9IH5iaXRzOw0KPiA+ICsJd3JpdGVsKHRtcCwgcmVnKTsNCj4gPiArfQ0KPiA+ICsNCj4gPiAr
-c3RhdGljIGlubGluZSB2b2lkIG10a19waHlfc2V0X2JpdHModm9pZCBfX2lvbWVtICpyZWcsIHUz
-MiBiaXRzKQ0KPiA+ICt7DQo+ID4gKwl1MzIgdG1wID0gcmVhZGwocmVnKTsNCj4gPiArDQo+ID4g
-Kwl0bXAgfD0gYml0czsNCj4gPiArCXdyaXRlbCh0bXAsIHJlZyk7DQo+ID4gK30NCj4gPiArDQo+
-ID4gK3N0YXRpYyBpbmxpbmUgdm9pZCBtdGtfcGh5X3VwZGF0ZV9iaXRzKHZvaWQgX19pb21lbSAq
-cmVnLCB1MzINCj4gPiBtYXNrLCB1MzIgdmFsKQ0KPiA+ICt7DQo+ID4gKwl1MzIgdG1wID0gcmVh
-ZGwocmVnKTsNCj4gPiArDQo+ID4gKwl0bXAgJj0gfm1hc2s7DQo+ID4gKwl0bXAgfD0gdmFsICYg
-bWFzazsNCj4gPiArCXdyaXRlbCh0bXAsIHJlZyk7DQo+ID4gK30NCj4gPiArDQo+ID4gKyNlbmRp
-Zg0KPiA+IA0KPiANCj4gVGhlc2UgaGVscGVycyBhcmUgYWxtb3N0IGV4YWN0bHkgZHVwbGljYXRp
-bmcgd2hhdA0KPiByZWdtYXBfdXBkYXRlX2JpdHMoKSBpcyBkb2luZy4NCj4gSSBhcHByZWNpYXRl
-IHRoZSBlZmZvcnQgdG8gc3RvcCBvcGVuLWNvZGluZyB0aGUgc2FtZSBzZXF1ZW5jZXMgb3Zlcg0K
-PiBhbmQgb3ZlciBieQ0KPiBhZGRpbmcgc3VjaCBoZWxwZXIgZnVuY3Rpb25zLCANCkkgYWdyZWUg
-d2l0aCB5b3UuDQo+IGJ1dCBJIHRoaW5rIHRoYXQgdGhlIHByb3BlciB3YXkgb2YgZG9pbmcgd2hh
-dCB5b3UNCj4gYXJlIHByb3Bvc2luZyBpcyBub3QgdG8gYWRkIGN1c3RvbSBmdW5jdGlvbnMgYnV0
-IHJhdGhlciByZXVzZSB3aGF0DQo+IHRoZSBMaW51eCBBUElzDQo+IGdpdmUgeW91Lg0KSSBhbHNv
-IGxpa2UgdG8gdXNlIGNvbW1vbiBBUElzIEFTQVAsIGJ1dCBub3QgZm91bmQgc3VpdGFibGUgb25l
-cy4NClRoaXMgbWF5IGJlIGEgcHJvYmxlbSwgSSBmb3VuZCB0aGF0IHNvbWUgc2ltaWxhciBjdXN0
-b20gaGVscHMgYWxyZWFkeQ0KYWRkZWQgdW5kZXIgcGh5IGZvbGQuDQoNCj4gDQo+IFdoYXQgYWJv
-dXQgZG9pbmcgYSBjb252ZXJzaW9uIHRvIHVzZSByZWdtYXAgb24gdGhpcyBkcml2ZXI/DQpObywg
-d2UgZG9uJ3QgdXNlIHJlZ21hcCBoZXJlLCB0aGVzZSByZWdpc3RlcnMgYXJlIG1vbm9wb2xpemVk
-IGJ5IHQtcGh5LCANCml0J3Mgbm90IHN5c2Nvbi4NCg0KDQo=
+As the possible failure of the ioremap(), the 'data->MmioAddress' could
+be NULL.
+Therefore it should be better to check it in order to transfer the
+error.
+
+Fixes: 0e6f9d270840 ("pcmcia: use pcmcia_loop_config in scsi pcmcia drivers")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/scsi/pcmcia/nsp_cs.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/scsi/pcmcia/nsp_cs.c b/drivers/scsi/pcmcia/nsp_cs.c
+index ac89002646a3..bcd61439ca3f 100644
+--- a/drivers/scsi/pcmcia/nsp_cs.c
++++ b/drivers/scsi/pcmcia/nsp_cs.c
+@@ -1560,6 +1560,9 @@ static int nsp_cs_config_check(struct pcmcia_device *p_dev, void *priv_data)
+ 		data->MmioAddress = (unsigned long)
+ 			ioremap(p_dev->resource[2]->start,
+ 					resource_size(p_dev->resource[2]));
++		if (!data->MmioAddress)
++			goto next_entry;
++
+ 		data->MmioLength  = resource_size(p_dev->resource[2]);
+ 	}
+ 	/* If we got this far, we're cool! */
+-- 
+2.25.1
 

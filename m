@@ -2,117 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A361481EEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 18:58:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D9AD481EFA
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 19:02:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241581AbhL3R6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 12:58:55 -0500
-Received: from mail-qt1-f170.google.com ([209.85.160.170]:35827 "EHLO
-        mail-qt1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236855AbhL3R6x (ORCPT
+        id S241590AbhL3SCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 13:02:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236001AbhL3SCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 12:58:53 -0500
-Received: by mail-qt1-f170.google.com with SMTP id j17so22369386qtx.2;
-        Thu, 30 Dec 2021 09:58:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QD1aj9TXJBpH5UqfHeYs/TFaBUwS5ZRep+k43Zsm2pA=;
-        b=xoiRM6UG41s2J0omFxmLhelurGfEZvHALbtfbt0R6KRviAw1tBmD/N+vfcG9iES6qA
-         B5OZ8/Uvbz2DGQn7WQPIYcgxPYAdCxM1GPT5hi0pKJlJAPN9TMWfSrfsAvb3Tc5/wdLR
-         do++iSr+DDc1nfMaUjEir3oKfgqw2nBwRXAP+U5g7ROy/QWqb0+v/ZVMFksVuEUHEhTP
-         1pQZZh6QSbh340arVN3Ws1IHLQuJrDEC2o/FdrM7ikoTMynJt99lbiBBTfBhHq0fQYIG
-         zLHUUqHkajLt9UO+/t8caOOBiWhzUX25ZjeJgMkkvjwgRDcD6Fu5KeB7UdvIt8J7JLjn
-         S+7w==
-X-Gm-Message-State: AOAM530tou0q4VtP2Ivs/UPeG7CCAHCJMRxmYZhR+faUNDy0pDHEIATk
-        y/r8k+wpid9xfcpBKD1kqs+z+szgWG9VJQ6Vf5o=
-X-Google-Smtp-Source: ABdhPJw6Eojhl7OswwcxNETpAu8SyD6rI1f5FXxp1CgROTbrnGyPWWdgA9SAkHmQTFUo8yrYEGKp4cNBkmeDh4OjLpQ=
-X-Received: by 2002:ac8:7c4e:: with SMTP id o14mr27446100qtv.80.1640887133120;
- Thu, 30 Dec 2021 09:58:53 -0800 (PST)
+        Thu, 30 Dec 2021 13:02:21 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3791FC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 10:02:21 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 33EA51EC0354;
+        Thu, 30 Dec 2021 19:02:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1640887335;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=bi5eqR3iTwO+cVYztiLpIkRFM8Tu2pVJl0IA02mZXYM=;
+        b=MaH3Ypy2W4T8N8fJD6O2deGqex4XQoflWdhFjVXfZSQX6P6gITDQ+t8QepXXbt52DXQWpI
+        tVPc6IsXDXbcBipi8fz9PCf+rcmG75agxLI2cn0Yp/ah8b/SJpgBz0qTn9TxITw1YEjpD9
+        w4UNdGqdtPdzMMxsjpsmfmboPVCAMZM=
+Date:   Thu, 30 Dec 2021 19:02:21 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+Subject: Re: [PATCH 04/26] x86/traps: Add #VE support for TDX guest
+Message-ID: <Yc30LewCB5u6lVpW@zn.tnic>
+References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
+ <20211214150304.62613-5-kirill.shutemov@linux.intel.com>
+ <YcTR5HnkHi7CjVyx@zn.tnic>
+ <20211228233112.cpycmdv55edxhvbv@black.fi.intel.com>
+ <YcxGrw6Ymqs8NPjY@zn.tnic>
+ <20211230080500.cmc6x2nbykprlyy2@box.shutemov.name>
+ <Yc2Ps9npROL3znOi@zn.tnic>
+ <20211230154127.tf2rc4yu2v7uorv5@box.shutemov.name>
 MIME-Version: 1.0
-References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien>
- <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com>
- <alpine.DEB.2.22.394.2112172022100.2968@hadrien> <87r1abt1d2.fsf@riseup.net>
- <alpine.DEB.2.22.394.2112172258480.2968@hadrien> <87fsqqu6by.fsf@riseup.net>
- <alpine.DEB.2.22.394.2112180654470.3139@hadrien> <878rwitdu3.fsf@riseup.net>
- <alpine.DEB.2.22.394.2112181138210.3130@hadrien> <871r29tvdj.fsf@riseup.net>
- <alpine.DEB.2.22.394.2112190734070.3181@hadrien> <87wnk0s0tf.fsf@riseup.net>
- <CAJZ5v0i7gBtm6x+zUUzhxXjmYhPwr=JxvOuMZ0aD9qxnjE9YKw@mail.gmail.com>
- <878rwdse9o.fsf@riseup.net> <alpine.DEB.2.22.394.2112281745240.24929@hadrien>
- <CAJZ5v0i4xnesG=vfx7Y-wyeaGvjDeGcsaOVqhRLnV8YXk-m2gA@mail.gmail.com>
- <alpine.DEB.2.22.394.2112281845180.24929@hadrien> <CAJZ5v0grayg9evWsB5ktKSFq=yA_AHoEWSfpSkQ=MVQ-=butfA@mail.gmail.com>
- <alpine.DEB.2.22.394.2112291012030.24929@hadrien> <CAJZ5v0g5wDxYXA-V=Ex_Md82hgnj5K6Vr0tavFFVz=uBqo8wag@mail.gmail.com>
- <alpine.DEB.2.22.394.2112301840360.15550@hadrien>
-In-Reply-To: <alpine.DEB.2.22.394.2112301840360.15550@hadrien>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 30 Dec 2021 18:58:41 +0100
-Message-ID: <CAJZ5v0h38jh3gyTp9W0ws0yXyfK=F+TQ7VYRVx4aGXhNeSObEg@mail.gmail.com>
-Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Francisco Jerez <currojerez@riseup.net>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211230154127.tf2rc4yu2v7uorv5@box.shutemov.name>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 30, 2021 at 6:54 PM Julia Lawall <julia.lawall@inria.fr> wrote:
->
-> > > The effect is the same.  But that approach is indeed simpler than patching
-> > > the kernel.
-> >
-> > It is also applicable when intel_pstate runs in the active mode.
-> >
-> > As for the results that you have reported, it looks like the package
-> > power on these systems is dominated by package voltage and going from
-> > P-state 20 to P-state 21 causes that voltage to increase significantly
-> > (the observed RAM energy usage pattern is consistent with that).  This
-> > means that running at P-states above 20 is only really justified if
-> > there is a strict performance requirement that can't be met otherwise.
-> >
-> > Can you please check what value is there in the base_frequency sysfs
-> > attribute under cpuX/cpufreq/?
->
-> 2100000, which should be pstate 21
->
-> >
-> > I'm guessing that the package voltage level for P-states 10 and 20 is
-> > the same, so the power difference between them is not significant
-> > relative to the difference between P-state 20 and 21 and if increasing
-> > the P-state causes some extra idle time to appear in the workload
-> > (even though there is not enough of it to prevent to overall
-> > utilization from increasing), then the overall power draw when running
-> > at P-state 10 may be greater that for P-state 20.
->
-> My impression is that the package voltage level for P-states 10 to 20 is
-> high enough that increasing the frequency has little impact.  But the code
-> runs twice as fast, which reduces the execution time a lot, saving energy.
->
-> My first experiment had only one running thread.  I also tried running 32
-> spinning threads for 10 seconds, ie using up one package and leaving the
-> other idle.  In this case, instead of staying around 600J for pstates
-> 10-20, the pstate rises from 743 to 946.  But there is still a gap between
-> 20 and 21, with 21 being 1392J.
->
-> > You can check if there is any C-state residency difference between
-> > these two cases by running the workload under turbostat in each of
-> > them.
->
-> The C1 and C6 cases (CPU%c1 and CPU%c6) are about the same between 20 and
-> 21, whether with 1 thread or with 32 thread.
+On Thu, Dec 30, 2021 at 06:41:27PM +0300, Kirill A. Shutemov wrote:
+> The updated commit message is below. Let me know if something is unclear.
+> 
+> ----------------------------8<-------------------------------------------
+> 
+> Virtualization Exceptions (#VE) are delivered to TDX guests due to
+> specific guest actions which may happen in either user space or the
+> kernel:
+> 
+>  * Specific instructions (WBINVD, for example)
+>  * Specific MSR accesses
+>  * Specific CPUID leaf accesses
+>  * Access to unmapped pages (EPT violation)
+> 
+> In the settings that Linux will run in, virtual exceptions are never
 
-I meant to compare P-state 10 and P-state 20.
+virtualization exceptions
 
-20 and 21 are really close as far as the performance is concerned, so
-I wouldn't expect to see any significant C-state residency difference
-between them.
+> generated on accesses to normal, TD-private memory that has been
+> accepted.
+> 
+> Syscall entry code has a critical window where the kernel stack is not
+> yet set up. Any exception in this window leads to hard to debug issues
+> and can be exploited for privilege escalation. Exceptions in the NMI
+> entry code also cause issues. IRET from the exception handle will
+
+"Returning from the exception handler with IRET will... "
+
+> re-enable NMIs and nested NMI will corrupt the NMI stack.
+> 
+> For these reasons, the kernel avoids #VEs during the syscall gap and
+> the NMI entry code. Entry code paths do not access TD-shared memory,
+> MMIO regions, use #VE triggering MSRs, instructions, or CPUID leaves
+> that might generate #VE. VMM can remove memory from TD at any point,
+> but access to unaccepted (or missing) private memory leads to VM
+> termination, not to #VE.
+> 
+> Similarly, to page faults and breakpoints, #VEs are allowed in NMI
+
+"Similarly to" - no comma.
+
+> handlers once the kernel is ready to deal with nested NMIs.
+> 
+> During #VE delivery, all interrupts, including NMIs, are blocked until
+> TDGETVEINFO is called. It prevents #VE nesting until the kernel reads
+> the VE info.
+> 
+> If a guest kernel action which would normally cause a #VE occurs in
+> the interrupt-disabled region before TDGETVEINFO, a #DF (fault
+> exception) is delivered to the guest which will result in an oops.
+
+That up to here can go over the #VE handler.
+
+> Add basic infrastructure to handle any #VE which occurs in the kernel
+> or userspace. Later patches will add handling for specific #VE
+> scenarios.
+> 
+> For now, convert unhandled #VE's (everything, until later in this
+> series) so that they appear just like a #GP by calling the
+> ve_raise_fault() directly. The ve_raise_fault() function is similar
+> to #GP handler and is responsible for sending SIGSEGV to userspace
+> and CPU die and notifying debuggers and other die chain users.
+
+Yap, better.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

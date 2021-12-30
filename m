@@ -2,142 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D694B481F48
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 19:40:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6063481F4B
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 19:43:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241681AbhL3Skx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 13:40:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38618 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241673AbhL3Skv (ORCPT
+        id S241734AbhL3Sng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 13:43:36 -0500
+Received: from mail-qt1-f177.google.com ([209.85.160.177]:41651 "EHLO
+        mail-qt1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236872AbhL3Sne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 13:40:51 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8822FC06173E
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 10:40:51 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id l10-20020a17090a384a00b001b22190e075so23447776pjf.3
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 10:40:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0dlCui6ef10a63W49l8BeTD6AlMqaA5DizmBUz4pmE0=;
-        b=cCnkXzILDcBP2M9InOSjHJwJ1jEfD62+xKs/RcNbUQDWf2HXUt/AUIkduZcK9yoXHc
-         JXYXD/C5t3+K2RQd8Q/ly6PI4PF/AUWQPatd3JV9p4GWme7hNZibf8u5O3w6IVy4txQD
-         Z4rGuFHiD96cwkgkFkBGR26VYM0vVE04pt6GaYUOTHPQ27cMbF/c0TRPu26gBQ/FJRLO
-         dsF3ZHkTsq/Hk9Vz3AArXDwy+dKYts0n/3gKE0cxyzdFDfomQenAH4kbMtiGTKuty86e
-         3XKpxjsLDcHI0jPh/SFeR+K+SFBYoB/q2DG4hKMQBRbkegn8mJrPNXB6s3hD8Q+aHxlh
-         43dw==
+        Thu, 30 Dec 2021 13:43:34 -0500
+Received: by mail-qt1-f177.google.com with SMTP id v22so22421181qtx.8;
+        Thu, 30 Dec 2021 10:43:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0dlCui6ef10a63W49l8BeTD6AlMqaA5DizmBUz4pmE0=;
-        b=T9GONe01Nxq53tr1icsiWw5vPhkRCT+0XK2P6I7PA0h6rwdcU9AImrQR3P6mGHqU88
-         B18ED970p19i0yhPKHWjyWp3FXjXwGfJY11TLyuQ3VVdO4vAaSPs5qcbXtbOTYME5OEy
-         QO407gZ6Q1acGs9thtusoRmIifIFPbbawZpytlsh6MjmMtuZgFSgdeT8eakAZmu318tm
-         QY7ml/MGWy7XdmyVwUGu8MNFIjZAZwBIIN5HNbe754Bb7LfAjAGVNJOlwv+ylGS0jyIu
-         vjOPdnRar+lbbzJoVmzBEL0JMZ+qJxZdBJGhzhbX22/JYrgywZvYa8M420hMJQHjzHZ0
-         SG1A==
-X-Gm-Message-State: AOAM530fNfxyN89Gh4mLRL4oISwg9V6DvkpOetXYmOF74hArFSmP/2LI
-        5g20/1LAiedT7ZKTeelVVy2oaw==
-X-Google-Smtp-Source: ABdhPJw1DGaUS0160SXEiorqCYdmWgjglHDjXF9V7C0SSxlxrcLzR+TYgYTAmK0J0pGgmghC5eafuw==
-X-Received: by 2002:a17:90b:3b45:: with SMTP id ot5mr37244717pjb.147.1640889650869;
-        Thu, 30 Dec 2021 10:40:50 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id j7sm28410030pfu.164.2021.12.30.10.40.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Dec 2021 10:40:50 -0800 (PST)
-Date:   Thu, 30 Dec 2021 18:40:47 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Lai Jiangshan <laijs@linux.alibaba.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, kvm@vger.kernel.org
-Subject: Re: [RFC PATCH] x86/kvm: Allow kvm_read_and_reset_apf_flags() to be
- instrumented
-Message-ID: <Yc39L/2Ltx53bP/0@google.com>
-References: <20211126123145.2772-1-jiangshanlai@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZgJKNR+mlHxxn85M9qhfcIgprdRDVkipREIlRLErdq0=;
+        b=sC+g7+nukGhssMSyodWz8FL6BT4JjVzE/B9YlRgL/2WbC612lObNNN1SxPF31u2YGn
+         Ga0+Bi3DCh20AmquXaK+p6lOIiycgKEqIEPD6AczOLl9GGpkz6QXwkRzV1H+eStM+SEC
+         DQ8ZxrO+DO7vlCQXnXUPkRidSkcAtikKfUA5xVkkEqWHpum9TG/IbOY6y7jdXPUoW/oO
+         PYe3yvAU9B3jGd53K1fwtig8x3gzwo0oxtbjbkCkjHbJED+Q8yX/AxzbPTnhBxN26JEl
+         pT9lLDA1pqT/qBCmnMqcRIGgcK++4Opsh0SgGiUv36nxpaF46+nkZHbQjju+VU84VNus
+         TL8w==
+X-Gm-Message-State: AOAM531ASuocE0y7g55CFia8894J9RZZ3YTIrhUAfPlo3r669Xkweiqr
+        JMoGsHcXO0B5UtE+Ki/AZjgUMci20zTLbapeKUo=
+X-Google-Smtp-Source: ABdhPJwOzWG3w+ovnmBiOFolF9Lyj0D7tOKBjwwglyV6mcpKTC4/mxWM/EGJzA8gUqKU5LrXBy8YjomjER0Kio0hioo=
+X-Received: by 2002:ac8:46cc:: with SMTP id h12mr27864091qto.417.1640889813400;
+ Thu, 30 Dec 2021 10:43:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211126123145.2772-1-jiangshanlai@gmail.com>
+References: <20211220151438.1196-1-ricardo.neri-calderon@linux.intel.com> <20211220151438.1196-4-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20211220151438.1196-4-ricardo.neri-calderon@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 30 Dec 2021 19:43:22 +0100
+Message-ID: <CAJZ5v0hQUMBw-0t0QzvCfOvzp0WEhE64xiU1JX2jkzdG5BJrMg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/7] thermal: intel: hfi: Minimally initialize the
+ Hardware Feedback Interface
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 26, 2021, Lai Jiangshan wrote:
-> From: Lai Jiangshan <laijs@linux.alibaba.com>
-> 
-> Both VMX and SVM made mistakes of calling kvm_read_and_reset_apf_flags()
-> in instrumentable code:
-> 	vmx_vcpu_enter_exit()
-> 		ASYNC PF induced VMEXIT
-> 		save cr2
-> 	leave noinstr section
-> 	-- kernel #PF can happen here due to instrumentation
-> 	handle_exception_nmi_irqoff
-> 		kvm_read_and_reset_apf_flags()
-> 
-> If kernel #PF happens before handle_exception_nmi_irqoff() after leaving
-> noinstr section due to instrumentation, kernel #PF handler will consume
-> the incorrect apf flags and panic.
-> 
-> The problem might be fixed by moving kvm_read_and_reset_apf_flags()
-> into vmx_vcpu_enter_exit() to consume apf flags earlier before leaving
-> noinstr section like the way it handles CR2.
-> 
-> But linux kernel only resigters ASYNC PF for userspace and guest, so
-
-I'd omit the guest part.  While technically true, it's not relevant to the change
-as the instrumentation safety comes purely from the user_mode() check.  Mentioning
-the "guest" side of things gets confusing as the "host" may be an L1 kernel, in
-which case it is also a guest and may have its own guests.
-
-It'd also be helpful for future readers to call out that this is true only since
-commit 3a7c8fafd1b4 ("x86/kvm: Restrict ASYNC_PF to user space").  Allowing async
-#PF in kernel mode was presumably why this code was non-instrumentable in the
-first place.
-
-> ASYNC PF can't hit when it is in kernel, so apf flags can be changed to
-> be consumed only when the #PF is from guest or userspace.
-
-...
-
-> @@ -1538,7 +1514,20 @@ DEFINE_IDTENTRY_RAW_ERRORCODE(exc_page_fault)
->  	state = irqentry_enter(regs);
->  
->  	instrumentation_begin();
-> -	handle_page_fault(regs, error_code, address);
+On Mon, Dec 20, 2021 at 4:23 PM Ricardo Neri
+<ricardo.neri-calderon@linux.intel.com> wrote:
+>
+> The Intel Hardware Feedback Interface provides guidance to the operating
+> system about the performance and energy efficiency capabilities of each
+> CPU in the system. Capabilities are numbers between 0 and 255 where a
+> higher number represents a higher capability. For each CPU, energy
+> efficiency and performance are reported as separate capabilities.
+>
+> Hardware computes these capabilities based on the operating conditions of
+> the system such as power and thermal limits. These capabilities are shared
+> with the operating system in a table resident in memory. Each package in
+> the system has its own HFI instance. Every logical CPU in the package is
+> represented in the table. More than one logical CPUs may be represented in
+> a single table entry. When the hardware updates the table, it generates a
+> package-level thermal interrupt.
+>
+> The size and format of the HFI table depend on the supported features and
+> can only be determined at runtime. To minimally initialize the HFI, parse
+> its features and allocate one instance per package of a data structure with
+> the necessary parameters to read and navigate a local copy (i.e., owned by
+> the driver) of individual HFI tables.
+>
+> A subsequent changeset will provide per-CPU initialization and interrupt
+> handling.
+>
+> Cc: Andi Kleen <ak@linux.intel.com>
+> Cc: Aubrey Li <aubrey.li@linux.intel.com>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: Tim Chen <tim.c.chen@linux.intel.com>
+> Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
+> Reviewed-by: Len Brown <len.brown@intel.com>
+> Co-developed by: Aubrey Li <aubrey.li@linux.intel.com>
+> Signed-off-by: Aubrey Li <aubrey.li@linux.intel.com>
+> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> ---
+> Changes since v1:
+>   * Renamed X86_FEATURE_INTEL_HFI as X86_FEATURE_HFI. (Boris)
+>   * Reworked parsing of HFI features using bitfields instead of bitmasks.
+>     (PeterZ).
+>   * Removed hfi_instance::parsed as hfi_parse_features() is called only
+>     once via intel_hfi_init() via thermal_throttle_init_device().
+>     (Rafael)
+>   * Converted pr_err() to pr_debug(). (Srinivas, Rafael)
+>   * Removed unnecessary dependency on CONFIG_SCHED_MC.
+>   * Renamed hfi_instance::ts_counter as hfi_instance::timestamp.
+>   * Renamed hfi_instance::table_base as hfi_instance::local_table and
+>     relocated its definition to this patch.
+>   * Wrapped hfi_instance::timestamp and hfi_instance:local_table in an
+>     anonymous union, since both point at the same location.
+> ---
+>  drivers/thermal/intel/Kconfig       |  12 ++
+>  drivers/thermal/intel/Makefile      |   1 +
+>  drivers/thermal/intel/intel_hfi.c   | 175 ++++++++++++++++++++++++++++
+>  drivers/thermal/intel/intel_hfi.h   |  11 ++
+>  drivers/thermal/intel/therm_throt.c |   3 +
+>  5 files changed, 202 insertions(+)
+>  create mode 100644 drivers/thermal/intel/intel_hfi.c
+>  create mode 100644 drivers/thermal/intel/intel_hfi.h
+>
+> diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
+> index c83ea5d04a1d..1a21ff60fdc7 100644
+> --- a/drivers/thermal/intel/Kconfig
+> +++ b/drivers/thermal/intel/Kconfig
+> @@ -99,3 +99,15 @@ config INTEL_MENLOW
+>           Intel Menlow platform.
+>
+>           If unsure, say N.
 > +
-> +	/*
-> +	 * KVM uses #PF vector to deliver 'page not present' events to guests
-> +	 * (asynchronous page fault mechanism). The event happens when a
-> +	 * userspace task is trying to access some valid (from guest's point of
-> +	 * view) memory which is not currently mapped by the host (e.g. the
-> +	 * memory is swapped out). Note, the corresponding "page ready" event
-> +	 * which is injected when the memory becomes available, is delivered via
-> +	 * an interrupt mechanism and not a #PF exception
-> +	 * (see arch/x86/kernel/kvm.c: sysvec_kvm_asyncpf_interrupt()).
-> +	 */
-> +	if (!user_mode(regs) || !kvm_handle_async_user_pf(regs, (u32)address))
-> +		handle_page_fault(regs, error_code, address);
+> +config INTEL_HFI
 
-To preserve the panic() if an async #PF is injected for !user_mode, any reason
-not to do?
+This looks like it may be too general, because HFI is not a thermal-only thing.
 
-	if (!kvm_handle_async_user_pf(regs, (u32)address))
-		handle_page_fault(regs, error_code, address);
-
-Then __kvm_handle_async_user_pf() can keep its panic() on !user_mode().  And it
-also saves a conditional when kvm_async_pf_enabled is not true.
+Maybe cal it INTEL_HFI_THERMAL?

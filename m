@@ -2,211 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E871A481CA4
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 14:48:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02ED6481CA9
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 14:53:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239728AbhL3Ns2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 08:48:28 -0500
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:57395 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235821AbhL3Ns1 (ORCPT
+        id S239744AbhL3Nx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 08:53:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59596 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235821AbhL3Nx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 08:48:27 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id B18E55803AD;
-        Thu, 30 Dec 2021 08:48:26 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 30 Dec 2021 08:48:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=r5nxOi
-        syFTtm3Lt210TuCZFrjiI0ZSYmX8dE32zPpw8=; b=AWw3JK/M3koYuH0ByXnmGm
-        cL+kBFzuaLWpr0Fh9usE8semlLoiXpUed1/QP9NefTtfSkhIgDKbORZn43OP2pEJ
-        spqf4FJ4ClRQVLumYPXeyUYYqMCM20Z/clpzCho0Yj1aQGlf8xENJTYxeE3pBfmt
-        wy0OVQqHrkHu2WY/exMBbej8wfIKQm1VhQjewS91JozysT5poBAo/k7YyLUqw5i3
-        w6/gS/kx/e3F+Hh7rX1XVt7k0cJfrI07H7bxaZaG2UCNX/xtPnL2h1IlBF0XsCHa
-        E8QKxibKNvko4e09v8POk9RJN4bbfzZVAATpbF5QwijMNsJnOyzIrjF815nF5/AA
-        ==
-X-ME-Sender: <xms:qrjNYbRacaVIKXABNVPNYUvQw3elwZtDqGZ6IgD1v9vNwzPfaoAaoA>
-    <xme:qrjNYcxyp0ajpOp7Mw5jPdpfr6mAFN6xcQb8qnJivRWT-VpIxQi0CoXeHhm7PzXtV
-    s2buxnhyL99hqY>
-X-ME-Received: <xmr:qrjNYQ2B3znPDH0__J1zTL6cR85-Ox7-9beNGYp_h__WlglwkbTIHVjpIkXQAoUIaeaSmQdEL-jEkdTyR0h86byWlP38kA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddruddvfedgheeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
-    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
-    gvrhhnpedtffekkeefudffveegueejffejhfetgfeuuefgvedtieehudeuueekhfduheel
-    teenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
-    hoshgthhesihguohhstghhrdhorhhg
-X-ME-Proxy: <xmx:qrjNYbAM-_QZyBdfEFUuWPxn2wRkPzTacOuyvucaclZ1m39rNvdpPQ>
-    <xmx:qrjNYUhLzmr0m5ahE1O0NzfYnsyLkqGa6EF_IAFC74G70hSqFQcSGg>
-    <xmx:qrjNYfpZvyihOVrxjwAhjQpU5Laz_HVB1c2m1s57TBwqlagCV05zKg>
-    <xmx:qrjNYZY__mdKNZclg_DkhfSxj0Gp_ggtn9UindjAa-TxIVRbHF5_IA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 30 Dec 2021 08:48:25 -0500 (EST)
-Date:   Thu, 30 Dec 2021 15:48:22 +0200
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Yevhen Orlov <yevhen.orlov@plvision.eu>
-Cc:     netdev@vger.kernel.org, stephen@networkplumber.org, andrew@lunn.ch,
-        Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
-        Taras Chornyi <taras.chornyi@plvision.eu>,
-        Mickey Rachamim <mickeyr@marvell.com>,
-        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
-        Taras Chornyi <tchornyi@marvell.com>,
-        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 3/6] net: marvell: prestera: Add prestera
- router infra
-Message-ID: <Yc24pow5B9PaFWP2@shredder>
-References: <20211227215233.31220-1-yevhen.orlov@plvision.eu>
- <20211227215233.31220-4-yevhen.orlov@plvision.eu>
+        Thu, 30 Dec 2021 08:53:26 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3B6C061574;
+        Thu, 30 Dec 2021 05:53:26 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id u13so54510948lff.12;
+        Thu, 30 Dec 2021 05:53:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to;
+        bh=OTSybf/FehI6pYOln3P9eF9NWxZwb34ljQ3EhfbORfY=;
+        b=dVlRNmU91czZpmVfSBFodQPJyUm7fPAk9/SKokWAHQBr/mqCFDsQ/8CPrIqIuY+yzs
+         7EM082dH5CFiVciaNy2eab6C38Y3gmViomkTIC9i0N8OFtYir1oXkGgFZ/IbPKevSrH4
+         RJO7gzqdZb70khUL3IwucXOj0gL9oh7FIJX6IyUzckvlg+lO8+pCNmlXDy+iRlgatyAx
+         eNn8GsaFho2S6zdHS8xGcPEwU8GOCzIRhPkNUzZTQqv+YA2NjZGWKBgaCffDnGjfZuHF
+         dJMpcAk4t3KSTukWvptRb7BTiuC3PX80VlU0nXKUCtXRWk/j1iXjOrvprGjPzUf1+cCr
+         /5/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to;
+        bh=OTSybf/FehI6pYOln3P9eF9NWxZwb34ljQ3EhfbORfY=;
+        b=NkLgCVHkYap6v/tNIQYInOH0XtpsTKAsatRmoeO3cNPfijnIC/wLJwVp5ZnybpRNXT
+         uxZnbSXCohUYLsbIQzg+O6EWE51JuU1Bbes7jUjfeSbGFOANo16CKoQf7hLHHoRCrlEi
+         6cf3ooRNp1lO2CCuCKUkO7ybr4nIrhlm3mC3loe0iIbIHtmfFYeKVj0LWfgy4Cbhs2Ky
+         RGzNkwGV+11aHpErvuv4VANgtClCIKyMq6k9+xUq5uBpLHShjpG4QZWxfnw+SQRuzBMu
+         agwARYQf0ZcVmmCbD2PzPRyrO6nOQlPvrKLFDXryavFcKzoo2D6VfvXknSe/TiTdqUOc
+         ymmQ==
+X-Gm-Message-State: AOAM531qM6Z8qjL9ghmCdDoKfxQYTc5cag/qGbwv39UiUN/XMuiABb/I
+        nlFdnrMqqkGDzFzZvbe9WY4=
+X-Google-Smtp-Source: ABdhPJzhYhe9+iV9lTrCPZXRK8GG575ZUASfEQaxOXdr+TjG+93c5iKi1GDwVUnRQE2jwCHvlE4ydw==
+X-Received: by 2002:a05:6512:2216:: with SMTP id h22mr26787332lfu.155.1640872404331;
+        Thu, 30 Dec 2021 05:53:24 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.235.97])
+        by smtp.gmail.com with ESMTPSA id by6sm1346843ljb.78.2021.12.30.05.53.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Dec 2021 05:53:23 -0800 (PST)
+Content-Type: multipart/mixed; boundary="------------dCX0IlaUbMjKeidKwYkueUP0"
+Message-ID: <83bf58b6-ace2-2db8-4f8b-322e78a3e198@gmail.com>
+Date:   Thu, 30 Dec 2021 16:53:21 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211227215233.31220-4-yevhen.orlov@plvision.eu>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [syzbot] general protection fault in
+ sg_alloc_append_table_from_pages
+Content-Language: en-US
+To:     syzbot <syzbot+2c56b725ec547fa9cb29@syzkaller.appspotmail.com>,
+        christian.koenig@amd.com, dri-devel@lists.freedesktop.org,
+        gurchetansingh@chromium.org, kraxel@redhat.com,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, sumit.semwal@linaro.org,
+        syzkaller-bugs@googlegroups.com
+References: <000000000000b0a1a605ce3ec5ad@google.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <000000000000b0a1a605ce3ec5ad@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 11:52:28PM +0200, Yevhen Orlov wrote:
-> Add prestera_router.c, which contains code to subscribe/unsubscribe on
-> kernel notifiers for router. This handle kernel notifications,
-> parse structures to make key to manipulate prestera_router_hw's objects.
-> 
-> Also prestera_router is container for router's objects database.
-> 
-> Co-developed-by: Taras Chornyi <tchornyi@marvell.com>
-> Signed-off-by: Taras Chornyi <tchornyi@marvell.com>
-> Co-developed-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
-> Signed-off-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
-> Signed-off-by: Yevhen Orlov <yevhen.orlov@plvision.eu>
-> ---
-> v1-->v2
-> * No changes
-> ---
->  .../net/ethernet/marvell/prestera/Makefile    |  3 +-
->  .../net/ethernet/marvell/prestera/prestera.h  | 11 ++++++++
->  .../ethernet/marvell/prestera/prestera_main.c |  6 ++++
->  .../marvell/prestera/prestera_router.c        | 28 +++++++++++++++++++
->  4 files changed, 47 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/net/ethernet/marvell/prestera/prestera_router.c
-> 
-> diff --git a/drivers/net/ethernet/marvell/prestera/Makefile b/drivers/net/ethernet/marvell/prestera/Makefile
-> index 48dbcb2baf8f..ec69fc564a9f 100644
-> --- a/drivers/net/ethernet/marvell/prestera/Makefile
-> +++ b/drivers/net/ethernet/marvell/prestera/Makefile
-> @@ -3,6 +3,7 @@ obj-$(CONFIG_PRESTERA)	+= prestera.o
->  prestera-objs		:= prestera_main.o prestera_hw.o prestera_dsa.o \
->  			   prestera_rxtx.o prestera_devlink.o prestera_ethtool.o \
->  			   prestera_switchdev.o prestera_acl.o prestera_flow.o \
-> -			   prestera_flower.o prestera_span.o prestera_counter.o
-> +			   prestera_flower.o prestera_span.o prestera_counter.o \
-> +			   prestera_router.o
->  
->  obj-$(CONFIG_PRESTERA_PCI)	+= prestera_pci.o
-> diff --git a/drivers/net/ethernet/marvell/prestera/prestera.h b/drivers/net/ethernet/marvell/prestera/prestera.h
-> index 636caf492531..7160da678457 100644
-> --- a/drivers/net/ethernet/marvell/prestera/prestera.h
-> +++ b/drivers/net/ethernet/marvell/prestera/prestera.h
-> @@ -270,12 +270,20 @@ struct prestera_switch {
->  	u32 mtu_min;
->  	u32 mtu_max;
->  	u8 id;
-> +	struct prestera_router *router;
->  	struct prestera_lag *lags;
->  	struct prestera_counter *counter;
->  	u8 lag_member_max;
->  	u8 lag_max;
->  };
->  
-> +struct prestera_router {
-> +	struct prestera_switch *sw;
-> +	struct list_head vr_list;
-> +	struct list_head rif_entry_list;
-> +	bool aborted;
+This is a multi-part message in MIME format.
+--------------dCX0IlaUbMjKeidKwYkueUP0
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Never used
-
-> +};
-> +
->  struct prestera_rxtx_params {
->  	bool use_sdma;
->  	u32 map_addr;
-> @@ -303,6 +311,9 @@ struct prestera_port *prestera_port_find_by_hwid(struct prestera_switch *sw,
->  
->  int prestera_port_autoneg_set(struct prestera_port *port, u64 link_modes);
->  
-> +int prestera_router_init(struct prestera_switch *sw);
-> +void prestera_router_fini(struct prestera_switch *sw);
-> +
->  struct prestera_port *prestera_find_port(struct prestera_switch *sw, u32 id);
->  
->  int prestera_port_cfg_mac_read(struct prestera_port *port,
-> diff --git a/drivers/net/ethernet/marvell/prestera/prestera_main.c b/drivers/net/ethernet/marvell/prestera/prestera_main.c
-> index a0dbad5cb88d..242904fcd866 100644
-> --- a/drivers/net/ethernet/marvell/prestera/prestera_main.c
-> +++ b/drivers/net/ethernet/marvell/prestera/prestera_main.c
-> @@ -893,6 +893,10 @@ static int prestera_switch_init(struct prestera_switch *sw)
->  	if (err)
->  		return err;
->  
-> +	err = prestera_router_init(sw);
-> +	if (err)
-> +		goto err_router_init;
-> +
->  	err = prestera_switchdev_init(sw);
->  	if (err)
->  		goto err_swdev_register;
-> @@ -949,6 +953,8 @@ static int prestera_switch_init(struct prestera_switch *sw)
->  err_rxtx_register:
->  	prestera_switchdev_fini(sw);
->  err_swdev_register:
-> +	prestera_router_fini(sw);
-
-Missing a call in prestera_switch_fini(). Most likely visible with
-kmemleak enabled
-
-> +err_router_init:
->  	prestera_netdev_event_handler_unregister(sw);
->  	prestera_hw_switch_fini(sw);
->  
-> diff --git a/drivers/net/ethernet/marvell/prestera/prestera_router.c b/drivers/net/ethernet/marvell/prestera/prestera_router.c
-> new file mode 100644
-> index 000000000000..f3980d10eb29
-> --- /dev/null
-> +++ b/drivers/net/ethernet/marvell/prestera/prestera_router.c
-> @@ -0,0 +1,28 @@
-> +// SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0
-> +/* Copyright (c) 2019-2021 Marvell International Ltd. All rights reserved */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/types.h>
-> +
-> +#include "prestera.h"
-> +
-> +int prestera_router_init(struct prestera_switch *sw)
-> +{
-> +	struct prestera_router *router;
-> +
-> +	router = kzalloc(sizeof(*sw->router), GFP_KERNEL);
-> +	if (!router)
-> +		return -ENOMEM;
-> +
-> +	sw->router = router;
-> +	router->sw = sw;
-> +
-> +	return 0;
-> +}
-> +
-> +void prestera_router_fini(struct prestera_switch *sw)
-> +{
-> +	kfree(sw->router);
-> +	sw->router = NULL;
-> +}
-> +
-> -- 
-> 2.17.1
+On 10/13/21 19:51, syzbot wrote:
+> Hello,
 > 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    717478d89fe2 Merge tag 'riscv-for-linus-5.15-rc5' of git:/..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=12489abf300000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=32e6048063923b7b
+> dashboard link: https://syzkaller.appspot.com/bug?extid=2c56b725ec547fa9cb29
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=167b9e4f300000
+> 
+> The issue was bisected to:
+> 
+> commit 284562e1f34874e267d4f499362c3816f8f6bc3f
+> Author: Gurchetan Singh <gurchetansingh@chromium.org>
+> Date:   Tue Dec 3 01:36:27 2019 +0000
+> 
+>      udmabuf: implement begin_cpu_access/end_cpu_access hooks
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12d68447300000
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=11d68447300000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=16d68447300000
+> 
+
+zero ubuf->pagecount will cause kmalloc_array() to return ZERO_PTR, that 
+is unsafe to deref
+
+#syz test
+git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+
+
+
+With regards,
+Pavel Skripkin
+--------------dCX0IlaUbMjKeidKwYkueUP0
+Content-Type: text/plain; charset=UTF-8; name="ph"
+Content-Disposition: attachment; filename="ph"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvZG1hLWJ1Zi91ZG1hYnVmLmMgYi9kcml2ZXJzL2RtYS1i
+dWYvdWRtYWJ1Zi5jCmluZGV4IGM1N2E2MDlkYjc1Yi4uZTczMzA2ODRkM2I4IDEwMDY0NAot
+LS0gYS9kcml2ZXJzL2RtYS1idWYvdWRtYWJ1Zi5jCisrKyBiL2RyaXZlcnMvZG1hLWJ1Zi91
+ZG1hYnVmLmMKQEAgLTE5MCw2ICsxOTAsMTAgQEAgc3RhdGljIGxvbmcgdWRtYWJ1Zl9jcmVh
+dGUoc3RydWN0IG1pc2NkZXZpY2UgKmRldmljZSwKIAkJaWYgKHVidWYtPnBhZ2Vjb3VudCA+
+IHBnbGltaXQpCiAJCQlnb3RvIGVycjsKIAl9CisKKwlpZiAoIXVidWYtPnBhZ2Vjb3VudCkK
+KwkJZ290byBlcnI7CisKIAl1YnVmLT5wYWdlcyA9IGttYWxsb2NfYXJyYXkodWJ1Zi0+cGFn
+ZWNvdW50LCBzaXplb2YoKnVidWYtPnBhZ2VzKSwKIAkJCQkgICAgR0ZQX0tFUk5FTCk7CiAJ
+aWYgKCF1YnVmLT5wYWdlcykgewo=
+
+--------------dCX0IlaUbMjKeidKwYkueUP0--

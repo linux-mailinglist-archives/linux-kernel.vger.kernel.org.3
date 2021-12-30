@@ -2,82 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 948CD481C4B
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 14:00:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D3C481C4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 14:00:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239431AbhL3M76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 07:59:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47754 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbhL3M76 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 07:59:58 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A7AC061574;
-        Thu, 30 Dec 2021 04:59:57 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id d201so48118299ybc.7;
-        Thu, 30 Dec 2021 04:59:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=KBYUy4F1EkXBdZcvrhlETrInDlhxQrDb/K+4x/wDGCY=;
-        b=gqngpeMpoYQ4piP+SbH4Dv7nTr4f1JG+97AEcCC6UgrmpbD5M2uAru8zIOYEYF8qjI
-         9akjvzoEZtHLnIBM/E5hiV/SsSNlZ5lrgx/XI6+cd7Erc2g75qR79hHb6KmoK6BxTRgu
-         pgoICgylsPk4Mum8a8HeGGEUY6Q3+/uB7n1IUsM+KuSXZStnD32lCEMIveNtM+ncg0k8
-         ooNFx24cUFaXXKGXhDCLKhx3qRfbXSrA3LVtiXJ1Q0O6cgrwjO4yX+/c/b4wNtEvvNSe
-         XCdQyajvMpgGmqjAdM0vlFQ5Qqgy7/4xk+cpj1/b2b6wzTRpHUZcWwrmmr7VpffZewqP
-         0pBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=KBYUy4F1EkXBdZcvrhlETrInDlhxQrDb/K+4x/wDGCY=;
-        b=aCwfbzuO0Dsim0kTCQ2+npYFCjOc25VVH9QjOEYzIo04YIPTqzYs1JaG+kHQpTwt9J
-         OzG8JSoWI/aOsrobB1IOT6OITH0XlvMDJJfT5PssU6psvvqEGnB2Vhg7QKi/4nxZkheP
-         YBYD459N5uJc4lad9H83lqUfsnriBE6ikPN34Z2WJ1i/K9Lwzyn625iXQDgaT0so1Stt
-         O9P+BwjcZzPDfGauKhk+pVGLhLd5XvgLtAFIcTKq7U0bqvGxVZQsskFmwv9PFIS+bCm8
-         D71PMBPBaZou+gbeZ8yZC62tCdNqossteicbn2RQ/oztiFA1H39xntz+Jb2z1LtDoAbG
-         2XDg==
-X-Gm-Message-State: AOAM532a8Q+25yRUTnJJahXcFzlaygB4arEZG6Y4qT7g2mFCOTdxAv5M
-        CliYuaws8RouB5kOGsZv6x7j9tuuicrM7t8zrgyt370Lxnw=
-X-Google-Smtp-Source: ABdhPJyWoAqkaXk0xy2Ox1E9ANMjqSKicrWixn0gpxNODMZZ+J1K+9N7sjPgtbk4ryyIi4Dmen+bmHea7hE+VRxxpvw=
-X-Received: by 2002:a25:d44:: with SMTP id 65mr27863779ybn.510.1640869196708;
- Thu, 30 Dec 2021 04:59:56 -0800 (PST)
+        id S239439AbhL3NAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 08:00:09 -0500
+Received: from mail-eopbgr40050.outbound.protection.outlook.com ([40.107.4.50]:37029
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229565AbhL3NAG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 08:00:06 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RbzT/Mcqp6IrkcExKn8Stg1MZW4dCDhCJWsC8YPKvaYZCR32/xa11GhQ2hKctkxm1RrrCW0VF8WzDkUW18FCAjrUbSGQhREfkTUyIDYUUBQ2+Y+xwZBpiUpTDf0QvjwW8QY80O5EFr0HCFUg9yVrvSBR7ix6PxyV83+S3J2Mv4lpgPrRIj/pIUnXbngtBuArcJQKIH9tTurmWockUJA7v+1K1JLTyN+KgdmHYOUbFycJ0MOk/YfM8BzHXA2xKOZ1hs8gePNcrvgQ8ubuysR5Mki/zocVGak169fAdNtJYpHtlWg0mVdN6QQQ2yujHBkY1fZ8k8NwpxUqLUOITMcNKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nPScv5aVAZDucZD+LBKkeS5nyXuFniWj/F2aoqX38fI=;
+ b=bNctb8qsdxf+jprZAFdcnssSxnvU5hxyryflsfpw+HmPnvnH+Ch4NEwAFOEH54IXjYPC2h0IdcD273Mdhc9OrnnXPB4ERXyGEb1uNGiKQlbuTu+yGGh3Z1p81gyNLbNdFmnqBczeawGXiyXC/s4xgCXJ+HFHqESS3HTkbEWUEaq8OfttjwOL+gV6fTK+SZQpjLPbrYfCsybLq7lC8vTZvT9SoPzmyTOVSX+hg6nx+27RscrnrDrcht06oCmjj3unRpp9GDB1GXu1J7ctkWroOdZM1MySPIPnh1bmlfU/Wc13xlyZ+cd+RuUgczqSnPY1J6DD0rdWMHOQajDy6SnJmQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nPScv5aVAZDucZD+LBKkeS5nyXuFniWj/F2aoqX38fI=;
+ b=SFpEcrV7NiaDqxMg20Xwop3wkxhWhVwQ12O9r5pyi8Rc/vqppxycrvuo6rQpfYNuisVOn6AmyiR0zHhg4xdCxxiusqc39ISOlA9w8CZxn3d/4p3Vlx2L+kN0zpUfG1NR7egHO/Yzm7Z0uqZJ+UcwwyxoJ9KxNR8EB5b9QwFn1Vs=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by VI1PR04MB5293.eurprd04.prod.outlook.com (2603:10a6:803:5f::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.21; Thu, 30 Dec
+ 2021 13:00:04 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::c84:1f0b:cc79:9226]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::c84:1f0b:cc79:9226%3]) with mapi id 15.20.4823.023; Thu, 30 Dec 2021
+ 13:00:04 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Maxim Kiselev <bigunclemax@gmail.com>
+CC:     "fido_max@inbox.ru" <fido_max@inbox.ru>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] powerpc: dts: t1040rdb: fix ports names for Seville
+ Ethernet switch
+Thread-Topic: [PATCH] powerpc: dts: t1040rdb: fix ports names for Seville
+ Ethernet switch
+Thread-Index: AQHX/WognYLuoHin80+YgXjEGjdBC6xK/32A
+Date:   Thu, 30 Dec 2021 13:00:04 +0000
+Message-ID: <20211230130003.pzwzac5xttnnksz6@skbuf>
+References: <20211230104329.677138-1-bigunclemax@gmail.com>
+In-Reply-To: <20211230104329.677138-1-bigunclemax@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ca136a7e-8e17-4953-b473-08d9cb944c22
+x-ms-traffictypediagnostic: VI1PR04MB5293:EE_
+x-microsoft-antispam-prvs: <VI1PR04MB529301D2E340F3705600B880E0459@VI1PR04MB5293.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /B+ZOTW9qTGebbHRnsmZ+SvRtU5gPE26UXx1Bp5MpSnKHKh8plHl2ZEjjyw4p8wDG1FUj1KMzPWgpdVPnlhG9aQjjexYFsg9zj2MAlTMbRsWQHkd8oPdl7nxOtQmCDt6Nylic0inXZCYhOhar5RG7+GB155zycjsfOAvs2D/b++/clgzmARShlUYkidYytsVphp6u6W7qOq7x78DKlU1pux1gtWzFKEHtie87hy2tsB5uCgTdOChQmMApq6yFCPC02FgiZNUIxUmrhnanfj/Kg1KxLicWOVg8celbudUsosLL6iyutimuRglKc+E1CDdODZbemzN8/DzymnFswUAhvnVC/uan7aop7tDCCH5XnoS9Tgka/GJvAL/FeePdG8/sepcnBHYN6mUOg4gZjKSgDZ7zHloMrJjH37d41bFlUXLJ+lBIFqKCjFVVOtGBKqTIaTnZ+eEj9xn81PfSEW6R8VCVesZsN9WPEZUBoxonz3UoaBjiJN17sN4l9bAPyLcibwqBKq8IvBxS3Ix6rfe+cUXth+aKzwzeyOCAb5H0DBhWx5KUodbSat3XIrcAlRPZ23jzfDncxh14wUdjEwOTPCuc8l6cPHsJ1kHI2+cM1rYE5+pi8q0vcGQH1DWRjOEViPsFhv3PCVmY95cRG2pFDJ89VYme6FpV56RRrXwMV0ZGPlITLZ8cfoM+xZDy67jvXwnBkfEcFOA3LPZtnVmxA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(4636009)(366004)(38100700002)(8676002)(66946007)(54906003)(86362001)(4326008)(6506007)(6486002)(66446008)(64756008)(66476007)(316002)(33716001)(66556008)(83380400001)(7416002)(38070700005)(76116006)(9686003)(186003)(26005)(6916009)(44832011)(2906002)(71200400001)(508600001)(122000001)(5660300002)(1076003)(8936002)(6512007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?DTJLR9CGSjERw/QuQ8hZmhIvSAlR4IjpuQmnQ6CsbNyLMHpmeP1cjRGnGHdc?=
+ =?us-ascii?Q?mELHtOyPUcTM5le46rVX8Wz33m4XvcxACjN3mXotGGxPrePelizGMGTtni+v?=
+ =?us-ascii?Q?Ma++adhu5BD3C2/Sto/pTmyMObgLCA6pOH9eHZpFqB1ejitmJyV+oN/cR099?=
+ =?us-ascii?Q?TCPZe4mT3HhSnibngbRqI9eDPA2gkW6rJz9RUn/1MILzCGIaWefM0iIazYEN?=
+ =?us-ascii?Q?0/41b7A+0V0hwVj+z9JU4dOuGU7pMIuhg/lp3sxJ7i/ytpc+xMh2bpYW6A3P?=
+ =?us-ascii?Q?LW5+Glj7F+Q13ECO70cCZCWaw3P1OQk4G3mrLCo0b5xfXbsM8v1zUy3he58x?=
+ =?us-ascii?Q?aRyrFnw59nkqPfBXMDG0Wm6a+G98Y8RgGE5r4+jPC9GajsMeimvGPTqFZ6Cg?=
+ =?us-ascii?Q?hZ+auMEmGsu/v+t4/QPrF+X6B5eDVLkGL8/5dyvFZ6HLqMjB1K7xEbLDkQvd?=
+ =?us-ascii?Q?17+t7LRS4iwDY5M803q8bH/ackPQSTGpRCI1XnFPcP6UY498/cum6W4/YTQJ?=
+ =?us-ascii?Q?8EA89dsOLQQcdFeBFKYXHhN+eVmLpte7HeJhnT+0HuVNkCKdPHjCFymb4XlH?=
+ =?us-ascii?Q?IlhJw8sNa4fp87V+y+r1+iyigykOko28muYCKAnwTVY4lz/uk+1/yD+1G7BD?=
+ =?us-ascii?Q?9soQ3910mGyOdCkhH8C9f2oecP5/BzdWSnAC8Xes1sH94N96POH8mhxFb+Vs?=
+ =?us-ascii?Q?DdmZgkytgMzVGwdzMKrU//DItjYlZ159f2N1YfEBxQqu+rCLAfqkV8lF8KJW?=
+ =?us-ascii?Q?MywUfwl4UzTWrcieXqLEu08rsMGD9y+fA1go67PIZb//8S1QQNyeTvp+MrPj?=
+ =?us-ascii?Q?ekmYYf8SBZpsQdi++9tpq8i2ykSR9RuwrtCOfciXI5AxK+uSYhBYNVmAybwG?=
+ =?us-ascii?Q?DOHgX1ou9vHr5YxmkVATHjrvvTxPPVJAKfzylL8Hz5TxzE/920vR/wqky3M2?=
+ =?us-ascii?Q?I6D4z5Df5EvND4mLrmSLqRKBIf+Q2Kq0lktVtmBVCVOOsq7+MzdqlVVcxWTE?=
+ =?us-ascii?Q?NGfdglv08yb5CUgjNtWGPcjG9os0JVIVOSuPupTPBTGmX6MmLJNi2o9K1vD1?=
+ =?us-ascii?Q?4OWDKMU1W0c9VMY/X/csdGFrQ+DqEQvCuclMNrkejovhgNTneBq8sU6/Q36o?=
+ =?us-ascii?Q?73PHCiLCRVOEq5QDlpBnsVuMpjITtP7qkMw1D33AKQ9ipoIfz7N2YH8ci7xa?=
+ =?us-ascii?Q?sYQI3Zh8j+eRiX+0qZF1NSpLl2L7sTt1i62m+JQtNJ4ZphQU/aIn/H3EfxFB?=
+ =?us-ascii?Q?kPK/ZfolokS0uThIt39ACdwqiLxAgjizkjb2J5SfVsR/sSU7SmTtnZZH2FUm?=
+ =?us-ascii?Q?lNPwI4jLBjGY2oyD8JwXVfFghmfbNcpj4JXH8s10zJb3Yxwf7DtDk6jDiiEz?=
+ =?us-ascii?Q?t9qv6KreuagPfU1slRU1ink0E8pezvcLqD5VaM5hJd2OYul9Ka1W1/2Dw30k?=
+ =?us-ascii?Q?lpd8JR3GG4OAAOLid7eTI0lwWalxNc/Z+NvuIWGtd8j374kaU19yCnBmaFPi?=
+ =?us-ascii?Q?bAT8Eci2+66UkMySfeA0tQts3g0ifR8OouCj7VojSbt/Yq/4J8x/CDpP+dOM?=
+ =?us-ascii?Q?1c1uVe3BgpFd1JarDfhR2OCa1fAZpmWO8CXeBMw1HTqmnsKptSCqkuKW07KF?=
+ =?us-ascii?Q?WC4X4z8gbtjMphZMUIXRnUs=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1FBAA796895CCB4AB23AF6019D2DA1FF@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Thu, 30 Dec 2021 13:59:46 +0100
-Message-ID: <CAKXUXMxh=QK4C5OfLL1wSvoGFJZ8U+EhSr5dy9ddExtVhAdU-Q@mail.gmail.com>
-Subject: References to non-existing configs in the NILFS2 FILESYSTEM
-To:     Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-        linux-nilfs@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca136a7e-8e17-4953-b473-08d9cb944c22
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Dec 2021 13:00:04.1795
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Z3DmOQUOjva3UCheMydB1hOJcs1uYOwIFf6+54l+4PK+5PAFP3LBLTK2DTeOSKuWatckcYKCzVLlchQZKBG48Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5293
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Ryusuke Konishi-san,
+On Thu, Dec 30, 2021 at 01:43:28PM +0300, Maxim Kiselev wrote:
+> Fix network interface names for the switch ports according to labels
+> that are written on the front panel of the board. They start from ETH3
+> and end at ETH10.
+>=20
+> Fixes: e69eb0824d8c ("powerpc: dts: t1040rdb: add ports for Seville
+> Ethernet switch")
 
+A Fixes: tag should not wrap on multiple lines.
 
-The script ./scripts/checkkconfigsymbols.py identifies references to
-non-existing configs in the NILFS2 FILESYSTEM:
+> Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
+> Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
+> ---
 
-NILFS_POSIX_ACL
-Referencing files: fs/nilfs2/nilfs.h
+Sadly I'm not able to confirm or disprove this change right now, because
+my T1040RDB has a bad DDR memory stick, it seems, so it just randomly hangs=
+.
+But I'm pretty sure the Ethernet ports were properly mapped out when I
+tested them.
 
-NILFS_XATTR
-Referencing files: fs/nilfs2/nilfs.h, fs/nilfs2/super.c
+Do you have the T1040RDB or the T1040D4RDB? Because the front panel of
+my T1040RDB looks like this:
 
-I assume this filesystem support is simply not yet developed to
-support those two configs fully, and these code blocks are just some
-first steps in that direction, but are currently just intended to be
-dead code in the repository. If you do not see this support to be
-added in the future, you could also just delete these ifdef blocks and
-these references to non-existing configs.
+ +---------------------------------------------------------------------+
+ |                                                                     |
+ |  +-------+-------+               +-------+-------+-------+-------+  |
+ |  | UART0 |  ETH1 |               |  ETH4 |  ETH6 |  ETH8 | ETH10 |  |
+ |  +-------+-------+-------+-------+-------+-------+-------+-------+  |
+ |  | UART1 |  ETH0 |  ETH2 |  ETH3 |  ETH5 |  ETH7 |  ETH9 | ETH11 |  |
+ +--+-------+-------+-------+-------+-------+-------+-------+-------+--+
 
-This is just to share this information with you; there is no need for
-further action.
-
-
-Best regards,
-
-Lukas
+>  arch/powerpc/boot/dts/fsl/t1040rdb.dts | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/arch/powerpc/boot/dts/fsl/t1040rdb.dts b/arch/powerpc/boot/d=
+ts/fsl/t1040rdb.dts
+> index af0c8a6f56138..b6733e7e65805 100644
+> --- a/arch/powerpc/boot/dts/fsl/t1040rdb.dts
+> +++ b/arch/powerpc/boot/dts/fsl/t1040rdb.dts
+> @@ -119,7 +119,7 @@ &seville_port0 {
+>  	managed =3D "in-band-status";
+>  	phy-handle =3D <&phy_qsgmii_0>;
+>  	phy-mode =3D "qsgmii";
+> -	label =3D "ETH5";
+> +	label =3D "ETH3";
+>  	status =3D "okay";
+>  };
+> =20
+> @@ -135,7 +135,7 @@ &seville_port2 {
+>  	managed =3D "in-band-status";
+>  	phy-handle =3D <&phy_qsgmii_2>;
+>  	phy-mode =3D "qsgmii";
+> -	label =3D "ETH7";
+> +	label =3D "ETH5";
+>  	status =3D "okay";
+>  };
+> =20
+> @@ -151,7 +151,7 @@ &seville_port4 {
+>  	managed =3D "in-band-status";
+>  	phy-handle =3D <&phy_qsgmii_4>;
+>  	phy-mode =3D "qsgmii";
+> -	label =3D "ETH9";
+> +	label =3D "ETH7";
+>  	status =3D "okay";
+>  };
+> =20
+> @@ -167,7 +167,7 @@ &seville_port6 {
+>  	managed =3D "in-band-status";
+>  	phy-handle =3D <&phy_qsgmii_6>;
+>  	phy-mode =3D "qsgmii";
+> -	label =3D "ETH11";
+> +	label =3D "ETH9";
+>  	status =3D "okay";
+>  };
+> =20
+> --=20
+> 2.32.0
+>=

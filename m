@@ -2,102 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 766FB4820AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 23:40:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 437E44820AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 23:41:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242287AbhL3Wkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 17:40:36 -0500
-Received: from mga03.intel.com ([134.134.136.65]:42081 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234688AbhL3Wkg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 17:40:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640904036; x=1672440036;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6XReL5s7m6DoDfEpmkpF+Vd/MjJQMXM90tY+u0icvg4=;
-  b=nQ1y3dvuaGfZiTl9GWKo/lJ2slEK5ll6pL13cg/nDNVgYEtpZL6e5AuK
-   l9KTRqyp3a5yTZ/TV9rrU131d0iu4KBvZseEibtr5wkvy+ms72Wufr+i8
-   Ez8FNGPAiv+0h9z8parH66qXZ4Qiskayd2ZC0ln6ShWjW8Ooo5QBM9V09
-   e9deLhNNIPXOuareLPSzg/LECNg46VO8PfbyxbObigkMZs/KYGsU7tqbR
-   Fov82NpMFhBza1eAdmsjZigpoj07k80NCF8yH5VuDLFw9U/q/0Xh44934
-   5TbKq1bWxHGRU/xHk2wOkItZ+ay9895qWfYo7+2OULjUATmfG93GoB11e
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="241696928"
-X-IronPort-AV: E=Sophos;i="5.88,248,1635231600"; 
-   d="scan'208";a="241696928"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 14:40:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,248,1635231600"; 
-   d="scan'208";a="470787998"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 30 Dec 2021 14:40:33 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n3465-000Afj-3X; Thu, 30 Dec 2021 22:40:33 +0000
-Date:   Fri, 31 Dec 2021 06:39:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Luo Jiaxing <luojiaxing@huawei.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        John Garry <john.garry@huawei.com>
-Subject: drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:4327:35: sparse: sparse:
- incorrect type in argument 4 (different base types)
-Message-ID: <202112310618.mBoYcfPO-lkp@intel.com>
+        id S242299AbhL3WlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 17:41:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234688AbhL3WlV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 17:41:21 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A12C061574;
+        Thu, 30 Dec 2021 14:41:20 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id w16so103005169edc.11;
+        Thu, 30 Dec 2021 14:41:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Io66HcUiLdVjjQqfsG6ke9IYSCPIgdy83uGT3iFGDRY=;
+        b=fKnkHOWPj9bJBcuLBDjRUjw82wEi6715Sv3LgvoYt2iPafs/3BjDjvZv/lsNwRVCIf
+         UdOdo7kDBPKeU8jw3NIMRCMA19K76CPQ2gtywrpOfaHQbIu8u7BxeOKHjCdTtxt12lwv
+         WIXS8D5YG4O+fhY4pOPlHkuFPoh1ErwgC0gfEA5hhis3B9IMPp9caigTWJzmK29t4YOQ
+         3T78D2/ceYpQfhW3Z4OjEr/3OqOmIYcBzVymHls6nFgoezCFhkr9aHszJNyxRGtnOgkB
+         TPUCM/4E+xhrKPwFV86csn3Q40lDwlVuY3IX6mAxzdXJK5jafYQTb8IwsJGGZmXDvaoL
+         UYKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Io66HcUiLdVjjQqfsG6ke9IYSCPIgdy83uGT3iFGDRY=;
+        b=NKAXDr8Ldn0a3w4RlOdPcA1ztFY9H2H1SM8BjNFZx4Hr4V2n1CcFu7eB1txYEHDuB5
+         XW/6OxmkwrOZRPDFSmIgsbfBSOFbJvtMssSdonWTiynWNY/fCDjApvZw5hyN0J0tD/MK
+         zbAo6S734x52bEq5PXgdg8Y7RlPj2W65gxiqhoEwtbgNN8yVLTA8qDxUIlA64f82Ibzj
+         +e2mPZ6CcDhtg6irxJRSulS4fQ4AfZ+AxL/cbKdr6hrt+eNEcRcZLpViGouqqBfcaZgW
+         cM6zztrxuT9YLFsYhNq18r3j9KDKwBYo5Mt9RbLt3NiNCT361+dzCXuXf6cAiAFLgRfF
+         b2pA==
+X-Gm-Message-State: AOAM532wLfZopD+BULwbi+arPK0mf2KylnI1tudBBSAwvgT8niD1akgo
+        XcLTIbzjvfem4wgEnjT43hGGBQ9tjTVgiDwbqS8=
+X-Google-Smtp-Source: ABdhPJyc3+8pKEBma4UIVLbyKZ0OwEGnDSbOQoseLj9oz+jzU13ksxDgRUoco3UPkmeVynlUMRu417KD4nrZocZsvx4=
+X-Received: by 2002:a17:906:ff14:: with SMTP id zn20mr27176133ejb.649.1640904079384;
+ Thu, 30 Dec 2021 14:41:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211230102110.3861-1-yu.tu@amlogic.com> <20211230102110.3861-7-yu.tu@amlogic.com>
+In-Reply-To: <20211230102110.3861-7-yu.tu@amlogic.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Thu, 30 Dec 2021 23:41:08 +0100
+Message-ID: <CAFBinCAzDSw6jmpU-S2KGZ32D+U1fNqLgKMmkPSdz=-XN4isDA@mail.gmail.com>
+Subject: Re: [PATCH V3 6/6] tty: serial: meson: Change request_irq to
+ devm_request_irq and move devm_request_irq to meson_uart_probe()
+To:     Yu Tu <yu.tu@amlogic.com>
+Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Vyacheslav <adeep@lexina.in>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   9bad743e8d221c1be8fa80f0e76102234e472ac3
-commit: cd96fe600cc4924d8d0cc6e3161870219c0d2c12 scsi: hisi_sas: Add trace FIFO debugfs support
-date:   11 months ago
-config: ia64-randconfig-s031-20211123 (https://download.01.org/0day-ci/archive/20211231/202112310618.mBoYcfPO-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=cd96fe600cc4924d8d0cc6e3161870219c0d2c12
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout cd96fe600cc4924d8d0cc6e3161870219c0d2c12
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/scsi/hisi_sas/ fs/dlm/
+On Thu, Dec 30, 2021 at 11:22 AM Yu Tu <yu.tu@amlogic.com> wrote:
+>
+> Because an interrupt error occurs when the user opens /dev/ttyAML* but
+> don't close it, and then opens the same port again. This problem is
+> encountered in actual projects.
+I would like to hear from the serial driver maintainers whether the
+described problem is a userspace or driver bug.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+If it's a driver bug then this should be sent as a separate patch
+(unrelated to this series) with a fixes tag.
+
+[...]
+> +       ret = devm_request_irq(&pdev->dev, port->irq, meson_uart_interrupt,
+> +                              0, dev_name(&pdev->dev), port);
+You can replace dev_name(&pdev->dev) with NULL to achieve the same
+result with less code.
+dev_name(dev) is the default value, see [0]
 
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:4327:35: sparse: sparse: incorrect type in argument 4 (different base types) @@     expected restricted __le32 [usertype] *[assigned] ptr @@     got unsigned int * @@
-   drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:4327:35: sparse:     expected restricted __le32 [usertype] *[assigned] ptr
-   drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:4327:35: sparse:     got unsigned int *
+Best regards,
+Martin
 
-vim +4327 drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
 
-  4319	
-  4320	static int debugfs_fifo_data_v3_hw_show(struct seq_file *s, void *p)
-  4321	{
-  4322		struct hisi_sas_phy *phy = s->private;
-  4323	
-  4324		debugfs_read_fifo_data_v3_hw(phy);
-  4325	
-  4326		debugfs_show_row_32_v3_hw(s, 0, HISI_SAS_FIFO_DATA_DW_SIZE * 4,
-> 4327					  phy->fifo.rd_data);
-  4328	
-  4329		return 0;
-  4330	}
-  4331	DEFINE_SHOW_ATTRIBUTE(debugfs_fifo_data_v3_hw);
-  4332	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+[0] https://elixir.bootlin.com/linux/v5.15/source/kernel/irq/devres.c#L64

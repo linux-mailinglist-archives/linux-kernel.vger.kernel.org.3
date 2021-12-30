@@ -2,92 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D74481AC8
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 09:41:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1467E481ACC
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 09:42:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237798AbhL3Il1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 03:41:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47436 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbhL3Il0 (ORCPT
+        id S237829AbhL3Imt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 03:42:49 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58450 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230472AbhL3Ims (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 03:41:26 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5551CC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 00:41:26 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id z3so17786682plg.8
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 00:41:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=gOSR7Y5DhmldlZYZfgKoXEayFeN352tbiKfrmxSItQc=;
-        b=WBrUjKZ1MYrPSt00PeR/mTNRrVpCvHel0Lg3ImvjYrpFZDbWLK/UnfPLg6rZWPeI3s
-         Si60i3Aaj2AyUUMW0xXXnnZgAaFG22VM/YW3ILLJ/KEamEiBVhhxUWy1zg3NTG0uksIc
-         aFG+jX43bMqYzYfMwXnGGLouv/ga81ZvAOSsDGLO5w8VRpCSAlWRHnf+8MrGHlonel/Y
-         AjFH1wloszk4fPX32kaJzvRfprgl685dJUQvSbEqD0//nIAxewNsuc1CE9ZDb/Ac/NTl
-         iD1qlBDxnJNUNVUZYaCpA515E29AZGbXEAJuCdfxLYP0XFD+idJy6SOMf1jQwQUJTY+i
-         5k7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=gOSR7Y5DhmldlZYZfgKoXEayFeN352tbiKfrmxSItQc=;
-        b=IF5dGcwvkaEvpZkJNZISgC0HDm99ljdWSo+pDr7fQb59JGAP0lbZj2BIK/p5CtWiAH
-         4V+a2GTwO6JJTyeP4ws/z0neQCNfUHMYOij2Mz0haRcMqCtve6WQb9b5r41G9rZ3uRzE
-         jMsIgx9XNuKFS5/kO45T42gHzApCYodnzErc2Js2w+sld0z5n4khLeGGj/euanLhH7Kt
-         dmOg02OpmqVt8AtwbRwQqCnkRG0DTUac05Tn67bjLeckHaF+BH0YN/JRVW7tMIK7Z7aW
-         3Nc0UMFfqb6DwK+3P3Yzmns50DwNyBtuEHndk6OB3GpNLrUeh48hcBBNccQyYns/IBJ1
-         5LrQ==
-X-Gm-Message-State: AOAM531T6FhsttXACKXQgygxgJmXK1pLLCKM3Iq+LzeUudycPsE62ZVQ
-        vw4NEIGTUnqLel4zC/IG8I8=
-X-Google-Smtp-Source: ABdhPJyH2XwTtE9Nzyy6f297GaPnRvARYrZckPTba0wOcm8Ng7MoLinGyFkMGnhgZso5EuXvpfs9Ow==
-X-Received: by 2002:a17:902:b10e:b0:149:a59c:1417 with SMTP id q14-20020a170902b10e00b00149a59c1417mr2392252plr.165.1640853685835;
-        Thu, 30 Dec 2021 00:41:25 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id k23sm4171216pji.3.2021.12.30.00.41.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Dec 2021 00:41:25 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-Cc:     linmq006@gmail.com, Yong Wu <yong.wu@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ikjoon Jang <ikjn@chromium.org>,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] memory: mtk-smi: add missing put_device() call in mtk_smi_device_link_common
-Date:   Thu, 30 Dec 2021 08:41:15 +0000
-Message-Id: <20211230084115.5375-1-linmq006@gmail.com>
+        Thu, 30 Dec 2021 03:42:48 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A80BF615F1;
+        Thu, 30 Dec 2021 08:42:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63049C36AEA;
+        Thu, 30 Dec 2021 08:42:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640853767;
+        bh=vyvelD0Nu1PcVFnAHB/GirQcZKWNcV9A02QtrZmIqf8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:From;
+        b=D60tRmX0q5Z1EAnZvAOQRAhiEpoh0/PYYALEuofTZWMEJ6clBXaUOM4cNUVxsHfG5
+         qMCUovUacUCbDjuecHIBRyB3XHEkpZXxLVzxWZxblqALOsg26JYmj5jUH/trB9jsa2
+         m56hza0kcSi10HhzXsd+rZtnV3pwTENLjKJRppGpyRdzQCWtI48m6v4m41rvTiIXsm
+         J/4vNJ/EX89uY1AeHKWGMZNZNjdOLBQsQ2KyAtpPG0qmPeiC+XqIUYPDhqpEQGtMn9
+         zpBGEsdDZu/grBalKvYWYM2J1Pf0VmC8v07tKgdbD6LEjehTDvv3hTUlqC0u4s6FCm
+         ok3tqh/O5dEMA==
+From:   SeongJae Park <sj@kernel.org>
+To:     akpm@linux-foundation.org
+Cc:     broonie@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au
+Subject: Re: mmotm 2021-12-29-20-07 uploaded
+Date:   Thu, 30 Dec 2021 08:42:43 +0000
+Message-Id: <20211230084243.10673-1-sj@kernel.org>
 X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <20211230040740.SbquJAFf5%akpm@linux-foundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The reference taken by 'of_find_device_by_node()' must be released when
-not needed anymore.
-Add the corresponding 'put_device()' in the error handling paths.
+Hello Andrew,
 
-Fixes: 4740475 ("memory: mtk-smi: Add device link for smi-sub-common")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/memory/mtk-smi.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+On Wed, 29 Dec 2021 20:07:40 -0800 akpm@linux-foundation.org wrote:
 
-diff --git a/drivers/memory/mtk-smi.c b/drivers/memory/mtk-smi.c
-index e201e5976f34..2131f2c9e7ed 100644
---- a/drivers/memory/mtk-smi.c
-+++ b/drivers/memory/mtk-smi.c
-@@ -386,8 +386,10 @@ static int mtk_smi_device_link_common(struct device *dev, struct device **com_de
- 	of_node_put(smi_com_node);
- 	if (smi_com_pdev) {
- 		/* smi common is the supplier, Make sure it is ready before */
--		if (!platform_get_drvdata(smi_com_pdev))
-+		if (!platform_get_drvdata(smi_com_pdev)) {
-+			put_device(&smi_com_pdev->dev);
- 			return -EPROBE_DEFER;
-+		}
- 		smi_com_dev = &smi_com_pdev->dev;
- 		link = device_link_add(dev, smi_com_dev,
- 				       DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS);
--- 
-2.17.1
+> The mm-of-the-moment snapshot 2021-12-29-20-07 has been uploaded to
+> 
+>    https://www.ozlabs.org/~akpm/mmotm/
+> 
+> mmotm-readme.txt says
+> 
+> README for mm-of-the-moment:
+> 
+> https://www.ozlabs.org/~akpm/mmotm/
+> 
+> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> more than once a week.
+> 
+> You will need quilt to apply these patches to the latest Linus release (5.x
+> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+> https://ozlabs.org/~akpm/mmotm/series
+> 
+> The file broken-out.tar.gz contains two datestamp files: .DATE and
+> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+> followed by the base kernel version against which this patch series is to
+> be applied.
+> 
+> This tree is partially included in linux-next.  To see which patches are
+> included in linux-next, consult the `series' file.  Only the patches
+> within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
+> linux-next.
+> 
+> 
+> A full copy of the full kernel tree with the linux-next and mmotm patches
+> already applied is available through git within an hour of the mmotm
+> release.  Individual mmotm releases are tagged.  The master branch always
+> points to the latest release, so it's constantly rebasing.
+> 
+> 	https://github.com/hnaz/linux-mm
 
+I realized the git repository is not updated since 2021-10-27.  That's
+obviously not a problem, but if that's not temporal but intentional, I guess
+above text might be better to be updated?
+
+> 
+> The directory https://www.ozlabs.org/~akpm/mmots/ (mm-of-the-second)
+> contains daily snapshots of the -mm tree.  It is updated more frequently
+> than mmotm, and is untested.
+> 
+> A git copy of this tree is also available at
+> 
+> 	https://github.com/hnaz/linux-mm
+
+ditto.
+
+
+Thanks,
+SJ
+
+[...]

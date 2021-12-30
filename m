@@ -2,351 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB1348188B
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:31:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD86481898
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 03:35:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234812AbhL3CbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 21:31:10 -0500
-Received: from m-r2.th.seeweb.it ([5.144.164.171]:38093 "EHLO
-        m-r2.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234683AbhL3CbJ (ORCPT
+        id S234908AbhL3CfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 21:35:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52120 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233074AbhL3CfI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 21:31:09 -0500
-Received: from localhost.localdomain (83.6.168.106.neoplus.adsl.tpnet.pl [83.6.168.106])
-        by m-r2.th.seeweb.it (Postfix) with ESMTPA id 56A9640268;
-        Thu, 30 Dec 2021 03:31:06 +0100 (CET)
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-To:     ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: qcom: gcc-msm8994: Remove NoC clocks
-Date:   Thu, 30 Dec 2021 03:31:00 +0100
-Message-Id: <20211230023101.1122588-1-konrad.dybcio@somainline.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 29 Dec 2021 21:35:08 -0500
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B64C061574;
+        Wed, 29 Dec 2021 18:35:07 -0800 (PST)
+Received: by mail-ed1-x541.google.com with SMTP id q14so85019883edi.3;
+        Wed, 29 Dec 2021 18:35:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=voLAT29uQmvFJF1yqoF/u59oF12nNcayLd/i0yTgxcE=;
+        b=klj5Ud/6/7miOoip7cY5kX6vd2XS1JM5PqfQMAR/wDWBgfJ/+aRM5qX84G97T+2zHG
+         qOt8SK82PhSR/VkSudotU/i1X2B6mlv3+71Cp/9BXoxtKoOlKUdf5G03p0SHpE5ldoxK
+         i86gtsfW0Hm+9gsl0vyJbn+ovdvnKsU4+yOMTfxHgKlLQvPKX1zOT7S0Xj+22iyyzFBM
+         RPI3gRg+L0A4tquV2g8YkQwbOUuyTH9nQvi/iSG9qh5OLmm5EEzB+lUrvUqU5cATNdh7
+         It4wdKwgMIo+ZK0EPnSVzSmfPnXADzgsdQ96KKDgIFvipo9RCvCWoGLNftolrh5jOcSb
+         huRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=voLAT29uQmvFJF1yqoF/u59oF12nNcayLd/i0yTgxcE=;
+        b=nb2yG/d39758/1A3Yz74LhqBjRGSXwXO+e3ee30IJFSiyo8G3aE2jF3RYwnQjewzDr
+         FV8qx9PnSkFOeNffALqhgDk3F42rzo7x8Gzf8x1/Ga+wQUFdYUXs+F+OCHPIefuCPzcV
+         IvakTUiBeEeYc6oC6g8z0h7HuakfEe0qkqEtr5IlP3H000PG6BDHy9Uwpspt+Xnmeu2S
+         jcd3OCGO44zpMF1PY8mwSbPGZPRhfOO6+5ePg0wlkh7CCwxQrHGs99nV4Pv8H4HgOOvX
+         fp/+TLyartO79YMvhgYsC6rl+xujkoqc21QAphCySir/6vcTOlCZvDgipt4xRz7TvjRy
+         OowA==
+X-Gm-Message-State: AOAM533PFRBay+j+CKVlG9VuC0l/gMSxxjl8HVlHSIcyqEMmPDHw9BUt
+        pMTEr8fKvxaO+vqF7EsZgP11RKc/2gjFHiOiIZg=
+X-Google-Smtp-Source: ABdhPJw937o5vB6F8C+kDTsx8+yArOSfCjgkhSCZSiguf2aPH1MvnlCTJMTYRNwkOehSKHALS7+jkbwgg9l9oh1O2Qc=
+X-Received: by 2002:a17:907:d19:: with SMTP id gn25mr23597114ejc.456.1640831706603;
+ Wed, 29 Dec 2021 18:35:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211229113256.299024-1-imagedong@tencent.com>
+ <CAADnVQLY2i+2YTj+Oi7+70e98sRC-t6rr536sc=3WYghpki+ug@mail.gmail.com>
+ <CADxym3Ya-=_zknyJmrQZ-fBKTK_PfPX1Njd=3pqYZR0_B8erJg@mail.gmail.com> <CAADnVQK6FTp1wACyhH0bNztT73DDr_wbCMbj7GorLRrOOQB2SA@mail.gmail.com>
+In-Reply-To: <CAADnVQK6FTp1wACyhH0bNztT73DDr_wbCMbj7GorLRrOOQB2SA@mail.gmail.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Thu, 30 Dec 2021 10:31:56 +0800
+Message-ID: <CADxym3Yc6-=HgM+4-t9xoNDDSEoFQNy6iUSLj+EVGhNHjHF_wQ@mail.gmail.com>
+Subject: Re: [PATCH net-next] net: bpf: add hook for close of tcp timewait sock
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just like in commit 05cf3ec00d460b50088d421fb878a0f83f57e262
-("clk: qcom: gcc-msm8996: Drop (again) gcc_aggre1_pnoc_ahb_clk")
-adding NoC clocks turned out to be a huge mistake, as they cause a lot of
-issues at little benefit (basically only letting Linux know about their
-children's frequencies), especially when mishandled or misconfigured.
+On Thu, Dec 30, 2021 at 10:12 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Wed, Dec 29, 2021 at 6:07 PM Menglong Dong <menglong8.dong@gmail.com> wrote:
+> >
+> > On Thu, Dec 30, 2021 at 12:46 AM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Wed, Dec 29, 2021 at 3:33 AM <menglong8.dong@gmail.com> wrote:
+> > > >
+> > > > From: Menglong Dong <imagedong@tencent.com>
+> > > >
+> > > > The cgroup eBPF attach type 'CGROUP_SOCK_OPS' is able to monitor the
+> > > > state change of a tcp connect with 'BPF_SOCK_OPS_STATE_CB' ops.
+> > > >
+> > > > However, it can't trace the whole state change of a tcp connect. While
+> > > > a connect becomes 'TCP_TIME_WAIT' state, this sock will be release and
+> > > > a tw sock will be created. While tcp sock release, 'TCP_CLOSE' state
+> > > > change will be passed to eBPF program. Howeven, the real state of this
+> > > > connect is 'TCP_TIME_WAIT'.
+> > > >
+> > > > To make eBPF get the real state change of a tcp connect, add
+> > > > 'CGROUP_TWSK_CLOSE' cgroup attach type, which will be called when
+> > > > tw sock release and tcp connect become CLOSE.
+> > >
+> > > The use case is not explained.
+> >
+> > Sorry for the absence of use cases and selftests. In my case, it is for NAT of
+> > a docker container.
+> >
+> > Simply speaking, I'll add an element to a hash map during sys_connect() with
+> > 'BPF_SOCK_OPS_TCP_CONNECT_CB' ops of 'BPF_CGROUP_SOCK_OPS'
+> > cgroup attach type. Therefore, the received packet of the host can do DNAT
+> > according to the hash map.
+> >
+> > I need to release the element in the hashmap when the connection closes.
+> > With the help of 'BPF_SOCK_OPS_STATE_CB', I can monitor the TCP_CLOSE
+> > of the connection. However, as I mentioned above, it doesn't work well when
+> > it comes to tw sock. When the connect become 'FIN_WAIT2' or 'TIME_WAIT',
+> > the state of the tcp sock becomes 'TCP_CLOSE', which doesn't match the connect
+> > state. Therefore, the 'fin' packet that the host received can't be DNAT, as the
+> > element is already removed.
+> >
+> > In this patch, BPF_SOCK_OPS_TW_CLOSE_FLAG is introduced, which is used
+> > make 'BPF_SOCK_OPS_STATE_CB' not called when this sock becomes
+> > TCP_CLOSE if it is being replaced with a tw sock.
+> >
+> > > Why bpf tracing cannot be used to achieve the same?
+> >
+> > En...do you mean kprobe based eBPF trace? It can work, but I don't think it's
+> > high-performance, especially for network NAT. Strictly speaking, attach types,
+> > such as 'CGROUP_INET_SOCK_RELEASE', can be replaced by bpf tracing, but
+> > they exist out of performance.
+>
+> kprobe at the entry is pretty fast.
+> fentry is even faster. It's actually faster than cgroup based hook.
 
-Adding these ones broke SDCC approx 99 out of 100 times, but that somehow
-went unnoticed. To prevent further issues like this one, remove them.
+Really? Doesn't it already consider the data copy of bpf_probe_read()?
+After all,
+sock based eBPF can read sock data directly.
 
-This commit is effectively a revert of 74a33fac3aab77558ca0d80c9935
-("clk: qcom: gcc-msm8994: Add missing NoC clocks") with ABI preservation.
+What's more, I'm not sure bpf tracing is enough, because I do NAT not for all
+the docker containers, which means not all tcp connect close should call my
+eBPF program, and that's the advantage of cgroup based eBPF.
 
-Fixes: 74a33fac3aab ("clk: qcom: gcc-msm8994: Add missing NoC clocks")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
----
- drivers/clk/qcom/gcc-msm8994.c | 100 +--------------------------------
- 1 file changed, 3 insertions(+), 97 deletions(-)
+Thanks!
+Menglong Dong
 
-diff --git a/drivers/clk/qcom/gcc-msm8994.c b/drivers/clk/qcom/gcc-msm8994.c
-index 702a9bdc0559..18044e8dc732 100644
---- a/drivers/clk/qcom/gcc-msm8994.c
-+++ b/drivers/clk/qcom/gcc-msm8994.c
-@@ -107,42 +107,6 @@ static const struct clk_parent_data gcc_xo_gpll0_gpll4[] = {
- 	{ .hw = &gpll4.clkr.hw },
- };
- 
--static struct clk_rcg2 system_noc_clk_src = {
--	.cmd_rcgr = 0x0120,
--	.hid_width = 5,
--	.parent_map = gcc_xo_gpll0_map,
--	.clkr.hw.init = &(struct clk_init_data){
--		.name = "system_noc_clk_src",
--		.parent_data = gcc_xo_gpll0,
--		.num_parents = ARRAY_SIZE(gcc_xo_gpll0),
--		.ops = &clk_rcg2_ops,
--	},
--};
--
--static struct clk_rcg2 config_noc_clk_src = {
--	.cmd_rcgr = 0x0150,
--	.hid_width = 5,
--	.parent_map = gcc_xo_gpll0_map,
--	.clkr.hw.init = &(struct clk_init_data){
--		.name = "config_noc_clk_src",
--		.parent_data = gcc_xo_gpll0,
--		.num_parents = ARRAY_SIZE(gcc_xo_gpll0),
--		.ops = &clk_rcg2_ops,
--	},
--};
--
--static struct clk_rcg2 periph_noc_clk_src = {
--	.cmd_rcgr = 0x0190,
--	.hid_width = 5,
--	.parent_map = gcc_xo_gpll0_map,
--	.clkr.hw.init = &(struct clk_init_data){
--		.name = "periph_noc_clk_src",
--		.parent_data = gcc_xo_gpll0,
--		.num_parents = ARRAY_SIZE(gcc_xo_gpll0),
--		.ops = &clk_rcg2_ops,
--	},
--};
--
- static struct freq_tbl ftbl_ufs_axi_clk_src[] = {
- 	F(50000000, P_GPLL0, 12, 0, 0),
- 	F(100000000, P_GPLL0, 6, 0, 0),
-@@ -1149,8 +1113,6 @@ static struct clk_branch gcc_blsp1_ahb_clk = {
- 		.enable_mask = BIT(17),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_blsp1_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &periph_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -1434,8 +1396,6 @@ static struct clk_branch gcc_blsp2_ahb_clk = {
- 		.enable_mask = BIT(15),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_blsp2_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &periph_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -1763,8 +1723,6 @@ static struct clk_branch gcc_lpass_q6_axi_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_lpass_q6_axi_clk",
--			.parent_hws = (const struct clk_hw *[]){ &system_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -1777,8 +1735,6 @@ static struct clk_branch gcc_mss_q6_bimc_axi_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_mss_q6_bimc_axi_clk",
--			.parent_hws = (const struct clk_hw *[]){ &system_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -1806,9 +1762,6 @@ static struct clk_branch gcc_pcie_0_cfg_ahb_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_pcie_0_cfg_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &config_noc_clk_src.clkr.hw },
--			.num_parents = 1,
--			.flags = CLK_SET_RATE_PARENT,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -1821,9 +1774,6 @@ static struct clk_branch gcc_pcie_0_mstr_axi_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_pcie_0_mstr_axi_clk",
--			.parent_hws = (const struct clk_hw *[]){ &system_noc_clk_src.clkr.hw },
--			.num_parents = 1,
--			.flags = CLK_SET_RATE_PARENT,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -1853,9 +1803,6 @@ static struct clk_branch gcc_pcie_0_slv_axi_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_pcie_0_slv_axi_clk",
--			.parent_hws = (const struct clk_hw *[]){ &system_noc_clk_src.clkr.hw },
--			.num_parents = 1,
--			.flags = CLK_SET_RATE_PARENT,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -1883,9 +1830,6 @@ static struct clk_branch gcc_pcie_1_cfg_ahb_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_pcie_1_cfg_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &config_noc_clk_src.clkr.hw },
--			.num_parents = 1,
--			.flags = CLK_SET_RATE_PARENT,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -1898,9 +1842,6 @@ static struct clk_branch gcc_pcie_1_mstr_axi_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_pcie_1_mstr_axi_clk",
--			.parent_hws = (const struct clk_hw *[]){ &system_noc_clk_src.clkr.hw },
--			.num_parents = 1,
--			.flags = CLK_SET_RATE_PARENT,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -1929,9 +1870,6 @@ static struct clk_branch gcc_pcie_1_slv_axi_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_pcie_1_slv_axi_clk",
--			.parent_hws = (const struct clk_hw *[]){ &system_noc_clk_src.clkr.hw },
--			.num_parents = 1,
--			.flags = CLK_SET_RATE_PARENT,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -1959,8 +1897,6 @@ static struct clk_branch gcc_pdm_ahb_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_pdm_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &periph_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -1988,9 +1924,6 @@ static struct clk_branch gcc_sdcc1_ahb_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_sdcc1_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &periph_noc_clk_src.clkr.hw },
--			.num_parents = 1,
--			.flags = CLK_SET_RATE_PARENT,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2003,9 +1936,6 @@ static struct clk_branch gcc_sdcc2_ahb_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_sdcc2_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &periph_noc_clk_src.clkr.hw },
--			.num_parents = 1,
--			.flags = CLK_SET_RATE_PARENT,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2033,9 +1963,6 @@ static struct clk_branch gcc_sdcc3_ahb_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_sdcc3_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &periph_noc_clk_src.clkr.hw },
--			.num_parents = 1,
--			.flags = CLK_SET_RATE_PARENT,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2063,9 +1990,6 @@ static struct clk_branch gcc_sdcc4_ahb_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_sdcc4_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &periph_noc_clk_src.clkr.hw },
--			.num_parents = 1,
--			.flags = CLK_SET_RATE_PARENT,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2123,8 +2047,6 @@ static struct clk_branch gcc_tsif_ahb_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_tsif_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &periph_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2152,8 +2074,6 @@ static struct clk_branch gcc_ufs_ahb_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_ufs_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &config_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2197,8 +2117,6 @@ static struct clk_branch gcc_ufs_rx_symbol_0_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_ufs_rx_symbol_0_clk",
--			.parent_hws = (const struct clk_hw *[]){ &system_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2212,8 +2130,6 @@ static struct clk_branch gcc_ufs_rx_symbol_1_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_ufs_rx_symbol_1_clk",
--			.parent_hws = (const struct clk_hw *[]){ &system_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2242,8 +2158,6 @@ static struct clk_branch gcc_ufs_tx_symbol_0_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_ufs_tx_symbol_0_clk",
--			.parent_hws = (const struct clk_hw *[]){ &system_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2257,8 +2171,6 @@ static struct clk_branch gcc_ufs_tx_symbol_1_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_ufs_tx_symbol_1_clk",
--			.parent_hws = (const struct clk_hw *[]){ &system_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2363,8 +2275,6 @@ static struct clk_branch gcc_usb_hs_ahb_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_usb_hs_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &periph_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2487,8 +2397,6 @@ static struct clk_branch gcc_boot_rom_ahb_clk = {
- 		.enable_mask = BIT(10),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_boot_rom_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &config_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2502,8 +2410,6 @@ static struct clk_branch gcc_prng_ahb_clk = {
- 		.enable_mask = BIT(13),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_prng_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &periph_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2546,9 +2452,6 @@ static struct clk_regmap *gcc_msm8994_clocks[] = {
- 	[GPLL0] = &gpll0.clkr,
- 	[GPLL4_EARLY] = &gpll4_early.clkr,
- 	[GPLL4] = &gpll4.clkr,
--	[CONFIG_NOC_CLK_SRC] = &config_noc_clk_src.clkr,
--	[PERIPH_NOC_CLK_SRC] = &periph_noc_clk_src.clkr,
--	[SYSTEM_NOC_CLK_SRC] = &system_noc_clk_src.clkr,
- 	[UFS_AXI_CLK_SRC] = &ufs_axi_clk_src.clkr,
- 	[USB30_MASTER_CLK_SRC] = &usb30_master_clk_src.clkr,
- 	[BLSP1_QUP1_I2C_APPS_CLK_SRC] = &blsp1_qup1_i2c_apps_clk_src.clkr,
-@@ -2695,6 +2598,9 @@ static struct clk_regmap *gcc_msm8994_clocks[] = {
- 	[USB_SS_PHY_LDO] = &usb_ss_phy_ldo.clkr,
- 	[GCC_BOOT_ROM_AHB_CLK] = &gcc_boot_rom_ahb_clk.clkr,
- 	[GCC_PRNG_AHB_CLK] = &gcc_prng_ahb_clk.clkr,
-+	[CONFIG_NOC_CLK_SRC] = NULL,
-+	[PERIPH_NOC_CLK_SRC] = NULL,
-+	[SYSTEM_NOC_CLK_SRC] = NULL,
- };
- 
- static struct gdsc *gcc_msm8994_gdscs[] = {
--- 
-2.34.1
-
+> Give it a shot.

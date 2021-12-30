@@ -2,308 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE8BC481BA6
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 12:16:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8EBA481BAB
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 12:23:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238879AbhL3LQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 06:16:19 -0500
-Received: from mail-io1-f70.google.com ([209.85.166.70]:56106 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235325AbhL3LQT (ORCPT
+        id S238893AbhL3LXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 06:23:38 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60622 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235325AbhL3LXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 06:16:19 -0500
-Received: by mail-io1-f70.google.com with SMTP id n80-20020a6b8b53000000b00601ac7398c3so10780548iod.22
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 03:16:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=DdJiJoPMs+seIe/UgA1bIYn2fRdIJapWUjI6wsJZCN8=;
-        b=vM1tqs7yfvd35OR5DFql3/SUYystLiclCV5adKUszCryVG86u34uFUum/ffzNr20LT
-         e23cQphA/gIdskXwLZohHqXPX5utyVaRtSCXRG86DDOabi8v1sejWhj7fvosCgK+qGWJ
-         hkn4cQ3fg1S4DNhAoOMJHhRx6L12Qo0uSvdiw+fUC1vbRMPIq53gz4h8G07iTtUwe5M8
-         NIxAjQ3Q6jZjx9lpxMfMBigxy7tO25FXGqfjFgVgwEPZGa87pixbmi14VNjieLBLdq7X
-         XBdvkQzXYaZCy9n98g9GtEeLfeEGfTTaKR1bGvsx7KNoPeJsRyXiA+KkG1gDu7DUysSi
-         z+Uw==
-X-Gm-Message-State: AOAM532ydqCZFaiEujbtEsnjAMds0HDPq4onsQZ2K8Tj+MBvcWgciz/o
-        FDsUjxArsYmhiGlLr7polv/42zJEeSSJWPxGT5iPOcjwmM6F
-X-Google-Smtp-Source: ABdhPJy0wQDKCuupOF+1E8CdNjesed8oiEjqUOWtW2mA+Ff/pNSJ3245T8fDhRItTv5eTj27S6pHCw1QKR24GBoE8xllLzpulSBf
+        Thu, 30 Dec 2021 06:23:37 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26AAEB80B3A;
+        Thu, 30 Dec 2021 11:23:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10A59C36AEA;
+        Thu, 30 Dec 2021 11:23:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640863414;
+        bh=YZKLVpxRB2F1djgguiiA+gLT6qBxeg7fWB1+NZn0g3o=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=WGt+ZtiP05KwZgUx8dQTuBEioi/oFiKTi54CpS1ee9M7ZKixpZlPFp30Q84IBvtB0
+         ECnUrLrsFZZ9w5LQcWu1e8BRDLhGwApaY9/v5B7l4gStcrkVrHZjZ0akf1FvsJ0JrH
+         YzRu4B3taUf75KJ8PwpmtjFNOwJujjW/ELmNfpy9Lid4BjLyh3OueS2DPK7uOe2Xdy
+         XlHue8DCW7CRpz4AVUrWfaySLWbPnGyutNSqtWDn/Ja/IOl9u8+I5hnTIS4vEfNe1x
+         XrA6ZHc/kQlN+JwyzqUkaDpP7VR5nDuQUf30tLThia+5H7J8443cz/PBWDBjZokZpG
+         YRAkndLf8pPWg==
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Aharon Landau <aharonl@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+Subject: [PATCH rdma-next v1 1/7] RDMA/mlx5: Merge similar flows of allocating MR from the cache
+Date:   Thu, 30 Dec 2021 13:23:18 +0200
+Message-Id: <b35e219a9895101459862bf0e6430d8cdc7622dc.1640862842.git.leonro@nvidia.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <cover.1640862842.git.leonro@nvidia.com>
+References: <cover.1640862842.git.leonro@nvidia.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3815:: with SMTP id i21mr13781136jav.39.1640862978601;
- Thu, 30 Dec 2021 03:16:18 -0800 (PST)
-Date:   Thu, 30 Dec 2021 03:16:18 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f6fa5905d45b2ea5@google.com>
-Subject: [syzbot] possible deadlock in genl_rcv (3)
-From:   syzbot <syzbot+3feee90fde88bc16f893@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, fw@strlen.de, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, mathew.j.martineau@linux.intel.com,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        yajun.deng@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Aharon Landau <aharonl@nvidia.com>
 
-syzbot found the following issue on:
+When allocating an MR from the cache, the driver calls to
+get_cache_mr(), and in case of failure, retries with create_cache_mr().
+This is the flow of mlx5_mr_cache_alloc(), so use it instead.
 
-HEAD commit:    438645193e59 Merge tag 'pinctrl-v5.16-3' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14f67afbb00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cb2fb6a50dc0ed30
-dashboard link: https://syzkaller.appspot.com/bug?extid=3feee90fde88bc16f893
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3feee90fde88bc16f893@syzkaller.appspotmail.com
-
-======================================================
-WARNING: possible circular locking dependency detected
-5.16.0-rc6-syzkaller #0 Not tainted
-------------------------------------------------------
-syz-executor.0/17763 is trying to acquire lock:
-ffffffff8d39eb90 (cb_lock){++++}-{3:3}, at: genl_rcv+0x15/0x40 net/netlink/genetlink.c:802
-
-but task is already holding lock:
-ffff888018a81868 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_lock_nested fs/pipe.c:81 [inline]
-ffff888018a81868 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_lock+0x5a/0x70 fs/pipe.c:89
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #7 (&pipe->mutex/1){+.+.}-{3:3}:
-       __mutex_lock_common kernel/locking/mutex.c:607 [inline]
-       __mutex_lock+0x12f/0x12f0 kernel/locking/mutex.c:740
-       pipe_lock_nested fs/pipe.c:81 [inline]
-       pipe_lock+0x5a/0x70 fs/pipe.c:89
-       iter_file_splice_write+0x15a/0xc10 fs/splice.c:635
-       ovl_splice_write+0x4b2/0xde0 fs/overlayfs/file.c:451
-       do_splice_from fs/splice.c:767 [inline]
-       do_splice+0xb7e/0x1960 fs/splice.c:1079
-       __do_splice+0x134/0x250 fs/splice.c:1144
-       __do_sys_splice fs/splice.c:1350 [inline]
-       __se_sys_splice fs/splice.c:1332 [inline]
-       __x64_sys_splice+0x198/0x250 fs/splice.c:1332
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
-
--> #6 (sb_writers#3){.+.+}-{0:0}:
-       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-       __sb_start_write include/linux/fs.h:1810 [inline]
-       sb_start_write include/linux/fs.h:1880 [inline]
-       file_start_write include/linux/fs.h:3008 [inline]
-       lo_write_bvec drivers/block/loop.c:242 [inline]
-       lo_write_simple drivers/block/loop.c:265 [inline]
-       do_req_filebacked drivers/block/loop.c:494 [inline]
-       loop_handle_cmd drivers/block/loop.c:1857 [inline]
-       loop_process_work+0x1499/0x1db0 drivers/block/loop.c:1897
-       process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
-       worker_thread+0x658/0x11f0 kernel/workqueue.c:2445
-       kthread+0x405/0x4f0 kernel/kthread.c:327
-       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
--> #5 ((work_completion)(&worker->work)){+.+.}-{0:0}:
-       process_one_work+0x921/0x1690 kernel/workqueue.c:2274
-       worker_thread+0x658/0x11f0 kernel/workqueue.c:2445
-       kthread+0x405/0x4f0 kernel/kthread.c:327
-       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
--> #4 ((wq_completion)loop3){+.+.}-{0:0}:
-       flush_workqueue+0x110/0x15b0 kernel/workqueue.c:2818
-       drain_workqueue+0x1a5/0x3c0 kernel/workqueue.c:2983
-       destroy_workqueue+0x71/0x800 kernel/workqueue.c:4420
-       __loop_clr_fd+0x1de/0x1070 drivers/block/loop.c:1124
-       lo_release+0x1ac/0x1f0 drivers/block/loop.c:1761
-       blkdev_put_whole block/bdev.c:694 [inline]
-       blkdev_put+0x2de/0x980 block/bdev.c:957
-       blkdev_close+0x6a/0x80 block/fops.c:515
-       __fput+0x286/0x9f0 fs/file_table.c:280
-       task_work_run+0xdd/0x1a0 kernel/task_work.c:164
-       tracehook_notify_resume include/linux/tracehook.h:189 [inline]
-       exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
-       exit_to_user_mode_prepare+0x27e/0x290 kernel/entry/common.c:207
-       __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
-       syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
-       do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
-
--> #3 (&lo->lo_mutex){+.+.}-{3:3}:
-       __mutex_lock_common kernel/locking/mutex.c:607 [inline]
-       __mutex_lock+0x12f/0x12f0 kernel/locking/mutex.c:740
-       lo_open+0x75/0x120 drivers/block/loop.c:1733
-       blkdev_get_whole+0x99/0x2d0 block/bdev.c:671
-       blkdev_get_by_dev.part.0+0x5c6/0xc70 block/bdev.c:826
-       blkdev_get_by_dev+0x6b/0x80 block/bdev.c:860
-       blkdev_open+0x154/0x2e0 block/fops.c:501
-       do_dentry_open+0x4c8/0x1250 fs/open.c:822
-       do_open fs/namei.c:3426 [inline]
-       path_openat+0x1cad/0x2750 fs/namei.c:3559
-       do_filp_open+0x1aa/0x400 fs/namei.c:3586
-       do_sys_openat2+0x16d/0x4d0 fs/open.c:1212
-       do_sys_open fs/open.c:1228 [inline]
-       __do_sys_openat fs/open.c:1244 [inline]
-       __se_sys_openat fs/open.c:1239 [inline]
-       __x64_sys_openat+0x13f/0x1f0 fs/open.c:1239
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
-
--> #2 (&disk->open_mutex){+.+.}-{3:3}:
-       __mutex_lock_common kernel/locking/mutex.c:607 [inline]
-       __mutex_lock+0x12f/0x12f0 kernel/locking/mutex.c:740
-       bd_register_pending_holders+0x2c/0x470 block/holder.c:161
-       device_add_disk+0x6b1/0xef0 block/genhd.c:485
-       add_disk include/linux/genhd.h:212 [inline]
-       nbd_dev_add+0x8d9/0xcd0 drivers/block/nbd.c:1818
-       nbd_genl_connect+0x11f3/0x1930 drivers/block/nbd.c:1948
-       genl_family_rcv_msg_doit+0x228/0x320 net/netlink/genetlink.c:731
-       genl_family_rcv_msg net/netlink/genetlink.c:775 [inline]
-       genl_rcv_msg+0x328/0x580 net/netlink/genetlink.c:792
-       netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2496
-       genl_rcv+0x24/0x40 net/netlink/genetlink.c:803
-       netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
-       netlink_unicast+0x533/0x7d0 net/netlink/af_netlink.c:1345
-       netlink_sendmsg+0x904/0xdf0 net/netlink/af_netlink.c:1921
-       sock_sendmsg_nosec net/socket.c:704 [inline]
-       sock_sendmsg+0xcf/0x120 net/socket.c:724
-       ____sys_sendmsg+0x6e8/0x810 net/socket.c:2409
-       ___sys_sendmsg+0xf3/0x170 net/socket.c:2463
-       __sys_sendmsg+0xe5/0x1b0 net/socket.c:2492
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
-
--> #1 (genl_mutex){+.+.}-{3:3}:
-       __mutex_lock_common kernel/locking/mutex.c:607 [inline]
-       __mutex_lock+0x12f/0x12f0 kernel/locking/mutex.c:740
-       genl_lock net/netlink/genetlink.c:33 [inline]
-       genl_lock_all net/netlink/genetlink.c:46 [inline]
-       genl_register_family net/netlink/genetlink.c:393 [inline]
-       genl_register_family+0x40f/0x1300 net/netlink/genetlink.c:384
-       vdpa_init drivers/vdpa/vdpa.c:926 [inline]
-       vdpa_init+0x40/0x70 drivers/vdpa/vdpa.c:919
-       do_one_initcall+0x103/0x650 init/main.c:1297
-       do_initcall_level init/main.c:1370 [inline]
-       do_initcalls init/main.c:1386 [inline]
-       do_basic_setup init/main.c:1405 [inline]
-       kernel_init_freeable+0x6b1/0x73a init/main.c:1610
-       kernel_init+0x1a/0x1d0 init/main.c:1499
-       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
--> #0 (cb_lock){++++}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3063 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3186 [inline]
-       validate_chain kernel/locking/lockdep.c:3801 [inline]
-       __lock_acquire+0x2a07/0x54a0 kernel/locking/lockdep.c:5027
-       lock_acquire kernel/locking/lockdep.c:5637 [inline]
-       lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5602
-       down_read+0x98/0x440 kernel/locking/rwsem.c:1470
-       genl_rcv+0x15/0x40 net/netlink/genetlink.c:802
-       netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
-       netlink_unicast+0x533/0x7d0 net/netlink/af_netlink.c:1345
-       netlink_sendmsg+0x904/0xdf0 net/netlink/af_netlink.c:1921
-       sock_sendmsg_nosec net/socket.c:704 [inline]
-       sock_sendmsg+0xcf/0x120 net/socket.c:724
-       sock_no_sendpage+0xf6/0x140 net/core/sock.c:3080
-       kernel_sendpage.part.0+0x1a0/0x340 net/socket.c:3504
-       kernel_sendpage net/socket.c:3501 [inline]
-       sock_sendpage+0xe5/0x140 net/socket.c:1003
-       pipe_to_sendpage+0x2ad/0x380 fs/splice.c:364
-       splice_from_pipe_feed fs/splice.c:418 [inline]
-       __splice_from_pipe+0x43e/0x8a0 fs/splice.c:562
-       splice_from_pipe fs/splice.c:597 [inline]
-       generic_splice_sendpage+0xd4/0x140 fs/splice.c:746
-       do_splice_from fs/splice.c:767 [inline]
-       do_splice+0xb7e/0x1960 fs/splice.c:1079
-       __do_splice+0x134/0x250 fs/splice.c:1144
-       __do_sys_splice fs/splice.c:1350 [inline]
-       __se_sys_splice fs/splice.c:1332 [inline]
-       __x64_sys_splice+0x198/0x250 fs/splice.c:1332
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-other info that might help us debug this:
-
-Chain exists of:
-  cb_lock --> sb_writers#3 --> &pipe->mutex/1
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&pipe->mutex/1);
-                               lock(sb_writers#3);
-                               lock(&pipe->mutex/1);
-  lock(cb_lock);
-
- *** DEADLOCK ***
-
-1 lock held by syz-executor.0/17763:
- #0: ffff888018a81868 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_lock_nested fs/pipe.c:81 [inline]
- #0: ffff888018a81868 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_lock+0x5a/0x70 fs/pipe.c:89
-
-stack backtrace:
-CPU: 1 PID: 17763 Comm: syz-executor.0 Not tainted 5.16.0-rc6-syzkaller #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2143
- check_prev_add kernel/locking/lockdep.c:3063 [inline]
- check_prevs_add kernel/locking/lockdep.c:3186 [inline]
- validate_chain kernel/locking/lockdep.c:3801 [inline]
- __lock_acquire+0x2a07/0x54a0 kernel/locking/lockdep.c:5027
- lock_acquire kernel/locking/lockdep.c:5637 [inline]
- lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5602
- down_read+0x98/0x440 kernel/locking/rwsem.c:1470
- genl_rcv+0x15/0x40 net/netlink/genetlink.c:802
- netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
- netlink_unicast+0x533/0x7d0 net/netlink/af_netlink.c:1345
- netlink_sendmsg+0x904/0xdf0 net/netlink/af_netlink.c:1921
- sock_sendmsg_nosec net/socket.c:704 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:724
- sock_no_sendpage+0xf6/0x140 net/core/sock.c:3080
- kernel_sendpage.part.0+0x1a0/0x340 net/socket.c:3504
- kernel_sendpage net/socket.c:3501 [inline]
- sock_sendpage+0xe5/0x140 net/socket.c:1003
- pipe_to_sendpage+0x2ad/0x380 fs/splice.c:364
- splice_from_pipe_feed fs/splice.c:418 [inline]
- __splice_from_pipe+0x43e/0x8a0 fs/splice.c:562
- splice_from_pipe fs/splice.c:597 [inline]
- generic_splice_sendpage+0xd4/0x140 fs/splice.c:746
- do_splice_from fs/splice.c:767 [inline]
- do_splice+0xb7e/0x1960 fs/splice.c:1079
- __do_splice+0x134/0x250 fs/splice.c:1144
- __do_sys_splice fs/splice.c:1350 [inline]
- __se_sys_splice fs/splice.c:1332 [inline]
- __x64_sys_splice+0x198/0x250 fs/splice.c:1332
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fb339614e99
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fb337f8a168 EFLAGS: 00000246 ORIG_RAX: 0000000000000113
-RAX: ffffffffffffffda RBX: 00007fb339727f60 RCX: 00007fb339614e99
-RDX: 0000000000000005 RSI: 0000000000000000 RDI: 0000000000000003
-RBP: 00007fb33966eff1 R08: 0000000000010004 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc9dc737af R14: 00007fb337f8a300 R15: 0000000000022000
- </TASK>
-
-
+Signed-off-by: Aharon Landau <aharonl@nvidia.com>
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/infiniband/hw/mlx5/mlx5_ib.h |  3 +-
+ drivers/infiniband/hw/mlx5/mr.c      | 51 +++++-----------------------
+ drivers/infiniband/hw/mlx5/odp.c     | 11 ++++--
+ 3 files changed, 19 insertions(+), 46 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/drivers/infiniband/hw/mlx5/mlx5_ib.h b/drivers/infiniband/hw/mlx5/mlx5_ib.h
+index 48eda21a358f..9c3cf6f26ad1 100644
+--- a/drivers/infiniband/hw/mlx5/mlx5_ib.h
++++ b/drivers/infiniband/hw/mlx5/mlx5_ib.h
+@@ -1344,7 +1344,8 @@ int mlx5_mr_cache_init(struct mlx5_ib_dev *dev);
+ int mlx5_mr_cache_cleanup(struct mlx5_ib_dev *dev);
+ 
+ struct mlx5_ib_mr *mlx5_mr_cache_alloc(struct mlx5_ib_dev *dev,
+-				       unsigned int entry, int access_flags);
++				       struct mlx5_cache_ent *ent,
++				       int access_flags);
+ 
+ int mlx5_ib_check_mr_status(struct ib_mr *ibmr, u32 check_mask,
+ 			    struct ib_mr_status *mr_status);
+diff --git a/drivers/infiniband/hw/mlx5/mr.c b/drivers/infiniband/hw/mlx5/mr.c
+index 157d862fb864..2cba55bb7825 100644
+--- a/drivers/infiniband/hw/mlx5/mr.c
++++ b/drivers/infiniband/hw/mlx5/mr.c
+@@ -566,25 +566,22 @@ static void cache_work_func(struct work_struct *work)
+ 	__cache_work_func(ent);
+ }
+ 
+-/* Allocate a special entry from the cache */
+ struct mlx5_ib_mr *mlx5_mr_cache_alloc(struct mlx5_ib_dev *dev,
+-				       unsigned int entry, int access_flags)
++				       struct mlx5_cache_ent *ent,
++				       int access_flags)
+ {
+-	struct mlx5_mr_cache *cache = &dev->cache;
+-	struct mlx5_cache_ent *ent;
+ 	struct mlx5_ib_mr *mr;
+ 
+-	if (WARN_ON(entry <= MR_CACHE_LAST_STD_ENTRY ||
+-		    entry >= ARRAY_SIZE(cache->ent)))
+-		return ERR_PTR(-EINVAL);
+-
+ 	/* Matches access in alloc_cache_mr() */
+ 	if (!mlx5_ib_can_reconfig_with_umr(dev, 0, access_flags))
+ 		return ERR_PTR(-EOPNOTSUPP);
+ 
+-	ent = &cache->ent[entry];
+ 	spin_lock_irq(&ent->lock);
+ 	if (list_empty(&ent->head)) {
++		if (ent->limit) {
++			queue_adjust_cache_locked(ent);
++			ent->miss++;
++		}
+ 		spin_unlock_irq(&ent->lock);
+ 		mr = create_cache_mr(ent);
+ 		if (IS_ERR(mr))
+@@ -598,32 +595,9 @@ struct mlx5_ib_mr *mlx5_mr_cache_alloc(struct mlx5_ib_dev *dev,
+ 
+ 		mlx5_clear_mr(mr);
+ 	}
+-	mr->access_flags = access_flags;
+ 	return mr;
+ }
+ 
+-/* Return a MR already available in the cache */
+-static struct mlx5_ib_mr *get_cache_mr(struct mlx5_cache_ent *req_ent)
+-{
+-	struct mlx5_ib_mr *mr = NULL;
+-	struct mlx5_cache_ent *ent = req_ent;
+-
+-	spin_lock_irq(&ent->lock);
+-	if (!list_empty(&ent->head)) {
+-		mr = list_first_entry(&ent->head, struct mlx5_ib_mr, list);
+-		list_del(&mr->list);
+-		ent->available_mrs--;
+-		queue_adjust_cache_locked(ent);
+-		spin_unlock_irq(&ent->lock);
+-		mlx5_clear_mr(mr);
+-		return mr;
+-	}
+-	queue_adjust_cache_locked(ent);
+-	spin_unlock_irq(&ent->lock);
+-	req_ent->miss++;
+-	return NULL;
+-}
+-
+ static void mlx5_mr_cache_free(struct mlx5_ib_dev *dev, struct mlx5_ib_mr *mr)
+ {
+ 	struct mlx5_cache_ent *ent = mr->cache_ent;
+@@ -959,16 +933,9 @@ static struct mlx5_ib_mr *alloc_cacheable_mr(struct ib_pd *pd,
+ 		return mr;
+ 	}
+ 
+-	mr = get_cache_mr(ent);
+-	if (!mr) {
+-		mr = create_cache_mr(ent);
+-		/*
+-		 * The above already tried to do the same stuff as reg_create(),
+-		 * no reason to try it again.
+-		 */
+-		if (IS_ERR(mr))
+-			return mr;
+-	}
++	mr = mlx5_mr_cache_alloc(dev, ent, access_flags);
++	if (IS_ERR(mr))
++		return mr;
+ 
+ 	mr->ibmr.pd = pd;
+ 	mr->umem = umem;
+diff --git a/drivers/infiniband/hw/mlx5/odp.c b/drivers/infiniband/hw/mlx5/odp.c
+index 91eb615b89ee..0972afc3e952 100644
+--- a/drivers/infiniband/hw/mlx5/odp.c
++++ b/drivers/infiniband/hw/mlx5/odp.c
+@@ -407,6 +407,7 @@ static void mlx5_ib_page_fault_resume(struct mlx5_ib_dev *dev,
+ static struct mlx5_ib_mr *implicit_get_child_mr(struct mlx5_ib_mr *imr,
+ 						unsigned long idx)
+ {
++	struct mlx5_ib_dev *dev = mr_to_mdev(imr);
+ 	struct ib_umem_odp *odp;
+ 	struct mlx5_ib_mr *mr;
+ 	struct mlx5_ib_mr *ret;
+@@ -418,13 +419,14 @@ static struct mlx5_ib_mr *implicit_get_child_mr(struct mlx5_ib_mr *imr,
+ 	if (IS_ERR(odp))
+ 		return ERR_CAST(odp);
+ 
+-	mr = mlx5_mr_cache_alloc(
+-		mr_to_mdev(imr), MLX5_IMR_MTT_CACHE_ENTRY, imr->access_flags);
++	mr = mlx5_mr_cache_alloc(dev, &dev->cache.ent[MLX5_IMR_MTT_CACHE_ENTRY],
++				 imr->access_flags);
+ 	if (IS_ERR(mr)) {
+ 		ib_umem_odp_release(odp);
+ 		return mr;
+ 	}
+ 
++	mr->access_flags = imr->access_flags;
+ 	mr->ibmr.pd = imr->ibmr.pd;
+ 	mr->ibmr.device = &mr_to_mdev(imr)->ib_dev;
+ 	mr->umem = &odp->umem;
+@@ -493,12 +495,15 @@ struct mlx5_ib_mr *mlx5_ib_alloc_implicit_mr(struct mlx5_ib_pd *pd,
+ 	if (IS_ERR(umem_odp))
+ 		return ERR_CAST(umem_odp);
+ 
+-	imr = mlx5_mr_cache_alloc(dev, MLX5_IMR_KSM_CACHE_ENTRY, access_flags);
++	imr = mlx5_mr_cache_alloc(dev,
++				  &dev->cache.ent[MLX5_IMR_KSM_CACHE_ENTRY],
++				  access_flags);
+ 	if (IS_ERR(imr)) {
+ 		ib_umem_odp_release(umem_odp);
+ 		return imr;
+ 	}
+ 
++	imr->access_flags = access_flags;
+ 	imr->ibmr.pd = &pd->ibpd;
+ 	imr->ibmr.iova = 0;
+ 	imr->umem = &umem_odp->umem;
+-- 
+2.33.1
+

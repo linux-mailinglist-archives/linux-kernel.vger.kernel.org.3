@@ -2,149 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCE61481DAF
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 16:29:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FBC7481DB3
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 16:30:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238545AbhL3P3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 10:29:51 -0500
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:46625 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236492AbhL3P3u (ORCPT
+        id S236213AbhL3PaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 10:30:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52902 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234169AbhL3PaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 10:29:50 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id C2A3F580390;
-        Thu, 30 Dec 2021 10:29:49 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Thu, 30 Dec 2021 10:29:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=PeK1SwXweHmcMIKsN9xO7bPrTKl
-        nfkcB/zGp4yM0vHQ=; b=goitL7zogb3Vw5mO8T4AogbyHlIDbWk2FLpsCFlokbZ
-        wUiyMvqyN3bUU4seHo3s/1NQecupaSATdoowyCZiQ5AyyYUs7Zh/vFEnkbNt6fGX
-        wIpQGT5Cte1/1z5TYGviRQYUyq1y+KYZqBJdUW7gfvBddO7vTI9WOSCuhcAYYcyH
-        Bu4QB0Y5fdxG3tB3ZGvWrAgX4Wp4RcRWcsMjHofciX9Io4S6JMIT9klzX9h1mIJK
-        PxILJsHrZmTm/+R+L/GuVkiha3Yezmwavh+b+FiyB+HxNhEMnh7wjEP6rs3pjR3Q
-        gu25R0YZBzKfHiW5M5/rta05RV8VqRsXIWuaY94lSWA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=PeK1Sw
-        XweHmcMIKsN9xO7bPrTKlnfkcB/zGp4yM0vHQ=; b=dxwZ263E5RRHIp1OW0yVNi
-        twOowHLYXvXYaRj+tsu+q2AhVWTDsPNPSTwAJl9Xekq9a+6/4/E+gajpcczQY8ay
-        VOzEaqQk9vTPuw9BaMB4v+/eb6Pb9050tt9MdM8jJWMwq6K6P+Rkvr7v/yIG0CIv
-        7BlnHGA2c9h+1G5unRLiJWnW98+DDM/MxchnYbXkS+FU3EysKMMCs0cKOHjMSjyJ
-        7BfRkmqXA9Gnm/5JJzBIhEfnQf4VVR2xnsJlmvV6Spi0+H6F5FXaJP443x3c3O1n
-        txOO6w3/mf9R4DUe7Ko9Cb1Nd352XF7eaXLDk8RZBUb/WMWBIvW9apBmTCMR7hew
-        ==
-X-ME-Sender: <xms:bNDNYWghxJSEidgXtm6XlZXBKucEJ5pm1UQzI0yffMtaVAinEfDGoA>
-    <xme:bNDNYXDFW9GT3OMKXCaD-KBb8YsoPXi08_dvDXnIM1VBf5AtHUabY3HqtgVzJgylB
-    -1ECb9qUwQ-MqzUP5Y>
-X-ME-Received: <xmr:bNDNYeEIFrIIPZxYV8PEqPRTfksppzRylPcR8WU8bR6ZbI7nzUMKCuxWHHdsCfVOaSaMMinQzV9N227i5ju888x8BknM3BKdKs0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddruddvfedgjeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdljedtmdenucfjughrpeffhffvuffkfhggtggujgesghdtreertddt
-    vdenucfhrhhomheprfgrthhrihgtkhcuhghilhhlihgrmhhsuceophgrthhrihgtkhessh
-    htfigtgidrgiihiieqnecuggftrfgrthhtvghrnhepgeehheefffegkeevhedthffgudfh
-    geefgfdthefhkedtleffveekgfeuffehtdeinecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepphgrthhrihgtkhesshhtfigtgidrgiihii
-X-ME-Proxy: <xmx:bNDNYfRZqzHvxv4sHDpM1995lKHO4q2UjDa0zRx6LsGylUe3_uWv7Q>
-    <xmx:bNDNYTxJ-tkgjSJf4jhD-nptE-FtqfgAX99S-VyTP31UASbBa3FVDg>
-    <xmx:bNDNYd6yk7mHJ-FtnDGXAaQQVWqBVnk6lpWCA7Stq8Y-fPGTRMJ1yA>
-    <xmx:bdDNYWrJX8UKRkPIjArH9zi1I8Qz9C53cJhMwdSwQne_LuRwBT7pRg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 30 Dec 2021 10:29:48 -0500 (EST)
-Date:   Thu, 30 Dec 2021 09:29:46 -0600
-From:   Patrick Williams <patrick@stwcx.xyz>
-To:     Pratyush Yadav <p.yadav@ti.com>, Joel Stanley <joel@jms.id.au>
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Potin Lai <potin.lai@quantatw.com>,
-        linux-mtd@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mtd: aspeed-smc: improve probe resilience
-Message-ID: <Yc3Qav+ULNdF5zRT@heinlein>
-References: <20211229143334.297305-1-patrick@stwcx.xyz>
- <20211229173411.l2bipmi4x3arqjoo@ti.com>
+        Thu, 30 Dec 2021 10:30:04 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44731C061574;
+        Thu, 30 Dec 2021 07:30:04 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id j18so51114992wrd.2;
+        Thu, 30 Dec 2021 07:30:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1jof+DZebMLPiQc0TwDMmSnKuPJVGago0B+tjBwIYlw=;
+        b=OZYYKWmxJBwf2rALtePHVS5iVQMWA2WaSnbsSEYQnasSAZbu2SogzxPvsH7rP1Z7GT
+         UGJMXslRLv9dnu1DEgFUCQhuZmfavkZDCl1cKazBsWGvsFZShnCxYJ7dnOzbJMR8uxuf
+         ilazXWBQFquKFYhUFEHXTR81dmAM0AETc+A+50T6ahvzFWkbNZwC+OVb8h2kymGRWjNo
+         PMvMiCvY4ovqjukVwQL72U4imxJ0i/QtiOXJ3uoNF8ie6gcfa8K6LgMYuekZKw7zRMRQ
+         BNOCziQY+5xLAWR2kxNKwmKTtBZ29pk//hWTqgCe2NgR9ZONCO2YeZHvjfMaHKnpusG3
+         bKdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1jof+DZebMLPiQc0TwDMmSnKuPJVGago0B+tjBwIYlw=;
+        b=Ds1708EBanEvnYUoe2gqDZZKLOD6lQIA4fatNI/y594vg3uIqNsBsVEYbFRfZH98Qg
+         i0gzcIwHf2gl+oXq67wq7xBcM/3LrfNVoCrQtqdw02P3QE+1wIz7ERJUjokni9FjdFOV
+         Pwz92gEibFTpORxA/nqvn7asb9RD1Mf4xdaUD4RBchYUvL8RmOIUSwbvHzLbdQIwXtjo
+         FiNwvZ1grMYH1hZG7nkJUuVEcZsRCWpO2+45ftLU9i9KrABQCtjJ8G13vzDK1qqc1kYz
+         CUlY6obSx2YBd3DIbV+vcQmu5zl8ph1LHQZoMQm4S+WbnlJ+ifuXuSk4hiLi/vPzmv5K
+         cLdg==
+X-Gm-Message-State: AOAM530X3q43mbNBFk3DmH2GJhTmMXXsoh9YJQ2c/xPDhv3F0EtzSww/
+        RhQLH9brzIlvA6816z9Xb0Y=
+X-Google-Smtp-Source: ABdhPJx5+OCjcspjRbYTsb4M9GjVMlH0pAjXWZCbNoB4HSUcvc6rFly+j9tntV0aChPYTZHYQgTHLA==
+X-Received: by 2002:adf:dcd2:: with SMTP id x18mr25558357wrm.173.1640878202749;
+        Thu, 30 Dec 2021 07:30:02 -0800 (PST)
+Received: from [192.168.1.145] ([207.188.161.251])
+        by smtp.gmail.com with ESMTPSA id d4sm23839556wrx.102.2021.12.30.07.30.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Dec 2021 07:30:02 -0800 (PST)
+Message-ID: <98efb356-dc0d-fa7e-5579-7984f2bb3e84@gmail.com>
+Date:   Thu, 30 Dec 2021 16:30:00 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="HEhOyDGNPr5K1QDH"
-Content-Disposition: inline
-In-Reply-To: <20211229173411.l2bipmi4x3arqjoo@ti.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v20 5/7] dt-bindings: soc: mediatek: add mt8192 svs
+ dt-bindings
+Content-Language: en-US
+To:     Roger Lu <roger.lu@mediatek.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Guenter Roeck <linux@roeck-us.net>
+References: <20210721070904.15636-1-roger.lu@mediatek.com>
+ <20210721070904.15636-6-roger.lu@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20210721070904.15636-6-roger.lu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Please add a commit message.
 
---HEhOyDGNPr5K1QDH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Regards,
+Matthias
 
-On Wed, Dec 29, 2021 at 11:04:13PM +0530, Pratyush Yadav wrote:
-> Hi,
->=20
-> On 29/12/21 08:33AM, Patrick Williams wrote:
-=20
-> The patch itself looks fine to me but we no longer want to maintain=20
-> drivers under drivers/mtd/spi-nor/controllers/. They should be moved to=
-=20
-> implement the SPI MEM API (under drivers/spi/).
-
-Is the linux-aspeed community aware of this?  Are you saying you don't want=
- to
-take fixes for their driver into the MTD tree?  Can it be pulled into the A=
-speed
-tree?
-
-> Could you please volunteer to do the conversion for this driver?
-
-I'm not personally going to be able to get to it for at least the next 3 mo=
-nths.
-
-It looks like we don't have a dedicated maintainer for this driver other th=
-an
-Joel by nature of him being listed as the maintainer of "ARM/ASPEED MACHINE
-SUPPORT".  I'm not sure if Aspeed themselves are planning on doing the nece=
-ssary
-refactoring here.
-
-
-Joel, are you aware of this driver using a deprecated implementation?  Were
-there anyone planning to do the reworks that you are aware of?  I'd like to=
- get
-this fix at least into the OpenBMC kernel tree because I'm seeing this fail=
- in
-the real world.
-
---=20
-Patrick Williams
-
---HEhOyDGNPr5K1QDH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAmHN0GkACgkQqwNHzC0A
-wRm3mw//YWhGsoq3nvfbqICOBABeacq8/jETQMaKxf8gyrjUq3wiv4dRedTgkLUz
-p5qJkV7CRz1rjKYs/DDokUVdOS3xUvW3N8D1pkNA+OyZ2u+XDSAByGdXU++8uBdC
-3aueTRa8W0Cha744JYGvipggXqtW1g9OHug+AfRrTDtUkv/YXVF9PHw2hIf4oqk5
-wPypiUYKdCrjzTR9BM3s9gEGJIxSqDcBmHbycoqECB60AAoNk148B6UcKD48rKlf
-UZdhvt9eV5YlHdCM0XIM9TcrMvpVuRxxaO5exV0ND1fzWXlEgwlBBwvqaI+xTFQ9
-ojyLi8D0IbDDN+e5JYDFZqAPqkzW8939tdfOFw1PgoJIVqF+7gbIoFNMqn3mMbYO
-JFBOcJSRC8NsK64WHr582OX+I1b9cGWEVgtqnH5/0QbKxIqPzpyFn0X+Pf43YeX/
-U7czaxM+yc2UhptT006hhe4X+E5KpadMGspxpLaKo7u/UEJMw+24rAaXyvQoU13B
-WBlms+AQC0TzbqpYbC60cQpTUkLiDhTXoEFMDOy9up49OrgHp4W0uT+wZOv5iboe
-H37VdpZeQCjkcldIti5iG0FaPpGCjHQcexCdIP357U19qPUK/w0czq5jZRv1wekn
-VJ5IdlTrh6H+FTkdk+vKeXkhgiBlaGo30r2VzMNG9dP2qpVhuw8=
-=xdO4
------END PGP SIGNATURE-----
-
---HEhOyDGNPr5K1QDH--
+On 21/07/2021 09:09, Roger Lu wrote:
+> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+>   .../devicetree/bindings/soc/mediatek/mtk-svs.yaml         | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml b/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
+> index a855ced410f8..59342e627b67 100644
+> --- a/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
+> +++ b/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
+> @@ -22,6 +22,7 @@ properties:
+>     compatible:
+>       enum:
+>         - mediatek,mt8183-svs
+> +      - mediatek,mt8192-svs
+>   
+>     reg:
+>       maxItems: 1
+> @@ -51,6 +52,13 @@ properties:
+>         - const: svs-calibration-data
+>         - const: t-calibration-data
+>   
+> +  resets:
+> +    maxItems: 1
+> +
+> +  reset-names:
+> +    items:
+> +      - const: svs_rst
+> +
+>   required:
+>     - compatible
+>     - reg
+> 

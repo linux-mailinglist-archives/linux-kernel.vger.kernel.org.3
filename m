@@ -2,113 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98979481FCD
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:19:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B013B481FD1
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:21:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240714AbhL3TTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 14:19:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47346 "EHLO
+        id S241818AbhL3TVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 14:21:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237300AbhL3TTN (ORCPT
+        with ESMTP id S240217AbhL3TVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 14:19:13 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD110C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 11:19:12 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id s6so21679717ioj.0
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 11:19:12 -0800 (PST)
+        Thu, 30 Dec 2021 14:21:33 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D1BC061574;
+        Thu, 30 Dec 2021 11:21:32 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id h15so28650667ljh.12;
+        Thu, 30 Dec 2021 11:21:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DUj31a0vWo3+lEkWZ+Adl6dlbYeVbADGrJgYxEnUpUg=;
-        b=mbg/EqmGC4aKsDVdK+LUwUmyuc8RJbrhQq7fn5O/VePmeXQxMEt4E2QMXeAsvIwjq3
-         qF6t+DKdExmjPyMrouBwqZOQJqa5b1kbDFye72VO+jcsL3RNqd+sKUNJ7UJEL0fu787s
-         +d2d0EVglT//LUZQ2sGy3DVYIkNtImWqumqekWT2ydDz47FaV294nvXPm9lE2ue1/QdE
-         JOw9/fi6sR+vXltb8tWq+ZNMsjmUOafqJ7QOizA/1xWtpjRhkAfCwzcTCOWRuIWkYaUY
-         Lfsn848MsXSY9UrLAR/WZRj5s9qEy5URi5cpQJbmPfF7s0PJyW+wrpzS6S/P0KaUlLx+
-         TakQ==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=29ZCKi+UYzfbhhlJGwYUn8LArOBBrJMbEQDCucP9wW0=;
+        b=oYK77syPVHf9WjJUqDaa/+9viAoEgnBaoIHI1uQSzo0DU7cyoWXv8Asdj1r6GFy4n6
+         UPCotKGpU02eUvPmNsFG4drmFRZlq8LPztA8D6BDReSTVnyJVNFn8q7+ZRpHcEI9X4KC
+         pB/Fl8iB7mYDsuKRuaZi5d6Ga10am9ikNtDVJMAi39HN35MRVCVa06nFdIcGGg1XVWrG
+         BdAEhqlSsVRFdufxzT4DypO3AVaNrvbXMZNfltO2b4zQuLNWNnw0QsmpJ8sY9WKQ6/9k
+         tbufgpZgKJdJViikuQ5JA7v/DusFQIY70J/JJ7KcX7G+OKtyzIIRTKOxTwYzLPQxVvz2
+         RoRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DUj31a0vWo3+lEkWZ+Adl6dlbYeVbADGrJgYxEnUpUg=;
-        b=FJszSIfMjom4W0df+wz2PQ+7Q/DdwvzJ/V3JIJoU/YV2xxXmZqt6x/QqzcKEvXSdrv
-         qkULU6uvCw2SqsuvK1UO2UVrYTnm3+1z1riBzS71coV4y/R3Uo3L6npO3fEcSfCDV874
-         Rl8KGYJTUZMW+7BIcpyHLUnlfh0iWdddvlAJQudZXqnPEKJncYfeOtUm+S7ugTk/KyJ6
-         A7IIwOqjFlnbVyhrRVGPZ6aZBBD8Kb/2pkGd/DklumFvsIJtXZdJI5XDElRUzv8eg/Va
-         jCJOwX2u1IvrRYUQM8/C6wEGVvXfsuq3RZQOLrsDV507ucUcH28HeqK0ONfxXuBKSOFI
-         Z5ug==
-X-Gm-Message-State: AOAM532KOnZuqzDpF25DXnfZBYWLiFt6ioQB9I/ZoCcSGtSXtgOMWXqx
-        mFCdFr4ysneathywt89aENDvq7yda5qvIZGXGD7mHLHb
-X-Google-Smtp-Source: ABdhPJxihgVqz3Jf8c6xjbs24o35Y/OGcfau8t919A9kb5IZPmf4DcDe2qcv+0r86e2Yaeo/TW3QxXTqc5chjXCQn1Y=
-X-Received: by 2002:a05:6638:2404:: with SMTP id z4mr9960690jat.9.1640891952203;
- Thu, 30 Dec 2021 11:19:12 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=29ZCKi+UYzfbhhlJGwYUn8LArOBBrJMbEQDCucP9wW0=;
+        b=aCKIt1relVwsqKYt1qP/T6pe+h/W9fb4K/qQ0HqSmmJiZlzf6PcZqcZgoJPniX0gJ4
+         qJbLz7HbjW4TFphQYhHGaZqFecM8RZncd3yjpO1pN9Hujdb6LzCNO0Iwa73tLtpiV+F6
+         jWju1mcQdyj0wDTJ5w8jnA1kYUzGqOyH6ENOLWpuhcv5VxcCsg1lsAfd9fowalXOgFlT
+         zFOusuF614jCuUrxCLur4j1uALoKdpNY3EAtRajxe9kNQLqtXSGUw5KegwQouyaiLUn9
+         WFnaz8EWJ1ZK0PUULE0fRcrf7Sv5+J9lsUtwqp8Fd0nzl3+7u/ILRG9ghtmZQjOS4JUJ
+         SCgA==
+X-Gm-Message-State: AOAM530lzqHWXHzcgzO8SIUxxvjP5AkSqQy623oF37rm18p+pUsB5R5S
+        DlyXnTYxlKgbNtDE4SJBHhDgxmrfkpo=
+X-Google-Smtp-Source: ABdhPJzPf/616b1vKZjygFJ9jDrkf1rprCIdL5VRNA9yIBZcjKjShCOpY6FdvEkErC1hZwDxUhPfVA==
+X-Received: by 2002:a2e:990:: with SMTP id 138mr26702257ljj.507.1640892090620;
+        Thu, 30 Dec 2021 11:21:30 -0800 (PST)
+Received: from [192.168.1.103] ([178.176.75.215])
+        by smtp.gmail.com with ESMTPSA id br31sm2558552lfb.279.2021.12.30.11.21.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Dec 2021 11:21:30 -0800 (PST)
+Subject: Re: [PATCH v3 1/3] PCI: Add device code for AMD FCH SATA Controller
+ in AHCI mode
+To:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        linux-ide@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211229161119.1006-1-pmenzel@molgen.mpg.de>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <0df4ec50-b986-6a9b-3908-1cf62b53341b@gmail.com>
+Date:   Thu, 30 Dec 2021 22:21:28 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <cover.1640891329.git.andreyknvl@google.com>
-In-Reply-To: <cover.1640891329.git.andreyknvl@google.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Thu, 30 Dec 2021 20:19:01 +0100
-Message-ID: <CA+fCnZd+sBzecOGBD8zR3CxXS1yjV-X3-epAb6N=ZT8rJdCU6A@mail.gmail.com>
-Subject: Re: [PATCH mm v5 00/39] kasan, vmalloc, arm64: add vmalloc tagging
- support for SW/HW_TAGS
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        andrey.konovalov@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211229161119.1006-1-pmenzel@molgen.mpg.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 30, 2021 at 8:12 PM <andrey.konovalov@linux.dev> wrote:
->
-> From: Andrey Konovalov <andreyknvl@google.com>
->
-> Hi,
->
-> This patchset adds vmalloc tagging support for SW_TAGS and HW_TAGS
-> KASAN modes.
->
-> The tree with patches is available here:
->
-> https://github.com/xairy/linux/tree/up-kasan-vmalloc-tags-v5-akpm
->
-> About half of patches are cleanups I went for along the way. None of
-> them seem to be important enough to go through stable, so I decided
-> not to split them out into separate patches/series.
->
-> The patchset is partially based on an early version of the HW_TAGS
-> patchset by Vincenzo that had vmalloc support. Thus, I added a
-> Co-developed-by tag into a few patches.
->
-> SW_TAGS vmalloc tagging support is straightforward. It reuses all of
-> the generic KASAN machinery, but uses shadow memory to store tags
-> instead of magic values. Naturally, vmalloc tagging requires adding
-> a few kasan_reset_tag() annotations to the vmalloc code.
->
-> HW_TAGS vmalloc tagging support stands out. HW_TAGS KASAN is based on
-> Arm MTE, which can only assigns tags to physical memory. As a result,
-> HW_TAGS KASAN only tags vmalloc() allocations, which are backed by
-> page_alloc memory. It ignores vmap() and others.
->
-> Thanks!
+Hello!
 
-Hi Andrew,
+On 12/29/21 7:11 PM, Paul Menzel wrote:
 
-Could you PTAL and consider taking this into mm?
+> The ASUS F2A85-M PRO with the fusion controller hub (FCH) AMD A85
+> (Hudson D4) has the SATA controller below.
+> 
+>     $ lspci -s 00:11.0
+>     00:11.0 SATA controller [0106]: Advanced Micro Devices, Inc. [AMD] FCH SATA Controller [AHCI mode] [1022:7801] (rev 40)
+> 
+> Add the ID for it, when in AHCI mode.
+> 
+> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> ---
+>  include/linux/pci_ids.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> index 011f2f1ea5bb..fe944b44858a 100644
+> --- a/include/linux/pci_ids.h
+> +++ b/include/linux/pci_ids.h
+> @@ -602,6 +602,7 @@
+>  #define PCI_DEVICE_ID_AMD_LX_VIDEO  0x2081
+>  #define PCI_DEVICE_ID_AMD_LX_AES    0x2082
+>  #define PCI_DEVICE_ID_AMD_HUDSON2_SATA_IDE	0x7800
+> +#define PCI_DEVICE_ID_AMD_HUDSON2_SATA_AHCI	0x7801
 
-Thanks!
+   We only add device IDs to this file if they are used in 2+ places.
+
+[...]
+
+MBR, Sergey

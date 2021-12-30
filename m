@@ -2,76 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B95481C7F
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 14:30:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99824481C89
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 14:31:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239643AbhL3NaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 08:30:24 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:47162 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239544AbhL3NaO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 08:30:14 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 26509616E8;
-        Thu, 30 Dec 2021 13:30:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2D42FC36AF9;
-        Thu, 30 Dec 2021 13:30:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640871013;
-        bh=Hkfa2XCEB5vC8j15H2bEiskJ7X9PBtlLYYgFAxuRrgU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=PlvKt+i2PbVzBc17vm63tBMn5QKgMdML2+i0pRPSxGfc4sV1MnG0o9dAts0M+X0vS
-         BYce/C9Jzreji/eiE74azUOgEu2JzBOT8GSpluy6IMKikunqzjo/IR7od3pRaX4yBf
-         GbfVuJ17d8MGq2LQJtDL0bP2lmTQiAX1RsyS3in64nSDHRs5sApVSYsIwEiZGuMFGq
-         SIZAuaUV0mUEovFRoO6MJTDCvt3xplzgm8NJ0QxGXxm/3bn1tAi+LAxYqEHlXc7xDq
-         k95DMhA8M4k68ByTyhd1TfYeJ4V2olH1HiVBVbgLL4Lr0eqruyb5nE/hHBrOCcKX10
-         zYWWO96Zp72Yw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 14963C395E7;
-        Thu, 30 Dec 2021 13:30:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S239737AbhL3Nak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 08:30:40 -0500
+Received: from mga11.intel.com ([192.55.52.93]:20878 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239720AbhL3Nae (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 08:30:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640871034; x=1672407034;
+  h=to:cc:references:from:subject:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=CaykkQeZGgUd3oJK9j6eM6u/Kxn85gXCb8YO2ymI5Yg=;
+  b=isGGsVSx1lhfJ7ZiGCMfCHZoTnbqQ8UC0xwbHFiw7joTul/o9QIqQ117
+   hmVy3N1VR+BUrpPX0Af8RhhWsgxPFff65KgAWXCgT3kdyo9YB8h5YNOXn
+   21bWv0wpkkG5Kw3drrQ0uA2Bl6/6cSCbd3yhPXY9zPzCDHWVzIg2NfDa7
+   kEp70neLNozve6NIsFTBqEHNvk96yZUh49NADmwqOdMaYUupRRMxtvk+j
+   e5xdVJeQ9oYZ3nTPR1itodB8lJV7NnNUbvGGnUJtX6pduZCWzAuSViGsQ
+   f1KGJKDCSOuV0XuCBo7aanvpg6ta3BkwgU4akaAKn/SF2pL2l9/IAsJyH
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10212"; a="239212545"
+X-IronPort-AV: E=Sophos;i="5.88,248,1635231600"; 
+   d="scan'208";a="239212545"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 05:30:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,248,1635231600"; 
+   d="scan'208";a="619368353"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga004.jf.intel.com with ESMTP; 30 Dec 2021 05:30:31 -0800
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, cgel.zte@gmail.com
+Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, luo penghao <luo.penghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20211230064010.586496-1-luo.penghao@zte.com.cn>
+ <Yc1ZaOsmoZHoWyxt@kroah.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH linux] usb: xhci-ring: Add return if ret is less than 0
+Message-ID: <a740545a-b2cc-d829-8d63-6f0dc5ef6f8f@linux.intel.com>
+Date:   Thu, 30 Dec 2021 15:31:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <Yc1ZaOsmoZHoWyxt@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: lantiq_etop: replace strlcpy with strscpy
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164087101307.9335.10460578821915297757.git-patchwork-notify@kernel.org>
-Date:   Thu, 30 Dec 2021 13:30:13 +0000
-References: <20211229232257.3525-1-olek2@wp.pl>
-In-Reply-To: <20211229232257.3525-1-olek2@wp.pl>
-To:     Aleksander Jan Bajkowski <olek2@wp.pl>
-Cc:     davem@davemloft.net, kuba@kernel.org, jgg@ziepe.ca,
-        rdunlap@infradead.org, arnd@arndb.de, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu, 30 Dec 2021 00:22:57 +0100 you wrote:
-> strlcpy is marked as deprecated in Documentation/process/deprecated.rst,
-> and there is no functional difference when the caller expects truncation
-> (when not checking the return value). strscpy is relatively better as it
-> also avoids scanning the whole source string.
+On 30.12.2021 9.02, Greg Kroah-Hartman wrote:
+> On Thu, Dec 30, 2021 at 06:40:10AM +0000, cgel.zte@gmail.com wrote:
+>> From: luo penghao <luo.penghao@zte.com.cn>
+>>
+>> For the robustness of the code, judgment and return should be added here
 > 
-> This silences the related checkpatch warnings from:
-> commit 5dbdb2d87c29 ("checkpatch: prefer strscpy to strlcpy")
+> I do not understand this changelog text at all.  Please explain the
+> problem and why you are making this change much better.
 > 
-> [...]
 
-Here is the summary with links:
-  - [net-next] net: lantiq_etop: replace strlcpy with strscpy
-    https://git.kernel.org/netdev/net-next/c/7b1cd6a644f7
+Agree, this doesn't explain at all what is going on.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+So looking at the code it checks if a zero-length transfer after a bulk transfer is
+properly prepared before queuing the TRB to hardware.
 
+Nothing wrong with that. We do check that the main part of the bulk transfer
+is properly prepared before this, so it's very unlikely to fail, but not impossible. 
 
+>>
+>> The clang_analyzer complains as follows:
+>>
+>> drivers/usb/host/xhci-ring.c:
+>>
+>> Value stored to 'ret' is never read
+>>
+>> Reported-by: Zeal Robot <zealci@zte.com.cn>
+>> Signed-off-by: luo penghao <luo.penghao@zte.com.cn>
+>> ---
+>>  drivers/usb/host/xhci-ring.c | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+>> index d0b6806..c4eefe2 100644
+>> --- a/drivers/usb/host/xhci-ring.c
+>> +++ b/drivers/usb/host/xhci-ring.c
+>> @@ -3721,6 +3721,8 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+>>  		ret = prepare_transfer(xhci, xhci->devs[slot_id],
+>>  				       ep_index, urb->stream_id,
+>>  				       1, urb, 1, mem_flags);
+>> +		if (unlikely(ret < 0))
+>> +			return ret;
+
+We can't just return if it fails. 
+We already queued the main part of the bulk transfer to the ring, but haven't given
+those TRBs to hardware yet. This is done in giveback_first_trb() a few lines later.
+
+As this case probably won't happen, we could just add a small debug message here,
+and skip the zero-length packet. 
+Queue the main part of the bulk transfer and give it to hardware anyway.
+It will probably time out later.
+
+>>  		urb_priv->td[1].last_trb = ring->enqueue;
+>>  		urb_priv->td[1].last_trb_seg = ring->enq_seg;
+>>  		field = TRB_TYPE(TRB_NORMAL) | ring->cycle_state | TRB_IOC;
+>> -- 
+>> 2.15.2
+>>
+>>
+> 
+> How did you test this change?
+
+Wondering the same.
+
+Suggestion:
+Add a hack to detect a zero-length transfer in prepare_transfer(), and intentionally 
+fail (return error) in places prepare_transfer() could normally fail.
+
+And then check that the system behaves better with your patch than without.
+
+-Mathias

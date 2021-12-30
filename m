@@ -2,107 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B46B6482038
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 21:17:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C30C848203F
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 21:21:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241010AbhL3UR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 15:17:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60428 "EHLO
+        id S242082AbhL3UVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 15:21:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240824AbhL3UR3 (ORCPT
+        with ESMTP id S242065AbhL3UVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 15:17:29 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD90C06173F
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 12:17:28 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id u20so22147882pfi.12
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 12:17:28 -0800 (PST)
+        Thu, 30 Dec 2021 15:21:45 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F145FC06173E
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 12:21:44 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id h7so11991919lfu.4
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 12:21:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=d1luYh8oV8U9gtPnKSgUx3W3sB5nYcV3i4BXIdLwMks=;
-        b=G5MBbA2uFaYCxq2v62QTZ5r2llDeVLWWlI1J0HmEm2LYEg3ZwFLgKHihlSToz/kZAf
-         o5CKV21w5XAnQy5qgwZlxhOrtn26rqcTVsTHOu3yuBSlwfzSzWWL5ulxX8K5m8LnwTPr
-         2BrOLcTZnN8YSTDz6j/mzPCeO/lHucgHTVHog=
+        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=1M8/pTBgCNgjw7luW/ryskM/W2c2sEhJd4G0NuDPzic=;
+        b=uEWW7EVWI310VES8xhKfslDh5Cp3e8UmjZaE4B4JX1PlZQxbbh2WKTiuK+R4hVf9lq
+         ZAJZ60ki/0unTuVTuV0SgraOfDuL17Kk/WZ4U6I7vJGrPtw0f2aff3NK6YaBYfA/MKUp
+         78tlfZQJqWA2HKp5fw5iF1A0Qx3Z1tl9x+MoJrlPxUWnGeA+2bBdRWv530c3kiWZTkLA
+         3dB9CvbQw87bDwUTzBRnFWrI6u+LoihHWpldM0QU89gVXMKNhJcLb54qHAKMwU/koCB9
+         lR+wm8O32VOdpo4zZFqF0osyYiZFU5metIpcCcQkNuGZYSAR8NdF7nXF7FHt0E4ChgWi
+         mayg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=d1luYh8oV8U9gtPnKSgUx3W3sB5nYcV3i4BXIdLwMks=;
-        b=0HmWPrYthsDYSQYpJmzzoyaMhpfkpN6qxQRebc7L8BpYmi7pFpTOpBSrnbC0CLtUlk
-         jAKhSfP6zouZ1ur3zPMbSc648FuxvjW77YETg1EaF9rtiB7prkmMhT630p+W6pzKaqwQ
-         dqJ58vKrKx8Y1BNkez63e01Z0oURpNbpXBPvHy+y8iE7dNK1M8vVXqSwJwUCKtAfoThT
-         1H/85+A/0GxGwVjGCFj47xRYu5RKLoOmulH41X5/PuME8TWiLi5OUV7DqwZkPA1PDm8N
-         AgzjWPvtM+U9eAv/+tf8yDetedpk9NJkBXf+sSKNLt5wo8jVWCrtk33+ypEN/53ep9rx
-         bddA==
-X-Gm-Message-State: AOAM533nI5yb2Av1EGqmqvomy/F1JVyI0VEWovguXi8ElPXsSNghC+R/
-        jD6f+htvGQwdBa4aJo4/hPHiZ4pak0cpzQ==
-X-Google-Smtp-Source: ABdhPJwywWqiz65dsvMg8lmhWfMkY/9zDIJxnInTBrT6uCsb/VzPYhqS8G6HyrVvGWrNXQY0NlBQpg==
-X-Received: by 2002:a63:9312:: with SMTP id b18mr22402500pge.185.1640895448447;
-        Thu, 30 Dec 2021 12:17:28 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:b477:d18e:ed55:21c6])
-        by smtp.gmail.com with UTF8SMTPSA id i4sm11982494pjj.30.2021.12.30.12.17.26
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=1M8/pTBgCNgjw7luW/ryskM/W2c2sEhJd4G0NuDPzic=;
+        b=sHf+6qUT5TrnCYOAB5foVwYXMD+i2+7kXFKddpGDTO6Ge+ROevAdfmQQZKZEp4SFx9
+         EzywazPnZYk3nmFqhTvPGXQlIdZoznj4E0kbyH01rur3TUZU49Av4abheXXdDeB795xZ
+         iPUaWCf+JfOlXyW5C+HOfkngV9jVgnh4wG/PSKpnNByhW8CuI25O6O0JxEH4U0zacxp7
+         hS1/K7RErC2DclkLLsjmPiEf/httDfX7dk7Yrp9Vpwjxg5SPi8hqB5amoKntg33+ben4
+         BQDtzF0TeAbw5xEHpT6el34StWuEmLjnb9Mlkp31vyHo6HRElX+aNGhyzwVbfoTPoOIt
+         UBSw==
+X-Gm-Message-State: AOAM531QNCjZ53AG9kWQr+pB2+FbeT3nn4Erom51vudhaViH3JDhZRRW
+        DQx5Hiv3NU+lsvzBbcyZMEAFN9Ag3cI/FeuoKDg=
+X-Google-Smtp-Source: ABdhPJzENm5qQ8Ns7IwaTB5kH4JuYy5gGwHSWr9o0LIB82dnjwMsqW87ieTydkDAPvVCk6bHVFU04g==
+X-Received: by 2002:ac2:490f:: with SMTP id n15mr12551770lfi.141.1640895702792;
+        Thu, 30 Dec 2021 12:21:42 -0800 (PST)
+Received: from [192.168.112.17] (nikaet.starlink.ru. [94.141.168.29])
+        by smtp.gmail.com with ESMTPSA id p27sm2566749lfa.295.2021.12.30.12.21.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Dec 2021 12:17:28 -0800 (PST)
-Date:   Thu, 30 Dec 2021 12:17:26 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Peter Chen <peter.chen@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Bastien Nocera <hadess@hadess.net>
-Subject: Re: [PATCH v17 1/7] usb: misc: Add onboard_usb_hub driver
-Message-ID: <Yc4T1qSkcRF2iBVg@google.com>
-References: <20211116200739.924401-1-mka@chromium.org>
- <20211116120642.v17.1.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
- <07781322-3632-7d63-0da8-a651a438a3ff@gmail.com>
+        Thu, 30 Dec 2021 12:21:42 -0800 (PST)
+Subject: Re: [PATCH] iio: stm: don't always auto-enable I2C and SPI interface
+ drivers
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20211229072916.2567155-1-nikita.yoush@cogentembedded.com>
+ <CAHp75VfKcKyc8fdu0XnaYYnY2UP+27=8hKJMtzwH5755Cw=sww@mail.gmail.com>
+From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Message-ID: <4d8e2b87-3196-0cf4-6096-885b446b3aa7@cogentembedded.com>
+Date:   Thu, 30 Dec 2021 23:21:41 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <07781322-3632-7d63-0da8-a651a438a3ff@gmail.com>
+In-Reply-To: <CAHp75VfKcKyc8fdu0XnaYYnY2UP+27=8hKJMtzwH5755Cw=sww@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 11:05:28PM +0300, Dmitry Osipenko wrote:
-> 16.11.2021 23:07, Matthias Kaehlcke пишет:
-> > +static const struct usb_device_id onboard_hub_id_table[] = {
-> > +	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x0411) }, /* RTS0411 USB 3.0 */
-> > +	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5411) }, /* RTS5411 USB 2.0 */
-> > +	{},
-> > +};
+      This patch makes I2C and SPI interface drivers for STMicroelectronics
+>     sensor chips individually selectable via Kconfig.
 > 
-> RTS5411 two times in the comments?
+>     The default is kept unchanged - I2C and SPI interface drivers are still
+>     selected by default if the corresponding bus support is available.
+> 
+>     However, the patch makes it is possible to explicitly disable drivers
+>     that are not needed for particular 
+> 
+> NAK if users need now manually update their .config / defconfigs.
 
-One time, the other is RTS0511
+No they don't need to update anything.
+And 'make oldconfig' will be old.
 
-> Internet suggests that RTS5411 is USB 3.0
-
-Correct, however the chip internally has two hubs, one for USB2 and one for
-USB3:
-
-  Bus 002 Device 002: ID 0bda:0411 Realtek Semiconductor Corp. 4-Port USB 3.1 Hub
-  Bus 001 Device 002: ID 0bda:5411 Realtek Semiconductor Corp. 4-Port USB 2.1 Hub
-
-> Are these hubs expected to be powered-on only when upstream port is
-> enabled? Shouldn't runtime PM be used for that somehow?
-
-In the general case I would expect that a onboard hub is connected to a port
-that is enabled. For now I think it's fine to power the hub always when the
-system is running (which is also the current situation with using always-on
-regulators). If someone has an actual use case where the upstream port can
-be disabled they can add support for that later.
+The config will only change after a manual action.

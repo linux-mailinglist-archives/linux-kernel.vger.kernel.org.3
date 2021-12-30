@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D60894819F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 07:37:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C6AF4819FB
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 07:37:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236280AbhL3GhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 01:37:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48048 "EHLO
+        id S236357AbhL3Ghw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 01:37:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbhL3GhE (ORCPT
+        with ESMTP id S229514AbhL3Ghv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 01:37:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC13FC061574
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 22:37:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D07A615F1
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 06:37:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4A33C36AE7;
-        Thu, 30 Dec 2021 06:37:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640846223;
-        bh=kxs0yNf+JfJvs6MssFMgtJ/46fWVg6XcH0FrpZ6Cq+o=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=aVWz3CKN5r+sl/I17t+2OyPKvaZO4m21tu3Rgmv/g593gfAjpXVgCWYlsXY2c+uy6
-         I1RmOQzivk2Ex9UxPlQgFwAfWjFEV3zzBdl1noDuAtOJYRhaEvaUpKpuAbnAipEv8I
-         1ZBKbnt76w38iqMamwnwTSMuI8sALnCCzGtNxZ01E1QDwsy79dctfvoJhFK7B/K5s5
-         dl5LSyr/S2AY4e6puafU+AqDqrVpTojBkeerKSPsyLkH+CJYrNobCETmFwa7lw/ZYA
-         Rqf2r7n9jqqNxeVXmoF5yPLl/k9ylmYwZDFfp0ZFP5KuIB4E+LN9UoqS36PE5gWbTw
-         VIalmpTKMmkJA==
-Message-ID: <953ccf2e-69fe-f8c6-03b9-8fd62162a21c@kernel.org>
-Date:   Thu, 30 Dec 2021 14:37:00 +0800
+        Thu, 30 Dec 2021 01:37:51 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF795C061574
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 22:37:50 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id p15so19124454ybk.10
+        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 22:37:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=xt7N/GSFW6F5MOnscNiBhOBHJnvv+ofTo6Zovqg77uo=;
+        b=o9DYiRIPusj4d2P7/qKJwTl6frkCHyMZM9WzJXJ/rqTNAcVFWOPPEI+oE0spttD5HY
+         pHj+a4UWo9LxTPkIVzHixNdV33b09Lm3e6oi6bQUY/qNl/j8uU3qs+wjKshVpB4AwTdY
+         1VXutrIpWOY/7F7MQJ3Duo6yjfqEzk2Dku1miEcA7UXP21R3Gc3nThf5hF7IVcwtxFbd
+         uTDfE00+OTmEKDbFMZgRuIgbFeP6+FwsFY2LA5quqpRjidB8aTIHmIRmUrWyfNTyOyVQ
+         uV2vxL4qkBunBCx58yYWgOTDXYSL0KPFGa2Xyb1aZ5oMD+l+FTIHfKbx2ZMkVCdO5Yff
+         hZyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=xt7N/GSFW6F5MOnscNiBhOBHJnvv+ofTo6Zovqg77uo=;
+        b=qUgEiwRuOjquNdX8yLvvcD9SuN4TrTolThC55LGxmrS22o9f7+Sz/3wnG+c9kIgNJv
+         rcGyGzkWH6Y47m50w0sN54Uen8EaCR85Gh3klMIAEtCsU0gJTmoSHiGh83wFKXPUPo4J
+         19UM6CP5K3Klku8NpoFMzARKsHoHyxV0nyyYKYqr4kNI6nbvE0Wozq0omNbiCKbs2pah
+         Git8i3MIBGHHVTHOWL1uAC2Yw48lElXTcjZ22BRvV6JhqXUN+AqnoNj5fEii4LIjXSPu
+         14X0f75FkZCqye5DfdLPWA5pmhJxj4jSFbZZHAG5cFgrquGGmG8EcytMpjQvG2vBsLZC
+         H/YA==
+X-Gm-Message-State: AOAM531/NieGHWTEAwCwOJRalA2ol1SPgofywFCl+SLkwGNbYeNNaDnl
+        4ce2gZJ3c1e8i/1+iiQY443D6gP77oM2lrrBquE=
+X-Google-Smtp-Source: ABdhPJwE57yu2fHcdzVeVZ7THcUAQpswRvaOtmTToEFDmDtqjictlE24bTrUcF9c32g5dtIm5X2p2m73nLRyvtgJh8c=
+X-Received: by 2002:a25:e08d:: with SMTP id x135mr29156509ybg.476.1640846269311;
+ Wed, 29 Dec 2021 22:37:49 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [f2fs-dev] [PATCH 2/2] f2fs: do not bother checkpoint by
- f2fs_get_node_info
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-References: <20211214182435.2595176-1-jaegeuk@kernel.org>
- <20211214182435.2595176-2-jaegeuk@kernel.org>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20211214182435.2595176-2-jaegeuk@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Reply-To: godwinppter@gmail.com
+Sender: maxwelljohn205@gmail.com
+Received: by 2002:a05:7000:2d1b:0:0:0:0 with HTTP; Wed, 29 Dec 2021 22:37:48
+ -0800 (PST)
+From:   Godwin Pete <godwinnpeter@gmail.com>
+Date:   Thu, 30 Dec 2021 07:37:48 +0100
+X-Google-Sender-Auth: O6zRHMB1Q0lK8jCxKQ1rklNAmdQ
+Message-ID: <CAHiReTzUX-aeh_2jFzK-d_kkCNH1DRjKQEANW+vc+P59CggYoQ@mail.gmail.com>
+Subject: I need your response
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021/12/15 2:24, Jaegeuk Kim wrote:
-> This patch tries to mitigate lock contention between f2fs_write_checkpoint and
-> f2fs_get_node_info along with nat_tree_lock.
-> 
-> The idea is, if checkpoint is currently running, other threads that try to grab
-> nat_tree_lock would be better to wait for checkpoint.
-> 
-> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Good morning my good Friend,
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+I'm contacting you to know if you can help me to transfer the amount
+of ($6Million). After the transfer we have to share it, 50% for me,
+and 50% for you. Please let me know if you can help me so that I can
+give you the full information regarding the transfer.
 
-Thanks,
+Thanks.

@@ -2,104 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4791481EA0
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 18:32:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE00481EA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 18:32:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236155AbhL3RcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 12:32:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51598 "EHLO
+        id S241487AbhL3Rcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 12:32:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbhL3RcX (ORCPT
+        with ESMTP id S231386AbhL3Rcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 12:32:23 -0500
+        Thu, 30 Dec 2021 12:32:47 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C72C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 09:32:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91046C061574;
+        Thu, 30 Dec 2021 09:32:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=FVxCiAm7knnCFp4Ex/JwHbySRDGua05m3qd2w6v9KHM=; b=r0/YctsTek+t+H2KmXn4sSX2/T
-        QHq0YrO8fuQwBEeikf+D+aMNgvARCeM5Pa9DteuxULqUaJjfWf+PvsjfaXKMQzQaeHsmdjbYfPQ4z
-        +Jh8peL8ebAD7pbQZ8YEetQ+ha0y3zOCbHPiPDGmmos3lae2yFIP07Ft1Zos0WPEWF8LHqJZ5f/WV
-        ULIh2KpJb2zHczirJUoJ7rAWR5dfMUPPeJK6Esge6ssLhyVWNoV3vlWaBUSsrp8s8M/NbWXfue70U
-        BEJZAB5P8XQexQeFSN80YIJT7fbcLf/MvS91W1cS03FOoSNpfbGH1FuoQP+zGdImmvC3JUeJpGVvQ
-        ijBub2JA==;
+        In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=aA9xBCuC2t/FCahUtFoF9vl9PxKpUL1fgzD9EinxOdo=; b=Z8drxXgAC81DL2C+p/fauQxUXf
+        NsKPhFvqfekg/WFrvVja5bA4fBORGdpvl0dWCK1Aoy3l5uVtRvRBA9iSLlKP7MEsBfdf/5Fu5FSLU
+        sDrJhGQg0kzhDDj/znSXRYMKj8gNfjGfKfzPuBuKqbI+FiNy+JxXh4xugYlsC7E9GWKVC6f1MDl9S
+        Y6gPYgQNL7lvyLoboMGvlG7EvgBVcGm9mBUQH3kBagIVy5gjGwDniIoBNVLLGX4ciE9bYzSNqeSxg
+        TaJvSv6YFKo1M5aY7TKF3d6WSTbKPOsj5qwdeTGeZpTdggtOoHpx+gKJFlk48Ggu+VoGK6+XLFRGa
+        4m2kFgjQ==;
 Received: from [2601:1c0:6280:3f0::aa0b]
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n2zHY-009x2C-RT; Thu, 30 Dec 2021 17:32:05 +0000
-Message-ID: <d810267d-1a70-4f3a-65f8-18f25965a58d@infradead.org>
-Date:   Thu, 30 Dec 2021 09:32:01 -0800
+        id 1n2zI7-009x46-N5; Thu, 30 Dec 2021 17:32:39 +0000
+Message-ID: <3ad11107-30d8-ab75-961b-8142404c8c21@infradead.org>
+Date:   Thu, 30 Dec 2021 09:32:35 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.1
-Subject: Re: [PATCH] mm/shmem: Fix a build error due to shmem_unuse() under
- !CONFIG_SHMEM
+Subject: Re: mmotm 2021-12-29-20-07 uploaded (mm/damon)
 Content-Language: en-US
-To:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org
-Cc:     hch@lst.de, hughd@google.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20211230103844.15302-1-sj@kernel.org>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        akpm@linux-foundation.org, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        SeongJae Park <sj@kernel.org>
+References: <20211230040740.SbquJAFf5%akpm@linux-foundation.org>
+ <a57f9bc4-2c1b-f819-17a6-2e1d2f9dd173@infradead.org>
+ <1aaf9c11-0d8e-b92d-5c92-46e50a6e8d4e@linux.alibaba.com>
 From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20211230103844.15302-1-sj@kernel.org>
+In-Reply-To: <1aaf9c11-0d8e-b92d-5c92-46e50a6e8d4e@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 12/30/21 02:38, SeongJae Park wrote:
-> A patch[1] in -mm tree that titled mm-simplify-try_to_unuse.patch[2]
-> didn't properly change the type of 'shmem_unuse()' definition under
-> !CONFIG_SHMEM, and therefore causing below build error when CONFIG_SHMEM
-> is not set.
+On 12/29/21 22:33, Baolin Wang wrote:
+> Hi,
 > 
->     linux/mm/shmem.c:3992:5: error: conflicting types for 'shmem_unuse'
->      3992 | int shmem_unuse(unsigned int type, unsigned long *fs_pages_to_unuse)
->           |     ^~~~~~~~~~~
->     In file included from linux/include/linux/khugepaged.h:6,
->                      from linux/mm/shmem.c:37:
->     linux/include/linux/shmem_fs.h:86:5: note: previous declaration of 'shmem_unuse' was here
->        86 | int shmem_unuse(unsigned int type);
->           |     ^~~~~~~~~~~
->     linux/scripts/Makefile.build:289: recipe for target 'mm/shmem.o' failed
+> On 12/30/2021 2:27 PM, Randy Dunlap wrote:
+>> Hi--
+>>
+>> On 12/29/21 20:07, akpm@linux-foundation.org wrote:
+>>> The mm-of-the-moment snapshot 2021-12-29-20-07 has been uploaded to
+>>>
+>>>     https://www.ozlabs.org/~akpm/mmotm/
+>>>
+>>> mmotm-readme.txt says
+>>>
+>>> README for mm-of-the-moment:
+>>>
+>>> https://www.ozlabs.org/~akpm/mmotm/
+>>>
+>>> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+>>> more than once a week.
+>>>
+>>> You will need quilt to apply these patches to the latest Linus release (5.x
+>>> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+>>> https://ozlabs.org/~akpm/mmotm/series
+>>>
+>>> The file broken-out.tar.gz contains two datestamp files: .DATE and
+>>> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+>>> followed by the base kernel version against which this patch series is to
+>>> be applied.
+>>
+>>
+>> On i386:
+>>
+>> ../mm/damon/vaddr.c: In function ‘damon_hugetlb_mkold’:
+>> ../mm/damon/vaddr.c:402:17: warning: unused variable ‘h’ [-Wunused-variable]
+>>    struct hstate *h = hstate_vma(vma);
 > 
-> This commit fixes the issue by fixing the type of the definition under
-> the config.
-> 
-> [1] https://lore.kernel.org/linux-mm/20211224062246.1258487-9-hch@lst.de/
-> [2] https://www.ozlabs.org/~akpm/mmotm/broken-out/mm-simplify-try_to_unuse.patch
-> 
-> Signed-off-by: SeongJae Park <sj@kernel.org>
+> Ah, thanks for report, I think below changes can fix the warning. And I'll send a new version to address this warning.
+
+Yes, that works. Thanks.
 
 Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
 
-Thanks.
-
-> ---
->  mm/shmem.c              | 2 +-
->  scripts/rust-version.sh | 0
->  2 files changed, 1 insertion(+), 1 deletion(-)
->  mode change 100644 => 100755 scripts/rust-version.sh
+> diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
+> index bcdc602..25bff8a 100644
+> --- a/mm/damon/vaddr.c
+> +++ b/mm/damon/vaddr.c
+> @@ -397,7 +397,6 @@ static void damon_hugetlb_mkold(pte_t *pte, struct mm_struct *mm,
+>                                 struct vm_area_struct *vma, unsigned long addr)
+>  {
+>         bool referenced = false;
+> -       struct hstate *h = hstate_vma(vma);
+>         pte_t entry = huge_ptep_get(pte);
+>         struct page *page = pte_page(entry);
 > 
-> diff --git a/mm/shmem.c b/mm/shmem.c
-> index 421b2459929a..a83c91282c1f 100644
-> --- a/mm/shmem.c
-> +++ b/mm/shmem.c
-> @@ -3989,7 +3989,7 @@ int __init shmem_init(void)
->  	return 0;
->  }
->  
-> -int shmem_unuse(unsigned int type, unsigned long *fs_pages_to_unuse)
-> +int shmem_unuse(unsigned int type)
->  {
->  	return 0;
->  }
-> diff --git a/scripts/rust-version.sh b/scripts/rust-version.sh
-> old mode 100644
-> new mode 100755
+> @@ -414,7 +413,7 @@ static void damon_hugetlb_mkold(pte_t *pte, struct mm_struct *mm,
+>         }
+> 
+>  #ifdef CONFIG_MMU_NOTIFIER
+> -       if (mmu_notifier_clear_young(mm, addr, addr + huge_page_size(h)))
+> +       if (mmu_notifier_clear_young(mm, addr, addr + huge_page_size(hstate_vma(vma))))
+>                 referenced = true;
+>  #endif /* CONFIG_MMU_NOTIFIER */
 
 -- 
 ~Randy

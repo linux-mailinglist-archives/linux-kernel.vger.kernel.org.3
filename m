@@ -2,155 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 612A5481E71
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 18:11:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21807481E73
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 18:12:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241419AbhL3RLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 12:11:15 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:52428 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240162AbhL3RLO (ORCPT
+        id S241430AbhL3RMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 12:12:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47274 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240162AbhL3RMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 12:11:14 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 24D212A5;
-        Thu, 30 Dec 2021 18:11:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1640884272;
-        bh=2i0Xf3+MqKuDzJ3qo4MKmI3c87rR/zqriiPRHez0XuM=;
+        Thu, 30 Dec 2021 12:12:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81681C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 09:12:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 21CE661706
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 17:12:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4EA9C36AE9;
+        Thu, 30 Dec 2021 17:12:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640884356;
+        bh=Qoyvwny4RIcNEyTTjTptbnDKv3Vi7ycyTXmv8nLl+xU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aiVqldI2TWABX/6mPYzPYKzI1nF3DUmu6OnLSODulyBRABjHGL+RZI2ywnWal4Y+Q
-         pJnpuxSdGCefFpuWqOa1he6/StifB5lD0qONkkCYN36WDL0Abzl4QsrWtPNEm7HBtM
-         /+A2USHDKLGLBwt2lratcXZ2/fjlBbyuABHzfMQE=
-Date:   Thu, 30 Dec 2021 19:11:11 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] arm64: dts: renesas: r8a77961: Add lvds0 device node
-Message-ID: <Yc3oL5lrUTObye7A@pendragon.ideasonboard.com>
-References: <20211224052309.1997096-1-nikita.yoush@cogentembedded.com>
- <20211224052309.1997096-3-nikita.yoush@cogentembedded.com>
- <YcyTV4fJqMHIeyYB@pendragon.ideasonboard.com>
- <87626d61-ada0-c220-bea5-5330f5256629@cogentembedded.com>
- <YcyXQxW3kRqQ2Yv0@pendragon.ideasonboard.com>
- <39f70781-831e-c86a-ec5f-68f2b4bd3d62@cogentembedded.com>
- <Ycy4AMAT53Uzf+K7@pendragon.ideasonboard.com>
- <bb6ef732-7cd2-5ba9-0eef-caf2fbfbf829@cogentembedded.com>
- <Ycze8wzD3Qi8YVAa@pendragon.ideasonboard.com>
- <123e3993-cb71-b6dc-e4f4-4cad1eb51b00@cogentembedded.com>
+        b=J4vJK4Q2vdqC50QEUrgws0u2ruzCkbtWSovMAisTN9uDkbDiaPWCIbCqPOND/V6iJ
+         RCoh6Yy4bEW1dTW+MC0HiT4baouV1M1NdoTiqHWiS3Gaki2Cx5SaYuYNbp1MyGNdBa
+         BcJ51o5vZUR+ijFpTZPi8nu3btYkkNaLJXIuRwbY=
+Date:   Thu, 30 Dec 2021 18:12:33 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] staging: pi433: add docs to packet_format and
+ tx_start_condition enum
+Message-ID: <Yc3ogfD+Cs8zteiB@kroah.com>
+References: <20211230170129.GA10296@mail.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <123e3993-cb71-b6dc-e4f4-4cad1eb51b00@cogentembedded.com>
+In-Reply-To: <20211230170129.GA10296@mail.google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nikita,
-
-On Thu, Dec 30, 2021 at 08:30:43AM +0300, Nikita Yushchenko wrote:
-> >> I'd prefer to make each DT fragment to use only either entities defined in that fragment itself, or
-> >> defined "interface entities" between this and "neighbor" DT fragment.
-> >>
-> >> Such as:
-> >> - SoC's DT fragment defines a named port/endpoint to export video stream at
-> >> - board's DT fragment defines a named panel node corresponding to panel plugged into board's physical
-> >> connector, and connects endpoints with SoC's video export,
-> >> - panel's DT fragment extends the panel node from board with video mode information for this particular
-> >> panel.
-> >> ...
->  >
-> > I agree it's annoying, but we'll have a similar problem, just the other
-> > way around, with an endpoint defined in the SoC dtsi. Many R-Car SoCs
-> > have two LVDS encoders, and you can attach a panel to either of them.
-> > Some boards use LVDS0, some boards use LVDS1, and some boards could even
-> > use both.
+On Fri, Dec 31, 2021 at 06:01:29AM +1300, Paulo Miguel Almeida wrote:
+> While pi433 driver deals with the nuances of the different possible
+> config combinations, it's hard (at first) to understand the rationale
+> for some of the tx/rx-related source code unless you're fairly familiar
+> with the rf69's inner workings.
 > 
-> The case of "some boards use LVDS0, some boards use LVDS1" is directly addressed by what I'm trying to 
-> suggest. The per-board DT fragment can completely hide board's connection details, without a need for 
-> any new concept.
-
-We could do this by adding a label to the port instead of the endpoint
-in the SoC .dtsi.
-
-lvds0: lvds@.... {
-	...
-
-	ports {
-		port@0 {
-			lvds0_in: endpoint {
-				remote-endpoint = <&du_out_lvds0>;
-			};
-		};
-
-		lvds_out_panel_port: port@1 {
-		};
-};
-
-It would however likely be better do add the label to port@1 in the
-board .dts though, as usage of a particular LVDS output is a board
-property, not an SoC property.
-
-Then, in the overlay,
-
-panel {
-	port {
-		panel_in: endpoint {
-			remote_endpoint <&lvds_out_panel>;
-		};
-	};
-};
-
-&lvds_out_panel_port {
-	lvds_out_panel: endpoint {
-		remote-endpoint = <&panel_in>;
-	};
-};
-
-There's one caveat though: The LVDS DT nodes are disabled in the SoC
-.dtsi, so the overlay would need to have
-
-&lvds0 {
-	status = "okay";
-};
-
-and that would need to reference the correct lvds node. Without
-parameterized overlays, I don't think we can solve this issue neatly
-(especially given that panels will often have control GPIOs, or
-GPIO-controlled regulators, that could be wired to different SoC GPIOs
-on different boards).
-
-> The case of "some boards could even use both" indeed needs a some way to parametrize panel's DT 
-> fragment, and perhaps load two instances of it with different parameters. To some extent this is doable 
-> via preprocessor magic and multiple includes, although this approach has obvious disadvantages.
+> This patch documents the expected behaviour and limits of both
+> packet_format and tx_start_condition enum fields.
 > 
-> > A real solution for this problem will require a new concept. The "DT
-> > connector" proposal is related to this problem space. There's also a
-> > proprietary implementation in the Rapsberry Pi boot loader of a
-> > mechanism to support parametrized overlays ([2] and [3], or [4] for an
-> > example of how a panel reset or backlight GPIO can be parametrized).
+> Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+> ---
+> v2: removed comments pointed out during v1 review (Req Greg k-h)
+> v1: https://lore.kernel.org/lkml/20211229094713.GA28795@localhost.localdomain/
+> ---
+>  drivers/staging/pi433/rf69_enum.h | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 > 
-> So the problem is already recognized for years...  what stops from
-> wider adoption of this or similar solutions?
+> diff --git a/drivers/staging/pi433/rf69_enum.h b/drivers/staging/pi433/rf69_enum.h
+> index fbf56fcf5fe8..0f0fa741d089 100644
+> --- a/drivers/staging/pi433/rf69_enum.h
+> +++ b/drivers/staging/pi433/rf69_enum.h
+> @@ -110,12 +110,24 @@ enum fifo_fill_condition {
+>  };
+>  
+>  enum packet_format {
+> +    /*
+> +     * Used when the size of payload is fixed in advance. This mode of
+> +     * operation may be of interest to minimize RF overhead by 1 byte as
+> +     * no length byte field is required
+> +     */
+>  	packet_length_fix,
+> +    /*
+> +     * Used when the size of payload isn't known in advance. It requires the
+> +     * transmitter to send the length byte in each packet so the receiver
+> +     * would know how to operate properly
+> +     */
+>  	packet_length_var
+>  };
+>  
+>  enum tx_start_condition {
+> +    /* the number of bytes in the FIFO exceeds FIFO_THRESHOLD */
+>  	fifo_level,
+> +    /* at least one byte in the FIFO */
+>  	fifo_not_empty
+>  };
+>  
+> -- 
+> 2.25.4
+> 
+> 
 
-Someone to continue working on it I suppose :-)
+Hi,
 
-> And - if/while that is not being done - can't we at least try to
-> follow more portable DT coding pattern while staying within existing
-> concepts?
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-We could use a label for the port node as shown above. It's not a
-complete solution, but it may help. I'm not sure how to solve the
-enabling of the lvds encoder DT node though.
+You are receiving this message because of the following common error(s)
+as indicated below:
 
--- 
-Regards,
+- Your patch contains warnings and/or errors noticed by the
+  scripts/checkpatch.pl tool.
 
-Laurent Pinchart
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot

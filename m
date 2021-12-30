@@ -2,68 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C6AF4819FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 07:37:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AA564819FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 07:38:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236357AbhL3Ghw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 01:37:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
+        id S236519AbhL3Gia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 01:38:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbhL3Ghv (ORCPT
+        with ESMTP id S229514AbhL3Gi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 01:37:51 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF795C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 22:37:50 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id p15so19124454ybk.10
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 22:37:50 -0800 (PST)
+        Thu, 30 Dec 2021 01:38:27 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A72C061574;
+        Wed, 29 Dec 2021 22:38:27 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id m18so20492295qtk.3;
+        Wed, 29 Dec 2021 22:38:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=xt7N/GSFW6F5MOnscNiBhOBHJnvv+ofTo6Zovqg77uo=;
-        b=o9DYiRIPusj4d2P7/qKJwTl6frkCHyMZM9WzJXJ/rqTNAcVFWOPPEI+oE0spttD5HY
-         pHj+a4UWo9LxTPkIVzHixNdV33b09Lm3e6oi6bQUY/qNl/j8uU3qs+wjKshVpB4AwTdY
-         1VXutrIpWOY/7F7MQJ3Duo6yjfqEzk2Dku1miEcA7UXP21R3Gc3nThf5hF7IVcwtxFbd
-         uTDfE00+OTmEKDbFMZgRuIgbFeP6+FwsFY2LA5quqpRjidB8aTIHmIRmUrWyfNTyOyVQ
-         uV2vxL4qkBunBCx58yYWgOTDXYSL0KPFGa2Xyb1aZ5oMD+l+FTIHfKbx2ZMkVCdO5Yff
-         hZyQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DHepH6WFdLmTwtF4ySUnxzCwyN0QrtXXmuhORtez5fw=;
+        b=C++FEa4oW/Hj3h4Imvj4O+HA304cNyM39J+rHxY6yVKfUqvg/QvlOi2PvNyQm+chFF
+         RI+9H0RcG4X0wv7pQFf1RNb1DwENR0oT9w0YwVOM5P9Iv/hsaGw4nk2QHhaaKQE70as4
+         cXQFB22wB+58cUeJXohJmb/a0vHSDbx/F/ODvZv6L2z+NAASirnNEautXfxiLU/WJgjO
+         K5DlJ/QfDiMSDV0gnrjur04VrehL2iEy9dDcBBdivgeIowPpp6B1BKBnUCzb0593+/sW
+         7Wnx5PIcZkZJJjxxvtQC7B6bv6YIQfmzyP44+NBHLySil2TCoCnZ6W2tv28Fr5w3ehkQ
+         E/8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=xt7N/GSFW6F5MOnscNiBhOBHJnvv+ofTo6Zovqg77uo=;
-        b=qUgEiwRuOjquNdX8yLvvcD9SuN4TrTolThC55LGxmrS22o9f7+Sz/3wnG+c9kIgNJv
-         rcGyGzkWH6Y47m50w0sN54Uen8EaCR85Gh3klMIAEtCsU0gJTmoSHiGh83wFKXPUPo4J
-         19UM6CP5K3Klku8NpoFMzARKsHoHyxV0nyyYKYqr4kNI6nbvE0Wozq0omNbiCKbs2pah
-         Git8i3MIBGHHVTHOWL1uAC2Yw48lElXTcjZ22BRvV6JhqXUN+AqnoNj5fEii4LIjXSPu
-         14X0f75FkZCqye5DfdLPWA5pmhJxj4jSFbZZHAG5cFgrquGGmG8EcytMpjQvG2vBsLZC
-         H/YA==
-X-Gm-Message-State: AOAM531/NieGHWTEAwCwOJRalA2ol1SPgofywFCl+SLkwGNbYeNNaDnl
-        4ce2gZJ3c1e8i/1+iiQY443D6gP77oM2lrrBquE=
-X-Google-Smtp-Source: ABdhPJwE57yu2fHcdzVeVZ7THcUAQpswRvaOtmTToEFDmDtqjictlE24bTrUcF9c32g5dtIm5X2p2m73nLRyvtgJh8c=
-X-Received: by 2002:a25:e08d:: with SMTP id x135mr29156509ybg.476.1640846269311;
- Wed, 29 Dec 2021 22:37:49 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DHepH6WFdLmTwtF4ySUnxzCwyN0QrtXXmuhORtez5fw=;
+        b=PeT2QfctpAupvOv5NV2H+8ZLG8IOkuEAqwK3k+1cxrkYQ6Dnzlfz0w+V5P80wekmpF
+         W1vKZNdgGP99f82T8NABlHEkW3ESErxbmlXzM4JqTogwBN2IXl/wdzBF7JAfECnVJqLh
+         uqcRnI4/PHfhduji3G8hiMbrIo93hrdjySYMS+OzSnXpLpzRxXjp+PytclForT7ey06z
+         W/NAE9zSBZEmsu6HvPuoj7Td3GgClqQDcUKC7bn21CZpdskyX1c1FPBYsd0v8lFSkYVy
+         QUj1vnt6gcfj1PAGJS7wqAKJeNYKtGgMuxSQghVxusOVnEmxA6NLHlcAM5hj4f3S7vcp
+         R5HQ==
+X-Gm-Message-State: AOAM531ka7KGPxAkZi/fpFgr00sX/n3cEC5c7NIn4sdGhum8L6oeLUl5
+        GEiz741t/ikLjHwnkss+Wvbodc14qiI=
+X-Google-Smtp-Source: ABdhPJz8s/cHPhanDMG6LppHwvPgDSGzd+eWEAGfrkJk9Fma13DbIqhW16HcBTr81KC2VwGt91qqMA==
+X-Received: by 2002:ac8:5bca:: with SMTP id b10mr25682665qtb.170.1640846306237;
+        Wed, 29 Dec 2021 22:38:26 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id l15sm20505059qtx.77.2021.12.29.22.38.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Dec 2021 22:38:25 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: luo.penghao@zte.com.cn
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        linux-kernel@vger.kernel.org, luo penghao <luo.penghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux] usb-storage: Remove redundant assignments
+Date:   Thu, 30 Dec 2021 06:38:19 +0000
+Message-Id: <20211230063819.586428-1-luo.penghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Reply-To: godwinppter@gmail.com
-Sender: maxwelljohn205@gmail.com
-Received: by 2002:a05:7000:2d1b:0:0:0:0 with HTTP; Wed, 29 Dec 2021 22:37:48
- -0800 (PST)
-From:   Godwin Pete <godwinnpeter@gmail.com>
-Date:   Thu, 30 Dec 2021 07:37:48 +0100
-X-Google-Sender-Auth: O6zRHMB1Q0lK8jCxKQ1rklNAmdQ
-Message-ID: <CAHiReTzUX-aeh_2jFzK-d_kkCNH1DRjKQEANW+vc+P59CggYoQ@mail.gmail.com>
-Subject: I need your response
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good morning my good Friend,
+From: luo penghao <luo.penghao@zte.com.cn>
 
-I'm contacting you to know if you can help me to transfer the amount
-of ($6Million). After the transfer we have to share it, 50% for me,
-and 50% for you. Please let me know if you can help me so that I can
-give you the full information regarding the transfer.
+The assignments in these two places will be overwritten, so they
+should be deleted.
 
-Thanks.
+The clang_analyzer complains as follows:
+
+drivers/usb/storage/sierra_ms.c:
+
+Value stored to 'retries' is never read
+Value stored to 'result' is never read
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: luo penghao <luo.penghao@zte.com.cn>
+---
+ drivers/usb/storage/sierra_ms.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/usb/storage/sierra_ms.c b/drivers/usb/storage/sierra_ms.c
+index b9f78ef..0774ba2 100644
+--- a/drivers/usb/storage/sierra_ms.c
++++ b/drivers/usb/storage/sierra_ms.c
+@@ -130,8 +130,6 @@ int sierra_ms_init(struct us_data *us)
+ 	struct swoc_info *swocInfo;
+ 	struct usb_device *udev;
+ 
+-	retries = 3;
+-	result = 0;
+ 	udev = us->pusb_dev;
+ 
+ 	/* Force Modem mode */
+-- 
+2.15.2
+
+

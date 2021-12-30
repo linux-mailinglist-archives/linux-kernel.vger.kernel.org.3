@@ -2,67 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 872D4481F12
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 19:11:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4954F481F15
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 19:13:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241632AbhL3SLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 13:11:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237218AbhL3SL3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 13:11:29 -0500
-Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765C3C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 10:11:29 -0800 (PST)
-Received: from [IPv6:2a02:a03f:eafe:c901:a9e6:6f2a:78f1:2f3] (unknown [IPv6:2a02:a03f:eafe:c901:a9e6:6f2a:78f1:2f3])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        id S241652AbhL3SNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 13:13:14 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:51358 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237218AbhL3SNM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 13:13:12 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id EF56C28A0EF;
-        Thu, 30 Dec 2021 19:11:27 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1640887888;
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 44B371EC047E;
+        Thu, 30 Dec 2021 19:13:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1640887987;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1LlsOc0XKHSOXOCSgkqOLv7yx0nbdOQV6NO9Werr8Us=;
-        b=Dt6EYNk+PTJoMPt5z+epeIbHLEwvNKsgFFgmTH057U0yJ3l5T4fDMggccJApkkEcK+BAUT
-        x3W7fVY3jzeP24Kt3SeRIZprcSh38+m5uMWTc+hQG2Lr58Bk2D5Hhbr47uxc9/QwwXPl3/
-        CkGn5orMIFDtMpl+OPI2/AUV28rRBVIjNf4cvlrXO/IQP1a60XawXhOLkRghtUXEtKbNzV
-        i5H1UeEakLmyMCLnwCl6luXtRNnLX7JxRlkOPnRycBnRfTfx7PmMeZ9+WZ4a2fxQyA/M21
-        xCRJyE7zAk07CPD+1A4a10gD4QnMlAGJX7T9gv8N8BXJDe3g2CMx+juzPRIYog==
-Message-ID: <6c2b8578215a5a5354a544d558a1ac45ec1577da.camel@svanheule.net>
-Subject: Re: [RFC PATCH v1 1/3] dt-bindings: power: reset: Convert
- gpio-restart binding to schema
-From:   Sander Vanheule <sander@svanheule.net>
-To:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
-Date:   Thu, 30 Dec 2021 19:11:26 +0100
-In-Reply-To: <c47705dbf6e9e287332f3ccb91578e81dbb81625.1640887456.git.sander@svanheule.net>
-References: <cover.1640887456.git.sander@svanheule.net>
-         <c47705dbf6e9e287332f3ccb91578e81dbb81625.1640887456.git.sander@svanheule.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=HWMPRh25ZbodNOXgfw96x5j8RUQdYVL2P7Y+IUXk+B4=;
+        b=msub9hV4adDaT9sL/9IJ6InZn2634sRUPbLyk0JrpgQb8egmxRLanime/h2VRe6u/pvsaC
+        D47F/8tTMW5MIGO7nepybE/d8M8PJWLVB70d6Q+JXtUGIfwMyK5BL03oRXVrDoCOpbB7pC
+        f7G6ZKwqdOiEgdk7pbJF9cIoynNR6Vw=
+Date:   Thu, 30 Dec 2021 19:13:09 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/7] x86: Add definitions for the Intel Hardware
+ Feedback Interface
+Message-ID: <Yc32tQF+rvuqwLYf@zn.tnic>
+References: <20211220151438.1196-1-ricardo.neri-calderon@linux.intel.com>
+ <20211220151438.1196-3-ricardo.neri-calderon@linux.intel.com>
+ <CAJZ5v0if855q45KOvCkOGq3DZfx4nsH1yzr5qCEYvZCe1bzASw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0if855q45KOvCkOGq3DZfx4nsH1yzr5qCEYvZCe1bzASw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2021-12-30 at 19:06 +0100, Sander Vanheule wrote:
-> Convert the gpio-restart binding from plain text format to a schema
-> binding, maintaining the original content and updating formatting where
-> required.
-> 
-> Signed-off-by: Sander Vanheule <sander@svanheule.net>
+On Thu, Dec 30, 2021 at 07:03:57PM +0100, Rafael J. Wysocki wrote:
 
-I had these patches set aside since a few weeks already, but apparently this conversion
-was merged last week. This patch can be disregarded, sorry for the noise.
+> Subject: Re: [PATCH v2 2/7] x86: Add definitions for the Intel Hardware Feedback Interface
 
-Best,
-Sander
+Make that subject prefix "x86/cpu:" when committing pls.
 
+With that:
+
+Acked-by: Borislav Petkov <bp@suse.de>
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

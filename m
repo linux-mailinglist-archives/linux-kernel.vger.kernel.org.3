@@ -2,116 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 308F2481D31
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 15:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 775A4481D3D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 15:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240050AbhL3OkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 09:40:23 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:52020 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232891AbhL3OkW (ORCPT
+        id S240416AbhL3Omm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 09:42:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42300 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240050AbhL3Oml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 09:40:22 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E315CB81C5C;
-        Thu, 30 Dec 2021 14:40:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34DB6C36AED;
-        Thu, 30 Dec 2021 14:40:19 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="RXdHN0Op"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1640875216;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MzNV7SQ7psPPB0GDu1mCaoJSBE2Rx6BV8EzIdyhHHbo=;
-        b=RXdHN0OpqdXtqrgKPj43w7+KIohJuyRSEA5zOuJ+789Q9v49Kvepfw3jZ6KfCbsohzt/Cd
-        u5OEHKU6ZLaVDu/CMrAw6t6IV5jzfy1dH1UswkRlQntbluWLCmIEAUAQJ/EF8Bg4Qho/0H
-        6XDsHQJlSxy7LiBYDuxfeyMJJRCjDYs=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6b9a65e8 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 30 Dec 2021 14:40:16 +0000 (UTC)
-Received: by mail-yb1-f173.google.com with SMTP id k69so57172106ybf.1;
-        Thu, 30 Dec 2021 06:40:16 -0800 (PST)
-X-Gm-Message-State: AOAM533TbF/7uVeyvCcYoGkYApdsNXHrW/MXIHrihO/zM39MgeHtL8yi
-        QA1Aj6wad2z9aqOn7j2JkFKedPY9Qlb8CwYTAA0=
-X-Google-Smtp-Source: ABdhPJzwdlHoqaLQBHQkuTcxpjumUC+xuzhYpIYHtzMxpcoXfxLfkW8ChrnxIONsU3LPMTO8QxdgFQBq8hygbJHAtR4=
-X-Received: by 2002:a25:854f:: with SMTP id f15mr29103630ybn.121.1640875215633;
- Thu, 30 Dec 2021 06:40:15 -0800 (PST)
+        Thu, 30 Dec 2021 09:42:41 -0500
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9201AC06173E
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 06:42:41 -0800 (PST)
+Received: by mail-qv1-xf35.google.com with SMTP id q3so22245593qvc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 06:42:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/lKISuKQSLJq7W846wWyQPT/02yK4dCfDutUdXbJUE8=;
+        b=y9GwPrdNAQFLG/s5DqEEynU9lk8S/zqa5e6AdqR3bbHQh+HBCIe3Olv0DXAR4+aF+S
+         ssTo31FCoWMnUvKW9GA/+RdbfW+IjIS7cYi0x0MH6WBFzbWWhmcQ80ULhE4CaSZHjDTJ
+         prnIYo8oH+A9pLL/p0hNgA+IilgY2tJ8xFWSJwaNFG8V6IDiXCUoI+15/VRGgCO7TzWn
+         PPIDZXKjcRFYG1HyATVt+Z2aDTsulaP3morwG98dkGg1YjDx34vnc70nHhybhWv7vFMj
+         dmY7yCFdbBweVZCzLMh4Rn9Uh9TPUenCVsRgInK4ZLa7FVA8A9X5DnlR4EDg3KtGgfaX
+         0ZZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/lKISuKQSLJq7W846wWyQPT/02yK4dCfDutUdXbJUE8=;
+        b=LsthU+bF/CVvhziYIoHvYLS1lw9lVbZ0XAechWTssDvKj/rGSTHzSNrXhIH0czUK3a
+         4LcynGvYL1+GxEcp6dxM7uvgsxeIroUPdfbhbSot+iIXq4dCwgoQO5mOzKFC6SkDP4yQ
+         K0+HArg0y8mJi9P3yGnktylnPGdV/hOBWjtEWFrtverOq343lNtZHx3X/srMqChYn5Ma
+         BtuNaGFyH9lQYdFO8OBUCnKUVLSx1cURlC+YaDciuVFJNeTU7oJfuaV8GDgWetMk9HAx
+         e2Nr93H0NQuzRMzN9D2Nzhclm8xm88yl3l30I25N+ZeFSKzbANQuSv3oj92CjrjQO2qI
+         Fa7g==
+X-Gm-Message-State: AOAM531A1jA9MZ9v9hTTTj0GldCONhg2AEKnVorsmKJhm+QMAave3g8L
+        mQRvRfIb84oaxLxdLLo/glN7isdc3klB+qAKu+mdD2VBsyFphA==
+X-Google-Smtp-Source: ABdhPJzJuu40611h0P8gpEq2A1hMiIaXCb1nTVZL3xZi8wKhm6cKrO+ixRJE9sSU773pYMI6ZOlBsjki8tq1vohgACw=
+X-Received: by 2002:a05:6214:248a:: with SMTP id gi10mr27557554qvb.115.1640875360837;
+ Thu, 30 Dec 2021 06:42:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20211228153826.448805-1-Jason@zx2c4.com> <20211229211009.108091-1-linux@dominikbrodowski.net>
- <20211229211009.108091-6-linux@dominikbrodowski.net>
-In-Reply-To: <20211229211009.108091-6-linux@dominikbrodowski.net>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Thu, 30 Dec 2021 15:40:04 +0100
-X-Gmail-Original-Message-ID: <CAHmME9ogFn8deTmVMfKLjQ727kgGzuWRgaNaDW2PF+KwyQw0uQ@mail.gmail.com>
-Message-ID: <CAHmME9ogFn8deTmVMfKLjQ727kgGzuWRgaNaDW2PF+KwyQw0uQ@mail.gmail.com>
-Subject: Re: [PATCH v8 6/7] random: early initialization of ChaCha constants
-To:     Dominik Brodowski <linux@dominikbrodowski.net>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        "Ivan T . Ivanov" <iivanov@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org
+References: <20211230023101.1122588-1-konrad.dybcio@somainline.org>
+ <CAA8EJprR_eNiRTXOLnHzztbdH_RYj-+Po99b=7c2Asxvop+jtQ@mail.gmail.com> <5543bdad-3518-fe20-d755-69ebac4ddd69@somainline.org>
+In-Reply-To: <5543bdad-3518-fe20-d755-69ebac4ddd69@somainline.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 30 Dec 2021 17:42:29 +0300
+Message-ID: <CAA8EJpq_T0tR=zN8G43otsWEqgkfqV0egrAtfG-VJMib6ZtEHA@mail.gmail.com>
+Subject: Re: [PATCH] clk: qcom: gcc-msm8994: Remove NoC clocks
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for the patch. Comments are inline below.
-
-On Wed, Dec 29, 2021 at 10:13 PM Dominik Brodowski
-<linux@dominikbrodowski.net> wrote:
->  drivers/char/random.c   | 10 +++++++---
->  include/crypto/chacha.h | 15 +++++++++++----
-
-For the next submission of this (which you can do standalone and call
-a v2), please Cc linux-crypto and Herbert as part of the commit body.
-I still intend to take this through the random tree, since that's the
-purpose of it, but because it touches the lib/crypto code, they should
-be in the loop.
-
->  static struct crng_state primary_crng = {
->         .lock = __SPIN_LOCK_UNLOCKED(primary_crng.lock),
-> +       .state[0] = CHACHA_CONSTANT_EXPA, /* "expa" */
-> +       .state[1] = CHACHA_CONSTANT_ND_3, /* "nd 3" */
-> +       .state[2] = CHACHA_CONSTANT_2_BY, /* "2-by" */
-> +       .state[3] = CHACHA_CONSTANT_TE_K, /* "te k" */
->  };
-
-I don't think you need the comments here, since the constant is
-already descriptive.
-
+On Thu, 30 Dec 2021 at 17:29, Konrad Dybcio
+<konrad.dybcio@somainline.org> wrote:
 >
->  /*
-> @@ -823,9 +827,9 @@ static void __maybe_unused crng_initialize_secondary(struct crng_state *crng)
->         crng->init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
->  }
 >
-> -static void __init crng_initialize_primary(struct crng_state *crng)
-> +static void __init crng_initialize_primary(void)
->  {
-> +       struct crng_state *crng = &primary_crng;
-> -       crng_initialize_primary(&primary_crng);
-> +       crng_initialize_primary();
+> > You don't have to init array entries with NULL values (if it's not for
+> > the documentation purposes). Uninitialized entries will get NULL value
+> > anyway.
+> >
 
-There are a bunch of places where we're passing around globals when we
-could collapse them down. It probably makes sense to do that in a
-separate cleanup series (please feel free!), rather than here, since
-the init-time constants issue doesn't really change anything with
-regards to this function signature.
 
->  static inline void chacha_init_consts(u32 *state)
->  {
-> -       state[0]  = 0x61707865; /* "expa" */
-> -       state[1]  = 0x3320646e; /* "nd 3" */
-> -       state[2]  = 0x79622d32; /* "2-by" */
-> -       state[3]  = 0x6b206574; /* "te k" */
-> +       state[0]  = CHACHA_CONSTANT_EXPA; /* "expa" */
-> +       state[1]  = CHACHA_CONSTANT_ND_3; /* "nd 3" */
-> +       state[2]  = CHACHA_CONSTANT_2_BY; /* "2-by" */
-> +       state[3]  = CHACHA_CONSTANT_TE_K; /* "te k" */
->  }
+> Forgot to address this in my previous message, but I think it may be a
+>
+> good indicator for the next person that decides this would be a good idea
+>
+> that they should probably stay away from it.. If it's really bad, then sure, I
+>
+> can remove it..
 
-I don't think you need the comments here, since the constant is
-already descriptive.
+You can add a comment on top of those assignments telling this, so
+that the next person doing the semi-auto cleanup wouldn't delete the
+assignments.
+
+-- 
+With best wishes
+Dmitry

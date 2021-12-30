@@ -2,89 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D14A2481E21
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 17:32:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF6D481E2D
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 17:36:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241307AbhL3QcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 11:32:01 -0500
-Received: from mail-qk1-f176.google.com ([209.85.222.176]:46734 "EHLO
-        mail-qk1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241210AbhL3QcA (ORCPT
+        id S239703AbhL3QgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 11:36:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39236 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240308AbhL3QgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 11:32:00 -0500
-Received: by mail-qk1-f176.google.com with SMTP id 202so19371581qkg.13;
-        Thu, 30 Dec 2021 08:32:00 -0800 (PST)
+        Thu, 30 Dec 2021 11:36:18 -0500
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59241C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 08:36:18 -0800 (PST)
+Received: by mail-ed1-x541.google.com with SMTP id y22so100156040edq.2
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 08:36:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=tJuk50ldQ3muMSuXbgoS9j25a+T88Kj8cRwalO+iQW8=;
+        b=Tl2guSR4m3xEw3rpULIHJ++wqFW/SYEQmQ7WMIbnHy2zYaUoARg7cK9PknZf6cN0W3
+         Peuy4aLjRGAefGaAUwuauVVgDEtZLCzlwjNxLtx80PQlCxoGSnVjxl5sdsVysUIYKcXe
+         ZHEvY5FhgjEl58lOLJ1A9t4h30umP/Ypa+sfhqsYwU7Yrt1WkeUurBVz0ENELi+zsR3u
+         BJQNY1VfxHUUaE/8TT5cdKRGj8c4KYFh+H7dGlxuQ+DG6onDg8Jr518b+Y5yocGrGcCe
+         yh+h+XVHDxXODtQ3qlmex9RXZy1vi5EDfVkrKOrMBn882gkRab822AE3oOXEEvSNp6yc
+         Cq3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SMR3MPLmeBapB7tPMkt4p+dub4AFSu/Ecw/CYlkb3Qg=;
-        b=4SktJ7eJ//akFihWoES9GihNDcsgoA1gFgiq5aoTtyEUSBFSPsZX9L4P5HqLxXSmQ4
-         5HCB3X4giCSGyNZIVIy4ScKfSsLg8K8DgbTWH4595i5T5dhXOl0LTv4dF+Jl0gJLOKPK
-         sUGLxRT6OLJqODTI2XFxnUCNCdxjrbW+L7KivUSxjwp2epoxH2WTEmwu1Jrn3ZdoDoaZ
-         n2LIO+eNPE4P2e8gyeSvKbn9hOl6o0knX61rH0I/Uq89Gi75deNjDSDd3OD0GAGAbO4V
-         lHl89an1ESg+5IRfq3XczsB/L5DkE8lCpTZvT0iiDiOgnihKqjOKnK1vycc6bJYx6Zj7
-         HAcg==
-X-Gm-Message-State: AOAM531i0Iw7i4laRQu39sLGEFuFwlX3CGbxCD4AJy8bJ7tgdrNeMDLV
-        d6WdkqLYtnY+nbPTYgXlYmWsLzroft8pkB7o6nY=
-X-Google-Smtp-Source: ABdhPJzsKgoPVIRt1f1dGhol687DGA5SJ3uvWtKWwXyUEjSvbZ9NpgoMTPiBslL5ME5a+nsfvibwS/JBDv0D7eRoe9M=
-X-Received: by 2002:a05:620a:4721:: with SMTP id bs33mr22857201qkb.8.1640881920167;
- Thu, 30 Dec 2021 08:32:00 -0800 (PST)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=tJuk50ldQ3muMSuXbgoS9j25a+T88Kj8cRwalO+iQW8=;
+        b=f1poE3ndHb9z+tnXXSrzvxlw++kLAcfTtJIVEbozDzJYEal2OSbSdxRzCCIzLFxv0H
+         wqT7QGC60ZYpnP1+CeSMP2UYSvz9eVsW4CkExuQajhNiD1NfGNXwiaSpLD45jBeLFdHq
+         mxmWJSYCnUOQBQhA0nQCYPH0Fku2lIWx03nyR4YfSCsbWQDuO14gLhxYOxw53x9Jvf2o
+         CsiHwDQpp0DKpbaZ9fUUddbDIpZHSm0UUR860Z6JY8vzm4OmwQtUmIjYRrCpTxGrhoee
+         wiAAa/3bVpkOxHqxXp1ZXTz20RZ7Csssm6kACEYHMi8uoMG+8GdWNFFk24MgKI8EsmES
+         5zOg==
+X-Gm-Message-State: AOAM530tmqQpo+gRUH+GyjbMwTflGIPc/Kbn8/cktavsPfrDlIWrRbww
+        u3YbfLRqltIEE4L/E2hPz0q/rs67bz7lPdOEgpE=
+X-Google-Smtp-Source: ABdhPJzOomp7dfsSHzp32oQmbyN2PzdvUl16PkfjdGA/zQ1JLDHrj2HPGycg1+BKCtW6WdYSjbqXMvD8Y4OnayGP3mo=
+X-Received: by 2002:a17:907:9805:: with SMTP id ji5mr25733798ejc.431.1640882176818;
+ Thu, 30 Dec 2021 08:36:16 -0800 (PST)
 MIME-Version: 1.0
-References: <20211229174058.11350-1-shenzijun@kylinos.cn>
-In-Reply-To: <20211229174058.11350-1-shenzijun@kylinos.cn>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 30 Dec 2021 17:31:49 +0100
-Message-ID: <CAJZ5v0jef5a=3w6bsh6CwEYixTwVgTaT6BBwYym3Sut6KToJsg@mail.gmail.com>
-Subject: Re: [PATCH] ACPICA: DEBUGGER: Add return value check to acpi_db_walk_for_fields()
-To:     shenzijun <shenzijun@kylinos.cn>
-Cc:     Robert Moore <robert.moore@intel.com>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        jinzi120021@sina.com
+Received: by 2002:a05:6402:524a:0:0:0:0 with HTTP; Thu, 30 Dec 2021 08:36:16
+ -0800 (PST)
+From:   saleem norman <norsaleem74@gmail.com>
+Date:   Thu, 30 Dec 2021 08:36:16 -0800
+Message-ID: <CALzdWh_x5jjnnv1r9eGK9qr1a48HO-KCPT0FhG6Jv8RmohjA0g@mail.gmail.com>
+Subject: DEAR FRIEND CONTACTS MY SECRETARY HIS E-MAIL nelson_salah@aol.com.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 29, 2021 at 10:41 AM shenzijun <shenzijun@kylinos.cn> wrote:
->
-> From: Zijun Shen <shenzijun@kylinos.cn>
->
-> The function acpi_db_walk_for_fields frees buffer.pointer by the
-> first ACPI_FREE. And then uses the second ACPI_FREE to free
-> buffer.pointer which may assigns again in acpi_evaluate_object.
-> It's necessary to make sure that buffer.pointer get a block of
-> memory in acpi_evaluate_object and acpi_evaluate_object return 0.
->
-> Signed-off-by: Zijun Shen <shenzijun@kylinos.cn>
-> ---
->  drivers/acpi/acpica/dbnames.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/acpi/acpica/dbnames.c b/drivers/acpi/acpica/dbnames.c
-> index 3615e1a6efd8..7a2d980cb2b8 100644
-> --- a/drivers/acpi/acpica/dbnames.c
-> +++ b/drivers/acpi/acpica/dbnames.c
-> @@ -550,7 +550,10 @@ acpi_db_walk_for_fields(acpi_handle obj_handle,
->         ACPI_FREE(buffer.pointer);
->
->         buffer.length = ACPI_ALLOCATE_LOCAL_BUFFER;
-> -       acpi_evaluate_object(obj_handle, NULL, NULL, &buffer);
-> +       status = acpi_evaluate_object(obj_handle, NULL, NULL, &buffer);
-> +       if (ACPI_FAILURE(status)) {
-> +               return (AE_OK);
-> +       }
->
->         /*
->          * Since this is a field unit, surround the output in braces
-> --
+I'M SORRY BUT HAPPY TO INFORM YOU ABOUT MY SUCCESS IN GETTING THOSE
+FUNDS TRANSFERRED UNDER THE CO-OPERATION OF A NEW PARTNER FROM
+PARAGUAY THOUGH I TRIED MY BEST TO INVOLVE YOU IN THE GOLD/DIAMOND
+BUSINESS BUT GOD DECIDED THE WHOLE SITUATIONS. PRESENTLY AM IN UNITED
+ARAB EMIRATES FOR INVESTMENT PROJECTS WITH MY OWN SHARE OF THE TOTAL
+SUM OF THE MONEY. MEANWHILE, I DIDN'T FORGET YOU=E2=80=99RE PAST EFFORTS AN=
+D
+ATTEMPTS TO ASSIST ME IN TRANSFERRING THOSE FUNDS DESPITE THAT
+EVERYTHING FAILED US SOMEHOW. NOW CONTACT MY SECRETARY IN BURKINA
+FASO. MR. NELSON SALAH BY NAME: HIS E-MAIL nelson_salah@aol.com.
 
+ASK HIM TO SEND YOU THE VISA CARD TOTAL SUM OF $2.500, 000.00.USD
+WHICH I KEPT FOR YOUR COMPENSATION FOR ALL THE PAST EFFORTS AND
+ATTEMPT TO ASSIST ME IN THIS MATTER. I DEEPLY APPRECIATED YOUR EFFORTS
+AT THAT TIME VERY MUCH. SO FEEL FREE AND KEEP IN TOUCHED WITH MY
+SECRETARY; MR. NELSON SALAH AND INSTRUCT HIM WHERE TO SEND THE VISA
+CARD VALUE SUM OF $2.500, 000.00.USD TO YOU. NOW THIS AMOUNT IS ME AND
+THE NEW PARTNER CONTRIBUTE AND OFFER YOU THIS AMOUNT
+$1.500.000.00.USD. IS FROM MY OWN SHARE WHILE MY NEW PARTNER SUPPORTED
+YOU ALSO WITH SUM OF $ 1000000.USD. FROM HIS OWN SHARE ALSO BECAUSE I
+EXPLAIN THE WHOLE FACTS TO HIM THAT YOU ARE THE FIRST PERSON I
+CONTACTED THAT WANTED TO ASSIST ME WHILE YOU COULD NOT MAKE IT AND HE
+SAID OKAY THERE'S NO PROBLEM.
 
-This is ACPICA material, so please submit it to the upstream ACPICA
-project via https://github.com/acpica/acpica/
+SO YOU HAVE TO KEEP THE WHOLE SECRET ABOUT MY SUCCESS, BECAUSE I
+BELIEVE ONLY YOU KNOW HOW I MADE THIS MONEY SO TRY TO KEEP EVERYTHING
+SECRET. I HOPE YOU UNDERSTAND THE REASON WHY THIS HUGE AMOUNT OF FUNDS
+WAS KEPT FOR YOU? PLEASE DO LET ME KNOW IMMEDIATELY YOU RECEIVE THE
+VISA CARD SO THAT WE CAN SHARE THE JOY AFTER ALL THE SUFFERINGS AT
+THAT TIME; IN THIS MOMENT OF TIME, I'M VERY BUSY HERE BECAUSE OF THE
+INVESTMENT PROJECTS WHICH MYSELF AND THE NEW PARTNER ARE HAVING AT
+HAND, FINALLY;
 
-Thanks!
+REMEMBER THAT I HAVE ALREADY FORWARD THE INSTRUCTION TO THE SECRETARY
+ON YOUR BEHALF TO RECEIVE THAT MONEY, SO FEEL FREE TO KEEP IN TOUCH
+WITH HIM, SO THAT HE WILL SEND THE VISA CARD VALUE SUM OF
+$2.500,000.00.USD. TWO MILLION FIVE HUNDRED THOUSAND UNITED STATE
+DOLLARS TO YOU WITHOUT ANY DELAY.
+
+BEST REGARDS,
+MR. NORMAN SALEEM.

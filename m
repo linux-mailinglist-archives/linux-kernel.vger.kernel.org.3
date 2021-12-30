@@ -2,279 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A03D5481939
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 05:08:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 319E0481935
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 05:07:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235776AbhL3EIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 29 Dec 2021 23:08:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44320 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235752AbhL3EIn (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 29 Dec 2021 23:08:43 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC73C061574
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 20:08:42 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id 2so20356211pgb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 29 Dec 2021 20:08:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PnblsQTouamLaaYF+i5YwC/rFlgROnk+BZ7Hd2kYjpI=;
-        b=nCxmfo98okK1sBj/x7kqPPvxAkp2UQW/AK8R1mLlmxBzVWDkcd+YX2Sx0nO4CWFt/a
-         ThTzCKhxvnUwntrmD5QpscxsCxiaxuQO3zL61qle9Eh5ZLvliasEAsD3woPsimaCS4YB
-         ++eRkvBqtJS39Lby0vdKhfy/fz5Fe5RwtUDAzwakU31fgCnitZVNry3odV69XIL0Y1bZ
-         TGRkjaIk/C7tRVIIrgJ7KPHxQqrxpJoz6PV4+NtehlxdBap2ZQu3mkzGGxtC+RSg7PtY
-         j7hXJLavRQDE/iMHVjzkhNjkpLlTjfRjaMs8OkIFLn2fk1JCXeTRfUCgaWYImi1feg8J
-         hmwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PnblsQTouamLaaYF+i5YwC/rFlgROnk+BZ7Hd2kYjpI=;
-        b=pOIL8qSwFUJoTz3h3TrRMXzAKq6/vD4tP33nV5p9FNDgFGwwl+kHPvFr7tR5nxQdHx
-         HFNwinpi9p5OQxXM4suXvWUggzAe0rlUKsZupPyGHmBzlchFPGUq/qDNZoSYC4lQQNBB
-         Nx2zaXIPKVmIrX7q2dr8fEaddVUjL01f/8GEUQIMbLEl/XiOC5aBrM8togI6CkLGTH7m
-         xV1fNqaTsThh/YZBo4FWE+rKW8e8sYoSyhSQokqLue+AG8wcX4ax56ATA45XzWerB+nV
-         wmXOruLGXh0uuRpELyCDi1J7GXWG5rQ9Nd259H+P2kSZAGkATfOG63MPbMlDV5rf+TVF
-         791Q==
-X-Gm-Message-State: AOAM530sI7gLkcWyzqFicO1mV9wZpLcXjV9v/wuCzEn3pZhyD/BMruxh
-        70oIxpLuND8tO0barna1dAc=
-X-Google-Smtp-Source: ABdhPJzi8HussOq9YJBbDF8N+DOBYLJah0g9SNACCS+ddPovcYcZMJGl7OtpHdRlvEkTfA8yCxGcPA==
-X-Received: by 2002:a05:6a00:198a:b0:4bb:2032:2abd with SMTP id d10-20020a056a00198a00b004bb20322abdmr30105624pfl.2.1640837321667;
-        Wed, 29 Dec 2021 20:08:41 -0800 (PST)
-Received: from localhost ([103.220.76.197])
-        by smtp.gmail.com with ESMTPSA id e21sm8488674pff.24.2021.12.29.20.08.39
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 29 Dec 2021 20:08:41 -0800 (PST)
-Date:   Thu, 30 Dec 2021 12:05:54 +0800
-From:   Yue Hu <zbestahu@gmail.com>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
-        Liu Bo <bo.liu@linux.alibaba.com>,
-        LKML <linux-kernel@vger.kernel.org>, geshifei@coolpad.com,
-        zhangwen@coolpad.com, shaojunjun@coolpad.com, huyue@coolpad.com
-Subject: Re: [PATCH 2/5] erofs: use meta buffers for inode operations
-Message-ID: <20211230120554.000008bc.zbestahu@gmail.com>
-In-Reply-To: <20211229041405.45921-3-hsiangkao@linux.alibaba.com>
-References: <20211229041405.45921-1-hsiangkao@linux.alibaba.com>
-        <20211229041405.45921-3-hsiangkao@linux.alibaba.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
+        id S235713AbhL3EHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 29 Dec 2021 23:07:30 -0500
+Received: from mail-eopbgr30052.outbound.protection.outlook.com ([40.107.3.52]:46981
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233830AbhL3EH1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 29 Dec 2021 23:07:27 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q8Z5wSW0MxlWjCpuM91gKum1uvRUCWS3CExiY6ZwgvL/kx7BlBEzVGx/VfLqVKNBK+QCFgLu7J0LqWwp9ny+zjXUrH2lCBhd3cnlHlas/uJ/bmILDEBaF2d9arEoX0f6DQrXosGF/aQWaK6SagTA2tN6dF2OqdtdZKsacDS4lU5MPNx4cC/zBDr8HkHMNDWF0+8NxkFpeSoJvCF6UKUaKg/Jgjte7q+bnMfkdxWxJZFABhHteyCvGgFEE1tELChZC0DKFeWOieLBnYrDdIOgyoPwR6xHllFnlM1yURBb8cS6jVcyEwcyllmBVQHGzHgf+38QQh3ZoOJiutihn7L1KQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9xUlUnsLHiAviBJmva+7SB/0RyHMGNJVaWpNxthYnAM=;
+ b=ePPU6EXiuhbXfllv0TYNd2UzjQYeD35rmwf9PD7GEgc1xKWB4P1DOhOwi3Xk9+kAJHhXvrUBr7iDtIXDWrSIxwM+rssWRUixpZsyeOADxxUkGrhlF19p3Rklm6o/20q1MreukzoJU0HtlXPx2nSvMAHhZDPPN75Za4Dm0M/6z1iWOTwoj7tqDaAZYCSzrSUt+xUHbbnCROA8B8n87ES0UaSP5mFA+IBwoTuUelbVHjhEEJaUh1yIkyu+1fb0KjZrCWWY6+lVMWca5t0o/Qb8UzaNo5LVMFyWSoGrJziFAeCZJGG5TIsJtP+rA0DaCUH6WAzl1ij/0Ar+ke+cyjCFCQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9xUlUnsLHiAviBJmva+7SB/0RyHMGNJVaWpNxthYnAM=;
+ b=Wu/4GAxMQdrcOupje2K1m879JIxu/DKS7phbidq3yNzmUMSIQD9VRl9fTVXCONnh1jv09z2bNePWi5Nr8HxLQxi7XTz1+n2vMoY454z/fb63P3e8/JUjNYPbQaHqFpvEZUWXCno45kZgKjlYyleGWnGTW/g7gGX/AynviIPEzzc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
+ by AM6PR04MB5704.eurprd04.prod.outlook.com (2603:10a6:20b:a6::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.14; Thu, 30 Dec
+ 2021 04:07:25 +0000
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::a5b3:9e5:366:a3fc]) by AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::a5b3:9e5:366:a3fc%3]) with mapi id 15.20.4844.014; Thu, 30 Dec 2021
+ 04:07:25 +0000
+From:   Liu Ying <victor.liu@nxp.com>
+To:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     linux-imx@nxp.com, Sean Paul <seanpaul@chromium.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Subject: [PATCH] drm/atomic: Check new_crtc_state->active to determine if CRTC needs disable in self refresh mode
+Date:   Thu, 30 Dec 2021 12:06:26 +0800
+Message-Id: <20211230040626.646807-1-victor.liu@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SGXP274CA0009.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::21)
+ To AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2016b71a-d5b1-4893-1c70-08d9cb49e339
+X-MS-TrafficTypeDiagnostic: AM6PR04MB5704:EE_
+X-Microsoft-Antispam-PRVS: <AM6PR04MB5704889576E629EE7DB68F8398459@AM6PR04MB5704.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:639;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9XlrDoARqfYGaEnvzd2mFKfYQXasjdcaXHDz5dnayawWGmiQ+NfDjr96ZRnbiN9EpgIo9OSyYOav0WVkGZsTYPZ3QhlxTQkSMvNuXqrUJdeXZ2KhBaAS3EMdRtNftlWUeEGeNVSPcrbbD89Rz9RV8A0lspw25w5/vqE/9nf4lIENsttIw11t1jY6XAhfCI8Q4sb3OXBmoNjPvA161iNlR9QTUvazBg2MbsAPwZITsyB/dk6LtR7+2zCkUc/ncJXNUlhCpF0Q3uEfZa59ciN1vxfKzQ6CwZQTyuQNx7J0iEuF0L9BR46U0ORwVx/+9f4yWuKz/RjbpOBmVdtrVwHnVoIiDp1915mMRGAGVtDHKPD99U0nEMs5wnyt3jLBbSnlU8Y1T9ErG5W8Sw5P8XrfwXjzQCbnlz+s3Jq4nzPXt5nGkjmFJCu9zuZYO2tZt2PhZCQML7yGdoh+VEwk0U0vd1/QolI7nr5XOZRwdFU2A79CJxrydjdAF01+MJP+c0lV62r1nfBUMpiwwy2WwptCoXtG/IQa5tzORfldrOj0YGCGfETIe3OJwo39L8wjc8NFKE6iLTFdx5BUP3GotLd9Sm9SN7gtvvNt48/EiwozIlykJMH7m+nPVsav6jvPetbnVatl9OC7s5xOHCUeLA1tw9tLFmu1fqh+nmZ9lvuEHm++cP6/kD7yJqzu5OUix6pzVb4m/5cyigZ/Jx0wAGXyYw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(52116002)(6506007)(86362001)(66556008)(38350700002)(38100700002)(26005)(66476007)(4326008)(316002)(186003)(66946007)(83380400001)(508600001)(6512007)(2616005)(6486002)(2906002)(54906003)(1076003)(5660300002)(8676002)(8936002)(36756003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lVPE/di6TW4U+wrz5TPPXUlphBz/nSidrZiBEj+BlAY6LvE7lcdsJ0PfZUuB?=
+ =?us-ascii?Q?Y79j1vJ1RXOwR5mDVf4BipFEelxPa+qWdbOsak+jGi+Ay8fBjKIaDnJ39Rod?=
+ =?us-ascii?Q?QKKTnsn+UKK++mjmFnTqmVuaZEojql0yMzUk4XiK7ZREaG+aJ5dEVge9urhA?=
+ =?us-ascii?Q?IYERh8M+Om6RCn17RUItfNm6wjJPUxLcrcZ0afXnKpnoeIl96PkNySCV3OJw?=
+ =?us-ascii?Q?CVz0UTP9+fcbCYQM1rcTZAb6CXUkiKAByRvzFHbOuoju/pg74gXVs4M5UxLx?=
+ =?us-ascii?Q?yEgzQIhqj2Z2IjwH/wJmoTWFBwh/aXYXwdPtOB8KGkIcBYyqfNi6Zbac6+Ur?=
+ =?us-ascii?Q?DKMbdK6rC0i4fpMK9IaOqoyZGqfQviVMz7bT6mPI99tJiVhfKyMnhw363P50?=
+ =?us-ascii?Q?SaU2OCvno7tBHkjww/OrKwEdFuRrJSfQvrdJIkbO08pStt2JVeX8GbSFqi6X?=
+ =?us-ascii?Q?r9KIxBHNrwkzY02UMWPx6aKL0zhJxevRYfaQ9bzeoL5X/MSumpQWbueiuTxt?=
+ =?us-ascii?Q?OGnq6PMKbO1K6ZCKm6DKFvSpNHV5IZ29Ji7N+/LRzdtoWnVkD23o0InveQj/?=
+ =?us-ascii?Q?qSxdzBvzkfCmTWicHKFLYaVXMg0MyLB5YYXGF5vmr0fJpvjnihpLB+Of9pxa?=
+ =?us-ascii?Q?5tUPGrJP4kAuuQyOnorEfTCHuvXFuirpdhaSgGi7qsHbxb15jLHV+e34ekW2?=
+ =?us-ascii?Q?qSsxZGQ5DXwDSD5EKSwMuJyF9rx9E2eTcPlOIno+7giUfqISv+Eyl/GRJx87?=
+ =?us-ascii?Q?ojBbPKcu62+EYE0iuGW8e+ug16UB5CIbKpQjXhppnMWat7zhUYCf+5RP39Am?=
+ =?us-ascii?Q?HxY+of3X4aoosCGj4m9gMMnyeUeGJ0Jw/PBuB22RI8fE7WAygE1WO7xsSOrY?=
+ =?us-ascii?Q?K0K+sRV7FcGMO9blaSClXGwHD4px4n7HYgOFYb7iOgEAAyRXpWg7AJ/lZku+?=
+ =?us-ascii?Q?yZuq1UQVEaS2rIavq1XN0j91gaeB9k9nmzRPI6uHd/9G72MIGy9+1lMwI2Wk?=
+ =?us-ascii?Q?V1x1Z3/93/uTj2YzFX2izvFlzWeTbRWIq2Wd2DtZ0nSgFLKxiAQT6DAVg43+?=
+ =?us-ascii?Q?uSirb6hN/7+zAp9WZDN/4Pm8LeH3tTz1FVqwzxaG/5wuA3dYidUdrJHR2hdF?=
+ =?us-ascii?Q?N4BaN58c9u9p6yP+4KIy6EKQzFxsDaPl9oTHXOc/Bq2DzRZlrb6oAilq7+Lf?=
+ =?us-ascii?Q?lupErta0u5BYeRHnl/fFD66u0l9XrQc1jxwYwUsQN0FMtWXAMS/vyiOeHKRr?=
+ =?us-ascii?Q?qioDp8dAPwZALcZYyYTmXLJsniMrAEWoktvv9WyCDhy5s+QxUDoJhD07g6p8?=
+ =?us-ascii?Q?Vv76PXYg3H96e8zA3+trNfrE5OhOGwUz5k2TQPWcEsLPhgHy7nc7fPMC+bXx?=
+ =?us-ascii?Q?WC927vkDTv9irvfkyHWocn+w9M3I7eJkViIjrETEbJYjukpavL7ExwQCotAJ?=
+ =?us-ascii?Q?9QAUcolZDlWZreAZtu/FVD9bohRXGKCFDXQa4FvGg2Jl4mW6S5rl/1lTNtpq?=
+ =?us-ascii?Q?ierwUjam+ZaiOY4DacVtqSlj5iI3fUsk9EbI3uEEyxNrIhSMKFfeOIy99/5U?=
+ =?us-ascii?Q?84kQIBVybOdB6IUjXEwoAUtpC5hsnCy1n+oykudjuqOyprs7S/LMB+FuG48K?=
+ =?us-ascii?Q?Nd6rO3rY0MeGnkp8RrzBSuQ=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2016b71a-d5b1-4893-1c70-08d9cb49e339
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Dec 2021 04:07:25.8450
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Z4vpEdsfp+SH8NyH94arMpP8gRlr607ET3+e8frgoGoYjth2TrcTx3Cnd3g5/ZDz9fHH2tFQbDOOMUYJ/S0ptg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5704
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Dec 2021 12:14:02 +0800
-Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
+Actual hardware state of CRTC is controlled by the member 'active' in
+struct drm_crtc_state instead of the member 'enable', according to the
+kernel doc of the member 'enable'.  In fact, the drm client modeset
+and atomic helpers are using the member 'active' to do the control.
 
-> Get rid of old erofs_get_meta_page() within inode operations by
-> using on-stack meta buffers in order to prepare subpage and folio
-> features.
-> 
-> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-> ---
->  fs/erofs/inode.c    | 68 +++++++++++++++++++++------------------------
->  fs/erofs/internal.h |  3 ++
->  2 files changed, 35 insertions(+), 36 deletions(-)
-> 
-> diff --git a/fs/erofs/inode.c b/fs/erofs/inode.c
-> index 2345f1de438e..ff62f84f47d3 100644
-> --- a/fs/erofs/inode.c
-> +++ b/fs/erofs/inode.c
-> @@ -13,8 +13,8 @@
->   * the inode payload page if it's an extended inode) in order to fill
->   * inline data if possible.
->   */
-> -static struct page *erofs_read_inode(struct inode *inode,
-> -				     unsigned int *ofs)
-> +static void *erofs_read_inode(struct erofs_buf *buf,
-> +			      struct inode *inode, unsigned int *ofs)
->  {
->  	struct super_block *sb = inode->i_sb;
->  	struct erofs_sb_info *sbi = EROFS_SB(sb);
-> @@ -22,7 +22,7 @@ static struct page *erofs_read_inode(struct inode *inode,
->  	const erofs_off_t inode_loc = iloc(sbi, vi->nid);
->  
->  	erofs_blk_t blkaddr, nblks = 0;
-> -	struct page *page;
-> +	void *kaddr;
->  	struct erofs_inode_compact *dic;
->  	struct erofs_inode_extended *die, *copied = NULL;
->  	unsigned int ifmt;
-> @@ -34,14 +34,14 @@ static struct page *erofs_read_inode(struct inode *inode,
->  	erofs_dbg("%s, reading inode nid %llu at %u of blkaddr %u",
->  		  __func__, vi->nid, *ofs, blkaddr);
->  
-> -	page = erofs_get_meta_page(sb, blkaddr);
-> -	if (IS_ERR(page)) {
-> +	kaddr = erofs_read_metabuf(buf, sb, blkaddr, EROFS_KMAP);
-> +	if (IS_ERR(kaddr)) {
->  		erofs_err(sb, "failed to get inode (nid: %llu) page, err %ld",
-> -			  vi->nid, PTR_ERR(page));
-> -		return page;
-> +			  vi->nid, PTR_ERR(kaddr));
-> +		return kaddr;
->  	}
->  
-> -	dic = page_address(page) + *ofs;
-> +	dic = kaddr + *ofs;
->  	ifmt = le16_to_cpu(dic->i_format);
->  
->  	if (ifmt & ~EROFS_I_ALL) {
-> @@ -62,12 +62,12 @@ static struct page *erofs_read_inode(struct inode *inode,
->  	switch (erofs_inode_version(ifmt)) {
->  	case EROFS_INODE_LAYOUT_EXTENDED:
->  		vi->inode_isize = sizeof(struct erofs_inode_extended);
-> -		/* check if the inode acrosses page boundary */
-> -		if (*ofs + vi->inode_isize <= PAGE_SIZE) {
-> +		/* check if the extended inode acrosses block boundary */
-> +		if (*ofs + vi->inode_isize <= EROFS_BLKSIZ) {
->  			*ofs += vi->inode_isize;
->  			die = (struct erofs_inode_extended *)dic;
->  		} else {
-> -			const unsigned int gotten = PAGE_SIZE - *ofs;
-> +			const unsigned int gotten = EROFS_BLKSIZ - *ofs;
->  
->  			copied = kmalloc(vi->inode_isize, GFP_NOFS);
->  			if (!copied) {
-> @@ -75,18 +75,16 @@ static struct page *erofs_read_inode(struct inode *inode,
->  				goto err_out;
->  			}
->  			memcpy(copied, dic, gotten);
-> -			unlock_page(page);
-> -			put_page(page);
-> -
-> -			page = erofs_get_meta_page(sb, blkaddr + 1);
-> -			if (IS_ERR(page)) {
-> -				erofs_err(sb, "failed to get inode payload page (nid: %llu), err %ld",
-> -					  vi->nid, PTR_ERR(page));
-> +			kaddr = erofs_read_metabuf(buf, sb, blkaddr + 1,
-> +						   EROFS_KMAP);
-> +			if (IS_ERR(kaddr)) {
-> +				erofs_err(sb, "failed to get inode payload block (nid: %llu), err %ld",
-> +					  vi->nid, PTR_ERR(kaddr));
->  				kfree(copied);
-> -				return page;
-> +				return kaddr;
->  			}
->  			*ofs = vi->inode_isize - gotten;
-> -			memcpy((u8 *)copied + gotten, page_address(page), *ofs);
-> +			memcpy((u8 *)copied + gotten, kaddr, *ofs);
->  			die = copied;
->  		}
->  		vi->xattr_isize = erofs_xattr_ibody_size(die->i_xattr_icount);
-> @@ -200,7 +198,7 @@ static struct page *erofs_read_inode(struct inode *inode,
->  		inode->i_blocks = roundup(inode->i_size, EROFS_BLKSIZ) >> 9;
->  	else
->  		inode->i_blocks = nblks << LOG_SECTORS_PER_BLOCK;
-> -	return page;
-> +	return kaddr;
->  
->  bogusimode:
->  	erofs_err(inode->i_sb, "bogus i_mode (%o) @ nid %llu",
-> @@ -209,12 +207,11 @@ static struct page *erofs_read_inode(struct inode *inode,
->  err_out:
->  	DBG_BUGON(1);
->  	kfree(copied);
-> -	unlock_page(page);
-> -	put_page(page);
-> +	erofs_put_metabuf(buf);
->  	return ERR_PTR(err);
->  }
->  
-> -static int erofs_fill_symlink(struct inode *inode, void *data,
-> +static int erofs_fill_symlink(struct inode *inode, void *kaddr,
->  			      unsigned int m_pofs)
->  {
->  	struct erofs_inode *vi = EROFS_I(inode);
-> @@ -222,7 +219,7 @@ static int erofs_fill_symlink(struct inode *inode, void *data,
->  
->  	/* if it cannot be handled with fast symlink scheme */
->  	if (vi->datalayout != EROFS_INODE_FLAT_INLINE ||
-> -	    inode->i_size >= PAGE_SIZE) {
-> +	    inode->i_size >= EROFS_BLKSIZ) {
->  		inode->i_op = &erofs_symlink_iops;
->  		return 0;
->  	}
-> @@ -232,8 +229,8 @@ static int erofs_fill_symlink(struct inode *inode, void *data,
->  		return -ENOMEM;
->  
->  	m_pofs += vi->xattr_isize;
-> -	/* inline symlink data shouldn't cross page boundary as well */
-> -	if (m_pofs + inode->i_size > PAGE_SIZE) {
-> +	/* inline symlink data shouldn't cross block boundary */
-> +	if (m_pofs + inode->i_size > EROFS_BLKSIZ) {
->  		kfree(lnk);
->  		erofs_err(inode->i_sb,
->  			  "inline data cross block boundary @ nid %llu",
-> @@ -241,8 +238,7 @@ static int erofs_fill_symlink(struct inode *inode, void *data,
->  		DBG_BUGON(1);
->  		return -EFSCORRUPTED;
->  	}
-> -
-> -	memcpy(lnk, data + m_pofs, inode->i_size);
-> +	memcpy(lnk, kaddr + m_pofs, inode->i_size);
->  	lnk[inode->i_size] = '\0';
->  
->  	inode->i_link = lnk;
-> @@ -253,16 +249,17 @@ static int erofs_fill_symlink(struct inode *inode, void *data,
->  static int erofs_fill_inode(struct inode *inode, int isdir)
->  {
->  	struct erofs_inode *vi = EROFS_I(inode);
-> -	struct page *page;
-> +	struct erofs_buf buf = __EROFS_BUF_INITIALIZER;
-> +	void *kaddr;
->  	unsigned int ofs;
->  	int err = 0;
->  
->  	trace_erofs_fill_inode(inode, isdir);
->  
->  	/* read inode base data from disk */
-> -	page = erofs_read_inode(inode, &ofs);
-> -	if (IS_ERR(page))
-> -		return PTR_ERR(page);
-> +	kaddr = erofs_read_inode(&buf, inode, &ofs);
-> +	if (IS_ERR(kaddr))
-> +		return PTR_ERR(kaddr);
->  
->  	/* setup the new inode */
->  	switch (inode->i_mode & S_IFMT) {
-> @@ -278,7 +275,7 @@ static int erofs_fill_inode(struct inode *inode, int isdir)
->  		inode->i_fop = &erofs_dir_fops;
->  		break;
->  	case S_IFLNK:
-> -		err = erofs_fill_symlink(inode, page_address(page), ofs);
-> +		err = erofs_fill_symlink(inode, kaddr, ofs);
->  		if (err)
->  			goto out_unlock;
->  		inode_nohighmem(inode);
-> @@ -302,8 +299,7 @@ static int erofs_fill_inode(struct inode *inode, int isdir)
->  	inode->i_mapping->a_ops = &erofs_raw_access_aops;
->  
->  out_unlock:
-> -	unlock_page(page);
-> -	put_page(page);
-> +	erofs_put_metabuf(&buf);
->  	return err;
->  }
->  
-> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-> index 7053f1c4171d..f1e4eb3025f6 100644
-> --- a/fs/erofs/internal.h
-> +++ b/fs/erofs/internal.h
-> @@ -475,6 +475,9 @@ struct erofs_map_dev {
->  /* data.c */
->  extern const struct file_operations erofs_file_fops;
->  struct page *erofs_get_meta_page(struct super_block *sb, erofs_blk_t blkaddr);
-> +void erofs_put_metabuf(struct erofs_buf *buf);
-> +void *erofs_read_metabuf(struct erofs_buf *buf, struct super_block *sb,
-> +			 erofs_blk_t blkaddr, enum erofs_kmap_type type);
->  int erofs_map_dev(struct super_block *sb, struct erofs_map_dev *dev);
->  int erofs_fiemap(struct inode *inode, struct fiemap_extent_info *fieinfo,
->  		 u64 start, u64 len);
+Referencing the member 'enable' of new_crtc_state, the function
+crtc_needs_disable() may fail to reflect if CRTC needs disable in
+self refresh mode, e.g., when the framebuffer emulation will be blanked
+through the client modeset helper with the next commit, the member
+'enable' of new_crtc_state is still true while the member 'active' is
+false, hence the relevant potential encoder and bridges won't be disabled.
 
-Reviewed-by: Yue Hu <huyue2@yulong.com>
+So, let's check new_crtc_state->active to determine if CRTC needs disable
+in self refresh mode instead of new_crtc_state->enable.
+
+Fixes: 1452c25b0e60 ("drm: Add helpers to kick off self refresh mode in drivers")
+Cc: Sean Paul <seanpaul@chromium.org>
+Cc: Rob Clark <robdclark@chromium.org>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Signed-off-by: Liu Ying <victor.liu@nxp.com>
+---
+ drivers/gpu/drm/drm_atomic_helper.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/drm_atomic_helper.c b/drivers/gpu/drm/drm_atomic_helper.c
+index a7a05e1e26bb..9603193d2fa1 100644
+--- a/drivers/gpu/drm/drm_atomic_helper.c
++++ b/drivers/gpu/drm/drm_atomic_helper.c
+@@ -1016,7 +1016,7 @@ crtc_needs_disable(struct drm_crtc_state *old_state,
+ 	 * it's in self refresh mode and needs to be fully disabled.
+ 	 */
+ 	return old_state->active ||
+-	       (old_state->self_refresh_active && !new_state->enable) ||
++	       (old_state->self_refresh_active && !new_state->active) ||
+ 	       new_state->self_refresh_active;
+ }
+ 
+-- 
+2.25.1
+

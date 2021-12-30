@@ -2,88 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A50481F00
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 19:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 475F7481F03
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 19:06:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241607AbhL3SFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 13:05:41 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:43136 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241595AbhL3SFk (ORCPT
+        id S241617AbhL3SGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 13:06:18 -0500
+Received: from polaris.svanheule.net ([84.16.241.116]:33352 "EHLO
+        polaris.svanheule.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241595AbhL3SGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 13:05:40 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 30 Dec 2021 13:06:17 -0500
+Received: from terra.local.svanheule.net (unknown [IPv6:2a02:a03f:eafe:c901:a9e6:6f2a:78f1:2f3])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A0CB6B81CD9;
-        Thu, 30 Dec 2021 18:05:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC132C36AED;
-        Thu, 30 Dec 2021 18:05:37 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="MuZQZeY3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1640887535;
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 248D528A0E5;
+        Thu, 30 Dec 2021 19:06:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1640887576;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=G5mF3LI5nypD4r/oSkoaGAuHjwCFw9cBOVQMtb6LgxE=;
-        b=MuZQZeY3LtmUFrFNQCLvYLoQ5fR29kpIH7lO/9LQsvyDmKdHuZcwM6mVn4HGsatJGa77vO
-        IL+bspsG36ddi/OxQi0phW8b65cB+tO71sXTV6V/lOzatomXLiOcpnPFResVLzXQaCETZe
-        q20uGbjcHKZMRMXMm7MuQwbFwTfYbnA=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 95a9b6c7 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 30 Dec 2021 18:05:35 +0000 (UTC)
-Received: by mail-yb1-f180.google.com with SMTP id m19so56851530ybf.9;
-        Thu, 30 Dec 2021 10:05:35 -0800 (PST)
-X-Gm-Message-State: AOAM531RBsmC8Hgw27Hgexh1VajUTrGdxkcnq6VjGLZE0CX2EDEwFezJ
-        kFbHJuX+41I75GvBrqjC8EwVcDuhCtJ0TAUvoog=
-X-Google-Smtp-Source: ABdhPJy+emTaHOsS12qbBqKNh+HWMpUMULgRvE95E0YyVv7icXN/TVk54maJffeMODdrGE4OqubM1aHcSu1sarQQeAs=
-X-Received: by 2002:a25:854f:: with SMTP id f15mr30169067ybn.121.1640887534304;
- Thu, 30 Dec 2021 10:05:34 -0800 (PST)
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=hr+RIrYGlc+BfROx8Zd0QRK1lPcxYrVTiLGdePNUfcQ=;
+        b=cx2IzqzZxZtR9q5tL/ixyMEjMCicoq270SKpoZ+Nip6vvNA8k4E9LG42KMXK0JYBHKPUlo
+        wK6K5mDvlGW0+lnthBwRM1iviWYoNkoe0rCjy+i0Wlsn7JYdBXkudObqgs1dI3EzHnIfj7
+        VRYRu1j5KS51jdfcJl7OGsXXxmNq3vQFas6o2sXXbSUsqQ8nGQ1uawBsS0JKQ3fLtJWmtF
+        bRWFOhZAuGaMgR5h3qUkof7Gc19Ad0ycywp0QFfz3chWV1W22LkbOTeiOsCWpuI06myPe3
+        r9p0+FQ8D708j5V2CNf4OxVoIXD3mEAk7SK2C3nQhdvfafEqoardL7S6Q4GMfQ==
+From:   Sander Vanheule <sander@svanheule.net>
+To:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Sander Vanheule <sander@svanheule.net>
+Subject: [RFC PATCH v1 0/3] convert gpio-restart bindings to yaml
+Date:   Thu, 30 Dec 2021 19:06:00 +0100
+Message-Id: <cover.1640887456.git.sander@svanheule.net>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20211012082708.121931-1-iivanov@suse.de> <YWVKAk4h5bsUA3b6@light.dominikbrodowski.net>
- <YaivhAV8LouB0zGV@light.dominikbrodowski.net> <CAHmME9qxBeBzfKCjzfAFX9ZWAGKv1TKCQw3x22d_DmJtaAewLw@mail.gmail.com>
- <YanOIvAV1iPBEXR3@light.dominikbrodowski.net> <CAHmME9qGHo4n6QGxnE+O46pagOR0bA+9E8bi8ZLPAzMuMZpPwg@mail.gmail.com>
- <20211206081431.e3cl2rbvgpvbouff@suse>
-In-Reply-To: <20211206081431.e3cl2rbvgpvbouff@suse>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Thu, 30 Dec 2021 19:05:23 +0100
-X-Gmail-Original-Message-ID: <CAHmME9q6DnMk=p5kL0c1e4TxJOLpdxJpm3RbbgsNE8x1PWwi9g@mail.gmail.com>
-Message-ID: <CAHmME9q6DnMk=p5kL0c1e4TxJOLpdxJpm3RbbgsNE8x1PWwi9g@mail.gmail.com>
-Subject: Re: [PATCH v4] random: fix crash on multiple early calls to add_bootloader_randomness()
-To:     "Ivan T. Ivanov" <iivanov@suse.de>
-Cc:     Dominik Brodowski <linux@dominikbrodowski.net>,
-        "Theodore Ts'o" <tytso@mit.edu>, Ard Biesheuvel <ardb@kernel.org>,
-        linux-efi@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Ivan,
+This patch series first converts the gpio-restart bindings to the schema
+format, so device descriptions can be verified against the binding.  Two
+smaller patches then follow: one to fix the documentation, and a one to add
+suffixes to values with implied units.
 
-On Mon, Dec 6, 2021 at 9:14 AM Ivan T. Ivanov <iivanov@suse.de> wrote:
-> Initial bug report could be found here [1]. Comments 14 and onward are
-> probably helpful. To reproduce the issue I have downloaded "assets"
-> from [2] and recreated test environment as found in autoinst-log.txt [3].
-> Search for qemu-img and qemu-system-aarch64 in the log above. Login
-> credentials for the images could be found by searching for "password"
-> in the same file.
->
-> Regards,
-> Ivan
->
->
-> [1] https://bugzilla.suse.com/show_bug.cgi?id=1184924
-> [2] https://openqa.opensuse.org/tests/latest?arch=aarch64&distri=opensuse&flavor=DVD&machine=aarch64&test=extra_tests_in_textmode&version=15.3
-> [3] https://openqa.opensuse.org/tests/2052459/logfile?filename=autoinst-log.txt
+Open questions:
+- Who should I add as maintainer for the binding, if not myself (patch 1)
+- Should properties with names that don't match the guidelines be updated, or
+  can the original names be kept? (patch 2, 3)
+- Since the "priority" property is a Linux kernel specific thing, should it
+  just deprecated entirely? (patch 3)
 
-After a few rounds, Dominik and I converged on a set of patches that
-are now in the crng/random.git tree. Do you think you could try this
-tree out against your various test environments to confirm it fixes
-the issue SUSE was seeing?
+Sander Vanheule (3):
+  dt-bindings: power: reset: Convert gpio-restart binding to schema
+  dt-bindings: power: reset: gpio-restart: Add -ms suffix to delays
+  dt-bindings: power: reset: gpio-restart: Correct default priority
 
-Tree is here: https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git
+ .../bindings/power/reset/gpio-restart.txt     |  54 ----------
+ .../bindings/power/reset/gpio-restart.yaml    | 101 ++++++++++++++++++
+ 2 files changed, 101 insertions(+), 54 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/power/reset/gpio-restart.txt
+ create mode 100644 Documentation/devicetree/bindings/power/reset/gpio-restart.yaml
 
-Thanks,
-Jason
+-- 
+2.33.1
+

@@ -2,308 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C640481EDC
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 18:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B0A3481EDE
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 18:54:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241583AbhL3Rwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 12:52:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56170 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241577AbhL3Rwt (ORCPT
+        id S236803AbhL3RyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 12:54:04 -0500
+Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:15922
+        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229554AbhL3RyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 12:52:49 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA0CC061401;
-        Thu, 30 Dec 2021 09:52:49 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id o63-20020a17090a0a4500b001b1c2db8145so28579038pjo.5;
-        Thu, 30 Dec 2021 09:52:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=dcBlXZFiwjA71AEHcnKhvkZGJOjelC7heeu53qWimxg=;
-        b=OV8sN2JkxtylbB7LoYCTzmrx77UhGCo5ssLqmcH9QyiMDoG+2gsk4w7hBkLu+KeAht
-         gy7O95n3Ai2G/3OOe612lhPolyFTwivvkNiE1PmcFAkesrEUpBomqt3j0wBIxBSHxk2M
-         u0tCKPHgS3OkrXQIihG6rdwKDf/JD7K4JJVQgZgf5FXCDrCe0+37Wo/dqhsBIm9G07Sc
-         Sh+y21jNYaoMOpx1LpSAZ0AdOudhKL2kb4Vr9ZPuYvAa7ZgIv8QcBnAsPRJc0DdAlAYM
-         hVyCgETDgYsE3NbLYicISsstUh6v3hW4cL7Ly4ti7DBuuF3ISthRP2zYib6fJwktIstF
-         jMqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=dcBlXZFiwjA71AEHcnKhvkZGJOjelC7heeu53qWimxg=;
-        b=RP5Zm8QfRw5KffHegWTzKwYUfYN4suIpFmSz+aFL+FpNsdUpqTqRxbjW9ciCo1dGB6
-         U4jaRCM1cOLGCv8Pi1IXSVVVk8Z9NznVAdKXUGh+J3ra1Qs6k4sy646yUPNN2NZ94M2i
-         Cbcd53XwRH8cxUNDyRQEpbQTSlmbM0cTlY1VHtZAzoOZKaPEJGXyxf+ZPje8HW2mGnS3
-         A1TYHXxnpDtVcn9DsMjsmytSM+xnu2IeS1lXeE0yzVCxz+jN+TM8yDjCxXj7xQfTqPNR
-         3dCROtaBV7cUsw084OrTW5LDqiRfWi7x77scfu+CIPQslGVV6r0Tmy4NHCct3ElXr13S
-         cNfw==
-X-Gm-Message-State: AOAM530tVBYV9M1BG878pM9GFSK1+PZg3zcL2ijRBH7Nckg7BcyqS7Xr
-        z7GORaHDAY8zyuTwBDwaiGM=
-X-Google-Smtp-Source: ABdhPJyzDtTIP4keK4rHYgRg3tve4+Tryzjz8S1GqzA6arlkfArgmE+w2sLOZXLPQLwUCuGDx+QYkg==
-X-Received: by 2002:a17:902:eb44:b0:148:b1ed:1a33 with SMTP id i4-20020a170902eb4400b00148b1ed1a33mr31814748pli.149.1640886769096;
-        Thu, 30 Dec 2021 09:52:49 -0800 (PST)
-Received: from integral2.. ([180.254.126.2])
-        by smtp.gmail.com with ESMTPSA id 185sm9244188pfe.26.2021.12.30.09.52.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Dec 2021 09:52:48 -0800 (PST)
-From:   Ammar Faizi <ammarfaizi2@gmail.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     io-uring Mailing List <io-uring@vger.kernel.org>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ammar Faizi <ammarfaizi2@gmail.com>,
-        Nugra <richiisei@gmail.com>
-Subject: [RFC PATCH v3 3/3] io_uring: Add `sendto(2)` and `recvfrom(2)` support
-Date:   Fri, 31 Dec 2021 00:52:32 +0700
-Message-Id: <20211230173126.174350-4-ammar.faizi@intel.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211230173126.174350-1-ammar.faizi@intel.com>
-References: <20211230115057.139187-3-ammar.faizi@intel.com>
- <20211230173126.174350-1-ammar.faizi@intel.com>
+        Thu, 30 Dec 2021 12:54:03 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3AcVkA460evgjJ89z4GfbD5cVwkn2cJEfYwER7XOP?=
+ =?us-ascii?q?LsXnJ3D50hjBTzWQWDDuBbvzYYWemKN0gaonk9BxUvcLcytQ2QQE+nZ1PZyIT+?=
+ =?us-ascii?q?JCdXbx1DW+pYnjMdpWbJK5fAnR3huDodKjYdVeB4Ef9WlTdhSMkj/jRHOGkULS?=
+ =?us-ascii?q?s1h1ZHmeIdg9w0HqPpMZp2uaEsfDha++8kYuaT//3YDdJ6BYoWo4g0J9vnTs01?=
+ =?us-ascii?q?BjEVJz0iXRlDRxDlAe2e3D4l/vzL4npR5fzatE88uJX24/+IL+FEmPxp3/BC/u?=
+ =?us-ascii?q?lm7rhc0AMKlLQFVjTzCQGHfH4214b+XdaPqUTbZLwbW9VljGIlpZ1wcpEsZiYS?=
+ =?us-ascii?q?AEzP6SKlv51vxxwSnsgbPUWp9crJlD666R/1XbuaXLiyvhqJEI7J4sV/qBwG24?=
+ =?us-ascii?q?m3fcFMioKbB2ZivCe2rOgR/R0wMIuMKHDJ5kevHB+xCqfFf8gTYreXazG7Pdc3?=
+ =?us-ascii?q?TEtloZPG+rTY4wSbj8HRBDNZRdnOVoNDp862uCyiRHXbTxCpUmV46kq5mHJ5Ah?=
+ =?us-ascii?q?w1rH3N5zSYNPibcFUmFuI43rD13r2DwtcN9GFzzeBtHW2iYfnmSL9RZJXF7Ci8?=
+ =?us-ascii?q?PNuqEOcy3ZVCxAMU1a/5/6jhSaWXtNZJEs84CciraEuskesS7HVRxCkrWSWlh8?=
+ =?us-ascii?q?aVcBZH+Az5EeK0KW8ywSEHGlCSjNFbN0OrsI6RTU2kFSOmrvBGz1pu7CTVTSS6?=
+ =?us-ascii?q?7aIsTSuESwUK2YYYmkDVwRt3jVJiOnflTqWEY0lSfTsyIOlX2GthSqHsm4lia9?=
+ =?us-ascii?q?Vi8MXv5hXNGvv21qEzqUlhCZsjukPYl+Y0w=3D=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A9HVvxqPF9w6/o8BcTl6jsMiBIKoaSvp037BK?=
+ =?us-ascii?q?7S1MoHtuHfBw9vrBoB1/73TJYVUqKRIdcLK7WJVoKEm0nfRICO8qTNWftWLdyR?=
+ =?us-ascii?q?KVxdFZgbfK8nnYAGnV24dmpNpdWpk7Mca1IRxRoK/BkXaFOudl+cLC0I3Av5al?=
+ =?us-ascii?q?815dCThwL5olxSoRMHfmLmRGADBcQad8Prf03Ls4m9N+QwVuUixrbkN1JNQv7u?=
+ =?us-ascii?q?e7864Px3M9dnoawRSJ5AnI1Fe/KWn84j4OFy5Cxa4m+XXI1xHo/6nLiYDc9iPh?=
+X-IronPort-AV: E=Sophos;i="5.88,248,1635199200"; 
+   d="scan'208";a="1269087"
+Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 18:54:01 +0100
+Date:   Thu, 30 Dec 2021 18:54:01 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+cc:     Francisco Jerez <currojerez@riseup.net>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
+In-Reply-To: <CAJZ5v0g5wDxYXA-V=Ex_Md82hgnj5K6Vr0tavFFVz=uBqo8wag@mail.gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2112301840360.15550@hadrien>
+References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien> <CAJZ5v0iBU8gw8+-5nxj2cKzf7tyN=p3Adcm4Z5bn=oVYhU28bQ@mail.gmail.com> <alpine.DEB.2.22.394.2112172022100.2968@hadrien> <87r1abt1d2.fsf@riseup.net> <alpine.DEB.2.22.394.2112172258480.2968@hadrien>
+ <87fsqqu6by.fsf@riseup.net> <alpine.DEB.2.22.394.2112180654470.3139@hadrien> <878rwitdu3.fsf@riseup.net> <alpine.DEB.2.22.394.2112181138210.3130@hadrien> <871r29tvdj.fsf@riseup.net> <alpine.DEB.2.22.394.2112190734070.3181@hadrien> <87wnk0s0tf.fsf@riseup.net>
+ <CAJZ5v0i7gBtm6x+zUUzhxXjmYhPwr=JxvOuMZ0aD9qxnjE9YKw@mail.gmail.com> <878rwdse9o.fsf@riseup.net> <alpine.DEB.2.22.394.2112281745240.24929@hadrien> <CAJZ5v0i4xnesG=vfx7Y-wyeaGvjDeGcsaOVqhRLnV8YXk-m2gA@mail.gmail.com> <alpine.DEB.2.22.394.2112281845180.24929@hadrien>
+ <CAJZ5v0grayg9evWsB5ktKSFq=yA_AHoEWSfpSkQ=MVQ-=butfA@mail.gmail.com> <alpine.DEB.2.22.394.2112291012030.24929@hadrien> <CAJZ5v0g5wDxYXA-V=Ex_Md82hgnj5K6Vr0tavFFVz=uBqo8wag@mail.gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds sendto(2) and recvfrom(2) support for io_uring.
+> > The effect is the same.  But that approach is indeed simpler than patching
+> > the kernel.
+>
+> It is also applicable when intel_pstate runs in the active mode.
+>
+> As for the results that you have reported, it looks like the package
+> power on these systems is dominated by package voltage and going from
+> P-state 20 to P-state 21 causes that voltage to increase significantly
+> (the observed RAM energy usage pattern is consistent with that).  This
+> means that running at P-states above 20 is only really justified if
+> there is a strict performance requirement that can't be met otherwise.
+>
+> Can you please check what value is there in the base_frequency sysfs
+> attribute under cpuX/cpufreq/?
 
-New opcodes:
-  IORING_OP_SENDTO
-  IORING_OP_RECVFROM
+2100000, which should be pstate 21
 
-Cc: Nugra <richiisei@gmail.com>
-Tested-by: Nugra <richiisei@gmail.com>
-Link: https://github.com/axboe/liburing/issues/397
-Signed-off-by: Ammar Faizi <ammarfaizi2@gmail.com>
----
+>
+> I'm guessing that the package voltage level for P-states 10 and 20 is
+> the same, so the power difference between them is not significant
+> relative to the difference between P-state 20 and 21 and if increasing
+> the P-state causes some extra idle time to appear in the workload
+> (even though there is not enough of it to prevent to overall
+> utilization from increasing), then the overall power draw when running
+> at P-state 10 may be greater that for P-state 20.
 
-v3:
-  - Fix build error when CONFIG_NET is undefined should be done in
-    the first patch, not this patch.
+My impression is that the package voltage level for P-states 10 to 20 is
+high enough that increasing the frequency has little impact.  But the code
+runs twice as fast, which reduces the execution time a lot, saving energy.
 
-  - Add Tested-by tag from Nugra.
+My first experiment had only one running thread.  I also tried running 32
+spinning threads for 10 seconds, ie using up one package and leaving the
+other idle.  In this case, instead of staying around 600J for pstates
+10-20, the pstate rises from 743 to 946.  But there is still a gap between
+20 and 21, with 21 being 1392J.
 
-v2:
-  - In `io_recvfrom()`, mark the error check of `move_addr_to_user()`
-    call as unlikely.
+> You can check if there is any C-state residency difference between
+> these two cases by running the workload under turbostat in each of
+> them.
 
-  - Fix build error when CONFIG_NET is undefined.
+The C1 and C6 cases (CPU%c1 and CPU%c6) are about the same between 20 and
+21, whether with 1 thread or with 32 thread.
 
-  - Added Nugra to CC list (tester).
----
- fs/io_uring.c                 | 80 +++++++++++++++++++++++++++++++++--
- include/uapi/linux/io_uring.h |  2 +
- 2 files changed, 78 insertions(+), 4 deletions(-)
+> Anyway, this is a configuration in which the HWP scaling algorithm
+> used when intel_pstate runs in the active mode is likely to work
+> better, because it should take the processor design into account.
+> That's why it is the default configuration of intel_pstate on systems
+> with HWP.  There are cases in which schedutil helps, but that's mostly
+> when HWP without it tends to run the workload too fast, because it
+> lacks the utilization history provided by PELT.
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 7adcb591398f..3726958f8f58 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -575,7 +575,15 @@ struct io_sr_msg {
- 	union {
- 		struct compat_msghdr __user	*umsg_compat;
- 		struct user_msghdr __user	*umsg;
--		void __user			*buf;
-+
-+		struct {
-+			void __user		*buf;
-+			struct sockaddr __user	*addr;
-+			union {
-+				int		sendto_addr_len;
-+				int __user	*recvfrom_addr_len;
-+			};
-+		};
- 	};
- 	int				msg_flags;
- 	int				bgid;
-@@ -1133,6 +1141,19 @@ static const struct io_op_def io_op_defs[] = {
- 		.needs_file = 1
- 	},
- 	[IORING_OP_GETXATTR] = {},
-+	[IORING_OP_SENDTO] = {
-+		.needs_file		= 1,
-+		.unbound_nonreg_file	= 1,
-+		.pollout		= 1,
-+		.audit_skip		= 1,
-+	},
-+	[IORING_OP_RECVFROM] = {
-+		.needs_file		= 1,
-+		.unbound_nonreg_file	= 1,
-+		.pollin			= 1,
-+		.buffer_select		= 1,
-+		.audit_skip		= 1,
-+	},
- };
- 
- /* requests with any of those set should undergo io_disarm_next() */
-@@ -5216,12 +5237,24 @@ static int io_sendmsg_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	if (unlikely(req->ctx->flags & IORING_SETUP_IOPOLL))
- 		return -EINVAL;
- 
-+	/*
-+	 * For IORING_OP_SEND{,TO}, the assignment to @sr->umsg
-+	 * is equivalent to an assignment to @sr->buf.
-+	 */
- 	sr->umsg = u64_to_user_ptr(READ_ONCE(sqe->addr));
-+
- 	sr->len = READ_ONCE(sqe->len);
- 	sr->msg_flags = READ_ONCE(sqe->msg_flags) | MSG_NOSIGNAL;
- 	if (sr->msg_flags & MSG_DONTWAIT)
- 		req->flags |= REQ_F_NOWAIT;
- 
-+	if (req->opcode == IORING_OP_SENDTO) {
-+		sr->addr = u64_to_user_ptr(READ_ONCE(sqe->addr2));
-+		sr->sendto_addr_len = READ_ONCE(sqe->addr3);
-+	} else {
-+		sr->addr = (struct sockaddr __user *) NULL;
-+	}
-+
- #ifdef CONFIG_COMPAT
- 	if (req->ctx->compat)
- 		sr->msg_flags |= MSG_CMSG_COMPAT;
-@@ -5275,6 +5308,7 @@ static int io_sendmsg(struct io_kiocb *req, unsigned int issue_flags)
- 
- static int io_sendto(struct io_kiocb *req, unsigned int issue_flags)
- {
-+	struct sockaddr_storage address;
- 	struct io_sr_msg *sr = &req->sr_msg;
- 	struct msghdr msg;
- 	struct iovec iov;
-@@ -5291,10 +5325,20 @@ static int io_sendto(struct io_kiocb *req, unsigned int issue_flags)
- 	if (unlikely(ret))
- 		return ret;
- 
--	msg.msg_name = NULL;
-+
- 	msg.msg_control = NULL;
- 	msg.msg_controllen = 0;
--	msg.msg_namelen = 0;
-+	if (sr->addr) {
-+		ret = move_addr_to_kernel(sr->addr, sr->sendto_addr_len,
-+					  &address);
-+		if (unlikely(ret < 0))
-+			goto fail;
-+		msg.msg_name = (struct sockaddr *) &address;
-+		msg.msg_namelen = sr->sendto_addr_len;
-+	} else {
-+		msg.msg_name = NULL;
-+		msg.msg_namelen = 0;
-+	}
- 
- 	flags = req->sr_msg.msg_flags;
- 	if (issue_flags & IO_URING_F_NONBLOCK)
-@@ -5309,6 +5353,7 @@ static int io_sendto(struct io_kiocb *req, unsigned int issue_flags)
- 			return -EAGAIN;
- 		if (ret == -ERESTARTSYS)
- 			ret = -EINTR;
-+	fail:
- 		req_set_fail(req);
- 	}
- 	__io_req_complete(req, issue_flags, ret, 0);
-@@ -5427,13 +5472,25 @@ static int io_recvmsg_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	if (unlikely(req->ctx->flags & IORING_SETUP_IOPOLL))
- 		return -EINVAL;
- 
-+	/*
-+	 * For IORING_OP_RECV{,FROM}, the assignment to @sr->umsg
-+	 * is equivalent to an assignment to @sr->buf.
-+	 */
- 	sr->umsg = u64_to_user_ptr(READ_ONCE(sqe->addr));
-+
- 	sr->len = READ_ONCE(sqe->len);
- 	sr->bgid = READ_ONCE(sqe->buf_group);
- 	sr->msg_flags = READ_ONCE(sqe->msg_flags) | MSG_NOSIGNAL;
- 	if (sr->msg_flags & MSG_DONTWAIT)
- 		req->flags |= REQ_F_NOWAIT;
- 
-+	if (req->opcode == IORING_OP_RECVFROM) {
-+		sr->addr = u64_to_user_ptr(READ_ONCE(sqe->addr2));
-+		sr->recvfrom_addr_len = u64_to_user_ptr(READ_ONCE(sqe->addr3));
-+	} else {
-+		sr->addr = (struct sockaddr __user *) NULL;
-+	}
-+
- #ifdef CONFIG_COMPAT
- 	if (req->ctx->compat)
- 		sr->msg_flags |= MSG_CMSG_COMPAT;
-@@ -5509,6 +5566,7 @@ static int io_recvfrom(struct io_kiocb *req, unsigned int issue_flags)
- 	struct iovec iov;
- 	unsigned flags;
- 	int ret, min_ret = 0;
-+	struct sockaddr_storage address;
- 	bool force_nonblock = issue_flags & IO_URING_F_NONBLOCK;
- 
- 	sock = sock_from_file(req->file);
-@@ -5526,7 +5584,7 @@ static int io_recvfrom(struct io_kiocb *req, unsigned int issue_flags)
- 	if (unlikely(ret))
- 		goto out_free;
- 
--	msg.msg_name = NULL;
-+	msg.msg_name = sr->addr ? (struct sockaddr *) &address : NULL;
- 	msg.msg_control = NULL;
- 	msg.msg_controllen = 0;
- 	msg.msg_namelen = 0;
-@@ -5540,6 +5598,16 @@ static int io_recvfrom(struct io_kiocb *req, unsigned int issue_flags)
- 		min_ret = iov_iter_count(&msg.msg_iter);
- 
- 	ret = sock_recvmsg(sock, &msg, flags);
-+
-+	if (ret >= 0 && sr->addr != NULL) {
-+		int tmp;
-+
-+		tmp = move_addr_to_user(&address, msg.msg_namelen, sr->addr,
-+					sr->recvfrom_addr_len);
-+		if (unlikely(tmp < 0))
-+			ret = tmp;
-+	}
-+
- out_free:
- 	if (ret < min_ret) {
- 		if (ret == -EAGAIN && force_nonblock)
-@@ -6778,9 +6846,11 @@ static int io_req_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	case IORING_OP_SYNC_FILE_RANGE:
- 		return io_sfr_prep(req, sqe);
- 	case IORING_OP_SENDMSG:
-+	case IORING_OP_SENDTO:
- 	case IORING_OP_SEND:
- 		return io_sendmsg_prep(req, sqe);
- 	case IORING_OP_RECVMSG:
-+	case IORING_OP_RECVFROM:
- 	case IORING_OP_RECV:
- 		return io_recvmsg_prep(req, sqe);
- 	case IORING_OP_CONNECT:
-@@ -7060,12 +7130,14 @@ static int io_issue_sqe(struct io_kiocb *req, unsigned int issue_flags)
- 	case IORING_OP_SENDMSG:
- 		ret = io_sendmsg(req, issue_flags);
- 		break;
-+	case IORING_OP_SENDTO:
- 	case IORING_OP_SEND:
- 		ret = io_sendto(req, issue_flags);
- 		break;
- 	case IORING_OP_RECVMSG:
- 		ret = io_recvmsg(req, issue_flags);
- 		break;
-+	case IORING_OP_RECVFROM:
- 	case IORING_OP_RECV:
- 		ret = io_recvfrom(req, issue_flags);
- 		break;
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index efc7ac9b3a6b..a360069d1e8e 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -150,6 +150,8 @@ enum {
- 	IORING_OP_SETXATTR,
- 	IORING_OP_FGETXATTR,
- 	IORING_OP_GETXATTR,
-+	IORING_OP_SENDTO,
-+	IORING_OP_RECVFROM,
- 
- 	/* this goes last, obviously */
- 	IORING_OP_LAST,
--- 
-2.32.0
+OK, I'll look into that case a bit more.
 
+thanks,
+julia

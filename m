@@ -2,71 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91FAD481BA0
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 12:11:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D460481BA1
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 12:11:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238865AbhL3LLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 06:11:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52086 "EHLO
+        id S238869AbhL3LLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 06:11:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235057AbhL3LLQ (ORCPT
+        with ESMTP id S235057AbhL3LLo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 06:11:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40ECC061574;
-        Thu, 30 Dec 2021 03:11:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9284CB80B3A;
-        Thu, 30 Dec 2021 11:11:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1C52C36AEA;
-        Thu, 30 Dec 2021 11:11:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640862673;
-        bh=kBwUDpy6z1zSj0ft3UeCPbW98secaFdJlM9Xmg7Mxo0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UV/e05WiGbOfiYeCR5AJBtXa+b69LjIlAPVsuSCLymdCirqGQi5jJBkq6TsDdlcVW
-         4/dYA5EKNr5NBtYryeGOweI66KlVkM/L0S3dALPHwg7z9j0LHCpBV1PIpoQ35zWRyj
-         XxyuGbHv/ogQdyjtgPjOFVP3QjyucUtcw4pRbskw=
-Date:   Thu, 30 Dec 2021 12:11:10 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 0/5] acpi: Store _PLD information and convert users
-Message-ID: <Yc2Tzs1wRGtxZBOg@kroah.com>
-References: <20211223081620.45479-1-heikki.krogerus@linux.intel.com>
- <CAJZ5v0jHQmNGsOu9TQhUJD3uoc6XijZwRD1K4GfV_KoD=Q79WA@mail.gmail.com>
+        Thu, 30 Dec 2021 06:11:44 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C78C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 03:11:43 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id s21-20020a05683004d500b0058f585672efso27049777otd.3
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 03:11:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=Czr881vajn+zMvKnvNarIUGCjt+P/NqfiUXbcHCJi0k=;
+        b=xuJ9mGjRXqaLXzsbm2e9UPttIxJdvqpNBLsVbvZ/gHiRJeh+nUrY9VTQ7kjKQ1OSlm
+         U129wW/JCMD6n6kRwacYDVHgMt3iSlwHGAlq5pF8JKA83GtBfALyy/5seIC1UPru744D
+         XKQwkA7n5pKpRTcRYkFwBhQ2HKafWMOVV28uPBiB8DqgH40LSokBMc1vTavOKSnAiyuQ
+         E1OWFzAIDw3wB7e9mOeLNVbXr6cjkcUyf41iOIpFlhMBfwdNKpS/mR2552V4lR/T+9mw
+         wx/GKfToib/FNKG4VV1nRY98iq7RnWlMwhSwFNdmoX3Ry63YaUazGlFtYxr6UZkAFs1S
+         LSjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=Czr881vajn+zMvKnvNarIUGCjt+P/NqfiUXbcHCJi0k=;
+        b=J0NsMJgFgTyHDBR7LJoDGnpOLszlsBew2dhJvhOGMtyh7Q6CUFZF1QjzyA166JY97I
+         Yv0/gaaGDrpcLcX4zglAfKnvnmGTf4Kak1D+jMv1Wg7syEUX6IjnImaM8QlYqvo9dMDy
+         DLrwAvetg5ba84iJO0Fgt8ww3rztl6/yGiAJpTkxgOt3vI6V8AUI/wlC7O1PI4h1pfMu
+         2DVph/x6XZMgLckfvpWDVhKI4nTj9zT6es4pLtafKqj1YFDM0q3KikmMAk0if7ekxVvK
+         kTbndNvccQfUHXCwllSdh71jhWEyTDUjRUVdPIWJqYV/hPb9tw1e1hRYvWoSs8LpfSSS
+         X48A==
+X-Gm-Message-State: AOAM532b+2kOI2xvh3Tz/hh1mS5q9ea46j8QXmvRlrhG3Di5fTVpr7tN
+        WbKHnQ7x9mLQ/3+GfINXeADEWQHntS/J+tWZVT8TCA==
+X-Google-Smtp-Source: ABdhPJzPYFci8h/7GlV2vqQ2ZFFuujJK8HBjGtBan2EDPSSGQXym8YGCqHdu/NQAr1+I6sj/Hd++7n+cLFscRdXruiE=
+X-Received: by 2002:a9d:51c3:: with SMTP id d3mr21655218oth.152.1640862702517;
+ Thu, 30 Dec 2021 03:11:42 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 30 Dec 2021 05:11:41 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0jHQmNGsOu9TQhUJD3uoc6XijZwRD1K4GfV_KoD=Q79WA@mail.gmail.com>
+In-Reply-To: <Ycv5gnWDtosJhwjc@matsya>
+References: <20211217150854.2081-1-granquet@baylibre.com> <20211217150854.2081-7-granquet@baylibre.com>
+ <Ycv5gnWDtosJhwjc@matsya>
+From:   Guillaume Ranquet <granquet@baylibre.com>
+User-Agent: alot/0.10
+Date:   Thu, 30 Dec 2021 05:11:41 -0600
+Message-ID: <CABnWg9sBdAhjUPnijiwLj-iFP_AHjP06FkzrqEmtXsSeGTYK0Q@mail.gmail.com>
+Subject: Re: [PATCH v7 6/8] phy: phy-mtk-dp: Add driver for DP phy
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 05:18:16PM +0100, Rafael J. Wysocki wrote:
-> On Thu, Dec 23, 2021 at 9:16 AM Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> >
-> > Hi,
-> >
-> > The last version (v4) was not properly cleaned up. Should be now OK.
-> 
-> It looks good to me, so
-> 
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> for the ACPI-related changes in this series and please feel free to
-> route it through the USB tree if that's preferred.
+Hi Vinod,
 
-Thanks, I'll take this through the USB tree now.
+Quoting Vinod Koul (2021-12-29 07:00:34)
+>
+> On 17-12-21, 16:08, Guillaume Ranquet wrote:
+> > From: Markus Schneider-Pargmann <msp@baylibre.com>
+>
+> Pls cc relevant folks on cover so that they know what is going on in the
+> series... Is this dependent on rest? It should not and can be sent and
+> reviewed separately!
+>
 
-greg k-h
+Sorry, I'm a bit of a noob...
+I've used the get_maintainers.pl script to get the to: and cc: for each patch.
+I'll make sure the cover has everyone included in the next revision.
+
+The phy is not dependant on the rest, but this phy cannot be used outside of
+the mt8195 Display Port context... as the phy is actually the same IP as the DP.
+
+The DP driver has a functional dependency with the phy, they can be split into
+two series as they both merge/compile on their own.
+
+Do you want me to split the series with the phy on one hand the the DP driver
+on the other?
+
+> > This is a new driver that supports the integrated DisplayPort phy for
+> > mediatek SoCs, especially the mt8195. The phy is integrated into the
+> > DisplayPort controller and will be created by the mtk-dp driver. This
+> > driver expects a struct regmap to be able to work on the same registers
+> > as the DisplayPort controller. It sets the device data to be the struct
+> > phy so that the DisplayPort controller can easily work with it.
+> >
+> > The driver does not have any devicetree bindings because the datasheet
+> > does not list the controller and the phy as distinct units.
+> >
+> > The interaction with the controller can be covered by the configure
+> > callback of the phy framework and its displayport parameters.
+> >
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > ---
+> >  MAINTAINERS                       |   1 +
+> >  drivers/phy/mediatek/Kconfig      |   8 ++
+> >  drivers/phy/mediatek/Makefile     |   1 +
+> >  drivers/phy/mediatek/phy-mtk-dp.c | 219 ++++++++++++++++++++++++++++++
+> >  4 files changed, 229 insertions(+)
+> >  create mode 100644 drivers/phy/mediatek/phy-mtk-dp.c
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 8b7a98daf8e05..c44829d8a74df 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -6394,6 +6394,7 @@ L:      linux-mediatek@lists.infradead.org (moderated for non-subscribers)
+> >  S:   Supported
+> >  F:   Documentation/devicetree/bindings/display/mediatek/
+> >  F:   drivers/gpu/drm/mediatek/
+> > +F:   drivers/phy/mediatek/phy-mtk-dp.c
+> >  F:   drivers/phy/mediatek/phy-mtk-hdmi*
+> >  F:   drivers/phy/mediatek/phy-mtk-mipi*
+> >
+> > diff --git a/drivers/phy/mediatek/Kconfig b/drivers/phy/mediatek/Kconfig
+> > index 55f8e6c048ab3..f7ec860590492 100644
+> > --- a/drivers/phy/mediatek/Kconfig
+> > +++ b/drivers/phy/mediatek/Kconfig
+> > @@ -55,3 +55,11 @@ config PHY_MTK_MIPI_DSI
+> >       select GENERIC_PHY
+> >       help
+> >         Support MIPI DSI for Mediatek SoCs.
+> > +
+> > +config PHY_MTK_DP
+> > +     tristate "MediaTek DP-PHY Driver"
+> > +     depends on ARCH_MEDIATEK || COMPILE_TEST
+> > +     depends on OF
+> > +     select GENERIC_PHY
+> > +     help
+> > +       Support DisplayPort PHY for Mediatek SoCs.
+> > diff --git a/drivers/phy/mediatek/Makefile b/drivers/phy/mediatek/Makefile
+> > index ace660fbed3a1..4ba1e06504346 100644
+> > --- a/drivers/phy/mediatek/Makefile
+> > +++ b/drivers/phy/mediatek/Makefile
+> > @@ -3,6 +3,7 @@
+> >  # Makefile for the phy drivers.
+> >  #
+> >
+> > +obj-$(CONFIG_PHY_MTK_DP)             += phy-mtk-dp.o
+> >  obj-$(CONFIG_PHY_MTK_TPHY)           += phy-mtk-tphy.o
+> >  obj-$(CONFIG_PHY_MTK_UFS)            += phy-mtk-ufs.o
+> >  obj-$(CONFIG_PHY_MTK_XSPHY)          += phy-mtk-xsphy.o
+> > diff --git a/drivers/phy/mediatek/phy-mtk-dp.c b/drivers/phy/mediatek/phy-mtk-dp.c
+> > new file mode 100644
+> > index 0000000000000..e0de2a367e788
+> > --- /dev/null
+> > +++ b/drivers/phy/mediatek/phy-mtk-dp.c
+> > @@ -0,0 +1,219 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (c) 2021 BayLibre
+> > + * Author: Markus Schneider-Pargmann <msp@baylibre.com>
+> > + */
+> > +
+> > +#include <linux/delay.h>
+> > +#include <linux/io.h>
+> > +#include <linux/of.h>
+> > +#include <linux/phy/phy.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/regmap.h>
+> > +
+> > +#define PHY_OFFSET 0x1000
+> > +
+> > +#define MTK_DP_PHY_DIG_PLL_CTL_1             (PHY_OFFSET + 0x014)
+> > +# define TPLL_SSC_EN                         BIT(3)
+> > +
+> > +#define MTK_DP_PHY_DIG_BIT_RATE                      (PHY_OFFSET + 0x03C)
+> > +# define BIT_RATE_RBR                                0
+> > +# define BIT_RATE_HBR                                1
+> > +# define BIT_RATE_HBR2                               2
+> > +# define BIT_RATE_HBR3                               3
+> > +
+> > +#define MTK_DP_PHY_DIG_SW_RST                        (PHY_OFFSET + 0x038)
+> > +# define DP_GLB_SW_RST_PHYD                  BIT(0)
+> > +
+> > +#define MTK_DP_LANE0_DRIVING_PARAM_3         (PHY_OFFSET + 0x138)
+> > +#define MTK_DP_LANE1_DRIVING_PARAM_3         (PHY_OFFSET + 0x238)
+> > +#define MTK_DP_LANE2_DRIVING_PARAM_3         (PHY_OFFSET + 0x338)
+> > +#define MTK_DP_LANE3_DRIVING_PARAM_3         (PHY_OFFSET + 0x438)
+> > +# define XTP_LN_TX_LCTXC0_SW0_PRE0_DEFAULT   0x10
+> > +# define XTP_LN_TX_LCTXC0_SW0_PRE1_DEFAULT   (0x14 << 8)
+> > +# define XTP_LN_TX_LCTXC0_SW0_PRE2_DEFAULT   (0x18 << 16)
+> > +# define XTP_LN_TX_LCTXC0_SW0_PRE3_DEFAULT   (0x20 << 24)
+>
+> how about defining constants and using FEILD_PREP() to set the value.
+> Here and few other places!
+>
+Noted for next revision,
+Thanks.
+
+> > +static int mtk_dp_phy_configure(struct phy *phy, union phy_configure_opts *opts)
+> > +{
+> > +     struct mtk_dp_phy *dp_phy = phy_get_drvdata(phy);
+> > +     u32 val;
+> > +
+> > +     if (opts->dp.set_rate) {
+> > +             switch (opts->dp.link_rate) {
+> > +             default:
+> > +                     dev_err(&phy->dev,
+> > +                             "Implementation error, unknown linkrate %x\n",
+> > +                             opts->dp.link_rate);
+> > +                     return -EINVAL;
+> > +             case 1620:
+> > +                     val = BIT_RATE_RBR;
+> > +                     break;
+> > +             case 2700:
+> > +                     val = BIT_RATE_HBR;
+> > +                     break;
+> > +             case 5400:
+> > +                     val = BIT_RATE_HBR2;
+> > +                     break;
+> > +             case 8100:
+> > +                     val = BIT_RATE_HBR3;
+> > +                     break;
+> > +             }
+> > +             regmap_write(dp_phy->regs, MTK_DP_PHY_DIG_BIT_RATE, val);
+>
+> interesting use of default :) which is correct!
+>
+> But why keep the regmap_write inside switch, you are anyway returning in
+> default, so this write could be outside as well
+
+Not my code here (as we are upstreaming code from the vendor tree).
+My understanding is that the regmap_write() shouldn't be called if
+dp.set_rate is false as val won't be set.
+
+This doesn't actually happen because the only client for this phy is
+the DP driver and we make sure to call it with dp.set_rate to true.
+
+> --
+> ~Vinod
+
+Thx,
+Guillaume.

@@ -2,104 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B013B481FD1
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:21:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 542A6481FD3
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 20:22:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241818AbhL3TVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 14:21:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47854 "EHLO
+        id S241925AbhL3TWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 14:22:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240217AbhL3TVd (ORCPT
+        with ESMTP id S240217AbhL3TWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 14:21:33 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D1BC061574;
-        Thu, 30 Dec 2021 11:21:32 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id h15so28650667ljh.12;
-        Thu, 30 Dec 2021 11:21:32 -0800 (PST)
+        Thu, 30 Dec 2021 14:22:08 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746F8C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 11:22:08 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id i8so13653515pgt.13
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 11:22:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=29ZCKi+UYzfbhhlJGwYUn8LArOBBrJMbEQDCucP9wW0=;
-        b=oYK77syPVHf9WjJUqDaa/+9viAoEgnBaoIHI1uQSzo0DU7cyoWXv8Asdj1r6GFy4n6
-         UPCotKGpU02eUvPmNsFG4drmFRZlq8LPztA8D6BDReSTVnyJVNFn8q7+ZRpHcEI9X4KC
-         pB/Fl8iB7mYDsuKRuaZi5d6Ga10am9ikNtDVJMAi39HN35MRVCVa06nFdIcGGg1XVWrG
-         BdAEhqlSsVRFdufxzT4DypO3AVaNrvbXMZNfltO2b4zQuLNWNnw0QsmpJ8sY9WKQ6/9k
-         tbufgpZgKJdJViikuQ5JA7v/DusFQIY70J/JJ7KcX7G+OKtyzIIRTKOxTwYzLPQxVvz2
-         RoRg==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+mUtf+fyGiADPbbqXLfJ2sL02qx3ygRddOMW9sXf8kM=;
+        b=qYXQziX8Y4uSkN040i7HBoI+oOa5SoCNkcWtGdUmcaVUSstLVl7gjpPgN9I/OoARfE
+         KjkW+I046/rYUv1v3APDx/Orq2Nt9ZeKIp3PRzYwJRd64RpLurzxMkknbVxu0xNDwQDn
+         50LTDe0upNYikY2C6vPWerGQDhysdRq+djOm54cB5o4CjtRcotc142F91z0wCYx8bqGk
+         XgdYkMz6tAw+U94B+KK7gnXjHlybHc8TRakh8F+8cAd/GXVkXUPLgNxDZ9ZWiwmnlgox
+         Hm0QcKqPaNCBggoIZbMN/bpj/y57MIO0Fgkz/Oza03FYClq7Ebcx4RjEeQ0izeTDrPMk
+         10Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=29ZCKi+UYzfbhhlJGwYUn8LArOBBrJMbEQDCucP9wW0=;
-        b=aCKIt1relVwsqKYt1qP/T6pe+h/W9fb4K/qQ0HqSmmJiZlzf6PcZqcZgoJPniX0gJ4
-         qJbLz7HbjW4TFphQYhHGaZqFecM8RZncd3yjpO1pN9Hujdb6LzCNO0Iwa73tLtpiV+F6
-         jWju1mcQdyj0wDTJ5w8jnA1kYUzGqOyH6ENOLWpuhcv5VxcCsg1lsAfd9fowalXOgFlT
-         zFOusuF614jCuUrxCLur4j1uALoKdpNY3EAtRajxe9kNQLqtXSGUw5KegwQouyaiLUn9
-         WFnaz8EWJ1ZK0PUULE0fRcrf7Sv5+J9lsUtwqp8Fd0nzl3+7u/ILRG9ghtmZQjOS4JUJ
-         SCgA==
-X-Gm-Message-State: AOAM530lzqHWXHzcgzO8SIUxxvjP5AkSqQy623oF37rm18p+pUsB5R5S
-        DlyXnTYxlKgbNtDE4SJBHhDgxmrfkpo=
-X-Google-Smtp-Source: ABdhPJzPf/616b1vKZjygFJ9jDrkf1rprCIdL5VRNA9yIBZcjKjShCOpY6FdvEkErC1hZwDxUhPfVA==
-X-Received: by 2002:a2e:990:: with SMTP id 138mr26702257ljj.507.1640892090620;
-        Thu, 30 Dec 2021 11:21:30 -0800 (PST)
-Received: from [192.168.1.103] ([178.176.75.215])
-        by smtp.gmail.com with ESMTPSA id br31sm2558552lfb.279.2021.12.30.11.21.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Dec 2021 11:21:30 -0800 (PST)
-Subject: Re: [PATCH v3 1/3] PCI: Add device code for AMD FCH SATA Controller
- in AHCI mode
-To:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        linux-ide@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211229161119.1006-1-pmenzel@molgen.mpg.de>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <0df4ec50-b986-6a9b-3908-1cf62b53341b@gmail.com>
-Date:   Thu, 30 Dec 2021 22:21:28 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+mUtf+fyGiADPbbqXLfJ2sL02qx3ygRddOMW9sXf8kM=;
+        b=BMu7S2gYjaPXyfZ9WQw0tgFGd+5TiBXyOaYC4qW+uTSsbRM9+9qJvRP95hcljIxdiy
+         7dcxXhI8TTgPjxXlBrtVcIiTFj/cv3I1qwg6LFt2xMgGyOP7mhE3NJG2h0r2hB9Xkz5U
+         scEr1xCo11uLhhSBB9keemGsloFAnPu1/EJDyAYs30KWLSFUDRAEY8AQG3djrqb5VPh5
+         dzlF1fZYpO5TFNWVcQO8mYI0ethv92X60ti7ZUYzW3XwGHdQxQwIJS7DroLXaHng0myh
+         zgZvsyI/rii+ixOIL1hrhAw2rFw37RLBmmYiWQGWqFQYcbV3qUDnq+RB5Y5o8f7+M8k9
+         g0RQ==
+X-Gm-Message-State: AOAM530jvT6Y8RVMd1bXz04kFPt+JKkqZ/MOE/wYoKa4r4sNi+ro9wrx
+        N+z+y80BTmaST2kkv76u+EwpTg==
+X-Google-Smtp-Source: ABdhPJzo2qQot4YYh2sqOX2qDnTi34IfdYiH4bQr7iMKVzwbD0LQ1vHOEabmj42ZSrRvPHU7s6Gubw==
+X-Received: by 2002:a62:1dca:0:b0:4ba:cfc4:1af7 with SMTP id d193-20020a621dca000000b004bacfc41af7mr32929296pfd.58.1640892127817;
+        Thu, 30 Dec 2021 11:22:07 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id i68sm18735930pfc.151.2021.12.30.11.22.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Dec 2021 11:22:07 -0800 (PST)
+Date:   Thu, 30 Dec 2021 19:22:03 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Stevens <stevensd@chromium.org>
+Cc:     Marc Zyngier <maz@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v5 4/4] KVM: mmu: remove over-aggressive warnings
+Message-ID: <Yc4G23rrSxS59br5@google.com>
+References: <20211129034317.2964790-1-stevensd@google.com>
+ <20211129034317.2964790-5-stevensd@google.com>
 MIME-Version: 1.0
-In-Reply-To: <20211229161119.1006-1-pmenzel@molgen.mpg.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211129034317.2964790-5-stevensd@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
-
-On 12/29/21 7:11 PM, Paul Menzel wrote:
-
-> The ASUS F2A85-M PRO with the fusion controller hub (FCH) AMD A85
-> (Hudson D4) has the SATA controller below.
+On Mon, Nov 29, 2021, David Stevens wrote:
+> From: David Stevens <stevensd@chromium.org>
 > 
->     $ lspci -s 00:11.0
->     00:11.0 SATA controller [0106]: Advanced Micro Devices, Inc. [AMD] FCH SATA Controller [AHCI mode] [1022:7801] (rev 40)
+> Remove two warnings that require ref counts for pages to be non-zero, as
+> mapped pfns from follow_pfn may not have an initialized ref count.
 > 
-> Add the ID for it, when in AHCI mode.
-> 
-> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> Signed-off-by: David Stevens <stevensd@chromium.org>
 > ---
->  include/linux/pci_ids.h | 1 +
->  1 file changed, 1 insertion(+)
+>  arch/x86/kvm/mmu/mmu.c | 7 -------
+>  virt/kvm/kvm_main.c    | 2 +-
+>  2 files changed, 1 insertion(+), 8 deletions(-)
 > 
-> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-> index 011f2f1ea5bb..fe944b44858a 100644
-> --- a/include/linux/pci_ids.h
-> +++ b/include/linux/pci_ids.h
-> @@ -602,6 +602,7 @@
->  #define PCI_DEVICE_ID_AMD_LX_VIDEO  0x2081
->  #define PCI_DEVICE_ID_AMD_LX_AES    0x2082
->  #define PCI_DEVICE_ID_AMD_HUDSON2_SATA_IDE	0x7800
-> +#define PCI_DEVICE_ID_AMD_HUDSON2_SATA_AHCI	0x7801
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 0626395ff1d9..7c4c7fededf0 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -621,13 +621,6 @@ static int mmu_spte_clear_track_bits(struct kvm *kvm, u64 *sptep)
+>  
+>  	pfn = spte_to_pfn(old_spte);
+>  
+> -	/*
+> -	 * KVM does not hold the refcount of the page used by
+> -	 * kvm mmu, before reclaiming the page, we should
+> -	 * unmap it from mmu first.
+> -	 */
+> -	WARN_ON(!kvm_is_reserved_pfn(pfn) && !page_count(pfn_to_page(pfn)));
+> -
+>  	if (is_accessed_spte(old_spte))
+>  		kvm_set_pfn_accessed(pfn);
+>  
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 16a8a71f20bf..d81edcb3e107 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -170,7 +170,7 @@ bool kvm_is_zone_device_pfn(kvm_pfn_t pfn)
+>  	 * the device has been pinned, e.g. by get_user_pages().  WARN if the
+>  	 * page_count() is zero to help detect bad usage of this helper.
 
-   We only add device IDs to this file if they are used in 2+ places.
+Stale comment.
 
-[...]
+>  	 */
+> -	if (!pfn_valid(pfn) || WARN_ON_ONCE(!page_count(pfn_to_page(pfn))))
+> +	if (!pfn_valid(pfn) || !page_count(pfn_to_page(pfn)))
 
-MBR, Sergey
+Hrm, I know the whole point of this series is to support pages without an elevated
+refcount, but this WARN was extremely helpful in catching several use-after-free
+bugs in the TDP MMU.  We talked about burying a slow check behind MMU_WARN_ON, but
+that isn't very helpful because no one runs with MMU_WARN_ON, and this is also a
+type of check that's most useful if it runs in production.
+
+IIUC, this series explicitly disallows using pfns that have a struct page without
+refcounting, and the issue with the WARN here is that kvm_is_zone_device_pfn() is
+called by kvm_is_reserved_pfn() before ensure_pfn_ref() rejects problematic pages,
+i.e. triggers false positive.
+
+So, can't we preserve the use-after-free benefits of the check by moving it to
+where KVM releases the PFN?  I.e.
+
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index fbca2e232e94..675b835525fa 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -2904,15 +2904,19 @@ EXPORT_SYMBOL_GPL(kvm_release_pfn_dirty);
+
+ void kvm_set_pfn_dirty(kvm_pfn_t pfn)
+ {
+-       if (!kvm_is_reserved_pfn(pfn) && !kvm_is_zone_device_pfn(pfn))
++       if (!kvm_is_reserved_pfn(pfn) && !kvm_is_zone_device_pfn(pfn)) {
++               WARN_ON_ONCE(!page_count(pfn_to_page(pfn)));
+                SetPageDirty(pfn_to_page(pfn));
++       }
+ }
+ EXPORT_SYMBOL_GPL(kvm_set_pfn_dirty);
+
+ void kvm_set_pfn_accessed(kvm_pfn_t pfn)
+ {
+-       if (!kvm_is_reserved_pfn(pfn) && !kvm_is_zone_device_pfn(pfn))
++       if (!kvm_is_reserved_pfn(pfn) && !kvm_is_zone_device_pfn(pfn)) {
++               WARN_ON_ONCE(!page_count(pfn_to_page(pfn)));
+                mark_page_accessed(pfn_to_page(pfn));
++       }
+ }
+ EXPORT_SYMBOL_GPL(kvm_set_pfn_accessed);
+
+In a way, that's even better than the current check as it makes it more obvious
+that the WARN is due to a use-after-free.

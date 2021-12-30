@@ -2,129 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E97BF481F46
-	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 19:40:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D694B481F48
+	for <lists+linux-kernel@lfdr.de>; Thu, 30 Dec 2021 19:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241661AbhL3Skf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 13:40:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:24354 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233595AbhL3Ske (ORCPT
+        id S241681AbhL3Skx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 13:40:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38618 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241673AbhL3Skv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 13:40:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640889633;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MbQ6UTaZ+JchUIz8NAwbybt8i/nP+nB2Nzcb91Lig9Y=;
-        b=h0JACVYQS2xiOzphT5DupU03WWtt5qYwNVxDyj0vT3cFlI6oeXNRDHPa3ICYxBZfpicY8m
-        5ZqNUOOn7kkzhtCE3iEK0Okv5hDlz9E0lRdu8YNKg70FYLWe4a5y7e2SfBzeK5CKKd4Gy6
-        /XumNuY9zKs9RLQo03wV3IX7COhw6MU=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-193-iQP98mV0Mu6ccx3V__Zlqw-1; Thu, 30 Dec 2021 13:40:32 -0500
-X-MC-Unique: iQP98mV0Mu6ccx3V__Zlqw-1
-Received: by mail-ed1-f69.google.com with SMTP id d7-20020aa7ce07000000b003f84e9b9c2fso17454121edv.3
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 10:40:32 -0800 (PST)
+        Thu, 30 Dec 2021 13:40:51 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8822FC06173E
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 10:40:51 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id l10-20020a17090a384a00b001b22190e075so23447776pjf.3
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 10:40:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0dlCui6ef10a63W49l8BeTD6AlMqaA5DizmBUz4pmE0=;
+        b=cCnkXzILDcBP2M9InOSjHJwJ1jEfD62+xKs/RcNbUQDWf2HXUt/AUIkduZcK9yoXHc
+         JXYXD/C5t3+K2RQd8Q/ly6PI4PF/AUWQPatd3JV9p4GWme7hNZibf8u5O3w6IVy4txQD
+         Z4rGuFHiD96cwkgkFkBGR26VYM0vVE04pt6GaYUOTHPQ27cMbF/c0TRPu26gBQ/FJRLO
+         dsF3ZHkTsq/Hk9Vz3AArXDwy+dKYts0n/3gKE0cxyzdFDfomQenAH4kbMtiGTKuty86e
+         3XKpxjsLDcHI0jPh/SFeR+K+SFBYoB/q2DG4hKMQBRbkegn8mJrPNXB6s3hD8Q+aHxlh
+         43dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MbQ6UTaZ+JchUIz8NAwbybt8i/nP+nB2Nzcb91Lig9Y=;
-        b=j7I8ItCI+GuGKJiVX5ZlLyphAe6nP7gvhjYrspBZorAana1s0KYf9ClIeNA0rV4YNZ
-         i4Kor6toSvmlPSD6Z4NoJm40N4gb871sdYOzEne0Lcg887zN/YSf27EA/dfkhYlVnMzt
-         xbcl0D0gAReoGJGmpCsLIf3EnAmxo5hyv2EtCNGa3p+mPJMtOahdTyNaWY/08AFC4m70
-         rE2EE6VXfnMpyIcqSX014TpnY3hSYj3/cTtH3oBHSiW605iB3GZ7z8kIIIItphSB7ws9
-         GnIM5Y2IM/2ARR4Rr3vdRxz5VC8+IdlxqYGBfyYFyhYXlno+Bu4JSkx7qDvCesDESlIv
-         3KaA==
-X-Gm-Message-State: AOAM533x/iWQI1teEcE+jC7v/E4ekmSvcfzineLi6sQVDatOL9GREbP6
-        jJinH9z4fFlQCYTfb/+FPJt5bAI9K5OhPEgkkgVMyIXXgggS+jeQf7YigEdES7+Gtk6WMNFORI+
-        TcPST2TS2iwzeoi1v/o7y11PF
-X-Received: by 2002:a50:fc93:: with SMTP id f19mr12870673edq.180.1640889631043;
-        Thu, 30 Dec 2021 10:40:31 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx/sv+BexySX7FvaFv581MzQ3yHBjt1kF9Bju+nrFgYmhFaGX7ob1HlciOK3TfSeDh3YWWYvQ==
-X-Received: by 2002:a50:fc93:: with SMTP id f19mr12870655edq.180.1640889630836;
-        Thu, 30 Dec 2021 10:40:30 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id nb20sm7761809ejc.25.2021.12.30.10.40.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Dec 2021 10:40:30 -0800 (PST)
-Message-ID: <980d3895-b9c1-6f3c-3b7e-b5fc208769ad@redhat.com>
-Date:   Thu, 30 Dec 2021 19:40:29 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0dlCui6ef10a63W49l8BeTD6AlMqaA5DizmBUz4pmE0=;
+        b=T9GONe01Nxq53tr1icsiWw5vPhkRCT+0XK2P6I7PA0h6rwdcU9AImrQR3P6mGHqU88
+         B18ED970p19i0yhPKHWjyWp3FXjXwGfJY11TLyuQ3VVdO4vAaSPs5qcbXtbOTYME5OEy
+         QO407gZ6Q1acGs9thtusoRmIifIFPbbawZpytlsh6MjmMtuZgFSgdeT8eakAZmu318tm
+         QY7ml/MGWy7XdmyVwUGu8MNFIjZAZwBIIN5HNbe754Bb7LfAjAGVNJOlwv+ylGS0jyIu
+         vjOPdnRar+lbbzJoVmzBEL0JMZ+qJxZdBJGhzhbX22/JYrgywZvYa8M420hMJQHjzHZ0
+         SG1A==
+X-Gm-Message-State: AOAM530fNfxyN89Gh4mLRL4oISwg9V6DvkpOetXYmOF74hArFSmP/2LI
+        5g20/1LAiedT7ZKTeelVVy2oaw==
+X-Google-Smtp-Source: ABdhPJw1DGaUS0160SXEiorqCYdmWgjglHDjXF9V7C0SSxlxrcLzR+TYgYTAmK0J0pGgmghC5eafuw==
+X-Received: by 2002:a17:90b:3b45:: with SMTP id ot5mr37244717pjb.147.1640889650869;
+        Thu, 30 Dec 2021 10:40:50 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id j7sm28410030pfu.164.2021.12.30.10.40.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Dec 2021 10:40:50 -0800 (PST)
+Date:   Thu, 30 Dec 2021 18:40:47 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Lai Jiangshan <laijs@linux.alibaba.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, kvm@vger.kernel.org
+Subject: Re: [RFC PATCH] x86/kvm: Allow kvm_read_and_reset_apf_flags() to be
+ instrumented
+Message-ID: <Yc39L/2Ltx53bP/0@google.com>
+References: <20211126123145.2772-1-jiangshanlai@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 4/4] platform/x86: Add crystal_cove_charger driver
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20211225115509.94891-1-hdegoede@redhat.com>
- <20211225115509.94891-5-hdegoede@redhat.com>
- <CAHp75VcnPJvprayX+B_nHEahbrSyvAORyD9dAuMJ9zEP+Jq3hw@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAHp75VcnPJvprayX+B_nHEahbrSyvAORyD9dAuMJ9zEP+Jq3hw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211126123145.2772-1-jiangshanlai@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 12/25/21 15:37, Andy Shevchenko wrote:
-> On Sat, Dec 25, 2021 at 1:55 PM Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> Driver for the external-charger IRQ pass-through function of the
->> Bay Trail Crystal Cove PMIC.
+On Fri, Nov 26, 2021, Lai Jiangshan wrote:
+> From: Lai Jiangshan <laijs@linux.alibaba.com>
 > 
-> Intel Bay Trail (same in the code)
-
-Ack will fix before merging.
-
->> Note this is NOT a power_supply class driver, it just deals with IRQ
->> pass-through, this requires this separate driver because the PMIC's
->> level 2 interrupt for this must be explicitly acked.
->>
->> This new driver gets enabled by the existing X86_ANDROID_TABLETS Kconfig
->> option because the x86-android-tablets module is the only user of the
->> exported external-charger IRQ.
+> Both VMX and SVM made mistakes of calling kvm_read_and_reset_apf_flags()
+> in instrumentable code:
+> 	vmx_vcpu_enter_exit()
+> 		ASYNC PF induced VMEXIT
+> 		save cr2
+> 	leave noinstr section
+> 	-- kernel #PF can happen here due to instrumentation
+> 	handle_exception_nmi_irqoff
+> 		kvm_read_and_reset_apf_flags()
 > 
-> ...
+> If kernel #PF happens before handle_exception_nmi_irqoff() after leaving
+> noinstr section due to instrumentation, kernel #PF handler will consume
+> the incorrect apf flags and panic.
 > 
->>  drivers/platform/x86/crystal_cove_charger.c | 153 ++++++++++++++++++++
+> The problem might be fixed by moving kvm_read_and_reset_apf_flags()
+> into vmx_vcpu_enter_exit() to consume apf flags earlier before leaving
+> noinstr section like the way it handles CR2.
 > 
-> I'm wondering why it's not under the intel/ subfolder. Do we expect to
-> have the same PMIC used on other x86 vendors?
+> But linux kernel only resigters ASYNC PF for userspace and guest, so
 
-I was wondering about doing this myself before submitting this upstream,
-since you have the same idea, lets go for it. I'll move this before
-merging it.
+I'd omit the guest part.  While technically true, it's not relevant to the change
+as the instrumentation safety comes purely from the user_mode() check.  Mentioning
+the "guest" side of things gets confusing as the "host" may be an L1 kernel, in
+which case it is also a guest and may have its own guests.
 
-> 
-> ...
-> 
->> +static int crystal_cove_charger_probe(struct platform_device *pdev)
->> +{
-> 
-> Adding
-> 
->   struct device *dev = &pdev->dev;
-> 
-> may increase readability a bit and perhaps reduce the amount of LOCs.
+It'd also be helpful for future readers to call out that this is true only since
+commit 3a7c8fafd1b4 ("x86/kvm: Restrict ASYNC_PF to user space").  Allowing async
+#PF in kernel mode was presumably why this code was non-instrumentable in the
+first place.
 
-Normally I'm a fan of doing that myself, but it doesn't really help
-here since there are only a few references and those fit in 1 line.
+> ASYNC PF can't hit when it is in kernel, so apf flags can be changed to
+> be consumed only when the #PF is from guest or userspace.
 
-Regards,
+...
 
-Hans
+> @@ -1538,7 +1514,20 @@ DEFINE_IDTENTRY_RAW_ERRORCODE(exc_page_fault)
+>  	state = irqentry_enter(regs);
+>  
+>  	instrumentation_begin();
+> -	handle_page_fault(regs, error_code, address);
+> +
+> +	/*
+> +	 * KVM uses #PF vector to deliver 'page not present' events to guests
+> +	 * (asynchronous page fault mechanism). The event happens when a
+> +	 * userspace task is trying to access some valid (from guest's point of
+> +	 * view) memory which is not currently mapped by the host (e.g. the
+> +	 * memory is swapped out). Note, the corresponding "page ready" event
+> +	 * which is injected when the memory becomes available, is delivered via
+> +	 * an interrupt mechanism and not a #PF exception
+> +	 * (see arch/x86/kernel/kvm.c: sysvec_kvm_asyncpf_interrupt()).
+> +	 */
+> +	if (!user_mode(regs) || !kvm_handle_async_user_pf(regs, (u32)address))
+> +		handle_page_fault(regs, error_code, address);
 
+To preserve the panic() if an async #PF is injected for !user_mode, any reason
+not to do?
+
+	if (!kvm_handle_async_user_pf(regs, (u32)address))
+		handle_page_fault(regs, error_code, address);
+
+Then __kvm_handle_async_user_pf() can keep its panic() on !user_mode().  And it
+also saves a conditional when kvm_async_pf_enabled is not true.

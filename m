@@ -2,84 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B2B482438
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 14:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8765C48243D
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 14:43:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbhLaNg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 08:36:57 -0500
-Received: from mga05.intel.com ([192.55.52.43]:18348 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229652AbhLaNg4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 08:36:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640957816; x=1672493816;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ziiIZDW4FuCQoGjGsFab8WdZj2erKAoSEUkndTEE768=;
-  b=G/R1fBgW5tuDtQML1YOmn6BddE9qnAw3WMmUDxI1z16hkiYhKWdkhRoF
-   XpB19EpmMI8WMxubYYRyjXrBVjMvsE6pyZIMWgn5eAQID6L1ngUXVsWg9
-   jLR0vqqTTFXKIPJDonH9wFONE4ddCChMHqZdwOXB5te7zhSao2UwuuQ04
-   O5taEaAU2Cm34FLKEDPAdUyN937j/cdo8l3NVI9riEpCjBOnxmAZA5nFL
-   mgB70MiiaGuUGnpzjJMV6iwW0BQ7asiwHGRpII55AS/rtap6BafiGJIeq
-   fy0b/rqYeLnoJoCZSPQJDYUTLZ2jE5bcVOYKpGbbKbBVEWEZNTgpfs1vW
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="328145542"
-X-IronPort-AV: E=Sophos;i="5.88,251,1635231600"; 
-   d="scan'208";a="328145542"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2021 05:36:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,251,1635231600"; 
-   d="scan'208";a="470948797"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 31 Dec 2021 05:36:54 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n3I5W-000BId-6R; Fri, 31 Dec 2021 13:36:54 +0000
-Date:   Fri, 31 Dec 2021 21:36:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <anup.patel@wdc.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Alexander Graf <graf@amazon.com>
-Subject: ERROR: modpost: "boot_cpu_hartid" [arch/riscv/kvm/kvm.ko] undefined!
-Message-ID: <202112312103.ocXHa7GE-lkp@intel.com>
+        id S230207AbhLaNnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 08:43:19 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:54374 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229652AbhLaNnS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 31 Dec 2021 08:43:18 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 67D1D61795;
+        Fri, 31 Dec 2021 13:43:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55BCAC36AEA;
+        Fri, 31 Dec 2021 13:43:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640958197;
+        bh=riLwjw8krb8OxQcZBIqxR9zTPbsU+dtHc4Y6gmVcaRc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b0GQhItaBGknP/vQFDElSAT8a9M/Jp72U/iVPQYVaOn8ZNQa06z1ysQpGNQWlDMEJ
+         ngK75KAJ8FsJI/n/2EHnVvOeaLhFgD6kdptzUeodgapqr/ht/FcwwErIF48VnoilBy
+         N1boTHiktp75CQ9HNVJq2P6mFnerzSkVrRJtk+VHWP3/i8r2nLSLL2TmiQQXDFY809
+         2g/HzeB1KMt64ASAsD8FIEoBuWcFbzUN/y5S47exX1G9HVCX0dzuoV29yAC91Pfx+G
+         IVthbazen1jbidDwaQSc20RirPbxY3jluzAKs0IE68gybkDkTwDRdOA2ZhBTz/XKD5
+         4opmHEbjSROrQ==
+Date:   Fri, 31 Dec 2021 14:43:15 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Deep Majumder <deep@fastmail.in>
+Cc:     linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] Docs: Fixes link to I2C specification
+Message-ID: <Yc8I89eEqN8CcgDv@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Deep Majumder <deep@fastmail.in>, linux-doc@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211119061401.19852-1-deep@fastmail.in>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="GW+rflw+5+PYEx5W"
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211119061401.19852-1-deep@fastmail.in>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anup,
 
-FYI, the error/warning still remains.
+--GW+rflw+5+PYEx5W
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4f3d93c6eaff6b84e43b63e0d7a119c5920e1020
-commit: fd7bb4a251dfc1da3496bf59a4793937c13e8c1f RISC-V: KVM: Implement VMID allocator
-date:   3 months ago
-config: riscv-randconfig-r005-20211231 (https://download.01.org/0day-ci/archive/20211231/202112312103.ocXHa7GE-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fd7bb4a251dfc1da3496bf59a4793937c13e8c1f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout fd7bb4a251dfc1da3496bf59a4793937c13e8c1f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
+On Fri, Nov 19, 2021 at 11:44:01AM +0530, Deep Majumder wrote:
+> The link to the I2C specification is broken and is replaced in this
+> patch by one that points to Rev 6 (2014) of the specification.
+> Although `https://www.nxp.com" hosts the Rev 7 (2021) of this
+> specification, it is behind a login-wall and thus cannot be used.
+> Thus, an additional link has been added (which doesn't require a login)
+> and the NXP official docs link has been updated. The additional link is
+> not the Wayback Machine link since it seems that the PDF has not been
+> archived.
+>=20
+> Signed-off-by: Deep Majumder <deep@fastmail.in>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Applied to for-current with minor updates to text and commit message as
+discussed here, thanks!
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> ERROR: modpost: "boot_cpu_hartid" [arch/riscv/kvm/kvm.ko] undefined!
+--GW+rflw+5+PYEx5W
+Content-Type: application/pgp-signature; name="signature.asc"
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHPCPIACgkQFA3kzBSg
+KbbKeRAAo1baRRpnMxfXlwvvTi2yv1LkZN+CvFKDH7SwMao3B0j+mh/JiVrjOIMT
+E17qBiZAerhIpaoJu2/PBrD5ZiVScUbb41Ij0vHMONjFUytRgdCLkp/WDVWVkskm
+v/l3YvQlLiaMLv+J6rj4/ABwGOq5Ayrzrrl81xsZN4peEiMV2FdUHyS7YIMBmdJW
+BmltfbFboQsMBULiSV2OoJrqKP9mRgbqCrsHdmotUq3zj6WHgVZGg4ebpErWYm4d
+6qgW40MHklJ5r9eqy4LQb6q1pK14hm7zXeepKku/EmNrgC9IqHfngfOWlAj3lYKB
+JAZygZ5tu0aVxZBmYf6ppgwjDZvyzjBnvcKFpTThWQsvAvNdDGNT6pVmDrrH/Uyv
++Po03Tq44/rHBuZDh71uB+B71z5kLVRvpLY6K69ICn/+2T702LdiIWDHkIXGjUNE
+UxdvZpuGSDMjcxpbtA0HvUF5gEABWHRSY2o+A7epG0P4rmWnD3Dy9de24JTxCJ6+
+jhLUifQ1sQM7KM5gAT/5PYKQyX7A1nKbY8NCoE8RRQ/N1yFVh+HxYzesWCA/h+ZU
+0vX/mRKuZaLoch6FW+cnM+tVTnVkx/7+AuN23Mrr9xisdLJOSkJOwqCi69XMOJ1u
+zZylOL1XHINBXgBSBFVEsdTbJwQsXFliCeegiC+o+KKUW3kGfmA=
+=QDyg
+-----END PGP SIGNATURE-----
+
+--GW+rflw+5+PYEx5W--

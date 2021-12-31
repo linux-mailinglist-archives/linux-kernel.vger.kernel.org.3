@@ -2,110 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73AA248218D
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 03:31:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A04EA482190
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 03:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242284AbhLaCbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 21:31:31 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:38421 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S237557AbhLaCba (ORCPT
+        id S242313AbhLaCcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 21:32:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56816 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237557AbhLaCcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 21:31:30 -0500
-Received: (qmail 1123353 invoked by uid 1000); 30 Dec 2021 21:31:29 -0500
-Date:   Thu, 30 Dec 2021 21:31:29 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+3ae6a2b06f131ab9849f@syzkaller.appspotmail.com>
-Cc:     andreyknvl@google.com, dvyukov@google.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Write in
- usb_hcd_poll_rh_status (2)
-Message-ID: <Yc5rgUo8dyJKX98M@rowland.harvard.edu>
-References: <Yc4RsFnaFfbCUeRy@rowland.harvard.edu>
- <0000000000007e5fdb05d4668af8@google.com>
+        Thu, 30 Dec 2021 21:32:03 -0500
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49587C061574;
+        Thu, 30 Dec 2021 18:32:03 -0800 (PST)
+Received: by mail-yb1-xb42.google.com with SMTP id p15so26753943ybk.10;
+        Thu, 30 Dec 2021 18:32:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=JVBD5yksZxsGutsYS0eFNfyrQ76f0vg/ibwJcBMTicw=;
+        b=L8rpxmDCN1ikw/gmU4P6YK02NrJwmb8vnG7PeeOsHN7BfZpMUKsGISzLrtJwVAFDrB
+         mXPmsmSsQ6OqgqeJPpnXnTdBTCqlbVC02OL9jOkGcONd/TkRjRjNKgyxMWIDuKwI3vw/
+         bGIhHppSgb6kqnDeCUlxfmOAX7TtQuxrQElxP2wPJhr+OsOh1GmB/BJfjm7xEZw+3lbh
+         uY8OP0t5MSXjLBueSZFms3ohCrt7/Uh7T5Pxx7Eb5gIfkg4NMW/M9gsJXYJDwNb8o/7m
+         ZK0wc8cuh/GcLRbN9yP+XEZ2MJYwWKUaouO+Kakf9zzfJBsyzCXupNMO26hLtlif0tG2
+         shig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=JVBD5yksZxsGutsYS0eFNfyrQ76f0vg/ibwJcBMTicw=;
+        b=NhwlCQrJ64JSLMlLZYHebZTVj2lAyMub/ZeyT1a92NYWsGrt5aUs/X27UFdiojLKeE
+         wOHF0mbpBYCbrQ9R0VP0nFERBT4JApBowH82GfVyPzuoLteK020UdKZyArAXhtOPwnZV
+         w4mVjfhw958odYhmqN13P5/fNavsfnHOHmGzk6yQtUbJOhAPVo0wsbhS7rUxvAbIo04D
+         U328B21m1bCf763sopC0s479tO6dutWoKijZTol4lO1ys+i1JL5lEvnUksokKZ33idSM
+         x6yyAlLCttJ0wdt1eu6A4KCDqqj9NCotbxB8z/LW2cQv2ujy9PD+nd0VT18CPVgJ7KtP
+         gkkA==
+X-Gm-Message-State: AOAM530WG/CZeyRh7HG9m2IXX1G35EN/Nf9Qof1P7tw7b+QHgdWJx8e0
+        QZjmrjHwZ5/gKCMgn0CmdAW3NYz8NgiIi63D39M=
+X-Google-Smtp-Source: ABdhPJxHFq4M6ky3lFhl3t+0n++ANc9X8PmONVHU09aZfkknm9NX4lCvnrBEZTEAcGjwpu4G/LmjwmV009rMZWPJ8Sk=
+X-Received: by 2002:a25:2e4c:: with SMTP id b12mr26946986ybn.569.1640917922513;
+ Thu, 30 Dec 2021 18:32:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000007e5fdb05d4668af8@google.com>
+References: <20211230051132.21056-1-hbh25y@gmail.com> <20211230051132.21056-3-hbh25y@gmail.com>
+ <Yc4MeIt6JygZ6CrY@rowland.harvard.edu>
+In-Reply-To: <Yc4MeIt6JygZ6CrY@rowland.harvard.edu>
+From:   Hangyu Hua <hbh25y@gmail.com>
+Date:   Fri, 31 Dec 2021 10:31:51 +0800
+Message-ID: <CAOo-nLLpNfHzrOyF4P0XvFK1h+J+aZqGL+AqmZP2PG6C=rcFjg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] usb: gadget: clear related members when goto fail
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, axboe@kernel.dk,
+        jj251510319013@gmail.com, dan.carpenter@oracle.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Trimmed CC: list]
+On 2021/12/31 =E4=B8=8A=E5=8D=883:46, Alan Stern wrote:
+> You must not do this.  I never sent you an Acked-by for this patch; you
+> shouldn't claim that I did.
 
-On Thu, Dec 30, 2021 at 04:49:18PM -0800, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-> KASAN: slab-out-of-bounds Write in usb_hcd_poll_rh_status
-...
-> Tested on:
-> 
-> commit:         eec4df26 Merge tag 's390-5.16-6' of git://git.kernel.o..
-> git tree: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+I am sorry about this. I should read the linux kernel community rules
+more carefully.
 
-I'm glad to see that the git tree is reported properly, but the commit 
-label is too short.  The reproducer bug report had exactly the opposite 
-problems!  It said:
+>>      value =3D usb_gadget_probe_driver(&gadgetfs_driver);
+>>      if (value !=3D 0) {
+>> +            dev->dev =3D NULL;
+>> +            dev->hs_config =3D NULL;
+>> +            dev->config =3D NULL;
+>>              kfree (dev->buf);
+>>              dev->buf =3D NULL;
+> Why not just grep the lock and goto fail?
 
-> syzbot has found a reproducer for the following issue on:
+You are right. I will modify my patch later.
+
+>>      } else {
+>> @@ -1892,7 +1895,12 @@ dev_config (struct file *fd, const char __user *b=
+uf, size_t len, loff_t *ptr)
+>>      }
+>>      return value;
+>>
+>> +fail2:
+>> +    dev->dev =3D NULL;
+>> +fail1:
+>> +    dev->hs_config =3D NULL;
 >
-> HEAD commit:    eec4df26e24e Merge tag 's390-5.16-6' of git://git.kernel.o..
-> git tree:       upstream
+> It is not necessary to have all these different statement labels.  You
+> can simply have "fail:" clear all three pointers.
+>
+>>   fail:
+>> +    dev->config =3D NULL;
+>>      spin_unlock_irq (&dev->lock);
+>>      pr_debug ("%s: %s fail %zd, %p\n", shortname, __func__, value, dev)=
+;
+>>      kfree (dev->buf);
+>
+> Alan Stern
+>
 
-Andrey or Dmitry?  Can you guys unify these two outputs to make both 
-lines correct always?
+I don't think so. It is not necessary to clean all three pointers if
+some of them aren't kbuf. I think it may be better to keep their own
+pointers.
 
-Moving on...  Important lines from the console log:
-
-[   76.919138][ T4081] usb usb9: usbdev_do_ioctl: BULK
-[   76.924966][ T4081] usb usb9: usbfs: process 4081 (syz-executor189) did not claim interface 0 before use
-[   76.935186][ T4081] usb usb9: ep1 int-in, length 1, timeout 9
-[   76.941355][ T4099] usb usb9: opened by process 4099: syz-executor189
-[   76.942606][ T4087] usb usb9: usbdev_do_ioctl: BULK
-[   76.949968][    C1] 
-==================================================================
-[   76.950070][    C1] BUG: KASAN: slab-out-of-bounds in usb_hcd_poll_rh_status+0x376/0x780
-[   76.950102][    C1] Write of size 2 at addr ffff8880121ae230 by task syz-executor189/4087
-
-It's hard to tell what's really happening.  The suspicious part is the 
-"length 1" combined with the "Write of size 2" -- but they refer to 
-different processes!
-
-Maybe this diagnostic patch will help a little.
-
-Alan Stern
-
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ eec4df26e24e
-
-Index: usb-devel/drivers/usb/core/devio.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/devio.c
-+++ usb-devel/drivers/usb/core/devio.c
-@@ -109,7 +109,7 @@ struct async {
- 	u8 bulk_status;
- };
- 
--static bool usbfs_snoop;
-+static bool usbfs_snoop = true;
- module_param(usbfs_snoop, bool, S_IRUGO | S_IWUSR);
- MODULE_PARM_DESC(usbfs_snoop, "true to log all usbfs traffic");
- 
-Index: usb-devel/drivers/usb/core/hcd.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/hcd.c
-+++ usb-devel/drivers/usb/core/hcd.c
-@@ -809,8 +809,10 @@ static int rh_queue_status (struct usb_h
- 	unsigned	len = 1 + (urb->dev->maxchild / 8);
- 
- 	spin_lock_irqsave (&hcd_root_hub_lock, flags);
-+	dev_info(hcd->self.controller, "rh_queue_status: len %d tblen %d\n",
-+			len, urb->transfer_buffer_length);
- 	if (hcd->status_urb || urb->transfer_buffer_length < len) {
--		dev_dbg (hcd->self.controller, "not queuing rh status urb\n");
-+		dev_info(hcd->self.controller, "not queuing rh status urb\n");
- 		retval = -EINVAL;
- 		goto done;
- 	}
-
+Thanks. Happy new year.

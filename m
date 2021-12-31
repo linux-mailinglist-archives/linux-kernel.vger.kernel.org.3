@@ -2,129 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14D0B48244B
+	by mail.lfdr.de (Postfix) with ESMTP id AB45348244D
 	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 15:24:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbhLaOKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 09:10:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:59891 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229854AbhLaOKS (ORCPT
+        id S230406AbhLaOYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 09:24:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229854AbhLaOYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 09:10:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640959817;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZA7VWkCPr41q8/Hb/ehlM3EuRdCqmcpsIFtWCkCNsyY=;
-        b=gSaZ5Ymw6DDuHhqUSJDb6Cpl9nKCJHgBFK5jqfZ/+DSB81fN7NhNmj+Afrs+tyOhoIVRrK
-        1PfSiN96SZrBNK6/PdyC/69LlttTJJLKxCwjkNrPW9A0hgAsxv3PhAJqn2XIds/ywVGSba
-        xqt6Exmnq+mgeyf51jkgzeEKQGOUlNI=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-557-GvKHXCAmNDGjfrGSAjpXmw-1; Fri, 31 Dec 2021 09:10:16 -0500
-X-MC-Unique: GvKHXCAmNDGjfrGSAjpXmw-1
-Received: by mail-ed1-f72.google.com with SMTP id q15-20020a056402518f00b003f87abf9c37so18869960edd.15
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 06:10:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZA7VWkCPr41q8/Hb/ehlM3EuRdCqmcpsIFtWCkCNsyY=;
-        b=h7haNXwTdlKmNhHdSVGysLd/vXaenrdsvvMoKup9K2Znt4P0dF1iVZD1drm8N0z68s
-         sGIXzusQByY6huySGg9SCjaTUiLoiBAQBlAd7y5lerlCOytIxlIL06tkcV4FtqEuLPoX
-         n43l+R89pPSUbWPLuZRAb+j3I/OrZ5SV/mERLBxZU0uc2POKDy6QI2R58HfEhjLsKYw8
-         6GCqcjKfBBFOEI093hOTzlhezBlHr+sWhTcNCXZVPCS/S7YUlN0tLMzC3GU+21LG/wW6
-         vl0wcZJc79r1EiCGO5U1brEbzIb1dD2dCA7axuhfCTzW902Otweml8r6b8sN1GZu7Ze5
-         1ybg==
-X-Gm-Message-State: AOAM530LF+z/qGCTzriP1xoAp8wCTZsXWMlMyA9xrNtL16CLZFxEBBZ5
-        NWIpGBoqtgwS5US7K8CYXPKcPijJ/dL5KxZI3Ba1v0ifkFQYF1NyFWezI1pMytqApbGhikfsg9U
-        QgApjRI9OVzyR1MoK/QUzC7sS
-X-Received: by 2002:a05:6402:520e:: with SMTP id s14mr35102426edd.10.1640959814983;
-        Fri, 31 Dec 2021 06:10:14 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyXtpIURiz+yNaLNBLGV+WSn/jF2jDc9Bt4tyqjwsuq38M6N4JPJi2er/re4Hlsy4la5AJufA==
-X-Received: by 2002:a05:6402:520e:: with SMTP id s14mr35102414edd.10.1640959814778;
-        Fri, 31 Dec 2021 06:10:14 -0800 (PST)
-Received: from krava ([83.240.62.97])
-        by smtp.gmail.com with ESMTPSA id u21sm10615429eds.8.2021.12.31.06.10.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Dec 2021 06:10:14 -0800 (PST)
-Date:   Fri, 31 Dec 2021 15:10:13 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     yaowenbin <yaowenbin1@huawei.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        namhyung@kernel.org, linux-kernel@vger.kernel.org,
-        hewenliang4@huawei.com, wuxu.wu@huawei.com
-Subject: Re: [PATCH] perf top: add concurrent access protection of the SLsmg
- screen management
-Message-ID: <Yc8PRcFFSvIev0c5@krava>
-References: <a91e3943-7ddc-f5c0-a7f5-360f073c20e6@huawei.com>
+        Fri, 31 Dec 2021 09:24:23 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9C2C061574;
+        Fri, 31 Dec 2021 06:24:22 -0800 (PST)
+Received: from ip4d173d02.dynamic.kabel-deutschland.de ([77.23.61.2] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1n3IpI-0000DM-Jk; Fri, 31 Dec 2021 15:24:12 +0100
+Message-ID: <5c9d7c6b-05cd-4d17-b941-a93d90197cd3@leemhuis.info>
+Date:   Fri, 31 Dec 2021 15:24:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a91e3943-7ddc-f5c0-a7f5-360f073c20e6@huawei.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v4 1/1] mm: vmscan: Reduce throttling due to a failure to
+ make progress
+Content-Language: en-BS
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mel Gorman <mgorman@techsingularity.net>,
+        Mark Brown <broonie@kernel.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Alexey Avramov <hakavlad@inbox.lv>,
+        Rik van Riel <riel@surriel.com>,
+        Mike Galbraith <efault@gmx.de>,
+        Darrick Wong <djwong@kernel.org>, regressions@lists.linux.dev,
+        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20211202150614.22440-1-mgorman@techsingularity.net>
+ <caf247ab-f6fe-a3b9-c4b5-7ce17d1d5e43@leemhuis.info>
+ <20211229154553.09dd5bb657bc19d45c3de8dd@linux-foundation.org>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <20211229154553.09dd5bb657bc19d45c3de8dd@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1640960662;ce6ca4c0;
+X-HE-SMSGID: 1n3IpI-0000DM-Jk
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 29, 2021 at 04:55:19PM +0800, yaowenbin wrote:
-> When the following command is executed several times, a coredump file is generated.
-> 	$ timeout -k 9 5 perf top -e task-clock
-> 	*******
-> 	*******
-> 	*******
-> 	0.01%  [kernel]                  [k] __do_softirq
-> 	0.01%  libpthread-2.28.so        [.] __pthread_mutex_lock
-> 	0.01%  [kernel]                  [k] __ll_sc_atomic64_sub_return
-> 	double free or corruption (!prev) perf top --sort comm,dso
-> 	timeout: the monitored command dumped core
+On 30.12.21 00:45, Andrew Morton wrote:
+> On Tue, 28 Dec 2021 11:04:18 +0100 Thorsten Leemhuis <regressions@leemhuis.info> wrote:
 > 
-> When we terminate "perf top" using sending signal method, SLsmg_reset_smg
-> function is called. SLsmg_reset_smg resets the SLsmg screen management routines
-> by freeing all memory allocated while it was active. However SLsmg_reinit_smg
-> function maybe be called by another thread. SLsmg_reinit_smg function will
-> free the same memory accessed by SLsmg_reset_smg functon, thus it results
-> in double free. SLsmg_reinit_smg function is called already protected by
-> ui__lock, so we fix the problem by adding pthread_mutex_trylock of ui__lock
-> when calling SLsmg_reset_smg function.
+>> Hi, this is your Linux kernel regression tracker speaking.
+>>
+>> On 02.12.21 16:06, Mel Gorman wrote:
+>>> Mike Galbraith, Alexey Avramov and Darrick Wong all reported similar
+>>> problems due to reclaim throttling for excessive lengths of time.
+>>> In Alexey's case, a memory hog that should go OOM quickly stalls for
+>>> several minutes before stalling. In Mike and Darrick's cases, a small
+>>> memcg environment stalled excessively even though the system had enough
+>>> memory overall.
+>>
+>> Just wondering: this patch afaics is now in -mm and  Linux next for
+>> nearly two weeks. Is that intentional? I had expected it to be mainlined
+>> with the batch of patches Andrew mailed to Linus last week, but it
+>> wasn't among them.
 > 
-> Signed-off-by: yaowenbin <yaowenbin1@huawei.com>
-> Signed-off-by: hewenliang <hewenliang4@huawei.com>
-> Signed-off-by: Wenyu Liu <liuwenyu7@huawei.com>
-> ---
->  tools/perf/ui/tui/setup.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
+> I have it queued for 5.17-rc1.
 > 
-> diff --git a/tools/perf/ui/tui/setup.c b/tools/perf/ui/tui/setup.c
-> index d4ac41679..1fdf92062 100644
-> --- a/tools/perf/ui/tui/setup.c
-> +++ b/tools/perf/ui/tui/setup.c
-> @@ -170,9 +170,11 @@ void ui__exit(bool wait_for_ok)
->  				    "Press any key...", 0);
+> There is still time to squeeze it into 5.16, just, with a cc:stable. 
 > 
->  	SLtt_set_cursor_visibility(1);
-> -	SLsmg_refresh();
-> -	SLsmg_reset_smg();
-> +	if (!pthread_mutex_trylock(&ui__lock)) {
+> Alternatively we could merge it into 5.17-rc1 with a cc:stable, so it
+> will trickle back with less risk to the 5.17 release.
+> 
+> What do people think?
 
-trylock because it can be called from signal, right?
-could you plase add some comment about that
+CCing Linus, to make sure he's aware of this.
 
-thanks,
-jirka
+Maybe I'm totally missing something, but I'm a bit confused by what you
+wrote, as the regression afaik was introduced between v5.15..v5.16-rc1.
+So I assume this is what you meant:
 
-> +		SLsmg_refresh();
-> +		SLsmg_reset_smg();
-> +		pthread_mutex_unlock(&ui__lock);
-> +	}
->  	SLang_reset_tty();
-> -
->  	perf_error__unregister(&perf_tui_eops);
->  }
-> --
-> 2.27.0
-> 
+```
+I have it queued for 5.17-rc1.
 
+There is still time to squeeze it into 5.16.
+
+Alternatively we could merge it into 5.17-rc1 with a cc:stable, so it
+will trickle back with less risk to the 5.16 release.
+
+What do people think?
+```
+
+I'll leave the individual risk evaluation of the patch to others. If the
+fix is risky, waiting for 5.17 is fine for me.
+
+But hmmm, regarding the "could merge it into 5.17-rc1 with a cc:stable"
+idea a remark: is that really "less risk", as your stated?
+
+If we get it into rc8 (which is still possible, even if a bit hard due
+to the new year festivities), it will get at least one week of testing.
+
+If the fix waits for the next merge window, it all depends on the how
+the timing works out. But it's easy to picture a worst case: the fix is
+only merged on the Friday evening before Linus releases 5.17-rc1 and
+right after it's out makes it into a stable-rc (say a day or two after
+5.17-rc1 is out) and from there into a 5.16.y release on Thursday. That
+IMHO would mean less days of testing in the end (and there is a weekend
+in this period as well).
+
+Waiting obviously will also mean that users of 5.16 and 5.16.y will
+likely have to face this regression for at least two and a half weeks,
+unless you send the fix early and Greg backports it before rc1 (which he
+afaics does if there are good reasons). Yes, it's `just` a performance
+regression, so it might not stop anyone from running Linux 5.16 -- but
+it's one that three people separately reported in the 5.16 devel cycle,
+so others will likely encounter it as well if we leave it unfixed in
+5.16. This will likely annoy some people, especially if they invest time
+in bisecting it, only to find out that the forth iteration of the fix
+for the regression is already available since December the 2nd.
+
+Ciao, Thorsten

@@ -2,81 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7577B482351
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 11:26:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 972DE482352
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 11:27:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbhLaK0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 05:26:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46074 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbhLaK0P (ORCPT
+        id S230071AbhLaK1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 05:27:05 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:51688 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229565AbhLaK1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 05:26:15 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82085C061574;
-        Fri, 31 Dec 2021 02:26:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Rg9rGwZgGR4ykMu25hQPlqku2ztjnWuF82soOKGpW3k=; b=nl1DAtkaErGPmlGNZgIzCZ3aq0
-        qRf8iS5UM3v0zagSWEXLlrCQUagZ2Cy8pB9vkkYpEMOk8GUOFZNmxu4IEoyHMRNG6LWbn1mNkKvAC
-        6tXqtdrt5I6Y3KfrO4GnhDqM6wRJNvcZ6pYDmwxfgWuZ1tlXAkZIkiUArYsJSvDaB2Ds8xU4bQzHk
-        nWjyXTniKEqGS/X6CtHSYoLjbJyNbvEciNhciOGHx7hGgy4mi3FlQ7DLbjwj0sIJO6AZK8jj4i8a/
-        nw+/Hq41kwMRw8BR+j+ZnGudav6WCmNkU7t5Atfm9JypUchH1i0QGa6fzH+SvkRYtMQdXAMmXVVUr
-        4hvclzTA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56500)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1n3F6o-0003jN-Rv; Fri, 31 Dec 2021 10:26:03 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1n3F6k-0003QA-Vg; Fri, 31 Dec 2021 10:25:58 +0000
-Date:   Fri, 31 Dec 2021 10:25:58 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Ilkka Koskinen <ilkka@os.amperecomputing.com>
-Cc:     lorenzo.pieralisi@arm.com, guohanjun@huawei.com,
-        sudeep.holla@arm.com, rafael@kernel.org, lenb@kernel.org,
-        robert.moore@intel.com, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        patches@amperecomputing.com, scott@os.amperecomputing.com,
-        darren@os.amperecomputing.com
-Subject: Re: [PATCH v3 0/2] ACPI: Arm Generic Diagnostic Dump and Reset device
-Message-ID: <Yc7attAhxzhWfuBn@shell.armlinux.org.uk>
-References: <20211231033725.21109-1-ilkka@os.amperecomputing.com>
+        Fri, 31 Dec 2021 05:27:04 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BVAQRXS032981;
+        Fri, 31 Dec 2021 04:26:27 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1640946387;
+        bh=bpUJPGgi/5Jx8j2h6g3oXESZgoh1z7lVwijB7GXIvPY=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=I9dhu3YnYCdPQV5wZhyOYljCW4hQ7M3JSxn0R/O6sq2J2xXbx2ZcHqiNzlLS9Ij7z
+         flBelTZNcsrNHIBW/GTR9RiIIcbJpXDj0KeAUDldhNPbd7Vq52rYRgMLdvzap4QbUx
+         JxYHXmup4QljSyZRiZHqqrq0kq57+0xMFGxWlizY=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BVAQR5s023694
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 31 Dec 2021 04:26:27 -0600
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 31
+ Dec 2021 04:26:27 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 31 Dec 2021 04:26:27 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BVAQQ7k052825;
+        Fri, 31 Dec 2021 04:26:26 -0600
+Date:   Fri, 31 Dec 2021 15:56:25 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Patrick Williams <patrick@stwcx.xyz>
+CC:     Joel Stanley <joel@jms.id.au>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Potin Lai <potin.lai@quantatw.com>,
+        <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mtd: aspeed-smc: improve probe resilience
+Message-ID: <20211231102623.izaqlzjvracbbgmp@ti.com>
+References: <20211229143334.297305-1-patrick@stwcx.xyz>
+ <20211229173411.l2bipmi4x3arqjoo@ti.com>
+ <Yc3Qav+ULNdF5zRT@heinlein>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20211231033725.21109-1-ilkka@os.amperecomputing.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <Yc3Qav+ULNdF5zRT@heinlein>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 30, 2021 at 07:37:23PM -0800, Ilkka Koskinen wrote:
-> Arm Generic Diagnostic Dump and Reset device enables a maintainer to
-> request OS to perform a diagnostic dump and reset a system via SDEI
-> event or an interrupt. This patchset adds support for the SDEI path.
-> 
-> I do have a patch to enable the interrupt path as well but I'm holding
-> it back since AGDI table is missing interrupt configuration fields
-> (trigger type etc.).
-> 
-> The recently published specification is available at
-> https://developer.arm.com/documentation/den0093/latest
-> 
-> The patchset was tested on Ampere Altra/Mt. Jade.
-> 
-> The patchset applies on top of
->   git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm bleeding-edge (642439a44411)
+Hi Patrick,
 
-LGTM, thanks!
+On 30/12/21 09:29AM, Patrick Williams wrote:
+> On Wed, Dec 29, 2021 at 11:04:13PM +0530, Pratyush Yadav wrote:
+> > Hi,
+> > 
+> > On 29/12/21 08:33AM, Patrick Williams wrote:
+>  
+> > The patch itself looks fine to me but we no longer want to maintain 
+> > drivers under drivers/mtd/spi-nor/controllers/. They should be moved to 
+> > implement the SPI MEM API (under drivers/spi/).
+> 
+> Is the linux-aspeed community aware of this?  Are you saying you don't want to
+> take fixes for their driver into the MTD tree?  Can it be pulled into the Aspeed
+> tree?
 
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+I am fine with taking in bug fixes but no longer want to take in any new 
+features. My main intention was to nudge you to convert it to SPI MEM 
+regardless of whether this is a bug fix or a new feature, because 
+eventually we want to get rid of drivers/mtd/spi-nor/controllers/ and 
+the API that comes along with it.
+
+As for your patch, I certainly don't want it to go via the aspeed tree. 
+It should go via the MTD tree or not at all. I am not quite sure if this 
+counts as a bug fix or a new feature though.
+
+> 
+> > Could you please volunteer to do the conversion for this driver?
+> 
+> I'm not personally going to be able to get to it for at least the next 3 months.
+> 
+> It looks like we don't have a dedicated maintainer for this driver other than
+> Joel by nature of him being listed as the maintainer of "ARM/ASPEED MACHINE
+> SUPPORT".  I'm not sure if Aspeed themselves are planning on doing the necessary
+> refactoring here.
+> 
+> 
+> Joel, are you aware of this driver using a deprecated implementation?  Were
+> there anyone planning to do the reworks that you are aware of?  I'd like to get
+> this fix at least into the OpenBMC kernel tree because I'm seeing this fail in
+> the real world.
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

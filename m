@@ -2,86 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD5B4823EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 13:13:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0CA44823EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 13:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbhLaMMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 07:12:55 -0500
-Received: from mga09.intel.com ([134.134.136.24]:51683 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229489AbhLaMMy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 07:12:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640952774; x=1672488774;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=h4xZ0G4SUs79127R3CIr0/yTBHzPGjwWTiB2YHrCjJE=;
-  b=W1QOI8vhEfdDWaRPD+DJnfxDzdyNK1bhoZKxeryZihWXo/lWEw0tE/RL
-   b3CLC/PNgC0vhgkBUIQ5mOVUxRzh8UsIZ/05AGf7+LEyKqfhf9OUjCmYp
-   FhZCw8mAzaODXfcum4cpdMzoo6j60sZJO/0j4BAIpX5/7BaMNk+9AdzEO
-   HpTmLODh0GU6YKZ/rDvUQYo6wXKxH76JLgCnxtKrTSl2tJs2VS6FXDtrc
-   U9V563P1nc1dOd9ewiwevE8sKzvtJWz28ZpPQlAl443QhiaD+6OeVkd9E
-   C6WKk4QmezhXf0Jusn+Xhfi5zxolANvLjbg7HI9RT42IY0lV587zxSRcA
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="241605045"
-X-IronPort-AV: E=Sophos;i="5.88,251,1635231600"; 
-   d="scan'208";a="241605045"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2021 04:12:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,251,1635231600"; 
-   d="scan'208";a="511185611"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 31 Dec 2021 04:12:52 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n3GmC-000BEC-7z; Fri, 31 Dec 2021 12:12:52 +0000
-Date:   Fri, 31 Dec 2021 20:12:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <anup.patel@wdc.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] RISC-V: fix semicolon.cocci warnings
-Message-ID: <20211231121206.GA2749@e375fe33811b>
+        id S230012AbhLaMOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 07:14:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41668 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229489AbhLaMOV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 31 Dec 2021 07:14:21 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 863F4C061574;
+        Fri, 31 Dec 2021 04:14:21 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id co15so23280099pjb.2;
+        Fri, 31 Dec 2021 04:14:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=s4ZIgRJxA/bJpK9EGNpz1Frs6UgnAptCBgM4W8Ra484=;
+        b=QzWESQ6syjOkTbO9iMpSAzXF2zK6Dng8Gp7fLynIjU7Mj+W2iPVrZDumnxmamx1YzW
+         TPIl7XCvUmjXUnfE3QLPTCJh1j8zh4OaATJ902E1Nppf8GBY8e+IhHuYlb6QpT1GAHNk
+         hk6SgrVVt1nsgibikT0Fe3oSTjJBJannf8EBpw5OjY1gFpE5IGtuQmR/nW8Tj/A5D+lI
+         lOSQkBf9zxe4/yjYiY+TjpdInKRj7woJV2UJLH5jk2CjVVa3HEoC3XTov+J5dnByqz7/
+         2F8pE7yGsHgBuoF/wXgwnlYK/qH0eStOSViYivce+1Hzs2ksANXZz1O+VON+yW8lKPpM
+         rbJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=s4ZIgRJxA/bJpK9EGNpz1Frs6UgnAptCBgM4W8Ra484=;
+        b=TyTx5D6xWRyAb7I9IWYocwAZZYIpi5yYjHQMYAJXfTVvW6sf1DaYJEJC72RMlXP2Rz
+         EaEB8cAU0UO75XAvB5fnzDsdSwZTHD8x1T9UXU6GpzQnPAGW3D5tm5w6yUueVtMjrih7
+         SWmpYLaitopq8/gD/xyHXsXO4DltnxDRw5o9mVv6aGkZZszj5ibspxn9H85AW9biNkbZ
+         YqJGw54buH6ZbhyoLM7Gy7DA+u4BW4GmjK8SHfzg6uHDwobpHsf8wsJ7aAjfHT+NUYG2
+         ZyOplWu4oZg/w3HmhiO0YjezGOaRxqqbI0O6CE3dmzRQJWCJ5btmJ6odBS1CSKzvxfSk
+         wbMg==
+X-Gm-Message-State: AOAM533HvUD6FZNon0iSJ9CaREsoPB0vK5uyzwsy+7V5yYMwpWqNbUs/
+        4PdS7tRC+LhnaaSsrpW05mdhjtpNsM9vz6YA5Tc=
+X-Google-Smtp-Source: ABdhPJz66ZSi21NgcqNFU9hPth58xFztXy4cZk5KcxZRUT1egh/2Xxd38wiHDKKHAlWk+WJ1xoyq+g==
+X-Received: by 2002:a17:902:7294:b0:149:64f4:bdba with SMTP id d20-20020a170902729400b0014964f4bdbamr30801058pll.48.1640952860999;
+        Fri, 31 Dec 2021 04:14:20 -0800 (PST)
+Received: from [192.168.0.105] ([45.116.106.186])
+        by smtp.gmail.com with ESMTPSA id rm3sm25280515pjb.8.2021.12.31.04.14.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Dec 2021 04:14:20 -0800 (PST)
+Message-ID: <65c90674808fc0a93c7d329067bf3e80736a003a.camel@gmail.com>
+Subject: Re: [PATCH] mctp: Remove only static neighbour on RTM_DELNEIGH
+From:   Gagan Kumar <gagan1kumar.cs@gmail.com>
+To:     Jeremy Kerr <jk@codeconstruct.com.au>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     matt@codeconstruct.com.au, davem@davemloft.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 31 Dec 2021 17:44:15 +0530
+In-Reply-To: <e20e47833649b5141fa327aa8113e34d4b1bbe15.camel@codeconstruct.com.au>
+References: <20211228130956.8553-1-gagan1kumar.cs@gmail.com>
+         <20211230175112.7daeb74e@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+         <e20e47833649b5141fa327aa8113e34d4b1bbe15.camel@codeconstruct.com.au>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Patchwork-Hint: ignore
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: kernel test robot <lkp@intel.com>
+Hi Jeremy and Jakub,
 
-arch/riscv/kernel/smp.c:130:2-3: Unneeded semicolon
+Thanks for the response.
+
+On Fri, 2021-12-31 at 11:33 +0800, Jeremy Kerr wrote:
+
+> Hi Jakub & Gagan,
+> 
+> > > Add neighbour source flag in mctp_neigh_remove(...) to allow
+> > > removal of only static neighbours.
+> > 
+> > Which are the only ones that exist today right?
+> 
+> That's correct. There may be a future facility for the kernel to
+> perform
+> neighbour discovery itself (somewhat analogous to ARP), but only the
+> static entries are possible at the moment.
+> 
+> > Can you clarify the motivation and practical impact of the change 
+> > in the commit message to make it clear? AFAICT this is a no-op / prep
+> > for some later changes, right Jeremy?
+> 
+> Yes, it'll be a no-op now; I'm not aware of any changes coming that
+> require parameterisation of the neighbour type yet.
+> 
+> Gagan - can you provide any context on this change?
+
+I was exploring the repository and wanted to get familiar with the
+patching process. During that, I was looking for some TODOs in /net for
+my first patch and came across mctp.
+
+I thought `TODO: add a "source" flag so netlink can only delete static
+neighbours?` might be of some use in the future. So, thought of sending
+a patch for the same.
+
+If I were to think like a critic, "You aren't gonna need it" principle
+can be applied here.
+
+If you think it's ok to proceed I can update the commit message to
+include the motivation and impact as a no-op.
+
+> 
+> Cheers,
+> 
+> 
+> Jeremy
+
+Thanks,
+Gagan
 
 
- Remove unneeded semicolon.
-
-Generated by: scripts/coccinelle/misc/semicolon.cocci
-
-CC: Anup Patel <anup.patel@wdc.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
----
-
-tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
-head:   6fa93cde61f5f84422bd3f97b9db6e2406a344dd
-commit: dea7752f30104c9bb3c2c67ce2c56e5a5eb3c290 [17/42] RISC-V: Treat IPIs as normal Linux IRQs
-:::::: branch date: 6 hours ago
-:::::: commit date: 3 days ago
-
- smp.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- a/arch/riscv/kernel/smp.c
-+++ b/arch/riscv/kernel/smp.c
-@@ -127,7 +127,7 @@ static irqreturn_t handle_IPI(int irq, v
- 	default:
- 		pr_warn("CPU%d: unhandled IPI%d\n", smp_processor_id(), ipi);
- 		break;
--	};
-+	}
- 
- 	return IRQ_HANDLED;
- }

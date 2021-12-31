@@ -2,224 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 550DB482175
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 03:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 912A9482178
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 03:21:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240897AbhLaCUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 21:20:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54220 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbhLaCUS (ORCPT
+        id S242143AbhLaCVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 21:21:02 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60144 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230097AbhLaCVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 21:20:18 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95849C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 18:20:17 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id j21so104230184edt.9
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 18:20:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=4BT5zSfL/LUdbZdT7j6ucUNjI5aCsRxRWutN5UwoeoQ=;
-        b=JS05VUbdXCb2vE/Df2H2tmvCQg0xPu00xtd1dFM6nybozLMpF10Ffn87plGDDoLs9a
-         07mcVsORaWKjjbHEl0dg0qMToISbz24ywLH9drAs9Btv/gzplx9h0OL/ObOME9pvi7pp
-         Exzzfkbgrh0DisQlvrtoGh+nRJSDoYaAncIOVwg/0FoDHVzVcOXji0DGVSZZaGTeOBUt
-         iY95+Om1JHo1jM34GmHRIxNh3p9VJL0Er86cjHGmiVeO02WZEPPPdZxtxtr225iUDCNM
-         9anPDhYr8nYoq3Af0iZTMGtgLya3jS2DTOtNsgwDVLa1vuOuG4pkkvU4orUa4C3tco+E
-         jKyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=4BT5zSfL/LUdbZdT7j6ucUNjI5aCsRxRWutN5UwoeoQ=;
-        b=701KnsquP3ph1fhhjzB9a+bpWRnpe3sN3SbO9TLB1zJR8NwziR+OLPtw+sXc9Snt9C
-         NOrjsxGQAnKMH0/8a8HlSmAcJXBS38jVwO+PnWijT5VvezYEzDIWkXPPFoyvvoPzFOzS
-         zRh0RiXcwNm9HQCN3EMC/Hb+SRx0yTWxegSkFmr0v1A+cILrbfbsCVxmxcQf4pvlKlrU
-         AQMmK7gWyfNSkpjCNKex9P50yDRFDrt8y2QZbvflmVOpkM88aaCe31c4jxvifZG3S3TB
-         t7s1YOISy1estUVeWFTXrq3CXpX+KFbBLMIOp54Pf7y4Xpzv0vy0qxJng2IQcNkDWaix
-         8TfA==
-X-Gm-Message-State: AOAM533/hnYaPWkHWhw8bmzfhpV+3zIsEEQSKcdwM8UrLkLPdgbM8zKx
-        4RmUd0KU22TYMLcwhPnQm/pNE04nXi1cy/913yc=
-X-Google-Smtp-Source: ABdhPJzK4bwK3dCrdFYmwJN+bnta2+FkZk2rCib3ASiiaOzTq7TLIxCQxhMawtWlr6zLbgjFMrbjQeBRlYpzxMTlWwI=
-X-Received: by 2002:a17:907:9493:: with SMTP id dm19mr26834530ejc.161.1640917216039;
- Thu, 30 Dec 2021 18:20:16 -0800 (PST)
-MIME-Version: 1.0
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Fri, 31 Dec 2021 12:20:04 +1000
-Message-ID: <CAPM=9tyK28tROtoYmE-Li2P5JL92GHcXFcXmWFi+z1m1AU6yqw@mail.gmail.com>
-Subject: [git pull] drm fixes for 5.16-rc8
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 30 Dec 2021 21:21:01 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7353C6177D
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 02:21:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5C4AC36AEA;
+        Fri, 31 Dec 2021 02:21:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1640917260;
+        bh=ajiIzV1Xo12M2EjXkjV5RYiF8ztULKZe0Ddbh2BUyGQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hWdvL4Wfm1nDv5Iwgr3rQMGvyStltiA2NVcOiuj/RHLyEAaC0MpJvTob1RjdXxlrA
+         oWGl4R+mSCNAQGuqcwuQBahIpa3wbxHPj8cT8/+Pf2iRSUU+l7l4HQthiIIhB9ryMD
+         oNQfeVXO3d6E1AeWCepOl4ohfhb6dBhbGCnI4768=
+Date:   Thu, 30 Dec 2021 18:20:59 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/4] Remove the type-unclear target id concept
+Message-Id: <20211230182059.6535f9201eba9e420a08445a@linux-foundation.org>
+In-Reply-To: <20211230100723.2238-1-sj@kernel.org>
+References: <20211230100723.2238-1-sj@kernel.org>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus (and misc maintainers),
+On Thu, 30 Dec 2021 10:07:19 +0000 SeongJae Park <sj@kernel.org> wrote:
 
-This is a bit bigger than I'd like, however it has two weeks of amdgpu
-fixes in it, since they missed last week, which was very small.
+> DAMON asks each monitoring target ('struct damon_target') to have one
+> 'unsigned long' integer called 'id', which should be unique among the
+> targets of same monitoring context.  Meaning of it is, however, totally
+> up to the monitoring primitives that registered to the monitoring
+> context.  For example, the virtual address spaces monitoring primitives
+> treats the id as a 'struct pid' pointer.
+> 
+> This makes the code flexible but ugly, not well-documented, and
+> type-unsafe[1].  Also, identification of each target can be done via its
+> index.  For the reason, this patchset removes the concept and uses clear
+> type definition.
 
-The nouveau regression is probably the biggest fix in here, and it
-needs to go into 5.15 as well, two i915 fixes, and then a scattering
-of amdgpu fixes. The biggest fix in there is for a fencing NULL
-pointer dereference, the rest are pretty minor.
-
-For the misc team, I've pulled the two misc fixes manually since I'm
-not sure what is happening at this time of year!
-
-The amdgpu maintainers have the outstanding runpm regression to fix
-still, they are just working through the last bits of it now.
-
-Happy New Year in advance!
-Dave.
-
-drm-fixes-2021-12-31:
-drm fixes for 5.16-rc8
-
-nouveau:
-- fencing regression fix
-
-i915:
-- Fix possible uninitialized variable
-- Fix composite fence seqno increment on each fence creation
-
-amdgpu:
-- Fencing fix
-- XGMI fix
-- VCN regression fix
-- IP discovery regression fixes
-- Fix runpm documentation
-- Suspend/resume fixes
-- Yellow Carp display fixes
-- MCLK power management fix
-- dma-buf fix
-The following changes since commit fc74e0a40e4f9fd0468e34045b0c45bba11dcbb2=
-:
-
-  Linux 5.16-rc7 (2021-12-26 13:17:17 -0800)
-
-are available in the Git repository at:
-
-  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2021-12-31
-
-for you to fetch changes up to ce9b333c73a5a8707f2f446a837a6ca743ddcffd:
-
-  Merge branch 'drm-misc-fixes' of
-ssh://git.freedesktop.org/git/drm/drm-misc into drm-fixes (2021-12-31
-11:40:29 +1000)
-
-----------------------------------------------------------------
-drm fixes for 5.16-rc8
-
-nouveau:
-- fencing regression fix
-
-i915:
-- Fix possible uninitialized variable
-- Fix composite fence seqno icrement on each fence creation
-
-amdgpu:
-- Fencing fix
-- XGMI fix
-- VCN regression fix
-- IP discovery regression fixes
-- Fix runpm documentation
-- Suspend/resume fixes
-- Yellow Carp display fixes
-- MCLK power management fix
-- dma-buf fix
-
-----------------------------------------------------------------
-Alex Deucher (4):
-      drm/amdgpu: add support for IP discovery gc_info table v2
-      drm/amdgpu: fix runpm documentation
-      drm/amdgpu: always reset the asic in suspend (v2)
-      drm/amdgpu: no DC support for headless chips
-
-Angus Wang (1):
-      drm/amd/display: Changed pipe split policy to allow for
-multi-display pipe split
-
-Charlene Liu (1):
-      drm/amd/display: fix B0 TMDS deepcolor no dislay issue
-
-Christian K=C3=B6nig (2):
-      drm/amdgpu: fix dropped backing store handling in
-amdgpu_dma_buf_move_notify
-      drm/nouveau: wait for the exclusive fence after the shared ones v2
-
-Dave Airlie (3):
-      Merge tag 'drm-intel-fixes-2021-12-29' of
-git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
-      Merge tag 'amd-drm-fixes-5.16-2021-12-29' of
-https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
-      Merge branch 'drm-misc-fixes' of
-ssh://git.freedesktop.org/git/drm/drm-misc into drm-fixes
-
-Evan Quan (1):
-      drm/amdgpu: put SMU into proper state on runpm suspending for
-BOCO capable platform
-
-Huang Rui (1):
-      drm/amdgpu: introduce new amdgpu_fence object to indicate the
-job embedded fence
-
-Lai, Derek (1):
-      drm/amd/display: Added power down for DCN10
-
-Lijo Lazar (1):
-      drm/amd/pm: Fix xgmi link control on aldebaran
-
-Matthew Brost (2):
-      drm/i915: Fix possible uninitialized variable in parallel extension
-      drm/i915: Increment composite fence seqno
-
-Nicholas Kazlauskas (3):
-      drm/amd/display: Send s0i2_rdy in stream_count =3D=3D 0 optimization
-      drm/amd/display: Set optimize_pwr_state for DCN31
-      drm/amd/display: Fix USB4 null pointer dereference in
-update_psp_stream_config
-
-Prike Liang (1):
-      drm/amd/pm: skip setting gfx cgpg in the s0ix suspend-resume
-
-chen gong (1):
-      drm/amdgpu: When the VCN(1.0) block is suspended, powergating is
-explicitly enabled
-
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c         |  17 ++-
- drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c      |  76 +++++++++----
- drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c        |   2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            |  27 ++++-
- drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c          | 126 ++++++++++++++---=
-----
- drivers/gpu/drm/amd/amdgpu/amdgpu_ring.h           |   4 +-
- drivers/gpu/drm/amd/amdgpu/vcn_v1_0.c              |   7 ++
- .../amd/display/dc/clk_mgr/dcn31/dcn31_clk_mgr.c   |   1 +
- drivers/gpu/drm/amd/display/dc/core/dc_link.c      |   5 +-
- drivers/gpu/drm/amd/display/dc/dcn10/dcn10_init.c  |   1 +
- .../gpu/drm/amd/display/dc/dcn20/dcn20_resource.c  |   2 +-
- .../drm/amd/display/dc/dcn201/dcn201_resource.c    |   2 +-
- .../gpu/drm/amd/display/dc/dcn21/dcn21_resource.c  |   2 +-
- .../gpu/drm/amd/display/dc/dcn30/dcn30_resource.c  |   2 +-
- .../drm/amd/display/dc/dcn301/dcn301_resource.c    |   2 +-
- .../drm/amd/display/dc/dcn302/dcn302_resource.c    |   2 +-
- .../drm/amd/display/dc/dcn303/dcn303_resource.c    |   2 +-
- drivers/gpu/drm/amd/display/dc/dcn31/dcn31_init.c  |   1 +
- .../gpu/drm/amd/display/dc/dcn31/dcn31_resource.c  |  27 ++++-
- .../gpu/drm/amd/display/dc/dcn31/dcn31_resource.h  |  31 +++++
- drivers/gpu/drm/amd/include/discovery.h            |  49 ++++++++
- drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c          |   7 +-
- drivers/gpu/drm/amd/pm/swsmu/smu12/smu_v12_0.c     |   3 +-
- drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c |   2 +-
- drivers/gpu/drm/i915/gem/i915_gem_context.c        |   2 +-
- drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c     |   2 +-
- drivers/gpu/drm/nouveau/nouveau_fence.c            |  28 ++---
- 27 files changed, 318 insertions(+), 114 deletions(-)
+Thanks.  This doesn't appear to be urgent, so I'll park it until after 5.17-rc1.

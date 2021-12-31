@@ -2,176 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE5C34823EF
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 13:15:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39BC74823F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 13:15:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbhLaMPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 07:15:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbhLaMPJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 07:15:09 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AEDFC06173E
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 04:15:09 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id g11so60076034lfu.2
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 04:15:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qA48Fk3mQBHDUQYEpc8DXFnUfIf/OAvjGHgizTaa2Rs=;
-        b=Dd9Hc2hoiQD56GDie5hYLl56IxuoyREYBA/QBeDuW83mVjBF5S+ttDPs1ypjV4KY5n
-         qQu7LWeBnYgsbZSY2UxPPyQ3jo9jzhIttuWh1bOjR9cTe+8JsG8E7ZmtQftPeo5NXKHr
-         3rCPvkwjP0dw5HR3BOFRrrCMW+7TnJAPQtuh0FNkbPWMxaOxdGWNnKlS24qgWQx/X6H5
-         l1PJYZtl/omcNOe4fOlTxilJUGUOta8YRQHjLkVaL5meRIvLnnTnA2Ct3XVZmyZwS1U/
-         jEAZDY1ICBe35GQQcLdzEqftwDKpQXdJA31/eFYrBqrwT8NfUhGHeIQQGk9RHvF9l1eT
-         gW/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qA48Fk3mQBHDUQYEpc8DXFnUfIf/OAvjGHgizTaa2Rs=;
-        b=E+SUl5k3lw2Yc2aCiN7/T96ASFCalFdJqzbxue/poWTPet//MdhMjSCAfpU1ENrUYv
-         v3Tar0a/+h/CwCwRA2f8EWgE8F+pcK5iIXuVxuJGXMwqpRTaEkyFU0P9Bexkr2sXTYsR
-         qf/Rzuotv6bRCoXvJyZMlK6DHc0/YFuFk0sPh+J2cE6avXt0ILzBYjCxJFc2KWWHk8sZ
-         OV18VxnM8eXnVWTQ/wG2v1h2HOkSkkc5ZQLas79QcTNxYPMHYA1AnAAW0LJwb+2VkzFt
-         EEqzW6IIfBA1oGTKTvO7FLJRGCnKHjNnWJCOkVwN9nJtz/rtl7UBuYWnmLgKRniNA7H7
-         bSSw==
-X-Gm-Message-State: AOAM530hrkyEfYxc+1gcjesr6IUFoQXVhAzRaKlxYlrnnrWuyyO8RT1Z
-        kL7ZiSS/21WJC5nigTDq6PnWesYiIZwh0RCaTfSFUA==
-X-Google-Smtp-Source: ABdhPJxB39SYIrqnEbN1Ilx/4u6YrucaTYRt8Dnw/aiO1ez8cHGoyYDvdb9NnCiH6rmQEcuBQzLFiuVZRWuE+q1QEq8=
-X-Received: by 2002:a19:6748:: with SMTP id e8mr2099004lfj.358.1640952907072;
- Fri, 31 Dec 2021 04:15:07 -0800 (PST)
+        id S230059AbhLaMPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 07:15:55 -0500
+Received: from mga18.intel.com ([134.134.136.126]:21729 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230019AbhLaMPy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 31 Dec 2021 07:15:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640952954; x=1672488954;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LKd+D52akhFhXjrKsO1jJ4sQVJPGl/N+ZDu1amsHgWE=;
+  b=T3dtHSlWP+eSxjQ5/VBIkab28KCAaxRm0umTZuR7slcXplJXeEw6pZ2g
+   CvOB0G66J6BSQT0LgHG0tKwXHy3AiBAH5boDinOJ9jQxLBQhTKtKKlvnE
+   5eCXa38i6ojDNWK+JqoVPr4rrYvj05u4nBXmiOdGv+5CgMUlQkFK/gF1/
+   VuXT1GDABqSx8Ay7hDoivraD/SirIHurWiOk37D8/Ldtih72qTmkm3qm0
+   iXx18g1rauya7b9xpwZyJS9fwIPfh5XFRoWC1Ui+eaxCfQ8qWC0kNcboT
+   nMJAi6qX3mw/sXZuyymAJBc7qD0X8WtcG1jwPenRkGK0beu9ZMtnV+FjH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="228628695"
+X-IronPort-AV: E=Sophos;i="5.88,251,1635231600"; 
+   d="scan'208";a="228628695"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2021 04:15:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,251,1635231600"; 
+   d="scan'208";a="470936441"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 31 Dec 2021 04:15:52 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n3Gp6-000BEM-9c; Fri, 31 Dec 2021 12:15:52 +0000
+Date:   Fri, 31 Dec 2021 20:15:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anup Patel <anup.patel@wdc.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [avpatel:riscv_kvm_aia_v1 17/42] arch/riscv/kernel/smp.c:130:2-3:
+ Unneeded semicolon
+Message-ID: <202112312054.ZfoKGMHF-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211222030634.33816-1-michael@allwinnertech.com>
- <CAPDyKFoNuWX76Haq0MfvukbHR8mMq0rX7qC+o_ZhEAxAwwpBbQ@mail.gmail.com> <2021123116275961132724@allwinnertech.com>
-In-Reply-To: <2021123116275961132724@allwinnertech.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 31 Dec 2021 13:14:30 +0100
-Message-ID: <CAPDyKFpnTk9Ky-zr-dakTZJr1N_65_6py9=3_78vwOR930apEQ@mail.gmail.com>
-Subject: Re: Re: [PATCH 1/3] mmc:sunxi-mmc:add support on discrete device
- power supply
-To:     "michael@allwinnertech.com" <michael@allwinnertech.com>
-Cc:     mripard <mripard@kernel.org>, wens <wens@csie.org>,
-        samuel <samuel@sholland.org>,
-        "andre.przywara" <andre.przywara@arm.com>,
-        "jernej.skrabec" <jernej.skrabec@gmail.com>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-sunxi <linux-sunxi@lists.linux.dev>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 31 Dec 2021 at 09:28, michael@allwinnertech.com
-<michael@allwinnertech.com> wrote:
->
-> > From: Ulf Hansson
-> > Date: 2021-12-29 00:49
-> > To: Michael Wu
-> > CC: mripard; wens; samuel; andre.przywara; jernej.skrabec; linux-mmc; linux-arm-kernel; linux-sunxi; linux-kernel
-> > Subject: Re: [PATCH 1/3] mmc:sunxi-mmc:add support on discrete device power supply
-> > On Wed, 22 Dec 2021 at 04:07, Michael Wu <michael@allwinnertech.com> wrote:
-> > >
-> > > Because some platform has no regulator, only use discrete devices
-> > > to supply power,For this situation, to use sd/mmc card, we add ocr manually
-> > >
-> > > Signed-off-by: Michael Wu <michael@allwinnertech.com>
-> > > ---
-> > >  drivers/mmc/host/sunxi-mmc.c | 8 ++++++++
-> > >  1 file changed, 8 insertions(+)
-> > >
-> > > diff --git a/drivers/mmc/host/sunxi-mmc.c b/drivers/mmc/host/sunxi-mmc.c
-> > > index 2702736a1c57..afeefead6501 100644
-> > > --- a/drivers/mmc/host/sunxi-mmc.c
-> > > +++ b/drivers/mmc/host/sunxi-mmc.c
-> > > @@ -1300,6 +1300,14 @@ static int sunxi_mmc_resource_request(struct sunxi_mmc_host *host,
-> > >         if (ret)
-> > >                 return ret;
-> > >
-> > > +       /**
-> > > +        * Some platforms has no regulator. Discrete devices are used instead.
-> > > +        * To support sd/mmc card, we need to add ocr manually.
-> > > +        */
-> > > +       if (!host->mmc->ocr_avail)
-> > > +               host->mmc->ocr_avail = MMC_VDD_32_33 | MMC_VDD_33_34;
-> > > +
-> >
-> > Rather than doing this, I suggest you hook up a fixed vmmc regulator in the DTS.
-> >
-> > Nevertheless, it seems reasonable to check that the ocr_avail gets set
-> > up correctly. And if it doesn't, perhaps we should print a warning and
-> > return an error code.
-> >
-> > > +
-> > >         host->reg_base = devm_platform_ioremap_resource(pdev, 0);
-> > >         if (IS_ERR(host->reg_base))
-> > >                 return PTR_ERR(host->reg_base);
-> >
-> > Kind regards
-> > Uffe
->
-> Dear Uffe,
-> Thanks for your suggestion. It is a better solution.
-> I've modified my patch. Please check if it's reasonable. If it is, I'll re-sumbit it later.
->
-> ---
-> Subject: [PATCH v2] mmc: sunxi-mmc: check ocr_avail on resource request
->
-> Some platforms have no regulator, discrete power devices are used instead.
-> However, sunxi_mmc_probe does not catch this exception when regulator is
-> absent in DTS. This leads to sd or eMMC init failure.
-> To solve this, a fixed vmmc regulator must be hooked up in DTS, like this:
-> reg_dummy_vmmc: dummy_vmmc {
->         compatible = "regulator-fixed";
->         regulator-name = "dummy-vmmc";
->         regulator-min-microvolt = <500000>;
->         regulator-max-microvolt = <3500000>;
+tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
+head:   6fa93cde61f5f84422bd3f97b9db6e2406a344dd
+commit: dea7752f30104c9bb3c2c67ce2c56e5a5eb3c290 [17/42] RISC-V: Treat IPIs as normal Linux IRQs
+config: riscv-randconfig-c004-20211231 (https://download.01.org/0day-ci/archive/20211231/202112312054.ZfoKGMHF-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 11.2.0
 
-The min/max should be set to the same value as you can't really change
-the voltage levels.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-If you know the voltage level that is supplied for your platform, then
-state this value - otherwise I would suggest picking 3.3V, which is
-rather commonly used for MMC/SD.
 
-> };
-> mmc0:mmc@4020000 {
->         compatible = "allwinner,sun50i-a100-emmc";
->         device_type = "mmc0";
->         vmmc-supply = <&reg_dummy_vmmc>;
-> }
-> In this patch, we print an error message and abort the probe process if
-> the regulator is not specified in DTS.
->
-> Signed-off-by: Michael Wu <michael@allwinnertech.com>
-> ---
->
-> diff --git a/drivers/mmc/host/sunxi-mmc.c b/drivers/mmc/host/sunxi-mmc.c
-> index 2702736..0da74bd 100644
-> --- a/drivers/mmc/host/sunxi-mmc.c
-> +++ b/drivers/mmc/host/sunxi-mmc.c
-> @@ -1300,6 +1300,11 @@
->         if (ret)
->                 return ret;
->
-> +       if (!host->mmc->ocr_avail) {
-> +               dev_err(&pdev->dev, "Could not get mmc regulator\n");
-> +               return -EINVAL;
-> +       }
-> +
->         host->reg_base = devm_platform_ioremap_resource(pdev, 0);
->         if (IS_ERR(host->reg_base))
->                 return PTR_ERR(host->reg_base);
->
-> Best Regards,
-> Michael Wu
+cocci warnings: (new ones prefixed by >>)
+>> arch/riscv/kernel/smp.c:130:2-3: Unneeded semicolon
 
-Yep, this looks good to me!
+Please review and possibly fold the followup patch.
 
-Kind regards
-Uffe
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

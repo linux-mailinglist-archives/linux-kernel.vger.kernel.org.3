@@ -2,105 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5419B48228C
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 07:58:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39783482291
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 08:05:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242726AbhLaG6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 01:58:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbhLaG6b (ORCPT
+        id S242733AbhLaHFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 02:05:36 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:17314 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229699AbhLaHFg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 01:58:31 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF0EC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 22:58:30 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id s1so54640104wrg.1
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 22:58:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jrtc27.com; s=gmail.jrtc27.user;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=IPvWCWArFmIoJo6e3SOp/K7+W774iGoTLAEhKjFbcaM=;
-        b=dSM1+9ApbR+hVWEQTXuqFoWRuF2F4OskLpLWSebcI5qH7YaRhtzyDrQ6O8S//o+Sed
-         TVpKnAyqwT4pl06ZBCvkuNgkuEtp380NBzsCXOyu5x7A134l1RQBDM1zkDYDBhqsaN0B
-         itO5qp62T5nZR+b3iNfVFZ6VZS5scV1Q3w05MkWo2UGSzx0P8vqMGGYRfA28RtrMwFu6
-         1V+49vpa8EBXHvFnlPaSI+6sQAD/PoVKtd6FaUFYS5l9sI2LMFbwY+eM3zc9a+gp6V/n
-         mflPV/80xEyUceQxQWFVDzLzaMLpFvXkbjEHkMzd+w8jgM/2QUlrMqCHVC7ssriChgDn
-         wDJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=IPvWCWArFmIoJo6e3SOp/K7+W774iGoTLAEhKjFbcaM=;
-        b=ZFWBotQGgzSyarX4akis8VpNU7Ll4CGSBlr8dL4evCjQFuD6msDjJhRX7bM/bos5h2
-         LquoeuyVXi9dVSu5Vd8xfEEVRfpxDMzvtDeDELn9shVjk+nh/44BXlsOCfCp7Zp6WjiN
-         N0phN7IccjvGobbOEHNzXRYGojbsksM3G9QEHfyTUuGL4c4DBWUXPXsgkimwmp1/hUPq
-         w/R3I5oDJe4Up4lfbox0Ds3IR/rAz8ZGMrnrmGyUbpv0hV/AJJj3zUOuADA4F0ke18r+
-         180dsMrUcb4L5b+rGCSwRrn0rc0AX4FS734l+/4FPBtJdPqhJM+bMoksH6rUli6rQmWC
-         ID2Q==
-X-Gm-Message-State: AOAM532gz29yEGF7odSl/H4NR2wBdGagtvqxpMYPf6vYZssVJdv1D0D4
-        o91fidppY36bmJ6LwdrfTV1idA==
-X-Google-Smtp-Source: ABdhPJygojzvVzB67tBssVheNi//lj4PKhm+W1eQ9WhHYt1kuWqGvmaINV7eorhNEFDhpHAQ8BhDag==
-X-Received: by 2002:a5d:6d8a:: with SMTP id l10mr28425146wrs.527.1640933909153;
-        Thu, 30 Dec 2021 22:58:29 -0800 (PST)
-Received: from [10.248.123.188] (global-5-144.nat-2.net.cam.ac.uk. [131.111.5.144])
-        by smtp.gmail.com with ESMTPSA id j39sm23680532wms.0.2021.12.30.22.58.28
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 30 Dec 2021 22:58:28 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH] riscv: dts: sifive unmatched: Add gpio poweroff
-From:   James Clarke <jrtc27@jrtc27.com>
-X-Mailer: iPhone Mail (16H62)
-In-Reply-To: <20211231061110.89403-1-w6rz@comcast.net>
-Date:   Fri, 31 Dec 2021 06:58:22 +0000
-Cc:     Dimitri John Ledkov <dimitri.ledkov@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Vincent Pelletier <plr.vincent@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Qiu Wenbo <qiuwenbo@kylinos.com.cn>,
-        Yash Shah <yash.shah@sifive.com>, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <73F7FAE3-5113-48DD-B0F5-0EEAA0A8B0C1@jrtc27.com>
-References: <20211231061110.89403-1-w6rz@comcast.net>
-To:     Ron Economos <w6rz@comcast.net>
+        Fri, 31 Dec 2021 02:05:36 -0500
+Received: from kwepemi100009.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JQGNM1jB0z9s1L;
+        Fri, 31 Dec 2021 15:04:35 +0800 (CST)
+Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
+ kwepemi100009.china.huawei.com (7.221.188.242) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 31 Dec 2021 15:05:32 +0800
+Received: from [10.67.102.118] (10.67.102.118) by
+ kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 31 Dec 2021 15:05:32 +0800
+Subject: Re: [PATCH v2 2/6] crypto: arm64/sm3-ce - make dependent on sm3
+ library
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vitaly Chikunov <vt@altlinux.org>,
+        Eric Biggers <ebiggers@google.com>,
+        "Eric Biggers" <ebiggers@kernel.org>,
+        Gilad Ben-Yossef <gilad@benyossef.com>,
+        "Ard Biesheuvel" <ardb@kernel.org>,
+        Jussi Kivilinna <jussi.kivilinna@iki.fi>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, <linux-crypto@vger.kernel.org>,
+        <x86@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20211222045022.27069-1-tianjia.zhang@linux.alibaba.com>
+ <20211222045022.27069-3-tianjia.zhang@linux.alibaba.com>
+From:   liulongfang <liulongfang@huawei.com>
+Message-ID: <18fdaf2c-827e-8d17-1eb7-cb1c12d15808@huawei.com>
+Date:   Fri, 31 Dec 2021 15:05:31 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <20211222045022.27069-3-tianjia.zhang@linux.alibaba.com>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.118]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600005.china.huawei.com (7.193.23.191)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31 Dec 2021, at 06:11, Ron Economos <w6rz@comcast.net> wrote:
->=20
-> This patch is required for the following commit to work.
->=20
-> commit f2928e224d85 ("riscv: set default pm_power_off to NULL")
->=20
-> Signed-off-by: Ron Economos <w6rz@comcast.net>
+On 2021/12/22 12:50, Tianjia Zhang Wrote:
+> SM3 generic library is stand-alone implementation, sm3-ce can depend
+> on the SM3 library instead of sm3-generic.
+> 
+> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 > ---
-> arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts | 5 +++++
-> 1 file changed, 5 insertions(+)
->=20
-> diff --git a/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts b/arch/ri=
-scv/boot/dts/sifive/hifive-unmatched-a00.dts
-> index 6bfa1f24d3de..c4ed9efdff03 100644
-> --- a/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
-> +++ b/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
-> @@ -39,6 +39,11 @@ rtcclk: rtcclk {
->        clock-frequency =3D <RTCCLK_FREQ>;
->        clock-output-names =3D "rtcclk";
->    };
+>  arch/arm64/crypto/Kconfig       |  2 +-
+>  arch/arm64/crypto/sm3-ce-glue.c | 20 ++++++++++++++------
+>  2 files changed, 15 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/arm64/crypto/Kconfig b/arch/arm64/crypto/Kconfig
+> index addfa413650b..2a965aa0188d 100644
+> --- a/arch/arm64/crypto/Kconfig
+> +++ b/arch/arm64/crypto/Kconfig
+> @@ -45,7 +45,7 @@ config CRYPTO_SM3_ARM64_CE
+>  	tristate "SM3 digest algorithm (ARMv8.2 Crypto Extensions)"
+>  	depends on KERNEL_MODE_NEON
+>  	select CRYPTO_HASH
+> -	select CRYPTO_SM3
+> +	select CRYPTO_LIB_SM3
+>  
+>  config CRYPTO_SM4_ARM64_CE
+>  	tristate "SM4 symmetric cipher (ARMv8.2 Crypto Extensions)"
+> diff --git a/arch/arm64/crypto/sm3-ce-glue.c b/arch/arm64/crypto/sm3-ce-glue.c
+> index d71faca322f2..3198f31c9446 100644
+> --- a/arch/arm64/crypto/sm3-ce-glue.c
+> +++ b/arch/arm64/crypto/sm3-ce-glue.c
+> @@ -27,7 +27,7 @@ static int sm3_ce_update(struct shash_desc *desc, const u8 *data,
+>  			 unsigned int len)
+>  {
+>  	if (!crypto_simd_usable())
+> -		return crypto_sm3_update(desc, data, len);
+> +		return sm3_update(shash_desc_ctx(desc), data, len);
+>  
+>  	kernel_neon_begin();
+>  	sm3_base_do_update(desc, data, len, sm3_ce_transform);
+> @@ -39,7 +39,7 @@ static int sm3_ce_update(struct shash_desc *desc, const u8 *data,
+>  static int sm3_ce_final(struct shash_desc *desc, u8 *out)
+>  {
+>  	if (!crypto_simd_usable())
+> -		return crypto_sm3_finup(desc, NULL, 0, out);
+> +		return sm3_final(shash_desc_ctx(desc), out);
+>  
+>  	kernel_neon_begin();
+>  	sm3_base_do_finalize(desc, sm3_ce_transform);
+> @@ -51,14 +51,22 @@ static int sm3_ce_final(struct shash_desc *desc, u8 *out)
+>  static int sm3_ce_finup(struct shash_desc *desc, const u8 *data,
+>  			unsigned int len, u8 *out)
+>  {
+> -	if (!crypto_simd_usable())
+> -		return crypto_sm3_finup(desc, data, len, out);
+> +	if (!crypto_simd_usable()) {
+> +		struct sm3_state *sctx = shash_desc_ctx(desc);
 > +
-> +    gpio-poweroff {
-> +        compatible =3D "gpio-poweroff";
-> +        gpios =3D <&gpio 2 GPIO_ACTIVE_LOW>;
-> +    };
-
-Why? It=E2=80=99s abstracted by firmware, which works.
-
-Jess
-
+> +		if (len)
+> +			sm3_update(sctx, data, len);
+> +		sm3_final(sctx, out);
+> +		return 0;
+> +	}
+>  
+>  	kernel_neon_begin();
+> -	sm3_base_do_update(desc, data, len, sm3_ce_transform);
+> +	if (len)
+> +		sm3_base_do_update(desc, data, len, sm3_ce_transform);
+> +	sm3_base_do_finalize(desc, sm3_ce_transform);
+>  	kernel_neon_end();
+>  
+> -	return sm3_ce_final(desc, out);
+> +	return sm3_base_finish(desc, out);
+>  }
+>  
+>  static struct shash_alg sm3_alg = {
+>You have modified the implementation of SM3 algorithm, so what benefits will be gained
+after such modification?
+What flaws are solved or can performance be improved?
+Thanks.
+Longfang.

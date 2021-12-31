@@ -2,97 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3013F4821AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 04:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90A9A4821B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 04:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242497AbhLaDEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 22:04:15 -0500
-Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:56869 "EHLO
-        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241168AbhLaDEN (ORCPT
+        id S242575AbhLaDMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 22:12:34 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:29311 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237453AbhLaDMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 22:04:13 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R351e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V0OKTNs_1640919848;
-Received: from 30.240.117.58(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V0OKTNs_1640919848)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 31 Dec 2021 11:04:10 +0800
-Message-ID: <ae865b5e-f385-6aac-2838-cb76b82df68c@linux.alibaba.com>
-Date:   Fri, 31 Dec 2021 11:04:08 +0800
+        Thu, 30 Dec 2021 22:12:31 -0500
+Received: from kwepemi500007.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JQ9Cz1c46zbjjc;
+        Fri, 31 Dec 2021 11:11:59 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi500007.china.huawei.com (7.221.188.207) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 31 Dec 2021 11:12:29 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
+ (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 31 Dec
+ 2021 11:12:28 +0800
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     <jack@suse.cz>, <tj@kernel.org>, <axboe@kernel.dk>,
+        <paolo.valente@linaro.org>
+CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
+        <yi.zhang@huawei.com>
+Subject: [PATCH v2 0/3] block, bfq: minor cleanup and fix
+Date:   Fri, 31 Dec 2021 11:23:51 +0800
+Message-ID: <20211231032354.793092-1-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [PATCH v2 1/3] ghes_edac: unify memory error report format with
- cper
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
-        rric@kernel.org, ardb@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
-References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
- <20211210134019.28536-2-xueshuai@linux.alibaba.com>
- <YctFli9oMBYTlf7h@zn.tnic>
- <9e0bf7c0-ed50-5b0b-0576-3651249ba5cd@linux.alibaba.com>
- <Yc3y+uVEcAFgTE5x@zn.tnic>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <Yc3y+uVEcAFgTE5x@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Borislav,
+Chagnes in v2:
+ - add comment in patch 2
+ - remove patch 4, since the problem do not exist.
 
-Thank you for your comments.
+Yu Kuai (3):
+  block, bfq: cleanup bfq_bfqq_to_bfqg()
+  block, bfq: avoid moving bfqq to it's parent bfqg
+  block, bfq: don't move oom_bfqq
 
-在 2021/12/31 AM1:57, Borislav Petkov 写道:
-> On Wed, Dec 29, 2021 at 11:22:11AM +0800, Shuai Xue wrote:
->> Yep, these fields are unpopulated by BIOS, I manually enable all Validation
->> Bits for debug so that we see the difference more clearly. I will declare it
->> in next version.
-> 
-> Declare what? I can't parse your statement.
+ block/bfq-cgroup.c  | 16 +++++++++++++++-
+ block/bfq-iosched.c |  4 ++--
+ block/bfq-iosched.h |  1 -
+ block/bfq-wf2q.c    | 15 ---------------
+ 4 files changed, 17 insertions(+), 19 deletions(-)
 
-The ghes_edac log message is printed only when a validation bit is set, e.g.:
+-- 
+2.31.1
 
-	if (mem_err->validation_bits & CPER_MEM_VALID_NODE)
-		p += sprintf(p, "node:%d ", mem_err->node);
-
-Not all bits are populated by BIOS in my platform, I manually enable all
-validation bits during test so that we can see log message and differences of all
-fields more clearly.
-
-	+ 	mem_err->validation_bits = 0xfffffffffffffff;
-
->> Well, the purpose is not to improve but unify.
-> 
-> The most importang goal with kernel code is improvement and less bugs.
-> Unification is second. We should not jump through hoops and unify at
-> every price just because there's a duplicated function somewhere.
-> Remember that when doing your changes.
-
-I see. Thank you.
-
->> Well, Robert suggested me add a unification patch[1] so that we could review
->> the changes more clearly. I think it makes sense.
-> 
-> Not really. I can imagine why Robert suggested that but this strategy is
-> causing unnecessary churn. What one usually does in such cases is:
-> 
-> 1. Add changes to the target functionality - the one in cper.c - by
-> explaining *why* those changes are needed.
-> 
-> 2. Switch ghes_edac.c to that functionality and remove the redundant one
-> there.
-> 
-> Simple and clean diffstat and easy review.
-> 
-> Thx.
-
-Got it. I will send next version latter.
-
-Merry Christmas and happy New Year.
-
-Best Regards,
-Shuai

@@ -2,110 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 169B5482170
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 03:18:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 550DB482175
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 03:20:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242022AbhLaCSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 21:18:43 -0500
-Received: from mga05.intel.com ([192.55.52.43]:48391 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230097AbhLaCSm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 21:18:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640917122; x=1672453122;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NR+X/lDxU9ClDHwe9FHHtHQ8Eqv0Pb4+isH42TXyTf8=;
-  b=Z8cBkdoTQzLypYGMA8IH0wcn1bNravvP0Gs5CSL9X9R+UUeTirR6Prnt
-   lPzz3OEg2+0hXdFtYHSR8bAs3FoWrsawIFukHuUSvYkUQyEXt+Jrmy+yk
-   GiBSei108GDCq1nD9RZ2Z8+Qif4sV+AsiNP8ztghCZwamVPNAPsNZI1DG
-   WVW6dsGjP4A0UHuowMkGZ3+yvNiqCYrNvxRjvynszNGUVZfaxoWnwcXTC
-   pnK1O+QPbC07DCZKIgTf6DS76F3Za9sQ+yRoIBHDkyxn1pe/lrrdkITpE
-   r2+DwVCJ0KoM/T1srD6NwnwXGVfBCDsXH6hS4cUhuXkSJdtqemQ+DZjJ3
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="328095067"
-X-IronPort-AV: E=Sophos;i="5.88,250,1635231600"; 
-   d="scan'208";a="328095067"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 18:18:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,250,1635231600"; 
-   d="scan'208";a="468963952"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 30 Dec 2021 18:18:40 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n37V9-000ArQ-7j; Fri, 31 Dec 2021 02:18:39 +0000
-Date:   Fri, 31 Dec 2021 10:17:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hannes Reinecke <hare@suse.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: [dlemoal-libata:for-5.17-logging 28/79]
- drivers/ata/sata_mv.c:1276:30: warning: 'dw' is used uninitialized
-Message-ID: <202112311057.WDs1psTQ-lkp@intel.com>
+        id S240897AbhLaCUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 21:20:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54220 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230097AbhLaCUS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 21:20:18 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95849C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 18:20:17 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id j21so104230184edt.9
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 18:20:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=4BT5zSfL/LUdbZdT7j6ucUNjI5aCsRxRWutN5UwoeoQ=;
+        b=JS05VUbdXCb2vE/Df2H2tmvCQg0xPu00xtd1dFM6nybozLMpF10Ffn87plGDDoLs9a
+         07mcVsORaWKjjbHEl0dg0qMToISbz24ywLH9drAs9Btv/gzplx9h0OL/ObOME9pvi7pp
+         Exzzfkbgrh0DisQlvrtoGh+nRJSDoYaAncIOVwg/0FoDHVzVcOXji0DGVSZZaGTeOBUt
+         iY95+Om1JHo1jM34GmHRIxNh3p9VJL0Er86cjHGmiVeO02WZEPPPdZxtxtr225iUDCNM
+         9anPDhYr8nYoq3Af0iZTMGtgLya3jS2DTOtNsgwDVLa1vuOuG4pkkvU4orUa4C3tco+E
+         jKyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=4BT5zSfL/LUdbZdT7j6ucUNjI5aCsRxRWutN5UwoeoQ=;
+        b=701KnsquP3ph1fhhjzB9a+bpWRnpe3sN3SbO9TLB1zJR8NwziR+OLPtw+sXc9Snt9C
+         NOrjsxGQAnKMH0/8a8HlSmAcJXBS38jVwO+PnWijT5VvezYEzDIWkXPPFoyvvoPzFOzS
+         zRh0RiXcwNm9HQCN3EMC/Hb+SRx0yTWxegSkFmr0v1A+cILrbfbsCVxmxcQf4pvlKlrU
+         AQMmK7gWyfNSkpjCNKex9P50yDRFDrt8y2QZbvflmVOpkM88aaCe31c4jxvifZG3S3TB
+         t7s1YOISy1estUVeWFTXrq3CXpX+KFbBLMIOp54Pf7y4Xpzv0vy0qxJng2IQcNkDWaix
+         8TfA==
+X-Gm-Message-State: AOAM533/hnYaPWkHWhw8bmzfhpV+3zIsEEQSKcdwM8UrLkLPdgbM8zKx
+        4RmUd0KU22TYMLcwhPnQm/pNE04nXi1cy/913yc=
+X-Google-Smtp-Source: ABdhPJzK4bwK3dCrdFYmwJN+bnta2+FkZk2rCib3ASiiaOzTq7TLIxCQxhMawtWlr6zLbgjFMrbjQeBRlYpzxMTlWwI=
+X-Received: by 2002:a17:907:9493:: with SMTP id dm19mr26834530ejc.161.1640917216039;
+ Thu, 30 Dec 2021 18:20:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Fri, 31 Dec 2021 12:20:04 +1000
+Message-ID: <CAPM=9tyK28tROtoYmE-Li2P5JL92GHcXFcXmWFi+z1m1AU6yqw@mail.gmail.com>
+Subject: [git pull] drm fixes for 5.16-rc8
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/dlemoal/libata.git for-5.17-logging
-head:   7830f5151b3b153a04daec48653458c9a2db7b16
-commit: 8e1aff057cd5a2d00d19754fabf7095ba54a7e91 [28/79] sata_mv: replace DPRINTK with dynamic debugging
-config: sparc64-randconfig-r005-20211230 (https://download.01.org/0day-ci/archive/20211231/202112311057.WDs1psTQ-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/dlemoal/libata.git/commit/?id=8e1aff057cd5a2d00d19754fabf7095ba54a7e91
-        git remote add dlemoal-libata git://git.kernel.org/pub/scm/linux/kernel/git/dlemoal/libata.git
-        git fetch --no-tags dlemoal-libata for-5.17-logging
-        git checkout 8e1aff057cd5a2d00d19754fabf7095ba54a7e91
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc64 SHELL=/bin/bash drivers/ata/
+Hi Linus (and misc maintainers),
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This is a bit bigger than I'd like, however it has two weeks of amdgpu
+fixes in it, since they missed last week, which was very small.
 
-All warnings (new ones prefixed by >>):
+The nouveau regression is probably the biggest fix in here, and it
+needs to go into 5.15 as well, two i915 fixes, and then a scattering
+of amdgpu fixes. The biggest fix in there is for a fencing NULL
+pointer dereference, the rest are pretty minor.
 
-   drivers/ata/sata_mv.c: In function 'mv_pci_error':
->> drivers/ata/sata_mv.c:1276:30: warning: 'dw' is used uninitialized [-Wuninitialized]
-    1276 |                         o += snprintf(linebuf + o, 38 - o,
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1277 |                                       "%08x ", dw);
-         |                                       ~~~~~~~~~~~~
-   drivers/ata/sata_mv.c:1270:13: note: 'dw' was declared here
-    1270 |         u32 dw;
-         |             ^~
+For the misc team, I've pulled the two misc fixes manually since I'm
+not sure what is happening at this time of year!
 
+The amdgpu maintainers have the outstanding runpm regression to fix
+still, they are just working through the last bits of it now.
 
-vim +/dw +1276 drivers/ata/sata_mv.c
+Happy New Year in advance!
+Dave.
 
-  1266	
-  1267	static void mv_dump_pci_cfg(struct pci_dev *pdev, unsigned bytes)
-  1268	{
-  1269		int b, w, o;
-  1270		u32 dw;
-  1271		unsigned char linebuf[38];
-  1272	
-  1273		for (b = 0; b < bytes; ) {
-  1274			for (w = 0, o = 0; b < bytes && w < 4; w++) {
-  1275				(void) pci_read_config_dword(pdev, b, &dw);
-> 1276				o += snprintf(linebuf + o, 38 - o,
-  1277					      "%08x ", dw);
-  1278				b += sizeof(u32);
-  1279			}
-  1280			dev_dbg(&pdev->dev, "%s: %02x: %s\n",
-  1281				__func__, b, linebuf);
-  1282		}
-  1283	}
-  1284	
+drm-fixes-2021-12-31:
+drm fixes for 5.16-rc8
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+nouveau:
+- fencing regression fix
+
+i915:
+- Fix possible uninitialized variable
+- Fix composite fence seqno increment on each fence creation
+
+amdgpu:
+- Fencing fix
+- XGMI fix
+- VCN regression fix
+- IP discovery regression fixes
+- Fix runpm documentation
+- Suspend/resume fixes
+- Yellow Carp display fixes
+- MCLK power management fix
+- dma-buf fix
+The following changes since commit fc74e0a40e4f9fd0468e34045b0c45bba11dcbb2=
+:
+
+  Linux 5.16-rc7 (2021-12-26 13:17:17 -0800)
+
+are available in the Git repository at:
+
+  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2021-12-31
+
+for you to fetch changes up to ce9b333c73a5a8707f2f446a837a6ca743ddcffd:
+
+  Merge branch 'drm-misc-fixes' of
+ssh://git.freedesktop.org/git/drm/drm-misc into drm-fixes (2021-12-31
+11:40:29 +1000)
+
+----------------------------------------------------------------
+drm fixes for 5.16-rc8
+
+nouveau:
+- fencing regression fix
+
+i915:
+- Fix possible uninitialized variable
+- Fix composite fence seqno icrement on each fence creation
+
+amdgpu:
+- Fencing fix
+- XGMI fix
+- VCN regression fix
+- IP discovery regression fixes
+- Fix runpm documentation
+- Suspend/resume fixes
+- Yellow Carp display fixes
+- MCLK power management fix
+- dma-buf fix
+
+----------------------------------------------------------------
+Alex Deucher (4):
+      drm/amdgpu: add support for IP discovery gc_info table v2
+      drm/amdgpu: fix runpm documentation
+      drm/amdgpu: always reset the asic in suspend (v2)
+      drm/amdgpu: no DC support for headless chips
+
+Angus Wang (1):
+      drm/amd/display: Changed pipe split policy to allow for
+multi-display pipe split
+
+Charlene Liu (1):
+      drm/amd/display: fix B0 TMDS deepcolor no dislay issue
+
+Christian K=C3=B6nig (2):
+      drm/amdgpu: fix dropped backing store handling in
+amdgpu_dma_buf_move_notify
+      drm/nouveau: wait for the exclusive fence after the shared ones v2
+
+Dave Airlie (3):
+      Merge tag 'drm-intel-fixes-2021-12-29' of
+git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
+      Merge tag 'amd-drm-fixes-5.16-2021-12-29' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
+      Merge branch 'drm-misc-fixes' of
+ssh://git.freedesktop.org/git/drm/drm-misc into drm-fixes
+
+Evan Quan (1):
+      drm/amdgpu: put SMU into proper state on runpm suspending for
+BOCO capable platform
+
+Huang Rui (1):
+      drm/amdgpu: introduce new amdgpu_fence object to indicate the
+job embedded fence
+
+Lai, Derek (1):
+      drm/amd/display: Added power down for DCN10
+
+Lijo Lazar (1):
+      drm/amd/pm: Fix xgmi link control on aldebaran
+
+Matthew Brost (2):
+      drm/i915: Fix possible uninitialized variable in parallel extension
+      drm/i915: Increment composite fence seqno
+
+Nicholas Kazlauskas (3):
+      drm/amd/display: Send s0i2_rdy in stream_count =3D=3D 0 optimization
+      drm/amd/display: Set optimize_pwr_state for DCN31
+      drm/amd/display: Fix USB4 null pointer dereference in
+update_psp_stream_config
+
+Prike Liang (1):
+      drm/amd/pm: skip setting gfx cgpg in the s0ix suspend-resume
+
+chen gong (1):
+      drm/amdgpu: When the VCN(1.0) block is suspended, powergating is
+explicitly enabled
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c         |  17 ++-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c      |  76 +++++++++----
+ drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c        |   2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            |  27 ++++-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c          | 126 ++++++++++++++---=
+----
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ring.h           |   4 +-
+ drivers/gpu/drm/amd/amdgpu/vcn_v1_0.c              |   7 ++
+ .../amd/display/dc/clk_mgr/dcn31/dcn31_clk_mgr.c   |   1 +
+ drivers/gpu/drm/amd/display/dc/core/dc_link.c      |   5 +-
+ drivers/gpu/drm/amd/display/dc/dcn10/dcn10_init.c  |   1 +
+ .../gpu/drm/amd/display/dc/dcn20/dcn20_resource.c  |   2 +-
+ .../drm/amd/display/dc/dcn201/dcn201_resource.c    |   2 +-
+ .../gpu/drm/amd/display/dc/dcn21/dcn21_resource.c  |   2 +-
+ .../gpu/drm/amd/display/dc/dcn30/dcn30_resource.c  |   2 +-
+ .../drm/amd/display/dc/dcn301/dcn301_resource.c    |   2 +-
+ .../drm/amd/display/dc/dcn302/dcn302_resource.c    |   2 +-
+ .../drm/amd/display/dc/dcn303/dcn303_resource.c    |   2 +-
+ drivers/gpu/drm/amd/display/dc/dcn31/dcn31_init.c  |   1 +
+ .../gpu/drm/amd/display/dc/dcn31/dcn31_resource.c  |  27 ++++-
+ .../gpu/drm/amd/display/dc/dcn31/dcn31_resource.h  |  31 +++++
+ drivers/gpu/drm/amd/include/discovery.h            |  49 ++++++++
+ drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c          |   7 +-
+ drivers/gpu/drm/amd/pm/swsmu/smu12/smu_v12_0.c     |   3 +-
+ drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c |   2 +-
+ drivers/gpu/drm/i915/gem/i915_gem_context.c        |   2 +-
+ drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c     |   2 +-
+ drivers/gpu/drm/nouveau/nouveau_fence.c            |  28 ++---
+ 27 files changed, 318 insertions(+), 114 deletions(-)

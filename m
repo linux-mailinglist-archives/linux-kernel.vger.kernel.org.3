@@ -2,92 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F662482426
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 14:20:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ABDF482429
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 14:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbhLaNTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 08:19:04 -0500
-Received: from cae.in-ulm.de ([217.10.14.231]:44878 "EHLO cae.in-ulm.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229823AbhLaNTD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 08:19:03 -0500
-X-Greylist: delayed 397 seconds by postgrey-1.27 at vger.kernel.org; Fri, 31 Dec 2021 08:19:03 EST
-Received: by cae.in-ulm.de (Postfix, from userid 1000)
-        id DE23114042E; Fri, 31 Dec 2021 14:12:21 +0100 (CET)
-Date:   Fri, 31 Dec 2021 14:12:21 +0100
-From:   "Christian A. Ehrhardt" <lk@c--e.de>
-To:     alsa-devel@alsa-project.org
-Cc:     linux-kernel@vger.kernel.org,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Stefan Binding <sbinding@opensource.cirrus.com>,
-        Vitaly Rodionov <vitalyr@opensource.cirrus.com>,
-        Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>
-Subject: hda/cs8409: Fix internal speaker detection
-Message-ID: <20211231131221.itwotyfk5qomn7n6@cae.in-ulm.de>
+        id S230274AbhLaNT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 08:19:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55750 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230245AbhLaNT6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 31 Dec 2021 08:19:58 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFEEC061574;
+        Fri, 31 Dec 2021 05:19:57 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id b73so17361398wmd.0;
+        Fri, 31 Dec 2021 05:19:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jYKu1srmFQCpI8rykGJJnfsG32cAQvaoZEbqfDemaO4=;
+        b=GalcyacMNctt+2U3h1VRqF8ChGdDy5uAQzIdbtoqMz3IMmXlan3wZrnuoo2InlWIxl
+         RlTcPpyg3DifJWSPZGU+PDfGxMHhMELuKXFWik/NNQ0mTum6dLeVFI1qHrnxo52r1NMA
+         rsiiNM/TR4CvKZ11TUoM09j3AuJIvnbiitwxuXyPb5c6haYCLTV+R/bQYRKavogDPA7M
+         4jnWlFk+VRXH8zD4LIgYzucPc9hNik+kuj/QlXd9Baf1HHmV19P77RiIQw4/0APHSdqe
+         xq84oqUmsi4GFXMhKYPc9o1xaXVXkPW+3neW0ojhgqPCj7O0pQOZ+EW/hqE4r46+FbJj
+         6+hA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jYKu1srmFQCpI8rykGJJnfsG32cAQvaoZEbqfDemaO4=;
+        b=aVAr9sDTPxnfZoSTiEhLcgBxmAr5a1wcdeeXNJYZaX2/L3AgpewhsHces+uu0guhmQ
+         xeJrsNccnQvVrTDqE/5La4eOmtxJd+FM7C9Z33TlheHTkc3WjUfSrt9zMonpOAsVlvIs
+         X+LVuFB9R5oxaCuz7endHd2TCHAJnZrW8+H8HYYpnRoKjfVR/CMj8LxRiW3W+mVE97sn
+         vSElZESSsgwaCiaDwH7aXKe5A8B8vRDwm9agpfnLyBuPIcjjfep+N+taX/9FQ3Yn0L9G
+         mFFn9qLjuYOeckEaaxo6p0jZ9KmGRB0INbUEFFiT89xTVQnM303EDtnS/jh76GCaxutX
+         cwqw==
+X-Gm-Message-State: AOAM533K2cDMFaio/XTdAocLdMS0Z2I1H51P+qQ7NTQqQOxMYbYOH7LR
+        xHdeBjfMhv8UMhijEp3aKdPLSUWtTyBD1Q==
+X-Google-Smtp-Source: ABdhPJw/XUeixiBtkn2ljsLLjQ7ciXVXiXXAtfRHVbXjXhzRVbzWR0UKbi/sVur/D/BuZD+ShBYH6g==
+X-Received: by 2002:a1c:808f:: with SMTP id b137mr29605639wmd.6.1640956795864;
+        Fri, 31 Dec 2021 05:19:55 -0800 (PST)
+Received: from localhost.localdomain ([84.9.151.116])
+        by smtp.googlemail.com with ESMTPSA id r11sm27096683wrw.5.2021.12.31.05.19.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Dec 2021 05:19:55 -0800 (PST)
+From:   Iain Hunter <drhunter95@gmail.com>
+Cc:     iain@hunterembedded.co.uk, Iain Hunter <drhunter95@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 1/2] Add binding for ti,adc1018. It allows selection of channel as a Device Tree property
+Date:   Fri, 31 Dec 2021 13:19:15 +0000
+Message-Id: <20211231131951.1245508-1-drhunter95@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+New binding file uses the adc.yaml to define channel selection 
 
-Hi,
-
-I have a DELL Inspirion 3501 laptop with a cirrus cs8904 HDA codec.
-With more recent kernels the internal speakers stopped working.
-I bisected the issue and tracked it down to this commit 
-
-| commit c8b4f0865e82c14924c69c07d985af3ee9133316
-| Author: Stefan Binding <sbinding@opensource.cirrus.com>
-| Date:   Wed Aug 11 19:56:52 2021 +0100
-|
-|     ALSA: hda/cs8409: Remove unnecessary delays
-        
-After a bit of experimenting with the timeouts I came
-up with the patch below that fixes the issue for me.
-
-However, I don't have the specs for the chip, i.e. I don't
-know what a theoretically correct value would be.
-
-Suggested patch below, please consider inclusion.
-
-     regards   Christian
-
-From 9c796d221171c6d12fd84ae4f5c8315030c8c4ca Mon Sep 17 00:00:00 2001
-From: "Christian A. Ehrhardt" <lk@c--e.de>
-Date: Fri, 31 Dec 2021 10:33:19 +0100
-Subject: [PATCH 1/2] ALSA: hda/cs8409: Increase delay during jack detection
-
-Commit c8b4f0865e82 reduced delays related to cs42l42 jack
-detection. However, the change was too aggressive. As a result
-internal speakers on DELL Inspirion 3501 ac8b4f0865e82re not detected.
-
-Increase the delay in cs42l42_run_jack_detect() a bit.
-
-Fixes: c8b4f0865e82 ("ALSA: hda/cs8409: Remove unnecessary delays")
-Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
+Signed-off-by: Iain Hunter <drhunter95@gmail.com>
 ---
- sound/pci/hda/patch_cs8409.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../bindings/iio/adc/ti,ads1018.yaml          | 126 ++++++++++++++++++
+ 1 file changed, 126 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/ti,ads1018.yaml
 
-diff --git a/sound/pci/hda/patch_cs8409.c b/sound/pci/hda/patch_cs8409.c
-index 039b9f2f8e94..bf5d7f0c6ba5 100644
---- a/sound/pci/hda/patch_cs8409.c
-+++ b/sound/pci/hda/patch_cs8409.c
-@@ -628,8 +628,8 @@ static void cs42l42_run_jack_detect(struct sub_codec *cs42l42)
- 	cs8409_i2c_write(cs42l42, 0x1b74, 0x07);
- 	cs8409_i2c_write(cs42l42, 0x131b, 0xFD);
- 	cs8409_i2c_write(cs42l42, 0x1120, 0x80);
--	/* Wait ~100us*/
--	usleep_range(100, 200);
-+	/* Wait ~20ms*/
-+	usleep_range(20000, 25000);
- 	cs8409_i2c_write(cs42l42, 0x111f, 0x77);
- 	cs8409_i2c_write(cs42l42, 0x1120, 0xc0);
- }
+diff --git a/Documentation/devicetree/bindings/iio/adc/ti,ads1018.yaml b/Documentation/devicetree/bindings/iio/adc/ti,ads1018.yaml
+new file mode 100644
+index 000000000000..a65fee9d83dd
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/adc/ti,ads1018.yaml
+@@ -0,0 +1,126 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/adc/ti,ads1018.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: TI ADS1018 4 channel I2C analog to digital converter
++
++maintainers:
++  - Iain Hunter <iain@hunterembedded.co.uk>
++
++description: |
++  Datasheet at: https://www.ti.com/lit/gpn/ads1018
++  Supports both single ended and differential channels.
++
++properties:
++  compatible:
++    const: ti,ads1018
++
++  reg:
++    maxItems: 1
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 0
++
++  "#io-channel-cells":
++    const: 1
++
++  spi-max-frequency: true
++  spi-cpol: true
++  spi-cpha: true
++
++required:
++  - compatible
++  - reg
++  - "#address-cells"
++  - "#size-cells"
++  - spi-cpha
++
++additionalProperties: false
++
++patternProperties:
++  "^channel@([0-3])$":
++    $ref: "adc.yaml"
++    type: object
++
++    properties:
++      reg:
++        description: |
++            Must be 0, actual channel selected in ti,adc-channels for single ended
++            or ti-adc-channels-diff for differential
++        $ref: /schemas/types.yaml#/definitions/uint32
++        enum: [0]
++
++      ti,adc-channels:
++        description: |
++          List of single-ended channels muxed for this ADC. It can have up to 4
++          channels numbered 0-3
++        $ref: /schemas/types.yaml#/definitions/uint32-array
++        deprecated: true
++
++      ti,adc-diff-channels:
++        description: |
++          List of differential channels muxed for this ADC between the pins vinp
++          and vinn. The 4 possible options are:
++          vinp=0, vinn=1
++          vinp=0, vinn=3
++          vinp=1, vinn=3
++          vinp=2, vinn=3
++
++          They are listed in a pair <vinp vinn>.
++
++          Note: At least one of "ti,adc-channels" or "ti,adc-diff-channels" is
++          required.
++        $ref: /schemas/types.yaml#/definitions/uint32-matrix
++        items:
++          items:
++            - description: |
++                "vinp" indicates positive input number
++              minimum: 0
++              maximum: 2
++            - description: |
++                "vinn" indicates negative input number
++              minimum: 1
++              maximum: 3
++
++
++    required:
++      - reg
++
++examples:
++  - |
++    // example on SPI1 with single ended channel 1
++    spi {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        adc@1 {
++            compatible = "ti,ads1018";
++            reg = <0x0>;
++            #address-cells = <1>;
++            #size-cells = <0>;
++            spi-cpha;
++            ti,adc-channels = <1>;
++        };
++    };
++  - |
++    // example on SPI0 with differential between inputs 0 and 3
++    spi {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        adc@0 {
++            compatible = "ti,ads1018";
++            reg = <0x0>;
++            #address-cells = <1>;
++            #size-cells = <0>;
++            spi-cpha;
++            ti,adc-diff-channels = <0 3>;
++        };
++    };
++
++...
 -- 
-2.32.0
-
+2.25.1
 

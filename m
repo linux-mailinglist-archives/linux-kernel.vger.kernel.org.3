@@ -2,135 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B44B482128
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 02:07:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 368ED48212B
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 02:07:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242443AbhLaBGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 20:06:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38312 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237396AbhLaBGg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 20:06:36 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4285FC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 17:06:36 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id z9so33955121edm.10
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 17:06:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3yQ0lyfMsNWxiMLxC7em/5nNtO4aymAyCuSjy0PLjqE=;
-        b=SLc0c5KYaStYakowoSGrDCyr+GCKo0gvXAK3yjZoe0eCjK0tvsYkX8SeaOeqLgv+VS
-         rLeF/GiD7XZRyhmcw9sbXDVKeeFFi08zWDH4onV3aJ4ry+5CCLd0uBxfzu6r4ktM6RzF
-         1NK6NtrifweJfmVuXC/QYhj0g7YvHAd5gPZN9RZbCAnbjuQ9CQSqNbN9D4NPnQc/G1WD
-         7NNrV6CRid2kEA/D7bTxlDEiyDAHGe54qe6KO+/PDBtEyxMqzDrKkHk5OxYfELyg2sx3
-         UZpUxupvmLWBQ7JSO3HqaOpa9AbeeURK75MlHGL+LMoRGAUT86pcp38ZCUqIW0jkMt7G
-         X7qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3yQ0lyfMsNWxiMLxC7em/5nNtO4aymAyCuSjy0PLjqE=;
-        b=7UbFx7gwughlqCEVVdkJy6oBDsgB64twGPcWp28oYyNf2VocQtjK8wmU6+Cx7rmqLD
-         LpfkfY3q892T0dEstA/0e9ospgUgrZFnYT4tXJhNYxTvrSY8yu0+uotRYMBA44CQqjY3
-         NIpfLJV8fDKPKPzK0NJ52aMR/w2a5/TWh4wYHwJpEMEsbuR2rWdi8j85mxh/cKso2Emc
-         6G+w+JVuc80s4UZxCd7vDy9NlZRVZ3xVGJQKtSSjwoaYRT6UBn5nsyYOLkxWzmuUUxpN
-         J2qtE9eX6683S7ToEUNxlc0x1OSfzsJuK8FeZg68IA+q2r/QhB27Lo0PfLzCaIAlGaQ5
-         KW7A==
-X-Gm-Message-State: AOAM5301/lsRJh1TTd2TmIko7qiTrDVAzDSFzM7mnhn/+zByd23KK9tG
-        y9mx7RiIfDxsykl7lksdFEpVwNhMfSlOvHJ8FSo=
-X-Google-Smtp-Source: ABdhPJyo68+ChNlP6cqot2N18ioE6wTAVKtpFUVqJGqbScez/zNRZ8+jd6QXBTq3VXQ5lPT2OuK0PcljVZ21ydATcds=
-X-Received: by 2002:a17:906:3586:: with SMTP id o6mr27008922ejb.186.1640912794629;
- Thu, 30 Dec 2021 17:06:34 -0800 (PST)
+        id S242455AbhLaBHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 20:07:20 -0500
+Received: from mga01.intel.com ([192.55.52.88]:1292 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237396AbhLaBHT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 20:07:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640912839; x=1672448839;
+  h=cc:subject:to:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=FNhqRlbtz223hzG+ANsW67D6RvnITFJYKJzpbGvXUE8=;
+  b=FqJ48biHch2tEfMHnUXNjzmxDgPU5MbGX/sqdWYfCdoJSHl89Zmd2RUb
+   7kLHbuASSRnXG+xvB9I71Mx9OdPkeLKtCB+YDFY55YyrpC/pnfEydRvQh
+   hEZZIuZ+mmOBJaOF2AAWCLGLsshjK84MlkuZg7FhlH6DXoZM22a8CJ8Lo
+   TZ55+mcxlestS3yF6nZnOidXpAF8irNUzLz7HvRAvrxZnf8LnKA5e2b2N
+   4TF0e5oCSPe/KxGePCX2emfAOjZ6FcS9GFOLcQVCTSInvweeCQlqV/Xcx
+   mUtleEZbvsrhK9dh86lbBohKHzE9vl1PTO/yaKqACsyHQ01I1JDTySXzZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="266002024"
+X-IronPort-AV: E=Sophos;i="5.88,248,1635231600"; 
+   d="scan'208";a="266002024"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 17:07:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,248,1635231600"; 
+   d="scan'208";a="524573035"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
+  by orsmga008.jf.intel.com with ESMTP; 30 Dec 2021 17:07:06 -0800
+Cc:     baolu.lu@linux.intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 03/13] PCI: pci_stub: Suppress kernel DMA ownership
+ auto-claiming
+To:     Bjorn Helgaas <helgaas@kernel.org>
+References: <20211230222414.GA1805873@bhelgaas>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+Message-ID: <a8dacfbb-d447-cf1f-28db-cda632802952@linux.intel.com>
+Date:   Fri, 31 Dec 2021 09:06:34 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20210903023811.3458-1-chao@kernel.org>
-In-Reply-To: <20210903023811.3458-1-chao@kernel.org>
-From:   Shachar Raindel <shacharr@gmail.com>
-Date:   Thu, 30 Dec 2021 17:06:23 -0800
-Message-ID: <CAGZn=28_q5tGd5kL_nU3Tz3_XA+gqODGpP6CKsZB6tKb3dAXtA@mail.gmail.com>
-Subject: Re: [f2fs-dev] [PATCH] f2fs: quota: fix potential deadlock
-To:     Chao Yu <chao@kernel.org>
-Cc:     jaegeuk@kernel.org, linux-kernel@vger.kernel.org,
-        Yi Zhuang <zhuangyi1@huawei.com>,
-        linux-f2fs-devel@lists.sourceforge.net
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211230222414.GA1805873@bhelgaas>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Somewhat late to the party (i.e. 3 months late), happy mailbox cleanup holidays!
+On 12/31/21 6:24 AM, Bjorn Helgaas wrote:
+> On Thu, Dec 30, 2021 at 01:34:27PM +0800, Lu Baolu wrote:
+>> Hi Bjorn,
+>>
+>> On 12/30/21 4:42 AM, Bjorn Helgaas wrote:
+>>> On Fri, Dec 17, 2021 at 02:36:58PM +0800, Lu Baolu wrote:
+>>>> The pci_dma_configure() marks the iommu_group as containing only devices
+>>>> with kernel drivers that manage DMA.
+>>>
+>>> I'm looking at pci_dma_configure(), and I don't see the connection to
+>>> iommu_groups.
+>>
+>> The 2nd patch "driver core: Set DMA ownership during driver bind/unbind"
+>> sets all drivers' DMA to be kernel-managed by default except a few ones
+>> which has a driver flag set. So by default, all iommu groups contains
+>> only devices with kernel drivers managing DMA.
+> 
+> It looks like that happens in device_dma_configure(), not
+> pci_dma_configure().
+> 
+>>>> Avoid this default behavior for the
+>>>> pci_stub because it does not program any DMA itself.  This allows the
+>>>> pci_stub still able to be used by the admin to block driver binding after
+>>>> applying the DMA ownership to vfio.
+>>>
+>>>>
+>>>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+>>>> ---
+>>>>    drivers/pci/pci-stub.c | 3 +++
+>>>>    1 file changed, 3 insertions(+)
+>>>>
+>>>> diff --git a/drivers/pci/pci-stub.c b/drivers/pci/pci-stub.c
+>>>> index e408099fea52..6324c68602b4 100644
+>>>> --- a/drivers/pci/pci-stub.c
+>>>> +++ b/drivers/pci/pci-stub.c
+>>>> @@ -36,6 +36,9 @@ static struct pci_driver stub_driver = {
+>>>>    	.name		= "pci-stub",
+>>>>    	.id_table	= NULL,	/* only dynamic id's */
+>>>>    	.probe		= pci_stub_probe,
+>>>> +	.driver		= {
+>>>> +		.suppress_auto_claim_dma_owner = true,
+>>>
+>>> The new .suppress_auto_claim_dma_owner controls whether we call
+>>> iommu_device_set_dma_owner().  I guess you added
+>>> .suppress_auto_claim_dma_owner because iommu_device_set_dma_owner()
+>>> must be done *before* we call the driver's .probe() method?
+>>
+>> As explained above, all drivers are set to kernel-managed dma by
+>> default. For those vfio and vfio-approved drivers,
+>> suppress_auto_claim_dma_owner is used to tell the driver core that "this
+>> driver is attached to device for userspace assignment purpose, do not
+>> claim it for kernel-management dma".
+>>
+>>> Otherwise, we could call some new interface from .probe() instead of
+>>> adding the flag to struct device_driver.
+>>
+>> Most device drivers are of the kernel-managed DMA type. Only a few vfio
+>> and vfio-approved drivers need to use this flag. That's the reason why
+>> we claim kernel-managed DMA by default.
+> 
+> Yes.  But you didn't answer the question of whether this must be done
+> by a new flag in struct device_driver, or whether it could be done by
+> having these few VFIO and "VFIO-approved" (whatever that means)
+> drivers call a new interface.
+> 
+> I was speculating that maybe the DMA ownership claiming must be done
+> *before* the driver's .probe() method?  If so, that would require a
+> new flag.  But I don't know whether that's the case.  If DMA
+> ownership could be claimed by the .probe() method, we wouldn't need
+> the new flag in struct device_driver.
 
-On Thu, Sep 2, 2021 at 8:04 PM Chao Yu <chao@kernel.org> wrote:
->
-> As Yi Zhuang reported in bugzilla:
->
-> https://bugzilla.kernel.org/show_bug.cgi?id=214299
->
-Bug report is for kernel 5.3. When I reported very similar deadlock in
-google-msm 4.9 tree (
-https://lore.kernel.org/linux-f2fs-devel/20201128174124.22397-1-shacharr@gmail.com/t/
-), you pointed out that the code was missing commits which removed the
-cp_rwsem grabbing (which are also missing from kernel 5.3):
+Yes. It's feasible. Hence we can remove the suppress flag which is only
+for some special drivers. I will come up with a new version so that you
+can further comment with the real code. Thank you!
 
+> 
+> Bjorn
+> 
 
-commit 435cbab95e3966cd8310addd9e9b758dce0e8b84
-Author: Jaegeuk Kim <jaegeuk@kernel.org>
-Date:   Thu Apr 9 10:25:21 2020 -0700
-
-     f2fs: fix quota_sync failure due to f2fs_lock_op
-
-commit ca7f76e680745d3b8a386638045f85dac1c4b2f4
-Author: Chao Yu <chao@kernel.org>
-Date:   Fri May 29 17:29:47 2020 +0800
-
-     f2fs: fix wrong discard space
-
-commit 79963d967b492876fa17c8c2c2c17b7438683d9b
-Author: Chao Yu <chao@kernel.org>
-Date:   Thu Jun 18 14:36:23 2020 +0800
-
-     f2fs: shrink node_write lock coverage
-
-Is this patch needed with these commits applied?
-
-
->
-> There is potential deadlock during quota data flush as below:
->
-> Thread A:                       Thread B:
-> f2fs_dquot_acquire
-> down_read(&sbi->quota_sem)
->                                 f2fs_write_checkpoint
->                                 block_operations
->                                 f2fs_look_all
->                                 down_write(&sbi->cp_rwsem)
-> f2fs_quota_write
-> f2fs_write_begin
-> __do_map_lock
-> f2fs_lock_op
-> down_read(&sbi->cp_rwsem)
->                                 __need_flush_qutoa
->                                 down_write(&sbi->quota_sem)
->
-> This patch changes block_operations() to use trylock, if it fails,
-> it means there is potential quota data updater, in this condition,
-> let's flush quota data first and then trylock again to check dirty
-> status of quota data.
->
-> The side effect is: in heavy race condition (e.g. multi quota data
-> upaters vs quota data flusher), it may decrease the probability of
-> synchronizing quota data successfully in checkpoint() due to limited
-> retry time of quota flush.
->
-> Reported-by: Yi Zhuang <zhuangyi1@huawei.com>
-> Signed-off-by: Chao Yu <chao@kernel.org>
-
-As this patch is applied in the mainline kernel, can we CC -stable to
-get this patch into the various Android kernels? Specifically,
-https://android.googlesource.com/kernel/msm/+/refs/tags/android-12.0.0_r0.21/fs/f2fs/checkpoint.c#1147
-needs this patch (alongside many other google-msm kernel branches).
-
-Thanks,
---Shachar
+Best regards,
+baolu

@@ -2,226 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 586A5482346
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 11:21:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 814E8482331
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 11:18:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbhLaKUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 05:20:20 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:30132 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbhLaKT7 (ORCPT
+        id S229806AbhLaKSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 05:18:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44306 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229567AbhLaKSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 05:19:59 -0500
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JQLdx0sXrz1DKPL;
-        Fri, 31 Dec 2021 18:16:37 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- kwepemi500008.china.huawei.com (7.221.188.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 31 Dec 2021 18:19:57 +0800
-Received: from localhost.localdomain (10.67.165.24) by
- kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 31 Dec 2021 18:19:57 +0800
-From:   Guangbin Huang <huangguangbin2@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>, <wangjie125@huawei.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lipeng321@huawei.com>, <huangguangbin2@huawei.com>,
-        <chenhao288@hisilicon.com>
-Subject: [PATCH net-next 10/10] net: hns3: delete the hclge_cmd.c and hclgevf_cmd.c
-Date:   Fri, 31 Dec 2021 18:14:59 +0800
-Message-ID: <20211231101459.56083-11-huangguangbin2@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211231101459.56083-1-huangguangbin2@huawei.com>
-References: <20211231101459.56083-1-huangguangbin2@huawei.com>
+        Fri, 31 Dec 2021 05:18:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9832C061574;
+        Fri, 31 Dec 2021 02:18:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BC59617A8;
+        Fri, 31 Dec 2021 10:18:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72D83C36AEA;
+        Fri, 31 Dec 2021 10:18:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640945920;
+        bh=W4gCix9DyaimD79GMXZWaGfwS+mV5yHLdzhBL/68EsQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IJojEaKyszuhZeZE8k0ejvlsIxYpdyyLSY7xFKeMMDvQSVi1UsHJNI0m0ickGzy9n
+         VilkGSmUNEJEDvrjo3vrxiMGArHfDZzy6fharvvNNPTioJU7St2ZKg4j0teeRmly2d
+         e203jW9u1JdQ2lOUv+JEQPH4OAumDAV++0P9jiPE=
+Date:   Fri, 31 Dec 2021 11:18:36 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Pavel Machek <pavel@denx.de>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH 5.10 48/76] platform/x86: intel_pmc_core: fix memleak on
+ registration failure
+Message-ID: <Yc7Y/HOgY5aT7STP@kroah.com>
+References: <20211227151324.694661623@linuxfoundation.org>
+ <20211227151326.366957180@linuxfoundation.org>
+ <20211231100405.GB17525@amd>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600016.china.huawei.com (7.193.23.20)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211231100405.GB17525@amd>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jie Wang <wangjie125@huawei.com>
+On Fri, Dec 31, 2021 at 11:04:05AM +0100, Pavel Machek wrote:
+> Hi!
+> 
+> On Mon 2021-12-27 16:31:03, Greg Kroah-Hartman wrote:
+> > From: Johan Hovold <johan@kernel.org>
+> > 
+> > commit 26a8b09437804fabfb1db080d676b96c0de68e7c upstream.
+> > 
+> > In case device registration fails during module initialisation, the
+> > platform device structure needs to be freed using platform_device_put()
+> > to properly free all resources (e.g. the device name).
+> >
+> 
+> Does it? What exactly was leaking here?
+> 
+> > +++ b/drivers/platform/x86/intel_pmc_core_pltdrv.c
+> > @@ -65,7 +65,7 @@ static int __init pmc_core_platform_init
+> >  
+> >  	retval = platform_device_register(pmc_core_device);
+> >  	if (retval)
+> > -		kfree(pmc_core_device);
+> > +		platform_device_put(pmc_core_device);
+> >  
+> 
+> This is strange. Failing registration should have no effects that need
+> to be undone.
 
-currently most cmdq APIs are unified in hclge_comm_cmd.c. Newly developed
-cmdq APIs should also be placed in hclge_comm_cmd.c. So there is no need to
-keep hclge_cmd.c and hclgevf_cmd.c.
+Sadly, that is not how the driver model has ever worked for various
+reasons.
 
-This patch moves the hclge(vf)_cmd_send to hclge(vf)_main.c and deletes
-the source files and makefile scripts.
-
-Signed-off-by: Jie Wang <wangjie125@huawei.com>
-Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
----
- drivers/net/ethernet/hisilicon/hns3/Makefile  |  4 +-
- .../hisilicon/hns3/hns3pf/hclge_cmd.c         | 26 -------------
- .../hisilicon/hns3/hns3pf/hclge_main.c        | 14 +++++++
- .../hisilicon/hns3/hns3vf/hclgevf_cmd.c       | 38 -------------------
- .../hisilicon/hns3/hns3vf/hclgevf_main.c      | 26 +++++++++++++
- 5 files changed, 42 insertions(+), 66 deletions(-)
- delete mode 100644 drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_cmd.c
- delete mode 100644 drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_cmd.c
-
-diff --git a/drivers/net/ethernet/hisilicon/hns3/Makefile b/drivers/net/ethernet/hisilicon/hns3/Makefile
-index cb3aaf5252d0..18f833138562 100644
---- a/drivers/net/ethernet/hisilicon/hns3/Makefile
-+++ b/drivers/net/ethernet/hisilicon/hns3/Makefile
-@@ -17,11 +17,11 @@ hns3-$(CONFIG_HNS3_DCB) += hns3_dcbnl.o
- 
- obj-$(CONFIG_HNS3_HCLGEVF) += hclgevf.o
- 
--hclgevf-objs = hns3vf/hclgevf_main.o hns3vf/hclgevf_cmd.o hns3vf/hclgevf_mbx.o  hns3vf/hclgevf_devlink.o \
-+hclgevf-objs = hns3vf/hclgevf_main.o hns3vf/hclgevf_mbx.o  hns3vf/hclgevf_devlink.o \
- 		hns3_common/hclge_comm_cmd.o
- 
- obj-$(CONFIG_HNS3_HCLGE) += hclge.o
--hclge-objs = hns3pf/hclge_main.o hns3pf/hclge_cmd.o hns3pf/hclge_mdio.o hns3pf/hclge_tm.o \
-+hclge-objs = hns3pf/hclge_main.o hns3pf/hclge_mdio.o hns3pf/hclge_tm.o \
- 		hns3pf/hclge_mbx.o hns3pf/hclge_err.o  hns3pf/hclge_debugfs.o hns3pf/hclge_ptp.o hns3pf/hclge_devlink.o \
- 		hns3_common/hclge_comm_cmd.o
- 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_cmd.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_cmd.c
-deleted file mode 100644
-index 6a066d3ac86e..000000000000
---- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_cmd.c
-+++ /dev/null
-@@ -1,26 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0+
--// Copyright (c) 2016-2017 Hisilicon Limited.
--
--#include <linux/dma-mapping.h>
--#include <linux/slab.h>
--#include <linux/pci.h>
--#include <linux/device.h>
--#include <linux/err.h>
--#include <linux/dma-direction.h>
--#include "hclge_cmd.h"
--#include "hnae3.h"
--#include "hclge_main.h"
--
--/**
-- * hclge_cmd_send - send command to command queue
-- * @hw: pointer to the hw struct
-- * @desc: prefilled descriptor for describing the command
-- * @num : the number of descriptors to be sent
-- *
-- * This is the main send command for command queue, it
-- * sends the queue, cleans the queue, etc
-- **/
--int hclge_cmd_send(struct hclge_hw *hw, struct hclge_desc *desc, int num)
--{
--	return hclge_comm_cmd_send(&hw->hw, desc, num, true);
--}
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-index 9eab97f804c8..bc117ea3c9c5 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-@@ -479,6 +479,20 @@ static const struct key_info tuple_key_info[] = {
- 	  offsetof(struct hclge_fd_rule, tuples_mask.l4_user_def) },
- };
- 
-+/**
-+ * hclge_cmd_send - send command to command queue
-+ * @hw: pointer to the hw struct
-+ * @desc: prefilled descriptor for describing the command
-+ * @num : the number of descriptors to be sent
-+ *
-+ * This is the main send command for command queue, it
-+ * sends the queue, cleans the queue, etc
-+ **/
-+int hclge_cmd_send(struct hclge_hw *hw, struct hclge_desc *desc, int num)
-+{
-+	return hclge_comm_cmd_send(&hw->hw, desc, num, true);
-+}
-+
- static int hclge_mac_update_stats_defective(struct hclge_dev *hdev)
- {
- #define HCLGE_MAC_CMD_NUM 21
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_cmd.c b/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_cmd.c
-deleted file mode 100644
-index fc9dc506cfd2..000000000000
---- a/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_cmd.c
-+++ /dev/null
-@@ -1,38 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0+
--// Copyright (c) 2016-2017 Hisilicon Limited.
--
--#include <linux/device.h>
--#include <linux/dma-direction.h>
--#include <linux/dma-mapping.h>
--#include <linux/err.h>
--#include <linux/pci.h>
--#include <linux/slab.h>
--#include "hclgevf_cmd.h"
--#include "hclgevf_main.h"
--#include "hnae3.h"
--
--/* hclgevf_cmd_send - send command to command queue
-- * @hw: pointer to the hw struct
-- * @desc: prefilled descriptor for describing the command
-- * @num : the number of descriptors to be sent
-- *
-- * This is the main send command for command queue, it
-- * sends the queue, cleans the queue, etc
-- */
--int hclgevf_cmd_send(struct hclgevf_hw *hw, struct hclge_desc *desc, int num)
--{
--	return hclge_comm_cmd_send(&hw->hw, desc, num, false);
--}
--
--void hclgevf_arq_init(struct hclgevf_dev *hdev)
--{
--	struct hclge_comm_cmq *cmdq = &hdev->hw.hw.cmq;
--
--	spin_lock(&cmdq->crq.lock);
--	/* initialize the pointers of async rx queue of mailbox */
--	hdev->arq.hdev = hdev;
--	hdev->arq.head = 0;
--	hdev->arq.tail = 0;
--	atomic_set(&hdev->arq.count, 0);
--	spin_unlock(&cmdq->crq.lock);
--}
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c b/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c
-index 2889c75195c5..08bd6fe0f29e 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c
-@@ -92,6 +92,32 @@ static const u32 tqp_intr_reg_addr_list[] = {HCLGEVF_TQP_INTR_CTRL_REG,
- 					     HCLGEVF_TQP_INTR_GL2_REG,
- 					     HCLGEVF_TQP_INTR_RL_REG};
- 
-+/* hclgevf_cmd_send - send command to command queue
-+ * @hw: pointer to the hw struct
-+ * @desc: prefilled descriptor for describing the command
-+ * @num : the number of descriptors to be sent
-+ *
-+ * This is the main send command for command queue, it
-+ * sends the queue, cleans the queue, etc
-+ */
-+int hclgevf_cmd_send(struct hclgevf_hw *hw, struct hclge_desc *desc, int num)
-+{
-+	return hclge_comm_cmd_send(&hw->hw, desc, num, false);
-+}
-+
-+void hclgevf_arq_init(struct hclgevf_dev *hdev)
-+{
-+	struct hclge_comm_cmq *cmdq = &hdev->hw.hw.cmq;
-+
-+	spin_lock(&cmdq->crq.lock);
-+	/* initialize the pointers of async rx queue of mailbox */
-+	hdev->arq.hdev = hdev;
-+	hdev->arq.head = 0;
-+	hdev->arq.tail = 0;
-+	atomic_set(&hdev->arq.count, 0);
-+	spin_unlock(&cmdq->crq.lock);
-+}
-+
- static struct hclgevf_dev *hclgevf_ae_get_hdev(struct hnae3_handle *handle)
- {
- 	if (!handle->client)
--- 
-2.33.0
-
+greg k-h

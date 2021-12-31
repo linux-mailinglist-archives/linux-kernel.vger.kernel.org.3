@@ -2,84 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6A4482213
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 06:04:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1076482215
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 06:10:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbhLaFEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 00:04:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
+        id S230479AbhLaFKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 00:10:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234691AbhLaFE2 (ORCPT
+        with ESMTP id S229530AbhLaFKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 00:04:28 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDF1C061396;
-        Thu, 30 Dec 2021 21:04:23 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id m1so22876584pfk.8;
-        Thu, 30 Dec 2021 21:04:23 -0800 (PST)
+        Fri, 31 Dec 2021 00:10:46 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C637C061574;
+        Thu, 30 Dec 2021 21:10:46 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id n30-20020a17090a5aa100b001b2b6509685so7555337pji.3;
+        Thu, 30 Dec 2021 21:10:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=Jv3w8ysID9bIetc2OrmK9ofIibDjY1UTgwH1tyTgknM=;
-        b=UQik1Bm7JhtWirI+JIelxhnGBp+K+kC5f3J3KIkbaERNBoP8cj873RRDIkmWi4VxAm
-         wuDuYKsF7Hv0tcJO8ZQcKScLVZGYlRaBOg5SWSsB415XYzCmR/6ksW69jt1ujH/15Nwe
-         8AF2q/o69XN8XcznhFKD9hocYPnVroLcjhx5eszoRISoVoO8wTW3AY2s+oLrKbFbe3Rw
-         jq9fAnqdZUvuXwM/Gups9NqUw3MdugBYV77IZI2gW8vGbiL6dOtHTY1p7QVve2VlyLwN
-         /l38q01peucbO1LW0UgpKa5JZhONC4TUC9K8SMmkzq4Ut5kPpdmw33oaMLvLsqPZPSyo
-         52jw==
+        bh=e0YefREn4gELMGJZJ+pkh6rFK9yjum+kekppiSmQYkk=;
+        b=FSnV/pMiUeqAg14q11imoCyrwOAdR0DDRrEVOpCWGv0+Q5Gtavh7LpUDB1rsCE+zfS
+         z16YXRC6GAnrmxqHZBF9gWreOxpAFyaNNfkJ5E41N4k3BB+xjwKNBzFuIOA2mcZ2hTfe
+         44GME3G5WrF5PGXL0qb732Ze9fCt7oT9XL4ic1Q06OyOm/ZFDtnEv4cUM72Bbg/EBasK
+         7LHZ98sbVJvnGkubUgog4cNHTVWNSy/AJLGaRp5kG+ixPJWLJsNYOJR7quTcskprKaDP
+         pAx5OkoJNXl3Eee0GeHGNxRTNQW4xGkWp9Kwu2EMYWunO2VsWOT2pYYR8wZe+ryb7ffE
+         KXfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Jv3w8ysID9bIetc2OrmK9ofIibDjY1UTgwH1tyTgknM=;
-        b=FJo/US/UX6iduHVl+oOoqBqaSyDrYsChG5zKwXNn+IEiWRxyVv/wUVehDFCmZPtfgT
-         IybAZzP9bmTqphrNWuTcIgAdDepD4W/sUI4s2SZdcLsnfMV/0fZMy7VCMyG89bkhaKqc
-         WymIjoOuFNt0W4B8fx4xK8uBqoxgE2uTQYLiLM1NoP0ty/2jppRQWmnFdjEpGnuMHJvu
-         2NEsV2IzqWxBgcgPm4KKH6FwC0p+ZY4DTehFgSDysdYW91ZEyVATiCYoOZoOvFzHa2Wt
-         rVVKtgLgfe1SDj6GxBGILcnCI89TCiktsi0CjUNv6al1KfLDt0CUd2GcUg1OVc54Tdby
-         yA4Q==
-X-Gm-Message-State: AOAM533gnc6vStSwcQWllYHDd93MbH3a8jcB/0zQW8WVj/adCXWuoke6
-        ZXOeaGgI5AkU63B8canxA00=
-X-Google-Smtp-Source: ABdhPJz/RJrMGYChq/MXzCqULBB2tzlvAn2H0bZW/JDf6Zw8jzay7WamvklxRmTY9+I/ZacKI07+dg==
-X-Received: by 2002:a63:20f:: with SMTP id 15mr30710800pgc.490.1640927062455;
-        Thu, 30 Dec 2021 21:04:22 -0800 (PST)
+        bh=e0YefREn4gELMGJZJ+pkh6rFK9yjum+kekppiSmQYkk=;
+        b=wMbdv94AImhQaAvuLCzUb7xbobQXNX+agz+pqLakyquEgTS8XrMczcezNsW5svhGPk
+         0BBAeGvv3D1yFebwTLLfQxLewb7gH386DsmzprOoH3L8hH3jljsejfERqzVKjST3gYCb
+         VZdveP+ZRGtQ/QacNpvvYgaZfr8FXVK4nD9wFUw/tgISV7O+BZVcES+r7bGQe/MJW0so
+         pQNhZnx9afLb5iQ58ZhgQmazghRQnHqOn4h51fNZ8k3xKjtHDPVYAvSxDih2LUJX8OQ3
+         flB/ldzyA7rJij9SV13YUL2W6wEUkcOSOSjx3fv50PS8D3ljtO6JdnJeUtk/AZq0ihtQ
+         WIJg==
+X-Gm-Message-State: AOAM533/pmlW8zuSXvQ5yUMpcd/W2/cRLJPe/6GKYOkSichiVbT22UD2
+        ngoEOk1R+5X13G9t4HO4aoxqYwtE65c=
+X-Google-Smtp-Source: ABdhPJybFD+6RW3rZV6Lxx2VEorevHsCNtXLiUCU2yrrfZF1WCUPFSKoiA3l/brIykmBuUZMh9nMTA==
+X-Received: by 2002:a17:90a:1919:: with SMTP id 25mr29757112pjg.181.1640927445433;
+        Thu, 30 Dec 2021 21:10:45 -0800 (PST)
 Received: from google.com ([2620:15c:202:201:ecb6:a6a9:17cc:2829])
-        by smtp.gmail.com with ESMTPSA id p37sm24929343pfh.97.2021.12.30.21.04.20
+        by smtp.gmail.com with ESMTPSA id z2sm29877144pfh.188.2021.12.30.21.10.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Dec 2021 21:04:21 -0800 (PST)
-Date:   Thu, 30 Dec 2021 21:04:18 -0800
+        Thu, 30 Dec 2021 21:10:44 -0800 (PST)
+Date:   Thu, 30 Dec 2021 21:10:42 -0800
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     kernel@nn7.de, mjg59@srcf.ucam.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+b88c5eae27386b252bbd@syzkaller.appspotmail.com
-Subject: Re: [PATCH] input: appletouch: initialize work before device
- registration
-Message-ID: <Yc6PUmjd4BDctN9h@google.com>
-References: <20211230141151.17300-1-paskripkin@gmail.com>
+To:     "Leo L. Schwab" <ewhac@ewhac.org>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] Input: spaceball - fix parsing of movement data
+ packets
+Message-ID: <Yc6Q0tqQzHcFdlyU@google.com>
+References: <20211221101630.1146385-1-ewhac@ewhac.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211230141151.17300-1-paskripkin@gmail.com>
+In-Reply-To: <20211221101630.1146385-1-ewhac@ewhac.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 30, 2021 at 05:11:51PM +0300, Pavel Skripkin wrote:
-> Syzbot has reported warning in __flush_work(). This warning is caused by
-> work->func == NULL, which means missing work initialization.
+On Tue, Dec 21, 2021 at 02:16:31AM -0800, Leo L. Schwab wrote:
+> The spaceball.c module was not properly parsing the movement reports
+> coming from the device.  The code read axis data as signed 16-bit
+> little-endian values starting at offset 2.
 > 
-> This may happen, since input_dev->close() calls cancel_work_sync(&dev->work),
-> but dev->work initalization happens _after_ input_register_device()
-> call.
+> In fact, axis data in Spaceball movement reports are signed 16-bit
+> big-endian values starting at offset 3.  This was determined first by
+> visually inspecting the data packets, and later verified by consulting:
+> http://spacemice.org/pdf/SpaceBall_2003-3003_Protocol.pdf
 > 
-> So this patch moves dev->work initialization before registering input
-> device
+> If this ever worked properly, it was in the time before Git...
 > 
-> Fixes: 5a6eb676d3bc ("Input: appletouch - improve powersaving for Geyser3 devices")
-> Reported-and-tested-by: syzbot+b88c5eae27386b252bbd@syzkaller.appspotmail.com
-> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+> Signed-off-by: Leo L. Schwab <ewhac@ewhac.org>
 
 Applied, thank you.
 

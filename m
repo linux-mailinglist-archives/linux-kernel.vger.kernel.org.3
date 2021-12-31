@@ -2,198 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 430924825A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 20:27:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 747644825A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 20:34:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231589AbhLaT11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 14:27:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
+        id S231598AbhLaTe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 14:34:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbhLaT1Z (ORCPT
+        with ESMTP id S231365AbhLaTeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 14:27:25 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9FAC061574;
-        Fri, 31 Dec 2021 11:27:24 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id v7so57258260wrv.12;
-        Fri, 31 Dec 2021 11:27:24 -0800 (PST)
+        Fri, 31 Dec 2021 14:34:22 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E40C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 11:34:22 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id n10-20020a7bc5ca000000b00345c520d38eso15088167wmk.1
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 11:34:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Qm//CCvSZhhAyMJiVwLJsA5O+pIcy0ON3NGd+6daj8I=;
-        b=NdkAcUyFpbV/pCYiiMGbRnTZdchrB5+9Vlh1TTrjVdMFMERdIo0bPOiLA9qMfOMYcG
-         VDM1+LXQ0/WLKG4Jk12xctM5UKOkIILHxXbfkRpbub9BKaSnFtmhIp2xxsgsFLxY/GoG
-         qD89/hb/DykEN4bclctzQR6tikasjYnud1pq8QVjgdfEX9h5Dohrw+T9HuurC7A945Zd
-         zbZ5IASxcZ30qRSkEsRfWeGkGnnwuriJw+XC89KGaurql/HmUlgom5lVobt7EYEk94Qf
-         3kzKF+MxRXBJyyrFKN8mXaWm/oDhDnqZLtWXecHJ7zlW7ZjB/HLzsDG96rMxjsqf192w
-         VznA==
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=g6o3zxhpevdsY7naZdAmR9vo4+2iWBIeVK+ZQV09U6Y=;
+        b=GWnrrBgtFzDFxGT6abR7AgeFAnACWva6rdbX4qgXrEycYtQKilts7ADJOpl2C9QlFr
+         FXaJtR2iK6I7FMZJVgPKw1gM1hO8YQvQtJKbPoWhWWkOWpOILtz7knxVfDdYxR+uNFA4
+         yKgnyBvw3tFRKQSBB5k3B6oncklNw2OPpxcMSle1l88IOsP8swUDRxpm/5Ct3PFPGJbQ
+         B14O2DZkMrHnKv8gtIVlklDLNCOkokxQdO/wu+/GQOJKkW09FYMRz8FWRxV7fim5AsuP
+         PZ0ParePntOsl5p/soLA6bpD+OUEVse3TfIoECX2F80OgvAEA0WCv5GggVsLtpMvlIo2
+         nsRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Qm//CCvSZhhAyMJiVwLJsA5O+pIcy0ON3NGd+6daj8I=;
-        b=b2SNBLlnnilr9yk72TkuSbmZXuWgirN2AFm9JTAG4eo9YU5/z/J9ux7f4+3ZRnFltW
-         8Stoz3usqr9lxclh0x56IhAvk1GaCyITom/4ti4AVAWf9r8hucUiGMX79sY8cRyxAQ6V
-         7piQ/4aJINkchFuSHu24O4q5feoBO/YEa8tPKkwJTxHA/016Mgwuw/aZsReavmYwKgbT
-         B2r6COlDKHUodyekW423UFIC7r2TVY+E5WN4JHqVonj6wlEqCRcmi2VY6JL3JsDoWZ9y
-         8YQsmqizVxrsqgTZ3f+sJ6Y9AAHOlGnEBjTCAPY5sa4SS3J3/Lr3KFVg4FenqygFPfHk
-         yfhQ==
-X-Gm-Message-State: AOAM5331savUS8rAn/yEfuQXqusDuQ1XQHkbUNgl5sGMo1kA41QUhv0I
-        vFodQykH90CRdrjk0QE4MKKrz7AQI+Srs9LhGEH2sutWvnI=
-X-Google-Smtp-Source: ABdhPJxhyb5Hc+/IrcPvoUpXtTAEsXA3e/2gae0d4byRMf+Aq5LuT6moGYOB1H8xqvJlFDr0n7U7qWxaLN7I4TvBzJ8=
-X-Received: by 2002:a5d:588c:: with SMTP id n12mr30515862wrf.56.1640978843312;
- Fri, 31 Dec 2021 11:27:23 -0800 (PST)
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=g6o3zxhpevdsY7naZdAmR9vo4+2iWBIeVK+ZQV09U6Y=;
+        b=NrFPa1WFQUlDG7ZcUm7ZU3Qywgq9vx8gcZbeLTAo4xakx3vqamTAxP2xrWhje6L60Y
+         Dj87ULLSBnhykrszwQk7q6c7K3lF9iSlnYNBOoofl3YL1/mHl7k0ybvDCsS5027LOPnW
+         65HFZEBahypazj9yjc2R1Q0tjdczLkdJw+G3jWn547EeDQSG1SZErvfBVlszRn9r/qtm
+         TPHJuXisuT4r4B1VqF9kCU/DPJ3GDOHBv8jso6fUp3SisYKrI+FGa+WMrhFc2Q5E1bCU
+         2h7emmHc0zNY7Dg+QopOBdcCIzfhPAxauLl3SEsxkrYYlS6ARinwyA0ScoL0VMQU0TXA
+         nzUg==
+X-Gm-Message-State: AOAM532Qh0N6KaBFL7x6aEkC+627QNCxrB7ktZORocV4ch2EPFjNGqKj
+        Fg0LJUzYb2fTFqp850LBIX3Ex5E/z++AsJKIolk=
+X-Google-Smtp-Source: ABdhPJwIlCzkm/ESFUPUZgEiPEdyGPJm9M5u0SWYiO2JafFwwQWjEWqmuIYl0izaSfFU9YyMRc+alVy4HJ/+iOZQ1D4=
+X-Received: by 2002:a7b:ce16:: with SMTP id m22mr30995474wmc.149.1640979260691;
+ Fri, 31 Dec 2021 11:34:20 -0800 (PST)
 MIME-Version: 1.0
-References: <20211222155743.256280-1-miquel.raynal@bootlin.com>
- <20211222155743.256280-13-miquel.raynal@bootlin.com> <CAB_54W6AZ+LGTcFsQjNx7uq=+R5v_kdF0Xm5kwWQ8ONtfOrmAw@mail.gmail.com>
- <Ycx0mwQcFsmVqWVH@ni.fr.eu.org> <CAB_54W41ZEoXzoD2_wadfMTY8anv9D9e2T5wRckdXjs7jKTTCA@mail.gmail.com>
-In-Reply-To: <CAB_54W41ZEoXzoD2_wadfMTY8anv9D9e2T5wRckdXjs7jKTTCA@mail.gmail.com>
-From:   Alexander Aring <alex.aring@gmail.com>
-Date:   Fri, 31 Dec 2021 14:27:12 -0500
-Message-ID: <CAB_54W6gHE1S9Q+-SVbrnAWPxBxnvf54XVTCmddtj8g-bZzMRA@mail.gmail.com>
-Subject: Re: [net-next 12/18] net: mac802154: Handle scan requests
-To:     Nicolas Schodet <nico@ni.fr.eu.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        linux-wpan - ML <linux-wpan@vger.kernel.org>,
-        David Girault <david.girault@qorvo.com>,
-        Romuald Despres <romuald.despres@qorvo.com>,
-        Frederic Blain <frederic.blain@qorvo.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        kernel list <linux-kernel@vger.kernel.org>
+Sender: mrsnadiaemaan2@gmail.com
+Received: by 2002:a5d:6a88:0:0:0:0:0 with HTTP; Fri, 31 Dec 2021 11:34:20
+ -0800 (PST)
+From:   Mrs Nadia Emaan <mrsnadiaemaan52@gmail.com>
+Date:   Fri, 31 Dec 2021 19:34:20 +0000
+X-Google-Sender-Auth: n-J20Kxv91byisnqVW9DAt6EiGc
+Message-ID: <CAJQujBsf2m=DUfZp490BCRKX49jthzeFj5vQq-3+5nCc7+H7iA@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Greetings Beloved One,
 
-On Thu, 30 Dec 2021 at 14:47, Alexander Aring <alex.aring@gmail.com> wrote:
->
-> Hi,
->
-> On Wed, 29 Dec 2021 at 09:45, Nicolas Schodet <nico@ni.fr.eu.org> wrote:
-> >
-> > Hi,
-> >
-> > * Alexander Aring <alex.aring@gmail.com> [2021-12-29 09:30]:
-> > > Hi,
-> > > On Wed, 22 Dec 2021 at 10:58, Miquel Raynal <miquel.raynal@bootlin.com> wrote:
-> > > ...
-> > > > +{
-> > > > +       bool promiscuous_on = mac802154_check_promiscuous(local);
-> > > > +       int ret;
-> > > > +
-> > > > +       if ((state && promiscuous_on) || (!state && !promiscuous_on))
-> > > > +               return 0;
-> > > > +
-> > > > +       ret = drv_set_promiscuous_mode(local, state);
-> > > > +       if (ret)
-> > > > +               pr_err("Failed to %s promiscuous mode for SW scanning",
-> > > > +                      state ? "set" : "reset");
-> > > The semantic of promiscuous mode on the driver layer is to turn off
-> > > ack response, address filtering and crc checking. Some transceivers
-> > > don't allow a more fine tuning on what to enable/disable. I think we
-> > > should at least do the checksum checking per software then?
-> > > Sure there is a possible tune up for more "powerful" transceivers then...
-> >
-> > In this case, the driver could change the (flags &
-> > IEEE802154_HW_RX_DROP_BAD_CKSUM) bit dynamically to signal it does not
-> > check the checksum anymore. Would it work?
->
-> I think that would work, although the intention of the hw->flags is to
-> define what the hardware is supposed to support as not changing those
-> values dynamically during runtime so mac will care about it. However
-> we don't expose those flags to the userspace, so far I know. We can
-> still introduce two separated flags if necessary in future.
->
-> Why do we need promiscuous mode at all? Why is it necessary for a
-> scan? What of "ack response, address filtering and crc checking" you
-> want to disable and why?
->
+I am contacting you through this means because I need your urgent
+assistance and also help me to carry a charity project in your
+country. I found your email address as a true child of God for past
+few days now that I have been praying to know if you are really the
+chosen one for this great charity project, according to God's
+direction, after all prayers I am convinced, and I have decided to
+contact you. Please, i want you use the funds for the Lord's work,
+with confidence, read and respond now.
 
-I see now why promiscuous mode is necessary here. The actual
-promiscuous mode setting for the driver is not the same as promiscuous
-mode in 802.15.4 spec. For until now it was there for running a
-sniffer device only.
-As the 802.15.4 spec defines some "filtering levels" I came up with a
-draft so we can define which filtering level should be done on the
-hardware.
 
-diff --git a/include/net/mac802154.h b/include/net/mac802154.h
-index 72978fb72a3a..3839ed3f8f0d 100644
---- a/include/net/mac802154.h
-+++ b/include/net/mac802154.h
-@@ -130,6 +130,48 @@ enum ieee802154_hw_flags {
- #define IEEE802154_HW_OMIT_CKSUM       (IEEE802154_HW_TX_OMIT_CKSUM | \
-                                         IEEE802154_HW_RX_OMIT_CKSUM)
+My name is Mrs. Nadia Emman, a widow, but currently based in West
+Africa since my life with my late husband, who was a businessman in
+this country before dying some years ago. We were married to many
+years without a child. He died after a brief illness that lasted only
+six days and I myself have been suffering from an ovarian cancer
+disease. At this moment I am about to finish the race in this way
+because the disease has reached a very bad stage, without any family
+member and without children. I hope you do not expose or betray this
+trust and I am sure that I am about to trust you for the mutual
+benefit of orphans and the less privileged. I have some funds that I
+inherited from my late husband, the total sum of ($ 12,500,000.00)
+deposited at a bank here in Burkina Faso. After knowing my current
+state of health, I decided to trust you with this fund, believing that
+you will use it in the way I will instruct here.
 
-+/**
-+ * enum ieee802154_filter_mode - hardware filter mode that a driver
-will pass to
-+ *                              pass to mac802154.
-+ *
-+ * @IEEE802154_FILTER_MODE_0: No MFR filtering at all.
-+ *
-+ * @IEEE802154_FILTER_MODE_1: IEEE802154_FILTER_MODE_1 with a bad FCS filter.
-+ *
-+ * @IEEE802154_FILTER_MODE_2: Same as IEEE802154_FILTER_MODE_1, known as
-+ *                           802.15.4 promiscuous mode, sets
-+ *                           mib.PromiscuousMode.
-+ *
-+ * @IEEE802154_FILTER_MODE_3_SCAN: Same as IEEE802154_FILTER_MODE_2 without
-+ *                                set mib.PromiscuousMode.
-+ *
-+ * @IEEE802154_FILTER_MODE_3_NO_SCAN:
-+ *     IEEE802154_FILTER_MODE_3_SCAN with MFR additional filter on:
-+ *
-+ *     - No reserved value in frame type
-+ *     - No reserved value in frame version
-+ *     - Match mib.PanId or broadcast
-+ *     - Destination address field:
-+ *       - Match mib.ShortAddress or broadcast
-+ *       - Match mib.ExtendedAddress or GroupRxMode is true
-+ *       - ImplicitBroadcast is true and destination address field/destination
-+ *         panid is not included.
-+ *       - Device is coordinator only source address present in data
-+ *         frame/command frame and source panid matches mib.PanId
-+ *       - Device is coordinator only source address present in multipurpose
-+ *         frame and destination panid matches macPanId
-+ *     - Beacon frames source panid matches mib.PanId. If mib.PanId is
-+ *       broadcast it should always be accepted.
-+ *
-+ */
-+enum ieee802154_filter_mode {
-+       IEEE802154_FILTER_MODE_0,
-+       IEEE802154_FILTER_MODE_1,
-+       IEEE802154_FILTER_MODE_2,
-+       IEEE802154_FILTER_MODE_3_SCAN,
-+       IEEE802154_FILTER_MODE_3_NO_SCAN,
-+};
-+
- /* struct ieee802154_ops - callbacks from mac802154 to the driver
-  *
-  * This structure contains various callbacks that the driver may
-@@ -249,7 +291,7 @@ struct ieee802154_ops {
-        int             (*set_frame_retries)(struct ieee802154_hw *hw,
-                                             s8 retries);
-        int             (*set_promiscuous_mode)(struct ieee802154_hw *hw,
--                                               const bool on);
-+                                               enum
-ieee802154_filter_mode mode);
-        int             (*enter_scan_mode)(struct ieee802154_hw *hw,
-                                           struct
-cfg802154_scan_request *request);
-        int             (*exit_scan_mode)(struct ieee802154_hw *hw);
 
----
+you will use this $12.5 Million for public benefit as follows;
 
-In your case it will be IEEE802154_FILTER_MODE_3_SCAN mode, for a
-sniffer we probably want as default IEEE802154_FILTER_MODE_0, as
-"promiscuous mode" currently is.
+1. Establish An Orphanage Home To Help The Orphanages Children.
+2. Build A Hospital To Help The Poor.
+3. Build A Nursing Home For Elderly People Need Care & Meal.
 
-- Alex
+You will named them after my late husband.Therefore, I need you to
+help me and claim this money and use it for charities, for orphanages
+and provide justice and help to the poor, needy and to promote the
+words of God and the effort to maintain the house of God, according to
+the bible in the book of. Jeremiah 22: 15-16, without minding our
+different religions.
+
+It will be a pleasure to compensate with 40% percent of the total
+money for your effort in handling the transaction, while 60% of the
+money will go to charity project.
+
+All I need from you is sincerity and ability to complete the task of
+God without any failure. It will be my pleasure to see that the bank
+has finally released and transferred the fund to your bank account in
+the country, even before I die here in the hospital, due to my current
+state of health, everything must be processed as soon as possible.
+
+I am waiting for your immediate response, if you are only interested
+in obtaining more details about the transaction and execution of this
+humanitarian project for the glory and honor of God.
+
+Sorry if you received this letter in your spam, is due to recent
+connection/network error here in the country.
+
+Please I am waiting for your urgent reply now.
+
+May God Bless you,
+Mrs. Nadia Emman.

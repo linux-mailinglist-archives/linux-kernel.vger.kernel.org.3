@@ -2,50 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEAD64825AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 20:42:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4B34825AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 20:53:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbhLaTm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 14:42:56 -0500
-Received: from slot0.jllresort.com ([62.197.136.5]:47766 "EHLO
-        slot0.jllresort.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231524AbhLaTmz (ORCPT
+        id S231639AbhLaTxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 14:53:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56068 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231524AbhLaTxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 14:42:55 -0500
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=jllresort.com;
- h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding; i=ele.mon@jllresort.com;
- bh=YDWzp14VIWtBkcPJLEhMcpbXs60=;
- b=GYUE14pzrQ/BjxUxOFEj9iW6Rur8/CpLvBK/PJpxej6UoujgnvOP8/tkyRmNcNhT9tE4bUiAhjoN
-   g0yokzzvGamhLT/zirkJHokyPz2bg1cbxk+uLhWWO71tKZ3LULq14gJkOVBhdl+7RbX3jXcLCVu+
-   McpCzaZFV6OCjDvsZNdAAkzLR2/l+CMa8+nn80U2l3TMiUePIr3MEG/xe0a3++7UWGis/fMScgs6
-   YN1FEyD/J0inTFSf/TN6uRB5sYDDDFAw8boiFT1+PkMygePmUJKnvF6YwwfK2on0ouHIshronahq
-   AEl6R1yyR1Nf9rSGUAzD1aTI+STny5YFO2niHQ==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=jllresort.com;
- b=MmxBjGsOB/w32E1Kog1Vw6i7jMSraIHxwhWvuOsu5uC+pgXBrsmQzhTqkkfO0Hl/QHyOGE89fZ20
-   HjRlgwphExYCyG4luJh23XyMCMvgVcsxIe7leyrhQHIYhqafaON0M1RcDbGHOAF5+zNp9WF8TtUt
-   VKvZbkLM31KOByS8Aaq0KPjx04Q6yL4pIo41w4tdumxKERqGfFtReubw+iU601sj3EZeMqYh+18D
-   SGao/hOwfyK8NGpI+F+3tnAtUDUio4Oy8iSEL7MiLFItW5Vg2xP/rhkKriwZw1wGr0Gs33pNm/kT
-   ZtUGZw5Damh0BIluIpowuS2daBOdDWoaYiCHuQ==;
-Reply-To: mustafa.ayvaz@ayvazburosu.com
-From:   ele.mon@jllresort.com
-To:     linux-kernel@vger.kernel.org
-Subject: Attention
-Date:   31 Dec 2021 20:42:50 +0100
-Message-ID: <20211231203420.A90D7AA8E32995F5@jllresort.com>
+        Fri, 31 Dec 2021 14:53:23 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A0AC061574;
+        Fri, 31 Dec 2021 11:53:22 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id o185so55278451ybo.12;
+        Fri, 31 Dec 2021 11:53:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tofT5X8Ky8VJjrU9fps9vvYs2udpY1ZJrRJIJqMy6Xo=;
+        b=NC4vE1NIbAFpDTLHljHkXgMQuL7lEZUUymJVoPwb3jSqhCFWkgfCRmLY7m2S5ls2FO
+         juBIc1sAfpnF1DbKSQDi8pcMbte/mKuXXAuU7o5REjq1Ps3tNAkqEjhrA+gDKkTzuikh
+         VY37rLSpyeN5TcAzv67obqiAEarJLMBxAxV5LhOD5PKvFCr4/LyKcLhWqMM4BCtls1Ya
+         DPqoDut/qVi9IrkknkG4CATrMZRsJoctf4jn7lOIKAhYgS5hOvErR20D2LlONR32Tk3I
+         BPlOTUJmDHmDBsnsuHvbN5J/xHLmXNDzyT/qH5FbN2D7/g/7OK/xuJ4mgsrUffsnj0qh
+         EPFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tofT5X8Ky8VJjrU9fps9vvYs2udpY1ZJrRJIJqMy6Xo=;
+        b=FcyiNXT+ANpZG+6Xl2dvQ7RSDPOf9T2Mp8e/5nd64b3TAUiZAbkDY6d7W1xUTboQrH
+         Q+DMrFMnOi3ft6XShQdpmymbr8yzeQEfEpKXKQiJvN21vd5wfjiPoKgFPbJ1tztvhyVe
+         fgkg6wBN+a6alP0e97GDSlQRYJD0YeLzfHt/AZU7H4EGXDw/p/+HcGu1x96gLcD5P7Q/
+         fvmGvC0S9qVHneaQ1ITeW4HBQ5sZhjxfBPnnb9n/elwbvXO/pQV4if+zGPdujHTKX3rs
+         NOvQq3zDDlVFK74WF+kBEkt8lqsGke56cbiMDUEOX4XGQjHvN5VMv3+fr19yC5HhxBGy
+         agjg==
+X-Gm-Message-State: AOAM533dyzsiorfW9NJ/YKSRPDGcBonpVmlTxTPUx4KKKE2RBwIc6RQY
+        ksnKQIXvBsoYyyjtIKhbqKSzff0yDdJtuOu8nmjyd7gv
+X-Google-Smtp-Source: ABdhPJz4cAKTyeEHqZWTKvD4UAeWmRla7uiIwmyJVVxkalWZF1wyxJOuJE7ox45U2Vkf6wGIx5FNMVbupUCGSeGMi7k=
+X-Received: by 2002:a05:6902:1149:: with SMTP id p9mr17360342ybu.398.1640980401917;
+ Fri, 31 Dec 2021 11:53:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+References: <02077a37-46d6-c94f-fa08-9da7ee99e42c@googlemail.com> <50ea1b0e-28d7-6d04-9c03-4becc4db143b@googlemail.com>
+In-Reply-To: <50ea1b0e-28d7-6d04-9c03-4becc4db143b@googlemail.com>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Fri, 31 Dec 2021 11:53:11 -0800
+Message-ID: <CABBYNZLc9Pj=LYhL5MUUVkhenHb_xfT59aDDkdk14k7+ojeUzw@mail.gmail.com>
+Subject: Re: 5.16.0-rc7+ Bluetooth error
+To:     Chris Clayton <chris2553@googlemail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        Kiran K <kiran.k@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings to you linux-kernel,
+Hi Chris,
 
-I was wondering if you got my previous email? I have been trying=20
-to reach you by email linux-kernel@vger.kernel.org, kindly get=20
-back to me swiftly, it is very important.
+On Fri, Dec 31, 2021 at 2:35 AM Chris Clayton <chris2553@googlemail.com> wrote:
+>
+> On 30/12/2021 09:21, Chris Clayton wrote:
+> > Hi,
+> >
+> > I pulled the latest changes into my clone of Linus' tree and built and installed the kernel. (git describe gives
+> > v5.16-rc7-9-ge7c124bd0463). I'm seeing errors reported by the bluetooth subsystem that i don't see in 5.15.12 or 5.10.89
+> >
+> > The problem seems to occur twice during system startup and on each occasion I see a batch of identical error messages:
+> >
+> > [    3.980822] Bluetooth: hci0: Failed to read codec capabilities (-56)
+> > [    3.982812] Bluetooth: hci0: Failed to read codec capabilities (-56)
+> > [    3.984812] Bluetooth: hci0: Failed to read codec capabilities (-56)
+> > [    3.986608] Bluetooth: hci0: Failed to read codec capabilities (-56)
+> > [    3.987621] Bluetooth: hci0: Failed to read codec capabilities (-56)
+> > [    3.988606] Bluetooth: hci0: Failed to read codec capabilities (-56)
+> > [    3.989650] Bluetooth: hci0: Failed to read codec capabilities (-56)
+> >
+>
+> Sorry, I should have said that despite the above errors, my bluetooth devices still work fine.
 
-Thanks
-Mustafa Ayvaz
-Email: mustafa.ayvaz@ayvazburosu.com
+Would be great to have the HCI trace (btmon).
+
+@Kiran K Is this to be expected?
+
+>
+> > A full dmesg log is attached. I've also attached Two files containing the output from "lsusb -v" run on 5.10.89 and
+> > 5.16-rc7.
+> >
+> > Please let me know if I can provide any other diagnostic information or test any patches. You'll need to cc me on
+> > replies because I'm not subscribed to LKML or linux-bluetooth.
+> >
+> > Thanks
+
+
+
+-- 
+Luiz Augusto von Dentz

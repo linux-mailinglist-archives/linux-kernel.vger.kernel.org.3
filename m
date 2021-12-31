@@ -2,72 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C703482194
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 03:32:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C07482196
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 03:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242551AbhLaCcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 21:32:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56902 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242497AbhLaCcS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 21:32:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8324AC061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 18:32:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1376D6177F
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 02:32:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 750A0C36AED;
-        Fri, 31 Dec 2021 02:32:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640917937;
-        bh=W3/zFG0+BwVpcdmtt5kBBkH7TTioI2eHdohrq8pnTLQ=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=C4dRtstCDxtn1ntX5fw8mB6zwCcwqUlDEvVVRx7Y237SmkLX6pa+/64MTjAH8AqCI
-         OjUF2Q6ZoodqRqSLSYVQjJnkjrKJWChWG6WmaJui4T7XOnc2Lu6pk4II9T3iCWJk/2
-         OcdZ9mi1Z4w4oeCZxgVTq80swSjXq+cxLifiP5JvjH1j3D6fniZJaDR1yR8fa13qsC
-         Ftiy44HO/rxrVNtweBX6A9u/Pz8XXM+D+G/oOLeca1oewOIXmuHkvVIEXMvgnP5Jue
-         /67CQlL3TkLDeZL1LJRLbti9bTbXCFCDArlJn1037o9dgYR7ao9z3fq537y2kaNHzf
-         PU7Zr1xP1dxqg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5FD45C395E3;
-        Fri, 31 Dec 2021 02:32:17 +0000 (UTC)
-Subject: Re: [git pull] drm fixes for 5.16-rc8
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAPM=9tyK28tROtoYmE-Li2P5JL92GHcXFcXmWFi+z1m1AU6yqw@mail.gmail.com>
-References: <CAPM=9tyK28tROtoYmE-Li2P5JL92GHcXFcXmWFi+z1m1AU6yqw@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAPM=9tyK28tROtoYmE-Li2P5JL92GHcXFcXmWFi+z1m1AU6yqw@mail.gmail.com>
-X-PR-Tracked-Remote: git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2021-12-31
-X-PR-Tracked-Commit-Id: ce9b333c73a5a8707f2f446a837a6ca743ddcffd
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 4f3d93c6eaff6b84e43b63e0d7a119c5920e1020
-Message-Id: <164091793738.21027.8664024446891515270.pr-tracker-bot@kernel.org>
-Date:   Fri, 31 Dec 2021 02:32:17 +0000
-To:     Dave Airlie <airlied@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        id S241106AbhLaCeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 21:34:20 -0500
+Received: from mga14.intel.com ([192.55.52.115]:24704 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237592AbhLaCeT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 21:34:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640918059; x=1672454059;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=3xgj6YPF/dL11Z/52845rvYXUsZ6jR0j7Y9+NOsvBzY=;
+  b=E673iBEPfiETG4UJudFtRXdPEIG2QjOlhVs1izTPhy4O79QK0MLiUNmF
+   QLG9FwmvTszTpqkl5a52gr/Y5ThMc3ZAMXQTVgaO1zH7+48m2HPrXRGb/
+   6sK3Vro3InUz70cfwta4LNgXa1G4cZaAQ6QZealuXc6RlbHlrlIkrNtfI
+   pXYq4NKwrUKVxR6uQBv7U9KHEIGVLiqLRhJz+0hDhtF1Xe/6owH0D+ieE
+   vi+bOeA2gdlyT+DCmRjRW7Rd1MfYUTCIxJtX+c2LCfuaMdCSCcoFm/hNq
+   +CK/ohQQUrkS0wBS7yRFxgaZLTiF5PCeYfFKzqUc/E6rYkMmHVg2aUg9b
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="241971104"
+X-IronPort-AV: E=Sophos;i="5.88,250,1635231600"; 
+   d="scan'208";a="241971104"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 18:34:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,250,1635231600"; 
+   d="scan'208";a="666706992"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by fmsmga001.fm.intel.com with ESMTP; 30 Dec 2021 18:34:10 -0800
+Date:   Fri, 31 Dec 2021 10:33:34 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com
+Subject: Re: [PATCH v3 kvm/queue 11/16] KVM: Add kvm_map_gfn_range
+Message-ID: <20211231023334.GA7255@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20211223123011.41044-1-chao.p.peng@linux.intel.com>
+ <20211223123011.41044-12-chao.p.peng@linux.intel.com>
+ <YcS6m9CieYaIGA3F@google.com>
+ <20211224041351.GB44042@chaop.bj.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211224041351.GB44042@chaop.bj.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 31 Dec 2021 12:20:04 +1000:
+On Fri, Dec 24, 2021 at 12:13:51PM +0800, Chao Peng wrote:
+> On Thu, Dec 23, 2021 at 06:06:19PM +0000, Sean Christopherson wrote:
+> > On Thu, Dec 23, 2021, Chao Peng wrote:
+> > > This new function establishes the mapping in KVM page tables for a
+> > > given gfn range. It can be used in the memory fallocate callback for
+> > > memfd based memory to establish the mapping for KVM secondary MMU when
+> > > the pages are allocated in the memory backend.
+> > 
+> > NAK, under no circumstance should KVM install SPTEs in response to allocating
+> > memory in a file.   The correct thing to do is to invalidate the gfn range
+> > associated with the newly mapped range, i.e. wipe out any shared SPTEs associated
+> > with the memslot.
+> 
+> Right, thanks.
 
-> git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2021-12-31
+BTW, I think the current fallocate() callback is just useless as long as
+we don't want to install KVM SPTEs in response to allocating memory in a
+file. The invalidation of the shared SPTEs should be notified through 
+mmu_notifier of the shared memory backend, not memfd_notifier of the
+private memory backend.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/4f3d93c6eaff6b84e43b63e0d7a119c5920e1020
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thanks,
+Chao

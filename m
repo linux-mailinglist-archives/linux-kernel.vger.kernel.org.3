@@ -2,85 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76735482457
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 15:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D5F482477
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 15:59:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbhLaOe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 09:34:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43534 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbhLaOeZ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 09:34:25 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DEBC061574
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 06:34:25 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id 139so49041717ybd.3
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 06:34:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=JXeFOPyTrDaAFJ+vTz4fcec9DEXgQySzBIYKKZ5A61E=;
-        b=RB4YnNLjOKqR6XhMlYRY9T7IZzORf1xRUN6EitZFMh8cDVctt4dUXxIuYWkkTiAgK3
-         tzY6YR89s8PH0qKzrdwDODdKwagHcHjee6+7Yv9MeCmt1EHdJw4dunBqmy3jwCiMxYw2
-         NDrJblXqtXl4WfgiISjQS96/XX+d63bOd4WImtzJjQhX0rrhu+q85Dwg55ex9dGU+DcA
-         jggTKgVuat76SNX+Hb62zoyEA4YRp8rVz4yKYBz7ksoSWJokI4deEfjXygQmvziZr5zx
-         ItmCX9k3QnG2znIszrIp7h9MliTL8qRezn+fhdVy43KwhW6zTZdFHslp2TbFXLib5Bqd
-         UdPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=JXeFOPyTrDaAFJ+vTz4fcec9DEXgQySzBIYKKZ5A61E=;
-        b=ew9jQu3ruKHhwIpkrCsWS7lNWxJZB38pOGHPw8p5TInK9nqWZuekXAskvirhZt/kMp
-         dnLbba6Xt9p+cCXntNyYsJBbZtevMhphgkM1YiMHeM1GqQgYBizJRmSg1e26EJMargnX
-         zz5cgOBTWeCC+tSVIwGvMpUoySOnYOEL++IjBPO9m9fChg9BIcZB/9Pt8802Ma4E1CFo
-         WkNN0Tp1ZIPACp677ifTgDyjTTFCAq4lnxXrHdIrmtVTFJS5mEeFGtoimnmxSEEU4Eiu
-         E7J8ss80rVHjk3Yd/QrvQzF9UcfuSvc5QFKZYfyijZI1fzp1O5aBhIlG+UlTGxW+E5fj
-         EMIw==
-X-Gm-Message-State: AOAM531u8DTDUfwEAo8fCJIjJWD8dTI/bPXQadBZMTdldmgXmgnDNLV9
-        xE2Y1hi6PehLulliM4ID+PRPlREVG/6Jfp4KCUUwnXy3IHA=
-X-Google-Smtp-Source: ABdhPJwi0iFH208fM2OaoLfUEIaskgVToKROczYXNY6gVBC1wooqsIrvgmio8969gEJCa8ADoe5KNRILWLP9fmzGQWs=
-X-Received: by 2002:a9d:7987:: with SMTP id h7mr25634088otm.60.1640960924252;
- Fri, 31 Dec 2021 06:28:44 -0800 (PST)
-MIME-Version: 1.0
-Sender: hgghghhjhghg06@gmail.com
-Received: by 2002:a05:6838:8394:0:0:0:0 with HTTP; Fri, 31 Dec 2021 06:28:43
- -0800 (PST)
-From:   Mrs Carlsen monika <carlsen.monika@gmail.com>
-Date:   Fri, 31 Dec 2021 15:28:43 +0100
-X-Google-Sender-Auth: lYY3p5qtMjRefXrpv4dQNT9-DMM
-Message-ID: <CALjxKU7ZS7cSkitQvMyjvuV=QGhseLQ=5Bp675qbfx_M=YytSA@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S230522AbhLaO7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 09:59:07 -0500
+Received: from mga18.intel.com ([134.134.136.126]:29026 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229474AbhLaO7D (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 31 Dec 2021 09:59:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640962743; x=1672498743;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=OVSz8IsiD1AyzuC6JkviSS4vl4sM3klnHE+FMiHvbOo=;
+  b=WnNkvYqa7wR3PxQj/SI8/YeG196h8Hh2MfDLjPJtqRioN6k7VBObzl8e
+   1q7N6TFZ1qUT8PBbduYzAR3DEycTA207S3Owj6bwcWW/KfCuTXEQJtaAQ
+   PAQtX0BJgsuY5zhAKIttL+hlbwqTS8yGKDQlOtN5hlIBvylbI+eVg01xb
+   3c+Ps2bEhK0u99C+boHP2ndYjOT5olFbdkFZeyM7YLtMsWuS7fcf+wsrS
+   h69Pg6L8NbvcKjMMcpL0sULm13hlRgOmM7H54WFbMmjd/Uu42pJYQXD69
+   hKl4Fo0qNt4Fd+ZLwhthPdJG0x9Xp90J3pg/LyFa7TXBH3UuAd5i2tmKx
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="228641845"
+X-IronPort-AV: E=Sophos;i="5.88,251,1635231600"; 
+   d="scan'208";a="228641845"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2021 06:59:03 -0800
+X-IronPort-AV: E=Sophos;i="5.88,251,1635231600"; 
+   d="scan'208";a="524758418"
+Received: from arthur-vostro-3668.sh.intel.com ([10.239.13.120])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2021 06:58:57 -0800
+From:   Zeng Guang <guang.zeng@intel.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        Kai Huang <kai.huang@intel.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Robert Hu <robert.hu@intel.com>, Gao Chao <chao.gao@intel.com>,
+        Zeng Guang <guang.zeng@intel.com>,
+        Robert Hoo <robert.hu@linux.intel.com>
+Subject: [PATCH v5 2/8] KVM: VMX: Extend BUILD_CONTROLS_SHADOW macro to support 64-bit variation
+Date:   Fri, 31 Dec 2021 22:28:43 +0800
+Message-Id: <20211231142849.611-3-guang.zeng@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20211231142849.611-1-guang.zeng@intel.com>
+References: <20211231142849.611-1-guang.zeng@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  I sent this mail praying it will found you in a good condition of
-health,since I myself are in a very critical health condition in which
-I sleep every night without knowing if I may be alive to see the next
-day.am Mrs.Monika John Carlsen,wife of late Mr John Carlsen, a widow
-suffering from long time illness.I have some funds I inherited from my
-late husband,the sum of($11.000.000,eleven million dollars) my Doctor
-told me recently that I have serious sickness  which is cancer
-problem.What disturbs me most is my stroke sickness.Having known my
-condition,I decided to donate this fund to a good person that will
-utilize it the way am going to instruct herein.I need a very honest
-and God fearing person who can claim this money and use it for Charity
-works,for orphanages,widows and also build schools for less privileges
-that will be named after my late husband if possible and to promote
-the word of God and the effort that the house of God is maintained.
+From: Robert Hoo <robert.hu@linux.intel.com>
 
-  I do not want a situation where this money will be used in an
-ungodly manner.That's why am taking this decision.am not afraid of
-death so I know where am going.I accept this decision because I do not
-have any child who will inherit this money after I die.Please I want
-your sincerely and urgent answer to know if you will be able to
-execute this project,and I will give you more information on how the
-fund will be transferred to your bank account.am waiting for your
-reply.
+The Tertiary VM-Exec Control, different from previous control fields, is 64
+bit. So extend BUILD_CONTROLS_SHADOW() by adding a 'bit' parameter, to
+support both 32 bit and 64 bit fields' auxiliary functions building.
 
-Best Regards,
-Mrs.Monika John Carlsen
+Suggested-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Robert Hoo <robert.hu@linux.intel.com>
+Signed-off-by: Zeng Guang <guang.zeng@intel.com>
+---
+ arch/x86/kvm/vmx/vmx.h | 59 ++++++++++++++++++++++--------------------
+ 1 file changed, 31 insertions(+), 28 deletions(-)
+
+diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
+index 4df2ac24ffc1..07e1753225bf 100644
+--- a/arch/x86/kvm/vmx/vmx.h
++++ b/arch/x86/kvm/vmx/vmx.h
+@@ -443,35 +443,38 @@ static inline u8 vmx_get_rvi(void)
+ 	return vmcs_read16(GUEST_INTR_STATUS) & 0xff;
+ }
+ 
+-#define BUILD_CONTROLS_SHADOW(lname, uname)				    \
+-static inline void lname##_controls_set(struct vcpu_vmx *vmx, u32 val)	    \
+-{									    \
+-	if (vmx->loaded_vmcs->controls_shadow.lname != val) {		    \
+-		vmcs_write32(uname, val);				    \
+-		vmx->loaded_vmcs->controls_shadow.lname = val;		    \
+-	}								    \
+-}									    \
+-static inline u32 __##lname##_controls_get(struct loaded_vmcs *vmcs)	    \
+-{									    \
+-	return vmcs->controls_shadow.lname;				    \
+-}									    \
+-static inline u32 lname##_controls_get(struct vcpu_vmx *vmx)		    \
+-{									    \
+-	return __##lname##_controls_get(vmx->loaded_vmcs);		    \
+-}									    \
+-static inline void lname##_controls_setbit(struct vcpu_vmx *vmx, u32 val)   \
+-{									    \
+-	lname##_controls_set(vmx, lname##_controls_get(vmx) | val);	    \
+-}									    \
+-static inline void lname##_controls_clearbit(struct vcpu_vmx *vmx, u32 val) \
+-{									    \
+-	lname##_controls_set(vmx, lname##_controls_get(vmx) & ~val);	    \
++#define BUILD_CONTROLS_SHADOW(lname, uname, bits)			\
++static inline								\
++void lname##_controls_set(struct vcpu_vmx *vmx, u##bits val)		\
++{									\
++	if (vmx->loaded_vmcs->controls_shadow.lname != val) {		\
++		vmcs_write##bits(uname, val);				\
++		vmx->loaded_vmcs->controls_shadow.lname = val;		\
++	}								\
++}									\
++static inline u##bits __##lname##_controls_get(struct loaded_vmcs *vmcs)\
++{									\
++	return vmcs->controls_shadow.lname;				\
++}									\
++static inline u##bits lname##_controls_get(struct vcpu_vmx *vmx)	\
++{									\
++	return __##lname##_controls_get(vmx->loaded_vmcs);		\
++}									\
++static inline								\
++void lname##_controls_setbit(struct vcpu_vmx *vmx, u##bits val)		\
++{									\
++	lname##_controls_set(vmx, lname##_controls_get(vmx) | val);	\
++}									\
++static inline								\
++void lname##_controls_clearbit(struct vcpu_vmx *vmx, u##bits val)	\
++{									\
++	lname##_controls_set(vmx, lname##_controls_get(vmx) & ~val);	\
+ }
+-BUILD_CONTROLS_SHADOW(vm_entry, VM_ENTRY_CONTROLS)
+-BUILD_CONTROLS_SHADOW(vm_exit, VM_EXIT_CONTROLS)
+-BUILD_CONTROLS_SHADOW(pin, PIN_BASED_VM_EXEC_CONTROL)
+-BUILD_CONTROLS_SHADOW(exec, CPU_BASED_VM_EXEC_CONTROL)
+-BUILD_CONTROLS_SHADOW(secondary_exec, SECONDARY_VM_EXEC_CONTROL)
++BUILD_CONTROLS_SHADOW(vm_entry, VM_ENTRY_CONTROLS, 32)
++BUILD_CONTROLS_SHADOW(vm_exit, VM_EXIT_CONTROLS, 32)
++BUILD_CONTROLS_SHADOW(pin, PIN_BASED_VM_EXEC_CONTROL, 32)
++BUILD_CONTROLS_SHADOW(exec, CPU_BASED_VM_EXEC_CONTROL, 32)
++BUILD_CONTROLS_SHADOW(secondary_exec, SECONDARY_VM_EXEC_CONTROL, 32)
+ 
+ static inline void vmx_register_cache_reset(struct kvm_vcpu *vcpu)
+ {
+-- 
+2.27.0
+

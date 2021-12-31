@@ -2,109 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C81482538
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 17:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B74DF48253C
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 17:56:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbhLaQy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 11:54:28 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:53604 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbhLaQy1 (ORCPT
+        id S230156AbhLaQ4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 11:56:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46324 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230022AbhLaQ4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 11:54:27 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36763B81D1C
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 16:54:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 371A3C36AE9;
-        Fri, 31 Dec 2021 16:54:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640969664;
-        bh=rvg6wZRVQUU4lpCX5Q8pmgTeUuHLBdlRzgcEDddaL60=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tIopv7WjtNwg2I+/VhiCEmWKJA3Tp1CfYoB9KDs2x8I6fLKM/8volT7GuscQVzWs0
-         4W609XGbmX/wgGnDbQaEZi78ZWSGGAKnaapOTTOW3B22ltwqmUndOzNxtVXNQaKX8q
-         gq3S3GleuaHGqpUVSk8u1fvG9CXNaeb4Piqe7S3oMtRFCrmKSjgdXzLt2NsMG8CrUr
-         BanPbFsEiEi7ytq9i7+dL0cU0jv+EME5GaLSECaJm9JmFPfUdmEYyr1CeREoPZkk9B
-         9Pmxe0u9r58Cuv2Chi9G4xslNjW+6xAQ14SNUxoCRVzrO4B0kDE2ISiNRE8JDLSI0P
-         cab1GSHv+NJ3g==
-Date:   Fri, 31 Dec 2021 09:54:20 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     cgel.zte@gmail.com
-Cc:     ndesaulniers@google.com, keescook@chromium.org,
-        wang.yong12@zte.com.cn, xu.xin16@zte.com.cn,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH linux-next] tools: compiler-gcc.h::Keep compatible with
- non-clang compilers.
-Message-ID: <Yc81vBwPo/aHMfXB@archlinux-ax161>
-References: <20211231100833.590691-1-xu.xin16@zte.com.cn>
+        Fri, 31 Dec 2021 11:56:50 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC49C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 08:56:50 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id f18-20020a17090aa79200b001ad9cb23022so26057240pjq.4
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 08:56:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Fhqsai9/5uTpmhu9BCUGRv/iOpwY1XebeAJzkMmetAg=;
+        b=DTTANcgQxP/+d+SIfU7vQgtLwKl7eY50ftYhrvl9vSh6Hu0HYf2iigJ3RKtoyq23sj
+         gRii9H+9YyK62wyllPKWLhPo3BegEtpX6Yg3ZHXeUdvoOw0sH/I84xuypATf+fMk8LBH
+         O4lBZrdOFmhBJQPp2875HXZ0ZVQblWDDurWrkXhIP5fG+QM8vpMSh7BpJwiVB1IQDsJg
+         4m3w6u6gZPWBzgqiTJNinwfqTuL1w2cnMa/rTYP2hWmAH6sPVcVqosaxqYQSH5GxqZet
+         xeSf1JN5N2AE76YbEuqRaWdJ/ngfTjedQ98lpvwYnHxRUFlTeLb3fXRkGObrPqaiDrK6
+         4bHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Fhqsai9/5uTpmhu9BCUGRv/iOpwY1XebeAJzkMmetAg=;
+        b=UQVD3cLfE4sqRLJbe3oj6XiCauX6w9qmzF3aqCIbIA8uauZGsc3m5SXk4XKEWgjU9t
+         Mhw/BLnI4u0fbzaaLudrM9xisjE2F4BeyIQ9FZgKdyGWOPCJ0tbAKKz+rrHfbsp/55c7
+         BsBUwytZPbXvUaX1McyO9KO+KwDgAbf04NFs+pWTFIrBG4wtg8+07EyiRp8ype6Qltjm
+         m1hxZThYLL5Japf4ZdoiWy6mFG+3tHeyuBMOSHjBKEFmsPjYlnpYc2OLfAhK2lFK54Wc
+         Iy6oKGhlS60flU9JmMdIc+BYwwrSZZVujF5XjZvoeGVr5ozHkJqlqw1mU7qqMQMAM9GD
+         o0cw==
+X-Gm-Message-State: AOAM532Q4Ej9OwMQyP6vIQe7L7PivZGoHp0gIXeB2KFJrY/6hTAUJ5LA
+        XW2BfS1GS+b/Yr0fUMUsqX/lDIxY+CL5mjvC
+X-Google-Smtp-Source: ABdhPJxbh1vyPADNysAidGV2ytIAgoJ8tmJoKQuoiBd2eBUqHzHGm5J35dSdoI4BZhj0Nw+Z6BHyhQ==
+X-Received: by 2002:a17:902:8d8c:b0:149:4497:faab with SMTP id v12-20020a1709028d8c00b001494497faabmr36204345plo.161.1640969809949;
+        Fri, 31 Dec 2021 08:56:49 -0800 (PST)
+Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:b:18dd:5111:d391:607b])
+        by smtp.gmail.com with ESMTPSA id mh3sm35188026pjb.26.2021.12.31.08.56.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Dec 2021 08:56:49 -0800 (PST)
+From:   Tianyu Lan <ltykernel@gmail.com>
+To:     hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        michael.h.kelley@microsoft.com, kys@microsoft.com
+Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        vkuznets@redhat.com, brijesh.singh@amd.com, konrad.wilk@oracle.com,
+        hch@lst.de, wei.liu@kernel.org, parri.andrea@gmail.com,
+        thomas.lendacky@amd.com, kernel test robot <lkp@intel.com>
+Subject: [PATCH] Swiotlb: Add CONFIG_HAS_IOMEM check around memremap() in the swiotlb_mem_remap()
+Date:   Fri, 31 Dec 2021 11:56:40 -0500
+Message-Id: <20211231165640.1245751-1-ltykernel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211231100833.590691-1-xu.xin16@zte.com.cn>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 31, 2021 at 10:08:33AM +0000, cgel.zte@gmail.com wrote:
-> From: xu xin <xu.xin16@zte.com.cn>
-> 
-> When HOSTC = gcc (GCC) 4.8.5, there is an error occurring as follows:
-> error: Undefined __has_attribute.
-> 
-> This problem is introduced by commit d0ee23f9d78be ("tools:
-> compiler-gcc.h: Guard error attribute use with __has_attribute").
+From: Tianyu Lan <Tianyu.Lan@microsoft.com>
 
-Yes, sorry for breaking this. It has been discussed here with some ideas
-for a resolution but I never got any feedback so I never carried it
-through, thank you for picking it up.
+HAS_IOMEM option may not be selected on some platforms(e.g, s390) and this
+will cause compile error due to miss memremap() implementation. Fix it via
+adding HAS_IOMEM check around memremap() in the swiotlb.c.
 
-https://lore.kernel.org/r/c1b1a299-c60d-28a4-07ab-1ecd211d6da9@i-love.sakura.ne.jp/
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
+---
+ kernel/dma/swiotlb.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-This patch should probably be sent straight to Linus next time it is
-sent, as he directly applied both my commit and the one that it was
-fixing. Nick and I do not pick up patches currently although Kees might
-be willing to take this one.
+diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
+index b36c1cdd0c4f..3de651ba38cc 100644
+--- a/kernel/dma/swiotlb.c
++++ b/kernel/dma/swiotlb.c
+@@ -167,6 +167,7 @@ static void *swiotlb_mem_remap(struct io_tlb_mem *mem, unsigned long bytes)
+ {
+ 	void *vaddr = NULL;
+ 
++#ifdef CONFIG_HAS_IOMEM
+ 	if (swiotlb_unencrypted_base) {
+ 		phys_addr_t paddr = mem->start + swiotlb_unencrypted_base;
+ 
+@@ -175,6 +176,7 @@ static void *swiotlb_mem_remap(struct io_tlb_mem *mem, unsigned long bytes)
+ 			pr_err("Failed to map the unencrypted memory %pa size %lx.\n",
+ 			       &paddr, bytes);
+ 	}
++#endif
+ 
+ 	return vaddr;
+ }
+-- 
+2.25.1
 
-> To solve it, this patch is given to keep the comatibility.
-
-                                               ^ compatibility
-
-Might be worth adding "with older GCC versions" at the end of that
-sentence.
-
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Co-developed-by: wangyong <wang.yong12@zte.com.cn>
-> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-> ---
->  tools/include/linux/compiler-gcc.h | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/tools/include/linux/compiler-gcc.h b/tools/include/linux/compiler-gcc.h
-> index 8816f06fc6c7..7da593d3cb91 100644
-> --- a/tools/include/linux/compiler-gcc.h
-> +++ b/tools/include/linux/compiler-gcc.h
-> @@ -16,6 +16,11 @@
->  # define __fallthrough __attribute__ ((fallthrough))
->  #endif
->  
-> +
-> +#ifndef __has_attribute
-> +# define __has_attribute(x) 0  /* Compatibility with non-clang compilers. */
-
-This comment is not really accurate; it implies that clang is the only
-one that defines __has_attribute() but GCC 5.x or newer supports
-__has_attribute().  A more accurate comment might be:
-
-/* Compatibility with GCC < 5.x */
-
-> +#endif
-> +
->  #if __has_attribute(__error__)
->  # define __compiletime_error(message) __attribute__((error(message)))
->  #endif
-> -- 
-> 2.25.1
-> 

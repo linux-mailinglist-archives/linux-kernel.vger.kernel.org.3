@@ -2,93 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8765C48243D
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 14:43:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2694482443
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 14:54:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbhLaNnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 08:43:19 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:54374 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbhLaNnS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 08:43:18 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 67D1D61795;
-        Fri, 31 Dec 2021 13:43:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55BCAC36AEA;
-        Fri, 31 Dec 2021 13:43:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640958197;
-        bh=riLwjw8krb8OxQcZBIqxR9zTPbsU+dtHc4Y6gmVcaRc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b0GQhItaBGknP/vQFDElSAT8a9M/Jp72U/iVPQYVaOn8ZNQa06z1ysQpGNQWlDMEJ
-         ngK75KAJ8FsJI/n/2EHnVvOeaLhFgD6kdptzUeodgapqr/ht/FcwwErIF48VnoilBy
-         N1boTHiktp75CQ9HNVJq2P6mFnerzSkVrRJtk+VHWP3/i8r2nLSLL2TmiQQXDFY809
-         2g/HzeB1KMt64ASAsD8FIEoBuWcFbzUN/y5S47exX1G9HVCX0dzuoV29yAC91Pfx+G
-         IVthbazen1jbidDwaQSc20RirPbxY3jluzAKs0IE68gybkDkTwDRdOA2ZhBTz/XKD5
-         4opmHEbjSROrQ==
-Date:   Fri, 31 Dec 2021 14:43:15 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Deep Majumder <deep@fastmail.in>
-Cc:     linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] Docs: Fixes link to I2C specification
-Message-ID: <Yc8I89eEqN8CcgDv@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Deep Majumder <deep@fastmail.in>, linux-doc@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211119061401.19852-1-deep@fastmail.in>
+        id S230359AbhLaNyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 08:54:03 -0500
+Received: from cae.in-ulm.de ([217.10.14.231]:44896 "EHLO cae.in-ulm.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230272AbhLaNyC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 31 Dec 2021 08:54:02 -0500
+X-Greylist: delayed 569 seconds by postgrey-1.27 at vger.kernel.org; Fri, 31 Dec 2021 08:54:02 EST
+Received: by cae.in-ulm.de (Postfix, from userid 1000)
+        id 4E7AA14042E; Fri, 31 Dec 2021 14:44:32 +0100 (CET)
+Date:   Fri, 31 Dec 2021 14:44:32 +0100
+From:   "Christian A. Ehrhardt" <cae@familie-ehrhardt.de>
+To:     alsa-devel@alsa-project.org
+Cc:     linux-kernel@vger.kernel.org,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>,
+        Vitaly Rodionov <vitalyr@opensource.cirrus.com>,
+        Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>
+Subject: hda/cs8904: Fix jack detection after resume
+Message-ID: <20211231134432.atwmuzeceqiklcoa@cae.in-ulm.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GW+rflw+5+PYEx5W"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211119061401.19852-1-deep@fastmail.in>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---GW+rflw+5+PYEx5W
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-On Fri, Nov 19, 2021 at 11:44:01AM +0530, Deep Majumder wrote:
-> The link to the I2C specification is broken and is replaced in this
-> patch by one that points to Rev 6 (2014) of the specification.
-> Although `https://www.nxp.com" hosts the Rev 7 (2021) of this
-> specification, it is behind a login-wall and thus cannot be used.
-> Thus, an additional link has been added (which doesn't require a login)
-> and the NXP official docs link has been updated. The additional link is
-> not the Wayback Machine link since it seems that the PDF has not been
-> archived.
->=20
-> Signed-off-by: Deep Majumder <deep@fastmail.in>
+while debugging something different, I found the following
+jack detection related bug in the cs8904 driver on my DELL
+Inspirion 3501:
+- Plug in a headset, play some sound to make sure that
+  the headset is detected.
+- Stop the sound, wait for the codec to go into suspend (30s
+  should be plenty enough time)
+- Unplug the headset while the codec is in suspend.
+- Try to play sound on the internal speakers. Notice that
+  the the driver still thinks the headset is connected. As a result
+  there is no sound on the internal speakers.
 
-Applied to for-current with minor updates to text and commit message as
-discussed here, thanks!
+AFAICS the bug was introduced by the following commit:
+| commit 424e531b47f83da87490464c5bf633dfb624fe6a
+| Author: Stefan Binding <sbinding@opensource.cirrus.com>
+| Date:   Fri Aug 27 12:02:51 2021 +0100
+| 
+|     ALSA: hda/cs8409: Ensure Type Detection is only run on startup when
+|     necessary
 
+The bug is with the hp_jack_in and mic_jack_in flags that are used
+to determine if jack detection should be run etc. These flags
+are cleared in the suspend path. This prevents a status change from
+being detected after resume as hp_jack_in is cleared by suspend and
+there is no jack due to the unplug of the headset.
 
---GW+rflw+5+PYEx5W
-Content-Type: application/pgp-signature; name="signature.asc"
+This status change was never reported to the HDA core, though.
+On suspend this is not done, only hd_jack_in is cleared and on
+resume the driver thinks that there is no change the needs reporting.
 
------BEGIN PGP SIGNATURE-----
+Proposed fix below, please consider inclusion.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHPCPIACgkQFA3kzBSg
-KbbKeRAAo1baRRpnMxfXlwvvTi2yv1LkZN+CvFKDH7SwMao3B0j+mh/JiVrjOIMT
-E17qBiZAerhIpaoJu2/PBrD5ZiVScUbb41Ij0vHMONjFUytRgdCLkp/WDVWVkskm
-v/l3YvQlLiaMLv+J6rj4/ABwGOq5Ayrzrrl81xsZN4peEiMV2FdUHyS7YIMBmdJW
-BmltfbFboQsMBULiSV2OoJrqKP9mRgbqCrsHdmotUq3zj6WHgVZGg4ebpErWYm4d
-6qgW40MHklJ5r9eqy4LQb6q1pK14hm7zXeepKku/EmNrgC9IqHfngfOWlAj3lYKB
-JAZygZ5tu0aVxZBmYf6ppgwjDZvyzjBnvcKFpTThWQsvAvNdDGNT6pVmDrrH/Uyv
-+Po03Tq44/rHBuZDh71uB+B71z5kLVRvpLY6K69ICn/+2T702LdiIWDHkIXGjUNE
-UxdvZpuGSDMjcxpbtA0HvUF5gEABWHRSY2o+A7epG0P4rmWnD3Dy9de24JTxCJ6+
-jhLUifQ1sQM7KM5gAT/5PYKQyX7A1nKbY8NCoE8RRQ/N1yFVh+HxYzesWCA/h+ZU
-0vX/mRKuZaLoch6FW+cnM+tVTnVkx/7+AuN23Mrr9xisdLJOSkJOwqCi69XMOJ1u
-zZylOL1XHINBXgBSBFVEsdTbJwQsXFliCeegiC+o+KKUW3kGfmA=
-=QDyg
------END PGP SIGNATURE-----
+     regards   Christian
 
---GW+rflw+5+PYEx5W--
+From 1dcf34c1d1c6c4852a86ec3ae189afa5d90ea09c Mon Sep 17 00:00:00 2001
+From: "Christian A. Ehrhardt" <lk@c--e.de>
+Date: Fri, 31 Dec 2021 12:13:48 +0100
+Subject: [PATCH 2/2] ALSA: hda/cs8409: Fix Jack detection after resume
+
+The suspend code unconditionally sets ->hp_jack_in and ->mic_jack_in
+to zero but without reporting this status change to the HDA core.
+To compensate for this, always assume a status change on the
+first unsol event after boot or resume.
+
+Fixes:	424e531b47f8 ("ALSA: hda/cs8409: Ensure Type Detection is only run on startup when necessary")
+Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
+---
+ sound/pci/hda/patch_cs8409-tables.c | 3 +++
+ sound/pci/hda/patch_cs8409.c        | 5 ++++-
+ sound/pci/hda/patch_cs8409.h        | 1 +
+ 3 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/sound/pci/hda/patch_cs8409-tables.c b/sound/pci/hda/patch_cs8409-tables.c
+index 0fb0a428428b..df0b4522babf 100644
+--- a/sound/pci/hda/patch_cs8409-tables.c
++++ b/sound/pci/hda/patch_cs8409-tables.c
+@@ -252,6 +252,7 @@ struct sub_codec cs8409_cs42l42_codec = {
+ 	.init_seq_num = ARRAY_SIZE(cs42l42_init_reg_seq),
+ 	.hp_jack_in = 0,
+ 	.mic_jack_in = 0,
++	.force_status_change = 1,
+ 	.paged = 1,
+ 	.suspended = 1,
+ 	.no_type_dect = 0,
+@@ -443,6 +444,7 @@ struct sub_codec dolphin_cs42l42_0 = {
+ 	.init_seq_num = ARRAY_SIZE(dolphin_c0_init_reg_seq),
+ 	.hp_jack_in = 0,
+ 	.mic_jack_in = 0,
++	.force_status_change = 1,
+ 	.paged = 1,
+ 	.suspended = 1,
+ 	.no_type_dect = 0,
+@@ -456,6 +458,7 @@ struct sub_codec dolphin_cs42l42_1 = {
+ 	.init_seq_num = ARRAY_SIZE(dolphin_c1_init_reg_seq),
+ 	.hp_jack_in = 0,
+ 	.mic_jack_in = 0,
++	.force_status_change = 1,
+ 	.paged = 1,
+ 	.suspended = 1,
+ 	.no_type_dect = 1,
+diff --git a/sound/pci/hda/patch_cs8409.c b/sound/pci/hda/patch_cs8409.c
+index bf5d7f0c6ba5..aff2b5abb81e 100644
+--- a/sound/pci/hda/patch_cs8409.c
++++ b/sound/pci/hda/patch_cs8409.c
+@@ -636,7 +636,9 @@ static void cs42l42_run_jack_detect(struct sub_codec *cs42l42)
+ 
+ static int cs42l42_handle_tip_sense(struct sub_codec *cs42l42, unsigned int reg_ts_status)
+ {
+-	int status_changed = 0;
++	int status_changed = cs42l42->force_status_change;
++
++	cs42l42->force_status_change = 0;
+ 
+ 	/* TIP_SENSE INSERT/REMOVE */
+ 	switch (reg_ts_status) {
+@@ -791,6 +793,7 @@ static void cs42l42_suspend(struct sub_codec *cs42l42)
+ 	cs42l42->last_page = 0;
+ 	cs42l42->hp_jack_in = 0;
+ 	cs42l42->mic_jack_in = 0;
++	cs42l42->force_status_change = 1;
+ 
+ 	/* Put CS42L42 into Reset */
+ 	gpio_data = snd_hda_codec_read(codec, CS8409_PIN_AFG, 0, AC_VERB_GET_GPIO_DATA, 0);
+diff --git a/sound/pci/hda/patch_cs8409.h b/sound/pci/hda/patch_cs8409.h
+index ade2b838590c..d0b725c7285b 100644
+--- a/sound/pci/hda/patch_cs8409.h
++++ b/sound/pci/hda/patch_cs8409.h
+@@ -305,6 +305,7 @@ struct sub_codec {
+ 
+ 	unsigned int hp_jack_in:1;
+ 	unsigned int mic_jack_in:1;
++	unsigned int force_status_change:1;
+ 	unsigned int suspended:1;
+ 	unsigned int paged:1;
+ 	unsigned int last_page;
+-- 
+2.32.0
+

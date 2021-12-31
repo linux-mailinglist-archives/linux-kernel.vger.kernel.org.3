@@ -2,113 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 972DE482352
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 11:27:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB2A8482354
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 11:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbhLaK1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 05:27:05 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:51688 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbhLaK1E (ORCPT
+        id S230091AbhLaK1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 05:27:16 -0500
+Received: from mail-sh.amlogic.com ([58.32.228.43]:34146 "EHLO
+        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230084AbhLaK1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 05:27:04 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BVAQRXS032981;
-        Fri, 31 Dec 2021 04:26:27 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1640946387;
-        bh=bpUJPGgi/5Jx8j2h6g3oXESZgoh1z7lVwijB7GXIvPY=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=I9dhu3YnYCdPQV5wZhyOYljCW4hQ7M3JSxn0R/O6sq2J2xXbx2ZcHqiNzlLS9Ij7z
-         flBelTZNcsrNHIBW/GTR9RiIIcbJpXDj0KeAUDldhNPbd7Vq52rYRgMLdvzap4QbUx
-         JxYHXmup4QljSyZRiZHqqrq0kq57+0xMFGxWlizY=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BVAQR5s023694
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 31 Dec 2021 04:26:27 -0600
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 31
- Dec 2021 04:26:27 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 31 Dec 2021 04:26:27 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BVAQQ7k052825;
-        Fri, 31 Dec 2021 04:26:26 -0600
-Date:   Fri, 31 Dec 2021 15:56:25 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Patrick Williams <patrick@stwcx.xyz>
-CC:     Joel Stanley <joel@jms.id.au>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Potin Lai <potin.lai@quantatw.com>,
-        <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mtd: aspeed-smc: improve probe resilience
-Message-ID: <20211231102623.izaqlzjvracbbgmp@ti.com>
-References: <20211229143334.297305-1-patrick@stwcx.xyz>
- <20211229173411.l2bipmi4x3arqjoo@ti.com>
- <Yc3Qav+ULNdF5zRT@heinlein>
+        Fri, 31 Dec 2021 05:27:14 -0500
+Received: from [10.18.29.173] (10.18.29.173) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Fri, 31 Dec
+ 2021 18:27:12 +0800
+Message-ID: <a296e666-368b-4cd5-427e-30fc66a15b49@amlogic.com>
+Date:   Fri, 31 Dec 2021 18:27:12 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Yc3Qav+ULNdF5zRT@heinlein>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH V3 1/6] tty: serial: meson: Drop the legacy compatible
+ strings and clock code
+Content-Language: en-US
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     <linux-serial@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Vyacheslav <adeep@lexina.in>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>
+References: <20211230102110.3861-1-yu.tu@amlogic.com>
+ <20211230102110.3861-2-yu.tu@amlogic.com>
+ <CAFBinCCwjS36ss_4sU+o9m8gEprFsVZbqcxgpQxczTNohZqFdA@mail.gmail.com>
+From:   Yu Tu <yu.tu@amlogic.com>
+In-Reply-To: <CAFBinCCwjS36ss_4sU+o9m8gEprFsVZbqcxgpQxczTNohZqFdA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.18.29.173]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Patrick,
+Hi Martin,
+	Thank you very much for your reply.
 
-On 30/12/21 09:29AM, Patrick Williams wrote:
-> On Wed, Dec 29, 2021 at 11:04:13PM +0530, Pratyush Yadav wrote:
-> > Hi,
-> > 
-> > On 29/12/21 08:33AM, Patrick Williams wrote:
->  
-> > The patch itself looks fine to me but we no longer want to maintain 
-> > drivers under drivers/mtd/spi-nor/controllers/. They should be moved to 
-> > implement the SPI MEM API (under drivers/spi/).
+On 2021/12/31 6:22, Martin Blumenstingl wrote:
+> [ EXTERNAL EMAIL ]
 > 
-> Is the linux-aspeed community aware of this?  Are you saying you don't want to
-> take fixes for their driver into the MTD tree?  Can it be pulled into the Aspeed
-> tree?
-
-I am fine with taking in bug fixes but no longer want to take in any new 
-features. My main intention was to nudge you to convert it to SPI MEM 
-regardless of whether this is a bug fix or a new feature, because 
-eventually we want to get rid of drivers/mtd/spi-nor/controllers/ and 
-the API that comes along with it.
-
-As for your patch, I certainly don't want it to go via the aspeed tree. 
-It should go via the MTD tree or not at all. I am not quite sure if this 
-counts as a bug fix or a new feature though.
-
+> On Thu, Dec 30, 2021 at 11:21 AM Yu Tu <yu.tu@amlogic.com> wrote:
+>>
+>> All mainline .dts files have been using the stable UART since Linux
+>> 4.16. Drop the legacy compatible strings and related clock code.
+>>
+>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+> I have just realized that this cannot be dropped until my series "ARM:
+> dts: meson: fix UART device-tree schema validation" [0] is merged
 > 
-> > Could you please volunteer to do the conversion for this driver?
+> [...]
+>> -/* Legacy bindings, should be removed when no more used */
+>> -OF_EARLYCON_DECLARE(meson, "amlogic,meson-uart",
+>> -                   meson_serial_early_console_setup);
+> This part is still needed as long as above series is not merged yet.
+> If we remove this then earlycon will stop working on the 32-bit SoCs
+> unless [0] is merged.
 > 
-> I'm not personally going to be able to get to it for at least the next 3 months.
+> All other code below - except the of_device_id entry - can still be
+> removed since meson8.dtsi and meson8b.dtsi are using the non-legacy
+> clocks already.
 > 
-> It looks like we don't have a dedicated maintainer for this driver other than
-> Joel by nature of him being listed as the maintainer of "ARM/ASPEED MACHINE
-> SUPPORT".  I'm not sure if Aspeed themselves are planning on doing the necessary
-> refactoring here.
+> Sorry for only noticing this now.
+> 
+I will add it back in the next patch and delete it after your submission 
+is merged.
+> 
+> Best regards,
+> Martin
 > 
 > 
-> Joel, are you aware of this driver using a deprecated implementation?  Were
-> there anyone planning to do the reworks that you are aware of?  I'd like to get
-> this fix at least into the OpenBMC kernel tree because I'm seeing this fail in
-> the real world.
-
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+> [0] https://patchwork.kernel.org/project/linux-amlogic/cover/20211227180026.4068352-1-martin.blumenstingl@googlemail.com/
+> 

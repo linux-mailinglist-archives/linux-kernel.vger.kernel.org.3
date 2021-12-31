@@ -2,120 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9213448215C
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 02:58:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE69482160
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 03:00:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242538AbhLaB6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 20:58:53 -0500
-Received: from mga07.intel.com ([134.134.136.100]:20260 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229890AbhLaB6w (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 20:58:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640915932; x=1672451932;
-  h=cc:subject:to:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=5DUIS3fYDXtA8WzqPnxiZ6jJAXuU/rSnDLDZK5j56bA=;
-  b=mIuKVIkEPjHCGEh5mu16SS6FQJ85IAmbWulyiyHJhOscm+2JUtbH3lOx
-   D594wIiMjGz3atlBQOf9gDZhbX3JyifUYFWo0cI+Z9Eebki2kE/w8pEW5
-   Clw20mzVKcz3KpludUVxxUGn2hcsNLkyi1fYAurUBCi9FlIn4XTXqShr7
-   WAH7s85xUz/IvA7qHX1oBEcItqnTxcWSaNnpL3nCDoXIDKFHK8tQwai2Y
-   cgaH/TJLT+0fla2xHG3qHgZZk6Gn2FyLymWf+Ln9jbDulU6M73DKQA28u
-   o8EaiAYE1Fu+KO2IuWtELZDzalJM+1ab/NlcvVlo0WOdAb5fgTfpRjPV5
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="305119217"
-X-IronPort-AV: E=Sophos;i="5.88,250,1635231600"; 
-   d="scan'208";a="305119217"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 17:58:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,250,1635231600"; 
-   d="scan'208";a="524583164"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by orsmga008.jf.intel.com with ESMTP; 30 Dec 2021 17:58:43 -0800
-Cc:     baolu.lu@linux.intel.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 03/13] PCI: pci_stub: Suppress kernel DMA ownership
- auto-claiming
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Bjorn Helgaas <helgaas@kernel.org>
-References: <568b6d1d-69df-98ad-a864-dd031bedd081@linux.intel.com>
- <20211230222414.GA1805873@bhelgaas> <20211231004019.GH1779224@nvidia.com>
- <5eb8650c-432f-bf06-c63d-6320199ef894@linux.intel.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Message-ID: <9daec0aa-b58f-93b3-c8bb-b67ec6d84596@linux.intel.com>
-Date:   Fri, 31 Dec 2021 09:58:11 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S242541AbhLaCA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 21:00:26 -0500
+Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:60681 "EHLO
+        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229890AbhLaCAZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 21:00:25 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R861e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=cuibixuan@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0V0OEF90_1640916021;
+Received: from 30.43.68.129(mailfrom:cuibixuan@linux.alibaba.com fp:SMTPD_---0V0OEF90_1640916021)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 31 Dec 2021 10:00:22 +0800
+Message-ID: <b94123d2-5a39-b635-4471-8962ba2a69fb@linux.alibaba.com>
+Date:   Fri, 31 Dec 2021 10:00:20 +0800
 MIME-Version: 1.0
-In-Reply-To: <5eb8650c-432f-bf06-c63d-6320199ef894@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [PATCH -next] SUNRPC: Clean XPRT_CONGESTED of xprt->state when
+ rpc task is killed
+To:     Trond Myklebust <trondmy@hammerspace.com>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Cc:     "pete.wl@alibaba-inc.com" <pete.wl@alibaba-inc.com>,
+        "xiaoh.peixh@alibaba-inc.com" <xiaoh.peixh@alibaba-inc.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "bfields@fieldses.org" <bfields@fieldses.org>,
+        "weipu.zy@alibaba-inc.com" <weipu.zy@alibaba-inc.com>,
+        "wenan.mwa@alibaba-inc.com" <wenan.mwa@alibaba-inc.com>,
+        "anna.schumaker@netapp.com" <anna.schumaker@netapp.com>
+References: <1639490018-128451-1-git-send-email-cuibixuan@linux.alibaba.com>
+ <1639490018-128451-2-git-send-email-cuibixuan@linux.alibaba.com>
+ <c5c17989-4c1e-35d2-5a75-a27e58cf6673@linux.alibaba.com>
+ <c5d8fa4cfe87800afe588c4c3d54cd3178e04b47.camel@hammerspace.com>
+ <efbf73f3-c6cd-90f6-ef22-bde14be708cc@linux.alibaba.com>
+ <b8c236d99fd0f4e08dd0ee12a81274bd643a7690.camel@hammerspace.com>
+From:   Bixuan Cui <cuibixuan@linux.alibaba.com>
+In-Reply-To: <b8c236d99fd0f4e08dd0ee12a81274bd643a7690.camel@hammerspace.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/31/21 9:10 AM, Lu Baolu wrote:
-> 
-> On 12/31/21 8:40 AM, Jason Gunthorpe wrote:
->> On Thu, Dec 30, 2021 at 04:24:14PM -0600, Bjorn Helgaas wrote:
->>
->>> I was speculating that maybe the DMA ownership claiming must be done
->>> *before* the driver's .probe() method?
->>
->> This is correct.
->>
->>> If DMA ownership could be claimed by the .probe() method, we
->>> wouldn't need the new flag in struct device_driver.
->>
->> The other requirement is that every existing driver must claim
->> ownership, so pushing this into the device driver's probe op would
->> require revising almost every driver in Linux...
->>
->> In effect the new flag indicates if the driver will do the DMA
->> ownership claim in it's probe, or should use the default claim the
->> core code does.
->>
->> In almost every case a driver should do a claim. A driver like
->> pci-stub, or a bridge, that doesn't actually operate MMIO on the
->> device would be the exception.
-> 
-> We still need to call iommu_device_use_dma_api() in bus dma_configure()
-> callback. But we can call iommu_device_unuse_dma_api() in the .probe()
-> of vfio (and vfio-approved) drivers, so that we don't need the new flag
-> anymore.
 
-Oh, wait. I didn't think about the hot-plug case. If we call
-iommu_device_use_dma_api() in bus dma_configure() anyway, we can't bind
-any (no matter vfio or none-vfio) driver to a device if it's group has
-already been assigned to user space. It seems that we can't omit this
-flag.
+在 2021/12/22 下午11:02, Trond Myklebust 写道:
+> On Wed, 2021-12-22 at 10:55 +0800, Bixuan Cui wrote:
+>> 在 2021/12/21 上午2:22, Trond Myklebust 写道:
+>>   
+>>> On Mon, 2021-12-20 at 11:39 +0800, Bixuan Cui wrote:
+>>>   
+>>>> ping~
+>>>>
+>>>> 在 2021/12/14 下午9:53, Bixuan Cui 写道:
+>>>>   
+>>>>> When the values of tcp_max_slot_table_entries and
+>>>>> sunrpc.tcp_slot_table_entries are lower than the number of rpc
+>>>>> tasks,
+>>>>> xprt_dynamic_alloc_slot() in xprt_alloc_slot() will return -
+>>>>> EAGAIN,
+>>>>> and
+>>>>> then set xprt->state to XPRT_CONGESTED:
+>>>>>     xprt_retry_reserve
+>>>>>       ->xprt_do_reserve
+>>>>>         ->xprt_alloc_slot
+>>>>>           ->xprt_dynamic_alloc_slot // return -EAGAIN and task-
+>>>>>   
+>>>>>> tk_rqstp is NULL
+>>>>>             ->xprt_add_backlog // set_bit(XPRT_CONGESTED, &xprt-
+>>>>>   
+>>>>>> state);
+>>>>> When rpc task is killed, XPRT_CONGESTED bit of xprt->state will
+>>>>> not
+>>>>> be
+>>>>> cleaned up and nfs hangs:
+>>>>>     rpc_exit_task
+>>>>>       ->xprt_release // if (req == NULL) is true, then
+>>>>> XPRT_CONGESTED
+>>>>>                     // bit not clean
+>>>>>
+>>>>> Add xprt_wake_up_backlog(xprt) to clean XPRT_CONGESTED bit in
+>>>>> xprt_release().
+>>> I'm not seeing how this explanation makes sense. If the task
+>>> doesn't
+>>> hold a slot, then freeing that task isn't going to clear the
+>>> congestion
+>>> caused by all the slots being in use.
+>> Hi，
+>> If the rpc task is free, call xprt_release() :
+>> void xprt_release(struct rpc_task *task)
+>>   {
+>>        if (req == NULL) {
+>>                    if (task->tk_client) {
+>>                            xprt = task->tk_xprt;
+>>                            xprt_release_write(xprt, task); // 1.
+>> release xprt
+>>                    }
+>>                    return;
+>>            }
+>>        ....
+>>        if (likely(!bc_prealloc(req)))
+>>                    xprt->ops->free_slot(xprt, req); // 2. release slot
+>> and call xprt_wake_up_backlog(xprt, req) to wakeup next task(clear
+>> XPRT_CONGESTED bit if next is NULL) in xprt_free_slot()
+>>            else
+>>                    xprt_free_bc_request(req);
+>>   }
+>>   I mean that in step 1, xprt was only released, but
+>> xprt_wake_up_backlog was not called (I don’t know if it is necessary,
+>> but xprt->state may still be XPRT_CONGESTED), which causes xprt to
+>> hold up. I think it happens when the task that does not hold a slot
+>> is the last released task，xprt_wake_up_backlog(clear XPRT_CONGESTED)
+>> will not be executed. :-)
+>> Thanks，
+>> Bixuan Cui
+>>
+>>   
+> My point is that in that case 1, there is no slot to free, so there is
+> no change to the congestion state.
+>
+> IOW: your patch is incorrect because it is trying to assign a slot in a
+> case where there is no slot to assign.
+Hi，
+I found the correct way to fix it, that is, do not free the request when 
+there are tasks in the xprt->backlog :-)
+And it has been fixed by e877a88d1f06 (SUNRPC in case of backlog, hand 
+free slots directly to waiting task)
+     commit e877a88d1f069edced4160792f42c2a8e2dba942
+     Author: NeilBrown <neilb@suse.de>
+     Date:   Mon May 17 09:59:10 2021 +1000
 
-Best regards,
-baolu
+     SUNRPC in case of backlog, hand free slots directly to waiting task
+
+     If sunrpc.tcp_max_slot_table_entries is small and there are tasks
+     on the backlog queue, then when a request completes it is freed and the
+     first task on the queue is woken.  The expectation is that it will wake
+     and claim that request.  However if it was a sync task and the waiting
+     process was killed at just that moment, it will wake and NOT claim the
+     request.
+Thanks for your advice.
+
+Thanks,
+Bixuan Cui
+

@@ -2,133 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D37482393
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 12:09:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02194482396
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 12:10:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbhLaLJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 06:09:21 -0500
-Received: from mga09.intel.com ([134.134.136.24]:39112 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229623AbhLaLJU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 06:09:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640948960; x=1672484960;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=s6e0usEdmNX8PYb7FJZB0qWYjeLu2DtzLROFA90ONG0=;
-  b=f0il+1+AGBae/+JvM+lFgS75yeWZY09S/lzixJh8N1NfgXv+1UAPNVKo
-   6owSzoRgun5AT5bVfQ3mOlBBTCgYUTAIwfWPVf5WiGensNWFxPnX0bc0N
-   BhaNe5unj106f8VQ/brO+7d5A8xqUKVyzl1x2yKRWX1Ik5JjR3TreUP8D
-   +VaJkA7bgqfaunCO2iSQH+zPqYZhqUnKbGgY83ClFni2qa4hRDnCTNGEX
-   Zro0+cDmE9/VmjA5325BeL41Srp4EtwmDe7XggXuGdiKCt52MoiatFQB8
-   MnU1ahKCEKST6AE3ix8sifQYRw6xSiw60HmUA5l6Hj+Se8OCe6ZxNminv
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="241600825"
-X-IronPort-AV: E=Sophos;i="5.88,251,1635231600"; 
-   d="scan'208";a="241600825"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2021 03:09:19 -0800
-X-IronPort-AV: E=Sophos;i="5.88,251,1635231600"; 
-   d="scan'208";a="470925579"
-Received: from arudakov-mobl.ccr.corp.intel.com (HELO localhost) ([10.252.25.42])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2021 03:09:16 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Bernard Zhao <bernard@vivo.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     Bernard Zhao <bernard@vivo.com>
-Subject: Re: [PATCH] gpu/drm: fix potential memleak in error branch
-In-Reply-To: <20211116124751.31181-1-bernard@vivo.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20211116124751.31181-1-bernard@vivo.com>
-Date:   Fri, 31 Dec 2021 13:09:13 +0200
-Message-ID: <87zgohhvza.fsf@intel.com>
+        id S229660AbhLaLKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 06:10:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229614AbhLaLKj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 31 Dec 2021 06:10:39 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2F3C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 03:10:39 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id o7so30625083ioo.9
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 03:10:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=MCKSUZdIg2LlknPazZeU6YOn/vSo6Zd6+ppY3unVwPk=;
+        b=MK9TPw82agg+cb7Yb3yobKno/VDtBXZ5VbPY8YO47plZX44XHH/BDSFdh2i1dyva3a
+         fLhK1GcJzeGlXpYh1DM2fnFkA5D5WC7k68NsIzTtkYMQGsimchnJLB7hoE5iSTzKWwTM
+         a1Hqw+0GoH+0hCLpAH/dYIF6w5duBHcgnjFBU6v7IDxbrcX4dTaKYbzMu5vWzFWccvra
+         Y472dab3hqGKG7pMnQy8Or/Z7H6MozdyQyzaP1RXh3LfeMONtnpJCAwbBHkVx05AWQ9k
+         AKzc7BHNVv7vXRrVucP/qvkh8oYnl0wyN9T7WTNB+43KkyQpJy28fN2G3PipRhhUgOiJ
+         3WWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=MCKSUZdIg2LlknPazZeU6YOn/vSo6Zd6+ppY3unVwPk=;
+        b=PzM1bGeEfdYh5o7kJ5Rf0ouJ30y1gXJNzeAbqIXko1KTm6wi1sqMMMZMxAKa5cfbOO
+         lQM7fXLZHZjgLgiZLPgWqCLYYe8PwsHEzO/7rM9Vc1gtEEUIHdKBTmQNC4ZeAxDUbQfl
+         5Lj/BpnFieyY3hFoKH1O3OaIbnmmOx7r+yY7daYAs+kbuak/vUHSHEDf/cniMTus0SA3
+         4pUWwGGXbD38DhmkzM5od9U6tBdtf4UfIvOBKYSosAUD6oL2hHzXJ3ssrGk5rNsMZ7bU
+         8z7JR9mV+pe7v63O9SVwHq5sc3+ilsGs6S3WWvifU4hZ1BAMloaVfTIrkb3A0FV9GyDO
+         ZzTg==
+X-Gm-Message-State: AOAM532svMplKyjryso2qgHYGalagFxahO4zGGFpBsVo11UopWvZxU8i
+        mh5zn9k2LI47VHEDP719uWUEX/AWbuAsjnu4cgw=
+X-Google-Smtp-Source: ABdhPJxz9nWQWyzSvPdUOV9v8JJaqKUO24CtddVg2dTGlTIEzlnVPdJS7wzeA/+Ad+jFdaztZTalXMgbqnGvTDm699M=
+X-Received: by 2002:a05:6638:1302:: with SMTP id r2mr14681935jad.37.1640949038844;
+ Fri, 31 Dec 2021 03:10:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+Sender: saniadamsani19@gmail.com
+Received: by 2002:a6b:f819:0:0:0:0:0 with HTTP; Fri, 31 Dec 2021 03:10:38
+ -0800 (PST)
+From:   Jenny Ross <jennyross210@gmail.com>
+Date:   Fri, 31 Dec 2021 11:10:38 +0000
+X-Google-Sender-Auth: tRxCDjcMQKWoEqIqwKkb-5ZVbFI
+Message-ID: <CALTU+G-j+zB7yVz=n7eUpwn2=XQWvxPfacM_STMCYbcPJKey3g@mail.gmail.com>
+Subject: Hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 Nov 2021, Bernard Zhao <bernard@vivo.com> wrote:
-> This patch try to fix potential memleak in error branch.
+How are you?
 
-Please elaborate.
+My name is Jenny Ross, I came across your email address on Linkedin
+is your email address valid?  please your attention is needed, i have
+something very important to share with you.
 
-BR,
-Jani.
-
->
-> Signed-off-by: Bernard Zhao <bernard@vivo.com>
-> ---
->  drivers/gpu/drm/drm_dp_mst_topology.c | 22 ++++++++++++++++------
->  1 file changed, 16 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/gpu/drm/drm_dp_mst_topology.c b/drivers/gpu/drm/drm_dp_mst_topology.c
-> index f3d79eda94bb..f73b180dee73 100644
-> --- a/drivers/gpu/drm/drm_dp_mst_topology.c
-> +++ b/drivers/gpu/drm/drm_dp_mst_topology.c
-> @@ -5501,7 +5501,10 @@ int drm_dp_mst_topology_mgr_init(struct drm_dp_mst_topology_mgr *mgr,
->  				 int max_lane_count, int max_link_rate,
->  				 int conn_base_id)
->  {
-> -	struct drm_dp_mst_topology_state *mst_state;
-> +	struct drm_dp_mst_topology_state *mst_state = NULL;
-> +
-> +	mgr->payloads = NULL;
-> +	mgr->proposed_vcpis = NULL;
->  
->  	mutex_init(&mgr->lock);
->  	mutex_init(&mgr->qlock);
-> @@ -5523,7 +5526,7 @@ int drm_dp_mst_topology_mgr_init(struct drm_dp_mst_topology_mgr *mgr,
->  	 */
->  	mgr->delayed_destroy_wq = alloc_ordered_workqueue("drm_dp_mst_wq", 0);
->  	if (mgr->delayed_destroy_wq == NULL)
-> -		return -ENOMEM;
-> +		goto out;
->  
->  	INIT_WORK(&mgr->work, drm_dp_mst_link_probe_work);
->  	INIT_WORK(&mgr->tx_work, drm_dp_tx_work);
-> @@ -5539,18 +5542,18 @@ int drm_dp_mst_topology_mgr_init(struct drm_dp_mst_topology_mgr *mgr,
->  	mgr->conn_base_id = conn_base_id;
->  	if (max_payloads + 1 > sizeof(mgr->payload_mask) * 8 ||
->  	    max_payloads + 1 > sizeof(mgr->vcpi_mask) * 8)
-> -		return -EINVAL;
-> +		goto failed;
->  	mgr->payloads = kcalloc(max_payloads, sizeof(struct drm_dp_payload), GFP_KERNEL);
->  	if (!mgr->payloads)
-> -		return -ENOMEM;
-> +		goto failed;
->  	mgr->proposed_vcpis = kcalloc(max_payloads, sizeof(struct drm_dp_vcpi *), GFP_KERNEL);
->  	if (!mgr->proposed_vcpis)
-> -		return -ENOMEM;
-> +		goto failed;
->  	set_bit(0, &mgr->payload_mask);
->  
->  	mst_state = kzalloc(sizeof(*mst_state), GFP_KERNEL);
->  	if (mst_state == NULL)
-> -		return -ENOMEM;
-> +		goto failed;
->  
->  	mst_state->total_avail_slots = 63;
->  	mst_state->start_slot = 1;
-> @@ -5563,6 +5566,13 @@ int drm_dp_mst_topology_mgr_init(struct drm_dp_mst_topology_mgr *mgr,
->  				    &drm_dp_mst_topology_state_funcs);
->  
->  	return 0;
-> +
-> +failed:
-> +	kfree(mgr->proposed_vcpis);
-> +	kfree(mgr->payloads);
-> +	destroy_workqueue(mgr->delayed_destroy_wq);
-> +out:
-> +	return -ENOMEM;
->  }
->  EXPORT_SYMBOL(drm_dp_mst_topology_mgr_init);
-
--- 
-Jani Nikula, Intel Open Source Graphics Center
+Regards
+Jenny

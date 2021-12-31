@@ -2,72 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5BB4482285
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 07:44:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8800948228A
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 07:58:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242711AbhLaGo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 01:44:28 -0500
-Received: from conssluserg-02.nifty.com ([210.131.2.81]:63455 "EHLO
-        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbhLaGo2 (ORCPT
+        id S242719AbhLaGzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 01:55:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242713AbhLaGzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 01:44:28 -0500
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 1BV6i1LH031944;
-        Fri, 31 Dec 2021 15:44:02 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 1BV6i1LH031944
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1640933042;
-        bh=GT91TcNIPBXDZB5upjF3cU0X71wUr8B4PKDoP48+hTU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ARTZCU30+eWCX8tC8LXWGc8BC53uuZ/o1Gaku/GIgNBu6eNXL6/UUqcLQZAQLAvPY
-         Tyqt+eEql7Dncia5JJg0m3B0WSJy7NSecr4WCqB26XsamdTvzMhyUb6zT02nwENqmH
-         /OQLxyok7n/tbH848X6xycOWuelkP7tJiPnPA9qUo1E7xlDvZ4Tb093c13w8LKS+KC
-         lR5jG1vPSGRNuvB4M/HOFC1IrOOU36E9qrDsFz1q6CXrHee6RlsuLONgErGEWHXHBe
-         uduGI8Lc6nOX3OhHzCXzo7Puz5FjSNRsISU2q2cgPUskNwQ5VdYuIBQ70r2xVgcfVR
-         wKPTyWJvUztfw==
-X-Nifty-SrcIP: [209.85.215.170]
-Received: by mail-pg1-f170.google.com with SMTP id a23so23191020pgm.4;
-        Thu, 30 Dec 2021 22:44:02 -0800 (PST)
-X-Gm-Message-State: AOAM531U53cLNTPmve74uBv8dvf0nOOoFGFTEZKri2MrlEf85F8eGLyO
-        Y4uxeIZvwnwi51/DA/YrBXb9ngJ1eB4g57KGZeY=
-X-Google-Smtp-Source: ABdhPJzWTpKMeT6Dto5fEr50qh7Nt1g71CJKnOhU7QPxjOiB0td/DuEXDtV2IWK40EOhoB6fayjUTi0OVU6uPmbkVvk=
-X-Received: by 2002:a63:3753:: with SMTP id g19mr8666029pgn.126.1640933041443;
- Thu, 30 Dec 2021 22:44:01 -0800 (PST)
+        Fri, 31 Dec 2021 01:55:17 -0500
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9E6C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 22:55:16 -0800 (PST)
+Received: by mail-ua1-x92d.google.com with SMTP id p1so23961784uap.9
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 22:55:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=zOHJbgxEeKcTUS1M3dbg/CCHL8zxNc7o7Y1pwSiNVNQ=;
+        b=IT5h5foFLL5qyaUd5mvWdRcYgxl+akBSmQtmS8ASHtgqQOS4G30L/maDNzcKTBrcr3
+         j5jXpG9E0hIlIdCdubSlfsXQOXtJY4qBrGNAYjBfXPLWTFq66GfDjNQlaMStuh8s2Fq7
+         nB4ITFTHV3O7BS8ozN0ijcLZdqXEj4W2LsteLKZAYY/wVCX/xaTGBeKzKQGZuOHos4t9
+         wUFXifw+mdbpT8FOg37NVGWeNgz6tUIC3ASLqDX7eaz//dVZfQ9QLc4xgeuq+5A4yfPg
+         Vemu/HMxweuhiLo5WnmBJFfnHism5nHOjS5xXB4YeRLGHceZvvJGU8RNqHOxYn7Lnr9X
+         kfJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=zOHJbgxEeKcTUS1M3dbg/CCHL8zxNc7o7Y1pwSiNVNQ=;
+        b=pI2rf9NwGMUgJyqkrH7xECI44D7FmnwzTNd8sphEzTLNXnYqqX0TsLVOYacqWNrJH6
+         JOz8RrsWkUgz+GQYXGRCME7U8n1OUVHGIeWTYlU7Wv9mcrZHYzuchsrnBzZlEo3XZ0zx
+         Ig0B4geFCq4xacz16JplxNpRAp2qyTMScXK+KX3lRaQEUx8JxTLtctr2upm/iXyK9i4D
+         g/fdXYcZVWRGo/++ehdUSQc3Pq11wJcN4xpNrviwFh/lPAgbqEjibEW3THHP28bFCUKb
+         5jWKnXy1+QQlIAYfYNc1OZi2J+sCA0gHDP6g3dkJS4Yxi3K9FAJsREiUj0juJrwkWhGz
+         Dpug==
+X-Gm-Message-State: AOAM530Yo6v0eyVkVVdyWrBKo3HOvHpbW24bHexE8T61kHWaiFkPSQaF
+        qUk00vnttfaFSu99vo52b1wJ69n7GMnNgmy+bbU=
+X-Google-Smtp-Source: ABdhPJxFAXSI8I0QK/1H/r1QJrFLpGwXfYzIJ978c37JFBOaZ9OK+G3ZmPNlH61Ah2dB9IZdVp8LD62QMpuoNo26ns0=
+X-Received: by 2002:ab0:598a:: with SMTP id g10mr10549164uad.12.1640933715876;
+ Thu, 30 Dec 2021 22:55:15 -0800 (PST)
 MIME-Version: 1.0
-References: <1B559478-D266-4D77-B9D5-F6F21D9EFB83@gmail.com>
-In-Reply-To: <1B559478-D266-4D77-B9D5-F6F21D9EFB83@gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 31 Dec 2021 15:43:24 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT_REk8M-DmCWBcfTBXfQcg=djnSeHRV9STh_SJGcEVbw@mail.gmail.com>
-Message-ID: <CAK7LNAT_REk8M-DmCWBcfTBXfQcg=djnSeHRV9STh_SJGcEVbw@mail.gmail.com>
-Subject: Re: Missing closing files in linux/scripts/kconfig/confdata.c
-To:     Ryan Cai <ycaibb@gmail.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Sender: sandraljohnpaul21@gmail.com
+Received: by 2002:a05:612c:269c:b0:272:2ad4:164d with HTTP; Thu, 30 Dec 2021
+ 22:55:15 -0800 (PST)
+From:   DINA MCKENNA <dinamckennahowley@gmail.com>
+Date:   Fri, 31 Dec 2021 06:55:15 +0000
+X-Google-Sender-Auth: citBpOkHzvQx69c-qj3qg1D-Jlw
+Message-ID: <CAAdqRCxoa+dZs80K7Ha5P2nDz2y1cVRLMPHvER2D2BXBatHmGA@mail.gmail.com>
+Subject: Calvary greetings.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 30, 2021 at 12:11 PM Ryan Cai <ycaibb@gmail.com> wrote:
->
-> Dear Kernel maintainers,
->
->           1. In linux/scripts/kconfig/confdata.c (conf_write_autoconf_cmd), the file opened at Line 946 may not closed when going to Line 981.
->           Location: https://github.com/torvalds/linux/blob/e851dfae4371d3c751f1e18e8eb5eba993de1467/scripts/kconfig/confdata.c#L964-L981
->
->          2. In linux/scripts/kconfig/confdata.c (__conf_write_autoconf), the file opened at Line1081 may not closed when going to Line 1095,
->            Location: https://github.com/torvalds/linux/blob/e851dfae4371d3c751f1e18e8eb5eba993de1467/scripts/kconfig/confdata.c#L1081-L1095
->
->            I think, the fix is inserting fclose before the returning. Should it be a bug? I can send a patch for these.
->
+Hello my dear,
 
-Yes, they are both bugs.
-Thanks for catching them.
+ I sent this mail praying it will get to you in a good condition of
+health, since I myself are in a very critical health condition in
+which I sleep every night without knowing if I may be alive to see the
+next day. I bring peace and love to you. It is by the grace of God, I
+had no choice than to do what is lawful and right in the sight of God
+for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
+y
+and glory upon my life. I am Mrs. Dina. Howley Mckenna, a widow. I am
+suffering from a long time brain tumor, It has defiled all forms of
+medical treatment, and right now I have about a few months to leave,
+according to medical experts. The situation has gotten complicated
+recently with my inability to hear proper, am communicating with you
+with the help of the chief nurse herein the hospital, from all
+indication my conditions is really deteriorating and it is quite
+obvious that, according to my doctors they have advised me that I may
+not live too long, Because this illness has gotten to a very bad
+stage. I plead that you will not expose or betray this trust and
+confidence that I am about to repose on you for the mutual benefit of
+the orphans and the less privilege. I have some funds I inherited from
+my late husband, the sum of ($ 11,000,000.00, Eleven Million Dollars).
+Having known my condition, I decided to donate this fund to you
+believing that you will utilize it the way i am going to instruct
+herein. I need you to assist me and reclaim this money and use it for
+Charity works therein your country  for orphanages and gives justice
+and help to the poor, needy and widows says The Lord." Jeremiah
+22:15-16.=E2=80=9C and also build schools for less privilege that will be
+named after my late husband if possible and to promote the word of God
+and the effort that the house of God is maintained. I do not want a
+situation where this money will be used in an ungodly manner. That's
+why I'm taking this decision. I'm not afraid of death, so I know where
+I'm going. I accept this decision because I do not have any child who
+will inherit this money after I die.. Please I want your sincerely and
+urgent answer to know if you will be able to execute this project for
+the glory of God, and I will give you more information on how the fund
+will be transferred to your bank account. May the grace, peace, love
+and the truth in the Word of God be with you and all those that you
+love and care for.
 
+I'm waiting for your immediate reply..
 
-
--- 
-Best Regards
-Masahiro Yamada
+May God Bless you,
+Mrs. Dina. Howley Mckenna.

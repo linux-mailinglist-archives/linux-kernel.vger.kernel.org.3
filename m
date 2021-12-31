@@ -2,95 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F56448214F
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 02:41:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8B7482153
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 02:44:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242505AbhLaBlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 20:41:04 -0500
-Received: from smtp23.cstnet.cn ([159.226.251.23]:36718 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S242471AbhLaBlD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 20:41:03 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-03 (Coremail) with SMTP id rQCowAAXHFiVX85hbHPvBA--.30636S2;
-        Fri, 31 Dec 2021 09:40:37 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     ebiggers@kernel.org, herbert@gondor.apana.org.au,
-        davem@davemloft.net
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] crypto: af_alg - check possible NULL pointer
-Date:   Fri, 31 Dec 2021 09:40:36 +0800
-Message-Id: <20211231014036.1870631-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S242514AbhLaBo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 20:44:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46532 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242471AbhLaBo2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 20:44:28 -0500
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E742C061574;
+        Thu, 30 Dec 2021 17:44:28 -0800 (PST)
+Received: by mail-pj1-x1044.google.com with SMTP id iy13so22425589pjb.5;
+        Thu, 30 Dec 2021 17:44:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=TZjER95UmKt9tkxdzo6ulN0VUUKpHWsIMP43D9luT3Y=;
+        b=iYHwZI0+/fZ+Ih9cG6VfsjartsycTQ+8LU6+D9c//7cNbkQvh7lHZ9NRCIogpKMHh3
+         F3u1Psnk0aY9Zht45HEDhQ6jZExyYtxcZtjBgRBS2j8WaZzjoGCySG7bx9A9a7XjyR/7
+         deY0jtY6UdmYSz/VG08ecHiWGso7oUWvtYiONnBW9cYIDvN1XZOVs3Mef2JokqAlaGGU
+         kaLBOsnNs6fcnQWbuOQYDr6BXr/cVsQkJ9w2X0E4KXlqv1aZRYjltG2V9j+GowmQT3Mf
+         UyGbuiTYr+4Xy+vNoVrmFpQLWF3alSz/D1/e/bk8GZ0Azh+r7hW3LQ0XDiJ15yCiyDTR
+         7+6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=TZjER95UmKt9tkxdzo6ulN0VUUKpHWsIMP43D9luT3Y=;
+        b=73nFJxAT4BUjElUFc3YTPvfA2KHQk/grpNLlAkVNVTK9w9LZIUTJeXWxi42xNZ3A5Q
+         a6bjV5eyEzCpMx4+Pm03kxrnUMuHn5OGClYuv8oGZ+6dgR1NSzvc3jdcu4NmNleXIU2T
+         wX4RUP0qkctbm85aW/O2MIcAwCBACV7YcJiatq2A0W/rfwsPfsw+sp2PPrctFazYVtQY
+         1lXbBfnVsEo+KLoocmeO+Vt8HpoDEIQEqS+7TphopzlRh9uyvdIm8PKFczbkIMY5+/st
+         gaSURr8oqWTvTCT+hKWvuDbkbPW+QG7pHS/cvVoGy3pckK9ze2CePWJJINmurG5UPwNe
+         ny5w==
+X-Gm-Message-State: AOAM532Yu6kS6V4dJqL3ED0toyTdZ7y3rHsgl9+FBlxuBb23nPCx41kR
+        zb6s5cXsrOQXEWlSKUQj+sfTnjD2ssjGEA==
+X-Google-Smtp-Source: ABdhPJxg7PQDaMFvvRZ5NKwdcrglQ2/xxakDEeZvecKFqb61vhCDuVn5lBCayPCT4Q2E8OXiRJl2Nw==
+X-Received: by 2002:a17:903:1c4:b0:149:45fb:d6f0 with SMTP id e4-20020a17090301c400b0014945fbd6f0mr32824523plh.143.1640915068003;
+        Thu, 30 Dec 2021 17:44:28 -0800 (PST)
+Received: from [0.0.0.0] (ec2-18-162-113-223.ap-east-1.compute.amazonaws.com. [18.162.113.223])
+        by smtp.gmail.com with ESMTPSA id f14sm29494696pfv.215.2021.12.30.17.44.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Dec 2021 17:44:27 -0800 (PST)
+Subject: Re: [PATCH v2 1/2] usb: gadget: don't release an existing dev->buf
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     balbi@kernel.org, axboe@kernel.dk, stern@rowland.harvard.edu,
+        jj251510319013@gmail.com, dan.carpenter@oracle.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211230043815.18899-1-hbh25y@gmail.com>
+ <20211230043815.18899-2-hbh25y@gmail.com> <Yc2R+nIOG6aJ+hea@kroah.com>
+From:   Hangyu Hua <hbh25y@gmail.com>
+Message-ID: <6f7806af-1818-dbab-9e21-fee54a60d42b@gmail.com>
+Date:   Fri, 31 Dec 2021 09:44:23 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <Yc2R+nIOG6aJ+hea@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowAAXHFiVX85hbHPvBA--.30636S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZw1kKF4xGw1xAFWftr4ruFg_yoWkJrg_Cr
-        yDAr1Durs7Zr18CF4DJa17Gr10qayUurW8WrWjk343K3W5JasrX3Wqyr13ArZrCa4xuFWk
-        Ww1qkr17C342vjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb48FF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
-        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
-        WUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK
-        6w4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
-        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
-        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4U
-        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbYFAPUUUU
-        U==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Because of the possible alloc failure of the alloc_page(), it could
-return NULL pointer.
-And there is a check below the sg_assign_page().
-But it will be more logical to move the NULL check before the
-sg_assign_page().
+I misunderstood the meaning of Alan. He didn't ack this patch. We stil 
+disscuss about this. I am sorry.
 
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
-
-v1 -> v2
-
-* Change 1. Move the previous check in front of sg_assign_page().
----
- crypto/af_alg.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/crypto/af_alg.c b/crypto/af_alg.c
-index 18cc82dc4a42..f79e446d8132 100644
---- a/crypto/af_alg.c
-+++ b/crypto/af_alg.c
-@@ -931,16 +931,19 @@ int af_alg_sendmsg(struct socket *sock, struct msghdr *msg, size_t size,
- 			sg_unmark_end(sg + sgl->cur - 1);
- 
- 		do {
-+			struct page *pg;
- 			unsigned int i = sgl->cur;
- 
- 			plen = min_t(size_t, len, PAGE_SIZE);
- 
--			sg_assign_page(sg + i, alloc_page(GFP_KERNEL));
--			if (!sg_page(sg + i)) {
-+			pg = alloc_page(GFP_KERNEL);
-+			if (!pg) {
- 				err = -ENOMEM;
- 				goto unlock;
- 			}
- 
-+			sg_assign_page(sg + i, pg);
-+
- 			err = memcpy_from_msg(page_address(sg_page(sg + i)),
- 					      msg, plen);
- 			if (err) {
--- 
-2.25.1
-
+On 2021/12/30 下午7:03, Greg KH wrote:
+> On Thu, Dec 30, 2021 at 12:38:14PM +0800, Hangyu Hua wrote:
+>> dev->buf does not need to be released if it already exists before
+>> executing dev_config.
+>>
+>> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> 
+> I missed this, where did Alan ack this patch?
+> 
+> thanks,
+> 
+> greg k-h
+> 

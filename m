@@ -2,174 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A7C482592
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 19:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87282482599
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 20:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231365AbhLaS4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 13:56:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
+        id S231523AbhLaTPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 14:15:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbhLaS4O (ORCPT
+        with ESMTP id S229862AbhLaTPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 13:56:14 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4B8C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 10:56:14 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id v7so57156688wrv.12
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 10:56:14 -0800 (PST)
+        Fri, 31 Dec 2021 14:15:14 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6211C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 11:15:13 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id l5so76840569edj.13
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 11:15:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=XRfpr7i3YGNRNX+sqa8uo1YTDTIBpi+zjFAQkEMU4QY=;
-        b=k6gdIM6pyiOdhwcd7Yddxv5Od0x2vC3baD9lr+K7rDR+ZqYhitE4PWr8n4+ZhhP36+
-         PB68qWV5bmsWOkmK/h6NIMffgSY4Hi9BnHa39LxI56+RwgIf1+vpnSuSAfitXuRoQyQq
-         7XPxIj+PV+SvkGNpsYgbT5qwXj4BS9X7I1b0OsnWlz3hF5SM4ka1IOwbG7GQrhkduFid
-         u7FtaD/MguCCYOI4TPafF+s+nBvMtglgVZA4Nofex3vED+z5UR7rNGw0n2N4QLEnTDKj
-         wNdaowr1U3lzn5nNOCelXU0H4CmDFTtnTeKndFsNqMPssWQMP0TLsvyuP0RBdUUTg5ca
-         aqVw==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HRhip54+JnwF8oKsLs20EY47pxmh2riYZm3Qc8IBRcM=;
+        b=V7WaTtf3U2sm9T7zwDPV1eYMgoM0U1SemKSgiUC1NGMfC0pOm+NL58I/hVlSHS2kuP
+         nH+9Fjukx33me0dTQKe90FOa9nT9rVcfx4lUU4XO5OR1f4ZQOxOT0O+VQ7baOGx4MnGw
+         YgS3srfJCUf1l5EREBzfqYvFTwBO8Ho+bG7iU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XRfpr7i3YGNRNX+sqa8uo1YTDTIBpi+zjFAQkEMU4QY=;
-        b=ahxDTE/mYBFBUTsu9QT12qMUjWznXrJdP79fLLqceskdB7znWtLIwEdTan+ojr37PA
-         tPl92faqaK7kbyedrXHYJMZfHdLFu7qpJKjkLMyxTtflxqAOtkCSP0st+J6Gbz1QFR5q
-         Qo5GvUdttQdSzoaq8z65rgoEP1DL4moJNageFhJTRCUoGamfd9rUEYwQXHz6NW2hpvD7
-         XlG3/8IVArLBpS/GbUz2lXf8bT3UFaQM/mAGzQG6gfx2kVzn+KH3Gr7dN6kZAEopbQRl
-         ALTWlH9hylVkIeLAP9gO0DAgyh+DHn3WBrL1bMiQMn0kMsWjvd7zuiMJyUXmUiafqdFI
-         pZlg==
-X-Gm-Message-State: AOAM532PKdWHXfyrgcOYqgncxeyKEF6q95LlMyvFey3pQKOsfeHVrdjs
-        l75rh7TftytepVvOAUYhrQo=
-X-Google-Smtp-Source: ABdhPJw3U7gOLz7Dj+wHwrpDAZe/nshH5EUBFQgXENLjhVcz1NdMBQjc5fmkNxL3xmhlZ6wZPByQZw==
-X-Received: by 2002:a05:6000:2aa:: with SMTP id l10mr30698378wry.518.1640976972309;
-        Fri, 31 Dec 2021 10:56:12 -0800 (PST)
-Received: from pswork (i5E86B4D2.versanet.de. [94.134.180.210])
-        by smtp.gmail.com with ESMTPSA id g198sm30659446wme.23.2021.12.31.10.56.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Dec 2021 10:56:11 -0800 (PST)
-Date:   Fri, 31 Dec 2021 19:56:11 +0100
-From:   Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org, nsaenz@kernel.org,
-        Gaston Gonzalez <gascoar@gmail.com>,
-        Ojaswin Mujoo <ojaswin98@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Phil Elwell <phil@raspberrypi.com>,
-        bcm-kernel-feedback-list@broadcom.com
-Subject: Re: [PATCH v2] staging: vc04_services: Fix RCU dereference check
-Message-ID: <20211231185611.GA4463@pswork>
-References: <20211230133430.GA10256@pswork>
- <20211230145415.11962-1-treasure4paddy@gmail.com>
- <1f52892e-ca86-33e4-25da-eb0b40f45b04@i2se.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HRhip54+JnwF8oKsLs20EY47pxmh2riYZm3Qc8IBRcM=;
+        b=OX/P40nA6CTh5vwZVmHpwFxTCqD43BD0Mia/lj5Z2q5XCUlT0Lc4caT2fwdaEmsuy5
+         I0qyYxgadj4JbGY74bbt8TOiuna3nBQtxrExaPvXBzGVa3kY+Z7IqVsUTgd5H+g4+XbM
+         14AjPdU0gUwM8RIIVKQSU1eWH4YIUTfdcTvVb+3QcAYJz60U/FB0B7khaLRzuaDZD8aF
+         8911kPzFiHF2WpdUTje41LB89B4H68jVmzmFgK0B+yhD5IgMkvm5Kjbgu0lFlgwrYfoR
+         k2J26bEXLYSCQaPArHrYMFeWwRVqUjZN1/7CzBlOF3I/7FzkJEhBcBIPNvyeaEZ90hJW
+         Ftbw==
+X-Gm-Message-State: AOAM533QJniBAN3QcQ9FkXZBHsAWGch9V4E9Xrqf3Sfr6d9p/JG7aXQi
+        J7FiWculsTuF6Ej2VUBK4B4t9CSVi7kohWf0
+X-Google-Smtp-Source: ABdhPJzu2D3YHVVQrjOf5mHibDWiY0fd9WIKQBR7n6tIW6DUGGqAOj4uKfVXB+KHlSma4hlipAONWQ==
+X-Received: by 2002:a05:6402:6cd:: with SMTP id n13mr35809179edy.248.1640978111522;
+        Fri, 31 Dec 2021 11:15:11 -0800 (PST)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
+        by smtp.gmail.com with ESMTPSA id q14sm10944739edd.40.2021.12.31.11.15.09
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Dec 2021 11:15:10 -0800 (PST)
+Received: by mail-wr1-f50.google.com with SMTP id w20so48338294wra.9
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 11:15:09 -0800 (PST)
+X-Received: by 2002:a05:6000:10d2:: with SMTP id b18mr29861213wrx.193.1640978109225;
+ Fri, 31 Dec 2021 11:15:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1f52892e-ca86-33e4-25da-eb0b40f45b04@i2se.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20211202150614.22440-1-mgorman@techsingularity.net>
+ <caf247ab-f6fe-a3b9-c4b5-7ce17d1d5e43@leemhuis.info> <20211229154553.09dd5bb657bc19d45c3de8dd@linux-foundation.org>
+ <5c9d7c6b-05cd-4d17-b941-a93d90197cd3@leemhuis.info>
+In-Reply-To: <5c9d7c6b-05cd-4d17-b941-a93d90197cd3@leemhuis.info>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 31 Dec 2021 11:14:53 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wi3z_aFJ7kkJb+GDLzUMAzxYMRpVzuMRh5QFaFJnhGydA@mail.gmail.com>
+Message-ID: <CAHk-=wi3z_aFJ7kkJb+GDLzUMAzxYMRpVzuMRh5QFaFJnhGydA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/1] mm: vmscan: Reduce throttling due to a failure to
+ make progress
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mark Brown <broonie@kernel.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Alexey Avramov <hakavlad@inbox.lv>,
+        Rik van Riel <riel@surriel.com>,
+        Mike Galbraith <efault@gmx.de>,
+        Darrick Wong <djwong@kernel.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 30, 2021 at 10:39:58PM +0100, Stefan Wahren wrote:
-> Hi Padmanabha,
-> 
-> Am 30.12.21 um 15:54 schrieb Padmanabha Srinivasaiah:
-> > In service_callback path RCU dereferenced pointer struct vchiq_service
-> > need to be accessed inside rcu read-critical section.
-> >
-> > Accessing same with rcu_read_[lock/unlock] fixes the issue.
-> >
-> > [   32.201659] =============================
-> > [   32.201664] WARNING: suspicious RCU usage
-> > [   32.201670] 5.15.11-rt24-v8+ #3 Not tainted
-> > [   32.201680] -----------------------------
-> > [   32.201685] drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.h:529 suspicious rcu_dereference_check() usage!
-> > [   32.201695]
-> > [   32.201695] other info that might help us debug this:
-> > [   32.201695]
-> > [   32.201700]
-> > [   32.201700] rcu_scheduler_active = 2, debug_locks = 1
-> > [   32.201708] no locks held by vchiq-slot/0/98.
-> > [   32.201715]
-> > [   32.201715] stack backtrace:
-> > [   32.201723] CPU: 1 PID: 98 Comm: vchiq-slot/0 Not tainted 5.15.11-rt24-v8+ #3
-> > [   32.201733] Hardware name: Raspberry Pi 4 Model B Rev 1.4 (DT)
-> > [   32.201739] Call trace:
-> > [   32.201742]  dump_backtrace+0x0/0x1b8
-> > [   32.201772]  show_stack+0x20/0x30
-> > [   32.201784]  dump_stack_lvl+0x8c/0xb8
-> > [   32.201799]  dump_stack+0x18/0x34
-> > [   32.201808]  lockdep_rcu_suspicious+0xe4/0xf8
-> > [   32.201817]  service_callback+0x124/0x400
-> > [   32.201830]  slot_handler_func+0xf60/0x1e20
-> > [   32.201839]  kthread+0x19c/0x1a8
-> > [   32.201849]  ret_from_fork+0x10/0x20
-> >
-> > Signed-off-by: Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
-> > ---
-> > Changes in v2:
-> > 	RCU dereferenced pointer need to be accessed inside rcu
-> > read-side critical section.
-> >
-> >  .../vc04_services/interface/vchiq_arm/vchiq_arm.c      | 10 ++++++++--
-> >  1 file changed, 8 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> > index 6759a6261500..8ddd400ab2c3 100644
-> > --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> > +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> > @@ -1053,24 +1053,30 @@ service_callback(enum vchiq_reason reason, struct vchiq_header *header,
-> >  	struct vchiq_service *service;
-> >  	struct vchiq_instance *instance;
-> >  	bool skip_completion = false;
-> > +	unsigned int localport;
-> >  
-> >  	DEBUG_INITIALISE(g_state.local);
-> >  
-> >  	DEBUG_TRACE(SERVICE_CALLBACK_LINE);
-> >  
-> > +	rcu_read_lock();
-> >  	service = handle_to_service(handle);
-> > -	if (WARN_ON(!service))
-> > +	if (WARN_ON(!service)) {
-> > +		rcu_read_unlock();
-> >  		return VCHIQ_SUCCESS;
-> > +	}
-> >  
-> >  	user_service = (struct user_service *)service->base.userdata;
-> 
-> user_service is part of the service struct and it's modification below
-> in this function is protected by a spinlock ( msg_queue_spinlock ). So i
-> would expected that all read accesses to user_service before the
-> spinlock are protected by RCU. After applying this patch there would be
-> still the check for "user_service->is_vchi" unprotected. But i'm not
-> sure about this.
+On Fri, Dec 31, 2021 at 6:24 AM Thorsten Leemhuis
+<regressions@leemhuis.info> wrote:
 >
-Thank you stefan for identfying it. Yes, userdata/user_service can be
-potentially released after graceperiod.
+> If we get it into rc8 (which is still possible, even if a bit hard due
+> to the new year festivities), it will get at least one week of testing.
 
-Also here pointer is used around different synchronization mechanism,
-taking an extra reference will keep semantics simpler and will not
-prolong the graceperiod. Will regenerate the patch again.
+I took it with Hugh's ack from his reply to this, so it should be in rc8.
 
-> Best regards
-> 
-> >  	instance = user_service->instance;
-> > +	localport = service->localport;
-> > +	rcu_read_unlock();
-> >  
-> >  	if (!instance || instance->closing)
-> >  		return VCHIQ_SUCCESS;
-> >  
-> >  	vchiq_log_trace(vchiq_arm_log_level,
-> >  			"%s - service %lx(%d,%p), reason %d, header %lx, instance %lx, bulk_userdata %lx",
-> > -			__func__, (unsigned long)user_service, service->localport,
-> > +			__func__, (unsigned long)user_service, (int)localport,
-> >  			user_service->userdata, reason, (unsigned long)header,
-> >  			(unsigned long)instance, (unsigned long)bulk_userdata);
-> >  
-> 
+I'm not sure how much testing a week in rc8 will actually get, but
+next week is likely to be at least a _bit_ more active than the
+current week has been. And it's been tested by the people reporting it
+(and apparently Hugh too).
+
+                   Linus

@@ -2,79 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19772482274
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 07:21:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 188C5482277
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 07:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241050AbhLaGV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 01:21:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49678 "EHLO
+        id S241159AbhLaGVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 01:21:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbhLaGVZ (ORCPT
+        with ESMTP id S229496AbhLaGVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 01:21:25 -0500
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6C1C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 22:21:24 -0800 (PST)
-Received: by mail-ed1-x544.google.com with SMTP id o6so105910553edc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 22:21:24 -0800 (PST)
+        Fri, 31 Dec 2021 01:21:50 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C97CC061574;
+        Thu, 30 Dec 2021 22:21:50 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id d9so54520566wrb.0;
+        Thu, 30 Dec 2021 22:21:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Vyk/sC8dW/EtQlG22Js3Uj4pzuJookMbcMm/pKhoK14=;
-        b=E8IimrvB4jfb/eqjaTOvdIMgPjS8xwiEV209ekCiCuk2sk1Sy+eEN2aCgTNQfUKfYX
-         Mvq2KK8NQm4nf5T8dUJMLeXybPn4rG1RLrUqAwtHC+9R4sueSpa0NIGpsvLjJUAhbg1U
-         A74ArnbkQQtnY8woXjR/jWIfXPHQpvw3VsPnoW3Ju0ejp+EIDEiO017YKfjbS8o+C5bl
-         2ziMbH5GUfhlJ/KKspcSO6RMkEHUGJxwPHmhu/CbgWZCrqbmqQ94wW6p4HiMUuYMMQZD
-         LrHW84o3KVaYlpBNXfl4DlfMJPhGLE+2cTTTO9BDeC1Eetjafz92TqVHkGhXhT0SPPYq
-         KcXA==
+        d=googlemail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:references:in-reply-to:content-transfer-encoding;
+        bh=8mjrwm3w0KoS600EYUD7h9ycLkJobzFPTBS2rfWrhAA=;
+        b=J2GoPl1OarqetmbJu7EsAw/bqylp91mFU5T4Zs3EfQBXtlE+KgMNdPw5Jgij8bQUqC
+         KTzlLF1S4/gzztFrlv65cGskMvBuW92ENegm+vCrETLYPCV3pvXJpuEzSlK+B3EGXigW
+         r6uYXZzElgWOUnaQl1hMlEI8/mrkc2vrPp5fWVGg3yn1wwpCWExcYOO3ZkDi6VWXVgNq
+         QGlH3YgLP5N9vrGGm2hWjN6h8IXFlF25/v26kTEyuHXGa2xdkqWIWE0S34HDN9XLaCCp
+         NA+4pskNMhj0Yfg7vlOvGsR5QyhBuo4Rfnx07u2VPei8/OFMWeOoPi9KGvhyApZM0Rxk
+         XS8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Vyk/sC8dW/EtQlG22Js3Uj4pzuJookMbcMm/pKhoK14=;
-        b=TSiuA9dXZsN5M2PcTdvNHGgrVcwByC/q3NG31OR5aynLqfObjULqLfhtA4ThkG+Wc2
-         qkvNXAzV9I16hWfe9tTwhw7F5KTufBIeGQ7OEVRT8Tf9n0gcfokNaFZh2h5QZeNAl2VR
-         PIZwDVKuLhWZIanTkNsZnbDS/Uj99OWNQmH50nMO3EEGul6VOaY2IGGB6hR9Dsn6lOO0
-         pRaQpZGxa/5+xfGWRh/iBVlSIFPjXVCef/XyGG7PQzgKSq0sYUsZKLMbt54i+M4EFchJ
-         JPMy473DaPlZWjqrx9sXsladxnu5B868RnE6CeT+cD51vUvEuGYpdhm9Ldeb2pZqDOqH
-         vNMw==
-X-Gm-Message-State: AOAM532W5thm7Y1jMo+rBBgOVCO/Wk+D70m+PhmM0UPpp6DbnD6D9FNk
-        0uPISRMJzOz8nRabaD4jd8zez6KJ2yARXZTVZdM=
-X-Google-Smtp-Source: ABdhPJwhr/nr7HmseSCnr/GMDQC6iR397hBSiTNQwhjL0ReheZFlkkBgcMp2twHygarFI1RcYDl/5lJgGcFS4bGwBPg=
-X-Received: by 2002:a17:907:608c:: with SMTP id ht12mr26695872ejc.402.1640931682943;
- Thu, 30 Dec 2021 22:21:22 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:references:in-reply-to
+         :content-transfer-encoding;
+        bh=8mjrwm3w0KoS600EYUD7h9ycLkJobzFPTBS2rfWrhAA=;
+        b=B22hdhJ2goQNWr3zewGuiCc9r7BFusCufGtByegubzqJmDArVMsiaufBcckFD15aBV
+         vdIr9SiOkUwT0qZ5XnnzBkAk1EbFy3Tg6GExAi0qDRVNE9gW0jEdANcxpv+zNE6XtELg
+         r63muBBziHkRm2+oFhh9ojJVHgdYpeDN4g5P/jDqFeXN+P9nrX+uTHltg7M/NRVy0wEe
+         2pIJxVviAB3peFtPM3sjL0+PsBU3dL/6fYyltocRLJjCaC/BY86gKYJxcVXK4ADrau6v
+         YhBHHZQ+4Eym6ZcfVugP04NZSewC8CUfG3SRy4pdrI7iNxkFGk9IiSWc+HgQp5uGl+XP
+         90oQ==
+X-Gm-Message-State: AOAM533bQwV6OtzqldyxRmxe6442Wlt/Iz/JMPUnQsahVBIKK0l+lN4Q
+        1oHNpbMWPhkWrvLE/hltZaeMdlO1F4H/XQ==
+X-Google-Smtp-Source: ABdhPJy7k+mr9VR7cFrcywTNDoc3AchTbasl4McsYnydjoKSRyrRETDhVuFiv07scbFcSINMD37ThA==
+X-Received: by 2002:a5d:6d49:: with SMTP id k9mr19898185wri.530.1640931708956;
+        Thu, 30 Dec 2021 22:21:48 -0800 (PST)
+Received: from [192.168.1.10] (4e691f2a.skybroadband.com. [78.105.31.42])
+        by smtp.googlemail.com with ESMTPSA id m35sm54878477wms.1.2021.12.30.22.21.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Dec 2021 22:21:48 -0800 (PST)
+Message-ID: <50ea1b0e-28d7-6d04-9c03-4becc4db143b@googlemail.com>
+Date:   Fri, 31 Dec 2021 06:21:47 +0000
 MIME-Version: 1.0
-Received: by 2002:a54:314f:0:0:0:0:0 with HTTP; Thu, 30 Dec 2021 22:21:22
- -0800 (PST)
-Reply-To: marois.nicole1958@yahoo.com
-From:   =?UTF-8?Q?Mrs_Nicole_Beno=C3=AEt_Marois?= 
-        <marois.nicole19588@gmail.com>
-Date:   Fri, 31 Dec 2021 06:21:22 +0000
-Message-ID: <CACp9Mizei0cT8Y98QBN28Uo6+sd5S8FFsrmKiJ_hzz5XKu5_cg@mail.gmail.com>
-Subject: DEAR BELOVED,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: 5.16.0-rc7+ Bluetooth error
+Content-Language: en-GB
+From:   Chris Clayton <chris2553@googlemail.com>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>
+References: <02077a37-46d6-c94f-fa08-9da7ee99e42c@googlemail.com>
+In-Reply-To: <02077a37-46d6-c94f-fa08-9da7ee99e42c@googlemail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Dear Beloved,
+On 30/12/2021 09:21, Chris Clayton wrote:
+> Hi,
+> 
+> I pulled the latest changes into my clone of Linus' tree and built and installed the kernel. (git describe gives
+> v5.16-rc7-9-ge7c124bd0463). I'm seeing errors reported by the bluetooth subsystem that i don't see in 5.15.12 or 5.10.89
+> 
+> The problem seems to occur twice during system startup and on each occasion I see a batch of identical error messages:
+> 
+> [    3.980822] Bluetooth: hci0: Failed to read codec capabilities (-56)
+> [    3.982812] Bluetooth: hci0: Failed to read codec capabilities (-56)
+> [    3.984812] Bluetooth: hci0: Failed to read codec capabilities (-56)
+> [    3.986608] Bluetooth: hci0: Failed to read codec capabilities (-56)
+> [    3.987621] Bluetooth: hci0: Failed to read codec capabilities (-56)
+> [    3.988606] Bluetooth: hci0: Failed to read codec capabilities (-56)
+> [    3.989650] Bluetooth: hci0: Failed to read codec capabilities (-56)
+> 
 
-I am Mrs Nicole Benoite Marois and i have been suffering from ovarian
-cancer disease and the doctor says that i have just few days to leave.
-I am from (Paris) France but based in Africa Burkina Faso since eight
-years ago as a business woman dealing with gold exportation.
+Sorry, I should have said that despite the above errors, my bluetooth devices still work fine.
 
-I have $4.5 Million US Dollars at Eco-Bank here in Burkina Faso and i
-instructed the bank to transfer the fund to you as foreigner that will
-apply to the bank after i have gone, that they should release the fund
-to him / her but you will assure me that you will take 50% of the fund
-and give 50% to the orphanages home in your country for my heart to
-rest.
 
-Respond to me immediately for further details since I have just few
-days to end my life due to the ovarian cancer disease, hoping you will
-understand my point?
-
-Yours fairly friend
+> A full dmesg log is attached. I've also attached Two files containing the output from "lsusb -v" run on 5.10.89 and
+> 5.16-rc7.
+> 
+> Please let me know if I can provide any other diagnostic information or test any patches. You'll need to cc me on
+> replies because I'm not subscribed to LKML or linux-bluetooth.
+> 
+> Thanks

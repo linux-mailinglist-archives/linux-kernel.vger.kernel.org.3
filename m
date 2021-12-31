@@ -2,156 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB83482470
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 15:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87E4C482490
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 16:33:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbhLaO4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 09:56:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
+        id S230471AbhLaPc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 10:32:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229474AbhLaO4J (ORCPT
+        with ESMTP id S229453AbhLaPc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 09:56:09 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B702C061574;
-        Fri, 31 Dec 2021 06:56:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1640962568;
-        bh=sDai55vfi8ztIwHwG9CiB/YlU4KFnOQV47quuAy+nuU=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=pbowBHYbfUcMRZav89vd7x8Rr3BTP+uX2npGdNo3xAQmXpnLKG6LQ+3dugNPnt9Li
-         CsYeMiU1zihVDee16iyhTVknYCM/W5wEoh85WK9aFoa4EqELqTnlfFuONVemKD2gJJ
-         y68cLJ+9VYzMvJsPR3b6QItNXDiQ/QoQt/Tc9074=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id F006A1280F65;
-        Fri, 31 Dec 2021 09:56:08 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id mAXCex0LrNwd; Fri, 31 Dec 2021 09:56:08 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1640962568;
-        bh=sDai55vfi8ztIwHwG9CiB/YlU4KFnOQV47quuAy+nuU=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=pbowBHYbfUcMRZav89vd7x8Rr3BTP+uX2npGdNo3xAQmXpnLKG6LQ+3dugNPnt9Li
-         CsYeMiU1zihVDee16iyhTVknYCM/W5wEoh85WK9aFoa4EqELqTnlfFuONVemKD2gJJ
-         y68cLJ+9VYzMvJsPR3b6QItNXDiQ/QoQt/Tc9074=
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::c447])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 757D21280DCE;
-        Fri, 31 Dec 2021 09:56:08 -0500 (EST)
-Message-ID: <9a2406164955ce9a1eea3f3accd33a9b9400ccca.camel@HansenPartnership.com>
-Subject: [GIT PULL] SCSI fixes for 5.16-rc7
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Fri, 31 Dec 2021 09:56:07 -0500
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Fri, 31 Dec 2021 10:32:59 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20BCC061574;
+        Fri, 31 Dec 2021 07:32:58 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id z9so39988362edm.10;
+        Fri, 31 Dec 2021 07:32:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VysC3BYXJYli8788JzEtZNXjhfyXYrLxhWoo/L00x/E=;
+        b=A5uw6B+NLxc54AYITgqbaMurE9BkhaMQycGBQ+64od14Ko3v4KZQ0LBEARMrOY0WWq
+         BX4Q9tVxPWvGMEq69UVdh/66w0MXgK2hFrCDKomg3HJsqW2FZq+8fH7p2y248KmEq635
+         DF816PiLjuuOdI+pRjldBagq752gNBnP52rVgUuOt7J2gOa62B8wis3gfhNryBDZZ4yY
+         WvdvrumpkRfLRm/f20fzTrw2D2jLfZM+twPVLcjI0J1tCHQiOw+x1/osk0JkRLbbk6ta
+         Dg1Kz5LCGrQyBm1xSY1jchqnFpAttMGxP9HtxH8YvMX2lFQv0oTG0YA+jtbhEOpPro+z
+         Z8tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VysC3BYXJYli8788JzEtZNXjhfyXYrLxhWoo/L00x/E=;
+        b=iNMMhDfi3FLkm/YfL64i8nO8Y9VShw7y4DCYcmXUJQXInkF5VAf3j2Sc29IEkPeqXK
+         D1RPkkLNrcOS0CLtGuSZEidQdlZsVKbxA+lNmK8u+f8h4mqnya6+SvOYHc6DVU/5eSOp
+         +7L/XWBHxjtFEYXtxSXHgOSMBuaIU1YI4RNRipLq1B5bTnH7t6ATrB49o3DHWWjI6NS+
+         JysqBHd99whqSoADQVRtgWaSd1wmp3dNy2DGs+ZfziC3C61KP9iLeQO1pUk0h1oHzLIy
+         Ey66vC+vPp6CuX6Bc/le18nCtv3f0nu7OEW5Ifn08N4FE7naZ465h4M53BEiZgZ09DxT
+         hdow==
+X-Gm-Message-State: AOAM532RpLNU7hk17dXmViRKPQK6OaT4ot+7WpkoG4kHApToqu4dwXsN
+        rJe66evu2oMaW7mwQQaKVXHk04l5MX7gWwBZm6o=
+X-Google-Smtp-Source: ABdhPJwwyGmCRzsWC1+J5FYszmJ9Zjgj16AmXBvLzezgiA1gx+LbEMKOekxvjbgJhjN/PIHipJwl0+Zy8IHnasqVFB8=
+X-Received: by 2002:a50:eacb:: with SMTP id u11mr35038865edp.290.1640964777172;
+ Fri, 31 Dec 2021 07:32:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <20211230102110.3861-1-yu.tu@amlogic.com> <20211230102110.3861-5-yu.tu@amlogic.com>
+ <CAFBinCCL-QaeSRCLzfyNXcRQZ7YC1D85rP2y4OGkAjCmQEqGgQ@mail.gmail.com> <3e1e40aa-7865-0f7a-5772-e2ad96c8141d@amlogic.com>
+In-Reply-To: <3e1e40aa-7865-0f7a-5772-e2ad96c8141d@amlogic.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Fri, 31 Dec 2021 16:32:46 +0100
+Message-ID: <CAFBinCB2nF0TwRE1uJ4UTB_avcqRBfOHR1CDSe29dB1o-YjEHQ@mail.gmail.com>
+Subject: Re: [PATCH V3 4/6] tty: serial: meson: The UART baud rate calculation
+ is described using the common clock code. Also added S4 chip uart Compatible.
+To:     Yu Tu <yu.tu@amlogic.com>
+Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Vyacheslav <adeep@lexina.in>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Three fixes, all in drivers.  The lpfc one doesn't look exploitable,
-but nasty things could happen in string operations if mybuf ends up
-with an on stack unterminated string.
+On Fri, Dec 31, 2021 at 12:24 PM Yu Tu <yu.tu@amlogic.com> wrote:
+[...]
+> >>   static int meson_uart_request_port(struct uart_port *port)
+> >>   {
+> >> +       struct meson_uart_data *private_data = port->private_data;
+> >> +       int ret;
+> >> +
+> >> +       ret = clk_prepare_enable(private_data->pclk);
+> >> +       if (ret)
+> >> +               return ret;
+> >> +
+> >> +       ret = clk_prepare_enable(private_data->baud_clk);
+> >> +       if (ret) {
+> >> +               clk_disable_unprepare(private_data->pclk);
+> >> +               return ret;
+> >> +       }
+> > This code is from my original suggestion - and I had a doubt there
+> > which I forgot to add as a comment originally:
+> > Can you confirm that accessing the UART controller registers works
+> > even when "pclk" is turned off?
+> > I am asking this because the common clock framework can access the
+> > clocks at any time.
+> > And I have seen SoCs which would hang when trying to access a module's
+> > registers while the module's pclk is turned off.
+> On all meson platforms, the default pclk for all UART is turned on
+> during the u-boot phase. When registering uart pclk in the kernel phase,
+> the CLK_IGNORE_UNUSED flag is added. So the real shutdown is when the
+> standby goes down, the parent clk shuts down.
+Interesting, thanks for sharing that u-boot turns these clocks on.
+Let's say someone wanted to make u-boot save power and turn off all
+UART clocks except the one for uart_AO (where we typically connect the
+serial console).
+In that case the pclk of uart_C (just to choose an example here) is
+turned off. Would there be a problem then accessing the registers of
+uart_C before clk_prepare_enable is called?
 
-The patch is available here:
+[...]
+> >>          port->fifosize = 64;
+> > commit 27d44e05d7b85d ("tty: serial: meson: retrieve port FIFO size
+> > from DT") [0] from May 2021 has changed this line to:
+> >    port->fifosize = fifosize;
+> > So your patch currently does not apply to linux-next (or even Linus'
+> > mainline tree).
+> >
+> So do I need to wait for [0] patch merged before I can continue to make
+> changes ?
+These changes are already merged.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+> What can I do before?
+You should base your changes on top of the tty.git/tty-next branch [1]
+where Greg (the maintainer of this tree) will pick up the patches once
+they are good (got enough Acked-by/Reviewed-by, etc.).
+I suspect that you based your changes on an older or stable kernel
+version (let's say 5.10). New functionality should always get into the
+-next tree where various auto-build robots will compile-test the
+changes and we even have Kernel CI where changes are tested on real
+hardware (BayLibre even maintains Amlogic boards in their Kernel CI
+labs). Let's say Amlogic updates to Linux 5.17 next year then the
+patches are already included in that kernel version - instead of being
+only available in Linux 5.10.
 
-The short changelog is:
 
-Alexey Makhalov (1):
-      scsi: vmw_pvscsi: Set residual data length conditionally
+Best regards,
+Martin
 
-Dan Carpenter (1):
-      scsi: lpfc: Terminate string in lpfc_debugfs_nvmeio_trc_write()
 
-Lixiaokeng (1):
-      scsi: libiscsi: Fix UAF in iscsi_conn_get_param()/iscsi_conn_teardown()
-
-And the diffstat:
-
- drivers/scsi/libiscsi.c          | 6 ++++--
- drivers/scsi/lpfc/lpfc_debugfs.c | 4 ++--
- drivers/scsi/vmw_pvscsi.c        | 7 +++++--
- 3 files changed, 11 insertions(+), 6 deletions(-)
-
-With full diff below.
-
-James
-
----
-
-diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
-index 284b939fb1ea..059dae8909ee 100644
---- a/drivers/scsi/libiscsi.c
-+++ b/drivers/scsi/libiscsi.c
-@@ -3100,6 +3100,8 @@ void iscsi_conn_teardown(struct iscsi_cls_conn *cls_conn)
- {
- 	struct iscsi_conn *conn = cls_conn->dd_data;
- 	struct iscsi_session *session = conn->session;
-+	char *tmp_persistent_address = conn->persistent_address;
-+	char *tmp_local_ipaddr = conn->local_ipaddr;
- 
- 	del_timer_sync(&conn->transport_timer);
- 
-@@ -3121,8 +3123,6 @@ void iscsi_conn_teardown(struct iscsi_cls_conn *cls_conn)
- 	spin_lock_bh(&session->frwd_lock);
- 	free_pages((unsigned long) conn->data,
- 		   get_order(ISCSI_DEF_MAX_RECV_SEG_LEN));
--	kfree(conn->persistent_address);
--	kfree(conn->local_ipaddr);
- 	/* regular RX path uses back_lock */
- 	spin_lock_bh(&session->back_lock);
- 	kfifo_in(&session->cmdpool.queue, (void*)&conn->login_task,
-@@ -3134,6 +3134,8 @@ void iscsi_conn_teardown(struct iscsi_cls_conn *cls_conn)
- 	mutex_unlock(&session->eh_mutex);
- 
- 	iscsi_destroy_conn(cls_conn);
-+	kfree(tmp_persistent_address);
-+	kfree(tmp_local_ipaddr);
- }
- EXPORT_SYMBOL_GPL(iscsi_conn_teardown);
- 
-diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_debugfs.c
-index bd6d459afce5..08b2e85dcd7d 100644
---- a/drivers/scsi/lpfc/lpfc_debugfs.c
-+++ b/drivers/scsi/lpfc/lpfc_debugfs.c
-@@ -2954,8 +2954,8 @@ lpfc_debugfs_nvmeio_trc_write(struct file *file, const char __user *buf,
- 	char mybuf[64];
- 	char *pbuf;
- 
--	if (nbytes > 64)
--		nbytes = 64;
-+	if (nbytes > 63)
-+		nbytes = 63;
- 
- 	memset(mybuf, 0, sizeof(mybuf));
- 
-diff --git a/drivers/scsi/vmw_pvscsi.c b/drivers/scsi/vmw_pvscsi.c
-index c2ba65224633..1f037b8ab904 100644
---- a/drivers/scsi/vmw_pvscsi.c
-+++ b/drivers/scsi/vmw_pvscsi.c
-@@ -586,9 +586,12 @@ static void pvscsi_complete_request(struct pvscsi_adapter *adapter,
- 			 * Commands like INQUIRY may transfer less data than
- 			 * requested by the initiator via bufflen. Set residual
- 			 * count to make upper layer aware of the actual amount
--			 * of data returned.
-+			 * of data returned. There are cases when controller
-+			 * returns zero dataLen with non zero data - do not set
-+			 * residual count in that case.
- 			 */
--			scsi_set_resid(cmd, scsi_bufflen(cmd) - e->dataLen);
-+			if (e->dataLen && (e->dataLen < scsi_bufflen(cmd)))
-+				scsi_set_resid(cmd, scsi_bufflen(cmd) - e->dataLen);
- 			cmd->result = (DID_OK << 16);
- 			break;
- 
-
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git/log/?h=tty-next

@@ -2,102 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 704EE482383
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 11:44:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5820348238D
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 12:01:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbhLaKoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 05:44:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50416 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbhLaKn7 (ORCPT
+        id S229551AbhLaLBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 06:01:05 -0500
+Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:43216 "EHLO
+        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229446AbhLaLBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 05:43:59 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E2CC061574;
-        Fri, 31 Dec 2021 02:43:59 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id b186-20020a1c1bc3000000b00345734afe78so14595315wmb.0;
-        Fri, 31 Dec 2021 02:43:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=bLUkTU6YF+8VLXQUQIWE9F/hQfPP+FolDFiTd3ZDtrs=;
-        b=bmY1kbjIlV/sLw6YhqPG6UsoOX4iiCGCWwkkibgh5ixxQ8zdbpjVi0HUXeLfI9ELdE
-         rGqCLvHCBDW+/qRxI1fur/cYvuGt7PU0tnaIw4dhjS+2KQ5ST5/V3bWySd8d1ZD6V/2b
-         egZamqr04QzT8IhF2ZTU0idJTQSJHxetevaG04biYD4Su1cy+vYsJp4YWpSNkAvfvsXl
-         WTYox+UlLJHQXCiyKl3bqRboxKW3PqBF7EEZGA3vTCIgF+xwMzBL9I8gX41UA40DV33s
-         xZ4U7hvU6vmu7Qwm1ka5Xq2mp6K32Kmarc4UXIkOadVRR0TdjyHelHw0qtbnzli5tNlt
-         p0AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=bLUkTU6YF+8VLXQUQIWE9F/hQfPP+FolDFiTd3ZDtrs=;
-        b=K6qZurkjqNtVF2zJhqn2EoOIAcwkFMiqOaY1uuJ7UAU+Dpcl5me1i8u8+7eY3ATw9D
-         trzCjPib/w9UpizPjceI+6d5Y0s5cth7NIg+Y2xixGIDC24adGMfXNJBAse0ogz7WIvp
-         Hrjkr97xfcDWEqF/LnL+xNunJKf5K6LFEf+EeHURZSHu5ATIACzwGj7jw0uC7Ln6cbIZ
-         xry01eyakAvgCslffr2nXpvyZn+tqPBouIjfOJgNbOK35MpXnNYnOacZz20HQ/rstxwb
-         uj0/bNhrKPBkqvWyS6oAExRj0FOA3oB3iC7Eu8ht5MXLbWUsrtLRrnWOCEavnwlP9uSl
-         BJ7w==
-X-Gm-Message-State: AOAM531y8Jm1IeY7mzSy2RqD2baSqY32TOR6iATFFflxKi/Ryc2MK4uS
-        owC9DQ/jTc3i8QNdbxjZJYQDO5/k0qs=
-X-Google-Smtp-Source: ABdhPJwaB4oZMlIVWbJDarcy1yJ7NaobnlWBgzU0JfLp+wnpSa6WOB8j7cUNARKMaRDf+3/cuWS3cg==
-X-Received: by 2002:a05:600c:1991:: with SMTP id t17mr29701332wmq.21.1640947437988;
-        Fri, 31 Dec 2021 02:43:57 -0800 (PST)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id b1sm29584285wrd.92.2021.12.31.02.43.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Dec 2021 02:43:57 -0800 (PST)
-Date:   Fri, 31 Dec 2021 11:43:53 +0100
-From:   Corentin Labbe <clabbe.montjoie@gmail.com>
-To:     conleylee@foxmail.com
-Cc:     davem@davemloft.net, kuba@kernel.org, mripard@kernel.org,
-        wens@csie.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6] sun4i-emac.c: add dma support
-Message-ID: <Yc7e6V9/oioEpx8c@Red>
-References: <20211228164817.1297c1c9@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
- <tencent_DE05ADA53D5B084D4605BE6CB11E49EF7408@qq.com>
+        Fri, 31 Dec 2021 06:01:02 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R901e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0V0Qbvzp_1640948456;
+Received: from 30.240.96.79(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0V0Qbvzp_1640948456)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 31 Dec 2021 19:00:57 +0800
+Message-ID: <77861ac9-2996-4a8f-f0d1-84950e1c6af9@linux.alibaba.com>
+Date:   Fri, 31 Dec 2021 19:00:55 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <tencent_DE05ADA53D5B084D4605BE6CB11E49EF7408@qq.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [PATCH v2 2/6] crypto: arm64/sm3-ce - make dependent on sm3
+ library
+Content-Language: en-US
+To:     liulongfang <liulongfang@huawei.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vitaly Chikunov <vt@altlinux.org>,
+        Eric Biggers <ebiggers@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Gilad Ben-Yossef <gilad@benyossef.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Jussi Kivilinna <jussi.kivilinna@iki.fi>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-crypto@vger.kernel.org,
+        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20211222045022.27069-1-tianjia.zhang@linux.alibaba.com>
+ <20211222045022.27069-3-tianjia.zhang@linux.alibaba.com>
+ <18fdaf2c-827e-8d17-1eb7-cb1c12d15808@huawei.com>
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+In-Reply-To: <18fdaf2c-827e-8d17-1eb7-cb1c12d15808@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Wed, Dec 29, 2021 at 09:43:51AM +0800, conleylee@foxmail.com a écrit :
-> From: Conley Lee <conleylee@foxmail.com>
-> 
-> Thanks for your review. Here is the new version for this patch.
-> 
-> This patch adds support for the emac rx dma present on sun4i. The emac
-> is able to move packets from rx fifo to RAM by using dma.
-> 
-> Change since v4.
->   - rename sbk field to skb
->   - rename alloc_emac_dma_req to emac_alloc_dma_req
->   - using kzalloc(..., GPF_ATOMIC) in interrupt context to avoid
->     sleeping
->   - retry by using emac_inblk_32bit when emac_dma_inblk_32bit fails
->   - fix some code style issues 
-> 
-> Change since v5.
->   - fix some code style issue
-> 
+Hi
 
-Hello
+On 12/31/21 3:05 PM, liulongfang wrote:
+> On 2021/12/22 12:50, Tianjia Zhang Wrote:
+>> SM3 generic library is stand-alone implementation, sm3-ce can depend
+>> on the SM3 library instead of sm3-generic.
+>>
+>> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+>> ---
+>>   arch/arm64/crypto/Kconfig       |  2 +-
+>>   arch/arm64/crypto/sm3-ce-glue.c | 20 ++++++++++++++------
+>>   2 files changed, 15 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/arch/arm64/crypto/Kconfig b/arch/arm64/crypto/Kconfig
+>> index addfa413650b..2a965aa0188d 100644
+>> --- a/arch/arm64/crypto/Kconfig
+>> +++ b/arch/arm64/crypto/Kconfig
+>> @@ -45,7 +45,7 @@ config CRYPTO_SM3_ARM64_CE
+>>   	tristate "SM3 digest algorithm (ARMv8.2 Crypto Extensions)"
+>>   	depends on KERNEL_MODE_NEON
+>>   	select CRYPTO_HASH
+>> -	select CRYPTO_SM3
+>> +	select CRYPTO_LIB_SM3
+>>   
+>>   config CRYPTO_SM4_ARM64_CE
+>>   	tristate "SM4 symmetric cipher (ARMv8.2 Crypto Extensions)"
+>> diff --git a/arch/arm64/crypto/sm3-ce-glue.c b/arch/arm64/crypto/sm3-ce-glue.c
+>> index d71faca322f2..3198f31c9446 100644
+>> --- a/arch/arm64/crypto/sm3-ce-glue.c
+>> +++ b/arch/arm64/crypto/sm3-ce-glue.c
+>> @@ -27,7 +27,7 @@ static int sm3_ce_update(struct shash_desc *desc, const u8 *data,
+>>   			 unsigned int len)
+>>   {
+>>   	if (!crypto_simd_usable())
+>> -		return crypto_sm3_update(desc, data, len);
+>> +		return sm3_update(shash_desc_ctx(desc), data, len);
+>>   
+>>   	kernel_neon_begin();
+>>   	sm3_base_do_update(desc, data, len, sm3_ce_transform);
+>> @@ -39,7 +39,7 @@ static int sm3_ce_update(struct shash_desc *desc, const u8 *data,
+>>   static int sm3_ce_final(struct shash_desc *desc, u8 *out)
+>>   {
+>>   	if (!crypto_simd_usable())
+>> -		return crypto_sm3_finup(desc, NULL, 0, out);
+>> +		return sm3_final(shash_desc_ctx(desc), out);
+>>   
+>>   	kernel_neon_begin();
+>>   	sm3_base_do_finalize(desc, sm3_ce_transform);
+>> @@ -51,14 +51,22 @@ static int sm3_ce_final(struct shash_desc *desc, u8 *out)
+>>   static int sm3_ce_finup(struct shash_desc *desc, const u8 *data,
+>>   			unsigned int len, u8 *out)
+>>   {
+>> -	if (!crypto_simd_usable())
+>> -		return crypto_sm3_finup(desc, data, len, out);
+>> +	if (!crypto_simd_usable()) {
+>> +		struct sm3_state *sctx = shash_desc_ctx(desc);
+>> +
+>> +		if (len)
+>> +			sm3_update(sctx, data, len);
+>> +		sm3_final(sctx, out);
+>> +		return 0;
+>> +	}
+>>   
+>>   	kernel_neon_begin();
+>> -	sm3_base_do_update(desc, data, len, sm3_ce_transform);
+>> +	if (len)
+>> +		sm3_base_do_update(desc, data, len, sm3_ce_transform);
+>> +	sm3_base_do_finalize(desc, sm3_ce_transform);
+>>   	kernel_neon_end();
+>>   
+>> -	return sm3_ce_final(desc, out);
+>> +	return sm3_base_finish(desc, out);
+>>   }
+>>   
+>>   static struct shash_alg sm3_alg = {
+>> You have modified the implementation of SM3 algorithm, so what benefits will be gained
+> after such modification?
+> What flaws are solved or can performance be improved?
+> Thanks.
+> Longfang.
 
-I just tested this on a sun4i-a10-olinuxino-lime
+This modification does not bring obvious performance improvement, but
+makes the code logic more reasonable in terms of architecture and
+calling level. The calling relationship before modification is:
+   sm3-ce -> sm3-generic -> sm3-lib,
+after this modification is: sm3-ce -> sm3-lib.
 
-I got:
-[    2.922812] sun4i-emac 1c0b000.ethernet (unnamed net_device) (uninitialized): get io resource from device: 0x1c0b000, size = 4096
-[    2.934512] sun4i-emac 1c0b000.ethernet (unnamed net_device) (uninitialized): failed to request dma channel. dma is disabled
-[    2.945740] sun4i-emac 1c0b000.ethernet (unnamed net_device) (uninitialized): configure dma failed. disable dma.
-[    2.957887] sun4i-emac 1c0b000.ethernet: eth0: at (ptrval), IRQ 19 MAC: 02:49:09:40:ab:3d
-
-On which board did you test it and how ?
-
-Regards
+Best regards,
+Tianjia

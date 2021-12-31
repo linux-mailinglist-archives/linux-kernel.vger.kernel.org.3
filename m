@@ -2,65 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC41D4825CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 21:44:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32A1B4825CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 21:52:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231722AbhLaUoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 15:44:07 -0500
-Received: from mail-il1-f199.google.com ([209.85.166.199]:36759 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231708AbhLaUoG (ORCPT
+        id S231735AbhLaUw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 15:52:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40448 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231725AbhLaUw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 15:44:06 -0500
-Received: by mail-il1-f199.google.com with SMTP id m15-20020a056e021c2f00b002b536f2ae9dso11472932ilh.3
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 12:44:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=Of3gUYtQNOdGN0VCHZ9V9d8Ng0GEU6SSLufzFHaw2CE=;
-        b=MfYejTDeNnkSjSQkHhYpKhR5jhqVgOhlxxz6hFo1ADxdh6r1v1nQUGGeNpZq2evDMb
-         5SEHJIyuv9yqvwpajLHzQ+UnJidfRC2aH5qpHpor+J/BrPgcgL3Hkd4M3lPBlehnPBBS
-         E2G6ZFMDoEUQxmOhDL7mAglsJoPtR762zlUoaF9cFeQrIG8CIQ1YzOSz34SHbhMnIqb1
-         8GXTf+gy77LAYTw0VwbIhOJY5nyDaxMDYPATDO6j26XvNdbe+Kc8ll0GGV/IJPHkt87L
-         Qcu03wEHvVbeBSOnd9Of6fo+cMHTWMNpyBRCoqqa7pkOP2A2L8stqumObf/sDOIYitAG
-         pHLQ==
-X-Gm-Message-State: AOAM533vAevr4+J4Hrvsi2ybIvPvBgyZBEObo8KBPw2MQmdWh+ztWIEt
-        7RZjUqmPP6PCcyOvzyvSgOC1UV9WwFh37mRc+4halj3YUndZ
-X-Google-Smtp-Source: ABdhPJxQWiMF5hhNnlmcGcPjirBvBWo3QMc5mLxUHrNzczChFwXxfTMdBa3z+KDIG9Ly8dHMGltuWtoKVX3GmRE2pSoGKqZaQ+Gp
+        Fri, 31 Dec 2021 15:52:28 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41092C061574;
+        Fri, 31 Dec 2021 12:52:28 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.94.2)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1n3Ost-0004rN-DV; Fri, 31 Dec 2021 21:52:19 +0100
+Date:   Fri, 31 Dec 2021 20:52:03 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>, Michael Lee <igvtee@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH v9 0/3]  net: ethernet: mtk_eth_soc: refactoring and Clause 45
+Message-ID: <Yc9tc4jHEYsRq++v@makrotopia.org>
+References: <Ycr5Cna76eg2B0An@shell.armlinux.org.uk>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:7602:: with SMTP id g2mr16215397iom.37.1640983445917;
- Fri, 31 Dec 2021 12:44:05 -0800 (PST)
-Date:   Fri, 31 Dec 2021 12:44:05 -0800
-In-Reply-To: <Yc9odypVqqB2uMm/@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000060560805d4773ba0@google.com>
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Write in usb_hcd_poll_rh_status
- (2)
-From:   syzbot <syzbot+3ae6a2b06f131ab9849f@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, dvyukov@google.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ycr5Cna76eg2B0An@shell.armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Rework value and type of mdio read and write functions in mtk_eth_soc
+and generally clean up and unify both functions.
+Then add support to access Clause 45 phy registers.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+All three commits are tested on the Bananapi BPi-R64 board having
+MediaTek MT7531BE DSA gigE switch using clause 22 MDIO and
+Ubiquiti UniFi 6 LR access point having Aquantia AQR112C PHY using
+clause 45 MDIO.
 
-Reported-and-tested-by: syzbot+3ae6a2b06f131ab9849f@syzkaller.appspotmail.com
+v9: improved formatting and Cc missing maintainer
+v8: add patch from Russel King, switch to bitfield helper macros
+v7: remove unneeded variables and order OR-ed call parameters
+v6: further clean up functions and more cleanly separate patches
+v5: fix wrong variable name in first patch covered by follow-up patch
+v4: clean-up return values and types, split into two commits
+v3: return -1 instead of 0xffff on error in _mtk_mdio_write
+v2: use MII_DEVADDR_C45_SHIFT and MII_REGADDR_C45_MASK to extract
+    device id and register address. Unify read and write functions to
+    have identical types and parameter names where possible as we are
+    anyway already replacing both function bodies.
 
-Tested on:
 
-commit:         eec4df26 Merge tag 's390-5.16-6' of git://git.kernel.o..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1a86c22260afac2f
-dashboard link: https://syzkaller.appspot.com/bug?extid=3ae6a2b06f131ab9849f
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=148e8e35b00000
+Daniel Golle (2):
+  net: ethernet: mtk_eth_soc: fix return value and refactor MDIO ops
+  net: ethernet: mtk_eth_soc: implement Clause 45 MDIO access
 
-Note: testing is done by a robot and is best-effort only.
+Russell King (Oracle) (1):
+  net: mdio: add helpers to extract clause 45 regad and devad fields
+
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c | 85 +++++++++++++++------
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h | 19 +++--
+ include/linux/mdio.h                        | 12 +++
+ 3 files changed, 89 insertions(+), 27 deletions(-)
+
+-- 
+2.34.1
+

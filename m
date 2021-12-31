@@ -2,139 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39783482291
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 08:05:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BAAD482293
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 08:08:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242733AbhLaHFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 02:05:36 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:17314 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbhLaHFg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 02:05:36 -0500
-Received: from kwepemi100009.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JQGNM1jB0z9s1L;
-        Fri, 31 Dec 2021 15:04:35 +0800 (CST)
-Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
- kwepemi100009.china.huawei.com (7.221.188.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 31 Dec 2021 15:05:32 +0800
-Received: from [10.67.102.118] (10.67.102.118) by
- kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 31 Dec 2021 15:05:32 +0800
-Subject: Re: [PATCH v2 2/6] crypto: arm64/sm3-ce - make dependent on sm3
- library
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vitaly Chikunov <vt@altlinux.org>,
-        Eric Biggers <ebiggers@google.com>,
-        "Eric Biggers" <ebiggers@kernel.org>,
-        Gilad Ben-Yossef <gilad@benyossef.com>,
-        "Ard Biesheuvel" <ardb@kernel.org>,
-        Jussi Kivilinna <jussi.kivilinna@iki.fi>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, <linux-crypto@vger.kernel.org>,
-        <x86@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20211222045022.27069-1-tianjia.zhang@linux.alibaba.com>
- <20211222045022.27069-3-tianjia.zhang@linux.alibaba.com>
-From:   liulongfang <liulongfang@huawei.com>
-Message-ID: <18fdaf2c-827e-8d17-1eb7-cb1c12d15808@huawei.com>
-Date:   Fri, 31 Dec 2021 15:05:31 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S242740AbhLaHIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 02:08:15 -0500
+Received: from mx3.molgen.mpg.de ([141.14.17.11]:43301 "EHLO mx1.molgen.mpg.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229636AbhLaHIO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 31 Dec 2021 02:08:14 -0500
+Received: from [192.168.0.3] (ip5f5aea97.dynamic.kabel-deutschland.de [95.90.234.151])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id E7E7B61EA1922;
+        Fri, 31 Dec 2021 08:08:11 +0100 (CET)
+Message-ID: <fbfd865f-c88c-6ee1-6cb9-8194e170cd3a@molgen.mpg.de>
+Date:   Fri, 31 Dec 2021 08:08:11 +0100
 MIME-Version: 1.0
-In-Reply-To: <20211222045022.27069-3-tianjia.zhang@linux.alibaba.com>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.118]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600005.china.huawei.com (7.193.23.191)
-X-CFilter-Loop: Reflected
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v3 3/3] ahci: AMD A85 FCH (Hudson D4): Skip 200 ms
+ debounce delay in `sata_link_resume()`
+Content-Language: en-US
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     linux-ide@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        linux-kernel@vger.kernel.org
+References: <20211229161119.1006-1-pmenzel@molgen.mpg.de>
+ <20211229161119.1006-3-pmenzel@molgen.mpg.de>
+ <5c333718-eaa5-b41c-e8ea-59d6e01254aa@opensource.wdc.com>
+ <19f6cd93-9bd7-60dc-4471-18022bcf456c@molgen.mpg.de>
+ <7b64d1c3-f798-d64b-9ee3-9669d98f4e28@opensource.wdc.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <7b64d1c3-f798-d64b-9ee3-9669d98f4e28@opensource.wdc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021/12/22 12:50, Tianjia Zhang Wrote:
-> SM3 generic library is stand-alone implementation, sm3-ce can depend
-> on the SM3 library instead of sm3-generic.
+Dear Damien,
+
+
+Am 31.12.21 um 01:52 schrieb Damien Le Moal:
+> On 12/30/21 20:08, Paul Menzel wrote:
+>>>>    	board_ahci_nomsi,
+>>>>    	board_ahci_noncq,
+>>>>    	board_ahci_nosntf,
+>>>> @@ -141,6 +142,13 @@ static const struct ata_port_info ahci_port_info[] = {
+>>>>    		.udma_mask	= ATA_UDMA6,
+>>>>    		.port_ops	= &ahci_ops,
+>>>>    	},
+>>>> +	[board_ahci_nodbdelay] = {
+>>>> +		.flags		= AHCI_FLAG_COMMON,
+>>>> +		.link_flags	= ATA_LFLAG_NO_DB_DELAY,
+>>>> +		.pio_mask	= ATA_PIO4,
+>>>> +		.udma_mask	= ATA_UDMA6,
+>>>> +		.port_ops	= &ahci_ops,
+>>>> +	},
+>>>>    	[board_ahci_nomsi] = {
+>>>>    		AHCI_HFLAGS	(AHCI_HFLAG_NO_MSI),
+>>>>    		.flags		= AHCI_FLAG_COMMON,
+>>>> @@ -437,6 +445,7 @@ static const struct pci_device_id ahci_pci_tbl[] = {
+>>>>    		board_ahci_al },
+>>>>    	/* AMD */
+>>>>    	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_HUDSON2_SATA_IDE), board_ahci },
+>>>> +	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_HUDSON2_SATA_AHCI), board_ahci_nodbdelay },
+>>>
+>>> Patch 1 introduces this macro in pci_ids.h, but it is used only here. So
+>>> to keep with the current style in this structure, drop the macro (so
+>>> drop patch 1).
+>>
+>> I wait for your answer of the second patch, and then I am going to sent v4.
 > 
-> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> ---
->  arch/arm64/crypto/Kconfig       |  2 +-
->  arch/arm64/crypto/sm3-ce-glue.c | 20 ++++++++++++++------
->  2 files changed, 15 insertions(+), 7 deletions(-)
+> Let's use the numeric value. No macro definition needed.
+
+Alright. I am going to follow the maintainers wishes.
+
+>>>>    	{ PCI_VDEVICE(AMD, 0x7900), board_ahci }, /* AMD CZ */
+>>>>    	{ PCI_VDEVICE(AMD, 0x7901), board_ahci_mobile }, /* AMD Green Sardine */
+>>>>    	/* AMD is using RAID class only for ahci controllers */
+>>
+>> Do you have a AHCI device at hand, where you could also test if
+>> everything works fine without the delay?
 > 
-> diff --git a/arch/arm64/crypto/Kconfig b/arch/arm64/crypto/Kconfig
-> index addfa413650b..2a965aa0188d 100644
-> --- a/arch/arm64/crypto/Kconfig
-> +++ b/arch/arm64/crypto/Kconfig
-> @@ -45,7 +45,7 @@ config CRYPTO_SM3_ARM64_CE
->  	tristate "SM3 digest algorithm (ARMv8.2 Crypto Extensions)"
->  	depends on KERNEL_MODE_NEON
->  	select CRYPTO_HASH
-> -	select CRYPTO_SM3
-> +	select CRYPTO_LIB_SM3
->  
->  config CRYPTO_SM4_ARM64_CE
->  	tristate "SM4 symmetric cipher (ARMv8.2 Crypto Extensions)"
-> diff --git a/arch/arm64/crypto/sm3-ce-glue.c b/arch/arm64/crypto/sm3-ce-glue.c
-> index d71faca322f2..3198f31c9446 100644
-> --- a/arch/arm64/crypto/sm3-ce-glue.c
-> +++ b/arch/arm64/crypto/sm3-ce-glue.c
-> @@ -27,7 +27,7 @@ static int sm3_ce_update(struct shash_desc *desc, const u8 *data,
->  			 unsigned int len)
->  {
->  	if (!crypto_simd_usable())
-> -		return crypto_sm3_update(desc, data, len);
-> +		return sm3_update(shash_desc_ctx(desc), data, len);
->  
->  	kernel_neon_begin();
->  	sm3_base_do_update(desc, data, len, sm3_ce_transform);
-> @@ -39,7 +39,7 @@ static int sm3_ce_update(struct shash_desc *desc, const u8 *data,
->  static int sm3_ce_final(struct shash_desc *desc, u8 *out)
->  {
->  	if (!crypto_simd_usable())
-> -		return crypto_sm3_finup(desc, NULL, 0, out);
-> +		return sm3_final(shash_desc_ctx(desc), out);
->  
->  	kernel_neon_begin();
->  	sm3_base_do_finalize(desc, sm3_ce_transform);
-> @@ -51,14 +51,22 @@ static int sm3_ce_final(struct shash_desc *desc, u8 *out)
->  static int sm3_ce_finup(struct shash_desc *desc, const u8 *data,
->  			unsigned int len, u8 *out)
->  {
-> -	if (!crypto_simd_usable())
-> -		return crypto_sm3_finup(desc, data, len, out);
-> +	if (!crypto_simd_usable()) {
-> +		struct sm3_state *sctx = shash_desc_ctx(desc);
-> +
-> +		if (len)
-> +			sm3_update(sctx, data, len);
-> +		sm3_final(sctx, out);
-> +		return 0;
-> +	}
->  
->  	kernel_neon_begin();
-> -	sm3_base_do_update(desc, data, len, sm3_ce_transform);
-> +	if (len)
-> +		sm3_base_do_update(desc, data, len, sm3_ce_transform);
-> +	sm3_base_do_finalize(desc, sm3_ce_transform);
->  	kernel_neon_end();
->  
-> -	return sm3_ce_final(desc, out);
-> +	return sm3_base_finish(desc, out);
->  }
->  
->  static struct shash_alg sm3_alg = {
->You have modified the implementation of SM3 algorithm, so what benefits will be gained
-after such modification?
-What flaws are solved or can performance be improved?
-Thanks.
-Longfang.
+> Unfortunately, I do not have any board with this adapter.
+
+Sorry, we misunderstand each other. (I wrote a reply to my own patch [1].)
+
+I think the delay is not necessary for any modern AHCI controller. It’d 
+be great, if you could test, if it’s also true on the systems you have 
+by just skipping the delay.
+
+
+Kind regards,
+
+Paul
+
+
+[1]: 
+https://lore.kernel.org/linux-ide/20211227162658.11314-2-pmenzel@molgen.mpg.de/T/#m697d2121463a4c946730e6b83940e12d6d7e6700

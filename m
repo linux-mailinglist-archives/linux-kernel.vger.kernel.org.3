@@ -2,154 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82CE54821A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 03:54:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E5E4821C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 04:20:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241164AbhLaCy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 21:54:29 -0500
-Received: from mga14.intel.com ([192.55.52.115]:39380 "EHLO mga14.intel.com"
+        id S242591AbhLaDUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 22:20:39 -0500
+Received: from mx1.cqplus1.com ([113.204.237.245]:57970 "EHLO mx1.cqplus1.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241081AbhLaCy2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 21:54:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640919268; x=1672455268;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=LPcVk7Dhs/psxqqcTf8fKAlDbNnm7Ve0rMtCoM0tbUc=;
-  b=gwYHV3/AilQsyS4mOLhcMIKE6Y21gtunjFMJheEH1KP88PqTQr/IjWzZ
-   MgNBP2Zec4RKxDL7eFeUVtqnxgwl0We2kKVm+6hyYKie+S4h/81fPvQuW
-   pzmqreLKQKA30YfCjQcryz1/purTc70yhvvPoKNU0qttj0Q4nuSheo3qw
-   D6gZBGRWx/+bB00qsHgOgelXIi1CNtLCiRvdlk4qjceBcleHSwyt/tgW5
-   QclsngPqyDDOGbnGEp4bOd6lfZxaplrRnw7QlARSJhwBXlL7C8c4BZTNN
-   DkN5DhQf5f5CF+RVkJbLwLCu1sRrxG2p120SOr/MlLrKy3rGzlGt9gAVJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="241972471"
-X-IronPort-AV: E=Sophos;i="5.88,250,1635231600"; 
-   d="scan'208";a="241972471"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 18:54:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,250,1635231600"; 
-   d="scan'208";a="666710583"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
-  by fmsmga001.fm.intel.com with ESMTP; 30 Dec 2021 18:54:19 -0800
-Date:   Fri, 31 Dec 2021 10:53:44 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com
-Subject: Re: [PATCH v3 kvm/queue 04/16] KVM: Extend the memslot to support
- fd-based private memory
-Message-ID: <20211231025344.GC7255@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20211223123011.41044-1-chao.p.peng@linux.intel.com>
- <20211223123011.41044-5-chao.p.peng@linux.intel.com>
- <YcSzafzpjMy6m28B@google.com>
+        id S229590AbhLaDUi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 22:20:38 -0500
+X-MailGates: (compute_score:DELIVER,40,3)
+Received: from 172.27.96.203
+        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(24952:0:AUTH_RELAY)
+        (envelope-from <xt.hu@cqplus1.com>); Fri, 31 Dec 2021 10:50:45 +0800 (CST)
+Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
+ CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 31 Dec 2021 10:50:42 +0800
+Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
+ ([::1]) with mapi id 15.01.2375.017; Fri, 31 Dec 2021 10:50:41 +0800
+From:   =?utf-8?B?eHQuaHVb6IOh5YWI6Z+sXQ==?= <xt.hu@cqplus1.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+CC:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
+        =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>,
+        Rob Herring <robh@kernel.org>
+Subject: RE: [PATCH v4 2/2] watchdog: Add watchdog driver for Sunplus SP7021
+Thread-Topic: [PATCH v4 2/2] watchdog: Add watchdog driver for Sunplus SP7021
+Thread-Index: Adf96zGpMiWEfywATSCQ2rqHRhcaXQ==
+Date:   Fri, 31 Dec 2021 02:50:41 +0000
+Message-ID: <17803809bef1499fb051cf79fc3c7245@cqplus1.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.28.110.16]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YcSzafzpjMy6m28B@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 05:35:37PM +0000, Sean Christopherson wrote:
-> On Thu, Dec 23, 2021, Chao Peng wrote:
-> 
-> > +	struct file *file;
-> 
-> Please use more descriptive names, shaving characters is not at all priority.
-> 
-> > +	u64 ofs;
-> 
-> I believe this should be loff_t.
-> 
-> 	struct file *private_file;
-> 	struct loff_t private_offset;
-> 
-> >  };
-> >  
-> > +static inline bool kvm_slot_is_private(const struct kvm_memory_slot *slot)
-> > +{
-> > +	if (slot && (slot->flags & KVM_MEM_PRIVATE))
-> > +		return true;
-> > +	return false;
-> 
-> 	return slot && (slot->flags & KVM_MEM_PRIVATE);
-> 
-> > +}
-> > +
-> >  static inline bool kvm_slot_dirty_track_enabled(const struct kvm_memory_slot *slot)
-> >  {
-> >  	return slot->flags & KVM_MEM_LOG_DIRTY_PAGES;
-> > diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> > index 1daa45268de2..41434322fa23 100644
-> > --- a/include/uapi/linux/kvm.h
-> > +++ b/include/uapi/linux/kvm.h
-> > @@ -103,6 +103,17 @@ struct kvm_userspace_memory_region {
-> >  	__u64 userspace_addr; /* start of the userspace allocated memory */
-> >  };
-> >  
-> > +struct kvm_userspace_memory_region_ext {
-> > +	__u32 slot;
-> > +	__u32 flags;
-> > +	__u64 guest_phys_addr;
-> > +	__u64 memory_size; /* bytes */
-> > +	__u64 userspace_addr; /* hva */
-> 
-> Would it make sense to embed "struct kvm_userspace_memory_region"?
-> 
-> > +	__u64 ofs; /* offset into fd */
-> > +	__u32 fd;
-> 
-> Again, use descriptive names, then comments like "offset into fd" are unnecessary.
-> 
-> 	__u64 private_offset;
-> 	__u32 private_fd;
-
-My original thought is the same fields might be used for shared memslot
-as well in future (e.g. there may be another KVM_MEM_* bit can reuse the
-same fields for shared slot) so non private-specific name may sound
-better. But definitely I have no objection and can use private_* names
-for next version unless there is other objection.
-
-Thanks,
-Chao
-> 
-> > +	__u32 padding[5];
-> > +};
-> > +
-> >  /*
-> >   * The bit 0 ~ bit 15 of kvm_memory_region::flags are visible for userspace,
-> >   * other bits are reserved for kvm internal use which are defined in
-> > @@ -110,6 +121,7 @@ struct kvm_userspace_memory_region {
-> >   */
-> >  #define KVM_MEM_LOG_DIRTY_PAGES	(1UL << 0)
-> >  #define KVM_MEM_READONLY	(1UL << 1)
-> > +#define KVM_MEM_PRIVATE		(1UL << 2)
-> >  
-> >  /* for KVM_IRQ_LINE */
-> >  struct kvm_irq_level {
-> > -- 
-> > 2.17.1
-> > 
+SGkgQ2hydXN0b3BoZSwNCg0KCVRoYW5rcyBmb3IgeW91ciByZXNwb25kLg0KDQpCZXN0IFJlZ2Fy
+ZHMsDQpYaWFudGFvDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IENocmlz
+dG9waGUgSkFJTExFVCA8Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI+DQo+IFRvOiBYaWFu
+dGFvIEh1IDx4dC5odUBjcXBsdXMxLmNvbT4sDQo+CXdpbUBsaW51eC13YXRjaGRvZy5vcmcsIHAu
+emFiZWxAcGVuZ3V0cm9uaXguZGUsDQo+CWxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcsIGxp
+bnV4LXdhdGNoZG9nQHZnZXIua2VybmVsLm9yZywNCj4JbGludXhAcm9lY2stdXMubmV0LCByb2Jo
+K2R0QGtlcm5lbC5vcmcsDQo+CWRldmljZXRyZWVAdmdlci5rZXJuZWwub3JnDQo+IENjOiB3ZWxs
+cy5sdUBzdW5wbHVzLmNvbSwgcWluamlhbkBjcXBsdXMxLmNvbQ0KPiBTdWJqZWN0OiBSZTogW1BB
+VENIIHY0IDIvMl0gd2F0Y2hkb2c6IEFkZCB3YXRjaGRvZyBkcml2ZXIgZm9yIFN1bnBsdXMgU1A3
+MDIxDQo+IERhdGU6IFdlZCwgMjkgRGVjIDIwMjEgMTA6Mzk6MDggKzAxMDAJW3RocmVhZCBvdmVy
+dmlld10NCj4gTWVzc2FnZS1JRDogPDBiMTAyZmEwLWNiZmMtYTk3ZS04ZTdmLWNjZTgxNDY0NTBi
+Y0B3YW5hZG9vLmZyPiAocmF3KQ0KPiBJbi1SZXBseS1UbzogPDIwMjExMjI5MDU0MzA4LjYzMTY4
+LTMteHQuaHVAY3FwbHVzMS5jb20+DQo+DQo+Li4uDQo+DQo+ID4gK3N0YXRpYyBpbnQgc3Bfd2R0
+X3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+ID4gK3sNCj4gPiArCXN0cnVj
+dCBkZXZpY2UgKmRldiA9ICZwZGV2LT5kZXY7DQo+ID4gKwlzdHJ1Y3Qgc3Bfd2R0X3ByaXYgKnBy
+aXY7DQo+ID4gKwlpbnQgZXJyOw0KPiA+ICsNCj4gPiArCXByaXYgPSBkZXZtX2t6YWxsb2MoZGV2
+LCBzaXplb2YoKnByaXYpLCBHRlBfS0VSTkVMKTsNCj4gPiArCWlmICghcHJpdikNCj4gPiArCQly
+ZXR1cm4gLUVOT01FTTsNCj4gPiArDQo+ID4gKwlwcml2LT5jbGsgPSBkZXZtX2Nsa19nZXQoZGV2
+LCBOVUxMKTsNCj4gPiArCWlmIChJU19FUlIocHJpdi0+Y2xrKSkgew0KPiA+ICsJCWRldl9lcnIo
+ZGV2LCAiQ2FuJ3QgZmluZCBjbG9jayBzb3VyY2VcbiIpOw0KPiA+ICsJCXJldHVybiBQVFJfRVJS
+KHByaXYtPmNsayk7DQo+ID4gKwl9DQo+ID4gKw0KPiA+ICsJZXJyID0gY2xrX3ByZXBhcmVfZW5h
+YmxlKHByaXYtPmNsayk7DQo+ID4gKwlpZiAoZXJyKSB7DQo+ID4gKwkJZGV2X2VycihkZXYsICJD
+bG9jayBjYW4ndCBiZSBlbmFibGVkIGNvcnJlY3RseVxuIik7DQo+ID4gKwkJcmV0dXJuIGVycjsN
+Cj4gPiArCX0NCj4gPiArDQo+ID4gKwkvKiBUaGUgdGltZXIgYW5kIHdhdGNoZG9nIHNoYXJlZCB0
+aGUgU1RDIHJlc2V0ICovDQo+ID4gKwlwcml2LT5yc3RjID0gZGV2bV9yZXNldF9jb250cm9sX2dl
+dF9zaGFyZWQoZGV2LCBOVUxMKTsNCj4gPiArCWlmICghSVNfRVJSKHByaXYtPnJzdGMpKQ0KPiA+
+ICsJCXJlc2V0X2NvbnRyb2xfZGVhc3NlcnQocHJpdi0+cnN0Yyk7DQo+ID4gKw0KPiA+ICsJZXJy
+ID0gZGV2bV9hZGRfYWN0aW9uX29yX3Jlc2V0KGRldiwgc3BfcmVzZXRfY29udHJvbF9hc3NlcnQs
+DQo+ID4gKwkJCQkgICAgICAgcHJpdi0+cnN0Yyk7DQo+ID4gKwlpZiAoZXJyKQ0KPiA+ICsJCXJl
+dHVybiBlcnI7DQo+IFRoaXMgbG9va3Mgb2RkLg0KPiBXZSBjb3VsZCB1bmRvIHNvbWV0aGluZyB0
+aGF0IHdhcyBub3QgZG9uZS4gKGlmIElTX0VSUihwcml2LT5yc3RjKSkNCj4gVGhpcyBpcyBhbHNv
+IG5vdCByZWFsbHkgY29uc2lzdGVudCB3aXRoIHdoYXQgaXMgZG9uZSBpbiBzdXNwZWRuL3Jlc3Vt
+ZS4NCj4gSW4gdGhlc2UgZnVuY3Rpb25zLCB3ZSBkb24ndCBjaGVjayBmb3IgSVNfRVJSKHByaXYt
+PnJzdGMpLg0KPg0KDQpIZXJlIEkgcmVmZXIgdG8gbXQ3NjIxX3dkdC5jLiBJJ20gc3VyZSBJIG5l
+ZWQgZGVhc3NlcnQgcmVzZXQgdG8gcmVzZXQgDQp3YXRjaGRvZyByZWdpc3RlciB2YWx1ZSB3aGVu
+IGRyaXZlciBwcm9iZS4gYWNjb3JkaW5nbHkgSSBhc3NlcnQgcmVzZXQgDQppbiBkZXZtX2FkZF9h
+Y3Rpb25fb3JfcmVzZXQoKSB0byBlbnN1cmUgdGhhdCB0aGUgcmVnaXN0ZXJzIG9mIHdhdGNoZG9n
+IA0KY2FuJ3QgYmUgb3BlcmF0ZWQgYWZ0ZXIgbW9kdWxlIHJlbW92ZS4NCg0KPiA+ICsNCj4gPiAr
+CWVyciA9IGRldm1fYWRkX2FjdGlvbl9vcl9yZXNldChkZXYsIHNwX2Nsa19kaXNhYmxlX3VucHJl
+cGFyZSwNCj4gPiArCQkJCSAgICAgICBwcml2LT5jbGspOw0KPiA+ICsJaWYgKGVycikNCj4gPiAr
+CQlyZXR1cm4gZXJyOw0KPiBTaG91bGRuJ3QgdGhpcyBiZSBqdXN0IGFmdGVyIGNsa19wcmVwYXJl
+X2VuYWJsZSgpPw0KDQpJIHRlc3RlZCB0aGUgb3JkZXIgb2YgZXhlY3V0aW9uIG9mIHRoZSBhZGRl
+ZCBmdW5jdGlvbnMgd2hpY2ggaXMgc2ltaWxhciB0byANCnB1c2ggYW5kIHBvcC4gRmlyc3QgaW4s
+IGxhc3Qgb3V0LiBJIHRoaW5rIEkgc2hvdWxkIGRpc2FibGUgY2xvY2sgbGFzdC4NCg==

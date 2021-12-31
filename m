@@ -2,70 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39BC74823F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 13:15:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5154823F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 13:18:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbhLaMPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 07:15:55 -0500
-Received: from mga18.intel.com ([134.134.136.126]:21729 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230019AbhLaMPy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 07:15:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640952954; x=1672488954;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LKd+D52akhFhXjrKsO1jJ4sQVJPGl/N+ZDu1amsHgWE=;
-  b=T3dtHSlWP+eSxjQ5/VBIkab28KCAaxRm0umTZuR7slcXplJXeEw6pZ2g
-   CvOB0G66J6BSQT0LgHG0tKwXHy3AiBAH5boDinOJ9jQxLBQhTKtKKlvnE
-   5eCXa38i6ojDNWK+JqoVPr4rrYvj05u4nBXmiOdGv+5CgMUlQkFK/gF1/
-   VuXT1GDABqSx8Ay7hDoivraD/SirIHurWiOk37D8/Ldtih72qTmkm3qm0
-   iXx18g1rauya7b9xpwZyJS9fwIPfh5XFRoWC1Ui+eaxCfQ8qWC0kNcboT
-   nMJAi6qX3mw/sXZuyymAJBc7qD0X8WtcG1jwPenRkGK0beu9ZMtnV+FjH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="228628695"
-X-IronPort-AV: E=Sophos;i="5.88,251,1635231600"; 
-   d="scan'208";a="228628695"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2021 04:15:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,251,1635231600"; 
-   d="scan'208";a="470936441"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 31 Dec 2021 04:15:52 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n3Gp6-000BEM-9c; Fri, 31 Dec 2021 12:15:52 +0000
-Date:   Fri, 31 Dec 2021 20:15:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <anup.patel@wdc.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [avpatel:riscv_kvm_aia_v1 17/42] arch/riscv/kernel/smp.c:130:2-3:
- Unneeded semicolon
-Message-ID: <202112312054.ZfoKGMHF-lkp@intel.com>
+        id S230082AbhLaMSH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 31 Dec 2021 07:18:07 -0500
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:46505 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229985AbhLaMSH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 31 Dec 2021 07:18:07 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 9405A1BF206;
+        Fri, 31 Dec 2021 12:18:04 +0000 (UTC)
+Date:   Fri, 31 Dec 2021 13:18:03 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm@kernel.org, soc@kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [GIT PULL 2/2] memory: omap: drivers for v5.17
+Message-ID: <20211231131803.08fb5d49@xps13>
+In-Reply-To: <20211230164901.4fbf8cc3@xps13>
+References: <20211224111124.6097-1-krzysztof.kozlowski@canonical.com>
+        <20211224111124.6097-2-krzysztof.kozlowski@canonical.com>
+        <20211230164901.4fbf8cc3@xps13>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
-head:   6fa93cde61f5f84422bd3f97b9db6e2406a344dd
-commit: dea7752f30104c9bb3c2c67ce2c56e5a5eb3c290 [17/42] RISC-V: Treat IPIs as normal Linux IRQs
-config: riscv-randconfig-c004-20211231 (https://download.01.org/0day-ci/archive/20211231/202112312054.ZfoKGMHF-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 11.2.0
+Hello,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+miquel.raynal@bootlin.com wrote on Thu, 30 Dec 2021 16:49:01 +0100:
 
+> Hi Krzysztof, Arnd, Olof,
+> 
+> krzysztof.kozlowski@canonical.com wrote on Fri, 24 Dec 2021 12:11:24
+> +0100:
+> 
+> > Hi Arnd and Olof,
+> > 
+> > Separate topic branch for omap-gpmc driver. This includes changes to
+> > mtd-nand-omap2 driver (acked by Miquel) *which will conflict NAND tree*:
+> > 
+> > 1. The "of_device_id omap_nand_ids" is moved to header
+> >    ../platform_data/mtd-nand-omap2.h.
+> > 2. New compatible is added to above "of_device_id omap_nand_ids".
+> > 
+> > One way to avoid pushing this conflict to Linus, would be if Miquel would
+> > actually pull this request instead of soc tree.  
+> 
+> Sorry for the mess, I didn't spot the conflict when sending my Ack to
+> Krysztof.
+> 
+> I will pull this to simplify the handling.
 
-cocci warnings: (new ones prefixed by >>)
->> arch/riscv/kernel/smp.c:130:2-3: Unneeded semicolon
+Pulled into nand/next, thanks!
 
-Please review and possibly fold the followup patch.
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Miquèl

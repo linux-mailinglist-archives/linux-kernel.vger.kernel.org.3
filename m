@@ -2,135 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E4C482490
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 16:33:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FCF7482493
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 16:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbhLaPc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 10:32:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56236 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbhLaPc7 (ORCPT
+        id S230512AbhLaPfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 10:35:09 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:16918 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229453AbhLaPfI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 10:32:59 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20BCC061574;
-        Fri, 31 Dec 2021 07:32:58 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id z9so39988362edm.10;
-        Fri, 31 Dec 2021 07:32:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VysC3BYXJYli8788JzEtZNXjhfyXYrLxhWoo/L00x/E=;
-        b=A5uw6B+NLxc54AYITgqbaMurE9BkhaMQycGBQ+64od14Ko3v4KZQ0LBEARMrOY0WWq
-         BX4Q9tVxPWvGMEq69UVdh/66w0MXgK2hFrCDKomg3HJsqW2FZq+8fH7p2y248KmEq635
-         DF816PiLjuuOdI+pRjldBagq752gNBnP52rVgUuOt7J2gOa62B8wis3gfhNryBDZZ4yY
-         WvdvrumpkRfLRm/f20fzTrw2D2jLfZM+twPVLcjI0J1tCHQiOw+x1/osk0JkRLbbk6ta
-         Dg1Kz5LCGrQyBm1xSY1jchqnFpAttMGxP9HtxH8YvMX2lFQv0oTG0YA+jtbhEOpPro+z
-         Z8tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VysC3BYXJYli8788JzEtZNXjhfyXYrLxhWoo/L00x/E=;
-        b=iNMMhDfi3FLkm/YfL64i8nO8Y9VShw7y4DCYcmXUJQXInkF5VAf3j2Sc29IEkPeqXK
-         D1RPkkLNrcOS0CLtGuSZEidQdlZsVKbxA+lNmK8u+f8h4mqnya6+SvOYHc6DVU/5eSOp
-         +7L/XWBHxjtFEYXtxSXHgOSMBuaIU1YI4RNRipLq1B5bTnH7t6ATrB49o3DHWWjI6NS+
-         JysqBHd99whqSoADQVRtgWaSd1wmp3dNy2DGs+ZfziC3C61KP9iLeQO1pUk0h1oHzLIy
-         Ey66vC+vPp6CuX6Bc/le18nCtv3f0nu7OEW5Ifn08N4FE7naZ465h4M53BEiZgZ09DxT
-         hdow==
-X-Gm-Message-State: AOAM532RpLNU7hk17dXmViRKPQK6OaT4ot+7WpkoG4kHApToqu4dwXsN
-        rJe66evu2oMaW7mwQQaKVXHk04l5MX7gWwBZm6o=
-X-Google-Smtp-Source: ABdhPJwwyGmCRzsWC1+J5FYszmJ9Zjgj16AmXBvLzezgiA1gx+LbEMKOekxvjbgJhjN/PIHipJwl0+Zy8IHnasqVFB8=
-X-Received: by 2002:a50:eacb:: with SMTP id u11mr35038865edp.290.1640964777172;
- Fri, 31 Dec 2021 07:32:57 -0800 (PST)
-MIME-Version: 1.0
-References: <20211230102110.3861-1-yu.tu@amlogic.com> <20211230102110.3861-5-yu.tu@amlogic.com>
- <CAFBinCCL-QaeSRCLzfyNXcRQZ7YC1D85rP2y4OGkAjCmQEqGgQ@mail.gmail.com> <3e1e40aa-7865-0f7a-5772-e2ad96c8141d@amlogic.com>
-In-Reply-To: <3e1e40aa-7865-0f7a-5772-e2ad96c8141d@amlogic.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Fri, 31 Dec 2021 16:32:46 +0100
-Message-ID: <CAFBinCB2nF0TwRE1uJ4UTB_avcqRBfOHR1CDSe29dB1o-YjEHQ@mail.gmail.com>
-Subject: Re: [PATCH V3 4/6] tty: serial: meson: The UART baud rate calculation
- is described using the common clock code. Also added S4 chip uart Compatible.
-To:     Yu Tu <yu.tu@amlogic.com>
-Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Vyacheslav <adeep@lexina.in>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 31 Dec 2021 10:35:08 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BVCGicK015277;
+        Fri, 31 Dec 2021 15:35:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=LP/dBwlqnNk/jLLOaJ7zpEi8bzPx+FAQeQ4w/ORZh+4=;
+ b=nRvd2Isrehz5K8MDuHskgKA+a9KSVAV0R3Un31cw1JbL88w7M6iMwtf/FBn+NVcWIHrO
+ 4+szHJvuCuli5frfRwly5FHHI5CEblPb3/FNi/FuoLZUnN7LLtXhj3ft173hcTn3+OBL
+ l/ORSHEkT5d81tRpmGtUtWhSK5CGmR/AdMF1WnUX6GjvCqBvmcAnlLcH31a4oPa0/UcW
+ GFETGCekaYFHJuB+RK+ClIHqcflD7/1Eyd6bF6gML0dt0PQ/JRim24Ed6Uqq2r4b6s8P
+ 7OB2DbbBMrFUFM8w2YHh58RCNtCAKzjz1Sf7BMRfNtG8lGP1Ue3fSfWQZLmRl5Sf330p yw== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3d9qyvm17c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 31 Dec 2021 15:35:06 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BVF7JpL031036;
+        Fri, 31 Dec 2021 15:35:04 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06fra.de.ibm.com with ESMTP id 3d5tjk1dbu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 31 Dec 2021 15:35:04 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BVFZ1MT37814750
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 31 Dec 2021 15:35:01 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8E87752054;
+        Fri, 31 Dec 2021 15:35:01 +0000 (GMT)
+Received: from sig-9-65-77-101.ibm.com (unknown [9.65.77.101])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id ECD7C52051;
+        Fri, 31 Dec 2021 15:35:00 +0000 (GMT)
+Message-ID: <56c53b027ae8ae6909d38904bf089e73011657d7.camel@linux.ibm.com>
+Subject: Re: [PATCH v1 4/5] ima: support fs-verity file digest based
+ signatures
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-integrity@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 31 Dec 2021 10:35:00 -0500
+In-Reply-To: <YalDvGjq0inMFKln@sol.localdomain>
+References: <20211202215507.298415-1-zohar@linux.ibm.com>
+         <20211202215507.298415-5-zohar@linux.ibm.com>
+         <YalDvGjq0inMFKln@sol.localdomain>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 1H1ZfXi8nX8DwlQxOYJYVOme3-KcPwe8
+X-Proofpoint-ORIG-GUID: 1H1ZfXi8nX8DwlQxOYJYVOme3-KcPwe8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-31_06,2021-12-30_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ phishscore=0 mlxlogscore=975 spamscore=0 adultscore=0 clxscore=1015
+ priorityscore=1501 mlxscore=0 lowpriorityscore=0 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112310067
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 31, 2021 at 12:24 PM Yu Tu <yu.tu@amlogic.com> wrote:
-[...]
-> >>   static int meson_uart_request_port(struct uart_port *port)
-> >>   {
-> >> +       struct meson_uart_data *private_data = port->private_data;
-> >> +       int ret;
-> >> +
-> >> +       ret = clk_prepare_enable(private_data->pclk);
-> >> +       if (ret)
-> >> +               return ret;
-> >> +
-> >> +       ret = clk_prepare_enable(private_data->baud_clk);
-> >> +       if (ret) {
-> >> +               clk_disable_unprepare(private_data->pclk);
-> >> +               return ret;
-> >> +       }
-> > This code is from my original suggestion - and I had a doubt there
-> > which I forgot to add as a comment originally:
-> > Can you confirm that accessing the UART controller registers works
-> > even when "pclk" is turned off?
-> > I am asking this because the common clock framework can access the
-> > clocks at any time.
-> > And I have seen SoCs which would hang when trying to access a module's
-> > registers while the module's pclk is turned off.
-> On all meson platforms, the default pclk for all UART is turned on
-> during the u-boot phase. When registering uart pclk in the kernel phase,
-> the CLK_IGNORE_UNUSED flag is added. So the real shutdown is when the
-> standby goes down, the parent clk shuts down.
-Interesting, thanks for sharing that u-boot turns these clocks on.
-Let's say someone wanted to make u-boot save power and turn off all
-UART clocks except the one for uart_AO (where we typically connect the
-serial console).
-In that case the pclk of uart_C (just to choose an example here) is
-turned off. Would there be a problem then accessing the registers of
-uart_C before clk_prepare_enable is called?
+Hi Eric,
 
-[...]
-> >>          port->fifosize = 64;
-> > commit 27d44e05d7b85d ("tty: serial: meson: retrieve port FIFO size
-> > from DT") [0] from May 2021 has changed this line to:
-> >    port->fifosize = fifosize;
-> > So your patch currently does not apply to linux-next (or even Linus'
-> > mainline tree).
-> >
-> So do I need to wait for [0] patch merged before I can continue to make
-> changes ?
-These changes are already merged.
+On Thu, 2021-12-02 at 14:07 -0800, Eric Biggers wrote:
+> On Thu, Dec 02, 2021 at 04:55:06PM -0500, Mimi Zohar wrote:
+> >  	case IMA_VERITY_DIGSIG:
+> > -		fallthrough;
+> > +		set_bit(IMA_DIGSIG, &iint->atomic_flags);
+> > +
+> > +		/*
+> > +		 * The IMA signature is based on a hash of IMA_VERITY_DIGSIG
+> > +		 * and the fs-verity file digest, not directly on the
+> > +		 * fs-verity file digest.  Both digests should probably be
+> > +		 * included in the IMA measurement list, but for now this
+> > +		 * digest is only used for verifying the IMA signature.
+> > +		 */
+> > +		verity_digest[0] = IMA_VERITY_DIGSIG;
+> > +		memcpy(verity_digest + 1, iint->ima_hash->digest,
+> > +		       iint->ima_hash->length);
+> > +
+> > +		hash.hdr.algo = iint->ima_hash->algo;
+> > +		hash.hdr.length = iint->ima_hash->length;
+> 
+> This is still wrong because the bytes being signed don't include the hash
+> algorithm.  Unless you mean for it to be implicitly always SHA-256?  fs-verity
+> supports SHA-512 too, and it may support other hash algorithms in the future.
 
-> What can I do before?
-You should base your changes on top of the tty.git/tty-next branch [1]
-where Greg (the maintainer of this tree) will pick up the patches once
-they are good (got enough Acked-by/Reviewed-by, etc.).
-I suspect that you based your changes on an older or stable kernel
-version (let's say 5.10). New functionality should always get into the
--next tree where various auto-build robots will compile-test the
-changes and we even have Kernel CI where changes are tested on real
-hardware (BayLibre even maintains Amlogic boards in their Kernel CI
-labs). Let's say Amlogic updates to Linux 5.17 next year then the
-patches are already included in that kernel version - instead of being
-only available in Linux 5.10.
+IMA assumes that the file hash algorithm and the signature algorithm
+are the same.   If they're not the same, for whatever reason, the
+signature verification would simply fail.
 
+Based on the v2 signature header 'type' field, IMA can differentiate
+between regular IMA file hash based signatures and fs-verity file
+digest based signatures.  The digest field (d-ng) in the IMA
+meausrement list prefixes the digest with the hash algorithm. I'm
+missing the reason for needing to hash fs-verity's file digest with
+other metadata, and sign that hash rather than fs-verity's file digest
+directly.
 
-Best regards,
-Martin
+thanks,
 
+Mimi
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git/log/?h=tty-next

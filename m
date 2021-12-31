@@ -2,277 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9526C48227B
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 07:25:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97C97482283
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 07:38:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242710AbhLaGZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 01:25:09 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:34863 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbhLaGZG (ORCPT
+        id S229812AbhLaGip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 01:38:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53510 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229699AbhLaGio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 01:25:06 -0500
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JQFVB3vMHzccKC;
-        Fri, 31 Dec 2021 14:24:34 +0800 (CST)
-Received: from localhost.localdomain (10.175.103.91) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 31 Dec 2021 14:25:03 +0800
-From:   Wei Li <liwei391@huawei.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>
-CC:     <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <rui.xiang@huawei.com>
-Subject: [PATCH 2/2] perf tools: Enhance the matching of sub-commands
-Date:   Fri, 31 Dec 2021 14:30:44 +0800
-Message-ID: <20211231063044.2405691-3-liwei391@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211231063044.2405691-1-liwei391@huawei.com>
-References: <20211231063044.2405691-1-liwei391@huawei.com>
+        Fri, 31 Dec 2021 01:38:44 -0500
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFC3C061574;
+        Thu, 30 Dec 2021 22:38:43 -0800 (PST)
+Received: by mail-ed1-x541.google.com with SMTP id w16so106032170edc.11;
+        Thu, 30 Dec 2021 22:38:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7QdT5wIqMLqiDjnbc5NO2sqm1YBwnpTrRkOEfrSvYtM=;
+        b=BRrX0UNubaRo0jTyr/gSq1Vv3qZcep0y9pArACTiMqqa5PvMX1Xed25KkzJAKU1k9e
+         I2ATbje+ranMVDT7J7sRMPx7Jj1ZBUYhp816LNlX11Hl4iGHgwCfdVWXysjkGeOzjfco
+         y8Hls+QQbk2DsQUmr8b4VJ7EAcdq85NNpNPrtTKNSCK9w7NY5OOO9efCzoW2mQ3+8IJI
+         JuRr9YINEmBuoZJN0H/YpXPApT9sMxRUG43XaOfS7pqG5lMUD5eW79v8QbXPj6D6aemY
+         1SXX5y8iD6mZbAC+Pmr2zc0hiHToOMW2y8y4TvdsA1bTxKqqWlPlEIxJ4XnQ4K3pta8+
+         mvoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7QdT5wIqMLqiDjnbc5NO2sqm1YBwnpTrRkOEfrSvYtM=;
+        b=ci7I+Pi1cWjXkyYHnet6zOA+aDNuqd4xJqMag5iwmHuJuAxhe25qg97B8Q0hurdec/
+         gUDBTfYEzN+fU7Qxji7GoLVSw2PRlOHS1gCEA22juaYdg6CZghWh+Ys7IUu0cfzY0Me5
+         0jpeo8u0eqQJ4KTqSdX+QNHe8Zb8ttC0RisDlgDcRd61lNCnvCPiGTR4JmBMKpmweFcA
+         qoHwS32wuO2vZBzGmUd04sNPNIZay8sghKbIDYM0GT5sW9g5dlwgKHfMdbFi5xy54d3y
+         q70nVO5nfIKT3rYDo3BRJX5n5Lg1/wgxPoHliCN+mY4czT7qpd+OUCZKofkbsbfi58j1
+         UrhA==
+X-Gm-Message-State: AOAM531PmrX1xKOPT8w3iAdxyfre0v6+GzXj0U1/AMkbWIipSm8DMf/4
+        FNQ3RE6v1RPptLBy2LGk7esyuTmIN3ol/vWlr50=
+X-Google-Smtp-Source: ABdhPJwR3+AiHDBRUwjjjhAFaLoDRHgkHJb+lzXnAPIhYb6d3AGfZdHkoXYjtLknto7c4ODWZaHR0o2TZmaJEgCFXrU=
+X-Received: by 2002:a17:907:7e9e:: with SMTP id qb30mr26583877ejc.348.1640932722369;
+ Thu, 30 Dec 2021 22:38:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
+References: <20211230093240.1125937-1-imagedong@tencent.com>
+ <20211230093240.1125937-2-imagedong@tencent.com> <20211230172619.40603ff3@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <20211230172619.40603ff3@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Fri, 31 Dec 2021 14:35:31 +0800
+Message-ID: <CADxym3aonWQoR=XkoLqn_taEhjBYeMf7f2Tgjgnq7fCNT2kHNw@mail.gmail.com>
+Subject: Re: [PATCH v2 net-next 1/3] net: skb: introduce kfree_skb_with_reason()
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        David Ahern <dsahern@kernel.org>, mingo@redhat.com,
+        David Miller <davem@davemloft.net>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        jonathan.lemon@gmail.com, alobakin@pm.me,
+        Kees Cook <keescook@chromium.org>,
+        Paolo Abeni <pabeni@redhat.com>, talalahmad@google.com,
+        haokexin@gmail.com, Menglong Dong <imagedong@tencent.com>,
+        atenart@kernel.org, bigeasy@linutronix.de,
+        Wei Wang <weiwan@google.com>, arnd@arndb.de, vvs@virtuozzo.com,
+        Cong Wang <cong.wang@bytedance.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Mengen Sun <mengensun@tencent.com>, mungerjiang@tencent.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We support short command 'rec*' for 'record' and 'rep*' for 'report' in
-lots of sub-commands, but the matching is not quite strict currnetly.
+On Fri, Dec 31, 2021 at 9:26 AM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Thu, 30 Dec 2021 17:32:38 +0800 menglong8.dong@gmail.com wrote:
+> > From: Menglong Dong <imagedong@tencent.com>
+> >
+> > Introduce the interface kfree_skb_with_reason(), which is used to pass
+> > the reason why the skb is dropped to 'kfree_skb' tracepoint.
+> >
+> > Add the 'reason' field to 'trace_kfree_skb', therefor user can get
+> > more detail information about abnormal skb with 'drop_monitor' or
+> > eBPF.
+>
+> >  void skb_release_head_state(struct sk_buff *skb);
+> >  void kfree_skb(struct sk_buff *skb);
+>
+> Should this be turned into a static inline calling
+> kfree_skb_with_reason() now? BTW you should drop the
+> '_with'.
+>
 
-It may be puzzling sometime, like we mis-type a 'recport' to report but
-it will perform 'record' in fact without any message.
+I thought about it before, but I'm a little afraid that some users may trace
+kfree_skb() with kprobe, making it inline may not be friendly to them?
 
-To fix this, add a check to ensure that the short cmd is valid prefix
-of the real command.
+> > +void kfree_skb_with_reason(struct sk_buff *skb,
+> > +                        enum skb_drop_reason reason);
+>
+> continuation line is unaligned, please try checkpatch
+>
+> >  void kfree_skb_list(struct sk_buff *segs);
+> >  void skb_dump(const char *level, const struct sk_buff *skb, bool full_pkt);
+> >  void skb_tx_error(struct sk_buff *skb);
+> > diff --git a/include/trace/events/skb.h b/include/trace/events/skb.h
+> > index 9e92f22eb086..cab1c08a30cd 100644
+> > --- a/include/trace/events/skb.h
+> > +++ b/include/trace/events/skb.h
+> > @@ -9,29 +9,51 @@
+> >  #include <linux/netdevice.h>
+> >  #include <linux/tracepoint.h>
+> >
+> > +#define TRACE_SKB_DROP_REASON                                        \
+> > +     EM(SKB_DROP_REASON_NOT_SPECIFIED, NOT_SPECIFIED)        \
+> > +     EMe(SKB_DROP_REASON_MAX, HAHA_MAX)
+>
+> HAHA_MAX ?
 
-Signed-off-by: Wei Li <liwei391@huawei.com>
----
- tools/perf/builtin-c2c.c       | 5 +++--
- tools/perf/builtin-kmem.c      | 2 +-
- tools/perf/builtin-kvm.c       | 9 +++++----
- tools/perf/builtin-lock.c      | 5 +++--
- tools/perf/builtin-mem.c       | 5 +++--
- tools/perf/builtin-sched.c     | 4 ++--
- tools/perf/builtin-script.c    | 6 ++++--
- tools/perf/builtin-stat.c      | 4 ++--
- tools/perf/builtin-timechart.c | 3 ++-
- 9 files changed, 25 insertions(+), 18 deletions(-)
+Enn......WOW_MAX? Just kidding, I'll make it 'MAX' (or remove this line,
+as it won't be used).
 
-diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
-index b5c67ef73862..e9d98ffa59c7 100644
---- a/tools/perf/builtin-c2c.c
-+++ b/tools/perf/builtin-c2c.c
-@@ -44,6 +44,7 @@
- #include "../perf.h"
- #include "pmu.h"
- #include "pmu-hybrid.h"
-+#include "string2.h"
- 
- struct c2c_hists {
- 	struct hists		hists;
-@@ -3024,9 +3025,9 @@ int cmd_c2c(int argc, const char **argv)
- 	if (!argc)
- 		usage_with_options(c2c_usage, c2c_options);
- 
--	if (!strncmp(argv[0], "rec", 3)) {
-+	if (!strncmp(argv[0], "rec", 3) && strcmp_prefix("record", argv[0])) {
- 		return perf_c2c__record(argc, argv);
--	} else if (!strncmp(argv[0], "rep", 3)) {
-+	} else if (!strncmp(argv[0], "rep", 3) && strcmp_prefix("report", argv[0])) {
- 		return perf_c2c__report(argc, argv);
- 	} else {
- 		usage_with_options(c2c_usage, c2c_options);
-diff --git a/tools/perf/builtin-kmem.c b/tools/perf/builtin-kmem.c
-index da03a341c63c..94db540430fe 100644
---- a/tools/perf/builtin-kmem.c
-+++ b/tools/perf/builtin-kmem.c
-@@ -1946,7 +1946,7 @@ int cmd_kmem(int argc, const char **argv)
- 			kmem_page = 1;
- 	}
- 
--	if (!strncmp(argv[0], "rec", 3)) {
-+	if (!strncmp(argv[0], "rec", 3) && strcmp_prefix("record", argv[0])) {
- 		symbol__init(NULL);
- 		return __cmd_record(argc, argv);
- 	}
-diff --git a/tools/perf/builtin-kvm.c b/tools/perf/builtin-kvm.c
-index c6f352ee57e6..afdfc5931df6 100644
---- a/tools/perf/builtin-kvm.c
-+++ b/tools/perf/builtin-kvm.c
-@@ -24,6 +24,7 @@
- #include "util/ordered-events.h"
- #include "util/kvm-stat.h"
- #include "ui/ui.h"
-+#include "util/string2.h"
- 
- #include <sys/prctl.h>
- #ifdef HAVE_TIMERFD_SUPPORT
-@@ -1500,10 +1501,10 @@ static int kvm_cmd_stat(const char *file_name, int argc, const char **argv)
- 		goto perf_stat;
- 	}
- 
--	if (!strncmp(argv[1], "rec", 3))
-+	if (!strncmp(argv[1], "rec", 3) && strcmp_prefix("record", argv[1]))
- 		return kvm_events_record(&kvm, argc - 1, argv + 1);
- 
--	if (!strncmp(argv[1], "rep", 3))
-+	if (!strncmp(argv[1], "rep", 3) && strcmp_prefix("report", argv[1]))
- 		return kvm_events_report(&kvm, argc - 1 , argv + 1);
- 
- #ifdef HAVE_TIMERFD_SUPPORT
-@@ -1631,9 +1632,9 @@ int cmd_kvm(int argc, const char **argv)
- 		}
- 	}
- 
--	if (!strncmp(argv[0], "rec", 3))
-+	if (!strncmp(argv[0], "rec", 3) && strcmp_prefix("record", argv[0]))
- 		return __cmd_record(file_name, argc, argv);
--	else if (!strncmp(argv[0], "rep", 3))
-+	else if (!strncmp(argv[0], "rep", 3) && strcmp_prefix("report", argv[0]))
- 		return __cmd_report(file_name, argc, argv);
- 	else if (!strncmp(argv[0], "diff", 4))
- 		return cmd_diff(argc, argv);
-diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-index d70131b7b1b1..7bf7662c6089 100644
---- a/tools/perf/builtin-lock.c
-+++ b/tools/perf/builtin-lock.c
-@@ -18,6 +18,7 @@
- #include "util/session.h"
- #include "util/tool.h"
- #include "util/data.h"
-+#include "util/string2.h"
- 
- #include <sys/types.h>
- #include <sys/prctl.h>
-@@ -997,9 +998,9 @@ int cmd_lock(int argc, const char **argv)
- 	if (!argc)
- 		usage_with_options(lock_usage, lock_options);
- 
--	if (!strncmp(argv[0], "rec", 3)) {
-+	if (!strncmp(argv[0], "rec", 3) && strcmp_prefix("record", argv[0])) {
- 		return __cmd_record(argc, argv);
--	} else if (!strncmp(argv[0], "report", 6)) {
-+	} else if (!strncmp(argv[0], "rep", 3) && strcmp_prefix("report", argv[0])) {
- 		trace_handler = &report_lock_ops;
- 		if (argc) {
- 			argc = parse_options(argc, argv,
-diff --git a/tools/perf/builtin-mem.c b/tools/perf/builtin-mem.c
-index fcf65a59bea2..ed0083d43e27 100644
---- a/tools/perf/builtin-mem.c
-+++ b/tools/perf/builtin-mem.c
-@@ -20,6 +20,7 @@
- #include "util/symbol.h"
- #include "util/pmu.h"
- #include "util/pmu-hybrid.h"
-+#include "util/string2.h"
- #include <linux/err.h>
- 
- #define MEM_OPERATION_LOAD	0x1
-@@ -496,9 +497,9 @@ int cmd_mem(int argc, const char **argv)
- 			mem.input_name = "perf.data";
- 	}
- 
--	if (!strncmp(argv[0], "rec", 3))
-+	if (!strncmp(argv[0], "rec", 3) && strcmp_prefix("record", argv[0]))
- 		return __cmd_record(argc, argv, &mem);
--	else if (!strncmp(argv[0], "rep", 3))
-+	else if (!strncmp(argv[0], "rep", 3) && strcmp_prefix("report", argv[0]))
- 		return report_events(argc, argv, &mem);
- 	else
- 		usage_with_options(mem_usage, mem_options);
-diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
-index 4527f632ebe4..db2b83d996d8 100644
---- a/tools/perf/builtin-sched.c
-+++ b/tools/perf/builtin-sched.c
-@@ -3554,7 +3554,7 @@ int cmd_sched(int argc, const char **argv)
- 	if (!strcmp(argv[0], "script"))
- 		return cmd_script(argc, argv);
- 
--	if (!strncmp(argv[0], "rec", 3)) {
-+	if (!strncmp(argv[0], "rec", 3) && strcmp_prefix("record", argv[0])) {
- 		return __cmd_record(argc, argv);
- 	} else if (!strncmp(argv[0], "lat", 3)) {
- 		sched.tp_handler = &lat_ops;
-@@ -3574,7 +3574,7 @@ int cmd_sched(int argc, const char **argv)
- 		sched.tp_handler = &map_ops;
- 		setup_sorting(&sched, latency_options, latency_usage);
- 		return perf_sched__map(&sched);
--	} else if (!strncmp(argv[0], "rep", 3)) {
-+	} else if (!strncmp(argv[0], "rep", 3) && strcmp_prefix("replay", argv[0])) {
- 		sched.tp_handler = &replay_ops;
- 		if (argc) {
- 			argc = parse_options(argc, argv, replay_options, replay_usage, 0);
-diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-index 9434367af166..04735ed08e14 100644
---- a/tools/perf/builtin-script.c
-+++ b/tools/perf/builtin-script.c
-@@ -3849,13 +3849,15 @@ int cmd_script(int argc, const char **argv)
- 	if (symbol__validate_sym_arguments())
- 		return -1;
- 
--	if (argc > 1 && !strncmp(argv[0], "rec", strlen("rec"))) {
-+	if (argc > 1 && !strncmp(argv[0], "rec", strlen("rec")) &&
-+		strcmp_prefix("record", argv[0])) {
- 		rec_script_path = get_script_path(argv[1], RECORD_SUFFIX);
- 		if (!rec_script_path)
- 			return cmd_record(argc, argv);
- 	}
- 
--	if (argc > 1 && !strncmp(argv[0], "rep", strlen("rep"))) {
-+	if (argc > 1 && !strncmp(argv[0], "rep", strlen("rep")) &&
-+		strcmp_prefix("report", argv[0])) {
- 		rep_script_path = get_script_path(argv[1], REPORT_SUFFIX);
- 		if (!rep_script_path) {
- 			fprintf(stderr,
-diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-index 7974933dbc77..bff0689ad15b 100644
---- a/tools/perf/builtin-stat.c
-+++ b/tools/perf/builtin-stat.c
-@@ -2260,11 +2260,11 @@ int cmd_stat(int argc, const char **argv)
- 	} else
- 		stat_config.csv_sep = DEFAULT_SEPARATOR;
- 
--	if (argc && !strncmp(argv[0], "rec", 3)) {
-+	if (argc && !strncmp(argv[0], "rec", 3) && strcmp_prefix("record", argv[0])) {
- 		argc = __cmd_record(argc, argv);
- 		if (argc < 0)
- 			return -1;
--	} else if (argc && !strncmp(argv[0], "rep", 3))
-+	} else if (argc && !strncmp(argv[0], "rep", 3) && strcmp_prefix("report", argv[0]))
- 		return __cmd_report(argc, argv);
- 
- 	interval = stat_config.interval;
-diff --git a/tools/perf/builtin-timechart.c b/tools/perf/builtin-timechart.c
-index 43bf4d67edb0..1b180cfcda74 100644
---- a/tools/perf/builtin-timechart.c
-+++ b/tools/perf/builtin-timechart.c
-@@ -35,6 +35,7 @@
- #include "util/tool.h"
- #include "util/data.h"
- #include "util/debug.h"
-+#include "util/string2.h"
- #include <linux/err.h>
- 
- #ifdef LACKS_OPEN_MEMSTREAM_PROTOTYPE
-@@ -1983,7 +1984,7 @@ int cmd_timechart(int argc, const char **argv)
- 		return -1;
- 	}
- 
--	if (argc && !strncmp(argv[0], "rec", 3)) {
-+	if (argc && !strncmp(argv[0], "rec", 3) && strcmp_prefix("record", argv[0])) {
- 		argc = parse_options(argc, argv, timechart_record_options,
- 				     timechart_record_usage,
- 				     PARSE_OPT_STOP_AT_NON_OPTION);
--- 
-2.25.1
+>
+> > +
+> > +#undef EM
+> > +#undef EMe
+> > +
+> > +#define EM(a, b)     TRACE_DEFINE_ENUM(a);
+> > +#define EMe(a, b)    TRACE_DEFINE_ENUM(a);
+> > +
+> > +TRACE_SKB_DROP_REASON
+> > +
+> > +#undef EM
+> > +#undef EMe
+> > +#define EM(a, b)     { a, #b },
+> > +#define EMe(a, b)    { a, #b }
+> > +
+> > +
+>
+> double new line
 
+Get it!
+
+Thanks~
+Menglong Dong
+
+>
+> >  /*
+> >   * Tracepoint for free an sk_buff:
+> >   */
+> >  TRACE_EVENT(kfree_skb,
+> >
+> > -     TP_PROTO(struct sk_buff *skb, void *location),
+> > +     TP_PROTO(struct sk_buff *skb, void *location,
+> > +              enum skb_drop_reason reason),
+> >
+> > -     TP_ARGS(skb, location),
+> > +     TP_ARGS(skb, location, reason),
+> >
+> >       TP_STRUCT__entry(
+> > -             __field(        void *,         skbaddr         )
+> > -             __field(        void *,         location        )
+> > -             __field(        unsigned short, protocol        )
+> > +             __field(void *,         skbaddr)
+> > +             __field(void *,         location)
+> > +             __field(unsigned short, protocol)
+> > +             __field(enum skb_drop_reason,   reason)
+> >       ),
+> >
+> >       TP_fast_assign(
+> >               __entry->skbaddr = skb;
+> >               __entry->location = location;
+> >               __entry->protocol = ntohs(skb->protocol);
+> > +             __entry->reason = reason;
+> >       ),
+> >
+> > -     TP_printk("skbaddr=%p protocol=%u location=%p",
+> > -             __entry->skbaddr, __entry->protocol, __entry->location)
+> > +     TP_printk("skbaddr=%p protocol=%u location=%p reason: %s",
+> > +             __entry->skbaddr, __entry->protocol, __entry->location,
+> > +             __print_symbolic(__entry->reason, TRACE_SKB_DROP_REASON))
+> >  );
+> >
+> >  TRACE_EVENT(consume_skb,
+> > diff --git a/net/core/dev.c b/net/core/dev.c
+> > index 644b9c8be3a8..9464dbf9e3d6 100644
+> > --- a/net/core/dev.c
+> > +++ b/net/core/dev.c
+> > @@ -4899,7 +4899,8 @@ static __latent_entropy void net_tx_action(struct softirq_action *h)
+> >                       if (likely(get_kfree_skb_cb(skb)->reason == SKB_REASON_CONSUMED))
+> >                               trace_consume_skb(skb);
+> >                       else
+> > -                             trace_kfree_skb(skb, net_tx_action);
+> > +                             trace_kfree_skb(skb, net_tx_action,
+> > +                                             SKB_DROP_REASON_NOT_SPECIFIED);
+> >
+> >                       if (skb->fclone != SKB_FCLONE_UNAVAILABLE)
+> >                               __kfree_skb(skb);
+> > diff --git a/net/core/drop_monitor.c b/net/core/drop_monitor.c
+> > index 3d0ab2eec916..7b288a121a41 100644
+> > --- a/net/core/drop_monitor.c
+> > +++ b/net/core/drop_monitor.c
+> > @@ -110,7 +110,8 @@ static u32 net_dm_queue_len = 1000;
+> >
+> >  struct net_dm_alert_ops {
+> >       void (*kfree_skb_probe)(void *ignore, struct sk_buff *skb,
+> > -                             void *location);
+> > +                             void *location,
+> > +                             enum skb_drop_reason reason);
+> >       void (*napi_poll_probe)(void *ignore, struct napi_struct *napi,
+> >                               int work, int budget);
+> >       void (*work_item_func)(struct work_struct *work);
+> > @@ -262,7 +263,9 @@ static void trace_drop_common(struct sk_buff *skb, void *location)
+> >       spin_unlock_irqrestore(&data->lock, flags);
+> >  }
+> >
+> > -static void trace_kfree_skb_hit(void *ignore, struct sk_buff *skb, void *location)
+> > +static void trace_kfree_skb_hit(void *ignore, struct sk_buff *skb,
+> > +                             void *location,
+> > +                             enum skb_drop_reason reason)
+> >  {
+> >       trace_drop_common(skb, location);
+> >  }
+> > @@ -490,7 +493,8 @@ static const struct net_dm_alert_ops net_dm_alert_summary_ops = {
+> >
+> >  static void net_dm_packet_trace_kfree_skb_hit(void *ignore,
+> >                                             struct sk_buff *skb,
+> > -                                           void *location)
+> > +                                           void *location,
+> > +                                           enum skb_drop_reason reason)
+> >  {
+> >       ktime_t tstamp = ktime_get_real();
+> >       struct per_cpu_dm_data *data;
+> > diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> > index 275f7b8416fe..570dc022a8a1 100644
+> > --- a/net/core/skbuff.c
+> > +++ b/net/core/skbuff.c
+> > @@ -770,11 +770,31 @@ void kfree_skb(struct sk_buff *skb)
+> >       if (!skb_unref(skb))
+> >               return;
+> >
+> > -     trace_kfree_skb(skb, __builtin_return_address(0));
+> > +     trace_kfree_skb(skb, __builtin_return_address(0),
+> > +                     SKB_DROP_REASON_NOT_SPECIFIED);
+> >       __kfree_skb(skb);
+> >  }
+> >  EXPORT_SYMBOL(kfree_skb);
+> >
+> > +/**
+> > + *   kfree_skb_with_reason - free an sk_buff with reason
+> > + *   @skb: buffer to free
+> > + *   @reason: reason why this skb is dropped
+> > + *
+> > + *   The same as kfree_skb() except that this function will pass
+> > + *   the drop reason to 'kfree_skb' tracepoint.
+> > + */
+> > +void kfree_skb_with_reason(struct sk_buff *skb,
+> > +                        enum skb_drop_reason reason)
+> > +{
+> > +     if (!skb_unref(skb))
+> > +             return;
+> > +
+> > +     trace_kfree_skb(skb, __builtin_return_address(0), reason);
+> > +     __kfree_skb(skb);
+> > +}
+> > +EXPORT_SYMBOL(kfree_skb_with_reason);
+> > +
+> >  void kfree_skb_list(struct sk_buff *segs)
+> >  {
+> >       while (segs) {
+>

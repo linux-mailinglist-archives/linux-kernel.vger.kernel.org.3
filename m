@@ -2,88 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 865744820F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 01:13:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 093894820F7
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 01:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242362AbhLaAM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 30 Dec 2021 19:12:57 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:48696 "EHLO gloria.sntech.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240794AbhLaAM4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 30 Dec 2021 19:12:56 -0500
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1n35XK-0007No-QN; Fri, 31 Dec 2021 01:12:46 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Yifeng Zhao <yifeng.zhao@rock-chips.com>
-Cc:     robh+dt@kernel.org, jbx6244@gmail.com, devicetree@vger.kernel.org,
-        vkoul@kernel.org, michael.riesch@wolfvision.net,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, kishon@ti.com,
-        p.zabel@pengutronix.de, cl@rock-chips.com,
-        kever.yang@rock-chips.com, lee.jones@linaro.org,
-        wulf@rock-chips.com, Yifeng Zhao <yifeng.zhao@rock-chips.com>
-Subject: Re: [PATCH v7 1/4] dt-bindings: mfd: syscon: add naneng combo phy register compatible
-Date:   Fri, 31 Dec 2021 01:12:45 +0100
-Message-ID: <5585789.uSDJEYM7Em@diego>
-In-Reply-To: <20211230084815.28110-2-yifeng.zhao@rock-chips.com>
-References: <20211230084815.28110-1-yifeng.zhao@rock-chips.com> <20211230084815.28110-2-yifeng.zhao@rock-chips.com>
+        id S239708AbhLaATk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 30 Dec 2021 19:19:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56486 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233018AbhLaATk (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 30 Dec 2021 19:19:40 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED49C061574
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 16:19:39 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id f18-20020a17090aa79200b001ad9cb23022so24385770pjq.4
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 16:19:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=NkqRNNqdWnGnE0W/FPoPkuJT53qZDL0ppvXkFpYOLH0=;
+        b=Wyr+9BhjCsOXR3L78Hkb48nq/AiQO0hWGBvmvgeWkGmDfGbULdR67cAiqu5foOt0Y8
+         ZSqNuZQEJ8EyCjbJIuR/uK7I7X5qnXeqXgiKAqHUmJUH0+lZ0HP80YbkPgLZHHRHBQIJ
+         5uCTUvM+8poGE8Hsp3AHoKZhTNBdPmTftsFjeX0YfdNWp5xXVcV3Qo7loaCp5DJ+Jkg/
+         doztlJX7ZFKJMDv5suL+3LoA7CsoQ8Q9C2DB8BPGY7V2Z3OLobudOdikRSn9Fu4EVzzi
+         uFtxwa6PzZZFFuXXK0ERZGVkKp6TOQUUqWkIu671PVoiD/q+C0Thylj5RKYi4T6PDG/8
+         ibPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=NkqRNNqdWnGnE0W/FPoPkuJT53qZDL0ppvXkFpYOLH0=;
+        b=0m8V0JKSLB2sHlaJwNgeT+dHSA5kqHRzcOttKWBQ61INqaUEy4JUGo9XqBjoaxOSIa
+         +Qz93exjrD/shIIi96RkilHl2GJazy1i1iNR6JWi3KWVfWyYATwapMJBCkHnbg9R1bhJ
+         0xDJ6zUxDNbvzzB9bdFGVFXfNMUeCm2zGKhKvnfXPlORQsWRwCB4HpTgNlxQt+XhD6So
+         jDNHPNKJ/RnSOs35Z5wuq5V2Rmu7ex3N1KwDQeDPt+WHbU4F5agVRK3TMwu0G8ZLfuwp
+         glC8JSBHy2thXmtHCHxa2oBlrY0OOS3Xrgg86qEpapByTY0mXfZBeOo98AtWoL93gXIi
+         FGOg==
+X-Gm-Message-State: AOAM533tRKqoOOq5PY6mR84ndIz5wBtVj89fZALWktUYqoUVkGg/D+4j
+        br7pvDa6ukHtAdp5Dl6DaDE=
+X-Google-Smtp-Source: ABdhPJw+ibIWzDJmRsxqV8rxNJpYCQa722YIWG/QIFpWLfxbcbZVrugjVI+wrejWywkT62zAraOt8g==
+X-Received: by 2002:a17:902:e28a:b0:149:907a:1b4e with SMTP id o10-20020a170902e28a00b00149907a1b4emr15380960plc.44.1640909979409;
+        Thu, 30 Dec 2021 16:19:39 -0800 (PST)
+Received: from mail.google.com (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
+        by smtp.gmail.com with ESMTPSA id ev3sm28843282pjb.48.2021.12.30.16.19.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Dec 2021 16:19:38 -0800 (PST)
+Date:   Fri, 31 Dec 2021 13:19:33 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     gregkh@linuxfoundation.org, paulo.miguel.almeida.rodenas@gmail.com
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] staging: pi433: add docs to packet_format and
+ tx_start_condition enum
+Message-ID: <20211231001933.GA6779@mail.google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yifeng,
+While pi433 driver deals with the nuances of the different possible
+config combinations, it's hard (at first) to understand the rationale
+for some of the tx/rx-related source code unless you're fairly familiar
+with the rf69's inner workings.
 
-Am Donnerstag, 30. Dezember 2021, 09:48:12 CET schrieb Yifeng Zhao:
-> From: Johan Jonker <jbx6244@gmail.com>
-> 
-> Add naneng combo phy register compatible.
-> 
-> Acked-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-> Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
-> ---
-> 
-> Changes in v7: None
-> Changes in v5: None
-> Changes in v4: None
-> Changes in v3: None
-> Changes in v2: None
-> 
->  Documentation/devicetree/bindings/mfd/syscon.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
-> index fdd96e378df0..e9bb96ab9446 100644
-> --- a/Documentation/devicetree/bindings/mfd/syscon.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
-> @@ -52,6 +52,8 @@ properties:
->                - rockchip,rk3288-qos
->                - rockchip,rk3368-qos
->                - rockchip,rk3399-qos
-> +              - rockchip,rk3568-pipe-grf
-> +              - rockchip,rk3568-pipe-phy-grf
+This patch documents the expected behaviour and limits of both
+packet_format and tx_start_condition enum fields.
 
-can you please move these to the grf.yaml as discussed in the previous
-version.
+Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+---
+v3: fix formatting issue (Req Greg k-h bot)
+v2: remove comments pointed out during v1 review (Req Greg k-h)
+v1: https://lore.kernel.org/lkml/20211229094713.GA28795@localhost.localdomain/
+---
+ drivers/staging/pi433/rf69_enum.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Background is of course to keep all *-grf compatibles in the same file.
-
-Thanks
-Heiko
-
-
->                - rockchip,rk3568-qos
->                - samsung,exynos3-sysreg
->                - samsung,exynos4-sysreg
-> 
-
-
-
+diff --git a/drivers/staging/pi433/rf69_enum.h b/drivers/staging/pi433/rf69_enum.h
+index fbf56fcf5fe8..b33a33a85d3b 100644
+--- a/drivers/staging/pi433/rf69_enum.h
++++ b/drivers/staging/pi433/rf69_enum.h
+@@ -110,12 +110,24 @@ enum fifo_fill_condition {
+ };
+ 
+ enum packet_format {
++	/*
++	 * Used when the size of payload is fixed in advance. This mode of
++	 * operation may be of interest to minimize RF overhead by 1 byte as
++	 * no length byte field is required
++	 */
+ 	packet_length_fix,
++	/*
++	 * Used when the size of payload isn't known in advance. It requires the
++	 * transmitter to send the length byte in each packet so the receiver
++	 * would know how to operate properly
++	 */
+ 	packet_length_var
+ };
+ 
+ enum tx_start_condition {
++	/* the number of bytes in the FIFO exceeds FIFO_THRESHOLD */
+ 	fifo_level,
++	/* at least one byte in the FIFO */
+ 	fifo_not_empty
+ };
+ 
+-- 
+2.25.4
 

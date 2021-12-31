@@ -2,169 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C5A482261
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 07:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDE1548226F
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 07:17:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237073AbhLaGDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 01:03:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45858 "EHLO
+        id S239991AbhLaGRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 01:17:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbhLaGDg (ORCPT
+        with ESMTP id S229496AbhLaGRa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 01:03:36 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A050C061574
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 22:03:35 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id 200so23118769pgg.3
-        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 22:03:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=HZZLgE4W8fug2FCzGFVaCkPrWVmBPVIP5iwpvtWZJVg=;
-        b=Cq8jM3Plos8Gav7O/Yczrs+aoQcTlmynuwKq4qtx4Y9ntm4IsOAJD8HXZcPMF9PXDA
-         n7QtHmKLmBtZ9/TQ72dGwx/a88dAnpGeIzcUAN+0YRyGZQBOoTVRI1ORhQ6XRehm9agG
-         Ps5AaMwkwr5+/dZZMIQ9VnTNPPSCS/VikQ8daK1SZyc4PfkUiOHK+mb5vbPFPAAVU58K
-         zMJuMHRo7Rxj6tmdlhIdbA3V9YujrGD1pmT0ZQJH8mWqI0NefVrQRBOzJa4g+8VLi9oc
-         ZFbo+s6dlppDueOKCuVVHsnuxUsii5RPx+nYB5G72XA9DDrRIFL91AbYlTqnsYcdktYy
-         iN4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=HZZLgE4W8fug2FCzGFVaCkPrWVmBPVIP5iwpvtWZJVg=;
-        b=Pjy8zEUanT8lm508iasBN3sgkWmIQS/5rRAD4Oup+tgFotn8GggjbP8tnecCwXXFWQ
-         oU1P24+7hpzJI/WLnIVo5uviLIapb6q+Emhl7g79i5q6mUW3DdtF/NvRH/T0oLTQfPJj
-         wEU1eQIRdeWc1m8BUNwVUbhUOFdqZXHop18ZgpqzX3GZ8/DliSctq5YWqzzatZzivXu7
-         xtUZgkUqgJbGQ4lBDZCdWNTwmnZ5//XbSSy4daIuETsvSK5+W/KMfF7T7vHuvtesjyGY
-         R3Ow2tB5T4Y2GfTo+ETjuzRoK+cm65m57wyccA3hICgsJxwMOjtCiDS16kY1JzcFolDP
-         9Okg==
-X-Gm-Message-State: AOAM5303Ms3snMhrups6zpjBgJeho4whtB4Tl8oaDy9BF8cFlN93J0lQ
-        mbr5+2EHvcPOvfsfpOcH18E=
-X-Google-Smtp-Source: ABdhPJxIjjJNL4mJcLi3Yh76Jm2d4gfvToDz3xQQw1CdxUczthnJiF5S5kKUNgio1tH2d7YOpZ8mTQ==
-X-Received: by 2002:a63:2cd1:: with SMTP id s200mr30287649pgs.251.1640930614972;
-        Thu, 30 Dec 2021 22:03:34 -0800 (PST)
-Received: from bj09640pcu.spreadtrum.com ([117.18.48.102])
-        by smtp.gmail.com with ESMTPSA id i4sm12832070pjj.30.2021.12.30.22.03.31
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 30 Dec 2021 22:03:34 -0800 (PST)
-From:   weidong guan <weidong.guanguan@gmail.com>
-To:     daniel.lezcano@linaro.org
-Cc:     tglx@linutronix.de, orsonzhai@gmail.com, baolin.wang7@gmail.com,
-        zhang.lyra@gmail.com, linux-kernel@vger.kernel.org,
-        "weidong.guan" <weidong.guan@unisoc.com>
-Subject: [PATCH] clocksource: fix counter with 32bit may wrap around
-Date:   Fri, 31 Dec 2021 14:02:35 +0800
-Message-Id: <1640930555-12220-1-git-send-email-weidong.guanguan@gmail.com>
-X-Mailer: git-send-email 1.9.1
+        Fri, 31 Dec 2021 01:17:30 -0500
+X-Greylist: delayed 150 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 30 Dec 2021 22:17:29 PST
+Received: from resqmta-a1p-077720.sys.comcast.net (resqmta-a1p-077720.sys.comcast.net [IPv6:2001:558:fd01:2bb4::6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98AEC061574
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 22:17:29 -0800 (PST)
+Received: from resomta-a1p-077059.sys.comcast.net ([96.103.145.240])
+        by resqmta-a1p-077720.sys.comcast.net with ESMTP
+        id 3BAPnk5l5IUDU3BBpnFPcc; Fri, 31 Dec 2021 06:14:57 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=comcast.net;
+        s=20190202a; t=1640931297;
+        bh=B8RJ34LocrDqPDwZMnx/NOtlAthCdFGYGjocIeA+vIk=;
+        h=Received:Received:From:To:Subject:Date:Message-Id:MIME-Version;
+        b=FY5av+ONgK5OAVhD1kJvwQbEykaWOUNNcyl5AQk7ie7G/TFU/APNCb8X4Fhe7385s
+         R5wwrRfT81BmQ/OPwwJ8WHPYH6u9WinXe2/45VNtTBEZVdKOvhML16sStqIsLC78kx
+         S2ubMjZYsT1gCDD3SYFfxwwhyKV59S+Tr/03n92n+V3cSOnKil0gckeUx7rVVGRttW
+         UdG6xSFhAr7tt3k8CEcnNc5LhKV/uX1mAWEf9EYr90DyKLLr+/4vDQEoi9mDJbP0bi
+         yRUTHRTTlzXrCUvGzanc9Ft0V+va6EdVtrlSWPrLCi4lYeXiu+IMknQRT9UhL3Ou02
+         0zODKSYvI+Sjw==
+Received: from w6rz.silicon ([IPv6:2601:647:4700:284:9d56:573c:4e75:fa6c])
+        by resomta-a1p-077059.sys.comcast.net with ESMTPA
+        id 3BBFnSy4GhrTt3BBNnq2cX; Fri, 31 Dec 2021 06:14:32 +0000
+X-Xfinity-VMeta: sc=-100.00;st=legit
+From:   Ron Economos <w6rz@comcast.net>
+To:     Dimitri John Ledkov <dimitri.ledkov@canonical.com>
+Cc:     Ron Economos <w6rz@comcast.net>, Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Vincent Pelletier <plr.vincent@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Qiu Wenbo <qiuwenbo@kylinos.com.cn>,
+        Yash Shah <yash.shah@sifive.com>, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] riscv: dts: sifive unmatched: Add gpio poweroff
+Date:   Thu, 30 Dec 2021 22:11:06 -0800
+Message-Id: <20211231061110.89403-1-w6rz@comcast.net>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "weidong.guan" <weidong.guan@unisoc.com>
+This patch is required for the following commit to work.
 
-When the system sleep time exceeds 30+ hours, counter with 32bit may wrap
-around, resulting in insufficient sleep compensation time. So We should
-enable 64bit counter mode of sprd timer and use the given mult/shift
-to ensure that sufficient counts can be generated.
+commit f2928e224d85 ("riscv: set default pm_power_off to NULL")
 
-Signed-off-by: weidong.guan <weidong.guan@unisoc.com>
+Signed-off-by: Ron Economos <w6rz@comcast.net>
 ---
- drivers/clocksource/timer-sprd.c | 31 ++++++++++++++++++++-----------
- 1 file changed, 20 insertions(+), 11 deletions(-)
+ arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/clocksource/timer-sprd.c b/drivers/clocksource/timer-sprd.c
-index 430cb99..7eac059 100644
---- a/drivers/clocksource/timer-sprd.c
-+++ b/drivers/clocksource/timer-sprd.c
-@@ -30,6 +30,7 @@
- #define TIMER_VALUE_SHDW_HI	0x1c
- 
- #define TIMER_VALUE_LO_MASK	GENMASK(31, 0)
-+#define TIMER_VALUE_64BIT_MASK GENMASK_ULL(63, 0)
- 
- static void sprd_timer_enable(void __iomem *base, u32 flag)
- {
-@@ -57,10 +58,12 @@ static void sprd_timer_disable(void __iomem *base)
- 	writel_relaxed(val, base + TIMER_CTL);
- }
- 
--static void sprd_timer_update_counter(void __iomem *base, unsigned long cycles)
-+static void
-+sprd_timer_update_counter(void __iomem *base, unsigned long long cycles)
- {
- 	writel_relaxed(cycles & TIMER_VALUE_LO_MASK, base + TIMER_LOAD_LO);
--	writel_relaxed(0, base + TIMER_LOAD_HI);
-+	writel_relaxed((cycles >> 32) & TIMER_VALUE_LO_MASK,
-+			base + TIMER_LOAD_HI);
- }
- 
- static void sprd_timer_enable_interrupt(void __iomem *base)
-@@ -82,7 +85,7 @@ static int sprd_timer_set_next_event(unsigned long cycles,
- 	struct timer_of *to = to_timer_of(ce);
- 
- 	sprd_timer_disable(timer_of_base(to));
--	sprd_timer_update_counter(timer_of_base(to), cycles);
-+	sprd_timer_update_counter(timer_of_base(to), (u64)cycles);
- 	sprd_timer_enable(timer_of_base(to), 0);
- 
- 	return 0;
-@@ -93,7 +96,8 @@ static int sprd_timer_set_periodic(struct clock_event_device *ce)
- 	struct timer_of *to = to_timer_of(ce);
- 
- 	sprd_timer_disable(timer_of_base(to));
--	sprd_timer_update_counter(timer_of_base(to), timer_of_period(to));
-+	sprd_timer_update_counter(timer_of_base(to),
-+				  (u64)timer_of_period(to));
- 	sprd_timer_enable(timer_of_base(to), TIMER_CTL_PERIOD_MODE);
- 
- 	return 0;
-@@ -162,15 +166,19 @@ static int __init sprd_timer_init(struct device_node *np)
- 
- static u64 sprd_suspend_timer_read(struct clocksource *cs)
- {
--	return ~(u64)readl_relaxed(timer_of_base(&suspend_to) +
--				   TIMER_VALUE_SHDW_LO) & cs->mask;
-+	u64 value_hi, value_lo;
+diff --git a/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts b/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
+index 6bfa1f24d3de..c4ed9efdff03 100644
+--- a/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
++++ b/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
+@@ -39,6 +39,11 @@ rtcclk: rtcclk {
+ 		clock-frequency = <RTCCLK_FREQ>;
+ 		clock-output-names = "rtcclk";
+ 	};
 +
-+	value_hi = (u64)readl_relaxed(timer_of_base(&suspend_to) + TIMER_VALUE_SHDW_HI);
-+	value_lo = (u64)readl_relaxed(timer_of_base(&suspend_to) + TIMER_VALUE_SHDW_LO);
-+	return ~(u64)((value_hi << 32) + value_lo) & cs->mask;
- }
- 
- static int sprd_suspend_timer_enable(struct clocksource *cs)
- {
- 	sprd_timer_update_counter(timer_of_base(&suspend_to),
--				  TIMER_VALUE_LO_MASK);
--	sprd_timer_enable(timer_of_base(&suspend_to), TIMER_CTL_PERIOD_MODE);
-+				  TIMER_VALUE_64BIT_MASK);
-+	sprd_timer_enable(timer_of_base(&suspend_to),
-+			  TIMER_CTL_PERIOD_MODE|TIMER_CTL_64BIT_WIDTH);
- 
- 	return 0;
- }
-@@ -183,10 +191,12 @@ static void sprd_suspend_timer_disable(struct clocksource *cs)
- static struct clocksource suspend_clocksource = {
- 	.name	= "sprd_suspend_timer",
- 	.rating	= 200,
-+	.mult   = 0x1DCD650,
-+	.shift  = 10,
- 	.read	= sprd_suspend_timer_read,
- 	.enable = sprd_suspend_timer_enable,
- 	.disable = sprd_suspend_timer_disable,
--	.mask	= CLOCKSOURCE_MASK(32),
-+	.mask	= CLOCKSOURCE_MASK(64),
- 	.flags	= CLOCK_SOURCE_IS_CONTINUOUS | CLOCK_SOURCE_SUSPEND_NONSTOP,
++	gpio-poweroff {
++		compatible = "gpio-poweroff";
++		gpios = <&gpio 2 GPIO_ACTIVE_LOW>;
++	};
  };
  
-@@ -198,8 +208,7 @@ static int __init sprd_suspend_timer_init(struct device_node *np)
- 	if (ret)
- 		return ret;
- 
--	clocksource_register_hz(&suspend_clocksource,
--				timer_of_rate(&suspend_to));
-+	clocksource_register_hz(&suspend_clocksource, 0);
- 
- 	return 0;
- }
+ &uart0 {
 -- 
-1.9.1
+2.25.1
 

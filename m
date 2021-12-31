@@ -2,76 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C534822A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 08:50:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 902924822A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 08:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242764AbhLaHuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 02:50:40 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:48636 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229636AbhLaHuj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 02:50:39 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowACXn1c8ts5hxcaTBQ--.45212S2;
-        Fri, 31 Dec 2021 15:50:20 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     dwlsalmeida@gmail.com, mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] media: vidtv: Check for null return of vzalloc
-Date:   Fri, 31 Dec 2021 15:50:19 +0800
-Message-Id: <20211231075019.1894177-1-jiasheng@iscas.ac.cn>
+        id S242770AbhLaH4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 02:56:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229636AbhLaH4A (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 31 Dec 2021 02:56:00 -0500
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4399FC061574;
+        Thu, 30 Dec 2021 23:56:00 -0800 (PST)
+Received: by mail-qk1-x731.google.com with SMTP id l11so24560904qke.11;
+        Thu, 30 Dec 2021 23:56:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7zbpRrLBrCKgX6NkoRmj/V8e4hwO+gRAuTh6iRR6fRI=;
+        b=gZeajJuxp7WDIeKV55HDgQxImZZ8Zp1E+Uks8G+1W/dECIW0wqGPRC/T41C0A9uaOJ
+         CyR1IkcYi+7jNKy/+HG+2kKZe/AijQd/evChNOe2vXnLD3nVU8XLceptctr2mJQ3gteM
+         iFfwsVnefhAph6n0r5o+adjSCMprBSdp78HJLN+SeeJi/R6nWtEl91hqolwr4a+m4k5J
+         sdxZDPp6Jx8WTfhtlBhePiP/Ndgfmh6Uv4xck/GpVn625MgCGlN6C6vF8NOhaJEtChN7
+         4gyLUKez/v52X29BDG8majal6Nt1GjYA7/5dmFKmcUjtB9/LOWdx0bmQyrSSlBYUkHy4
+         p/jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7zbpRrLBrCKgX6NkoRmj/V8e4hwO+gRAuTh6iRR6fRI=;
+        b=XvaaZ5qor8hrx2MK6Zj2HvXDNrvRE1bIFYeFfm9IC1GNT+cEZtKdgKcLSC90qORYzr
+         9mrhH1ciFUQyErXNAjy8I+hKK1iNLrPlsA2RydR7J2PEwePcim2+FaAXOSAJIYktVQyW
+         D/zYmf27IktOF6nzx1Ald1EnOVeGBhabkFRc65KCjIw+7DZmWlZESGUBlt9DT6FBsHLD
+         nQeV6Xujnzm2GE+vFXKUzm3LANSELA+uZCRBUq1qWJoLz/d3cTjfj+c/ugRDFvmb7+YW
+         QWdWjEg6dOtMsqS3DDX1DdgSiYXo3/FGKmI82V+CUlGG/Rw/VMFHaCoqndYQnespRwG0
+         mh7Q==
+X-Gm-Message-State: AOAM531+uSee9aHcFHnwYXEjLoIgYReNh1OpSKiI3zRA1VLUlDzEKa8x
+        1nrGbNDG8LrAdp0nUirQEEw=
+X-Google-Smtp-Source: ABdhPJyKkY7fb4yE50itA6Vyq1mfU98xDilbpOVABc56ExnAcKSWM8rEgm1SyQmncVQP7Y+Trbf7pA==
+X-Received: by 2002:a05:620a:450a:: with SMTP id t10mr24054473qkp.412.1640937358326;
+        Thu, 30 Dec 2021 23:55:58 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id y16sm19779866qki.41.2021.12.30.23.55.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Dec 2021 23:55:57 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: xu.xin16@zte.com.cn
+To:     masahiroy@kernel.org, michal.lkml@markovi.net,
+        ndesaulniers@google.com
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xu xin <xu.xin16@zte.com.cn>
+Subject: [PATCH] Fix compilation errors when using special directory
+Date:   Fri, 31 Dec 2021 07:55:51 +0000
+Message-Id: <20211231075551.589515-1-xu.xin16@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowACXn1c8ts5hxcaTBQ--.45212S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Jw4DJr1DWFyrurWDZr1rCrg_yoWDGwb_ua
-        n3Xr1xWayUKrWrtrnrtr1xZry0kaykuFyvgFnxt3ySvFy3ZF18Jryjvr18Gw429rZ09FZr
-        Aw43Xr1F9r1xGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbcxFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8CwCF
-        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjKFAPUUUUU==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the possible failure of the vzalloc(), e->encoder_buf might be NULL.
-Therefore, it should be better to check it like the kzalloc() in order
-to guarantee the success of the initialization.
+From: xu xin <xu.xin16@zte.com.cn>
 
-Fixes: f90cf6079bf6 ("media: vidtv: add a bridge driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+When we compile the kernel with cross compilers, if CROSS_COMPILE is
+specified by the path containing special directory like '~', some
+compilation error will occurs.
+
+Here's an example:
+
+$ make ARCH=x86_64
+CROSS_COMPILE=~/x86_64_gcc9.2.0_glibc2.31.0/bin/x86_64-pc-linux-gnu- all
+
+error:./scripts/mkcompile_h: line 64:
+~/x86_64_gcc9.2.0_glibc2.31.0/bin/x86_64-pc-linux-gnu-ld: No such file or
+directory
+
+Since there are many other similar scripts using these variables, in
+order to solve the problem from the source, add realpath in makefile to
+turn these variables into absolute paths.
+
+Signed-off-by: xu xin <xu.xin16@zte.com.cn>
 ---
- drivers/media/test-drivers/vidtv/vidtv_s302m.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ Makefile | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_s302m.c b/drivers/media/test-drivers/vidtv/vidtv_s302m.c
-index d79b65854627..d7907f1ae530 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_s302m.c
-+++ b/drivers/media/test-drivers/vidtv/vidtv_s302m.c
-@@ -455,6 +455,11 @@ struct vidtv_encoder
- 		e->name = kstrdup(args.name, GFP_KERNEL);
- 
- 	e->encoder_buf = vzalloc(VIDTV_S302M_BUF_SZ);
-+	if (!e->encoder_buf) {
-+		kfree(e);
-+		return NULL;
-+	}
-+
- 	e->encoder_buf_sz = VIDTV_S302M_BUF_SZ;
- 	e->encoder_buf_offset = 0;
- 
+diff --git a/Makefile b/Makefile
+index fe5a4d8e4ac5..cdbb747787ac 100644
+--- a/Makefile
++++ b/Makefile
+@@ -459,14 +459,14 @@ OBJDUMP		= llvm-objdump
+ READELF		= llvm-readelf
+ STRIP		= llvm-strip
+ else
+-CC		= $(CROSS_COMPILE)gcc
+-LD		= $(CROSS_COMPILE)ld
+-AR		= $(CROSS_COMPILE)ar
+-NM		= $(CROSS_COMPILE)nm
+-OBJCOPY		= $(CROSS_COMPILE)objcopy
+-OBJDUMP		= $(CROSS_COMPILE)objdump
+-READELF		= $(CROSS_COMPILE)readelf
+-STRIP		= $(CROSS_COMPILE)strip
++CC		= $(realpath $(CROSS_COMPILE))gcc
++LD		= $(realpath $(CROSS_COMPILE))ld
++AR		= $(realpath $(CROSS_COMPILE))ar
++NM		= $(realpath $(CROSS_COMPILE))nm
++OBJCOPY		= $(realpath $(CROSS_COMPILE))objcopy
++OBJDUMP		= $(realpath $(CROSS_COMPILE))objdump
++READELF		= $(realpath $(CROSS_COMPILE))readelf
++STRIP		= $(realpath $(CROSS_COMPILE))strip
+ endif
+ RUSTC		= rustc
+ RUSTDOC		= rustdoc
 -- 
 2.25.1
 

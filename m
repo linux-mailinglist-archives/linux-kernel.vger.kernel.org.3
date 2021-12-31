@@ -2,101 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A16304825D5
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 21:58:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE1A4825DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 22:05:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbhLaU57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 15:57:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41656 "EHLO
+        id S231775AbhLaVEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 16:04:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbhLaU56 (ORCPT
+        with ESMTP id S231670AbhLaVEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 15:57:58 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A09AC061574;
-        Fri, 31 Dec 2021 12:57:58 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.94.2)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1n3OyI-0004u3-P8; Fri, 31 Dec 2021 21:57:54 +0100
-Date:   Fri, 31 Dec 2021 20:57:43 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>, Michael Lee <igvtee@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH v9 1/3] net: mdio: add helpers to extract clause 45 regad and
- devad fields
-Message-ID: <Yc9uphz7RGb63kzM@makrotopia.org>
-References: <Ycr5Cna76eg2B0An@shell.armlinux.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ycr5Cna76eg2B0An@shell.armlinux.org.uk>
+        Fri, 31 Dec 2021 16:04:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00521C061574;
+        Fri, 31 Dec 2021 13:04:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9A7A61828;
+        Fri, 31 Dec 2021 21:04:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E3D6C36AEA;
+        Fri, 31 Dec 2021 21:04:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1640984669;
+        bh=9LdS4YJ2dTX8nxYH2HymplEjjux9p/BXT0uHZJPppE4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HPd73zj0+Ds30HpWM2w3T3pzK97Th2xrvft4vEQqFUwCO3LLVx3QsMsQftC6YAJuA
+         L76ehC6mRgp6Iy80AniCihq+049S8007yW/lNnye34QV+x86qlCKlmBFrizvHlhRte
+         wH3yaNE8SRLLVoQ/5BYJGCQCG9om9f8amj6LPD2Q=
+Date:   Fri, 31 Dec 2021 13:04:27 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mark Brown <broonie@kernel.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Alexey Avramov <hakavlad@inbox.lv>,
+        Rik van Riel <riel@surriel.com>,
+        Mike Galbraith <efault@gmx.de>,
+        Darrick Wong <djwong@kernel.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 1/1] mm: vmscan: Reduce throttling due to a failure
+ to make progress
+Message-Id: <20211231130427.2239793015906a1c1ede44a4@linux-foundation.org>
+In-Reply-To: <CAHk-=whj9ZWJ2Fmv2vY-NAB_nR-KgpzpRx6Oxs=ayyTEN7E8zw@mail.gmail.com>
+References: <20211202150614.22440-1-mgorman@techsingularity.net>
+        <caf247ab-f6fe-a3b9-c4b5-7ce17d1d5e43@leemhuis.info>
+        <20211229154553.09dd5bb657bc19d45c3de8dd@linux-foundation.org>
+        <5c9d7c6b-05cd-4d17-b941-a93d90197cd3@leemhuis.info>
+        <CAHk-=wi3z_aFJ7kkJb+GDLzUMAzxYMRpVzuMRh5QFaFJnhGydA@mail.gmail.com>
+        <CAHk-=whj9ZWJ2Fmv2vY-NAB_nR-KgpzpRx6Oxs=ayyTEN7E8zw@mail.gmail.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+On Fri, 31 Dec 2021 11:21:14 -0800 Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-Add a couple of helpers and definitions to extract the clause 45 regad
-and devad fields from the regnum passed into MDIO drivers.
+> On Fri, Dec 31, 2021 at 11:14 AM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > On Fri, Dec 31, 2021 at 6:24 AM Thorsten Leemhuis
+> > <regressions@leemhuis.info> wrote:
+> > >
+> > > If we get it into rc8 (which is still possible, even if a bit hard due
+> > > to the new year festivities), it will get at least one week of testing.
+> >
+> > I took it with Hugh's ack from his reply to this, so it should be in rc8.
+> 
+> Pushed out as 1b4e3f26f9f7 ("mm: vmscan: Reduce throttling due to a
+> failure to make progress")
 
-Tested-by: Daniel Golle <daniel@makrotopia.org>
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Needs this fixup, which I shall tweak a bit then send formally
+in a few minutes.
+
+
+From: Mel Gorman <mgorman@techsingularity.net>
+Subject: mm: vmscan: reduce throttling due to a failure to make progress -fix
+
+Hugh Dickins reported the following
+
+	My tmpfs swapping load (tweaked to use huge pages more heavily
+	than in real life) is far from being a realistic load: but it was
+	notably slowed down by your throttling mods in 5.16-rc, and this
+	patch makes it well again - thanks.
+
+	But: it very quickly hit NULL pointer until I changed that last
+	line to
+
+        if (first_pgdat)
+                consider_reclaim_throttle(first_pgdat, sc);
+
+The likely issue is that huge pages are a major component of the test
+workload. When this is the case, first_pgdat may never get set if
+compaction is ready to continue due to this check
+
+        if (IS_ENABLED(CONFIG_COMPACTION) &&
+            sc->order > PAGE_ALLOC_COSTLY_ORDER &&
+            compaction_ready(zone, sc)) {
+                sc->compaction_ready = true;
+                continue;
+        }
+
+If this was true for every zone in the zonelist, first_pgdat would never
+get set resulting in a NULL pointer exception.
+
+This is a fix to the mmotm patch
+mm-vmscan-reduce-throttling-due-to-a-failure-to-make-progress.patch
+
+Link: https://lkml.kernel.org/r/20211209095453.GM3366@techsingularity.net
+Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+Reported-by: Hugh Dickins <hughd@google.com>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Rik van Riel <riel@surriel.com>
+Cc: Mike Galbraith <efault@gmx.de>
+Cc: Darrick J. Wong <djwong@kernel.org>
+Cc: Shakeel Butt <shakeelb@google.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 ---
-v9: unchanged
-v8: First inclusing upon comment on mailing list
 
- include/linux/mdio.h | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ mm/vmscan.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/mdio.h b/include/linux/mdio.h
-index 9f3587a61e145..ecac96d52e010 100644
---- a/include/linux/mdio.h
-+++ b/include/linux/mdio.h
-@@ -7,6 +7,7 @@
- #define __LINUX_MDIO_H__
+--- a/mm/vmscan.c~mm-vmscan-reduce-throttling-due-to-a-failure-to-make-progress-fix
++++ a/mm/vmscan.c
+@@ -3530,7 +3530,8 @@ static void shrink_zones(struct zonelist
+ 		shrink_node(zone->zone_pgdat, sc);
+ 	}
  
- #include <uapi/linux/mdio.h>
-+#include <linux/bitfield.h>
- #include <linux/mod_devicetable.h>
+-	consider_reclaim_throttle(first_pgdat, sc);
++	if (first_pgdat)
++		consider_reclaim_throttle(first_pgdat, sc);
  
- /* Or MII_ADDR_C45 into regnum for read/write on mii_bus to enable the 21 bit
-@@ -14,6 +15,7 @@
-  */
- #define MII_ADDR_C45		(1<<30)
- #define MII_DEVADDR_C45_SHIFT	16
-+#define MII_DEVADDR_C45_MASK	GENMASK(20, 16)
- #define MII_REGADDR_C45_MASK	GENMASK(15, 0)
- 
- struct gpio_desc;
-@@ -381,6 +383,16 @@ static inline u32 mdiobus_c45_addr(int devad, u16 regnum)
- 	return MII_ADDR_C45 | devad << MII_DEVADDR_C45_SHIFT | regnum;
- }
- 
-+static inline u16 mdiobus_c45_regad(u32 regnum)
-+{
-+	return FIELD_GET(MII_REGADDR_C45_MASK, regnum);
-+}
-+
-+static inline u16 mdiobus_c45_devad(u32 regnum)
-+{
-+	return FIELD_GET(MII_DEVADDR_C45_MASK, regnum);
-+}
-+
- static inline int __mdiobus_c45_read(struct mii_bus *bus, int prtad, int devad,
- 				     u16 regnum)
- {
--- 
-2.34.1
+ 	/*
+ 	 * Restore to original mask to avoid the impact on the caller if we
+_
 

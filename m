@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87282482599
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 20:15:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A0BC4825A1
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 20:27:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231523AbhLaTPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 14:15:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
+        id S231577AbhLaT1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 14:27:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbhLaTPO (ORCPT
+        with ESMTP id S231365AbhLaT1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 14:15:14 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6211C061574
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 11:15:13 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id l5so76840569edj.13
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 11:15:13 -0800 (PST)
+        Fri, 31 Dec 2021 14:27:13 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF644C061574
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 11:27:12 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id j21so111457339edt.9
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 11:27:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=HRhip54+JnwF8oKsLs20EY47pxmh2riYZm3Qc8IBRcM=;
-        b=V7WaTtf3U2sm9T7zwDPV1eYMgoM0U1SemKSgiUC1NGMfC0pOm+NL58I/hVlSHS2kuP
-         nH+9Fjukx33me0dTQKe90FOa9nT9rVcfx4lUU4XO5OR1f4ZQOxOT0O+VQ7baOGx4MnGw
-         YgS3srfJCUf1l5EREBzfqYvFTwBO8Ho+bG7iU=
+        bh=YU06RrU6q8sQBZyTzdprAi1+FG3h7shQoFSUPOjUgj8=;
+        b=WUx8Mhhd4JwVQESuI9u7ibjcwyDeZgExAuH1BIuRaOVdHGHErUrYtd8S4F7h9peeqh
+         8OvDto1JXS/Ie82GmFUdJQWquyftRBj+vshMMwgA2gwN1hOjJnuPUG5fhS0XeSdHGSHu
+         vQalMh1yNNmYCULVdEgZQLxGfTbmoE08YWuvE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=HRhip54+JnwF8oKsLs20EY47pxmh2riYZm3Qc8IBRcM=;
-        b=OX/P40nA6CTh5vwZVmHpwFxTCqD43BD0Mia/lj5Z2q5XCUlT0Lc4caT2fwdaEmsuy5
-         I0qyYxgadj4JbGY74bbt8TOiuna3nBQtxrExaPvXBzGVa3kY+Z7IqVsUTgd5H+g4+XbM
-         14AjPdU0gUwM8RIIVKQSU1eWH4YIUTfdcTvVb+3QcAYJz60U/FB0B7khaLRzuaDZD8aF
-         8911kPzFiHF2WpdUTje41LB89B4H68jVmzmFgK0B+yhD5IgMkvm5Kjbgu0lFlgwrYfoR
-         k2J26bEXLYSCQaPArHrYMFeWwRVqUjZN1/7CzBlOF3I/7FzkJEhBcBIPNvyeaEZ90hJW
-         Ftbw==
-X-Gm-Message-State: AOAM533QJniBAN3QcQ9FkXZBHsAWGch9V4E9Xrqf3Sfr6d9p/JG7aXQi
-        J7FiWculsTuF6Ej2VUBK4B4t9CSVi7kohWf0
-X-Google-Smtp-Source: ABdhPJzu2D3YHVVQrjOf5mHibDWiY0fd9WIKQBR7n6tIW6DUGGqAOj4uKfVXB+KHlSma4hlipAONWQ==
-X-Received: by 2002:a05:6402:6cd:: with SMTP id n13mr35809179edy.248.1640978111522;
-        Fri, 31 Dec 2021 11:15:11 -0800 (PST)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
-        by smtp.gmail.com with ESMTPSA id q14sm10944739edd.40.2021.12.31.11.15.09
+        bh=YU06RrU6q8sQBZyTzdprAi1+FG3h7shQoFSUPOjUgj8=;
+        b=QOrZZT+zNmTxTlpwXVdgPVPgIwNN04JFYdtVjGOoEXVPQhNg9BUVsNz9WWiG2AXv+9
+         l3gWnVjbTqiEGbUMpArLbijt05BTomsoFZMxJ/hscDQ/do1cCac+dadkkt21PmYhSXW/
+         R//tY6T21cu0oDRxWSqW0vDK/oXvKG+y4UY/8Lrx/4axQcaVWXGZANaOY4hgTYUj1HUm
+         bi86XbChDdkyc/EpfLwGW12+pq6NE63Kv5PSGdf5Fk/i9nMlsqpzUbPAgWlEZpItCEpl
+         Fo1yvkhVkAuknffIxYiQ0vaJbxOQXRpSDG727dvaScI8pk0NZeU1kvRZ/1fUQjqL2XQg
+         nYaQ==
+X-Gm-Message-State: AOAM531mliM6nz4Aiol8374ie67bEUlU9cMaIOwpXLoGSFBPpyBSFyed
+        pTfkfxwjChfG4zLk6U1GAtkh1F+2JCaRtgBiRJQ=
+X-Google-Smtp-Source: ABdhPJxO3Aj0k3yURMtk6SfnOH7rwm7V/vFRXzBvkmIRliyquKzbOWZ6dUm+Cwl70GgAeanhjBR9qA==
+X-Received: by 2002:aa7:c1c1:: with SMTP id d1mr32665937edp.416.1640978831156;
+        Fri, 31 Dec 2021 11:27:11 -0800 (PST)
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
+        by smtp.gmail.com with ESMTPSA id h10sm8549271ejx.115.2021.12.31.11.27.10
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Dec 2021 11:15:10 -0800 (PST)
-Received: by mail-wr1-f50.google.com with SMTP id w20so48338294wra.9
-        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 11:15:09 -0800 (PST)
-X-Received: by 2002:a05:6000:10d2:: with SMTP id b18mr29861213wrx.193.1640978109225;
- Fri, 31 Dec 2021 11:15:09 -0800 (PST)
+        Fri, 31 Dec 2021 11:27:10 -0800 (PST)
+Received: by mail-ed1-f46.google.com with SMTP id w16so111632765edc.11
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 11:27:10 -0800 (PST)
+X-Received: by 2002:a5d:6211:: with SMTP id y17mr30389617wru.97.1640978490358;
+ Fri, 31 Dec 2021 11:21:30 -0800 (PST)
 MIME-Version: 1.0
 References: <20211202150614.22440-1-mgorman@techsingularity.net>
  <caf247ab-f6fe-a3b9-c4b5-7ce17d1d5e43@leemhuis.info> <20211229154553.09dd5bb657bc19d45c3de8dd@linux-foundation.org>
- <5c9d7c6b-05cd-4d17-b941-a93d90197cd3@leemhuis.info>
-In-Reply-To: <5c9d7c6b-05cd-4d17-b941-a93d90197cd3@leemhuis.info>
+ <5c9d7c6b-05cd-4d17-b941-a93d90197cd3@leemhuis.info> <CAHk-=wi3z_aFJ7kkJb+GDLzUMAzxYMRpVzuMRh5QFaFJnhGydA@mail.gmail.com>
+In-Reply-To: <CAHk-=wi3z_aFJ7kkJb+GDLzUMAzxYMRpVzuMRh5QFaFJnhGydA@mail.gmail.com>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 31 Dec 2021 11:14:53 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wi3z_aFJ7kkJb+GDLzUMAzxYMRpVzuMRh5QFaFJnhGydA@mail.gmail.com>
-Message-ID: <CAHk-=wi3z_aFJ7kkJb+GDLzUMAzxYMRpVzuMRh5QFaFJnhGydA@mail.gmail.com>
+Date:   Fri, 31 Dec 2021 11:21:14 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whj9ZWJ2Fmv2vY-NAB_nR-KgpzpRx6Oxs=ayyTEN7E8zw@mail.gmail.com>
+Message-ID: <CAHk-=whj9ZWJ2Fmv2vY-NAB_nR-KgpzpRx6Oxs=ayyTEN7E8zw@mail.gmail.com>
 Subject: Re: [PATCH v4 1/1] mm: vmscan: Reduce throttling due to a failure to
  make progress
 To:     Thorsten Leemhuis <regressions@leemhuis.info>
@@ -80,17 +80,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 31, 2021 at 6:24 AM Thorsten Leemhuis
-<regressions@leemhuis.info> wrote:
+On Fri, Dec 31, 2021 at 11:14 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> If we get it into rc8 (which is still possible, even if a bit hard due
-> to the new year festivities), it will get at least one week of testing.
+> On Fri, Dec 31, 2021 at 6:24 AM Thorsten Leemhuis
+> <regressions@leemhuis.info> wrote:
+> >
+> > If we get it into rc8 (which is still possible, even if a bit hard due
+> > to the new year festivities), it will get at least one week of testing.
+>
+> I took it with Hugh's ack from his reply to this, so it should be in rc8.
 
-I took it with Hugh's ack from his reply to this, so it should be in rc8.
+Pushed out as 1b4e3f26f9f7 ("mm: vmscan: Reduce throttling due to a
+failure to make progress")
 
-I'm not sure how much testing a week in rc8 will actually get, but
-next week is likely to be at least a _bit_ more active than the
-current week has been. And it's been tested by the people reporting it
-(and apparently Hugh too).
-
-                   Linus
+             Linus

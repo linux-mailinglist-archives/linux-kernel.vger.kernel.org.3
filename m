@@ -2,133 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3843E482609
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 23:46:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4CF48260F
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 00:05:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231872AbhLaWqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 17:46:18 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:56552 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231847AbhLaWqS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 17:46:18 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E4C261826;
-        Fri, 31 Dec 2021 22:46:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7488FC36AE9;
-        Fri, 31 Dec 2021 22:46:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640990776;
-        bh=WH9X1Ez5mzTdfGWS1Cc+jTto7XALQCuzQE0nmz4pGvY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=INeUZ04sSy4VFgM2zqD2UAtAPMbCQLZ8/5cIP1UNP8DMsIf6tBZzEgGGekmgGRbPY
-         6vESN3V8WuvuFqvbwkcRUlc3hZ9C+rj0EK8TQqGQ1d98eHhN397VwOo+r9+5r6U0cr
-         Ow5nZEikvDg4r2/fYY5xQM7bL7icWI0OUJkzkpIdX0MLb5E5u1eWPohQ5lEos2W64s
-         Xe2XvGXA9GGvi8xUtgnNEUaG8M78Ia3PCQOU5yvrP3n7y6SJf1bg+9f3Q8b0JPQSG8
-         KM4M3X1lZ2WREvp2yMkWRs9lcrbFkmlEYrUXqzVOfRz+psNSctYDcakpG6RAA3UUKV
-         bAK8IEikQzOOA==
-Date:   Fri, 31 Dec 2021 14:46:15 -0800
-From:   Saeed Mahameed <saeed@kernel.org>
-To:     Zizhuang Deng <sunsetdzz@gmail.com>, mbloch@nvidia.com
-Cc:     saeedm@nvidia.com, leon@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net/mlx5: Add vport return value checks
-Message-ID: <20211231224615.oneibk4ks5wofgf7@sx1>
-References: <20211230052558.959617-1-sunsetdzz@gmail.com>
+        id S231883AbhLaXES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 18:04:18 -0500
+Received: from mga06.intel.com ([134.134.136.31]:54008 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230094AbhLaXES (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 31 Dec 2021 18:04:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640991857; x=1672527857;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OtOfCsv/G+qZJTFQyWe4fIYjAxpBa1hYVEj7lcDTSag=;
+  b=aQB5NaCmhquQ8QHr55Pq3wwZyfkB6KJoKAF588kF7bhM3tH8cTG7AyAE
+   jnbUNghPoSmU7YVVVlGmogblUH50rKOMledbgt+r4/9gGR7cmxJzzH44V
+   VVkwgz90+GkybCnUt+yEybUZ//wa8ncO9BlJ4L/kwL46mMfZmnkPA8+qS
+   MwGozdDQ7XURgdiwXCZWmshSZ3EpPBstTYlHT1WSelWmzdP0U5RPmQYOx
+   dQylT4bRrq5XYJoWSvAQnL1pMGuY22AA046SKLCPMl9RmYDwhVVUd/vid
+   UTS6V3g8/zDxc/Ibn8KzlTy/hbBthajlHH1gMukWcg3MpJSXFNSQ46shX
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10214"; a="302602154"
+X-IronPort-AV: E=Sophos;i="5.88,252,1635231600"; 
+   d="scan'208";a="302602154"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2021 15:04:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,252,1635231600"; 
+   d="scan'208";a="619731227"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 31 Dec 2021 15:04:15 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n3QwZ-000Bm5-Al; Fri, 31 Dec 2021 23:04:15 +0000
+Date:   Sat, 1 Jan 2022 07:04:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Quentin Perret <qperret@google.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>
+Subject: arch/arm64/kvm/hyp/nvhe/setup.c:133:17: warning: no previous
+ prototype for '__pkvm_init_finalise'
+Message-ID: <202201010637.S574BWhv-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211230052558.959617-1-sunsetdzz@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 30, 2021 at 01:25:58PM +0800, Zizhuang Deng wrote:
->add missing vport return value checks for recent code, as in [1].
->
->Ref:
->[1] https://lkml.org/lkml/2020/11/1/315
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1b4e3f26f9f7553b260b8aed43967500961448a6
+commit: f320bc742bc23c1d43567712fe2814bf04b19ebc KVM: arm64: Prepare the creation of s1 mappings at EL2
+date:   10 months ago
+config: arm64-randconfig-r035-20211231 (https://download.01.org/0day-ci/archive/20220101/202201010637.S574BWhv-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f320bc742bc23c1d43567712fe2814bf04b19ebc
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f320bc742bc23c1d43567712fe2814bf04b19ebc
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/ drivers/edac/
 
-Where did this patch come from ? real bug ? or just aligning the code to
-be according the link below ? 
-because all the use-cases below are supposed to be guaranteed to have a
-valid vport object for uplink/pf/and ecpf vportrs, i am not against the
-patch, I am just trying to understand if there is a hidden bug somewhere .. 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/arm64/kvm/hyp/nvhe/setup.c:133:17: warning: no previous prototype for '__pkvm_init_finalise' [-Wmissing-prototypes]
+     133 | void __noreturn __pkvm_init_finalise(void)
+         |                 ^~~~~~~~~~~~~~~~~~~~
 
 
+vim +/__pkvm_init_finalise +133 arch/arm64/kvm/hyp/nvhe/setup.c
 
->Signed-off-by: Zizhuang Deng <sunsetdzz@gmail.com>
->---
-> .../mellanox/mlx5/core/eswitch_offloads.c     | 20 +++++++++++++++++++
-> 1 file changed, 20 insertions(+)
->
->diff --git a/drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c b/drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c
->index f4eaa5893886..fda214021738 100644
->--- a/drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c
->+++ b/drivers/net/ethernet/mellanox/mlx5/core/eswitch_offloads.c
+   132	
+ > 133	void __noreturn __pkvm_init_finalise(void)
+   134	{
+   135		struct kvm_host_data *host_data = this_cpu_ptr(&kvm_host_data);
+   136		struct kvm_cpu_context *host_ctxt = &host_data->host_ctxt;
+   137		unsigned long nr_pages, reserved_pages, pfn;
+   138		int ret;
+   139	
+   140		/* Now that the vmemmap is backed, install the full-fledged allocator */
+   141		pfn = hyp_virt_to_pfn(hyp_pgt_base);
+   142		nr_pages = hyp_s1_pgtable_pages();
+   143		reserved_pages = hyp_early_alloc_nr_used_pages();
+   144		ret = hyp_pool_init(&hpool, pfn, nr_pages, reserved_pages);
+   145		if (ret)
+   146			goto out;
+   147	
+   148		pkvm_pgtable_mm_ops = (struct kvm_pgtable_mm_ops) {
+   149			.zalloc_page = hyp_zalloc_hyp_page,
+   150			.phys_to_virt = hyp_phys_to_virt,
+   151			.virt_to_phys = hyp_virt_to_phys,
+   152			.get_page = hyp_get_page,
+   153			.put_page = hyp_put_page,
+   154		};
+   155		pkvm_pgtable.mm_ops = &pkvm_pgtable_mm_ops;
+   156	
+   157	out:
+   158		/*
+   159		 * We tail-called to here from handle___pkvm_init() and will not return,
+   160		 * so make sure to propagate the return value to the host.
+   161		 */
+   162		cpu_reg(host_ctxt, 1) = ret;
+   163	
+   164		__host_enter(host_ctxt);
+   165	}
+   166	
 
-[...]
-
->@@ -1309,11 +1317,15 @@ static void esw_del_fdb_peer_miss_rules(struct mlx5_eswitch *esw)
->
-> 	if (mlx5_ecpf_vport_exists(esw->dev)) {
-> 		vport = mlx5_eswitch_get_vport(esw, MLX5_VPORT_ECPF);
->+		if (IS_ERR(vport))
->+			return;
-
-memleak, we need to hit kvfree(flows) below, 
-instead of returning you should make the del_flow conditional and continue
-to next steps in the esw_del_fdb_peer_miss_rules routine, 
-e.g:
-if (vport)
-	mlx5_del_flow_rules(flows[vport->index]);
-
-> 		mlx5_del_flow_rules(flows[vport->index]);
-> 	}
->
-> 	if (mlx5_core_is_ecpf_esw_manager(esw->dev)) {
-> 		vport = mlx5_eswitch_get_vport(esw, MLX5_VPORT_PF);
->+		if (IS_ERR(vport))
->+			return;
-
-ditto 
-
-> 		mlx5_del_flow_rules(flows[vport->index]);
-> 	}
-> 	kvfree(flows);
->@@ -2385,6 +2397,9 @@ static int esw_set_uplink_slave_ingress_root(struct mlx5_core_dev *master,
-> 	if (master) {
-> 		esw = master->priv.eswitch;
-> 		vport = mlx5_eswitch_get_vport(esw, MLX5_VPORT_UPLINK);
->+		if (IS_ERR(vport))
->+			return PTR_ERR(vport);
->+
-> 		MLX5_SET(set_flow_table_root_in, in, table_of_other_vport, 1);
-> 		MLX5_SET(set_flow_table_root_in, in, table_vport_number,
-> 			 MLX5_VPORT_UPLINK);
->@@ -2405,6 +2420,9 @@ static int esw_set_uplink_slave_ingress_root(struct mlx5_core_dev *master,
-> 	} else {
-> 		esw = slave->priv.eswitch;
-> 		vport = mlx5_eswitch_get_vport(esw, MLX5_VPORT_UPLINK);
->+		if (IS_ERR(vport))
->+			return PTR_ERR(vport);
->+
-> 		ns = mlx5_get_flow_vport_acl_namespace(slave,
-> 						       MLX5_FLOW_NAMESPACE_ESW_INGRESS,
-> 						       vport->index);
->@@ -2590,6 +2608,8 @@ static void esw_unset_master_egress_rule(struct mlx5_core_dev *dev)
->
-> 	vport = mlx5_eswitch_get_vport(dev->priv.eswitch,
-> 				       dev->priv.eswitch->manager_vport);
->+	if (IS_ERR(vport))
->+		return;
->
-> 	esw_acl_egress_ofld_cleanup(vport);
-> }
->-- 
->2.25.1
->
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

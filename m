@@ -2,71 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 409554825B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 21:01:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C3AB4825BF
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 21:30:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbhLaUBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 15:01:02 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33792 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbhLaUBB (ORCPT
+        id S231669AbhLaUas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 15:30:48 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:51571 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S231640AbhLaUas (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 15:01:01 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DD3FFB81DCF;
-        Fri, 31 Dec 2021 20:00:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6760C36AE9;
-        Fri, 31 Dec 2021 20:00:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640980858;
-        bh=J/YhgplwbzCAtQrNHiVFUQO7/JbOvD5UTT8N+uN3SQQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ZsC2+GjlMJgo1dKwfQjYFV6Cokbp69TEvWUbc6essnRrp13ymbZIZXlq30k+m+fcq
-         bic1B+Mw25u+8ERtSg48VGbXSPjIxqK1GbeKTab/8kyIjWL7Gopmxzd+7NRxlZLiin
-         sUEk8BhLszCZHFTZYIoAGW0k7aIQf0fjZT5NnvATivVUud9vs0wDCTIf81DRwTCq7T
-         1QB/oieu5QTTS2SLWGeqOgd3YPUSKhg5MFDy2KMmFeq4TihWlz1XWSKmnapiQztyl1
-         lc0H6eh2+GjsonBCHQmg59M9cEYHBXf+tFvo73/ml1md5ye5vgx/UT9SpNccYHDcVL
-         +wEuMA43m+zfQ==
-Date:   Fri, 31 Dec 2021 20:59:25 +0100
-From:   Miguel Ojeda <ojeda@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Miguel Ojeda <ojeda@kernel.org>, linux-kbuild@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] doc: kbuild: fix default in `imply` table
-Message-ID: <20211231195925.GA1678@kernel.org>
+        Fri, 31 Dec 2021 15:30:48 -0500
+Received: (qmail 1137662 invoked by uid 1000); 31 Dec 2021 15:30:47 -0500
+Date:   Fri, 31 Dec 2021 15:30:47 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     syzbot <syzbot+3ae6a2b06f131ab9849f@syzkaller.appspotmail.com>
+Cc:     andreyknvl@google.com, dvyukov@google.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KASAN: slab-out-of-bounds Write in
+ usb_hcd_poll_rh_status (2)
+Message-ID: <Yc9odypVqqB2uMm/@rowland.harvard.edu>
+References: <Yc8+zLP8KTB8gT71@rowland.harvard.edu>
+ <000000000000af950605d474b781@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: elm/2
+In-Reply-To: <000000000000af950605d474b781@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-`BAZ` takes `FOO`'s value as default (as far as `BAR` allows it).
+On Fri, Dec 31, 2021 at 09:44:06AM -0800, syzbot wrote:
+> Hello,
+> 
+> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+> KASAN: slab-out-of-bounds Write in usb_hcd_poll_rh_status
+> 
+> vhci_hcd vhci_hcd.0: poll_rh_status: len 2 maxch 0 tblen 1
+> ==================================================================
+> BUG: KASAN: slab-out-of-bounds in memcpy include/linux/fortify-string.h:225 [inline]
+> BUG: KASAN: slab-out-of-bounds in usb_hcd_poll_rh_status+0x5f4/0x780 drivers/usb/core/hcd.c:776
+> Write of size 2 at addr ffff88801da403c0 by task syz-executor133/4062
 
-Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
----
- Documentation/kbuild/kconfig-language.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I think I understand the problem.  This patch is intended to fix it.
 
-diff --git a/Documentation/kbuild/kconfig-language.rst b/Documentation/kbuild/kconfig-language.rst
-index 98c24183d8c3..93a5b6e1fabd 100644
---- a/Documentation/kbuild/kconfig-language.rst
-+++ b/Documentation/kbuild/kconfig-language.rst
-@@ -176,7 +176,7 @@ applicable everywhere (see syntax).
- 	y		y		y		Y/m/n
- 	n		m		n		N/m
- 	m		m		m		M/n
--	y		m		n		M/n
-+	y		m		m		M/n
- 	y		n		*		N
- 	===		===		=============	==============
+Alan Stern
+
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ eec4df26e24e
+
+Index: usb-devel/drivers/usb/core/hcd.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/hcd.c
++++ usb-devel/drivers/usb/core/hcd.c
+@@ -753,6 +753,7 @@ void usb_hcd_poll_rh_status(struct usb_h
+ {
+ 	struct urb	*urb;
+ 	int		length;
++	int		status;
+ 	unsigned long	flags;
+ 	char		buffer[6];	/* Any root hubs with > 31 ports? */
  
--- 
-2.34.1
-
+@@ -770,11 +771,17 @@ void usb_hcd_poll_rh_status(struct usb_h
+ 		if (urb) {
+ 			clear_bit(HCD_FLAG_POLL_PENDING, &hcd->flags);
+ 			hcd->status_urb = NULL;
++			if (urb->transfer_buffer_length >= length) {
++				status = 0;
++			} else {
++				status = -EOVERFLOW;
++				length = urb->transfer_buffer_length;
++			}
+ 			urb->actual_length = length;
+ 			memcpy(urb->transfer_buffer, buffer, length);
+ 
+ 			usb_hcd_unlink_urb_from_ep(hcd, urb);
+-			usb_hcd_giveback_urb(hcd, urb, 0);
++			usb_hcd_giveback_urb(hcd, urb, status);
+ 		} else {
+ 			length = 0;
+ 			set_bit(HCD_FLAG_POLL_PENDING, &hcd->flags);

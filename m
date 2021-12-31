@@ -2,119 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 902924822A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 08:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AED7E4822D6
+	for <lists+linux-kernel@lfdr.de>; Fri, 31 Dec 2021 09:43:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242770AbhLaH4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 02:56:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbhLaH4A (ORCPT
+        id S230226AbhLaInJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 03:43:09 -0500
+Received: from mx0a-00364e01.pphosted.com ([148.163.135.74]:44098 "EHLO
+        mx0a-00364e01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229862AbhLaInH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 02:56:00 -0500
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4399FC061574;
-        Thu, 30 Dec 2021 23:56:00 -0800 (PST)
-Received: by mail-qk1-x731.google.com with SMTP id l11so24560904qke.11;
-        Thu, 30 Dec 2021 23:56:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7zbpRrLBrCKgX6NkoRmj/V8e4hwO+gRAuTh6iRR6fRI=;
-        b=gZeajJuxp7WDIeKV55HDgQxImZZ8Zp1E+Uks8G+1W/dECIW0wqGPRC/T41C0A9uaOJ
-         CyR1IkcYi+7jNKy/+HG+2kKZe/AijQd/evChNOe2vXnLD3nVU8XLceptctr2mJQ3gteM
-         iFfwsVnefhAph6n0r5o+adjSCMprBSdp78HJLN+SeeJi/R6nWtEl91hqolwr4a+m4k5J
-         sdxZDPp6Jx8WTfhtlBhePiP/Ndgfmh6Uv4xck/GpVn625MgCGlN6C6vF8NOhaJEtChN7
-         4gyLUKez/v52X29BDG8majal6Nt1GjYA7/5dmFKmcUjtB9/LOWdx0bmQyrSSlBYUkHy4
-         p/jQ==
+        Fri, 31 Dec 2021 03:43:07 -0500
+X-Greylist: delayed 2712 seconds by postgrey-1.27 at vger.kernel.org; Fri, 31 Dec 2021 03:43:07 EST
+Received: from pps.filterd (m0167071.ppops.net [127.0.0.1])
+        by mx0a-00364e01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BV7v8gU013028
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 02:57:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=columbia.edu; h=date : from : to :
+ subject : message-id : mime-version : content-type; s=pps01;
+ bh=XYJ96+jqHJDJOlXU1I6iTgc3VZ9+RdBj4DlG4CFm2jA=;
+ b=B6K9L9zPJYE1jRXAjGUsVTFBVTvAYdZWIc6IhdoDxBWdUGxeg0wb7I5l0/5HuhEpFw8J
+ ZC8ED9dZv3rFvJvqhJFfmKZ2BPTzYLNZ76aQvp4hnuH4la4KeztnoIrjzOG9YBoiQcqw
+ IoCAZiFNrUaqPn/JuSbHIQMnQAnA/kkvN2LJ6F/2XozOGP+N8UDWcIT4u1aQktxGGBGO
+ loolmK/woMl81MRx/uut7CNmh9/xOOZXs0x6phvsebkA1FKbubaTgVgvbE5xwyNpPAz2
+ izv9yg/7daZAD8X0fzhfOY9vphVcU8SSX8oTfCsQo+jWyScuNtP45+1uAGjJ4mXWILoY 3g== 
+Received: from sendprdmail20.cc.columbia.edu (sendprdmail20.cc.columbia.edu [128.59.72.22])
+        by mx0a-00364e01.pphosted.com (PPS) with ESMTPS id 3d9u4k8f7m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 02:57:55 -0500
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com [209.85.219.70])
+        by sendprdmail20.cc.columbia.edu (8.14.7/8.14.4) with ESMTP id 1BV7vsZ9082438
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Fri, 31 Dec 2021 02:57:54 -0500
+Received: by mail-qv1-f70.google.com with SMTP id eu14-20020ad44f4e000000b00410c7f3fa1cso21265487qvb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 30 Dec 2021 23:57:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7zbpRrLBrCKgX6NkoRmj/V8e4hwO+gRAuTh6iRR6fRI=;
-        b=XvaaZ5qor8hrx2MK6Zj2HvXDNrvRE1bIFYeFfm9IC1GNT+cEZtKdgKcLSC90qORYzr
-         9mrhH1ciFUQyErXNAjy8I+hKK1iNLrPlsA2RydR7J2PEwePcim2+FaAXOSAJIYktVQyW
-         D/zYmf27IktOF6nzx1Ald1EnOVeGBhabkFRc65KCjIw+7DZmWlZESGUBlt9DT6FBsHLD
-         nQeV6Xujnzm2GE+vFXKUzm3LANSELA+uZCRBUq1qWJoLz/d3cTjfj+c/ugRDFvmb7+YW
-         QWdWjEg6dOtMsqS3DDX1DdgSiYXo3/FGKmI82V+CUlGG/Rw/VMFHaCoqndYQnespRwG0
-         mh7Q==
-X-Gm-Message-State: AOAM531+uSee9aHcFHnwYXEjLoIgYReNh1OpSKiI3zRA1VLUlDzEKa8x
-        1nrGbNDG8LrAdp0nUirQEEw=
-X-Google-Smtp-Source: ABdhPJyKkY7fb4yE50itA6Vyq1mfU98xDilbpOVABc56ExnAcKSWM8rEgm1SyQmncVQP7Y+Trbf7pA==
-X-Received: by 2002:a05:620a:450a:: with SMTP id t10mr24054473qkp.412.1640937358326;
-        Thu, 30 Dec 2021 23:55:58 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id y16sm19779866qki.41.2021.12.30.23.55.55
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=XYJ96+jqHJDJOlXU1I6iTgc3VZ9+RdBj4DlG4CFm2jA=;
+        b=Eg24IMEXbvYBOuZD4P2hffoTWvU3a/yMyZlIizG+mjBZ06K1UCKZRzmIx/r8DSa1SD
+         6yjpYueNod83gphReCjuRpC+LDuIUvE8IqDnQ1A0asJzLNqwi47efI3IXrnHtKIAiBZi
+         DV32f0KCie71HFSEWwdQPmqOMx7kai2VbmLwnLw8hQGV81uxlvZTnxNQB1r7pKVMVwoN
+         Y9qpR1QLuU9eOVHjk4TJ9IU4XZHI8jHb6mE1dPdPZpogwCVhR/gw6+CM14P6rup7gSJN
+         F0iPU2pzDJkd/pgTM7MZN9LQtlQdVNjzReXP/LGhohQGHodaEyzRvAZD1SXIGworar9Q
+         pkjQ==
+X-Gm-Message-State: AOAM533Zxz/aroTZG6l42r+X9CATdo0lNhDzxpPoo69Re2iMlPzbq2kn
+        CVOX7vNjZQyfufR8JDATIHkfNKHYkUIC4VKIP+3S+g+7zKp2bMuMxjZIBnHlDEW6X/0/VQxWju/
+        0tkhOw7MN2IMHa2YE6N0JotXGQpyOKoe2
+X-Received: by 2002:a05:622a:28b:: with SMTP id z11mr29708356qtw.242.1640937473526;
+        Thu, 30 Dec 2021 23:57:53 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzGdl2gbez4UWF0TJuoVotAJ+KZJOCLrGFHOxIPa3TONNaK1seQ6MTD8gGkRoTplx57UoHvsg==
+X-Received: by 2002:a05:622a:28b:: with SMTP id z11mr29708347qtw.242.1640937473222;
+        Thu, 30 Dec 2021 23:57:53 -0800 (PST)
+Received: from charmander (dyn-160-39-33-233.dyn.columbia.edu. [160.39.33.233])
+        by smtp.gmail.com with ESMTPSA id h1sm20488766qta.54.2021.12.30.23.57.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Dec 2021 23:55:57 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: xu.xin16@zte.com.cn
-To:     masahiroy@kernel.org, michal.lkml@markovi.net,
-        ndesaulniers@google.com
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xu xin <xu.xin16@zte.com.cn>
-Subject: [PATCH] Fix compilation errors when using special directory
-Date:   Fri, 31 Dec 2021 07:55:51 +0000
-Message-Id: <20211231075551.589515-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 30 Dec 2021 23:57:52 -0800 (PST)
+Date:   Fri, 31 Dec 2021 02:57:50 -0500
+From:   Tal Zussman <tz2294@columbia.edu>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        "open list:FILESYSTEMS (VFS and infrastructure)" 
+        <linux-fsdevel@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, tz2294@columbia.edu,
+        Xijiao Li <xl2950@columbia.edu>,
+        Hans Montero <hjm2133@columbia.edu>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        OS-TA <cucs4118-tas@googlegroups.com>
+Subject: [PATCH] fs: Remove FIXME comment in generic_write_checks()
+Message-ID: <20211231075750.GA1376@charmander>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-ORIG-GUID: v5RZhkOk-zCVT95H3GUrFeArxTilt5r-
+X-Proofpoint-GUID: v5RZhkOk-zCVT95H3GUrFeArxTilt5r-
+X-CU-OB: Yes
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-31_02,2021-12-30_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=10
+ mlxlogscore=908 lowpriorityscore=10 suspectscore=0 phishscore=0
+ bulkscore=10 priorityscore=1501 mlxscore=0 clxscore=1011 spamscore=0
+ malwarescore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2112310033
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xu xin <xu.xin16@zte.com.cn>
+This patch removes an unnecessary comment that had to do with block special
+files from `generic_write_checks()`.
 
-When we compile the kernel with cross compilers, if CROSS_COMPILE is
-specified by the path containing special directory like '~', some
-compilation error will occurs.
+The comment, originally added in Linux v2.4.14.9, was to clarify that we only
+set `pos` to the file size when the file was opened with `O_APPEND` if the file
+wasn't a block special file. Prior to Linux v2.4, block special files had a
+different `write()` function which was unified into a generic `write()` function
+in Linux v2.4. This generic `write()` function called `generic_write_checks()`.
+For more details, see this earlier conversation:
+https://lore.kernel.org/linux-fsdevel/Yc4Czk5A+p5p2Y4W@mit.edu/
 
-Here's an example:
+Currently, block special devices have their own `write_iter()` function and no
+longer share the same `generic_write_checks()`, therefore rendering the comment
+irrelevant.
 
-$ make ARCH=x86_64
-CROSS_COMPILE=~/x86_64_gcc9.2.0_glibc2.31.0/bin/x86_64-pc-linux-gnu- all
-
-error:./scripts/mkcompile_h: line 64:
-~/x86_64_gcc9.2.0_glibc2.31.0/bin/x86_64-pc-linux-gnu-ld: No such file or
-directory
-
-Since there are many other similar scripts using these variables, in
-order to solve the problem from the source, add realpath in makefile to
-turn these variables into absolute paths.
-
-Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+Signed-off-by: Tal Zussman <tz2294@columbia.edu>
+Co-authored-by: Xijiao Li <xl2950@columbia.edu>
+Co-authored-by: Hans Montero <hjm2133@columbia.edu>
+Suggested-by: Theodore Ts'o <tytso@mit.edu>
 ---
- Makefile | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ fs/read_write.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index fe5a4d8e4ac5..cdbb747787ac 100644
---- a/Makefile
-+++ b/Makefile
-@@ -459,14 +459,14 @@ OBJDUMP		= llvm-objdump
- READELF		= llvm-readelf
- STRIP		= llvm-strip
- else
--CC		= $(CROSS_COMPILE)gcc
--LD		= $(CROSS_COMPILE)ld
--AR		= $(CROSS_COMPILE)ar
--NM		= $(CROSS_COMPILE)nm
--OBJCOPY		= $(CROSS_COMPILE)objcopy
--OBJDUMP		= $(CROSS_COMPILE)objdump
--READELF		= $(CROSS_COMPILE)readelf
--STRIP		= $(CROSS_COMPILE)strip
-+CC		= $(realpath $(CROSS_COMPILE))gcc
-+LD		= $(realpath $(CROSS_COMPILE))ld
-+AR		= $(realpath $(CROSS_COMPILE))ar
-+NM		= $(realpath $(CROSS_COMPILE))nm
-+OBJCOPY		= $(realpath $(CROSS_COMPILE))objcopy
-+OBJDUMP		= $(realpath $(CROSS_COMPILE))objdump
-+READELF		= $(realpath $(CROSS_COMPILE))readelf
-+STRIP		= $(realpath $(CROSS_COMPILE))strip
- endif
- RUSTC		= rustc
- RUSTDOC		= rustdoc
+diff --git a/fs/read_write.c b/fs/read_write.c
+index 0074afa7ecb3..0173dc7183c9 100644
+--- a/fs/read_write.c
++++ b/fs/read_write.c
+@@ -1637,7 +1637,6 @@ ssize_t generic_write_checks(struct kiocb *iocb, struct iov_iter *from)
+ 	if (!iov_iter_count(from))
+ 		return 0;
+ 
+-	/* FIXME: this is for backwards compatibility with 2.4 */
+ 	if (iocb->ki_flags & IOCB_APPEND)
+ 		iocb->ki_pos = i_size_read(inode);
+ 
 -- 
-2.25.1
+2.20.1
 

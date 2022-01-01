@@ -2,110 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6413C482847
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 20:05:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DB9A48285B
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 20:52:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232517AbiAATEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jan 2022 14:04:51 -0500
-Received: from smtp08.smtpout.orange.fr ([80.12.242.130]:60077 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231161AbiAATEu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jan 2022 14:04:50 -0500
-Received: from pop-os.home ([86.243.171.122])
-        by smtp.orange.fr with ESMTPA
-        id 3jgMnLu6Bbyf93jgMn77BQ; Sat, 01 Jan 2022 20:04:49 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sat, 01 Jan 2022 20:04:49 +0100
-X-ME-IP: 86.243.171.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     jgg@ziepe.ca, davem@davemloft.net, kuba@kernel.org, arnd@arndb.de,
-        tanghui20@huawei.com, gustavoars@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] sun/cassini: Use dma_set_mask_and_coherent() and simplify code
-Date:   Sat,  1 Jan 2022 20:04:45 +0100
-Message-Id: <9608eda38887c50ac7399ea1b41f977709678ea3.1641063795.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        id S232566AbiAATmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jan 2022 14:42:02 -0500
+Received: from mga06.intel.com ([134.134.136.31]:25242 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230464AbiAATmB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 1 Jan 2022 14:42:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641066121; x=1672602121;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0bUqQx94xWjbDjYrjHJvM+vwnASI0bjZ//bSb8M+Phg=;
+  b=mVg9oPYWFCf67eIiPKyKowvPtsw2pqBnxuodzKMjtBRFuz1DBUMFPQSY
+   bCCQtE4WQtqem8XExe3Qkq55fxATz4RZ5O4jv4EEIjNKexoJMC2EAjp/2
+   xgj+GdvZMZWxgGG5OJi+21jb5yO9dLc3iiPCNZCbRo4FtyNFBMk67UDIY
+   8soe1DvVvyF+u5Aw8AfW2k+ta2+of8gI9SPS1ZNpkzlrUebAnnK3IWBzj
+   fbJs1ejcSmMX4Zl7skNcqfgLZ92kL8wH6l2gTEM54jswP9kkPrXZ23WYj
+   FJ8RwasR2cWgj31cxO/LiRBv3orPv+mNAabruzpHil/MrokPoffxl4GAh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10214"; a="302669977"
+X-IronPort-AV: E=Sophos;i="5.88,254,1635231600"; 
+   d="scan'208";a="302669977"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2022 11:42:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,254,1635231600"; 
+   d="scan'208";a="471212222"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 01 Jan 2022 11:41:58 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n3kGL-000Cm0-VZ; Sat, 01 Jan 2022 19:41:57 +0000
+Date:   Sun, 2 Jan 2022 03:41:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     KuoHsiang Chou <kuohsiang_chou@aspeedtech.com>,
+        tzimmermann@suse.de, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, airlied@redhat.com, airlied@linux.ie,
+        daniel@ffwll.ch, jenmin_yuan@aspeedtech.com,
+        kuohsiang_chou@aspeedtech.com, arc_sung@aspeedtech.com,
+        tommy_huang@aspeedtech.com
+Subject: [PATCH] drm/ast: fix semicolon.cocci warnings
+Message-ID: <20220101194131.GA11806@0607766062a2>
+References: <20211122103617.3496-1-kuohsiang_chou@aspeedtech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211122103617.3496-1-kuohsiang_chou@aspeedtech.com>
+X-Patchwork-Hint: ignore
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use dma_set_mask_and_coherent() instead of unrolling it with some
-dma_set_mask()+dma_set_coherent_mask().
+From: kernel test robot <lkp@intel.com>
 
-Moreover, as stated in [1], dma_set_mask() with a 64-bit mask will never
-fail if dev->dma_mask is non-NULL.
-So, if it fails, the 32 bits case will also fail for the same reason.
+drivers/gpu/drm/ast/ast_dp.c:166:3-4: Unneeded semicolon
 
-That said, 'pci_using_dac' can only be 1 after a successful
-dma_set_mask_and_coherent().
 
-Simplify code and remove some dead code accordingly.
+ Remove unneeded semicolon.
 
-[1]: https://lkml.org/lkml/2021/6/7/398
+Generated by: scripts/coccinelle/misc/semicolon.cocci
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+CC: KuoHsiang Chou <kuohsiang_chou@aspeedtech.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
 ---
- drivers/net/ethernet/sun/cassini.c | 26 ++++++--------------------
- 1 file changed, 6 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/net/ethernet/sun/cassini.c b/drivers/net/ethernet/sun/cassini.c
-index d2d4f47c7e28..dba9f12efa1c 100644
---- a/drivers/net/ethernet/sun/cassini.c
-+++ b/drivers/net/ethernet/sun/cassini.c
-@@ -4893,8 +4893,8 @@ static int cas_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	unsigned long casreg_len;
- 	struct net_device *dev;
- 	struct cas *cp;
--	int i, err, pci_using_dac;
- 	u16 pci_cmd;
-+	int i, err;
- 	u8 orig_cacheline_size = 0, cas_cacheline_size = 0;
- 
- 	if (cas_version_printed++ == 0)
-@@ -4965,23 +4965,10 @@ static int cas_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
- 
- 
- 	/* Configure DMA attributes. */
--	if (!dma_set_mask(&pdev->dev, DMA_BIT_MASK(64))) {
--		pci_using_dac = 1;
--		err = dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(64));
--		if (err < 0) {
--			dev_err(&pdev->dev, "Unable to obtain 64-bit DMA "
--			       "for consistent allocations\n");
--			goto err_out_free_res;
--		}
--
--	} else {
--		err = dma_set_mask(&pdev->dev, DMA_BIT_MASK(32));
--		if (err) {
--			dev_err(&pdev->dev, "No usable DMA configuration, "
--			       "aborting\n");
--			goto err_out_free_res;
--		}
--		pci_using_dac = 0;
-+	err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-+	if (err) {
-+		dev_err(&pdev->dev, "No usable DMA configuration, aborting\n");
-+		goto err_out_free_res;
- 	}
- 
- 	casreg_len = pci_resource_len(pdev, 0);
-@@ -5087,8 +5074,7 @@ static int cas_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	if ((cp->cas_flags & CAS_FLAG_NO_HW_CSUM) == 0)
- 		dev->features |= NETIF_F_HW_CSUM | NETIF_F_SG;
- 
--	if (pci_using_dac)
--		dev->features |= NETIF_F_HIGHDMA;
-+	dev->features |= NETIF_F_HIGHDMA;
- 
- 	/* MTU range: 60 - varies or 9000 */
- 	dev->min_mtu = CAS_MIN_MTU;
--- 
-2.32.0
+url:    https://github.com/0day-ci/linux/commits/KuoHsiang-Chou/drm-ast-Create-the-driver-for-ASPEED-proprietory-Display-Port/20211122-183830
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+:::::: branch date: 6 weeks ago
+:::::: commit date: 6 weeks ago
 
+ ast_dp.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/drivers/gpu/drm/ast/ast_dp.c
++++ b/drivers/gpu/drm/ast/ast_dp.c
+@@ -163,7 +163,7 @@ bool ast_dp_launch(struct drm_device *de
+ 				bDPExecute = 0;
+ 				break;
+ 			}
+-		};
++		}
+ 
+ 		if (bDPExecute)
+ 			ast->tx_chip_type = AST_TX_ASTDP;

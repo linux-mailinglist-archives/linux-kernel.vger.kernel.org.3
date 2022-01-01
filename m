@@ -2,83 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC6D482809
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 18:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F952482811
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 18:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232597AbiAARZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jan 2022 12:25:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49430 "EHLO
+        id S232606AbiAARl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jan 2022 12:41:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232576AbiAARZl (ORCPT
+        with ESMTP id S230259AbiAARl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jan 2022 12:25:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97AFEC061574;
-        Sat,  1 Jan 2022 09:25:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9304F60B0E;
-        Sat,  1 Jan 2022 17:25:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EB71C36AE9;
-        Sat,  1 Jan 2022 17:25:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641057939;
-        bh=wVzs2I90SVS0VgI1GrDKWfQHs32ZhZLROC6lh3nYjh0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=P8aVCJkh8LRChuZM8HhZrGk7ngTezKkANOdCyTm+oPDHwA925SbxC9xCEaxLhDv7w
-         fy2dd35xvJ55o9a5+4SS+wRT066L5qXUGFwEmXasSThY/h9vv65hRZVvpEqIfpCLsY
-         HV6r+hEJfZVBeux37Dh/5WpwYssVch3t126yq4C0OmnGUKVI+8V19MbRZnDmQ8erfz
-         ii8zRA9dnuNZRmlF4wxKlmz25tOkmSlmPPwwXjaTi/z1ZPyIDIYgoJwFHMvegtQcwj
-         dP7HjB+v9UIiReA6fZLbZCZ0/btpyGAH1O0GKm87OEPEBGfSgstXgybxOPw9taeYHK
-         TRFP0DEgupLtA==
-Message-ID: <aef1ecb9-0757-0bbf-74a5-70d88fd52e08@kernel.org>
-Date:   Sat, 1 Jan 2022 19:25:34 +0200
+        Sat, 1 Jan 2022 12:41:27 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD6CC061574;
+        Sat,  1 Jan 2022 09:41:27 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.94.2)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1n3iNV-0007Lq-3h; Sat, 01 Jan 2022 18:41:13 +0100
+Date:   Sat, 1 Jan 2022 17:41:07 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Michael Lee <igvtee@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH v9 1/3] net: mdio: add helpers to extract clause 45 regad
+ and devad fields
+Message-ID: <YdCSM7DiJ+vvfmji@makrotopia.org>
+References: <Ycr5Cna76eg2B0An@shell.armlinux.org.uk>
+ <Yc9tk6IZ0ldqHx4Y@makrotopia.org>
+ <YdCM/mbeT66asmj7@lunn.ch>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 1/3] interconnect: imx: Switch from
- imx_icc_node_adj_desc to fsl,icc-id node assignment
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220101163956.3344467-1-abel.vesa@nxp.com>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20220101163956.3344467-1-abel.vesa@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdCM/mbeT66asmj7@lunn.ch>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Abel,
-
-Thanks for working on this!
-
-On 1.01.22 18:39, Abel Vesa wrote:
-> In order to be able to have more than one NoCs in the interconnect net
-> we need to decouple the NoC from the dram. So instead of using the
-> imx_icc_node_adj_desc, we use the fsl,icc-id property that is in
-> each NoC (or pl301) to the icc node (based on the id) to it.
-
-I believe that this DT property should be documented somewhere.
-Maybe in Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml?
-
-BR,
-Georgi
-
-> Along with all the NoC and pl301 nodes in the dts we will have a
-> interconnect dedicated node. This node will be the actual device of the
-> icc provider.
+On Sat, Jan 01, 2022 at 06:18:54PM +0100, Andrew Lunn wrote:
+> On Fri, Dec 31, 2021 at 08:52:35PM +0000, Russell King (Oracle) wrote:
+> > Add a couple of helpers and definitions to extract the clause 45 regad
+> > and devad fields from the regnum passed into MDIO drivers.
+> > 
+> > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> ---
-> 
-> No changes since v1.
-> 
->   drivers/interconnect/imx/imx.c | 70 +++++++++++++++-------------------
->   1 file changed, 31 insertions(+), 39 deletions(-)
+> This email has me confused. It seems to be coming directly from
+> Russell, but is part of a patchset? Then there is a second 1/3 later
+> in the patchset?
 
+That happened by accident when using git-send-email and hence the
+first time it was sent with Russell's From: in the RFC822 headers it
+was (rightly) rejected.
+I noticed that shortly after and resend the patch with my sender
+address set as From: in the RFC822 headers and Russell's From: in the
+mail body for only git, and not mailservers, to care about.
+
+Sorry for that additional noise.

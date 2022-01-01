@@ -2,104 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3242548266C
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 04:40:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E2F482672
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 04:57:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232039AbiAADjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 22:39:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42544 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232001AbiAADjw (ORCPT
+        id S232041AbiAAD5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 22:57:20 -0500
+Received: from mail104.syd.optusnet.com.au ([211.29.132.246]:36749 "EHLO
+        mail104.syd.optusnet.com.au" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231981AbiAAD5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 22:39:52 -0500
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD095C061574;
-        Fri, 31 Dec 2021 19:39:51 -0800 (PST)
-Received: by mail-qk1-x735.google.com with SMTP id t66so14947754qkb.4;
-        Fri, 31 Dec 2021 19:39:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=cOmwaF/tJXP/5+yfkJDU/5HkcnePK8N/zdTNdlwYIvk=;
-        b=MJRNuSA0i5e9NdJjfEcnlEdXR2SSoQrG2WitCEqfv8Y7W6AKBEWWPkAcCrBUlDv8se
-         4D0jKcQaaQryoTpwCoGZRjyVwDHdv9TOyQwPAQYyMsNwiSekDqJB7IP4bHSNrgUAIyjr
-         OTcV/0n8rQI30cnVwpmZefoF1yfZn9rFOvd/gnzbfvD81tRAHzNEOs3xjETeB11QrMa+
-         mYmVRsIlQSN0h2D6lYv+W30i8gW7cuHMlf/47A2K7YGr8bT9r/NfUppLYcPMIGePUAqv
-         GgaUKVvdHbcpkmPSh3soopi6Hjwh4NhoUxQlAoHxz5Caf1NuR8V/02JTfkVIzIHFzmAT
-         yBqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=cOmwaF/tJXP/5+yfkJDU/5HkcnePK8N/zdTNdlwYIvk=;
-        b=FyjqTE7dT14nh85qprpG7ucx0LLFQjrrxs5E42vrbCPIkBpD8PhgCxhVYF2KZk7Izh
-         90sNDsh8zy4fGanhlMRSHUxgquz4ILi3MrFmT4qZQI8FzMofUQ71jhITnYIw6nVjqOHo
-         lLqmm81PPg2yshDIOmFQ+ALebNoxkTh0CDzo01QtfxOUf5VuwQ6SVhP1l+MiHJ4GoDpS
-         rnBOErL7MDyVm95M3MarHk2CzWmiXhzxPhP3r0H4wnRmpCmXZ03D0LLJJF6vTlE0qGBQ
-         2IxCJ/5lS6/nzucp+EVfSuUaoJxRZAN2QUR1nb16RLoTyUqKrOBO+IBOj0UfPsqz3FPb
-         X1nA==
-X-Gm-Message-State: AOAM530zjnZ1YiiQpZJgGUEc1UOpA5qn+MZdKhK0dwijFQv9AUEnoBje
-        CoR0Z48ddZ21kDZttGsQsrydVGSMSkE=
-X-Google-Smtp-Source: ABdhPJxnyakU3jWiWpdSGLZH8xc65waj5hW1rfqMQ99BXYlxqOO8Bw/rHUzOJx2D8SgEpgAr92es4g==
-X-Received: by 2002:ae9:ef52:: with SMTP id d79mr26729925qkg.356.1641008390926;
-        Fri, 31 Dec 2021 19:39:50 -0800 (PST)
-Received: from [192.168.1.49] (c-67-187-90-124.hsd1.ky.comcast.net. [67.187.90.124])
-        by smtp.gmail.com with ESMTPSA id w2sm24433942qta.11.2021.12.31.19.39.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Dec 2021 19:39:50 -0800 (PST)
-Subject: Re: [PATCH 0/2] of: unittest: re-implement overlay tracking
-From:   Frank Rowand <frowand.list@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>, erhard_f@mailbox.org,
-        yinxiujiang@kylinos.cn
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220101033329.1277779-1-frowand.list@gmail.com>
-Message-ID: <d1af4cc8-eb7e-ec83-0e15-11d3d4791a29@gmail.com>
-Date:   Fri, 31 Dec 2021 21:39:49 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 31 Dec 2021 22:57:19 -0500
+Received: from dread.disaster.area (pa49-181-243-119.pa.nsw.optusnet.com.au [49.181.243.119])
+        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 6A7C18A80B1;
+        Sat,  1 Jan 2022 14:57:17 +1100 (AEDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1n3VW8-009v9G-La; Sat, 01 Jan 2022 14:57:16 +1100
+Date:   Sat, 1 Jan 2022 14:57:16 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     djwong@kernel.org, linux-xfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] net/tls: Remove redundant initialization of mp
+Message-ID: <20220101035716.GF945095@dread.disaster.area>
+References: <20211231122352.14275-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-In-Reply-To: <20220101033329.1277779-1-frowand.list@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211231122352.14275-1-jiapeng.chong@linux.alibaba.com>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=e9dl9Yl/ c=1 sm=1 tr=0 ts=61cfd11d
+        a=BEa52nrBdFykVEm6RU8P4g==:117 a=BEa52nrBdFykVEm6RU8P4g==:17
+        a=kj9zAlcOel0A:10 a=DghFqjY3_ZEA:10 a=SRrdq9N9AAAA:8 a=7-415B0cAAAA:8
+        a=cCNTWZp2dwuWsVUTxxUA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Erhard,
+On Fri, Dec 31, 2021 at 08:23:52PM +0800, Jiapeng Chong wrote:
+> mp is being initialized to log->l_mp but this is never read
+> as record is overwritten later on. Remove the redundant
+> initialization.
 
-Can you please check whether this patch series fixes the shift-out-of-bounds
-problem you reported?
-
--Frank
+The compiler is not smart enough to just elide the second "mp =
+log->l_mp;" assignment?
 
 
-On 12/31/21 9:33 PM, frowand.list@gmail.com wrote:
-> From: Frank Rowand <frank.rowand@sony.com>
+> Cleans up the following clang-analyzer warning:
 > 
-> Some overlays are tracked when they are applied.  The tracked overlays
-> are later removed after the overlay tests are completed.  The old
-> implementation makes assumptions about the expected values for
-> overlay changeset id created by the overlay apply which result
-> in fragile code.  The new code removes the assumptions.
+> fs/xfs/xfs_log_recover.c:3543:20: warning: Value stored to 'mp' during
+> its initialization is never read [clang-analyzer-deadcode.DeadStores].
 > 
-> A symptom that exposes a problem with the tracking code is a
-> warning "UBSAN: shift-out-of-bounds in drivers/of/unittest.c:1933:36",
-> Kernel Version: 5.15-rc7, PPC-64, Talos II.  This results from variable
-> "id" value of -1 in the final line of of_unittest_untrack_overlay().
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  fs/xfs/xfs_log_recover.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> The first patch in the series cleans up the inconsistent use of overlay
-> changeset id and the obsolete overlay id.  The id is a core concept in
-> the overlay tracking that is re-implemented in the second patch in
-> the series.
-> 
-> Frank Rowand (2):
->   of: unittest: change references to obsolete overlay id
->   of: unittest: re-implement overlay tracking
-> 
->  drivers/of/unittest.c | 154 +++++++++++++++++++-----------------------
->  1 file changed, 71 insertions(+), 83 deletions(-)
-> 
+> diff --git a/fs/xfs/xfs_log_recover.c b/fs/xfs/xfs_log_recover.c
+> index 8ecb9a8567b7..9142efbdc670 100644
+> --- a/fs/xfs/xfs_log_recover.c
+> +++ b/fs/xfs/xfs_log_recover.c
+> @@ -3540,7 +3540,7 @@ STATIC void
+>  xlog_recover_check_summary(
+>  	struct xlog		*log)
+>  {
+> -	struct xfs_mount	*mp = log->l_mp;
+> +	struct xfs_mount	*mp;
+>  	struct xfs_perag	*pag;
+>  	struct xfs_buf		*agfbp;
+>  	struct xfs_buf		*agibp;
 
+You removed the wrong initialisation line. Leave this one here and
+remove the standalone one.
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com

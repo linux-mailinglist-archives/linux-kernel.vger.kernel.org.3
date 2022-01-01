@@ -2,95 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C434048264A
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 03:07:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFF4548264E
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 03:22:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231924AbiAACHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 21:07:14 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:59359 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S231915AbiAACHN (ORCPT
+        id S231937AbiAACRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 21:17:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53210 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231229AbiAACRO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 21:07:13 -0500
-Received: (qmail 1142479 invoked by uid 1000); 31 Dec 2021 21:07:12 -0500
-Date:   Fri, 31 Dec 2021 21:07:12 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <greg@kroah.com>
-Cc:     USB mailing list <linux-usb@vger.kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        syzkaller-bugs@googlegroups.com
-Subject: [PATCH] USB: Fix "slab-out-of-bounds Write" bug in
- usb_hcd_poll_rh_status
-Message-ID: <Yc+3UIQJ2STbxNua@rowland.harvard.edu>
-References: <Yc9odypVqqB2uMm/@rowland.harvard.edu>
- <00000000000060560805d4773ba0@google.com>
+        Fri, 31 Dec 2021 21:17:14 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8352C061574;
+        Fri, 31 Dec 2021 18:17:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1FF67CE1D92;
+        Sat,  1 Jan 2022 02:17:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F7A3C36AEC;
+        Sat,  1 Jan 2022 02:17:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641003430;
+        bh=zNgktqMSEm4Spnftwe0PgXFUZSas22WRXgFRIC+HVWA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aIVQiieZHF5LcrBSb9TJq4vxpWGEt3s7FbuoNTTsEcjAJ5nXCsrVYaa10DHGRLu6z
+         6jwF1Pg6xLZ4DQTZDQ+ule62sbC96Vtp36h8VDkyHAmZiULy6Uk1lXKLkol79P9d0+
+         PnOdyi6pM+Ftps1Mo84MzpQ6AmjQoBGnCyLY5ernB2wqvFFonV4igqxGkrNSy1djTw
+         ZTce8iaSULh+WtfZN6ub/j5zbKLpuRAZPuslXj4s7TRpTMtqm/sr84/tXS38GgtggQ
+         q02DLY5l8k2ZWILBZ7D9EP0Xqmts7xGxwqu7cmUVdVBjNte3KWxbpLB8Vm8yNwB9nZ
+         JoKZGPdMNpPEA==
+Date:   Fri, 31 Dec 2021 18:17:09 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Gagan Kumar <gagan1kumar.cs@gmail.com>
+Cc:     Jeremy Kerr <jk@codeconstruct.com.au>, matt@codeconstruct.com.au,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mctp: Remove only static neighbour on RTM_DELNEIGH
+Message-ID: <20211231181709.7f46dbfc@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <65c90674808fc0a93c7d329067bf3e80736a003a.camel@gmail.com>
+References: <20211228130956.8553-1-gagan1kumar.cs@gmail.com>
+        <20211230175112.7daeb74e@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <e20e47833649b5141fa327aa8113e34d4b1bbe15.camel@codeconstruct.com.au>
+        <65c90674808fc0a93c7d329067bf3e80736a003a.camel@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00000000000060560805d4773ba0@google.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the USB core code for getting root-hub status reports was
-originally written, it was assumed that the hub driver would be its
-only caller.  But this isn't true now; user programs can use usbfs to
-communicate with root hubs and get status reports.  When they do this,
-they may use a transfer_buffer that is smaller than the data returned
-by the HCD, which will lead to a buffer overflow error when
-usb_hcd_poll_rh_status() tries to store the status data.  This was
-discovered by syzbot:
+On Fri, 31 Dec 2021 17:44:15 +0530 Gagan Kumar wrote:
+> > > Can you clarify the motivation and practical impact of the change 
+> > > in the commit message to make it clear? AFAICT this is a no-op / prep
+> > > for some later changes, right Jeremy?  
+> > 
+> > Yes, it'll be a no-op now; I'm not aware of any changes coming that
+> > require parameterisation of the neighbour type yet.
+> > 
+> > Gagan - can you provide any context on this change?  
+> 
+> I was exploring the repository and wanted to get familiar with the
+> patching process. During that, I was looking for some TODOs in /net for
+> my first patch and came across mctp.
+> 
+> I thought `TODO: add a "source" flag so netlink can only delete static
+> neighbours?` might be of some use in the future. So, thought of sending
+> a patch for the same.
+> 
+> If I were to think like a critic, "You aren't gonna need it" principle
+> can be applied here.
+> 
+> If you think it's ok to proceed I can update the commit message to
+> include the motivation and impact as a no-op.
 
-BUG: KASAN: slab-out-of-bounds in memcpy include/linux/fortify-string.h:225 [inline]
-BUG: KASAN: slab-out-of-bounds in usb_hcd_poll_rh_status+0x5f4/0x780 drivers/usb/core/hcd.c:776
-Write of size 2 at addr ffff88801da403c0 by task syz-executor133/4062
-
-This patch fixes the bug by reducing the amount of status data if it
-won't fit in the transfer_buffer.  If some data gets discarded then
-the URB's completion status is set to -EOVERFLOW rather than 0, to let
-the user know what happened.
-
-Reported-and-tested-by: syzbot+3ae6a2b06f131ab9849f@syzkaller.appspotmail.com
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Cc: <stable@vger.kernel.org>
-
----
-
-
-[as1966]
-
-
- drivers/usb/core/hcd.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-Index: usb-devel/drivers/usb/core/hcd.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/hcd.c
-+++ usb-devel/drivers/usb/core/hcd.c
-@@ -753,6 +753,7 @@ void usb_hcd_poll_rh_status(struct usb_h
- {
- 	struct urb	*urb;
- 	int		length;
-+	int		status;
- 	unsigned long	flags;
- 	char		buffer[6];	/* Any root hubs with > 31 ports? */
- 
-@@ -770,11 +771,17 @@ void usb_hcd_poll_rh_status(struct usb_h
- 		if (urb) {
- 			clear_bit(HCD_FLAG_POLL_PENDING, &hcd->flags);
- 			hcd->status_urb = NULL;
-+			if (urb->transfer_buffer_length >= length) {
-+				status = 0;
-+			} else {
-+				status = -EOVERFLOW;
-+				length = urb->transfer_buffer_length;
-+			}
- 			urb->actual_length = length;
- 			memcpy(urb->transfer_buffer, buffer, length);
- 
- 			usb_hcd_unlink_urb_from_ep(hcd, urb);
--			usb_hcd_giveback_urb(hcd, urb, 0);
-+			usb_hcd_giveback_urb(hcd, urb, status);
- 		} else {
- 			length = 0;
- 			set_bit(HCD_FLAG_POLL_PENDING, &hcd->flags);
+SGTM

@@ -2,205 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF26482816
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 19:02:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1278482817
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 19:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232611AbiAASCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jan 2022 13:02:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:45191 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230259AbiAASCW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jan 2022 13:02:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641060141;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zOU7T3r4wefZ6y4v0az6szwM1G6nHEQJA6eIHA1wZGs=;
-        b=hEjNTVWReXKZgA2Jg0uQaRs+ViycnLwmw8a6zmmPmbmxIa7JDVGqMt1DE3SzqpaJ1LdVSl
-        +P/itX0tBkbZ8qcDFcTBqPMuSJge2UwCCvqFNE7D9baMhqlehJxhjXDtW7OTzUsN0B5OX/
-        NQYDD3X61VC7hvkRLvZGdSZLqYiAah4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-18-yjAXsXbrPtqNS7gZ7wgutg-1; Sat, 01 Jan 2022 13:02:18 -0500
-X-MC-Unique: yjAXsXbrPtqNS7gZ7wgutg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3CE142F26;
-        Sat,  1 Jan 2022 18:02:17 +0000 (UTC)
-Received: from [10.22.8.94] (unknown [10.22.8.94])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D5B5B79A22;
-        Sat,  1 Jan 2022 18:02:14 +0000 (UTC)
-Message-ID: <843bffdd-6c5b-2869-e089-01d180f36a76@redhat.com>
-Date:   Sat, 1 Jan 2022 13:02:14 -0500
+        id S232620AbiAASK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jan 2022 13:10:59 -0500
+Received: from mga03.intel.com ([134.134.136.65]:6946 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230259AbiAASK6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 1 Jan 2022 13:10:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641060658; x=1672596658;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6K3CoX9YAWSrcp9OBFlitgEmNzH3DMhqxHNj6k1aLfM=;
+  b=eZ0ZjWybNN1ZRDO1AeYQ2ogZ0FfMNZekOVVPYZR0/8/zpaoAi2R4rg+o
+   jDtceWPsSX5mcRJJiBvNcGn0UJfL4HOkwjbByY6o9kWUgpN0TaeIUmPwC
+   Abk3bB7yJG3uLoq/6Dm9g24iheR2VkKoKR4Z3q0DFdhAO09eDFOnb8Khh
+   Uyu59XcOgTZmkaGPqXX4hNE8BHRizMjqCO1UWmNda/R5JSGLrGfB4o25x
+   KwLslV69CN7g0DuglUAc05NOEshL1Hcp/fK6HVftnxqE2BGIuhapamfU2
+   DHv8zTrTvA7V07HtnfD4QC5gc0hnB8RDuS96rIHAG74qeLWs3ESLDKDy2
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10214"; a="241867569"
+X-IronPort-AV: E=Sophos;i="5.88,254,1635231600"; 
+   d="scan'208";a="241867569"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2022 10:10:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,254,1635231600"; 
+   d="scan'208";a="619890056"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 01 Jan 2022 10:10:57 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n3iqG-000CjQ-GR; Sat, 01 Jan 2022 18:10:56 +0000
+Date:   Sun, 2 Jan 2022 02:10:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     JianMin Liu <jian-min.liu@mediatek.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:google/android/kernel/common/android12-5.10-2021-12
+ 8788/9999] kernel/sched/pelt.c:35:5: warning: no previous prototype for
+ 'get_pelt_halflife'
+Message-ID: <202201020220.ooYV0tfD-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [lockdep] UAF read in print_name().
-Content-Language: en-US
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Christoph Hellwig <hch@lst.de>
-References: <77f05c15-81b6-bddd-9650-80d5f23fe330@i-love.sakura.ne.jp>
- <015af849-3571-e9ac-692f-d803aa19f566@redhat.com>
- <f80074eb-58bc-7db7-d945-ef18f7617c4e@i-love.sakura.ne.jp>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <f80074eb-58bc-7db7-d945-ef18f7617c4e@i-love.sakura.ne.jp>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/30/21 10:09, Tetsuo Handa wrote:
-> On 2021/12/29 12:25, Waiman Long wrote:
->> On 12/28/21 05:49, Tetsuo Handa wrote:
->>> Hello.
->>>
->>> I found using linux-next-20211210 that reading /proc/lockdep after lockdep splat
->>> triggers UAF read access. I think this is a side effect of zapping dependency
->>> information when loop driver's WQ is destroyed. You might want to xchg() the pointer
->>> with a dummy struct containing a static string.
->>>
->>> difference before lockdep splat and after lockdep splat
->>> ----------------------------------------
->>> 8635c8636
->>> < ffff88811561cd28 OPS:      26 FD:  122 BD:    1 +.+.: (wq_completion)loop0
->>> ---
->>>> ffff88811561cd28 OPS:      31 FD:  439 BD:    1 +.+.:  M>^MM-^AM-^HM-^?M-^?
->> Thanks for reporting.
->>
->> Yes, listing locking classes by /proc/lockdep is racy as all_lock_classes is accessed
->> without lock protection. OTOH, we probably can't fix this race as lock hold time will be
->> too long for this case. Atomically xchg the class name is a possible workaround, but we
->> also need to add additional checks as the iteration may also be redirected to
->> free_lock_classes leading to an endless iteration loop.
-> Thanks for responding. But is this bug really unfixable?
-I am not saying that it is unfixable. I am just saying that we cannot 
-guarantee a consistent output of /proc/lockdep as internal data may 
-change in the middle of dumping the output.
->
-> Please see the following result.
->
-> ----------------------------------------
-> [root@localhost ~]# uname -r
-> 5.16.0-rc4-next-20211210
-> [root@localhost ~]# grep loop /proc/lockdep
-> [root@localhost ~]# truncate -s 100m testfile
-> [root@localhost ~]# losetup -f testfile
-> [root@localhost ~]# grep loop /proc/lockdep
-> ffffffffa02b73c8 OPS:      17 FD:   34 BD:    1 +.+.: loop_ctl_mutex
-> ffff888106fb0528 OPS:     114 FD:  183 BD:    1 +.+.: (wq_completion)loop0
-> [root@localhost ~]# losetup -D
-> [root@localhost ~]# grep loop /proc/lockdep
-> ffffffffa02b73c8 OPS:      17 FD:   34 BD:    1 +.+.: loop_ctl_mutex
-> ffffffffa02b7328 OPS:       1 FD:    1 BD:    1 +.+.: loop_validate_mutex
-> [root@localhost ~]# losetup -f testfile
-> [root@localhost ~]# grep loop /proc/lockdep
-> ffffffffa02b73c8 OPS:      18 FD:   34 BD:    1 +.+.: loop_ctl_mutex
-> ffffffffa02b7328 OPS:       1 FD:    1 BD:    1 +.+.: loop_validate_mutex
-> ffff888106fb1128 OPS:     118 FD:  183 BD:    1 +.+.: (wq_completion)loop0
-> [root@localhost ~]# losetup -D
-> [root@localhost ~]# grep loop /proc/lockdep
-> ffffffffa02b73c8 OPS:      18 FD:   34 BD:    1 +.+.: loop_ctl_mutex
-> ffffffffa02b7328 OPS:       2 FD:    1 BD:    1 +.+.: loop_validate_mutex
-> [root@localhost ~]# grep debug_locks /proc/lockdep_stats
->   debug_locks:                             1
-> [root@localhost ~]#
-> ----------------------------------------
->
-> We can confirm that the "(wq_completion)loop0" entry disappears when WQ for /dev/loop0 is destroyed.
->
-> Then, please see the following reproducer for this lockdep problem. As you can see, there is 10
-> seconds between lockdep complained and /proc/lockdep is read. 10 seconds should be enough time
-> for erasing the "(wq_completion)loop0" entry.
+Hi JianMin,
 
-Thanks for the reproducer.
+FYI, the error/warning still remains.
+
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.10-2021-12
+head:   982761134d974e5ec66bd02c18df9b3e2d61dbb4
+commit: 1efc36b815769cb8c7dae1d53373b190c017f5d1 [8788/9999] ANDROID: sched: add a helper function to change PELT half-life
+config: i386-buildonly-randconfig-r003-20211111 (https://download.01.org/0day-ci/archive/20220102/202201020220.ooYV0tfD-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/ammarfaizi2/linux-block/commit/1efc36b815769cb8c7dae1d53373b190c017f5d1
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.10-2021-12
+        git checkout 1efc36b815769cb8c7dae1d53373b190c017f5d1
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/sched/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/sched/pelt.c:35:5: warning: no previous prototype for 'get_pelt_halflife' [-Wmissing-prototypes]
+      35 | int get_pelt_halflife(void)
+         |     ^~~~~~~~~~~~~~~~~
+>> kernel/sched/pelt.c:68:5: warning: no previous prototype for 'set_pelt_halflife' [-Wmissing-prototypes]
+      68 | int set_pelt_halflife(int num)
+         |     ^~~~~~~~~~~~~~~~~
 
 
-> ----------------------------------------
-> #include <stdio.h>
-> #include <stdlib.h>
-> #include <sys/types.h>
-> #include <sys/stat.h>
-> #include <fcntl.h>
-> #include <unistd.h>
-> #include <sys/ioctl.h>
-> #include <linux/loop.h>
-> #include <sys/sendfile.h>
->
-> int main(int argc, char *argv[])
-> {
-> 	const int file_fd = open("testfile", O_RDWR | O_CREAT, 0600);
-> 	ftruncate(file_fd, 1048576);
-> 	char filename[128] = { };
-> 	const int loop_num = ioctl(open("/dev/loop-control", 3),  LOOP_CTL_GET_FREE, 0);
-> 	snprintf(filename, sizeof(filename) - 1, "/dev/loop%d", loop_num);
-> 	const int loop_fd_1 = open(filename, O_RDWR);
-> 	ioctl(loop_fd_1, LOOP_SET_FD, file_fd);
-> 	const int loop_fd_2 = open(filename, O_RDWR);
-> 	ioctl(loop_fd_1, LOOP_CLR_FD, 0);
-> 	const int sysfs_fd = open("/sys/power/resume", O_RDWR);
-> 	sendfile(file_fd, sysfs_fd, 0, 1048576);
-> 	sendfile(loop_fd_2, file_fd, 0, 1048576);
-> 	write(sysfs_fd, "700", 3);
-> 	system("/bin/cat /proc/lockdep > /tmp/lockdep-before-splat"); // Save before "zap on release" forgets the dependency.
-> 	close(loop_fd_2);
-> 	close(loop_fd_1); // Lockdep complains the circular dependency and turns off.
-> 	close(file_fd);
-> 	sleep(10);
-> 	system("/bin/cat /proc/lockdep > /tmp/lockdep-after-splat"); // Save after "zap on release" forgot the dependency.
-> 	return 0;
-> }
-> ----------------------------------------
->
-> If we compare the content of /proc/lockdep before and after, we can confirm that
-> the "(wq_completion)loop0" entry does not disappear even after loop device was
-> destroyed. (The 'k' is POISON_FREE read out as a string.)
->
-> ----------------------------------------
-> # diff /tmp/lockdep-before-splat /tmp/lockdep-after-splat | tail | cat -v
-> ---
->> ffffffffa02b7328 OPS:       3 FD:    1 BD:   15 +.+.: loop_validate_mutex
-> 7403c7411
-> < ffffffff826612d8 OPS:       4 FD:  337 BD:    1 .+.+: kn->active#135
-> ---
->> ffffffff826612d8 OPS:       4 FD:  338 BD:    1 .+.+: kn->active#135
-> 7411c7419
-> < ffff88810422b528 OPS:      22 FD:  183 BD:    1 +.+.: (wq_completion)loop0
-> ---
->> ffff88810422b528 OPS:      32 FD:  435 BD:    1 +.+.: kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkM-%M-;M-;M-;M-;M-;M-;M-;M-;
-> ----------------------------------------
->
-> Isn't this a bug that lockdep stopped erasing the dependency chain because
-> lockdep was already turned off before start reading /proc/lockdep ?
-That could be the case, I need to take a further look into the code.
->
->
-> By the way, this "zap on destroy" behavior made it difficult to find a reproducer
-> because "at least once during the lifetime of the kernel" part of
->
->    The validator achieves perfect, mathematical 'closure' (proof of locking
->    correctness) in the sense that for every simple, standalone single-task
->    locking sequence that occurred at least once during the lifetime of the
->    kernel, the validator proves it with a 100% certainty that no
->    combination and timing of these locking sequences can cause any class of
->    lock related deadlock. [*]
->
-> in Documentation/locking/lockdep-design.txt became no longer applicable?
->
-I believe that passage refers to validating usage of locks to make sure 
-that any deadlock can be detected. It is not really related to the 
-correctness of /proc/lockdep output which is a problem in this 
-particular case.
+vim +/get_pelt_halflife +35 kernel/sched/pelt.c
 
-Cheers,
-Longman
+    34	
+  > 35	int get_pelt_halflife(void)
+    36	{
+    37		return pelt_load_avg_period;
+    38	}
+    39	EXPORT_SYMBOL_GPL(get_pelt_halflife);
+    40	
+    41	static int __set_pelt_halflife(void *data)
+    42	{
+    43		int rc = 0;
+    44		int num = *(int *)data;
+    45	
+    46		switch (num) {
+    47		case PELT8_LOAD_AVG_PERIOD:
+    48			pelt_load_avg_period = PELT8_LOAD_AVG_PERIOD;
+    49			pelt_load_avg_max = PELT8_LOAD_AVG_MAX;
+    50			pelt_runnable_avg_yN_inv = pelt8_runnable_avg_yN_inv;
+    51			pr_info("PELT half life is set to %dms\n", num);
+    52			break;
+    53		case PELT32_LOAD_AVG_PERIOD:
+    54			pelt_load_avg_period = PELT32_LOAD_AVG_PERIOD;
+    55			pelt_load_avg_max = PELT32_LOAD_AVG_MAX;
+    56			pelt_runnable_avg_yN_inv = pelt32_runnable_avg_yN_inv;
+    57			pr_info("PELT half life is set to %dms\n", num);
+    58			break;
+    59		default:
+    60			rc = -EINVAL;
+    61			pr_err("Failed to set PELT half life to %dms, the current value is %dms\n",
+    62				num, pelt_load_avg_period);
+    63		}
+    64	
+    65		return rc;
+    66	}
+    67	
+  > 68	int set_pelt_halflife(int num)
+    69	{
+    70		return stop_machine(__set_pelt_halflife, &num, NULL);
+    71	}
+    72	EXPORT_SYMBOL_GPL(set_pelt_halflife);
+    73	
 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

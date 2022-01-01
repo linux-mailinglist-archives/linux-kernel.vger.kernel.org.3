@@ -2,282 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C31EA48266A
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 04:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3242548266C
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 04:40:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232032AbiAADdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 22:33:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41196 "EHLO
+        id S232039AbiAADjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 22:39:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232010AbiAADdj (ORCPT
+        with ESMTP id S232001AbiAADjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 22:33:39 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66FAFC061574;
-        Fri, 31 Dec 2021 19:33:39 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id v22so25466706qtx.8;
-        Fri, 31 Dec 2021 19:33:39 -0800 (PST)
+        Fri, 31 Dec 2021 22:39:52 -0500
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD095C061574;
+        Fri, 31 Dec 2021 19:39:51 -0800 (PST)
+Received: by mail-qk1-x735.google.com with SMTP id t66so14947754qkb.4;
+        Fri, 31 Dec 2021 19:39:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=XCZIWc943tGIO95j8AxKAR/J5LIDyYCAcQH1rfQcnGw=;
-        b=pbIaJWvKDbw/fi0syNJ13QBPVkPTl7s7jVW4JmGtb7LRHPUsjZbm3aQigMz5Rm4VUA
-         07BAKYpWh1CoXvO/IAZeQOgn8lqrUGiCWjmgKXIhimKYR4NXRcp6YLMNqDoeZEANuLBp
-         2oJtlc9+MnDDqFR67hKU42LN9Pko8gHbErGdpjrZi4NoGUWOENpeiCeefFpY1QtZp163
-         RqwqdLBROPjASS8mOaIK92H4OWY2q9cIMpD+psW3wDrIoYhikUPkfTXd8TjjS2+LowrW
-         FVwyZQqvkaeyJDehM7sspCxiSCCUf1tjXvVWLMMWMyozqI7q92umIXjAiNiKb6gtslzk
-         69pQ==
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=cOmwaF/tJXP/5+yfkJDU/5HkcnePK8N/zdTNdlwYIvk=;
+        b=MJRNuSA0i5e9NdJjfEcnlEdXR2SSoQrG2WitCEqfv8Y7W6AKBEWWPkAcCrBUlDv8se
+         4D0jKcQaaQryoTpwCoGZRjyVwDHdv9TOyQwPAQYyMsNwiSekDqJB7IP4bHSNrgUAIyjr
+         OTcV/0n8rQI30cnVwpmZefoF1yfZn9rFOvd/gnzbfvD81tRAHzNEOs3xjETeB11QrMa+
+         mYmVRsIlQSN0h2D6lYv+W30i8gW7cuHMlf/47A2K7YGr8bT9r/NfUppLYcPMIGePUAqv
+         GgaUKVvdHbcpkmPSh3soopi6Hjwh4NhoUxQlAoHxz5Caf1NuR8V/02JTfkVIzIHFzmAT
+         yBqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XCZIWc943tGIO95j8AxKAR/J5LIDyYCAcQH1rfQcnGw=;
-        b=7lpdYUogpsXAxTIyuiBA7bYWEqlTsWJMxlG18sR4XKquXzo3amto5WDPYha4pX7htA
-         nrrurcT/iQujUFqYPDO1ioK+4Ep/sBRHSU08cLXIZ+lHqSVT9gdIqt2dPnDPvWqJv1RV
-         3Th2jsIZpnoCugWQ0PbE+ldmK8xx+fcgcW+sT6ZGBtb2/Tge85iQWBcAHFTcJAkM6K+I
-         sR2rRweBjVOAXifK1j3dQ162NoOxmEl93O1ZbeShrxIOtpZSYf1sYxyLl1igqjEMFIBL
-         UwvsNFCzwTc0cslmaPuvzUEcVxXgNd6aa14TmRtSkgsi1cvy+dqTQ0shybGjdxkpHJfI
-         /XRQ==
-X-Gm-Message-State: AOAM5328o4/oZ6Ivs/h1GekZWX7jy15FwmVBaHW75JZB3ZmM0aLNFcGI
-        yV4HWpwTkWGelFJABM5/5WY=
-X-Google-Smtp-Source: ABdhPJyeooLqVAWTjaL3pwzXtleC/1eeGZIxL/lTQ/jbLuWnczCcOYj6wpJ8hL0BmuFfaZ7fTcuZOA==
-X-Received: by 2002:a05:622a:1354:: with SMTP id w20mr32273847qtk.566.1641008018591;
-        Fri, 31 Dec 2021 19:33:38 -0800 (PST)
-Received: from localhost.localdomain (c-67-187-90-124.hsd1.ky.comcast.net. [67.187.90.124])
-        by smtp.gmail.com with ESMTPSA id x4sm24132867qtw.44.2021.12.31.19.33.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Dec 2021 19:33:38 -0800 (PST)
-From:   frowand.list@gmail.com
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=cOmwaF/tJXP/5+yfkJDU/5HkcnePK8N/zdTNdlwYIvk=;
+        b=FyjqTE7dT14nh85qprpG7ucx0LLFQjrrxs5E42vrbCPIkBpD8PhgCxhVYF2KZk7Izh
+         90sNDsh8zy4fGanhlMRSHUxgquz4ILi3MrFmT4qZQI8FzMofUQ71jhITnYIw6nVjqOHo
+         lLqmm81PPg2yshDIOmFQ+ALebNoxkTh0CDzo01QtfxOUf5VuwQ6SVhP1l+MiHJ4GoDpS
+         rnBOErL7MDyVm95M3MarHk2CzWmiXhzxPhP3r0H4wnRmpCmXZ03D0LLJJF6vTlE0qGBQ
+         2IxCJ/5lS6/nzucp+EVfSuUaoJxRZAN2QUR1nb16RLoTyUqKrOBO+IBOj0UfPsqz3FPb
+         X1nA==
+X-Gm-Message-State: AOAM530zjnZ1YiiQpZJgGUEc1UOpA5qn+MZdKhK0dwijFQv9AUEnoBje
+        CoR0Z48ddZ21kDZttGsQsrydVGSMSkE=
+X-Google-Smtp-Source: ABdhPJxnyakU3jWiWpdSGLZH8xc65waj5hW1rfqMQ99BXYlxqOO8Bw/rHUzOJx2D8SgEpgAr92es4g==
+X-Received: by 2002:ae9:ef52:: with SMTP id d79mr26729925qkg.356.1641008390926;
+        Fri, 31 Dec 2021 19:39:50 -0800 (PST)
+Received: from [192.168.1.49] (c-67-187-90-124.hsd1.ky.comcast.net. [67.187.90.124])
+        by smtp.gmail.com with ESMTPSA id w2sm24433942qta.11.2021.12.31.19.39.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Dec 2021 19:39:50 -0800 (PST)
+Subject: Re: [PATCH 0/2] of: unittest: re-implement overlay tracking
+From:   Frank Rowand <frowand.list@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>, erhard_f@mailbox.org,
         yinxiujiang@kylinos.cn
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] of: unittest: re-implement overlay tracking
-Date:   Fri, 31 Dec 2021 21:33:29 -0600
-Message-Id: <20220101033329.1277779-3-frowand.list@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220101033329.1277779-1-frowand.list@gmail.com>
 References: <20220101033329.1277779-1-frowand.list@gmail.com>
+Message-ID: <d1af4cc8-eb7e-ec83-0e15-11d3d4791a29@gmail.com>
+Date:   Fri, 31 Dec 2021 21:39:49 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220101033329.1277779-1-frowand.list@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Rowand <frank.rowand@sony.com>
+Hi Erhard,
 
-Some overlays are tracked when they are applied.  The tracked overlays
-are later removed after the overlay tests are completed.  The old
-implementation makes assumptions about the expected values for
-overlay changeset id created by the overlay apply which result
-in fragile code.  The new code removes the assumptions.
+Can you please check whether this patch series fixes the shift-out-of-bounds
+problem you reported?
 
-A symptom that exposes a problem with the tracking code is a
-warning "UBSAN: shift-out-of-bounds in drivers/of/unittest.c:1933:36",
-Kernel Version: 5.15-rc7, PPC-64, Talos II.  This results from variable
-"id" value of -1 in the final line of of_unittest_untrack_overlay().
+-Frank
 
-Reported-by: erhard_f@mailbox.org
-Signed-off-by: Frank Rowand <frank.rowand@sony.com>
----
- drivers/of/unittest.c | 110 +++++++++++++++++++-----------------------
- 1 file changed, 49 insertions(+), 61 deletions(-)
 
-diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
-index 33c458044600..e2807014cbe7 100644
---- a/drivers/of/unittest.c
-+++ b/drivers/of/unittest.c
-@@ -1657,7 +1657,7 @@ static void __init of_unittest_overlay_gpio(void)
- 	 * The overlays are applied by overlay_data_apply()
- 	 * instead of of_unittest_apply_overlay() so that they
- 	 * will not be tracked.  Thus they will not be removed
--	 * by of_unittest_destroy_tracked_overlays().
-+	 * by of_unittest_remove_tracked_overlays().
- 	 *
- 	 * - apply overlay_gpio_01
- 	 * - apply overlay_gpio_02a
-@@ -1905,86 +1905,70 @@ static const char *overlay_name_from_nr(int nr)
- 
- static const char *bus_path = "/testcase-data/overlay-node/test-bus";
- 
--/* FIXME: it is NOT guaranteed that overlay ids are assigned in sequence */
-+#define MAX_TRACK_OVCS_IDS 256
- 
--#define MAX_UNITTEST_OVERLAYS	256
--static unsigned long overlay_id_bits[BITS_TO_LONGS(MAX_UNITTEST_OVERLAYS)];
--static int overlay_first_id = -1;
-+static int track_ovcs_id[MAX_TRACK_OVCS_IDS];
-+static int track_ovcs_id_overlay_nr[MAX_TRACK_OVCS_IDS];
-+static int track_ovcs_id_cnt;
- 
--static long of_unittest_overlay_tracked(int id)
-+static void of_unittest_track_overlay(int ovcs_id, int overlay_nr)
- {
--	if (WARN_ON(id >= MAX_UNITTEST_OVERLAYS))
--		return 0;
--	return overlay_id_bits[BIT_WORD(id)] & BIT_MASK(id);
--}
--
--static void of_unittest_track_overlay(int id)
--{
--	if (overlay_first_id < 0)
--		overlay_first_id = id;
--	id -= overlay_first_id;
--
--	if (WARN_ON(id >= MAX_UNITTEST_OVERLAYS))
-+	if (WARN_ON(track_ovcs_id_cnt >= MAX_TRACK_OVCS_IDS))
- 		return;
--	overlay_id_bits[BIT_WORD(id)] |= BIT_MASK(id);
-+
-+	track_ovcs_id[track_ovcs_id_cnt] = ovcs_id;
-+	track_ovcs_id_overlay_nr[track_ovcs_id_cnt] = overlay_nr;
-+	track_ovcs_id_cnt++;
- }
- 
--static void of_unittest_untrack_overlay(int id)
-+static void of_unittest_untrack_overlay(int ovcs_id)
- {
--	if (overlay_first_id < 0)
-+	if (WARN_ON(track_ovcs_id_cnt < 1))
- 		return;
--	id -= overlay_first_id;
--	if (WARN_ON(id >= MAX_UNITTEST_OVERLAYS))
--		return;
--	overlay_id_bits[BIT_WORD(id)] &= ~BIT_MASK(id);
--}
- 
--static void of_unittest_destroy_tracked_overlays(void)
--{
--	int id, ret, defers, ovcs_id;
-+	track_ovcs_id_cnt--;
- 
--	if (overlay_first_id < 0)
--		return;
-+	/* If out of synch then test is broken.  Do not try to recover. */
-+	WARN_ON(track_ovcs_id[track_ovcs_id_cnt] != ovcs_id);
-+}
- 
--	/* try until no defers */
--	do {
--		defers = 0;
--		/* remove in reverse order */
--		for (id = MAX_UNITTEST_OVERLAYS - 1; id >= 0; id--) {
--			if (!of_unittest_overlay_tracked(id))
--				continue;
-+static void of_unittest_remove_tracked_overlays(void)
-+{
-+	int ret, ovcs_id, overlay_nr, save_ovcs_id;
-+	const char *overlay_name;
- 
--			ovcs_id = id + overlay_first_id;
--			ret = of_overlay_remove(&ovcs_id);
--			if (ret == -ENODEV) {
--				pr_warn("%s: no overlay to destroy for #%d\n",
--					__func__, id + overlay_first_id);
--				continue;
--			}
--			if (ret != 0) {
--				defers++;
--				pr_warn("%s: overlay destroy failed for #%d\n",
--					__func__, id + overlay_first_id);
--				continue;
--			}
-+	while (track_ovcs_id_cnt > 0) {
- 
--			of_unittest_untrack_overlay(id);
-+		ovcs_id = track_ovcs_id[track_ovcs_id_cnt - 1];
-+		overlay_nr = track_ovcs_id_overlay_nr[track_ovcs_id_cnt - 1];
-+		save_ovcs_id = ovcs_id;
-+		ret = of_overlay_remove(&ovcs_id);
-+		if (ret == -ENODEV) {
-+			overlay_name = overlay_name_from_nr(overlay_nr);
-+			pr_warn("%s: of_overlay_remove() for overlay \"%s\" failed, ret = %d\n",
-+				__func__, overlay_name, ret);
- 		}
--	} while (defers > 0);
-+		of_unittest_untrack_overlay(save_ovcs_id);
-+	};
-+
- }
- 
- static int __init of_unittest_apply_overlay(int overlay_nr, int *ovcs_id)
- {
-+	/*
-+	 * The overlay will be tracked, thus it will be removed
-+	 * by of_unittest_remove_tracked_overlays().
-+	 */
-+
- 	const char *overlay_name;
- 
- 	overlay_name = overlay_name_from_nr(overlay_nr);
- 
- 	if (!overlay_data_apply(overlay_name, ovcs_id)) {
--		unittest(0, "could not apply overlay \"%s\"\n",
--				overlay_name);
-+		unittest(0, "could not apply overlay \"%s\"\n", overlay_name);
- 		return -EFAULT;
- 	}
--	of_unittest_track_overlay(*ovcs_id);
-+	of_unittest_track_overlay(*ovcs_id, overlay_nr);
- 
- 	return 0;
- }
-@@ -2226,7 +2210,7 @@ static void __init of_unittest_overlay_6(void)
- 			return;
- 	}
- 	save_ovcs_id[0] = ovcs_id;
--	of_unittest_track_overlay(ovcs_id);
-+	of_unittest_track_overlay(ovcs_id, overlay_nr + 0);
- 
- 	EXPECT_END(KERN_INFO,
- 		   "OF: overlay: WARNING: memory leak will occur if overlay removed, property: /testcase-data/overlay-node/test-bus/test-unittest6/status");
-@@ -2243,7 +2227,7 @@ static void __init of_unittest_overlay_6(void)
- 			return;
- 	}
- 	save_ovcs_id[1] = ovcs_id;
--	of_unittest_track_overlay(ovcs_id);
-+	of_unittest_track_overlay(ovcs_id, overlay_nr + 1);
- 
- 	EXPECT_END(KERN_INFO,
- 		   "OF: overlay: WARNING: memory leak will occur if overlay removed, property: /testcase-data/overlay-node/test-bus/test-unittest7/status");
-@@ -2317,7 +2301,7 @@ static void __init of_unittest_overlay_8(void)
- 		return;
- 
- 	save_ovcs_id[0] = ovcs_id;
--	of_unittest_track_overlay(ovcs_id);
-+	of_unittest_track_overlay(ovcs_id, overlay_nr + 0);
- 
- 	overlay_name = overlay_name_from_nr(overlay_nr + 1);
- 
-@@ -2336,7 +2320,7 @@ static void __init of_unittest_overlay_8(void)
- 	}
- 
- 	save_ovcs_id[1] = ovcs_id;
--	of_unittest_track_overlay(ovcs_id);
-+	of_unittest_track_overlay(ovcs_id, overlay_nr + 1);
- 
- 	/* now try to remove first overlay (it should fail) */
- 	ovcs_id = save_ovcs_id[0];
-@@ -2356,6 +2340,10 @@ static void __init of_unittest_overlay_8(void)
- 		   "OF: overlay: node_overlaps_later_cs: #6 overlaps with #7 @/testcase-data/overlay-node/test-bus/test-unittest8");
- 
- 	if (!ret) {
-+		/*
-+		 * Should never get here.  If we do, expect a lot of
-+		 * subsequent tracking and overlay removal related errors.
-+		 */
- 		unittest(0, "%s was destroyed @\"%s\"\n",
- 				overlay_name_from_nr(overlay_nr + 0),
- 				unittest_path(unittest_nr,
-@@ -2805,7 +2793,7 @@ static void __init of_unittest_overlay(void)
- 
- 	of_unittest_overlay_gpio();
- 
--	of_unittest_destroy_tracked_overlays();
-+	of_unittest_remove_tracked_overlays();
- 
- out:
- 	of_node_put(bus_np);
--- 
-Frank Rowand <frank.rowand@sony.com>
+On 12/31/21 9:33 PM, frowand.list@gmail.com wrote:
+> From: Frank Rowand <frank.rowand@sony.com>
+> 
+> Some overlays are tracked when they are applied.  The tracked overlays
+> are later removed after the overlay tests are completed.  The old
+> implementation makes assumptions about the expected values for
+> overlay changeset id created by the overlay apply which result
+> in fragile code.  The new code removes the assumptions.
+> 
+> A symptom that exposes a problem with the tracking code is a
+> warning "UBSAN: shift-out-of-bounds in drivers/of/unittest.c:1933:36",
+> Kernel Version: 5.15-rc7, PPC-64, Talos II.  This results from variable
+> "id" value of -1 in the final line of of_unittest_untrack_overlay().
+> 
+> The first patch in the series cleans up the inconsistent use of overlay
+> changeset id and the obsolete overlay id.  The id is a core concept in
+> the overlay tracking that is re-implemented in the second patch in
+> the series.
+> 
+> Frank Rowand (2):
+>   of: unittest: change references to obsolete overlay id
+>   of: unittest: re-implement overlay tracking
+> 
+>  drivers/of/unittest.c | 154 +++++++++++++++++++-----------------------
+>  1 file changed, 71 insertions(+), 83 deletions(-)
+> 
 

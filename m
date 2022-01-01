@@ -2,129 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 325B148275C
+	by mail.lfdr.de (Postfix) with ESMTP id CCA6748275E
 	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 11:56:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232278AbiAAKyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jan 2022 05:54:39 -0500
-Received: from mga12.intel.com ([192.55.52.136]:53922 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229624AbiAAKyj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jan 2022 05:54:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641034479; x=1672570479;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ha7s+2QtLtZP4MEH1gak+iXGjy7xDlDv5uUrKrZQLIE=;
-  b=dl1NY8/A2kUbq6PAlCdjelwDMNMBaUc9D1yawHsONh1f+8rFj9OQBfFG
-   a1fPStj9NcV4VNnBY/SXYRTvPiJpcGCfnQUgx+r8qJvAGsgStN1aj8+7l
-   71gnb7X1hm/I3JEsdd3XgysCG8JpEMb4mWLihYS4m5YcYs/spjVy3E1um
-   Fza1pELc5d+giD2xGL+WOhwXfrzoV1Zxg8ns7pMhgY4YFglv9NcQO6baj
-   yp+z/N2/68fQ1RwC1ih0PPk+8P0GWJ9tieEsKZTlVWXEtzuIpxqhvmhq7
-   V5+d+bmt3TFkMZpCdurkyZA6ssMpnSAO3L7R4J4fDSgaLFzd1/nJ6HPHP
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10214"; a="221880340"
-X-IronPort-AV: E=Sophos;i="5.88,253,1635231600"; 
-   d="scan'208";a="221880340"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2022 02:54:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,253,1635231600"; 
-   d="scan'208";a="469249286"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 01 Jan 2022 02:54:37 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n3c20-000CMy-N0; Sat, 01 Jan 2022 10:54:36 +0000
-Date:   Sat, 1 Jan 2022 18:54:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Pavel Begunkov <asml.silence@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>
-Subject: fs/io_uring.c:2330:40: warning: variable 'prev' set but not used
-Message-ID: <202201011808.Lm6C3RMA-lkp@intel.com>
+        id S232286AbiAAK43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jan 2022 05:56:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50908 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229624AbiAAK42 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 1 Jan 2022 05:56:28 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CAFC061574;
+        Sat,  1 Jan 2022 02:56:28 -0800 (PST)
+Received: from ip4d173d02.dynamic.kabel-deutschland.de ([77.23.61.2] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1n3c3m-0003Dw-Vy; Sat, 01 Jan 2022 11:56:27 +0100
+Message-ID: <bbb587b1-4555-ba8d-fe43-d56d41a3c652@leemhuis.info>
+Date:   Sat, 1 Jan 2022 11:56:26 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 5.15 04/42] RDMA/mlx5: Fix releasing unallocated memory in
+ dereg MR flow
+Content-Language: en-BS
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, Alaa Hleihel <alaa@nvidia.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+References: <20211215172026.641863587@linuxfoundation.org>
+ <20211215172026.789963312@linuxfoundation.org>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <20211215172026.789963312@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1641034588;529470cb;
+X-HE-SMSGID: 1n3c3m-0003Dw-Vy
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pavel,
+Hi, this is your Linux kernel regression tracker speaking.
 
-FYI, the error/warning still remains.
+On 15.12.21 18:20, Greg Kroah-Hartman wrote:
+> From: Alaa Hleihel <alaa@nvidia.com>
+> 
+> [ Upstream commit f0ae4afe3d35e67db042c58a52909e06262b740f ]
+> 
+> For the case of IB_MR_TYPE_DM the mr does doesn't have a umem, even though
+> it is a user MR. This causes function mlx5_free_priv_descs() to think that
+> it is a kernel MR, leading to wrongly accessing mr->descs that will get
+> wrong values in the union which leads to attempt to release resources that
+> were not allocated in the first place.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   8008293888188c3923f5bd8a69370dae25ed14e5
-commit: 6f33b0bc4ea43f5c5ce7b7c9ab66051f80837862 io_uring: use slist for completion batching
-date:   2 months ago
-config: nios2-defconfig (https://download.01.org/0day-ci/archive/20220101/202201011808.Lm6C3RMA-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6f33b0bc4ea43f5c5ce7b7c9ab66051f80837862
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 6f33b0bc4ea43f5c5ce7b7c9ab66051f80837862
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash
+TWIMC, that commit made it into 5.15.y, but is known to cause a
+regression in v5.16-rc:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+https://lore.kernel.org/lkml/f298db4ec5fdf7a2d1d166ca2f66020fd9397e5c.1640079962.git.leonro@nvidia.com/
+https://lore.kernel.org/all/EEBA2D1C-F29C-4237-901C-587B60CEE113@oracle.com/
 
-All warnings (new ones prefixed by >>):
+A fix for mainline was posted, but got stuck afaics:
+https://lore.kernel.org/lkml/f298db4ec5fdf7a2d1d166ca2f66020fd9397e5c.1640079962.git.leonro@nvidia.com/
 
-   fs/io_uring.c: In function 'io_queue_async_work':
-   fs/io_uring.c:1455:61: warning: parameter 'locked' set but not used [-Wunused-but-set-parameter]
-    1455 | static void io_queue_async_work(struct io_kiocb *req, bool *locked)
-         |                                                       ~~~~~~^~~~~~
-   fs/io_uring.c: In function '__io_submit_flush_completions':
->> fs/io_uring.c:2330:40: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
-    2330 |         struct io_wq_work_node *node, *prev;
-         |                                        ^~~~
+A revert was also discussed, but not performed:
+https://lore.kernel.org/all/20211222101312.1358616-1-maorg@nvidia.com/
 
+Ciao, Thorsten
 
-vim +/prev +2330 fs/io_uring.c
+> For example:
+>  DMA-API: mlx5_core 0000:08:00.1: device driver tries to free DMA memory it has not allocated [device address=0x0000000000000000] [size=0 bytes]
+>  WARNING: CPU: 8 PID: 1021 at kernel/dma/debug.c:961 check_unmap+0x54f/0x8b0
+>  RIP: 0010:check_unmap+0x54f/0x8b0
+>  Call Trace:
+>   debug_dma_unmap_page+0x57/0x60
+>   mlx5_free_priv_descs+0x57/0x70 [mlx5_ib]
+>   mlx5_ib_dereg_mr+0x1fb/0x3d0 [mlx5_ib]
+>   ib_dereg_mr_user+0x60/0x140 [ib_core]
+>   uverbs_destroy_uobject+0x59/0x210 [ib_uverbs]
+>   uobj_destroy+0x3f/0x80 [ib_uverbs]
+>   ib_uverbs_cmd_verbs+0x435/0xd10 [ib_uverbs]
+>   ? uverbs_finalize_object+0x50/0x50 [ib_uverbs]
+>   ? lock_acquire+0xc4/0x2e0
+>   ? lock_acquired+0x12/0x380
+>   ? lock_acquire+0xc4/0x2e0
+>   ? lock_acquire+0xc4/0x2e0
+>   ? ib_uverbs_ioctl+0x7c/0x140 [ib_uverbs]
+>   ? lock_release+0x28a/0x400
+>   ib_uverbs_ioctl+0xc0/0x140 [ib_uverbs]
+>   ? ib_uverbs_ioctl+0x7c/0x140 [ib_uverbs]
+>   __x64_sys_ioctl+0x7f/0xb0
+>   do_syscall_64+0x38/0x90
+> 
+> Fix it by reorganizing the dereg flow and mlx5_ib_mr structure:
+>  - Move the ib_umem field into the user MRs structure in the union as it's
+>    applicable only there.
+>  - Function mlx5_ib_dereg_mr() will now call mlx5_free_priv_descs() only
+>    in case there isn't udata, which indicates that this isn't a user MR.
+> 
+> Fixes: f18ec4223117 ("RDMA/mlx5: Use a union inside mlx5_ib_mr")
+> Link: https://lore.kernel.org/r/66bb1dd253c1fd7ceaa9fc411061eefa457b86fb.1637581144.git.leonro@nvidia.com
+> Signed-off-by: Alaa Hleihel <alaa@nvidia.com>
+> Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>  drivers/infiniband/hw/mlx5/mlx5_ib.h |  6 +++---
+>  drivers/infiniband/hw/mlx5/mr.c      | 26 ++++++++++++--------------
+>  2 files changed, 15 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/infiniband/hw/mlx5/mlx5_ib.h b/drivers/infiniband/hw/mlx5/mlx5_ib.h
+> index bf20a388eabe1..6204ae2caef58 100644
+> --- a/drivers/infiniband/hw/mlx5/mlx5_ib.h
+> +++ b/drivers/infiniband/hw/mlx5/mlx5_ib.h
+> @@ -641,7 +641,6 @@ struct mlx5_ib_mr {
+>  
+>  	/* User MR data */
+>  	struct mlx5_cache_ent *cache_ent;
+> -	struct ib_umem *umem;
+>  
+>  	/* This is zero'd when the MR is allocated */
+>  	union {
+> @@ -653,7 +652,7 @@ struct mlx5_ib_mr {
+>  			struct list_head list;
+>  		};
+>  
+> -		/* Used only by kernel MRs (umem == NULL) */
+> +		/* Used only by kernel MRs */
+>  		struct {
+>  			void *descs;
+>  			void *descs_alloc;
+> @@ -675,8 +674,9 @@ struct mlx5_ib_mr {
+>  			int data_length;
+>  		};
+>  
+> -		/* Used only by User MRs (umem != NULL) */
+> +		/* Used only by User MRs */
+>  		struct {
+> +			struct ib_umem *umem;
+>  			unsigned int page_shift;
+>  			/* Current access_flags */
+>  			int access_flags;
+> diff --git a/drivers/infiniband/hw/mlx5/mr.c b/drivers/infiniband/hw/mlx5/mr.c
+> index 22e2f4d79743d..69b2ce4c292ae 100644
+> --- a/drivers/infiniband/hw/mlx5/mr.c
+> +++ b/drivers/infiniband/hw/mlx5/mr.c
+> @@ -1911,19 +1911,18 @@ mlx5_alloc_priv_descs(struct ib_device *device,
+>  	return ret;
+>  }
+>  
+> -static void
+> -mlx5_free_priv_descs(struct mlx5_ib_mr *mr)
+> +static void mlx5_free_priv_descs(struct mlx5_ib_mr *mr)
+>  {
+> -	if (!mr->umem && mr->descs) {
+> -		struct ib_device *device = mr->ibmr.device;
+> -		int size = mr->max_descs * mr->desc_size;
+> -		struct mlx5_ib_dev *dev = to_mdev(device);
+> +	struct mlx5_ib_dev *dev = to_mdev(mr->ibmr.device);
+> +	int size = mr->max_descs * mr->desc_size;
+>  
+> -		dma_unmap_single(&dev->mdev->pdev->dev, mr->desc_map, size,
+> -				 DMA_TO_DEVICE);
+> -		kfree(mr->descs_alloc);
+> -		mr->descs = NULL;
+> -	}
+> +	if (!mr->descs)
+> +		return;
+> +
+> +	dma_unmap_single(&dev->mdev->pdev->dev, mr->desc_map, size,
+> +			 DMA_TO_DEVICE);
+> +	kfree(mr->descs_alloc);
+> +	mr->descs = NULL;
+>  }
+>  
+>  int mlx5_ib_dereg_mr(struct ib_mr *ibmr, struct ib_udata *udata)
+> @@ -1999,7 +1998,8 @@ int mlx5_ib_dereg_mr(struct ib_mr *ibmr, struct ib_udata *udata)
+>  	if (mr->cache_ent) {
+>  		mlx5_mr_cache_free(dev, mr);
+>  	} else {
+> -		mlx5_free_priv_descs(mr);
+> +		if (!udata)
+> +			mlx5_free_priv_descs(mr);
+>  		kfree(mr);
+>  	}
+>  	return 0;
+> @@ -2086,7 +2086,6 @@ static struct mlx5_ib_mr *mlx5_ib_alloc_pi_mr(struct ib_pd *pd,
+>  	if (err)
+>  		goto err_free_in;
+>  
+> -	mr->umem = NULL;
+>  	kfree(in);
+>  
+>  	return mr;
+> @@ -2213,7 +2212,6 @@ static struct ib_mr *__mlx5_ib_alloc_mr(struct ib_pd *pd,
+>  	}
+>  
+>  	mr->ibmr.device = pd->device;
+> -	mr->umem = NULL;
+>  
+>  	switch (mr_type) {
+>  	case IB_MR_TYPE_MEM_REG:
 
-  2326	
-  2327	static void __io_submit_flush_completions(struct io_ring_ctx *ctx)
-  2328		__must_hold(&ctx->uring_lock)
-  2329	{
-> 2330		struct io_wq_work_node *node, *prev;
-  2331		struct io_submit_state *state = &ctx->submit_state;
-  2332		struct req_batch rb;
-  2333	
-  2334		spin_lock(&ctx->completion_lock);
-  2335		wq_list_for_each(node, prev, &state->compl_reqs) {
-  2336			struct io_kiocb *req = container_of(node, struct io_kiocb,
-  2337							    comp_list);
-  2338	
-  2339			__io_cqring_fill_event(ctx, req->user_data, req->result,
-  2340						req->compl.cflags);
-  2341		}
-  2342		io_commit_cqring(ctx);
-  2343		spin_unlock(&ctx->completion_lock);
-  2344		io_cqring_ev_posted(ctx);
-  2345	
-  2346		io_init_req_batch(&rb);
-  2347		node = state->compl_reqs.first;
-  2348		do {
-  2349			struct io_kiocb *req = container_of(node, struct io_kiocb,
-  2350							    comp_list);
-  2351	
-  2352			node = req->comp_list.next;
-  2353			if (req_ref_put_and_test(req))
-  2354				io_req_free_batch(&rb, req, &ctx->submit_state);
-  2355		} while (node);
-  2356	
-  2357		io_req_free_batch_finish(ctx, &rb);
-  2358		INIT_WQ_LIST(&state->compl_reqs);
-  2359	}
-  2360	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

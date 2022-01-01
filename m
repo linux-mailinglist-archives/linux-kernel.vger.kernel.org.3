@@ -2,118 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D044482762
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 12:03:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81867482763
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 12:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232297AbiAALDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jan 2022 06:03:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52346 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232270AbiAALDG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jan 2022 06:03:06 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADA8C061574;
-        Sat,  1 Jan 2022 03:03:05 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id o30so16063785wms.4;
-        Sat, 01 Jan 2022 03:03:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Z/+9nvmLB5oEXe4I6O3MJpdQ4O59Sk/tOuc5Q78ycSI=;
-        b=iqfHPGieEbjoGyxVq0oJI2zlJ10bouhezyn4iemfIsQWm++l/17j4YBGg06GEoljEZ
-         NM//csCTnqTgEdKVv773vuU5U1Q2N4ypQh9jbgjW2Fik8VBpLdAafYwWaIoHP8EREl83
-         3Ewt1ykGKwT+1ECcKdY9fEKz6jmY0GflbOjTpUaUPeen0qlxtoVczESw5OU+Eb8wl8xA
-         3yFTXtyUoU2HZETNCLrkO7jQAnggox5Z5Vm5mhfc6sqy/F+EsVQnJJFjkrGiMk+sGbwi
-         mHGzOVb4+XAiUhZDIGJhdtVVxyG4yFwEa2IiSFD2TGnL6vwpJKF+lh/CtzCMhgOVfjNJ
-         aMyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Z/+9nvmLB5oEXe4I6O3MJpdQ4O59Sk/tOuc5Q78ycSI=;
-        b=5DEQYJQgtBOwllD/AhD2RYxD75V0DCRzdJ20FwsBp7fTyb9iCqR2u70cUvIGH0bzJL
-         wI1ZSNxYXLbcqekic5+FtDAwMMLj6oSeOIgw9A4DkHtfBEaZDQqPJC2zz/HUdXtpZdRo
-         kh8QudjG+cCu1r0VE63ByotSxH1JJcDk8Gr3sXA6GEOYGK9AuhwmmQQ0W81W+EVTg2sy
-         nyT+g9X50gQXX2skVi5LbpxI+tpvNeytBpsn2WoVJtarlptmblJXu3iwaxdPaFRvgJDB
-         8K92qBGfD5CVPFlck++TVDjgtUJBNgMuhGJU3xczTiz2N1mi0+ghH0n3A8420cuw5vR4
-         +uJg==
-X-Gm-Message-State: AOAM533d0XuHgjSge2rSvN0BEyj2sU1s6IQHbwlsD/rgT6i3Q6y3LSbG
-        jZGZraLST4N8TUIa5GFj9i4=
-X-Google-Smtp-Source: ABdhPJz6q4+H7oaIwJTrdJubrwrWCH5bAR5Qx9uj3aTmlp5kCZMGazsTdNS8SFUNzc0gwtQipe1oFg==
-X-Received: by 2002:a05:600c:4ed1:: with SMTP id g17mr23871140wmq.112.1641034984247;
-        Sat, 01 Jan 2022 03:03:04 -0800 (PST)
-Received: from [192.168.1.10] (4e691f2a.skybroadband.com. [78.105.31.42])
-        by smtp.googlemail.com with ESMTPSA id h3sm29559366wrt.94.2022.01.01.03.03.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Jan 2022 03:03:03 -0800 (PST)
-Message-ID: <b4175a8e-a9a4-29e8-b433-6c0dd99c9673@googlemail.com>
-Date:   Sat, 1 Jan 2022 11:03:02 +0000
+        id S232305AbiAALFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jan 2022 06:05:41 -0500
+Received: from mga11.intel.com ([192.55.52.93]:54348 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232262AbiAALFj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 1 Jan 2022 06:05:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641035139; x=1672571139;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7F/1rfrDpFHaLLjNQxV1l6jMkR8vxrQEQH7dQh46bF8=;
+  b=YCS2RdApcPXmqhlAK1VNQC4NGdZC+f0VZS4N/NT4/OtxPLamD2dosW/T
+   Ys4+WbzRknGvl85+XXpaiGNmBJGUruWuCToMEm9WdWXtJ0SsG+i1/JPk2
+   T238JP0MWSnb5vAVfUs36FZJuaUR8w5TcQs38mTvHKYUT12NIIl8gzocl
+   P6g4M/87otQ47O6LfBvMI64zs0W9OSch05R1yKl3sI03bmv/ng2lJv3PP
+   WTuv7pVZSCGXsJmXToJP6hnHdxBYxSYVb7jBuScMoOoSTiQJ57ThNDGDk
+   Ft9RTw3B77fU1C2iIxoKd1vD9dsERtNYPAxI760uFlnExkhuJeA0RJZzK
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10214"; a="239431572"
+X-IronPort-AV: E=Sophos;i="5.88,253,1635231600"; 
+   d="scan'208";a="239431572"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2022 03:05:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,253,1635231600"; 
+   d="scan'208";a="471145627"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 01 Jan 2022 03:05:37 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n3cCf-000CNl-0J; Sat, 01 Jan 2022 11:05:37 +0000
+Date:   Sat, 1 Jan 2022 19:04:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: include/asm-generic/cmpxchg.h:37:39: sparse: sparse: cast truncates
+ bits from constant value (deadbeef becomes ef)
+Message-ID: <202201011813.hKjzPzZI-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: 5.16.0-rc7+ Bluetooth error
-Content-Language: en-GB
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        Kiran K <kiran.k@intel.com>
-References: <02077a37-46d6-c94f-fa08-9da7ee99e42c@googlemail.com>
- <50ea1b0e-28d7-6d04-9c03-4becc4db143b@googlemail.com>
- <CABBYNZLc9Pj=LYhL5MUUVkhenHb_xfT59aDDkdk14k7+ojeUzw@mail.gmail.com>
-From:   Chris Clayton <chris2553@googlemail.com>
-In-Reply-To: <CABBYNZLc9Pj=LYhL5MUUVkhenHb_xfT59aDDkdk14k7+ojeUzw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   8008293888188c3923f5bd8a69370dae25ed14e5
+commit: c7178cdecdbef8321f418fac55f3afaca3bb4c96 locking/atomic: h8300: use asm-generic exclusively
+date:   7 months ago
+config: h8300-randconfig-s031-20211117 (https://download.01.org/0day-ci/archive/20220101/202201011813.hKjzPzZI-lkp@intel.com/config)
+compiler: h8300-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c7178cdecdbef8321f418fac55f3afaca3bb4c96
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c7178cdecdbef8321f418fac55f3afaca3bb4c96
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=h8300 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-On 31/12/2021 19:53, Luiz Augusto von Dentz wrote:
-> Hi Chris,
-> 
-> On Fri, Dec 31, 2021 at 2:35 AM Chris Clayton <chris2553@googlemail.com> wrote:
->>
->> On 30/12/2021 09:21, Chris Clayton wrote:
->>> Hi,
->>>
->>> I pulled the latest changes into my clone of Linus' tree and built and installed the kernel. (git describe gives
->>> v5.16-rc7-9-ge7c124bd0463). I'm seeing errors reported by the bluetooth subsystem that i don't see in 5.15.12 or 5.10.89
->>>
->>> The problem seems to occur twice during system startup and on each occasion I see a batch of identical error messages:
->>>
->>> [    3.980822] Bluetooth: hci0: Failed to read codec capabilities (-56)
->>> [    3.982812] Bluetooth: hci0: Failed to read codec capabilities (-56)
->>> [    3.984812] Bluetooth: hci0: Failed to read codec capabilities (-56)
->>> [    3.986608] Bluetooth: hci0: Failed to read codec capabilities (-56)
->>> [    3.987621] Bluetooth: hci0: Failed to read codec capabilities (-56)
->>> [    3.988606] Bluetooth: hci0: Failed to read codec capabilities (-56)
->>> [    3.989650] Bluetooth: hci0: Failed to read codec capabilities (-56)
->>>
->>
->> Sorry, I should have said that despite the above errors, my bluetooth devices still work fine.
-> 
-> Would be great to have the HCI trace (btmon).
-> 
+sparse warnings: (new ones prefixed by >>)
+   lib/atomic64_test.c: note: in included file (through arch/h8300/include/generated/asm/cmpxchg.h, include/asm-generic/atomic.h, arch/h8300/include/generated/asm/atomic.h, ...):
+>> include/asm-generic/cmpxchg.h:37:39: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
+>> include/asm-generic/cmpxchg.h:48:40: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
+>> include/asm-generic/cmpxchg.h:37:39: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
+>> include/asm-generic/cmpxchg.h:48:40: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
+>> include/asm-generic/cmpxchg.h:37:39: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
+>> include/asm-generic/cmpxchg.h:48:40: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
+>> include/asm-generic/cmpxchg.h:37:39: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
+>> include/asm-generic/cmpxchg.h:48:40: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
+   lib/atomic64_test.c: note: in included file (through include/asm-generic/cmpxchg.h, arch/h8300/include/generated/asm/cmpxchg.h, include/asm-generic/atomic.h, ...):
+>> include/asm-generic/cmpxchg-local.h:30:42: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
+>> include/asm-generic/cmpxchg-local.h:34:44: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
+>> include/asm-generic/cmpxchg-local.h:30:42: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
+>> include/asm-generic/cmpxchg-local.h:34:44: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
+>> include/asm-generic/cmpxchg-local.h:30:42: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
+>> include/asm-generic/cmpxchg-local.h:34:44: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
+>> include/asm-generic/cmpxchg-local.h:30:42: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
+>> include/asm-generic/cmpxchg-local.h:34:44: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
+>> include/asm-generic/cmpxchg-local.h:30:42: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
+>> include/asm-generic/cmpxchg-local.h:34:44: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
+>> include/asm-generic/cmpxchg-local.h:30:42: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
+>> include/asm-generic/cmpxchg-local.h:34:44: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
+>> include/asm-generic/cmpxchg-local.h:30:42: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
+>> include/asm-generic/cmpxchg-local.h:34:44: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
+>> include/asm-generic/cmpxchg-local.h:30:42: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
+>> include/asm-generic/cmpxchg-local.h:34:44: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
 
-How would I go about capturing that, please? This all happens during boot, so I don't have access to the system to set
-up a trace.
+vim +37 include/asm-generic/cmpxchg.h
 
+b4816afa398670 David Howells 2012-03-28  24  
+b4816afa398670 David Howells 2012-03-28  25  static inline
+b4816afa398670 David Howells 2012-03-28  26  unsigned long __xchg(unsigned long x, volatile void *ptr, int size)
+b4816afa398670 David Howells 2012-03-28  27  {
+b4816afa398670 David Howells 2012-03-28  28  	unsigned long ret, flags;
+b4816afa398670 David Howells 2012-03-28  29  
+b4816afa398670 David Howells 2012-03-28  30  	switch (size) {
+b4816afa398670 David Howells 2012-03-28  31  	case 1:
+b4816afa398670 David Howells 2012-03-28  32  #ifdef __xchg_u8
+b4816afa398670 David Howells 2012-03-28  33  		return __xchg_u8(x, ptr);
+b4816afa398670 David Howells 2012-03-28  34  #else
+b4816afa398670 David Howells 2012-03-28  35  		local_irq_save(flags);
+b4816afa398670 David Howells 2012-03-28  36  		ret = *(volatile u8 *)ptr;
+b4816afa398670 David Howells 2012-03-28 @37  		*(volatile u8 *)ptr = x;
+b4816afa398670 David Howells 2012-03-28  38  		local_irq_restore(flags);
+b4816afa398670 David Howells 2012-03-28  39  		return ret;
+b4816afa398670 David Howells 2012-03-28  40  #endif /* __xchg_u8 */
+b4816afa398670 David Howells 2012-03-28  41  
+b4816afa398670 David Howells 2012-03-28  42  	case 2:
+b4816afa398670 David Howells 2012-03-28  43  #ifdef __xchg_u16
+b4816afa398670 David Howells 2012-03-28  44  		return __xchg_u16(x, ptr);
+b4816afa398670 David Howells 2012-03-28  45  #else
+b4816afa398670 David Howells 2012-03-28  46  		local_irq_save(flags);
+b4816afa398670 David Howells 2012-03-28  47  		ret = *(volatile u16 *)ptr;
+b4816afa398670 David Howells 2012-03-28 @48  		*(volatile u16 *)ptr = x;
+b4816afa398670 David Howells 2012-03-28  49  		local_irq_restore(flags);
+b4816afa398670 David Howells 2012-03-28  50  		return ret;
+b4816afa398670 David Howells 2012-03-28  51  #endif /* __xchg_u16 */
+b4816afa398670 David Howells 2012-03-28  52  
+b4816afa398670 David Howells 2012-03-28  53  	case 4:
+b4816afa398670 David Howells 2012-03-28  54  #ifdef __xchg_u32
+b4816afa398670 David Howells 2012-03-28  55  		return __xchg_u32(x, ptr);
+b4816afa398670 David Howells 2012-03-28  56  #else
+b4816afa398670 David Howells 2012-03-28  57  		local_irq_save(flags);
+b4816afa398670 David Howells 2012-03-28  58  		ret = *(volatile u32 *)ptr;
+b4816afa398670 David Howells 2012-03-28  59  		*(volatile u32 *)ptr = x;
+b4816afa398670 David Howells 2012-03-28  60  		local_irq_restore(flags);
+b4816afa398670 David Howells 2012-03-28  61  		return ret;
+b4816afa398670 David Howells 2012-03-28  62  #endif /* __xchg_u32 */
+b4816afa398670 David Howells 2012-03-28  63  
 
-> @Kiran K Is this to be expected?
-> 
->>
->>> A full dmesg log is attached. I've also attached Two files containing the output from "lsusb -v" run on 5.10.89 and
->>> 5.16-rc7.
->>>
->>> Please let me know if I can provide any other diagnostic information or test any patches. You'll need to cc me on
->>> replies because I'm not subscribed to LKML or linux-bluetooth.
->>>
->>> Thanks
-> 
-> 
-> 
+:::::: The code at line 37 was first introduced by commit
+:::::: b4816afa3986704d1404fc48e931da5135820472 Move the asm-generic/system.h xchg() implementation to asm-generic/cmpxchg.h
+
+:::::: TO: David Howells <dhowells@redhat.com>
+:::::: CC: David Howells <dhowells@redhat.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

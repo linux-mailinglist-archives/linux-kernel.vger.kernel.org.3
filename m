@@ -2,139 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D65314827B5
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 14:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A9574827BA
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 15:19:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232434AbiAANaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jan 2022 08:30:24 -0500
-Received: from mail-sh.amlogic.com ([58.32.228.43]:46969 "EHLO
-        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiAANaX (ORCPT
+        id S232154AbiAAODC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jan 2022 09:03:02 -0500
+Received: from fallback14.mail.ru ([94.100.179.44]:41552 "EHLO
+        fallback14.mail.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232171AbiAAODB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jan 2022 08:30:23 -0500
-Received: from [10.18.89.180] (10.18.89.180) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Sat, 1 Jan
- 2022 21:30:13 +0800
-Message-ID: <7278bace-a2b9-0cfc-55b3-c19311e3352e@amlogic.com>
-Date:   Sat, 1 Jan 2022 21:30:12 +0800
+        Sat, 1 Jan 2022 09:03:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=inbox.ru; s=mail3;
+        h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=DiWUKuSkGF6p5mizZhXlR2tJ1F0K9PMZt5QJC+2hB6I=;
+        t=1641045781;x=1641651181; 
+        b=gmh5RLmIBirhY5Qa5//RXrSb1UhcFCs3p2DHxWODSMlQaQmxTZHzoC4trYgsq5w3Hekg/r2g6+1uYRnn1Alb4TlyEVBpm0/1w2wC5ETvp6uQw3oXvGAhmIXmja7VxARBzsoIa3k4mGl0iosF19U/Yu5NJRSRB59k6+a87UqRl/U=;
+Received: from [10.161.55.49] (port=40210 helo=smtpng1.i.mail.ru)
+        by fallback14.m.smailru.net with esmtp (envelope-from <gtk3@inbox.ru>)
+        id 1n3eyK-0001lG-39
+        for linux-kernel@vger.kernel.org; Sat, 01 Jan 2022 17:03:00 +0300
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=inbox.ru; s=mail4;
+        h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=DiWUKuSkGF6p5mizZhXlR2tJ1F0K9PMZt5QJC+2hB6I=;
+        t=1641045780;x=1641651180; 
+        b=Me+9HNvYeN8+FTwQb776Kbh+2zRV2vMIUlGdJBlGMKhPPQMSsgVbRfZyYZkTc6HgBLBK0xoQ1qntDUB58vtNhQK5mHu+qaWojuRGNkJRTmc0SMFO7oi7a9DyfSojNkV/t/0sWha4ixC+eIeiKd53s/CiZ4v9LSXYDdY01MRKWzVqupHueyb/eUNVM338c8mN6RFDrl/ylLCRKxcsrfdToGvkDqPKjqZgWQ545tekeKakjxuu8D/mFQ3b0noljE4KPDw2QrEOg4ZAOdfuY1b89X0cFjc8caN5yCCe1RdT8ouf8eZKqFPZ5KNHZdXe0jGLBq3yK2FqzUJSHjgJZOVc1g==;
+Received: by smtpng1.m.smailru.net with esmtpa (envelope-from <gtk3@inbox.ru>)
+        id 1n3eyD-0008TK-VI; Sat, 01 Jan 2022 17:02:54 +0300
+From:   Maxim Kutnij <gtk3@inbox.ru>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Maxim Kutnij <gtk3@inbox.ru>, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] ARM: mediatek: add smp bringup code for MT6582
+Date:   Sat,  1 Jan 2022 19:01:36 +0500
+Message-Id: <20220101140140.4119-1-gtk3@inbox.ru>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: dda186e0-38e0-4061-f60e-e297441d9fed@gmail.com
+References: 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH V3 4/6] tty: serial: meson: The UART baud rate calculation
- is described using the common clock code. Also added S4 chip uart Compatible.
-Content-Language: en-US
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Vyacheslav <adeep@lexina.in>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>
-References: <20211230102110.3861-1-yu.tu@amlogic.com>
- <20211230102110.3861-5-yu.tu@amlogic.com>
- <CAFBinCCL-QaeSRCLzfyNXcRQZ7YC1D85rP2y4OGkAjCmQEqGgQ@mail.gmail.com>
- <3e1e40aa-7865-0f7a-5772-e2ad96c8141d@amlogic.com>
- <CAFBinCB2nF0TwRE1uJ4UTB_avcqRBfOHR1CDSe29dB1o-YjEHQ@mail.gmail.com>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <CAFBinCB2nF0TwRE1uJ4UTB_avcqRBfOHR1CDSe29dB1o-YjEHQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.18.89.180]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
+X-4EC0790: 10
+X-7564579A: EEAE043A70213CC8
+X-77F55803: 4F1203BC0FB41BD9059F52CFE4D0B70A3182EAA8D6D52E873A1994A0A58B3679182A05F5380850404C228DA9ACA6FE2770EC1BE4B0A9857E6979F502FE3FB0810B0C6E9BC1DBE2F1CDD3A89687622077
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7FEAC828D2BF6EC3CEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637CF58BB58AE3180708638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D8B23F8FE78000A35E1E6A61D05692D1EF6F9789CCF6C18C3F8528715B7D10C86859CC434672EE6371117882F4460429724CE54428C33FAD305F5C1EE8F4F765FCAE9A1BBD95851C5BA471835C12D1D9774AD6D5ED66289B52BA9C0B312567BB23117882F446042972877693876707352033AC447995A7AD18F04B652EEC242312D2E47CDBA5A96583BA9C0B312567BB231DD303D21008E29813377AFFFEAFD269A417C69337E82CC2E827F84554CEF50127C277FBC8AE2E8BA83251EDC214901ED5E8D9A59859A8B670D51CA322917D6D089D37D7C0E48F6C5571747095F342E88FB05168BE4CE3AF
+X-C1DE0DAB: C20DE7B7AB408E4181F030C43753B8186998911F362727C414F749A5E30D975C357A67C6196E73BD052C76992E68C5BDF63D558AFC78F3309C2B6934AE262D3EE7EAB7254005DCED7532B743992DF240BDC6A1CF3F042BAD6DF99611D93F60EF15519F706774CB6A699F904B3F4130E343918A1A30D5E7FCCB5012B2E24CD356
+X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D34F1257DC9690AEBA17DC4691ABE95C32262CB4E95B1B5458B3626551DB270B2E3082DB3A08A46D8311D7E09C32AA3244CC9A9B1F89D90A51834130A1DDE7519F781560E2432555DBB8D5DD81C2BAB7D1D
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojzdjxcBf1eR7IaHzwSrR3VA==
+X-Mailru-Sender: 689FA8AB762F739339CABD9B3CA9A7D6877C163FC9F125F2BF1B4592C9EB3CE68F8182784CE3FA142B2697F7A04D759B04FC54F637BA925032C609A2DC06202998FD9B05CC386A12349DB15C680E247222B820C1B2086D890DA7A0AF5A3A8387
+X-Mras: Ok
+X-7564579A: B8F34718100C35BD
+X-77F55803: 6242723A09DB00B458EAA7E4B0EE0F09C028C005AD0BCC4E3E30073B5499037368F3CF0E9FE49B6998B3DD7178ECBFFC7D936F73A3C51E669E8B0398FC2CA7A659818E1134944E0E
+X-7FA49CB5: 0D63561A33F958A5C324D9B9381A94A34E896A30D56601F345D0C3F982A662FACACD7DF95DA8FC8BD5E8D9A59859A8B64071617579528AACCC7F00164DA146DAFE8445B8C89999728AA50765F7900637987F95F28AE5935D389733CBF5DBD5E9C8A9BA7A39EFB766F5D81C698A659EA7CC7F00164DA146DA9985D098DBDEAEC88ADF99E4698B9BE8F6B57BC7E6449061A352F6E88A58FB86F5D81C698A659EA775ECD9A6C639B01B78DA827A17800CE72CA115C55BEA7BA6731C566533BA786AA5CC5B56E945C8DA
+X-C1DE0DAB: C20DE7B7AB408E4181F030C43753B8186998911F362727C414F749A5E30D975C357A67C6196E73BD4D9E77D27E0759BA11930786214ECB289C2B6934AE262D3EE7EAB7254005DCED8DA55E71E02F9FC08E8E86DC7131B365E7726E8460B7C23C
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojzdjxcBf1eR5ytVVKGqdftg==
+X-Mailru-MI: 800
+X-Mras: Ok
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin,
-     Thank you very much for your reply.
+This patch adds SMP support on the MediaTek MT6582 quad-core Cortex-A7 SoC.
+And also enable GPT6.
 
-On 2021/12/31 23:32, Martin Blumenstingl wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> On Fri, Dec 31, 2021 at 12:24 PM Yu Tu <yu.tu@amlogic.com> wrote:
-> [...]
->>>>    static int meson_uart_request_port(struct uart_port *port)
->>>>    {
->>>> +       struct meson_uart_data *private_data = port->private_data;
->>>> +       int ret;
->>>> +
->>>> +       ret = clk_prepare_enable(private_data->pclk);
->>>> +       if (ret)
->>>> +               return ret;
->>>> +
->>>> +       ret = clk_prepare_enable(private_data->baud_clk);
->>>> +       if (ret) {
->>>> +               clk_disable_unprepare(private_data->pclk);
->>>> +               return ret;
->>>> +       }
->>> This code is from my original suggestion - and I had a doubt there
->>> which I forgot to add as a comment originally:
->>> Can you confirm that accessing the UART controller registers works
->>> even when "pclk" is turned off?
->>> I am asking this because the common clock framework can access the
->>> clocks at any time.
->>> And I have seen SoCs which would hang when trying to access a module's
->>> registers while the module's pclk is turned off.
->> On all meson platforms, the default pclk for all UART is turned on
->> during the u-boot phase. When registering uart pclk in the kernel phase,
->> the CLK_IGNORE_UNUSED flag is added. So the real shutdown is when the
->> standby goes down, the parent clk shuts down.
-> Interesting, thanks for sharing that u-boot turns these clocks on.
-> Let's say someone wanted to make u-boot save power and turn off all
-> UART clocks except the one for uart_AO (where we typically connect the
-> serial console).
-> In that case the pclk of uart_C (just to choose an example here) is
-> turned off. Would there be a problem then accessing the registers of
-> uart_C before clk_prepare_enable is called?
-The way you describe it, it does hang. This would not be recommended on 
-actual projects.
+Signed-off-by: Maxim Kutnij <gtk3@inbox.ru>
+---
+ arch/arm/mach-mediatek/mediatek.c | 4 +++-
+ arch/arm/mach-mediatek/platsmp.c  | 1 +
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-At present, AmLogic chips are older than S4 Soc, and we have no way to 
-deal with this problem. We have to tell customers not to use it in this 
-way。Customers rarely use it in real projects.On the S4 SOC we will use 
-a clock like the UART pclk to control the shutdown using two registers, 
-one safe (need to operate in EL3) and one normal (EL1). It will only be 
-closed if both registers are closed. This mainly prevents misoperation.
+diff --git a/arch/arm/mach-mediatek/mediatek.c b/arch/arm/mach-mediatek/mediatek.c
+index e6e9f93a1..aefeb6614 100644
+--- a/arch/arm/mach-mediatek/mediatek.c
++++ b/arch/arm/mach-mediatek/mediatek.c
+@@ -20,7 +20,8 @@ static void __init mediatek_timer_init(void)
+ {
+ 	void __iomem *gpt_base;
+ 
+-	if (of_machine_is_compatible("mediatek,mt6589") ||
++	if (of_machine_is_compatible("mediatek,mt6582") ||
++	    of_machine_is_compatible("mediatek,mt6589") ||
+ 	    of_machine_is_compatible("mediatek,mt7623") ||
+ 	    of_machine_is_compatible("mediatek,mt8135") ||
+ 	    of_machine_is_compatible("mediatek,mt8127")) {
+@@ -38,6 +39,7 @@ static void __init mediatek_timer_init(void)
+ 
+ static const char * const mediatek_board_dt_compat[] = {
+ 	"mediatek,mt2701",
++	"mediatek,mt6582",
+ 	"mediatek,mt6589",
+ 	"mediatek,mt6592",
+ 	"mediatek,mt7623",
+diff --git a/arch/arm/mach-mediatek/platsmp.c b/arch/arm/mach-mediatek/platsmp.c
+index 16a4ee6c9..e1c7ad52f 100644
+--- a/arch/arm/mach-mediatek/platsmp.c
++++ b/arch/arm/mach-mediatek/platsmp.c
+@@ -49,6 +49,7 @@ static const struct of_device_id mtk_tz_smp_boot_infos[] __initconst = {
+ };
+ 
+ static const struct of_device_id mtk_smp_boot_infos[] __initconst = {
++	{ .compatible   = "mediatek,mt6582", .data = &mtk_mt7623_boot },
+ 	{ .compatible   = "mediatek,mt6589", .data = &mtk_mt6589_boot },
+ 	{ .compatible   = "mediatek,mt7623", .data = &mtk_mt7623_boot },
+ 	{ .compatible   = "mediatek,mt7629", .data = &mtk_mt7623_boot },
+-- 
+2.33.1
 
-With your experience, I'd like to know how you deal with this kind of 
-problem.
-> 
-> [...]
->>>>           port->fifosize = 64;
->>> commit 27d44e05d7b85d ("tty: serial: meson: retrieve port FIFO size
->>> from DT") [0] from May 2021 has changed this line to:
->>>     port->fifosize = fifosize;
->>> So your patch currently does not apply to linux-next (or even Linus'
->>> mainline tree).
->>>
->> So do I need to wait for [0] patch merged before I can continue to make
->> changes ?
-> These changes are already merged.
-> 
->> What can I do before?
-> You should base your changes on top of the tty.git/tty-next branch [1]
-> where Greg (the maintainer of this tree) will pick up the patches once
-> they are good (got enough Acked-by/Reviewed-by, etc.).
-> I suspect that you based your changes on an older or stable kernel
-> version (let's say 5.10). New functionality should always get into the
-> -next tree where various auto-build robots will compile-test the
-> changes and we even have Kernel CI where changes are tested on real
-> hardware (BayLibre even maintains Amlogic boards in their Kernel CI
-> labs). Let's say Amlogic updates to Linux 5.17 next year then the
-> patches are already included in that kernel version - instead of being
-> only available in Linux 5.10.
-> 
-I'm sorry, I did branch confirm there was a mistake, I have corrected.
-> 
-> Best regards,
-> Martin
-> 
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git/log/?h=tty-next
-> 

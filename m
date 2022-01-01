@@ -2,104 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF3F4826D6
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 08:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92DBE4826DE
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 08:43:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbiAAHce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jan 2022 02:32:34 -0500
-Received: from mga11.intel.com ([192.55.52.93]:41247 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231148AbiAAHcd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jan 2022 02:32:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641022353; x=1672558353;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7vk+brI+MP72nhmlqrJ8pE9GK7vP8Xk9GSzHHEZeYJU=;
-  b=k8xUh+uhJzrJ936+sGwOrQSnXlCJ0eabRHBDzB9+1R21ifjeHeYqZSTD
-   byY/1HXwvM5m+ExV5eJ3CTVK1T2l5OGkXlYPqCYO7bBUlH7aJpODSoQ3k
-   /rBc1Owlw14lz/abdw9eTF3H+PO97XZsCv6AfwrEzkcAo6ai9YySapDxz
-   RC4/nsruke5xkpM2Kcb1ihd1XZtdH8ALVtyWi65ZXkyiMTN+iWMgKOnYl
-   XaUDOL+fgE0QcPP2O3rWJyftbKs9WD+ZrUURGIY8QaL/3lATRWuAIP1Y7
-   axgCiArZO47OYmVCsp/sBzQz1H4cta10Iy1JKP2LF3uSc0g2AWhkaQXdG
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10214"; a="239420906"
-X-IronPort-AV: E=Sophos;i="5.88,253,1635231600"; 
-   d="scan'208";a="239420906"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2021 23:32:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,253,1635231600"; 
-   d="scan'208";a="619806461"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 31 Dec 2021 23:32:31 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n3YsR-000CBk-7v; Sat, 01 Jan 2022 07:32:31 +0000
-Date:   Sat, 1 Jan 2022 15:31:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kelly Rossmoyer <krossmo@google.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alistair Delva <adelva@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android11-kiwi-5.4
- 2423/9999] kernel/power/wakeup_reason.c:199:6: sparse: sparse: symbol
- '__log_abort_or_abnormal_wake' was not declared. Should it be static?
-Message-ID: <202201011526.iW3K3uKk-lkp@intel.com>
+        id S231265AbiAAHnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jan 2022 02:43:46 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:41820 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231240AbiAAHnp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 1 Jan 2022 02:43:45 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2017gv8e103728;
+        Sat, 1 Jan 2022 01:42:57 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1641022977;
+        bh=pcQIy4e3o4+nMzvakDQ0s6AhMzKjUhVgfo34VY6QNfs=;
+        h=From:To:CC:Subject:Date;
+        b=x6ME+4rMf+8Ew7WLgjoI62z3iAeifE3tkfrVwx6xHAxgqtI58v4DPuWKAHU1z7AKz
+         yNpXYTElfZGExz2feFv9Dq59p3pYXB/JGx/SqGU3NkgC+HZBhMYACdFdbrqPm6oGv7
+         3E6JsqsTtXUt0L7uZ3kFzHK1bjPaV1PZCypzAT7o=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2017gvq4088985
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sat, 1 Jan 2022 01:42:57 -0600
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Sat, 1
+ Jan 2022 01:42:56 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Sat, 1 Jan 2022 01:42:56 -0600
+Received: from LT5CD112GSQZ.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2017gpwV033162;
+        Sat, 1 Jan 2022 01:42:52 -0600
+From:   Apurva Nandan <a-nandan@ti.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mark Brown <broonie@kernel.org>,
+        Apurva Nandan <a-nandan@ti.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Alexander Lobakin <alobakin@pm.me>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>
+CC:     <p.yadav@ti.com>
+Subject: [PATCH v3 00/17] mtd: spinand: Add Octal DTR SPI (8D-8D-8D) mode support
+Date:   Sat, 1 Jan 2022 13:12:33 +0530
+Message-ID: <20220101074250.14443-1-a-nandan@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android11-kiwi-5.4
-head:   04f660d6724f5df1b07f8cf9e1c55f70fb43d1d2
-commit: 189ced91cd7b0e440b0be876406fd36313a11c3f [2423/9999] ANDROID: power: wakeup_reason: wake reason enhancements
-config: x86_64-randconfig-s022-20211118 (https://download.01.org/0day-ci/archive/20220101/202201011526.iW3K3uKk-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/ammarfaizi2/linux-block/commit/189ced91cd7b0e440b0be876406fd36313a11c3f
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android11-kiwi-5.4
-        git checkout 189ced91cd7b0e440b0be876406fd36313a11c3f
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Hi,
+This series proposes patches for adding the following functionality
+in SPI NAND core:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+- Octal DTR SPI (8D-8D-8D) mode support
 
+- ctrl_ops support
 
-sparse warnings: (new ones prefixed by >>)
->> kernel/power/wakeup_reason.c:199:6: sparse: sparse: symbol '__log_abort_or_abnormal_wake' was not declared. Should it be static?
-   kernel/power/wakeup_reason.c:378:12: sparse: sparse: symbol 'wakeup_reason_init' was not declared. Should it be static?
+- Winbond W35N01JW SPI NAND chip support
 
-vim +/__log_abort_or_abnormal_wake +199 kernel/power/wakeup_reason.c
+This series has been tested on TI J721e EVM with the Winbond W35N01JW
+flash with following test utilities:
 
-   198	
- > 199	void __log_abort_or_abnormal_wake(bool abort, const char *fmt, va_list args)
-   200	{
-   201		unsigned long flags;
-   202	
-   203		spin_lock_irqsave(&wakeup_reason_lock, flags);
-   204	
-   205		/* Suspend abort or abnormal wake reason has already been logged. */
-   206		if (suspend_abort || abnormal_wake) {
-   207			spin_unlock_irqrestore(&wakeup_reason_lock, flags);
-   208			return;
-   209		}
-   210	
-   211		suspend_abort = abort;
-   212		abnormal_wake = !abort;
-   213		vsnprintf(non_irq_wake_reason, MAX_SUSPEND_ABORT_LEN, fmt, args);
-   214	
-   215		spin_unlock_irqrestore(&wakeup_reason_lock, flags);
-   216	}
-   217	
+- nandtest
+  Test log: https://pastebin.com/raw/PusiLYVQ
+
+- mtd_stresstest
+  Test log: https://pastebin.com/raw/gBtV2CAf
+
+- UBIFS LTP stress test (NAND_XL_STRESS_DD_RW_UBIFS).
+  Test log: https://pastebin.com/raw/J8WyLsz1
+
+Datasheet: https://www.winbond.com/export/sites/winbond/datasheet/W35N01JW_Datasheet_Brief.pdf
 
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Changes in v3:
+
+- Added support for ctrl_ops, data_ops and ctrl_ops_variants.
+
+- Made the implementation generic in terms of spinand protocol and SPI mode
+  changes.
+
+- Added option to disable Octal DTR mode.
+
+- Removed spinand_patch_op(), adjust_op() manufacturer_op.
+
+- Removed Power-on-Reset functionality and its call from mtd_suspend(), now 
+  just disable Octal DTR at suspend.
+
+
+Changes in v2:
+
+- Removed *_ALL_ARGS() macros from spi-mem.h, and redefined DTR macros.
+
+- Renamed spinand_setup_op() to spinand_patch_op(). Reduced one
+  conditional check from this function. Had to keep tweaking in hot-path
+  to avoid complicated implementation "hacks".
+
+- Changes in commit messages and added comments.
+
+- Dropped "Reject 8D-8D-8D op_templates if octal_dtr_enale() is
+  missing in manufacturer_op" patch.
+
+- Reduced PoR reset delay.
+
+- Splitted "mtd: spinand: Add support for Winbond W35N01JW SPI NAND
+  flash" into 3 independent patches.
+
+
+Apurva Nandan (17):
+  spi: spi-mem: Add DTR templates for cmd, address, dummy and data phase
+  mtd: spinand: Define macros for Octal DTR ops
+  mtd: spinand: Add enum spinand_protocol to indicate current SPI IO
+    mode
+  mtd: spinand: Rename 'op_templates' to 'data_ops'
+  mtd: spinand: Define ctrl_ops for non-page read/write op templates
+  mtd: spinand: Define default ctrl_ops in the core
+  mtd: spinand: Switch from op macros usage to 'ctrl_ops' in the core
+  mtd: spinand: Add support for manufacturer-based ctrl_ops variations
+  mtd: spinand: Add change_mode() in manufacturer_ops
+  mtd: spinand: Add pointer to probed flash's spinand_info
+  mtd: spinand: Allow enabling/disabling Octal DTR mode in the core
+  mtd: spinand: Add mtd_suspend() to disable Octal DTR mode at suspend
+  mtd: spinand: winbond: Add support for write volatile configuration
+    register op
+  mtd: spinand: winbond: Add octal_dtr_enable/disable() in
+    manufacturer_ops
+  mtd: spianand: winbond: Add change_mode() manufacturer_ops
+  mtd: spinand: winbond: Rename cache op_variants struct variable
+  mtd: spinand: winbond: Add support for Winbond W35N01JW SPI NAND flash
+
+ drivers/mtd/nand/spi/core.c    | 213 +++++++++++++++++++++++++----
+ drivers/mtd/nand/spi/winbond.c | 242 +++++++++++++++++++++++++++++++--
+ include/linux/mtd/spinand.h    | 154 +++++++++++++++++++--
+ include/linux/spi/spi-mem.h    |  41 ++++++
+ 4 files changed, 599 insertions(+), 51 deletions(-)
+
+-- 
+2.25.1
+

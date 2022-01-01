@@ -2,98 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2AF948275B
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 11:56:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 325B148275C
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 11:56:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232269AbiAAKwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jan 2022 05:52:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50030 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbiAAKwY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jan 2022 05:52:24 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDECC061574;
-        Sat,  1 Jan 2022 02:52:24 -0800 (PST)
-Received: from ip4d173d02.dynamic.kabel-deutschland.de ([77.23.61.2] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1n3bzk-0005yW-5C; Sat, 01 Jan 2022 11:52:16 +0100
-Message-ID: <0bdf0a46-bd10-6b14-d569-a18e6bb73836@leemhuis.info>
-Date:   Sat, 1 Jan 2022 11:52:15 +0100
+        id S232278AbiAAKyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jan 2022 05:54:39 -0500
+Received: from mga12.intel.com ([192.55.52.136]:53922 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229624AbiAAKyj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 1 Jan 2022 05:54:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641034479; x=1672570479;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ha7s+2QtLtZP4MEH1gak+iXGjy7xDlDv5uUrKrZQLIE=;
+  b=dl1NY8/A2kUbq6PAlCdjelwDMNMBaUc9D1yawHsONh1f+8rFj9OQBfFG
+   a1fPStj9NcV4VNnBY/SXYRTvPiJpcGCfnQUgx+r8qJvAGsgStN1aj8+7l
+   71gnb7X1hm/I3JEsdd3XgysCG8JpEMb4mWLihYS4m5YcYs/spjVy3E1um
+   Fza1pELc5d+giD2xGL+WOhwXfrzoV1Zxg8ns7pMhgY4YFglv9NcQO6baj
+   yp+z/N2/68fQ1RwC1ih0PPk+8P0GWJ9tieEsKZTlVWXEtzuIpxqhvmhq7
+   V5+d+bmt3TFkMZpCdurkyZA6ssMpnSAO3L7R4J4fDSgaLFzd1/nJ6HPHP
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10214"; a="221880340"
+X-IronPort-AV: E=Sophos;i="5.88,253,1635231600"; 
+   d="scan'208";a="221880340"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2022 02:54:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,253,1635231600"; 
+   d="scan'208";a="469249286"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 01 Jan 2022 02:54:37 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n3c20-000CMy-N0; Sat, 01 Jan 2022 10:54:36 +0000
+Date:   Sat, 1 Jan 2022 18:54:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Pavel Begunkov <asml.silence@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>
+Subject: fs/io_uring.c:2330:40: warning: variable 'prev' set but not used
+Message-ID: <202201011808.Lm6C3RMA-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v4 1/1] mm: vmscan: Reduce throttling due to a failure to
- make progress
-Content-Language: en-BS
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mark Brown <broonie@kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Alexey Avramov <hakavlad@inbox.lv>,
-        Rik van Riel <riel@surriel.com>,
-        Mike Galbraith <efault@gmx.de>,
-        Darrick Wong <djwong@kernel.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20211202150614.22440-1-mgorman@techsingularity.net>
- <caf247ab-f6fe-a3b9-c4b5-7ce17d1d5e43@leemhuis.info>
- <20211229154553.09dd5bb657bc19d45c3de8dd@linux-foundation.org>
- <5c9d7c6b-05cd-4d17-b941-a93d90197cd3@leemhuis.info>
- <CAHk-=wi3z_aFJ7kkJb+GDLzUMAzxYMRpVzuMRh5QFaFJnhGydA@mail.gmail.com>
- <CAHk-=whj9ZWJ2Fmv2vY-NAB_nR-KgpzpRx6Oxs=ayyTEN7E8zw@mail.gmail.com>
- <CAHk-=wjKNjx1EApBoaqB0kZ8BB5r+YReOELA5uwRhwMi17S=qg@mail.gmail.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <CAHk-=wjKNjx1EApBoaqB0kZ8BB5r+YReOELA5uwRhwMi17S=qg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1641034344;05adff4e;
-X-HE-SMSGID: 1n3bzk-0005yW-5C
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Pavel,
 
-On 31.12.21 20:22, Linus Torvalds wrote:
-> On Fri, Dec 31, 2021 at 11:21 AM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
->>
->> Pushed out as 1b4e3f26f9f7 ("mm: vmscan: Reduce throttling due to a
->> failure to make progress")
+FYI, the error/warning still remains.
 
-Thx.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   8008293888188c3923f5bd8a69370dae25ed14e5
+commit: 6f33b0bc4ea43f5c5ce7b7c9ab66051f80837862 io_uring: use slist for completion batching
+date:   2 months ago
+config: nios2-defconfig (https://download.01.org/0day-ci/archive/20220101/202201011808.Lm6C3RMA-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6f33b0bc4ea43f5c5ce7b7c9ab66051f80837862
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 6f33b0bc4ea43f5c5ce7b7c9ab66051f80837862
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash
 
-> .. and I _think_ this empties the regzbot queue for this release, Thorsten. No?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Well, it was the regression that bothered me most. But there are still a
-few out there that got introduced this cycle.
+All warnings (new ones prefixed by >>):
 
-There is a regression in RDMA/mlx5 introduced in v5.16-rc5:
-https://lore.kernel.org/lkml/f298db4ec5fdf7a2d1d166ca2f66020fd9397e5c.1640079962.git.leonro@nvidia.com/
-https://lore.kernel.org/all/EEBA2D1C-F29C-4237-901C-587B60CEE113@oracle.com/
-A fix is available, but got stuck afaics:
-https://lore.kernel.org/lkml/f298db4ec5fdf7a2d1d166ca2f66020fd9397e5c.1640079962.git.leonro@nvidia.com/
-And I only noticed just now: a revert was also discussed, but not performed:
-https://lore.kernel.org/all/20211222101312.1358616-1-maorg@nvidia.com/
-Will let Greg know, seems the commit got backported to 5.15.
+   fs/io_uring.c: In function 'io_queue_async_work':
+   fs/io_uring.c:1455:61: warning: parameter 'locked' set but not used [-Wunused-but-set-parameter]
+    1455 | static void io_queue_async_work(struct io_kiocb *req, bool *locked)
+         |                                                       ~~~~~~^~~~~~
+   fs/io_uring.c: In function '__io_submit_flush_completions':
+>> fs/io_uring.c:2330:40: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
+    2330 |         struct io_wq_work_node *node, *prev;
+         |                                        ^~~~
 
-s0ix suspend broke for some AMD machines, Alex and Mario are busy
-looking into it:
-https://gitlab.freedesktop.org/drm/amd/-/issues/1821
-https://bugzilla.kernel.org/show_bug.cgi?id=215436
 
-Alex is also dealing with another issue where the screen contents now
-get restored after some input events:
-https://bugzilla.kernel.org/show_bug.cgi?id=215203
+vim +/prev +2330 fs/io_uring.c
 
-There still seems to be a performance regression that Josef and Valentin
-try hard to pin down without much success for weeks now:
-https://lore.kernel.org/lkml/87tuf07hdk.mognet@arm.com/
+  2326	
+  2327	static void __io_submit_flush_completions(struct io_ring_ctx *ctx)
+  2328		__must_hold(&ctx->uring_lock)
+  2329	{
+> 2330		struct io_wq_work_node *node, *prev;
+  2331		struct io_submit_state *state = &ctx->submit_state;
+  2332		struct req_batch rb;
+  2333	
+  2334		spin_lock(&ctx->completion_lock);
+  2335		wq_list_for_each(node, prev, &state->compl_reqs) {
+  2336			struct io_kiocb *req = container_of(node, struct io_kiocb,
+  2337							    comp_list);
+  2338	
+  2339			__io_cqring_fill_event(ctx, req->user_data, req->result,
+  2340						req->compl.cflags);
+  2341		}
+  2342		io_commit_cqring(ctx);
+  2343		spin_unlock(&ctx->completion_lock);
+  2344		io_cqring_ev_posted(ctx);
+  2345	
+  2346		io_init_req_batch(&rb);
+  2347		node = state->compl_reqs.first;
+  2348		do {
+  2349			struct io_kiocb *req = container_of(node, struct io_kiocb,
+  2350							    comp_list);
+  2351	
+  2352			node = req->comp_list.next;
+  2353			if (req_ref_put_and_test(req))
+  2354				io_req_free_batch(&rb, req, &ctx->submit_state);
+  2355		} while (node);
+  2356	
+  2357		io_req_free_batch_finish(ctx, &rb);
+  2358		INIT_WQ_LIST(&state->compl_reqs);
+  2359	}
+  2360	
 
-And there one more report, but it might be a follow-up error due to
-another regression:
-https://lore.kernel.org/linux-pm/52933493.dBzk7ret6Y@geek500/
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

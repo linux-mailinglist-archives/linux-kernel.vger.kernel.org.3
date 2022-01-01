@@ -2,118 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F414826C7
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 06:42:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E48EA4826D0
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 08:10:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiAAFlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jan 2022 00:41:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiAAFls (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jan 2022 00:41:48 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118D9C061574;
-        Fri, 31 Dec 2021 21:41:48 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id c3so8169965pls.5;
-        Fri, 31 Dec 2021 21:41:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1dR3g8GY5Euozr0ox0MhudsRm4E1DeVHdsfvznKOpDk=;
-        b=a2k/eogEwh6cFihXTy5Nay5P7MpFloJWyCc8jScDDXlHf8Bb0mJoCdAbczo+vMYTUz
-         IIDImoWAsU7QBi8rAV2LLQmBmxjkgADtgUMgG/j93r+QfR5rLlhkuXLXCnTGc5H7ut0h
-         9b7icckn/TMUa1zRS76kylBwoypdiu0TFJJPgvTJASq9WKLw2/PDrAx6KHZjFQohcY0d
-         07eu7tq4U3no5TMsuvbJ/aMEu1bM1Z2JZU8z6IJCtI3ScRNebTOyLZXLEXtYfF6EVVq+
-         IQs4RnUDgz/8j34LCvMWagWmnxzXZxgMP9RkIMN5A510r9tduBYUTBxLtm78UjLOu76p
-         N03w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1dR3g8GY5Euozr0ox0MhudsRm4E1DeVHdsfvznKOpDk=;
-        b=RIIMpkJSoQ27ItUEFbzHaZ+VBA1hVs/OP/9ZbbX7b5SokSO4CEn6y9hB/W4Sa2DQHD
-         O7GHlqf/0AqOTCNYPEd7OhjpfQD/QjppeVr4e3MmdDJfwovdjTAj4ECdcrfbXqe7xQMh
-         8vC3qOmA+qeC9YLn0h8JunQLbjSWTSMxCG1O8IFPwCYkolwkZTI4AFPMTcWUOxLqqbtk
-         0mudap7IsE655K1Cv+I6GzobJh0PECEWi96jCArh2QdLC+1+24Qyq11/mjn8YLRBV1G3
-         d9ACAluz63jUE5wKOScfUOJhdvvNRg1XT+B/egWLLCSeO0In+BbDR7/dDARXgpbm/p4b
-         TOiw==
-X-Gm-Message-State: AOAM531Yzj1LbI5ZoBP3ya0z4ieX4V6ZNexh15Yuixi8eTQ4kaYvvtaL
-        TVow4Pn2WXz8sdmaLXp4u3gA26yDTmy8VQH1TtU=
-X-Google-Smtp-Source: ABdhPJzhiV/BmCtdaC4FnA4JF5VKsqhxHqY4YjYA5nKBJ3WiHVoJLknNK3uJIC1ixAAyKjOTUZReDw==
-X-Received: by 2002:a17:90b:3b8e:: with SMTP id pc14mr46641451pjb.217.1641015707453;
-        Fri, 31 Dec 2021 21:41:47 -0800 (PST)
-Received: from gagan ([45.116.106.186])
-        by smtp.gmail.com with ESMTPSA id cx5sm29448148pjb.22.2021.12.31.21.41.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Dec 2021 21:41:46 -0800 (PST)
-From:   Gagan Kumar <gagan1kumar.cs@gmail.com>
-To:     kuba@kernel.org, jk@codeconstruct.com.au
-Cc:     matt@codeconstruct.com.au, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Gagan Kumar <gagan1kumar.cs@gmail.com>
-Subject: [PATCH v2] mctp: Remove only static neighbour on RTM_DELNEIGH
-Date:   Sat,  1 Jan 2022 11:11:25 +0530
-Message-Id: <20220101054125.9104-1-gagan1kumar.cs@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211231181709.7f46dbfc@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-References: <20211231181709.7f46dbfc@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        id S229900AbiAAGvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jan 2022 01:51:35 -0500
+Received: from mga11.intel.com ([192.55.52.93]:56822 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229453AbiAAGve (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 1 Jan 2022 01:51:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641019894; x=1672555894;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ks9yCcSxMhbRSf8kpAuo58zy3dnJgOysskevQbfxejU=;
+  b=bnHreu1btawD6giE25v2PLCb/nIZ5U3vtg0bOZWDe5Umv6gx8pSseirG
+   JSHLXwmjHH3AbQkUBD5CoEAklNCAa5HTbgU4Xv3aoWmc8nSbkJkPQ4j1r
+   tY++MSFGh/WJ9LEYzLk4iDADxmWzzYMn726XCzsPf7CactD50TjDAqcVQ
+   IrEN+Hav0Soi/JQVW098zamMO9C+bpDxd7DvoYSg6EeO/o9RFEw1s9nRN
+   kmJDedmrlieLuah7JIGZrmLWcm9L4DlcE+CnP1iMgCFj25y8cWroWH40A
+   MT3iTbv7joyMLXHqqfDjhtdgN2vIOJXi5ORzpgtB4EcuWUVv8EvBmcjfW
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10214"; a="239419462"
+X-IronPort-AV: E=Sophos;i="5.88,252,1635231600"; 
+   d="scan'208";a="239419462"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2021 22:51:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,252,1635231600"; 
+   d="scan'208";a="619802063"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 31 Dec 2021 22:51:30 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n3YEj-000C8g-S6; Sat, 01 Jan 2022 06:51:29 +0000
+Date:   Sat, 1 Jan 2022 14:50:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Scull <ascull@google.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>
+Subject: arch/arm64/kvm/handle_exit.c:295:24: warning: no previous prototype
+ for 'nvhe_hyp_panic_handler'
+Message-ID: <202201011459.th7AJ0tn-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add neighbour source flag in mctp_neigh_remove(...) to allow removal of
-only static neighbours.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   8008293888188c3923f5bd8a69370dae25ed14e5
+commit: aec0fae62e47050019474936248a311a0ab08705 KVM: arm64: Log source when panicking from nVHE hyp
+date:   9 months ago
+config: arm64-randconfig-r035-20211231 (https://download.01.org/0day-ci/archive/20220101/202201011459.th7AJ0tn-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=aec0fae62e47050019474936248a311a0ab08705
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout aec0fae62e47050019474936248a311a0ab08705
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/ drivers/edac/
 
-This should be a no-op change and might be useful later when mctp can
-have MCTP_NEIGH_DISCOVER neighbours.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Gagan Kumar <gagan1kumar.cs@gmail.com>
+All warnings (new ones prefixed by >>):
+
+   arch/arm64/kvm/handle_exit.c:177:35: warning: initialized field overwritten [-Woverride-init]
+     177 |         [ESR_ELx_EC_WFx]        = kvm_handle_wfx,
+         |                                   ^~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:177:35: note: (near initialization for 'arm_exit_handlers[1]')
+   arch/arm64/kvm/handle_exit.c:178:35: warning: initialized field overwritten [-Woverride-init]
+     178 |         [ESR_ELx_EC_CP15_32]    = kvm_handle_cp15_32,
+         |                                   ^~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:178:35: note: (near initialization for 'arm_exit_handlers[3]')
+   arch/arm64/kvm/handle_exit.c:179:35: warning: initialized field overwritten [-Woverride-init]
+     179 |         [ESR_ELx_EC_CP15_64]    = kvm_handle_cp15_64,
+         |                                   ^~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:179:35: note: (near initialization for 'arm_exit_handlers[4]')
+   arch/arm64/kvm/handle_exit.c:180:35: warning: initialized field overwritten [-Woverride-init]
+     180 |         [ESR_ELx_EC_CP14_MR]    = kvm_handle_cp14_32,
+         |                                   ^~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:180:35: note: (near initialization for 'arm_exit_handlers[5]')
+   arch/arm64/kvm/handle_exit.c:181:35: warning: initialized field overwritten [-Woverride-init]
+     181 |         [ESR_ELx_EC_CP14_LS]    = kvm_handle_cp14_load_store,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:181:35: note: (near initialization for 'arm_exit_handlers[6]')
+   arch/arm64/kvm/handle_exit.c:182:35: warning: initialized field overwritten [-Woverride-init]
+     182 |         [ESR_ELx_EC_CP14_64]    = kvm_handle_cp14_64,
+         |                                   ^~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:182:35: note: (near initialization for 'arm_exit_handlers[12]')
+   arch/arm64/kvm/handle_exit.c:183:35: warning: initialized field overwritten [-Woverride-init]
+     183 |         [ESR_ELx_EC_HVC32]      = handle_hvc,
+         |                                   ^~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:183:35: note: (near initialization for 'arm_exit_handlers[18]')
+   arch/arm64/kvm/handle_exit.c:184:35: warning: initialized field overwritten [-Woverride-init]
+     184 |         [ESR_ELx_EC_SMC32]      = handle_smc,
+         |                                   ^~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:184:35: note: (near initialization for 'arm_exit_handlers[19]')
+   arch/arm64/kvm/handle_exit.c:185:35: warning: initialized field overwritten [-Woverride-init]
+     185 |         [ESR_ELx_EC_HVC64]      = handle_hvc,
+         |                                   ^~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:185:35: note: (near initialization for 'arm_exit_handlers[22]')
+   arch/arm64/kvm/handle_exit.c:186:35: warning: initialized field overwritten [-Woverride-init]
+     186 |         [ESR_ELx_EC_SMC64]      = handle_smc,
+         |                                   ^~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:186:35: note: (near initialization for 'arm_exit_handlers[23]')
+   arch/arm64/kvm/handle_exit.c:187:35: warning: initialized field overwritten [-Woverride-init]
+     187 |         [ESR_ELx_EC_SYS64]      = kvm_handle_sys_reg,
+         |                                   ^~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:187:35: note: (near initialization for 'arm_exit_handlers[24]')
+   arch/arm64/kvm/handle_exit.c:188:35: warning: initialized field overwritten [-Woverride-init]
+     188 |         [ESR_ELx_EC_SVE]        = handle_sve,
+         |                                   ^~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:188:35: note: (near initialization for 'arm_exit_handlers[25]')
+   arch/arm64/kvm/handle_exit.c:189:35: warning: initialized field overwritten [-Woverride-init]
+     189 |         [ESR_ELx_EC_IABT_LOW]   = kvm_handle_guest_abort,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:189:35: note: (near initialization for 'arm_exit_handlers[32]')
+   arch/arm64/kvm/handle_exit.c:190:35: warning: initialized field overwritten [-Woverride-init]
+     190 |         [ESR_ELx_EC_DABT_LOW]   = kvm_handle_guest_abort,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:190:35: note: (near initialization for 'arm_exit_handlers[36]')
+   arch/arm64/kvm/handle_exit.c:191:35: warning: initialized field overwritten [-Woverride-init]
+     191 |         [ESR_ELx_EC_SOFTSTP_LOW]= kvm_handle_guest_debug,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:191:35: note: (near initialization for 'arm_exit_handlers[50]')
+   arch/arm64/kvm/handle_exit.c:192:35: warning: initialized field overwritten [-Woverride-init]
+     192 |         [ESR_ELx_EC_WATCHPT_LOW]= kvm_handle_guest_debug,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:192:35: note: (near initialization for 'arm_exit_handlers[52]')
+   arch/arm64/kvm/handle_exit.c:193:35: warning: initialized field overwritten [-Woverride-init]
+     193 |         [ESR_ELx_EC_BREAKPT_LOW]= kvm_handle_guest_debug,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:193:35: note: (near initialization for 'arm_exit_handlers[48]')
+   arch/arm64/kvm/handle_exit.c:194:35: warning: initialized field overwritten [-Woverride-init]
+     194 |         [ESR_ELx_EC_BKPT32]     = kvm_handle_guest_debug,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:194:35: note: (near initialization for 'arm_exit_handlers[56]')
+   arch/arm64/kvm/handle_exit.c:195:35: warning: initialized field overwritten [-Woverride-init]
+     195 |         [ESR_ELx_EC_BRK64]      = kvm_handle_guest_debug,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:195:35: note: (near initialization for 'arm_exit_handlers[60]')
+   arch/arm64/kvm/handle_exit.c:196:35: warning: initialized field overwritten [-Woverride-init]
+     196 |         [ESR_ELx_EC_FP_ASIMD]   = handle_no_fpsimd,
+         |                                   ^~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:196:35: note: (near initialization for 'arm_exit_handlers[7]')
+   arch/arm64/kvm/handle_exit.c:197:35: warning: initialized field overwritten [-Woverride-init]
+     197 |         [ESR_ELx_EC_PAC]        = kvm_handle_ptrauth,
+         |                                   ^~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/handle_exit.c:197:35: note: (near initialization for 'arm_exit_handlers[9]')
+>> arch/arm64/kvm/handle_exit.c:295:24: warning: no previous prototype for 'nvhe_hyp_panic_handler' [-Wmissing-prototypes]
+     295 | void __noreturn __cold nvhe_hyp_panic_handler(u64 esr, u64 spsr, u64 elr,
+         |                        ^~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/nvhe_hyp_panic_handler +295 arch/arm64/kvm/handle_exit.c
+
+   294	
+ > 295	void __noreturn __cold nvhe_hyp_panic_handler(u64 esr, u64 spsr, u64 elr,
+
 ---
-Changes in v2:
-  - Add motivation and impact in the commit message.
-  - Split long line > 80 chars into two.
-
- net/mctp/neigh.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/net/mctp/neigh.c b/net/mctp/neigh.c
-index 5cc042121493..6ad3e33bd4d4 100644
---- a/net/mctp/neigh.c
-+++ b/net/mctp/neigh.c
-@@ -85,8 +85,8 @@ void mctp_neigh_remove_dev(struct mctp_dev *mdev)
- 	mutex_unlock(&net->mctp.neigh_lock);
- }
- 
--// TODO: add a "source" flag so netlink can only delete static neighbours?
--static int mctp_neigh_remove(struct mctp_dev *mdev, mctp_eid_t eid)
-+static int mctp_neigh_remove(struct mctp_dev *mdev, mctp_eid_t eid,
-+			     enum mctp_neigh_source source)
- {
- 	struct net *net = dev_net(mdev->dev);
- 	struct mctp_neigh *neigh, *tmp;
-@@ -94,7 +94,8 @@ static int mctp_neigh_remove(struct mctp_dev *mdev, mctp_eid_t eid)
- 
- 	mutex_lock(&net->mctp.neigh_lock);
- 	list_for_each_entry_safe(neigh, tmp, &net->mctp.neighbours, list) {
--		if (neigh->dev == mdev && neigh->eid == eid) {
-+		if (neigh->dev == mdev && neigh->eid == eid &&
-+		    neigh->source == source) {
- 			list_del_rcu(&neigh->list);
- 			/* TODO: immediate RTM_DELNEIGH */
- 			call_rcu(&neigh->rcu, __mctp_neigh_free);
-@@ -202,7 +203,7 @@ static int mctp_rtm_delneigh(struct sk_buff *skb, struct nlmsghdr *nlh,
- 	if (!mdev)
- 		return -ENODEV;
- 
--	return mctp_neigh_remove(mdev, eid);
-+	return mctp_neigh_remove(mdev, eid, MCTP_NEIGH_STATIC);
- }
- 
- static int mctp_fill_neigh(struct sk_buff *skb, u32 portid, u32 seq, int event,
--- 
-2.32.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

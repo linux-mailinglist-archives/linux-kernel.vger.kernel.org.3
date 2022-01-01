@@ -2,145 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C33A4827A7
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 14:04:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D430C4827A8
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 14:06:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbiAAND7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jan 2022 08:03:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33044 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229873AbiAAND6 (ORCPT
+        id S232406AbiAANGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jan 2022 08:06:36 -0500
+Received: from fallback17.m.smailru.net ([94.100.176.130]:42018 "EHLO
+        fallback17.mail.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229873AbiAANGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jan 2022 08:03:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641042237;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jEdnJ5V6e6dDfgBpeMguyXtUhNZckFfASUngcdFfCTk=;
-        b=ifg7dzWO35iVHUr5ZbqQTPEELH8NFfosTNnBWlpTa6w8fdCPCwy/drRsn1CX2Kf+k7z5jX
-        856LeH9CB0FEYKHP7eQ+D1WQIu4zh+tDxhH3gzKZuo/8PfQ/tl6FLCz7am6z+XtNBHSvZO
-        jgr8uWP10D15DFDOShsqu8OHD3NBSIA=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-352-0b78mfA_On2DMVWiYnr2Qg-1; Sat, 01 Jan 2022 08:03:54 -0500
-X-MC-Unique: 0b78mfA_On2DMVWiYnr2Qg-1
-Received: by mail-ed1-f70.google.com with SMTP id g11-20020a056402090b00b003f8fd1ac475so12355080edz.1
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jan 2022 05:03:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jEdnJ5V6e6dDfgBpeMguyXtUhNZckFfASUngcdFfCTk=;
-        b=eXPK7+uX9sLmctC7LysPbdgjbBQY37rZnzdGkrm3UFQ9EoGY7m5EhzczYt51nLSxj+
-         d5o+3nwCOnQ66NmUbndvwv2X2oOMTfYJcvf5OnTBuPIsQB6CXoMQqvjNkgxB0zCQavas
-         CLXF/w+PPTm1t21yoU9rWbWZwZutphn8vdKMvvoNzF8IIYJ+9WmFZZdxtLMvoXIVkZoW
-         X7mT9nCEzyea4dA76npKiyQ+wZBgngIVH0Eho8TTuprTTl9He4QRt7lrcwVa67kqlCLz
-         fUZOD1xdPQbc/hMiyOTlAVMy3R+ADRNxyoq7E4PvaU/bi5PZRiWwcEOFX/Ibr35iJ5OM
-         lEGA==
-X-Gm-Message-State: AOAM530LxRXqcTGAtUTUo7LqEw7KaLXcwqOGQ+fwQqRMsvqTZ2mgDuZQ
-        6Kvpn+uGgFbxli+zzVKNZHjxh4ZTjitb/VJv4zreQottncOlTXeKtUu0Xchu24uunJFxCyK0S/k
-        rVOJwhFDCDO9immefyse1hLJC
-X-Received: by 2002:a17:907:3e0b:: with SMTP id hp11mr30113726ejc.584.1641042233064;
-        Sat, 01 Jan 2022 05:03:53 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz7Y1adl3v/hPy2/ES5ul0vI6t8erfXHjHO2xkuYFjn2Jc6HysX14HpQzNuS1F971b17Nikbw==
-X-Received: by 2002:a17:907:3e0b:: with SMTP id hp11mr30113718ejc.584.1641042232933;
-        Sat, 01 Jan 2022 05:03:52 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id d17sm9136699ejd.217.2022.01.01.05.03.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Jan 2022 05:03:52 -0800 (PST)
-Message-ID: <91e95d59-f8b1-07f9-de57-824e6b1668d5@redhat.com>
-Date:   Sat, 1 Jan 2022 14:03:51 +0100
+        Sat, 1 Jan 2022 08:06:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=inbox.ru; s=mail3;
+        h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=KToB9ioSqLBApRJJGq9ea4pL5GpnS8QdtF/0UlhxTDM=;
+        t=1641042395;x=1641647795; 
+        b=WcCBVTFSevf/R0mYN38P50ah9IDmoTFPUee8q5ohtcERXqusdfMhBWOhD2c3A7MploumiW+Dw8AJ1YM0m4i1UEQcObCtNxdG73knsXWXes+gbY6l2lvlmFkhUaLD/u4fvZTGTHt0xMGEBijxiTmWB31d5IGqTG2nQlNF374TcJ8=;
+Received: from [10.161.100.15] (port=42712 helo=smtpng3.i.mail.ru)
+        by fallback17.m.smailru.net with esmtp (envelope-from <gtk3@inbox.ru>)
+        id 1n3e5h-0006ns-UG
+        for linux-kernel@vger.kernel.org; Sat, 01 Jan 2022 16:06:34 +0300
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=inbox.ru; s=mail4;
+        h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=KToB9ioSqLBApRJJGq9ea4pL5GpnS8QdtF/0UlhxTDM=;
+        t=1641042393;x=1641647793; 
+        b=fqqSpY6OmbV44ZjVlT/MWUcoTg1UlBtBvw6g0OKrrbHiZWD8Lp/4WPlnEM0o6BDOyaAm+cHcWof7iOqPBzW9YXbwX5IEPrPTCrDxGGafw0NTJj7OU61XVrFotDZSqoj2pi/FMc+gzGQu4dSTNOdI4L2v4yTtXzMUCTlrqt+ILl9R7JUoXvhpxaVFXZHqrpRW41zOA9tTyE+07ora27hYI0T6g/nIcWb+eBLV3zMgkkT5lgrzqvQn5Tx68EoNg3bJmekgrWOagOkfk5KMlfNdNp6dAa+RoqMDMNUwl2nnRFN0mDE3ndd4KFHyo9g98tAH5NZQOoisPj6gmql7Zvt/1Q==;
+Received: by smtpng3.m.smailru.net with esmtpa (envelope-from <gtk3@inbox.ru>)
+        id 1n3e5V-0001EB-5f; Sat, 01 Jan 2022 16:06:21 +0300
+From:   Maxim Kutnij <gtk3@inbox.ru>
+To:     gtk3@inbox.ru, Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux@armlinux.org.uk,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 1/2] ARM: mediatek: add smp bringup code for MT6582
+Date:   Sat,  1 Jan 2022 18:05:06 +0500
+Message-Id: <20220101130506.13150-1-gtk3@inbox.ru>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: dda186e0-38e0-4061-f60e-e297441d9fed@gmail.com
+References: <20211230155152.48715-1-gtk3@inbox.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] platform/x86: intel_scu_ipc: Keep polling IPC status if
- it reads IPC_STATUS_ERR
-Content-Language: en-US
-To:     "Khandelwal, Rajat" <rajat.khandelwal@intel.com>,
-        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "Krogerus, Heikki" <heikki.krogerus@intel.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "Westerberg, Mika" <mika.westerberg@intel.com>
-References: <20211230082353.2585-1-rajat.khandelwal@intel.com>
- <CO1PR11MB48352F856F280F0E3716972196469@CO1PR11MB4835.namprd11.prod.outlook.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CO1PR11MB48352F856F280F0E3716972196469@CO1PR11MB4835.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-4EC0790: 10
+X-7564579A: 78E4E2B564C1792B
+X-77F55803: 4F1203BC0FB41BD94D5EF110843E6A676E515EAF4FD70AA3725BF6578192D028182A05F538085040E5BD0237C100BAA87D54C989C5EC827EEEE2C162EAC33CE0729DF6D36F72BBC2
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7A3DED2DACB82E709C2099A533E45F2D0395957E7521B51C2CFCAF695D4D8E9FCEA1F7E6F0F101C6778DA827A17800CE731D82F3F177D3BCDEA1F7E6F0F101C6723150C8DA25C47586E58E00D9D99D84E1BDDB23E98D2D38BEBC5CAB6D411FFA61F6588347996ED35101B66044103EC1C20879F7C8C5043D14489FFFB0AA5F4BF176DF2183F8FC7C0C26CFBAC0749D213D2E47CDBA5A96583C09775C1D3CA48CFE478A468B35FE767117882F4460429724CE54428C33FAD30A8DF7F3B2552694AC26CFBAC0749D213D2E47CDBA5A9658378DA827A17800CE7ABB305BD10C6E5099FA2833FD35BB23DF004C906525384302BEBFE083D3B9BA71A620F70A64A45A98AA50765F79006372E808ACE2090B5E1725E5C173C3A84C3C5EA940A35A165FF2DBA43225CD8A89F9E2C8583869C8577A91E23F1B6B78B78B5C8C57E37DE458BEDA766A37F9254B7
+X-C1DE0DAB: 0D63561A33F958A5A09B03AD8E65B7A56908254F4A8519ED6790FCCE016AA8F5D59269BC5F550898D99A6476B3ADF6B47008B74DF8BB9EF7333BD3B22AA88B938A852937E12ACA75B869F6C56E712840410CA545F18667F91A7EA1CDA0B5A7A0
+X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D34524B2D44961BF9C69174E81260E988F08E5CC1D4ECC46F0AF6C887B786391A7732A43A24F8C3F0651D7E09C32AA3244C7E16FDAA18EAFC7B38098160188814501DD47778AE04E04DDCA3B3C10BC03908
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojzdjxcBf1eR6jpxmLTK4rOg==
+X-Mailru-Sender: 689FA8AB762F739339CABD9B3CA9A7D6BFC7A9A0EFA9D73F4E93F6E6285CB8038F8182784CE3FA142B2697F7A04D759B04FC54F637BA925032C609A2DC06202998FD9B05CC386A12349DB15C680E247222B820C1B2086D890DA7A0AF5A3A8387
+X-Mras: Ok
+X-7564579A: B8F34718100C35BD
+X-77F55803: 6242723A09DB00B458EAA7E4B0EE0F09C028C005AD0BCC4E3E30073B5499037368F3CF0E9FE49B6998B3DD7178ECBFFC4540FA5D07A18573013799E982662969356E047325B62430
+X-7FA49CB5: 0D63561A33F958A5B72E0FFD55EDCF5B0A49375FE814657F424CC57B51E2CF73CACD7DF95DA8FC8BD5E8D9A59859A8B649BD6D9C51793B4DCC7F00164DA146DAFE8445B8C89999728AA50765F790063706C2E049600DA66E9FA2833FD35BB23D2EF20D2F80756B5F868A13BD56FB6657A471835C12D1D977725E5C173C3A84C36804EF05EF4ADF2ACC7F00164DA146DA6F5DAA56C3B73B23C77107234E2CFBA522CA9DD8327EE493EFA58DFCB7B0AE11438480C876D879DDC4224003CC83647689D4C264860C145E
+X-C1DE0DAB: 0D63561A33F958A5B72E0FFD55EDCF5B0A49375FE814657F6B07673C23030F35D59269BC5F550898D99A6476B3ADF6B4886A5961035A09600383DAD389E261318FB05168BE4CE3AF
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojzdjxcBf1eR6oiU3S9vhSGw==
+X-Mailru-MI: 800
+X-Mras: Ok
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rajat,
 
-On 12/31/21 16:49, Khandelwal, Rajat wrote:
-> Adding ++Heikki
-> 
-> Thanks
-> Rajat
+On Fri, 31 Dec 2021 16:51:20 +0100, Matthias Brugger wrote:
+>What do we need the clock-frequency for? I wasn't able to figure that 
+>out right now.
+>
+>Other then that patches look good.
+>
+>Regards,
+>Matthias
 
-If you want me to apply this, please send this as a proper patch, not as an inline
-forward to me, with the platform-driver-x86@vger.kernel.org list in the Cc.
+I thought it might be useful in the future. But if not, then I will remove it in the next patch.
 
-Regards,
-
-Hans
-
-
-> -----Original Message-----
-> From: Khandelwal, Rajat <rajat.khandelwal@intel.com> 
-> Sent: Thursday, December 30, 2021 1:54 PM
-> To: mika.westerberg@linux.intel.com
-> Cc: linux-kernel@vger.kernel.org; platform-driver-x86@vger.kernel.org; Khandelwal, Rajat <rajat.khandelwal@intel.com>; Westerberg, Mika <mika.westerberg@intel.com>
-> Subject: [PATCH] platform/x86: intel_scu_ipc: Keep polling IPC status if it reads IPC_STATUS_ERR
-> 
-> The current implementation returns -EIO if and when IPC_STATUS_ERR is returned and returns -ETIMEDOUT even if the status is busy.
-> This patch polls the IPC status even if IPC_STATUS_ERR is returned until timeout expires and returns -EBUSY if the status shows busy.
-> Observed in multiple scenarios, trying to fetch the status of IPC after it shows ERR sometimes eradicates the ERR status.
-> 
-> Signed-off-by: Rajat-Khandelwal <rajat.khandelwal@intel.com>
-> ---
->  drivers/platform/x86/intel_scu_ipc.c | 14 ++++++++++----
->  1 file changed, 10 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/intel_scu_ipc.c b/drivers/platform/x86/intel_scu_ipc.c
-> index 7cc9089d1e14..1f90acaa7212 100644
-> --- a/drivers/platform/x86/intel_scu_ipc.c
-> +++ b/drivers/platform/x86/intel_scu_ipc.c
-> @@ -233,17 +233,23 @@ static inline u32 ipc_data_readl(struct intel_scu_ipc_dev *scu, u32 offset)  static inline int busy_loop(struct intel_scu_ipc_dev *scu)  {
->  	unsigned long end = jiffies + IPC_TIMEOUT;
-> +	u32 status;
->  
->  	do {
-> -		u32 status;
-> -
->  		status = ipc_read_status(scu);
-> -		if (!(status & IPC_STATUS_BUSY))
-> -			return (status & IPC_STATUS_ERR) ? -EIO : 0;
-> +		if (!(status & IPC_STATUS_BUSY)) {
-> +			if (!(status & IPC_STATUS_ERR))
-> +				return 0;
-> +		}
->  
->  		usleep_range(50, 100);
->  	} while (time_before(jiffies, end));
->  
-> +	if (status & IPC_STATUS_BUSY)
-> +		return -EBUSY;
-> +	if (status & IPC_STATUS_ERR)
-> +		return -EIO;
-> +
->  	return -ETIMEDOUT;
->  }
->  
-> --
-> 2.17.1
-> 
-
+Maxim

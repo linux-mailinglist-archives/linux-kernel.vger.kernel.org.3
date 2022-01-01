@@ -2,66 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 509224828A0
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 23:01:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E014828AB
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 23:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232769AbiAAWBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jan 2022 17:01:51 -0500
-Received: from mail-ua1-f42.google.com ([209.85.222.42]:39904 "EHLO
-        mail-ua1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiAAWBu (ORCPT
+        id S232813AbiAAWB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jan 2022 17:01:59 -0500
+Received: from mail-ua1-f47.google.com ([209.85.222.47]:36823 "EHLO
+        mail-ua1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232802AbiAAWB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jan 2022 17:01:50 -0500
-Received: by mail-ua1-f42.google.com with SMTP id j11so15019311uaq.6;
-        Sat, 01 Jan 2022 14:01:50 -0800 (PST)
+        Sat, 1 Jan 2022 17:01:57 -0500
+Received: by mail-ua1-f47.google.com with SMTP id r15so52007059uao.3;
+        Sat, 01 Jan 2022 14:01:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=EIYlX0fg89iThHN0zMuGWjZdyWg72w1vf2v0+D7SNtI=;
-        b=hrOsgbOYGBqErc1KQWtNwwl5z4eJTcbsp4pzs/N9OrkJ3jHn5LHhj5l6bRjwhxlNBa
-         Kh1q8mRFsOuCoJpKKn14Av2Piju4og2yzR2qY+fLjo0BiGrMDc0EXWUfBmemy1rIn/LP
-         yI93Rj4cL3ySqjc/DK1rbTuvWqnVEfa19m0QNMjcV5tnftwL/yl3YC1rTrx25WaPsLtR
-         jvA6DLab610B5JMAuknBSoR1BoSyoBAHWKpqNL8hs3yIF2dvD1q/7vP1N4ky9kWzP27j
-         3QotvZk68eggtMfpA7kJ+b+FcbIkKG9gZgXfpiqksNO46F/oQBlm1DBBTo0gHQPHkHYj
-         03Pg==
-X-Gm-Message-State: AOAM53358rVQ0qWjkq8zzXEJU0cmzGdMW8TPiySLJ0zE2FjcLfyuouFC
-        okNPdH6ggXksOOwig234QEJsIKlxCwj1
-X-Google-Smtp-Source: ABdhPJz2XEbM/n1d4hzrwv5hiRpcGtsXAB6QuViudqMOLi02VAkPU3bX7OP/UX05O/2eLvlC42/doQ==
-X-Received: by 2002:ab0:6956:: with SMTP id c22mr5104855uas.51.1641074509649;
-        Sat, 01 Jan 2022 14:01:49 -0800 (PST)
+        bh=ib7VxLrH+wz9KcO4aEP5G0wyP6h6Sx532OQ1mK/6MNA=;
+        b=lDuLo15UmbtIdpgbcbTCSTycm5SyFXAEeZwgP51xgZit+og/MGEsnhTsnEJTA/eK34
+         0Mvdbn+bvINR+Xc1KhpCjsXC2BOjGtFgjOuPr6PU0sxnKyivyqCmkEF0FaLtiPXkHmcW
+         hapa6x0mOimZOr2dPUYnNOT5ftPwdDnf5/xFP/BiKXa8QN7Ai6LgLATvNg3NISacQn8W
+         Cf2j/kizHs67knbGY+eVSTi418GJemCHyUK+RlEpuAnzi/mu++um+Ksmc8YFkujOBm70
+         nil4VJGkZM2YbcbePtHBny6+/A1bSVgG0uBIcSsyamOogd1R9bjRJ7KO6bczurOx6utT
+         q0SQ==
+X-Gm-Message-State: AOAM5307t+Y4mQp6yzUksX9cB34rmahMSkhl4Y6Mx+Pd5eOMoG9Usakh
+        Y7o5RQehls2R8uY1i80VxyJRou2uVV7b
+X-Google-Smtp-Source: ABdhPJwf0BdYPyh284WfH5DaVslcyK+esQPXh84kVI+AYK2HFSTsPjwU9ipp4CkPSPV4rx8fj3uvkg==
+X-Received: by 2002:a9f:3f08:: with SMTP id h8mr12967902uaj.128.1641074516353;
+        Sat, 01 Jan 2022 14:01:56 -0800 (PST)
 Received: from robh.at.kernel.org ([209.91.235.3])
-        by smtp.gmail.com with ESMTPSA id i62sm6165690vke.33.2022.01.01.14.01.47
+        by smtp.gmail.com with ESMTPSA id u33sm5942815uau.7.2022.01.01.14.01.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Jan 2022 14:01:48 -0800 (PST)
-Received: (nullmailer pid 839548 invoked by uid 1000);
+        Sat, 01 Jan 2022 14:01:55 -0800 (PST)
+Received: (nullmailer pid 839553 invoked by uid 1000);
         Sat, 01 Jan 2022 22:01:44 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Rajeev Nandan <quic_rajeevny@quicinc.com>
-Cc:     robh+dt@kernel.org, linux-arm-msm@vger.kernel.org,
-        quic_mkrishn@quicinc.com, dmitry.baryshkov@linaro.org,
-        quic_kalyant@quicinc.com, freedreno@lists.freedesktop.org,
-        robdclark@gmail.com, daniel@ffwll.ch, swboyd@chromium.org,
-        airlied@linux.ie, sean@poorly.run, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, quic_abhinavk@quicinc.com,
-        dri-devel@lists.freedesktop.org, jonathan@marek.ca
-In-Reply-To: <1640856276-14697-2-git-send-email-quic_rajeevny@quicinc.com>
-References: <1640856276-14697-1-git-send-email-quic_rajeevny@quicinc.com> <1640856276-14697-2-git-send-email-quic_rajeevny@quicinc.com>
-Subject: Re: [v1 1/2] dt-bindings: msm/dsi: Add 10nm dsi phy tuning properties
+To:     Iain Hunter <drhunter95@gmail.com>
+Cc:     iain@hunterembedded.co.uk, Rob Herring <robh+dt@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211231131951.1245508-1-drhunter95@gmail.com>
+References: <20211231131951.1245508-1-drhunter95@gmail.com>
+Subject: Re: [PATCH v4 1/2] Add binding for ti,adc1018. It allows selection of channel as a Device Tree property
 Date:   Sat, 01 Jan 2022 18:01:44 -0400
-Message-Id: <1641074504.063577.839547.nullmailer@robh.at.kernel.org>
+Message-Id: <1641074504.089913.839552.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Dec 2021 14:54:35 +0530, Rajeev Nandan wrote:
-> Add 10nm dsi phy tuning properties for phy drive strength and
-> phy drive level adjustemnt.
+On Fri, 31 Dec 2021 13:19:15 +0000, Iain Hunter wrote:
+> New binding file uses the adc.yaml to define channel selection
 > 
-> Signed-off-by: Rajeev Nandan <quic_rajeevny@quicinc.com>
+> Signed-off-by: Iain Hunter <drhunter95@gmail.com>
 > ---
->  .../devicetree/bindings/display/msm/dsi-phy-10nm.yaml | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
+>  .../bindings/iio/adc/ti,ads1018.yaml          | 126 ++++++++++++++++++
+>  1 file changed, 126 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/adc/ti,ads1018.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -70,16 +67,15 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml: properties:phy-drive-strength-cfg:type: 'array' is not one of ['boolean', 'object']
-	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml: properties:phy-drive-level-cfg:type: 'array' is not one of ['boolean', 'object']
-	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml: ignoring, error in schema: properties: phy-drive-strength-cfg: type
-Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.example.dt.yaml:0:0: /example-0/dsi-phy@ae94400: failed to match any schema with compatible: ['qcom,dsi-phy-10nm']
+Documentation/devicetree/bindings/iio/adc/ti,ads1018.example.dts:24.19-31.15: Warning (spi_bus_reg): /example-0/spi/adc@1: SPI bus unit address format error, expected "0"
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/ti,ads1018.example.dt.yaml: adc@1: 'ti,adc-channels' does not match any of the regexes: '^channel@([0-3])$', 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/ti,ads1018.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/ti,ads1018.example.dt.yaml: adc@0: 'ti,adc-diff-channels' does not match any of the regexes: '^channel@([0-3])$', 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/ti,ads1018.yaml
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1574124
+See https://patchwork.ozlabs.org/patch/1574373
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.

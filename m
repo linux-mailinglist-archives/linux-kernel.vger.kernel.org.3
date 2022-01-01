@@ -2,87 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B7E648265A
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 03:50:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 668B8482663
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 04:33:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231979AbiAACsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 31 Dec 2021 21:48:25 -0500
-Received: from mga06.intel.com ([134.134.136.31]:54309 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229565AbiAACsY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 31 Dec 2021 21:48:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641005304; x=1672541304;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xB9sPVHLrGDtS7AnFwxWetj0wZJR4BB2KzUP5dpluNs=;
-  b=eqW0z4z6lrGoPUr0oigo84O3B4k6bUo4y2cuwyOXH4i32sA8d1SFW9H4
-   3vi61jiOPr6wWM8oXKGQkeAnpwFudtFKxiIOX0QXxRNGh05ieICf7y29K
-   seFAm9jjvFwxT9AndDlIRBr9Q/FfN3vFvTscOkQXhXRHTqSpcanmDJAA6
-   egbPtybVpnQImzc6sY4hqpv7ocBFMwHkeHwvPrlylrJe/rSaIQa5C0qE0
-   6Gqlrfd25w9z0mQezG2sSdHKOpFQKvnXvRVlicrLQaoBc6cbtlKa5Aa+h
-   s3p4RI+fN/SkSq1w2sRyaEPewfNGBZwlFTlKkkp+Q5BQcYhId3QySIsoO
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10214"; a="302613357"
-X-IronPort-AV: E=Sophos;i="5.88,252,1635231600"; 
-   d="scan'208";a="302613357"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2021 18:48:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,252,1635231600"; 
-   d="scan'208";a="471081553"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 31 Dec 2021 18:48:22 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n3URS-000Buh-4s; Sat, 01 Jan 2022 02:48:22 +0000
-Date:   Sat, 1 Jan 2022 10:47:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: WARNING: modpost: vmlinux.o(.text+0xd7dc5): Section mismatch in
- reference from the function __next_node() to the variable
- .init.data:numa_nodes_parsed
-Message-ID: <202201011044.3zHljdgM-lkp@intel.com>
+        id S231994AbiAADD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 31 Dec 2021 22:03:59 -0500
+Received: from mail-proxyout-2.websupport.eu ([37.9.169.36]:51182 "EHLO
+        mail-proxyout-2.websupport.eu" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229565AbiAADD6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 31 Dec 2021 22:03:58 -0500
+X-Greylist: delayed 467 seconds by postgrey-1.27 at vger.kernel.org; Fri, 31 Dec 2021 22:03:58 EST
+Received: from mail-proxyweb-1.websupport.eu (unknown [10.10.56.1])
+        by mail-proxyout-2.websupport.eu (Postfix) with ESMTP id 4JQmqF1p7nz1yjy
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jan 2022 03:56:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cpv.sk; s=mail;
+        t=1641005769; bh=fAlNi1WtFjUzdv+evZVX09rVaqI1nGxLyAc+rspnRUg=;
+        h=To:Subject:Date:From:Reply-To;
+        b=RE776/XAlibsB6Y+Bed467O22BCPx9T6FPtwAqhLiboUKcjQx7Z81s7CP35sZ7COm
+         UXY8pwizQeu7F5PEZhvfiWIbN5ZI0Sr5UphrYgD+n60tJePBUSE/E++vfS6sOmda4w
+         oQbRH1/VNa4dTjfb9N589q+MhPgVSGzoOXt0mwLbPYITZYbMFuTn7/Ae92kUC2spTU
+         ivYS9CjAlOEkzc5uCljJ9RUPlrzLNs1raqhW/OcV6fDVi91Eg/unzmvZwObFueXiBT
+         TH9cf5Z7fONPogaPz2Rt8KccHJ8ESc/E8IYcrgNQAWcTK9D1qYL/vj3syHyKwMnTmy
+         rW7Rj3pIsvcCQ==
+Received: from php72-tmpl (unknown [10.10.172.84])
+        by mail-proxyweb-1.websupport.eu (Postfix) with SMTP id 4JQmqF0tXJz3qsT
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jan 2022 03:56:09 +0100 (CET)
+Received: (nullmailer pid 343300 invoked by uid 1087553);
+        Sat, 01 Jan 2022 02:56:08 -0000
+To:     linux-kernel@vger.kernel.org
+Subject: =?UTF-8?Q?Pridanie_nov=C3=A9ho_cyklopodujatia_:_"=E2=9D=A4=EF=B8=8F_You_h?=  =?UTF-8?Q?ave_unread_messages_from_Sharon_(2)!_Click_Here:_http://inx.lv/?=  =?UTF-8?Q?pIaX=3Fjpfqa_=E2=9D=A4=EF=B8=8F"?=
+Date:   Sat, 1 Jan 2022 02:56:08 +0000
+From:   =?UTF-8?Q?Cyklistika_pre_v=C5=A1etk=C3=BDch?= <cpv@cpv.sk>
+Reply-To: cpv@cpv.sk
+Message-ID: <2c3f574d419999907ab8edf470802cff@cyklistikaprevsetkych.sk>
+X-Mailer: PHPMailer 5.2.27 (https://github.com/PHPMailer/PHPMailer)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   8008293888188c3923f5bd8a69370dae25ed14e5
-commit: 5c88af59f9abc202648a431428ad9d32e5d2a201 lib: inline _find_next_bit() wrappers
-date:   8 months ago
-config: x86_64-buildonly-randconfig-r005-20211230 (https://download.01.org/0day-ci/archive/20220101/202201011044.3zHljdgM-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project cd284b7ac0615afc6e0f1a30da2777e361de27a3)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5c88af59f9abc202648a431428ad9d32e5d2a201
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 5c88af59f9abc202648a431428ad9d32e5d2a201
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Dobrý deň ❤️ You have unread messages from Sharon (2)! Click Here: http://inx.lv/pIaX?jpfqa ❤️,
+ďakujeme Vám za pridanie Vášho cyklopodujatia. Všetky nové cyklopodujatia sú dôkladné kontrolované a pridávané v najbližšom možnom čase. O úspešnosti pridania Vášho cyklopodujatia Vás budeme kontaktovať na e-mail: linux-kernel@vger.kernel.org.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Ďakujeme Vám za váš záujem prezentovať svoje cyklopodujatie prostredníctvom web stránky Cyklistika pre všetkych.
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+Vaše cyklopodujatie budeme propagovať aj prostredníctvom sociálnych sietí
+na FACEBOOKu facebook.com/cyklistikaprevsetkych
+na INSTAGRAMe instagram.com/cyklistikaprevsetkych
 
->> WARNING: modpost: vmlinux.o(.text+0xd7dc5): Section mismatch in reference from the function __next_node() to the variable .init.data:numa_nodes_parsed
-The function __next_node() references
-the variable __initdata numa_nodes_parsed.
-This is often because __next_node lacks a __initdata
-annotation or the annotation of numa_nodes_parsed is wrong.
-
+S pozdravom pekného dňa, Matúš Goga.
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Mobil: +421 (0) 911 512 413
+E-mail: goga@cpv.sk
+

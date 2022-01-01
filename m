@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81867482763
+	by mail.lfdr.de (Postfix) with ESMTP id CB78E482764
 	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 12:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232305AbiAALFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jan 2022 06:05:41 -0500
-Received: from mga11.intel.com ([192.55.52.93]:54348 "EHLO mga11.intel.com"
+        id S232313AbiAALFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jan 2022 06:05:43 -0500
+Received: from mga03.intel.com ([134.134.136.65]:2290 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232262AbiAALFj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S232270AbiAALFj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 1 Jan 2022 06:05:39 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1641035139; x=1672571139;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7F/1rfrDpFHaLLjNQxV1l6jMkR8vxrQEQH7dQh46bF8=;
-  b=YCS2RdApcPXmqhlAK1VNQC4NGdZC+f0VZS4N/NT4/OtxPLamD2dosW/T
-   Ys4+WbzRknGvl85+XXpaiGNmBJGUruWuCToMEm9WdWXtJ0SsG+i1/JPk2
-   T238JP0MWSnb5vAVfUs36FZJuaUR8w5TcQs38mTvHKYUT12NIIl8gzocl
-   P6g4M/87otQ47O6LfBvMI64zs0W9OSch05R1yKl3sI03bmv/ng2lJv3PP
-   WTuv7pVZSCGXsJmXToJP6hnHdxBYxSYVb7jBuScMoOoSTiQJ57ThNDGDk
-   Ft9RTw3B77fU1C2iIxoKd1vD9dsERtNYPAxI760uFlnExkhuJeA0RJZzK
+  bh=TvkQ7v8u8dl4awdM71zwvB6ZagqGpjzsOsdxxfMsb+g=;
+  b=YC4y/n2BL+yooOemssWVJte/CAQ1bEdKqbKC//eelTA0aP5qo2VoZvuv
+   lXyD2we3neUNDCmKzGVaGEqrqCw265gFCwj4xePvjRLONyoXKk67Z3mlV
+   zl0wozIwyTol/6aVfLVypwAelwsZ3z3b+qegtQXVBaU0wLOlA3lVWG3z+
+   nTft9SDabIp7SmI22DkvgpdYShMf6idy7gA7wTR2TODq/yfbPLZf2vKFz
+   DA2s0gAEc14EHvaBuegVqECurYldc0k+EDLJBoNJ/D69yRk861QKHRafB
+   iKktlVWZ+6bsN41jBxDq/pkzKIxptwcQh9SnrXq+tTRlBOkoaqn3TC/M1
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10214"; a="239431572"
+X-IronPort-AV: E=McAfee;i="6200,9189,10214"; a="241840978"
 X-IronPort-AV: E=Sophos;i="5.88,253,1635231600"; 
-   d="scan'208";a="239431572"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2022 03:05:39 -0800
+   d="scan'208";a="241840978"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2022 03:05:39 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,253,1635231600"; 
-   d="scan'208";a="471145627"
+   d="scan'208";a="687680692"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 01 Jan 2022 03:05:37 -0800
+  by orsmga005.jf.intel.com with ESMTP; 01 Jan 2022 03:05:37 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1n3cCf-000CNl-0J; Sat, 01 Jan 2022 11:05:37 +0000
-Date:   Sat, 1 Jan 2022 19:04:43 +0800
+        id 1n3cCe-000CNj-Vn; Sat, 01 Jan 2022 11:05:36 +0000
+Date:   Sat, 1 Jan 2022 19:04:49 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Mark Rutland <mark.rutland@arm.com>
+To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: include/asm-generic/cmpxchg.h:37:39: sparse: sparse: cast truncates
- bits from constant value (deadbeef becomes ef)
-Message-ID: <202201011813.hKjzPzZI-lkp@intel.com>
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Robert Richter <rric@kernel.org>
+Subject: drivers/pci/controller/dwc/pcie-hisi.c:61:37: sparse: sparse:
+ incorrect type in initializer (different address spaces)
+Message-ID: <202201011832.Ed6K2waY-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -54,103 +55,123 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   8008293888188c3923f5bd8a69370dae25ed14e5
-commit: c7178cdecdbef8321f418fac55f3afaca3bb4c96 locking/atomic: h8300: use asm-generic exclusively
-date:   7 months ago
-config: h8300-randconfig-s031-20211117 (https://download.01.org/0day-ci/archive/20220101/202201011813.hKjzPzZI-lkp@intel.com/config)
-compiler: h8300-linux-gcc (GCC) 11.2.0
+commit: 6e5a1fff9096ecd259dedcbbdc812aa90986a40e PCI: Avoid building empty drivers
+date:   10 months ago
+config: alpha-randconfig-s032-20211117 (https://download.01.org/0day-ci/archive/20220101/202201011832.Ed6K2waY-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.2.0
 reproduce:
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # apt-get install sparse
         # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c7178cdecdbef8321f418fac55f3afaca3bb4c96
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6e5a1fff9096ecd259dedcbbdc812aa90986a40e
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout c7178cdecdbef8321f418fac55f3afaca3bb4c96
+        git checkout 6e5a1fff9096ecd259dedcbbdc812aa90986a40e
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=h8300 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha SHELL=/bin/bash drivers/dma/ drivers/pci/controller/dwc/ sound/soc/mediatek/common/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 
 sparse warnings: (new ones prefixed by >>)
-   lib/atomic64_test.c: note: in included file (through arch/h8300/include/generated/asm/cmpxchg.h, include/asm-generic/atomic.h, arch/h8300/include/generated/asm/atomic.h, ...):
->> include/asm-generic/cmpxchg.h:37:39: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
->> include/asm-generic/cmpxchg.h:48:40: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
->> include/asm-generic/cmpxchg.h:37:39: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
->> include/asm-generic/cmpxchg.h:48:40: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
->> include/asm-generic/cmpxchg.h:37:39: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
->> include/asm-generic/cmpxchg.h:48:40: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
->> include/asm-generic/cmpxchg.h:37:39: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
->> include/asm-generic/cmpxchg.h:48:40: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
-   lib/atomic64_test.c: note: in included file (through include/asm-generic/cmpxchg.h, arch/h8300/include/generated/asm/cmpxchg.h, include/asm-generic/atomic.h, ...):
->> include/asm-generic/cmpxchg-local.h:30:42: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
->> include/asm-generic/cmpxchg-local.h:34:44: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
->> include/asm-generic/cmpxchg-local.h:30:42: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
->> include/asm-generic/cmpxchg-local.h:34:44: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
->> include/asm-generic/cmpxchg-local.h:30:42: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
->> include/asm-generic/cmpxchg-local.h:34:44: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
->> include/asm-generic/cmpxchg-local.h:30:42: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
->> include/asm-generic/cmpxchg-local.h:34:44: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
->> include/asm-generic/cmpxchg-local.h:30:42: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
->> include/asm-generic/cmpxchg-local.h:34:44: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
->> include/asm-generic/cmpxchg-local.h:30:42: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
->> include/asm-generic/cmpxchg-local.h:34:44: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
->> include/asm-generic/cmpxchg-local.h:30:42: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
->> include/asm-generic/cmpxchg-local.h:34:44: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
->> include/asm-generic/cmpxchg-local.h:30:42: sparse: sparse: cast truncates bits from constant value (deadbeef becomes ef)
->> include/asm-generic/cmpxchg-local.h:34:44: sparse: sparse: cast truncates bits from constant value (deadbeef becomes beef)
+>> drivers/pci/controller/dwc/pcie-hisi.c:61:37: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void [noderef] __iomem *reg_base @@     got void *priv @@
+   drivers/pci/controller/dwc/pcie-hisi.c:61:37: sparse:     expected void [noderef] __iomem *reg_base
+   drivers/pci/controller/dwc/pcie-hisi.c:61:37: sparse:     got void *priv
+>> drivers/pci/controller/dwc/pcie-hisi.c:132:19: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *priv @@     got void [noderef] __iomem *[assigned] reg_base @@
+   drivers/pci/controller/dwc/pcie-hisi.c:132:19: sparse:     expected void *priv
+   drivers/pci/controller/dwc/pcie-hisi.c:132:19: sparse:     got void [noderef] __iomem *[assigned] reg_base
 
-vim +37 include/asm-generic/cmpxchg.h
+vim +61 drivers/pci/controller/dwc/pcie-hisi.c
 
-b4816afa398670 David Howells 2012-03-28  24  
-b4816afa398670 David Howells 2012-03-28  25  static inline
-b4816afa398670 David Howells 2012-03-28  26  unsigned long __xchg(unsigned long x, volatile void *ptr, int size)
-b4816afa398670 David Howells 2012-03-28  27  {
-b4816afa398670 David Howells 2012-03-28  28  	unsigned long ret, flags;
-b4816afa398670 David Howells 2012-03-28  29  
-b4816afa398670 David Howells 2012-03-28  30  	switch (size) {
-b4816afa398670 David Howells 2012-03-28  31  	case 1:
-b4816afa398670 David Howells 2012-03-28  32  #ifdef __xchg_u8
-b4816afa398670 David Howells 2012-03-28  33  		return __xchg_u8(x, ptr);
-b4816afa398670 David Howells 2012-03-28  34  #else
-b4816afa398670 David Howells 2012-03-28  35  		local_irq_save(flags);
-b4816afa398670 David Howells 2012-03-28  36  		ret = *(volatile u8 *)ptr;
-b4816afa398670 David Howells 2012-03-28 @37  		*(volatile u8 *)ptr = x;
-b4816afa398670 David Howells 2012-03-28  38  		local_irq_restore(flags);
-b4816afa398670 David Howells 2012-03-28  39  		return ret;
-b4816afa398670 David Howells 2012-03-28  40  #endif /* __xchg_u8 */
-b4816afa398670 David Howells 2012-03-28  41  
-b4816afa398670 David Howells 2012-03-28  42  	case 2:
-b4816afa398670 David Howells 2012-03-28  43  #ifdef __xchg_u16
-b4816afa398670 David Howells 2012-03-28  44  		return __xchg_u16(x, ptr);
-b4816afa398670 David Howells 2012-03-28  45  #else
-b4816afa398670 David Howells 2012-03-28  46  		local_irq_save(flags);
-b4816afa398670 David Howells 2012-03-28  47  		ret = *(volatile u16 *)ptr;
-b4816afa398670 David Howells 2012-03-28 @48  		*(volatile u16 *)ptr = x;
-b4816afa398670 David Howells 2012-03-28  49  		local_irq_restore(flags);
-b4816afa398670 David Howells 2012-03-28  50  		return ret;
-b4816afa398670 David Howells 2012-03-28  51  #endif /* __xchg_u16 */
-b4816afa398670 David Howells 2012-03-28  52  
-b4816afa398670 David Howells 2012-03-28  53  	case 4:
-b4816afa398670 David Howells 2012-03-28  54  #ifdef __xchg_u32
-b4816afa398670 David Howells 2012-03-28  55  		return __xchg_u32(x, ptr);
-b4816afa398670 David Howells 2012-03-28  56  #else
-b4816afa398670 David Howells 2012-03-28  57  		local_irq_save(flags);
-b4816afa398670 David Howells 2012-03-28  58  		ret = *(volatile u32 *)ptr;
-b4816afa398670 David Howells 2012-03-28  59  		*(volatile u32 *)ptr = x;
-b4816afa398670 David Howells 2012-03-28  60  		local_irq_restore(flags);
-b4816afa398670 David Howells 2012-03-28  61  		return ret;
-b4816afa398670 David Howells 2012-03-28  62  #endif /* __xchg_u32 */
-b4816afa398670 David Howells 2012-03-28  63  
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   56  
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   57  static void __iomem *hisi_pcie_map_bus(struct pci_bus *bus, unsigned int devfn,
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   58  				       int where)
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   59  {
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   60  	struct pci_config_window *cfg = bus->sysdata;
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01  @61  	void __iomem *reg_base = cfg->priv;
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   62  
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   63  	if (bus->number == cfg->busr.start)
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   64  		return reg_base + where;
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   65  	else
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   66  		return pci_ecam_map_bus(bus, devfn, where);
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   67  }
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   68  
+a2ec1996098c7d drivers/pci/host/pcie-hisi.c           Dongdong Liu      2017-02-06   69  #if defined(CONFIG_ACPI) && defined(CONFIG_PCI_QUIRKS)
+a2ec1996098c7d drivers/pci/host/pcie-hisi.c           Dongdong Liu      2017-02-06   70  
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   71  static int hisi_pcie_init(struct pci_config_window *cfg)
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   72  {
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   73  	struct device *dev = cfg->parent;
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   74  	struct acpi_device *adev = to_acpi_device(dev);
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   75  	struct acpi_pci_root *root = acpi_driver_data(adev);
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   76  	struct resource *res;
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   77  	void __iomem *reg_base;
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   78  	int ret;
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   79  
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   80  	/*
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   81  	 * Retrieve RC base and size from a HISI0081 device with _UID
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   82  	 * matching our segment.
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   83  	 */
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   84  	res = devm_kzalloc(dev, sizeof(*res), GFP_KERNEL);
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   85  	if (!res)
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   86  		return -ENOMEM;
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   87  
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   88  	ret = acpi_get_rc_resources(dev, "HISI0081", root->segment, res);
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   89  	if (ret) {
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   90  		dev_err(dev, "can't get rc base address\n");
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   91  		return -ENOMEM;
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   92  	}
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   93  
+e313a447e73527 drivers/pci/dwc/pcie-hisi.c            Lorenzo Pieralisi 2017-04-19   94  	reg_base = devm_pci_remap_cfgspace(dev, res->start, resource_size(res));
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   95  	if (!reg_base)
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   96  		return -ENOMEM;
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   97  
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   98  	cfg->priv = reg_base;
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01   99  	return 0;
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01  100  }
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01  101  
+0b104773b4f72c drivers/pci/controller/dwc/pcie-hisi.c Rob Herring       2020-04-09  102  const struct pci_ecam_ops hisi_pcie_ops = {
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01  103  	.init         =  hisi_pcie_init,
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01  104  	.pci_ops      = {
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01  105  		.map_bus    = hisi_pcie_map_bus,
+4788316f743539 drivers/pci/host/pcie-hisi.c           Bjorn Helgaas     2017-02-07  106  		.read       = hisi_pcie_rd_conf,
+4788316f743539 drivers/pci/host/pcie-hisi.c           Bjorn Helgaas     2017-02-07  107  		.write      = hisi_pcie_wr_conf,
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01  108  	}
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01  109  };
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01  110  
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01  111  #endif
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01  112  
+5f00f1a0178cf5 drivers/pci/host/pcie-hisi.c           Dongdong Liu      2016-12-01  113  #ifdef CONFIG_PCI_HISI
+500a1d9a43e0a1 drivers/pci/host/pcie-hisi.c           Zhou Wang         2015-10-29  114  
+a2ec1996098c7d drivers/pci/host/pcie-hisi.c           Dongdong Liu      2017-02-06  115  static int hisi_pcie_platform_init(struct pci_config_window *cfg)
+a2ec1996098c7d drivers/pci/host/pcie-hisi.c           Dongdong Liu      2017-02-06  116  {
+a2ec1996098c7d drivers/pci/host/pcie-hisi.c           Dongdong Liu      2017-02-06  117  	struct device *dev = cfg->parent;
+a2ec1996098c7d drivers/pci/host/pcie-hisi.c           Dongdong Liu      2017-02-06  118  	struct platform_device *pdev = to_platform_device(dev);
+a2ec1996098c7d drivers/pci/host/pcie-hisi.c           Dongdong Liu      2017-02-06  119  	struct resource *res;
+a2ec1996098c7d drivers/pci/host/pcie-hisi.c           Dongdong Liu      2017-02-06  120  	void __iomem *reg_base;
+a2ec1996098c7d drivers/pci/host/pcie-hisi.c           Dongdong Liu      2017-02-06  121  
+a2ec1996098c7d drivers/pci/host/pcie-hisi.c           Dongdong Liu      2017-02-06  122  	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+a2ec1996098c7d drivers/pci/host/pcie-hisi.c           Dongdong Liu      2017-02-06  123  	if (!res) {
+a2ec1996098c7d drivers/pci/host/pcie-hisi.c           Dongdong Liu      2017-02-06  124  		dev_err(dev, "missing \"reg[1]\"property\n");
+a2ec1996098c7d drivers/pci/host/pcie-hisi.c           Dongdong Liu      2017-02-06  125  		return -EINVAL;
+a2ec1996098c7d drivers/pci/host/pcie-hisi.c           Dongdong Liu      2017-02-06  126  	}
+a2ec1996098c7d drivers/pci/host/pcie-hisi.c           Dongdong Liu      2017-02-06  127  
+e313a447e73527 drivers/pci/dwc/pcie-hisi.c            Lorenzo Pieralisi 2017-04-19  128  	reg_base = devm_pci_remap_cfgspace(dev, res->start, resource_size(res));
+a2ec1996098c7d drivers/pci/host/pcie-hisi.c           Dongdong Liu      2017-02-06  129  	if (!reg_base)
+a2ec1996098c7d drivers/pci/host/pcie-hisi.c           Dongdong Liu      2017-02-06  130  		return -ENOMEM;
+a2ec1996098c7d drivers/pci/host/pcie-hisi.c           Dongdong Liu      2017-02-06  131  
+a2ec1996098c7d drivers/pci/host/pcie-hisi.c           Dongdong Liu      2017-02-06 @132  	cfg->priv = reg_base;
+a2ec1996098c7d drivers/pci/host/pcie-hisi.c           Dongdong Liu      2017-02-06  133  	return 0;
+a2ec1996098c7d drivers/pci/host/pcie-hisi.c           Dongdong Liu      2017-02-06  134  }
+a2ec1996098c7d drivers/pci/host/pcie-hisi.c           Dongdong Liu      2017-02-06  135  
 
-:::::: The code at line 37 was first introduced by commit
-:::::: b4816afa3986704d1404fc48e931da5135820472 Move the asm-generic/system.h xchg() implementation to asm-generic/cmpxchg.h
+:::::: The code at line 61 was first introduced by commit
+:::::: 5f00f1a0178cf52928366a5e1f376a65f1f3f389 PCI: Add MCFG quirks for HiSilicon Hip05/06/07 host controllers
 
-:::::: TO: David Howells <dhowells@redhat.com>
-:::::: CC: David Howells <dhowells@redhat.com>
+:::::: TO: Dongdong Liu <liudongdong3@huawei.com>
+:::::: CC: Bjorn Helgaas <helgaas@kernel.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

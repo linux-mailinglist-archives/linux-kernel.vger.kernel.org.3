@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0389F4826EA
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 08:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A0504826EE
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 08:44:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232109AbiAAHoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jan 2022 02:44:10 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:41884 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbiAAHoH (ORCPT
+        id S232065AbiAAHoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jan 2022 02:44:22 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:58006 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232098AbiAAHoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jan 2022 02:44:07 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2017hmuc103853;
-        Sat, 1 Jan 2022 01:43:48 -0600
+        Sat, 1 Jan 2022 02:44:15 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2017hs9c034659;
+        Sat, 1 Jan 2022 01:43:54 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1641023028;
-        bh=WTH3svtm8n6MIEwZAu3h7/fylQLPQKhJoycJnq2zHnQ=;
+        s=ti-com-17Q1; t=1641023035;
+        bh=yaG+MRp6i5Q9AgNtz6EkmbKt/8BQv9sW+DzhOTyeyS4=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=HX0KOYi9O3sXiFcz52RqBowlLZAnNQDNKbaYG4pm6k3zlmJnuNbDTBNtH+Zwy/pca
-         C0NqCyyOtTCBV+rrE3zv5qeZIl6rxxea384r7Tl/QMLhrxuwzpInhotWXGuiWFyDjH
-         RBRHl96SCnDn9MrKlCvEY5AxbJ8A3Jzm10nbxR/w=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2017hm50127530
+        b=LOYJXjrzk4h0sLRJA6JKlrd3/AC7UjFB6I/UhkftrJF65PS5UPCSmw7PWaeXhLILI
+         qeE6YrR0UcHmqYzWNbwDvLriCLLma2eRz6kkiFnNyf3j97eoPX9lKCuGMsuUrKN9TC
+         KUPvz6j5UHoF9npBMPl6R21Lx8Uu6ndvgw1epiyY=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2017hsI8039599
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 1 Jan 2022 01:43:48 -0600
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+        Sat, 1 Jan 2022 01:43:54 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Sat, 1
- Jan 2022 01:43:48 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ Jan 2022 01:43:54 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Sat, 1 Jan 2022 01:43:48 -0600
+ Frontend Transport; Sat, 1 Jan 2022 01:43:54 -0600
 Received: from LT5CD112GSQZ.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2017gpwe033162;
-        Sat, 1 Jan 2022 01:43:42 -0600
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2017gpwf033162;
+        Sat, 1 Jan 2022 01:43:48 -0600
 From:   Apurva Nandan <a-nandan@ti.com>
 To:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
@@ -51,9 +51,9 @@ To:     Miquel Raynal <miquel.raynal@bootlin.com>,
         <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <linux-spi@vger.kernel.org>
 CC:     <p.yadav@ti.com>
-Subject: [PATCH v3 09/17] mtd: spinand: Add change_mode() in manufacturer_ops
-Date:   Sat, 1 Jan 2022 13:12:42 +0530
-Message-ID: <20220101074250.14443-10-a-nandan@ti.com>
+Subject: [PATCH v3 10/17] mtd: spinand: Add pointer to probed flash's spinand_info
+Date:   Sat, 1 Jan 2022 13:12:43 +0530
+Message-ID: <20220101074250.14443-11-a-nandan@ti.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220101074250.14443-1-a-nandan@ti.com>
 References: <20220101074250.14443-1-a-nandan@ti.com>
@@ -65,41 +65,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce change_mode() manufacturer_op to let the vendor provide the
-implementation of switching of SPI IO modes.
-
-The method to switch to different SPI IO mode may vary across
-manufacturers. For example, for Winbond, Octal DTR is enabled by
-writing values to the volatile configuration register. So, let the
-manufacturer's code have their own implementation for switching to
-any given SPI IO mode. Manufacturer's code need to take care, if
-the requested protocol change is allowed/needed and how to apply
-it.
+The data_ops_variants and ctrl_ops_variants defined in manufacturer's
+code are required again when changing flash modes, because they hold
+the op templates for the new protocol. It would be useful to have a
+pointer to the device description entry i.e. probed flash's
+spinand_info table in the spinand_device struct itself.
 
 Signed-off-by: Apurva Nandan <a-nandan@ti.com>
 ---
+ drivers/mtd/nand/spi/core.c | 1 +
  include/linux/mtd/spinand.h | 3 +++
- 1 file changed, 3 insertions(+)
+ 2 files changed, 4 insertions(+)
 
+diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
+index 9688fdfc174e..1a602e4dd6bd 100644
+--- a/drivers/mtd/nand/spi/core.c
++++ b/drivers/mtd/nand/spi/core.c
+@@ -1107,6 +1107,7 @@ int spinand_match_and_init(struct spinand_device *spinand,
+ 		spinand->flags = table[i].flags;
+ 		spinand->id.len = 1 + table[i].devid.len;
+ 		spinand->select_target = table[i].select_target;
++		spinand->desc_entry = &table[i];
+ 
+ 		op = spinand_select_data_op_variant(spinand,
+ 					info->data_ops_variants.read_cache);
 diff --git a/include/linux/mtd/spinand.h b/include/linux/mtd/spinand.h
-index 5dae0649f2fb..ad924271a248 100644
+index ad924271a248..a8c071983a27 100644
 --- a/include/linux/mtd/spinand.h
 +++ b/include/linux/mtd/spinand.h
-@@ -298,6 +298,7 @@ struct spinand_devid {
- /**
-  * struct manufacurer_ops - SPI NAND manufacturer specific operations
-  * @init: initialize a SPI NAND device
-+ * @change_mode: switch the SPI NAND flash to a specific SPI protocol
-  * @cleanup: cleanup a SPI NAND device
-  *
-  * Each SPI NAND manufacturer driver should implement this interface so that
-@@ -305,6 +306,8 @@ struct spinand_devid {
+@@ -534,6 +534,8 @@ struct spinand_dirmap {
+  *		passed in spi_mem_op be DMA-able, so we can't based the bufs on
+  *		the stack
+  * @manufacturer: SPI NAND manufacturer information
++ * @desc_entry: pointer to device description entry in the manufacturer's
++ *		spinand_info tables
+  * @priv: manufacturer private data
   */
- struct spinand_manufacturer_ops {
- 	int (*init)(struct spinand_device *spinand);
-+	int (*change_mode)(struct spinand_device *spinand,
-+			   const enum spinand_protocol protocol);
- 	void (*cleanup)(struct spinand_device *spinand);
+ struct spinand_device {
+@@ -566,6 +568,7 @@ struct spinand_device {
+ 	u8 *oobbuf;
+ 	u8 *scratchbuf;
+ 	const struct spinand_manufacturer *manufacturer;
++	const struct spinand_info *desc_entry;
+ 	void *priv;
  };
  
 -- 

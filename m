@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18181482957
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 06:32:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E4648295C
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 06:34:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbiABFc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 00:32:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34664 "EHLO
+        id S230255AbiABFeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 00:34:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiABFcZ (ORCPT
+        with ESMTP id S230210AbiABFeT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 00:32:25 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D22C061401
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jan 2022 21:32:25 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id t14so22538391ljh.8
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jan 2022 21:32:25 -0800 (PST)
+        Sun, 2 Jan 2022 00:34:19 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A708C06173F
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jan 2022 21:34:19 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id r4so25191565lfe.7
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Jan 2022 21:34:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=eoiQ1KQCJ264ktaBoIMzabH4DC3BnHoyNUOH7R2xfGE=;
-        b=yYBSC5lysVvJJvnfgAikjlfcPvXtpBeSHCMXW02NeblK+R7M2cdUuXlPIQsC8hgj6S
-         m9MClDBjLME/csDB9yr+lu2tJAczUjiZQugxQKJKJ/Y85c0/CIZyIoPEUl5o83nLjsQd
-         yFYszFo2r81u/y51uN6O+HurpwmOo9M8TkZ4VgMSukjVAFnYKhDuS3QHNRSQ6xsYhBuU
-         X2cMVp6CObIuuli55848qIysWAP/7IrvkE4fhng5L0fYkpzLBfjbObzyYm21uv35RX2N
-         lmBWtfArOezp5xg7xGM6xXq9gv7w/3zSNrW+TqVYg/upO7oPZtc1kWklBnnTV0A7NqS3
-         h1Ow==
+        bh=92ZAzCrCPw0W1NFt/Y4QYxWJV7lis48854pVbK+SYG4=;
+        b=qCQ7fuFvoP38NvSywvxG3zAhp9FxZ5InVyVfNdATCe0bCC9nRt2cRf2T8FZOqinAaV
+         Cr9Nj3fjMNfFV8YlWFxpG/pcb6RiVKSWXCUAnLhFA/1FFmlSmLF4zb+HOgEHYg1b16sC
+         KL/JJoC1mr8tNru2Oa4Jq6Sj5TNuxGaUn3SMIKIk9McaZ5Cz4iaSOvGQiIojw6cjIIyA
+         X3R0ilGtEPNt9mAhqX/SMyQm2UXUC4fbpgNOZPYrJG9dglIRrW5vakche/gqdc4oCMwY
+         7Jbyn5fJLTpTZJ05rpARLwPKi7amKxRgS8jrfD646IunH9Oo2hI59T1vqLTgqh3jw6kC
+         BPeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=eoiQ1KQCJ264ktaBoIMzabH4DC3BnHoyNUOH7R2xfGE=;
-        b=cGde1nMTKLqfLD+zMlUYiwrumQHd15xq16B7XCp3NtxbDdO15LNcshsidY6LqzzsIu
-         zvBBYhPu/rSJn7UXnfI1QtD3v0bEZKA3VuGwuAZ1syy1/onXqbgmI96a9HgbmnuctLzs
-         0EvIwMUrG1FjMNmU8Zqb7K7pVRSWbs7xTnnWgaqPr31Jz2kmWE2O8+nnop4KC+kgkTpw
-         Tso14BUo63lv9atrwvjd2PWBQ0e/u5YoEHRgY+9Q8Uf2eGaeS5QRa2ZqVv/UsqbZntG0
-         TbctiPDw+77wLlrQpVVfZsjoOBewjW9G81oNlnwTBLM0kU9RHInma/IA4ljGByGuRJZO
-         iKgw==
-X-Gm-Message-State: AOAM530h+OtLpDV2M2/sNgUjEx35ARJ/fx4O6rb54rNZh/vZFLc5/8L7
-        bcOvmP7oaUqzKILYK+7yxNAH7Bxmq6jOcRkRD1o81w==
-X-Google-Smtp-Source: ABdhPJw4xEaszeQin5r2Odu1gmvGU60LgLA3geDvlmTokl3LciZbSNZGYLPNPKmSyqjJHa3BrTln8FjKn/xFLZmC/AY=
-X-Received: by 2002:a2e:7c01:: with SMTP id x1mr33669767ljc.145.1641101543185;
- Sat, 01 Jan 2022 21:32:23 -0800 (PST)
+        bh=92ZAzCrCPw0W1NFt/Y4QYxWJV7lis48854pVbK+SYG4=;
+        b=i3+KWUN2zx68GGJ+FgB77DmEE7+taiBKHTVrIHOJUrQBlqR14uQ7QIFe5CupMZPeEI
+         cgWE4MjJ47ye4mgoZd/cT1I8pHLPpPOcjgKZZ3ZR8G5Qp8Z7y5llcJiuODDV0OxD4CKM
+         8XGc+Hes4ZjI2fRYgiTAwal51PeoRuzJMbiAkxyX4auOlUTSL2aVDINgs7IQQdA3y9Te
+         STga1TGnuGLfEL/yax5dXY+GDVv4APby6BQluHyRyGrn3tJQLG++XuEsV2a/tTs7Lh8s
+         tQt86yVzRljxtIaQvLH7ky83o6vRbNvnizjyIjZUgPp+/rPap44hMTTJENpZqdDclm3o
+         KWWQ==
+X-Gm-Message-State: AOAM533ew1zDyVlOKWbiM7HuvXY+lMInO7BXqitz51MMl86tLo1VTICg
+        PMN5in5xsg/jxIKkpH+cPeG1olTtiC2buTmhE/F+4g==
+X-Google-Smtp-Source: ABdhPJybDhokn+xOVsFdW+LfgnJof+m7g7TYaEEWVbC+XMFpx5jKW+mJxZ0kkJrYuc2RLM2CC8d/xzZp3Ew/OWgI5oQ=
+X-Received: by 2002:a05:6512:39ce:: with SMTP id k14mr18986263lfu.508.1641101657431;
+ Sat, 01 Jan 2022 21:34:17 -0800 (PST)
 MIME-Version: 1.0
-References: <20211226153624.162281-1-marcan@marcan.st> <20211226153624.162281-4-marcan@marcan.st>
-In-Reply-To: <20211226153624.162281-4-marcan@marcan.st>
+References: <20211226153624.162281-1-marcan@marcan.st> <20211226153624.162281-7-marcan@marcan.st>
+In-Reply-To: <20211226153624.162281-7-marcan@marcan.st>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 2 Jan 2022 06:31:26 +0100
-Message-ID: <CACRpkdZc75XUJh7afPhcBNaVE63Ovby2HVBe+HObvURN8i84KQ@mail.gmail.com>
-Subject: Re: [PATCH 03/34] brcmfmac: firmware: Support having multiple alt paths
+Date:   Sun, 2 Jan 2022 06:34:05 +0100
+Message-ID: <CACRpkdZaPKApKLS8jRjtg2dXvz0e_XmEVzndNQbZ34hMUaZwcA@mail.gmail.com>
+Subject: Re: [PATCH 06/34] brcmfmac: firmware: Support passing in multiple board_types
 To:     Hector Martin <marcan@marcan.st>,
         Dmitry Osipenko <digetx@gmail.com>
 Cc:     Kalle Valo <kvalo@codeaurora.org>,
@@ -85,21 +85,13 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Sun, Dec 26, 2021 at 4:37 PM Hector Martin <marcan@marcan.st> wrote:
 
-> Apple platforms have firmware and config files identified with multiple
-> dimensions. We want to be able to find the most specific firmware
-> available for any given platform, progressively trying more general
-> firmwares.
->
-> First, add support for having multiple alternate firmware paths.
+> In order to make use of the multiple alt_path functionality, change
+> board_type to an array. Bus drivers can pass in a NULL-terminated list
+> of board type strings to try for the firmware fetch.
 >
 > Signed-off-by: Hector Martin <marcan@marcan.st>
 
-This looks OK to me so FWIW:
 Acked-by: Linus Walleij <linus.walleij@linaro.org>
-
-Make sure Dmitry Osipenko gets to review this though, he has many
-valuable insights about how the FW is loaded and helped me out a
-lot when I patched this.
 
 Yours,
 Linus Walleij

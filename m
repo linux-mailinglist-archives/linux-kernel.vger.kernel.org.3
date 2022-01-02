@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78AD2482A29
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 07:20:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52AD0482A2E
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 07:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231923AbiABGUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 01:20:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45518 "EHLO
+        id S231947AbiABGU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 01:20:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231905AbiABGUE (ORCPT
+        with ESMTP id S231358AbiABGU5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 01:20:04 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F07C061746
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jan 2022 22:20:04 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id k27so51014367ljc.4
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jan 2022 22:20:04 -0800 (PST)
+        Sun, 2 Jan 2022 01:20:57 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BF1C06173E
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jan 2022 22:20:56 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id g26so68513126lfv.11
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Jan 2022 22:20:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=33p8zByIPP6vd/MVn5Q5ispXndVo3HnOt5vS5VnsFO4=;
-        b=iG09u258R47bMA5zDz/ddEWi+USaMVoj7ZdpA+GfWJ8wwKh7g45jFT5+dJZ83MfeLm
-         oXWLKhqzOSz0bkoA7UcVOva5QXT2Sdg57mTZbKFQ/rGiy1YaedXyCbK1FCkFddb5CM0q
-         QmQDF1mXSWPv0Sdx1STzq8nzUMfMLuXYiFXwS/ce5hePsXLwBmJ/McXTnCVmFKQSTFfh
-         wHtIj29gxogS4/LAwzn+StT19mhvxtzFFehMf5JZr0lw+AYFO9zdX9RrhHSt6/8AexdE
-         7PYBIPbSvdv8BesqrVPgxpDJCRhDydJa5MK5aobrx1wf4d01JKa3IAc+jj32xpEmGOQN
-         zsHQ==
+        bh=iZfVXMnlFKiRYFSBtV5QUvN00BNnqV5JOXQJdrR8Sew=;
+        b=sdBIgE+VYwC06bsPhTHjM+UfcUy1tLJ2op+ZavumxCT6zdSzTUST7hlfJDtZPO5CGd
+         0SABlupThnCzBE3gLGBg6MmuJGpi4Fx6BEmFGcdGN84KLvETqTDHpC4wWybZ3Xni3For
+         21dPXKBxBAChu7D1owrHM8L94avJF8Mnn2PWLFeboCUo8vQutvpMX4YdNxr+qysJDwzE
+         jtlgIcTmaCb7gs6Iyv4w6WxKaaB0w4vTv4EwYCJBNZYUVU7ederPyCSmSONF5DSYmgF/
+         O1YZV0Hr5Dvyg5S+bzHkwtPlkuN0hFYS7bT7BlhztciDo1kH7leWW0vNZWNHZPNgzvIL
+         e6hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=33p8zByIPP6vd/MVn5Q5ispXndVo3HnOt5vS5VnsFO4=;
-        b=U1rjcxrAeDjSjZakYb/DyL8g2kkvj1d+iCSKemPcuGOsvlb6Vh1+OUnkpTRtlsaA/d
-         sIUCDr/2Ktnv0f/zuf3VoH8VJc5C9fOJ98HC+UvVcKToOIMP1MRrH69/xbLDOYxTi7oM
-         4iWGLJuApz4OwOCL8NGXZvdVroetgn3006NKtPDko29ibPch7J8ZTENo67CTGvfa8w2v
-         ED/LKowATgGYX2ScFsTgv/lNWENCxt0D8qdUfK8nB0UTU39vH1PEkRBZimUg9rRA4Aj1
-         tMiVt7VRulFmfWhMcL6qkOiHZ597FO4DvcJJJfqQu54TzenPpOnIbx7VoRY15aMfp1UI
-         irlQ==
-X-Gm-Message-State: AOAM532htDEfSXI56oe8pH/1XE9SECj5TmIfiB557i++7Hx3lEyQoQOz
-        5Nb4rXJof59dnZCMua6Cfs5h1BQAJxQSiYtWgv20ww==
-X-Google-Smtp-Source: ABdhPJxVM+M7FZ5irngCc67P8eyuZ1BmrcWr9l4YZI+cHq8gDCBvA9/EAh9k8I+PvRB2/MtWngCj0Is3WMMQGdkkR+M=
-X-Received: by 2002:a2e:7c01:: with SMTP id x1mr33735118ljc.145.1641104402564;
- Sat, 01 Jan 2022 22:20:02 -0800 (PST)
+        bh=iZfVXMnlFKiRYFSBtV5QUvN00BNnqV5JOXQJdrR8Sew=;
+        b=apyxHb9eoSJOS6kkngXK+n9bW3+JhoZ2QhyYGidDEAFhcaQWuhwtNOFrsDAXY2dDBj
+         9TDWd82X40P7v/zA+yvqTLXN9fd7ehg0YI66meOJ+CpCY/5C7SCD7AFIU/CjCpe3sGg5
+         KYDrO3LdipuWHuH6LEEkgyREKZ6qJS4srCwDg0jgI4QWEVRsK1DxriUm7qzX9gMdZ2KE
+         wm8uptAwn+3QSDsLNhRd27flHrVsZ/z+L1QupMs3foNR86dVt4igQPIeU4UOkwVCjqgA
+         OPDJQcUiKoi8e9y3bf3jmx7Z2m4XgWbeJpQS3qUalJO0jWB9FIH0RvooBgtWg+/rw6Z1
+         q4jw==
+X-Gm-Message-State: AOAM530bETvM4X60r1blzXN2W42HYpKqcedZgZJX/FfRCj3ByOh6XIiE
+        M7sqvhPJpGJ2HGjW7GrabPOqM5Ka3yLSUS5ZoGJdfA==
+X-Google-Smtp-Source: ABdhPJwGf3GpaIdTpmfU98rgqH5l8olR5k/M9CUek/1KS0aQHfgaFJavl8RBOhO7emZSxB4N+8M/uzkY9ewCBSwILQg=
+X-Received: by 2002:a05:6512:39ce:: with SMTP id k14mr19074277lfu.508.1641104454979;
+ Sat, 01 Jan 2022 22:20:54 -0800 (PST)
 MIME-Version: 1.0
-References: <20211226153624.162281-1-marcan@marcan.st> <20211226153624.162281-35-marcan@marcan.st>
-In-Reply-To: <20211226153624.162281-35-marcan@marcan.st>
+References: <20211226153624.162281-1-marcan@marcan.st> <20211226153624.162281-16-marcan@marcan.st>
+In-Reply-To: <20211226153624.162281-16-marcan@marcan.st>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 2 Jan 2022 07:19:50 +0100
-Message-ID: <CACRpkdaGjWoSu+gA=HgX2zPJPvAeXHvYDUo=U2itA3Nosr+rSw@mail.gmail.com>
-Subject: Re: [PATCH 34/34] brcmfmac: common: Add support for external
- calibration blobs
+Date:   Sun, 2 Jan 2022 07:20:42 +0100
+Message-ID: <CACRpkdYkRjzNnudcrroXxdkxEF-PvTgqgy25HidhY9KsFapJsg@mail.gmail.com>
+Subject: Re: [PATCH 15/34] ACPI / property: Support strings in Apple _DSM props
 To:     Hector Martin <marcan@marcan.st>
 Cc:     Kalle Valo <kvalo@codeaurora.org>,
         "David S. Miller" <davem@davemloft.net>,
@@ -83,20 +82,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 26, 2021 at 4:41 PM Hector Martin <marcan@marcan.st> wrote:
+On Sun, Dec 26, 2021 at 4:38 PM Hector Martin <marcan@marcan.st> wrote:
 
-> The calibration blob for a chip is normally stored in SROM and loaded
-> internally by the firmware. However, Apple ARM64 platforms instead store
-> it as part of platform configuration data, and provide it via the Apple
-> Device Tree. We forward this into the Linux DT in the bootloader.
->
-> Add support for taking this blob from the DT and loading it into the
-> dongle. The loading mechanism is the same as used for the CLM and TxCap
-> blobs.
+> The Wi-Fi module in Apple machines has a "module-instance" device
+> property that specifies the platform type and is used for firmware
+> selection. Its value is a string, so add support for string values in
+> acpi_extract_apple_properties().
 >
 > Signed-off-by: Hector Martin <marcan@marcan.st>
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,
 Linus Walleij

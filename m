@@ -2,106 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D426482C4F
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 18:05:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E95F482C50
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 18:06:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbiABRFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 12:05:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
+        id S229669AbiABRGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 12:06:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiABRE6 (ORCPT
+        with ESMTP id S229473AbiABRGt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 12:04:58 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17814C061761;
-        Sun,  2 Jan 2022 09:04:58 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id l4so20220070wmq.3;
-        Sun, 02 Jan 2022 09:04:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=L3boBvFJeKQxpTMzKTlBE3Vnj/eOP88tQipRCfi3Teg=;
-        b=d0iokJiEd40r0UmcUsVrnhkvwIa0OfS7C/AzULxKac7BTk///7pEJvxXoMcDSSVNQM
-         eJOq0ad7oRzeQLkZzZFMjw/y5dnJizyJThsdjSuWUQIO5Cb4sMYjFCRpAd9aMvCakhoW
-         ntN2nbiDizuNgwJy3FMdVYoMgIjy06+AqyWRFu0GgyETzhR56xVF78Xt4TxXXDLK1aOj
-         QD+IG91UJwLNpwH9EQWj86wR8lWzzvyIHEFh/s/4WwwF027GW8sLEeXNGvGBS9cHAHcm
-         cXL6VVE/CdJM+vouA/OpdbSeML0mOmnaWNDkAkK8pRWVE5I0cRprS50rHaDMHFbsCqAW
-         gpgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=L3boBvFJeKQxpTMzKTlBE3Vnj/eOP88tQipRCfi3Teg=;
-        b=NFYWoe6AhKRw1GBxvyJ0w8diPjMiR2l/qYtM6UWR6oKXfMEBXzyeEU56H66ulzEdpZ
-         +vnBhHLKXKXXjy4oeLO2n/SJ8I+psL1zm+aZUUjKfKviqkHq8tRq59ZUvKyP08Bx64rc
-         /50Gt2OpWaJV/tCvbWM2k5xEL57Gv57CwaLoHE061E6FzjmroBu+SAdniHLUrUuqS3o1
-         8lhYP1vFmdff0M/ErPmtxBsW3Fu9VN+BxuNESr+w0IZZ5J0zmRHn8vwMQN/8QF4zNEpL
-         /rxRXfgbyVTbKeWqLLDrGmdkPHIcvkquMeBfqJq7wE3LGpwWhZGUYoP1PieaJjuGeIdY
-         6L1g==
-X-Gm-Message-State: AOAM532TJeGh+AwVlq/g2OmqwN0Q7V0r+ZoH8aoIl8XYRRmWdst1XayF
-        vQ/JBM9K5kc9CW8DZoKTPQo=
-X-Google-Smtp-Source: ABdhPJwe83dtZDpqhiUjphmosusV20Q9sphZnCUgQZkrgjYoPzxYNyJHYEUsSv+8IbGLEdYj3LidXQ==
-X-Received: by 2002:a1c:7209:: with SMTP id n9mr35880616wmc.92.1641143096585;
-        Sun, 02 Jan 2022 09:04:56 -0800 (PST)
-Received: from localhost.localdomain ([217.113.240.86])
-        by smtp.gmail.com with ESMTPSA id a204sm34869172wmd.39.2022.01.02.09.04.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jan 2022 09:04:56 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     jikos@kernel.org
-Cc:     benjamin.tissoires@redhat.com, rydberg@bitmath.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alexhenrie24@gmail.com,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH 1/1] HID: apple: Report Magic Keyboard 2021 with fingerprint reader battery over USB
-Date:   Sun,  2 Jan 2022 18:04:47 +0100
-Message-Id: <20220102170447.159959-2-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220102170447.159959-1-jose.exposito89@gmail.com>
-References: <20220102170447.159959-1-jose.exposito89@gmail.com>
+        Sun, 2 Jan 2022 12:06:49 -0500
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B50C061761
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jan 2022 09:06:49 -0800 (PST)
+Received: from dslb-188-104-058-096.188.104.pools.vodafone-ip.de ([188.104.58.96] helo=martin-debian-2.paytec.ch)
+        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <postmaster@kaiser.cx>)
+        id 1n44Jg-0005Gp-NC; Sun, 02 Jan 2022 18:06:44 +0100
+Received: from martin by martin-debian-2.paytec.ch with local (Exim 4.94.2)
+        (envelope-from <martin@martin-debian-2.paytec.ch>)
+        id 1n44Jf-000DmX-6I; Sun, 02 Jan 2022 18:06:43 +0100
+Date:   Sun, 2 Jan 2022 18:06:43 +0100
+From:   Martin Kaiser <martin@kaiser.cx>
+To:     Michael Straube <straube.linux@gmail.com>
+Cc:     gregkh@linuxfoundation.org, Larry.Finger@lwfinger.net,
+        phil@philpotter.co.uk, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/7] staging: r8188eu: UsbRxHighSpeedMode is set but
+ never used
+Message-ID: <YdHbo6YXFmI+UQJh@martin-debian-1.paytec.ch>
+References: <20220101084937.3411-1-straube.linux@gmail.com>
+ <20220101084937.3411-3-straube.linux@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220101084937.3411-3-straube.linux@gmail.com>
+Sender: "Martin Kaiser,,," <martin@martin-debian-2.paytec.ch>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Like the Apple Magic Keyboard 2015, when connected over USB, the 2021
-version with fingerprint reader registers 2 different interfaces. One of
-them is used to report the battery level.
+Thus wrote Michael Straube (straube.linux@gmail.com):
 
-However, unlike when connected over Bluetooth, the battery level is not
-reported automatically and it is required to fetch it manually.
+> The field UsbRxHighSpeedMode of struct hal_data_8188e is set but
+> never used. Remove it.
 
-Add the APPLE_RDESC_BATTERY quirk to fix the battery report descriptor
-and manually fetch the battery level.
+> Signed-off-by: Michael Straube <straube.linux@gmail.com>
+> ---
+> v3: no changes
+> v2: no changes
 
-Tested with the ANSI variant of the keyboard with and without numpad.
+>  drivers/staging/r8188eu/hal/usb_halinit.c      | 5 -----
+>  drivers/staging/r8188eu/include/rtl8188e_hal.h | 3 ---
+>  2 files changed, 8 deletions(-)
 
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
----
- drivers/hid/hid-apple.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
+> index 104705ef170e..96db9a8e7667 100644
+> --- a/drivers/staging/r8188eu/hal/usb_halinit.c
+> +++ b/drivers/staging/r8188eu/hal/usb_halinit.c
+> @@ -502,16 +502,11 @@ usb_AggSettingRxUpdate(
 
-diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
-index e40cd17c7f40..8054a130fc91 100644
---- a/drivers/hid/hid-apple.c
-+++ b/drivers/hid/hid-apple.c
-@@ -723,11 +723,11 @@ static const struct hid_device_id apple_devices[] = {
- 	{ HID_BLUETOOTH_DEVICE(BT_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_2021),
- 		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_FINGERPRINT_2021),
--		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
-+		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK | APPLE_RDESC_BATTERY },
- 	{ HID_BLUETOOTH_DEVICE(BT_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_FINGERPRINT_2021),
- 		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_NUMPAD_2021),
--		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
-+		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK | APPLE_RDESC_BATTERY },
- 	{ HID_BLUETOOTH_DEVICE(BT_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_NUMPAD_2021),
- 		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
- 
--- 
-2.25.1
+>  static void InitUsbAggregationSetting(struct adapter *Adapter)
+>  {
+> -	struct hal_data_8188e *haldata = &Adapter->haldata;
+> -
+>  	/*  Tx aggregation setting */
+>  	usb_AggSettingTxUpdate(Adapter);
 
+>  	/*  Rx aggregation setting */
+>  	usb_AggSettingRxUpdate(Adapter);
+> -
+> -	/*  201/12/10 MH Add for USB agg mode dynamic switch. */
+> -	haldata->UsbRxHighSpeedMode = false;
+>  }
+
+>  static void _InitOperationMode(struct adapter *Adapter)
+> diff --git a/drivers/staging/r8188eu/include/rtl8188e_hal.h b/drivers/staging/r8188eu/include/rtl8188e_hal.h
+> index e8cb093abb62..8b54f52f49e2 100644
+> --- a/drivers/staging/r8188eu/include/rtl8188e_hal.h
+> +++ b/drivers/staging/r8188eu/include/rtl8188e_hal.h
+> @@ -262,9 +262,6 @@ struct hal_data_8188e {
+>  	u8	OutEpQueueSel;
+>  	u8	OutEpNumber;
+
+> -	/*  Add for USB aggreation mode dynamic shceme. */
+> -	bool		UsbRxHighSpeedMode;
+> -
+>  	/*  2010/11/22 MH Add for slim combo debug mode selective. */
+>  	/*  This is used for fix the drawback of CU TSMC-A/UMC-A cut.
+>  	 * HW auto suspend ability. Close BT clock. */
+> -- 
+> 2.34.1
+
+Acked-by: Martin Kaiser <martin@kaiser.cx>

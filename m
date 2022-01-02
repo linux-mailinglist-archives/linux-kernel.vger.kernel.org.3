@@ -2,101 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48344482BCC
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 16:58:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B121482BD1
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 17:14:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233365AbiABP6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 10:58:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56838 "EHLO
+        id S232501AbiABQOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 11:14:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233346AbiABP6W (ORCPT
+        with ESMTP id S232286AbiABQOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 10:58:22 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C04C061785
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jan 2022 07:58:20 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id w16so127212035edc.11
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Jan 2022 07:58:20 -0800 (PST)
+        Sun, 2 Jan 2022 11:14:30 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F52C061761;
+        Sun,  2 Jan 2022 08:14:29 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id d198-20020a1c1dcf000000b0034569cdd2a2so17187912wmd.5;
+        Sun, 02 Jan 2022 08:14:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
+        d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=OYdnWQTNQSkylqwGU9DXv097uGOIIbNIJox9C8EV798=;
-        b=nPEm77WvYKR2bAuCELb6hDDj+BAogUAEoG0cTdk26QKla9SJ/K5GcQp6JK4qseNlLh
-         ynCr0FEyuN9+JFK6l9ZYCzUOlcnUAhZKOfn1N+rHPKylr5vXskx4dClVu++IVn534dX1
-         4pTIETDYTpcEc7k4eyzc9pCw1RYNrDcSQZZmQ=
+        bh=M8d4jk47oCuccILhlRc/9yaOfbV2sOOCkqDrRw8XhIk=;
+        b=fwow5QyMuhID/lPGRQqs/X4A8XyFnDJhWUs9kfO6eSrft7sGpzNo8E1SDUMn7yg3D1
+         hnIQaBBrrVzOsZu3xY3p35jWxCVLu1zUEhwBwerr5yZuVJ/PaHVdltnK/XAy1RKnxaaD
+         Fbc3SsnXwsh5G+fwnCAGkJ02UQ8C72kYGJEkH8FB/50rwzggLslLpjMeAFr2efxlOBo6
+         14QADD4KjcJ3SJWfGBRxIQEfvSjGxpoFTeng7TWuyLr/HR56n3w82iwSAtWuiqcaSDHu
+         a5Csp5swUOqRjRY7N9VYl0r6vlZ+nWxe2+sWsCva3uRI6DjbVs5y/sY4J21eRtJn1FeM
+         izmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=OYdnWQTNQSkylqwGU9DXv097uGOIIbNIJox9C8EV798=;
-        b=oeHIXph2FbNjpA9XlKvi0Lw7OkRPvY9NRNmj4aQaCk3dHaC3bTEaDrnmsNgSsVaSCH
-         dyv3d8BymviAGbx8NzSDHDH2Yb3+/u95XxNKz985XO1/skWUzxOVOHGZfdat3DHOssia
-         7fi/i0BjUs82roHNRnwbHT9qx4Ju8RrHoRfVSTwfm3e3NRnkqxphTS45Sb66F1ylVU/b
-         D/2z2i8jkaW/VEHYc3sjB/LJ2EXp1NdbBkhPWwws8oTtGFXfC+zTPWVoTLFHfOqqCiT8
-         wCJUaAIJU7fvHQfhq1JU41jc+FOiMyuhjSW6XYfwO7CSNrp+oJvN1vVsNlmAJtuJ9fmI
-         q8Bw==
-X-Gm-Message-State: AOAM531GckwTcW1q/xTvX25iKbW1rnMp2B/ES33tA7mtp/MjbIs1I7vd
-        q9miSVYtLJeOraPbkPmhdEP2UmjabMx1xA==
-X-Google-Smtp-Source: ABdhPJxs8ZXgg/b3bjvdNyPvKVD2JxQZJjYct8hwUTCt/YFUKUbmE7jl8MO1UjphdsF29E6CygnLKg==
-X-Received: by 2002:a17:906:c110:: with SMTP id do16mr31724548ejc.743.1641139098569;
-        Sun, 02 Jan 2022 07:58:18 -0800 (PST)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-95-244-92-231.retail.telecomitalia.it. [95.244.92.231])
-        by smtp.gmail.com with ESMTPSA id j13sm9025584edw.89.2022.01.02.07.58.17
+        bh=M8d4jk47oCuccILhlRc/9yaOfbV2sOOCkqDrRw8XhIk=;
+        b=uUM/yh0U91KzqeObPP7FX2+k9gQZswR4GPVJmB+qkkKBiY0qiZJfVI7LklXSlqejgk
+         P0txWzHIFEjlzewbso4BFPbHVGOx+yNT9vDqRBY8SHJXlGeI3JnREpJ4bPRvpbWzXuY7
+         ewB1YBYlA5P8rMhWFc4x3INKaGrP55MZCgVVAYPIJC5ThoKmYQHz13f0HO4Ftcv006dQ
+         9AMFzbTJSC5zwfh07CiVF7n+Oh4RztQ+7ZqN6GuttnUSf/wWvF5o1Dn2NDzZy7nVl8/5
+         /CRiV2u7NY6XtJJ8BQGGFHhjNr0wgsnRdTeJfkDA4+aFN5uSYqoTk5Pnp9a8WF5oHzYn
+         /EUw==
+X-Gm-Message-State: AOAM531rDdaWr4LI71XpKGB5zVWPWdMa6cIBTjn2r8IuiMTBbJRX2juU
+        y/RrcOS5/LjnQr9GLxZVSXo=
+X-Google-Smtp-Source: ABdhPJynM/Adj+3dUtjrT/79VAazSgKmC2z7Z5fnrviUdYA9at5SIvwI50uwB3fa0+KgkixRyu9LkA==
+X-Received: by 2002:a7b:c397:: with SMTP id s23mr5485253wmj.162.1641140068370;
+        Sun, 02 Jan 2022 08:14:28 -0800 (PST)
+Received: from localhost.localdomain ([217.113.240.86])
+        by smtp.gmail.com with ESMTPSA id f8sm34155715wry.16.2022.01.02.08.14.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jan 2022 07:58:18 -0800 (PST)
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Michael Nazzareno Trimarchi <michael@amarulasolutions.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH] can: flexcan: switch the i.MX series to timestamp based rx-offload
-Date:   Sun,  2 Jan 2022 16:58:13 +0100
-Message-Id: <20220102155813.1646746-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.32.0
+        Sun, 02 Jan 2022 08:14:27 -0800 (PST)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     jikos@kernel.org
+Cc:     benjamin.tissoires@redhat.com, rydberg@bitmath.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alexhenrie24@gmail.com,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH -next] HID: apple: Report Magic Keyboard 2021 battery over USB
+Date:   Sun,  2 Jan 2022 17:14:18 +0100
+Message-Id: <20220102161418.143775-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As explained by commit b3cf53e988ce ("can: flexcan: add support for
-timestamp based rx-offload"), the controller has 64 message buffers but
-it uses only 6 for reception. Enabling timestamp mode, instead of FIFO,
-allows you to use the maximum number of messages for reception.
+Like the Apple Magic Keyboard 2015, when connected over USB, the 2021
+version registers 2 different interfaces. One of them is used to report
+the battery level.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+However, unlike when connected over Bluetooth, the battery level is not
+reported automatically and it is required to fetch it manually.
 
+Add the APPLE_RDESC_BATTERY quirk to fix the battery report descriptor
+and manually fetch the battery level.
+
+Tested with the ANSI, ISO and JIS variants of the keyboard.
+
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
 ---
+ drivers/hid/hid-apple.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- drivers/net/can/flexcan.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
-index 12b60ad95b02..40a6611b5d6e 100644
---- a/drivers/net/can/flexcan.c
-+++ b/drivers/net/can/flexcan.c
-@@ -397,11 +397,13 @@ static const struct flexcan_devtype_data fsl_p1010_devtype_data = {
+diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
+index 2bd8276411e0..afbee7c3b2e1 100644
+--- a/drivers/hid/hid-apple.c
++++ b/drivers/hid/hid-apple.c
+@@ -719,7 +719,7 @@ static const struct hid_device_id apple_devices[] = {
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER1_TP_ONLY),
+ 		.driver_data = APPLE_NUMLOCK_EMULATION | APPLE_HAS_FN },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_2021),
+-		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
++		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK | APPLE_RDESC_BATTERY },
+ 	{ HID_BLUETOOTH_DEVICE(BT_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_2021),
+ 		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
  
- static const struct flexcan_devtype_data fsl_imx25_devtype_data = {
- 	.quirks = FLEXCAN_QUIRK_BROKEN_WERR_STATE |
--		FLEXCAN_QUIRK_BROKEN_PERR_STATE,
-+		FLEXCAN_QUIRK_BROKEN_PERR_STATE |
-+		FLEXCAN_QUIRK_USE_OFF_TIMESTAMP,
- };
- 
- static const struct flexcan_devtype_data fsl_imx28_devtype_data = {
--	.quirks = FLEXCAN_QUIRK_BROKEN_PERR_STATE,
-+	.quirks = FLEXCAN_QUIRK_BROKEN_PERR_STATE |
-+		FLEXCAN_QUIRK_USE_OFF_TIMESTAMP,
- };
- 
- static const struct flexcan_devtype_data fsl_imx6q_devtype_data = {
 -- 
-2.32.0
+2.25.1
 

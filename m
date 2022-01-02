@@ -2,28 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D073482B85
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 15:18:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E6EE482B8F
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 15:25:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233186AbiABOSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 09:18:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiABOSQ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 09:18:16 -0500
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD8FC061761;
-        Sun,  2 Jan 2022 06:18:16 -0800 (PST)
+        id S233216AbiABOZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 09:25:41 -0500
+Received: from marcansoft.com ([212.63.210.85]:53004 "EHLO mail.marcansoft.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229760AbiABOZk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 2 Jan 2022 09:25:40 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 6262D425C1;
-        Sun,  2 Jan 2022 14:18:06 +0000 (UTC)
-Message-ID: <e9ecbd0b-8741-1e7d-ae7a-f839287cb5c9@marcan.st>
-Date:   Sun, 2 Jan 2022 23:18:04 +0900
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 70505425C1;
+        Sun,  2 Jan 2022 14:25:29 +0000 (UTC)
+Message-ID: <f35bed9b-aefd-cdf1-500f-194d5699cffd@marcan.st>
+Date:   Sun, 2 Jan 2022 23:25:27 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
  Gecko/20100101 Thunderbird/91.4.1
@@ -41,8 +37,7 @@ To:     Dmitry Osipenko <digetx@gmail.com>,
         Franky Lin <franky.lin@broadcom.com>,
         Hante Meuleman <hante.meuleman@broadcom.com>,
         Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Chung-hsien Hsu <chung-hsien.hsu@infineon.com>
+        Wright Feng <wright.feng@infineon.com>
 Cc:     Sven Peter <sven@svenpeter.dev>,
         Alyssa Rosenzweig <alyssa@rosenzweig.io>,
         Mark Kettenis <kettenis@openbsd.org>,
@@ -51,7 +46,6 @@ Cc:     Sven Peter <sven@svenpeter.dev>,
         Linus Walleij <linus.walleij@linaro.org>,
         Hans de Goede <hdegoede@redhat.com>,
         "John W. Linville" <linville@tuxdriver.com>,
-        "Daniel (Deognyoun) Kim" <dekim@broadcom.com>,
         "brian m. carlson" <sandals@crustytoothpaste.net>,
         linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -59,54 +53,98 @@ Cc:     Sven Peter <sven@svenpeter.dev>,
         SHA-cyfmac-dev-list@infineon.com
 References: <20211226153624.162281-1-marcan@marcan.st>
  <20211226153624.162281-4-marcan@marcan.st>
- <8e99eb47-2bc1-7899-5829-96f2a515b2cb@gmail.com>
+ <c79d67af-2d4c-2c9d-bb7d-630faf9de175@gmail.com>
 From:   Hector Martin <marcan@marcan.st>
-In-Reply-To: <8e99eb47-2bc1-7899-5829-96f2a515b2cb@gmail.com>
+In-Reply-To: <c79d67af-2d4c-2c9d-bb7d-630faf9de175@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/01/02 15:45, Dmitry Osipenko wrote:
+On 2022/01/02 16:08, Dmitry Osipenko wrote:
 > 26.12.2021 18:35, Hector Martin пишет:
->> -static char *brcm_alt_fw_path(const char *path, const char *board_type)
->> +static const char **brcm_alt_fw_paths(const char *path, const char *board_type)
->>  {
->>  	char alt_path[BRCMF_FW_NAME_LEN];
->> +	char **alt_paths;
->>  	char suffix[5];
->>  
->>  	strscpy(alt_path, path, BRCMF_FW_NAME_LEN);
->> @@ -609,27 +612,46 @@ static char *brcm_alt_fw_path(const char *path, const char *board_type)
->>  	strlcat(alt_path, board_type, BRCMF_FW_NAME_LEN);
->>  	strlcat(alt_path, suffix, BRCMF_FW_NAME_LEN);
->>  
->> -	return kstrdup(alt_path, GFP_KERNEL);
->> +	alt_paths = kzalloc(sizeof(char *) * 2, GFP_KERNEL);
-> 
-> array_size()?
-
-Of what array?
-
-> 
->> +	alt_paths[0] = kstrdup(alt_path, GFP_KERNEL);
+>> +static void brcm_free_alt_fw_paths(const char **alt_paths)
+>> +{
+>> +	int i;
 >> +
->> +	return (const char **)alt_paths;
+>> +	if (!alt_paths)
+>> +		return;
+>> +
+>> +	for (i = 0; alt_paths[i]; i++)
+>> +		kfree(alt_paths[i]);
+>> +
+>> +	kfree(alt_paths);
+>>  }
+>>  
+>>  static int brcmf_fw_request_firmware(const struct firmware **fw,
+>>  				     struct brcmf_fw *fwctx)
+>>  {
+>>  	struct brcmf_fw_item *cur = &fwctx->req->items[fwctx->curpos];
+>> -	int ret;
+>> +	int ret, i;
+>>  
+>>  	/* Files can be board-specific, first try a board-specific path */
+>>  	if (cur->type == BRCMF_FW_TYPE_NVRAM && fwctx->req->board_type) {
+>> -		char *alt_path;
+>> +		const char **alt_paths = brcm_alt_fw_paths(cur->path, fwctx);
+>>  
+>> -		alt_path = brcm_alt_fw_path(cur->path, fwctx->req->board_type);
+>> -		if (!alt_path)
+>> +		if (!alt_paths)
+>>  			goto fallback;
+>>  
+>> -		ret = request_firmware(fw, alt_path, fwctx->dev);
+>> -		kfree(alt_path);
+>> -		if (ret == 0)
+>> -			return ret;
+>> +		for (i = 0; alt_paths[i]; i++) {
+>> +			ret = firmware_request_nowarn(fw, alt_paths[i], fwctx->dev);
+>> +			if (ret == 0) {
+>> +				brcm_free_alt_fw_paths(alt_paths);
+>> +				return ret;
+>> +			}
+>> +		}
+>> +		brcm_free_alt_fw_paths(alt_paths);
+>>  	}
+>>  
+>>  fallback:
+>> @@ -641,6 +663,9 @@ static void brcmf_fw_request_done(const struct firmware *fw, void *ctx)
+>>  	struct brcmf_fw *fwctx = ctx;
+>>  	int ret;
+>>  
+>> +	brcm_free_alt_fw_paths(fwctx->alt_paths);
+>> +	fwctx->alt_paths = NULL;
 > 
-> Why this casting is needed?
+> It looks suspicious that fwctx->alt_paths isn't zero'ed by other code
+> paths. The brcm_free_alt_fw_paths() should take fwctx for the argument
+> and fwctx->alt_paths should be set to NULL there.
 
-Because implicit conversion from char ** to const char ** is not legal
-in C, as that could cause const unsoundness if you do this:
+There are multiple code paths for alt_paths; the initial firmware lookup
+uses fwctx->alt_paths, and once we know the firmware load succeeded we
+use blocking firmware requests for NVRAM/CLM/etc and those do not use
+the fwctx member, but rather just keep alt_paths in function scope
+(brcmf_fw_request_firmware). You're right that there was a rebase SNAFU
+there though, I'll compile test each patch before sending v2. Sorry
+about that. In this series the code should build again by patch #6.
 
-char *foo[1];
-const char **bar = foo;
+Are you thinking of any particular code paths? As far as I saw when
+writing this, brcmf_fw_request_done() should always get called whether
+things succeed or fail. There are no other code paths that free
+fwctx->alt_paths.
 
-bar[0] = "constant string";
-foo[0][0] = '!'; // clobbers constant string
+> On the other hand, I'd change the **alt_paths to a fixed-size array.
+> This should simplify the code, making it easier to follow and maintain.
+> 
+> -	const char **alt_paths;
+> +	char *alt_paths[BRCM_MAX_ALT_FW_PATHS];
+> 
+> Then you also won't need to NULL-terminate the array, which is a common
+> source of bugs in kernel.
 
-But it's fine in this case since the non-const pointer disappears so
-nothing can ever write through it again.
+That sounds reasonable, it'll certainly make the code simpler. I'll do
+that for v2.
+
 
 -- 
 Hector Martin (marcan@marcan.st)

@@ -2,166 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1390D482D00
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 23:35:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6008482D04
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 23:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbiABWfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 17:35:15 -0500
-Received: from mail-eopbgr60109.outbound.protection.outlook.com ([40.107.6.109]:38628
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230405AbiABWfO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 17:35:14 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CH8wymgk4v9pNILZDzpjWv2cQgKyrw/56FUaA6orWUzSbKntVn13QjNribFRs5+vf8C4TpAn6LBmHAdMIez8xs+gE8QZRUywjU9cVbFyPmGfuGBlL8T0xNiz7Pr+js8HG1JAHpbgzbYg2ISVHzB8cj5xTMK/D7y88gVaIl8ie7DAUQ7MctEF/STRBHA1MbeX3JZzJllHU5u+yzHmfJQHPgslSJdTxLZ6RxotnHb5VGXlhsqbtWQlycnkKhgdQTCNjScU8Kvyo+/MtZsOBSEuw8vstWEdavZm8rttd/ZRQKmpBhcKFGDJURlCvgobt3m551SCqDIvwelOh5e+e+n8YA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2uMAxwT0txh7w8O0YWF7+73NkfsdNNqfV2KSQQd0x+s=;
- b=hRfUdBwbwYNe9o3qwEgn+pKeueUhcuk36wbljxFpDoByJglUS208i8ALsd3suq4rGRxoOjDbA+FVVCzVVkFCMNxgdXKLYMhd7UaKXujpACxDigTb0b1GmRm/SsEmTBHCZRHkEOhFsqp55hjpj7AEZ2DrJ+4t60ewYrJPZcyrZU9fVf0nUNTR1sxyz/Sd+3HsIAzvNYThbY0/HwEi4Zs4Yj3Uo7rJgCepW8jUg8UjlBBCDjCL339OO8hvQYCcjxfyVMlEx0cxiPCBs7ZsxgM9BNGYJRqebSqXCLUVtCVL+ELMtmB6toGrT+Nb+4B+w/nzn9xB0d/O/DOxi7SdqaSgrw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
- dkim=pass header.d=axentia.se; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2uMAxwT0txh7w8O0YWF7+73NkfsdNNqfV2KSQQd0x+s=;
- b=b7G907EwfGfH1to9+Z220tVn018NlFpMOv3vBnylJTzTELoPFzRFe7UtqmBWsKJ+eNGsjmjt8Ft+bG0GqfCMykjIjMGUJ2MGicCd6gbc//43ohcJhcaDuoEFezsdNj8Ooy7h3iykYeBuIo7WaKyrV3QGxJRoAmmjuRvFsTDsEl0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=axentia.se;
-Received: from DB8PR02MB5482.eurprd02.prod.outlook.com (2603:10a6:10:eb::29)
- by DB6PR0202MB2920.eurprd02.prod.outlook.com (2603:10a6:4:ab::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Sun, 2 Jan
- 2022 22:35:13 +0000
-Received: from DB8PR02MB5482.eurprd02.prod.outlook.com
- ([fe80::99a:847f:ce2e:745]) by DB8PR02MB5482.eurprd02.prod.outlook.com
- ([fe80::99a:847f:ce2e:745%4]) with mapi id 15.20.4844.016; Sun, 2 Jan 2022
- 22:35:13 +0000
-Message-ID: <1d01075c-ce9a-ad36-a8a9-1528f41579a2@axentia.se>
-Date:   Sun, 2 Jan 2022 23:35:10 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Content-Language: sv-SE
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-From:   Peter Rosin <peda@axentia.se>
-Subject: [PATCH 1/6] dt-bindings: ti-serdes-mux: Add defines for J721S2 SoC
-Organization: Axentia Technologies AB
-Cc:     Aswath Govindraju <a-govindraju@ti.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: HE1PR0902CA0013.eurprd09.prod.outlook.com
- (2603:10a6:3:e5::23) To DB8PR02MB5482.eurprd02.prod.outlook.com
- (2603:10a6:10:eb::29)
+        id S230445AbiABWg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 17:36:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58098 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230405AbiABWgz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 2 Jan 2022 17:36:55 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217E8C061761;
+        Sun,  2 Jan 2022 14:36:55 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id v7so66553140wrv.12;
+        Sun, 02 Jan 2022 14:36:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=J/+oeCXYZ5vSQikGncgP5k15zSUqzYA+Gew2jgommjI=;
+        b=ZEh/3VL6mfwWiY0ZW1XF4gZ/9dmgFcIrydJ/E8RJceUXBjR1YLvLzQYyvW9rdyGkDW
+         ARno+fTtI8ZQj4FTiHEX1AdRG/KQwpl65Z0B0JPUKNCbPl33O+S5iG+ipnlkbYyK4mfn
+         chgV/k5MFMxUKNMnaUALxogQE27BjwOoVedGqQFMAW3oveQD0sZn7DGshK1TsA+3sAo5
+         29QSUMUPLQZW8pnFmx/0qrFPlOxMD9Oar8Dp8W0Yb3HCiDhbwl6CgglhZm2TWP/Rc5BK
+         SrsnakbB9XmsC8IutZN4B9oqVqMsmLm9ZeljIDYAfedXJ4puRoQnLlYbDV8pATh5CExA
+         fCfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=J/+oeCXYZ5vSQikGncgP5k15zSUqzYA+Gew2jgommjI=;
+        b=QWlQFoJB7Iqywv/Of3/oVV1K6V1c4RHztQ/TwVj3YRNjUQod/j4FmLo+TmDff9H1Sp
+         JLZPmgqAbkVDVWmTeGysT7hsmC8a0iNmqiWeojRh1muHjt+DQP9vah32+AszY2/LysSB
+         5SW0E/xBfCRFBs2AqYD9i9Q3BzetprT6LltqBeorEarQzEKffrABQS9WJ0X9C8lT5t4M
+         b3i2AcFlAUzbCzjUMHQnElac/U+1xBaRVCQYOWjf69H1beGHvg7CBc52GZvr0cx45RTC
+         nkb9ctghOpVaDa9e7S2rcQ2OcgNh4xzsuyE/sunXmnLE1+61as2Y2huUsgqT1du+kWIB
+         +r8w==
+X-Gm-Message-State: AOAM531AD8Nkr665rAUa0pk2apMgawbPEQoZeAHuOabeyeInRGB41NRY
+        x5KCm4OImEa6UzFMt9tGa/9nv+/JwJYWCqx6Gs0=
+X-Google-Smtp-Source: ABdhPJzACikmBCmNga+QSoSY5xz73ioEyoeewlJ7AtcP9Ml2naaObVMZCGAR5ekrUOJgQZ/zV4QCVBsuccMLKtop3Xc=
+X-Received: by 2002:adf:fc02:: with SMTP id i2mr36325658wrr.154.1641163013752;
+ Sun, 02 Jan 2022 14:36:53 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3d76ba48-a93b-49df-9166-08d9ce402438
-X-MS-TrafficTypeDiagnostic: DB6PR0202MB2920:EE_
-X-Microsoft-Antispam-PRVS: <DB6PR0202MB29205EBFCC210FCBA9335882BC489@DB6PR0202MB2920.eurprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3044;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jJmv6botGhfSvM/MIPCAirFwzhKOatCzspjpHdit2WtgFvXfl8ejg6BQOYfOnxNsUltFrHLSnsmbHZe0EARdDRIgzfvdIxeit8ZtOyMGU79AfbDzFfz/xC4VHYJlEoPF8dWB5+T+U+dq5gHQrX8b5HsmpvZk/ATv1H0bf5chUl5mSBtCgtwBJ9jUqf4wMdHkjE9ydKTSf6uJvzNa/Hr3UifXOuZ+cFStNf77pBfgmt+W3B3JczDdx/gLk7scm1jW/U3eCaL/JPfjPdoIiTnzDS4zP9bLelSz3qtL7GvoFhJlKQQFjzGk09Ym1ZzlgAOQP1dFizQkwKC++pr/wZlSJQd+38+RFiowTRCXImJ7JqrcLklqPDHAM6YTFZepFy2rOkdvDedBlsQ624s872reOAcJkVTByWEfDzRdpH+ByPlbsmW4KkRhJ9GrcaCcgucALPRGS3Uai3mjuENKbdoF2AWm8VC2BaH3mReLZK5w0j7WV25DKOFp95z5KVT2lgBIfvhadZglVp3OtKBmyRN0TfXl/aRsHxfNIQCHWvQOiSN5g7Z2hHf8AzU5KNRDUz7fYcvNlwWq8b4+S0S2mFqgmB/eEu7V5lMniFW7qLhYhuxZUFslekfjHuissOR25ayzj1XcOht/+4qyQEhH1shVObMlDStWmaWBh/cYW6hcruzc78hk+smhaRns+ikvtI5s/o0mSkTMoVLIG+tFbdVMYOdsyKn1fbFDbwFcyB9VvhM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR02MB5482.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(346002)(39830400003)(136003)(376002)(396003)(38100700002)(508600001)(4326008)(36916002)(31696002)(54906003)(2906002)(2616005)(66946007)(316002)(5660300002)(8676002)(66476007)(66556008)(6916009)(86362001)(36756003)(6506007)(26005)(6486002)(8936002)(31686004)(6512007)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cDR0aDBRZHBCdTZYYWYrMG9BbllaK3hGYktlRmRiRi9jWnIxY1dSVHVsNTRS?=
- =?utf-8?B?elFWZlYwN2xWL1FMSkJBVVFKRzNNRjBEdkxML25wMHBNUWlJUW5OY3hRaHdK?=
- =?utf-8?B?UlNUU1RYUFBSNUEwdkRoSndqQWJLWTErZENsQnY3UUVPcU5WV1ZlZWd5aTgz?=
- =?utf-8?B?bFFRM3hxSlk5TmNCUS9rQVE0Vmc5bkg0QWRTZ29PdU95SDNPajJjNWllRkVF?=
- =?utf-8?B?NFdJbkhQemd2Mlk1MUlqaTlvQTgwN3ZGaEF4Nkk0SlA0Ym0vNVJyMTdpZDVm?=
- =?utf-8?B?ekJqZHg2QklKS0RKMGg4VzVBKzZoNEhTd0g5dmxkOUtaZm5Jb1JOZ0V3U3dj?=
- =?utf-8?B?RTRhN0JSODRnSFBCajlaUll6QjdjWk4zQkhvSjlOZERjYWc4bjZ6by9oVG45?=
- =?utf-8?B?bDY3WWNuRHhPNDFjcFF2dkFxK1B5VWlHRkxJdTFuU0QxM1ZqLy9XWFNIcmV3?=
- =?utf-8?B?ci9VMWxKM1lSL1BvR2tBK2kxZVJNVGtXTzRNVnNsRmY1WURhR0hFNzJCQmxK?=
- =?utf-8?B?d2o0bGt5L2J2ZGhlY1VDUmYxMUxhQ1ZyMCtydmdSdXNVMm4vbGtQd3JZSzlh?=
- =?utf-8?B?Q2hLSFhHOVdCK3Z4SG1BTEZmQmZJMkx2YmFOSjZoaEE0L3RxTFVMcEJoc0M4?=
- =?utf-8?B?RmF6aVhLOXdYR1RqNHVKSGNDSDBNUDNCSThpdkszOFdQcWtjR3J3R1VoV2xk?=
- =?utf-8?B?RndTekVEdVdSYkQvaC9sL2swczgvK0MrcTFPUkg5d0hRVkFtSzJBMlFySEpX?=
- =?utf-8?B?ajdHNWEyRVczdlZXVWdoVTFtemF0bVF6djM0MjlHSlg2SFd3RWdjL2psOGwy?=
- =?utf-8?B?SXhsUjljSUIrSThKYzZXU3RtUkYzT0NYRUNNRW5kRmR2QzYzS0g5M2JRQzBT?=
- =?utf-8?B?UnUveWRxMVpKLzJmMHNwOU9CK0lyUU9QalltSWkzY2R6WUFGSnFoY3lpdDBo?=
- =?utf-8?B?WXdud1QwV3J4b3FXL2FZeEQzUVA3UnQ5RldHZzdwZlVpN0JqNDQ5cVkvTUxI?=
- =?utf-8?B?bWlldXlIN1FPYXROYUJaM2Y3Vmw4U1pjK3V4WlFCQ04rRHNISmVqSU9CNGpa?=
- =?utf-8?B?bzVYdFFxbHlVejdOenV1NzBHOHorbVM3aGgyckI3ZmM1UTZsZEwvSHd5clFF?=
- =?utf-8?B?cUVibWduV1pTNXdXcEFZQVF4ZzJiT2drdUV6Y05EOFQ1Z0Z0aDlqaWsvcXRv?=
- =?utf-8?B?WStNNDR1S0x6R05hK2lKVkplT0N6TUFNRlEwdUxXdFJYLzhJVDBEbjN3Nlph?=
- =?utf-8?B?U3kxbjg1aHRrN3RFU0NwZ3FkMHRENlIyQWxDUWIwVzBBMUdBOVl2ZkVBYVJz?=
- =?utf-8?B?NkJIbXZWT1d5UGZ6aS9jVkpuRHVXQmhRL1N2REY1a1J1U1YvNVArQlQ1K1Rx?=
- =?utf-8?B?K2VPc2lDSHQwS3pWWkZ6dHZVcjBJOGdrWEx5YlVQUEVtSjJmaVFsOG0wSm54?=
- =?utf-8?B?UkI4cS9HWE1NUU16SjR6Sm1zeG1DVnAwZnBHbUNrNlpJZkZuMHlKTjJUM1ZR?=
- =?utf-8?B?a1Q1bDcrcyt6eGhZS2Fna25BVFZycjRVd2lzV1JRc3pMRHZzNExDVC9xbUlL?=
- =?utf-8?B?TmgrZWhCa0U2bzFacGluMTJLUnhWWDlkelFSMVRhSEMreG1XT2d4b21sTURq?=
- =?utf-8?B?Ym50ZWhhY3hPSDBWQzgwR2FoMlJGM2c0Z3VYeXp1R3FnT3V2MElMYjg2VUZY?=
- =?utf-8?B?L0lKNmMrYXcyRWlWVDFsSXlTRlhYaUFSWnZEVkJ4NEZmdDdzOUhHUGl5T2xl?=
- =?utf-8?B?MFE2YWF0NTMrTHdNY2tHRzhaRHRicUtUQVZuNUVFL1YycXVqQ2dVQ2FhenZr?=
- =?utf-8?B?czFZaks0MEFpWk9jc0hqeVVmbW1qdUQvcS9aa084RU1jTmJHa01DNVlFcTVC?=
- =?utf-8?B?NzFZemNjMWVKV0V0alEvNjk0a3F5V2ZiS2RpT2FDNXdHWXdqc0N0VXVCWEpO?=
- =?utf-8?B?RFIveFhleFRLSmcwUlZpOUEvY0RXRHRVejdkc0hnWUttYzdCeEJ3QmZDZFlq?=
- =?utf-8?B?eUsyQnF6NlVZdTRUbGJHRGJqek9Lb1JTT1F0YUpyeXlRcTZhSHQwdkhpOWZX?=
- =?utf-8?B?M2I4ZERjSVNXMVNkWW8xTnJYOEduRGZoTUxNbSswVVV4T3UyRnd3YnhJNHZV?=
- =?utf-8?Q?xOaU=3D?=
-X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3d76ba48-a93b-49df-9166-08d9ce402438
-X-MS-Exchange-CrossTenant-AuthSource: DB8PR02MB5482.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jan 2022 22:35:13.1957
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HE/yN7e/XZOwzahOWa1QkiuWvKZXE/nQVMP7gVrHBPmLMZmhI1F3oRBhdGbz1dvt
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0202MB2920
+References: <CAG_fn=VDEoQx5c7XzWX1yaYBd5y5FrG1aagrkv+SZ03c8TfQYQ@mail.gmail.com>
+ <20220102171943.28846-1-paskripkin@gmail.com> <CAB_54W6i9-fy8Vc-uypXPtj3Uy0VuZpidFuRH0DVoWJ8utcWiw@mail.gmail.com>
+ <81467464-630a-25c4-425d-d8c5c01a739c@gmail.com>
+In-Reply-To: <81467464-630a-25c4-425d-d8c5c01a739c@gmail.com>
+From:   Alexander Aring <alex.aring@gmail.com>
+Date:   Sun, 2 Jan 2022 17:36:42 -0500
+Message-ID: <CAB_54W50xKFCWZ5vYuDG2p4ijpd63cSutRrV4MLs9oasLmKgzQ@mail.gmail.com>
+Subject: Re: [PATCH RFT] ieee802154: atusb: move to new USB API
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     Stefan Schmidt <stefan@datenfreihafen.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-wpan - ML <linux-wpan@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        "# 3.19.x" <stable@vger.kernel.org>,
+        Alexander Potapenko <glider@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aswath Govindraju <a-govindraju@ti.com>
+Hi,
 
-There are 4 lanes in the single instance of J721S2 SERDES. Each SERDES
-lane mux can select upto 4 different IPs. Define all the possible
-functions.
+On Sun, 2 Jan 2022 at 17:21, Pavel Skripkin <paskripkin@gmail.com> wrote:
+>
+> On 1/3/22 01:15, Alexander Aring wrote:
+> > Hi,
+> >
+> > On Sun, 2 Jan 2022 at 12:19, Pavel Skripkin <paskripkin@gmail.com> wrote:
+> >>
+> >> Alexander reported a use of uninitialized value in
+> >> atusb_set_extended_addr(), that is caused by reading 0 bytes via
+> >> usb_control_msg().
+> >>
+> >
+> > Does there exist no way to check on this and return an error on USB
+> > API caller level?
+> >
+> >> Since there is an API, that cannot read less bytes, than was requested,
+> >> let's move atusb driver to use it. It will fix all potintial bugs with
+> >> uninit values and make code more modern
+> >>
+> >
+> > If this is not possible to fix with the "old" USB API then I think the
+> > "old" USB API needs to be fixed.
+> > Changing to the new USB API as "making the code more modern" is a new
+> > feature and is a candidate for next.
+> >
+>
+> It can be fixed with the old one. Something like that should work:
+>
+> -       if (ret < 0) {
+> -               atusb->err = ret;
+> +       if (ret < size) {
+> +               atusb->err = ret < 0: ret: -ENODATA;
+>
+> But I thought, that moving to new API is better fix, just because old
+> one prone to uninit value bugs if error checking is wrong
 
-Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-Acked-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Peter Rosin <peda@axentia.se>
----
- include/dt-bindings/mux/ti-serdes.h | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+A fix should have the smallest changes as possible and not use "new
+stuff" which might break other things. Also I am not sure since "when"
+this new USB API exists. To backport the fix into stable send a fix
+using the "old USB API".
+If the fix is upstream you can send patches to use the new API and
+remove the additional check if this is done by using the new API.
+Maybe it's worth checking that the errno stays the same.
 
-diff --git a/include/dt-bindings/mux/ti-serdes.h b/include/dt-bindings/mux/ti-serdes.h
-index d417b9268b16..d3116c52ab72 100644
---- a/include/dt-bindings/mux/ti-serdes.h
-+++ b/include/dt-bindings/mux/ti-serdes.h
-@@ -95,4 +95,26 @@
- #define AM64_SERDES0_LANE0_PCIE0		0x0
- #define AM64_SERDES0_LANE0_USB			0x1
- 
-+/* J721S2 */
-+
-+#define J721S2_SERDES0_LANE0_EDP_LANE0		0x0
-+#define J721S2_SERDES0_LANE0_PCIE1_LANE0	0x1
-+#define J721S2_SERDES0_LANE0_IP3_UNUSED		0x2
-+#define J721S2_SERDES0_LANE0_IP4_UNUSED		0x3
-+
-+#define J721S2_SERDES0_LANE1_EDP_LANE1		0x0
-+#define J721S2_SERDES0_LANE1_PCIE1_LANE1	0x1
-+#define J721S2_SERDES0_LANE1_USB		0x2
-+#define J721S2_SERDES0_LANE1_IP4_UNUSED		0x3
-+
-+#define J721S2_SERDES0_LANE2_EDP_LANE2		0x0
-+#define J721S2_SERDES0_LANE2_PCIE1_LANE2	0x1
-+#define J721S2_SERDES0_LANE2_IP3_UNUSED		0x2
-+#define J721S2_SERDES0_LANE2_IP4_UNUSED		0x3
-+
-+#define J721S2_SERDES0_LANE3_EDP_LANE3		0x0
-+#define J721S2_SERDES0_LANE3_PCIE1_LANE3	0x1
-+#define J721S2_SERDES0_LANE3_USB		0x2
-+#define J721S2_SERDES0_LANE3_IP4_UNUSED		0x3
-+
- #endif /* _DT_BINDINGS_MUX_TI_SERDES */
--- 
-2.20.1
+Thanks.
 
-
+- Alex

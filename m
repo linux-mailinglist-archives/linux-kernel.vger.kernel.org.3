@@ -2,105 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A29B482AA7
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 10:20:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31D4F482AAB
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 10:34:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbiABJUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 04:20:11 -0500
-Received: from smtp02.smtpout.orange.fr ([80.12.242.124]:54478 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231341AbiABJUK (ORCPT
+        id S232200AbiABJeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 04:34:03 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:47570 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232170AbiABJeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 04:20:10 -0500
-Received: from pop-os.home ([86.243.171.122])
-        by smtp.orange.fr with ESMTPA
-        id 3x26n7NltS9NT3x27nETjb; Sun, 02 Jan 2022 10:20:08 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 02 Jan 2022 10:20:08 +0100
-X-ME-IP: 86.243.171.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     aelior@marvell.com, manishc@marvell.com, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] qed: Use dma_set_mask_and_coherent() and simplify code
-Date:   Sun,  2 Jan 2022 10:20:05 +0100
-Message-Id: <40af8d810ef06bb10f45e54a61494b5c42038841.1641115135.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Sun, 2 Jan 2022 04:34:02 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id F198D210FC;
+        Sun,  2 Jan 2022 09:34:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641116040; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=za9Nb3pV9k7x3EBgdsgdMzdnzl28mguREcJHM4y0Npg=;
+        b=hee0rKy9OxyMXGnCqJDkXvXede+C07akqihe3Y2XvVml4+f1jVhzKu2P8wxagLHoJ1pV4S
+        sb/ga/iKnprTtqojs8fJO8P0lhyWVew8NkfrrO/t3PgHpYj/VhQAN/ur7+ke7sGZbNpOw5
+        FDUS4EHffo2qidqYjwHq9/R9Hx6iyOg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641116040;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=za9Nb3pV9k7x3EBgdsgdMzdnzl28mguREcJHM4y0Npg=;
+        b=I8PosESHV0y5VPI2VF7QGJZv9nrDs72UBSROKb6BaKcwII1TBn9b0a3ESwisuT3ZWGYVIw
+        aVvuhh2Itc31i4CQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D1BF01361C;
+        Sun,  2 Jan 2022 09:34:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id OrjUMohx0WEmYwAAMHmgww
+        (envelope-from <bp@suse.de>); Sun, 02 Jan 2022 09:34:00 +0000
+Date:   Sun, 2 Jan 2022 10:34:03 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/urgent for 5.16
+Message-ID: <YdFxi7TVYP61uA4f@zn.tnic>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use dma_set_mask_and_coherent() instead of unrolling it with some
-dma_set_mask()+dma_set_coherent_mask().
+Hi Linus,
 
-Moreover, as stated in [1], dma_set_mask() with a 64-bit mask will never
-fail if dev->dma_mask is non-NULL.
-So, if it fails, the 32 bits case will also fail for the same reason.
+please pull a single x86/urgent fix for 5.16.
 
-Simplify code and remove some dead code accordingly.
+Thx.
 
-Now that qed_set_coherency_mask() is mostly a single call to
-dma_set_mask_and_coherent(), fold it in its only caller.
-
-[1]: https://lkml.org/lkml/2021/6/7/398
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/net/ethernet/qlogic/qed/qed_main.c | 28 ++++------------------
- 1 file changed, 5 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_main.c b/drivers/net/ethernet/qlogic/qed/qed_main.c
-index 46d4207f22a3..c5003fa1a25e 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_main.c
-+++ b/drivers/net/ethernet/qlogic/qed/qed_main.c
-@@ -255,27 +255,6 @@ static void __exit qed_exit(void)
- }
- module_exit(qed_exit);
- 
--/* Check if the DMA controller on the machine can properly handle the DMA
-- * addressing required by the device.
-- */
--static int qed_set_coherency_mask(struct qed_dev *cdev)
--{
--	struct device *dev = &cdev->pdev->dev;
--
--	if (dma_set_mask(dev, DMA_BIT_MASK(64)) == 0) {
--		if (dma_set_coherent_mask(dev, DMA_BIT_MASK(64)) != 0) {
--			DP_NOTICE(cdev,
--				  "Can't request 64-bit consistent allocations\n");
--			return -EIO;
--		}
--	} else if (dma_set_mask(dev, DMA_BIT_MASK(32)) != 0) {
--		DP_NOTICE(cdev, "Can't request 64b/32b DMA addresses\n");
--		return -EIO;
--	}
--
--	return 0;
--}
--
- static void qed_free_pci(struct qed_dev *cdev)
- {
- 	struct pci_dev *pdev = cdev->pdev;
-@@ -351,9 +330,12 @@ static int qed_init_pci(struct qed_dev *cdev, struct pci_dev *pdev)
- 	if (IS_PF(cdev) && !cdev->pci_params.pm_cap)
- 		DP_NOTICE(cdev, "Cannot find power management capability\n");
- 
--	rc = qed_set_coherency_mask(cdev);
--	if (rc)
-+	rc = dma_set_mask_and_coherent(&cdev->pdev->dev, DMA_BIT_MASK(64));
-+	if (rc) {
-+		DP_NOTICE(cdev, "Can't request DMA addresses\n");
-+		rc = -EIO;
- 		goto err2;
-+	}
- 
- 	cdev->pci_params.mem_start = pci_resource_start(pdev, 0);
- 	cdev->pci_params.mem_end = pci_resource_end(pdev, 0);
+The following changes since commit fc74e0a40e4f9fd0468e34045b0c45bba11dcbb2:
+
+  Linux 5.16-rc7 (2021-12-26 13:17:17 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v5.16_rc8
+
+for you to fetch changes up to d6f12f83989bb356ac6880a954f62c7667e35066:
+
+  x86/build: Use the proper name CONFIG_FW_LOADER (2021-12-29 22:20:38 +0100)
+
+----------------------------------------------------------------
+- Use the proper CONFIG symbol in a preprocessor check.
+
+----------------------------------------------------------------
+Lukas Bulwahn (1):
+      x86/build: Use the proper name CONFIG_FW_LOADER
+
+ arch/x86/tools/relocs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
 -- 
-2.32.0
+Regards/Gruss,
+    Boris.
 
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

@@ -2,85 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C19F1482C88
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 19:06:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E930C482C7C
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 19:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbiABSGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 13:06:49 -0500
-Received: from isilmar-4.linta.de ([136.243.71.142]:39802 "EHLO
-        isilmar-4.linta.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230242AbiABSGg (ORCPT
+        id S230185AbiABSAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 13:00:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229753AbiABSAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 13:06:36 -0500
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
-        by isilmar-4.linta.de (Postfix) with ESMTPSA id 65756201413;
-        Sun,  2 Jan 2022 18:06:31 +0000 (UTC)
-Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
-        id EFA16806AF; Sun,  2 Jan 2022 18:52:19 +0100 (CET)
-Date:   Sun, 2 Jan 2022 18:52:19 +0100
-From:   Dominik Brodowski <linux@dominikbrodowski.net>
-To:     Jason Wang <wangborong@cdjrlc.com>
-Cc:     lee.jones@linaro.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pcmcia: pcmcia_resource: return 0 if success
-Message-ID: <YdHmUw4id8QpQusE@owl.dominikbrodowski.net>
-References: <20211212075630.349459-1-wangborong@cdjrlc.com>
+        Sun, 2 Jan 2022 13:00:10 -0500
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652B0C061761
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jan 2022 10:00:09 -0800 (PST)
+Received: from dslb-188-104-058-096.188.104.pools.vodafone-ip.de ([188.104.58.96] helo=martin-debian-2.paytec.ch)
+        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <martin@kaiser.cx>)
+        id 1n459H-0005Ye-Ot; Sun, 02 Jan 2022 19:00:03 +0100
+From:   Martin Kaiser <martin@kaiser.cx>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Martin Kaiser <martin@kaiser.cx>
+Subject: [PATCH 0/5] staging: r8188eu: some trivial cleanups
+Date:   Sun,  2 Jan 2022 18:59:27 +0100
+Message-Id: <20220102175932.89127-1-martin@kaiser.cx>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211212075630.349459-1-wangborong@cdjrlc.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Sun, Dec 12, 2021 at 03:56:30PM +0800 schrieb Jason Wang:
-> The initial value of variable `ret' is -EINVAL, which is used for
-> returning the error status in `pcmcia_release_io' when errors occur.
-> But if there is no error in `pcmcia_release_io', `ret' should be changed
-> to a successful value to return. Thus we change `ret' value to 0 when
-> the function's status is successful.
+Remove unused variables and defines in several places.
 
-Thanks for your patch! However, the sole user of pcmcia_release_io() is
-not interested in the return value anyway. Therefore, I'd suggest the
-following.
+Martin Kaiser (5):
+  staging: r8188eu: remove unused power management defines
+  staging: r8188eu: internal autosuspend is always false
+  staging: r8188eu: fix_rate is set but not used.
+  staging: r8188eu: cmd_issued_cnt is set but not used
+  staging: r8188eu: turbo scan is always off for r8188eu
 
-Thanks,
-	Dominik
+ drivers/staging/r8188eu/core/rtw_cmd.c        |  3 ---
+ drivers/staging/r8188eu/core/rtw_pwrctrl.c    |  9 +-------
+ drivers/staging/r8188eu/hal/rtl8188e_dm.c     |  1 -
+ drivers/staging/r8188eu/hal/rtl8188e_rf6052.c | 21 +++++++------------
+ drivers/staging/r8188eu/include/drv_types.h   |  2 --
+ drivers/staging/r8188eu/include/rtw_cmd.h     |  1 -
+ drivers/staging/r8188eu/include/rtw_pwrctrl.h |  5 -----
+ drivers/staging/r8188eu/os_dep/ioctl_linux.c  |  6 ------
+ drivers/staging/r8188eu/os_dep/os_intfs.c     |  4 ----
+ drivers/staging/r8188eu/os_dep/usb_intf.c     |  3 +--
+ 10 files changed, 9 insertions(+), 46 deletions(-)
 
+-- 
+2.30.2
 
-pcmcia: make pcmcia_release_io() void, as no-one is interested in return value
-
-As the only user of pcmcia_release_io() is not interested in its return
-value, and we cannot do anything on failure, convert the function to return
-void.
-
-Reported-by: Jason Wang <wangborong@cdjrlc.com>
-Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
-
-diff --git a/drivers/pcmcia/pcmcia_resource.c b/drivers/pcmcia/pcmcia_resource.c
-index c1c197292111..d78091e79a0f 100644
---- a/drivers/pcmcia/pcmcia_resource.c
-+++ b/drivers/pcmcia/pcmcia_resource.c
-@@ -390,10 +390,9 @@ int pcmcia_release_configuration(struct pcmcia_device *p_dev)
-  * "stale", we don't bother checking the port ranges against the
-  * current socket values.
-  */
--static int pcmcia_release_io(struct pcmcia_device *p_dev)
-+static void pcmcia_release_io(struct pcmcia_device *p_dev)
- {
- 	struct pcmcia_socket *s = p_dev->socket;
--	int ret = -EINVAL;
- 	config_t *c;
- 
- 	mutex_lock(&s->ops_mutex);
-@@ -412,8 +411,6 @@ static int pcmcia_release_io(struct pcmcia_device *p_dev)
- 
- out:
- 	mutex_unlock(&s->ops_mutex);
--
--	return ret;
- } /* pcmcia_release_io */
- 
- 

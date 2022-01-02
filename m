@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D904829E1
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 07:02:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD5674829EC
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 07:03:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbiABGC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 01:02:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41410 "EHLO
+        id S231694AbiABGD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 01:03:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbiABGCZ (ORCPT
+        with ESMTP id S230325AbiABGD2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 01:02:25 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11722C06173E
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jan 2022 22:02:25 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id i11so38619615ljm.13
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jan 2022 22:02:24 -0800 (PST)
+        Sun, 2 Jan 2022 01:03:28 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5145AC061746
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jan 2022 22:03:28 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id bp20so68502603lfb.6
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Jan 2022 22:03:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Iv0K/OnJ4x9KfFHJ0rMuNgjAIOFFIZXtmp5GzA9pOGE=;
-        b=kbXmk9tr198z8pao9hHrPKf2/6KoiMTCjBYI5UoO7DR6FwK3vS+Y+F9/3Ze+BxLQvp
-         IfXT/GtwJfVx2IdtpbYiUqh460czkPgKS7BR+FuMiIZ0GHazwnFhrNzn6s71X0HRG0YS
-         YD0Cu0h0orwxGR5rbhIMnXonf/VBgml/3NcgoalHGzb23VlOsrUO0MNKCwpAyxAr0btU
-         SQhmKxoqUUVf252ZCFucZE1RDIFYSpqTAixbrZlc5Cy/Fl3bp5zJXlyHNj1u7DXAaH3w
-         VSH6H6Yl/P90PN2I/McvkhjudFH7wiLqxwV80iEyjv2SjFFj2ThhJ6DmPAOccSyu4Z7t
-         W6HQ==
+        bh=eOSEt2UYspkO7KlpH0taqWCjFFVAh5LxlRawNiLoSCA=;
+        b=tGCb3hDZ09NPFPr6FT12MbJtVURDBtkxRXV2FAUpIK+IdsXRbxxLlxD5RF8xeHOlEc
+         rdmSfOvohYAfAqnQntjwxXcMrg8fpekXTKeiEFtU+MjoWUpWzrz6GxsLS2PcAK2OmQEy
+         YumzH+DZG7mHqw7l6y3F2G18Ru+zT6NqLuwsAIkADGyZ4dRhzF7YoWyMV5/9RlP8Nu+b
+         z51JezLya73SyPTWGXQTVea/ARxo88mAjh5xPmHLM3Y+UnVUeA3Ir/OY3xosGv89OQP1
+         vyZohRjymVa7nmmoZKQUluLyyA9P0Wnp6d0ZturGsebk89CRpkHYtSDzYi333r+AjIv+
+         uUoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Iv0K/OnJ4x9KfFHJ0rMuNgjAIOFFIZXtmp5GzA9pOGE=;
-        b=MBGKMHDPU8udFPnuqA1fjfEy/nFJ+RGSadjqNTBq9+4yIHztl22CFr5S7miZMoXkOe
-         utjhZGyMEJQg5l3ZyL/wnATyUyv3KbAf1taoKyjzv525VYIEEo02QfaDwYO5cpg7TAlU
-         Go9bUwjeDv6BqR2EdQ4VwNl+IGheTPZ5vgzLmlUo0+AByNUhoTEFi5pRunx2OO/LWewo
-         IB254tds/4q3TChU9pA+fmr22ULujLMkEA60yT7BsCZ3YkvN3CqcGHNdPzAK1N3uSVlG
-         FPO78ZOS2qO2V1Y6/RZf55ZB29br3u8RHssRAKBVglcfXiQ+RyOLQiPeUv+Uo3sVvy6A
-         vrMQ==
-X-Gm-Message-State: AOAM533V1SAd7yaU06oBhR8d1X7ygOPDjsrWtyg1FnkalVIK5T6mEzWg
-        1GauKqjl3thI0VoT1pc24oPfEQoStZovvx4x6hHibA==
-X-Google-Smtp-Source: ABdhPJxvaWFPeqjDxRtZ5GOTtcaUxjX5EavoTj/qbHCqCtmPBlJ1yLcjqFSF/5y/WvhdRwObdm85gUse1YdzqzD+y7I=
-X-Received: by 2002:a05:651c:623:: with SMTP id k35mr35551617lje.133.1641103343390;
- Sat, 01 Jan 2022 22:02:23 -0800 (PST)
+        bh=eOSEt2UYspkO7KlpH0taqWCjFFVAh5LxlRawNiLoSCA=;
+        b=4YH83PNX55UCqr8Od7lk7lYjKIbVeBQsgHGX4KBQJIa3NjuGnZaD1VsaYQH62/78Fh
+         1YNqXK/98tPOLcwrSg1mAYpacaDUzsjD5O4m1KbZI3ydj6WcYT9hNcBftv+0g2dWz9X6
+         in+y6KxxwGW1F/GWsk37i2AFxVupGPX6KZO5TFxJ/zTCInVxpt5FWpgJAugrqX1DiWea
+         heVck0jZs0P4kOoT8dUiu1wn/CMbxrvh5p+ln5JRLBoA5XSCZK8EXRdqth7EtdR6FLbQ
+         a88Q8D8xYIYJDayUN3JHol7OYbgegCPX92MHPJLVfogwCgPwMleHMD2jzUm6SET0g09N
+         AC2w==
+X-Gm-Message-State: AOAM533biQz8oTlZ6DG763F/SUV45nmx6byEbzVzDGmYyBSVhdHwmnDI
+        T+PqQcY+xVYgDhgapXNFdpA0GrdkCNhGOdnqTUDZ9w==
+X-Google-Smtp-Source: ABdhPJyUsJK/0aqdGyEKpwuU7vg2NlhR00lEWpxX20MF2aZZkZEtuybziC46nnAcrr7lYQhYJfFsFAUfCpx4oTaGd/A=
+X-Received: by 2002:a05:6512:2303:: with SMTP id o3mr36790809lfu.362.1641103406623;
+ Sat, 01 Jan 2022 22:03:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20211226153624.162281-1-marcan@marcan.st> <20211226153624.162281-21-marcan@marcan.st>
-In-Reply-To: <20211226153624.162281-21-marcan@marcan.st>
+References: <20211226153624.162281-1-marcan@marcan.st> <20211226153624.162281-22-marcan@marcan.st>
+In-Reply-To: <20211226153624.162281-22-marcan@marcan.st>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 2 Jan 2022 07:02:11 +0100
-Message-ID: <CACRpkdY97WMk6KbQDT-_2=M7H7HrF5JDp3rPruc9oCXwm71k8w@mail.gmail.com>
-Subject: Re: [PATCH 20/34] brcmfmac: pcie: Perform correct BCM4364 firmware selection
+Date:   Sun, 2 Jan 2022 07:03:14 +0100
+Message-ID: <CACRpkdaPwG7gQd6Zk81NH_u2ZzPA8=33kCThm+SPn_fywBm6AQ@mail.gmail.com>
+Subject: Re: [PATCH 21/34] brcmfmac: chip: Only disable D11 cores; handle an
+ arbitrary number
 To:     Hector Martin <marcan@marcan.st>
 Cc:     Kalle Valo <kvalo@codeaurora.org>,
         "David S. Miller" <davem@davemloft.net>,
@@ -84,33 +85,16 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Sun, Dec 26, 2021 at 4:39 PM Hector Martin <marcan@marcan.st> wrote:
 
-> This chip exists in two revisions (B2=r3 and B3=r4) on different
-> platforms, and was added without regard to doing proper firmware
-> selection or differentiating between them. Fix this to have proper
-> per-revision firmwares and support Apple NVRAM selection.
+> At least on BCM4387, the D11 cores are held in reset on cold startup and
+> firmware expects to release reset itself. Just assert reset here and let
+> firmware deassert it. Premature deassertion results in the firmware
+> failing to initialize properly some of the time, with strange AXI bus
+> errors.
 >
-> Revision B2 is present on at least these Apple T2 Macs:
+> Also, BCM4387 has 3 cores, up from 2. The logic for handling that is in
+> brcmf_chip_ai_resetcore(), but since we aren't using that any more, just
+> handle it here.
 >
-> kauai:    MacBook Pro 15" (Touch/2018-2019)
-> maui:     MacBook Pro 13" (Touch/2018-2019)
-> lanai:    Mac mini (Late 2018)
-> ekans:    iMac Pro 27" (5K, Late 2017)
->
-> And these non-T2 Macs:
->
-> nihau:    iMac 27" (5K, 2019)
->
-> Revision B3 is present on at least these Apple T2 Macs:
->
-> bali:     MacBook Pro 16" (2019)
-> trinidad: MacBook Pro 13" (2020, 4 TB3)
-> borneo:   MacBook Pro 16" (2019, 5600M)
-> kahana:   Mac Pro (2019)
-> kahana:   Mac Pro (2019, Rack)
-> hanauma:  iMac 27" (5K, 2020)
-> kure:     iMac 27" (5K, 2020, 5700/XT)
->
-> Fixes: 24f0bd136264 ("brcmfmac: add the BRCM 4364 found in MacBook Pro 15,2")
 > Signed-off-by: Hector Martin <marcan@marcan.st>
 
 Reviewed-by: Linus Walleij <linus.walleij@linaro.org>

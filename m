@@ -2,103 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5F8482A45
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 07:27:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 002F7482A4B
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 07:38:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232045AbiABG1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 01:27:24 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:53069 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231982AbiABG1X (ORCPT
+        id S232053AbiABGiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 01:38:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49564 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230374AbiABGiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 01:27:23 -0500
+        Sun, 2 Jan 2022 01:38:17 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695EAC061574;
+        Sat,  1 Jan 2022 22:38:17 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id u22so51071452lju.7;
+        Sat, 01 Jan 2022 22:38:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1641104843; x=1672640843;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KNjbPSw0dS/30AtlU76DflNFpjpfBnTRJdGVbLSGOkQ=;
-  b=Wott16rALNDzrLWNAh8zd1LrcYYnrR61/L9O2cR/rYZQyZDFZejsF4tb
-   e2Z5E8p5FqUxBHgEin8cTTwIVCThNlAQ7BrkGzIYsCWb83GhP+SvOCqt/
-   oBgHR73QH2fUiNZG3QeKB68twSwI/87N7k5OYK4L1XQ9xBdcikFo58azx
-   s=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Jan 2022 22:27:23 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2022 22:27:23 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Sat, 1 Jan 2022 22:27:22 -0800
-Received: from [10.216.52.178] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Sat, 1 Jan 2022
- 22:27:18 -0800
-Message-ID: <3741398c-b3e2-4872-d08f-9de02fe3cab9@quicinc.com>
-Date:   Sun, 2 Jan 2022 11:57:12 +0530
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=RY/U1mpEKxFZojyoZ97q8tWXTVzCIHhjBCHLYYMtIr8=;
+        b=nHsU7FKiC1V5YYqkluEY6hG4KFarKP2yzppwyAiIUjCKH4hfRxFWIPkkwtpVpBAWun
+         qviHdevED9XzS+i/3x9khk5Cs8Mtm7p6N4mdiOAGwkUTkAoN1xZlmU1VvYT3wGiKn3Ms
+         MfVs6LjuVO4ucTjgq3cF3NJA46bgiVZgTyW5M2ExUSbOVdQ/yD25oH5mCNxpr0eW18km
+         lX16cASexynWPol0RAQ9y6JRRK384Sjr0eeURq62k6buWgHIDj40traQnrPd3bn0Npej
+         DiMJCbkqkDRcswJSJS/Z/oqDS0ExkWOOPqToxroUBTbbOcs4TjnAm9NpAXC+ECVPj9bG
+         WjZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=RY/U1mpEKxFZojyoZ97q8tWXTVzCIHhjBCHLYYMtIr8=;
+        b=eCSM/7YpN908ohBMmnFD5a8/XJw7yYM7PI0OuClZjGGEgRqp8zPlQaF4rbjsK7hxIk
+         1K/o0Cp0cD6AVQADxWd+2Pp+Prv8uVukY4NubxV6fq2qpQniylSpbnQ5NFNFIpfOXvwX
+         qX15SXIDxG2c+024PYVcLxVkHk3axSjbM+662xlfUqDgDn8sezDrHW7uNDxXdOk7YEXg
+         pSwxf/gFn6zcF+0SFFLXmTj1GzAJMfxXrSQzepxRKVb9C74CbsneC4b6RHI/0HxXt2TR
+         cqa1XKf8lKdkOCp4PV4RaNm0p3vNUkA1EALZ1186tEWtwNHcB0YvhzQT55HIPwO5Z6SD
+         c1vg==
+X-Gm-Message-State: AOAM531ZIbXN5cU5FmBrBcdpsc2+UVWNHjjdD2tj5VvjpSRr1vRRZekp
+        +the8XleZxd0ZuvJ4VDLIM4=
+X-Google-Smtp-Source: ABdhPJya1AJlz6j758QzPpJT+m/4CvnYx+/OXQX5TwjL0M+LEGylW6FcMTook3yFztb7fsQNkEY2jw==
+X-Received: by 2002:a05:651c:d5:: with SMTP id 21mr31546294ljr.433.1641105495746;
+        Sat, 01 Jan 2022 22:38:15 -0800 (PST)
+Received: from [192.168.2.145] (46-138-43-24.dynamic.spd-mgts.ru. [46.138.43.24])
+        by smtp.googlemail.com with ESMTPSA id p21sm2642428lfu.154.2022.01.01.22.38.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Jan 2022 22:38:15 -0800 (PST)
+Subject: Re: [PATCH 03/34] brcmfmac: firmware: Support having multiple alt
+ paths
+To:     Hector Martin <marcan@marcan.st>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Chung-hsien Hsu <chung-hsien.hsu@infineon.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "Daniel (Deognyoun) Kim" <dekim@broadcom.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com
+References: <20211226153624.162281-1-marcan@marcan.st>
+ <20211226153624.162281-4-marcan@marcan.st>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <17b997d2-708e-4ed7-7e27-1c3e0cd5c428@gmail.com>
+Date:   Sun, 2 Jan 2022 09:38:13 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] dt-bindings: qcom,pdc: convert to YAML
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        <linux-arm-msm@vger.kernel.org>
-CC:     <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-References: <20211213152208.290923-1-luca.weiss@fairphone.com>
- <39d259cf-5663-5073-f16b-71a21f0e62e3@quicinc.com>
- <CGROQPIOKGRH.2UVREF2IWAOIC@otso>
-From:   Maulik Shah <quic_mkshah@quicinc.com>
-In-Reply-To: <CGROQPIOKGRH.2UVREF2IWAOIC@otso>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+In-Reply-To: <20211226153624.162281-4-marcan@marcan.st>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luca,
+26.12.2021 18:35, Hector Martin пишет:
+> Apple platforms have firmware and config files identified with multiple
+> dimensions. We want to be able to find the most specific firmware
+> available for any given platform, progressively trying more general
+> firmwares.
+> 
+> First, add support for having multiple alternate firmware paths.
+> 
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  .../broadcom/brcm80211/brcmfmac/firmware.c    | 73 ++++++++++++++-----
+>  1 file changed, 55 insertions(+), 18 deletions(-)
 
-On 12/29/2021 3:11 PM, Luca Weiss wrote:
-> Hi Maulik,
->
-> On Mon Dec 20, 2021 at 1:24 PM CET, Maulik Shah wrote:
->> Hi Luca,
->>
->> On 12/13/2021 8:52 PM, Luca Weiss wrote:
->>> Convert the PDC interrupt controller bindings to YAML.
->>>
->>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
->>> ---
->>> This patch depends on the following patch, which fixed sm8250 & sm8350
->>> compatibles and adds sm6350.
->>> https://lore.kernel.org/linux-arm-msm/20211213082614.22651-4-luca.weiss@fairphone.com/
->>>
->>> Also, if somebody has a better suggestion for the register names,
->>> the second one is pulled from downstream commit message which calls it
->>> both "SPI config registers" and "interface registers":
->>> https://source.codeaurora.org/quic/la/kernel/msm-4.19/commit/?id=cdefb63745e051a5bcf69663ac9d084d7da1eeec
->> Thanks for the patch. Please use "apss-shared-spi-cfg" name for the
->> second reg.
->>
->> It was intended in [1] to remove it since there are no user in upstream
->> for second reg. but it should be fine to convert existing to yaml first
->> and then look to fix that.
->>
-> Do you have a full-text version of that? I'd use it instead of this in
-> the binding.
->
->    - description: PDC interface register region
-you can use below description,
+...
+> -static char *brcm_alt_fw_path(const char *path, const char *board_type)
+> +static const char **brcm_alt_fw_paths(const char *path, const char *board_type)
+...
+>  static int brcmf_fw_request_firmware(const struct firmware **fw,
+>  				     struct brcmf_fw *fwctx)
+>  {
+>  	struct brcmf_fw_item *cur = &fwctx->req->items[fwctx->curpos];
+> -	int ret;
+> +	int ret, i;
+>  
+>  	/* Files can be board-specific, first try a board-specific path */
+>  	if (cur->type == BRCMF_FW_TYPE_NVRAM && fwctx->req->board_type) {
+> -		char *alt_path;
+> +		const char **alt_paths = brcm_alt_fw_paths(cur->path, fwctx);
 
-description: Edge or Level config register for SPI interrupts
+The brcm_alt_fw_paths() takes "board_type" argument, while you're
+passing the "fwctx" to it. This patch doesn't compile.
 
-Thanks,
-Maulik
+If this code is changed by a further patch, then please use "git rebase
+--exec" to compile-test all the patches.
+
+drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c: In function
+‘brcmf_fw_request_firmware’:
+drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c:642:71:
+error: passing argument 2 of ‘brcm_alt_fw_paths’ from incompatible
+pointer type [-Werror=incompatible-pointer-types]
+  642 |                 const char **alt_paths =
+brcm_alt_fw_paths(cur->path, fwctx);
+      |
+      ^~~~~
+      |
+      |
+      |
+      struct brcmf_fw *
+drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c:597:69:
+note: expected ‘const char *’ but argument is of type ‘struct brcmf_fw *’
+  597 | static const char **brcm_alt_fw_paths(const char *path, const
+char *board_type)
+      |
+~~~~~~~~~~~~^~~~~~~~~~
+drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c: In function
+‘brcmf_fw_get_firmwares’:
+drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c:752:59:
+error: passing argument 2 of ‘brcm_alt_fw_paths’ from incompatible
+pointer type [-Werror=incompatible-pointer-types]
+  752 |         fwctx->alt_paths = brcm_alt_fw_paths(first->path, fwctx);
+      |                                                           ^~~~~
+      |                                                           |
+      |                                                           struct
+brcmf_fw *
+drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c:597:69:
+note: expected ‘const char *’ but argument is of type ‘struct brcmf_fw *’
+  597 | static const char **brcm_alt_fw_paths(const char *path, const
+char *board_type)
+      |
+~~~~~~~~~~~~^~~~~~~~~~
+cc1: some warnings being treated as errors

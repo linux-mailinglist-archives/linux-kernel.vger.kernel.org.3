@@ -2,105 +2,431 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79194482B9C
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 15:56:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92F9E482BA2
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 16:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233241AbiABO4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 09:56:14 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58734 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiABO4N (ORCPT
+        id S233254AbiABPAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 10:00:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44364 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232286AbiABPAb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 09:56:13 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3FDB60E96;
-        Sun,  2 Jan 2022 14:56:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 256DDC36AE7;
-        Sun,  2 Jan 2022 14:56:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641135372;
-        bh=ak0IIoVK9/CDZ36U9L9K0FJoC+zkQLSSj6iZfLnnwXM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Kalsn5HMf+Dbxv+KjJ6XNC6jSiYpVCnDXFLYOvGUAf4Ijf6bFHUTRADiSdZboZC9y
-         +xC/PiQAx0cn3Qvkbw991fpDlAeAVTOJGslz8S6VhL52Y7ogB4b9fttDLcQ6VlFa0L
-         VsTtp+kxHEcvIyJG9qj8DGv5YLenTIk1n1UdmFHlndfR8HG9SIh3oIIL8wFujAyAN3
-         hjyq/mpSijfqTJ1UD72jxl6HkV4PzKzGv4yZf+R2ZWaWeh2o1oUeTMaElGTOebyxPf
-         HVwFHfqvr/aP1y56k1+GXK/75P/hT43Yf5rol0YghhTMP8gSZ183vzVFzUQmRXyNVK
-         ViGPrOvEjed6w==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 9A89540B92; Sun,  2 Jan 2022 11:56:09 -0300 (-03)
-Date:   Sun, 2 Jan 2022 11:56:09 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Zechuan Chen <chenzechuan1@huawei.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
-        namhyung@kernel.org, Jianlin.Lv@arm.com,
-        ravi.bangoria@linux.ibm.com, yao.jin@linux.intel.com,
-        yangjihong1@huawei.com, mpe@ellerman.id.au,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] powerpc/perf: fix ppc64 perf probe add events failed
-Message-ID: <YdG9CSk9ayoVmBhz@kernel.org>
-References: <20211228111338.218602-1-chenzechuan1@huawei.com>
+        Sun, 2 Jan 2022 10:00:31 -0500
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4CA5C061761;
+        Sun,  2 Jan 2022 07:00:30 -0800 (PST)
+Received: by mail-oo1-xc2d.google.com with SMTP id v30-20020a4a315e000000b002c52d555875so10068996oog.12;
+        Sun, 02 Jan 2022 07:00:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=P2NunqPsfwbLHCBKpeZX3P1PQn+/3HUxFOV6Kmc9akI=;
+        b=Z01d9CETBQ3K00M5qbSdyfq5DTo/WrDODAymff8bBatISpKIBJW07UzL57tUjBsBC1
+         k6mI8MA1trvjKKs7jCqPuC2f3YkzkiPLDQDp5VSfXgxkVbq7QecS8X1Pyj8CEFD8rKxn
+         r6GgcfC/qmJckDjXDqDEysTe+W16X6BoytN/t9Id284Tig5bfHFMx/tqpkNOkYxjFmsp
+         P/lSOsY1dME9qVT6vUbwxyqRTZNQcWpuWr4+VdRPbH4EcFxhlAlQUvOmr45+A5yMb7cq
+         PTZfQG5K05Vzf5lPAXsiVl7ugjXHV90RnPiNsbH10wRWslI0nIGJzQB9nBpX+JQb+4FD
+         zJnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=P2NunqPsfwbLHCBKpeZX3P1PQn+/3HUxFOV6Kmc9akI=;
+        b=vs+YpLoOh2DKw1r5ncRb6TokB0OvMxtQaaQMt31Ku/b0IBQk8yn7o1OHeinLwyyDm/
+         Zls4AhuzYcuBWdQ4bxU8lQ8a3MrZ9TFs0Ty4dh9/dZZLPj/qylBQiJzD+mlSMCKIJra0
+         NSZR0kU0BEVEf5xL7Dmj+jZN1Azyu0cgzIA/CYARuFGT2aKOo7NAQsHLz6juJ89mh/q3
+         FOfiJnCDpZg/4J1Y/Zk/1qIiu4UFl0CPWVm05jeiH14zhRFgRtRRsNPKIcI//QJ4s+Ag
+         b78eaIvWCpN/hfbU5fYw13XR4Oii0PV1tTqyyBcpXh8GUAAXo6E0gWoePMHDdee3vDCX
+         u6Ew==
+X-Gm-Message-State: AOAM5319dmlL11q/GlEf0inuFRep412Mzg98vGBb5oMRqcPCAkB9CCVZ
+        oVYKuhLPErtzXN/41Ue0BE0=
+X-Google-Smtp-Source: ABdhPJyYBr/1YdYL4wroqspT5NA2JC7m+YvYQKHc0OEOd6JveJE6DMszxm9vZ39h1C90+5tdzBovxw==
+X-Received: by 2002:a4a:96f1:: with SMTP id t46mr26367625ooi.53.1641135630115;
+        Sun, 02 Jan 2022 07:00:30 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q5sm8777670oiv.2.2022.01.02.07.00.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Jan 2022 07:00:29 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 2 Jan 2022 07:00:27 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Xiantao Hu <xt.hu@cqplus1.com>
+Cc:     wim@linux-watchdog.org, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        wells.lu@sunplus.com, qinjian@cqplus1.com
+Subject: Re: [PATCH v4 2/2] watchdog: Add watchdog driver for Sunplus SP7021
+Message-ID: <20220102150027.GA2806117@roeck-us.net>
+References: <20211229054308.63168-1-xt.hu@cqplus1.com>
+ <20211229054308.63168-3-xt.hu@cqplus1.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211228111338.218602-1-chenzechuan1@huawei.com>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <20211229054308.63168-3-xt.hu@cqplus1.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Dec 28, 2021 at 07:13:38PM +0800, Zechuan Chen escreveu:
-> Because of commit bf794bf52a80 ("powerpc/kprobes: Fix kallsyms lookup
-> across powerpc ABIv1 and ABIv2"), in ppc64 ABIv1, our perf command
-> eliminates the need to use the prefix "." at the symbol name. But when
-> the command "perf probe -a schedule" is executed on ppc64 ABIv1, it
-> obtains two symbol address information through /proc/kallsyms, for example:
+On Wed, Dec 29, 2021 at 01:43:08PM +0800, Xiantao Hu wrote:
+> Sunplus SP7021 requires watchdog timer support.
+> Add watchdog driver to enable this.
 > 
-> cat /proc/kallsyms | grep -w schedule
-> c000000000657020 T .schedule
-> c000000000d4fdb8 D schedule
-> 
-> The symbol "D schedule" is not a function symbol, and perf will print:
-> "p:probe/schedule _text+13958584"Failed to write event: Invalid argument
-> 
-> Therefore, when searching symbols from map and adding probe point for
-> them, a symbol type check is added. If the type of symbol is not a
-> function, skip it.
-> 
-> Fixes: bf794bf52a80 ("powerpc/kprobes: Fix kallsyms lookup across powerpc ABIv1 and ABIv2")
-> 
-> Signed-off-by: Zechuan Chen <chenzechuan1@huawei.com>
+> Signed-off-by: Xiantao Hu <xt.hu@cqplus1.com>
 > ---
->  tools/perf/util/probe-event.c | 3 +++
->  1 file changed, 3 insertions(+)
+> Changes in v4
+>  - Drop the unused varible struct resource *wdt_res.
+>  - Drop the operations related to address 0x9c000274.
+>    Put it in bootloader before entry kernel boot in v3.
 > 
-> diff --git a/tools/perf/util/probe-event.c b/tools/perf/util/probe-event.c
-> index b2a02c9ab8ea..a834918a0a0d 100644
-> --- a/tools/perf/util/probe-event.c
-> +++ b/tools/perf/util/probe-event.c
-> @@ -3083,6 +3083,9 @@ static int find_probe_trace_events_from_map(struct perf_probe_event *pev,
->  	for (j = 0; j < num_matched_functions; j++) {
->  		sym = syms[j];
+>  MAINTAINERS                    |   1 +
+>  drivers/watchdog/Kconfig       |  11 ++
+>  drivers/watchdog/Makefile      |   1 +
+>  drivers/watchdog/sunplus_wdt.c | 278 +++++++++++++++++++++++++++++++++
+>  4 files changed, 291 insertions(+)
+>  create mode 100644 drivers/watchdog/sunplus_wdt.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index fe6cc971c..a1b3d76e2 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18247,6 +18247,7 @@ M:	Xiantao Hu <xt.hu@cqplus1.com>
+>  L:	linux-watchdog@vger.kernel.org
+>  S:	Maintained
+>  F:	Documentation/devicetree/bindings/watchdog/sunplus,sp7021-wdt.yaml
+> +F:	drivers/watchdog/sunplus_wdt.c
 >  
-> +		if (sym->type != STT_FUNC)
-> +			continue;
+>  SUPERH
+>  M:	Yoshinori Sato <ysato@users.sourceforge.jp>
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index 9d222ba17..d3dbe8695 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -976,6 +976,17 @@ config MSC313E_WATCHDOG
+>  	  To compile this driver as a module, choose M here: the
+>  	  module will be called msc313e_wdt.
+>  
+> +config SUNPLUS_WATCHDOG
+> +	tristate "Sunplus watchdog support"
+> +	depends on ARCH_SUNPLUS || COMPILE_TEST
+> +	select WATCHDOG_CORE
+> +	help
+> +	  Say Y here to include support for the watchdog timer
+> +	  in Sunplus SoCs.
+> +
+> +	  To compile this driver as a module, choose M here: the
+> +	  module will be called sunplus_wdt.
+> +
+>  # X86 (i386 + ia64 + x86_64) Architecture
+>  
+>  config ACQUIRE_WDT
+> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+> index 2ee970641..0fa548ee6 100644
+> --- a/drivers/watchdog/Makefile
+> +++ b/drivers/watchdog/Makefile
+> @@ -93,6 +93,7 @@ obj-$(CONFIG_PM8916_WATCHDOG) += pm8916_wdt.o
+>  obj-$(CONFIG_ARM_SMC_WATCHDOG) += arm_smc_wdt.o
+>  obj-$(CONFIG_VISCONTI_WATCHDOG) += visconti_wdt.o
+>  obj-$(CONFIG_MSC313E_WATCHDOG) += msc313e_wdt.o
+> +obj-$(CONFIG_SUNPLUS_WATCHDOG) += sunplus_wdt.o
+>  
+>  # X86 (i386 + ia64 + x86_64) Architecture
+>  obj-$(CONFIG_ACQUIRE_WDT) += acquirewdt.o
+> diff --git a/drivers/watchdog/sunplus_wdt.c b/drivers/watchdog/sunplus_wdt.c
+> new file mode 100644
+> index 000000000..9fae7a14b
+> --- /dev/null
+> +++ b/drivers/watchdog/sunplus_wdt.c
+> @@ -0,0 +1,278 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * sunplus Watchdog Driver
+> + *
+> + * Copyright (C) 2021 Sunplus Technology Co., Ltd.
+> + *
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reset.h>
+> +#include <linux/watchdog.h>
+> +
+> +#define WDT_CTRL                0x00
+> +#define WDT_CNT                 0x04
+> +
+> +#define WDT_STOP				0x3877
+> +#define WDT_RESUME				0x4A4B
+> +#define WDT_CLRIRQ				0x7482
+> +#define WDT_UNLOCK				0xAB00
+> +#define WDT_LOCK				0xAB01
+> +#define WDT_CONMAX				0xDEAF
+> +
+> +#define SP_WDT_MAX_TIMEOUT		11U
+> +#define SP_WDT_DEFAULT_TIMEOUT	10
+> +
+> +#define STC_CLK				90000
+> +
+> +#define DEVICE_NAME		"sunplus-wdt"
+> +
+> +static unsigned int timeout;
+> +module_param(timeout, int, 0);
+> +MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds");
+> +
+> +static bool nowayout = WATCHDOG_NOWAYOUT;
+> +module_param(nowayout, bool, 0);
+> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
+> +			__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+> +
+> +struct sp_wdt_priv {
+> +	struct watchdog_device wdev;
+> +	void __iomem *base;
+> +	struct clk *clk;
+> +	struct reset_control *rstc;
+> +};
+> +
+> +static int sp_wdt_restart(struct watchdog_device *wdev,
+> +			  unsigned long action, void *data)
+> +{
+> +	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> +	void __iomem *base = priv->base;
+> +
+> +	writel(WDT_STOP, base + WDT_CTRL);
+> +	writel(WDT_UNLOCK, base + WDT_CTRL);
+> +	writel(0x0001, base + WDT_CNT);
+> +	writel(WDT_LOCK, base + WDT_CTRL);
+> +	writel(WDT_RESUME, base + WDT_CTRL);
+> +
+> +	return 0;
+> +}
+> +
+> +/* TIMEOUT_MAX = ffff0/90kHz =11.65,so longer than 11 seconds will time out */
+> +static int sp_wdt_ping(struct watchdog_device *wdev)
+> +{
+> +	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> +	void __iomem *base = priv->base;
+> +	u32 count;
+> +	u32 actual;
+> +
+> +	actual = min(wdev->timeout, SP_WDT_MAX_TIMEOUT);
+> +
+> +	if (actual > SP_WDT_MAX_TIMEOUT) {
+> +		writel(WDT_CONMAX, base + WDT_CTRL);
+> +	} else {
+> +		writel(WDT_UNLOCK, base + WDT_CTRL);
+> +		/* tiemrw_cnt[3:0]can't be write,only [19:4] can be write. */
+> +		count = (actual * STC_CLK) >> 4;
+> +		writel(count, base + WDT_CNT);
+> +		writel(WDT_LOCK, base + WDT_CTRL);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int sp_wdt_set_timeout(struct watchdog_device *wdev,
+> +			      unsigned int timeout)
+> +{
+> +	wdev->timeout = timeout;
+> +	sp_wdt_ping(wdev);
+
+This is exactly what the calling code does if there is no set_timeout
+function, so you can just drop this function,
+
+> +
+> +	return 0;
+> +}
+> +
+> +static int sp_wdt_stop(struct watchdog_device *wdev)
+> +{
+> +	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> +	void __iomem *base = priv->base;
+> +
+> +	writel(WDT_STOP, base + WDT_CTRL);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sp_wdt_start(struct watchdog_device *wdev)
+> +{
+> +	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> +	void __iomem *base = priv->base;
+> +
+> +	writel(WDT_RESUME, base + WDT_CTRL);
+> +
+> +	return 0;
+> +}
+> +
+> +static unsigned int sp_wdt_get_timeleft(struct watchdog_device *wdev)
+> +{
+> +	struct sp_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> +	void __iomem *base = priv->base;
+> +	u32 val;
+> +
+> +	val = readl(base + WDT_CNT);
+> +	val &= 0xffff;
+> +	val = val << 4;
+> +
+> +	return val;
+> +}
+> +
+> +static const struct watchdog_info sp_wdt_info = {
+> +	.identity	= DEVICE_NAME,
+> +	.options	= WDIOF_SETTIMEOUT |
+> +			  WDIOF_MAGICCLOSE |
+> +			  WDIOF_KEEPALIVEPING,
+> +};
+> +
+> +static const struct watchdog_ops sp_wdt_ops = {
+> +	.owner		= THIS_MODULE,
+> +	.start		= sp_wdt_start,
+> +	.stop		= sp_wdt_stop,
+> +	.ping		= sp_wdt_ping,
+> +	.set_timeout	= sp_wdt_set_timeout,
+> +	.get_timeleft	= sp_wdt_get_timeleft,
+> +	.restart	= sp_wdt_restart,
+> +};
+> +
+> +static void sp_clk_disable_unprepare(void *data)
+> +{
+> +	clk_disable_unprepare(data);
+> +}
+> +
+> +static void sp_reset_control_assert(void *data)
+> +{
+> +	reset_control_assert(data);
+> +}
+> +
+> +static int sp_wdt_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct sp_wdt_priv *priv;
+> +	int err;
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->clk = devm_clk_get(dev, NULL);
+> +	if (IS_ERR(priv->clk)) {
+> +		dev_err(dev, "Can't find clock source\n");
+> +		return PTR_ERR(priv->clk);
+> +	}
+> +
+> +	err = clk_prepare_enable(priv->clk);
+> +	if (err) {
+> +		dev_err(dev, "Clock can't be enabled correctly\n");
+> +		return err;
+> +	}
+> +
+> +	/* The timer and watchdog shared the STC reset */
+> +	priv->rstc = devm_reset_control_get_shared(dev, NULL);
+> +	if (!IS_ERR(priv->rstc))
+> +		reset_control_deassert(priv->rstc);
+> +
+> +	err = devm_add_action_or_reset(dev, sp_reset_control_assert,
+> +				       priv->rstc);
+> +	if (err)
+> +		return err;
 > +
 
-Humm, shouldn't this be handled by find_probe_functions(), i.e. it
-shoudn't return data symbols, right? Otherwise other places using this
-function may malfunction as well?
+devm_add_action_or_reset() above should only be called if 
+devm_reset_control_get_shared succeeds.
 
-Naveen? Masami?
+> +	err = devm_add_action_or_reset(dev, sp_clk_disable_unprepare,
+> +				       priv->clk);
 
-- Arnaldo
+This should be called immediately after clk_prepare_enable().
 
->  		/* There can be duplicated symbols in the map */
->  		for (i = 0; i < j; i++)
->  			if (sym->start == syms[i]->start) {
+> +	if (err)
+> +		return err;
+> +
+> +	priv->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(priv->base))
+> +		return PTR_ERR(priv->base);
+> +
+> +	priv->wdev.info = &sp_wdt_info;
+> +	priv->wdev.ops = &sp_wdt_ops;
+> +	priv->wdev.timeout = SP_WDT_DEFAULT_TIMEOUT;
+> +	priv->wdev.max_hw_heartbeat_ms = SP_WDT_MAX_TIMEOUT * 1000;
+> +	priv->wdev.min_timeout = 1;
+> +	priv->wdev.parent = dev;
+> +
+> +	watchdog_init_timeout(&priv->wdev, timeout, dev);
+> +	watchdog_set_nowayout(&priv->wdev, nowayout);
+> +	watchdog_set_restart_priority(&priv->wdev, 128);
+> +
+> +	watchdog_set_drvdata(&priv->wdev, priv);
+> +
+> +	watchdog_stop_on_reboot(&priv->wdev);
+> +	err = devm_watchdog_register_device(dev, &priv->wdev);
+> +	if (err)
+> +		return err;
+> +
+> +	platform_set_drvdata(pdev, priv);
+> +
+> +	dev_info(dev, "Watchdog enabled (timeout=%d sec%s.)\n",
+> +		 priv->wdev.timeout, nowayout ? ", nowayout" : "");
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id sp_wdt_of_match[] = {
+> +	{.compatible = "sunplus,sp7021-wdt", },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, sp_wdt_of_match);
+> +
+> +static int __maybe_unused sp_wdt_suspend(struct device *dev)
+> +{
+> +	struct sp_wdt_priv *priv = dev_get_drvdata(dev);
+> +
+> +	if (watchdog_active(&priv->wdev))
+> +		sp_wdt_stop(&priv->wdev);
+> +
+> +	reset_control_assert(priv->rstc);
+> +	clk_disable_unprepare(priv->clk);
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused sp_wdt_resume(struct device *dev)
+> +{
+> +	int err;
+> +
+> +	struct sp_wdt_priv *priv = dev_get_drvdata(dev);
+> +
+> +	err = clk_prepare_enable(priv->clk);
+> +	if (err) {
+> +		dev_err(dev, "Clock can't be enabled correctly\n");
+> +		return err;
+> +	}
+> +
+> +	reset_control_deassert(priv->rstc);
+> +
+> +	if (watchdog_active(&priv->wdev))
+> +		sp_wdt_start(&priv->wdev);
+> +
+> +	return 0;
+> +}
+> +
+> +static SIMPLE_DEV_PM_OPS(sp_wdt_pm_ops, sp_wdt_suspend, sp_wdt_resume);
+> +
+> +static struct platform_driver sp_wdt_driver = {
+> +	.probe = sp_wdt_probe,
+> +	.driver = {
+> +		   .name = DEVICE_NAME,
+> +		   .of_match_table = sp_wdt_of_match,
+> +		   .pm = &sp_wdt_pm_ops,
+> +	},
+> +};
+> +
+> +module_platform_driver(sp_wdt_driver);
+> +
+> +MODULE_AUTHOR("Xiantao Hu <xt.hu@cqplus1.com>");
+> +MODULE_DESCRIPTION("Sunplus Watchdog Timer Driver");
+> +MODULE_LICENSE("GPL v2");
 > -- 
-> 2.12.3
+> 2.33.1
+> 

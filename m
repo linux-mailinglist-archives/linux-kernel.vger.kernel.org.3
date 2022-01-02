@@ -2,186 +2,394 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 822F7482CA7
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 21:12:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8163E482CAE
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 21:26:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiABUMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 15:12:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55456 "EHLO
+        id S229723AbiABUXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 15:23:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiABUMp (ORCPT
+        with ESMTP id S229450AbiABUXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 15:12:45 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1B5C061761;
-        Sun,  2 Jan 2022 12:12:44 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id j11so69405832lfg.3;
-        Sun, 02 Jan 2022 12:12:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=J6ekuq2pMzK/C+td0TqNztQHRujSMVkioAz6VuQ9qnw=;
-        b=kOQSp+WEAevZWUcVz/soT0LPYNjTDJoFfCp5Q3t6ngGUlYcIiOGiuoNjS48u0JwQ90
-         hnOBSqpl1JhAbF6Cf5tJLw1CzCd/ZBKQlmV4xAWcQ43XQvFTQuOqLt5jsMerN9AtK5YQ
-         mkTzPTU/3ZIXdmIFhel12GY0YqTO+aZ54ZPozrq4Lq3NKh3nujZ03Qqb0VduxTKd4Inc
-         obpOaHIHyuP7sOYVxjd0f2g+sCvgaTvykdfNeDKR7sWY20H5IMkHH667QeqoVj93MuJ8
-         HczhwX8HSGVpf3rtsKBtwC5kp6Eop3h3cI7MWad031NlUSM3qtSpGGwQcVm0chOFzHWi
-         QPJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=J6ekuq2pMzK/C+td0TqNztQHRujSMVkioAz6VuQ9qnw=;
-        b=QQ1oWHY/1stp6pCPZWv498/kncsATlW/8nhnF7vrGvhPFKYeArJhIzM5oMLq53yR/2
-         Cfe8NxwTeMGUZwcIxlMyplYsj6MNNL68unYZncKxknQWF8DYzp/rnrKBZQA2KNaUT8fi
-         e0X3elvmYreW5shrPrhesoMzwUL5E9q9fHCYUu46SJW/rtVGwVpGRRr2QDMcp8uU8Q/h
-         CYc1txpqVl7huLWQMtdU20uyG8ruZkVh2lfuui8OcO0hNMugm3MD6ibbJ/uJMK+ywPcM
-         dEhc2yOdkvPNJ1Z5ClUJAdkpPdcfC3rrVdIAoqAiII63TLbUSBX16Dssd6SizWXx/L+s
-         SLPA==
-X-Gm-Message-State: AOAM533+d8VXzrorn8LQtaQzxqZz7NsF/CFiUbn/u8hgjmnigOvNtOGv
-        SE7I410FZmMeQPTlE152GZI=
-X-Google-Smtp-Source: ABdhPJwUHRr1tfjmtZh2XM+y62JHtGcWJvwkZ/OHZPSK0pSyvkv40wKp3K/LZUx9rAfCRbf7sj19mA==
-X-Received: by 2002:a05:6512:1149:: with SMTP id m9mr38205299lfg.679.1641154363265;
-        Sun, 02 Jan 2022 12:12:43 -0800 (PST)
-Received: from [192.168.2.145] (46-138-43-24.dynamic.spd-mgts.ru. [46.138.43.24])
-        by smtp.googlemail.com with ESMTPSA id bi1sm3192665lfb.248.2022.01.02.12.12.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Jan 2022 12:12:42 -0800 (PST)
-Subject: Re: [PATCH 03/34] brcmfmac: firmware: Support having multiple alt
- paths
-To:     Hector Martin <marcan@marcan.st>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com
-References: <20211226153624.162281-1-marcan@marcan.st>
- <20211226153624.162281-4-marcan@marcan.st>
- <c79d67af-2d4c-2c9d-bb7d-630faf9de175@gmail.com>
- <f35bed9b-aefd-cdf1-500f-194d5699cffd@marcan.st>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <cc3d020f-8f5c-7e6d-d6fc-27d133c87609@gmail.com>
-Date:   Sun, 2 Jan 2022 23:12:41 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Sun, 2 Jan 2022 15:23:00 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BEF4C061761
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jan 2022 12:22:59 -0800 (PST)
+Received: from ip4d173d02.dynamic.kabel-deutschland.de ([77.23.61.2] helo=regzbot.fritz.box); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        id 1n47NZ-0007XR-8e; Sun, 02 Jan 2022 21:22:57 +0100
+From:   "Regzbot (on behalf of Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Linux regressions report  for mainline [2022-01-02]
+Date:   Sun,  2 Jan 2022 20:22:56 +0000
+Message-Id: <164115482345.892609.132126317184270346@leemhuis.info>
+X-Mailer: git-send-email 2.31.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <f35bed9b-aefd-cdf1-500f-194d5699cffd@marcan.st>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1641154979;b1eeb4f4;
+X-HE-SMSGID: 1n47NZ-0007XR-8e
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-02.01.2022 17:25, Hector Martin пишет:
-> On 2022/01/02 16:08, Dmitry Osipenko wrote:
->> 26.12.2021 18:35, Hector Martin пишет:
->>> +static void brcm_free_alt_fw_paths(const char **alt_paths)
->>> +{
->>> +	int i;
->>> +
->>> +	if (!alt_paths)
->>> +		return;
->>> +
->>> +	for (i = 0; alt_paths[i]; i++)
->>> +		kfree(alt_paths[i]);
->>> +
->>> +	kfree(alt_paths);
->>>  }
->>>  
->>>  static int brcmf_fw_request_firmware(const struct firmware **fw,
->>>  				     struct brcmf_fw *fwctx)
->>>  {
->>>  	struct brcmf_fw_item *cur = &fwctx->req->items[fwctx->curpos];
->>> -	int ret;
->>> +	int ret, i;
->>>  
->>>  	/* Files can be board-specific, first try a board-specific path */
->>>  	if (cur->type == BRCMF_FW_TYPE_NVRAM && fwctx->req->board_type) {
->>> -		char *alt_path;
->>> +		const char **alt_paths = brcm_alt_fw_paths(cur->path, fwctx);
->>>  
->>> -		alt_path = brcm_alt_fw_path(cur->path, fwctx->req->board_type);
->>> -		if (!alt_path)
->>> +		if (!alt_paths)
->>>  			goto fallback;
->>>  
->>> -		ret = request_firmware(fw, alt_path, fwctx->dev);
->>> -		kfree(alt_path);
->>> -		if (ret == 0)
->>> -			return ret;
->>> +		for (i = 0; alt_paths[i]; i++) {
->>> +			ret = firmware_request_nowarn(fw, alt_paths[i], fwctx->dev);
->>> +			if (ret == 0) {
->>> +				brcm_free_alt_fw_paths(alt_paths);
->>> +				return ret;
->>> +			}
->>> +		}
->>> +		brcm_free_alt_fw_paths(alt_paths);
->>>  	}
->>>  
->>>  fallback:
->>> @@ -641,6 +663,9 @@ static void brcmf_fw_request_done(const struct firmware *fw, void *ctx)
->>>  	struct brcmf_fw *fwctx = ctx;
->>>  	int ret;
->>>  
->>> +	brcm_free_alt_fw_paths(fwctx->alt_paths);
->>> +	fwctx->alt_paths = NULL;
->>
->> It looks suspicious that fwctx->alt_paths isn't zero'ed by other code
->> paths. The brcm_free_alt_fw_paths() should take fwctx for the argument
->> and fwctx->alt_paths should be set to NULL there.
-> 
-> There are multiple code paths for alt_paths; the initial firmware lookup
-> uses fwctx->alt_paths, and once we know the firmware load succeeded we
-> use blocking firmware requests for NVRAM/CLM/etc and those do not use
-> the fwctx member, but rather just keep alt_paths in function scope
-> (brcmf_fw_request_firmware). You're right that there was a rebase SNAFU
-> there though, I'll compile test each patch before sending v2. Sorry
-> about that. In this series the code should build again by patch #6.
-> 
-> Are you thinking of any particular code paths? As far as I saw when
-> writing this, brcmf_fw_request_done() should always get called whether
-> things succeed or fail. There are no other code paths that free
-> fwctx->alt_paths.
+Hi, this is regzbot, the Linux kernel regression tracking bot.
 
-It should be okay in the particular case then. But this is not obvious
-without taking a closer look at the code, which is a sign that there is
-some room for improvement.
+Currently I'm aware of 23 regressions in linux-mainline. Find the
+current status below and the latest on the web:
 
->> On the other hand, I'd change the **alt_paths to a fixed-size array.
->> This should simplify the code, making it easier to follow and maintain.
->>
->> -	const char **alt_paths;
->> +	char *alt_paths[BRCM_MAX_ALT_FW_PATHS];
->>
->> Then you also won't need to NULL-terminate the array, which is a common
->> source of bugs in kernel.
-> 
-> That sounds reasonable, it'll certainly make the code simpler. I'll do
-> that for v2.
+https://linux-regtracking.leemhuis.info/regzbot/mainline/
 
-Feel free to CC me on v2. I'll take a closer look and give a test to the
-patches on older hardware, checking for regressions.
+Bye bye, hope to see you soon for the next report.
+   Regzbot (on behalf of Thorsten Leemhuis)
 
+
+========================================================
+current cycle (v5.15.. aka v5.16-rc), culprit identified
+========================================================
+
+
+[ *NEW* ] pm: laptop totally freezes when going to hibernation
+--------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/256689953.114854578.1640622738334.JavaMail.root@zimbra40-e7.priv.proxad.net/
+https://lore.kernel.org/linux-pm/256689953.114854578.1640622738334.JavaMail.root@zimbra40-e7.priv.proxad.net/
+
+By casteyde.christian@free.fr, 6 days ago; 4 activities, latest 1 days ago.
+Introduced in 804b6e5ee613 (v5.16-rc1)
+
+Recent activities from: Thorsten Leemhuis (1), Christian Casteyde (1),
+  Rafael J. Wysocki (1), casteyde.christian@free.fr (1)
+
+Noteworthy links:
+* https://bugzilla.kernel.org/show_bug.cgi?id=215427
+
+
+[ *NEW* ] drm: amdgpu: s0ix suspend stopped working
+---------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/f3aa1e12-c65f-8668-772c-b25dca79b642@leemhuis.info/
+https://lore.kernel.org/regressions/f3aa1e12-c65f-8668-772c-b25dca79b642@leemhuis.info/
+
+By Thorsten Leemhuis, 1 days ago; 1 activities, latest 1 days ago.
+Introduced in 2a50edbf10c8 (v5.16-rc1)
+
+Recent activities from: Thorsten Leemhuis (1)
+
+Noteworthy links:
+* https://gitlab.freedesktop.org/drm/amd/-/issues/1821
+* https://bugzilla.kernel.org/show_bug.cgi?id=215436
+
+
+5-10% increase in IO latencies with nohz balance patch
+------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/YaUH5GFFoLiS4/3/@localhost.localdomain/
+https://lore.kernel.org/lkml/YaUH5GFFoLiS4%2F3%2F@localhost.localdomain/
+
+By Josef Bacik, 34 days ago; 11 activities, latest 11 days ago.
+Introduced in 7fd7a9e0caba (v5.16-rc1)
+
+
+RDMA/mlx5: Regression since v5.15-rc5: Kernel panic when called ib_dereg_mr
+---------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/9974ea8c-f1cb-aeb4-cf1b-19d37536894a@linux.alibaba.com/
+https://lore.kernel.org/linux-rdma/9974ea8c-f1cb-aeb4-cf1b-19d37536894a@linux.alibaba.com/
+
+By Tony Lu, 12 days ago; 5 activities, latest 11 days ago.
+Introduced in f0ae4afe3d35 (v5.16-rc5)
+
+Noteworthy links:
+* [PATCH rdma-rc] RDMA/mlx5: Fix dereg mr flow for kernel MRs
+  https://lore.kernel.org/lkml/f298db4ec5fdf7a2d1d166ca2f66020fd9397e5c.1640079962.git.leonro@nvidia.com/
+  12 days ago, by Leon Romanovsky; thread monitored.
+
+
+fbdev/efifb: Monitors no longer sleep (amdgpu dual monitor setup)
+-----------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/8a27c986-4767-bd29-2073-6c4ffed49bba@jetfuse.net/
+https://lore.kernel.org/linux-fbdev/8a27c986-4767-bd29-2073-6c4ffed49bba@jetfuse.net/
+
+By Brandon Nielsen, 26 days ago; 4 activities, latest 16 days ago.
+Introduced in 55285e21f045 (v5.16-rc1)
+
+Noteworthy links:
+* https://bugzilla.redhat.com/show_bug.cgi?id=2028613
+* https://bugzilla.kernel.org/show_bug.cgi?id=215203
+
+
+=========================================================================================
+previous cycle (v5.14..v5.15), culprit identified, with activity in the past three months
+=========================================================================================
+
+
+[ *NEW* ] bluetooth: more Intel chips require the workaround for the broken initial command
+-------------------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/20211202162256.31837-1-tiwai@suse.de/
+https://lore.kernel.org/lkml/20211202162256.31837-1-tiwai@suse.de/
+
+By Takashi Iwai, 31 days ago; 11 activities, latest 5 days ago.
+Introduced in 83f2dafe2a62 (v5.15-rc1)
+
+Recent activities from: Thorsten Leemhuis (1)
+
+Noteworthy links:
+* https://bugzilla.kernel.org/show_bug.cgi?id=215167
+* https://bugzilla.opensuse.org/show_bug.cgi?id=1193124
+
+
+cifs: unable to mount cifs 1.0 shares because support for NTLM and weaker authentication algorithms was removed
+---------------------------------------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/dce98c91-d28c-0f5a-b177-1f4275cf0f35@leemhuis.info/
+https://lore.kernel.org/regressions/dce98c91-d28c-0f5a-b177-1f4275cf0f35@leemhuis.info/
+
+By Thorsten Leemhuis, 10 days ago; 1 activities, latest 10 days ago.
+Introduced in 76a3c92ec9e0 (v5.15-rc1)
+
+
+drm: amdgpu: NUC8i7HVKVA crashes during system suspend
+------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/bug-215315-2300@https.bugzilla.kernel.org//
+https://lore.kernel.org/dri-devel/bug-215315-2300@https.bugzilla.kernel.org%2F/
+
+By bugzilla-daemon@bugzilla.kernel.org, 20 days ago; 1 activities, latest 20 days ago.
+Introduced in f7d6779df642 (v5.15-rc1)
+
+Noteworthy links:
+* https://bugzilla.kernel.org/show_bug.cgi?id=215315
+
+
+Bluetooth not working on 5.15+ since "Bluetooth: Move shutdown callback before flushing tx and rx queue"
+--------------------------------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/CAJvGw+AJ5dHSb50RtJHnjbhMVQa+rJgYznFV4t-iaO0qx+W-jw@mail.gmail.com/
+https://lore.kernel.org/lkml/CAJvGw%2BAJ5dHSb50RtJHnjbhMVQa%2BrJgYznFV4t-iaO0qx%2BW-jw@mail.gmail.com/
+
+By coldolt, 23 days ago; 3 activities, latest 23 days ago.
+Introduced in 0ea53674d07f (v5.15-rc1)
+
+
+==================================================================================
+older cycles (..v5.14), culprit identified, with activity in the past three months
+==================================================================================
+
+
+Bug in Memory Layout of rx_desc for QCA6174
+-------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/CAH4F6usFu8-A6k5Z7rU9__iENcSC6Zr-NtRhh_aypR74UvN1uQ@mail.gmail.com/
+https://lore.kernel.org/ath10k/CAH4F6usFu8-A6k5Z7rU9__iENcSC6Zr-NtRhh_aypR74UvN1uQ@mail.gmail.com/
+
+By Francesco Magliocca, 198 days ago; 8 activities, latest 10 days ago.
+Introduced in e3def6f7ddf8 (v4.16-rc1)
+
+One patch associated with this regression:
+* [PATCH v2] ath10k: abstract htt_rx_desc structure
+  https://lore.kernel.org/linux-wireless/20211216151823.68878-1-franciman12@gmail.com/
+  17 days ago, by Francesco Magliocca; thread monitored.
+
+Noteworthy links:
+* Bug in Memory Layout of rx_desc for QCA6174
+  https://lore.kernel.org/ath10k/CAH4F6uvX=xtTnBDaj1BVHSx_FDSUbpc4TRC2DGTHBmGJSD2oEA@mail.gmail.com/
+  65 days ago, by Francesco Magliocca; thread monitored.
+
+
+usb: gadget: atmel: ethernet over USB Gadget not recognized anymore after disconnect and reconnect
+--------------------------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/20211211183650.12183-1-marcelo.jimenez@gmail.com/
+https://lore.kernel.org/regressions/20211211183650.12183-1-marcelo.jimenez@gmail.com/
+
+By Marcelo Roberto Jimenez, 22 days ago; 7 activities, latest 11 days ago.
+Introduced in 70a7f8be8598 (v5.2-rc1)
+
+
+gpio: some GPIO lines have stopped working
+------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/20211217153555.9413-1-marcelo.jimenez@gmail.com/
+https://lore.kernel.org/stable/20211217153555.9413-1-marcelo.jimenez@gmail.com/
+
+By Marcelo Roberto Jimenez, 16 days ago; 7 activities, latest 12 days ago.
+Introduced in 2ab73c6d8323 (v5.7-rc1)
+
+
+net: wireless: ath10k: 5GHz channels are marked as No-IR
+--------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/1c160dfb-6ccc-b4d6-76f6-4364e0adb6dd@reox.at/
+https://lore.kernel.org/ath10k/1c160dfb-6ccc-b4d6-76f6-4364e0adb6dd@reox.at/
+
+By Sebastian Bachmann, 36 days ago; 22 activities, latest 13 days ago.
+Introduced in 2dc016599cfa (v5.6-rc1)
+
+Noteworthy links:
+* Compex WLE600VX AP mode 5GHz doesn't work since kernel 5.6
+  https://lore.kernel.org/ath10k/5971a327-d11a-35e6-8295-8dfb8ae3a434@yandex.ru/
+  630 days ago, by svp; thread monitored.
+* Re: Compex WLE600VX AP mode 5GHz doesn't work since kernel 5.6
+  https://lore.kernel.org/ath10k/CA+ASDXNNfG3-ra8C2ou457J=Vj5eE83VCXgGsFPQQOixTcu7YA@mail.gmail.com/
+  558 days ago, by Brian Norris
+* [PATCH] Revert "ath: add support for special 0x0 regulatory domain"
+  https://lore.kernel.org/linux-wireless/20200730124923.271429-1-alsi@bang-olufsen.dk/
+  521 days ago, by Alvin Šipraga; thread monitored.
+* [PATCH] Revert "ath: add support for special 0x0 regulatory domain"
+  https://lore.kernel.org/ath10k/20201022172113.GA1367233@capeo.gueux.org/
+  437 days ago, by Félix Sipma; thread monitored.
+* Re: [PATCH] Revert "ath: add support for special 0x0 regulatory domain"
+  https://lore.kernel.org/ath10k/19e636c1-fdbe-7222-a055-d668e4617070@gmx.de/
+  377 days ago, by sparks71@gmx.de; thread monitored.
+* https://bugs.debian.org/959821
+* https://bbs.archlinux.org/viewtopic.php?id=254535
+
+
+fbdev: matroxfb: display black ans warns "the current input timing is not supported by the monitor display"
+-----------------------------------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/20211218180035.200552-1-liuzx@knownsec.com/
+https://lore.kernel.org/lkml/20211218180035.200552-1-liuzx@knownsec.com/
+
+By Z. Liu, 15 days ago; 2 activities, latest 13 days ago.
+Introduced in 11be60bd66d5 (v5.7-rc1)
+
+Noteworthy links:
+* https://bugzilla.kernel.org/show_bug.cgi?id=215355
+
+
+pci: the pci sysfs "rom" file has disappeared for VGA devices
+-------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/YbxqIyrkv3GhZVxx@intel.com/
+https://lore.kernel.org/linux-pci/YbxqIyrkv3GhZVxx@intel.com/
+
+By Ville Syrjälä, 16 days ago; 4 activities, latest 15 days ago.
+Introduced in 527139d738d7 (v5.13-rc1)
+
+
+btrfs: deadlocks in dedupe
+--------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/20211210183456.GP17148@hungrycats.org/
+https://lore.kernel.org/linux-btrfs/20211210183456.GP17148@hungrycats.org/
+
+By Zygo Blaxell, 23 days ago; 11 activities, latest 15 days ago.
+Introduced in 3078d85c9a10 (v5.11-rc1)
+
+
+mtd: cfi_cmdset_0002: flash write accesses on the hardware fail on a PowerPC MPC8313 to a 8-bit-parallel S29GL064N flash
+------------------------------------------------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/b687c259-6413-26c9-d4c9-b3afa69ea124@pengutronix.de/
+https://lore.kernel.org/lkml/b687c259-6413-26c9-d4c9-b3afa69ea124@pengutronix.de/
+
+By Ahmad Fatoum, 20 days ago; 2 activities, latest 18 days ago.
+Introduced in dfeae1073583 (v4.18-rc1)
+
+
+drm: amdgpu: apps that need amdgpu do not start after system is woken from suspend
+----------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/1295184560.182511.1639075777725@mail.yahoo.com/
+https://lore.kernel.org/linux-i2c/1295184560.182511.1639075777725@mail.yahoo.com/
+
+By Tareque Md.Hanif, 24 days ago; 1 activities, latest 24 days ago.
+Introduced in 5a7b95fb993e (v5.14-rc1)
+
+
+bluetooth: "Query LE tx power on startup" broke Bluetooth on MacBookPro16,1
+---------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/4970a940-211b-25d6-edab-21a815313954@protonmail.com/
+https://lore.kernel.org/regressions/4970a940-211b-25d6-edab-21a815313954@protonmail.com/
+
+By Orlando Chamberlain, 95 days ago; 86 activities, latest 25 days ago.
+Introduced in 7c395ea521e6 (v5.11-rc1)
+
+Fix incoming:
+* Bluetooth: btbcm: disable read tx power for some Macs with the T2 Security chip
+  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=801b4c027b44a185292007d3cf7513999d644723
+
+
+usb: fsl_udc_core: corrupted request list leads to unrecoverable loop
+---------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/MWHPR2201MB152074F47BF142189365627B91879@MWHPR2201MB1520.namprd22.prod.outlook.com/
+https://lore.kernel.org/linuxppc-dev/MWHPR2201MB152074F47BF142189365627B91879@MWHPR2201MB1520.namprd22.prod.outlook.com/
+
+By Eugene Bordenkircher, 65 days ago; 16 activities, latest 29 days ago.
+Introduced in f79a60b8785 (v3.4-rc4)
+
+Noteworthy links:
+* Re: bug: usb: gadget: FSL_UDC_CORE Corrupted request list leads to unrecoverable loop.
+  https://lore.kernel.org/all/CADRPPNSrhiwr8jmBb2h4cFYqHtuDKK8rL0i6Bkg7+xEyXJPATA@mail.gmail.com/
+  64 days ago, by Li Yang
+* Re: bug: usb: gadget: FSL_UDC_CORE Corrupted request list leads to unrecoverable loop.
+  https://lore.kernel.org/all/2c275adc278477e1e512ea6ecc0c1f4dcc46969d.camel@infinera.com/
+  64 days ago, by Joakim Tjernlund
+
+
+PCIe regression on APM Merlin (aarch64 dev platform) preventing NVME initialization
+-----------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/CA+enf=v9rY_xnZML01oEgKLmvY1NGBUUhnSJaETmXtDtXfaczA@mail.gmail.com/
+https://lore.kernel.org/linux-pci/CA%2Benf=v9rY_xnZML01oEgKLmvY1NGBUUhnSJaETmXtDtXfaczA@mail.gmail.com/
+
+By Stéphane Graber, 45 days ago; 9 activities, latest 31 days ago.
+Introduced in 6dce5aa59e0b (v5.5-rc1)
+
+Fix incoming:
+* PCI: xgene: Fix IB window setup
+  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=c7a75d07827a1f33d566e18e6098379cc2a0c2b2
+
+
+=============================================================================
+older cycles (..v5.14), unkown culprit, with activity in the past three weeks
+=============================================================================
+
+
+[ *NEW* ] Touchpad is not working after suspend to RAM since kernel 5.14 (fwd from b.k.o bug 214667)
+----------------------------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/12b9a10a-626b-cafd-05d6-cf0a116aa39b@leemhuis.info/
+https://lore.kernel.org/lkml/12b9a10a-626b-cafd-05d6-cf0a116aa39b@leemhuis.info/
+
+By Thorsten Leemhuis, 5 days ago; 2 activities, latest 1 days ago.
+Introduced in b3e296425482
+
+Recent activities from: Thorsten Leemhuis (1),
+  regressions@leemhuis.info (1)
+
+Noteworthy links:
+* https://bugzilla.kernel.org/show_bug.cgi?id=214667
+
+
+====================================================================
+all others with unkown culprit and activity in the past three months
+====================================================================
+
+
+idle power increased from ~20 to ~28 watts
+------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/c11d94b4-1701-4e26-efd1-42038342c4aa@kaputniks.org/
+https://lore.kernel.org/lkml/c11d94b4-1701-4e26-efd1-42038342c4aa@kaputniks.org/
+
+By Idzibear, 62 days ago; 3 activities, latest 62 days ago.
+Introduced in v5.14..v5.15
+
+
+=============
+End of report
+=============
+
+All regressions marked '[ *NEW* ]' were added since the previous report,
+which can be found here:
+https://lore.kernel.org/r/164055061372.788592.14520202566843934212@leemhuis.info
+
+Thanks for your attention, have a nice day!
+
+  Regzbot, your hard working Linux kernel regression tracking robot
+
+
+P.S.: Wanna know more about regzbot or how to use it to track regressions
+for your subsystem? Then check out the getting started guide or the
+reference documentation:
+
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+
+The short version: if you see a regression report you want to see
+tracked, just send a reply to the report where you Cc
+regressions@lists.linux.dev with a line like this:
+
+#regzbot introduced: v5.13..v5.14-rc1
+
+If you want to fix a tracked regression, just do what is expected
+anyway: add a 'Link:' tag with the url to the report, e.g.:
+
+Link: https://lore.kernel.org/all/30th.anniversary.repost@klaava.Helsinki.FI/

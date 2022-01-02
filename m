@@ -2,94 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D4F482AAB
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 10:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9383A482AB2
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 11:07:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232200AbiABJeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 04:34:03 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:47570 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232170AbiABJeC (ORCPT
+        id S232226AbiABKHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 05:07:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37766 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232210AbiABKHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 04:34:02 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id F198D210FC;
-        Sun,  2 Jan 2022 09:34:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1641116040; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=za9Nb3pV9k7x3EBgdsgdMzdnzl28mguREcJHM4y0Npg=;
-        b=hee0rKy9OxyMXGnCqJDkXvXede+C07akqihe3Y2XvVml4+f1jVhzKu2P8wxagLHoJ1pV4S
-        sb/ga/iKnprTtqojs8fJO8P0lhyWVew8NkfrrO/t3PgHpYj/VhQAN/ur7+ke7sGZbNpOw5
-        FDUS4EHffo2qidqYjwHq9/R9Hx6iyOg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1641116040;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=za9Nb3pV9k7x3EBgdsgdMzdnzl28mguREcJHM4y0Npg=;
-        b=I8PosESHV0y5VPI2VF7QGJZv9nrDs72UBSROKb6BaKcwII1TBn9b0a3ESwisuT3ZWGYVIw
-        aVvuhh2Itc31i4CQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D1BF01361C;
-        Sun,  2 Jan 2022 09:34:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id OrjUMohx0WEmYwAAMHmgww
-        (envelope-from <bp@suse.de>); Sun, 02 Jan 2022 09:34:00 +0000
-Date:   Sun, 2 Jan 2022 10:34:03 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/urgent for 5.16
-Message-ID: <YdFxi7TVYP61uA4f@zn.tnic>
+        Sun, 2 Jan 2022 05:07:15 -0500
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219A1C061574;
+        Sun,  2 Jan 2022 02:07:13 -0800 (PST)
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 14395100DA1A7;
+        Sun,  2 Jan 2022 11:07:11 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id E21914A82A; Sun,  2 Jan 2022 11:07:10 +0100 (CET)
+Date:   Sun, 2 Jan 2022 11:07:10 +0100
+From:   Lukas Wunner <lukas@wunner.de>
+To:     jmades <jochen@mades.net>
+Cc:     gregkh@linuxfoundation.org, Russell King <linux@armlinux.org.uk>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>
+Subject: Re: [PATCH] Bugfix RTS line config in RS485 mode is overwritten in
+ pl011_set_mctrl() function.
+Message-ID: <20220102100710.GA29858@wunner.de>
+References: <20211231171516.18407-1-jochen@mades.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211231171516.18407-1-jochen@mades.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, Dec 31, 2021 at 05:15:14PM +0000, jmades wrote:
+> Based on the "0001-serial-amba-pl011-add-RS485-support.patch" this change is necesarry otherwise the RTS-line will be pulled up in SER_RS485_RTS_BEFORE_SEND mode before sending data. This hinders the driver to receive data, f.ex. when the device is an RS485 slave device.
+> 
+> Signed-off-by: jmades <jochen@mades.net>
 
-please pull a single x86/urgent fix for 5.16.
+Patch is correct, but commit message could be improved:
 
-Thx.
+* Subject should be in imperative mood (by convention), it should be
+  prepended by "serial: pl011: " (in line with previous commits touching
+  this driver, use "git log --oneline amba-pl011.c") and the trailing dot
+  is unnecessary, e.g.:
 
----
+  "serial: pl011: Fix incorrect rs485 RTS polarity on set_mctrl"
 
-The following changes since commit fc74e0a40e4f9fd0468e34045b0c45bba11dcbb2:
+* Commit message should be wrapped at 72 characters (so that it appears
+  centered when displayed with "git log" on an 80 chars terminal).
+  The reference to "0001-serial-amba-pl011-add-RS485-support.patch"
+  should be replaced with a reference to the offending commit, e.g.:
 
-  Linux 5.16-rc7 (2021-12-26 13:17:17 -0800)
+  "Commit 8d479237727c ("serial: amba-pl011: add RS485 support") sought
+  to keep RTS deasserted on set_mctrl if rs485 is enabled.  However it
+  did so only if deasserted RTS polarity is high.  Fix it in case it's
+  low."
 
-are available in the Git repository at:
+  Feel free to copy this to a v2 of your patch and amend as you see fit.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v5.16_rc8
+* Add tags for the offending commit:
 
-for you to fetch changes up to d6f12f83989bb356ac6880a954f62c7667e35066:
+  Fixes: 8d479237727c ("serial: amba-pl011: add RS485 support")
+  Cc: stable@vger.kernel.org # v5.15+
 
-  x86/build: Use the proper name CONFIG_FW_LOADER (2021-12-29 22:20:38 +0100)
+* Be sure to cc the author of the offending commit.
 
-----------------------------------------------------------------
-- Use the proper CONFIG symbol in a preprocessor check.
+Thanks,
 
-----------------------------------------------------------------
-Lukas Bulwahn (1):
-      x86/build: Use the proper name CONFIG_FW_LOADER
+Lukas
 
- arch/x86/tools/relocs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+> ---
+>  drivers/tty/serial/amba-pl011.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
+> index 537f37ac4..1749c1498 100644
+> --- a/drivers/tty/serial/amba-pl011.c
+> +++ b/drivers/tty/serial/amba-pl011.c
+> @@ -1646,8 +1646,12 @@ static void pl011_set_mctrl(struct uart_port *port, unsigned int mctrl)
+>  	    container_of(port, struct uart_amba_port, port);
+>  	unsigned int cr;
+>  
+> -	if (port->rs485.flags & SER_RS485_ENABLED)
+> -		mctrl &= ~TIOCM_RTS;
+> +	if (port->rs485.flags & SER_RS485_ENABLED) {
+> +		if (port->rs485.flags & SER_RS485_RTS_AFTER_SEND)
+> +			mctrl &= ~TIOCM_RTS;
+> +		else
+> +			mctrl |= TIOCM_RTS;
+> +	}
+>  
+>  	cr = pl011_read(uap, REG_CR);

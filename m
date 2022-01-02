@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 508F248296D
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 06:45:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6484829AD
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 06:50:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230505AbiABFpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 00:45:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37570 "EHLO
+        id S231147AbiABFu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 00:50:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbiABFpl (ORCPT
+        with ESMTP id S230511AbiABFu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 00:45:41 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B60C061574
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jan 2022 21:45:40 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id g11so68532590lfu.2
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jan 2022 21:45:40 -0800 (PST)
+        Sun, 2 Jan 2022 00:50:27 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC7CC06173F
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jan 2022 21:50:27 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id i31so68377194lfv.10
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Jan 2022 21:50:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=1EAWwXHlTYT2aAtV9nfRbh+fLObBN/Vc+dUFwa1m7hM=;
-        b=NtqICEPnHTugIrKVb4uE5H+ccSsW0m2AUHJJv+DOQBjE6RAORPK6hDoTg9AbXC2ebM
-         EJwGH02Af3ngq0cEoeugSzUT6K+fTw6LSWqY6IrBXV8/bPe03RlV1zEjq6c/9DmwGGWq
-         6lOwOEiqI0ODRl3NYirizlaR2kCs4RfN3J/EgL5Gofg+BNcc7tZwULni42KUziQfCNzH
-         Et9BLng7f+6GnQp2QKIftjDDSH6xAKST57MjiufrwQcehGlDxPS4oQojw1nGmJ0yHv4n
-         f5JKbSrx6EDY4XXuoW5Kn5C73UKtdsZV5Od+pleAlvPqmq3TC8Lu+zWf0kLyOnBFLrVk
-         thIw==
+        bh=nhN7NWahO9J/KN17ys1dyhTURCCVE5feduyNTBCD4xM=;
+        b=n/TD9+cCUnrBWb1Y58ieKNbFn60JI2jFQKV2YEBjPI64whoto8M8+MwAAqxzOan8vs
+         uS992VBDhpbqXVlRaeYGypHTx0YphkvM0KjCpM9L4DFqTyTirAr/ojZKMkRiZ4h3Kasg
+         DbkdXHAFqUzXMtZTJTRq0iyB0xKNiJQpiQu6D4IRz9Q+bLZGJ5U3nXT/EfLeb+G5fsER
+         9fNzDFi/fGjX5JcPRTI+WT36n9OUnWk0djDmBRVhzNpm7HEGKTDKXOAmHUydwm77Tog9
+         SDUoWE3AmDVstIlBx9m/PXdl83AL/O+4cP/o4zxSA/s0ujJCUtLuvzfhxJAQgNm6N7yF
+         kkqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1EAWwXHlTYT2aAtV9nfRbh+fLObBN/Vc+dUFwa1m7hM=;
-        b=V2ALAkt99/zt7/2DgNjtM+LgVG3sfWimmC+vo4c8R+VpXZ4THKfeJgE3R0lD7gm/OY
-         iwxC4uJ8DOTS+0Nlgj3pIvL7oV8FP9LL97GAJSoVFjJtz8ee/10ufC+WkAc1iIJs4aUW
-         UMKQ0vG6FVVTyjQyGHRg7Ef7sX+RPoExwm46/TQ7Om258XoPNY0fhmr+VD9u+QtXnZ6R
-         LVurTvoFsrgqyXbhVwJYIsgUPZilKDfqbEnawxilhyTnzxh9EtUbvMcda1CJH9YphFjZ
-         R65PRote63sJIu3mzKHQRoKSBN8JR/IHjoKXJf7hNswyLuHFZLoYO+qx183HhYL7Ecxw
-         uDlA==
-X-Gm-Message-State: AOAM5310mpcAZlsT8ZoKvU5XuN+7CXi6962Y/SCiaWK02ORZRkOCN1xL
-        0KW73NCS9OGHnSWaKJynW151nydgka00xHToYIv7LQ==
-X-Google-Smtp-Source: ABdhPJw0U8KliC+SK3yNYeECc13z2dQDpc9pC9zZPe0Q+T/G905Dw8G+V0A59RdXRZ0tYOk2WAOgABJfLlYjWXg644Q=
-X-Received: by 2002:a05:6512:2303:: with SMTP id o3mr36756881lfu.362.1641102338917;
- Sat, 01 Jan 2022 21:45:38 -0800 (PST)
+        bh=nhN7NWahO9J/KN17ys1dyhTURCCVE5feduyNTBCD4xM=;
+        b=4CxK+DAd2GifiXn2IHWvaGq+5nC1ZD+5pcjJpSs77M6wZpUjl3pu0gosUOw+In/fid
+         67JKlhanrwt9dtMdjwVKYzVmT70ja9KEBpWQMGVr4PYliRvP10XnGe67mHRXsOfrioYU
+         xU1h3xT3V8YOMpw/HwuYunTmEAGTaJOptJG22G/QNYtqR5BHyI4MyBTi7Kq3o/qXG0EE
+         FaQI6+nwgI0VmfbHaayXWrZN2/YdYn8NmSqMle3ElvXNeTNB26g8wq1BKMciWxvjX98D
+         SXn4OORszXbS9TuDk/VQFI0hD8Hz9BOYBFNjbyT5iAG1PKqUyIHzk1d0YKKToGU+l3iK
+         PMRA==
+X-Gm-Message-State: AOAM531dXpBN7IIJDGAQb56v5h3b5l5qApesOQVE5JqsXNWeRD28ZMUa
+        61ssHdRgkli3s4mThJpARYO0MTzJBPp/sqsK7ipUyA==
+X-Google-Smtp-Source: ABdhPJxHWrcdDvJHL6Eo2PnCIxuGE9o8ruut2xQF63lFp6SbHL/k+lqi4MUG2iE58N3HEMEz7ldXBICcoY0TohhP++Q=
+X-Received: by 2002:a05:6512:261f:: with SMTP id bt31mr20407633lfb.400.1641102625444;
+ Sat, 01 Jan 2022 21:50:25 -0800 (PST)
 MIME-Version: 1.0
-References: <20211226153624.162281-1-marcan@marcan.st> <20211226153624.162281-10-marcan@marcan.st>
-In-Reply-To: <20211226153624.162281-10-marcan@marcan.st>
+References: <20211226153624.162281-1-marcan@marcan.st> <20211226153624.162281-11-marcan@marcan.st>
+In-Reply-To: <20211226153624.162281-11-marcan@marcan.st>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 2 Jan 2022 06:44:30 +0100
-Message-ID: <CACRpkdZfP9LSq8JgtiLrZg_JjpSP3p1ERkdsLpq12tA3HzzONA@mail.gmail.com>
-Subject: Re: [PATCH 09/34] brcmfmac: pcie: Perform firmware selection for
- Apple platforms
+Date:   Sun, 2 Jan 2022 06:50:13 +0100
+Message-ID: <CACRpkdbviGvBoAOLfLPe-auabYd-iMmpxerTiB4whQ3r+QTMeg@mail.gmail.com>
+Subject: Re: [PATCH 10/34] brcmfmac: firmware: Allow platform to override macaddr
 To:     Hector Martin <marcan@marcan.st>
 Cc:     Kalle Valo <kvalo@codeaurora.org>,
         "David S. Miller" <davem@davemloft.net>,
@@ -85,76 +84,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Sun, Dec 26, 2021 at 4:37 PM Hector Martin <marcan@marcan.st> wrote:
 
-> On Apple platforms, firmware selection uses the following elements:
+> On Device Tree platforms, it is customary to be able to set the MAC
+> address via the Device Tree, as it is often stored in system firmware.
+> This is particularly relevant for Apple ARM64 platforms, where this
+> information comes from system configuration and passed through by the
+> bootloader into the DT.
 >
->   Property         Example   Source
->   ==============   =======   ========================
-> * Chip name        4378      Device ID
-> * Chip revision    B1        OTP
-> * Platform         shikoku   DT (ARM64) or ACPI (x86)
-> * Module type      RASP      OTP
-> * Module vendor    m         OTP
-> * Module version   6.11      OTP
-> * Antenna SKU      X3        DT (ARM64) or ??? (x86)
+> Implement support for this by fetching the platform MAC address and
+> adding or replacing the macaddr= property in nvram. This becomes the
+> dongle's default MAC address.
 >
-> In macOS, these firmwares are stored using filenames in this format
-> under /usr/share/firmware/wifi:
->
->     C-4378__s-B1/P-shikoku-X3_M-RASP_V-m__m-6.11.txt
->
-> To prepare firmwares for Linux, we rename these to a scheme following
-> the existing brcmfmac convention:
->
->     brcmfmac<chip><lower(rev)>-pcie.apple,<platform>-<mod_type>-\
->         <mod_vendor>-<mod_version>-<antenna_sku>.txt
->
-> The NVRAM uses all the components, while the firmware and CLM blob only
-> use the chip/revision/platform/antenna_sku:
->
->     brcmfmac<chip><lower(rev)>-pcie.apple,<platform>-<antenna_sku>.bin
->
-> e.g.
->
->     brcm/brcmfmac4378b1-pcie.apple,shikoku-RASP-m-6.11-X3.txt
->     brcm/brcmfmac4378b1-pcie.apple,shikoku-X3.bin
->
-> In addition, since there are over 1000 files in total, many of which are
-> symlinks or outright duplicates, we deduplicate and prune the firmware
-> tree to reduce firmware filenames to fewer dimensions. For example, the
-> shikoku platform (MacBook Air M1 2020) simplifies to just 4 files:
->
->     brcm/brcmfmac4378b1-pcie.apple,shikoku.clm_blob
->     brcm/brcmfmac4378b1-pcie.apple,shikoku.bin
->     brcm/brcmfmac4378b1-pcie.apple,shikoku-RASP-m.txt
->     brcm/brcmfmac4378b1-pcie.apple,shikoku-RASP-u.txt
->
-> This reduces the total file count to around 170, of which 75 are
-> symlinks and 95 are regular files: 7 firmware blobs, 27 CLM blobs, and
-> 61 NVRAM config files. We also slightly process NVRAM files to correct
-> some formatting issues and add a missing default macaddr= property.
->
-> To handle this, the driver must try the following path formats when
-> looking for firmware files:
->
->     brcm/brcmfmac4378b1-pcie.apple,shikoku-RASP-m-6.11-X3.txt
->     brcm/brcmfmac4378b1-pcie.apple,shikoku-RASP-m-6.11.txt
->     brcm/brcmfmac4378b1-pcie.apple,shikoku-RASP-m.txt
->     brcm/brcmfmac4378b1-pcie.apple,shikoku-RASP.txt
->     brcm/brcmfmac4378b1-pcie.apple,shikoku-X3.txt *
->     brcm/brcmfmac4378b1-pcie.apple,shikoku.txt
->
-> * Not relevant for NVRAM, only for firmware/CLM.
->
-> The chip revision nominally comes from OTP on Apple platforms, but it
-> can be mapped to the PCI revision number, so we ignore the OTP revision
-> and continue to use the existing PCI revision mechanism to identify chip
-> revisions, as the driver already does for other chips. Unfortunately,
-> the mapping is not consistent between different chip types, so this has
-> to be determined experimentally.
+> On platforms with an SROM MAC address, this overrides it. On platforms
+> without one, such as Apple ARM64 devices, this is required for the
+> firmware to boot (it will fail if it does not have a valid MAC at all).
 >
 > Signed-off-by: Hector Martin <marcan@marcan.st>
 
-It's a neat hack, and I don't see anyone doing anything smarter so:
+This looks very helpful.
+
+> +       /* Add space for properties we may add */
+> +       size += strlen(BRCMF_FW_DEFAULT_BOARDREV) + 1;
+> +       size += BRCMF_FW_MACADDR_LEN + 1;
+
+Add some note to the commit log why you also make space for
+boardrev? (Looks useful.) Is the boardrev spacing in the right
+patch?
+
+With that addressed:
 Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,

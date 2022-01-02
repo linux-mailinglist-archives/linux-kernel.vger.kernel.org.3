@@ -2,341 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 199FD482D05
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 23:37:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB45482D06
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 23:38:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbiABWhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 17:37:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58280 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230405AbiABWhk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 17:37:40 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720FFC061761
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jan 2022 14:37:40 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id o6so129514591edc.4
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Jan 2022 14:37:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=y0LN2T23VrbLM6uttfB82mzxRwmEHSNqZvn2oV0AJY0=;
-        b=ZV5/Cg6dzQfYRgVPUyaR6GOaosDzcaxZwrbnqu7Lv2PdRnxVPRRZ1DSuK1HhfdxEpy
-         fI3UWnqLWqiEOjA6O+tIv4coVND4Sboz5OzKr8Hsds/N/Ss8m8cVYMZ/BEu+FtQFqHpy
-         BsJx9N/O/vl9R2cUNKfrr6H7bCNaktrvckfxo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=y0LN2T23VrbLM6uttfB82mzxRwmEHSNqZvn2oV0AJY0=;
-        b=MBpyn72pw1kVS9Gangz6LWbyUqNLYq0Bktbft6dt+/6MuPj9hmpXHl4733Usbsm4Q7
-         PTSSuJB8pMoGewQU2xx7++QCQCI6W+ZjgkKVFOpIF+dByfU05croZpaHAvudCCDAIapI
-         hLZfhRZcd8iPt3Fey5eJWv33ISwwZsg7QTmqtCWbfN50+DiP+Hrc3OBNI3CG4AAYEHVX
-         e0Nr4PJDGj5B2x8EpKbnlLYxPCHv7uqa/K130v3FEV8Gc83z2IQcygH9BtyTetmqvDUv
-         afBL8GnZBtAmvZMLo93aM6GCVd0l15YoXmOhaB9JZG/qHcWey12L4deayWqjVz6eFqI0
-         J6mQ==
-X-Gm-Message-State: AOAM533rm8KiJMPRsUqxv13cw72q10MHHodslEDHPkTv5c23gBdp33/J
-        ioQxxzw6RqwOPFlAtFnFECP4bRMytqcBdGC4
-X-Google-Smtp-Source: ABdhPJweA5Z5jey0RyrI7D8Tx5ysGeWfMN0Hyi1FxmnKyPjMclj7c9rUXZS2a9CTkXPR3MBhNYyoYA==
-X-Received: by 2002:a17:906:7944:: with SMTP id l4mr34900316ejo.598.1641163058745;
-        Sun, 02 Jan 2022 14:37:38 -0800 (PST)
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
-        by smtp.gmail.com with ESMTPSA id p4sm10174499eju.98.2022.01.02.14.37.38
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Jan 2022 14:37:38 -0800 (PST)
-Received: by mail-wr1-f48.google.com with SMTP id t26so66637270wrb.4
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Jan 2022 14:37:38 -0800 (PST)
-X-Received: by 2002:adf:f54e:: with SMTP id j14mr36023476wrp.442.1641163057994;
- Sun, 02 Jan 2022 14:37:37 -0800 (PST)
+        id S230465AbiABWiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 17:38:20 -0500
+Received: from mail-eopbgr60102.outbound.protection.outlook.com ([40.107.6.102]:38910
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230405AbiABWiT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 2 Jan 2022 17:38:19 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HJbDzUq+xcF8wGf7eriuVXLMGShK2b6OaEkHTusgYIXvpMdhSu+YxuHxRFHMInCIZBYuF0x+3gbf911/Iyc8HdkuA992DUPb+X2gPYEj/2P4uGwZKpUv2a0htEhrUKLpURfsyE6Mvxqm+2oz5c90Tt/CU6Bn5fGj5TQAft2pnRmZ/OItR797jey3QgP3T7z8C3EZmQujRWahk1FpQkSjmKicbu0Za557Qr50p0oGTj//qUW9DDRaky9tm8Hi3hSa0x6c28YCIl4rUejcz75yxQP517ovaVfqbfNSCoy4Jvm5sATw/mY7EWJFZizBoTUppKrXODz95zUt5lTA49XpJw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2uMAxwT0txh7w8O0YWF7+73NkfsdNNqfV2KSQQd0x+s=;
+ b=gnO/1AaPId94K2HOV6Gz+PHB0WFwpYlNtZtf6xtm3IZDI+uRwB/onPpz3skPszV4us+P8EQt3TEuFxlsBmyc71IXIEMj3eSN31wSAn2I+jTS6/CaQYf9laHvFfaix6ur4vEVbeoLk8sC2/uAmE2Ptj8WqWxFli6jQmGruAl6HAH3xtNDAxbjFC6etCjIce2cNfRYSa30Huj48KWP+b0I/uu8IbtHO2zx+weYQVJ7ZHJBaYnEFc2Sv0YFpFVk6zHkmAV2CHsMPN6wKjBVUfd7mfoew0rUGDyo2wN40bESPg8MYtzMeL0AqjtJ1jEgwrUcCLsE0Xu13c4xWaiQ809PLQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
+ dkim=pass header.d=axentia.se; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2uMAxwT0txh7w8O0YWF7+73NkfsdNNqfV2KSQQd0x+s=;
+ b=bQzuNkXLzb1jgHQNVkCVG1EsJ98byO/27uW4qzI1zMndTWR99Jk5EdOyFX9tqTLyVLFSUnk5EOm+OFAoN8FpXbvOMy/4sYyC6jPub44AoJUizTX3r4Z0L6KjuPb+CCTb/uC1u/0CoVycJRv3q9q+JqNMHirTFNDIouNLOdA+Tvg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=axentia.se;
+Received: from DB8PR02MB5482.eurprd02.prod.outlook.com (2603:10a6:10:eb::29)
+ by DB6PR0202MB2920.eurprd02.prod.outlook.com (2603:10a6:4:ab::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Sun, 2 Jan
+ 2022 22:38:15 +0000
+Received: from DB8PR02MB5482.eurprd02.prod.outlook.com
+ ([fe80::99a:847f:ce2e:745]) by DB8PR02MB5482.eurprd02.prod.outlook.com
+ ([fe80::99a:847f:ce2e:745%4]) with mapi id 15.20.4844.016; Sun, 2 Jan 2022
+ 22:38:14 +0000
+Message-ID: <0571fd6b-ec4d-71b3-5cf7-6fa48ed5592c@axentia.se>
+Date:   Sun, 2 Jan 2022 23:38:12 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Content-Language: sv-SE
+In-Reply-To: <94ab71e1-2e68-def2-95b8-33162172f65c@axentia.se>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Aswath Govindraju <a-govindraju@ti.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+From:   Peter Rosin <peda@axentia.se>
+Subject: [PATCH 1/6] dt-bindings: ti-serdes-mux: Add defines for J721S2 SoC
+Organization: Axentia Technologies AB
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: GV3P280CA0061.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:150:a::28) To DB8PR02MB5482.eurprd02.prod.outlook.com
+ (2603:10a6:10:eb::29)
 MIME-Version: 1.0
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 2 Jan 2022 14:37:22 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wg=3dEpPGhz8YvJUDWhFW_GUeASBGmqyw3aPQRfB3ki9w@mail.gmail.com>
-Message-ID: <CAHk-=wg=3dEpPGhz8YvJUDWhFW_GUeASBGmqyw3aPQRfB3ki9w@mail.gmail.com>
-Subject: Linux 5.16-rc8
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: abf2ae17-8877-4fd3-7472-08d9ce409022
+X-MS-TrafficTypeDiagnostic: DB6PR0202MB2920:EE_
+X-Microsoft-Antispam-PRVS: <DB6PR0202MB292073D0A9139549A83D739FBC489@DB6PR0202MB2920.eurprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3044;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DdQHPclJnQLj+6aVsNhlIPRohxbmVEMx1mLLFpgJAgo0DFNo5iefL1+yOXB5oGJSvH7y4u/U5E/nLNS+vzQR1HYnO5QZeVZUJFnfbM2mfb/MCslI+AOsvlYn8LL8ZoJ6SEMWjNr9InJc5UfynFEXgPDFIjsiZ8RE1TWjAOovdv7Qnv0lDRQwbjRbbAY6+vk48vVCHNlZIGx5dz7hUmQu5cS/Vv2+XSZcY9Juf9blMprD5lAmMfLYKtTgQwWCkMdVXuaAs80rKAeIByNYJNCrSQfFTKxu+AUEj9oa7HIB4SxlAZKjka2ivLq2lWU8nhxRo1Z4mpH75Jx0x0GCcc69w8mnhEquxmNd6YNqw6A3CjKeePxCFffBj4VKrLjaQXg9wHxpPp4bggK/doErKLLgChVLSjMpR8I2fJ4UBrflxIX5JeMPcyFO6oUHhW14ro3mhi7nHOXwtSU8DxHAP26GE7pRigi8mArVVMfX8SZ8boo76+ZpPHBPg/XxgUjAxL34Z8bH3QuuJdrjq/GMwgqXKlEudUyFNLvbfbGPsQyXECpULNEk3ZurGJJpyQPb0FvIq8gYVr4GYGMBfAjk3D7yZQ+4RCkJhDsmRasXDRJmKqfuQ0uHc+IPoBkdOYlE2Y5VgM+G8+1dzsUryxVEEv5bQmzPzhho+Hq3a7Ozp/NjvmeHfGU7xxE2zmSR/uXogJ0Ux99xHrnXqlPTlTFUgQutoIn1+ViRu7bUvwEHTEhlsjw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR02MB5482.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(346002)(39830400003)(136003)(376002)(396003)(38100700002)(508600001)(4326008)(36916002)(31696002)(54906003)(2906002)(2616005)(66946007)(316002)(5660300002)(8676002)(66476007)(66556008)(6916009)(86362001)(36756003)(6506007)(26005)(6486002)(8936002)(31686004)(6512007)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?clZKTzBMbzNCc0RlZ2lqazl3cFpYMWk0MWtqTGMyVnEwc1dxekpSdDJvYThX?=
+ =?utf-8?B?TjJUaWRmQmZ1bXlKVWZWWHFuWExMMTRkdndNaUt4NWY5ek9xS2MxMGljRUNa?=
+ =?utf-8?B?THlwWGNqVFVLd2FTZEw4a0hEUnpxVnVneFVhOWZOaUdySHZ3T2xVZlNCTzdI?=
+ =?utf-8?B?NzN3QVVrQldPRDIzNGdjMVQybVMxR2d5NE9SNFdyZTFEM1JLVVVqTW4xWDFp?=
+ =?utf-8?B?dGw2YWFqa0VneUVjYy9kK1dNNWViQ0JBWkxxbmR4ZE03TXIyVTFRTlNBRWI1?=
+ =?utf-8?B?WnM2U25VdTNyM0lCMGlNL3lxdEJTOCtpU3ZlYktIQkUwNVcwekJZZnhTRDMy?=
+ =?utf-8?B?dURQUjNuQ0FEcklwZ1RHY3YvdEdmbFpLbHRKWnMxbHJLNkZ4TnNVV3dXQkRp?=
+ =?utf-8?B?UFExSm80WDdBOWNvM1hERHN6Zk5ENEFjQ1U5Tnk4elArVzE2bXl5elZtUmtX?=
+ =?utf-8?B?SDZGcEpYS2puZGVjZ2thZ1F6bXF4cXh5Ylp5VlpyVG5CTVZxN1RCVnVWTHAx?=
+ =?utf-8?B?NTlqbExsNm1kQ0ZFb3BlR1lWMWMrUmFLdWpnbnUwdUZGTEEzeHNWRWFkRmFB?=
+ =?utf-8?B?ZEdkM2d5dGRsdmZRd2NPNkhKYWV5ZENzUjZ0ZkdiTUoyQVNTaUVad1lFNHlN?=
+ =?utf-8?B?RkNOT1JpTVJOcXdlMlFZa1o1OWY0T3BtSUNHcTdRQWZZS3ZpczBWNUlEcDZj?=
+ =?utf-8?B?SVhOWG9ZM2JYNk1TcW5uRk5xZCtiYlZPMEJ6UU5jOGlVcEl1ejlFZ1JUQXJn?=
+ =?utf-8?B?emxpWnlLWDhXTWlMK21KbExsdDlzMEs2Y2Q2VWhJbHpIbHhxUzlFRjBoZUtN?=
+ =?utf-8?B?UTh5M01udGR2bG05RzNwZ20zbkRHcjZzT3VzbXdicnFCcHhqcG00MzJGTWxI?=
+ =?utf-8?B?YWdxVGNrWm1TTFByVkU4TXM1cVhaYVhNaEYxdmFVY2xtb08yMXEzR3ZaSDJ5?=
+ =?utf-8?B?Qm5hVVZjdVh1RmRBUmhUTzdhTjFxb1JoTDFNbUJWVUlJL0ZhY1kwSDU4Mjlo?=
+ =?utf-8?B?ZjdZVFhyVWp0UnAzVnpWcTR0QTduYjBZdzdzVnBjRXV0Um4zbkRKR3praThl?=
+ =?utf-8?B?MUJkSFBHRE1LRzVXWlExVnhTQzczc0U0SHN2Rm9EV2paMVZ5TDhiL0xTSWdW?=
+ =?utf-8?B?N3JCQUR1d3BiTXFxdUxpMjRCUDk5azQ4WXZqOWVWbVRuaXl1dHNKUVBQUEZL?=
+ =?utf-8?B?K29zeUZPQWlSNU83VTZYN3ZKcjdHMHVGbzhQZWpxcnJ1c0puZVBIVFl0S1pO?=
+ =?utf-8?B?R05TTEg1ZTFVNkRKSmw1VjlEUldTc1hxN1NLN3lFbmFJY3ZHNkRGaURoRG5n?=
+ =?utf-8?B?aGVRR2lnV0FUdXhkOXFJN1VZRE04RkxnMmhVTFE5ZzdlUzFaVjRiVzdQVWZR?=
+ =?utf-8?B?Mk9nR24rUnVFUzVMdHZqaEZ0M2liUng2OGdjeVF1a0NwUU9aUTZxSm1LOCtz?=
+ =?utf-8?B?NWd1RHF5aVMzSFE2VjIra3QrekpRU1lsRUVYZXp4c3IzZmRXZEhwUGp4czF4?=
+ =?utf-8?B?ZG9nempLcFBNbWR0VVJLZjFtdlB4b1NLNGhDdWQ2eTJDVjVMbmZVcCtuRGJu?=
+ =?utf-8?B?cG9pQktVaDM5c0RiMFVVQ2NzbGFQVDhGYjc2eVpMbXE5MDJ2MWRKV0pCMEY4?=
+ =?utf-8?B?VTBYNGlqQ0hEcUtEL1RIUHlTNC9TbHp5MmQyT1lGQ0dYSm0yNFBxd2VNTlJM?=
+ =?utf-8?B?a0VOS3BFRkFBNm1tUGNkWCsySE1STW9CRWx1OC9UdWw4R2tFdXBINi84UURw?=
+ =?utf-8?B?dEtjM0lBbnExZ1dJaGFaVzFGdmk5SFFESTNCYzNNbTJBRWVobEhTd1pTL3hY?=
+ =?utf-8?B?MWxUTGxYQ0VBcTlmVHBvdHc1SWR1S1F0aW9NVS9yVm9ZeFA4RjVqb0ZZTklW?=
+ =?utf-8?B?VlZqZldkM05iSDU5UXY5N1lrNkhWemRxYkRXYVFDUTdzaUxJemFnQ0VNRHhU?=
+ =?utf-8?B?Njh0VGIxdTM1L2JzUHJHYmhrWlhuTUR3NURtaG9qUEMvSUNvS2lnNEFzOTlx?=
+ =?utf-8?B?WW9qSmgvaWtPNTFYVmNPQlRCU3U1djl6clVTakxuSUdNMi85bjRuVXRHVGVm?=
+ =?utf-8?B?N1JLZDlEd240QWJ0Ukdua2Z4aktiSUZuaGJJaXBuejBVRSsxQnJXS0tGVUdT?=
+ =?utf-8?Q?HGwA=3D?=
+X-OriginatorOrg: axentia.se
+X-MS-Exchange-CrossTenant-Network-Message-Id: abf2ae17-8877-4fd3-7472-08d9ce409022
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR02MB5482.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jan 2022 22:38:14.2916
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: H34DwF+vwGrA1ZoBbcro4AmeWmIUfLogULoU5HMy1vohtzV9tAbjuADCgSZMBix8
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0202MB2920
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-So as expected, this is a tiny rc - there really hasn't been a lot
-going on during the holidays. Even now, not everybody is necessarily
-back, and we'll likely have another very quiet upcoming week and then
-I'll do the real 5.16 release and we'll hopefully be more or less back
-to normal (and thanks to the people who have already sent me pending
-pull request for 5.17 - it helps me to have them early, since I'll
-unfortunately have some travel during the upcoming merge window).
+From: Aswath Govindraju <a-govindraju@ti.com>
 
-The bulk here (and "bulk" is probably the wrong word to use, it's all
-pretty small) is gpu and networking drivers, and some core networking
-fixes. There's some other minor noise in here too (usb, i2c, input,
-auxdisplay, scsi, perf tooling), but it's all very small.
+There are 4 lanes in the single instance of J721S2 SERDES. Each SERDES
+lane mux can select upto 4 different IPs. Define all the possible
+functions.
 
-Please, as you emerge from your holiday-induced food coma, do give it
-a quick test so that we can all be happy about the final release next
-weekend.
-
-                 Linus
-
+Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Peter Rosin <peda@axentia.se>
 ---
+ include/dt-bindings/mux/ti-serdes.h | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/include/dt-bindings/mux/ti-serdes.h b/include/dt-bindings/mux/ti-serdes.h
+index d417b9268b16..d3116c52ab72 100644
+--- a/include/dt-bindings/mux/ti-serdes.h
++++ b/include/dt-bindings/mux/ti-serdes.h
+@@ -95,4 +95,26 @@
+ #define AM64_SERDES0_LANE0_PCIE0		0x0
+ #define AM64_SERDES0_LANE0_USB			0x1
+ 
++/* J721S2 */
++
++#define J721S2_SERDES0_LANE0_EDP_LANE0		0x0
++#define J721S2_SERDES0_LANE0_PCIE1_LANE0	0x1
++#define J721S2_SERDES0_LANE0_IP3_UNUSED		0x2
++#define J721S2_SERDES0_LANE0_IP4_UNUSED		0x3
++
++#define J721S2_SERDES0_LANE1_EDP_LANE1		0x0
++#define J721S2_SERDES0_LANE1_PCIE1_LANE1	0x1
++#define J721S2_SERDES0_LANE1_USB		0x2
++#define J721S2_SERDES0_LANE1_IP4_UNUSED		0x3
++
++#define J721S2_SERDES0_LANE2_EDP_LANE2		0x0
++#define J721S2_SERDES0_LANE2_PCIE1_LANE2	0x1
++#define J721S2_SERDES0_LANE2_IP3_UNUSED		0x2
++#define J721S2_SERDES0_LANE2_IP4_UNUSED		0x3
++
++#define J721S2_SERDES0_LANE3_EDP_LANE3		0x0
++#define J721S2_SERDES0_LANE3_PCIE1_LANE3	0x1
++#define J721S2_SERDES0_LANE3_USB		0x2
++#define J721S2_SERDES0_LANE3_IP4_UNUSED		0x3
++
+ #endif /* _DT_BINDINGS_MUX_TI_SERDES */
+-- 
+2.20.1
 
-Adrian Hunter (3):
-      perf intel-pt: Fix parsing of VM time correlation arguments
-      perf script: Fix CPU filtering of a script's switch events
-      perf scripts python: intel-pt-events.py: Fix printing of switch event=
-s
 
-Aleksander Jan Bajkowski (1):
-      net: lantiq_xrx200: fix statistics of received bytes
-
-Alex Deucher (4):
-      drm/amdgpu: add support for IP discovery gc_info table v2
-      drm/amdgpu: fix runpm documentation
-      drm/amdgpu: always reset the asic in suspend (v2)
-      drm/amdgpu: no DC support for headless chips
-
-Alexey Makhalov (1):
-      scsi: vmw_pvscsi: Set residual data length conditionally
-
-Amir Tzin (1):
-      net/mlx5e: Wrap the tx reporter dump callback to extract the sq
-
-Andra Paraschiv (1):
-      nitro_enclaves: Use get_user_pages_unlocked() call to handle mmap ass=
-ert
-
-Angus Wang (1):
-      drm/amd/display: Changed pipe split policy to allow for
-multi-display pipe split
-
-Charlene Liu (1):
-      drm/amd/display: fix B0 TMDS deepcolor no dislay issue
-
-Chris Mi (2):
-      net/mlx5: Fix tc max supported prio for nic mode
-      net/mlx5e: Delete forward rule for ct or sample action
-
-Christian Brauner (1):
-      fs/mount_setattr: always cleanup mount_kattr
-
-Christian K=C3=B6nig (2):
-      drm/amdgpu: fix dropped backing store handling in
-amdgpu_dma_buf_move_notify
-      drm/nouveau: wait for the exclusive fence after the shared ones v2
-
-Christophe JAILLET (3):
-      net/mlx5: Fix some error handling paths in 'mlx5e_tc_add_fdb_flow()'
-      net: ag71xx: Fix a potential double free in error handling paths
-      ionic: Initialize the 'lif->dbid_inuse' bitmap
-
-Chunfeng Yun (4):
-      usb: mtu3: fix interval value for intr and isoc
-      usb: mtu3: add memory barrier before set GPD's HWO
-      usb: mtu3: fix list_head check warning
-      usb: mtu3: set interval of FS intr and isoc endpoint
-
-Ciara Loftus (1):
-      xsk: Initialise xskb free_list_node
-
-Coco Li (2):
-      udp: using datalen to cap ipv6 udp max gso segments
-      selftests: Calculate udpgso segment count without header adjustment
-
-Dan Carpenter (1):
-      scsi: lpfc: Terminate string in lpfc_debugfs_nvmeio_trc_write()
-
-Deep Majumder (1):
-      Docs: Fixes link to I2C specification
-
-Dmitry V. Levin (1):
-      uapi: fix linux/nfc.h userspace compilation errors
-
-Dust Li (2):
-      net/smc: don't send CDC/LLC message if link not ready
-      net/smc: fix kernel panic caused by race of smc_sock
-
-Evan Quan (1):
-      drm/amdgpu: put SMU into proper state on runpm suspending for
-BOCO capable platform
-
-Gal Pressman (2):
-      net/mlx5e: Fix skb memory leak when TC classifier action
-offloads are disabled
-      net/mlx5e: Fix wrong features assignment in case of error
-
-Heikki Krogerus (1):
-      usb: typec: ucsi: Only check the contract if there is a connection
-
-Heiko Carstens (1):
-      recordmcount.pl: fix typo in s390 mcount regex
-
-Huang Rui (1):
-      drm/amdgpu: introduce new amdgpu_fence object to indicate the
-job embedded fence
-
-James McLaughlin (1):
-      igc: Fix TX timestamp support for non-MSI-X platforms
-
-Javier Martinez Canillas (1):
-      efi: Move efifb_setup_from_dmi() prototype from arch headers
-
-Jianguo Wu (2):
-      selftests: net: Fix a typo in udpgro_fwd.sh
-      selftests: net: using ping6 for IPv6 in udpgro_fwd.sh
-
-Jiasheng Jiang (1):
-      net/ncsi: check for error return from call to nla_put_u32
-
-John Garry (1):
-      perf pmu: Fix alias events list
-
-Karsten Graul (1):
-      net/smc: fix using of uninitialized completions
-
-Krzysztof Kozlowski (1):
-      nfc: uapi: use kernel size_t to fix user-space builds
-
-Lai, Derek (1):
-      drm/amd/display: Added power down for DCN10
-
-Leo L. Schwab (1):
-      Input: spaceball - fix parsing of movement data packets
-
-Lijo Lazar (1):
-      drm/amd/pm: Fix xgmi link control on aldebaran
-
-Linus Torvalds (1):
-      Linux 5.16-rc8
-
-Lixiaokeng (1):
-      scsi: libiscsi: Fix UAF in iscsi_conn_get_param()/iscsi_conn_teardown=
-()
-
-Luiz Sampaio (2):
-      auxdisplay: charlcd: fixing coding style issue
-      auxdisplay: charlcd: checking for pointer reference before dereferenc=
-ing
-
-Lukas Bulwahn (1):
-      x86/build: Use the proper name CONFIG_FW_LOADER
-
-Ma Xinjian (1):
-      selftests: mptcp: Remove the deprecated config NFT_COUNTER
-
-Mathias Nyman (1):
-      xhci: Fresco FL1100 controller should not have BROKEN_MSI quirk set.
-
-Matthew Brost (2):
-      drm/i915: Fix possible uninitialized variable in parallel extension
-      drm/i915: Increment composite fence seqno
-
-Matthias-Christian Ott (1):
-      net: usb: pegasus: Do not drop long Ethernet frames
-
-Maxim Mikityanskiy (2):
-      net/mlx5e: Fix interoperability between XSK and ICOSQ recovery flow
-      net/mlx5e: Fix ICOSQ recovery flow for XSK
-
-Mel Gorman (2):
-      mm: vmscan: Reduce throttling due to a failure to make progress
-      mm: vmscan: reduce throttling due to a failure to make progress -fix
-
-Miaoqian Lin (4):
-      net/mlx5: DR, Fix NULL vs IS_ERR checking in dr_domain_init_resources
-      net: phy: fixed_phy: Fix NULL vs IS_ERR() checking in __fixed_phy_reg=
-ister
-      perf expr: Fix return value of ids__new()
-      fsl/fman: Fix missing put_device() call in fman_port_probe
-
-Michael Ellerman (1):
-      powerpc/ptdump: Fix DEBUG_WX since generic ptdump conversion
-
-Mike Kravetz (1):
-      userfaultfd/selftests: fix hugetlb area allocations
-
-Moshe Shemesh (1):
-      net/mlx5: Fix SF health recovery flow
-
-Muchun Song (1):
-      net: fix use-after-free in tw_timer_handler
-
-Nicholas Kazlauskas (3):
-      drm/amd/display: Send s0i2_rdy in stream_count =3D=3D 0 optimization
-      drm/amd/display: Set optimize_pwr_state for DCN31
-      drm/amd/display: Fix USB4 null pointer dereference in
-update_psp_stream_config
-
-Nikolay Aleksandrov (3):
-      net: bridge: mcast: add and enforce query interval minimum
-      net: bridge: mcast: add and enforce startup query interval minimum
-      net: bridge: mcast: fix br_multicast_ctx_vlan_global_disabled helper
-
-Pavel Skripkin (2):
-      Input: appletouch - initialize work before device registration
-      i2c: validate user data in compat ioctl
-
-Prike Liang (1):
-      drm/amd/pm: skip setting gfx cgpg in the s0ix suspend-resume
-
-Roi Dayan (1):
-      net/mlx5e: TC, Fix memory leak with rules with internal port
-
-SeongJae Park (1):
-      mm/damon/dbgfs: fix 'struct pid' leaks in 'dbgfs_target_ids_write()'
-
-Shay Drory (2):
-      net/mlx5: Use first online CPU instead of hard coded CPU
-      net/mlx5: Fix error print in case of IRQ request failed
-
-Tamir Duberstein (1):
-      ipv6: raw: check passed optlen before reading
-
-Todd Kjos (1):
-      binder: fix async_free_space accounting for empty parcels
-
-Tom Rix (1):
-      selinux: initialize proto variable in selinux_ip_postroute_compat()
-
-Vincent Pelletier (1):
-      usb: gadget: f_fs: Clear ffs_eventfd in ffs_data_clear.
-
-Vinicius Costa Gomes (1):
-      igc: Do not enable crosstimestamping for i225-V models
-
-Wei Yongjun (1):
-      NFC: st21nfca: Fix memory leak in device probe and remove
-
-William Zhao (1):
-      ip6_vti: initialize __ip6_tnl_parm struct in vti6_siocdevprivate
-
-Xin Long (1):
-      sctp: use call_rcu to free endpoint
-
-Yevgeny Kliteynik (1):
-      net/mlx5: DR, Fix querying eswitch manager vport for ECPF
-
-Zekun Shen (1):
-      atlantic: Fix buff_ring OOB in aq_ring_rx_clean
-
-chen gong (1):
-      drm/amdgpu: When the VCN(1.0) block is suspended, powergating is
-explicitly enabled
-
-wolfgang huang (1):
-      mISDN: change function names to avoid conflicts
-
-wujianguo (1):
-      selftests/net: udpgso_bench_tx: fix dst ip argument
-
-xu xin (1):
-      Documentation: fix outdated interpretation of ip_no_pmtu_disc
-
-yangxingwu (1):
-      net: udp: fix alignment problem in udp4_seq_show()
-
-yaowenbin (1):
-      perf top: Fix TUI exit screen refresh race condition

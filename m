@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 379BD4829F4
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 07:11:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 742654829FB
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 07:12:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231727AbiABGLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 01:11:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43476 "EHLO
+        id S231728AbiABGMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 01:12:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231671AbiABGLt (ORCPT
+        with ESMTP id S230503AbiABGMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 01:11:49 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779CAC061574
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jan 2022 22:11:48 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id v15so51273610ljc.0
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jan 2022 22:11:48 -0800 (PST)
+        Sun, 2 Jan 2022 01:12:41 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0D4C061574
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jan 2022 22:12:41 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id k21so68579196lfu.0
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Jan 2022 22:12:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=CLYs6RPdlYoNdW+4UL3boVj/wZ9DVO7dQZSS21vPQg8=;
-        b=k1AOt9g7ctt0LaNkr2kqTxIjq3+DWOMbt5ZOTBEJA6LntouCvz3cYAhESGIrt+jF0n
-         ThCPNtuYU7nqQ93Bv0wFNIvD4gbfeV0LShkAxf5Pr0L5cPrKs2+YInUWDDQu7k7SJ5p6
-         dW8xprCt6mIhj1AUY+0jhZHcBb5vkt7Q955Netg7siEtQuDgaeEx8X8gGl62VSvtVW2N
-         gBkrprBk9ggy11Y8xjCLCx2NbSC3yW+m+PUtZyybJOs9RAu1Jw0ErbEyapVGNta+aa2K
-         zhHVlyN89pAO2JUBqUUrUym51c9J7skKnHoo0d0iNNhQOeAFJzN5W29j3j0hQ7FocYqU
-         wI5A==
+        bh=Sr+ER9IX2/B4nV8iN0lne0ja+h9XjRKALDUv4gsdEq8=;
+        b=a0zrYiQe6oy2feBrswwh0622limRL8L7ivluVKKkAvSCnDKBrEMA2KHZDIplyDo3nH
+         HVjqzGWU6UiBa45tcD0T0SRbXUGfVlkWgBX/7nNRCJuifEMonhYV77ifpVDUQdzQ5FY7
+         0RuHKAj2o1/K9YjPc7uF8EL5RNzUcIk9vB5PHwbyZ7jWSvcB6VrjZCrbluAy5O8m85uX
+         /HRcWgfkOSSzaiazBY5p91VfB2ZjbvRjKfcsdk6vfq983l8DQJ4vej1FO1ZuA+85uXOE
+         0hO0ZZEzvBwWkPPyXClhLDWUzl5bLw9pbTnvYI87iUmL9M/crRFNAwrEFcv23zRPBsJZ
+         j+Nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=CLYs6RPdlYoNdW+4UL3boVj/wZ9DVO7dQZSS21vPQg8=;
-        b=I/s/bkVjGdKtwJJi21CvZXbvMLV9Rn6FeTwpPh/jIdGh9C6J850usOeVBa9qO996hY
-         fOwCH7+R7758ca99XFAZbr18b6pZNMExMx92sedbGDl3XFE7hY/uHv8ZJFcsolIykmnL
-         m+8lO7OHe0tqpVsJlfcHtclIZbpELo6xsbKdgC793tjqwMA+dtC9Jwla0E4vVxIvT+uB
-         Ke/6/QH+CQyrqxDy88XBx/tqgLr438/Bps0TK0vKHQYtvvS+ab0vcHo6tu5UMHsMKGxJ
-         YA87mB9ZMTE5gPWEQKlRrq1nAG6odsEY5ORcTziKISb98+7x07ZN4koZ9FMLEcFc9wiL
-         1AAQ==
-X-Gm-Message-State: AOAM533C5M30xe2szm8XQaktb/UznL8OxGI0AWhe+ozktcvq7Uu6hBIw
-        cykjwVWQ6j2jEL8FHMDExl8vjZxr1uYeadJEGw//vA==
-X-Google-Smtp-Source: ABdhPJwgIObPmwk+diSjYih9QUhroCYQGoR5YghpXUjDlvzhjBXtDoMBCB6FepG9wKcYRFCuczmvG4SeU5CjPd2DRiI=
-X-Received: by 2002:a2e:7c01:: with SMTP id x1mr33723616ljc.145.1641103906802;
- Sat, 01 Jan 2022 22:11:46 -0800 (PST)
+        bh=Sr+ER9IX2/B4nV8iN0lne0ja+h9XjRKALDUv4gsdEq8=;
+        b=0pwTgEdZZaT58cohR6R8+Quzj6Mll6dEt/xLXCbl3BQ9ks+5kHz0zAd13EfGwu7fzh
+         iT5g6cR7dNm2S6Iuc9FGqlwhzZ/PPkA5ty5OehreoFl1FQrY/ovRxCm3uAQZBbNIVQhO
+         zO3RLMyzjmGAuaPPW10HO2mFrXM5uXp/uBiUysEtVZELl7pI8H6Ro8P7RWIW42Icsk2Y
+         1urAL11996V3GieLZgQBVSJL4triqESwlp3wr778vXji7RZJsStdJH3yjjKrak9Y9jIY
+         ihli9psIfCY2WGzaD2feUd/rYcX/en7gP964II1GHkWCpRvILZAIxX8DAYNyVTFLT11k
+         dJ2Q==
+X-Gm-Message-State: AOAM5324Faa9T1aF/Ah2B2JstVxOFX+8R9kwMTAMxQrfVmRBHt4oyVAV
+        6cb1kxKGOke7tssz0ju4eVg4jN+5pZ6qxJ8Siyq4tw==
+X-Google-Smtp-Source: ABdhPJzvbEB90BzJsMRsT8Mkiyxl66oHOHfkYlf+Fq2EUSQOhlCFCxWcoOsHAFCvQkLP/uzBaJhFhCLO79HXhJE06ms=
+X-Received: by 2002:ac2:5445:: with SMTP id d5mr37492687lfn.349.1641103959525;
+ Sat, 01 Jan 2022 22:12:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20211226153624.162281-1-marcan@marcan.st> <20211226153624.162281-25-marcan@marcan.st>
-In-Reply-To: <20211226153624.162281-25-marcan@marcan.st>
+References: <20211226153624.162281-1-marcan@marcan.st> <20211226153624.162281-26-marcan@marcan.st>
+In-Reply-To: <20211226153624.162281-26-marcan@marcan.st>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 2 Jan 2022 07:11:34 +0100
-Message-ID: <CACRpkdZJnXhzDRhZt97Svf5pU5T_Xc2mfxFFnibNda7JJ8fiFQ@mail.gmail.com>
-Subject: Re: [PATCH 24/34] brcmfmac: feature: Add support for setting feats
- based on WLC version
+Date:   Sun, 2 Jan 2022 07:12:27 +0100
+Message-ID: <CACRpkdaNcQD64-zvV1kcDk97mBP8Ys+eVERi0Ozzj0_6r3M7MQ@mail.gmail.com>
+Subject: Re: [PATCH 25/34] brcmfmac: cfg80211: Add support for PMKID_V3 operations
 To:     Hector Martin <marcan@marcan.st>
 Cc:     Kalle Valo <kvalo@codeaurora.org>,
         "David S. Miller" <davem@davemloft.net>,
@@ -85,9 +84,11 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Sun, Dec 26, 2021 at 4:39 PM Hector Martin <marcan@marcan.st> wrote:
 
-> The "wlc_ver" iovar returns information on the WLC and EPI versions.
-> This can be used to determine whether the PMKID_V2 and _V3 features are
-> supported.
+> Add support for the new PMKID_V3 API, which allows performing PMKID
+> mutations individually, instead of requiring the driver to keep track of
+> the full list. This new API is required by at least BCM4387.
+>
+> Note that PMKID_V2 is not implemented yet.
 >
 > Signed-off-by: Hector Martin <marcan@marcan.st>
 

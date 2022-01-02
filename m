@@ -2,273 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF75F482907
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 05:00:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D9E482911
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 05:17:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbiABEAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jan 2022 23:00:46 -0500
-Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:57051 "EHLO
-        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230148AbiABEAh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jan 2022 23:00:37 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R471e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V0Xfdc3_1641096018;
-Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V0Xfdc3_1641096018)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sun, 02 Jan 2022 12:00:36 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
-        Liu Bo <bo.liu@linux.alibaba.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Yue Hu <huyue2@yulong.com>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>
-Subject: [PATCH v2 5/5] erofs: use meta buffers for zmap operations
-Date:   Sun,  2 Jan 2022 12:00:17 +0800
-Message-Id: <20220102040017.51352-6-hsiangkao@linux.alibaba.com>
-X-Mailer: git-send-email 2.24.4
-In-Reply-To: <20220102040017.51352-1-hsiangkao@linux.alibaba.com>
-References: <20220102040017.51352-1-hsiangkao@linux.alibaba.com>
+        id S230255AbiABEN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jan 2022 23:13:26 -0500
+Received: from mga04.intel.com ([192.55.52.120]:1672 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230131AbiABENZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 1 Jan 2022 23:13:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641096805; x=1672632805;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IFW0CWLe1IN6itjqlDSBi2hPZV2tzKF4nYd2Uf0qm9w=;
+  b=Y1ByRpH2LVtHxzZlZlKhqqxmo2zg+oJNyNse5UA/muk8q/1Iu5pCr6dP
+   sQPKk8TX55XSm4wfc8xG17pjWhVJeGTn0tI9N5z9fO8KJskscBAhwgE4i
+   ZJdoFuBBV08vt/3aCYa/pQL+mNqYtsQR+fUMEdf32UHb6T96jYanzd+NP
+   i7EJbwxARyzQj3b6uChSuZzS1wGrbQ+TVGMbZEDR3nWAlnNn3iAblX6GQ
+   /COuGQfBlVoAZBEd2fZACBnISNgox90pOjgPVjTwg3y532k/OpqN4anxb
+   ak1XRPeJZhjVHFZKjp1Bfm5gOMe06gaUU7kHMlbvXRStqv1rBSnmyIcze
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10214"; a="240763286"
+X-IronPort-AV: E=Sophos;i="5.88,255,1635231600"; 
+   d="scan'208";a="240763286"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2022 20:13:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,255,1635231600"; 
+   d="scan'208";a="471280245"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 01 Jan 2022 20:13:23 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n3sFH-000D40-5m; Sun, 02 Jan 2022 04:13:23 +0000
+Date:   Sun, 2 Jan 2022 12:12:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Cai Huoqing <caihuoqing@baidu.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: litex_liteeth.c:undefined reference to
+ `devm_platform_ioremap_resource_byname'
+Message-ID: <202201021231.crXSVMeM-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Get rid of old erofs_get_meta_page() within zmap operations by
-using on-stack meta buffers in order to prepare subpage and folio
-features.
+Hi Cai,
 
-Finally, erofs_get_meta_page() is useless. Get rid of it!
+FYI, the error/warning still remains.
 
-Reviewed-by: Yue Hu <huyue2@yulong.com>
-Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   278218f6778bc7d6f8b67199446c56cec7ebb841
+commit: 464a57281f29afc202905b456b0cb8bc729b383a net/mlxbf_gige: Make use of devm_platform_ioremap_resourcexxx()
+date:   4 months ago
+config: s390-randconfig-r005-20220101 (https://download.01.org/0day-ci/archive/20220102/202201021231.crXSVMeM-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=464a57281f29afc202905b456b0cb8bc729b383a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 464a57281f29afc202905b456b0cb8bc729b383a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   s390-linux-ld: kernel/dma/coherent.o: in function `dma_init_coherent_memory':
+   coherent.c:(.text+0xb0): undefined reference to `memremap'
+   s390-linux-ld: coherent.c:(.text+0x1d4): undefined reference to `memunmap'
+   s390-linux-ld: kernel/dma/coherent.o: in function `dma_declare_coherent_memory':
+   coherent.c:(.text+0x68e): undefined reference to `memunmap'
+   s390-linux-ld: drivers/irqchip/irq-al-fic.o: in function `al_fic_init_dt':
+   irq-al-fic.c:(.init.text+0x72): undefined reference to `of_iomap'
+   s390-linux-ld: irq-al-fic.c:(.init.text+0x4b4): undefined reference to `iounmap'
+   s390-linux-ld: drivers/dma/fsl-edma.o: in function `fsl_edma_probe':
+   fsl-edma.c:(.text+0x119c): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: fsl-edma.c:(.text+0x12fe): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/dma/idma64.o: in function `idma64_platform_probe':
+   idma64.c:(.text+0x1c98): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/net/ethernet/altera/altera_tse_main.o: in function `request_and_map':
+   altera_tse_main.c:(.text+0xde8): undefined reference to `devm_ioremap'
+   s390-linux-ld: drivers/net/ethernet/litex/litex_liteeth.o: in function `liteeth_probe':
+>> litex_liteeth.c:(.text+0x854): undefined reference to `devm_platform_ioremap_resource_byname'
+>> s390-linux-ld: litex_liteeth.c:(.text+0x8ca): undefined reference to `devm_platform_ioremap_resource_byname'
+
 ---
- fs/erofs/data.c     | 13 -----------
- fs/erofs/internal.h |  6 ++---
- fs/erofs/zdata.c    | 23 ++++++++-----------
- fs/erofs/zmap.c     | 56 +++++++++++++--------------------------------
- 4 files changed, 28 insertions(+), 70 deletions(-)
-
-diff --git a/fs/erofs/data.c b/fs/erofs/data.c
-index 6495e16a50a9..187f19f8a9a1 100644
---- a/fs/erofs/data.c
-+++ b/fs/erofs/data.c
-@@ -9,19 +9,6 @@
- #include <linux/dax.h>
- #include <trace/events/erofs.h>
- 
--struct page *erofs_get_meta_page(struct super_block *sb, erofs_blk_t blkaddr)
--{
--	struct address_space *const mapping = sb->s_bdev->bd_inode->i_mapping;
--	struct page *page;
--
--	page = read_cache_page_gfp(mapping, blkaddr,
--				   mapping_gfp_constraint(mapping, ~__GFP_FS));
--	/* should already be PageUptodate */
--	if (!IS_ERR(page))
--		lock_page(page);
--	return page;
--}
--
- void erofs_unmap_metabuf(struct erofs_buf *buf)
- {
- 	if (buf->kmap_type == EROFS_KMAP)
-diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-index f1e4eb3025f6..3db494a398b2 100644
---- a/fs/erofs/internal.h
-+++ b/fs/erofs/internal.h
-@@ -419,14 +419,14 @@ enum {
- #define EROFS_MAP_FULL_MAPPED	(1 << BH_FullMapped)
- 
- struct erofs_map_blocks {
-+	struct erofs_buf buf;
-+
- 	erofs_off_t m_pa, m_la;
- 	u64 m_plen, m_llen;
- 
- 	unsigned short m_deviceid;
- 	char m_algorithmformat;
- 	unsigned int m_flags;
--
--	struct page *mpage;
- };
- 
- /* Flags used by erofs_map_blocks_flatmode() */
-@@ -474,7 +474,7 @@ struct erofs_map_dev {
- 
- /* data.c */
- extern const struct file_operations erofs_file_fops;
--struct page *erofs_get_meta_page(struct super_block *sb, erofs_blk_t blkaddr);
-+void erofs_unmap_metabuf(struct erofs_buf *buf);
- void erofs_put_metabuf(struct erofs_buf *buf);
- void *erofs_read_metabuf(struct erofs_buf *buf, struct super_block *sb,
- 			 erofs_blk_t blkaddr, enum erofs_kmap_type type);
-diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-index 49da3931b2e3..498b7666efe8 100644
---- a/fs/erofs/zdata.c
-+++ b/fs/erofs/zdata.c
-@@ -698,20 +698,18 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
- 		goto err_out;
- 
- 	if (z_erofs_is_inline_pcluster(clt->pcl)) {
--		struct page *mpage;
-+		void *mp;
- 
--		mpage = erofs_get_meta_page(inode->i_sb,
--					    erofs_blknr(map->m_pa));
--		if (IS_ERR(mpage)) {
--			err = PTR_ERR(mpage);
-+		mp = erofs_read_metabuf(&fe->map.buf, inode->i_sb,
-+					erofs_blknr(map->m_pa), EROFS_NO_KMAP);
-+		if (IS_ERR(mp)) {
-+			err = PTR_ERR(mp);
- 			erofs_err(inode->i_sb,
- 				  "failed to get inline page, err %d", err);
- 			goto err_out;
- 		}
--		/* TODO: new subpage feature will get rid of it */
--		unlock_page(mpage);
--
--		WRITE_ONCE(clt->pcl->compressed_pages[0], mpage);
-+		get_page(fe->map.buf.page);
-+		WRITE_ONCE(clt->pcl->compressed_pages[0], fe->map.buf.page);
- 		clt->mode = COLLECT_PRIMARY_FOLLOWED_NOINPLACE;
- 	} else {
- 		/* preload all compressed pages (can change mode if needed) */
-@@ -1529,9 +1527,7 @@ static int z_erofs_readpage(struct file *file, struct page *page)
- 	if (err)
- 		erofs_err(inode->i_sb, "failed to read, err [%d]", err);
- 
--	if (f.map.mpage)
--		put_page(f.map.mpage);
--
-+	erofs_put_metabuf(&f.map.buf);
- 	erofs_release_pages(&pagepool);
- 	return err;
- }
-@@ -1576,8 +1572,7 @@ static void z_erofs_readahead(struct readahead_control *rac)
- 
- 	z_erofs_runqueue(inode->i_sb, &f, &pagepool,
- 			 z_erofs_get_sync_decompress_policy(sbi, nr_pages));
--	if (f.map.mpage)
--		put_page(f.map.mpage);
-+	erofs_put_metabuf(&f.map.buf);
- 	erofs_release_pages(&pagepool);
- }
- 
-diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
-index 1037ac17b7a6..18d7fd1a5064 100644
---- a/fs/erofs/zmap.c
-+++ b/fs/erofs/zmap.c
-@@ -35,7 +35,7 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
- 	struct super_block *const sb = inode->i_sb;
- 	int err, headnr;
- 	erofs_off_t pos;
--	struct page *page;
-+	struct erofs_buf buf = __EROFS_BUF_INITIALIZER;
- 	void *kaddr;
- 	struct z_erofs_map_header *h;
- 
-@@ -61,14 +61,13 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
- 
- 	pos = ALIGN(iloc(EROFS_SB(sb), vi->nid) + vi->inode_isize +
- 		    vi->xattr_isize, 8);
--	page = erofs_get_meta_page(sb, erofs_blknr(pos));
--	if (IS_ERR(page)) {
--		err = PTR_ERR(page);
-+	kaddr = erofs_read_metabuf(&buf, sb, erofs_blknr(pos),
-+				   EROFS_KMAP_ATOMIC);
-+	if (IS_ERR(kaddr)) {
-+		err = PTR_ERR(kaddr);
- 		goto out_unlock;
- 	}
- 
--	kaddr = kmap_atomic(page);
--
- 	h = kaddr + erofs_blkoff(pos);
- 	vi->z_advise = le16_to_cpu(h->h_advise);
- 	vi->z_algorithmtype[0] = h->h_algorithmtype & 15;
-@@ -101,20 +100,19 @@ static int z_erofs_fill_inode_lazy(struct inode *inode)
- 		goto unmap_done;
- 	}
- unmap_done:
--	kunmap_atomic(kaddr);
--	unlock_page(page);
--	put_page(page);
-+	erofs_put_metabuf(&buf);
- 	if (err)
- 		goto out_unlock;
- 
- 	if (vi->z_advise & Z_EROFS_ADVISE_INLINE_PCLUSTER) {
--		struct erofs_map_blocks map = { .mpage = NULL };
-+		struct erofs_map_blocks map = {
-+			.buf = __EROFS_BUF_INITIALIZER
-+		};
- 
- 		vi->z_idata_size = le16_to_cpu(h->h_idata_size);
- 		err = z_erofs_do_map_blocks(inode, &map,
- 					    EROFS_GET_BLOCKS_FINDTAIL);
--		if (map.mpage)
--			put_page(map.mpage);
-+		erofs_put_metabuf(&map.buf);
- 
- 		if (!map.m_plen ||
- 		    erofs_blkoff(map.m_pa) + map.m_plen > EROFS_BLKSIZ) {
-@@ -151,31 +149,11 @@ static int z_erofs_reload_indexes(struct z_erofs_maprecorder *m,
- 				  erofs_blk_t eblk)
- {
- 	struct super_block *const sb = m->inode->i_sb;
--	struct erofs_map_blocks *const map = m->map;
--	struct page *mpage = map->mpage;
--
--	if (mpage) {
--		if (mpage->index == eblk) {
--			if (!m->kaddr)
--				m->kaddr = kmap_atomic(mpage);
--			return 0;
--		}
- 
--		if (m->kaddr) {
--			kunmap_atomic(m->kaddr);
--			m->kaddr = NULL;
--		}
--		put_page(mpage);
--	}
--
--	mpage = erofs_get_meta_page(sb, eblk);
--	if (IS_ERR(mpage)) {
--		map->mpage = NULL;
--		return PTR_ERR(mpage);
--	}
--	m->kaddr = kmap_atomic(mpage);
--	unlock_page(mpage);
--	map->mpage = mpage;
-+	m->kaddr = erofs_read_metabuf(&m->map->buf, sb, eblk,
-+				      EROFS_KMAP_ATOMIC);
-+	if (IS_ERR(m->kaddr))
-+		return PTR_ERR(m->kaddr);
- 	return 0;
- }
- 
-@@ -711,8 +689,7 @@ static int z_erofs_do_map_blocks(struct inode *inode,
- 			map->m_flags |= EROFS_MAP_FULL_MAPPED;
- 	}
- unmap_out:
--	if (m.kaddr)
--		kunmap_atomic(m.kaddr);
-+	erofs_unmap_metabuf(&m.map->buf);
- 
- out:
- 	erofs_dbg("%s, m_la %llu m_pa %llu m_llen %llu m_plen %llu m_flags 0%o",
-@@ -759,8 +736,7 @@ static int z_erofs_iomap_begin_report(struct inode *inode, loff_t offset,
- 	struct erofs_map_blocks map = { .m_la = offset };
- 
- 	ret = z_erofs_map_blocks_iter(inode, &map, EROFS_GET_BLOCKS_FIEMAP);
--	if (map.mpage)
--		put_page(map.mpage);
-+	erofs_put_metabuf(&map.buf);
- 	if (ret < 0)
- 		return ret;
- 
--- 
-2.24.4
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

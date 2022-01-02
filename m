@@ -2,99 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BFC9482B00
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 13:02:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF19482B03
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 13:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbiABMCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 07:02:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbiABMCK (ORCPT
+        id S231324AbiABMUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 07:20:10 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58606 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229693AbiABMUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 07:02:10 -0500
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B98AC061574
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jan 2022 04:02:10 -0800 (PST)
-Received: by mail-qv1-xf2d.google.com with SMTP id r6so28487910qvr.13
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Jan 2022 04:02:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=giNV2075gDEg5+v4iNG0NypwhzHYGunkPAo5/HPLi/w=;
-        b=YpOicduLSBimY9O7Jc0BEMhHhyUhGg0R1wQ9uWjr9kv9cpxpuKGJxd7DtidWPx1+u8
-         0bkKI/KZxWn7Tus+Skjlbv0OqxazGWHbq0iGxV5NsJFBnZ7l8lSbKO7CcIfy5v6IXVyI
-         eDUZu6sy+42jqlZKZrWMUM4EHeYDZH6mDfy++KraEmOQka0OVFGspJkxSU30d4HuWVc/
-         4/nPa1d8TXltLgjb+8kVyfzeL2Dm1VsBcXq0emwb+GU1nECEg/2Zv2FY9UqgUAWsAWl4
-         EXjdFeSQKLv/seKMZbgtoV6V3ea4/al893kSrzOxIkap2F6AnNn7eZhLK88qJlri9AUs
-         Zigg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=giNV2075gDEg5+v4iNG0NypwhzHYGunkPAo5/HPLi/w=;
-        b=4DZDs4qcgih7rR5M9MR+uB76Uyjsn27aGtb6VUISI40fhJPG2ZzVjkID5OrOXhdQFe
-         ztEgXOOj7DaKHc6HRvndGVgZitnpK9nJBKN1psVW4L7InMkTvEtBE05mMl2s3SdHnLSx
-         5Hia2eLlO9/2CcQS5YzCwaweKgVxkwr+bNvI6r1uaNSQxUxQ3FQGdYFbV/Xgm//Di4iW
-         92DdA10zDyG0h7NJcCfeCHFNc0JC0519/mArczH7fjDis4p9BXHB73RBdXwDCNQhgGyU
-         5mJUcoSbq7Rro04jIx3EzYmNnJ76vCi6ABn65VH6aOVMC0pRQB3pGa/0QBdBSt9JThbf
-         6ung==
-X-Gm-Message-State: AOAM532+IVibEgWHdhp5eiz25Z8epNoq53dp21CMiRcwch6ZgBmqMudt
-        B0UmKt04+mtP6UDzjbLJd/tOnIH7wlw=
-X-Google-Smtp-Source: ABdhPJyrZ/HeawXYxDPqeibxcFyfxrth+Ezl/N8Mr/HYaaUEE8cBMWowC9DIKfOrb1iGoIc1Cs4ecQ==
-X-Received: by 2002:ad4:5bc3:: with SMTP id t3mr38168464qvt.47.1641124929530;
-        Sun, 02 Jan 2022 04:02:09 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id h3sm25758323qko.78.2022.01.02.04.02.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jan 2022 04:02:08 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: xu.xin16@zte.com.cn
-To:     torvalds@linux-foundation.org, nathan@kernel.org,
-        ndesaulniers@google.com, keescook@chromium.org
-Cc:     wang.yong12@zte.com.cn, xu.xin16@zte.com.cn,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] tools: compiler-gcc.h: Keep compatible with older GCC versions
-Date:   Sun,  2 Jan 2022 12:02:01 +0000
-Message-Id: <20220102120201.594408-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Sun, 2 Jan 2022 07:20:10 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D70AE60C4E;
+        Sun,  2 Jan 2022 12:20:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3F7CDC36AEF;
+        Sun,  2 Jan 2022 12:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641126009;
+        bh=gFw9Bkudy0WLB2fmuCTRkFdkoevTtHNSg81TjK3q9gw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=NgtXRrBDjh8OA7Clto8L1rpBiFobiwPToRtn0UXC/C+ufRXJIcksXa3V3Fy2jvlVO
+         K3dtfluaf46QwRhgVIBylq9RyuqXuTUwj1Zqg4OpgIBIGeU3esDECBQiOrqXlWSYO3
+         V+CXMD6kdR+g6EFLgUX/4REd2F7I7c8KHZQur6cBDplYZxMVsDJKojKKmRia9fUOG3
+         KLOPE64IW2O88xzsWA13d/xrLHcMr4IIEqaJdNLNUiS2csKUeRR+S/F3lT9VMyRutT
+         LtkX6yVQMXnw8CWQf965GccZVh64o//ntpFUvoEIu4LEjy9lAVC8NL6ERjaKXm8yDP
+         YF2jSAH20Zy+w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 25C72C395E8;
+        Sun,  2 Jan 2022 12:20:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] mctp: Remove only static neighbour on RTM_DELNEIGH
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164112600914.23508.794588778406331918.git-patchwork-notify@kernel.org>
+Date:   Sun, 02 Jan 2022 12:20:09 +0000
+References: <20220101054125.9104-1-gagan1kumar.cs@gmail.com>
+In-Reply-To: <20220101054125.9104-1-gagan1kumar.cs@gmail.com>
+To:     Gagan Kumar <gagan1kumar.cs@gmail.com>
+Cc:     kuba@kernel.org, jk@codeconstruct.com.au,
+        matt@codeconstruct.com.au, davem@davemloft.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xu xin <xu.xin16@zte.com.cn>
+Hello:
 
-When HOST CC = gcc (GCC) 4.8.5, we found that there is an error occurring:
-Undefined __has_attribute as we built the whole kernel and tools.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-To solve this, this patch is given to keep the compatibility with older
-GCC versions.
+On Sat,  1 Jan 2022 11:11:25 +0530 you wrote:
+> Add neighbour source flag in mctp_neigh_remove(...) to allow removal of
+> only static neighbours.
+> 
+> This should be a no-op change and might be useful later when mctp can
+> have MCTP_NEIGH_DISCOVER neighbours.
+> 
+> Signed-off-by: Gagan Kumar <gagan1kumar.cs@gmail.com>
+> 
+> [...]
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Co-developed-by: wangyong <wang.yong12@zte.com.cn>
-Signed-off-by: xu xin <xu.xin16@zte.com.cn>
----
- tools/include/linux/compiler-gcc.h | 4 ++++
- 1 file changed, 4 insertions(+)
+Here is the summary with links:
+  - [v2] mctp: Remove only static neighbour on RTM_DELNEIGH
+    https://git.kernel.org/netdev/net/c/ae81de737885
 
-diff --git a/tools/include/linux/compiler-gcc.h b/tools/include/linux/compiler-gcc.h
-index 8816f06fc6c7..333ed16b3b12 100644
---- a/tools/include/linux/compiler-gcc.h
-+++ b/tools/include/linux/compiler-gcc.h
-@@ -16,6 +16,10 @@
- # define __fallthrough __attribute__ ((fallthrough))
- #endif
- 
-+#ifndef __has_attribute
-+# define __has_attribute(x) 0  /* Compatibility with GCC versions < 5.x */
-+#endif
-+
- #if __has_attribute(__error__)
- # define __compiletime_error(message) __attribute__((error(message)))
- #endif
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

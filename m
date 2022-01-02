@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D02FB482A36
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 07:23:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31821482A42
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 07:26:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231950AbiABGXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 01:23:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46352 "EHLO
+        id S232021AbiABG0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 01:26:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiABGXh (ORCPT
+        with ESMTP id S231982AbiABG0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 01:23:37 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9A0C06173F
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jan 2022 22:23:37 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id g13so38906996ljj.10
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jan 2022 22:23:36 -0800 (PST)
+        Sun, 2 Jan 2022 01:26:18 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA02C06173F
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jan 2022 22:26:17 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id x4so33534828ljc.6
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Jan 2022 22:26:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=VgQd8mVA5Ou/dtF60Rr1+uXMaZpGfgKYwjDfuQ8htQ8=;
-        b=jNm5mAS5EjqfDtNL1Kn9XGIg2+C/re/dVJe3eqlS2GgVT9Dsfokxnq73f+ZCCXYoB2
-         ADTmWRj7SXDEWfM1CGvMFtKf31AgCvoor+GQ5trEA2y8r2D8bU4KVV75ZVRm8p/x0Je5
-         gCBpQkSXQdQqEZqJ26Hyu3cUoBoFXVuJfys/lZf6tSy7UBfVhRkAe5W3o6sKHXLSs9WB
-         ihhebtQQwzbOsOlh2nn0ATWggbUiiwUJmvwKvuApgM/xj8lK70GBmg0DDNNw4z99xkIK
-         vR/K2fsxGQrRtcmQqXG6/o7qm5zrqAPWC1+7DEFzAGCOov08BXlPovIB8gL5LYSFLHVT
-         UwPw==
+        bh=7Ny9IOrp5AKhlKTAYswE45XRnsrR6ugsPgi1A08bE1w=;
+        b=TKg2YDlA4UU2vpZUOddZ+gAYQofb8wN0yjqnKj8J888QfbSRQVOoL7VmuWZgDhSvfK
+         cadBoTx+ddiKnJl+yr0VTL3S+0hDUi5IqxqKuS0qvOW1O21OmiilONgxAUlBxU7rfRpH
+         FLKQgrAYMm/7CJftZ3vmOpeGT0vSpT6y3Qfs//tdUGswleZFB2+CPxZQkyU9K3WKP1aB
+         ZW8Yian1Tm6Ij3UoYAHNOpoMQecvP9t/HOo/nT3sLavAKL4b04gj5kXQIWh+xUec9lje
+         KmDLdjigN4cnRCg7LNxjt6QGcYfIxc7drNymNAaxY5rg3Y5jeG4QzYeYxYv+VUI9c1GE
+         0AAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=VgQd8mVA5Ou/dtF60Rr1+uXMaZpGfgKYwjDfuQ8htQ8=;
-        b=TMwo0USCh5WW825TY3/fLTMLCsTgJTysjDAvAoNdnQEWRIUoDoT4R+FwdrIdKtlcpa
-         OR4+XzpBOPNhpoDEfrc+9/+gqqpUXGdcSBhaVBa5pXN5TU33wu0RX/BPs/YqBv7Ewihj
-         xNgO+JIwyAmb+rY3vRzbt0UmPBcQXpObKpvc7cyjJLrOlTYxpYnOHA2udLBCcyXozLKl
-         ah9dXqLxEJ0VibokTFLvaErpGyJ/XG7aeIx7ikQEEjG2KxDADr0F0mnFGooHi+NUd7ys
-         7BPiG2hC/qjBJ4xzH/9VPL07D9TIYmCbM3MMEpp1UEmIm9pbAb+k6pUlZfa/O8IJgfdQ
-         4nDA==
-X-Gm-Message-State: AOAM530SJF2axLCd8pXFl26d0XofUoQyyTyzH8W6wkeCDlYO3OzMszD6
-        fv5cz/ZJrW29/1jpcxokge1VB5TXTuz2H2uOdxkZ6w==
-X-Google-Smtp-Source: ABdhPJx1bpQrYxUZGqaWXyD0VzScJihPrK6/lT6pAwBXrQOaBPvT+Wr+wnvxmv2Se+jeu73uNv6b9Zecgs+PTeWpQeg=
-X-Received: by 2002:a2e:a4ac:: with SMTP id g12mr14355456ljm.183.1641104614823;
- Sat, 01 Jan 2022 22:23:34 -0800 (PST)
+        bh=7Ny9IOrp5AKhlKTAYswE45XRnsrR6ugsPgi1A08bE1w=;
+        b=JbLojyzEsdLeAOoNN8Z1Wb1EF4hxLbNBgXIc4mPEH3i9bNysssCeDHCYsha2c3R/JA
+         ezXyEtaYe7LHRoaPXzQvykcfSW8GmCRBRH1K/q5haXq8hlNe8u247qtDytMfXtP11hHf
+         BVIraT+fPPM/MbuW82uoIQMiKOt1jtWTtkGGrBq/WBuVlcOrhBhFUymTkf6N6GwQ7BF6
+         M4v0UTdtI/TanpmLGxSb5x13hbRUg7tIh/lHPaogLKchJrHW63KT0k/BbpMv8rd4aNdF
+         NWrAIpaFZttnN0C9Pl0zEtPwoec2CAUggUoI/bHnESSZrLt1B4936WjJuSb6EbSzreAj
+         IIbA==
+X-Gm-Message-State: AOAM533DiC0UIog7cCv9kkj2Q2EU8PjxoszgTyiRj1SzI//tKeIAqEZ+
+        r5oO+Q+lGvE46j66MZ1MvvKKMms8307L2mJEh+N5EA==
+X-Google-Smtp-Source: ABdhPJyRzuMEVAx8+y8buo4E3ptNZEMM3+VBbQLibGlevyTYSkZ6ULIp8S7z3qvrnwEJadDN6IFlYjiNNsX6dqdcAtI=
+X-Received: by 2002:a2e:7c01:: with SMTP id x1mr33744057ljc.145.1641104776175;
+ Sat, 01 Jan 2022 22:26:16 -0800 (PST)
 MIME-Version: 1.0
-References: <20211226153624.162281-1-marcan@marcan.st> <20211226153624.162281-24-marcan@marcan.st>
-In-Reply-To: <20211226153624.162281-24-marcan@marcan.st>
+References: <20211226153624.162281-1-marcan@marcan.st>
+In-Reply-To: <20211226153624.162281-1-marcan@marcan.st>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 2 Jan 2022 07:23:22 +0100
-Message-ID: <CACRpkdaEVsSxsp-7RCF0Gy8XcWCbGJnP7b0Q9TmMLFz33gs3jA@mail.gmail.com>
-Subject: Re: [PATCH 23/34] brcmfmac: cfg80211: Add support for scan params v2
+Date:   Sun, 2 Jan 2022 07:25:27 +0100
+Message-ID: <CACRpkdY1qL6s45qMq65mCrdDDjNfoksadO3Va=zSUhT41pBktw@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/34] brcmfmac: Support Apple T2 and M1 platforms
 To:     Hector Martin <marcan@marcan.st>
 Cc:     Kalle Valo <kvalo@codeaurora.org>,
         "David S. Miller" <davem@davemloft.net>,
@@ -82,14 +82,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 26, 2021 at 4:39 PM Hector Martin <marcan@marcan.st> wrote:
+On Sun, Dec 26, 2021 at 4:36 PM Hector Martin <marcan@marcan.st> wrote:
 
-> This new API version is required for at least the BCM4387 firmware. Add
-> support for it, with a fallback to the v1 API.
->
-> Signed-off-by: Hector Martin <marcan@marcan.st>
+> Merry Christmas! This year Santa brings us a 34-patch series to add
+> proper support for the Broadcom FullMAC chips used on Apple T2 and M1
+> platforms:
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+I tried to review as best I could, when I think I know what I'm doing I state
+Reviewed-by and when I think it just LooksGoodToMe(TM) I replied
+Acked-by. If I missed some patch you can assume Acked-by from me
+on these as well.
+
+Thanks for doing this, some really old bugs and code improvements long
+overdue is in the series, much appreciated.
 
 Yours,
 Linus Walleij

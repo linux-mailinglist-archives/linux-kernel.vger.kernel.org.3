@@ -2,84 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BCC5482A64
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 08:02:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4384482A69
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 08:06:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232848AbiABHCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 02:02:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54856 "EHLO
+        id S232859AbiABHGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 02:06:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiABHCg (ORCPT
+        with ESMTP id S229520AbiABHGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 02:02:36 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC52C06173E
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jan 2022 23:02:36 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id bp20so68680363lfb.6
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jan 2022 23:02:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tvv0DgV9NgQ98HHlvA9A23WiX/m5Ked1q7rAcv1JoHI=;
-        b=FgxbBkHr4ssahA/LRHFCPhZGIzGGh1341x5GTN/imnarLCCW4gGvqu2iXqbXg5m98o
-         9k5PH/+9+Fdsg0V6Ttl4BoYb2rYkpXbxTAQYaCiRZrFOXXPakp70wO/1ix5QvBk0D4/V
-         qui1GWGTszsMzRAe6VYNzhquU4sW+OLZEdRR2rJfTcun2rXIGWIQAVu+cMgT8pvael1K
-         FUeGabpXt8suJQnA8g5VlOhUzFSNAQ1rs6eH1DePr7thrCTh7vWuZjnTAVy3ceNlK31E
-         xUj3kvapPgj0YjumCo0S+uCHy0EV0rBmo651gqIwtQ7dVkoILjsQD1NhEUnSo7AlmGpB
-         iCcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tvv0DgV9NgQ98HHlvA9A23WiX/m5Ked1q7rAcv1JoHI=;
-        b=TmpaCXrW8v55EYjXM/eTFlYhUSX4IBCTEyYcnMBWDBu2UaoazHGYKombaG2dALJtmB
-         koMtyDvkZt7kKrb/dFZAcegl2LSGBfxcaAIaivFtkilME4l8+rcJ3uKOSld8lR8e56ID
-         eIUVMiX3v/hKzkVxdxfByWVyXOYNs5Vy/zyJ1cEYu6ByUkNpkki/CNV5OVohO0xIIcyJ
-         ZwjmSM5Tn8A6tq1ssJQ/yFNpNU33gaWXn1AdpUYt0N3J46IpaM14LJ+ZdBG6LeSgMMbZ
-         GE44d8RH2hPG293FJrEeA3cKuQsWRAwNP6xaZ+BbszNSku/D/UYTZt9mFoBabI4A+xoi
-         72Bw==
-X-Gm-Message-State: AOAM530LoEuT7VE6QbRzF+9+jazgi5grcxOcpe54IfhbO0hbIf8JZff4
-        60aT6Mr4gsZ7wHTnb5jQXToXpsCmMYa5gMBk1UwXPQ==
-X-Google-Smtp-Source: ABdhPJxOYkFHnmRn3PYBTBsgCRCoJd7PFWfeRGQ56+8AZELiRbmsztgXlZvIJs8EwHLTIxk38f21bTkC+UzdQ7Xg7Nk=
-X-Received: by 2002:a05:6512:750:: with SMTP id c16mr37738865lfs.622.1641106954440;
- Sat, 01 Jan 2022 23:02:34 -0800 (PST)
+        Sun, 2 Jan 2022 02:06:14 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80AC7C061574;
+        Sat,  1 Jan 2022 23:06:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=Fn0Dlw6FCxWGsDk39oPG6vOggtEUK9wbuTNWpXi1hUU=; b=xqq2+LYn0oJc/Ka/MWISEp9pGL
+        tnWi6anzIxsedlLsZ6OiqL4r0T32tGEv3IL/4ja8wbs5XQjNCiQ+3hUAPxkl5pH+66oERIzdgOIWa
+        yTUP64kpb33pFIvVF0NF6UyKCRlmWVm54JqmpNDsdhoTHwDPGMWRiHZ/uqczhGXIyEXjnzp2cOxd6
+        Div/itI8k8HbbkfmghNDtWafMxHrq7Okz/y/DkVitw2sbxkMl2KBcu6nHAiFsiv6tew/DxahHetsD
+        vi0xRdOUHXloy8w9G2sTyAlHws62nzycyxbshQVU+kPWi5Llb3T1lOgTNlJ8es5NJsr1NDx2W17Nf
+        d46jbKag==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n3uwU-007cTF-ET; Sun, 02 Jan 2022 07:06:10 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>
+Cc:     linux-rdma@vger.kernel.org, linux-um@lists.infradead.org,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH 1/2] IB/qib: don't use qib_wc_x86_64 for UML
+Date:   Sat,  1 Jan 2022 23:06:09 -0800
+Message-Id: <20220102070609.22783-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20211229072916.2567155-1-nikita.yoush@cogentembedded.com>
-In-Reply-To: <20211229072916.2567155-1-nikita.yoush@cogentembedded.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 2 Jan 2022 08:02:21 +0100
-Message-ID: <CACRpkdYcR7SA1bfzAtMBpXZiXZeZnV8hWGddx26VvvKwiZC4Sw@mail.gmail.com>
-Subject: Re: [PATCH] iio: stm: don't always auto-enable I2C and SPI interface drivers
-To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        Cai Huoqing <caihuoqing@baidu.com>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 29, 2021 at 8:29 AM Nikita Yushchenko
-<nikita.yoush@cogentembedded.com> wrote:
+When building qib_wc_x86_64.c on ARCH=um, references to some cpuinfo
+fields cause build errors since cpuinfo does not contain x86-specific
+fields.
 
->  config IIO_ST_ACCEL_I2C_3AXIS
-> -       tristate
-> -       depends on IIO_ST_ACCEL_3AXIS
-> -       depends on IIO_ST_SENSORS_I2C
-> +       tristate "STMicroelectronics accelerometers 3-Axis I2C Interface"
-> +       depends on (I2C && IIO_ST_ACCEL_3AXIS)
-> +       default y if (I2C && IIO_ST_ACCEL_3AXIS)
-> +       select IIO_ST_SENSORS_I2C
+This source file is x86_64-specific, so don't include it in the
+target object file when CONFIG_UML is set/enabled.
 
-This thing that a Kconfig symbol is made to depend on itself just
-boggles my head but it wouldn't surprise me if KConfig is this weird :(
+Prevents these build errors:
 
-I CCed Arnd who knows KConfig a bit better than anyone I know.
+../drivers/infiniband/hw/qib/qib_wc_x86_64.c: In function ‘qib_unordered_wc’:
+../drivers/infiniband/hw/qib/qib_wc_x86_64.c:149:22: error: ‘struct cpuinfo_um’ has no member named ‘x86_vendor’
+  return boot_cpu_data.x86_vendor != X86_VENDOR_AMD;
+                      ^
+../drivers/infiniband/hw/qib/qib_wc_x86_64.c:149:37: error: ‘X86_VENDOR_AMD’ undeclared (first use in this function); did you mean ‘X86_VENDOR_ANY’?
+  return boot_cpu_data.x86_vendor != X86_VENDOR_AMD;
+                                     ^~~~~~~~~~~~~~
+../drivers/infiniband/hw/qib/qib_wc_x86_64.c:150:1: error: control reaches end of non-void function [-Werror=return-type]
 
-Yours,
-Linus Walleij
+Fixes: 68f5d3f3b654 ("um: add PCI over virtio emulation driver")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+---
+ drivers/infiniband/hw/qib/Makefile |    2 ++
+ 1 file changed, 2 insertions(+)
+
+--- linux-next-20211224.orig/drivers/infiniband/hw/qib/Makefile
++++ linux-next-20211224/drivers/infiniband/hw/qib/Makefile
+@@ -12,6 +12,8 @@ ib_qib-y := qib_diag.o qib_driver.o qib_
+ # 6120 has no fallback if no MSI interrupts, others can do INTx
+ ib_qib-$(CONFIG_PCI_MSI) += qib_iba6120.o
+ 
++ifeq ($(CONFIG_UML),)
+ ib_qib-$(CONFIG_X86_64) += qib_wc_x86_64.o
++endif
+ ib_qib-$(CONFIG_PPC64) += qib_wc_ppc64.o
+ ib_qib-$(CONFIG_DEBUG_FS) += qib_debugfs.o

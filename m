@@ -2,77 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B86A2482BDA
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 17:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D23482BDD
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 17:20:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233353AbiABQUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 11:20:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
+        id S233370AbiABQUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 11:20:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiABQUL (ORCPT
+        with ESMTP id S232476AbiABQUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 2 Jan 2022 11:20:11 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D662EC061761;
-        Sun,  2 Jan 2022 08:20:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6B7C061784;
+        Sun,  2 Jan 2022 08:20:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 60E0960F28;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9335A60F2F;
+        Sun,  2 Jan 2022 16:20:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F383DC36AF7;
         Sun,  2 Jan 2022 16:20:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C83E7C36AEF;
-        Sun,  2 Jan 2022 16:20:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641140408;
-        bh=OWPAcX5W9YO4VRgLlKi/wh9YuvxFOfDeRVi74HY2SRI=;
+        s=k20201202; t=1641140410;
+        bh=fHPkSq5tuHNMpjNNmo9oVMCrgs3exCVtpW3lELTZ5K4=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=CsgIuFTgLO3VnRAT5rE6F2aogkuP6Gc6ATSE5Ph8HmOg6zcjvuIK9BXm4J7hkm9Z2
-         wsi1mxcOv5LCotP3D4x0B5vJhKLgy3fjhHkHchkl9oL73rJ9Z7QK8gkTd45anGbsCa
-         Pf6da9wjQrxiI98p2COEddW8H1n8F9zKTn2dNCJFhA2y/M3W7QGBZXMdBFmQCUgtxb
-         orJvBDGeKS6VSICLrNZdOSjln090ZSmEu5CyipMB5LQ6YkVrw3KRiUGAM/gZjOfmt4
-         tsTZE6Xoa823f0QTu2r0/yzEpE6K+/4ChlSMSv1TwiDwk53OXAgSA3SMH60XiII9Oa
-         CZPUtLX/264iQ==
+        b=EnxPB1s0xXndQc0+K0fe45YKUg4ICwuF6GweOjRf4FNOTQW4MvhMMkz5zYXFrzDjx
+         hHDx2TW28Itxe0AJyb6w4pGs29msPnTdoaPEudY8M9PeDbstslpZyYzQ+YOXiXVpUp
+         dMNEPauaT8Kq52I7gTwua81xXDYdFXGGUYgPHrrBgoXAeu35IZemF/r+lEOiy/oI3x
+         UGqe3krmvBkipVYK7jTWX1kzwdcHRbTQJGWvaXhOMJiaJ45mAyEbbeZnWyXcCFfu0f
+         F8orVoUv18hBJuHZo2B31pVPA7DAVTDu67Hlt37HSyk/5PcFFxItgREenLDbwXsjfI
+         vKTgIqi49YWBQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 991D7C395EA;
-        Sun,  2 Jan 2022 16:20:08 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DD5B8C395ED;
+        Sun,  2 Jan 2022 16:20:09 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] rndis_host: support Hytera digital radios
+Subject: Re: [PATCH] enic: Remove usage of the deprecated "pci-dma-compat.h" API
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164114040862.20715.16025079855839191884.git-patchwork-notify@kernel.org>
-Date:   Sun, 02 Jan 2022 16:20:08 +0000
-References: <20220101172207.129863-1-thomas@toye.io>
-In-Reply-To: <20220101172207.129863-1-thomas@toye.io>
-To:     Thomas Toye <thomas@toye.io>
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <164114040990.20715.4916088969148860027.git-patchwork-notify@kernel.org>
+Date:   Sun, 02 Jan 2022 16:20:09 +0000
+References: <5080845d91e115300252298fe17fac5333458491.1641118952.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <5080845d91e115300252298fe17fac5333458491.1641118952.git.christophe.jaillet@wanadoo.fr>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     benve@cisco.com, _govind@gmx.com, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This patch was applied to netdev/net.git (master)
+This patch was applied to netdev/net-next.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Sat,  1 Jan 2022 18:22:07 +0100 you wrote:
-> Hytera makes a range of digital (DMR) radios. These radios can be
-> programmed to a allow a computer to control them over Ethernet over USB,
-> either using NCM or RNDIS.
+On Sun,  2 Jan 2022 11:23:39 +0100 you wrote:
+> In [1], Christoph Hellwig has proposed to remove the wrappers in
+> include/linux/pci-dma-compat.h.
 > 
-> This commit adds support for RNDIS for Hytera radios. I tested with a
-> Hytera PD785 and a Hytera MD785G. When these radios are programmed to
-> set up a Radio to PC Network using RNDIS, an USB interface will be added
-> with class 2 (Communications), subclass 2 (Abstract Modem Control) and
-> an interface protocol of 255 ("vendor specific" - lsusb even hints "MSFT
-> RNDIS?").
+> Some reasons why this API should be removed have been given by Julia
+> Lawall in [2].
+> 
+> A coccinelle script has been used to perform the needed transformation
+> Only relevant parts are given below.
 > 
 > [...]
 
 Here is the summary with links:
-  - rndis_host: support Hytera digital radios
-    https://git.kernel.org/netdev/net/c/29262e1f773b
+  - enic: Remove usage of the deprecated "pci-dma-compat.h" API
+    https://git.kernel.org/netdev/net-next/c/60c332029c8d
 
 You are awesome, thank you!
 -- 

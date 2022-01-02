@@ -2,50 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D23482BDD
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 17:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A46482BE4
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 17:20:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233370AbiABQUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 11:20:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbiABQUL (ORCPT
+        id S233439AbiABQUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 11:20:21 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49606 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233348AbiABQUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 11:20:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6B7C061784;
-        Sun,  2 Jan 2022 08:20:11 -0800 (PST)
+        Sun, 2 Jan 2022 11:20:12 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9335A60F2F;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 383C1B80DC0;
+        Sun,  2 Jan 2022 16:20:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 06207C36AFA;
         Sun,  2 Jan 2022 16:20:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F383DC36AF7;
-        Sun,  2 Jan 2022 16:20:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1641140410;
-        bh=fHPkSq5tuHNMpjNNmo9oVMCrgs3exCVtpW3lELTZ5K4=;
+        bh=3IKkUpkgQY4/Z4KSOOJNzWd8+Mxwytd8v5Qlwl+PGIQ=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=EnxPB1s0xXndQc0+K0fe45YKUg4ICwuF6GweOjRf4FNOTQW4MvhMMkz5zYXFrzDjx
-         hHDx2TW28Itxe0AJyb6w4pGs29msPnTdoaPEudY8M9PeDbstslpZyYzQ+YOXiXVpUp
-         dMNEPauaT8Kq52I7gTwua81xXDYdFXGGUYgPHrrBgoXAeu35IZemF/r+lEOiy/oI3x
-         UGqe3krmvBkipVYK7jTWX1kzwdcHRbTQJGWvaXhOMJiaJ45mAyEbbeZnWyXcCFfu0f
-         F8orVoUv18hBJuHZo2B31pVPA7DAVTDu67Hlt37HSyk/5PcFFxItgREenLDbwXsjfI
-         vKTgIqi49YWBQ==
+        b=TwXTHXDNcU4oIx0uo6m6SAxaKxDEXD0QcV6vb5y7V7ZLqgOhPpIU1cGxXqTyjhTo1
+         eH3teyJOExCy/ag0RjCNa4xqUGYokj0AXgp2TRCCaL2GEsNqa01/qpiSbPQ+RkrVhC
+         K5+HEoPiLkfTLZqku0o135wI1pmraG1U/1VOyLbIUEKXAOBGMe0mbY35LVqE2wwtrZ
+         2nLxmo1vptbUeHhSnl/kYmbxZrDm2db8/WviTP9NNqq++wBb6ivamAmu2OJT2YBTKe
+         H6yYPrd2VFlTHpI7mcLfAD/qOwCtu98sXpgvbYPr0xCH9nQw+V+csfvcJsCugWnZUW
+         M4yZ+jBeCMMdQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DD5B8C395ED;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E6E53C395E5;
         Sun,  2 Jan 2022 16:20:09 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] enic: Remove usage of the deprecated "pci-dma-compat.h" API
+Subject: Re: [PATCH] qed: Use dma_set_mask_and_coherent() and simplify code
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164114040990.20715.4916088969148860027.git-patchwork-notify@kernel.org>
+Message-Id: <164114040994.20715.4612362659004680767.git-patchwork-notify@kernel.org>
 Date:   Sun, 02 Jan 2022 16:20:09 +0000
-References: <5080845d91e115300252298fe17fac5333458491.1641118952.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <5080845d91e115300252298fe17fac5333458491.1641118952.git.christophe.jaillet@wanadoo.fr>
+References: <40af8d810ef06bb10f45e54a61494b5c42038841.1641115135.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <40af8d810ef06bb10f45e54a61494b5c42038841.1641115135.git.christophe.jaillet@wanadoo.fr>
 To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     benve@cisco.com, _govind@gmx.com, davem@davemloft.net,
+Cc:     aelior@marvell.com, manishc@marvell.com, davem@davemloft.net,
         kuba@kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
 Precedence: bulk
@@ -57,21 +54,19 @@ Hello:
 This patch was applied to netdev/net-next.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Sun,  2 Jan 2022 11:23:39 +0100 you wrote:
-> In [1], Christoph Hellwig has proposed to remove the wrappers in
-> include/linux/pci-dma-compat.h.
+On Sun,  2 Jan 2022 10:20:05 +0100 you wrote:
+> Use dma_set_mask_and_coherent() instead of unrolling it with some
+> dma_set_mask()+dma_set_coherent_mask().
 > 
-> Some reasons why this API should be removed have been given by Julia
-> Lawall in [2].
-> 
-> A coccinelle script has been used to perform the needed transformation
-> Only relevant parts are given below.
+> Moreover, as stated in [1], dma_set_mask() with a 64-bit mask will never
+> fail if dev->dma_mask is non-NULL.
+> So, if it fails, the 32 bits case will also fail for the same reason.
 > 
 > [...]
 
 Here is the summary with links:
-  - enic: Remove usage of the deprecated "pci-dma-compat.h" API
-    https://git.kernel.org/netdev/net-next/c/60c332029c8d
+  - qed: Use dma_set_mask_and_coherent() and simplify code
+    https://git.kernel.org/netdev/net-next/c/4f9f531e1505
 
 You are awesome, thank you!
 -- 

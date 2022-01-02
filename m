@@ -2,97 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE36482C90
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 19:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE6B7482C94
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 20:01:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiABSlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 13:41:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35994 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiABSlR (ORCPT
+        id S229850AbiABTAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 14:00:16 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59472 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229450AbiABTAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 13:41:17 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A1CC061761
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jan 2022 10:41:16 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id v6so4284397wra.8
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Jan 2022 10:41:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=tShDbYknZRWS4YLp1TQWmgakh1Xx5r6yUGEJ8fPlufM=;
-        b=KT1w8ru6khj009b2hhJSG+gmT9S2sh+TI+IC0XSmz5/a8YvlQD1is3MFEjGtPRbkzL
-         qxo9N0eB9cd8U65sUkhbyD7CC5mLDQtbLM0+BTZ2NQvl9XXnUhmcRiMRTplU15reqs1A
-         0vZ2oMuUhPHP541+0MiWGLXZqFoSrvb2j4mUa0td8puRYZtQMgn1CYZjSCPXidAJHcGh
-         IABazWv+OY/w24UGF6j2pu1BYESyngrg19tEzG0p939EuMVtm2oebyHx4PtSyf+1O0PL
-         b60Q+iMde0KCQ2gZNO2suYmqEcKwemJ49rr0OooZVZ2tWuU8111/coVS0YhF2C6hM9Kb
-         y4DA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tShDbYknZRWS4YLp1TQWmgakh1Xx5r6yUGEJ8fPlufM=;
-        b=tEQm7T9lzKJydq+721OW8jWFL6VT4bOM7+tLVxKwiEofU7FszZJMqW62i2hH2dMFSZ
-         /tZIrw3J6oWRSF8QyMnGL3WbqUR9w9yV/GDiExVsOdgHwREd1ZPHxL56nwL0q0CwwT1C
-         TO6oLx1znqBaB6GbcNy8YbePsHzi48cXvZVtfEDNlfgkKLeaS3zSHEgTFH2b9tT7J/7g
-         zESQw83bAvwIuSXirI/TxxUik9yQIAlibMfxSIcqsY6w1n4iwhTgEx7hAfKWrWnmQMVr
-         xaRRfyWkV9e9mRNOjpW5yxcPLYunglgK3UJLoaM6sCI9zNupsXYFqYhxKuiUszRcNnQD
-         lH2A==
-X-Gm-Message-State: AOAM533cFp219LJoI1C+zpecCkeUhJ2vYdjqlo0xOhtW61Z6rT3zzM+N
-        qKiyR8j9ogIDSBdL1msUKmE=
-X-Google-Smtp-Source: ABdhPJwGzVTO3MmfHrAdE+ZI+yg060sdsonun9deEPMt3V7tGLIQ2Xs2Ex44QO2xbPCkYcj5KPFwGg==
-X-Received: by 2002:a5d:56c2:: with SMTP id m2mr36334359wrw.313.1641148874773;
-        Sun, 02 Jan 2022 10:41:14 -0800 (PST)
-Received: from ?IPV6:2a02:8108:96c0:3b88::d7e8? ([2a02:8108:96c0:3b88::d7e8])
-        by smtp.gmail.com with ESMTPSA id z11sm39696846wmf.9.2022.01.02.10.41.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Jan 2022 10:41:14 -0800 (PST)
-Message-ID: <1821100d-c647-5237-de4a-b96bde556c5e@gmail.com>
-Date:   Sun, 2 Jan 2022 19:41:13 +0100
+        Sun, 2 Jan 2022 14:00:14 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4BA2FB80DD8;
+        Sun,  2 Jan 2022 19:00:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F1030C36AEE;
+        Sun,  2 Jan 2022 19:00:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641150012;
+        bh=t6gkySw86mij+Rw0QukcxX8x7yBBcD8iE7E5iibMWOA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=d6Y5cmk7jgkcpxR+F2rZMiypogeZeqxGc8UfZZD5TPAvnsuENs+qRgU3MX5fRoRKX
+         UQhlB8a/HaEgURLBcTfRmvRsH2OOK81PqcnCKQcAeMwb9e+fOus2OR5HxaD9WQdKkZ
+         zTBVZXXfDpfrvQM5WhaVtukdR+JLqrkT0tNOGswHSF4+awfE7rTi+hsExDDmVuVqTs
+         vqZJ6cYz4atd0jkPzQmCsR4XSoydq/oYOAPvyRp+M5yECCQ3dxdOdjtHMt3ADNakdh
+         pEMIwsF9rxiCIEfABxOWuql3deSsU1U25HbCkMHUn44Lqz+pZ+gzjktl3d0xA4XE3e
+         BPONvH6x9bHWw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D2CA9C32795;
+        Sun,  2 Jan 2022 19:00:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH 0/5] staging: r8188eu: some trivial cleanups
-Content-Language: en-US
-To:     Martin Kaiser <martin@kaiser.cx>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220102175932.89127-1-martin@kaiser.cx>
-From:   Michael Straube <straube.linux@gmail.com>
-In-Reply-To: <20220102175932.89127-1-martin@kaiser.cx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 net-next 0/5] lynx pcs interface cleanup
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164115001185.21718.4612917729093758759.git-patchwork-notify@kernel.org>
+Date:   Sun, 02 Jan 2022 19:00:11 +0000
+References: <20211229050310.1153868-1-colin.foster@in-advantage.com>
+In-Reply-To: <20211229050310.1153868-1-colin.foster@in-advantage.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux@armlinux.org.uk, hkallweit1@gmail.com, ioana.ciornei@nxp.com,
+        kuba@kernel.org, davem@davemloft.net, f.fainelli@gmail.com,
+        vivien.didelot@gmail.com, andrew@lunn.ch,
+        UNGLinuxDriver@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.manoil@nxp.com, vladimir.oltean@nxp.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/2/22 18:59, Martin Kaiser wrote:
-> Remove unused variables and defines in several places.
-> 
-> Martin Kaiser (5):
->    staging: r8188eu: remove unused power management defines
->    staging: r8188eu: internal autosuspend is always false
->    staging: r8188eu: fix_rate is set but not used.
->    staging: r8188eu: cmd_issued_cnt is set but not used
->    staging: r8188eu: turbo scan is always off for r8188eu
-> 
->   drivers/staging/r8188eu/core/rtw_cmd.c        |  3 ---
->   drivers/staging/r8188eu/core/rtw_pwrctrl.c    |  9 +-------
->   drivers/staging/r8188eu/hal/rtl8188e_dm.c     |  1 -
->   drivers/staging/r8188eu/hal/rtl8188e_rf6052.c | 21 +++++++------------
->   drivers/staging/r8188eu/include/drv_types.h   |  2 --
->   drivers/staging/r8188eu/include/rtw_cmd.h     |  1 -
->   drivers/staging/r8188eu/include/rtw_pwrctrl.h |  5 -----
->   drivers/staging/r8188eu/os_dep/ioctl_linux.c  |  6 ------
->   drivers/staging/r8188eu/os_dep/os_intfs.c     |  4 ----
->   drivers/staging/r8188eu/os_dep/usb_intf.c     |  3 +--
->   10 files changed, 9 insertions(+), 46 deletions(-)
-> 
+Hello:
 
-Looks good to me. For all patches:
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Acked-by: Michael Straube <straube.linux@gmail.com>
+On Tue, 28 Dec 2021 21:03:05 -0800 you wrote:
+> The current Felix driver (and Seville) rely directly on the lynx_pcs
+> device. There are other possible PCS interfaces that can be used with
+> this hardware, so this should be abstracted from felix. The generic
+> phylink_pcs is used instead.
+> 
+> While going through the code, there were some opportunities to change
+> some misleading variable names. Those are included in this patch set.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2,net-next,1/5] net: phy: lynx: refactor Lynx PCS module to use generic phylink_pcs
+    https://git.kernel.org/netdev/net-next/c/e7026f15564f
+  - [v2,net-next,2/5] net: dsa: felix: name change for clarity from pcs to mdio_device
+    https://git.kernel.org/netdev/net-next/c/61f0d0c304a2
+  - [v2,net-next,3/5] net: dsa: seville: name change for clarity from pcs to mdio_device
+    https://git.kernel.org/netdev/net-next/c/2c1415e67f93
+  - [v2,net-next,4/5] net: ethernet: enetc: name change for clarity from pcs to mdio_device
+    https://git.kernel.org/netdev/net-next/c/82cc453753c5
+  - [v2,net-next,5/5] net: pcs: lynx: use a common naming scheme for all lynx_pcs variables
+    https://git.kernel.org/netdev/net-next/c/0699b3e06f22
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

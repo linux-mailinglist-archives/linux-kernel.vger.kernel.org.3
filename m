@@ -2,103 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9383A482AB2
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 11:07:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F5E482ABE
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 11:23:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232226AbiABKHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 05:07:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232210AbiABKHP (ORCPT
+        id S232250AbiABKXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 05:23:48 -0500
+Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:52238 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232239AbiABKXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 05:07:15 -0500
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219A1C061574;
-        Sun,  2 Jan 2022 02:07:13 -0800 (PST)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 14395100DA1A7;
-        Sun,  2 Jan 2022 11:07:11 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id E21914A82A; Sun,  2 Jan 2022 11:07:10 +0100 (CET)
-Date:   Sun, 2 Jan 2022 11:07:10 +0100
-From:   Lukas Wunner <lukas@wunner.de>
-To:     jmades <jochen@mades.net>
-Cc:     gregkh@linuxfoundation.org, Russell King <linux@armlinux.org.uk>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>
-Subject: Re: [PATCH] Bugfix RTS line config in RS485 mode is overwritten in
- pl011_set_mctrl() function.
-Message-ID: <20220102100710.GA29858@wunner.de>
-References: <20211231171516.18407-1-jochen@mades.net>
+        Sun, 2 Jan 2022 05:23:46 -0500
+Received: from pop-os.home ([86.243.171.122])
+        by smtp.orange.fr with ESMTPA
+        id 3y1dnH4CtFGqt3y1dntg15; Sun, 02 Jan 2022 11:23:45 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 02 Jan 2022 11:23:45 +0100
+X-ME-IP: 86.243.171.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     benve@cisco.com, _govind@gmx.com, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] enic: Remove usage of the deprecated "pci-dma-compat.h" API
+Date:   Sun,  2 Jan 2022 11:23:39 +0100
+Message-Id: <5080845d91e115300252298fe17fac5333458491.1641118952.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211231171516.18407-1-jochen@mades.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 31, 2021 at 05:15:14PM +0000, jmades wrote:
-> Based on the "0001-serial-amba-pl011-add-RS485-support.patch" this change is necesarry otherwise the RTS-line will be pulled up in SER_RS485_RTS_BEFORE_SEND mode before sending data. This hinders the driver to receive data, f.ex. when the device is an RS485 slave device.
-> 
-> Signed-off-by: jmades <jochen@mades.net>
+In [1], Christoph Hellwig has proposed to remove the wrappers in
+include/linux/pci-dma-compat.h.
 
-Patch is correct, but commit message could be improved:
+Some reasons why this API should be removed have been given by Julia
+Lawall in [2].
 
-* Subject should be in imperative mood (by convention), it should be
-  prepended by "serial: pl011: " (in line with previous commits touching
-  this driver, use "git log --oneline amba-pl011.c") and the trailing dot
-  is unnecessary, e.g.:
+A coccinelle script has been used to perform the needed transformation
+Only relevant parts are given below.
 
-  "serial: pl011: Fix incorrect rs485 RTS polarity on set_mctrl"
+@@
+expression e1, e2;
+@@
+-    pci_dma_mapping_error(e1, e2)
++    dma_mapping_error(&e1->dev, e2)
 
-* Commit message should be wrapped at 72 characters (so that it appears
-  centered when displayed with "git log" on an 80 chars terminal).
-  The reference to "0001-serial-amba-pl011-add-RS485-support.patch"
-  should be replaced with a reference to the offending commit, e.g.:
+[1]: https://lore.kernel.org/kernel-janitors/20200421081257.GA131897@infradead.org/
+[2]: https://lore.kernel.org/kernel-janitors/alpine.DEB.2.22.394.2007120902170.2424@hadrien/
 
-  "Commit 8d479237727c ("serial: amba-pl011: add RS485 support") sought
-  to keep RTS deasserted on set_mctrl if rs485 is enabled.  However it
-  did so only if deasserted RTS polarity is high.  Fix it in case it's
-  low."
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/net/ethernet/cisco/enic/enic.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  Feel free to copy this to a v2 of your patch and amend as you see fit.
+diff --git a/drivers/net/ethernet/cisco/enic/enic.h b/drivers/net/ethernet/cisco/enic/enic.h
+index c67a16a48d62..52aaf1bb5205 100644
+--- a/drivers/net/ethernet/cisco/enic/enic.h
++++ b/drivers/net/ethernet/cisco/enic/enic.h
+@@ -304,7 +304,7 @@ static inline bool enic_is_notify_intr(struct enic *enic, int intr)
+ 
+ static inline int enic_dma_map_check(struct enic *enic, dma_addr_t dma_addr)
+ {
+-	if (unlikely(pci_dma_mapping_error(enic->pdev, dma_addr))) {
++	if (unlikely(dma_mapping_error(&enic->pdev->dev, dma_addr))) {
+ 		net_warn_ratelimited("%s: PCI dma mapping failed!\n",
+ 				     enic->netdev->name);
+ 		enic->gen_stats.dma_map_error++;
+-- 
+2.32.0
 
-* Add tags for the offending commit:
-
-  Fixes: 8d479237727c ("serial: amba-pl011: add RS485 support")
-  Cc: stable@vger.kernel.org # v5.15+
-
-* Be sure to cc the author of the offending commit.
-
-Thanks,
-
-Lukas
-
-> ---
->  drivers/tty/serial/amba-pl011.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
-> index 537f37ac4..1749c1498 100644
-> --- a/drivers/tty/serial/amba-pl011.c
-> +++ b/drivers/tty/serial/amba-pl011.c
-> @@ -1646,8 +1646,12 @@ static void pl011_set_mctrl(struct uart_port *port, unsigned int mctrl)
->  	    container_of(port, struct uart_amba_port, port);
->  	unsigned int cr;
->  
-> -	if (port->rs485.flags & SER_RS485_ENABLED)
-> -		mctrl &= ~TIOCM_RTS;
-> +	if (port->rs485.flags & SER_RS485_ENABLED) {
-> +		if (port->rs485.flags & SER_RS485_RTS_AFTER_SEND)
-> +			mctrl &= ~TIOCM_RTS;
-> +		else
-> +			mctrl |= TIOCM_RTS;
-> +	}
->  
->  	cr = pl011_read(uap, REG_CR);

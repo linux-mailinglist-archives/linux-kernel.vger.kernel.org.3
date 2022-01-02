@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2E4648295C
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 06:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C5E482961
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 06:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbiABFeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 00:34:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35092 "EHLO
+        id S230397AbiABFio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 00:38:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbiABFeT (ORCPT
+        with ESMTP id S230355AbiABFil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 00:34:19 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A708C06173F
-        for <linux-kernel@vger.kernel.org>; Sat,  1 Jan 2022 21:34:19 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id r4so25191565lfe.7
-        for <linux-kernel@vger.kernel.org>; Sat, 01 Jan 2022 21:34:19 -0800 (PST)
+        Sun, 2 Jan 2022 00:38:41 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE25C06173F
+        for <linux-kernel@vger.kernel.org>; Sat,  1 Jan 2022 21:38:39 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id x7so68436456lfu.8
+        for <linux-kernel@vger.kernel.org>; Sat, 01 Jan 2022 21:38:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=92ZAzCrCPw0W1NFt/Y4QYxWJV7lis48854pVbK+SYG4=;
-        b=qCQ7fuFvoP38NvSywvxG3zAhp9FxZ5InVyVfNdATCe0bCC9nRt2cRf2T8FZOqinAaV
-         Cr9Nj3fjMNfFV8YlWFxpG/pcb6RiVKSWXCUAnLhFA/1FFmlSmLF4zb+HOgEHYg1b16sC
-         KL/JJoC1mr8tNru2Oa4Jq6Sj5TNuxGaUn3SMIKIk9McaZ5Cz4iaSOvGQiIojw6cjIIyA
-         X3R0ilGtEPNt9mAhqX/SMyQm2UXUC4fbpgNOZPYrJG9dglIRrW5vakche/gqdc4oCMwY
-         7Jbyn5fJLTpTZJ05rpARLwPKi7amKxRgS8jrfD646IunH9Oo2hI59T1vqLTgqh3jw6kC
-         BPeA==
+        bh=NKM5pDpKGo5CtAH2kaYK05iHThvnh/g8xXIKQdgPzT4=;
+        b=Jaa78xZz4Ef1rWk+5+c+lsETsvvfUKfaFf2NdHyTLKUbozrIHly0Eb9oAX2cbexbA6
+         JfqMuVuwGZ7a2wmeOJkQUblcPzxM4WjQxcztd2DRYI5dsNnvbK1fAsK1Osvniu0eptPf
+         jX+lqvjCrkef75juC+FtShWUq8RsfAI/eiChjMHu8God82rZ5elKzIuJ5Pcx7hjdR9/G
+         Szd3hPGvTv6CVGJnnMejGdd5GAB2UuxdVLgTaJHCvuCEjUOJgbdMImQrFFLjPEUcC3dJ
+         n8mS+18IpE93eTslSNobZIPTClvNekn6UV1EOKyZ28XCVO0dTYNVzfMMJBnKlG7nXRf/
+         ykrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=92ZAzCrCPw0W1NFt/Y4QYxWJV7lis48854pVbK+SYG4=;
-        b=i3+KWUN2zx68GGJ+FgB77DmEE7+taiBKHTVrIHOJUrQBlqR14uQ7QIFe5CupMZPeEI
-         cgWE4MjJ47ye4mgoZd/cT1I8pHLPpPOcjgKZZ3ZR8G5Qp8Z7y5llcJiuODDV0OxD4CKM
-         8XGc+Hes4ZjI2fRYgiTAwal51PeoRuzJMbiAkxyX4auOlUTSL2aVDINgs7IQQdA3y9Te
-         STga1TGnuGLfEL/yax5dXY+GDVv4APby6BQluHyRyGrn3tJQLG++XuEsV2a/tTs7Lh8s
-         tQt86yVzRljxtIaQvLH7ky83o6vRbNvnizjyIjZUgPp+/rPap44hMTTJENpZqdDclm3o
-         KWWQ==
-X-Gm-Message-State: AOAM533ew1zDyVlOKWbiM7HuvXY+lMInO7BXqitz51MMl86tLo1VTICg
-        PMN5in5xsg/jxIKkpH+cPeG1olTtiC2buTmhE/F+4g==
-X-Google-Smtp-Source: ABdhPJybDhokn+xOVsFdW+LfgnJof+m7g7TYaEEWVbC+XMFpx5jKW+mJxZ0kkJrYuc2RLM2CC8d/xzZp3Ew/OWgI5oQ=
-X-Received: by 2002:a05:6512:39ce:: with SMTP id k14mr18986263lfu.508.1641101657431;
- Sat, 01 Jan 2022 21:34:17 -0800 (PST)
+        bh=NKM5pDpKGo5CtAH2kaYK05iHThvnh/g8xXIKQdgPzT4=;
+        b=3lb6NZFGidb5rzZVK9PqUAyv6r1JL5/Fs4f9AcSE/14dzYxWkCoV+ghSu/h1vSnDb9
+         EBGaVyb+GnaVp5Wtj5+bnmVZu/kKEc4hilcVDBPvVR4IeAo//L4kZQZ/jA2lPJbnCesH
+         8tYxlYkGBR5mUEeydCG4AbRDM25b0W4eh9EgEAWUBXCIVGSUHYo+uztTrQagYO+/Vjvg
+         AkK546uVg+S1JbPZgHVVg4UAsoUGt6NMtWl3BOwm/F1UUsMRIvqWpuysbjudsN6U35sH
+         ROJG7Mpo/LlArWKTtw15YoFArsldlTs4foI1AfbJ/7w65Vb7DGc8RaUx6XwL7sYszRjg
+         QNdA==
+X-Gm-Message-State: AOAM531F5pBy2XrfbDjdBax31qrvfyQoK6OhDOTbk8rItoRg8OGoCukU
+        SisyJSoGpCvV0NjqtDkaboZHy3ObefULhF64hkZXTg==
+X-Google-Smtp-Source: ABdhPJwScD+cSe/FoT2vC+ARQMc7NMM24G1QSYXN5N9jDj/84sI63A0trDPqp1K62en32Eo/3RO6hb6S+ag/FDiF8VA=
+X-Received: by 2002:a05:6512:750:: with SMTP id c16mr37581258lfs.622.1641101917347;
+ Sat, 01 Jan 2022 21:38:37 -0800 (PST)
 MIME-Version: 1.0
-References: <20211226153624.162281-1-marcan@marcan.st> <20211226153624.162281-7-marcan@marcan.st>
-In-Reply-To: <20211226153624.162281-7-marcan@marcan.st>
+References: <20211226153624.162281-1-marcan@marcan.st> <20211226153624.162281-8-marcan@marcan.st>
+In-Reply-To: <20211226153624.162281-8-marcan@marcan.st>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 2 Jan 2022 06:34:05 +0100
-Message-ID: <CACRpkdZaPKApKLS8jRjtg2dXvz0e_XmEVzndNQbZ34hMUaZwcA@mail.gmail.com>
-Subject: Re: [PATCH 06/34] brcmfmac: firmware: Support passing in multiple board_types
-To:     Hector Martin <marcan@marcan.st>,
-        Dmitry Osipenko <digetx@gmail.com>
+Date:   Sun, 2 Jan 2022 06:38:25 +0100
+Message-ID: <CACRpkdbyFr-ZQuKOtx4+RRRBddmPGGUTY0j2VvT_7KxRBEQzNQ@mail.gmail.com>
+Subject: Re: [PATCH 07/34] brcmfmac: pcie: Read Apple OTP information
+To:     Hector Martin <marcan@marcan.st>
 Cc:     Kalle Valo <kvalo@codeaurora.org>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -85,13 +84,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Sun, Dec 26, 2021 at 4:37 PM Hector Martin <marcan@marcan.st> wrote:
 
-> In order to make use of the multiple alt_path functionality, change
-> board_type to an array. Bus drivers can pass in a NULL-terminated list
-> of board type strings to try for the firmware fetch.
+> On Apple platforms, the One Time Programmable ROM in the Broadcom chips
+> contains information about the specific board design (module, vendor,
+> version) that is required to select the correct NVRAM file. Parse this
+> OTP ROM and extract the required strings.
+>
+> Note that the user OTP offset/size is per-chip. This patch does not add
+> any chips yet.
 >
 > Signed-off-by: Hector Martin <marcan@marcan.st>
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Overall looks fine!
+
+> +       const char *chip_params;
+> +       const char *module_params;
+
+This variable name "module_params" is a bit confusing since loadable
+kernel modules have params...
+
+Can we think of another name and just put a comment that this
+refers to the WiFi module building block?
+
+Sometimes people talk about SoM:s (system-on-modules), so
+maybe som_params or brcm_som_params?
 
 Yours,
 Linus Walleij

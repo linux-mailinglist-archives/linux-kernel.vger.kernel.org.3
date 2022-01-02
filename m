@@ -2,33 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15283482D3D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 00:33:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F39B482D33
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 00:33:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbiABXdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 18:33:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231144AbiABXcz (ORCPT
+        id S231159AbiABXc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 18:32:57 -0500
+Received: from angie.orcam.me.uk ([78.133.224.34]:38400 "EHLO
+        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229516AbiABXcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 18:32:55 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8EF9EC061785
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jan 2022 15:32:54 -0800 (PST)
+        Sun, 2 Jan 2022 18:32:54 -0500
+X-Greylist: delayed 553 seconds by postgrey-1.27 at vger.kernel.org; Sun, 02 Jan 2022 18:32:53 EST
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 923099200C0; Mon,  3 Jan 2022 00:24:14 +0100 (CET)
+        id DBD2E9200C1; Mon,  3 Jan 2022 00:24:19 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 8E6649200BF;
-        Sun,  2 Jan 2022 23:24:14 +0000 (GMT)
-Date:   Sun, 2 Jan 2022 23:24:14 +0000 (GMT)
+        by angie.orcam.me.uk (Postfix) with ESMTP id D8CD09200BF;
+        Sun,  2 Jan 2022 23:24:19 +0000 (GMT)
+Date:   Sun, 2 Jan 2022 23:24:19 +0000 (GMT)
 From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Jean Delvare <jdelvare@suse.com>
-cc:     linux-kernel@vger.kernel.org
-Subject: [RESEND][PATCH 2/2] firmware: dmi: Log board vendor if no system
- vendor has been given
-In-Reply-To: <alpine.DEB.2.21.2201020127140.56863@angie.orcam.me.uk>
-Message-ID: <alpine.DEB.2.21.2201020131540.56863@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2201020127140.56863@angie.orcam.me.uk>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>
+cc:     x86@kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/4] x86/PCI: Odd generic PIRQ router improvements
+Message-ID: <alpine.DEB.2.21.2201020142430.56863@angie.orcam.me.uk>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -36,80 +35,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some systems do not provide any names with System Information, e.g. the 
-Tyan Tomcat IV S1564D mainboard reports:
+Hi,
 
-Legacy DMI 2.0 present.
-DMI:  /i430HX, BIOS 4.51 PG 05/13/98
+ Resending as this has gone into void.  Also there is a context dependency 
+with a change developed later possibly causing a merge conflict, so to 
+make it easier to queue the incoming patches I have folded the follow-up 
+change into this series, expanding it to 4 patches from the original 3 and 
+mechanically regenerating according to upstream changes.  I have updated 
+the cover letter accordingly.
 
-This is not unreasonable given that it was retailed as a bare mainboard 
-rather that a complete system, so no information could have been known 
-about the integrator.  It does have the manufacturer correctly recorded 
-with Base Board Information though:
+ While working on the SiS85C497 PIRQ router I have noticed an odd
+phenomenon with my venerable Tyan Tomcat IV S1564D board, where the PCI 
+INTD# line of the USB host controller included as function 3 of the PIIX3 
+southbridge cannot be routed in the `noapic' mode.  As it turns out the 
+reason for this is the BIOS has two individual entries in its PIRQ table 
+for two of its three functions, and the wrong one is chosen for routing 
+said line.
 
-Handle 0x0001
-	DMI type 1, 8 bytes.
-	System Information
-		Manufacturer:
-		Product Name:
-		Version:
-		Serial Number:
-Handle 0x0002
-	DMI type 2, 8 bytes.
-	Base Board Information
-		Manufacturer: Tyan Computer Corp
-		Product Name: i430HX
-		Version:
-		Serial Number:
+ Strictly speaking this violates the PCI BIOS specification, but it can be 
+easily worked around while preserving the semantics for compliant systems.
 
-Resort to logging the board manufacturer then if none has been given for 
-the system.  Also refrain from including the separating slash if no name 
-has been given for the system.
+ Therefore I have come up with this patch series, which addresses this 
+problem with 3/4, adds function reporting to the debug PIRQ table dump 
+with 2/4 and also prints a usable physical memory address of the PIRQ 
+table in a debug message with 1/4.
 
-Output is now:
+ Then 4/4 follows, addressing the inability to use a PIRQ table to route 
+interrupts for devices placed behind PCI-to-PCI bridges on option cards, 
+and especially where the BIOS has failed to enumerate the whole bus tree 
+in the first place.
 
-Legacy DMI 2.0 present.
-DMI: Tyan Computer Corp i430HX, BIOS 4.51 PG 05/13/98
+ See individual change descriptions for further details.
 
-for said board, surely more informative (of course a better name could 
-have been chosen for the product than just "i430HX", but there you go).
+ Please apply.
 
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
----
- drivers/firmware/dmi_scan.c |   16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
-
-linux-dmi-board-vendor.diff
-Index: linux-macro-ide-tty/drivers/firmware/dmi_scan.c
-===================================================================
---- linux-macro-ide-tty.orig/drivers/firmware/dmi_scan.c
-+++ linux-macro-ide-tty/drivers/firmware/dmi_scan.c
-@@ -535,17 +535,23 @@ static int __init print_filtered(char *b
- static void __init dmi_format_ids(char *buf, size_t len)
- {
- 	int c = 0;
-+	const char *vendor;
- 	const char *board;	/* Board Name is optional */
-+	const char *name;
- 
--	c += print_filtered(buf + c, len - c,
--			    dmi_get_system_info(DMI_SYS_VENDOR));
-+	vendor = dmi_get_system_info(DMI_SYS_VENDOR);
-+	if (!vendor || !*vendor)
-+		vendor = dmi_get_system_info(DMI_BOARD_VENDOR);
-+	c += print_filtered(buf + c, len - c, vendor);
- 	c += scnprintf(buf + c, len - c, " ");
--	c += print_filtered(buf + c, len - c,
--			    dmi_get_system_info(DMI_PRODUCT_NAME));
-+
-+	name = dmi_get_system_info(DMI_PRODUCT_NAME);
-+	c += print_filtered(buf + c, len - c, name);
- 
- 	board = dmi_get_system_info(DMI_BOARD_NAME);
- 	if (board && *board) {
--		c += scnprintf(buf + c, len - c, "/");
-+		if (name && *name)
-+			c += scnprintf(buf + c, len - c, "/");
- 		c += print_filtered(buf + c, len - c, board);
- 	}
- 	c += scnprintf(buf + c, len - c, ", BIOS ");
+  Maciej

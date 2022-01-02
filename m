@@ -2,128 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B40F04828B9
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jan 2022 23:58:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9054828CE
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 01:06:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232566AbiAAW6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 1 Jan 2022 17:58:08 -0500
-Received: from mga02.intel.com ([134.134.136.20]:65310 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231582AbiAAW6I (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 1 Jan 2022 17:58:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641077888; x=1672613888;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7SK0DU34lm4A76mU+OTQXk/ZoNkBeoIrXAV+IY98qgg=;
-  b=FZFaSeoy5pEDW34zH/fHjiQY/aWY1N7/k+unpmoI7ygzAOQVEljE6Zpn
-   NurzF0frVb3ErVVqNdwxv09/RM/0R2lWNxeMYcQJGExtmpVGlo728oDQd
-   bPA+yzqQYLHAdgTIdszXGZAvs4In80TzatOWV89DMrqi16N5x/1jLyavP
-   jDz21ljMfNUyT+0lUMRv8GVap1MXBKlApxulKK2Otx8oaoKBFE1uonY7Y
-   BCIGXaTgmSY+kRScPUGVJ7xzoEFxlLFxNEkF+znseLzu+qmhjJ0n5hsyV
-   9U61sadTeKpDQxoCSynIVk0F2ksfanmLMerOkzLnv5G73tnm50ccHxz/q
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10214"; a="229237643"
-X-IronPort-AV: E=Sophos;i="5.88,254,1635231600"; 
-   d="scan'208";a="229237643"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2022 14:58:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,254,1635231600"; 
-   d="scan'208";a="610412205"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 01 Jan 2022 14:58:05 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n3nK9-000CrP-AG; Sat, 01 Jan 2022 22:58:05 +0000
-Date:   Sun, 2 Jan 2022 06:58:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Jessica Yu <jeyu@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Miroslav Benes <mbenes@suse.cz>
-Subject: kernel/module.c:4478:14: warning: variable 'exit' set but not used
-Message-ID: <202201020600.rl5oKvlD-lkp@intel.com>
+        id S232824AbiABAGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 1 Jan 2022 19:06:45 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:49226 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230286AbiABAGp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 1 Jan 2022 19:06:45 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C90C960C61;
+        Sun,  2 Jan 2022 00:06:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18894C36AEC;
+        Sun,  2 Jan 2022 00:06:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641082004;
+        bh=ZAUy90d6O2KXPxJR35W4rfyA39P/1qMUOwjjl8GsxCc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Oe4N2coccA5BDgwcczeS7n88UUIcCNwQwcajKE7YyAvaExQOmpvhn7cUPJPilUYDD
+         BjXNsQGT+d+38P0/1l95/sPEPVvwkSjukwVWDYY7mR/e9d4VueD4sUFu6Gaz6jCG+U
+         OOFdFfpFVNSnFI8pocqT6nHAAhOoQyqZFupUKBcwmR9kJaOAA+mNOBRpyqbLeI4G6o
+         G2VxehkTeChlljXPONBnnY5olzZgY160C4CXZk7rDwC1twWBoxQ1X6TFS3KgtSQwc3
+         v5zE2gmbb1nBKqlwFdtm1dx7xGZbc/rIzZpI2qRhuX43cO4KH37AjdfNtspPM4FzxG
+         oGsG/33nSiNnA==
+Received: by mail-yb1-f179.google.com with SMTP id e202so46656693ybf.4;
+        Sat, 01 Jan 2022 16:06:43 -0800 (PST)
+X-Gm-Message-State: AOAM533ZkxGfPhEr6dyzR9uyuQpQfIDTDrHJzQQU0pGi5VzE9oFVejf2
+        LThvqygGWSX7HyqIbuTXAWL3aqQjdS+TD5j4B6Q=
+X-Google-Smtp-Source: ABdhPJwdbYaJtCvfmIiaaj7O/eygUcSXYW0xsFgFpSc8iYQgx7lh9fqWlwjn4IuDYZ3HrHceOBN/3j9+w5UMh+RdI2s=
+X-Received: by 2002:a25:3745:: with SMTP id e66mr5560519yba.208.1641082003191;
+ Sat, 01 Jan 2022 16:06:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211226022411.22437-1-rdunlap@infradead.org>
+In-Reply-To: <20211226022411.22437-1-rdunlap@infradead.org>
+From:   Song Liu <song@kernel.org>
+Date:   Sat, 1 Jan 2022 16:06:32 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW5sC5bi3CfAtL1iwHHUbHvsVc0f0y6rn7szK1okBAaEWw@mail.gmail.com>
+Message-ID: <CAPhsuW5sC5bi3CfAtL1iwHHUbHvsVc0f0y6rn7szK1okBAaEWw@mail.gmail.com>
+Subject: Re: [PATCH] md: fix spelling of "its"
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        linux-raid <linux-raid@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Sat, Dec 25, 2021 at 6:24 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> Use the possessive "its" instead of the contraction "it's"
+> in printed messages.
+>
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Song Liu <song@kernel.org>
+> Cc: linux-raid@vger.kernel.org
 
-FYI, the error/warning still remains.
+Applied to md-next.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   278218f6778bc7d6f8b67199446c56cec7ebb841
-commit: 0d67e332e6df72f43eaa21228daa3a79e23093f3 module: fix clang CFI with MODULE_UNLOAD=n
-date:   3 months ago
-config: arm64-randconfig-r022-20220101 (https://download.01.org/0day-ci/archive/20220102/202201020600.rl5oKvlD-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7cd109b92c72855937273a6c8ab19016fbe27d33)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0d67e332e6df72f43eaa21228daa3a79e23093f3
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 0d67e332e6df72f43eaa21228daa3a79e23093f3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+Thanks!
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> kernel/module.c:4478:14: warning: variable 'exit' set but not used [-Wunused-but-set-variable]
-           exitcall_t *exit;
-                       ^
-   1 warning generated.
-
-
-vim +/exit +4478 kernel/module.c
-
-^1da177e4c3f41 Linus Torvalds 2005-04-16  4473  
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4474  static void cfi_init(struct module *mod)
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4475  {
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4476  #ifdef CONFIG_CFI_CLANG
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4477  	initcall_t *init;
-cf68fffb66d60d Sami Tolvanen  2021-04-08 @4478  	exitcall_t *exit;
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4479  
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4480  	rcu_read_lock_sched();
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4481  	mod->cfi_check = (cfi_check_fn)
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4482  		find_kallsyms_symbol_value(mod, "__cfi_check");
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4483  	init = (initcall_t *)
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4484  		find_kallsyms_symbol_value(mod, "__cfi_jt_init_module");
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4485  	exit = (exitcall_t *)
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4486  		find_kallsyms_symbol_value(mod, "__cfi_jt_cleanup_module");
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4487  	rcu_read_unlock_sched();
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4488  
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4489  	/* Fix init/exit functions to point to the CFI jump table */
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4490  	if (init)
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4491  		mod->init = *init;
-0d67e332e6df72 Arnd Bergmann  2021-09-27  4492  #ifdef CONFIG_MODULE_UNLOAD
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4493  	if (exit)
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4494  		mod->exit = *exit;
-0d67e332e6df72 Arnd Bergmann  2021-09-27  4495  #endif
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4496  
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4497  	cfi_module_add(mod, module_addr_min);
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4498  #endif
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4499  }
-cf68fffb66d60d Sami Tolvanen  2021-04-08  4500  
-
-:::::: The code at line 4478 was first introduced by commit
-:::::: cf68fffb66d60d96209446bfc4a15291dc5a5d41 add support for Clang CFI
-
-:::::: TO: Sami Tolvanen <samitolvanen@google.com>
-:::::: CC: Kees Cook <keescook@chromium.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+>  drivers/md/md-cluster.c |    2 +-
+>  drivers/md/md.c         |    2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> --- linux-next-20211224.orig/drivers/md/md.c
+> +++ linux-next-20211224/drivers/md/md.c
+> @@ -8402,7 +8402,7 @@ int md_setup_cluster(struct mddev *mddev
+>         spin_lock(&pers_lock);
+>         /* ensure module won't be unloaded */
+>         if (!md_cluster_ops || !try_module_get(md_cluster_mod)) {
+> -               pr_warn("can't find md-cluster module or get it's reference.\n");
+> +               pr_warn("can't find md-cluster module or get its reference.\n");
+>                 spin_unlock(&pers_lock);
+>                 return -ENOENT;
+>         }
+> --- linux-next-20211224.orig/drivers/md/md-cluster.c
+> +++ linux-next-20211224/drivers/md/md-cluster.c
+> @@ -574,7 +574,7 @@ static int process_recvd_msg(struct mdde
+>         int ret = 0;
+>
+>         if (WARN(mddev->cluster_info->slot_number - 1 == le32_to_cpu(msg->slot),
+> -               "node %d received it's own msg\n", le32_to_cpu(msg->slot)))
+> +               "node %d received its own msg\n", le32_to_cpu(msg->slot)))
+>                 return -1;
+>         switch (le32_to_cpu(msg->type)) {
+>         case METADATA_UPDATED:

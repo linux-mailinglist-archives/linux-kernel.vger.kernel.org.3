@@ -2,103 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61547482A6B
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 08:06:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF252482A70
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 08:08:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232874AbiABHG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 02:06:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
+        id S232885AbiABHIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 02:08:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiABHGY (ORCPT
+        with ESMTP id S229520AbiABHIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 02:06:24 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF23EC061574;
-        Sat,  1 Jan 2022 23:06:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=Q0ej29B2j8z2ws8+2YZINTmx55/6VfNY4BKK9M/i8rU=; b=NpkxujGjDDq5zLPA7hBZ9ZBIXF
-        Vv/QrXQdckNvHXp1o9YZRPJEgsZr2nkg+73hc8BKw4iy3CHuvGxMIleMmAzg27AJDmW9t/rWFFmSf
-        ibSYcF+QzUtPqkLcojAE7Ws7zDzVdj39g5Uuqw/UfCazmEGHntKA/IwpTPxXqBokbY7Yqv4Gusjns
-        QnazMvqArdmoP4PVB75V2KjbU1qek4nuPhUnTzNSJkQZrLnGOvU3IflbWsOEtism1tpPixCH7R1yL
-        2bIsXDAa4ITn0Nq6d6CvnB97AtPPymCGx8oFf32FmVkdJykNtmnsXODYw8/1Qd/KJuVDNvlbBMs5Y
-        YqPw6+0w==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n3uwi-007cUw-60; Sun, 02 Jan 2022 07:06:24 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>
-Cc:     linux-rdma@vger.kernel.org, linux-um@lists.infradead.org,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH 2/2] IB/rdmavt: modify rdmavt/qp.c for UML
-Date:   Sat,  1 Jan 2022 23:06:23 -0800
-Message-Id: <20220102070623.24009-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.31.1
+        Sun, 2 Jan 2022 02:08:34 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329DCC061574;
+        Sat,  1 Jan 2022 23:08:34 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id p7so50426488ljj.1;
+        Sat, 01 Jan 2022 23:08:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=4pJHGx8Mv9IfGjeqKBn3sbftuPoFfBWcnCGgc1xztxQ=;
+        b=G0eksPpTL0cBUAjxo9Uq/syqgZ+9CuQkn9g1+ODI1F5WuTU4/DoaLwjpuh2OigzdyZ
+         6OHPRlUm75CZOV2/J0tyrQswqd7QbAABMVIwzEDce0zH1AT9hHXbDRBCUd4kYasn24Ht
+         G8UNPFbRdBzBLt8CC6Zv1SU55AeZwlNd/29PjPqpIM8aD8R6iOmOyTk2e23wG0AZp5WZ
+         Vs+XpH4X5p8olNWfcbkba68wy8Rs1MuO58A0vWMA39jS41H6+AnkpXEpKtoD1Dy30uk9
+         ULQ18yF+7BoPRUSjec613wKU53k1KjaRAQ+RCUxRx1KcmtwLXUJWnWzWJ9UrkZby31OH
+         2ReQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=4pJHGx8Mv9IfGjeqKBn3sbftuPoFfBWcnCGgc1xztxQ=;
+        b=KuJ18D/vYehPU8eRm/Oxo9q8YoAk3+6uY8PilPKiHIpVMtldbLAH2rBULojncgKUXN
+         d+m4vH1YIp1yUWQqw4iYIjtMSNO8oMq/C0cBG7bmw/olrrBx7Ybb65yMvLTaP1NFt/6B
+         hfgyWRBoTW8pI6c+bprbNh7txRNvdDC5BeiCfmq3Jm82nOEryQeUJvmEY3iRPJOJ7SsE
+         fnhRdJJY2YkakWeJf3mRS7Mq49slTWpWY9CfL6DJnLVciw4+bPqTlykCw9uuT8pZkpcb
+         4QnuHEC/pUu0YuceFOb9qD85bl7Oq+oN/QGYWxjS/LevMgXAJHMWaTaJevbOZc5WhB5h
+         768g==
+X-Gm-Message-State: AOAM531/AufMA2F4BEK90uwZowGMY9XqPSB2kLN7gt5U5zIJTejCfxpr
+        EyxQE/BSo7thtPgAdJyk4F5OAmASl24=
+X-Google-Smtp-Source: ABdhPJzR1Z24rRNnRBmMEiZ9vuuUXv6kpIZiLr+j7LGf6GuFK3Ni7ZIx2WNCsviwkuU8UavVhkBIyw==
+X-Received: by 2002:a2e:b5a8:: with SMTP id f8mr36334292ljn.130.1641107312509;
+        Sat, 01 Jan 2022 23:08:32 -0800 (PST)
+Received: from [192.168.2.145] (46-138-43-24.dynamic.spd-mgts.ru. [46.138.43.24])
+        by smtp.googlemail.com with ESMTPSA id l2sm2317980lja.51.2022.01.01.23.08.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Jan 2022 23:08:32 -0800 (PST)
+Subject: Re: [PATCH 03/34] brcmfmac: firmware: Support having multiple alt
+ paths
+To:     Hector Martin <marcan@marcan.st>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Chung-hsien Hsu <chung-hsien.hsu@infineon.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "Daniel (Deognyoun) Kim" <dekim@broadcom.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com
+References: <20211226153624.162281-1-marcan@marcan.st>
+ <20211226153624.162281-4-marcan@marcan.st>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <c79d67af-2d4c-2c9d-bb7d-630faf9de175@gmail.com>
+Date:   Sun, 2 Jan 2022 10:08:30 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20211226153624.162281-4-marcan@marcan.st>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building rdmavt for ARCH=um, qp.c has a build error on a reference
-to the x86-specific cpuinfo field 'x86_cache_size'. This value is then
-used to determine whether to use cacheless_memcpy() or not.
-Provide a fake value to LLC for CONFIG_UML. Then provide a separate
-verison of cacheless_memcpy() for CONFIG_UML that is just a plain
-memcpy(), like the calling code uses.
+26.12.2021 18:35, Hector Martin пишет:
+> +static void brcm_free_alt_fw_paths(const char **alt_paths)
+> +{
+> +	int i;
+> +
+> +	if (!alt_paths)
+> +		return;
+> +
+> +	for (i = 0; alt_paths[i]; i++)
+> +		kfree(alt_paths[i]);
+> +
+> +	kfree(alt_paths);
+>  }
+>  
+>  static int brcmf_fw_request_firmware(const struct firmware **fw,
+>  				     struct brcmf_fw *fwctx)
+>  {
+>  	struct brcmf_fw_item *cur = &fwctx->req->items[fwctx->curpos];
+> -	int ret;
+> +	int ret, i;
+>  
+>  	/* Files can be board-specific, first try a board-specific path */
+>  	if (cur->type == BRCMF_FW_TYPE_NVRAM && fwctx->req->board_type) {
+> -		char *alt_path;
+> +		const char **alt_paths = brcm_alt_fw_paths(cur->path, fwctx);
+>  
+> -		alt_path = brcm_alt_fw_path(cur->path, fwctx->req->board_type);
+> -		if (!alt_path)
+> +		if (!alt_paths)
+>  			goto fallback;
+>  
+> -		ret = request_firmware(fw, alt_path, fwctx->dev);
+> -		kfree(alt_path);
+> -		if (ret == 0)
+> -			return ret;
+> +		for (i = 0; alt_paths[i]; i++) {
+> +			ret = firmware_request_nowarn(fw, alt_paths[i], fwctx->dev);
+> +			if (ret == 0) {
+> +				brcm_free_alt_fw_paths(alt_paths);
+> +				return ret;
+> +			}
+> +		}
+> +		brcm_free_alt_fw_paths(alt_paths);
+>  	}
+>  
+>  fallback:
+> @@ -641,6 +663,9 @@ static void brcmf_fw_request_done(const struct firmware *fw, void *ctx)
+>  	struct brcmf_fw *fwctx = ctx;
+>  	int ret;
+>  
+> +	brcm_free_alt_fw_paths(fwctx->alt_paths);
+> +	fwctx->alt_paths = NULL;
 
-Prevents these build errors:
+It looks suspicious that fwctx->alt_paths isn't zero'ed by other code
+paths. The brcm_free_alt_fw_paths() should take fwctx for the argument
+and fwctx->alt_paths should be set to NULL there.
 
-../drivers/infiniband/sw/rdmavt/qp.c: In function ‘rvt_wss_llc_size’:
-../drivers/infiniband/sw/rdmavt/qp.c:88:23: error: ‘struct cpuinfo_um’ has no member named ‘x86_cache_size’; did you mean ‘x86_capability’?
-  return boot_cpu_data.x86_cache_size;
+On the other hand, I'd change the **alt_paths to a fixed-size array.
+This should simplify the code, making it easier to follow and maintain.
 
-../drivers/infiniband/sw/rdmavt/qp.c: In function ‘cacheless_memcpy’:
-../drivers/infiniband/sw/rdmavt/qp.c:100:2: error: implicit declaration of function ‘__copy_user_nocache’; did you mean ‘copy_user_page’? [-Werror=implicit-function-declaration]
-  __copy_user_nocache(dst, (void __user *)src, n, 0);
+-	const char **alt_paths;
++	char *alt_paths[BRCM_MAX_ALT_FW_PATHS];
 
-Fixes: 68f5d3f3b654 ("um: add PCI over virtio emulation driver")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
----
- drivers/infiniband/sw/rdmavt/qp.c |   12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
---- linux-next-20211224.orig/drivers/infiniband/sw/rdmavt/qp.c
-+++ linux-next-20211224/drivers/infiniband/sw/rdmavt/qp.c
-@@ -84,10 +84,15 @@ EXPORT_SYMBOL(ib_rvt_state_ops);
- /* platform specific: return the last level cache (llc) size, in KiB */
- static int rvt_wss_llc_size(void)
- {
-+#if !defined(CONFIG_UML)
- 	/* assume that the boot CPU value is universal for all CPUs */
- 	return boot_cpu_data.x86_cache_size;
-+#else /* CONFIG_UML */
-+	return 1024;	/* fake 1 MB LLC size */
-+#endif
- }
- 
-+#if !defined(CONFIG_UML)
- /* platform specific: cacheless copy */
- static void cacheless_memcpy(void *dst, void *src, size_t n)
- {
-@@ -99,6 +104,13 @@ static void cacheless_memcpy(void *dst,
- 	 */
- 	__copy_user_nocache(dst, (void __user *)src, n, 0);
- }
-+#else
-+/* for CONFIG_UML, this is just a plain memcpy() */
-+static void cacheless_memcpy(void *dst, void *src, size_t n)
-+{
-+	memcpy(dst, src, n);
-+}
-+#endif
- 
- void rvt_wss_exit(struct rvt_dev_info *rdi)
- {
+Then you also won't need to NULL-terminate the array, which is a common
+source of bugs in kernel.

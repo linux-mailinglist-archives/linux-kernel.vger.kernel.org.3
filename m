@@ -2,103 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FBE1482C4A
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 18:02:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4241A482C4B
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 18:04:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbiABRCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 12:02:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiABRCK (ORCPT
+        id S229606AbiABRE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 12:04:29 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44508 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229463AbiABRE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 12:02:10 -0500
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1B3CC061761
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jan 2022 09:02:09 -0800 (PST)
-Received: from dslb-188-104-058-096.188.104.pools.vodafone-ip.de ([188.104.58.96] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <postmaster@kaiser.cx>)
-        id 1n44FB-0005FB-5O; Sun, 02 Jan 2022 18:02:05 +0100
-Received: from martin by martin-debian-2.paytec.ch with local (Exim 4.94.2)
-        (envelope-from <martin@martin-debian-2.paytec.ch>)
-        id 1n44FA-000DFb-IA; Sun, 02 Jan 2022 18:02:04 +0100
-Date:   Sun, 2 Jan 2022 18:02:04 +0100
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Michael Straube <straube.linux@gmail.com>
-Cc:     gregkh@linuxfoundation.org, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/7] staging: r8188eu: bRDGEnable is always false
-Message-ID: <YdHajL5y9banviZN@martin-debian-1.paytec.ch>
-References: <20220101084937.3411-1-straube.linux@gmail.com>
- <20220101084937.3411-2-straube.linux@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220101084937.3411-2-straube.linux@gmail.com>
-Sender: "Martin Kaiser,,," <martin@martin-debian-2.paytec.ch>
+        Sun, 2 Jan 2022 12:04:28 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7693060F05
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jan 2022 17:04:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DBBBAC36AE9;
+        Sun,  2 Jan 2022 17:04:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641143066;
+        bh=SgQxRl9NPw71tXOXq40vgT6b2QsFu+ARtz+umgs6t2Y=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Czg8AxeEgR23RAI+Z6h+RreevUV6is/gSsXRx0AMVl51Wu+CnfKwLQ8KL815u+t5t
+         pJthGqYZSItblflM03vROLeE20ZzUEzwp/SsI1FH4QRab1SskpYvVa3zMfLOUUm0yn
+         FMF7xrwhbRvlkB6STNFzRxSwjdLwYhlogL2XdCPArUroYT/ZtghWtgRCi+DC/4tokh
+         lHaqG9N+KDqzE3APdUs5oxaCTkTcU5VRXp6+SZiyGTF6InT1faS7sK+wZSlDFxRBMg
+         XyEznp2jjDvyA+vyZ6JxBKmolDOyr1u+Kl2ScMPuo6V9C1xV+VctKtXfEZFZPiQXjD
+         4ZxVKE0t0OrsA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C784BC32795;
+        Sun,  2 Jan 2022 17:04:26 +0000 (UTC)
+Subject: Re: [GIT PULL] x86/urgent for 5.16
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YdFxi7TVYP61uA4f@zn.tnic>
+References: <YdFxi7TVYP61uA4f@zn.tnic>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YdFxi7TVYP61uA4f@zn.tnic>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v5.16_rc8
+X-PR-Tracked-Commit-Id: d6f12f83989bb356ac6880a954f62c7667e35066
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 1286cc4893cf356ad6c3a042116981e827dd3680
+Message-Id: <164114306680.7230.4942660350214464195.pr-tracker-bot@kernel.org>
+Date:   Sun, 02 Jan 2022 17:04:26 +0000
+To:     Borislav Petkov <bp@suse.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thus wrote Michael Straube (straube.linux@gmail.com):
+The pull request you sent on Sun, 2 Jan 2022 10:34:03 +0100:
 
-> The field bRDGEnable in struct hal_data_8188e is never set. It stays
-> at its default value 0. Remove bRDGEnable and related dead code.
+> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v5.16_rc8
 
-> Signed-off-by: Michael Straube <straube.linux@gmail.com>
-> ---
-> v3: no changes
-> v2: no changes
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/1286cc4893cf356ad6c3a042116981e827dd3680
 
->  drivers/staging/r8188eu/hal/usb_halinit.c      | 10 ----------
->  drivers/staging/r8188eu/include/rtl8188e_hal.h |  3 ---
->  2 files changed, 13 deletions(-)
+Thank you!
 
-> diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-> index d5c7e8bf1f38..104705ef170e 100644
-> --- a/drivers/staging/r8188eu/hal/usb_halinit.c
-> +++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-> @@ -384,13 +384,6 @@ static void _InitEDCA(struct adapter *Adapter)
->  	rtw_write32(Adapter, REG_EDCA_VO_PARAM, 0x002FA226);
->  }
-
-> -static void _InitRDGSetting(struct adapter *Adapter)
-> -{
-> -	rtw_write8(Adapter, REG_RD_CTRL, 0xFF);
-> -	rtw_write16(Adapter, REG_RD_NAV_NXT, 0x200);
-> -	rtw_write8(Adapter, REG_RD_RESP_PKT_TH, 0x05);
-> -}
-> -
->  static void _InitRetryFunction(struct adapter *Adapter)
->  {
->  	u8 value8;
-> @@ -712,9 +705,6 @@ u32 rtl8188eu_hal_init(struct adapter *Adapter)
->  	value16 |= (MACTXEN | MACRXEN);
->  	rtw_write8(Adapter, REG_CR, value16);
-
-> -	if (haldata->bRDGEnable)
-> -		_InitRDGSetting(Adapter);
-> -
->  	/* Enable TX Report */
->  	/* Enable Tx Report Timer */
->  	value8 = rtw_read8(Adapter, REG_TX_RPT_CTRL);
-> diff --git a/drivers/staging/r8188eu/include/rtl8188e_hal.h b/drivers/staging/r8188eu/include/rtl8188e_hal.h
-> index b42af86555cd..e8cb093abb62 100644
-> --- a/drivers/staging/r8188eu/include/rtl8188e_hal.h
-> +++ b/drivers/staging/r8188eu/include/rtl8188e_hal.h
-> @@ -236,9 +236,6 @@ struct hal_data_8188e {
-
->  	u32	RfRegChnlVal[2];
-
-> -	/* RDG enable */
-> -	bool	 bRDGEnable;
-> -
->  	/* for host message to fw */
->  	u8	LastHMEBoxNum;
-
-> -- 
-> 2.34.1
-
-Acked-by: Martin Kaiser <martin@kaiser.cx>
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

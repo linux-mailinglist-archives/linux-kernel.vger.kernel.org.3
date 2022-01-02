@@ -2,78 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F0B482C85
-	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 19:06:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93A84482C8C
+	for <lists+linux-kernel@lfdr.de>; Sun,  2 Jan 2022 19:28:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbiABSGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 13:06:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
+        id S229553AbiABS2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 13:28:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiABSGf (ORCPT
+        with ESMTP id S229450AbiABS2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 13:06:35 -0500
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C4AC061761
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jan 2022 10:06:34 -0800 (PST)
-Received: from dslb-188-104-058-096.188.104.pools.vodafone-ip.de ([188.104.58.96] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <postmaster@kaiser.cx>)
-        id 1n45FW-0005cX-BA; Sun, 02 Jan 2022 19:06:30 +0100
-Received: from martin by martin-debian-2.paytec.ch with local (Exim 4.94.2)
-        (envelope-from <martin@martin-debian-2.paytec.ch>)
-        id 1n45FV-000NCe-LX; Sun, 02 Jan 2022 19:06:29 +0100
-Date:   Sun, 2 Jan 2022 19:06:29 +0100
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Michael Straube <straube.linux@gmail.com>
-Cc:     gregkh@linuxfoundation.org, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/11] staging: r8188eu: the next set of cleanups
-Message-ID: <YdHppRqgNdPRGhBg@martin-debian-1.paytec.ch>
-References: <20220102131141.12310-1-straube.linux@gmail.com>
+        Sun, 2 Jan 2022 13:28:03 -0500
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A6CC061761;
+        Sun,  2 Jan 2022 10:28:03 -0800 (PST)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 8BFDB100DECB3;
+        Sun,  2 Jan 2022 19:28:01 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 697BF16E2A; Sun,  2 Jan 2022 19:28:01 +0100 (CET)
+Date:   Sun, 2 Jan 2022 19:28:01 +0100
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     jmades <jochen@mades.net>, gregkh@linuxfoundation.org,
+        Russell King <linux@armlinux.org.uk>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>
+Subject: Re: [PATCH] Bugfix RTS line config in RS485 mode is overwritten in
+ pl011_set_mctrl() function.
+Message-ID: <20220102182801.GA22268@wunner.de>
+References: <20211231171516.18407-1-jochen@mades.net>
+ <20220102100710.GA29858@wunner.de>
+ <0e0e91b8-72f8-aa31-50e2-80090dd5613a@gmx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220102131141.12310-1-straube.linux@gmail.com>
-Sender: "Martin Kaiser,,," <martin@martin-debian-2.paytec.ch>
+In-Reply-To: <0e0e91b8-72f8-aa31-50e2-80090dd5613a@gmx.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thus wrote Michael Straube (straube.linux@gmail.com):
+On Sun, Jan 02, 2022 at 04:06:53PM +0100, Lino Sanfilippo wrote:
+> On 02.01.22 at 11:07, Lukas Wunner wrote:
+> > On Fri, Dec 31, 2021 at 05:15:14PM +0000, jmades wrote:
+> > > --- a/drivers/tty/serial/amba-pl011.c
+> > > +++ b/drivers/tty/serial/amba-pl011.c
+> > > @@ -1646,8 +1646,12 @@ static void pl011_set_mctrl(struct uart_port *port, unsigned int mctrl)
+> > >  	    container_of(port, struct uart_amba_port, port);
+> > >  	unsigned int cr;
+> > >
+> > > -	if (port->rs485.flags & SER_RS485_ENABLED)
+> > > -		mctrl &= ~TIOCM_RTS;
+> > > +	if (port->rs485.flags & SER_RS485_ENABLED) {
+> > > +		if (port->rs485.flags & SER_RS485_RTS_AFTER_SEND)
+> > > +			mctrl &= ~TIOCM_RTS;
+> > > +		else
+> > > +			mctrl |= TIOCM_RTS;
+> > > +	}
+> > >
+> > >  	cr = pl011_read(uap, REG_CR);
+> 
+> Does this logic really have to be implemented in the driver?
 
-> This set
->  - removes some unused structs, enums and defines
->  - removes set but not used fields from some structures
+No, it doesn't have to be and indeed I'm working towards consolidating
+it in the serial core with this collection of patches:
 
-> Tested on x86_64 with Inter-Tech DMG-02.
+https://git.kernel.org/gregkh/tty/c/d3b3404df318
+https://lore.kernel.org/all/f49f945375f5ccb979893c49f1129f51651ac738.1641129062.git.lukas@wunner.de
+https://lore.kernel.org/all/e22089ab49e6e78822c50c8c4db46bf3ee885623.1641129328.git.lukas@wunner.de
+https://lore.kernel.org/all/bceeaba030b028ed810272d55d5fc6f3656ddddb.1641129752.git.lukas@wunner.de
+https://github.com/l1k/linux/commit/532ef2ad757f
 
-> Michael Straube (11):
->   staging: r8188eu: remove MAX_CHANNEL_NUM_2G
->   staging: r8188eu: remove struct rt_channel_plan_2g
->   staging: r8188eu: remove unused enum and defines
->   staging: r8188eu: struct rx_hpc is not used
->   staging: r8188eu: clean up struct rtw_dig
->   staging: r8188eu: clean up struct sw_ant_switch
->   staging: r8188eu: struct odm_sta_info is not used
->   staging: r8188eu: enum hw90_block is not used
->   staging: r8188eu: remove unneeded comments from Hal8188EPhyCfg.h
->   staging: r8188eu: remove unused defines from Hal8188EPhyCfg.h
->   staging: r8188eu: remove unused defines from rtw_eeprom.h
+The last of these removes the rs485 logic from pl011_set_mctrl().
+I'll post it once the others (and Jochen Mades' patch) have landed.
 
->  drivers/staging/r8188eu/core/rtw_mlme_ext.c   |  2 +-
->  drivers/staging/r8188eu/hal/odm.c             | 11 ---
->  .../staging/r8188eu/include/Hal8188EPhyCfg.h  | 34 +------
->  drivers/staging/r8188eu/include/odm.h         | 90 +------------------
->  drivers/staging/r8188eu/include/rtw_eeprom.h  | 31 -------
->  .../staging/r8188eu/include/rtw_mlme_ext.h    |  5 --
->  drivers/staging/r8188eu/include/rtw_rf.h      | 24 -----
->  7 files changed, 3 insertions(+), 194 deletions(-)
+Even though the logic is eventually removed from pl011_set_mctrl(),
+Jochen's patch makes sense as a backportable fix for v5.15.
 
-> -- 
-> 2.34.1
 
-for all patches
+> It looks as if the serial core already takes RS485 into account before
+> calling set_mctrls(). At least I get the impression when looking
+> at uart_tiocmset() and uart_port_dtr_rts(). Also other drivers like imx
+> simply seem to ignore RTS in case of RS485.
 
-Acked-by: Martin Kaiser <martin@kaiser.cx>
+The logic in uart_port_dtr_rts() is broken.  That's fixed by d3b3404df318,
+which is queued up in tty-next for v5.17.
+
+The pl011 driver papered over it with its own rs485-specific logic in
+pl011_set_mctrl().  But as Jochen Mades correctly pointed out, that
+only worked correctly if RTS is driven high on idle.
+
+
+The logic in uart_tiocmset() is correct, but not sufficient because
+uart_throttle(), uart_unthrottle and uart_set_termios() need to become
+rs485-aware as well.  That's also addressed by the above-linked
+GitHub commit.
+
+Thanks,
+
+Lukas

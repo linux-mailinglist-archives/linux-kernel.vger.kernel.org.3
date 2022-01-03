@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7FFF483278
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:28:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 145114832E2
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:32:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234134AbiACO2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:28:00 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58602 "EHLO
+        id S234675AbiACObb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:31:31 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60396 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233711AbiACO1N (ORCPT
+        with ESMTP id S234390AbiACO3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:27:13 -0500
+        Mon, 3 Jan 2022 09:29:04 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AADBEB80EF2;
-        Mon,  3 Jan 2022 14:27:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C45BEC36AEB;
-        Mon,  3 Jan 2022 14:27:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 567E9B80F4B;
+        Mon,  3 Jan 2022 14:29:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90335C36AEB;
+        Mon,  3 Jan 2022 14:29:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220030;
-        bh=PXiKZ5/+VkOThTo1q2YxSENXuwQ31fc09fEktv2lT7Y=;
+        s=korg; t=1641220142;
+        bh=KN/rfn8uLbLW12jyH3PUZ8URqNdpwFCpFYUNeRo93vw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gbOFGI5mVH0M1OVyPYlgey//xxeKF2JBYMsyHJ3p6gSGV+n5lVbf05v+oavnkrRxT
-         LKA6/x4sDjo+3YNJUUt46BHMfX3Cn8zTGMM/PJBpliUnn5YQX05qoBFl8BIYwtGn9Y
-         Zhswlfse+t121OlcvCzqDVONaHoBKd+i9nEixaSY=
+        b=jX6pxKJVH5SSf48d+rgZTRnFxh//NceBpPn4wly8Sv06hMJPkhfSaMSq9vnknNUFf
+         lZ7BvXAfUZO6hYl0S78eR+Ytqn8QiG23rtAtRLKkmqDJ4d+YhsvXw4YrMD0G0vX27O
+         Z3ZBNgbnfYu60aYAMCGO+G1xjJSn++kQJHUTBMa0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Samuel=20=C4=8Cavoj?= <samuel@cavoj.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 04/37] Input: i8042 - enable deferred probe quirk for ASUS UM325UA
+        stable@vger.kernel.org, Helge Deller <deller@gmx.de>,
+        Sasha Levin <sashal@kernel.org>,
+        John David Anglin <dave.anglin@bell.net>
+Subject: [PATCH 5.10 05/48] parisc: Clear stale IIR value on instruction access rights trap
 Date:   Mon,  3 Jan 2022 15:23:42 +0100
-Message-Id: <20220103142052.017846433@linuxfoundation.org>
+Message-Id: <20220103142053.666629092@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142051.883166998@linuxfoundation.org>
-References: <20220103142051.883166998@linuxfoundation.org>
+In-Reply-To: <20220103142053.466768714@linuxfoundation.org>
+References: <20220103142053.466768714@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,43 +46,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Čavoj <samuel@cavoj.net>
+From: Helge Deller <deller@gmx.de>
 
-[ Upstream commit 44ee250aeeabb28b52a10397ac17ffb8bfe94839 ]
+[ Upstream commit 484730e5862f6b872dca13840bed40fd7c60fa26 ]
 
-The ASUS UM325UA suffers from the same issue as the ASUS UX425UA, which
-is a very similar laptop. The i8042 device is not usable immediately
-after boot and fails to initialize, requiring a deferred retry.
+When a trap 7 (Instruction access rights) occurs, this means the CPU
+couldn't execute an instruction due to missing execute permissions on
+the memory region.  In this case it seems the CPU didn't even fetched
+the instruction from memory and thus did not store it in the cr19 (IIR)
+register before calling the trap handler. So, the trap handler will find
+some random old stale value in cr19.
 
-Enable the deferred probe quirk for the UM325UA.
+This patch simply overwrites the stale IIR value with a constant magic
+"bad food" value (0xbaadf00d), in the hope people don't start to try to
+understand the various random IIR values in trap 7 dumps.
 
-BugLink: https://bugzilla.suse.com/show_bug.cgi?id=1190256
-Signed-off-by: Samuel Čavoj <samuel@cavoj.net>
-Link: https://lore.kernel.org/r/20211204015615.232948-1-samuel@cavoj.net
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Noticed-by: John David Anglin <dave.anglin@bell.net>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/input/serio/i8042-x86ia64io.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/parisc/kernel/traps.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/input/serio/i8042-x86ia64io.h b/drivers/input/serio/i8042-x86ia64io.h
-index 2bd33a28b97cc..0282c4c55e9da 100644
---- a/drivers/input/serio/i8042-x86ia64io.h
-+++ b/drivers/input/serio/i8042-x86ia64io.h
-@@ -1003,6 +1003,13 @@ static const struct dmi_system_id i8042_dmi_probe_defer_table[] __initconst = {
- 			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX425UA"),
- 		},
- 	},
-+	{
-+		/* ASUS ZenBook UM325UA */
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX325UA_UM325UA"),
-+		},
-+	},
- 	{ }
- };
- 
+diff --git a/arch/parisc/kernel/traps.c b/arch/parisc/kernel/traps.c
+index a52c7abf2ca49..43f56335759a4 100644
+--- a/arch/parisc/kernel/traps.c
++++ b/arch/parisc/kernel/traps.c
+@@ -729,6 +729,8 @@ void notrace handle_interruption(int code, struct pt_regs *regs)
+ 			}
+ 			mmap_read_unlock(current->mm);
+ 		}
++		/* CPU could not fetch instruction, so clear stale IIR value. */
++		regs->iir = 0xbaadf00d;
+ 		fallthrough;
+ 	case 27: 
+ 		/* Data memory protection ID trap */
 -- 
 2.34.1
 

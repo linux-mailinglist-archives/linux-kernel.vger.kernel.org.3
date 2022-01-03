@@ -2,140 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7C748380D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 21:40:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38BCA48380E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 21:41:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbiACUkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 15:40:47 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:52866 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiACUkq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 15:40:46 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D185611A8;
-        Mon,  3 Jan 2022 20:40:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14E5AC36AE9;
-        Mon,  3 Jan 2022 20:40:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641242445;
-        bh=Rb9Put4CZYBjJMBE6EfigJflIlUFmXCrr9zZca+eiDA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=b/MjYuWBd45UQFZNknBDPyyPsHMvebAhmk5n7du4JyV3+XgN7JI94mGhA0vNwOC0i
-         pWv8jeYL3T7oE6UvL4iRMvW+TNt3xJqIa4vg8Rf3R9zo5rPI8lsVnhXM6VRo8FaSGv
-         FUwBblGF/3u4koAelJRP6nxxCFKm4AF29owzIm/vxUevlAgMDnM1G4+BGQ6CNHadb5
-         iXRCCoN+5WCxn3IF7i9BQT9ZIVMHdk8ap5VO4d6QoiHNUshHdOrMSsA3/2e9w3gAI6
-         hEOaf1yjF/c7hpkSHSD2q+SL9ZrMoctBuekKhBeCq6aB1VfmEWpwsiWbtEs19fmdZy
-         Q6Z0KJCWHSLYA==
-Date:   Mon, 3 Jan 2022 21:40:35 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Tomasz =?UTF-8?B?V2FybmllxYLFgm8=?= <tomasz.warniello@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scripts: kernel-doc: transform documentation into POD
-Message-ID: <20220103214023.15cd2570@coco.lan>
-In-Reply-To: <87h7b8cfg0.fsf@meer.lwn.net>
-References: <20211209225549.69010-1-tomasz.warniello@gmail.com>
-        <87h7b8cfg0.fsf@meer.lwn.net>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        id S229566AbiACUlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 15:41:18 -0500
+Received: from mga02.intel.com ([134.134.136.20]:48758 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229478AbiACUlR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 15:41:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641242477; x=1672778477;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mvf/dwn2CN/4T6eA3WyndzrgWr796ef3yoEvKiAHOIY=;
+  b=ZHi37KzBS7Xn+2gn9vPS+gJjxjLI4dD9Pmyu/5+m7i2SI6itKZyT8byV
+   pmrzT/hV8uhPA4HTXjMQcsQkhumEb8SZyyehMinJol1uyRTVeL+AWKRXN
+   a488ayLXPfmtXigWdFXCeUAgFtDIDLvloMycUgOQ6r4/UmrrwnaJWfjrC
+   k7BugFVurXBIo3oXJRwgIOnyJx/y2hQYg1zcJU78dlTzF5HpCC6kqkCx6
+   5mYqSnpFrF/ZAGdCgUXZTGbwhVHM46fOhTqs7+IlN60Tg+cD65H7i+ht3
+   ZdzBCsbPird4l5RcgLo8oWIf2XyW3N82JiZnovmv3iToPutb8YpBOh2+p
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="229429217"
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="229429217"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 12:41:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="620419301"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 03 Jan 2022 12:41:14 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n4U8n-000EPM-Gm; Mon, 03 Jan 2022 20:41:13 +0000
+Date:   Tue, 4 Jan 2022 04:41:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexey Gladkov <legion@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Containers <containers@lists.linux.dev>
+Cc:     kbuild-all@lists.01.org,
+        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Daniel Walsh <dwalsh@redhat.com>,
+        Davidlohr Bueso <dbueso@suse.de>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Kirill Tkhai <ktkhai@virtuozzo.com>
+Subject: Re: [PATCH v1] ipc: Store mqueue sysctls in the ipc namespace
+Message-ID: <202201040410.Hhzhq6t0-lkp@intel.com>
+References: <0f0408bb7fbf3187966a9bf19a98642a5d9669fe.1641225760.git.legion@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0f0408bb7fbf3187966a9bf19a98642a5d9669fe.1641225760.git.legion@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, 16 Dec 2021 16:12:15 -0700
-Jonathan Corbet <corbet@lwn.net> escreveu:
+Hi Alexey,
 
-> Tomasz Warnie=C5=82=C5=82o <tomasz.warniello@gmail.com> writes:
->=20
-> > The only change in the script execution flow is the replacement
-> > of the 'usage' function with the native core Perl 'pod2usage'.
-> >
-> > This entails:
-> > - an overall documentation restructuring
-> > - addition of a synopsis
-> >
-> > Otherwise my intervention is minimal:
-> > - a few tiny language, formatting and spacing corrections
-> > - a few missing bits added in the command syntax description
-> > - adding subsections in the "FORMAT OF COMMENTS" section
-> > - alphabetical sorting within OPTIONS subections =20
->=20
-> So I think that this is generally a good thing, but I do have some
-> quibbles.  Starting with the above, which is a pretty clear violation of
-> the "each patch does one thing" rule.  Please separate out your changes
-> into separate patches so that they are more easily reviewed.
+Thank you for the patch! Yet something to improve:
 
-I almost did that in the past, but due to a different rationale ;-)
+[auto build test ERROR on linux/master]
+[also build test ERROR on hnaz-mm/master linus/master v5.16-rc8 next-20211224]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Besides the points that Jonathan already mentioned, I'd like to add
-one additional request...
+url:    https://github.com/0day-ci/linux/commits/Alexey-Gladkov/ipc-Store-mqueue-sysctls-in-the-ipc-namespace/20220104-000523
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 136057256686de39cc3a07c2e39ef6bc43003ff6
+config: arm64-buildonly-randconfig-r005-20220103 (https://download.01.org/0day-ci/archive/20220104/202201040410.Hhzhq6t0-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/637324916f39ec562ac383bfbc22ee9fcbfcb1c0
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Alexey-Gladkov/ipc-Store-mqueue-sysctls-in-the-ipc-namespace/20220104-000523
+        git checkout 637324916f39ec562ac383bfbc22ee9fcbfcb1c0
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-Pod is very useful when associated with Getopt, e. g.:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-	use Getopt::Long;
-	use Pod::Usage;
+All errors (new ones prefixed by >>):
 
-In a similar way to scripts/get_abi.pl (and scripts/get_feat.pl).
+   aarch64-linux-ld: Unexpected GOT/PLT entries detected!
+   aarch64-linux-ld: Unexpected run-time procedure linkages detected!
+   aarch64-linux-ld: ID map text too big or misaligned
+   aarch64-linux-ld: ipc/mqueue.o: in function `init_mqueue_fs':
+>> mqueue.c:(.init.text+0x64): undefined reference to `setup_mq_sysctls'
+   aarch64-linux-ld: ipc/namespace.o: in function `free_ipc':
+>> namespace.c:(.text+0xb0): undefined reference to `retire_mq_sysctls'
+   aarch64-linux-ld: ipc/namespace.o: in function `copy_ipcs':
+>> namespace.c:(.text+0x4d8): undefined reference to `setup_mq_sysctls'
 
-This simplifies a lot the parameter handling, as it would
-be like:
-
-	GetOptions(
-		"debug=3Di" =3D> \$debug,
-		"enable-lineno" =3D> \$enable_lineno,
-		"rst-source!" =3D> \$description_is_rst,
-		"dir=3Ds" =3D> \$prefix,
-		'help|?' =3D> \$help,
-		"show-hints" =3D> \$hint,
-		"search-string=3Ds" =3D> \$search_string,
-		man =3D> \$man
-	) or pod2usage(2);
-
-This would make easier to maintain the parameters and the associated
-summary help and man-like help. An additional advantage of using Getopt
-is that the parameters can be added before or after the file name.
-
-IMO, the best would be to add a patch at the version 2 of this series
-in order to use GetOpt too.
-
-> A few other things below...
->=20
-> > Finally, the TODO stub evolves into a section:
-> > - perldoc request removed
-> > - undocumented options added
-> >
-> > Run `kernel-doc -h` to see the full doc.
-> >
-> > The TODO suggestion is ancient, thus I can't address its author with
-> > a "Suggested-by" tag.
-> >
-> > Signed-off-by: Tomasz Warnie=C5=82=C5=82o <tomasz.warniello@gmail.com>
-> > ---
-> >  scripts/kernel-doc | 613 ++++++++++++++++++++++++++++++---------------
-> >  1 file changed, 413 insertions(+), 200 deletions(-)
-> >
-> > diff --git a/scripts/kernel-doc b/scripts/kernel-doc
-> > index 3106b7536b89..00c0c7f5ff58 100755
-> > --- a/scripts/kernel-doc
-> > +++ b/scripts/kernel-doc
-> > @@ -4,46 +4,33 @@
-> >  use warnings;
-> >  use strict;
-
-I would also add:
-
-	BEGIN { $Pod::Usage::Formatter =3D 'Pod::Text::Termcap'; }
-
-at the final version, in order to produce a better output.
-
-Regards,
-Mauro
-
-
-Thanks,
-Mauro
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,160 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D91483835
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 22:10:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F2E3483839
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 22:11:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiACVKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 16:10:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46376 "EHLO
+        id S229728AbiACVLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 16:11:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiACVKE (ORCPT
+        with ESMTP id S229677AbiACVLV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 16:10:04 -0500
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25963C061784
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 13:10:04 -0800 (PST)
-Received: by mail-ua1-x92a.google.com with SMTP id j11so22879815uaq.6
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 13:10:04 -0800 (PST)
+        Mon, 3 Jan 2022 16:11:21 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F227C061761;
+        Mon,  3 Jan 2022 13:11:21 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id v10-20020a05600c214a00b00345e59928eeso15142925wml.0;
+        Mon, 03 Jan 2022 13:11:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vRvdJMDdSlp7AoT9THjTeWXGcO2IOGUNMerMmkmxg10=;
-        b=WOjwnvaTgAlrCij4xYZRumTZR8tjB95ysob+/TvcGExl2jQfAUw2CrouqACMBFPTvP
-         EQZy+73qWuBO65Tjag++bE37GQelP59TglP9mKmJKtKQUI9J/EYTIhzYg1Xobl4x3I7g
-         Iq4QubmAYOY9jc7XLam1El4zmGsi4fOcp/vG8Il7yav2XYb588fY2DVmK2IlSuc0H/eJ
-         mfA2YZ1n6JGVG8M+C7A8wrYyYGsiAjyTpn6DjQlRtU7974mFv8+OEF5kAlWhVi0Lgi6W
-         +7JECNjUBayrFsgC9b38ejuMrXfOGh8fdmit7e1OBX5tCTJJ/2Ij6+kcjv7qYKeq1x9w
-         Wbng==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=23Spac22qMCHfCI2/b5dWMEYBsY6e8BHsVslDXm1X+k=;
+        b=OrWNoKKSXtyPe+OrQzhZyxTDTdNVUeKChx9fA421HbK7LTBPzsGAub7bOFCydpha3f
+         uOslZ2fJaAb5XZ6tNuwCQP3Rp13iwR3XyHBoZfCHhFXVmpswfqFWdGuPnmZIPOz+8FP4
+         RLbkp9UnZ6uEv668wVs+NcPS8Y1I+Ni3WPa1lmpW3cADo9BXK5DPHJ0Wg77Zx784ygdt
+         T4h23UyomhGTx5gnF5g7b8WntiaLWwahOvEY0E/OY3m+5at/+DeQo8jyu5XrrkNDZOv5
+         9qtwAAG3QgFd2b7QY13OOk1KBB2OSpgP4rFNCgMcwn0WV+Zi3EEIsquFVkQg5NigdZF7
+         B9BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vRvdJMDdSlp7AoT9THjTeWXGcO2IOGUNMerMmkmxg10=;
-        b=j9wYLVo8sfref00T7pPqOvBFcyWz0inpLzjgSYRWV9hB1PTi+mBNR4lS1AFI3LvoKK
-         yFfSGhcnGUSB/QNGWfcqfH26RJ6mvJZx6FOFh1OzvfK0yjOBEah2HT5do/MYIj8rSOse
-         KuVj1f+w4RNAU9+vSgXA04VvB2qAf+/yHFg6T0cm/qbTACu08OzI5mFja1T8C+RUuzlx
-         EG/zk6DuU72/kPbz7H+nvf7wahIVIdUvaaUmKsSADeMTdP/2bu0KIKERIneILdKUfols
-         bKYTaPMD7a6IQJKuRuDrKYtYj/TcGPTBDS39O3/EnSj24ZOgKJeiTyq3Y769HqriK7w1
-         76CQ==
-X-Gm-Message-State: AOAM531OHWMT4Kr40u+qmnE7o5CD52CG85VxRZLZI+Xh15Adp98r1HXi
-        bl1LsrSMuHV6n6wDkiVsmIdgNjHH0nJDkWBTLmWo6w==
-X-Google-Smtp-Source: ABdhPJxgDRFmMhl+sVYsOfiFZMynbkisWLJLKAi7qKcUhIzO0pWMhKFaFJjDOQ757xspze60MfFqmt9CuZ/stZqOr3Q=
-X-Received: by 2002:ab0:5a46:: with SMTP id m6mr12827954uad.104.1641244203176;
- Mon, 03 Jan 2022 13:10:03 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=23Spac22qMCHfCI2/b5dWMEYBsY6e8BHsVslDXm1X+k=;
+        b=Pfe5EwHqMBCPILpN2pOLQG0yT+x6Xtt2eqG0ocfpfkk+Xk56gB7fQeeJ0n8qgV3Xou
+         ewjGZcLS/u2wI8yQ/wLfK06to68PsitE1ux94U1WxGIs/2zXW34tmq8L6LI1kJ8En4Az
+         Loe6K0ZTIIsFvEulq0Kz81ZAhmExyaYH3JTu/A3bSyFUNtyguXVe62OylYuqFw3QzijY
+         6Hx0gOG2Uhg+zfu2Gyz3A7eJtnqpdddxy2+gpm6S+saNIFfB4DXEzeCVYx+XcrS7dtti
+         wOSoh1LjqHDi8Ze6nPzcDPbaX1QYuCK/w8BXK/+xU1eUxHNuPupb/C2HMRZ+YITNhdqY
+         fQyg==
+X-Gm-Message-State: AOAM533SVSLIkDIMF62kbyKHRL32fkE0BmoiPaYDin54DxJ/lwTqEv//
+        AQKqM5Q2pbPLP2NZCvUOCUdtal2Tsl9fvw==
+X-Google-Smtp-Source: ABdhPJwpRgDjQdo5Je4FbVpk+2FXoGzC41usKgJdlgDDsaK3CMohj7abhRolnBPwozEwHPzgno2RaA==
+X-Received: by 2002:a1c:7f50:: with SMTP id a77mr41467923wmd.57.1641244279934;
+        Mon, 03 Jan 2022 13:11:19 -0800 (PST)
+Received: from eldamar (80-218-24-251.dclient.hispeed.ch. [80.218.24.251])
+        by smtp.gmail.com with ESMTPSA id b5sm5772374wrr.19.2022.01.03.13.11.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jan 2022 13:11:19 -0800 (PST)
+Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
+Date:   Mon, 3 Jan 2022 22:11:18 +0100
+From:   Salvatore Bonaccorso <carnil@debian.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Wenqing Liu <wenqingliu0120@gmail.com>,
+        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: Re: [PATCH 5.10 60/76] f2fs: fix to do sanity check on last xattr
+ entry in __f2fs_setxattr()
+Message-ID: <YdNmdhsKS5ZWHOlB@eldamar.lan>
+References: <20211227151324.694661623@linuxfoundation.org>
+ <20211227151326.779679392@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20211230195325.328220-1-krzysztof.kozlowski@canonical.com> <20211230195325.328220-3-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211230195325.328220-3-krzysztof.kozlowski@canonical.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Mon, 3 Jan 2022 23:09:51 +0200
-Message-ID: <CAPLW+4mDWg1xAGEALNVN1vs8jb3rzH2VqEBfacTkM_gNxeuhRg@mail.gmail.com>
-Subject: Re: [RFT][PATCH 3/3] arm64: dts: exynos: drop incorrectly placed
- wakeup interrupts in Exynos850
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sylwester Nawrocki <snawrocki@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211227151326.779679392@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Dec 2021 at 21:53, Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> The pin controller device node is expected to have one (optional)
-> interrupt.  Its pin banks capable of external interrupts, should define
-> interrupts for each pin, unless a muxed interrupt is used.
->
-> Exynos850 defined the second part - interrupt for each pin in wake-up
-> pin controller - but also added these interrupts in main device node,
-> which is not correct.
->
-> Fixes: e3493220fd3e ("arm64: dts: exynos: Add initial Exynos850 SoC support")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Hi,
+
+On Mon, Dec 27, 2021 at 04:31:15PM +0100, Greg Kroah-Hartman wrote:
+> From: Chao Yu <chao@kernel.org>
+> 
+> commit 5598b24efaf4892741c798b425d543e4bed357a1 upstream.
+> 
+> As Wenqing Liu reported in bugzilla:
+> 
+> https://bugzilla.kernel.org/show_bug.cgi?id=215235
+> 
+> - Overview
+> page fault in f2fs_setxattr() when mount and operate on corrupted image
+> 
+> - Reproduce
+> tested on kernel 5.16-rc3, 5.15.X under root
+> 
+> 1. unzip tmp7.zip
+> 2. ./single.sh f2fs 7
+> 
+> Sometimes need to run the script several times
+> 
+> - Kernel dump
+> loop0: detected capacity change from 0 to 131072
+> F2FS-fs (loop0): Found nat_bits in checkpoint
+> F2FS-fs (loop0): Mounted with checkpoint version = 7548c2ee
+> BUG: unable to handle page fault for address: ffffe47bc7123f48
+> RIP: 0010:kfree+0x66/0x320
+> Call Trace:
+>  __f2fs_setxattr+0x2aa/0xc00 [f2fs]
+>  f2fs_setxattr+0xfa/0x480 [f2fs]
+>  __f2fs_set_acl+0x19b/0x330 [f2fs]
+>  __vfs_removexattr+0x52/0x70
+>  __vfs_removexattr_locked+0xb1/0x140
+>  vfs_removexattr+0x56/0x100
+>  removexattr+0x57/0x80
+>  path_removexattr+0xa3/0xc0
+>  __x64_sys_removexattr+0x17/0x20
+>  do_syscall_64+0x37/0xb0
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> The root cause is in __f2fs_setxattr(), we missed to do sanity check on
+> last xattr entry, result in out-of-bound memory access during updating
+> inconsistent xattr data of target inode.
+> 
+> After the fix, it can detect such xattr inconsistency as below:
+> 
+> F2FS-fs (loop11): inode (7) has invalid last xattr entry, entry_size: 60676
+> F2FS-fs (loop11): inode (8) has corrupted xattr
+> F2FS-fs (loop11): inode (8) has corrupted xattr
+> F2FS-fs (loop11): inode (8) has invalid last xattr entry, entry_size: 47736
+> 
+> Cc: stable@vger.kernel.org
+> Reported-by: Wenqing Liu <wenqingliu0120@gmail.com>
+> Signed-off-by: Chao Yu <chao@kernel.org>
+> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > ---
+>  fs/f2fs/xattr.c |   11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> --- a/fs/f2fs/xattr.c
+> +++ b/fs/f2fs/xattr.c
+> @@ -680,8 +680,17 @@ static int __f2fs_setxattr(struct inode
+>  	}
+>  
+>  	last = here;
+> -	while (!IS_XATTR_LAST_ENTRY(last))
+> +	while (!IS_XATTR_LAST_ENTRY(last)) {
+> +		if ((void *)(last) + sizeof(__u32) > last_base_addr ||
+> +			(void *)XATTR_NEXT_ENTRY(last) > last_base_addr) {
+> +			f2fs_err(F2FS_I_SB(inode), "inode (%lu) has invalid last xattr entry, entry_size: %zu",
+> +					inode->i_ino, ENTRY_SIZE(last));
+> +			set_sbi_flag(F2FS_I_SB(inode), SBI_NEED_FSCK);
+> +			error = -EFSCORRUPTED;
+> +			goto exit;
+> +		}
+>  		last = XATTR_NEXT_ENTRY(last);
+> +	}
+>  
+>  	newsize = XATTR_ALIGN(sizeof(struct f2fs_xattr_entry) + len + size);
 
-Tested-by: Sam Protsenko <semen.protsenko@linaro.org>
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+It looks this commit while it was applied to several stable series
+(TTBOMK in 5.15.12, 5.10.89, 5.4.169, 4.19.223 and 4.14.260) it is
+still missing from mainline, Chao, or anyone else, do you know what
+happened here?
 
-Despite some errors brought by this change:
-
-    samsung-pinctrl 11850000.pinctrl: irq number not available
-    samsung-pinctrl 11c30000.pinctrl: irq number not available
-
-the interrupts seem to be functional still. Tested on E850-96 board,
-by pressing buttons connected to gpa0..gpa1, and checking
-/proc/interrupts info. I guess it's ok to merge this one as is, and
-then work further to fix the driver (or dts?) accordingly.
-
-Also, I submitted related patch ("arm64: dts: exynos: Add missing gpm6
-and gpm7 nodes to Exynos850"), please take a look.
-
->  arch/arm64/boot/dts/exynos/exynos850.dtsi | 40 -----------------------
->  1 file changed, 40 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/exynos/exynos850.dtsi b/arch/arm64/boot/dts/exynos/exynos850.dtsi
-> index 2abbb972b610..4f0a40de5e67 100644
-> --- a/arch/arm64/boot/dts/exynos/exynos850.dtsi
-> +++ b/arch/arm64/boot/dts/exynos/exynos850.dtsi
-> @@ -344,38 +344,6 @@ cmu_hsi: clock-controller@13400000 {
->                 pinctrl_alive: pinctrl@11850000 {
->                         compatible = "samsung,exynos850-pinctrl";
->                         reg = <0x11850000 0x1000>;
-> -                       interrupts = <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 27 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 28 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 29 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
->
->                         wakeup-interrupt-controller {
->                                 compatible = "samsung,exynos7-wakeup-eint";
-> @@ -385,14 +353,6 @@ wakeup-interrupt-controller {
->                 pinctrl_cmgp: pinctrl@11c30000 {
->                         compatible = "samsung,exynos850-pinctrl";
->                         reg = <0x11c30000 0x1000>;
-> -                       interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 45 IRQ_TYPE_LEVEL_HIGH>,
-> -                                    <GIC_SPI 46 IRQ_TYPE_LEVEL_HIGH>;
->
->                         wakeup-interrupt-controller {
->                                 compatible = "samsung,exynos7-wakeup-eint";
-> --
-> 2.32.0
->
+Regards,
+Salvatore

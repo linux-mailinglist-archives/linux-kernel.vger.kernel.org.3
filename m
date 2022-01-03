@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 374EB483316
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:33:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74C1B4832E0
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234597AbiACOdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:33:20 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:60718 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234558AbiACObP (ORCPT
+        id S234644AbiACOb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:31:26 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60304 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234003AbiACO26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:31:15 -0500
+        Mon, 3 Jan 2022 09:28:58 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B851461073;
-        Mon,  3 Jan 2022 14:31:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F978C36AEB;
-        Mon,  3 Jan 2022 14:31:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 31516B80F10;
+        Mon,  3 Jan 2022 14:28:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 571ADC36AEB;
+        Mon,  3 Jan 2022 14:28:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220274;
-        bh=Foai4sLAMDdhPCoXa828rM1d8oaNt8Fvd2wVnhbSfQk=;
+        s=korg; t=1641220136;
+        bh=5oKonMdfPWcTcP5aLeNS3LwAb3WS0ZaSP+v5iP7J+QU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D+Fvfml6lBHsPy/VorLFBZZ87Ssj3tJ0ruXAStTQ2g8zklqsk6fwEW8efGy1M4Ckz
-         cgh1x5KQ93FCN4fqTTzTH3LUMEn8g9YoeIOz7f69cs7uUiyMbtbvJtdsBRCzYKFt2W
-         FIGVRXPb7ugyW/qx30tUXnG6rbUNLQqhuI+A9pks=
+        b=YI0hpPDcNFSx18DE0s6T4Vq1Qx9VtB9q3bNkDkb5W6S9hrmjNEZPhX2UuL1WlWMcz
+         4Zz7XladxzB4zNAMQIRHZw+QA+RfPkd9VZQVdrAbNOOqqKeROUiWji9bRB/Tt5orNZ
+         e1i46UkklB/A6T3Km4CxogT9xrXmR1Jgf/9J1UC8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shay Drory <shayd@nvidia.com>,
-        Moshe Shemesh <moshe@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
+        stable@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 18/73] net/mlx5: Fix error print in case of IRQ request failed
-Date:   Mon,  3 Jan 2022 15:23:39 +0100
-Message-Id: <20220103142057.508680336@linuxfoundation.org>
+Subject: [PATCH 5.10 03/48] tomoyo: Check exceeded quota early in tomoyo_domain_quota_is_ok().
+Date:   Mon,  3 Jan 2022 15:23:40 +0100
+Message-Id: <20220103142053.602957802@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142056.911344037@linuxfoundation.org>
-References: <20220103142056.911344037@linuxfoundation.org>
+In-Reply-To: <20220103142053.466768714@linuxfoundation.org>
+References: <20220103142053.466768714@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,41 +46,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shay Drory <shayd@nvidia.com>
+From: Dmitry Vyukov <dvyukov@google.com>
 
-[ Upstream commit aa968f922039706f6d13e8870b49e424d0a8d9ad ]
+[ Upstream commit 04e57a2d952bbd34bc45744e72be3eecdc344294 ]
 
-In case IRQ layer failed to find or to request irq, the driver is
-printing the first cpu of the provided affinity as part of the error
-print. Empty affinity is a valid input for the IRQ layer, and it is
-an error to call cpumask_first() on empty affinity.
+If tomoyo is used in a testing/fuzzing environment in learning mode,
+for lots of domains the quota will be exceeded and stay exceeded
+for prolonged periods of time. In such cases it's pointless (and slow)
+to walk the whole acl list again and again just to rediscover that
+the quota is exceeded. We already have the TOMOYO_DIF_QUOTA_WARNED flag
+that notes the overflow condition. Check it early to avoid the slowdown.
 
-Remove the first cpu print from the error message.
+[penguin-kernel]
+This patch causes a user visible change that the learning mode will not be
+automatically resumed after the quota is increased. To resume the learning
+mode, administrator will need to explicitly clear TOMOYO_DIF_QUOTA_WARNED
+flag after increasing the quota. But I think that this change is generally
+preferable, for administrator likely wants to optimize the acl list for
+that domain before increasing the quota, or that domain likely hits the
+quota again. Therefore, don't try to care to clear TOMOYO_DIF_QUOTA_WARNED
+flag automatically when the quota for that domain changed.
 
-Fixes: c36326d38d93 ("net/mlx5: Round-Robin EQs over IRQs")
-Signed-off-by: Shay Drory <shayd@nvidia.com>
-Reviewed-by: Moshe Shemesh <moshe@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Signed-off-by: Dmitry Vyukov <dvyukov@google.com>
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ security/tomoyo/util.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c b/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
-index 763c83a023809..11f3649fdaab1 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
-@@ -346,8 +346,8 @@ static struct mlx5_irq *irq_pool_request_affinity(struct mlx5_irq_pool *pool,
- 	new_irq = irq_pool_create_irq(pool, affinity);
- 	if (IS_ERR(new_irq)) {
- 		if (!least_loaded_irq) {
--			mlx5_core_err(pool->dev, "Didn't find IRQ for cpu = %u\n",
--				      cpumask_first(affinity));
-+			mlx5_core_err(pool->dev, "Didn't find a matching IRQ. err = %ld\n",
-+				      PTR_ERR(new_irq));
- 			mutex_unlock(&pool->lock);
- 			return new_irq;
- 		}
+diff --git a/security/tomoyo/util.c b/security/tomoyo/util.c
+index cd458e10cf2af..ee9c2aa0c8df9 100644
+--- a/security/tomoyo/util.c
++++ b/security/tomoyo/util.c
+@@ -1046,6 +1046,8 @@ bool tomoyo_domain_quota_is_ok(struct tomoyo_request_info *r)
+ 		return false;
+ 	if (!domain)
+ 		return true;
++	if (READ_ONCE(domain->flags[TOMOYO_DIF_QUOTA_WARNED]))
++		return false;
+ 	list_for_each_entry_rcu(ptr, &domain->acl_info_list, list,
+ 				srcu_read_lock_held(&tomoyo_ss)) {
+ 		u16 perm;
+@@ -1091,14 +1093,12 @@ bool tomoyo_domain_quota_is_ok(struct tomoyo_request_info *r)
+ 	if (count < tomoyo_profile(domain->ns, domain->profile)->
+ 	    pref[TOMOYO_PREF_MAX_LEARNING_ENTRY])
+ 		return true;
+-	if (!domain->flags[TOMOYO_DIF_QUOTA_WARNED]) {
+-		domain->flags[TOMOYO_DIF_QUOTA_WARNED] = true;
+-		/* r->granted = false; */
+-		tomoyo_write_log(r, "%s", tomoyo_dif[TOMOYO_DIF_QUOTA_WARNED]);
++	WRITE_ONCE(domain->flags[TOMOYO_DIF_QUOTA_WARNED], true);
++	/* r->granted = false; */
++	tomoyo_write_log(r, "%s", tomoyo_dif[TOMOYO_DIF_QUOTA_WARNED]);
+ #ifndef CONFIG_SECURITY_TOMOYO_INSECURE_BUILTIN_SETTING
+-		pr_warn("WARNING: Domain '%s' has too many ACLs to hold. Stopped learning mode.\n",
+-			domain->domainname->name);
++	pr_warn("WARNING: Domain '%s' has too many ACLs to hold. Stopped learning mode.\n",
++		domain->domainname->name);
+ #endif
+-	}
+ 	return false;
+ }
 -- 
 2.34.1
 

@@ -2,160 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB073483830
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 22:06:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D91483835
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 22:10:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiACVGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 16:06:18 -0500
-Received: from angie.orcam.me.uk ([78.133.224.34]:38466 "EHLO
-        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiACVGR (ORCPT
+        id S229704AbiACVKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 16:10:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46376 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229691AbiACVKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 16:06:17 -0500
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 521E792009C; Mon,  3 Jan 2022 22:06:15 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 42D6E92009B;
-        Mon,  3 Jan 2022 21:06:15 +0000 (GMT)
-Date:   Mon, 3 Jan 2022 21:06:15 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Douglas Gilbert <dgilbert@interlog.com>
-cc:     Khalid Aziz <khalid@gonehiking.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>, Nix <nix@esperi.org.uk>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] scsi: Set allocation length to 255 for ATA
- Information VPD page
-In-Reply-To: <d9eaa1f8-7abb-645b-d624-5069205c6983@interlog.com>
-Message-ID: <alpine.DEB.2.21.2201032017290.56863@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2201020010540.56863@angie.orcam.me.uk> <alpine.DEB.2.21.2201020030130.56863@angie.orcam.me.uk> <d9eaa1f8-7abb-645b-d624-5069205c6983@interlog.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Mon, 3 Jan 2022 16:10:04 -0500
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25963C061784
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 13:10:04 -0800 (PST)
+Received: by mail-ua1-x92a.google.com with SMTP id j11so22879815uaq.6
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 13:10:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vRvdJMDdSlp7AoT9THjTeWXGcO2IOGUNMerMmkmxg10=;
+        b=WOjwnvaTgAlrCij4xYZRumTZR8tjB95ysob+/TvcGExl2jQfAUw2CrouqACMBFPTvP
+         EQZy+73qWuBO65Tjag++bE37GQelP59TglP9mKmJKtKQUI9J/EYTIhzYg1Xobl4x3I7g
+         Iq4QubmAYOY9jc7XLam1El4zmGsi4fOcp/vG8Il7yav2XYb588fY2DVmK2IlSuc0H/eJ
+         mfA2YZ1n6JGVG8M+C7A8wrYyYGsiAjyTpn6DjQlRtU7974mFv8+OEF5kAlWhVi0Lgi6W
+         +7JECNjUBayrFsgC9b38ejuMrXfOGh8fdmit7e1OBX5tCTJJ/2Ij6+kcjv7qYKeq1x9w
+         Wbng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vRvdJMDdSlp7AoT9THjTeWXGcO2IOGUNMerMmkmxg10=;
+        b=j9wYLVo8sfref00T7pPqOvBFcyWz0inpLzjgSYRWV9hB1PTi+mBNR4lS1AFI3LvoKK
+         yFfSGhcnGUSB/QNGWfcqfH26RJ6mvJZx6FOFh1OzvfK0yjOBEah2HT5do/MYIj8rSOse
+         KuVj1f+w4RNAU9+vSgXA04VvB2qAf+/yHFg6T0cm/qbTACu08OzI5mFja1T8C+RUuzlx
+         EG/zk6DuU72/kPbz7H+nvf7wahIVIdUvaaUmKsSADeMTdP/2bu0KIKERIneILdKUfols
+         bKYTaPMD7a6IQJKuRuDrKYtYj/TcGPTBDS39O3/EnSj24ZOgKJeiTyq3Y769HqriK7w1
+         76CQ==
+X-Gm-Message-State: AOAM531OHWMT4Kr40u+qmnE7o5CD52CG85VxRZLZI+Xh15Adp98r1HXi
+        bl1LsrSMuHV6n6wDkiVsmIdgNjHH0nJDkWBTLmWo6w==
+X-Google-Smtp-Source: ABdhPJxgDRFmMhl+sVYsOfiFZMynbkisWLJLKAi7qKcUhIzO0pWMhKFaFJjDOQ757xspze60MfFqmt9CuZ/stZqOr3Q=
+X-Received: by 2002:ab0:5a46:: with SMTP id m6mr12827954uad.104.1641244203176;
+ Mon, 03 Jan 2022 13:10:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20211230195325.328220-1-krzysztof.kozlowski@canonical.com> <20211230195325.328220-3-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211230195325.328220-3-krzysztof.kozlowski@canonical.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Mon, 3 Jan 2022 23:09:51 +0200
+Message-ID: <CAPLW+4mDWg1xAGEALNVN1vs8jb3rzH2VqEBfacTkM_gNxeuhRg@mail.gmail.com>
+Subject: Re: [RFT][PATCH 3/3] arm64: dts: exynos: drop incorrectly placed
+ wakeup interrupts in Exynos850
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sylwester Nawrocki <snawrocki@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2 Jan 2022, Douglas Gilbert wrote:
+On Thu, 30 Dec 2021 at 21:53, Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> The pin controller device node is expected to have one (optional)
+> interrupt.  Its pin banks capable of external interrupts, should define
+> interrupts for each pin, unless a muxed interrupt is used.
+>
+> Exynos850 defined the second part - interrupt for each pin in wake-up
+> pin controller - but also added these interrupts in main device node,
+> which is not correct.
+>
+> Fixes: e3493220fd3e ("arm64: dts: exynos: Add initial Exynos850 SoC support")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
 
-> > Originally it was thought that Areca hardware may have issues with a
-> > valid allocation length supplied for a VPD inquiry, however older SCSI
-> > standard revisions[1] consider 255 the maximum length allowed and what
-> > has later become the high order byte is considered reserved and must be
-> > zero with the INQUIRY command.  Therefore it was unnecessary to reduce
-> > the amount of data requested from 512 as far down as to 64, arbitrarily
-> > chosen, and 255 would as well do.
-> 
-> Not arbitrary, 64 bytes would get all the fields less the 512 byte ATA
-> DEVICE IDENTIFY data field.
+Tested-by: Sam Protsenko <semen.protsenko@linaro.org>
+Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
 
- That may well be the case, however there is no justification given for 
-the particular size of 64 bytes chosen either in the comment nearby or the 
-change description associated with the commit referred this arrangement 
-has originated from.  At the time of my original submission I examined the 
-relevant thread of discussion[1] including the patch submission itself[2], 
-and just to be sure I have double-checked it now and there is no mention 
-as to why this value was chosen.  There is no associated macro that could 
-give some explanation and which good coding style would expect rather than 
-a magic number inline.
+Despite some errors brought by this change:
 
- So I do have all the reasons to conclude this value has indeed been 
-arbitrarily chosen, don't I?
+    samsung-pinctrl 11850000.pinctrl: irq number not available
+    samsung-pinctrl 11c30000.pinctrl: irq number not available
 
-> > With commit b3ae8780b429 ("[SCSI] Add EVPD page 0x83 and 0x80 to sysfs")
-> > we have since got the SCSI_VPD_PG_LEN macro, so use that instead.
-> > 
-> > References:
-> > 
-> > [1] "Information technology - Small Computer System Interface - 2",
-> >      WORKING DRAFT, X3T9.2, Project 375D, Revision 10L, 7-SEP-93, Section
-> >      8.2.5 "INQUIRY command", pp.104-108
-> 
-> Yes, 1992, long withdrawn and only used by several billion USB keys.
+the interrupts seem to be functional still. Tested on E850-96 board,
+by pressing buttons connected to gpa0..gpa1, and checking
+/proc/interrupts info. I guess it's ok to merge this one as is, and
+then work further to fix the driver (or dts?) accordingly.
 
- Well, this has surfaced in a setup where devices dated 199x are used, so 
-I guess they have all the rights to use whatever standard was most recent, 
-or say second most recent at the time as we need to factor in design lead 
-times.
+Also, I submitted related patch ("arm64: dts: exynos: Add missing gpm6
+and gpm7 nodes to Exynos850"), please take a look.
 
-> How does your problem arise? Could USB mass storage be involved?
-
- This command does crash the HBA involved where 1/3 and 2/3 have not been 
-applied.  No USB involved, just these proper SCSI (SPI) targets:
-
-scsi 0:0:0:0: Direct-Access     IBM      DDYS-T18350M     SA5A PQ: 0 ANSI: 3
-scsi 0:0:1:0: Direct-Access     SEAGATE  ST336607LW       0006 PQ: 0 ANSI: 3
-scsi 0:0:5:0: Direct-Access     IOMEGA   ZIP 100          E.08 PQ: 0 ANSI: 2
-
-as noted with 1/3 and 2/3.
-
- Not noted here as not directly relevant though, and this is because this 
-change is a clean-up only, to have the buffer size consistent across the 
-various `scsi_get_vpd_page' calls, by using the SCSI_VPD_PG_LEN macro 
-defined meanwhile, that sets the maximum supported by older SCSI standard 
-revisions (which can therefore be safely used without asking the device 
-how much data it can/wants to actually return) and consequently devices 
-implementing them.
-
- I noted in the original submission[3]:
-
-> Nix,
-> 
-> I can see you're still around.  Would you therefore please be so kind
-> as to verify this change with your Areca hardware if you still have it?
-> 
-> It looks to me like you were thinking in the right direction with:
-> <https://lore.kernel.org/linux-scsi/87vc3nuipg.fsf@spindle.srvr.nix/>.
-> Sadly nobody seemed to have paid attention to your observation and neither
-> were different buffer sizes considered (or at least it wasn't mentioned in
-> the discussion).
-> 
->  Maciej
-
--- and Nix was kind enough to verify my proposal works just fine with the 
-piece of hardware the commit referred addressed a problem with, so the 
-replacement buffer size is as good as the original one while making code 
-consistent.  As you can see I did observe right away that the buffer size 
-was not discussed.
-
- If you insist that the value of 64 stay, then please come up with a 
-suitable macro name to define along with SCSI_VPD_PG_LEN that reflects the 
-meaning of 64 in this context and I'll be happy to update 3/3 accordingly, 
-but please explain why the value of 64 is any better than 255 here and the 
-inconsistency with the buffer size justified.
-
-> And this patch solves your problem by returning part of the ATA DEVICE
-> IDENTIFY data (which is 512 bytes long)? If so, why not say so.
-
- As I noted above, this is for consistency with other `scsi_get_vpd_page' 
-calls and to avoid an inline magic number.  If you think that it is not 
-stated clearly enough in my change description and the change is otherwise 
-acceptable, then I can update the explanation accordingly.
-
-> And what about using 0x2ff as the INQUIRY allocation length? If the
-> broken device ignores the top byte, you get 255 bytes back. If a
-> correct device takes both bytes it should return 0x23c bytes after
-> resid is taken into account.
-
- I have verified (some of) the devices listed above to correctly reject 
-`scsi_get_vpd_page' requests with allocation length exceeding 255, as 
-required by the SCSI standard revision at their time.  I can't speak of 
-the INQUIRY command, as I haven't checked it in this context.
-
- Does my explanation clear your concerns?  If so, then please advise how 
-to proceed with this change.  Thank you for your review.
-
-References:
-
-[1] "3.10.2 or 3.10.3: arcmsr failure at bootup / early userspace 
-    transition", 
-    <https://lore.kernel.org/linux-scsi/87r4ehfzhf.fsf@spindle.srvr.nix/>
-
-[2] "scsi disk: Use its own buffer for the vpd request", 
-    <https://lore.kernel.org/linux-scsi/51FA71E2.6010501@fastmail.fm/>
-
-[3] "scsi: Set allocation length to 255 for ATA Information VPD page", 
-    <https://lore.kernel.org/linux-scsi/alpine.DEB.2.21.2104141306130.44318@angie.orcam.me.uk/>
-
-  Maciej
+>  arch/arm64/boot/dts/exynos/exynos850.dtsi | 40 -----------------------
+>  1 file changed, 40 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/exynos/exynos850.dtsi b/arch/arm64/boot/dts/exynos/exynos850.dtsi
+> index 2abbb972b610..4f0a40de5e67 100644
+> --- a/arch/arm64/boot/dts/exynos/exynos850.dtsi
+> +++ b/arch/arm64/boot/dts/exynos/exynos850.dtsi
+> @@ -344,38 +344,6 @@ cmu_hsi: clock-controller@13400000 {
+>                 pinctrl_alive: pinctrl@11850000 {
+>                         compatible = "samsung,exynos850-pinctrl";
+>                         reg = <0x11850000 0x1000>;
+> -                       interrupts = <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 27 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 28 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 29 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
+>
+>                         wakeup-interrupt-controller {
+>                                 compatible = "samsung,exynos7-wakeup-eint";
+> @@ -385,14 +353,6 @@ wakeup-interrupt-controller {
+>                 pinctrl_cmgp: pinctrl@11c30000 {
+>                         compatible = "samsung,exynos850-pinctrl";
+>                         reg = <0x11c30000 0x1000>;
+> -                       interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 45 IRQ_TYPE_LEVEL_HIGH>,
+> -                                    <GIC_SPI 46 IRQ_TYPE_LEVEL_HIGH>;
+>
+>                         wakeup-interrupt-controller {
+>                                 compatible = "samsung,exynos7-wakeup-eint";
+> --
+> 2.32.0
+>

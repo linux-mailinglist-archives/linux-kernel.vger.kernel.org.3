@@ -2,291 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD90D482EB8
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 08:29:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 578CC482EBA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 08:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbiACH30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 02:29:26 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:45596 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiACH3Z (ORCPT
+        id S230261AbiACHah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 02:30:37 -0500
+Received: from conssluserg-06.nifty.com ([210.131.2.91]:23042 "EHLO
+        conssluserg-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229793AbiACHag (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 02:29:25 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DDD560FAC;
-        Mon,  3 Jan 2022 07:29:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBE72C36AEE;
-        Mon,  3 Jan 2022 07:29:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641194964;
-        bh=D21M/w5mJ32q+5rLheZRjFl9ed881ji9sxo2nEtGT5g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Sin/9qplWkNAK6ee9lheT9RPnuSym17csm7sAa0EFoFKw2hNrcxyKDBXbg3JsACzN
-         pV/dH2dr+yt0mFPZwbQcQHjDhr50l6ZOek5TThmGLrxslDJ3ZOjyiebDemWqbCUfFD
-         0Y0tLHRyEPc7KXabJwLXcvLTNJ1tHVi4TrDdPF/A=
-Date:   Mon, 3 Jan 2022 08:29:18 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Tony Huang =?utf-8?B?6buD5oe35Y6a?= <tony.huang@sunplus.com>
-Cc:     Tony Huang <tonyhuang.sunplus@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "derek.kiernan@xilinx.com" <derek.kiernan@xilinx.com>,
-        "dragan.cvetic@xilinx.com" <dragan.cvetic@xilinx.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        Wells Lu =?utf-8?B?5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Subject: Re: [PATCH v6 2/2] misc: Add iop driver for Sunplus SP7021
-Message-ID: <YdKlzmrCSi8N5Uj7@kroah.com>
-References: <cover.1640836400.git.tonyhuang.sunplus@gmail.com>
- <ac565aa146b83fdb155ad81eae22bc17fdb8bc51.1640836400.git.tonyhuang.sunplus@gmail.com>
- <Yc2v76Rti2Db3zK3@kroah.com>
- <7c94a768206b48a984c4d269a0e98e50@sphcmbx02.sunplus.com.tw>
+        Mon, 3 Jan 2022 02:30:36 -0500
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 2037U8rC002866;
+        Mon, 3 Jan 2022 16:30:08 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 2037U8rC002866
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1641195009;
+        bh=Q4N4pyt3k5xc5akbM1fMeGbDBN+5P/qoHX4LoFCURZ0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dcZizZ8p+8OxgL28/fZcq505gsbf1u/7e8Ka+6OerXdRHFurGX3adX5YMOGCEWzf8
+         tmomwybOn8Ry38TGkU7ha3Ri65P1ppq+d03br8tHWcfHwEWsRywrnT287+tHcrFenJ
+         LyV6aPK+YDQmoL5A+PHMS76WrXVq8yfMlerUFq2YMnNVp0b1786d8C1QQN5chsBzcD
+         l1mjAe1x8IeZSBgE6PjRdxcWfLoc25XT/Vj8Hw1UOmgGfz6AtvzCbHRxMs+MsR//j/
+         mEMq5xJqULrsdGS5tDIgsbsAscIAge2N3y+7D/7K6MmuFKhIsTeRiTYNZcnbv/lWTO
+         n44mnXZ+4WRAw==
+X-Nifty-SrcIP: [209.85.210.176]
+Received: by mail-pf1-f176.google.com with SMTP id t187so15225687pfb.11;
+        Sun, 02 Jan 2022 23:30:08 -0800 (PST)
+X-Gm-Message-State: AOAM532X9Cb7PfOuDvEepT7kvOd2rR0o2vE+1FIGVyDSWzRXj0viZLIJ
+        RXTjTZ+jmr5GI2skcigfd+W9c9SSsezDWmJJnTU=
+X-Google-Smtp-Source: ABdhPJyQeq2KyC8k1IjK4sk+CNmFy3cPWLH/65C3uwwjeVfRHRqNFBVMinDmiwdvtujwUsnpZZkAgtXxv2AA/sGRLv8=
+X-Received: by 2002:a62:83c3:0:b0:4ba:bb14:4bf7 with SMTP id
+ h186-20020a6283c3000000b004babb144bf7mr44853082pfe.32.1641195007963; Sun, 02
+ Jan 2022 23:30:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7c94a768206b48a984c4d269a0e98e50@sphcmbx02.sunplus.com.tw>
+References: <20211231075551.589515-1-xu.xin16@zte.com.cn>
+In-Reply-To: <20211231075551.589515-1-xu.xin16@zte.com.cn>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 3 Jan 2022 16:29:31 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARBGWP4pj4t2XStG326BB3XFnJwKOMQqR7RXd5nDCPmWA@mail.gmail.com>
+Message-ID: <CAK7LNARBGWP4pj4t2XStG326BB3XFnJwKOMQqR7RXd5nDCPmWA@mail.gmail.com>
+Subject: Re: [PATCH] Fix compilation errors when using special directory
+To:     cgel.zte@gmail.com
+Cc:     Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        xu xin <xu.xin16@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 03, 2022 at 05:31:27AM +0000, Tony Huang 黃懷厚 wrote:
-> Dear Greg:
-> 
-> > > IOP(8051) embedded inside SP7021 which is used as Processor for I/O
-> > > control, monitor RTC interrupt and cooperation with CPU & PMC in power
-> > > management purpose.
-> > > The IOP core is DQ8051, so also named IOP8051, it supports dedicated
-> > > JTAG debug pins which share with SP7021.
-> > > In standby mode operation, the power spec reach 400uA.
-> > >
-> > > Signed-off-by: Tony Huang <tonyhuang.sunplus@gmail.com>
-> > > ---
-> > > Changes in v6:
-> > >  - Added sysfs read/write description.
-> > >  - Modify sysfs read function.
-> > >  - Addressed comments from kernel test robot.
-> > >
-> > >  Documentation/ABI/testing/sysfs-platform-soc@B |  25 ++
-> > >  MAINTAINERS                                    |   2 +
-> > >  drivers/misc/Kconfig                           |  12 +
-> > >  drivers/misc/Makefile                          |   1 +
-> > >  drivers/misc/sunplus_iop.c                     | 476
-> > +++++++++++++++++++++++++
-> > >  5 files changed, 516 insertions(+)
-> > >  create mode 100644 Documentation/ABI/testing/sysfs-platform-soc@B
-> > >  create mode 100644 drivers/misc/sunplus_iop.c
-> > >
-> > > diff --git a/Documentation/ABI/testing/sysfs-platform-soc@B
-> > > b/Documentation/ABI/testing/sysfs-platform-soc@B
-> > > new file mode 100644
-> > > index 0000000..6272919
-> > > --- /dev/null
-> > > +++ b/Documentation/ABI/testing/sysfs-platform-soc@B
-> > > @@ -0,0 +1,25 @@
-> > > +What:		/sys/devices/platform/soc@B/9c000400.iop/sp_iop_mailbox
-> > > +Date:		December 2021
-> > > +KernelVersion:	5.16
-> > > +Contact:	Tony Huang <tonyhuang.sunplus@gmail.com>
-> > > +Description:
-> > > +		Show 8051 mailbox0 data.
-> > 
-> > What format is the data in?
-> > 
-> 
-> Unsigned short
-
-So you are returning 16 bits, please describe the value as to what it
-will contain and what it means.
-
-And what exactly does "8051" mean here?  That is just some random
-processor in the system, it needs to be described better please.
-
-> > > +config SUNPLUS_IOP
-> > > +	tristate "Sunplus IOP support"
-> > > +	default ARCH_SUNPLUS
-> > > +	help
-> > > +	  Sunplus I/O processor (8051) driver.
-> > > +	  Processor for I/O control, RTC wake-up proceduce management,
-> > > +	  and cooperation with CPU&PMC in power management.
-> > > +	  Need Install DQ8051, The DQ8051 bin file generated by keil C.
-> > 
-> > I do not understand this sentence, what do you mean by it?  Can you provide a
-> > link to where the files that are required are?  Why not include them in the
-> > linux-firmware project?
-> > 
-> 
-> 1.We will provide users with 8051 normal and standby source code.			
->   Path: https://sunplus.atlassian.net/wiki/spaces/doc/pages/610172933/How+to+use+I+O+processor+8051+of+SP7021#5.-Write-C-or-assembly-source-files-for-IOP			
-> 2.Users can follow the operation steps to generate normal.bin and standby.bin.			
->   Path: https://sunplus.atlassian.net/wiki/spaces/doc/pages/466190338/26.+IOP8051			
->   26.5 How To Create 8051 bin file			
-
-Please include stuff like this in the help text to make it more obvious.
-
-> > > +struct regs_moon0 {
-> > > +	u32 stamp;         /* 00 */
-> > > +	u32 clken[10];     /* 01~10 */
-> > > +	u32 gclken[10];    /* 11~20 */
-> > > +	u32 reset[10];     /* 21~30 */
-> > > +	u32 sfg_cfg_mode;  /* 31 */
-> > 
-> > What are these comments numbering?
-> > 
-> 
-> regs_moon0 is Group 0 moon register.					
-> The Group0 moon register range is 0x9c00000~0x9c00007F					
-> /*00*/: 0x9c000000~0x9c000003					
-> /*01~10*/:0x9c000004~0x9c00002b					
-> /*11~20*/:0x9c00002c~0x9c000053					
-> /*21~30*/:0x9c000054~0x9c00007b					
-> /*31*/:0x9c00007c~0x9c00007f					
-
-Ok, so the number is just the offset into a memory location?  Please be
-specific.
+On Fri, Dec 31, 2021 at 4:56 PM <cgel.zte@gmail.com> wrote:
+>
+> From: xu xin <xu.xin16@zte.com.cn>
+>
+> When we compile the kernel with cross compilers, if CROSS_COMPILE is
+> specified by the path containing special directory like '~', some
+> compilation error will occurs.
+>
+> Here's an example:
+>
+> $ make ARCH=x86_64
+> CROSS_COMPILE=~/x86_64_gcc9.2.0_glibc2.31.0/bin/x86_64-pc-linux-gnu- all
+>
+> error:./scripts/mkcompile_h: line 64:
+> ~/x86_64_gcc9.2.0_glibc2.31.0/bin/x86_64-pc-linux-gnu-ld: No such file or
+> directory
+>
+> Since there are many other similar scripts using these variables, in
+> order to solve the problem from the source, add realpath in makefile to
+> turn these variables into absolute paths.
+>
+> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
 
 
-> 
-> > > +};
-> > > +
-> > > +struct regs_iop {
-> > > +	u32 iop_control;/* 00 */
-> > > +	u32 iop_reg1;/* 01 */
-> > > +	u32 iop_bp;/* 02 */
-> > > +	u32 iop_regsel;/* 03 */
-> > > +	u32 iop_regout;/* 04 */
-> > > +	u32 iop_reg5;/* 05 */
-> > > +	u32 iop_resume_pcl;/* 06 */
-> > > +	u32 iop_resume_pch;/* 07 */
-> > > +	u32 iop_data0;/* 08 */
-> > > +	u32 iop_data1;/* 09 */
-> > > +	u32 iop_data2;/* 10 */
-> > > +	u32 iop_data3;/* 11 */
-> > > +	u32 iop_data4;/* 12 */
-> > > +	u32 iop_data5;/* 13 */
-> > > +	u32 iop_data6;/* 14 */
-> > > +	u32 iop_data7;/* 15 */
-> > > +	u32 iop_data8;/* 16 */
-> > > +	u32 iop_data9;/* 17 */
-> > > +	u32 iop_data10;/* 18 */
-> > > +	u32 iop_data11;/* 19 */
-> > > +	u32 iop_base_adr_l;/* 20 */
-> > > +	u32 iop_base_adr_h;/* 21 */
-> > > +	u32 memory_bridge_control;/* 22 */
-> > > +	u32 iop_regmap_adr_l;/* 23 */
-> > > +	u32 iop_regmap_adr_h;/* 24 */
-> > > +	u32 iop_direct_adr;/* 25*/
-> > > +	u32 reserved[6];/* 26~31 */
-> > 
-> > Same here, what are these numbers?
-> > 
-> > And why are they not lined up like the previous structure?
-> > 
-> 
-> Sorry, I don't understand what you mean. Isn't this a struct?					
+This depends on what shell you are using.
 
-Your comments are not lined up the same way the structure above has
-them.
 
-> > > +	struct mutex write_lock;
-> > > +	void *iop_regs;
-> > > +	void *pmc_regs;
-> > > +	void *moon0_regs;
-> > 
-> > Why void pointers?  You created structures above, use them!
-> > 
-> 
-> Because I received "Reported-by: kernel test robot <lkp@intel.com>", warmming message. As follows:										
-> sparse warnings: (new ones prefixed by >>)										
->    drivers/misc/sunplus_iop.c:94:39: sparse: sparse: cast removes address space '__iomem' of expression										
->    drivers/misc/sunplus_iop.c:95:43: sparse: sparse: cast removes address space '__iomem' of expression										
-> >> drivers/misc/sunplus_iop.c:100:16: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *p @@     got void [noderef] __iomem *[assigned] iop_kernel_base @@										
->    drivers/misc/sunplus_iop.c:100:16: sparse:     expected void *p										
->    drivers/misc/sunplus_iop.c:100:16: sparse:     got void [noderef] __iomem *[assigned] iop_kernel_base										
+If you use a modern shell like bash,
+~ is expanded into the home directory path
+on the shell side.
 
-Ah, so these are actual pointers to the iomem memory?  Or pointers to
-the structures you have copied out?  It is not obvious.
+So, Make will see the absolute path.
+In contrast, dash does not expand ~.
 
-> > > +	reg = readl(&p_moon0_reg->reset[0]);
-> > > +	reg |= 0x10;
-> > > +	writel(reg, (&p_moon0_reg->reset[0]));
-> > > +	reg &= ~(0x10);
-> > > +	writel(reg, (&p_moon0_reg->reset[0]));
-> > > +
-> > > +	writel(0x00ff0085, (iop->moon0_regs + 32 * 4 * 1 + 4 * 1));
-> > > +
-> > > +	reg = readl(iop->moon0_regs + 32 * 4 * 1 + 4 * 2);
-> > > +	reg |= 0x08000800;
-> > > +	writel(reg, (iop->moon0_regs + 32 * 4 * 1 + 4 * 2));
-> > > +
-> > > +	reg = readl(&p_iop_reg->iop_control);
-> > > +	reg |= 0x0200;//disable watchdog event reset IOP
-> > > +	writel(reg, &p_iop_reg->iop_control);
-> > > +
-> > > +	reg = (iop->iop_mem_start & 0xFFFF);
-> > > +	writel(reg, &p_iop_reg->iop_base_adr_l);
-> > > +	reg = (iop->iop_mem_start >> 16);
-> > > +	writel(reg, &p_iop_reg->iop_base_adr_h);
-> > > +
-> > > +	reg = readl(&p_iop_reg->iop_control);
-> > > +	reg &= ~(0x01);
-> > > +	writel(reg, &p_iop_reg->iop_control);
-> > > +
-> > > +	writel(WAKEUP_PIN, &p_iop_reg->iop_data0);
-> > > +	writel(iop->gpio_wakeup, &p_iop_reg->iop_data1);
-> > > +
-> > > +	ret = readl_poll_timeout(&p_iop_reg->iop_data2, value,
-> > > +				 (value & IOP_READY) == IOP_READY, 1000, 10000);
-> > > +	if (ret) {
-> > > +		dev_err(dev, "timed out\n");
-> > > +		return ret;
-> > > +	}
-> > > +
-> > > +	writel(RISC_READY, &p_iop_reg->iop_data2);
-> > > +	writel(0x00, &p_iop_reg->iop_data5);
-> > > +	writel(0x60, &p_iop_reg->iop_data6);
-> > > +
-> > > +	ret = readl_poll_timeout(&p_iop_reg->iop_data7, value,
-> > > +				 value == 0xaaaa, 1000, 10000);
-> > > +	if (ret) {
-> > > +		dev_err(dev, "timed out\n");
-> > > +		return ret;
-> > > +	}
-> > > +
-> > > +	writel(0xdd, &p_iop_reg->iop_data1);//8051 bin file call Ultra low
-> > function.
-> > > +	mdelay(10);
-> > 
-> > Where did 10 come from?  How do you know that is correct?
-> > 
-> 
-> I need time to move stanby.bin code 16K data from SDRAM to 8051's icache.		
-> 10msec should be enough		
 
-Please document it, as it looks like the data was already sent so there
-should not be any need for a delay on the Linux side.
+[Test code]
+$(warning CROSS_COMPILE is $(CROSS_COMPILE))
+all:
+        @:
 
-Or do a read which will ensure that the data is there, right?
 
-> > > +static void sp_iop_platform_driver_shutdown(struct platform_device
-> > > +*pdev) {
-> > > +	struct sp_iop *iop = platform_get_drvdata(pdev);
-> > > +	struct regs_iop *p_iop_reg = (struct regs_iop *)iop->iop_regs;
-> > > +	unsigned int value;
-> > > +
-> > > +	sp_iop_standby_mode(iop);
-> > > +	mdelay(10);
-> > 
-> > Why sleep on shutdown?
-> > 
-> 
-> I need time to switch from normal.bin code to standby.bin code.				
 
-Then why does the function call not wait until that happens?  Why wait
-here?
+[Result]
+masahiro@grover:/tmp$ bash
+masahiro@grover:/tmp$ make
+CROSS_COMPILE=~/x86_64_gcc9.2.0_glibc2.31.0/bin/x86_64-pc-linux-gnu-
+all
+Makefile:1: CROSS_COMPILE is
+/home/masahiro/x86_64_gcc9.2.0_glibc2.31.0/bin/x86_64-pc-linux-gnu-
+masahiro@grover:/tmp$ dash
+$ make CROSS_COMPILE=~/x86_64_gcc9.2.0_glibc2.31.0/bin/x86_64-pc-linux-gnu- all
+Makefile:1: CROSS_COMPILE is
+~/x86_64_gcc9.2.0_glibc2.31.0/bin/x86_64-pc-linux-gnu-
 
-thanks,
 
-greg k-h
+
+
+
+Moreover, your patch does not work at all because
+the $(realpath ) built-in function does not expand ~.
+
+~ is a shell's special character (and only some shells recognize it).
+GNU Make is completely agnostic about such a character.
+
+
+
+If you are using such a shell that does not understand ~,
+as Nathan suggested, you can use $HOME.
+
+
+
+> ---
+>  Makefile | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index fe5a4d8e4ac5..cdbb747787ac 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -459,14 +459,14 @@ OBJDUMP           = llvm-objdump
+>  READELF                = llvm-readelf
+>  STRIP          = llvm-strip
+>  else
+> -CC             = $(CROSS_COMPILE)gcc
+> -LD             = $(CROSS_COMPILE)ld
+> -AR             = $(CROSS_COMPILE)ar
+> -NM             = $(CROSS_COMPILE)nm
+> -OBJCOPY                = $(CROSS_COMPILE)objcopy
+> -OBJDUMP                = $(CROSS_COMPILE)objdump
+> -READELF                = $(CROSS_COMPILE)readelf
+> -STRIP          = $(CROSS_COMPILE)strip
+> +CC             = $(realpath $(CROSS_COMPILE))gcc
+> +LD             = $(realpath $(CROSS_COMPILE))ld
+> +AR             = $(realpath $(CROSS_COMPILE))ar
+> +NM             = $(realpath $(CROSS_COMPILE))nm
+> +OBJCOPY                = $(realpath $(CROSS_COMPILE))objcopy
+> +OBJDUMP                = $(realpath $(CROSS_COMPILE))objdump
+> +READELF                = $(realpath $(CROSS_COMPILE))readelf
+> +STRIP          = $(realpath $(CROSS_COMPILE))strip
+>  endif
+>  RUSTC          = rustc
+>  RUSTDOC                = rustdoc
+> --
+> 2.25.1
+>
+
+
+--
+Best Regards
+Masahiro Yamada

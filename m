@@ -2,59 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B8E6483111
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 13:37:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA1F483116
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 13:38:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231851AbiACMh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 07:37:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42494 "EHLO
+        id S231877AbiACMik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 07:38:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiACMh2 (ORCPT
+        with ESMTP id S229596AbiACMik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 07:37:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4C8C061761
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 04:37:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C26CD6101A
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 12:37:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98A61C36AED;
-        Mon,  3 Jan 2022 12:37:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641213447;
-        bh=LBLiu4N+doRci3guL1TOsL4GKEag2oFH1fZP2LDSNZ8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ww3ShMRZom04wjM5MsU3X9kpJXeO0HKlgZsOtR5WRYAu9MHn1dbnZX4HDS04fHUs1
-         WHHGSb2/Kh62cZlPJQTS87P7sK1xJg7XRwQ84BDbXBmIMw8KALF68hD5C0NjwZW5+I
-         B/dMQOSVkSsynmsSCQP1NDoWxK0C+QXjuWT9GOLY=
-Date:   Mon, 3 Jan 2022 13:37:24 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     Aswath Govindraju <a-govindraju@ti.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 5/6] mux: fix grammar, missing "is".
-Message-ID: <YdLuBM77Ygg05qzm@kroah.com>
-References: <94ab71e1-2e68-def2-95b8-33162172f65c@axentia.se>
- <9f501a7c-47b4-783a-5519-75440fe488b0@axentia.se>
+        Mon, 3 Jan 2022 07:38:40 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47BAC061761;
+        Mon,  3 Jan 2022 04:38:39 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id w184so78842984ybg.5;
+        Mon, 03 Jan 2022 04:38:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=bLnja4l85nY7sG9mMjzxhaWHBfXUtbh2pLdWbEvQT2M=;
+        b=m4CUYDwwYGiBfH4j8fRGpV7WzjTeq6n6WgqFCAqLuacnUYGG+YJ8TCG+iuxNy+pSdq
+         MG6esO8rGS5DMqZWLdSneFAoX1677MpUP/IP6CXbNuI46zQv5DTlEQrJV23B89peuNXj
+         AVQch7sIfT0BLA2mfBu40WNwdVJgGpxdchG1g7z9fBk2gwrDpWWjCBr3S9wRj0cjgMEO
+         jlckqsAib8eKoGLX3GigP/bm0kWvfsAa76H3GT8j+3Ccy5b3bepMdJsrMAkjdqFKPUy/
+         IITm7l+6xloMLl/NAxLASRMLp0RirC0qBJHj260BWBGNNwwPJLYSmlNIDs4x2diUpZMU
+         fdvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=bLnja4l85nY7sG9mMjzxhaWHBfXUtbh2pLdWbEvQT2M=;
+        b=hbDIrNl3UHAox1Sux23ykPv1ta/noMSYoV/0qbGwxpzBoEfiN3QH/gnlqOkL8WDia/
+         xxAkQJrOoGfoPQNiDr36KrkxH4MT2vHaWtLdIpJPq3rYPUStMCPwogzmF89RkRkOR829
+         NVi4I9IuIk4Eb5v5X5J4ug8VjY75nvCjqoLVWUwhixqWu53WdZ1X+4Toj/QJTtt6Oynf
+         0/Yo7VNQwAI+P5LvwDbKuBS+h21qVQrh/34iP6d1m87/UUiAKz8WpMN40Qp4dEKjVVG2
+         QWYHJJ9E5neQ663dvTIusr8w/OyKhca/PDJqnpFgbCuGoUMSmng762YNBAprJyWbQFQV
+         z2fQ==
+X-Gm-Message-State: AOAM532Wn9zDzjIVpuFA5YXIkYZW2oKzReoOfOvI5pkiJpCjpBoEDttU
+        4GDLA/zRDbG15YUhub4lfGTrAswkD7YNzBCsSm5VHBF/MOY=
+X-Google-Smtp-Source: ABdhPJwdM3ZmHEBgBAOasDIn6DTwku2MFxMojwFtTshOEa88VdPAVXEVQwwrD/l8q8VtG5eC8Gu9lgQd/OKoDv/CcDY=
+X-Received: by 2002:a25:bccd:: with SMTP id l13mr15586329ybm.767.1641213519001;
+ Mon, 03 Jan 2022 04:38:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9f501a7c-47b4-783a-5519-75440fe488b0@axentia.se>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Mon, 3 Jan 2022 13:38:28 +0100
+Message-ID: <CAKXUXMy=M42hapfG1S4ZT1v5WEdH2KYiF8Cgukmf48=FKFCyJg@mail.gmail.com>
+Subject: Potentially broken error path in bio_map_user_iov()
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel-janitors <kernel-janitors@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 02, 2022 at 11:38:45PM +0100, Peter Rosin wrote:
-> 
-> Signed-off-by: Peter Rosin <peda@axentia.se>
-> ---
->  drivers/mux/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Dear Christoph,
 
-I really do not like to take changes with no changelog text at all :(
+in the function bio_map_user_iov() in ./block/blk-map.c, there is an
+error branch for unlikely(offs & queue_dma_alignment(rq->q)), where
+the supposingly expected error return value of the function is set,
+i.e., ret = -EINVAL;. However, the variable ret is unconditionally
+reset by the blk_rq_append_bio(...) call below, so that this 'ret =
+-EINVAL;' assignment has no effect.
 
-thanks,
+I am unsure which control flow you expect for this error case through
+the bio_map_user_iov() function. Maybe you just want a patch like this
+below to return the error code if it is at least once set?
 
-greg k-h
+diff --git a/block/blk-map.c b/block/blk-map.c
+index 4526adde0156..4a3f6703f46f 100644
+--- a/block/blk-map.c
++++ b/block/blk-map.c
+@@ -235,7 +235,7 @@ static int bio_map_user_iov(struct request *rq,
+struct iov_iter *iter,
+ {
+        unsigned int max_sectors = queue_max_hw_sectors(rq->q);
+        struct bio *bio;
+-       int ret;
++       int ret = 0;
+        int j;
+
+        if (!iov_iter_count(iter))
+@@ -296,6 +296,9 @@ static int bio_map_user_iov(struct request *rq,
+struct iov_iter *iter,
+                        break;
+        }
+
++       if (ret)
++               goto out_unmap;
++
+        ret = blk_rq_append_bio(rq, bio);
+        if (ret)
+                goto out_unmap;
+
+I know too little about this function and its intent to create a
+proper patch, though.
+
+I also looked at the previous versions, but the error code of this
+error branch was really never effectively returned before either (as
+far as I grasped the earlier versions of this function). So, this
+error path probably never worked as intended.
+
+
+Best regards,
+
+Lukas

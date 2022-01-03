@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B8324831F9
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B194831F1
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:24:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232365AbiACOXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:23:22 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:45944 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233614AbiACOW4 (ORCPT
+        id S233465AbiACOXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:23:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233419AbiACOWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:22:56 -0500
+        Mon, 3 Jan 2022 09:22:41 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1EDC061799;
+        Mon,  3 Jan 2022 06:22:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 92808CE110D;
-        Mon,  3 Jan 2022 14:22:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A2BFC36AFD;
-        Mon,  3 Jan 2022 14:22:52 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5B45CCE1109;
+        Mon,  3 Jan 2022 14:22:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ADAAC36AEB;
+        Mon,  3 Jan 2022 14:22:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641219773;
-        bh=kZQSglxbd2SRfF5dyFhvrX8een9kNkioVEwsan94ckU=;
+        s=korg; t=1641219757;
+        bh=yLmwlPHdrpgmr0YEKzev50jgMT2p9jeYzVcPI2wHECc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eEjhGKOtFX+nz6hlJgooWuhhsNclUZhgRhzkINusayOImaYL4EkyXGdK/VOvN7diK
-         JOIibEuFc/kTz5XNBBgk9nvpZM7rYjbJ6tfK4gtPnhmJHI7tUkXvF5x/GqZE4cteIz
-         sIMjq2VyJrjWjlTx3zsEVr78BelYFV2MG77cr84E=
+        b=mj82lD5q83PbIb4YNH9MfYIeAwAIO/aPjqJChaxkVXV3kRTcRmeHdPEPtTAz6wgyi
+         +jcp4PqZw/pvoKU8Pz3ZbxtbYtIzL/Lhw+Kzw+bbViNNcwk3XaboAOvQYxuu6TqHZN
+         KiKBUQlMl3i4HoJ3TcDsqmoWBCkf77M5d9QiR6QM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.14 10/19] nfc: uapi: use kernel size_t to fix user-space builds
+        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        syzbot+b88c5eae27386b252bbd@syzkaller.appspotmail.com
+Subject: [PATCH 4.9 11/13] Input: appletouch - initialize work before device registration
 Date:   Mon,  3 Jan 2022 15:21:27 +0100
-Message-Id: <20220103142052.400730938@linuxfoundation.org>
+Message-Id: <20220103142052.322735673@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142052.068378906@linuxfoundation.org>
-References: <20220103142052.068378906@linuxfoundation.org>
+In-Reply-To: <20220103142051.979780231@linuxfoundation.org>
+References: <20220103142051.979780231@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,36 +49,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-commit 79b69a83705e621b258ac6d8ae6d3bfdb4b930aa upstream.
+commit 9f3ccdc3f6ef10084ceb3a47df0961bec6196fd0 upstream.
 
-Fix user-space builds if it includes /usr/include/linux/nfc.h before
-some of other headers:
+Syzbot has reported warning in __flush_work(). This warning is caused by
+work->func == NULL, which means missing work initialization.
 
-  /usr/include/linux/nfc.h:281:9: error: unknown type name ‘size_t’
-    281 |         size_t service_name_len;
-        |         ^~~~~~
+This may happen, since input_dev->close() calls
+cancel_work_sync(&dev->work), but dev->work initalization happens _after_
+input_register_device() call.
 
-Fixes: d646960f7986 ("NFC: Initial LLCP support")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+So this patch moves dev->work initialization before registering input
+device
+
+Fixes: 5a6eb676d3bc ("Input: appletouch - improve powersaving for Geyser3 devices")
+Reported-and-tested-by: syzbot+b88c5eae27386b252bbd@syzkaller.appspotmail.com
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Link: https://lore.kernel.org/r/20211230141151.17300-1-paskripkin@gmail.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/uapi/linux/nfc.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/input/mouse/appletouch.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/include/uapi/linux/nfc.h
-+++ b/include/uapi/linux/nfc.h
-@@ -276,7 +276,7 @@ struct sockaddr_nfc_llcp {
- 	__u8 dsap; /* Destination SAP, if known */
- 	__u8 ssap; /* Source SAP to be bound to */
- 	char service_name[NFC_LLCP_MAX_SERVICE_NAME]; /* Service name URI */;
--	size_t service_name_len;
-+	__kernel_size_t service_name_len;
- };
+--- a/drivers/input/mouse/appletouch.c
++++ b/drivers/input/mouse/appletouch.c
+@@ -929,6 +929,8 @@ static int atp_probe(struct usb_interfac
+ 	set_bit(BTN_TOOL_TRIPLETAP, input_dev->keybit);
+ 	set_bit(BTN_LEFT, input_dev->keybit);
  
- /* NFC socket protocols */
++	INIT_WORK(&dev->work, atp_reinit);
++
+ 	error = input_register_device(dev->input);
+ 	if (error)
+ 		goto err_free_buffer;
+@@ -936,8 +938,6 @@ static int atp_probe(struct usb_interfac
+ 	/* save our data pointer in this interface device */
+ 	usb_set_intfdata(iface, dev);
+ 
+-	INIT_WORK(&dev->work, atp_reinit);
+-
+ 	return 0;
+ 
+  err_free_buffer:
 
 

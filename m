@@ -2,179 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F8D483168
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 14:32:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BCFC483172
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 14:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233103AbiACNcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 08:32:06 -0500
-Received: from ni.piap.pl ([195.187.100.5]:40176 "EHLO ni.piap.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230368AbiACNcG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 08:32:06 -0500
-Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
-        by ni.piap.pl (Postfix) with ESMTPSA id 78263C3F3ED9;
-        Mon,  3 Jan 2022 14:32:04 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl 78263C3F3ED9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=piap.pl; s=mail;
-        t=1641216724; bh=3xEAksF42GqvPyIo5udWzXK97YqUun/mk0Ov9K3jQR4=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=GrwQJBKV3WQV07gvU3YJG/uaCfNk8E5y8C3VGALy14v7pABzwAKzglkoLanDga8D4
-         LJNVFC8N7D8jUJnVIHaB3UQHstn34QSQqfbiPHpcsskGNxgWr1ANhRBs28J9HwuViy
-         UjBYUJJ8neXV8+p5qrtaOFxUiR+2d4vDmnoiF59g=
-From:   =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH v7 1/2] dt-binding: media: document ON Semi AR0521 sensor
- bindings
-References: <m3czl9eylt.fsf@t19.piap.pl>
-Sender: khalasa@piap.pl
-Date:   Mon, 03 Jan 2022 14:32:04 +0100
-In-Reply-To: <m3czl9eylt.fsf@t19.piap.pl> ("Krzysztof =?utf-8?Q?Ha=C5=82as?=
- =?utf-8?Q?a=22's?= message of
-        "Mon, 03 Jan 2022 14:29:50 +0100")
-Message-ID: <m38rvxeyi3.fsf@t19.piap.pl>
+        id S233125AbiACNfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 08:35:11 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:33688 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229534AbiACNfJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 08:35:09 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 796436104B;
+        Mon,  3 Jan 2022 13:35:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30D2EC36AED;
+        Mon,  3 Jan 2022 13:35:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641216907;
+        bh=jFbww1NpkfvF5p1XfPt3zfR/YkekAF7W2Tm4G835O4M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RrUNsbWOMvMY4xUSYjLPOr10hdRxw4E6URCeY7lFspPpcJ0/wdcZIrwtFEe/eUaXM
+         ItgKGnDrDXSiTQrBHnR96QQ6s8q//vTQKBKN3BQe00AaPws/NIZ0LYnLyfaMO7BREK
+         Z3QULJodnDdazkqb7LfgBWRHhbPQACcw4xgSzDok=
+Date:   Mon, 3 Jan 2022 14:35:04 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yaqin Pan <akingchen@vivo.com>
+Cc:     balbi@kernel.org, devicetree@vger.kernel.org, kernel@vivo.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        robh+dt@kernel.org
+Subject: Re: [PATCH v3 1/2] usb: dwc3: Add a quirk to set
+ GUCTL.SPRSCTRLTRANSEN bit.
+Message-ID: <YdL7iDbNk0cct1Bs@kroah.com>
+References: <Yc3UuSRkgiopJ5jp@kroah.com>
+ <20211231115931.20628-1-akingchen@vivo.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-KLMS-Rule-ID: 3
-X-KLMS-Message-Action: skipped
-X-KLMS-AntiSpam-Status: not scanned, whitelist
-X-KLMS-AntiPhishing: not scanned, whitelist
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, not scanned, whitelist
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211231115931.20628-1-akingchen@vivo.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This file documents DT bindings for the AR0521 camera sensor driver.
+On Fri, Dec 31, 2021 at 07:59:31PM +0800, Yaqin Pan wrote:
+> On Thu, 30 Dec 2021 16:48:09 +0100 Greg Kroah-Hartman wrote:
+> >On Thu, Dec 30, 2021 at 11:36:12PM +0800, Yaqin Pan wrote:
+> >> On Thu, 30 Dec 2021 15:12:27 +0100 Greg Kroah-Hartman wrote:
+> >> >> This quirk is only for dwc3 host mode.
+> >> >> the dwc3 controller can't emurate some devices successfully.
+> >> >> For example, TF card reader (aaaa:8816):
+> >> >> failed log
+> >> >> usb 1-1: new high-speed USB device number 2 using xhci-hcd
+> >> >> usb 1-1: device descriptor read/all, error -110
+> >> >> >From the usb analyzer, always return NAK in the data phase.
+> >> >> if enable the GUCTL.SPRSCTRLTRANSEN bit. then the log is:
+> >> >> usb 2-1: new high-speed USB device number 3 using xhci-hcd
+> >> >> usb 2-1: New USB device found, idVendor=aaaa,
+> >> >> idProduct=8816, bcdDevice=13.08
+> >> >> usb 2-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> >> >> usb 2-1: Product: MXT USB Device
+> >> >> usb 2-1: Manufacturer: MXTronics
+> >> >> usb 2-1: SerialNumber: 150101v01
+> >> >> usb 2-1: New USB device found, VID=aaaa, PID=8816
+> >> >> 
+> >> >> Some devices are slow in responding to Control transfers.
+> >> >> Scheduling mulitiple transactions in one microframe/frame
+> >> >> can cause the devices to misbehave. if this qurik is enabled,
+> >> >> the host controller schedules transations for a Control transfer
+> >> >> in defferent microframes/frame.
+> >> >
+> >> >If this is needed for all devices (i.e. you do not know what device is
+> >> >going to be plugged in), why not just enable it for all controllers?
+> >> >Why whould you NOT want this enabled?
+> >> >
+> >> >Or is this a broken hardware device and only specific host controllers
+> >> >need this?  If so, how do we know which ones need this set and which do
+> >> >not?
+> >> 
+> >> I think not all dwc3 controllers need this. For cell phone,customers may
+> >> use various usb devices, we can enable this quirk to fix some compatibility
+> >> issues. For some chip platform of qcom, i encounter this issue, not every
+> >> platform i encounter this problem.
+> >> 
+> >> If enabled for all controllers, it will reduce the speed of Control transfers. 
+> >> So i think it would be better for user to enable it by their own purposes.
+> >
+> >But how do hardware vendors know to enable this?  Can we trigger off of
+> >PCI ids?  Do we need a list of quirks to show which host controllers are
+> >broken this way?
+> >
+> >Burying something as basic as "reliable device connection" in a DT quirk
+> >seems very sloppy to me.  We want reliable systems, right?
+> 
+> Yes, we want reliable systems. But i don't have a good ideal about this issue.
+> when we meet this problem, and from the dwc-usb3 controller datasheet,we know
+> enable one bit in dwc-usb3 controller's register can fixed this issue.
+> 
+> Of course, i can list the host controllers that i used broken this way if needed.
 
-Signed-off-by: Krzysztof Ha=C5=82asa <khalasa@piap.pl>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
+Please have a list of controller that this is needed for, and add the
+quirk for them only.  Don't require this to be in a DT file as that will
+never be noticed.
 
-diff --git
-a/Documentation/devicetree/bindings/media/i2c/onnn,ar0521.yaml
-b/Documentation/devicetree/bindings/media/i2c/onnn,ar0521.yaml
-new file mode 100644
-index 000000000000..b617cc5c6a9f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/onnn,ar0521.yaml
-@@ -0,0 +1,112 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/i2c/onnn,ar0521.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: ON Semiconductor AR0521 MIPI CSI-2 sensor
-+
-+maintainers:
-+  - Krzysztof Ha=C5=82asa <khalasa@piap.pl>
-+
-+description: |-
-+  The AR0521 is a raw CMOS image sensor with MIPI CSI-2 and
-+  I2C-compatible control interface.
-+
-+properties:
-+  compatible:
-+    const: onnn,ar0521
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    const: extclk
-+
-+  vaa-supply:
-+    description:
-+      Definition of the regulator used as analog (2.7 V) voltage supply.
-+
-+  vdd-supply:
-+    description:
-+      Definition of the regulator used as digital core (1.2 V) voltage sup=
-ply.
-+
-+  vdd_io-supply:
-+    description:
-+      Definition of the regulator used as digital I/O (1.8 V) voltage supp=
-ly.
-+
-+  reset-gpios:
-+    description: reset GPIO, usually active low
-+    maxItems: 1
-+
-+  port:
-+    $ref: /schemas/graph.yaml#/$defs/port-base
-+    unevaluatedProperties: false
-+    description: |
-+      Video output port.
-+
-+    properties:
-+      endpoint:
-+        $ref: /schemas/media/video-interfaces.yaml#
-+        unevaluatedProperties: false
-+
-+        properties:
-+          bus-type:
-+            const: 4
-+          data-lanes:
-+            anyOf:
-+              - items:
-+                  - const: 1
-+              - items:
-+                  - const: 1
-+                  - const: 2
-+              - items:
-+                  - const: 1
-+                  - const: 2
-+                  - const: 3
-+                  - const: 4
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - vaa-supply
-+  - vdd-supply
-+  - vdd_io-supply
-+  - port
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/clock/imx6qdl-clock.h>
-+
-+    i2c {
-+            #address-cells =3D <1>;
-+            #size-cells =3D <0>;
-+
-+            ar0521: camera-sensor@36 {
-+                    compatible =3D "onnn,ar0521";
-+                    reg =3D <0x36>;
-+                    pinctrl-names =3D "default";
-+                    pinctrl-0 =3D <&pinctrl_mipi_camera>;
-+                    clocks =3D <&clks IMX6QDL_CLK_CKO>;
-+                    clock-names =3D "extclk";
-+                    reset-gpios =3D <&gpio1 7 GPIO_ACTIVE_LOW>;
-+                    vaa-supply =3D <&reg_2p7v>;
-+                    vdd-supply =3D <&reg_1p2v>;
-+                    vdd_io-supply =3D <&reg_1p8v>;
-+
-+                    port {
-+                           mipi_camera_to_mipi_csi2: endpoint {
-+                                    remote-endpoint =3D <&mipi_csi2_in>;
-+                                    data-lanes =3D <1 2 3 4>;
-+                            };
-+                    };
-+            };
-+    };
+thanks,
+
+greg k-h

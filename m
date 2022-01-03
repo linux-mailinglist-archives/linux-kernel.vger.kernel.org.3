@@ -2,102 +2,316 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C3C44836C1
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 19:22:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04BD74836BF
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 19:22:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235483AbiACSWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 13:22:18 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:59858 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235465AbiACSWR (ORCPT
+        id S235463AbiACSWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 13:22:10 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:37016 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229511AbiACSWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 13:22:17 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 40EF51F386;
-        Mon,  3 Jan 2022 18:22:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1641234136;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=m2T7Ptw6ivT22notp7XGH744eDJ9q3aTWSw5scKaE7c=;
-        b=IhUL+BrNeK04m/jxSIY3+iS654VLE0a9ReZ9QUWzIAFEkEflzyNoFLnuQ1NnXxJI2sGR9H
-        kDYQloYwgSpEkxg70B344o5FY64GlXk0zm36LfJVQeem/m4E6chJTmi+o/vTb9PAcRXL3e
-        ieWquwm5oKglop9HHGm5PrDmAsslt8c=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1641234136;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=m2T7Ptw6ivT22notp7XGH744eDJ9q3aTWSw5scKaE7c=;
-        b=SEvKkNpcEODHnL8E9Hc3Gsxk3np/iW8f0Tw3Mrpcus2RuScMx4NISB5iZUfdGDXnuybiA2
-        Xp9wnseUGevyLiDw==
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id EEBA5A3B89;
-        Mon,  3 Jan 2022 18:22:15 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id 2DF7EDA729; Mon,  3 Jan 2022 19:21:46 +0100 (CET)
-Date:   Mon, 3 Jan 2022 19:21:46 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
-Cc:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, clm@fb.com,
-        josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] btrfs: Remove redundant initialization of slot
-Message-ID: <20220103182146.GN28560@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, Qu Wenruo <quwenruo.btrfs@gmx.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, clm@fb.com,
-        josef@toxicpanda.com, dsterba@suse.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20211231122306.13720-1-jiapeng.chong@linux.alibaba.com>
- <f6aa56ee-16b2-9a53-2377-07d638b1289b@gmx.com>
+        Mon, 3 Jan 2022 13:22:09 -0500
+Received: from kbox (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 023D720B7179;
+        Mon,  3 Jan 2022 10:22:08 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 023D720B7179
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1641234129;
+        bh=Y+cSm587R0Ox6HqvSX7e0ba9yBSjtSdXhWvTVqKzIfA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jy5q7R2gV5aFnshM/qmMNgEbjOorRrrax8Bn3o4DwRcwQBTOl0QYK3UWQtl/JwUPB
+         h58sKRynSIjpaQWAD+E5yAcAJttjARzuecNdISvfNUxiE0dpeqhRu3TNDKNUby6Pmx
+         On9RCI5dj1P1sgdwWNXQl4UeBSIJJDKfufd8W0Qk=
+Date:   Mon, 3 Jan 2022 10:22:04 -0800
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     rostedt@goodmis.org, linux-trace-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 01/12] user_events: Add minimal support for
+ trace_event into ftrace
+Message-ID: <20220103182204.GA15459@kbox>
+References: <20211216173511.10390-1-beaub@linux.microsoft.com>
+ <20211216173511.10390-2-beaub@linux.microsoft.com>
+ <20211222001637.4d45b40ce99737ba213ae2b4@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f6aa56ee-16b2-9a53-2377-07d638b1289b@gmx.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+In-Reply-To: <20211222001637.4d45b40ce99737ba213ae2b4@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 31, 2021 at 09:07:45PM +0800, Qu Wenruo wrote:
+On Wed, Dec 22, 2021 at 12:16:37AM +0900, Masami Hiramatsu wrote:
+> Hi Beau,
 > 
+> On Thu, 16 Dec 2021 09:35:00 -0800
+> Beau Belgrave <beaub@linux.microsoft.com> wrote:
 > 
-> On 2021/12/31 20:23, Jiapeng Chong wrote:
-> > slot is being initialized to path->slots[0] but this is never
-> > read as slot is overwritten later on. Remove the redundant
-> > initialization.
-> >
-> > Cleans up the following clang-analyzer warning:
-> >
-> > fs/btrfs/tree-log.c:6125:7: warning: Value stored to 'slot' during its
-> > initialization is never read [clang-analyzer-deadcode.DeadStores].
-> >
-> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> > Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> > Minimal support for interacting with dynamic events, trace_event and
+> > ftrace.
+> 
+> Since the cover mail is merged, could you describe what is
+> the user_events here? :)
+> 
+
+Yeah, would this basically be what I have in the cover letter without
+the history tracking?
+
+> I have some comments below, but not so much.
+> 
+> > Core outline of flow between user process, ioctl and trace_event
+> > APIs.
+> > 
+> > Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
 > > ---
-> >   fs/btrfs/tree-log.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
-> > index 9165486b554e..c083562a3334 100644
-> > --- a/fs/btrfs/tree-log.c
-> > +++ b/fs/btrfs/tree-log.c
-> > @@ -6122,7 +6122,7 @@ static int log_new_ancestors(struct btrfs_trans_handle *trans,
-> >   	while (true) {
-> >   		struct btrfs_fs_info *fs_info = root->fs_info;
-> >   		struct extent_buffer *leaf = path->nodes[0];
-> > -		int slot = path->slots[0];
-> > +		int slot;
+> >  include/uapi/linux/user_events.h |   71 ++
+> >  kernel/trace/Kconfig             |   14 +
+> >  kernel/trace/Makefile            |    1 +
+> >  kernel/trace/trace_events_user.c | 1188 ++++++++++++++++++++++++++++++
+> >  4 files changed, 1274 insertions(+)
+> >  create mode 100644 include/uapi/linux/user_events.h
+> >  create mode 100644 kernel/trace/trace_events_user.c
+> > 
+> > diff --git a/include/uapi/linux/user_events.h b/include/uapi/linux/user_events.h
+> > new file mode 100644
+> > index 000000000000..f97db05e00c9
+> > --- /dev/null
+> > +++ b/include/uapi/linux/user_events.h
+> > @@ -0,0 +1,71 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> > +/*
+> > + * Copyright (c) 2021, Microsoft Corporation.
+> > + *
+> > + * Authors:
+> > + *   Beau Belgrave <beaub@linux.microsoft.com>
+> > + */
+> > +#ifndef _UAPI_LINUX_USER_EVENTS_H
+> > +#define _UAPI_LINUX_USER_EVENTS_H
+> > +
+> > +#include <linux/types.h>
+> > +#include <linux/ioctl.h>
+> > +
+> > +#ifdef __KERNEL__
+> > +#include <linux/uio.h>
+> > +#else
+> > +#include <sys/uio.h>
+> > +#endif
+> > +
+> > +#define USER_EVENTS_SYSTEM "user_events"
+> > +#define USER_EVENTS_PREFIX "u:"
+> > +
+> > +/* Bits 0-6 are for known probe types, Bit 7 is for unknown probes */
+> > +#define EVENT_BIT_FTRACE 0
+> > +#define EVENT_BIT_PERF 1
+> > +#define EVENT_BIT_OTHER 7
+> > +
+> > +#define EVENT_STATUS_FTRACE (1 << EVENT_BIT_FTRACE)
+> > +#define EVENT_STATUS_PERF (1 << EVENT_BIT_PERF)
+> > +#define EVENT_STATUS_OTHER (1 << EVENT_BIT_OTHER)
+> > +
+> > +/* Create dynamic location entry within a 32-bit value */
+> > +#define DYN_LOC(offset, size) ((size) << 16 | (offset))
+> > +
+> > +/* Use raw iterator for attached BPF program(s), no affect on ftrace/perf */
+> > +#define FLAG_BPF_ITER (1 << 0)
+> > +
 > 
-> If you're cleaning up slot, then why not also cleaning up leaf?
+> Can you add a description of the user_reg (and each field) here?
+> 
 
-Yes, the variable leaf does not need to be initialized as well, both
-should be cleaned up in the same patch.
+Sure thing.
 
-> And again, no feedback no matter what on other patches from you, and
-> still CC to maintainers.
+> > +struct user_reg {
+> > +	__u32 size;
+> > +	__u64 name_args;
+> 
+> BTW, this field name is a bit strange. It is indeed "name and arguments",
+> but actually, it is the definition of the event, isn't it?
+> 
 
-It's better to add the CCs than not, don't worry about that.
+It also includes flags, which are not part of the definition. I expect
+the number of flags to increase in the future. For example, enabling
+auto-deregistering of the event upon close if it's the last ref, etc.
+
+> > +	__u32 status_index;
+> > +	__u32 write_index;
+> > +};
+> > +
+> > +#define DIAG_IOC_MAGIC '*'
+> > +#define DIAG_IOCSREG _IOWR(DIAG_IOC_MAGIC, 0, struct user_reg*)
+> > +#define DIAG_IOCSDEL _IOW(DIAG_IOC_MAGIC, 1, char*)
+> > +
+> > +enum {
+> > +	USER_BPF_DATA_KERNEL,
+> > +	USER_BPF_DATA_USER,
+> > +	USER_BPF_DATA_ITER,
+> > +};
+> > +
+> > +struct user_bpf_iter {
+> > +	__u32 iov_offset;
+> > +	__u32 nr_segs;
+> > +	const struct iovec *iov;
+> > +};
+> > +
+> > +struct user_bpf_context {
+> > +	__u32 data_type;
+> > +	__u32 data_len;
+> > +	union {
+> > +		void *kdata;
+> > +		void *udata;
+> > +		struct user_bpf_iter *iter;
+> > +	};
+> > +};
+> 
+> Are those bpf related data structures passed from/to user?
+> 
+
+They are passed to the BPF program, which requires to know their
+definitions when compiling in places such as libbpf. The owner of the
+structure in memory is always the kernel. The data the context points to
+can either be from the kernel or user. The data_type tells you which is
+the case so your BPF program can probe correctly.
+
+> [...]
+> > +/*
+> > + * Parses a register command for user_events
+> > + * Format: event_name[:FLAG1[,FLAG2...]] [field1[;field2...]]
+> > + *
+> > + * Example event named test with a 20 char msg field with a unsigned int after:
+> 
+> Please quote the words in the example, like 
+> 
+> Example event named 'test' with a 20 char 'msg' field with an 'unsigned int id' after:
+> 
+> (is that correct?)
+> 
+
+Think so, seems like unsigned int 'id' would be more appropriate here,
+the rest look accurate. I'll change it.
+
+> > + * test char[20] msg;unsigned int id
+> > + *
+> > + * NOTE: Offsets are from the user data perspective, they are not from the
+> > + * trace_entry/buffer perspective. We automatically add the common properties
+> > + * sizes to the offset for the user.
+> > + */
+> > +static int user_event_parse_cmd(char *raw_command, struct user_event **newuser)
+> > +{
+> > +	char *name = raw_command;
+> > +	char *args = strpbrk(name, " ");
+> > +	char *flags;
+> > +
+> > +	if (args)
+> > +		*args++ = 0;
+> > +
+> > +	flags = strpbrk(name, ":");
+> > +
+> > +	if (flags)
+> > +		*flags++ = 0;
+> > +
+> 
+> Just a nitpick. What about using strsep()?
+> 
+
+strsep() has a side effect of setting the first parameter to NULL if the
+delimiter is not found. This can lead to unintentional errors.
+
+> args = raw_command;
+> flags = strsep(&args, " ");
+> name = strsep(&flags, ":");
+> 
+
+For example, if there wasn't a space then args would now be null. Where
+as before only args would be null and name would be valid.
+
+> > +	return user_event_parse(name, args, flags, newuser);
+> > +}
+> > +
+> 
+> [...]
+> 
+> > +
+> > +static ssize_t user_status_read(struct file *file, char __user *ubuf,
+> > +				size_t count, loff_t *ppos)
+> > +{
+> > +	/*
+> > +	 * Delay allocation of seq data until requested, most callers
+> > +	 * will never read the status file. They will only mmap.
+> > +	 */
+> 
+> I think you don't need to do this optimization since this is not
+> a hot path. And it causes strange behaviors. See below;
+> 
+
+In all of our usage we won't read the file, we simply mmap in. It felt
+wasteful for the 99% case to allocate a seq_buf to just never be used.
+If the file is closed after mmap from the user side then the seq_buf is
+allocated but then freed, so not as big of a deal.
+
+I'll try to see if the normal mmap pattern we use leaves allocations
+around. If not, then I'm fine having this optimization removed.
+
+> > +	if (file->private_data == NULL) {
+> > +		int ret;
+> > +
+> > +		if (*ppos != 0)
+> > +			return -EINVAL;
+> > +
+> > +		ret = single_open(file, user_status_show, NULL);
+> > +
+> > +		if (ret)
+> > +			return ret;
+> 
+> This seems strange returning failure of open(2) from read(2).
+> 
+
+Yeah, too bad there wasn't a better place for it if we don't want extra
+memory per-status file.
+
+> > +	}
+> > +
+> > +	return seq_read(file, ubuf, count, ppos);
+> > +}
+> > +
+> > +static loff_t user_status_seek(struct file *file, loff_t offset, int whence)
+> > +{
+> > +	if (file->private_data == NULL)
+> 
+> For example, this means unless start reading we can not do seek.
+> So, please make the code as usually that is, unless any special reason.
+> 
+
+Sure, see above, I'll see if I can get this cleaned up.
+
+> 
+> > +		return 0;
+> > +
+> > +	return seq_lseek(file, offset, whence);
+> > +}
+> > +
+> > +static int user_status_release(struct inode *node, struct file *file)
+> > +{
+> > +	if (file->private_data == NULL)
+> > +		return 0;
+> > +
+> > +	return single_release(node, file);
+> > +}
+> > +
+> > +static const struct file_operations user_status_fops = {
+> > +	.mmap = user_status_mmap,
+> > +	.read = user_status_read,
+> > +	.llseek  = user_status_seek,
+> > +	.release = user_status_release,
+> > +};
+> 
+> Thank you,
+> 
+> 
+> 
+> -- 
+> Masami Hiramatsu <mhiramat@kernel.org>
+
+Thanks,
+-Beau

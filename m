@@ -2,69 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02654483156
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 14:17:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14900483158
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 14:24:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232029AbiACNRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 08:17:15 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:57580 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiACNRN (ORCPT
+        id S232548AbiACNYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 08:24:01 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:47426 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229793AbiACNYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 08:17:13 -0500
-Date:   Mon, 3 Jan 2022 14:17:11 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1641215832;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EfKZrFqVyZ2KnKNACe7A+XVNznQOd3fjQmbJwtLKxd0=;
-        b=uZNQSGWGQ7CdagbgT1W+VciJtfugoQI4pdoTivpVCHkiwwcIeDZEAr/SFgOShUWcGoqAw5
-        2hPSfl1qYriobrtDkwRDlsk945kdFbDkuPclOM2d3WXnDIvnnd1CDqCBwUa5XG8j0JGQHX
-        lJZudGFxFYg35xAHX5p2RUCntM96BhKIAIQ/daQyjOp8U5031mJ3qhU/gGxohbVP9FXAth
-        0YbH8SkoQ7iN0WwNylVXoooN6deK1X4PA0ifKccsKnCEgtw95FRd3j6kfw3MjhhAxUwgN0
-        XKOMaNOaAtaip9ogVlvtC21AVhPeT9Zx3P8RQtt4ehxGq9Vq4SHNs6MC3NLwXw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1641215832;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EfKZrFqVyZ2KnKNACe7A+XVNznQOd3fjQmbJwtLKxd0=;
-        b=aUMbQcUqIADOUEuTNSmkctVy6w2LtORe3TPpdf+gXxXKlUNZAK+R4GEpskZsF2tmjboIob
-        DWc7GgoVtPC9qUDw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Zqiang <qiang1.zhang@intel.com>, frederic@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcu: per-cpu rcuc kthread are created only when
- rcutree.use_softirq=0
-Message-ID: <YdL3Vx6pq6YCL1kx@linutronix.de>
-References: <20211228160510.2893362-1-qiang1.zhang@intel.com>
- <20220101164426.GA2408833@paulmck-ThinkPad-P17-Gen-1>
+        Mon, 3 Jan 2022 08:24:00 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 761A4B80EA7
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 13:23:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F153C36AEB;
+        Mon,  3 Jan 2022 13:23:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641216238;
+        bh=+bcTLaUgWHsLoBnTZrJn4nlfN54T2db4ye/+cH2BnYQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xJqSqztgB4NUpACIeclViOu5mBcOGClje6AFnOUzqnz2mP9DLitz5/VTVzFLgFkpd
+         trhnMgtEk7H6aKMJZlXt9RAupO6JKPKJkT5OOGsEpGRddH3URThUBlDK4bYaWCzO1K
+         uV9eGUDkkvlfyNYsxRdBkg1TFcRmZjy+jew64cDA=
+Date:   Mon, 3 Jan 2022 14:23:54 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Aswath Govindraju <a-govindraju@ti.com>
+Cc:     Peter Rosin <peda@axentia.se>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/6] mux: Add support for reading mux state from consumer
+ DT node
+Message-ID: <YdL46pTsM5dloS3n@kroah.com>
+References: <94ab71e1-2e68-def2-95b8-33162172f65c@axentia.se>
+ <b9bb0b36-cf58-b436-6b72-c4211022981c@axentia.se>
+ <YdLvX8TWBavEq8PH@kroah.com>
+ <f5351a32-18d1-9426-1060-42d658435247@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220101164426.GA2408833@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <f5351a32-18d1-9426-1060-42d658435247@ti.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-01 08:44:26 [-0800], Paul E. McKenney wrote:
-> On Wed, Dec 29, 2021 at 12:05:10AM +0800, Zqiang wrote:
-> > In non-RT kernel, if the RCU_BOOST is enabled, the per-cpu rcuc
-> > kthread will be created, however under the rcutree.use_softirq=1,
-> > the RCU core processing only in softirq context, the rcuc kthread
-> > doesn't do anything, so remove RCU_BOOST interference.
-> > 
-> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+On Mon, Jan 03, 2022 at 06:35:52PM +0530, Aswath Govindraju wrote:
+> Hi Greg,
 > 
-> Looks sane to me, but adding Sebastian on CC for his thoughts.
+> On 03/01/22 6:13 pm, Greg Kroah-Hartman wrote:
+> > On Sun, Jan 02, 2022 at 11:38:29PM +0100, Peter Rosin wrote:
+> >> From: Aswath Govindraju <a-govindraju@ti.com>
+> >>
+> >> In some cases, we might need to provide the state of the mux to be set for
+> >> the operation of a given peripheral. Therefore, pass this information using
+> >> mux-states property.
+> > 
+> > Where is the user of this new function?
+> > 
+> 
+> This function will be used by the following patch series,
+> 
+> https://lore.kernel.org/lkml/20211216041012.16892-1-a-govindraju@ti.com/t/
+> 
+> Since the above has a dependency on this patch series, it is planned to
+> be merged after this series.
 
-Yes, it makes sense. invoke_rcu_core_kthread() is only invoked for
-!use_softirq so it makes to create the threads based on this condition.
+Please provide the users of new functions as part of the same series,
+otherwise it is impossible to determine how the functions are used, or
+if they are even used at all.
 
-Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+We try to not add functions with no in-tree users.
 
-> 							Thanx, Paul
+thanks,
 
-Sebastian
+greg k-h

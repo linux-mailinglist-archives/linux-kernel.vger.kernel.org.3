@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A6248335E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:36:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 060C148329E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:29:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235099AbiACOg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:36:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40356 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235537AbiACOem (ORCPT
+        id S234492AbiACO3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:29:24 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58320 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234133AbiACO2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:34:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6A7C08E883;
-        Mon,  3 Jan 2022 06:32:45 -0800 (PST)
+        Mon, 3 Jan 2022 09:28:01 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6CBB6B80F02;
-        Mon,  3 Jan 2022 14:32:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39FB2C36AF0;
-        Mon,  3 Jan 2022 14:32:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 668736111B;
+        Mon,  3 Jan 2022 14:28:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EE32C36AEE;
+        Mon,  3 Jan 2022 14:27:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220363;
-        bh=CBCLoL3PlPAkYt2ViNpVsAbTFU6ZPDuvgOtuV9dMTB4=;
+        s=korg; t=1641220079;
+        bh=KHfhOfW6ps0SIGyPEE/RE/jPeJBdNnNF0tRb5eGgZ1Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ncPTTL+pVS0phK1vSAMJeBuCVmF8NkRErMp52l+e1qmjL1KBM20VI4miRggSGA5as
-         CS0bf4MG15/VsWGL50ntLJ4fA4fbvQA54vyiapy3iVWvUJibXlBGbbhKGQV6oGf03K
-         1wCQ/0UG4PGVplHKOFnE/m9A6VACQxBWB0c6dAIs=
+        b=YizUP16ENDJzAKjlXH4aTJOdWw2pOER8bXuFaLCYoHiFl+CItEejO+rB8YsdxKD8P
+         VRFYLQuY/orV0z4hjTb1HWRavkXDmbiYgSBTjntvUPcUkuPUPJ7s6HEsVsW0sfgVbB
+         dTWVGp3H4yqrP3SZapQTRswGYFHLhqrqz5eEfEeo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jianguo Wu <wujianguo@chinatelecom.cn>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 46/73] selftests: net: Fix a typo in udpgro_fwd.sh
-Date:   Mon,  3 Jan 2022 15:24:07 +0100
-Message-Id: <20220103142058.400875931@linuxfoundation.org>
+        stable@vger.kernel.org, Yuwen Ng <yuwen.ng@mediatek.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Subject: [PATCH 5.4 30/37] usb: mtu3: fix list_head check warning
+Date:   Mon,  3 Jan 2022 15:24:08 +0100
+Message-Id: <20220103142052.807297651@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142056.911344037@linuxfoundation.org>
-References: <20220103142056.911344037@linuxfoundation.org>
+In-Reply-To: <20220103142051.883166998@linuxfoundation.org>
+References: <20220103142051.883166998@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,36 +45,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jianguo Wu <wujianguo@chinatelecom.cn>
+From: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-[ Upstream commit add25d6d6c85f7b6d00a055ee0a4169acf845681 ]
+commit 8c313e3bfd9adae8d5c4ba1cc696dcbc86fbf9bf upstream.
 
-$rvs -> $rcv
+This is caused by uninitialization of list_head.
 
-Fixes: a062260a9d5f ("selftests: net: add UDP GRO forwarding self-tests")
-Signed-off-by: Jianguo Wu <wujianguo@chinatelecom.cn>
-Link: https://lore.kernel.org/r/d247d7c8-a03a-0abf-3c71-4006a051d133@163.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+BUG: KASAN: use-after-free in __list_del_entry_valid+0x34/0xe4
+
+Call trace:
+dump_backtrace+0x0/0x298
+show_stack+0x24/0x34
+dump_stack+0x130/0x1a8
+print_address_description+0x88/0x56c
+__kasan_report+0x1b8/0x2a0
+kasan_report+0x14/0x20
+__asan_load8+0x9c/0xa0
+__list_del_entry_valid+0x34/0xe4
+mtu3_req_complete+0x4c/0x300 [mtu3]
+mtu3_gadget_stop+0x168/0x448 [mtu3]
+usb_gadget_unregister_driver+0x204/0x3a0
+unregister_gadget_item+0x44/0xa4
+
+Fixes: 83374e035b62 ("usb: mtu3: add tracepoints to help debug")
+Cc: stable@vger.kernel.org
+Reported-by: Yuwen Ng <yuwen.ng@mediatek.com>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Link: https://lore.kernel.org/r/20211218095749.6250-3-chunfeng.yun@mediatek.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/net/udpgro_fwd.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/mtu3/mtu3_gadget.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/net/udpgro_fwd.sh b/tools/testing/selftests/net/udpgro_fwd.sh
-index 7f26591f236b9..6a3985b8cd7f6 100755
---- a/tools/testing/selftests/net/udpgro_fwd.sh
-+++ b/tools/testing/selftests/net/udpgro_fwd.sh
-@@ -132,7 +132,7 @@ run_test() {
- 	local rcv=`ip netns exec $NS_DST $ipt"-save" -c | grep 'dport 8000' | \
- 							  sed -e 's/\[//' -e 's/:.*//'`
- 	if [ $rcv != $pkts ]; then
--		echo " fail - received $rvs packets, expected $pkts"
-+		echo " fail - received $rcv packets, expected $pkts"
- 		ret=1
- 		return
- 	fi
--- 
-2.34.1
-
+--- a/drivers/usb/mtu3/mtu3_gadget.c
++++ b/drivers/usb/mtu3/mtu3_gadget.c
+@@ -245,6 +245,7 @@ struct usb_request *mtu3_alloc_request(s
+ 	mreq->request.dma = DMA_ADDR_INVALID;
+ 	mreq->epnum = mep->epnum;
+ 	mreq->mep = mep;
++	INIT_LIST_HEAD(&mreq->list);
+ 	trace_mtu3_alloc_request(mreq);
+ 
+ 	return &mreq->request;
 
 

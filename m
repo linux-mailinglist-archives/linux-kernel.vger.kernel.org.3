@@ -2,91 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA49482E65
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 07:11:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A11BF482E6F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 07:18:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231814AbiACGLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 01:11:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:41426 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229505AbiACGLk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 01:11:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641190300;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eZWdqglEJRBMyWOswue91QGGug+foo23E07h4yycLxk=;
-        b=UoWwmUTCiOr4Q+ETUTbX7SuB9YDG70Acx/InccEsUaBN57qlBZ9fnR1CQtguM8eqER/inY
-        nyCnZfgqksrUFsvmmBe4bpUVDeA4U713dcMOYPSNmCXJfPMjp3MuOkmGXdwEKSWMRRMhHZ
-        VK4dcFRcZhPxG85cLQNe9ExCQBIAzO0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-607-jznnFRq4Ox2x6SNXuNadWw-1; Mon, 03 Jan 2022 01:11:36 -0500
-X-MC-Unique: jznnFRq4Ox2x6SNXuNadWw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S231826AbiACGSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 01:18:06 -0500
+Received: from marcansoft.com ([212.63.210.85]:36554 "EHLO mail.marcansoft.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229505AbiACGSE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 01:18:04 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DB1321006AA9;
-        Mon,  3 Jan 2022 06:11:33 +0000 (UTC)
-Received: from sirius.home.kraxel.org (unknown [10.39.193.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 76F497B9DB;
-        Mon,  3 Jan 2022 06:11:30 +0000 (UTC)
-Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
-        id C52A6180039F; Mon,  3 Jan 2022 07:11:27 +0100 (CET)
-Date:   Mon, 3 Jan 2022 07:11:27 +0100
-From:   Gerd Hoffmann <kraxel@redhat.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Dave Airlie <airlied@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: Re: [RFC 26/32] drm: handle HAS_IOPORT dependencies
-Message-ID: <20220103061127.jrnsfuxbxk2ywmtg@sirius.home.kraxel.org>
-References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
- <20211227164317.4146918-27-schnelle@linux.ibm.com>
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 0800142528;
+        Mon,  3 Jan 2022 06:17:53 +0000 (UTC)
+Message-ID: <f08c15d8-3944-84bf-1032-76ac3b75e298@marcan.st>
+Date:   Mon, 3 Jan 2022 15:17:51 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211227164317.4146918-27-schnelle@linux.ibm.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [PATCH 03/34] brcmfmac: firmware: Support having multiple alt
+ paths
+Content-Language: en-US
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com
+References: <20211226153624.162281-1-marcan@marcan.st>
+ <20211226153624.162281-4-marcan@marcan.st>
+ <8e99eb47-2bc1-7899-5829-96f2a515b2cb@gmail.com>
+ <e9ecbd0b-8741-1e7d-ae7a-f839287cb5c9@marcan.st>
+ <48f16559-6891-9401-dd8e-762c7573304c@gmail.com>
+ <d96fe60e-c029-b400-9c29-0f95c3632301@marcan.st>
+ <4a307f13-0bd3-5fa5-dd51-9cd1d39eaa33@gmail.com>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <4a307f13-0bd3-5fa5-dd51-9cd1d39eaa33@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 05:43:11PM +0100, Niklas Schnelle wrote:
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. We thus need to add HAS_IOPORT as dependency for
-> those drivers using them. There is also a direct and hard coded use in
-> cirrus.c which according to the comment is only necessary during resume.
-> Let's just skip this as for example s390 which doesn't have I/O port
-> support also doesen't support suspend/resume.
+On 2022/01/03 10:26, Dmitry Osipenko wrote:
+> 03.01.2022 03:41, Hector Martin пишет:
+>>> There is indeed no need for the castings in such cases, it's a typical
+>>> code pattern in kernel. You would need to do the casting for the other
+>>> way around, i.e. if char ** was returned and **alt_paths was a const.
+>> You do need to do the cast. Try it.
+>>
+>> $ cat test.c
+>> int main() {
+>>         char *foo[1];
+>>         const char **bar = foo;
+>>
+>>         return 0;
+>> }
+>>
+>> $ gcc test.c
+>> test.c: In function ‘main’:
+>> test.c:4:28: warning: initialization of ‘const char **’ from
+>> incompatible pointer type ‘char **’ [-Wincompatible-pointer-types]
+>>     4 |         const char **bar = foo;
+>>       |
+>>
+>> You can implicitly cast char* to const char*, but you *cannot*
+>> impliclicitly cast char** to const char** for the reason I explained. It
+>> requires a cast.
+> 
+> Right, I read it as "char * const *". The "const char **" vs "char *
+> const *" always confuses me.
+> 
+> Hence you should've written "const char **alt_paths;" in
+> brcm_alt_fw_paths() in the first place and then casting wouldn't have
+> been needed.
 
->  config DRM_BOCHS
->  	tristate "DRM Support for bochs dispi vga interface (qemu stdvga)"
->  	depends on DRM && PCI && MMU
-> +	depends on HAS_IOPORT
->  	select DRM_KMS_HELPER
->  	select DRM_VRAM_HELPER
->  	select DRM_TTM
+Sure, in this case that works since the string is just strduped and
+never mutated. Either way this will change to an argument instead of a
+return value, since I'll change it to be statically sized as you said
+and allocated by the caller (or in the struct).
 
-On devices with an mmio bar the driver works just fine without inb/outb,
-see bochs->mmio checks in bochs.c
-
-take care,
-  Gerd
-
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

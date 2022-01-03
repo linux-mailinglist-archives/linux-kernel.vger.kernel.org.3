@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6FB1483320
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB984832E7
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:32:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234694AbiACOdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:33:37 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:32768 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234737AbiACObk (ORCPT
+        id S234808AbiACObr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:31:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39066 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234717AbiACO3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:31:40 -0500
+        Mon, 3 Jan 2022 09:29:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57CF4C06137C;
+        Mon,  3 Jan 2022 06:29:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E6366110F;
-        Mon,  3 Jan 2022 14:31:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06CAAC36AEB;
-        Mon,  3 Jan 2022 14:31:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EBE86610F4;
+        Mon,  3 Jan 2022 14:29:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF5B4C36AEB;
+        Mon,  3 Jan 2022 14:29:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220298;
-        bh=27e5PbD9EWqYAWYv9hAqSWtD7yB2Z/OoYQ5POT/Z1Vw=;
+        s=korg; t=1641220154;
+        bh=6pCikU2Fm7ZEK2XCYNwB4Vy+5UJpu5UD+099WR2pDxo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z6DebqqwSCEcHR1fUZ4toft/susGvCvS8geMMc6edfX8Xhc6SLIwxZ4W/YMO0G9lp
-         1brWtAw6d9kcuOWgr01B4uRF25qGt5Hs4xuqARaTPzrABqkccTmR+HMm8cBWkL2OuA
-         VG7jCN1zr1racJCXq7ng3x+jYp9+Wg7uRoEIyvTU=
+        b=phvrR6+OtaMmrw5pzF5Uz+LRAEjdJ/1NKU2LVHZ+CueNuJwdUVJ4zWfUt5yUlEMip
+         hJo9A/vXnNXksqX/kmtY2aud2XHe5iktCAr3j2aYCc0EFJdjDB+aZGbso3vgtSncnl
+         Ynkjw81hTvtW1SJmFXYdWWl0lcnzV+zVqnwU4CWk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chris Mi <cmi@nvidia.com>,
-        Roi Dayan <roid@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 25/73] net/mlx5e: Delete forward rule for ct or sample action
+        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        Paul Moore <paul@paul-moore.com>
+Subject: [PATCH 5.10 09/48] selinux: initialize proto variable in selinux_ip_postroute_compat()
 Date:   Mon,  3 Jan 2022 15:23:46 +0100
-Message-Id: <20220103142057.728180193@linuxfoundation.org>
+Message-Id: <20220103142053.792388751@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142056.911344037@linuxfoundation.org>
-References: <20220103142056.911344037@linuxfoundation.org>
+In-Reply-To: <20220103142053.466768714@linuxfoundation.org>
+References: <20220103142053.466768714@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,60 +48,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chris Mi <cmi@nvidia.com>
+From: Tom Rix <trix@redhat.com>
 
-[ Upstream commit 2820110d945923ab2f4901753e4ccbb2a506fa8e ]
+commit 732bc2ff080c447f8524f40c970c481f5da6eed3 upstream.
 
-When there is ct or sample action, the ct or sample rule will be deleted
-and return. But if there is an extra mirror action, the forward rule can't
-be deleted because of the return.
+Clang static analysis reports this warning
 
-Fix it by removing the return.
+hooks.c:5765:6: warning: 4th function call argument is an uninitialized
+                value
+        if (selinux_xfrm_postroute_last(sksec->sid, skb, &ad, proto))
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Fixes: 69e2916ebce4 ("net/mlx5: CT: Add support for mirroring")
-Fixes: f94d6389f6a8 ("net/mlx5e: TC, Add support to offload sample action")
-Signed-off-by: Chris Mi <cmi@nvidia.com>
-Reviewed-by: Roi Dayan <roid@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+selinux_parse_skb() can return ok without setting proto.  The later call
+to selinux_xfrm_postroute_last() does an early check of proto and can
+return ok if the garbage proto value matches.  So initialize proto.
+
+Cc: stable@vger.kernel.org
+Fixes: eef9b41622f2 ("selinux: cleanup selinux_xfrm_sock_rcv_skb() and selinux_xfrm_postroute_last()")
+Signed-off-by: Tom Rix <trix@redhat.com>
+[PM: typo/spelling and checkpatch.pl description fixes]
+Signed-off-by: Paul Moore <paul@paul-moore.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en_tc.c | 17 ++++++-----------
- 1 file changed, 6 insertions(+), 11 deletions(-)
+ security/selinux/hooks.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-index e7736421d1bc2..fa461bc57baee 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-@@ -1179,21 +1179,16 @@ void mlx5e_tc_unoffload_fdb_rules(struct mlx5_eswitch *esw,
- 	if (attr->flags & MLX5_ESW_ATTR_FLAG_SLOW_PATH)
- 		goto offload_rule_0;
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -5665,7 +5665,7 @@ static unsigned int selinux_ip_postroute
+ 	struct common_audit_data ad;
+ 	struct lsm_network_audit net = {0,};
+ 	char *addrp;
+-	u8 proto;
++	u8 proto = 0;
  
--	if (flow_flag_test(flow, CT)) {
--		mlx5_tc_ct_delete_flow(get_ct_priv(flow->priv), flow, attr);
--		return;
--	}
--
--	if (flow_flag_test(flow, SAMPLE)) {
--		mlx5e_tc_sample_unoffload(get_sample_priv(flow->priv), flow->rule[0], attr);
--		return;
--	}
--
- 	if (attr->esw_attr->split_count)
- 		mlx5_eswitch_del_fwd_rule(esw, flow->rule[1], attr);
- 
-+	if (flow_flag_test(flow, CT))
-+		mlx5_tc_ct_delete_flow(get_ct_priv(flow->priv), flow, attr);
-+	else if (flow_flag_test(flow, SAMPLE))
-+		mlx5e_tc_sample_unoffload(get_sample_priv(flow->priv), flow->rule[0], attr);
-+	else
- offload_rule_0:
--	mlx5_eswitch_del_offloaded_rule(esw, flow->rule[0], attr);
-+		mlx5_eswitch_del_offloaded_rule(esw, flow->rule[0], attr);
- }
- 
- struct mlx5_flow_handle *
--- 
-2.34.1
-
+ 	if (sk == NULL)
+ 		return NF_ACCEPT;
 
 

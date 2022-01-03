@@ -2,90 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2708C483009
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 11:49:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB8A483012
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 11:50:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232749AbiACKtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 05:49:19 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:44542 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiACKtT (ORCPT
+        id S232790AbiACKuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 05:50:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47024 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232753AbiACKuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 05:49:19 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id C4B3D2110B;
-        Mon,  3 Jan 2022 10:49:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1641206957; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kXWXkoeqCuuk6VXlljVuLN5eBry1ocUqknDqjO5oeek=;
-        b=WlxjNI4cZHAoGZ0p4MYppKOslPLul653Z5x/knyWA7LxKGIL9YaMiMLnYld2KjGXwSHlnV
-        MZhhiDsY7zTjLkySqqhbbV5H6rRGJ/2b237ooGf1ztTo6/15OiVlugUG6kdgOUipgBTJrb
-        8Ae3GgDqYw/Kj/5kB5LAHjtP6N/Jp3Q=
-Received: from suse.cz (unknown [10.100.224.162])
+        Mon, 3 Jan 2022 05:50:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95DA6C061784;
+        Mon,  3 Jan 2022 02:50:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 46F11A3B83;
-        Mon,  3 Jan 2022 10:49:17 +0000 (UTC)
-Date:   Mon, 3 Jan 2022 11:49:14 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     David Vernet <void@manifault.com>
-Cc:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz
-Subject: Re: [PATCH -next] livepatch: Fix missing unlock on error in
- klp_enable_patch()
-Message-ID: <YdLUqsYeXg91GjZ7@alley>
-References: <20211225025115.475348-1-yangyingliang@huawei.com>
- <YcnqcXMQ7hxBe68a@dev0025.ash9.facebook.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DBEC61025;
+        Mon,  3 Jan 2022 10:50:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9C3B1C36AF2;
+        Mon,  3 Jan 2022 10:50:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641207009;
+        bh=SbzhVYDA7q36z2bKdgU4rcWBPtBR6G7zZfQLH8PrWFk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=UUX0YiaPjWOw7LxiIw0L/VEoiFtHiHVJOnAJNbXkWakqO4TXkfp0U7h7gPy6KguCy
+         LVioZVqAEVO1LVvygfQobxYbhS1y/s6LJkUqsaTd6yMAN1wzUz9QbGbIBFUuj2oMHS
+         TxjUMpORGWAj/oQcri0ahqzWslqWG9OxrIgE6xzpW69LcsYkEQ15c2ajeAjJ2MRTy5
+         cYxKXTsuWRWucWUrHmn0PqpJqTc3LdiMGuQG+iEoAgm+Pafn3k69r6euoHeCslBzmw
+         MrXAmftLb1ksLXqoiZZBhUAbPCKS6EGNabWEB/fOhMFb+FVT0JfGbA4q7cSHmjTUSU
+         4DdNwGXnN9WSw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7FD0EF79406;
+        Mon,  3 Jan 2022 10:50:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YcnqcXMQ7hxBe68a@dev0025.ash9.facebook.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] ethernet: s2io: Use dma_set_mask_and_coherent() and simplify
+ code
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164120700951.2591.15379662570045379334.git-patchwork-notify@kernel.org>
+Date:   Mon, 03 Jan 2022 10:50:09 +0000
+References: <e53afd59c8938bfaaa94cadd4621d40f54ec2102.1641155181.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <e53afd59c8938bfaaa94cadd4621d40f54ec2102.1641155181.git.christophe.jaillet@wanadoo.fr>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     jdmason@kudzu.us, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2021-12-27 08:31:45, David Vernet wrote:
-> Yang Yingliang <yangyingliang@huawei.com> wrote on Sat [2021-Dec-25 10:51:15 +0800]:
-> > Add missing unlock when try_module_get() fails in klp_enable_patch().
-> > 
-> > Fixes: bf01c2975925 ("livepatch: Fix kobject refcount bug on klp_init_patch_early failure path")
-> > Reported-by: Hulk Robot <hulkci@huawei.com>
-> > Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> > ---
-> >  kernel/livepatch/core.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-> > index 23cf444091a8..01bfab7fe7c0 100644
-> > --- a/kernel/livepatch/core.c
-> > +++ b/kernel/livepatch/core.c
-> > @@ -1047,8 +1047,10 @@ int klp_enable_patch(struct klp_patch *patch)
-> >  		return -EINVAL;
-> >  	}
-> >  
-> > -	if (!try_module_get(patch->mod))
-> > +	if (!try_module_get(patch->mod)) {
-> > +		mutex_unlock(&klp_mutex);
-> >  		return -ENODEV;
-> > +	}
-> >  
-> >  	klp_init_patch_early(patch);
-> >  
-> > -- 
-> > 2.25.1
-> > 
+Hello:
+
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Sun,  2 Jan 2022 21:27:39 +0100 you wrote:
+> Use dma_set_mask_and_coherent() instead of unrolling it with some
+> dma_set_mask()+dma_set_coherent_mask().
 > 
-> Apologies for the silly oversight. Thank you for the fix.
+> Moreover, as stated in [1], dma_set_mask() with a 64-bit mask will never
+> fail if dev->dma_mask is non-NULL.
+> So, if it fails, the 32 bits case will also fail for the same reason.
+> 
+> [...]
 
-And nobody caught it. I think that it was partly caused by
-a pre-holiday loss of concentration :-/
+Here is the summary with links:
+  - ethernet: s2io: Use dma_set_mask_and_coherent() and simplify code
+    https://git.kernel.org/netdev/net-next/c/7120075ec41a
 
-> Acked-by: David Vernet <void@manifault.com>
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-Best Regards,
-Petr

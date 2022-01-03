@@ -2,149 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88375483614
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 18:32:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A022E483611
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 18:32:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232142AbiACRbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 12:31:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
+        id S235998AbiACRbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 12:31:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235339AbiACRbB (ORCPT
+        with ESMTP id S235590AbiACRbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 3 Jan 2022 12:31:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C664C06137A;
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8661C06137B;
         Mon,  3 Jan 2022 09:30:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19FDB611A8;
-        Mon,  3 Jan 2022 17:30:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BCBAC36AED;
-        Mon,  3 Jan 2022 17:30:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641231038;
-        bh=Ryn0r3NAKNZ9E1Jqj6JP6t4Ph3g8R6NUFHrMJ/x8N4I=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jYaxibQKekZngHxBUq4jR8ukSlwGnUTrMVm3I2lAXxRbaX/wx7cJn35PDJRdh2DyY
-         N0rodCVxeHAhMx0AS4aFXjeNzs3QV+laQbECl30DvFOEiNR+ASRt/xC2R1lvn92Hby
-         gbbPirZ3lPp3Rb/yHdyWQvmJb6+Rhy0Q+cs92hwpA4eqLtpxyjRjNuSzLP9UGRN1bI
-         CJ7pEGbv04rOJhMdugdrBLbJWyAolt3/+vadSz7tNzbF8Wxl7FwcwHI0z3XFwi21za
-         0iaOP+r4gxuyNbp+S6K0D0hQMrRj73RYMQrpFp3aoPnJASL7FxHWB+FFrEKAGs3Y0J
-         T4c8GSWv+GMDA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     wolfgang huang <huangjinhui@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, isdn@linux-pingi.de,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 5/5] mISDN: change function names to avoid conflicts
-Date:   Mon,  3 Jan 2022 12:30:29 -0500
-Message-Id: <20220103173029.1613474-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103173029.1613474-1-sashal@kernel.org>
-References: <20220103173029.1613474-1-sashal@kernel.org>
+Received: by mail-wr1-x433.google.com with SMTP id o3so13011865wrh.10;
+        Mon, 03 Jan 2022 09:30:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ieLzOgCJ18o1a90jIR9YZk5rmj0v70cqqTlRuLr9aYE=;
+        b=Ki1DNOBNOCnARRUZ5+7C8IrcnSgC3J/g4IC6/oX9CI3jlP9ItYiZwWQPH182hng2u4
+         8msPlBASs3pJ2+DA1jUoTMhs+WZYBJq1GbOWR9ShfhVQMLQ7FhEl19Q+lHMDC/ZSc3t1
+         /CzpgboCmCSL+SAgVM+sLxMATL0X05RGrhpiCscE51bD3ldDgBIx4nVnfwCQkOZiBUaZ
+         mL/CDwwvBM36kXbyBq+3aPkh8SflASt6fHwoypEDdoRIAalVb5N9P4J5exQL0Fx/x358
+         hV3p6oDZMRCL8QgBR06ULpC6LmLJ5PsU1HN3NPvXbaZusJ8wwrB6eYi+3oSRWDOwG+73
+         IpXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ieLzOgCJ18o1a90jIR9YZk5rmj0v70cqqTlRuLr9aYE=;
+        b=Yk4yRBHO2n7rFSenW85LYGrmgO1NL+3CPPW1CJ8suiqTgOX9hKBCwtpbTCSwnHQMsZ
+         xYSoS0KW0Gr3xQWxkKwSYAKuzbsLEiPyrbVigTpoFx8ccUeVmH/ukqpIIMGNfh2B23hw
+         zmW7LgaJRriKevTgDTeYZVkB8Fhbannpx2L00yhHX3GkiNUZywhFoOQs9N0wpRrYS6eE
+         8iMGOxx3+ttGv0oyaEREb45Yxy3ysQBZyi130/zqWou3urbZxdhCusO4LQAaR55aeEKF
+         LZXhbL4p+i5WYLYXIICddhApTXd7XWtq2V3Y+pwvikRwnFYueDJejRaGI3fS6sRYx38J
+         srnA==
+X-Gm-Message-State: AOAM5326HfftSGcLivzRt66RYozyIvaKVaPiGwo93gloqFW9mKot90tw
+        S0zB69TjFzO7ewfoQYbVNH5UvFjJSLmIZw==
+X-Google-Smtp-Source: ABdhPJyloc9hnDCLTV+5qSTOWpsbGeHAHWWR/pxWTNZScHowNhp5SlOoecPkrlpU/g2rXr7cRPqP9A==
+X-Received: by 2002:a5d:638b:: with SMTP id p11mr38529186wru.241.1641231038529;
+        Mon, 03 Jan 2022 09:30:38 -0800 (PST)
+Received: from fuji.fritz.box (ip-89-161-76-237.tel.tkb.net.pl. [89.161.76.237])
+        by smtp.gmail.com with ESMTPSA id l8sm36648090wrv.25.2022.01.03.09.30.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jan 2022 09:30:38 -0800 (PST)
+Date:   Mon, 3 Jan 2022 18:30:34 +0100
+From:   Tomasz =?UTF-8?B?V2FybmllxYLFgm8=?= <tomasz.warniello@gmail.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scripts: kernel-doc: transform documentation into POD
+Message-ID: <20220103183034.77ba8a8c@fuji.fritz.box>
+In-Reply-To: <87pmp9tcju.fsf@intel.com>
+References: <20211209225549.69010-1-tomasz.warniello@gmail.com>
+        <87h7b8cfg0.fsf@meer.lwn.net>
+        <0796a780-f5ee-0b6c-e7ef-544ba5f6a429@gmail.com>
+        <87pmp9tcju.fsf@intel.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: wolfgang huang <huangjinhui@kylinos.cn>
+On Mon, 03 Jan 2022 11:04:53 +0200
+Jani Nikula <jani.nikula@linux.intel.com> wrote:
 
-[ Upstream commit 8b5fdfc57cc2471179d1c51081424ded833c16c8 ]
+> On Mon, 03 Jan 2022, Tomasz Warnie=C5=82=C5=82o <tomasz.warniello@gmail.c=
+om> wrote:
+> > On 17/12/2021 00:12, Jonathan Corbet wrote: =20
+> >>>  my $kernelversion;
+> >>> @@ -468,7 +306,7 @@ while ($ARGV[0] =3D~ m/^--?(.*)/) {
+> >>>      } elsif ($cmd eq "Werror") {
+> >>>  	$Werror =3D 1;
+> >>>      } elsif (($cmd eq "h") || ($cmd eq "help")) {
+> >>> -	usage();
+> >>> +			pod2usage(-exitval =3D> 0, -verbose =3D> 2); =20
+> >>=20
+> >> Why the strange indentation here?  This file is far from pretty, but
+> >> that makes it worse.  (Other places too). =20
+> >
+> > Sometimes beauty requires cooperation. You can help it in your pager.
+> > If it's less, then try `-x 2`, `-x 4`, etc. =20
+>=20
+> In kernel, tabs are 8 characters.
+>=20
+> See Documentation/process/coding-style.rst
+>=20
+>=20
+> BR,
+> Jani.
+>=20
+>=20
 
-As we build for mips, we meet following error. l1_init error with
-multiple definition. Some architecture devices usually marked with
-l1, l2, lxx as the start-up phase. so we change the mISDN function
-names, align with Isdnl2_xxx.
+I am a heretic then.
 
-mips-linux-gnu-ld: drivers/isdn/mISDN/layer1.o: in function `l1_init':
-(.text+0x890): multiple definition of `l1_init'; \
-arch/mips/kernel/bmips_5xxx_init.o:(.text+0xf0): first defined here
-make[1]: *** [home/mips/kernel-build/linux/Makefile:1161: vmlinux] Error 1
+Except for the initial dogma, I understand and agree with the rationale
+in coding-style.rst.
 
-Signed-off-by: wolfgang huang <huangjinhui@kylinos.cn>
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/isdn/mISDN/core.c   | 6 +++---
- drivers/isdn/mISDN/core.h   | 4 ++--
- drivers/isdn/mISDN/layer1.c | 4 ++--
- 3 files changed, 7 insertions(+), 7 deletions(-)
+Only what if I have stared at the screen not for 20 hours, but for
+40 hours? Now I want to have indentation even deeper, of 16 spaces.
+And how do I get this having 8 spaces here and there instead of tabs?
+The system begins to fall apart.
 
-diff --git a/drivers/isdn/mISDN/core.c b/drivers/isdn/mISDN/core.c
-index faf505462a4f5..f5a06a6fb297f 100644
---- a/drivers/isdn/mISDN/core.c
-+++ b/drivers/isdn/mISDN/core.c
-@@ -390,7 +390,7 @@ mISDNInit(void)
- 	err = mISDN_inittimer(&debug);
- 	if (err)
- 		goto error2;
--	err = l1_init(&debug);
-+	err = Isdnl1_Init(&debug);
- 	if (err)
- 		goto error3;
- 	err = Isdnl2_Init(&debug);
-@@ -404,7 +404,7 @@ mISDNInit(void)
- error5:
- 	Isdnl2_cleanup();
- error4:
--	l1_cleanup();
-+	Isdnl1_cleanup();
- error3:
- 	mISDN_timer_cleanup();
- error2:
-@@ -417,7 +417,7 @@ static void mISDN_cleanup(void)
- {
- 	misdn_sock_cleanup();
- 	Isdnl2_cleanup();
--	l1_cleanup();
-+	Isdnl1_cleanup();
- 	mISDN_timer_cleanup();
- 	class_unregister(&mISDN_class);
- 
-diff --git a/drivers/isdn/mISDN/core.h b/drivers/isdn/mISDN/core.h
-index 52695bb81ee7a..3c039b6ade2e1 100644
---- a/drivers/isdn/mISDN/core.h
-+++ b/drivers/isdn/mISDN/core.h
-@@ -69,8 +69,8 @@ struct Bprotocol	*get_Bprotocol4id(u_int);
- extern int	mISDN_inittimer(u_int *);
- extern void	mISDN_timer_cleanup(void);
- 
--extern int	l1_init(u_int *);
--extern void	l1_cleanup(void);
-+extern int	Isdnl1_Init(u_int *);
-+extern void	Isdnl1_cleanup(void);
- extern int	Isdnl2_Init(u_int *);
- extern void	Isdnl2_cleanup(void);
- 
-diff --git a/drivers/isdn/mISDN/layer1.c b/drivers/isdn/mISDN/layer1.c
-index 3192b0eb39445..284d3a9c7df7d 100644
---- a/drivers/isdn/mISDN/layer1.c
-+++ b/drivers/isdn/mISDN/layer1.c
-@@ -407,7 +407,7 @@ create_l1(struct dchannel *dch, dchannel_l1callback *dcb) {
- EXPORT_SYMBOL(create_l1);
- 
- int
--l1_init(u_int *deb)
-+Isdnl1_Init(u_int *deb)
- {
- 	debug = deb;
- 	l1fsm_s.state_count = L1S_STATE_COUNT;
-@@ -418,7 +418,7 @@ l1_init(u_int *deb)
- }
- 
- void
--l1_cleanup(void)
-+Isdnl1_cleanup(void)
- {
- 	mISDN_FsmFree(&l1fsm_s);
- }
--- 
-2.34.1
+The misleading statement is that tabs are 8 characters long. No. They
+are exactly 1 character long. And that's ASCII 9.
 
+Cheers,
+TW

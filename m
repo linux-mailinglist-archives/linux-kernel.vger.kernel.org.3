@@ -2,125 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC92483459
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 16:40:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C7A48345D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 16:41:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234237AbiACPkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 10:40:05 -0500
-Received: from mga04.intel.com ([192.55.52.120]:58028 "EHLO mga04.intel.com"
+        id S232842AbiACPlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 10:41:49 -0500
+Received: from mga14.intel.com ([192.55.52.115]:20979 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232717AbiACPkE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 10:40:04 -0500
+        id S230160AbiACPls (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 10:41:48 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641224404; x=1672760404;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=qXCyLqVDNwxH8Zr1q5G6Jk/cwa0kQx/JhvfRtQx9Sno=;
-  b=Z31eh82ZtK4psFXaSOdicNfBLWgqAxNC/GyQIpStHE8Aj+qFWx2h4E7T
-   8A4shs9U/JvCXeMEKb7CupX9s7o4/jv33NBeOFxhNxCIa6iEgGOD03M5q
-   HWd+fddGXli6RCLXy8KzrDCIV2WdmIo1FqxKOFtmP28APWYOGBOvf0GeO
-   wrnCI3+n4f+7LSdRHT98lKMBq/rsVX/6b9zw5sOgVckCpJLwS63Wb1rlW
-   ScBzfod0pqZSB/i44+dm58r5KFZ3eYntzxzxTZbHIsqJILN4/7OBnK6L9
-   UJHxBY6nd73zfi9VJjChLg+BF/t1US9/BLN3dja+5TwzZQXpMBx7EviJA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10215"; a="240900368"
+  t=1641224508; x=1672760508;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=g5C1DLmzAjmvh8fBdfrCcd+FGlrkD8urpR90vXZoFjU=;
+  b=QPK6Jse77vI5nv3kD20JUr8OHSP1W60/h8WoFBVcRIomUbFrS+SieCwW
+   7IXjhdnqnyTj4RJkJsS1w63fqHOuE+rvMc42oTexVXQKzoUBLcbx1+O3S
+   9F6/yzfTCegdD++Arh1AZOBQ4Wejj3q5ld0BB9XuKgXbjDmxJpLWwNQ+r
+   lmW61Ew1g5rFhIRLGV90qhURoc+r5GgfVM0tUyQmPHNKPcMqEhFjBlT4g
+   fndaCISAY97gT9dwLY6dsuNWX9vqxsOE6oy2fH2rXAW9BoQmg9dECnoy7
+   2KtokdkR/uasbC6ST7G9OjjsBLwP5zctnX+xm4N6Ayh0dnaajGnGmILSL
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10215"; a="242283703"
 X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="240900368"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 07:40:03 -0800
+   d="scan'208";a="242283703"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 07:41:47 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="610790443"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
-  by FMSMGA003.fm.intel.com with ESMTP; 03 Jan 2022 07:40:00 -0800
-Subject: Re: [PATCH 0/6] x86/insn: Add instructions to instruction decoder
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org,
+   d="scan'208";a="688243455"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga005.jf.intel.com with ESMTP; 03 Jan 2022 07:41:39 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 203Ffa79022803;
+        Mon, 3 Jan 2022 15:41:36 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        H Peter Anvin <hpa@zytor.com>, chang.seok.bae@intel.com,
-        Masami Hiramatsu <mhiramat@kernel.org>
-References: <20211202095029.2165714-1-adrian.hunter@intel.com>
- <20211223153808.cddab56b114e5ddf755bd2d0@kernel.org>
- <c5737eb6-383b-13ea-20d1-af597c69a21d@intel.com>
- <YdMOiFDdEny4Jicc@kernel.org> <YdMP5vmU+uqMz04d@kernel.org>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Message-ID: <c7ac518e-82fb-eb51-7778-5e9b1aaed9a9@intel.com>
-Date:   Mon, 3 Jan 2022 17:40:00 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v9 03/15] kallsyms: Hide layout
+Date:   Mon,  3 Jan 2022 16:40:23 +0100
+Message-Id: <20220103154023.7326-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <Yc40UKmylVh38vl5@zn.tnic>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-4-alexandr.lobakin@intel.com> <Yc40UKmylVh38vl5@zn.tnic>
 MIME-Version: 1.0
-In-Reply-To: <YdMP5vmU+uqMz04d@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01/2022 17:01, Arnaldo Carvalho de Melo wrote:
-> Em Mon, Jan 03, 2022 at 11:56:08AM -0300, Arnaldo Carvalho de Melo escreveu:
->> Em Mon, Jan 03, 2022 at 10:13:24AM +0200, Adrian Hunter escreveu:
->>> On 23/12/2021 08:38, Masami Hiramatsu wrote:
->>>> Hi,
->>>>
->>>> Sorry, I missed this series.
->>>>
->>>> On Thu,  2 Dec 2021 11:50:23 +0200
->>>> Adrian Hunter <adrian.hunter@intel.com> wrote:
->>>>
->>>>> Hi
->>>>>
->>>>> Here are patches to bring the kernel and tools x86 instruction decoder
->>>>> more up to date.
->>>>>
->>>>> x86 instruction decoder is used for both kernel instructions and user space
->>>>> instructions (e.g. uprobes, perf tools Intel PT), so it is good to update
->>>>> it with new instructions.
->>>>
->>>> Hmm, I thought perf used objdump for that purpose internally.
->>>> Anyway, this series looks good to me. I'm a bit surprised that the
->>>> insn decoder can actually support those instructions only changing
->>>> X86_EVEX_M() macro :-)
->>>>
->>>> Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
->>>>
->>>> Thank you!
->>>
->>> Thanks!
->>>
->>> Arnaldo, could you consider taking these patches?
->>
->> I can pick the tools/ bits, the arch/x86/ should go via PeterZ, right?
->> Peter?
-> 
-> I tried applying the whole shebang and got:
-> 
-> ⬢[acme@toolbox perf]$ git am ./20211202_adrian_hunter_x86_insn_add_instructions_to_instruction_decoder.mbx
-> Applying: perf tests: Add AMX instructions to x86 instruction decoder test
-> Applying: x86/insn: Add AMX instructions to x86 instruction decoder
-> Applying: perf tests: Add misc instructions to x86 instruction decoder test
-> Applying: x86/insn: Add misc instructions to x86 instruction decoder
-> Applying: perf tests: Add AVX512-FP16 instructions to x86 instruction decoder test
-> Applying: x86/insn: Add AVX512-FP16 instructions to x86 instruction decoder
-> error: patch failed: arch/x86/lib/x86-opcode-map.txt:896
-> error: arch/x86/lib/x86-opcode-map.txt: patch does not apply
-> Patch failed at 0006 x86/insn: Add AVX512-FP16 instructions to x86 instruction decoder
-> hint: Use 'git am --show-current-patch=diff' to see the failed patch
-> When you have resolved this problem, run "git am --continue".
-> If you prefer to skip this patch, run "git am --skip" instead.
-> To restore the original branch and stop patching, run "git am --abort".
-> ⬢[acme@toolbox perf]$
-> 
-> So since this needs rebasing, could you please split it into two
-> patchsets, one for tools/ and another for arch and send two batches?
-> This way I'll pick the tools/ one, the x86 maintainers the other bits.
-> 
-> Otherwise the x86 maintainers would have to test if the tools/ bits
-> works as expected, etc.
+From: Borislav Petkov <bp@alien8.de>
+Date: Thu, 30 Dec 2021 23:36:00 +0100
 
-It seems not to be happening for me.  What tree/branch is it?
+> On Thu, Dec 23, 2021 at 01:21:57AM +0100, Alexander Lobakin wrote:
+> > Subject: Re: [PATCH v9 03/15] kallsyms: Hide layout
+> 
+> That title is kinda laconic...
+
+"kallsyms: randomize /proc/kallsyms output order"?
+
+> 
+> > From: Kristen Carlson Accardi <kristen@linux.intel.com>
+> > 
+> > This patch makes /proc/kallsyms display in a random order, rather
+> 
+> Avoid having "This patch" or "This commit" in the commit message. It is
+> tautologically useless.
+> 
+> Also, do
+> 
+> $ git grep 'This patch' Documentation/process
+> 
+> for more details.
+
+Goes straight from the original series. Worth changing anyways.
+
+> 
+> > than sorted by address in order to hide the newly randomized address
+> > layout.
+> 
+> Sorted by address?
+> 
+> My /proc/kallsyms says
+> 
+> $ awk '{ print $1 }' /proc/kallsyms | uniq -c
+>  119086 0000000000000000
+> 
+> so all the addresses are 0. Aha, and when I list them as root, only then
+> I see non-null addresses.
+> 
+> So why do we that patch at all?
+
+It displays zeros for non-roots, but the symbols are still sorted by
+their addresses. As a result, if you leak one address, you could
+determine some others.
+This is especially critical with FG-KASLR as its text layout is
+random each time and sorted /proc/kallsyms would make the entire
+feature useless.
+
+> 
+> > alobakin:
+> > Don't depend FG-KASLR and always do that for unpriviledged accesses
+> 
+> Unknown word [unpriviledged] in commit message, suggestions:
+>         ['unprivileged', 'underprivileged', 'privileged']
+
+I either have some problems with checkpatch + codespell, or they
+missed all that typos you're noticing. Thanks, and apologies =\
+
+> 
+> > as suggested by several folks.
+> > Also, introduce and use a shuffle_array() macro which shuffles an
+> > array using Fisher-Yates.
+> 
+> Fisher-Yates what?
+> 
+> /me goes and looks at the wikipedia article.
+> 
+> Aha, a Fisher-Yates shuffle algoithm.
+> 
+> Don't be afraid to explain more in your commit messages and make them
+> more reader-friendly.
+
+Sure.
+This patch initially was at the tail of the set, after the commits
+where this algo is mentioned several times in a more detailed
+manner, but I moved it to the head then as the requests for doing
+this unconditionally converted it to a pre-requisite.
+
+> 
+> > We'll make use of it several more times
+> > later on.
+> 
+> Not important for this commit.
+> 
+> ...
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
+
+Thanks!
+Al

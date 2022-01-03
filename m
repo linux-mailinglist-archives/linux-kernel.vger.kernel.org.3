@@ -2,41 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 030CF48326E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:27:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49D02483272
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:27:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233969AbiACO1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:27:42 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57366 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233950AbiACO0s (ORCPT
+        id S233875AbiACO1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:27:50 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:47882 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233898AbiACO1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:26:48 -0500
+        Mon, 3 Jan 2022 09:27:00 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A2606113A;
-        Mon,  3 Jan 2022 14:26:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DA2EC36AED;
-        Mon,  3 Jan 2022 14:26:47 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 82E34CE10AB;
+        Mon,  3 Jan 2022 14:26:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87F89C36AED;
+        Mon,  3 Jan 2022 14:26:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220007;
-        bh=meaVt6qxs1Pw8r6eqm0M+H25XV8Bj1eq9wBfuKdhyr0=;
+        s=korg; t=1641220013;
+        bh=Fat5/gav5Ev3yOHAa+iUaAhuYVIo/sAoXBkqrV2Drpw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uQhGHHcAs5e3dXTbUKAltLJGEKblC2vtn7QioF7t+r/v//zlOlhNYV5mnV4Em12/t
-         YBXFHG1n4wD18XsLOQo9jwggCnzJbjtYzgSboWasXgIeksYU/dzrLmjigoy4Q0Y/nX
-         8lyEyRAJToO72NfKO+h6Bp3BW4LpeKWLXwIanUSk=
+        b=AYq92irO6s6Zde1DcF/2d5J0PF1gOGAs25Uf/z2NFISS479KUhCI9m8d1hlAVvlwP
+         4yeTXNfe7yzm1QZ0h4886P81joHk70TpHDS3+lJCBgDGzdXPjI5nCMOzRWHwJwXvVC
+         ZLXil9pjA7O6wXKizVyGpfW97BMF5oXaOtZyGlyw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Shannon Nelson <snelson@pensando.io>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Gal Pressman <gal@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 19/37] ionic: Initialize the lif->dbid_inuse bitmap
-Date:   Mon,  3 Jan 2022 15:23:57 +0100
-Message-Id: <20220103142052.471530511@linuxfoundation.org>
+Subject: [PATCH 5.4 20/37] net/mlx5e: Fix wrong features assignment in case of error
+Date:   Mon,  3 Jan 2022 15:23:58 +0100
+Message-Id: <20220103142052.500627438@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220103142051.883166998@linuxfoundation.org>
 References: <20220103142051.883166998@linuxfoundation.org>
@@ -48,38 +46,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Gal Pressman <gal@nvidia.com>
 
-[ Upstream commit 140c7bc7d1195750342ea0e6ab76179499ae7cd7 ]
+[ Upstream commit 992d8a4e38f0527f24e273ce3a9cd6dea1a6a436 ]
 
-When allocated, this bitmap is not initialized. Only the first bit is set a
-few lines below.
+In case of an error in mlx5e_set_features(), 'netdev->features' must be
+updated with the correct state of the device to indicate which features
+were updated successfully.
+To do that we maintain a copy of 'netdev->features' and update it after
+successful feature changes, so we can assign it to back to
+'netdev->features' if needed.
 
-Use bitmap_zalloc() to make sure that it is cleared before being used.
+However, since not all netdev features are handled by the driver (e.g.
+GRO/TSO/etc), some features may not be updated correctly in case of an
+error updating another feature.
 
-Fixes: 6461b446f2a0 ("ionic: Add interrupts and doorbells")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Shannon Nelson <snelson@pensando.io>
-Link: https://lore.kernel.org/r/6a478eae0b5e6c63774e1f0ddb1a3f8c38fa8ade.1640527506.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+For example, while requesting to disable TSO (feature which is not
+handled by the driver) and enable HW-GRO, if an error occurs during
+HW-GRO enable, 'oper_features' will be assigned with 'netdev->features'
+and HW-GRO turned off. TSO will remain enabled in such case, which is a
+bug.
+
+To solve that, instead of using 'netdev->features' as the baseline of
+'oper_features' and changing it on set feature success, use 'features'
+instead and update it in case of errors.
+
+Fixes: 75b81ce719b7 ("net/mlx5e: Don't override netdev features field unless in error flow")
+Signed-off-by: Gal Pressman <gal@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/pensando/ionic/ionic_lif.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/mellanox/mlx5/core/en_main.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/pensando/ionic/ionic_lif.c b/drivers/net/ethernet/pensando/ionic/ionic_lif.c
-index 99ba3551458fc..f9c303d76658a 100644
---- a/drivers/net/ethernet/pensando/ionic/ionic_lif.c
-+++ b/drivers/net/ethernet/pensando/ionic/ionic_lif.c
-@@ -1995,7 +1995,7 @@ static int ionic_lif_init(struct ionic_lif *lif)
- 		return -EINVAL;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+index 5f4f0f61c83c8..dea884c94568c 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+@@ -3907,12 +3907,11 @@ static int set_feature_arfs(struct net_device *netdev, bool enable)
+ 
+ static int mlx5e_handle_feature(struct net_device *netdev,
+ 				netdev_features_t *features,
+-				netdev_features_t wanted_features,
+ 				netdev_features_t feature,
+ 				mlx5e_feature_handler feature_handler)
+ {
+-	netdev_features_t changes = wanted_features ^ netdev->features;
+-	bool enable = !!(wanted_features & feature);
++	netdev_features_t changes = *features ^ netdev->features;
++	bool enable = !!(*features & feature);
+ 	int err;
+ 
+ 	if (!(changes & feature))
+@@ -3920,22 +3919,22 @@ static int mlx5e_handle_feature(struct net_device *netdev,
+ 
+ 	err = feature_handler(netdev, enable);
+ 	if (err) {
++		MLX5E_SET_FEATURE(features, feature, !enable);
+ 		netdev_err(netdev, "%s feature %pNF failed, err %d\n",
+ 			   enable ? "Enable" : "Disable", &feature, err);
+ 		return err;
  	}
  
--	lif->dbid_inuse = bitmap_alloc(lif->dbid_count, GFP_KERNEL);
-+	lif->dbid_inuse = bitmap_zalloc(lif->dbid_count, GFP_KERNEL);
- 	if (!lif->dbid_inuse) {
- 		dev_err(dev, "Failed alloc doorbell id bitmap, aborting\n");
- 		return -ENOMEM;
+-	MLX5E_SET_FEATURE(features, feature, enable);
+ 	return 0;
+ }
+ 
+ int mlx5e_set_features(struct net_device *netdev, netdev_features_t features)
+ {
+-	netdev_features_t oper_features = netdev->features;
++	netdev_features_t oper_features = features;
+ 	int err = 0;
+ 
+ #define MLX5E_HANDLE_FEATURE(feature, handler) \
+-	mlx5e_handle_feature(netdev, &oper_features, features, feature, handler)
++	mlx5e_handle_feature(netdev, &oper_features, feature, handler)
+ 
+ 	err |= MLX5E_HANDLE_FEATURE(NETIF_F_LRO, set_feature_lro);
+ 	err |= MLX5E_HANDLE_FEATURE(NETIF_F_HW_VLAN_CTAG_FILTER,
 -- 
 2.34.1
 

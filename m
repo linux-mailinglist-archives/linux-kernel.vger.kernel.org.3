@@ -2,66 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B3B4834D5
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 17:36:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 627534834D7
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 17:39:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233045AbiACQgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 11:36:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40900 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbiACQgl (ORCPT
+        id S233987AbiACQjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 11:39:01 -0500
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:43351 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229920AbiACQjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 11:36:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C00CC061761
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 08:36:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D47A6114A
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 16:36:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E1DAC36AEF
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 16:36:40 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="VgrgPLG+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1641227798;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DsEvNmoTH8Azrn9drFViG44IjQFbTxtdM+ncXLPGeKc=;
-        b=VgrgPLG+2jfp9CNvT+l7SwGGNferOR4ee48jIKlI1DOshAIYJQsv9hVEOeq+thzE8xTf58
-        OXDlHYTFT2GX0TIdr7DWETnEXcxoMYV4IUP94DF3w0HPztVe40F8DZe7q4HUQSVrZwQYFt
-        vodsI5Ah+p7AxpA/SS+vQDndl4nBUMg=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 93707ad5 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Mon, 3 Jan 2022 16:36:38 +0000 (UTC)
-Received: by mail-yb1-f175.google.com with SMTP id e202so57793657ybf.4
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 08:36:38 -0800 (PST)
-X-Gm-Message-State: AOAM533gw3wLx73mQv8WstjP/6/EUxoWKprQ0c7hbKtcZEjwg+9f6F3y
-        PDpAxWFJr2NrkdOvMM5POEIADCY2Z7g5hQ3K+Z8=
-X-Google-Smtp-Source: ABdhPJxT1UlOMEJnw8ZNAfu41X7rYiT5nVcMjawaLZg1iCcG2QXIF3DZWJph872Tf7iFB8ZXC1zVxSA66LgJQeHYvds=
-X-Received: by 2002:a25:8c4:: with SMTP id 187mr7371821ybi.245.1641227797232;
- Mon, 03 Jan 2022 08:36:37 -0800 (PST)
+        Mon, 3 Jan 2022 11:39:00 -0500
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 203GcsAu002472
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 3 Jan 2022 11:38:54 -0500
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 2C56815C00E1; Mon,  3 Jan 2022 11:38:54 -0500 (EST)
+Date:   Mon, 3 Jan 2022 11:38:54 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Jann Horn <jannh@google.com>, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] random: Don't reset crng_init_cnt on urandom_read()
+Message-ID: <YdMmnnAkLpk81mYN@mit.edu>
+References: <20220103155931.411722-1-jannh@google.com>
+ <CAHmME9otnT=XeMPGYW5H8TOu9aLxxKi6_gT-Fnvh5Jy+WM-HGA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220103160002.1068356-1-Jason@zx2c4.com> <CAG48ez2FfXLfCiF5PZdyUM4oZVCL0MtN8+mT6Zb-7kn69-Xs8A@mail.gmail.com>
-In-Reply-To: <CAG48ez2FfXLfCiF5PZdyUM4oZVCL0MtN8+mT6Zb-7kn69-Xs8A@mail.gmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 3 Jan 2022 17:36:26 +0100
-X-Gmail-Original-Message-ID: <CAHmME9r7QpF_SRXUMSj_rhQFwne3jaYqfDsYo_m+u1fhjeAT0A@mail.gmail.com>
-Message-ID: <CAHmME9r7QpF_SRXUMSj_rhQFwne3jaYqfDsYo_m+u1fhjeAT0A@mail.gmail.com>
-Subject: Re: [PATCH] random: reseed in RNDRESEEDCRNG for the !crng_ready() case
-To:     Jann Horn <jannh@google.com>
-Cc:     "Theodore Ts'o" <tytso@mit.edu>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHmME9otnT=XeMPGYW5H8TOu9aLxxKi6_gT-Fnvh5Jy+WM-HGA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Related discussion: https://github.com/systemd/systemd/issues/21983
+On Mon, Jan 03, 2022 at 05:03:57PM +0100, Jason A. Donenfeld wrote:
+> On Mon, Jan 3, 2022 at 4:59 PM Jann Horn <jannh@google.com> wrote:
+> > This code was inconsistent, and it probably made things worse - just get
+> > rid of it.
+> 
+> Rather than adding crng_init_cnt=0 if crng_init<1 to extract_crng_user
+> and get_random_bytes, getting rid of it like this seems probably okay
+> and makes the model simpler. I'll apply this. Thank you.
 
-As of now, I'm not totally convinced this makes sense to apply, but
-we'll see where this exploration goes.
+Ack.  It does mean that we're making a choice that an attacker who is
+carrying out a incremental state tracking attack on the CRNG will make
+/dev/urandom (and getrandom) to make the crng emit "less secure" in
+the period when crng_init is > 0 and < 2.  On the other hand, this
+allows us to get to the state of crng_init=2 faster, where as before,
+the attacker could delay getting us to the state crng_init=1 forever,
+where reads from /dev/urandom would be hence be insecure forever (and
+getrandom() would block forever).
 
-Jason
+
+						- Ted

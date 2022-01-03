@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A4D483258
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:27:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C8B54832DD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:32:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbiACO1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:27:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38630 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233552AbiACO0V (ORCPT
+        id S234602AbiACObT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:31:19 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59176 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234061AbiACO2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:26:21 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D693C06179B;
-        Mon,  3 Jan 2022 06:26:20 -0800 (PST)
+        Mon, 3 Jan 2022 09:28:52 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DF4CDCE1106;
-        Mon,  3 Jan 2022 14:26:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA96EC36AED;
-        Mon,  3 Jan 2022 14:26:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2AC21B80EBB;
+        Mon,  3 Jan 2022 14:28:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28D19C36AED;
+        Mon,  3 Jan 2022 14:28:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641219977;
-        bh=zzCY/fEsYqpMS+9mtH68nU1cAYzNk5ELATqcEm9U5P8=;
+        s=korg; t=1641220129;
+        bh=eIhGmX8+z6x2AibWPj9WdrnKNb/9c/wmYoCBUossBXA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ixkm0Er+zBFLoxoNp/kEZc3+8YmUjXGCy6X7qNatDpvaBAsviY/Gv1J039H1jD2ak
-         h8UrVmm0/FAQaukiFRvc/TthNBXFsRYpg3JDCuwiGltTom8I8bSxzVhWVGYAaFZOyT
-         VM0jMfxR9jv4Kkk59beUlf54O9i6hzsxd8AebMu8=
+        b=UGOxDFM98cvruqGSN/I7ad1zaDEl3kSj2BLBOtCtnjkg9oryk+VcH20AXB2L+9eZ5
+         zREqMLL5R1rA1qvcqQ6fWa2KULE/vNURy6muUTo3flZMdGcL7sY8ulijEIxYvdECyC
+         3Mz9VNKRHU8HSaqASq1MqKEStYXEiOX/T0VZgyNU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kbuild test robot <lkp@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jiri Kosina <jkosina@suse.cz>, Jason Self <jason@bluehome.net>
-Subject: [PATCH 5.4 01/37] HID: asus: Add depends on USB_HID to HID_ASUS Kconfig option
+        stable@vger.kernel.org,
+        =?UTF-8?q?Samuel=20=C4=8Cavoj?= <samuel@cavoj.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 02/48] Input: i8042 - enable deferred probe quirk for ASUS UM325UA
 Date:   Mon,  3 Jan 2022 15:23:39 +0100
-Message-Id: <20220103142051.930280444@linuxfoundation.org>
+Message-Id: <20220103142053.555184168@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142051.883166998@linuxfoundation.org>
-References: <20220103142051.883166998@linuxfoundation.org>
+In-Reply-To: <20220103142053.466768714@linuxfoundation.org>
+References: <20220103142053.466768714@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -51,34 +47,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Samuel Čavoj <samuel@cavoj.net>
 
-commit c4f0126d487f3c68ab19ccb7c561e8fbf3ea2247 upstream.
+[ Upstream commit 44ee250aeeabb28b52a10397ac17ffb8bfe94839 ]
 
-Since commit 4bc43a421218 ("HID: asus: Add
-hid_is_using_ll_driver(usb_hid_driver) check") the hid-asus.c depends
-on the usb_hid_driver symbol. Add a depends on USB_HID to Kconfig to
-fix missing symbols errors in hid-asus when USB_HID is not enabled.
+The ASUS UM325UA suffers from the same issue as the ASUS UX425UA, which
+is a very similar laptop. The i8042 device is not usable immediately
+after boot and fails to initialize, requiring a deferred retry.
 
-Fixes: 4bc43a421218 ("HID: asus: Add hid_is_using_ll_driver(usb_hid_driver) check")
-Reported-by: kbuild test robot <lkp@intel.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
-Cc: Jason Self <jason@bluehome.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Enable the deferred probe quirk for the UM325UA.
+
+BugLink: https://bugzilla.suse.com/show_bug.cgi?id=1190256
+Signed-off-by: Samuel Čavoj <samuel@cavoj.net>
+Link: https://lore.kernel.org/r/20211204015615.232948-1-samuel@cavoj.net
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/Kconfig |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/input/serio/i8042-x86ia64io.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@ -149,6 +149,7 @@ config HID_APPLEIR
+diff --git a/drivers/input/serio/i8042-x86ia64io.h b/drivers/input/serio/i8042-x86ia64io.h
+index 1acc7c8449294..148a7c5fd0e22 100644
+--- a/drivers/input/serio/i8042-x86ia64io.h
++++ b/drivers/input/serio/i8042-x86ia64io.h
+@@ -1003,6 +1003,13 @@ static const struct dmi_system_id i8042_dmi_probe_defer_table[] __initconst = {
+ 			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX425UA"),
+ 		},
+ 	},
++	{
++		/* ASUS ZenBook UM325UA */
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
++			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX325UA_UM325UA"),
++		},
++	},
+ 	{ }
+ };
  
- config HID_ASUS
- 	tristate "Asus"
-+	depends on USB_HID
- 	depends on LEDS_CLASS
- 	depends on ASUS_WMI || ASUS_WMI=n
- 	select POWER_SUPPLY
+-- 
+2.34.1
+
 
 

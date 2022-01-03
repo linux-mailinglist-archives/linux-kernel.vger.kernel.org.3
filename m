@@ -2,110 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B204483477
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 16:59:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B060F48347A
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 17:00:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233337AbiACP7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 10:59:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60848 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiACP7n (ORCPT
+        id S233505AbiACQA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 11:00:27 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:36324 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231566AbiACQAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 10:59:43 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCEDFC061761;
-        Mon,  3 Jan 2022 07:59:42 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id r5so30415545pgi.6;
-        Mon, 03 Jan 2022 07:59:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=ul8L7yJ1J0zXK3Ue0HqUoFN3kW9JC/qcbMluleB9bYk=;
-        b=BhhL/rcLHewHWuEpiTyXFcVFqUPcGFip+UI5EMwbtJwRNyRy+VgzNwt5779X0heBpt
-         0NFRaNryLWq6Ys86Z5rgZ7MvPwuq7KJEpxqt+hUnKvugsCiDFQjK9B471jz6Zq/UpVoS
-         NcNyyAfISHXLg1Mgi6mffySBV0DElYMDYqTDuWP2+zUQgOXcUr5CX2881LKbl6nA/dgG
-         fGE2fP3brPeCI8tTgpNvQoZSSnUXynEBTK6WGiootPmewqOSNro3Uzlbl/MMelFDUoTW
-         KOMbpM3ZNPgYtPoAepLTl8thFUncGVKUD96O1cbvnH3jxuncXnaBt7ENGRlKB5g/leug
-         EZJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=ul8L7yJ1J0zXK3Ue0HqUoFN3kW9JC/qcbMluleB9bYk=;
-        b=PfshiK/QP5aSjpN2AT4LvPtiMjq5Zfk800B6GRlnjc33vI48cSRa3gYcn3nKUuXPGV
-         uC2QAITgBM5zMoLMaYg/qafta57PE5wfUCV1sJNmMd9k2u/V1s2BzAcgu77Pkr8SeRjv
-         MIz9trbiCEVsT7z7SXswwWY7fyd2TQ72f/0UV8PCVcST5o7yt+gnSj2YQSC2rC1IrSfY
-         BuYXZdhl4QnvsJPd2UbFoD/tGw/ufwhCI5pUQRNX7H1h7vCFmBHatlfrP/5lah5EUH9G
-         oSOzHsaVxxbpTA9jXg1QK44vrm4sqwwGfXhhL5ZpUeRvYtZbMAj8cJsRMgI84Wg9tdT5
-         Fzwg==
-X-Gm-Message-State: AOAM5300YxVFwiTpSRBU9AH42fVu7iv5fh3wR+oSrzk5C4f4bO+ZW3K1
-        ctFvCPbcCOLGmY1TFI3n2s0=
-X-Google-Smtp-Source: ABdhPJxp/Ic16mK7JMI9+HKup25AtmvCmIFdDy+ouZVAL4txSOBEa0euIyHjl7ZLRsMvDizTHzPROg==
-X-Received: by 2002:a05:6a00:8d3:b0:4bc:3fe0:98d2 with SMTP id s19-20020a056a0008d300b004bc3fe098d2mr22110560pfu.3.1641225582453;
-        Mon, 03 Jan 2022 07:59:42 -0800 (PST)
-Received: from [192.168.3.7] (softbank219203027033.bbtec.net. [219.203.27.33])
-        by smtp.gmail.com with ESMTPSA id f4sm36518361pfj.25.2022.01.03.07.59.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jan 2022 07:59:42 -0800 (PST)
-Message-ID: <a86506727555e6cd38681b94fcecf6b7fabf5bc8.camel@gmail.com>
-Subject: Re: [PATCH] media: pt3: Use dma_set_mask_and_coherent() and
- simplify code
-From:   Akihiro TSUKADA <tskd08@gmail.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        mchehab@kernel.org, andy.shevchenko@gmail.com,
-        kirill.shilimanov@huawei.com, novikov@ispras.ru
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Date:   Tue, 04 Jan 2022 00:59:38 +0900
-In-Reply-To: <34f3a2b58d5f9078709b7d592536af0be49ea1d9.1641072450.git.christophe.jaillet@wanadoo.fr>
-References: <34f3a2b58d5f9078709b7d592536af0be49ea1d9.1641072450.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.42.2 
+        Mon, 3 Jan 2022 11:00:25 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7389DB8100B
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 16:00:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEBC6C36AEB;
+        Mon,  3 Jan 2022 16:00:22 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Ind/g1B5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1641225620;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=qx7aU6bTBZDcx6Qr9I6iDbUH1sytCqJlxzi6Spl3Hf8=;
+        b=Ind/g1B5FOEeHbSq2WgTK3Dtm7eLvTGJWgjzP1sml3w0Mr7XCsF6eaYoboWPSZqj8wEnuQ
+        m932SLp6r0VlHFgo9lGOoZ+w7iwum+//ZuaRGJ5U6RG3jkzKaJFQbf1EJkuW5j6fJD1aC+
+        lRsbvq9gli/Mtp5Q7t7O9cwOxZImwU4=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0f724d62 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 3 Jan 2022 16:00:20 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     "Theodore Ts'o" <tytso@mit.edu>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, Jann Horn <jannh@google.com>
+Subject: [PATCH] random: reseed in RNDRESEEDCRNG for the !crng_ready() case
+Date:   Mon,  3 Jan 2022 17:00:02 +0100
+Message-Id: <20220103160002.1068356-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/media/pci/pt3/pt3.c | 16 ++++------------
->  1 file changed, 4 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/media/pci/pt3/pt3.c
-> b/drivers/media/pci/pt3/pt3.c
-> index 0d51bdf01f43..11f26cac0abc 100644
-> --- a/drivers/media/pci/pt3/pt3.c
-> +++ b/drivers/media/pci/pt3/pt3.c
-> @@ -707,18 +707,10 @@ static int pt3_probe(struct pci_dev *pdev,
-> const struct pci_device_id *ent)
->         if (ret < 0)
->                 return ret;
->  
-> -       ret = dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
-> -       if (ret == 0)
-> -               dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(64));
-> -       else {
-> -               ret = dma_set_mask(&pdev->dev, DMA_BIT_MASK(32));
-> -               if (ret == 0)
-> -                       dma_set_coherent_mask(&pdev->dev,
-> DMA_BIT_MASK(32));
-> -               else {
-> -                       dev_err(&pdev->dev, "Failed to set DMA
-> mask\n");
-> -                       return ret;
-> -               }
-> -               dev_info(&pdev->dev, "Use 32bit DMA\n");
-> +       ret = dma_set_mask_and_coherent(&pdev->dev,
-> DMA_BIT_MASK(64));
-> +       if (ret) {
-> +               dev_err(&pdev->dev, "Failed to set DMA mask\n");
-> +               return ret;
->         }
->  
->         pt3 = devm_kzalloc(&pdev->dev, sizeof(*pt3), GFP_KERNEL);
+Userspace often wants to seed the RNG from disk, without knowing how
+much entropy is really in that file. In that case, userspace says
+there's no entropy, so none is credited. If this happens in the
+crng_init==1 state -- common at early boot time when such seed files are
+used -- then that seed file will be written into the pool, but it won't
+actually help the quality of /dev/urandom reads. Instead, it'll sit
+around until something does credit sufficient amounts of entropy, at
+which point, the RNG is seeded and initialized.
 
-tested on x86_64.
+Rather than let those seed file bits sit around unused until "sometime
+later", userspaces that call RNDRESEEDCRNG can expect, with this commit,
+for those seed bits to be put to use *somehow*. This is accomplished by
+extracting from the input pool on RNDRESEEDCRNG, xoring 32 bytes into
+the current crng state.
 
-Acked-by: Akihiro Tsukada <tskd08@gmail.com>
+Suggested-by: Jann Horn <jannh@google.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+Jann - this is the change I think you were requesting when we discussed
+this. Please let me know if it matches what you had in mind.
+
+ drivers/char/random.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 17ec60948795..805e509d9c30 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1961,8 +1961,17 @@ static long random_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
+ 	case RNDRESEEDCRNG:
+ 		if (!capable(CAP_SYS_ADMIN))
+ 			return -EPERM;
+-		if (crng_init < 2)
++		if (!crng_ready()) {
++			unsigned long flags, i;
++			u32 new_key[8];
++			_extract_entropy(&input_pool, new_key, sizeof(new_key), 0);
++			spin_lock_irqsave(&primary_crng.lock, flags);
++			for (i = 0; i < ARRAY_SIZE(new_key); ++i)
++				primary_crng.state[4 + i] ^= new_key[i];
++			spin_unlock_irqrestore(&primary_crng.lock, flags);
++			memzero_explicit(new_key, sizeof(new_key));
+ 			return -ENODATA;
++		}
+ 		crng_reseed(&primary_crng, &input_pool);
+ 		WRITE_ONCE(crng_global_init_time, jiffies - 1);
+ 		return 0;
+-- 
+2.34.1
+

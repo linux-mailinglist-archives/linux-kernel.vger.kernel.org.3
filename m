@@ -2,125 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A794E4838A4
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 22:48:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 272974838AD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 23:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiACVsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 16:48:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55092 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiACVsL (ORCPT
+        id S230038AbiACWCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 17:02:31 -0500
+Received: from giacobini.uberspace.de ([185.26.156.129]:47652 "EHLO
+        giacobini.uberspace.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229525AbiACWCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 16:48:11 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E710C061761;
-        Mon,  3 Jan 2022 13:48:11 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id e5so21726689wmq.1;
-        Mon, 03 Jan 2022 13:48:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=S9dCDiLfbeldB1HjWX1YrC/d8Bc58qG97B0V8rzpWFg=;
-        b=hldhc9R3zhX0S3wtlezacyK/3Y2NLhxAEjnksO1QnxLPAvDP8+BO5ZdraS6HmOPwPp
-         qJtW6+WcT4NAcWA56joT7djw1wFh51yPUv77OVZeU7CLcV48xTLWygHvKgwzze/GAFrt
-         3q9FtRaYDdVADOzgKUuwcymInZzzRm+ULdhe82uXREjs4Qu2aclhp7Sd5BqvPuHHHxYD
-         xU/9OYJvrAm2uok7ei3Wu2y+W4dpkWjUA0FpDsrXU7HkXp+8iSaXaijLoRm+JXjoGQSp
-         +SoC2kEXLyqDrWnW/hBAY3jV8F+1jOHNL0VFBsZUVVosRPzTLCJ0O1/5f3WUE8lz8L5E
-         fAJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=S9dCDiLfbeldB1HjWX1YrC/d8Bc58qG97B0V8rzpWFg=;
-        b=oGEuquKCck0ozemmZCWx+N6IwfRQOuyJ3yv8+bcgRAPfOdbURGUOIPAAjuXQUlB9TZ
-         wcjo6/he/3Yn+EYz652TPC5pZ+s+e7G1qbMasLvYf2p+UKmRa1QrwlPOenZ1iLRk7ta/
-         jiiyz5yMBFSa20gFjoT9z3DWqQSriYg5BfJSF69qudbqGdicivYZ9LsfpEFQsrpjFHyo
-         kyJGwFG0X43VaPRUzVKAjZ0bxuDEzKSdGrRLSGEwBVDaTl/oPqXAQf7a+WiIFVOY9jOH
-         mFjEcTNIngHt3yBql8kGjQtNRCh/moRunKAwfSUgKc9YV5EI90zCprVkVUcOxZMOYdHu
-         nrww==
-X-Gm-Message-State: AOAM5322MgQIEJzUVmUpPBtMMIfLw6cexwBy9WRq934YbuuRt0QOvlUq
-        hoNKWi+00cbohc+qH7OaR+jYZAGYQHtosg==
-X-Google-Smtp-Source: ABdhPJyYyB9SzOCX9KoVSmfrNTbnKw8C3Yx5TnaTBqVqB/wCWKECxTB9YPcIPF4wQMtuSVtKoIF+nA==
-X-Received: by 2002:a7b:cb9a:: with SMTP id m26mr35616716wmi.55.1641246490137;
-        Mon, 03 Jan 2022 13:48:10 -0800 (PST)
-Received: from fuji.fritz.box (ip-89-161-76-237.tel.tkb.net.pl. [89.161.76.237])
-        by smtp.gmail.com with ESMTPSA id l26sm33957392wme.36.2022.01.03.13.48.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jan 2022 13:48:09 -0800 (PST)
-Date:   Mon, 3 Jan 2022 22:48:06 +0100
-From:   Tomasz =?UTF-8?B?V2FybmllxYLFgm8=?= <tomasz.warniello@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scripts: kernel-doc: transform documentation into POD
-Message-ID: <20220103224806.2932bac2@fuji.fritz.box>
-In-Reply-To: <87bl0sziva.fsf@meer.lwn.net>
-References: <20211209225549.69010-1-tomasz.warniello@gmail.com>
-        <87h7b8cfg0.fsf@meer.lwn.net>
-        <0796a780-f5ee-0b6c-e7ef-544ba5f6a429@gmail.com>
-        <87pmp9tcju.fsf@intel.com>
-        <20220103183034.77ba8a8c@fuji.fritz.box>
-        <87bl0sziva.fsf@meer.lwn.net>
+        Mon, 3 Jan 2022 17:02:31 -0500
+X-Greylist: delayed 401 seconds by postgrey-1.27 at vger.kernel.org; Mon, 03 Jan 2022 17:02:30 EST
+Received: (qmail 30180 invoked by uid 990); 3 Jan 2022 21:55:48 -0000
+Authentication-Results: giacobini.uberspace.de;
+        auth=pass (plain)
+Message-ID: <36ec2e79-7544-ba14-8bdd-d748dfad0ea7@eknoes.de>
+Date:   Mon, 3 Jan 2022 22:55:43 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Content-Language: en-US
+To:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        luiz.von.dentz@intel.com, Marcel Holtmann <marcel@holtmann.org>
+From:   =?UTF-8?Q?S=c3=b6nke_Huster?= <soenke.huster@eknoes.de>
+Subject: [BUG] Page Fault in hci_inquiry_result_with_rssi_evt
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Bar: --
+X-Rspamd-Report: BAYES_HAM(-2.999632) MIME_GOOD(-0.1) R_MIXED_CHARSET(0.714285)
+X-Rspamd-Score: -2.385347
+Received: from unknown (HELO unkown) (::1)
+        by giacobini.uberspace.de (Haraka/2.8.28) with ESMTPSA; Mon, 03 Jan 2022 22:55:48 +0100
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 03 Jan 2022 13:04:09 -0700
-Jonathan Corbet <corbet@lwn.net> wrote:
+Hello,
 
-> Tomasz Warnie=C5=82=C5=82o <tomasz.warniello@gmail.com> writes:
->=20
-> > On Mon, 03 Jan 2022 11:04:53 +0200
-> > Jani Nikula <jani.nikula@linux.intel.com> wrote: =20
-> >> In kernel, tabs are 8 characters.
-> >>=20
-> >> See Documentation/process/coding-style.rst
-> >>  =20
-> >
-> > I am a heretic then.
-> >
-> > Except for the initial dogma, I understand and agree with the rationale
-> > in coding-style.rst.
-> >
-> > Only what if I have stared at the screen not for 20 hours, but for
-> > 40 hours? Now I want to have indentation even deeper, of 16 spaces.
-> > And how do I get this having 8 spaces here and there instead of tabs?
-> > The system begins to fall apart.
-> >
-> > The misleading statement is that tabs are 8 characters long. No. They
-> > are exactly 1 character long. And that's ASCII 9. =20
->=20
-> This is not particularly helpful.
+While fuzzing bluetooth-next I found the following bug:
 
-Not helpful? In what matter? It is a matter of fact opinion on
-coding-style.rst, which Jani Nikula referred to, so I think it is both
-in topic and may be helpful to some. While troublesome to some others,
-that's true.
+[   27.333034] BUG: unable to handle page fault for address: fffff61a1a1a1a1a
+[   27.333241] #PF: supervisor read access in kernel mode
+[   27.333241] #PF: error_code(0x0000) - not-present page
+[   27.333241] PGD 6dfd2067 P4D 6dfd2067 PUD 0 
+[   27.333241] Oops: 0000 [#1] PREEMPT SMP KASAN NOPTI
+[   27.333241] CPU: 0 PID: 45 Comm: kworker/u3:2 Not tainted 5.16.0-rc1+ #81
+[   27.333241] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
+[   27.333241] Workqueue: hci0 hci_rx_work
+[   27.333241] RIP: 0010:hci_inquiry_result_with_rssi_evt+0xbc/0x950
+[   27.333241] Code: 8b 04 24 48 c1 e8 03 42 80 3c 28 00 0f 85 20 07 00 00 48 8b 04 24 4c 8b 28 48 b8 00 00 00 00 00 fc ff df 4c 89 0
+[   27.333241] RSP: 0018:ffffc900004ff9c8 EFLAGS: 00010212
+[   27.333241] RAX: dffffc0000000000 RBX: 0000000000000022 RCX: ffffffff834663d1
+[   27.333241] RDX: 1ffffa1a1a1a1a1a RSI: 0000000000000012 RDI: ffff88800affb074
+[   27.333241] RBP: ffff88800aae0000 R08: ffffffff844ef360 R09: ffffffff83487b35
+[   27.333241] R10: 000000000000002c R11: 0000000000000022 R12: ffff88800affb000
+[   27.333241] R13: ffffd0d0d0d0d0d0 R14: 0000000000000000 R15: ffff88800aae0000
+[   27.333241] FS:  0000000000000000(0000) GS:ffff88806ce00000(0000) knlGS:0000000000000000
+[   27.333241] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   27.333241] CR2: fffff61a1a1a1a1a CR3: 0000000004a26000 CR4: 00000000000006f0
+[   27.333241] Call Trace:
+[   27.333241]  <TASK>
+[   27.333241]  ? wait_for_completion_io+0x270/0x270
+[   27.333241]  ? hci_inquiry_result_evt+0x4b0/0x4b0
+[   27.333241]  hci_event_packet+0x3b11/0x7b10
+[   27.333241]  ? lock_chain_count+0x20/0x20
+[   27.333241]  ? hci_cmd_status_evt.constprop.0+0x4ea0/0x4ea0
+[   27.333241]  ? sysvec_reboot+0x50/0xc0
+[   27.333241]  ? find_held_lock+0x2c/0x110
+[   27.333241]  ? lock_release+0x3b2/0x6f0
+[   27.333241]  ? skb_dequeue+0x110/0x1a0
+[   27.333241]  ? mark_held_locks+0x9e/0xe0
+[   27.333241]  ? lockdep_hardirqs_on_prepare+0x17b/0x400
+[   27.333241]  hci_rx_work+0x4d3/0xb90
+[   27.333241]  process_one_work+0x904/0x1590
+[   27.333241]  ? lock_release+0x6f0/0x6f0
+[   27.333241]  ? pwq_dec_nr_in_flight+0x230/0x230
+[   27.333241]  ? rwlock_bug.part.0+0x90/0x90
+[   27.333241]  ? _raw_spin_lock_irq+0x41/0x50
+[   27.333241]  worker_thread+0x578/0x1310
+[   27.333241]  ? process_one_work+0x1590/0x1590
+[   27.333241]  kthread+0x3b2/0x490
+[   27.333241]  ? _raw_spin_unlock_irq+0x1f/0x40
+[   27.333241]  ? set_kthread_struct+0x100/0x100
+[   27.333241]  ret_from_fork+0x22/0x30
+[   27.333241]  </TASK>
+[   27.333241] Modules linked in:
+[   27.333241] CR2: fffff61a1a1a1a1a
+[   27.333241] ---[ end trace 6a6825484c8fefa6 ]---
+[   27.333241] RIP: 0010:hci_inquiry_result_with_rssi_evt+0xbc/0x950
+[   27.333241] Code: 8b 04 24 48 c1 e8 03 42 80 3c 28 00 0f 85 20 07 00 00 48 8b 04 24 4c 8b 28 48 b8 00 00 00 00 00 fc ff df 4c 89 0
+[   27.333241] RSP: 0018:ffffc900004ff9c8 EFLAGS: 00010212
+[   27.333241] RAX: dffffc0000000000 RBX: 0000000000000022 RCX: ffffffff834663d1
+[   27.333241] RDX: 1ffffa1a1a1a1a1a RSI: 0000000000000012 RDI: ffff88800affb074
+[   27.333241] RBP: ffff88800aae0000 R08: ffffffff844ef360 R09: ffffffff83487b35
+[   27.333241] R10: 000000000000002c R11: 0000000000000022 R12: ffff88800affb000
+[   27.333241] R13: ffffd0d0d0d0d0d0 R14: 0000000000000000 R15: ffff88800aae0000
+[   27.333241] FS:  0000000000000000(0000) GS:ffff88806ce00000(0000) knlGS:0000000000000000
+[   27.333241] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   27.333241] CR2: fffff61a1a1a1a1a CR3: 0000000004a26000 CR4: 00000000000006f0
+[   27.379996] kworker/u3:2 (45) used greatest stack depth: 27736 bytes left
 
-> I would like to get your work in, but need some cooperation to get
-> there.
->=20
-> Please:
->=20
->  - Post your patch series as a single thread with a coherent cover
->    letter.
+It occurs when sending the following frame to the kernel:
 
-Sorry, I'm a newbie in this business. I need to figure out how emails
-work. Is this just one thread per version or one thread per all versions?
-Can you please direct me to some documentation about this?
+$ xxd crashes/hci_inquiry_result_with_rssi_evt
+00000000: 0422 24d0 d0d0 d0d0 d0ff ff              ."$........
 
->  - Stick with current coding conventions
-
-To be honest, I need to think this over.
-
->  - Avoid snide comments to reviewers.
-
-My reply is no more snide than coding-style.rst. Compare them. It strictly
-relates to it. I don't point my answer at the reviewer in any way, if that's
-what you mean.
-
-Ch, TW
+The bug was introduced with the commit "Bluetooth: HCI: Use skb_pull_data to parse Inquiry Result with RSSI event" (https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git/commit/?id=8d08d324fdcb7).

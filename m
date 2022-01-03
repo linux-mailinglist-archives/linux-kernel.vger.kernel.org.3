@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E8EA48323D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D0648327D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:28:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233865AbiACO0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:26:08 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:56000 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232481AbiACOZ3 (ORCPT
+        id S233440AbiACO2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:28:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232807AbiACO1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:25:29 -0500
+        Mon, 3 Jan 2022 09:27:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A738C061761;
+        Mon,  3 Jan 2022 06:27:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BD8960FA2;
-        Mon,  3 Jan 2022 14:25:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07424C36AEB;
-        Mon,  3 Jan 2022 14:25:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E013D60FA2;
+        Mon,  3 Jan 2022 14:27:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F18C36AED;
+        Mon,  3 Jan 2022 14:27:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641219928;
-        bh=CTKojC1ShDEUvmIXrIsMZrl7CZ7FiWIRZZiYC9o5kjA=;
+        s=korg; t=1641220023;
+        bh=nH09yIs0wax0PiA9uNlgRbWcT4YBReLap6tdfJiFY6I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ot4p5ETHT+mKnFmbezA/KI5FZDyPBDsJ/mOCGjYdTtTHOsm3h60KvbnONnonkBlvO
-         9WEg1aEK/LCKrsx3zJ4bpc8+WWzRaN0T3P7fI/tgyNEareqnI/gv+IOcKzGC3vJmfm
-         XeYUGz+MS6uC6/2b0u288wrc0F45cLUnPq1uFLvg=
+        b=wyKUJ1O1Tz9OrAaY8Qgd0Vi2S/1cwP8cYmusfYRiskgwIj2n02LeIXuhoQh7+ImBZ
+         rJz12gAGlmH3fcoE3X4XKgbsS38JUI3bkl0cu1160SL+uij0hzcWvmboeULwMDaPhE
+         OPT8iBxudxlH6V/0O7FBAkvcLPYoMgZtGF/XzvnA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nikolay Martynov <mar.kolya@gmail.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 4.19 20/27] xhci: Fresco FL1100 controller should not have BROKEN_MSI quirk set.
-Date:   Mon,  3 Jan 2022 15:24:00 +0100
-Message-Id: <20220103142052.822143703@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 23/37] fsl/fman: Fix missing put_device() call in fman_port_probe
+Date:   Mon,  3 Jan 2022 15:24:01 +0100
+Message-Id: <20220103142052.588232516@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142052.162223000@linuxfoundation.org>
-References: <20220103142052.162223000@linuxfoundation.org>
+In-Reply-To: <20220103142051.883166998@linuxfoundation.org>
+References: <20220103142051.883166998@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,50 +49,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit e4844092581ceec22489b66c42edc88bc6079783 upstream.
+[ Upstream commit bf2b09fedc17248b315f80fb249087b7d28a69a6 ]
 
-The Fresco Logic FL1100 controller needs the TRUST_TX_LENGTH quirk like
-other Fresco controllers, but should not have the BROKEN_MSI quirks set.
+The reference taken by 'of_find_device_by_node()' must be released when
+not needed anymore.
+Add the corresponding 'put_device()' in the and error handling paths.
 
-BROKEN_MSI quirk causes issues in detecting usb drives connected to docks
-with this FL1100 controller.
-The BROKEN_MSI flag was apparently accidentally set together with the
-TRUST_TX_LENGTH quirk
-
-Original patch went to stable so this should go there as well.
-
-Fixes: ea0f69d82119 ("xhci: Enable trust tx length quirk for Fresco FL11 USB controller")
-Cc: stable@vger.kernel.org
-cc: Nikolay Martynov <mar.kolya@gmail.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20211221112825.54690-2-mathias.nyman@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 18a6c85fcc78 ("fsl/fman: Add FMan Port Support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci-pci.c |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/freescale/fman/fman_port.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -90,7 +90,6 @@ static void xhci_pci_quirks(struct devic
- 	/* Look for vendor-specific quirks */
- 	if (pdev->vendor == PCI_VENDOR_ID_FRESCO_LOGIC &&
- 			(pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_PDK ||
--			 pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_FL1100 ||
- 			 pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_FL1400)) {
- 		if (pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_PDK &&
- 				pdev->revision == 0x0) {
-@@ -125,6 +124,10 @@ static void xhci_pci_quirks(struct devic
- 			pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_FL1009)
- 		xhci->quirks |= XHCI_BROKEN_STREAMS;
+diff --git a/drivers/net/ethernet/freescale/fman/fman_port.c b/drivers/net/ethernet/freescale/fman/fman_port.c
+index 47f6fee1f3964..1812434cda847 100644
+--- a/drivers/net/ethernet/freescale/fman/fman_port.c
++++ b/drivers/net/ethernet/freescale/fman/fman_port.c
+@@ -1791,7 +1791,7 @@ static int fman_port_probe(struct platform_device *of_dev)
+ 	fman = dev_get_drvdata(&fm_pdev->dev);
+ 	if (!fman) {
+ 		err = -EINVAL;
+-		goto return_err;
++		goto put_device;
+ 	}
  
-+	if (pdev->vendor == PCI_VENDOR_ID_FRESCO_LOGIC &&
-+			pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_FL1100)
-+		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
-+
- 	if (pdev->vendor == PCI_VENDOR_ID_NEC)
- 		xhci->quirks |= XHCI_NEC_HOST;
+ 	err = of_property_read_u32(port_node, "cell-index", &val);
+@@ -1799,7 +1799,7 @@ static int fman_port_probe(struct platform_device *of_dev)
+ 		dev_err(port->dev, "%s: reading cell-index for %pOF failed\n",
+ 			__func__, port_node);
+ 		err = -EINVAL;
+-		goto return_err;
++		goto put_device;
+ 	}
+ 	port_id = (u8)val;
+ 	port->dts_params.id = port_id;
+@@ -1833,7 +1833,7 @@ static int fman_port_probe(struct platform_device *of_dev)
+ 	}  else {
+ 		dev_err(port->dev, "%s: Illegal port type\n", __func__);
+ 		err = -EINVAL;
+-		goto return_err;
++		goto put_device;
+ 	}
  
+ 	port->dts_params.type = port_type;
+@@ -1847,7 +1847,7 @@ static int fman_port_probe(struct platform_device *of_dev)
+ 			dev_err(port->dev, "%s: incorrect qman-channel-id\n",
+ 				__func__);
+ 			err = -EINVAL;
+-			goto return_err;
++			goto put_device;
+ 		}
+ 		port->dts_params.qman_channel_id = qman_channel_id;
+ 	}
+@@ -1857,7 +1857,7 @@ static int fman_port_probe(struct platform_device *of_dev)
+ 		dev_err(port->dev, "%s: of_address_to_resource() failed\n",
+ 			__func__);
+ 		err = -ENOMEM;
+-		goto return_err;
++		goto put_device;
+ 	}
+ 
+ 	port->dts_params.fman = fman;
+@@ -1882,6 +1882,8 @@ static int fman_port_probe(struct platform_device *of_dev)
+ 
+ 	return 0;
+ 
++put_device:
++	put_device(&fm_pdev->dev);
+ return_err:
+ 	of_node_put(port_node);
+ free_port:
+-- 
+2.34.1
+
 
 

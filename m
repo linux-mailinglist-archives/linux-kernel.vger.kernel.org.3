@@ -2,151 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5705E482D54
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 01:41:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFDE8482D64
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 02:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbiACAlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 19:41:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56656 "EHLO
+        id S231270AbiACBCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 20:02:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbiACAlj (ORCPT
+        with ESMTP id S231245AbiACBCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 19:41:39 -0500
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBE2C061761;
-        Sun,  2 Jan 2022 16:41:39 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id C9A494267B;
-        Mon,  3 Jan 2022 00:41:29 +0000 (UTC)
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com
-References: <20211226153624.162281-1-marcan@marcan.st>
- <20211226153624.162281-4-marcan@marcan.st>
- <8e99eb47-2bc1-7899-5829-96f2a515b2cb@gmail.com>
- <e9ecbd0b-8741-1e7d-ae7a-f839287cb5c9@marcan.st>
- <48f16559-6891-9401-dd8e-762c7573304c@gmail.com>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH 03/34] brcmfmac: firmware: Support having multiple alt
- paths
-Message-ID: <d96fe60e-c029-b400-9c29-0f95c3632301@marcan.st>
-Date:   Mon, 3 Jan 2022 09:41:27 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Sun, 2 Jan 2022 20:02:07 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9FCC061761
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jan 2022 17:02:06 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id o7so36862191ioo.9
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jan 2022 17:02:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=LCdYBCWRZKdKiGE+rth1UGOefg7aXgJUkI8QK9WTTv0=;
+        b=cAnHpedkcbG2/TODtq8Y49qZngzDR+QwicjNn+xyAbor0nPTj6CXPXkVt5w7RshrH0
+         kz9Lcfe/6UdlkB9xoQ0IFMiTNwOoObqwCnrmrvY4nzQw35pKvZPmS/0/ckzK8MdX6mV5
+         y7W4f0dJuYyXcJd3w2bDnicHbyu57Bmt/TbNn1RxU9ycpr2KUtv88wMjm4GOaQwMf00/
+         PRpfD8+t7kx20/8NLIO3DvktxI8g4b/+FA3MFJ2sUb0/3fPw6lNnH+lcD2XNeDg5hedN
+         qpqerZmbZhIgqv1FXDq7x4LMEgOo2EXdy5vtw0z3cWtGZwOYXBDazIh3XDo6NOHFxGvw
+         O5lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=LCdYBCWRZKdKiGE+rth1UGOefg7aXgJUkI8QK9WTTv0=;
+        b=h4l6vXwdhoUHYl4EmH5gBZjPpSoGkcpdSLvucHgg5eaLjTPz0VJVRXdf55wdZW3WTv
+         nJ2emLzVHoU7THRntzfICNGInyCIU4UxntnDmNlhosB9j5zyUwNXqE7a+BZPCM1loMi6
+         px1nfS1eLp4o67PUjEfnEbI9GpWxne/mzq87neNdxIW5qDYv9E/rHyfWpgjwUVu7Gyd1
+         vkKBm6yA4JU1YpEYdaiXcr2EfSMINQSEYvDWg2mDtZeZO5JsdQ1Gv3rzbkNQG9LsPGC8
+         YRSBwlkJ9w+fpeQ3Q8gnhHRljZ/3Od/gNtB0XUnnXnhcnCUb2naMkIo8mj0MkeCswq3q
+         8YaQ==
+X-Gm-Message-State: AOAM531KqZvACwaZ8iqyjHkB08UjOSVMg4KrQypl7akFMpf4erH3F8SX
+        +pwbB3CXrv6nuzWTiV+o/3nsSCndrZdMF2/sLv8i/w==
+X-Google-Smtp-Source: ABdhPJyMLyEB8QQhyG6sPL+tCsTDM7rfRr6HtT20LsS+F4EAzutQwYFbATydUR8ILFuU+KywV4LCkEdYtMBfuRd2ayI=
+X-Received: by 2002:a05:6602:1484:: with SMTP id a4mr19570511iow.35.1641171725930;
+ Sun, 02 Jan 2022 17:02:05 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <48f16559-6891-9401-dd8e-762c7573304c@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: es-ES
-Content-Transfer-Encoding: 8bit
+References: <20211226025215.22866-1-rdunlap@infradead.org>
+In-Reply-To: <20211226025215.22866-1-rdunlap@infradead.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Sun, 2 Jan 2022 17:01:53 -0800
+Message-ID: <CAP-5=fXHUg9jEOmGxCk3UP2mdb8oSCyg-UenL1k7MhLFAaaj5Q@mail.gmail.com>
+Subject: Re: [PATCH] perf: fix typos of "its" and "reponse"
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        "zhengjun.xing@intel.com" <zhengjun.xing@intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01/2022 05.11, Dmitry Osipenko wrote:
-> 02.01.2022 17:18, Hector Martin пишет:
->> On 2022/01/02 15:45, Dmitry Osipenko wrote:
->>> 26.12.2021 18:35, Hector Martin пишет:
->>>> -static char *brcm_alt_fw_path(const char *path, const char *board_type)
->>>> +static const char **brcm_alt_fw_paths(const char *path, const char *board_type)
->>>>  {
->>>>  	char alt_path[BRCMF_FW_NAME_LEN];
->>>> +	char **alt_paths;
->>>>  	char suffix[5];
->>>>  
->>>>  	strscpy(alt_path, path, BRCMF_FW_NAME_LEN);
->>>> @@ -609,27 +612,46 @@ static char *brcm_alt_fw_path(const char *path, const char *board_type)
->>>>  	strlcat(alt_path, board_type, BRCMF_FW_NAME_LEN);
->>>>  	strlcat(alt_path, suffix, BRCMF_FW_NAME_LEN);
->>>>  
->>>> -	return kstrdup(alt_path, GFP_KERNEL);
->>>> +	alt_paths = kzalloc(sizeof(char *) * 2, GFP_KERNEL);
->>>
->>> array_size()?
->>
->> Of what array?
-> 
-> array_size(sizeof(*alt_paths), 2)
+On Sat, Dec 25, 2021 at 6:52 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> Use the possessive "its" instead of the contraction of "it is" ("it's")
+> where needed in user-viewable messages.
+>
+> Correct typos of "reponse" to "response" (reported by checkpatch).
+>
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+> Cc: Jiri Olsa <jolsa@redhat.com>
+> Cc: Namhyung Kim <namhyung@kernel.org>
+> Cc: linux-perf-users@vger.kernel.org
 
-Heh, TIL. I thought you meant ARRAY_SIZE. First time I see the lowercase
-macro. That's a confusing name collision...
+Making this information better is valuable! The data is autogenerated
+by these scripts:
+https://github.com/intel/event-converter-for-linux-perf
+From data here:
+https://download.01.org/perfmon/
+In a way the files that are in the tree are temporary build files.
+Perhaps we can have the original source and scripts within the Linux
+tools tree to simplify fixes like these.
 
->>>> +	alt_paths[0] = kstrdup(alt_path, GFP_KERNEL);
->>>> +
->>>> +	return (const char **)alt_paths;
->>>
->>> Why this casting is needed?
->>
->> Because implicit conversion from char ** to const char ** is not legal
->> in C, as that could cause const unsoundness if you do this:
->>
->> char *foo[1];
->> const char **bar = foo;
->>
->> bar[0] = "constant string";
->> foo[0][0] = '!'; // clobbers constant string
-> 
-> It's up to a programmer to decide what is right to do. C gives you
-> flexibility, meanwhile it's easy to shoot yourself in the foot if you
-> won't be careful.
+Thanks,
+Ian
 
-Which is why that conversion is illegal without a cast and you need to
-explicitly choose to shoot yourself in the foot :-)
 
->> But it's fine in this case since the non-const pointer disappears so
->> nothing can ever write through it again.
->>
-> 
-> There is indeed no need for the castings in such cases, it's a typical
-> code pattern in kernel. You would need to do the casting for the other
-> way around, i.e. if char ** was returned and **alt_paths was a const.
 
-You do need to do the cast. Try it.
-
-$ cat test.c
-int main() {
-        char *foo[1];
-        const char **bar = foo;
-
-        return 0;
-}
-
-$ gcc test.c
-test.c: In function ‘main’:
-test.c:4:28: warning: initialization of ‘const char **’ from
-incompatible pointer type ‘char **’ [-Wincompatible-pointer-types]
-    4 |         const char **bar = foo;
-      |
-
-You can implicitly cast char* to const char*, but you *cannot*
-impliclicitly cast char** to const char** for the reason I explained. It
-requires a cast.
-
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+> ---
+>  tools/perf/pmu-events/arch/x86/broadwell/uncore.json          |    6 +++=
+---
+>  tools/perf/pmu-events/arch/x86/cascadelakex/uncore-other.json |    4 ++-=
+-
+>  tools/perf/pmu-events/arch/x86/haswell/uncore.json            |    6 +++=
+---
+>  tools/perf/pmu-events/arch/x86/skylakex/uncore-other.json     |    4 ++-=
+-
+>  4 files changed, 10 insertions(+), 10 deletions(-)
+>
+> --- linux-next-20211224.orig/tools/perf/pmu-events/arch/x86/broadwell/unc=
+ore.json
+> +++ linux-next-20211224/tools/perf/pmu-events/arch/x86/broadwell/uncore.j=
+son
+> @@ -184,8 +184,8 @@
+>      "EventCode": "0x80",
+>      "UMask": "0x01",
+>      "EventName": "UNC_ARB_TRK_OCCUPANCY.ALL",
+> -    "BriefDescription": "Each cycle count number of all Core outgoing va=
+lid entries. Such entry is defined as valid from it's allocation till first=
+ of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-cohere=
+nt traffic.",
+> -    "PublicDescription": "Each cycle count number of all Core outgoing v=
+alid entries. Such entry is defined as valid from it's allocation till firs=
+t of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-coher=
+ent traffic.",
+> +    "BriefDescription": "Each cycle count number of all Core outgoing va=
+lid entries. Such entry is defined as valid from its allocation till first =
+of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-coheren=
+t traffic.",
+> +    "PublicDescription": "Each cycle count number of all Core outgoing v=
+alid entries. Such entry is defined as valid from its allocation till first=
+ of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-cohere=
+nt traffic.",
+>      "Counter": "0,",
+>      "CounterMask": "0",
+>      "Invert": "0",
+> @@ -275,4 +275,4 @@
+>      "Invert": "0",
+>      "EdgeDetect": "0"
+>    }
+> -]
+> \ No newline at end of file
+> +]
+> --- linux-next-20211224.orig/tools/perf/pmu-events/arch/x86/cascadelakex/=
+uncore-other.json
+> +++ linux-next-20211224/tools/perf/pmu-events/arch/x86/cascadelakex/uncor=
+e-other.json
+> @@ -514,7 +514,7 @@
+>          "EventCode": "0x5C",
+>          "EventName": "UNC_CHA_SNOOP_RESP.RSP_FWD_WB",
+>          "PerPkg": "1",
+> -        "PublicDescription": "Counts when a transaction with the opcode =
+type Rsp*Fwd*WB Snoop Response was received which indicates the data was wr=
+itten back to it's home socket, and the cacheline was forwarded to the requ=
+estor socket.  This snoop response is only used in >=3D 4 socket systems.  =
+It is used when a snoop HITM's in a remote caching agent and it directly fo=
+rwards data to a requestor, and simultaneously returns data to it's home so=
+cket to be written back to memory.",
+> +        "PublicDescription": "Counts when a transaction with the opcode =
+type Rsp*Fwd*WB Snoop Response was received which indicates the data was wr=
+itten back to its home socket, and the cacheline was forwarded to the reque=
+stor socket.  This snoop response is only used in >=3D 4 socket systems.  I=
+t is used when a snoop HITM's in a remote caching agent and it directly for=
+wards data to a requestor, and simultaneously returns data to its home sock=
+et to be written back to memory.",
+>          "UMask": "0x20",
+>          "Unit": "CHA"
+>      },
+> @@ -524,7 +524,7 @@
+>          "EventCode": "0x5C",
+>          "EventName": "UNC_CHA_SNOOP_RESP.RSP_WBWB",
+>          "PerPkg": "1",
+> -        "PublicDescription": "Counts when a transaction with the opcode =
+type Rsp*WB Snoop Response was received which indicates which indicates the=
+ data was written back to it's home.  This is returned when a non-RFO reque=
+st hits a cacheline in the Modified state. The Cache can either downgrade t=
+he cacheline to a S (Shared) or I (Invalid) state depending on how the syst=
+em has been configured.  This reponse will also be sent when a cache reques=
+ts E (Exclusive) ownership of a cache line without receiving data, because =
+the cache must acquire ownership.",
+> +        "PublicDescription": "Counts when a transaction with the opcode =
+type Rsp*WB Snoop Response was received which indicates which indicates the=
+ data was written back to its home.  This is returned when a non-RFO reques=
+t hits a cacheline in the Modified state. The Cache can either downgrade th=
+e cacheline to a S (Shared) or I (Invalid) state depending on how the syste=
+m has been configured.  This response will also be sent when a cache reques=
+ts E (Exclusive) ownership of a cache line without receiving data, because =
+the cache must acquire ownership.",
+>          "UMask": "0x10",
+>          "Unit": "CHA"
+>      },
+> --- linux-next-20211224.orig/tools/perf/pmu-events/arch/x86/haswell/uncor=
+e.json
+> +++ linux-next-20211224/tools/perf/pmu-events/arch/x86/haswell/uncore.jso=
+n
+> @@ -304,8 +304,8 @@
+>      "EventCode": "0x80",
+>      "UMask": "0x01",
+>      "EventName": "UNC_ARB_TRK_OCCUPANCY.ALL",
+> -    "BriefDescription": "Each cycle count number of all Core outgoing va=
+lid entries. Such entry is defined as valid from it's allocation till first=
+ of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-cohere=
+nt traffic.",
+> -    "PublicDescription": "Each cycle count number of all Core outgoing v=
+alid entries. Such entry is defined as valid from it's allocation till firs=
+t of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-coher=
+ent traffic.",
+> +    "BriefDescription": "Each cycle count number of all Core outgoing va=
+lid entries. Such entry is defined as valid from its allocation till first =
+of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-coheren=
+t traffic.",
+> +    "PublicDescription": "Each cycle count number of all Core outgoing v=
+alid entries. Such entry is defined as valid from its allocation till first=
+ of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-cohere=
+nt traffic.",
+>      "Counter": "0",
+>      "CounterMask": "0",
+>      "Invert": "0",
+> @@ -371,4 +371,4 @@
+>      "Invert": "0",
+>      "EdgeDetect": "0"
+>    }
+> -]
+> \ No newline at end of file
+> +]
+> --- linux-next-20211224.orig/tools/perf/pmu-events/arch/x86/skylakex/unco=
+re-other.json
+> +++ linux-next-20211224/tools/perf/pmu-events/arch/x86/skylakex/uncore-ot=
+her.json
+> @@ -514,7 +514,7 @@
+>          "EventCode": "0x5C",
+>          "EventName": "UNC_CHA_SNOOP_RESP.RSP_FWD_WB",
+>          "PerPkg": "1",
+> -        "PublicDescription": "Counts when a transaction with the opcode =
+type Rsp*Fwd*WB Snoop Response was received which indicates the data was wr=
+itten back to it's home socket, and the cacheline was forwarded to the requ=
+estor socket.  This snoop response is only used in >=3D 4 socket systems.  =
+It is used when a snoop HITM's in a remote caching agent and it directly fo=
+rwards data to a requestor, and simultaneously returns data to it's home so=
+cket to be written back to memory.",
+> +        "PublicDescription": "Counts when a transaction with the opcode =
+type Rsp*Fwd*WB Snoop Response was received which indicates the data was wr=
+itten back to its home socket, and the cacheline was forwarded to the reque=
+stor socket.  This snoop response is only used in >=3D 4 socket systems.  I=
+t is used when a snoop HITM's in a remote caching agent and it directly for=
+wards data to a requestor, and simultaneously returns data to its home sock=
+et to be written back to memory.",
+>          "UMask": "0x20",
+>          "Unit": "CHA"
+>      },
+> @@ -524,7 +524,7 @@
+>          "EventCode": "0x5C",
+>          "EventName": "UNC_CHA_SNOOP_RESP.RSP_WBWB",
+>          "PerPkg": "1",
+> -        "PublicDescription": "Counts when a transaction with the opcode =
+type Rsp*WB Snoop Response was received which indicates which indicates the=
+ data was written back to it's home.  This is returned when a non-RFO reque=
+st hits a cacheline in the Modified state. The Cache can either downgrade t=
+he cacheline to a S (Shared) or I (Invalid) state depending on how the syst=
+em has been configured.  This reponse will also be sent when a cache reques=
+ts E (Exclusive) ownership of a cache line without receiving data, because =
+the cache must acquire ownership.",
+> +        "PublicDescription": "Counts when a transaction with the opcode =
+type Rsp*WB Snoop Response was received which indicates which indicates the=
+ data was written back to its home.  This is returned when a non-RFO reques=
+t hits a cacheline in the Modified state. The Cache can either downgrade th=
+e cacheline to a S (Shared) or I (Invalid) state depending on how the syste=
+m has been configured.  This response will also be sent when a cache reques=
+ts E (Exclusive) ownership of a cache line without receiving data, because =
+the cache must acquire ownership.",
+>          "UMask": "0x10",
+>          "Unit": "CHA"
+>      },

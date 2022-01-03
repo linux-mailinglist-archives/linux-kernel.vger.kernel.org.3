@@ -2,87 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 627C44831B9
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:17:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E5A4831BA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233263AbiACORC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:17:02 -0500
-Received: from mga07.intel.com ([134.134.136.100]:55071 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229831AbiACORB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:17:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641219421; x=1672755421;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GjYXt/ODx7J7/7NS8za6Xq0tVsMrMeyI68UwaJUOMto=;
-  b=TrUKo4Oze3s86a6DXvZcKP072TsfQ/wUyIbi/ky7tcUbkUYU0qPvlgY7
-   PrODlRH3dtpgKwxCrvbL74imD3SsY7tFNPQitW8q8jIxrOkStVOQJG+5T
-   NWfzMCIfddRfcoAy5ubZEHefoSU/zSfQTx8nGekXNTpQ3X0WHn9fr8tPJ
-   MIyvBzu02+RR7xE8WSeQQ75ueF1kt7lpuON7aC6Usn8wnQa+k++Zxv7F3
-   OwaWA7ksJgp1lNqw1011xi9b2ec3BEIXoy6gVMnA4W7wws9vIWRDz3A+u
-   ZwuSHLHoSsipmyZlD2lL3rT4IE33u0gM+POpUzHi13O39hNL8bNAUgDqN
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10215"; a="305422026"
-X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="305422026"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 06:17:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="617226065"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 03 Jan 2022 06:16:54 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 27378283; Mon,  3 Jan 2022 16:17:05 +0200 (EET)
-Date:   Mon, 3 Jan 2022 17:17:05 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Dave Hansen <dave.hansen@intel.com>, tglx@linutronix.de,
-        mingo@redhat.com, luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 19/26] x86/tdx: Make pages shared in ioremap()
-Message-ID: <20220103141705.6hqflhwykqmtfim6@black.fi.intel.com>
-References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
- <20211214150304.62613-20-kirill.shutemov@linux.intel.com>
- <87c288d6-9bf8-5a94-a628-1e0aaa7de690@amd.com>
- <20211223171530.v73posbqizb5l3md@black.fi.intel.com>
- <f61b591b-a06c-bc29-4b9b-a5d46111fe4e@intel.com>
- <YcTTt4LXKfDO+9u3@zn.tnic>
- <20211223205604.g44kez5d7iedatfo@box.shutemov.name>
- <YcTlhp1PUfrMOelI@zn.tnic>
- <20211224110300.7zj3nc5nbbv7jobp@black.fi.intel.com>
- <33914dc1-37e8-f0bb-6468-71c3b5f4169d@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <33914dc1-37e8-f0bb-6468-71c3b5f4169d@amd.com>
+        id S230093AbiACOT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:19:59 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:42518 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229928AbiACOT6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 09:19:58 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 3FF631F381;
+        Mon,  3 Jan 2022 14:19:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641219597; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jfa4SuGSj9EC7/7mQQY7Eyg/NfHteUPqQazpLPF+JBU=;
+        b=KUzqc20gJ3kRAltmG1dIT99trVY05/8GBi8B2g7Ln/5E1iltmPc9iUdMNbx/8TsbLz3a52
+        4Zk8MdUxwk9WDSqpPIFqEUtzOAZ+qqI9zO5Tgc0uVKD4tX7OjUIglyKomR6rJZSGWakKUR
+        JWigHNs/aOchf93rFwq3LMWwU2/VkVE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641219597;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jfa4SuGSj9EC7/7mQQY7Eyg/NfHteUPqQazpLPF+JBU=;
+        b=J2IHNHT8x3kuRPiIMF01DH5DU3QTHUEBHUfzILLjwO/hByuGbO31GI8daiscru9pXKcGRg
+        zH/h9CaGETQLQACg==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id EB28CA3B81;
+        Mon,  3 Jan 2022 14:19:56 +0000 (UTC)
+Date:   Mon, 03 Jan 2022 15:19:56 +0100
+Message-ID: <s5ha6gcnboz.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Christian Lachner <gladiac@gmail.com>
+Cc:     perex@perex.cz, tiwai@suse.com, kailang@realtek.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] ALSA: hda/realtek - Fix silent output on Gigabyte X570  Aorus Master after reboot from Windows
+In-Reply-To: <20220103140517.30273-2-gladiac@gmail.com>
+References: <20220103140517.30273-1-gladiac@gmail.com>
+        <20220103140517.30273-2-gladiac@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 09:07:10AM -0600, Tom Lendacky wrote:
-> Why can't this follow the cc_platform_has() logic and maybe even live in
-> the cc_platform.c file (though there might be issues with that, I haven't
-> really looked)?
+On Mon, 03 Jan 2022 15:05:17 +0100,
+Christian Lachner wrote:
+> 
+> This patch addresses an issue where after rebooting from Windows into Linux
+> there would be no audio output.
+> 
+> It turns out that the Realtek Audio driver on Windows changes some coeffs
+> which are not being reset/reinitialized when rebooting the machine. As a
+> result, there is no audio output until these coeffs are being reset to
+> their initial state. This patch takes care of that by setting known-good
+> (initial) values to the coeffs.
+> 
+> We initially relied upon alc1220_fixup_clevo_p950() to fix some pins in the
+> connection list. However, it also sets coef 0x7 which does not need to be
+> touched. Furthermore, to prevent mixing device-specific quirks I introduced
+> a new alc1220_fixup_gb_x570() which is heavily based on
+> alc1220_fixup_clevo_p950() but does not set coeff 0x7 and fixes the coeffs
+> that are actually needed instead.
+> 
+> This new alc1220_fixup_gb_x570() is believed to also work for other boards,
+> like the Gigabyte X570 Aorus Extreme and the newer Gigabyte Aorus X570S
+> Master. However, as there is no way for me to test these I initially only
+> enable this new behaviour for the mainboard I have which is the Gigabyte
+> X570(non-S) Aorus Master.
+> 
+> I tested this patch on the 5.15 branch as well as on master and it is
+> working well for me.
+> 
+> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=205275
+> Signed-off-by: Christian Lachner <gladiac@gmail.com>
 
-There's issue with declaring cc_pgprot_encrypted()/cc_pgprot_decrypted()
-in cc_platform.h. It requires pgprot_t to be defined and attempt to
-include relevant header leads to circular dependencies.
+Thanks, applied now (with Cc-to-stable and Fixes tag).
 
-Moreover, pgprot_t defined in different headers, depending on an
-architecture.
 
-I'm not sure how to unwind this dependency hell. Any clues?
-
--- 
- Kirill A. Shutemov
+Takashi

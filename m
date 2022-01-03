@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E9EF4836EB
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 19:35:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E794836E7
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 19:35:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235690AbiACSfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 13:35:22 -0500
+        id S235697AbiACSfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 13:35:02 -0500
 Received: from drummond.us ([74.95.14.229]:40377 "EHLO
         talisker.home.drummond.us" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S235705AbiACSfS (ORCPT
+        by vger.kernel.org with ESMTP id S235740AbiACSfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 13:35:18 -0500
-X-Greylist: delayed 875 seconds by postgrey-1.27 at vger.kernel.org; Mon, 03 Jan 2022 13:35:12 EST
+        Mon, 3 Jan 2022 13:35:00 -0500
+X-Greylist: delayed 836 seconds by postgrey-1.27 at vger.kernel.org; Mon, 03 Jan 2022 13:34:55 EST
 Received: from talisker.home.drummond.us (localhost [127.0.0.1])
-        by talisker.home.drummond.us (8.15.2/8.15.2/Debian-20) with ESMTP id 203IKWnj983506;
-        Mon, 3 Jan 2022 10:20:32 -0800
+        by talisker.home.drummond.us (8.15.2/8.15.2/Debian-20) with ESMTP id 203IKXWJ983520;
+        Mon, 3 Jan 2022 10:20:33 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=home.drummond.us;
         s=default; t=1641234033;
-        bh=f6bKazr4Vyn0DnvfqZzgyhTykMFxWyhjSEgJ0jCBDjQ=;
+        bh=cfkDVUC04N1/5TKLzChdaVzjxjk6gzgwbrbQoSLvShw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z4lMRRX8BRd9RmxIQ54Y0iCgerITrvWRZ0kWwIW5uwIYNkFVwOzawIdpalrZ6VEAf
-         5tZUMrYbcFa+8X3iJQ3BgeVx9IW7EZnuaIa89s0YfvVoy2zH1ePVhdPKYi+RT2BVsL
-         ljGqmYDki79peMJknxxH52oHdir1BVJJdLUSpJTsW1uXaKa2yDi2kHNl8olhisFSIT
-         AYPW9bmNWNSbUgtQ4aAUAchkKtVp5DIkO/sNoVrGNs87A37VDvR4A96YjYvaex9YAO
-         ftdTrGE2WqM4nrQPzKLN3yKXvPXugWew4M3CceUKmj7ImLWfUSE9tZXrsM7I1czP0l
-         u6KO95Ig//NkA==
+        b=3bO7fBxepM4+/51f0L5qyw/bOgsjQRd0fcDGjKx7c40y65UfrwqkoWMcaCES5BrN+
+         nKUb6uagsnHUTHJSULqwvRKsCgqW8BQWZINOK9KZcOlVzVOOcxk9pax4Xeml/9DZvT
+         0x29XgMTtXonYouglW8+Jearv13ejCZnKViYIIzsICH7kNq1p/nA+R+VO/fleXM9jM
+         NLDHVByAShijXnZLRxOBLlC4QnB/7SJBCrgGxHWHjkv2liiZMYy0VVqqqEINsP+j34
+         gyu9RYX96ayZW6dsA+FKzRMPlkU/qOGHtc9saAcEGyQonMqzGiG/z4oHRqhE1bbP0H
+         CEKRA26oxA4nw==
 Received: (from walt@localhost)
-        by talisker.home.drummond.us (8.15.2/8.15.2/Submit) id 203IKWSg983505;
-        Mon, 3 Jan 2022 10:20:32 -0800
+        by talisker.home.drummond.us (8.15.2/8.15.2/Submit) id 203IKXpq983519;
+        Mon, 3 Jan 2022 10:20:33 -0800
 From:   Walt Drummond <walt@drummond.us>
 To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     linux-kernel@vger.kernel.org, Walt Drummond <walt@drummond.us>
-Subject: [RFC PATCH 2/8] signals: Put the full signal mask on the signal stack for x86_64, X32 and ia32 compatibility mode
-Date:   Mon,  3 Jan 2022 10:19:50 -0800
-Message-Id: <20220103181956.983342-3-walt@drummond.us>
+        John Johansen <john.johansen@canonical.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     linux-kernel@vger.kernel.org, Walt Drummond <walt@drummond.us>,
+        linux-security-module@vger.kernel.org
+Subject: [RFC PATCH 3/8] signals: Use a helper function to test if a signal is a real-time signal.
+Date:   Mon,  3 Jan 2022 10:19:51 -0800
+Message-Id: <20220103181956.983342-4-walt@drummond.us>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220103181956.983342-1-walt@drummond.us>
 References: <20220103181956.983342-1-walt@drummond.us>
@@ -47,125 +48,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Put the complete sigset_t in the real-tme signal stack frame for
-x86_64, x32 and ia32 compatibility mode on x86.
+Rather than testing against SIGRTMIN/SIGRTMAX directly, use this
+helper to determine if a signal is a real-time signal.
 
 Signed-off-by: Walt Drummond <walt@drummond.us>
 ---
- arch/x86/ia32/ia32_signal.c        |  5 +++--
- arch/x86/include/asm/sighandling.h | 34 ++++++++++++++++++++++++++++++
- arch/x86/kernel/signal.c           | 11 +++-------
- 3 files changed, 40 insertions(+), 10 deletions(-)
+ include/linux/signal.h     | 8 ++++++++
+ kernel/signal.c            | 6 +++---
+ kernel/time/posix-timers.c | 3 ++-
+ security/apparmor/ipc.c    | 4 ++--
+ 4 files changed, 15 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/ia32/ia32_signal.c b/arch/x86/ia32/ia32_signal.c
-index 5e3d9b7fd5fb..03a0ecd8c7f3 100644
---- a/arch/x86/ia32/ia32_signal.c
-+++ b/arch/x86/ia32/ia32_signal.c
-@@ -130,7 +130,8 @@ COMPAT_SYSCALL_DEFINE0(rt_sigreturn)
+diff --git a/include/linux/signal.h b/include/linux/signal.h
+index c66d4f520228..a730f3d4615e 100644
+--- a/include/linux/signal.h
++++ b/include/linux/signal.h
+@@ -53,6 +53,14 @@ enum siginfo_layout {
  
- 	if (!access_ok(frame, sizeof(*frame)))
- 		goto badframe;
--	if (__get_user(set.sig[0], (__u64 __user *)&frame->uc.uc_sigmask))
-+	if (copy_from_user(&set, &frame->uc.uc_sigmask,
-+			   sizeof(frame->uc.uc_sigmask)))
- 		goto badframe;
+ enum siginfo_layout siginfo_layout(unsigned sig, int si_code);
  
- 	set_current_blocked(&set);
-@@ -347,7 +348,7 @@ int ia32_setup_rt_frame(int sig, struct ksignal *ksig,
- 	 */
- 	unsafe_put_user(*((u64 *)&code), (u64 __user *)frame->retcode, Efault);
- 	unsafe_put_sigcontext32(&frame->uc.uc_mcontext, fp, regs, set, Efault);
--	unsafe_put_user(*(__u64 *)set, (__u64 __user *)&frame->uc.uc_sigmask, Efault);
-+	unsafe_put_compat_sigmask(set, frame, Efault);
- 	user_access_end();
- 
- 	if (__copy_siginfo_to_user32(&frame->info, &ksig->info))
-diff --git a/arch/x86/include/asm/sighandling.h b/arch/x86/include/asm/sighandling.h
-index 65e667279e0f..e247bea06a17 100644
---- a/arch/x86/include/asm/sighandling.h
-+++ b/arch/x86/include/asm/sighandling.h
-@@ -15,4 +15,38 @@
- 
- void signal_fault(struct pt_regs *regs, void __user *frame, char *where);
- 
-+static inline int
-+__unsafe_put_sigmask(char *set, char __user *fp, size_t size)
++/* Test if 'sig' is a realtime signal.  Use this instead of testing
++ * SIGRTMIN/SIGRTMAX directly.
++ */
++static inline int realtime_signal(unsigned long sig)
 +{
-+	char *src;
-+	char __user *dst;
-+	size_t len;
-+
-+	len = size;
-+	src = set;
-+	dst = fp;
-+	unsafe_copy_loop(dst, src, len, unsigned long, Efault);
-+
-+	return 0;
-+Efault:
-+	return -EFAULT;
++	return (sig >= SIGRTMIN) && (sig <= SIGRTMAX);
 +}
 +
-+#define unsafe_put_sigmask(set, frame, label)				\
-+do {									\
-+	if (__unsafe_put_sigmask((char *) set,				\
-+				 (char __user *) &(frame)->uc.uc_sigmask, \
-+				 sizeof(sigset_t)))			\
-+		goto label;						\
-+} while (0)
-+
-+#define unsafe_put_compat_sigmask(set, frame, label)			\
-+do {									\
-+	if (__unsafe_put_sigmask((char *) set,				\
-+				 (char __user *) &(frame)->uc.uc_sigmask, \
-+				 sizeof(compat_sigset_t)))		\
-+		goto label;						\
-+} while (0)
-+
-+
- #endif /* _ASM_X86_SIGHANDLING_H */
-diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
-index f4d21e470083..bb5f3f39c412 100644
---- a/arch/x86/kernel/signal.c
-+++ b/arch/x86/kernel/signal.c
-@@ -203,11 +203,6 @@ do {									\
- 		goto label;						\
- } while(0);
- 
--#define unsafe_put_sigmask(set, frame, label) \
--	unsafe_put_user(*(__u64 *)(set), \
--			(__u64 __user *)&(frame)->uc.uc_sigmask, \
--			label)
--
  /*
-  * Set up a signal frame.
+  * Define some primitives to manipulate sigset_t.
   */
-@@ -587,7 +582,7 @@ static int x32_setup_rt_frame(struct ksignal *ksig,
- 	restorer = ksig->ka.sa.sa_restorer;
- 	unsafe_put_user(restorer, (unsigned long __user *)&frame->pretcode, Efault);
- 	unsafe_put_sigcontext(&frame->uc.uc_mcontext, fp, regs, set, Efault);
--	unsafe_put_sigmask(set, frame, Efault);
-+	unsafe_put_compat_sigmask(set, frame, Efault);
- 	user_access_end();
+diff --git a/kernel/signal.c b/kernel/signal.c
+index 94b1828ae973..a2f0e38ba934 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -1065,7 +1065,7 @@ static void complete_signal(int sig, struct task_struct *p, enum pid_type type)
  
- 	if (ksig->ka.sa.sa_flags & SA_SIGINFO) {
-@@ -664,7 +659,7 @@ SYSCALL_DEFINE0(rt_sigreturn)
- 	frame = (struct rt_sigframe __user *)(regs->sp - sizeof(long));
- 	if (!access_ok(frame, sizeof(*frame)))
- 		goto badframe;
--	if (__get_user(*(__u64 *)&set, (__u64 __user *)&frame->uc.uc_sigmask))
-+	if (copy_from_user(&set, &frame->uc.uc_sigmask, sizeof(sigset_t)))
- 		goto badframe;
- 	if (__get_user(uc_flags, &frame->uc.uc_flags))
- 		goto badframe;
-@@ -922,7 +917,7 @@ COMPAT_SYSCALL_DEFINE0(x32_rt_sigreturn)
+ static inline bool legacy_queue(struct sigpending *signals, int sig)
+ {
+-	return (sig < SIGRTMIN) && sigismember(&signals->signal, sig);
++	return !realtime_signal(sig) && sigismember(&signals->signal, sig);
+ }
  
- 	if (!access_ok(frame, sizeof(*frame)))
- 		goto badframe;
--	if (__get_user(set.sig[0], (__u64 __user *)&frame->uc.uc_sigmask))
-+	if (copy_from_user(&set, &frame->uc.uc_sigmask, sizeof(compat_sigset_t)))
- 		goto badframe;
- 	if (__get_user(uc_flags, &frame->uc.uc_flags))
- 		goto badframe;
+ static int __send_signal(int sig, struct kernel_siginfo *info, struct task_struct *t,
+@@ -1108,7 +1108,7 @@ static int __send_signal(int sig, struct kernel_siginfo *info, struct task_struc
+ 	 * make sure at least one signal gets delivered and don't
+ 	 * pass on the info struct.
+ 	 */
+-	if (sig < SIGRTMIN)
++	if (!realtime_signal(sig))
+ 		override_rlimit = (is_si_special(info) || info->si_code >= 0);
+ 	else
+ 		override_rlimit = 0;
+@@ -1144,7 +1144,7 @@ static int __send_signal(int sig, struct kernel_siginfo *info, struct task_struc
+ 			break;
+ 		}
+ 	} else if (!is_si_special(info) &&
+-		   sig >= SIGRTMIN && info->si_code != SI_USER) {
++		   realtime_signal(sig) && info->si_code != SI_USER) {
+ 		/*
+ 		 * Queue overflow, abort.  We may abort if the
+ 		 * signal was rt and sent by user using something
+diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
+index 1cd10b102c51..6afb98eadd1d 100644
+--- a/kernel/time/posix-timers.c
++++ b/kernel/time/posix-timers.c
+@@ -442,7 +442,8 @@ static struct pid *good_sigevent(sigevent_t * event)
+ 		fallthrough;
+ 	case SIGEV_SIGNAL:
+ 	case SIGEV_THREAD:
+-		if (event->sigev_signo <= 0 || event->sigev_signo > SIGRTMAX)
++		/* Signal 0 is a valid signal, just not here. */
++		if (!valid_signal(event->sigev_signo) || event->sigev_signo == 0)
+ 			return NULL;
+ 		fallthrough;
+ 	case SIGEV_NONE:
+diff --git a/security/apparmor/ipc.c b/security/apparmor/ipc.c
+index fe36d112aad9..8149b989b665 100644
+--- a/security/apparmor/ipc.c
++++ b/security/apparmor/ipc.c
+@@ -130,9 +130,9 @@ int aa_may_ptrace(struct aa_label *tracer, struct aa_label *tracee,
+ 
+ static inline int map_signal_num(int sig)
+ {
+-	if (sig > SIGRTMAX)
++	if (!valid_signal(sig))
+ 		return SIGUNKNOWN;
+-	else if (sig >= SIGRTMIN)
++	else if (realtime_signal(sig))
+ 		return sig - SIGRTMIN + SIGRT_BASE;
+ 	else if (sig < MAXMAPPED_SIG)
+ 		return sig_map[sig];
 -- 
 2.30.2
 

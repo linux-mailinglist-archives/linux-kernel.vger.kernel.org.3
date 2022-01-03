@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E4D483779
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 20:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E81748377C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 20:17:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236078AbiACTQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 14:16:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49386 "EHLO
+        id S236082AbiACTRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 14:17:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiACTQo (ORCPT
+        with ESMTP id S229996AbiACTRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 14:16:44 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882F7C061761
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 11:16:43 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id bm14so139530310edb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 11:16:43 -0800 (PST)
+        Mon, 3 Jan 2022 14:17:39 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D75BC061761
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 11:17:39 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id bm14so139537897edb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 11:17:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=7KymNEPxa+Z+FSFBz/5rYyS1VzBPF/+Pclc+ZH7hbiQ=;
-        b=HB3+lf29knL0mnR/jINZfGcminLku65Da/NiPhXIkSS+AuH2KKAk1K+c6nIsTQUSwM
-         YdHUESfWb8rj+99sk2R9AxRXhdwMx8bfN4UOdw3AvHWUurSZPGsOFXWGvqGCsH29gA2u
-         EtwNmvQ5ok1LuybRlzVly0fbbpus2beCQET6LpI3duVsc6K3CbhT2k9m6tNb2dX2P+AG
-         fZMe5TcVLDxaU+ZJw0NLYu960uhSbA6MVjt7/1+yDb8B+20yhJcsOelyTZTjV/F0c5hl
-         J2KHfC4K69IC11o954daY6TTfHG9ILbfB6Vr0mIF9tfhtuADAf1qO4uooYlpRm+B6UxH
-         G0fg==
+        bh=ZzBnG5Tq6fNKffbRz6OE2Xlj0QLh5ytz67gRg7INpU0=;
+        b=UTaqcYUhCOb3rqmd7JkCb5ZvPokVzDW4Sq7tzf7XBtAy0UJ0ZU3RiQs0TDhac1XDV4
+         OHdSi4M5D18sExUevZq02uhK9FV/bWPO2XONEzQ2TcZzB3juAoIKq1SPVnijwkw3QtJB
+         9x008MMVcg5Ebbkr/r0pgvEUJRGa6nTxSB0JEt4K8YxgS3oz4SW3TPdhd6A4gm9vo1Jw
+         TyUQFAlt+8XpY/+8UD072AJGIazEvSq/nGEy/b9iNv6WNLWnGPLYIaP72tCjyiq/DPcI
+         E4z1+qHQJlPe43dpY/za02CIs1f7fP87vThnC2LbKYFuMzpfr716mwUd5MD3C0pwA9z5
+         ialg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7KymNEPxa+Z+FSFBz/5rYyS1VzBPF/+Pclc+ZH7hbiQ=;
-        b=grJF8s6cUEguaFZHrHKMECgjcvDmZveqyxBh4t3xlpCRz9pzA3mw8gs8X+HvBUhdn1
-         pBqMAA7ebguUrViKle/A2HjiNCmLXGn8SYsESlixX0JBbPIY47qvM1HqV7Vm5poUxx6T
-         Uy3QodFOosP6aFLk5xZnrRnKfT9ETjcLu97wI20k6CS5gBfSrMKyUOpjCxgBjA7IYDFX
-         gntApEZxg/z7i4vvLMTpfmFRTX6UTyjCgHt/HzlvAuGpx5YYNZ822TTk8EWribjr++ss
-         AyA4YDmG4q8liloPJlw9TO7tLuw8zlUddLOJmMh/Mqyg+57wRRkYSxiJc1gzlFhRmprP
-         3FAQ==
-X-Gm-Message-State: AOAM531AdMI7B/ldtqi+mE7nBddA4X+F3oughDk7Hc2jhWDLFezBfp2i
-        VIAvlFUCuLdH078EAJCx9PA=
-X-Google-Smtp-Source: ABdhPJwPhDTlkvvg/DQhO23DWmZU/XOzRGvAtqLTX4vfUZIugoXL3eeQ1fUJu7vktQq74gV+dLvrTQ==
-X-Received: by 2002:a50:d691:: with SMTP id r17mr13265102edi.317.1641237402171;
-        Mon, 03 Jan 2022 11:16:42 -0800 (PST)
+        bh=ZzBnG5Tq6fNKffbRz6OE2Xlj0QLh5ytz67gRg7INpU0=;
+        b=BRg0tlgU1bbdAXXw8eGllfPQxdPuRK5PdhZeoSVBCrS5w4NkIUT/smAh236tf4j9SZ
+         9OYunXyzeXc2u03g9xQs+K+OMx4TirnyGQp7sx7uK63wBYUVLjESPtkJ9Pqp7Lwvt0T2
+         6UZ9VRDi4Y2+GSAwhBysMxzE7oPJD2Quo/pBSYk7qbMjEvr293ljnv2NdslIyzcj+KIt
+         BGqeFUxsg+3rsjsAXZ+ECn1jLmOgXZIFr0fEaSmx2nYW8rdT2lpqFGKeLONweIJ9OX1Z
+         xc0Vishz/xHt4YvtbHKpSozBW1rRk8CEFWg9MwfyS5y6FsnZPIdt6E0antdb3xbifbcW
+         V0Yw==
+X-Gm-Message-State: AOAM531M9ZOxG7XTceQKUJJth92maPJLHG/ljeXoJ6M0G0JP4lhiA+Xd
+        kV3F7/kCn+nQoXVnzdKuy+A=
+X-Google-Smtp-Source: ABdhPJzegIVxVKh9kTFs0NiBdhnD5cWGuyxD41QL+Mq9PNfF6Bv4PFzqxXB+VM+prYBe0aB7uWmwMA==
+X-Received: by 2002:a05:6402:408:: with SMTP id q8mr23482089edv.254.1641237458038;
+        Mon, 03 Jan 2022 11:17:38 -0800 (PST)
 Received: from t470p.fritz.box (host-87-18-201-21.retail.telecomitalia.it. [87.18.201.21])
-        by smtp.gmail.com with ESMTPSA id gt20sm7009614ejc.11.2022.01.03.11.16.41
+        by smtp.gmail.com with ESMTPSA id gt20sm7009614ejc.11.2022.01.03.11.17.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jan 2022 11:16:41 -0800 (PST)
+        Mon, 03 Jan 2022 11:17:37 -0800 (PST)
 From:   Alberto Merciai <alb3rt0.m3rciai@gmail.com>
 Cc:     alb3rt0.m3rciai@gmail.com, linuxfancy@googlegroups.com,
         Larry Finger <Larry.Finger@lwfinger.net>,
@@ -56,15 +56,16 @@ Cc:     alb3rt0.m3rciai@gmail.com, linuxfancy@googlegroups.com,
         Michael Straube <straube.linux@gmail.com>,
         Martin Kaiser <martin@kaiser.cx>,
         "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Saurav Girepunje <saurav.girepunje@gmail.com>,
         Ivan Safonov <insafonov@gmail.com>,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Zameer Manji <zmanji@gmail.com>, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 12/56] staging: r8188eu: rename camelcase ClearMFrag to clear_m_frag
-Date:   Mon,  3 Jan 2022 20:01:47 +0100
-Message-Id: <20220103190326.363960-13-alb3rt0.m3rciai@gmail.com>
+Subject: [PATCH 13/56] staging: r8188eu: add parenthesis to macro clear_m_frag
+Date:   Mon,  3 Jan 2022 20:01:48 +0100
+Message-Id: <20220103190326.363960-14-alb3rt0.m3rciai@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220103190326.363960-1-alb3rt0.m3rciai@gmail.com>
 References: <20220103190326.363960-1-alb3rt0.m3rciai@gmail.com>
@@ -75,40 +76,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename camel case macro ClearMFrag into get_m_frag.
+Enclose in parenthesis complex macro clear_m_frag
 
 Signed-off-by: Alberto Merciai <alb3rt0.m3rciai@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_xmit.c | 2 +-
- drivers/staging/r8188eu/include/wifi.h  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/staging/r8188eu/include/wifi.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-index aa00e1711514..0deba46d3a23 100644
---- a/drivers/staging/r8188eu/core/rtw_xmit.c
-+++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-@@ -991,7 +991,7 @@ s32 rtw_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, struct
- 			pattrib->last_txcmdsz = pattrib->hdrlen + pattrib->iv_len + ((pattrib->nr_frags == 1) ? llc_sz : 0) +
- 						((pattrib->bswenc) ? pattrib->icv_len : 0) + mem_sz;
- 
--			ClearMFrag(mem_start);
-+			clear_m_frag(mem_start);
- 
- 			break;
- 		}
 diff --git a/drivers/staging/r8188eu/include/wifi.h b/drivers/staging/r8188eu/include/wifi.h
-index a07729f79867..e2ec9e630fbf 100644
+index e2ec9e630fbf..30185d0dabec 100644
 --- a/drivers/staging/r8188eu/include/wifi.h
 +++ b/drivers/staging/r8188eu/include/wifi.h
-@@ -180,7 +180,7 @@ enum WIFI_REG_DOMAIN {
- 
+@@ -181,7 +181,7 @@ enum WIFI_REG_DOMAIN {
  #define get_m_frag(pbuf)	(((*(__le16 *)(pbuf)) & cpu_to_le16(_MORE_FRAG_)) != 0)
  
--#define ClearMFrag(pbuf)	\
-+#define clear_m_frag(pbuf)	\
- 	*(__le16 *)(pbuf) &= (~cpu_to_le16(_MORE_FRAG_))
+ #define clear_m_frag(pbuf)	\
+-	*(__le16 *)(pbuf) &= (~cpu_to_le16(_MORE_FRAG_))
++	(*(__le16 *)(pbuf) &= (~cpu_to_le16(_MORE_FRAG_)))
  
  #define SetRetry(pbuf)	\
+ 	*(__le16 *)(pbuf) |= cpu_to_le16(_RETRY_)
 -- 
 2.25.1
 

@@ -2,140 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 756CE4834F5
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 17:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A344834D1
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 17:35:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231569AbiACQlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 11:41:40 -0500
-Received: from mout-y-111.mailbox.org ([91.198.250.236]:47502 "EHLO
-        mout-y-111.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbiACQlk (ORCPT
+        id S234557AbiACQfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 11:35:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40524 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234273AbiACQfE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 11:41:40 -0500
-X-Greylist: delayed 418 seconds by postgrey-1.27 at vger.kernel.org; Mon, 03 Jan 2022 11:41:39 EST
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:105:465:1:4:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-y-111.mailbox.org (Postfix) with ESMTPS id 4JSLvD4QBgzQlLT;
-        Mon,  3 Jan 2022 17:35:04 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-        t=1641227704;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jGg109/SdVHAGsrAmpzH9OY+vbgtukVPEWTK0WDru0U=;
-        b=JPiCmn4viCFV5AgGgiXuMVhdjihzp9zD9mToOIWkQ7kOssdUJ1uVQatFtHPjjemejZNm2m
-        jXJyqbGr54wvezf4JWOUBqZ3BwI9+Fly+lcQNTnFCBCZB5Sas++7/kIneb/bDm0sprKHs/
-        CZaZwDbd8LYSvaZIFsb0rMpgmCyLJ/wTkWCJ4Bs3yyvGCRHVsuiCzFPtFxUO2/AN6+5b5F
-        ydQDl4vJhHeTirNyUBWOah+uWAb2RhTBcVlryyt4HOe9U7Xe7xBOygEredkuIA6mc23Gtb
-        obvY8yKyyxy3Lt/jq0JDUe2NqzV/XsNFMiTlCNP6Fat+DWikEbbtjfdhb+deAA==
-From:   Marcello Sylvester Bauer <sylv@sylv.io>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Marcello Sylvester Bauer <sylv@sylv.io>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 4/4] hwmon: (max6639) Add devicetree support
-Date:   Mon,  3 Jan 2022 17:33:54 +0100
-Message-Id: <18f099abda66841042d71739c6ffd41c84434106.1641224715.git.sylv@sylv.io>
-In-Reply-To: <cover.1641224715.git.sylv@sylv.io>
-References: <cover.1641224715.git.sylv@sylv.io>
+        Mon, 3 Jan 2022 11:35:04 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25DF3C061784
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 08:35:04 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id q16so70942214wrg.7
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 08:35:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=T3i9zgwcayeVl7cWKMRosEJ4OOhKmrBVCf1DuyQd0ZQ=;
+        b=RCUaoyJ8tstUuLAgGQdCMqjsBhS4AyDd1/vb1OGi7sZXmNZg0AVF09KzJY55SMrOC8
+         BmAsBLhu+de4Kk0F4X/aSuyK16euq/BSzIHaZC69KVLlv7to4DJc5XFMyp0SBgNkmM8S
+         tOAGUGP1WeSR+HiF4cZSYlzjCtE5W1UQBHzIxKU+KgWco/ik9v25waLqEiJ+SixDe0Zh
+         HUwAqUEhJltFYvSk35b7WFJFpWMAO3fTBFg9n7emkb/ZLmYDBm5AC/MqAB6J5vGtmYUL
+         Pyus9RPN1hHm3SVRlRpqlLUovM+UdhLUPq7NYvk9gN9xp/Gsakn5CDDNu9prgw1hqE9c
+         OObA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=T3i9zgwcayeVl7cWKMRosEJ4OOhKmrBVCf1DuyQd0ZQ=;
+        b=ELiUr4RHnicpV7ph+v21JXA/d5otIj7JmyNGPuhtZgsHe5Vvs9eIh90TBQNqzMsmkS
+         C9rmvPIZU4Mb1WRk+jA9I61n0NhOBDTZ/H6PZJhIhMvm5sYmn7E4W4oZoKKgz2GE8gvG
+         2GdeeXmXgKLR4M/6Bl48PjHPXjKh0sEDP1PwdHY1fvDMzvceeDX2FdZPuPMvY5CMScKT
+         3b3GOqhMdHBXRcm3mwLlpv6DadYMAaYK5m9ImAQAOQb1X8OIu/dMYZc16vW/Dvtep1tO
+         eOLyQkmQh1DM7KI20euhILnclFWD5edZNWc0BDYLnfSOcpyYibFmp/g9IxBak4tLantu
+         IIjQ==
+X-Gm-Message-State: AOAM533m8C1tXVlnTqzRZizoacfnbjOPIkciyQmscIuzemTRNJ66eeaW
+        ++/A/TPx6ABBGzqFhqdE8xbWlw==
+X-Google-Smtp-Source: ABdhPJw8ZtseazM51WUqhtiDVXvitp+YDlIfXCPd0LTC+fJ/cPh2CMZqRThBa00IrdH/HQDGzeNZOw==
+X-Received: by 2002:a5d:58dc:: with SMTP id o28mr38899290wrf.217.1641227702500;
+        Mon, 03 Jan 2022 08:35:02 -0800 (PST)
+Received: from ?IPv6:2001:861:44c0:66c0:7c9d:a967:38e2:5220? ([2001:861:44c0:66c0:7c9d:a967:38e2:5220])
+        by smtp.gmail.com with ESMTPSA id l10sm20389876wmq.7.2022.01.03.08.35.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jan 2022 08:35:02 -0800 (PST)
+Subject: Re: [PATCH V3 1/6] tty: serial: meson: Drop the legacy compatible
+ strings and clock code
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Vyacheslav <adeep@lexina.in>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Yu Tu <yu.tu@amlogic.com>
+References: <20211230102110.3861-1-yu.tu@amlogic.com>
+ <20211230102110.3861-2-yu.tu@amlogic.com>
+ <CAFBinCCwjS36ss_4sU+o9m8gEprFsVZbqcxgpQxczTNohZqFdA@mail.gmail.com>
+ <a296e666-368b-4cd5-427e-30fc66a15b49@amlogic.com>
+ <CAFBinCA2V=sx95Q=+4nLDXFK1Os11XVWtK8KauxixVwYXLUz1Q@mail.gmail.com>
+ <3865f01c-83f7-a69d-6835-c26f662629b7@baylibre.com>
+ <YdMUEzStFf99EeQ5@kroah.com>
+ <df9e472e-ac17-26ed-d820-e80d5b7b0e80@baylibre.com>
+ <YdMkc2YQcYjgR7Qk@kroah.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <257d153c-960a-59fc-dfa9-5e160e42b68d@baylibre.com>
+Date:   Mon, 3 Jan 2022 17:35:01 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YdMkc2YQcYjgR7Qk@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow the driver to work with device tree support.
+On 03/01/2022 17:29, Greg Kroah-Hartman wrote:
+> On Mon, Jan 03, 2022 at 04:29:56PM +0100, Neil Armstrong wrote:
+>>>> Would it be possible we also receive the notification when those patches are applied ?
+>>>> Maybe a MAINTAINERS entry is missing so we can receive them ?
+>>>
+>>> That would be good, so that people can review the patches.  Otherwise I
+>>> have to just guess :)
+>>
+>> exact, I naively thought it would be matched in the:
+>> N:      meson
+>> entry but it seems an proper entry for drivers/tty/serial/meson_uart.c is needed.
+> 
+> Try it, does that work when running get_maintainer.pl on this patch?
 
-Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
----
- drivers/hwmon/max6639.c | 47 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
+Yes it does work, so no problem here
 
-diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
-index d733c35b5bcf..f84ee4a05f80 100644
---- a/drivers/hwmon/max6639.c
-+++ b/drivers/hwmon/max6639.c
-@@ -412,6 +412,38 @@ static int rpm_range_to_reg(int range)
- 	return 1; /* default: 4000 RPM */
- }
- 
-+static struct max6639_platform_data *get_pdata_from_dt_node(struct device *dev)
-+{
-+	struct max6639_platform_data *pdata;
-+	u32 pol, ppr, rpm;
-+	int ret;
-+
-+	pdata = devm_kzalloc(dev, sizeof(*pdata), GFP_KERNEL);
-+	if (!pdata)
-+		return ERR_PTR(-ENOMEM);
-+
-+	pdata->pwm_polarity = true;
-+	ret = of_property_read_u32(dev->of_node, "polarity", &pol);
-+	if (!ret && !pol)
-+		pdata->pwm_polarity = false;
-+
-+	ret = of_property_read_u32(dev->of_node, "pulses-per-revolution", &ppr);
-+	if (ret < 0)
-+		dev_warn(dev, "No pulses-per-revolution property\n");
-+	else
-+		pdata->ppr = ppr;
-+
-+	ret = of_property_read_u32(dev->of_node, "rpm-range", &rpm);
-+	if (ret < 0) {
-+		dev_warn(dev, "no rpm-range property\n");
-+		pdata->rpm_range = 4000;
-+	} else {
-+		pdata->rpm_range = rpm;
-+	}
-+
-+	return pdata;
-+}
-+
- static int max6639_init_client(struct i2c_client *client,
- 			       struct max6639_data *data)
- {
-@@ -421,6 +453,12 @@ static int max6639_init_client(struct i2c_client *client,
- 	int rpm_range = 1; /* default: 4000 RPM */
- 	int err;
- 
-+	if (!max6639_info && client->dev.of_node) {
-+		max6639_info = get_pdata_from_dt_node(&client->dev);
-+		if (IS_ERR(max6639_info))
-+			return PTR_ERR(max6639_info);
-+	}
-+
- 	/* Reset chip to default values, see below for GCONFIG setup */
- 	err = i2c_smbus_write_byte_data(client, MAX6639_REG_GCONFIG,
- 				  MAX6639_GCONFIG_POR);
-@@ -631,6 +669,14 @@ static const struct i2c_device_id max6639_id[] = {
- 
- MODULE_DEVICE_TABLE(i2c, max6639_id);
- 
-+#ifdef CONFIG_OF
-+static const struct of_device_id maxim_of_platform_match[] = {
-+	{.compatible = "maxim,max6639"},
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, maxim_of_platform_match);
-+#endif
-+
- static SIMPLE_DEV_PM_OPS(max6639_pm_ops, max6639_suspend, max6639_resume);
- 
- static struct i2c_driver max6639_driver = {
-@@ -638,6 +684,7 @@ static struct i2c_driver max6639_driver = {
- 	.driver = {
- 		   .name = "max6639",
- 		   .pm = &max6639_pm_ops,
-+		   .of_match_table = of_match_ptr(maxim_of_platform_match),
- 		   },
- 	.probe_new = max6639_probe,
- 	.id_table = max6639_id,
--- 
-2.33.1
+> 
+>>>> It would help me track those TTY and USB patches more easily.
+>>>
+>>> I recommend MAINTAINERS entries for drivers that are not listed and that
+>>> you care about seeing the changes for.
+>>
+>> This is why we have a regex to match these.
+> 
+> Great, the submitter should have used that.
+> 
+>> I can submit a patch to have a proper entry if the regex is not enough/appropriate.
+> 
+> Whatever makes the tools work is fine with me.
+> 
+>> BTW can you point us how are selected the recipients of the notification messages you send ?
+> 
+> For when I apply a patch, everyone on the ack/signed-off-by/reviewed-by
+> list gets a response.  I do not hit mailing lists with the notification
+> as that's just too much noise.
+> 
+> Been doing it this way for well over a decade now, nothing new here :)
+
+Ok right, no problem, other maintainers (e.g: net, sound) and default b4 behavior is to
+send notification to same recipient as original patch.
+
+It it fits everyone for a decade, no need to change ! We have very low patches for tty & usb anyway
+
+Neil
+
+> 
+> thanks,
+> 
+> greg k-h
+> 
 

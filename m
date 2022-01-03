@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB0C4831E3
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:22:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 002AF483211
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:24:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233493AbiACOWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:22:45 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:53674 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233362AbiACOW0 (ORCPT
+        id S233703AbiACOYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:24:07 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:46310 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231195AbiACOXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:22:26 -0500
+        Mon, 3 Jan 2022 09:23:35 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FA3D6114D;
-        Mon,  3 Jan 2022 14:22:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FAACC36AEB;
-        Mon,  3 Jan 2022 14:22:24 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 54EC3CE1110;
+        Mon,  3 Jan 2022 14:23:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06FFFC36AED;
+        Mon,  3 Jan 2022 14:23:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641219745;
-        bh=kZQSglxbd2SRfF5dyFhvrX8een9kNkioVEwsan94ckU=;
+        s=korg; t=1641219812;
+        bh=vockE4d5UvlidGkv9Im4Rv4S0mFCwbAbZ40ui7n1iXw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mb4fnSZC3bBjQ7l26z8cJu4Gp+/CXObTprnjP0g99Ik1sjnAFUgCAReyQkC/yBTcX
-         GWtXJTitVf9MIpwwXTHWWRbH0iElgh5MvQMGNBwXsvrJCJCxqMc9vQbSoOXqvR6rtF
-         us7BiaGvD/LbsgpHaaypxu8pqlE9oe8wh1F1sT4k=
+        b=tRNqQBiYdZSL3iz0t4HqWupn+2mZ9IuHOmoDf0PR4f54Ewq+m/McjWiUr3M57tSxu
+         lTqs/2QXDfT5J42DaQJAZM0/myqHqv4wFA7DCWDLVw5Qj/1lK/JwiQcMlh6DjeGRIw
+         NVOEKtPdravU/DYCoSONlgsb/Bxs0JWro6GPIFEs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.9 06/13] nfc: uapi: use kernel size_t to fix user-space builds
+        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        Paul Moore <paul@paul-moore.com>
+Subject: [PATCH 4.14 05/19] selinux: initialize proto variable in selinux_ip_postroute_compat()
 Date:   Mon,  3 Jan 2022 15:21:22 +0100
-Message-Id: <20220103142052.172522769@linuxfoundation.org>
+Message-Id: <20220103142052.241291041@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142051.979780231@linuxfoundation.org>
-References: <20220103142051.979780231@linuxfoundation.org>
+In-Reply-To: <20220103142052.068378906@linuxfoundation.org>
+References: <20220103142052.068378906@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,36 +45,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+From: Tom Rix <trix@redhat.com>
 
-commit 79b69a83705e621b258ac6d8ae6d3bfdb4b930aa upstream.
+commit 732bc2ff080c447f8524f40c970c481f5da6eed3 upstream.
 
-Fix user-space builds if it includes /usr/include/linux/nfc.h before
-some of other headers:
+Clang static analysis reports this warning
 
-  /usr/include/linux/nfc.h:281:9: error: unknown type name ‘size_t’
-    281 |         size_t service_name_len;
-        |         ^~~~~~
+hooks.c:5765:6: warning: 4th function call argument is an uninitialized
+                value
+        if (selinux_xfrm_postroute_last(sksec->sid, skb, &ad, proto))
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Fixes: d646960f7986 ("NFC: Initial LLCP support")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+selinux_parse_skb() can return ok without setting proto.  The later call
+to selinux_xfrm_postroute_last() does an early check of proto and can
+return ok if the garbage proto value matches.  So initialize proto.
+
+Cc: stable@vger.kernel.org
+Fixes: eef9b41622f2 ("selinux: cleanup selinux_xfrm_sock_rcv_skb() and selinux_xfrm_postroute_last()")
+Signed-off-by: Tom Rix <trix@redhat.com>
+[PM: typo/spelling and checkpatch.pl description fixes]
+Signed-off-by: Paul Moore <paul@paul-moore.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/uapi/linux/nfc.h |    2 +-
+ security/selinux/hooks.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/include/uapi/linux/nfc.h
-+++ b/include/uapi/linux/nfc.h
-@@ -276,7 +276,7 @@ struct sockaddr_nfc_llcp {
- 	__u8 dsap; /* Destination SAP, if known */
- 	__u8 ssap; /* Source SAP to be bound to */
- 	char service_name[NFC_LLCP_MAX_SERVICE_NAME]; /* Service name URI */;
--	size_t service_name_len;
-+	__kernel_size_t service_name_len;
- };
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -5321,7 +5321,7 @@ static unsigned int selinux_ip_postroute
+ 	struct common_audit_data ad;
+ 	struct lsm_network_audit net = {0,};
+ 	char *addrp;
+-	u8 proto;
++	u8 proto = 0;
  
- /* NFC socket protocols */
+ 	if (sk == NULL)
+ 		return NF_ACCEPT;
 
 

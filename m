@@ -2,141 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B07848344F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 16:35:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1F9483450
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 16:35:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234197AbiACPfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 10:35:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55442 "EHLO
+        id S234227AbiACPfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 10:35:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232579AbiACPfQ (ORCPT
+        with ESMTP id S232647AbiACPfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 10:35:16 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95092C061761;
-        Mon,  3 Jan 2022 07:35:15 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id t26so70585757wrb.4;
-        Mon, 03 Jan 2022 07:35:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fwoh/wxpLCTrTZD3q7z2iU1EBbvcdilR8NQ1crz+Dak=;
-        b=FbSoY90AKEGYS7Bgpb3nuWnfa68L5JDl8Dj2rJnG7iw4CiY1Qitu+Z/fzhtAS5OMO/
-         hO68KW+RPZ+udHaAw1v4p7uOqE1USPbUzeURv7C2Q4nnLlGYLAt3ZsTbKlrnFPEgxrF9
-         UsHnEjhAZoSIxa1a4GMAjKQpzhbXQbfv7Lf0CV6RUuPlr/X4WOUahygScAfGQpf3j38W
-         wrd/0ioJJjBCqiZTb+6frG7j5PhE37ugu1MaDCmaApvbRcX1FRD/m7OPv0nlWL3md2WD
-         87Ys1771Dq3yQrz/uf0pxEbfUO0po0e6S0JrGdpkclzM4vSmhic/5p697yWi/bPXwPrJ
-         8ftA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fwoh/wxpLCTrTZD3q7z2iU1EBbvcdilR8NQ1crz+Dak=;
-        b=KNt6u9P2ZdzuQvqT9O6K0ePVlHhFFg4A8TrUzS07dUZPVvKfdaAr9w9xuP/vyNmSbD
-         P2fnmiZpcWvhRPqWr3251hkDTVU+CsoM9WlTXiOzhzdbOg93losZVsChhs6AsdZUDSCD
-         H8cxEHdPjLrj02szxOuI26KvQSvhfv8f22Jm1EJVi8/JR79+M1gf21akX6wDJzeC09ih
-         QEI6eK6XWpCo9WII+AmLEStsAJrRE73ebPxZax8D5IsC/XIBGnuE+jIoBBtRT/AcDlkM
-         JTq+s3xJDm0qNULIa2W7gujW+POcoV5vZsV5R5kXgQ9cIV9Y5I7Fmhiy9abOU0W2pV1y
-         H2hw==
-X-Gm-Message-State: AOAM533VZ5AezecNQHR0qc3vbVQhmKZShHSi/9HQPFwv+U9D41gAxonF
-        FfKXDf+vxQ2yI0dQtKxM8QtAkOyBQnVqQtRoaEo=
-X-Google-Smtp-Source: ABdhPJyfYR5Tgej1+JbfKke6k6aFWArD0MekU/04WhRD9OHXM6/dib5ggFdNePgFDDRJu1kABOsT7XoAjKW/ssWe5jM=
-X-Received: by 2002:a05:6000:186e:: with SMTP id d14mr40390261wri.205.1641224114204;
- Mon, 03 Jan 2022 07:35:14 -0800 (PST)
+        Mon, 3 Jan 2022 10:35:17 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CFDC061761;
+        Mon,  3 Jan 2022 07:35:17 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 62D041F4256D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1641224115;
+        bh=p5EAAH/x5etyTTXg0rGI1Jb/gnWuZUb3EEqjne7i8P4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=j9kx1Tp7b+cQWBMh4lAdJma7UapFIlQDaVSebM0sPFE457Odj+7U3Q3N3t7srTcIc
+         0xoLgHIpmrX6YzdqJ2dYTJldSOL4ut/EIKxaZJ9rkEWDWIvMl4fEDsLcvkastg9mJe
+         pzmxd153lgRk7HhK19l1VxHNZ+UpQDvTeNvSiBF3VGnT6SHmWPhlVX1Q0TvEUgCs3H
+         FfIBjy8lGkaSWTItBgEgsbfcPkO6Yz8ZouDqVQTOJf9yK2DL3ffi2W644uC8SoY9lV
+         Ky3oz9qIutOvNl7AKrXHVjwQYNL4zehBnJM1di9YLahSUjrsD6HukRV2FYiGrRCN56
+         k5J2vAz7OISzw==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     thierry.reding@gmail.com
+Cc:     u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        matthias.bgg@gmail.com, linux-pwm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH] pwm: pwm-mtk-disp: Switch to regmap for mmio access
+Date:   Mon,  3 Jan 2022 16:35:06 +0100
+Message-Id: <20220103153506.50896-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <CAG_fn=VDEoQx5c7XzWX1yaYBd5y5FrG1aagrkv+SZ03c8TfQYQ@mail.gmail.com>
- <20220102171943.28846-1-paskripkin@gmail.com> <YdL0GPxy4TdGDzOO@kroah.com>
-In-Reply-To: <YdL0GPxy4TdGDzOO@kroah.com>
-From:   Alexander Aring <alex.aring@gmail.com>
-Date:   Mon, 3 Jan 2022 10:35:03 -0500
-Message-ID: <CAB_54W7HQmm1ncCEsTmZFR+GVf6p6Vz0RMWDJXAhXQcW4r3hUQ@mail.gmail.com>
-Subject: Re: [PATCH RFT] ieee802154: atusb: move to new USB API
-To:     Greg KH <greg@kroah.com>
-Cc:     Pavel Skripkin <paskripkin@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-wpan - ML <linux-wpan@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        "# 3.19.x" <stable@vger.kernel.org>,
-        Alexander Potapenko <glider@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Switch to using the generic regmap API instead of calls to readl/writel
+for MMIO register access, allowing us to reduce code size.
 
-On Mon, 3 Jan 2022 at 08:03, Greg KH <greg@kroah.com> wrote:
->
-> On Sun, Jan 02, 2022 at 08:19:43PM +0300, Pavel Skripkin wrote:
-> > Alexander reported a use of uninitialized value in
-> > atusb_set_extended_addr(), that is caused by reading 0 bytes via
-> > usb_control_msg().
-> >
-> > Since there is an API, that cannot read less bytes, than was requested,
-> > let's move atusb driver to use it. It will fix all potintial bugs with
-> > uninit values and make code more modern
-> >
-> > Fail log:
-> >
-> > BUG: KASAN: uninit-cmp in ieee802154_is_valid_extended_unicast_addr include/linux/ieee802154.h:310 [inline]
-> > BUG: KASAN: uninit-cmp in atusb_set_extended_addr drivers/net/ieee802154/atusb.c:1000 [inline]
-> > BUG: KASAN: uninit-cmp in atusb_probe.cold+0x29f/0x14db drivers/net/ieee802154/atusb.c:1056
-> > Uninit value used in comparison: 311daa649a2003bd stack handle: 000000009a2003bd
-> >  ieee802154_is_valid_extended_unicast_addr include/linux/ieee802154.h:310 [inline]
-> >  atusb_set_extended_addr drivers/net/ieee802154/atusb.c:1000 [inline]
-> >  atusb_probe.cold+0x29f/0x14db drivers/net/ieee802154/atusb.c:1056
-> >  usb_probe_interface+0x314/0x7f0 drivers/usb/core/driver.c:396
-> >
-> > Fixes: 7490b008d123 ("ieee802154: add support for atusb transceiver")
-> > Cc: stable@vger.kernel.org # 5.9
-> > Reported-by: Alexander Potapenko <glider@google.com>
-> > Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-> > ---
-> >  drivers/net/ieee802154/atusb.c | 61 +++++++++++++++++++++-------------
-> >  1 file changed, 38 insertions(+), 23 deletions(-)
-> >
-> > diff --git a/drivers/net/ieee802154/atusb.c b/drivers/net/ieee802154/atusb.c
-> > index 23ee0b14cbfa..43befea0110f 100644
-> > --- a/drivers/net/ieee802154/atusb.c
-> > +++ b/drivers/net/ieee802154/atusb.c
-> > @@ -80,10 +80,9 @@ struct atusb_chip_data {
-> >   * in atusb->err and reject all subsequent requests until the error is cleared.
-> >   */
-> >
-> > -static int atusb_control_msg(struct atusb *atusb, unsigned int pipe,
-> > -                          __u8 request, __u8 requesttype,
-> > -                          __u16 value, __u16 index,
-> > -                          void *data, __u16 size, int timeout)
-> > +static int atusb_control_msg_recv(struct atusb *atusb, __u8 request, __u8 requesttype,
-> > +                               __u16 value, __u16 index,
-> > +                               void *data, __u16 size, int timeout)
->
-> Why do you need a wrapper function at all?  Why not just call the real
-> usb functions instead?
->
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/pwm/pwm-mtk-disp.c | 77 ++++++++++++++++----------------------
+ 1 file changed, 32 insertions(+), 45 deletions(-)
 
-This driver has a lot of history, there is a comment which states:
+diff --git a/drivers/pwm/pwm-mtk-disp.c b/drivers/pwm/pwm-mtk-disp.c
+index c605013e4114..4a6fab144cee 100644
+--- a/drivers/pwm/pwm-mtk-disp.c
++++ b/drivers/pwm/pwm-mtk-disp.c
+@@ -14,6 +14,7 @@
+ #include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/pwm.h>
++#include <linux/regmap.h>
+ #include <linux/slab.h>
+ 
+ #define DISP_PWM_EN		0x00
+@@ -47,7 +48,7 @@ struct mtk_disp_pwm {
+ 	const struct mtk_pwm_data *data;
+ 	struct clk *clk_main;
+ 	struct clk *clk_mm;
+-	void __iomem *base;
++	struct regmap *regmap;
+ 	bool enabled;
+ };
+ 
+@@ -56,22 +57,11 @@ static inline struct mtk_disp_pwm *to_mtk_disp_pwm(struct pwm_chip *chip)
+ 	return container_of(chip, struct mtk_disp_pwm, chip);
+ }
+ 
+-static void mtk_disp_pwm_update_bits(struct mtk_disp_pwm *mdp, u32 offset,
+-				     u32 mask, u32 data)
+-{
+-	void __iomem *address = mdp->base + offset;
+-	u32 value;
+-
+-	value = readl(address);
+-	value &= ~mask;
+-	value |= data;
+-	writel(value, address);
+-}
+-
+ static int mtk_disp_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+ 			      const struct pwm_state *state)
+ {
+ 	struct mtk_disp_pwm *mdp = to_mtk_disp_pwm(chip);
++	const struct mtk_pwm_data *pdata = mdp->data;
+ 	u32 clk_div, period, high_width, value;
+ 	u64 div, rate;
+ 	int err;
+@@ -80,8 +70,7 @@ static int mtk_disp_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+ 		return -EINVAL;
+ 
+ 	if (!state->enabled) {
+-		mtk_disp_pwm_update_bits(mdp, DISP_PWM_EN, mdp->data->enable_mask,
+-					 0x0);
++		regmap_clear_bits(mdp->regmap, DISP_PWM_EN, pdata->enable_mask);
+ 
+ 		if (mdp->enabled) {
+ 			clk_disable_unprepare(mdp->clk_mm);
+@@ -138,37 +127,25 @@ static int mtk_disp_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+ 	high_width = mul_u64_u64_div_u64(state->duty_cycle, rate, div);
+ 	value = period | (high_width << PWM_HIGH_WIDTH_SHIFT);
+ 
+-	mtk_disp_pwm_update_bits(mdp, mdp->data->con0,
+-				 PWM_CLKDIV_MASK,
+-				 clk_div << PWM_CLKDIV_SHIFT);
+-	mtk_disp_pwm_update_bits(mdp, mdp->data->con1,
+-				 PWM_PERIOD_MASK | PWM_HIGH_WIDTH_MASK,
+-				 value);
++	regmap_update_bits(mdp->regmap, pdata->con0, PWM_CLKDIV_MASK,
++			   clk_div << PWM_CLKDIV_SHIFT);
++	regmap_update_bits(mdp->regmap, pdata->con1,
++			   PWM_PERIOD_MASK | PWM_HIGH_WIDTH_MASK, value);
+ 
+ 	if (mdp->data->has_commit) {
+-		mtk_disp_pwm_update_bits(mdp, mdp->data->commit,
+-					 mdp->data->commit_mask,
+-					 mdp->data->commit_mask);
+-		mtk_disp_pwm_update_bits(mdp, mdp->data->commit,
+-					 mdp->data->commit_mask,
+-					 0x0);
++		regmap_set_bits(mdp->regmap, pdata->commit, pdata->commit_mask);
++		regmap_clear_bits(mdp->regmap, pdata->commit, pdata->commit_mask);
+ 	} else {
+ 		/*
+ 		 * For MT2701, disable double buffer before writing register
+ 		 * and select manual mode and use PWM_PERIOD/PWM_HIGH_WIDTH.
+ 		 */
+-		mtk_disp_pwm_update_bits(mdp, mdp->data->bls_debug,
+-					 mdp->data->bls_debug_mask,
+-					 mdp->data->bls_debug_mask);
+-		mtk_disp_pwm_update_bits(mdp, mdp->data->con0,
+-					 mdp->data->con0_sel,
+-					 mdp->data->con0_sel);
++		regmap_set_bits(mdp->regmap, pdata->bls_debug, pdata->bls_debug_mask);
++		regmap_set_bits(mdp->regmap, pdata->con0, pdata->con0_sel);
+ 	}
+ 
+-	mtk_disp_pwm_update_bits(mdp, DISP_PWM_EN, mdp->data->enable_mask,
+-				 mdp->data->enable_mask);
++	regmap_set_bits(mdp->regmap, DISP_PWM_EN, pdata->enable_mask);
+ 	mdp->enabled = true;
+-
+ 	return 0;
+ }
+ 
+@@ -195,8 +172,8 @@ static void mtk_disp_pwm_get_state(struct pwm_chip *chip,
+ 	}
+ 
+ 	rate = clk_get_rate(mdp->clk_main);
+-	con0 = readl(mdp->base + mdp->data->con0);
+-	con1 = readl(mdp->base + mdp->data->con1);
++	regmap_read(mdp->regmap, mdp->data->con0, &con0);
++	regmap_read(mdp->regmap, mdp->data->con1, &con1);
+ 	state->enabled = !!(con0 & BIT(0));
+ 	clk_div = FIELD_GET(PWM_CLKDIV_MASK, con0);
+ 	period = FIELD_GET(PWM_PERIOD_MASK, con1);
+@@ -219,9 +196,17 @@ static const struct pwm_ops mtk_disp_pwm_ops = {
+ 	.owner = THIS_MODULE,
+ };
+ 
++static const struct regmap_config mtk_disp_pwm_regmap_config = {
++	.reg_bits = 32,
++	.reg_stride = 4,
++	.val_bits = 32,
++	.disable_locking = true,
++};
++
+ static int mtk_disp_pwm_probe(struct platform_device *pdev)
+ {
+ 	struct mtk_disp_pwm *mdp;
++	void __iomem *base;
+ 	int ret;
+ 
+ 	mdp = devm_kzalloc(&pdev->dev, sizeof(*mdp), GFP_KERNEL);
+@@ -230,9 +215,13 @@ static int mtk_disp_pwm_probe(struct platform_device *pdev)
+ 
+ 	mdp->data = of_device_get_match_data(&pdev->dev);
+ 
+-	mdp->base = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(mdp->base))
+-		return PTR_ERR(mdp->base);
++	base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(base))
++		return PTR_ERR(base);
++
++	mdp->regmap = devm_regmap_init_mmio(&pdev->dev, base, &mtk_disp_pwm_regmap_config);
++	if (IS_ERR(mdp->regmap))
++		return PTR_ERR(mdp->regmap);
+ 
+ 	mdp->clk_main = devm_clk_get(&pdev->dev, "main");
+ 	if (IS_ERR(mdp->clk_main))
+@@ -247,10 +236,8 @@ static int mtk_disp_pwm_probe(struct platform_device *pdev)
+ 	mdp->chip.npwm = 1;
+ 
+ 	ret = pwmchip_add(&mdp->chip);
+-	if (ret < 0) {
+-		dev_err(&pdev->dev, "pwmchip_add() failed: %pe\n", ERR_PTR(ret));
+-		return ret;
+-	}
++	if (ret < 0)
++		return dev_err_probe(&pdev->dev, ret, "pwmchip_add() failed\n");
+ 
+ 	platform_set_drvdata(pdev, mdp);
+ 
+-- 
+2.33.1
 
-"To reduce the number of error checks in the code, we record the first
-error in atusb->err and reject all subsequent requests until the error
-is cleared."
-
-I think in the early state of this driver (as it was acting more as an
-USB<->SPI bridge) there was a lot of state handling involved. Nowadays
-we have a lot of such handling inside the device firmware (which is
-btw. open source). This might be not an excuse but an explanation why
-it was introduced in such a way.
-
-...
->
-> I would recommend just moving to use the real USB functions and no
-> wrapper function at all like this, it will make things more obvious and
-> easier to understand over time.
-
-okay.
-
-- Alex

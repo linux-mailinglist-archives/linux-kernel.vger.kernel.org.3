@@ -2,42 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E8748324D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:26:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B8324831F9
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:24:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231309AbiACO0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:26:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37696 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232511AbiACOXs (ORCPT
+        id S232365AbiACOXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:23:22 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:45944 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233614AbiACOW4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:23:48 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE94C061396;
-        Mon,  3 Jan 2022 06:23:48 -0800 (PST)
+        Mon, 3 Jan 2022 09:22:56 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8C49DCE1106;
-        Mon,  3 Jan 2022 14:23:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32F37C36AEB;
-        Mon,  3 Jan 2022 14:23:44 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 92808CE110D;
+        Mon,  3 Jan 2022 14:22:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A2BFC36AFD;
+        Mon,  3 Jan 2022 14:22:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641219824;
-        bh=yDVMoh+zFYVWydrzRUhL/ul5REYghUpWGvNymc1bwaI=;
+        s=korg; t=1641219773;
+        bh=kZQSglxbd2SRfF5dyFhvrX8een9kNkioVEwsan94ckU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NiLuowc6p67emxWdjQ4pmMxIxVaKcIRbc+CCGYagwyPmPWDgKgzb7suP+ZD2lsO+W
-         b70qQU7NPa+dv5IUY1jbNnKFUbzyPVAbXMQQ6gYrQMHm7QPOYr2yRailXsxCKJtXgx
-         h4a4Ji87u6PhKpHgI+fz4kQxQoLKXjcyAkXgYWZ0=
+        b=eEjhGKOtFX+nz6hlJgooWuhhsNclUZhgRhzkINusayOImaYL4EkyXGdK/VOvN7diK
+         JOIibEuFc/kTz5XNBBgk9nvpZM7rYjbJ6tfK4gtPnhmJHI7tUkXvF5x/GqZE4cteIz
+         sIMjq2VyJrjWjlTx3zsEVr78BelYFV2MG77cr84E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 09/19] fsl/fman: Fix missing put_device() call in fman_port_probe
-Date:   Mon,  3 Jan 2022 15:21:26 +0100
-Message-Id: <20220103142052.368859883@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.14 10/19] nfc: uapi: use kernel size_t to fix user-space builds
+Date:   Mon,  3 Jan 2022 15:21:27 +0100
+Message-Id: <20220103142052.400730938@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220103142052.068378906@linuxfoundation.org>
 References: <20220103142052.068378906@linuxfoundation.org>
@@ -49,82 +46,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-[ Upstream commit bf2b09fedc17248b315f80fb249087b7d28a69a6 ]
+commit 79b69a83705e621b258ac6d8ae6d3bfdb4b930aa upstream.
 
-The reference taken by 'of_find_device_by_node()' must be released when
-not needed anymore.
-Add the corresponding 'put_device()' in the and error handling paths.
+Fix user-space builds if it includes /usr/include/linux/nfc.h before
+some of other headers:
 
-Fixes: 18a6c85fcc78 ("fsl/fman: Add FMan Port Support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+  /usr/include/linux/nfc.h:281:9: error: unknown type name ‘size_t’
+    281 |         size_t service_name_len;
+        |         ^~~~~~
+
+Fixes: d646960f7986 ("NFC: Initial LLCP support")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/freescale/fman/fman_port.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ include/uapi/linux/nfc.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/freescale/fman/fman_port.c b/drivers/net/ethernet/freescale/fman/fman_port.c
-index ac3d791f52821..b7295f21aa580 100644
---- a/drivers/net/ethernet/freescale/fman/fman_port.c
-+++ b/drivers/net/ethernet/freescale/fman/fman_port.c
-@@ -1779,7 +1779,7 @@ static int fman_port_probe(struct platform_device *of_dev)
- 	fman = dev_get_drvdata(&fm_pdev->dev);
- 	if (!fman) {
- 		err = -EINVAL;
--		goto return_err;
-+		goto put_device;
- 	}
+--- a/include/uapi/linux/nfc.h
++++ b/include/uapi/linux/nfc.h
+@@ -276,7 +276,7 @@ struct sockaddr_nfc_llcp {
+ 	__u8 dsap; /* Destination SAP, if known */
+ 	__u8 ssap; /* Source SAP to be bound to */
+ 	char service_name[NFC_LLCP_MAX_SERVICE_NAME]; /* Service name URI */;
+-	size_t service_name_len;
++	__kernel_size_t service_name_len;
+ };
  
- 	err = of_property_read_u32(port_node, "cell-index", &val);
-@@ -1787,7 +1787,7 @@ static int fman_port_probe(struct platform_device *of_dev)
- 		dev_err(port->dev, "%s: reading cell-index for %pOF failed\n",
- 			__func__, port_node);
- 		err = -EINVAL;
--		goto return_err;
-+		goto put_device;
- 	}
- 	port_id = (u8)val;
- 	port->dts_params.id = port_id;
-@@ -1821,7 +1821,7 @@ static int fman_port_probe(struct platform_device *of_dev)
- 	}  else {
- 		dev_err(port->dev, "%s: Illegal port type\n", __func__);
- 		err = -EINVAL;
--		goto return_err;
-+		goto put_device;
- 	}
- 
- 	port->dts_params.type = port_type;
-@@ -1835,7 +1835,7 @@ static int fman_port_probe(struct platform_device *of_dev)
- 			dev_err(port->dev, "%s: incorrect qman-channel-id\n",
- 				__func__);
- 			err = -EINVAL;
--			goto return_err;
-+			goto put_device;
- 		}
- 		port->dts_params.qman_channel_id = qman_channel_id;
- 	}
-@@ -1845,7 +1845,7 @@ static int fman_port_probe(struct platform_device *of_dev)
- 		dev_err(port->dev, "%s: of_address_to_resource() failed\n",
- 			__func__);
- 		err = -ENOMEM;
--		goto return_err;
-+		goto put_device;
- 	}
- 
- 	port->dts_params.fman = fman;
-@@ -1870,6 +1870,8 @@ static int fman_port_probe(struct platform_device *of_dev)
- 
- 	return 0;
- 
-+put_device:
-+	put_device(&fm_pdev->dev);
- return_err:
- 	of_node_put(port_node);
- free_port:
--- 
-2.34.1
-
+ /* NFC socket protocols */
 
 

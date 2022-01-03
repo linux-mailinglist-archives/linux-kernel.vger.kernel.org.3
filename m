@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CFA48379E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 20:35:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8E848379F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 20:36:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236230AbiACTff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 14:35:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53684 "EHLO
+        id S236232AbiACTgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 14:36:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235921AbiACTfe (ORCPT
+        with ESMTP id S231609AbiACTga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 14:35:34 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB51C061761
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 11:35:33 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id b13so139596106edd.8
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 11:35:33 -0800 (PST)
+        Mon, 3 Jan 2022 14:36:30 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994B4C061761
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 11:36:29 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id q14so131850739edi.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 11:36:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Q60Y2ZU4KjMyN9CVACLTkSUsRlZZ5k6NDg3gofPn8tQ=;
-        b=XDVAms3tVDA+S7wz5/snL+tcXTLOToU7dY8UQcdpzzfd9qxTEoiCO0C3bk5v3EDUwU
-         CW94d4kc0Axt8vbjiBTha0/snPn0wlcnhxiLchsbcJzX9JYnWCX5graRuiVPx09ANdgZ
-         v5DXJ74gEUAmWsmISgM81rY+OXtWjpQRCdthcoKkOXsEeriHgeDZNsvc089HJ8BAasb4
-         SxX47JFIX9GZKEzKArEiY4EyLIO7xiuW3HJ6RuYAAQrIahRBI+kECiaKSvGZZFahpquI
-         NlgRFO0ll0LhKEABO8wZ/SrrvhwyO7RaEzNuEdiFPVP7eqTKy/1vOGx7WHfcmgx6KXGy
-         izsw==
+        bh=dkBCem7AfWkwYLA2jSzBncQYkb4W5EBJcwzkV+pYnXg=;
+        b=YSGTxfykdhGoKuq0nb0GLPn63Oc6REBKwVr9Tn8picwlNHUa7yOZ6rNa64wt9DuyCm
+         YlH01QbaKjhXvijlZS027ECwNW/6qCp+FrwvGXhPQeH6FK0eHYsd923MZDNbazM0wKZl
+         aDWf+VxRKcvKQ2KBf62+1qs33qeUA+De2TI0m8RyopURklCN3rBPQpUEZCppZK3j674l
+         BVuYLqvFjwHFuMqUC90Au1XB0d7hkkPHmnlaIEVa6VKWWFR/4LGWdTrSnWTCvTyaxAe7
+         pbU2UrfqYEH1CgL16iehVwjHxASx3buSQN8OYz6PHrpDJ8xxRlWIZmiXJRQBSOt+Q0aL
+         PhCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Q60Y2ZU4KjMyN9CVACLTkSUsRlZZ5k6NDg3gofPn8tQ=;
-        b=T819x4ObodnjGDY5C5OIgWt2HlryADL0saJSGOOc7ZRYL6SQk3gRApj06G7b5QgnA+
-         U8rBIUKOL3KaYLjjLCaagEhSU0AvIzhbQ7t8xRh37ljD3hf06e1lI00IGk8biBm9r81g
-         twpM5iEo08dpTh+dLFpr6TtIjxgWsC/A5RuCDZt7OvuBQKCgt/PCwwRV8MRIZlpwPvlo
-         9Uc/I5MRgFcWCBuj0YSchbsRx2T2mr+MPOq3gT0O0Ehhd5lo9l6QMrKADCkSiyCKv+xg
-         VIufZdU95hEXHpApdksejb1Pw3LU9oMT+LFP1tScC9CVQJin+3eOZiiAjJMWlFizgabL
-         7v+Q==
-X-Gm-Message-State: AOAM531svJ+6CBa/pxawjvUW3aXYXGy5tlwOqDjX75a01W5T07M0NfC9
-        vFsee6ikwdXVyXoVycQFhIk=
-X-Google-Smtp-Source: ABdhPJy1aYhQzb0EsvGxbLeH9phdTwF2fi32uDOwFnH3/agm2CJhGCxg/W/KwvcfYZ8H9m/+XHMpIA==
-X-Received: by 2002:aa7:cb09:: with SMTP id s9mr6691880edt.379.1641238532359;
-        Mon, 03 Jan 2022 11:35:32 -0800 (PST)
+        bh=dkBCem7AfWkwYLA2jSzBncQYkb4W5EBJcwzkV+pYnXg=;
+        b=N0REF17w7P5fnxKufSKocdnYS2kQNbYPCXm+GM0mqeYn7t16c6V2eWX6V4Rx4ehHEI
+         nZrmXIliAS+VRKapN+SD1upOWIOJqJHJDI60FCpr/+FRF5KMbiywCC85pgQ3uYujazRX
+         ELEfGIZ2l0ddDa5dOm24wawb+Eu27rGLe/uh1QHV05D5Ik+EUmsxGGxbci6QD9kNEiEC
+         byBeqSHbOfJbwO35nYZigPwE0V1aQACuiFaWwXtUKxN03DJnnARzqpUme8wHsrcAVuDO
+         hLngdSV0DQTuGZcr6k4S5JTke9/9C1uc+Q5Qbq8kaz5FgLBcqUVBuBDhKEjbqs1mD5GF
+         pTkw==
+X-Gm-Message-State: AOAM5300TcvGFZRP0D6/BtnZwo9UqzJL9wuoVED/FQ21DmO2cBO35m+G
+        K+GRDrhplqX/GI51qHsFFzE=
+X-Google-Smtp-Source: ABdhPJzlZW8sHHCkBJX2kk3Nm9mNb1igKIYfnu/8pneM2jcAqT92fo6aWC8rHAcnFxcEfjxh/iUr6A==
+X-Received: by 2002:a17:906:71cc:: with SMTP id i12mr38598250ejk.457.1641238588220;
+        Mon, 03 Jan 2022 11:36:28 -0800 (PST)
 Received: from t470p.fritz.box (host-87-18-201-21.retail.telecomitalia.it. [87.18.201.21])
-        by smtp.gmail.com with ESMTPSA id gt20sm7009614ejc.11.2022.01.03.11.35.30
+        by smtp.gmail.com with ESMTPSA id gt20sm7009614ejc.11.2022.01.03.11.36.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jan 2022 11:35:31 -0800 (PST)
+        Mon, 03 Jan 2022 11:36:27 -0800 (PST)
 From:   Alberto Merciai <alb3rt0.m3rciai@gmail.com>
 Cc:     alb3rt0.m3rciai@gmail.com, linuxfancy@googlegroups.com,
         Larry Finger <Larry.Finger@lwfinger.net>,
@@ -59,13 +59,12 @@ Cc:     alb3rt0.m3rciai@gmail.com, linuxfancy@googlegroups.com,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Saurav Girepunje <saurav.girepunje@gmail.com>,
         Ivan Safonov <insafonov@gmail.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Zameer Manji <zmanji@gmail.com>, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 32/56] staging: r8188eu: rename camelcase GetFrameSubType to get_frame_subtype
-Date:   Mon,  3 Jan 2022 20:02:07 +0100
-Message-Id: <20220103190326.363960-33-alb3rt0.m3rciai@gmail.com>
+Subject: [PATCH 33/56] staging: r8188eu: rename camelcase SetFrameSubType to set_frame_subtype
+Date:   Mon,  3 Jan 2022 20:02:08 +0100
+Message-Id: <20220103190326.363960-34-alb3rt0.m3rciai@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220103190326.363960-1-alb3rt0.m3rciai@gmail.com>
 References: <20220103190326.363960-1-alb3rt0.m3rciai@gmail.com>
@@ -76,197 +75,307 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename camel case macro GetFrameSubType into get_frame_subtype.
+Rename camel case macro SetFrameSubType into set_frame_subtype.
 
 Signed-off-by: Alberto Merciai <alb3rt0.m3rciai@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_mlme_ext.c   |  8 ++++----
- drivers/staging/r8188eu/core/rtw_p2p.c        |  2 +-
- drivers/staging/r8188eu/core/rtw_recv.c       | 18 +++++++++---------
- drivers/staging/r8188eu/core/rtw_security.c   |  4 ++--
- drivers/staging/r8188eu/core/rtw_wlan_util.c  |  2 +-
- drivers/staging/r8188eu/hal/rtl8188e_rxdesc.c |  2 +-
- drivers/staging/r8188eu/include/wifi.h        |  2 +-
- 7 files changed, 19 insertions(+), 19 deletions(-)
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c | 38 ++++++++++-----------
+ drivers/staging/r8188eu/core/rtw_p2p.c      |  8 ++---
+ drivers/staging/r8188eu/core/rtw_xmit.c     |  2 +-
+ drivers/staging/r8188eu/hal/rtl8188e_cmd.c  | 10 +++---
+ drivers/staging/r8188eu/include/wifi.h      |  2 +-
+ 5 files changed, 30 insertions(+), 30 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-index 5d0901f72cd8..0e7e7143b5fc 100644
+index 0e7e7143b5fc..d11d9a21a0e1 100644
 --- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
 +++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-@@ -426,7 +426,7 @@ void mgt_dispatcher(struct adapter *padapter, struct recv_frame *precv_frame)
+@@ -1797,7 +1797,7 @@ void issue_p2p_GO_request(struct adapter *padapter, u8 *raddr)
  
- 	ptable = mlme_sta_tbl;
+ 	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
+ 	pmlmeext->mgnt_seq++;
+-	SetFrameSubType(pframe, WIFI_ACTION);
++	set_frame_subtype(pframe, WIFI_ACTION);
  
--	index = GetFrameSubType(pframe) >> 4;
-+	index = get_frame_subtype(pframe) >> 4;
+ 	pframe += sizeof(struct rtw_ieee80211_hdr_3addr);
+ 	pattrib->pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
+@@ -2133,7 +2133,7 @@ static void issue_p2p_GO_response(struct adapter *padapter, u8 *raddr, u8 *frame
  
- 	if (index > 13)
+ 	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
+ 	pmlmeext->mgnt_seq++;
+-	SetFrameSubType(pframe, WIFI_ACTION);
++	set_frame_subtype(pframe, WIFI_ACTION);
+ 
+ 	pframe += sizeof(struct rtw_ieee80211_hdr_3addr);
+ 	pattrib->pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
+@@ -2491,7 +2491,7 @@ static void issue_p2p_GO_confirm(struct adapter *padapter, u8 *raddr, u8 result)
+ 
+ 	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
+ 	pmlmeext->mgnt_seq++;
+-	SetFrameSubType(pframe, WIFI_ACTION);
++	set_frame_subtype(pframe, WIFI_ACTION);
+ 
+ 	pframe += sizeof(struct rtw_ieee80211_hdr_3addr);
+ 	pattrib->pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
+@@ -2653,7 +2653,7 @@ void issue_p2p_invitation_request(struct adapter *padapter, u8 *raddr)
+ 
+ 	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
+ 	pmlmeext->mgnt_seq++;
+-	SetFrameSubType(pframe, WIFI_ACTION);
++	set_frame_subtype(pframe, WIFI_ACTION);
+ 
+ 	pframe += sizeof(struct rtw_ieee80211_hdr_3addr);
+ 	pattrib->pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
+@@ -2899,7 +2899,7 @@ void issue_p2p_invitation_response(struct adapter *padapter, u8 *raddr, u8 dialo
+ 
+ 	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
+ 	pmlmeext->mgnt_seq++;
+-	SetFrameSubType(pframe, WIFI_ACTION);
++	set_frame_subtype(pframe, WIFI_ACTION);
+ 
+ 	pframe += sizeof(struct rtw_ieee80211_hdr_3addr);
+ 	pattrib->pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
+@@ -3091,7 +3091,7 @@ void issue_p2p_provision_request(struct adapter *padapter, u8 *pssid, u8 ussidle
+ 
+ 	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
+ 	pmlmeext->mgnt_seq++;
+-	SetFrameSubType(pframe, WIFI_ACTION);
++	set_frame_subtype(pframe, WIFI_ACTION);
+ 
+ 	pframe += sizeof(struct rtw_ieee80211_hdr_3addr);
+ 	pattrib->pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
+@@ -3205,7 +3205,7 @@ void issue_probersp_p2p(struct adapter *padapter, unsigned char *da)
+ 
+ 	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
+ 	pmlmeext->mgnt_seq++;
+-	SetFrameSubType(fctrl, WIFI_PROBERSP);
++	set_frame_subtype(fctrl, WIFI_PROBERSP);
+ 
+ 	pattrib->hdrlen = sizeof(struct rtw_ieee80211_hdr_3addr);
+ 	pattrib->pktlen = pattrib->hdrlen;
+@@ -3461,7 +3461,7 @@ static int _issue_probereq_p2p(struct adapter *padapter, u8 *da, int wait_ack)
+ 
+ 	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
+ 	pmlmeext->mgnt_seq++;
+-	SetFrameSubType(pframe, WIFI_PROBEREQ);
++	set_frame_subtype(pframe, WIFI_PROBEREQ);
+ 
+ 	pframe += sizeof(struct rtw_ieee80211_hdr_3addr);
+ 	pattrib->pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
+@@ -4349,7 +4349,7 @@ void issue_beacon(struct adapter *padapter, int timeout_ms)
+ 
+ 	SetSeqNum(pwlanhdr, 0/*pmlmeext->mgnt_seq*/);
+ 	/* pmlmeext->mgnt_seq++; */
+-	SetFrameSubType(pframe, WIFI_BEACON);
++	set_frame_subtype(pframe, WIFI_BEACON);
+ 
+ 	pframe += sizeof(struct rtw_ieee80211_hdr_3addr);
+ 	pattrib->pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
+@@ -4565,7 +4565,7 @@ void issue_probersp(struct adapter *padapter, unsigned char *da, u8 is_valid_p2p
+ 
+ 	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
+ 	pmlmeext->mgnt_seq++;
+-	SetFrameSubType(fctrl, WIFI_PROBERSP);
++	set_frame_subtype(fctrl, WIFI_PROBERSP);
+ 
+ 	pattrib->hdrlen = sizeof(struct rtw_ieee80211_hdr_3addr);
+ 	pattrib->pktlen = pattrib->hdrlen;
+@@ -4718,7 +4718,7 @@ static int _issue_probereq(struct adapter *padapter, struct ndis_802_11_ssid *ps
+ 
+ 	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
+ 	pmlmeext->mgnt_seq++;
+-	SetFrameSubType(pframe, WIFI_PROBEREQ);
++	set_frame_subtype(pframe, WIFI_PROBEREQ);
+ 
+ 	pframe += sizeof(struct rtw_ieee80211_hdr_3addr);
+ 	pattrib->pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
+@@ -4835,7 +4835,7 @@ void issue_auth(struct adapter *padapter, struct sta_info *psta, unsigned short
+ 
+ 	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
+ 	pmlmeext->mgnt_seq++;
+-	SetFrameSubType(pframe, WIFI_AUTH);
++	set_frame_subtype(pframe, WIFI_AUTH);
+ 
+ 	pframe += sizeof(struct rtw_ieee80211_hdr_3addr);
+ 	pattrib->pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
+@@ -4971,7 +4971,7 @@ void issue_asocrsp(struct adapter *padapter, unsigned short status, struct sta_i
+ 	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
+ 	pmlmeext->mgnt_seq++;
+ 	if ((pkt_type == WIFI_ASSOCRSP) || (pkt_type == WIFI_REASSOCRSP))
+-		SetFrameSubType(pwlanhdr, pkt_type);
++		set_frame_subtype(pwlanhdr, pkt_type);
+ 	else
  		return;
-@@ -443,7 +443,7 @@ void mgt_dispatcher(struct adapter *padapter, struct recv_frame *precv_frame)
- 		psta->RxMgmtFrameSeqNum = precv_frame->attrib.seq_num;
- 	}
  
--	switch (GetFrameSubType(pframe)) {
-+	switch (get_frame_subtype(pframe)) {
- 	case WIFI_AUTH:
- 		if (check_fwstate(pmlmepriv, WIFI_AP_STATE))
- 			ptable->func = &OnAuth;
-@@ -970,7 +970,7 @@ unsigned int OnAssocReq(struct adapter *padapter, struct recv_frame *precv_frame
- 	if ((pmlmeinfo->state & 0x03) != WIFI_FW_AP_STATE)
- 		return _FAIL;
+@@ -5101,7 +5101,7 @@ void issue_assocreq(struct adapter *padapter)
  
--	frame_type = GetFrameSubType(pframe);
-+	frame_type = get_frame_subtype(pframe);
- 	if (frame_type == WIFI_ASSOCREQ) {
- 		reassoc = 0;
- 		ie_offset = _ASOCREQ_IE_OFFSET_;
-@@ -6217,7 +6217,7 @@ u8 collect_bss_info(struct adapter *padapter, struct recv_frame *precv_frame, st
+ 	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
+ 	pmlmeext->mgnt_seq++;
+-	SetFrameSubType(pframe, WIFI_ASSOCREQ);
++	set_frame_subtype(pframe, WIFI_ASSOCREQ);
  
- 	memset(bssid, 0, sizeof(struct wlan_bssid_ex));
+ 	pframe += sizeof(struct rtw_ieee80211_hdr_3addr);
+ 	pattrib->pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
+@@ -5420,7 +5420,7 @@ static int _issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned
  
--	subtype = GetFrameSubType(pframe);
-+	subtype = get_frame_subtype(pframe);
+ 	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
+ 	pmlmeext->mgnt_seq++;
+-	SetFrameSubType(pframe, WIFI_DATA_NULL);
++	set_frame_subtype(pframe, WIFI_DATA_NULL);
  
- 	if (subtype == WIFI_BEACON) {
- 		bssid->Reserved[0] = 1;
+ 	pframe += sizeof(struct rtw_ieee80211_hdr_3addr);
+ 	pattrib->pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
+@@ -5540,7 +5540,7 @@ static int _issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16
+ 
+ 	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
+ 	pmlmeext->mgnt_seq++;
+-	SetFrameSubType(pframe, WIFI_QOS_DATA_NULL);
++	set_frame_subtype(pframe, WIFI_QOS_DATA_NULL);
+ 
+ 	pframe += sizeof(struct rtw_ieee80211_hdr_3addr_qos);
+ 	pattrib->pktlen = sizeof(struct rtw_ieee80211_hdr_3addr_qos);
+@@ -5645,7 +5645,7 @@ static int _issue_deauth(struct adapter *padapter, unsigned char *da, unsigned s
+ 
+ 	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
+ 	pmlmeext->mgnt_seq++;
+-	SetFrameSubType(pframe, WIFI_DEAUTH);
++	set_frame_subtype(pframe, WIFI_DEAUTH);
+ 
+ 	pframe += sizeof(struct rtw_ieee80211_hdr_3addr);
+ 	pattrib->pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
+@@ -5757,7 +5757,7 @@ void issue_action_BA(struct adapter *padapter, unsigned char *raddr, unsigned ch
+ 
+ 	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
+ 	pmlmeext->mgnt_seq++;
+-	SetFrameSubType(pframe, WIFI_ACTION);
++	set_frame_subtype(pframe, WIFI_ACTION);
+ 
+ 	pframe += sizeof(struct rtw_ieee80211_hdr_3addr);
+ 	pattrib->pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
+@@ -5895,7 +5895,7 @@ static void issue_action_BSSCoexistPacket(struct adapter *padapter)
+ 
+ 	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
+ 	pmlmeext->mgnt_seq++;
+-	SetFrameSubType(pframe, WIFI_ACTION);
++	set_frame_subtype(pframe, WIFI_ACTION);
+ 
+ 	pframe += sizeof(struct rtw_ieee80211_hdr_3addr);
+ 	pattrib->pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
 diff --git a/drivers/staging/r8188eu/core/rtw_p2p.c b/drivers/staging/r8188eu/core/rtw_p2p.c
-index 7b30b9b64b41..aa739ae86d22 100644
+index aa739ae86d22..98b9d38ee59f 100644
 --- a/drivers/staging/r8188eu/core/rtw_p2p.c
 +++ b/drivers/staging/r8188eu/core/rtw_p2p.c
-@@ -815,7 +815,7 @@ u32 process_assoc_req_p2p_ie(struct wifidirect_info *pwdinfo, u8 *pframe, uint l
- 	if (!rtw_p2p_chk_role(pwdinfo, P2P_ROLE_GO))
- 		return P2P_STATUS_FAIL_REQUEST_UNABLE;
+@@ -147,7 +147,7 @@ static void issue_group_disc_req(struct wifidirect_info *pwdinfo, u8 *da)
  
--	frame_type = GetFrameSubType(pframe);
-+	frame_type = get_frame_subtype(pframe);
- 	if (frame_type == WIFI_ASSOCREQ)
- 		ie_offset = _ASOCREQ_IE_OFFSET_;
- 	else /*  WIFI_REASSOCREQ */
-diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-index 9902adf99142..8fd2ae89d7eb 100644
---- a/drivers/staging/r8188eu/core/rtw_recv.c
-+++ b/drivers/staging/r8188eu/core/rtw_recv.c
-@@ -707,10 +707,10 @@ static int ap2sta_data_frame(
- 			goto exit;
- 		}
+ 	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
+ 	pmlmeext->mgnt_seq++;
+-	SetFrameSubType(pframe, WIFI_ACTION);
++	set_frame_subtype(pframe, WIFI_ACTION);
  
--		/* if ((GetFrameSubType(ptr) & WIFI_QOS_DATA_TYPE) == WIFI_QOS_DATA_TYPE) { */
-+		/* if ((get_frame_subtype(ptr) & WIFI_QOS_DATA_TYPE) == WIFI_QOS_DATA_TYPE) { */
- 		/*  */
+ 	pframe += sizeof(struct rtw_ieee80211_hdr_3addr);
+ 	pattrib->pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
+@@ -206,7 +206,7 @@ static void issue_p2p_devdisc_resp(struct wifidirect_info *pwdinfo, u8 *da, u8 s
  
--		if (GetFrameSubType(ptr) & BIT(6)) {
-+		if (get_frame_subtype(ptr) & BIT(6)) {
- 			/* No data, will not indicate to upper layer, temporily count it here */
- 			count_rx_stats(adapter, precv_frame, *psta);
- 			ret = RTW_RX_HANDLED;
-@@ -784,11 +784,11 @@ static int sta2ap_data_frame(struct adapter *adapter,
+ 	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
+ 	pmlmeext->mgnt_seq++;
+-	SetFrameSubType(pframe, WIFI_ACTION);
++	set_frame_subtype(pframe, WIFI_ACTION);
  
- 		process_pwrbit_data(adapter, precv_frame);
+ 	pframe += sizeof(struct rtw_ieee80211_hdr_3addr);
+ 	pattrib->pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
+@@ -276,7 +276,7 @@ static void issue_p2p_provision_resp(struct wifidirect_info *pwdinfo, u8 *raddr,
  
--		if ((GetFrameSubType(ptr) & WIFI_QOS_DATA_TYPE) == WIFI_QOS_DATA_TYPE) {
-+		if ((get_frame_subtype(ptr) & WIFI_QOS_DATA_TYPE) == WIFI_QOS_DATA_TYPE) {
- 			process_wmmps_data(adapter, precv_frame);
- 		}
+ 	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
+ 	pmlmeext->mgnt_seq++;
+-	SetFrameSubType(pframe, WIFI_ACTION);
++	set_frame_subtype(pframe, WIFI_ACTION);
  
--		if (GetFrameSubType(ptr) & BIT(6)) {
-+		if (get_frame_subtype(ptr) & BIT(6)) {
- 			/* No data, will not indicate to upper layer, temporily count it here */
- 			count_rx_stats(adapter, precv_frame, *psta);
- 			ret = RTW_RX_HANDLED;
-@@ -827,7 +827,7 @@ static int validate_recv_ctrl_frame(struct adapter *padapter,
- 		return _FAIL;
+ 	pframe += sizeof(struct rtw_ieee80211_hdr_3addr);
+ 	pattrib->pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
+@@ -353,7 +353,7 @@ static void issue_p2p_presence_resp(struct wifidirect_info *pwdinfo, u8 *da, u8
  
- 	/* only handle ps-poll */
--	if (GetFrameSubType(pframe) == WIFI_PSPOLL) {
-+	if (get_frame_subtype(pframe) == WIFI_PSPOLL) {
- 		u16 aid;
- 		u8 wmmps_ac = 0;
- 		struct sta_info *psta = NULL;
-@@ -944,11 +944,11 @@ static int validate_recv_mgnt_frame(struct adapter *padapter,
- 	psta = rtw_get_stainfo(&padapter->stapriv, GetAddr2Ptr(precv_frame->rx_data));
- 	if (psta) {
- 		psta->sta_stats.rx_mgnt_pkts++;
--		if (GetFrameSubType(precv_frame->rx_data) == WIFI_BEACON) {
-+		if (get_frame_subtype(precv_frame->rx_data) == WIFI_BEACON) {
- 			psta->sta_stats.rx_beacon_pkts++;
--		} else if (GetFrameSubType(precv_frame->rx_data) == WIFI_PROBEREQ) {
-+		} else if (get_frame_subtype(precv_frame->rx_data) == WIFI_PROBEREQ) {
- 			psta->sta_stats.rx_probereq_pkts++;
--		} else if (GetFrameSubType(precv_frame->rx_data) == WIFI_PROBERSP) {
-+		} else if (get_frame_subtype(precv_frame->rx_data) == WIFI_PROBERSP) {
- 			if (!memcmp(padapter->eeprompriv.mac_addr, GetAddr1Ptr(precv_frame->rx_data), ETH_ALEN))
- 				psta->sta_stats.rx_probersp_pkts++;
- 			else if (is_broadcast_mac_addr(GetAddr1Ptr(precv_frame->rx_data)) ||
-@@ -1101,7 +1101,7 @@ static int validate_recv_frame(struct adapter *adapter, struct recv_frame *precv
+ 	SetSeqNum(pwlanhdr, pmlmeext->mgnt_seq);
+ 	pmlmeext->mgnt_seq++;
+-	SetFrameSubType(pframe, WIFI_ACTION);
++	set_frame_subtype(pframe, WIFI_ACTION);
+ 
+ 	pframe += sizeof(struct rtw_ieee80211_hdr_3addr);
+ 	pattrib->pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
+diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
+index e182f63b6c6b..16760806bd65 100644
+--- a/drivers/staging/r8188eu/core/rtw_xmit.c
++++ b/drivers/staging/r8188eu/core/rtw_xmit.c
+@@ -723,7 +723,7 @@ s32 rtw_make_wlanhdr(struct adapter *padapter, u8 *hdr, struct pkt_attrib *pattr
+ 
+ 	memset(hdr, 0, WLANHDR_OFFSET);
+ 
+-	SetFrameSubType(fctrl, pattrib->subtype);
++	set_frame_subtype(fctrl, pattrib->subtype);
+ 
+ 	if (pattrib->subtype & WIFI_DATA_TYPE) {
+ 		if (check_fwstate(pmlmepriv, WIFI_STATION_STATE)) {
+diff --git a/drivers/staging/r8188eu/hal/rtl8188e_cmd.c b/drivers/staging/r8188eu/hal/rtl8188e_cmd.c
+index 8fb4789d9e65..50b9fd72f6ff 100644
+--- a/drivers/staging/r8188eu/hal/rtl8188e_cmd.c
++++ b/drivers/staging/r8188eu/hal/rtl8188e_cmd.c
+@@ -228,7 +228,7 @@ static void ConstructBeacon(struct adapter *adapt, u8 *pframe, u32 *pLength)
+ 	memcpy(pwlanhdr->addr3, get_my_bssid(cur_network), ETH_ALEN);
+ 
+ 	SetSeqNum(pwlanhdr, 0/*pmlmeext->mgnt_seq*/);
+-	SetFrameSubType(pframe, WIFI_BEACON);
++	set_frame_subtype(pframe, WIFI_BEACON);
+ 
+ 	pframe += sizeof(struct rtw_ieee80211_hdr_3addr);
+ 	pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
+@@ -306,7 +306,7 @@ static void ConstructPSPoll(struct adapter *adapt, u8 *pframe, u32 *pLength)
+ 	fctrl = &pwlanhdr->frame_ctl;
+ 	*(fctrl) = 0;
+ 	set_pwr_mgt(fctrl);
+-	SetFrameSubType(pframe, WIFI_PSPOLL);
++	set_frame_subtype(pframe, WIFI_PSPOLL);
+ 
+ 	/*  AID. */
+ 	SetDuration(pframe, (pmlmeinfo->aid | 0xc000));
+@@ -369,7 +369,7 @@ static void ConstructNullFunctionData(struct adapter *adapt, u8 *pframe,
+ 	if (bQoS) {
+ 		struct rtw_ieee80211_hdr_3addr_qos *pwlanqoshdr;
+ 
+-		SetFrameSubType(pframe, WIFI_QOS_DATA_NULL);
++		set_frame_subtype(pframe, WIFI_QOS_DATA_NULL);
+ 
+ 		pwlanqoshdr = (struct rtw_ieee80211_hdr_3addr_qos *)pframe;
+ 		SetPriority(&pwlanqoshdr->qc, AC);
+@@ -377,7 +377,7 @@ static void ConstructNullFunctionData(struct adapter *adapt, u8 *pframe,
+ 
+ 		pktlen = sizeof(struct rtw_ieee80211_hdr_3addr_qos);
+ 	} else {
+-		SetFrameSubType(pframe, WIFI_DATA_NULL);
++		set_frame_subtype(pframe, WIFI_DATA_NULL);
+ 
+ 		pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
  	}
+@@ -407,7 +407,7 @@ static void ConstructProbeRsp(struct adapter *adapt, u8 *pframe, u32 *pLength, u
+ 	memcpy(pwlanhdr->addr3, bssid, ETH_ALEN);
  
- 	type =  get_frame_type(ptr);
--	subtype = GetFrameSubType(ptr); /* bit(7)~bit(2) */
-+	subtype = get_frame_subtype(ptr); /* bit(7)~bit(2) */
+ 	SetSeqNum(pwlanhdr, 0);
+-	SetFrameSubType(fctrl, WIFI_PROBERSP);
++	set_frame_subtype(fctrl, WIFI_PROBERSP);
  
- 	pattrib->to_fr_ds = get_tofr_ds(ptr);
- 
-diff --git a/drivers/staging/r8188eu/core/rtw_security.c b/drivers/staging/r8188eu/core/rtw_security.c
-index 42ff5fd5ddad..e8d2242b92ea 100644
---- a/drivers/staging/r8188eu/core/rtw_security.c
-+++ b/drivers/staging/r8188eu/core/rtw_security.c
-@@ -973,7 +973,7 @@ static int aes_cipher(u8 *key, uint hdrlen, u8 *pframe, uint plen)
- 	u8 padded_buffer[16];
- 	u8 mic[8];
- 	uint	frtype  = get_frame_type(pframe);
--	uint	frsubtype  = GetFrameSubType(pframe);
-+	uint	frsubtype  = get_frame_subtype(pframe);
- 
- 	frsubtype = frsubtype >> 4;
- 
-@@ -1167,7 +1167,7 @@ static int aes_decipher(struct adapter *padapter, u8 *key, uint hdrlen,
- 
- /*	uint	offset = 0; */
- 	uint	frtype  = get_frame_type(pframe);
--	uint	frsubtype  = GetFrameSubType(pframe);
-+	uint	frsubtype  = get_frame_subtype(pframe);
- 
- 	frsubtype = frsubtype >> 4;
- 
-diff --git a/drivers/staging/r8188eu/core/rtw_wlan_util.c b/drivers/staging/r8188eu/core/rtw_wlan_util.c
-index d40669c21fc1..5f4c9d61511e 100644
---- a/drivers/staging/r8188eu/core/rtw_wlan_util.c
-+++ b/drivers/staging/r8188eu/core/rtw_wlan_util.c
-@@ -872,7 +872,7 @@ int rtw_check_bcn_info(struct adapter  *Adapter, u8 *pframe, u32 packet_len)
- 	if (!bssid)
- 		return _FAIL;
- 
--	subtype = GetFrameSubType(pframe) >> 4;
-+	subtype = get_frame_subtype(pframe) >> 4;
- 
- 	if (subtype == WIFI_BEACON)
- 		bssid->Reserved[0] = 1;
-diff --git a/drivers/staging/r8188eu/hal/rtl8188e_rxdesc.c b/drivers/staging/r8188eu/hal/rtl8188e_rxdesc.c
-index 90d426199f52..9ffb1af5d846 100644
---- a/drivers/staging/r8188eu/hal/rtl8188e_rxdesc.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188e_rxdesc.c
-@@ -150,7 +150,7 @@ void update_recvframe_phyinfo_88e(struct recv_frame *precvframe, struct phy_stat
- 				  myid(&padapter->eeprompriv), ETH_ALEN));
- 
- 	pkt_info.bPacketBeacon = pkt_info.bPacketMatchBSSID &&
--				 (GetFrameSubType(wlanhdr) == WIFI_BEACON);
-+				 (get_frame_subtype(wlanhdr) == WIFI_BEACON);
- 
- 	if (pkt_info.bPacketBeacon) {
- 		if (check_fwstate(&padapter->mlmepriv, WIFI_STATION_STATE))
+ 	pktlen = sizeof(struct rtw_ieee80211_hdr_3addr);
+ 	pframe += pktlen;
 diff --git a/drivers/staging/r8188eu/include/wifi.h b/drivers/staging/r8188eu/include/wifi.h
-index 7053185667a5..4e000ff8d58a 100644
+index 4e000ff8d58a..7997eb290b4f 100644
 --- a/drivers/staging/r8188eu/include/wifi.h
 +++ b/drivers/staging/r8188eu/include/wifi.h
-@@ -207,7 +207,7 @@ enum WIFI_REG_DOMAIN {
- #define get_frame_type(pbuf)				\
- 	(le16_to_cpu(*(__le16 *)(pbuf)) & (BIT(3) | BIT(2)))
- 
--#define GetFrameSubType(pbuf)	(le16_to_cpu(*(__le16 *)(pbuf)) & (BIT(7) |\
-+#define get_frame_subtype(pbuf)	(le16_to_cpu(*(__le16 *)(pbuf)) & (BIT(7) |\
+@@ -210,7 +210,7 @@ enum WIFI_REG_DOMAIN {
+ #define get_frame_subtype(pbuf)	(le16_to_cpu(*(__le16 *)(pbuf)) & (BIT(7) |\
  	 BIT(6) | BIT(5) | BIT(4) | BIT(3) | BIT(2)))
  
- #define SetFrameSubType(pbuf, type) \
+-#define SetFrameSubType(pbuf, type) \
++#define set_frame_subtype(pbuf, type) \
+ 	do {    \
+ 		*(__le16 *)(pbuf) &= cpu_to_le16(~(BIT(7) | BIT(6) |	\
+ 		 BIT(5) | BIT(4) | BIT(3) | BIT(2))); \
 -- 
 2.25.1
 

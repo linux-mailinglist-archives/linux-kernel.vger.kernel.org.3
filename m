@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33FFB483224
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:25:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF48A4833AB
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:41:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231345AbiACOZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:25:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37754 "EHLO
+        id S234419AbiACOkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:40:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231503AbiACOY6 (ORCPT
+        with ESMTP id S234969AbiACOid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:24:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40729C061799;
-        Mon,  3 Jan 2022 06:24:58 -0800 (PST)
+        Mon, 3 Jan 2022 09:38:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A72C07E5C3;
+        Mon,  3 Jan 2022 06:34:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3DE161115;
-        Mon,  3 Jan 2022 14:24:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8377C36AED;
-        Mon,  3 Jan 2022 14:24:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1C946B80EFC;
+        Mon,  3 Jan 2022 14:34:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E251C36AED;
+        Mon,  3 Jan 2022 14:34:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641219897;
-        bh=Ij56v6rE/z80DpQA0o2gHhtAOHmyg/M+gIvhxCVw19U=;
+        s=korg; t=1641220454;
+        bh=k7D1OA2Ii3MGEVnnuFmG31cfWeIt3MzNwOsJB+Rl5u4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0gV7I60v/C6Q7zIfHriblN4Q1XhBiaSfOZhrzpb7UoelCLKNSR6ti0v2nvxGvWa17
-         YcQ6xUJUBlgNPHURzcCfBpJ8AMgW29MbhA4USnJjByE23IVpTurLosc2RA08WRZsSI
-         3nMcEIss9nHMwQCX9q0Ibz9oI7VmQ/4MsW7NmdqQ=
+        b=KYtQWz/AXroLr2Vsl7cRBhYO79kVmnklB5urksX1ChFPqV3U9XjIKjEXsflmph/+k
+         3g7yuwwnIYswgO3hDkjO79s/ufo0xZ9fLquPXsNCLF0y06wimbfj1pzODP6Qxcx9YD
+         9e5wKVFfjjjYylyXjmuVXpizQa77DjlCGiMdoCdY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+9276d76e83e3bcde6c99@syzkaller.appspotmail.com,
-        Lee Jones <lee.jones@linaro.org>,
-        Xin Long <lucien.xin@gmail.com>,
+        stable@vger.kernel.org, Matthias-Christian Ott <ott@mirix.org>,
+        Andrew Lunn <andrew@lunn.ch>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 11/27] sctp: use call_rcu to free endpoint
-Date:   Mon,  3 Jan 2022 15:23:51 +0100
-Message-Id: <20220103142052.551038831@linuxfoundation.org>
+Subject: [PATCH 5.15 31/73] net: usb: pegasus: Do not drop long Ethernet frames
+Date:   Mon,  3 Jan 2022 15:23:52 +0100
+Message-Id: <20220103142057.914920766@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142052.162223000@linuxfoundation.org>
-References: <20220103142052.162223000@linuxfoundation.org>
+In-Reply-To: <20220103142056.911344037@linuxfoundation.org>
+References: <20220103142056.911344037@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,275 +50,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Long <lucien.xin@gmail.com>
+From: Matthias-Christian Ott <ott@mirix.org>
 
-[ Upstream commit 5ec7d18d1813a5bead0b495045606c93873aecbb ]
+[ Upstream commit ca506fca461b260ab32952b610c3d4aadc6c11fd ]
 
-This patch is to delay the endpoint free by calling call_rcu() to fix
-another use-after-free issue in sctp_sock_dump():
+The D-Link DSB-650TX (2001:4002) is unable to receive Ethernet frames
+that are longer than 1518 octets, for example, Ethernet frames that
+contain 802.1Q VLAN tags.
 
-  BUG: KASAN: use-after-free in __lock_acquire+0x36d9/0x4c20
-  Call Trace:
-    __lock_acquire+0x36d9/0x4c20 kernel/locking/lockdep.c:3218
-    lock_acquire+0x1ed/0x520 kernel/locking/lockdep.c:3844
-    __raw_spin_lock_bh include/linux/spinlock_api_smp.h:135 [inline]
-    _raw_spin_lock_bh+0x31/0x40 kernel/locking/spinlock.c:168
-    spin_lock_bh include/linux/spinlock.h:334 [inline]
-    __lock_sock+0x203/0x350 net/core/sock.c:2253
-    lock_sock_nested+0xfe/0x120 net/core/sock.c:2774
-    lock_sock include/net/sock.h:1492 [inline]
-    sctp_sock_dump+0x122/0xb20 net/sctp/diag.c:324
-    sctp_for_each_transport+0x2b5/0x370 net/sctp/socket.c:5091
-    sctp_diag_dump+0x3ac/0x660 net/sctp/diag.c:527
-    __inet_diag_dump+0xa8/0x140 net/ipv4/inet_diag.c:1049
-    inet_diag_dump+0x9b/0x110 net/ipv4/inet_diag.c:1065
-    netlink_dump+0x606/0x1080 net/netlink/af_netlink.c:2244
-    __netlink_dump_start+0x59a/0x7c0 net/netlink/af_netlink.c:2352
-    netlink_dump_start include/linux/netlink.h:216 [inline]
-    inet_diag_handler_cmd+0x2ce/0x3f0 net/ipv4/inet_diag.c:1170
-    __sock_diag_cmd net/core/sock_diag.c:232 [inline]
-    sock_diag_rcv_msg+0x31d/0x410 net/core/sock_diag.c:263
-    netlink_rcv_skb+0x172/0x440 net/netlink/af_netlink.c:2477
-    sock_diag_rcv+0x2a/0x40 net/core/sock_diag.c:274
+The frames are sent to the pegasus driver via USB but the driver
+discards them because they have the Long_pkt field set to 1 in the
+received status report. The function read_bulk_callback of the pegasus
+driver treats such received "packets" (in the terminology of the
+hardware) as errors but the field simply does just indicate that the
+Ethernet frame (MAC destination to FCS) is longer than 1518 octets.
 
-This issue occurs when asoc is peeled off and the old sk is freed after
-getting it by asoc->base.sk and before calling lock_sock(sk).
+It seems that in the 1990s there was a distinction between
+"giant" (> 1518) and "runt" (< 64) frames and the hardware includes
+flags to indicate this distinction. It seems that the purpose of the
+distinction "giant" frames was to not allow infinitely long frames due
+to transmission errors and to allow hardware to have an upper limit of
+the frame size. However, the hardware already has such limit with its
+2048 octet receive buffer and, therefore, Long_pkt is merely a
+convention and should not be treated as a receive error.
 
-To prevent the sk free, as a holder of the sk, ep should be alive when
-calling lock_sock(). This patch uses call_rcu() and moves sock_put and
-ep free into sctp_endpoint_destroy_rcu(), so that it's safe to try to
-hold the ep under rcu_read_lock in sctp_transport_traverse_process().
+Actually, the hardware is even able to receive Ethernet frames with 2048
+octets which exceeds the claimed limit frame size limit of the driver of
+1536 octets (PEGASUS_MTU).
 
-If sctp_endpoint_hold() returns true, it means this ep is still alive
-and we have held it and can continue to dump it; If it returns false,
-it means this ep is dead and can be freed after rcu_read_unlock, and
-we should skip it.
-
-In sctp_sock_dump(), after locking the sk, if this ep is different from
-tsp->asoc->ep, it means during this dumping, this asoc was peeled off
-before calling lock_sock(), and the sk should be skipped; If this ep is
-the same with tsp->asoc->ep, it means no peeloff happens on this asoc,
-and due to lock_sock, no peeloff will happen either until release_sock.
-
-Note that delaying endpoint free won't delay the port release, as the
-port release happens in sctp_endpoint_destroy() before calling call_rcu().
-Also, freeing endpoint by call_rcu() makes it safe to access the sk by
-asoc->base.sk in sctp_assocs_seq_show() and sctp_rcv().
-
-Thanks Jones to bring this issue up.
-
-v1->v2:
-  - improve the changelog.
-  - add kfree(ep) into sctp_endpoint_destroy_rcu(), as Jakub noticed.
-
-Reported-by: syzbot+9276d76e83e3bcde6c99@syzkaller.appspotmail.com
-Reported-by: Lee Jones <lee.jones@linaro.org>
-Fixes: d25adbeb0cdb ("sctp: fix an use-after-free issue in sctp_sock_dump")
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Matthias-Christian Ott <ott@mirix.org>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/sctp/sctp.h    |  6 +++---
- include/net/sctp/structs.h |  3 ++-
- net/sctp/diag.c            | 12 ++++++------
- net/sctp/endpointola.c     | 23 +++++++++++++++--------
- net/sctp/socket.c          | 23 +++++++++++++++--------
- 5 files changed, 41 insertions(+), 26 deletions(-)
+ drivers/net/usb/pegasus.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/net/sctp/sctp.h b/include/net/sctp/sctp.h
-index 2c6570e6fcfec..903b2ddde1b43 100644
---- a/include/net/sctp/sctp.h
-+++ b/include/net/sctp/sctp.h
-@@ -118,6 +118,7 @@ extern struct percpu_counter sctp_sockets_allocated;
- int sctp_asconf_mgmt(struct sctp_sock *, struct sctp_sockaddr_entry *);
- struct sk_buff *sctp_skb_recv_datagram(struct sock *, int, int, int *);
+diff --git a/drivers/net/usb/pegasus.c b/drivers/net/usb/pegasus.c
+index 6a92a3fef75e5..cd063f45785b7 100644
+--- a/drivers/net/usb/pegasus.c
++++ b/drivers/net/usb/pegasus.c
+@@ -493,11 +493,11 @@ static void read_bulk_callback(struct urb *urb)
+ 		goto goon;
  
-+typedef int (*sctp_callback_t)(struct sctp_endpoint *, struct sctp_transport *, void *);
- void sctp_transport_walk_start(struct rhashtable_iter *iter);
- void sctp_transport_walk_stop(struct rhashtable_iter *iter);
- struct sctp_transport *sctp_transport_get_next(struct net *net,
-@@ -128,9 +129,8 @@ int sctp_transport_lookup_process(int (*cb)(struct sctp_transport *, void *),
- 				  struct net *net,
- 				  const union sctp_addr *laddr,
- 				  const union sctp_addr *paddr, void *p);
--int sctp_for_each_transport(int (*cb)(struct sctp_transport *, void *),
--			    int (*cb_done)(struct sctp_transport *, void *),
--			    struct net *net, int *pos, void *p);
-+int sctp_transport_traverse_process(sctp_callback_t cb, sctp_callback_t cb_done,
-+				    struct net *net, int *pos, void *p);
- int sctp_for_each_endpoint(int (*cb)(struct sctp_endpoint *, void *), void *p);
- int sctp_get_sctp_info(struct sock *sk, struct sctp_association *asoc,
- 		       struct sctp_info *info);
-diff --git a/include/net/sctp/structs.h b/include/net/sctp/structs.h
-index 2882bc7a5b4b8..18f9924aa2507 100644
---- a/include/net/sctp/structs.h
-+++ b/include/net/sctp/structs.h
-@@ -1348,6 +1348,7 @@ struct sctp_endpoint {
- 
- 	u32 secid;
- 	u32 peer_secid;
-+	struct rcu_head rcu;
- };
- 
- /* Recover the outter endpoint structure. */
-@@ -1363,7 +1364,7 @@ static inline struct sctp_endpoint *sctp_ep(struct sctp_ep_common *base)
- struct sctp_endpoint *sctp_endpoint_new(struct sock *, gfp_t);
- void sctp_endpoint_free(struct sctp_endpoint *);
- void sctp_endpoint_put(struct sctp_endpoint *);
--void sctp_endpoint_hold(struct sctp_endpoint *);
-+int sctp_endpoint_hold(struct sctp_endpoint *ep);
- void sctp_endpoint_add_asoc(struct sctp_endpoint *, struct sctp_association *);
- struct sctp_association *sctp_endpoint_lookup_assoc(
- 	const struct sctp_endpoint *ep,
-diff --git a/net/sctp/diag.c b/net/sctp/diag.c
-index 8767405de9fa4..0a9db0a7f4234 100644
---- a/net/sctp/diag.c
-+++ b/net/sctp/diag.c
-@@ -307,9 +307,8 @@ out:
- 	return err;
- }
- 
--static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
-+static int sctp_sock_dump(struct sctp_endpoint *ep, struct sctp_transport *tsp, void *p)
- {
--	struct sctp_endpoint *ep = tsp->asoc->ep;
- 	struct sctp_comm_param *commp = p;
- 	struct sock *sk = ep->base.sk;
- 	struct sk_buff *skb = commp->skb;
-@@ -319,6 +318,8 @@ static int sctp_sock_dump(struct sctp_transport *tsp, void *p)
- 	int err = 0;
- 
- 	lock_sock(sk);
-+	if (ep != tsp->asoc->ep)
-+		goto release;
- 	list_for_each_entry(assoc, &ep->asocs, asocs) {
- 		if (cb->args[4] < cb->args[1])
- 			goto next;
-@@ -361,9 +362,8 @@ release:
- 	return err;
- }
- 
--static int sctp_sock_filter(struct sctp_transport *tsp, void *p)
-+static int sctp_sock_filter(struct sctp_endpoint *ep, struct sctp_transport *tsp, void *p)
- {
--	struct sctp_endpoint *ep = tsp->asoc->ep;
- 	struct sctp_comm_param *commp = p;
- 	struct sock *sk = ep->base.sk;
- 	const struct inet_diag_req_v2 *r = commp->r;
-@@ -521,8 +521,8 @@ skip:
- 	if (!(idiag_states & ~(TCPF_LISTEN | TCPF_CLOSE)))
- 		goto done;
- 
--	sctp_for_each_transport(sctp_sock_filter, sctp_sock_dump,
--				net, &pos, &commp);
-+	sctp_transport_traverse_process(sctp_sock_filter, sctp_sock_dump,
-+					net, &pos, &commp);
- 	cb->args[2] = pos;
- 
- done:
-diff --git a/net/sctp/endpointola.c b/net/sctp/endpointola.c
-index 8640dedcf64f1..c4068451b9c76 100644
---- a/net/sctp/endpointola.c
-+++ b/net/sctp/endpointola.c
-@@ -242,6 +242,18 @@ void sctp_endpoint_free(struct sctp_endpoint *ep)
- }
- 
- /* Final destructor for endpoint.  */
-+static void sctp_endpoint_destroy_rcu(struct rcu_head *head)
-+{
-+	struct sctp_endpoint *ep = container_of(head, struct sctp_endpoint, rcu);
-+	struct sock *sk = ep->base.sk;
-+
-+	sctp_sk(sk)->ep = NULL;
-+	sock_put(sk);
-+
-+	kfree(ep);
-+	SCTP_DBG_OBJCNT_DEC(ep);
-+}
-+
- static void sctp_endpoint_destroy(struct sctp_endpoint *ep)
- {
- 	struct sock *sk;
-@@ -275,18 +287,13 @@ static void sctp_endpoint_destroy(struct sctp_endpoint *ep)
- 	if (sctp_sk(sk)->bind_hash)
- 		sctp_put_port(sk);
- 
--	sctp_sk(sk)->ep = NULL;
--	/* Give up our hold on the sock */
--	sock_put(sk);
--
--	kfree(ep);
--	SCTP_DBG_OBJCNT_DEC(ep);
-+	call_rcu(&ep->rcu, sctp_endpoint_destroy_rcu);
- }
- 
- /* Hold a reference to an endpoint. */
--void sctp_endpoint_hold(struct sctp_endpoint *ep)
-+int sctp_endpoint_hold(struct sctp_endpoint *ep)
- {
--	refcount_inc(&ep->base.refcnt);
-+	return refcount_inc_not_zero(&ep->base.refcnt);
- }
- 
- /* Release a reference to an endpoint and clean up if there are
-diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-index 1148f66917079..d429d59228041 100644
---- a/net/sctp/socket.c
-+++ b/net/sctp/socket.c
-@@ -5056,11 +5056,12 @@ int sctp_transport_lookup_process(int (*cb)(struct sctp_transport *, void *),
- }
- EXPORT_SYMBOL_GPL(sctp_transport_lookup_process);
- 
--int sctp_for_each_transport(int (*cb)(struct sctp_transport *, void *),
--			    int (*cb_done)(struct sctp_transport *, void *),
--			    struct net *net, int *pos, void *p) {
-+int sctp_transport_traverse_process(sctp_callback_t cb, sctp_callback_t cb_done,
-+				    struct net *net, int *pos, void *p)
-+{
- 	struct rhashtable_iter hti;
- 	struct sctp_transport *tsp;
-+	struct sctp_endpoint *ep;
- 	int ret;
- 
- again:
-@@ -5069,26 +5070,32 @@ again:
- 
- 	tsp = sctp_transport_get_idx(net, &hti, *pos + 1);
- 	for (; !IS_ERR_OR_NULL(tsp); tsp = sctp_transport_get_next(net, &hti)) {
--		ret = cb(tsp, p);
--		if (ret)
--			break;
-+		ep = tsp->asoc->ep;
-+		if (sctp_endpoint_hold(ep)) { /* asoc can be peeled off */
-+			ret = cb(ep, tsp, p);
-+			if (ret)
-+				break;
-+			sctp_endpoint_put(ep);
-+		}
- 		(*pos)++;
- 		sctp_transport_put(tsp);
- 	}
- 	sctp_transport_walk_stop(&hti);
- 
- 	if (ret) {
--		if (cb_done && !cb_done(tsp, p)) {
-+		if (cb_done && !cb_done(ep, tsp, p)) {
- 			(*pos)++;
-+			sctp_endpoint_put(ep);
- 			sctp_transport_put(tsp);
- 			goto again;
- 		}
-+		sctp_endpoint_put(ep);
- 		sctp_transport_put(tsp);
- 	}
- 
- 	return ret;
- }
--EXPORT_SYMBOL_GPL(sctp_for_each_transport);
-+EXPORT_SYMBOL_GPL(sctp_transport_traverse_process);
- 
- /* 7.2.1 Association Status (SCTP_STATUS)
- 
+ 	rx_status = buf[count - 2];
+-	if (rx_status & 0x1e) {
++	if (rx_status & 0x1c) {
+ 		netif_dbg(pegasus, rx_err, net,
+ 			  "RX packet error %x\n", rx_status);
+ 		net->stats.rx_errors++;
+-		if (rx_status & 0x06)	/* long or runt	*/
++		if (rx_status & 0x04)	/* runt	*/
+ 			net->stats.rx_length_errors++;
+ 		if (rx_status & 0x08)
+ 			net->stats.rx_crc_errors++;
 -- 
 2.34.1
 

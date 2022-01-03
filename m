@@ -2,130 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C154838F3
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 00:01:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0E54838F4
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 00:03:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbiACXBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 18:01:46 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:41814 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbiACXBo (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 18:01:44 -0500
-Received: from kbox (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
-        by linux.microsoft.com (Postfix) with ESMTPSA id EEC1D20B7179;
-        Mon,  3 Jan 2022 15:01:43 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EEC1D20B7179
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1641250904;
-        bh=zhGZbRIjnQ9zoZM+UuGo+hN274Xz54V+/R2UHwkLgzA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BTpu5M17g13mPQeTO4B4EY2hsveOO+ckUrdAqGw2o+mTSHBCUe0qDwFrvk5VTpVKS
-         Tm6T9vJaa5TiqKxlpMhqLuY+GJJxeBMgQjkVEEo+g4Rq70cpk6l7bVQDujJ+NVmZMU
-         Z/G1gohUv9XAocH2kit5/XFSZgaFR0WHflJLu3wk=
-Date:   Mon, 3 Jan 2022 15:01:39 -0800
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     rostedt@goodmis.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 09/12] user_events: Add documentation file
-Message-ID: <20220103230139.GA1522@kbox>
-References: <20211216173511.10390-1-beaub@linux.microsoft.com>
- <20211216173511.10390-10-beaub@linux.microsoft.com>
- <20211222231834.875f662b37fe673dec0b3663@kernel.org>
+        id S230422AbiACXDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 18:03:21 -0500
+Received: from mga04.intel.com ([192.55.52.120]:57737 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230343AbiACXDT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 18:03:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641250999; x=1672786999;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3IMir7bHq3FA6eo0MQd9Rr+HvDz01+2BDkL6zkQgisE=;
+  b=dlJqyL/gi5lMIBplE/IgNjJGjckDukuwdGYM2GuGIzM7FAqJkXUIvdQ9
+   J+sPfIpE17VlSfw4a0lVDmDB6GAsKclKFCe4UY8yWF+FTrOyt3RPG0D8m
+   dlKDB/dVuK2tKq/FaOR8OY3mc+lNsqw+/yi5TdG9BqvcYZCshBhincYBn
+   ySgpug0G0V1/anAWo4aaLbi0DcKDUItkVZA8Ht+iQDME//SLrdL8cGjX2
+   OCdXYoMYd56hobvw+pbeJ9kFkY0YlqMRy41ME6chDkkqfETinqOvzP0+m
+   2or8DLkgHndtXj5NLS7Q8B87wO07P3YIguzvoXcISuW+kP36MtcBLi/cZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="240947441"
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="240947441"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 15:03:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="471790208"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 03 Jan 2022 15:03:17 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n4WMH-000EU9-1q; Mon, 03 Jan 2022 23:03:17 +0000
+Date:   Tue, 4 Jan 2022 07:02:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Palmer <daniel@0x0f.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [chenxing:msc313_mainlining 85/86] Error:
+ arch/arm/boot/dts/mstar-infinity2m-ssd201-wirelesstag-ido-som2d01.dtsi:18.1-9
+ Label or path pm_uart not found
+Message-ID: <202201040602.CbRBg9gS-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211222231834.875f662b37fe673dec0b3663@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 11:18:34PM +0900, Masami Hiramatsu wrote:
-> Hi Beau,
-> 
-> On Thu, 16 Dec 2021 09:35:08 -0800
-> Beau Belgrave <beaub@linux.microsoft.com> wrote:
-> 
-> > Add a documentation file about user_events with example code, etc.
-> > explaining how it may be used.
-> > 
-> > Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
-> > ---
-> >  Documentation/trace/index.rst       |   1 +
-> >  Documentation/trace/user_events.rst | 195 ++++++++++++++++++++++++++++
-> >  2 files changed, 196 insertions(+)
-> >  create mode 100644 Documentation/trace/user_events.rst
-> > 
-> > diff --git a/Documentation/trace/index.rst b/Documentation/trace/index.rst
-> > index 3769b9b7aed8..3a47aa8341c6 100644
-> > --- a/Documentation/trace/index.rst
-> > +++ b/Documentation/trace/index.rst
-> > @@ -30,3 +30,4 @@ Linux Tracing Technologies
-> >     stm
-> >     sys-t
-> >     coresight/index
-> > +   user_events
-> > diff --git a/Documentation/trace/user_events.rst b/Documentation/trace/user_events.rst
-> > new file mode 100644
-> > index 000000000000..36104b537476
-> > --- /dev/null
-> > +++ b/Documentation/trace/user_events.rst
-> > @@ -0,0 +1,195 @@
-> > +=========================================
-> > +user_events: User-based Event Tracing
-> > +=========================================
+tree:   git://github.com/linux-chenxing/linux.git msc313_mainlining
+head:   2269f75a5b53b9a05d21d432ad75f5e41b344814
+commit: 7bf46c9e0566d3046584d7fed53d1587c316fde5 [85/86] ARM: dts: mstar: Add top level dts for ssd201-som2d01
+config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20220104/202201040602.CbRBg9gS-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/linux-chenxing/linux/commit/7bf46c9e0566d3046584d7fed53d1587c316fde5
+        git remote add chenxing git://github.com/linux-chenxing/linux.git
+        git fetch --no-tags chenxing msc313_mainlining
+        git checkout 7bf46c9e0566d3046584d7fed53d1587c316fde5
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
 
-[..]
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > +Registering
-> > +-----------
-> > +Registering within a user process is done via ioctl() out to the
-> > +/sys/kernel/debug/tracing/user_events_data file. The command to issue is
-> > +DIAG_IOCSREG. This command takes a struct user_reg as an argument.
-> > +
-> 
-> Could you add the user_reg data structure here?
-> 
+All errors (new ones prefixed by >>):
 
-Sure thing.
+>> Error: arch/arm/boot/dts/mstar-infinity2m-ssd201-wirelesstag-ido-som2d01.dtsi:18.1-9 Label or path pm_uart not found
+   FATAL ERROR: Syntax error parsing input tree
 
-> > +The struct user_reg requires two values, the first is the size of the structure
-> > +to ensure forward and backward compatibility. The second is the command string
-> > +to issue for registering.
-> 
-> This explanation may be a bit out of date? 
-> user_reg has 4 fields. 2 for input, 2 for output.
-> 
-
-Yeah, it only requires 2 inputs to work. I'll try to make this clearer.
-
-> And could you add a section for DIAG_IOCSDEL?
-> 
-
-Sure thing.
-
-> > +
-> > +User based events show up under tracefs like any other event under the
-> > +subsystem named "user_events". This means tools that wish to attach to the
-> > +events need to use /sys/kernel/debug/tracing/events/user_events/[name]/enable
-> > +or perf record -e user_events:[name] when attaching/recording.
-> > +
-> > +**NOTE:** *The write_index returned is only valid for the FD that was used*
-> > +
-
-[..]
-
-> > +Example Code
-> > +------------
-> > +See sample code in samples/user_events.
-> 
-> Maybe tools/testing/selftests/user_events ?
-> 
-
-Previously I was asked to put the sample code in samples/user_events, so
-it lives there.
-
-Thanks,
--Beau
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,76 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 569674832E5
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:32:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F88483364
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:36:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234760AbiACObk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:31:40 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:40528 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234685AbiACO3t (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:29:49 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        id S235120AbiACOgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:36:35 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33898 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235562AbiACOeo (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 09:34:44 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 74FF91EC03C9;
-        Mon,  3 Jan 2022 15:29:43 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1641220183;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=oE7Hh2g3joX5kAqP0+tlJVwo2oeAGS331TRpaZv2Mmc=;
-        b=MjC/g0mmC1FI5Zb/TO43NrKn1ydnM0xSeh6AqovnbBZiX3TC44csAEBvM4xCqdzrqNmZjk
-        04k1egrrs5IeEACO4S5OAIAtgM6JcJNXZtKsbt2sKLpGBMRPiwcI1NDmdb4zQ/MGJ/80Vk
-        DXq9xzfS7A5EfhZur6SgIBBMA7ysW5k=
-Date:   Mon, 3 Jan 2022 15:29:44 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Dave Hansen <dave.hansen@intel.com>, tglx@linutronix.de,
-        mingo@redhat.com, luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 19/26] x86/tdx: Make pages shared in ioremap()
-Message-ID: <YdMIWAT42el4D6wJ@zn.tnic>
-References: <20211214150304.62613-20-kirill.shutemov@linux.intel.com>
- <87c288d6-9bf8-5a94-a628-1e0aaa7de690@amd.com>
- <20211223171530.v73posbqizb5l3md@black.fi.intel.com>
- <f61b591b-a06c-bc29-4b9b-a5d46111fe4e@intel.com>
- <YcTTt4LXKfDO+9u3@zn.tnic>
- <20211223205604.g44kez5d7iedatfo@box.shutemov.name>
- <YcTlhp1PUfrMOelI@zn.tnic>
- <20211224110300.7zj3nc5nbbv7jobp@black.fi.intel.com>
- <33914dc1-37e8-f0bb-6468-71c3b5f4169d@amd.com>
- <20220103141705.6hqflhwykqmtfim6@black.fi.intel.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9F35B80EF2
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 14:34:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1975C36AEB;
+        Mon,  3 Jan 2022 14:34:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641220482;
+        bh=kxzLuP0W5HNS5y4JPh4ATpkpErb4oP7rLxAFa+gmsy4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=u4gJ8Yd5UfOl2AYDjVwu/nSvn9dhd9SwIu3bBzMCl8ONS/1thlwGuQXXq4zHnyl4L
+         R8YBmkTzsFUEDrya9lnfw0JkzUYpxZmgO/qGTwVPdsf75nG/SfRUQy50Hw1GPfc024
+         rIa9suGthVJddIsafBxlPsJ9wF5TKD2CdNU33lpsHKijZFzlAy/rYzJiPlo8IFzh8V
+         iozEu/C3loTEzIAqYhELi0369oTHpa2hRwetkUHyuLdnHbxO80bLkzSr3BhPSmx/td
+         5yepxpk9o+VaFVbh8ygefkWwhz70LKYGuDadpIpPllkcslB+Gqp26FhylDWrgvs9C2
+         6c0izP3O4/XDw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 7C7105C19BD; Mon,  3 Jan 2022 06:34:42 -0800 (PST)
+Date:   Mon, 3 Jan 2022 06:34:42 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Zqiang <qiang1.zhang@intel.com>, frederic@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rcu: per-cpu rcuc kthread are created only when
+ rcutree.use_softirq=0
+Message-ID: <20220103143442.GG2408833@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20211228160510.2893362-1-qiang1.zhang@intel.com>
+ <20220101164426.GA2408833@paulmck-ThinkPad-P17-Gen-1>
+ <YdL3Vx6pq6YCL1kx@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220103141705.6hqflhwykqmtfim6@black.fi.intel.com>
+In-Reply-To: <YdL3Vx6pq6YCL1kx@linutronix.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 03, 2022 at 05:17:05PM +0300, Kirill A. Shutemov wrote:
-> I'm not sure how to unwind this dependency hell. Any clues?
+On Mon, Jan 03, 2022 at 02:17:11PM +0100, Sebastian Andrzej Siewior wrote:
+> On 2022-01-01 08:44:26 [-0800], Paul E. McKenney wrote:
+> > On Wed, Dec 29, 2021 at 12:05:10AM +0800, Zqiang wrote:
+> > > In non-RT kernel, if the RCU_BOOST is enabled, the per-cpu rcuc
+> > > kthread will be created, however under the rcutree.use_softirq=1,
+> > > the RCU core processing only in softirq context, the rcuc kthread
+> > > doesn't do anything, so remove RCU_BOOST interference.
+> > > 
+> > > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> > 
+> > Looks sane to me, but adding Sebastian on CC for his thoughts.
+> 
+> Yes, it makes sense. invoke_rcu_core_kthread() is only invoked for
+> !use_softirq so it makes to create the threads based on this condition.
+> 
+> Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-Forward-declaration maybe?
+Thank you both!  As usual, I could not resist a bit of wordsmithing,
+please see below.
 
-I.e., something like
+							Thanx, Paul
 
-struct task_struct;
+------------------------------------------------------------------------
 
-at the top of arch/x86/include/asm/switch_to.h, for example...
+commit 6e68b781388cfaca95a07493a060c4a6e4ee5d0f
+Author: Zqiang <qiang1.zhang@intel.com>
+Date:   Wed Dec 29 00:05:10 2021 +0800
 
--- 
-Regards/Gruss,
-    Boris.
+    rcu: Create per-cpu rcuc kthreads only when rcutree.use_softirq=0
+    
+    The per-CPU "rcuc" kthreads are used only by kernels booted with
+    rcutree.use_softirq=0, but they are nevertheless unconditionally created
+    by kernels built with CONFIG_RCU_BOOST=y.  This results in "rcuc"
+    kthreads being created that are never actually used.  This commit
+    therefore refrains from creating these kthreads unless the kernel
+    is actually booted with rcutree.use_softirq=0.
+    
+    Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+    Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
-https://people.kernel.org/tglx/notes-about-netiquette
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index aeea5487632f7..5c0ffee7a43a0 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -2903,7 +2903,7 @@ static int __init rcu_spawn_core_kthreads(void)
+ 
+ 	for_each_possible_cpu(cpu)
+ 		per_cpu(rcu_data.rcu_cpu_has_work, cpu) = 0;
+-	if (!IS_ENABLED(CONFIG_RCU_BOOST) && use_softirq)
++	if (use_softirq)
+ 		return 0;
+ 	WARN_ONCE(smpboot_register_percpu_thread(&rcu_cpu_thread_spec),
+ 		  "%s: Could not start rcuc kthread, OOM is now expected behavior\n", __func__);

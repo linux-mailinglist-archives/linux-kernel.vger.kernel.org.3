@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B91E4832C0
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47CB7483382
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:37:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229455AbiACOam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:30:42 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58480 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234180AbiACO3d (ORCPT
+        id S235944AbiACOhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:37:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39770 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235893AbiACOfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:29:33 -0500
+        Mon, 3 Jan 2022 09:35:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE96C0698E0;
+        Mon,  3 Jan 2022 06:33:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E7EBB6104D;
-        Mon,  3 Jan 2022 14:29:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B020BC36AEF;
-        Mon,  3 Jan 2022 14:29:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E02D661118;
+        Mon,  3 Jan 2022 14:33:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2B37C36AEE;
+        Mon,  3 Jan 2022 14:33:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220172;
-        bh=81FEi5KOVRIXz2dOtAN0oZn0JSOlVOsOo5u44K4BUO8=;
+        s=korg; t=1641220381;
+        bh=xMd3ssgUtmHfUUuT/aN+AwqoW8S23HqgA7y0QG5Ftn0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oIB3Fv1xayHe2MIhb6ZHQTxg3BwG38B5omYhoBK8xJ1ROisoqVBw3eVhiHx7anFGi
-         83AFwGClYqu/0z69eFk+rBsnmnCoE4ETcMsh5qaSjmoFPOQTkPvE5PnBrBq0HrpzQH
-         1l1ifhCY0gspBAFGYAIK0qA+63foqG8GO0xdDu2Y=
+        b=gRU5UGXRpWVUzFYFnRNuKfyoDXrnoqo3AH+NRJNtAqthOtiYXN6CJulhWXAnR2qrD
+         xwnoalehJZCpMMmjF1oDoy319GvTxwXx5SnGtJo6sY0vwKxJPRF0+bzCR8leH/jvMM
+         Xut9ZFewWVpHb32VNolCOHbjI+udbJNLa4nhnSFs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Dmitry V. Levin" <ldv@altlinux.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 34/48] uapi: fix linux/nfc.h userspace compilation errors
-Date:   Mon,  3 Jan 2022 15:24:11 +0100
-Message-Id: <20220103142054.625924517@linuxfoundation.org>
+        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        syzbot+e417648b303855b91d8a@syzkaller.appspotmail.com
+Subject: [PATCH 5.15 51/73] i2c: validate user data in compat ioctl
+Date:   Mon,  3 Jan 2022 15:24:12 +0100
+Message-Id: <20220103142058.566788377@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142053.466768714@linuxfoundation.org>
-References: <20220103142053.466768714@linuxfoundation.org>
+In-Reply-To: <20220103142056.911344037@linuxfoundation.org>
+References: <20220103142056.911344037@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,48 +49,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry V. Levin <ldv@altlinux.org>
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-commit 7175f02c4e5f5a9430113ab9ca0fd0ce98b28a51 upstream.
+[ Upstream commit bb436283e25aaf1533ce061605d23a9564447bdf ]
 
-Replace sa_family_t with __kernel_sa_family_t to fix the following
-linux/nfc.h userspace compilation errors:
+Wrong user data may cause warning in i2c_transfer(), ex: zero msgs.
+Userspace should not be able to trigger warnings, so this patch adds
+validation checks for user data in compact ioctl to prevent reported
+warnings
 
-/usr/include/linux/nfc.h:266:2: error: unknown type name 'sa_family_t'
-  sa_family_t sa_family;
-/usr/include/linux/nfc.h:274:2: error: unknown type name 'sa_family_t'
-  sa_family_t sa_family;
-
-Fixes: 23b7869c0fd0 ("NFC: add the NFC socket raw protocol")
-Fixes: d646960f7986 ("NFC: Initial LLCP support")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Dmitry V. Levin <ldv@altlinux.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-and-tested-by: syzbot+e417648b303855b91d8a@syzkaller.appspotmail.com
+Fixes: 7d5cb45655f2 ("i2c compat ioctls: move to ->compat_ioctl()")
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/uapi/linux/nfc.h |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/i2c/i2c-dev.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/include/uapi/linux/nfc.h
-+++ b/include/uapi/linux/nfc.h
-@@ -263,7 +263,7 @@ enum nfc_sdp_attr {
- #define NFC_SE_ENABLED  0x1
+diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
+index bce0e8bb78520..cf5d049342ead 100644
+--- a/drivers/i2c/i2c-dev.c
++++ b/drivers/i2c/i2c-dev.c
+@@ -535,6 +535,9 @@ static long compat_i2cdev_ioctl(struct file *file, unsigned int cmd, unsigned lo
+ 				   sizeof(rdwr_arg)))
+ 			return -EFAULT;
  
- struct sockaddr_nfc {
--	sa_family_t sa_family;
-+	__kernel_sa_family_t sa_family;
- 	__u32 dev_idx;
- 	__u32 target_idx;
- 	__u32 nfc_protocol;
-@@ -271,7 +271,7 @@ struct sockaddr_nfc {
++		if (!rdwr_arg.msgs || rdwr_arg.nmsgs == 0)
++			return -EINVAL;
++
+ 		if (rdwr_arg.nmsgs > I2C_RDWR_IOCTL_MAX_MSGS)
+ 			return -EINVAL;
  
- #define NFC_LLCP_MAX_SERVICE_NAME 63
- struct sockaddr_nfc_llcp {
--	sa_family_t sa_family;
-+	__kernel_sa_family_t sa_family;
- 	__u32 dev_idx;
- 	__u32 target_idx;
- 	__u32 nfc_protocol;
+-- 
+2.34.1
+
 
 

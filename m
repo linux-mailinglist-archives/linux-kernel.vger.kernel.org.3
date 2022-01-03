@@ -2,62 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4274482F1A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 09:47:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56759482F2B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 09:59:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232256AbiACIrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 03:47:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48150 "EHLO
+        id S232265AbiACI7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 03:59:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbiACIrg (ORCPT
+        with ESMTP id S229723AbiACI7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 03:47:36 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3558C061761;
-        Mon,  3 Jan 2022 00:47:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=llnu8QJu6fQ5fARI5nnJE4VOSVCuPtj0YARKDQ1XaDk=; b=iwanQ2KgFNcFbhFTx85/rdZzlu
-        rWCNk7ZUS0f9diiadn9UNHsIQfNSHDMdaBYWMHbgDBzBkb8GjTC38YqoahD1rbTgYCYLiHtIIeX50
-        U+GpCJB6LjP85sYpFftg0OtUNs1wkdwmGZ1L85NOeE4dNAadtlMSSLqQg9lzTjB00HGnQHTonC79A
-        KdtvRZAGwvTWZUBw0K/IZWJZP0eV/LLqst/9LlRvlDmfEmw+T4qtwRbCV/BlXA3IRc49lwOgHpq1u
-        6Uq1tmb5lreDO2Jst+fpcGiOIoMEeIYeogyVIj3dBfFzisxvogpiEAOPNEBX1uAlykqYT9z3TfdoZ
-        OrFpM22w==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n4J04-008c8E-Jv; Mon, 03 Jan 2022 08:47:28 +0000
-Date:   Mon, 3 Jan 2022 00:47:28 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     benve@cisco.com, govind@gmx.com, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] enic: Use dma_set_mask_and_coherent()
-Message-ID: <YdK4IIFvi5O5eXHC@infradead.org>
-References: <f926eab883a3e5c4dbfd3eb5108b3e1828e6513b.1641045708.git.christophe.jaillet@wanadoo.fr>
+        Mon, 3 Jan 2022 03:59:08 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389A1C061761;
+        Mon,  3 Jan 2022 00:59:08 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 8A5071F41EBE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1641200347;
+        bh=Lg7ar1sN11ciL2DcpoXXF8T+6ylIewLjLgr41Thyq3Y=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=YKOtWIbxd0k61NxswnNEpxj+h1HzxuK9la2Q+nvHl2NikBMjv+8ZCdlxSr5bepYGH
+         rmO7GB93XpTKJiOc55M2foj8gXDaQ9oLaCGMHJ7ncNMF2FlIc7jeBq7UBm8BTt7acd
+         5qWncBGtpDuiHtuAD6oBA/yWfyfjX9EEh+FOBJ7Fz3OwzZUTRH1JbmsEGFHLq+E7W9
+         sgvyn/PymuRs79ZAzKf53YXkO23qjQY8uDi6RMxXjm04gNySExylW9iq7XNDpdZd0M
+         ULOLdg3gHfjACKvWBNOKtxIDJ/XA6Qs0CsfVpidOYylnH89u/S+rJqJWYrF6B3tzbq
+         tUPGLHYuglTLA==
+Subject: Re: [PATCH v2 3/5] phy: mediatek: add helpers to update bits of
+ registers
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eddie Hung <eddie.hung@mediatek.com>
+References: <20211218082802.5256-1-chunfeng.yun@mediatek.com>
+ <20211218082802.5256-3-chunfeng.yun@mediatek.com>
+ <047803b9-d09f-d4f8-a674-317cc19dd055@collabora.com>
+ <75b2773d1d170f42bae0774dbc58d1458cb25502.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <821f9e8b-cf35-2e53-e64f-c19e7bde957b@collabora.com>
+Date:   Mon, 3 Jan 2022 09:59:04 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f926eab883a3e5c4dbfd3eb5108b3e1828e6513b.1641045708.git.christophe.jaillet@wanadoo.fr>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <75b2773d1d170f42bae0774dbc58d1458cb25502.camel@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 01, 2022 at 03:02:45PM +0100, Christophe JAILLET wrote:
-> -	err = dma_set_mask(&pdev->dev, DMA_BIT_MASK(47));
-> +	err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(47));
->  	if (err) {
-> +		err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
->  		if (err) {
->  			dev_err(dev, "No usable DMA configuration, aborting\n");
->  			goto err_out_release_regions;
->  		}
->  	} else {
->  		using_dac = 1;
+Il 30/12/21 03:06, Chunfeng Yun ha scritto:
+> On Fri, 2021-12-24 at 11:10 +0100, AngeloGioacchino Del Regno wrote:
+>> Il 18/12/21 09:28, Chunfeng Yun ha scritto:
+>>> Add three helpers mtk_phy_clear/set/update_bits() for registers
+>>> operation
+>>>
+>>> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+>>> ---
+>>> v2: new patch, add register access helpers,
+>>>       Add updatel() macro suggested by Vinod, here add more ones
+>>> instead.
+>>> ---
+>>>    drivers/phy/mediatek/phy-mtk-io.h | 38
+>>> +++++++++++++++++++++++++++++++
+>>>    1 file changed, 38 insertions(+)
+>>>    create mode 100644 drivers/phy/mediatek/phy-mtk-io.h
+>>>
+>>> diff --git a/drivers/phy/mediatek/phy-mtk-io.h
+>>> b/drivers/phy/mediatek/phy-mtk-io.h
+>>> new file mode 100644
+>>> index 000000000000..500fcdab165d
+>>> --- /dev/null
+>>> +++ b/drivers/phy/mediatek/phy-mtk-io.h
+>>> @@ -0,0 +1,38 @@
+>>> +/* SPDX-License-Identifier: GPL-2.0 */
+>>> +/*
+>>> + * Copyright (C) 2021 MediaTek Inc.
+>>> + *
+>>> + * Author: Chunfeng Yun <chunfeng.yun@mediatek.com>
+>>> + */
+>>> +
+>>> +#ifndef __PHY_MTK_H__
+>>> +#define __PHY_MTK_H__
+>>> +
+>>> +#include <linux/io.h>
+>>> +
+>>> +static inline void mtk_phy_clear_bits(void __iomem *reg, u32 bits)
+>>> +{
+>>> +	u32 tmp = readl(reg);
+>>> +
+>>> +	tmp &= ~bits;
+>>> +	writel(tmp, reg);
+>>> +}
+>>> +
+>>> +static inline void mtk_phy_set_bits(void __iomem *reg, u32 bits)
+>>> +{
+>>> +	u32 tmp = readl(reg);
+>>> +
+>>> +	tmp |= bits;
+>>> +	writel(tmp, reg);
+>>> +}
+>>> +
+>>> +static inline void mtk_phy_update_bits(void __iomem *reg, u32
+>>> mask, u32 val)
+>>> +{
+>>> +	u32 tmp = readl(reg);
+>>> +
+>>> +	tmp &= ~mask;
+>>> +	tmp |= val & mask;
+>>> +	writel(tmp, reg);
+>>> +}
+>>> +
+>>> +#endif
+>>>
+>>
+>> These helpers are almost exactly duplicating what
+>> regmap_update_bits() is doing.
+>> I appreciate the effort to stop open-coding the same sequences over
+>> and over by
+>> adding such helper functions,
+> I agree with you.
+>> but I think that the proper way of doing what you
+>> are proposing is not to add custom functions but rather reuse what
+>> the Linux APIs
+>> give you.
+> I also like to use common APIs ASAP, but not found suitable ones.
+> This may be a problem, I found that some similar custom helps already
+> added under phy fold.
+> 
+>>
+>> What about doing a conversion to use regmap on this driver?
+> No, we don't use regmap here, these registers are monopolized by t-phy,
+> it's not syscon.
+> 
+> 
 
-There is no need for the callback.  All the routines to set a DMA mask
-will only fail if the passed in mask is too small, but never if it is
-larger than what is supported.  Also the using_dac variable is not
-needed, NETIF_F_HIGHDMA can and should be set unconditionally.
+Hello,
+
+The regmap API allows this kind of usage, registers don't necessarily have
+to be part of a syscon.
+
+Regards,
+- Angelo

@@ -2,789 +2,436 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3254834A7
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 17:20:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D794834AB
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 17:24:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234404AbiACQUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 11:20:33 -0500
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:9627 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232511AbiACQUc (ORCPT
+        id S234430AbiACQYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 11:24:15 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59238 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231534AbiACQYO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 11:20:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1641226833; x=1672762833;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Kduq4iC5jLSf6oJL/f7Wtq1+k6j7Am+qaEpynm6uV8s=;
-  b=xU7kMy+jkXDmLjPFJtxyNSzjUaQpjNJp9cAr+zFVaJGuMRaZJhmZeOvn
-   FZ6qP6sWiofDbKQr/d01H0Q1duZMV9LbjbvWX0RukFE/CtQAfQuTLf+wl
-   FuplVFsVjZAXrNa5E8rNrBoeJ4OwI+bhcMqjWpXFvK+uJGIIc5coJo9c7
-   5/D4RbIzfzuI5TSggJtohe+C5x5Sd+uMBTf/56UBbr7ajd4qYoPx6Xt4U
-   q/WHEsWBJHAFrPftPD3FNXJGOmEbUb1sLfQJTtTpi57Sb6woTpKyyr0qv
-   nwEgkcKNnA1KTrqM5EMhY+GQjh4kvLolm18bBGe4AySvsI9uKAl/PA4CZ
-   g==;
-IronPort-SDR: jLqhccxuqru0tH5lbgih9uetDgjx2yquCqreEEmy744cO3RjtJIOgA2ULXNurvm3/RhRxdFeFJ
- bSU6fAzfrVLodyMf7Xw6/pCnRusNTjEe6eOTa//WY30WEgRdIvN6jRjEZDV/ltSd89cpq7FVSq
- Ieef1/bfZJtJ5TwN4Co6RlZjYQFvJsbDVdFqK0XCZgFn8wrYK6K8DVKuBwFaxIORDohiI6gRsl
- mkqSkMmBKUJmu245PMRajbJnSlRCjCGDy9o0K2BZE6vy040aSoQpEZekjxIMD01XhkNG4BVhlI
- M4+mRhV+zymrZ5MzFgs1fLaS
-X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="157345367"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Jan 2022 09:20:33 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 3 Jan 2022 09:20:31 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 3 Jan 2022 09:20:31 -0700
-Date:   Mon, 3 Jan 2022 17:22:44 +0100
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "vivien.didelot@gmail.com" <vivien.didelot@gmail.com>,
-        "andrew@lunn.ch" <andrew@lunn.ch>
-Subject: Re: [PATCH net-next 3/3] net: lan966x: Extend switchdev with mdb
- support
-Message-ID: <20220103162244.wjbn5rezn54jvuwj@soft-dev3-1.localhost>
-References: <20220103131039.3473876-1-horatiu.vultur@microchip.com>
- <20220103131039.3473876-4-horatiu.vultur@microchip.com>
- <20220103144319.w65nc3c4ru24zzh7@skbuf>
+        Mon, 3 Jan 2022 11:24:14 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 346886114A;
+        Mon,  3 Jan 2022 16:24:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B453C36AEB;
+        Mon,  3 Jan 2022 16:24:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641227053;
+        bh=ZpPAlBJcc3DZqp5X0mPY52nCNgGaZNTEWY4IM4UoSLE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rodw9dbRmhNY8eCt1HQnqyGzCtkqqhvemZ/Ddjj19bZ6ny1aPCyu/qmCYtspuXSW6
+         X7IuIW2SCZ7Bc80A0FtL8KLxlRHFEwDGWZgArW4RpQ0pMh7aSHT7c6xryO3YP5BZmB
+         7saorrapxcuvnUkHf5n60HFuZYvmcO8C2P34rGlA=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH] pktcdvd: convert to use attribute groups
+Date:   Mon,  3 Jan 2022 17:24:08 +0100
+Message-Id: <20220103162408.742003-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20220103144319.w65nc3c4ru24zzh7@skbuf>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=11936; h=from:subject; bh=ZpPAlBJcc3DZqp5X0mPY52nCNgGaZNTEWY4IM4UoSLE=; b=owGbwMvMwCRo6H6F97bub03G02pJDImXlVUzVp87KBNm5JzrtU1vZ9TSBRxmE0wr/hte4l5ZLqsW NyulI5aFQZCJQVZMkeXLNp6j+ysOKXoZ2p6GmcPKBDKEgYtTACZy/wPDgh1yjGw6Ac4SD6q+Fp2wNs vfcj3alGHBmhmLNQr5N2z6tHHWtY4/arJmE4/rAQA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 01/03/2022 14:43, Vladimir Oltean wrote:
-> 
-> On Mon, Jan 03, 2022 at 02:10:39PM +0100, Horatiu Vultur wrote:
-> > Extend lan966x driver with mdb support by implementing the switchdev
-> > calls: SWITCHDEV_OBJ_ID_PORT_MDB and SWITCHDEV_OBJ_ID_HOST_MDB.
-> > It is allowed to add both ipv4/ipv6 entries and l2 entries. To add
-> > ipv4/ipv6 entries is not required to use the PGID table while for l2
-> > entries it is required. The PGID table is much smaller than MAC table
-> > so only fewer l2 entries can be added.
-> >
-> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> > ---
-> >  .../net/ethernet/microchip/lan966x/Makefile   |   2 +-
-> >  .../ethernet/microchip/lan966x/lan966x_main.c |   2 +
-> >  .../ethernet/microchip/lan966x/lan966x_main.h |  13 +
-> >  .../ethernet/microchip/lan966x/lan966x_mdb.c  | 500 ++++++++++++++++++
-> >  .../microchip/lan966x/lan966x_switchdev.c     |   8 +
-> >  .../ethernet/microchip/lan966x/lan966x_vlan.c |   7 +-
-> >  6 files changed, 530 insertions(+), 2 deletions(-)
-> >  create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_mdb.c
-> >
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/Makefile b/drivers/net/ethernet/microchip/lan966x/Makefile
-> > index ec1a1fa8b0d5..040cfff9f577 100644
-> > --- a/drivers/net/ethernet/microchip/lan966x/Makefile
-> > +++ b/drivers/net/ethernet/microchip/lan966x/Makefile
-> > @@ -7,4 +7,4 @@ obj-$(CONFIG_LAN966X_SWITCH) += lan966x-switch.o
-> >
-> >  lan966x-switch-objs  := lan966x_main.o lan966x_phylink.o lan966x_port.o \
-> >                       lan966x_mac.o lan966x_ethtool.o lan966x_switchdev.o \
-> > -                     lan966x_vlan.o lan966x_fdb.o
-> > +                     lan966x_vlan.o lan966x_fdb.o lan966x_mdb.o
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> > index 2c6bf7b0afdf..2cb70da63db3 100644
-> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> > @@ -926,6 +926,7 @@ static int lan966x_probe(struct platform_device *pdev)
-> >               lan966x_port_init(lan966x->ports[p]);
-> >       }
-> >
-> > +     lan966x_mdb_init(lan966x);
-> >       err = lan966x_fdb_init(lan966x);
-> >       if (err)
-> >               goto cleanup_ports;
-> > @@ -955,6 +956,7 @@ static int lan966x_remove(struct platform_device *pdev)
-> >       mutex_destroy(&lan966x->stats_lock);
-> >
-> >       lan966x_mac_purge_entries(lan966x);
-> > +     lan966x_mdb_deinit(lan966x);
-> >       lan966x_fdb_deinit(lan966x);
-> >
-> >       return 0;
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-> > index 49ce6a04ca40..76f0b5446b2e 100644
-> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-> > @@ -107,6 +107,10 @@ struct lan966x {
-> >       /* worqueue for fdb */
-> >       struct workqueue_struct *fdb_work;
-> >       struct list_head fdb_entries;
-> > +
-> > +     /* mdb */
-> > +     struct list_head mdb_entries;
-> > +     struct list_head pgid_entries;
-> >  };
-> >
-> >  struct lan966x_port_config {
-> > @@ -213,6 +217,15 @@ int lan966x_handle_fdb(struct net_device *dev,
-> >                      unsigned long event, const void *ctx,
-> >                      const struct switchdev_notifier_fdb_info *fdb_info);
-> >
-> > +void lan966x_mdb_init(struct lan966x *lan966x);
-> > +void lan966x_mdb_deinit(struct lan966x *lan966x);
-> > +int lan966x_handle_port_mdb_add(struct lan966x_port *port,
-> > +                             const struct switchdev_obj *obj);
-> > +int lan966x_handle_port_mdb_del(struct lan966x_port *port,
-> > +                             const struct switchdev_obj *obj);
-> > +void lan966x_mdb_erase_entries(struct lan966x *lan966x, u16 vid);
-> > +void lan966x_mdb_write_entries(struct lan966x *lan966x, u16 vid);
-> > +
-> >  static inline void __iomem *lan_addr(void __iomem *base[],
-> >                                    int id, int tinst, int tcnt,
-> >                                    int gbase, int ginst,
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_mdb.c b/drivers/net/ethernet/microchip/lan966x/lan966x_mdb.c
-> > new file mode 100644
-> > index 000000000000..4fd8b06a56c1
-> > --- /dev/null
-> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_mdb.c
-> > @@ -0,0 +1,500 @@
-> > +// SPDX-License-Identifier: GPL-2.0+
-> > +
-> > +#include <net/switchdev.h>
-> > +
-> > +#include "lan966x_main.h"
-> > +
-> > +struct lan966x_pgid_entry {
-> > +     struct list_head list;
-> > +     int index;
-> > +     refcount_t refcount;
-> > +     u16 ports;
-> > +};
-> > +
-> > +struct lan966x_mdb_entry {
-> > +     struct list_head list;
-> > +     unsigned char mac[ETH_ALEN];
-> > +     u16 vid;
-> > +     u16 ports;
-> > +     struct lan966x_pgid_entry *pgid;
-> > +     bool cpu_copy;
-> > +};
-> > +
-> > +void lan966x_mdb_init(struct lan966x *lan966x)
-> > +{
-> > +     INIT_LIST_HEAD(&lan966x->mdb_entries);
-> > +     INIT_LIST_HEAD(&lan966x->pgid_entries);
-> > +}
-> > +
-> > +static void lan966x_mdb_purge_mdb_entries(struct lan966x *lan966x)
-> > +{
-> > +     struct lan966x_mdb_entry *mdb_entry, *tmp;
-> > +
-> > +     list_for_each_entry_safe(mdb_entry, tmp, &lan966x->mdb_entries, list) {
-> > +             list_del(&mdb_entry->list);
-> > +             kfree(mdb_entry);
-> > +     }
-> > +}
-> > +
-> > +static void lan966x_mdb_purge_pgid_entries(struct lan966x *lan966x)
-> > +{
-> > +     struct lan966x_pgid_entry *pgid_entry, *tmp;
-> > +
-> > +     list_for_each_entry_safe(pgid_entry, tmp, &lan966x->pgid_entries, list) {
-> > +             list_del(&pgid_entry->list);
-> > +             kfree(pgid_entry);
-> > +     }
-> > +}
-> > +
-> > +void lan966x_mdb_deinit(struct lan966x *lan966x)
-> > +{
-> > +     lan966x_mdb_purge_mdb_entries(lan966x);
-> > +     lan966x_mdb_purge_pgid_entries(lan966x);
-> > +}
-> > +
-> > +static struct lan966x_mdb_entry *
-> > +lan966x_mdb_entry_get(struct lan966x *lan966x,
-> > +                   const unsigned char *mac,
-> > +                   u16 vid)
-> > +{
-> > +     struct lan966x_mdb_entry *mdb_entry;
-> > +
-> > +     list_for_each_entry(mdb_entry, &lan966x->mdb_entries, list) {
-> > +             if (ether_addr_equal(mdb_entry->mac, mac) &&
-> > +                 mdb_entry->vid == vid)
-> > +                     return mdb_entry;
-> > +     }
-> > +
-> > +     return NULL;
-> > +}
-> > +
-> > +static struct lan966x_mdb_entry *
-> > +lan966x_mdb_entry_add(struct lan966x *lan966x,
-> > +                   const struct switchdev_obj_port_mdb *mdb)
-> > +{
-> > +     struct lan966x_mdb_entry *mdb_entry;
-> > +
-> > +     mdb_entry = kzalloc(sizeof(*mdb_entry), GFP_KERNEL);
-> > +     if (!mdb_entry)
-> > +             return ERR_PTR(-ENOMEM);
-> > +
-> > +     ether_addr_copy(mdb_entry->mac, mdb->addr);
-> > +     mdb_entry->vid = mdb->vid;
-> > +
-> > +     list_add_tail(&mdb_entry->list, &lan966x->mdb_entries);
-> > +
-> > +     return mdb_entry;
-> > +}
-> > +
-> > +static void lan966x_mdb_encode_mac(unsigned char *mac,
-> > +                                struct lan966x_mdb_entry *mdb_entry,
-> > +                                enum macaccess_entry_type type)
-> > +{
-> > +     ether_addr_copy(mac, mdb_entry->mac);
-> > +
-> > +     if (type == ENTRYTYPE_MACV4) {
-> > +             mac[0] = 0;
-> > +             mac[1] = mdb_entry->ports >> 8;
-> > +             mac[2] = mdb_entry->ports & 0xff;
-> > +     } else if (type == ENTRYTYPE_MACV6) {
-> > +             mac[0] = mdb_entry->ports >> 8;
-> > +             mac[1] = mdb_entry->ports & 0xff;
-> > +     }
-> > +}
-> > +
-> > +static int lan966x_mdb_ip_add(struct lan966x_port *port,
-> > +                           const struct switchdev_obj_port_mdb *mdb,
-> > +                           enum macaccess_entry_type type)
-> > +{
-> > +     bool cpu_port = netif_is_bridge_master(mdb->obj.orig_dev);
-> > +     struct lan966x *lan966x = port->lan966x;
-> > +     struct lan966x_mdb_entry *mdb_entry;
-> > +     unsigned char mac[ETH_ALEN];
-> > +     bool cpu_copy = false;
-> > +
-> > +     mdb_entry = lan966x_mdb_entry_get(lan966x, mdb->addr, mdb->vid);
-> > +     if (!mdb_entry) {
-> > +             mdb_entry = lan966x_mdb_entry_add(lan966x, mdb);
-> > +             if (IS_ERR(mdb_entry))
-> > +                     return PTR_ERR(mdb_entry);
-> > +     } else {
-> > +             lan966x_mdb_encode_mac(mac, mdb_entry, type);
-> > +             lan966x_mac_forget(lan966x, mac, mdb_entry->vid, type);
-> > +     }
-> > +
-> > +     if (cpu_port)
-> > +             mdb_entry->cpu_copy = true;
-> > +     else
-> > +             mdb_entry->ports |= BIT(port->chip_port);
-> > +
-> > +     /* Copy the frame to CPU only if the CPU is the vlan */
-> 
-> s/is the vlan/is in the VLAN/
-> 
-> > +     if (mdb_entry->cpu_copy) {
-> > +             if (lan966x_vlan_cpu_member_cpu_vlan_mask(lan966x,
-> > +                                                       mdb_entry->vid))
-> > +                     cpu_copy = true;
-> > +     }
-> 
-> I find it slightly simpler to squash the two if blocks into a single one.
-> 
->         if (lan966x_vlan_cpu_member_cpu_vlan_mask(lan966x, mdb_entry->vid) &&
->             mdb_entry->cpu_copy)
->                 cpu_copy = true;
-> 
-> > +
-> > +     lan966x_mdb_encode_mac(mac, mdb_entry, type);
-> > +     return lan966x_mac_cpu_copy(lan966x, 0, cpu_copy,
-> > +                                 mac, mdb_entry->vid, type);
-> > +}
-> > +
-> > +static int lan966x_mdb_ip_del(struct lan966x_port *port,
-> > +                           const struct switchdev_obj_port_mdb *mdb,
-> > +                           enum macaccess_entry_type type)
-> > +{
-> > +     bool cpu_port = netif_is_bridge_master(mdb->obj.orig_dev);
-> > +     struct lan966x *lan966x = port->lan966x;
-> > +     struct lan966x_mdb_entry *mdb_entry;
-> > +     unsigned char mac[ETH_ALEN];
-> > +
-> > +     mdb_entry = lan966x_mdb_entry_get(lan966x, mdb->addr, mdb->vid);
-> > +     if (!mdb_entry) {
-> > +             /* If the CPU originted this and the entry was not found, it is
-> 
-> s/originted/originated/
-> 
-> > +              * because already another port has removed the entry
-> > +              */
-> > +             if (cpu_port)
-> > +                     return 0;
-> 
-> Could you explain again why this is normal? If another port has removed
-> the entry, how is the address copied to the CPU any longer?
+There is no need to create kobject children of the pktcdvd device just
+to display a subdirectory name.  Instead, use a named attribute group
+which removes the extra kobjects and also fixes the userspace race where
+the device is created yet tools like libudev can not see the attributes
+as they think the subdirectories are some other sort of device.
 
-The cpu_port is set only when the entry is deleted by the bridge. So then
-all the ports under the bridge will be notified about this. So when the first
-port is notified it would delete the entry and then when the second port is
-notified, it would try to delete the entry which is already deleted by
-the first port. That is the reason why it returns 0 and not an error.
+Cc: linux-block@vger.kernel.org
+Cc: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/block/pktcdvd.c | 275 ++++++++++++++++++++--------------------
+ include/linux/pktcdvd.h |  10 --
+ 2 files changed, 134 insertions(+), 151 deletions(-)
 
-> 
-> > +             return -ENOENT;
-> > +     }
-> > +
-> > +     lan966x_mdb_encode_mac(mac, mdb_entry, type);
-> > +     lan966x_mac_forget(lan966x, mac, mdb_entry->vid, type);
-> > +
-> > +     if (cpu_port)
-> > +             mdb_entry->cpu_copy = false;
-> > +     else
-> > +             mdb_entry->ports &= ~BIT(port->chip_port);
-> > +     if (!mdb_entry->ports && !mdb_entry->cpu_copy) {
-> > +             list_del(&mdb_entry->list);
-> > +             kfree(mdb_entry);
-> > +             return 0;
-> > +     }
-> > +
-> > +     lan966x_mdb_encode_mac(mac, mdb_entry, type);
-> > +     return lan966x_mac_cpu_copy(lan966x, 0, mdb_entry->cpu_copy,
-> > +                                 mac, mdb_entry->vid, type);
-> > +}
-> > +
-> > +static struct lan966x_pgid_entry *
-> > +lan966x_pgid_entry_add(struct lan966x *lan966x, int index, u16 ports)
-> > +{
-> > +     struct lan966x_pgid_entry *pgid_entry;
-> > +
-> > +     pgid_entry = kzalloc(sizeof(*pgid_entry), GFP_KERNEL);
-> > +     if (!pgid_entry)
-> > +             return ERR_PTR(-ENOMEM);
-> > +
-> > +     pgid_entry->ports = ports;
-> > +     pgid_entry->index = index;
-> > +     refcount_set(&pgid_entry->refcount, 1);
-> > +
-> > +     list_add_tail(&pgid_entry->list, &lan966x->pgid_entries);
-> > +
-> > +     return pgid_entry;
-> > +}
-> > +
-> > +static struct lan966x_pgid_entry *
-> > +lan966x_pgid_entry_get(struct lan966x *lan966x,
-> > +                    struct lan966x_mdb_entry *mdb_entry)
-> > +{
-> > +     struct lan966x_pgid_entry *pgid_entry;
-> > +     int index;
-> > +
-> > +     /* Try to find an existing pgid that uses the same ports as the
-> > +      * mdb_entry
-> > +      */
-> > +     list_for_each_entry(pgid_entry, &lan966x->pgid_entries, list) {
-> > +             if (pgid_entry->ports == mdb_entry->ports) {
-> > +                     refcount_inc(&pgid_entry->refcount);
-> > +                     return pgid_entry;
-> > +             }
-> > +     }
-> > +
-> > +     /* Try to find an empty pgid entry and allocate one in case it finds it,
-> > +      * otherwise it means that there are no more resources
-> > +      */
-> > +     for (index = PGID_FIRST; index < PGID_LAST; index++) {
-> > +             bool used = false;
-> > +
-> > +             list_for_each_entry(pgid_entry, &lan966x->pgid_entries, list) {
-> > +                     if (pgid_entry->index == index) {
-> > +                             used = true;
-> > +                             break;
-> > +                     }
-> > +             }
-> > +
-> > +             if (!used)
-> > +                     return lan966x_pgid_entry_add(lan966x, index,
-> > +                                                   mdb_entry->ports);
-> > +     }
-> > +
-> > +     return ERR_PTR(-ENOSPC);
-> > +}
-> > +
-> > +static void lan966x_pgid_entry_del(struct lan966x *lan966x,
-> > +                                struct lan966x_pgid_entry *pgid_entry)
-> > +{
-> > +     if (!refcount_dec_and_test(&pgid_entry->refcount))
-> > +             return;
-> > +
-> > +     list_del(&pgid_entry->list);
-> > +     kfree(pgid_entry);
-> > +}
-> > +
-> > +static int lan966x_mdb_l2_add(struct lan966x_port *port,
-> > +                           const struct switchdev_obj_port_mdb *mdb,
-> > +                           enum macaccess_entry_type type)
-> > +{
-> > +     bool cpu_port = netif_is_bridge_master(mdb->obj.orig_dev);
-> > +     struct lan966x *lan966x = port->lan966x;
-> > +     struct lan966x_pgid_entry *pgid_entry;
-> > +     struct lan966x_mdb_entry *mdb_entry;
-> > +     unsigned char mac[ETH_ALEN];
-> > +
-> > +     mdb_entry = lan966x_mdb_entry_get(lan966x, mdb->addr, mdb->vid);
-> > +     if (!mdb_entry) {
-> > +             mdb_entry = lan966x_mdb_entry_add(lan966x, mdb);
-> > +             if (IS_ERR(mdb_entry))
-> > +                     return PTR_ERR(mdb_entry);
-> > +     } else {
-> > +             lan966x_pgid_entry_del(lan966x, mdb_entry->pgid);
-> > +             lan966x_mdb_encode_mac(mac, mdb_entry, type);
-> > +             lan966x_mac_forget(lan966x, mac, mdb_entry->vid, type);
-> > +     }
-> > +
-> > +     if (cpu_port) {
-> > +             mdb_entry->ports |= BIT(CPU_PORT);
-> > +             mdb_entry->cpu_copy = true;
-> > +     } else {
-> > +             mdb_entry->ports |= BIT(port->chip_port);
-> > +     }
-> > +
-> > +     pgid_entry = lan966x_pgid_entry_get(lan966x, mdb_entry);
-> > +     if (IS_ERR(pgid_entry)) {
-> > +             list_del(&mdb_entry->list);
-> > +             kfree(mdb_entry);
-> > +             return PTR_ERR(pgid_entry);
-> > +     }
-> > +     mdb_entry->pgid = pgid_entry;
-> > +
-> > +     /* Copy the frame to CPU only if the CPU is the vlan */
-> > +     if (mdb_entry->cpu_copy) {
-> > +             if (!lan966x_vlan_cpu_member_cpu_vlan_mask(lan966x,
-> > +                                                        mdb_entry->vid))
-> > +                     mdb_entry->ports &= BIT(CPU_PORT);
-> > +     }
-> > +
-> > +     lan_rmw(ANA_PGID_PGID_SET(mdb_entry->ports),
-> > +             ANA_PGID_PGID,
-> > +             lan966x, ANA_PGID(pgid_entry->index));
-> > +
-> > +     return lan966x_mac_learn(lan966x, pgid_entry->index, mdb_entry->mac,
-> > +                              mdb_entry->vid, type);
-> > +}
-> > +
-> > +static int lan966x_mdb_l2_del(struct lan966x_port *port,
-> > +                           const struct switchdev_obj_port_mdb *mdb,
-> > +                           enum macaccess_entry_type type)
-> > +{
-> > +     bool cpu_port = netif_is_bridge_master(mdb->obj.orig_dev);
-> > +     struct lan966x *lan966x = port->lan966x;
-> > +     struct lan966x_pgid_entry *pgid_entry;
-> > +     struct lan966x_mdb_entry *mdb_entry;
-> > +     unsigned char mac[ETH_ALEN];
-> > +
-> > +     mdb_entry = lan966x_mdb_entry_get(lan966x, mdb->addr, mdb->vid);
-> > +     if (!mdb_entry)
-> > +             return -ENOENT;
-> > +
-> > +     lan966x_mdb_encode_mac(mac, mdb_entry, type);
-> > +     lan966x_mac_forget(lan966x, mac, mdb_entry->vid, type);
-> > +     lan966x_pgid_entry_del(lan966x, mdb_entry->pgid);
-> > +
-> > +     if (cpu_port)
-> > +             mdb_entry->ports &= ~BIT(CPU_PORT);
-> > +     else
-> > +             mdb_entry->ports &= ~BIT(port->chip_port);
-> > +     if (!mdb_entry->ports) {
-> > +             list_del(&mdb_entry->list);
-> > +             kfree(mdb_entry);
-> > +             return 0;
-> > +     }
-> > +
-> > +     pgid_entry = lan966x_pgid_entry_get(lan966x, mdb_entry);
-> > +     if (IS_ERR(pgid_entry)) {
-> > +             list_del(&mdb_entry->list);
-> > +             kfree(mdb_entry);
-> > +             return PTR_ERR(pgid_entry);
-> > +     }
-> > +     mdb_entry->pgid = pgid_entry;
-> > +
-> > +     lan_rmw(ANA_PGID_PGID_SET(mdb_entry->ports),
-> > +             ANA_PGID_PGID,
-> > +             lan966x, ANA_PGID(pgid_entry->index));
-> > +
-> > +     return lan966x_mac_learn(lan966x, pgid_entry->index, mdb_entry->mac,
-> > +                              mdb_entry->vid, type);
-> > +}
-> > +
-> > +static enum macaccess_entry_type
-> > +lan966x_mdb_classify(const unsigned char *mac)
-> > +{
-> > +     if (mac[0] == 0x01 && mac[1] == 0x00 && mac[2] == 0x5e)
-> > +             return ENTRYTYPE_MACV4;
-> > +     if (mac[0] == 0x33 && mac[1] == 0x33)
-> > +             return ENTRYTYPE_MACV6;
-> > +     return ENTRYTYPE_LOCKED;
-> > +}
-> > +
-> > +int lan966x_handle_port_mdb_add(struct lan966x_port *port,
-> > +                             const struct switchdev_obj *obj)
-> > +{
-> > +     const struct switchdev_obj_port_mdb *mdb = SWITCHDEV_OBJ_PORT_MDB(obj);
-> > +     enum macaccess_entry_type type;
-> > +
-> > +     /* Split the way the entries are added for ipv4/ipv6 and for l2. The
-> > +      * reason is that for ipv4/ipv6 it doesn't require to use any pgid
-> > +      * entry, while for l2 is required to use pgid entries
-> > +      */
-> > +     type = lan966x_mdb_classify(mdb->addr);
-> > +     if (type == ENTRYTYPE_MACV4 ||
-> > +         type == ENTRYTYPE_MACV6)
-> > +             return lan966x_mdb_ip_add(port, mdb, type);
-> > +     else
-> > +             return lan966x_mdb_l2_add(port, mdb, type);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +int lan966x_handle_port_mdb_del(struct lan966x_port *port,
-> > +                             const struct switchdev_obj *obj)
-> > +{
-> > +     const struct switchdev_obj_port_mdb *mdb = SWITCHDEV_OBJ_PORT_MDB(obj);
-> > +     enum macaccess_entry_type type;
-> > +
-> > +     /* Split the way the entries are removed for ipv4/ipv6 and for l2. The
-> > +      * reason is that for ipv4/ipv6 it doesn't require to use any pgid
-> > +      * entry, while for l2 is required to use pgid entries
-> > +      */
-> > +     type = lan966x_mdb_classify(mdb->addr);
-> > +     if (type == ENTRYTYPE_MACV4 ||
-> > +         type == ENTRYTYPE_MACV6)
-> > +             return lan966x_mdb_ip_del(port, mdb, type);
-> > +     else
-> > +             return lan966x_mdb_l2_del(port, mdb, type);
-> > +
-> > +     return 0;
-> 
-> The "return 0" is dead code. I would expect:
-> 
->         if (type == ENTRYTYPE_MACV4 || type == ENTRYTYPE_MACV6)
->                 return lan966x_mdb_ip_del(port, mdb, type);
-> 
->         return lan966x_mdb_l2_del(port, mdb, type);
-> 
-> > +}
-> > +
-> > +static void lan966x_mdb_ip_cpu_copy(struct lan966x *lan966x,
-> > +                                 struct lan966x_mdb_entry *mdb_entry,
-> > +                                 enum macaccess_entry_type type)
-> > +{
-> > +     unsigned char mac[ETH_ALEN];
-> > +
-> > +     lan966x_mdb_encode_mac(mac, mdb_entry, type);
-> > +     lan966x_mac_forget(lan966x, mac, mdb_entry->vid, type);
-> > +     lan966x_mac_cpu_copy(lan966x, 0, true, mac, mdb_entry->vid, type);
-> > +}
-> > +
-> > +static void lan966x_mdb_l2_cpu_copy(struct lan966x *lan966x,
-> > +                                 struct lan966x_mdb_entry *mdb_entry,
-> > +                                 enum macaccess_entry_type type)
-> > +{
-> > +     struct lan966x_pgid_entry *pgid_entry;
-> > +     unsigned char mac[ETH_ALEN];
-> > +
-> > +     lan966x_pgid_entry_del(lan966x, mdb_entry->pgid);
-> > +     lan966x_mdb_encode_mac(mac, mdb_entry, type);
-> > +     lan966x_mac_forget(lan966x, mac, mdb_entry->vid, type);
-> > +
-> > +     mdb_entry->ports |= BIT(CPU_PORT);
-> > +
-> > +     pgid_entry = lan966x_pgid_entry_get(lan966x, mdb_entry);
-> > +     if (IS_ERR(pgid_entry))
-> > +             return;
-> > +
-> > +     mdb_entry->pgid = pgid_entry;
-> > +
-> > +     lan_rmw(ANA_PGID_PGID_SET(mdb_entry->ports),
-> > +             ANA_PGID_PGID,
-> > +             lan966x, ANA_PGID(pgid_entry->index));
-> > +
-> > +     lan966x_mac_learn(lan966x, pgid_entry->index, mdb_entry->mac,
-> > +                       mdb_entry->vid, type);
-> > +}
-> > +
-> > +void lan966x_mdb_write_entries(struct lan966x *lan966x, u16 vid)
-> > +{
-> > +     struct lan966x_mdb_entry *mdb_entry;
-> > +     enum macaccess_entry_type type;
-> > +
-> > +     list_for_each_entry(mdb_entry, &lan966x->mdb_entries, list) {
-> > +             if (mdb_entry->vid != vid || !mdb_entry->cpu_copy)
-> > +                     continue;
-> > +
-> > +             type = lan966x_mdb_classify(mdb_entry->mac);
-> > +             if (type == ENTRYTYPE_MACV4 ||
-> > +                 type == ENTRYTYPE_MACV6)
-> > +                     lan966x_mdb_ip_cpu_copy(lan966x, mdb_entry, type);
-> > +             else
-> > +                     lan966x_mdb_l2_cpu_copy(lan966x, mdb_entry, type);
-> > +     }
-> > +}
-> > +
-> > +static void lan966x_mdb_ip_cpu_remove(struct lan966x *lan966x,
-> > +                                   struct lan966x_mdb_entry *mdb_entry,
-> > +                                   enum macaccess_entry_type type)
-> > +{
-> > +     unsigned char mac[ETH_ALEN];
-> > +
-> > +     lan966x_mdb_encode_mac(mac, mdb_entry, type);
-> > +     lan966x_mac_forget(lan966x, mac, mdb_entry->vid, type);
-> > +     lan966x_mac_cpu_copy(lan966x, 0, false, mac, mdb_entry->vid, type);
-> > +}
-> > +
-> > +static void lan966x_mdb_l2_cpu_remove(struct lan966x *lan966x,
-> > +                                   struct lan966x_mdb_entry *mdb_entry,
-> > +                                   enum macaccess_entry_type type)
-> > +{
-> > +     struct lan966x_pgid_entry *pgid_entry;
-> > +     unsigned char mac[ETH_ALEN];
-> > +
-> > +     lan966x_pgid_entry_del(lan966x, mdb_entry->pgid);
-> > +     lan966x_mdb_encode_mac(mac, mdb_entry, type);
-> > +     lan966x_mac_forget(lan966x, mac, mdb_entry->vid, type);
-> > +
-> > +     mdb_entry->ports &= ~BIT(CPU_PORT);
-> > +
-> > +     pgid_entry = lan966x_pgid_entry_get(lan966x, mdb_entry);
-> > +     if (IS_ERR(pgid_entry))
-> > +             return;
-> > +
-> > +     mdb_entry->pgid = pgid_entry;
-> > +
-> > +     lan_rmw(ANA_PGID_PGID_SET(mdb_entry->ports),
-> > +             ANA_PGID_PGID,
-> > +             lan966x, ANA_PGID(pgid_entry->index));
-> > +
-> > +     lan966x_mac_learn(lan966x, pgid_entry->index, mdb_entry->mac,
-> > +                       mdb_entry->vid, type);
-> > +}
-> > +
-> > +void lan966x_mdb_erase_entries(struct lan966x *lan966x, u16 vid)
-> > +{
-> > +     struct lan966x_mdb_entry *mdb_entry;
-> > +     enum macaccess_entry_type type;
-> > +
-> > +     list_for_each_entry(mdb_entry, &lan966x->mdb_entries, list) {
-> > +             if (mdb_entry->vid != vid || !mdb_entry->cpu_copy)
-> > +                     continue;
-> > +
-> > +             type = lan966x_mdb_classify(mdb_entry->mac);
-> > +             if (type == ENTRYTYPE_MACV4 ||
-> > +                 type == ENTRYTYPE_MACV6)
-> > +                     lan966x_mdb_ip_cpu_remove(lan966x, mdb_entry, type);
-> > +             else
-> > +                     lan966x_mdb_l2_cpu_remove(lan966x, mdb_entry, type);
-> > +     }
-> > +}
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_switchdev.c b/drivers/net/ethernet/microchip/lan966x/lan966x_switchdev.c
-> > index deb3dd5be67a..7de55f6a4da8 100644
-> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_switchdev.c
-> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_switchdev.c
-> > @@ -438,6 +438,10 @@ static int lan966x_handle_port_obj_add(struct net_device *dev, const void *ctx,
-> >       case SWITCHDEV_OBJ_ID_PORT_VLAN:
-> >               err = lan966x_handle_port_vlan_add(port, obj);
-> >               break;
-> > +     case SWITCHDEV_OBJ_ID_PORT_MDB:
-> > +     case SWITCHDEV_OBJ_ID_HOST_MDB:
-> > +             err = lan966x_handle_port_mdb_add(port, obj);
-> > +             break;
-> >       default:
-> >               err = -EOPNOTSUPP;
-> >               break;
-> > @@ -473,6 +477,10 @@ static int lan966x_handle_port_obj_del(struct net_device *dev, const void *ctx,
-> >       case SWITCHDEV_OBJ_ID_PORT_VLAN:
-> >               err = lan966x_handle_port_vlan_del(port, obj);
-> >               break;
-> > +     case SWITCHDEV_OBJ_ID_PORT_MDB:
-> > +     case SWITCHDEV_OBJ_ID_HOST_MDB:
-> 
-> The HOST_MDB switchdev events are replicated per the number of ports in
-> the bridge.
-
-Correct.
-
-> So I would expect that you keep refcounts on them, otherwise
-> the first deletion of such an element would trigger the removal of the
-> entry from hardware even though it's still in use.
-
-Sorry, I am not sure I am following, by whom is it still in use?
-
-I was trying the following commands:
-
-ip link set dev eth0 master br0
-ip link set dev eth1 master br0
-bridge mdb add dev br0 port br0 grp 225.1.2.3
-
-Then both ports eth0 and eth1 will get a notification about this. And
-they will add an entry in the MAC table for this.
-Then when the following command is run:
-
-bridge mdb del dev br0 port br0 grp 225.1.2.3
-
-Then again both ports will get a notification about this and eth0 will
-delete the entry from the MAC table. So why is this not correct? Then
-will be eth1 who will get the notification and try to delete the entry
-which is already deleted.
-
-> 
-> > +             err = lan966x_handle_port_mdb_del(port, obj);
-> > +             break;
-> >       default:
-> >               err = -EOPNOTSUPP;
-> >               break;
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_vlan.c b/drivers/net/ethernet/microchip/lan966x/lan966x_vlan.c
-> > index 057f48ddf22c..8d7260cd7da9 100644
-> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_vlan.c
-> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_vlan.c
-> > @@ -219,6 +219,7 @@ void lan966x_vlan_port_add_vlan(struct lan966x_port *port,
-> >       if (lan966x_vlan_cpu_member_cpu_vlan_mask(lan966x, vid)) {
-> >               lan966x_vlan_cpu_add_vlan_mask(lan966x, vid);
-> >               lan966x_fdb_write_entries(lan966x, vid);
-> > +             lan966x_mdb_write_entries(lan966x, vid);
-> >       }
-> >
-> >       lan966x_vlan_port_set_vid(port, vid, pvid, untagged);
-> > @@ -241,6 +242,7 @@ void lan966x_vlan_port_del_vlan(struct lan966x_port *port, u16 vid)
-> >       if (!lan966x_vlan_port_any_vlan_mask(lan966x, vid)) {
-> >               lan966x_vlan_cpu_del_vlan_mask(lan966x, vid);
-> >               lan966x_fdb_erase_entries(lan966x, vid);
-> > +             lan966x_mdb_erase_entries(lan966x, vid);
-> >       }
-> >  }
-> >
-> > @@ -254,8 +256,10 @@ void lan966x_vlan_cpu_add_vlan(struct lan966x *lan966x, u16 vid)
-> >        * information so when a front port is added then it would add also the
-> >        * CPU port.
-> >        */
-> > -     if (lan966x_vlan_port_any_vlan_mask(lan966x, vid))
-> > +     if (lan966x_vlan_port_any_vlan_mask(lan966x, vid)) {
-> >               lan966x_vlan_cpu_add_vlan_mask(lan966x, vid);
-> > +             lan966x_mdb_write_entries(lan966x, vid);
-> > +     }
-> >
-> >       lan966x_vlan_cpu_add_cpu_vlan_mask(lan966x, vid);
-> >       lan966x_fdb_write_entries(lan966x, vid);
-> > @@ -267,6 +271,7 @@ void lan966x_vlan_cpu_del_vlan(struct lan966x *lan966x, u16 vid)
-> >       lan966x_vlan_cpu_del_cpu_vlan_mask(lan966x, vid);
-> >       lan966x_vlan_cpu_del_vlan_mask(lan966x, vid);
-> >       lan966x_fdb_erase_entries(lan966x, vid);
-> > +     lan966x_mdb_erase_entries(lan966x, vid);
-> >  }
-> >
-> >  void lan966x_vlan_init(struct lan966x *lan966x)
-> > --
-> > 2.33.0
-> >
-
+diff --git a/drivers/block/pktcdvd.c b/drivers/block/pktcdvd.c
+index b53f648302c1..435e20f892f1 100644
+--- a/drivers/block/pktcdvd.c
++++ b/drivers/block/pktcdvd.c
+@@ -113,57 +113,10 @@ static sector_t get_zone(sector_t sector, struct pktcdvd_device *pd)
+ 	return (sector + pd->offset) & ~(sector_t)(pd->settings.size - 1);
+ }
+ 
+-/*
+- * create and register a pktcdvd kernel object.
+- */
+-static struct pktcdvd_kobj* pkt_kobj_create(struct pktcdvd_device *pd,
+-					const char* name,
+-					struct kobject* parent,
+-					struct kobj_type* ktype)
+-{
+-	struct pktcdvd_kobj *p;
+-	int error;
+-
+-	p = kzalloc(sizeof(*p), GFP_KERNEL);
+-	if (!p)
+-		return NULL;
+-	p->pd = pd;
+-	error = kobject_init_and_add(&p->kobj, ktype, parent, "%s", name);
+-	if (error) {
+-		kobject_put(&p->kobj);
+-		return NULL;
+-	}
+-	kobject_uevent(&p->kobj, KOBJ_ADD);
+-	return p;
+-}
+-/*
+- * remove a pktcdvd kernel object.
+- */
+-static void pkt_kobj_remove(struct pktcdvd_kobj *p)
+-{
+-	if (p)
+-		kobject_put(&p->kobj);
+-}
+-/*
+- * default release function for pktcdvd kernel objects.
+- */
+-static void pkt_kobj_release(struct kobject *kobj)
+-{
+-	kfree(to_pktcdvdkobj(kobj));
+-}
+-
+-
+ /**********************************************************
+- *
+  * sysfs interface for pktcdvd
+  * by (C) 2006  Thomas Maier <balagi@justmail.de>
+- *
+- **********************************************************/
+-
+-#define DEF_ATTR(_obj,_name,_mode) \
+-	static struct attribute _obj = { .name = _name, .mode = _mode }
+-
+-/**********************************************************
++ 
+   /sys/class/pktcdvd/pktcdvd[0-7]/
+                      stat/reset
+                      stat/packets_started
+@@ -176,75 +129,94 @@ static void pkt_kobj_release(struct kobject *kobj)
+                      write_queue/congestion_on
+  **********************************************************/
+ 
+-DEF_ATTR(kobj_pkt_attr_st1, "reset", 0200);
+-DEF_ATTR(kobj_pkt_attr_st2, "packets_started", 0444);
+-DEF_ATTR(kobj_pkt_attr_st3, "packets_finished", 0444);
+-DEF_ATTR(kobj_pkt_attr_st4, "kb_written", 0444);
+-DEF_ATTR(kobj_pkt_attr_st5, "kb_read", 0444);
+-DEF_ATTR(kobj_pkt_attr_st6, "kb_read_gather", 0444);
+-
+-static struct attribute *kobj_pkt_attrs_stat[] = {
+-	&kobj_pkt_attr_st1,
+-	&kobj_pkt_attr_st2,
+-	&kobj_pkt_attr_st3,
+-	&kobj_pkt_attr_st4,
+-	&kobj_pkt_attr_st5,
+-	&kobj_pkt_attr_st6,
+-	NULL
+-};
++static ssize_t packets_started_show(struct device *dev,
++				    struct device_attribute *attr, char *buf)
++{
++	struct pktcdvd_device *pd = dev_get_drvdata(dev);
+ 
+-DEF_ATTR(kobj_pkt_attr_wq1, "size", 0444);
+-DEF_ATTR(kobj_pkt_attr_wq2, "congestion_off", 0644);
+-DEF_ATTR(kobj_pkt_attr_wq3, "congestion_on",  0644);
++	return sysfs_emit(buf, "%lu\n", pd->stats.pkt_started);
++}
++static DEVICE_ATTR_RO(packets_started);
+ 
+-static struct attribute *kobj_pkt_attrs_wqueue[] = {
+-	&kobj_pkt_attr_wq1,
+-	&kobj_pkt_attr_wq2,
+-	&kobj_pkt_attr_wq3,
+-	NULL
+-};
++static ssize_t packets_finished_show(struct device *dev,
++				     struct device_attribute *attr, char *buf)
++{
++	struct pktcdvd_device *pd = dev_get_drvdata(dev);
+ 
+-static ssize_t kobj_pkt_show(struct kobject *kobj,
+-			struct attribute *attr, char *data)
++	return sysfs_emit(buf, "%lu\n", pd->stats.pkt_ended);
++}
++static DEVICE_ATTR_RO(packets_finished);
++
++static ssize_t kb_written_show(struct device *dev,
++			       struct device_attribute *attr, char *buf)
+ {
+-	struct pktcdvd_device *pd = to_pktcdvdkobj(kobj)->pd;
+-	int n = 0;
+-	int v;
+-	if (strcmp(attr->name, "packets_started") == 0) {
+-		n = sprintf(data, "%lu\n", pd->stats.pkt_started);
++	struct pktcdvd_device *pd = dev_get_drvdata(dev);
+ 
+-	} else if (strcmp(attr->name, "packets_finished") == 0) {
+-		n = sprintf(data, "%lu\n", pd->stats.pkt_ended);
++	return sysfs_emit(buf, "%lu\n", pd->stats.secs_w >> 1);
++}
++static DEVICE_ATTR_RO(kb_written);
+ 
+-	} else if (strcmp(attr->name, "kb_written") == 0) {
+-		n = sprintf(data, "%lu\n", pd->stats.secs_w >> 1);
++static ssize_t kb_read_show(struct device *dev,
++			    struct device_attribute *attr, char *buf)
++{
++	struct pktcdvd_device *pd = dev_get_drvdata(dev);
+ 
+-	} else if (strcmp(attr->name, "kb_read") == 0) {
+-		n = sprintf(data, "%lu\n", pd->stats.secs_r >> 1);
++	return sysfs_emit(buf, "%lu\n", pd->stats.secs_r >> 1);
++}
++static DEVICE_ATTR_RO(kb_read);
+ 
+-	} else if (strcmp(attr->name, "kb_read_gather") == 0) {
+-		n = sprintf(data, "%lu\n", pd->stats.secs_rg >> 1);
++static ssize_t kb_read_gather_show(struct device *dev,
++				   struct device_attribute *attr, char *buf)
++{
++	struct pktcdvd_device *pd = dev_get_drvdata(dev);
+ 
+-	} else if (strcmp(attr->name, "size") == 0) {
+-		spin_lock(&pd->lock);
+-		v = pd->bio_queue_size;
+-		spin_unlock(&pd->lock);
+-		n = sprintf(data, "%d\n", v);
++	return sysfs_emit(buf, "%lu\n", pd->stats.secs_rg >> 1);
++}
++static DEVICE_ATTR_RO(kb_read_gather);
+ 
+-	} else if (strcmp(attr->name, "congestion_off") == 0) {
+-		spin_lock(&pd->lock);
+-		v = pd->write_congestion_off;
+-		spin_unlock(&pd->lock);
+-		n = sprintf(data, "%d\n", v);
++static ssize_t reset_store(struct device *dev, struct device_attribute *attr,
++			   const char *buf, size_t len)
++{
++	struct pktcdvd_device *pd = dev_get_drvdata(dev);
+ 
+-	} else if (strcmp(attr->name, "congestion_on") == 0) {
+-		spin_lock(&pd->lock);
+-		v = pd->write_congestion_on;
+-		spin_unlock(&pd->lock);
+-		n = sprintf(data, "%d\n", v);
++	if (len > 0) {
++		pd->stats.pkt_started = 0;
++		pd->stats.pkt_ended = 0;
++		pd->stats.secs_w = 0;
++		pd->stats.secs_rg = 0;
++		pd->stats.secs_r = 0;
+ 	}
++	return len;
++}
++static DEVICE_ATTR_WO(reset);
++
++static struct attribute *pkt_stat_attrs[] = {
++	&dev_attr_packets_finished.attr,
++	&dev_attr_packets_started.attr,
++	&dev_attr_kb_read.attr,
++	&dev_attr_kb_written.attr,
++	&dev_attr_kb_read_gather.attr,
++	&dev_attr_reset.attr,
++	NULL,
++};
++
++static const struct attribute_group pkt_stat_group = {
++	.name = "stat",
++	.attrs = pkt_stat_attrs,
++};
++
++static ssize_t size_show(struct device *dev,
++			 struct device_attribute *attr, char *buf)
++{
++	struct pktcdvd_device *pd = dev_get_drvdata(dev);
++	int n;
++
++	spin_lock(&pd->lock);
++	n = sysfs_emit(buf, "%d\n", pd->bio_queue_size);
++	spin_unlock(&pd->lock);
+ 	return n;
+ }
++static DEVICE_ATTR_RO(size);
+ 
+ static void init_write_congestion_marks(int* lo, int* hi)
+ {
+@@ -263,30 +235,56 @@ static void init_write_congestion_marks(int* lo, int* hi)
+ 	}
+ }
+ 
+-static ssize_t kobj_pkt_store(struct kobject *kobj,
+-			struct attribute *attr,
+-			const char *data, size_t len)
++static ssize_t congestion_off_show(struct device *dev,
++				   struct device_attribute *attr, char *buf)
+ {
+-	struct pktcdvd_device *pd = to_pktcdvdkobj(kobj)->pd;
+-	int val;
++	struct pktcdvd_device *pd = dev_get_drvdata(dev);
++	int n;
+ 
+-	if (strcmp(attr->name, "reset") == 0 && len > 0) {
+-		pd->stats.pkt_started = 0;
+-		pd->stats.pkt_ended = 0;
+-		pd->stats.secs_w = 0;
+-		pd->stats.secs_rg = 0;
+-		pd->stats.secs_r = 0;
++	spin_lock(&pd->lock);
++	n = sysfs_emit(buf, "%d\n", pd->write_congestion_off);
++	spin_unlock(&pd->lock);
++	return n;
++}
++
++static ssize_t congestion_off_store(struct device *dev,
++				    struct device_attribute *attr,
++				    const char *buf, size_t len)
++{
++	struct pktcdvd_device *pd = dev_get_drvdata(dev);
++	int val;
+ 
+-	} else if (strcmp(attr->name, "congestion_off") == 0
+-		   && sscanf(data, "%d", &val) == 1) {
++	if (sscanf(buf, "%d", &val) == 1) {
+ 		spin_lock(&pd->lock);
+ 		pd->write_congestion_off = val;
+ 		init_write_congestion_marks(&pd->write_congestion_off,
+ 					&pd->write_congestion_on);
+ 		spin_unlock(&pd->lock);
++	}
++	return len;
++}
++static DEVICE_ATTR_RW(congestion_off);
++
++static ssize_t congestion_on_show(struct device *dev,
++				  struct device_attribute *attr, char *buf)
++{
++	struct pktcdvd_device *pd = dev_get_drvdata(dev);
++	int n;
+ 
+-	} else if (strcmp(attr->name, "congestion_on") == 0
+-		   && sscanf(data, "%d", &val) == 1) {
++	spin_lock(&pd->lock);
++	n = sysfs_emit(buf, "%d\n", pd->write_congestion_on);
++	spin_unlock(&pd->lock);
++	return n;
++}
++
++static ssize_t congestion_on_store(struct device *dev,
++				   struct device_attribute *attr,
++				   const char *buf, size_t len)
++{
++	struct pktcdvd_device *pd = dev_get_drvdata(dev);
++	int val;
++
++	if (sscanf(buf, "%d", &val) == 1) {
+ 		spin_lock(&pd->lock);
+ 		pd->write_congestion_on = val;
+ 		init_write_congestion_marks(&pd->write_congestion_off,
+@@ -295,44 +293,39 @@ static ssize_t kobj_pkt_store(struct kobject *kobj,
+ 	}
+ 	return len;
+ }
++static DEVICE_ATTR_RW(congestion_on);
+ 
+-static const struct sysfs_ops kobj_pkt_ops = {
+-	.show = kobj_pkt_show,
+-	.store = kobj_pkt_store
++static struct attribute *pkt_wq_attrs[] = {
++	&dev_attr_congestion_on.attr,
++	&dev_attr_congestion_off.attr,
++	&dev_attr_size.attr,
++	NULL,
+ };
+-static struct kobj_type kobj_pkt_type_stat = {
+-	.release = pkt_kobj_release,
+-	.sysfs_ops = &kobj_pkt_ops,
+-	.default_attrs = kobj_pkt_attrs_stat
++
++static const struct attribute_group pkt_wq_group = {
++	.name = "write_queue",
++	.attrs = pkt_wq_attrs,
+ };
+-static struct kobj_type kobj_pkt_type_wqueue = {
+-	.release = pkt_kobj_release,
+-	.sysfs_ops = &kobj_pkt_ops,
+-	.default_attrs = kobj_pkt_attrs_wqueue
++
++static const struct attribute_group *pkt_groups[] = {
++	&pkt_stat_group,
++	&pkt_wq_group,
++	NULL,
+ };
+ 
+ static void pkt_sysfs_dev_new(struct pktcdvd_device *pd)
+ {
+ 	if (class_pktcdvd) {
+-		pd->dev = device_create(class_pktcdvd, NULL, MKDEV(0, 0), NULL,
+-					"%s", pd->name);
++		pd->dev = device_create_with_groups(class_pktcdvd, NULL,
++						    MKDEV(0, 0), pd, pkt_groups,
++						    "%s", pd->name);
+ 		if (IS_ERR(pd->dev))
+ 			pd->dev = NULL;
+ 	}
+-	if (pd->dev) {
+-		pd->kobj_stat = pkt_kobj_create(pd, "stat",
+-					&pd->dev->kobj,
+-					&kobj_pkt_type_stat);
+-		pd->kobj_wqueue = pkt_kobj_create(pd, "write_queue",
+-					&pd->dev->kobj,
+-					&kobj_pkt_type_wqueue);
+-	}
+ }
+ 
+ static void pkt_sysfs_dev_remove(struct pktcdvd_device *pd)
+ {
+-	pkt_kobj_remove(pd->kobj_stat);
+-	pkt_kobj_remove(pd->kobj_wqueue);
+ 	if (class_pktcdvd)
+ 		device_unregister(pd->dev);
+ }
+diff --git a/include/linux/pktcdvd.h b/include/linux/pktcdvd.h
+index 174601554b06..fc2ed629be72 100644
+--- a/include/linux/pktcdvd.h
++++ b/include/linux/pktcdvd.h
+@@ -152,14 +152,6 @@ struct packet_stacked_data
+ };
+ #define PSD_POOL_SIZE		64
+ 
+-struct pktcdvd_kobj
+-{
+-	struct kobject		kobj;
+-	struct pktcdvd_device	*pd;
+-};
+-#define to_pktcdvdkobj(_k) \
+-  ((struct pktcdvd_kobj*)container_of(_k,struct pktcdvd_kobj,kobj))
+-
+ struct pktcdvd_device
+ {
+ 	struct block_device	*bdev;		/* dev attached */
+@@ -195,8 +187,6 @@ struct pktcdvd_device
+ 	int			write_congestion_on;
+ 
+ 	struct device		*dev;		/* sysfs pktcdvd[0-7] dev */
+-	struct pktcdvd_kobj	*kobj_stat;	/* sysfs pktcdvd[0-7]/stat/     */
+-	struct pktcdvd_kobj	*kobj_wqueue;	/* sysfs pktcdvd[0-7]/write_queue/ */
+ 
+ 	struct dentry		*dfs_d_root;	/* debugfs: devname directory */
+ 	struct dentry		*dfs_f_info;	/* debugfs: info file */
 -- 
-/Horatiu
+2.34.1
+

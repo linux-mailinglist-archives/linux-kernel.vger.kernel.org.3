@@ -2,114 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4602482ECC
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 08:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 826EA482ED3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 08:47:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbiACHpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 02:45:23 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:59636 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230370AbiACHpX (ORCPT
+        id S232030AbiACHr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 02:47:56 -0500
+Received: from st43p00im-ztdg10071801.me.com ([17.58.63.171]:41996 "EHLO
+        st43p00im-ztdg10071801.me.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232027AbiACHrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 02:45:23 -0500
-X-UUID: cfc88ef970f049fba0806cd9aca3ad48-20220103
-X-UUID: cfc88ef970f049fba0806cd9aca3ad48-20220103
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <roger.lu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 528300326; Mon, 03 Jan 2022 15:45:19 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 3 Jan 2022 15:45:17 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 3 Jan
- 2022 15:45:17 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 3 Jan 2022 15:45:16 +0800
-Message-ID: <28bc9c8ba962e09e321db3149c1196edefe4e856.camel@mediatek.com>
-Subject: Re: [PATCH v20 5/7] dt-bindings: soc: mediatek: add mt8192 svs
- dt-bindings
-From:   Roger Lu <roger.lu@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        YT Lee <yt.lee@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Date:   Mon, 3 Jan 2022 15:45:17 +0800
-In-Reply-To: <98efb356-dc0d-fa7e-5579-7984f2bb3e84@gmail.com>
-References: <20210721070904.15636-1-roger.lu@mediatek.com>
-         <20210721070904.15636-6-roger.lu@mediatek.com>
-         <98efb356-dc0d-fa7e-5579-7984f2bb3e84@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 3 Jan 2022 02:47:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
+        t=1641196074; bh=MwMZsATWpgmG+kPynE5dyXpf6f+nL7GftB7qOw0on7Y=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=Wgs5HpiCTnVU9fBVHu7pF5O2E60NBd6nTQN1DGYzs+h1XVPn47pUk36iVcz9u10z1
+         zmPYRTM2Kpe5gx+3dJbe3kQZqlxyBsZxhDNAe06McjYB40FhQ9SdKB9AoT4jbN7+n7
+         81/7RRfzxqnnbxxUJxYDfhvppATcZc0ok0mmGdtB4qrRj/lsKPRklBFN5XOkUZxqhD
+         3iZnOihzMRQ70bAhbBqHYbjZ2Xdx14BgxuWSV/3+YBwyz1zAckPtLIdCYQvQLIbdaQ
+         pmwVX+HpwjYBvAgPUB+LIA93lKNaqJeQytDbTGCY9SGpPCJnCrEEqmOCGOWmjbDdCl
+         mzIuprer1iHPQ==
+Received: from localhost (101.220.150.77.rev.sfr.net [77.150.220.101])
+        by st43p00im-ztdg10071801.me.com (Postfix) with ESMTPSA id DAB953C097A;
+        Mon,  3 Jan 2022 07:47:53 +0000 (UTC)
+From:   Alain Volmat <avolmat@me.com>
+To:     Rob Herring <robh+dt@kernel.org>, linux-pci@vger.kernel.org
+Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>, avolmat@me.com
+Subject: [PATCH RESEND v2 0/5] Introduction of PCIe support on STi platform
+Date:   Mon,  3 Jan 2022 08:47:26 +0100
+Message-Id: <20220103074731.3651-1-avolmat@me.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.790,17.11.62.513.0000000_definitions?=
+ =?UTF-8?Q?=3D2022-01-03=5F01:2021-12-30=5F02,2022-01-03=5F01,2021-12-02?=
+ =?UTF-8?Q?=5F01_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 malwarescore=0
+ spamscore=0 clxscore=1015 adultscore=0 suspectscore=0 mlxlogscore=999
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2201030052
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthias,
+The STi platform SoC embed a designware based PCIe controller.
+This serie include the driver for the controller and DT for the
+stih407-family and for the stih418-b2264 into which it is used.
 
+Within the DT and the binding, only st,stih407-pcie compatible is
+used.
+Rob, could you clarify if I need to mention both compatible (st,stih407-pcie
+and snps,dw-pcie) or if st,stih407-pcie is enought ?
 
-On Thu, 2021-12-30 at 16:30 +0100, Matthias Brugger wrote:
-> Please add a commit message.
+RESEND since not all patches made their way to the mailing list on
+previous attempt.
 
-Sure, I'll add it in the next version. Thanks.
+v2: update of the pcie-st driver to add possibility to build as module
+    and remove the __init of the probe
 
-> 
-> Regards,
-> Matthias
-> 
-> On 21/07/2021 09:09, Roger Lu wrote:
-> > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> > ---
-> >   .../devicetree/bindings/soc/mediatek/mtk-svs.yaml         | 8 ++++++++
-> >   1 file changed, 8 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
-> > b/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
-> > index a855ced410f8..59342e627b67 100644
-> > --- a/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
-> > +++ b/Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
-> > @@ -22,6 +22,7 @@ properties:
-> >     compatible:
-> >       enum:
-> >         - mediatek,mt8183-svs
-> > +      - mediatek,mt8192-svs
-> >   
-> >     reg:
-> >       maxItems: 1
-> > @@ -51,6 +52,13 @@ properties:
-> >         - const: svs-calibration-data
-> >         - const: t-calibration-data
-> >   
-> > +  resets:
-> > +    maxItems: 1
-> > +
-> > +  reset-names:
-> > +    items:
-> > +      - const: svs_rst
-> > +
-> >   required:
-> >     - compatible
-> >     - reg
-> > 
+Alain Volmat (5):
+  dt-bindings: pci: st-pcie: PCIe controller found on STi platforms
+  pci: dwc: pcie-st: Add PCIe driver for STi platforms
+  MAINTAINERS: add entry for ST STI PCIE driver
+  ARM: dts: sti: add the PCIe controller node within stih407-family
+  ARM: dts: sti: enable PCIe on the stih418-b2264 board
+
+ .../devicetree/bindings/pci/snps,dw-pcie.yaml |   2 +-
+ .../devicetree/bindings/pci/st,st-pcie.yaml   | 112 +++++
+ MAINTAINERS                                   |   6 +
+ arch/arm/boot/dts/stih407-family.dtsi         |  40 ++
+ arch/arm/boot/dts/stih418-b2264.dts           |   5 +
+ drivers/pci/controller/dwc/Kconfig            |  11 +
+ drivers/pci/controller/dwc/Makefile           |   1 +
+ drivers/pci/controller/dwc/pcie-sti.c         | 386 ++++++++++++++++++
+ 8 files changed, 562 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/pci/st,st-pcie.yaml
+ create mode 100644 drivers/pci/controller/dwc/pcie-sti.c
+
+-- 
+2.25.1
 

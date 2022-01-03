@@ -2,97 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CBCC4837A5
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 20:40:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CDD84837A8
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 20:40:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235953AbiACTkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 14:40:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
+        id S235972AbiACTkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 14:40:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231124AbiACTkN (ORCPT
+        with ESMTP id S233450AbiACTke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 14:40:13 -0500
-Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDDF1C061761;
-        Mon,  3 Jan 2022 11:40:12 -0800 (PST)
-Received: by fieldses.org (Postfix, from userid 2815)
-        id 2490472F7; Mon,  3 Jan 2022 14:40:12 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org 2490472F7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
-        s=default; t=1641238812;
-        bh=Y8sRSNBFkjBLbhStDg107D1cMBXSj8V94CG81+nbg8Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IXNi7eP6U5279zYPBjhfXL1NV7XJDackoNl+BYyz8hBYLb8RVGH4GnWG9M6tf5iZf
-         QmpqiazJw9M+7eArX+idRrKV2hkphO1ESeMyYtPw3MdKNU350yFuvF8X+phsme9vpf
-         lfPs7kAs232BV/sGqgt/aytZiowMScqEdBlmACLY=
-Date:   Mon, 3 Jan 2022 14:40:12 -0500
-From:   "J. Bruce Fields" <bfields@fieldses.org>
-To:     Vasily Averin <vvs@virtuozzo.com>
-Cc:     Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>, kernel@openvz.org,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chuck Lever <chuck.lever@oracle.com>
-Subject: Re: [PATCH v3 2/3] nfs4: handle async processing of F_SETLK with
- FL_SLEEP
-Message-ID: <20220103194012.GF21514@fieldses.org>
-References: <1f354cec-d2d6-ddf5-56e0-325c10fe26ee@virtuozzo.com>
- <00d1e0fa-55dd-82a5-2607-70d4552cc7f4@virtuozzo.com>
+        Mon, 3 Jan 2022 14:40:34 -0500
+Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49184C061761;
+        Mon,  3 Jan 2022 11:40:34 -0800 (PST)
+Received: by mail-vk1-xa33.google.com with SMTP id m200so19421907vka.6;
+        Mon, 03 Jan 2022 11:40:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0yThoTV+RS18CRQ2uhToFwD8vowRI/t+DmQcT4bfRDQ=;
+        b=AYJ0m/hJg238lQCW9AljqQ6g7YTe5SMoBHWAEcv/ADmCK+3mK6RLrgpfHpDAWmyfno
+         664nsNaFLdeebOM1kcDbhtJGyDqmvHs78JPOc+QCzCswfS0MIb/J6RPmYCIKW/W/sWaZ
+         STa0m2KXzHvCiLdwwmqm2Qejg7q+DT0NbW+Ft+WrzkyiTI6pWODVZyPwVLMpGosyM3eC
+         efZ8rNvxZv+ZBY3nx5APRLnMmsw/mblubL9C2AgIi5843TV+3x3n2X7kfNwzs/pr1QmS
+         qoF6kQJxwTI66s8gkLtzVcqY+ALr4DiDyraYLeHDAHE9rf5weQnajK7Tbnypz15M5G15
+         opeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0yThoTV+RS18CRQ2uhToFwD8vowRI/t+DmQcT4bfRDQ=;
+        b=6FNZZm1BWNb6x4cTT5H+l5tksQAxgRM0/FwDhwjVkcWyWebprJ6i/Xz0Ee/TYHM4mh
+         AuD+Uza+E1PyEkWxy4CKDQIBERqRhFg88KgLhwABoLsS5OVSamqLX52Y/eiAdxME11vb
+         gidKqJIsLQAduvjYDtYgq9rQCNKSAYvSYl1FjIAb6/iKhwF2WLcJVGTTpU2lmnR8raTl
+         yCHT+ZenpuoyMnretXjfRia5+5eH6j963D2Wp5Yisg1H9HGlsE+2Y2rganjBjfrKakUn
+         BQHdRZnOjxWR8mjmw2cZwz0LBZ89T6F6hcgsEdrVG8TBSNsjH/yGVwwiBC4hvaY4i8BD
+         KK2Q==
+X-Gm-Message-State: AOAM533yLd0HDsZIwkdarkhx/uhdWpgdN5nAHNGraXBcNL+GTmhT+qwJ
+        f1fsqmrz3WyekY4XFFYgPNjFe8AK5OM=
+X-Google-Smtp-Source: ABdhPJxKqGuaNP5wEXjBHSvdtqcp4oMCCQOLx4Zq4avFwousGq32deS9be7pp/BmtMoDye4/GRTkfQ==
+X-Received: by 2002:a1f:1bd0:: with SMTP id b199mr1788528vkb.33.1641238833064;
+        Mon, 03 Jan 2022 11:40:33 -0800 (PST)
+Received: from 7YHHR73.igp.broadcom.net ([192.19.161.250])
+        by smtp.gmail.com with ESMTPSA id y19sm4595905uad.14.2022.01.03.11.40.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jan 2022 11:40:32 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Maxime Bizon <mbizon@freebox.fr>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net-next] net: mdio: Demote probed message to debug print
+Date:   Mon,  3 Jan 2022 11:40:24 -0800
+Message-Id: <20220103194024.2620-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00d1e0fa-55dd-82a5-2607-70d4552cc7f4@virtuozzo.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 29, 2021 at 11:24:43AM +0300, Vasily Averin wrote:
-> nfsd and lockd use F_SETLK cmd with the FL_SLEEP flag set to request
-> asynchronous processing of blocking locks.
-> 
-> Currently nfs4 use locks_lock_inode_wait() function which is blocked
-> for such requests. To handle them correctly FL_SLEEP flag should be
-> temporarily reset before executing the locks_lock_inode_wait() function.
-> 
-> Additionally block flag is forced to set, to translate blocking lock to
-> remote nfs server, expecting it supports async processing of the blocking
-> locks too.
+On systems with large numbers of MDIO bus/muxes the message indicating
+that a given MDIO bus has been successfully probed is repeated for as
+many buses we have, which can eat up substantial boot time for no
+reason, demote to a debug print.
 
-Seems like an improvement, but is there some way to make this more
-straightforward by just calling a function that doesn't sleep in the
-first place?  (posix_lock_inode(), maybe?)
+Reported-by: Maxime Bizon <mbizon@freebox.fr>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ drivers/net/phy/mdio_bus.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---b.
+diff --git a/drivers/net/phy/mdio_bus.c b/drivers/net/phy/mdio_bus.c
+index f52da568cce3..58d602985877 100644
+--- a/drivers/net/phy/mdio_bus.c
++++ b/drivers/net/phy/mdio_bus.c
+@@ -597,7 +597,7 @@ int __mdiobus_register(struct mii_bus *bus, struct module *owner)
+ 	mdiobus_setup_mdiodev_from_board_info(bus, mdiobus_create_device);
+ 
+ 	bus->state = MDIOBUS_REGISTERED;
+-	pr_info("%s: probed\n", bus->name);
++	dev_dbg(&bus->dev, "probed\n");
+ 	return 0;
+ 
+ error:
+-- 
+2.25.1
 
-> 
-> https://bugzilla.kernel.org/show_bug.cgi?id=215383
-> Signed-off-by: Vasily Averin <vvs@virtuozzo.com>
-> ---
->  fs/nfs/nfs4proc.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/nfs/nfs4proc.c b/fs/nfs/nfs4proc.c
-> index ee3bc79f6ca3..9b1380c4223c 100644
-> --- a/fs/nfs/nfs4proc.c
-> +++ b/fs/nfs/nfs4proc.c
-> @@ -7094,7 +7094,7 @@ static int _nfs4_do_setlk(struct nfs4_state *state, int cmd, struct file_lock *f
->  			recovery_type == NFS_LOCK_NEW ? GFP_KERNEL : GFP_NOFS);
->  	if (data == NULL)
->  		return -ENOMEM;
-> -	if (IS_SETLKW(cmd))
-> +	if (IS_SETLKW(cmd) || (fl->fl_flags & FL_SLEEP))
->  		data->arg.block = 1;
->  	nfs4_init_sequence(&data->arg.seq_args, &data->res.seq_res, 1,
->  				recovery_type > NFS_LOCK_NEW);
-> @@ -7200,6 +7200,9 @@ static int _nfs4_proc_setlk(struct nfs4_state *state, int cmd, struct file_lock
->  	int status;
->  
->  	request->fl_flags |= FL_ACCESS;
-> +	if (((fl_flags & FL_SLEEP_POSIX) == FL_SLEEP_POSIX) && IS_SETLK(cmd))
-> +		request->fl_flags &= ~FL_SLEEP;
-> +
->  	status = locks_lock_inode_wait(state->inode, request);
->  	if (status < 0)
->  		goto out;
-> -- 
-> 2.25.1

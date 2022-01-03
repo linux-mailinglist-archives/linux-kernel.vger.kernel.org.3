@@ -2,215 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0666948367D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 18:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 077C148367F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 18:58:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235229AbiACR4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 12:56:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
+        id S234822AbiACR6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 12:58:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233934AbiACR4o (ORCPT
+        with ESMTP id S232091AbiACR6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 12:56:44 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D188EC061792
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 09:56:43 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id k18so34597940wrg.11
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 09:56:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tCiPkp3jfEInQDuu5pe2s+FpAfkVA+xspBGKsfc9N3o=;
-        b=4X6ZZCCrYU57LSXKx569kRQxY/MNgkQFPpsJDHX2Ub8keBv+PYodi4YgTdDzZsDIS4
-         mw5gefTaflVbh1AnJGWiVVBwJQvdEeV9Cy5y2oOEV1/aMER5Vk7UXmIXPYUqfwlm9qvi
-         0u5Z2gMEnzUx16otyh3qogvs4At7o51QoddC48qVTe4yfM79t7bYuZK5G2nD8JZWdn+3
-         soYuwTwi83slTgHg7k0ygDImXcmGfSBbPd+mspqgnZ1NuYQSXM74wTkQ+wadF93enS4F
-         ADlXrdf8SsEwtTxfbaXaKk83INV+7vA4fIKN2obvZ3cVL78LeuwsSXtWEQPzgra6c2cr
-         uv8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tCiPkp3jfEInQDuu5pe2s+FpAfkVA+xspBGKsfc9N3o=;
-        b=4qQ2uSKOR4l4ouVI0DUS+QuICIFOMmG64sSk+Qn1gkIHCLoUOeOa4mqIPLRrxEJ8gq
-         4QYZU3vL2qKXkRBAudCinS04Hv9Aw8+17bWlSPy/BBGlpBd3GhC70slHZXPJztpfF3mp
-         5ILjl40GdW3lEJSOIDbAtFgU9GhWPYHpDWxVl5t9fc2FH5xWW5Yweji0mhbofTVQjon6
-         TbchxqzAZdurFxpEYvRenlEybaJyPDzRAltFpQSc5nU/lJLQI+aAAoJPpOFoEveW5dlu
-         NixLcC9mIEltdi5SjNlRH2YEB/Ifj4e7gGbDNzzGksgRsYvlYeyBRgUSGPgLfpLBv6tb
-         wDow==
-X-Gm-Message-State: AOAM532naz+q83kF570yvJUy05xXmP/LXan9Y/IrQAJWpzOZdHF+JXzi
-        nFuHTu3z00BJXsF8SpUrb+Lvlbd+QhLpXQ==
-X-Google-Smtp-Source: ABdhPJxOtKYtTNaIgDan8PjmiObJStT/bn80hFMljJ8rGG+Y+kZqa1LMyYMm0veoWk234qEPQBjQbg==
-X-Received: by 2002:a05:6000:118a:: with SMTP id g10mr38020352wrx.533.1641232602351;
-        Mon, 03 Jan 2022 09:56:42 -0800 (PST)
-Received: from localhost.localdomain ([2001:861:44c0:66c0:7c9d:a967:38e2:5220])
-        by smtp.gmail.com with ESMTPSA id f13sm35763228wri.51.2022.01.03.09.56.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jan 2022 09:56:41 -0800 (PST)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     davem@davemloft.net
-Cc:     Neil Armstrong <narmstrong@baylibre.com>, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 2/3] net: stmmac: dwmac-oxnas: Add support for OX810SE
-Date:   Mon,  3 Jan 2022 18:56:37 +0100
-Message-Id: <20220103175638.89625-3-narmstrong@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220103175638.89625-1-narmstrong@baylibre.com>
-References: <20220103175638.89625-1-narmstrong@baylibre.com>
+        Mon, 3 Jan 2022 12:58:08 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B111CC061761;
+        Mon,  3 Jan 2022 09:58:08 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 28C1A1EC0118;
+        Mon,  3 Jan 2022 18:58:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1641232683;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=lg6/SYBjwUEm8ZWAi8vMp09yL3c8/qSiwWmVSfDOZsI=;
+        b=cigFZ3t+av441lOj6j6kLxBruXe7oY02YdcKvTWUtOdgK+yXsRxtr2QH6Ji1J5C6xMDYNI
+        3OT2Lyz79LWuY2XjIVwXoH12SqzYMa8NLLExRsTBhbb4mPdi51hkdpojujEj0mlU0WUt+L
+        69kmi6dje7xywQzF0lEj9yye60AiCPk=
+Date:   Mon, 3 Jan 2022 18:58:02 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     llvm@lists.linux.dev
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-tip-commits@vger.kernel.org,
+        kernel test robot <lkp@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Miroslav Benes <mbenes@suse.cz>, linux-kernel@vger.kernel.org
+Subject: Re: [tip: objtool/urgent] compiler.h: Fix annotation macro
+ misplacement with Clang
+Message-ID: <YdM5Kh1NOKEwDwAP@zn.tnic>
+References: <0417e96909b97a406323409210de7bf13df0b170.1636410380.git.jpoimboe@redhat.com>
+ <164016423099.16921.16996655982787145621.tip-bot2@tip-bot2>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <164016423099.16921.16996655982787145621.tip-bot2@tip-bot2>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for OX810SE dwmac glue setup, which is a simplified version
-of the OX820 introduced later with more control on the PHY interface.
+I wonder if clang folks have seen this and perhaps have a comment as to
+why the volatile gets ingored... Added.
 
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
----
- .../net/ethernet/stmicro/stmmac/dwmac-oxnas.c | 92 ++++++++++++++-----
- 1 file changed, 70 insertions(+), 22 deletions(-)
+On Wed, Dec 22, 2021 at 09:10:30AM -0000, tip-bot2 for Josh Poimboeuf wrote:
+> The following commit has been merged into the objtool/urgent branch of tip:
+> 
+> Commit-ID:     dcce50e6cc4d86a63dc0a9a6ee7d4f948ccd53a1
+> Gitweb:        https://git.kernel.org/tip/dcce50e6cc4d86a63dc0a9a6ee7d4f948ccd53a1
+> Author:        Josh Poimboeuf <jpoimboe@redhat.com>
+> AuthorDate:    Mon, 08 Nov 2021 14:35:59 -08:00
+> Committer:     Josh Poimboeuf <jpoimboe@redhat.com>
+> CommitterDate: Tue, 21 Dec 2021 15:09:46 -08:00
+> 
+> compiler.h: Fix annotation macro misplacement with Clang
+> 
+> When building with Clang and CONFIG_TRACE_BRANCH_PROFILING, there are a
+> lot of unreachable warnings, like:
+> 
+>   arch/x86/kernel/traps.o: warning: objtool: handle_xfd_event()+0x134: unreachable instruction
+> 
+> Without an input to the inline asm, 'volatile' is ignored for some
+> reason and Clang feels free to move the reachable() annotation away from
+> its intended location.
+> 
+> Fix that by re-adding the counter value to the inputs.
+> 
+> Fixes: f1069a8756b9 ("compiler.h: Avoid using inline asm operand modifiers")
+> Fixes: c199f64ff93c ("instrumentation.h: Avoid using inline asm operand modifiers")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+> Link: https://lore.kernel.org/r/0417e96909b97a406323409210de7bf13df0b170.1636410380.git.jpoimboe@redhat.com
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: x86@kernel.org
+> Cc: Vasily Gorbik <gor@linux.ibm.com>
+> Cc: Miroslav Benes <mbenes@suse.cz>
+> ---
+>  include/linux/compiler.h        | 4 ++--
+>  include/linux/instrumentation.h | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+> index 3d5af56..429dceb 100644
+> --- a/include/linux/compiler.h
+> +++ b/include/linux/compiler.h
+> @@ -121,7 +121,7 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+>  	asm volatile(__stringify_label(c) ":\n\t"			\
+>  		     ".pushsection .discard.reachable\n\t"		\
+>  		     ".long " __stringify_label(c) "b - .\n\t"		\
+> -		     ".popsection\n\t");				\
+> +		     ".popsection\n\t" : : "i" (c));			\
+>  })
+>  #define annotate_reachable() __annotate_reachable(__COUNTER__)
+>  
+> @@ -129,7 +129,7 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+>  	asm volatile(__stringify_label(c) ":\n\t"			\
+>  		     ".pushsection .discard.unreachable\n\t"		\
+>  		     ".long " __stringify_label(c) "b - .\n\t"		\
+> -		     ".popsection\n\t");				\
+> +		     ".popsection\n\t" : : "i" (c));			\
+>  })
+>  #define annotate_unreachable() __annotate_unreachable(__COUNTER__)
+>  
+> diff --git a/include/linux/instrumentation.h b/include/linux/instrumentation.h
+> index fa2cd8c..24359b4 100644
+> --- a/include/linux/instrumentation.h
+> +++ b/include/linux/instrumentation.h
+> @@ -11,7 +11,7 @@
+>  	asm volatile(__stringify(c) ": nop\n\t"				\
+>  		     ".pushsection .discard.instr_begin\n\t"		\
+>  		     ".long " __stringify(c) "b - .\n\t"		\
+> -		     ".popsection\n\t");				\
+> +		     ".popsection\n\t" : : "i" (c));			\
+>  })
+>  #define instrumentation_begin() __instrumentation_begin(__COUNTER__)
+>  
+> @@ -50,7 +50,7 @@
+>  	asm volatile(__stringify(c) ": nop\n\t"				\
+>  		     ".pushsection .discard.instr_end\n\t"		\
+>  		     ".long " __stringify(c) "b - .\n\t"		\
+> -		     ".popsection\n\t");				\
+> +		     ".popsection\n\t" : : "i" (c));			\
+>  })
+>  #define instrumentation_end() __instrumentation_end(__COUNTER__)
+>  #else
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-oxnas.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-oxnas.c
-index adfeb8d3293d..7ffa4a4eb30f 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-oxnas.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-oxnas.c
-@@ -12,6 +12,7 @@
- #include <linux/io.h>
- #include <linux/module.h>
- #include <linux/of.h>
-+#include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
- #include <linux/mfd/syscon.h>
-@@ -48,12 +49,58 @@
- #define DWMAC_RX_VARDELAY(d)		((d) << DWMAC_RX_VARDELAY_SHIFT)
- #define DWMAC_RXN_VARDELAY(d)		((d) << DWMAC_RXN_VARDELAY_SHIFT)
- 
-+struct oxnas_dwmac;
-+
-+struct oxnas_dwmac_data {
-+	void (*setup)(struct oxnas_dwmac *dwmac);
-+};
-+
- struct oxnas_dwmac {
- 	struct device	*dev;
- 	struct clk	*clk;
- 	struct regmap	*regmap;
-+	const struct oxnas_dwmac_data	*data;
- };
- 
-+static void oxnas_dwmac_setup_ox810se(struct oxnas_dwmac *dwmac)
-+{
-+	unsigned int value;
-+
-+	/* Enable GMII_GTXCLK to follow GMII_REFCLK, required for gigabit PHY */
-+	value = BIT(DWMAC_CKEN_GTX)		|
-+		 /* Use simple mux for 25/125 Mhz clock switching */
-+		 BIT(DWMAC_SIMPLE_MUX);
-+
-+	regmap_write(dwmac->regmap, OXNAS_DWMAC_CTRL_REGOFFSET, value);
-+}
-+
-+static void oxnas_dwmac_setup_ox820(struct oxnas_dwmac *dwmac)
-+{
-+	unsigned int value;
-+
-+	/* Enable GMII_GTXCLK to follow GMII_REFCLK, required for gigabit PHY */
-+	value = BIT(DWMAC_CKEN_GTX)		|
-+		 /* Use simple mux for 25/125 Mhz clock switching */
-+		BIT(DWMAC_SIMPLE_MUX)		|
-+		/* set auto switch tx clock source */
-+		BIT(DWMAC_AUTO_TX_SOURCE)	|
-+		/* enable tx & rx vardelay */
-+		BIT(DWMAC_CKEN_TX_OUT)		|
-+		BIT(DWMAC_CKEN_TXN_OUT)	|
-+		BIT(DWMAC_CKEN_TX_IN)		|
-+		BIT(DWMAC_CKEN_RX_OUT)		|
-+		BIT(DWMAC_CKEN_RXN_OUT)	|
-+		BIT(DWMAC_CKEN_RX_IN);
-+	regmap_write(dwmac->regmap, OXNAS_DWMAC_CTRL_REGOFFSET, value);
-+
-+	/* set tx & rx vardelay */
-+	value = DWMAC_TX_VARDELAY(4)	|
-+		DWMAC_TXN_VARDELAY(2)	|
-+		DWMAC_RX_VARDELAY(10)	|
-+		DWMAC_RXN_VARDELAY(8);
-+	regmap_write(dwmac->regmap, OXNAS_DWMAC_DELAY_REGOFFSET, value);
-+}
-+
- static int oxnas_dwmac_init(struct platform_device *pdev, void *priv)
- {
- 	struct oxnas_dwmac *dwmac = priv;
-@@ -75,27 +122,7 @@ static int oxnas_dwmac_init(struct platform_device *pdev, void *priv)
- 		return ret;
- 	}
- 
--	/* Enable GMII_GTXCLK to follow GMII_REFCLK, required for gigabit PHY */
--	value |= BIT(DWMAC_CKEN_GTX)		|
--		 /* Use simple mux for 25/125 Mhz clock switching */
--		 BIT(DWMAC_SIMPLE_MUX)		|
--		 /* set auto switch tx clock source */
--		 BIT(DWMAC_AUTO_TX_SOURCE)	|
--		 /* enable tx & rx vardelay */
--		 BIT(DWMAC_CKEN_TX_OUT)		|
--		 BIT(DWMAC_CKEN_TXN_OUT)	|
--		 BIT(DWMAC_CKEN_TX_IN)		|
--		 BIT(DWMAC_CKEN_RX_OUT)		|
--		 BIT(DWMAC_CKEN_RXN_OUT)	|
--		 BIT(DWMAC_CKEN_RX_IN);
--	regmap_write(dwmac->regmap, OXNAS_DWMAC_CTRL_REGOFFSET, value);
--
--	/* set tx & rx vardelay */
--	value = DWMAC_TX_VARDELAY(4)	|
--		DWMAC_TXN_VARDELAY(2)	|
--		DWMAC_RX_VARDELAY(10)	|
--		DWMAC_RXN_VARDELAY(8);
--	regmap_write(dwmac->regmap, OXNAS_DWMAC_DELAY_REGOFFSET, value);
-+	dwmac->data->setup(dwmac);
- 
- 	return 0;
- }
-@@ -128,6 +155,12 @@ static int oxnas_dwmac_probe(struct platform_device *pdev)
- 		goto err_remove_config_dt;
- 	}
- 
-+	dwmac->data = (const struct oxnas_dwmac_data *)of_device_get_match_data(&pdev->dev);
-+	if (!dwmac->data) {
-+		ret = -EINVAL;
-+		goto err_remove_config_dt;
-+	}
-+
- 	dwmac->dev = &pdev->dev;
- 	plat_dat->bsp_priv = dwmac;
- 	plat_dat->init = oxnas_dwmac_init;
-@@ -166,8 +199,23 @@ static int oxnas_dwmac_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
-+static const struct oxnas_dwmac_data ox810se_dwmac_data = {
-+	.setup = oxnas_dwmac_setup_ox810se,
-+};
-+
-+static const struct oxnas_dwmac_data ox820_dwmac_data = {
-+	.setup = oxnas_dwmac_setup_ox820,
-+};
-+
- static const struct of_device_id oxnas_dwmac_match[] = {
--	{ .compatible = "oxsemi,ox820-dwmac" },
-+	{
-+		.compatible = "oxsemi,ox810se-dwmac",
-+		.data = &ox810se_dwmac_data,
-+	},
-+	{
-+		.compatible = "oxsemi,ox820-dwmac",
-+		.data = &ox820_dwmac_data,
-+	},
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, oxnas_dwmac_match);
 -- 
-2.25.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

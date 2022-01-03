@@ -2,174 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E4F483150
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 14:11:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 954D1483154
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 14:16:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbiACNLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 08:11:21 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:47974 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229793AbiACNLV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 08:11:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=aI1cZL5yB9L7qnlhEEZoUoA/icXX0WayjwBgzXAEGSM=; b=ovr3ZqLGrOSjym2xPMPaH4Lb0X
-        9+459Qp+Vm93dINFlabvTPHkCaIJdQdmzGLZenAEz67gqO4JXt3NdupTjM65SGiRgdY5L12vBdHMy
-        hnTNtm1L7ma3Uvlc/u2B3PHdXkS9tudUjWOAPGa3MNXzEJCQWRVGbmYocMQ0ScFpdwx4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1n4N7I-000N0r-SU; Mon, 03 Jan 2022 14:11:12 +0100
-Date:   Mon, 3 Jan 2022 14:11:12 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Xiangyu Chen <xiangyu.chen@aol.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, robh+dt@kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xiangyu.chen@msn.com
-Subject: Re: [PATCH 2/2] dt-bindings: net: ti:add support slave interface
- using internal clock in dual rmii emac mode
-Message-ID: <YdL18KgE8J/ptaO6@lunn.ch>
-References: <20220103050200.6382-1-xiangyu.chen.ref@aol.com>
- <20220103050200.6382-1-xiangyu.chen@aol.com>
+        id S232001AbiACNQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 08:16:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50980 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229793AbiACNQE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 08:16:04 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F1BC061761;
+        Mon,  3 Jan 2022 05:16:04 -0800 (PST)
+Received: from ip4d173d02.dynamic.kabel-deutschland.de ([77.23.61.2] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1n4NBv-0006ka-RO; Mon, 03 Jan 2022 14:15:59 +0100
+Message-ID: <0d897f0a-6671-bb78-21d5-e475d1db29b9@leemhuis.info>
+Date:   Mon, 3 Jan 2022 14:15:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220103050200.6382-1-xiangyu.chen@aol.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH rdma-rc] RDMA/mlx5: Fix dereg mr flow for kernel MRs
+Content-Language: en-BS
+To:     Leon Romanovsky <leon@kernel.org>,
+        Tony Lu <tonylu@linux.alibaba.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>, Maor Gottlieb <maorg@nvidia.com>,
+        Alaa Hleihel <alaa@nvidia.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org
+References: <f298db4ec5fdf7a2d1d166ca2f66020fd9397e5c.1640079962.git.leonro@nvidia.com>
+ <YcKSzszT/zw2ECjh@TonyMac-Alibaba> <YdLHDzmNXlqSMj/A@unreal>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <YdLHDzmNXlqSMj/A@unreal>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1641215764;8329ada1;
+X-HE-SMSGID: 1n4NBv-0006ka-RO
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 03, 2022 at 01:02:02PM +0800, Xiangyu Chen wrote:
-> This is the second patch of as subject said topic. It contains dts
->  document modification.
+Hi, this is your Linux kernel regression tracker speaking.
 
-Please thread your two patches together. git send-email should do that
-by default.
+On 03.01.22 10:51, Leon Romanovsky wrote:
+> On Wed, Dec 22, 2021 at 10:51:58AM +0800, Tony Lu wrote:
+>> On Tue, Dec 21, 2021 at 11:46:41AM +0200, Leon Romanovsky wrote:
+>>> From: Maor Gottlieb <maorg@nvidia.com>
+>>>
+>>> The cited commit moved umem into the union, hence
+>>> umem could be accessed only for user MRs. Add udata check
+>>> before access umem in the dereg flow.
+>>>
+>>> Fixes: f0ae4afe3d35 ("RDMA/mlx5: Fix releasing unallocated memory in dereg MR flow")
+>>> Tested-by: Chuck Lever <chuck.lever@oracle.com>
+>>> Signed-off-by: Maor Gottlieb <maorg@nvidia.com>
+>>> Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+>>> ---
+>>>  drivers/infiniband/hw/mlx5/mlx5_ib.h | 2 +-
+>>>  drivers/infiniband/hw/mlx5/mr.c      | 4 ++--
+>>>  drivers/infiniband/hw/mlx5/odp.c     | 4 ++--
+>>>  3 files changed, 5 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/drivers/infiniband/hw/mlx5/mlx5_ib.h b/drivers/infiniband/hw/mlx5/mlx5_ib.h
+>>
+>> This patch was tested and works for me in our environment for SMC. It
+>> wouldn't panic when release link and call ib_dereg_mr.
+>>
+>> Tested-by: Tony Lu <tonylu@linux.alibaba.com>
+> 
+> Thanks, unfortunately, this patch is incomplete.
 
-> Those patches regarding to add a way to setup/config the TI-AM335x series
-> Soc for 2 ways phy clock mode under RMII mode.
-> 
-> The basic scenario is when we have 2 PHYs connected to AM335x in RMII
-> mode, either we set the both of phy in external clock mode or we set the phy in internal
-> clock mode.
-> 
-> As TI suggetsion, when under RMII mode, the clock should use an external
-> osc due to AM335x cannot generate a low-jitter stable 50MHz clock, this
-> might cause some PHY cannot work correctly. But in some case (e.g. our
-> design, no impact on using low speed PHY for debugging/management).
-> There is no impact on some model phys.
-> 
-> So I think we should provide a way to allow user can set/config the PHY
-> chose clock mode in dual RMII emac mode.
-> 
-> Tests:
-> 
-> Below is my testing environment:
-> 
-> am335x SOC --RMII 1--> PHY1 (eth0) which using internal clock
->           |-RMII 2--> PHY2 (eth1) which using external clock
-> 
-> Booting log:
-> Booting log:
-> 
-> [    1.843108] cpsw 4a100000.ethernet: Detected MACID = 78:04:73:37:68:6c
-> [    1.850924] cpsw 4a100000.ethernet: initialized cpsw ale version 1.4
-> [    1.857842] cpsw 4a100000.ethernet: ALE Table size 1024
-> [    1.863449] cpsw 4a100000.ethernet: cpts: overflow check period 500 (jiffies)
-> [    1.874620] cpsw 4a100000.ethernet: cpsw: Detected MACID = 78:04:73:37:68:6e
-> [    4.017695] net eth0: initializing cpsw version 1.12 (0)
-> [    5.207867] cpsw 4a100000.ethernet eth0: Link is Up - 10Mbps/Full - flow control off
-> [  29.747480] net eth1: initializing cpsw version 1.12 (0)
-> [  30.806444] cpsw 4a100000.ethernet eth1: Link is Up - 100Mbps/Full - flow control off
-> 
-> # ifconfig
-> 
-> eth0      Link encap:Ethernet  HWaddr 00:FA:F9:00:61:88
->           inet addr:192.168.0.20  Bcast:192.168.0.255  Mask:255.255.255.0
->           inet6 addr: fe80::2fa:f9ff:fe00:6188/64 Scope:Link
->           UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
->           RX packets:20 errors:0 dropped:0 overruns:0 frame:0
->           TX packets:35 errors:0 dropped:0 overruns:0 carrier:0
->           collisions:0 txqueuelen:1000
->           RX bytes:1394 (1.3 KiB)  TX bytes:3272 (3.1 KiB)
->           Interrupt:50
-> 
-> eth1      Link encap:Ethernet  HWaddr 78:04:73:37:68:6E
->           inet addr:10.176.28.165  Bcast:10.176.29.255  Mask:255.255.254.0
->           inet6 addr: fe80::7a04:73ff:fe37:686e/64 Scope:Link
->           UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
->           RX packets:1809 errors:0 dropped:0 overruns:0 frame:0
->           TX packets:99 errors:0 dropped:0 overruns:0 carrier:0
->           collisions:0 txqueuelen:1000
->           RX bytes:123057 (120.1 KiB)  TX bytes:9012 (8.8 KiB)
-> 
-> lo        Link encap:Local Loopback
->           inet addr:127.0.0.1  Mask:255.0.0.0
->           inet6 addr: ::1/128 Scope:Host
->           UP LOOPBACK RUNNING  MTU:65536  Metric:1
->           RX packets:44 errors:0 dropped:0 overruns:0 frame:0
->           TX packets:44 errors:0 dropped:0 overruns:0 carrier:0
->           collisions:0 txqueuelen:1000
->           RX bytes:4872 (4.7 KiB)  TX bytes:4872 (4.7 KiB)
-> 
-> PHY1 (eth0, using internal clock from AM335x) ping:
-> #ping 192.168.0.20
-> 
-> PING 192.168.0.20 (192.168.0.20): 56 data bytes
-> 64 bytes from 192.168.0.20: seq=0 ttl=64 time=1.340 ms
-> 
-> ^C
-> 
-> --- 192.168.0.20 ping statistics ---
-> 1 packets transmitted, 1 packets received, 0% packet loss
-> round-trip min/avg/max = 1.340/1.340/1.340 ms
-> 
-> PHY2 (eth1, using external clock to AM335x) ping:
-> # ping 10.176.28.1
-> 
-> PING 10.176.28.1 (10.176.28.1): 56 data bytes
-> 64 bytes from 10.176.28.1: seq=1 ttl=254 time=1.967 ms
-> 64 bytes from 10.176.28.1: seq=2 ttl=254 time=1.652 ms
-> 64 bytes from 10.176.28.1: seq=3 ttl=254 time=1.688 ms
-> 
-> ^C
-> 
-> --- 10.176.28.1 ping statistics ---
-> 
-> 
-> Both phy working normally.
-> 
-> 
-> Thanks and Best regrads,
-> 
-> Xiangyu
+Could you be a bit more verbose and give a status update? It's hard to
+follow from the outside. But according to the "Fixes: f0ae4afe3d35"
+above this was supposed to fix a regression introduced in v5.16-rc5 that
+was also reported here:
+https://lore.kernel.org/linux-rdma/9974ea8c-f1cb-aeb4-cf1b-19d37536894a@linux.alibaba.com/
 
-This text should go into patch 0 of 2.
+Commit f0ae4afe3d35 in fact was also backported to v5.15.y and might
+cause trouble there as well.
 
-> From df2b0c2f7723deedcf4195e48e851de16b400775 Mon Sep 17 00:00:00 2001
-> From: Xiangyu Chen <xiangyu.chen@aol.com>
-> Date: Fri, 31 Dec 2021 10:38:03 +0800
-> Subject: [PATCH 2/2] dt-bindings: net: ti:add support slave interface using
->  internal clock in dual rmii emac mode
-> 
-> The am335x support dual emac in rmii mode, the rmii clock can be
-> provided by external osc or internal soc by ref_clk pin.
-> When rmii-clock-ext has been set in device tree, both emac has been
-> set to external clock mode, otherwise both emac has been set to internal
-> clock mode.
-> 
-> In some case, one slave can be used external clock, another slave can be
-> used internal clock.
-> 
-> This commit to support define a method to tell driver which slave phy
-> use internal clock when the "rmii-clock-ext" has been set.
+Should it maybe simply be reverted (and reapplied with all fixes later)
+in mainline (5.16 will likely be released in 6 days!) and v5.15.y?
 
-With patch 0/2 explaining the big picture, this commit message should
-just talk about the binding.
+Ciao, Thorsten (wearing his 'Linux kernel regression tracker' hat)
 
-It is worth reading
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html
+P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
+on my table. I can only look briefly into most of them. Unfortunately
+therefore I sometimes will get things wrong or miss something important.
+I hope that's not the case here; if you think it is, don't hesitate to
+tell me about it in a public reply, that's in everyone's interest.
 
-	Andrew
+BTW, I have no personal interest in this issue, which is tracked using
+regzbot, my Linux kernel regression tracking bot
+(https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
+this mail to get things rolling again and hence don't need to be CC on
+all further activities wrt to this regression.
+

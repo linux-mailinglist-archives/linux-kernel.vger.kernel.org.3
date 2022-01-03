@@ -2,45 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2F3483504
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 17:43:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A53004834F9
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 17:41:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232311AbiACQm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 11:42:57 -0500
-Received: from mout-y-209.mailbox.org ([91.198.250.237]:13552 "EHLO
-        mout-y-209.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230500AbiACQmy (ORCPT
+        id S231927AbiACQlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 11:41:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42158 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230517AbiACQlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 11:42:54 -0500
+        Mon, 3 Jan 2022 11:41:40 -0500
+X-Greylist: delayed 401 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 03 Jan 2022 08:41:40 PST
+Received: from mout-y-111.mailbox.org (mout-y-111.mailbox.org [IPv6:2001:67c:2050:1::465:111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F46C061761;
+        Mon,  3 Jan 2022 08:41:40 -0800 (PST)
 Received: from smtp202.mailbox.org (unknown [91.198.250.118])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mout-y-209.mailbox.org (Postfix) with ESMTPS id 4JSLv73wtLzQl9k;
-        Mon,  3 Jan 2022 17:34:59 +0100 (CET)
+        by mout-y-111.mailbox.org (Postfix) with ESMTPS id 4JSLv925YmzQlLQ;
+        Mon,  3 Jan 2022 17:35:01 +0100 (CET)
 X-Virus-Scanned: amavisd-new at heinlein-support.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-        t=1641227699;
+        t=1641227700;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RO2yaGVn76qLu0Ta5p2QgD+mNSF76oZ7lBBtNjROBas=;
-        b=RXLYnZxMIJlnnou2g1RloT+jtoNa14Zbs0RhxWHBPL/xhWaA4QakNO+CAq/qh3ug9jgnqU
-        rhuFEmyf1eJwz53jCIdNQ616V70/UF1E9Q9T4D0E9Rwjg9vTO5szPwREs2Wpq0aDwmQd6+
-        Opr+lxV2ODAQn9mRGgYFbOAjfBsW+5Hx5HiCwXTDdr1etfHNV8fB9JGdQkNifS3NN/bWw9
-        GXkIy2SBuLquiThBHuw6eKyRc3K2VblRGs9MNHtQ2wVK0NtSYQAmnnAR1XsZea8VuJI/CB
-        HrYhv6gfLOkcZrXBFyRjOxFy2dn3Mob2YPhLjWBm7ZzPSskmCAFkR0GC6YS2tw==
+        bh=eVaFMeMetbF2chCKkaAP7mGT+Mpn+9qurXFgcY31yEw=;
+        b=Ft18cB8WzNQOXw5b2wYqIlYweCebjU2JnRNNYrh6cxhIfQ9krzjXMF779dY3PqaYcV0KMl
+        OpcPwPa/lm1rNc9sL1CIL7IqeHx5mj0AlfKmkssr52RyOyw6Nmy2JSxb6H57pPjQoQmyW1
+        qBTUFjf1yHyOk9kBZb5fT97rz+F6W1buTm8qF6/5HgLou3IDMhFrCI4+XJjStRNOyHiFBQ
+        bMb/rV8c66vCxJmBVMmxPc0OseF7YNoLPA9rklTaNBVV/9q2w46IdQbhA48hVp/Rp09bNq
+        WnN17Xx9nWdyuMrDYAGUncIFOuSiGuBrTbyiHNPFMkIZ765C/MNV7HfhQIRAKw==
 From:   Marcello Sylvester Bauer <sylv@sylv.io>
 To:     linux-hwmon@vger.kernel.org
 Cc:     Marcello Sylvester Bauer <sylv@sylv.io>,
         Patrick Rudolph <patrick.rudolph@9elements.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 0/4] Add max6639 regulator and devicetree support
-Date:   Mon,  3 Jan 2022 17:33:50 +0100
-Message-Id: <cover.1641224715.git.sylv@sylv.io>
+Subject: [PATCH v1 1/4] hwmon: (max6639) Update Datasheet URL
+Date:   Mon,  3 Jan 2022 17:33:51 +0100
+Message-Id: <9de5b23396e4031158a68bfbd47d370b50080e43.1641224715.git.sylv@sylv.io>
 In-Reply-To: <cover.1641224715.git.sylv@sylv.io>
 References: <cover.1641224715.git.sylv@sylv.io>
 MIME-Version: 1.0
@@ -49,24 +54,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The old Datasheet does not exist anymore.
 
-these patches add devicetree support for the Maxim MAX6639.
-In addition, it includes optional regulator support for the fan-supply and
-updates the URL to the datasheet.
+Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+---
+ Documentation/hwmon/max6639.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Marcello Sylvester Bauer (4):
-  hwmon: (max6639) Update Datasheet URL
-  hwmon: (max6639) Add regulator support
-  dt-bindings: hwmon: Add binding for max6639
-  hwmon: (max6639) Add devicetree support
-
- .../bindings/hwmon/maxim,max6639.yaml         |  71 ++++++++++
- Documentation/hwmon/max6639.rst               |   2 +-
- drivers/hwmon/max6639.c                       | 122 ++++++++++++++++--
- 3 files changed, 186 insertions(+), 9 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max6639.yaml
-
+diff --git a/Documentation/hwmon/max6639.rst b/Documentation/hwmon/max6639.rst
+index 3da54225f83c..c85d285a3489 100644
+--- a/Documentation/hwmon/max6639.rst
++++ b/Documentation/hwmon/max6639.rst
+@@ -9,7 +9,7 @@ Supported chips:
+ 
+     Addresses scanned: I2C 0x2c, 0x2e, 0x2f
+ 
+-    Datasheet: http://pdfserv.maxim-ic.com/en/ds/MAX6639.pdf
++    Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX6639-MAX6639F.pdf
+ 
+ Authors:
+     - He Changqing <hechangqing@semptian.com>
 -- 
 2.33.1
 

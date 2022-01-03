@@ -2,98 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CDB4831B7
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:13:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 627C44831B9
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:17:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233257AbiACONT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:13:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbiACONS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:13:18 -0500
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4D8C061761;
-        Mon,  3 Jan 2022 06:13:17 -0800 (PST)
-Received: by mail-ua1-x92f.google.com with SMTP id o63so57962869uao.5;
-        Mon, 03 Jan 2022 06:13:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=iPVzylUVRpeAcfXNQppU6FqeZrAVxB1sR63Dt2iVLwU=;
-        b=iUd6OgjQIQOJ+2STZhjzuYn99Wa6bykJ3/NRtPlLiiIdh8UkMnXIvX6mbzPrfX1x7o
-         kSktM1Con9Ybym6MGjt8Rvr0iNeZoI1FeLvr8lYLXCU0Nmue/wqZlevwTq/H6Kw8ZsFW
-         +V8lrWU2bcAbuaBRMMWMxhTYpRdHnO0IREJyDa+CP0QuYKTHgghvmNlEOS/qbxFv30Rq
-         wz4//V8mlBkfFA2SnQgn61Usy9YtxJF16JWOmIJCWZc/Vw3c1oMT/hxsNr5tXXzhP2xV
-         ZP7YXAf/DxJ+ZcJUzo4OkwkSdCABIYvb9HvKppySgy8XfGbUkqEKo/ZMbZ52I+/Xj7UY
-         OhfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=iPVzylUVRpeAcfXNQppU6FqeZrAVxB1sR63Dt2iVLwU=;
-        b=I/J2iKV+NKF2R+NP7LX6R2R1HVZ32YS47I33eV5TjhCw0+SkpwQpmn/KN+PYtKwwMf
-         K5e3Xdj84jgS6YaDQ4mrRJbRz3eIPRIkgcMiwrpHxscxTEAQX57HQud/x799O+znJR4K
-         morw7yI4LLZXWU0u9yFGWGA1StZYeoFZoyk7j3IpZ/VQN0AGQ0P5mBu1nkkjIVtIxb+J
-         Lpul4+HbPG576Jmf+rVXkpWVG3wDIx87vArtpCTVe9kI5lQHinzTYciXfAa1eESNNJhf
-         45VsVhaFwzCnhbaRKSLBPog6neN2B5kpJE3xiLmHfoxiqNqqwNdhqW79RVAIPeBPl2IP
-         QRjg==
-X-Gm-Message-State: AOAM5339T2DAJkSknsmMOdLnidlvV75wYAXw1NtTpkeMW0FG0ibGU6gz
-        iWyseVXFizZQYejP/z/cEHAOPLF/rv9hauw2Bxg=
-X-Google-Smtp-Source: ABdhPJw6vTeLy4HHkOD0cRJ66G1hNoZL4n6P2HY1spPFAU24qh9JshJb35crTY48+wIUAzkztf1JWDIur+aALh9+ueY=
-X-Received: by 2002:a05:6102:1613:: with SMTP id cu19mr13217645vsb.39.1641219196826;
- Mon, 03 Jan 2022 06:13:16 -0800 (PST)
+        id S233263AbiACORC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:17:02 -0500
+Received: from mga07.intel.com ([134.134.136.100]:55071 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229831AbiACORB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 09:17:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641219421; x=1672755421;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GjYXt/ODx7J7/7NS8za6Xq0tVsMrMeyI68UwaJUOMto=;
+  b=TrUKo4Oze3s86a6DXvZcKP072TsfQ/wUyIbi/ky7tcUbkUYU0qPvlgY7
+   PrODlRH3dtpgKwxCrvbL74imD3SsY7tFNPQitW8q8jIxrOkStVOQJG+5T
+   NWfzMCIfddRfcoAy5ubZEHefoSU/zSfQTx8nGekXNTpQ3X0WHn9fr8tPJ
+   MIyvBzu02+RR7xE8WSeQQ75ueF1kt7lpuON7aC6Usn8wnQa+k++Zxv7F3
+   OwaWA7ksJgp1lNqw1011xi9b2ec3BEIXoy6gVMnA4W7wws9vIWRDz3A+u
+   ZwuSHLHoSsipmyZlD2lL3rT4IE33u0gM+POpUzHi13O39hNL8bNAUgDqN
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10215"; a="305422026"
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="305422026"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 06:17:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="617226065"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 03 Jan 2022 06:16:54 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 27378283; Mon,  3 Jan 2022 16:17:05 +0200 (EET)
+Date:   Mon, 3 Jan 2022 17:17:05 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Dave Hansen <dave.hansen@intel.com>, tglx@linutronix.de,
+        mingo@redhat.com, luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 19/26] x86/tdx: Make pages shared in ioremap()
+Message-ID: <20220103141705.6hqflhwykqmtfim6@black.fi.intel.com>
+References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
+ <20211214150304.62613-20-kirill.shutemov@linux.intel.com>
+ <87c288d6-9bf8-5a94-a628-1e0aaa7de690@amd.com>
+ <20211223171530.v73posbqizb5l3md@black.fi.intel.com>
+ <f61b591b-a06c-bc29-4b9b-a5d46111fe4e@intel.com>
+ <YcTTt4LXKfDO+9u3@zn.tnic>
+ <20211223205604.g44kez5d7iedatfo@box.shutemov.name>
+ <YcTlhp1PUfrMOelI@zn.tnic>
+ <20211224110300.7zj3nc5nbbv7jobp@black.fi.intel.com>
+ <33914dc1-37e8-f0bb-6468-71c3b5f4169d@amd.com>
 MIME-Version: 1.0
-References: <20211230044027.2739732-1-daniel@0x0f.com>
-In-Reply-To: <20211230044027.2739732-1-daniel@0x0f.com>
-From:   Romain Perier <romain.perier@gmail.com>
-Date:   Mon, 3 Jan 2022 15:13:05 +0100
-Message-ID: <CABgxDoKMNcYzPH6mcO0yfJhpK2kRZR5BK=p5H1YvVqJGjbynDg@mail.gmail.com>
-Subject: Re: [PATCH] rtc: msc313: Select by default on MSTARV7
-To:     Daniel Palmer <daniel@0x0f.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <33914dc1-37e8-f0bb-6468-71c3b5f4169d@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Dec 27, 2021 at 09:07:10AM -0600, Tom Lendacky wrote:
+> Why can't this follow the cc_platform_has() logic and maybe even live in
+> the cc_platform.c file (though there might be issues with that, I haven't
+> really looked)?
 
-Le jeu. 30 d=C3=A9c. 2021 =C3=A0 05:40, Daniel Palmer <daniel@0x0f.com> a =
-=C3=A9crit :
->
-> All of the ARCH_MSTARV7 chips have this RTC so it's more likey
-> ARCH_MSTARV7 wants it than doesn't.
->
-> At the same time fix up the indent on the depends on line that looks
-> like it got converted from a tab to spaces at some point.
->
-> Signed-off-by: Daniel Palmer <daniel@0x0f.com>
-> ---
->  drivers/rtc/Kconfig | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-> index 058e56a10ab8..9acd4ea267df 100644
-> --- a/drivers/rtc/Kconfig
-> +++ b/drivers/rtc/Kconfig
-> @@ -1924,7 +1924,8 @@ config RTC_DRV_WILCO_EC
->
->  config RTC_DRV_MSC313
->         tristate "MStar MSC313 RTC"
-> -        depends on ARCH_MSTARV7 || COMPILE_TEST
-> +       depends on ARCH_MSTARV7 || COMPILE_TEST
-> +       default ARCH_MSTARV7
+There's issue with declaring cc_pgprot_encrypted()/cc_pgprot_decrypted()
+in cc_platform.h. It requires pgprot_t to be defined and attempt to
+include relevant header leads to circular dependencies.
 
-You still depend on ARCH_MSTARV7 so "default y" is enough. It
-will only work if the dependencies are satisfied and, when it is the
-case, the value can be overridden by the user.
+Moreover, pgprot_t defined in different headers, depending on an
+architecture.
 
-Cheers,
-Romain
+I'm not sure how to unwind this dependency hell. Any clues?
+
+-- 
+ Kirill A. Shutemov

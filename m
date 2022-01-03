@@ -2,107 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38BCA48380E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 21:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D311483814
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 21:51:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbiACUlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 15:41:18 -0500
-Received: from mga02.intel.com ([134.134.136.20]:48758 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229478AbiACUlR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 15:41:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641242477; x=1672778477;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mvf/dwn2CN/4T6eA3WyndzrgWr796ef3yoEvKiAHOIY=;
-  b=ZHi37KzBS7Xn+2gn9vPS+gJjxjLI4dD9Pmyu/5+m7i2SI6itKZyT8byV
-   pmrzT/hV8uhPA4HTXjMQcsQkhumEb8SZyyehMinJol1uyRTVeL+AWKRXN
-   a488ayLXPfmtXigWdFXCeUAgFtDIDLvloMycUgOQ6r4/UmrrwnaJWfjrC
-   k7BugFVurXBIo3oXJRwgIOnyJx/y2hQYg1zcJU78dlTzF5HpCC6kqkCx6
-   5mYqSnpFrF/ZAGdCgUXZTGbwhVHM46fOhTqs7+IlN60Tg+cD65H7i+ht3
-   ZdzBCsbPird4l5RcgLo8oWIf2XyW3N82JiZnovmv3iToPutb8YpBOh2+p
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="229429217"
-X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="229429217"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 12:41:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="620419301"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 03 Jan 2022 12:41:14 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n4U8n-000EPM-Gm; Mon, 03 Jan 2022 20:41:13 +0000
-Date:   Tue, 4 Jan 2022 04:41:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexey Gladkov <legion@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Containers <containers@lists.linux.dev>
-Cc:     kbuild-all@lists.01.org,
-        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Daniel Walsh <dwalsh@redhat.com>,
-        Davidlohr Bueso <dbueso@suse.de>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Kirill Tkhai <ktkhai@virtuozzo.com>
-Subject: Re: [PATCH v1] ipc: Store mqueue sysctls in the ipc namespace
-Message-ID: <202201040410.Hhzhq6t0-lkp@intel.com>
-References: <0f0408bb7fbf3187966a9bf19a98642a5d9669fe.1641225760.git.legion@kernel.org>
+        id S229598AbiACUvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 15:51:37 -0500
+Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:46072
+        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229478AbiACUvg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 15:51:36 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3AZBxJoai1JhWGmQMxaIZ8jOi9X161dhEKZh0ujC4?=
+ =?us-ascii?q?5NGQNrF6WrkVTxjcaWziPPfyLajD3fo0ka9+z9koP6p/Vxt43HVNoqXw8FHgiR?=
+ =?us-ascii?q?ejtVY3IdB+oV8+xBpSeFxw/t512huEtnanYd1eEzvuWGuWn/SkUOZ2gHOKmUra?=
+ =?us-ascii?q?dYnspHmeIdQ964f5ds79g6mJXqYjha++9kYuaT/z3YDdJ6RYsWo4nw/7rRCdUg?=
+ =?us-ascii?q?RjHkGhwUmrSyhx8lAS2e3E9VPrzLEwqRpfyatE88uWSH44vwFwll1418SvBCvv?=
+ =?us-ascii?q?9+lr6Wk0DTqTTMA7mZnh+C/Xk3EgE/3ZrlP9kb5Lwam8O49mNt9JszNRE85i5V?=
+ =?us-ascii?q?g4tOoXNnv4cWl9WCUmSOIUfpeWeeSXu2SCU5wicG5f2+N10BU8/MIkw+ettB2x?=
+ =?us-ascii?q?Ks/sCJ1glZQ2ZneW0zai2WMF2h98uMdGtOo4D0ll71zDfDOgvWtbbSqPG/8JG1?=
+ =?us-ascii?q?Ts5rsRPG+vOIcsfdTdrKh/HZnVnPloRAro9kf2ui325dCdXwHqLpLA6+GiVzxF?=
+ =?us-ascii?q?02aLFNNvTc8aNA8JPkS6womPA4nS8GhQyKtOS03yG/2iqi+uJmjn0MKoWFbul5?=
+ =?us-ascii?q?rtpjUeVy2g7FhIbTx24rOO/h0r4XMhQQ2QR+ywhqoAo+UCrR8W7VBq9yFacswI?=
+ =?us-ascii?q?RQch4Eus08giBx6PYpQGDCQAsTCNbaZoiucsyRBQw21OJls+vDjtq2JWLSHSW+?=
+ =?us-ascii?q?7GI6zyvODQJKnMqYS4CRBECpd75r+kOYrjnJjp4OPfq1ZusQ2i2nWDM/HV4nbg?=
+ =?us-ascii?q?Ny9UFzeO98Eyvvt5lnbCRJiZd2+kddjvNAttFWbOY?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AfaH9kqtVqy7f2yd2VW0LTAXN7skDkdV00zEX?=
+ =?us-ascii?q?/kB9WHVpmwKj5rmTdZUgpG3JYVkqNE3Ip+rwT5VoLUmyyXcx2+ks1VnLZniZhI?=
+ =?us-ascii?q?OHRLsSnbcK6QeQZxEXz4ZmpNZdm0IXMqyCMbECt7eE3ODaKadD/DDkysGVrMPf?=
+ =?us-ascii?q?y3soUg1wcaFn6G5Ce3Om+xZNNXR77PMCffL2jKd6TnibCBcqh+uAdw04toP41q?=
+ =?us-ascii?q?X2fefdEHg77mkcmW6zZF2ThoIT0nCjr2wjukt0sNMfGeesqX2C2kz1iYDf9iPh?=
+X-IronPort-AV: E=Sophos;i="5.88,258,1635199200"; 
+   d="scan'208";a="1521059"
+Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 21:51:34 +0100
+Date:   Mon, 3 Jan 2022 21:51:33 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+cc:     Francisco Jerez <currojerez@riseup.net>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
+In-Reply-To: <CAJZ5v0hsCjKA3EisK9s_S8Vb9Tgm4eps1FTKvUSfd9_JPh5wBQ@mail.gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2201032110590.3020@hadrien>
+References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien> <878rwdse9o.fsf@riseup.net> <alpine.DEB.2.22.394.2112281745240.24929@hadrien> <CAJZ5v0i4xnesG=vfx7Y-wyeaGvjDeGcsaOVqhRLnV8YXk-m2gA@mail.gmail.com> <alpine.DEB.2.22.394.2112281845180.24929@hadrien>
+ <CAJZ5v0grayg9evWsB5ktKSFq=yA_AHoEWSfpSkQ=MVQ-=butfA@mail.gmail.com> <alpine.DEB.2.22.394.2112291012030.24929@hadrien> <CAJZ5v0g5wDxYXA-V=Ex_Md82hgnj5K6Vr0tavFFVz=uBqo8wag@mail.gmail.com> <alpine.DEB.2.22.394.2112301840360.15550@hadrien>
+ <CAJZ5v0h38jh3gyTp9W0ws0yXyfK=F+TQ7VYRVx4aGXhNeSObEg@mail.gmail.com> <alpine.DEB.2.22.394.2112301919240.15550@hadrien> <CAJZ5v0haa5QWvTUUg+wwSHvuWyk8pic1N0kox=E1ZKNrHSFuzw@mail.gmail.com> <alpine.DEB.2.22.394.2112301942360.15550@hadrien>
+ <CAJZ5v0im+Cke7tcNRav2VCyf5Qvi7qC29aF+9A1kVZZmt7cu6g@mail.gmail.com> <alpine.DEB.2.22.394.2201031922110.3020@hadrien> <CAJZ5v0hsCjKA3EisK9s_S8Vb9Tgm4eps1FTKvUSfd9_JPh5wBQ@mail.gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0f0408bb7fbf3187966a9bf19a98642a5d9669fe.1641225760.git.legion@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexey,
 
-Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on linux/master]
-[also build test ERROR on hnaz-mm/master linus/master v5.16-rc8 next-20211224]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+On Mon, 3 Jan 2022, Rafael J. Wysocki wrote:
 
-url:    https://github.com/0day-ci/linux/commits/Alexey-Gladkov/ipc-Store-mqueue-sysctls-in-the-ipc-namespace/20220104-000523
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 136057256686de39cc3a07c2e39ef6bc43003ff6
-config: arm64-buildonly-randconfig-r005-20220103 (https://download.01.org/0day-ci/archive/20220104/202201040410.Hhzhq6t0-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/637324916f39ec562ac383bfbc22ee9fcbfcb1c0
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Alexey-Gladkov/ipc-Store-mqueue-sysctls-in-the-ipc-namespace/20220104-000523
-        git checkout 637324916f39ec562ac383bfbc22ee9fcbfcb1c0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
+> On Mon, Jan 3, 2022 at 7:23 PM Julia Lawall <julia.lawall@inria.fr> wrote:
+> >
+> > > > > Can you please run the 32 spinning threads workload (ie. on one
+> > > > > package) and with P-state locked to 10 and then to 20 under turbostat
+> > > > > and send me the turbostat output for both runs?
+> > > >
+> > > > Attached.
+> > > >
+> > > > Pstate 10: spin_minmax_10_dahu-9_5.15.0freq_schedutil_11.turbo
+> > > > Pstate 20: spin_minmax_20_dahu-9_5.15.0freq_schedutil_11.turbo
+> > >
+> > > Well, in  both cases there is only 1 CPU running and it is running at
+> > > 1 GHz (ie. P-state 10) all the time as far as I can say.
+> >
+> > It looks better now.  I included 1 core (core 0) for pstates 10, 20, and
+> > 21, and 32 cores (socket 0) for the same pstates.
+>
+> OK, so let's first consider the runs where 32 cores (entire socket 0)
+> are doing the work.
+>
+> This set of data clearly shows that running the busy cores at 1 GHz
+> takes less energy than running them at 2 GHz (the ratio of these
+> numbers is roughly 2/3 if I got that right).  This means that P-state
+> 10 is more energy efficient than P-state 20, as expected.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Here all the threads always spin for 10 seconds.  But if they had a fixed
+amount of work to do, they should finish twice as fast at pstate 20.
+Currently, we have 708J at pstate 10 and 905J at pstate 20, but if we can
+divide the time at pstate 20 by 2, we should be around 450J, which is much
+less than 708J.
 
-All errors (new ones prefixed by >>):
+turbostat -J sleep 5 shows 105J, so we're still ahead.
 
-   aarch64-linux-ld: Unexpected GOT/PLT entries detected!
-   aarch64-linux-ld: Unexpected run-time procedure linkages detected!
-   aarch64-linux-ld: ID map text too big or misaligned
-   aarch64-linux-ld: ipc/mqueue.o: in function `init_mqueue_fs':
->> mqueue.c:(.init.text+0x64): undefined reference to `setup_mq_sysctls'
-   aarch64-linux-ld: ipc/namespace.o: in function `free_ipc':
->> namespace.c:(.text+0xb0): undefined reference to `retire_mq_sysctls'
-   aarch64-linux-ld: ipc/namespace.o: in function `copy_ipcs':
->> namespace.c:(.text+0x4d8): undefined reference to `setup_mq_sysctls'
+I haven't yet tried the actual experiment of spinning for 5 seconds and
+then sleeping for 5 seconds, though.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>
+> However, the cost of running at 2.1 GHz is much greater than the cost
+> of running at 2 GHz and I'm still thinking that this is attributable
+> to some kind of voltage increase between P-state 20 and P-state 21
+> (which, interestingly enough, affects the second "idle" socket too).
+>
+> In the other set of data, where only 1 CPU is doing the work, P-state
+> 10 is still more energy-efficient than P-state 20,
+
+Actually, this doesn't seem to be the case.  It's surely due to the
+approximation of the result, but the consumption is slightly lower for
+pstate 20.  With more runs it probably averages out to around the same.
+
+julia
+
+> but it takes more
+> time to do the work at 1 GHz, so the energy lost due to leakage
+> increases too and it is "leaked" by all of the CPUs in the package
+> (including the idle ones in core C-states), so overall this loss
+> offsets the gain from using a more energy-efficient P-state.  At the
+> same time, socket 1 can spend more time in PC2 when the busy CPU is
+> running at 2 GHz (which means less leakage in that socket), so with 1
+> CPU doing the work the total cost of running at 2 GHz is slightly
+> smaller than the total cost of running at 1 GHz.  [Note how important
+> it is to take the other CPUs in the system into account in this case,
+> because there are simply enough of them to affect one-CPU measurements
+> in a significant way.]
+>
+> Still, when going from 2 GHz to 2.1 GHz, the voltage jump causes the
+> energy to increase significantly again.
+>

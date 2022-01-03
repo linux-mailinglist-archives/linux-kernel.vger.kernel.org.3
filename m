@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B294D483347
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:35:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 941DC48327F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:28:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234917AbiACOfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:35:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39828 "EHLO
+        id S234190AbiACO2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:28:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234372AbiACOcj (ORCPT
+        with ESMTP id S233627AbiACO1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:32:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121A7C07E5E5;
-        Mon,  3 Jan 2022 06:31:31 -0800 (PST)
+        Mon, 3 Jan 2022 09:27:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85063C0617A1;
+        Mon,  3 Jan 2022 06:27:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ADE2FB80EFB;
-        Mon,  3 Jan 2022 14:31:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA84EC36AFE;
-        Mon,  3 Jan 2022 14:31:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E95666111C;
+        Mon,  3 Jan 2022 14:27:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5179C36AED;
+        Mon,  3 Jan 2022 14:27:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220289;
-        bh=lRiISj3/y9VsBRHDRgyp9MXbi4UHiXhDQpRnlaliZzM=;
+        s=korg; t=1641220033;
+        bh=8GgqGsbxpCWx8a0xDbp37nRZ70LFcMCuY9GWf0vsys4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Td2/5zDWFnyor1LANO9YJARbYLKU7zMKj2pBm8E+zMrcO45WxK3WQJPtOK0HBqR8+
-         nGushBsvg00vjX41FlK+ZtjsABV+Yx4tClug5VyHTLhSS9ETW/lNQ5oCVoPZqA6F3n
-         +mVuezgCG2YhDNpZtnW0IhsuBCEHK/EYf9JY/RlA=
+        b=iRHzE7sFb3fWtSkmZPXjxFYpThyK/pLdfFJu4JWZJizIlX+GtRPXWWxvfJwRsis1Q
+         xDIRl/qRvGHrBpswvNN6qNc8m9EhuZV5lYZJ6eePKQ6kTp7E0JeEd4WH28A7Sbo61s
+         H9L403K2OMhgmz0Fvmwdfd5c9N/VXA3HQ47XcJfs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
+        stable@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 22/73] net/mlx5e: Fix interoperability between XSK and ICOSQ recovery flow
+Subject: [PATCH 5.4 05/37] tomoyo: Check exceeded quota early in tomoyo_domain_quota_is_ok().
 Date:   Mon,  3 Jan 2022 15:23:43 +0100
-Message-Id: <20220103142057.631452153@linuxfoundation.org>
+Message-Id: <20220103142052.049517619@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142056.911344037@linuxfoundation.org>
-References: <20220103142056.911344037@linuxfoundation.org>
+In-Reply-To: <20220103142051.883166998@linuxfoundation.org>
+References: <20220103142051.883166998@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,217 +49,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxim Mikityanskiy <maximmi@nvidia.com>
+From: Dmitry Vyukov <dvyukov@google.com>
 
-[ Upstream commit 17958d7cd731b977ae7d4af38d891c3a1235b5f1 ]
+[ Upstream commit 04e57a2d952bbd34bc45744e72be3eecdc344294 ]
 
-Both regular RQ and XSKRQ use the same ICOSQ for UMRs. When doing
-recovery for the ICOSQ, don't forget to deactivate XSKRQ.
+If tomoyo is used in a testing/fuzzing environment in learning mode,
+for lots of domains the quota will be exceeded and stay exceeded
+for prolonged periods of time. In such cases it's pointless (and slow)
+to walk the whole acl list again and again just to rediscover that
+the quota is exceeded. We already have the TOMOYO_DIF_QUOTA_WARNED flag
+that notes the overflow condition. Check it early to avoid the slowdown.
 
-XSK can be opened and closed while channels are active, so a new mutex
-prevents the ICOSQ recovery from running at the same time. The ICOSQ
-recovery deactivates and reactivates XSKRQ, so any parallel change in
-XSK state would break consistency. As the regular RQ is running, it's
-not enough to just flush the recovery work, because it can be
-rescheduled.
+[penguin-kernel]
+This patch causes a user visible change that the learning mode will not be
+automatically resumed after the quota is increased. To resume the learning
+mode, administrator will need to explicitly clear TOMOYO_DIF_QUOTA_WARNED
+flag after increasing the quota. But I think that this change is generally
+preferable, for administrator likely wants to optimize the acl list for
+that domain before increasing the quota, or that domain likely hits the
+quota again. Therefore, don't try to care to clear TOMOYO_DIF_QUOTA_WARNED
+flag automatically when the quota for that domain changed.
 
-Fixes: be5323c8379f ("net/mlx5e: Report and recover from CQE error on ICOSQ")
-Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Signed-off-by: Dmitry Vyukov <dvyukov@google.com>
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en.h  |  2 ++
- .../ethernet/mellanox/mlx5/core/en/health.h   |  2 ++
- .../mellanox/mlx5/core/en/reporter_rx.c       | 35 ++++++++++++++++++-
- .../mellanox/mlx5/core/en/xsk/setup.c         | 16 ++++++++-
- .../net/ethernet/mellanox/mlx5/core/en_main.c |  7 ++--
- 5 files changed, 58 insertions(+), 4 deletions(-)
+ security/tomoyo/util.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-index c10a107a3ea53..54757117071db 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-@@ -727,6 +727,8 @@ struct mlx5e_channel {
- 	DECLARE_BITMAP(state, MLX5E_CHANNEL_NUM_STATES);
- 	int                        ix;
- 	int                        cpu;
-+	/* Sync between icosq recovery and XSK enable/disable. */
-+	struct mutex               icosq_recovery_lock;
- };
- 
- struct mlx5e_ptp;
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/health.h b/drivers/net/ethernet/mellanox/mlx5/core/en/health.h
-index 018262d0164b3..3aaf3c2752feb 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/health.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/health.h
-@@ -30,6 +30,8 @@ void mlx5e_reporter_rx_destroy(struct mlx5e_priv *priv);
- void mlx5e_reporter_icosq_cqe_err(struct mlx5e_icosq *icosq);
- void mlx5e_reporter_rq_cqe_err(struct mlx5e_rq *rq);
- void mlx5e_reporter_rx_timeout(struct mlx5e_rq *rq);
-+void mlx5e_reporter_icosq_suspend_recovery(struct mlx5e_channel *c);
-+void mlx5e_reporter_icosq_resume_recovery(struct mlx5e_channel *c);
- 
- #define MLX5E_REPORTER_PER_Q_MAX_LEN 256
- #define MLX5E_REPORTER_FLUSH_TIMEOUT_MSEC 2000
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_rx.c
-index 0eb125316fe20..e329158fdc555 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_rx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_rx.c
-@@ -59,6 +59,7 @@ static void mlx5e_reset_icosq_cc_pc(struct mlx5e_icosq *icosq)
- 
- static int mlx5e_rx_reporter_err_icosq_cqe_recover(void *ctx)
- {
-+	struct mlx5e_rq *xskrq = NULL;
- 	struct mlx5_core_dev *mdev;
- 	struct mlx5e_icosq *icosq;
- 	struct net_device *dev;
-@@ -67,7 +68,13 @@ static int mlx5e_rx_reporter_err_icosq_cqe_recover(void *ctx)
- 	int err;
- 
- 	icosq = ctx;
-+
-+	mutex_lock(&icosq->channel->icosq_recovery_lock);
-+
-+	/* mlx5e_close_rq cancels this work before RQ and ICOSQ are killed. */
- 	rq = &icosq->channel->rq;
-+	if (test_bit(MLX5E_RQ_STATE_ENABLED, &icosq->channel->xskrq.state))
-+		xskrq = &icosq->channel->xskrq;
- 	mdev = icosq->channel->mdev;
- 	dev = icosq->channel->netdev;
- 	err = mlx5_core_query_sq_state(mdev, icosq->sqn, &state);
-@@ -81,6 +88,9 @@ static int mlx5e_rx_reporter_err_icosq_cqe_recover(void *ctx)
- 		goto out;
- 
- 	mlx5e_deactivate_rq(rq);
-+	if (xskrq)
-+		mlx5e_deactivate_rq(xskrq);
-+
- 	err = mlx5e_wait_for_icosq_flush(icosq);
- 	if (err)
- 		goto out;
-@@ -94,15 +104,28 @@ static int mlx5e_rx_reporter_err_icosq_cqe_recover(void *ctx)
- 		goto out;
- 
- 	mlx5e_reset_icosq_cc_pc(icosq);
-+
- 	mlx5e_free_rx_in_progress_descs(rq);
-+	if (xskrq)
-+		mlx5e_free_rx_in_progress_descs(xskrq);
-+
- 	clear_bit(MLX5E_SQ_STATE_RECOVERING, &icosq->state);
- 	mlx5e_activate_icosq(icosq);
--	mlx5e_activate_rq(rq);
- 
-+	mlx5e_activate_rq(rq);
- 	rq->stats->recover++;
-+
-+	if (xskrq) {
-+		mlx5e_activate_rq(xskrq);
-+		xskrq->stats->recover++;
-+	}
-+
-+	mutex_unlock(&icosq->channel->icosq_recovery_lock);
-+
- 	return 0;
- out:
- 	clear_bit(MLX5E_SQ_STATE_RECOVERING, &icosq->state);
-+	mutex_unlock(&icosq->channel->icosq_recovery_lock);
- 	return err;
+diff --git a/security/tomoyo/util.c b/security/tomoyo/util.c
+index eba0b3395851e..861fc6f4ebfb7 100644
+--- a/security/tomoyo/util.c
++++ b/security/tomoyo/util.c
+@@ -1029,6 +1029,8 @@ bool tomoyo_domain_quota_is_ok(struct tomoyo_request_info *r)
+ 		return false;
+ 	if (!domain)
+ 		return true;
++	if (READ_ONCE(domain->flags[TOMOYO_DIF_QUOTA_WARNED]))
++		return false;
+ 	list_for_each_entry_rcu(ptr, &domain->acl_info_list, list,
+ 				srcu_read_lock_held(&tomoyo_ss)) {
+ 		u16 perm;
+@@ -1074,14 +1076,12 @@ bool tomoyo_domain_quota_is_ok(struct tomoyo_request_info *r)
+ 	if (count < tomoyo_profile(domain->ns, domain->profile)->
+ 	    pref[TOMOYO_PREF_MAX_LEARNING_ENTRY])
+ 		return true;
+-	if (!domain->flags[TOMOYO_DIF_QUOTA_WARNED]) {
+-		domain->flags[TOMOYO_DIF_QUOTA_WARNED] = true;
+-		/* r->granted = false; */
+-		tomoyo_write_log(r, "%s", tomoyo_dif[TOMOYO_DIF_QUOTA_WARNED]);
++	WRITE_ONCE(domain->flags[TOMOYO_DIF_QUOTA_WARNED], true);
++	/* r->granted = false; */
++	tomoyo_write_log(r, "%s", tomoyo_dif[TOMOYO_DIF_QUOTA_WARNED]);
+ #ifndef CONFIG_SECURITY_TOMOYO_INSECURE_BUILTIN_SETTING
+-		pr_warn("WARNING: Domain '%s' has too many ACLs to hold. Stopped learning mode.\n",
+-			domain->domainname->name);
++	pr_warn("WARNING: Domain '%s' has too many ACLs to hold. Stopped learning mode.\n",
++		domain->domainname->name);
+ #endif
+-	}
+ 	return false;
  }
- 
-@@ -703,6 +726,16 @@ void mlx5e_reporter_icosq_cqe_err(struct mlx5e_icosq *icosq)
- 	mlx5e_health_report(priv, priv->rx_reporter, err_str, &err_ctx);
- }
- 
-+void mlx5e_reporter_icosq_suspend_recovery(struct mlx5e_channel *c)
-+{
-+	mutex_lock(&c->icosq_recovery_lock);
-+}
-+
-+void mlx5e_reporter_icosq_resume_recovery(struct mlx5e_channel *c)
-+{
-+	mutex_unlock(&c->icosq_recovery_lock);
-+}
-+
- static const struct devlink_health_reporter_ops mlx5_rx_reporter_ops = {
- 	.name = "rx",
- 	.recover = mlx5e_rx_reporter_recover,
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
-index 538bc2419bd83..8526a5fbbf0bf 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
-@@ -4,6 +4,7 @@
- #include "setup.h"
- #include "en/params.h"
- #include "en/txrx.h"
-+#include "en/health.h"
- 
- /* It matches XDP_UMEM_MIN_CHUNK_SIZE, but as this constant is private and may
-  * change unexpectedly, and mlx5e has a minimum valid stride size for striding
-@@ -170,7 +171,13 @@ void mlx5e_close_xsk(struct mlx5e_channel *c)
- 
- void mlx5e_activate_xsk(struct mlx5e_channel *c)
- {
-+	/* ICOSQ recovery deactivates RQs. Suspend the recovery to avoid
-+	 * activating XSKRQ in the middle of recovery.
-+	 */
-+	mlx5e_reporter_icosq_suspend_recovery(c);
- 	set_bit(MLX5E_RQ_STATE_ENABLED, &c->xskrq.state);
-+	mlx5e_reporter_icosq_resume_recovery(c);
-+
- 	/* TX queue is created active. */
- 
- 	spin_lock_bh(&c->async_icosq_lock);
-@@ -180,6 +187,13 @@ void mlx5e_activate_xsk(struct mlx5e_channel *c)
- 
- void mlx5e_deactivate_xsk(struct mlx5e_channel *c)
- {
--	mlx5e_deactivate_rq(&c->xskrq);
-+	/* ICOSQ recovery may reactivate XSKRQ if clear_bit is called in the
-+	 * middle of recovery. Suspend the recovery to avoid it.
-+	 */
-+	mlx5e_reporter_icosq_suspend_recovery(c);
-+	clear_bit(MLX5E_RQ_STATE_ENABLED, &c->xskrq.state);
-+	mlx5e_reporter_icosq_resume_recovery(c);
-+	synchronize_net(); /* Sync with NAPI to prevent mlx5e_post_rx_wqes. */
-+
- 	/* TX queue is disabled on close. */
- }
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-index 8cf5fbebd674b..611c8a0cbf4f0 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-@@ -911,8 +911,6 @@ void mlx5e_deactivate_rq(struct mlx5e_rq *rq)
- void mlx5e_close_rq(struct mlx5e_rq *rq)
- {
- 	cancel_work_sync(&rq->dim.work);
--	if (rq->icosq)
--		cancel_work_sync(&rq->icosq->recover_work);
- 	cancel_work_sync(&rq->recover_work);
- 	mlx5e_destroy_rq(rq);
- 	mlx5e_free_rx_descs(rq);
-@@ -1875,6 +1873,8 @@ static int mlx5e_open_queues(struct mlx5e_channel *c,
- 	if (err)
- 		goto err_close_xdpsq_cq;
- 
-+	mutex_init(&c->icosq_recovery_lock);
-+
- 	err = mlx5e_open_icosq(c, params, &cparam->icosq, &c->icosq);
- 	if (err)
- 		goto err_close_async_icosq;
-@@ -1943,9 +1943,12 @@ static void mlx5e_close_queues(struct mlx5e_channel *c)
- 	mlx5e_close_xdpsq(&c->xdpsq);
- 	if (c->xdp)
- 		mlx5e_close_xdpsq(&c->rq_xdpsq);
-+	/* The same ICOSQ is used for UMRs for both RQ and XSKRQ. */
-+	cancel_work_sync(&c->icosq.recover_work);
- 	mlx5e_close_rq(&c->rq);
- 	mlx5e_close_sqs(c);
- 	mlx5e_close_icosq(&c->icosq);
-+	mutex_destroy(&c->icosq_recovery_lock);
- 	mlx5e_close_icosq(&c->async_icosq);
- 	if (c->xdp)
- 		mlx5e_close_cq(&c->rq_xdpsq.cq);
 -- 
 2.34.1
 

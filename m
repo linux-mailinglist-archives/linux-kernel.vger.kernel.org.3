@@ -2,108 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA1F483116
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 13:38:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFFB1483117
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 13:39:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbiACMik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 07:38:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42756 "EHLO
+        id S231882AbiACMjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 07:39:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiACMik (ORCPT
+        with ESMTP id S229514AbiACMjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 07:38:40 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47BAC061761;
-        Mon,  3 Jan 2022 04:38:39 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id w184so78842984ybg.5;
-        Mon, 03 Jan 2022 04:38:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=bLnja4l85nY7sG9mMjzxhaWHBfXUtbh2pLdWbEvQT2M=;
-        b=m4CUYDwwYGiBfH4j8fRGpV7WzjTeq6n6WgqFCAqLuacnUYGG+YJ8TCG+iuxNy+pSdq
-         MG6esO8rGS5DMqZWLdSneFAoX1677MpUP/IP6CXbNuI46zQv5DTlEQrJV23B89peuNXj
-         AVQch7sIfT0BLA2mfBu40WNwdVJgGpxdchG1g7z9fBk2gwrDpWWjCBr3S9wRj0cjgMEO
-         jlckqsAib8eKoGLX3GigP/bm0kWvfsAa76H3GT8j+3Ccy5b3bepMdJsrMAkjdqFKPUy/
-         IITm7l+6xloMLl/NAxLASRMLp0RirC0qBJHj260BWBGNNwwPJLYSmlNIDs4x2diUpZMU
-         fdvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=bLnja4l85nY7sG9mMjzxhaWHBfXUtbh2pLdWbEvQT2M=;
-        b=hbDIrNl3UHAox1Sux23ykPv1ta/noMSYoV/0qbGwxpzBoEfiN3QH/gnlqOkL8WDia/
-         xxAkQJrOoGfoPQNiDr36KrkxH4MT2vHaWtLdIpJPq3rYPUStMCPwogzmF89RkRkOR829
-         NVi4I9IuIk4Eb5v5X5J4ug8VjY75nvCjqoLVWUwhixqWu53WdZ1X+4Toj/QJTtt6Oynf
-         0/Yo7VNQwAI+P5LvwDbKuBS+h21qVQrh/34iP6d1m87/UUiAKz8WpMN40Qp4dEKjVVG2
-         QWYHJJ9E5neQ663dvTIusr8w/OyKhca/PDJqnpFgbCuGoUMSmng762YNBAprJyWbQFQV
-         z2fQ==
-X-Gm-Message-State: AOAM532Wn9zDzjIVpuFA5YXIkYZW2oKzReoOfOvI5pkiJpCjpBoEDttU
-        4GDLA/zRDbG15YUhub4lfGTrAswkD7YNzBCsSm5VHBF/MOY=
-X-Google-Smtp-Source: ABdhPJwdM3ZmHEBgBAOasDIn6DTwku2MFxMojwFtTshOEa88VdPAVXEVQwwrD/l8q8VtG5eC8Gu9lgQd/OKoDv/CcDY=
-X-Received: by 2002:a25:bccd:: with SMTP id l13mr15586329ybm.767.1641213519001;
- Mon, 03 Jan 2022 04:38:39 -0800 (PST)
+        Mon, 3 Jan 2022 07:39:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06258C061761
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 04:39:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8F18B80EB0
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 12:39:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52714C36AF2
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 12:39:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641213572;
+        bh=HA5+7zlAQulQBX2cVKSU6TdiKadRflwBDFVjRsvDYVs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Y0ULpnBT0g0UDp17/4EORGndRjm7el0EeYgKUeSEw83DwfhCNt1nMc1+vddEL5Ou7
+         bPzt+l5Ubr4AcXtgbzR2BlVthJjHVIbjjiKVBipgSb/0/FHfUCBDf82E7v8kyjDZBE
+         ZcAgfMZU7Rl9uu+KJt47Ia2y7TwZlhVvinjZFcNyEOGEzbHhuRs5I/GYS0bkHd2qGD
+         QYC9v0gfS4sRqkaSPTb3u7JMcgYCecaocxSiV/Zz8/8hWZvtbp3CHPfXljS2yppNS9
+         36MXQ0CNl6QApNUwd2jlQ/nf0pUHXluqKjC4asuvc/RdqAEofQgt5AEGU7t8AJdD6A
+         D4KMOLZIpkoyw==
+Received: by mail-ed1-f48.google.com with SMTP id q14so127614448edi.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 04:39:32 -0800 (PST)
+X-Gm-Message-State: AOAM530IM65zHlbtyaBtqQW25I5GxEfoWy9KM8El/80FJosjCfv37oVF
+        16/QCgTtLedMwhxjwLyxxY7txoL9yOUTAFu61w==
+X-Google-Smtp-Source: ABdhPJwwZ/3BPywQvW5Rrs1+664TaJh3FdH4vjHV6vG9LTySPj2+KPJh8eExMszOptrw3vU1ySFcU2qa6PxV5c3PjyU=
+X-Received: by 2002:a17:907:629a:: with SMTP id nd26mr37424097ejc.680.1641213570556;
+ Mon, 03 Jan 2022 04:39:30 -0800 (PST)
 MIME-Version: 1.0
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Mon, 3 Jan 2022 13:38:28 +0100
-Message-ID: <CAKXUXMy=M42hapfG1S4ZT1v5WEdH2KYiF8Cgukmf48=FKFCyJg@mail.gmail.com>
-Subject: Potentially broken error path in bio_map_user_iov()
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>
+References: <20211022172413.195559-1-markyacoub@chromium.org> <20211229184420.793234-1-markyacoub@chromium.org>
+In-Reply-To: <20211229184420.793234-1-markyacoub@chromium.org>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Mon, 3 Jan 2022 20:39:15 +0800
+X-Gmail-Original-Message-ID: <CAAOTY_9E71AfKy_poZMA7s++TvzM4=VH0H1o8ZBmDphcz9iXDw@mail.gmail.com>
+Message-ID: <CAAOTY_9E71AfKy_poZMA7s++TvzM4=VH0H1o8ZBmDphcz9iXDw@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/mediatek: Set default value for Panel Orientation
+ connector prop.
+To:     Mark Yacoub <markyacoub@chromium.org>
+Cc:     "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Sean Paul <seanpaul@chromium.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Jason-JH Lin <jason-jh.lin@mediatek.com>, tzungbi@google.com,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Christoph,
+Hi, Mark:
 
-in the function bio_map_user_iov() in ./block/blk-map.c, there is an
-error branch for unlikely(offs & queue_dma_alignment(rq->q)), where
-the supposingly expected error return value of the function is set,
-i.e., ret = -EINVAL;. However, the variable ret is unconditionally
-reset by the blk_rq_append_bio(...) call below, so that this 'ret =
--EINVAL;' assignment has no effect.
+Mark Yacoub <markyacoub@chromium.org> =E6=96=BC 2021=E5=B9=B412=E6=9C=8830=
+=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=882:44=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> [Why]
+> Creating the prop uses UNKNOWN as the initial value, which is not a
+> supported value if the prop is to be supported.
+>
+> [How]
+> Set the panel orientation default value to NORMAL right after creating
+> the prop if no DSI panel exists.
+> Panels have their own orientations, and panel orientation can't be
+> overriden once initialized to a value.
+>
+> v1:
+> Set panel orientation only if DSI panel does not exist.
+>
+> Tested on Jacuzzi(MTK)
+> Fixes IGT@kms_properties@get_properties-sanity-{atomic,non-atomic}
+>
+> Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_dsi.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediate=
+k/mtk_dsi.c
+> index 0ad7157660afa..9d33dd93118e0 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> @@ -1040,6 +1040,13 @@ static int mtk_dsi_encoder_init(struct drm_device =
+*drm, struct mtk_dsi *dsi)
+>                 goto err_cleanup_encoder;
+>         }
+>
+> +       /* A drm_panel can have its own orientation. If there is no panel=
+, set the
+> +        * orientation to NORMAL. */
+> +       if (!dsi->panel) {
 
-I am unsure which control flow you expect for this error case through
-the bio_map_user_iov() function. Maybe you just want a patch like this
-below to return the error code if it is at least once set?
+Please send patch based on latest kernel version. In latest kernel
+version, struct mtk_dsi{} has no member 'panel'.
 
-diff --git a/block/blk-map.c b/block/blk-map.c
-index 4526adde0156..4a3f6703f46f 100644
---- a/block/blk-map.c
-+++ b/block/blk-map.c
-@@ -235,7 +235,7 @@ static int bio_map_user_iov(struct request *rq,
-struct iov_iter *iter,
- {
-        unsigned int max_sectors = queue_max_hw_sectors(rq->q);
-        struct bio *bio;
--       int ret;
-+       int ret = 0;
-        int j;
+Regards,
+Chun-Kuang.
 
-        if (!iov_iter_count(iter))
-@@ -296,6 +296,9 @@ static int bio_map_user_iov(struct request *rq,
-struct iov_iter *iter,
-                        break;
-        }
-
-+       if (ret)
-+               goto out_unmap;
-+
-        ret = blk_rq_append_bio(rq, bio);
-        if (ret)
-                goto out_unmap;
-
-I know too little about this function and its intent to create a
-proper patch, though.
-
-I also looked at the previous versions, but the error code of this
-error branch was really never effectively returned before either (as
-far as I grasped the earlier versions of this function). So, this
-error path probably never worked as intended.
-
-
-Best regards,
-
-Lukas
+> +               drm_connector_set_panel_orientation(
+> +                       dsi->connector, DRM_MODE_PANEL_ORIENTATION_NORMAL=
+);
+> +       }
+> +
+>         drm_connector_attach_encoder(dsi->connector, &dsi->encoder);
+>
+>         return 0;
+> --
+> 2.34.1.448.ga2b2bfdf31-goog
+>

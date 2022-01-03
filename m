@@ -2,133 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9E7482FCB
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 11:11:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 961AC482FCD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 11:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232599AbiACKLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 05:11:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38622 "EHLO
+        id S232613AbiACKO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 05:14:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232427AbiACKLf (ORCPT
+        with ESMTP id S232427AbiACKO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 05:11:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED6BC061761;
-        Mon,  3 Jan 2022 02:11:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 3 Jan 2022 05:14:28 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530DDC061761;
+        Mon,  3 Jan 2022 02:14:28 -0800 (PST)
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3FBBDB80E8A;
-        Mon,  3 Jan 2022 10:11:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C030C36AEE;
-        Mon,  3 Jan 2022 10:11:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641204693;
-        bh=0CGYyvpbOW/VRV/ian3+DNn3UCORswc82gG+YGYqP3M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A19vH4W12VYWzXuxzehvzYhLNsaJU4A8C1Ba2tXkoyyt9EmBq6mluWclToOhPqUiz
-         7wDromuOoL5BDl1Y1Bwy1sPMNXiUjQDdmyv1eb8xmfrFtpQC9ClMXGWhadp7Aj2mH4
-         w1ErpTEZzjh3qKlvSVXlY/WcbD9kkHl8vsaKrnZw=
-Date:   Mon, 3 Jan 2022 11:11:30 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
- -v1: Eliminate the Linux kernel's "Dependency Hell"
-Message-ID: <YdLL0kaFhm6rp9NS@kroah.com>
-References: <YdIfz+LMewetSaEB@gmail.com>
+        (Authenticated sender: bbrezillon)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 7F73B1F41D7C;
+        Mon,  3 Jan 2022 10:14:26 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1641204867;
+        bh=IMW6UvrrsgagYb5Hjy5wGh/54TACYyMTtsxIHHS9AYU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WE0yu8Q+cWTkBgQFY7ZELdiZ1nUdqSOmBD9RJuQ59WzyL4BzHUxm3HkQevoooV8rp
+         krJ6vbQRwlsTdty0xaDcIxvT3NqvyJm6RyvhGvMqOopvhxoj7xM0noKRW2XOmRHM0B
+         el4c+mBl4AFVaZumsEZ2SGUUoa3WdYuUDINPA4pP/Dsm9hVMHRLLzJfHECLEGedoLV
+         jdz8TGRtvx6gwHL17IGxSDsAtD2zvEM56om6C8I8mrX0Ztgrow+U6E4lHVTuvoRPFL
+         r7jfmydo3hYe2dii4x2zEUw915z8GhOrKcHbK8blQM7DvgTM4CwO4GN9wc2S0F2j2n
+         ByLvMUZu1YW7g==
+Date:   Mon, 3 Jan 2022 11:14:23 +0100
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     Apurva Nandan <a-nandan@ti.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mark Brown <broonie@kernel.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Alexander Lobakin <alobakin@pm.me>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <p.yadav@ti.com>
+Subject: Re: [PATCH v3 11/17] mtd: spinand: Allow enabling/disabling Octal
+ DTR mode in the core
+Message-ID: <20220103111423.5c2b72c9@collabora.com>
+In-Reply-To: <20220101074250.14443-12-a-nandan@ti.com>
+References: <20220101074250.14443-1-a-nandan@ti.com>
+        <20220101074250.14443-12-a-nandan@ti.com>
+Organization: Collabora
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdIfz+LMewetSaEB@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 02, 2022 at 10:57:35PM +0100, Ingo Molnar wrote:
-> 
-> I'm pleased to announce the first public version of my new "Fast Kernel 
-> Headers" project that I've been working on since late 2020, which is a 
-> comprehensive rework of the Linux kernel's header hierarchy & header 
-> dependencies, with the dual goals of:
-> 
->  - speeding up the kernel build (both absolute and incremental build times)
-> 
->  - decoupling subsystem type & API definitions from each other
-> 
-> The fast-headers tree consists of over 25 sub-trees internally, spanning 
-> over 2,200 commits, which can be found here:
-> 
->    git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
-> 
-> As most kernel developers know, there's around ~10,000 main .h headers in 
-> the Linux kernel, in the include/ and arch/*/include/ hierarchies. Over the 
-> last 30+ years they have grown into a complicated & painful set of 
-> cross-dependencies we are affectionately calling 'Dependency Hell'.
-> 
-> Before going into details about how this tree solves 'dependency hell' 
-> exactly, here's the current kernel build performance gain with 
-> CONFIG_FAST_HEADERS=y enabled, (and with CONFIG_KALLSYMS_FAST=y enabled as 
-> well - see below), using a stock x86 Linux distribution's .config with all 
-> modules built into the vmlinux:
-> 
->   #
->   # Performance counter stats for 'make -j96 vmlinux' (3 runs):
->   #
->   # (Elapsed time in seconds):
->   #
-> 
->   v5.16-rc7:            231.34 +- 0.60 secs, 15.5 builds/hour    # [ vanilla baseline ]
->   -fast-headers-v1:     129.97 +- 0.51 secs, 27.7 builds/hour    # +78.0% improvement
-> 
-> Or in terms of CPU time utilized:
-> 
->   v5.16-rc7:            11,474,982.05 msec cpu-clock   # 49.601 CPUs utilized
->   -fast-headers-v1:      7,100,730.37 msec cpu-clock   # 54.635 CPUs utilized   # +61.6% improvement
+On Sat, 1 Jan 2022 13:12:44 +0530
+Apurva Nandan <a-nandan@ti.com> wrote:
 
-Speed up is very impressive, nice job!
-
-> Techniques used by the fast-headers tree to reduce header size & dependencies:
+> Enable Octal DTR SPI mode, i.e. 8D-8D-8D mode, if the SPI NAND flash
+> device supports it. Mixed OSPI (1S-1S-8S & 1S-8S-8S), mixed DTR modes
+> (1S-1D-8D), etc. aren't supported yet.
 > 
->  - Aggressive decoupling of high level headers from each other, starting
->    with <linux/sched.h>. Since 'struct task_struct' is a union of many
->    subsystems, there's a new "per_task" infrastructure modeled after the
->    per_cpu framework, which creates fields in task_struct without having
->    to modify sched.h or the 'struct task_struct' type:
+> The method to switch to Octal DTR SPI mode may vary across
+> manufacturers. For example, for Winbond, it is enabled by writing
+> values to the volatile configuration register. So, let the
+> manufacturer's code have their own implementation for switching to
+> Octal DTR SPI mode.
 > 
->             DECLARE_PER_TASK(type, name);
->             ...
->             per_task(current, name) = val;
+> Check for the SPI NAND device's support for Octal DTR mode using
+> spinand flags, and if the data_ops and ctrl_ops are 8D-8D-8D, call
+> change_mode() manufacturer op. If the SPI controller doesn't
+> supports these modes, the selected data_ops and ctrl_ops will
+> prevent switching to the Octal DTR mode. And finally update the
+> spinand protocol and ctrl_ops on success. Similarly, for disabling
+> Octal DTR mode, call change_mode(), and update protocol and ctrl_ops.
 > 
->    The per_task() facility then seamlessly creates an offset into the
->    task_struct->per_task_area[] array, and uses the asm-offsets.h
->    mechanism to create offsets into it early in the build.
+> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
+> ---
+>  drivers/mtd/nand/spi/core.c | 79 +++++++++++++++++++++++++++++++++++++
+>  include/linux/mtd/spinand.h |  1 +
+>  2 files changed, 80 insertions(+)
 > 
->    There's no runtime overhead disadvantage from using per_task() framework,
->    the generated code is functionally equivalent to types embedded in
->    task_struct.
+> diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
+> index 1a602e4dd6bd..2fd08085db6f 100644
+> --- a/drivers/mtd/nand/spi/core.c
+> +++ b/drivers/mtd/nand/spi/core.c
+> @@ -1067,6 +1067,81 @@ spinand_select_ctrl_ops_variant(struct spinand_device *spinand,
+>  	return NULL;
+>  }
+>  
+> +static bool spinand_op_is_octal_dtr(const struct spi_mem_op *op)
+> +{
+> +	return  op->cmd.buswidth == 8 && op->cmd.dtr &&
+> +		op->addr.buswidth == 8 && op->addr.dtr &&
+> +		op->data.buswidth == 8 && op->data.dtr;
+> +}
+> +
+> +static int spinand_init_octal_dtr_enable(struct spinand_device *spinand)
+> +{
+> +	struct device *dev = &spinand->spimem->spi->dev;
+> +	const struct spinand_ctrl_ops *octal_dtr_ctrl_ops;
+> +	int ret;
+> +
+> +	if (!(spinand->flags & SPINAND_HAS_OCTAL_DTR_BIT))
+> +		return 0;
+> +
+> +	if (!(spinand_op_is_octal_dtr(spinand->data_ops.read_cache) &&
+> +	      spinand_op_is_octal_dtr(spinand->data_ops.write_cache) &&
+> +	      spinand_op_is_octal_dtr(spinand->data_ops.update_cache)))
+> +		return 0;
+> +
+> +	octal_dtr_ctrl_ops = spinand_select_ctrl_ops_variant(spinand,
+> +					spinand->desc_entry->ctrl_ops_variants,
+> +					SPINAND_8D_8D_8D);
+> +
+> +	if (!octal_dtr_ctrl_ops)
+> +		return 0;
+> +
+> +	if (!spinand->manufacturer->ops->change_mode) {
+> +		dev_dbg(dev,
+> +			"Missing ->change_mode(), unable to switch mode\n");
+> +		return -EINVAL;
 
-This is "interesting", but how are you going to keep the
-kernel/sched/per_task_area_struct_defs.h and struct task_struct_per_task
-definition in sync?  It seems that you manually created this (which is
-great for testing), but over the long-term, trying to manually determine
-what needs to be done here to keep everything lined up properly is going
-to be a major pain.
+Looks like something that's worth printing at the info level, and I
+think returning EOPNOTSUPP would be more appropriate.
 
-That issue aside, I took a glance at the tree, and overall it looks like
-a lot of nice cleanups.  Most of these can probably go through the
-various subsystem trees, after you split them out, for the "major" .h
-cleanups.  Is that something you are going to be planning on doing?
+> +	}
+> +
+> +	ret = spinand->manufacturer->ops->change_mode(spinand,
+> +						      SPINAND_8D_8D_8D);
+> +	if (ret) {
+> +		dev_err(dev,
+> +			"Failed to enable Octal DTR SPI mode (err = %d)\n",
+> +			ret);
+> +		return ret;
+> +	}
+> +
+> +	spinand->protocol = SPINAND_8D_8D_8D;
+> +	spinand->ctrl_ops = octal_dtr_ctrl_ops;
+> +
+> +	dev_dbg(dev,
+> +		"%s SPI NAND switched to Octal DTR SPI (8D-8D-8D) mode\n",
+> +		spinand->manufacturer->name);
+> +	return 0;
+> +}
+> +
+> +static int spinand_init_octal_dtr_disable(struct spinand_device *spinand)
 
-thanks,
+This function is never used. I guess it should be called in the
+suspend/shutdown path, at least.
 
-greg k-h
+> +{
+> +	struct device *dev = &spinand->spimem->spi->dev;
+> +	int ret;
+> +
+> +	if (!spinand->manufacturer->ops->change_mode)
+> +		return -EINVAL;
+> +
+> +	ret = spinand->manufacturer->ops->change_mode(spinand,
+> +						      SPINAND_1S_1S_1S);
+> +
+> +	if (ret) {
+> +		dev_err(dev,
+> +			"Failed to disable Octal DTR SPI mode (err = %d)\n",
+> +			ret);
+> +		return ret;
+> +	}
+> +
+> +	spinand->protocol = SPINAND_1S_1S_1S;
+> +	spinand->ctrl_ops = &spinand_default_ctrl_ops;
+> +	return 0;
+> +}
+> +
+>  /**
+>   * spinand_match_and_init() - Try to find a match between a device ID and an
+>   *			      entry in a spinand_info table
+> @@ -1203,6 +1278,10 @@ static int spinand_init_flash(struct spinand_device *spinand)
+>  			break;
+>  	}
+>  
+> +	ret = spinand_init_octal_dtr_enable(spinand);
+> +	if (ret)
+> +		return ret;
+> +
+>  	if (ret)
+>  		spinand_manufacturer_cleanup(spinand);
+>  
+> diff --git a/include/linux/mtd/spinand.h b/include/linux/mtd/spinand.h
+> index a8c071983a27..f12aa4516fab 100644
+> --- a/include/linux/mtd/spinand.h
+> +++ b/include/linux/mtd/spinand.h
+> @@ -417,6 +417,7 @@ struct spinand_ecc_info {
+>  
+>  #define SPINAND_HAS_QE_BIT		BIT(0)
+>  #define SPINAND_HAS_CR_FEAT_BIT		BIT(1)
+> +#define SPINAND_HAS_OCTAL_DTR_BIT	BIT(2)
+
+Do we really need a new flag for this? Isn't the template op
+initialization enough to reflect whether the NAND and controller can do
+8DTR or not?
+
+>  
+>  /**
+>   * struct spinand_ondie_ecc_conf - private SPI-NAND on-die ECC engine structure
+

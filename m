@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D888E4837BB
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 20:51:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 403E84837BD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 20:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236059AbiACTv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 14:51:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57350 "EHLO
+        id S234465AbiACTwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 14:52:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiACTv2 (ORCPT
+        with ESMTP id S231217AbiACTwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 14:51:28 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED58C061761
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 11:51:28 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id o6so139838991edc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 11:51:27 -0800 (PST)
+        Mon, 3 Jan 2022 14:52:24 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07709C061761
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 11:52:24 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id u25so18494512edf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 11:52:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=k4MP9cdcpwJv4AnIhTdvzZ5UofI+2H5vG44bmxBYiF4=;
-        b=e10pV/xyhikyTMrLwOXfOTvNB7+9lfRl50lbv5taXuIvG27gNI9Ry24SaiQeWmfOb+
-         NH3piNXxKYrxj03YsI9y7ZE/ql9ro/ULC1d6h2GaqBkILq8v3AdiRfVMVGXNWfOkG0Ak
-         EXjosndDOchJD185VyhkV6iY0hAlyUZbbwBYer8sYJRDOQXufIHSwnxBfQaZ7BuC1OJA
-         C6U1f2MjlKEuil7BrDZtF1Y0z1cLjl3A84eK6QZcDEbE/zUD8ewnpdyVJ4GHtaCdsY+J
-         5tUN0ZJLm+89TdrYQJ09k1E8we2JlwAKlArBaGoGE9ARpiWKUYkpPkHz7E5EbX6+0N8S
-         o6tw==
+        bh=8ByAqSVB2B3ep+zd7HSU1TmysX0Jx7A5in4U6nSnvgc=;
+        b=dMy2H4U9+w1PP3Ry9CRyrNp4dio4xBSHGn2UY/conmG+lHPoAq9hnpLwdOB81r7p8B
+         5pYwJe4pOOIEnu+pUrHNKC8vC5uaGcHM9/kF3f+sb1cMEpf09oqXQvz70BnO1sdSvOOh
+         stCZi5T6qxV0T0XrYzCyT/uSExAIrtubkUBKrkE8InsxbPWa8D0BZwcV7LZnlQ2jbS5W
+         rNNXXh8GB3+eVUdxuAVOAQ9I/3KGy5J/J3k2CDB/to5ELqM8+2z+lQfRzobsAw9cSQF8
+         sdFrfotPY1YvjH7WEGD2oi3gq3gvHaaekb6SQJrdZvzodWuJhJWIO7Iw4BqCUgdpGuo5
+         Ecvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=k4MP9cdcpwJv4AnIhTdvzZ5UofI+2H5vG44bmxBYiF4=;
-        b=Yn7EJLsrVD1SY4Ts847ur+YWf1O0d+UC5bHXeO0JxEXLpokDd/qbgOSx1R+6oW+xMQ
-         lnEQXOTT8AxXHTK9agOivYbxJiIo2Koy3zJ+BJbMi9pFQkX+kJ0n+E0W9Lvt32oxQ/gV
-         Nk6D2wkOjeRS2vKktu569nWvJMnM2IyBIDgZ8WRj45mp8cvnsikbFH3tAS0huf5j1O5Q
-         ov5QaKYLY8gp3j/oa/E1F+rtap3LrNfezQWk0sH5PKWroyH2OX1fsckHMlT5++AKSwJR
-         zYLbvgOcl5BjDOC5bXaV6FsTMvtdF51QSN5mTkDFtKQdpEgMCKMwBv9NVpP/H8Xj6p86
-         7GRA==
-X-Gm-Message-State: AOAM530hOx2gRGoRMNd2Z7MCvve1Ydl0zm8+ig/YMMFg4rwiwvdaiz9K
-        1GuIsQepfMGZoxNh24pvJjs=
-X-Google-Smtp-Source: ABdhPJzeJr5tl2OWAo42OxvC44dV2qIAJ9G22xYVXm6CIt4ibrPv0HYcPid50ae20FEazLx48fX8aA==
-X-Received: by 2002:a17:906:2802:: with SMTP id r2mr38768004ejc.172.1641239486689;
-        Mon, 03 Jan 2022 11:51:26 -0800 (PST)
+        bh=8ByAqSVB2B3ep+zd7HSU1TmysX0Jx7A5in4U6nSnvgc=;
+        b=TClS7m9wVk71Vi7a6ZQ+Jzv7Rp1n405JNKkahBm2OaSwCCGyheMHzypD72dF2MM0XE
+         CA+F9oxfSYYA68DyEu7y3La+Lg4d1N4OCYQ5VRrdS/qRsIvYIkcFXVFmfBUvpnE68lpH
+         1QyAcBTBpMSJU7PMloE0zsX4qnCDahrIeaXvhxceRpnQbtbuODZZYQXMSsKh3/uzWAOt
+         hNskdPyysW7eOoEuuQ8xxLzOYFuXKYcuaRNXRWooJm/yWY/nsVWE3QlrLtOgEMmwk5PR
+         I9kDOCb7niOj6N5P6n4Ds0Qroa9lZK1aAYp76zYKqqOqzvnNRQYhCoAcjlU1zpmGyMWP
+         Og7Q==
+X-Gm-Message-State: AOAM533MLr8o5yVssmp1objiK43KWAAwcRJT7FPTRILRn70KWha3qq0v
+        rf2wwwDA/nPh3CxUB9SOlig=
+X-Google-Smtp-Source: ABdhPJw5AW4b0KIQnsnsLl8cvI51gNhi/VHTXTUk15QVc9jBjrHQZ9XNcAJnxlthXk7w3fg9w16sPw==
+X-Received: by 2002:a17:907:1703:: with SMTP id le3mr35788097ejc.344.1641239542622;
+        Mon, 03 Jan 2022 11:52:22 -0800 (PST)
 Received: from t470p.fritz.box (host-87-18-201-21.retail.telecomitalia.it. [87.18.201.21])
-        by smtp.gmail.com with ESMTPSA id gt20sm7009614ejc.11.2022.01.03.11.51.25
+        by smtp.gmail.com with ESMTPSA id gt20sm7009614ejc.11.2022.01.03.11.52.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jan 2022 11:51:26 -0800 (PST)
+        Mon, 03 Jan 2022 11:52:22 -0800 (PST)
 From:   Alberto Merciai <alb3rt0.m3rciai@gmail.com>
 Cc:     alb3rt0.m3rciai@gmail.com, linuxfancy@googlegroups.com,
         Larry Finger <Larry.Finger@lwfinger.net>,
@@ -60,12 +60,12 @@ Cc:     alb3rt0.m3rciai@gmail.com, linuxfancy@googlegroups.com,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Saurav Girepunje <saurav.girepunje@gmail.com>,
         Ivan Safonov <insafonov@gmail.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Zameer Manji <zmanji@gmail.com>, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 49/56] staging: r8188eu: rename camelcase GetAckpolicy into get_ack_policy
-Date:   Mon,  3 Jan 2022 20:02:24 +0100
-Message-Id: <20220103190326.363960-50-alb3rt0.m3rciai@gmail.com>
+Subject: [PATCH 50/56] staging: r8188eu: rename camelcase GetAMsdu to get_a_msdu
+Date:   Mon,  3 Jan 2022 20:02:25 +0100
+Message-Id: <20220103190326.363960-51-alb3rt0.m3rciai@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220103190326.363960-1-alb3rt0.m3rciai@gmail.com>
 References: <20220103190326.363960-1-alb3rt0.m3rciai@gmail.com>
@@ -76,7 +76,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename camel case macro GetAckpolicy into get_ack_policy.
+Rename camel case macro GetAMsdu into get_a_msdu
 
 Signed-off-by: Alberto Merciai <alb3rt0.m3rciai@gmail.com>
 ---
@@ -85,31 +85,31 @@ Signed-off-by: Alberto Merciai <alb3rt0.m3rciai@gmail.com>
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-index d187bb73f539..4aa295ad4a27 100644
+index 4aa295ad4a27..81dcb482ff22 100644
 --- a/drivers/staging/r8188eu/core/rtw_recv.c
 +++ b/drivers/staging/r8188eu/core/rtw_recv.c
-@@ -1036,7 +1036,7 @@ static int validate_recv_data_frame(struct adapter *adapter,
- 	/* parsing QC field */
+@@ -1037,7 +1037,7 @@ static int validate_recv_data_frame(struct adapter *adapter,
  	if (pattrib->qos == 1) {
  		pattrib->priority = get_priority((ptr + 24));
--		pattrib->ack_policy = GetAckpolicy((ptr + 24));
-+		pattrib->ack_policy = get_ack_policy((ptr + 24));
- 		pattrib->amsdu = GetAMsdu((ptr + 24));
+ 		pattrib->ack_policy = get_ack_policy((ptr + 24));
+-		pattrib->amsdu = GetAMsdu((ptr + 24));
++		pattrib->amsdu = get_a_msdu((ptr + 24));
  		pattrib->hdrlen = pattrib->to_fr_ds == 3 ? 32 : 26;
  
+ 		if (pattrib->priority != 0 && pattrib->priority != 3)
 diff --git a/drivers/staging/r8188eu/include/wifi.h b/drivers/staging/r8188eu/include/wifi.h
-index 584161c9b5c5..2de7addd1fbf 100644
+index 2de7addd1fbf..7a42031ebc15 100644
 --- a/drivers/staging/r8188eu/include/wifi.h
 +++ b/drivers/staging/r8188eu/include/wifi.h
-@@ -244,7 +244,7 @@ enum WIFI_REG_DOMAIN {
- #define set_ack_policy(pbuf, ack)	\
- 	(*(__le16 *)(pbuf) |= cpu_to_le16((ack & 3) << 5))
+@@ -246,7 +246,7 @@ enum WIFI_REG_DOMAIN {
  
--#define GetAckpolicy(pbuf) (((le16_to_cpu(*(__le16 *)pbuf)) >> 5) & 0x3)
-+#define get_ack_policy(pbuf) (((le16_to_cpu(*(__le16 *)pbuf)) >> 5) & 0x3)
+ #define get_ack_policy(pbuf) (((le16_to_cpu(*(__le16 *)pbuf)) >> 5) & 0x3)
  
- #define GetAMsdu(pbuf) (((le16_to_cpu(*(__le16 *)pbuf)) >> 7) & 0x1)
+-#define GetAMsdu(pbuf) (((le16_to_cpu(*(__le16 *)pbuf)) >> 7) & 0x1)
++#define get_a_msdu(pbuf) (((le16_to_cpu(*(__le16 *)pbuf)) >> 7) & 0x1)
  
+ #define SetAMsdu(pbuf, amsdu)	\
+ 	*(__le16 *)(pbuf) |= cpu_to_le16((amsdu & 1) << 7)
 -- 
 2.25.1
 

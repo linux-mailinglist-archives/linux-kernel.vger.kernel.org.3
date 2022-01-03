@@ -2,111 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DFF48358A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 18:27:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E4948358C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 18:27:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235233AbiACR07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 12:26:59 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58518 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232075AbiACR0z (ORCPT
+        id S235241AbiACR1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 12:27:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232075AbiACR1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 12:26:55 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A5776118F
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 17:26:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 882ADC36AED
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 17:26:54 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="mCFy7wTx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1641230812;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ixG3K0VqFW+/w9u92E25Dj3Tibd0n4kLzMuSOVvn1kg=;
-        b=mCFy7wTxWpafM7F3f32ZHpRD/i+CZBFjoNJ8d2udSm1LElECkrR+N4+7w9UmA/h51uMys0
-        XvH1lltwVLBdnYyJPwshaQHzHtJ3Y5zxPYap5HHT+FeZ2sY8GjOeAPY+ziPcF58I78mg7M
-        vtrz2iL8w10HVuiqcE9fozoLNghjT/4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 76506462 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Mon, 3 Jan 2022 17:26:51 +0000 (UTC)
-Received: by mail-yb1-f180.google.com with SMTP id w184so81078203ybg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 09:26:51 -0800 (PST)
-X-Gm-Message-State: AOAM530NImtk2OakvsuLcps2HTTcvt92t0f5ruWnEKzKqeZueWFaXLKT
-        cVDgtdY/vuAPkqBg5FJjIV1wM8ppbSMCEPu5X7E=
-X-Google-Smtp-Source: ABdhPJyUvYDcQaDiQiN0OAMVIeg+O4BHvmo7C3Y53vsOI14B2TKapVW4TkQGKJGsHcNpvbjt3oy/UH5qxpzL+7r+zyg=
-X-Received: by 2002:a05:6902:150d:: with SMTP id q13mr16409745ybu.113.1641230810742;
- Mon, 03 Jan 2022 09:26:50 -0800 (PST)
+        Mon, 3 Jan 2022 12:27:33 -0500
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B85FC061761;
+        Mon,  3 Jan 2022 09:27:32 -0800 (PST)
+Received: by mail-vk1-xa31.google.com with SMTP id h67so19233500vkh.1;
+        Mon, 03 Jan 2022 09:27:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Grh3iRZLDkYqgCiFWJobaJkZx4Mto9jnEwXBQ73vVs4=;
+        b=mMZ8yh5BwCDZZkz+NRrigwzXbRhzhr0uT47SGJR5vQ41rWiwsqT75T/KjbMPToqiOU
+         ONeOVHXANG/jIWe6RYJ3tpVidoHTRfmCGdwb62w6tp1ND329HnY4TQ3brTu4cjnySEro
+         E7JvCakWwdQ8GNodifagl0smURKNMV/i7BaNbTkfslU4WP4FFTEuqzAtYegsMPjbvruC
+         MmabsvRR7PK3R5O2fGvEMroZnY3/W643AZX7WGsoqlMoNsczeuKmHx2X24T0x2rGdIkT
+         ShdqfeUeECkDZ9fNBgWAMNl7JJOt+LjGXYTmt6XBVS+ciYmE+DynpwBCMOztEkoLpE/q
+         ekUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Grh3iRZLDkYqgCiFWJobaJkZx4Mto9jnEwXBQ73vVs4=;
+        b=UJSNpKL3ce8+UIP85Otn2tWlOnAptY+pdg1aX0lJ+Z5+Hcmr+p8GHQgUDuIuBqDlIV
+         G9ZLDqJws5oc07a7lWZJsMDokl5XzdsxZTe7x5q/tOTV0FySiPJbPjvUefZEkLiLraaC
+         edhWgBE4zSSNMzFuMet6y/VQr40QawjVK7ackRuAsabSuU5r2FN/ypJfWExqimER/RR8
+         Dc/TIywsH4cTfQKc8sLHiaZsrv8vrlWW0c+dd9PXc2CMCtr7eji0MxPqIRBQlgaWEqlW
+         jA973nj7RTf+uKEFMIrtIEiq7T+SCf7G6jPHSD8hha9EiVCB9uXnLue74wSWyleYWXgJ
+         wFmw==
+X-Gm-Message-State: AOAM531vJnRLPWVxNO7kfs4qfj8ylem1J3e9Yis/fHl54WDxu7zydrFo
+        gr4OEIpPcWQz5TKhtbJz5YjOgW+/IjE=
+X-Google-Smtp-Source: ABdhPJxUFUMmfH39/l/tXRgkH25UICIz6jPCAdEbL/I7WJI7MiJEefbIklc92it83hGd4QWS/zKivw==
+X-Received: by 2002:a05:6122:220d:: with SMTP id bb13mr6095735vkb.33.1641230851556;
+        Mon, 03 Jan 2022 09:27:31 -0800 (PST)
+Received: from [10.230.2.158] ([192.19.161.250])
+        by smtp.gmail.com with ESMTPSA id r2sm7449338vsk.28.2022.01.03.09.27.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jan 2022 09:27:31 -0800 (PST)
+Message-ID: <00d8af2f-45ff-48d7-43e7-14c59a0aca62@gmail.com>
+Date:   Mon, 3 Jan 2022 09:27:28 -0800
 MIME-Version: 1.0
-References: <20220103160002.1068356-1-Jason@zx2c4.com> <YdMsMZU/PL7o2j5f@mit.edu>
-In-Reply-To: <YdMsMZU/PL7o2j5f@mit.edu>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 3 Jan 2022 18:26:39 +0100
-X-Gmail-Original-Message-ID: <CAHmME9qJtA2BGjXUn2WQVFUNr3OdAo__BS-nVst5mhYhfsA8GA@mail.gmail.com>
-Message-ID: <CAHmME9qJtA2BGjXUn2WQVFUNr3OdAo__BS-nVst5mhYhfsA8GA@mail.gmail.com>
-Subject: Re: [PATCH] random: reseed in RNDRESEEDCRNG for the !crng_ready() case
-To:     "Theodore Ts'o" <tytso@mit.edu>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Jann Horn <jannh@google.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH 4/9] mtd: rawnand: brcmnand: Move OF operations out of
+ brcmnand_init_cs()
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-mtd@lists.infradead.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Colin Ian King <colin.king@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM SPECIFIC AMBA DRIVER (BCMA)" 
+        <linux-wireless@vger.kernel.org>,
+        "open list:BROADCOM STB NAND FLASH DRIVER" 
+        <bcm-kernel-feedback-list@broadcom.com>
+References: <20211223002225.3738385-1-f.fainelli@gmail.com>
+ <20211223002225.3738385-5-f.fainelli@gmail.com>
+ <20220103175606.71a4eb93@xps13>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220103175606.71a4eb93@xps13>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 3, 2022 at 6:02 PM Theodore Ts'o <tytso@mit.edu> wrote:
->
-> On Mon, Jan 03, 2022 at 05:00:02PM +0100, Jason A. Donenfeld wrote:
-> > Userspace often wants to seed the RNG from disk, without knowing how
-> > much entropy is really in that file. In that case, userspace says
-> > there's no entropy, so none is credited. If this happens in the
-> > crng_init==1 state -- common at early boot time when such seed files are
-> > used -- then that seed file will be written into the pool, but it won't
-> > actually help the quality of /dev/urandom reads. Instead, it'll sit
-> > around until something does credit sufficient amounts of entropy, at
-> > which point, the RNG is seeded and initialized.
-> >
-> > Rather than let those seed file bits sit around unused until "sometime
-> > later", userspaces that call RNDRESEEDCRNG can expect, with this commit,
-> > for those seed bits to be put to use *somehow*. This is accomplished by
-> > extracting from the input pool on RNDRESEEDCRNG, xoring 32 bytes into
-> > the current crng state.
->
-> I think this is fine, but the RNDRESEEDRNG ioctl is rarely used by
-> userspace.  From a Google search I see that jitterentropy uses it, but
-> in most setups it won't be called.
->
-> So something we could do to improve things is to add some code to
-> random_write() so that in the case where crng_init is 1, we take half
-> of the bytes or CHACHA_KEY_SIZE bytes, whichever is less, and pass
-> those bytes to crng_fast_load().  (We'll have to copy it to a bounce
-> buffer since the passed in pointer is __user, and memzero_explicit it
-> after calling crng_fast_load.)
->
-> This will divert some part of the seed file to partially initialize
-> the CRNG.  It won't fully initialize the CRNG, but that's fine, since
-> it's possible that the seed file has been compromised --- or is a
-> fixed value if the seed file is from coming a VM image file.  So
-> having at least half of the entropy used to initialize CRNG up to
-> crng_init=1 is coming from interrupt timing seems like a good thing.
 
-Yea, doing things in RNDADDENTROPY or random_write is a possibility,
-and then userspace doesn't need to adopt new strange things. In
-looking at this, though, and combined with the attitude of the
-crng_init_cnt=0 commit from last hour, I'm beginning to think that
-trying to cater toward crng_init<2 usage is an exercise in madness. We
-provide getrandom(..., 0)'s blocking mode for users who want things to
-be real. If you're not doing this (or can't due to old kernels), you
-should probably Know What You're Doing and adjust accordingly. To that
-end, I'm not convinced this patch or similar ideas of making
-crng_init=1 mode more useful really has much of a future.
 
-However, it does seem like userspaces who know what they're doing
-*can* take necessary countermeasures for the seeding use case that
-Jann originally identified as being potentially problematic. To that
-end, I submitted a PR to systemd:
-https://github.com/systemd/systemd/pull/21986 . We'll see what they
-think.
+On 1/3/2022 8:56 AM, Miquel Raynal wrote:
+> Hi Florian,
+> 
+> f.fainelli@gmail.com wrote on Wed, 22 Dec 2021 16:22:20 -0800:
+> 
+>> In order to initialize a given chip select object for use by the
+>> brcmnand driver, move all of the Device Tree specific routines outside
+>> of brcmnand_init_cs() in order to make it usable in a platform data
+>> configuration which will be necessary for supporting BCMA chips.
+> 
+> TBH I'm note a big fan of the idea. I'm not sure going back to
+> supporting platform data this way really is a good idea... There are so
+> much things that are well described with DT that we now rely upon that
+> I am not entirely convinced by these changes :-/ The move is generally
+> in the other direction: getting rid of the legacy platform data.
 
-Jason
+In the cover letter there is an explanation as to why we need to 
+introduce platform data/device support here: the platforms on which this 
+NAND controller shim is used do not have Device Tree support, and won't 
+have it in the future either. They are old platforms (first SoC 
+supported by bcm47xx is maybe 15 years old now) but they are still in 
+active and wide use by the OpenWrt, dd-wrt communities.
+-- 
+Florian

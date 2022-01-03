@@ -2,147 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7C44836A1
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 19:11:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F036F48369D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 19:10:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235352AbiACSLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 13:11:01 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:57436 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235234AbiACSLA (ORCPT
+        id S235269AbiACSKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 13:10:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34438 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235234AbiACSKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 13:11:00 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E884A210E8;
-        Mon,  3 Jan 2022 18:10:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1641233458; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Op3ImOqOwCCgnIZralyZf3tGTao+t3Y622jP3bRdc3M=;
-        b=C2zVimxxGBkbjHiUPECVcDKFMB2sv4FqZcW8GgohA812H99T/sYphGZEA629myHI1xwfUB
-        EAkGvy3QcUL7w4mnTnl7szW5Fx/6/jwA9fnzECUU2Sma7xvOTmQrTquQlS23TiIHyoVOdi
-        hXjehu5D/56NRpJ+CiRwuwIH541HAPU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1641233458;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Op3ImOqOwCCgnIZralyZf3tGTao+t3Y622jP3bRdc3M=;
-        b=oSr9zFj9HMCbLGX5MoS/SaS6qozzC73ylXqxLdax9DGQnykLDDk2KqDo7iHeTOHc038jY8
-        783kriuIq+Bu45Bg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7535E13B09;
-        Mon,  3 Jan 2022 18:10:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id UEjgGzI802FfKwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 03 Jan 2022 18:10:58 +0000
-Message-ID: <91eb34b0-ff19-40a3-9744-ad80432d8317@suse.cz>
-Date:   Mon, 3 Jan 2022 19:10:58 +0100
+        Mon, 3 Jan 2022 13:10:44 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2A2C061761
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 10:10:43 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id k27so56876809ljc.4
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 10:10:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UhBbx898E389Fzaey+N9kjPR5JWyzT1VKoYkhiyWe8g=;
+        b=WNVG9om0NNJeiGdVtxlF2hehbq7ZTQinCQ0aiTIDP7czv3IYKvW0PzFZiNKtHAGkOg
+         XOsR4p3Wg+sW/Av3EyKs+2lqcZ0mjWUyrmCflwzQir8438voP2MpxRgFxHf9C0UXFT42
+         au35hp2HhA5Yz/CLpODDkAAxt04ZW2Too7T7LazNx7aSh+At68ojWI4BHCMyrH9Dk6nw
+         kiPk7CuCES4r6EyYHAJ9uKXVXoRcju6TrwjD8aPi97IwWUTqAzAS0elu+7O+8qf41xZH
+         Vo6mDuW5ZbNc3Macmml2RsUr9pfCxHkaaCOKqpA23jvj4czqKnwLMfaPXeqz/Hffd49e
+         Unhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UhBbx898E389Fzaey+N9kjPR5JWyzT1VKoYkhiyWe8g=;
+        b=eP3DJ63oSk5iskO/PIRktgN74O15KwDW5XlvnMjE7mD79Rp8gLOTYLnL95wYk7l5mv
+         r3FXbZQ1R3yfFA/5nuxEH1girenaMP0fRCfkizTkOJRCTfV9BJonKJHpRzk8IORXDHgq
+         kMPSn4U8IVWyZCb/mkme6/XBSqpyBcYFrrSwLw07ebtZqvy7bXpgYN5A8zNff9ufeU+E
+         9nAnvhxKyND9XSvVsiX8DV5nsn8VTgofzAnu6/o2dUegWgQv7J/F3BuTlkSAan1d0lE8
+         Eo5uYkolxvbak7VzIaYoekuBzDp+C0/GEQEENtcLLo6oTKPeMprmA0V7xeUPxb0EFhbE
+         zGJA==
+X-Gm-Message-State: AOAM5337rYUS8Wr2cOtJw8x7hH1JPRJy8x3xjhqb2DmwAB+70J8YlGyS
+        kFnEdZx7/Gk63ImR9en8jGI9dg==
+X-Google-Smtp-Source: ABdhPJzY+s8TfVvyJ9/LCXSRARWNgeCS8RHWcxrxopKC3x+KZZIczghbGQh9RqSvS5nDp/wrHlVJWA==
+X-Received: by 2002:a2e:a546:: with SMTP id e6mr7438700ljn.320.1641233442100;
+        Mon, 03 Jan 2022 10:10:42 -0800 (PST)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id g24sm1444781lfh.88.2022.01.03.10.10.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jan 2022 10:10:41 -0800 (PST)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 49129103686; Mon,  3 Jan 2022 21:10:59 +0300 (+03)
+Date:   Mon, 3 Jan 2022 21:10:59 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>, tglx@linutronix.de,
+        mingo@redhat.com, luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 19/26] x86/tdx: Make pages shared in ioremap()
+Message-ID: <20220103181059.ui5eloufw5gsojcb@box.shutemov.name>
+References: <f61b591b-a06c-bc29-4b9b-a5d46111fe4e@intel.com>
+ <YcTTt4LXKfDO+9u3@zn.tnic>
+ <20211223205604.g44kez5d7iedatfo@box.shutemov.name>
+ <YcTlhp1PUfrMOelI@zn.tnic>
+ <20211224110300.7zj3nc5nbbv7jobp@black.fi.intel.com>
+ <33914dc1-37e8-f0bb-6468-71c3b5f4169d@amd.com>
+ <20220103141705.6hqflhwykqmtfim6@black.fi.intel.com>
+ <YdMIWAT42el4D6wJ@zn.tnic>
+ <20220103151516.pfcz2pap5l7r2rzv@box.shutemov.name>
+ <b4b54116-1cd7-468a-0889-d497268cbfb2@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>,
-        Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-References: <20211210154332.11526-1-brijesh.singh@amd.com>
- <20211210154332.11526-21-brijesh.singh@amd.com> <Yc8jerEP5CrxfFi4@zn.tnic>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v8 20/40] x86/sev: Use SEV-SNP AP creation to start
- secondary CPUs
-In-Reply-To: <Yc8jerEP5CrxfFi4@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b4b54116-1cd7-468a-0889-d497268cbfb2@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/31/21 16:36, Borislav Petkov wrote:
-> On Fri, Dec 10, 2021 at 09:43:12AM -0600, Brijesh Singh wrote:
->> diff --git a/arch/x86/include/asm/sev-common.h b/arch/x86/include/asm/sev-common.h
->> index 123a96f7dff2..38c14601ae4a 100644
+On Mon, Jan 03, 2022 at 08:50:12AM -0800, Dave Hansen wrote:
+> On 1/3/22 7:15 AM, Kirill A. Shutemov wrote:
+> > On Mon, Jan 03, 2022 at 03:29:44PM +0100, Borislav Petkov wrote:
+> >> On Mon, Jan 03, 2022 at 05:17:05PM +0300, Kirill A. Shutemov wrote:
+> >>> I'm not sure how to unwind this dependency hell. Any clues?
+> >> Forward-declaration maybe?
+> >>
+> >> I.e., something like
+> >>
+> >> struct task_struct;
+> >>
+> >> at the top of arch/x86/include/asm/switch_to.h, for example...
+> > Forward-declaration only works if you refer the struct/union by pointer,
+> > not value.
+> > 
+> > And pgprot_t is not always a struct and when it is a struct it is
+> > anonymous.
+> > 
+> > See "git grep 'typedef.*pgprot_t;'".
 > 
->> +{
->> +	unsigned long pfn;
->> +	struct page *p;
->> +
->> +	/*
->> +	 * Allocate an SNP safe page to workaround the SNP erratum where
->> +	 * the CPU will incorrectly signal an RMP violation  #PF if a
->> +	 * hugepage (2mb or 1gb) collides with the RMP entry of VMSA page.
+> In the end, the new functions get used like this:
 > 
-> 		2MB or 1GB
+> 	prot = pgprot_decrypted(prot);
 > 
-> Collides how? The 4K frame is inside the hugepage?
+> I think they _could_ be:
 > 
->> +	 * The recommeded workaround is to not use the large page.
+> 	pgprot_set_decrypted(&prot);
 > 
-> Unknown word [recommeded] in comment, suggestions:
->         ['recommended', 'recommend', 'recommitted', 'commended', 'commandeered']
+> Which would let you have a declaration like this:
 > 
->> +	 *
->> +	 * Allocate one extra page, use a page which is not 2mb aligned
+> 	extern void pgprot_cc_set_decrypted(pgprot_t *prot);
 > 
-> 2MB-aligned
-> 
->> +	 * and free the other.
->> +	 */
->> +	p = alloc_pages(GFP_KERNEL_ACCOUNT | __GFP_ZERO, 1);
->> +	if (!p)
->> +		return NULL;
->> +
->> +	split_page(p, 1);
->> +
->> +	pfn = page_to_pfn(p);
->> +	if (IS_ALIGNED(__pfn_to_phys(pfn), PMD_SIZE)) {
->> +		pfn++;
->> +		__free_page(p);
->> +	} else {
->> +		__free_page(pfn_to_page(pfn + 1));
->> +	}
-> 
-> AFAICT, this is doing all this stuff so that you can make sure you get a
-> non-2M-aligned page. I wonder if there's a way to simply ask mm to give
-> you such page directly.
-> 
-> vbabka?
+> It does not exactly give me warm and fuzzy feelings, but it would work
+> around the header problem.
 
-AFAIK, not, as this is a very unusual constraint. Unless there are more
-places that need it, should be fine to solve it like above. Maybe just also
-be optimistic and try a plain order-0 first and only if it has the undesired
-alignment (which should happen only once per 512 allocations), fallback to
-the above?
+Apart for being ugly, I don't see how it solves anything. How would you
+forward-declare a typedef?
+
+-- 
+ Kirill A. Shutemov

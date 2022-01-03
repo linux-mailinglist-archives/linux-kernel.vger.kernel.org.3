@@ -2,105 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F694836E5
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 19:35:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ADAC48371D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 19:43:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235724AbiACSe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 13:34:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
+        id S235574AbiACSnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 13:43:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235681AbiACSez (ORCPT
+        with ESMTP id S229805AbiACSnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 13:34:55 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB33C061761;
-        Mon,  3 Jan 2022 10:34:55 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id g2so30687072pgo.9;
-        Mon, 03 Jan 2022 10:34:55 -0800 (PST)
+        Mon, 3 Jan 2022 13:43:15 -0500
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D14C061761
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 10:43:14 -0800 (PST)
+Received: by mail-ua1-x936.google.com with SMTP id u6so51857375uaq.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 10:43:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=PdKT33UwUCzy7PrWIw5LDS/jLSQXJ7UbI+tPlHdEnTc=;
-        b=qhwpIQNyNdOsaRnpwOuktBsG66Dpdus+uJ/91T1PyipaTJmlb4/TMdPdho8l/gb26Q
-         D5cQiefvHHpwAU7tfB7j5rkLno3LODbuPcOqB79K0OscDR/dZS9EySj1PUK+hT8CtENt
-         HkhwOvrdAC1qSSQo6TnHlaXOd67jEL5K+4xPgOPAYz6Q4+a49ny+5p6So93FSZ8c908x
-         7nd5KTJ9MzHK6bhUpL1+5TTp9KuPqQfo1P9Xhup7Usiva6+qUc4q6hNEgbCM1/H7NJGu
-         ylkaocax0S3RG2hl+jXlytU2uDteCHYwjeTcHhi5W4lG7mfJmT2eP9WYiFbX5XherMLX
-         ZsMA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nJQBNk6axtfRB7RGJeAUInYTBuvs/80E/DpFdWXcxTw=;
+        b=pueGbZ3h1ny2MEwEmNqEHMbRlcfwFBhSTwqfKj2WWvApEm70cprF6KcJ53sOijU058
+         IoukxZWHD0gHF4wofYp76S2O9pc2etOve+cWkVIlbZVKb0B46/deu5gdZkND9LlYFn1f
+         da9jT5L4o/+uQT/JP9op+Ax37qefK0CNsWdsH1zG6FnVUR105MK8QvPlgGLvxVkGgjP6
+         h2joz/eltAq8qB5f/gaRLRix7OrdnlYgpoCWWHnQ9o8faMDwCQwA7no4/9P+Fe/vIWSZ
+         G2uu0JCH3A4fh0JACBouWNBKODRc9XtiD5BP602i9W3l9ITWxqh7d7T1l0IW7amxW30N
+         L3Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PdKT33UwUCzy7PrWIw5LDS/jLSQXJ7UbI+tPlHdEnTc=;
-        b=yrAqHeVz4g11DFr5mauTAChahFqicHwYw4s4+7dGbIibd9r9iCijb9kB4jx9+dSNut
-         vyYj3ZcllPOhZE0fRsM69C+XIDv8obnvQ1D/FBPAQJI/MVAHUKhHIfIopWOpT+vfF7/J
-         rHitlYzCMHmOETXfQUM5kC9o+t549G4/kd7XOXEmrqKrrOJSlN8t6O3O4CeF/W3ag260
-         4FPq0BYbqWR0cnIhA21WEfd3BctEhF4pA1tmKF12JzHsiI1uj7oNCFjnGLeXfRYjEgfI
-         CdGmijqJlMn3D9zCadjwb+HHLQyd8BAyAvFBfzNeoNUHNO9qhf2CDVxqzKtaJOV2u85+
-         2wRg==
-X-Gm-Message-State: AOAM532HdviEz12GA5s2M/ScCInvThqMI/psimjtthmcc3dhU1X+4I8v
-        advdL4aH4GkBTrbjxgFwSDKB1HGd9/I=
-X-Google-Smtp-Source: ABdhPJwQkP1F9g59ayqzl57SP8Q9M0rIRh5kGGL6GNi75Db+rqt0zHEmVKOrBxqVVop6v0brfS7e0A==
-X-Received: by 2002:a62:1507:0:b0:4ba:7078:2477 with SMTP id 7-20020a621507000000b004ba70782477mr47431754pfv.56.1641234894731;
-        Mon, 03 Jan 2022 10:34:54 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id g5sm41786465pfj.143.2022.01.03.10.34.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jan 2022 10:34:54 -0800 (PST)
-Message-ID: <800ce698-c657-b512-33c3-722f6f22c49b@gmail.com>
-Date:   Mon, 3 Jan 2022 10:34:53 -0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nJQBNk6axtfRB7RGJeAUInYTBuvs/80E/DpFdWXcxTw=;
+        b=m5gJTXWE+WQ6ol4UfZThnxy6ZNS7IcDQ+gIndgGPavoSlRHJn9WWyHuHurXkXQDbZB
+         iA/Mv6SstqZ1d41K/4HMMrDbI5rALKPNHw6BRiRUEXzUbW6BYjiIW/WB+Lr4Nu5VuwFl
+         JaaDKboDPEkrDc0P/9fSOOifRGS3p9CQPxOVnyaJNnupchCBI9ZIxnI4l9ffhy6+FKuO
+         xHHmdX+Xd0mZpcE5PTjmaxFqYGD3DvG7o9ArJ9ZOXRd5BO9SLPtBECUoPKGhVpPGetzh
+         cJto7K4AGrThbbsHk0nWj173FqKGij+86SLZ7skMWK2+GSKcKUGVz1GABw+ScF18ntvg
+         FEtw==
+X-Gm-Message-State: AOAM5316574pRzX0VwJZMcxYUuD76l8SD07i/F6eq7kFIRu8dN9xhJix
+        JLkHq/BD96uL+yEFE1NmBiF8rRJPREeRBvDVQlb+7g==
+X-Google-Smtp-Source: ABdhPJwX2k6vaWwYLozxhBfsZvEvo2FdmoJsPYoTEOsunSCI8p/WioPIFzSX+cajzPMg+b6x7iY6xl2+GwAUad8DJt0=
+X-Received: by 2002:a67:e10c:: with SMTP id d12mr13619941vsl.20.1641235393823;
+ Mon, 03 Jan 2022 10:43:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH 5.4 14/37] net: phy: fixed_phy: Fix NULL vs IS_ERR()
- checking in __fixed_phy_register
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-References: <20220103142051.883166998@linuxfoundation.org>
- <20220103142052.316070279@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220103142052.316070279@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20211231161930.256733-1-krzysztof.kozlowski@canonical.com> <20211231161930.256733-3-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211231161930.256733-3-krzysztof.kozlowski@canonical.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Mon, 3 Jan 2022 20:43:02 +0200
+Message-ID: <CAPLW+4kVjswvcx7PjkBq_cPrmoi1_yJw9qGOO2tcRCDm27zKmA@mail.gmail.com>
+Subject: Re: [PATCH 02/24] pinctrl: samsung: accept GPIO bank nodes with a suffix
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        Chanho Park <chanho61.park@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 31 Dec 2021 at 18:20, Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> Existing dt-bindings expected that each GPIO/pin bank within pin
+> controller has its own node with name matching the bank (e.g. gpa0,
+> gpx2) and "gpio-controller" property.  The node name is then used for
+> matching between driver data and DTS.
+>
+> Newly introduced dtschema expects to have nodes ending with "-gpio-bank"
+> suffix, so rewrite bank-devicetree matching to look for old and new
+> style of naming.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  drivers/pinctrl/samsung/pinctrl-samsung.c | 57 ++++++++++++++++++-----
+>  1 file changed, 45 insertions(+), 12 deletions(-)
+>
+> diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.c b/drivers/pinctrl/samsung/pinctrl-samsung.c
+> index f2864a7869b3..561853df8ef7 100644
+> --- a/drivers/pinctrl/samsung/pinctrl-samsung.c
+> +++ b/drivers/pinctrl/samsung/pinctrl-samsung.c
+> @@ -1011,13 +1011,56 @@ static void samsung_banks_of_node_put(struct samsung_pinctrl_drv_data *d)
+>                 of_node_put(bank->of_node);
+>  }
+>
+> +/*
+> + * Iterate over all driver pin banks to find one matching the name of node,
+> + * skipping optional "-gpio" node suffix. When found, assign node to the bank.
+> + */
+> +static void samsung_banks_of_node_get(struct device *dev,
+> +                                     struct samsung_pinctrl_drv_data *d,
+> +                                     struct device_node *node)
+> +{
+> +       const char *suffix = "-gpio-bank";
+> +       struct samsung_pin_bank *bank;
+> +       struct device_node *child;
+> +       /* Pin bank names are up to 4 characters */
+> +       char node_name[20];
+> +       unsigned int i;
+> +       size_t len;
+> +
+> +       bank = d->pin_banks;
+> +       for (i = 0; i < d->nr_banks; ++i, ++bank) {
+> +               strscpy(node_name, bank->name, sizeof(node_name));
+> +               len = strlcat(node_name, suffix, sizeof(node_name));
+> +               if (len == sizeof(sizeof(node_name))) {
 
+Double sizeof is probably wrong?
 
-On 1/3/2022 6:23 AM, Greg Kroah-Hartman wrote:
-> From: Miaoqian Lin <linmq006@gmail.com>
-> 
-> [ Upstream commit b45396afa4177f2b1ddfeff7185da733fade1dc3 ]
-> 
-> The fixed_phy_get_gpiod function() returns NULL, it doesn't return error
-> pointers, using NULL checking to fix this.i
-> 
-> Fixes: 5468e82f7034 ("net: phy: fixed-phy: Drop GPIO from fixed_phy_add()")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> Link: https://lore.kernel.org/r/20211224021500.10362-1-linmq006@gmail.com
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-
-This patch prevents systems using fixed PHY devices from successfully 
-registering, especially when those systems have a fixed PHY that does 
-not use a GPIO:
-
-[    5.971952] brcm-systemport 9300000.ethernet: failed to register 
-fixed PHY
-[    5.978854] brcm-systemport: probe of 9300000.ethernet failed with 
-error -22
-[    5.986047] brcm-systemport 9400000.ethernet: failed to register 
-fixed PHY
-[    5.992947] brcm-systemport: probe of 9400000.ethernet failed with 
-error -22
-
-Please drop it for now until it can be investigated. Thanks!
--- 
-Florian
+> +                       dev_err(dev, "Too long pin bank name '%s', ignoring\n",
+> +                               bank->name);
+> +                       continue;
+> +               }
+> +
+> +               for_each_child_of_node(node, child) {
+> +                       if (!of_find_property(child, "gpio-controller", NULL))
+> +                               continue;
+> +                       if (of_node_name_eq(child, node_name))
+> +                               break;
+> +                       else if (of_node_name_eq(child, bank->name))
+> +                               break;
+> +               }
+> +
+> +               if (child)
+> +                       bank->of_node = child;
+> +               else
+> +                       dev_warn(dev, "Missing node for bank %s - invalid DTB\n",
+> +                                bank->name);
+> +               /* child reference dropped in samsung_drop_banks_of_node() */
+> +       }
+> +}
+> +
+>  /* retrieve the soc specific data */
+>  static const struct samsung_pin_ctrl *
+>  samsung_pinctrl_get_soc_data(struct samsung_pinctrl_drv_data *d,
+>                              struct platform_device *pdev)
+>  {
+>         struct device_node *node = pdev->dev.of_node;
+> -       struct device_node *np;
+>         const struct samsung_pin_bank_data *bdata;
+>         const struct samsung_pin_ctrl *ctrl;
+>         struct samsung_pin_bank *bank;
+> @@ -1081,17 +1124,7 @@ samsung_pinctrl_get_soc_data(struct samsung_pinctrl_drv_data *d,
+>          */
+>         d->virt_base = virt_base[0];
+>
+> -       for_each_child_of_node(node, np) {
+> -               if (!of_find_property(np, "gpio-controller", NULL))
+> -                       continue;
+> -               bank = d->pin_banks;
+> -               for (i = 0; i < d->nr_banks; ++i, ++bank) {
+> -                       if (of_node_name_eq(np, bank->name)) {
+> -                               bank->of_node = np;
+> -                               break;
+> -                       }
+> -               }
+> -       }
+> +       samsung_banks_of_node_get(&pdev->dev, d, node);
+>
+>         d->pin_base = pin_base;
+>         pin_base += d->nr_pins;
+> --
+> 2.32.0
+>

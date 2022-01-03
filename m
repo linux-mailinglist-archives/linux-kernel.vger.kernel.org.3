@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CEFF48328D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 002FB4832C6
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:31:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234293AbiACO2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:28:39 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58956 "EHLO
+        id S234222AbiACOao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:30:44 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60946 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233793AbiACO1h (ORCPT
+        with ESMTP id S234558AbiACO3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:27:37 -0500
+        Mon, 3 Jan 2022 09:29:37 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24E5FB80EFD;
-        Mon,  3 Jan 2022 14:27:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5397AC36AEB;
-        Mon,  3 Jan 2022 14:27:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B468B80EFC;
+        Mon,  3 Jan 2022 14:29:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C55C6C36AED;
+        Mon,  3 Jan 2022 14:29:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220054;
-        bh=vyj/Vkr9EC4mEIQsxIDbkkOi9a3R9gjtU12B8TPCGuE=;
+        s=korg; t=1641220175;
+        bh=uEmlorknZ4j1WY6HEon9h0FOTpjpcZa8gp1aoA334dQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JJlZgp94nToTd7Zy4WHfMan8mYiSpIEh8mr8N9aXRLnD0iTI8TDBF/AGMQ7RU12Er
-         n/k+KewI6rMo57mPWAYiexM3ZjBR4YNNFgNtMNs3ghWiMCbj0bbouskxGmJKyNuaD2
-         KeAwq3sthTNgPPTi8z1FnRCxWguoKpHVedZrvrlU=
+        b=vEAFXzkfK5Jq9KBj3MxoXx2xIO4is7K9vXU6Gub/HarV5/nYaAy88agZp6y0tgu29
+         wLVYL5//CDGWRJ19oxPK7IX6XeMoOxG+eCRJDssxeVR43Y6ZhVQnpfExqp7zjsjGw4
+         CZ4tcLGdZ+mAradUAjQDbwrms1OEepJ57YzduPuU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        syzbot+b88c5eae27386b252bbd@syzkaller.appspotmail.com
-Subject: [PATCH 5.4 34/37] Input: appletouch - initialize work before device registration
+        stable@vger.kernel.org, chen gong <curry.gong@amd.com>,
+        Evan Quan <evan.quan@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.10 35/48] drm/amdgpu: When the VCN(1.0) block is suspended, powergating is explicitly enabled
 Date:   Mon,  3 Jan 2022 15:24:12 +0100
-Message-Id: <20220103142052.928523488@linuxfoundation.org>
+Message-Id: <20220103142054.657357805@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142051.883166998@linuxfoundation.org>
-References: <20220103142051.883166998@linuxfoundation.org>
+In-Reply-To: <20220103142053.466768714@linuxfoundation.org>
+References: <20220103142053.466768714@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,50 +46,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+From: chen gong <curry.gong@amd.com>
 
-commit 9f3ccdc3f6ef10084ceb3a47df0961bec6196fd0 upstream.
+commit b7865173cf6ae59942e2c69326a06e1c1df5ecf6 upstream.
 
-Syzbot has reported warning in __flush_work(). This warning is caused by
-work->func == NULL, which means missing work initialization.
+Play a video on the raven (or PCO, raven2) platform, and then do the S3
+test. When resume, the following error will be reported:
 
-This may happen, since input_dev->close() calls
-cancel_work_sync(&dev->work), but dev->work initalization happens _after_
-input_register_device() call.
+amdgpu 0000:02:00.0: [drm:amdgpu_ring_test_helper [amdgpu]] *ERROR* ring
+vcn_dec test failed (-110)
+[drm:amdgpu_device_ip_resume_phase2 [amdgpu]] *ERROR* resume of IP block
+<vcn_v1_0> failed -110
+amdgpu 0000:02:00.0: amdgpu: amdgpu_device_ip_resume failed (-110).
+PM: dpm_run_callback(): pci_pm_resume+0x0/0x90 returns -110
 
-So this patch moves dev->work initialization before registering input
-device
+[why]
+When playing the video: The power state flag of the vcn block is set to
+POWER_STATE_ON.
 
-Fixes: 5a6eb676d3bc ("Input: appletouch - improve powersaving for Geyser3 devices")
-Reported-and-tested-by: syzbot+b88c5eae27386b252bbd@syzkaller.appspotmail.com
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Link: https://lore.kernel.org/r/20211230141151.17300-1-paskripkin@gmail.com
+When doing suspend: There is no change to the power state flag of the
+vcn block, it is still POWER_STATE_ON.
+
+When doing resume: Need to open the power gate of the vcn block and set
+the power state flag of the VCN block to POWER_STATE_ON.
+But at this time, the power state flag of the vcn block is already
+POWER_STATE_ON. The power status flag check in the "8f2cdef drm/amd/pm:
+avoid duplicate powergate/ungate setting" patch will return the
+amdgpu_dpm_set_powergating_by_smu function directly.
+As a result, the gate of the power was not opened, causing the
+subsequent ring test to fail.
+
+[how]
+In the suspend function of the vcn block, explicitly change the power
+state flag of the vcn block to POWER_STATE_OFF.
+
+BugLink: https://gitlab.freedesktop.org/drm/amd/-/issues/1828
+Signed-off-by: chen gong <curry.gong@amd.com>
+Reviewed-by: Evan Quan <evan.quan@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Cc: stable@vger.kernel.org
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/input/mouse/appletouch.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/vcn_v1_0.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/drivers/input/mouse/appletouch.c
-+++ b/drivers/input/mouse/appletouch.c
-@@ -916,6 +916,8 @@ static int atp_probe(struct usb_interfac
- 	set_bit(BTN_TOOL_TRIPLETAP, input_dev->keybit);
- 	set_bit(BTN_LEFT, input_dev->keybit);
- 
-+	INIT_WORK(&dev->work, atp_reinit);
+--- a/drivers/gpu/drm/amd/amdgpu/vcn_v1_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/vcn_v1_0.c
+@@ -254,6 +254,13 @@ static int vcn_v1_0_suspend(void *handle
+ {
+ 	int r;
+ 	struct amdgpu_device *adev = (struct amdgpu_device *)handle;
++	bool idle_work_unexecuted;
 +
- 	error = input_register_device(dev->input);
- 	if (error)
- 		goto err_free_buffer;
-@@ -923,8 +925,6 @@ static int atp_probe(struct usb_interfac
- 	/* save our data pointer in this interface device */
- 	usb_set_intfdata(iface, dev);
++	idle_work_unexecuted = cancel_delayed_work_sync(&adev->vcn.idle_work);
++	if (idle_work_unexecuted) {
++		if (adev->pm.dpm_enabled)
++			amdgpu_dpm_enable_uvd(adev, false);
++	}
  
--	INIT_WORK(&dev->work, atp_reinit);
--
- 	return 0;
- 
-  err_free_buffer:
+ 	r = vcn_v1_0_hw_fini(adev);
+ 	if (r)
 
 

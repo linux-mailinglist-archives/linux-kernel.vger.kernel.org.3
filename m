@@ -2,125 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F036F48369D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 19:10:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 651704836A8
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 19:13:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235269AbiACSKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 13:10:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34438 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235234AbiACSKo (ORCPT
+        id S235372AbiACSN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 13:13:26 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:57542 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232153AbiACSNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 13:10:44 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2A2C061761
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 10:10:43 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id k27so56876809ljc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 10:10:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UhBbx898E389Fzaey+N9kjPR5JWyzT1VKoYkhiyWe8g=;
-        b=WNVG9om0NNJeiGdVtxlF2hehbq7ZTQinCQ0aiTIDP7czv3IYKvW0PzFZiNKtHAGkOg
-         XOsR4p3Wg+sW/Av3EyKs+2lqcZ0mjWUyrmCflwzQir8438voP2MpxRgFxHf9C0UXFT42
-         au35hp2HhA5Yz/CLpODDkAAxt04ZW2Too7T7LazNx7aSh+At68ojWI4BHCMyrH9Dk6nw
-         kiPk7CuCES4r6EyYHAJ9uKXVXoRcju6TrwjD8aPi97IwWUTqAzAS0elu+7O+8qf41xZH
-         Vo6mDuW5ZbNc3Macmml2RsUr9pfCxHkaaCOKqpA23jvj4czqKnwLMfaPXeqz/Hffd49e
-         Unhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UhBbx898E389Fzaey+N9kjPR5JWyzT1VKoYkhiyWe8g=;
-        b=eP3DJ63oSk5iskO/PIRktgN74O15KwDW5XlvnMjE7mD79Rp8gLOTYLnL95wYk7l5mv
-         r3FXbZQ1R3yfFA/5nuxEH1girenaMP0fRCfkizTkOJRCTfV9BJonKJHpRzk8IORXDHgq
-         kMPSn4U8IVWyZCb/mkme6/XBSqpyBcYFrrSwLw07ebtZqvy7bXpgYN5A8zNff9ufeU+E
-         9nAnvhxKyND9XSvVsiX8DV5nsn8VTgofzAnu6/o2dUegWgQv7J/F3BuTlkSAan1d0lE8
-         Eo5uYkolxvbak7VzIaYoekuBzDp+C0/GEQEENtcLLo6oTKPeMprmA0V7xeUPxb0EFhbE
-         zGJA==
-X-Gm-Message-State: AOAM5337rYUS8Wr2cOtJw8x7hH1JPRJy8x3xjhqb2DmwAB+70J8YlGyS
-        kFnEdZx7/Gk63ImR9en8jGI9dg==
-X-Google-Smtp-Source: ABdhPJzY+s8TfVvyJ9/LCXSRARWNgeCS8RHWcxrxopKC3x+KZZIczghbGQh9RqSvS5nDp/wrHlVJWA==
-X-Received: by 2002:a2e:a546:: with SMTP id e6mr7438700ljn.320.1641233442100;
-        Mon, 03 Jan 2022 10:10:42 -0800 (PST)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id g24sm1444781lfh.88.2022.01.03.10.10.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jan 2022 10:10:41 -0800 (PST)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 49129103686; Mon,  3 Jan 2022 21:10:59 +0300 (+03)
-Date:   Mon, 3 Jan 2022 21:10:59 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, tglx@linutronix.de,
-        mingo@redhat.com, luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 19/26] x86/tdx: Make pages shared in ioremap()
-Message-ID: <20220103181059.ui5eloufw5gsojcb@box.shutemov.name>
-References: <f61b591b-a06c-bc29-4b9b-a5d46111fe4e@intel.com>
- <YcTTt4LXKfDO+9u3@zn.tnic>
- <20211223205604.g44kez5d7iedatfo@box.shutemov.name>
- <YcTlhp1PUfrMOelI@zn.tnic>
- <20211224110300.7zj3nc5nbbv7jobp@black.fi.intel.com>
- <33914dc1-37e8-f0bb-6468-71c3b5f4169d@amd.com>
- <20220103141705.6hqflhwykqmtfim6@black.fi.intel.com>
- <YdMIWAT42el4D6wJ@zn.tnic>
- <20220103151516.pfcz2pap5l7r2rzv@box.shutemov.name>
- <b4b54116-1cd7-468a-0889-d497268cbfb2@intel.com>
+        Mon, 3 Jan 2022 13:13:25 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id A3B82210F0;
+        Mon,  3 Jan 2022 18:13:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1641233604;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uzZchxi+TR4IE3cZQjb0YuFYQJw5uhG2j8DvVF8bOic=;
+        b=RUerQin6ZBA4anP+Ueaia7xk0PXt49jUxwKR4nHIczQ50gdatEyf1/oBDGuyTMUeiI6acD
+        lFu1ugHUYSXQV+6QNMXKEP+EmZv2ukYPm8yu/aqO6bY6nAat91i1nGiNVMRND+WT2aKf1D
+        GKoCJhEvplSj8AH7pRq+4gaep/NnvKc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1641233604;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uzZchxi+TR4IE3cZQjb0YuFYQJw5uhG2j8DvVF8bOic=;
+        b=KTkvCmcRlSvTkzzVXR6cK8oM0fqExFGdLfamkz4yKz1ZAsiiFNGHm9EVx4xZkUyR0MtOZK
+        15arC5OIOx8v5yBQ==
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 7528BA3B89;
+        Mon,  3 Jan 2022 18:13:24 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 9481ADA729; Mon,  3 Jan 2022 19:12:55 +0100 (CET)
+Date:   Mon, 3 Jan 2022 19:12:55 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     Qu Wenruo <wqu@suse.com>
+Cc:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, clm@fb.com,
+        josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] btrfs: Use min() instead of doing it manually
+Message-ID: <20220103181255.GL28560@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, Qu Wenruo <wqu@suse.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, clm@fb.com,
+        josef@toxicpanda.com, dsterba@suse.com, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+References: <20211227113435.88262-1-jiapeng.chong@linux.alibaba.com>
+ <7a37b841-3b82-ce8d-0459-ebaea539fc89@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b4b54116-1cd7-468a-0889-d497268cbfb2@intel.com>
+In-Reply-To: <7a37b841-3b82-ce8d-0459-ebaea539fc89@suse.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 03, 2022 at 08:50:12AM -0800, Dave Hansen wrote:
-> On 1/3/22 7:15 AM, Kirill A. Shutemov wrote:
-> > On Mon, Jan 03, 2022 at 03:29:44PM +0100, Borislav Petkov wrote:
-> >> On Mon, Jan 03, 2022 at 05:17:05PM +0300, Kirill A. Shutemov wrote:
-> >>> I'm not sure how to unwind this dependency hell. Any clues?
-> >> Forward-declaration maybe?
-> >>
-> >> I.e., something like
-> >>
-> >> struct task_struct;
-> >>
-> >> at the top of arch/x86/include/asm/switch_to.h, for example...
-> > Forward-declaration only works if you refer the struct/union by pointer,
-> > not value.
+On Mon, Dec 27, 2021 at 07:49:01PM +0800, Qu Wenruo wrote:
+> 
+> 
+> On 2021/12/27 19:34, Jiapeng Chong wrote:
+> > Eliminate following coccicheck warning:
 > > 
-> > And pgprot_t is not always a struct and when it is a struct it is
-> > anonymous.
+> > ./fs/btrfs/volumes.c:7768:13-14: WARNING opportunity for min().
 > > 
-> > See "git grep 'typedef.*pgprot_t;'".
+> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> > Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> > ---
+> >   fs/btrfs/volumes.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
+> > index 730355b55b42..dca3f0cedff9 100644
+> > --- a/fs/btrfs/volumes.c
+> > +++ b/fs/btrfs/volumes.c
+> > @@ -7765,7 +7765,7 @@ static int btrfs_device_init_dev_stats(struct btrfs_device *device,
+> >   			btrfs_dev_stat_set(device, i, 0);
+> >   		device->dev_stats_valid = 1;
+> >   		btrfs_release_path(path);
+> > -		return ret < 0 ? ret : 0;
+> > +		return min(ret, 0);
 > 
-> In the end, the new functions get used like this:
+> Nope, please don't blindly follow whatever the static checker reports, 
+> but spend sometime on the code.
 > 
-> 	prot = pgprot_decrypted(prot);
+> In this particular case, min(ret, 0) is not really making the code any 
+> easier to read.
 > 
-> I think they _could_ be:
+> The "if (ret)" branch means, either we got a critical error (ret < 0) or 
+> we didn't find the dev status item
 > 
-> 	pgprot_set_decrypted(&prot);
+> For no dev status item case, it's no big deal and we can continue 
+> returning 0. For fatal error case, it mostly means the device tree is 
+> corrupted, and we return @ret directly.
 > 
-> Which would let you have a declaration like this:
-> 
-> 	extern void pgprot_cc_set_decrypted(pgprot_t *prot);
-> 
-> It does not exactly give me warm and fuzzy feelings, but it would work
-> around the header problem.
+> Are you really thinking we're calculating a minimal value between 0 and ret?
 
-Apart for being ugly, I don't see how it solves anything. How would you
-forward-declare a typedef?
-
--- 
- Kirill A. Shutemov
+That's probably the most important point. Although the expression could
+be equivalent to calculating minimum, the code should read "if there was
+an error, return it, otherwise return 0". Using min() for that obscures
+that.

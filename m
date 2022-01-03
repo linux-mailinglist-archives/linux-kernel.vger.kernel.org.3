@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0BE14831FD
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:24:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA40E4831F2
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:24:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233523AbiACOX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:23:28 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:54108 "EHLO
+        id S232294AbiACOXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:23:11 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:53944 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233616AbiACOW5 (ORCPT
+        with ESMTP id S233489AbiACOWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:22:57 -0500
+        Mon, 3 Jan 2022 09:22:45 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3E656111B;
-        Mon,  3 Jan 2022 14:22:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ACB3C36AFB;
-        Mon,  3 Jan 2022 14:22:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B79F661122;
+        Mon,  3 Jan 2022 14:22:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AA23C36AEB;
+        Mon,  3 Jan 2022 14:22:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641219776;
-        bh=Nm5zNV5nzs2S0sWDBFqt41qcKNKeJuleJ5hkANXoOxI=;
+        s=korg; t=1641219764;
+        bh=Fq/v6ZQh6sIpyMBs9RRyYt3mdYBLW1V7LMyQFtpvBRg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aL2e91drxGBJ2T1dnlp+K5Qpq6a8WwyhAbHc6C+YLUcbVNsWlaN8qntic0U3LR8MM
-         GyCdybJE3ft/InMOhBxfP20ncS3JjD9CUleYid7yJSpcfPlY9SvymxXCHmtVpJxaht
-         cNKbBrl06a6F8OiLKhXsfwlu84OJAIn7PAeq706I=
+        b=2lAyXsAMBMYUToQJHxQQNxnwvI9U9B0UCZ8ti0ydJ51BP2aJ50fWbQG/ruXn8BUXe
+         wjNEviCLBDmKXQdiEdv3PgAiNBHmlTCUk5gAJyq8KK46ZnjOZyiGV1AP5FdPXCIK/b
+         2u7HbT2QZJYeERQqAFe/EsPvRWGYvzUnoyuSas10=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Dmitry V. Levin" <ldv@altlinux.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.14 11/19] uapi: fix linux/nfc.h userspace compilation errors
-Date:   Mon,  3 Jan 2022 15:21:28 +0100
-Message-Id: <20220103142052.431494638@linuxfoundation.org>
+        stable@vger.kernel.org, Muchun Song <songmuchun@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Fam Zheng <fam.zheng@bytedance.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.9 13/13] net: fix use-after-free in tw_timer_handler
+Date:   Mon,  3 Jan 2022 15:21:29 +0100
+Message-Id: <20220103142052.380621907@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142052.068378906@linuxfoundation.org>
-References: <20220103142052.068378906@linuxfoundation.org>
+In-Reply-To: <20220103142051.979780231@linuxfoundation.org>
+References: <20220103142051.979780231@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,48 +47,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry V. Levin <ldv@altlinux.org>
+From: Muchun Song <songmuchun@bytedance.com>
 
-commit 7175f02c4e5f5a9430113ab9ca0fd0ce98b28a51 upstream.
+commit e22e45fc9e41bf9fcc1e92cfb78eb92786728ef0 upstream.
 
-Replace sa_family_t with __kernel_sa_family_t to fix the following
-linux/nfc.h userspace compilation errors:
+A real world panic issue was found as follow in Linux 5.4.
 
-/usr/include/linux/nfc.h:266:2: error: unknown type name 'sa_family_t'
-  sa_family_t sa_family;
-/usr/include/linux/nfc.h:274:2: error: unknown type name 'sa_family_t'
-  sa_family_t sa_family;
+    BUG: unable to handle page fault for address: ffffde49a863de28
+    PGD 7e6fe62067 P4D 7e6fe62067 PUD 7e6fe63067 PMD f51e064067 PTE 0
+    RIP: 0010:tw_timer_handler+0x20/0x40
+    Call Trace:
+     <IRQ>
+     call_timer_fn+0x2b/0x120
+     run_timer_softirq+0x1ef/0x450
+     __do_softirq+0x10d/0x2b8
+     irq_exit+0xc7/0xd0
+     smp_apic_timer_interrupt+0x68/0x120
+     apic_timer_interrupt+0xf/0x20
 
-Fixes: 23b7869c0fd0 ("NFC: add the NFC socket raw protocol")
-Fixes: d646960f7986 ("NFC: Initial LLCP support")
+This issue was also reported since 2017 in the thread [1],
+unfortunately, the issue was still can be reproduced after fixing
+DCCP.
+
+The ipv4_mib_exit_net is called before tcp_sk_exit_batch when a net
+namespace is destroyed since tcp_sk_ops is registered befrore
+ipv4_mib_ops, which means tcp_sk_ops is in the front of ipv4_mib_ops
+in the list of pernet_list. There will be a use-after-free on
+net->mib.net_statistics in tw_timer_handler after ipv4_mib_exit_net
+if there are some inflight time-wait timers.
+
+This bug is not introduced by commit f2bf415cfed7 ("mib: add net to
+NET_ADD_STATS_BH") since the net_statistics is a global variable
+instead of dynamic allocation and freeing. Actually, commit
+61a7e26028b9 ("mib: put net statistics on struct net") introduces
+the bug since it put net statistics on struct net and free it when
+net namespace is destroyed.
+
+Moving init_ipv4_mibs() to the front of tcp_init() to fix this bug
+and replace pr_crit() with panic() since continuing is meaningless
+when init_ipv4_mibs() fails.
+
+[1] https://groups.google.com/g/syzkaller/c/p1tn-_Kc6l4/m/smuL_FMAAgAJ?pli=1
+
+Fixes: 61a7e26028b9 ("mib: put net statistics on struct net")
+Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+Cc: Cong Wang <cong.wang@bytedance.com>
+Cc: Fam Zheng <fam.zheng@bytedance.com>
 Cc: <stable@vger.kernel.org>
-Signed-off-by: Dmitry V. Levin <ldv@altlinux.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Link: https://lore.kernel.org/r/20211228104145.9426-1-songmuchun@bytedance.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/uapi/linux/nfc.h |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/ipv4/af_inet.c |   10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
---- a/include/uapi/linux/nfc.h
-+++ b/include/uapi/linux/nfc.h
-@@ -261,7 +261,7 @@ enum nfc_sdp_attr {
- #define NFC_SE_ENABLED  0x1
+--- a/net/ipv4/af_inet.c
++++ b/net/ipv4/af_inet.c
+@@ -1833,6 +1833,10 @@ static int __init inet_init(void)
  
- struct sockaddr_nfc {
--	sa_family_t sa_family;
-+	__kernel_sa_family_t sa_family;
- 	__u32 dev_idx;
- 	__u32 target_idx;
- 	__u32 nfc_protocol;
-@@ -269,7 +269,7 @@ struct sockaddr_nfc {
+ 	tcp_v4_init();
  
- #define NFC_LLCP_MAX_SERVICE_NAME 63
- struct sockaddr_nfc_llcp {
--	sa_family_t sa_family;
-+	__kernel_sa_family_t sa_family;
- 	__u32 dev_idx;
- 	__u32 target_idx;
- 	__u32 nfc_protocol;
++	/* Initialise per-cpu ipv4 mibs */
++	if (init_ipv4_mibs())
++		panic("%s: Cannot init ipv4 mibs\n", __func__);
++
+ 	/* Setup TCP slab cache for open requests. */
+ 	tcp_init();
+ 
+@@ -1861,12 +1865,6 @@ static int __init inet_init(void)
+ 
+ 	if (init_inet_pernet_ops())
+ 		pr_crit("%s: Cannot init ipv4 inet pernet ops\n", __func__);
+-	/*
+-	 *	Initialise per-cpu ipv4 mibs
+-	 */
+-
+-	if (init_ipv4_mibs())
+-		pr_crit("%s: Cannot init ipv4 mibs\n", __func__);
+ 
+ 	ipv4_proc_init();
+ 
 
 

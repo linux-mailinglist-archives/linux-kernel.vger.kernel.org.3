@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 060C148329E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:29:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE44F48336B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:36:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234492AbiACO3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:29:24 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58320 "EHLO
+        id S235294AbiACOgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:36:40 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:33898 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234133AbiACO2B (ORCPT
+        with ESMTP id S233930AbiACOcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:28:01 -0500
+        Mon, 3 Jan 2022 09:32:47 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 668736111B;
-        Mon,  3 Jan 2022 14:28:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EE32C36AEE;
-        Mon,  3 Jan 2022 14:27:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD91D61120;
+        Mon,  3 Jan 2022 14:32:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3990C36AF3;
+        Mon,  3 Jan 2022 14:32:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220079;
-        bh=KHfhOfW6ps0SIGyPEE/RE/jPeJBdNnNF0tRb5eGgZ1Q=;
+        s=korg; t=1641220366;
+        bh=RifEtkUqxRuMJrzn6sDhokpjTK6yc/FgFm4zxJ41hok=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YizUP16ENDJzAKjlXH4aTJOdWw2pOER8bXuFaLCYoHiFl+CItEejO+rB8YsdxKD8P
-         VRFYLQuY/orV0z4hjTb1HWRavkXDmbiYgSBTjntvUPcUkuPUPJ7s6HEsVsW0sfgVbB
-         dTWVGp3H4yqrP3SZapQTRswGYFHLhqrqz5eEfEeo=
+        b=pLU4d/WUXQPdkpEE4qfMvg3MML8KXzHpWGKijRU5Ot5Rc1eruwAt8giAZjQgNRHW9
+         tczEZajGpiGQEmyaHVa2+wSiEb+tUESobnB7n60C0MyVPCPovNcPAFK7ara5UTHhqs
+         RiPLnLbxwmHAliHnFYBAVWZYSTtBTDDGlVvaso5U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yuwen Ng <yuwen.ng@mediatek.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-Subject: [PATCH 5.4 30/37] usb: mtu3: fix list_head check warning
+        stable@vger.kernel.org, Nikolay Aleksandrov <nikolay@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 47/73] net: bridge: mcast: fix br_multicast_ctx_vlan_global_disabled helper
 Date:   Mon,  3 Jan 2022 15:24:08 +0100
-Message-Id: <20220103142052.807297651@linuxfoundation.org>
+Message-Id: <20220103142058.430158925@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142051.883166998@linuxfoundation.org>
-References: <20220103142051.883166998@linuxfoundation.org>
+In-Reply-To: <20220103142056.911344037@linuxfoundation.org>
+References: <20220103142056.911344037@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,47 +46,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chunfeng Yun <chunfeng.yun@mediatek.com>
+From: Nikolay Aleksandrov <nikolay@nvidia.com>
 
-commit 8c313e3bfd9adae8d5c4ba1cc696dcbc86fbf9bf upstream.
+[ Upstream commit 168fed986b3a7ec7b98cab1fe84e2f282b9e6a8f ]
 
-This is caused by uninitialization of list_head.
+We need to first check if the context is a vlan one, then we need to
+check the global bridge multicast vlan snooping flag, and finally the
+vlan's multicast flag, otherwise we will unnecessarily enable vlan mcast
+processing (e.g. querier timers).
 
-BUG: KASAN: use-after-free in __list_del_entry_valid+0x34/0xe4
-
-Call trace:
-dump_backtrace+0x0/0x298
-show_stack+0x24/0x34
-dump_stack+0x130/0x1a8
-print_address_description+0x88/0x56c
-__kasan_report+0x1b8/0x2a0
-kasan_report+0x14/0x20
-__asan_load8+0x9c/0xa0
-__list_del_entry_valid+0x34/0xe4
-mtu3_req_complete+0x4c/0x300 [mtu3]
-mtu3_gadget_stop+0x168/0x448 [mtu3]
-usb_gadget_unregister_driver+0x204/0x3a0
-unregister_gadget_item+0x44/0xa4
-
-Fixes: 83374e035b62 ("usb: mtu3: add tracepoints to help debug")
-Cc: stable@vger.kernel.org
-Reported-by: Yuwen Ng <yuwen.ng@mediatek.com>
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-Link: https://lore.kernel.org/r/20211218095749.6250-3-chunfeng.yun@mediatek.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 7b54aaaf53cb ("net: bridge: multicast: add vlan state initialization and control")
+Signed-off-by: Nikolay Aleksandrov <nikolay@nvidia.com>
+Link: https://lore.kernel.org/r/20211228153142.536969-1-nikolay@nvidia.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/mtu3/mtu3_gadget.c |    1 +
- 1 file changed, 1 insertion(+)
+ net/bridge/br_private.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/usb/mtu3/mtu3_gadget.c
-+++ b/drivers/usb/mtu3/mtu3_gadget.c
-@@ -245,6 +245,7 @@ struct usb_request *mtu3_alloc_request(s
- 	mreq->request.dma = DMA_ADDR_INVALID;
- 	mreq->epnum = mep->epnum;
- 	mreq->mep = mep;
-+	INIT_LIST_HEAD(&mreq->list);
- 	trace_mtu3_alloc_request(mreq);
+diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
+index 5951e3142fe94..bd218c2b2cd97 100644
+--- a/net/bridge/br_private.h
++++ b/net/bridge/br_private.h
+@@ -1158,9 +1158,9 @@ br_multicast_port_ctx_get_global(const struct net_bridge_mcast_port *pmctx)
+ static inline bool
+ br_multicast_ctx_vlan_global_disabled(const struct net_bridge_mcast *brmctx)
+ {
+-	return br_opt_get(brmctx->br, BROPT_MCAST_VLAN_SNOOPING_ENABLED) &&
+-	       br_multicast_ctx_is_vlan(brmctx) &&
+-	       !(brmctx->vlan->priv_flags & BR_VLFLAG_GLOBAL_MCAST_ENABLED);
++	return br_multicast_ctx_is_vlan(brmctx) &&
++	       (!br_opt_get(brmctx->br, BROPT_MCAST_VLAN_SNOOPING_ENABLED) ||
++		!(brmctx->vlan->priv_flags & BR_VLFLAG_GLOBAL_MCAST_ENABLED));
+ }
  
- 	return &mreq->request;
+ static inline bool
+-- 
+2.34.1
+
 
 

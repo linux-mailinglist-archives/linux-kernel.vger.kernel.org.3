@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2244837A1
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 20:38:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 955594837A3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 20:39:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236238AbiACTiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 14:38:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
+        id S236239AbiACTjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 14:39:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231124AbiACTiW (ORCPT
+        with ESMTP id S231124AbiACTjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 14:38:22 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118F4C061761
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 11:38:22 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id w16so139766153edc.11
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 11:38:21 -0800 (PST)
+        Mon, 3 Jan 2022 14:39:18 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFCFC061761
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 11:39:18 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id z9so69756132edm.10
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 11:39:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=oMh+q7mC2mFIsFYxBYOdHoBM17ue2y9c4qk5sF/l0tY=;
-        b=jo1NqZ18M5fENeho9u7mnv/iD6okof2ZJHHu40MWuzynWuyY7LwdZyPhFU9W4ujJvd
-         xDsVJW1WTALCsbd5INUR3un6mwJGPylj47/3j3X5sgi5DoFTkF8+rXXc+9hSkG6usrJx
-         A3H8jpMjROfiG4z502ituAFjUQJWgKd2LSRB7SXvYGoVRoF5POG8RkfT2okvWyr9I8L6
-         58tT/Vhjy/UPz2SL5wvmtlXyWQL8KTtIiVP8uN7IR7HfVbo5zcu3B9vIyL23nnd9YbMj
-         6QVN0wDihNQHeM6aJt72i6vR2FB+zDl0ol0EUcw4GcHoTKn6GengCmbGnQkZJDlxfl97
-         P1HA==
+        bh=BMhggAvIizLWpZm5anArBqzFIM1VgWDkud2H5TZUdOQ=;
+        b=ILjtXqTydxDVe43R7vp27AFF1uezTtpQc2Pq41CcWnIn7oeOYpc4rd/Gv9YHBZG1q9
+         raRvH0tYi7J4QcDjb0AC6CNGZV1yMZMekWXRhXjhKQnlVYtZtR1hFpB8rw8wg2mNG7sH
+         lrOUr5uALw7BbMOB93VTF38N1O6KZCr5F1HuQpvNo/uycHDsMuey2oxzUGOrT3huyA8S
+         zVfX7I1YIZJSGMlF+lRNI1xYvNjR8fFOKeO2WMkKJIZasUcIGFUpQl3Ck7XwxQVvuB0j
+         g1QioGYzGeQsiNepciskXOoJFzlh1aQoxwoaVGTEX0MmSZ/JG4fTsO2FGw/H0FuZEhGE
+         kKtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oMh+q7mC2mFIsFYxBYOdHoBM17ue2y9c4qk5sF/l0tY=;
-        b=LkUpKWMgTbipa9E5xH6Owh/hMdMjZYphoUmzRkcJdOT3ZEJVBQeRb/JhWDpPcBHfA6
-         75xqzp8b/2LsVAv0WIxfa3l0VSvI8//npiXh0HiXDSw5XqV0K+HgBaTMM74mvK+anKaH
-         M6szjQW9gBb997mmN2nzMjlAv77g5tNiTTfMdSb6LXKL+64B6mqJd2QYfcxko9vUTy9F
-         PLLvD/ygqqmWTxnCe1dUBiv8no/uFFecigWxsFywmyyog918iZBOge1ZermPohifWuP3
-         COstTYlnphcQR/38yUXqVyJoq01sysLaRrgXZs3CEp4a9UDzLHY0gxKtVjh0ZWerKlGe
-         1ijw==
-X-Gm-Message-State: AOAM533/BaBrTM/XlbhooPBAI2NwFCs97vNhKbTzGDT13vsUgyThJ9I5
-        LOCMordn/CFXsm0tl19ODRY=
-X-Google-Smtp-Source: ABdhPJyLVf0d2NqzeZXMVzFExPbbehQ3yj2eTcbSMWiEkRXhS8hIjHriCeOWJentwohyMvMid/YX8Q==
-X-Received: by 2002:a17:907:9694:: with SMTP id hd20mr35888097ejc.360.1641238700748;
-        Mon, 03 Jan 2022 11:38:20 -0800 (PST)
+        bh=BMhggAvIizLWpZm5anArBqzFIM1VgWDkud2H5TZUdOQ=;
+        b=xs06QdVNZnbVlreGfRKc04Ca1Kmfb379KK265zyKiZMF92QcACl6er0md87XgnDTF7
+         5izI/2WgKONB2Rc6AxcUact7I8F+UATA9XYEd8cZ1vDVrnExapwSjrGvH+yGZhYykIlD
+         OUoVFWA7aJ72XK/iIaKlTrw9f5zGJ9aFLEaoimxPn2isZMSPpFUIn53M4ZTHPEZLRySc
+         J/uYXBORg8DvJx5wkW9Cz3s92oQnB5ot1kjn4/fZecgP4UTCp+U/qdG/ky3yODSfZ9RV
+         SktS32gkxY7Xp/aUaVL+gj3v20OyEL+ImD0rpJj2v0Ef9JU1rPKOhVMAp37UfiiCVcQD
+         bEDA==
+X-Gm-Message-State: AOAM531ZAchRulzv1i7fofUCWnL+UxuZq4bXM8loDcwNzRQ88Z3SLlTo
+        vlEiJbAZ3RWXPiThSIrCcj0=
+X-Google-Smtp-Source: ABdhPJyDx/PUo9F9PIasWO3OfV4fpxNZtHIjJ5Ib3UTPlJLaFrNiDwiGGdk7W/1OtHBydLkqLjPVGw==
+X-Received: by 2002:a17:906:71cc:: with SMTP id i12mr38604007ejk.457.1641238756758;
+        Mon, 03 Jan 2022 11:39:16 -0800 (PST)
 Received: from t470p.fritz.box (host-87-18-201-21.retail.telecomitalia.it. [87.18.201.21])
-        by smtp.gmail.com with ESMTPSA id gt20sm7009614ejc.11.2022.01.03.11.38.19
+        by smtp.gmail.com with ESMTPSA id gt20sm7009614ejc.11.2022.01.03.11.39.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jan 2022 11:38:20 -0800 (PST)
+        Mon, 03 Jan 2022 11:39:16 -0800 (PST)
 From:   Alberto Merciai <alb3rt0.m3rciai@gmail.com>
 Cc:     alb3rt0.m3rciai@gmail.com, linuxfancy@googlegroups.com,
         Larry Finger <Larry.Finger@lwfinger.net>,
@@ -60,13 +60,11 @@ Cc:     alb3rt0.m3rciai@gmail.com, linuxfancy@googlegroups.com,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Saurav Girepunje <saurav.girepunje@gmail.com>,
         Ivan Safonov <insafonov@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Yang Li <yang.lee@linux.alibaba.com>,
         Zameer Manji <zmanji@gmail.com>, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 35/56] staging: r8188eu: rename camelcase GetFragNum to get_frag_num
-Date:   Mon,  3 Jan 2022 20:02:10 +0100
-Message-Id: <20220103190326.363960-36-alb3rt0.m3rciai@gmail.com>
+Subject: [PATCH 36/56] staging: r8188eu: remove dead macro GetTupleCache
+Date:   Mon,  3 Jan 2022 20:02:11 +0100
+Message-Id: <20220103190326.363960-37-alb3rt0.m3rciai@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220103190326.363960-1-alb3rt0.m3rciai@gmail.com>
 References: <20220103190326.363960-1-alb3rt0.m3rciai@gmail.com>
@@ -77,40 +75,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename camel case macro GetFragNum to get_frag_num
+Remove dead macro GetTupleCache.
 
 Signed-off-by: Alberto Merciai <alb3rt0.m3rciai@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_recv.c | 2 +-
- drivers/staging/r8188eu/include/wifi.h  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/staging/r8188eu/include/wifi.h | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-index 6224e4631bf9..8bda34f87849 100644
---- a/drivers/staging/r8188eu/core/rtw_recv.c
-+++ b/drivers/staging/r8188eu/core/rtw_recv.c
-@@ -1105,7 +1105,7 @@ static int validate_recv_frame(struct adapter *adapter, struct recv_frame *precv
- 
- 	pattrib->to_fr_ds = get_tofr_ds(ptr);
- 
--	pattrib->frag_num = GetFragNum(ptr);
-+	pattrib->frag_num = get_frag_num(ptr);
- 	pattrib->seq_num = get_sequence(ptr);
- 
- 	pattrib->pw_save = get_pwr_mgt(ptr);
 diff --git a/drivers/staging/r8188eu/include/wifi.h b/drivers/staging/r8188eu/include/wifi.h
-index 1b2545cba279..ec9fe081dbb4 100644
+index ec9fe081dbb4..652a31da0556 100644
 --- a/drivers/staging/r8188eu/include/wifi.h
 +++ b/drivers/staging/r8188eu/include/wifi.h
-@@ -220,7 +220,7 @@ enum WIFI_REG_DOMAIN {
- #define get_sequence(pbuf)			\
- 	(le16_to_cpu(*(__le16 *)((size_t)(pbuf) + 22)) >> 4)
- 
--#define GetFragNum(pbuf)			\
-+#define get_frag_num(pbuf)			\
+@@ -223,9 +223,6 @@ enum WIFI_REG_DOMAIN {
+ #define get_frag_num(pbuf)			\
  	(le16_to_cpu(*(__le16 *)((size_t)(pbuf) + 22)) & 0x0f)
  
- #define GetTupleCache(pbuf)			\
+-#define GetTupleCache(pbuf)			\
+-	(cpu_to_le16(*(unsigned short *)((size_t)(pbuf) + 22)))
+-
+ #define SetFragNum(pbuf, num) \
+ 	do {    \
+ 		*(unsigned short *)((size_t)(pbuf) + 22) = \
 -- 
 2.25.1
 

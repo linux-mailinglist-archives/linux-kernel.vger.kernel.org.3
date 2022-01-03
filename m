@@ -2,113 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A022E483611
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 18:32:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D5C483604
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 18:31:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235998AbiACRbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 12:31:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235590AbiACRbB (ORCPT
+        id S235945AbiACRbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 12:31:35 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:38826 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235638AbiACRao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 12:31:01 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8661C06137B;
-        Mon,  3 Jan 2022 09:30:39 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id o3so13011865wrh.10;
-        Mon, 03 Jan 2022 09:30:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ieLzOgCJ18o1a90jIR9YZk5rmj0v70cqqTlRuLr9aYE=;
-        b=Ki1DNOBNOCnARRUZ5+7C8IrcnSgC3J/g4IC6/oX9CI3jlP9ItYiZwWQPH182hng2u4
-         8msPlBASs3pJ2+DA1jUoTMhs+WZYBJq1GbOWR9ShfhVQMLQ7FhEl19Q+lHMDC/ZSc3t1
-         /CzpgboCmCSL+SAgVM+sLxMATL0X05RGrhpiCscE51bD3ldDgBIx4nVnfwCQkOZiBUaZ
-         mL/CDwwvBM36kXbyBq+3aPkh8SflASt6fHwoypEDdoRIAalVb5N9P4J5exQL0Fx/x358
-         hV3p6oDZMRCL8QgBR06ULpC6LmLJ5PsU1HN3NPvXbaZusJ8wwrB6eYi+3oSRWDOwG+73
-         IpXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ieLzOgCJ18o1a90jIR9YZk5rmj0v70cqqTlRuLr9aYE=;
-        b=Yk4yRBHO2n7rFSenW85LYGrmgO1NL+3CPPW1CJ8suiqTgOX9hKBCwtpbTCSwnHQMsZ
-         xYSoS0KW0Gr3xQWxkKwSYAKuzbsLEiPyrbVigTpoFx8ccUeVmH/ukqpIIMGNfh2B23hw
-         zmW7LgaJRriKevTgDTeYZVkB8Fhbannpx2L00yhHX3GkiNUZywhFoOQs9N0wpRrYS6eE
-         8iMGOxx3+ttGv0oyaEREb45Yxy3ysQBZyi130/zqWou3urbZxdhCusO4LQAaR55aeEKF
-         LZXhbL4p+i5WYLYXIICddhApTXd7XWtq2V3Y+pwvikRwnFYueDJejRaGI3fS6sRYx38J
-         srnA==
-X-Gm-Message-State: AOAM5326HfftSGcLivzRt66RYozyIvaKVaPiGwo93gloqFW9mKot90tw
-        S0zB69TjFzO7ewfoQYbVNH5UvFjJSLmIZw==
-X-Google-Smtp-Source: ABdhPJyloc9hnDCLTV+5qSTOWpsbGeHAHWWR/pxWTNZScHowNhp5SlOoecPkrlpU/g2rXr7cRPqP9A==
-X-Received: by 2002:a5d:638b:: with SMTP id p11mr38529186wru.241.1641231038529;
-        Mon, 03 Jan 2022 09:30:38 -0800 (PST)
-Received: from fuji.fritz.box (ip-89-161-76-237.tel.tkb.net.pl. [89.161.76.237])
-        by smtp.gmail.com with ESMTPSA id l8sm36648090wrv.25.2022.01.03.09.30.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jan 2022 09:30:38 -0800 (PST)
-Date:   Mon, 3 Jan 2022 18:30:34 +0100
-From:   Tomasz =?UTF-8?B?V2FybmllxYLFgm8=?= <tomasz.warniello@gmail.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scripts: kernel-doc: transform documentation into POD
-Message-ID: <20220103183034.77ba8a8c@fuji.fritz.box>
-In-Reply-To: <87pmp9tcju.fsf@intel.com>
-References: <20211209225549.69010-1-tomasz.warniello@gmail.com>
-        <87h7b8cfg0.fsf@meer.lwn.net>
-        <0796a780-f5ee-0b6c-e7ef-544ba5f6a429@gmail.com>
-        <87pmp9tcju.fsf@intel.com>
+        Mon, 3 Jan 2022 12:30:44 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3F5F3B81071;
+        Mon,  3 Jan 2022 17:30:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBAC8C36AED;
+        Mon,  3 Jan 2022 17:30:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641231042;
+        bh=T5mVZxCsINiWAaVvpGFhIa51X5dboMG8f6te8Ga/uWw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DAu6FA+uOBwtWM0u90FZ4q9gzxoKNB39evcOF40QwY9or+B5LS4la721VuvLkJj3g
+         9IqGlRzV+BPDMvEINPEzkPCO9C5zPLgRQVLiWBWfuG3z8hd7VirAa9ypFuUu8jszL7
+         cpFa8T5i/XusTsG68OeBGLObekvKxnWAkCHUu9LuF4ffKrBxRL+VKw9eOqqAJZZvRk
+         ndn7EvMsOZTK82aGjxy/o4PAxUlDDMElT1Z8WbkifDKZLfXEmxicCmaqb4TLuPGVkg
+         O6+liNBgVUVRE4157diUESP5DfTQ2M7uFiuhMPxD0N/7bxlaPv5uqT7dmDfPzH75hO
+         oTg6Ld6Yf2xqQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Lixiaokeng <lixiaokeng@huawei.com>,
+        Lu Tixiong <lutianxiong@huawei.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Lee Duncan <lduncan@suse.com>,
+        Linfeilong <linfeilong@huawei.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, cleech@redhat.com,
+        jejb@linux.ibm.com, open-iscsi@googlegroups.com,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 1/4] scsi: libiscsi: Fix UAF in iscsi_conn_get_param()/iscsi_conn_teardown()
+Date:   Mon,  3 Jan 2022 12:30:36 -0500
+Message-Id: <20220103173039.1613564-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 03 Jan 2022 11:04:53 +0200
-Jani Nikula <jani.nikula@linux.intel.com> wrote:
+From: Lixiaokeng <lixiaokeng@huawei.com>
 
-> On Mon, 03 Jan 2022, Tomasz Warnie=C5=82=C5=82o <tomasz.warniello@gmail.c=
-om> wrote:
-> > On 17/12/2021 00:12, Jonathan Corbet wrote: =20
-> >>>  my $kernelversion;
-> >>> @@ -468,7 +306,7 @@ while ($ARGV[0] =3D~ m/^--?(.*)/) {
-> >>>      } elsif ($cmd eq "Werror") {
-> >>>  	$Werror =3D 1;
-> >>>      } elsif (($cmd eq "h") || ($cmd eq "help")) {
-> >>> -	usage();
-> >>> +			pod2usage(-exitval =3D> 0, -verbose =3D> 2); =20
-> >>=20
-> >> Why the strange indentation here?  This file is far from pretty, but
-> >> that makes it worse.  (Other places too). =20
-> >
-> > Sometimes beauty requires cooperation. You can help it in your pager.
-> > If it's less, then try `-x 2`, `-x 4`, etc. =20
->=20
-> In kernel, tabs are 8 characters.
->=20
-> See Documentation/process/coding-style.rst
->=20
->=20
-> BR,
-> Jani.
->=20
->=20
+[ Upstream commit 1b8d0300a3e9f216ae4901bab886db7299899ec6 ]
 
-I am a heretic then.
+|- iscsi_if_destroy_conn            |-dev_attr_show
+ |-iscsi_conn_teardown
+  |-spin_lock_bh                     |-iscsi_sw_tcp_conn_get_param
 
-Except for the initial dogma, I understand and agree with the rationale
-in coding-style.rst.
+  |-kfree(conn->persistent_address)   |-iscsi_conn_get_param
+  |-kfree(conn->local_ipaddr)
+                                       ==>|-read persistent_address
+                                       ==>|-read local_ipaddr
+  |-spin_unlock_bh
 
-Only what if I have stared at the screen not for 20 hours, but for
-40 hours? Now I want to have indentation even deeper, of 16 spaces.
-And how do I get this having 8 spaces here and there instead of tabs?
-The system begins to fall apart.
+When iscsi_conn_teardown() and iscsi_conn_get_param() happen in parallel, a
+UAF may be triggered.
 
-The misleading statement is that tabs are 8 characters long. No. They
-are exactly 1 character long. And that's ASCII 9.
+Link: https://lore.kernel.org/r/046ec8a0-ce95-d3fc-3235-666a7c65b224@huawei.com
+Reported-by: Lu Tixiong <lutianxiong@huawei.com>
+Reviewed-by: Mike Christie <michael.christie@oracle.com>
+Reviewed-by: Lee Duncan <lduncan@suse.com>
+Signed-off-by: Lixiaokeng <lixiaokeng@huawei.com>
+Signed-off-by: Linfeilong <linfeilong@huawei.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/libiscsi.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Cheers,
-TW
+diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
+index f3dfec02abecc..ebf3a277d8bba 100644
+--- a/drivers/scsi/libiscsi.c
++++ b/drivers/scsi/libiscsi.c
+@@ -2991,6 +2991,8 @@ void iscsi_conn_teardown(struct iscsi_cls_conn *cls_conn)
+ {
+ 	struct iscsi_conn *conn = cls_conn->dd_data;
+ 	struct iscsi_session *session = conn->session;
++	char *tmp_persistent_address = conn->persistent_address;
++	char *tmp_local_ipaddr = conn->local_ipaddr;
+ 
+ 	del_timer_sync(&conn->transport_timer);
+ 
+@@ -3012,8 +3014,6 @@ void iscsi_conn_teardown(struct iscsi_cls_conn *cls_conn)
+ 	spin_lock_bh(&session->frwd_lock);
+ 	free_pages((unsigned long) conn->data,
+ 		   get_order(ISCSI_DEF_MAX_RECV_SEG_LEN));
+-	kfree(conn->persistent_address);
+-	kfree(conn->local_ipaddr);
+ 	/* regular RX path uses back_lock */
+ 	spin_lock_bh(&session->back_lock);
+ 	kfifo_in(&session->cmdpool.queue, (void*)&conn->login_task,
+@@ -3025,6 +3025,8 @@ void iscsi_conn_teardown(struct iscsi_cls_conn *cls_conn)
+ 	mutex_unlock(&session->eh_mutex);
+ 
+ 	iscsi_destroy_conn(cls_conn);
++	kfree(tmp_persistent_address);
++	kfree(tmp_local_ipaddr);
+ }
+ EXPORT_SYMBOL_GPL(iscsi_conn_teardown);
+ 
+-- 
+2.34.1
+

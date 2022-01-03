@@ -2,132 +2,1212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3EAF483174
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 14:35:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39A85483177
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 14:36:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233129AbiACNf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 08:35:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55286 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiACNf2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 08:35:28 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE06C061761;
-        Mon,  3 Jan 2022 05:35:27 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id v6so8238613wra.8;
-        Mon, 03 Jan 2022 05:35:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=VRK5HsxWtUBcHbxZyOm3gdgQYDUVk/y62Vk5hy/pEaU=;
-        b=eyKZl1xnowuNvg7+HosjAbAnByb/eZLfnnsxMp6IFAm6HsUe4RoXQ/I5ZdhtJW3X2N
-         ud2aKr68hafn4xuOqD4a/lc3TGpAZog+enKLGD7ftVz39Bal7XroHgrWBPGze0r40QDb
-         Ltxw55nWOvD0klWr1ubZIxSz1Hg5O8xm0E09AGWXjohGnOxmv/8qHwjpqIP3bagLsZCX
-         ORVGF2WDIhJwyJRIcS2vUsC7od83XShF4/zL1+0R6uU+oBGNaCPlXRtb5Ydxrr1lU/uc
-         2D2ayA1HAXCBIUBUPvrLN9aS5uSJIDbOsPalorYbyCWToes+oCFn2m99orzMKWoBlwlA
-         XOng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=VRK5HsxWtUBcHbxZyOm3gdgQYDUVk/y62Vk5hy/pEaU=;
-        b=OGrjoAorLmXoOyUOIEb9m+Nt6ao4uo+nV0c1CZGGM9XPNpBu8yjkqQ6XlOMS2qboAv
-         jHerLfwjj4DF89THQy8tQeI23U4eUwHAmbwehoFshhVfXTF8WwUCpBaYay8ANi9TCER+
-         33Ixe5+5NANU0+G/aLPiXKenj9oagvJH9VC7TUpZVtN7wl8eP3XDbdG/mtap495PwvIq
-         zDennXiuczzLtlKoobUGqvBtaSUFmcb+I355S+25fNgxS5IAFZFinN4MnZJhvPGmrDKu
-         C4Er7AatI8Ro72xtBvQN3PxKwP3y3JaAsMyiLeDH/qOalRTLfja6N2rIIApkxwtW729N
-         wBDw==
-X-Gm-Message-State: AOAM531peGqsAxtOZ+UWxP8yRM6rzdP1yRERFwnmK0mFWg7AR526uUQS
-        knF76HzvxC0aIfJE2SqkF98jvdwek+0NSQ==
-X-Google-Smtp-Source: ABdhPJxJqfT+HfANXnaNQ/9KDj+8bSI9sQ/Bvqq4mY/RYpNPzJcmVnri8r/ZWrPCl6M8A49mXASl+g==
-X-Received: by 2002:a5d:64c8:: with SMTP id f8mr41754938wri.158.1641216926122;
-        Mon, 03 Jan 2022 05:35:26 -0800 (PST)
-Received: from [192.168.1.10] (4e691f2a.skybroadband.com. [78.105.31.42])
-        by smtp.googlemail.com with ESMTPSA id o3sm32930072wmr.15.2022.01.03.05.35.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jan 2022 05:35:25 -0800 (PST)
-Message-ID: <b583dc48-a6b6-f6c7-4a5a-678d985ce358@googlemail.com>
-Date:   Mon, 3 Jan 2022 13:35:23 +0000
+        id S233149AbiACNgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 08:36:21 -0500
+Received: from ni.piap.pl ([195.187.100.5]:40698 "EHLO ni.piap.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229534AbiACNgU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 08:36:20 -0500
+Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
+        by ni.piap.pl (Postfix) with ESMTPSA id E1711C3F2A53;
+        Mon,  3 Jan 2022 14:36:18 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl E1711C3F2A53
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=piap.pl; s=mail;
+        t=1641216979; bh=AdwECoFwZNSetzE/e4CfttDF+5AoiAPMr+Vy/0n0ey0=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=PrUED9HANlw9k+y1HVMvKNRdioXwyQnAALaOfLB2cu9hfiEvltQHHXrM3adUSYPWI
+         2DGPH2tasmXvgOJvuqW8du6lIIDsr9mbPt33a++60TMCX0prvFrT0dm3vA2AnH06Yd
+         yz3KyISy84ljfMcme8Xs0eD4HSNmEzgpY/lZ8E2E=
+From:   =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Jacopo Mondi <jacopo@jmondi.org>, Joe Perches <joe@perches.com>
+Subject: [PATCH v7 2/2] Driver for ON Semi AR0521 camera sensor
+References: <m3czl9eylt.fsf@t19.piap.pl>
+Sender: khalasa@piap.pl
+Date:   Mon, 03 Jan 2022 14:36:18 +0100
+In-Reply-To: <m3czl9eylt.fsf@t19.piap.pl> ("Krzysztof =?utf-8?Q?Ha=C5=82as?=
+ =?utf-8?Q?a=22's?= message of
+        "Mon, 03 Jan 2022 14:29:50 +0100")
+Message-ID: <m34k6leyb1.fsf@t19.piap.pl>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: 5.16.0-rc7+ Bluetooth error
-Content-Language: en-GB
-To:     "K, Kiran" <kiran.k@intel.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>
-References: <02077a37-46d6-c94f-fa08-9da7ee99e42c@googlemail.com>
- <50ea1b0e-28d7-6d04-9c03-4becc4db143b@googlemail.com>
- <CABBYNZLc9Pj=LYhL5MUUVkhenHb_xfT59aDDkdk14k7+ojeUzw@mail.gmail.com>
- <DM8PR11MB55735DD3A1EA9132E1A71733F5499@DM8PR11MB5573.namprd11.prod.outlook.com>
-From:   Chris Clayton <chris2553@googlemail.com>
-In-Reply-To: <DM8PR11MB55735DD3A1EA9132E1A71733F5499@DM8PR11MB5573.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-KLMS-Rule-ID: 3
+X-KLMS-Message-Action: skipped
+X-KLMS-AntiSpam-Status: not scanned, whitelist
+X-KLMS-AntiPhishing: not scanned, whitelist
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, not scanned, whitelist
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The driver has been extensively tested in an i.MX6-based system.
+AR0521 is a 5.7 mm x 4.3 mm, 5 MPix RGGB MIPI/HiSPi BSI CMOS sensor
+from On Semiconductor.
 
+Signed-off-by: Krzysztof Ha=C5=82asa <khalasa@piap.pl>
 
-On 03/01/2022 09:55, K, Kiran wrote:
-> Hi Luiz, Chris,
-> 
->> -----Original Message-----
->> From: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
->> Sent: Saturday, January 1, 2022 1:23 AM
->> To: Chris Clayton <chris2553@googlemail.com>
->> Cc: LKML <linux-kernel@vger.kernel.org>; linux-bluetooth@vger.kernel.org;
->> K, Kiran <kiran.k@intel.com>
->> Subject: Re: 5.16.0-rc7+ Bluetooth error
->>
->> Hi Chris,
->>
->> On Fri, Dec 31, 2021 at 2:35 AM Chris Clayton <chris2553@googlemail.com>
->> wrote:
->>>
->>> On 30/12/2021 09:21, Chris Clayton wrote:
->>>> Hi,
->>>>
->>>> I pulled the latest changes into my clone of Linus' tree and built
->>>> and installed the kernel. (git describe gives
->>>> v5.16-rc7-9-ge7c124bd0463). I'm seeing errors reported by the
->>>> bluetooth subsystem that i don't see in 5.15.12 or 5.10.89
->>>>
->>>> The problem seems to occur twice during system startup and on each
->> occasion I see a batch of identical error messages:
->>>>
->>>> [    3.980822] Bluetooth: hci0: Failed to read codec capabilities (-56)
->>>> [    3.982812] Bluetooth: hci0: Failed to read codec capabilities (-56)
->>>> [    3.984812] Bluetooth: hci0: Failed to read codec capabilities (-56)
->>>> [    3.986608] Bluetooth: hci0: Failed to read codec capabilities (-56)
->>>> [    3.987621] Bluetooth: hci0: Failed to read codec capabilities (-56)
->>>> [    3.988606] Bluetooth: hci0: Failed to read codec capabilities (-56)
->>>> [    3.989650] Bluetooth: hci0: Failed to read codec capabilities (-56)
->>>>
->>>
->>> Sorry, I should have said that despite the above errors, my bluetooth
->> devices still work fine.
->>
->> Would be great to have the HCI trace (btmon).
->>
->> @Kiran K Is this to be expected?
-> 
-> May be the BT controller here is not supporting HCI_READ_CODEC_CAPABILITIES command.
-> 
-> This has been fixed - https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git/commit/?id=107fe0482b549a0e43a971e5fd104719c6e495ef
-> 
-
-I've applied the patch to 5.16.0-rc8 and the error messages are no longer produced. My bluetooth devices are stiil working.
-
-Tested-By: Chris Clayton <chris2553@googlemail.com>
-
-> A check has been added to read codec capabilities only if supported.
-> 
-> Thanks,
-> Kiran
-> 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 79fd8a012893..5d33f0277ad2 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1383,6 +1383,13 @@ S:	Supported
+ W:	http://www.aquantia.com
+ F:	drivers/net/ethernet/aquantia/atlantic/aq_ptp*
+=20
++AR0521 ON SEMICONDUCTOR CAMERA SENSOR DRIVER
++M:	Krzysztof Ha=C5=82asa <khalasa@piap.pl>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/media/i2c/onnn,ar0521.yaml
++F:	drivers/media/i2c/ar0521.c
++
+ ARASAN NAND CONTROLLER DRIVER
+ M:	Miquel Raynal <miquel.raynal@bootlin.com>
+ M:	Naga Sureshkumar Relli <nagasure@xilinx.com>
+diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+index 69c56e24a612..741ae073623e 100644
+--- a/drivers/media/i2c/Kconfig
++++ b/drivers/media/i2c/Kconfig
+@@ -733,6 +733,19 @@ config VIDEO_APTINA_PLL
+ config VIDEO_CCS_PLL
+ 	tristate
+=20
++config VIDEO_AR0521
++	tristate "ON Semiconductor AR0521 sensor support"
++	depends on I2C && VIDEO_V4L2
++	select MEDIA_CONTROLLER
++	select VIDEO_V4L2_SUBDEV_API
++	select V4L2_FWNODE
++	help
++	  This is a Video4Linux2 sensor driver for the ON Semiconductor
++	  AR0521 camera.
++
++	  To compile this driver as a module, choose M here: the
++	  module will be called ar0521.
++
+ config VIDEO_HI556
+ 	tristate "Hynix Hi-556 sensor support"
+ 	depends on I2C && VIDEO_V4L2
+diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
+index b01f6cd05ee8..4e4986e16071 100644
+--- a/drivers/media/i2c/Makefile
++++ b/drivers/media/i2c/Makefile
+@@ -118,6 +118,7 @@ obj-$(CONFIG_VIDEO_I2C)		+=3D video-i2c.o
+ obj-$(CONFIG_VIDEO_ML86V7667)	+=3D ml86v7667.o
+ obj-$(CONFIG_VIDEO_OV2659)	+=3D ov2659.o
+ obj-$(CONFIG_VIDEO_TC358743)	+=3D tc358743.o
++obj-$(CONFIG_VIDEO_AR0521)	+=3D ar0521.o
+ obj-$(CONFIG_VIDEO_HI556)	+=3D hi556.o
+ obj-$(CONFIG_VIDEO_HI846)	+=3D hi846.o
+ obj-$(CONFIG_VIDEO_IMX208)	+=3D imx208.o
+diff --git a/drivers/media/i2c/ar0521.c b/drivers/media/i2c/ar0521.c
+new file mode 100644
+index 000000000000..0adbbd8ea3b5
+--- /dev/null
++++ b/drivers/media/i2c/ar0521.c
+@@ -0,0 +1,1093 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2021 Sie=C4=87 Badawcza =C5=81ukasiewicz
++ * - Przemys=C5=82owy Instytut Automatyki i Pomiar=C3=B3w PIAP
++ * Written by Krzysztof Ha=C5=82asa
++ */
++
++#include <linux/clk.h>
++#include <linux/delay.h>
++#include <linux/pm_runtime.h>
++
++#include <media/v4l2-ctrls.h>
++#include <media/v4l2-fwnode.h>
++#include <media/v4l2-subdev.h>
++
++/* External clock (extclk) frequencies */
++#define AR0521_EXTCLK_MIN	  (10 * 1000 * 1000)
++#define AR0521_EXTCLK_MAX	  (48 * 1000 * 1000)
++
++/* PLL and PLL2 */
++#define AR0521_PLL_MIN		 (320 * 1000 * 1000)
++#define AR0521_PLL_MAX		(1280 * 1000 * 1000)
++
++/* Effective pixel clocks, the registers may be DDR */
++#define AR0521_PIXEL_CLOCK_RATE	 (184 * 1000 * 1000)
++#define AR0521_PIXEL_CLOCK_MIN	 (168 * 1000 * 1000)
++#define AR0521_PIXEL_CLOCK_MAX	 (414 * 1000 * 1000)
++
++#define AR0521_WIDTH_MIN	       8u
++#define AR0521_WIDTH_MAX	    2608u
++#define AR0521_HEIGHT_MIN	       8u
++#define AR0521_HEIGHT_MAX	    1958u
++
++#define AR0521_WIDTH_BLANKING_MIN     572u
++#define AR0521_HEIGHT_BLANKING_MIN     38u /* must be even */
++#define AR0521_TOTAL_WIDTH_MIN	     2968u
++
++/* AR0521 registers */
++#define AR0521_REG_VT_PIX_CLK_DIV		0x0300
++#define AR0521_REG_FRAME_LENGTH_LINES		0x0340
++
++#define AR0521_REG_CHIP_ID			0x3000
++#define AR0521_REG_COARSE_INTEGRATION_TIME	0x3012
++#define AR0521_REG_ROW_SPEED			0x3016
++#define AR0521_REG_EXTRA_DELAY			0x3018
++#define AR0521_REG_RESET			0x301A
++#define   AR0521_REG_RESET_DEFAULTS		  0x0238
++#define   AR0521_REG_RESET_GROUP_PARAM_HOLD	  0x8000
++#define   AR0521_REG_RESET_STREAM		  BIT(2)
++#define   AR0521_REG_RESET_RESTART		  BIT(1)
++#define   AR0521_REG_RESET_INIT			  BIT(0)
++
++#define AR0521_REG_GREEN1_GAIN			0x3056
++#define AR0521_REG_BLUE_GAIN			0x3058
++#define AR0521_REG_RED_GAIN			0x305A
++#define AR0521_REG_GREEN2_GAIN			0x305C
++#define AR0521_REG_GLOBAL_GAIN			0x305E
++
++#define AR0521_REG_HISPI_TEST_MODE		0x3066
++#define AR0521_REG_HISPI_TEST_MODE_LP11		  0x0004
++
++#define AR0521_REG_TEST_PATTERN_MODE		0x3070
++
++#define AR0521_REG_SERIAL_FORMAT		0x31AE
++#define AR0521_REG_SERIAL_FORMAT_MIPI		  0x0200
++
++#define AR0521_REG_HISPI_CONTROL_STATUS		0x31C6
++#define AR0521_REG_HISPI_CONTROL_STATUS_FRAMER_TEST_MODE_ENABLE 0x80
++
++#define be		cpu_to_be16
++
++static const char * const ar0521_supply_names[] =3D {
++	"vdd_io",	/* I/O (1.8V) supply */
++	"vdd",		/* Core, PLL and MIPI (1.2V) supply */
++	"vaa",		/* Analog (2.7V) supply */
++};
++
++struct ar0521_ctrls {
++	struct v4l2_ctrl_handler handler;
++	struct {
++		struct v4l2_ctrl *gain;
++		struct v4l2_ctrl *red_balance;
++		struct v4l2_ctrl *blue_balance;
++	};
++	struct {
++		struct v4l2_ctrl *hblank;
++		struct v4l2_ctrl *vblank;
++	};
++	struct v4l2_ctrl *pixrate;
++	struct v4l2_ctrl *exposure;
++	struct v4l2_ctrl *test_pattern;
++};
++
++struct ar0521_dev {
++	struct i2c_client *i2c_client;
++	struct v4l2_subdev sd;
++	struct media_pad pad;
++	struct clk *extclk;
++	u32 extclk_freq;
++
++	struct regulator *supplies[ARRAY_SIZE(ar0521_supply_names)];
++	struct gpio_desc *reset_gpio;
++
++	/* lock to protect all members below */
++	struct mutex lock;
++
++	struct v4l2_mbus_framefmt fmt;
++	struct ar0521_ctrls ctrls;
++	unsigned int lane_count;
++	u16 total_width;
++	u16 total_height;
++	u16 pll_pre;
++	u16 pll_mult;
++	u16 pll_pre2;
++	u16 pll_mult2;
++	bool streaming;
++};
++
++static inline struct ar0521_dev *to_ar0521_dev(struct v4l2_subdev *sd)
++{
++	return container_of(sd, struct ar0521_dev, sd);
++}
++
++static inline struct v4l2_subdev *ctrl_to_sd(struct v4l2_ctrl *ctrl)
++{
++	return &container_of(ctrl->handler, struct ar0521_dev,
++			     ctrls.handler)->sd;
++}
++
++static u32 div64_round(u64 v, u32 d)
++{
++	return div_u64(v + (d >> 1), d);
++}
++
++static u32 div64_round_up(u64 v, u32 d)
++{
++	return div_u64(v + d - 1, d);
++}
++
++/* Data must be BE16, the first value is the register address */
++static int ar0521_write_regs(struct ar0521_dev *sensor, const __be16 *data,
++			     unsigned int count)
++{
++	struct i2c_client *client =3D sensor->i2c_client;
++	struct i2c_msg msg;
++	int ret;
++
++	msg.addr =3D client->addr;
++	msg.flags =3D client->flags;
++	msg.buf =3D (u8 *)data;
++	msg.len =3D count * sizeof(*data);
++
++	ret =3D i2c_transfer(client->adapter, &msg, 1);
++
++	if (ret < 0) {
++		v4l2_err(&sensor->sd, "%s: I2C write error\n", __func__);
++		return ret;
++	}
++
++	return 0;
++}
++
++static int ar0521_write_reg(struct ar0521_dev *sensor, u16 reg, u16 val)
++{
++	__be16 buf[2] =3D {be(reg), be(val)};
++
++	return ar0521_write_regs(sensor, buf, 2);
++}
++
++static int ar0521_set_geometry(struct ar0521_dev *sensor)
++{
++	/* All dimensions are unsigned 12-bit integers */
++	u16 x =3D (AR0521_WIDTH_MAX - sensor->fmt.width) / 2;
++	u16 y =3D ((AR0521_HEIGHT_MAX - sensor->fmt.height) / 2) & ~1;
++	__be16 regs[] =3D {
++		be(AR0521_REG_FRAME_LENGTH_LINES),
++		be(sensor->total_height),
++		be(sensor->total_width),
++		be(x),
++		be(y),
++		be(x + sensor->fmt.width - 1),
++		be(y + sensor->fmt.height - 1),
++		be(sensor->fmt.width),
++		be(sensor->fmt.height)
++	};
++
++	dev_dbg(&sensor->i2c_client->dev, "%s()\n", __func__);
++
++	return ar0521_write_regs(sensor, regs, ARRAY_SIZE(regs));
++}
++
++static int ar0521_set_gains(struct ar0521_dev *sensor)
++{
++	int green =3D sensor->ctrls.gain->val;
++	int red =3D max(green + sensor->ctrls.red_balance->val, 0);
++	int blue =3D max(green + sensor->ctrls.blue_balance->val, 0);
++	unsigned int gain =3D min(red, min(green, blue));
++	unsigned int analog =3D min(gain, 64u); /* range is 0 - 127 */
++	__be16 regs[5];
++
++	dev_dbg(&sensor->i2c_client->dev, "%s()\n", __func__);
++
++	red   =3D min(red   - analog + 64, 511u);
++	green =3D min(green - analog + 64, 511u);
++	blue  =3D min(blue  - analog + 64, 511u);
++	regs[0] =3D be(AR0521_REG_GREEN1_GAIN);
++	regs[1] =3D be(green << 7 | analog);
++	regs[2] =3D be(blue  << 7 | analog);
++	regs[3] =3D be(red   << 7 | analog);
++	regs[4] =3D be(green << 7 | analog);
++
++	return ar0521_write_regs(sensor, regs, ARRAY_SIZE(regs));
++}
++
++static u32 calc_pll(struct ar0521_dev *sensor, int num, u32 freq, u16 *pre=
+_ptr,
++		    u16 *mult_ptr)
++{
++	u16 pre =3D 1, mult =3D 1, new_pre;
++	u32 pll =3D AR0521_PLL_MAX + 1;
++
++	for (new_pre =3D 1; new_pre < 64; new_pre++) {
++		u32 new_pll;
++		u32 new_mult =3D div64_round_up((u64)freq * new_pre,
++					      sensor->extclk_freq);
++
++		if (new_mult < 32)
++			continue; /* Minimum value */
++		if (new_mult > 254)
++			break; /* Maximum, larger pre won't work either */
++		if (sensor->extclk_freq * (u64)new_mult < AR0521_PLL_MIN *
++		    new_pre)
++			continue;
++		if (sensor->extclk_freq * (u64)new_mult > AR0521_PLL_MAX *
++		    new_pre)
++			break; /* Larger pre won't work either */
++		new_pll =3D div64_round_up(sensor->extclk_freq * (u64)new_mult,
++					 new_pre);
++		if (new_pll < pll) {
++			pll =3D new_pll;
++			pre =3D new_pre;
++			mult =3D new_mult;
++		}
++	}
++
++	pll =3D div64_round(sensor->extclk_freq * (u64)mult, pre);
++	*pre_ptr =3D pre;
++	*mult_ptr =3D mult;
++	return pll;
++}
++
++#define DIV 4
++static void ar0521_calc_mode(struct ar0521_dev *sensor)
++{
++	unsigned int speed_mod =3D 4 / sensor->lane_count; /* 1 with 4 DDR lanes =
+*/
++	u16 total_width =3D max(sensor->fmt.width + AR0521_WIDTH_BLANKING_MIN,
++			      AR0521_TOTAL_WIDTH_MIN);
++	u16 total_height =3D sensor->fmt.height + AR0521_HEIGHT_BLANKING_MIN;
++
++	/* Calculate approximate pixel clock first */
++	u64 pix_clk =3D AR0521_PIXEL_CLOCK_RATE;
++
++	/* PLL1 drives pixel clock - dual rate */
++	pix_clk =3D calc_pll(sensor, 1, pix_clk * (DIV / 2), &sensor->pll_pre,
++			   &sensor->pll_mult);
++	pix_clk =3D div64_round(pix_clk, (DIV / 2));
++	calc_pll(sensor, 2, pix_clk * (DIV / 2) * speed_mod, &sensor->pll_pre2,
++		 &sensor->pll_mult2);
++
++	sensor->total_width =3D total_width;
++	sensor->total_height =3D total_height;
++}
++
++static int ar0521_write_mode(struct ar0521_dev *sensor)
++{
++	__be16 pll_regs[] =3D {
++		be(AR0521_REG_VT_PIX_CLK_DIV),
++		/* 0x300 */ be(4), /* vt_pix_clk_div =3D number of bits / 2 */
++		/* 0x302 */ be(1), /* vt_sys_clk_div */
++		/* 0x304 */ be((sensor->pll_pre2 << 8) | sensor->pll_pre),
++		/* 0x306 */ be((sensor->pll_mult2 << 8) | sensor->pll_mult),
++		/* 0x308 */ be(8), /* op_pix_clk_div =3D 2 * vt_pix_clk_div */
++		/* 0x30A */ be(1)  /* op_sys_clk_div */
++	};
++	int ret;
++
++	dev_dbg(&sensor->i2c_client->dev, "%s()\n", __func__);
++
++	/* Stop streaming for just a moment */
++	ret =3D ar0521_write_reg(sensor, AR0521_REG_RESET,
++			       AR0521_REG_RESET_DEFAULTS);
++	if (ret)
++		return ret;
++
++	ret =3D ar0521_set_geometry(sensor);
++	if (ret)
++		return ret;
++
++	ret =3D ar0521_write_regs(sensor, pll_regs, ARRAY_SIZE(pll_regs));
++	if (ret)
++		return ret;
++
++	ret =3D ar0521_write_reg(sensor, AR0521_REG_COARSE_INTEGRATION_TIME,
++			       sensor->ctrls.exposure->val);
++	if (ret)
++		return ret;
++
++	ret =3D ar0521_write_reg(sensor, AR0521_REG_RESET,
++			       AR0521_REG_RESET_DEFAULTS |
++			       AR0521_REG_RESET_STREAM);
++	if (ret)
++		return ret;
++
++	ret =3D ar0521_write_reg(sensor, AR0521_REG_TEST_PATTERN_MODE,
++			       sensor->ctrls.test_pattern->val);
++	if (ret)
++		return ret;
++
++	dev_dbg(&sensor->i2c_client->dev,
++		"AR0521: %ux%u, total %ux%u\n",
++		sensor->fmt.width, sensor->fmt.height, sensor->total_width,
++		sensor->total_height);
++	return 0;
++}
++
++static int ar0521_set_stream(struct ar0521_dev *sensor, bool on)
++{
++	int ret;
++
++	dev_dbg(&sensor->i2c_client->dev, "%s(%u)\n", __func__, on);
++
++	if (on) {
++		ret =3D pm_runtime_resume_and_get(&sensor->i2c_client->dev);
++		if (ret < 0)
++			return ret;
++
++		ar0521_calc_mode(sensor);
++		ret =3D ar0521_write_mode(sensor);
++		if (ret)
++			goto err;
++
++		ret =3D ar0521_set_gains(sensor);
++		if (ret)
++			goto err;
++
++		/* Exit LP-11 mode on clock and data lanes */
++		ret =3D ar0521_write_reg(sensor, AR0521_REG_HISPI_CONTROL_STATUS,
++				       0);
++		if (ret)
++			goto err;
++
++		/* Start streaming */
++		ret =3D ar0521_write_reg(sensor, AR0521_REG_RESET,
++				       AR0521_REG_RESET_DEFAULTS |
++				       AR0521_REG_RESET_STREAM);
++		if (ret)
++			goto err;
++
++		return 0;
++
++err:
++		pm_runtime_put(&sensor->i2c_client->dev);
++		return ret;
++
++	} else {
++		/* Reset gain, the sensor may produce all white pixels without
++		   this */
++		ret =3D ar0521_write_reg(sensor, AR0521_REG_GLOBAL_GAIN, 0x2000);
++		if (ret)
++			return ret;
++
++		/* Stop streaming */
++		ret =3D ar0521_write_reg(sensor, AR0521_REG_RESET,
++				       AR0521_REG_RESET_DEFAULTS);
++		if (ret)
++			return ret;
++
++		pm_runtime_put(&sensor->i2c_client->dev);
++		return 0;
++	}
++}
++
++static void ar0521_adj_fmt(struct v4l2_mbus_framefmt *fmt)
++{
++	fmt->width =3D clamp(ALIGN(fmt->width, 4), AR0521_WIDTH_MIN,
++			   AR0521_WIDTH_MAX);
++	fmt->height =3D clamp(ALIGN(fmt->height, 4), AR0521_HEIGHT_MIN,
++			    AR0521_HEIGHT_MAX);
++	fmt->code =3D MEDIA_BUS_FMT_SGRBG8_1X8;
++	fmt->field =3D V4L2_FIELD_NONE;
++	fmt->colorspace =3D V4L2_COLORSPACE_SRGB;
++	fmt->ycbcr_enc =3D V4L2_YCBCR_ENC_DEFAULT;
++	fmt->quantization =3D V4L2_QUANTIZATION_FULL_RANGE;
++	fmt->xfer_func =3D V4L2_XFER_FUNC_DEFAULT;
++}
++
++static int ar0521_get_fmt(struct v4l2_subdev *sd,
++			  struct v4l2_subdev_state *sd_state,
++			  struct v4l2_subdev_format *format)
++{
++	struct ar0521_dev *sensor =3D to_ar0521_dev(sd);
++	struct v4l2_mbus_framefmt *fmt;
++
++	dev_dbg(&sensor->i2c_client->dev, "%s(%u)\n", __func__, format->which);
++
++	mutex_lock(&sensor->lock);
++
++	if (format->which =3D=3D V4L2_SUBDEV_FORMAT_TRY)
++		fmt =3D v4l2_subdev_get_try_format(&sensor->sd, sd_state, 0
++						 /* pad */);
++	else
++		fmt =3D &sensor->fmt;
++
++	format->format =3D *fmt;
++
++	mutex_unlock(&sensor->lock);
++	return 0;
++}
++
++static int ar0521_set_fmt(struct v4l2_subdev *sd,
++			  struct v4l2_subdev_state *sd_state,
++			  struct v4l2_subdev_format *format)
++{
++	struct ar0521_dev *sensor =3D to_ar0521_dev(sd);
++	int ret =3D 0;
++
++	dev_dbg(&sensor->i2c_client->dev, "%s(%u)\n", __func__, format->which);
++
++	ar0521_adj_fmt(&format->format);
++
++	mutex_lock(&sensor->lock);
++
++	if (format->which =3D=3D V4L2_SUBDEV_FORMAT_TRY) {
++		struct v4l2_mbus_framefmt *fmt;
++
++		fmt =3D v4l2_subdev_get_try_format(sd, sd_state, 0 /* pad */);
++		*fmt =3D format->format;
++	} else {
++		sensor->fmt =3D format->format;
++		ar0521_calc_mode(sensor);
++	}
++
++	mutex_unlock(&sensor->lock);
++	return ret;
++}
++
++static int ar0521_s_ctrl(struct v4l2_ctrl *ctrl)
++{
++	struct v4l2_subdev *sd =3D ctrl_to_sd(ctrl);
++	struct ar0521_dev *sensor =3D to_ar0521_dev(sd);
++	int ret;
++
++	/* v4l2_ctrl_lock() locks our own mutex */
++
++	dev_dbg(&sensor->i2c_client->dev, "%s(0x%X)\n", __func__, ctrl->id);
++
++	switch (ctrl->id) {
++	case V4L2_CID_HBLANK:
++	case V4L2_CID_VBLANK:
++		sensor->total_width =3D sensor->fmt.width +
++			sensor->ctrls.hblank->val;
++		sensor->total_height =3D sensor->fmt.width +
++			sensor->ctrls.vblank->val;
++		break;
++	default:
++		ret =3D -EINVAL;
++		break;
++	}
++
++	// access the sensor only if it's powered up
++	if (!pm_runtime_get_if_in_use(&sensor->i2c_client->dev))
++		return 0;
++
++	switch (ctrl->id) {
++	case V4L2_CID_HBLANK:
++	case V4L2_CID_VBLANK:
++		ret =3D ar0521_set_geometry(sensor);
++		break;
++	case V4L2_CID_GAIN:
++	case V4L2_CID_RED_BALANCE:
++	case V4L2_CID_BLUE_BALANCE:
++		ret =3D ar0521_set_gains(sensor);
++		break;
++	case V4L2_CID_EXPOSURE:
++		ret =3D ar0521_write_reg(sensor,
++				       AR0521_REG_COARSE_INTEGRATION_TIME,
++				       ctrl->val);
++		break;
++	case V4L2_CID_TEST_PATTERN:
++		ret =3D ar0521_write_reg(sensor, AR0521_REG_TEST_PATTERN_MODE,
++				       ctrl->val);
++		break;
++	}
++
++	pm_runtime_put(&sensor->i2c_client->dev);
++	return ret;
++}
++
++static const struct v4l2_ctrl_ops ar0521_ctrl_ops =3D {
++	.s_ctrl =3D ar0521_s_ctrl,
++};
++
++static const char * const test_pattern_menu[] =3D {
++	"Disabled",
++	"Solid color",
++	"Color bars",
++	"Faded color bars"
++};
++
++static int ar0521_init_controls(struct ar0521_dev *sensor)
++{
++	const struct v4l2_ctrl_ops *ops =3D &ar0521_ctrl_ops;
++	struct ar0521_ctrls *ctrls =3D &sensor->ctrls;
++	struct v4l2_ctrl_handler *hdl =3D &ctrls->handler;
++	int ret;
++
++	v4l2_ctrl_handler_init(hdl, 32);
++
++	/* We can use our own mutex for the ctrl lock */
++	hdl->lock =3D &sensor->lock;
++
++	/* Manual gain */
++	ctrls->gain =3D v4l2_ctrl_new_std(hdl, ops, V4L2_CID_GAIN, 0, 511, 1, 0);
++	ctrls->red_balance =3D v4l2_ctrl_new_std(hdl, ops, V4L2_CID_RED_BALANCE,
++					       -512, 511, 1, 0);
++	ctrls->blue_balance =3D v4l2_ctrl_new_std(hdl, ops, V4L2_CID_BLUE_BALANCE,
++						-512, 511, 1, 0);
++	v4l2_ctrl_cluster(3, &ctrls->gain);
++
++	ctrls->hblank =3D v4l2_ctrl_new_std(hdl, ops, V4L2_CID_HBLANK,
++					  AR0521_WIDTH_BLANKING_MIN, 4094, 1,
++					  AR0521_WIDTH_BLANKING_MIN);
++	ctrls->vblank =3D v4l2_ctrl_new_std(hdl, ops, V4L2_CID_VBLANK,
++					  AR0521_HEIGHT_BLANKING_MIN, 4094, 2,
++					  AR0521_HEIGHT_BLANKING_MIN);
++	v4l2_ctrl_cluster(2, &ctrls->hblank);
++
++	/* Read-only */
++	ctrls->pixrate =3D v4l2_ctrl_new_std(hdl, ops, V4L2_CID_PIXEL_RATE,
++					   AR0521_PIXEL_CLOCK_MIN,
++					   AR0521_PIXEL_CLOCK_MAX, 1,
++					   AR0521_PIXEL_CLOCK_RATE);
++
++	/* Manual exposure time */
++	ctrls->exposure =3D v4l2_ctrl_new_std(hdl, ops, V4L2_CID_EXPOSURE, 0,
++					    65535, 1, 360);
++
++	ctrls->test_pattern =3D v4l2_ctrl_new_std_menu_items(hdl, ops,
++					V4L2_CID_TEST_PATTERN,
++					ARRAY_SIZE(test_pattern_menu) - 1,
++					0, 0, test_pattern_menu);
++
++	if (hdl->error) {
++		ret =3D hdl->error;
++		goto free_ctrls;
++	}
++
++	sensor->sd.ctrl_handler =3D hdl;
++	return 0;
++
++free_ctrls:
++	v4l2_ctrl_handler_free(hdl);
++	return ret;
++}
++
++#define REGS_ENTRY(a)	{(a), ARRAY_SIZE(a)}
++#define REGS(...)	REGS_ENTRY(((const __be16[]){__VA_ARGS__}))
++
++static const struct initial_reg {
++	const __be16 *data; /* data[0] is register address */
++	unsigned int count;
++} initial_regs[] =3D {
++	REGS(be(0x0112), be(0x0808)), /* 8-bit/8-bit mode */
++
++	/* PEDESTAL+2 :+2 is a workaround for 10bit mode +0.5 rounding */
++	REGS(be(0x301E), be(0x00AA)),
++
++	/* corrections_recommended_bayer */
++	REGS(be(0x3042),
++	     be(0x0004),  /* 3042: RNC: enable b/w rnc mode */
++	     be(0x4580)), /* 3044: RNC: enable row noise correction */
++
++	REGS(be(0x30D2),
++	     be(0x0000),  /* 30D2: CRM/CC: enable crm on Visible and CC rows */
++	     be(0x0000),  /* 30D4: CC: CC enabled with 16 samples per column */
++	     /* 30D6: CC: bw mode enabled/12 bit data resolution/bw mode */
++	     be(0x2FFF)),
++
++	REGS(be(0x30DA),
++	     be(0x0FFF),  /* 30DA: CC: column correction clip level 2 is 0 */
++	     be(0x0FFF),  /* 30DC: CC: column correction clip level 3 is 0 */
++	     be(0x0000)), /* 30DE: CC: Group FPN correction */
++
++	/* RNC: rnc scaling factor =3D * 54 / 64 (32 / 38 * 64 =3D 53.9) */
++	REGS(be(0x30EE), be(0x1136)),
++	REGS(be(0x30FA), be(0xFD00)), /* GPIO0 =3D flash, GPIO1 =3D shutter */
++	REGS(be(0x3120), be(0x0005)), /* p1 dither enabled for 10bit mode */
++	REGS(be(0x3172), be(0x0206)), /* txlo clk divider options */
++	/* FDOC:fdoc settings with fdoc every frame turned of */
++	REGS(be(0x3180), be(0x9434)),
++
++	REGS(be(0x31B0),
++	     be(0x008B),  /* 31B0: frame_preamble - FIXME check WRT lanes# */
++	     be(0x0050)), /* 31B2: line_preamble - FIXME check WRT lanes# */
++
++	/* don't use continuous clock mode while shut down */
++	REGS(be(0x31BC), be(0x068C)),
++	REGS(be(0x31E0), be(0x0781)), /* Fuse/2DDC: enable 2ddc */
++
++	/* analog_setup_recommended_10bit */
++	REGS(be(0x341A), be(0x4735)), /* Samp&Hold pulse in ADC */
++	REGS(be(0x3420), be(0x4735)), /* Samp&Hold pulse in ADC */
++	REGS(be(0x3426), be(0x8A1A)), /* ADC offset distribution pulse */
++	REGS(be(0x342A), be(0x0018)), /* pulse_config */
++
++	/* pixel_timing_recommended */
++	REGS(be(0x3D00),
++	     /* 3D00 */ be(0x043E), be(0x4760), be(0xFFFF), be(0xFFFF),
++	     /* 3D08 */ be(0x8000), be(0x0510), be(0xAF08), be(0x0252),
++	     /* 3D10 */ be(0x486F), be(0x5D5D), be(0x8056), be(0x8313),
++	     /* 3D18 */ be(0x0087), be(0x6A48), be(0x6982), be(0x0280),
++	     /* 3D20 */ be(0x8359), be(0x8D02), be(0x8020), be(0x4882),
++	     /* 3D28 */ be(0x4269), be(0x6A95), be(0x5988), be(0x5A83),
++	     /* 3D30 */ be(0x5885), be(0x6280), be(0x6289), be(0x6097),
++	     /* 3D38 */ be(0x5782), be(0x605C), be(0xBF18), be(0x0961),
++	     /* 3D40 */ be(0x5080), be(0x2090), be(0x4390), be(0x4382),
++	     /* 3D48 */ be(0x5F8A), be(0x5D5D), be(0x9C63), be(0x8063),
++	     /* 3D50 */ be(0xA960), be(0x9757), be(0x8260), be(0x5CFF),
++	     /* 3D58 */ be(0xBF10), be(0x1681), be(0x0802), be(0x8000),
++	     /* 3D60 */ be(0x141C), be(0x6000), be(0x6022), be(0x4D80),
++	     /* 3D68 */ be(0x5C97), be(0x6A69), be(0xAC6F), be(0x4645),
++	     /* 3D70 */ be(0x4400), be(0x0513), be(0x8069), be(0x6AC6),
++	     /* 3D78 */ be(0x5F95), be(0x5F70), be(0x8040), be(0x4A81),
++	     /* 3D80 */ be(0x0300), be(0xE703), be(0x0088), be(0x4A83),
++	     /* 3D88 */ be(0x40FF), be(0xFFFF), be(0xFD70), be(0x8040),
++	     /* 3D90 */ be(0x4A85), be(0x4FA8), be(0x4F8C), be(0x0070),
++	     /* 3D98 */ be(0xBE47), be(0x8847), be(0xBC78), be(0x6B89),
++	     /* 3DA0 */ be(0x6A80), be(0x6986), be(0x6B8E), be(0x6B80),
++	     /* 3DA8 */ be(0x6980), be(0x6A88), be(0x7C9F), be(0x866B),
++	     /* 3DB0 */ be(0x8765), be(0x46FF), be(0xE365), be(0xA679),
++	     /* 3DB8 */ be(0x4A40), be(0x4580), be(0x44BC), be(0x7000),
++	     /* 3DC0 */ be(0x8040), be(0x0802), be(0x10EF), be(0x0104),
++	     /* 3DC8 */ be(0x3860), be(0x5D5D), be(0x5682), be(0x1300),
++	     /* 3DD0 */ be(0x8648), be(0x8202), be(0x8082), be(0x598A),
++	     /* 3DD8 */ be(0x0280), be(0x2048), be(0x3060), be(0x8042),
++	     /* 3DE0 */ be(0x9259), be(0x865A), be(0x8258), be(0x8562),
++	     /* 3DE8 */ be(0x8062), be(0x8560), be(0x9257), be(0x8221),
++	     /* 3DF0 */ be(0x10FF), be(0xB757), be(0x9361), be(0x1019),
++	     /* 3DF8 */ be(0x8020), be(0x9043), be(0x8E43), be(0x845F),
++	     /* 3E00 */ be(0x835D), be(0x805D), be(0x8163), be(0x8063),
++	     /* 3E08 */ be(0xA060), be(0x9157), be(0x8260), be(0x5CFF),
++	     /* 3E10 */ be(0xFFFF), be(0xFFE5), be(0x1016), be(0x2048),
++	     /* 3E18 */ be(0x0802), be(0x1C60), be(0x0014), be(0x0060),
++	     /* 3E20 */ be(0x2205), be(0x8120), be(0x908F), be(0x6A80),
++	     /* 3E28 */ be(0x6982), be(0x5F9F), be(0x6F46), be(0x4544),
++	     /* 3E30 */ be(0x0005), be(0x8013), be(0x8069), be(0x6A80),
++	     /* 3E38 */ be(0x7000), be(0x0000), be(0x0000), be(0x0000),
++	     /* 3E40 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
++	     /* 3E48 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
++	     /* 3E50 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
++	     /* 3E58 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
++	     /* 3E60 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
++	     /* 3E68 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
++	     /* 3E70 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
++	     /* 3E78 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
++	     /* 3E80 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
++	     /* 3E88 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
++	     /* 3E90 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
++	     /* 3E98 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
++	     /* 3EA0 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
++	     /* 3EA8 */ be(0x0000), be(0x0000), be(0x0000), be(0x0000),
++	     /* 3EB0 */ be(0x0000), be(0x0000), be(0x0000)),
++
++	REGS(be(0x3EB6), be(0x004C)), /* ECL */
++
++	REGS(be(0x3EBA),
++	     be(0xAAAD),  /* 3EBA */
++	     be(0x0086)), /* 3EBC: Bias currents for FSC/ECL */
++
++	REGS(be(0x3EC0),
++	     be(0x1E00),  /* 3EC0: SFbin/SH mode settings */
++	     be(0x100A),  /* 3EC2: CLK divider for ramp for 10 bit 400MH */
++	     /* 3EC4: FSC clamps for HDR mode and adc comp power down co */
++	     be(0x3300),
++	     be(0xEA44),  /* 3EC6: VLN and clk gating controls */
++	     be(0x6F6F),  /* 3EC8: Txl0 and Txlo1 settings for normal mode */
++	     be(0x2F4A),  /* 3ECA: CDAC/Txlo2/RSTGHI/RSTGLO settings */
++	     be(0x0506),  /* 3ECC: RSTDHI/RSTDLO/CDAC/TXHI settings */
++	     /* 3ECE: Ramp buffer settings and Booster enable (bits 0-5) */
++	     be(0x203B),
++	     be(0x13F0),  /* 3ED0: TXLO from atest/sf bin settings */
++	     be(0xA53D),  /* 3ED2: Ramp offset */
++	     be(0x862F),  /* 3ED4: TXLO open loop/row driver settings */
++	     be(0x4081),  /* 3ED6: Txlatch fr cfpn rows/vln bias */
++	     be(0x8003),  /* 3ED8: Ramp step setting for 10 bit 400 Mhz */
++	     be(0xA580),  /* 3EDA: Ramp Offset */
++	     be(0xC000),  /* 3EDC: over range for rst and under range for sig */
++	     be(0xC103)), /* 3EDE: over range for sig and col dec clk settings */
++
++	/* corrections_recommended_bayer */
++	REGS(be(0x3F00),
++	     be(0x0017),  /* 3F00: BM_T0 */
++	     be(0x02DD),  /* 3F02: BM_T1 */
++	     /* 3F04: if Ana_gain less than 2, use noise_floor0, multipl */
++	     be(0x0020),
++	     /* 3F06: if Ana_gain between 4 and 7, use noise_floor2 and */
++	     be(0x0040),
++	     /* 3F08: if Ana_gain between 4 and 7, use noise_floor2 and */
++	     be(0x0070),
++	     /* 3F0A: Define noise_floor0(low address) and noise_floor1 */
++	     be(0x0101),
++	     be(0x0302)), /* 3F0C: Define noise_floor2 and noise_floor3 */
++
++	REGS(be(0x3F10),
++	     be(0x0505),  /* 3F10: single k factor 0 */
++	     be(0x0505),  /* 3F12: single k factor 1 */
++	     be(0x0505),  /* 3F14: single k factor 2 */
++	     be(0x01FF),  /* 3F16: cross factor 0 */
++	     be(0x01FF),  /* 3F18: cross factor 1 */
++	     be(0x01FF),  /* 3F1A: cross factor 2 */
++	     be(0x0022)), /* 3F1E */
++
++	/* GTH_THRES_RTN: 4max,4min filtered out of every 46 samples and */
++	REGS(be(0x3F2C), be(0x442E)),
++
++	REGS(be(0x3F3E),
++	     be(0x0000),  /* 3F3E: Switch ADC from 12 bit to 10 bit mode */
++	     be(0x1511),  /* 3F40: couple k factor 0 */
++	     be(0x1511),  /* 3F42: couple k factor 1 */
++	     be(0x0707)), /* 3F44: couple k factor 2 */
++};
++
++static int ar0521_power_off(struct device *dev)
++{
++	struct v4l2_subdev *sd =3D dev_get_drvdata(dev);
++	struct ar0521_dev *sensor =3D to_ar0521_dev(sd);
++	int i;
++
++	dev_dbg(&sensor->i2c_client->dev, "%s()\n", __func__);
++	clk_disable_unprepare(sensor->extclk);
++
++	if (sensor->reset_gpio)
++		gpiod_set_value(sensor->reset_gpio, 1); /* assert RESET signal */
++
++	for (i =3D ARRAY_SIZE(ar0521_supply_names) - 1; i >=3D 0; i--) {
++		if (sensor->supplies[i])
++			regulator_disable(sensor->supplies[i]);
++	}
++	return 0;
++}
++
++static int ar0521_power_on(struct device *dev)
++{
++	struct v4l2_subdev *sd =3D dev_get_drvdata(dev);
++	struct ar0521_dev *sensor =3D to_ar0521_dev(sd);
++	unsigned int cnt;
++	int ret;
++
++	dev_dbg(&sensor->i2c_client->dev, "%s()\n", __func__);
++	for (cnt =3D 0; cnt < ARRAY_SIZE(ar0521_supply_names); cnt++)
++		if (sensor->supplies[cnt]) {
++			ret =3D regulator_enable(sensor->supplies[cnt]);
++			if (ret < 0)
++				goto off;
++
++			usleep_range(1000, 1500); /* min 1 ms */
++		}
++
++	ret =3D clk_prepare_enable(sensor->extclk);
++	if (ret < 0) {
++		v4l2_err(&sensor->sd, "error enabling sensor clock\n");
++		goto off;
++	}
++	usleep_range(1000, 1500); /* min 1 ms */
++
++	if (sensor->reset_gpio)
++		/* deassert RESET signal */
++		gpiod_set_value(sensor->reset_gpio, 0);
++	usleep_range(4500, 5000); /* min 45000 clocks */
++
++	for (cnt =3D 0; cnt < ARRAY_SIZE(initial_regs); cnt++)
++		if (ar0521_write_regs(sensor, initial_regs[cnt].data,
++				      initial_regs[cnt].count))
++			goto off;
++
++	ret =3D ar0521_write_reg(sensor, AR0521_REG_SERIAL_FORMAT,
++			       AR0521_REG_SERIAL_FORMAT_MIPI |
++			       sensor->lane_count);
++	if (ret)
++		goto off;
++
++	/* set MIPI test mode - disabled for now */
++	ret =3D ar0521_write_reg(sensor, AR0521_REG_HISPI_TEST_MODE,
++			       ((0x40 << sensor->lane_count) - 0x40) |
++			       AR0521_REG_HISPI_TEST_MODE_LP11);
++	if (ret)
++		goto off;
++
++	ret =3D ar0521_write_reg(sensor, AR0521_REG_ROW_SPEED, 0x110 |
++			       4 / sensor->lane_count);
++	if (ret)
++		goto off;
++
++	return 0;
++off:
++	ar0521_power_off(dev);
++	return ret;
++}
++
++static int ar0521_enum_mbus_code(struct v4l2_subdev *sd,
++				 struct v4l2_subdev_state *sd_state,
++				 struct v4l2_subdev_mbus_code_enum *code)
++{
++	struct ar0521_dev *sensor =3D to_ar0521_dev(sd);
++
++	if (code->index)
++		return -EINVAL;
++
++	code->code =3D sensor->fmt.code;
++	dev_dbg(&sensor->i2c_client->dev, "%s() =3D %X\n", __func__, code->code);
++	return 0;
++}
++
++static int ar0521_pre_streamon(struct v4l2_subdev *sd, u32 flags)
++{
++	struct ar0521_dev *sensor =3D to_ar0521_dev(sd);
++	int ret;
++
++	dev_dbg(&sensor->i2c_client->dev, "%s(0x%X)\n", __func__, flags);
++	if (!(flags & V4L2_SUBDEV_PRE_STREAMON_FL_MANUAL_LP))
++		return -EACCES;
++
++	ret =3D pm_runtime_resume_and_get(&sensor->i2c_client->dev);
++	if (ret < 0)
++		return ret;
++
++	/* Set LP-11 on clock and data lanes */
++	ret =3D ar0521_write_reg(sensor, AR0521_REG_HISPI_CONTROL_STATUS,
++			AR0521_REG_HISPI_CONTROL_STATUS_FRAMER_TEST_MODE_ENABLE);
++	if (ret)
++		goto err;
++
++	/* Start streaming LP-11 */
++	ret =3D ar0521_write_reg(sensor, AR0521_REG_RESET,
++			       AR0521_REG_RESET_DEFAULTS |
++			       AR0521_REG_RESET_STREAM);
++	if (ret)
++		goto err;
++	return 0;
++
++err:
++	pm_runtime_put(&sensor->i2c_client->dev);
++	return ret;
++}
++
++static int ar0521_post_streamoff(struct v4l2_subdev *sd)
++{
++	struct ar0521_dev *sensor =3D to_ar0521_dev(sd);
++
++	dev_dbg(&sensor->i2c_client->dev, "%s()\n", __func__);
++
++	pm_runtime_put(&sensor->i2c_client->dev);
++	return 0;
++}
++
++static int ar0521_s_stream(struct v4l2_subdev *sd, int enable)
++{
++	struct ar0521_dev *sensor =3D to_ar0521_dev(sd);
++	int ret;
++
++	dev_dbg(&sensor->i2c_client->dev, "%s(%i)\n", __func__, enable);
++	mutex_lock(&sensor->lock);
++
++	ret =3D ar0521_set_stream(sensor, enable);
++	if (!ret)
++		sensor->streaming =3D enable;
++
++	mutex_unlock(&sensor->lock);
++	return ret;
++}
++
++static const struct v4l2_subdev_core_ops ar0521_core_ops =3D {
++	.log_status =3D v4l2_ctrl_subdev_log_status,
++};
++
++static const struct v4l2_subdev_video_ops ar0521_video_ops =3D {
++	.s_stream =3D ar0521_s_stream,
++	.pre_streamon =3D ar0521_pre_streamon,
++	.post_streamoff =3D ar0521_post_streamoff,
++};
++
++static const struct v4l2_subdev_pad_ops ar0521_pad_ops =3D {
++	.enum_mbus_code =3D ar0521_enum_mbus_code,
++	.get_fmt =3D ar0521_get_fmt,
++	.set_fmt =3D ar0521_set_fmt,
++};
++
++static const struct v4l2_subdev_ops ar0521_subdev_ops =3D {
++	.core =3D &ar0521_core_ops,
++	.video =3D &ar0521_video_ops,
++	.pad =3D &ar0521_pad_ops,
++};
++
++static int __maybe_unused ar0521_suspend(struct device *dev)
++{
++	struct v4l2_subdev *sd =3D dev_get_drvdata(dev);
++	struct ar0521_dev *sensor =3D to_ar0521_dev(sd);
++
++	dev_dbg(&sensor->i2c_client->dev, "%s()\n", __func__);
++	if (sensor->streaming)
++		ar0521_set_stream(sensor, 0);
++
++	return 0;
++}
++
++static int __maybe_unused ar0521_resume(struct device *dev)
++{
++	struct v4l2_subdev *sd =3D dev_get_drvdata(dev);
++	struct ar0521_dev *sensor =3D to_ar0521_dev(sd);
++
++	dev_dbg(&sensor->i2c_client->dev, "%s()\n", __func__);
++	if (sensor->streaming)
++		return ar0521_set_stream(sensor, 1);
++
++	return 0;
++}
++
++static int ar0521_probe(struct i2c_client *client,
++			const struct i2c_device_id *id)
++{
++	struct v4l2_fwnode_endpoint ep =3D {
++		.bus_type =3D V4L2_MBUS_CSI2_DPHY
++	};
++	struct device *dev =3D &client->dev;
++	struct fwnode_handle *endpoint;
++	struct ar0521_dev *sensor;
++	unsigned int cnt;
++	int ret;
++
++	dev_dbg(dev, "%s()\n", __func__);
++	sensor =3D devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
++	if (!sensor)
++		return -ENOMEM;
++
++	sensor->i2c_client =3D client;
++	sensor->fmt.width =3D AR0521_WIDTH_MAX;
++	sensor->fmt.height =3D AR0521_HEIGHT_MAX;
++	ar0521_adj_fmt(&sensor->fmt);
++
++	endpoint =3D fwnode_graph_get_endpoint_by_id(dev_fwnode(dev), 0, 0,
++						   FWNODE_GRAPH_ENDPOINT_NEXT);
++	if (!endpoint) {
++		dev_err(dev, "endpoint node not found\n");
++		return -EINVAL;
++	}
++
++	ret =3D v4l2_fwnode_endpoint_parse(endpoint, &ep);
++	fwnode_handle_put(endpoint);
++	if (ret) {
++		dev_err(dev, "could not parse endpoint\n");
++		return ret;
++	}
++
++	if (ep.bus_type !=3D V4L2_MBUS_CSI2_DPHY) {
++		dev_err(dev, "invalid bus type, must be MIPI CSI2\n");
++		return -EINVAL;
++	}
++
++	sensor->lane_count =3D ep.bus.mipi_csi2.num_data_lanes;
++	switch (sensor->lane_count) {
++	case 1:
++	case 2:
++	case 4:
++		break;
++	default:
++		dev_err(dev, "invalid number of MIPI data lanes\n");
++		return -EINVAL;
++	}
++
++	/* Get master clock (extclk) */
++	sensor->extclk =3D devm_clk_get(dev, "extclk");
++	if (IS_ERR(sensor->extclk)) {
++		dev_err(dev, "failed to get extclk\n");
++		return PTR_ERR(sensor->extclk);
++	}
++
++	sensor->extclk_freq =3D clk_get_rate(sensor->extclk);
++
++	if (sensor->extclk_freq < AR0521_EXTCLK_MIN ||
++	    sensor->extclk_freq > AR0521_EXTCLK_MAX) {
++		dev_err(dev, "extclk frequency out of range: %u Hz\n",
++			sensor->extclk_freq);
++		return -EINVAL;
++	}
++
++	/* Request optional reset pin (usually active low) and assert it */
++	sensor->reset_gpio =3D devm_gpiod_get_optional(dev, "reset",
++						     GPIOD_OUT_HIGH);
++
++	v4l2_i2c_subdev_init(&sensor->sd, client, &ar0521_subdev_ops);
++
++	sensor->sd.flags =3D V4L2_SUBDEV_FL_HAS_DEVNODE;
++	sensor->pad.flags =3D MEDIA_PAD_FL_SOURCE;
++	sensor->sd.entity.function =3D MEDIA_ENT_F_CAM_SENSOR;
++	ret =3D media_entity_pads_init(&sensor->sd.entity, 1, &sensor->pad);
++	if (ret)
++		return ret;
++
++	for (cnt =3D 0; cnt < ARRAY_SIZE(ar0521_supply_names); cnt++) {
++		struct regulator *supply =3D devm_regulator_get(dev,
++						ar0521_supply_names[cnt]);
++
++		if (IS_ERR(supply)) {
++			dev_info(dev, "no %s regulator found: %li\n",
++				 ar0521_supply_names[cnt], PTR_ERR(supply));
++			return PTR_ERR(supply);
++		}
++		sensor->supplies[cnt] =3D supply;
++	}
++
++	mutex_init(&sensor->lock);
++
++	ret =3D ar0521_init_controls(sensor);
++	if (ret)
++		goto entity_cleanup;
++
++	ar0521_adj_fmt(&sensor->fmt);
++
++	ret =3D v4l2_async_register_subdev(&sensor->sd);
++	if (ret)
++		goto free_ctrls;
++
++	/* Turn on the device and enable runtime PM */
++	ret =3D ar0521_power_on(&client->dev);
++	if (ret)
++		goto disable;
++	pm_runtime_set_active(&client->dev);
++	pm_runtime_enable(&client->dev);
++	dev_dbg(dev, "AR0521 driver initialized, master clock frequency: %u Hz, %=
+u MIPI data lanes\n",
++		sensor->extclk_freq, sensor->lane_count);
++	return 0;
++
++disable:
++	v4l2_async_unregister_subdev(&sensor->sd);
++	media_entity_cleanup(&sensor->sd.entity);
++free_ctrls:
++	v4l2_ctrl_handler_free(&sensor->ctrls.handler);
++entity_cleanup:
++	media_entity_cleanup(&sensor->sd.entity);
++	mutex_destroy(&sensor->lock);
++	return ret;
++}
++
++static int ar0521_remove(struct i2c_client *client)
++{
++	struct v4l2_subdev *sd =3D i2c_get_clientdata(client);
++	struct ar0521_dev *sensor =3D to_ar0521_dev(sd);
++
++	v4l2_async_unregister_subdev(&sensor->sd);
++	media_entity_cleanup(&sensor->sd.entity);
++	v4l2_ctrl_handler_free(&sensor->ctrls.handler);
++	pm_runtime_disable(&client->dev);
++	if (!pm_runtime_status_suspended(&client->dev))
++		ar0521_power_off(&client->dev);
++	pm_runtime_set_suspended(&client->dev);
++	mutex_destroy(&sensor->lock);
++	return 0;
++}
++
++static const struct dev_pm_ops ar0521_pm_ops =3D {
++	SET_SYSTEM_SLEEP_PM_OPS(ar0521_suspend, ar0521_resume)
++	SET_RUNTIME_PM_OPS(ar0521_power_off, ar0521_power_on, NULL)
++};
++static const struct of_device_id ar0521_dt_ids[] =3D {
++	{.compatible =3D "onnn,ar0521"},
++	{}
++};
++MODULE_DEVICE_TABLE(of, ar0521_dt_ids);
++
++static struct i2c_driver ar0521_i2c_driver =3D {
++	.driver =3D {
++		.name  =3D "ar0521",
++		.pm =3D &ar0521_pm_ops,
++		.of_match_table	=3D ar0521_dt_ids,
++	},
++	.probe    =3D ar0521_probe,
++	.remove   =3D ar0521_remove,
++};
++
++module_i2c_driver(ar0521_i2c_driver);
++
++MODULE_DESCRIPTION("AR0521 MIPI Camera subdev driver");
++MODULE_AUTHOR("Krzysztof Ha=C5=82asa <khalasa@piap.pl>");
++MODULE_LICENSE("GPL v2");

@@ -2,307 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36672483474
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 16:58:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8A6483478
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 16:59:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232821AbiACP6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 10:58:46 -0500
-Received: from foss.arm.com ([217.140.110.172]:44038 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229545AbiACP6q (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 10:58:46 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A4FCE6D;
-        Mon,  3 Jan 2022 07:58:45 -0800 (PST)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id F3B303F774;
-        Mon,  3 Jan 2022 07:58:44 -0800 (PST)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>
-Subject: [PATCH v2] ACPI: PCC: Implement OperationRegion handler for the PCC Type 3 subtype
-Date:   Mon,  3 Jan 2022 15:58:38 +0000
-Message-Id: <20220103155838.616580-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.25.1
+        id S234237AbiACP7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 10:59:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233422AbiACP7r (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 10:59:47 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727D4C061784
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 07:59:47 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id p1-20020a1c7401000000b00345c2d068bdso18797922wmc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 07:59:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jHxpQIVhhbZi0yOZgtN9wp+xDeMXXriIvx34cNOPKr0=;
+        b=Itd3pvMPNVqsusLITfC3YWxqxW/OB3DbfwdZXnoVSoUstCCEb5jMnnwPfa/tE7yVSF
+         JJ3DpTcdYjZGQnBkvxb43XEtmyjrCK2B8hEmBgJtv3xl24wE3zyajEkVyXP6oq3GujSo
+         RxRkLXzVPlofvbdkIEoFjL3tq6qll5rAhKHjxs/QkSkvmugkQvI2x0c1620cSNXi5nHw
+         /rS0s3chXmBEKJqfleknwNESsM/ovVnWsiDVQs3rsAaPaN5OqLlzVkBaVL9wcrBy/LGm
+         3Az/Uwo1mWAA1L3HomMPwOORC3WDACcgaG2Th6/sG6pxtoq45erx83V/vMcUd8BBC0zr
+         nQrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jHxpQIVhhbZi0yOZgtN9wp+xDeMXXriIvx34cNOPKr0=;
+        b=007h0x4e+2QnFlMWv9rc+gyFZbZtiMIYptK7bdq/eNUFCwuwklxzWxu8xvDiqjllwF
+         vKZs3i0om4xjqlUDp+fiMG9CwvrgxI/G7StLA4lvc9Sp6npVkZNoHDxdG3TQ9RGBlR/3
+         fKFIymtPbC5qpscXWsKW5r6GvC24jqfMBgJ6Zso0mz3jgdrHquTN3fT8Ch3a4GH4xjUP
+         UXCseMRBa0EftSvToBquZ4iT32DaHLYQLnMTvxPqzZVBCzk63Y2MPT0KM+iay786r92M
+         KvUvrXsmf3pyP1bZ6wFOBu4mS4G5CBYMOPGUmZy87z/Ge9R7WhAORp9qGbF3DksKzKUs
+         tfuw==
+X-Gm-Message-State: AOAM531ZoxUBaL9lOq4xjQvDItfOitFBQfoX2/DIgAX5WOjR4nhLNNpo
+        MxmDNL6hc5Wn9io/JgEu2x0BuA==
+X-Google-Smtp-Source: ABdhPJx7brG1T5QCTTrgkfNIsmSG4IeZM7iPlA3xEmC7uJuuRSe+RFZznimMqNE8yvE33PQod27O/A==
+X-Received: by 2002:a05:600c:5009:: with SMTP id n9mr39398936wmr.162.1641225585849;
+        Mon, 03 Jan 2022 07:59:45 -0800 (PST)
+Received: from localhost ([2a02:168:96c5:1:55ed:514f:6ad7:5bcc])
+        by smtp.gmail.com with ESMTPSA id n12sm28074899wmq.30.2022.01.03.07.59.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jan 2022 07:59:45 -0800 (PST)
+From:   Jann Horn <jannh@google.com>
+To:     "Theodore Ts'o" <tytso@mit.edu>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, Jann Horn <jannh@google.com>
+Subject: [PATCH] random: Don't reset crng_init_cnt on urandom_read()
+Date:   Mon,  3 Jan 2022 16:59:31 +0100
+Message-Id: <20220103155931.411722-1-jannh@google.com>
+X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PCC OpRegion provides a mechanism to communicate with the platform
-directly from the AML. PCCT provides the list of PCC channel available
-in the platform, a subset or all of them can be used in PCC Opregion.
+At the moment, urandom_read() (used for /dev/urandom) resets crng_init_cnt
+to zero when it is called at crng_init<2. This is inconsistent: We do it
+for /dev/urandom reads, but not for the equivalent
+getrandom(GRND_INSECURE).
 
-This patch registers the PCC OpRegion handler before ACPI tables are
-loaded. This relies on the special context data passed to identify and
-set up the PCC channel before the OpRegion handler is executed for the
-first time.
+(And worse, as Jason pointed out, we're only doing this as long as
+maxwarn>0.)
 
-Typical PCC Opregion declaration looks like this:
+crng_init_cnt is only read in crng_fast_load(); it is relevant at
+crng_init=3D=3D0 for determining when to switch to crng_init=3D=3D1 (and wh=
+ere in
+the RNG state array to write).
 
-OperationRegion (PFRM, PCC, 2, 0x74)
-Field (PFRM, ByteAcc, NoLock, Preserve)
-{
-    SIGN,   32,
-    FLGS,   32,
-    LEN,    32,
-    CMD,    32,
-    DATA,   800
-}
+As far as I understand:
 
-It contains four named double words followed by 100 bytes of buffer
-names DATA.
+ - crng_init=3D=3D0 means "we have nothing, we might just be returning the =
+same
+   exact numbers on every boot on every machine, we don't even have
+   non-cryptographic randomness; we should shove every bit of entropy we
+   can get into the RNG immediately"
+ - crng_init=3D=3D1 means "well we have something, it might not be
+   cryptographic, but at least we're not gonna return the same data every
+   time or whatever, it's probably good enough for TCP and ASLR and stuff;
+   we now have time to build up actual cryptographic entropy in the input
+   pool"
+ - crng_init=3D=3D2 means "this is supposed to be cryptographically secure =
+now,
+   but we'll keep adding more entropy just to be sure".
 
-ASL can fill out the buffer something like:
+The current code means that if someone is pulling data from /dev/urandom
+fast enough at crng_init=3D=3D0, we'll keep resetting crng_init_cnt, and we=
+'ll
+never make forward progress to crng_init=3D=3D1. It seems to be intended to
+prevent an attacker from bruteforcing the contents of small individual RNG
+inputs on the way from crng_init=3D=3D0 to crng_init=3D=3D1, but that's mis=
+guided;
+crng_init=3D=3D1 isn't supposed to provide proper cryptographic security
+anyway, RNG users who care about getting secure RNG output have to wait
+until crng_init=3D=3D2.
 
-    /* Create global or local buffer */
-    Name (BUFF, Buffer (0x0C){})
-    /* Create double word fields over the buffer */
-    CreateDWordField (BUFF, 0x0, WD0)
-    CreateDWordField (BUFF, 0x04, WD1)
-    CreateDWordField (BUFF, 0x08, WD2)
+This code was inconsistent, and it probably made things worse - just get
+rid of it.
 
-    /* Fill the named fields */
-    WD0 = 0x50434300
-    SIGN = BUFF
-    WD0 = 1
-    FLGS = BUFF
-    WD0 = 0x10
-    LEN = BUFF
-
-    /* Fill the payload in the DATA buffer */
-    WD0 = 0
-    WD1 = 0x08
-    WD2 = 0
-    DATA = BUFF
-
-    /* Write to CMD field to trigger handler */
-    WD0 = 0x4404
-    CMD = BUFF
-
-This buffer is received by acpi_pcc_opregion_space_handler. This
-handler will fetch the complete buffer via internal_pcc_buffer.
-
-The setup handler will receive the special PCC context data which will
-contain the PCC channel index which used to set up the channel. The
-buffer pointer and length is saved in region context which is then used
-in the handler.
-
-Cc: Rafael J. Wysocki <rafael@kernel.org>
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+Signed-off-by: Jann Horn <jannh@google.com>
 ---
- drivers/acpi/Kconfig    |  17 ++++++
- drivers/acpi/Makefile   |   1 +
- drivers/acpi/acpi_pcc.c | 120 ++++++++++++++++++++++++++++++++++++++++
- drivers/acpi/bus.c      |   1 +
- include/linux/acpi.h    |   6 ++
- 5 files changed, 145 insertions(+)
- create mode 100644 drivers/acpi/acpi_pcc.c
+ drivers/char/random.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-v1[0]-v2:
-	- Addressed all the comments from Rafael[1]
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 605969ed0f96..3c3f5c62378c 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1816,7 +1816,6 @@ urandom_read_nowarn(struct file *file, char __user *b=
+uf, size_t nbytes,
+ static ssize_t
+ urandom_read(struct file *file, char __user *buf, size_t nbytes, loff_t *p=
+pos)
+ {
+-	unsigned long flags;
+ 	static int maxwarn =3D 10;
+=20
+ 	if (!crng_ready() && maxwarn > 0) {
+@@ -1824,9 +1823,6 @@ urandom_read(struct file *file, char __user *buf, siz=
+e_t nbytes, loff_t *ppos)
+ 		if (__ratelimit(&urandom_warning))
+ 			pr_notice("%s: uninitialized urandom read (%zd bytes read)\n",
+ 				  current->comm, nbytes);
+-		spin_lock_irqsave(&primary_crng.lock, flags);
+-		crng_init_cnt =3D 0;
+-		spin_unlock_irqrestore(&primary_crng.lock, flags);
+ 	}
+=20
+ 	return urandom_read_nowarn(file, buf, nbytes, ppos);
 
-[0] https://lore.kernel.org/r/20211222190919.137550-1-sudeep.holla@arm.com/
-[1] https://lore.kernel.org/r/CAJZ5v0jWJVSFS3KTavfCTzxWq-Q361nGDCWf+VLXRu-9Z4MJsQ@mail.gmail.com
-
-diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
-index 91f1da16934d..8cdc7860b6e6 100644
---- a/drivers/acpi/Kconfig
-+++ b/drivers/acpi/Kconfig
-@@ -546,6 +546,23 @@ config ACPI_PPTT
- 	bool
- endif
-
-+config ACPI_PCC
-+	bool "ACPI PCC Address Space"
-+	depends on PCC
-+	default y
-+	help
-+	  The PCC Address Space also referred as PCC Operation Region pertains
-+	  to the region of PCC subspace that succeeds the PCC signature.
-+
-+	  The PCC Operation Region works in conjunction with the PCC Table
-+	  (Platform Communications Channel Table). PCC subspaces that are
-+	  marked for use as PCC Operation Regions must not be used as PCC
-+	  subspaces for the standard ACPI features such as CPPC, RASF, PDTT and
-+	  MPST. These standard features must always use the PCC Table instead.
-+
-+	  Enable this feature if you want to set up and install the PCC Address
-+	  Space handler to handle PCC OpRegion in the firmware.
-+
- source "drivers/acpi/pmic/Kconfig"
-
- config ACPI_VIOT
-diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
-index d3dc79298ce3..f47032769f69 100644
---- a/drivers/acpi/Makefile
-+++ b/drivers/acpi/Makefile
-@@ -67,6 +67,7 @@ acpi-$(CONFIG_ACPI_LPIT)	+= acpi_lpit.o
- acpi-$(CONFIG_ACPI_GENERIC_GSI) += irq.o
- acpi-$(CONFIG_ACPI_WATCHDOG)	+= acpi_watchdog.o
- acpi-$(CONFIG_ACPI_PRMT)	+= prmt.o
-+acpi-$(CONFIG_ACPI_PCC)		+= acpi_pcc.o
-
- # Address translation
- acpi-$(CONFIG_ACPI_ADXL)	+= acpi_adxl.o
-diff --git a/drivers/acpi/acpi_pcc.c b/drivers/acpi/acpi_pcc.c
-new file mode 100644
-index 000000000000..64552fdb7347
---- /dev/null
-+++ b/drivers/acpi/acpi_pcc.c
-@@ -0,0 +1,120 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Author: Sudeep Holla <sudeep.holla@arm.com>
-+ * Copyright 2021 Arm Limited
-+ *
-+ * The PCC Address Space also referred as PCC Operation Region pertains to the
-+ * region of PCC subspace that succeeds the PCC signature. The PCC Operation
-+ * Region works in conjunction with the PCC Table(Platform Communications
-+ * Channel Table). PCC subspaces that are marked for use as PCC Operation
-+ * Regions must not be used as PCC subspaces for the standard ACPI features
-+ * such as CPPC, RASF, PDTT and MPST. These standard features must always use
-+ * the PCC Table instead.
-+ *
-+ * This driver sets up the PCC Address Space and installs an handler to enable
-+ * handling of PCC OpRegion in the firmware.
-+ *
-+ */
-+#include <linux/kernel.h>
-+#include <linux/acpi.h>
-+#include <linux/completion.h>
-+#include <linux/idr.h>
-+#include <linux/io.h>
-+
-+#include <acpi/pcc.h>
-+
-+struct pcc_data {
-+	struct pcc_mbox_chan *pcc_chan;
-+	void __iomem *pcc_comm_addr;
-+	struct completion done;
-+	struct mbox_client cl;
-+	struct acpi_pcc_info ctx;
-+};
-+
-+struct acpi_pcc_info pcc_ctx;
-+
-+static void pcc_rx_callback(struct mbox_client *cl, void *m)
-+{
-+	struct pcc_data *data = container_of(cl, struct pcc_data, cl);
-+
-+	complete(&data->done);
-+}
-+
-+static acpi_status
-+acpi_pcc_address_space_setup(acpi_handle region_handle, u32 function,
-+			     void *handler_context,  void **region_context)
-+{
-+	struct pcc_data *data;
-+	struct acpi_pcc_info *ctx = handler_context;
-+	struct pcc_mbox_chan *pcc_chan;
-+
-+	data = kzalloc(sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return_ACPI_STATUS(AE_NO_MEMORY);
-+
-+	data->cl.rx_callback = pcc_rx_callback;
-+	data->cl.knows_txdone = true;
-+	data->ctx.length = ctx->length;
-+	data->ctx.subspace_id = ctx->subspace_id;
-+	data->ctx.internal_buffer = ctx->internal_buffer;
-+
-+	init_completion(&data->done);
-+	data->pcc_chan = pcc_mbox_request_channel(&data->cl, ctx->subspace_id);
-+	if (IS_ERR(data->pcc_chan)) {
-+		pr_err("Failed to find PCC channel for subspace %d\n",
-+		       ctx->subspace_id);
-+		return_ACPI_STATUS(AE_NOT_FOUND);
-+	}
-+
-+	pcc_chan = data->pcc_chan;
-+	data->pcc_comm_addr = acpi_os_ioremap(pcc_chan->shmem_base_addr,
-+					      pcc_chan->shmem_size);
-+	if (!data->pcc_comm_addr) {
-+		pr_err("Failed to ioremap PCC comm region mem for %d\n",
-+		       ctx->subspace_id);
-+		return_ACPI_STATUS(AE_NO_MEMORY);
-+	}
-+
-+	*region_context = data;
-+	return_ACPI_STATUS(AE_OK);
-+}
-+
-+static acpi_status
-+acpi_pcc_address_space_handler(u32 function, acpi_physical_address addr,
-+			       u32 bits, acpi_integer *value,
-+			       void *handler_context, void *region_context)
-+{
-+	int ret;
-+	struct pcc_data *data = region_context;
-+
-+	reinit_completion(&data->done);
-+
-+	/* Write to Shared Memory */
-+	memcpy_toio(data->pcc_comm_addr, (void *)value, data->ctx.length);
-+
-+	ret = mbox_send_message(data->pcc_chan->mchan, NULL);
-+	if (ret < 0)
-+		return_ACPI_STATUS(AE_ERROR);
-+
-+	if (data->pcc_chan->mchan->mbox->txdone_irq)
-+		wait_for_completion(&data->done);
-+
-+	mbox_client_txdone(data->pcc_chan->mchan, ret);
-+
-+	memcpy_fromio(value, data->pcc_comm_addr, data->ctx.length);
-+
-+	return_ACPI_STATUS(AE_OK);
-+}
-+
-+void __init acpi_init_pcc(void)
-+{
-+	acpi_status status;
-+
-+	status = acpi_install_address_space_handler(ACPI_ROOT_OBJECT,
-+						    ACPI_ADR_SPACE_PLATFORM_COMM,
-+						    &acpi_pcc_address_space_handler,
-+						    &acpi_pcc_address_space_setup,
-+						    &pcc_ctx);
-+	if (ACPI_FAILURE(status))
-+		pr_alert("OperationRegion handler could not be installed\n");
-+}
-diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-index dd535b4b9a16..75a61626eddd 100644
---- a/drivers/acpi/bus.c
-+++ b/drivers/acpi/bus.c
-@@ -1320,6 +1320,7 @@ static int __init acpi_init(void)
- 		pr_debug("%s: kset create error\n", __func__);
-
- 	init_prmt();
-+	acpi_init_pcc();
- 	result = acpi_bus_init();
- 	if (result) {
- 		kobject_put(acpi_kobj);
-diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-index 6c0798db6bde..eaeb4b9255bc 100644
---- a/include/linux/acpi.h
-+++ b/include/linux/acpi.h
-@@ -1389,6 +1389,12 @@ static inline int find_acpi_cpu_cache_topology(unsigned int cpu, int level)
- }
- #endif
-
-+#ifdef CONFIG_ACPI_PCC
-+void acpi_init_pcc(void);
-+#else
-+static inline void acpi_init_pcc(void) { }
-+#endif
-+
- #ifdef CONFIG_ACPI
- extern void acpi_device_notify(struct device *dev);
- extern void acpi_device_notify_remove(struct device *dev);
---
-2.25.1
+base-commit: c9e6606c7fe92b50a02ce51dda82586ebdf99b48
+--=20
+2.34.1.448.ga2b2bfdf31-goog
 

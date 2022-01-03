@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E08BA48324E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:26:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8342B483286
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232758AbiACO0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:26:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
+        id S234016AbiACO21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:28:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233776AbiACO0A (ORCPT
+        with ESMTP id S234041AbiACO1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:26:00 -0500
+        Mon, 3 Jan 2022 09:27:24 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F6EC061378;
-        Mon,  3 Jan 2022 06:26:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB59BC0698CF;
+        Mon,  3 Jan 2022 06:27:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C85A561122;
-        Mon,  3 Jan 2022 14:25:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB460C36AED;
-        Mon,  3 Jan 2022 14:25:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BAF96111A;
+        Mon,  3 Jan 2022 14:27:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEC33C36AEB;
+        Mon,  3 Jan 2022 14:27:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641219959;
+        s=korg; t=1641220042;
         bh=kzFB35nUgKEGPQmA/GQT7vVblxDe8PHNHe1KRrpLT48=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tRYw9TSMI5mZGXraUftzPsv5wX4scBRE6q1dd6wez3/VoJIuFN++YiotREu1BeFDM
-         xibI1+UTAHdzpAkIWIaCTRI01wsc7DiNyMSOaPjPjTD/LSOBFHcJsKmBgoY9bHR9mO
-         70k6Aj9il4ujT18Cj0dR3n3dyxorA1Sgvv58AB/g=
+        b=DupfScinEuW5TNi6ViRs84mgxEf5CPfHAphS7APGoW+wik4Lza7sdaZsHENeAv6Z4
+         qnNRQLj4h4Oip4Ai1IRY8uS/K4P3/k/C/pfcAw+C7qKrz7Wxzqlx95LGxUvRe7vWzA
+         Bx5fQ7Gd4z3iVH92T/KfdjZbR5sRS1RoONRmXB14=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>,
         Jerome Marchand <jmarchan@redhat.com>,
         Heiko Carstens <hca@linux.ibm.com>
-Subject: [PATCH 4.19 06/27] recordmcount.pl: fix typo in s390 mcount regex
+Subject: [PATCH 5.4 08/37] recordmcount.pl: fix typo in s390 mcount regex
 Date:   Mon,  3 Jan 2022 15:23:46 +0100
-Message-Id: <20220103142052.393146838@linuxfoundation.org>
+Message-Id: <20220103142052.139063669@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142052.162223000@linuxfoundation.org>
-References: <20220103142052.162223000@linuxfoundation.org>
+In-Reply-To: <20220103142051.883166998@linuxfoundation.org>
+References: <20220103142051.883166998@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8

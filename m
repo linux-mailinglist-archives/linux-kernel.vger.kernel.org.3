@@ -2,41 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF37B483371
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:37:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 736464832F6
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:33:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233958AbiACOgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:36:50 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:34374 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235276AbiACOdY (ORCPT
+        id S233842AbiACOcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:32:14 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33044 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234871AbiACOaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:33:24 -0500
+        Mon, 3 Jan 2022 09:30:05 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 288B561073;
-        Mon,  3 Jan 2022 14:33:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECC0BC36AED;
-        Mon,  3 Jan 2022 14:33:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 55D87B80EF1;
+        Mon,  3 Jan 2022 14:30:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F617C36AEB;
+        Mon,  3 Jan 2022 14:30:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220403;
-        bh=aPaF9STBfZcHl6z+1CzkG861rg7dSvFZHwgE4LTQnfc=;
+        s=korg; t=1641220203;
+        bh=+rPLnKknIZSktPz1CQ2xZo8naZzCjPMPwwbuURqYrl8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CtEN6w9KdReRTDLbOCH60lAUPZDYI0MEg2oMdzzU0KodwCDfr5wm0Y6s1Y7rCoLZe
-         p6PVu4uYLzjB4+nPD4pfNIChvcS7WrB0dpz2qa2fgITMA28QS+Rqz0pGoISSodem+0
-         aoP5ojqcsJGwuT2f5ldvR1WAVbHrg7g2yJ68IjqA=
+        b=WmXk88/6/kKjyd2D5CkHfqS8DlJh4RjnkpGGOZPpdQcwLfe2+kAcS0JI4O75Bde+m
+         Mlub4m4BHajHOgCui3D2xeB9K9KMIG9XWLQsQ45VqITIklmvgLAT4omapy+/P+MIFE
+         YJNtb2hp6xPahY02rq3STIGJFNgUdydLjuBgS1iM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nikolay Martynov <mar.kolya@gmail.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 5.15 58/73] xhci: Fresco FL1100 controller should not have BROKEN_MSI quirk set.
-Date:   Mon,  3 Jan 2022 15:24:19 +0100
-Message-Id: <20220103142058.799531199@linuxfoundation.org>
+        stable@vger.kernel.org, Matt Wang <wwentao@vmware.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Vishal Bhakta <vbhakta@vmware.com>,
+        VMware PV-Drivers <pv-drivers@vmware.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-scsi@vger.kernel.org, Alexey Makhalov <amakhalov@vmware.com>,
+        Shmulik Ladkani <shmulik.ladkani@gmail.com>
+Subject: [PATCH 5.10 43/48] scsi: vmw_pvscsi: Set residual data length conditionally
+Date:   Mon,  3 Jan 2022 15:24:20 +0100
+Message-Id: <20220103142054.922995054@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142056.911344037@linuxfoundation.org>
-References: <20220103142056.911344037@linuxfoundation.org>
+In-Reply-To: <20220103142053.466768714@linuxfoundation.org>
+References: <20220103142053.466768714@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,50 +50,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
+From: Alexey Makhalov <amakhalov@vmware.com>
 
-commit e4844092581ceec22489b66c42edc88bc6079783 upstream.
+commit 142c779d05d1fef75134c3cb63f52ccbc96d9e1f upstream.
 
-The Fresco Logic FL1100 controller needs the TRUST_TX_LENGTH quirk like
-other Fresco controllers, but should not have the BROKEN_MSI quirks set.
+The PVSCSI implementation in the VMware hypervisor under specific
+configuration ("SCSI Bus Sharing" set to "Physical") returns zero dataLen
+in the completion descriptor for READ CAPACITY(16). As a result, the kernel
+can not detect proper disk geometry. This can be recognized by the kernel
+message:
 
-BROKEN_MSI quirk causes issues in detecting usb drives connected to docks
-with this FL1100 controller.
-The BROKEN_MSI flag was apparently accidentally set together with the
-TRUST_TX_LENGTH quirk
+  [ 0.776588] sd 1:0:0:0: [sdb] Sector size 0 reported, assuming 512.
 
-Original patch went to stable so this should go there as well.
+The PVSCSI implementation in QEMU does not set dataLen at all, keeping it
+zeroed. This leads to a boot hang as was reported by Shmulik Ladkani.
 
-Fixes: ea0f69d82119 ("xhci: Enable trust tx length quirk for Fresco FL11 USB controller")
+It is likely that the controller returns the garbage at the end of the
+buffer. Residual length should be set by the driver in that case. The SCSI
+layer will erase corresponding data. See commit bdb2b8cab439 ("[SCSI] erase
+invalid data returned by device") for details.
+
+Commit e662502b3a78 ("scsi: vmw_pvscsi: Set correct residual data length")
+introduced the issue by setting residual length unconditionally, causing
+the SCSI layer to erase the useful payload beyond dataLen when this value
+is returned as 0.
+
+As a result, considering existing issues in implementations of PVSCSI
+controllers, we do not want to call scsi_set_resid() when dataLen ==
+0. Calling scsi_set_resid() has no effect if dataLen equals buffer length.
+
+Link: https://lore.kernel.org/lkml/20210824120028.30d9c071@blondie/
+Link: https://lore.kernel.org/r/20211220190514.55935-1-amakhalov@vmware.com
+Fixes: e662502b3a78 ("scsi: vmw_pvscsi: Set correct residual data length")
+Cc: Matt Wang <wwentao@vmware.com>
+Cc: Martin K. Petersen <martin.petersen@oracle.com>
+Cc: Vishal Bhakta <vbhakta@vmware.com>
+Cc: VMware PV-Drivers <pv-drivers@vmware.com>
+Cc: James E.J. Bottomley <jejb@linux.ibm.com>
+Cc: linux-scsi@vger.kernel.org
 Cc: stable@vger.kernel.org
-cc: Nikolay Martynov <mar.kolya@gmail.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20211221112825.54690-2-mathias.nyman@linux.intel.com
+Reported-and-suggested-by: Shmulik Ladkani <shmulik.ladkani@gmail.com>
+Signed-off-by: Alexey Makhalov <amakhalov@vmware.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/host/xhci-pci.c |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/scsi/vmw_pvscsi.c |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -123,7 +123,6 @@ static void xhci_pci_quirks(struct devic
- 	/* Look for vendor-specific quirks */
- 	if (pdev->vendor == PCI_VENDOR_ID_FRESCO_LOGIC &&
- 			(pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_PDK ||
--			 pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_FL1100 ||
- 			 pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_FL1400)) {
- 		if (pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_PDK &&
- 				pdev->revision == 0x0) {
-@@ -158,6 +157,10 @@ static void xhci_pci_quirks(struct devic
- 			pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_FL1009)
- 		xhci->quirks |= XHCI_BROKEN_STREAMS;
- 
-+	if (pdev->vendor == PCI_VENDOR_ID_FRESCO_LOGIC &&
-+			pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_FL1100)
-+		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
-+
- 	if (pdev->vendor == PCI_VENDOR_ID_NEC)
- 		xhci->quirks |= XHCI_NEC_HOST;
+--- a/drivers/scsi/vmw_pvscsi.c
++++ b/drivers/scsi/vmw_pvscsi.c
+@@ -591,9 +591,12 @@ static void pvscsi_complete_request(stru
+ 			 * Commands like INQUIRY may transfer less data than
+ 			 * requested by the initiator via bufflen. Set residual
+ 			 * count to make upper layer aware of the actual amount
+-			 * of data returned.
++			 * of data returned. There are cases when controller
++			 * returns zero dataLen with non zero data - do not set
++			 * residual count in that case.
+ 			 */
+-			scsi_set_resid(cmd, scsi_bufflen(cmd) - e->dataLen);
++			if (e->dataLen && (e->dataLen < scsi_bufflen(cmd)))
++				scsi_set_resid(cmd, scsi_bufflen(cmd) - e->dataLen);
+ 			cmd->result = (DID_OK << 16);
+ 			break;
  
 
 

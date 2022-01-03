@@ -2,158 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2E3483839
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 22:11:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA39E48383E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 22:15:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiACVLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 16:11:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46672 "EHLO
+        id S229740AbiACVPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 16:15:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiACVLV (ORCPT
+        with ESMTP id S229675AbiACVPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 16:11:21 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F227C061761;
-        Mon,  3 Jan 2022 13:11:21 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id v10-20020a05600c214a00b00345e59928eeso15142925wml.0;
-        Mon, 03 Jan 2022 13:11:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=23Spac22qMCHfCI2/b5dWMEYBsY6e8BHsVslDXm1X+k=;
-        b=OrWNoKKSXtyPe+OrQzhZyxTDTdNVUeKChx9fA421HbK7LTBPzsGAub7bOFCydpha3f
-         uOslZ2fJaAb5XZ6tNuwCQP3Rp13iwR3XyHBoZfCHhFXVmpswfqFWdGuPnmZIPOz+8FP4
-         RLbkp9UnZ6uEv668wVs+NcPS8Y1I+Ni3WPa1lmpW3cADo9BXK5DPHJ0Wg77Zx784ygdt
-         T4h23UyomhGTx5gnF5g7b8WntiaLWwahOvEY0E/OY3m+5at/+DeQo8jyu5XrrkNDZOv5
-         9qtwAAG3QgFd2b7QY13OOk1KBB2OSpgP4rFNCgMcwn0WV+Zi3EEIsquFVkQg5NigdZF7
-         B9BQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=23Spac22qMCHfCI2/b5dWMEYBsY6e8BHsVslDXm1X+k=;
-        b=Pfe5EwHqMBCPILpN2pOLQG0yT+x6Xtt2eqG0ocfpfkk+Xk56gB7fQeeJ0n8qgV3Xou
-         ewjGZcLS/u2wI8yQ/wLfK06to68PsitE1ux94U1WxGIs/2zXW34tmq8L6LI1kJ8En4Az
-         Loe6K0ZTIIsFvEulq0Kz81ZAhmExyaYH3JTu/A3bSyFUNtyguXVe62OylYuqFw3QzijY
-         6Hx0gOG2Uhg+zfu2Gyz3A7eJtnqpdddxy2+gpm6S+saNIFfB4DXEzeCVYx+XcrS7dtti
-         wOSoh1LjqHDi8Ze6nPzcDPbaX1QYuCK/w8BXK/+xU1eUxHNuPupb/C2HMRZ+YITNhdqY
-         fQyg==
-X-Gm-Message-State: AOAM533SVSLIkDIMF62kbyKHRL32fkE0BmoiPaYDin54DxJ/lwTqEv//
-        AQKqM5Q2pbPLP2NZCvUOCUdtal2Tsl9fvw==
-X-Google-Smtp-Source: ABdhPJwpRgDjQdo5Je4FbVpk+2FXoGzC41usKgJdlgDDsaK3CMohj7abhRolnBPwozEwHPzgno2RaA==
-X-Received: by 2002:a1c:7f50:: with SMTP id a77mr41467923wmd.57.1641244279934;
-        Mon, 03 Jan 2022 13:11:19 -0800 (PST)
-Received: from eldamar (80-218-24-251.dclient.hispeed.ch. [80.218.24.251])
-        by smtp.gmail.com with ESMTPSA id b5sm5772374wrr.19.2022.01.03.13.11.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jan 2022 13:11:19 -0800 (PST)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Date:   Mon, 3 Jan 2022 22:11:18 +0100
-From:   Salvatore Bonaccorso <carnil@debian.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Wenqing Liu <wenqingliu0120@gmail.com>,
-        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: Re: [PATCH 5.10 60/76] f2fs: fix to do sanity check on last xattr
- entry in __f2fs_setxattr()
-Message-ID: <YdNmdhsKS5ZWHOlB@eldamar.lan>
-References: <20211227151324.694661623@linuxfoundation.org>
- <20211227151326.779679392@linuxfoundation.org>
+        Mon, 3 Jan 2022 16:15:43 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195DAC061761;
+        Mon,  3 Jan 2022 13:15:43 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JST6w4yd1z4xgr;
+        Tue,  4 Jan 2022 08:15:36 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1641244537;
+        bh=teojRSACimY0JQGit354iqPjqfxxvMa15nrLCMgclKM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Zi7ZePcjkcLXgn+fdj0y490AN0eK7lqTATobf2ozEfftyDWstqJjDSlon4lBmV9N9
+         jPO8INwEl5pG2H8BuWaowxtmZD+dQjX22J9ujWGaLZcCrJHJPMChLvdaqX6LJvGQXG
+         IL0DjCKUxHnLRTGTxczimppfigB2DNJmogbK7W9biuMFAmskMJqswZyoZtaUbFDqJ2
+         y2NnZCW+xbpfZXrVqCc8pOevS7OLvRo2O9trQWPIunT3VBRLLH0ys8cOfG4xafqTm9
+         9aD3HZfjAsvjAnSuhqewtOqw4X7hqrE7oB0VbKbpT9Qy2p5kseqZ+6zODZ+Ajkj4+4
+         RSHc5kNZGGV/A==
+Date:   Tue, 4 Jan 2022 08:15:34 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Jessica Clarke <jrtc27@jrtc27.com>,
+        Bob Moore <robert.moore@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commits in the pm tree
+Message-ID: <20220104081534.5bd47f87@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211227151326.779679392@linuxfoundation.org>
+Content-Type: multipart/signed; boundary="Sig_/_LRrlSCbdzNIs0Th8yZZpz3";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+--Sig_/_LRrlSCbdzNIs0Th8yZZpz3
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 27, 2021 at 04:31:15PM +0100, Greg Kroah-Hartman wrote:
-> From: Chao Yu <chao@kernel.org>
-> 
-> commit 5598b24efaf4892741c798b425d543e4bed357a1 upstream.
-> 
-> As Wenqing Liu reported in bugzilla:
-> 
-> https://bugzilla.kernel.org/show_bug.cgi?id=215235
-> 
-> - Overview
-> page fault in f2fs_setxattr() when mount and operate on corrupted image
-> 
-> - Reproduce
-> tested on kernel 5.16-rc3, 5.15.X under root
-> 
-> 1. unzip tmp7.zip
-> 2. ./single.sh f2fs 7
-> 
-> Sometimes need to run the script several times
-> 
-> - Kernel dump
-> loop0: detected capacity change from 0 to 131072
-> F2FS-fs (loop0): Found nat_bits in checkpoint
-> F2FS-fs (loop0): Mounted with checkpoint version = 7548c2ee
-> BUG: unable to handle page fault for address: ffffe47bc7123f48
-> RIP: 0010:kfree+0x66/0x320
-> Call Trace:
->  __f2fs_setxattr+0x2aa/0xc00 [f2fs]
->  f2fs_setxattr+0xfa/0x480 [f2fs]
->  __f2fs_set_acl+0x19b/0x330 [f2fs]
->  __vfs_removexattr+0x52/0x70
->  __vfs_removexattr_locked+0xb1/0x140
->  vfs_removexattr+0x56/0x100
->  removexattr+0x57/0x80
->  path_removexattr+0xa3/0xc0
->  __x64_sys_removexattr+0x17/0x20
->  do_syscall_64+0x37/0xb0
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> 
-> The root cause is in __f2fs_setxattr(), we missed to do sanity check on
-> last xattr entry, result in out-of-bound memory access during updating
-> inconsistent xattr data of target inode.
-> 
-> After the fix, it can detect such xattr inconsistency as below:
-> 
-> F2FS-fs (loop11): inode (7) has invalid last xattr entry, entry_size: 60676
-> F2FS-fs (loop11): inode (8) has corrupted xattr
-> F2FS-fs (loop11): inode (8) has corrupted xattr
-> F2FS-fs (loop11): inode (8) has invalid last xattr entry, entry_size: 47736
-> 
-> Cc: stable@vger.kernel.org
-> Reported-by: Wenqing Liu <wenqingliu0120@gmail.com>
-> Signed-off-by: Chao Yu <chao@kernel.org>
-> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  fs/f2fs/xattr.c |   11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
-> 
-> --- a/fs/f2fs/xattr.c
-> +++ b/fs/f2fs/xattr.c
-> @@ -680,8 +680,17 @@ static int __f2fs_setxattr(struct inode
->  	}
->  
->  	last = here;
-> -	while (!IS_XATTR_LAST_ENTRY(last))
-> +	while (!IS_XATTR_LAST_ENTRY(last)) {
-> +		if ((void *)(last) + sizeof(__u32) > last_base_addr ||
-> +			(void *)XATTR_NEXT_ENTRY(last) > last_base_addr) {
-> +			f2fs_err(F2FS_I_SB(inode), "inode (%lu) has invalid last xattr entry, entry_size: %zu",
-> +					inode->i_ino, ENTRY_SIZE(last));
-> +			set_sbi_flag(F2FS_I_SB(inode), SBI_NEED_FSCK);
-> +			error = -EFSCORRUPTED;
-> +			goto exit;
-> +		}
->  		last = XATTR_NEXT_ENTRY(last);
-> +	}
->  
->  	newsize = XATTR_ALIGN(sizeof(struct f2fs_xattr_entry) + len + size);
+Hi all,
 
-It looks this commit while it was applied to several stable series
-(TTBOMK in 5.15.12, 5.10.89, 5.4.169, 4.19.223 and 4.14.260) it is
-still missing from mainline, Chao, or anyone else, do you know what
-happened here?
+Commits
 
-Regards,
-Salvatore
+  a3e525feaeec ("ACPICA: Avoid subobject buffer overflow when validating RS=
+DP signature")
+  339651be3704 ("ACPICA: Macros: Remove ACPI_PHYSADDR_TO_PTR")
+  5d6e59665d8b ("ACPICA: Use original pointer for virtual origin tables")
+  ca25f92b72d2 ("ACPICA: Use original data_table_region pointer for accesse=
+s")
+
+are missing a Signed-off-by from their author.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/_LRrlSCbdzNIs0Th8yZZpz3
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHTZ3YACgkQAVBC80lX
+0Gyy2gf/eRL1DU4SOUeKm2HFbnMhsSU/Qsw9MZWkgz8kQi50jtiX2VOkj3dhg0zt
+iS2OeIfrqZf3JobYJKRBbS7APP7Q/f+jNhGrdOc0GHBjavSSGHNJQu+w3I+OSGEl
+F3nrluXsQuZKOtz0QabympkLEGxAc6ADhm2YAYBNX4ovBAYAMGTKFAE2hhylAh1Z
+y3gxH4wCwc230Q+rNcyNP/okIjLb9Rt4LKSWeGqla8LVdNI06ywmDWHE3XwXmJjR
+lEqUpD55LlWRE86qvYtOaB0d6IAvuUU4QIpvDBqCzFXT+WojpihSz4O9rQiRTfAk
+91BnZt6MeOvXdq+eD9+2Red50GVC8A==
+=X1UR
+-----END PGP SIGNATURE-----
+
+--Sig_/_LRrlSCbdzNIs0Th8yZZpz3--

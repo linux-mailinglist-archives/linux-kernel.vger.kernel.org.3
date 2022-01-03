@@ -2,177 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E5E483408
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 16:16:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32C0C48340D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 16:18:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233404AbiACPP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 10:15:57 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38616 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiACPPw (ORCPT
+        id S233817AbiACPSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 10:18:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51536 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229995AbiACPSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 10:15:52 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55623B80EFC;
-        Mon,  3 Jan 2022 15:15:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A17F0C36AED;
-        Mon,  3 Jan 2022 15:15:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641222950;
-        bh=JlsPW+XrEU2GAaGgYw+gRc7fXysdOHvhf4ucIuTXWwA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j+TKAu/VWbwINQiN+cy4dJvGI4Pp93ZQQ9Xw8Q0568LoeqlZQ9HMtxajwxbzg7Q7N
-         rFWdSJqWRFOu04e8JZGN3suKf7UCYUtKJfAq0/mCZyp0Fj5bGT2xIfEv9m2u0zLfuC
-         bojiet0Jg7yx6/5cngumnJHmKjsgMvQK1WFGnccMMcbvGWt/ejIpqbNz1xkff8fVyN
-         KDF8tv55FQgwdSmvShKUAU59yPRuFWt/4cod+CPoiBlYAPowu3xNF3TUj+mBBNim7m
-         ytP6oO8zJB62z1UZP9R7wWLP3dmhMZElhYqOqmgm112d4xWXhUOTl1JGf2uGJ46B7c
-         ViYJuDJq/xxAw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 0889840B92; Mon,  3 Jan 2022 12:15:47 -0300 (-03)
-Date:   Mon, 3 Jan 2022 12:15:46 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org,
-        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        eranian@google.com
-Subject: Re: [was: libtraceevent: Increase libtraceevent logging when verbose]
-Message-ID: <YdMTIl7jn25XrUn8@kernel.org>
-References: <20210923001024.550263-1-irogers@google.com>
- <20210923001024.550263-4-irogers@google.com>
- <bc2b0786-8965-1bcd-2316-9d9bb37b9c31@kernel.org>
- <c19ca2a2-54c9-88b1-b705-5a2cd4dd9580@kernel.org>
+        Mon, 3 Jan 2022 10:18:12 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A825C061761
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 07:18:11 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id s1so70616109wrg.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 07:18:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=RCaHyP5ebl213km5STCt5+zOoJt9LjhnFcS42FC3TYI=;
+        b=7VDW7DnekEMpLtUjkrLruXmrj7LanTofrDr8lwJYDR6cGPDvRRZ7QaFnt3ti531DGs
+         NG6m3a0rGNmqOlLqHynzbAZWpKzrATHOEabLmLbelnzWE8oGaY7eyydvCQSVrTdiIEM/
+         sBAP1KaSdVsRX+fM0+AhIMC/53tY8a1sFR7Vzr8kRg9ono/8wqAJfsVtyC19+weX2eay
+         iurlsBnuvLe5KfD2yVGBQDFdk2ksuPAVLvlAEp+BoPWvpJFwUZ3OW1LTl+lxHbe0gbKb
+         NTFzWKLDxyWDuSHXS6xLDq1gfiw3QqTgoRlaT7+zRfWfhFWKn+47qo1GFBIyFW+jRxv4
+         VkEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=RCaHyP5ebl213km5STCt5+zOoJt9LjhnFcS42FC3TYI=;
+        b=HIZeMNhaRkUxEeBEpROF5pBVhByFAhyozm3uBeS/Q0q9viKTHsCA4iCwJO8v+h1Chg
+         xO0qYiKvFtyBXVdiDQDsRpPBsDdndFp2JWUjTfhhLIfse1vdOqecHV9XK59oWyePFLdV
+         qu4kgI3bI5S8yFFcg77eL5DUM0jdNDu9+V7XlrCm/sFnLE9WkQMMpcNvdl+oZXPOZL5I
+         qOLxSApoX6O8S2dBwMvmrXPlA3JLBr+jA9McYY3jMYdFSnn8jQe+tirW//SQpxXc08xj
+         dIogNm8nR8c42vxVUzfX2WnN+tvWeFmSDChhMPPV2hqpafDjFlVzEKuTiNS2P7ONuKCi
+         wB2Q==
+X-Gm-Message-State: AOAM531S1peL0F5FQokbi0exF7+bz/3G0Rc7WdzKIGHl8kM9FOjO4iFY
+        Zrg/GOdGOPmkWfJWOgRxonX+5A==
+X-Google-Smtp-Source: ABdhPJwbSTS4oam1MAa06aQBgF89Uhw69k911CPsHZgOi4vqcoTlEc/QPIkleuaGl1naux23SCbdHA==
+X-Received: by 2002:a5d:6c6c:: with SMTP id r12mr39501803wrz.706.1641223090126;
+        Mon, 03 Jan 2022 07:18:10 -0800 (PST)
+Received: from ?IPv6:2001:861:44c0:66c0:7c9d:a967:38e2:5220? ([2001:861:44c0:66c0:7c9d:a967:38e2:5220])
+        by smtp.gmail.com with ESMTPSA id i8sm44072453wry.108.2022.01.03.07.18.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jan 2022 07:18:09 -0800 (PST)
+Subject: Re: [PATCH] arm64: dts: meson-sm1: add spdifin spdifout nodes
+To:     Artem Lapkin <email2tema@gmail.com>
+Cc:     jbrunet@baylibre.com, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        christianshewitt@gmail.com, art@khadas.com, nick@khadas.com,
+        gouwa@khadas.com
+References: <20211215030236.340841-1-art@khadas.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <67d8cefc-d7c7-daba-bfe3-5935ded52beb@baylibre.com>
+Date:   Mon, 3 Jan 2022 16:18:09 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <20211215030236.340841-1-art@khadas.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c19ca2a2-54c9-88b1-b705-5a2cd4dd9580@kernel.org>
-X-Url:  http://acmel.wordpress.com
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Jan 03, 2022 at 09:25:26AM +0100, Jiri Slaby escreveu:
-> Ping -- perf build is still broken in 5.16-rc8 due to this.
+On 15/12/2021 04:02, Artem Lapkin wrote:
+> Add spdifin spdifout nodes for Amlogic SM1 SoCs.
 > 
-> On 16. 12. 21, 9:07, Jiri Slaby wrote:
-> > Hi,
-> > 
-> > On 23. 09. 21, 2:10, Ian Rogers wrote:
-> > > libtraceevent has added more levels of debug printout and with changes
-> > > like:
-> > > https://lore.kernel.org/linux-trace-devel/20210507095022.1079364-3-tz.stoyanov@gmail.com
-> > > 
-> > > previously generated output like "registering plugin" is no longer
-> > > displayed. This change makes it so that if perf's verbose debug output
-> > > is enabled then the debug and info libtraceevent messages can be
-> > > displayed.
-> > > The code is conditionally enabled based on the libtraceevent version as
-> > > discussed in the RFC:
-> > > https://lore.kernel.org/lkml/20210610060643.595673-1-irogers@google.com/
-> > > 
-> > > v2. Is a rebase and handles the case of building without
-> > >      LIBTRACEEVENT_DYNAMIC.
-> > 
-> > It breaks build with LIBTRACEEVENT_DYNAMIC and version 1.3.0:
-> >  > util/debug.c: In function ‘perf_debug_option’:
-> >  > util/debug.c:243:17: error: implicit declaration of function
-> > ‘tep_set_loglevel’ [-Werror=implicit-function-declaration]
-> >  >   243 |                 tep_set_loglevel(TEP_LOG_INFO);
-> >  >       |                 ^~~~~~~~~~~~~~~~
-> >  > util/debug.c:243:34: error: ‘TEP_LOG_INFO’ undeclared (first use in
-> > this function); did you mean ‘TEP_PRINT_INFO’?
-> >  >   243 |                 tep_set_loglevel(TEP_LOG_INFO);
-> >  >       |                                  ^~~~~~~~~~~~
-> >  >       |                                  TEP_PRINT_INFO
-> >  > util/debug.c:243:34: note: each undeclared identifier is reported
-> > only once for each function it appears in
-> >  > util/debug.c:245:34: error: ‘TEP_LOG_DEBUG’ undeclared (first use in
-> > this function)
-> >  >   245 |                 tep_set_loglevel(TEP_LOG_DEBUG);
-> >  >       |                                  ^~~~~~~~~~~~~
-> >  > util/debug.c:247:34: error: ‘TEP_LOG_ALL’ undeclared (first use in
-> > this function)
-> >  >   247 |                 tep_set_loglevel(TEP_LOG_ALL);
-> >  >       |                                  ^~~~~~~~~~~
-> > 
-> > It is because the gcc's command line looks like:
-> > gcc
-> > ...
-> > -I/home/abuild/rpmbuild/BUILD/tools/lib/
-> > ...
-> > -DLIBTRACEEVENT_VERSION=65790
-> > ...
-> > 
-> > So:
-> > 
-> > 
-> > > --- a/tools/perf/util/debug.c
-> > > +++ b/tools/perf/util/debug.c
-> > > @@ -24,6 +24,16 @@
-> > >   #include "util/parse-sublevel-options.h"
-> > >   #include <linux/ctype.h>
-> > > +#include <traceevent/event-parse.h>
-> > 
-> > /home/abuild/rpmbuild/BUILD/tools/lib/traceevent/event-parse.h is taken
-> > here.
-> > 
-> > > @@ -228,6 +238,15 @@ int perf_debug_option(const char *str)
-> > >       /* Allow only verbose value in range (0, 10), otherwise set 0. */
-> > >       verbose = (verbose < 0) || (verbose > 10) ? 0 : verbose;
-> > > +#if MAKE_LIBTRACEEVENT_VERSION(1, 3, 0) <= LIBTRACEEVENT_VERSION
-> > 
-> > But
-> > -DLIBTRACEEVENT_VERSION=65790
-> > is taken here (which is 1.3.0).
-> > 
-> > > +    if (verbose == 1)
-> > > +        tep_set_loglevel(TEP_LOG_INFO);
-> > > +    else if (verbose == 2)
-> > > +        tep_set_loglevel(TEP_LOG_DEBUG);
-> > > +    else if (verbose >= 3)
-> > > +        tep_set_loglevel(TEP_LOG_ALL);
-> > > +#endif
-> > > +
-> > >       return 0;
-> > >   }
+> Signed-off-by: Artem Lapkin <art@khadas.com>
+> ---
+> 
+> SPDIF IN and SPDIF OUT both tested and works fine for VIM3L (meson-sm1)
+> same as for VIM3 (meson-g12)
+> 
+> SPDIF in and SPDIF OUT both pins available via GPIO header (SPDIF_OUT PIN
+> 13 spdif_ao_out_pins and SPDIF_IN PIN 35 - same PWM_F spdif_in_h_pins)
+> 
+> https://lore.kernel.org/linux-arm-kernel/1jtuhwvqxa.fsf@starbuckisacylon.baylibre.com/t/
+> 
+> ALSA spdifin test example
+> =========================
+> 
+> # arecord -fS16_LE -r48000 -c2 -Dplug:spdifin
+> 
+> # cat .asoundrc
+> pcm.spdifin {
+> type iec958
+> slave {
+> pcm "hw:0,1"
+> format IEC958_SUBFRAME_LE
+> }
+> }
+> 
+> DT sound card configs for testing
+> =================================
+> 
+> &spdifout {
+>     pinctrl-0 = <&spdif_ao_out_pins>;
+>     pinctrl-names = "default";
+>     status = "okay";
+> };
+> 
+> &spdifin {
+>     pinctrl-0 = <&spdif_in_h_pins>;
+>     pinctrl-names = "default";
+>     status = "okay";
+> };
+> 
+> ...
+>     spdif_dit: audio-codec-1 {
+> 	#sound-dai-cells = <0>;
+> 	compatible = "linux,spdif-dit";
+> 	status = "okay";
+> 	sound-name-prefix = "DIT";
+>     };
+> 
+>     spdif_dir: audio-codec-2 {
+> 	#sound-dai-cells = <0>;
+> 	compatible = "linux,spdif-dir";
+> 	status = "okay";
+> 	sound-name-prefix = "DIR";
+>     };
+> ...
+> 	audio-routing = ...
+> 		"TODDR_B IN 3", "SPDIFIN Capture",
+> 		"SPDIFOUT IN 0", "FRDDR_A OUT 3";
+> 
+> ...
+> 	dai-link-10 {
+> 	    sound-dai = <&spdifout>;
+> 
+> 	    codec-0 {
+> 		sound-dai = <&spdif_dit>;
+> 	    };
+> 	};
+> 
+> 	/* spdif or toslink interface */
+> 	dai-link-11 {
+> 	    sound-dai = <&spdifin>;
+> 
+> 	    codec-0 {
+> 		sound-dai = <&spdif_dir>;
+> 	    };
+> 	};
+> ...
+> 
+> ---
+>  arch/arm64/boot/dts/amlogic/meson-sm1.dtsi | 27 ++++++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi b/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
+> index 3d8b1f4f2001..1e0adf259d61 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
+> @@ -356,6 +356,33 @@ tdmin_lb: audio-controller@3c0 {
+>  			status = "disabled";
+>  		};
+>  
+> +		spdifin: audio-controller@400 {
+> +			compatible = "amlogic,g12a-spdifin",
+> +			"amlogic,axg-spdifin";
+> +			reg = <0x0 0x400 0x0 0x30>;
+> +			#sound-dai-cells = <0>;
+> +			sound-name-prefix = "SPDIFIN";
+> +			interrupts = <GIC_SPI 151 IRQ_TYPE_EDGE_RISING>;
+> +			clocks = <&clkc_audio AUD_CLKID_SPDIFIN>,
+> +			<&clkc_audio AUD_CLKID_SPDIFIN_CLK>;
+> +			clock-names = "pclk", "refclk";
+> +			resets = <&clkc_audio AUD_RESET_SPDIFIN>;
+> +			status = "disabled";
+> +		};
+> +
+> +		spdifout: audio-controller@480 {
+> +			compatible = "amlogic,g12a-spdifout",
+> +			"amlogic,axg-spdifout";
+> +			reg = <0x0 0x480 0x0 0x50>;
+> +			#sound-dai-cells = <0>;
+> +			sound-name-prefix = "SPDIFOUT";
+> +			clocks = <&clkc_audio AUD_CLKID_SPDIFOUT>,
+> +			<&clkc_audio AUD_CLKID_SPDIFOUT_CLK>;
+> +			clock-names = "pclk", "mclk";
+> +			resets = <&clkc_audio AUD_RESET_SPDIFOUT>;
+> +			status = "disabled";
+> +		};
+> +
+>  		tdmout_a: audio-controller@500 {
+>  			compatible = "amlogic,sm1-tdmout";
+>  			reg = <0x0 0x500 0x0 0x40>;
+> 
 
-Tried reproducing here on fedora 34 but it is at 1.1.1:
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
 
-make: Leaving directory '/var/home/acme/git/perf/tools/perf'
-
- Performance counter stats for 'make -k LIBTRACEEVENT_DYNAMIC=1 BUILD_BPF_SKEL=1 CORESIGHT=1 PYTHON=python3 O=/tmp/build/perf -C tools/perf install-bin':
-
-   397,176,418,790      cycles:u                                                    
-   493,885,896,752      instructions:u            #    1.24  insn per cycle         
-
-       8.664957770 seconds time elapsed
-
-      97.706894000 seconds user
-      23.714293000 seconds sys
-
-
-On branch perf/urgent
-Your branch is ahead of 'quaco/perf/urgent' by 369 commits.
-  (use "git push" to publish your local commits)
-
-nothing to commit, working tree clean
-19: 'import perf' in python                                         : Ok
-⬢[acme@toolbox perf]$ git diff
-⬢[acme@toolbox perf]$ rpm -q libtraceevent-devel
-libtraceevent-devel-1.1.1-2.fc34.x86_64
-
-Lemme see in a container so that I can also test the fix.
-
-- Arnaldo
+Thanks,
+Neil

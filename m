@@ -2,102 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E22A482E5C
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 07:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98C6F482E62
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 07:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231635AbiACGDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 01:03:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40828 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiACGDg (ORCPT
+        id S231797AbiACGIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 01:08:22 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:55772 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229505AbiACGIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 01:03:36 -0500
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C841EC061761;
-        Sun,  2 Jan 2022 22:03:35 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id A8608424D0;
-        Mon,  3 Jan 2022 06:03:24 +0000 (UTC)
-Message-ID: <fa19a8d2-f65d-c998-4c84-ae4d7736a681@marcan.st>
-Date:   Mon, 3 Jan 2022 15:03:22 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [PATCH 16/34] brcmfmac: acpi: Add support for fetching Apple ACPI
- properties
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
+        Mon, 3 Jan 2022 01:08:21 -0500
+X-UUID: edc9f4d61a9f42cdac6351498b7ee7fe-20220103
+X-UUID: edc9f4d61a9f42cdac6351498b7ee7fe-20220103
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2050952494; Mon, 03 Jan 2022 14:08:17 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 3 Jan 2022 14:08:15 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 3 Jan 2022 14:08:15 +0800
+Message-ID: <63e17e727d8290a5ebd8c4c5cd8f2383fc1164cc.camel@mediatek.com>
+Subject: Re: [PATCH v16 2/7] arm64: dts: mt8183: add svs device information
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Chung-hsien Hsu <chung-hsien.hsu@infineon.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "Daniel (Deognyoun) Kim" <dekim@broadcom.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com
-References: <20211226153624.162281-1-marcan@marcan.st>
- <20211226153624.162281-17-marcan@marcan.st>
- <CACRpkdbWs=5s-5qZXoDOf+f-y=c6XZOGZb7w0LL7bDEJpnnVpw@mail.gmail.com>
-From:   Hector Martin <marcan@marcan.st>
-In-Reply-To: <CACRpkdbWs=5s-5qZXoDOf+f-y=c6XZOGZb7w0LL7bDEJpnnVpw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Mon, 3 Jan 2022 14:08:15 +0800
+In-Reply-To: <20cf2c1e-d55b-5780-8c6e-4d8beaca5a65@gmail.com>
+References: <20210428065440.3704-1-roger.lu@mediatek.com>
+         <20210428065440.3704-3-roger.lu@mediatek.com>
+         <20cf2c1e-d55b-5780-8c6e-4d8beaca5a65@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/01/02 14:58, Linus Walleij wrote:
-> On Sun, Dec 26, 2021 at 4:38 PM Hector Martin <marcan@marcan.st> wrote:
-> 
->> On DT platforms, the module-instance and antenna-sku-info properties
->> are passed in the DT. On ACPI platforms, module-instance is passed via
->> the analogous Apple device property mechanism, while the antenna SKU
->> info is instead obtained via an ACPI method that grabs it from
->> non-volatile storage.
->>
->> Add support for this, to allow proper firmware selection on Apple
->> platforms.
->>
->> Signed-off-by: Hector Martin <marcan@marcan.st>
-> 
-> If the strings treated here are exactly the same as for the device tree,
-> you should be able to just use "devprops" (firmware node) to handle it
-> abstractly, and then the respective DT and ACPI backend will provide
-> the properties.
-> 
-> I don't know if this patch I made recently is enough of an examples:
-> https://lore.kernel.org/linux-hwmon/20211206020423.62402-2-linus.walleij@linaro.org/
-> 
-> If the ACPI and DT differs a lot in format and strings etc it may not
-> be worth it.
+Hi Matthias,
 
-It's not quite the same; module-instance is the same from macOS'
-perspective, but we don't use Apple's device tree directly but rather
-roll our own DT which uses a different property name in this case.
-antenna-sku-info uses an ACPI method on x86, so that one is completely
-different. So in the end nothing is actually shared.
+On Thu, 2021-12-30 at 13:54 +0100, Matthias Brugger wrote:
+> 
+> On 28/04/2021 08:54, Roger Lu wrote:
+> > add compitable/reg/irq/clock/efuse setting in svs node
+> > 
+> > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> > ---
+> >   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 18 ++++++++++++++++++
+> >   1 file changed, 18 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > index 80519a145f13..441d617ece43 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > @@ -657,6 +657,18 @@
+> >   			status = "disabled";
+> >   		};
+> >   
+> > +		svs: svs@1100b000 {
+> > +			compatible = "mediatek,mt8183-svs";
+> > +			reg = <0 0x1100b000 0 0x1000>;
+> > +			interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_LOW>;
+> > +			clocks = <&infracfg CLK_INFRA_THERM>;
+> > +			clock-names = "main";
+> > +			nvmem-cells = <&svs_calibration>,
+> > +				      <&thermal_calibration>;
+> > +			nvmem-cell-names = "svs-calibration-data",
+> > +					   "t-calibration-data";
+> > +		};
+> > +
+> >   		pwm0: pwm@1100e000 {
+> >   			compatible = "mediatek,mt8183-disp-pwm";
+> >   			reg = <0 0x1100e000 0 0x1000>;
+> > @@ -941,9 +953,15 @@
+> >   			reg = <0 0x11f10000 0 0x1000>;
+> >   			#address-cells = <1>;
+> >   			#size-cells = <1>;
+> 
+> Please add a new line between the different calibartion data, to improve 
+> readability.
 
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+No problem and thanks for the review.
+
+> Regards,
+> Matthias
+> 
+> > +			thermal_calibration: calib@180 {
+> > +				reg = <0x180 0xc>;
+> > +			};
+> >   			mipi_tx_calibration: calib@190 {
+> >   				reg = <0x190 0xc>;
+> >   			};
+> > +			svs_calibration: calib@580 {
+> > +				reg = <0x580 0x64>;
+> > +			};
+> >   		};
+> >   
+> >   		u3phy: usb-phy@11f40000 {
+> > 
+

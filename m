@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B17B14832DE
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:32:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4725548333A
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234626AbiACObW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:31:22 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:59122 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234074AbiACO3A (ORCPT
+        id S233581AbiACOfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:35:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235083AbiACOci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:29:00 -0500
+        Mon, 3 Jan 2022 09:32:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5788FC07E5E0;
+        Mon,  3 Jan 2022 06:31:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A7796110F;
-        Mon,  3 Jan 2022 14:28:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E81FC36AEB;
-        Mon,  3 Jan 2022 14:28:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB57761118;
+        Mon,  3 Jan 2022 14:31:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B46DCC36AEE;
+        Mon,  3 Jan 2022 14:31:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220139;
-        bh=gde+0MGjiDKzg9yAHZB053ZG7CKZtiptNN9QN03QLMc=;
+        s=korg; t=1641220283;
+        bh=3Z2rteND1uw1h9IVQ9HpnVCi95H5LJX7sK04HUYJOAk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=us+qRi0lXOGJYn8iqj4hYTTwkEGIL/5rB5Qxu5XsIXe90TybpMqIBBjff1MG17ZxX
-         5VB9rWmI2YzCseA4UoTis994XjNs5XEsjn+rFEDCLQqxiddxXrN9pozxONfr9gqgrv
-         kBqYf7X7LX8oEfPFkRo6SOePEdDtkUFqDtSpTvh4=
+        b=zZ1GZFasJylm9N9oNjP7/LFHGH743jv8HXnkyctb8Reft/fjMWqLPx7E6hiw7mARC
+         wk82lqNfEdi5gX5fYBIXYBbUZyPOBnD7A0ioTMr06+fSpVi8jgcJK04amnPwe+P9V2
+         cy/8v6K5fiKqL5x62Y0coNR2dWzJbx1QsLdZHPh0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        stable@vger.kernel.org, Chris Mi <cmi@nvidia.com>,
+        Roi Dayan <roid@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 04/48] tomoyo: use hwight16() in tomoyo_domain_quota_is_ok()
+Subject: [PATCH 5.15 20/73] net/mlx5: Fix tc max supported prio for nic mode
 Date:   Mon,  3 Jan 2022 15:23:41 +0100
-Message-Id: <20220103142053.635397905@linuxfoundation.org>
+Message-Id: <20220103142057.572473336@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142053.466768714@linuxfoundation.org>
-References: <20220103142053.466768714@linuxfoundation.org>
+In-Reply-To: <20220103142056.911344037@linuxfoundation.org>
+References: <20220103142056.911344037@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,73 +50,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+From: Chris Mi <cmi@nvidia.com>
 
-[ Upstream commit f702e1107601230eec707739038a89018ea3468d ]
+[ Upstream commit d671e109bd8548d067b27e39e183a484430bf102 ]
 
-hwight16() is much faster. While we are at it, no need to include
-"perm =" part into data_race() macro, for perm is a local variable
-that cannot be accessed by other threads.
+Only prio 1 is supported if firmware doesn't support ignore flow
+level for nic mode. The offending commit removed the check wrongly.
+Add it back.
 
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Fixes: 9a99c8f1253a ("net/mlx5e: E-Switch, Offload all chain 0 priorities when modify header and forward action is not supported")
+Signed-off-by: Chris Mi <cmi@nvidia.com>
+Reviewed-by: Roi Dayan <roid@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- security/tomoyo/util.c | 17 +++++++----------
- 1 file changed, 7 insertions(+), 10 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/lib/fs_chains.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/security/tomoyo/util.c b/security/tomoyo/util.c
-index ee9c2aa0c8df9..11dd8260c9cc7 100644
---- a/security/tomoyo/util.c
-+++ b/security/tomoyo/util.c
-@@ -1051,7 +1051,6 @@ bool tomoyo_domain_quota_is_ok(struct tomoyo_request_info *r)
- 	list_for_each_entry_rcu(ptr, &domain->acl_info_list, list,
- 				srcu_read_lock_held(&tomoyo_ss)) {
- 		u16 perm;
--		u8 i;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lib/fs_chains.c b/drivers/net/ethernet/mellanox/mlx5/core/lib/fs_chains.c
+index 97e5845b4cfdd..d5e47630e2849 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/lib/fs_chains.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/lib/fs_chains.c
+@@ -121,6 +121,9 @@ u32 mlx5_chains_get_nf_ft_chain(struct mlx5_fs_chains *chains)
  
- 		if (ptr->is_deleted)
- 			continue;
-@@ -1062,23 +1061,23 @@ bool tomoyo_domain_quota_is_ok(struct tomoyo_request_info *r)
- 		 */
- 		switch (ptr->type) {
- 		case TOMOYO_TYPE_PATH_ACL:
--			data_race(perm = container_of(ptr, struct tomoyo_path_acl, head)->perm);
-+			perm = data_race(container_of(ptr, struct tomoyo_path_acl, head)->perm);
- 			break;
- 		case TOMOYO_TYPE_PATH2_ACL:
--			data_race(perm = container_of(ptr, struct tomoyo_path2_acl, head)->perm);
-+			perm = data_race(container_of(ptr, struct tomoyo_path2_acl, head)->perm);
- 			break;
- 		case TOMOYO_TYPE_PATH_NUMBER_ACL:
--			data_race(perm = container_of(ptr, struct tomoyo_path_number_acl, head)
-+			perm = data_race(container_of(ptr, struct tomoyo_path_number_acl, head)
- 				  ->perm);
- 			break;
- 		case TOMOYO_TYPE_MKDEV_ACL:
--			data_race(perm = container_of(ptr, struct tomoyo_mkdev_acl, head)->perm);
-+			perm = data_race(container_of(ptr, struct tomoyo_mkdev_acl, head)->perm);
- 			break;
- 		case TOMOYO_TYPE_INET_ACL:
--			data_race(perm = container_of(ptr, struct tomoyo_inet_acl, head)->perm);
-+			perm = data_race(container_of(ptr, struct tomoyo_inet_acl, head)->perm);
- 			break;
- 		case TOMOYO_TYPE_UNIX_ACL:
--			data_race(perm = container_of(ptr, struct tomoyo_unix_acl, head)->perm);
-+			perm = data_race(container_of(ptr, struct tomoyo_unix_acl, head)->perm);
- 			break;
- 		case TOMOYO_TYPE_MANUAL_TASK_ACL:
- 			perm = 0;
-@@ -1086,9 +1085,7 @@ bool tomoyo_domain_quota_is_ok(struct tomoyo_request_info *r)
- 		default:
- 			perm = 1;
- 		}
--		for (i = 0; i < 16; i++)
--			if (perm & (1 << i))
--				count++;
-+		count += hweight16(perm);
- 	}
- 	if (count < tomoyo_profile(domain->ns, domain->profile)->
- 	    pref[TOMOYO_PREF_MAX_LEARNING_ENTRY])
+ u32 mlx5_chains_get_prio_range(struct mlx5_fs_chains *chains)
+ {
++	if (!mlx5_chains_prios_supported(chains))
++		return 1;
++
+ 	if (mlx5_chains_ignore_flow_level_supported(chains))
+ 		return UINT_MAX;
+ 
 -- 
 2.34.1
 

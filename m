@@ -2,74 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E444838D1
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 23:37:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C20374838D4
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 23:46:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbiACWgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 17:36:55 -0500
-Received: from ms.lwn.net ([45.79.88.28]:51062 "EHLO ms.lwn.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229876AbiACWgy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 17:36:54 -0500
+        id S230272AbiACWqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 17:46:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39376 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229876AbiACWq3 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 17:46:29 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E48EC061761;
+        Mon,  3 Jan 2022 14:46:29 -0800 (PST)
 Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id EB4FC4A6;
-        Mon,  3 Jan 2022 22:36:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net EB4FC4A6
+        by ms.lwn.net (Postfix) with ESMTPSA id 8D4C64A6;
+        Mon,  3 Jan 2022 22:46:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 8D4C64A6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1641249414; bh=wdaP/UD105480aBAEV/T+Q8YTQ/bJvNQykTevNi4HK8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=BtWn+UUPRghAT2LUpA02qgiVEwsbq8NnX33g/Nu97i77ddzezFrl1j0hjAl7w0a3H
-         FVYhpwRbzNqEkrvrLiPSzZ7FiWzR/1qrwIleqof9JjBC9LZf1tOnhvTZ1w7iuuZYn7
-         9m479FDJr6nR5/9/3qWr81190Av+4+eWNW942uZukDgL1awDr+Ju4OYY0u/jOEnybT
-         9qOsk3M90mU9YA9WtW+41zhjEi1gSD7+1xW6AjsvdbhJTCQnG1lennG8DDk7OggNqd
-         Op+nNGSDsYGT3db+syjhIDO547Q1vBscVtUp1Cb4wOKB+Hbuw3zM0d3idVHOsSRuOI
-         q60R9CFV3pv9w==
+        t=1641249988; bh=qf5K0CH0zwQh+dRvici2Yhs/O2Q9DxeX9GI/jF7NgG0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=GkR6EIdr0sZnDb8wQmib2pyB7UihpSktVblwbffZHEJT1un90ZLLHc7T54bMle1Vl
+         ojcIeqpewCc102zVesU+EqdtWxbSuiBxD4j4HmCFLXlsx4q44t3JH4l8/OVH0mtXVz
+         khk75B24IaUle2trWp4SEH4RHtB2ZTgc7yMJekn066bSTC5h4pyzYWGOR8aM9YRpr6
+         ev1Pbdg6GdpDKOR7pQ+bp4CLnwizCc3T8Q6RR9Fe6wIcMa6EUHtPel7/hmQl5Nc0u8
+         q4SG6pGRgJTOX217yi5D+4XdSv5D0Ys77jsbOXaKW/eJE/J1gHXaR6wZfSe2SHM2r/
+         mqrucZ6tvKQ/A==
 From:   Jonathan Corbet <corbet@lwn.net>
-To:     linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] docs: discourage use of list tables
-Date:   Mon, 03 Jan 2022 15:36:56 -0700
-Message-ID: <87r19oxx87.fsf@meer.lwn.net>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH 1/1] scripts: sphinx-pre-install: add required ctex
+ dependency
+In-Reply-To: <165aa6167f21e3892a6e308688c93c756e94f4e0.1641243581.git.mchehab@kernel.org>
+References: <cover.1641243581.git.mchehab@kernel.org>
+ <165aa6167f21e3892a6e308688c93c756e94f4e0.1641243581.git.mchehab@kernel.org>
+Date:   Mon, 03 Jan 2022 15:46:30 -0700
+Message-ID: <87mtkcxws9.fsf@meer.lwn.net>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Our documentation encourages the use of list-table formats, but that advice
-runs counter to the objective of keeping the plain-text documentation as
-useful and readable as possible.  Turn that advice around the other way so
-that people don't keep adding these tables.
+Mauro Carvalho Chehab <mchehab@kernel.org> writes:
 
-Signed-off-by: Jonathan Corbet <corbet@lwn.net>
----
- Documentation/doc-guide/sphinx.rst | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+> After a change meant to fix support for oriental characters
+> (Chinese, Japanese, Korean), ctex stylesheet is now a requirement
+> for PDF output.
+>
+> Reported-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> ---
+>
+> See [PATCH 0/1] at: https://lore.kernel.org/all/cover.1641243581.git.mchehab@kernel.org/
+>
+>  scripts/sphinx-pre-install | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/scripts/sphinx-pre-install b/scripts/sphinx-pre-install
+> index 288e86a9d1e5..46aaab414098 100755
+> --- a/scripts/sphinx-pre-install
+> +++ b/scripts/sphinx-pre-install
+> @@ -78,6 +78,7 @@ my %texlive = (
+>  	'ucs.sty'            => 'texlive-ucs',
+>  	'upquote.sty'        => 'texlive-upquote',
+>  	'wrapfig.sty'        => 'texlive-wrapfig',
+> +	'ctexhook.sty'       => 'texlive-ctex',
+>  );
 
-diff --git a/Documentation/doc-guide/sphinx.rst b/Documentation/doc-guide/sphinx.rst
-index 673cbb769c08..bb36f18ae9ac 100644
---- a/Documentation/doc-guide/sphinx.rst
-+++ b/Documentation/doc-guide/sphinx.rst
-@@ -261,12 +261,11 @@ please feel free to remove it.
- list tables
- -----------
- 
--We recommend the use of *list table* formats. The *list table* formats are
--double-stage lists. Compared to the ASCII-art they might not be as
--comfortable for
--readers of the text files. Their advantage is that they are easy to
--create or modify and that the diff of a modification is much more meaningful,
--because it is limited to the modified content.
-+The list-table formats can be useful for tables that are not easily laid
-+out in the usual Sphinx ASCII-art formats.  These formats are nearly
-+impossible for readers of the plain-text documents to understand, though,
-+and should be avoided in the absence of a strong justification for their
-+use.
- 
- The ``flat-table`` is a double-stage list similar to the ``list-table`` with
- some additional features:
--- 
-2.33.1
+I've applied this, thanks.
 
+jon

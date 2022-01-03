@@ -2,276 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFDE8482D64
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 02:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD926482D67
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 02:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbiACBCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 20:02:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbiACBCH (ORCPT
+        id S231284AbiACBYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 20:24:05 -0500
+Received: from vmicros1.altlinux.org ([194.107.17.57]:32936 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230110AbiACBYE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 20:02:07 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9FCC061761
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jan 2022 17:02:06 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id o7so36862191ioo.9
-        for <linux-kernel@vger.kernel.org>; Sun, 02 Jan 2022 17:02:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=LCdYBCWRZKdKiGE+rth1UGOefg7aXgJUkI8QK9WTTv0=;
-        b=cAnHpedkcbG2/TODtq8Y49qZngzDR+QwicjNn+xyAbor0nPTj6CXPXkVt5w7RshrH0
-         kz9Lcfe/6UdlkB9xoQ0IFMiTNwOoObqwCnrmrvY4nzQw35pKvZPmS/0/ckzK8MdX6mV5
-         y7W4f0dJuYyXcJd3w2bDnicHbyu57Bmt/TbNn1RxU9ycpr2KUtv88wMjm4GOaQwMf00/
-         PRpfD8+t7kx20/8NLIO3DvktxI8g4b/+FA3MFJ2sUb0/3fPw6lNnH+lcD2XNeDg5hedN
-         qpqerZmbZhIgqv1FXDq7x4LMEgOo2EXdy5vtw0z3cWtGZwOYXBDazIh3XDo6NOHFxGvw
-         O5lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LCdYBCWRZKdKiGE+rth1UGOefg7aXgJUkI8QK9WTTv0=;
-        b=h4l6vXwdhoUHYl4EmH5gBZjPpSoGkcpdSLvucHgg5eaLjTPz0VJVRXdf55wdZW3WTv
-         nJ2emLzVHoU7THRntzfICNGInyCIU4UxntnDmNlhosB9j5zyUwNXqE7a+BZPCM1loMi6
-         px1nfS1eLp4o67PUjEfnEbI9GpWxne/mzq87neNdxIW5qDYv9E/rHyfWpgjwUVu7Gyd1
-         vkKBm6yA4JU1YpEYdaiXcr2EfSMINQSEYvDWg2mDtZeZO5JsdQ1Gv3rzbkNQG9LsPGC8
-         YRSBwlkJ9w+fpeQ3Q8gnhHRljZ/3Od/gNtB0XUnnXnhcnCUb2naMkIo8mj0MkeCswq3q
-         8YaQ==
-X-Gm-Message-State: AOAM531KqZvACwaZ8iqyjHkB08UjOSVMg4KrQypl7akFMpf4erH3F8SX
-        +pwbB3CXrv6nuzWTiV+o/3nsSCndrZdMF2/sLv8i/w==
-X-Google-Smtp-Source: ABdhPJyMLyEB8QQhyG6sPL+tCsTDM7rfRr6HtT20LsS+F4EAzutQwYFbATydUR8ILFuU+KywV4LCkEdYtMBfuRd2ayI=
-X-Received: by 2002:a05:6602:1484:: with SMTP id a4mr19570511iow.35.1641171725930;
- Sun, 02 Jan 2022 17:02:05 -0800 (PST)
+        Sun, 2 Jan 2022 20:24:04 -0500
+Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id A810772C90A;
+        Mon,  3 Jan 2022 04:24:02 +0300 (MSK)
+Received: by mua.local.altlinux.org (Postfix, from userid 508)
+        id 7A7117CCA32; Mon,  3 Jan 2022 04:24:02 +0300 (MSK)
+Date:   Mon, 3 Jan 2022 04:24:02 +0300
+From:   "Dmitry V. Levin" <ldv@altlinux.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usr/include/Makefile: add linux/nfc.h to the compile-test
+ coverage
+Message-ID: <20220103012402.GA25177@altlinux.org>
 MIME-Version: 1.0
-References: <20211226025215.22866-1-rdunlap@infradead.org>
-In-Reply-To: <20211226025215.22866-1-rdunlap@infradead.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Sun, 2 Jan 2022 17:01:53 -0800
-Message-ID: <CAP-5=fXHUg9jEOmGxCk3UP2mdb8oSCyg-UenL1k7MhLFAaaj5Q@mail.gmail.com>
-Subject: Re: [PATCH] perf: fix typos of "its" and "reponse"
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        "zhengjun.xing@intel.com" <zhengjun.xing@intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 25, 2021 at 6:52 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> Use the possessive "its" instead of the contraction of "it is" ("it's")
-> where needed in user-viewable messages.
->
-> Correct typos of "reponse" to "response" (reported by checkpatch).
->
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-> Cc: Jiri Olsa <jolsa@redhat.com>
-> Cc: Namhyung Kim <namhyung@kernel.org>
-> Cc: linux-perf-users@vger.kernel.org
+As linux/nfc.h userspace compilation was finally fixed by commits
+79b69a83705e621b258ac6d8ae6d3bfdb4b930aa and
+7175f02c4e5f5a9430113ab9ca0fd0ce98b28a51, there is no need to keep
+the compile-test exception for it in usr/include/Makefile.
 
-Making this information better is valuable! The data is autogenerated
-by these scripts:
-https://github.com/intel/event-converter-for-linux-perf
-From data here:
-https://download.01.org/perfmon/
-In a way the files that are in the tree are temporary build files.
-Perhaps we can have the original source and scripts within the Linux
-tools tree to simplify fixes like these.
-
-Thanks,
-Ian
-
-
-
-> ---
->  tools/perf/pmu-events/arch/x86/broadwell/uncore.json          |    6 +++=
+Signed-off-by: Dmitry V. Levin <ldv@altlinux.org>
 ---
->  tools/perf/pmu-events/arch/x86/cascadelakex/uncore-other.json |    4 ++-=
--
->  tools/perf/pmu-events/arch/x86/haswell/uncore.json            |    6 +++=
----
->  tools/perf/pmu-events/arch/x86/skylakex/uncore-other.json     |    4 ++-=
--
->  4 files changed, 10 insertions(+), 10 deletions(-)
->
-> --- linux-next-20211224.orig/tools/perf/pmu-events/arch/x86/broadwell/unc=
-ore.json
-> +++ linux-next-20211224/tools/perf/pmu-events/arch/x86/broadwell/uncore.j=
-son
-> @@ -184,8 +184,8 @@
->      "EventCode": "0x80",
->      "UMask": "0x01",
->      "EventName": "UNC_ARB_TRK_OCCUPANCY.ALL",
-> -    "BriefDescription": "Each cycle count number of all Core outgoing va=
-lid entries. Such entry is defined as valid from it's allocation till first=
- of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-cohere=
-nt traffic.",
-> -    "PublicDescription": "Each cycle count number of all Core outgoing v=
-alid entries. Such entry is defined as valid from it's allocation till firs=
-t of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-coher=
-ent traffic.",
-> +    "BriefDescription": "Each cycle count number of all Core outgoing va=
-lid entries. Such entry is defined as valid from its allocation till first =
-of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-coheren=
-t traffic.",
-> +    "PublicDescription": "Each cycle count number of all Core outgoing v=
-alid entries. Such entry is defined as valid from its allocation till first=
- of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-cohere=
-nt traffic.",
->      "Counter": "0,",
->      "CounterMask": "0",
->      "Invert": "0",
-> @@ -275,4 +275,4 @@
->      "Invert": "0",
->      "EdgeDetect": "0"
->    }
-> -]
-> \ No newline at end of file
-> +]
-> --- linux-next-20211224.orig/tools/perf/pmu-events/arch/x86/cascadelakex/=
-uncore-other.json
-> +++ linux-next-20211224/tools/perf/pmu-events/arch/x86/cascadelakex/uncor=
-e-other.json
-> @@ -514,7 +514,7 @@
->          "EventCode": "0x5C",
->          "EventName": "UNC_CHA_SNOOP_RESP.RSP_FWD_WB",
->          "PerPkg": "1",
-> -        "PublicDescription": "Counts when a transaction with the opcode =
-type Rsp*Fwd*WB Snoop Response was received which indicates the data was wr=
-itten back to it's home socket, and the cacheline was forwarded to the requ=
-estor socket.  This snoop response is only used in >=3D 4 socket systems.  =
-It is used when a snoop HITM's in a remote caching agent and it directly fo=
-rwards data to a requestor, and simultaneously returns data to it's home so=
-cket to be written back to memory.",
-> +        "PublicDescription": "Counts when a transaction with the opcode =
-type Rsp*Fwd*WB Snoop Response was received which indicates the data was wr=
-itten back to its home socket, and the cacheline was forwarded to the reque=
-stor socket.  This snoop response is only used in >=3D 4 socket systems.  I=
-t is used when a snoop HITM's in a remote caching agent and it directly for=
-wards data to a requestor, and simultaneously returns data to its home sock=
-et to be written back to memory.",
->          "UMask": "0x20",
->          "Unit": "CHA"
->      },
-> @@ -524,7 +524,7 @@
->          "EventCode": "0x5C",
->          "EventName": "UNC_CHA_SNOOP_RESP.RSP_WBWB",
->          "PerPkg": "1",
-> -        "PublicDescription": "Counts when a transaction with the opcode =
-type Rsp*WB Snoop Response was received which indicates which indicates the=
- data was written back to it's home.  This is returned when a non-RFO reque=
-st hits a cacheline in the Modified state. The Cache can either downgrade t=
-he cacheline to a S (Shared) or I (Invalid) state depending on how the syst=
-em has been configured.  This reponse will also be sent when a cache reques=
-ts E (Exclusive) ownership of a cache line without receiving data, because =
-the cache must acquire ownership.",
-> +        "PublicDescription": "Counts when a transaction with the opcode =
-type Rsp*WB Snoop Response was received which indicates which indicates the=
- data was written back to its home.  This is returned when a non-RFO reques=
-t hits a cacheline in the Modified state. The Cache can either downgrade th=
-e cacheline to a S (Shared) or I (Invalid) state depending on how the syste=
-m has been configured.  This response will also be sent when a cache reques=
-ts E (Exclusive) ownership of a cache line without receiving data, because =
-the cache must acquire ownership.",
->          "UMask": "0x10",
->          "Unit": "CHA"
->      },
-> --- linux-next-20211224.orig/tools/perf/pmu-events/arch/x86/haswell/uncor=
-e.json
-> +++ linux-next-20211224/tools/perf/pmu-events/arch/x86/haswell/uncore.jso=
-n
-> @@ -304,8 +304,8 @@
->      "EventCode": "0x80",
->      "UMask": "0x01",
->      "EventName": "UNC_ARB_TRK_OCCUPANCY.ALL",
-> -    "BriefDescription": "Each cycle count number of all Core outgoing va=
-lid entries. Such entry is defined as valid from it's allocation till first=
- of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-cohere=
-nt traffic.",
-> -    "PublicDescription": "Each cycle count number of all Core outgoing v=
-alid entries. Such entry is defined as valid from it's allocation till firs=
-t of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-coher=
-ent traffic.",
-> +    "BriefDescription": "Each cycle count number of all Core outgoing va=
-lid entries. Such entry is defined as valid from its allocation till first =
-of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-coheren=
-t traffic.",
-> +    "PublicDescription": "Each cycle count number of all Core outgoing v=
-alid entries. Such entry is defined as valid from its allocation till first=
- of IDI0 or DRS0 messages is sent out. Accounts for Coherent and non-cohere=
-nt traffic.",
->      "Counter": "0",
->      "CounterMask": "0",
->      "Invert": "0",
-> @@ -371,4 +371,4 @@
->      "Invert": "0",
->      "EdgeDetect": "0"
->    }
-> -]
-> \ No newline at end of file
-> +]
-> --- linux-next-20211224.orig/tools/perf/pmu-events/arch/x86/skylakex/unco=
-re-other.json
-> +++ linux-next-20211224/tools/perf/pmu-events/arch/x86/skylakex/uncore-ot=
-her.json
-> @@ -514,7 +514,7 @@
->          "EventCode": "0x5C",
->          "EventName": "UNC_CHA_SNOOP_RESP.RSP_FWD_WB",
->          "PerPkg": "1",
-> -        "PublicDescription": "Counts when a transaction with the opcode =
-type Rsp*Fwd*WB Snoop Response was received which indicates the data was wr=
-itten back to it's home socket, and the cacheline was forwarded to the requ=
-estor socket.  This snoop response is only used in >=3D 4 socket systems.  =
-It is used when a snoop HITM's in a remote caching agent and it directly fo=
-rwards data to a requestor, and simultaneously returns data to it's home so=
-cket to be written back to memory.",
-> +        "PublicDescription": "Counts when a transaction with the opcode =
-type Rsp*Fwd*WB Snoop Response was received which indicates the data was wr=
-itten back to its home socket, and the cacheline was forwarded to the reque=
-stor socket.  This snoop response is only used in >=3D 4 socket systems.  I=
-t is used when a snoop HITM's in a remote caching agent and it directly for=
-wards data to a requestor, and simultaneously returns data to its home sock=
-et to be written back to memory.",
->          "UMask": "0x20",
->          "Unit": "CHA"
->      },
-> @@ -524,7 +524,7 @@
->          "EventCode": "0x5C",
->          "EventName": "UNC_CHA_SNOOP_RESP.RSP_WBWB",
->          "PerPkg": "1",
-> -        "PublicDescription": "Counts when a transaction with the opcode =
-type Rsp*WB Snoop Response was received which indicates which indicates the=
- data was written back to it's home.  This is returned when a non-RFO reque=
-st hits a cacheline in the Modified state. The Cache can either downgrade t=
-he cacheline to a S (Shared) or I (Invalid) state depending on how the syst=
-em has been configured.  This reponse will also be sent when a cache reques=
-ts E (Exclusive) ownership of a cache line without receiving data, because =
-the cache must acquire ownership.",
-> +        "PublicDescription": "Counts when a transaction with the opcode =
-type Rsp*WB Snoop Response was received which indicates which indicates the=
- data was written back to its home.  This is returned when a non-RFO reques=
-t hits a cacheline in the Modified state. The Cache can either downgrade th=
-e cacheline to a S (Shared) or I (Invalid) state depending on how the syste=
-m has been configured.  This response will also be sent when a cache reques=
-ts E (Exclusive) ownership of a cache line without receiving data, because =
-the cache must acquire ownership.",
->          "UMask": "0x10",
->          "Unit": "CHA"
->      },
+ usr/include/Makefile | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/usr/include/Makefile b/usr/include/Makefile
+index 1c2ae1368079..295d51e6ade0 100644
+--- a/usr/include/Makefile
++++ b/usr/include/Makefile
+@@ -34,7 +34,6 @@ no-header-test += linux/hdlc/ioctl.h
+ no-header-test += linux/ivtv.h
+ no-header-test += linux/kexec.h
+ no-header-test += linux/matroxfb.h
+-no-header-test += linux/nfc.h
+ no-header-test += linux/omap3isp.h
+ no-header-test += linux/omapfb.h
+ no-header-test += linux/patchkey.h
+
+-- 
+ldv

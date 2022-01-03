@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4050648333D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:35:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19E7D48323B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:26:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234424AbiACOfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:35:22 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35376 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235021AbiACOc3 (ORCPT
+        id S233799AbiACO0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:26:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38396 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233613AbiACOZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:32:29 -0500
+        Mon, 3 Jan 2022 09:25:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87239C061395;
+        Mon,  3 Jan 2022 06:25:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CFC44B80F10;
-        Mon,  3 Jan 2022 14:32:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99EACC36AEE;
-        Mon,  3 Jan 2022 14:32:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 279806111B;
+        Mon,  3 Jan 2022 14:25:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3332C36AEB;
+        Mon,  3 Jan 2022 14:25:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220346;
-        bh=qaEqp8YudRu590dhRs8eng7RbMWmXDKwxILbzHO9Br0=;
+        s=korg; t=1641219934;
+        bh=BiNP+Kkw3KOHP/XtRw2+kB+r1H+C1pHGVmnc0XIsH2s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=onJk7/EL6Ws3d+uHDAXNT1qTl8Xo4oSg5W+AhlzABR8Ik2VLNKoFlYGenk8pAQgqu
-         dgHp4Kk8wyOj9yo9wJA0iXLysNpy/u8v380LwqoRa6qgE8yNNq5FvIMCNpeWcVZpom
-         jhutUBH8m35utGHdUZrhwuhCIHDOCVzd3KE5NWXk=
+        b=PSTV31hfzGHc3xmxz8xwN3SK11b+bfu+UYPwi382HApY8PwJY++Vkn0rIQyHESt4G
+         xb+SMRX1YEJsOXwfxc3p4fPlm8RZo1qdTTuWNIYmekIa1Gfzmf7OAsQeNsFvmCFmxn
+         2m+jM3eJguPEqMVBweQJpe/pJbWJgahyOb/F/nWg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Shannon Nelson <snelson@pensando.io>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 41/73] ionic: Initialize the lif->dbid_inuse bitmap
+        stable@vger.kernel.org, Chunfeng Yun <chunfeng.yun@mediatek.com>
+Subject: [PATCH 4.19 22/27] usb: mtu3: set interval of FS intr and isoc endpoint
 Date:   Mon,  3 Jan 2022 15:24:02 +0100
-Message-Id: <20220103142058.240014366@linuxfoundation.org>
+Message-Id: <20220103142052.881739621@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142056.911344037@linuxfoundation.org>
-References: <20220103142056.911344037@linuxfoundation.org>
+In-Reply-To: <20220103142052.162223000@linuxfoundation.org>
+References: <20220103142052.162223000@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,40 +47,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-[ Upstream commit 140c7bc7d1195750342ea0e6ab76179499ae7cd7 ]
+commit 43f3b8cbcf93da7c2755af4a543280c31f4adf16 upstream.
 
-When allocated, this bitmap is not initialized. Only the first bit is set a
-few lines below.
+Add support to set interval also for FS intr and isoc endpoint.
 
-Use bitmap_zalloc() to make sure that it is cleared before being used.
-
-Fixes: 6461b446f2a0 ("ionic: Add interrupts and doorbells")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Shannon Nelson <snelson@pensando.io>
-Link: https://lore.kernel.org/r/6a478eae0b5e6c63774e1f0ddb1a3f8c38fa8ade.1640527506.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 4d79e042ed8b ("usb: mtu3: add support for usb3.1 IP")
+Cc: stable@vger.kernel.org
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Link: https://lore.kernel.org/r/20211218095749.6250-4-chunfeng.yun@mediatek.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/pensando/ionic/ionic_lif.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/mtu3/mtu3_gadget.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/net/ethernet/pensando/ionic/ionic_lif.c b/drivers/net/ethernet/pensando/ionic/ionic_lif.c
-index 7f3322ce044c7..6ac507ddf09af 100644
---- a/drivers/net/ethernet/pensando/ionic/ionic_lif.c
-+++ b/drivers/net/ethernet/pensando/ionic/ionic_lif.c
-@@ -3283,7 +3283,7 @@ int ionic_lif_init(struct ionic_lif *lif)
- 		return -EINVAL;
+--- a/drivers/usb/mtu3/mtu3_gadget.c
++++ b/drivers/usb/mtu3/mtu3_gadget.c
+@@ -98,6 +98,13 @@ static int mtu3_ep_enable(struct mtu3_ep
+ 			mult = usb_endpoint_maxp_mult(desc) - 1;
+ 		}
+ 		break;
++	case USB_SPEED_FULL:
++		if (usb_endpoint_xfer_isoc(desc))
++			interval = clamp_val(desc->bInterval, 1, 16);
++		else if (usb_endpoint_xfer_int(desc))
++			interval = clamp_val(desc->bInterval, 1, 255);
++
++		break;
+ 	default:
+ 		break; /*others are ignored */
  	}
- 
--	lif->dbid_inuse = bitmap_alloc(lif->dbid_count, GFP_KERNEL);
-+	lif->dbid_inuse = bitmap_zalloc(lif->dbid_count, GFP_KERNEL);
- 	if (!lif->dbid_inuse) {
- 		dev_err(dev, "Failed alloc doorbell id bitmap, aborting\n");
- 		return -ENOMEM;
--- 
-2.34.1
-
 
 

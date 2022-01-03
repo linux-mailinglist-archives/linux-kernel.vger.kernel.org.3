@@ -2,72 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D395483545
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 18:02:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D01483547
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 18:03:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234206AbiACRCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 12:02:46 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:48568 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229972AbiACRCp (ORCPT
+        id S234778AbiACRDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 12:03:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47230 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230009AbiACRDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 12:02:45 -0500
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 203H2gNt013979
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 3 Jan 2022 12:02:42 -0500
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id D8BD515C00E1; Mon,  3 Jan 2022 12:02:41 -0500 (EST)
-Date:   Mon, 3 Jan 2022 12:02:41 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, Jann Horn <jannh@google.com>
-Subject: Re: [PATCH] random: reseed in RNDRESEEDCRNG for the !crng_ready()
- case
-Message-ID: <YdMsMZU/PL7o2j5f@mit.edu>
-References: <20220103160002.1068356-1-Jason@zx2c4.com>
+        Mon, 3 Jan 2022 12:03:20 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7705C061761
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 09:03:19 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id a1so30972944qtx.11
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 09:03:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=yJU9zhwni6o3+iZvN5P4ezbbFlptXIDjM38WRcxQ32E=;
+        b=noF8JJJJnvfKFqf33bkEgTwyL+UX4F10QJG8qoWpz1rTM/BAcfM4zuoGJ5do4kszrw
+         Rg1fvwEhmb0g1xcJ4QtLZ1GUD/qFfGjcMmExVedWogSh8dR7+QqHd43hlZUUyqpWqjtf
+         P8BBZZfluylu1FRF7Wof6nn/wMnS8IsuTaMctpLt1gDi/Vat8TpxY47OneRsgqRxA6pK
+         k5/XMUE1tLNtJWH7ZVCftAu8fdOstJOPt8ndDb7RMAsm/7oJ2uogNGMkhbEs3ckVXngJ
+         fqTFEDvCw60xJ4NKEcx3U+nXrKXjnef5GibvxoAGc/Umf3E3n/qk18l4By+fUUDALHG7
+         5+bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=yJU9zhwni6o3+iZvN5P4ezbbFlptXIDjM38WRcxQ32E=;
+        b=V68EEvXm1TW+obneMYrI+mQAu4546DsPCKpIqOaqPRK2JkbjXeAmlUo4cT+c+0qLyQ
+         yWm60JOHm54aKAa8JTsu5Lx+8Z7/YOl9kbBPIc0i/V33vPX+J3/DKrKukYPJoAk/CSUb
+         JNHIurW2nj2IK7luFvHeuCroFXslSqLe0kQ85I/JXCWTCX/U+vE4ovW7jF7OfKtlXMwQ
+         J0N2omrXlkleVNiTc21l/ciqeDU2xMlsRVA9wbWFfGPDwGOULf23FBFBtCvGnOm60tNU
+         TIZOGTnXFB8NWB6dNWN6J0rhg/14U8TrsuE77GOaKrQcdoFbks7hWHT5FRHxb1ds0YyO
+         DM6w==
+X-Gm-Message-State: AOAM532apq0cKcYqJyw8OajyIoM2DN65iRpFd17YCHChNLkmFBZ6XgAY
+        HTRB+hGVSZQIem2YzOIAVf6CtA==
+X-Google-Smtp-Source: ABdhPJzA/SHPa7IwwpIDS2Ewwxk0uyuQatuwrlI5IDc0c1N8Iu658RAeumEbJlcYI0R9FitBZ7/n2A==
+X-Received: by 2002:ac8:7fc5:: with SMTP id b5mr40500137qtk.351.1641229399112;
+        Mon, 03 Jan 2022 09:03:19 -0800 (PST)
+Received: from xanadu.home (modemcable108.170-21-96.mc.videotron.ca. [96.21.170.108])
+        by smtp.gmail.com with ESMTPSA id f12sm27848315qkh.22.2022.01.03.09.03.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jan 2022 09:03:18 -0800 (PST)
+Date:   Mon, 3 Jan 2022 12:03:18 -0500 (EST)
+From:   Nicolas Pitre <npitre@baylibre.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-i3c@lists.infradead.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i3c/master/mipi-i3c-hci: correct the config reference
+ for endianness
+In-Reply-To: <20220103094504.3602-1-lukas.bulwahn@gmail.com>
+Message-ID: <3p9691n5-3qs-7s3q-pp9-389621935prr@onlyvoer.pbz>
+References: <20220103094504.3602-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220103160002.1068356-1-Jason@zx2c4.com>
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 03, 2022 at 05:00:02PM +0100, Jason A. Donenfeld wrote:
-> Userspace often wants to seed the RNG from disk, without knowing how
-> much entropy is really in that file. In that case, userspace says
-> there's no entropy, so none is credited. If this happens in the
-> crng_init==1 state -- common at early boot time when such seed files are
-> used -- then that seed file will be written into the pool, but it won't
-> actually help the quality of /dev/urandom reads. Instead, it'll sit
-> around until something does credit sufficient amounts of entropy, at
-> which point, the RNG is seeded and initialized.
+On Mon, 3 Jan 2022, Lukas Bulwahn wrote:
+
+> The referred config BIG_ENDIAN does not exist. The config for the
+> endianness of the CPU architecture is called CPU_BIG_ENDIAN.
 > 
-> Rather than let those seed file bits sit around unused until "sometime
-> later", userspaces that call RNDRESEEDCRNG can expect, with this commit,
-> for those seed bits to be put to use *somehow*. This is accomplished by
-> extracting from the input pool on RNDRESEEDCRNG, xoring 32 bytes into
-> the current crng state.
+> Correct the config name to the existing config for the endianness.
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-I think this is fine, but the RNDRESEEDRNG ioctl is rarely used by
-userspace.  From a Google search I see that jitterentropy uses it, but
-in most setups it won't be called.
+Acked-by: Nicolas Pitre <npitre@baylibre.com>
 
-So something we could do to improve things is to add some code to
-random_write() so that in the case where crng_init is 1, we take half
-of the bytes or CHACHA_KEY_SIZE bytes, whichever is less, and pass
-those bytes to crng_fast_load().  (We'll have to copy it to a bounce
-buffer since the passed in pointer is __user, and memzero_explicit it
-after calling crng_fast_load.)
-
-This will divert some part of the seed file to partially initialize
-the CRNG.  It won't fully initialize the CRNG, but that's fine, since
-it's possible that the seed file has been compromised --- or is a
-fixed value if the seed file is from coming a VM image file.  So
-having at least half of the entropy used to initialize CRNG up to
-crng_init=1 is coming from interrupt timing seems like a good thing.
-
-					- Ted
+> ---
+>  drivers/i3c/master/mipi-i3c-hci/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i3c/master/mipi-i3c-hci/core.c b/drivers/i3c/master/mipi-i3c-hci/core.c
+> index 1b73647cc3b1..8c01123dc4ed 100644
+> --- a/drivers/i3c/master/mipi-i3c-hci/core.c
+> +++ b/drivers/i3c/master/mipi-i3c-hci/core.c
+> @@ -662,7 +662,7 @@ static int i3c_hci_init(struct i3c_hci *hci)
+>  
+>  	/* Make sure our data ordering fits the host's */
+>  	regval = reg_read(HC_CONTROL);
+> -	if (IS_ENABLED(CONFIG_BIG_ENDIAN)) {
+> +	if (IS_ENABLED(CONFIG_CPU_BIG_ENDIAN)) {
+>  		if (!(regval & HC_CONTROL_DATA_BIG_ENDIAN)) {
+>  			regval |= HC_CONTROL_DATA_BIG_ENDIAN;
+>  			reg_write(HC_CONTROL, regval);
+> -- 
+> 2.17.1
+> 
+> 

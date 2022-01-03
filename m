@@ -2,115 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A97F482DDD
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 05:52:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E65FA482DE9
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 05:59:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231622AbiACEvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 23:51:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53344 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231574AbiACEvJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 23:51:09 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4D7C061761;
-        Sun,  2 Jan 2022 20:51:08 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so20535783wmj.5;
-        Sun, 02 Jan 2022 20:51:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=fUpNFk7n1xC8kYBnaIN6s2IV4QPkRGqkGmgZxWFNjR0=;
-        b=D4GN4gnEZX2f5537knsjoNwcViWodA0o3hg/jO9fmfhscAUjpfPpZNoJWJgIcRutDa
-         oSOiKguaPOGtut116jzjZhkcZ4rGGwlRNWP809WayOv0MVnRbAYp9b14fNKZyZyNt9jN
-         pQlDzcOxCP28DFTkLUlNioQLdmwN89KR9MzG3acygiPQC6o6lwJcCNDFFOw8xR7NeFrK
-         +Z+bJgGwaP/klx/cNoEi/wNhKcSrDvhvBQZrSTplgzaCCzWHsaWo/DWGWY5I/ra21d9P
-         5MlgFOi/tnHlK37VcKG11lXvFpWGRpDByNR6BXYI+RmkkNsgHiXazrTrnFNj5vBVAk5d
-         Q1Fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=fUpNFk7n1xC8kYBnaIN6s2IV4QPkRGqkGmgZxWFNjR0=;
-        b=qBK6HQEM54r7w4vNoWfZ9eD6HE6jlKI8UglES+y98Hm+TiB6MwmSn40HU2eNOCpva9
-         NdqYdmSftEjC7C7oWi8wZmfJLyXNjKXTiZcO9zSLoKs1ATjixAom535luXdTw7/JhpeC
-         rWHOplNmUsAhKenc9a63XYJDuwHRJZL2IYN44PD4rmmpZK1lCphDWflQjvWdD/VJ5Mki
-         JvqlISdxLAmI9VvQKR1gWbdHsQdbqmw9jNX4wn3Hik6mU2gT0HVsAFThV8qKZzU6/SVi
-         zto5FeLNEkmMNsRJCPddoamcANpDzUfDz23eeUfPoMLAngkLOxRszPqQ9hOW2qg9b8yx
-         5dJw==
-X-Gm-Message-State: AOAM531HNT1YNnaCVi0ubCS1KNqdn7tJUtxQPK46zYic9mN1RXw9oIjY
-        TwO1ts38RJ20KFKPg+5Nq7wWU5mEphZ4Ww==
-X-Google-Smtp-Source: ABdhPJwSG+E61BiWFkr+QkKy3SzHk8gc2FI96abNeDdfT86kfc8fwekaj6dGCSYonr2/fN6z5p7n1Q==
-X-Received: by 2002:a05:600c:4e86:: with SMTP id f6mr37010528wmq.144.1641185467256;
-        Sun, 02 Jan 2022 20:51:07 -0800 (PST)
-Received: from fuji.fritz.box (ip-89-161-76-237.tel.tkb.net.pl. [89.161.76.237])
-        by smtp.gmail.com with ESMTPSA id r7sm32819090wrt.77.2022.01.02.20.51.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jan 2022 20:51:06 -0800 (PST)
-From:   =?UTF-8?q?Tomasz=20Warnie=C5=82=C5=82o?= 
-        <tomasz.warniello@gmail.com>
-To:     corbet@lwn.net
-Cc:     =?UTF-8?q?Tomasz=20Warnie=C5=82=C5=82o?= 
-        <tomasz.warniello@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 10/15] scripts: kernel-doc: Transform documentation into POD (10/15)
-Date:   Mon,  3 Jan 2022 05:50:51 +0100
-Message-Id: <20220103045051.506526-5-tomasz.warniello@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220103045051.506526-1-tomasz.warniello@gmail.com>
-References: <20220103045051.506526-1-tomasz.warniello@gmail.com>
+        id S229768AbiACE7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 23:59:06 -0500
+Received: from mout.web.de ([212.227.15.3]:36331 "EHLO mout.web.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229677AbiACE7F (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 2 Jan 2022 23:59:05 -0500
+X-Greylist: delayed 302 seconds by postgrey-1.27 at vger.kernel.org; Sun, 02 Jan 2022 23:59:04 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
+        s=dbaedf251592; t=1641185943;
+        bh=HmxNcSlJD/9da6dyDW2ehByKsA6AedoSNPaTtlEXE/8=;
+        h=X-UI-Sender-Class:From:To:Subject:Date;
+        b=RizyQgdjl/e0GYHtH2BJArvaGnRRdgf5JTMu8mJgAKALp08qk3bO7vQmFSsHzP8FY
+         r/aXtBbxnkvSKl+3N17ucGFtkkhWJcE+LsCClkgYVpj/pQR9q8HQ/ZAgISeN+bqXob
+         US72cuVCmNocF+F7dtIBml3+71aZAFGLoXVb/yPU=
+X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
+Received: from arch.localnet ([93.219.152.58]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1Mx0N5-1mAvwo37v9-00yBjJ for
+ <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 05:54:01 +0100
+From:   Fabian Maurer <dark.shadow4@web.de>
+To:     linux-kernel@vger.kernel.org
+Subject: Usage of the UIO framework with DMA and x86 ports
+Date:   Mon, 03 Jan 2022 05:54:01 +0100
+Message-ID: <6089204.lOV4Wx5bFT@arch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+X-Provags-ID: V03:K1:A8EpY6g6GaybWX546juI8zUDDXgDTYL5P6Qr8/mcB727ugPNePm
+ QW20VhhosKh7gqcQvcp/R1mJSa4grbuqg+5iwogRpdZ41dStDxfY1ojc/ZPjnvphPeqe13Q
+ K2pKRAw45WvFyzm41NrsQnSUiLnSBYZPBS3kDI2v2cRR3mkL1BKYyZUXX4BzaqsmeFlADgI
+ jdhhHtcm8ZyzoN4PbERSw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ji6+pUMuduw=:Os4Vtpi5O+Tohe7mdS9azT
+ M+TZ1vZaHH8ELaRLj/x8wmVul/w14UhKkAbozBDq9hwklB3E4rvtlK/mcmHQgpeoiXVgWEbI4
+ x/5u0PWHQoVaMK18k0vxKRFzgHfGrIVUfCwN16AYjCA4EcHmd/n4WfvhD4kpBMOqfzvJjff1d
+ X2ZMuRu5gBv07GN2NWlmhVlD/RwOlRqqh/H5ipLpjQVbxTMqcKS540NgqcZtrjaI6vCvfu4C7
+ 1Z3cftJtJMRH8DsZduVYKXijkW/mnrPhKkSPYJVXRRFCL9NZf7+TCQpp4l4yQjuqOCkqpEgOo
+ 2G27EgPdIckS4jKXtEquoHLxenIeXJef1SG4T0LExRDKgNo04p1rX8X9dbotRTlgrPSf7LWJd
+ 6/TTFnTIY2pTO7rKbuvN78dappa+ZvMOhnnjUgJW7sPHXYu2OhIaGgOCoNJStSwSI9lHShKtf
+ T6q8YGWvZCgOPmdFBcpmHkmoOJTvTuUKqE+b3FziGryNPcc9NVvEM4Bf3Xm1rX/gHYYf0+nz+
+ VxPVUp6a8mvhDvLT7ikhoH5t7TLrpgiLnkYop3B1aeyESDNfQGnnIXVYtKlU/XRcoyAj30eeT
+ 4gI3l5NbHjqmMilTQP08Z7bzX80EeDC8CV0LjnJE6lHD99jqiMgsQOmNyxKyaQJd/jFC/m0I8
+ FWH0orpZ67zHjcKx0OJ2CPkBmM3yz9XOpf/57yyO0CKiZ3ejielFx3I6cwML+2CaVEwXq4Y4i
+ pS3j4FKDpPwuAa9SGj8T2o/gd0KSoxo1CmeUhYcAJxh5Cj8GAlA56qBENrOYWxz4r6QyrdEaS
+ hj72sRECG7q6UIsjc5GsmlMHI+FZTF82Tl1em0sGuEX7Ch17Pmo3CbKV+PHJ2jBb7lDs+lQQd
+ ZuHrAcszQMo1+ABZrvmNzvNQANR7Db/x/CtoTT9tTM0jd7jm3DVjrw7J2GWQBCkNZz8AFSeu/
+ t/Fd+7qkMP2jEoeVunZ+SZdm4WyDMUcKF2EmPiDyA9DSgdyaqosLUeB27LoaLVlHedSyg9pqj
+ W+MX2zCCqkPp+Gn/1ATV5WvLuwyUAUy73miEGOMh06w+vKzUg5pbYfG7r4MbBVlHppi6f8L/C
+ XqtF+IM7K61NBE=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Step 10) Replace the usage function
+Hello,
 
-This ends the fundamental POD transformation.
+I want to port the pcnet32 driver to userland for learning purposes. Maybe=
+ for
+something like ndiswrapper but in userspace.
 
-You can see the results with:
+I wanted to ask if it's possible to use UIO for PCI devices that need DMA =
+and
+x86 ports access. Preferably without writing my own kernel module.
+The documentation I found i a bit... lacking.
 
-$ scripts/kernel-doc -help
+Interrupts and memory-mapped-io are possible with uio_pci_generic, but not
+sure about DMA and ports. Ports are doable with a custom kernel module, bu=
+t I
+didn't find anything for using DMA with UIO. Except for creating your own
+solution.
 
-See step 1 for the series details.
+Is there something in UIO that allows me to avoid messing with kernel modu=
+les?
 
-Signed-off-by: Tomasz Warniełło <tomasz.warniello@gmail.com>
----
- scripts/kernel-doc | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+Second, low priority question:
+For the ndsiwrapper-in-userland idea I'd need to do the same with USB. Do =
+I
+need to create my own solution here or can this also be done with UIO?
 
-diff --git a/scripts/kernel-doc b/scripts/kernel-doc
-index 76018ca81594..bf0c5bb7b026 100755
---- a/scripts/kernel-doc
-+++ b/scripts/kernel-doc
-@@ -79,15 +79,6 @@ See Documentation/doc-guide/kernel-doc.rst for the documentation comment syntax.
- # 25/07/2012 - Added support for HTML5
- # -- Dan Luedtke <mail@danrl.de>
- 
--sub usage {
--    my $message = <<"EOF";
--Usage: $0 [OPTION ...] FILE ...
--
--EOF
--    print $message;
--    exit 1;
--}
--
- #
- # format of comments.
- # In the following table, (...)? signifies optional structure.
-@@ -468,7 +459,7 @@ while ($ARGV[0] =~ m/^--?(.*)/) {
-     } elsif ($cmd eq "Werror") {
- 	$Werror = 1;
-     } elsif (($cmd eq "h") || ($cmd eq "help")) {
--	usage();
-+			pod2usage(-exitval => 0, -verbose => 2);
-     } elsif ($cmd eq 'no-doc-sections') {
- 	    $no_doc_sections = 1;
-     } elsif ($cmd eq 'enable-lineno') {
--- 
-2.30.2
+Please CC me in replies.
+
+Regards,
+Fabian Maurer
+
 

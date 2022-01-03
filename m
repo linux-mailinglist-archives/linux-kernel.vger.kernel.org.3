@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D915D483770
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 20:11:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE92483771
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 20:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233953AbiACTLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 14:11:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48262 "EHLO
+        id S234062AbiACTMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 14:12:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233669AbiACTLs (ORCPT
+        with ESMTP id S232939AbiACTMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 14:11:48 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50554C061761
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 11:11:48 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id o6so139502090edc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 11:11:48 -0800 (PST)
+        Mon, 3 Jan 2022 14:12:50 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38F8C061761
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 11:12:49 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id u25so18159016edf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 11:12:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=8LpbJ40RMtGdL7dvHZ4+rXlOz+sMuPTGwqmKmFyNXJk=;
-        b=gzruZNCqvf+NZH4xW1qDIXaQKtspAUmzfbOYOr5VgwPSfY6qb/Qlzm5KXEQpL65bQ1
-         ySjCIy00tCVD5rAsLxLymFpCYctUXKQnJkEjHWmR7R8K+Hn7voYWARmCJB0K5Wxa5Yle
-         QNj/ymRmuW8sWJgtadS8hT7+3OzuWuLmU3XhhZm1iQawVJrDi4XJv5SZJ8TBfueXTzPA
-         H5i7Zi0E3H6SA+cc8GBk8IeLNL2+Aoc/k9Zq20IR0IX1JAX9DEx1Lp4+FUiLNmfE+859
-         0RebFYSsWNR90CN1vFoKx9ZCvs8dv5+kkNHebhKgGSfcwbD92iiCoGtlEKemkz1t/WT+
-         z48w==
+        bh=s+MuB54PDkEfI8PHV65928kvfFhHSc+/Cs9qJcLi3fQ=;
+        b=XjizaNZe9UlVUccI/ZOAhOXweQwyHLqOQ/yjsebGfXxdxK8IHTZSAB8Rr9J4q84ABu
+         J8ZwEBxvRh/gj4Hu3OKxz1tzCEn8/rQj5xe43AIZncfLy1PrYjSe9bKmTnGPLV2voWVG
+         6bVe5kuL6e6XXep17mrqkbsjtcgJLCPKoOpginuHGC+fCWgnrm2ENyRwWxLhTVFtRRKT
+         /w95L6gMQTxMbq+IfDoN/GFCt9cuoWUIJtqy5G9cm3ROoOJB8hj+IZa8bUVfU8xcXZhk
+         GWtZVISqlKt4BpbZBsW00k2naU6h/kjGyqYA47V/WxnRAMCfvgM7ghsUn8xHMeEQccUo
+         RmWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8LpbJ40RMtGdL7dvHZ4+rXlOz+sMuPTGwqmKmFyNXJk=;
-        b=7/kQBiQ1N8g7AaLzG+lZfCWxeQl2baFTI0r2qhZypmN4o/jStbpe+11Inmu2E/5eLH
-         ALLyoj7gkiFVudduCVt6lcv2ES5WQXBDt3Xf/dk+HvoC2KsvRNvqN2WJM7H9HTZTQYbK
-         rcruIEUQyqnsNsoeOQ5gnwvUPtMxLV/AJ9kUsuQ3hrgIPyys5lofLC5esfUsldpGIvcH
-         atWflw6a9ZkP8yfh4Pi6wtF4Pmf+b5oLQ0P0VMzQSCAlSF0eJQkVCsTABTvPPRC2O/4m
-         NUcNlxEASZHAa6nO27CYRo2Xyg/VK7BVuRntipcJxoKQgSFXhjqcWmsNNqeRa7lN+kjW
-         rykQ==
-X-Gm-Message-State: AOAM530WR7Dv2vLCD3T/dVjMjtP1T9ShIyjbOySvCKK/ve7SOB4VBuHb
-        19WEYUtVPVlnxJw97nXyJPo=
-X-Google-Smtp-Source: ABdhPJz8ii42Fhw8J3V8PDp9kVvGCo7GA3FfPxfVQ4KKnG6JfenvWXwpbYNjzNISPUSkh5DfZelrjA==
-X-Received: by 2002:a17:906:7d96:: with SMTP id v22mr7613314ejo.538.1641237106997;
-        Mon, 03 Jan 2022 11:11:46 -0800 (PST)
+        bh=s+MuB54PDkEfI8PHV65928kvfFhHSc+/Cs9qJcLi3fQ=;
+        b=Bwg0N6le/wi/Ifiq3rsUiwDXoISCAf8tyhjXEUOvwNAs/tY6ISESD9zzlwM+Lye2sv
+         QcU32RYwGTOHMJgKomfruEMSiR75rqJGkU4uZNdtDBuOufJfR2l6yf8OYLkkFf85ImtW
+         AgqG1xjWebHSP7B2DBS4kIWeY1xEkgoknGr/88cRzNJC95jhGy/drN2+t3iJ/W7HqNeA
+         TUtYrlXGYvYTU4P6QDpdTBAcpAbnHKBWiM4R2QpbEDpo4nB23BSxdJzMhyblpQfcGmwp
+         yg5hXru+JiJnIHUz1JY/jupr5bJSv1x7pky4x+SCLV6k+5ZAlwsk/ppgHSmFcBzaoXQk
+         TJkg==
+X-Gm-Message-State: AOAM533SbMSnG6zt+lnTk4ay6OBknrtLsp6nTegH0miXRH2E4nS6eFU8
+        WYUcNhRgNVz82WYVzlL1McI=
+X-Google-Smtp-Source: ABdhPJw88SOpvhao9DO04k3oBU4RhcYRfdpFcsOxiSdOGgUNhTlhVhQybV4RobOU7BkjKsId081Uzw==
+X-Received: by 2002:a05:6402:22fc:: with SMTP id dn28mr45137352edb.65.1641237168021;
+        Mon, 03 Jan 2022 11:12:48 -0800 (PST)
 Received: from t470p.fritz.box (host-87-18-201-21.retail.telecomitalia.it. [87.18.201.21])
-        by smtp.gmail.com with ESMTPSA id gt20sm7009614ejc.11.2022.01.03.11.11.45
+        by smtp.gmail.com with ESMTPSA id gt20sm7009614ejc.11.2022.01.03.11.12.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jan 2022 11:11:46 -0800 (PST)
+        Mon, 03 Jan 2022 11:12:47 -0800 (PST)
 From:   Alberto Merciai <alb3rt0.m3rciai@gmail.com>
 Cc:     alb3rt0.m3rciai@gmail.com, linuxfancy@googlegroups.com,
         Larry Finger <Larry.Finger@lwfinger.net>,
@@ -63,9 +63,9 @@ Cc:     alb3rt0.m3rciai@gmail.com, linuxfancy@googlegroups.com,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Zameer Manji <zmanji@gmail.com>, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 07/56] staging: r8188eu: add parenthesis to macro SetMFrag
-Date:   Mon,  3 Jan 2022 20:01:42 +0100
-Message-Id: <20220103190326.363960-8-alb3rt0.m3rciai@gmail.com>
+Subject: [PATCH 08/56] staging: r8188eu: rename camelcase SetMFrag to set_m_frag
+Date:   Mon,  3 Jan 2022 20:01:43 +0100
+Message-Id: <20220103190326.363960-9-alb3rt0.m3rciai@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220103190326.363960-1-alb3rt0.m3rciai@gmail.com>
 References: <20220103190326.363960-1-alb3rt0.m3rciai@gmail.com>
@@ -76,26 +76,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enclose in parenthesis complex macro SetMFrag
+Rename camel case macro SetMFrag into set_m_frag.
 
 Signed-off-by: Alberto Merciai <alb3rt0.m3rciai@gmail.com>
 ---
- drivers/staging/r8188eu/include/wifi.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/r8188eu/core/rtw_xmit.c | 2 +-
+ drivers/staging/r8188eu/include/wifi.h  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
+index b6a602060c91..aa00e1711514 100644
+--- a/drivers/staging/r8188eu/core/rtw_xmit.c
++++ b/drivers/staging/r8188eu/core/rtw_xmit.c
+@@ -924,7 +924,7 @@ s32 rtw_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, struct
+ 
+ 		pframe = mem_start;
+ 
+-		SetMFrag(mem_start);
++		set_m_frag(mem_start);
+ 
+ 		pframe += pattrib->hdrlen;
+ 		mpdu_len -= pattrib->hdrlen;
 diff --git a/drivers/staging/r8188eu/include/wifi.h b/drivers/staging/r8188eu/include/wifi.h
-index 1d24d798c5f9..6e39a72e49db 100644
+index 6e39a72e49db..fc5be22c5d2a 100644
 --- a/drivers/staging/r8188eu/include/wifi.h
 +++ b/drivers/staging/r8188eu/include/wifi.h
-@@ -176,7 +176,7 @@ enum WIFI_REG_DOMAIN {
+@@ -175,7 +175,7 @@ enum WIFI_REG_DOMAIN {
+ 
  #define get_tofr_ds(pframe)	((GetToDs(pframe) << 1) | GetFrDs(pframe))
  
- #define SetMFrag(pbuf)	\
--	*(__le16 *)(pbuf) |= cpu_to_le16(_MORE_FRAG_)
-+	(*(__le16 *)(pbuf) |= cpu_to_le16(_MORE_FRAG_))
+-#define SetMFrag(pbuf)	\
++#define set_m_frag(pbuf)	\
+ 	(*(__le16 *)(pbuf) |= cpu_to_le16(_MORE_FRAG_))
  
  #define GetMFrag(pbuf)	(((*(__le16 *)(pbuf)) & cpu_to_le16(_MORE_FRAG_)) != 0)
- 
 -- 
 2.25.1
 

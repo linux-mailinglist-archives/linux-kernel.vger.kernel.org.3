@@ -2,84 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C0C4482FC0
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 11:05:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A79482FC3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 11:05:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232427AbiACKF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 05:05:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37266 "EHLO
+        id S232467AbiACKFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 05:05:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiACKF1 (ORCPT
+        with ESMTP id S232453AbiACKFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 05:05:27 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3A4C061761;
-        Mon,  3 Jan 2022 02:05:27 -0800 (PST)
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 574FE1F4202F;
-        Mon,  3 Jan 2022 10:05:25 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1641204325;
-        bh=hntGeXyWsiKe+xbghtUjPiIlp26k8TkBB3PhDBV5vno=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZRdBI3CFXyyzoojXOtCsMSQGlX1rntSNsz4C0Kg7mxyUtp7ExCSjSRvt2VO/dsQ/b
-         BLs+3PXLwrQj/0ADWrH0nLzmzu7+5L1vrcCBPPtUYbjPPcgPQBOoTcPdHckuDotKe0
-         71M5lgaFPDMHVne249GHoQq9b4/RL0UNRynsIxiyx4KwHvIoMREvEEGoCbDWHhsdD3
-         AB5jSZgQVSoARx3RkCNKK77HOI/3IKbHH9WgCZbcxruaBwsmGtZ7z0omRcGzAc7vwn
-         mr0+w1iwMQ9Pi/Nb9564kJp2qsE2djOmTtSaHm9nMSqJuBK8L/+o64IBaTs4JDM4dP
-         WwuGw+rGaTcRg==
-Date:   Mon, 3 Jan 2022 11:05:21 +0100
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     Apurva Nandan <a-nandan@ti.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Mark Brown <broonie@kernel.org>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Alexander Lobakin <alobakin@pm.me>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <p.yadav@ti.com>
-Subject: Re: [PATCH v3 03/17] mtd: spinand: Add enum spinand_protocol to
- indicate current SPI IO mode
-Message-ID: <20220103110521.72532e21@collabora.com>
-In-Reply-To: <20220101074250.14443-4-a-nandan@ti.com>
-References: <20220101074250.14443-1-a-nandan@ti.com>
-        <20220101074250.14443-4-a-nandan@ti.com>
-Organization: Collabora
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
+        Mon, 3 Jan 2022 05:05:39 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B445CC061784
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 02:05:38 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id j21so133788714edt.9
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 02:05:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zyqrhqFrOjKgAQ/NgiI6myye+ZTSj+oGpoQCEyxK7I8=;
+        b=hh82xL5h3iuQi0w0UWmziHKDei2V7WmW8Q1scEW+3QAUMeU9NQzjI4tQbE7SdjFtf1
+         jSJxTC6JXmJC30t8UiD4KSbWgFjgI5vzj/f4kgXCMMF1cXpyBUaEbmKaciHqvMxsbzsA
+         s6srxiCjzdc1gKO+ggXM4XDCqtT2PwzGVzkb/jUr2J2ZhWo5kOfS2MJEdIdlgYONwV+r
+         8UXM2kZvxf61JNCPztpCEKlCSclwA8LLCiKZq9s5TG2Hj+M4q7kIxpkcgP2mbBpk/j8b
+         XueqCMflL2VGG7B2jaKdv/ucS5zBVJXPEWQ01p2ABMjOQzlW4lcBw20nefVTfWSS2F8G
+         U11g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zyqrhqFrOjKgAQ/NgiI6myye+ZTSj+oGpoQCEyxK7I8=;
+        b=t7hHbNGeU/HDnkiZb4GoraCchHgqJjVOoDA3O8O660HPV/++L1wzB7QERo/WxduJq/
+         ewVcah3j+Caq/qubZ2RnqgMnkHTFtVR3Fad+G7+h3f9oyxakhiWjsTrjw7Es2ObJqg9D
+         +zMd0A4MEZQEjmjoch7blOMNcVHObjH3sUYZvRzHOsGPMf/pV2szWd3W3Q54EBqQc1Ov
+         jwzi04YJeE6rOmTOnhv+/PGmN2DAuUSfF+nuuk1zyTbhyEfya1k/MaxGXEELwyzFYYEg
+         6TwWndvOkKiMUnUD+fY5E4g4PmKaM96IESUej8drAnaFBmBcZf1PyCCPxeU4Akd/nxGZ
+         tYcQ==
+X-Gm-Message-State: AOAM5325swlRyEHBwy66DjmNwGTpHk4BaM/dv2JF2GO4BoxjRmBTNHyz
+        9R80YF0f0qk1QpWVjVvvLJTrSRxB2mRDWHEHtLbHiTfedAk=
+X-Google-Smtp-Source: ABdhPJz0LLpdg5ZlhYjWS1ccr4u0SOQqQpZlRsNizsQSMtlQ61aLAXVlFvutkF5sr+/qADHHxZmu4uWBVmQTZlrVwhI=
+X-Received: by 2002:a50:9556:: with SMTP id v22mr43073644eda.69.1641204336956;
+ Mon, 03 Jan 2022 02:05:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20211223103809.12343-1-andriy.shevchenko@linux.intel.com> <20211223103809.12343-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20211223103809.12343-2-andriy.shevchenko@linux.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 3 Jan 2022 11:05:26 +0100
+Message-ID: <CAMRc=MfCu8Z-FLdyz8eAqjj+soARUk3zoL8jDFpe2VyLCd2r5Q@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] gpio: dwapb: Switch to use fwnode instead of of_node
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Hoan Tran <hoan@os.amperecomputing.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 1 Jan 2022 13:12:36 +0530
-Apurva Nandan <a-nandan@ti.com> wrote:
+On Thu, Dec 23, 2021 at 11:38 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> GPIO library now accepts fwnode as a firmware node, so
+> switch the driver to use it and hence rectify the ACPI
+> case which uses software nodes.
+>
+> Note, in this case it's rather logical fix that doesn't
+> affect functionality, thus no backporting required.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
 
-> diff --git a/include/linux/mtd/spinand.h b/include/linux/mtd/spinand.h
-> index 69e06e741717..77927afcea0f 100644
-> --- a/include/linux/mtd/spinand.h
-> +++ b/include/linux/mtd/spinand.h
-> @@ -194,6 +194,18 @@
->  		   SPI_MEM_OP_NO_DUMMY,					\
->  		   SPI_MEM_OP_DATA_OUT_DTR(len, buf, 8))
->  
-> +/**
-> + * enum spinand_protocol - List of SPI protocols to denote the op protocol and
-> + *			   SPI NAND flash IO modes.
-> + */
-> +enum spinand_protocol {
-> +	SPINAND_1S_1S_1S,
-> +	SPINAND_2S_2S_2S,
-> +	SPINAND_4S_4S_4S,
-> +	SPINAND_8S_8S_8S,
-> +	SPINAND_8D_8D_8D,
+Applied, thanks!
 
-I'd just name those SPINAND_PROTO_<width><S or D> since what really
-matters is the command cycle.
+Bart

@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BE2C483190
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 14:46:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B231483194
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 14:47:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233219AbiACNqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 08:46:45 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:39384 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233129AbiACNqn (ORCPT
+        id S233231AbiACNr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 08:47:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57968 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232139AbiACNrZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 08:46:43 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 4CB141F381;
-        Mon,  3 Jan 2022 13:46:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1641217602; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pW7KJTe5zTu3iiMJg0fE76u+nPgBkCnt2grmEbXRLAg=;
-        b=qB7TI0W/+b8yn7JSgCpj/uc/yfpA55RSQl/w+i6Lkyaf9yY2QXvRZWKTe09JM1y8Qit31j
-        8mK2JVVHJIi0hhSemJNQm6Pb1I25Uub1B03aBnyxK25xG5Vis9QVOOV4Txm/XbgDiXShuE
-        thVTlyZwPiV2ph+UnEaLvRW3o56zHU8=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 31687A3B81;
-        Mon,  3 Jan 2022 13:46:41 +0000 (UTC)
-Date:   Mon, 3 Jan 2022 14:46:41 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
-        void@manifault.com
-Subject: Re: [PATCH -next] livepatch: Fix missing unlock on error in
- klp_enable_patch()
-Message-ID: <YdL+QdAv3MtRSKJy@alley>
-References: <20211225025115.475348-1-yangyingliang@huawei.com>
+        Mon, 3 Jan 2022 08:47:25 -0500
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 12874C061761;
+        Mon,  3 Jan 2022 05:47:25 -0800 (PST)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 3279B92009C; Mon,  3 Jan 2022 14:47:24 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 2E00392009B;
+        Mon,  3 Jan 2022 13:47:24 +0000 (GMT)
+Date:   Mon, 3 Jan 2022 13:47:24 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Nikolai Zhubr <zhubr.2@gmail.com>
+cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@kernel.org>,
+        x86@kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] x86/PCI: SiS PIRQ router updates
+In-Reply-To: <61D2D9B5.7080401@gmail.com>
+Message-ID: <alpine.DEB.2.21.2201031338470.56863@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2201022040130.56863@angie.orcam.me.uk> <61D2D9B5.7080401@gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211225025115.475348-1-yangyingliang@huawei.com>
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 2021-12-25 10:51:15, Yang Yingliang wrote:
-> Add missing unlock when try_module_get() fails in klp_enable_patch().
-> 
-> Fixes: bf01c2975925 ("livepatch: Fix kobject refcount bug on klp_init_patch_early failure path")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+On Mon, 3 Jan 2022, Nikolai Zhubr wrote:
 
-JFYI, the patch has been committed into livepatch.git,
-branch for-5.17/fixes.
+> One peculiarity with my specific board is that I had to also patch ROM BIOS
+> because it included some non-standard $IRT table instead of $PIR table. With
+> that in place, it now Just Works.
 
-Best Regards,
-Petr
+ I have a patch in the queue for $IRT table support too, according to your 
+and some later findings about it.  Just waiting for an ack off-list from 
+someone, so I'll hopefully post it sometime this week.  Sadly I've been 
+quite loaded with higher-priority stuff recently meaning I can't dedicate 
+so much time to these patches as I would like to.  We'll get there though 
+sooner or later.
+
+ Thanks for your confirmation as to the usability of these changes.
+
+  Maciej

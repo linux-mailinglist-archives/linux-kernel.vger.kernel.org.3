@@ -2,121 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 105B04833DB
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 16:02:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CB104833DD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 16:03:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233578AbiACPCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 10:02:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47822 "EHLO
+        id S233622AbiACPDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 10:03:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231329AbiACPCC (ORCPT
+        with ESMTP id S229978AbiACPDf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 10:02:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBC7C061761
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 07:02:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B432C61123
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 15:02:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E75DEC36AEB;
-        Mon,  3 Jan 2022 15:02:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641222121;
-        bh=/KVtOXrT0KKAcOM0b7+6nsBiEimhMvwwJncp/6a6I/I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XzTf9ts/Kkd2In+W++nVF/36nwLEcgxH/2ovO7VP9XIb3DEKfnvMQNhtCeDNOddSL
-         LFsrooTLKWbZyBkR3leGWpi3uX+btEIboVi1IRRlHvGuBUAl3WbEWlhAxeCF9H0ukM
-         LoMmpb9JxYoaUmUDncVHn7CdQ43XX+voA+Xky9od5sWYduiNIlHc0hwP0wX9O82pg2
-         sWFJXH8jqcAf1aRP7uaLuQFFezQwfLRD3e6d8sO5SZOvME981qDp5/M4eV6urn2WJm
-         qtwuE3jjkZAlnQZrzOSg01CccJ1iTnFQxC7r/NJcsiJrm7qty0UguUYHsMiXbWHflJ
-         H6QDI9OVYSJOA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id DAB6340B92; Mon,  3 Jan 2022 12:01:58 -0300 (-03)
-Date:   Mon, 3 Jan 2022 12:01:58 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        H Peter Anvin <hpa@zytor.com>, chang.seok.bae@intel.com,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH 0/6] x86/insn: Add instructions to instruction decoder
-Message-ID: <YdMP5vmU+uqMz04d@kernel.org>
-References: <20211202095029.2165714-1-adrian.hunter@intel.com>
- <20211223153808.cddab56b114e5ddf755bd2d0@kernel.org>
- <c5737eb6-383b-13ea-20d1-af597c69a21d@intel.com>
- <YdMOiFDdEny4Jicc@kernel.org>
+        Mon, 3 Jan 2022 10:03:35 -0500
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32B8C061761;
+        Mon,  3 Jan 2022 07:03:34 -0800 (PST)
+Received: by mail-ua1-x936.google.com with SMTP id v12so46338574uar.7;
+        Mon, 03 Jan 2022 07:03:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sGuic1oifrNLOsnYg8TP87dUZ5BftJE8sD2UVQG0Aus=;
+        b=doQmxPP2d+u+nuW5xCZwlQ8bPNVCQjVekcYfpmaxF32IafNJckmMGOwPI3asnnmJVg
+         lU5ZUpGCFO04aIi6VsNOygDBeTMzDwhLmOmKUvqaRa5IcEMhD9pcfncSZEj1m2X9iVGU
+         bqsUJ7ENxuxRtF1WRMJNCd+drE7OxCOqUmdxjXZt7p3oxFvRz26UG5pNb7RUeOUaz17X
+         F3KJbTAWDmUsSIdHFGcpOOhN3OfqJhhI/GLS7K/rrvpAsTkOwEfQ99pgtrdg2DVBw4/N
+         vmzV9sTFHQKaIR9K6o9xRVgSJqYpyIv+2RNtR28h/m+VRr5fMEqIjZtH58FHwVBuASDa
+         RUUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sGuic1oifrNLOsnYg8TP87dUZ5BftJE8sD2UVQG0Aus=;
+        b=Z8ZaBHd1ndbc6TcbMQ7+VoCqd/TVjIltYZQfAelAwMaFbSJicEVF5cclDHSXV4e2KT
+         2fL1PplVbTBFDYxAmXQsN+K3N9xb9Qsmo9HFpG8+lY70a+xpgEfrPr+ccqniGFNUIA3K
+         ClFPFqWj97txOH4w7z23OEZrFD7tPtRzwmT89mR3a2ExqXHOs9cBtu36vFaY1wvnomqB
+         J4ohGN0JOPuaTf7AvFR8hDvOAMYEj2D9O99CdmbQTYg60lNyBZd++GKymA3a9v3Om4CF
+         ajtplMWVbs8Y9UEhQvER4VPoMx5PS88EmwAZKmaeY1gvCVCK7LjFeGFFwrFir0Ff42EB
+         v+KQ==
+X-Gm-Message-State: AOAM531O3OLotcCS36/SemQ66eVAwBDSYt3iQ6xNRxZX+g5s64RNbd9l
+        seUDn9+z4nRdcYPDwPXb+HsigiWJ5NKi8Z0sJV4=
+X-Google-Smtp-Source: ABdhPJztNdhJnI8z8JrXBxf8JGhSZZubSuIVYtRM8JYAhJmwn0luMOVJsAuDzx0HTEW2jcD1URd4aTzeV/JC3WNKwf0=
+X-Received: by 2002:ab0:239a:: with SMTP id b26mr15334154uan.101.1641222213907;
+ Mon, 03 Jan 2022 07:03:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YdMOiFDdEny4Jicc@kernel.org>
-X-Url:  http://acmel.wordpress.com
+References: <20211221143614.480385-1-deng.changcheng@zte.com.cn> <bc8803b511ed25ddc7091ba1f09f10ca415ca51e.camel@kernel.org>
+In-Reply-To: <bc8803b511ed25ddc7091ba1f09f10ca415ca51e.camel@kernel.org>
+From:   Ilya Dryomov <idryomov@gmail.com>
+Date:   Mon, 3 Jan 2022 16:03:31 +0100
+Message-ID: <CAOi1vP-uVjgcbHj6n_BesjS6-9H+02P-cy=1MKZsy9wk=OW7-Q@mail.gmail.com>
+Subject: Re: [PATCH] ceph: replace DEFINE_SIMPLE_ATTRIBUTE with DEFINE_DEBUGFS_ATTRIBUTE
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     cgel.zte@gmail.com, Ceph Development <ceph-devel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Jan 03, 2022 at 11:56:08AM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Mon, Jan 03, 2022 at 10:13:24AM +0200, Adrian Hunter escreveu:
-> > On 23/12/2021 08:38, Masami Hiramatsu wrote:
-> > > Hi,
-> > > 
-> > > Sorry, I missed this series.
-> > > 
-> > > On Thu,  2 Dec 2021 11:50:23 +0200
-> > > Adrian Hunter <adrian.hunter@intel.com> wrote:
-> > > 
-> > >> Hi
-> > >>
-> > >> Here are patches to bring the kernel and tools x86 instruction decoder
-> > >> more up to date.
-> > >>
-> > >> x86 instruction decoder is used for both kernel instructions and user space
-> > >> instructions (e.g. uprobes, perf tools Intel PT), so it is good to update
-> > >> it with new instructions.
-> > > 
-> > > Hmm, I thought perf used objdump for that purpose internally.
-> > > Anyway, this series looks good to me. I'm a bit surprised that the
-> > > insn decoder can actually support those instructions only changing
-> > > X86_EVEX_M() macro :-)
-> > > 
-> > > Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > > 
-> > > Thank you!
-> > 
-> > Thanks!
-> > 
-> > Arnaldo, could you consider taking these patches?
-> 
-> I can pick the tools/ bits, the arch/x86/ should go via PeterZ, right?
-> Peter?
+On Mon, Jan 3, 2022 at 3:41 PM Jeff Layton <jlayton@kernel.org> wrote:
+>
+> On Tue, 2021-12-21 at 14:36 +0000, cgel.zte@gmail.com wrote:
+> > From: Changcheng Deng <deng.changcheng@zte.com.cn>
+> >
+> > Fix the following coccicheck warning:
+> > ./fs/ceph/debugfs.c: 390: 0-23: WARNING: congestion_kb_fops should be
+> > defined with DEFINE_DEBUGFS_ATTRIBUTE
+> >
+> > Use DEFINE_DEBUGFS_ATTRIBUTE rather than DEFINE_SIMPLE_ATTRIBUTE for
+> > debugfs files.
+> >
+> > Reported-by: Zeal Robot <zealci@zte.com.cn>
+> > Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+> > ---
+> >  fs/ceph/debugfs.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/fs/ceph/debugfs.c b/fs/ceph/debugfs.c
+> > index 3cf7c9c1085b..64c4158c17c8 100644
+> > --- a/fs/ceph/debugfs.c
+> > +++ b/fs/ceph/debugfs.c
+> > @@ -387,8 +387,8 @@ static int congestion_kb_get(void *data, u64 *val)
+> >       return 0;
+> >  }
+> >
+> > -DEFINE_SIMPLE_ATTRIBUTE(congestion_kb_fops, congestion_kb_get,
+> > -                     congestion_kb_set, "%llu\n");
+> > +DEFINE_DEBUGFS_ATTRIBUTE(congestion_kb_fops, congestion_kb_get,
+> > +                      congestion_kb_set, "%llu\n");
+> >
+> >
+> >  void ceph_fs_debugfs_cleanup(struct ceph_fs_client *fsc)
+>
+> Thanks, merged into our testing branch. This should make v5.17.
 
-I tried applying the whole shebang and got:
+Hi Jeff,
 
-⬢[acme@toolbox perf]$ git am ./20211202_adrian_hunter_x86_insn_add_instructions_to_instruction_decoder.mbx
-Applying: perf tests: Add AMX instructions to x86 instruction decoder test
-Applying: x86/insn: Add AMX instructions to x86 instruction decoder
-Applying: perf tests: Add misc instructions to x86 instruction decoder test
-Applying: x86/insn: Add misc instructions to x86 instruction decoder
-Applying: perf tests: Add AVX512-FP16 instructions to x86 instruction decoder test
-Applying: x86/insn: Add AVX512-FP16 instructions to x86 instruction decoder
-error: patch failed: arch/x86/lib/x86-opcode-map.txt:896
-error: arch/x86/lib/x86-opcode-map.txt: patch does not apply
-Patch failed at 0006 x86/insn: Add AVX512-FP16 instructions to x86 instruction decoder
-hint: Use 'git am --show-current-patch=diff' to see the failed patch
-When you have resolved this problem, run "git am --continue".
-If you prefer to skip this patch, run "git am --skip" instead.
-To restore the original branch and stop patching, run "git am --abort".
-⬢[acme@toolbox perf]$
+This came up last year, has anything changed?
 
-So since this needs rebasing, could you please split it into two
-patchsets, one for tools/ and another for arch and send two batches?
-This way I'll pick the tools/ one, the x86 maintainers the other bits.
+https://www.spinics.net/lists/ceph-devel/msg50492.html
 
-Otherwise the x86 maintainers would have to test if the tools/ bits
-works as expected, etc.
+Thanks,
 
-- Arnaldo
+                Ilya

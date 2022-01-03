@@ -2,29 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 678FE482FD6
+	by mail.lfdr.de (Postfix) with ESMTP id AE788482FD8
 	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 11:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232631AbiACKTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 05:19:05 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:45956 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbiACKTF (ORCPT
+        id S232640AbiACKTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 05:19:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40262 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231387AbiACKTG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 05:19:05 -0500
+        Mon, 3 Jan 2022 05:19:06 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FBDC061761;
+        Mon,  3 Jan 2022 02:19:05 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 76E7F1F41D81
+        with ESMTPSA id 126CC1F41D8F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1641205143;
-        bh=c7Kt7fJqy3XK6npICeqo8aKlK7uv/fvZHkx0HfPLFvI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Xe7x8sfNccqTWEMFHcanwwvnmtUGxddKzG7SkdpwV+Cw6dQbCbST09zPX+ELHmGhx
-         6JacueS1xPOAQHVDXSazsUZA7D/USuqyE7zeElNx1bPG4nGFwuXEQsxwAGq6+D+gF2
-         mUIaDihRZ8DT/d4e7V5uelQha8x5unUiZ78c/DhlwZBlp6zd3JvY5OMaZ8xSmOPWLY
-         Y1/byQcSrQzKRKfPoRtHkQvJUK9+uV8w2QZMhw3VgcN71syFdBKSNO5zgDmp1+TIJs
-         GYgdMs87g4R/wdAEmFdKTqlugbxzwss7ZarV3UaRHP6V4UWm19ufA0JzMs14JUBVR0
-         AJWjzpcgLf5HA==
+        s=mail; t=1641205144;
+        bh=mGsQoC3yAKQfojVeguaBxYZrtaLtq1wmqI0wIpEb3gw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=PcphB17zDrBeDVMj1gM6wEFjcxGh4VuFeag/FNaH7oBscazIGHE628ONwKpQeM6to
+         ZNSWLmdMeP8455P9S7qadtUxc4nXqSADKOBij0mjIUrrEyJiT/6az+ThZQRTRS+Ear
+         ht6ZPsVuTX5oC2MtrzXJsN6lbqOU3hdeacoU7e2Ff6edQDmxKYOWIn3k1N6/GPowcd
+         TUIbVdJ6XV3ShSUZSk0LduMILDp800CVegTWbaT0YFyzy12MaWi5WT8LuqdE+m0M/k
+         dTGNSHUA7zCKQkVIGPBh36NUQpz0lxTgj/p7b0T/+gCa9fbu3Qy9RW6OQSKYesAXBF
+         vliDnPYjG6zKA==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     sean.wang@kernel.org
@@ -34,10 +37,12 @@ Cc:     linus.walleij@linaro.org, matthias.bgg@gmail.com,
         kernel@collabora.com,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 1/3] pinctrl: mediatek: pinctrl-moore: Simplify with dev_err_probe()
-Date:   Mon,  3 Jan 2022 11:18:53 +0100
-Message-Id: <20220103101855.17350-1-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 2/3] pinctrl: mediatek: pinctrl-paris: Simplify with dev_err_probe()
+Date:   Mon,  3 Jan 2022 11:18:54 +0100
+Message-Id: <20220103101855.17350-2-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20220103101855.17350-1-angelogioacchino.delregno@collabora.com>
+References: <20220103101855.17350-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -48,22 +53,22 @@ Use the dev_err_probe() helper to simplify error handling during probe.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/pinctrl/mediatek/pinctrl-moore.c | 25 +++++++++---------------
- 1 file changed, 9 insertions(+), 16 deletions(-)
+ drivers/pinctrl/mediatek/pinctrl-paris.c | 19 +++++++------------
+ 1 file changed, 7 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/pinctrl/mediatek/pinctrl-moore.c b/drivers/pinctrl/mediatek/pinctrl-moore.c
-index ad3b67163973..8531206159b7 100644
---- a/drivers/pinctrl/mediatek/pinctrl-moore.c
-+++ b/drivers/pinctrl/mediatek/pinctrl-moore.c
-@@ -606,6 +606,7 @@ static int mtk_build_functions(struct mtk_pinctrl *hw)
- int mtk_moore_pinctrl_probe(struct platform_device *pdev,
+diff --git a/drivers/pinctrl/mediatek/pinctrl-paris.c b/drivers/pinctrl/mediatek/pinctrl-paris.c
+index 4c6f6d967b18..70849d393917 100644
+--- a/drivers/pinctrl/mediatek/pinctrl-paris.c
++++ b/drivers/pinctrl/mediatek/pinctrl-paris.c
+@@ -956,6 +956,7 @@ static int mtk_pctrl_build_state(struct platform_device *pdev)
+ int mtk_paris_pinctrl_probe(struct platform_device *pdev,
  			    const struct mtk_pin_soc *soc)
  {
 +	struct device *dev = &pdev->dev;
  	struct pinctrl_pin_desc *pins;
  	struct mtk_pinctrl *hw;
  	int err, i;
-@@ -617,11 +618,9 @@ int mtk_moore_pinctrl_probe(struct platform_device *pdev,
+@@ -968,11 +969,9 @@ int mtk_paris_pinctrl_probe(struct platform_device *pdev,
  	hw->soc = soc;
  	hw->dev = &pdev->dev;
  
@@ -77,29 +82,20 @@ index ad3b67163973..8531206159b7 100644
  
  	hw->base = devm_kmalloc_array(&pdev->dev, hw->soc->nbase_names,
  				      sizeof(*hw->base), GFP_KERNEL);
-@@ -666,17 +665,13 @@ int mtk_moore_pinctrl_probe(struct platform_device *pdev,
+@@ -997,10 +996,8 @@ int mtk_paris_pinctrl_probe(struct platform_device *pdev,
+ 	spin_lock_init(&hw->lock);
  
- 	/* Setup groups descriptions per SoC types */
- 	err = mtk_build_groups(hw);
+ 	err = mtk_pctrl_build_state(pdev);
 -	if (err) {
--		dev_err(&pdev->dev, "Failed to build groups\n");
--		return err;
+-		dev_err(&pdev->dev, "build state failed: %d\n", err);
+-		return -EINVAL;
 -	}
 +	if (err)
-+		return dev_err_probe(dev, err, "Failed to build groups\n");
++		return dev_err_probe(dev, err, "build state failed\n");
  
- 	/* Setup functions descriptions per SoC types */
- 	err = mtk_build_functions(hw);
--	if (err) {
--		dev_err(&pdev->dev, "Failed to build functions\n");
--		return err;
--	}
-+	if (err)
-+		return dev_err_probe(dev, err, "Failed to build functions\n");
- 
- 	/* For able to make pinctrl_claim_hogs, we must not enable pinctrl
- 	 * until all groups and functions are being added one.
-@@ -692,10 +687,8 @@ int mtk_moore_pinctrl_probe(struct platform_device *pdev,
+ 	/* Copy from internal struct mtk_pin_desc to register to the core */
+ 	pins = devm_kmalloc_array(&pdev->dev, hw->soc->npins, sizeof(*pins),
+@@ -1038,10 +1035,8 @@ int mtk_paris_pinctrl_probe(struct platform_device *pdev,
  
  	/* Build gpiochip should be after pinctrl_enable is done */
  	err = mtk_build_gpiochip(hw, pdev->dev.of_node);

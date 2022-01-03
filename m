@@ -2,212 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27CC448304C
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 12:13:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63446483057
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 12:14:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232927AbiACLNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 06:13:33 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:43329 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232887AbiACLN3 (ORCPT
+        id S232921AbiACLOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 06:14:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231543AbiACLOK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 06:13:29 -0500
+        Mon, 3 Jan 2022 06:14:10 -0500
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282EEC061799
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 03:14:10 -0800 (PST)
+Received: by mail-oo1-xc34.google.com with SMTP id y13-20020a4a9c0d000000b002da7c495563so10617394ooj.10
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 03:14:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1641208410; x=1672744410;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=0sZLt1exlbnoOFLAaXjPGs1S0V3G9wpyyPepRTQ9El8=;
-  b=WtITM3pB8WJ9QjTcrD5yrGuJrgTMjAMXEG5o/eHS8Nm3YLyPp8vTR0nW
-   eyg3H/YA8hA1iVf3gTCC3DwcQM8BxMnxpiww6vnM9kT0EksZgxWQPcymN
-   SXWKziWZrWxBwznEiIkgXxaNLhY47STSE3Cr3Vo7nI3+W7zYZwJQxGd3h
-   4=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 03 Jan 2022 03:13:29 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 03:13:29 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 3 Jan 2022 03:13:28 -0800
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 3 Jan 2022 03:13:24 -0800
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <rohitkr@codeaurora.org>, <srinivas.kandagatla@linaro.org>,
-        <dianders@chromium.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
-Subject: [PATCH v2 3/3] arm64: dts: qcom: sc7280: add sound card support
-Date:   Mon, 3 Jan 2022 16:43:00 +0530
-Message-ID: <1641208380-15510-4-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1641208380-15510-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1641208380-15510-1-git-send-email-quic_srivasam@quicinc.com>
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7rQyh8qoFCVkTYCJoBUAa1eDCuPTeVpt8hM9QR+kGFw=;
+        b=lKp35sPLwfzzeo99ncy7I6kAbhlSDACT627ryf53mi4HRHQzMsBGXTG9q7DgSIQ5dd
+         du+t0EgHMYNnZCwdGxmiioX7UQGukUUf2MZlOixbz8H7j9AnAMXlY3CsU7D9T3fGCPOe
+         urPnWA2dDAB5GbwXvo+pGBEXUXwigVxVQwGRjwWv0stsQSVtWm/6oROJiOYvMyVegSP1
+         q27lKF6e8DxfUnf2oVRK1FAXd0QsxsOE/XJ12oQ6APghvll7UkPqeOAviQsq37DxeA/2
+         ZvVI3wGDXw7g5BPCP3FTKxrfr54jzIVKXSbV0GG+++jj+QHjVJ5m4aaz4ZmjYmFLlSej
+         cscg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7rQyh8qoFCVkTYCJoBUAa1eDCuPTeVpt8hM9QR+kGFw=;
+        b=4comJ9cE9fwOZyhMxh+oLvTWIFNrKSZmnm0MA7IREc+69DiLSwP+ZQu3whfHsK64Ot
+         yjRbgqH8451PO1e5T2gDjkXgQ9NtoDXxUZuJi76fnYJpzmaPlIaNSXRNGAvOl5KM6YbH
+         J845KXvS//fMULRw1SEB+CTMC2SOCLmiQUu1RFRMkV/H2i8nyVD4IWlroz0yaxnO2gvH
+         wkRo7Q5kowk1iQdRCVQr3M58zFDuMmq7HGMuXjrOV2g6YWHSU3Kogh2X94ttxeUgjqEG
+         qGbWMulKJSHQx14BhJsWBcVzGLX42J1zq7Chlb0Kiy07SSANLkOfOCYYi2Ion04wwl1Z
+         y9yQ==
+X-Gm-Message-State: AOAM533FxMyfV32dDUYfSmlvG6nWF4kNeTWt9luirA5geQjjnKMY1vpG
+        WbzfWuDuy392dEVF35gOBwvJOmyZfDhvcYzrkwdGvw==
+X-Google-Smtp-Source: ABdhPJxdQREDfbU4atMQgwtR/EJliSw5ut9txpzh8stIkU2N5ZJ8E4DugcU627Y8rFUiy4W9qw5htr1PorlsLDd/rLk=
+X-Received: by 2002:a4a:e155:: with SMTP id p21mr28047376oot.84.1641208449094;
+ Mon, 03 Jan 2022 03:14:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+References: <20211226153624.162281-1-marcan@marcan.st> <20211226153624.162281-8-marcan@marcan.st>
+ <CACRpkdbyFr-ZQuKOtx4+RRRBddmPGGUTY0j2VvT_7KxRBEQzNQ@mail.gmail.com> <46c09b62-d50f-fd2e-3eb4-ed4b643eef4a@marcan.st>
+In-Reply-To: <46c09b62-d50f-fd2e-3eb4-ed4b643eef4a@marcan.st>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 3 Jan 2022 12:13:56 +0100
+Message-ID: <CACRpkdZZSEfjSKR3QnfeUjRNyzgd3_3f8opvnpONMTfs0JLXJA@mail.gmail.com>
+Subject: Re: [PATCH 07/34] brcmfmac: pcie: Read Apple OTP information
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds sound card support for MTP using WCD938x headset playback,
-capture, I2S Speaker Playback and DMICs via VA macro.
+On Mon, Jan 3, 2022 at 6:52 AM Hector Martin <marcan@marcan.st> wrote:
+> On 2022/01/02 14:38, Linus Walleij wrote:
+> > On Sun, Dec 26, 2021 at 4:37 PM Hector Martin <marcan@marcan.st> wrote:
+> >
+> >> On Apple platforms, the One Time Programmable ROM in the Broadcom chips
+> >> contains information about the specific board design (module, vendor,
+> >> version) that is required to select the correct NVRAM file. Parse this
+> >> OTP ROM and extract the required strings.
+> >>
+> >> Note that the user OTP offset/size is per-chip. This patch does not add
+> >> any chips yet.
+> >>
+> >> Signed-off-by: Hector Martin <marcan@marcan.st>
+> >
+> > Overall looks fine!
+> >
+> >> +       const char *chip_params;
+> >> +       const char *module_params;
+> >
+> > This variable name "module_params" is a bit confusing since loadable
+> > kernel modules have params...
+> >
+> > Can we think of another name and just put a comment that this
+> > refers to the WiFi module building block?
+> >
+> > Sometimes people talk about SoM:s (system-on-modules), so
+> > maybe som_params or brcm_som_params?
+> >
+> > Yours,
+> > Linus Walleij
+> >
+>
+> How about board_params, since we're already calling those things boards
+> elsewhere in the driver? That could refer to the board of a standalone
+> module, or an integrated board, which should cover all cases.
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sc7280-crd.dts  |  8 +++
- arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 93 ++++++++++++++++++++++++++++++++
- arch/arm64/boot/dts/qcom/sc7280.dtsi     |  3 ++
- 3 files changed, 104 insertions(+)
+Fair enough, go for board_params!
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-index 035cca9..f55232e 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-@@ -76,6 +76,14 @@ ap_ts_pen_1v8: &i2c13 {
- 	qcom,us-euro-gpios = <&tlmm 81 0>;
- };
- 
-+&sound {
-+	audio-routing =
-+		"VA DMIC0", "MIC BIAS1",
-+		"VA DMIC1", "MIC BIAS1",
-+		"VA DMIC2", "MIC BIAS3",
-+		"VA DMIC3", "MIC BIAS3";
-+};
-+
- &tlmm {
- 	tp_int_odl: tp-int-odl {
- 		pins = "gpio7";
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-index 3449d56..63b1184 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-@@ -637,6 +637,99 @@
- 	};
- };
- 
-+&sound {
-+	compatible = "google,sc7280-herobrine";
-+	model = "sc7280-wcd938x-max98360a-1mic";
-+	status = "okay";
-+	audio-routing =
-+		"IN1_HPHL", "HPHL_OUT",
-+		"IN2_HPHR", "HPHR_OUT",
-+		"AMIC1", "MIC BIAS1",
-+		"AMIC2", "MIC BIAS2",
-+		"VA DMIC0", "MIC BIAS3",
-+		"VA DMIC1", "MIC BIAS3",
-+		"VA DMIC2", "MIC BIAS1",
-+		"VA DMIC3", "MIC BIAS1",
-+		"TX SWR_ADC0", "ADC1_OUTPUT",
-+		"TX SWR_ADC1", "ADC2_OUTPUT",
-+		"TX SWR_ADC2", "ADC3_OUTPUT",
-+		"TX SWR_DMIC0", "DMIC1_OUTPUT",
-+		"TX SWR_DMIC1", "DMIC2_OUTPUT",
-+		"TX SWR_DMIC2", "DMIC3_OUTPUT",
-+		"TX SWR_DMIC3", "DMIC4_OUTPUT",
-+		"TX SWR_DMIC4", "DMIC5_OUTPUT",
-+		"TX SWR_DMIC5", "DMIC6_OUTPUT",
-+		"TX SWR_DMIC6", "DMIC7_OUTPUT",
-+		"TX SWR_DMIC7", "DMIC8_OUTPUT";
-+
-+		qcom,msm-mbhc-hphl-swh = <1>;
-+		qcom,msm-mbhc-gnd-swh = <1>;
-+
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	#sound-dai-cells = <0>;
-+
-+	dai-link@6 {
-+		link-name = "WCD Playback";
-+		reg = <LPASS_CDC_DMA_RX0>;
-+		cpu {
-+			sound-dai = <&lpass_cpu LPASS_CDC_DMA_RX0>;
-+		};
-+
-+		codec {
-+			sound-dai = <&wcd938x 0>, <&swr0 0>, <&rxmacro 0>;
-+		};
-+	};
-+
-+	dai-link@19 {
-+		link-name = "WCD Capture";
-+		reg = <LPASS_CDC_DMA_TX3>;
-+		cpu {
-+			sound-dai = <&lpass_cpu LPASS_CDC_DMA_TX3>;
-+		};
-+
-+		codec {
-+			sound-dai = <&wcd938x 1>, <&swr1 0>, <&txmacro 0>;
-+		};
-+	};
-+
-+	dai-link@1 {
-+		link-name = "Secondary MI2S Playback";
-+		reg = <MI2S_SECONDARY>;
-+		cpu {
-+			sound-dai = <&lpass_cpu MI2S_SECONDARY>;
-+		};
-+
-+		codec {
-+			sound-dai = <&max98360a>;
-+		};
-+	};
-+
-+	dai-link@5 {
-+		link-name = "DP Playback";
-+		reg = <LPASS_DP_RX>;
-+		cpu {
-+			sound-dai = <&lpass_cpu LPASS_DP_RX>;
-+		};
-+
-+		codec {
-+				sound-dai = <&msm_dp>;
-+		};
-+	};
-+
-+	dai-link@25 {
-+		link-name = "DMIC Capture";
-+		reg = <LPASS_CDC_DMA_VA_TX0>;
-+		cpu {
-+			sound-dai = <&lpass_cpu LPASS_CDC_DMA_VA_TX0>;
-+		};
-+
-+		codec {
-+			sound-dai = <&vamacro 0>;
-+		};
-+	};
-+};
-+
- &swr0 {
- 	wcd_rx: wcd938x-rx{
- 		compatible = "sdw20217010d00";
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 68c7755..57bc5ef 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -2786,6 +2786,9 @@
- 
- 		};
- 
-+		sound: sound {
-+		};
-+
- 		usb_1_hsphy: phy@88e3000 {
- 			compatible = "qcom,sc7280-usb-hs-phy",
- 				     "qcom,usb-snps-hs-7nm-phy";
--- 
-2.7.4
-
+Yours,
+Linus Walleij

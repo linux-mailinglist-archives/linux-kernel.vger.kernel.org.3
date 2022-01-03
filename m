@@ -2,131 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C72AE483042
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 12:13:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7963248303D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 12:13:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232871AbiACLNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 06:13:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
+        id S232848AbiACLM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 06:12:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231558AbiACLNR (ORCPT
+        with ESMTP id S231558AbiACLM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 06:13:17 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020F1C061761
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 03:13:17 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id w16so134599692edc.11
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 03:13:16 -0800 (PST)
+        Mon, 3 Jan 2022 06:12:57 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734DAC061761;
+        Mon,  3 Jan 2022 03:12:57 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id j21so134402806edt.9;
+        Mon, 03 Jan 2022 03:12:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZZXkJPdWljf+/dV3WK0IraDCIyxCUGWBgOH9D0rR91I=;
-        b=VWBLxodJfliFelPaL4r3eW3VA8ZGb0ywH9I0BVwXx2yjtGpiQwN8Ww+MwdvHj9n82T
-         8mG21L4O1VyXTRiFUyGy21OIhXcmfm0yO8oKDI5mrp+wSN/6lh2PZuysAJbn6S+2L+46
-         JvFlNicVMFOQepR963n6OfSVNL4Mzbhw57HHJcqBVTdELg+FAyGReonbbjGTPOfkIkNK
-         Cv7KYiRMIhA4Yp3R6PJv9hDXJaIaa657dZmXBC1biMdDAqYy6f7FlzRjVn8m4hBva5Gl
-         87dcvUWfaAXc0apAMgW/AohxnBY7gpOkmAZypBCRwrMZSTwDovLUzdyTRsWZl8vqJ1IE
-         vS6A==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=sv0FFb+AVNSUt+0NEBQaAbNOgvs2uAKbwzLwFgJVapI=;
+        b=Cs+jquebwSEc/nCVzPpod6sOSUu0W5bOckbTVXl/1x2GII2solaXor+QTxcjUYNkBp
+         IvzteUQSNeiY0fjo9WpjAjwVHJyedylczE58C8vbeR4AfxmiafczqzyafpFcVhrwJTWn
+         +qDVTjeYE8KXI5nN2yiLMlF7Ma8pQdNMCj2nRVDgxy4fSS8LYRPJ3CWJSmM0zdIvUVj6
+         IkRUFHlk34oTVc4erMQH98LJdtP4gbdLJanQIzzSkxe9sCxF/I5kJjj/SgUEXY1TrZLK
+         GVNqvnA9KrcoLTWgPnKqtiyPekcLetOJ04Dchf8usuSm3pfg8PTw3UqKESpfWePG+tqd
+         r/cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZZXkJPdWljf+/dV3WK0IraDCIyxCUGWBgOH9D0rR91I=;
-        b=7TkjRbPeZGVxMcZV0c7GDWlVoljS2Dlb8oJ4AvVl4pDa8VVGhSxzmdSSqVEI8/SXeR
-         LXDMBba3jwKsqhGN6gIkU6zNsmGkklEioEzF+89r8IKsfS2kpyaVXbymNwY7LmYSK95X
-         5aqMWCUwolep7EpZFumEsyoDdTuYvrp3X4HNJREozHX9Xrnn3RxG9EFW4+PZvBkp5owt
-         xAMcBrVnw/Wr5GbKd9KlDxQ0aLhysRXaMZ5B3tWJQyV7gBYdWkpY6AchtdaFwo/NqaGr
-         lYvEWeJHrm/FFzTLlSDkux1slts9w9768qVHqrzKuyJq3GIWltvXJiN/9eQ7lhSf+WfG
-         d78g==
-X-Gm-Message-State: AOAM5308MW5TxYprneydQxMBltMBDJP1JeY+/l/Q77Bg0ElejCmLZgNH
-        VjEvVMlgylxrmUOPDEay0euxLKcVUZI=
-X-Google-Smtp-Source: ABdhPJymq7s8SuzSTRRmYBg5/4GxuUXlOQUW46uBpafvMSUxFcQz2D78ninctslyZDL7QsBI4gp7sg==
-X-Received: by 2002:a17:906:2a41:: with SMTP id k1mr34433952eje.512.1641208395620;
-        Mon, 03 Jan 2022 03:13:15 -0800 (PST)
-Received: from t470p.fritz.box (host-87-18-201-21.retail.telecomitalia.it. [87.18.201.21])
-        by smtp.gmail.com with ESMTPSA id v8sm13360312edt.10.2022.01.03.03.13.14
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=sv0FFb+AVNSUt+0NEBQaAbNOgvs2uAKbwzLwFgJVapI=;
+        b=wJHwbiivvZussSqrO2CKvJ19ch8efqQFGDJQofVr5zGX9THEsJRE0UKyzfwUVnVf85
+         GgI4K4ZJ8ji1MdeO3X1sHdpLQTlapbCxAI8q8CpLetpVx5TSSaPp5CNUiVwQJotRr62x
+         HlV9Gj9Hb3pWA7pnzr0e88arfRj4MljeaoKdtPckoMm03uuP9CFzfk5/4ea6DuxAoDIj
+         eahhVLeam0wuYiWMVd8mm7qKWqSd04LeJ3ziz4HgVif2tdmLSDYS/4uHZ1mDScUoAsFF
+         fyMBnz5SolcGVnnL1Xbh9klf+yWQjiyjk/CHgioT7mqUj2cifjANqrKylCRs9hTDttUC
+         VwCw==
+X-Gm-Message-State: AOAM531oFGsTm9De7jjHblQaqPjNHPZkqPG/CRXF1s/SjCjCbZflClQD
+        BH9lbHplhkF4rlEZifpvjEk=
+X-Google-Smtp-Source: ABdhPJyuhWTsVtfHF7R2xFKDCV1x1aL9h1LleR4iKtn4nPFsXSF/T7U4pvj91u8ghZlucSHi392fOA==
+X-Received: by 2002:a17:906:1c05:: with SMTP id k5mr25043791ejg.664.1641208375866;
+        Mon, 03 Jan 2022 03:12:55 -0800 (PST)
+Received: from gmail.com (0526F103.dsl.pool.telekom.hu. [5.38.241.3])
+        by smtp.gmail.com with ESMTPSA id zh8sm10476857ejb.21.2022.01.03.03.12.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jan 2022 03:13:15 -0800 (PST)
-From:   Alberto Merciai <alb3rt0.m3rciai@gmail.com>
-Cc:     alb3rt0.m3rciai@gmail.com, linuxfancy@googlegroups.com,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: rtl8188eu: replace camelcase field CustomerID
-Date:   Mon,  3 Jan 2022 12:11:32 +0100
-Message-Id: <20220103111131.212261-1-alb3rt0.m3rciai@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 03 Jan 2022 03:12:55 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Mon, 3 Jan 2022 12:12:50 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
+ -v1: Eliminate the Linux kernel's "Dependency Hell"
+Message-ID: <YdLaMvaM9vq4W6f1@gmail.com>
+References: <YdIfz+LMewetSaEB@gmail.com>
+ <YdLL0kaFhm6rp9NS@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdLL0kaFhm6rp9NS@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace camelcase field CustomerID to customer_id, compliant
-with linux kernel coding style.
 
-Signed-off-by: Alberto Merciai <alb3rt0.m3rciai@gmail.com>
----
- drivers/staging/rtl8188eu/hal/rtl8188e_dm.c      | 2 +-
- drivers/staging/rtl8188eu/hal/usb_halinit.c      | 2 +-
- drivers/staging/rtl8188eu/include/rtl8188e_hal.h | 2 +-
- drivers/staging/rtl8188eu/include/rtw_eeprom.h   | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+* Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
 
-diff --git a/drivers/staging/rtl8188eu/hal/rtl8188e_dm.c b/drivers/staging/rtl8188eu/hal/rtl8188e_dm.c
-index 1af919ff6d93..81d79b39e048 100644
---- a/drivers/staging/rtl8188eu/hal/rtl8188e_dm.c
-+++ b/drivers/staging/rtl8188eu/hal/rtl8188e_dm.c
-@@ -43,7 +43,7 @@ static void Init_ODM_ComInfo_88E(struct adapter *Adapter)
- 	dm_odm->SupportICType = ODM_RTL8188E;
- 	dm_odm->CutVersion = ODM_CUT_A;
- 	dm_odm->bIsMPChip = hal_data->VersionID.ChipType == NORMAL_CHIP;
--	dm_odm->PatchID = hal_data->CustomerID;
-+	dm_odm->PatchID = hal_data->customer_id;
- 	dm_odm->bWIFITest = Adapter->registrypriv.wifi_spec;
- 
- 	dm_odm->AntDivType = hal_data->TRxAntDivType;
-diff --git a/drivers/staging/rtl8188eu/hal/usb_halinit.c b/drivers/staging/rtl8188eu/hal/usb_halinit.c
-index 16a57b31a439..0fa01549bfa7 100644
---- a/drivers/staging/rtl8188eu/hal/usb_halinit.c
-+++ b/drivers/staging/rtl8188eu/hal/usb_halinit.c
-@@ -1385,7 +1385,7 @@ void rtw_hal_set_hwreg(struct adapter *Adapter, u8 variable, u8 *val)
- 				usb_write32(Adapter, REG_RCR, usb_read32(Adapter, REG_RCR) | RCR_CBSSID_DATA | RCR_CBSSID_BCN);
- 
- 				if (check_fwstate(pmlmepriv, WIFI_STATION_STATE))
--					RetryLimit = (haldata->CustomerID == RT_CID_CCX) ? 7 : 48;
-+					RetryLimit = (haldata->customer_id == RT_CID_CCX) ? 7 : 48;
- 				else /*  Ad-hoc Mode */
- 					RetryLimit = 0x7;
- 			} else if (type == 1) {
-diff --git a/drivers/staging/rtl8188eu/include/rtl8188e_hal.h b/drivers/staging/rtl8188eu/include/rtl8188e_hal.h
-index eb4655ecf6e0..231800f60583 100644
---- a/drivers/staging/rtl8188eu/include/rtl8188e_hal.h
-+++ b/drivers/staging/rtl8188eu/include/rtl8188e_hal.h
-@@ -181,7 +181,7 @@ struct txpowerinfo24g {
- 
- struct hal_data_8188e {
- 	struct HAL_VERSION	VersionID;
--	u16	CustomerID;
-+	u16	customer_id;
- 	u16	FirmwareVersion;
- 	u16	FirmwareVersionRev;
- 	u16	FirmwareSubVersion;
-diff --git a/drivers/staging/rtl8188eu/include/rtw_eeprom.h b/drivers/staging/rtl8188eu/include/rtw_eeprom.h
-index 10525493129b..57b675baf5bc 100644
---- a/drivers/staging/rtl8188eu/include/rtw_eeprom.h
-+++ b/drivers/staging/rtl8188eu/include/rtw_eeprom.h
-@@ -49,7 +49,7 @@
- /*  EEPROM size consideration. So, we have to perform proper translation
-  *  between them.
-  */
--/*  Besides, CustomerID of registry has precedence of that of EEPROM. */
-+/*  Besides, customer_id of registry has precedence of that of EEPROM. */
- /*  defined below. 060703, by rcnjko. */
- enum RT_CUSTOMER_ID {
- 	RT_CID_DEFAULT = 0,
--- 
-2.25.1
+> > Before going into details about how this tree solves 'dependency hell' 
+> > exactly, here's the current kernel build performance gain with 
+> > CONFIG_FAST_HEADERS=y enabled, (and with CONFIG_KALLSYMS_FAST=y enabled as 
+> > well - see below), using a stock x86 Linux distribution's .config with all 
+> > modules built into the vmlinux:
+> > 
+> >   #
+> >   # Performance counter stats for 'make -j96 vmlinux' (3 runs):
+> >   #
+> >   # (Elapsed time in seconds):
+> >   #
+> > 
+> >   v5.16-rc7:            231.34 +- 0.60 secs, 15.5 builds/hour    # [ vanilla baseline ]
+> >   -fast-headers-v1:     129.97 +- 0.51 secs, 27.7 builds/hour    # +78.0% improvement
+> > 
+> > Or in terms of CPU time utilized:
+> > 
+> >   v5.16-rc7:            11,474,982.05 msec cpu-clock   # 49.601 CPUs utilized
+> >   -fast-headers-v1:      7,100,730.37 msec cpu-clock   # 54.635 CPUs utilized   # +61.6% improvement
+> 
+> Speed up is very impressive, nice job!
 
+Thanks! :-)
+
+> > Techniques used by the fast-headers tree to reduce header size & dependencies:
+> > 
+> >  - Aggressive decoupling of high level headers from each other, starting
+> >    with <linux/sched.h>. Since 'struct task_struct' is a union of many
+> >    subsystems, there's a new "per_task" infrastructure modeled after the
+> >    per_cpu framework, which creates fields in task_struct without having
+> >    to modify sched.h or the 'struct task_struct' type:
+> > 
+> >             DECLARE_PER_TASK(type, name);
+> >             ...
+> >             per_task(current, name) = val;
+> > 
+> >    The per_task() facility then seamlessly creates an offset into the
+> >    task_struct->per_task_area[] array, and uses the asm-offsets.h
+> >    mechanism to create offsets into it early in the build.
+> > 
+> >    There's no runtime overhead disadvantage from using per_task() framework,
+> >    the generated code is functionally equivalent to types embedded in
+> >    task_struct.
+> 
+> This is "interesting", but how are you going to keep the 
+> kernel/sched/per_task_area_struct_defs.h and struct task_struct_per_task 
+> definition in sync?
+
+I have plans to clean this up further - see below - but in general I'd 
+*discourage* the embedding of new complex types to task_struct.
+
+In practice, most new task_struct fields are either simple types or 
+pointers to structs, which can be added to task_struct without having to 
+define a complex type for <linux/sched.h>.
+
+For example here's the list of the last 5 extensions of task_struct, since 
+November 2020 - I copy & pasted them out of git log -p include/linux/sched.h:
+
++       unsigned                        in_eventfd_signal:1;
+
++       cpumask_t                       *user_cpus_ptr;
+
++       unsigned int                    saved_state;
+
++       unsigned long                   saved_state_change;
+
++       struct bpf_run_ctx              *bpf_ctx;
+
+All of those new fields are either simple C types or struct pointers - none 
+of those extensions need per_task() handling per se.
+
+The overall policy to extend task_struct, going forward, would be to:
+
+ - Either make simple-type or struct-pointer additions to task_struct, that 
+   don't couple <linux/sched.h> to other subsystems.
+
+ - Or, if you absolutely must - and we don't want to forbid this - use the 
+   per_task() machinery to create a simple accessor to a complex embedded 
+   type.
+
+> [...]  It seems that you manually created this (which is great for 
+> testing), but over the long-term, trying to manually determine what needs 
+> to be done here to keep everything lined up properly is going to be a 
+> major pain.
+
+Note that under the policy above - and even according to the practice of 
+the last ~1.5 years - it should be exceedingly rare having to extend the 
+per_task() facility.
+
+There's one thing ugly about it, the fixed PER_TASK_BYTES limit, I plan to 
+make ->per_task_array[] the last field of task_struct, i.e. change it to:
+
+        u8                              per_task_area[];
+
+This actually became possible through the fixing of the x86 FPU code in the 
+following fast-headers commit:
+
+   4ae0f28bc1c8 headers/deps: x86/fpu: Make task_struct::thread constant size
+
+In the last ~1 year existence of the per_task() facility I didn't have any 
+maintenance troubles with these fields getting out of sync, but we could 
+also auto-generate kernel/sched/per_task_area_struct_defs.h from 
+kernel/sched/per_task_area_struct.h via a build-time script, and make 
+kernel/sched/per_task_area_struct.h the only method to define such fields.
+
+> That issue aside, I took a glance at the tree, and overall it looks like 
+> a lot of nice cleanups.  Most of these can probably go through the 
+> various subsystem trees, after you split them out, for the "major" .h 
+> cleanups.  Is that something you are going to be planning on doing?
+
+Yeah, I absolutely plan on doing that too:
+
+- About ~70% of the commits can be split up & parallelized through 
+  maintainer trees.
+
+- With the exception of the untangling of sched.h, per_task and the 
+  "Optimize Headers" series, where a lot of patches are dependent on each 
+  other. These are actually needed to get any measurable benefits from this 
+  tree (!). We can do these through the scheduler tree, or through the 
+  dedicated headers tree I posted.
+
+The latter monolithic series is pretty much unavoidable, it's the result of 
+30 years of coupling a lot of kernel subsystems to task_struct via embedded 
+structs & other complex types, that needed quite a bit of effort to 
+untangle, and that untangling needed to happen in-order.
+
+Do these plans this sound good to you?
+
+Thanks,
+
+	Ingo

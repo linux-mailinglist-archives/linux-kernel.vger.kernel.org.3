@@ -2,421 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C5D483793
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 20:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC9EE48379D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 20:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236179AbiACT3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 14:29:54 -0500
-Received: from mail-eopbgr60082.outbound.protection.outlook.com ([40.107.6.82]:60390
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236147AbiACT3u (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 14:29:50 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aK9CrkcIjR069+iYuheTn27d4JqyuwXFwX2b8cjrSmU257fjlCzZfZCjkOQ8ZVYtK/5suOibhsYmSFuc5i/88L9KIC0NO2kBt7QOKdEZeZ2A/xI81QAgeKwlGY6bgU+mxMZ0/helhc8UW0bq+QyvCYCSaAATZZcvPNFt+g/p7x+vCz1aynzWiQPRzzHMpwDbbJS4QQQ24CbgKWQVDAepI+SSdWzU4GNIfkPca2w0m2SegdYkHE3SAWULWwmhn4cq0XEzuKwLch5BisVTIzrdrj1NyD/tTbQvn93ZgjJoJAJKOt6k7R3RtU9sLLfq67NGcWyzOo3FVObcmtawxzJYcA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=i+vupuRPcQx/e8B8h9nq0mxh3cO3DhsQrMa1ftuEKW4=;
- b=DzZBRDf3CdkU2Jhklws88Q9KYxC9smH4Cd1ZLT3XXGC0kHHBklg46TixS2v9SRw85my6lbrQXyinZqtxV1x5r431rtOwSWCYB07Hy9kIfX3MkPPKJ5wYDjmQ/BUMk4n+garqy5p519foK06ZgokD+vrFsGbTHeynPX17cFO52ZgdFDldmrA06M6Bh7ZwoHxXgD+qDzp4r6DIcX7M7oy4hSdVKYg8k9TmUV6Xaz7PcIswI0RiuPlvyHwV+yAOXtz/8VJaApadrKBNwh0OdhYWArKdYQtxk5W8wdBY9VuN8wFNBhcly1NDZGK4NPEQfwX0Qp0d0KSy7wMzYXmmWviKtQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=i+vupuRPcQx/e8B8h9nq0mxh3cO3DhsQrMa1ftuEKW4=;
- b=PtJqEHSZ+ePc+iN1d3LoTA04oVcfujzZvYTv330yYNxF38XUjjqyhiM97t/1n+0460bbORE6A3Udq8gtNqbTnpDSZWT8QoVMjUyy/Md1o9KPeWZ87NaUcTx0C5rCYctW8QHShNKCpVb7/yc7QhoxYTQzSQUhAKBkdov+kcOlYq8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB4688.eurprd04.prod.outlook.com (2603:10a6:803:6a::30)
- by VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.13; Mon, 3 Jan
- 2022 19:29:43 +0000
-Received: from VI1PR04MB4688.eurprd04.prod.outlook.com
- ([fe80::4c4c:f2b2:addb:841]) by VI1PR04MB4688.eurprd04.prod.outlook.com
- ([fe80::4c4c:f2b2:addb:841%6]) with mapi id 15.20.4844.016; Mon, 3 Jan 2022
- 19:29:43 +0000
-From:   Abel Vesa <abel.vesa@nxp.com>
-To:     Georgi Djakov <djakov@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 3/3] interconnect: imx: Remove the imx_icc_node_adj_desc
-Date:   Mon,  3 Jan 2022 21:29:00 +0200
-Message-Id: <20220103192900.946521-3-abel.vesa@nxp.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220103192900.946521-1-abel.vesa@nxp.com>
-References: <20220103192900.946521-1-abel.vesa@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: VI1PR0501CA0009.eurprd05.prod.outlook.com
- (2603:10a6:800:92::19) To VI1PR04MB4688.eurprd04.prod.outlook.com
- (2603:10a6:803:6a::30)
+        id S236227AbiACTe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 14:34:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236159AbiACTe5 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 14:34:57 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0D1C061761;
+        Mon,  3 Jan 2022 11:34:57 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id i6so19488881pla.0;
+        Mon, 03 Jan 2022 11:34:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZQSxVw71hQKcJag96dNA2/qYOoUnho5N87+3PfeRU7o=;
+        b=INSsXBtzB3DSosLcMwixFDL1duSp/6YU+pUdCnc8xeNxcul0RrLlhoW7tOGBRk+qg+
+         sW1ZfWcUFW7kAJ61nwthLyJAlP5z0z3IOrC37IuQBTc1ERdzWCSk33nTO+DSg5X3+F1z
+         GxLwLh+QAsEWKa1CEN/eK0xzW0P0hZBOse+T8GHtd5k+NmHgfZeFUUfdvW6hWPn6ix9r
+         SUvDMrmPnZHQzgQR7z0k47ogcfmN0dVQrUVLi7PJ6/LMw1eO2Ot99MvTXIQWp1uiep4u
+         Tc2Ux4V4KBGHMsWcUUBZto9ma7Y/sVPGR+/g2e/qU9ege7zxQwCMH8/Fu2ChtDi/vym8
+         8MaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZQSxVw71hQKcJag96dNA2/qYOoUnho5N87+3PfeRU7o=;
+        b=PQEyP51xewWQu6lFrMSKMK3LEgPzS+ROEtTieyxLL5Kd1380coxF2joIRGDCbOaqs7
+         R1bNv3CMa/DWiYhGqtvOi9C61ug2MDUnF/02I69pPYd5Boy6qZa1ZSFp4DGZ8MLSMBlO
+         oKxO+hSomDXSjTyBi+tF2mQBcCcndAguDCQi9qL2iMeVqHmVFwjMEvvCNISPF+BpOv+F
+         KVOIxDsxBRIAK2y1s6KtUQbm06ObL3VtfCyK4vwNXoA9QgH6JY9ixeVmhTZmur6tHSyw
+         XZRjZv4DqRMBxR2cm2pAaiWASS9FuHYLBd4WwQBfNlt/zrqs7iDcPcYoloyFI1o3sILo
+         lIOw==
+X-Gm-Message-State: AOAM531UgVFVEV3E/ti9/zKM7/fdmtk7gQ7FSCp5IbrhQSNJa+G0wGWq
+        lyJ6uOv22FqR/9iIAdawHxfnpBo7/P8=
+X-Google-Smtp-Source: ABdhPJyBtL4fJwEh8vxyMkUZ0f624hJELqB2WBo2sfM+96CMbzEPWGq9MHccChE/fsZBRa5sqfFSoQ==
+X-Received: by 2002:a17:90b:4d86:: with SMTP id oj6mr56838900pjb.185.1641238496932;
+        Mon, 03 Jan 2022 11:34:56 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id j8sm40746294pfc.11.2022.01.03.11.34.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jan 2022 11:34:56 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net] Revert "net: phy: fixed_phy: Fix NULL vs IS_ERR() checking in __fixed_phy_register"
+Date:   Mon,  3 Jan 2022 11:34:52 -0800
+Message-Id: <20220103193453.1214961-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 41b8cf70-0ec9-4906-c3f5-08d9ceef64db
-X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR04MB710457451B5EF814001EB381F6499@VI1PR04MB7104.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4502;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gavpS0QJ275x9xW/r2q9Rh3kODFv0LMgtmYwwiBDAj6FPrObqNDMi2yB3hTCO8HJHJ/cjQkNcVNPP9kTUgDl+BjF3B3qZvBANGUuq0E5YW9+Id2GEY5xh4Vjo7PFFmWIsMEFKAmALpRlfJmQUOUCmOg9BDMxsoK5CWFQ7UwmyIgPMNlndahXmq3M2qRs+qBVcQjLX4V+iGuzNpHchkeZDcJOvKSnoHOSkUCyjhI3607MRUYUMygnYSU0n+3RQKrwrkWT2CJEasHPhNTvrBUYRIfYqu43zuuWRwQCbDhnRGCVqiZdk05SkR2AtVtBO/1ETPuSnNiHjwbZe54XVC3aT0nqJl10uDfrnghwKaYxee5PfwPWJpWZCrYrFok3LL2vgCYcw83SQinhXGkor5IzSJ23vEy8owF6k9oZVDRo+SAJ9NFY0OywAMJIcNG24Qeygch/O99kLnDtwQo0QJ36MZ5Y4tbUhLvptSAPtOga9JBbDfEm+6u0QDV0iytS6kU/5VA8ww/ANZVXE2I/jZ/BvTvcpltVtdAGSWSjfg8Le27wrDeN+DYGi1zNrwJDHwKC6rv7zY+Cd1va/KMu/WWHl2azJ3w+A99NexVAQ0O2iw251Oo1G8CAa7jM7gQdu/cQmZwc0mdumLI2kcSUhm7busa6RoNc3GDjKCMDPo4vCBSlAGDXup30uipHKCXJLRUZGYxwfsJOkHOX8FTSAgoEUQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4688.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(508600001)(2906002)(66476007)(8936002)(36756003)(8676002)(38350700002)(38100700002)(54906003)(110136005)(86362001)(4326008)(66556008)(2616005)(66946007)(186003)(26005)(316002)(1076003)(30864003)(6506007)(6486002)(6512007)(83380400001)(44832011)(5660300002)(52116002)(6666004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3gZ5CLlJlizrNyQxJVLekj/WIU/01y4W71sSlFS3pVKtMoPwps+5J9X8lkDo?=
- =?us-ascii?Q?VE/prCgDEx9j1KecjTOFvawXS6ugoscCag6h5Xa7YV3VIAFgrTRVs/hHXdtJ?=
- =?us-ascii?Q?9EswASsYhzAI8LPKA6ckzUaU/JMRdE10SEA2a5TWmiTrm3byToDzILB20OO9?=
- =?us-ascii?Q?bmMKnvhhnOiegYB43n/toht2YoO2BE7R3lFZJ6GAUiGRBexdzVTdA63wEivR?=
- =?us-ascii?Q?wrPnTYOBHZDCkVsWNo1eh0zv6YFd00BZUYdW7gq1aKA3jEJ0n3YWxgjOFdG3?=
- =?us-ascii?Q?JqvbT6iYw+jL5kRwRjQbnsJbf3bZnx5bag2WNYVtB55Uc58BSvmso6YYia4i?=
- =?us-ascii?Q?6pNiVqQBDasyRad0b3eCXmsti70RIwGTvUztVwhBcxDEFalwDneNS17lWf/N?=
- =?us-ascii?Q?MXltnPn35Ch3hNbkwR7UA6NC4m4MB06pPpJERc0TpeCzVv/BI9efslFCqBHt?=
- =?us-ascii?Q?Ruv5kvnLVQSS/SDpkLCQZxd/rnf1JW4dcRxNu8zvCRPotGh9reZM/R3U2Z8/?=
- =?us-ascii?Q?7QHAjx6lu8HnSoxAzkxUlVmkBIQvDUXNHdb9Jh95cjXwUKTSLMZVUS28PzS0?=
- =?us-ascii?Q?7BvxFVdAO4wgdETuEfFs/L9Z5Rpw8VHpCdlMm46rRwGm3wknVMFu6BpLjCu8?=
- =?us-ascii?Q?lK7+XGOfRT8RZ8c67VVX1qRJAB39a5sL8ArhU0qbH6iV76EorTN+4BkBkM53?=
- =?us-ascii?Q?oxnIoYSTUnWhMLhLSeMMRyFZWlrx35MsfAXbljYTH203zG6FsAJbm3gk1Gty?=
- =?us-ascii?Q?KjIlsxmEZkJCSbtwxMqlaXexFOK/ujxNSVlGY1cHPLP8ul2JnFF/THOgq1Uv?=
- =?us-ascii?Q?sVIYj93Oakn4DcQ0qfBvRpqguQlu8bzXbOoHvk+Hz/l9C8mtU19U0GrV8YQa?=
- =?us-ascii?Q?tdZI6Hpz9vF9wHf6Rizpt0SWX5qxBHvQywSoSw527qnGDM9esp0WV4Ow1j8W?=
- =?us-ascii?Q?48ckNGiQClcZV6DGCHeLDzBpRs77oc6buLeHC+GGX+iKNjAaq7ELkSuSF9ex?=
- =?us-ascii?Q?5xioIDqAjyOzdFuLeVRt/g/UIwoehS7lY0gvthlAX72JaAM28UgwNI9gsHVW?=
- =?us-ascii?Q?6XeY9+LWsA5QvqHaZEgWFnuPqR2m+mIKONTkcStaHvU6zPOoBiOlohLRW+Si?=
- =?us-ascii?Q?gCFwM+UZqvesVdpl4gNn2b3jpnEzlS8SNXqJkdno5Dfj7q3PswPAoOlF8B/s?=
- =?us-ascii?Q?y83XDPQO3zwTe7UYiSj+OEt8N5tQ/Cp2Iyf80wDHmRECo+Bkpwf1saWj5b6N?=
- =?us-ascii?Q?a7K8xq0AH8/bOeqLKW8VC614S7AFwTCwdwO7cZjo9ZXEUlebJXG1FYtTu0Q4?=
- =?us-ascii?Q?VS4D2XAGtTjY4GXOB0hokkZWuKUFdq9mVLgpHVxOyitEeR7gxzf9UtfF1C+N?=
- =?us-ascii?Q?q35F+Zq8o3iXWvU7uwYrld8T263acX7ztDp2VWCz79vO6kCVRaNS+h+nMYUe?=
- =?us-ascii?Q?ycSrbD99kIMfGDSrlgRKwQJtqYR6bvqvMHK5sd28+uHc6HT8Gvq2Q6x+BJCo?=
- =?us-ascii?Q?53FpQQkU3uiICjbN46xHUMneP71qU5TcJDUMzn0OdQCiwX4s4IDNbAn48BvY?=
- =?us-ascii?Q?xc1mHUTb0zYtBjI7KegJiyknAjmuecNu0f0fIWDo47grjsiNX/Ow1J7o0Pu7?=
- =?us-ascii?Q?pkol6G4mxXySj2uv2h8jry4=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 41b8cf70-0ec9-4906-c3f5-08d9ceef64db
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4688.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2022 19:29:43.5704
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ilQXYTOHFmAroTDH8ri+aYIQdkJG9OP8dZ8c2p0ubx5mfUvduJH02oktxYgBrVRxSB96x4BESZFe2CQCWH4t3w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7104
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the imx generic interconnect doesn't use the
-imx_icc_node_adj_desc, we remove it from all the i.MX8M
-platform drivers.
+This reverts commit b45396afa4177f2b1ddfeff7185da733fade1dc3 ("net: phy:
+fixed_phy: Fix NULL vs IS_ERR() checking in __fixed_phy_register")
+since it prevents any system that uses a fixed PHY without a GPIO
+descriptor from properly working:
 
-Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+[    5.971952] brcm-systemport 9300000.ethernet: failed to register fixed PHY
+[    5.978854] brcm-systemport: probe of 9300000.ethernet failed with error -22
+[    5.986047] brcm-systemport 9400000.ethernet: failed to register fixed PHY
+[    5.992947] brcm-systemport: probe of 9400000.ethernet failed with error -22
+
+Fixes: b45396afa417 ("net: phy: fixed_phy: Fix NULL vs IS_ERR() checking in __fixed_phy_register")
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- drivers/interconnect/imx/imx.h    | 19 ++++-------------
- drivers/interconnect/imx/imx8mm.c | 32 +++++++++-------------------
- drivers/interconnect/imx/imx8mn.c | 28 +++++++------------------
- drivers/interconnect/imx/imx8mq.c | 35 ++++++++++---------------------
- 4 files changed, 33 insertions(+), 81 deletions(-)
+ drivers/net/phy/fixed_phy.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/interconnect/imx/imx.h b/drivers/interconnect/imx/imx.h
-index 75da51076c68..5c9f5138f6aa 100644
---- a/drivers/interconnect/imx/imx.h
-+++ b/drivers/interconnect/imx/imx.h
-@@ -14,15 +14,6 @@
- 
- #define IMX_ICC_MAX_LINKS	4
- 
--/*
-- * struct imx_icc_node_adj - Describe a dynamic adjustable node
-- */
--struct imx_icc_node_adj_desc {
--	unsigned int bw_mul, bw_div;
--	const char *phandle_name;
--	bool main_noc;
--};
--
- /*
-  * struct imx_icc_node - Describe an interconnect node
-  * @name: name of the node
-@@ -35,23 +26,21 @@ struct imx_icc_node_desc {
- 	u16 id;
- 	u16 links[IMX_ICC_MAX_LINKS];
- 	u16 num_links;
--	const struct imx_icc_node_adj_desc *adj;
- };
- 
--#define DEFINE_BUS_INTERCONNECT(_name, _id, _adj, ...)			\
-+#define DEFINE_BUS_INTERCONNECT(_name, _id, ...)			\
- 	{								\
- 		.id = _id,						\
- 		.name = _name,						\
--		.adj = _adj,						\
- 		.num_links = ARRAY_SIZE(((int[]){ __VA_ARGS__ })),	\
- 		.links = { __VA_ARGS__ },				\
+diff --git a/drivers/net/phy/fixed_phy.c b/drivers/net/phy/fixed_phy.c
+index a0c256bd5441..c65fb5f5d2dc 100644
+--- a/drivers/net/phy/fixed_phy.c
++++ b/drivers/net/phy/fixed_phy.c
+@@ -239,8 +239,8 @@ static struct phy_device *__fixed_phy_register(unsigned int irq,
+ 	/* Check if we have a GPIO associated with this fixed phy */
+ 	if (!gpiod) {
+ 		gpiod = fixed_phy_get_gpiod(np);
+-		if (!gpiod)
+-			return ERR_PTR(-EINVAL);
++		if (IS_ERR(gpiod))
++			return ERR_CAST(gpiod);
  	}
  
- #define DEFINE_BUS_MASTER(_name, _id, _dest_id)				\
--	DEFINE_BUS_INTERCONNECT(_name, _id, NULL, _dest_id)
-+	DEFINE_BUS_INTERCONNECT(_name, _id, _dest_id)
- 
--#define DEFINE_BUS_SLAVE(_name, _id, _adj)				\
--	DEFINE_BUS_INTERCONNECT(_name, _id, _adj)
-+#define DEFINE_BUS_SLAVE(_name, _id)					\
-+	DEFINE_BUS_INTERCONNECT(_name, _id)
- 
- int imx_icc_register(struct platform_device *pdev,
- 		     struct imx_icc_node_desc *nodes,
-diff --git a/drivers/interconnect/imx/imx8mm.c b/drivers/interconnect/imx/imx8mm.c
-index 1083490bb391..0c16110bef9d 100644
---- a/drivers/interconnect/imx/imx8mm.c
-+++ b/drivers/interconnect/imx/imx8mm.c
-@@ -14,18 +14,6 @@
- 
- #include "imx.h"
- 
--static const struct imx_icc_node_adj_desc imx8mm_dram_adj = {
--	.bw_mul = 1,
--	.bw_div = 16,
--	.phandle_name = "fsl,ddrc",
--};
--
--static const struct imx_icc_node_adj_desc imx8mm_noc_adj = {
--	.bw_mul = 1,
--	.bw_div = 16,
--	.main_noc = true,
--};
--
- /*
-  * Describe bus masters, slaves and connections between them
-  *
-@@ -33,43 +21,43 @@ static const struct imx_icc_node_adj_desc imx8mm_noc_adj = {
-  * PL301 nics which are skipped/merged into PL301_MAIN
-  */
- static struct imx_icc_node_desc nodes[] = {
--	DEFINE_BUS_INTERCONNECT("NOC", IMX8MM_ICN_NOC, &imx8mm_noc_adj,
-+	DEFINE_BUS_INTERCONNECT("NOC", IMX8MM_ICN_NOC,
- 			IMX8MM_ICS_DRAM, IMX8MM_ICN_MAIN),
- 
--	DEFINE_BUS_SLAVE("DRAM", IMX8MM_ICS_DRAM, &imx8mm_dram_adj),
--	DEFINE_BUS_SLAVE("OCRAM", IMX8MM_ICS_OCRAM, NULL),
-+	DEFINE_BUS_SLAVE("DRAM", IMX8MM_ICS_DRAM),
-+	DEFINE_BUS_SLAVE("OCRAM", IMX8MM_ICS_OCRAM),
- 	DEFINE_BUS_MASTER("A53", IMX8MM_ICM_A53, IMX8MM_ICN_NOC),
- 
- 	/* VPUMIX */
- 	DEFINE_BUS_MASTER("VPU H1", IMX8MM_ICM_VPU_H1, IMX8MM_ICN_VIDEO),
- 	DEFINE_BUS_MASTER("VPU G1", IMX8MM_ICM_VPU_G1, IMX8MM_ICN_VIDEO),
- 	DEFINE_BUS_MASTER("VPU G2", IMX8MM_ICM_VPU_G2, IMX8MM_ICN_VIDEO),
--	DEFINE_BUS_INTERCONNECT("PL301_VIDEO", IMX8MM_ICN_VIDEO, NULL, IMX8MM_ICN_NOC),
-+	DEFINE_BUS_INTERCONNECT("PL301_VIDEO", IMX8MM_ICN_VIDEO, IMX8MM_ICN_NOC),
- 
- 	/* GPUMIX */
- 	DEFINE_BUS_MASTER("GPU 2D", IMX8MM_ICM_GPU2D, IMX8MM_ICN_GPU),
- 	DEFINE_BUS_MASTER("GPU 3D", IMX8MM_ICM_GPU3D, IMX8MM_ICN_GPU),
--	DEFINE_BUS_INTERCONNECT("PL301_GPU", IMX8MM_ICN_GPU, NULL, IMX8MM_ICN_NOC),
-+	DEFINE_BUS_INTERCONNECT("PL301_GPU", IMX8MM_ICN_GPU, IMX8MM_ICN_NOC),
- 
- 	/* DISPLAYMIX */
- 	DEFINE_BUS_MASTER("CSI", IMX8MM_ICM_CSI, IMX8MM_ICN_MIPI),
- 	DEFINE_BUS_MASTER("LCDIF", IMX8MM_ICM_LCDIF, IMX8MM_ICN_MIPI),
--	DEFINE_BUS_INTERCONNECT("PL301_MIPI", IMX8MM_ICN_MIPI, NULL, IMX8MM_ICN_NOC),
-+	DEFINE_BUS_INTERCONNECT("PL301_MIPI", IMX8MM_ICN_MIPI, IMX8MM_ICN_NOC),
- 
- 	/* HSIO */
- 	DEFINE_BUS_MASTER("USB1", IMX8MM_ICM_USB1, IMX8MM_ICN_HSIO),
- 	DEFINE_BUS_MASTER("USB2", IMX8MM_ICM_USB2, IMX8MM_ICN_HSIO),
- 	DEFINE_BUS_MASTER("PCIE", IMX8MM_ICM_PCIE, IMX8MM_ICN_HSIO),
--	DEFINE_BUS_INTERCONNECT("PL301_HSIO", IMX8MM_ICN_HSIO, NULL, IMX8MM_ICN_NOC),
-+	DEFINE_BUS_INTERCONNECT("PL301_HSIO", IMX8MM_ICN_HSIO, IMX8MM_ICN_NOC),
- 
- 	/* Audio */
- 	DEFINE_BUS_MASTER("SDMA2", IMX8MM_ICM_SDMA2, IMX8MM_ICN_AUDIO),
- 	DEFINE_BUS_MASTER("SDMA3", IMX8MM_ICM_SDMA3, IMX8MM_ICN_AUDIO),
--	DEFINE_BUS_INTERCONNECT("PL301_AUDIO", IMX8MM_ICN_AUDIO, NULL, IMX8MM_ICN_MAIN),
-+	DEFINE_BUS_INTERCONNECT("PL301_AUDIO", IMX8MM_ICN_AUDIO, IMX8MM_ICN_MAIN),
- 
- 	/* Ethernet */
- 	DEFINE_BUS_MASTER("ENET", IMX8MM_ICM_ENET, IMX8MM_ICN_ENET),
--	DEFINE_BUS_INTERCONNECT("PL301_ENET", IMX8MM_ICN_ENET, NULL, IMX8MM_ICN_MAIN),
-+	DEFINE_BUS_INTERCONNECT("PL301_ENET", IMX8MM_ICN_ENET, IMX8MM_ICN_MAIN),
- 
- 	/* Other */
- 	DEFINE_BUS_MASTER("SDMA1", IMX8MM_ICM_SDMA1, IMX8MM_ICN_MAIN),
-@@ -77,7 +65,7 @@ static struct imx_icc_node_desc nodes[] = {
- 	DEFINE_BUS_MASTER("USDHC1", IMX8MM_ICM_USDHC1, IMX8MM_ICN_MAIN),
- 	DEFINE_BUS_MASTER("USDHC2", IMX8MM_ICM_USDHC2, IMX8MM_ICN_MAIN),
- 	DEFINE_BUS_MASTER("USDHC3", IMX8MM_ICM_USDHC3, IMX8MM_ICN_MAIN),
--	DEFINE_BUS_INTERCONNECT("PL301_MAIN", IMX8MM_ICN_MAIN, NULL,
-+	DEFINE_BUS_INTERCONNECT("PL301_MAIN", IMX8MM_ICN_MAIN,
- 			IMX8MM_ICN_NOC, IMX8MM_ICS_OCRAM),
- };
- 
-diff --git a/drivers/interconnect/imx/imx8mn.c b/drivers/interconnect/imx/imx8mn.c
-index ad97e55fd4e5..f03f8db00917 100644
---- a/drivers/interconnect/imx/imx8mn.c
-+++ b/drivers/interconnect/imx/imx8mn.c
-@@ -11,18 +11,6 @@
- 
- #include "imx.h"
- 
--static const struct imx_icc_node_adj_desc imx8mn_dram_adj = {
--	.bw_mul = 1,
--	.bw_div = 4,
--	.phandle_name = "fsl,ddrc",
--};
--
--static const struct imx_icc_node_adj_desc imx8mn_noc_adj = {
--	.bw_mul = 1,
--	.bw_div = 4,
--	.main_noc = true,
--};
--
- /*
-  * Describe bus masters, slaves and connections between them
-  *
-@@ -30,23 +18,23 @@ static const struct imx_icc_node_adj_desc imx8mn_noc_adj = {
-  * PL301 nics which are skipped/merged into PL301_MAIN
-  */
- static struct imx_icc_node_desc nodes[] = {
--	DEFINE_BUS_INTERCONNECT("NOC", IMX8MN_ICN_NOC, &imx8mn_noc_adj,
-+	DEFINE_BUS_INTERCONNECT("NOC", IMX8MN_ICN_NOC,
- 			IMX8MN_ICS_DRAM, IMX8MN_ICN_MAIN),
- 
--	DEFINE_BUS_SLAVE("DRAM", IMX8MN_ICS_DRAM, &imx8mn_dram_adj),
--	DEFINE_BUS_SLAVE("OCRAM", IMX8MN_ICS_OCRAM, NULL),
-+	DEFINE_BUS_SLAVE("DRAM", IMX8MN_ICS_DRAM),
-+	DEFINE_BUS_SLAVE("OCRAM", IMX8MN_ICS_OCRAM),
- 	DEFINE_BUS_MASTER("A53", IMX8MN_ICM_A53, IMX8MN_ICN_NOC),
- 
- 	/* GPUMIX */
- 	DEFINE_BUS_MASTER("GPU", IMX8MN_ICM_GPU, IMX8MN_ICN_GPU),
--	DEFINE_BUS_INTERCONNECT("PL301_GPU", IMX8MN_ICN_GPU, NULL, IMX8MN_ICN_NOC),
-+	DEFINE_BUS_INTERCONNECT("PL301_GPU", IMX8MN_ICN_GPU, IMX8MN_ICN_NOC),
- 
- 	/* DISPLAYMIX */
- 	DEFINE_BUS_MASTER("CSI1", IMX8MN_ICM_CSI1, IMX8MN_ICN_MIPI),
- 	DEFINE_BUS_MASTER("CSI2", IMX8MN_ICM_CSI2, IMX8MN_ICN_MIPI),
- 	DEFINE_BUS_MASTER("ISI", IMX8MN_ICM_ISI, IMX8MN_ICN_MIPI),
- 	DEFINE_BUS_MASTER("LCDIF", IMX8MN_ICM_LCDIF, IMX8MN_ICN_MIPI),
--	DEFINE_BUS_INTERCONNECT("PL301_MIPI", IMX8MN_ICN_MIPI, NULL, IMX8MN_ICN_NOC),
-+	DEFINE_BUS_INTERCONNECT("PL301_MIPI", IMX8MN_ICN_MIPI, IMX8MN_ICN_NOC),
- 
- 	/* USB goes straight to NOC */
- 	DEFINE_BUS_MASTER("USB", IMX8MN_ICM_USB, IMX8MN_ICN_NOC),
-@@ -54,11 +42,11 @@ static struct imx_icc_node_desc nodes[] = {
- 	/* Audio */
- 	DEFINE_BUS_MASTER("SDMA2", IMX8MN_ICM_SDMA2, IMX8MN_ICN_AUDIO),
- 	DEFINE_BUS_MASTER("SDMA3", IMX8MN_ICM_SDMA3, IMX8MN_ICN_AUDIO),
--	DEFINE_BUS_INTERCONNECT("PL301_AUDIO", IMX8MN_ICN_AUDIO, NULL, IMX8MN_ICN_MAIN),
-+	DEFINE_BUS_INTERCONNECT("PL301_AUDIO", IMX8MN_ICN_AUDIO, IMX8MN_ICN_MAIN),
- 
- 	/* Ethernet */
- 	DEFINE_BUS_MASTER("ENET", IMX8MN_ICM_ENET, IMX8MN_ICN_ENET),
--	DEFINE_BUS_INTERCONNECT("PL301_ENET", IMX8MN_ICN_ENET, NULL, IMX8MN_ICN_MAIN),
-+	DEFINE_BUS_INTERCONNECT("PL301_ENET", IMX8MN_ICN_ENET, IMX8MN_ICN_MAIN),
- 
- 	/* Other */
- 	DEFINE_BUS_MASTER("SDMA1", IMX8MN_ICM_SDMA1, IMX8MN_ICN_MAIN),
-@@ -66,7 +54,7 @@ static struct imx_icc_node_desc nodes[] = {
- 	DEFINE_BUS_MASTER("USDHC1", IMX8MN_ICM_USDHC1, IMX8MN_ICN_MAIN),
- 	DEFINE_BUS_MASTER("USDHC2", IMX8MN_ICM_USDHC2, IMX8MN_ICN_MAIN),
- 	DEFINE_BUS_MASTER("USDHC3", IMX8MN_ICM_USDHC3, IMX8MN_ICN_MAIN),
--	DEFINE_BUS_INTERCONNECT("PL301_MAIN", IMX8MN_ICN_MAIN, NULL,
-+	DEFINE_BUS_INTERCONNECT("PL301_MAIN", IMX8MN_ICN_MAIN,
- 			IMX8MN_ICN_NOC, IMX8MN_ICS_OCRAM),
- };
- 
-diff --git a/drivers/interconnect/imx/imx8mq.c b/drivers/interconnect/imx/imx8mq.c
-index d7768d3c6d8a..b8c36d668946 100644
---- a/drivers/interconnect/imx/imx8mq.c
-+++ b/drivers/interconnect/imx/imx8mq.c
-@@ -12,18 +12,6 @@
- 
- #include "imx.h"
- 
--static const struct imx_icc_node_adj_desc imx8mq_dram_adj = {
--	.bw_mul = 1,
--	.bw_div = 4,
--	.phandle_name = "fsl,ddrc",
--};
--
--static const struct imx_icc_node_adj_desc imx8mq_noc_adj = {
--	.bw_mul = 1,
--	.bw_div = 4,
--	.main_noc = true,
--};
--
- /*
-  * Describe bus masters, slaves and connections between them
-  *
-@@ -31,43 +19,42 @@ static const struct imx_icc_node_adj_desc imx8mq_noc_adj = {
-  * PL301 nics which are skipped/merged into PL301_MAIN
-  */
- static struct imx_icc_node_desc nodes[] = {
--	DEFINE_BUS_INTERCONNECT("NOC", IMX8MQ_ICN_NOC, &imx8mq_noc_adj,
--			IMX8MQ_ICS_DRAM, IMX8MQ_ICN_MAIN),
-+	DEFINE_BUS_INTERCONNECT("NOC", IMX8MQ_ICN_NOC, IMX8MQ_ICS_DRAM, IMX8MQ_ICN_MAIN),
- 
--	DEFINE_BUS_SLAVE("DRAM", IMX8MQ_ICS_DRAM, &imx8mq_dram_adj),
--	DEFINE_BUS_SLAVE("OCRAM", IMX8MQ_ICS_OCRAM, NULL),
-+	DEFINE_BUS_SLAVE("DRAM", IMX8MQ_ICS_DRAM),
-+	DEFINE_BUS_SLAVE("OCRAM", IMX8MQ_ICS_OCRAM),
- 	DEFINE_BUS_MASTER("A53", IMX8MQ_ICM_A53, IMX8MQ_ICN_NOC),
- 
- 	/* VPUMIX */
- 	DEFINE_BUS_MASTER("VPU", IMX8MQ_ICM_VPU, IMX8MQ_ICN_VIDEO),
--	DEFINE_BUS_INTERCONNECT("PL301_VIDEO", IMX8MQ_ICN_VIDEO, NULL, IMX8MQ_ICN_NOC),
-+	DEFINE_BUS_INTERCONNECT("PL301_VIDEO", IMX8MQ_ICN_VIDEO, IMX8MQ_ICN_NOC),
- 
- 	/* GPUMIX */
- 	DEFINE_BUS_MASTER("GPU", IMX8MQ_ICM_GPU, IMX8MQ_ICN_GPU),
--	DEFINE_BUS_INTERCONNECT("PL301_GPU", IMX8MQ_ICN_GPU, NULL, IMX8MQ_ICN_NOC),
-+	DEFINE_BUS_INTERCONNECT("PL301_GPU", IMX8MQ_ICN_GPU, IMX8MQ_ICN_NOC),
- 
- 	/* DISPMIX (only for DCSS) */
- 	DEFINE_BUS_MASTER("DC", IMX8MQ_ICM_DCSS, IMX8MQ_ICN_DCSS),
--	DEFINE_BUS_INTERCONNECT("PL301_DC", IMX8MQ_ICN_DCSS, NULL, IMX8MQ_ICN_NOC),
-+	DEFINE_BUS_INTERCONNECT("PL301_DC", IMX8MQ_ICN_DCSS, IMX8MQ_ICN_NOC),
- 
- 	/* USBMIX */
- 	DEFINE_BUS_MASTER("USB1", IMX8MQ_ICM_USB1, IMX8MQ_ICN_USB),
- 	DEFINE_BUS_MASTER("USB2", IMX8MQ_ICM_USB2, IMX8MQ_ICN_USB),
--	DEFINE_BUS_INTERCONNECT("PL301_USB", IMX8MQ_ICN_USB, NULL, IMX8MQ_ICN_NOC),
-+	DEFINE_BUS_INTERCONNECT("PL301_USB", IMX8MQ_ICN_USB, IMX8MQ_ICN_NOC),
- 
- 	/* PL301_DISPLAY (IPs other than DCSS, inside SUPERMIX) */
- 	DEFINE_BUS_MASTER("CSI1", IMX8MQ_ICM_CSI1, IMX8MQ_ICN_DISPLAY),
- 	DEFINE_BUS_MASTER("CSI2", IMX8MQ_ICM_CSI2, IMX8MQ_ICN_DISPLAY),
- 	DEFINE_BUS_MASTER("LCDIF", IMX8MQ_ICM_LCDIF, IMX8MQ_ICN_DISPLAY),
--	DEFINE_BUS_INTERCONNECT("PL301_DISPLAY", IMX8MQ_ICN_DISPLAY, NULL, IMX8MQ_ICN_MAIN),
-+	DEFINE_BUS_INTERCONNECT("PL301_DISPLAY", IMX8MQ_ICN_DISPLAY, IMX8MQ_ICN_MAIN),
- 
- 	/* AUDIO */
- 	DEFINE_BUS_MASTER("SDMA2", IMX8MQ_ICM_SDMA2, IMX8MQ_ICN_AUDIO),
--	DEFINE_BUS_INTERCONNECT("PL301_AUDIO", IMX8MQ_ICN_AUDIO, NULL, IMX8MQ_ICN_DISPLAY),
-+	DEFINE_BUS_INTERCONNECT("PL301_AUDIO", IMX8MQ_ICN_AUDIO, IMX8MQ_ICN_DISPLAY),
- 
- 	/* ENET */
- 	DEFINE_BUS_MASTER("ENET", IMX8MQ_ICM_ENET, IMX8MQ_ICN_ENET),
--	DEFINE_BUS_INTERCONNECT("PL301_ENET", IMX8MQ_ICN_ENET, NULL, IMX8MQ_ICN_MAIN),
-+	DEFINE_BUS_INTERCONNECT("PL301_ENET", IMX8MQ_ICN_ENET, IMX8MQ_ICN_MAIN),
- 
- 	/* OTHER */
- 	DEFINE_BUS_MASTER("SDMA1", IMX8MQ_ICM_SDMA1, IMX8MQ_ICN_MAIN),
-@@ -76,7 +63,7 @@ static struct imx_icc_node_desc nodes[] = {
- 	DEFINE_BUS_MASTER("USDHC2", IMX8MQ_ICM_USDHC2, IMX8MQ_ICN_MAIN),
- 	DEFINE_BUS_MASTER("PCIE1", IMX8MQ_ICM_PCIE1, IMX8MQ_ICN_MAIN),
- 	DEFINE_BUS_MASTER("PCIE2", IMX8MQ_ICM_PCIE2, IMX8MQ_ICN_MAIN),
--	DEFINE_BUS_INTERCONNECT("PL301_MAIN", IMX8MQ_ICN_MAIN, NULL,
-+	DEFINE_BUS_INTERCONNECT("PL301_MAIN", IMX8MQ_ICN_MAIN,
- 			IMX8MQ_ICN_NOC, IMX8MQ_ICS_OCRAM),
- };
- 
+ 	/* Get the next available PHY address, up to PHY_MAX_ADDR */
 -- 
-2.31.1
+2.25.1
 

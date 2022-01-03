@@ -2,105 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D8FF483144
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 14:07:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3139483146
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 14:08:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232548AbiACNHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 08:07:44 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:34772 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232231AbiACNHn (ORCPT
+        id S232614AbiACNIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 08:08:34 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:6231 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230268AbiACNId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 08:07:43 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 071151F38B;
-        Mon,  3 Jan 2022 13:07:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1641215262; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CfKcPwGIyGJQW9aOLx/cbEJU5MrKtxa4IusWdY1IjT8=;
-        b=kHsrzV4/4xin7AyT/KKNZ9IKDWP/nEuJibfeGEN/Lx8s1B+YD6fZ/WK0aMxNuH+YY8tVGw
-        btB3pQuF9/4ccMpNf2s9DJeOKScQY3zkQugypgxKHgJ04QPlVNeCoFLASJNFxai3PANL4A
-        /1Rl/LRYWAhIjA7y41GMr3ydSsr+6lA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1641215262;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CfKcPwGIyGJQW9aOLx/cbEJU5MrKtxa4IusWdY1IjT8=;
-        b=764CjpdSZETDyv26UB+aYKt/k+Ywf8zz4aec6DveZDIPbdM04KHQimgi1Z0vZsDCN3AyhL
-        Kjax9zQsJrqvYfCg==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 4422DA3B81;
-        Mon,  3 Jan 2022 13:07:40 +0000 (UTC)
-Date:   Mon, 3 Jan 2022 14:07:40 +0100 (CET)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH v9 01/15] modpost: fix removing numeric suffixes
-In-Reply-To: <20211223002209.1092165-2-alexandr.lobakin@intel.com>
-Message-ID: <alpine.LSU.2.21.2201031407240.15051@pobox.suse.cz>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-2-alexandr.lobakin@intel.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Mon, 3 Jan 2022 08:08:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1641215312; x=1672751312;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=w4QtoPnTah0uUSfe6Jg24WSCWog3QOVMW9euB1f1QZM=;
+  b=gaeQoJyp0jiDXSYWlwm6eNbt3k3G1EORGnYZVNMau3YAyL4dxi4wXODc
+   vkrclTZ/IybH/1NrQHl+pcmj17EfC1cAY8AqxvRX7VfF/I5dwkHhjIMss
+   GDsl0Broc8vKMcCq1ixBmtCWU74J1pjBbNKhOQVL9tFgabkVbCTR/jayT
+   D/1yTgzZdkAmA8R8aDlxqyGg6JG1pRO01dSanagoDC4AXsAulkL6q5dD1
+   lKl5NR1TpH7m13vk5QXjdMLHI7Eep2bCLihqoI5qowu78QZHLjqxH1u1I
+   UdAHyC4qlQZlxKw/klB8HVvEErPDtVAPv0I5IrqH9aqMaS5jp1aBZJPAa
+   Q==;
+IronPort-SDR: rVUNA7/Tv8aEpue8wzDpkzmRtEbpZ2BH0E0DyUo5zINzp+voChmcfvw3wqNHw4cXnYpc6K4b3e
+ WL+hMKhCvPHCJAEHYOxnh0d5+h6DaoUg0DFGFo0Fv11OF7rbMdGrdlKxVnisFaDYTxlh2taqIE
+ BquyWhu37WPFBGYAwHKL0en07N2BBVOkuMffdQp3SJ4/kIbvwgAYtSsEj4OFfXB/EdmTLmEndI
+ BaE/LLbH9nWNcVD8yjMrhbIkKqp9qyHkCHfbqP27sDZzdvsxpGdEmYpzo5DKdn/fuxbNpKBm9y
+ j6cqbgXvOpElP30s1MZr6W/k
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="141458428"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Jan 2022 06:08:31 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 3 Jan 2022 06:08:31 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Mon, 3 Jan 2022 06:08:29 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <UNGLinuxDriver@microchip.com>, <davem@davemloft.net>,
+        <kuba@kernel.org>, <f.fainelli@gmail.com>,
+        <vivien.didelot@gmail.com>, <vladimir.oltean@nxp.com>,
+        <andrew@lunn.ch>, Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next 0/3] net: lan966x: Extend switchdev with mdb support
+Date:   Mon, 3 Jan 2022 14:10:36 +0100
+Message-ID: <20220103131039.3473876-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Dec 2021, Alexander Lobakin wrote:
+This patch series extends lan966x with mdb support by implementing
+the switchdev callbacks: SWITCHDEV_OBJ_ID_PORT_MDB and
+SWITCHDEV_OBJ_ID_HOST_MDB.
+It adds support for both ipv4/ipv6 entries and l2 entries.
 
-> For now, that condition from remove_dot():
-> 
-> if (m && (s[n + m] == '.' || s[n + m] == 0))
-> 
-> which was designed to test if it's a dot or a \0 after the suffix
-> is never satisfied.
-> This is due to that s[n + m] always points to the last digit of a
-> numeric suffix, not on the symbol next to it:
-> 
-> param_set_uint.0, s[n + m] is '0', s[n + m + 1] is '\0'
-> 
-> So it's off by one and was like that since 2014.
-> 
-> `-z uniq-symbol` linker flag which we are planning to use to
+Horatiu Vultur (3):
+  net: lan966x: Add function lan966x_mac_cpu_copy()
+  net: lan966x: Add PGID_FIRST and PGID_LAST
+  net: lan966x: Extend switchdev with mdb support
 
-`-z unique-symbol`
+ .../net/ethernet/microchip/lan966x/Makefile   |   2 +-
+ .../ethernet/microchip/lan966x/lan966x_mac.c  |  27 +-
+ .../ethernet/microchip/lan966x/lan966x_main.c |   2 +
+ .../ethernet/microchip/lan966x/lan966x_main.h |  24 +-
+ .../ethernet/microchip/lan966x/lan966x_mdb.c  | 500 ++++++++++++++++++
+ .../ethernet/microchip/lan966x/lan966x_regs.h |   6 +
+ .../microchip/lan966x/lan966x_switchdev.c     |   8 +
+ .../ethernet/microchip/lan966x/lan966x_vlan.c |   7 +-
+ 8 files changed, 568 insertions(+), 8 deletions(-)
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_mdb.c
 
-Miroslav
+-- 
+2.33.0
+

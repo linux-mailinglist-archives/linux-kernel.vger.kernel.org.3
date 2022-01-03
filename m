@@ -2,45 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D0648327D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:28:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C33CA48323A
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:26:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233440AbiACO2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:28:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232807AbiACO1E (ORCPT
+        id S232620AbiACOZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:25:58 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:56082 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231309AbiACOZc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:27:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A738C061761;
-        Mon,  3 Jan 2022 06:27:04 -0800 (PST)
+        Mon, 3 Jan 2022 09:25:32 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E013D60FA2;
-        Mon,  3 Jan 2022 14:27:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F18C36AED;
-        Mon,  3 Jan 2022 14:27:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1196761134;
+        Mon,  3 Jan 2022 14:25:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E01BBC36AEE;
+        Mon,  3 Jan 2022 14:25:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220023;
-        bh=nH09yIs0wax0PiA9uNlgRbWcT4YBReLap6tdfJiFY6I=;
+        s=korg; t=1641219931;
+        bh=EV0gMW+lW4Xs1/4vdQoO0+kzG1z2qLbTtxFqKQeJB4Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wyKUJ1O1Tz9OrAaY8Qgd0Vi2S/1cwP8cYmusfYRiskgwIj2n02LeIXuhoQh7+ImBZ
-         rJz12gAGlmH3fcoE3X4XKgbsS38JUI3bkl0cu1160SL+uij0hzcWvmboeULwMDaPhE
-         OPT8iBxudxlH6V/0O7FBAkvcLPYoMgZtGF/XzvnA=
+        b=ruguxJjiRJiuwVXUBqoSrgo3hEwwIdW2Kg+XnP4bj9zX4YGdsPESB/YdOYJHngCBh
+         cbTRCm9URcrqqfXVj2Kn91goD/q+axoHRYrP8JxcGVCzH7AlT008/w0/y8UmiHsDyg
+         2vEHF4dPNubSGRcLNWTLN9IiiP9rk8yJ7BfiytdA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 23/37] fsl/fman: Fix missing put_device() call in fman_port_probe
+        stable@vger.kernel.org, Vincent Pelletier <plr.vincent@gmail.com>
+Subject: [PATCH 4.19 21/27] usb: gadget: f_fs: Clear ffs_eventfd in ffs_data_clear.
 Date:   Mon,  3 Jan 2022 15:24:01 +0100
-Message-Id: <20220103142052.588232516@linuxfoundation.org>
+Message-Id: <20220103142052.851372510@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142051.883166998@linuxfoundation.org>
-References: <20220103142051.883166998@linuxfoundation.org>
+In-Reply-To: <20220103142052.162223000@linuxfoundation.org>
+References: <20220103142052.162223000@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,82 +44,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Vincent Pelletier <plr.vincent@gmail.com>
 
-[ Upstream commit bf2b09fedc17248b315f80fb249087b7d28a69a6 ]
+commit b1e0887379422975f237d43d8839b751a6bcf154 upstream.
 
-The reference taken by 'of_find_device_by_node()' must be released when
-not needed anymore.
-Add the corresponding 'put_device()' in the and error handling paths.
+ffs_data_clear is indirectly called from both ffs_fs_kill_sb and
+ffs_ep0_release, so it ends up being called twice when userland closes ep0
+and then unmounts f_fs.
+If userland provided an eventfd along with function's USB descriptors, it
+ends up calling eventfd_ctx_put as many times, causing a refcount
+underflow.
+NULL-ify ffs_eventfd to prevent these extraneous eventfd_ctx_put calls.
 
-Fixes: 18a6c85fcc78 ("fsl/fman: Add FMan Port Support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Also, set epfiles to NULL right after de-allocating it, for readability.
+
+For completeness, ffs_data_clear actually ends up being called thrice, the
+last call being before the whole ffs structure gets freed, so when this
+specific sequence happens there is a second underflow happening (but not
+being reported):
+
+/sys/kernel/debug/tracing# modprobe usb_f_fs
+/sys/kernel/debug/tracing# echo ffs_data_clear > set_ftrace_filter
+/sys/kernel/debug/tracing# echo function > current_tracer
+/sys/kernel/debug/tracing# echo 1 > tracing_on
+(setup gadget, run and kill function userland process, teardown gadget)
+/sys/kernel/debug/tracing# echo 0 > tracing_on
+/sys/kernel/debug/tracing# cat trace
+ smartcard-openp-436     [000] .....  1946.208786: ffs_data_clear <-ffs_data_closed
+ smartcard-openp-431     [000] .....  1946.279147: ffs_data_clear <-ffs_data_closed
+ smartcard-openp-431     [000] .n...  1946.905512: ffs_data_clear <-ffs_data_put
+
+Warning output corresponding to above trace:
+[ 1946.284139] WARNING: CPU: 0 PID: 431 at lib/refcount.c:28 refcount_warn_saturate+0x110/0x15c
+[ 1946.293094] refcount_t: underflow; use-after-free.
+[ 1946.298164] Modules linked in: usb_f_ncm(E) u_ether(E) usb_f_fs(E) hci_uart(E) btqca(E) btrtl(E) btbcm(E) btintel(E) bluetooth(E) nls_ascii(E) nls_cp437(E) vfat(E) fat(E) bcm2835_v4l2(CE) bcm2835_mmal_vchiq(CE) videobuf2_vmalloc(E) videobuf2_memops(E) sha512_generic(E) videobuf2_v4l2(E) sha512_arm(E) videobuf2_common(E) videodev(E) cpufreq_dt(E) snd_bcm2835(CE) brcmfmac(E) mc(E) vc4(E) ctr(E) brcmutil(E) snd_soc_core(E) snd_pcm_dmaengine(E) drbg(E) snd_pcm(E) snd_timer(E) snd(E) soundcore(E) drm_kms_helper(E) cec(E) ansi_cprng(E) rc_core(E) syscopyarea(E) raspberrypi_cpufreq(E) sysfillrect(E) sysimgblt(E) cfg80211(E) max17040_battery(OE) raspberrypi_hwmon(E) fb_sys_fops(E) regmap_i2c(E) ecdh_generic(E) rfkill(E) ecc(E) bcm2835_rng(E) rng_core(E) vchiq(CE) leds_gpio(E) libcomposite(E) fuse(E) configfs(E) ip_tables(E) x_tables(E) autofs4(E) ext4(E) crc16(E) mbcache(E) jbd2(E) crc32c_generic(E) sdhci_iproc(E) sdhci_pltfm(E) sdhci(E)
+[ 1946.399633] CPU: 0 PID: 431 Comm: smartcard-openp Tainted: G         C OE     5.15.0-1-rpi #1  Debian 5.15.3-1
+[ 1946.417950] Hardware name: BCM2835
+[ 1946.425442] Backtrace:
+[ 1946.432048] [<c08d60a0>] (dump_backtrace) from [<c08d62ec>] (show_stack+0x20/0x24)
+[ 1946.448226]  r7:00000009 r6:0000001c r5:c04a948c r4:c0a64e2c
+[ 1946.458412] [<c08d62cc>] (show_stack) from [<c08d9ae0>] (dump_stack+0x28/0x30)
+[ 1946.470380] [<c08d9ab8>] (dump_stack) from [<c0123500>] (__warn+0xe8/0x154)
+[ 1946.482067]  r5:c04a948c r4:c0a71dc8
+[ 1946.490184] [<c0123418>] (__warn) from [<c08d6948>] (warn_slowpath_fmt+0xa0/0xe4)
+[ 1946.506758]  r7:00000009 r6:0000001c r5:c0a71dc8 r4:c0a71e04
+[ 1946.517070] [<c08d68ac>] (warn_slowpath_fmt) from [<c04a948c>] (refcount_warn_saturate+0x110/0x15c)
+[ 1946.535309]  r8:c0100224 r7:c0dfcb84 r6:ffffffff r5:c3b84c00 r4:c24a17c0
+[ 1946.546708] [<c04a937c>] (refcount_warn_saturate) from [<c0380134>] (eventfd_ctx_put+0x48/0x74)
+[ 1946.564476] [<c03800ec>] (eventfd_ctx_put) from [<bf5464e8>] (ffs_data_clear+0xd0/0x118 [usb_f_fs])
+[ 1946.582664]  r5:c3b84c00 r4:c2695b00
+[ 1946.590668] [<bf546418>] (ffs_data_clear [usb_f_fs]) from [<bf547cc0>] (ffs_data_closed+0x9c/0x150 [usb_f_fs])
+[ 1946.609608]  r5:bf54d014 r4:c2695b00
+[ 1946.617522] [<bf547c24>] (ffs_data_closed [usb_f_fs]) from [<bf547da0>] (ffs_fs_kill_sb+0x2c/0x30 [usb_f_fs])
+[ 1946.636217]  r7:c0dfcb84 r6:c3a12260 r5:bf54d014 r4:c229f000
+[ 1946.646273] [<bf547d74>] (ffs_fs_kill_sb [usb_f_fs]) from [<c0326d50>] (deactivate_locked_super+0x54/0x9c)
+[ 1946.664893]  r5:bf54d014 r4:c229f000
+[ 1946.672921] [<c0326cfc>] (deactivate_locked_super) from [<c0326df8>] (deactivate_super+0x60/0x64)
+[ 1946.690722]  r5:c2a09000 r4:c229f000
+[ 1946.698706] [<c0326d98>] (deactivate_super) from [<c0349a28>] (cleanup_mnt+0xe4/0x14c)
+[ 1946.715553]  r5:c2a09000 r4:00000000
+[ 1946.723528] [<c0349944>] (cleanup_mnt) from [<c0349b08>] (__cleanup_mnt+0x1c/0x20)
+[ 1946.739922]  r7:c0dfcb84 r6:c3a12260 r5:c3a126fc r4:00000000
+[ 1946.750088] [<c0349aec>] (__cleanup_mnt) from [<c0143d10>] (task_work_run+0x84/0xb8)
+[ 1946.766602] [<c0143c8c>] (task_work_run) from [<c010bdc8>] (do_work_pending+0x470/0x56c)
+[ 1946.783540]  r7:5ac3c35a r6:c0d0424c r5:c200bfb0 r4:c200a000
+[ 1946.793614] [<c010b958>] (do_work_pending) from [<c01000c0>] (slow_work_pending+0xc/0x20)
+[ 1946.810553] Exception stack(0xc200bfb0 to 0xc200bff8)
+[ 1946.820129] bfa0:                                     00000000 00000000 000000aa b5e21430
+[ 1946.837104] bfc0: bef867a0 00000001 bef86840 00000034 bef86838 bef86790 bef86794 bef867a0
+[ 1946.854125] bfe0: 00000000 bef86798 b67b7a1c b6d626a4 60000010 b5a23760
+[ 1946.865335]  r10:00000000 r9:c200a000 r8:c0100224 r7:00000034 r6:bef86840 r5:00000001
+[ 1946.881914]  r4:bef867a0
+[ 1946.888793] ---[ end trace 7387f2a9725b28d0 ]---
+
+Fixes: 5e33f6fdf735 ("usb: gadget: ffs: add eventfd notification about ffs events")
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Vincent Pelletier <plr.vincent@gmail.com>
+Link: https://lore.kernel.org/r/f79eeea29f3f98de6782a064ec0f7351ad2f598f.1639793920.git.plr.vincent@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/freescale/fman/fman_port.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/usb/gadget/function/f_fs.c |    9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/freescale/fman/fman_port.c b/drivers/net/ethernet/freescale/fman/fman_port.c
-index 47f6fee1f3964..1812434cda847 100644
---- a/drivers/net/ethernet/freescale/fman/fman_port.c
-+++ b/drivers/net/ethernet/freescale/fman/fman_port.c
-@@ -1791,7 +1791,7 @@ static int fman_port_probe(struct platform_device *of_dev)
- 	fman = dev_get_drvdata(&fm_pdev->dev);
- 	if (!fman) {
- 		err = -EINVAL;
--		goto return_err;
-+		goto put_device;
- 	}
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -1698,11 +1698,15 @@ static void ffs_data_clear(struct ffs_da
  
- 	err = of_property_read_u32(port_node, "cell-index", &val);
-@@ -1799,7 +1799,7 @@ static int fman_port_probe(struct platform_device *of_dev)
- 		dev_err(port->dev, "%s: reading cell-index for %pOF failed\n",
- 			__func__, port_node);
- 		err = -EINVAL;
--		goto return_err;
-+		goto put_device;
- 	}
- 	port_id = (u8)val;
- 	port->dts_params.id = port_id;
-@@ -1833,7 +1833,7 @@ static int fman_port_probe(struct platform_device *of_dev)
- 	}  else {
- 		dev_err(port->dev, "%s: Illegal port type\n", __func__);
- 		err = -EINVAL;
--		goto return_err;
-+		goto put_device;
- 	}
+ 	BUG_ON(ffs->gadget);
  
- 	port->dts_params.type = port_type;
-@@ -1847,7 +1847,7 @@ static int fman_port_probe(struct platform_device *of_dev)
- 			dev_err(port->dev, "%s: incorrect qman-channel-id\n",
- 				__func__);
- 			err = -EINVAL;
--			goto return_err;
-+			goto put_device;
- 		}
- 		port->dts_params.qman_channel_id = qman_channel_id;
- 	}
-@@ -1857,7 +1857,7 @@ static int fman_port_probe(struct platform_device *of_dev)
- 		dev_err(port->dev, "%s: of_address_to_resource() failed\n",
- 			__func__);
- 		err = -ENOMEM;
--		goto return_err;
-+		goto put_device;
- 	}
+-	if (ffs->epfiles)
++	if (ffs->epfiles) {
+ 		ffs_epfiles_destroy(ffs->epfiles, ffs->eps_count);
++		ffs->epfiles = NULL;
++	}
  
- 	port->dts_params.fman = fman;
-@@ -1882,6 +1882,8 @@ static int fman_port_probe(struct platform_device *of_dev)
+-	if (ffs->ffs_eventfd)
++	if (ffs->ffs_eventfd) {
+ 		eventfd_ctx_put(ffs->ffs_eventfd);
++		ffs->ffs_eventfd = NULL;
++	}
  
- 	return 0;
+ 	kfree(ffs->raw_descs_data);
+ 	kfree(ffs->raw_strings);
+@@ -1715,7 +1719,6 @@ static void ffs_data_reset(struct ffs_da
  
-+put_device:
-+	put_device(&fm_pdev->dev);
- return_err:
- 	of_node_put(port_node);
- free_port:
--- 
-2.34.1
-
+ 	ffs_data_clear(ffs);
+ 
+-	ffs->epfiles = NULL;
+ 	ffs->raw_descs_data = NULL;
+ 	ffs->raw_descs = NULL;
+ 	ffs->raw_strings = NULL;
 
 

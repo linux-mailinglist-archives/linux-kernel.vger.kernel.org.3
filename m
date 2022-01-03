@@ -2,144 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B434838F6
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 00:04:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E1EE4838F9
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 00:04:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230436AbiACXE3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Jan 2022 18:04:29 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:64676 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229693AbiACXE3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 18:04:29 -0500
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 203JU1qA024728
-        for <linux-kernel@vger.kernel.org>; Mon, 3 Jan 2022 15:04:28 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dc7bu0r9e-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 15:04:28 -0800
-Received: from twshared7460.02.ash7.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 3 Jan 2022 15:04:24 -0800
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id B2B76270828AC; Mon,  3 Jan 2022 15:04:19 -0800 (PST)
-From:   Song Liu <song@kernel.org>
-To:     <linux-raid@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, Song Liu <song@kernel.org>,
-        <stable@vger.kernel.org>, Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Jens Axboe <axboe@kernel.dk>,
-        Norbert Warmuth <nwarmuth@t-online.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH] md/raid1: fix missing bitmap update w/o WriteMostly devices
-Date:   Mon, 3 Jan 2022 15:04:01 -0800
-Message-ID: <20220103230401.180704-1-song@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        id S230453AbiACXEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 18:04:49 -0500
+Received: from mail-bn8nam11on2046.outbound.protection.outlook.com ([40.107.236.46]:24608
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229700AbiACXEs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 18:04:48 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RwpwoL/0qcmxvUYoFAs3+xnTqDuRYSBqxCBVWCir6ox18HX3CkHlbxJpRDs9pBr1YbqkI4YxB3W6/2UV3KJisjk1hY7/SnJbAyzMgIJwtfWNtwYZB02LYZwAjZSs0txq+OAkHzGLWBz6+HwjWolcMv+2wSYgppKBTZhdC95t1i1OdI3AJXFxr2D29HOHto1Ymp01hWc0FAj8hxkknjGK4YEIaiSwjbjEtQlQE1hSl/c4/1wiab8hSp7gyMXFCe5pd6jHMqOTL7bKOuuxi9+SSFgKbY8iRVZu1KZN+Cu62NYLxEdkNnHnTtXu0VbtD0YIyQjyEEyU9MUDbVhLaDtS6g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kO76akFyYHFqc0zcQ00YZTvKuxj2JgPd+70+sE7aY6s=;
+ b=C/HVQTx4qV8F68uSEtamRspgHN4g3vq77T57YLj8TKoFHUpc4k10l0nG9IrtbUa59LSaLkkHgErZvbSOLuVpY83qi+wzAeBgBBS9aNr3RigoKhstri59WPGrgfWWY3x/WXym4tsg7zaLiIBS+FmLzx0EaBfxiHETRdi4pEMHqFL5dAUWhw845R6kRjJSNEkqGuPJxKEzWMIKDog3JEsty20e0WPbYDjQt+bUdWnYB7ssziZ8FNCe8orUbAU01sBrc5o78qPVuZHnnGEE0WHlJhg4yr/XdwYBsUhGVDgPd19blF7xo8sZEX1KwC6o3mCLvvIQOKIaRCsbGykZPjsg2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kO76akFyYHFqc0zcQ00YZTvKuxj2JgPd+70+sE7aY6s=;
+ b=Up9bvEpQ3MFh8XEUGAmEWBPMe3BOljIx2aSKD7ZXIG3851LLIJjHLUSviw7hiYMuTTd0hJnBHMSShiic1l5Xt9lw+ZvzQq/LocTgRlePtjSEGXNBk1hjSSEN5tcafZjRJ6jqQ8aOqUq42FdqeZUqS9+khOVmod4OZbP4sUcDrVOWU8E/MltKKHoCES8l2Huf0BoSvlRdQDXW3lcDPSC1LnfxRU40OwqxTWE8dNKDKdzhY1J4oT0vkrCOJreOWQurSvwDElEi+clpLy/sPApPTv9xSpY4JDBLo2620wK9rXLfbCZy8/BFvgQnG6P1cOWPC2YzWxD09rFKd4SyEpDoKw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
+ by BL1PR12MB5045.namprd12.prod.outlook.com (2603:10b6:208:310::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.14; Mon, 3 Jan
+ 2022 23:04:46 +0000
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::d8be:e4e4:ce53:6d11]) by BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::d8be:e4e4:ce53:6d11%7]) with mapi id 15.20.4844.016; Mon, 3 Jan 2022
+ 23:04:46 +0000
+Date:   Mon, 3 Jan 2022 19:04:45 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-rdma@vger.kernel.org, linux-um@lists.infradead.org
+Subject: Re: [PATCH 2/2] IB/rdmavt: modify rdmavt/qp.c for UML
+Message-ID: <20220103230445.GA2592848@nvidia.com>
+References: <20220102070623.24009-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220102070623.24009-1-rdunlap@infradead.org>
+X-ClientProxiedBy: BL0PR01CA0023.prod.exchangelabs.com (2603:10b6:208:71::36)
+ To BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 6-QcpeAUeWM0X_ZdfXqUWcDHIXTP1KYA
-X-Proofpoint-GUID: 6-QcpeAUeWM0X_ZdfXqUWcDHIXTP1KYA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-03_09,2022-01-01_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 mlxscore=0 bulkscore=0
- lowpriorityscore=0 spamscore=0 mlxlogscore=999 clxscore=1015 adultscore=0
- impostorscore=0 priorityscore=1501 suspectscore=0 malwarescore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201030156
-X-FB-Internal: deliver
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4aca90a1-74fa-4a5a-c288-08d9cf0d6f96
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5045:EE_
+X-Microsoft-Antispam-PRVS: <BL1PR12MB5045007D09A85318E162D9E0C2499@BL1PR12MB5045.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ws7vCoJL24geo4XHfU8uvVri5p6NO0QzCuKYwnuR4UhP+mQvDcHXymLoFwVLy/dLcPQWFpj0iJOzUNxjG+E3sv4ZqsDOqul2cMN1kOoAKElPdUoq/8Kos25hQjBGHlEm3bk1Oxsg8yKp9y4Ay0qNvbFyj+5547J9RQ3K7ztqI3WwWr4qhwQdLfOQyISobg0aGfUMndZUgO4DcZ3DNyqdAz/Jra0yQWXPIrc9091szwK1/HPlGnmtH7B7vCOTTEJJ8nU8FQnsEy2nyEv0RBrTqXPI5Q+EHC9bRC2F4nS7jQ3IHW20nDaoeqzwhlq6TIUnjwZFzoHzbYNU+WE6KDCqNAdIpLsJsc+c4Usd70DdX8e2NR+S2fbWNEBzrjDNFlt484xyQI2EekwXRPn1Y+gmaKspXdTI5uA8bhaPpTeEjMhfmKxyut1G3D3c3wyycXRKHyA+fq78+WMU++UgADyz+wZDbp5VY9V4L5VqbP3lI2v13aYqPWFOACZMnKKcQNngJljAGLZlNpGVW+kCfnWoNOo2URBClzkz5tVbuxsI1lJ2mQEX6WRW9AlMgc2rFFmMeVtYRZFDRu9XltJL7GAucER8KsBKCk2bqE0TkDqSox0VOPCTXksF1YAsyouW7H4EIelIzln1zfgyVSDuFXUsqw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(54906003)(8676002)(66946007)(66556008)(8936002)(86362001)(1076003)(5660300002)(26005)(316002)(508600001)(66476007)(4326008)(6486002)(6512007)(6916009)(186003)(36756003)(33656002)(38100700002)(2906002)(6506007)(2616005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SEJsNVNIR3VOMWg1VjVSWGZNQ2RrcUVlSSsxVFJPWXhNRVB6d2ltQ0pOUHFO?=
+ =?utf-8?B?d2lyZllTdVA2MENyS2NZenlCMkxRRU1COEhPaE5kUWg2QnNxRDFteEJoaWVW?=
+ =?utf-8?B?RlR3dXB6TkE3S3htVlZKeEFvSmtwV3NiOTNZTWJnU3VvV1VuSUw4ajQzOTBD?=
+ =?utf-8?B?OGlSWEtUaE41VXE4YWZ1ZTIzaU1IWFo2MkJNTlBSdEhNK3NSWVJ0WU9na1VK?=
+ =?utf-8?B?Wmh3anJOZ0hGUUtxZEZxLy9IQXpIanY3WG14NWZiK1dKMUdkaW1ucU5PTFEx?=
+ =?utf-8?B?SGJmV25vb09DbmdJRUFzNVpIWCtxNnkwMmJOZFJkbFFPQlAzc2M2ZDdVT0s0?=
+ =?utf-8?B?ZWNoTm1MckVrZWJncEtqMjZQRmUxNkZ3a0piWWJWUnlaU3NvMnVQL0NLcmtt?=
+ =?utf-8?B?Q3VCMjBOZW1FTXJiUjdIRGJZTXltVHZWbzYzT3g4YW9Id1BMbXRDOUdxQSsv?=
+ =?utf-8?B?SkMxdm9IZTZVODRneGZGa2QwY0hXSE5nQmJDbUl5TUNrSzZsQ1JlWG56MlpX?=
+ =?utf-8?B?NGdHUS9Da1d0eENxRjRPY3l1alUyamRWaGhLTjBOV01lYUVuOXhuNUpmbkJM?=
+ =?utf-8?B?WitrZDNDb09aWEhyM3oxNkg5L2Ftcjh5QS9FSXlvbnVjWi9aYUYwaE5wLzRu?=
+ =?utf-8?B?M0Z2SXVyQzRvbmhIMTRMWFRmYXIwTlJnWnp2N0Y1Y21pejYvSlJuYTZJMG1J?=
+ =?utf-8?B?MXpLN1RFZHlaZjVNNmIram5hTWhzdi9JOVd0ZnBGZHNzdUpHeFZDNXdWZ3B5?=
+ =?utf-8?B?UVV4N3RHL09OanFtSDNyNTlOcFNBU0lXY2oyNEYybGVtbXFuczhlbG9wQUlS?=
+ =?utf-8?B?bm00S2JSdCtlT2hHNzhuanF5cVZHTzRjY1J3L1d6ZFJXZHV5YlFyeTFyeEQ4?=
+ =?utf-8?B?YjFkZVpnRXZ6bmQyR3FGS3hJREU3aStHUjlPSkhqYWtEdUhOOFdaOFlIcDBP?=
+ =?utf-8?B?ckZhcGZsK2c1djVXWlA4QzNQOUVhV0xReFMxcnh1T3JVL1F0ZHMxWm1LUjdt?=
+ =?utf-8?B?dTRxNTdSUUxVVzVnQzI0ZndzZDhIcVA2OTJlc1dXV09rRHUrYUJtOG9LSEpo?=
+ =?utf-8?B?cms0RnJiS2hyTTN2ZU9xdkxwVDRnVVdWcUFNWHN3dVQ5cTQ0anQ5WUZra3p6?=
+ =?utf-8?B?aGpEQjdjU0krWHFkS0V4MjMzT3ZkeGlVYVlzajBZc0tSNU5oK1dSMTRjQlhX?=
+ =?utf-8?B?YjIveU5xWFNaRjZ0L0FycXNncmtVVGZGNEl2S0xsdHZxZGlSL2IwTkU1VTk5?=
+ =?utf-8?B?azhvZExMbDdzY1BUdGJaNFkwMWM0dnVEUnUxRU5RSlBVYXZJRWZ3aXpHbDRj?=
+ =?utf-8?B?eURBVzkwY1VDYmhjQlFoZWlFMXJEbWVpNFlLRFYvZ0k3MEVDbmxEaXB0QXQ2?=
+ =?utf-8?B?eHVWMVlubHdqQVB1TnZvOUUvVXMyd2phY2FmYjhpTmloSEc5ZzV0Nm9acDBm?=
+ =?utf-8?B?cStKK2djcWJYT3Z1NVN1QVNoSFQ5cTEyMjFOcStsUkh4WnJpSXZra1gvOVF0?=
+ =?utf-8?B?c0F0M252citDRWZiZ1kyR2t1dFk4QStKM1RwMTFYSHowMU1iSjNjMXR5RW1P?=
+ =?utf-8?B?NS9pWVRJOEEwUjNWR0tyUVFBTUJybUZ4cDdaMEFlSC9DRVpCdUdPeVZ6YU5R?=
+ =?utf-8?B?a0tMTWRZMWJ4YUhNRlpSRHpLVlR3UWsrejNZYXlJTWh5em4rOTdhRk1LOTJY?=
+ =?utf-8?B?bEtGWm01VlZDMVZ4MytvZURma2lXTE82UTN2ZHI3OTR2SlQvY1hSdWFGUlJO?=
+ =?utf-8?B?dUdPZnl1KzY2Nm5wWmJqL0dqMWF6dyt6TlN0ODN0bGlYS2FPdUVTeTBwZXJL?=
+ =?utf-8?B?eDlwdGduVDZDcjdCKzFXdExqNXl4YTJVWXF6SXIzLzh4OStIWkZzRlZqcmFK?=
+ =?utf-8?B?N2RpbGgzS2lhaXlHS2NGWU1LVFpoNm44YVFSUDlaNllPQW9XM2tqci92ZHpE?=
+ =?utf-8?B?YW13bUxiZCt1dG4rSDliMHRZSEhrenhTVUx6ZnpMZ2RVRFRldXVjbmd4TmxN?=
+ =?utf-8?B?eXZTeFZEZUZDeEhHaGFORG9lTHI1dUtsRC9iWE9GRHlzODNLN0l5TXBwNUVs?=
+ =?utf-8?B?V0lZekxPbkZCT1Axb0QyL1dkQ0M2cG9WU0VNWTRjK0h3REd0WlVONzNrQ094?=
+ =?utf-8?Q?UIOY=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4aca90a1-74fa-4a5a-c288-08d9cf0d6f96
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2022 23:04:46.6592
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qLstUlaYn7WBwafHTFQ1JrCs55M4E5eozKmsw4/HCfckSviDOqO1CCzc/Ue9KoQt
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5045
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit [1] causes missing bitmap updates when there isn't any WriteMostly
-devices.
+On Sat, Jan 01, 2022 at 11:06:23PM -0800, Randy Dunlap wrote:
+> When building rdmavt for ARCH=um, qp.c has a build error on a reference
+> to the x86-specific cpuinfo field 'x86_cache_size'. This value is then
+> used to determine whether to use cacheless_memcpy() or not.
+> Provide a fake value to LLC for CONFIG_UML. Then provide a separate
+> verison of cacheless_memcpy() for CONFIG_UML that is just a plain
+> memcpy(), like the calling code uses.
+> 
+> Prevents these build errors:
+> 
+> ../drivers/infiniband/sw/rdmavt/qp.c: In function ‘rvt_wss_llc_size’:
+> ../drivers/infiniband/sw/rdmavt/qp.c:88:23: error: ‘struct cpuinfo_um’ has no member named ‘x86_cache_size’; did you mean ‘x86_capability’?
+>   return boot_cpu_data.x86_cache_size;
+> 
+> ../drivers/infiniband/sw/rdmavt/qp.c: In function ‘cacheless_memcpy’:
+> ../drivers/infiniband/sw/rdmavt/qp.c:100:2: error: implicit declaration of function ‘__copy_user_nocache’; did you mean ‘copy_user_page’? [-Werror=implicit-function-declaration]
+>   __copy_user_nocache(dst, (void __user *)src, n, 0);
+> 
+> Fixes: 68f5d3f3b654 ("um: add PCI over virtio emulation driver")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>  drivers/infiniband/sw/rdmavt/qp.c |   12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> +++ linux-next-20211224/drivers/infiniband/sw/rdmavt/qp.c
+> @@ -84,10 +84,15 @@ EXPORT_SYMBOL(ib_rvt_state_ops);
+>  /* platform specific: return the last level cache (llc) size, in KiB */
+>  static int rvt_wss_llc_size(void)
+>  {
+> +#if !defined(CONFIG_UML)
+>  	/* assume that the boot CPU value is universal for all CPUs */
+>  	return boot_cpu_data.x86_cache_size;
+> +#else /* CONFIG_UML */
+> +	return 1024;	/* fake 1 MB LLC size */
+> +#endif
+>  }
+>  
+> +#if !defined(CONFIG_UML)
+>  /* platform specific: cacheless copy */
+>  static void cacheless_memcpy(void *dst, void *src, size_t n)
+>  {
+> @@ -99,6 +104,13 @@ static void cacheless_memcpy(void *dst,
+>  	 */
+>  	__copy_user_nocache(dst, (void __user *)src, n, 0);
+>  }
+> +#else
+> +/* for CONFIG_UML, this is just a plain memcpy() */
+> +static void cacheless_memcpy(void *dst, void *src, size_t n)
+> +{
+> +	memcpy(dst, src, n);
+> +}
+> +#endif
 
-Detailed steps to reproduce by Norbert (which somehow didn't make to lore):
+memcpy is not the same thing as __copy_user - the hint is in the
+__user cast..
 
-   # setup md10 (raid1) with two drives (1 GByte sparse files)
-   dd if=/dev/zero of=disk1 bs=1024k seek=1024 count=0
-   dd if=/dev/zero of=disk2 bs=1024k seek=1024 count=0
+It should by copy_from_user(), I think, and this is all just somehow
+broken to not check the return code.
 
-   losetup /dev/loop11 disk1
-   losetup /dev/loop12 disk2
+Why are you trying to make a HW driver compile on UML? Is there any
+way to even use a driver like this in a UML environment?
 
-   mdadm --create /dev/md10 --level=1 --raid-devices=2 /dev/loop11 /dev/loop12
-
-   # add bitmap (aka write-intent log)
-   mdadm /dev/md10 --grow --bitmap=internal
-
-   echo check > /sys/block/md10/md/sync_action
-
-   root:# cat /sys/block/md10/md/mismatch_cnt
-   0
-   root:#
-
-   # remove member drive disk2 (loop12)
-   mdadm /dev/md10 -f loop12 ; mdadm /dev/md10 -r loop12
-
-   # modify degraded md device
-   dd if=/dev/urandom of=/dev/md10 bs=512 count=1
-
-   # no blocks recorded as out of sync on the remaining member disk1/loop11
-   root:# mdadm -X /dev/loop11 | grep Bitmap
-             Bitmap : 16 bits (chunks), 0 dirty (0.0%)
-   root:#
-
-   # re-add disk2, nothing synced because of empty bitmap
-   mdadm /dev/md10 --re-add /dev/loop12
-
-   # check integrity again
-   echo check > /sys/block/md10/md/sync_action
-
-   # disk1 and disk2 are no longer in sync, reads return differend data
-   root:# cat /sys/block/md10/md/mismatch_cnt
-   128
-   root:#
-
-   # clean up
-   mdadm -S /dev/md10
-   losetup -d /dev/loop11
-   losetup -d /dev/loop12
-   rm disk1 disk2
-
-Fix this by moving the WriteMostly check to the if condition for
-alloc_behind_master_bio().
-
-[1] commit fd3b6975e9c1 ("md/raid1: only allocate write behind bio for WriteMostly device")
-Fixes: fd3b6975e9c1 ("md/raid1: only allocate write behind bio for WriteMostly device")
-Cc: stable@vger.kernel.org # v5.12+
-Cc: Guoqing Jiang <guoqing.jiang@linux.dev>
-Cc: Jens Axboe <axboe@kernel.dk>
-Reported-by: Norbert Warmuth <nwarmuth@t-online.de>
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Song Liu <song@kernel.org>
----
- drivers/md/raid1.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/md/raid1.c b/drivers/md/raid1.c
-index 7dc8026cf6ee..85505424f7a4 100644
---- a/drivers/md/raid1.c
-+++ b/drivers/md/raid1.c
-@@ -1496,12 +1496,13 @@ static void raid1_write_request(struct mddev *mddev, struct bio *bio,
- 		if (!r1_bio->bios[i])
- 			continue;
- 
--		if (first_clone && test_bit(WriteMostly, &rdev->flags)) {
-+		if (first_clone) {
- 			/* do behind I/O ?
- 			 * Not if there are too many, or cannot
- 			 * allocate memory, or a reader on WriteMostly
- 			 * is waiting for behind writes to flush */
- 			if (bitmap &&
-+			    test_bit(WriteMostly, &rdev->flags) &&
- 			    (atomic_read(&bitmap->behind_writes)
- 			     < mddev->bitmap_info.max_write_behind) &&
- 			    !waitqueue_active(&bitmap->behind_wait)) {
--- 
-2.30.2
-
+Jason

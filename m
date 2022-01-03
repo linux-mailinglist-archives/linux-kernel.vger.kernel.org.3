@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05BCD483565
+	by mail.lfdr.de (Postfix) with ESMTP id C6CAB483567
 	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 18:12:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235125AbiACRM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 12:12:26 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:52826 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232507AbiACRMZ (ORCPT
+        id S235146AbiACRMc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Jan 2022 12:12:32 -0500
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:57957 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232507AbiACRMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 12:12:25 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2FD761169;
-        Mon,  3 Jan 2022 17:12:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8D1EC36AED;
-        Mon,  3 Jan 2022 17:12:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641229944;
-        bh=uhzW4lvNDD6+3QU4kFJO1P9RzyroNM4hVqwkOjyflFc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=M2C4rtgqdlCu80hsauE4XK+QHhJS7coc0dG8D+GRHVmz+dhBJhEe420k0mRD4iAEI
-         xOWmfPnKDsIyz77uSNyGOUws/sy3crm7/DAd1KEF9GjPq08NNiSjb6U54ynMJrIWHy
-         f/OZpQCx2j47wmbEe4n8yBwdimxTuceHV2Qp2Y1Silre2Bm0PZYlmwXPZK3b/4cdrD
-         DfOuOSgp3sHu6qu8n7mFOCGgt/J9td/TAUPxJeivcuxGpoW93XWc5mon48pw3oBf0f
-         fyKZYCkUoa8DQPXitZLAEk96xKCJ4pGtaluKai+8pBlNSgpvCyZw5DFVqHUeRiCO96
-         Qrp9IL1RHhqLg==
-Date:   Mon, 3 Jan 2022 09:12:22 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Saurav Kashyap <skashyap@marvell.com>
-Cc:     Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Javed Hasan <jhasan@marvell.com>,
-        GR-QLogic-Storage-Upstream <GR-QLogic-Storage-Upstream@marvell.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [EXT] [PATCH] scsi: qedf: potential dereference of null pointer
-Message-ID: <20220103091222.194ef58f@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <DM6PR18MB30344528373170A95E67B50CD2499@DM6PR18MB3034.namprd18.prod.outlook.com>
-References: <20211216101449.375953-1-jiasheng@iscas.ac.cn>
-        <DM6PR18MB30344528373170A95E67B50CD2499@DM6PR18MB3034.namprd18.prod.outlook.com>
+        Mon, 3 Jan 2022 12:12:31 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id D1362FF80C;
+        Mon,  3 Jan 2022 17:12:26 +0000 (UTC)
+Date:   Mon, 3 Jan 2022 18:12:25 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-mtd@lists.infradead.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Colin Ian King <colin.king@intel.com>,
+        linux-kernel@vger.kernel.org (open list),
+        linux-wireless@vger.kernel.org (open list:BROADCOM SPECIFIC AMBA DRIVER
+        (BCMA)),
+        bcm-kernel-feedback-list@broadcom.com (open list:BROADCOM STB NAND
+        FLASH DRIVER)
+Subject: Re: [PATCH 9/9] mtd: rawnand: brcmnand: Add BCMA shim
+Message-ID: <20220103181225.20a60d82@xps13>
+In-Reply-To: <20211223002225.3738385-10-f.fainelli@gmail.com>
+References: <20211223002225.3738385-1-f.fainelli@gmail.com>
+        <20211223002225.3738385-10-f.fainelli@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Jan 2022 04:58:41 +0000 Saurav Kashyap wrote:
-> > QEDF_TERM_BUFF_SIZE,
-> >  		&term_params_dma, GFP_KERNEL);
-> > +	if (!term_params)
-> > +		return;  
-> 
-> <SK> Adding message about failure before returning will help in debugging.
 
-Memory allocations produce a pretty detailed splat.
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_AUTHOR("Braodcom");
+
+Small typo here :)
+
+> +MODULE_DESCRIPTION("NAND driver for BCMA chips");
+
+NAND controller driver, I want to enforce this *controller* word
+because NAND is way too vague and refers to nothing specific.
+
+Plus, it's not really a controller driver that we have here, more like
+a glue interface.
+
+Thanks,
+Miquèl

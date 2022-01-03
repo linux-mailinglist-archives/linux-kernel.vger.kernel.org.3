@@ -2,74 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0574483022
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 11:59:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 616A5483027
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 12:00:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232796AbiACK7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 05:59:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48948 "EHLO
+        id S232807AbiACLAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 06:00:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiACK7A (ORCPT
+        with ESMTP id S229651AbiACLAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 05:59:00 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED8DC061761
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 02:59:00 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id x10so49551814oix.6
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 02:59:00 -0800 (PST)
+        Mon, 3 Jan 2022 06:00:43 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A295C061761;
+        Mon,  3 Jan 2022 03:00:43 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id s4so37229758ljd.5;
+        Mon, 03 Jan 2022 03:00:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=PrtkiLnruR90iW6K5TjEW64KiN6Egmec2tVvw5EN+Jg=;
-        b=nErk3pBeR55LCYMr+Vbyc0UB9lc/O9qI/UE2OOKHlY/pcZ5xvc3e3okdGjVG2E0TRp
-         L/yeS5VbOuEmTFXvY53cAM83YUxIN87ONGLNl6eEQxssA2CitPDxYxwYNpTcOY0gmFU/
-         ucCjkc34bt+LxEePh+nToZzFaIaOmX1QL7yznQTvuLc+fW+iV3WpyWvoRL4S0xsUw6LT
-         uYWtXNsEWLucoZANJy+CFXeQWKeuzdY/idKZCt+gresSMfPNODr2/5NI5CI24kIlPXeV
-         2GgSWJbMBp0Y9P7er3YSRzMtBw3KvLQUdeaXhUQ3fRF5k8172yFmgq7GFJb/NkTx+3sw
-         lfqg==
+        h=message-id:date:from:user-agent:mime-version:to:cc:subject
+         :references:in-reply-to:content-transfer-encoding;
+        bh=RnaPEQ+GyYbouV07jQ/IDGsy7R+lQFdvlf3G6ZfyaFc=;
+        b=Ay/XTzWWTXvXdqT7IwGdNk+yxkvX6sKycrg4hnxQ+GO2J3WdleMQ+t8KT8M0NAenWl
+         fySEaxaEu20d4dnFodKIk35SoPr0f3MOJ5pLdkTe61mICEhRnz1pBBFx+leug6dp50Ta
+         MiHqr0z9n9TKlG6XU+J6Lr8PSmJ/mDeq4KQn6n62hxNxsvBGhVSfDcHrJhTR4g6XVxYz
+         DJFcNyoDIQprap5fyJbVBgmo5ADfWkDnca+d2Q1PeZICWsc5IxGPJebW+VC7OThfuWPT
+         LNzqJP2U6v5uLN1IK36zxhx/V8U2eUotOOvNbe935QQ9LAnl4xZZhfSdj63HaxJqkG2W
+         N4KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=PrtkiLnruR90iW6K5TjEW64KiN6Egmec2tVvw5EN+Jg=;
-        b=wLh6A9HsTp/KpjB7kFBJZ3DcaEo4YJZ4GaBkoe0NdN+H6gyouGCtWak3lq7+wD/fqu
-         Q37o0juNUQ1oZdACc1oEXjeTvBxr4HRG99VaBqCAb9i3YvB5QmFCPSAS0e8uiw5KY79N
-         5z0BwhGcDMM6AraphjHaYSdWxE9R+CbrpzmDMIiI4zv/JHanSaBnOhB5UWuztsyarDcr
-         sTLVMMhhOjCb7Gis8U11zTSmjTNvUTEh7GlLzJI5tvmz4PdVLqwME5h2oLhlZ7iaHKmU
-         rBlcXBccWJPRJtf/YfQZY0UjefM69bcra7ePHjWK+2FyS6BgGI4rv650HxDll+nJgbz+
-         p3zA==
-X-Gm-Message-State: AOAM533eBbjWInv348eP47mqvSSfuXTSW8xff/QDLBVisvOdbJJB94Eq
-        XTwCzndukZ/xmMGKcI6FhpyulFT+gobtEXLFm84=
-X-Google-Smtp-Source: ABdhPJwgydQBa9a/wB9z1Gk1XesqG0dmeFm49cKrYvuESMeGo92J0RwlzwoscA8SW+9TDoy0vegj3WT9L1bc2Q/BCg4=
-X-Received: by 2002:aca:ac93:: with SMTP id v141mr35628433oie.106.1641207540129;
- Mon, 03 Jan 2022 02:59:00 -0800 (PST)
+        h=x-gm-message-state:message-id:date:from:user-agent:mime-version:to
+         :cc:subject:references:in-reply-to:content-transfer-encoding;
+        bh=RnaPEQ+GyYbouV07jQ/IDGsy7R+lQFdvlf3G6ZfyaFc=;
+        b=IwvQ92au6SK/zFsgrjnAT/57fa+BedeoLpddEu2eCfGOptuAuF6MtP0zY9LXV5Wu53
+         2YuxjkdyxfA8P3E2J9EUxKu6uwTdDHsWkPN8Bnb2d5BnvtJiqrmpSSJ9fymYRENcKBxH
+         ozbjg/o3GR4qyFIZLmJadhu+GLEbp+a/hNqmmqBrI9hMOfah/lILeC5UxC7ERxQXxOqg
+         y9Wk/RnfSrMCTf434VQTfYJrh0r2aAjjUx4pK3K4n+Qyp9khAO/i34IBv+6fIf3YOcXP
+         Qdikfy/a9826dtVG4udpxRsUfy92xDVb4hh24EoOMPMBldfGSn+YwbAfP5MJnVwxr3D+
+         x7oQ==
+X-Gm-Message-State: AOAM533bAyI65TeHANV6X5LLsYGadDcjG8qzx3qW2dcNvBdRmzK+8P2v
+        49kXGL/uGbl0wg1VoiRu/cs=
+X-Google-Smtp-Source: ABdhPJycAZukdzBB1w2zWJkGxFA8SthDX9yApe13iw6iQ3W3TTUUwlVClmkH6dKoKHYs1efB2lgPNg==
+X-Received: by 2002:a05:651c:1993:: with SMTP id bx19mr21135430ljb.472.1641207641510;
+        Mon, 03 Jan 2022 03:00:41 -0800 (PST)
+Received: from [192.168.0.91] ([188.242.181.97])
+        by smtp.googlemail.com with ESMTPSA id q2sm1322382lfr.64.2022.01.03.03.00.40
+        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
+        Mon, 03 Jan 2022 03:00:40 -0800 (PST)
+Message-ID: <61D2D9B5.7080401@gmail.com>
+Date:   Mon, 03 Jan 2022 14:10:45 +0300
+From:   Nikolai Zhubr <zhubr.2@gmail.com>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; ru; rv:1.9.2.4) Gecko/20100608 Thunderbird/3.1
 MIME-Version: 1.0
-Received: by 2002:a05:6838:7cd1:0:0:0:0 with HTTP; Mon, 3 Jan 2022 02:58:59
- -0800 (PST)
-Reply-To: mmjanee02@gmail.com
-From:   Mary Jane Kallon <maurmbama1@gmail.com>
-Date:   Mon, 3 Jan 2022 02:58:59 -0800
-Message-ID: <CAD2nLk63VNw+VL3Vh1NutU4vDosoiX_y4Kz-aQEWTkjg_YoOuQ@mail.gmail.com>
-Subject: MY INFORMATION
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+CC:     Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@kernel.org>,
+        x86@kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] x86/PCI: SiS PIRQ router updates
+References: <alpine.DEB.2.21.2201022040130.56863@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2201022040130.56863@angie.orcam.me.uk>
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Dear,
-How are you doing today? I got your contact from a directory andpicked
-interest to communicate you by faith, though we have not met before, I
-believe we can achieve something together. My husband died few years
-ago after battling with brain cancer, before his death, he deposited
-($10.5 Million) in one of the financial institution. He wanted to
-establish coco processing factory and also real estate business.
+Hello Maciej,
 
-After the death of my husband, I have been receiving all manner of
-life threats from the family members, now the pressure is getting more
-severe I decided to leave this country. Please can you partner with me
-and receive the fund in your account while I come over there with my
-son for investment. If you  agree, get back for more details and what
-will be your commission for the assistance. I wait for your reply,
-Mary Jane Kallon
+Apparently, my previous replies (of 11-sep-2021 to 16-sep-2021) with 
+some observations somehow went to spam box or whatever. I was going to 
+retry but got too busy with unrelated stuff at that time. I can re-send 
+them if necessary.
+
+Anyway. Yes, your patch is very usefull. I've tested it quite thoroughly 
+back then, including sharing IRQs for 2 unrelated PCI devices etc. I 
+have it always automatically applied in my private trees since then.
+
+One peculiarity with my specific board is that I had to also patch ROM 
+BIOS because it included some non-standard $IRT table instead of $PIR 
+table. With that in place, it now Just Works.
+
+Thank you again for your effort,
+
+Regards,
+
+Nikolai
+
+
+03.01.2022 2:24, Maciej W. Rozycki:
+> Hi,
+>
+>   Reposting as this has gone nowhere.  Regenerated for line changes and
+> with Nikolai's Tested-by annotation for 2/2, which now have been verified
+> in combination with generic PIRQ router updates posted separately (there's
+> no ordering dependency between the two patch series).
+>
+>   Nikolai has observed the trigger mode not being fixed up once it has been
+> incorrectly set by the BIOS for PCI devices, causing all kinds of usual
+> issues.  As it turns out we don't have a PIRQ router defined for the
+> SiS85C497 southbridge, which Nikolai's system uses, and which is different
+> from the SiS85C503 southbridge we have support for.
+>
+>   As we use the generic `sis' infix (capitalised or not) for the SiS85C503
+> southbridge I have prepared this small patch series to first make the
+> existing SiS program entities use a more specific `sis503' infix, and then
+> provide a suitable PIRQ router for the SiS85C497 device.
+>
+>   See individual change descriptions for further details.
+>
+>   Please apply.
+>
+>    Maciej
+>
+

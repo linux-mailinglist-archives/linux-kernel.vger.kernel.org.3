@@ -2,82 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C052D48308F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 12:32:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0C81483097
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 12:34:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233033AbiACLcO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Jan 2022 06:32:14 -0500
-Received: from aposti.net ([89.234.176.197]:56640 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231569AbiACLcM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 06:32:12 -0500
-Date:   Mon, 03 Jan 2022 11:32:02 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH] mtd: rawnand: ingenic: Fix missing put_device in
- ingenic_ecc_get
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Harvey Hunt <harveyhuntnexus@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mips@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <EDT45R.P10AQNFPT9FP1@crapouillou.net>
-In-Reply-To: <20211230072751.21622-1-linmq006@gmail.com>
-References: <20211230072751.21622-1-linmq006@gmail.com>
+        id S233038AbiACLeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 06:34:11 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:45428 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230417AbiACLeK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 06:34:10 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E548161029;
+        Mon,  3 Jan 2022 11:34:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87687C36AEE;
+        Mon,  3 Jan 2022 11:34:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641209649;
+        bh=/lhs4d41GymbMsZ45EixKLn5HsmUCmIdUyyiZbhb7fo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gsZxuN/uY+z1XU2mvZv4qiGsLHPc14/2rGbA4eONCdMwVjKDc3PKYjEyfAlql+sq7
+         6E45+H2VBJSIPS21lkB/W58ymFXvnNynamfEPflZCu1b7kmld2qsCmHECSBaWykN/d
+         4pt7VBT867WhwM/75jSWCvQBjqodfDYPy00r795MDTnk5hucFtwZQfQZQ95LNXXmBO
+         MSgFX8He+W5ER0y10cYkAbw5dtQPjOjoE6ni9ZJDQK1aEMFWx+zJdiIJ6Z1MT3Y3ph
+         GVeWKO8rGnPra+pTzJGgTqZHQ6De9VCUKIcprelTc8rRTgud1v8odysjo6MuLxyKX2
+         5C2yP+wmUhVUw==
+Date:   Mon, 3 Jan 2022 17:04:05 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Sanjay R Mehta <Sanju.Mehta@amd.com>
+Cc:     gregkh@linuxfoundation.org, dan.j.williams@intel.com,
+        Thomas.Lendacky@amd.com, robh@kernel.org,
+        mchehab+samsung@kernel.org, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org
+Subject: Re: [PATCH] dmaengine: ptdma: fix concurrency issue with multiple
+ dma transfer
+Message-ID: <YdLfLc8lfOektWmi@matsya>
+References: <1639735118-9798-1-git-send-email-Sanju.Mehta@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1639735118-9798-1-git-send-email-Sanju.Mehta@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Le jeu., déc. 30 2021 at 07:27:51 +0000, Miaoqian Lin 
-<linmq006@gmail.com> a écrit :
-> If of_find_device_by_node() succeeds, ingenic_ecc_get() doesn't have
-> a corresponding put_device(). Thus add put_device() to fix the 
-> exception
-> handling.
+On 17-12-21, 03:58, Sanjay R Mehta wrote:
+> From: Sanjay R Mehta <sanju.mehta@amd.com>
 > 
-> Fixes: 15de8c6 ("mtd: rawnand: ingenic: Separate top-level and SoC 
-> specific code")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-
-Cheers,
--Paul
-
+> The command should be submitted only if the engine is idle,
+> for this, the next available descriptor is checked and set the flag
+> to false in case the descriptor is non-empty.
+> 
+> Also need to segregate the cases when DMA is complete or not.
+> In case if DMA is already complete there is no need to handle it
+> again and gracefully exit from the function.
+> 
+> Signed-off-by: Sanjay R Mehta <sanju.mehta@amd.com>
 > ---
->  drivers/mtd/nand/raw/ingenic/ingenic_ecc.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+>  drivers/dma/ptdma/ptdma-dmaengine.c | 24 +++++++++++++++++-------
+>  1 file changed, 17 insertions(+), 7 deletions(-)
 > 
-> diff --git a/drivers/mtd/nand/raw/ingenic/ingenic_ecc.c 
-> b/drivers/mtd/nand/raw/ingenic/ingenic_ecc.c
-> index efe0ffe4f1ab..9054559e52dd 100644
-> --- a/drivers/mtd/nand/raw/ingenic/ingenic_ecc.c
-> +++ b/drivers/mtd/nand/raw/ingenic/ingenic_ecc.c
-> @@ -68,9 +68,14 @@ static struct ingenic_ecc *ingenic_ecc_get(struct 
-> device_node *np)
->  	struct ingenic_ecc *ecc;
-> 
->  	pdev = of_find_device_by_node(np);
-> -	if (!pdev || !platform_get_drvdata(pdev))
-> +	if (!pdev)
->  		return ERR_PTR(-EPROBE_DEFER);
-> 
-> +	if (!platform_get_drvdata(pdev)) {
-> +		put_device(&pdev->dev);
-> +		return ERR_PTR(-EPROBE_DEFER);
-> +	}
+> diff --git a/drivers/dma/ptdma/ptdma-dmaengine.c b/drivers/dma/ptdma/ptdma-dmaengine.c
+> index c9e52f6..91b93e8 100644
+> --- a/drivers/dma/ptdma/ptdma-dmaengine.c
+> +++ b/drivers/dma/ptdma/ptdma-dmaengine.c
+> @@ -100,12 +100,17 @@ static struct pt_dma_desc *pt_handle_active_desc(struct pt_dma_chan *chan,
+>  		spin_lock_irqsave(&chan->vc.lock, flags);
+>  
+>  		if (desc) {
+> -			if (desc->status != DMA_ERROR)
+> -				desc->status = DMA_COMPLETE;
+> -
+> -			dma_cookie_complete(tx_desc);
+> -			dma_descriptor_unmap(tx_desc);
+> -			list_del(&desc->vd.node);
+> +			if (desc->status != DMA_COMPLETE) {
+> +				if (desc->status != DMA_ERROR)
+> +					desc->status = DMA_COMPLETE;
 > +
->  	ecc = platform_get_drvdata(pdev);
->  	clk_prepare_enable(ecc->clk);
-> 
-> --
-> 2.17.1
-> 
+> +				dma_cookie_complete(tx_desc);
+> +				dma_descriptor_unmap(tx_desc);
+> +				list_del(&desc->vd.node);
+> +			} else {
+> +				/* Don't handle it twice */
+> +				tx_desc = NULL;
+> +			}
+>  		}
+>  
+>  		desc = pt_next_dma_desc(chan);
+> @@ -233,9 +238,14 @@ static void pt_issue_pending(struct dma_chan *dma_chan)
+>  	struct pt_dma_chan *chan = to_pt_chan(dma_chan);
+>  	struct pt_dma_desc *desc;
+>  	unsigned long flags;
+> +	bool engine_is_idle = true;
+>  
+>  	spin_lock_irqsave(&chan->vc.lock, flags);
+>  
+> +	desc = pt_next_dma_desc(chan);
+> +	if (desc)
+> +		engine_is_idle = false;
+> +
+>  	vchan_issue_pending(&chan->vc);
+>  
+>  	desc = pt_next_dma_desc(chan);
+> @@ -243,7 +253,7 @@ static void pt_issue_pending(struct dma_chan *dma_chan)
+>  	spin_unlock_irqrestore(&chan->vc.lock, flags);
+>  
+>  	/* If there was nothing active, start processing */
+> -	if (desc)
+> +	if (engine_is_idle)
 
+Can you explain why do you need this flag and why desc is not
+sufficient..
 
+It also sounds like 2 patches to me...
+
+>  		pt_cmd_callback(desc, 0);
+>  }
+>  
+> -- 
+> 2.7.4
+
+-- 
+~Vinod

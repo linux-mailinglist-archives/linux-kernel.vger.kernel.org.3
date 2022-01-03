@@ -2,43 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 937414832B0
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:31:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91DE44832D6
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:32:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233766AbiACOaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:30:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234028AbiACO23 (ORCPT
+        id S234501AbiACObJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:31:09 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58790 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234041AbiACO2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:28:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CE6C06139A;
-        Mon,  3 Jan 2022 06:28:29 -0800 (PST)
+        Mon, 3 Jan 2022 09:28:32 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9DCE61123;
-        Mon,  3 Jan 2022 14:28:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FB85C36AEE;
-        Mon,  3 Jan 2022 14:28:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BAD5F61118;
+        Mon,  3 Jan 2022 14:28:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F570C36AED;
+        Mon,  3 Jan 2022 14:28:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220108;
-        bh=JTTUVMZBrmRNrOFx/pyP0vd6l07ERuv+Iaf514Nff0I=;
+        s=korg; t=1641220111;
+        bh=RIN9MxHkGM0usSKtn+wpqY8o5A4d61GsOKzm91kSsiA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iQYkbypo8PxeQ9y4V8UXQnOTFsslicAbQTNNtUTSkncmmtFsja9No4wwgcn0iPj8E
-         AGDM5zu7QpccAU35opiweYaaOhPTcUaDowfETDiNF6fCewjdkrCEtvL4zMTzXSaU21
-         czq8U4YYP6LhyFoG8O+BXw90At4hlM53sRjno5lg=
+        b=X/1bRPivrgPMjvf85NzOQJbfKic5q2yrFLTUpN3BgKdcQRixtDkYWsDEy8NwmxsG9
+         h1eumevoTF2IL/IKP9+TGmMz35pRQGObDS94M1H7vSwrvoJdBYdswbAfngpCe+hBQI
+         oMKD7pf5FXCpND8MFxUmHTmWyKy/6v+vcGfrWgGM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@mellanox.com>,
-        Aya Levin <ayal@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
+        stable@vger.kernel.org, Coco Li <lixiaoyan@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 13/48] net/mlx5e: Fix ICOSQ recovery flow for XSK
-Date:   Mon,  3 Jan 2022 15:23:50 +0100
-Message-Id: <20220103142053.919560843@linuxfoundation.org>
+Subject: [PATCH 5.10 14/48] udp: using datalen to cap ipv6 udp max gso segments
+Date:   Mon,  3 Jan 2022 15:23:51 +0100
+Message-Id: <20220103142053.951640888@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220103142053.466768714@linuxfoundation.org>
 References: <20220103142053.466768714@linuxfoundation.org>
@@ -50,122 +47,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxim Mikityanskiy <maximmi@mellanox.com>
+From: Coco Li <lixiaoyan@google.com>
 
-[ Upstream commit 19c4aba2d4e23997061fb11aed8a3e41334bfa14 ]
+[ Upstream commit 736ef37fd9a44f5966e25319d08ff7ea99ac79e8 ]
 
-There are two ICOSQs per channel: one is needed for RX, and the other
-for async operations (XSK TX, kTLS offload). Currently, the recovery
-flow for both is the same, and async ICOSQ is mistakenly treated like
-the regular ICOSQ.
+The max number of UDP gso segments is intended to cap to
+UDP_MAX_SEGMENTS, this is checked in udp_send_skb().
 
-This patch prevents running the regular ICOSQ recovery on async ICOSQ.
-The purpose of async ICOSQ is to handle XSK wakeup requests and post
-kTLS offload RX parameters, it has nothing to do with RQ and XSKRQ UMRs,
-so the regular recovery sequence is not applicable here.
+skb->len contains network and transport header len here, we should use
+only data len instead.
 
-Fixes: be5323c8379f ("net/mlx5e: Report and recover from CQE error on ICOSQ")
-Signed-off-by: Maxim Mikityanskiy <maximmi@mellanox.com>
-Reviewed-by: Aya Levin <ayal@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+This is the ipv6 counterpart to the below referenced commit,
+which missed the ipv6 change
+
+Fixes: 158390e45612 ("udp: using datalen to cap max gso segments")
+Signed-off-by: Coco Li <lixiaoyan@google.com>
+Reviewed-by: Willem de Bruijn <willemb@google.com>
+Link: https://lore.kernel.org/r/20211223222441.2975883-1-lixiaoyan@google.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en.h  |  3 --
- .../net/ethernet/mellanox/mlx5/core/en_main.c | 30 ++++++++++++++-----
- 2 files changed, 22 insertions(+), 11 deletions(-)
+ net/ipv6/udp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-index 9da34f82d4668..73060b30fece3 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-@@ -916,9 +916,6 @@ void mlx5e_deactivate_rq(struct mlx5e_rq *rq);
- void mlx5e_close_rq(struct mlx5e_rq *rq);
- 
- struct mlx5e_sq_param;
--int mlx5e_open_icosq(struct mlx5e_channel *c, struct mlx5e_params *params,
--		     struct mlx5e_sq_param *param, struct mlx5e_icosq *sq);
--void mlx5e_close_icosq(struct mlx5e_icosq *sq);
- int mlx5e_open_xdpsq(struct mlx5e_channel *c, struct mlx5e_params *params,
- 		     struct mlx5e_sq_param *param, struct xsk_buff_pool *xsk_pool,
- 		     struct mlx5e_xdpsq *sq, bool is_redirect);
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-index 6ec4b96497ffb..3f5a2bb9b3c0b 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-@@ -1051,9 +1051,20 @@ static void mlx5e_icosq_err_cqe_work(struct work_struct *recover_work)
- 	mlx5e_reporter_icosq_cqe_err(sq);
- }
- 
-+static void mlx5e_async_icosq_err_cqe_work(struct work_struct *recover_work)
-+{
-+	struct mlx5e_icosq *sq = container_of(recover_work, struct mlx5e_icosq,
-+					      recover_work);
-+
-+	/* Not implemented yet. */
-+
-+	netdev_warn(sq->channel->netdev, "async_icosq recovery is not implemented\n");
-+}
-+
- static int mlx5e_alloc_icosq(struct mlx5e_channel *c,
- 			     struct mlx5e_sq_param *param,
--			     struct mlx5e_icosq *sq)
-+			     struct mlx5e_icosq *sq,
-+			     work_func_t recover_work_func)
- {
- 	void *sqc_wq               = MLX5_ADDR_OF(sqc, param->sqc, wq);
- 	struct mlx5_core_dev *mdev = c->mdev;
-@@ -1073,7 +1084,7 @@ static int mlx5e_alloc_icosq(struct mlx5e_channel *c,
- 	if (err)
- 		goto err_sq_wq_destroy;
- 
--	INIT_WORK(&sq->recover_work, mlx5e_icosq_err_cqe_work);
-+	INIT_WORK(&sq->recover_work, recover_work_func);
- 
- 	return 0;
- 
-@@ -1423,13 +1434,14 @@ static void mlx5e_tx_err_cqe_work(struct work_struct *recover_work)
- 	mlx5e_reporter_tx_err_cqe(sq);
- }
- 
--int mlx5e_open_icosq(struct mlx5e_channel *c, struct mlx5e_params *params,
--		     struct mlx5e_sq_param *param, struct mlx5e_icosq *sq)
-+static int mlx5e_open_icosq(struct mlx5e_channel *c, struct mlx5e_params *params,
-+			    struct mlx5e_sq_param *param, struct mlx5e_icosq *sq,
-+			    work_func_t recover_work_func)
- {
- 	struct mlx5e_create_sq_param csp = {};
- 	int err;
- 
--	err = mlx5e_alloc_icosq(c, param, sq);
-+	err = mlx5e_alloc_icosq(c, param, sq, recover_work_func);
- 	if (err)
- 		return err;
- 
-@@ -1459,7 +1471,7 @@ void mlx5e_deactivate_icosq(struct mlx5e_icosq *icosq)
- 	synchronize_net(); /* Sync with NAPI. */
- }
- 
--void mlx5e_close_icosq(struct mlx5e_icosq *sq)
-+static void mlx5e_close_icosq(struct mlx5e_icosq *sq)
- {
- 	struct mlx5e_channel *c = sq->channel;
- 
-@@ -1862,11 +1874,13 @@ static int mlx5e_open_queues(struct mlx5e_channel *c,
- 
- 	spin_lock_init(&c->async_icosq_lock);
- 
--	err = mlx5e_open_icosq(c, params, &cparam->async_icosq, &c->async_icosq);
-+	err = mlx5e_open_icosq(c, params, &cparam->async_icosq, &c->async_icosq,
-+			       mlx5e_async_icosq_err_cqe_work);
- 	if (err)
- 		goto err_disable_napi;
- 
--	err = mlx5e_open_icosq(c, params, &cparam->icosq, &c->icosq);
-+	err = mlx5e_open_icosq(c, params, &cparam->icosq, &c->icosq,
-+			       mlx5e_icosq_err_cqe_work);
- 	if (err)
- 		goto err_close_async_icosq;
- 
+diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+index 8a1863146f34c..069551a04369e 100644
+--- a/net/ipv6/udp.c
++++ b/net/ipv6/udp.c
+@@ -1189,7 +1189,7 @@ static int udp_v6_send_skb(struct sk_buff *skb, struct flowi6 *fl6,
+ 			kfree_skb(skb);
+ 			return -EINVAL;
+ 		}
+-		if (skb->len > cork->gso_size * UDP_MAX_SEGMENTS) {
++		if (datalen > cork->gso_size * UDP_MAX_SEGMENTS) {
+ 			kfree_skb(skb);
+ 			return -EINVAL;
+ 		}
 -- 
 2.34.1
 

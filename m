@@ -2,88 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3DB4482E93
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 07:56:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F33E2482E9F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 08:04:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231953AbiACG4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 01:56:45 -0500
-Received: from conssluserg-01.nifty.com ([210.131.2.80]:59861 "EHLO
-        conssluserg-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbiACG4n (ORCPT
+        id S231974AbiACHEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 02:04:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53906 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231960AbiACHEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 01:56:43 -0500
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 2036uTEH013835;
-        Mon, 3 Jan 2022 15:56:30 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 2036uTEH013835
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1641192990;
-        bh=0+ioftAd/kkHmwKuFy51aEio59K+4lZDLN5BOQt2u3w=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nTNVKEZrIcpoiz0vXU4cujaLF1XGmzC1qJe3R5nPVJx0RAg8n7ssxzCiFVMdzSozD
-         fBLETiOgXeXRo5jzwfQDqJ8nK6gY6hkzCORFyIwfbS8DhnjIqbeqwgUfOrTxmrqUa6
-         9IycmHvX+n8rZDr4XLCGTyoAJmYe+ZBy3Wbbp7NIFFqOsc6hWnEGD8O37ACiJPJRWQ
-         fiZwbauWULziA8w1PWthBcVHg7QorrhnkoEIufRm9c1ckQtVNW1vQ81kvZ823otkF+
-         DwSOv5DjkyXkodmnjcFqQwoTUO9yYJG8+3jykObtDXwTLNHSByMPbWIXJurJte/j8a
-         BkMDtsBeNgkxQ==
-X-Nifty-SrcIP: [209.85.215.175]
-Received: by mail-pg1-f175.google.com with SMTP id g2so29429969pgo.9;
-        Sun, 02 Jan 2022 22:56:29 -0800 (PST)
-X-Gm-Message-State: AOAM531y7VwaMjDXBtJoRWRaVgOD4TL73huWrTbp78Cbt9I/LVX2f+qo
-        zAFwu3UIbWDfGaBtWJuWyCWC1iKPyOFYO8p9VTU=
-X-Google-Smtp-Source: ABdhPJwJ0lPthz4rrEgHqocpuqBwWw4mWjV43mmunLIwxztjbIqpUr4Xo+cCJayA7GGb/pAS/JRxOvLYbOBKLM9Ovww=
-X-Received: by 2002:a05:6a00:1484:b0:4bb:86a:c061 with SMTP id
- v4-20020a056a00148400b004bb086ac061mr44922472pfu.36.1641192988954; Sun, 02
- Jan 2022 22:56:28 -0800 (PST)
+        Mon, 3 Jan 2022 02:04:21 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFDEC061785
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jan 2022 23:04:21 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id u16so24294044plg.9
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jan 2022 23:04:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/DcmRLt7Z7G5djRntAe/G4dE78B3/xaF0U4jWKYBNfU=;
+        b=S03Z1TYbHIQK2DDj4RC9zWScJNEovt8TyEK6zbMLiOB2qW5cI4OG96W0UAkSq63cN6
+         yNyLNV9J7XJQ/1PPXj330SIdUPKbHddPJZG1BSK/pncC6VNsFoSrmcpJKOqgQPTcLG5/
+         OAU9Y4UkUX9y3cbHBOEnO6foHfq/j/uWCKIttgmx7McyfeW1L5S806sQgzkKXel1EBX+
+         uUYUVz1pzMCI0mhobreeIxic6v92QURpSqLGNkNC66Hx7YU9s7hGmVcspE7Ui7Z2Ova+
+         0TMyTOAzbbL+f8wtusgn0IDnZwUUeFWLGt1rkPSorkKOIuk1rSRskYvI9iWewPLEIfk7
+         UbZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/DcmRLt7Z7G5djRntAe/G4dE78B3/xaF0U4jWKYBNfU=;
+        b=p0mKoa0D+3m98xMX8VwFQ1hNQ0W9f1GB+BwqWPguC4AXfnwZkeNPAGb3CeSArNZJzx
+         AHHirVpWV56OwRIszgpgb6SrPo11+p9lmp8SzMtqE8J/zGfr15O8kA+ClKvpqEq2h0zg
+         UUYdiTuCcCRq//+nv5/3FHscu3fAsL491nPXjyKo2FZsuVJ7M580jPhvvQMcJuvTHJyZ
+         yD4uloSiAlqvrt/3O6Twz3VDJQFp0PJnNhVFJyQhOyvJv55I6bMAV3w1x+oxWvJNwdbm
+         dI+SBhyz7cjeq0pK/0vnb1bDOKX+Z79c81MaXWbdfrmsvu9r6tqG9YMcuQd8uQerXw2/
+         Tm+g==
+X-Gm-Message-State: AOAM531IGO57oraOC9njM6slkb/1UnFiq7JjMVCv1+89rj2ho46pkFzv
+        pxD1cqUnoHHxE2q93xtr5X90
+X-Google-Smtp-Source: ABdhPJzsL1FaARo2g5iaQ1zxVxsPpbe1VVSBq3BWkRXwfkNqWPlDdY76phzVncC7tdxM5zRJRMw6PQ==
+X-Received: by 2002:a17:902:bd95:b0:149:7cf7:a175 with SMTP id q21-20020a170902bd9500b001497cf7a175mr32538967pls.32.1641193460666;
+        Sun, 02 Jan 2022 23:04:20 -0800 (PST)
+Received: from thinkpad ([117.202.186.71])
+        by smtp.gmail.com with ESMTPSA id x33sm39113586pfh.212.2022.01.02.23.04.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Jan 2022 23:04:20 -0800 (PST)
+Date:   Mon, 3 Jan 2022 12:34:12 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Prasad Malisetty <quic_c_pmaliset@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
+        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_vbadigan@quicinc.com, quic_ramkri@quicinc.com,
+        swboyd@chromium.org, Prasad Malisetty <quic_pmaliset@quicinc.com>
+Subject: Re: [PATCH v1] PCI: qcom: Add system PM support
+Message-ID: <20220103070412.GD3581@thinkpad>
+References: <1640189262-9699-1-git-send-email-quic_c_pmaliset@quicinc.com>
 MIME-Version: 1.0
-References: <20211231195925.GA1678@kernel.org>
-In-Reply-To: <20211231195925.GA1678@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 3 Jan 2022 15:55:51 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASnMu3oBy18SHSkA-cpeXj=oaLQYTjfuBcuoHLi6aVC0Q@mail.gmail.com>
-Message-ID: <CAK7LNASnMu3oBy18SHSkA-cpeXj=oaLQYTjfuBcuoHLi6aVC0Q@mail.gmail.com>
-Subject: Re: [PATCH] doc: kbuild: fix default in `imply` table
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1640189262-9699-1-git-send-email-quic_c_pmaliset@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 1, 2022 at 5:01 AM Miguel Ojeda <ojeda@kernel.org> wrote:
->
-> `BAZ` takes `FOO`'s value as default (as far as `BAR` allows it).
->
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+On Wed, Dec 22, 2021 at 09:37:42PM +0530, Prasad Malisetty wrote:
+> From: Prasad Malisetty <quic_pmaliset@quicinc.com>
+> 
+> Add suspend_noirq and resume_noirq callbacks to handle
+> System suspend and resume in dwc pcie controller driver.
+> 
+> When system suspends, send PME turnoff message to enter
+> link into L2 state. Along with powerdown the PHY, disable
+> pipe clock, switch gcc_pcie_1_pipe_clk_src to XO if mux is
+> supported and disable the pcie clocks, regulators.
+> 
+> When system resumes, PCIe link will be re-established and
+> setup rc settings.
+> 
+> Signed-off-by: Prasad Malisetty <quic_pmaliset@quicinc.com>
 > ---
->  Documentation/kbuild/kconfig-language.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/kbuild/kconfig-language.rst b/Documentation/kbuild/kconfig-language.rst
-> index 98c24183d8c3..93a5b6e1fabd 100644
-> --- a/Documentation/kbuild/kconfig-language.rst
-> +++ b/Documentation/kbuild/kconfig-language.rst
-> @@ -176,7 +176,7 @@ applicable everywhere (see syntax).
->         y               y               y               Y/m/n
->         n               m               n               N/m
->         m               m               m               M/n
-> -       y               m               n               M/n
-> +       y               m               m               M/n
->         y               n               *               N
->         ===             ===             =============   ==============
->
-> --
-> 2.34.1
->
+>  drivers/pci/controller/dwc/pcie-qcom.c | 103 +++++++++++++++++++++++++++++++++
+>  1 file changed, 103 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index c19cd506..24dcf5a 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -73,6 +73,8 @@
+>  
+>  #define PCIE20_PARF_Q2A_FLUSH			0x1AC
+>  
+> +#define PCIE20_PARF_PM_STTS                     0x24
+> +
+>  #define PCIE20_MISC_CONTROL_1_REG		0x8BC
+>  #define DBI_RO_WR_EN				1
+>  
+> @@ -1616,6 +1618,107 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+>  	return ret;
+>  }
+>  
+> +static int qcom_pcie_send_pme_turnoff_msg(struct qcom_pcie *pcie)
+> +{
+> +	int ret = 0;
+> +	u32 val = 0, poll_val = 0;
+> +	uint64_t l23_rdy_poll_timeout = 100000;
 
+u64?
 
-Applied to linux-kbuild. Thanks.
+> +	struct dw_pcie *pci = pcie->pci;
+> +	struct device *dev = pci->dev;
+> +
+> +	val = readl(pcie->elbi + PCIE20_ELBI_SYS_CTRL);
+> +	val |= BIT(4);
 
--- 
-Best Regards
-Masahiro Yamada
+Please define BIT(4)
+
+> +	writel(val, pcie->elbi + PCIE20_ELBI_SYS_CTRL);
+> +
+> +	ret = readl_poll_timeout((pcie->parf + PCIE20_PARF_PM_STTS), poll_val,
+> +			(poll_val & BIT(5)), 10000, l23_rdy_poll_timeout);
+
+define BIT(5)
+
+> +	if (!ret)
+> +		dev_dbg(dev, "PCIe: PM_Enter_L23 is received\n");
+
+This is not a helpful debug message for an user. And there is no need of "PCIe"
+prefix also. Use something like,
+
+dev_dbg(dev, "Device entered L23 link state\n");
+
+> +	else
+> +		dev_err(dev, "PM_Enter_L23 is NOT received.PARF_PM_STTS 0x%x\n",
+> +			readl_relaxed(pcie->parf + PCIE20_PARF_PM_STTS));
+
+dev_dbg(dev, "Device failed to enter L23 link state. PARF_PM_STTS: 0x%x\n",
+	readl_relaxed(pcie->parf + PCIE20_PARF_PM_STTS));
+
+> +
+> +	return ret;
+> +}
+> +
+> +static void qcom_pcie_host_disable(struct qcom_pcie *pcie)
+> +{
+> +	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
+> +
+
+Why only 2.7.0? This should be generic.
+
+> +	/*Assert the reset of endpoint */
+
+Space after /*
+
+> +	qcom_ep_reset_assert(pcie);
+> +
+> +	/* Put PHY into POWER DOWN state */
+> +	phy_power_off(pcie->phy);
+> +
+> +	writel(1, pcie->parf + PCIE20_PARF_PHY_CTRL);
+
+define 1
+
+> +
+> +	/* Disable pipe clock */
+
+No need of this comment. As of now only pipe clock is disabled in post_deinit
+but it may change in future, so this comment will be outdated.
+
+> +	pcie->ops->post_deinit(pcie);
+> +
+> +	/* Change GCC_PCIE_1_PIPE_MUXR register to 0x2 for XO as parent */
+
+/* Set pipe clock parent to XO clock if needed */
+
+> +	if (pcie->pipe_clk_need_muxing)
+> +		clk_set_parent(res->pipe_clk_src, res->ref_clk_src);
+> +
+> +	/* Disable PCIe clocks and regulators*/
+
+Space before */
+
+> +	pcie->ops->deinit(pcie);
+> +}
+> +
+> +static int __maybe_unused qcom_pcie_pm_suspend_noirq(struct device *dev)
+> +{
+> +	int ret = 0;
+> +	struct qcom_pcie *pcie = dev_get_drvdata(dev);
+> +	struct dw_pcie *pci = pcie->pci;
+> +
+> +	if (!dw_pcie_link_up(pci)) {
+> +		dev_err(dev, "Power has been turned off already\n");
+
+This should be dev_dbg()
+
+> +		return ret;
+> +	}
+> +
+> +	/* Send PME turnoff msg */
+> +	ret = qcom_pcie_send_pme_turnoff_msg(pcie);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Power down the PHY, disable clock and regulators */
+> +	qcom_pcie_host_disable(pcie);
+> +
+> +	dev_info(dev, "PM: PCI is suspended\n");
+
+This is not needed.
+
+> +	return ret;
+> +}
+> +
+> +/* Resume the PCIe link */
+> +static int __maybe_unused qcom_pcie_pm_resume_noirq(struct device *dev)
+> +{
+> +	int ret = 0;
+> +	struct qcom_pcie *pcie = dev_get_drvdata(dev);
+> +	struct dw_pcie *pci = pcie->pci;
+> +	struct pcie_port *pp = &pci->pp;
+> +
+> +	dev_info(dev, "PM: Resuming\n");
+
+Again, no need of this.
+
+> +
+> +	/* Initialize PCIe host */
+> +	ret = qcom_pcie_host_init(pp);
+> +	if (ret)
+> +		dev_err(dev, "cannot initialize host\n");
+
+Can the below functions succeed if host_init fails?
+
+> +
+> +	dw_pcie_iatu_detect(pci);
+
+Why this is needed? This is a static info of the PCI controller and not supposed
+to change.
+
+> +	dw_pcie_setup_rc(pp);
+> +
+> +	/* Start the PCIe link */
+> +	qcom_pcie_start_link(pci);
+> +
+> +	ret = dw_pcie_wait_for_link(pci);
+> +	if (ret)
+> +		dev_err(dev, "Link never came up, Resume failed\n");
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct dev_pm_ops qcom_pcie_pm_ops = {
+
+Why is this struct not used?
+
+Thanks,
+Mani
+
+> +	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(qcom_pcie_pm_suspend_noirq, qcom_pcie_pm_resume_noirq)
+> +};
+> +
+>  static const struct of_device_id qcom_pcie_match[] = {
+>  	{ .compatible = "qcom,pcie-apq8084", .data = &apq8084_cfg },
+>  	{ .compatible = "qcom,pcie-ipq8064", .data = &ipq8064_cfg },
+> -- 
+> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+> of Code Aurora Forum, hosted by The Linux Foundation
+> 

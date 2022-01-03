@@ -2,322 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 542614833BC
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:45:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D3D24833BD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:47:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232129AbiACOpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:45:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43348 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230129AbiACOpP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:45:15 -0500
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9718FC061761
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 06:45:14 -0800 (PST)
-Received: by mail-ua1-x92a.google.com with SMTP id y4so1254639uad.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 06:45:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=07X0VtNLR2uHgUz3pskrvCYaEAcog26tD4bSPZFPOqk=;
-        b=pVjQa+kWqYrvvPrR0TlyTZKq4kLdmKSQ5hElY6Z1WrJmG3BXHKJCn4tEA55hBVBxqm
-         swT8goVTvWgnPTHT7/cGAiKbu++CGFIcoWl2TS21lPkxLrI7Slg1BTW4E9XiR42aI3Y9
-         aQftXTYscdUQWZ9EKZdT1OQPTYIsTfYcLhwu50thb0N6Y12aTrhOK0FFMmEyxRqi9gGf
-         97HfJthjuRTIv+WISTR8/eq6JBvZf71Co7Bqo1uICk5QbRGj2ZMGh/Bn9VdJ75T+iuZ0
-         Y0jRgFDqsu+clFYb0TRtQSD0rbr3NLhSrv+JOe8wzGE9hM0P19YpT3x0sE8unkqqDx3C
-         JV3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=07X0VtNLR2uHgUz3pskrvCYaEAcog26tD4bSPZFPOqk=;
-        b=VS1B1jxyiezlJP3BAXBaihNQY5tY/gXcLVNh1g1JPfMw3WgQhcxZ8QhsuZqV54Upqd
-         IzlU64lzlQBTG/EKqjDzpZvcHdaD8gSWBSOATjpvd0ObwNO3VmssIKN667ABg6EnedP4
-         VTe3PM0SItXOxrLsHY82DJ7Dbfmqoc/Ut0KlK6HJBop7dXe0kepfUxX76T/zsfhdFDWn
-         OdMh1RaeotWzZ8er/EGhKU+lFXPSeGFVLB+A8B7CELLO4GR45OFHhaUynsW4tksQNtMb
-         GLBG4nOflgdvTGj6mBlPqcg0FhdUvmHeZx8fXHcSzkefBOZ7h+J7ujzRqkJl4Blh8P1s
-         dp3w==
-X-Gm-Message-State: AOAM532mlUURIgjX5iGjg45yNB3l54C4G/W4ERD5VMxauV4c5MPkAziI
-        XgP8xXJ2CNoI4Wey9Z2nOY5RpefgZUBmvt4TNiGseQ==
-X-Google-Smtp-Source: ABdhPJx9+/wKkUsISVpXJe9Z+IOc2TM3l7b4zKIAons8L3ryF2j89sp4/mHE9glwo/uYG4mSTc57A2UcSMuyR77x4hc=
-X-Received: by 2002:a67:e10c:: with SMTP id d12mr13248417vsl.20.1641221113752;
- Mon, 03 Jan 2022 06:45:13 -0800 (PST)
+        id S232478AbiACOrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:47:49 -0500
+Received: from mga07.intel.com ([134.134.136.100]:56878 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232455AbiACOrq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 09:47:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641221266; x=1672757266;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=znrP2i87MLLUcp7H2Vnbtzt9yBXPSnogxgYGZPk7/Eg=;
+  b=mLWL3mMBH0VdrIIU0CbZkM21Wz9AQjg3ubeZz9zbRfP1FJ+QWaa6t+g+
+   5R36RfarE5RWYkCjJo/DC23vpqnCrkbpaUBvXouXutByWSp2EskC5kjuW
+   mtLqgFVbr1fPNs0pKGsF76bDv8nU/2GSSJXxGmO81flh9q+rZS/ZzAk+X
+   gtOZyF+kF6nKYzuaASzy+gb2f2RQx9a2QKPJzuxYNq5mhSGxwIJPDKH/1
+   F12WYx3TniSph+crwl7EgalVAoCejxecD3SqzCyRK4hIwJAL/ulgd0f46
+   DLiH8kUK5bqXoWBP97pWnWgkwWYbkbhToxC9mvxZLrYj8azAeN5e94PVH
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10215"; a="305425389"
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="305425389"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 06:47:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="760111132"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga006.fm.intel.com with ESMTP; 03 Jan 2022 06:47:42 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 203ElfGx009815;
+        Mon, 3 Jan 2022 14:47:41 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     cgel.zte@gmail.com
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        torvalds@linux-foundation.org, nathan@kernel.org,
+        ndesaulniers@google.com, keescook@chromium.org,
+        wang.yong12@zte.com.cn, xu.xin16@zte.com.cn,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH linux-next] tools: compiler-gcc.h: Keep compatible with older GCC versions
+Date:   Mon,  3 Jan 2022 15:46:35 +0100
+Message-Id: <20220103144635.5952-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20220102120201.594408-1-xu.xin16@zte.com.cn>
+References: <20220102120201.594408-1-xu.xin16@zte.com.cn>
 MIME-Version: 1.0
-References: <20211231161930.256733-1-krzysztof.kozlowski@canonical.com> <20211231162309.257587-2-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211231162309.257587-2-krzysztof.kozlowski@canonical.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Mon, 3 Jan 2022 16:45:02 +0200
-Message-ID: <CAPLW+4k5cMUNvLkZNsJCqTfrFWOGiakerYHY3kc+xQAvQ2Ce6w@mail.gmail.com>
-Subject: Re: [PATCH 19/24] arm64: dts: exynos: align pinctrl with dtschema in Exynos850
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Chanho Park <chanho61.park@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 31 Dec 2021 at 18:23, Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> Align the pin controller related nodes with dtschema.  No functional
-> change expected.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+From: cgel.zte@gmail.com
+Date: Sun,  2 Jan 2022 12:02:01 +0000
+
+> From: xu xin <xu.xin16@zte.com.cn>
+> 
+> When HOST CC = gcc (GCC) 4.8.5, we found that there is an error occurring:
+                           ^^^^^
+
+From [0]:
+
+Program  Minimal version
+GNU C    5.1
+
+This applies to both HOSTCC and CC.
+
+> Undefined __has_attribute as we built the whole kernel and tools.
+> 
+> To solve this, this patch is given to keep the compatibility with older
+> GCC versions.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Co-developed-by: wangyong <wang.yong12@zte.com.cn>
+> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
 > ---
+>  tools/include/linux/compiler-gcc.h | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/tools/include/linux/compiler-gcc.h b/tools/include/linux/compiler-gcc.h
+> index 8816f06fc6c7..333ed16b3b12 100644
+> --- a/tools/include/linux/compiler-gcc.h
+> +++ b/tools/include/linux/compiler-gcc.h
+> @@ -16,6 +16,10 @@
+>  # define __fallthrough __attribute__ ((fallthrough))
+>  #endif
+>  
+> +#ifndef __has_attribute
+> +# define __has_attribute(x) 0  /* Compatibility with GCC versions < 5.x */
+> +#endif
+> +
+>  #if __has_attribute(__error__)
+>  # define __compiletime_error(message) __attribute__((error(message)))
+>  #endif
+> -- 
+> 2.25.1
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+[0] https://elixir.bootlin.com/linux/v5.16-rc8/source/Documentation/process/changes.rst#L32
 
->  .../boot/dts/exynos/exynos850-pinctrl.dtsi    | 52 +++++++++----------
->  1 file changed, 26 insertions(+), 26 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/exynos/exynos850-pinctrl.dtsi b/arch/arm64/boot/dts/exynos/exynos850-pinctrl.dtsi
-> index f576b29c9b16..a71acf358d2d 100644
-> --- a/arch/arm64/boot/dts/exynos/exynos850-pinctrl.dtsi
-> +++ b/arch/arm64/boot/dts/exynos/exynos850-pinctrl.dtsi
-> @@ -13,7 +13,7 @@
->  #include <dt-bindings/pinctrl/samsung.h>
->
->  &pinctrl_alive {
-> -       gpa0: gpa0 {
-> +       gpa0: gpa0-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -30,7 +30,7 @@ gpa0: gpa0 {
->                              <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
->         };
->
-> -       gpa1: gpa1 {
-> +       gpa1: gpa1-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -47,7 +47,7 @@ gpa1: gpa1 {
->                              <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
->         };
->
-> -       gpa2: gpa2 {
-> +       gpa2: gpa2-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -64,7 +64,7 @@ gpa2: gpa2 {
->                              <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
->         };
->
-> -       gpa3: gpa3 {
-> +       gpa3: gpa3-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -81,7 +81,7 @@ gpa3: gpa3 {
->                              <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
->         };
->
-> -       gpa4: gpa4 {
-> +       gpa4: gpa4-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -94,7 +94,7 @@ gpa4: gpa4 {
->                              <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>;
->         };
->
-> -       gpq0: gpq0 {
-> +       gpq0: gpq0-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -134,7 +134,7 @@ uart1_pins: uart1-pins {
->  };
->
->  &pinctrl_cmgp {
-> -       gpm0: gpm0 {
-> +       gpm0: gpm0-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -144,7 +144,7 @@ gpm0: gpm0 {
->                 interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
->         };
->
-> -       gpm1: gpm1 {
-> +       gpm1: gpm1-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -154,7 +154,7 @@ gpm1: gpm1 {
->                 interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
->         };
->
-> -       gpm2: gpm2 {
-> +       gpm2: gpm2-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -164,7 +164,7 @@ gpm2: gpm2 {
->                 interrupts = <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>;
->         };
->
-> -       gpm3: gpm3 {
-> +       gpm3: gpm3-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -174,7 +174,7 @@ gpm3: gpm3 {
->                 interrupts = <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>;
->         };
->
-> -       gpm4: gpm4 {
-> +       gpm4: gpm4-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -184,7 +184,7 @@ gpm4: gpm4 {
->                 interrupts = <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>;
->         };
->
-> -       gpm5: gpm5 {
-> +       gpm5: gpm5-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -256,7 +256,7 @@ spi2_pins: spi2-pins {
->  };
->
->  &pinctrl_aud {
-> -       gpb0: gpb0 {
-> +       gpb0: gpb0-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -264,7 +264,7 @@ gpb0: gpb0 {
->                 #interrupt-cells = <2>;
->         };
->
-> -       gpb1: gpb1 {
-> +       gpb1: gpb1-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -322,7 +322,7 @@ aud_fm_idle_pins: aud-fm-idle-pins {
->  };
->
->  &pinctrl_hsi {
-> -       gpf2: gpf2 {
-> +       gpf2: gpf2-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -367,7 +367,7 @@ sd2_pdn_pins: sd2-pdn-pins {
->  };
->
->  &pinctrl_core {
-> -       gpf0: gpf0 {
-> +       gpf0: gpf0-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -375,7 +375,7 @@ gpf0: gpf0 {
->                 #interrupt-cells = <2>;
->         };
->
-> -       gpf1: gpf1 {
-> +       gpf1: gpf1-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -434,7 +434,7 @@ sd0_bus8_pins: sd0-bus8-pins {
->  };
->
->  &pinctrl_peri {
-> -       gpc0: gpc0 {
-> +       gpc0: gpc0-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -442,7 +442,7 @@ gpc0: gpc0 {
->                 #interrupt-cells = <2>;
->         };
->
-> -       gpc1: gpc1 {
-> +       gpc1: gpc1-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -450,7 +450,7 @@ gpc1: gpc1 {
->                 #interrupt-cells = <2>;
->         };
->
-> -       gpg0: gpg0 {
-> +       gpg0: gpg0-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -458,7 +458,7 @@ gpg0: gpg0 {
->                 #interrupt-cells = <2>;
->         };
->
-> -       gpg1: gpg1 {
-> +       gpg1: gpg1-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -466,7 +466,7 @@ gpg1: gpg1 {
->                 #interrupt-cells = <2>;
->         };
->
-> -       gpg2: gpg2 {
-> +       gpg2: gpg2-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -474,7 +474,7 @@ gpg2: gpg2 {
->                 #interrupt-cells = <2>;
->         };
->
-> -       gpg3: gpg3 {
-> +       gpg3: gpg3-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -482,14 +482,14 @@ gpg3: gpg3 {
->                 #interrupt-cells = <2>;
->         };
->
-> -       gpp0: gpp0 {
-> +       gpp0: gpp0-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
->                 interrupt-controller;
->                 #interrupt-cells = <2>;
->         };
-> -       gpp1: gpp1 {
-> +       gpp1: gpp1-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> @@ -497,7 +497,7 @@ gpp1: gpp1 {
->                 #interrupt-cells = <2>;
->         };
->
-> -       gpp2: gpp2 {
-> +       gpp2: gpp2-gpio-bank {
->                 gpio-controller;
->                 #gpio-cells = <2>;
->
-> --
-> 2.32.0
->
+Al

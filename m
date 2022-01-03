@@ -2,150 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6071148343D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 16:31:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B07848344F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 16:35:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234222AbiACPbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 10:31:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54476 "EHLO
+        id S234197AbiACPfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 10:35:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234088AbiACPbE (ORCPT
+        with ESMTP id S232579AbiACPfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 10:31:04 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22957C061784
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 07:31:04 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 54E5B1F42558
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1641223863;
-        bh=iVgZxVqC2T4q/YntLy6VYveQGVZXE87ejYYsVcnDTVo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fir+ujfJNM05YaXg9OVuXrjYsLYFWjcKntoB2ehQIIVsZVcVvTixYQhHYdMcCPd3o
-         pGtSFthvJDCddnv1LQHqYQuMx3UoOC1XxDunBT58INR3fxfvsdZ+UsSwY2wGhcqKpk
-         hcFEomrqtwycnN2JZ8UQcyvOVTg/f6+JUQJgWF2yXGXyQGjnEIZKo7taa9zvyuR0dg
-         9Tnkbq+KjiTxIZcCBHY7BUoj2utD4tUWbMSu1l15B1kagsMnOqAX5SWXYn2QmIGquD
-         JwYDjJq/guagELnXkvTJ7Es1Ke7mDHVN62es6uF+O1UXpfkD6le76NKZFpuWw4MQzO
-         FGi3fvaxMrcNw==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     chunkuang.hu@kernel.org
-Cc:     p.zabel@pengutronix.de, chunfeng.yun@mediatek.com, kishon@ti.com,
-        vkoul@kernel.org, matthias.bgg@gmail.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 4/4] phy: mediatek: phy-mtk-hdmi: Simplify with dev_err_probe()
-Date:   Mon,  3 Jan 2022 16:30:55 +0100
-Message-Id: <20220103153055.50473-4-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220103153055.50473-1-angelogioacchino.delregno@collabora.com>
-References: <20220103153055.50473-1-angelogioacchino.delregno@collabora.com>
+        Mon, 3 Jan 2022 10:35:16 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95092C061761;
+        Mon,  3 Jan 2022 07:35:15 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id t26so70585757wrb.4;
+        Mon, 03 Jan 2022 07:35:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fwoh/wxpLCTrTZD3q7z2iU1EBbvcdilR8NQ1crz+Dak=;
+        b=FbSoY90AKEGYS7Bgpb3nuWnfa68L5JDl8Dj2rJnG7iw4CiY1Qitu+Z/fzhtAS5OMO/
+         hO68KW+RPZ+udHaAw1v4p7uOqE1USPbUzeURv7C2Q4nnLlGYLAt3ZsTbKlrnFPEgxrF9
+         UsHnEjhAZoSIxa1a4GMAjKQpzhbXQbfv7Lf0CV6RUuPlr/X4WOUahygScAfGQpf3j38W
+         wrd/0ioJJjBCqiZTb+6frG7j5PhE37ugu1MaDCmaApvbRcX1FRD/m7OPv0nlWL3md2WD
+         87Ys1771Dq3yQrz/uf0pxEbfUO0po0e6S0JrGdpkclzM4vSmhic/5p697yWi/bPXwPrJ
+         8ftA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fwoh/wxpLCTrTZD3q7z2iU1EBbvcdilR8NQ1crz+Dak=;
+        b=KNt6u9P2ZdzuQvqT9O6K0ePVlHhFFg4A8TrUzS07dUZPVvKfdaAr9w9xuP/vyNmSbD
+         P2fnmiZpcWvhRPqWr3251hkDTVU+CsoM9WlTXiOzhzdbOg93losZVsChhs6AsdZUDSCD
+         H8cxEHdPjLrj02szxOuI26KvQSvhfv8f22Jm1EJVi8/JR79+M1gf21akX6wDJzeC09ih
+         QEI6eK6XWpCo9WII+AmLEStsAJrRE73ebPxZax8D5IsC/XIBGnuE+jIoBBtRT/AcDlkM
+         JTq+s3xJDm0qNULIa2W7gujW+POcoV5vZsV5R5kXgQ9cIV9Y5I7Fmhiy9abOU0W2pV1y
+         H2hw==
+X-Gm-Message-State: AOAM533VZ5AezecNQHR0qc3vbVQhmKZShHSi/9HQPFwv+U9D41gAxonF
+        FfKXDf+vxQ2yI0dQtKxM8QtAkOyBQnVqQtRoaEo=
+X-Google-Smtp-Source: ABdhPJyfYR5Tgej1+JbfKke6k6aFWArD0MekU/04WhRD9OHXM6/dib5ggFdNePgFDDRJu1kABOsT7XoAjKW/ssWe5jM=
+X-Received: by 2002:a05:6000:186e:: with SMTP id d14mr40390261wri.205.1641224114204;
+ Mon, 03 Jan 2022 07:35:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAG_fn=VDEoQx5c7XzWX1yaYBd5y5FrG1aagrkv+SZ03c8TfQYQ@mail.gmail.com>
+ <20220102171943.28846-1-paskripkin@gmail.com> <YdL0GPxy4TdGDzOO@kroah.com>
+In-Reply-To: <YdL0GPxy4TdGDzOO@kroah.com>
+From:   Alexander Aring <alex.aring@gmail.com>
+Date:   Mon, 3 Jan 2022 10:35:03 -0500
+Message-ID: <CAB_54W7HQmm1ncCEsTmZFR+GVf6p6Vz0RMWDJXAhXQcW4r3hUQ@mail.gmail.com>
+Subject: Re: [PATCH RFT] ieee802154: atusb: move to new USB API
+To:     Greg KH <greg@kroah.com>
+Cc:     Pavel Skripkin <paskripkin@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-wpan - ML <linux-wpan@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        "# 3.19.x" <stable@vger.kernel.org>,
+        Alexander Potapenko <glider@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the dev_err_probe() helper to simplify error handling during probe.
+Hi,
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/phy/mediatek/phy-mtk-hdmi.c | 50 +++++++++++------------------
- 1 file changed, 19 insertions(+), 31 deletions(-)
+On Mon, 3 Jan 2022 at 08:03, Greg KH <greg@kroah.com> wrote:
+>
+> On Sun, Jan 02, 2022 at 08:19:43PM +0300, Pavel Skripkin wrote:
+> > Alexander reported a use of uninitialized value in
+> > atusb_set_extended_addr(), that is caused by reading 0 bytes via
+> > usb_control_msg().
+> >
+> > Since there is an API, that cannot read less bytes, than was requested,
+> > let's move atusb driver to use it. It will fix all potintial bugs with
+> > uninit values and make code more modern
+> >
+> > Fail log:
+> >
+> > BUG: KASAN: uninit-cmp in ieee802154_is_valid_extended_unicast_addr include/linux/ieee802154.h:310 [inline]
+> > BUG: KASAN: uninit-cmp in atusb_set_extended_addr drivers/net/ieee802154/atusb.c:1000 [inline]
+> > BUG: KASAN: uninit-cmp in atusb_probe.cold+0x29f/0x14db drivers/net/ieee802154/atusb.c:1056
+> > Uninit value used in comparison: 311daa649a2003bd stack handle: 000000009a2003bd
+> >  ieee802154_is_valid_extended_unicast_addr include/linux/ieee802154.h:310 [inline]
+> >  atusb_set_extended_addr drivers/net/ieee802154/atusb.c:1000 [inline]
+> >  atusb_probe.cold+0x29f/0x14db drivers/net/ieee802154/atusb.c:1056
+> >  usb_probe_interface+0x314/0x7f0 drivers/usb/core/driver.c:396
+> >
+> > Fixes: 7490b008d123 ("ieee802154: add support for atusb transceiver")
+> > Cc: stable@vger.kernel.org # 5.9
+> > Reported-by: Alexander Potapenko <glider@google.com>
+> > Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+> > ---
+> >  drivers/net/ieee802154/atusb.c | 61 +++++++++++++++++++++-------------
+> >  1 file changed, 38 insertions(+), 23 deletions(-)
+> >
+> > diff --git a/drivers/net/ieee802154/atusb.c b/drivers/net/ieee802154/atusb.c
+> > index 23ee0b14cbfa..43befea0110f 100644
+> > --- a/drivers/net/ieee802154/atusb.c
+> > +++ b/drivers/net/ieee802154/atusb.c
+> > @@ -80,10 +80,9 @@ struct atusb_chip_data {
+> >   * in atusb->err and reject all subsequent requests until the error is cleared.
+> >   */
+> >
+> > -static int atusb_control_msg(struct atusb *atusb, unsigned int pipe,
+> > -                          __u8 request, __u8 requesttype,
+> > -                          __u16 value, __u16 index,
+> > -                          void *data, __u16 size, int timeout)
+> > +static int atusb_control_msg_recv(struct atusb *atusb, __u8 request, __u8 requesttype,
+> > +                               __u16 value, __u16 index,
+> > +                               void *data, __u16 size, int timeout)
+>
+> Why do you need a wrapper function at all?  Why not just call the real
+> usb functions instead?
+>
 
-diff --git a/drivers/phy/mediatek/phy-mtk-hdmi.c b/drivers/phy/mediatek/phy-mtk-hdmi.c
-index e037fa89696c..4f40a6eea004 100644
---- a/drivers/phy/mediatek/phy-mtk-hdmi.c
-+++ b/drivers/phy/mediatek/phy-mtk-hdmi.c
-@@ -104,20 +104,16 @@ static int mtk_hdmi_phy_probe(struct platform_device *pdev)
- 		return PTR_ERR(hdmi_phy->regmap);
- 
- 	ref_clk = devm_clk_get(dev, "pll_ref");
--	if (IS_ERR(ref_clk)) {
--		ret = PTR_ERR(ref_clk);
--		dev_err(&pdev->dev, "Failed to get PLL reference clock: %d\n",
--			ret);
--		return ret;
--	}
-+	if (IS_ERR(ref_clk))
-+		return dev_err_probe(dev, PTR_ERR(ref_clk),
-+				     "Failed to get PLL reference clock\n");
-+
- 	ref_clk_name = __clk_get_name(ref_clk);
- 
- 	ret = of_property_read_string(dev->of_node, "clock-output-names",
- 				      &clk_init.name);
--	if (ret < 0) {
--		dev_err(dev, "Failed to read clock-output-names: %d\n", ret);
--		return ret;
--	}
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "Failed to read clock-output-names\n");
- 
- 	hdmi_phy->dev = dev;
- 	hdmi_phy->conf =
-@@ -125,25 +121,19 @@ static int mtk_hdmi_phy_probe(struct platform_device *pdev)
- 	mtk_hdmi_phy_clk_get_data(hdmi_phy, &clk_init);
- 	hdmi_phy->pll_hw.init = &clk_init;
- 	hdmi_phy->pll = devm_clk_register(dev, &hdmi_phy->pll_hw);
--	if (IS_ERR(hdmi_phy->pll)) {
--		ret = PTR_ERR(hdmi_phy->pll);
--		dev_err(dev, "Failed to register PLL: %d\n", ret);
--		return ret;
--	}
-+	if (IS_ERR(hdmi_phy->pll))
-+		return dev_err_probe(dev, PTR_ERR(hdmi_phy->pll),
-+				    "Failed to register PLL\n");
- 
- 	ret = of_property_read_u32(dev->of_node, "mediatek,ibias",
- 				   &hdmi_phy->ibias);
--	if (ret < 0) {
--		dev_err(&pdev->dev, "Failed to get ibias: %d\n", ret);
--		return ret;
--	}
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "Failed to get ibias\n");
- 
- 	ret = of_property_read_u32(dev->of_node, "mediatek,ibias_up",
- 				   &hdmi_phy->ibias_up);
--	if (ret < 0) {
--		dev_err(&pdev->dev, "Failed to get ibias up: %d\n", ret);
--		return ret;
--	}
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "Failed to get ibias_up\n");
- 
- 	dev_info(dev, "Using default TX DRV impedance: 4.2k/36\n");
- 	hdmi_phy->drv_imp_clk = 0x30;
-@@ -152,17 +142,15 @@ static int mtk_hdmi_phy_probe(struct platform_device *pdev)
- 	hdmi_phy->drv_imp_d0 = 0x30;
- 
- 	phy = devm_phy_create(dev, NULL, mtk_hdmi_phy_dev_get_ops(hdmi_phy));
--	if (IS_ERR(phy)) {
--		dev_err(dev, "Failed to create HDMI PHY\n");
--		return PTR_ERR(phy);
--	}
-+	if (IS_ERR(phy))
-+		return dev_err_probe(dev, PTR_ERR(phy), "Cannot create HDMI PHY\n");
-+
- 	phy_set_drvdata(phy, hdmi_phy);
- 
- 	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
--	if (IS_ERR(phy_provider)) {
--		dev_err(dev, "Failed to register HDMI PHY\n");
--		return PTR_ERR(phy_provider);
--	}
-+	if (IS_ERR(phy_provider))
-+		return dev_err_probe(dev, PTR_ERR(phy_provider),
-+				     "Failed to register HDMI PHY\n");
- 
- 	if (hdmi_phy->conf->pll_default_off)
- 		hdmi_phy->conf->hdmi_phy_disable_tmds(hdmi_phy);
--- 
-2.33.1
+This driver has a lot of history, there is a comment which states:
 
+"To reduce the number of error checks in the code, we record the first
+error in atusb->err and reject all subsequent requests until the error
+is cleared."
+
+I think in the early state of this driver (as it was acting more as an
+USB<->SPI bridge) there was a lot of state handling involved. Nowadays
+we have a lot of such handling inside the device firmware (which is
+btw. open source). This might be not an excuse but an explanation why
+it was introduced in such a way.
+
+...
+>
+> I would recommend just moving to use the real USB functions and no
+> wrapper function at all like this, it will make things more obvious and
+> easier to understand over time.
+
+okay.
+
+- Alex

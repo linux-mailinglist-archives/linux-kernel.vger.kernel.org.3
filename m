@@ -2,64 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6BED482E7D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 07:32:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B6D482E87
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 07:48:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231889AbiACGcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 01:32:10 -0500
-Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:51466 "EHLO
-        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231848AbiACGcJ (ORCPT
+        id S231922AbiACGsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 01:48:10 -0500
+Received: from 6.mo548.mail-out.ovh.net ([188.165.58.48]:33943 "EHLO
+        6.mo548.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229995AbiACGsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 01:32:09 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0V0dXccU_1641191526;
-Received: from 192.168.31.65(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V0dXccU_1641191526)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 03 Jan 2022 14:32:07 +0800
-Message-ID: <d57c4609-a4c3-5e60-8257-a0704aaa30a5@linux.alibaba.com>
-Date:   Mon, 3 Jan 2022 14:32:05 +0800
+        Mon, 3 Jan 2022 01:48:09 -0500
+Received: from mxplan5.mail.ovh.net (unknown [10.109.138.84])
+        by mo548.mail-out.ovh.net (Postfix) with ESMTPS id 3640B207C9;
+        Mon,  3 Jan 2022 06:41:15 +0000 (UTC)
+Received: from kaod.org (37.59.142.96) by DAG4EX1.mxp5.local (172.16.2.31)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Mon, 3 Jan
+ 2022 07:41:14 +0100
+Authentication-Results: garm.ovh; auth=pass (GARM-96R0010519d886-6aaf-4337-bfe0-c5278666afd4,
+                    2FB4A63B976BE1634B5E5BEF676EDDCED9FE10A5) smtp.auth=clg@kaod.org
+X-OVh-ClientIp: 82.64.250.170
+Message-ID: <4d03fc5f-8c0a-96d0-da83-17d7a019ab58@kaod.org>
+Date:   Mon, 3 Jan 2022 07:41:13 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [PATCH v1 13/23] erofs: implement fscache-based data read
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] powerpc/xive: Add missing null check after calling
+ kmalloc
 Content-Language: en-US
-From:   JeffleXu <jefflexu@linux.alibaba.com>
-To:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org
-Cc:     linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
-        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
-        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
-        linux-kernel@vger.kernel.org
-References: <20211227125444.21187-1-jefflexu@linux.alibaba.com>
- <20211227125444.21187-14-jefflexu@linux.alibaba.com>
-In-Reply-To: <20211227125444.21187-14-jefflexu@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Ammar Faizi <ammarfaizi2@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
+CC:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Yang Li <yang.lee@linux.alibaba.com>
+References: <20211226135314.251221-1-ammar.faizi@intel.com>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <20211226135314.251221-1-ammar.faizi@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [37.59.142.96]
+X-ClientProxiedBy: DAG8EX2.mxp5.local (172.16.2.72) To DAG4EX1.mxp5.local
+ (172.16.2.31)
+X-Ovh-Tracer-GUID: 2e5ada26-2a7c-476c-84a3-c0e1a5e66fc8
+X-Ovh-Tracer-Id: 11135994504318192489
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrudeftddgleekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeevrogurhhitggpnfgvpgfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhepieegvdffkeegfeetuddttddtveduiefhgeduffekiedtkeekteekhfffleevleelnecukfhppedtrddtrddtrddtpdefjedrheelrddugedvrdelieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdprhgtphhtthhopeihrghnghdrlhgvvgeslhhinhhugidrrghlihgsrggsrgdrtghomh
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/26/21 14:54, Ammar Faizi wrote:
+> Commit 930914b7d528fc ("powerpc/xive: Add a debugfs file to dump
+> internal XIVE state") forgot to add a null check.
+> 
+> Add it.
+> 
+> Cc: Cédric Le Goater <clg@kaod.org>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Fixes: 930914b7d528fc6b0249bffc00564100bcf6ef75 ("powerpc/xive: Add a debugfs file to dump internal XIVE state")
+> Signed-off-by: Ammar Faizi <ammarfaizi2@gmail.com>
 
 
-On 12/27/21 8:54 PM, Jeffle Xu wrote:
->  
-> +static inline void do_copy_page(struct page *from, struct page *to,
-> +				size_t offset, size_t len)
-> +{
-> +	char *vfrom, *vto;
-> +
-> +	vfrom = kmap_atomic(from);
-> +	vto = kmap_atomic(to);
-> +	memcpy(vto, vfrom + offset, len);
-> +	kunmap_atomic(vto);
-> +	kunmap_atomic(vfrom);
-> +}
-> +
+Reviewed-by: Cédric Le Goater <clg@kaod.org>
 
-It seems that this private function can be replaced by memcpy_page().
-Will be done in the next version.
-
-
--- 
 Thanks,
-Jeffle
+
+C.

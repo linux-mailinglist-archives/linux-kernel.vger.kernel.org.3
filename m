@@ -2,325 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0442482F0E
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 09:39:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 632DE482F14
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 09:46:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232210AbiACIju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 03:39:50 -0500
-Received: from mail-dm6nam12on2047.outbound.protection.outlook.com ([40.107.243.47]:29633
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232169AbiACIjt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 03:39:49 -0500
+        id S232224AbiACIq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 03:46:26 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:51662 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232169AbiACIqY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 03:46:24 -0500
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2031SY9H012098;
+        Mon, 3 Jan 2022 08:46:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=Qwz1WJni+5K28H0erTh5ws4OGYqy92oEeDjQJl/qebY=;
+ b=h49THU7auLmwARZqg4KI/rlKIV9PS/LWNRO+8MTWdO5jwIt4mI7etjGYrm3XP6ygSkGI
+ 8Fcfvr9CU6FAlUEvZR8x5/9Bs10ai+siI4OYzV/fYJfJT2rs5UD2/CdFbp/j3/JsAYlc
+ neWZMg6IGnev46Nx85ywXbSZ0G/ikqCyHZlsggIbmXHLOj2WB3AV/5mt8NPsIek3YhQr
+ JtJqxZWuRF2b/DX5X0P0L8J7WyB+OyhwTIE0qzo47qM5tGtW4Vj7aKTNFa05+Z31Jqau
+ gxmBjDUc7Mx7E8oyRfyEOEB9JHuFgnVtvrQrScctf0KV8WHYsGm1HU1NjFA1Qh76IRbr gQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dadr8a794-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 03 Jan 2022 08:46:16 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2038fAWr016692;
+        Mon, 3 Jan 2022 08:46:15 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2171.outbound.protection.outlook.com [104.47.58.171])
+        by userp3020.oracle.com with ESMTP id 3dagdkd7f5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 03 Jan 2022 08:46:14 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dXo7YUjyjhzB9u/TQzmsZGiTfFDB4ptfJ6uLxglskFlHIYQHuumsmKp7mPGG80lRDrFBcFYstZePSv05pEB7T3HobpCBIFAbLDHYyzMDdwch0uep7Gy0lEIYX4IIOgAHMxpvDfQ7/08nqTFP7IE5K/VpHe74qHzOmrWA9SVfgQNDslz4vDshRlG3zL9a3tG7nZZAVbPvmPY13spIcUjArzxZNuJHCpnczaHy8tLxYVA3tSxv/EXMEsyJIdAzpi+bNb0q4V8CyOa9a70cQYEgpVsgO6u/WOooPeLP5d4d4sxsV3dWr6H6Lqxj4reNyE5I4YUdaNdQjEFv+JxvYKM8YA==
+ b=dwRKSJVdbWsfPIlnPxPH2orXsD9uWaGYbwwR63Rf3mJsPi5zKapwDazb+vLeQUGwvWJqMhte7jIzVIo2k6irxQZ3RJo5TWaxsveDQznEYwofEwoBheV3WmY53WmiO2cUhcvLZGeCafxBufSwCOfNlS6ILIw0dcRj8ZC0JAe4hMgXgTaUvE5OZhEUC7O56rI7lqV5JFm37U4C+N7TQMNgDiDS2npVoBuyxeu7pUgDEdVp5/DL+6Rh4OXLjCL0KziGn+V/LGT3K37YhQdmrxv90Dez9YM76wF0cFpWHCLZbMqpLIoRVhLbuxnFfbyA1qUSRF3xPU2chC0e0mJBLgdLlw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uIFf1dKjXiWnwwwNZKQZa4078RN+IhooUsJkHjPNlP4=;
- b=mwP1MVAbFjqpaWb1sWVHA4sWP0xuvH6lIRK688NP+A1uQWesemxYHD8Q1vNc6AOS2qdFNjFNwq4t3jXlQiHheeAQKp1JnAbRO6h7ViWzkr4Jy5F9rB+GGjFT48beSjVr7aJv7E47HKxhqcZp3coSHmyH9/+CF48ppK/Bsi4BpH+yxnqXoZ3PtY00eUwBEoTTsh+JqVCjfPyY2MZEBsEVgR4g/bJCZervkT0mCagw6h32x9OLF/jVDMrT21+FFVXCOHM3Rxuq0zzhb7xStl+XwkRodDOTktQ/Di9UUX/yhyLpgOSxeNggQDDTdbG8SJLGhjZzZb6woeSw4M4w8LcLNA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
+ bh=Qwz1WJni+5K28H0erTh5ws4OGYqy92oEeDjQJl/qebY=;
+ b=Ne3rDkCvm1AJe4sdYFlsiH6ORC/0qln1acy+bT+TlueFLkj1l+GO1LS0b5d3p4dN4nC81YoERLlZHgA9vuHbjuYZxW7MGQ8uH0JAMCTZT0cjJesMDN51PMD+Y0cYOodEWX+mw+4qTzmJhou9cdqqDXdlO2LumUwOCwo/zR5gCwDPe5Am5Skj9HJF7NPqkqJesgjlS/UYVeggN4nAruvUYeTxXvKF3UkinM3qD8/241Xf82WUjSUdhS2TG8s/MWYyNzRyi+SyKs6gfF6b9o9mQjNnnTc7UkRLlJ9fGTABGCkoegKdG+Fo4uJe+7m7r6MkG3aoaEKwZOxGGT4fYAO9gg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uIFf1dKjXiWnwwwNZKQZa4078RN+IhooUsJkHjPNlP4=;
- b=m2xNE6/6Rx/RiS+rl11+KLsSWG/uwPFD/nw9WVRpr4w77XTZo/DboSjkabkCdG/WWjbedWs+bsUTq4h6D9wS3vpiWpzfMAtlWlm6VcHOTHResrpFMoAIoCBEG0+gK6VdBQOWHzyeybptqTcd+OuBAo8F3vIxJQRrU7lDu5KyNus=
-Received: from DM5PR06CA0051.namprd06.prod.outlook.com (2603:10b6:3:37::13) by
- SA0PR02MB7243.namprd02.prod.outlook.com (2603:10b6:806:e8::10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4844.14; Mon, 3 Jan 2022 08:39:46 +0000
-Received: from DM3NAM02FT014.eop-nam02.prod.protection.outlook.com
- (2603:10b6:3:37:cafe::3f) by DM5PR06CA0051.outlook.office365.com
- (2603:10b6:3:37::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15 via Frontend
- Transport; Mon, 3 Jan 2022 08:39:45 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT014.mail.protection.outlook.com (10.13.5.23) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4844.14 via Frontend Transport; Mon, 3 Jan 2022 08:39:45 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Mon, 3 Jan 2022 00:39:44 -0800
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Mon, 3 Jan 2022 00:39:44 -0800
-Envelope-to: helgaas@kernel.org,
- linux-pci@vger.kernel.org,
- ffclaire1224@gmail.com,
- lorenzo.pieralisi@arm.com,
- robh@kernel.org,
- linux-kernel@vger.kernel.org,
- linux-kernel-mentees@lists.linuxfoundation.org,
- skhan@linuxfoundation.org,
- bhelgaas@google.com,
- linux-arm-kernel@lists.infradead.org
-Received: from [10.254.241.49] (port=41782)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1n4Isa-0007On-0d; Mon, 03 Jan 2022 00:39:44 -0800
-Message-ID: <d049cfb1-31e4-b712-cd9a-4566ade8de4c@xilinx.com>
-Date:   Mon, 3 Jan 2022 09:39:41 +0100
+ bh=Qwz1WJni+5K28H0erTh5ws4OGYqy92oEeDjQJl/qebY=;
+ b=jUrlK8BN3ng4YviZ7bh6qKAgY6m4dB9WqVv8hZohpGAfxGGCAgn24Mdgrw6A6urc7sPv/aROvT77F+uCZ3tRWzoCpTKBxvACKplJSO4Hg7oyfCvIsmpIdwo18g0rBWYA9j92DwCqf1JMAQiFeb+ch5Dly+dlLz3qaFBryKdg/sQ=
+Received: from CO1PR10MB4468.namprd10.prod.outlook.com (2603:10b6:303:6c::24)
+ by CO1PR10MB4417.namprd10.prod.outlook.com (2603:10b6:303:93::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.14; Mon, 3 Jan
+ 2022 08:46:12 +0000
+Received: from CO1PR10MB4468.namprd10.prod.outlook.com
+ ([fe80::d17e:432c:af45:248a]) by CO1PR10MB4468.namprd10.prod.outlook.com
+ ([fe80::d17e:432c:af45:248a%6]) with mapi id 15.20.4844.016; Mon, 3 Jan 2022
+ 08:46:12 +0000
+From:   Imran Khan <imran.f.khan@oracle.com>
+To:     gregkh@linuxfoundation.org, tj@kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [RFC PATCH v2 0/2] kernfs: use kernfs_node specific mutex and spinlock
+Date:   Mon,  3 Jan 2022 19:45:42 +1100
+Message-Id: <20220103084544.1109829-1-imran.f.khan@oracle.com>
+X-Mailer: git-send-email 2.30.2
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SYYP282CA0010.AUSP282.PROD.OUTLOOK.COM
+ (2603:10c6:10:b4::20) To CO1PR10MB4468.namprd10.prod.outlook.com
+ (2603:10b6:303:6c::24)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v2 23/23] PCI: xilinx-cpm: Rename xilinx_cpm_pcie_port to
- xilinx_cpm_pcie
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>, <linux-pci@vger.kernel.org>,
-        Fan Fei <ffclaire1224@gmail.com>
-CC:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-kernel-mentees@lists.linuxfoundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20211223011054.1227810-1-helgaas@kernel.org>
- <20211223011054.1227810-24-helgaas@kernel.org>
-From:   Michal Simek <michal.simek@xilinx.com>
-In-Reply-To: <20211223011054.1227810-24-helgaas@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d28e5858-1f18-4020-c465-08d9ce949885
-X-MS-TrafficTypeDiagnostic: SA0PR02MB7243:EE_
-X-Microsoft-Antispam-PRVS: <SA0PR02MB7243AF68316CBC86D3EA6DA8C6499@SA0PR02MB7243.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:635;
+X-MS-Office365-Filtering-Correlation-Id: 4e2a4378-e153-4bf1-8385-08d9ce957edb
+X-MS-TrafficTypeDiagnostic: CO1PR10MB4417:EE_
+X-Microsoft-Antispam-PRVS: <CO1PR10MB4417B60FB7B5FB8422CBA9E0B0499@CO1PR10MB4417.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:264;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rOLGb5iBk5isR60P2t+Hpt//0uvrs9jbtjlZP6x97+06a+FrrIExUeh+v+AlMJVxMk8dJAubkxJ6dYpx25OO6TtxlfM5LTpQ4iVuKM1ygN/5T6Vorab4wNbFPUAC5/eSZmPPJdcYL3M4DGyWcRFT1aLgL488EhHBz1u5PCAOUB+tQfg9faL1bMjxg5xj7guCqwW/2tDAehrZUcJ0+fY2DJfvBboqPvi1ck9UYZnkGqJiXgV1I6wBLBHht+wB1YK1XjM0jgxNcyiL/2XTPSnPXxjjIMOlneYQMYyveLCEoB9LR8YOAsULQw03rVK2Q/M+kzHoNjvjKyYsWwXRyptBSSq7MegT45pzNS/DSAJmKfFoJixJ18tAR440Zq5DO+7JwTfGZ7O8wLmDcBIc02TPSf8/uDcSDc0+fiaUyreKWCcjynI4xNjMZYnPWc4e96Md2bZqcCfYdmAMCCDzOySB+1/fIVlBnsZVyCbckgo7ROTW0RrIpjfOLMORdVl/zSZMykpjYK4gtRFOXbUKynagWmvOIgVQsbYn1Un8huQVgnbT9hYxnPf+rCXCBPXrA6iHM06hih4KvlZkDVdJIV0wQOuGVzyFgaE1GNrq8D95pN42VBjXPE7GtsV8X7uX1dOFFEu7k5P2wIYHsNl/E9Ki0SvVEubdbDdkYxpVmU+HoiAxk5E96gah8ABN0S96uK7F9lirlzPbdt92Ql2Dr0Sd6Ff7UbZ4N4dkhZdAoMrk3zhANN9fIi3ByAtcG7RBa6JsjiZUoOaotVBJQRxsLL9KGw==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(54906003)(110136005)(7416002)(336012)(83380400001)(44832011)(26005)(7636003)(6666004)(9786002)(8676002)(316002)(5660300002)(82310400004)(4326008)(426003)(31696002)(508600001)(186003)(31686004)(70206006)(70586007)(356005)(8936002)(53546011)(47076005)(2616005)(36860700001)(2906002)(36756003)(50156003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2022 08:39:45.8083
+X-Microsoft-Antispam-Message-Info: O+6kq+Kji1yaiqQHgivP4x84y2sIJq3o7NyiLIV/KUq7TSNpmOX20dyZrzaogr+1DrXuGIVxiEeTjWixjtRNyqZsXxZMFIMJznhyuTwEnvf2yA00k6kk5Qg/sAsOULd7FvmAbXgA6enwebIZq/jGkic7Vmc2FSJp8K/DPAgcyPCksvWVHeyGQRr+ESTsMlAgvRFY0XT1bMPY0ulhf/l0st4QYAPq/ehTPPUCidmSM5Y2nvruigdyGG2u/QKcagax1+NqiYMDUqYb4avKap8HZx5fBnvGzM+K0I7iWrj7bjYtBHB/0U7KcydJzYIB2WT9lwXaG5IspVCoVaJ5xYYnV2d04XMGfy5nD/2scsJVEjtKJwGM6qiRYi14gE2YzrikAxP+edEhTxnV3HACs0SGLfMlYXtI8mkPFkb5OodjpG7g1LdkH5TcOFGHGOTFNGY8NYOEAp85uTrAyK5L6fpJIjbvzn8uOSi0SrWTYKUMYFseY1Jr94NahptIusYpqM+xDIJl9QxDo2MG/680TG16D+nKq+LbGIdflW5kDVHPzWd251DQzWrDZIuS0wD/DCMfhyZ7oeZ7wjkwmLWdpRZ+IrzX4VfwXrXLe/Xz0tjw+1sjE1ZNHrgqflDX/7PTl7dBRTFcb2PuEKvTGwUysf5XITXiIMbixhY/sdepf1jySHTyrfuTjcz2z6SpfniCu11INo+agHHsJDEE4iMtRdOVfA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4468.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(103116003)(1076003)(8676002)(508600001)(8936002)(38100700002)(5660300002)(86362001)(4744005)(83380400001)(316002)(36756003)(26005)(38350700002)(186003)(2616005)(52116002)(4326008)(6506007)(6512007)(2906002)(6486002)(66476007)(66946007)(66556008)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OnHHZ/NFyKaBEPoQHE+gJaoHC6NUN58z7PEcwEGJ2L3ExJUFnjJs9RweiP3+?=
+ =?us-ascii?Q?VymlOrpeXK/C2OtuFpHLYe+6raBIwlZyhLBT1zYZNZCg7a1F/IwTWL3+6aYh?=
+ =?us-ascii?Q?l9v4bXCu3SuSX22xYDbAtCnWWw5QL6N6WWprtmv3xtbteRWZ0Pqu/2X9I6hT?=
+ =?us-ascii?Q?q7EoGKMIuyilC4gj7RLNCFlRUiGk8mfyMHQ77VeOHNE/hLun8VAtSkTcR7jq?=
+ =?us-ascii?Q?lXdtJIP3Yd+MI8kIRtRUmNL37EtkLcQd+DCGlWE/GNIkP/JqAeIfjr95DrLG?=
+ =?us-ascii?Q?1lnxaQ/FGPavg9YLmaMMmWhkYwYhjOtfFBfMt04FKmJbjVn9hk3o+57/CUxP?=
+ =?us-ascii?Q?PUZIlVJOk0/BiVM34S2FJWz8+t+hKhGxRcZgGnwzponFSIswd7HQPdjJcmPy?=
+ =?us-ascii?Q?tkDDhRVrEAVykUNb7fsk7MJzkb+i8fcv1sFoSLYatiblT8FzsDv00SEpUiJo?=
+ =?us-ascii?Q?vzs/n2afXJ280UvrDXySvtWPT6D5ubS4GsbO2lPEk2WUIRhx9QuLSPWBEYuT?=
+ =?us-ascii?Q?Pjzwq+x5aQHZeVly2k7tJID19JCztOaiiGEapBV9BB6lW5MQ7HqDYzNaLc0B?=
+ =?us-ascii?Q?lNkWV7zXO29rT4/4RwQVQXGtJo7NdsRMWd0GFrmmBoj0yhxvhBgAmLJoX+Ji?=
+ =?us-ascii?Q?QvZT2IHIcvyTQb6vLc8scODV6mwPLLGWkReNogu281r8YI/Ij7DSfhL9r+Rk?=
+ =?us-ascii?Q?QTF1/+glB41bJDPB8BFJyjTJABKuWzCZdhPtHbyc/1OJsguwWPs83phkBnvG?=
+ =?us-ascii?Q?xJ8HFQphmREinFVvDb3J9rENDWrdqa6Z+ClLqzLEEdv813KN7TypiFu2MdLy?=
+ =?us-ascii?Q?jC6RgT0OYRgA+OjHow7Q2xpXKnMADZ54ElY2QvauFd6NrbI9pNKiDIc0EIH6?=
+ =?us-ascii?Q?GyRhgLXVXGK9NUjwvAuthOPUtOflMI/T5yFodDc6AXgTu8T0M6vnIft94VlS?=
+ =?us-ascii?Q?GrZrCXdjxjJ6HIYgB3jHuwP/Q+/dEQadqUhiVZBAkFCf2+YelEeJ+o7beq5/?=
+ =?us-ascii?Q?sry58Rt6P1WqnIx5RyvdC0BegIX1M2SbuxJ2eZ+qeeCj2vHJzFyep+0kNI12?=
+ =?us-ascii?Q?W2hgdza75K0nQ7JDdnAfrWlcsTHNnPJXMHKTFuToUhHMlRHQeVQpgMh4Uu5l?=
+ =?us-ascii?Q?VEYwg0vkEXoZxrwbLbPyqQrARzuPdYnymo7NEw4dY7zNazmQp9GIHPONZGij?=
+ =?us-ascii?Q?bADtyhztgXtRmvfMeqTLpo5DzKd+EUy2VIa6v95Alj+POnQ7Ek2rL8OIjt7C?=
+ =?us-ascii?Q?mng1p1sSlCgi0H68dsP82O3QP2yMQnJMpZMhSjCezZwXGdx9+249KI33/lzv?=
+ =?us-ascii?Q?BpYwH1TRaaQToR8vxy6YLUHdkeSKJdlCWWijKxRCisRR/X0uPOGeB0x3xORX?=
+ =?us-ascii?Q?VzzqQzfKg+Zc+VXHOhR0HDjx10seEAtWyqaByKbGnWGmOKO+/GpnhMwftcWC?=
+ =?us-ascii?Q?UwdS4fdxbpPP5G9ug+VzDpN5hpFKYUPYk9iSgPvLoyVZnBjh9gvupEet1uMM?=
+ =?us-ascii?Q?+yxGQr3GjkxmA/LETnscUiglATQZ3RwI4hvo23j2JLDxUccT2h3h/AMnvwpw?=
+ =?us-ascii?Q?AsZ8pMgSOkeSwXGPMxYmyWuODQGaGIG53FgBlmvnY3dftwhNxd7wMAqbZzTL?=
+ =?us-ascii?Q?2oIohNghX88pFSBcMiRj+7w=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4e2a4378-e153-4bf1-8385-08d9ce957edb
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4468.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2022 08:46:12.6367
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d28e5858-1f18-4020-c465-08d9ce949885
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT014.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR02MB7243
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1q+RXDeh7KyW8fzrhmYrFD5XMcGaEwhvu5LFxRmLvvZWWh1ef+XEw573pkNalMQ+AsNFuaMNJF0XTZuHM6bmGQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB4417
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10215 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=743 bulkscore=0 spamscore=0
+ mlxscore=0 phishscore=0 adultscore=0 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2201030058
+X-Proofpoint-ORIG-GUID: qbiZehFxNf-gW_Sr3ih5bAPZcbIRssNR
+X-Proofpoint-GUID: qbiZehFxNf-gW_Sr3ih5bAPZcbIRssNR
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+RFC patchset to reduce usage of global locks in kernfs operations.
+
+PATCH-1: Move kernfs_open_file_mutex and kernfs_open_node_lock within
+         kernfs_node.
+
+PATCH-2: Use per kernfs_node specific lock to access permissions
+
+------------------------------------------------------------------
+
+Changes since v1:
+ - Introduce PATCH-2 to reduce contention seen around kernfs_rwsem after 
+   introduction of PATCH-1.
+
+Imran Khan (2):
+  kernfs: use kernfs_node specific mutex and spinlock.
+  kernfs: Reduce contention around global per-fs kernfs_rwsem.
+
+ fs/kernfs/dir.c        |  6 ++++++
+ fs/kernfs/file.c       | 48 +++++++++++++++---------------------------
+ fs/kernfs/inode.c      | 25 +++++++++++++++-------
+ include/linux/kernfs.h |  3 +++
+ 4 files changed, 43 insertions(+), 39 deletions(-)
 
 
-On 12/23/21 02:10, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> Rename struct xilinx_cpm_pcie_port to xilinx_cpm_pcie to match the
-> convention of <driver>_pcie. No functional change intended.
-> 
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Michal Simek <michal.simek@xilinx.com>
-> Cc: linux-arm-kernel@lists.infradead.org
-> ---
->   drivers/pci/controller/pcie-xilinx-cpm.c | 44 ++++++++++++------------
->   1 file changed, 22 insertions(+), 22 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/pcie-xilinx-cpm.c b/drivers/pci/controller/pcie-xilinx-cpm.c
-> index 95426df03200..c7cd44ed4dfc 100644
-> --- a/drivers/pci/controller/pcie-xilinx-cpm.c
-> +++ b/drivers/pci/controller/pcie-xilinx-cpm.c
-> @@ -99,10 +99,10 @@
->   #define XILINX_CPM_PCIE_REG_PSCR_LNKUP		BIT(11)
->   
->   /**
-> - * struct xilinx_cpm_pcie_port - PCIe port information
-> + * struct xilinx_cpm_pcie - PCIe port information
-> + * @dev: Device pointer
->    * @reg_base: Bridge Register Base
->    * @cpm_base: CPM System Level Control and Status Register(SLCR) Base
-> - * @dev: Device pointer
->    * @intx_domain: Legacy IRQ domain pointer
->    * @cpm_domain: CPM IRQ domain pointer
->    * @cfg: Holds mappings of config space window
-> @@ -110,10 +110,10 @@
->    * @irq: Error interrupt number
->    * @lock: lock protecting shared register access
->    */
-> -struct xilinx_cpm_pcie_port {
-> +struct xilinx_cpm_pcie {
-> +	struct device			*dev;
->   	void __iomem			*reg_base;
->   	void __iomem			*cpm_base;
-> -	struct device			*dev;
->   	struct irq_domain		*intx_domain;
->   	struct irq_domain		*cpm_domain;
->   	struct pci_config_window	*cfg;
-> @@ -122,24 +122,24 @@ struct xilinx_cpm_pcie_port {
->   	raw_spinlock_t			lock;
->   };
->   
-> -static u32 pcie_read(struct xilinx_cpm_pcie_port *port, u32 reg)
-> +static u32 pcie_read(struct xilinx_cpm_pcie *port, u32 reg)
->   {
->   	return readl_relaxed(port->reg_base + reg);
->   }
->   
-> -static void pcie_write(struct xilinx_cpm_pcie_port *port,
-> +static void pcie_write(struct xilinx_cpm_pcie *port,
->   		       u32 val, u32 reg)
->   {
->   	writel_relaxed(val, port->reg_base + reg);
->   }
->   
-> -static bool cpm_pcie_link_up(struct xilinx_cpm_pcie_port *port)
-> +static bool cpm_pcie_link_up(struct xilinx_cpm_pcie *port)
->   {
->   	return (pcie_read(port, XILINX_CPM_PCIE_REG_PSCR) &
->   		XILINX_CPM_PCIE_REG_PSCR_LNKUP);
->   }
->   
-> -static void cpm_pcie_clear_err_interrupts(struct xilinx_cpm_pcie_port *port)
-> +static void cpm_pcie_clear_err_interrupts(struct xilinx_cpm_pcie *port)
->   {
->   	unsigned long val = pcie_read(port, XILINX_CPM_PCIE_REG_RPEFR);
->   
-> @@ -153,7 +153,7 @@ static void cpm_pcie_clear_err_interrupts(struct xilinx_cpm_pcie_port *port)
->   
->   static void xilinx_cpm_mask_leg_irq(struct irq_data *data)
->   {
-> -	struct xilinx_cpm_pcie_port *port = irq_data_get_irq_chip_data(data);
-> +	struct xilinx_cpm_pcie *port = irq_data_get_irq_chip_data(data);
->   	unsigned long flags;
->   	u32 mask;
->   	u32 val;
-> @@ -167,7 +167,7 @@ static void xilinx_cpm_mask_leg_irq(struct irq_data *data)
->   
->   static void xilinx_cpm_unmask_leg_irq(struct irq_data *data)
->   {
-> -	struct xilinx_cpm_pcie_port *port = irq_data_get_irq_chip_data(data);
-> +	struct xilinx_cpm_pcie *port = irq_data_get_irq_chip_data(data);
->   	unsigned long flags;
->   	u32 mask;
->   	u32 val;
-> @@ -211,7 +211,7 @@ static const struct irq_domain_ops intx_domain_ops = {
->   
->   static void xilinx_cpm_pcie_intx_flow(struct irq_desc *desc)
->   {
-> -	struct xilinx_cpm_pcie_port *port = irq_desc_get_handler_data(desc);
-> +	struct xilinx_cpm_pcie *port = irq_desc_get_handler_data(desc);
->   	struct irq_chip *chip = irq_desc_get_chip(desc);
->   	unsigned long val;
->   	int i;
-> @@ -229,7 +229,7 @@ static void xilinx_cpm_pcie_intx_flow(struct irq_desc *desc)
->   
->   static void xilinx_cpm_mask_event_irq(struct irq_data *d)
->   {
-> -	struct xilinx_cpm_pcie_port *port = irq_data_get_irq_chip_data(d);
-> +	struct xilinx_cpm_pcie *port = irq_data_get_irq_chip_data(d);
->   	u32 val;
->   
->   	raw_spin_lock(&port->lock);
-> @@ -241,7 +241,7 @@ static void xilinx_cpm_mask_event_irq(struct irq_data *d)
->   
->   static void xilinx_cpm_unmask_event_irq(struct irq_data *d)
->   {
-> -	struct xilinx_cpm_pcie_port *port = irq_data_get_irq_chip_data(d);
-> +	struct xilinx_cpm_pcie *port = irq_data_get_irq_chip_data(d);
->   	u32 val;
->   
->   	raw_spin_lock(&port->lock);
-> @@ -273,7 +273,7 @@ static const struct irq_domain_ops event_domain_ops = {
->   
->   static void xilinx_cpm_pcie_event_flow(struct irq_desc *desc)
->   {
-> -	struct xilinx_cpm_pcie_port *port = irq_desc_get_handler_data(desc);
-> +	struct xilinx_cpm_pcie *port = irq_desc_get_handler_data(desc);
->   	struct irq_chip *chip = irq_desc_get_chip(desc);
->   	unsigned long val;
->   	int i;
-> @@ -327,7 +327,7 @@ static const struct {
->   
->   static irqreturn_t xilinx_cpm_pcie_intr_handler(int irq, void *dev_id)
->   {
-> -	struct xilinx_cpm_pcie_port *port = dev_id;
-> +	struct xilinx_cpm_pcie *port = dev_id;
->   	struct device *dev = port->dev;
->   	struct irq_data *d;
->   
-> @@ -350,7 +350,7 @@ static irqreturn_t xilinx_cpm_pcie_intr_handler(int irq, void *dev_id)
->   	return IRQ_HANDLED;
->   }
->   
-> -static void xilinx_cpm_free_irq_domains(struct xilinx_cpm_pcie_port *port)
-> +static void xilinx_cpm_free_irq_domains(struct xilinx_cpm_pcie *port)
->   {
->   	if (port->intx_domain) {
->   		irq_domain_remove(port->intx_domain);
-> @@ -369,7 +369,7 @@ static void xilinx_cpm_free_irq_domains(struct xilinx_cpm_pcie_port *port)
->    *
->    * Return: '0' on success and error value on failure
->    */
-> -static int xilinx_cpm_pcie_init_irq_domain(struct xilinx_cpm_pcie_port *port)
-> +static int xilinx_cpm_pcie_init_irq_domain(struct xilinx_cpm_pcie *port)
->   {
->   	struct device *dev = port->dev;
->   	struct device_node *node = dev->of_node;
-> @@ -410,7 +410,7 @@ static int xilinx_cpm_pcie_init_irq_domain(struct xilinx_cpm_pcie_port *port)
->   	return -ENOMEM;
->   }
->   
-> -static int xilinx_cpm_setup_irq(struct xilinx_cpm_pcie_port *port)
-> +static int xilinx_cpm_setup_irq(struct xilinx_cpm_pcie *port)
->   {
->   	struct device *dev = port->dev;
->   	struct platform_device *pdev = to_platform_device(dev);
-> @@ -462,7 +462,7 @@ static int xilinx_cpm_setup_irq(struct xilinx_cpm_pcie_port *port)
->    * xilinx_cpm_pcie_init_port - Initialize hardware
->    * @port: PCIe port information
->    */
-> -static void xilinx_cpm_pcie_init_port(struct xilinx_cpm_pcie_port *port)
-> +static void xilinx_cpm_pcie_init_port(struct xilinx_cpm_pcie *port)
->   {
->   	if (cpm_pcie_link_up(port))
->   		dev_info(port->dev, "PCIe Link is UP\n");
-> @@ -497,7 +497,7 @@ static void xilinx_cpm_pcie_init_port(struct xilinx_cpm_pcie_port *port)
->    *
->    * Return: '0' on success and error value on failure
->    */
-> -static int xilinx_cpm_pcie_parse_dt(struct xilinx_cpm_pcie_port *port,
-> +static int xilinx_cpm_pcie_parse_dt(struct xilinx_cpm_pcie *port,
->   				    struct resource *bus_range)
->   {
->   	struct device *dev = port->dev;
-> @@ -523,7 +523,7 @@ static int xilinx_cpm_pcie_parse_dt(struct xilinx_cpm_pcie_port *port,
->   	return 0;
->   }
->   
-> -static void xilinx_cpm_free_interrupts(struct xilinx_cpm_pcie_port *port)
-> +static void xilinx_cpm_free_interrupts(struct xilinx_cpm_pcie *port)
->   {
->   	irq_set_chained_handler_and_data(port->intx_irq, NULL, NULL);
->   	irq_set_chained_handler_and_data(port->irq, NULL, NULL);
-> @@ -537,7 +537,7 @@ static void xilinx_cpm_free_interrupts(struct xilinx_cpm_pcie_port *port)
->    */
->   static int xilinx_cpm_pcie_probe(struct platform_device *pdev)
->   {
-> -	struct xilinx_cpm_pcie_port *port;
-> +	struct xilinx_cpm_pcie *port;
->   	struct device *dev = &pdev->dev;
->   	struct pci_host_bridge *bridge;
->   	struct resource_entry *bus;
+base-commit: ea586a076e8aa606c59b66d86660590f18354b11
+-- 
+2.30.2
 
-
-
-Acked-by: Michal Simek <michal.simek@xilinx.com>
-
-Thanks,
-Michal

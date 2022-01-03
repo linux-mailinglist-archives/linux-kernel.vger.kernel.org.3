@@ -2,146 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38655483620
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 18:32:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3665F48363D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 18:36:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236097AbiACRc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 12:32:29 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33190 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235288AbiACRbY (ORCPT
+        id S231573AbiACRf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 12:35:58 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:45364 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230076AbiACRf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 12:31:24 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA20761169;
-        Mon,  3 Jan 2022 17:31:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FE9CC36AED;
-        Mon,  3 Jan 2022 17:31:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641231083;
-        bh=zmfqkjRv2inCV6030DusFTVgg7tQKcUyuxImduqerds=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LSCw03Qmy7FlJ9sCAxAjWdSxtRIHutke3xF2OMIAcCqFrdd+b1mbXmhUYdzWGkGPM
-         xJAMLOveoy/mBqpvb8AKtRgisWUKkUkPFrVDgIWPuFKd7JqN51mh3DxYtHq0ELvRME
-         KWVWl77ODUJgeeojnFeBTJFmS+V2pNDOAlp8DHhkZ2Ipe03tKxdGcfoxMKAv3A4Elr
-         btsJsvL0tUzN1fOtFMF70VmZ+L72UyO8rH1PVFps4NKuTYc29VVNBLykgM3DcVSy6x
-         emLTm7KWjNo1vznxAkY+OG5gTyiMImskJjrkUDR+UadRalFfLTy8+NrmnZRwrIVQLo
-         UdfOWl4hvbjXQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     wolfgang huang <huangjinhui@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, isdn@linux-pingi.de,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 4/4] mISDN: change function names to avoid conflicts
-Date:   Mon,  3 Jan 2022 12:31:05 -0500
-Message-Id: <20220103173105.1613707-4-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103173105.1613707-1-sashal@kernel.org>
-References: <20220103173105.1613707-1-sashal@kernel.org>
+        Mon, 3 Jan 2022 12:35:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1641231356; x=1672767356;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=phmkBmK4ComVJcWyRwmHpQFXgeS6G5/2dL4ZaNRfmis=;
+  b=Bhyn08EPTpOi5OOYDFHX32YsJ3raH9PfS85yfMzWIPFIjapTBmqV+c7l
+   QcgX+IboDvsYe8Yz1nJOHtQsEe3/DJUm8w0yUZgWldUnm2jVeEhoEJjfy
+   fqN3R/kZl57XNWr0cE9q9sxK/knQeX5Mh6P3bNBcPJjm8wHFnMUYTyVL/
+   WXUrUQ9Q7eXYhWugGMIc2UPu+cLum5kHqqQhPyrh6XxxoAHE2bwsDsbwJ
+   wQSQmQFIjm+Yam9/2dqkkgLnQzekLZXT0NAAF4niArHqaCa8Q10qoFL9I
+   XSPH+mJYn3x8myObvyXAn1ozdHj5+CUbXiHs4ZvWM6l/jg5AgCrhbAFdg
+   w==;
+IronPort-SDR: 130TyrA9v3XyUnj1qI61R2b62UlhuKNuXi/5XcUQc8xWUhtJ3H6+waLScudUTIlAQR4AM3Zfok
+ JARAOuteHASHs1VvohknmLhH4Mbqfy2CmkO0M1ua/vK/QjGAdA+GWQKaaNn4pLMbdT+wB/Jx4W
+ n9O2+wnjyIXg1JC4B5lVyNHS6a61/YbfWTazYATssGCB7+Yu9gdOGA7j2pTD09t/oHpOiM1LTW
+ J05mplo6+8zXva1ldxDBGs7y6cgnz7bmDDtZCokdgl6Y7xpa1Qyt0+pPmRSTllVDS0s8Zr+viJ
+ KliD4VxkHVvdcKQbdajpbSWD
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="141485881"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Jan 2022 10:35:55 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 3 Jan 2022 10:35:55 -0700
+Received: from [10.12.77.169] (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Mon, 3 Jan 2022 10:35:51 -0700
+Message-ID: <806f614d-4c83-53fa-dd1d-8054bc84d755@microchip.com>
+Date:   Mon, 3 Jan 2022 18:35:50 +0100
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 3/8] dt-bindings: rng: atmel,at91-trng: document sama7g5
+ TRNG
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Rob Herring <robh+dt@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        "Tony Lindgren" <tony@atomide.com>, <linux-crypto@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <openbmc@lists.ozlabs.org>
+References: <20211227183251.132525-1-krzysztof.kozlowski@canonical.com>
+ <20211227183251.132525-3-krzysztof.kozlowski@canonical.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20211227183251.132525-3-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: wolfgang huang <huangjinhui@kylinos.cn>
+On 27/12/2021 at 19:32, Krzysztof Kozlowski wrote:
+> Add compatbile for Microchip sama7g5 TRNG.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-[ Upstream commit 8b5fdfc57cc2471179d1c51081424ded833c16c8 ]
+As far as I understand:
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-As we build for mips, we meet following error. l1_init error with
-multiple definition. Some architecture devices usually marked with
-l1, l2, lxx as the start-up phase. so we change the mISDN function
-names, align with Isdnl2_xxx.
+Thanks for having taken care of this.
+Best regards,
+   Nicolas
 
-mips-linux-gnu-ld: drivers/isdn/mISDN/layer1.o: in function `l1_init':
-(.text+0x890): multiple definition of `l1_init'; \
-arch/mips/kernel/bmips_5xxx_init.o:(.text+0xf0): first defined here
-make[1]: *** [home/mips/kernel-build/linux/Makefile:1161: vmlinux] Error 1
+> ---
+>   .../devicetree/bindings/rng/atmel,at91-trng.yaml      | 11 ++++++++---
+>   1 file changed, 8 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/rng/atmel,at91-trng.yaml b/Documentation/devicetree/bindings/rng/atmel,at91-trng.yaml
+> index 0324e863dab8..c1527637eb74 100644
+> --- a/Documentation/devicetree/bindings/rng/atmel,at91-trng.yaml
+> +++ b/Documentation/devicetree/bindings/rng/atmel,at91-trng.yaml
+> @@ -13,9 +13,14 @@ maintainers:
+> 
+>   properties:
+>     compatible:
+> -    enum:
+> -      - atmel,at91sam9g45-trng
+> -      - microchip,sam9x60-trng
+> +    oneOf:
+> +      - enum:
+> +          - atmel,at91sam9g45-trng
+> +          - microchip,sam9x60-trng
+> +      - items:
+> +          - enum:
+> +              - microchip,sama7g5-trng
+> +          - const: atmel,at91sam9g45-trng
+> 
+>     clocks:
+>       maxItems: 1
+> --
+> 2.32.0
+> 
 
-Signed-off-by: wolfgang huang <huangjinhui@kylinos.cn>
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/isdn/mISDN/core.c   | 6 +++---
- drivers/isdn/mISDN/core.h   | 4 ++--
- drivers/isdn/mISDN/layer1.c | 4 ++--
- 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/isdn/mISDN/core.c b/drivers/isdn/mISDN/core.c
-index faf505462a4f5..f5a06a6fb297f 100644
---- a/drivers/isdn/mISDN/core.c
-+++ b/drivers/isdn/mISDN/core.c
-@@ -390,7 +390,7 @@ mISDNInit(void)
- 	err = mISDN_inittimer(&debug);
- 	if (err)
- 		goto error2;
--	err = l1_init(&debug);
-+	err = Isdnl1_Init(&debug);
- 	if (err)
- 		goto error3;
- 	err = Isdnl2_Init(&debug);
-@@ -404,7 +404,7 @@ mISDNInit(void)
- error5:
- 	Isdnl2_cleanup();
- error4:
--	l1_cleanup();
-+	Isdnl1_cleanup();
- error3:
- 	mISDN_timer_cleanup();
- error2:
-@@ -417,7 +417,7 @@ static void mISDN_cleanup(void)
- {
- 	misdn_sock_cleanup();
- 	Isdnl2_cleanup();
--	l1_cleanup();
-+	Isdnl1_cleanup();
- 	mISDN_timer_cleanup();
- 	class_unregister(&mISDN_class);
- 
-diff --git a/drivers/isdn/mISDN/core.h b/drivers/isdn/mISDN/core.h
-index 52695bb81ee7a..3c039b6ade2e1 100644
---- a/drivers/isdn/mISDN/core.h
-+++ b/drivers/isdn/mISDN/core.h
-@@ -69,8 +69,8 @@ struct Bprotocol	*get_Bprotocol4id(u_int);
- extern int	mISDN_inittimer(u_int *);
- extern void	mISDN_timer_cleanup(void);
- 
--extern int	l1_init(u_int *);
--extern void	l1_cleanup(void);
-+extern int	Isdnl1_Init(u_int *);
-+extern void	Isdnl1_cleanup(void);
- extern int	Isdnl2_Init(u_int *);
- extern void	Isdnl2_cleanup(void);
- 
-diff --git a/drivers/isdn/mISDN/layer1.c b/drivers/isdn/mISDN/layer1.c
-index bebc57b72138e..94d7cc58da648 100644
---- a/drivers/isdn/mISDN/layer1.c
-+++ b/drivers/isdn/mISDN/layer1.c
-@@ -407,7 +407,7 @@ create_l1(struct dchannel *dch, dchannel_l1callback *dcb) {
- EXPORT_SYMBOL(create_l1);
- 
- int
--l1_init(u_int *deb)
-+Isdnl1_Init(u_int *deb)
- {
- 	debug = deb;
- 	l1fsm_s.state_count = L1S_STATE_COUNT;
-@@ -419,7 +419,7 @@ l1_init(u_int *deb)
- }
- 
- void
--l1_cleanup(void)
-+Isdnl1_cleanup(void)
- {
- 	mISDN_FsmFree(&l1fsm_s);
- }
 -- 
-2.34.1
-
+Nicolas Ferre

@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF6648326A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:27:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9A1483233
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233770AbiACO1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:27:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38770 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233786AbiACO0n (ORCPT
+        id S230182AbiACOZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:25:46 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:46992 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231354AbiACOZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:26:43 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A12C061A32;
-        Mon,  3 Jan 2022 06:26:42 -0800 (PST)
+        Mon, 3 Jan 2022 09:25:13 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D250BCE110C;
-        Mon,  3 Jan 2022 14:26:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C1BFC36AEB;
-        Mon,  3 Jan 2022 14:26:38 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 33D11CE10BA;
+        Mon,  3 Jan 2022 14:25:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE286C36AED;
+        Mon,  3 Jan 2022 14:25:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641219999;
-        bh=W9ISIOUD7SyTTF9FdoaLgIB5PWBiYhZ1tKKPILimUG0=;
+        s=korg; t=1641219907;
+        bh=NR6ndANKVX4vkT3fyOyXyyzFpbnJ04RZltwOJluc+Ms=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rn3JTXlPuuBXZ1KU6Ysmw1d8l/dmZZh0wqLdtBN3QuZPah1dKRbqVTO58+qMuya/L
-         5DBv/1uucENv+WL0SiaBqk7i7MKszQ86CVG/MFxS1P39IpHSaUh47Ka2jrQW5i+Fqh
-         8BpnqkRDVQEKXZBIeU5yUTp4oTRbpDxSoLp1gbnk=
+        b=man9aOqjV1OLe6K9NlTBQjUjG/DM4TtM5DKiJUy4nD+ib1tORgICIAW97lLWcbdeM
+         Z5rOnZN67qxce2iUAvkWNmjkH+bSbZq95tmBS6fC/Z9AlCvwiEJRxTQLbE9I4QMRaW
+         yC3Z9KFZEXte7ZS3yP6NKkADCiDV2WULv32Ls2Co=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Matthias-Christian Ott <ott@mirix.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Gal Pressman <gal@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 16/37] net: usb: pegasus: Do not drop long Ethernet frames
+Subject: [PATCH 4.19 14/27] net/mlx5e: Fix wrong features assignment in case of error
 Date:   Mon,  3 Jan 2022 15:23:54 +0100
-Message-Id: <20220103142052.382380790@linuxfoundation.org>
+Message-Id: <20220103142052.638102991@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142051.883166998@linuxfoundation.org>
-References: <20220103142051.883166998@linuxfoundation.org>
+In-Reply-To: <20220103142052.162223000@linuxfoundation.org>
+References: <20220103142052.162223000@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,61 +46,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthias-Christian Ott <ott@mirix.org>
+From: Gal Pressman <gal@nvidia.com>
 
-[ Upstream commit ca506fca461b260ab32952b610c3d4aadc6c11fd ]
+[ Upstream commit 992d8a4e38f0527f24e273ce3a9cd6dea1a6a436 ]
 
-The D-Link DSB-650TX (2001:4002) is unable to receive Ethernet frames
-that are longer than 1518 octets, for example, Ethernet frames that
-contain 802.1Q VLAN tags.
+In case of an error in mlx5e_set_features(), 'netdev->features' must be
+updated with the correct state of the device to indicate which features
+were updated successfully.
+To do that we maintain a copy of 'netdev->features' and update it after
+successful feature changes, so we can assign it to back to
+'netdev->features' if needed.
 
-The frames are sent to the pegasus driver via USB but the driver
-discards them because they have the Long_pkt field set to 1 in the
-received status report. The function read_bulk_callback of the pegasus
-driver treats such received "packets" (in the terminology of the
-hardware) as errors but the field simply does just indicate that the
-Ethernet frame (MAC destination to FCS) is longer than 1518 octets.
+However, since not all netdev features are handled by the driver (e.g.
+GRO/TSO/etc), some features may not be updated correctly in case of an
+error updating another feature.
 
-It seems that in the 1990s there was a distinction between
-"giant" (> 1518) and "runt" (< 64) frames and the hardware includes
-flags to indicate this distinction. It seems that the purpose of the
-distinction "giant" frames was to not allow infinitely long frames due
-to transmission errors and to allow hardware to have an upper limit of
-the frame size. However, the hardware already has such limit with its
-2048 octet receive buffer and, therefore, Long_pkt is merely a
-convention and should not be treated as a receive error.
+For example, while requesting to disable TSO (feature which is not
+handled by the driver) and enable HW-GRO, if an error occurs during
+HW-GRO enable, 'oper_features' will be assigned with 'netdev->features'
+and HW-GRO turned off. TSO will remain enabled in such case, which is a
+bug.
 
-Actually, the hardware is even able to receive Ethernet frames with 2048
-octets which exceeds the claimed limit frame size limit of the driver of
-1536 octets (PEGASUS_MTU).
+To solve that, instead of using 'netdev->features' as the baseline of
+'oper_features' and changing it on set feature success, use 'features'
+instead and update it in case of errors.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Matthias-Christian Ott <ott@mirix.org>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 75b81ce719b7 ("net/mlx5e: Don't override netdev features field unless in error flow")
+Signed-off-by: Gal Pressman <gal@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/pegasus.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/en_main.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/usb/pegasus.c b/drivers/net/usb/pegasus.c
-index b744c09346a7c..dda051c94fb4d 100644
---- a/drivers/net/usb/pegasus.c
-+++ b/drivers/net/usb/pegasus.c
-@@ -495,11 +495,11 @@ static void read_bulk_callback(struct urb *urb)
- 		goto goon;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+index 9003702892cda..5979fcf124bb4 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+@@ -3666,12 +3666,11 @@ static int set_feature_arfs(struct net_device *netdev, bool enable)
  
- 	rx_status = buf[count - 2];
--	if (rx_status & 0x1e) {
-+	if (rx_status & 0x1c) {
- 		netif_dbg(pegasus, rx_err, net,
- 			  "RX packet error %x\n", rx_status);
- 		net->stats.rx_errors++;
--		if (rx_status & 0x06)	/* long or runt	*/
-+		if (rx_status & 0x04)	/* runt	*/
- 			net->stats.rx_length_errors++;
- 		if (rx_status & 0x08)
- 			net->stats.rx_crc_errors++;
+ static int mlx5e_handle_feature(struct net_device *netdev,
+ 				netdev_features_t *features,
+-				netdev_features_t wanted_features,
+ 				netdev_features_t feature,
+ 				mlx5e_feature_handler feature_handler)
+ {
+-	netdev_features_t changes = wanted_features ^ netdev->features;
+-	bool enable = !!(wanted_features & feature);
++	netdev_features_t changes = *features ^ netdev->features;
++	bool enable = !!(*features & feature);
+ 	int err;
+ 
+ 	if (!(changes & feature))
+@@ -3679,23 +3678,23 @@ static int mlx5e_handle_feature(struct net_device *netdev,
+ 
+ 	err = feature_handler(netdev, enable);
+ 	if (err) {
++		MLX5E_SET_FEATURE(features, feature, !enable);
+ 		netdev_err(netdev, "%s feature %pNF failed, err %d\n",
+ 			   enable ? "Enable" : "Disable", &feature, err);
+ 		return err;
+ 	}
+ 
+-	MLX5E_SET_FEATURE(features, feature, enable);
+ 	return 0;
+ }
+ 
+ static int mlx5e_set_features(struct net_device *netdev,
+ 			      netdev_features_t features)
+ {
+-	netdev_features_t oper_features = netdev->features;
++	netdev_features_t oper_features = features;
+ 	int err = 0;
+ 
+ #define MLX5E_HANDLE_FEATURE(feature, handler) \
+-	mlx5e_handle_feature(netdev, &oper_features, features, feature, handler)
++	mlx5e_handle_feature(netdev, &oper_features, feature, handler)
+ 
+ 	err |= MLX5E_HANDLE_FEATURE(NETIF_F_LRO, set_feature_lro);
+ 	err |= MLX5E_HANDLE_FEATURE(NETIF_F_HW_VLAN_CTAG_FILTER,
 -- 
 2.34.1
 

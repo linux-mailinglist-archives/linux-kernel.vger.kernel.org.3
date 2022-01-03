@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EADBC483465
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 16:47:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C707483469
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 16:47:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234276AbiACPq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 10:46:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58062 "EHLO
+        id S234400AbiACPrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 10:47:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234277AbiACPq6 (ORCPT
+        with ESMTP id S234296AbiACPrB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 10:46:58 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A5CC061761
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 07:46:57 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id w7so24588781plp.13
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 07:46:57 -0800 (PST)
+        Mon, 3 Jan 2022 10:47:01 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A64C061785
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 07:47:00 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id t123so29718823pfc.13
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 07:47:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=boundarydevices.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=DuinLQ82u9Ll4xBW8hohWni8CpDThAMqaisLf3sqjiw=;
-        b=Kkolr/5fSCKwJ4AF6i6ciBiCFTzyg3CmMMSYRrUfD0D0Ih8pTE0FRQaVS8k6LwaWLS
-         ePUreY/P0N4LNOx12Kzs9xYlg9X/jEHJYXEjqUC9Jj/dSznmL12TB3wNK3VF85Wn7nId
-         OwXbl3OZsd2qiM0LzCd8CKaxFADRZ2ifCQqTE=
+        bh=LuC6I612TLZwEINCPwWyZhF1G85K2gAYC1IKzQ9Ubwg=;
+        b=GRfk+w2ob9enhOcSB7G/ep4S1ROT5GfJoq0yFqlZEMr2APjXxmcSoqt3o4Pynd02JB
+         iYIOn8TwYE3aU2fgGpMxqi+ZkGopJzSz9ViJI6mAr6cNZ+Nr1B/iE5+SXcKg373MHo2U
+         pzHX1mC5YMj6dbFb4W3HcwRreytUsqfp/KVrM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=DuinLQ82u9Ll4xBW8hohWni8CpDThAMqaisLf3sqjiw=;
-        b=j8P93LlgnXoD+RRZQ654xPnClNJnyuGTnyDBzhfEck2pZQUYLqWZ0hKXo5bKr5iMvF
-         tVVhkb+k87IvpqG7P94gnLBL0d4OaTNiUsLs10vi9nhDNNNCETjTe8fRIZRFIDrTsHB6
-         WSFhHFrbEye0BqYu11V8pVj22mudpKWwkl0Ha9VEuTx17cugE06IZmLg8KtVXpfLoksy
-         7ylAeUKM5eZBuVTMeycjwoJr8p2w93V8d9nwU2T8gRWyJFI52zxQHq3RXfhOdIeUYxmz
-         qHx9n9tr6TyEiUyJuKuWiMVrPS1v9noPvDCcSSOj6kyIQcR5Tg/+xhQmBGDdtZN/jfnZ
-         22jg==
-X-Gm-Message-State: AOAM530ZaYVCePDROnkM2SnegMwEMhyLEAVie4wpfrhCES9beiNhPq7U
-        JHIxUipLRlddDwx8Z0sok2vkRQ==
-X-Google-Smtp-Source: ABdhPJz2tbfvAdwQ5b5as5ZgbBIZRiJhaS6MhPLzuzfwJHOg6gxQ/AN0OK7D3ctvxBQi1c8X8Fbyug==
-X-Received: by 2002:a17:90b:210:: with SMTP id fy16mr37090944pjb.202.1641224817454;
-        Mon, 03 Jan 2022 07:46:57 -0800 (PST)
+        bh=LuC6I612TLZwEINCPwWyZhF1G85K2gAYC1IKzQ9Ubwg=;
+        b=is+Ecipva41oH4S3pwoC1YaRut9bZokvHkBtcfTmU9nOa4P88yIVSXmR9ElFtVCTSJ
+         OeSf/qENd0xzZZdiz2ABoNeyZGTA4etc8G/cKxM54bDadvjhRDMpSBsYIZIPfhGuV67A
+         K/ABzpHNt9lMCqtCYwhsQbA8dVuQT64U6D5KE5jL0NVAOlQGh5okX2AsRt/6uBx0Mdyf
+         Q7qrazBHo9dMdi4obp571Omhhr7GupqWKnHtMkfg38oAO51yywhCBMkVWX602Ch7775P
+         mMgiXOqm2qdNX+L1jMCjzheHPi5s/gJaPa1bVgdLHmczCMlF4TSFXZyX5NQJJHlXpZen
+         ozvg==
+X-Gm-Message-State: AOAM531Ln9qvK95Pdec1e1DXEP/Fxl18DHCbw1Puqjv/x0aGwi15ah9W
+        taQbTP3YAjbr9pRp62+fE3YyyA==
+X-Google-Smtp-Source: ABdhPJwLI+NLuZ8zgVbA9INKDpuqIVAAWlzG6A08J97tHUyvcwYodufjPg5kieTeJIacj/Q74nw0Xw==
+X-Received: by 2002:a63:bf0b:: with SMTP id v11mr26213644pgf.144.1641224820490;
+        Mon, 03 Jan 2022 07:47:00 -0800 (PST)
 Received: from localhost.localdomain (lfbn-idf1-1-1088-186.w82-125.abo.wanadoo.fr. [82.125.191.186])
-        by smtp.gmail.com with ESMTPSA id l2sm41080153pfc.42.2022.01.03.07.46.54
+        by smtp.gmail.com with ESMTPSA id l2sm41080153pfc.42.2022.01.03.07.46.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jan 2022 07:46:57 -0800 (PST)
+        Mon, 03 Jan 2022 07:47:00 -0800 (PST)
 From:   Gary Bisson <gary.bisson@boundarydevices.com>
 To:     linux-amlogic@lists.infradead.org
 Cc:     Gary Bisson <gary.bisson@boundarydevices.com>,
@@ -55,9 +55,9 @@ Cc:     Gary Bisson <gary.bisson@boundarydevices.com>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] arm64: dts: meson-g12-common: add more pwm_f options
-Date:   Mon,  3 Jan 2022 16:46:15 +0100
-Message-Id: <20220103154616.308376-3-gary.bisson@boundarydevices.com>
+Subject: [PATCH 3/3] arm64: dts: meson-g12-common: add uart_ao_b pins muxing
+Date:   Mon,  3 Jan 2022 16:46:16 +0100
+Message-Id: <20220103154616.308376-4-gary.bisson@boundarydevices.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220103154616.308376-1-gary.bisson@boundarydevices.com>
 References: <20220103154616.308376-1-gary.bisson@boundarydevices.com>
@@ -67,7 +67,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing PWM_F pin muxing for GPIOA_11 and GPIOZ_12.
+- RX/TX signals can be mapped on 2 different pairs of pins so supporting
+  both options
+- RTS/CTS signals however only have 1 option available
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
@@ -80,36 +82,47 @@ Cc: devicetree@vger.kernel.org
 Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-kernel@vger.kernel.org
 ---
- .../arm64/boot/dts/amlogic/meson-g12-common.dtsi | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ .../boot/dts/amlogic/meson-g12-common.dtsi    | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-index 00c6f53290d4..af1357c48bee 100644
+index af1357c48bee..3a7773ffbd08 100644
 --- a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
 +++ b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-@@ -894,6 +894,22 @@ mux {
+@@ -1952,6 +1952,33 @@ mux {
  						};
  					};
  
-+					pwm_f_z_pins: pwm-f-z {
++					uart_ao_b_1_pins: uart-ao-b-1 {
 +						mux {
-+							groups = "pwm_f_z";
-+							function = "pwm_f";
++							groups = "uart_ao_b_tx_2",
++								 "uart_ao_b_rx_3";
++							function = "uart_ao_b";
 +							bias-disable;
 +						};
 +					};
 +
-+					pwm_f_a_pins: pwm-f-a {
++					uart_ao_b_2_pins: uart-ao-b-2 {
 +						mux {
-+							groups = "pwm_f_a";
-+							function = "pwm_f";
++							groups = "uart_ao_b_tx_8",
++								 "uart_ao_b_rx_9";
++							function = "uart_ao_b";
 +							bias-disable;
 +						};
 +					};
 +
- 					pwm_f_x_pins: pwm-f-x {
++					uart_ao_b_cts_rts_pins: uart-ao-b-cts-rts {
++						mux {
++							groups = "uart_ao_b_cts",
++								 "uart_ao_b_rts";
++							function = "uart_ao_b";
++							bias-disable;
++						};
++					};
++
+ 					pwm_a_e_pins: pwm-a-e {
  						mux {
- 							groups = "pwm_f_x";
+ 							groups = "pwm_a_e";
 -- 
 2.34.1
 

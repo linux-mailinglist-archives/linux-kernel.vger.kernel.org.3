@@ -2,133 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86193483584
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 18:23:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D1B48358E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 18:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235214AbiACRXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 12:23:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51670 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232003AbiACRXE (ORCPT
+        id S235243AbiACR1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 12:27:40 -0500
+Received: from stargate.chelsio.com ([12.32.117.8]:53926 "EHLO
+        stargate.chelsio.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232075AbiACR1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 12:23:04 -0500
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB257C061761;
-        Mon,  3 Jan 2022 09:23:03 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 8BDD4419BC;
-        Mon,  3 Jan 2022 17:22:53 +0000 (UTC)
-Message-ID: <87cd5244-501d-1a3a-35d1-2687cf145bb9@marcan.st>
-Date:   Tue, 4 Jan 2022 02:22:50 +0900
+        Mon, 3 Jan 2022 12:27:39 -0500
+Received: from localhost (scalar.blr.asicdesigners.com [10.193.185.94])
+        by stargate.chelsio.com (8.14.7/8.14.7) with ESMTP id 203HRRsf008814;
+        Mon, 3 Jan 2022 09:27:28 -0800
+Date:   Mon, 3 Jan 2022 22:53:21 +0530
+From:   Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>
+To:     linux-firmware@kernel.org
+Cc:     linux-kernel@vger.kernel.org, jwboyer@kernel.org,
+        ramaraju@chelsio.com, rahul.lakkireddy@chelsio.com
+Subject: pull request: linux-firmware: update cxgb4 firmware to 1.26.6.0
+Message-ID: <20220103172319.GA11176@chelsio.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [PATCH 16/34] brcmfmac: acpi: Add support for fetching Apple ACPI
- properties
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "brcm80211-dev-list.pdl@broadcom.com" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>
-References: <20211226153624.162281-1-marcan@marcan.st>
- <20211226153624.162281-17-marcan@marcan.st>
- <CAHp75VcZcJ+zCDL-J+w8gEeKXGYdJajjLoa1JTj_kkJixrV12Q@mail.gmail.com>
-From:   Hector Martin <marcan@marcan.st>
-In-Reply-To: <CAHp75VcZcJ+zCDL-J+w8gEeKXGYdJajjLoa1JTj_kkJixrV12Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/01/04 1:20, Andy Shevchenko wrote:
->     +void brcmf_acpi_probe(struct device *dev, enum brcmf_bus_type bus_type,
->     +                     struct brcmf_mp_device *settings)
->     +{
->     +       acpi_status status;
->     +       struct acpi_device *adev = ACPI_COMPANION(dev);
-> 
-> 
-> Please, move the assignment closer to its first user 
+Please pull the new Chelsio firmware from the following URL.
 
-So... two lines down? :-)
+  git://git.chelsio.net/pub/git/linux-firmware.git for-upstream
 
->   
-> 
->     +       const union acpi_object *o;
->     +       struct acpi_buffer buf = {ACPI_ALLOCATE_BUFFER, NULL};
->     +
->     +       if (!adev)
->     +               return;
->     +
->     +       if (!ACPI_FAILURE(acpi_dev_get_property(adev, "module-instance",
->     +                                               ACPI_TYPE_STRING,
->     &o))) {
->     +               const char *prefix = "apple,";
->     +               int len = strlen(prefix) + o->string.length + 1;
->     +               char *board_type = devm_kzalloc(dev, len, GFP_KERNEL);
->     +
->     +               strscpy(board_type, prefix, len);
->     +               strlcat(board_type, o->string.pointer, 
-> 
-> 
-> NIH devm_kasprintf()?
+Thanks,
+Rahul
 
-That sounds useful, didn't know that existed. Thanks!
+The following changes since commit 57d6b9507e28ac4803ea4aa4dba9592c889d6733:
 
->  
-> 
->     +               brcmf_dbg(INFO, "ACPI module-instance=%s\n",
->     o->string.pointer);
->     +               settings->board_type = board_type;
->     +       } else {
->     +               brcmf_dbg(INFO, "No ACPI module-instance\n");
->     +       }
->     +
->     +       status = acpi_evaluate_object(adev->handle, "RWCV", NULL, &buf);
->     +       o = buf.pointer;
->     +       if (!ACPI_FAILURE(status) && o && o->type == ACPI_TYPE_BUFFER &&
->     +           o->buffer.length >= 2) {
->     +               char *antenna_sku = devm_kzalloc(dev, 3, GFP_KERNEL);
->     +
->     +               memcpy(antenna_sku, o->buffer.pointer, 2);
-> 
-> 
-> NIH devm_kmemdup()?
+  cnm: add chips&media wave521c firmware. (2021-12-29 08:43:43 -0500)
 
-Not *quite*. I take the first two bytes of the returned buffer and turn
-them into a null-terminated 3-byte string. kmemdup wouldn't
-null-terminate or would copy too much, depending on length.
+are available in the git repository at:
 
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+  git://git.chelsio.net/pub/git/linux-firmware.git for-upstream
+
+for you to fetch changes up to 9e89f3b81e3258e7bffdc0ed18a5c56b1cbf3e3e:
+
+  cxgb4: Update firmware to revision 1.26.6.0 (2022-01-03 08:37:13 -0800)
+
+----------------------------------------------------------------
+Rahul Lakkireddy (1):
+      cxgb4: Update firmware to revision 1.26.6.0
+
+ WHENCE                  |  12 ++++++------
+ cxgb4/t4fw-1.26.4.0.bin | Bin 570880 -> 0 bytes
+ cxgb4/t4fw-1.26.6.0.bin | Bin 0 -> 570880 bytes
+ cxgb4/t5fw-1.26.4.0.bin | Bin 676352 -> 0 bytes
+ cxgb4/t5fw-1.26.6.0.bin | Bin 0 -> 676352 bytes
+ cxgb4/t6fw-1.26.4.0.bin | Bin 729600 -> 0 bytes
+ cxgb4/t6fw-1.26.6.0.bin | Bin 0 -> 729600 bytes
+ 7 files changed, 6 insertions(+), 6 deletions(-)
+ delete mode 100644 cxgb4/t4fw-1.26.4.0.bin
+ create mode 100644 cxgb4/t4fw-1.26.6.0.bin
+ delete mode 100644 cxgb4/t5fw-1.26.4.0.bin
+ create mode 100644 cxgb4/t5fw-1.26.6.0.bin
+ delete mode 100644 cxgb4/t6fw-1.26.4.0.bin
+ create mode 100644 cxgb4/t6fw-1.26.6.0.bin

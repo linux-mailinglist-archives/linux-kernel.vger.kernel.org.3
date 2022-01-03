@@ -2,382 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FAE2483515
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 17:49:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22DA2483517
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 17:50:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234802AbiACQts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 11:49:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44052 "EHLO
+        id S234821AbiACQtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 11:49:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234781AbiACQth (ORCPT
+        with ESMTP id S234996AbiACQtr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 11:49:37 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5D2C061761
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 08:49:37 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id o30so19235446wms.4
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 08:49:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=BBJjz4qSse0c3e8+RSJU1OahDp790FBGpdhk5TtZLn4=;
-        b=c8mBzicIsL5lCSSW/C3YvXD5DvtHOk79hi60nDXpz2/1sfifUhW31y38ctjJq23hHz
-         32tQcjFPxYYUsuqJiMMCMcCTcA3etuJ+3j4T1FWZfW9xzlnbXjWIlTuDeRrKulamIoc5
-         ELneo7tO9TPkqFV4DfYLx6nzkpa41fwmgAafgS9FsFxbAm7VEym2bEwj5jmrCIRBmGQP
-         N5k0+DbYaiGZcR++w0kVOHhuxL6N2LzuyOLnRotBy29BVdnPPTYl/q9yeK4gTu+/+u1X
-         yKPCPPVMrX0FjEns6slmyg/mLB4EDmEJUprojqpyZRUug3i9OXgialCLT9xxlGkUr8Hg
-         VkcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=BBJjz4qSse0c3e8+RSJU1OahDp790FBGpdhk5TtZLn4=;
-        b=Rcj10DP05gzHo/I2uo1vDnCesn3ig//dAC2TwmMz4DvycS7r5eQCl+GDU8w/B7aQZv
-         Jaegh8fSCaIVn2Y7jAIsJaD2x6OtucDor6VQZBrKLLbar/EuRHAr5NRC5pCKoyvAl1Cy
-         ansOVzukrA6ksYZJpqy8YpZxNC7Agze90qflWqyL/PyxuJ7WsMDqJalyodE2idBrXTHy
-         sYXVTLp4G1SlwEZWX5fi/VdJedQRU3BSoej/SbeIIY5rx1dvvLHiCcpH5N/i6h0im4Er
-         LbRXxX0bXOZDM0SWIpfhUDb9sUSN7uFooaLbpD32NDJZyATNBfcekEaykE5n8RxO4k75
-         JSFQ==
-X-Gm-Message-State: AOAM530IfAJsrUkkVCJQfkrJ++AT3ZU19iRG4eqYUCpnz9NAkXl7nIC8
-        zO4x2/60PfftbLgVBPWM0idX8h3NuOcCZQ==
-X-Google-Smtp-Source: ABdhPJxe+rih2EdPK/ut77NiqUVJXwdNIQVZNLjnURXtOuzblLT/HaWfzBhyBkjhMXdsdZlejTZnfA==
-X-Received: by 2002:a1c:721a:: with SMTP id n26mr38162322wmc.39.1641228575612;
-        Mon, 03 Jan 2022 08:49:35 -0800 (PST)
-Received: from ?IPv6:2001:861:44c0:66c0:7c9d:a967:38e2:5220? ([2001:861:44c0:66c0:7c9d:a967:38e2:5220])
-        by smtp.gmail.com with ESMTPSA id u20sm41061871wml.45.2022.01.03.08.49.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jan 2022 08:49:35 -0800 (PST)
-Subject: Re: [PATCH v2 3/9] arm64: dts: meson: add initial device-trees for
- X96-AIR
-To:     Christian Hewitt <christianshewitt@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Benoit Masson <yahoo@perenite.com>
-References: <20220103163956.6581-1-christianshewitt@gmail.com>
- <20220103163956.6581-4-christianshewitt@gmail.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-Message-ID: <3a1c359b-7884-7072-4e08-55687b9f94cf@baylibre.com>
-Date:   Mon, 3 Jan 2022 17:49:34 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 3 Jan 2022 11:49:47 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A83BC061761;
+        Mon,  3 Jan 2022 08:49:46 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DBB481EC0380;
+        Mon,  3 Jan 2022 17:49:39 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1641228580;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=P798RWaZTr+okBNMCVL+1sl56MgtJUmphTduCouvUIE=;
+        b=ip+HPwItP/DquYMql6pC3Po65Wa5C8XWBZLq6hy+3IQt1D9EWyxbEfUBkQZGd+h8+zSPWi
+        X5/4SIi5AAR2dbjqWQjWlH/qDK5OuQxoQakMhvKtmHNJnB/4mtQS1N5aMHi698V0TubJ9X
+        yB2kwu78JKqbDVvlBS/bSARKlFBV54g=
+Date:   Mon, 3 Jan 2022 17:49:42 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v8 21/40] x86/head: re-enable stack protection for
+ 32/64-bit builds
+Message-ID: <YdMpJg3YSdoYMKaZ@zn.tnic>
+References: <20211210154332.11526-1-brijesh.singh@amd.com>
+ <20211210154332.11526-22-brijesh.singh@amd.com>
 MIME-Version: 1.0
-In-Reply-To: <20220103163956.6581-4-christianshewitt@gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
+In-Reply-To: <20211210154332.11526-22-brijesh.singh@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01/2022 17:39, Christian Hewitt wrote:
-> The Amediatek X96-AIR is based on Amlogic S905X3 reference board
-> designs and ships in multiple configurations:
-> 
-> – 4GB DDR3 + 64GB eMMC + WiFi a/b/g/n/ac + BT + Gb Ethernet
-> – 4GB DDR3 + 32GB eMMC + WiFi a/b/g/n/ac + BT + Gb Ethernet
-> – 4GB DDR3 + 32GB eMMC + WiFi b/g/n (no BT) + 10/100 Ethernet
-> – 2GB DDR3 + 16GB eMMC + WiFi b/g/n (no BT) + 10/100 Ethernet
-> ...
-> - HDMI 2.1 video
-> - S/PDIF optical output
-> - AV output
-> - 2x USB 2.0 inc. OTG port
-> - 1x USB 3.0 port
-> - IR receiver
-> - 1x micro SD card slot (internal)
-> - 1x Reset/Update button (in AV jack)
-> - 7-segment VFD
-> 
-> The device-tree with -gbit suffix supports models with Gigabit
-> Ethernet, and the device-tree with no suffix supports models
-> with 10/100 Ethernet.
-> 
-> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
-> ---
->  arch/arm64/boot/dts/amlogic/Makefile          |   2 +
->  .../dts/amlogic/meson-sm1-x96-air-gbit.dts    | 133 ++++++++++++++++++
->  .../boot/dts/amlogic/meson-sm1-x96-air.dts    | 112 +++++++++++++++
->  3 files changed, 247 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-x96-air-gbit.dts
->  create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-x96-air.dts
-> 
-> diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
-> index 5148cd9e5146..1c0e554f54fc 100644
-> --- a/arch/arm64/boot/dts/amlogic/Makefile
-> +++ b/arch/arm64/boot/dts/amlogic/Makefile
-> @@ -56,4 +56,6 @@ dtb-$(CONFIG_ARCH_MESON) += meson-sm1-khadas-vim3l.dtb
->  dtb-$(CONFIG_ARCH_MESON) += meson-sm1-odroid-c4.dtb
->  dtb-$(CONFIG_ARCH_MESON) += meson-sm1-odroid-hc4.dtb
->  dtb-$(CONFIG_ARCH_MESON) += meson-sm1-sei610.dtb
-> +dtb-$(CONFIG_ARCH_MESON) += meson-sm1-x96-air.dtb
-> +dtb-$(CONFIG_ARCH_MESON) += meson-sm1-x96-air-gbit.dtb
->  dtb-$(CONFIG_ARCH_MESON) += meson-a1-ad401.dtb
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-x96-air-gbit.dts b/arch/arm64/boot/dts/amlogic/meson-sm1-x96-air-gbit.dts
-> new file mode 100644
-> index 000000000000..7e1a74046ba5
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-x96-air-gbit.dts
-> @@ -0,0 +1,133 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright (c) 2019 BayLibre SAS. All rights reserved.
-> + * Copyright (c) 2020 Christian Hewitt <christianshewitt@gmail.com>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "meson-sm1-ac2xx.dtsi"
-> +#include <dt-bindings/sound/meson-g12a-tohdmitx.h>
-> +
-> +/ {
-> +	compatible = "amediatech,x96-air-gbit", "amlogic,sm1";
-> +	model = "Shenzhen Amediatech Technology Co., Ltd X96 Air";
-> +
-> +	sound {
-> +		compatible = "amlogic,axg-sound-card";
-> +		model = "X96-AIR";
-> +		audio-aux-devs = <&tdmout_b>;
-> +		audio-routing = "TDMOUT_B IN 0", "FRDDR_A OUT 1",
-> +				"TDMOUT_B IN 1", "FRDDR_B OUT 1",
-> +				"TDMOUT_B IN 2", "FRDDR_C OUT 1",
-> +				"TDM_B Playback", "TDMOUT_B OUT";
-> +
-> +		assigned-clocks = <&clkc CLKID_MPLL2>,
-> +				  <&clkc CLKID_MPLL0>,
-> +				  <&clkc CLKID_MPLL1>;
-> +		assigned-clock-parents = <0>, <0>, <0>;
-> +		assigned-clock-rates = <294912000>,
-> +				       <270950400>,
-> +				       <393216000>;
-> +		status = "okay";
-> +
-> +		dai-link-0 {
-> +			sound-dai = <&frddr_a>;
-> +		};
-> +
-> +		dai-link-1 {
-> +			sound-dai = <&frddr_b>;
-> +		};
-> +
-> +		dai-link-2 {
-> +			sound-dai = <&frddr_c>;
-> +		};
-> +
-> +		/* 8ch hdmi interface */
-> +		dai-link-3 {
-> +			sound-dai = <&tdmif_b>;
-> +			dai-format = "i2s";
-> +			dai-tdm-slot-tx-mask-0 = <1 1>;
-> +			dai-tdm-slot-tx-mask-1 = <1 1>;
-> +			dai-tdm-slot-tx-mask-2 = <1 1>;
-> +			dai-tdm-slot-tx-mask-3 = <1 1>;
-> +			mclk-fs = <256>;
-> +
-> +			codec {
-> +				sound-dai = <&tohdmitx TOHDMITX_I2S_IN_B>;
-> +			};
-> +		};
-> +
-> +		/* hdmi glue */
-> +		dai-link-4 {
-> +			sound-dai = <&tohdmitx TOHDMITX_I2S_OUT>;
-> +
-> +			codec {
-> +				sound-dai = <&hdmi_tx>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&arb {
-> +	status = "okay";
-> +};
-> +
-> +&clkc_audio {
-> +	status = "okay";
-> +};
-> +
-> +&ethmac {
-> +	status = "okay";
-> +
-> +	pinctrl-0 = <&eth_pins>, <&eth_rgmii_pins>;
-> +	pinctrl-names = "default";
-> +	phy-mode = "rgmii-txid";
-> +	phy-handle = <&external_phy>;
-> +
-> +	rx-internal-delay-ps = <800>;
-> +};
-> +
-> +&ext_mdio {
-> +	external_phy: ethernet-phy@0 {
-> +		/* Realtek RTL8211F (0x001cc916) */
-> +		reg = <0>;
-> +		max-speed = <1000>;
-> +
-> +		reset-assert-us = <10000>;
-> +		reset-deassert-us = <80000>;
-> +		reset-gpios = <&gpio GPIOZ_15 (GPIO_ACTIVE_LOW | GPIO_OPEN_DRAIN)>;
-> +
-> +		interrupt-parent = <&gpio_intc>;
-> +		/* MAC_INTR on GPIOZ_14 */
-> +		interrupts = <26 IRQ_TYPE_LEVEL_LOW>;
-> +	};
-> +};
-> +
-> +&frddr_a {
-> +	status = "okay";
-> +};
-> +
-> +&frddr_b {
-> +	status = "okay";
-> +};
-> +
-> +&frddr_c {
-> +	status = "okay";
-> +};
-> +
-> +&ir {
-> +	linux,rc-map-name = "rc-x96max";
-> +};
-> +
-> +&tdmif_b {
-> +	status = "okay";
-> +};
-> +
-> +&tdmout_b {
-> +	status = "okay";
-> +};
-> +
-> +&tohdmitx {
-> +	status = "okay";
-> +};
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-x96-air.dts b/arch/arm64/boot/dts/amlogic/meson-sm1-x96-air.dts
-> new file mode 100644
-> index 000000000000..cd93d798f2a3
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-x96-air.dts
-> @@ -0,0 +1,112 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright (c) 2019 BayLibre SAS. All rights reserved.
-> + * Copyright (c) 2020 Christian Hewitt <christianshewitt@gmail.com>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "meson-sm1-ac2xx.dtsi"
-> +#include <dt-bindings/sound/meson-g12a-tohdmitx.h>
-> +
-> +/ {
-> +	compatible = "amediatech,x96-air", "amlogic,sm1";
-> +	model = "Shenzhen Amediatech Technology Co., Ltd X96 Air";
-> +
-> +	sound {
-> +		compatible = "amlogic,axg-sound-card";
-> +		model = "X96-AIR";
-> +		audio-aux-devs = <&tdmout_b>;
-> +		audio-routing = "TDMOUT_B IN 0", "FRDDR_A OUT 1",
-> +				"TDMOUT_B IN 1", "FRDDR_B OUT 1",
-> +				"TDMOUT_B IN 2", "FRDDR_C OUT 1",
-> +				"TDM_B Playback", "TDMOUT_B OUT";
-> +
-> +		assigned-clocks = <&clkc CLKID_MPLL2>,
-> +				  <&clkc CLKID_MPLL0>,
-> +				  <&clkc CLKID_MPLL1>;
-> +		assigned-clock-parents = <0>, <0>, <0>;
-> +		assigned-clock-rates = <294912000>,
-> +				       <270950400>,
-> +				       <393216000>;
-> +		status = "okay";
-> +
-> +		dai-link-0 {
-> +			sound-dai = <&frddr_a>;
-> +		};
-> +
-> +		dai-link-1 {
-> +			sound-dai = <&frddr_b>;
-> +		};
-> +
-> +		dai-link-2 {
-> +			sound-dai = <&frddr_c>;
-> +		};
-> +
-> +		/* 8ch hdmi interface */
-> +		dai-link-3 {
-> +			sound-dai = <&tdmif_b>;
-> +			dai-format = "i2s";
-> +			dai-tdm-slot-tx-mask-0 = <1 1>;
-> +			dai-tdm-slot-tx-mask-1 = <1 1>;
-> +			dai-tdm-slot-tx-mask-2 = <1 1>;
-> +			dai-tdm-slot-tx-mask-3 = <1 1>;
-> +			mclk-fs = <256>;
-> +
-> +			codec {
-> +				sound-dai = <&tohdmitx TOHDMITX_I2S_IN_B>;
-> +			};
-> +		};
-> +
-> +		/* hdmi glue */
-> +		dai-link-4 {
-> +			sound-dai = <&tohdmitx TOHDMITX_I2S_OUT>;
-> +
-> +			codec {
-> +				sound-dai = <&hdmi_tx>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&arb {
-> +	status = "okay";
-> +};
-> +
-> +&clkc_audio {
-> +	status = "okay";
-> +};
-> +
-> +&ethmac {
-> +	status = "okay";
-> +	phy-handle = <&internal_ephy>;
-> +	phy-mode = "rmii";
-> +};
-> +
-> +&frddr_a {
-> +	status = "okay";
-> +};
-> +
-> +&frddr_b {
-> +	status = "okay";
-> +};
-> +
-> +&frddr_c {
-> +	status = "okay";
-> +};
-> +
-> +&ir {
-> +	linux,rc-map-name = "rc-beelink-gs1";
-> +};
-> +
-> +&tdmif_b {
-> +	status = "okay";
-> +};
-> +
-> +&tdmout_b {
-> +	status = "okay";
-> +};
-> +
-> +&tohdmitx {
-> +	status = "okay";
-> +};
-> 
+On Fri, Dec 10, 2021 at 09:43:13AM -0600, Brijesh Singh wrote:
 
-Missing:
-Tested-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com> # X96-Air with Gbit/s PHY
-Tested-by: Piotr Oniszczuk <piotr.oniszczuk@gmail.com> # X96-Air with 10/100 Eth
+> Subject: Re: [PATCH v8 21/40] x86/head: re-enable stack protection for 32/64-bit builds
+
+The tip tree preferred format for patch subject prefixes is
+'subsys/component:', e.g. 'x86/apic:', 'x86/mm/fault:', 'sched/fair:',
+'genirq/core:'. Please do not use file names or complete file paths as
+prefix. 'git log path/to/file' should give you a reasonable hint in most
+cases.
+
+The condensed patch description in the subject line should start with a
+uppercase letter and should be written in imperative tone.
+
+In this case:
+
+x86/head/64: Re-enable stack protection
+
+There's no need for 32/64-bit builds - we don't have anything else :-)
+
+Please check all your subjects.
+
+> From: Michael Roth <michael.roth@amd.com>
+> 
+> As of commit 103a4908ad4d ("x86/head/64: Disable stack protection for
+> head$(BITS).o")
+
+verify_commit_quotation: Warning: The proper commit quotation format is:
+<newline>
+[  ]<sha1, 12 chars> ("commit name")
+<newline>
+
+> kernel/head64.c is compiled with -fno-stack-protector
+> to allow a call to set_bringup_idt_handler(), which would otherwise
+> have stack protection enabled with CONFIG_STACKPROTECTOR_STRONG. While
+> sufficient for that case, there may still be issues with calls to any
+> external functions that were compiled with stack protection enabled that
+> in-turn make stack-protected calls, or if the exception handlers set up
+> by set_bringup_idt_handler() make calls to stack-protected functions.
+> As part of 103a4908ad4d, stack protection was also disabled for
+> kernel/head32.c as a precaution.
+> 
+> Subsequent patches for SEV-SNP CPUID validation support will introduce
+> both such cases. Attempting to disable stack protection for everything
+> in scope to address that is prohibitive since much of the code, like
+> SEV-ES #VC handler, is shared code that remains in use after boot and
+> could benefit from having stack protection enabled. Attempting to inline
+> calls is brittle and can quickly balloon out to library/helper code
+> where that's not really an option.
+> 
+> Instead, re-enable stack protection for head32.c/head64.c and make the
+> appropriate changes to ensure the segment used for the stack canary is
+> initialized in advance of any stack-protected C calls.
+> 
+> for head64.c:
+> 
+> - The BSP will enter from startup_64 and call into C code
+
+Function names need to end with "()" so that it is clear they're
+functions.
+
+>   (startup_64_setup_env) shortly after setting up the stack, which may
+>   result in calls to stack-protected code. Set up %gs early to allow
+>   for this safely.
+> - APs will enter from secondary_startup_64*, and %gs will be set up
+>   soon after. There is one call to C code prior to this
+>   (__startup_secondary_64), but it is only to fetch sme_me_mask, and
+>   unlikely to be stack-protected, so leave things as they are, but add
+>   a note about this in case things change in the future.
+> 
+> for head32.c:
+> 
+> - BSPs/APs will set %fs to __BOOT_DS prior to any C calls. In recent
+>   kernels, the compiler is configured to access the stack canary at
+>   %fs:__stack_chk_guard,
+
+Add here somewhere:
+
+"See
+
+  3fb0fdb3bbe7 ("x86/stackprotector/32: Make the canary into a regular percpu variable")
+
+for details."
+
+> which overlaps with the initial per-cpu
+>   __stack_chk_guard variable in the initial/'master' .data..percpu
+>   area. This is sufficient to allow access to the canary for use
+>   during initial startup, so no changes are needed there.
+> 
+> Suggested-by: Joerg Roedel <jroedel@suse.de> #for 64-bit %gs set up
+> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> ---
+>  arch/x86/kernel/Makefile  |  1 -
+>  arch/x86/kernel/head_64.S | 24 ++++++++++++++++++++++++
+>  2 files changed, 24 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+> index 2ff3e600f426..4df8c8f7d2ac 100644
+> --- a/arch/x86/kernel/Makefile
+> +++ b/arch/x86/kernel/Makefile
+> @@ -48,7 +48,6 @@ endif
+>  # non-deterministic coverage.
+>  KCOV_INSTRUMENT		:= n
+>  
+> -CFLAGS_head$(BITS).o	+= -fno-stack-protector
+>  CFLAGS_cc_platform.o	+= -fno-stack-protector
+>  
+>  CFLAGS_irq.o := -I $(srctree)/$(src)/../include/asm/trace
+> diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
+> index 99de8fd461e8..9f8a7e48aca7 100644
+> --- a/arch/x86/kernel/head_64.S
+> +++ b/arch/x86/kernel/head_64.S
+> @@ -65,6 +65,22 @@ SYM_CODE_START_NOALIGN(startup_64)
+>  	leaq	(__end_init_task - FRAME_SIZE)(%rip), %rsp
+>  
+>  	leaq	_text(%rip), %rdi
+> +
+> +	/*
+> +	 * initial_gs points to initial fixed_per_cpu struct with storage for
+
+$ git grep fixed_per_cpu
+$
+
+??
+
+Do you mean this:
+
+SYM_DATA(initial_gs,    .quad INIT_PER_CPU_VAR(fixed_percpu_data))
+
+?
+
+> +	 * the stack protector canary. Global pointer fixups are needed at this
+> +	 * stage, so apply them as is done in fixup_pointer(), and initialize %gs
+> +	 * such that the canary can be accessed at %gs:40 for subsequent C calls.
+> +	 */
+> +	movl	$MSR_GS_BASE, %ecx
+> +	movq	initial_gs(%rip), %rax
+> +	movq	$_text, %rdx
+> +	subq	%rdx, %rax
+> +	addq	%rdi, %rax
+> +	movq	%rax, %rdx
+> +	shrq	$32,  %rdx
+> +	wrmsr
+> +
+>  	pushq	%rsi
+>  	call	startup_64_setup_env
+>  	popq	%rsi
+> @@ -146,6 +162,14 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+>  	 * added to the initial pgdir entry that will be programmed into CR3.
+>  	 */
+>  	pushq	%rsi
+
+<---- newline here.
+
+> +	/*
+> +	 * NOTE: %gs at this point is a stale data segment left over from the
+> +	 * real-mode trampoline, so the default stack protector canary location
+> +	 * at %gs:40 does not yet coincide with the expected fixed_per_cpu struct
+> +	 * that contains storage for the stack canary. So take care not to add
+> +	 * anything to the C functions in this path that would result in stack
+> +	 * protected C code being generated.
+> +	 */
+>  	call	__startup_secondary_64
+>  	popq	%rsi
+
+Can't you simply do
+
+	movq    sme_me_mask, %rax
+
+here instead and avoid the issue altogether?
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

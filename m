@@ -2,81 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60718482FC6
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 11:07:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F9E7482FCB
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 11:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232592AbiACKHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 05:07:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37634 "EHLO
+        id S232599AbiACKLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 05:11:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232453AbiACKHC (ORCPT
+        with ESMTP id S232427AbiACKLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 05:07:02 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1DB8C061784
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 02:07:01 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id b13so133876034edd.8
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 02:07:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HDDNrbo94yGf/mFPUSwm53ZPq2DtpQ/AKgaZuhvvG3E=;
-        b=uDZejrRMI89xz8mKDplRD8+MVXUW3LjgL0hyxTBzUazxljJmOZBruVG81LZdhMVGWL
-         bEJbh3791y8SEiOtnJd+rN5rtbJ5bR9huauO3s8vN5HoKNyAb5Ef2DCwCDFEmb0Kl40/
-         Z5RwO0I5MV6Fa5I8rbm0VfogoOJWWy0sE4YBhl954dEhj6cQbGKA55tSV+ht3G8oSOpu
-         8ZucOpJuro6X9/9zY8erAKIIYoBVT0agTTfCZLqWlLqFs8UPnf12iBQQJoQmU62vTwgH
-         Q+XC6JthkDC4QEO7ZQUrUPZyM/WsNiQHmMS6j9a4Xtv8QxHJzDBMCaTGewIwrZnqQSh9
-         gZHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HDDNrbo94yGf/mFPUSwm53ZPq2DtpQ/AKgaZuhvvG3E=;
-        b=wwwpO7dptv4karTkNE5+OA5ZLhBAolJqYF4y5x63zHJ52ez/CV0vA65mo6K4p9/f84
-         JqJWKwBM+ND/s2WsQIeIgGAsZ1bHEV1yKTzafvemNMVcPyVwIp3gPdoimIWmvrhpoIUE
-         y2pXaqw+nv6EZvuPtyAB0DLyJaicL5wo82Gyflk4zuVrjjfikqcdIn/cDHNrTqHbq44H
-         hWe/vE1JoRW+SMh3FWdEZ5aN282ORcr0z55+3EX3xiYwm3lHOTu5vR3SaI/zuOgImrIa
-         MVHokYhj+ZzDwR9Mq51j0rhHMpIUqbXfwfA8CFGTAXizlpNsqezyHs5MVK4cUDw78pXw
-         ZmKQ==
-X-Gm-Message-State: AOAM532mD1kr6AVz78FSlfZvO518eu6Qofv/d3WsU4BDNFJ2tfvNY5Md
-        i830TngvieGDc+aZPsOCKTzbC72y+TbCgkh0pohPAw==
-X-Google-Smtp-Source: ABdhPJxSo0bFqOkD1JphB5Ji1q1GKjtA/igTEwlGcc4AoWZL9cWg+AN1uhSA2irsbSx/M7ObRkZLjJZTp3a9i2hMJ/Q=
-X-Received: by 2002:aa7:dd59:: with SMTP id o25mr43212393edw.288.1641204420348;
- Mon, 03 Jan 2022 02:07:00 -0800 (PST)
+        Mon, 3 Jan 2022 05:11:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED6BC061761;
+        Mon,  3 Jan 2022 02:11:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3FBBDB80E8A;
+        Mon,  3 Jan 2022 10:11:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C030C36AEE;
+        Mon,  3 Jan 2022 10:11:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641204693;
+        bh=0CGYyvpbOW/VRV/ian3+DNn3UCORswc82gG+YGYqP3M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=A19vH4W12VYWzXuxzehvzYhLNsaJU4A8C1Ba2tXkoyyt9EmBq6mluWclToOhPqUiz
+         7wDromuOoL5BDl1Y1Bwy1sPMNXiUjQDdmyv1eb8xmfrFtpQC9ClMXGWhadp7Aj2mH4
+         w1ErpTEZzjh3qKlvSVXlY/WcbD9kkHl8vsaKrnZw=
+Date:   Mon, 3 Jan 2022 11:11:30 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
+ -v1: Eliminate the Linux kernel's "Dependency Hell"
+Message-ID: <YdLL0kaFhm6rp9NS@kroah.com>
+References: <YdIfz+LMewetSaEB@gmail.com>
 MIME-Version: 1.0
-References: <20211223103809.12343-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20211223103809.12343-1-andriy.shevchenko@linux.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 3 Jan 2022 11:06:49 +0100
-Message-ID: <CAMRc=McKS5CM-9ioQGVkEn4Oct6uxAiNKAm-y6S4FBOU3WDtVg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] gpiolib: acpi: make fwnode take precedence in
- struct gpio_chip
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Hoan Tran <hoan@os.amperecomputing.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdIfz+LMewetSaEB@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 11:38 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> If the driver sets the fwnode in struct gpio_chip, let it take
-> precedence over the parent's fwnode.
->
-> This is a follow up to the commit 9126a738edc1 ("gpiolib: of: make
-> fwnode take precedence in struct gpio_chip").
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
+On Sun, Jan 02, 2022 at 10:57:35PM +0100, Ingo Molnar wrote:
+> 
+> I'm pleased to announce the first public version of my new "Fast Kernel 
+> Headers" project that I've been working on since late 2020, which is a 
+> comprehensive rework of the Linux kernel's header hierarchy & header 
+> dependencies, with the dual goals of:
+> 
+>  - speeding up the kernel build (both absolute and incremental build times)
+> 
+>  - decoupling subsystem type & API definitions from each other
+> 
+> The fast-headers tree consists of over 25 sub-trees internally, spanning 
+> over 2,200 commits, which can be found here:
+> 
+>    git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
+> 
+> As most kernel developers know, there's around ~10,000 main .h headers in 
+> the Linux kernel, in the include/ and arch/*/include/ hierarchies. Over the 
+> last 30+ years they have grown into a complicated & painful set of 
+> cross-dependencies we are affectionately calling 'Dependency Hell'.
+> 
+> Before going into details about how this tree solves 'dependency hell' 
+> exactly, here's the current kernel build performance gain with 
+> CONFIG_FAST_HEADERS=y enabled, (and with CONFIG_KALLSYMS_FAST=y enabled as 
+> well - see below), using a stock x86 Linux distribution's .config with all 
+> modules built into the vmlinux:
+> 
+>   #
+>   # Performance counter stats for 'make -j96 vmlinux' (3 runs):
+>   #
+>   # (Elapsed time in seconds):
+>   #
+> 
+>   v5.16-rc7:            231.34 +- 0.60 secs, 15.5 builds/hour    # [ vanilla baseline ]
+>   -fast-headers-v1:     129.97 +- 0.51 secs, 27.7 builds/hour    # +78.0% improvement
+> 
+> Or in terms of CPU time utilized:
+> 
+>   v5.16-rc7:            11,474,982.05 msec cpu-clock   # 49.601 CPUs utilized
+>   -fast-headers-v1:      7,100,730.37 msec cpu-clock   # 54.635 CPUs utilized   # +61.6% improvement
 
-Applied, thanks!
+Speed up is very impressive, nice job!
 
-Bart
+> Techniques used by the fast-headers tree to reduce header size & dependencies:
+> 
+>  - Aggressive decoupling of high level headers from each other, starting
+>    with <linux/sched.h>. Since 'struct task_struct' is a union of many
+>    subsystems, there's a new "per_task" infrastructure modeled after the
+>    per_cpu framework, which creates fields in task_struct without having
+>    to modify sched.h or the 'struct task_struct' type:
+> 
+>             DECLARE_PER_TASK(type, name);
+>             ...
+>             per_task(current, name) = val;
+> 
+>    The per_task() facility then seamlessly creates an offset into the
+>    task_struct->per_task_area[] array, and uses the asm-offsets.h
+>    mechanism to create offsets into it early in the build.
+> 
+>    There's no runtime overhead disadvantage from using per_task() framework,
+>    the generated code is functionally equivalent to types embedded in
+>    task_struct.
+
+This is "interesting", but how are you going to keep the
+kernel/sched/per_task_area_struct_defs.h and struct task_struct_per_task
+definition in sync?  It seems that you manually created this (which is
+great for testing), but over the long-term, trying to manually determine
+what needs to be done here to keep everything lined up properly is going
+to be a major pain.
+
+That issue aside, I took a glance at the tree, and overall it looks like
+a lot of nice cleanups.  Most of these can probably go through the
+various subsystem trees, after you split them out, for the "major" .h
+cleanups.  Is that something you are going to be planning on doing?
+
+thanks,
+
+greg k-h

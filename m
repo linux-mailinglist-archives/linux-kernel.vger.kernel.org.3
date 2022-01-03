@@ -2,48 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18EA94833AA
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:40:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E8EA48323D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:26:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235401AbiACOkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:40:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41616 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234095AbiACOiH (ORCPT
+        id S233865AbiACO0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:26:08 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:56000 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232481AbiACOZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:38:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5439AC08EAF9;
-        Mon,  3 Jan 2022 06:34:11 -0800 (PST)
+        Mon, 3 Jan 2022 09:25:29 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C37DEB80EBB;
-        Mon,  3 Jan 2022 14:34:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 896B3C36AEB;
-        Mon,  3 Jan 2022 14:34:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BD8960FA2;
+        Mon,  3 Jan 2022 14:25:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07424C36AEB;
+        Mon,  3 Jan 2022 14:25:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220448;
-        bh=Ghqy2Eixp7F2g7xL8K1/BKVDRlbOx8SdC2OYkcuRgwg=;
+        s=korg; t=1641219928;
+        bh=CTKojC1ShDEUvmIXrIsMZrl7CZ7FiWIRZZiYC9o5kjA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wuYtA7s0Z7MBmIGkZVdaU7Zdm5bmDb4peyVCdm2UIBMAteqMdtqD3bXLgMTjfYldE
-         p9kHWpEIDdmtOyzVwOvQdJ+E8nVH5MYv4b9Ohn94QTMccvRST09SxURbrmQs1xrqcZ
-         NLbTgYEJHvCbNDPazu2PyhmpQvO+V3iF1IALmCZI=
+        b=Ot4p5ETHT+mKnFmbezA/KI5FZDyPBDsJ/mOCGjYdTtTHOsm3h60KvbnONnonkBlvO
+         9WEg1aEK/LCKrsx3zJ4bpc8+WWzRaN0T3P7fI/tgyNEareqnI/gv+IOcKzGC3vJmfm
+         XeYUGz+MS6uC6/2b0u288wrc0F45cLUnPq1uFLvg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Wheeler <daniel.wheeler@amd.com>,
-        Eric Yang <Eric.Yang2@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 39/73] drm/amd/display: Send s0i2_rdy in stream_count == 0 optimization
+        stable@vger.kernel.org, Nikolay Martynov <mar.kolya@gmail.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 4.19 20/27] xhci: Fresco FL1100 controller should not have BROKEN_MSI quirk set.
 Date:   Mon,  3 Jan 2022 15:24:00 +0100
-Message-Id: <20220103142058.166986224@linuxfoundation.org>
+Message-Id: <20220103142052.822143703@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142056.911344037@linuxfoundation.org>
-References: <20220103142056.911344037@linuxfoundation.org>
+In-Reply-To: <20220103142052.162223000@linuxfoundation.org>
+References: <20220103142052.162223000@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,45 +45,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-[ Upstream commit a07f8b9983543d465b50870ab4f845d4d710ed3f ]
+commit e4844092581ceec22489b66c42edc88bc6079783 upstream.
 
-[Why]
-Otherwise SMU won't mark Display as idle when trying to perform s2idle.
+The Fresco Logic FL1100 controller needs the TRUST_TX_LENGTH quirk like
+other Fresco controllers, but should not have the BROKEN_MSI quirks set.
 
-[How]
-Mark the bit in the dcn31 codepath, doesn't apply to older ASIC.
+BROKEN_MSI quirk causes issues in detecting usb drives connected to docks
+with this FL1100 controller.
+The BROKEN_MSI flag was apparently accidentally set together with the
+TRUST_TX_LENGTH quirk
 
-It needed to be split from phy refclk off to prevent entering s2idle
-when PSR was engaged but driver was not ready.
+Original patch went to stable so this should go there as well.
 
-Fixes: 118a33151658 ("drm/amd/display: Add DCN3.1 clock manager support")
-
-Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
-Reviewed-by: Eric Yang <Eric.Yang2@amd.com>
-Acked-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Signed-off-by: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: ea0f69d82119 ("xhci: Enable trust tx length quirk for Fresco FL11 USB controller")
+Cc: stable@vger.kernel.org
+cc: Nikolay Martynov <mar.kolya@gmail.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20211221112825.54690-2-mathias.nyman@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/display/dc/clk_mgr/dcn31/dcn31_clk_mgr.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/host/xhci-pci.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn31/dcn31_clk_mgr.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn31/dcn31_clk_mgr.c
-index 377c4e53a2b37..407e19412a949 100644
---- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn31/dcn31_clk_mgr.c
-+++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn31/dcn31_clk_mgr.c
-@@ -157,6 +157,7 @@ static void dcn31_update_clocks(struct clk_mgr *clk_mgr_base,
- 				union display_idle_optimization_u idle_info = { 0 };
- 				idle_info.idle_info.df_request_disabled = 1;
- 				idle_info.idle_info.phy_ref_clk_off = 1;
-+				idle_info.idle_info.s0i2_rdy = 1;
- 				dcn31_smu_set_display_idle_optimization(clk_mgr, idle_info.data);
- 				/* update power state */
- 				clk_mgr_base->clks.pwr_state = DCN_PWR_STATE_LOW_POWER;
--- 
-2.34.1
-
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -90,7 +90,6 @@ static void xhci_pci_quirks(struct devic
+ 	/* Look for vendor-specific quirks */
+ 	if (pdev->vendor == PCI_VENDOR_ID_FRESCO_LOGIC &&
+ 			(pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_PDK ||
+-			 pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_FL1100 ||
+ 			 pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_FL1400)) {
+ 		if (pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_PDK &&
+ 				pdev->revision == 0x0) {
+@@ -125,6 +124,10 @@ static void xhci_pci_quirks(struct devic
+ 			pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_FL1009)
+ 		xhci->quirks |= XHCI_BROKEN_STREAMS;
+ 
++	if (pdev->vendor == PCI_VENDOR_ID_FRESCO_LOGIC &&
++			pdev->device == PCI_DEVICE_ID_FRESCO_LOGIC_FL1100)
++		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
++
+ 	if (pdev->vendor == PCI_VENDOR_ID_NEC)
+ 		xhci->quirks |= XHCI_NEC_HOST;
+ 
 
 

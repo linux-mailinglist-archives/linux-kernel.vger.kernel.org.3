@@ -2,95 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1722B482E44
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 06:47:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F67482E49
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 06:49:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231737AbiACFrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 00:47:16 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:51484 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229527AbiACFrP (ORCPT
+        id S231752AbiACFtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 00:49:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37702 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229788AbiACFtQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 00:47:15 -0500
-X-UUID: b5def2786cb1486898923cf77f51cd3a-20220103
-X-UUID: b5def2786cb1486898923cf77f51cd3a-20220103
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2031834010; Mon, 03 Jan 2022 13:47:09 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 3 Jan 2022 13:47:07 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 3 Jan 2022 13:47:07 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Junzhi Zhao <junzhi.zhao@mediatek.com>,
-        Jie Qiu <jie.qiu@mediatek.com>
-CC:     Miles Chen <miles.chen@mediatek.com>,
-        Zhiqiang Lin <zhiqiang.lin@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4] drm/mediatek: Fix mtk_cec_mask()
-Date:   Mon, 3 Jan 2022 13:47:06 +0800
-Message-ID: <20220103054706.8072-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+        Mon, 3 Jan 2022 00:49:16 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DE0C061761;
+        Sun,  2 Jan 2022 21:49:16 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id f8so19267308pgf.8;
+        Sun, 02 Jan 2022 21:49:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=a0iiObTYNtgePExORvXCeabu8g7rlap8QathO0XHHKs=;
+        b=PTjsk5iijgkn45nJxLLN7yi5jBfZvHZIrUG21RiqBRUbSfAJ51lIYKDPISgkFyQqRe
+         V4gqUmomEFQ4dNvqLg5cPwGw+vkoY3owDjlYxXcaFBnEqiHHHn+hjBRFWoax2m6FSgLc
+         HAX7sEpInfDsHgTaBjThPm1bIWxpr8BoWPQe4yhXjaVWz/RWC3cdP9/Rt6oRSN9xc0R3
+         38blePt5Zp4okPxbQAiV/4zD7W09URALhoxQgJuKlWTzmSQ0dSfMFeDcKX5kLLbnfq+p
+         XLSmMgnpgmZpIwCl1I7w8hZB9gnfcmOYQwazyoKFoHzuigZnU+JSdzLoiwvH1XwwM8tN
+         7snQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=a0iiObTYNtgePExORvXCeabu8g7rlap8QathO0XHHKs=;
+        b=jiUcKD9/b3eYHdE6PbuoAAKZbFhDU7YhszS829CE0CRBqg37W72kUnI1bwj7oqto+G
+         4MH6PIwLI5zYwNonnd4GcTgZXvRZT5zgBfaP5C+lXhGPnU68C8vIwd5AGcPxbVXI3bsp
+         B7vWNMETRBA4kKytZb+aZ+feNNWIjgX2aoP0Lm/Ahrh+vSD7h+aK+a4f2tW1KBoHyrQC
+         hZZpft9PbLxyeK0FXIr+jxk//mCgxelUnjdMzopN21FutGaXihdeQM+rNOPS5ihrlGo1
+         gUSqfM92YVwNJ7W8nwthvy1ZJltlC1bK9935mf2DOob63upiFvr3noIt01gk99rwkUS3
+         g2xA==
+X-Gm-Message-State: AOAM533Vp+3z34SmJaprABXFAnG9v4LzY90ZwoPi9MR11LLo3x2z77lq
+        IFoANXpSTyJdh2gob/MRLFs=
+X-Google-Smtp-Source: ABdhPJy+JjkyTheHl+LUdqBbV9fcTztcCUYpzzzsV1ENkWM+62Ki38nl/9INTABTNcBgJMHNpQxFZw==
+X-Received: by 2002:aa7:96c5:0:b0:4ba:55c0:5e12 with SMTP id h5-20020aa796c5000000b004ba55c05e12mr44970857pfq.86.1641188954774;
+        Sun, 02 Jan 2022 21:49:14 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id m6sm30607229pgb.31.2022.01.02.21.49.12
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 02 Jan 2022 21:49:14 -0800 (PST)
+From:   Li-hao Kuo <lhjeff911@gmail.com>
+To:     p.zabel@pengutronix.de, daniel.thompson@linaro.org,
+        lee.jones@linaro.org, u.kleine-koenig@pengutronix.de,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     lh.kuo@sunplus.com, wells.lu@sunplus.com,
+        Li-hao Kuo <lhjeff911@gmail.com>
+Subject: [PATCH v3 0/2] Add I2C control driver for Sunplus SP7021 SoC   
+Date:   Mon,  3 Jan 2022 13:49:21 +0800
+Message-Id: <cover.1641188699.git.lhjeff911@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In current implementation, mtk_cec_mask() writes val into target register
-and ignores the mask. After talking to our hdmi experts, mtk_cec_mask()
-should read a register, clean only mask bits, and update (val | mask) bits
-to the register.
+This is a patch series for I2C driver for Sunplus SP7021 SoC.	
+	
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates	
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and	
+etc.) into a single chip. It is designed for industrial control.	
+	
+Refer to:	
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview	
+https://tibbo.com/store/plus1.html
 
-Fixes: 8f83f26891e1 ("drm/mediatek: Add HDMI support")
+Li-hao Kuo (2):
+  I2C: Add I2C driver for Sunplus SP7021
+  devicetree bindings I2C Add bindings doc for Sunplus SP7021
 
-Cc: Zhiqiang Lin <zhiqiang.lin@mediatek.com>
-Cc: CK Hu <ck.hu@mediatek.com>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>
+ .../devicetree/bindings/i2c/i2c-sunplus.yaml       |   72 +
+ MAINTAINERS                                        |    7 +
+ drivers/i2c/busses/Kconfig                         |   10 +
+ drivers/i2c/busses/Makefile                        |    1 +
+ drivers/i2c/busses/i2c-sunplus.c                   | 1483 ++++++++++++++++++++
+ 5 files changed, 1573 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
+ create mode 100644 drivers/i2c/busses/i2c-sunplus.c
 
-Signed-off-by: Miles Chen <miles.chen@mediatek.com>
-
----
-
-Change since v1:
-add Fixes tag
-
-Change since v2:
-add explanation of mtk_cec_mask()
-
-Change since v3:
-change misleading subject and modify the commit message since this is a bug fix patch
-
----
- drivers/gpu/drm/mediatek/mtk_cec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/mediatek/mtk_cec.c b/drivers/gpu/drm/mediatek/mtk_cec.c
-index e9cef5c0c8f7..cdfa648910b2 100644
---- a/drivers/gpu/drm/mediatek/mtk_cec.c
-+++ b/drivers/gpu/drm/mediatek/mtk_cec.c
-@@ -85,7 +85,7 @@ static void mtk_cec_mask(struct mtk_cec *cec, unsigned int offset,
- 	u32 tmp = readl(cec->regs + offset) & ~mask;
- 
- 	tmp |= val & mask;
--	writel(val, cec->regs + offset);
-+	writel(tmp, cec->regs + offset);
- }
- 
- void mtk_cec_set_hpd_event(struct device *dev,
 -- 
-2.18.0
+2.7.4
 

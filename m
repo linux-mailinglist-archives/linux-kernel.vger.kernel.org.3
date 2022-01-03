@@ -2,197 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A9D4837D9
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 20:58:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42CE14837DB
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 20:59:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234736AbiACT6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 14:58:49 -0500
-Received: from wout4-smtp.messagingengine.com ([64.147.123.20]:37365 "EHLO
-        wout4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230228AbiACT6r (ORCPT
+        id S234872AbiACT7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 14:59:01 -0500
+Received: from mail-qv1-f46.google.com ([209.85.219.46]:34741 "EHLO
+        mail-qv1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230228AbiACT7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 14:58:47 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 8B67C3200C14;
-        Mon,  3 Jan 2022 14:58:46 -0500 (EST)
-Received: from imap44 ([10.202.2.94])
-  by compute5.internal (MEProxy); Mon, 03 Jan 2022 14:58:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type:content-transfer-encoding; s=fm1; bh=gvgPv
-        1yG5EQYgZkYxMgOW+6+O+OmDk4fEPVfpu6yuIQ=; b=M4bsaYto/3wCLoO1zzRll
-        fH5SVoq3ie7OyCHmEeduFyYBDT2s7ZoXe99QYQoLHCOwtE87ZxhbAwI7+Oz7sE1s
-        Tv1qVviQNg1y30wxZF3aiHvQM2Mgso10JlbTFdki4OUP8Erq21W9IhZGYptVt1o/
-        as+eRqgxndLub5q3PsDJnbUOxVlsibY/5vdu2loySdmQbM5R/sz6VeQV0JQ24n7d
-        H69QikP/9eu0I9eeOKR29ZkFzYRdlyKYCIo6CQhVUZvaRI7A5BNzWK7LcaBgoLpo
-        tt6uAWuV00hlxWFYs9QxF9y9J8mHqcSKBcRhVO+/EGTZazrsRSt7nq61lV3CNUkO
-        w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=gvgPv1yG5EQYgZkYxMgOW+6+O+OmDk4fEPVfpu6yu
-        IQ=; b=WlyW14BG9PM16i0Z8ywr4FG0wd2NgHR1xinTzVAwUi/nWpFywwUemsLiP
-        6drVmO1YqOwUbF9UVIDY+rrtTVY5f2N+aT+qMwT9PPO+hAEXy7KvHrqqV54jNjlB
-        S9YjfU97Gm8OyByVipRLgp1Jy+5InHFGbwWcsIPaM625IJXELFFty5qYzERYvF/i
-        dsFle0/Bw4hHiy4OACVyPnarlgVYuGpyNo0ZanTHlNwve1T7R66QplmoxJOk7NBZ
-        aAPhwgDT+cMPVwztEtUazlU8o1JK4ou9fWflt+FRknuU7/nR/Zu73F7QZeyI4CLz
-        KrF6bkJGr1g5nRUmrFf+IEpCrD7qQ==
-X-ME-Sender: <xms:dVXTYT0W3l8xIDXWIMs9XuCREcrihqVe49HPma8unnTY8filtXv3Kw>
-    <xme:dVXTYSFivAfa3d_kXMmRLT7fRpoJuuTKZLlKg5YzE52YWwu7gU0d2T7RjYpp8GGUQ
-    f5QAU2sKoQDJr4GDAo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrudefuddgudefudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
-    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
-    hmqeenucggtffrrghtthgvrhhnpeefteegkeevfeethffgudehgedvueduvdeifedvvdel
-    hfefheekteefueektdefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:dVXTYT7GK5cFN0QkNOGRKcxupbGaUZJlDgOyrlAqcplB20UIHrr1_g>
-    <xmx:dVXTYY2Iynu1px52OMAGyPz2dLL1wt5ih_9iQdT7WIBGhzt_JybUtw>
-    <xmx:dVXTYWGWKhDO7uLkRtjWqz_zcMsWzR5KqvJmICxKdRVtp8I0mcSx-w>
-    <xmx:dlXTYSAkZjDTetsBEDg52Q9awJsMVYzgajyAVjYl_0LKVc6D_cW6QA>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 772C2FA0AA6; Mon,  3 Jan 2022 14:58:45 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4525-g8883000b21-fm-20211221.001-g8883000b
-Mime-Version: 1.0
-Message-Id: <55b214dc-315d-4157-9a69-89241a846898@www.fastmail.com>
-In-Reply-To: <20211126015216.26605-1-zhangqing@loongson.cn>
-References: <20211126015216.26605-1-zhangqing@loongson.cn>
-Date:   Mon, 03 Jan 2022 19:58:24 +0000
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "Qing Zhang" <zhangqing@loongson.cn>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-Cc:     devicetree@vger.kernel.org,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 1/3] MIPS: Loongson64: Add Loongson-2K1000 reset platform driver
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        Mon, 3 Jan 2022 14:59:00 -0500
+Received: by mail-qv1-f46.google.com with SMTP id ke6so32054684qvb.1;
+        Mon, 03 Jan 2022 11:59:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LKB1Oi91f6KvIqp2AxsAOCYi2Log+4aZ60rW4FxHnFY=;
+        b=NOP4VwFcwxQQGSTvJAUiBZXRbnOUt3QByaGdhA+WGyP71DZxbuRPdKK5ezUpJujh81
+         u00L8lhEuy76UE02g9G2iS/Uth+vdNyKUUsQTBWE05iPACE3PZoKWyt8xygpduq1y5Zl
+         YkrcOLofPbJqKI8Vn1278Eg1J0J/IulqxqMbKXzD2CvVK+Q9+3WvvfN8YBk8iJdYQwun
+         DI2I7oNunnO5t5m4ij5xOHGh3g7V8JnjPte8d+qQliny+k22CRVhCnyMrdaz71W1q2xL
+         ibONjTI1wLjQjYw1Kl7xgIFmKYen37zOs1FBvU1LBEb8L6C2RD1ufesQpQbXbKmFinoK
+         PJ+w==
+X-Gm-Message-State: AOAM533us76B1cVOR/8/myJn6OEq6lrv5O4EkPglNnWwOMBEDGrqq+Od
+        Oow8nSldYfDC82Tzz5y8y5GtV3BzH64Cy/Man38=
+X-Google-Smtp-Source: ABdhPJxzQiqGAYN2+YHxjayMyF9epaOrJg19JLzEhfCXYiawtKXRq5dI7vTa4ZfZTKVPYumKCbyma0KyT71hC/J6JEc=
+X-Received: by 2002:a05:6214:224a:: with SMTP id c10mr8699766qvc.35.1641239939785;
+ Mon, 03 Jan 2022 11:58:59 -0800 (PST)
+MIME-Version: 1.0
+References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien>
+ <alpine.DEB.2.22.394.2112190734070.3181@hadrien> <87wnk0s0tf.fsf@riseup.net>
+ <CAJZ5v0i7gBtm6x+zUUzhxXjmYhPwr=JxvOuMZ0aD9qxnjE9YKw@mail.gmail.com>
+ <878rwdse9o.fsf@riseup.net> <alpine.DEB.2.22.394.2112281745240.24929@hadrien>
+ <CAJZ5v0i4xnesG=vfx7Y-wyeaGvjDeGcsaOVqhRLnV8YXk-m2gA@mail.gmail.com>
+ <alpine.DEB.2.22.394.2112281845180.24929@hadrien> <CAJZ5v0grayg9evWsB5ktKSFq=yA_AHoEWSfpSkQ=MVQ-=butfA@mail.gmail.com>
+ <alpine.DEB.2.22.394.2112291012030.24929@hadrien> <CAJZ5v0g5wDxYXA-V=Ex_Md82hgnj5K6Vr0tavFFVz=uBqo8wag@mail.gmail.com>
+ <alpine.DEB.2.22.394.2112301840360.15550@hadrien> <CAJZ5v0h38jh3gyTp9W0ws0yXyfK=F+TQ7VYRVx4aGXhNeSObEg@mail.gmail.com>
+ <alpine.DEB.2.22.394.2112301919240.15550@hadrien> <CAJZ5v0haa5QWvTUUg+wwSHvuWyk8pic1N0kox=E1ZKNrHSFuzw@mail.gmail.com>
+ <alpine.DEB.2.22.394.2112301942360.15550@hadrien> <CAJZ5v0im+Cke7tcNRav2VCyf5Qvi7qC29aF+9A1kVZZmt7cu6g@mail.gmail.com>
+ <alpine.DEB.2.22.394.2201031922110.3020@hadrien>
+In-Reply-To: <alpine.DEB.2.22.394.2201031922110.3020@hadrien>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 3 Jan 2022 20:58:48 +0100
+Message-ID: <CAJZ5v0hsCjKA3EisK9s_S8Vb9Tgm4eps1FTKvUSfd9_JPh5wBQ@mail.gmail.com>
+Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Francisco Jerez <currojerez@riseup.net>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-=E5=9C=A82021=E5=B9=B411=E6=9C=8826=E6=97=A5=E5=8D=81=E4=B8=80=E6=9C=88 =
-=E4=B8=8A=E5=8D=881:52=EF=BC=8CQing Zhang=E5=86=99=E9=81=93=EF=BC=9A
-> Add power management register operations to support reboot and powerof=
-f.
+On Mon, Jan 3, 2022 at 7:23 PM Julia Lawall <julia.lawall@inria.fr> wrote:
 >
-> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
-> ---
-> v8-v9:
-> No change
-> ---
->  drivers/platform/mips/Kconfig      |  6 ++++
->  drivers/platform/mips/Makefile     |  1 +
->  drivers/platform/mips/ls2k-reset.c | 53 ++++++++++++++++++++++++++++++
->  3 files changed, 60 insertions(+)
->  create mode 100644 drivers/platform/mips/ls2k-reset.c
+> > > > Can you please run the 32 spinning threads workload (ie. on one
+> > > > package) and with P-state locked to 10 and then to 20 under turbostat
+> > > > and send me the turbostat output for both runs?
+> > >
+> > > Attached.
+> > >
+> > > Pstate 10: spin_minmax_10_dahu-9_5.15.0freq_schedutil_11.turbo
+> > > Pstate 20: spin_minmax_20_dahu-9_5.15.0freq_schedutil_11.turbo
+> >
+> > Well, in  both cases there is only 1 CPU running and it is running at
+> > 1 GHz (ie. P-state 10) all the time as far as I can say.
 >
-> diff --git a/drivers/platform/mips/Kconfig b/drivers/platform/mips/Kco=
-nfig
-> index 8ac149173c64b..d421e14823957 100644
-> --- a/drivers/platform/mips/Kconfig
-> +++ b/drivers/platform/mips/Kconfig
-> @@ -30,4 +30,10 @@ config RS780E_ACPI
->  	help
->  	  Loongson RS780E PCH ACPI Controller driver.
->=20
-> +config LS2K_RESET
-> +	bool "Loongson-2K1000 Reset Controller"
-> +	depends on MACH_LOONGSON64 || COMPILE_TEST
-> +	help
-> +	  Loongson-2K1000 Reset Controller driver.
-> +
->  endif # MIPS_PLATFORM_DEVICES
-> diff --git a/drivers/platform/mips/Makefile=20
-> b/drivers/platform/mips/Makefile
-> index 1781490987773..4c71444e453a6 100644
-> --- a/drivers/platform/mips/Makefile
-> +++ b/drivers/platform/mips/Makefile
-> @@ -1,3 +1,4 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  obj-$(CONFIG_CPU_HWMON) +=3D cpu_hwmon.o
->  obj-$(CONFIG_RS780E_ACPI) +=3D rs780e-acpi.o
-> +obj-$(CONFIG_LS2K_RESET) +=3D ls2k-reset.o
-> diff --git a/drivers/platform/mips/ls2k-reset.c=20
-> b/drivers/platform/mips/ls2k-reset.c
-> new file mode 100644
-> index 0000000000000..b70e7b8a092c2
-> --- /dev/null
-> +++ b/drivers/platform/mips/ls2k-reset.c
-> @@ -0,0 +1,53 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + *  Copyright (C) 2021, Qing Zhang <zhangqing@loongson.cn>
-> + *  Loongson-2K1000 reset support
-> + */
-> +
-> +#include <linux/of_address.h>
-> +#include <linux/pm.h>
-> +#include <asm/reboot.h>
-> +
-> +#define	PM1_STS		0x0c /* Power Management 1 Status Register */
-> +#define	PM1_CNT		0x14 /* Power Management 1 Control Register */
-> +#define	RST_CNT		0x30 /* Reset Control Register */
-> +
-> +static void __iomem *base;
-> +
-> +static void ls2k_restart(char *command)
-> +{
-> +	writel(0x1, base + RST_CNT);
-> +}
-> +
-> +static void ls2k_poweroff(void)
-> +{
-> +	/* Clear */
-> +	writel((readl(base + PM1_STS) & 0xffffffff), base + PM1_STS);
-> +	/* Sleep Enable | Soft Off*/
-> +	writel(GENMASK(12, 10) | BIT(13), base + PM1_CNT);
-> +}
-> +
-> +static int ls2k_reset_init(void)
-> +{
-> +	struct device_node *np;
-> +
-> +	np =3D of_find_compatible_node(NULL, NULL, "loongson,ls2k-pm");
-> +	if (!np) {
-> +		pr_info("Failed to get PM node\n");
-> +		return -ENODEV;
+> It looks better now.  I included 1 core (core 0) for pstates 10, 20, and
+> 21, and 32 cores (socket 0) for the same pstates.
 
-Hi Qing,
+OK, so let's first consider the runs where 32 cores (entire socket 0)
+are doing the work.
 
-Could you please remove this print.
-Otherwise we will have this suspecious log all loongson64 system, not on=
-ly ls2k.
+This set of data clearly shows that running the busy cores at 1 GHz
+takes less energy than running them at 2 GHz (the ratio of these
+numbers is roughly 2/3 if I got that right).  This means that P-state
+10 is more energy efficient than P-state 20, as expected.
 
-Thanks.
+However, the cost of running at 2.1 GHz is much greater than the cost
+of running at 2 GHz and I'm still thinking that this is attributable
+to some kind of voltage increase between P-state 20 and P-state 21
+(which, interestingly enough, affects the second "idle" socket too).
 
-- Jiaxun
+In the other set of data, where only 1 CPU is doing the work, P-state
+10 is still more energy-efficient than P-state 20, but it takes more
+time to do the work at 1 GHz, so the energy lost due to leakage
+increases too and it is "leaked" by all of the CPUs in the package
+(including the idle ones in core C-states), so overall this loss
+offsets the gain from using a more energy-efficient P-state.  At the
+same time, socket 1 can spend more time in PC2 when the busy CPU is
+running at 2 GHz (which means less leakage in that socket), so with 1
+CPU doing the work the total cost of running at 2 GHz is slightly
+smaller than the total cost of running at 1 GHz.  [Note how important
+it is to take the other CPUs in the system into account in this case,
+because there are simply enough of them to affect one-CPU measurements
+in a significant way.]
 
-> +	}
-> +
-> +	base =3D of_iomap(np, 0);
-> +	if (!base) {
-> +		pr_info("Failed to map PM register base address\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	_machine_restart =3D ls2k_restart;
-> +	pm_power_off =3D ls2k_poweroff;
-> +
-> +	of_node_put(np);
-> +	return 0;
-> +}
-> +
-> +arch_initcall(ls2k_reset_init);
-> --=20
-> 2.31.0
-
---=20
-- Jiaxun
+Still, when going from 2 GHz to 2.1 GHz, the voltage jump causes the
+energy to increase significantly again.

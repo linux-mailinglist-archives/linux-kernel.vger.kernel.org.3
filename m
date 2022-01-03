@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEFCC4832B3
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:31:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADEE948326D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:27:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234273AbiACOaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:30:21 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:60116 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234342AbiACO2r (ORCPT
+        id S233880AbiACO1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:27:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233651AbiACO0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:28:47 -0500
+        Mon, 3 Jan 2022 09:26:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE82C06137C;
+        Mon,  3 Jan 2022 06:26:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 326FEB80EF6;
-        Mon,  3 Jan 2022 14:28:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E68CC36AEB;
-        Mon,  3 Jan 2022 14:28:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A14076111A;
+        Mon,  3 Jan 2022 14:26:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 753CAC36AED;
+        Mon,  3 Jan 2022 14:26:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220123;
-        bh=sc5DPwU+l2GQloPVMmLyaws1M/V/9eBczfwPNjl1ZOs=;
+        s=korg; t=1641220005;
+        bh=CRHlpZ/k7qgCu9yP+xEGcp4K1hZv6Ldobe3tOC1Ql9U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E2iy29AJ93beySy0ia7Kq/6w52/b7lQzEwFWuNSLe1MTfF3hOvCYzTgqPj7NAWNeN
-         +WY27SzjZDnXX1Na8GccpV6FZHGVyPcd4v8GJJkpfdGPnP/kp+dDbI3XsKSYN53WB4
-         D5FGJPnPVpQ33G3EGqkJNz7Fa3Ta3NNZioIQVAdg=
+        b=asKSieAl+MWTLHn23QpD9A33EQPY7mr2dESa2Et3xlZFMCgORSzO0EzDGhRUoHKgh
+         6XfXZCfLqTM6Yd1xGrHA9EIIMh+ybAoMYXt8VyAqH/kwEG90DaTwEtlpDUxzzydCGG
+         zS59tbxtFI2fvZbb9G3myVBLfSV38vUuxqGsIwPA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Karsten Graul <kgraul@linux.ibm.com>,
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 18/48] net/smc: fix using of uninitialized completions
-Date:   Mon,  3 Jan 2022 15:23:55 +0100
-Message-Id: <20220103142054.093098564@linuxfoundation.org>
+Subject: [PATCH 5.4 18/37] NFC: st21nfca: Fix memory leak in device probe and remove
+Date:   Mon,  3 Jan 2022 15:23:56 +0100
+Message-Id: <20220103142052.440674542@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142053.466768714@linuxfoundation.org>
-References: <20220103142053.466768714@linuxfoundation.org>
+In-Reply-To: <20220103142051.883166998@linuxfoundation.org>
+References: <20220103142051.883166998@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,52 +50,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Karsten Graul <kgraul@linux.ibm.com>
+From: Wei Yongjun <weiyongjun1@huawei.com>
 
-[ Upstream commit 6d7373dabfd3933ee30c40fc8c09d2a788f6ece1 ]
+[ Upstream commit 1b9dadba502234eea7244879b8d5d126bfaf9f0c ]
 
-In smc_wr_tx_send_wait() the completion on index specified by
-pend->idx is initialized and after smc_wr_tx_send() was called the wait
-for completion starts. pend->idx is used to get the correct index for
-the wait, but the pend structure could already be cleared in
-smc_wr_tx_process_cqe().
-Introduce pnd_idx to hold and use a local copy of the correct index.
+'phy->pending_skb' is alloced when device probe, but forgot to free
+in the error handling path and remove path, this cause memory leak
+as follows:
 
-Fixes: 09c61d24f96d ("net/smc: wait for departure of an IB message")
-Signed-off-by: Karsten Graul <kgraul@linux.ibm.com>
+unreferenced object 0xffff88800bc06800 (size 512):
+  comm "8", pid 11775, jiffies 4295159829 (age 9.032s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000d66c09ce>] __kmalloc_node_track_caller+0x1ed/0x450
+    [<00000000c93382b3>] kmalloc_reserve+0x37/0xd0
+    [<000000005fea522c>] __alloc_skb+0x124/0x380
+    [<0000000019f29f9a>] st21nfca_hci_i2c_probe+0x170/0x8f2
+
+Fix it by freeing 'pending_skb' in error and remove.
+
+Fixes: 68957303f44a ("NFC: ST21NFCA: Add driver for STMicroelectronics ST21NFCA NFC Chip")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/smc/smc_wr.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/nfc/st21nfca/i2c.c | 29 ++++++++++++++++++++---------
+ 1 file changed, 20 insertions(+), 9 deletions(-)
 
-diff --git a/net/smc/smc_wr.c b/net/smc/smc_wr.c
-index 9dbe4804853e0..a71c9631f1ad3 100644
---- a/net/smc/smc_wr.c
-+++ b/net/smc/smc_wr.c
-@@ -288,18 +288,20 @@ int smc_wr_tx_send_wait(struct smc_link *link, struct smc_wr_tx_pend_priv *priv,
- 			unsigned long timeout)
- {
- 	struct smc_wr_tx_pend *pend;
-+	u32 pnd_idx;
- 	int rc;
+diff --git a/drivers/nfc/st21nfca/i2c.c b/drivers/nfc/st21nfca/i2c.c
+index 23ed11f91213d..6ea59426ab0bf 100644
+--- a/drivers/nfc/st21nfca/i2c.c
++++ b/drivers/nfc/st21nfca/i2c.c
+@@ -533,7 +533,8 @@ static int st21nfca_hci_i2c_probe(struct i2c_client *client,
+ 	phy->gpiod_ena = devm_gpiod_get(dev, "enable", GPIOD_OUT_LOW);
+ 	if (IS_ERR(phy->gpiod_ena)) {
+ 		nfc_err(dev, "Unable to get ENABLE GPIO\n");
+-		return PTR_ERR(phy->gpiod_ena);
++		r = PTR_ERR(phy->gpiod_ena);
++		goto out_free;
+ 	}
  
- 	pend = container_of(priv, struct smc_wr_tx_pend, priv);
- 	pend->compl_requested = 1;
--	init_completion(&link->wr_tx_compl[pend->idx]);
-+	pnd_idx = pend->idx;
-+	init_completion(&link->wr_tx_compl[pnd_idx]);
+ 	phy->se_status.is_ese_present =
+@@ -544,7 +545,7 @@ static int st21nfca_hci_i2c_probe(struct i2c_client *client,
+ 	r = st21nfca_hci_platform_init(phy);
+ 	if (r < 0) {
+ 		nfc_err(&client->dev, "Unable to reboot st21nfca\n");
+-		return r;
++		goto out_free;
+ 	}
  
- 	rc = smc_wr_tx_send(link, priv);
- 	if (rc)
- 		return rc;
- 	/* wait for completion by smc_wr_tx_process_cqe() */
- 	rc = wait_for_completion_interruptible_timeout(
--					&link->wr_tx_compl[pend->idx], timeout);
-+					&link->wr_tx_compl[pnd_idx], timeout);
- 	if (rc <= 0)
- 		rc = -ENODATA;
- 	if (rc > 0)
+ 	r = devm_request_threaded_irq(&client->dev, client->irq, NULL,
+@@ -553,15 +554,23 @@ static int st21nfca_hci_i2c_probe(struct i2c_client *client,
+ 				ST21NFCA_HCI_DRIVER_NAME, phy);
+ 	if (r < 0) {
+ 		nfc_err(&client->dev, "Unable to register IRQ handler\n");
+-		return r;
++		goto out_free;
+ 	}
+ 
+-	return st21nfca_hci_probe(phy, &i2c_phy_ops, LLC_SHDLC_NAME,
+-					ST21NFCA_FRAME_HEADROOM,
+-					ST21NFCA_FRAME_TAILROOM,
+-					ST21NFCA_HCI_LLC_MAX_PAYLOAD,
+-					&phy->hdev,
+-					&phy->se_status);
++	r = st21nfca_hci_probe(phy, &i2c_phy_ops, LLC_SHDLC_NAME,
++			       ST21NFCA_FRAME_HEADROOM,
++			       ST21NFCA_FRAME_TAILROOM,
++			       ST21NFCA_HCI_LLC_MAX_PAYLOAD,
++			       &phy->hdev,
++			       &phy->se_status);
++	if (r)
++		goto out_free;
++
++	return 0;
++
++out_free:
++	kfree_skb(phy->pending_skb);
++	return r;
+ }
+ 
+ static int st21nfca_hci_i2c_remove(struct i2c_client *client)
+@@ -574,6 +583,8 @@ static int st21nfca_hci_i2c_remove(struct i2c_client *client)
+ 
+ 	if (phy->powered)
+ 		st21nfca_hci_i2c_disable(phy);
++	if (phy->pending_skb)
++		kfree_skb(phy->pending_skb);
+ 
+ 	return 0;
+ }
 -- 
 2.34.1
 

@@ -2,136 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD2614831AB
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:04:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 704144831AD
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:06:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233238AbiACOET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:04:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
+        id S233247AbiACOGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:06:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiACOES (ORCPT
+        with ESMTP id S229518AbiACOGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:04:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50618C061761
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 06:04:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E17BD610A5
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 14:04:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77DF9C36AEB;
-        Mon,  3 Jan 2022 14:04:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641218657;
-        bh=b1Z4TUnfAUBsXmy2Byf0FBL1mQQmUSO3JuT+f5m4J40=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r9hqlQphtM7RoWq0STsFvdR9qOQ4bJybVsLXdRDBE0qBxMzIYONFvCnl/RIaVMltd
-         OQ41Ea8U6F68sEoyxcFiW2QxoEoy4vj3by15x4JJXAM0FLra0AVLQHbY+m0AESBsfe
-         2MB7Fnl822emLlyTxERL6Y6/xpftTXvGxNg3CuyI=
-Date:   Mon, 3 Jan 2022 15:04:14 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Daniel Xu <dxu@dxuuu.xyz>
-Cc:     arnd@arndb.de, giometti@enneenne.com, linux-kernel@vger.kernel.org,
-        thesven73@gmail.com, ojeda@kernel.org
-Subject: Re: [RFC char-misc-next 1/2] cdev: Add private pointer to struct cdev
-Message-ID: <YdMCXierm0K6cVA/@kroah.com>
-References: <cover.1641185192.git.dxu@dxuuu.xyz>
- <34157f5e8dbaa1063dd76608e1e57244305460e8.1641185192.git.dxu@dxuuu.xyz>
+        Mon, 3 Jan 2022 09:06:01 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC69C061761
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 06:06:01 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id m21so137523493edc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 06:06:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7l1N3XOpZYsurbeAEhyNi3v7swAEPB3pgAvLGm6C2g8=;
+        b=KSXmxgR1TNYYPOKYqVk8SrfAl0dva5wUZMGCdceMpDUP71rhz4XCgNL+DJVm58RA1w
+         INgZHgmN4WVmN9NDEk0ECUzyN1Zutdevg8mntQ1M4U4zD1rnAVAJBOBLaQJ2RLxTOjHx
+         BzvQEn1oEzqvvowzieRYTBnBXYMkK2l0E10/Ot1r700sG/7fDYp2Zq+/K8fKBVET+NKB
+         jZuD1Pj+UQVcsatZ/Ib2PX2OCvTsFZZQ2TdT2qrnuY/1wnyDisQN2z9EP/6wwMXnjok0
+         2Ahd/Hb10V5pRDjtD/3Bm2GIzZ04jJJZvPGV0zEB59WpaNpFq4S2lEi5H8co1vDszMeo
+         97EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7l1N3XOpZYsurbeAEhyNi3v7swAEPB3pgAvLGm6C2g8=;
+        b=rWaZaOPLB+rLcUiNO7M4CSr+jYYu3Kn8NO/VBZr9215iKT+6HP99EtLDeKzC+xUojT
+         5yRe6badc2wCUjdLUF1qQJHUZALU4UhjmRiX/VhVYCMvMcmsyVMOm2iiMShkMtSB61pu
+         0b3uUwXkOzjCkEyGdfnOC18+Jz2WUap35bjV+Ak/s72JPKmA1qt3NZW527qEj8HOMs93
+         7X+SmYuWRCKUl22ErVXh0/oafvW6k7CRgJ20LpqIMRtKwr4Q21TQhrWWecj2RAh4brB9
+         saB2dmafCAsGVUnJt0BzXUlBN8vLN8+qKAxC5YhEHIGz4BtU327FJjRIQwfaNgwfYQzf
+         JkGg==
+X-Gm-Message-State: AOAM533F4rztPnp4P6aLwn7EG/PGmRq0dkFSj38EmEaN9jpDTkBgw7Qf
+        RHtF8YCK3usm99nbSTFnJG0=
+X-Google-Smtp-Source: ABdhPJz9dO+U2IX25lTafqd8SM9pTmNc4D8Sywjzj+Fy4Ev6NgZGXr4X5biNoXH+SQV4fua6mhhdBA==
+X-Received: by 2002:a50:9d48:: with SMTP id j8mr45399399edk.192.1641218759995;
+        Mon, 03 Jan 2022 06:05:59 -0800 (PST)
+Received: from cosmos.lan (77.116.2.39.wireless.dyn.drei.com. [77.116.2.39])
+        by smtp.gmail.com with ESMTPSA id k16sm10694297ejk.172.2022.01.03.06.05.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jan 2022 06:05:59 -0800 (PST)
+From:   Christian Lachner <gladiac@gmail.com>
+To:     perex@perex.cz, tiwai@suse.com, kailang@realtek.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Christian Lachner <gladiac@gmail.com>
+Subject: [PATCH v2 0/1] ALSA: hda/realtek - Fix silent output on Gigabyte X570 Aorus Master after reboot from Windows
+Date:   Mon,  3 Jan 2022 15:05:16 +0100
+Message-Id: <20220103140517.30273-1-gladiac@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <34157f5e8dbaa1063dd76608e1e57244305460e8.1641185192.git.dxu@dxuuu.xyz>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 02, 2022 at 09:01:39PM -0800, Daniel Xu wrote:
-> struct cdev is a kobject managed struct, meaning kobject is ultimately
-> responsible for deciding when the object is freed. Because kobject uses
-> reference counts, it also means a cdev object isn't guaranteed to be
-> cleaned up with a call to cdev_del() -- the cleanup may occur later.
-> 
-> Unfortunately, this can result in subtle use-after-free bugs when struct
-> cdev is embedded in another struct, and the larger struct is freed
-> immediately after cdev_del(). For example:
-> 
->     struct contains_cdev {
->             struct cdev cdev;
->     }
-> 
->     void init(struct contains_cdev *cc) {
->             cdev_init(&cc->cdev);
->     }
-> 
->     void cleanup(struct contains_cdev *cc) {
->             cdev_del(&cc->cdev);
->             kfree(cc);
->     }
-> 
-> This kind of code can reliably trigger a KASAN splat with
-> CONFIG_KASAN=y and CONFIG_DEBUG_KOBJECT_RELEASE=y.
-> 
-> A fairly palatable workaround is replacing cdev_init() with cdev_alloc()
-> and storing a pointer instead. For example, this is totally fine:
-> 
->     struct contains_cdev_ptr {
->             struct cdev *cdev;
->     }
-> 
->     int init(struct contains_cdev_ptr *cc) {
->             cc->cdev = cdev_alloc();
->             if (!cc->cdev) {
->                     return -ENOMEM;
->             }
-> 
->             return 0;
->     }
-> 
->     void cleanup(struct contains_cdev_ptr *cc) {
->             cdev_del(cc->cdev);
->             kfree(cc);
->     }
-> 
-> The only downside from this workaround (other than the extra allocation)
-> is that container_of() upcasts no longer work. This is quite unfortunate
-> for any code that implements struct file_operations and wants to store
-> extra data with a struct cdev. With cdev_alloc() pointer, it's no longer
-> possible to do something like:
-> 
->     struct contains_cdev *cc = container_of(inode->i_cdev,
->                                             struct contains_cdev,
->                                             cdev);
-> 
-> Thus, I propose to add a void *private field to struct cdev so that
-> callers can store a pointer to the containing struct instead of using
-> container_of().
-> 
-> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> ---
->  include/linux/cdev.h | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/include/linux/cdev.h b/include/linux/cdev.h
-> index 0e8cd6293deb..0e674e900512 100644
-> --- a/include/linux/cdev.h
-> +++ b/include/linux/cdev.h
-> @@ -18,6 +18,7 @@ struct cdev {
->  	struct list_head list;
->  	dev_t dev;
->  	unsigned int count;
-> +	void *private;
+This is version 2 of my patch. It implements suggestions from Takashi Iwai.
+Thanks for that! Furthermore, I re-analyzed all the relevant coefs and
+removed those that are not actually needed.
 
-I understand your request here, but this is not how to use a cdev.  It
-should be embedded in a larger structure, and then you can always "cast
-out" to get the real structure here.  If you can't do that, then this
-private pointer doesn't make much sense at all as it too would be
-invalid.
+===
 
-Ideally the kobject in the cdev structure would not be used by things
-"outside" of the cdev core, but that ship seems long gone.  So just rely
-on the structure that this kobject protects, and you should be fine.
+This patch addresses an issue where after rebooting from Windows into Linux
+there would be no audio output.
 
-thanks,
+It turns out that the Realtek Audio driver on Windows changes some coeffs
+which are not being reset/reinitialized when rebooting the machine. As a
+result, there is no audio output until these coeffs are being reset to
+their initial state. This patch takes care of that by setting known-good
+(initial) values to the coeffs.
 
-greg k-h
+The coeffs were collected via alsa-info, see:
+  broken: https://pastebin.com/4bRBSseH
+  working: https://pastebin.com/WUTufvZB
+
+I also created a script which fixes the audio at runtime.
+
+ #!/bin/sh
+ hda-verb /dev/snd/hwC2D0 0x20 SET_COEF_INDEX 0x1a
+ hda-verb /dev/snd/hwC2D0 0x20 SET_PROC_COEF 0x01c1
+ hda-verb /dev/snd/hwC2D0 0x20 SET_COEF_INDEX 0x1b
+ hda-verb /dev/snd/hwC2D0 0x20 SET_PROC_COEF 0x0202
+ hda-verb /dev/snd/hwC2D0 0x20 SET_COEF_INDEX 0x43
+ hda-verb /dev/snd/hwC2D0 0x20 SET_PROC_COEF 0x3005
+
+However, obviously, we can and should fix this in the kernel.
+
+We initially relied upon alc1220_fixup_clevo_p950() to fix some pins in the
+connection list. However, it also sets coef 0x7 which does not need to be
+touched. Furthermore, to prevent mixing device-specific quirks I introduced
+a new alc1220_fixup_gb_x570() which is heavily based on
+alc1220_fixup_clevo_p950() but does not set coeff 0x7 and fixes the coeffs
+that are actually needed instead.
+
+This new alc1220_fixup_gb_x570() is believed to also work for other boards,
+like the Gigabyte X570 Aorus Extreme and the newer Gigabyte Aorus X570S
+Master. However, as there is no way for me to test these I initially only
+enable this new behaviour for the mainboard I have which is the Gigabyte
+X570(non-S) Aorus Master.
+
+I tested this patch on the 5.15 branch as well as on master and it is
+working well for me.
+
+Christian Lachner (1):
+  ALSA: hda/realtek - Fix silent output on Gigabyte X570 Aorus Master
+    after reboot from Windows
+
+ sound/pci/hda/patch_realtek.c | 30 +++++++++++++++++++++++++++++-
+ 1 file changed, 29 insertions(+), 1 deletion(-)
+
+-- 
+2.34.1
+

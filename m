@@ -2,118 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE7748348D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 17:06:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A31DF483495
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 17:08:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234345AbiACQGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 11:06:37 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:50254 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231648AbiACQGg (ORCPT
+        id S234399AbiACQIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 11:08:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231648AbiACQIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 11:06:36 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0B3D6115F;
-        Mon,  3 Jan 2022 16:06:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7806EC36AEB;
-        Mon,  3 Jan 2022 16:06:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641225995;
-        bh=DKwn2a4a8WstTrBz3YaW8iPlQgOGN/W5/nC7S2XFzZQ=;
-        h=Subject:To:References:From:Date:In-Reply-To:From;
-        b=Ynx9sCgtfBebo4tJlZiZKh0DkYZfGghQtMTz2vqmRzJbhuYU5Q2dSJMYKIbJ8i5sn
-         3nDeJDMCXg/jmxxFz/YY7YUUbQ5XfLTq5u1SZBBGb4HGvZtiWOlfpiUkHinsp2p5OJ
-         qrmXJsWNtkcTcgELDlHql50PV6PSfOnRynQbifGOXtK7GaLsUD6J8isnXK1ffazq+4
-         HMNeueW1n/hCAK1v8ilC5EztFgSGVRQUcbQDnBCEhBaWAgC38G6qS2SsNB3VlzMWwZ
-         c/QwuDjzZAxYrJzrbOaJsO/o2DNM11IRt17XGaaeuJOQk1Igtv2awQ5h+7QYmOEptl
-         uTKl/1G+H3kpg==
-Subject: Re: [PATCH 00/19] arm/arm64/dt-bindings: altera/intel: fix DTS and
- dtschema
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-mmc@vger.kernel.org
-References: <20211227133131.134369-1-krzysztof.kozlowski@canonical.com>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-Message-ID: <32990891-1378-d20e-7caa-a807964aab36@kernel.org>
-Date:   Mon, 3 Jan 2022 10:06:26 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 3 Jan 2022 11:08:51 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25BEC061761
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 08:08:50 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id i31so75838587lfv.10
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 08:08:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=d15sFOXBRn1YqhFC4TPixMjg1M5xVWdy0HG7Tbw2VS8=;
+        b=PCaiyQUwGEJ0jk+jkX8VQC4cWXFIdjqjjN69Y6GHLrryoj23s21XlrBCRyojuWiWFK
+         vy05fS60ispggk3vhZ/hn+35UxzvSI55dH6KB4C0MHrNashHD4T7d/QuL51KbDG4w+K3
+         q7n0HDXZ5tTth8idKyo9CDKoYshuFXW1dObkqsT+cR8hBriwkUpgJBV/tlpsV7shpMic
+         LzZA7cB9uaEfxoW4b0Ium+Uvbt7qpgozk+B3GKBA7xVRWTelJRw7pxIGzZOsu9UTfcds
+         N2VkaqEm+HwEkhUM9HYDfLpK/VroB09Wtcwtty4q37TFtFPznZbAl6aKPFCSmwDytPTu
+         LVzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=d15sFOXBRn1YqhFC4TPixMjg1M5xVWdy0HG7Tbw2VS8=;
+        b=bjlUM02PW94mCq6jDCRvj98Ajcn54iK9k9W9bYmw8vmZu4OBoh2k/vdZF0Vy3ihHw7
+         9FEzLKAs0GFa2+JehlmNi09kRQBTNTLpsIK4ttAOtugebw+waXBs6c+pYYbHhTFvGIPa
+         y9eXej8CE2duO50v3OeYbB5GcD/DKNk/DfI0RcTeKC9oJpt1WXEsn6jLtX/x2vOoKM6Z
+         XOiWQrw45tLhwb+nzXJJCnkRTyKrGBM0dVjs9RbECMuTtoSZKDuYu/SVQqddC9L1YUNf
+         zvy4WOo1dyAfSGXhz4CJ0afRq16KxGRiwb396nDkzKlSTZ2r3axJWaefQE2VwQYvXMat
+         sRqw==
+X-Gm-Message-State: AOAM530L0rzn/pgP0Hg55Um0x7vS1PttMCxsm8N5+XfeUVGJIaKCGX16
+        ypsCT6NcbBUhU8NCok9ZhsHQtw9E/XGeWjitgJbaLg==
+X-Google-Smtp-Source: ABdhPJxt0wIPKfwW66vV+3HOE1EluXKL9L7UPc/8gBQvU0y+lbiesC1pq+avNrHr74rUT6H+QvdpFlNYiWxKjsLx1MQ=
+X-Received: by 2002:a05:6512:234d:: with SMTP id p13mr35033232lfu.157.1641226128950;
+ Mon, 03 Jan 2022 08:08:48 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211227133131.134369-1-krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20220103160002.1068356-1-Jason@zx2c4.com>
+In-Reply-To: <20220103160002.1068356-1-Jason@zx2c4.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Mon, 3 Jan 2022 17:08:21 +0100
+Message-ID: <CAG48ez2FfXLfCiF5PZdyUM4oZVCL0MtN8+mT6Zb-7kn69-Xs8A@mail.gmail.com>
+Subject: Re: [PATCH] random: reseed in RNDRESEEDCRNG for the !crng_ready() case
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 3, 2022 at 5:00 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> Userspace often wants to seed the RNG from disk, without knowing how
+> much entropy is really in that file. In that case, userspace says
+> there's no entropy, so none is credited. If this happens in the
+> crng_init==1 state -- common at early boot time when such seed files are
+> used -- then that seed file will be written into the pool, but it won't
+> actually help the quality of /dev/urandom reads. Instead, it'll sit
+> around until something does credit sufficient amounts of entropy, at
+> which point, the RNG is seeded and initialized.
+>
+> Rather than let those seed file bits sit around unused until "sometime
+> later", userspaces that call RNDRESEEDCRNG can expect, with this commit,
+> for those seed bits to be put to use *somehow*. This is accomplished by
+> extracting from the input pool on RNDRESEEDCRNG, xoring 32 bytes into
+> the current crng state.
+>
+> Suggested-by: Jann Horn <jannh@google.com>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+> Jann - this is the change I think you were requesting when we discussed
+> this. Please let me know if it matches what you had in mind.
 
+Yeah, this looks good.
 
-On 12/27/21 7:31 AM, Krzysztof Kozlowski wrote:
-> Hi,
-> 
-> Partial cleanup of Altera/Intel ARMv7 and ARMv8 DTS and bindings.
-> 
-> The patches are independent, unless touching same files (e.g.
-> bindings/arm/altera.yaml).
-> 
-> Best regards,
-> Krzysztof
-> 
-> Krzysztof Kozlowski (19):
->    dt-bindings: vendor-prefixes: add Enclustra
->    dt-bindings: altera: document existing Cyclone 5 board compatibles
->    dt-bindings: altera: document Arria 5 based board compatibles
->    dt-bindings: altera: document Arria 10 based board compatibles
->    dt-bindings: altera: document VT compatibles
->    dt-bindings: altera: document Stratix 10 based board compatibles
->    dt-bindings: intel: document Agilex based board compatibles
->    dt-bindings: clock: intel,stratix10: convert to dtschema
->    dt-bindings: mmc: synopsys-dw-mshc: integrate Altera and Imagination
->    ARM: dts: arria5: add board compatible for SoCFPGA DK
->    ARM: dts: arria10: add board compatible for Mercury AA1
->    ARM: dts: arria10: add board compatible for SoCFPGA DK
->    arm64: dts: stratix10: add board compatible for SoCFPGA DK
->    arm64: dts: stratix10: move ARM timer out of SoC node
->    arm64: dts: stratix10: align mmc node names with dtschema
->    arm64: dts: stratix10: align regulator node names with dtschema
->    arm64: dts: agilex: add board compatible for SoCFPGA DK
->    arm64: dts: agilex: add board compatible for N5X DK
->    arm64: dts: agilex: align mmc node names with dtschema
-> 
->   .../devicetree/bindings/arm/altera.yaml       | 46 ++++++++++++++++---
->   .../bindings/arm/intel,socfpga.yaml           | 26 +++++++++++
->   .../bindings/clock/intc_stratix10.txt         | 20 --------
->   .../bindings/clock/intel,stratix10.yaml       | 35 ++++++++++++++
->   .../devicetree/bindings/mmc/img-dw-mshc.txt   | 28 -----------
->   .../bindings/mmc/socfpga-dw-mshc.txt          | 23 ----------
->   .../bindings/mmc/synopsys-dw-mshc.yaml        |  5 +-
->   .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
->   .../boot/dts/socfpga_arria10_mercury_aa1.dts  |  2 +-
->   arch/arm/boot/dts/socfpga_arria10_socdk.dtsi  |  2 +-
->   arch/arm/boot/dts/socfpga_arria5_socdk.dts    |  2 +-
->   .../boot/dts/altera/socfpga_stratix10.dtsi    | 21 +++++----
->   .../dts/altera/socfpga_stratix10_socdk.dts    |  3 +-
->   .../altera/socfpga_stratix10_socdk_nand.dts   |  3 +-
->   arch/arm64/boot/dts/intel/socfpga_agilex.dtsi |  2 +-
->   .../boot/dts/intel/socfpga_agilex_socdk.dts   |  1 +
->   .../dts/intel/socfpga_agilex_socdk_nand.dts   |  1 +
->   .../boot/dts/intel/socfpga_n5x_socdk.dts      |  1 +
->   18 files changed, 129 insertions(+), 94 deletions(-)
->   create mode 100644 Documentation/devicetree/bindings/arm/intel,socfpga.yaml
->   delete mode 100644 Documentation/devicetree/bindings/clock/intc_stratix10.txt
->   create mode 100644 Documentation/devicetree/bindings/clock/intel,stratix10.yaml
->   delete mode 100644 Documentation/devicetree/bindings/mmc/img-dw-mshc.txt
->   delete mode 100644 Documentation/devicetree/bindings/mmc/socfpga-dw-mshc.txt
-> 
+Reviewed-by: Jann Horn <jannh@google.com>
 
-Applied for all SoCFPGA patches.
+>  drivers/char/random.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/char/random.c b/drivers/char/random.c
+> index 17ec60948795..805e509d9c30 100644
+> --- a/drivers/char/random.c
+> +++ b/drivers/char/random.c
+> @@ -1961,8 +1961,17 @@ static long random_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
+>         case RNDRESEEDCRNG:
+>                 if (!capable(CAP_SYS_ADMIN))
+>                         return -EPERM;
+> -               if (crng_init < 2)
+> +               if (!crng_ready()) {
 
-Thanks,
-Dinh
+Non-actionable review note: We can race with crng_ready() becoming
+true in parallel, but that's probably fine - after all, that'll also
+do the CRNG reseeding stuff on its own.
+
+> +                       unsigned long flags, i;
+> +                       u32 new_key[8];
+> +                       _extract_entropy(&input_pool, new_key, sizeof(new_key), 0);
+> +                       spin_lock_irqsave(&primary_crng.lock, flags);
+> +                       for (i = 0; i < ARRAY_SIZE(new_key); ++i)
+> +                               primary_crng.state[4 + i] ^= new_key[i];
+> +                       spin_unlock_irqrestore(&primary_crng.lock, flags);
+
+Non-actionable review note: This doesn't need the same
+crng_global_init_time bump as below because at this point, no NUMA
+pools exist yet, only the single shared primary_crng.
+
+> +                       memzero_explicit(new_key, sizeof(new_key));
+>                         return -ENODATA;
+> +               }
+>                 crng_reseed(&primary_crng, &input_pool);
+>                 WRITE_ONCE(crng_global_init_time, jiffies - 1);
+>                 return 0;
+> --
+> 2.34.1
+>

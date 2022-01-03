@@ -2,141 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1775483493
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 17:07:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE7748348D
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 17:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234371AbiACQHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 11:07:35 -0500
-Received: from mga02.intel.com ([134.134.136.20]:29872 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231648AbiACQHe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 11:07:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641226054; x=1672762054;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rVVwDAkcOxhvyeGTJ9bFMrtt0ZWlk8cQj8m6qKDK0tg=;
-  b=Bqjjn6mwGSRgG9KY0aWfbooRTW2ZyS7SPHPhIA/OHX8sjyJZKx5SH3Di
-   srJ9m0KDbjNfkyP5pKpK7bIEScg5a/+HtqIAvxVIfrtCrkxSYhsVm98oc
-   FxI6hWF1sVYF/H1Zf524xtpZs4PmEivyqp2lmAJAbxihTAu4D6Phu0OX3
-   WC2f17pPCDsMRCDr+O68L6NIDfzRE5b2vTLBvtQ0/57gMPwKsToqto6gS
-   zOlJdmx5b2lXiGdsZp83mz8p3SJIMQPEBQCNSwxVHaV7Tgj+5H66dR+hI
-   EzT1ZPXCLa9TybRZDVF+RzT63n/IAUqeg2vy6TSZ7/xeYPvavonI5fC6D
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10215"; a="229392993"
-X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="229392993"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 08:07:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="760128765"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga006.fm.intel.com with ESMTP; 03 Jan 2022 08:07:25 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 203G7Mbb027955;
-        Mon, 3 Jan 2022 16:07:22 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        =?UTF-8?Q?F=C4=81ng-ru=C3=AC_S=C3=B2ng?= <maskray@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available to nuke pos-based search
-Date:   Mon,  3 Jan 2022 17:06:15 +0100
-Message-Id: <20220103160615.7904-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <alpine.LSU.2.21.2201031447140.15051@pobox.suse.cz>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-3-alexandr.lobakin@intel.com> <Yc2Tqc69W9ukKDI1@zn.tnic> <CAFP8O3K1mkiCGMTEeuSifZtr2piHsKTjP5TOA25nqpv2SrbzYQ@mail.gmail.com> <alpine.LSU.2.21.2201031447140.15051@pobox.suse.cz>
+        id S234345AbiACQGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 11:06:37 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:50254 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231648AbiACQGg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 11:06:36 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0B3D6115F;
+        Mon,  3 Jan 2022 16:06:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7806EC36AEB;
+        Mon,  3 Jan 2022 16:06:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641225995;
+        bh=DKwn2a4a8WstTrBz3YaW8iPlQgOGN/W5/nC7S2XFzZQ=;
+        h=Subject:To:References:From:Date:In-Reply-To:From;
+        b=Ynx9sCgtfBebo4tJlZiZKh0DkYZfGghQtMTz2vqmRzJbhuYU5Q2dSJMYKIbJ8i5sn
+         3nDeJDMCXg/jmxxFz/YY7YUUbQ5XfLTq5u1SZBBGb4HGvZtiWOlfpiUkHinsp2p5OJ
+         qrmXJsWNtkcTcgELDlHql50PV6PSfOnRynQbifGOXtK7GaLsUD6J8isnXK1ffazq+4
+         HMNeueW1n/hCAK1v8ilC5EztFgSGVRQUcbQDnBCEhBaWAgC38G6qS2SsNB3VlzMWwZ
+         c/QwuDjzZAxYrJzrbOaJsO/o2DNM11IRt17XGaaeuJOQk1Igtv2awQ5h+7QYmOEptl
+         uTKl/1G+H3kpg==
+Subject: Re: [PATCH 00/19] arm/arm64/dt-bindings: altera/intel: fix DTS and
+ dtschema
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-mmc@vger.kernel.org
+References: <20211227133131.134369-1-krzysztof.kozlowski@canonical.com>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+Message-ID: <32990891-1378-d20e-7caa-a807964aab36@kernel.org>
+Date:   Mon, 3 Jan 2022 10:06:26 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211227133131.134369-1-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miroslav Benes <mbenes@suse.cz>
-Date: Mon, 3 Jan 2022 14:55:42 +0100 (CET)
 
-> On Thu, 30 Dec 2021, Fāng-ruì Sòng wrote:
-> 
-> > On Thu, Dec 30, 2021 at 3:11 AM Borislav Petkov <bp@alien8.de> wrote:
-> > >
-> > > On Thu, Dec 23, 2021 at 01:21:56AM +0100, Alexander Lobakin wrote:
-> > > > [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available to nuke pos-based search
-> 
-> ...
-> 
-> > Apologies since I haven't read the patch series.
-> > 
-> > The option does not exist in ld.lld and I am a bit concerning about
-> > its semantics: https://maskray.me/blog/2020-11-15-explain-gnu-linker-options#z-unique-symbol
-> > 
-> > I thought that someone forwarded my comments (originally posted months
-> > on a feature request ago) here but seems not.
-> > (I am a ld.lld maintainer.)
-> 
-> Do you mean 
-> https://lore.kernel.org/all/20210123225928.z5hkmaw6qjs2gu5g@google.com/T/#u 
-> ?
-> 
-> Unfortunately, it did not lead anywhere. I think that '-z unique-symbol' 
-> option should work fine as long as the live patching is concerned. Maybe I 
-> misunderstood but your concerns mentioned at the blog do not apply. The 
-> stability is not an issue for us since we (KLP) always work with already 
-> built and fixed kernel. And(at least) GCC already uses number suffices for 
-> IPA clones and it has not been a problem anywhere.
 
-LLD doesn't have such an option, so FG-KASLR + livepatching builds
-wouldn't be available for LLVM with the current approach (or we'd
-still need a stub that prints "FG-KASLR is not compatible with
-sympos != 0").
-Unfortunately, I discovered this a bit late, just after sending this
-revision.
-
-OTOH, there's no easy alternative. <file + function> pair looks
-appealing, but is it even possible for now to implement in the
-kernel without much refactoring?
-
->
-> Am I wrong?
+On 12/27/21 7:31 AM, Krzysztof Kozlowski wrote:
+> Hi,
 > 
-> Thanks
+> Partial cleanup of Altera/Intel ARMv7 and ARMv8 DTS and bindings.
 > 
-> Miroslav 
+> The patches are independent, unless touching same files (e.g.
+> bindings/arm/altera.yaml).
+> 
+> Best regards,
+> Krzysztof
+> 
+> Krzysztof Kozlowski (19):
+>    dt-bindings: vendor-prefixes: add Enclustra
+>    dt-bindings: altera: document existing Cyclone 5 board compatibles
+>    dt-bindings: altera: document Arria 5 based board compatibles
+>    dt-bindings: altera: document Arria 10 based board compatibles
+>    dt-bindings: altera: document VT compatibles
+>    dt-bindings: altera: document Stratix 10 based board compatibles
+>    dt-bindings: intel: document Agilex based board compatibles
+>    dt-bindings: clock: intel,stratix10: convert to dtschema
+>    dt-bindings: mmc: synopsys-dw-mshc: integrate Altera and Imagination
+>    ARM: dts: arria5: add board compatible for SoCFPGA DK
+>    ARM: dts: arria10: add board compatible for Mercury AA1
+>    ARM: dts: arria10: add board compatible for SoCFPGA DK
+>    arm64: dts: stratix10: add board compatible for SoCFPGA DK
+>    arm64: dts: stratix10: move ARM timer out of SoC node
+>    arm64: dts: stratix10: align mmc node names with dtschema
+>    arm64: dts: stratix10: align regulator node names with dtschema
+>    arm64: dts: agilex: add board compatible for SoCFPGA DK
+>    arm64: dts: agilex: add board compatible for N5X DK
+>    arm64: dts: agilex: align mmc node names with dtschema
+> 
+>   .../devicetree/bindings/arm/altera.yaml       | 46 ++++++++++++++++---
+>   .../bindings/arm/intel,socfpga.yaml           | 26 +++++++++++
+>   .../bindings/clock/intc_stratix10.txt         | 20 --------
+>   .../bindings/clock/intel,stratix10.yaml       | 35 ++++++++++++++
+>   .../devicetree/bindings/mmc/img-dw-mshc.txt   | 28 -----------
+>   .../bindings/mmc/socfpga-dw-mshc.txt          | 23 ----------
+>   .../bindings/mmc/synopsys-dw-mshc.yaml        |  5 +-
+>   .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
+>   .../boot/dts/socfpga_arria10_mercury_aa1.dts  |  2 +-
+>   arch/arm/boot/dts/socfpga_arria10_socdk.dtsi  |  2 +-
+>   arch/arm/boot/dts/socfpga_arria5_socdk.dts    |  2 +-
+>   .../boot/dts/altera/socfpga_stratix10.dtsi    | 21 +++++----
+>   .../dts/altera/socfpga_stratix10_socdk.dts    |  3 +-
+>   .../altera/socfpga_stratix10_socdk_nand.dts   |  3 +-
+>   arch/arm64/boot/dts/intel/socfpga_agilex.dtsi |  2 +-
+>   .../boot/dts/intel/socfpga_agilex_socdk.dts   |  1 +
+>   .../dts/intel/socfpga_agilex_socdk_nand.dts   |  1 +
+>   .../boot/dts/intel/socfpga_n5x_socdk.dts      |  1 +
+>   18 files changed, 129 insertions(+), 94 deletions(-)
+>   create mode 100644 Documentation/devicetree/bindings/arm/intel,socfpga.yaml
+>   delete mode 100644 Documentation/devicetree/bindings/clock/intc_stratix10.txt
+>   create mode 100644 Documentation/devicetree/bindings/clock/intel,stratix10.yaml
+>   delete mode 100644 Documentation/devicetree/bindings/mmc/img-dw-mshc.txt
+>   delete mode 100644 Documentation/devicetree/bindings/mmc/socfpga-dw-mshc.txt
+> 
+
+Applied for all SoCFPGA patches.
 
 Thanks,
-Al
+Dinh

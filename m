@@ -2,111 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8616448374C
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 19:59:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35899483751
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 20:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235937AbiACS7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 13:59:15 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:33200 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235933AbiACS7N (ORCPT
+        id S235953AbiACTCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 14:02:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45990 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235930AbiACTCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 13:59:13 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 612F41F38A;
-        Mon,  3 Jan 2022 18:59:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1641236351; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TdDYxb7brFIwjLIMOPbmEZrjtTPyGQuN72CDxmaZLfg=;
-        b=dWmDaI2oEiMKNQ/h2pK0gxKOhJGVFjqcUfy5WlLeoTMbtoQQlT8wuOTfxE0x54/RsZa+VZ
-        /++EBkwRXtP2t7HGhnoqHczEUh9lk4s3e8BAYaec/1xND8s+vcu8XL+Ce07b2z3U/vd19h
-        El2EFPp6oC8CiFoxXn7gR0qjByjVfrU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1641236351;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TdDYxb7brFIwjLIMOPbmEZrjtTPyGQuN72CDxmaZLfg=;
-        b=YY2KJsZYLgiXY7d81omY33Rcs8bANCVR9IR8Ege9ggRmiN7gbjvK84EFOydeMNM37fS8jH
-        d82mn+0A4voKtTAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3D3F013B14;
-        Mon,  3 Jan 2022 18:59:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Yr13Dn9H02EBPQAAMHmgww
-        (envelope-from <bp@suse.de>); Mon, 03 Jan 2022 18:59:11 +0000
-Date:   Mon, 3 Jan 2022 19:59:14 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Dov Murik <dovmurik@linux.ibm.com>
-Cc:     linux-efi@vger.kernel.org, Ashish Kalra <ashish.kalra@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Andrew Scull <ascull@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
-        Jim Cadden <jcadden@ibm.com>,
-        Daniele Buono <dbuono@linux.vnet.ibm.com>,
-        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 0/5] Allow guest access to EFI confidential computing
- secret area
-Message-ID: <YdNHgtuVoLofL4cW@zn.tnic>
-References: <20211129114251.3741721-1-dovmurik@linux.ibm.com>
+        Mon, 3 Jan 2022 14:02:06 -0500
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1123C061761;
+        Mon,  3 Jan 2022 11:02:06 -0800 (PST)
+Received: by mail-vk1-xa2d.google.com with SMTP id s72so3603184vks.9;
+        Mon, 03 Jan 2022 11:02:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=GNIpy9RQ4x4PwLUuHcv96h7/jXsqh4G7X36M5tDW0gU=;
+        b=bsORjued5Oy7trclTEscVi8UzKmV9bbJPNctZFgQjnu3wczcsdkjCr/qWABkC8kbxx
+         gaZcqfK+yiZFeHJLrm2tm4OhH/nACkRVI9dqbDk+ZJZvHjK7iPDJJ0ba2DOtm+UxYuel
+         nO8MSJ38cm7zOKFWHm+nWnp2YANAP17rkwd+J0d94YoJv/5j/hD2lpUG1tpol5rnggBL
+         XdrERx3m2kX89g1dK42H4U8ge8snK0xK/9xth0Dpj+sktXQrtyVVAgIUUrYUHePiSHGO
+         /+r3AK51zAnCHVbvIkazIYH2o+LryjvMIwNDlUz/fihd4pQzON4ArVguuyNOxhKrxAqI
+         G40w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=GNIpy9RQ4x4PwLUuHcv96h7/jXsqh4G7X36M5tDW0gU=;
+        b=S3Xx0ipUow/bJl3PcluHvhL4RTPJv+6VucPRoSzcg4qV3gpTf+meIhtRNXUuWUYqzZ
+         IVHmDP8LGlqiHAekrJt9FWqgrs2IhDloUezJ2X6jyvheAOlGtpwgUjH5rVkcFm1FRfnf
+         vwGtzOodAslMZYQx/vEaa4qRtUEx97eQes8TYuD0Ryap2Xni/Cy94OGelVrR1Eg4//vN
+         eMSsDvzjZWkxb8L6YKAdVSynKCtChTcPMoPbD88yLCV+WdWCDsksgAgUCi92UtwRnjFn
+         0d24x7IR/isVGdkar9TlsKH5LBNctqDseOvBGrVzrMg1JKZ/2bBJ7v9T3MtPF3xjRSKO
+         o+Pg==
+X-Gm-Message-State: AOAM532pAWfAeZ2YVA5ZJJay36lBj3BDQCUUoLgE5bEZW+IbjHaFXx7l
+        2JpM0QV9vpKrxnUMwNQRsKXMkw2B0DU=
+X-Google-Smtp-Source: ABdhPJwSG0Buy3HIZZ1H/Za5Ncl+5yLGWuOMHW17tjDMfl6EDURgz/QgRLkRHCsayd2o3Uaem8cGJQ==
+X-Received: by 2002:ac5:c5c7:: with SMTP id g7mr14816431vkl.29.1641236525688;
+        Mon, 03 Jan 2022 11:02:05 -0800 (PST)
+Received: from [10.230.2.158] ([192.19.161.250])
+        by smtp.gmail.com with ESMTPSA id b8sm7254646vsl.19.2022.01.03.11.02.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jan 2022 11:02:05 -0800 (PST)
+Message-ID: <f5a6c584-6894-ff2e-d4cb-2af9f5fdaf55@gmail.com>
+Date:   Mon, 3 Jan 2022 11:02:02 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211129114251.3741721-1-dovmurik@linux.ibm.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH 5.4 00/37] 5.4.170-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        stable@vger.kernel.org
+References: <20220103142051.883166998@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220103142051.883166998@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 11:42:46AM +0000, Dov Murik wrote:
-> As a usage example, consider a guest performing computations on
-> encrypted files.  The Guest Owner provides the decryption key (= secret)
-> using the secret injection mechanism.  The guest application reads the
-> secret from the efi_secret filesystem and proceeds to decrypt the files
-> into memory and then performs the needed computations on the content.
+
+
+On 1/3/2022 6:23 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.170 release.
+> There are 37 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> In this example, the host can't read the files from the disk image
-> because they are encrypted.  Host can't read the decryption key because
-> it is passed using the secret injection mechanism (= secure channel).
-> Host can't read the decrypted content from memory because it's a
-> confidential (memory-encrypted) guest.
+> Responses should be made by Wed, 05 Jan 2022 14:20:40 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.170-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-So maybe I don't understand the example properly or something's missing
-but why can't the guest owner simply scp the secrets into the guest? Why
-is this special thing needed?
-
-The secret below says "...kata-secrets" so this sounds like
-something-automated-containers-thing where they'd profit from getting
-secrets automatically supplied to the guest. But I guess there you can
-scp too...
-
-So what am I missing?
-
-Thx.
-
+See my regression report about patch "net: phy: fixed_phy: Fix NULL vs 
+IS_ERR() checking in __fixed_phy_register", other than that, the rest 
+worked OK.
 -- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+Florian

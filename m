@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC20483283
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:28:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0460A48324B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:26:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232529AbiACO2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:28:25 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58752 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234027AbiACO1V (ORCPT
+        id S232507AbiACO0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:26:35 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:56542 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232370AbiACOZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:27:21 -0500
+        Mon, 3 Jan 2022 09:25:57 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 931C4B80EFF;
-        Mon,  3 Jan 2022 14:27:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5970C36AEB;
-        Mon,  3 Jan 2022 14:27:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B66676111A;
+        Mon,  3 Jan 2022 14:25:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99C5EC36AEB;
+        Mon,  3 Jan 2022 14:25:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220039;
-        bh=jYraZydYRAFrKPlqIsWfLV9e+BjA3LqSdGtNtSNDx4o=;
+        s=korg; t=1641219956;
+        bh=UmbZKoKXCk8AGLF3bv8Ko5PZRmEXy4bbdijletGn9Ns=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wHHKHzfpgiIUHQYHEsuZR7JLNmvYjDnaYBtzyWSof12wVT2o42YuMwAc1dMnpLOiQ
-         Uhcxoq/C6YHpmMhCVwfb9Gd/gwfL91kFHDGmyZ+5YwjaY5tZf1rVdz9fvsDOW/bLU5
-         iyCAxR+hHVLSpNIm/dKeRTB8B1vYkUsQE2kGsQNY=
+        b=H64OWiQppcXeWdTq65YBGFM4F7cnqcmm+9X9vLIi6XF9lLapiptLvT/jU+pTO5Vqf
+         S+83cQoXvTT/TfP/ETuq6pqCuDRdnDRALXttQMdXnJcTF2z+tEatL7ocRPNnN1bUz0
+         K7cF67fQILKa5U5+iv9JS3zDK/gSqgItFgAZD3jU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, k2ci <kernel-bot@kylinos.cn>,
-        Mike Rapoport <rppt@kernel.org>,
-        Jackie Liu <liuyun01@kylinos.cn>,
-        Mike Rapoport <rppt@linux.ibm.com>,
+        stable@vger.kernel.org, Wang Qing <wangqing@vivo.com>,
+        Hans de Goede <hdegoede@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 07/37] memblock: fix memblock_phys_alloc() section mismatch error
+Subject: [PATCH 4.19 05/27] platform/x86: apple-gmux: use resource_size() with res
 Date:   Mon,  3 Jan 2022 15:23:45 +0100
-Message-Id: <20220103142052.108834388@linuxfoundation.org>
+Message-Id: <20220103142052.355989323@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142051.883166998@linuxfoundation.org>
-References: <20220103142051.883166998@linuxfoundation.org>
+In-Reply-To: <20220103142052.162223000@linuxfoundation.org>
+References: <20220103142052.162223000@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,53 +46,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jackie Liu <liuyun01@kylinos.cn>
+From: Wang Qing <wangqing@vivo.com>
 
-[ Upstream commit d7f55471db2719629f773c2d6b5742a69595bfd3 ]
+[ Upstream commit eb66fb03a727cde0ab9b1a3858de55c26f3007da ]
 
-Fix modpost Section mismatch error in memblock_phys_alloc()
+This should be (res->end - res->start + 1) here actually,
+use resource_size() derectly.
 
-[...]
-WARNING: modpost: vmlinux.o(.text.unlikely+0x1dcc): Section mismatch in reference
-from the function memblock_phys_alloc() to the function .init.text:memblock_phys_alloc_range()
-The function memblock_phys_alloc() references
-the function __init memblock_phys_alloc_range().
-This is often because memblock_phys_alloc lacks a __init
-annotation or the annotation of memblock_phys_alloc_range is wrong.
-
-ERROR: modpost: Section mismatches detected.
-Set CONFIG_SECTION_MISMATCH_WARN_ONLY=y to allow them.
-[...]
-
-memblock_phys_alloc() is a one-line wrapper, make it __always_inline to
-avoid these section mismatches.
-
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Suggested-by: Mike Rapoport <rppt@kernel.org>
-Signed-off-by: Jackie Liu <liuyun01@kylinos.cn>
-[rppt: slightly massaged changelog ]
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-Link: https://lore.kernel.org/r/20211217020754.2874872-1-liu.yun@linux.dev
+Signed-off-by: Wang Qing <wangqing@vivo.com>
+Link: https://lore.kernel.org/r/1639484316-75873-1-git-send-email-wangqing@vivo.com
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/memblock.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/platform/x86/apple-gmux.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/memblock.h b/include/linux/memblock.h
-index f491690d54c6c..64b971b2542d6 100644
---- a/include/linux/memblock.h
-+++ b/include/linux/memblock.h
-@@ -351,8 +351,8 @@ phys_addr_t memblock_phys_alloc_range(phys_addr_t size, phys_addr_t align,
- 				      phys_addr_t start, phys_addr_t end);
- phys_addr_t memblock_phys_alloc_try_nid(phys_addr_t size, phys_addr_t align, int nid);
+diff --git a/drivers/platform/x86/apple-gmux.c b/drivers/platform/x86/apple-gmux.c
+index fd2ffebc868fc..caa03565c139b 100644
+--- a/drivers/platform/x86/apple-gmux.c
++++ b/drivers/platform/x86/apple-gmux.c
+@@ -628,7 +628,7 @@ static int gmux_probe(struct pnp_dev *pnp, const struct pnp_device_id *id)
+ 	}
  
--static inline phys_addr_t memblock_phys_alloc(phys_addr_t size,
--					      phys_addr_t align)
-+static __always_inline phys_addr_t memblock_phys_alloc(phys_addr_t size,
-+						       phys_addr_t align)
- {
- 	return memblock_phys_alloc_range(size, align, 0,
- 					 MEMBLOCK_ALLOC_ACCESSIBLE);
+ 	gmux_data->iostart = res->start;
+-	gmux_data->iolen = res->end - res->start;
++	gmux_data->iolen = resource_size(res);
+ 
+ 	if (gmux_data->iolen < GMUX_MIN_IO_LEN) {
+ 		pr_err("gmux I/O region too small (%lu < %u)\n",
 -- 
 2.34.1
 

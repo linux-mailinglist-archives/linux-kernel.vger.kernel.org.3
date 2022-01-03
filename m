@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9106448330A
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:33:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA02483229
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:25:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234121AbiACOc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:32:57 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:60116 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234013AbiACOap (ORCPT
+        id S232375AbiACOZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:25:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37754 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232470AbiACOZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:30:45 -0500
+        Mon, 3 Jan 2022 09:25:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C637C0617A2;
+        Mon,  3 Jan 2022 06:25:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AC3A8B80EF6;
-        Mon,  3 Jan 2022 14:30:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB0AEC36AED;
-        Mon,  3 Jan 2022 14:30:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A06B610B1;
+        Mon,  3 Jan 2022 14:25:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E75CBC36AEB;
+        Mon,  3 Jan 2022 14:25:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220243;
-        bh=Goj2JFIB+X4sTeoEYCvsPRk0fpH2kSWZeV7RcRz7v5o=;
+        s=korg; t=1641219919;
+        bh=6uZ5RRlyZ/Ssvt9ME2JBVJM3wvIu6RYNKVaTMYpt1YE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BSQTu2TBgDPGUccSpvloRTw6z8+HtTD6OfO/UIV0hWBiy7DvoIpou8s4Q/LQgTNw8
-         Hp4XmyotK7k2gz/X6s90gRhQbB1KBwqaab8MP5WpQp6y+V4F5tiJkNHKk7Ua3x2egG
-         OJvLJOOp8cWODDvRTigoL6O5j3Mf411ELvFnQBVY=
+        b=WIg8pxvuc4rXu24owmL6ljuC6monPRKPWWMEuHNqd6mkDS7FzwnhFbF6aVps0/nLi
+         hZBe5/+8EQnch2p5YjHRfUy9uwYWAXccs+WYFBb4fXiaGqNiVe1UF20Qfq8xA1PVMl
+         iU7gwiO+yrkVREK0C2Jp+He7gtpwWiYYCb6m/E5Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aleksander Jan Bajkowski <olek2@wp.pl>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 21/48] net: lantiq_xrx200: fix statistics of received bytes
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.19 18/27] nfc: uapi: use kernel size_t to fix user-space builds
 Date:   Mon,  3 Jan 2022 15:23:58 +0100
-Message-Id: <20220103142054.188635921@linuxfoundation.org>
+Message-Id: <20220103142052.762144878@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142053.466768714@linuxfoundation.org>
-References: <20220103142053.466768714@linuxfoundation.org>
+In-Reply-To: <20220103142052.162223000@linuxfoundation.org>
+References: <20220103142052.162223000@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,36 +49,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aleksander Jan Bajkowski <olek2@wp.pl>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-[ Upstream commit 5be60a945329d82f06fc755a43eeefbfc5f77d72 ]
+commit 79b69a83705e621b258ac6d8ae6d3bfdb4b930aa upstream.
 
-Received frames have FCS truncated. There is no need
-to subtract FCS length from the statistics.
+Fix user-space builds if it includes /usr/include/linux/nfc.h before
+some of other headers:
 
-Fixes: fe1a56420cf2 ("net: lantiq: Add Lantiq / Intel VRX200 Ethernet driver")
-Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+  /usr/include/linux/nfc.h:281:9: error: unknown type name ‘size_t’
+    281 |         size_t service_name_len;
+        |         ^~~~~~
+
+Fixes: d646960f7986 ("NFC: Initial LLCP support")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/lantiq_xrx200.c | 2 +-
+ include/uapi/linux/nfc.h |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/lantiq_xrx200.c b/drivers/net/ethernet/lantiq_xrx200.c
-index 072075bc60ee9..500511b72ac60 100644
---- a/drivers/net/ethernet/lantiq_xrx200.c
-+++ b/drivers/net/ethernet/lantiq_xrx200.c
-@@ -209,7 +209,7 @@ static int xrx200_hw_receive(struct xrx200_chan *ch)
- 	skb->protocol = eth_type_trans(skb, net_dev);
- 	netif_receive_skb(skb);
- 	net_dev->stats.rx_packets++;
--	net_dev->stats.rx_bytes += len - ETH_FCS_LEN;
-+	net_dev->stats.rx_bytes += len;
+--- a/include/uapi/linux/nfc.h
++++ b/include/uapi/linux/nfc.h
+@@ -278,7 +278,7 @@ struct sockaddr_nfc_llcp {
+ 	__u8 dsap; /* Destination SAP, if known */
+ 	__u8 ssap; /* Source SAP to be bound to */
+ 	char service_name[NFC_LLCP_MAX_SERVICE_NAME]; /* Service name URI */;
+-	size_t service_name_len;
++	__kernel_size_t service_name_len;
+ };
  
- 	return 0;
- }
--- 
-2.34.1
-
+ /* NFC socket protocols */
 
 

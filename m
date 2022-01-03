@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E614483367
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:36:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B51224832D2
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:31:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235144AbiACOgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:36:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39064 "EHLO
+        id S234399AbiACObB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:31:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235118AbiACOco (ORCPT
+        with ESMTP id S234223AbiACO2V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:32:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11F1C07E5EC;
-        Mon,  3 Jan 2022 06:31:42 -0800 (PST)
+        Mon, 3 Jan 2022 09:28:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E23C0613A1;
+        Mon,  3 Jan 2022 06:28:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F0986112C;
-        Mon,  3 Jan 2022 14:31:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14CFDC36AEB;
-        Mon,  3 Jan 2022 14:31:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91FCDB80EF2;
+        Mon,  3 Jan 2022 14:28:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6B8DC36AEB;
+        Mon,  3 Jan 2022 14:28:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220301;
-        bh=xUP90eLe/oZH0iSisA3GYJGxGlfXoLVdzAzGE7LQFLY=;
+        s=korg; t=1641220098;
+        bh=6bvBAOoKHf7RP0tlPb01yOXf6OXQV9M9kpp6ANGct1w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DCzpt2NQLTlUy580sP4VfS6pXfOM8QMoQ+l/0CZEMCHYCFPmgHGrfSbopVsVrlJ3h
-         f76ZLb9SsJFKPL4ti7lULVhrDKWBO41HaMBQ586vYpSQJuIkD3fShpJOoauZROtwSp
-         DhmsJRwKz6pSokNFsv0B9n9JovE9FfL6wsu2xmSs=
+        b=wBbBTKSMTZceRi63ED4jt/Ujl1OZ+IqFsMAJ76Ps8W2TjgnmjtyxV6qr09HNlrq1M
+         pN3nouYsO4DKydxgTkL9HtYY7pPbORRlxNnfnP8TV7iOMCWNGy/fm4HtN12ngHQT8R
+         I/ybG4UAM+oi31KxnJ4To+/4AL/Fv5iZoqbl9mHo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Coco Li <lixiaoyan@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, James Smart <jsmart2021@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 26/73] udp: using datalen to cap ipv6 udp max gso segments
+Subject: [PATCH 5.10 10/48] scsi: lpfc: Terminate string in lpfc_debugfs_nvmeio_trc_write()
 Date:   Mon,  3 Jan 2022 15:23:47 +0100
-Message-Id: <20220103142057.758759271@linuxfoundation.org>
+Message-Id: <20220103142053.824207316@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142056.911344037@linuxfoundation.org>
-References: <20220103142056.911344037@linuxfoundation.org>
+In-Reply-To: <20220103142053.466768714@linuxfoundation.org>
+References: <20220103142053.466768714@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,42 +50,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Coco Li <lixiaoyan@google.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 736ef37fd9a44f5966e25319d08ff7ea99ac79e8 ]
+[ Upstream commit 9020be114a47bf7ff33e179b3bb0016b91a098e6 ]
 
-The max number of UDP gso segments is intended to cap to
-UDP_MAX_SEGMENTS, this is checked in udp_send_skb().
+The "mybuf" string comes from the user, so we need to ensure that it is NUL
+terminated.
 
-skb->len contains network and transport header len here, we should use
-only data len instead.
-
-This is the ipv6 counterpart to the below referenced commit,
-which missed the ipv6 change
-
-Fixes: 158390e45612 ("udp: using datalen to cap max gso segments")
-Signed-off-by: Coco Li <lixiaoyan@google.com>
-Reviewed-by: Willem de Bruijn <willemb@google.com>
-Link: https://lore.kernel.org/r/20211223222441.2975883-1-lixiaoyan@google.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Link: https://lore.kernel.org/r/20211214070527.GA27934@kili
+Fixes: bd2cdd5e400f ("scsi: lpfc: NVME Initiator: Add debugfs support")
+Reviewed-by: James Smart <jsmart2021@gmail.com>
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv6/udp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/lpfc/lpfc_debugfs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-index 7bee95d8d2df0..8cd8c0bce0986 100644
---- a/net/ipv6/udp.c
-+++ b/net/ipv6/udp.c
-@@ -1204,7 +1204,7 @@ static int udp_v6_send_skb(struct sk_buff *skb, struct flowi6 *fl6,
- 			kfree_skb(skb);
- 			return -EINVAL;
- 		}
--		if (skb->len > cork->gso_size * UDP_MAX_SEGMENTS) {
-+		if (datalen > cork->gso_size * UDP_MAX_SEGMENTS) {
- 			kfree_skb(skb);
- 			return -EINVAL;
- 		}
+diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_debugfs.c
+index b89c5513243e8..beaf3a8d206f8 100644
+--- a/drivers/scsi/lpfc/lpfc_debugfs.c
++++ b/drivers/scsi/lpfc/lpfc_debugfs.c
+@@ -2956,8 +2956,8 @@ lpfc_debugfs_nvmeio_trc_write(struct file *file, const char __user *buf,
+ 	char mybuf[64];
+ 	char *pbuf;
+ 
+-	if (nbytes > 64)
+-		nbytes = 64;
++	if (nbytes > 63)
++		nbytes = 63;
+ 
+ 	memset(mybuf, 0, sizeof(mybuf));
+ 
 -- 
 2.34.1
 

@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E6248326B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:27:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 391EC483372
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:37:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbiACO1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:27:39 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:47802 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233797AbiACO0p (ORCPT
+        id S235502AbiACOgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:36:52 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:32768 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234649AbiACOde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:26:45 -0500
+        Mon, 3 Jan 2022 09:33:34 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CD137CE1113;
-        Mon,  3 Jan 2022 14:26:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 883D5C36AEB;
-        Mon,  3 Jan 2022 14:26:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E1896110F;
+        Mon,  3 Jan 2022 14:33:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30E77C36AED;
+        Mon,  3 Jan 2022 14:33:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220002;
-        bh=4KtpcwW3TzT/yXyjNPDNl75NLN0OkDFx62CaRAurAeo=;
+        s=korg; t=1641220412;
+        bh=LiXp6zQ8jCvVYccrpS+NcTbW1W6TXx+1oTAMH4oWdX8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RUA5WF8w2MhaCRR8bQ5/g1qgG+0S93sDmpcBOXFmH5zlaJqs9ksdOGHrazOI60XFe
-         Fn7SI7miq1ibA8yR5xv3Sv+9CWa2aW8f+FbzDSHwVx5UhRLtEuy/ZlNInddABLBQrV
-         KUAJCUIzoLAspTwC02TUKkP5+FZ9OcU6P5uNOpec=
+        b=OAzLqObpy8R8u703tNpVOOk0Wlrz05QFfuMM237SgfBvK7Qin+yKqj7le30vRVJ8h
+         BnsqO2T/y5Bv9aOzlcm4cHQk/XXXiE8W3rygZxqxfqa4pOFCcHAg0mDh1iAF4QVxn2
+         QW2M8hQZDnw/9sSyJx3IB2RTOmst87X89ypabJwg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aleksander Jan Bajkowski <olek2@wp.pl>,
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 17/37] net: lantiq_xrx200: fix statistics of received bytes
+Subject: [PATCH 5.15 34/73] NFC: st21nfca: Fix memory leak in device probe and remove
 Date:   Mon,  3 Jan 2022 15:23:55 +0100
-Message-Id: <20220103142052.411215067@linuxfoundation.org>
+Message-Id: <20220103142058.004992612@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142051.883166998@linuxfoundation.org>
-References: <20220103142051.883166998@linuxfoundation.org>
+In-Reply-To: <20220103142056.911344037@linuxfoundation.org>
+References: <20220103142056.911344037@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,31 +47,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aleksander Jan Bajkowski <olek2@wp.pl>
+From: Wei Yongjun <weiyongjun1@huawei.com>
 
-[ Upstream commit 5be60a945329d82f06fc755a43eeefbfc5f77d72 ]
+[ Upstream commit 1b9dadba502234eea7244879b8d5d126bfaf9f0c ]
 
-Received frames have FCS truncated. There is no need
-to subtract FCS length from the statistics.
+'phy->pending_skb' is alloced when device probe, but forgot to free
+in the error handling path and remove path, this cause memory leak
+as follows:
 
-Fixes: fe1a56420cf2 ("net: lantiq: Add Lantiq / Intel VRX200 Ethernet driver")
-Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+unreferenced object 0xffff88800bc06800 (size 512):
+  comm "8", pid 11775, jiffies 4295159829 (age 9.032s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000d66c09ce>] __kmalloc_node_track_caller+0x1ed/0x450
+    [<00000000c93382b3>] kmalloc_reserve+0x37/0xd0
+    [<000000005fea522c>] __alloc_skb+0x124/0x380
+    [<0000000019f29f9a>] st21nfca_hci_i2c_probe+0x170/0x8f2
+
+Fix it by freeing 'pending_skb' in error and remove.
+
+Fixes: 68957303f44a ("NFC: ST21NFCA: Add driver for STMicroelectronics ST21NFCA NFC Chip")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/lantiq_xrx200.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/nfc/st21nfca/i2c.c | 29 ++++++++++++++++++++---------
+ 1 file changed, 20 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/ethernet/lantiq_xrx200.c b/drivers/net/ethernet/lantiq_xrx200.c
-index 6e504854571cf..94541bf889a23 100644
---- a/drivers/net/ethernet/lantiq_xrx200.c
-+++ b/drivers/net/ethernet/lantiq_xrx200.c
-@@ -209,7 +209,7 @@ static int xrx200_hw_receive(struct xrx200_chan *ch)
- 	skb->protocol = eth_type_trans(skb, net_dev);
- 	netif_receive_skb(skb);
- 	net_dev->stats.rx_packets++;
--	net_dev->stats.rx_bytes += len - ETH_FCS_LEN;
-+	net_dev->stats.rx_bytes += len;
+diff --git a/drivers/nfc/st21nfca/i2c.c b/drivers/nfc/st21nfca/i2c.c
+index 279d88128b2e4..d56bc24709b5c 100644
+--- a/drivers/nfc/st21nfca/i2c.c
++++ b/drivers/nfc/st21nfca/i2c.c
+@@ -528,7 +528,8 @@ static int st21nfca_hci_i2c_probe(struct i2c_client *client,
+ 	phy->gpiod_ena = devm_gpiod_get(dev, "enable", GPIOD_OUT_LOW);
+ 	if (IS_ERR(phy->gpiod_ena)) {
+ 		nfc_err(dev, "Unable to get ENABLE GPIO\n");
+-		return PTR_ERR(phy->gpiod_ena);
++		r = PTR_ERR(phy->gpiod_ena);
++		goto out_free;
+ 	}
+ 
+ 	phy->se_status.is_ese_present =
+@@ -539,7 +540,7 @@ static int st21nfca_hci_i2c_probe(struct i2c_client *client,
+ 	r = st21nfca_hci_platform_init(phy);
+ 	if (r < 0) {
+ 		nfc_err(&client->dev, "Unable to reboot st21nfca\n");
+-		return r;
++		goto out_free;
+ 	}
+ 
+ 	r = devm_request_threaded_irq(&client->dev, client->irq, NULL,
+@@ -548,15 +549,23 @@ static int st21nfca_hci_i2c_probe(struct i2c_client *client,
+ 				ST21NFCA_HCI_DRIVER_NAME, phy);
+ 	if (r < 0) {
+ 		nfc_err(&client->dev, "Unable to register IRQ handler\n");
+-		return r;
++		goto out_free;
+ 	}
+ 
+-	return st21nfca_hci_probe(phy, &i2c_phy_ops, LLC_SHDLC_NAME,
+-					ST21NFCA_FRAME_HEADROOM,
+-					ST21NFCA_FRAME_TAILROOM,
+-					ST21NFCA_HCI_LLC_MAX_PAYLOAD,
+-					&phy->hdev,
+-					&phy->se_status);
++	r = st21nfca_hci_probe(phy, &i2c_phy_ops, LLC_SHDLC_NAME,
++			       ST21NFCA_FRAME_HEADROOM,
++			       ST21NFCA_FRAME_TAILROOM,
++			       ST21NFCA_HCI_LLC_MAX_PAYLOAD,
++			       &phy->hdev,
++			       &phy->se_status);
++	if (r)
++		goto out_free;
++
++	return 0;
++
++out_free:
++	kfree_skb(phy->pending_skb);
++	return r;
+ }
+ 
+ static int st21nfca_hci_i2c_remove(struct i2c_client *client)
+@@ -567,6 +576,8 @@ static int st21nfca_hci_i2c_remove(struct i2c_client *client)
+ 
+ 	if (phy->powered)
+ 		st21nfca_hci_i2c_disable(phy);
++	if (phy->pending_skb)
++		kfree_skb(phy->pending_skb);
  
  	return 0;
  }

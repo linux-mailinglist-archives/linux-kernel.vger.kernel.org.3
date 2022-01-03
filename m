@@ -2,80 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD0E54838F4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 00:03:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B434838F6
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 00:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbiACXDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 18:03:21 -0500
-Received: from mga04.intel.com ([192.55.52.120]:57737 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230343AbiACXDT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 18:03:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641250999; x=1672786999;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3IMir7bHq3FA6eo0MQd9Rr+HvDz01+2BDkL6zkQgisE=;
-  b=dlJqyL/gi5lMIBplE/IgNjJGjckDukuwdGYM2GuGIzM7FAqJkXUIvdQ9
-   J+sPfIpE17VlSfw4a0lVDmDB6GAsKclKFCe4UY8yWF+FTrOyt3RPG0D8m
-   dlKDB/dVuK2tKq/FaOR8OY3mc+lNsqw+/yi5TdG9BqvcYZCshBhincYBn
-   ySgpug0G0V1/anAWo4aaLbi0DcKDUItkVZA8Ht+iQDME//SLrdL8cGjX2
-   OCdXYoMYd56hobvw+pbeJ9kFkY0YlqMRy41ME6chDkkqfETinqOvzP0+m
-   2or8DLkgHndtXj5NLS7Q8B87wO07P3YIguzvoXcISuW+kP36MtcBLi/cZ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="240947441"
-X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="240947441"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 15:03:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="471790208"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 03 Jan 2022 15:03:17 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n4WMH-000EU9-1q; Mon, 03 Jan 2022 23:03:17 +0000
-Date:   Tue, 4 Jan 2022 07:02:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Palmer <daniel@0x0f.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [chenxing:msc313_mainlining 85/86] Error:
- arch/arm/boot/dts/mstar-infinity2m-ssd201-wirelesstag-ido-som2d01.dtsi:18.1-9
- Label or path pm_uart not found
-Message-ID: <202201040602.CbRBg9gS-lkp@intel.com>
+        id S230436AbiACXE3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Jan 2022 18:04:29 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:64676 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229693AbiACXE3 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 18:04:29 -0500
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 203JU1qA024728
+        for <linux-kernel@vger.kernel.org>; Mon, 3 Jan 2022 15:04:28 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dc7bu0r9e-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 15:04:28 -0800
+Received: from twshared7460.02.ash7.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 3 Jan 2022 15:04:24 -0800
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id B2B76270828AC; Mon,  3 Jan 2022 15:04:19 -0800 (PST)
+From:   Song Liu <song@kernel.org>
+To:     <linux-raid@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, Song Liu <song@kernel.org>,
+        <stable@vger.kernel.org>, Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Jens Axboe <axboe@kernel.dk>,
+        Norbert Warmuth <nwarmuth@t-online.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH] md/raid1: fix missing bitmap update w/o WriteMostly devices
+Date:   Mon, 3 Jan 2022 15:04:01 -0800
+Message-ID: <20220103230401.180704-1-song@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 6-QcpeAUeWM0X_ZdfXqUWcDHIXTP1KYA
+X-Proofpoint-GUID: 6-QcpeAUeWM0X_ZdfXqUWcDHIXTP1KYA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-03_09,2022-01-01_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 mlxscore=0 bulkscore=0
+ lowpriorityscore=0 spamscore=0 mlxlogscore=999 clxscore=1015 adultscore=0
+ impostorscore=0 priorityscore=1501 suspectscore=0 malwarescore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201030156
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://github.com/linux-chenxing/linux.git msc313_mainlining
-head:   2269f75a5b53b9a05d21d432ad75f5e41b344814
-commit: 7bf46c9e0566d3046584d7fed53d1587c316fde5 [85/86] ARM: dts: mstar: Add top level dts for ssd201-som2d01
-config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20220104/202201040602.CbRBg9gS-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/linux-chenxing/linux/commit/7bf46c9e0566d3046584d7fed53d1587c316fde5
-        git remote add chenxing git://github.com/linux-chenxing/linux.git
-        git fetch --no-tags chenxing msc313_mainlining
-        git checkout 7bf46c9e0566d3046584d7fed53d1587c316fde5
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+commit [1] causes missing bitmap updates when there isn't any WriteMostly
+devices.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Detailed steps to reproduce by Norbert (which somehow didn't make to lore):
 
-All errors (new ones prefixed by >>):
+   # setup md10 (raid1) with two drives (1 GByte sparse files)
+   dd if=/dev/zero of=disk1 bs=1024k seek=1024 count=0
+   dd if=/dev/zero of=disk2 bs=1024k seek=1024 count=0
 
->> Error: arch/arm/boot/dts/mstar-infinity2m-ssd201-wirelesstag-ido-som2d01.dtsi:18.1-9 Label or path pm_uart not found
-   FATAL ERROR: Syntax error parsing input tree
+   losetup /dev/loop11 disk1
+   losetup /dev/loop12 disk2
 
+   mdadm --create /dev/md10 --level=1 --raid-devices=2 /dev/loop11 /dev/loop12
+
+   # add bitmap (aka write-intent log)
+   mdadm /dev/md10 --grow --bitmap=internal
+
+   echo check > /sys/block/md10/md/sync_action
+
+   root:# cat /sys/block/md10/md/mismatch_cnt
+   0
+   root:#
+
+   # remove member drive disk2 (loop12)
+   mdadm /dev/md10 -f loop12 ; mdadm /dev/md10 -r loop12
+
+   # modify degraded md device
+   dd if=/dev/urandom of=/dev/md10 bs=512 count=1
+
+   # no blocks recorded as out of sync on the remaining member disk1/loop11
+   root:# mdadm -X /dev/loop11 | grep Bitmap
+             Bitmap : 16 bits (chunks), 0 dirty (0.0%)
+   root:#
+
+   # re-add disk2, nothing synced because of empty bitmap
+   mdadm /dev/md10 --re-add /dev/loop12
+
+   # check integrity again
+   echo check > /sys/block/md10/md/sync_action
+
+   # disk1 and disk2 are no longer in sync, reads return differend data
+   root:# cat /sys/block/md10/md/mismatch_cnt
+   128
+   root:#
+
+   # clean up
+   mdadm -S /dev/md10
+   losetup -d /dev/loop11
+   losetup -d /dev/loop12
+   rm disk1 disk2
+
+Fix this by moving the WriteMostly check to the if condition for
+alloc_behind_master_bio().
+
+[1] commit fd3b6975e9c1 ("md/raid1: only allocate write behind bio for WriteMostly device")
+Fixes: fd3b6975e9c1 ("md/raid1: only allocate write behind bio for WriteMostly device")
+Cc: stable@vger.kernel.org # v5.12+
+Cc: Guoqing Jiang <guoqing.jiang@linux.dev>
+Cc: Jens Axboe <axboe@kernel.dk>
+Reported-by: Norbert Warmuth <nwarmuth@t-online.de>
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Song Liu <song@kernel.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/md/raid1.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/md/raid1.c b/drivers/md/raid1.c
+index 7dc8026cf6ee..85505424f7a4 100644
+--- a/drivers/md/raid1.c
++++ b/drivers/md/raid1.c
+@@ -1496,12 +1496,13 @@ static void raid1_write_request(struct mddev *mddev, struct bio *bio,
+ 		if (!r1_bio->bios[i])
+ 			continue;
+ 
+-		if (first_clone && test_bit(WriteMostly, &rdev->flags)) {
++		if (first_clone) {
+ 			/* do behind I/O ?
+ 			 * Not if there are too many, or cannot
+ 			 * allocate memory, or a reader on WriteMostly
+ 			 * is waiting for behind writes to flush */
+ 			if (bitmap &&
++			    test_bit(WriteMostly, &rdev->flags) &&
+ 			    (atomic_read(&bitmap->behind_writes)
+ 			     < mddev->bitmap_info.max_write_behind) &&
+ 			    !waitqueue_active(&bitmap->behind_wait)) {
+-- 
+2.30.2
+

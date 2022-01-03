@@ -2,42 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30292483388
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:38:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B51C48336F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:36:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233263AbiACOiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:38:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40336 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235403AbiACOgU (ORCPT
+        id S235371AbiACOgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:36:46 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37220 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234574AbiACOdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:36:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5203C08EA6F;
-        Mon,  3 Jan 2022 06:33:14 -0800 (PST)
+        Mon, 3 Jan 2022 09:33:19 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83A836111B;
-        Mon,  3 Jan 2022 14:33:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F8CEC36AEB;
-        Mon,  3 Jan 2022 14:33:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1391BB80F52;
+        Mon,  3 Jan 2022 14:33:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5867DC36AED;
+        Mon,  3 Jan 2022 14:33:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220394;
-        bh=adsa5yIJ3KhbdWOnL5KPzA9BZ9b6uXnyfcdTxXVGTPw=;
+        s=korg; t=1641220396;
+        bh=qlxHfnN1hy+WjW6P2ULz01S9hF795a8OmW4Sd0AlJN0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n+n2cJ2/0uT/y1MMPIok8itGCtQhFDZDL3fcIxOECTpy5sR67ooczPZgwKnPH+aS5
-         hjXRjbbCjtTbH9bvGOvxFm4O8avEcRL6B+ZooHMpYkFCaAYL7BqnKn1s/fxnMJ0oM2
-         YNvzePVD1OxjcWzhpV7oUl23SuF57rcXuKLJJwOg=
+        b=r0ZMftFAfBJwV+hJ55dnz2yfMiTkzECNv4fkrHEBHALhmoXov072PcCUFDGnii8AX
+         2gqYy0FsPDrWNHfSskiiwf0ntUxDXl487llDHQliK39rynkm4snODjS/LWI9cbcB0w
+         s/H53Rr9rymW6uj5vxE6ne/SbcgCr89VxpZk7y6Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, chen gong <curry.gong@amd.com>,
-        Evan Quan <evan.quan@amd.com>,
+        stable@vger.kernel.org, Hawking Zhang <Hawking.Zhang@amd.com>,
         Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.15 55/73] drm/amdgpu: When the VCN(1.0) block is suspended, powergating is explicitly enabled
-Date:   Mon,  3 Jan 2022 15:24:16 +0100
-Message-Id: <20220103142058.696993813@linuxfoundation.org>
+Subject: [PATCH 5.15 56/73] drm/amdgpu: add support for IP discovery gc_info table v2
+Date:   Mon,  3 Jan 2022 15:24:17 +0100
+Message-Id: <20220103142058.729919623@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220103142056.911344037@linuxfoundation.org>
 References: <20220103142056.911344037@linuxfoundation.org>
@@ -49,65 +45,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: chen gong <curry.gong@amd.com>
+From: Alex Deucher <alexander.deucher@amd.com>
 
-commit b7865173cf6ae59942e2c69326a06e1c1df5ecf6 upstream.
+commit 5e713c6afa34c0fd6f113bf7bb1c2847172d7b20 upstream.
 
-Play a video on the raven (or PCO, raven2) platform, and then do the S3
-test. When resume, the following error will be reported:
+Used on gfx9 based systems. Fixes incorrect CU counts reported
+in the kernel log.
 
-amdgpu 0000:02:00.0: [drm:amdgpu_ring_test_helper [amdgpu]] *ERROR* ring
-vcn_dec test failed (-110)
-[drm:amdgpu_device_ip_resume_phase2 [amdgpu]] *ERROR* resume of IP block
-<vcn_v1_0> failed -110
-amdgpu 0000:02:00.0: amdgpu: amdgpu_device_ip_resume failed (-110).
-PM: dpm_run_callback(): pci_pm_resume+0x0/0x90 returns -110
-
-[why]
-When playing the video: The power state flag of the vcn block is set to
-POWER_STATE_ON.
-
-When doing suspend: There is no change to the power state flag of the
-vcn block, it is still POWER_STATE_ON.
-
-When doing resume: Need to open the power gate of the vcn block and set
-the power state flag of the VCN block to POWER_STATE_ON.
-But at this time, the power state flag of the vcn block is already
-POWER_STATE_ON. The power status flag check in the "8f2cdef drm/amd/pm:
-avoid duplicate powergate/ungate setting" patch will return the
-amdgpu_dpm_set_powergating_by_smu function directly.
-As a result, the gate of the power was not opened, causing the
-subsequent ring test to fail.
-
-[how]
-In the suspend function of the vcn block, explicitly change the power
-state flag of the vcn block to POWER_STATE_OFF.
-
-BugLink: https://gitlab.freedesktop.org/drm/amd/-/issues/1828
-Signed-off-by: chen gong <curry.gong@amd.com>
-Reviewed-by: Evan Quan <evan.quan@amd.com>
+Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1833
+Reviewed-by: Hawking Zhang <Hawking.Zhang@amd.com>
 Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/vcn_v1_0.c |    7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c |   76 ++++++++++++++++++--------
+ drivers/gpu/drm/amd/include/discovery.h       |   49 ++++++++++++++++
+ 2 files changed, 103 insertions(+), 22 deletions(-)
 
---- a/drivers/gpu/drm/amd/amdgpu/vcn_v1_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/vcn_v1_0.c
-@@ -253,6 +253,13 @@ static int vcn_v1_0_suspend(void *handle
- {
- 	int r;
- 	struct amdgpu_device *adev = (struct amdgpu_device *)handle;
-+	bool idle_work_unexecuted;
-+
-+	idle_work_unexecuted = cancel_delayed_work_sync(&adev->vcn.idle_work);
-+	if (idle_work_unexecuted) {
-+		if (adev->pm.dpm_enabled)
-+			amdgpu_dpm_enable_uvd(adev, false);
-+	}
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c
+@@ -415,10 +415,15 @@ void amdgpu_discovery_harvest_ip(struct
+ 	}
+ }
  
- 	r = vcn_v1_0_hw_fini(adev);
- 	if (r)
++union gc_info {
++	struct gc_info_v1_0 v1;
++	struct gc_info_v2_0 v2;
++};
++
+ int amdgpu_discovery_get_gfx_info(struct amdgpu_device *adev)
+ {
+ 	struct binary_header *bhdr;
+-	struct gc_info_v1_0 *gc_info;
++	union gc_info *gc_info;
+ 
+ 	if (!adev->mman.discovery_bin) {
+ 		DRM_ERROR("ip discovery uninitialized\n");
+@@ -426,27 +431,54 @@ int amdgpu_discovery_get_gfx_info(struct
+ 	}
+ 
+ 	bhdr = (struct binary_header *)adev->mman.discovery_bin;
+-	gc_info = (struct gc_info_v1_0 *)(adev->mman.discovery_bin +
++	gc_info = (union gc_info *)(adev->mman.discovery_bin +
+ 			le16_to_cpu(bhdr->table_list[GC].offset));
+-
+-	adev->gfx.config.max_shader_engines = le32_to_cpu(gc_info->gc_num_se);
+-	adev->gfx.config.max_cu_per_sh = 2 * (le32_to_cpu(gc_info->gc_num_wgp0_per_sa) +
+-					      le32_to_cpu(gc_info->gc_num_wgp1_per_sa));
+-	adev->gfx.config.max_sh_per_se = le32_to_cpu(gc_info->gc_num_sa_per_se);
+-	adev->gfx.config.max_backends_per_se = le32_to_cpu(gc_info->gc_num_rb_per_se);
+-	adev->gfx.config.max_texture_channel_caches = le32_to_cpu(gc_info->gc_num_gl2c);
+-	adev->gfx.config.max_gprs = le32_to_cpu(gc_info->gc_num_gprs);
+-	adev->gfx.config.max_gs_threads = le32_to_cpu(gc_info->gc_num_max_gs_thds);
+-	adev->gfx.config.gs_vgt_table_depth = le32_to_cpu(gc_info->gc_gs_table_depth);
+-	adev->gfx.config.gs_prim_buffer_depth = le32_to_cpu(gc_info->gc_gsprim_buff_depth);
+-	adev->gfx.config.double_offchip_lds_buf = le32_to_cpu(gc_info->gc_double_offchip_lds_buffer);
+-	adev->gfx.cu_info.wave_front_size = le32_to_cpu(gc_info->gc_wave_size);
+-	adev->gfx.cu_info.max_waves_per_simd = le32_to_cpu(gc_info->gc_max_waves_per_simd);
+-	adev->gfx.cu_info.max_scratch_slots_per_cu = le32_to_cpu(gc_info->gc_max_scratch_slots_per_cu);
+-	adev->gfx.cu_info.lds_size = le32_to_cpu(gc_info->gc_lds_size);
+-	adev->gfx.config.num_sc_per_sh = le32_to_cpu(gc_info->gc_num_sc_per_se) /
+-					 le32_to_cpu(gc_info->gc_num_sa_per_se);
+-	adev->gfx.config.num_packer_per_sc = le32_to_cpu(gc_info->gc_num_packer_per_sc);
+-
++	switch (gc_info->v1.header.version_major) {
++	case 1:
++		adev->gfx.config.max_shader_engines = le32_to_cpu(gc_info->v1.gc_num_se);
++		adev->gfx.config.max_cu_per_sh = 2 * (le32_to_cpu(gc_info->v1.gc_num_wgp0_per_sa) +
++						      le32_to_cpu(gc_info->v1.gc_num_wgp1_per_sa));
++		adev->gfx.config.max_sh_per_se = le32_to_cpu(gc_info->v1.gc_num_sa_per_se);
++		adev->gfx.config.max_backends_per_se = le32_to_cpu(gc_info->v1.gc_num_rb_per_se);
++		adev->gfx.config.max_texture_channel_caches = le32_to_cpu(gc_info->v1.gc_num_gl2c);
++		adev->gfx.config.max_gprs = le32_to_cpu(gc_info->v1.gc_num_gprs);
++		adev->gfx.config.max_gs_threads = le32_to_cpu(gc_info->v1.gc_num_max_gs_thds);
++		adev->gfx.config.gs_vgt_table_depth = le32_to_cpu(gc_info->v1.gc_gs_table_depth);
++		adev->gfx.config.gs_prim_buffer_depth = le32_to_cpu(gc_info->v1.gc_gsprim_buff_depth);
++		adev->gfx.config.double_offchip_lds_buf = le32_to_cpu(gc_info->v1.gc_double_offchip_lds_buffer);
++		adev->gfx.cu_info.wave_front_size = le32_to_cpu(gc_info->v1.gc_wave_size);
++		adev->gfx.cu_info.max_waves_per_simd = le32_to_cpu(gc_info->v1.gc_max_waves_per_simd);
++		adev->gfx.cu_info.max_scratch_slots_per_cu = le32_to_cpu(gc_info->v1.gc_max_scratch_slots_per_cu);
++		adev->gfx.cu_info.lds_size = le32_to_cpu(gc_info->v1.gc_lds_size);
++		adev->gfx.config.num_sc_per_sh = le32_to_cpu(gc_info->v1.gc_num_sc_per_se) /
++			le32_to_cpu(gc_info->v1.gc_num_sa_per_se);
++		adev->gfx.config.num_packer_per_sc = le32_to_cpu(gc_info->v1.gc_num_packer_per_sc);
++		break;
++	case 2:
++		adev->gfx.config.max_shader_engines = le32_to_cpu(gc_info->v2.gc_num_se);
++		adev->gfx.config.max_cu_per_sh = le32_to_cpu(gc_info->v2.gc_num_cu_per_sh);
++		adev->gfx.config.max_sh_per_se = le32_to_cpu(gc_info->v2.gc_num_sh_per_se);
++		adev->gfx.config.max_backends_per_se = le32_to_cpu(gc_info->v2.gc_num_rb_per_se);
++		adev->gfx.config.max_texture_channel_caches = le32_to_cpu(gc_info->v2.gc_num_tccs);
++		adev->gfx.config.max_gprs = le32_to_cpu(gc_info->v2.gc_num_gprs);
++		adev->gfx.config.max_gs_threads = le32_to_cpu(gc_info->v2.gc_num_max_gs_thds);
++		adev->gfx.config.gs_vgt_table_depth = le32_to_cpu(gc_info->v2.gc_gs_table_depth);
++		adev->gfx.config.gs_prim_buffer_depth = le32_to_cpu(gc_info->v2.gc_gsprim_buff_depth);
++		adev->gfx.config.double_offchip_lds_buf = le32_to_cpu(gc_info->v2.gc_double_offchip_lds_buffer);
++		adev->gfx.cu_info.wave_front_size = le32_to_cpu(gc_info->v2.gc_wave_size);
++		adev->gfx.cu_info.max_waves_per_simd = le32_to_cpu(gc_info->v2.gc_max_waves_per_simd);
++		adev->gfx.cu_info.max_scratch_slots_per_cu = le32_to_cpu(gc_info->v2.gc_max_scratch_slots_per_cu);
++		adev->gfx.cu_info.lds_size = le32_to_cpu(gc_info->v2.gc_lds_size);
++		adev->gfx.config.num_sc_per_sh = le32_to_cpu(gc_info->v2.gc_num_sc_per_se) /
++			le32_to_cpu(gc_info->v2.gc_num_sh_per_se);
++		adev->gfx.config.num_packer_per_sc = le32_to_cpu(gc_info->v2.gc_num_packer_per_sc);
++		break;
++	default:
++		dev_err(adev->dev,
++			"Unhandled GC info table %d.%d\n",
++			gc_info->v1.header.version_major,
++			gc_info->v1.header.version_minor);
++		return -EINVAL;
++	}
+ 	return 0;
+ }
+--- a/drivers/gpu/drm/amd/include/discovery.h
++++ b/drivers/gpu/drm/amd/include/discovery.h
+@@ -143,6 +143,55 @@ struct gc_info_v1_0 {
+ 	uint32_t gc_num_gl2a;
+ };
+ 
++struct gc_info_v1_1 {
++	struct gpu_info_header header;
++
++	uint32_t gc_num_se;
++	uint32_t gc_num_wgp0_per_sa;
++	uint32_t gc_num_wgp1_per_sa;
++	uint32_t gc_num_rb_per_se;
++	uint32_t gc_num_gl2c;
++	uint32_t gc_num_gprs;
++	uint32_t gc_num_max_gs_thds;
++	uint32_t gc_gs_table_depth;
++	uint32_t gc_gsprim_buff_depth;
++	uint32_t gc_parameter_cache_depth;
++	uint32_t gc_double_offchip_lds_buffer;
++	uint32_t gc_wave_size;
++	uint32_t gc_max_waves_per_simd;
++	uint32_t gc_max_scratch_slots_per_cu;
++	uint32_t gc_lds_size;
++	uint32_t gc_num_sc_per_se;
++	uint32_t gc_num_sa_per_se;
++	uint32_t gc_num_packer_per_sc;
++	uint32_t gc_num_gl2a;
++	uint32_t gc_num_tcp_per_sa;
++	uint32_t gc_num_sdp_interface;
++	uint32_t gc_num_tcps;
++};
++
++struct gc_info_v2_0 {
++	struct gpu_info_header header;
++
++	uint32_t gc_num_se;
++	uint32_t gc_num_cu_per_sh;
++	uint32_t gc_num_sh_per_se;
++	uint32_t gc_num_rb_per_se;
++	uint32_t gc_num_tccs;
++	uint32_t gc_num_gprs;
++	uint32_t gc_num_max_gs_thds;
++	uint32_t gc_gs_table_depth;
++	uint32_t gc_gsprim_buff_depth;
++	uint32_t gc_parameter_cache_depth;
++	uint32_t gc_double_offchip_lds_buffer;
++	uint32_t gc_wave_size;
++	uint32_t gc_max_waves_per_simd;
++	uint32_t gc_max_scratch_slots_per_cu;
++	uint32_t gc_lds_size;
++	uint32_t gc_num_sc_per_se;
++	uint32_t gc_num_packer_per_sc;
++};
++
+ typedef struct harvest_info_header {
+ 	uint32_t signature; /* Table Signature */
+ 	uint32_t version;   /* Table Version */
 
 

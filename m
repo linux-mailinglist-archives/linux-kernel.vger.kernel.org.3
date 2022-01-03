@@ -2,117 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51D8A48353F
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 17:59:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D395483545
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 18:02:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234961AbiACQ71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 11:59:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbiACQ7Z (ORCPT
+        id S234206AbiACRCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 12:02:46 -0500
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:48568 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229972AbiACRCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 11:59:25 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F192C061761;
-        Mon,  3 Jan 2022 08:59:25 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C1C0D1EC01CE;
-        Mon,  3 Jan 2022 17:59:19 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1641229159;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=ts44VVgH9vdtQvsOCoUEuFivddAMNPUEDPS8OSJXVYg=;
-        b=nfC00FSml3Yvgxtd6HqgtS5JNr6Fc3GQM8Jd7kUwmMzWTxwFIpSWVhWlp+t04uFD+vAopj
-        Hp1ptTv1Kkc09sOxjZNrhllxxBJUSrPBfumpaXkvyRa7LH6qeYMtZ5/MtQyvWeL9ge8Xds
-        LA/roCFzE0evxqS+dGv8CFS9MHoGXBg=
-Date:   Mon, 3 Jan 2022 17:59:27 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v9 03/15] kallsyms: Hide layout
-Message-ID: <YdMrb/t2zJbpLYj0@zn.tnic>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
- <20211223002209.1092165-4-alexandr.lobakin@intel.com>
- <Yc40UKmylVh38vl5@zn.tnic>
- <20220103154023.7326-1-alexandr.lobakin@intel.com>
+        Mon, 3 Jan 2022 12:02:45 -0500
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 203H2gNt013979
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 3 Jan 2022 12:02:42 -0500
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id D8BD515C00E1; Mon,  3 Jan 2022 12:02:41 -0500 (EST)
+Date:   Mon, 3 Jan 2022 12:02:41 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, Jann Horn <jannh@google.com>
+Subject: Re: [PATCH] random: reseed in RNDRESEEDCRNG for the !crng_ready()
+ case
+Message-ID: <YdMsMZU/PL7o2j5f@mit.edu>
+References: <20220103160002.1068356-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220103154023.7326-1-alexandr.lobakin@intel.com>
+In-Reply-To: <20220103160002.1068356-1-Jason@zx2c4.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 03, 2022 at 04:40:23PM +0100, Alexander Lobakin wrote:
-> "kallsyms: randomize /proc/kallsyms output order"?
+On Mon, Jan 03, 2022 at 05:00:02PM +0100, Jason A. Donenfeld wrote:
+> Userspace often wants to seed the RNG from disk, without knowing how
+> much entropy is really in that file. In that case, userspace says
+> there's no entropy, so none is credited. If this happens in the
+> crng_init==1 state -- common at early boot time when such seed files are
+> used -- then that seed file will be written into the pool, but it won't
+> actually help the quality of /dev/urandom reads. Instead, it'll sit
+> around until something does credit sufficient amounts of entropy, at
+> which point, the RNG is seeded and initialized.
+> 
+> Rather than let those seed file bits sit around unused until "sometime
+> later", userspaces that call RNDRESEEDCRNG can expect, with this commit,
+> for those seed bits to be put to use *somehow*. This is accomplished by
+> extracting from the input pool on RNDRESEEDCRNG, xoring 32 bytes into
+> the current crng state.
 
-Better.
+I think this is fine, but the RNDRESEEDRNG ioctl is rarely used by
+userspace.  From a Google search I see that jitterentropy uses it, but
+in most setups it won't be called.
 
-> It displays zeros for non-roots, but the symbols are still sorted by
-> their addresses. As a result, if you leak one address, you could
-> determine some others.
+So something we could do to improve things is to add some code to
+random_write() so that in the case where crng_init is 1, we take half
+of the bytes or CHACHA_KEY_SIZE bytes, whichever is less, and pass
+those bytes to crng_fast_load().  (We'll have to copy it to a bounce
+buffer since the passed in pointer is __user, and memzero_explicit it
+after calling crng_fast_load.)
 
-Because if an attacker has the corresponding vmlinux, he has the offsets
-too so, game over?
+This will divert some part of the seed file to partially initialize
+the CRNG.  It won't fully initialize the CRNG, but that's fine, since
+it's possible that the seed file has been compromised --- or is a
+fixed value if the seed file is from coming a VM image file.  So
+having at least half of the entropy used to initialize CRNG up to
+crng_init=1 is coming from interrupt timing seems like a good thing.
 
-> This is especially critical with FG-KASLR as its text layout is
-> random each time and sorted /proc/kallsyms would make the entire
-> feature useless.
-
-Do you notice how exactly this needs to absolutely be in the commit
-message? Instead of that "this patch" bla which is more or less obvious.
-
-IOW, always talk about *why* you're doing a change.
-
-> I either have some problems with checkpatch + codespell, or they
-> missed all that typos you're noticing. Thanks, and apologies =\
-
-No worries, and thank python's enchant module which I use to spellcheck
-stuff.
-
-So lemme look at the actual patch then :)
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+					- Ted

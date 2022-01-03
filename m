@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5CCE4832A5
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:31:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B7948334E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:35:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234521AbiACO3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:29:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38686 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233916AbiACO2M (ORCPT
+        id S234312AbiACOfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:35:42 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60386 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233963AbiACOcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:28:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B84C0698D3;
-        Mon,  3 Jan 2022 06:28:08 -0800 (PST)
+        Mon, 3 Jan 2022 09:32:53 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 48282B80EF2;
-        Mon,  3 Jan 2022 14:28:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C9C5C36AF0;
-        Mon,  3 Jan 2022 14:28:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D175161119;
+        Mon,  3 Jan 2022 14:32:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F142C36AEB;
+        Mon,  3 Jan 2022 14:32:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220086;
-        bh=iZTFXKSwQoFLul70I3cCFwLfy+l08i9jLlhkuDlt3AU=;
+        s=korg; t=1641220372;
+        bh=CimNV+shsGOoPrcFLjR3vYjlz4NNvKPdixSuaJlPVNo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mUnIfKFkx0mNZ+6qqCP863wWh6yG3pn60j5NdpLrkjC1H2BVobEURICX9FPZ2AzYL
-         cJWQZI9ad1NtcDBQl+Lm9y/QYyUKA2qANz5bHp5YX1B17hmZgcuIfUjNHX0rYM+Vwr
-         +fIk/YHKGm/VAB4DHItMjc+hdynZrpxz8Y+tufb4=
+        b=bg/GIt9YmsOgRPC9FMn3yLvp3clYrZWea/bBaUkH8bpibaOCwWe3NTO7NwdiaqHEV
+         s2+eQIts0egIQbA1BCy7oMHH1Xj/8oFFYL0vdF9zUer4403aE52CNFrTs/Hp47V50w
+         7O+ya4mxg/WEd0ainjDpRnmV32ctLifNeLbs8USY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Todd Kjos <tkjos@google.com>
-Subject: [PATCH 5.4 32/37] binder: fix async_free_space accounting for empty parcels
+        stable@vger.kernel.org, Jianguo Wu <wujianguo@chinatelecom.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 49/73] selftests: net: using ping6 for IPv6 in udpgro_fwd.sh
 Date:   Mon,  3 Jan 2022 15:24:10 +0100
-Message-Id: <20220103142052.866161692@linuxfoundation.org>
+Message-Id: <20220103142058.492189171@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142051.883166998@linuxfoundation.org>
-References: <20220103142051.883166998@linuxfoundation.org>
+In-Reply-To: <20220103142056.911344037@linuxfoundation.org>
+References: <20220103142056.911344037@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,46 +46,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Todd Kjos <tkjos@google.com>
+From: Jianguo Wu <wujianguo@chinatelecom.cn>
 
-commit cfd0d84ba28c18b531648c9d4a35ecca89ad9901 upstream.
+[ Upstream commit 8b3170e07539855ee91bc5e2fa7780a4c9b5c7aa ]
 
-In 4.13, commit 74310e06be4d ("android: binder: Move buffer out of area shared with user space")
-fixed a kernel structure visibility issue. As part of that patch,
-sizeof(void *) was used as the buffer size for 0-length data payloads so
-the driver could detect abusive clients sending 0-length asynchronous
-transactions to a server by enforcing limits on async_free_size.
+udpgro_fwd.sh output following message:
+  ping: 2001:db8:1::100: Address family for hostname not supported
 
-Unfortunately, on the "free" side, the accounting of async_free_space
-did not add the sizeof(void *) back. The result was that up to 8-bytes of
-async_free_space were leaked on every async transaction of 8-bytes or
-less.  These small transactions are uncommon, so this accounting issue
-has gone undetected for several years.
+Using ping6 when pinging IPv6 addresses.
 
-The fix is to use "buffer_size" (the allocated buffer size) instead of
-"size" (the logical buffer size) when updating the async_free_space
-during the free operation. These are the same except for this
-corner case of asynchronous transactions with payloads < 8 bytes.
-
-Fixes: 74310e06be4d ("android: binder: Move buffer out of area shared with user space")
-Signed-off-by: Todd Kjos <tkjos@google.com>
-Cc: stable@vger.kernel.org # 4.14+
-Link: https://lore.kernel.org/r/20211220190150.2107077-1-tkjos@google.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: a062260a9d5f ("selftests: net: add UDP GRO forwarding self-tests")
+Signed-off-by: Jianguo Wu <wujianguo@chinatelecom.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/android/binder_alloc.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/net/udpgro_fwd.sh | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/android/binder_alloc.c
-+++ b/drivers/android/binder_alloc.c
-@@ -613,7 +613,7 @@ static void binder_free_buf_locked(struc
- 	BUG_ON(buffer->user_data > alloc->buffer + alloc->buffer_size);
+diff --git a/tools/testing/selftests/net/udpgro_fwd.sh b/tools/testing/selftests/net/udpgro_fwd.sh
+index 6a3985b8cd7f6..3ea73013d9568 100755
+--- a/tools/testing/selftests/net/udpgro_fwd.sh
++++ b/tools/testing/selftests/net/udpgro_fwd.sh
+@@ -185,6 +185,7 @@ for family in 4 6; do
+ 	IPT=iptables
+ 	SUFFIX=24
+ 	VXDEV=vxlan
++	PING=ping
  
- 	if (buffer->async_transaction) {
--		alloc->free_async_space += size + sizeof(struct binder_buffer);
-+		alloc->free_async_space += buffer_size + sizeof(struct binder_buffer);
+ 	if [ $family = 6 ]; then
+ 		BM_NET=$BM_NET_V6
+@@ -192,6 +193,7 @@ for family in 4 6; do
+ 		SUFFIX="64 nodad"
+ 		VXDEV=vxlan6
+ 		IPT=ip6tables
++		PING="ping6"
+ 	fi
  
- 		binder_alloc_debug(BINDER_DEBUG_BUFFER_ALLOC_ASYNC,
- 			     "%d: binder_free_buf size %zd async free %zd\n",
+ 	echo "IPv$family"
+@@ -237,7 +239,7 @@ for family in 4 6; do
+ 
+ 	# load arp cache before running the test to reduce the amount of
+ 	# stray traffic on top of the UDP tunnel
+-	ip netns exec $NS_SRC ping -q -c 1 $OL_NET$DST_NAT >/dev/null
++	ip netns exec $NS_SRC $PING -q -c 1 $OL_NET$DST_NAT >/dev/null
+ 	run_test "GRO fwd over UDP tunnel" $OL_NET$DST_NAT 1 1 $OL_NET$DST
+ 	cleanup
+ 
+-- 
+2.34.1
+
 
 

@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A423482DDC
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 05:51:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5AFD482DDB
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 05:51:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231612AbiACEvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 23:51:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53334 "EHLO
+        id S231600AbiACEvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 23:51:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231570AbiACEvH (ORCPT
+        with ESMTP id S231573AbiACEvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 23:51:07 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24800C061761;
+        Sun, 2 Jan 2022 23:51:08 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FDCC061784;
         Sun,  2 Jan 2022 20:51:07 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id f134-20020a1c1f8c000000b00345c05bc12dso17731417wmf.3;
+Received: by mail-wm1-x32f.google.com with SMTP id g191-20020a1c9dc8000000b0032fbf912885so17714577wme.4;
         Sun, 02 Jan 2022 20:51:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=WziIORtcu1ixmyUuFsOxZjMh6fj5KLgl3inLlioeuQg=;
-        b=cu9OGb/9eo47wQDxRq3PD8Llngit205Utyebr5rVMT+mWn3P1zYFOyX9SI/yk7BeTs
-         PKMr/bX+FBCC9/n/yyDRmsi3LC2fs1CC2+aDE9tIBz5DJpKQSLJBnSM/tuVYkYGbcP2+
-         B8Srgz7ZjXW51i1UtS1Vu7vMwF5PfG7Kj+9D5x5CKzwqA331+PGmsMYVwKJ/qte3pPZ7
-         hEFODGtrY5Atqhg2T3yONs486P7WtLquLUsOnCeeWfQ1Yz0D9+Ubx0RrUhdAm+ZzfVG1
-         VOalMpVMCPr/iSJC3kL0PDIOhAw+5jF7xBdM2wt6LOv0deRJNBv8+rMtBZXzQ6AOjvoR
-         549w==
+        bh=VfgtFWBOAntscrZjVoR2yDobZ73EctKONX/lgDmC4tg=;
+        b=EpNRJwvN7RiJI9XMrZR8ScHIWWO9ohpBw2wLVhD+LfgUjwxecCVJYC/cpWAUa21WKk
+         +B7r7MMMNsz+TRaTviqkHoPTK5i4Cik32b+OCKAr/4ZjPqKH5aQ9a3hDWb5xVGFijop6
+         dRi7LXux17kOavlta8gm+oFeBhtVHmD+r2cShEAQzA8719jtAMFwMblj/MIiHZ+8NoUz
+         b7gwcMhHVE1uX9XrL6pNVfLXCxsVJBd5ULFSKFGINXg4qR8fIWbzJmMyF/oiMRlFQB8y
+         PT7FhXMTfPg7wUPtWmI2pgpUOEY69mCSxkRUl7jrLIPnxKOb1mEotEYgt7Vwf5Ey0mVK
+         NY1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=WziIORtcu1ixmyUuFsOxZjMh6fj5KLgl3inLlioeuQg=;
-        b=qur41pRAJFfj2+WsDdgj1KEZgf2+XLsdMAi+C52UtuViKHHNMj606dDpKLvJ/EQVcI
-         nOImRk5Q7ljmPKy/m4fp453OhUTAsw9891keXRRJriSyD+b2kv6fQxiSr7DrzHREdORp
-         COm7e3Xq7k0dARudGKaNyIBXo58ALf6wjfjBT7WfSdw0YIJrPeGfbVGO3XgargxMejeN
-         cFhsoaLPbueQZUHLpQE5oVWPvcvXPrL10bDomuPHXZGeKL0VeiG+tf44feMBXWXnu1Pc
-         UJRwcg3A/E5qdq9O8jO/NYaNwJJhGjEXzSqGiVF1svzo6/rrd7zhreOE4DQiRPdSbdsy
-         rTig==
-X-Gm-Message-State: AOAM531ouT+NrirYiQboAx5rW5HLO38Q5TeeG82RGOtuIvSbLa1nMffm
-        SzBVFpTJwbtfJ1C9pamVERs=
-X-Google-Smtp-Source: ABdhPJxRm3LhJeUjnU62xpAreas0yY8/fNxeXgofzCxRrxxAJEGRx8sPe+8PTLU+PrSo6wTBKjhc6w==
-X-Received: by 2002:a05:600c:2304:: with SMTP id 4mr37344474wmo.71.1641185465775;
-        Sun, 02 Jan 2022 20:51:05 -0800 (PST)
+        bh=VfgtFWBOAntscrZjVoR2yDobZ73EctKONX/lgDmC4tg=;
+        b=bVJF0MyaoIWgds5rTzjjfmRbZq0Ya3cPVtH45+w+0fDhQGh02dBSi1bWcWqUnXFELx
+         jzuY3C+xwO3QWx/fviTafUCsykEuQZMvKbJDvxax4BEFLF/6P4rTSgstURKs3kRmhuEz
+         PdcjrXH6VMyxvpXCuEFIXzKDs4vvbzaV/l+e2GYZc0VnzIoeAmgTKtdg0dRKdtXT6BEn
+         +ze3+MJ32YouFj6YeSSkywcUjx0BYBc4QeNGJChVAiu2X9iIBKTgP5RP+0CrfOXM2n1y
+         DgMnZP88gfc1vu8UhDLqMEZ3dC2qHMd6eWqVTxil+ECgC/ajrKSYPwdc1SvYUpYfuXQj
+         3eHQ==
+X-Gm-Message-State: AOAM531Yg++Af3cXQX9HBvecXKu8FqQ24Lc26PsrVK14iIZ96pWW0AkX
+        yYg1Rsh/DvwLn1O6JiE+kW0=
+X-Google-Smtp-Source: ABdhPJy0OMqloQUsZWDoSVQW6S/s2M6TWLxx6B3DF/pSCm1V6hz9tIBPLG22lsPqNDY9W2a/xszOgw==
+X-Received: by 2002:a7b:c194:: with SMTP id y20mr37470450wmi.79.1641185466519;
+        Sun, 02 Jan 2022 20:51:06 -0800 (PST)
 Received: from fuji.fritz.box (ip-89-161-76-237.tel.tkb.net.pl. [89.161.76.237])
         by smtp.gmail.com with ESMTPSA id r7sm32819090wrt.77.2022.01.02.20.51.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jan 2022 20:51:05 -0800 (PST)
+        Sun, 02 Jan 2022 20:51:06 -0800 (PST)
 From:   =?UTF-8?q?Tomasz=20Warnie=C5=82=C5=82o?= 
         <tomasz.warniello@gmail.com>
 To:     corbet@lwn.net
 Cc:     =?UTF-8?q?Tomasz=20Warnie=C5=82=C5=82o?= 
         <tomasz.warniello@gmail.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 08/15] scripts: kernel-doc: Transform documentation into POD (8/15)
-Date:   Mon,  3 Jan 2022 05:50:49 +0100
-Message-Id: <20220103045051.506526-3-tomasz.warniello@gmail.com>
+Subject: [PATCH v2 09/15] scripts: kernel-doc: Transform documentation into POD (9/15)
+Date:   Mon,  3 Jan 2022 05:50:50 +0100
+Message-Id: <20220103045051.506526-4-tomasz.warniello@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220103045051.506526-1-tomasz.warniello@gmail.com>
 References: <20220103045051.506526-1-tomasz.warniello@gmail.com>
@@ -67,69 +67,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Step 8) Translate the "Output selection modifiers" subsection of OPTIONS
+Step 9) Translate the "Other parameters" subsection of OPTIONS
 
-A subsection "reStructuredText only" is added for -enable-lineno.
-
-Other notes:
-- paragraphing correction
+Notes:
+- The -help token is added.
+- The entries are sorted alphbetically.
 
 See step 1 for the series details.
 
 Signed-off-by: Tomasz Warniełło <tomasz.warniello@gmail.com>
 ---
- scripts/kernel-doc | 37 +++++++++++++++++++++++++++++--------
- 1 file changed, 29 insertions(+), 8 deletions(-)
+ scripts/kernel-doc | 23 ++++++++++++++++++-----
+ 1 file changed, 18 insertions(+), 5 deletions(-)
 
 diff --git a/scripts/kernel-doc b/scripts/kernel-doc
-index 7d95213c11b8..fa1270272b3c 100755
+index fa1270272b3c..76018ca81594 100755
 --- a/scripts/kernel-doc
 +++ b/scripts/kernel-doc
-@@ -83,14 +83,6 @@ sub usage {
+@@ -83,11 +83,6 @@ sub usage {
      my $message = <<"EOF";
  Usage: $0 [OPTION ...] FILE ...
  
--Output selection modifiers:
--  -no-doc-sections	Do not output DOC: sections.
--  -enable-lineno        Enable output of #define LINENO lines. Only works with
--                        reStructuredText format.
--  -export-file FILE     Specify an additional FILE in which to look for
--                        EXPORT_SYMBOL() and EXPORT_SYMBOL_GPL(). To be used with
--                        -export or -internal. May be specified multiple times.
+-Other parameters:
+-  -v			Verbose output, more warnings and other information.
+-  -h			Print this help.
+-  -Werror		Treat warnings as errors.
 -
- Other parameters:
-   -v			Verbose output, more warnings and other information.
-   -h			Print this help.
-@@ -2607,4 +2599,33 @@ May be specified multiple times.
+ EOF
+     print $message;
+     exit 1;
+@@ -2628,4 +2623,22 @@ Enable output of #define LINENO lines.
  
  =back
  
-+=head2 Output selection modifiers:
++=head2 Other parameters:
 +
 +=over 8
 +
-+=item -no-doc-sections
++=item -h, -help
 +
-+Do not output DOC: sections.
++Print this help.
 +
-+=item -export-file FILE
++=item -v
 +
-+Specify an additional FILE in which to look for EXPORT_SYMBOL() and
-+EXPORT_SYMBOL_GPL().
++Verbose output, more warnings and other information.
 +
-+To be used with -export or -internal.
++=item -Werror
 +
-+May be specified multiple times.
-+
-+=back
-+
-+=head3 reStructuredText only
-+
-+=over 8
-+
-+=item -enable-lineno
-+
-+Enable output of #define LINENO lines.
++Treat warnings as errors.
 +
 +=back
 +

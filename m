@@ -2,132 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0ABB483820
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 21:58:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 248D0483825
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 21:59:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbiACU6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 15:58:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
+        id S229653AbiACU7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 15:59:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiACU6j (ORCPT
+        with ESMTP id S229697AbiACU7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 15:58:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E02C061761;
-        Mon,  3 Jan 2022 12:58:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 530B7B810AD;
-        Mon,  3 Jan 2022 20:58:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF2E3C36AE9;
-        Mon,  3 Jan 2022 20:58:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641243514;
-        bh=Oi2lazAlGtBEN+SacQrdXjI+cepKxcMn/RM+uCr/A+8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=R88BGgJV4fIZVu/4U+HzuRMu7VpdLNmck25pqqUONCQyalbdrWib82X6UQLyQtINl
-         3xqyglE3tEdrN7URVYUoBlSFLq0qZ1qUSk7RFl/K5M67EulzEjqwvaO4H6zwY0+jvP
-         JmvNRy/BAW1pTo53rjcSszjmrrEgumNtNGk/VydAuosiAFMD3XgbZuHjfGhYJZRJjQ
-         GqrjeDM3bqq9Z1VxGImUhTnXU/ILMFntSJAlDvSEiPSlWcJgFXB1ubJSPxaNhFBfzq
-         +MHwJiwc/wYghXYjEvNX8SZ0N4LvLn4zcc0mHirsRacAThrl1dYJeAdX2aS9S/iMYi
-         ivyu+TF9VQqog==
-Date:   Mon, 3 Jan 2022 21:58:31 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: make pdfdocs fails on Debian stable
-Message-ID: <20220103215831.2e65bb94@coco.lan>
-In-Reply-To: <20220103171108.GB3422@lst.de>
-References: <20220103163050.GA3151@lst.de>
-        <20220103175814.5b22a6a7@coco.lan>
-        <20220103171108.GB3422@lst.de>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        Mon, 3 Jan 2022 15:59:23 -0500
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC43AC061761
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 12:59:22 -0800 (PST)
+Received: by mail-ua1-x92b.google.com with SMTP id i5so44702710uaq.10
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 12:59:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9DI7U33XnwqMBqIYYTvY19UtR18aJdkAMIqCMnWY6O8=;
+        b=uWmTvM9lJIr1+KHyjNcMXJUC571AxiXGhpJKCO94UujqnDReRrxk3QqtSDFEPnkwFk
+         mU+y9+j9FjMR0AIAZnXfWISDfFf+F1FuWi4GV4mIrguP71w4NqFwyaOnJtf2Tiiddefk
+         7ktYER/Jg23rRejddi9cj1wH3lCyADoYqi6xbXdYoBbwMSRuRFsFfpdMiM3cnbxwG0f/
+         Q7GVE+FGdkskwr5po5SJ/90rBRdvffKQOY71iZ6W+Vmt3VOYOwj0eW+fyeJ1IVQeLPqJ
+         8uuLlGqMqYicbiolFKAZLyr/PZed6XVseIfia3hPlliN2g/K59MpEX8dYyXbnU0Xi3VM
+         tf9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9DI7U33XnwqMBqIYYTvY19UtR18aJdkAMIqCMnWY6O8=;
+        b=mRMxq1vY3Ga261avrTQc4Lsf11aOraeSeMpLRyH+iSYrOBGH3ZLvWo/y0fjTVkMqSM
+         ZtN7Tc2EUO322l3g6g1NX2P7TOwbiNtQjhGRXg9hdq3nmxHQXGDoRiFpW6qDW6EP8zVe
+         nf+OOr92KHe6AoZolNQdqxNZUFeS1bXkUy2y5JHry/8+Fp7y6TiT6eYpXoW+XJLm441p
+         Arl83oo8lDWUS1+VbPdb7lrcA/vxYVjYb4J7agqtRUasgmQpdBjayLYvp2BQ/njSFywS
+         N05n/OVl8QoMXCLAfksha6+R5l6hRURGhyu01eQtMj05fLadrnlqVw3HiESkoZ7U36Co
+         BzoQ==
+X-Gm-Message-State: AOAM533vJZeehkDpjCCq8cObm8PiOlPeQzl8r3DYKMU9RS1rkC1kHPwR
+        /8FUbwVAi+ceQ5/vM/xMXCWcXXylzmN8/1iEgIcuNQ==
+X-Google-Smtp-Source: ABdhPJz565d48havHy/Fmp/TH4dis1kq3/Wnv+KXzc+hm2za8waxX8fvzxdpx/tqIvMh9wV2Vt2R9ZePnPbk02nbMKE=
+X-Received: by 2002:ab0:1d8c:: with SMTP id l12mr9711603uak.114.1641243561934;
+ Mon, 03 Jan 2022 12:59:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <3c0087a9-5c3b-d665-136e-6110a0482775@canonical.com>
+In-Reply-To: <3c0087a9-5c3b-d665-136e-6110a0482775@canonical.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Mon, 3 Jan 2022 22:59:10 +0200
+Message-ID: <CAPLW+4nrPKA66GrF4XukyHWHJ=wBycjyK3ZPLCofEFe-VJ9wWg@mail.gmail.com>
+Subject: Re: Exynos850 and ExynosAuto v9 pinctrl wakeup muxed interrupt
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Chanho Park <chanho61.park@samsung.com>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, 3 Jan 2022 18:11:08 +0100
-Christoph Hellwig <hch@lst.de> escreveu:
+On Thu, 30 Dec 2021 at 21:34, Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> Hi Chanho and Sam,
+>
+> I am slowly finishing dtschema for Samsung pinctrl drivers [1] and I
+> noticed that Exynos850 and Auto v9 do not define interrupt in pinctrl
+> node with: wakeup-interrupt-controller. This is an interrupt muxing
+> several external wakeup interrupts, e.g. EINT16 - EINT31.
+>
+> For Exynos5433 this looks like:
+> https://elixir.bootlin.com/linux/latest/source/arch/arm64/boot/dts/exynos/exynos5433.dtsi#L857
+>
+> Missing muxed interrupt for Exynos850 and Autov9 might be fine, although
+> you should see in dmesg error log like:
+>     "irq number for muxed EINTs not found"
+>
+> Can you check that your wakeup-interrupt-controller is properly defined
+> in DTSI? If yes, I will need to include such differences in the dtschema.
+>
 
-> On Mon, Jan 03, 2022 at 05:58:14PM +0100, Mauro Carvalho Chehab wrote:
-> > Weird... when you do a make, it should have checked for all
-> > dependencies, when it internally runs:
-> > 
-> > 	./scripts/sphinx-pre-install   
-> 
-> Detected OS: Debian GNU/Linux 11 (bullseye).
-> Sphinx version: 3.4.3
-> 
-> 
-> All optional dependencies are met.
-> Needed package dependencies are met.
-> 
-> > Basically, you need the xelatex package for it to work, as PDF
-> > output is via LaTeX. This is not a mandatory requirement, though,
-> > as most people are only interested on html output, and LaTeX
-> > dependencies require to install lots of stuff. it should provide you
-> > a list of packages required for PDF, with a suggestion of using
-> > apt-get to install it.
-> > 
-> > In this specific case, I guess the package name is 'texlive-xetex'.  
-> 
-> texlive-xetex is installed and seems to work find on various other
-> documents produced earlier by make pdfdocs
+In case of Exynos850, no muxed interrupts exist for wakeup GPIO
+domains. Basically, "pinctrl_alive" and "pinctrl_cmgp" domains are
+wake-up capable, and they have dedicated interrupt for each particular
+GPIO pin. All those interrupts are defined in exynos850-pinctrl.dtsi
+file, in next nodes:
+  - pinctrl_alive: gpa0..gpa4 (interrupt numbers 1..36)
+  - pinctrl_cmgp: gpm0..gpm7 (interrupt numbers 39..46)
 
-Ah, the error is specific to RCU.tex then?
+All mentioned interrupts are wakeup interrupts, and there are no muxed
+ones. So it seems like it's not possible to specify "interrupts"
+property in pinctrl nodes with wakeup-interrupt-controller. The PM is
+not enabled in Exynos850 platform yet, so I can't really test if
+interrupts I mentioned are able to wake up the system.
 
-You'll need to re-run xelatex with -interaction=interactive, in
-order to be able to identify what's the root cause.
+After adding this patch ("arm64: dts: exynos: Add missing gpm6 and
+gpm7 nodes to Exynos850"), I can't see this error message anymore:
 
-You could do this by using LATEXOPTS, e. g.:
+    samsung-pinctrl 11c30000.pinctrl: irq number for muxed EINTs not found
 
-	$ make SPHINXDIRS=RCU LATEXOPTS="-interaction=interactive" pdfdocs
+That's because exynos_eint_wkup_init() function exits in this check:
 
-With that, LaTeX will stop at the offending line from the .tex file.
+    if (!muxed_banks) {
+        of_node_put(wkup_np);
+        return 0;
+    }
 
-On a quick test here, I'm getting these at Fedora 35:
+But I actually can see another error message, printed in
+exynos_eint_gpio_init() function (for wake-up capable pinctrl nodes,
+because those nodes don't have "interrupts" property now -- you
+removed those in your patch):
 
-	(/usr/share/texlive/texmf-dist/tex/latex/l3packages/xtemplate/xtemplate.sty)
+    samsung-pinctrl 11850000.pinctrl: irq number not available
+    samsung-pinctrl 11c30000.pinctrl: irq number not available
 
-	! LaTeX Error: File `ctexhook.sty' not found.
+which in turn leads to exynos_eint_gpio_init() function to exit with
+-EINVAL code in the very beginning, and I'm not sure if it's ok? As I
+said, those errors only appear after your patch ("arm64: dts: exynos:
+drop incorrectly placed wakeup interrupts in Exynos850").
 
-	Type X to quit or <RETURN> to proceed,
-	or enter new name. (Default extension: sty)
+It raises next questions, which I'm trying to think over right now.
+Krzysztof, please let me know if you already have answers to those:
 
-It seems that a recent change (probably to better address issues with 
-Chinese and Japanese translation) added an extra dependency to some
-stylesheet.
+1. Regarding "wakeup-interrupt-controller" node (and
+exynos_eint_wkup_init() function): is it ok to not have "interrupts"
+property in there? Would corresponding interrupts specified in child
+nodes (gpa0..gpa4) function as wake-up interrupts in this case? Or
+pinctrl driver should be reworked somehow?
 
-I solved it by installing this package: "texlive-ctex".
+2. Regarding missing interrupts in pinctrl nodes (and corresponding
+error in exynos_eint_gpio_init() function): should it be reworked in
+some way for Exynos850? Error message seems invalid in Exynos850 case,
+and I'm not even sure if it's ok exynos_eint_gpio_init() fails. Should
+it be modified to work that error around, in case of Exynos850?
 
-The enclosed patch should fix the script for it to report such need.
+All other pinctrl nodes have a muxed interrupt (except pinctrl_aud,
+but that's probably fine).
 
-Thanks,
-Mauro
+Thanks!
 
-[PATCH] scripts: sphinx-pre-install: add required ctex dependency
-
-After a change meant to fix support for oriental characters
-(Chinese, Japanese, Korean), ctex stylesheet is now a requirement
-for PDF output.
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-
-diff --git a/scripts/sphinx-pre-install b/scripts/sphinx-pre-install
-index 288e86a9d1e5..46aaab414098 100755
---- a/scripts/sphinx-pre-install
-+++ b/scripts/sphinx-pre-install
-@@ -78,6 +78,7 @@ my %texlive = (
- 	'ucs.sty'            => 'texlive-ucs',
- 	'upquote.sty'        => 'texlive-upquote',
- 	'wrapfig.sty'        => 'texlive-wrapfig',
-+	'ctexhook.sty'       => 'texlive-ctex',
- );
- 
- #
-
+> [1] https://github.com/krzk/linux/tree/n/dt-bindings-samsung-pinctrl-schema
+>
+> Best regards,
+> Krzysztof

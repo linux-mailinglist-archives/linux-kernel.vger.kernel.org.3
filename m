@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4223E4832CB
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:31:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEED848324A
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:26:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbiACOau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:30:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234580AbiACO3j (ORCPT
+        id S233945AbiACO0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:26:33 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:56502 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232344AbiACOZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:29:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A367BC061784;
-        Mon,  3 Jan 2022 06:29:07 -0800 (PST)
+        Mon, 3 Jan 2022 09:25:54 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 642BBB80F1A;
-        Mon,  3 Jan 2022 14:29:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A14ECC36AEB;
-        Mon,  3 Jan 2022 14:29:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C31F261139;
+        Mon,  3 Jan 2022 14:25:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87C67C36AED;
+        Mon,  3 Jan 2022 14:25:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220145;
-        bh=TUmadFdk29V/j4ip7iNaRZQKjQD47/UXTdGrnEcl7YM=;
+        s=korg; t=1641219953;
+        bh=6YGgRH6ThzbzsmiBnkn8aHEm9OO34efPccdNlOv5AlE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PXXvWPDjpVmyjc597hovqT7f9sGL/OZtLpXV5VZiJlp/RBRzjHkHJFd0mkOdkLxv8
-         jnla4fSVVr/shSHTlP3Igav6bwi3zfq1aT9yGFQCzueR+CtUPzXuFw1GiiEbY6nehK
-         x05L+0qSWmUFmgon8pgl5sE6DyKlGHjVm1IoW2eI=
+        b=tkiZePRdYr2ha1K68SS5zvCqwV/who23dF5/r3aB7CdazcAKUYrOi4FhMYhXtkH0V
+         OgaCzJcZ8f4Y4h2hImhfLEXRLKl4amaVOWYNCh9rv7FZdh5D0Wm4OxIzPy816BzEQ1
+         UpZRJ2cxCSzvOj1yWtzHikzMVGXL/h+YCAsR0/2I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wang Qing <wangqing@vivo.com>,
-        Hans de Goede <hdegoede@redhat.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Samuel=20=C4=8Cavoj?= <samuel@cavoj.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 06/48] platform/x86: apple-gmux: use resource_size() with res
-Date:   Mon,  3 Jan 2022 15:23:43 +0100
-Message-Id: <20220103142053.698808957@linuxfoundation.org>
+Subject: [PATCH 4.19 04/27] Input: i8042 - enable deferred probe quirk for ASUS UM325UA
+Date:   Mon,  3 Jan 2022 15:23:44 +0100
+Message-Id: <20220103142052.319197706@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142053.466768714@linuxfoundation.org>
-References: <20220103142053.466768714@linuxfoundation.org>
+In-Reply-To: <20220103142052.162223000@linuxfoundation.org>
+References: <20220103142052.162223000@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,35 +47,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Qing <wangqing@vivo.com>
+From: Samuel Čavoj <samuel@cavoj.net>
 
-[ Upstream commit eb66fb03a727cde0ab9b1a3858de55c26f3007da ]
+[ Upstream commit 44ee250aeeabb28b52a10397ac17ffb8bfe94839 ]
 
-This should be (res->end - res->start + 1) here actually,
-use resource_size() derectly.
+The ASUS UM325UA suffers from the same issue as the ASUS UX425UA, which
+is a very similar laptop. The i8042 device is not usable immediately
+after boot and fails to initialize, requiring a deferred retry.
 
-Signed-off-by: Wang Qing <wangqing@vivo.com>
-Link: https://lore.kernel.org/r/1639484316-75873-1-git-send-email-wangqing@vivo.com
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Enable the deferred probe quirk for the UM325UA.
+
+BugLink: https://bugzilla.suse.com/show_bug.cgi?id=1190256
+Signed-off-by: Samuel Čavoj <samuel@cavoj.net>
+Link: https://lore.kernel.org/r/20211204015615.232948-1-samuel@cavoj.net
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/platform/x86/apple-gmux.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/input/serio/i8042-x86ia64io.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/platform/x86/apple-gmux.c b/drivers/platform/x86/apple-gmux.c
-index 9aae45a452002..57553f9b4d1dc 100644
---- a/drivers/platform/x86/apple-gmux.c
-+++ b/drivers/platform/x86/apple-gmux.c
-@@ -625,7 +625,7 @@ static int gmux_probe(struct pnp_dev *pnp, const struct pnp_device_id *id)
- 	}
+diff --git a/drivers/input/serio/i8042-x86ia64io.h b/drivers/input/serio/i8042-x86ia64io.h
+index 29179d42b467a..ee0b0a7237ad8 100644
+--- a/drivers/input/serio/i8042-x86ia64io.h
++++ b/drivers/input/serio/i8042-x86ia64io.h
+@@ -1007,6 +1007,13 @@ static const struct dmi_system_id i8042_dmi_probe_defer_table[] __initconst = {
+ 			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX425UA"),
+ 		},
+ 	},
++	{
++		/* ASUS ZenBook UM325UA */
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
++			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX325UA_UM325UA"),
++		},
++	},
+ 	{ }
+ };
  
- 	gmux_data->iostart = res->start;
--	gmux_data->iolen = res->end - res->start;
-+	gmux_data->iolen = resource_size(res);
- 
- 	if (gmux_data->iolen < GMUX_MIN_IO_LEN) {
- 		pr_err("gmux I/O region too small (%lu < %u)\n",
 -- 
 2.34.1
 

@@ -2,248 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22DA2483517
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 17:50:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C0548351A
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 17:50:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234821AbiACQtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 11:49:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234996AbiACQtr (ORCPT
+        id S231345AbiACQuF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Jan 2022 11:50:05 -0500
+Received: from relay10.mail.gandi.net ([217.70.178.230]:60049 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234917AbiACQt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 11:49:47 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A83BC061761;
-        Mon,  3 Jan 2022 08:49:46 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DBB481EC0380;
-        Mon,  3 Jan 2022 17:49:39 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1641228580;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=P798RWaZTr+okBNMCVL+1sl56MgtJUmphTduCouvUIE=;
-        b=ip+HPwItP/DquYMql6pC3Po65Wa5C8XWBZLq6hy+3IQt1D9EWyxbEfUBkQZGd+h8+zSPWi
-        X5/4SIi5AAR2dbjqWQjWlH/qDK5OuQxoQakMhvKtmHNJnB/4mtQS1N5aMHi698V0TubJ9X
-        yB2kwu78JKqbDVvlBS/bSARKlFBV54g=
-Date:   Mon, 3 Jan 2022 17:49:42 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v8 21/40] x86/head: re-enable stack protection for
- 32/64-bit builds
-Message-ID: <YdMpJg3YSdoYMKaZ@zn.tnic>
-References: <20211210154332.11526-1-brijesh.singh@amd.com>
- <20211210154332.11526-22-brijesh.singh@amd.com>
+        Mon, 3 Jan 2022 11:49:59 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 7F7CE240005;
+        Mon,  3 Jan 2022 16:49:54 +0000 (UTC)
+Date:   Mon, 3 Jan 2022 17:49:53 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-mtd@lists.infradead.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Colin Ian King <colin.king@intel.com>,
+        linux-kernel@vger.kernel.org (open list),
+        linux-wireless@vger.kernel.org (open list:BROADCOM SPECIFIC AMBA DRIVER
+        (BCMA)),
+        bcm-kernel-feedback-list@broadcom.com (open list:BROADCOM STB NAND
+        FLASH DRIVER)
+Subject: Re: [PATCH 1/9] mtd: rawnand: brcmnand: Allow SoC to provide I/O
+ operations
+Message-ID: <20220103174953.40d7fa52@xps13>
+In-Reply-To: <20211223002225.3738385-2-f.fainelli@gmail.com>
+References: <20211223002225.3738385-1-f.fainelli@gmail.com>
+        <20211223002225.3738385-2-f.fainelli@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211210154332.11526-22-brijesh.singh@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 09:43:13AM -0600, Brijesh Singh wrote:
+Hi Florian,
 
-> Subject: Re: [PATCH v8 21/40] x86/head: re-enable stack protection for 32/64-bit builds
+f.fainelli@gmail.com wrote on Wed, 22 Dec 2021 16:22:17 -0800:
 
-The tip tree preferred format for patch subject prefixes is
-'subsys/component:', e.g. 'x86/apic:', 'x86/mm/fault:', 'sched/fair:',
-'genirq/core:'. Please do not use file names or complete file paths as
-prefix. 'git log path/to/file' should give you a reasonable hint in most
-cases.
-
-The condensed patch description in the subject line should start with a
-uppercase letter and should be written in imperative tone.
-
-In this case:
-
-x86/head/64: Re-enable stack protection
-
-There's no need for 32/64-bit builds - we don't have anything else :-)
-
-Please check all your subjects.
-
-> From: Michael Roth <michael.roth@amd.com>
+> Allow a brcmnand_soc instance to provide a custom set of I/O operations
+> which we will require when using this driver on a BCMA bus which is not
+> directly memory mapped I/O. Update the nand_{read,write}_reg accordingly
+> to use the SoC operations if provided.
 > 
-> As of commit 103a4908ad4d ("x86/head/64: Disable stack protection for
-> head$(BITS).o")
-
-verify_commit_quotation: Warning: The proper commit quotation format is:
-<newline>
-[  ]<sha1, 12 chars> ("commit name")
-<newline>
-
-> kernel/head64.c is compiled with -fno-stack-protector
-> to allow a call to set_bringup_idt_handler(), which would otherwise
-> have stack protection enabled with CONFIG_STACKPROTECTOR_STRONG. While
-> sufficient for that case, there may still be issues with calls to any
-> external functions that were compiled with stack protection enabled that
-> in-turn make stack-protected calls, or if the exception handlers set up
-> by set_bringup_idt_handler() make calls to stack-protected functions.
-> As part of 103a4908ad4d, stack protection was also disabled for
-> kernel/head32.c as a precaution.
-> 
-> Subsequent patches for SEV-SNP CPUID validation support will introduce
-> both such cases. Attempting to disable stack protection for everything
-> in scope to address that is prohibitive since much of the code, like
-> SEV-ES #VC handler, is shared code that remains in use after boot and
-> could benefit from having stack protection enabled. Attempting to inline
-> calls is brittle and can quickly balloon out to library/helper code
-> where that's not really an option.
-> 
-> Instead, re-enable stack protection for head32.c/head64.c and make the
-> appropriate changes to ensure the segment used for the stack canary is
-> initialized in advance of any stack-protected C calls.
-> 
-> for head64.c:
-> 
-> - The BSP will enter from startup_64 and call into C code
-
-Function names need to end with "()" so that it is clear they're
-functions.
-
->   (startup_64_setup_env) shortly after setting up the stack, which may
->   result in calls to stack-protected code. Set up %gs early to allow
->   for this safely.
-> - APs will enter from secondary_startup_64*, and %gs will be set up
->   soon after. There is one call to C code prior to this
->   (__startup_secondary_64), but it is only to fetch sme_me_mask, and
->   unlikely to be stack-protected, so leave things as they are, but add
->   a note about this in case things change in the future.
-> 
-> for head32.c:
-> 
-> - BSPs/APs will set %fs to __BOOT_DS prior to any C calls. In recent
->   kernels, the compiler is configured to access the stack canary at
->   %fs:__stack_chk_guard,
-
-Add here somewhere:
-
-"See
-
-  3fb0fdb3bbe7 ("x86/stackprotector/32: Make the canary into a regular percpu variable")
-
-for details."
-
-> which overlaps with the initial per-cpu
->   __stack_chk_guard variable in the initial/'master' .data..percpu
->   area. This is sufficient to allow access to the canary for use
->   during initial startup, so no changes are needed there.
-> 
-> Suggested-by: Joerg Roedel <jroedel@suse.de> #for 64-bit %gs set up
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 > ---
->  arch/x86/kernel/Makefile  |  1 -
->  arch/x86/kernel/head_64.S | 24 ++++++++++++++++++++++++
->  2 files changed, 24 insertions(+), 1 deletion(-)
+>  drivers/mtd/nand/raw/brcmnand/brcmnand.c | 14 ++++++++++++--
+>  drivers/mtd/nand/raw/brcmnand/brcmnand.h | 23 +++++++++++++++++++++++
+>  2 files changed, 35 insertions(+), 2 deletions(-)
 > 
-> diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-> index 2ff3e600f426..4df8c8f7d2ac 100644
-> --- a/arch/x86/kernel/Makefile
-> +++ b/arch/x86/kernel/Makefile
-> @@ -48,7 +48,6 @@ endif
->  # non-deterministic coverage.
->  KCOV_INSTRUMENT		:= n
+> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+> index f75929783b94..7a1673b1b1af 100644
+> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+> @@ -594,13 +594,18 @@ enum {
 >  
-> -CFLAGS_head$(BITS).o	+= -fno-stack-protector
->  CFLAGS_cc_platform.o	+= -fno-stack-protector
+>  static inline u32 nand_readreg(struct brcmnand_controller *ctrl, u32 offs)
+>  {
+> +	if (brcmnand_soc_has_ops(ctrl->soc))
+> +		return brcmnand_soc_read(ctrl->soc, offs);
+>  	return brcmnand_readl(ctrl->nand_base + offs);
+>  }
 >  
->  CFLAGS_irq.o := -I $(srctree)/$(src)/../include/asm/trace
-> diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-> index 99de8fd461e8..9f8a7e48aca7 100644
-> --- a/arch/x86/kernel/head_64.S
-> +++ b/arch/x86/kernel/head_64.S
-> @@ -65,6 +65,22 @@ SYM_CODE_START_NOALIGN(startup_64)
->  	leaq	(__end_init_task - FRAME_SIZE)(%rip), %rsp
+>  static inline void nand_writereg(struct brcmnand_controller *ctrl, u32 offs,
+>  				 u32 val)
+>  {
+> -	brcmnand_writel(val, ctrl->nand_base + offs);
+> +	if (brcmnand_soc_has_ops(ctrl->soc))
+> +		brcmnand_soc_write(ctrl->soc, val, offs);
+> +	else
+> +		brcmnand_writel(val, ctrl->nand_base + offs);
+>  }
 >  
->  	leaq	_text(%rip), %rdi
+>  static int brcmnand_revision_init(struct brcmnand_controller *ctrl)
+> @@ -766,13 +771,18 @@ static inline void brcmnand_rmw_reg(struct brcmnand_controller *ctrl,
+>  
+>  static inline u32 brcmnand_read_fc(struct brcmnand_controller *ctrl, int word)
+>  {
+> +	if (brcmnand_soc_has_ops(ctrl->soc))
+> +		return brcmnand_soc_read(ctrl->soc, ~0);
+>  	return __raw_readl(ctrl->nand_fc + word * 4);
+>  }
+>  
+>  static inline void brcmnand_write_fc(struct brcmnand_controller *ctrl,
+>  				     int word, u32 val)
+>  {
+> -	__raw_writel(val, ctrl->nand_fc + word * 4);
+> +	if (brcmnand_soc_has_ops(ctrl->soc))
+> +		brcmnand_soc_write(ctrl->soc, val, ~0);
+> +	else
+> +		__raw_writel(val, ctrl->nand_fc + word * 4);
+>  }
+>  
+>  static inline void edu_writel(struct brcmnand_controller *ctrl,
+> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.h b/drivers/mtd/nand/raw/brcmnand/brcmnand.h
+> index eb498fbe505e..a3f2ad5f6572 100644
+> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.h
+> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.h
+> @@ -11,12 +11,19 @@
+>  
+>  struct platform_device;
+>  struct dev_pm_ops;
+> +struct brcmnand_io_ops;
+>  
+>  struct brcmnand_soc {
+>  	bool (*ctlrdy_ack)(struct brcmnand_soc *soc);
+>  	void (*ctlrdy_set_enabled)(struct brcmnand_soc *soc, bool en);
+>  	void (*prepare_data_bus)(struct brcmnand_soc *soc, bool prepare,
+>  				 bool is_param);
+> +	const struct brcmnand_io_ops *ops;
+> +};
 > +
-> +	/*
-> +	 * initial_gs points to initial fixed_per_cpu struct with storage for
-
-$ git grep fixed_per_cpu
-$
-
-??
-
-Do you mean this:
-
-SYM_DATA(initial_gs,    .quad INIT_PER_CPU_VAR(fixed_percpu_data))
-
-?
-
-> +	 * the stack protector canary. Global pointer fixups are needed at this
-> +	 * stage, so apply them as is done in fixup_pointer(), and initialize %gs
-> +	 * such that the canary can be accessed at %gs:40 for subsequent C calls.
-> +	 */
-> +	movl	$MSR_GS_BASE, %ecx
-> +	movq	initial_gs(%rip), %rax
-> +	movq	$_text, %rdx
-> +	subq	%rdx, %rax
-> +	addq	%rdi, %rax
-> +	movq	%rax, %rdx
-> +	shrq	$32,  %rdx
-> +	wrmsr
+> +struct brcmnand_io_ops {
+> +	u32 (*read_reg)(struct brcmnand_soc *soc, u32 offset);
+> +	void (*write_reg)(struct brcmnand_soc *soc, u32 val, u32 offset);
+>  };
+>  
+>  static inline void brcmnand_soc_data_bus_prepare(struct brcmnand_soc *soc,
+> @@ -58,6 +65,22 @@ static inline void brcmnand_writel(u32 val, void __iomem *addr)
+>  		writel_relaxed(val, addr);
+>  }
+>  
+> +static inline bool brcmnand_soc_has_ops(struct brcmnand_soc *soc)
+> +{
+> +	return soc && soc->ops && soc->ops->read_reg && soc->ops->write_reg;
+> +}
 > +
->  	pushq	%rsi
->  	call	startup_64_setup_env
->  	popq	%rsi
-> @@ -146,6 +162,14 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
->  	 * added to the initial pgdir entry that will be programmed into CR3.
->  	 */
->  	pushq	%rsi
+> +static inline u32 brcmnand_soc_read(struct brcmnand_soc *soc, u32 offset)
+> +{
+> +	return soc->ops->read_reg(soc, offset);
+> +}
+> +
+> +static inline void brcmnand_soc_write(struct brcmnand_soc *soc, u32 val,
+> +				      u32 offset)
+> +{
+> +	soc->ops->write_reg(soc, val, offset);
+> +}
+> +
 
-<---- newline here.
+It might be worth looking into more optimized ways to do these checks,
+in particular the read/write_reg ones because you're checking against
+some static data which cannot be optimized out by the compiler but
+won't change in the lifetime of the kernel.
 
-> +	/*
-> +	 * NOTE: %gs at this point is a stale data segment left over from the
-> +	 * real-mode trampoline, so the default stack protector canary location
-> +	 * at %gs:40 does not yet coincide with the expected fixed_per_cpu struct
-> +	 * that contains storage for the stack canary. So take care not to add
-> +	 * anything to the C functions in this path that would result in stack
-> +	 * protected C code being generated.
-> +	 */
->  	call	__startup_secondary_64
->  	popq	%rsi
-
-Can't you simply do
-
-	movq    sme_me_mask, %rax
-
-here instead and avoid the issue altogether?
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+Miquèl

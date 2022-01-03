@@ -2,109 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BCFC483172
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 14:35:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3EAF483174
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 14:35:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233125AbiACNfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 08:35:11 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33688 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiACNfJ (ORCPT
+        id S233129AbiACNf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 08:35:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55286 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229534AbiACNf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 08:35:09 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 796436104B;
-        Mon,  3 Jan 2022 13:35:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30D2EC36AED;
-        Mon,  3 Jan 2022 13:35:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641216907;
-        bh=jFbww1NpkfvF5p1XfPt3zfR/YkekAF7W2Tm4G835O4M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RrUNsbWOMvMY4xUSYjLPOr10hdRxw4E6URCeY7lFspPpcJ0/wdcZIrwtFEe/eUaXM
-         ItgKGnDrDXSiTQrBHnR96QQ6s8q//vTQKBKN3BQe00AaPws/NIZ0LYnLyfaMO7BREK
-         Z3QULJodnDdazkqb7LfgBWRHhbPQACcw4xgSzDok=
-Date:   Mon, 3 Jan 2022 14:35:04 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yaqin Pan <akingchen@vivo.com>
-Cc:     balbi@kernel.org, devicetree@vger.kernel.org, kernel@vivo.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        robh+dt@kernel.org
-Subject: Re: [PATCH v3 1/2] usb: dwc3: Add a quirk to set
- GUCTL.SPRSCTRLTRANSEN bit.
-Message-ID: <YdL7iDbNk0cct1Bs@kroah.com>
-References: <Yc3UuSRkgiopJ5jp@kroah.com>
- <20211231115931.20628-1-akingchen@vivo.com>
+        Mon, 3 Jan 2022 08:35:28 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE06C061761;
+        Mon,  3 Jan 2022 05:35:27 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id v6so8238613wra.8;
+        Mon, 03 Jan 2022 05:35:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=VRK5HsxWtUBcHbxZyOm3gdgQYDUVk/y62Vk5hy/pEaU=;
+        b=eyKZl1xnowuNvg7+HosjAbAnByb/eZLfnnsxMp6IFAm6HsUe4RoXQ/I5ZdhtJW3X2N
+         ud2aKr68hafn4xuOqD4a/lc3TGpAZog+enKLGD7ftVz39Bal7XroHgrWBPGze0r40QDb
+         Ltxw55nWOvD0klWr1ubZIxSz1Hg5O8xm0E09AGWXjohGnOxmv/8qHwjpqIP3bagLsZCX
+         ORVGF2WDIhJwyJRIcS2vUsC7od83XShF4/zL1+0R6uU+oBGNaCPlXRtb5Ydxrr1lU/uc
+         2D2ayA1HAXCBIUBUPvrLN9aS5uSJIDbOsPalorYbyCWToes+oCFn2m99orzMKWoBlwlA
+         XOng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=VRK5HsxWtUBcHbxZyOm3gdgQYDUVk/y62Vk5hy/pEaU=;
+        b=OGrjoAorLmXoOyUOIEb9m+Nt6ao4uo+nV0c1CZGGM9XPNpBu8yjkqQ6XlOMS2qboAv
+         jHerLfwjj4DF89THQy8tQeI23U4eUwHAmbwehoFshhVfXTF8WwUCpBaYay8ANi9TCER+
+         33Ixe5+5NANU0+G/aLPiXKenj9oagvJH9VC7TUpZVtN7wl8eP3XDbdG/mtap495PwvIq
+         zDennXiuczzLtlKoobUGqvBtaSUFmcb+I355S+25fNgxS5IAFZFinN4MnZJhvPGmrDKu
+         C4Er7AatI8Ro72xtBvQN3PxKwP3y3JaAsMyiLeDH/qOalRTLfja6N2rIIApkxwtW729N
+         wBDw==
+X-Gm-Message-State: AOAM531peGqsAxtOZ+UWxP8yRM6rzdP1yRERFwnmK0mFWg7AR526uUQS
+        knF76HzvxC0aIfJE2SqkF98jvdwek+0NSQ==
+X-Google-Smtp-Source: ABdhPJxJqfT+HfANXnaNQ/9KDj+8bSI9sQ/Bvqq4mY/RYpNPzJcmVnri8r/ZWrPCl6M8A49mXASl+g==
+X-Received: by 2002:a5d:64c8:: with SMTP id f8mr41754938wri.158.1641216926122;
+        Mon, 03 Jan 2022 05:35:26 -0800 (PST)
+Received: from [192.168.1.10] (4e691f2a.skybroadband.com. [78.105.31.42])
+        by smtp.googlemail.com with ESMTPSA id o3sm32930072wmr.15.2022.01.03.05.35.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jan 2022 05:35:25 -0800 (PST)
+Message-ID: <b583dc48-a6b6-f6c7-4a5a-678d985ce358@googlemail.com>
+Date:   Mon, 3 Jan 2022 13:35:23 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211231115931.20628-1-akingchen@vivo.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: 5.16.0-rc7+ Bluetooth error
+Content-Language: en-GB
+To:     "K, Kiran" <kiran.k@intel.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>
+References: <02077a37-46d6-c94f-fa08-9da7ee99e42c@googlemail.com>
+ <50ea1b0e-28d7-6d04-9c03-4becc4db143b@googlemail.com>
+ <CABBYNZLc9Pj=LYhL5MUUVkhenHb_xfT59aDDkdk14k7+ojeUzw@mail.gmail.com>
+ <DM8PR11MB55735DD3A1EA9132E1A71733F5499@DM8PR11MB5573.namprd11.prod.outlook.com>
+From:   Chris Clayton <chris2553@googlemail.com>
+In-Reply-To: <DM8PR11MB55735DD3A1EA9132E1A71733F5499@DM8PR11MB5573.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 31, 2021 at 07:59:31PM +0800, Yaqin Pan wrote:
-> On Thu, 30 Dec 2021 16:48:09 +0100 Greg Kroah-Hartman wrote:
-> >On Thu, Dec 30, 2021 at 11:36:12PM +0800, Yaqin Pan wrote:
-> >> On Thu, 30 Dec 2021 15:12:27 +0100 Greg Kroah-Hartman wrote:
-> >> >> This quirk is only for dwc3 host mode.
-> >> >> the dwc3 controller can't emurate some devices successfully.
-> >> >> For example, TF card reader (aaaa:8816):
-> >> >> failed log
-> >> >> usb 1-1: new high-speed USB device number 2 using xhci-hcd
-> >> >> usb 1-1: device descriptor read/all, error -110
-> >> >> >From the usb analyzer, always return NAK in the data phase.
-> >> >> if enable the GUCTL.SPRSCTRLTRANSEN bit. then the log is:
-> >> >> usb 2-1: new high-speed USB device number 3 using xhci-hcd
-> >> >> usb 2-1: New USB device found, idVendor=aaaa,
-> >> >> idProduct=8816, bcdDevice=13.08
-> >> >> usb 2-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-> >> >> usb 2-1: Product: MXT USB Device
-> >> >> usb 2-1: Manufacturer: MXTronics
-> >> >> usb 2-1: SerialNumber: 150101v01
-> >> >> usb 2-1: New USB device found, VID=aaaa, PID=8816
-> >> >> 
-> >> >> Some devices are slow in responding to Control transfers.
-> >> >> Scheduling mulitiple transactions in one microframe/frame
-> >> >> can cause the devices to misbehave. if this qurik is enabled,
-> >> >> the host controller schedules transations for a Control transfer
-> >> >> in defferent microframes/frame.
-> >> >
-> >> >If this is needed for all devices (i.e. you do not know what device is
-> >> >going to be plugged in), why not just enable it for all controllers?
-> >> >Why whould you NOT want this enabled?
-> >> >
-> >> >Or is this a broken hardware device and only specific host controllers
-> >> >need this?  If so, how do we know which ones need this set and which do
-> >> >not?
-> >> 
-> >> I think not all dwc3 controllers need this. For cell phone,customers may
-> >> use various usb devices, we can enable this quirk to fix some compatibility
-> >> issues. For some chip platform of qcom, i encounter this issue, not every
-> >> platform i encounter this problem.
-> >> 
-> >> If enabled for all controllers, it will reduce the speed of Control transfers. 
-> >> So i think it would be better for user to enable it by their own purposes.
-> >
-> >But how do hardware vendors know to enable this?  Can we trigger off of
-> >PCI ids?  Do we need a list of quirks to show which host controllers are
-> >broken this way?
-> >
-> >Burying something as basic as "reliable device connection" in a DT quirk
-> >seems very sloppy to me.  We want reliable systems, right?
+
+
+On 03/01/2022 09:55, K, Kiran wrote:
+> Hi Luiz, Chris,
 > 
-> Yes, we want reliable systems. But i don't have a good ideal about this issue.
-> when we meet this problem, and from the dwc-usb3 controller datasheet,we know
-> enable one bit in dwc-usb3 controller's register can fixed this issue.
+>> -----Original Message-----
+>> From: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+>> Sent: Saturday, January 1, 2022 1:23 AM
+>> To: Chris Clayton <chris2553@googlemail.com>
+>> Cc: LKML <linux-kernel@vger.kernel.org>; linux-bluetooth@vger.kernel.org;
+>> K, Kiran <kiran.k@intel.com>
+>> Subject: Re: 5.16.0-rc7+ Bluetooth error
+>>
+>> Hi Chris,
+>>
+>> On Fri, Dec 31, 2021 at 2:35 AM Chris Clayton <chris2553@googlemail.com>
+>> wrote:
+>>>
+>>> On 30/12/2021 09:21, Chris Clayton wrote:
+>>>> Hi,
+>>>>
+>>>> I pulled the latest changes into my clone of Linus' tree and built
+>>>> and installed the kernel. (git describe gives
+>>>> v5.16-rc7-9-ge7c124bd0463). I'm seeing errors reported by the
+>>>> bluetooth subsystem that i don't see in 5.15.12 or 5.10.89
+>>>>
+>>>> The problem seems to occur twice during system startup and on each
+>> occasion I see a batch of identical error messages:
+>>>>
+>>>> [    3.980822] Bluetooth: hci0: Failed to read codec capabilities (-56)
+>>>> [    3.982812] Bluetooth: hci0: Failed to read codec capabilities (-56)
+>>>> [    3.984812] Bluetooth: hci0: Failed to read codec capabilities (-56)
+>>>> [    3.986608] Bluetooth: hci0: Failed to read codec capabilities (-56)
+>>>> [    3.987621] Bluetooth: hci0: Failed to read codec capabilities (-56)
+>>>> [    3.988606] Bluetooth: hci0: Failed to read codec capabilities (-56)
+>>>> [    3.989650] Bluetooth: hci0: Failed to read codec capabilities (-56)
+>>>>
+>>>
+>>> Sorry, I should have said that despite the above errors, my bluetooth
+>> devices still work fine.
+>>
+>> Would be great to have the HCI trace (btmon).
+>>
+>> @Kiran K Is this to be expected?
 > 
-> Of course, i can list the host controllers that i used broken this way if needed.
+> May be the BT controller here is not supporting HCI_READ_CODEC_CAPABILITIES command.
+> 
+> This has been fixed - https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git/commit/?id=107fe0482b549a0e43a971e5fd104719c6e495ef
+> 
 
-Please have a list of controller that this is needed for, and add the
-quirk for them only.  Don't require this to be in a DT file as that will
-never be noticed.
+I've applied the patch to 5.16.0-rc8 and the error messages are no longer produced. My bluetooth devices are stiil working.
 
-thanks,
+Tested-By: Chris Clayton <chris2553@googlemail.com>
 
-greg k-h
+> A check has been added to read codec capabilities only if supported.
+> 
+> Thanks,
+> Kiran
+> 

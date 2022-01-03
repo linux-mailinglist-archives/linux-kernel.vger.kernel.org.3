@@ -2,38 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95621483314
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:33:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51714483327
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:35:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235261AbiACOdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:33:18 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34010 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234473AbiACObH (ORCPT
+        id S234853AbiACOdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:33:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39692 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234839AbiACOby (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:31:07 -0500
+        Mon, 3 Jan 2022 09:31:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1AEC061191;
+        Mon,  3 Jan 2022 06:31:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F8C9B80EFC;
-        Mon,  3 Jan 2022 14:31:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 381F4C36AED;
-        Mon,  3 Jan 2022 14:31:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4B8361073;
+        Mon,  3 Jan 2022 14:31:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BCE0C36AED;
+        Mon,  3 Jan 2022 14:31:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220264;
-        bh=wvebfAli38uyvHBZWAwzkhQv+UFPLYFOcmeaOgplM7c=;
+        s=korg; t=1641220268;
+        bh=dWFiXWuT8Fs5pOOi3ytTsbEma3qMU8GwaHVWrXT0vEs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gs48+yJ3gQ5JTHtoVkhzxG+6b3wTPA9XR6JaROmHHiL6Lo8HwUp84sOLFdZBlSsfw
-         haEFhTOvcOe6Lrg9NhFEdMSL3ByDHw01s9Lso9T/wk8wZj9nFwq/UljTFDPdub3BCP
-         kaTHhopDiDT6EaxhqPT5I3V6LNihYamHjjWvE884=
+        b=UF3Q8UoFSKHoIehkGmqATX4MNHT1sWvVVdAPIPrjHAy/Pv0155JPO0UaahXdwKn1Y
+         y6LmUxwYeB+5WFK2Y4I9d/hk47ZXZEo4iWtShV/uTBA3h5cBWNcouyW45+2si3Kuo7
+         qwCLcnOedXX+JhJ99NTtspd2C+rCYPVqAeLH5rNY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
-        Paul Moore <paul@paul-moore.com>
-Subject: [PATCH 5.15 15/73] selinux: initialize proto variable in selinux_ip_postroute_compat()
-Date:   Mon,  3 Jan 2022 15:23:36 +0100
-Message-Id: <20220103142057.413677731@linuxfoundation.org>
+        stable@vger.kernel.org, James Smart <jsmart2021@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 16/73] scsi: lpfc: Terminate string in lpfc_debugfs_nvmeio_trc_write()
+Date:   Mon,  3 Jan 2022 15:23:37 +0100
+Message-Id: <20220103142057.444584128@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220103142056.911344037@linuxfoundation.org>
 References: <20220103142056.911344037@linuxfoundation.org>
@@ -45,41 +50,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 732bc2ff080c447f8524f40c970c481f5da6eed3 upstream.
+[ Upstream commit 9020be114a47bf7ff33e179b3bb0016b91a098e6 ]
 
-Clang static analysis reports this warning
+The "mybuf" string comes from the user, so we need to ensure that it is NUL
+terminated.
 
-hooks.c:5765:6: warning: 4th function call argument is an uninitialized
-                value
-        if (selinux_xfrm_postroute_last(sksec->sid, skb, &ad, proto))
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-selinux_parse_skb() can return ok without setting proto.  The later call
-to selinux_xfrm_postroute_last() does an early check of proto and can
-return ok if the garbage proto value matches.  So initialize proto.
-
-Cc: stable@vger.kernel.org
-Fixes: eef9b41622f2 ("selinux: cleanup selinux_xfrm_sock_rcv_skb() and selinux_xfrm_postroute_last()")
-Signed-off-by: Tom Rix <trix@redhat.com>
-[PM: typo/spelling and checkpatch.pl description fixes]
-Signed-off-by: Paul Moore <paul@paul-moore.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20211214070527.GA27934@kili
+Fixes: bd2cdd5e400f ("scsi: lpfc: NVME Initiator: Add debugfs support")
+Reviewed-by: James Smart <jsmart2021@gmail.com>
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- security/selinux/hooks.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/lpfc/lpfc_debugfs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -5812,7 +5812,7 @@ static unsigned int selinux_ip_postroute
- 	struct common_audit_data ad;
- 	struct lsm_network_audit net = {0,};
- 	char *addrp;
--	u8 proto;
-+	u8 proto = 0;
+diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_debugfs.c
+index bd6d459afce54..08b2e85dcd7d8 100644
+--- a/drivers/scsi/lpfc/lpfc_debugfs.c
++++ b/drivers/scsi/lpfc/lpfc_debugfs.c
+@@ -2954,8 +2954,8 @@ lpfc_debugfs_nvmeio_trc_write(struct file *file, const char __user *buf,
+ 	char mybuf[64];
+ 	char *pbuf;
  
- 	if (sk == NULL)
- 		return NF_ACCEPT;
+-	if (nbytes > 64)
+-		nbytes = 64;
++	if (nbytes > 63)
++		nbytes = 63;
+ 
+ 	memset(mybuf, 0, sizeof(mybuf));
+ 
+-- 
+2.34.1
+
 
 

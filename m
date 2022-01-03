@@ -2,111 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF34483498
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 17:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0644D48349F
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 17:15:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233877AbiACQKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 11:10:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35192 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233046AbiACQKw (ORCPT
+        id S234406AbiACQPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 11:15:20 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:49835 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S233621AbiACQPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 11:10:52 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B24C061761
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 08:10:51 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id 69so31732665qkd.6
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 08:10:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=D1Q3J6juiePL27oWBkNOxTw2Gj9XV99OOInUYuxJbFA=;
-        b=K83wNLSqiOi8vkX/rso4uTib9WyUzG+hZKEYcqDcieuwvx8rSQoSi+KaIrxQ1OzQog
-         TDzNbj//gaIPz6hc/czb1VUjZFifljsuefa5lRfEZSS2joeL3jairu9nvrFTo7aLcA8+
-         chTKfTi35f+mA3a4VvuMf9g6B9+OXAwwU5B4BKT2GDtkgDlWySSFk97KAhhz5ZaV52YD
-         OthaIbhPUP2OpIqopyIvOlDeaGPXNXl73+sYrfKfLQ/TGkBxSKmKr/waFZQAdAX956Hr
-         Rxi/QHTYWUp1YAzfrxuuEFUez1Ljxin7TlA6P99aKoLlRTig2ys9lKYRIsgrj3BdCmun
-         NmMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=D1Q3J6juiePL27oWBkNOxTw2Gj9XV99OOInUYuxJbFA=;
-        b=ItdlfUK8CGQO0MdA2iUPrjWbfGXD4ij+sKNocjvW3mh6a/CDtWRKm8Y1261VQik8M1
-         NrITQcpyly5xaN/T7ji3dFtPK5Xh5eOAcyC12rwA4OAJSBCWrLF+Ndcq/frmu+FOTBgp
-         UmSMH8VwFdSFlE/wq5BuqpZiN151plRXTmvw3lWkHuzf5r2ALqZH2bJa9Gy7KGo4CMht
-         gZ67lipoOps4M5Y8ILJB92AL0/7Gergm2aRpz4v2GnnIIoCTAgwc/OKUqk1rcWPjnxQJ
-         mq14xs/RetBEU6i3Ft4dBVsFQTyM/3OPFcRycwNUA1kJqMUaHG8mJl3gpbxB0whZpphG
-         phoQ==
-X-Gm-Message-State: AOAM530qFgoUKTrIcu+TSJP8yRvnmp8fJJbltTfHhDEBeZOj+iZlrpDv
-        P2igMf98DZ0Hji8G2Vy6qzcqZw==
-X-Google-Smtp-Source: ABdhPJyNV5rHobiq6J8ocNRs9MB2USBw2xmYNfVt1+XhSMp1T2zlbT9BAc0HnGfPjpPYBlHq18KNyg==
-X-Received: by 2002:a05:620a:85e:: with SMTP id u30mr32185499qku.765.1641226250755;
-        Mon, 03 Jan 2022 08:10:50 -0800 (PST)
-Received: from localhost (cpe-174-109-172-136.nc.res.rr.com. [174.109.172.136])
-        by smtp.gmail.com with ESMTPSA id o10sm30540976qtx.33.2022.01.03.08.10.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jan 2022 08:10:50 -0800 (PST)
-Date:   Mon, 3 Jan 2022 11:10:49 -0500
-From:   Josef Bacik <josef@toxicpanda.com>
-To:     Yongji Xie <xieyongji@bytedance.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-block@vger.kernel.org, nbd@other.debian.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] nbd: Don't use workqueue to handle recv work
-Message-ID: <YdMgCS1RMcb5V2RJ@localhost.localdomain>
-References: <20211227091241.103-1-xieyongji@bytedance.com>
- <Ycycda8w/zHWGw9c@infradead.org>
- <CACycT3usfTdzmK=gOsBf3=-0e8HZ3_0ZiBJqkWb_r7nki7xzYA@mail.gmail.com>
+        Mon, 3 Jan 2022 11:15:17 -0500
+Received: (qmail 1188656 invoked by uid 1000); 3 Jan 2022 11:15:16 -0500
+Date:   Mon, 3 Jan 2022 11:15:16 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [RFC 31/32] usb: handle HAS_IOPORT dependencies
+Message-ID: <YdMhFKOdBsDvFStt@rowland.harvard.edu>
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+ <20211227164317.4146918-32-schnelle@linux.ibm.com>
+ <YcojyRhALdm40gfk@rowland.harvard.edu>
+ <8bda347ea30b60f1edb55693ff7509e7f7b1f979.camel@linux.ibm.com>
+ <Yc86mvCUe2mHCa57@rowland.harvard.edu>
+ <5a271c9e80ee394ecb41297e66d687e035a823ce.camel@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACycT3usfTdzmK=gOsBf3=-0e8HZ3_0ZiBJqkWb_r7nki7xzYA@mail.gmail.com>
+In-Reply-To: <5a271c9e80ee394ecb41297e66d687e035a823ce.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 30, 2021 at 12:01:23PM +0800, Yongji Xie wrote:
-> On Thu, Dec 30, 2021 at 1:35 AM Christoph Hellwig <hch@infradead.org> wrote:
-> >
-> > On Mon, Dec 27, 2021 at 05:12:41PM +0800, Xie Yongji wrote:
-> > > The rescuer thread might take over the works queued on
-> > > the workqueue when the worker thread creation timed out.
-> > > If this happens, we have no chance to create multiple
-> > > recv threads which causes I/O hung on this nbd device.
-> >
-> > If a workqueue is used there aren't really 'receive threads'.
-> > What is the deadlock here?
+On Mon, Jan 03, 2022 at 12:35:45PM +0100, Niklas Schnelle wrote:
+> On Fri, 2021-12-31 at 12:15 -0500, Alan Stern wrote:
+> > On Fri, Dec 31, 2021 at 12:06:24PM +0100, Niklas Schnelle wrote:
+> > > On Mon, 2021-12-27 at 15:36 -0500, Alan Stern wrote:
+> > > > On Mon, Dec 27, 2021 at 05:43:16PM +0100, Niklas Schnelle wrote:
+
+> > > > > diff --git a/drivers/usb/host/uhci-hcd.h b/drivers/usb/host/uhci-hcd.h
+> > > > > index 8ae5ccd26753..8e30116b6fd2 100644
+> > > > > --- a/drivers/usb/host/uhci-hcd.h
+> > > > > +++ b/drivers/usb/host/uhci-hcd.h
+> > > > > @@ -586,12 +586,14 @@ static inline int uhci_aspeed_reg(unsigned int reg)
+> > > > >  
+> > > > >  static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
+> > > > >  {
+> > > > > +#ifdef CONFIG_HAS_IOPORT
+> > > > >  	if (uhci_has_pci_registers(uhci))
+> > > > >  		return inl(uhci->io_addr + reg);
+> > > > > -	else if (uhci_is_aspeed(uhci))
+> > > > > +#endif
+> > > > 
+> > > > Instead of making all these changes (here and in the hunks below), you
+> > > > can simply modify the definition of uhci_has_pci_registers() so that it
+> > > > always gives 0 when CONFIG_HAS_IOPORT is N.
+> > > > 
+> > > > Alan Stern
+> > > 
+> > > I don't think that works, for example in the hunk you quoted returning
+> > > 0 from uhci_has_pci_registers() only skips over the inl() at run-time.
+> > > We're aiming to have inl() undeclared if HAS_IOPORT is unset though.
+> > 
+> > I see.  Do you think the following would be acceptable?  Add:
+> > 
+> > #ifdef CONFIG_HAS_IOPORT
+> > #define UHCI_IN(x)	x
+> > #define UHCI_OUT(x)	x
+> > #else
+> > #define UHCI_IN(x)	0
+> > #define UHCI_OUT(x)
+> > #endif
+> > 
+> > and then replace for example inl(uhci->io_addr + reg) with 
+> > UHCI_IN(inl(uhci->io_addr + reg)).
 > 
-> We might have multiple recv works, and those recv works won't quit
-> unless the socket is closed. If the rescuer thread takes over those
-> works, only the first recv work can run. The I/O needed to be handled
-> in other recv works would be hung since no thread can handle them.
+> In principle that looks like a valid approach. Not sure this is better
+> than explicit ifdefs though.
+
+The general preference in the kernel is to avoid sprinkling #ifdef's 
+throughout function definitions, and instead encapsulate their effects 
+with macros or inline functions -- like this.
+
+>  With this approach one could add
+> UHCI_IN()/UHCI_OUT() calls which end up as nops without realizing it as
+> it would disable any compile time warning for using them without
+> guarding against CONFIG_HAS_IOPORT being undefined.
+
+To help prevent that, we can add
+
+#undef UHCI_IN
+#undef UHCI_OUT
+
+at the end of this section.
+
+> > The definition of uhci_has_pci_registers() should be updated in any 
+> > case; there's no reason for it to do a runtime check of uhci->io_addr 
+> > when HAS_IOPORT is disabled.
 > 
+> Agree. Interestingly same as with the "if
+> (IS_ENABLED(CONFIG_HAS_IOPORT))" it seems having
+> uhci_has_pci_registers() compile-time defined to 0 (I added a
+> defined(CONFIG_HAS_IOPORT) to it) makes the compiler ignore the missing
+> inl() decleration already. But I'm not sure if we should rely on that.
 
-I'm not following this explanation.  What is the rescuer thread you're talking
-about?  If there's an error we close the socket which will error out the recvmsg
-which will make the recv workqueue close down.
+I definitely would not rely on it.
 
-> In that case, we can see below stacks in rescuer thread:
-> 
-> __schedule
->   schedule
->     scheule_timeout
->       unix_stream_read_generic
->         unix_stream_recvmsg
->           sock_xmit
->             nbd_read_stat
->               recv_work
->                 process_one_work
->                   rescuer_thread
->                     kthread
->                       ret_from_fork
-
-This is just the thing hanging waiting for an incoming request, so this doesn't
-tell me anything.  Thanks,
-
-Josef
+Alan Stern

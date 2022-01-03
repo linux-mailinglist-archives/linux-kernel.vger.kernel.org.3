@@ -2,55 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7564837FB
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 21:17:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B256D4837FE
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 21:18:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbiACURc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 15:17:32 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:48926 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229796AbiACURa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 15:17:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=0oZv60GKcHzqITnRG34XTD85FFqqcUJPJ/Bagrlxjjw=; b=BW8U1rjPNdi/NiTdS7HTGe69pd
-        O/op/Xkq9+ZhlwW1Ip1PB4MJk2HvjIyumM4fdsIYGDZw9o8AMai1XZF3A82+6I//OPw2Oe/ST56JH
-        i3kXJ4yA8WLw9KrDezO7L+ycyJONi1sEsex2rFpbaCNaFUPSxrxSVhFsECrjUH7FvnJM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1n4Tlm-000P9l-D9; Mon, 03 Jan 2022 21:17:26 +0100
-Date:   Mon, 3 Jan 2022 21:17:26 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     netdev@vger.kernel.org, Maxime Bizon <mbizon@freebox.fr>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next] net: mdio: Demote probed message to debug print
-Message-ID: <YdNZ1rusFT1OJFgh@lunn.ch>
-References: <20220103194024.2620-1-f.fainelli@gmail.com>
+        id S230500AbiACUSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 15:18:10 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:47612 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230234AbiACUSJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 15:18:09 -0500
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 5F7CE1C0B7F; Mon,  3 Jan 2022 21:18:08 +0100 (CET)
+Date:   Mon, 3 Jan 2022 21:18:07 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 4.4 00/11] 4.4.298-rc1 review
+Message-ID: <20220103201807.GA12168@duo.ucw.cz>
+References: <20220103142050.763904028@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="n8g4imXOkfNTN/H1"
 Content-Disposition: inline
-In-Reply-To: <20220103194024.2620-1-f.fainelli@gmail.com>
+In-Reply-To: <20220103142050.763904028@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 03, 2022 at 11:40:24AM -0800, Florian Fainelli wrote:
-> On systems with large numbers of MDIO bus/muxes the message indicating
-> that a given MDIO bus has been successfully probed is repeated for as
-> many buses we have, which can eat up substantial boot time for no
-> reason, demote to a debug print.
-> 
-> Reported-by: Maxime Bizon <mbizon@freebox.fr>
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+--n8g4imXOkfNTN/H1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-    Andrew
+Hi!
+
+> This is the start of the stable review cycle for the 4.4.298 release.
+> There are 11 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+
+CIP testing did not find any problems here:
+
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
+4.4.y
+
+Tested-by: Pavel Machek (CIP) <pavel@denx.de>
+
+Best regards,
+                                                                Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--n8g4imXOkfNTN/H1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYdNZ/wAKCRAw5/Bqldv6
+8rLZAJ9gi97IrtRZyzusmVvI3KJ9PBIf7ACfaCiK+D1vdb0SWLgmukHQYGEj8FY=
+=XJMk
+-----END PGP SIGNATURE-----
+
+--n8g4imXOkfNTN/H1--

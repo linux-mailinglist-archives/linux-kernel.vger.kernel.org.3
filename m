@@ -2,39 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4EB84832A7
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:31:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 163FF48328C
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:28:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234206AbiACOaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:30:09 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58480 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233617AbiACO2N (ORCPT
+        id S234256AbiACO2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:28:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233773AbiACO1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:28:13 -0500
+        Mon, 3 Jan 2022 09:27:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74232C06139B;
+        Mon,  3 Jan 2022 06:27:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC8D961126;
-        Mon,  3 Jan 2022 14:28:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C42A6C36AED;
-        Mon,  3 Jan 2022 14:28:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 44192B80EFD;
+        Mon,  3 Jan 2022 14:27:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7402AC36AEB;
+        Mon,  3 Jan 2022 14:27:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220092;
-        bh=D7vziGM8fAztn7Lvyb1hUN6jVVq9j/merOsMjP6rLf8=;
+        s=korg; t=1641220052;
+        bh=6uZ5RRlyZ/Ssvt9ME2JBVJM3wvIu6RYNKVaTMYpt1YE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gvpXW4IUb5te3WkqLsA1pAIsvVzIPx1vd7RPkJX/Kucbn9DioKyzKsyAkjWeUw8cZ
-         IqUnB2H3Yl3kSHMX121Oo92cNn5ovHnoM84naKmetqP3jg21e8D4+sBdhdga+2U1Ae
-         znNX4vx4SYbVzp9vMwt5MXY3a06urFK5T2pckDuE=
+        b=1EnMDgksRQ6AyKIMA8U1HajVUDa/ZScPhVv0D1CKgF8LVWKqZfMyBYADpwKYqAsgV
+         f3rNtzzhDJ6gBy1deklH/zpxiOMO53DsDDk1qxQDZPVnkfKFC+mapa2I34Z/l+BjhT
+         CzXbcsvhEM/uXuP6czCTk3wlU5VJNApugelhvC6Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        syzbot+e417648b303855b91d8a@syzkaller.appspotmail.com
-Subject: [PATCH 5.4 24/37] i2c: validate user data in compat ioctl
-Date:   Mon,  3 Jan 2022 15:24:02 +0100
-Message-Id: <20220103142052.623863257@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.4 25/37] nfc: uapi: use kernel size_t to fix user-space builds
+Date:   Mon,  3 Jan 2022 15:24:03 +0100
+Message-Id: <20220103142052.655444354@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220103142051.883166998@linuxfoundation.org>
 References: <20220103142051.883166998@linuxfoundation.org>
@@ -46,40 +49,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-[ Upstream commit bb436283e25aaf1533ce061605d23a9564447bdf ]
+commit 79b69a83705e621b258ac6d8ae6d3bfdb4b930aa upstream.
 
-Wrong user data may cause warning in i2c_transfer(), ex: zero msgs.
-Userspace should not be able to trigger warnings, so this patch adds
-validation checks for user data in compact ioctl to prevent reported
-warnings
+Fix user-space builds if it includes /usr/include/linux/nfc.h before
+some of other headers:
 
-Reported-and-tested-by: syzbot+e417648b303855b91d8a@syzkaller.appspotmail.com
-Fixes: 7d5cb45655f2 ("i2c compat ioctls: move to ->compat_ioctl()")
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+  /usr/include/linux/nfc.h:281:9: error: unknown type name ‘size_t’
+    281 |         size_t service_name_len;
+        |         ^~~~~~
+
+Fixes: d646960f7986 ("NFC: Initial LLCP support")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/i2c/i2c-dev.c | 3 +++
- 1 file changed, 3 insertions(+)
+ include/uapi/linux/nfc.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
-index c9ae1895cd48a..7da6ca26a5f56 100644
---- a/drivers/i2c/i2c-dev.c
-+++ b/drivers/i2c/i2c-dev.c
-@@ -536,6 +536,9 @@ static long compat_i2cdev_ioctl(struct file *file, unsigned int cmd, unsigned lo
- 				   sizeof(rdwr_arg)))
- 			return -EFAULT;
+--- a/include/uapi/linux/nfc.h
++++ b/include/uapi/linux/nfc.h
+@@ -278,7 +278,7 @@ struct sockaddr_nfc_llcp {
+ 	__u8 dsap; /* Destination SAP, if known */
+ 	__u8 ssap; /* Source SAP to be bound to */
+ 	char service_name[NFC_LLCP_MAX_SERVICE_NAME]; /* Service name URI */;
+-	size_t service_name_len;
++	__kernel_size_t service_name_len;
+ };
  
-+		if (!rdwr_arg.msgs || rdwr_arg.nmsgs == 0)
-+			return -EINVAL;
-+
- 		if (rdwr_arg.nmsgs > I2C_RDWR_IOCTL_MAX_MSGS)
- 			return -EINVAL;
- 
--- 
-2.34.1
-
+ /* NFC socket protocols */
 
 

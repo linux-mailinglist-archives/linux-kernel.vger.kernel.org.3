@@ -2,76 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CABC3482EE1
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 08:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7D2482EE4
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 08:59:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbiACHyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 02:54:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36714 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiACHyw (ORCPT
+        id S230499AbiACH7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 02:59:05 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58322 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230057AbiACH7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 02:54:52 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B12C061761
-        for <linux-kernel@vger.kernel.org>; Sun,  2 Jan 2022 23:54:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=s6pxSP+ajg4hdJ8d9+GMrlSCSiEOlsN0aP8e9JW0qCo=; b=uwCl5XU5JVUEfQ5LILKGctTPdV
-        W4RvxzbFzkCYUQTJJoMl95IYrXXq8egkDmG8VnN9qzDoRSF3iPjX2K2zD2BJUfTyWZPez2W8QypCS
-        gGCYTCbUAXJpJjRCO4elEs/2p0PdcAelqWqxQ5e2N0468VevRiAEAFV/9f+L4f368gWnUBhVRsLrM
-        4V9Qr6jWY5HUFk4pko1sxKX62jJ72ZPI8rlv/Kc31o52X9NRMoxgJIzwbcguYpHsXN8OYBoyTTFak
-        Y4K+tnefWkBNxwIBxpOfFtse4bOvsvogp1hPaIu49dPj+o1KpPyp6rQNe70AL3e92RtD3JY4MHIF0
-        GeHFtCGg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n4IB4-008XyT-FD; Mon, 03 Jan 2022 07:54:46 +0000
-Date:   Sun, 2 Jan 2022 23:54:46 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        michael.h.kelley@microsoft.com, kys@microsoft.com,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        vkuznets@redhat.com, brijesh.singh@amd.com, konrad.wilk@oracle.com,
-        hch@lst.de, wei.liu@kernel.org, parri.andrea@gmail.com,
-        thomas.lendacky@amd.com, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] Swiotlb: Add CONFIG_HAS_IOMEM check around memremap() in
- the swiotlb_mem_remap()
-Message-ID: <YdKrxgnpT0Dc0t2T@infradead.org>
-References: <20211231165640.1245751-1-ltykernel@gmail.com>
+        Mon, 3 Jan 2022 02:59:03 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5C0E60FAC;
+        Mon,  3 Jan 2022 07:59:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F0B7C36AE9;
+        Mon,  3 Jan 2022 07:59:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641196742;
+        bh=kyW/XMXR5lTP3aGxWP55dHobxfaSLE0dq/BDg5eq888=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SIhcNMeZj8G1Kbp2YCY+DaB7jmlU72dcQGI1V6UZ/jQVFL1M7mOIcKiQo68XHB/KW
+         OeyQ2AlSfWEF6JlLCYu6WVHzcYxjK+NKb/UpdCSfE5VS8bJGYqt6vJ5en26Asj6Ary
+         5ro5Bo6MPBa2ryfMphlordDFpNozOm4hUdSD9PFtaDXYq5lHX0cd3PhyHH4oUxK03O
+         ZnpFqYCDfWfbS5y/LI6UfKl0wL9b0xdLf2t5HuUVvuYeYUCQw4XWlvJ/s2Z4iyrP8n
+         eHoB516/MOI8yVsSXSnlW05K8V2uDtI5jGcqfGYiQsFqwpQlwSV9dUNJFeWoCqRwpN
+         ttcD8/Xro/WlA==
+Date:   Mon, 3 Jan 2022 09:58:57 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     cgel.zte@gmail.com
+Cc:     jgg@nvidia.com, chi.minghao@zte.com.cn,
+        dennis.dalessandro@cornelisnetworks.com,
+        devesh.s.sharma@oracle.com, dledford@redhat.com,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        mbloch@nvidia.com, selvin.xavier@broadcom.com, trix@redhat.com,
+        zealci@zte.com.cn
+Subject: Re: [PATCH for-next v5] RDMA/ocrdma: remove unneeded variable
+Message-ID: <YdKswVT1cjcyaS1S@unreal>
+References: <20211214235015.GA969883@nvidia.com>
+ <20211215055421.441375-1-chi.minghao@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211231165640.1245751-1-ltykernel@gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20211215055421.441375-1-chi.minghao@zte.com.cn>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 31, 2021 at 11:56:40AM -0500, Tianyu Lan wrote:
-> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
+On Wed, Dec 15, 2021 at 05:54:21AM +0000, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
 > 
-> HAS_IOMEM option may not be selected on some platforms(e.g, s390) and this
-> will cause compile error due to miss memremap() implementation. Fix it via
-> adding HAS_IOMEM check around memremap() in the swiotlb.c.
+> Return status directly from function called.
 > 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 > ---
->  kernel/dma/swiotlb.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-> index b36c1cdd0c4f..3de651ba38cc 100644
-> --- a/kernel/dma/swiotlb.c
-> +++ b/kernel/dma/swiotlb.c
-> @@ -167,6 +167,7 @@ static void *swiotlb_mem_remap(struct io_tlb_mem *mem, unsigned long bytes)
->  {
->  	void *vaddr = NULL;
->  
-> +#ifdef CONFIG_HAS_IOMEM
+>  drivers/infiniband/hw/ocrdma/ocrdma_verbs.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
 
-Please stub out all of swiotlb_mem_remap instead of the ifdef inside the
-function.
+Please don't send vX patches as a reply to previous versions.
+It messes the emails thread very badly.
+
+See an output of your previous attempts:
+https://lore.kernel.org/all/20211215055421.441375-1-chi.minghao@zte.com.cn/
+Thread overview: 10+ messages / expand[flat|nested]  mbox.gz  Atom feed  top
+2021-12-09  1:52 [PATCH] drivers:ocrdma:remove " cgel.zte
+2021-12-09 13:08 ` Tom Rix
+2021-12-10  1:32   ` [PATCHv2] " cgel.zte
+2021-12-14  6:45     ` Devesh Sharma
+2021-12-14  8:10       ` [PATCH v3 ocrdma-next] drivers: ocrdma: remove " cgel.zte
+2021-12-14  8:43         ` [External] : " Devesh Sharma
+2021-12-14  9:23           ` [PATCH for-next v4] RDMA/ocrdma: " cgel.zte
+2021-12-14 11:12             ` [External] : " Devesh Sharma
+2021-12-14 23:50             ` Jason Gunthorpe
+2021-12-15  5:54               ` cgel.zte [this message]
+
+Thanks

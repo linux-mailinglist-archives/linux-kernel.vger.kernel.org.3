@@ -2,165 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 578CC482EBA
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 08:30:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5B4482EBC
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 08:36:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbiACHah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 02:30:37 -0500
-Received: from conssluserg-06.nifty.com ([210.131.2.91]:23042 "EHLO
-        conssluserg-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiACHag (ORCPT
+        id S230288AbiACHgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 02:36:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60836 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229793AbiACHgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 02:30:36 -0500
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 2037U8rC002866;
-        Mon, 3 Jan 2022 16:30:08 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 2037U8rC002866
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1641195009;
-        bh=Q4N4pyt3k5xc5akbM1fMeGbDBN+5P/qoHX4LoFCURZ0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dcZizZ8p+8OxgL28/fZcq505gsbf1u/7e8Ka+6OerXdRHFurGX3adX5YMOGCEWzf8
-         tmomwybOn8Ry38TGkU7ha3Ri65P1ppq+d03br8tHWcfHwEWsRywrnT287+tHcrFenJ
-         LyV6aPK+YDQmoL5A+PHMS76WrXVq8yfMlerUFq2YMnNVp0b1786d8C1QQN5chsBzcD
-         l1mjAe1x8IeZSBgE6PjRdxcWfLoc25XT/Vj8Hw1UOmgGfz6AtvzCbHRxMs+MsR//j/
-         mEMq5xJqULrsdGS5tDIgsbsAscIAge2N3y+7D/7K6MmuFKhIsTeRiTYNZcnbv/lWTO
-         n44mnXZ+4WRAw==
-X-Nifty-SrcIP: [209.85.210.176]
-Received: by mail-pf1-f176.google.com with SMTP id t187so15225687pfb.11;
-        Sun, 02 Jan 2022 23:30:08 -0800 (PST)
-X-Gm-Message-State: AOAM532X9Cb7PfOuDvEepT7kvOd2rR0o2vE+1FIGVyDSWzRXj0viZLIJ
-        RXTjTZ+jmr5GI2skcigfd+W9c9SSsezDWmJJnTU=
-X-Google-Smtp-Source: ABdhPJyQeq2KyC8k1IjK4sk+CNmFy3cPWLH/65C3uwwjeVfRHRqNFBVMinDmiwdvtujwUsnpZZkAgtXxv2AA/sGRLv8=
-X-Received: by 2002:a62:83c3:0:b0:4ba:bb14:4bf7 with SMTP id
- h186-20020a6283c3000000b004babb144bf7mr44853082pfe.32.1641195007963; Sun, 02
- Jan 2022 23:30:07 -0800 (PST)
+        Mon, 3 Jan 2022 02:36:33 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B095C061761;
+        Sun,  2 Jan 2022 23:36:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=Bx7NtCk13O3MYnOesPcQB/UnVRax9ZEBIq5svXtVmbM=; b=jAnUvCaO8PLbHhvB8G7hoc8pJn
+        aKYylEnGeyhVDrH6QhTNanVYzpdkjE10nnn4UJUSbScGudrZuxk67km/SOqLdzEFHTtXFxLQuLGGw
+        y+41rII6BRxKrc5URUl9UB8Sf8EoWipTUOJ5/EJhxACZqRVvuiV68y2ZNlgeRuA24Uuc0JpvYSJyc
+        HQ10QO5Up4W+j0buZtw5XpfIwW0ls9fra+ztPdlSM1VDOwiK2TgQLgpxCg/QORXOJ5yZ7X0Fnuyn8
+        Kloz3c3IhP/42FXKO0eS5cWnTyK5TuOJ9Zdk9Pq019whwiL4vxKzwIZgfd5SIbbCCbEdH/rMp8np2
+        gATh4hmw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n4HtM-0054kh-Hu; Mon, 03 Jan 2022 07:36:28 +0000
+Message-ID: <7a9999a4-257c-3428-779e-0fdbf02d4782@infradead.org>
+Date:   Sun, 2 Jan 2022 23:36:23 -0800
 MIME-Version: 1.0
-References: <20211231075551.589515-1-xu.xin16@zte.com.cn>
-In-Reply-To: <20211231075551.589515-1-xu.xin16@zte.com.cn>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 3 Jan 2022 16:29:31 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARBGWP4pj4t2XStG326BB3XFnJwKOMQqR7RXd5nDCPmWA@mail.gmail.com>
-Message-ID: <CAK7LNARBGWP4pj4t2XStG326BB3XFnJwKOMQqR7RXd5nDCPmWA@mail.gmail.com>
-Subject: Re: [PATCH] Fix compilation errors when using special directory
-To:     cgel.zte@gmail.com
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v1] docs: 5.Posting.rst: describe Fixes: and Link: tags
+Content-Language: en-US
+To:     Thorsten Leemhuis <linux@leemhuis.info>, linux-doc@vger.kernel.org
+Cc:     workflows@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        xu xin <xu.xin16@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>
+References: <2b9c093339322e2686140a486b978c0b03476f42.1641194004.git.linux@leemhuis.info>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <2b9c093339322e2686140a486b978c0b03476f42.1641194004.git.linux@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 31, 2021 at 4:56 PM <cgel.zte@gmail.com> wrote:
->
-> From: xu xin <xu.xin16@zte.com.cn>
->
-> When we compile the kernel with cross compilers, if CROSS_COMPILE is
-> specified by the path containing special directory like '~', some
-> compilation error will occurs.
->
-> Here's an example:
->
-> $ make ARCH=x86_64
-> CROSS_COMPILE=~/x86_64_gcc9.2.0_glibc2.31.0/bin/x86_64-pc-linux-gnu- all
->
-> error:./scripts/mkcompile_h: line 64:
-> ~/x86_64_gcc9.2.0_glibc2.31.0/bin/x86_64-pc-linux-gnu-ld: No such file or
-> directory
->
-> Since there are many other similar scripts using these variables, in
-> order to solve the problem from the source, add realpath in makefile to
-> turn these variables into absolute paths.
->
-> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+Hi--
 
-
-This depends on what shell you are using.
-
-
-If you use a modern shell like bash,
-~ is expanded into the home directory path
-on the shell side.
-
-So, Make will see the absolute path.
-In contrast, dash does not expand ~.
-
-
-[Test code]
-$(warning CROSS_COMPILE is $(CROSS_COMPILE))
-all:
-        @:
-
-
-
-[Result]
-masahiro@grover:/tmp$ bash
-masahiro@grover:/tmp$ make
-CROSS_COMPILE=~/x86_64_gcc9.2.0_glibc2.31.0/bin/x86_64-pc-linux-gnu-
-all
-Makefile:1: CROSS_COMPILE is
-/home/masahiro/x86_64_gcc9.2.0_glibc2.31.0/bin/x86_64-pc-linux-gnu-
-masahiro@grover:/tmp$ dash
-$ make CROSS_COMPILE=~/x86_64_gcc9.2.0_glibc2.31.0/bin/x86_64-pc-linux-gnu- all
-Makefile:1: CROSS_COMPILE is
-~/x86_64_gcc9.2.0_glibc2.31.0/bin/x86_64-pc-linux-gnu-
-
-
-
-
-
-Moreover, your patch does not work at all because
-the $(realpath ) built-in function does not expand ~.
-
-~ is a shell's special character (and only some shells recognize it).
-GNU Make is completely agnostic about such a character.
-
-
-
-If you are using such a shell that does not understand ~,
-as Nathan suggested, you can use $HOME.
-
-
-
+On 1/2/22 23:15, Thorsten Leemhuis wrote:
+> Explain Fixes: and Link: tags in Documentation/process/5.Posting.rst,
+> which are missing in this file for unknown reasons and only described in
+> Documentation/process/submitting-patches.rst.
+> 
+> Signed-off-by: Thorsten Leemhuis <linux@leemhuis.info>
+> CC: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
 > ---
->  Makefile | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index fe5a4d8e4ac5..cdbb747787ac 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -459,14 +459,14 @@ OBJDUMP           = llvm-objdump
->  READELF                = llvm-readelf
->  STRIP          = llvm-strip
->  else
-> -CC             = $(CROSS_COMPILE)gcc
-> -LD             = $(CROSS_COMPILE)ld
-> -AR             = $(CROSS_COMPILE)ar
-> -NM             = $(CROSS_COMPILE)nm
-> -OBJCOPY                = $(CROSS_COMPILE)objcopy
-> -OBJDUMP                = $(CROSS_COMPILE)objdump
-> -READELF                = $(CROSS_COMPILE)readelf
-> -STRIP          = $(CROSS_COMPILE)strip
-> +CC             = $(realpath $(CROSS_COMPILE))gcc
-> +LD             = $(realpath $(CROSS_COMPILE))ld
-> +AR             = $(realpath $(CROSS_COMPILE))ar
-> +NM             = $(realpath $(CROSS_COMPILE))nm
-> +OBJCOPY                = $(realpath $(CROSS_COMPILE))objcopy
-> +OBJDUMP                = $(realpath $(CROSS_COMPILE))objdump
-> +READELF                = $(realpath $(CROSS_COMPILE))readelf
-> +STRIP          = $(realpath $(CROSS_COMPILE))strip
->  endif
->  RUSTC          = rustc
->  RUSTDOC                = rustdoc
-> --
-> 2.25.1
->
+> Lo! If there is still a chance I'l like to get this patch into v5.17, as
 
+                                 I'd
 
---
-Best Regards
-Masahiro Yamada
+> during my work as regression tracker I noticed quite a few developers
+> seem to be unaware how the Link: tag should be used. Maybe in parts
+> that's because Documentation/process/5.Posting.rst doesn't describe it
+> yet, which described things from a another different angle than
+> Documentation/process/submitting-patches.rst.
+> 
+> Ciao, Thorsten
+> 
+> v1:
+> - First version as stand alone patch. It used to be the first patch of
+>   this series that got abandoned after RFC/v2:
+>   https://lore.kernel.org/all/cover.1639042966.git.linux@leemhuis.info/
+>   Patch itself is unchanged, patch description slighly changed. Might
+
+                                                 slightly
+
+>   later submit other changes from that series seperately, too, still
+
+                                                separately,
+
+>   unsure.
+> ---
+>  Documentation/process/5.Posting.rst | 29 ++++++++++++++++++++++-------
+>  1 file changed, 22 insertions(+), 7 deletions(-)
+> 
+> diff --git a/Documentation/process/5.Posting.rst b/Documentation/process/5.Posting.rst
+> index 855a70b80269..e7b919070210 100644
+> --- a/Documentation/process/5.Posting.rst
+> +++ b/Documentation/process/5.Posting.rst
+> @@ -197,14 +197,29 @@ the build process, for example, or editor backup files) in the patch.  The
+>  file "dontdiff" in the Documentation directory can help in this regard;
+>  pass it to diff with the "-X" option.
+>  
+> -The tags mentioned above are used to describe how various developers have
+> -been associated with the development of this patch.  They are described in
+> -detail in
+> -the :ref:`Documentation/process/submitting-patches.rst <submittingpatches>`
+> -document; what follows here is a brief summary.  Each of these lines has
+> -the format:
+> +The tags already briefly mentioned above are used to provide insights how
+> +the patch came into being. They are described in detail in the
+> +:ref:`Documentation/process/submitting-patches.rst <submittingpatches>`
+> +document; what follows here is a brief summary.
+>  
+> -::
+> +One tag is used to refer to earlier commits which had problems fixed by
+> +the patch::
+> +
+> +	Fixes: 1f2e3d4c5b6a ("The first line of the commit specified by the first 12 characters of its SHA-1 ID")
+> +
+> +Another tag is used for linking web pages with additional backgrounds or
+> +details, for example a report about a bug fixed by the patch or a document
+> +with a specification implemented by the patch::
+> +
+> +	Link: https://example.com/somewhere.html  optional-other-stuff
+> +
+> +Many maintainers when applying a patch also add this tag to link to the
+> +latest public review posting of the patch; often this is automatically done
+> +by tools like b4 or a git hook like the one described in
+> +'Documentation/maintainer/configure-git.rst'.
+> +
+> +A third kind of tags are used to document who was involved in the development of
+
+                of tag is used
+
+> +the patch. Each of these uses this format::
+>  
+>  	tag: Full Name <email address>  optional-other-stuff
+>  
+> 
+> base-commit: b36064425a18e29a3bad9c007b4dd1223f8aadc5
+
+-- 
+~Randy

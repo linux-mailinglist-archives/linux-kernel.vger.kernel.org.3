@@ -2,86 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF8CB4838ED
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 23:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC4AF4838F2
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 00:01:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbiACW5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 17:57:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
+        id S230361AbiACXBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 18:01:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbiACW5N (ORCPT
+        with ESMTP id S229558AbiACXBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 17:57:13 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48985C061761;
-        Mon,  3 Jan 2022 14:57:13 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id CC8CE4A8;
-        Mon,  3 Jan 2022 22:57:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net CC8CE4A8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1641250632; bh=EZSdjmbwoUZbkpeAbnWluDvQjX1mE6MaV2rTZoNqJKo=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=JIXjJsh4dDNZpukgwDev4HDO+SPs7iX0DV6uVCCscpmIs5BXAL4N3V0DJYviHhpso
-         CgtUCnoTt1gacDvexUJDpKSUn+gpYkejyJXzkFa48TOMqByAkxEWG5LdM9hXWwb3JB
-         TVvHfijE30UGVO3cfFO10ABCNsQhVBJSlsC2cMYQaJyMYSepEjzIdK4jbRN+2+GuTx
-         6Isq7gwfbB0MqTsjeg/9IcdpQjpEVsd1rS6WH0iQ2NTtZ/S7NJ8aYBLIM9JfWvVwLb
-         trSy7EE1M3O/ncIuTHjThM1NGqkp8CD4hkwb/UKR4P9ReQWo910KIyg/sPMVatrvTm
-         DS7qoBGUX9Hwg==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        linux-doc@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: Re: [PATCH] Documentation: refer to config RANDOMIZE_BASE for
- kernel address-space randomization
-In-Reply-To: <20211230171940.27558-1-lukas.bulwahn@gmail.com>
-References: <20211230171940.27558-1-lukas.bulwahn@gmail.com>
-Date:   Mon, 03 Jan 2022 15:57:15 -0700
-Message-ID: <875yr0xwac.fsf@meer.lwn.net>
+        Mon, 3 Jan 2022 18:01:43 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352CEC061761;
+        Mon,  3 Jan 2022 15:01:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=3nDVn8ws7/m69Ka3Wq2aZ970s0t94NQxPoFLp0IKM6M=; b=Dn5Whu7Vr7PETcOW1Npz8Sp/do
+        GaeJ8/dNdJdT1M1Zym/mIVHmDh3hUJvgERGCJylWrccvr2zFKGPq542VkkWf0VbGA31Ik3CzAuufT
+        cPXlcduIrrrh/NGZDGmegmzVJ4YKNebTS5PsuFqTe/OJvDXvrBPiO4ELMVHrXfbwRztaM81PPuqz0
+        VxkVYRWHIOEHE+G1octtnJ9khy1n0uV5jTJkGDOjomDEisRf3z49kz+JTjZXjcwQK4t0PTqe9onkY
+        rlwSTf/QFhnT8ceChQmocEv/Saeie7XdAC9kLAqU582fEM+qhuWa2yyCJYDejzcjDdqNYDI3G1jsr
+        Tam8XiSQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n4WKi-005AhY-Fb; Mon, 03 Jan 2022 23:01:40 +0000
+Message-ID: <6e8661ff-b470-10e9-966b-587c7fc2c296@infradead.org>
+Date:   Mon, 3 Jan 2022 15:01:36 -0800
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH] docs: discourage use of list tables
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <87r19oxx87.fsf@meer.lwn.net>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <87r19oxx87.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lukas Bulwahn <lukas.bulwahn@gmail.com> writes:
 
-> The config RANDOMIZE_SLAB does not exist, the authors probably intended to
-> refer to the config RANDOMIZE_BASE, which provides kernel address-space
-> randomization. They probably just confused SLAB with BASE (these two
-> four-letter words coincidentally share three common letters), as they also
-> point out the config SLAB_FREELIST_RANDOM as further randomization within
-> the same sentence.
->
-> Fix the reference of the config for kernel address-space randomization to
-> the config that provides that.
->
-> Fixes: 6e88559470f5 ("Documentation: Add section about CPU vulnerabilities for Spectre")
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+
+On 1/3/22 14:36, Jonathan Corbet wrote:
+> Our documentation encourages the use of list-table formats, but that advice
+> runs counter to the objective of keeping the plain-text documentation as
+> useful and readable as possible.  Turn that advice around the other way so
+> that people don't keep adding these tables.
+> 
+> Signed-off-by: Jonathan Corbet <corbet@lwn.net>
+
+for sure.
+
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks.
+
 > ---
->  Documentation/admin-guide/hw-vuln/spectre.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/admin-guide/hw-vuln/spectre.rst b/Documentation/admin-guide/hw-vuln/spectre.rst
-> index ab7d402c1677..a2b22d5640ec 100644
-> --- a/Documentation/admin-guide/hw-vuln/spectre.rst
-> +++ b/Documentation/admin-guide/hw-vuln/spectre.rst
-> @@ -468,7 +468,7 @@ Spectre variant 2
->     before invoking any firmware code to prevent Spectre variant 2 exploits
->     using the firmware.
+>  Documentation/doc-guide/sphinx.rst | 11 +++++------
+>  1 file changed, 5 insertions(+), 6 deletions(-)
+> 
+> diff --git a/Documentation/doc-guide/sphinx.rst b/Documentation/doc-guide/sphinx.rst
+> index 673cbb769c08..bb36f18ae9ac 100644
+> --- a/Documentation/doc-guide/sphinx.rst
+> +++ b/Documentation/doc-guide/sphinx.rst
+> @@ -261,12 +261,11 @@ please feel free to remove it.
+>  list tables
+>  -----------
 >  
-> -   Using kernel address space randomization (CONFIG_RANDOMIZE_SLAB=y
-> +   Using kernel address space randomization (CONFIG_RANDOMIZE_BASE=y
->     and CONFIG_SLAB_FREELIST_RANDOM=y in the kernel configuration) makes
->     attacks on the kernel generally more difficult.
+> -We recommend the use of *list table* formats. The *list table* formats are
+> -double-stage lists. Compared to the ASCII-art they might not be as
+> -comfortable for
+> -readers of the text files. Their advantage is that they are easy to
+> -create or modify and that the diff of a modification is much more meaningful,
+> -because it is limited to the modified content.
+> +The list-table formats can be useful for tables that are not easily laid
+> +out in the usual Sphinx ASCII-art formats.  These formats are nearly
+> +impossible for readers of the plain-text documents to understand, though,
+> +and should be avoided in the absence of a strong justification for their
+> +use.
+>  
+>  The ``flat-table`` is a double-stage list similar to the ``list-table`` with
+>  some additional features:
 
-Makes sense to me...applied, thanks.
-
-jon
+-- 
+~Randy

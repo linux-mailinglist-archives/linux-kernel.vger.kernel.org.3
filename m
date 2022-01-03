@@ -2,74 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C54482D41
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 00:46:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5705E482D54
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 01:41:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiABXql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 18:46:41 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:35554 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229555AbiABXqk (ORCPT
+        id S231208AbiACAlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 19:41:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56656 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230516AbiACAlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 18:46:40 -0500
-X-UUID: e16f94d125c744a79ed82d7091faa024-20220103
-X-UUID: e16f94d125c744a79ed82d7091faa024-20220103
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1794068794; Mon, 03 Jan 2022 07:46:36 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 3 Jan 2022 07:46:34 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 3 Jan
- 2022 07:46:34 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 3 Jan 2022 07:46:34 +0800
-From:   <miles.chen@mediatek.com>
-To:     <matthias.bgg@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        Jie Qiu <jie.qiu@mediatek.com>,
-        "Junzhi Zhao" <junzhi.zhao@mediatek.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     <airlied@linux.ie>, <chunkuang.hu@kernel.org>, <daniel@ffwll.ch>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <miles.chen@mediatek.com>,
-        <llvm@lists.linux.dev>
-Subject: Re: [PATCH v3] drm/mediatek: Fix unused-but-set variable warning
-Date:   Mon, 3 Jan 2022 07:46:32 +0800
-Message-ID: <20220102234633.31709-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <fcaccc97-e920-08eb-ec3f-4c4b11ea8925@gmail.com>
-References: <fcaccc97-e920-08eb-ec3f-4c4b11ea8925@gmail.com>
+        Sun, 2 Jan 2022 19:41:39 -0500
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBE2C061761;
+        Sun,  2 Jan 2022 16:41:39 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id C9A494267B;
+        Mon,  3 Jan 2022 00:41:29 +0000 (UTC)
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com
+References: <20211226153624.162281-1-marcan@marcan.st>
+ <20211226153624.162281-4-marcan@marcan.st>
+ <8e99eb47-2bc1-7899-5829-96f2a515b2cb@gmail.com>
+ <e9ecbd0b-8741-1e7d-ae7a-f839287cb5c9@marcan.st>
+ <48f16559-6891-9401-dd8e-762c7573304c@gmail.com>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH 03/34] brcmfmac: firmware: Support having multiple alt
+ paths
+Message-ID: <d96fe60e-c029-b400-9c29-0f95c3632301@marcan.st>
+Date:   Mon, 3 Jan 2022 09:41:27 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+In-Reply-To: <48f16559-6891-9401-dd8e-762c7573304c@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: es-ES
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> I'm still not happy with the commit subject, I think it is misleading. Clang 
-> only helped to find the bug, but the we are fixing something else, that's not 
-> just a clang warning. But I don't want to nit-pick too much so:
+On 03/01/2022 05.11, Dmitry Osipenko wrote:
+> 02.01.2022 17:18, Hector Martin пишет:
+>> On 2022/01/02 15:45, Dmitry Osipenko wrote:
+>>> 26.12.2021 18:35, Hector Martin пишет:
+>>>> -static char *brcm_alt_fw_path(const char *path, const char *board_type)
+>>>> +static const char **brcm_alt_fw_paths(const char *path, const char *board_type)
+>>>>  {
+>>>>  	char alt_path[BRCMF_FW_NAME_LEN];
+>>>> +	char **alt_paths;
+>>>>  	char suffix[5];
+>>>>  
+>>>>  	strscpy(alt_path, path, BRCMF_FW_NAME_LEN);
+>>>> @@ -609,27 +612,46 @@ static char *brcm_alt_fw_path(const char *path, const char *board_type)
+>>>>  	strlcat(alt_path, board_type, BRCMF_FW_NAME_LEN);
+>>>>  	strlcat(alt_path, suffix, BRCMF_FW_NAME_LEN);
+>>>>  
+>>>> -	return kstrdup(alt_path, GFP_KERNEL);
+>>>> +	alt_paths = kzalloc(sizeof(char *) * 2, GFP_KERNEL);
+>>>
+>>> array_size()?
+>>
+>> Of what array?
 > 
-> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> array_size(sizeof(*alt_paths), 2)
 
-thanks. I think you are right.
-I will change the subject to "drm/mediatek: Fix mtk_cec_mask()", remove the 
-clang part and submit patch v4.
+Heh, TIL. I thought you meant ARRAY_SIZE. First time I see the lowercase
+macro. That's a confusing name collision...
 
-e.g,
-"""
-drm/mediatek: Fix mtk_cec_mask()
+>>>> +	alt_paths[0] = kstrdup(alt_path, GFP_KERNEL);
+>>>> +
+>>>> +	return (const char **)alt_paths;
+>>>
+>>> Why this casting is needed?
+>>
+>> Because implicit conversion from char ** to const char ** is not legal
+>> in C, as that could cause const unsoundness if you do this:
+>>
+>> char *foo[1];
+>> const char **bar = foo;
+>>
+>> bar[0] = "constant string";
+>> foo[0][0] = '!'; // clobbers constant string
+> 
+> It's up to a programmer to decide what is right to do. C gives you
+> flexibility, meanwhile it's easy to shoot yourself in the foot if you
+> won't be careful.
 
-In current implementation, mtk_cec_mask() writes val into target register
-and ignores the mask. After talking to our hdmi experts, mtk_cec_mask()
-should read a register, clean only mask bits, and update (val | mask) bits
-to the register.
+Which is why that conversion is illegal without a cast and you need to
+explicitly choose to shoot yourself in the foot :-)
 
-Fixes: 8f83f26891e1 ("drm/mediatek: Add HDMI support")
-"""
+>> But it's fine in this case since the non-const pointer disappears so
+>> nothing can ever write through it again.
+>>
+> 
+> There is indeed no need for the castings in such cases, it's a typical
+> code pattern in kernel. You would need to do the casting for the other
+> way around, i.e. if char ** was returned and **alt_paths was a const.
+
+You do need to do the cast. Try it.
+
+$ cat test.c
+int main() {
+        char *foo[1];
+        const char **bar = foo;
+
+        return 0;
+}
+
+$ gcc test.c
+test.c: In function ‘main’:
+test.c:4:28: warning: initialization of ‘const char **’ from
+incompatible pointer type ‘char **’ [-Wincompatible-pointer-types]
+    4 |         const char **bar = foo;
+      |
+
+You can implicitly cast char* to const char*, but you *cannot*
+impliclicitly cast char** to const char** for the reason I explained. It
+requires a cast.
+
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

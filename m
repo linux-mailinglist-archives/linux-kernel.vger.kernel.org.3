@@ -2,55 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCD0448355B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 18:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05BCD483565
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 18:12:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235009AbiACRLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 12:11:12 -0500
-Received: from verein.lst.de ([213.95.11.211]:47341 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230316AbiACRLL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 12:11:11 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id BF71568AFE; Mon,  3 Jan 2022 18:11:08 +0100 (CET)
-Date:   Mon, 3 Jan 2022 18:11:08 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: make pdfdocs fails on Debian stable
-Message-ID: <20220103171108.GB3422@lst.de>
-References: <20220103163050.GA3151@lst.de> <20220103175814.5b22a6a7@coco.lan>
+        id S235125AbiACRM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 12:12:26 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:52826 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232507AbiACRMZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 12:12:25 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2FD761169;
+        Mon,  3 Jan 2022 17:12:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8D1EC36AED;
+        Mon,  3 Jan 2022 17:12:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641229944;
+        bh=uhzW4lvNDD6+3QU4kFJO1P9RzyroNM4hVqwkOjyflFc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=M2C4rtgqdlCu80hsauE4XK+QHhJS7coc0dG8D+GRHVmz+dhBJhEe420k0mRD4iAEI
+         xOWmfPnKDsIyz77uSNyGOUws/sy3crm7/DAd1KEF9GjPq08NNiSjb6U54ynMJrIWHy
+         f/OZpQCx2j47wmbEe4n8yBwdimxTuceHV2Qp2Y1Silre2Bm0PZYlmwXPZK3b/4cdrD
+         DfOuOSgp3sHu6qu8n7mFOCGgt/J9td/TAUPxJeivcuxGpoW93XWc5mon48pw3oBf0f
+         fyKZYCkUoa8DQPXitZLAEk96xKCJ4pGtaluKai+8pBlNSgpvCyZw5DFVqHUeRiCO96
+         Qrp9IL1RHhqLg==
+Date:   Mon, 3 Jan 2022 09:12:22 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Saurav Kashyap <skashyap@marvell.com>
+Cc:     Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Javed Hasan <jhasan@marvell.com>,
+        GR-QLogic-Storage-Upstream <GR-QLogic-Storage-Upstream@marvell.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [EXT] [PATCH] scsi: qedf: potential dereference of null pointer
+Message-ID: <20220103091222.194ef58f@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <DM6PR18MB30344528373170A95E67B50CD2499@DM6PR18MB3034.namprd18.prod.outlook.com>
+References: <20211216101449.375953-1-jiasheng@iscas.ac.cn>
+        <DM6PR18MB30344528373170A95E67B50CD2499@DM6PR18MB3034.namprd18.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220103175814.5b22a6a7@coco.lan>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 03, 2022 at 05:58:14PM +0100, Mauro Carvalho Chehab wrote:
-> Weird... when you do a make, it should have checked for all
-> dependencies, when it internally runs:
+On Mon, 3 Jan 2022 04:58:41 +0000 Saurav Kashyap wrote:
+> > QEDF_TERM_BUFF_SIZE,
+> >  		&term_params_dma, GFP_KERNEL);
+> > +	if (!term_params)
+> > +		return;  
 > 
-> 	./scripts/sphinx-pre-install 
+> <SK> Adding message about failure before returning will help in debugging.
 
-Detected OS: Debian GNU/Linux 11 (bullseye).
-Sphinx version: 3.4.3
-
-
-All optional dependencies are met.
-Needed package dependencies are met.
-
-> Basically, you need the xelatex package for it to work, as PDF
-> output is via LaTeX. This is not a mandatory requirement, though,
-> as most people are only interested on html output, and LaTeX
-> dependencies require to install lots of stuff. it should provide you
-> a list of packages required for PDF, with a suggestion of using
-> apt-get to install it.
-> 
-> In this specific case, I guess the package name is 'texlive-xetex'.
-
-texlive-xetex is installed and seems to work find on various other
-documents produced earlier by make pdfdocs
+Memory allocations produce a pretty detailed splat.

@@ -2,47 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7D548338D
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:38:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C21F24832F3
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:32:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234833AbiACOi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:38:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232093AbiACOgk (ORCPT
+        id S234282AbiACOcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:32:11 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59690 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234821AbiACOaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:36:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEEAEC0617A1;
-        Mon,  3 Jan 2022 06:33:20 -0800 (PST)
+        Mon, 3 Jan 2022 09:30:00 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CD33610B1;
-        Mon,  3 Jan 2022 14:33:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55FA6C36AF0;
-        Mon,  3 Jan 2022 14:33:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 877DC6110F;
+        Mon,  3 Jan 2022 14:30:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D77CC36AEB;
+        Mon,  3 Jan 2022 14:29:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220400;
-        bh=+9ns34Li/KaFaleKeoV9zquOLbxHaSWUhrkvSbps2ws=;
+        s=korg; t=1641220200;
+        bh=lfZgQiSK/yrOEMg1TkiYy+VUpjPc3UEEmHl/tvsUjaI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e8tWrKaWJ96ARhdOF5x2Frkg6Z0jTBIpRRzUKxpItPzTVTIi6vvykpIryr6Rio3UE
-         F/53SE4RvViT248zvYcRfTIak6dM0z3BQnO1RQCVflBKKcn7/vx5l6bAfcb1T0wrda
-         L0knadEHnlUZ2UlDNR2g0ZXnDATMvNVUQoSJpF3w=
+        b=Y0H8n/HV/Tr77iQJZMwAWXd/+1nmOhfAYqbld1OPRoG+2gFlraxPziLlUgzqc0LPl
+         +qUM+FUXm5XYXICEUasB6LBs98JQ2RNPmRn/nhB87Kyfwykk7V6KQblhS51Skdw2Ix
+         rg+7DADO8XabQ37NzzRvxoKrRhDqS8mVJUyiWlvY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Wheeler <daniel.wheeler@amd.com>,
-        Aric Cyr <Aric.Cyr@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Angus Wang <angus.wang@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.15 57/73] drm/amd/display: Changed pipe split policy to allow for multi-display pipe split
-Date:   Mon,  3 Jan 2022 15:24:18 +0100
-Message-Id: <20220103142058.762278116@linuxfoundation.org>
+        stable@vger.kernel.org, Todd Kjos <tkjos@google.com>
+Subject: [PATCH 5.10 42/48] binder: fix async_free_space accounting for empty parcels
+Date:   Mon,  3 Jan 2022 15:24:19 +0100
+Message-Id: <20220103142054.892318094@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142056.911344037@linuxfoundation.org>
-References: <20220103142056.911344037@linuxfoundation.org>
+In-Reply-To: <20220103142053.466768714@linuxfoundation.org>
+References: <20220103142053.466768714@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,119 +44,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Angus Wang <angus.wang@amd.com>
+From: Todd Kjos <tkjos@google.com>
 
-commit ee2698cf79cc759a397c61086c758d4cc85938bf upstream.
+commit cfd0d84ba28c18b531648c9d4a35ecca89ad9901 upstream.
 
-[WHY]
-Current implementation of pipe split policy prevents pipe split with
-multiple displays connected, which caused the MCLK speed to be stuck at
-max
+In 4.13, commit 74310e06be4d ("android: binder: Move buffer out of area shared with user space")
+fixed a kernel structure visibility issue. As part of that patch,
+sizeof(void *) was used as the buffer size for 0-length data payloads so
+the driver could detect abusive clients sending 0-length asynchronous
+transactions to a server by enforcing limits on async_free_size.
 
-[HOW]
-Changed the pipe split policies so that pipe split is allowed for
-multi-display configurations
+Unfortunately, on the "free" side, the accounting of async_free_space
+did not add the sizeof(void *) back. The result was that up to 8-bytes of
+async_free_space were leaked on every async transaction of 8-bytes or
+less.  These small transactions are uncommon, so this accounting issue
+has gone undetected for several years.
 
-Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1522
-Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1709
-Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1655
-Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1403
+The fix is to use "buffer_size" (the allocated buffer size) instead of
+"size" (the logical buffer size) when updating the async_free_space
+during the free operation. These are the same except for this
+corner case of asynchronous transactions with payloads < 8 bytes.
 
-Note this is a backport of this commit from amdgpu drm-next for 5.16.
-
-Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
-Reviewed-by: Aric Cyr <Aric.Cyr@amd.com>
-Acked-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Signed-off-by: Angus Wang <angus.wang@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org
+Fixes: 74310e06be4d ("android: binder: Move buffer out of area shared with user space")
+Signed-off-by: Todd Kjos <tkjos@google.com>
+Cc: stable@vger.kernel.org # 4.14+
+Link: https://lore.kernel.org/r/20211220190150.2107077-1-tkjos@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c   |    2 +-
- drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c   |    2 +-
- drivers/gpu/drm/amd/display/dc/dcn30/dcn30_resource.c   |    2 +-
- drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c |    2 +-
- drivers/gpu/drm/amd/display/dc/dcn302/dcn302_resource.c |    2 +-
- drivers/gpu/drm/amd/display/dc/dcn303/dcn303_resource.c |    2 +-
- drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c   |    2 +-
- 7 files changed, 7 insertions(+), 7 deletions(-)
+ drivers/android/binder_alloc.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c
-@@ -1067,7 +1067,7 @@ static const struct dc_debug_options deb
- 		.timing_trace = false,
- 		.clock_trace = true,
- 		.disable_pplib_clock_request = true,
--		.pipe_split_policy = MPC_SPLIT_AVOID_MULT_DISP,
-+		.pipe_split_policy = MPC_SPLIT_DYNAMIC,
- 		.force_single_disp_pipe_split = false,
- 		.disable_dcc = DCC_ENABLE,
- 		.vsr_support = true,
---- a/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c
-@@ -874,7 +874,7 @@ static const struct dc_debug_options deb
- 		.clock_trace = true,
- 		.disable_pplib_clock_request = true,
- 		.min_disp_clk_khz = 100000,
--		.pipe_split_policy = MPC_SPLIT_AVOID_MULT_DISP,
-+		.pipe_split_policy = MPC_SPLIT_DYNAMIC,
- 		.force_single_disp_pipe_split = false,
- 		.disable_dcc = DCC_ENABLE,
- 		.vsr_support = true,
---- a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_resource.c
-@@ -840,7 +840,7 @@ static const struct dc_debug_options deb
- 	.timing_trace = false,
- 	.clock_trace = true,
- 	.disable_pplib_clock_request = true,
--	.pipe_split_policy = MPC_SPLIT_AVOID_MULT_DISP,
-+	.pipe_split_policy = MPC_SPLIT_DYNAMIC,
- 	.force_single_disp_pipe_split = false,
- 	.disable_dcc = DCC_ENABLE,
- 	.vsr_support = true,
---- a/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c
-@@ -863,7 +863,7 @@ static const struct dc_debug_options deb
- 	.disable_clock_gate = true,
- 	.disable_pplib_clock_request = true,
- 	.disable_pplib_wm_range = true,
--	.pipe_split_policy = MPC_SPLIT_AVOID_MULT_DISP,
-+	.pipe_split_policy = MPC_SPLIT_DYNAMIC,
- 	.force_single_disp_pipe_split = false,
- 	.disable_dcc = DCC_ENABLE,
- 	.vsr_support = true,
---- a/drivers/gpu/drm/amd/display/dc/dcn302/dcn302_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn302/dcn302_resource.c
-@@ -211,7 +211,7 @@ static const struct dc_debug_options deb
- 		.timing_trace = false,
- 		.clock_trace = true,
- 		.disable_pplib_clock_request = true,
--		.pipe_split_policy = MPC_SPLIT_AVOID_MULT_DISP,
-+		.pipe_split_policy = MPC_SPLIT_DYNAMIC,
- 		.force_single_disp_pipe_split = false,
- 		.disable_dcc = DCC_ENABLE,
- 		.vsr_support = true,
---- a/drivers/gpu/drm/amd/display/dc/dcn303/dcn303_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn303/dcn303_resource.c
-@@ -193,7 +193,7 @@ static const struct dc_debug_options deb
- 		.timing_trace = false,
- 		.clock_trace = true,
- 		.disable_pplib_clock_request = true,
--		.pipe_split_policy = MPC_SPLIT_AVOID_MULT_DISP,
-+		.pipe_split_policy = MPC_SPLIT_DYNAMIC,
- 		.force_single_disp_pipe_split = false,
- 		.disable_dcc = DCC_ENABLE,
- 		.vsr_support = true,
---- a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
-@@ -923,7 +923,7 @@ static const struct dc_debug_options deb
- 	.timing_trace = false,
- 	.clock_trace = true,
- 	.disable_pplib_clock_request = false,
--	.pipe_split_policy = MPC_SPLIT_AVOID,
-+	.pipe_split_policy = MPC_SPLIT_DYNAMIC,
- 	.force_single_disp_pipe_split = false,
- 	.disable_dcc = DCC_ENABLE,
- 	.vsr_support = true,
+--- a/drivers/android/binder_alloc.c
++++ b/drivers/android/binder_alloc.c
+@@ -662,7 +662,7 @@ static void binder_free_buf_locked(struc
+ 	BUG_ON(buffer->user_data > alloc->buffer + alloc->buffer_size);
+ 
+ 	if (buffer->async_transaction) {
+-		alloc->free_async_space += size + sizeof(struct binder_buffer);
++		alloc->free_async_space += buffer_size + sizeof(struct binder_buffer);
+ 
+ 		binder_alloc_debug(BINDER_DEBUG_BUFFER_ALLOC_ASYNC,
+ 			     "%d: binder_free_buf size %zd async free %zd\n",
 
 

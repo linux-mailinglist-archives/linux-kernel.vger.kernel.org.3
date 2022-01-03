@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 002FB4832C6
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:31:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EAF0483380
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234222AbiACOao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:30:44 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:60946 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234558AbiACO3h (ORCPT
+        id S234311AbiACOha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:37:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39806 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235939AbiACOfS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:29:37 -0500
+        Mon, 3 Jan 2022 09:35:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F783C08EA37;
+        Mon,  3 Jan 2022 06:33:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9B468B80EFC;
-        Mon,  3 Jan 2022 14:29:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C55C6C36AED;
-        Mon,  3 Jan 2022 14:29:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F313E6112D;
+        Mon,  3 Jan 2022 14:33:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4270C36AEB;
+        Mon,  3 Jan 2022 14:33:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641220175;
-        bh=uEmlorknZ4j1WY6HEon9h0FOTpjpcZa8gp1aoA334dQ=;
+        s=korg; t=1641220384;
+        bh=6uZ5RRlyZ/Ssvt9ME2JBVJM3wvIu6RYNKVaTMYpt1YE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vEAFXzkfK5Jq9KBj3MxoXx2xIO4is7K9vXU6Gub/HarV5/nYaAy88agZp6y0tgu29
-         wLVYL5//CDGWRJ19oxPK7IX6XeMoOxG+eCRJDssxeVR43Y6ZhVQnpfExqp7zjsjGw4
-         CZ4tcLGdZ+mAradUAjQDbwrms1OEepJ57YzduPuU=
+        b=d6UQSqXJJwBi3rG9W2Rl4/BTMiXixLrEYq2eQ5l4AAmkXznRwqXLd4xR4oBngzEx0
+         M/KKVs8TARAUwxe3OxEPH74vUSwMppz38FTNt0hhBJtGAUzmeBQR/Q8U7gFic9fN6c
+         6OMcpaeMzoC6vzN/zoux1g5cYnzmuHdm+xsmtfnk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, chen gong <curry.gong@amd.com>,
-        Evan Quan <evan.quan@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.10 35/48] drm/amdgpu: When the VCN(1.0) block is suspended, powergating is explicitly enabled
-Date:   Mon,  3 Jan 2022 15:24:12 +0100
-Message-Id: <20220103142054.657357805@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 52/73] nfc: uapi: use kernel size_t to fix user-space builds
+Date:   Mon,  3 Jan 2022 15:24:13 +0100
+Message-Id: <20220103142058.603639131@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220103142053.466768714@linuxfoundation.org>
-References: <20220103142053.466768714@linuxfoundation.org>
+In-Reply-To: <20220103142056.911344037@linuxfoundation.org>
+References: <20220103142056.911344037@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,65 +49,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: chen gong <curry.gong@amd.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-commit b7865173cf6ae59942e2c69326a06e1c1df5ecf6 upstream.
+commit 79b69a83705e621b258ac6d8ae6d3bfdb4b930aa upstream.
 
-Play a video on the raven (or PCO, raven2) platform, and then do the S3
-test. When resume, the following error will be reported:
+Fix user-space builds if it includes /usr/include/linux/nfc.h before
+some of other headers:
 
-amdgpu 0000:02:00.0: [drm:amdgpu_ring_test_helper [amdgpu]] *ERROR* ring
-vcn_dec test failed (-110)
-[drm:amdgpu_device_ip_resume_phase2 [amdgpu]] *ERROR* resume of IP block
-<vcn_v1_0> failed -110
-amdgpu 0000:02:00.0: amdgpu: amdgpu_device_ip_resume failed (-110).
-PM: dpm_run_callback(): pci_pm_resume+0x0/0x90 returns -110
+  /usr/include/linux/nfc.h:281:9: error: unknown type name ‘size_t’
+    281 |         size_t service_name_len;
+        |         ^~~~~~
 
-[why]
-When playing the video: The power state flag of the vcn block is set to
-POWER_STATE_ON.
-
-When doing suspend: There is no change to the power state flag of the
-vcn block, it is still POWER_STATE_ON.
-
-When doing resume: Need to open the power gate of the vcn block and set
-the power state flag of the VCN block to POWER_STATE_ON.
-But at this time, the power state flag of the vcn block is already
-POWER_STATE_ON. The power status flag check in the "8f2cdef drm/amd/pm:
-avoid duplicate powergate/ungate setting" patch will return the
-amdgpu_dpm_set_powergating_by_smu function directly.
-As a result, the gate of the power was not opened, causing the
-subsequent ring test to fail.
-
-[how]
-In the suspend function of the vcn block, explicitly change the power
-state flag of the vcn block to POWER_STATE_OFF.
-
-BugLink: https://gitlab.freedesktop.org/drm/amd/-/issues/1828
-Signed-off-by: chen gong <curry.gong@amd.com>
-Reviewed-by: Evan Quan <evan.quan@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org
+Fixes: d646960f7986 ("NFC: Initial LLCP support")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/vcn_v1_0.c |    7 +++++++
- 1 file changed, 7 insertions(+)
+ include/uapi/linux/nfc.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/amd/amdgpu/vcn_v1_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/vcn_v1_0.c
-@@ -254,6 +254,13 @@ static int vcn_v1_0_suspend(void *handle
- {
- 	int r;
- 	struct amdgpu_device *adev = (struct amdgpu_device *)handle;
-+	bool idle_work_unexecuted;
-+
-+	idle_work_unexecuted = cancel_delayed_work_sync(&adev->vcn.idle_work);
-+	if (idle_work_unexecuted) {
-+		if (adev->pm.dpm_enabled)
-+			amdgpu_dpm_enable_uvd(adev, false);
-+	}
+--- a/include/uapi/linux/nfc.h
++++ b/include/uapi/linux/nfc.h
+@@ -278,7 +278,7 @@ struct sockaddr_nfc_llcp {
+ 	__u8 dsap; /* Destination SAP, if known */
+ 	__u8 ssap; /* Source SAP to be bound to */
+ 	char service_name[NFC_LLCP_MAX_SERVICE_NAME]; /* Service name URI */;
+-	size_t service_name_len;
++	__kernel_size_t service_name_len;
+ };
  
- 	r = vcn_v1_0_hw_fini(adev);
- 	if (r)
+ /* NFC socket protocols */
 
 

@@ -2,69 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 060924830EC
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 13:17:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1AB14830EE
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 13:17:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbiACMRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 07:17:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
+        id S231374AbiACMRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 07:17:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiACMQ7 (ORCPT
+        with ESMTP id S229590AbiACMRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 07:16:59 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D962C061761;
-        Mon,  3 Jan 2022 04:16:59 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id w184so78686072ybg.5;
-        Mon, 03 Jan 2022 04:16:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=lOyYQI0CIiGDaIpaEWbuQqbHJxkreGLXN8QH7/z8oI4=;
-        b=avHPEGVXj896OQFF1OF8lCa7weuU688Bgnpm0I6pbYz1jMhNj2SDgNGAGsxgYOWx+c
-         cpbaI+2zQm4NH4mEZp8vasOY2vT9Edc/3q82TLFpkKZxWA6McTVyivhnhlomW0gSZETH
-         c/VZWKq2H5c5gEIo3cKElPBM179+Pq/ivqeFhTjEWKBR0QYsdk7PtUcXqxxNdFLl5fbe
-         HC4xM3B/D6RSOJfP0r5Ky1dVi9E3oOY90BuvcNe59iqbvkxBcD7yKYZ0LNk6Km+UUyd+
-         JmUg+t8XZi1bG73eHLaBasdU9dgEVq0npwkZbvcXTc2AdFM5khqDAru/yuHfS9FXsEWD
-         GKig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=lOyYQI0CIiGDaIpaEWbuQqbHJxkreGLXN8QH7/z8oI4=;
-        b=7wVPrrvd5szd1JakcGc4VoMRah4kWZUtIcJ9jfOaSn5twf9qRI7Jol9QVQHLS5Bdmy
-         XoidvXEw9+iK1ULrwFx0aVTVpZJh+eZUphaSbuDfR1Uqkc9yU43tQvAYcCJxwfvGv+Lr
-         TeZB7YWxjzCt2fbSeQNlugO+yXvzqLr9yu019yuoSiUlbIOeTo9lIvNwIvDUblv3XHCF
-         MwSHlCj9AKc+9DiMS28c6OE4hC6WLysCndh+YeeUH6MHT5lcgaQD95ESnYAHwphAHpB3
-         SuIKa0DnfJRzvQvX5D3u2Uh14Mt4QKfSrMGEWbGsr/DDZFShBTNH/+KFMhpUEorHhLla
-         uVSQ==
-X-Gm-Message-State: AOAM531lXjC1UZlfiMz1Q6Tz0EAVriWKCI10+1ZJthHAnWigFB8ZimpM
-        jIkY1h9K+L8g+dkXuJeA3KXnn/VzP/Y9328mVxdzd1XJppg=
-X-Google-Smtp-Source: ABdhPJzFJ/ln50kOs0GKYcEn5ilkqzXWpFA5l2H5i2IT85AlUaFrXYtyGnGh00nCHkufXifTTHJwPUUlwvvkP5I6cis=
-X-Received: by 2002:a25:3454:: with SMTP id b81mr41515482yba.723.1641212218511;
- Mon, 03 Jan 2022 04:16:58 -0800 (PST)
+        Mon, 3 Jan 2022 07:17:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB5AC061761;
+        Mon,  3 Jan 2022 04:17:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8B7AB80DB8;
+        Mon,  3 Jan 2022 12:17:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2BBDC36AED;
+        Mon,  3 Jan 2022 12:17:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641212255;
+        bh=dc2unh4GlJ8vViNO3Gnk9VSP1cp5kJt5wPpCByT/E7g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Esba8fxSxOj6CAm5kCtuWucqmvY2MkTzFsFURtwQ1DZleUMpEpo5aFLarlJ0aT1WS
+         CSm5W7KIFjBOL/A7wDLFI3GnJwHoLiNE10bkcqyKdaPvkmp41heYkKc2dqUmM0gGhl
+         y5w8FhRTpko2RHgeMKEPy1TlJqhpqgfyqmBIPhL5W9kpnSFXECN++mwcnBMMaPyJkv
+         uuPQ2pHJGnxHiewu18+Pufz7dLDI7W71cPHA+ZScP17L4gpjZjDlF8zIjnGhrYtA41
+         3gbcoytK2PiZZiILlqE/A+OZ+qh2Htbm9pakkIEg6odK7i/EBugfl2v0NmF3B6T8xx
+         GULikp4FNwWLQ==
+Date:   Mon, 3 Jan 2022 14:17:31 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        Aharon Landau <aharonl@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org
+Subject: Re: [PATCH rdma-next v1 6/7] RDMA/mlx5: Delay the deregistration of
+ a non-cache mkey
+Message-ID: <YdLpWxwn7WPdvEno@unreal>
+References: <cover.1640862842.git.leonro@nvidia.com>
+ <20220102030310.2452-1-hdanton@sina.com>
 MIME-Version: 1.0
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Mon, 3 Jan 2022 13:16:48 +0100
-Message-ID: <CAKXUXMwcPLAAviuotom39+9m3upZvir-az=_-ZxU0eOu8OPxWA@mail.gmail.com>
-Subject: Reference to non-existing config COMET_EARLY_UART_DEBUG
-To:     Brian Cain <bcain@codeaurora.org>, linux-hexagon@vger.kernel.org
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220102030310.2452-1-hdanton@sina.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Brian,
+On Sun, Jan 02, 2022 at 11:03:10AM +0800, Hillf Danton wrote:
+> On Thu, 30 Dec 2021 13:23:23 +0200
+> > From: Aharon Landau <aharonl@nvidia.com>
+> > 
+> > When restarting an application with many non-cached mkeys, all the mkeys
+> > will be destroyed and then recreated.
+> > 
+> > This process takes a long time (about 20 seconds for deregistration and
+> > 28 seconds for registration of 100,000 MRs).
+> > 
+> > To shorten the restart runtime, insert the mkeys temporarily into the
+> > cache and schedule a delayed work to destroy them later. If there is no
+> > fitting entry to these mkeys, create a temporary entry that fits them.
+> > 
+> > If 30 seconds have passed and no user reclaimed the temporarily cached
+> > mkeys, the scheduled work will destroy the mkeys and the temporary
+> > entries.
+> > 
+> > When restarting an application, the mkeys will still be in the cache
+> > when trying to reg them again, therefore, the registration will be
+> > faster (4 seconds for deregistration and 5 seconds or registration of
+> > 100,000 MRs).
+> > 
+> > Signed-off-by: Aharon Landau <aharonl@nvidia.com>
+> > Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+> > ---
+> >  drivers/infiniband/hw/mlx5/mlx5_ib.h |   3 +
+> >  drivers/infiniband/hw/mlx5/mr.c      | 131 ++++++++++++++++++++++++++-
+> >  2 files changed, 132 insertions(+), 2 deletions(-)
 
-In arch/hexagon/kernel/vm_init_segtable.S, an ifdef refers to
-CONFIG_COMET_EARLY_UART_DEBUG, but this config is never defined in the
-Kconfig files.
+<...>
 
-Can we delete this dead code in
-arch/hexagon/kernel/vm_init_segtable.S? If so, I will send a patch for
-that.
+> > +	if (!ent->is_tmp)
+> > +		mr->mmkey.cache_ent = ent;
+> > +	else {
+> > +		ent->total_mrs--;
+> > +		cancel_delayed_work(&ent->dev->cache.remove_ent_dwork);
+> > +		queue_delayed_work(ent->dev->cache.wq,
+> > +				   &ent->dev->cache.remove_ent_dwork,
+> > +				   msecs_to_jiffies(30 * 1000));
+> > +	}
+> 
+> Nit: collapse cancel and queue into mod_delayed_work().
+> 
+> >  }
 
-Best regards,
+<...>
 
-Lukas
+> > +	INIT_WORK(&ent->work, cache_work_func);
+> > +	INIT_DELAYED_WORK(&ent->dwork, delayed_cache_work_func);
+> 
+> More important IMHO is to cut work in a seperate patch given that dwork can
+> be queued with zero delay and both work callbacks are simple wrappers of
+> __cache_work_func(). 
+
+Thanks, I'll collect more feedback and resubmit.
+
+> 
+> Hillf

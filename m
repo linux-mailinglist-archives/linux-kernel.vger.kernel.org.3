@@ -2,138 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5B4482EBC
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 08:36:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C90482EC4
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 08:43:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbiACHgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 02:36:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiACHgd (ORCPT
+        id S230368AbiACHng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 02:43:36 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:56978 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229793AbiACHne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 02:36:33 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B095C061761;
-        Sun,  2 Jan 2022 23:36:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=Bx7NtCk13O3MYnOesPcQB/UnVRax9ZEBIq5svXtVmbM=; b=jAnUvCaO8PLbHhvB8G7hoc8pJn
-        aKYylEnGeyhVDrH6QhTNanVYzpdkjE10nnn4UJUSbScGudrZuxk67km/SOqLdzEFHTtXFxLQuLGGw
-        y+41rII6BRxKrc5URUl9UB8Sf8EoWipTUOJ5/EJhxACZqRVvuiV68y2ZNlgeRuA24Uuc0JpvYSJyc
-        HQ10QO5Up4W+j0buZtw5XpfIwW0ls9fra+ztPdlSM1VDOwiK2TgQLgpxCg/QORXOJ5yZ7X0Fnuyn8
-        Kloz3c3IhP/42FXKO0eS5cWnTyK5TuOJ9Zdk9Pq019whwiL4vxKzwIZgfd5SIbbCCbEdH/rMp8np2
-        gATh4hmw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n4HtM-0054kh-Hu; Mon, 03 Jan 2022 07:36:28 +0000
-Message-ID: <7a9999a4-257c-3428-779e-0fdbf02d4782@infradead.org>
-Date:   Sun, 2 Jan 2022 23:36:23 -0800
+        Mon, 3 Jan 2022 02:43:34 -0500
+X-UUID: 6a3dbd5d55aa466a9f48df8d76e658b4-20220103
+X-UUID: 6a3dbd5d55aa466a9f48df8d76e658b4-20220103
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 891752601; Mon, 03 Jan 2022 15:43:30 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 3 Jan 2022 15:43:28 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 3 Jan 2022 15:43:28 +0800
+Message-ID: <ca8e8e62d4c7d9b714c64fbf9e59ba0ebe42bea4.camel@mediatek.com>
+Subject: Re: [PATCH v16 0/7] soc: mediatek: SVS: introduce MTK SVS
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Mon, 3 Jan 2022 15:43:28 +0800
+In-Reply-To: <abd9332b-dace-f75a-33f5-be88fe516784@gmail.com>
+References: <20210428065440.3704-1-roger.lu@mediatek.com>
+         <abd9332b-dace-f75a-33f5-be88fe516784@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v1] docs: 5.Posting.rst: describe Fixes: and Link: tags
-Content-Language: en-US
-To:     Thorsten Leemhuis <linux@leemhuis.info>, linux-doc@vger.kernel.org
-Cc:     workflows@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>
-References: <2b9c093339322e2686140a486b978c0b03476f42.1641194004.git.linux@leemhuis.info>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <2b9c093339322e2686140a486b978c0b03476f42.1641194004.git.linux@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+Hi Matthias,
 
-On 1/2/22 23:15, Thorsten Leemhuis wrote:
-> Explain Fixes: and Link: tags in Documentation/process/5.Posting.rst,
-> which are missing in this file for unknown reasons and only described in
-> Documentation/process/submitting-patches.rst.
+On Thu, 2021-12-30 at 14:18 +0100, Matthias Brugger wrote:
 > 
-> Signed-off-by: Thorsten Leemhuis <linux@leemhuis.info>
-> CC: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-> ---
-> Lo! If there is still a chance I'l like to get this patch into v5.17, as
-
-                                 I'd
-
-> during my work as regression tracker I noticed quite a few developers
-> seem to be unaware how the Link: tag should be used. Maybe in parts
-> that's because Documentation/process/5.Posting.rst doesn't describe it
-> yet, which described things from a another different angle than
-> Documentation/process/submitting-patches.rst.
+> On 28/04/2021 08:54, Roger Lu wrote:
+> > 1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
+> > 2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by
+> > get_cpu_device().
+> > After retrieving subsys device, SVS driver calls device_link_add() to make
+> > sure probe/suspend callback priority.
+> > 3. SVS dts refers to reset controller [4] to help reset SVS HW.
+> > 
+> > #mt8183 SVS related patches
+> > [1] 
+> > https://urldefense.com/v3/__https://patchwork.kernel.org/patch/11193513/__;!!CTRNKA9wMg0ARbw!yy2e7JqE__BQAZF3jwBuR3Fbzbv8LPxwwA3l6SVu7SFAG94dCHyVq9A3MIscKXW-$
+> >  
 > 
-> Ciao, Thorsten
+> Already mainline, please either refer to the commit, to make it clear it's 
+> maineline or drop it.
 > 
-> v1:
-> - First version as stand alone patch. It used to be the first patch of
->   this series that got abandoned after RFC/v2:
->   https://lore.kernel.org/all/cover.1639042966.git.linux@leemhuis.info/
->   Patch itself is unchanged, patch description slighly changed. Might
-
-                                                 slightly
-
->   later submit other changes from that series seperately, too, still
-
-                                                separately,
-
->   unsure.
-> ---
->  Documentation/process/5.Posting.rst | 29 ++++++++++++++++++++++-------
->  1 file changed, 22 insertions(+), 7 deletions(-)
+> > [2] 
+> > https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/patch/20201013102358.22588-2-michael.kao@mediatek.com/__;!!CTRNKA9wMg0ARbw!yy2e7JqE__BQAZF3jwBuR3Fbzbv8LPxwwA3l6SVu7SFAG94dCHyVq9A3ML35Ale5$
+> >  
 > 
-> diff --git a/Documentation/process/5.Posting.rst b/Documentation/process/5.Posting.rst
-> index 855a70b80269..e7b919070210 100644
-> --- a/Documentation/process/5.Posting.rst
-> +++ b/Documentation/process/5.Posting.rst
-> @@ -197,14 +197,29 @@ the build process, for example, or editor backup files) in the patch.  The
->  file "dontdiff" in the Documentation directory can help in this regard;
->  pass it to diff with the "-X" option.
->  
-> -The tags mentioned above are used to describe how various developers have
-> -been associated with the development of this patch.  They are described in
-> -detail in
-> -the :ref:`Documentation/process/submitting-patches.rst <submittingpatches>`
-> -document; what follows here is a brief summary.  Each of these lines has
-> -the format:
-> +The tags already briefly mentioned above are used to provide insights how
-> +the patch came into being. They are described in detail in the
-> +:ref:`Documentation/process/submitting-patches.rst <submittingpatches>`
-> +document; what follows here is a brief summary.
->  
-> -::
-> +One tag is used to refer to earlier commits which had problems fixed by
-> +the patch::
-> +
-> +	Fixes: 1f2e3d4c5b6a ("The first line of the commit specified by the first 12 characters of its SHA-1 ID")
-> +
-> +Another tag is used for linking web pages with additional backgrounds or
-> +details, for example a report about a bug fixed by the patch or a document
-> +with a specification implemented by the patch::
-> +
-> +	Link: https://example.com/somewhere.html  optional-other-stuff
-> +
-> +Many maintainers when applying a patch also add this tag to link to the
-> +latest public review posting of the patch; often this is automatically done
-> +by tools like b4 or a git hook like the one described in
-> +'Documentation/maintainer/configure-git.rst'.
-> +
-> +A third kind of tags are used to document who was involved in the development of
-
-                of tag is used
-
-> +the patch. Each of these uses this format::
->  
->  	tag: Full Name <email address>  optional-other-stuff
->  
+> Same here.
 > 
-> base-commit: b36064425a18e29a3bad9c007b4dd1223f8aadc5
+> > [3] 
+> > https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/patch/20200306041345.259332-3-drinkcat@chromium.org/__;!!CTRNKA9wMg0ARbw!yy2e7JqE__BQAZF3jwBuR3Fbzbv8LPxwwA3l6SVu7SFAG94dCHyVq9A3MMUMr7Oh$
+> >  
+> 
+> Same here,
 
--- 
-~Randy
+Thanks for the review. I'll refer to mainline or the latest reviewing patch. 
+
+> 
+> > 
+> > #mt8192 SVS related patches
+> > [1] 
+> > https://urldefense.com/v3/__https://patchwork.kernel.org/patch/11193513/__;!!CTRNKA9wMg0ARbw!yy2e7JqE__BQAZF3jwBuR3Fbzbv8LPxwwA3l6SVu7SFAG94dCHyVq9A3MIscKXW-$
+> >  
+> 
+> Same here, it's actually the same link as [1].
+> 
+> > [2] 
+> > https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/patch/20201223074944.2061-1-michael.kao@mediatek.com/__;!!CTRNKA9wMg0ARbw!yy2e7JqE__BQAZF3jwBuR3Fbzbv8LPxwwA3l6SVu7SFAG94dCHyVq9A3MEUxFEDM$
+> >  
+> > [3] 
+> > https://urldefense.com/v3/__https://lore.kernel.org/patchwork/patch/1360551/__;!!CTRNKA9wMg0ARbw!yy2e7JqE__BQAZF3jwBuR3Fbzbv8LPxwwA3l6SVu7SFAG94dCHyVq9A3MNObUeLt$
+> >  
+> > [4] 
+> > https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/patch/20200817030324.5690-5-crystal.guo@mediatek.com/__;!!CTRNKA9wMg0ARbw!yy2e7JqE__BQAZF3jwBuR3Fbzbv8LPxwwA3l6SVu7SFAG94dCHyVq9A3MMx-JKoe$
+> >  
+> 
+> There are many dependencies for that. Some patches need resubmit, others seem
+> to 
+> be stale. I'd advise to concentrate on mt8183 for now and add support for
+> mt8192 
+> once dependencies have settled.
+
+Sure, let's concentrate on mt8183 patches first. Thanks for sharing the advice.
+
+> 
+> Regards,
+> Matthias
+> 
+> > 
+> > changes since v15:
+> > - Put (*set_freqs_pct) and (*get_vops) in struct svs_bank because they are
+> > part of svs bank's operation
+> > - Add define "SVSB_INIT02_RM_DVTFIXED" and "SVSB_MON_VOLT_IGNORE" to make
+> > control clearly.
+> > - Remove unnecessary parenthesis
+> > 
+> > Roger Lu (7):
+> >    [v16,1/7] dt-bindings: soc: mediatek: add mtk svs dt-bindings
+> >    [v16,2/7] arm64: dts: mt8183: add svs device information
+> >    [v16,3/7] soc: mediatek: SVS: introduce MTK SVS engine
+> >    [v16,4/7] soc: mediatek: SVS: add debug commands
+> >    [v16,5/7] dt-bindings: soc: mediatek: add mt8192 svs dt-bindings
+> >    [v16,6/7] arm64: dts: mt8192: add svs device information
+> >    [v16,7/7] soc: mediatek: SVS: add mt8192 SVS GPU driver
+> > 
+> >   .../bindings/soc/mediatek/mtk-svs.yaml        |   92 +
+> >   arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   18 +
+> >   arch/arm64/boot/dts/mediatek/mt8192.dtsi      |   34 +
+> >   drivers/soc/mediatek/Kconfig                  |   10 +
+> >   drivers/soc/mediatek/Makefile                 |    1 +
+> >   drivers/soc/mediatek/mtk-svs.c                | 2524 +++++++++++++++++
+> >   6 files changed, 2679 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-
+> > svs.yaml
+> >   create mode 100644 drivers/soc/mediatek/mtk-svs.c
+> > 
+> > _______________________________________________
+> > Linux-mediatek mailing list
+> > Linux-mediatek@lists.infradead.org
+> > 
+https://urldefense.com/v3/__http://lists.infradead.org/mailman/listinfo/linux-mediatek__;!!CTRNKA9wMg0ARbw!yy2e7JqE__BQAZF3jwBuR3Fbzbv8LPxwwA3l6SVu7SFAG94dCHyVq9A3MIj4Pohu$
+> >  
+> > 
+

@@ -2,106 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3D24833BD
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:47:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5F74833C2
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:49:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232478AbiACOrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:47:49 -0500
-Received: from mga07.intel.com ([134.134.136.100]:56878 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232455AbiACOrq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:47:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641221266; x=1672757266;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=znrP2i87MLLUcp7H2Vnbtzt9yBXPSnogxgYGZPk7/Eg=;
-  b=mLWL3mMBH0VdrIIU0CbZkM21Wz9AQjg3ubeZz9zbRfP1FJ+QWaa6t+g+
-   5R36RfarE5RWYkCjJo/DC23vpqnCrkbpaUBvXouXutByWSp2EskC5kjuW
-   mtLqgFVbr1fPNs0pKGsF76bDv8nU/2GSSJXxGmO81flh9q+rZS/ZzAk+X
-   gtOZyF+kF6nKYzuaASzy+gb2f2RQx9a2QKPJzuxYNq5mhSGxwIJPDKH/1
-   F12WYx3TniSph+crwl7EgalVAoCejxecD3SqzCyRK4hIwJAL/ulgd0f46
-   DLiH8kUK5bqXoWBP97pWnWgkwWYbkbhToxC9mvxZLrYj8azAeN5e94PVH
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10215"; a="305425389"
-X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="305425389"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 06:47:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="760111132"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga006.fm.intel.com with ESMTP; 03 Jan 2022 06:47:42 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 203ElfGx009815;
-        Mon, 3 Jan 2022 14:47:41 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     cgel.zte@gmail.com
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        torvalds@linux-foundation.org, nathan@kernel.org,
-        ndesaulniers@google.com, keescook@chromium.org,
-        wang.yong12@zte.com.cn, xu.xin16@zte.com.cn,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH linux-next] tools: compiler-gcc.h: Keep compatible with older GCC versions
-Date:   Mon,  3 Jan 2022 15:46:35 +0100
-Message-Id: <20220103144635.5952-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220102120201.594408-1-xu.xin16@zte.com.cn>
-References: <20220102120201.594408-1-xu.xin16@zte.com.cn>
+        id S233489AbiACOtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:49:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44502 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232301AbiACOtW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 09:49:22 -0500
+Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74E3C061785
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 06:49:21 -0800 (PST)
+Received: by mail-vk1-xa29.google.com with SMTP id b77so18947297vka.11
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 06:49:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HWc6kMGP/M+msoEBTnVD+/VQ6/IgWEBExdaLxDbpI5U=;
+        b=g7BmJBPMjxPW+Ba565Ck5u6y91erR7ajoBfz1K+6UZzNMaTYgdU3/604VSjUrNipbO
+         9EAkF9uG2AZh4L737doHouNA2ZGiF88vxfu0M1/PZMQ2bH6ujlfo+wVjh/vVlY2PA2P1
+         I6YMP2/a4KlaBTvUqZWYA8RCZXqekivT4NkoTh9BrghF5zKxG27tnCLddGi6P+dZln4m
+         Hf1ka8DNBu2YiXHgP46BFlyKsFVeS9AKoAp1/B0vmLm3SiWV6tyJ7gaXIHh9fbYIpKGj
+         aJGJTtWNCJHn94Xd1IU91DBVrN955TTJE8d3oSGqxqFfGk07/RFKlqZxLa2w9b8ar1k1
+         6Y1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HWc6kMGP/M+msoEBTnVD+/VQ6/IgWEBExdaLxDbpI5U=;
+        b=m4fbH1WoxDPbjcXSyopDi+ltb3FbKwXTHyhWW3IyaURpM0VtNOp7imrOavIkW1C/dZ
+         tfF7GoOFnyrs1UAxZoq0bA1KcTz118bFh9dZYHyuZWbd0o7sTnNZh6LRIRHjX8b22ON4
+         GUSQ5ste5hbqwO+6xcdRLmijshpfFCDw0bzAuRU8X2VaU5dICUJ0HY6IRJl9GSctR6pz
+         UOz+YHtkyVhmnCYnCqtoS+AxtRceHScFR9ELoVJ3p/lr+eZM4bK6M8FIBieHTI8JzadH
+         UFGnK9+TyHeHNw0eP9zuigHTUAymEVAtndehFm0kHmtJqurACI2fzP2yswSlLiGGcoDY
+         M89Q==
+X-Gm-Message-State: AOAM530sMX6B7exhiKAYcBLc7TvtQxxCwrCyLKxIjYt2tEsmGTtwPNKN
+        qiJxrkvs7kPSAp6n3GXU9f3jcwT9VBqLLka8caKKoA==
+X-Google-Smtp-Source: ABdhPJwwIA/IfQvilN4fRR9XaYaLNL5dYfW/SyPMBHLI4fmxOM14YyT+pKiuH/zq7OrOqH4hy71kD0yP359HgsUko0g=
+X-Received: by 2002:ac5:cb72:: with SMTP id l18mr15057905vkn.1.1641221361003;
+ Mon, 03 Jan 2022 06:49:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211231161930.256733-1-krzysztof.kozlowski@canonical.com> <20211231161930.256733-2-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211231161930.256733-2-krzysztof.kozlowski@canonical.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Mon, 3 Jan 2022 16:49:08 +0200
+Message-ID: <CAPLW+4mosbk2_NPFFP=sUmKjBoZOG3vNcmT+7sMtTunhbVqcxA@mail.gmail.com>
+Subject: Re: [PATCH 01/24] pinctrl: samsung: drop pin banks references on
+ error paths
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        Chanho Park <chanho61.park@samsung.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: cgel.zte@gmail.com
-Date: Sun,  2 Jan 2022 12:02:01 +0000
-
-> From: xu xin <xu.xin16@zte.com.cn>
-> 
-> When HOST CC = gcc (GCC) 4.8.5, we found that there is an error occurring:
-                           ^^^^^
-
-From [0]:
-
-Program  Minimal version
-GNU C    5.1
-
-This applies to both HOSTCC and CC.
-
-> Undefined __has_attribute as we built the whole kernel and tools.
-> 
-> To solve this, this patch is given to keep the compatibility with older
-> GCC versions.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Co-developed-by: wangyong <wang.yong12@zte.com.cn>
-> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+On Fri, 31 Dec 2021 at 18:20, Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> The driver iterates over its devicetree children with
+> for_each_child_of_node() and stores for later found node pointer.  This
+> has to be put in error paths to avoid leak during re-probing.
+>
+> Fixes: ab663789d697 ("pinctrl: samsung: Match pin banks with their device nodes")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->  tools/include/linux/compiler-gcc.h | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/tools/include/linux/compiler-gcc.h b/tools/include/linux/compiler-gcc.h
-> index 8816f06fc6c7..333ed16b3b12 100644
-> --- a/tools/include/linux/compiler-gcc.h
-> +++ b/tools/include/linux/compiler-gcc.h
-> @@ -16,6 +16,10 @@
->  # define __fallthrough __attribute__ ((fallthrough))
->  #endif
->  
-> +#ifndef __has_attribute
-> +# define __has_attribute(x) 0  /* Compatibility with GCC versions < 5.x */
-> +#endif
+>  drivers/pinctrl/samsung/pinctrl-samsung.c | 29 +++++++++++++++++------
+>  1 file changed, 22 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.c b/drivers/pinctrl/samsung/pinctrl-samsung.c
+> index 8941f658e7f1..f2864a7869b3 100644
+> --- a/drivers/pinctrl/samsung/pinctrl-samsung.c
+> +++ b/drivers/pinctrl/samsung/pinctrl-samsung.c
+> @@ -1002,6 +1002,15 @@ samsung_pinctrl_get_soc_data_for_of_alias(struct platform_device *pdev)
+>         return &(of_data->ctrl[id]);
+>  }
+>
+> +static void samsung_banks_of_node_put(struct samsung_pinctrl_drv_data *d)
+> +{
+> +       struct samsung_pin_bank *bank;
+> +       unsigned int i;
 > +
->  #if __has_attribute(__error__)
->  # define __compiletime_error(message) __attribute__((error(message)))
->  #endif
-> -- 
-> 2.25.1
+> +       for (i = 0; i < d->nr_banks; ++i, ++bank)
+> +               of_node_put(bank->of_node);
 
-[0] https://elixir.bootlin.com/linux/v5.16-rc8/source/Documentation/process/changes.rst#L32
+But "bank" variable wasn't actually assigned before, only declared?
 
-Al
+> +}
+> +
+>  /* retrieve the soc specific data */
+>  static const struct samsung_pin_ctrl *
+>  samsung_pinctrl_get_soc_data(struct samsung_pinctrl_drv_data *d,
+> @@ -1116,19 +1125,19 @@ static int samsung_pinctrl_probe(struct platform_device *pdev)
+>         if (ctrl->retention_data) {
+>                 drvdata->retention_ctrl = ctrl->retention_data->init(drvdata,
+>                                                           ctrl->retention_data);
+> -               if (IS_ERR(drvdata->retention_ctrl))
+> -                       return PTR_ERR(drvdata->retention_ctrl);
+> +               if (IS_ERR(drvdata->retention_ctrl)) {
+> +                       ret = PTR_ERR(drvdata->retention_ctrl);
+> +                       goto err_put_banks;
+> +               }
+>         }
+>
+>         ret = samsung_pinctrl_register(pdev, drvdata);
+>         if (ret)
+> -               return ret;
+> +               goto err_put_banks;
+>
+>         ret = samsung_gpiolib_register(pdev, drvdata);
+> -       if (ret) {
+> -               samsung_pinctrl_unregister(pdev, drvdata);
+> -               return ret;
+> -       }
+> +       if (ret)
+> +               goto err_unregister;
+>
+>         if (ctrl->eint_gpio_init)
+>                 ctrl->eint_gpio_init(drvdata);
+> @@ -1138,6 +1147,12 @@ static int samsung_pinctrl_probe(struct platform_device *pdev)
+>         platform_set_drvdata(pdev, drvdata);
+>
+>         return 0;
+> +
+> +err_unregister:
+> +       samsung_pinctrl_unregister(pdev, drvdata);
+> +err_put_banks:
+> +       samsung_banks_of_node_put(drvdata);
+> +       return ret;
+>  }
+>
+>  /*
+> --
+> 2.32.0
+>

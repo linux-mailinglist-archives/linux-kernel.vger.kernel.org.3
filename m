@@ -2,174 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 051A24830A3
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 12:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CAA548302B
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 12:04:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231774AbiACLkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 06:40:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58104 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiACLkI (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 06:40:08 -0500
-Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FD4C061761
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 03:40:07 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:d906:519d:26e8:df0])
-        by baptiste.telenet-ops.be with bizsmtp
-        id eBg22600Y5DCMko01Bg2dC; Mon, 03 Jan 2022 12:40:03 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1n4Lh4-008CeT-IS
-        for linux-kernel@vger.kernel.org; Mon, 03 Jan 2022 12:40:02 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1n4KmR-005Lx1-0m
-        for linux-kernel@vger.kernel.org; Mon, 03 Jan 2022 11:41:31 +0100
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     linux-kernel@vger.kernel.org
-Subject: Build regressions/improvements in v5.16-rc8
-Date:   Mon,  3 Jan 2022 11:41:31 +0100
-Message-Id: <20220103104131.1275903-1-geert@linux-m68k.org>
-X-Mailer: git-send-email 2.25.1
+        id S232823AbiACLE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 06:04:56 -0500
+Received: from mail-bn7nam10on2087.outbound.protection.outlook.com ([40.107.92.87]:15745
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229651AbiACLEz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 06:04:55 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iAuNXfqLTS2ZaqfmTNinGPd0HCcIavOxirYhabbTRHxcc18+G+SAutBVlDrTBuv9dQ/BM6njahAdLA3WhzVPzkqU/usq4GBlU/jFg173s+vMwAQOgEy7ekCCanV2FHFoajoO4SbtR5+n8rF2ab6OvTYtGRRQo1kvK+kYKU9WDAuCRmSVGu0/L9Jlqkx5baFj8X1HyPpimvnOaA3spyMDC6a/vEoi/zDjbisl0U9RuNayffGa1gxpwgQJ97xm8XasCb/2MrHv5wCcgrop69uKbzrHU+lLq6DvQ+dj+GfOSDKZfGliUtvqde8j5dLnXxATQQ3H0lU4cDgxQdUEnnNW/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=agd7bUwMhbbV9ucMFdQiYr8eGxQEktx7I5Pzfng2YCc=;
+ b=muLf97OzbO1okc8IyNfUlP+lgbf6r/83+pZMpzMRbZIEoLBxRkJEd+nWKNnvFdEqttTVEmTx2Dzr3ADINuVXbxMccYaK7xx/zAEUpkplIndiSukYqApq3yYyQ3vdIwNHwYlb9eaXcbNoyaCr9iMI3w+lC/Grqh9yunCxjAPHfHTx7+nxsClUVdSxc1DBGjGWfXZbk/DS2lxxDsoIQ2xIHNPSw9vTJWOm6LpZE8+arZRF5elpXnUJE6WnpCEJ2Lf4R5aD9RTJqd4uxu9T0Io/mPWTTn/WKkXIallRo6wO0douNyBrwet0NQl5smWs1Rg/GotlHhfR/Fqg3CfpQ1A7fA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.235) smtp.rcpttodomain=secunet.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=agd7bUwMhbbV9ucMFdQiYr8eGxQEktx7I5Pzfng2YCc=;
+ b=Q/ibNCV4EHIRpTXAlPXsuuYLCkrUCL++wmMT27F8wJRpXydnqNGgxBzlE5vOt8h9gVFZehed89cs2N17EV6LUFXFas7ahbE1KsE7DxXtXCIVzfFr0jKFObFGGPOxrODReli1FIkRh4S55CP0IxPr8OhuRD7chtqeUwX/he/DNUSJ2ShdBCmkI9zwQDsrdA60VxgA6dAD1X08GULwhSNX6M7CRWkS/X1q/+BfEb8s0QFyZpt5EHjQ+3ZdwTl2+GB2vPj1ZIo41iQk4TUO3/OI6grWClHspG0aCgRAKdv/TBwwMfo1+FoJR1EJ4AXA4xmvgNsMKXe749QO+M+cWxwmZw==
+Received: from DM3PR14CA0133.namprd14.prod.outlook.com (2603:10b6:0:53::17) by
+ MN2PR12MB3903.namprd12.prod.outlook.com (2603:10b6:208:15a::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Mon, 3 Jan
+ 2022 11:04:53 +0000
+Received: from DM6NAM11FT012.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:0:53:cafe::9f) by DM3PR14CA0133.outlook.office365.com
+ (2603:10b6:0:53::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.13 via Frontend
+ Transport; Mon, 3 Jan 2022 11:04:53 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.235) by
+ DM6NAM11FT012.mail.protection.outlook.com (10.13.173.109) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4844.14 via Frontend Transport; Mon, 3 Jan 2022 11:04:52 +0000
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 3 Jan
+ 2022 11:04:51 +0000
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 3 Jan
+ 2022 03:04:50 -0800
+Received: from vdi.nvidia.com (172.20.187.5) by mail.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Mon, 3 Jan 2022 11:04:48 +0000
+From:   Raed Salem <raeds@nvidia.com>
+To:     <steffen.klassert@secunet.com>, <herbert@gondor.apana.org.au>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>, <huyn@nvidia.com>,
+        <saeedm@nvidia.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Raed Salem <raeds@nvidia.com>
+Subject: [PATCH net] net/xfrm: IPsec tunnel mode fix inner_ipproto setting in sec_path
+Date:   Mon, 3 Jan 2022 13:04:44 +0200
+Message-ID: <20220103110444.10964-1-raeds@nvidia.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 75983761-93c9-43e6-950a-08d9cea8dde9
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3903:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB39036A2716C5B7F98DAF0FC3C9499@MN2PR12MB3903.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SDgk3OlQZJkffLYlnisJKcz6ISEE2AVBJB6T+K1EzY3PrSVEaozfCEnoeabYIZDliIE18BGSYUJU5UL7/W+mY9cfHP7NTG24XquHET82RmowY1f81r0KSdPPCSGFAWp5kuD5zBPMAU87XxHgTI9M6KWMog4Mk2/V+ab3liMqF4yvHB3rbxgGZQ+EjgZQF5B8k99sDLrtxRVtp5kKz9Hp8RVcb+y1ynSS/OtJ6RksQTi2wlJKYhUVkasetsGePOmCaSIbLzPzhwz8WbiRz68HpAV0IOdwydaHNkjD8/ImNK72VNoPy0meTfniBMSCEz80xrPyVFzYScRV55E0GwQ1yg6b/0nxXLWTO0tUj4yHd9173I23w7+Dj5AF9cwJVLl+K+TjYxR8q0OtR3i7b6XyqY/HZCWnRuAIbLWAjxcQiX2AQE2kYL7oEsKMzlO8Li8OMD+H6Biq6wAv8rHL1VXuVizQJwqAbklUronyO/BHO9KLoJULGkRTSXbxSUcXB8OEfWJktEpXKI/XroH3kOHXVX3W4rffdHIyIP/3GOdvKoJ9jBv/GBmR2Uu9vNx9tfNU5Uqkq+mKAlFB6LPPLjuXDRv3eANShpGbmDNhGjKFVdsWyBOoFy7mgzEPX6xsFTuPuHKfam9Zqgr25328OLjSfEBHj2uVHr3LMj0Ho5x9e280mk3t+n95LfS7X+wTzSOwy4xHkRFwYuWAuV+FrLloAr97lax0LpWq9NWKPD76hvx8OEMCvR+W5x9G3Hb85RsM8Y3S3kjjOg18Sxzz16bzkH5DUp/SVfMx02ajnjr6GNs=
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(40470700002)(46966006)(36840700001)(86362001)(316002)(8676002)(26005)(70206006)(5660300002)(70586007)(4326008)(8936002)(54906003)(36756003)(110136005)(2906002)(356005)(508600001)(107886003)(6666004)(36860700001)(82310400004)(2616005)(1076003)(336012)(81166007)(186003)(47076005)(7696005)(83380400001)(426003)(40460700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2022 11:04:52.1286
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 75983761-93c9-43e6-950a-08d9cea8dde9
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT012.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3903
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Below is the list of build error/warning regressions/improvements in
-v5.16-rc8[1] compared to v5.15[2].
+The inner_ipproto saves the inner IP protocol of the plain
+text packet. This allows vendor's IPsec feature making offload
+decision at skb's features_check and configuring hardware at
+ndo_start_xmit, current code implenetation did not handle the
+case where IPsec is used in tunnel mode.
 
-Summarized:
-  - build errors: +6/-13
-  - build warnings: +39/-29
+Fix by handling the case when IPsec is used in tunnel mode by
+reading the protocol of the plain text packet IP protocol.
 
-JFYI, when comparing v5.16-rc8[1] to v5.16-rc7[3], the summaries are:
-  - build errors: +0/-1
-  - build warnings: +0/-0
+Fixes: fa4535238fb5 ("net/xfrm: Add inner_ipproto into sec_path")
+Change-Id: I8c109cd3f1de1d983b2f49ea5f8f7a403c6023a5
+Signed-off-by: Raed Salem <raeds@nvidia.com>
+---
+ net/xfrm/xfrm_output.c | 30 +++++++++++++++++++++++++-----
+ 1 file changed, 25 insertions(+), 5 deletions(-)
 
-Note that there may be false regressions, as some logs are incomplete.
-Still, they're build errors/warnings.
+diff --git a/net/xfrm/xfrm_output.c b/net/xfrm/xfrm_output.c
+index 229544b..4dc4a7b 100644
+--- a/net/xfrm/xfrm_output.c
++++ b/net/xfrm/xfrm_output.c
+@@ -647,10 +647,12 @@ static int xfrm_output_gso(struct net *net, struct sock *sk, struct sk_buff *skb
+  * This requires hardware to know the inner packet type to calculate
+  * the inner header checksum. Save inner ip protocol here to avoid
+  * traversing the packet in the vendor's xmit code.
+- * If the encap type is IPIP, just save skb->inner_ipproto. Otherwise,
+- * get the ip protocol from the IP header.
++ * For IPsec tunnel mode save the ip protocol from the IP header of the
++ * plain text packet. Otherwise If the encap type is IPIP, just save
++ * skb->inner_ipproto in any other case get the ip protocol from the IP
++ * header.
+  */
+-static void xfrm_get_inner_ipproto(struct sk_buff *skb)
++static void xfrm_get_inner_ipproto(struct sk_buff *skb, struct xfrm_state *x)
+ {
+ 	struct xfrm_offload *xo = xfrm_offload(skb);
+ 	const struct ethhdr *eth;
+@@ -658,6 +660,25 @@ static void xfrm_get_inner_ipproto(struct sk_buff *skb)
+ 	if (!xo)
+ 		return;
+ 
++	if (x->outer_mode.encap == XFRM_MODE_TUNNEL) {
++		switch (x->outer_mode.family) {
++		case AF_INET:
++			xo->inner_ipproto = ip_hdr(skb)->protocol;
++			break;
++		case AF_INET6:
++			xo->inner_ipproto = ipv6_hdr(skb)->nexthdr;
++			break;
++		default:
++			break;
++		}
++
++		return;
++	}
++
++	/* non-Tunnel Mode */
++	if (!skb->encapsulation)
++		return;
++
+ 	if (skb->inner_protocol_type == ENCAP_TYPE_IPPROTO) {
+ 		xo->inner_ipproto = skb->inner_ipproto;
+ 		return;
+@@ -712,8 +733,7 @@ int xfrm_output(struct sock *sk, struct sk_buff *skb)
+ 		sp->xvec[sp->len++] = x;
+ 		xfrm_state_hold(x);
+ 
+-		if (skb->encapsulation)
+-			xfrm_get_inner_ipproto(skb);
++		xfrm_get_inner_ipproto(skb, x);
+ 		skb->encapsulation = 1;
+ 
+ 		if (skb_is_gso(skb)) {
+-- 
+1.8.3.1
 
-Happy fixing! ;-)
-
-Thanks to the linux-next team for providing the build service.
-
-[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/c9e6606c7fe92b50a02ce51dda82586ebdf99b48/ (98 out of 99 configs)
-[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/8bb7eca972ad531c9b149c0a51ab43a417385813/ (90 out of 99 configs)
-[3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/fc74e0a40e4f9fd0468e34045b0c45bba11dcbb2/ (all 99 configs)
-
-
-*** ERRORS ***
-
-6 error regressions:
-  + /kisskb/src/crypto/blake2b_generic.c: error: the frame size of 2288 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 109:1
-  + /kisskb/src/drivers/mtd/nand/raw/mpc5121_nfc.c: error: unused variable 'mtd' [-Werror=unused-variable]:  => 294:19
-  + error: arch/sparc/kernel/head_32.o: relocation truncated to fit: R_SPARC_WDISP22 against `.init.text':  => (.head.text+0x5100), (.head.text+0x5040)
-  + error: arch/sparc/kernel/head_32.o: relocation truncated to fit: R_SPARC_WDISP22 against symbol `leon_smp_cpu_startup' defined in .text section in arch/sparc/kernel/trampoline_32.o:  => (.init.text+0xa4)
-  + error: arch/sparc/kernel/process_32.o: relocation truncated to fit: R_SPARC_WDISP22 against `.text':  => (.fixup+0x4), (.fixup+0xc)
-  + error: arch/sparc/kernel/signal_32.o: relocation truncated to fit: R_SPARC_WDISP22 against `.text':  => (.fixup+0x4), (.fixup+0x1c), (.fixup+0x28), (.fixup+0x34), (.fixup+0x10)
-
-13 error improvements:
-  - /kisskb/src/drivers/pci/controller/vmd.c: error: 'X86_MSI_BASE_ADDRESS_HIGH' undeclared (first use in this function): 151:20 => 
-  - /kisskb/src/drivers/pci/controller/vmd.c: error: 'X86_MSI_BASE_ADDRESS_LOW' undeclared (first use in this function): 152:35 => 
-  - /kisskb/src/drivers/pci/controller/vmd.c: error: 'arch_msi_msg_addr_lo_t {aka struct arch_msi_msg_addr_lo}' has no member named 'base_address': 152:19 => 
-  - /kisskb/src/drivers/pci/controller/vmd.c: error: 'arch_msi_msg_addr_lo_t {aka struct arch_msi_msg_addr_lo}' has no member named 'destid_0_7': 153:19 => 
-  - /kisskb/src/drivers/pci/controller/vmd.c: error: control reaches end of non-void function [-Werror=return-type]: 128:1 => 
-  - /kisskb/src/drivers/pci/controller/vmd.c: error: dereferencing pointer to incomplete type 'struct pci_sysdata': 751:4 => 
-  - /kisskb/src/drivers/pci/controller/vmd.c: error: field 'sysdata' has incomplete type: 117:21 => 
-  - /kisskb/src/drivers/tty/serial/cpm_uart/cpm_uart_core.c: error: 'udbg_cpm_getc' defined but not used [-Werror=unused-function]: 1109:12 => 
-  - /kisskb/src/drivers/tty/serial/cpm_uart/cpm_uart_core.c: error: 'udbg_cpm_putc' defined but not used [-Werror=unused-function]: 1095:13 => 
-  - /kisskb/src/drivers/tty/serial/sunzilog.c: error: 'sunzilog_putchar' defined but not used [-Werror=unused-function]: 1128:13 => 
-  - /kisskb/src/drivers/usb/gadget/udc/fsl_qe_udc.c: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]: 1496:33, 970:41, 1496:12, 842:13, 970:13, 842:41 => 
-  - /kisskb/src/drivers/usb/gadget/udc/fsl_qe_udc.c: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]: 971:28, 843:56, 1497:48, 843:28, 971:56, 1497:27 => 
-  - /kisskb/src/lib/xxhash.c: error: the frame size of 1624 bytes is larger than 1536 bytes [-Werror=frame-larger-than=]: 236:1 => 
-
-
-*** WARNINGS ***
-
-39 warning regressions:
-  + arch/m68k/configs/multi_defconfig: warning: symbol value 'm' invalid for MCTP:  => 322
-  + arch/m68k/configs/sun3_defconfig: warning: symbol value 'm' invalid for MCTP:  => 295
-  + modpost: WARNING: modpost: EXPORT symbol "___rw_read_enter" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "___rw_read_exit" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "___rw_read_try" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "___rw_write_enter" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "__ashldi3" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "__ashrdi3" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "__copy_1page" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "__divdi3" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "__lshrdi3" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "__muldi3" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "__ndelay" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "__udelay" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "bzero_1page" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: EXPORT symbol "empty_zero_page" [vmlinux] version ...:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x136d0): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x136e8): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13700): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13718): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13730): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13748): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13760): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x137b0): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x137c8): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x137e0): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x137f8): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13810): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13828): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13840): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x13858): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4610): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4628): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4640): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4658): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4670): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4688): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x46a0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
-  + modpost: WARNING: modpost: vmlinux.o(.text.unlikely+0x45e4): Section mismatch in reference from the function __trace_event_discard_commit() to the variable .init.data:initcall_level_names:  => N/A
-
-29 warning improvements:
-  - /kisskb/src/arch/m68k/include/asm/string.h: warning: '__builtin_memcpy' reading 6 bytes from a region of size 0 [-Wstringop-overread]: 72:25 => 
-  - /kisskb/src/block/genhd.c: warning: the frame size of 1640 bytes is larger than 1536 bytes [-Wframe-larger-than=]: 1194:1 => 
-  - /kisskb/src/block/genhd.c: warning: the frame size of 1672 bytes is larger than 1536 bytes [-Wframe-larger-than=]: 1194:1 => 
-  - /kisskb/src/lib/xxhash.c: warning: the frame size of 1616 bytes is larger than 1536 bytes [-Wframe-larger-than=]: 236:1 => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3570): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3588): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x35a0): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x35b8): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x35d0): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x35e8): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3600): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3618): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3630): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3648): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3660): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3678): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x3690): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x36a8): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x36c0): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x36d8): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x108): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x120): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x138): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x150): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x168): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x180): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x198): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: lib/find_bit_benchmark.o(.text.unlikely+0x0): Section mismatch in reference from the (unknown reference) (unknown) to the variable .init.data:bitmap2: N/A => 
-  - modpost: WARNING: modpost: lib/test_bitmap.o(.text.unlikely+0x58): Section mismatch in reference from the function bitmap_equal() to the variable .init.rodata:test_print: N/A => 
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds

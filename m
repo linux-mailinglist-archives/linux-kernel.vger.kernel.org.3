@@ -2,80 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F0448372B
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 19:47:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D06F0483732
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 19:49:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235810AbiACSrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 13:47:10 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35336 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235519AbiACSrI (ORCPT
+        id S235881AbiACSte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 13:49:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235519AbiACStd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 13:47:08 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B87C9611A4;
-        Mon,  3 Jan 2022 18:47:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50709C36AEE;
-        Mon,  3 Jan 2022 18:47:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641235627;
-        bh=xLRvTyvRogqyZpUBzL95jJd3BCU/LsOKXczUxm6kTmI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m+zbNRAo+GHaJbpDoRl6Vsa3bWHGfnKQjHeAYr7x1qB5JP3iseE6j4xZ+jqt+3VhO
-         HCLdroUMhpZyA122tFeDeShISUYDxU0rWP2e1iRfhOu0vRe0qiXX0IzM0eTX+wErWq
-         +Whq51RUGVV1j1kbb7RSP4iBfw8cohpBZUt3LUvJ9ESK8fl+Ce6jWYr9O5C69gzVh4
-         uWKCPb7Yp32IEYZBWYtENP1VkosP1JYlMsUhVAfsR4ooPBnhqzI+UaeDbGS3u5LiYX
-         A/SGFlMVgIDlLxqAMzVcB+WlHgPfvtILRZo0G5dk5S4bQO8wXwzuRLtj8pgbcD9iCM
-         bXG4kD67crBIA==
-Date:   Mon, 3 Jan 2022 20:47:02 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     syzbot <syzbot+e3f96c43d19782dd14a7@syzkaller.appspotmail.com>,
-        jgg@ziepe.ca
-Cc:     liangwenpeng@huawei.com, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, liweihang@huawei.com,
-        syzkaller-bugs@googlegroups.com, tanxiaofei@huawei.com,
-        yuehaibing@huawei.com
-Subject: Re: [syzbot] KASAN: use-after-free Read in ucma_destroy_private_ctx
-Message-ID: <YdNEpi2HziuJz1WW@unreal>
-References: <00000000000056c61c05d4b086d4@google.com>
+        Mon, 3 Jan 2022 13:49:33 -0500
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE14C061761;
+        Mon,  3 Jan 2022 10:49:32 -0800 (PST)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n4SNN-00Gymw-Sf; Mon, 03 Jan 2022 18:48:10 +0000
+Date:   Mon, 3 Jan 2022 18:48:09 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Walt Drummond <walt@drummond.us>
+Cc:     aacraid@microsemi.com, anna.schumaker@netapp.com, arnd@arndb.de,
+        bsegall@google.com, bp@alien8.de, chuck.lever@oracle.com,
+        bristot@redhat.com, dave.hansen@linux.intel.com,
+        dwmw2@infradead.org, dietmar.eggemann@arm.com, dinguyen@kernel.org,
+        geert@linux-m68k.org, gregkh@linuxfoundation.org, hpa@zytor.com,
+        idryomov@gmail.com, mingo@redhat.com, yzaikin@google.com,
+        ink@jurassic.park.msu.ru, jejb@linux.ibm.com, jmorris@namei.org,
+        bfields@fieldses.org, jlayton@kernel.org, jirislaby@kernel.org,
+        john.johansen@canonical.com, juri.lelli@redhat.com,
+        keescook@chromium.org, mcgrof@kernel.org,
+        martin.petersen@oracle.com, mattst88@gmail.com, mgorman@suse.de,
+        oleg@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
+        rth@twiddle.net, richard@nod.at, serge@hallyn.com,
+        rostedt@goodmis.org, tglx@linutronix.de,
+        trond.myklebust@hammerspace.com, vincent.guittot@linaro.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-m68k@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [RFC PATCH 0/8] signals: Support more than 64 signals
+Message-ID: <YdNE6UXRT02135Pd@zeniv-ca.linux.org.uk>
+References: <20220103181956.983342-1-walt@drummond.us>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <00000000000056c61c05d4b086d4@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220103181956.983342-1-walt@drummond.us>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 03, 2022 at 09:05:16AM -0800, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    a8ad9a2434dc Merge tag 'efi-urgent-for-v5.16-2' of git://g..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=10cf5253b00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=1a86c22260afac2f
-> dashboard link: https://syzkaller.appspot.com/bug?extid=e3f96c43d19782dd14a7
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+e3f96c43d19782dd14a7@syzkaller.appspotmail.com
-> 
-> ==================================================================
-> BUG: KASAN: use-after-free in ucma_cleanup_multicast drivers/infiniband/core/ucma.c:491 [inline]
-> BUG: KASAN: use-after-free in ucma_destroy_private_ctx+0x914/0xb70 drivers/infiniband/core/ucma.c:579
-> Read of size 8 at addr ffff88801bb74b00 by task syz-executor.1/25529
+On Mon, Jan 03, 2022 at 10:19:48AM -0800, Walt Drummond wrote:
+> This patch set expands the number of signals in Linux beyond the
+> current cap of 64.  It sets a new cap at the somewhat arbitrary limit
+> of 1024 signals, both because it’s what GLibc and MUSL support and
+> because many architectures pad sigset_t or ucontext_t in the kernel to
+> this cap.  This limit is not fixed and can be further expanded within
+> reason.
 
-Jason,
+Could you explain the point of the entire exercise?  Why do we need more
+rt signals in the first place?
 
-Can it be race between ucma_process_join() and "if (refcount_read(&ctx->ref))"
-check in ucma_destroy_private_ctx()?
-
-The ucma_process_join() grabbed ctx, but released it in error path,
-while ucma_destroy_private_ctx() was called without holding any locks?
-
-Thanks
+glibc has quite a bit of utterly pointless future-proofing.  So "they
+allow more" is not a good reason - not without a plausible use-case,
+at least.

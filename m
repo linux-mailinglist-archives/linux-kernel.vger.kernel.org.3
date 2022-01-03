@@ -2,115 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06DDE483131
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 13:57:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D00483132
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 13:57:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbiACM47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 07:56:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51151 "EHLO
+        id S232124AbiACM5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 07:57:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:36008 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229514AbiACM46 (ORCPT
+        by vger.kernel.org with ESMTP id S229514AbiACM5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 07:56:58 -0500
+        Mon, 3 Jan 2022 07:57:32 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641214617;
+        s=mimecast20190719; t=1641214652;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=q+0VcHP1CYruqwB40NeEtKv4yl+LXrHLsOptfsKeiRI=;
-        b=TTZO3sz+dhG1W/zQxCGWArN2XnIhnmQqFY1Bkzyfvql5ZK7j6VEJrffIESnbn1FNpdwscA
-        D8qFDzFT/HL78RKI12OZDWm+cfklI7sqOrpolPbajvhxS2BBJIsuQ0GzVNVWBdYOTrBZQo
-        tX4RlsezetwRAAT+VgzBtEiT4yL8k88=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=rtHRy5Ohnx4vTqt4HL3s0oEFof8g2wOpu2Bww26wH0o=;
+        b=ehUWYfwEjTpNAmCPB9RoP+yvw5CLv+nWgE6C5Wjq+dDIvxybtuMf2HfoXCbyEo/ge1QyLi
+        Pfd8k1slc06+Z4LO3y1yh7dZsZVm16Sm5BmvHj4IEoZ7CXzmzCamufn9OAtmG3oXgU5hzg
+        PPMBXy/UOeANxvUvnTfULM2yueU4cQ0=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-221-f_vcIepbPG6BAux4lAkEKQ-1; Mon, 03 Jan 2022 07:56:56 -0500
-X-MC-Unique: f_vcIepbPG6BAux4lAkEKQ-1
-Received: by mail-wm1-f70.google.com with SMTP id v23-20020a05600c215700b0034566adb612so8716902wml.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 04:56:56 -0800 (PST)
+ us-mta-557-GgLgf2lTNbOM93Ot7bc6bQ-1; Mon, 03 Jan 2022 07:57:30 -0500
+X-MC-Unique: GgLgf2lTNbOM93Ot7bc6bQ-1
+Received: by mail-wm1-f69.google.com with SMTP id 144-20020a1c0496000000b003305ac0e03aso16500590wme.8
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 04:57:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=q+0VcHP1CYruqwB40NeEtKv4yl+LXrHLsOptfsKeiRI=;
-        b=IYwJutgiXKGrbpP6QBFsx/IWm4ypJhoEimrO9bMdMc+Pw3/iLP2XXbnXftCMo8F/zR
-         WIUG5FO+TXRmxqp7kYA53HbzO65XXLKeJrCP8oa0eb5F/v+V/9yh5lNEDOIl9eg2Imug
-         phNdEyPhvOukDyanQrr41y+AwrzWF1a5Ty3ww9SM+Im0vc/JJWQtjiLjgAiY9G77OsDe
-         LT4HpdDXfM6P7fJIihkuZVj4fsyNlBKubScMClSzEnQ7XnsGZ24qvHjPa1ZqR6CaZ16G
-         67gYh5H86Emzq02QjqziUq++gqYBfm1FprLFTzdKsQQCUq63FfntpWkfqQPFp91h8HCQ
-         jvOg==
-X-Gm-Message-State: AOAM531cfIkbR1xXl4J+DajELZU0+7nRGP9NbYpp2EOnZL87kyTDomku
-        7Surq4GXFIUGsUvaYUIe8dBLnyuMvSL6ZFd+CHiwgmEtvvIZNxvTft7MV8HwLpYsDwGM6cY2EwI
-        tbLbeRLjJgM8BhoSdaUCGcbJgvdWtiMKsosQIQabFehM4P4cYjCCpEpBzahHPd7AFOygG4vbGLx
-        Z0
-X-Received: by 2002:a5d:64eb:: with SMTP id g11mr8187886wri.135.1641214615811;
-        Mon, 03 Jan 2022 04:56:55 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyDpUMIC/WC+h6hUImHvQqEuiygZq8ljLrr9aVNb+INT15FUbHInzoVOpdVgC/6qO+i+/5zHg==
-X-Received: by 2002:a5d:64eb:: with SMTP id g11mr8187862wri.135.1641214615521;
-        Mon, 03 Jan 2022 04:56:55 -0800 (PST)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id l26sm34337226wrz.44.2022.01.03.04.56.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jan 2022 04:56:54 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Igor Mammedov <imammedo@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN
-In-Reply-To: <20220103104057.4dcf7948@redhat.com>
-References: <20211122175818.608220-1-vkuznets@redhat.com>
- <20211122175818.608220-3-vkuznets@redhat.com>
- <16368a89-99ea-e52c-47b6-bd006933ec1f@redhat.com>
- <20211227183253.45a03ca2@redhat.com>
- <61325b2b-dc93-5db2-2d0a-dd0900d947f2@redhat.com>
- <87mtkdqm7m.fsf@redhat.com> <20220103104057.4dcf7948@redhat.com>
-Date:   Mon, 03 Jan 2022 13:56:53 +0100
-Message-ID: <875yr1q8oa.fsf@redhat.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=rtHRy5Ohnx4vTqt4HL3s0oEFof8g2wOpu2Bww26wH0o=;
+        b=Aj2owjEGRXGFYQatpSeysQnoLUn2nWHlROjtz/+k4UNwz+468doVMKpHl9juLEcj6Z
+         +6j7D2Fdi9dBpNIOTr4pqXZbOuYGgpJa8GwjttDj65Japu7/msDGjLiNz9DclRoWR5xR
+         aw3BmnsXdiLspoURnKDVdtJtPp7znqAdZBizSIJRq5r2PkZkRB3+EkBoP8YYQXV7fHGc
+         WSdWuGYWxt5QUHu7bw2vm+Q/IDYEDdpT1r5913O349BTcz136JLYA3ERZEdAxURHfSih
+         X/5VE8o1Q4uTDhWiH+lZwztABSNbM8zp0Tf65A9zxBWvLYzfj2Q2A/TuALUDBc7ZLyPE
+         ChYg==
+X-Gm-Message-State: AOAM531Dw2VTKwtdu5wDqoOtNxCxT5HOjvU0Vq4dZRnTY43a9W/NlVcz
+        aK/ZUWNaQRdihTW0YFwFFeKtdELrQLiQ+TgnPhFwytPq2SatfCwmZiOB0UVEGQUtLUIlpDAqMEa
+        dj9xIWFLwsNFyXIPGS8MbNc1U
+X-Received: by 2002:a1c:9897:: with SMTP id a145mr38431876wme.194.1641214649667;
+        Mon, 03 Jan 2022 04:57:29 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwNFbRHlX3+JW2UIwAlHQfqEFbGkmkSTy1UKAUDkqCOFXRNx+q34gCIQqJQagxKEQ61e3r2uA==
+X-Received: by 2002:a1c:9897:: with SMTP id a145mr38431865wme.194.1641214649414;
+        Mon, 03 Jan 2022 04:57:29 -0800 (PST)
+Received: from [192.168.3.132] (p5b0c6974.dip0.t-ipconnect.de. [91.12.105.116])
+        by smtp.gmail.com with ESMTPSA id a2sm39164107wri.17.2022.01.03.04.57.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jan 2022 04:57:29 -0800 (PST)
+Message-ID: <d8753c88-95f3-75ec-d6b6-27105a9a5968@redhat.com>
+Date:   Mon, 3 Jan 2022 13:57:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>, linux-kernel@vger.kernel.org
+References: <1641190916-24751-1-git-send-email-anshuman.khandual@arm.com>
+ <bd3f2157-858c-b091-0982-12c425b2029a@redhat.com>
+ <c4104b5d-45b8-732a-45e9-0a1cb4954dde@arm.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH V2] arm64/mm/hotplug: Warn when memory limit has been
+ reduced
+In-Reply-To: <c4104b5d-45b8-732a-45e9-0a1cb4954dde@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Igor Mammedov <imammedo@redhat.com> writes:
 
-> On Mon, 03 Jan 2022 09:04:29 +0100
-> Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
->
->> Paolo Bonzini <pbonzini@redhat.com> writes:
->> 
->> > On 12/27/21 18:32, Igor Mammedov wrote:  
->> >>> Tweaked and queued nevertheless, thanks.  
->> >> it seems this patch breaks VCPU hotplug, in scenario:
->> >> 
->> >>    1. hotunplug existing VCPU (QEMU stores VCPU file descriptor in parked cpus list)
->> >>    2. hotplug it again (unsuspecting QEMU reuses stored file descriptor when recreating VCPU)
->> >> 
->> >> RHBZ:https://bugzilla.redhat.com/show_bug.cgi?id=2028337#c11
->> >>   
->> >
->> > The fix here would be (in QEMU) to not call KVM_SET_CPUID2 again. 
->> > However, we need to work around it in KVM, and allow KVM_SET_CPUID2 if 
->> > the data passed to the ioctl is the same that was set before.  
->> 
->> Are we sure the data is going to be *exactly* the same? In particular,
->> when using vCPU fds from the parked list, do we keep the same
->> APIC/x2APIC id when hotplugging? Or can we actually hotplug with a
->> different id?
->
-> If I recall it right, it can be a different ID easily.
->
+>> Via which mechanism would the unplug of that memory happen? On arm64,
+>> this should only be possible via ACPI, when unplugging a DIMM that was
+>> available since boot.
+>>
+>> But won't acpi_memory_enable_device() try adding that memory while
+>> ignoring the memory limit? And adding should work, no?
+> 
+> Adding that memory via hotplug into the kernel first ? In that case
+> removal would still go via the kernel and user would know about it.
 
-It's broken then. I'd suggest we revert the patch from KVM and think
-about the strategy how to proceed. Going forward, we really want to ban
-KVM_SET_CPUID{,2} after KVM_RUN (see the comment which my patch moves).
-E.g. we can have an 'allowlist' of things which can change (and put
-*APICids there) and only fail KVM_SET_CPUID{,2} when we see something
-else changing. In QEMU, we can search the parked CPUs list for an entry
-with the right *APICid and reuse it only if we manage to find one.
+Can we please add details on how to actually trigger it (below) to the
+patch description? Otherwise it's really hard to get about which senario
+we do care, and about which we don't care.
+
+> 
+>>
+>> Can you share some details on how to trigger this on arm64?
+> 
+> The primary scenario this proposal is targeted towards is when boot
+> memory is set aside from the host, hot-plugged back into the kernel
+> and repurposed (via hotplug-hotremove path) for guest kernel usage.
+> This new warning would reassert that "mem=" cmdline option is debug
+> only on arm64 platform, and should not be used for production.
+Let me get this straight:
+
+1. Restrict physical memory to use via "mem="
+
+-> Some boot memory is !present and, therefore !early
+
+2. Hotplug that memory to the kernel
+
+-> How?
+
+a) dax/kmem? Does not apply I think.
+b) DIMM? Does not apply I think.
+c) CONFIG_ARCH_MEMORY_PROBE ?
+
+3. Trigger physical hotunplug and actually remove the memory
+
+-> How?
+
+4. kexec; will try using hotunplugged memory
+
 
 -- 
-Vitaly
+Thanks,
+
+David / dhildenb
 

@@ -2,158 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5D54831B3
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:10:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8CDB4831B7
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 15:13:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233224AbiACOKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 09:10:11 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:5548 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232091AbiACOKK (ORCPT
+        id S233257AbiACONT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 09:13:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229831AbiACONS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 09:10:10 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 203DDart028657;
-        Mon, 3 Jan 2022 14:09:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=v2ghILQ+1jhsJwkVkfQ4PDvXvqOTFTxfb49TgDMC0dg=;
- b=TVs7eLyhQ5pfpRACGjD2c0PDMReATd9YCt6ukUuudUKmv77UH65en0sx1yzLuEzThJ9P
- I6Lhkt3QccJfVhJK+7yVxJ6eQKzMtiaUq5AXSA4sYkwQDjbdLiHvuuJNzLrwp2XFjWEf
- ARgJntRz9jzI6ssBXv1wDQE+vnR80e1HCNAPmZiXPhIMyRG11EWPcNkp/IGM5lofg3lK
- 80T9xIPWYsfM2EIdfdxpOH7tFgo2EtqVtDy1uDZETfUgettaYqxz2EnYuPvF195ng2v6
- CdPE0CdD0sj8jD9OTtbqcVHkwg7Es0xB99fZZEkqf9WMapLefLdVBGDE579bZMCtvfz1 HA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dc1uf0vcj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Jan 2022 14:09:44 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 203Dptg6011938;
-        Mon, 3 Jan 2022 14:09:43 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dc1uf0vcb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Jan 2022 14:09:43 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 203E8G6X003424;
-        Mon, 3 Jan 2022 14:09:42 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma04dal.us.ibm.com with ESMTP id 3daekahcch-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Jan 2022 14:09:42 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 203E9fdE36438500
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 3 Jan 2022 14:09:41 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 04E9E13605E;
-        Mon,  3 Jan 2022 14:09:41 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 88F83136059;
-        Mon,  3 Jan 2022 14:09:38 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon,  3 Jan 2022 14:09:38 +0000 (GMT)
-Message-ID: <0626de21-d22f-329c-fc64-ecd7eab1331a@linux.ibm.com>
-Date:   Mon, 3 Jan 2022 09:09:37 -0500
+        Mon, 3 Jan 2022 09:13:18 -0500
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4D8C061761;
+        Mon,  3 Jan 2022 06:13:17 -0800 (PST)
+Received: by mail-ua1-x92f.google.com with SMTP id o63so57962869uao.5;
+        Mon, 03 Jan 2022 06:13:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=iPVzylUVRpeAcfXNQppU6FqeZrAVxB1sR63Dt2iVLwU=;
+        b=iUd6OgjQIQOJ+2STZhjzuYn99Wa6bykJ3/NRtPlLiiIdh8UkMnXIvX6mbzPrfX1x7o
+         kSktM1Con9Ybym6MGjt8Rvr0iNeZoI1FeLvr8lYLXCU0Nmue/wqZlevwTq/H6Kw8ZsFW
+         +V8lrWU2bcAbuaBRMMWMxhTYpRdHnO0IREJyDa+CP0QuYKTHgghvmNlEOS/qbxFv30Rq
+         wz4//V8mlBkfFA2SnQgn61Usy9YtxJF16JWOmIJCWZc/Vw3c1oMT/hxsNr5tXXzhP2xV
+         ZP7YXAf/DxJ+ZcJUzo4OkwkSdCABIYvb9HvKppySgy8XfGbUkqEKo/ZMbZ52I+/Xj7UY
+         OhfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=iPVzylUVRpeAcfXNQppU6FqeZrAVxB1sR63Dt2iVLwU=;
+        b=I/J2iKV+NKF2R+NP7LX6R2R1HVZ32YS47I33eV5TjhCw0+SkpwQpmn/KN+PYtKwwMf
+         K5e3Xdj84jgS6YaDQ4mrRJbRz3eIPRIkgcMiwrpHxscxTEAQX57HQud/x799O+znJR4K
+         morw7yI4LLZXWU0u9yFGWGA1StZYeoFZoyk7j3IpZ/VQN0AGQ0P5mBu1nkkjIVtIxb+J
+         Lpul4+HbPG576Jmf+rVXkpWVG3wDIx87vArtpCTVe9kI5lQHinzTYciXfAa1eESNNJhf
+         45VsVhaFwzCnhbaRKSLBPog6neN2B5kpJE3xiLmHfoxiqNqqwNdhqW79RVAIPeBPl2IP
+         QRjg==
+X-Gm-Message-State: AOAM5339T2DAJkSknsmMOdLnidlvV75wYAXw1NtTpkeMW0FG0ibGU6gz
+        iWyseVXFizZQYejP/z/cEHAOPLF/rv9hauw2Bxg=
+X-Google-Smtp-Source: ABdhPJw6vTeLy4HHkOD0cRJ66G1hNoZL4n6P2HY1spPFAU24qh9JshJb35crTY48+wIUAzkztf1JWDIur+aALh9+ueY=
+X-Received: by 2002:a05:6102:1613:: with SMTP id cu19mr13217645vsb.39.1641219196826;
+ Mon, 03 Jan 2022 06:13:16 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v7 10/14] securityfs: Extend securityfs with namespacing
- support
-Content-Language: en-US
-To:     Christian Brauner <christian.brauner@ubuntu.com>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        James Bottomley <James.Bottomley@HansenPartnership.com>
-References: <20211216054323.1707384-1-stefanb@linux.vnet.ibm.com>
- <20211216054323.1707384-11-stefanb@linux.vnet.ibm.com>
- <20211216134027.33sprdmhol2tbctf@wittgenstein>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20211216134027.33sprdmhol2tbctf@wittgenstein>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: jsA1Gn0Zs6K0t0IbxU9x7rtF5PCW93Ws
-X-Proofpoint-ORIG-GUID: uXiAfUfvBh1c5O8bgcGxgWWeD9yraZ7d
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-03_05,2022-01-01_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
- suspectscore=0 bulkscore=0 priorityscore=1501 lowpriorityscore=0
- phishscore=0 adultscore=0 spamscore=0 clxscore=1015 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201030096
+References: <20211230044027.2739732-1-daniel@0x0f.com>
+In-Reply-To: <20211230044027.2739732-1-daniel@0x0f.com>
+From:   Romain Perier <romain.perier@gmail.com>
+Date:   Mon, 3 Jan 2022 15:13:05 +0100
+Message-ID: <CABgxDoKMNcYzPH6mcO0yfJhpK2kRZR5BK=p5H1YvVqJGjbynDg@mail.gmail.com>
+Subject: Re: [PATCH] rtc: msc313: Select by default on MSTARV7
+To:     Daniel Palmer <daniel@0x0f.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On 12/16/21 08:40, Christian Brauner wrote:
-> On Thu, Dec 16, 2021 at 12:43:19AM -0500, Stefan Berger wrote:
->> From: Stefan Berger <stefanb@linux.ibm.com>
->>
->> Extend 'securityfs' for support of IMA namespacing so that each
->> IMA (user) namespace can have its own front-end for showing the currently
->> active policy, the measurement list, number of violations and so on.
->>
->> Drop the addition dentry reference to enable simple cleanup of dentries
->> upon umount.
->>
->> Prevent mounting of an instance of securityfs in another user namespace
->> than it belongs to. Also, prevent accesses to directories when another
->> user namespace is active than the one that the instance of securityfs
->> belongs to.
->>
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
->> ---
->>   security/inode.c | 37 ++++++++++++++++++++++++++++++++++---
->>   1 file changed, 34 insertions(+), 3 deletions(-)
->>
->> diff --git a/security/inode.c b/security/inode.c
->> index fee01ff4d831..a0d9f086e3d5 100644
->> --- a/security/inode.c
->> +++ b/security/inode.c
->> @@ -26,6 +26,29 @@
->>   static struct vfsmount *init_securityfs_mount;
->>   static int init_securityfs_mount_count;
->>   
->> +static int securityfs_permission(struct user_namespace *mnt_userns,
->> +				 struct inode *inode, int mask)
->> +{
->> +	int err;
->> +
->> +	err = generic_permission(&init_user_ns, inode, mask);
->> +	if (!err) {
->> +		if (inode->i_sb->s_user_ns != current_user_ns())
->> +			err = -EACCES;
-> I really think the correct semantics is to grant all callers access
-> whose user namespace is the same as or an ancestor of the securityfs
-> userns. It's weird to deny access to callers who are located in an
-> ancestor userns.
-
-Ok, will be using current_in_userns() or the more explicit in_userns() 
-for the check.
-
-
+Le jeu. 30 d=C3=A9c. 2021 =C3=A0 05:40, Daniel Palmer <daniel@0x0f.com> a =
+=C3=A9crit :
 >
-> For example, a privileged process on the host should be allowed to setns
-> to the userns of an unprivileged container and inspect its securityfs
-> instance.
+> All of the ARCH_MSTARV7 chips have this RTC so it's more likey
+> ARCH_MSTARV7 wants it than doesn't.
 >
-> We're mostly interested to block such as scenarios where two sibling
-> unprivileged containers are created in the initial userns and an fd
-> proxy or something funnels a file descriptor from one sibling container
-> to the another one and the receiving sibling container can use readdir()
-> or openat() on this fd. (I'm not even convinced that this is actually a
-> problem but stricter semantics at the beginning can't hurt. We can
-> always relax this later.)
+> At the same time fix up the indent on the depends on line that looks
+> like it got converted from a tab to spaces at some point.
+>
+> Signed-off-by: Daniel Palmer <daniel@0x0f.com>
+> ---
+>  drivers/rtc/Kconfig | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> index 058e56a10ab8..9acd4ea267df 100644
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -1924,7 +1924,8 @@ config RTC_DRV_WILCO_EC
+>
+>  config RTC_DRV_MSC313
+>         tristate "MStar MSC313 RTC"
+> -        depends on ARCH_MSTARV7 || COMPILE_TEST
+> +       depends on ARCH_MSTARV7 || COMPILE_TEST
+> +       default ARCH_MSTARV7
+
+You still depend on ARCH_MSTARV7 so "default y" is enough. It
+will only work if the dependencies are satisfied and, when it is the
+case, the value can be overridden by the user.
+
+Cheers,
+Romain

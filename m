@@ -2,131 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60BFD482D91
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 03:36:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B5FA482D97
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 04:01:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbiACCgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 2 Jan 2022 21:36:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33341 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229647AbiACCgf (ORCPT
+        id S231443AbiACC6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 2 Jan 2022 21:58:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57504 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229634AbiACC6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 2 Jan 2022 21:36:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641177394;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=VDx03SuBQubF3lONsbFtyx0KLs3ccMl9lEB9t6K9Q1Q=;
-        b=EMpB7MVMukLWkus8csrCGxvYxJtuMcmmc8yckDvBpI+PulE83Fqt2i6FM4eZ9TiBB8+vGz
-        q1zCcfglwZ9H30gJ7rOg/rpAYX5BVuXbcbTgethE35BM8TQUmk2geJhdj2oSKUkrOTFaIs
-        madR1cvzo+ejQw/yfqjcm5CPAzjSlqA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-118-yQThVD1GPAScaLu9d8d36w-1; Sun, 02 Jan 2022 21:36:31 -0500
-X-MC-Unique: yQThVD1GPAScaLu9d8d36w-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B2B8E1898293;
-        Mon,  3 Jan 2022 02:36:30 +0000 (UTC)
-Received: from llong.com (unknown [10.22.16.91])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 58FEAE2C4;
-        Mon,  3 Jan 2022 02:36:22 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Boqun Feng <boqun.feng@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH] locking/lockdep: Avoid potential access of invalid memory in lock_class
-Date:   Sun,  2 Jan 2022 21:35:58 -0500
-Message-Id: <20220103023558.1377055-1-longman@redhat.com>
+        Sun, 2 Jan 2022 21:58:20 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C99C061761
+        for <linux-kernel@vger.kernel.org>; Sun,  2 Jan 2022 18:58:20 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id 196so28301117pfw.10
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Jan 2022 18:58:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DVgsBWp5ZjtwwmJt5kRoylS+HiSFvZfG39ptL/0/1ns=;
+        b=oiLEZJ0mV70bDxYjVGgUPl5CGniBtHPJd3skQpvy/JGh79+RWrTJqNobY2RJsTW90L
+         CSOpVY8j6DWE/KNjksWDefqnGNG8bxoKvok/OKwJSS3DsrhTqX+QtDywdxF3/MjqCTYg
+         InOYg+M30Agi6GU2+GnRo2ZLZWoGbmvt9PPo+sodBIeS7ybo2GKqCjyZ0I2IyHrcCAQ3
+         WlNTS/S5FGQm0Rge6EH9MYaJOX+gdMlDeIPEM/XvjGScYA5XABEdSKhBDhni8jiFCokh
+         kQvHLt6S63gaGHCM/wyYvImu+HfVr/IzWIPc0Um7wDbwQVSuPflwvqgZTBOdvf/fkUzS
+         AOtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DVgsBWp5ZjtwwmJt5kRoylS+HiSFvZfG39ptL/0/1ns=;
+        b=ecIwXKaEMtpqvAKDiDf1wi9fUSHqRB+T8IWphnkr9jjZkhmHyDxbhN75ugFOhgKn4N
+         raoyZTgnMmFqgf82IWArROpAfs1URYcOyOaQXEFXKcSo1zr0zMSRaiUcuEB4GrsWugqV
+         dqqbInz+Yx+bkpWeEzQTCv5HOz9mS8+l6wrjwji3IRRG0xs3xXeMrForgLAQQNxjB6Zb
+         78DpJSJaOrn1r7RcCZZ8NVjSRTbPtxpoE+AJA142B1nL0qxVPxSVBGAlIQzPAsH9zoyK
+         L+lzGqzkuwPjvwALXo1s2JeoW0lqJ063FZEAh2NpEcDbYJ58ONTqzUQWG8DG1wqWPS2z
+         sEtw==
+X-Gm-Message-State: AOAM530dL76FhTraPNpvBholbcxosCFo4W87PPfMj9H8Jv7tKRLf4RE3
+        VtN90xSQbGL0jEW9IU4Vl4WY1vOb5mA=
+X-Google-Smtp-Source: ABdhPJyptkrrI1UE1dGqlPh4SXk1LBrRpnOKrS2DCl2c6/X317cqtOOiWOSAi9/IPegbizDGWSUPFg==
+X-Received: by 2002:a63:f244:: with SMTP id d4mr39379649pgk.65.1641178699160;
+        Sun, 02 Jan 2022 18:58:19 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:eced:8562:1343:24f1])
+        by smtp.gmail.com with ESMTPSA id m6sm30209294pgb.31.2022.01.02.18.58.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Jan 2022 18:58:17 -0800 (PST)
+Date:   Sun, 2 Jan 2022 18:58:15 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Martin Wilck <martin.wilck@suse.com>, Jessica Yu <jeyu@kernel.org>,
+        Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] module: add in-kernel support for decompressing
+Message-ID: <YdJmRzDwruE5jt8W@google.com>
+References: <YbLvDWdyFivlj7pP@google.com>
+ <YbPsqR5ZyiFwJul3@bombadil.infradead.org>
+ <YbP6Q9J++OVKqPfn@google.com>
+ <YcC0zpFV8ppOCtZw@bombadil.infradead.org>
+ <YcFHZVHbIG3ujDlC@google.com>
+ <YcJOUvQJJGSHmlCE@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YcJOUvQJJGSHmlCE@bombadil.infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It was found that reading /proc/lockdep after a lockdep splat may
-potentially cause an access to freed memory if lockdep_unregister_key()
-is called after the splat but before access to /proc/lockdep [1]. This
-is due to the fact that graph_lock() call in lockdep_unregister_key()
-fails after the clearing of debug_locks by the splat process.
+Hi Luis,
 
-After lockdep_unregister_key() is called, the lock_name may be freed
-but the corresponding lock_class structure still have a reference to
-it. That invalid memory pointer will then be accessed when /proc/lockdep
-is read by a user and a use-after-free (UAF) error will be reported if
-KASAN is enabled.
+Happy New Year!
 
-To fix this problem, lockdep_unregister_key() is now modified to always
-search for a matching key irrespective of the debug_locks state and
-zap the corresponding lock class if a matching one is found.
+On Tue, Dec 21, 2021 at 01:59:46PM -0800, Luis Chamberlain wrote:
+> On Mon, Dec 20, 2021 at 07:17:57PM -0800, Dmitry Torokhov wrote:
+> > On Mon, Dec 20, 2021 at 08:52:30AM -0800, Luis Chamberlain wrote:
+> > > On Fri, Dec 10, 2021 at 05:09:23PM -0800, Dmitry Torokhov wrote:
+> > > > On Fri, Dec 10, 2021 at 04:11:21PM -0800, Luis Chamberlain wrote:
+> > > > > On Thu, Dec 09, 2021 at 10:09:17PM -0800, Dmitry Torokhov wrote:
+> > > > > > diff --git a/init/Kconfig b/init/Kconfig
+> > > > > > index cd23faa163d1..d90774ff7610 100644
+> > > > > > --- a/init/Kconfig
+> > > > > > +++ b/init/Kconfig
+> > > > > > @@ -2305,6 +2305,19 @@ config MODULE_COMPRESS_ZSTD
+> > > > > >  
+> > > > > >  endchoice
+> > > > > >  
+> > > > > > +config MODULE_DECOMPRESS
+> > > > > > +	bool "Support in-kernel module decompression"
+> > > > > > +	depends on MODULE_COMPRESS_GZIP || MODULE_COMPRESS_XZ
+> > > > > > +	select ZLIB_INFLATE if MODULE_COMPRESS_GZIP
+> > > > > > +	select XZ_DEC if MODULE_COMPRESS_XZ
+> > > > > 
+> > > > > What if MODULE_COMPRESS_GZIP and MODULE_COMPRESS_XZ are enabled?
+> > > > > These are not mutually exclusive.
+> > > > 
+> > > > They are mutually exclusive, the kernel uses the same (one) compression
+> > > > method for all kernel modules that it generates (i.e we do not compress
+> > > > drivers/usb/... with gzip while drivers/net/... with xz).
+> > > 
+> > > Ah yes I failed to see the choice/prompt for it.
+> > > 
+> > > > The idea here is to allow the kernel consume the same format that was
+> > > > used when generating modules. Supporting multiple formats at once is
+> > > > overkill IMO.
+> > > 
+> > > Indeed.
+> > > 
+> > > > > > +	help
+> > > > > > +
+> > > > > > +	  Support for decompressing kernel modules by the kernel itself
+> > > > > > +	  instead of relying on userspace to perform this task. Useful when
+> > > > > > +	  load pinning security policy is enabled.
+> > > > > 
+> > > > > Shouldn't kernel decompression be faster too? If so, what's the
+> > > > > point of doing it in userspace?
+> > > > 
+> > > > Make the kernel smaller?
+> > > 
+> > > Yes this I buy.
+> > > 
+> > > > Have more flexibility with exotic compression
+> > > > formats?
+> > > 
+> > > I just have a hunch that doing module decompression in the kernel will
+> > > speed things quite a bit... any chance you can provide some before and
+> > > after systemd-analyze ?
+> > 
+> > If you insist I can try running it, 
+> 
+> If you can run the test, yes it would be appreciated.
 
-[1] https://lore.kernel.org/lkml/77f05c15-81b6-bddd-9650-80d5f23fe330@i-love.sakura.ne.jp/
+OK, so I finally got around to doing it and the differences are pretty
+much noise, as I expected:
 
-Fixes: 8b39adbee805 ("locking/lockdep: Make lockdep_unregister_key() honor 'debug_locks' again")
-Reported-by: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/locking/lockdep.c | 24 +++++++++++++++---------
- 1 file changed, 15 insertions(+), 9 deletions(-)
+5.16.0-rc7:         Startup finished in 5.022s (firmware) + 6.106s (loader) + 1.370s (kernel) + 5.685s (initrd) + 10.842s (userspace) = 29.026s
+5.16.0-rc7-patched: Startup finished in 4.958s (firmware) + 6.701s (loader) + 1.382s (kernel) + 5.278s (initrd) + 10.822s (userspace) = 29.145s
+5.16.0-rc7-patched: Startup finished in 4.953s (firmware) + 5.912s (loader) + 1.385s (kernel) + 5.327s (initrd) + 10.457s (userspace) = 28.036s
 
-diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index 2270ec68f10a..d4252b5c9863 100644
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -6288,7 +6288,13 @@ void lockdep_reset_lock(struct lockdep_map *lock)
- 		lockdep_reset_lock_reg(lock);
- }
- 
--/* Unregister a dynamically allocated key. */
-+/*
-+ * Unregister a dynamically allocated key.
-+ *
-+ * Unlike lockdep_register_key(), a search is always done to find a matching
-+ * key irrespective of debug_locks to avoid potential invalid access to freed
-+ * memory in lock_class entry.
-+ */
- void lockdep_unregister_key(struct lock_class_key *key)
- {
- 	struct hlist_head *hash_head = keyhashentry(key);
-@@ -6303,10 +6309,8 @@ void lockdep_unregister_key(struct lock_class_key *key)
- 		return;
- 
- 	raw_local_irq_save(flags);
--	if (!graph_lock())
--		goto out_irq;
-+	lockdep_lock();
- 
--	pf = get_pending_free();
- 	hlist_for_each_entry_rcu(k, hash_head, hash_entry) {
- 		if (k == key) {
- 			hlist_del_rcu(&k->hash_entry);
-@@ -6314,11 +6318,13 @@ void lockdep_unregister_key(struct lock_class_key *key)
- 			break;
- 		}
- 	}
--	WARN_ON_ONCE(!found);
--	__lockdep_free_key_range(pf, key, 1);
--	call_rcu_zapped(pf);
--	graph_unlock();
--out_irq:
-+	WARN_ON_ONCE(!found && debug_locks);
-+	if (found) {
-+		pf = get_pending_free();
-+		__lockdep_free_key_range(pf, key, 1);
-+		call_rcu_zapped(pf);
-+	}
-+	lockdep_unlock();
- 	raw_local_irq_restore(flags);
- 
- 	/* Wait until is_dynamic_key() has finished accessing k->hash_entry. */
+Also see attached.
+
+> 
+> > but it should be slower unless your
+> > memory controller is so slow that reading file from disk and dealing
+> > with page by page decompression is quicker than copying already
+> > decompressed data from userspace. 
+> 
+> With userspace decompression I'd imagine we also have more context switches.
+
+We have plenty of rescheduling points when we allocate new pages, so I
+expect we'll be getting preempted while in kernel as well if needed.
+
+> 
+> > We still reading and uncompressing
+> > file in kmod (to make sure the format is valid)
+> 
+> I don't understand, that seems wasteful.
+
+This way we can make sure we are not feeding kernel garbage and abort
+early. Yes, we could just check signature and hope that the data is good
+(and if it is not the kernel will reject it) but this is not a hot path
+at all and amount of data we decompress is relatively small, so I do not
+think trying to optimize this makes much sense (as shown by the numbers
+above).
+
+> 
+> > and we can uncompress
+> > using large buffers (we are not concerned with using unswappable kernel
+> > memory).
+> > 
+> > Maybe in the future when we have streaming and accelerated in-kernel
+> > decompression API we could optimize for that in kmod and see some
+> > savings on very large modules.
+> 
+> That would be very nice.
+
+Again, practical benefit of doing this is pretty much close to 0 in this
+particular case.
+
+Thanks.
+
 -- 
-2.27.0
-
+Dmitry

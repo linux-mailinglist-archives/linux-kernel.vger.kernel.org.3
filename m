@@ -2,98 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35899483751
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 20:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F05483758
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 20:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235953AbiACTCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 14:02:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45990 "EHLO
+        id S235972AbiACTD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 14:03:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235930AbiACTCG (ORCPT
+        with ESMTP id S235959AbiACTDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 14:02:06 -0500
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1123C061761;
-        Mon,  3 Jan 2022 11:02:06 -0800 (PST)
-Received: by mail-vk1-xa2d.google.com with SMTP id s72so3603184vks.9;
-        Mon, 03 Jan 2022 11:02:06 -0800 (PST)
+        Mon, 3 Jan 2022 14:03:55 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A0BC061761
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 11:03:54 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id y22so139446033edq.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 11:03:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=GNIpy9RQ4x4PwLUuHcv96h7/jXsqh4G7X36M5tDW0gU=;
-        b=bsORjued5Oy7trclTEscVi8UzKmV9bbJPNctZFgQjnu3wczcsdkjCr/qWABkC8kbxx
-         gaZcqfK+yiZFeHJLrm2tm4OhH/nACkRVI9dqbDk+ZJZvHjK7iPDJJ0ba2DOtm+UxYuel
-         nO8MSJ38cm7zOKFWHm+nWnp2YANAP17rkwd+J0d94YoJv/5j/hD2lpUG1tpol5rnggBL
-         XdrERx3m2kX89g1dK42H4U8ge8snK0xK/9xth0Dpj+sktXQrtyVVAgIUUrYUHePiSHGO
-         /+r3AK51zAnCHVbvIkazIYH2o+LryjvMIwNDlUz/fihd4pQzON4ArVguuyNOxhKrxAqI
-         G40w==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/2JEOCUCGzzKmkzKgD9tpqsM2aLNkAEcT88f23wY2bA=;
+        b=JLeOr+J+M8DUT40vwroGazDnni2GSIRt+UK1Wan7DZyOexyDU/YQmk+dEpf1qCIKvB
+         sdi3N1GEBVzmp4k1JV0PXO2EuYlQRgz71448OTfOqlCGXefWb6N9QIY9GWGjUSRNOFhP
+         RH5vshF/o3KwBxgHdTu8YG8n6BKE93ODWFKIJIFCVDaRDgX+gFlSbUfHkg/NFwIEmboj
+         5Lw+0lJtvv+9POGBZs5AJIdyrwrfkdm6NRp6KJ6ZBdXZDkhWirn4l2M0fjbnI9tpY0xN
+         9JSfDSWLFcO45YJiIfRY9bAPmjLBHAL74PdQKv2aIKZnVy5A1SeMwR7kzfBJnPJ1bZIf
+         5riQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=GNIpy9RQ4x4PwLUuHcv96h7/jXsqh4G7X36M5tDW0gU=;
-        b=S3Xx0ipUow/bJl3PcluHvhL4RTPJv+6VucPRoSzcg4qV3gpTf+meIhtRNXUuWUYqzZ
-         IVHmDP8LGlqiHAekrJt9FWqgrs2IhDloUezJ2X6jyvheAOlGtpwgUjH5rVkcFm1FRfnf
-         vwGtzOodAslMZYQx/vEaa4qRtUEx97eQes8TYuD0Ryap2Xni/Cy94OGelVrR1Eg4//vN
-         eMSsDvzjZWkxb8L6YKAdVSynKCtChTcPMoPbD88yLCV+WdWCDsksgAgUCi92UtwRnjFn
-         0d24x7IR/isVGdkar9TlsKH5LBNctqDseOvBGrVzrMg1JKZ/2bBJ7v9T3MtPF3xjRSKO
-         o+Pg==
-X-Gm-Message-State: AOAM532pAWfAeZ2YVA5ZJJay36lBj3BDQCUUoLgE5bEZW+IbjHaFXx7l
-        2JpM0QV9vpKrxnUMwNQRsKXMkw2B0DU=
-X-Google-Smtp-Source: ABdhPJwSG0Buy3HIZZ1H/Za5Ncl+5yLGWuOMHW17tjDMfl6EDURgz/QgRLkRHCsayd2o3Uaem8cGJQ==
-X-Received: by 2002:ac5:c5c7:: with SMTP id g7mr14816431vkl.29.1641236525688;
-        Mon, 03 Jan 2022 11:02:05 -0800 (PST)
-Received: from [10.230.2.158] ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id b8sm7254646vsl.19.2022.01.03.11.02.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jan 2022 11:02:05 -0800 (PST)
-Message-ID: <f5a6c584-6894-ff2e-d4cb-2af9f5fdaf55@gmail.com>
-Date:   Mon, 3 Jan 2022 11:02:02 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH 5.4 00/37] 5.4.170-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        bh=/2JEOCUCGzzKmkzKgD9tpqsM2aLNkAEcT88f23wY2bA=;
+        b=rIyh3h/jdNdy7UtMnJJiFC7He6G64Wgpm680fDLPqvqaaQNSjC/lWNNSsfd6foPfEz
+         I2GXMTmu8iyI0KrivmIEbkOi7wi6BfSstzxV7Jh2sK98YYuekx9LQ3cQf+wLjJy1Q6uR
+         Jnyp3/PUJ5F3EMOkZ/uy68kOfdO3A4lKw9KNRbhsGAGUSdtbHEnRsN0cCYJaNBPa+pLf
+         ++2HODf+O374SQg8yTL78ISg+sDYjBhZytHd1mnW3iqYc+lBrWtmDjcEDowZBoPSwYno
+         hrNnezAejyA7zjHnFE+2GhV3VPlxJZU07LR6wBMk1WiUxwZEpK8FnEDpCp4oDC1VSU11
+         Q7lg==
+X-Gm-Message-State: AOAM533BCr5jfBacUJCPL2Qw75l5IdlOavnjwrDF8caZ48B4jEBkBIT/
+        fRjfYw3NOFFJUMUqan7vMU4=
+X-Google-Smtp-Source: ABdhPJxiUJjU/vUyAMmqdJdmitcqB1YdVBA/hEU4Fn+S8yy51xeZfvNormw4/e36RadlSSTBpBFhow==
+X-Received: by 2002:a05:6402:34c6:: with SMTP id w6mr46365324edc.284.1641236633574;
+        Mon, 03 Jan 2022 11:03:53 -0800 (PST)
+Received: from t470p.fritz.box (host-87-18-201-21.retail.telecomitalia.it. [87.18.201.21])
+        by smtp.gmail.com with ESMTPSA id gt20sm7009614ejc.11.2022.01.03.11.03.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jan 2022 11:03:53 -0800 (PST)
+From:   Alberto Merciai <alb3rt0.m3rciai@gmail.com>
+Cc:     alb3rt0.m3rciai@gmail.com, linuxfancy@googlegroups.com,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Straube <straube.linux@gmail.com>,
+        Martin Kaiser <martin@kaiser.cx>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Saurav Girepunje <saurav.girepunje@gmail.com>,
+        Ivan Safonov <insafonov@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Zameer Manji <zmanji@gmail.com>, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        stable@vger.kernel.org
-References: <20220103142051.883166998@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220103142051.883166998@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Subject: [PATCH 00/56] staging: r8188eu: wifi.h macros refactoring
+Date:   Mon,  3 Jan 2022 20:01:35 +0100
+Message-Id: <20220103190326.363960-1-alb3rt0.m3rciai@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series refactors most of the macros inside
+include/wifi.h making them compliant with linux coding style.
 
+Main changes are related to the following issues:
+- Avoid CamelCase
+- Remove dead code
+- Macros with complex values should be enclosed in parentheses
 
-On 1/3/2022 6:23 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.170 release.
-> There are 37 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 05 Jan 2022 14:20:40 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.170-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Alberto Merciai (56):
+  staging: r8188eu: add parenthesis to macro SetToDs
+  staging: r8188eu: rename camelcase SetToDs to set_to_ds
+  staging: r8188eu: remove dead macro ClearToDs
+  staging: r8188eu: add parenthesis to macro SetFrDs
+  staging: r8188eu: rename camelcase SetFrDs to set_fr_ds
+  staging: r8188eu: remove dead macro ClearFrDs
+  staging: r8188eu: add parenthesis to macro SetMFrag
+  staging: r8188eu: rename camelcase SetMFrag to set_m_frag
+  staging: r8188eu: rename camelcase GetToDs to get_to_ds
+  staging: r8188eu: rename camelcase GetFrDs to get_fr_ds
+  staging: r8188eu: rename camelcase GetMFrag to get_m_frag
+  staging: r8188eu: rename camelcase ClearMFrag to clear_m_frag
+  staging: r8188eu: add parenthesis to macro clear_m_frag
+  staging: r8188eu: remove dead macro SetRetry
+  staging: r8188eu: rename camelcase GetRetry to get_retry
+  staging: r8188eu: remove dead macro ClearRetry
+  staging: r8188eu: rename camelcase SetPwrMgt to set_pwr_mgt
+  staging: r8188eu: add parenthesis to macro set_pwr_mgt
+  staging: r8188eu: rename camelcase GetPwrMgt to get_pwr_mgt
+  staging: r8188eu: remove dead macro ClearPwrMgt
+  staging: r8188eu: rename camelcase SetMData to set_m_data
+  staging: r8188eu: add parenthesis to macro set_m_data
+  staging: r8188eu: rename camelcase GetMData to get_m_data
+  staging: r8188eu: remove dead macro ClearMData
+  staging: r8188eu: rename camelcase SetPrivacy to set_privacy
+  staging: r8188eu: add parenthesis to macro set_privacy
+  staging: r8188eu: rename camelcase GetPrivacy to get_privacy
+  staging: r8188eu: remove dead macro ClearPrivacy
+  staging: r8188eu: rename camelcase GetOrder to get_order
+  staging: r8188eu: rename camelcase GetFrameType to get_frame_type
+  staging: r8188eu: remove dead macro SetFrameType
+  staging: r8188eu: rename camelcase GetFrameSubType to
+    get_frame_subtype
+  staging: r8188eu: rename camelcase SetFrameSubType to
+    set_frame_subtype
+  staging: r8188eu: rename camelcase GetSequence to get_sequence
+  staging: r8188eu: rename camelcase GetFragNum to get_frag_num
+  staging: r8188eu: remove dead macro GetTupleCache
+  staging: r8188eu: remove dead macro SetFragNum
+  staging: r8188eu: rename camelcase SetSeqNum to set_seq_num
+  staging: r8188eu: rename camelcase SetDuration to set_duration
+  staging: r8188eu: rename camelcase SetPriority to set_priority
+  staging: r8188eu: add parenthesis to macro set_duration
+  staging: r8188eu: add parenthesis to macro set_priority
+  staging: r8188eu: rename camelcase GetPriority to get_priority
+  staging: r8188eu: rename camelcase SetEOSP to set_eosp
+  staging: r8188eu: add parenthesis to macro set_eosp
+  staging: r8188eu: remove dead macro GetTid
+  staging: r8188eu: rename camelcase SetAckpolicy to set_ack_policy
+  staging: r8188eu: add parenthesis to macro set_ack_policy
+  staging: r8188eu: rename camelcase GetAckpolicy into get_ack_policy
+  staging: r8188eu: rename camelcase GetAMsdu to get_a_msdu
+  staging: r8188eu: remove dead macro SetAMsdu
+  staging: r8188eu: rename camelcase GetAid to get_aid
+  staging: r8188eu: rename camelcase GetAddr1Ptr to get_addr_1_ptr
+  staging: r8188eu: rename camelcase GetAddr2Ptr to get_addr_2_ptr
+  staging: r8188eu: rename camelcase GetAddr3Ptr to get_addr_3_ptr
+  staging: r8188eu: rename camelcase GetAddr4Ptr to get_addr_4_ptr
 
-See my regression report about patch "net: phy: fixed_phy: Fix NULL vs 
-IS_ERR() checking in __fixed_phy_register", other than that, the rest 
-worked OK.
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c   | 190 +++++++++---------
+ drivers/staging/r8188eu/core/rtw_p2p.c        |  24 +--
+ drivers/staging/r8188eu/core/rtw_recv.c       |  78 +++----
+ drivers/staging/r8188eu/core/rtw_security.c   |   8 +-
+ drivers/staging/r8188eu/core/rtw_wlan_util.c  |   4 +-
+ drivers/staging/r8188eu/core/rtw_xmit.c       |  22 +-
+ drivers/staging/r8188eu/hal/rtl8188e_cmd.c    |  30 +--
+ drivers/staging/r8188eu/hal/rtl8188e_rxdesc.c |   2 +-
+ drivers/staging/r8188eu/include/wifi.h        | 167 ++++++---------
+ 9 files changed, 240 insertions(+), 285 deletions(-)
+
 -- 
-Florian
+2.25.1
+

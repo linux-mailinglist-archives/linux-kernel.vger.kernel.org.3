@@ -2,98 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C8D482EE9
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 09:04:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E71482EEA
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 09:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232071AbiACIEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 03:04:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:36690 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230057AbiACIEg (ORCPT
+        id S232082AbiACILn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 03:11:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40360 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230057AbiACILl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 03:04:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641197075;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UdxaGBuR9xauk+WHq8djtOf6D/AnMAtrzYys2hrg50c=;
-        b=QtGxKdkJvuoiHKczHSfgr3AYLT9wt15yrq7sI0sEkGidT4RkwSEUmfvKzYGbTJX2EQcb+F
-        pzXPjS8jpSz5fQ++GJSnflPObrR0+mPMhLzofmGmj00UhltDz64BJeb8/UZQn/MjOjyPBZ
-        f2vrIC31HhsZjD4/qEmmidqQScwVIzI=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-231-7BPCJbh0OQKoK9XPUB9hlg-1; Mon, 03 Jan 2022 03:04:32 -0500
-X-MC-Unique: 7BPCJbh0OQKoK9XPUB9hlg-1
-Received: by mail-wr1-f72.google.com with SMTP id w25-20020adf8bd9000000b001a255212b7cso9951636wra.18
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 00:04:32 -0800 (PST)
+        Mon, 3 Jan 2022 03:11:41 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4B8C061761
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 00:11:41 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id r5so29574823pgi.6
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 00:11:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=oiEfYts536J1XlebKdzcdP3XXTCS0kXxLUqO5AkEJ40=;
+        b=iSJMYQ2Cj4iZmCj4OdlF8CzzypM9mJqA2+nRQYYMvd6hiNfEB++LzTPVLHhtkSp9rK
+         1Sf/zeQlPVJqwjx+xP74L5lXLNbJPmsSnVH8AxESoWzzZVqGhVPoNwKkM5CT6N9hjAC5
+         RpG7tPf7qIuceAp5DxBI7xXYR/IcvKue4xky8vessf0kHPYPxD2QYCufTpqh7cCaicBI
+         GRLxrR2VFB5uyqkaJ7O7SFudv/0eeaHT0CoS+Gm2Jdp62+L1LEuRhuh23mlDBe3RbVlP
+         stGxW9qUEKlyeS0BBb7hS0F6N+dRJ6SCqysWcnpwOqzv7FcOKCwjHlOjHN98fGnDqunz
+         dsIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=UdxaGBuR9xauk+WHq8djtOf6D/AnMAtrzYys2hrg50c=;
-        b=YQxmMHCoXO2JQ7xqRiObFs4D6rXjx3dDiSB+Huc/ZP9IVg0YOSKDbPvkN69sE4Z/dF
-         Vmow9BJN5oSL1sTJcObyn2nY2jmV1brPk1STA16jh2oD2e+1hRVpMhKCnIvA2JvBRk4R
-         CtrMzQ4jkQxXDlnputpT6ypnGRBaiZbBjIzo3MY5V1xcrPmLyw+bCCCS5TbbXcDaE4XT
-         i9h4i1SUOukK57D4rLK717SjPChPP/9XUFF7hMy6Ags0d8Ulh0RLDiIF+c68xCn9jHtZ
-         LF2vjEkO7F7+HO4VDRYMt5sQW25WAMjx14VuIZy4mMes8Nca4VsaEtxjZxmEyChT/huL
-         RdPQ==
-X-Gm-Message-State: AOAM531d8IrEJIBnycjjjksIbGICSb8UeQ5E55zYK9Cflq/uU7yYcohr
-        KMK7x0zEB5xAX1Ml95vXisl/5PGNffhEWqdD+fyEOonr3U+85OptqcpnuS+Zzh7uzL3yVz7XlM4
-        4E1rpwlI5/J1s/Dm6VPHGhC85mAwaWmA+WZxeyAFL5JxcdGUu35FiVZmEffMyThwqU+G/vMSZsv
-        aB
-X-Received: by 2002:a5d:608a:: with SMTP id w10mr36053912wrt.596.1641197071197;
-        Mon, 03 Jan 2022 00:04:31 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyVtP/aq31R7doXdWIFuANBoKaaKn+9HxKrxNy2cFus2ZwBwWHx5SjUajR9BsycSue2V/+yEw==
-X-Received: by 2002:a5d:608a:: with SMTP id w10mr36053893wrt.596.1641197070956;
-        Mon, 03 Jan 2022 00:04:30 -0800 (PST)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id p18sm4961997wmq.23.2022.01.03.00.04.29
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=oiEfYts536J1XlebKdzcdP3XXTCS0kXxLUqO5AkEJ40=;
+        b=X7x2PFxu8U/9T7d4ooqvpvvmZt6cjCB7XZYTFTn3NZam+Bh1Ik8LXBz0bNw0Roloze
+         iQt+WAoPSDM466NpiSmUFKiJ03m41uL4hkH+KtalVmgPfgeGRtvXJsWL941sLNvTRF82
+         sLuVfx6K7lZJb86FVOmPPyac1Et/vnRm4cAfUlLH5/kBvU4ub3zeMewi/G3tIeyhMoZF
+         TDjV/iW3c0esbpd/69XqEm0Xdc6j6iEt0XJyDclIgo4j9qHllls+s6UX+o9YRhPkfmMz
+         0ED3rcUW6BhGKI8t1a2QpcowgM8u84J5+Q0PAzzD7fxU+nPRtY24c8XxZkw9kl0qIcLz
+         A2og==
+X-Gm-Message-State: AOAM531ApXdkIaRmRW4mmBjxMFCKiDMQxN7wHHADB3Wa0gt0fapHxM7e
+        OiJ0D0l/Uekcru6ZMu7CHnc76rGDvkVKpw==
+X-Google-Smtp-Source: ABdhPJwnuH+20i3BZtl8dJzs0gIRj7V60TV1uj3NgoCFwUnetkcPhXhwgaXmCxw0epTawoFacj1edA==
+X-Received: by 2002:aa7:88c4:0:b0:4bb:5a48:9801 with SMTP id k4-20020aa788c4000000b004bb5a489801mr45376592pff.67.1641197500800;
+        Mon, 03 Jan 2022 00:11:40 -0800 (PST)
+Received: from mail.google.com (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
+        by smtp.gmail.com with ESMTPSA id s6sm17413771pjp.19.2022.01.03.00.11.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jan 2022 00:04:30 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Igor Mammedov <imammedo@redhat.com>
-Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN
-In-Reply-To: <61325b2b-dc93-5db2-2d0a-dd0900d947f2@redhat.com>
-References: <20211122175818.608220-1-vkuznets@redhat.com>
- <20211122175818.608220-3-vkuznets@redhat.com>
- <16368a89-99ea-e52c-47b6-bd006933ec1f@redhat.com>
- <20211227183253.45a03ca2@redhat.com>
- <61325b2b-dc93-5db2-2d0a-dd0900d947f2@redhat.com>
-Date:   Mon, 03 Jan 2022 09:04:29 +0100
-Message-ID: <87mtkdqm7m.fsf@redhat.com>
+        Mon, 03 Jan 2022 00:11:40 -0800 (PST)
+Date:   Mon, 3 Jan 2022 21:11:35 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     gregkh@linuxfoundation.org, paulo.miguel.almeida.rodenas@gmail.com,
+        realwakka@gmail.com
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: pi433: fix frequency deviation check
+Message-ID: <20220103081135.GA11642@mail.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paolo Bonzini <pbonzini@redhat.com> writes:
+rf69 datasheet states that frequency deviation must exceed 600 Hz but
+also that frequency deviation + (bitrate / 2) should be less than equal
+to 500 kHz to ensure proper modulation.
 
-> On 12/27/21 18:32, Igor Mammedov wrote:
->>> Tweaked and queued nevertheless, thanks.
->> it seems this patch breaks VCPU hotplug, in scenario:
->> 
->>    1. hotunplug existing VCPU (QEMU stores VCPU file descriptor in parked cpus list)
->>    2. hotplug it again (unsuspecting QEMU reuses stored file descriptor when recreating VCPU)
->> 
->> RHBZ:https://bugzilla.redhat.com/show_bug.cgi?id=2028337#c11
->> 
->
-> The fix here would be (in QEMU) to not call KVM_SET_CPUID2 again. 
-> However, we need to work around it in KVM, and allow KVM_SET_CPUID2 if 
-> the data passed to the ioctl is the same that was set before.
+This patch validates that both conditions are met so RF intersymbol
+interference is "avoided" where possible.
 
-Are we sure the data is going to be *exactly* the same? In particular,
-when using vCPU fds from the parked list, do we keep the same
-APIC/x2APIC id when hotplugging? Or can we actually hotplug with a
-different id?
+Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+---
+ drivers/staging/pi433/rf69.c | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/staging/pi433/rf69.c b/drivers/staging/pi433/rf69.c
+index e62e61ef4d27..cc22915fd489 100644
+--- a/drivers/staging/pi433/rf69.c
++++ b/drivers/staging/pi433/rf69.c
+@@ -255,17 +255,29 @@ int rf69_set_deviation(struct spi_device *spi, u32 deviation)
+ 	int retval;
+ 	u64 f_reg;
+ 	u64 f_step;
++	u32 bit_rate_reg;
++	u32 bit_rate;
+ 	u8 msb;
+ 	u8 lsb;
+ 	u64 factor = 1000000; // to improve precision of calculation
+ 
+-	// TODO: Dependency to bitrate
+-	if (deviation < 600 || deviation > 500000) {
+-		dev_dbg(&spi->dev, "set_deviation: illegal input param");
++	// calculate bit rate
++	bit_rate_reg = rf69_read_reg(spi, REG_BITRATE_MSB) << 8;
++	bit_rate_reg |= rf69_read_reg(spi, REG_BITRATE_LSB);
++	bit_rate = F_OSC / bit_rate_reg;
++
++	/*
++	 * frequency deviation must exceed 600 Hz and but not exceed
++	 * 500kHz when taking bitrate dependency into consideration
++	 * to ensure proper modulation
++	 */
++	if (deviation < 600 || (deviation + (bit_rate / 2)) > 500000) {
++		dev_dbg(&spi->dev,
++			"set_deviation: illegal input param: %u", deviation);
+ 		return -EINVAL;
+ 	}
+ 
+-	// calculat f step
++	// calculate f step
+ 	f_step = F_OSC * factor;
+ 	do_div(f_step, 524288); //  524288 = 2^19
+ 
 -- 
-Vitaly
+2.25.4
 

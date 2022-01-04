@@ -2,111 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 825AE483AAD
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 03:46:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 443CE483AAB
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 03:46:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232364AbiADCqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 21:46:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36472 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232222AbiADCql (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 21:46:41 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757BBC061761;
-        Mon,  3 Jan 2022 18:46:40 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id r4so35405333lfe.7;
-        Mon, 03 Jan 2022 18:46:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XwS+dVl5eiGqQaeH1qcWnqbx39W64a5YJhPs5tWYw7g=;
-        b=YXapyd2qG3y6Gyfh/8n/8oPRJItmRTXGr97OlealEHQMyM1zxhQqfY/s++lkwXIb4h
-         uqPK4wK28d+ZGbYX0HuUf0/4dYib8TgVwNelG8RYpSJnLHYyUtCnUngWUFN8hoP4M0Pq
-         83Mp0bYcIBxVzVQhGc811+L5v6q33/OfymddcRJCmxPspOl5ZdV+734O9gGYVe5LkRuu
-         SZCRr7i7UMgwopJlwo6Volz0cwnHxuq098HQO3915X0WVFMbYdMhuf/PQ322tTXCV30e
-         UQta80zF5BDFOEsSePVTDfp1pIJcO/LbjlpdNHPR8D8LR1ZGQ93sfsGg4o7LSGzFBfGw
-         89kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XwS+dVl5eiGqQaeH1qcWnqbx39W64a5YJhPs5tWYw7g=;
-        b=MhkpbP+EADvSQrgazFcw/2ZVp9wX07/I91iGkYkaHlcXdECirF0B38KywKqTihaeSF
-         xW5zHbXHWZv23ljy2N6boczRdfy5YFHfzfWqXusHkVa9USrZg985xOS60h9ErxIhUsTw
-         QNJM7XtW1IklnwwAFwld1s59zjpH7Ja3vI8EAtl/yevbmXOK9y2sDZIGv3oaF3M6YLXg
-         j+htkC8JYQOgcMliRfMUaodPKM2UlzfcDJbcCCK2ZhqDk2RN2xl62BrVD31KLL83zRyD
-         kwCvE9wI+yKheKiizSQFFb1l/Gy+yKzcbd3+MIIYo7ryJ6pjVvbf6w/6ceO3hN3bA5HD
-         Ogtw==
-X-Gm-Message-State: AOAM533IUVGATlz8q4UCZqWepvmSKMc9e+ssrYGOdUQinYEtIejsH8GO
-        tXawchkL8I49CmVQnUa2tNV0xOSPmEqqWD9McI4=
-X-Google-Smtp-Source: ABdhPJyf3/HeqXcc8LXsBeEU2licr8rlepkC/OaEN4ONlssLyRjB+M6ckTtp2DyRj/bMN5yED/Cwrj/hSJUE/u/+9bQ=
-X-Received: by 2002:a05:6512:3b26:: with SMTP id f38mr43643428lfv.374.1641264398765;
- Mon, 03 Jan 2022 18:46:38 -0800 (PST)
+        id S231345AbiADCqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 21:46:38 -0500
+Received: from mga17.intel.com ([192.55.52.151]:30082 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230296AbiADCqi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 21:46:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641264398; x=1672800398;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=H96Tm0F+TQLNdpxg3zs/3n8g4VOZzuPmeC4q3qc1jM8=;
+  b=PMmUA9fk4QP3P/CYJYm9OwRfRPXXovEZKt5nQ+JeiMgbXVHE1TLcF7hx
+   S9zy+LXZoL8wGipnMSfxmgJErJMHWrPTTsVkX6Qt0CP42aTgAaOs8GoRS
+   qyzYZMadcthr0NZY7cLQsMJIN0nQyM8F4kni//ImPilMcWZQmQoRDChM2
+   bxHAtGKPgFvCXpfGE5pnamsuAZV9gHxJVM7Lmq+Vh1ksZaAhc3MwjX0Zb
+   SPzHaHJgdi2j+DSbzz5YAmn4BrTCBhx4dkawWkIFhfU5owO/RKbMQCqi6
+   DPJX6nFs2BRvretLXdEYMMY2wom7vSlDZeI+YfZalDyYbolgqiV9sT0Xi
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="222817884"
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="222817884"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 18:46:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="610923983"
+Received: from louislifei-optiplex-7050.sh.intel.com (HELO louislifei-OptiPlex-7050) ([10.239.154.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 03 Jan 2022 18:46:36 -0800
+Date:   Tue, 4 Jan 2022 10:47:29 +0800
+From:   Li Fei1 <fei1.li@intel.com>
+To:     Zhou Qingyang <zhou1615@umn.edu>
+Cc:     kjlu@umn.edu, reinette.chatre@intel.com, zhi.a.wang@intel.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        fei1.li@intel.com
+Subject: Re: [PATCH] virt: acrn: fix a memory leak bug in acrn_dev_ioctl()
+Message-ID: <20220104024729.GA26952@louislifei-OptiPlex-7050>
+References: <20220104023439.33754-1-zhou1615@umn.edu>
 MIME-Version: 1.0
-References: <20220104012406.27580-1-lizhijian@fujitsu.com>
-In-Reply-To: <20220104012406.27580-1-lizhijian@fujitsu.com>
-From:   Zhu Yanjun <zyjzyj2000@gmail.com>
-Date:   Tue, 4 Jan 2022 10:46:27 +0800
-Message-ID: <CAD=hENd7dQPVAOrLvZwQG=SHRdnzN-Y4Ag3V_b5vUTzh6Y0YjQ@mail.gmail.com>
-Subject: Re: [PATCH v2] RDMA/rxe: Get rid of redundant plus
-To:     Li Zhijian <lizhijian@fujitsu.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-        RDMA mailing list <linux-rdma@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Li Zhijian <lizhijian@cn.fujitsu.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220104023439.33754-1-zhou1615@umn.edu>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 4, 2022 at 9:25 AM Li Zhijian <lizhijian@fujitsu.com> wrote:
->
-> From: Li Zhijian <lizhijian@cn.fujitsu.com>
->
-> Get rid of the duplicate plus in a line to be consistent with others.
->
-> Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
-
-Reviewed-by: Zhu Yanjun <zyjzyj2000@gmail.com>
-
-Zhu Yanjun
-
+On Tue, Jan 04, 2022 at 10:34:39AM +0800, Zhou Qingyang wrote:
+> In acrn_dev_ioctl(), vm_param is not released or passed out on the 
+> error path of "if ((vm_param->reserved0 | vm_param->reserved1) != 0)", 
+> which could lead to a memory leak.
+> 
+> Fix this bug by adding a kfree of vm_param on the error path.
+> 
+> This bug was found by a static analyzer.
+> 
+> Builds with CONFIG_ACRN_GUEST=y, CONFIG_ACRN_HSM=y show no new warnings, 
+> and our static analyzer no longer warns about this code.
+> 
+> Fixes: 9c5137aedd11 (“9c5137aedd11 virt: acrn: Introduce VM management interfaces”)
+> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
 > ---
->  drivers/infiniband/sw/rxe/rxe_opcode.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/infiniband/sw/rxe/rxe_opcode.c b/drivers/infiniband/sw/rxe/rxe_opcode.c
-> index 3ef5a10a6efd..79122eeb4d82 100644
-> --- a/drivers/infiniband/sw/rxe/rxe_opcode.c
-> +++ b/drivers/infiniband/sw/rxe/rxe_opcode.c
-> @@ -879,9 +879,9 @@ struct rxe_opcode_info rxe_opcode[RXE_NUM_OPCODE] = {
->                         [RXE_ATMETH]    = RXE_BTH_BYTES
->                                                 + RXE_RDETH_BYTES
->                                                 + RXE_DETH_BYTES,
-> -                       [RXE_PAYLOAD]   = RXE_BTH_BYTES +
-> +                       [RXE_PAYLOAD]   = RXE_BTH_BYTES
->                                                 + RXE_ATMETH_BYTES
-> -                                               + RXE_DETH_BYTES +
-> +                                               + RXE_DETH_BYTES
->                                                 + RXE_RDETH_BYTES,
->                 }
->         },
-> @@ -900,9 +900,9 @@ struct rxe_opcode_info rxe_opcode[RXE_NUM_OPCODE] = {
->                         [RXE_ATMETH]    = RXE_BTH_BYTES
->                                                 + RXE_RDETH_BYTES
->                                                 + RXE_DETH_BYTES,
-> -                       [RXE_PAYLOAD]   = RXE_BTH_BYTES +
-> +                       [RXE_PAYLOAD]   = RXE_BTH_BYTES
->                                                 + RXE_ATMETH_BYTES
-> -                                               + RXE_DETH_BYTES +
-> +                                               + RXE_DETH_BYTES
->                                                 + RXE_RDETH_BYTES,
->                 }
->         },
-> --
-> 2.33.0
->
->
->
+> The analysis employs differential checking to identify inconsistent
+> security operations (e.g., checks or kfrees) between two code paths
+> and confirms that the inconsistent operations are not recovered in 
+> the current function or the callers, so they constitute bugs. 
+> 
+> Note that, as a bug found by static analysis, it can be a false
+> positive or hard to trigger. Multiple researchers have cross-reviewed
+> the bug.
+> 
+Hi Qingyang
+
+Thanks a lot to fix this issue. Would you please to help to fix the same issue
+in ACRN_IOCTL_SET_VCPU_REGS case ?
+
+
+>  drivers/virt/acrn/hsm.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/virt/acrn/hsm.c b/drivers/virt/acrn/hsm.c
+> index 5419794fccf1..205f4c637556 100644
+> --- a/drivers/virt/acrn/hsm.c
+> +++ b/drivers/virt/acrn/hsm.c
+> @@ -136,9 +136,11 @@ static long acrn_dev_ioctl(struct file *filp, unsigned int cmd,
+>  		if (IS_ERR(vm_param))
+>  			return PTR_ERR(vm_param);
+>  
+> -		if ((vm_param->reserved0 | vm_param->reserved1) != 0)
+> -			return -EINVAL;
+> -
+> +		if ((vm_param->reserved0 | vm_param->reserved1) != 0) {
+> +			ret = -EINVAL;
+> +			kfree(vm_param);
+> +			break;
+> +		}
+>  		vm = acrn_vm_create(vm, vm_param);
+>  		if (!vm) {
+>  			ret = -EINVAL;
+> -- 
+> 2.25.1
+> 

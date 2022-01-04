@@ -2,113 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A194845E3
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:19:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59D194845E6
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:21:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235219AbiADQTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 11:19:36 -0500
-Received: from mga03.intel.com ([134.134.136.65]:64173 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229956AbiADQTf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 11:19:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641313175; x=1672849175;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9cYKoIOc9MOqqEbpXJd7uYlTuY1MUgX4CIdWto2c7jc=;
-  b=Ty2QYcmPtSliliWbzMq3NA3ajMtEStlrwfAEXtEhepyWVb7/aT0B2VeM
-   FjUG2DhrvnpyvpIEKjwsTTl6ggmo0lM3CckkxsGiOwF5Lp11UUEGDdQel
-   5nE9Zoe891D5hPfl5NSapODGuHaRSmuNbf8TdxeASEFLNA1DnEc+YSqdb
-   kxdo3JUzr+EmDf2M5wtRMPE4MVarAjSAHfiTeu7vBkEEfgegSsKbneT0e
-   e1309wkh+hPtCi0wpQ8/Vd9nzTHV4UlcR9DzlGHcrSQ+4poO06cu1Q17N
-   pqLeYhQC/o2WyYj9tQgMz8HUL3T3MhJwIsF8e2yJc4AIXLefc2Puc9yK9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="242208596"
-X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
-   d="scan'208";a="242208596"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 08:19:34 -0800
-X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
-   d="scan'208";a="488242337"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 08:19:31 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1n4mVp-006H9Y-45;
-        Tue, 04 Jan 2022 18:18:13 +0200
-Date:   Tue, 4 Jan 2022 18:18:12 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
- -v1: Eliminate the Linux kernel's "Dependency Hell"
-Message-ID: <YdRzRLqihstavvyd@smile.fi.intel.com>
-References: <YdIfz+LMewetSaEB@gmail.com>
+        id S235236AbiADQVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 11:21:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52730 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229956AbiADQVo (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 11:21:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA5EC061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 08:21:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48F62B81744
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 16:21:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A6DCC36AED;
+        Tue,  4 Jan 2022 16:21:39 +0000 (UTC)
+Date:   Tue, 4 Jan 2022 16:21:36 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "alex@ghiti.fr" <alex@ghiti.fr>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Steve Capper <steve.capper@arm.com>,
+        Will Deacon <will.deacon@arm.com>
+Subject: Re: [PATCH v6 04/14] mm, hugetlbfs: Allow for "high" userspace
+ addresses
+Message-ID: <YdR0EN2mdJuysugk@arm.com>
+References: <cover.1639736449.git.christophe.leroy@csgroup.eu>
+ <db238c1ca2d46e33c57328f8d450f2563e92f8c2.1639736449.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YdIfz+LMewetSaEB@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <db238c1ca2d46e33c57328f8d450f2563e92f8c2.1639736449.git.christophe.leroy@csgroup.eu>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 02, 2022 at 10:57:35PM +0100, Ingo Molnar wrote:
+On Fri, Dec 17, 2021 at 10:27:28AM +0000, Christophe Leroy wrote:
+> This is a complement of f6795053dac8 ("mm: mmap: Allow for "high"
+> userspace addresses") for hugetlb.
 > 
-> I'm pleased to announce the first public version of my new "Fast Kernel 
-> Headers" project that I've been working on since late 2020, which is a 
-> comprehensive rework of the Linux kernel's header hierarchy & header 
-> dependencies, with the dual goals of:
+> This patch adds support for "high" userspace addresses that are
+> optionally supported on the system and have to be requested via a hint
+> mechanism ("high" addr parameter to mmap).
 > 
->  - speeding up the kernel build (both absolute and incremental build times)
+> Architectures such as powerpc and x86 achieve this by making changes to
+> their architectural versions of hugetlb_get_unmapped_area() function.
+> However, arm64 uses the generic version of that function.
 > 
->  - decoupling subsystem type & API definitions from each other
+> So take into account arch_get_mmap_base() and arch_get_mmap_end() in
+> hugetlb_get_unmapped_area(). To allow that, move those two macros
+> out of mm/mmap.c into include/linux/sched/mm.h
 > 
-> The fast-headers tree consists of over 25 sub-trees internally, spanning 
-> over 2,200 commits, which can be found here:
+> If these macros are not defined in architectural code then they default
+> to (TASK_SIZE) and (base) so should not introduce any behavioural
+> changes to architectures that do not define them.
 > 
->    git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
+> For the time being, only ARM64 is affected by this change.
 > 
-> As most kernel developers know, there's around ~10,000 main .h headers in 
-> the Linux kernel, in the include/ and arch/*/include/ hierarchies. Over the 
-> last 30+ years they have grown into a complicated & painful set of 
-> cross-dependencies we are affectionately calling 'Dependency Hell'.
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Cc: Steve Capper <steve.capper@arm.com>
+> Cc: Will Deacon <will.deacon@arm.com>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> ---
+>  fs/hugetlbfs/inode.c     | 9 +++++----
+>  include/linux/sched/mm.h | 8 ++++++++
+>  mm/mmap.c                | 8 --------
+>  3 files changed, 13 insertions(+), 12 deletions(-)
 
-$ git grep -n -w kernel.h mingo/sched/headers -- include/ | wc -l
-138
-$ git grep -n -w kernel.h next/master -- include/ | wc -l
-96
+This would be an ABI change but I'm fine with it. Basically with this
+patch, getting hugetblfs addresses above 48-bit require explicit hint
+passed to mmap().
 
-Can we rather split kernel.h more? In some cases kernel.h is used just as a
-bundle instead of ~2-3 headers.
+I wonder whether we should add a fixes tag (or at least the cc stable):
 
+Fixes: f6795053dac8 ("mm: mmap: Allow for "high" userspace addresses")
+Cc: <stable@vger.kernel.org> # 5.0.x
 
-And I can't get why kernel.h is returned in the drm headers. AFAICT there are no
-dependencies:
+I think the original commit should have changed
+hugetlb_get_unmapped_area() to have the same behaviour as
+arch_get_unmapped_area(). Steve, any thoughts?
 
-mingo/sched/headers:include/drm/drm_gem_ttm_helper.h:6:#include <linux/kernel.h>
-mingo/sched/headers:include/drm/drm_gem_vram_helper.h:15:#include <linux/kernel.h> /* for container_of() */
-mingo/sched/headers:include/drm/drm_mm.h:44:#include <linux/kernel.h>
-mingo/sched/headers:include/drm/drm_property.h:28:#include <linux/kernel.h>
-mingo/sched/headers:include/drm/intel-gtt.h:9:#include <linux/kernel.h>
+FWIW,
 
-Ah, it may be due to base on the vanilla rather than on next, it would be
-nice to see this rebased on top of v5.17-rc1 when it's out.
-
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>

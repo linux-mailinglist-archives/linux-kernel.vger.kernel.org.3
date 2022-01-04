@@ -2,338 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87EC14847FA
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:36:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D27F4847FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:37:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236378AbiADSgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 13:36:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55796 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiADSgw (ORCPT
+        id S236388AbiADShm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jan 2022 13:37:42 -0500
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:33031 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229543AbiADShm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 13:36:52 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3DE7C061761;
-        Tue,  4 Jan 2022 10:36:51 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id z9so82018105edm.10;
-        Tue, 04 Jan 2022 10:36:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZE5U0vM24EpvrhbcMYz6etgOBCEzcX+TELpWaNM7ER0=;
-        b=bZTKsOtT0SR13Cw2XIVqRkCVT0V/TME94gCx0uguPkDbFsxe6SEWfawmaJYTUz5BQY
-         dehvditKiugSxP5f8OOcChyLs6Mx25OqWSUkp8IlbnCaIsuJsXxZZQiBT4u4mSdXZUE6
-         F+HthoqB0uTNP/AxkOP0yx1QSi7B81nMf+JdBly7chyr2KG2NBOLHrS2mrWfYBPI+6bB
-         uRJkagDVHm8aaJDpRQjmO+QshyC+5mefmZaA1UqlZr6tYaSr5hp3I6YZ/Pe0gxeJU7at
-         LU6VW2WimkD8U0xkzwfXffhFcQQpYBh/XtQcBmDO9Wa3mdWHo9RU2/4WrRzX8NUwOSwS
-         B88w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZE5U0vM24EpvrhbcMYz6etgOBCEzcX+TELpWaNM7ER0=;
-        b=q26fEQBMQLWYlQgjzEOTfVtKr3sHxK81Gy458DvAWr46vEdR6xxwQ8mTXYhjfPnt1C
-         UhdcQ+l+il03jFr/F83KEKb5Of+n2w+YXWHe85HNc/zHXVt7WN8FW6n08lcp+wp899se
-         Pe8EHZ5lsx5ZWsuzNgjAdZ2LWK41d2DBuWKt56UmWwyO+I4yiI2j6+ylYrDvbm5tMT3h
-         mDy2tr/k4Oyz/pptIPHXTzG/kGhMv06lxUzDMC4TrI2G7brpZmoXpq4V9QOfABw0WuLt
-         rTpZPk1WiOrl9W3GI8CdQ03u7hJJ47GsTzeyG7Vc8m9smjW3qPZ3oHUyR462UUFbDeHy
-         TR3g==
-X-Gm-Message-State: AOAM532MgMaUXfvjM2PFOYvqn12NPpXHCxqc8j/HYuzrr2QM42NTd1lO
-        8nURpl5op0eFt3pa7OYwgUo=
-X-Google-Smtp-Source: ABdhPJyeZEb01hhLiVti+YB+CYU1jAKYTcmhM6awaH7CMwFWUcMsajOTi6vNFmWidl5GhvOTYaO4/w==
-X-Received: by 2002:a17:906:eb04:: with SMTP id mb4mr39189145ejb.27.1641321410431;
-        Tue, 04 Jan 2022 10:36:50 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id z22sm213115edd.68.2022.01.04.10.36.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 10:36:50 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <d43887b6-630c-446e-caee-dcbaa72f2466@redhat.com>
-Date:   Tue, 4 Jan 2022 19:36:48 +0100
+        Tue, 4 Jan 2022 13:37:42 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 5BA126000B;
+        Tue,  4 Jan 2022 18:37:37 +0000 (UTC)
+Date:   Tue, 4 Jan 2022 19:37:36 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-mtd@lists.infradead.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Colin Ian King <colin.king@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM SPECIFIC AMBA DRIVER (BCMA)" 
+        <linux-wireless@vger.kernel.org>,
+        "open list:BROADCOM STB NAND FLASH DRIVER" 
+        <bcm-kernel-feedback-list@broadcom.com>
+Subject: Re: [PATCH 1/9] mtd: rawnand: brcmnand: Allow SoC to provide I/O
+ operations
+Message-ID: <20220104193736.7eb6a445@xps13>
+In-Reply-To: <9e4c0120-e088-fca0-0194-c45fcf9181cb@gmail.com>
+References: <20211223002225.3738385-1-f.fainelli@gmail.com>
+        <20211223002225.3738385-2-f.fainelli@gmail.com>
+        <20220103174953.40d7fa52@xps13>
+        <299bf6ed-80e6-ad15-8dc7-5ededaca15c5@gmail.com>
+        <20220104093221.6414aab9@xps13>
+        <20220104095755.46858287@xps13>
+        <9e4c0120-e088-fca0-0194-c45fcf9181cb@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v4 00/21] AMX Support in KVM
-Content-Language: en-US
-To:     Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, corbet@lwn.net, shuah@kernel.org
-Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, jing2.liu@intel.com,
-        guang.zeng@intel.com, wei.w.wang@intel.com
-References: <20211229131328.12283-1-yang.zhong@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211229131328.12283-1-yang.zhong@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/29/21 14:13, Yang Zhong wrote:
-> Highly appreciate for your review. This version mostly addressed the comments
-> from Sean. Most comments are adopted except three which are not closed and
-> need more discussions:
-> 
->    - Move the entire xfd write emulation code to x86.c. Doing so requires
->      introducing a new kvm_x86_ops callback to disable msr write bitmap.
->      According to Paolo's earlier comment he prefers to handle it in vmx.c.
+Hi Florian,
 
-Yes, I do.
+f.fainelli@gmail.com wrote on Tue, 4 Jan 2022 10:34:35 -0800:
 
->    - Directly check msr_bitmap in update_exception_bitmap() (for
->      trapping #NM) and vcpu_enter_guest() (for syncing guest xfd after
->      vm-exit) instead of introducing an extra flag in the last patch. However,
->      doing so requires another new kvm_x86_ops callback for checking
->      msr_bitmap since vcpu_enter_guest() is x86 common code. Having an
->      extra flag sounds simpler here (at least for the initial AMX support).
->      It does penalize nested guest with one xfd sync per exit, but it's not
->      worse than a normal guest which initializes xfd but doesn't run
->      AMX applications at all. Those could be improved afterwards.
+> On 1/4/22 12:57 AM, Miquel Raynal wrote:
+> > Hi Miquel,
+> > 
+> > miquel.raynal@bootlin.com wrote on Tue, 4 Jan 2022 09:32:21 +0100:
+> >   
+> >> Hi Florian,
+> >>
+> >> f.fainelli@gmail.com wrote on Mon, 3 Jan 2022 09:24:26 -0800:
+> >>  
+> >>> On 1/3/2022 8:49 AM, Miquel Raynal wrote:    
+> >>>> Hi Florian,
+> >>>>
+> >>>> f.fainelli@gmail.com wrote on Wed, 22 Dec 2021 16:22:17 -0800:
+> >>>>       
+> >>>>> Allow a brcmnand_soc instance to provide a custom set of I/O operations
+> >>>>> which we will require when using this driver on a BCMA bus which is not
+> >>>>> directly memory mapped I/O. Update the nand_{read,write}_reg accordingly
+> >>>>> to use the SoC operations if provided.
+> >>>>>
+> >>>>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> >>>>> ---
+> >>>>>   drivers/mtd/nand/raw/brcmnand/brcmnand.c | 14 ++++++++++++--
+> >>>>>   drivers/mtd/nand/raw/brcmnand/brcmnand.h | 23 +++++++++++++++++++++++
+> >>>>>   2 files changed, 35 insertions(+), 2 deletions(-)
+> >>>>>
+> >>>>> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+> >>>>> index f75929783b94..7a1673b1b1af 100644
+> >>>>> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+> >>>>> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+> >>>>> @@ -594,13 +594,18 @@ enum {      
+> >>>>>   >>   static inline u32 nand_readreg(struct brcmnand_controller *ctrl, u32 offs)      
+> >>>>>   {
+> >>>>> +	if (brcmnand_soc_has_ops(ctrl->soc))
+> >>>>> +		return brcmnand_soc_read(ctrl->soc, offs);
+> >>>>>   	return brcmnand_readl(ctrl->nand_base + offs);
+> >>>>>   }      
+> >>>>>   >>   static inline void nand_writereg(struct brcmnand_controller *ctrl, u32 offs,      
+> >>>>>   				 u32 val)
+> >>>>>   {
+> >>>>> -	brcmnand_writel(val, ctrl->nand_base + offs);
+> >>>>> +	if (brcmnand_soc_has_ops(ctrl->soc))
+> >>>>> +		brcmnand_soc_write(ctrl->soc, val, offs);
+> >>>>> +	else
+> >>>>> +		brcmnand_writel(val, ctrl->nand_base + offs);
+> >>>>>   }      
+> >>>>>   >>   static int brcmnand_revision_init(struct brcmnand_controller *ctrl)      
+> >>>>> @@ -766,13 +771,18 @@ static inline void brcmnand_rmw_reg(struct brcmnand_controller *ctrl,      
+> >>>>>   >>   static inline u32 brcmnand_read_fc(struct brcmnand_controller *ctrl, int word)      
+> >>>>>   {
+> >>>>> +	if (brcmnand_soc_has_ops(ctrl->soc))
+> >>>>> +		return brcmnand_soc_read(ctrl->soc, ~0);
+> >>>>>   	return __raw_readl(ctrl->nand_fc + word * 4);
+> >>>>>   }      
+> >>>>>   >>   static inline void brcmnand_write_fc(struct brcmnand_controller *ctrl,      
+> >>>>>   				     int word, u32 val)
+> >>>>>   {
+> >>>>> -	__raw_writel(val, ctrl->nand_fc + word * 4);
+> >>>>> +	if (brcmnand_soc_has_ops(ctrl->soc))
+> >>>>> +		brcmnand_soc_write(ctrl->soc, val, ~0);
+> >>>>> +	else
+> >>>>> +		__raw_writel(val, ctrl->nand_fc + word * 4);
+> >>>>>   }      
+> >>>>>   >>   static inline void edu_writel(struct brcmnand_controller *ctrl,      
+> >>>>> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.h b/drivers/mtd/nand/raw/brcmnand/brcmnand.h
+> >>>>> index eb498fbe505e..a3f2ad5f6572 100644
+> >>>>> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.h
+> >>>>> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.h
+> >>>>> @@ -11,12 +11,19 @@      
+> >>>>>   >>   struct platform_device;      
+> >>>>>   struct dev_pm_ops;
+> >>>>> +struct brcmnand_io_ops;      
+> >>>>>   >>   struct brcmnand_soc {      
+> >>>>>   	bool (*ctlrdy_ack)(struct brcmnand_soc *soc);
+> >>>>>   	void (*ctlrdy_set_enabled)(struct brcmnand_soc *soc, bool en);
+> >>>>>   	void (*prepare_data_bus)(struct brcmnand_soc *soc, bool prepare,
+> >>>>>   				 bool is_param);
+> >>>>> +	const struct brcmnand_io_ops *ops;
+> >>>>> +};
+> >>>>> +
+> >>>>> +struct brcmnand_io_ops {
+> >>>>> +	u32 (*read_reg)(struct brcmnand_soc *soc, u32 offset);
+> >>>>> +	void (*write_reg)(struct brcmnand_soc *soc, u32 val, u32 offset);
+> >>>>>   };      
+> >>>>>   >>   static inline void brcmnand_soc_data_bus_prepare(struct brcmnand_soc *soc,      
+> >>>>> @@ -58,6 +65,22 @@ static inline void brcmnand_writel(u32 val, void __iomem *addr)
+> >>>>>   		writel_relaxed(val, addr);
+> >>>>>   }      
+> >>>>>   >> +static inline bool brcmnand_soc_has_ops(struct brcmnand_soc *soc)      
+> >>>>> +{
+> >>>>> +	return soc && soc->ops && soc->ops->read_reg && soc->ops->write_reg;
+> >>>>> +}
+> >>>>> +
+> >>>>> +static inline u32 brcmnand_soc_read(struct brcmnand_soc *soc, u32 offset)
+> >>>>> +{
+> >>>>> +	return soc->ops->read_reg(soc, offset);
+> >>>>> +}
+> >>>>> +
+> >>>>> +static inline void brcmnand_soc_write(struct brcmnand_soc *soc, u32 val,
+> >>>>> +				      u32 offset)
+> >>>>> +{
+> >>>>> +	soc->ops->write_reg(soc, val, offset);
+> >>>>> +}
+> >>>>> +      
+> >>>>
+> >>>> It might be worth looking into more optimized ways to do these checks,
+> >>>> in particular the read/write_reg ones because you're checking against
+> >>>> some static data which cannot be optimized out by the compiler but
+> >>>> won't change in the lifetime of the kernel.      
+> >>>
+> >>> I suppose I could add an addition if IS_ENABLED(CONFIG_MTD_NAND_BRCMNAND_BCMA) at the front of brcmnand_soc_has_ops(), would that address your concern or you have something else in mind?    
+> >>
+> >> I don't like much the #ifdef solution, instead you might think of
+> >> static keys, or even better using a regmap. Regmap implementation is
+> >> free, you can use either one way or the other and for almost no
+> >> overhead compared to the bunch of functions you have here.  
+> > 
+> > Maybe regmaps will actually be slower than these regular if's. Perhaps
+> > static keys are the best option?  
+> 
+> OK static keys would probably work. I am not sure that the additional
+> branches for each register access would actually be causing a noticeable
+> performance impact. Pretty much any chip where this controller is used
+> has a DMA interface that you program and kick, the PIO is already
+> assumed to be slow, and each register access is about 200ns on STB chips
+> at least.
 
-The thing to do here would be to move 
-MAX_POSSIBLE_PASSTHROUGH_MSRS/MAX_DIRECT_ACCESS_MSRS from VMX/SVM to 
-core code.  For now we can keep the flag.
+I see. I'll let you decide what you prefer, I won't block if you stick
+to the regular if/else implementation.
 
->    - Disable #NM trap for nested guest. This version still chooses to always
->      trap #NM (regardless in L1 or L2) as long as xfd write interception is disabled.
->      In reality #NM is rare if nested guest doesn't intend to run AMX applications
->      and always-trap is safer than dynamic trap for the basic support in case
->      of any oversight here.
-
-Sean was justifying this with lack of support for nested AMX, but I'm 
-not sure actually what is missing at all.  That is, an L1 hypervisor 
-could expose AMX to L2, and then an L2->L0->L2 exit/reentry would have 
-to trap #NM.  Otherwise it would miss an XFD_ERR update.
-
-So the patches look good now.
-
-Paolo
-
-> (Jing is temporarily leave for family reason, Yang helped work out this version)
-> 
-> ----
-> v3->v4:
->    - Verify kvm selftest for AMX (Paolo)
->    - Move fpstate buffer expansion from kvm_vcpu_after_set_cpuid () to
->      kvm_check_cpuid() and improve patch description (Sean)
->    - Drop 'preemption' word in #NM interception patch (Sean)
->    - Remove 'trap_nm' flag. Replace it by: (Sean)
->      * Trapping #NM according to guest_fpu::xfd when write to xfd is
->        intercepted.
->      * Always trapping #NM when xfd write interception is disabled
->    - Use better name for #NM related functions (Sean)
->    - Drop '#ifdef CONFIG_X86_64' in __kvm_set_xcr (Sean)
->    - Update description for KVM_CAP_XSAVE2 and prevent the guest from
->      using the wrong ioctl (Sean)
->    - Replace 'xfd_out_of_sync' with a better name (Sean)
-> 
-> v2->v3:
->    - Trap #NM until write IA32_XFD with a non-zero value (Thomas)
->    - Revise return value in __xstate_request_perm() (Thomas)
->    - Revise doc for KVM_GET_SUPPORTED_CPUID (Paolo)
->    - Add Thomas's reviewed-by on one patch
->    - Reorder disabling read interception of XFD_ERR patch (Paolo)
->    - Move disabling r/w interception of XFD from x86.c to vmx.c (Paolo)
->    - Provide the API doc together with the new KVM_GET_XSAVE2 ioctl (Paolo)
->    - Make KVM_CHECK_EXTENSION(KVM_CAP_XSAVE2) return minimum size of struct
->      kvm_xsave (4K) (Paolo)
->    - Request permission at the start of vm_create_with_vcpus() in selftest
->    - Request permission conditionally when XFD is supported (Paolo)
-> 
-> v1->v2:
->    - Live migration supported and verified with a selftest
->    - Rebase to Thomas's new series for guest fpstate reallocation [1]
->    - Expand fpstate at KVM_SET_CPUID2 instead of when emulating XCR0
->      and IA32_XFD (Thomas/Paolo)
->    - Accordingly remove all exit-to-userspace stuff
->    - Intercept #NM to save guest XFD_ERR and restore host/guest value
->      at preemption on/off boundary (Thomas)
->    - Accordingly remove all xfd_err logic in preemption callback and
->      fpu_swap_kvm_fpstate()
->    - Reuse KVM_SET_XSAVE to handle both legacy and expanded buffer (Paolo)
->    - Don't return dynamic bits w/o prctl() in KVM_GET_SUPPORTED_CPUID (Paolo)
->    - Check guest permissions for dynamic features in CPUID[0xD] instead
->      of only for AMX at KVM_SET_CPUID (Paolo)
->    - Remove dynamic bit check for 32-bit guest in __kvm_set_xcr() (Paolo)
->    - Fix CPUID emulation for 0x1d and 0x1e (Paolo)
->    - Move "disable interception" to the end of the series (Paolo)
-> 
-> This series brings AMX (Advanced Matrix eXtensions) virtualization support
-> to KVM. The preparatory series from Thomas [1] is also included.
-> 
-> A large portion of the changes in this series is to deal with eXtended
-> Feature Disable (XFD) which allows resizing of the fpstate buffer to
-> support dynamically-enabled XSTATE features with large state component
-> (e.g. 8K for AMX).
-> 
-> There are a lot of simplications when comparing v2/v3 to the original
-> proposal [2] and the first version [3]. Thanks to Thomas and Paolo for
-> many good suggestions.
-> 
-> The support is based on following key changes:
-> 
->    - Guest permissions for dynamically-enabled XSAVE features
-> 
->      Native tasks have to request permission via prctl() before touching
->      a dynamic-resized XSTATE compoenent. Introduce guest permissions
->      for the similar purpose. Userspace VMM is expected to request guest
->      permission only once when the first vCPU is created.
-> 
->      KVM checks guest permission in KVM_SET_CPUID2. Setting XFD in guest
->      cpuid w/o proper permissions fails this operation. In the meantime,
->      unpermitted features are also excluded in KVM_GET_SUPPORTED_CPUID.
-> 
->    - Extend fpstate reallocation mechanism to cover guest fpu
-> 
->      Unlike native tasks which have reallocation triggered from #NM
->      handler, guest fpstate reallocation is requested by KVM when it
->      identifies the intention on using dynamically-enabled XSAVE
->      features inside guest.
-> 
->      Extend fpu core to allow KVM request fpstate buffer expansion
->      for a guest fpu containter.
-> 
->    - Trigger fpstate reallocation in KVM
-> 
->      This could be done either statically (before guest runs) or
->      dynamically (in the emulation path). According to discussion [1]
->      we decide to statically enable all xfeatures allowed by guest perm
->      in KVM_SET_CPUID2, with fpstate buffer sized accordingly. This spares
->      a lot of code and also avoid imposing an ordered restore sequence
->      (XCR0, XFD and XSTATE) to userspace VMM.
-> 
->    - RDMSR/WRMSR emulation for IA32_XFD
-> 
->      Because fpstate expansion is completed in KVM_SET_CPUID2, emulating
->      r/w access to IA32_XFD simply involves the xfd field in the guest
->      fpu container. If write and guest fpu is currently active, the
->      software state (guest_fpstate::xfd and per-cpu xfd cache) is also
->      updated.
-> 
->    - RDMSR/WRMSR emulation for XFD_ERR
-> 
->      When XFD causes an instruction to generate #NM, XFD_ERR contains
->      information about which disabled state components are being accessed.
->      It'd be problematic if the XFD_ERR value generated in guest is
->      consumed/clobbered by the host before the guest itself doing so.
-> 
->      Intercept #NM exception to save the guest XFD_ERR value when write
->      IA32_XFD with a non-zero value for 1st time. There is at most one
->      interception per guest task given a dynamic feature.
-> 
->      RDMSR/WRMSR emulation uses the saved value. The host value (always
->      ZERO outside of the host #NM handler) is restored before enabling
->      preemption. The saved guest value is restored right before entering
->      the guest (with preemption disabled).
-> 
->    - Get/set dynamic xfeature state for migration
-> 
->      Introduce new capability (KVM_CAP_XSAVE2) to deal with >4KB fpstate
->      buffer. Reading this capability returns the size of the current
->      guest fpstate (e.g. after expansion). Userspace VMM uses a new ioctl
->      (KVM_GET_XSAVE2) to read guest fpstate from the kernel and reuses
->      the existing ioctl (KVM_SET_XSAVE) to update guest fpsate to the
->      kernel. KVM_SET_XSAVE is extended to do properly_sized memdup_user()
->      based on the guest fpstate.
-> 
->    - Expose related cpuid bits to guest
-> 
->      The last step is to allow exposing XFD, AMX_TILE, AMX_INT8 and
->      AMX_BF16 in guest cpuid. Adding those bits into kvm_cpu_caps finally
->      activates all previous logics in this series
-> 
->    - Optimization: disable interception for IA32_XFD
-> 
->      IA32_XFD can be frequently updated by the guest, as it is part of
->      the task state and swapped in context switch when prev and next have
->      different XFD setting. Always intercepting WRMSR can easily cause
->      non-negligible overhead.
-> 
->      Disable r/w emulation for IA32_XFD after intercepting the first
->      WRMSR(IA32_XFD) with a non-zero value. However MSR passthrough
->      implies the software state (guest_fpstate::xfd and per-cpu xfd
->      cache) might be out of sync with MSR. This suggests KVM needs to
->      re-sync them at VM-exit before preemption is enabled.
-> 
-> Thanks Jun Nakajima and Kevin Tian for the design suggestions when this
-> version is being internally worked on.
-> 
-> [1] https://lore.kernel.org/all/20211214022825.563892248@linutronix.de/
-> [2] https://www.spinics.net/lists/kvm/msg259015.html
-> [3] https://lore.kernel.org/lkml/20211208000359.2853257-1-yang.zhong@intel.com/
-> 
-> Thanks,
-> Yang
-> 
-> ---
-> 
-> 
-> Guang Zeng (1):
->    kvm: x86: Add support for getting/setting expanded xstate buffer
-> 
-> Jing Liu (11):
->    kvm: x86: Fix xstate_required_size() to follow XSTATE alignment rule
->    kvm: x86: Exclude unpermitted xfeatures at KVM_GET_SUPPORTED_CPUID
->    x86/fpu: Make XFD initialization in __fpstate_reset() a function
->      argument
->    kvm: x86: Check and enable permitted dynamic xfeatures at
->      KVM_SET_CPUID2
->    kvm: x86: Add emulation for IA32_XFD
->    x86/fpu: Prepare xfd_err in struct fpu_guest
->    kvm: x86: Intercept #NM for saving IA32_XFD_ERR
->    kvm: x86: Emulate IA32_XFD_ERR for guest
->    kvm: x86: Disable RDMSR interception of IA32_XFD_ERR
->    kvm: x86: Add XCR0 support for Intel AMX
->    kvm: x86: Add CPUID support for Intel AMX
-> 
-> Kevin Tian (3):
->    x86/fpu: Provide fpu_update_guest_perm_features() for guest
->    x86/fpu: Provide fpu_update_guest_xfd() for IA32_XFD emulation
->    kvm: x86: Disable interception for IA32_XFD on demand
-> 
-> Thomas Gleixner (5):
->    x86/fpu: Extend fpu_xstate_prctl() with guest permissions
->    x86/fpu: Prepare guest FPU for dynamically enabled FPU features
->    x86/fpu: Add guest support to xfd_enable_feature()
->    x86/fpu: Add uabi_size to guest_fpu
->    x86/fpu: Provide fpu_sync_guest_vmexit_xfd_state()
-> 
-> Wei Wang (1):
->    kvm: selftests: Add support for KVM_CAP_XSAVE2
-> 
->   Documentation/virt/kvm/api.rst                |  46 +++++-
->   arch/x86/include/asm/cpufeatures.h            |   2 +
->   arch/x86/include/asm/fpu/api.h                |  11 ++
->   arch/x86/include/asm/fpu/types.h              |  32 ++++
->   arch/x86/include/asm/kvm_host.h               |   1 +
->   arch/x86/include/uapi/asm/kvm.h               |  16 +-
->   arch/x86/include/uapi/asm/prctl.h             |  26 ++--
->   arch/x86/kernel/fpu/core.c                    | 104 ++++++++++++-
->   arch/x86/kernel/fpu/xstate.c                  | 147 +++++++++++-------
->   arch/x86/kernel/fpu/xstate.h                  |  15 +-
->   arch/x86/kernel/process.c                     |   2 +
->   arch/x86/kvm/cpuid.c                          |  99 +++++++++---
->   arch/x86/kvm/vmx/vmcs.h                       |   5 +
->   arch/x86/kvm/vmx/vmx.c                        |  45 +++++-
->   arch/x86/kvm/vmx/vmx.h                        |   2 +-
->   arch/x86/kvm/x86.c                            | 105 ++++++++++++-
->   include/uapi/linux/kvm.h                      |   4 +
->   tools/arch/x86/include/uapi/asm/kvm.h         |  16 +-
->   tools/include/uapi/linux/kvm.h                |   3 +
->   .../testing/selftests/kvm/include/kvm_util.h  |   2 +
->   .../selftests/kvm/include/x86_64/processor.h  |  10 ++
->   tools/testing/selftests/kvm/lib/kvm_util.c    |  32 ++++
->   .../selftests/kvm/lib/x86_64/processor.c      |  67 +++++++-
->   .../testing/selftests/kvm/x86_64/evmcs_test.c |   2 +-
->   tools/testing/selftests/kvm/x86_64/smm_test.c |   2 +-
->   .../testing/selftests/kvm/x86_64/state_test.c |   2 +-
->   .../kvm/x86_64/vmx_preemption_timer_test.c    |   2 +-
->   27 files changed, 691 insertions(+), 109 deletions(-)
-> 
-
+Thanks,
+Miquèl

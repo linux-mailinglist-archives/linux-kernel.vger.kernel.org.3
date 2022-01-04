@@ -2,97 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 091CB484198
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 13:21:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A8D4841A0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 13:23:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232985AbiADMUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 07:20:55 -0500
-Received: from mail.credativ.com ([93.94.130.90]:37930 "EHLO mail.credativ.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232527AbiADMUv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 07:20:51 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.credativ.com (Postfix) with ESMTP id 41FF72009A;
-        Tue,  4 Jan 2022 12:20:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=credativ.de; s=email;
-        t=1641298849; bh=lORCloxc910E8pJ/4vNuaq0h5KufKbGTbOIBjWzEkLY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=edIcmO9rjTNd7+FYvWl5d78YE383veV1k+1M6p4QED9KPlqr2bonhlePMl8qrQDaw
-         et8vr6ARA3CxJKJbHHDPcjMrER1/BNlnRhQzqbtXX2k4XF6DVBZgxmLKOLBWesOtjY
-         8x2lbGjEvJBxzI/ziSmSH+CH4FLbeWn+znBDk+MBeBTjuy1Fa9C8zYVtqZA/xBQ5dH
-         klHMtusl0DMuwz+A+czXABk7z67uU6mNsFmvCw0Bg5Gehh3QlOrKm9yvBL3V5qBG0A
-         qfblbSBbsokFraHE2jevIdE8k7bs3MtS0+L0xA0zMG3LkTW16PvoS5VHJo07WXXDR6
-         7WfJbVKwGgE8Q==
-Received: from mail.credativ.com ([127.0.0.1])
-        by localhost (mail.credativ.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 36rF6LoypUw6; Tue,  4 Jan 2022 12:20:43 +0000 (UTC)
-Received: from softhammer.credativ.de (unknown [IPv6:2003:5b:203b:200::10:16])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: bbl)
-        by mail.credativ.com (Postfix) with ESMTPSA id 1DFA820028;
-        Tue,  4 Jan 2022 12:20:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=credativ.de; s=email;
-        t=1641298843; bh=lORCloxc910E8pJ/4vNuaq0h5KufKbGTbOIBjWzEkLY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UmQfmnk75X+algNubvPO5YJJiC8cCsdH1XxlQ0UoIpqo+lPERR/gL39u48QwMgTOD
-         3c9pKU/UWq+7K4AiDD1X/+4PYxUNAoebSkdJaEUM/Co1HWhIlD/TyjAXNX/zIaJuwb
-         FgvYS6gfLdw5Cw9tL95JggcgXdXvHoo57wX9RAYcwcIksm4H2R6dpcJQ1qTPAmai0m
-         q3Qt1FuzO1e4nHpFDAd2qQ+jENRXlPSIqnrwOMw3cmnOwdtJ3HrvYUQaZiscOLEyFe
-         N8asiUnebe3w4aYjHAev0YBHDCZx0wHO5xkLD+Ul+y4ChYCcBmP5W933gkZmTg0gmU
-         BG56TrOkOFrmA==
-Received: by softhammer.credativ.de (Postfix, from userid 1000)
-        id 4JSsCG3np2zB5sQ; Tue,  4 Jan 2022 13:20:42 +0100 (CET)
-Date:   Tue, 4 Jan 2022 13:20:42 +0100
-From:   Bastian Blank <bastian.blank@credativ.de>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: PROBLEM: SLAB use-after-free with ceph(fs)
-Message-ID: <YdQ7msXTCF5kKl4V@softhammer.credativ.lan>
-References: <YdQYEF9WCTWTAzOp@softhammer.credativ.lan>
- <22cf685dbf61e09a4e5e7c3a48d1117a769548a8.camel@kernel.org>
+        id S232992AbiADMX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 07:23:56 -0500
+Received: from mxout03.lancloud.ru ([45.84.86.113]:42080 "EHLO
+        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231753AbiADMX4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 07:23:56 -0500
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 79C4920F406F
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH] platform: finally disallow IRQ0 in platform_get_irq() and
+ its ilk
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Marc Zyngier <maz@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <5e001ec1-d3f1-bcb8-7f30-a6301fd9930c@omp.ru>
+ <87pmp7volh.wl-maz@kernel.org>
+ <CAMuHMdWjGUHZQhKDPASfpfNOiUg9HP2f3DsUsmJoijap29xpyQ@mail.gmail.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <f176d16c-000e-f886-754e-1fc222f80230@omp.ru>
+Date:   Tue, 4 Jan 2022 15:23:50 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <22cf685dbf61e09a4e5e7c3a48d1117a769548a8.camel@kernel.org>
+In-Reply-To: <CAMuHMdWjGUHZQhKDPASfpfNOiUg9HP2f3DsUsmJoijap29xpyQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+On 1/4/22 12:47 PM, Geert Uytterhoeven wrote:
 
-On Tue, Jan 04, 2022 at 07:00:31AM -0500, Jeff Layton wrote:
-> On Tue, 2022-01-04 at 10:49 +0100, Bastian Blank wrote:
-> > > [152791.777458] cache_from_obj: Wrong slab cache. jbd2_journal_handle but object is from kmalloc-256
+[...]
+>>> The commit a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is
+>>> invalid") only calls WARN() when IRQ0 is about to be returned, however
+>>> using IRQ0 is considered invalid (according to Linus) outside the arch/
+>>> code where it's used by the i8253 drivers. Many driver subsystems treat
+>>> 0 specially (e.g. as an indication of the polling mode by libata), so
+>>> the users of platform_get_irq[_byname]() in them would have to filter
+>>> out IRQ0 explicitly and this (quite obviously) doesn't scale...
+>>> Let's finally get this straight and return -EINVAL instead of IRQ0!
+>>>
+>>> Fixes: a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is invalid")
+>>> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+> 
+>>> --- driver-core.orig/drivers/base/platform.c
+>>> +++ driver-core/drivers/base/platform.c
+>>> @@ -231,7 +231,8 @@ int platform_get_irq_optional(struct pla
+>>>  out_not_found:
+>>>       ret = -ENXIO;
+>>>  out:
+>>> -     WARN(ret == 0, "0 is an invalid IRQ number\n");
+>>> +     if (WARN(!ret, "0 is an invalid IRQ number\n"))
+>>> +             return -EINVAL;
+>>>       return ret;
+>>>  }
+>>>  EXPORT_SYMBOL_GPL(platform_get_irq_optional);
+>>> @@ -445,7 +446,8 @@ static int __platform_get_irq_byname(str
+>>>
+>>>       r = platform_get_resource_byname(dev, IORESOURCE_IRQ, name);
+>>>       if (r) {
+>>> -             WARN(r->start == 0, "0 is an invalid IRQ number\n");
+>>> +             if (WARN(!r->start, "0 is an invalid IRQ number\n"))
+>>> +                     return -EINVAL;
+>>>               return r->start;
+>>>       }
+>>
+>> Geert recently mentioned that a few architectures (such as sh?) still
+>> use IRQ0 as something valid in limited cases.
+> 
+> https://lore.kernel.org/all/CAMuHMdUg3=q7gyaVHP0XcYUOo3PQUUv8Hc8wp5faVQ+bTBpg4A@mail.gmail.com
+> 
+> TL;DR: Probably only smsc911x Ethernet on the AP-SH4A-3A and
+> AP-SH4AD-0A boards, which should trigger the warning since v5.8.
 
-> At first blush, this looks like the same problem as:
->     https://tracker.ceph.com/issues/52283
-> ...but that should have been fixed in v5.14.
+   Gr... indeed these use IRQ0 and should cause WARN. Do you have any idea how to avoid this?
 
-Nope, does not make sense.  This reported issue tried to free a
-"ceph_cap_flush", while mine tries to free "jbd2_journal_handle", which
-is far away.
+>> From my PoV, this patch is fine, but please be prepared to fix things
+>> in a couple of years when someone decides to boot a recent kernel on
+>> their pet dinosaur. With that in mind:
+>>
+>> Acked-by: Marc Zyngier <maz@kernel.org>
+> 
+> TBH, I don't see much point in this patch, as the WARN() has been
+> there since a while,
 
-> You may also want to try v5.16-rc8 if you're able to build your own
-> kernels. There were some patches that went in to improve how the client
-> handles inodes that become inaccessible.
+   Yet there's WARN() -- which (at the end of day) should be avoided.
 
-I try to get them to install a 5.16-rc8 or newer, get a new crash dump
-and report that to https://tracker.ceph.com/.
+> and the end goal is to return zero instead of
+> -ENXIO for no interrupt, right?
 
-Thanks,
-Bastian
+   I don't care that much about platform_get_irq_optional() (Andy does),
+I do care about its caller, platform_get_irq(). The end goal here is to
+avoid WARN() and avoid having to handle IRQ0 in this function's callers.
 
--- 
-Bastian Blank
-Berater
-Telefon: +49 2166 9901-194
-E-Mail: bastian.blank@credativ.de
-credativ GmbH, HRB Mönchengladbach 12080, USt-ID-Nummer: DE204566209
-Trompeterallee 108, 41189 Mönchengladbach
-Geschäftsführung: Dr. Michael Meskes, Geoff Richardson, Peter Lilley
-Unser Umgang mit personenbezogenen Daten unterliegt
-folgenden Bestimmungen: https://www.credativ.de/datenschutz
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+[...]
+
+MBR, Sergey

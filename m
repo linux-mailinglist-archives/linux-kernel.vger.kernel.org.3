@@ -2,79 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A695B483EA8
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 10:02:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE4C9483EAF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 10:02:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbiADJCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 04:02:18 -0500
-Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:24739 "EHLO
-        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229545AbiADJCQ (ORCPT
+        id S229798AbiADJCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 04:02:41 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:51434 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229763AbiADJCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 04:02:16 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R741e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V0us7pN_1641286921;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V0us7pN_1641286921)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 04 Jan 2022 17:02:02 +0800
-Date:   Tue, 4 Jan 2022 17:02:00 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-erofs@lists.ozlabs.org, Liu Bo <bo.liu@linux.alibaba.com>,
-        LKML <linux-kernel@vger.kernel.org>, Yue Hu <huyue2@yulong.com>
-Subject: Re: [PATCH v2 5/5] erofs: use meta buffers for zmap operations
-Message-ID: <YdQNCJzQULVxC2QC@B-P7TQMD6M-0146.local>
-References: <20220102040017.51352-1-hsiangkao@linux.alibaba.com>
- <20220102040017.51352-6-hsiangkao@linux.alibaba.com>
- <5ed798da-4f01-17d4-cba2-dda50728bd25@kernel.org>
+        Tue, 4 Jan 2022 04:02:37 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20492TJ8085537;
+        Tue, 4 Jan 2022 03:02:29 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1641286949;
+        bh=SSFKI9jF+2pXTo1KdebT/jchgYGF9m9VboCPAUuM6Y0=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=J1CzwysLDa6BM/o2zgCXWqJ4QoBpI+kXglDUrRDdnj19+E1noTpoxrdo9ubaAWHCT
+         H+r7yPklxqsQ0x55jpdNYUbMgHmDuCYAz6mrhzaSs+fC7w7RFD3F99jKSRiMpSNXU/
+         dpLWI77XETpyKs+qAtFO2Q3kSFGrB82uKClraz7Q=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20492T5R027477
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 4 Jan 2022 03:02:29 -0600
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 4
+ Jan 2022 03:02:28 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 4 Jan 2022 03:02:28 -0600
+Received: from [10.24.69.159] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20492QI0109434;
+        Tue, 4 Jan 2022 03:02:26 -0600
+Subject: Re: [PATCH v2 0/5] PCI: Keystone: Misc fixes for TI's AM65x PCIe
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <20211126083119.16570-1-kishon@ti.com>
+From:   Kishon Vijay Abraham I <kishon@ti.com>
+Message-ID: <20979d61-87a3-f9c5-8185-f8032431367d@ti.com>
+Date:   Tue, 4 Jan 2022 14:32:25 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <5ed798da-4f01-17d4-cba2-dda50728bd25@kernel.org>
+In-Reply-To: <20211126083119.16570-1-kishon@ti.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chao,
+Hi Lorenzo,
 
-On Tue, Jan 04, 2022 at 04:15:05PM +0800, Chao Yu wrote:
-> On 2022/1/2 12:00, Gao Xiang wrote:
-
-...
-
-> > --- a/fs/erofs/zdata.c
-> > +++ b/fs/erofs/zdata.c
-> > @@ -698,20 +698,18 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
-> >   		goto err_out;
-> >   	if (z_erofs_is_inline_pcluster(clt->pcl)) {
-> > -		struct page *mpage;
-> > +		void *mp;
-> > -		mpage = erofs_get_meta_page(inode->i_sb,
-> > -					    erofs_blknr(map->m_pa));
-> > -		if (IS_ERR(mpage)) {
-> > -			err = PTR_ERR(mpage);
-> > +		mp = erofs_read_metabuf(&fe->map.buf, inode->i_sb,
-> > +					erofs_blknr(map->m_pa), EROFS_NO_KMAP);
-> > +		if (IS_ERR(mp)) {
-> > +			err = PTR_ERR(mp);
-> >   			erofs_err(inode->i_sb,
-> >   				  "failed to get inline page, err %d", err);
-> >   			goto err_out;
-> >   		}
-> > -		/* TODO: new subpage feature will get rid of it */
-> > -		unlock_page(mpage);
-> > -
-> > -		WRITE_ONCE(clt->pcl->compressed_pages[0], mpage);
-> > +		get_page(fe->map.buf.page);
+On 26/11/21 2:01 pm, Kishon Vijay Abraham I wrote:
+> Patch series includes miscellaneous fixes for TI's AM65x SoC
+> "PCI: keystone: Add workaround for Errata #i2037 (AM65x SR 1.0)"  has
+> already been sent before [1]
 > 
-> Comparing to previous implementation, it adds an extra reference on the page, why?
+> The other patch is to prevent PCIEPORTBUS driver to write to
+> MSI-X table (which is not mapped) leading to ~10sec delay
+> due to msix_mask_all().
+> 
+> v1 if the patch series is @ [2]
+> 
+> Changes from v1:
+> 1) Added two patches to fix 'dtbs_check'; a DT binding documentation
+> update and a driver update.
+> 2) Remove falling back to smaller DMA mask as suggested by Christoph.
+> 
+> [1] -> https://lore.kernel.org/r/20210325090026.8843-7-kishon@ti.com
+> [2] -> https://lore.kernel.org/r/20211110073343.12396-1-kishon@ti.com
+> 
+> Kishon Vijay Abraham I (5):
+>   dt-bindings: PCI: ti,am65: Fix
+>     "ti,syscon-pcie-id"/"ti,syscon-pcie-mode" to take argument
+>   PCI: keystone: Use phandle argument from
+>     "ti,syscon-pcie-id"/"ti,syscon-pcie-mode"
+>   PCI: keystone: Add workaround for Errata #i2037 (AM65x SR 1.0)
+>   PCI: keystone: Add quirk to mark AM654 RC BAR flag as IORESOURCE_UNSET
+>   PCI: keystone: Set DMA mask and coherent DMA mask
+> 
+>  .../bindings/pci/ti,am65-pci-ep.yaml          |  8 +-
+>  .../bindings/pci/ti,am65-pci-host.yaml        | 16 +++-
+>  drivers/pci/controller/dwc/pci-keystone.c     | 82 ++++++++++++++++++-
+>  3 files changed, 96 insertions(+), 10 deletions(-)
 
-Thanks for the question. Previously, erofs_get_meta_page was called
-independently without reusing zmap mpage, so the page refcount had no
-relationship with zmap mpage.
+Can this be merged?
 
-However, now we reuse zmap metabuf instead(fe->map.buf), so an extra
-page refcount is needed since zmap metabuf will be released at the end
-of readpage or readahead...
-
-Thanks,
-Gao Xiang
+Regards,
+Kishon

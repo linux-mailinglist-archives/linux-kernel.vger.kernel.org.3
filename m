@@ -2,177 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9BD48496E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 21:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97663484970
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 21:49:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233365AbiADUs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 15:48:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57760 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233252AbiADUs5 (ORCPT
+        id S233407AbiADUtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 15:49:12 -0500
+Received: from mail-ot1-f49.google.com ([209.85.210.49]:46048 "EHLO
+        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232615AbiADUtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 15:48:57 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360A0C061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 12:48:57 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id a203-20020a1c7fd4000000b003457874263aso439812wmd.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 12:48:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=colorfullife-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ooWecQNigVE8zIWQ771yQHVCG/Luw6UW39pf+jKA1Vo=;
-        b=1thCSJs4PrVpLeNSxTgucaZw90QODsEZGTxIgKA+IgwkZc+n/EjZVhSkBteE7E3faR
-         Egw88Tj5/edkUIiwUD8SS+ju0HINcNJq9TwKpyC0IHtPyDIIgK9au3vdAl1CMUN5IGMK
-         +yrcfhsnQBOOz4WPAFzfNQtbftAXxTfxyTEP0hCCIEAlNmTqbZ0kN1C0fEDHzLgrWpr3
-         o65eP6ON0Gtb81v4tALoeYam5fgpDCrnvUvga6Dzy1o8Ile5njWEazW748m+j/kQhbwb
-         IIuVJyXJG6xJ6+vS/Chfu+e4N66pR4vaZtMYNjri9jEHTbBR9cSK5/ZQBLZqxIHbTENX
-         GlqA==
+        Tue, 4 Jan 2022 15:49:11 -0500
+Received: by mail-ot1-f49.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso48588676otf.12;
+        Tue, 04 Jan 2022 12:49:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ooWecQNigVE8zIWQ771yQHVCG/Luw6UW39pf+jKA1Vo=;
-        b=gZ1j6NToBiLFYAMulSjY1qK1K03LL/HgEODynOpVFsroRh/TtC01PUNDmFr7+2IV52
-         3N4Cb69f6fi0sbA5+HSVMlKl2/TRuaPF42FCiWnzdQt/IqLfmTX0bf5LCSLDj0XmIpyh
-         vq/3UTEabeqiSUv7IWHMt79AF3bfugDJFYrzf0UmSWbaG+qGmJ6y4Stz4Dfs1t7VBerq
-         7JJyuBQ22EPzZrStatkYQWkvVPOlysht+w5WlDQ7O21WumTG09AroT1fP/ApPF5kv/ny
-         5EruRoO64W/TUB6PZlr1b1hz7yTRmW0scCDdS0JKThYmDCrV0tN+UnuMrjD/8FT2pw6V
-         h8vA==
-X-Gm-Message-State: AOAM530L4C6TpD+4+z4QDmx1q8v28AMZjtIhU+Lx/nva3qKO7bUp/8dm
-        u195eJlp17L87vDTVW0MTaLmpA==
-X-Google-Smtp-Source: ABdhPJwT7chVjLZZVthjh2u2ySDREcM4f4FmRAV2iAdj4rzaWxb+jkT3krSbBBFGFBRdBSxfChSghw==
-X-Received: by 2002:a05:600c:3507:: with SMTP id h7mr103619wmq.122.1641329335647;
-        Tue, 04 Jan 2022 12:48:55 -0800 (PST)
-Received: from ?IPV6:2003:d9:9708:b800:49a3:330d:2aba:c4a2? (p200300d99708b80049a3330d2abac4a2.dip0.t-ipconnect.de. [2003:d9:9708:b800:49a3:330d:2aba:c4a2])
-        by smtp.googlemail.com with ESMTPSA id c12sm17293190wrr.7.2022.01.04.12.48.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 12:48:55 -0800 (PST)
-Message-ID: <40ca86a1-ea36-0185-1ba5-c69005e46d3f@colorfullife.com>
-Date:   Tue, 4 Jan 2022 21:48:54 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RVzkHT/evz/UBD2bITCNNJEWZQF9qiy5Cy4cjCf+0oM=;
+        b=kInAJ+gQ3TcjcE0gqJHBNAi1AEN5fQuxV6K10C2Nb40jOJ7MzM4+6FS7gxhY1T31dG
+         w/HlRln+Mn9NkkaYbodWw3Nd7uY/JL93In9KjKPg2KRbj6UeoXyZbHQxfLQHS+mI7L3p
+         escq2uBB1XKzfUByZMNJuhyX49N9uDq+RpSubhMY6sV2qQIW4RTH0WE5iwQenkYUyt50
+         3LB4P91DsAeTnqi1evAQIXggK+uqBWEQKhuoH2OJpJLDJrB+BmmNm7r6+zGL29FyqYlJ
+         o1Wcbte6S1WjNqvOHS9oGS5YD6UxuzLeA1RfFeInevURrpJ8aSIWII6j2OljGRUzMw15
+         ggGg==
+X-Gm-Message-State: AOAM531lhV0Vh3SDy6+Pw1pP609wr5RVGmT1jWFAM1QIjpC/YdKRnoIN
+        OCYOhImEpGhPiMWa2i05M7OG1yXrKA==
+X-Google-Smtp-Source: ABdhPJzEuEUSPqpeb+HZHv5cZfQJ0CJo9W8/H4Hz48+iTTI351KMMU8nEoGwLSxXjG2akEEjDw2SAQ==
+X-Received: by 2002:a9d:4006:: with SMTP id m6mr37165854ote.173.1641329350890;
+        Tue, 04 Jan 2022 12:49:10 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id v5sm5082322oic.11.2022.01.04.12.49.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 12:49:10 -0800 (PST)
+Received: (nullmailer pid 1399221 invoked by uid 1000);
+        Tue, 04 Jan 2022 20:49:09 -0000
+Date:   Tue, 4 Jan 2022 14:49:09 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     David Heidelberg <david@ixit.cz>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        ~okias/devicetree@lists.sr.ht, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] dt-bindings: arm: merge qcom,idle-state with
+ idle-state
+Message-ID: <YdSyxY2SVXAqvNmS@robh.at.kernel.org>
+References: <20211224144835.39193-1-david@ixit.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2] ipc: Store mqueue sysctls in the ipc namespace
-Content-Language: en-US
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Alexey Gladkov <legion@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Containers <containers@lists.linux.dev>,
-        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Daniel Walsh <dwalsh@redhat.com>,
-        Davidlohr Bueso <dbueso@suse.de>,
-        Kirill Tkhai <ktkhai@virtuozzo.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Vasily Averin <vvs@virtuozzo.com>,
-        kernel test robot <lkp@intel.com>
-References: <0f0408bb7fbf3187966a9bf19a98642a5d9669fe.1641225760.git.legion@kernel.org>
- <792dcae82bc228cd0bec1fa80ed4d2c9340b0f8f.1641296947.git.legion@kernel.org>
- <c8edba64-9b4b-1ef8-f0b3-1b4beacf1551@colorfullife.com>
- <87v8yzfilp.fsf@email.froward.int.ebiederm.org>
-From:   Manfred Spraul <manfred@colorfullife.com>
-In-Reply-To: <87v8yzfilp.fsf@email.froward.int.ebiederm.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211224144835.39193-1-david@ixit.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Eric,
+On Fri, Dec 24, 2021 at 03:48:34PM +0100, David Heidelberg wrote:
+> Merge Qualcomm specific idle-state binding with generic one.
+> 
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> 
+> ---
+> v3:
+>  - integrate into idle-state.yml
+>  - orig. patch name was:
+>    "[v2] dt-bindings: arm/msm/qcom,idle-state convert to YAML"
+> 
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> ---
+>  .../devicetree/bindings/arm/idle-states.yaml  | 107 ++++++++++++++++++
+>  .../bindings/arm/msm/qcom,idle-state.txt      |  84 --------------
+>  2 files changed, 107 insertions(+), 84 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,idle-state.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/idle-states.yaml b/Documentation/devicetree/bindings/arm/idle-states.yaml
+> index 52bce5dbb11f..fde1557f2332 100644
+> --- a/Documentation/devicetree/bindings/arm/idle-states.yaml
+> +++ b/Documentation/devicetree/bindings/arm/idle-states.yaml
+> @@ -241,6 +241,64 @@ description: |+
+>    [6] ARM Linux Kernel documentation - Booting AArch64 Linux
+>        Documentation/arm64/booting.rst
+>  
+> +  ===========================================
+> +  5 - Qualcomm specific STATES
+> +  ===========================================
+> +
+> +  cpuidle-qcom is the cpuidle driver for Qualcomm SoCs and uses these idle
 
-On 1/4/22 19:42, Eric W. Biederman wrote:
-> Manfred Spraul <manfred@colorfullife.com> writes:
->   Hi Alexey,
->> On 1/4/22 12:51, Alexey Gladkov wrote:
->>> Right now, the mqueue sysctls take ipc namespaces into account in a
->>> rather hacky way. This works in most cases, but does not respect the
->>> user namespace.
->>>
->>> Within the user namespace, the user cannot change the /proc/sys/fs/mqueue/*
->>> parametres. This poses a problem in the rootless containers.
->>>
->>> To solve this I changed the implementation of the mqueue sysctls just
->>> like some other sysctls.
->>>
->>> Before this change:
->>>
->>> $ echo 5 | unshare -r -U -i tee /proc/sys/fs/mqueue/msg_max
->>> tee: /proc/sys/fs/mqueue/msg_max: Permission denied
->>> 5
->> Could you crosscheck that all (relevant) allocations in ipc/mqueue.c
->> use GFP_KERNEL_ACCOUNT?
-> They are not.
->
->> We should not allow normal users to use up all memory.
->>
->> Otherwise:
->> The idea is good, the limits do not really prevent using up all
->> memory, _ACCOUNT is the better approach.
->> And with _ACCOUNT, it doesn't hurt that the namespace root is able to
->> set limits.
-> Saying the cgroup kernel memory limit is the only thing that works, and
-> that is always better is silly.
->
->
-> First the cgroup kernel memory limits noted with ACCOUNT are not
-> acceptable on several kernel hot paths because they are so expensive.
+What's cpuidle?
 
-I was not aware that ACCOUNT allocations are very expensive.
+(Linux detail doesn't belong here)
 
-OTHO adding ACCOUNT resolved various out of memory crashes for IIRC 
-ipc/sem.c and/or ipc/msg.c. But we also do not have an RLIMIT for 
-ipc/sem.c or ipc/msg.c
+> +  states. Idle states have different enter/exit latency and residency values.
+> +  The idle states supported by the QCOM SoC are defined as -
+> +
+> +    * Standby
+> +    * Retention
+> +    * Standalone Power Collapse (Standalone PC or SPC)
+> +    * Power Collapse (PC)
+> +
+> +  Standby: Standby does a little more in addition to architectural clock gating.
+> +  When the WFI instruction is executed the ARM core would gate its internal
+> +  clocks. In addition to gating the clocks, QCOM cpus use this instruction as a
+> +  trigger to execute the SPM state machine. The SPM state machine waits for the
+> +  interrupt to trigger the core back in to active. This triggers the cache
+> +  hierarchy to enter standby states, when all cpus are idle. An interrupt brings
+> +  the SPM state machine out of its wait, the next step is to ensure that the
+> +  cache hierarchy is also out of standby, and then the cpu is allowed to resume
+> +  execution. This state is defined as a generic ARM WFI state by the ARM cpuidle
+> +  driver and is not defined in the DT. The SPM state machine should be
+> +  configured to execute this state by default and after executing every other
+> +  state below.
+> +
+> +  Retention: Retention is a low power state where the core is clock gated and
+> +  the memory and the registers associated with the core are retained. The
+> +  voltage may be reduced to the minimum value needed to keep the processor
+> +  registers active. The SPM should be configured to execute the retention
+> +  sequence and would wait for interrupt, before restoring the cpu to execution
+> +  state. Retention may have a slightly higher latency than Standby.
+> +
+> +  Standalone PC: A cpu can power down and warmboot if there is a sufficient time
+> +  between the time it enters idle and the next known wake up. SPC mode is used
+> +  to indicate a core entering a power down state without consulting any other
+> +  cpu or the system resources. This helps save power only on that core.  The SPM
+> +  sequence for this idle state is programmed to power down the supply to the
+> +  core, wait for the interrupt, restore power to the core, and ensure the
+> +  system state including cache hierarchy is ready before allowing core to
+> +  resume. Applying power and resetting the core causes the core to warmboot
+> +  back into Elevation Level (EL) which trampolines the control back to the
+> +  kernel. Entering a power down state for the cpu, needs to be done by trapping
+> +  into a EL. Failing to do so, would result in a crash enforced by the warm boot
+> +  code in the EL for the SoC. On SoCs with write-back L1 cache, the cache has to
+> +  be flushed in s/w, before powering down the core.
+> +
+> +  Power Collapse: This state is similar to the SPC mode, but distinguishes
+> +  itself in that the cpu acknowledges and permits the SoC to enter deeper sleep
+> +  modes. In a hierarchical power domain SoC, this means L2 and other caches can
+> +  be flushed, system bus, clocks - lowered, and SoC main XO clock gated and
+> +  voltages reduced, provided all cpus enter this state.  Since the span of low
+> +  power modes possible at this state is vast, the exit latency and the residency
+> +  of this low power mode would be considered high even though at a cpu level,
+> +  this essentially is cpu power down. The SPM in this state also may handshake
+> +  with the Resource power manager (RPM) processor in the SoC to indicate a
+> +  complete application processor subsystem shut down.
 
-Let me rephrase my question:
+I'm on the fence whether any of this belongs here... But I don't have a 
+better suggestion.
 
-When we allow non-root users to write to /proc/sys/fs/mqueue/msg_max, 
-are there any _relevant_ allocations that bypass _all_ limits?
+> +
+>  properties:
+>    $nodename:
+>      const: idle-states
+> @@ -323,6 +381,44 @@ patternProperties:
+>        - exit-latency-us
+>        - min-residency-us
+>  
+> +  "^(ret|spc|pc)$":
 
-As you write, we have RLIMIT_MSGQUEUE.
+Either these need to be added to the existing pattern for node names or 
+the node names in the dts files be changed to match the existing 
+binding. I think it is safe to do the latter as the driver doesn't care 
+about node names.
 
-And several allocations for ipc/mqueue already use ACCOUNT:
+And then you just need to update the 'compatible' schema.
 
-- the messages themselves, via load_msg()/alloc_msg().
-
-- the inodes, via mqueue_inode_cachep().
-
-
-> Further the memory cgroup kernel memory limit is not always delegated to
-> non-root users, which precludes using the memory cgroup kernel memory
-> limit in many situations.
->
->
-> The RLIMIT_MQUEUE limit definitely works, and as I read the kernel
-> source correct it defaults to MQ_BYTES_MAX aka 819200.  A limit of
-> 800KiB should prevent using up all of system memory, except on very low
-> memory machines.
-
-I'd agree that 800 kB is not relevant. But we need to be certain that 
-there are no loopholes.
-
-I do not see anything relevant, e.g. 0-byte messages should be covered 
-by mq_maxmsg. But perhaps I overlook something.
-
-> So please let's not confuse apples and oranges, and let's use the tools
-> in the kernel where they work, and not set them up in contest with each
-> other.
->
-> Rlimits with generous but real limits in general are good at catching
-> when a program misbehaves.  The cgroups are better at setting a total
-> memory cap.  In this case the rlimit cap is low enough it simply should
-> not matter.
->
-> What has been fixed with the ucount rlimits is that (baring
-> implementation bugs) it is now not possible to create a user namespace
-> and escape your rlimits by using multiple users.
-I'll try to check the patch in detail in the next few days.
-
-
---
-
-     Manfred
-
+> +    type: object
+> +    description:
+> +      Each state node represents a domain idle state description.
+> +
+> +    properties:
+> +      compatible:
+> +        items:
+> +          - enum:
+> +              - qcom,idle-state-ret
+> +              - qcom,idle-state-spc
+> +              - qcom,idle-state-pc
+> +          - const: arm,idle-state
+> +
+> +      entry-latency-us:
+> +        description:
+> +          The worst case latency in microseconds required to enter the idle
+> +          state. Note that, the exit-latency-us duration may be guaranteed only
+> +          after the entry-latency-us has passed.
+> +
+> +      exit-latency-us:
+> +        description:
+> +          The worst case latency in microseconds required to exit the idle
+> +          state.
+> +
+> +      min-residency-us:
+> +        description:
+> +          The minimum residency duration in microseconds after which the idle
+> +          state will yield power benefits, after overcoming the overhead while
+> +          entering the idle state.
+> +
+> +    required:
+> +      - compatible
+> +      - entry-latency-us
+> +      - exit-latency-us
+> +      - min-residency-us
+> +
+> +
+>  additionalProperties: false
+>  
+>  examples:
+> @@ -658,4 +754,15 @@ examples:
+>          };
+>      };
+>  
+> +  - |
+> +    // Example 3 - QCOM SPC
+> +    idle-states {
+> +      cpu_spc: spc {
+> +        compatible = "qcom,idle-state-spc", "arm,idle-state";
+> +        entry-latency-us = <150>;
+> +        exit-latency-us = <200>;
+> +        min-residency-us = <2000>;
+> +      };
+> +    };
+> +
+>  ...

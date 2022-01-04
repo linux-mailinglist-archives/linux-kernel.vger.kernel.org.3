@@ -2,86 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AFEB4843FD
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:59:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2184484400
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:59:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234506AbiADO67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:58:59 -0500
-Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:52494 "EHLO
-        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231989AbiADO66 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:58:58 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0V0z5cF9_1641308333;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V0z5cF9_1641308333)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 04 Jan 2022 22:58:55 +0800
-Date:   Tue, 4 Jan 2022 22:58:53 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Jeffle Xu <jefflexu@linux.alibaba.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
-        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
-        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 07/23] erofs: add nodev mode
-Message-ID: <YdRgrWEDU8sJVExX@B-P7TQMD6M-0146.local>
-Mail-Followup-To: Jeffle Xu <jefflexu@linux.alibaba.com>,
-        dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
-        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
-        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
-        linux-kernel@vger.kernel.org
-References: <20211227125444.21187-1-jefflexu@linux.alibaba.com>
- <20211227125444.21187-8-jefflexu@linux.alibaba.com>
- <YdRattisu+ITYvvZ@B-P7TQMD6M-0146.local>
+        id S234529AbiADO7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:59:25 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:36374 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231989AbiADO7Z (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 09:59:25 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowADHz5+vYNRhFHfGBQ--.33414S2;
+        Tue, 04 Jan 2022 22:58:55 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     miquel.raynal@bootlin.com
+Cc:     kyungmin.park@samsung.com, richard@nod.at, vigneshr@ti.com,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v2] mtd: onenand: Check for error irq
+Date:   Tue,  4 Jan 2022 22:58:54 +0800
+Message-Id: <20220104145854.1987853-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YdRattisu+ITYvvZ@B-P7TQMD6M-0146.local>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowADHz5+vYNRhFHfGBQ--.33414S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Wr13tw18Gr4UWrWUGF15urg_yoWkArc_CF
+        sa9FyxGrW0yr97u3Zxtw1fAr92kF4DWr1DZa90qrsIq345tFyFq3yDuF15ur17u34UKFy5
+        Cry5X3yxAw13JjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbc8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Jr0_
+        Gr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW5XwCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+        cVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUO4E_DUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 10:33:26PM +0800, Gao Xiang wrote:
-> On Mon, Dec 27, 2021 at 08:54:28PM +0800, Jeffle Xu wrote:
-> > Until then erofs is exactly blockdev based filesystem. In other using
-> > scenarios (e.g. container image), erofs needs to run upon files.
-> > 
-> > This patch introduces a new nodev mode, in which erofs could be mounted
-> > from a bootstrap blob file containing the complete erofs image.
-> > 
-> > The following patch will introduce a new mount option "uuid", by which
-> > users could specify the bootstrap blob file.
-> > 
-> > Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
-> 
-> I think the order of some patches in this patchset can be improved.
-> 
-> Take this patch as an example. This patch introduces a new mount
-> option called "uuid", so the kernel will just accept it (which
-> generates a user-visible impact) after this patch but it doesn't
-> actually work.
-> 
-> Therefore, we actually have three different behaviors here:
->  - kernel doesn't support "uuid" mount option completely;
->  - kernel support "uuid" but it doesn't work;
->  - kernel support "uuid" correctly (maybe after some random patch);
-> 
-> Actually that is bad for bisecting since there are some commits
-> having temporary behaviors. And we don't know which commit
-> actually fully implements this "uuid" mount option.
-> 
-> So personally I think the proper order is just like the bottom-up
-> approach, and make sure each patch can be tested / bisected
-> independently.
+As it is possible that there is no suitable irq, platform_get_irq()
+will return error number.
+Therefore, it might be better to check it and return error if fails
+to guarantee the success of the probe.
 
-Oh, I may misread this patch, but I still think we'd better to
-avoid dead paths "TODO" like this as much as possible.
+Fixes: 26777d37216c ("mtd: Move onenand code base to drivers/mtd/nand/onenand")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog:
 
-Just do in the bottom-up way.
+v1 -> v2
 
-Thanks,
-Gao Xiang
+* Change 1. Change the commit message.
+---
+ drivers/mtd/nand/onenand/generic.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/mtd/nand/onenand/generic.c b/drivers/mtd/nand/onenand/generic.c
+index 8b6f4da5d720..a4b8b65fe15f 100644
+--- a/drivers/mtd/nand/onenand/generic.c
++++ b/drivers/mtd/nand/onenand/generic.c
+@@ -53,7 +53,12 @@ static int generic_onenand_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	info->onenand.mmcontrol = pdata ? pdata->mmcontrol : NULL;
+-	info->onenand.irq = platform_get_irq(pdev, 0);
++
++	err = platform_get_irq(pdev, 0);
++	if (err < 0)
++		goto out_iounmap;
++
++	info->onenand.irq = err;
+ 
+ 	info->mtd.dev.parent = &pdev->dev;
+ 	info->mtd.priv = &info->onenand;
+-- 
+2.25.1
+

@@ -2,117 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCBB7483971
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 01:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6448F483973
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 01:22:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbiADAPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 19:15:55 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:37929 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbiADAPy (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 19:15:54 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JSY6w5LK0z4y41;
-        Tue,  4 Jan 2022 11:15:52 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641255353;
-        bh=BkGjYzrwCeaT9F8zSkNUuvWI/Njr0yVkcljfWHn7nBU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=XEmtNenXI71epZxNhwuN5LYhL7ugzDxLGYq73uEGVow3OGqfL6LS8iuJcr26egbkf
-         S/Ng955xXvt1oAn/8cKNK+whe5D2T+IAyJyhTghfJ+9bZlZhW8MAd64pWm2LBza2T/
-         8aPaxdFX35JHe6mBZLXDEucMubBNu2Ezp85WXWJfM/gIoX0sV3z3/WJ05Tjo4TMalG
-         iffWRXuMG1f/lIYp5SuPtXBrd/hsdXGOu7oy71nKi2gZ91R65IbMhNFlNr2Tk2OlEN
-         ahq3eGrAB/bO9bGhaGAR8TN7iNhZnC7uUeLXzE5/RTkju7hp8V54AOHUo96AT00JjF
-         MYmqTgxHzsVow==
-Date:   Tue, 4 Jan 2022 11:15:51 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the pm tree
-Message-ID: <20220104111551.7f26e893@canb.auug.org.au>
+        id S231446AbiADAWL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Jan 2022 19:22:11 -0500
+Received: from mail.chamber.uz ([217.30.169.104]:50837 "EHLO mail.chamber.uz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229527AbiADAWK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 19:22:10 -0500
+Received: from [192.168.8.132] (172.24.0.9) by mail.chamber.uz (172.24.0.254)
+ with Microsoft SMTP Server (TLS) id 14.2.347.0; Tue, 4 Jan 2022 05:21:01
+ +0500
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8rVNh+u5XBEjZLUpjZfghpN";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: $ 1,500,000.00 for You.
+To:     Recipients <bx@chamber.uz>
+From:   <bx@chamber.uz>
+Date:   Mon, 3 Jan 2022 16:20:36 -0800
+Reply-To: <warrenebuffett055@gmail.com>
+Message-ID: <cb276543-8afe-40a4-930a-9361f1b5e397@MX2010.chamber.local>
+X-Originating-IP: [172.24.0.9]
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/8rVNh+u5XBEjZLUpjZfghpN
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-Hi all,
+My name is Warren E. Buffett an American business tycoon, investor and philanthropist. am the most successful investor in the world and CEO,Berkshire Hathaway, I believe strongly in giving while living’ I had one idea that never changed in my mind ? that you should use your wealth to help people and i have decided to give {$ 1,500,000.00} One Million Five Hundred Thousand United state Dollars, to randomly selected individuals worldwide. On receipt of this email, you should count yourself as the lucky individual. Your email address was chosen online while searching at random. Kindly get back to me at your earliest convenience, so I know your email address is valid.
 
-After merging the pm tree, today's linux-next build (x86_84 allmodconfig)
-failed like this:
+You Can Google my name for more information:( Warren Buffett ).
 
-sound/soc/sh/rz-ssi.c: In function 'rz_ssi_probe':
-sound/soc/sh/rz-ssi.c:1023:2: error: ignoring return value of 'pm_runtime_r=
-esume_and_get' declared with attribute 'warn_unused_result' [-Werror=3Dunus=
-ed-result]
- 1023 |  pm_runtime_resume_and_get(&pdev->dev);
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+Send your reply to (warrenebuffett055@gmail.com) to enable me to give you more details about this Donation.
 
-Caused by commit
+I will be waiting for your response.
 
-  877d952c261e ("PM: runtime: Annotate pm_runtime_resume_and_get() as __mus=
-t_check")
-
-This also produced the following warnings in my arm multi_v7_defconfig
-build:
-
-drivers/crypto/stm32/stm32-hash.c: In function 'stm32_hash_hw_init':
-drivers/crypto/stm32/stm32-hash.c:816:2: warning: ignoring return value of =
-'pm_runtime_resume_and_get' declared with attribute 'warn_unused_result' [-=
-Wunused-result]
-  816 |  pm_runtime_resume_and_get(hdev->dev);
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/crypto/stm32/stm32-hash.c: In function 'stm32_hash_import':
-drivers/crypto/stm32/stm32-hash.c:1003:2: warning: ignoring return value of=
- 'pm_runtime_resume_and_get' declared with attribute 'warn_unused_result' [=
--Wunused-result]
- 1003 |  pm_runtime_resume_and_get(hdev->dev);
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/crypto/stm32/stm32-hash.c: In function 'stm32_hash_export':
-drivers/crypto/stm32/stm32-hash.c:965:2: warning: ignoring return value of =
-'pm_runtime_resume_and_get' declared with attribute 'warn_unused_result' [-=
-Wunused-result]
-  965 |  pm_runtime_resume_and_get(hdev->dev);
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/crypto/stm32/stm32-cryp.c: In function 'stm32_cryp_hw_init':
-drivers/crypto/stm32/stm32-cryp.c:545:2: warning: ignoring return value of =
-'pm_runtime_resume_and_get' declared with attribute 'warn_unused_result' [-=
-Wunused-result]
-  545 |  pm_runtime_resume_and_get(cryp->dev);
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-I have used the pm tree from next-20211224 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/8rVNh+u5XBEjZLUpjZfghpN
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHTkbcACgkQAVBC80lX
-0GwBKAgAkP9MzfHPRwpQs1r8tZP6C1JB5PmQJgtIzu/74+p5IDCdI2ps/Vjpe/z8
-89cP3Y99d1hsinQytnX/fBouU8Nf3FrCcuHrvfROJ37bzyzXpH0P8SugmuyslvRW
-iiJAccgMl9X1ltuU60leQFU/MtbC/67q+tQIsV4DyFi2qnYFnRQYFQ6TP49d0VHo
-x2j03dCVQc4iq+QjLyHUmfe6AdrRzNQU6oDAObZsJZ95nS0tK9LVfxeb8jOrq+l9
-z2QRBIM+jJE6CtCO/NecSQuoaoXSz1IokUF+3b3u97aRzju0DLFNBOSQYOgwolp7
-nnVmcdqrqFR2bR6f0dp0F4zLtFNhGg==
-=n7yp
------END PGP SIGNATURE-----
-
---Sig_/8rVNh+u5XBEjZLUpjZfghpN--
+Reply me for more information on this e-mail (warrenebuffett055@gmail.com)

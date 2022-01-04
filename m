@@ -2,132 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D14C44842CF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:53:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C2C4842D8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:54:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233847AbiADNxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 08:53:10 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:44896 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229535AbiADNxK (ORCPT
+        id S233892AbiADNyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 08:54:06 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:17325 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233881AbiADNyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 08:53:10 -0500
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 204B2g5v030926;
-        Tue, 4 Jan 2022 14:52:54 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : from : to
- : references : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=praGwGEYsgBaggT9u2yedfPPFakmcyA85Vqx86E0DLw=;
- b=eRJKRUJJP3Glsf478hzyyAE32YEW/QwN0nnEOsAGNFZsoZvPFbtDd/W5h7fVfw/f44T2
- crzn2TTt1KtlpXOo9fOBULANNAS/GXAaTY16ADSoBi0iqbRLGW5fhzirEwLFoYiUFCZs
- axE14gZElZ4e1Ei3BdK8uGVRTdfNf4KVbmYsVPOzbQw72pw5NedhyFBw2WJu/ZdGL5nm
- o2udpmgEUElmIkVGSlW2864otVvo6C6b8h7PYTn5podQ+YkihTzV4KU6B6MxnbKBHLVS
- tonBpdmrNZ3bv4ML46n6xAdaXZp+SJOfDIo0QGVS8gOKDkEUVY7llaFdkN0Lfy00ID5D zA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dcewm29a2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Jan 2022 14:52:54 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4396A10002A;
-        Tue,  4 Jan 2022 14:52:54 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2E76D24241C;
-        Tue,  4 Jan 2022 14:52:54 +0100 (CET)
-Received: from lmecxl0993.lme.st.com (10.75.127.50) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 4 Jan
- 2022 14:52:53 +0100
-Subject: Re: [PATCH] drm/stm: remove conflicting framebuffers
-From:   Philippe CORNU <philippe.cornu@foss.st.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20211206134735.13537-1-yannick.fertre@foss.st.com>
- <10c5672d-a228-ed9e-2f32-1ce9ae86dbcc@suse.de>
- <58cc264b-7b46-7869-1c38-f6d79a4daafe@foss.st.com>
-Message-ID: <5c58402b-9219-2789-f8c1-67cf2149beac@foss.st.com>
-Date:   Tue, 4 Jan 2022 14:52:52 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 4 Jan 2022 08:54:05 -0500
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JSvFn6Trrz9rwF;
+        Tue,  4 Jan 2022 21:53:01 +0800 (CST)
+Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
+ (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 4 Jan
+ 2022 21:54:03 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <mezin.alexander@gmail.com>, <jdelvare@suse.com>,
+        <linux@roeck-us.net>
+CC:     <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH -next] hwmon: (nzxt-smart2) Fix build with CONFIG_PM=n
+Date:   Tue, 4 Jan 2022 21:53:28 +0800
+Message-ID: <20220104135328.604-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-In-Reply-To: <58cc264b-7b46-7869-1c38-f6d79a4daafe@foss.st.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG1NODE2.st.com (10.75.127.2) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-04_06,2022-01-04_01,2021-12-02_01
+Content-Type: text/plain
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+drivers/hwmon/nzxt-smart2.c:707:12: error: 'nzxt_smart2_hid_reset_resume' defined but not used [-Werror=unused-function]
+  707 | static int nzxt_smart2_hid_reset_resume(struct hid_device *hdev)
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Move it into #ifdef block to fix this.
 
-On 12/14/21 11:15 AM, Philippe CORNU wrote:
-> 
-> 
-> On 12/6/21 3:23 PM, Thomas Zimmermann wrote:
->> Hi
->>
->> Am 06.12.21 um 14:47 schrieb Yannick Fertre:
->>> In case of using simplefb or another conflicting framebuffer,
->>> call drm_aperture_remove_framebuffers() to remove memory allocated.
->>>
->>> Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
->>
->> The patch should have contained a note that this is version 2 of the 
->> change with a short changelog. Anyway
->>
->> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
->>
->> Best regards
->> Thomas
->>
->>> ---
->>>   drivers/gpu/drm/stm/drv.c | 5 +++++
->>>   1 file changed, 5 insertions(+)
->>>
->>> diff --git a/drivers/gpu/drm/stm/drv.c b/drivers/gpu/drm/stm/drv.c
->>> index 222869b232ae..9f441aadf2d5 100644
->>> --- a/drivers/gpu/drm/stm/drv.c
->>> +++ b/drivers/gpu/drm/stm/drv.c
->>> @@ -14,6 +14,7 @@
->>>   #include <linux/of_platform.h>
->>>   #include <linux/pm_runtime.h>
->>> +#include <drm/drm_aperture.h>
->>>   #include <drm/drm_atomic.h>
->>>   #include <drm/drm_atomic_helper.h>
->>>   #include <drm/drm_drv.h>
->>> @@ -183,6 +184,10 @@ static int stm_drm_platform_probe(struct 
->>> platform_device *pdev)
->>>       DRM_DEBUG("%s\n", __func__);
->>> +    ret = drm_aperture_remove_framebuffers(false, &drv_driver);
->>> +    if (ret)
->>> +        return ret;
->>> +
-> 
-> Hi Yannick,
-> and many thanks for your patch.
-> Acked-by: Philippe Cornu <philippe.cornu@foss.st.com>
-> Philippe :-)
-> 
-> 
->>>       dma_set_coherent_mask(dev, DMA_BIT_MASK(32));
->>>       ddev = drm_dev_alloc(&drv_driver, dev);
->>>
->>
+Fixes: 0e43f31ee52f ("hwmon: add driver for NZXT RGB&Fan Controller/Smart Device v2.")
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ drivers/hwmon/nzxt-smart2.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Applied on drm-misc-next.
-Many thanks for your patch,
-Philippe :-)
+diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
+index 534d39b8908e..4963d630394a 100644
+--- a/drivers/hwmon/nzxt-smart2.c
++++ b/drivers/hwmon/nzxt-smart2.c
+@@ -704,6 +704,7 @@ static int nzxt_smart2_hid_raw_event(struct hid_device *hdev,
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_PM
+ static int nzxt_smart2_hid_reset_resume(struct hid_device *hdev)
+ {
+ 	struct drvdata *drvdata = hid_get_drvdata(hdev);
+@@ -720,6 +721,7 @@ static int nzxt_smart2_hid_reset_resume(struct hid_device *hdev)
+ 
+ 	return init_device(drvdata, drvdata->update_interval);
+ }
++#endif
+ 
+ static int nzxt_smart2_hid_probe(struct hid_device *hdev,
+ 				 const struct hid_device_id *id)
+-- 
+2.17.1
+

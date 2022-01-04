@@ -2,81 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A13194845D0
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:10:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CCE34845D3
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235169AbiADQKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 11:10:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50124 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235151AbiADQKD (ORCPT
+        id S235179AbiADQKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 11:10:55 -0500
+Received: from mail-wr1-f44.google.com ([209.85.221.44]:38645 "EHLO
+        mail-wr1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232163AbiADQKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 11:10:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB9CC061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 08:10:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 57920B80EF3
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 16:10:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1017CC36AED;
-        Tue,  4 Jan 2022 16:09:57 +0000 (UTC)
-Date:   Tue, 4 Jan 2022 16:09:54 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "alex@ghiti.fr" <alex@ghiti.fr>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Steve Capper <steve.capper@arm.com>
-Subject: Re: [PATCH v6 03/14] mm: Add len and flags parameters to
- arch_get_mmap_end()
-Message-ID: <YdRxUhy/lmfwGKYI@arm.com>
-References: <cover.1639736449.git.christophe.leroy@csgroup.eu>
- <f1014efff7d26279d8c687d759af9f709cd50453.1639736449.git.christophe.leroy@csgroup.eu>
+        Tue, 4 Jan 2022 11:10:54 -0500
+Received: by mail-wr1-f44.google.com with SMTP id e5so77161330wrc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 08:10:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dLfIM00O/Ipr0crkhKZyqpI5imxvGGmn0KKsbMAqWes=;
+        b=uN1ZdPaEjsvQWEJoS2Vu8KTYGGQzYvk5QzG3pP0Jmbgh4UZjWklVANb1GzqUkl6Ecr
+         zj7emgjF/Et3NpFif7D8njdiVzdl54X68Yqu7z6Lec0nCw2FdPS55YFprR9qtYPTFWbb
+         LfGnBFkk1FW0d3fHADMRMtkH5Vu7U9JBu6VoodONvZC/JvHKoVRUydK9JhcU+vOXHWQ6
+         AAjh6lJXGNppAvn3qAJPkv/UPwp9ESk33rroOMDm+2UIDX2ShMB2EotfrV6xXbEUDKSa
+         T1xOyJGe3eSkOiThX8+EaDVDT9VgoSpuY8S/opggAItts4EveL/yep7zlrU965Q5riq5
+         Civg==
+X-Gm-Message-State: AOAM533vyCHMByJTjjT6PKkfNjVIc72CPnWxW38BPfPY6lG75NKtx+ms
+        ZgVVXWpwBd6XZ4TImKAFaMoBxeX/0pc=
+X-Google-Smtp-Source: ABdhPJxAPRVEKFC6iEdVbnzKtmgbxeyx+Wsc6yqjkxA1VCzgkvg7TVaN0aQ8+ZqqWU4v4ZEUkUnhNA==
+X-Received: by 2002:a5d:420d:: with SMTP id n13mr38257101wrq.498.1641312653549;
+        Tue, 04 Jan 2022 08:10:53 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id h204sm38564690wmh.33.2022.01.04.08.10.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 08:10:53 -0800 (PST)
+Date:   Tue, 4 Jan 2022 16:10:51 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Wei Liu <wei.liu@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Tianyu Lan <ltykernel@gmail.com>, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, michael.h.kelley@microsoft.com,
+        kys@microsoft.com, Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        vkuznets@redhat.com, brijesh.singh@amd.com, konrad.wilk@oracle.com,
+        parri.andrea@gmail.com, thomas.lendacky@amd.com,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] Swiotlb: Add CONFIG_HAS_IOMEM check around memremap() in
+ the swiotlb_mem_remap()
+Message-ID: <20220104161051.yyvxjfb7ghg67ryr@liuwe-devbox-debian-v2>
+References: <20211231165640.1245751-1-ltykernel@gmail.com>
+ <YdKrxgnpT0Dc0t2T@infradead.org>
+ <20220104145155.hm7j5byhddn4zhb2@liuwe-devbox-debian-v2>
+ <20220104150307.GA23792@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f1014efff7d26279d8c687d759af9f709cd50453.1639736449.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <20220104150307.GA23792@lst.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 10:27:23AM +0000, Christophe Leroy wrote:
-> Powerpc needs flags and len to make decision on arch_get_mmap_end().
+On Tue, Jan 04, 2022 at 04:03:07PM +0100, Christoph Hellwig wrote:
+> On Tue, Jan 04, 2022 at 02:51:55PM +0000, Wei Liu wrote:
+> > > Please stub out all of swiotlb_mem_remap instead of the ifdef inside the
+> > > function.
+> > 
+> > Does this look okay to you?
 > 
-> So add them as parameters to arch_get_mmap_end().
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Cc: Steve Capper <steve.capper@arm.com>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> ---
->  arch/arm64/include/asm/processor.h | 4 ++--
->  mm/mmap.c                          | 6 +++---
->  2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
-> index 6f41b65f9962..88c696350ace 100644
-> --- a/arch/arm64/include/asm/processor.h
-> +++ b/arch/arm64/include/asm/processor.h
-> @@ -91,8 +91,8 @@
->  #endif /* CONFIG_COMPAT */
->  
->  #ifndef CONFIG_ARM64_FORCE_52BIT
-> -#define arch_get_mmap_end(addr) ((addr > DEFAULT_MAP_WINDOW) ? TASK_SIZE :\
-> -				DEFAULT_MAP_WINDOW)
-> +#define arch_get_mmap_end(addr, len, flags) ((addr > DEFAULT_MAP_WINDOW) ? TASK_SIZE :\
-> +									   DEFAULT_MAP_WINDOW)
+> Yes, thanks!
 
-Nitpick, move the "((addr > ...." on the following line. Either way,
+Thanks for confirming!
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+I will turn this into an ack and apply the diff to hyperv-next.
+
+Wei.

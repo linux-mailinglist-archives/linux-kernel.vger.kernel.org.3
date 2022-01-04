@@ -2,216 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2333D4848C7
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:46:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC1D4848CA
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbiADTqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 14:46:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43414 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbiADTqh (ORCPT
+        id S231370AbiADTrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 14:47:20 -0500
+Received: from out03.mta.xmission.com ([166.70.13.233]:44996 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230104AbiADTrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 14:46:37 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670E8C061792
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 11:46:37 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id 8so33123704pfo.4
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 11:46:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:date:message-id:in-reply-to:references:user-agent
-         :subject:mime-version;
-        bh=wgNeYCtrymTIkc3sqgAJU9v3yOnDzhVcJrXHoNdomGw=;
-        b=fnk6shPGt4mLwIiN5V+KMC/v4iGqd837Oo6ONR9Eoe4crvrQX89OKBwHYL3S09BLxD
-         R55fuKqjYAm9pvd/iaw7jeC4siIfmbAal/GtGTXdxjydkG6LPBJvlhnW5EcpqkTF4YjR
-         tNwO4eZwhD6SFvdNy5F59I3eYDljcUHHHN8r4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:date:message-id:in-reply-to
-         :references:user-agent:subject:mime-version;
-        bh=wgNeYCtrymTIkc3sqgAJU9v3yOnDzhVcJrXHoNdomGw=;
-        b=vfjnDbDCjZB0wHWxR0uwmWtv8ZlFF5wX7IYSbWeTCE4kLlj2DCbn4X7D2J+Fe/2qsb
-         cLpA6KMaDIxezCWF7DsN4eYXKbOzSCOFY8+q+HqSTsg6a1KwvxkMIVAM/L8VO8L6cBje
-         ErAvz/60vi59RWmkJH5Pg+1l0q8E/cbxQVkQZrsxdQb6qtMq9ZiA73fty7UB2jWMM/LL
-         D22ocbft47rA5awAxEd4C75mdVqaCOMdLdPkQNaLDdBWD7nRkzRk2Nii/UvQvQpja0W8
-         SEl/IXa9Y+5HcTPaPCHnaS5H5QgOCDUWYZuV5ITz4pV7n2YbDmYbcEva1xhJvLWBjy4V
-         mHMA==
-X-Gm-Message-State: AOAM532fiwFXtnA4gvJN0M/wvV+UA+VOTdAF9N3opcO6llRO6dOBn+1e
-        8QnP8wLIPn2vseKv0ybxSqlK2A==
-X-Google-Smtp-Source: ABdhPJzcn8Mg+FCPER4ceqy8hmq+FlExP4+JejlJRWDRdiFfMNc5K5/YFJFCq0oj95NxB8BxbqhMhg==
-X-Received: by 2002:a05:6a00:18a9:b0:4ba:cba6:868e with SMTP id x41-20020a056a0018a900b004bacba6868emr51578435pfh.20.1641325596823;
-        Tue, 04 Jan 2022 11:46:36 -0800 (PST)
-Received: from [192.168.178.38] (f140230.upc-f.chello.nl. [80.56.140.230])
-        by smtp.gmail.com with ESMTPSA id s34sm45209428pfg.198.2022.01.04.11.46.27
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 04 Jan 2022 11:46:35 -0800 (PST)
-From:   Arend Van Spriel <arend.vanspriel@broadcom.com>
-To:     Hector Martin <marcan@marcan.st>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        "Chi-hsien Lin" <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-CC:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        "Pieter-Paul Giesberts" <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>,
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        <SHA-cyfmac-dev-list@infineon.com>
-Date:   Tue, 04 Jan 2022 20:46:24 +0100
-Message-ID: <17e26a0de80.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
-In-Reply-To: <20220104072658.69756-24-marcan@marcan.st>
-References: <20220104072658.69756-1-marcan@marcan.st>
- <20220104072658.69756-24-marcan@marcan.st>
-User-Agent: AquaMail/1.33.0 (build: 103300102)
-Subject: Re: [PATCH v2 23/35] brcmfmac: cfg80211: Add support for scan params v2
+        Tue, 4 Jan 2022 14:47:15 -0500
+Received: from in02.mta.xmission.com ([166.70.13.52]:37404)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n4pm6-00GCPA-4B; Tue, 04 Jan 2022 12:47:14 -0700
+Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:36000 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n4pm5-009vcO-0I; Tue, 04 Jan 2022 12:47:13 -0700
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+        <20211213225350.27481-1-ebiederm@xmission.com>
+        <CAHk-=wiS2P+p9VJXV_fWd5ntashbA0QVzJx15rTnWOCAAVJU_Q@mail.gmail.com>
+Date:   Tue, 04 Jan 2022 13:47:05 -0600
+In-Reply-To: <CAHk-=wiS2P+p9VJXV_fWd5ntashbA0QVzJx15rTnWOCAAVJU_Q@mail.gmail.com>
+        (Linus Torvalds's message of "Tue, 4 Jan 2022 10:44:59 -0800")
+Message-ID: <87sfu3b7wm.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000002de45c05d4c6e534"
+Content-Type: text/plain
+X-XM-SPF: eid=1n4pm5-009vcO-0I;;;mid=<87sfu3b7wm.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX19/FjqjLqZn3YC2tQG1d74XlOdfVI1K+jo=
+X-SA-Exim-Connect-IP: 68.110.24.146
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa02.xmission.com
+X-Spam-Level: **
+X-Spam-Status: No, score=2.2 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,XMNoVowels,XMSubLong,
+        XM_B_SpammyWords autolearn=disabled version=3.4.2
+X-Spam-Virus: No
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4999]
+        *  1.5 XMNoVowels Alpha-numberic number with no vowels
+        *  0.7 XMSubLong Long Subject
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa02 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.2 XM_B_SpammyWords One or more commonly used spammy words
+X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Linus Torvalds <torvalds@linux-foundation.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 533 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 4.6 (0.9%), b_tie_ro: 3.2 (0.6%), parse: 1.22
+        (0.2%), extract_message_metadata: 14 (2.7%), get_uri_detail_list: 3.5
+        (0.7%), tests_pri_-1000: 12 (2.2%), tests_pri_-950: 1.08 (0.2%),
+        tests_pri_-900: 0.80 (0.2%), tests_pri_-90: 117 (21.9%), check_bayes:
+        103 (19.4%), b_tokenize: 7 (1.4%), b_tok_get_all: 8 (1.6%),
+        b_comp_prob: 2.2 (0.4%), b_tok_touch_all: 82 (15.4%), b_finish: 0.80
+        (0.2%), tests_pri_0: 372 (69.7%), check_dkim_signature: 0.41 (0.1%),
+        check_dkim_adsp: 2.7 (0.5%), poll_dns_idle: 1.38 (0.3%), tests_pri_10:
+        1.84 (0.3%), tests_pri_500: 6 (1.2%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 1/8] signal: Make SIGKILL during coredumps an explicit special case
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000002de45c05d4c6e534
-Content-Type: text/plain; format=flowed; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Linus Torvalds <torvalds@linux-foundation.org> writes:
 
-On January 4, 2022 8:30:51 AM Hector Martin <marcan@marcan.st> wrote:
-
-> This new API version is required for at least the BCM4387 firmware. Add
-> support for it, with a fallback to the v1 API.
+> On Mon, Dec 13, 2021 at 2:54 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+>>
+>>
+>>         if (signal->flags & (SIGNAL_GROUP_EXIT | SIGNAL_GROUP_COREDUMP)) {
+>> -               if (!(signal->flags & SIGNAL_GROUP_EXIT))
+>> -                       return sig == SIGKILL;
+>> +               struct core_state *core_state = signal->core_state;
+>> +               if (core_state) {
 >
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> ---
-> .../broadcom/brcm80211/brcmfmac/cfg80211.c    | 113 ++++++++++++++----
-> .../broadcom/brcm80211/brcmfmac/feature.c     |   1 +
-> .../broadcom/brcm80211/brcmfmac/feature.h     |   4 +-
-> .../broadcom/brcm80211/brcmfmac/fwil_types.h  |  49 +++++++-
-> 4 files changed, 145 insertions(+), 22 deletions(-)
+> This change is very confusing.
+>
+> Also, why does it do that 'signal->core_state->dumper.task', when we
+> already know that it's the same as 'signal->group_exit_task'?
+>
+> The only thing that sets 'signal->core_state' also sets
+> 'signal->group_exit_task', and the call chain has set both to the same
+> task.
+>
+> So the code is odd and makes little sense.
 
-Compiling this patch with C=2 gives following warnings:
+As you say signal->group_exit_task, and core_state->dumper.task point to
+the same task.  So it may be a little silly when viewed independently of
+everything else to use core_state->dumper.task instead of
+group_exit_task as it is an extra cache line dereference.
 
-drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1086:28: 
-warning: incorrect type in assignment (different base types)
-drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1086:28: 
-expected restricted __le16 [usertype] version
-drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1086:28: got int
-drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1148:38: 
-warning: incorrect type in assignment (different base types)
-drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1148:38: 
-expected restricted __le32 [usertype] scan_type
-drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1148:38: got int
-drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:789:30: 
-warning: incorrect type in assignment (different base types)
-drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:789:30: 
-expected unsigned char [usertype] scan_type
-drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:789:30: got 
-restricted __le32 [usertype] scan_type
+The thing is signal->group_exit_task is only used by coredumps currently
+as a flag to tell signal_group_exit to return true.  It is exec that
+actually uses signal->group_exit_task in conjunction with
+signal->notify_count to wake itself up.
 
-Will check if this is a valid warning.
+Using a pointer as a flag and not for it's value.  Having different
+semantics for who sets the pointer.  All of those are weird enough
+I just want to make signal->group_exit_task to go away.
 
-Regards,
-Arend
+By using core_state->dumper.task I was able to make
+signal->group_exit_task exclusive to the exec case in the following
+changes, and to rename it signal->group_exec_task so no one gets
+confused what the field is for.
+
+> But what's even more odd is how it
+>
+>  (a) sends the SIGKILL to somebody else
+>
+>  (b) does *NOT* send SIGKILL to itself
+>
+> Now, (a) is explained in the commit message. The intent is to signal
+> the core dumper.
+
+Which is the a specific thread of the target process, and it is
+the only thread running of the target process.
+
+> But (b) looks like a fundamental change in semantics. The target of
+> the SIGKILL is still running, might be in some loop in the kernel that
+> wants to be interrupted by a fatal signal, and you expressly disabled
+> the code that would send that fatal signal.
+>
+> If I send SIGKILL to thread A, then that SIGKILL had *better* be
+> delivered. To thread A, which may be in a "mutex_lock_killable()" or
+> whatever else.
+>
+> The fact that thread B may be in the process of trying to dump core
+> doesn't change that at all, as far as I can see.
+>
+> So I think this patch is fundamentally buggy and wrong. Or at least
+> needs much more explanation of why you'd not send SIGKILL to the
+> target thread.
+
+If you look at zap_threads.  You can observe that it takes the siglock,
+sets SIGNAL_GROUP_COREDUMP, and sets signal->core_state and in
+zap_process makes SIGKILL pending is the per-task sigset, and calls
+signal_wake_up on every task.
+
+This case in prepare_signal happens after that.  After every task
+has been told to die, and __fatal_signal_pending is true for all of
+them if they have not reached do_exit yet.
 
 
 
+If you look in zap_threads you will see that the core dumping thread
+clears TIF_SIGPENDING, and in general makes fatal_signal_pending false
+for itself.  But keep in mind that this thread because it is dumping
+core is already on the path to do_exit.  It has already processed a
+fatal signal.
 
---0000000000002de45c05d4c6e534
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
 
-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
-XSlOP9s1dqWlRRnnNxV7BVC87lkKKy0+1M2DOF6qRYQlnW4EfOyCToYLAG5zeV+AjepMoX6J9bUz
-yj4BlDtwH4HFjaRIlPPbdLshUA54/tV84x8woATuLGBq+hTZEpkZAgMBAAGjggHdMIIB2TAOBgNV
-HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
-KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
-Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
-dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
-OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
-MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
-BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFKb+3b9pz8zo
-0QsCHGb/p0UrBlU+MA0GCSqGSIb3DQEBCwUAA4IBAQCHisuRNqP0NfYfG3U3XF+bocf//aGLOCGj
-NvbnSbaUDT/ZkRFb9dQfDRVnZUJ7eDZWHfC+kukEzFwiSK1irDPZQAG9diwy4p9dM0xw5RXSAC1w
-FzQ0ClJvhK8PsjXF2yzITFmZsEhYEToTn2owD613HvBNijAnDDLV8D0K5gtDnVqkVB9TUAGjHsmo
-aAwIDFKdqL0O19Kui0WI1qNsu1tE2wAZk0XE9FG0OKyY2a2oFwJ85c5IO0q53U7+YePIwv4/J5aP
-OGM6lFPJCVnfKc3H76g/FyPyaE4AL/hfdNP8ObvCB6N/BVCccjNdglRsL2ewttAG3GM06LkvrLhv
-UCvjMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
-YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMMSnY
-h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDMZS4qo7HamO7EirlF
-37pLdoRZTyh1WCIYmWHKDBOzfTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yMjAxMDQxOTQ2MzdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
-AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
-BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAYjvAh/SVAZS21nzQHFPLM+O8amS1JAYCVmSa
-h1XXVka5Esh/l7U86HFRSiNQsaSpnG7g9NGbAd+P744qG9TVfMBp07jAPYuEntGaPksBjAFJ1VVP
-c/H9PvK26+9fHFHTwtSNNolBW5huY2JSoJyRrp7VE4l/N1RMutnGcepDs+ca+6J63iwsZt0XyAYN
-Y9n98ho8SsV4g7W+CBSO032u21NB+cwYqC6pUkbWnQdUs+0F+AFLkiN0MF/7WHH3iF0aFpHX5h2Q
-nba1fNnEm4vv+IVzmZmHcno+Mj6RSON63qXENIeVC4f2Y+tXKENc14ri2JatgEzpFxQb3KtbfExX
-+w==
---0000000000002de45c05d4c6e534--
+So in the special case I only worry about the dumping task as it is the
+only task after zap_threads that does not have fatal_signal_pending.
+
+
+This is different than the ordinary case of delivering SIGKILL
+where complete_signal makes SIGKILL pending in the per-task sigset
+of every task in the process.
+
+
+Currently I suspect changing wait_event_uninterruptible to
+wait_event_killable, is causing problems.
+
+Or perhaps there is some reason tasks that have already entered do_exit
+need to have fatal_signal_pending set. (The will have
+fatal_signal_pending set up until they enter get_signal which calls
+do_group_exit which calls do_exit).
+
+Which is why I am trying to reproduce the reported failure so I can get
+the kernel to tell me what is going on.  If this is not resolved quickly
+I won't send you this change, and I will pull it out of linux-next.
+
+Eric

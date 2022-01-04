@@ -2,238 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E2774842A8
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:39:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA1C4842A2
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:38:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232422AbiADNjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 08:39:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42496 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230389AbiADNju (ORCPT
+        id S233762AbiADNiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 08:38:50 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:13976 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233727AbiADNip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 08:39:50 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A398C061784
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 05:39:50 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id d1so87632547ybh.6
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 05:39:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=3RLDMN5GN9app8NkTXBsRwExWzCfe/qwhipZnnWbO6c=;
-        b=g2cmAsZAIBrEu/+aGa7taNXZhunMfbtjUcnpEZrJ6zgwQ7LPXS5rF2gFB4SgTlIJTH
-         YIGvkD0OABe4I0H+SDJMAf9adegR0zArwCwivciTckMcx/UG+0K/r75gYEQLjSgGA+my
-         RLB878VirLAwCebjJnZJ0quYEi+Xgrgh6M5nVDF8y7/X4GbkcXpSkhivdtzTvQCC+1BS
-         YNHxKScSEsKLqwGAH+nYU2iSoOFIzULV+BaYqD8BXPcfqNsh5RxvdmB6M2gMqrU54QHk
-         y3ihnW7a9EimLLI2l5y9j9xouFr6+7NLUP9kbh8yW3MbNK9Aco6P9acrtMFz/W4EqfC3
-         QAIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=3RLDMN5GN9app8NkTXBsRwExWzCfe/qwhipZnnWbO6c=;
-        b=HDl5s2TXdzEeqF+014l+IUB89FITCpNNFV/de9u1YMyH16ZXIRSlSHzWuOJD9R0Zsl
-         zpiFOmxEL4h8IOQQPUdvT3KLM1wLpdx6BrdJJn5QHF+1dpXmnaf2t4RU0Sx3ZTWyROjC
-         ZUrguX7j9cAbH0hcTCqajVfCCfyVCNX7H6Iy+olGVz7Zdt63gn/Ixev//WUp6ahDKwwc
-         2KbcijP/tiuLYY+mu0MvvnS9OeP+IxdZs4QrUrt1v+aUcnfLTiTNRQB51rEvs4oK/zNf
-         AJkF+g3TeMUcen5g9+e3US1v+NfZyQ2vDQQI5e47puHbAL79Fbwg4KTeuaXm7Az3hcsy
-         apog==
-X-Gm-Message-State: AOAM533WFgU/GpcAUo7XmoQoq3db1oaQwboMNwPjtgi8fDTvG96tKgGU
-        fA46HG16rUl3OVHANBaXtT3MqLd+YBiQLxLyC3RfRQ==
-X-Google-Smtp-Source: ABdhPJxet8972V5uC1CqcKMRXNUo6eWhqx2DuuVAw4/O6RmH4zbig0NhOsEOKYAO9wAlsJF46ndBWcgMzLVTIRiFk6k=
-X-Received: by 2002:a25:4b85:: with SMTP id y127mr61093665yba.181.1641303589035;
- Tue, 04 Jan 2022 05:39:49 -0800 (PST)
+        Tue, 4 Jan 2022 08:38:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1641303525; x=1672839525;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4tBpU8p77NKBam0vR6+WDIcpEDcMU61Ea9OWWZfa6Zw=;
+  b=DbXUQInJfwoiDB9sUk9gfHQ0pKUg9InlRf3+nPr/vywC9x1NbLJ48fD5
+   6UM3s0oHz2x08WN/c8FKiKEFJuKBUyOhUL6Z++fl7bhTUfNgsYbRLSiTM
+   Gi2+49ZGn07IWPKcmz0zYPHuRAlyRfplKicGXVfQdW5p4BVPBwrBdvp1N
+   3LRyOrtI/gQ894l9IVHy+dxHiqMkXPjNHDpRiLW6to1QGQgd1LokxR3Am
+   ah3e568U9tbixn4oDkkISMWrh+HAx/SVs698hD7TPgSSMOWAb6OHNE1TV
+   H4Wxl+VmxGUsCqGsJG1o64dqxUVypVpzmQJJf2qG9fu/jLnHaT8T9iB53
+   Q==;
+IronPort-SDR: 9j6vy0oJdhtisLYaaSDLtN4+C7TQKOk7JqZD0UC8NlQfC0FqZlb80ARpx+XpR+QeeWq7W5TJpm
+ YhA49sxwljhZo2isU+5wsV9yG0MGmqmbODXAg8OHJv1wkHGFV6FtSvMFhy1QPrugRfZOPcuTJa
+ whdHlYzwlOCR+p+CdApHz+8Kt0uY89GDS6frmCZIoHo0Jzk5zZyClgdlNsRSs2SYeHD18YkA7M
+ w9QhGzlwmOkGqBSnO6gfh+HdaAWN/+q2gmYQHetEg8ev4lntKQ5GWD2yPG3A0dEpxoVCRAN9po
+ 6XNQ/sGpADLRGCl8OlxS3nTq
+X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
+   d="scan'208";a="157456816"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Jan 2022 06:38:44 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 4 Jan 2022 06:38:44 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Tue, 4 Jan 2022 06:38:44 -0700
+Date:   Tue, 4 Jan 2022 14:40:57 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "vivien.didelot@gmail.com" <vivien.didelot@gmail.com>,
+        "andrew@lunn.ch" <andrew@lunn.ch>
+Subject: Re: [PATCH net-next v2 1/3] net: lan966x: Add function
+ lan966x_mac_ip_learn()
+Message-ID: <20220104134057.wj3wxba2glnz5k74@soft-dev3-1.localhost>
+References: <20220104101849.229195-1-horatiu.vultur@microchip.com>
+ <20220104101849.229195-2-horatiu.vultur@microchip.com>
+ <20220104111710.twaqos2fbmjfv5yu@skbuf>
 MIME-Version: 1.0
-References: <20220103142052.068378906@linuxfoundation.org>
-In-Reply-To: <20220103142052.068378906@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 4 Jan 2022 19:09:37 +0530
-Message-ID: <CA+G9fYu4Q1JJLBRZAJ-8Rd_nD=6B1KHUQ350JEztgqJDrckw2Q@mail.gmail.com>
-Subject: Re: [PATCH 4.14 00/19] 4.14.261-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20220104111710.twaqos2fbmjfv5yu@skbuf>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Jan 2022 at 19:53, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.14.261 release.
-> There are 19 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 05 Jan 2022 14:20:40 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.14.261-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.14.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+The 01/04/2022 11:17, Vladimir Oltean wrote:
+> 
+> On Tue, Jan 04, 2022 at 11:18:47AM +0100, Horatiu Vultur wrote:
+> > Extend mac functionality with the function lan966x_mac_ip_learn. This
+> > function adds an entry in the MAC table for IP multicast addresses.
+> > These entries can copy a frame to the CPU but also can forward on the
+> > front ports.
+> > This functionality is needed for mdb support. In case the CPU and some
+> > of the front ports subscribe to an IP multicast address.
+> >
+> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> > ---
+> >  .../ethernet/microchip/lan966x/lan966x_mac.c  | 33 ++++++++++++++++---
+> >  .../ethernet/microchip/lan966x/lan966x_main.h |  5 +++
+> >  .../ethernet/microchip/lan966x/lan966x_regs.h |  6 ++++
+> >  3 files changed, 39 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_mac.c b/drivers/net/ethernet/microchip/lan966x/lan966x_mac.c
+> > index efadb8d326cc..82eb6606e17f 100644
+> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_mac.c
+> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_mac.c
+> > @@ -68,17 +68,19 @@ static void lan966x_mac_select(struct lan966x *lan966x,
+> >       lan_wr(mach, lan966x, ANA_MACHDATA);
+> >  }
+> >
+> > -int lan966x_mac_learn(struct lan966x *lan966x, int port,
+> > -                   const unsigned char mac[ETH_ALEN],
+> > -                   unsigned int vid,
+> > -                   enum macaccess_entry_type type)
+> > +static int __lan966x_mac_learn(struct lan966x *lan966x, int pgid,
+> > +                            bool cpu_copy,
+> > +                            const unsigned char mac[ETH_ALEN],
+> > +                            unsigned int vid,
+> > +                            enum macaccess_entry_type type)
+> >  {
+> >       lan966x_mac_select(lan966x, mac, vid);
+> >
+> >       /* Issue a write command */
+> >       lan_wr(ANA_MACACCESS_VALID_SET(1) |
+> >              ANA_MACACCESS_CHANGE2SW_SET(0) |
+> > -            ANA_MACACCESS_DEST_IDX_SET(port) |
+> > +            ANA_MACACCESS_MAC_CPU_COPY_SET(cpu_copy) |
+> > +            ANA_MACACCESS_DEST_IDX_SET(pgid) |
+> >              ANA_MACACCESS_ENTRYTYPE_SET(type) |
+> >              ANA_MACACCESS_MAC_TABLE_CMD_SET(MACACCESS_CMD_LEARN),
+> >              lan966x, ANA_MACACCESS);
+> > @@ -86,6 +88,27 @@ int lan966x_mac_learn(struct lan966x *lan966x, int port,
+> >       return lan966x_mac_wait_for_completion(lan966x);
+> >  }
+> >
+> > +int lan966x_mac_ip_learn(struct lan966x *lan966x,
+> > +                      bool cpu_copy,
+> > +                      const unsigned char mac[ETH_ALEN],
+> > +                      unsigned int vid,
+> > +                      enum macaccess_entry_type type)
+> 
+> I think it's worth mentioning in a comment above this function that the
+> mask of front ports should be encoded into the address by now, via a
+> call to lan966x_mdb_encode_mac().
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Yes, I will do that.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> > +{
+> > +     WARN_ON(type != ENTRYTYPE_MACV4 && type != ENTRYTYPE_MACV6);
+> > +
+> > +     return __lan966x_mac_learn(lan966x, 0, cpu_copy, mac, vid, type);
+> > +}
+> > +
+> > +int lan966x_mac_learn(struct lan966x *lan966x, int port,
+> > +                   const unsigned char mac[ETH_ALEN],
+> > +                   unsigned int vid,
+> > +                   enum macaccess_entry_type type)
+> > +{
+> > +     WARN_ON(type != ENTRYTYPE_NORMAL && type != ENTRYTYPE_LOCKED);
+> > +
+> > +     return __lan966x_mac_learn(lan966x, port, false, mac, vid, type);
+> > +}
+> > +
+> >  int lan966x_mac_forget(struct lan966x *lan966x,
+> >                      const unsigned char mac[ETH_ALEN],
+> >                      unsigned int vid,
+> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+> > index c399b1256edc..f70e54526f53 100644
+> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+> > @@ -157,6 +157,11 @@ int lan966x_port_pcs_set(struct lan966x_port *port,
+> >                        struct lan966x_port_config *config);
+> >  void lan966x_port_init(struct lan966x_port *port);
+> >
+> > +int lan966x_mac_ip_learn(struct lan966x *lan966x,
+> > +                      bool cpu_copy,
+> > +                      const unsigned char mac[ETH_ALEN],
+> > +                      unsigned int vid,
+> > +                      enum macaccess_entry_type type);
+> >  int lan966x_mac_learn(struct lan966x *lan966x, int port,
+> >                     const unsigned char mac[ETH_ALEN],
+> >                     unsigned int vid,
+> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h b/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h
+> > index a13c469e139a..797560172aca 100644
+> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h
+> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h
+> > @@ -169,6 +169,12 @@ enum lan966x_target {
+> >  #define ANA_MACACCESS_CHANGE2SW_GET(x)\
+> >       FIELD_GET(ANA_MACACCESS_CHANGE2SW, x)
+> >
+> > +#define ANA_MACACCESS_MAC_CPU_COPY               BIT(16)
+> > +#define ANA_MACACCESS_MAC_CPU_COPY_SET(x)\
+> > +     FIELD_PREP(ANA_MACACCESS_MAC_CPU_COPY, x)
+> > +#define ANA_MACACCESS_MAC_CPU_COPY_GET(x)\
+> > +     FIELD_GET(ANA_MACACCESS_MAC_CPU_COPY, x)
+> 
+> Could you please add a space between (x) and \.
 
-## Build
-* kernel: 4.14.261-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-4.14.y
-* git commit: 1e980b44673d11c0bb0bed2afb54341e7541c083
-* git describe: v4.14.260-20-g1e980b44673d
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
-.260-20-g1e980b44673d
+Actually I prefer for now not to do that.
+The reason is that in the entire file there is no space between (x) and
+\.
+What I can do is when I will add another feature that requires more
+registes then I can change the entire file to have that space if it is
+worth it.
 
-## Test Regressions (compared to v4.14.260)
-No test regressions found.
+> 
+> > +
+> >  #define ANA_MACACCESS_VALID                      BIT(12)
+> >  #define ANA_MACACCESS_VALID_SET(x)\
+> >       FIELD_PREP(ANA_MACACCESS_VALID, x)
+> > --
+> > 2.33.0
+> >
 
-## Metric Regressions (compared to v4.14.260)
-No metric regressions found.
-
-## Test Fixes (compared to v4.14.260)
-No test fixes found.
-
-## Metric Fixes (compared to v4.14.260)
-No metric fixes found.
-
-## Test result summary
-total: 70912, pass: 57256, fail: 577, skip: 11331, xfail: 1748
-
-## Build Summary
-* arm: 254 total, 242 passed, 12 failed
-* arm64: 32 total, 32 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 19 total, 19 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 22 total, 22 passed, 0 failed
-* powerpc: 52 total, 0 passed, 52 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 31 total, 31 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+/Horatiu

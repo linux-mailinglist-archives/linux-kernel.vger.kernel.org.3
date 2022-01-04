@@ -2,60 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD82F483A78
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 03:07:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5F3483A81
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 03:13:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232035AbiADCG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 21:06:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55926 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231868AbiADCGy (ORCPT
+        id S232120AbiADCNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 21:13:35 -0500
+Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:58803 "EHLO
+        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229469AbiADCNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 21:06:54 -0500
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458FCC061761;
-        Mon,  3 Jan 2022 18:06:54 -0800 (PST)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n4ZDv-00H47P-5m; Tue, 04 Jan 2022 02:06:51 +0000
-Date:   Tue, 4 Jan 2022 02:06:51 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Qinghua Jin <qhjin_dev@163.com>
-Cc:     Colin Ian King <colin.king@canonical.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vfs: fix bug when opening a file with O_DIRECT on a file
- system that does not support it will leave an empty file
-Message-ID: <YdOru5u/Vs2+ns7B@zeniv-ca.linux.org.uk>
-References: <20220104015358.57443-1-qhjin_dev@163.com>
+        Mon, 3 Jan 2022 21:13:34 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R371e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V0nqt.T_1641262408;
+Received: from 30.225.24.14(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0V0nqt.T_1641262408)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 04 Jan 2022 10:13:29 +0800
+Message-ID: <31d6cfe4-3f6b-98e4-1760-9f0c296f3292@linux.alibaba.com>
+Date:   Tue, 4 Jan 2022 10:13:27 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220104015358.57443-1-qhjin_dev@163.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.0
+Subject: Re: [RFC PATCH net] net/smc: Reset conn->lgr when link group
+ registration fails
+To:     Karsten Graul <kgraul@linux.ibm.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dust Li <dust.li@linux.alibaba.com>,
+        tonylu_linux <tonylu@linux.alibaba.com>
+References: <1640677770-112053-1-git-send-email-guwen@linux.alibaba.com>
+ <07930fec-4109-0dfd-7df4-286cb56ec75b@linux.ibm.com>
+ <0082289b-d3dc-d202-ec37-844d8fe5303f@linux.alibaba.com>
+ <3cef644a-aeb3-ee15-9809-e560f7b24a5c@linux.ibm.com>
+From:   Wen Gu <guwen@linux.alibaba.com>
+In-Reply-To: <3cef644a-aeb3-ee15-9809-e560f7b24a5c@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 09:53:58AM +0800, Qinghua Jin wrote:
-> Colin Ian King reported the following
-> 
-> 1. create a minix file system and mount it
-> 2. open a file on the file system with O_RDWR | O_CREAT | O_TRUNC | O_DIRECT
-> 3. open fails with -EINVAL but leaves an empty file behind.  All other open() failures don't leave the
-> failed open files behind.
-> 
-> The reason is because when checking the O_DIRECT in do_dentry_open, the inode has created, and later err
-> processing can't remove the inode:
-> 
->         /* NB: we're sure to have correct a_ops only after f_op->open */
->         if (f->f_flags & O_DIRECT) {
->                 if (!f->f_mapping->a_ops || !f->f_mapping->a_ops->direct_IO)
->                         return -EINVAL;
->         }
-> 
-> The patch will check the O_DIRECT before creating the inode in lookup_open function.
+Thanks for your reply.
 
-NAK.  You are looking at ->a_ops of the parent directory.  Which might have nothing
-whatsoever to do with that of a regular file created in it.
+On 2022/1/3 6:52 pm, Karsten Graul wrote:
+> On 30/12/2021 04:50, Wen Gu wrote:
+>> Thanks for your reply.
+>>
+>> On 2021/12/29 9:07 pm, Karsten Graul wrote:
+>>> On 28/12/2021 08:49, Wen Gu wrote:
+>>>> SMC connections might fail to be registered to a link group due to
+>>>> things like unable to find a link to assign to in its creation. As
+>>>> a result, connection creation will return a failure and most
+>>>> resources related to the connection won't be applied or initialized,
+>>>> such as conn->abort_work or conn->lnk.
+>>> What I do not understand is the extra step after the new label out_unreg: that
+>>> may invoke smc_lgr_schedule_free_work(). You did not talk about that one.
+>>> Is the idea to have a new link group get freed() when a connection could not
+>>> be registered on it?
+>> Maybe we should try to free the link group when the registration fails, no matter
+>> it is new created or already existing? If so, is it better to do it in the same
+>> place like label 'out_unreg'?
+> 
+> I agree with your idea.
+> 
+> With the proposed change that conn->lgr gets not even set when the registration fails
+> we would not need the "conn->lgr = NULL;" after label out_unreg?
 
-IOW, you've removed the check on the file we are opening and replaced it with
-random check that just happens to yield negative on minixfs.
+Yes, conn->lgr now will be reset in smc_lgr_register_conn() if registration fails.
+
+> 
+> And as far as I understand the invocation of smc_lgr_schedule_free_work(lgr) is only
+> needed after label "create", because when an existing link group was found and the registration
+> failed then its free work would already be started when no more connections are assigned
+> to the link group, right?
+
+Thanks for your explanation. I also agree with only invoking smc_lgr_schedule_free_work(lgr)
+after label "create" now. I will improve it and send a v2 patch.
+
+Thanks,
+Wen Gu

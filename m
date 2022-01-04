@@ -2,107 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B16F48490E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 21:00:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0E1484912
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 21:01:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232127AbiADUAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 15:00:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46818 "EHLO
+        id S231499AbiADUBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 15:01:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiADUAb (ORCPT
+        with ESMTP id S230417AbiADUBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 15:00:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8A2C061761;
-        Tue,  4 Jan 2022 12:00:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 330C86159D;
-        Tue,  4 Jan 2022 20:00:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 272F8C36AEB;
-        Tue,  4 Jan 2022 20:00:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641326429;
-        bh=sQBg8Y7qecsMNIktMN2imf4TjCv8rYLDyWd3vuZtTxE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QlF7Z3pV7qgO1ENoOkiP5b1vxTg+E++D8xbTtbWdRiMEnvjv/AdPzMAmCsqfoxjw/
-         1qyBn/+vH7kMNjkn3oxskahyN8iG6X+uTqnjdvU2y2g/aYH/urAygMV58yz6WiMnwd
-         Ac+mDyW32y2hvjWhKk/AR3T/UUzn7zqXjtlO2cz1mpJbKDto595jR0nuthP1B3yahG
-         SRQwaC8moqMP47Nd5ETkctcUOjcIzleVmoHj/CsG9RwNlALoDPsWKMF5AEJ5cLTY+q
-         2TMronwNzzdPTXr7gnar8jkURFzuVlInyPxj3EsXUeaokxVZ+BKY9+c1yBAy2VGYPZ
-         A8+Wcr/1La5uA==
-Date:   Tue, 4 Jan 2022 12:00:27 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Aaron Ma <aaron.ma@canonical.com>, <davem@davemloft.net>,
-        <hayeswang@realtek.com>, <tiwai@suse.de>,
-        <linux-usb@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] net: usb: r8152: Add MAC passthrough support for more
- Lenovo Docks
-Message-ID: <20220104120027.611f8830@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20220104193455.6b8a21fc@md1za8fc.ad001.siemens.net>
-References: <20211116141917.31661-1-aaron.ma@canonical.com>
-        <20220104123814.32bf179e@md1za8fc.ad001.siemens.net>
-        <20220104065326.2a73f674@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-        <20220104180715.7ecb0980@md1za8fc.ad001.siemens.net>
-        <601815fe-a10e-fe48-254c-ed2ef1accffc@canonical.com>
-        <20220104193455.6b8a21fc@md1za8fc.ad001.siemens.net>
+        Tue, 4 Jan 2022 15:01:31 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC50C061784
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 12:01:31 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id w7so27251655plp.13
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 12:01:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=P38x3udDv7VccpZiXoJefyN8u/f+VmXSebvIF1IMJ9Y=;
+        b=qw2oIUC6W97Gros4OgiOyM9i+7wnsvMfbBO23Bw18z3JsaKNq/k2XsNKJCHIs+uVhy
+         LmQ2DH+PIflhbQyURRzOlqUVA/dYVzQ12LkZXFq45gUQaxupOlYHXeyYVsxaSjASGl3S
+         I3smWKwTp3QwUj7mR7TBDxgbLSUUQaBE7x1YudiYEl9vOXxoPnFxMLlNGowaNoUtOsY7
+         oWzeA6Ag6CFEl7bhn8kaTJBmd9SsR0da/cCl2HOmLeD/c6hgdl1K8Vbn+irjyJggrDLD
+         G7gxVyMzrcBVJdVBE13VgLzQVG1NPt9Ca/2mS6l4lsOJ1jvBpH4jMbyliEsT9CTHaVRi
+         UB/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=P38x3udDv7VccpZiXoJefyN8u/f+VmXSebvIF1IMJ9Y=;
+        b=sr0hJHX3mQrkCrc00CtyDJw0HfBxafM2J5y1lg3aXTRO08yGp5x/Nt1y3lqlhTGXj5
+         tud8HW+LpTSpX8aGxO3Q3gsg7Cs0qzBaZaSoUFn+yXWGuhaR/2QDGB7jmxLzhmC6JOYy
+         boeshScLVWk9YVKDwpl28exwDnKOqwLcBiEd7KE0fvee64nvWbwSTb6Dkld2cdYIYhLP
+         5gK+gu6kEOqmCDC931EUzyVM4U31jtz11ym1FQAnkobdkPSN8siW38hoSRlI7Ncor4ho
+         8xH0LUZf9O9U/DSDtNWFc3p8pen3ZPPzpnxfUTMr4p/lTFrfyUaoCiTpYAuCOSjbH+kN
+         9sxQ==
+X-Gm-Message-State: AOAM533mZeSW/GTVssK944Qpx1CSDmwLrEce8P2X14Nvru2Q5DxUHbCG
+        N0ApA8FXZr2GVkhkCFgxq1n2Y6k5bsr4wg==
+X-Google-Smtp-Source: ABdhPJwBn8VJJJbQjgdjK3BL5ElqCtvbbHY3YHVoqOGEuLZPAF39gjygq4zF9vcYOMP1k5rlARtrIQ==
+X-Received: by 2002:a17:902:c94b:b0:149:22af:ed1c with SMTP id i11-20020a170902c94b00b0014922afed1cmr49705852pla.78.1641326490792;
+        Tue, 04 Jan 2022 12:01:30 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id nu18sm160918pjb.15.2022.01.04.12.01.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 12:01:30 -0800 (PST)
+Date:   Tue, 4 Jan 2022 20:01:26 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yang Zhong <yang.zhong@intel.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, pbonzini@redhat.com, corbet@lwn.net,
+        shuah@kernel.org, jun.nakajima@intel.com, kevin.tian@intel.com,
+        jing2.liu@linux.intel.com, jing2.liu@intel.com,
+        guang.zeng@intel.com, wei.w.wang@intel.com
+Subject: Re: [PATCH v4 12/21] kvm: x86: Intercept #NM for saving IA32_XFD_ERR
+Message-ID: <YdSnlmO4dUnwRxxc@google.com>
+References: <20211229131328.12283-1-yang.zhong@intel.com>
+ <20211229131328.12283-13-yang.zhong@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211229131328.12283-13-yang.zhong@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jan 2022 19:34:55 +0100 Henning Schild wrote:
-> Am Wed, 5 Jan 2022 01:40:42 +0800
-> schrieb Aaron Ma <aaron.ma@canonical.com>:
-> > Yes, it's expected to be a mess if multiple r8152 are attached to
-> > Lenovo USB-C/TBT docks. The issue had been discussed for several
-> > times in LKML. Either lose this feature or add potential risk for
-> > multiple r8152.
-> > 
-> > The idea is to make the Dock work which only ship with one r8152.
-> > It's really hard to say r8152 is from dock or another plugin one.
-> > 
-> > If revert this patch, then most users with the original shipped dock
-> > may lose this feature. That's the problem this patch try to fix.  
-> 
-> I understand that. But i would say people can not expect such a crap
-> feature on Linux, or we really need very good reasoning to cause MAC
-> collisions with the real PHY and on top claim ETOOMANY of the dongles.
-> 
-> The other vendors seem to check bits of the "golden" dongle. At least
-> that is how i understand BD/AD/BND_MASK
-> 
-> How about making it a module param and default to off, and dev_warn if
-> BIOS has it turned on. That sounds like a reasonable compromise and
-> whoever turns it on twice probably really wants it. (note that BIOS
-> defaults to on ... so that was never intended by users, and corporate
-> users might not be allowed/able to turn that off)
-> 
-> MACs change ... all the time, people should use radius x509. The
-> request is probably coming from corporate users, and they are all on a
-> zero trust journey and will eventually stop relying on MACs anyways.
-> 
-> And if ubuntu wants to cater by default, there can always be an udev
-> rule or setting that module param to "on".
+On Wed, Dec 29, 2021, Yang Zhong wrote:
+> +static void handle_nm_fault_irqoff(struct kvm_vcpu *vcpu)
+> +{
+> +	rdmsrl(MSR_IA32_XFD_ERR, vcpu->arch.guest_fpu.xfd_err);
+> +	kvm_queue_exception(vcpu, NM_VECTOR);
 
-Let's split the problem into the clear regression caused by the patch
-and support of the feature on newer docks. I think we should fix the
-regression ASAP (the patch has also been backported to 5.15, so it's
-going to get more and more widely deployed). Then we can worry about
-the MAC addr copy on newer docks and the feature in a wider context.
-Is there really nothing in the usb info of the r8152 instance to
-indicate that it's part of the dock? Does the device have EEPROM which
-could contain useful info, maybe?
+This is still wrong, even though no additional supported is needed to support
+nested XFD.  If L1 wants to intercept #NM, then KVM must not inject the #NM and
+must not read XFD_ERR.
 
-> > For now I suggest to disable it in BIOS if you got multiple r8152.
-> > 
-> > Let me try to make some changes to limit this feature in one r8152.  
-> 
-> Which one? ;) And how to deal with the real NIC once you picked one?
-> Looking forward, please Cc me.
+That this was posted multiple times is disturbing, because kvm-unit-tests has a
+test for exactly this, and running it against this series on a host without XFD
+yields:
 
+  unchecked MSR access error: RDMSR from 0x1c5 at rIP: 0xffffffffa02478ee (vmx_handle_exit_irqoff+0x1de/0x240 [kvm_intel])
+  Call Trace:
+   <TASK>
+   kvm_arch_vcpu_ioctl_run+0x11a0/0x1fb0 [kvm]
+   kvm_vcpu_ioctl+0x279/0x690 [kvm]
+   __x64_sys_ioctl+0x83/0xb0
+   do_syscall_64+0x3b/0xc0
+   entry_SYSCALL_64_after_hwframe+0x44/0xae
+   </TASK>

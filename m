@@ -2,168 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40506483C1E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 08:02:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F4D5483C22
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 08:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233110AbiADHCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 02:02:39 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:26578 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233043AbiADHCi (ORCPT
+        id S233118AbiADHHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 02:07:24 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:33419 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233043AbiADHHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 02:02:38 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2045J4tP020341;
-        Tue, 4 Jan 2022 07:02:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=3wk2/neUEX85QFNkkO+Oosbsw9CiybuKQaIw/z1E9Uw=;
- b=jHZiCTSvxEbcv9IQDtPMAM9qnU4L3FbNvzmzli2JDdiBfarpJBSXrdg9+GG6ZeWfmYh6
- 4oe/UrBn2C3Xj4TgIoUdAhWjIfu8D7LBps2V9fYAuPyOQloU/Id9iw2zWqLZ6FXQROLr
- W1vWUQx7OxPV4mQ0/HJgEnRHcW8fdbNbjWIKRLhTAv92maW+x/LN85C5qalAwPySQS1V
- wc7b+uOuYifgjIzX2vW+BjG2JVDBWiiHEiZbtLmxgIh5wyMCo0qlJ6XWghVZmgSnvwiw
- THu7IE5JeC1RnhB10RSQfiVQvoQl72BhvohHSs1eXM/v61+YWYBNZLzy5yYzVuj0MUDJ wg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dcb2bdfsx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Jan 2022 07:02:13 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2046jOCa021625;
-        Tue, 4 Jan 2022 07:02:12 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dcb2bdfsc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Jan 2022 07:02:12 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2046sB5S008481;
-        Tue, 4 Jan 2022 07:02:10 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma02wdc.us.ibm.com with ESMTP id 3daeka5cwu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Jan 2022 07:02:10 +0000
-Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2047292k30278024
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 4 Jan 2022 07:02:09 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7E60C6E053;
-        Tue,  4 Jan 2022 07:02:09 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DCDFA6E056;
-        Tue,  4 Jan 2022 07:02:04 +0000 (GMT)
-Received: from [9.160.161.139] (unknown [9.160.161.139])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue,  4 Jan 2022 07:02:04 +0000 (GMT)
-Message-ID: <0280e20e-8459-dd35-0b7d-8dbc1e4a274a@linux.ibm.com>
-Date:   Tue, 4 Jan 2022 09:02:03 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v6 0/5] Allow guest access to EFI confidential computing
- secret area
+        Tue, 4 Jan 2022 02:07:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1641280041; x=1672816041;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=GcKnZZiKEHHzUo6FOv3aF1ZnDT/WcQpxj2LqeoE8Itw=;
+  b=oCSZvs+gqQ/1Kt2ahrVGJawmZHgKol9lRIvZgK9iBso1Tk6vEj2n1keI
+   DNcpW7HOk2EPlahKrsnieuy71BNGgCdYwFGLMv4A05OKGpyrhEoTVMmSD
+   ND7++bPRtMghhOfFloSXwzRhhNTOjy4m/hNa45p7j1zS0AvepK5GUs6yO
+   bk8QN7rb4eGstRfH379xI0KO/D6n6fBRB2YNYDf1xcZRrffUP2cZRsGiX
+   8vbcLcr6KC2P/fRWoNBAS5QYai7GPgwTB6+uADcYxLpR7C0oD+ux3ogMh
+   ZjB8GIshIkl0XB62P+5WX29itB+bMXGhEp74uSvSuWp0sFpJJ7XIw88oR
+   g==;
+IronPort-SDR: StRgL3d5mnEVKtfDV6Eo+ESlJKtBuju/QNPQUTRMA5p3vcXRRRtkZ1QxlpFakcaQqx4dWBd7YZ
+ 0r49MhGL/mFqkB+YS/OJiYL1OvLELxOwms8JNjn6y28yLZgfZGtJilFbNotsGM2Bg+9Y0c2ADU
+ 8OJzDRC+xEkqpNfPwGh9K8yRG850WrmUF/eGIxkQxVRp4eK5ari7njDqRuMBWk7Swq0OxmBaq3
+ SHIPc/gWFbRhf7MhfSJITcDS7JTEkGPCu9qIJeq2bWZ34EOnka6wzPcjprSLVFMBzW7ji376sy
+ MZ3Ou3Vop7gS2bMSPYF+f8Q/
+X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
+   d="scan'208";a="144241175"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Jan 2022 00:07:18 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 4 Jan 2022 00:07:18 -0700
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Tue, 4 Jan 2022 00:07:17 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=liPpYeuXySDZbmvHqn0W9CuyXgBFiWWLzG5VB5L6b1ACG4NJmmVkD4lPwUWqqrb/muqYatJHRahVeaMA+UEqKjmbK3SWKyaDi1DMHvYZXTICRG4pKECLEYdwSOPbky0booV3gnre5svRLShxY5awb+bRVnq0YZdmbQUrTYD/9AYfKg9BbmW5ApMSKaYK8WDNORrsdps3ivT5EWcO7FMnlJtu7KolZQGUxcBgObCFFE9c8n4O8lrWnuUJ86r1v/csjtwuXjtxd6KHXQ+egi012GpMeVx142MhTjGmI8HhH41Xf+Zg2RzZ1SbnerrdbJn15us2eTamHDCEWgBkRDYzeg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GcKnZZiKEHHzUo6FOv3aF1ZnDT/WcQpxj2LqeoE8Itw=;
+ b=jksh0iRV9kV9KNshQt+cfi33YFhdNQhSmMHu/8kLkWEC5ZoLg0i16+uTbunHs/WJaptmdJTi7KgJJ7Kmb2apUisdI0C1RjfnmT6V0CRpIHz2CGA6M4KgaOybFBHiP0cbrHINyhDadeLFnnTJncioUSyUedR/fswiLoLE5v32we3aV/2WIvsI6n2LTaf3WTrPkAwhNv4GR3mjJTUVZyC2FTdIPF+ong8/2/C2m1xIAAkgy9OUQDKjTRdQ2juDxUeR7m252azTqcYYbQzmaYrqBfw5M167phNyIZML0kcyKUs1NkNEwagFcypA58U6oc8WpYuMue6tKkyfyPKd1fIhdg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GcKnZZiKEHHzUo6FOv3aF1ZnDT/WcQpxj2LqeoE8Itw=;
+ b=MKnNOdVADX4enpQvNpqbFpbYLjLkJJW40qU3waMBPB0BQAIKoabeUMZLGpQg5JwBcX1ibuvAkXFTQoYwmvXzk3P9CI2bvYhntCRO+ORxo5ierzBJ1wv9OAgb2Hdiq6yt07fM54P5q8piKGJ1/Eta04zjbS14kBFSAAM9PcpQKsQ=
+Received: from SA2PR11MB4874.namprd11.prod.outlook.com (2603:10b6:806:f9::23)
+ by SN6PR11MB2877.namprd11.prod.outlook.com (2603:10b6:805:5b::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Tue, 4 Jan
+ 2022 07:07:12 +0000
+Received: from SA2PR11MB4874.namprd11.prod.outlook.com
+ ([fe80::5c96:23c3:4407:d3b1]) by SA2PR11MB4874.namprd11.prod.outlook.com
+ ([fe80::5c96:23c3:4407:d3b1%9]) with mapi id 15.20.4844.016; Tue, 4 Jan 2022
+ 07:07:12 +0000
+From:   <Tudor.Ambarus@microchip.com>
+To:     <Kavyasree.Kotagiri@microchip.com>, <arnd@arndb.de>,
+        <olof@lixom.net>, <robh+dt@kernel.org>,
+        <Nicolas.Ferre@microchip.com>
+CC:     <soc@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Manohar.Puri@microchip.com>
+Subject: Re: [PATCH] ARM: dts: add DT for lan966x SoC and 2-port board pcb8291
+Thread-Topic: [PATCH] ARM: dts: add DT for lan966x SoC and 2-port board
+ pcb8291
+Thread-Index: AQHYAKfBxAy1YVWf3k2O2unIgNc+5A==
+Date:   Tue, 4 Jan 2022 07:07:12 +0000
+Message-ID: <29f7e062-5669-ef1c-a80c-5e5b7b01af79@microchip.com>
+References: <20220103124857.24351-1-kavyasree.kotagiri@microchip.com>
+ <76804bd6-00e5-02ab-59df-d32586a55422@microchip.com>
+ <CO1PR11MB48651B354ABAF04ABB53FB04924A9@CO1PR11MB4865.namprd11.prod.outlook.com>
+In-Reply-To: <CO1PR11MB48651B354ABAF04ABB53FB04924A9@CO1PR11MB4865.namprd11.prod.outlook.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Borislav Petkov <bp@suse.de>
-Cc:     linux-efi@vger.kernel.org, Ashish Kalra <ashish.kalra@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Andrew Scull <ascull@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
-        Jim Cadden <jcadden@ibm.com>,
-        Daniele Buono <dbuono@linux.vnet.ibm.com>,
-        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Dov Murik <dovmurik@linux.ibm.com>
-References: <20211129114251.3741721-1-dovmurik@linux.ibm.com>
- <YdNHgtuVoLofL4cW@zn.tnic>
-From:   Dov Murik <dovmurik@linux.ibm.com>
-In-Reply-To: <YdNHgtuVoLofL4cW@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 3wgLohTNv17_5gRZNiogkFECRPbcAEpg
-X-Proofpoint-GUID: ff3sx0Y1crIH928XegyGBpeL5Z6Gow7J
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6e3314ad-53bf-4767-0d42-08d9cf50d4dd
+x-ms-traffictypediagnostic: SN6PR11MB2877:EE_
+x-microsoft-antispam-prvs: <SN6PR11MB28778A5BD36B38B19B324D48F04A9@SN6PR11MB2877.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3173;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: mwMqKAClQoGc5u+9VPqn9Gm+thGWGAEEfoKLDZi33CPk9sVXqWBgsjqXURNJmo1b2+QOABlXnyDflmJbODJdpYWTMYAcjTq+EFJOvk9UdsDeGtzxEBoHoBCo4ol48GouXFyNnQGY8jMYOw/qyQB+SpHYCYaIZbUZfiCQ1/alnXhWK4iYkQe/c5xGvWLkjGJs/n2CgHjvoLf7LgRLPqxlcCPbLmwHiMg1qIP8IJbEoZPyvOJYvSVhpNsf/QdWfHw5lrV4cH8xdiRPIl0c+dO5gxhfGCmz+vXTM5UpHTcVbmBVGZvnSayfU/OaPFaQv1A7sARC/kGnWeSYkgl+DtYmlxI62A3FGDugc9HqzOuueRJ1/8RqgdUxtQH3gSZJ8lcTCqDP8tg5atBlVtaAVfjBDwFoTjgQZmLFCsCBV9XuDZkjLJmSrU56408QQaSqhxm2977IFICUdRglhZDg92WnGxGJW4wWTOoq9lmnFLWa7rfF9MpxjkGeG/MalZbMJkmDJeUC+y7msKfOg2n2tJH1UZeHEpoRZgtrUFnVzyvHd71WlQc2YzezocsFi/t3xOEufXLkpiXhE47zKAgWTdxmc61AVaHkmbjvfhxRDDYVznrv6WnrboExR5OCoiiq0gK1MZJpMAwhURAoTPc9cpzqo/zAVFWuiKKGdLSJvN1C9mnPxuVXSrFboogvWmDAFog0jT91tmM044kMrQYUSh1U5S0fmvyUopXKSGNpjj+rJ9rNG3rn4r0DTcXg7XAb/pJk5Ajr9yuSFck+WoYG13edpA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB4874.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(508600001)(66946007)(107886003)(86362001)(316002)(31696002)(26005)(186003)(122000001)(6636002)(8936002)(31686004)(38070700005)(71200400001)(66556008)(2616005)(54906003)(53546011)(38100700002)(76116006)(36756003)(91956017)(8676002)(4326008)(5660300002)(4744005)(2906002)(6512007)(110136005)(6486002)(66476007)(66446008)(6506007)(64756008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dnVFRFlWVjByTlRucWZibVNNM1pOTnNhOUFtYXM4dDFWTVBJamxLWHpkdnE3?=
+ =?utf-8?B?NFhrZ0ZCZGFnOVpYN2NWVitPakl4TGQzUVNBeGZVdGlrdGwvb0NqR05XaVJ4?=
+ =?utf-8?B?UDYxL2Z3VWw4Q0h1MUp3N2I3UHZyT0syeEd1TWUzQ2ZuL0llVkpqb2t0Rkdh?=
+ =?utf-8?B?UzBGQ09PTCtUWFFUby9kRy8zbkp4Z2tpczkvSjVWL1ZSTmlrL3RjNXNIU3A0?=
+ =?utf-8?B?R3hmNGtGSlNISFA4Tnp5QlRBd0pocGpQb3NZOEQ3aE04RDlvMGU5dmVOeWUz?=
+ =?utf-8?B?eWFLUVUyVEh5eElnRlc2NEZ2QmRMaWZEd3djOXAzRUNqM29Ua0EvaWRYbHBn?=
+ =?utf-8?B?NTlybGZVRDBCWFlpcnJ1VWZ3Wk40TndaVzdSV1YxaTNtb09YMnprS25aUVRW?=
+ =?utf-8?B?U3dQaFU3dFhHTHd1M1JvR2s5RjZoY1d4UjNPYllYZVExWTdIcjN5bnEvT0F4?=
+ =?utf-8?B?K0x0R2xiTmQzYnRnV1Z0RUx5SG04T050aC9mMkErVG1IRXF6SzdTM2IwYkU5?=
+ =?utf-8?B?clN4bThDb2ozREdXa0tIM0oxZEkzdGJVc1czRjh0U0tLWnpiT21HZlE5MVk5?=
+ =?utf-8?B?WWFvQi9ocWlhMndlaEhMeHBYVjBOUmxvTWFOT2g2Y1dHMFdxblZOa1dYY1VF?=
+ =?utf-8?B?dytGMlpsaFdwSmM1QUl1WW1LUVluZjhFcHhXd2hiQnFpU0pKYjFBUmpEVlVs?=
+ =?utf-8?B?UDBnTXFwRHd5a0R3WEV0UGYvb0ZoVmtldjBNS2tBKzVpMEhaV1VBY05DTEp5?=
+ =?utf-8?B?b3pMcXVqUGpBaXpIc1JYcktsbnV6VHFGNXMzSmV5UkFGUWxaKy85VFptYjBa?=
+ =?utf-8?B?M0JGY25XeWtyMjdxTlRlL0hRVGtsZWwrQlYyNVp6QVh2anpWMXpCMDlVQ2JD?=
+ =?utf-8?B?aG5YODlDQjJTUVhBOXZrUk1RNEpRdUQzUUVsdTE5NUxTeGsrMGtWQXBWUno5?=
+ =?utf-8?B?SmM2K3dONTB1RFBNS3AzdmJ5Ym9GZit4R3J6ZFFYUFNGQjVqTm1xeWhZYzlj?=
+ =?utf-8?B?aVpGYjlDTXA2cHVjT1VVVUdJdG9zVlEzZUlXcnJqdlh2MHpjeTJpMithbWEx?=
+ =?utf-8?B?ZGR4NCtBSy9GR0U2OWRtNEpvU0FsN3BVZ2NqQ0lyVEU1OTJDdmluZStsNVJh?=
+ =?utf-8?B?MlZZSHZ4aDlJSkZvY2ZYbXJ0dkhOSTQrRzBxcjlLU2RMVU5UWEx4TUxDV043?=
+ =?utf-8?B?NFQ2YzdXWWY3VzFaMGpWNkswL1NjSWFhYjR6dFFpVjllSGtNUk9UdTZtL0Rn?=
+ =?utf-8?B?WXlMK0U1bWJ5QlpGdjYxNGZLZm5wdVdPWGlhK3QwSFlQbHFEVStDNDV3b054?=
+ =?utf-8?B?V2o4NGZkUVZZMEpiUGE3SzlKeHNqdGZ0aTd6RjBQVnkwMHUxTGdsTW5XY2VH?=
+ =?utf-8?B?NmkvSmNPQjZIdnE4bURteFFrVnNNeDg0dGtCQkJ5bytNb3kxY0VRNjc3V29o?=
+ =?utf-8?B?N2dCVlV5TG9Oa0RTanQ5M2poMTdwbTR4TEttTlRqdHpZZVN4bEorUmdGYVpm?=
+ =?utf-8?B?R2xVRVRaUlNaK3BySXVFSjlWTEtCZXRiaW1CVGF5UmY4TXVHcVI4TkFHOUVT?=
+ =?utf-8?B?bDlqS0pZeUVPY0tmdEFZc2RyRFVUME8xY0IzVDBoMEZEdTd0SzlvQTZLeUR3?=
+ =?utf-8?B?RzRFMTJMWW5ralcwdHE4bmxWY0c0TmdaMlJOQlpVM04zYVVFUWVORkxjTDM2?=
+ =?utf-8?B?RHhUZncxcERXSVZQV3VmZmJBckl1QUk4MFpaSGFTWjEvTXlYTG92bzRSc2dU?=
+ =?utf-8?B?bHorQ2dCVVM0cVM1aVJiTVNReG1vWkNUcE00anF5V29HN0RENVdMQVMxcjYx?=
+ =?utf-8?B?OThQa21FY0dWUWV1TGd6U0IvNnpVTjdIV3Y1MExUTE1QU3pPcjlROCtRMkpU?=
+ =?utf-8?B?UjVTemdaUkhTQ2t4UnE2Z0RYRzhudTg5eUhVNStzSTd4MW1yS1czZHJqOXFU?=
+ =?utf-8?B?bWlOVEdtc0tHb3ZTbGZYREp2TGtBUWs0MGpDYTE0dVNQL1dKQ2tEY0tyV0pE?=
+ =?utf-8?B?VHV3NFQ4MDRLdGlPOHFtVm95bnhEWllZMnVRRHh0U3luWmhudEw5dkRsUUtk?=
+ =?utf-8?B?NUVsMy9uQWg4cWgwU0lkYTY0S2FObm84S054aURDY242SXY0TEVxNW9wMlJV?=
+ =?utf-8?B?N0gwTTlmMTFibEE1UU5uZXkwRmxhNVYwOWgvZS9RenNBREp4T2dnb0xqL1Qv?=
+ =?utf-8?B?MkRicU9FZ2pRWmJJaVNuVTdGL3ZzYUl5TWtKL05XcWsyZi9kcGY4TzdCVUpE?=
+ =?utf-8?B?M2JrQUxMbEhJcW9wQ1NtOHA0MUlBPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6156724E086E9445BB917CD7E4DAC1AA@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-04_03,2022-01-01_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1011
- bulkscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0 adultscore=0
- mlxlogscore=999 impostorscore=0 priorityscore=1501 mlxscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2201040047
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA2PR11MB4874.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6e3314ad-53bf-4767-0d42-08d9cf50d4dd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jan 2022 07:07:12.4558
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QVJi214ipJyABUiyuQm0yC9kaAehC3t+yznYC0Lg8qrFl2xbeSkpiBgufeCSxDK3MuOUiPGJCTRaRf5tFqHDbGZM+4OLgPQ5GyG2tpUdAGA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB2877
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Boris,
-
-On 03/01/2022 20:59, Borislav Petkov wrote:
-> On Mon, Nov 29, 2021 at 11:42:46AM +0000, Dov Murik wrote:
->> As a usage example, consider a guest performing computations on
->> encrypted files.  The Guest Owner provides the decryption key (= secret)
->> using the secret injection mechanism.  The guest application reads the
->> secret from the efi_secret filesystem and proceeds to decrypt the files
->> into memory and then performs the needed computations on the content.
->>
->> In this example, the host can't read the files from the disk image
->> because they are encrypted.  Host can't read the decryption key because
->> it is passed using the secret injection mechanism (= secure channel).
->> Host can't read the decrypted content from memory because it's a
->> confidential (memory-encrypted) guest.
-> 
-> So maybe I don't understand the example properly or something's missing
-> but why can't the guest owner simply scp the secrets into the guest? Why
-> is this special thing needed?
-
-If the Guest Owner chooses to inject secrets via scp, it needs
-to be sure it is scp-ing to the correct VM - the one that has SEV
-enabled and was measured at launch.
-
-One way to achieve that would be to inject the guest's SSH private key
-using the proposed efi_secret mechanism.  This way the Guest Owner is
-sure it is talking to the correct guest and not to some other VM that
-was started by the untrusted cloud provider (say, with SEV disabled so
-the cloud provider can steal its memory content).
-
-
-> 
-> The secret below says "...kata-secrets" so this sounds like
-> something-automated-containers-thing where they'd profit from getting
-> secrets automatically supplied to the guest. But I guess there you can
-> scp too...
-
-Indeed this proposed efi_secret module is in use for enabling SEV
-confidential containers using Kata containers [1], but there's nothing
-specific in the current patch series about containers.  The patch series
-just exposes the launch-injected SEV secrets to userspace as virtual files
-(under securityfs).
-
-[1] https://github.com/confidential-containers/attestation-agent/tree/main/src/kbc_modules/offline_sev_kbc
-
-
-> 
-> So what am I missing?
-> 
-
-It boils down to: the confidential guest needs to have access to a
-secret which the untrusted host can't read, and which is essential for
-the normal operation of the guest.  This secret can be a decryption key,
-an SSH private key, an API key to a Key Management system, etc.  If a
-malicious cloud provider tries to start that VM without a secret (or
-with the wrong one), the actual workload that the guest is supposed to
-run will not execute meaningfully.
-
-The proposed patch series exposes the SEV injected secrets as virtual
-files, which can later be used as decryption keys (as done in the kata
-confidential containers use-case), or SSH private keys, or any other
-possible implementation.
-
--Dov
+T24gMS80LzIyIDc6MjAgQU0sIEthdnlhc3JlZSBLb3RhZ2lyaSAtIEkzMDk3OCB3cm90ZToNCj4+
+IE9uIDEvMy8yMiAyOjQ4IFBNLCBLYXZ5YXNyZWUgS290YWdpcmkgd3JvdGU6DQo+Pj4gZGlmZiAt
+LWdpdCBhL2FyY2gvYXJtL2Jvb3QvZHRzL2xhbjk2NnhfcGNiODI5MS5kdHMNCj4+IGIvYXJjaC9h
+cm0vYm9vdC9kdHMvbGFuOTY2eF9wY2I4MjkxLmR0cw0KPj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0
+DQo+Pj4gaW5kZXggMDAwMDAwMDAwMDAwLi5jZDA0NTRhNzk1ZTcNCj4+PiAtLS0gL2Rldi9udWxs
+DQo+Pj4gKysrIGIvYXJjaC9hcm0vYm9vdC9kdHMvbGFuOTY2eF9wY2I4MjkxLmR0cw0KPj4+IEBA
+IC0wLDAgKzEsNTUgQEANCj4+DQo+Pj4gKyZmbHgzIHsNCj4+PiArICAgICAgIGF0bWVsLGZsZXhj
+b20tbW9kZSA9IDxBVE1FTF9GTEVYQ09NX01PREVfVVNBUlQ+Ow0KPj4+ICsgICAgICAgc3RhdHVz
+ID0gIm9rYXkiOw0KPj4+ICsNCj4+PiArICAgICAgIHVzYXJ0MDogc2VyaWFsQDIwMCB7DQo+Pj4g
+KyAgICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAiYXRtZWwsYXQ5MXNhbTkyNjAtdXNhcnQiOw0K
+Pj4NCj4+IFRoZSBmbGV4Y29tIHVzYXJ0IG1vZGUgc2hvdWxkIGJlIGRlZmluZWQgaW4gdGhlIGR0
+c2kgZmlsZSwgc28gdGhhdCB5b3UNCj4+IHdvbid0IGR1cGxpY2F0ZSB0aGUgZGVmaW5pdGlvbiBp
+biBlYWNoIGR0cyB0aGF0IGluY2x1ZGVzIHRoZSBkdHNpIGZpbGUuDQo+Pg0KPiBkZWZpbmluZyBm
+bGV4Y29tIG1vZGUgaW4gZHRzIGFzIGZseDMgY2FuIGJlIHVzZWQgYXMgVVNBUlQvSTJDL1NQSSBv
+biBkaWZmZXJlbnQgYm9hcmRzLg0KDQpSaWdodCwgeW91IHNob3VsZCBkZWZpbmUgdGhlIG1vZGUg
+aW4gZHRzaSBhbmQgZW5hYmxlIGl0IGluIHRoZSBkdHMgZmlsZS4NCg0KPiBBbmQgaXQgaXMgbm90
+IHRoZSBzYW1lIG1vZGUgZm9yIGFsbCBib2FyZHMuDQo+IA0KPj4gQ2hlZXJzLA0KPj4gdGENCg0K

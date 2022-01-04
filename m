@@ -2,167 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4944A483A9C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 03:36:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 689D2483A9B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 03:35:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232316AbiADCgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 21:36:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34130 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232164AbiADCgH (ORCPT
+        id S232299AbiADCfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 21:35:12 -0500
+Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:36124 "EHLO
+        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232285AbiADCfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 21:36:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2537C061761
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 18:36:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F8CDB81088
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 02:36:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66627C36AEE;
-        Tue,  4 Jan 2022 02:36:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641263764;
-        bh=+z9cZMpMIAJrxbPFeDGIoeUl2a422rQtu6xbaNXN+EI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VXqsdmlZkbXc2zSf6DQHUBQ5vRtmnynPdO0/4UwDkyea1bnKgbKTOZgh3BO3rbapr
-         oTEpRYHYiu42g24ZxV02DUklBk42FTp5jpgcqGJo1NFVyZitmpuy79pgVYxFrghQgF
-         TZ+hltN7TYXdt557g4A4zno9W20eLalyhj3RwkUfHepyrXKy/sx3vPJ+cQ/EwuOLE9
-         Kiq4OH9XgD9XVRGfuxcrzBK0ZLZuR0pSdybK4gUTAg3/Afj/wCE4a9Q/lTDyT0W6NT
-         Q6VOcyNQlnAC1xSMJd9C7RCfrpzONdEbMZa90+LpeYz6CHPpD/ubneJjzfG7UL4E7a
-         rG2K8ci30LafQ==
-Date:   Tue, 4 Jan 2022 11:35:59 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Jianhua Liu <jianhua.ljh@gmail.com>
-Cc:     "liuqi (BA)" <liuqi115@huawei.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Will Deacon <will@kernel.org>, Linuxarm <linuxarm@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>, robin.murphy@arm.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] arm64: kprobe: Enable OPTPROBE for arm64
-Message-Id: <20220104113559.7dd1ff2cb575f62e0b01fb47@kernel.org>
-In-Reply-To: <CAAgTQPWomoiGdVJxwYBmXOj7RegHM4TSa2+yKVTQFhBFg8PtLg@mail.gmail.com>
-References: <20211207124002.59877-1-liuqi115@huawei.com>
-        <20211213183851.GD12405@willie-the-truck>
-        <20211214092657.5b9c26b4e3852602eced4fda@kernel.org>
-        <CAAgTQPUKqFn9_ENKbfJkFjT3v9L2NiFAY2xvULEj_6wguqWYNg@mail.gmail.com>
-        <f4552c3e-8f1a-bef1-9396-39aa2405b486@huawei.com>
-        <CAAgTQPWAK==cYPKeYNGE7nPGh0Y7Py4TcUoMPz76h15YNBNsLQ@mail.gmail.com>
-        <CAAgTQPWomoiGdVJxwYBmXOj7RegHM4TSa2+yKVTQFhBFg8PtLg@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Mon, 3 Jan 2022 21:35:11 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V0nqwQd_1641263708;
+Received: from 30.21.164.36(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0V0nqwQd_1641263708)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 04 Jan 2022 10:35:09 +0800
+Message-ID: <bc873789-e025-8366-88a8-f3dadcdd9db9@linux.alibaba.com>
+Date:   Tue, 4 Jan 2022 10:36:00 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v3] mm/damon: Add access checking for hugetlb pages
+To:     SeongJae Park <sj@kernel.org>
+Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20211230181919.1588-1-sj@kernel.org>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20211230181919.1588-1-sj@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jianhua,
+Hi SeongJae,
 
-On Mon, 3 Jan 2022 17:03:33 +0800
-Jianhua Liu <jianhua.ljh@gmail.com> wrote:
+On 12/31/2021 2:19 AM, SeongJae Park wrote:
+> On Thu, 30 Dec 2021 16:20:28 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+> 
+>> The process's VMAs can be mapped by hugetlb page, but now the DAMON
+>> did not implement the access checking for hugetlb pte, so we can not
+>> get the actual access count like below if a process VMAs were mapped
+>> by hugetlb.
+>>
+>> damon_aggregated: target_id=18446614368406014464 nr_regions=12 4194304-5476352: 0 545
+>> damon_aggregated: target_id=18446614368406014464 nr_regions=12 140662370467840-140662372970496: 0 545
+>> damon_aggregated: target_id=18446614368406014464 nr_regions=12 140662372970496-140662375460864: 0 545
+>> damon_aggregated: target_id=18446614368406014464 nr_regions=12 140662375460864-140662377951232: 0 545
+>> damon_aggregated: target_id=18446614368406014464 nr_regions=12 140662377951232-140662380449792: 0 545
+>> damon_aggregated: target_id=18446614368406014464 nr_regions=12 140662380449792-140662382944256: 0 545
+>> ......
+>>
+>> Thus this patch adds hugetlb access checking support, with this patch
+>> we can see below VMA mapped by hugetlb access count.
+>>
+>> damon_aggregated: target_id=18446613056935405824 nr_regions=12 140296486649856-140296489914368: 1 3
+>> damon_aggregated: target_id=18446613056935405824 nr_regions=12 140296489914368-140296492978176: 1 3
+>> damon_aggregated: target_id=18446613056935405824 nr_regions=12 140296492978176-140296495439872: 1 3
+>> damon_aggregated: target_id=18446613056935405824 nr_regions=12 140296495439872-140296498311168: 1 3
+>> damon_aggregated: target_id=18446613056935405824 nr_regions=12 140296498311168-140296501198848: 1 3
+>> damon_aggregated: target_id=18446613056935405824 nr_regions=12 140296501198848-140296504320000: 1 3
+>> damon_aggregated: target_id=18446613056935405824 nr_regions=12 140296504320000-140296507568128: 1 2
+>> ......
+>>
+>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> 
+> In addition to unwrapping program outputs in commit message, I personally
+> prefer indenting those with 4 spaces[1], but I wouldn't bother you for such a
+> trivial thing.  Thank you for this patch!
 
-> Hi Qi,
-> I have tested your patch on UNISOC s9863a.
-> Test case "kprobe_example & kretprobe_example" is OK.
-> 
-> Two point:
-> 1. backtrace is not perfect.
->    optprobe_common does not saved frame pointer,
->    backtrace lacks two calls.
-> such as for dup_mm: lack copy_process-->dup_mm
-> dup_mm backtrace from your patch:
-> [  832.387066] CPU: 0 PID: 296 Comm: sh Not tainted 5.16.0-rc5+ #8
-> [  832.387078] Hardware name: Spreadtrum SP9863A-1H10 Board (DT)
-> [  832.387083] Call trace:
-> [  832.387086]  dump_backtrace+0x0/0x1e0
-> [  832.387103]  show_stack+0x24/0x30
-> [  832.387112]  dump_stack_lvl+0x68/0x84
-> [  832.387123]  dump_stack+0x18/0x34
-> [  832.387131]  handler_pre+0x40/0x50 [kprobe_example]
-> [  832.387143]  opt_pre_handler+0x84/0xc0
-> [  832.387154]  optprobe_optimized_callback+0xec/0x164
-> [  832.387164]  optprobe_common+0x70/0xc4
-> [  832.387173]  kernel_clone+0x98/0x440
-> [  832.387182]  __do_sys_clone+0x54/0x80
-> [  832.387191]  __arm64_sys_clone+0x2c/0x40
-> [  832.387199]  invoke_syscall+0x50/0x120
-> [  832.387208]  el0_svc_common.constprop.0+0x4c/0xf4
-> [  832.387217]  do_el0_svc+0x30/0x9c
-> [  832.387225]  el0_svc+0x20/0x60
-> [  832.387235]  el0t_64_sync_handler+0xe8/0xf0
-> [  832.387242]  el0t_64_sync+0x1a0/0x1a4
-> 
-> 
-> dup_mm backtrace from other:
-> [  173.352294] CPU: 6 PID: 309 Comm: sh Not tainted 5.16.0-rc5+ #19
-> [  173.352301] Hardware name: Spreadtrum SP9863A-1H10 Board (DT)
-> [  173.352304] Call trace:
-> [  173.352307]  dump_backtrace+0x0/0x1d4
-> [  173.352319]  show_stack+0x18/0x24
-> [  173.352326]  dump_stack_lvl+0x68/0x84
-> [  173.352333]  dump_stack+0x18/0x34
-> [  173.352338]  handler_pre+0x38/0x48 [kprobe_example]
-> [  173.352347]  opt_pre_handler+0x74/0xb0
-> [  173.352354]  optimized_callback+0x108/0x130
-> [  173.352361]  optinsn_slot+0x258/0x1000
-> [  173.352366]  dup_mm+0x4/0x4b0
-> [  173.352373]  copy_process+0x1284/0x1360
-> [  173.352378]  kernel_clone+0x5c/0x3c0
-> [  173.352384]  __do_sys_clone+0x54/0x80
-> [  173.352390]  __arm64_sys_clone+0x24/0x30
-> [  173.352396]  invoke_syscall+0x48/0x114
-> [  173.352402]  el0_svc_common.constprop.0+0x44/0xec
-> [  173.352408]  do_el0_svc+0x24/0x90
-> [  173.352413]  el0_svc+0x20/0x60
-> [  173.352420]  el0t_64_sync_handler+0xe8/0xf0
-> [  173.352427]  el0t_64_sync+0x1a0/0x1a4
-
-Is the second one with your patch?
+I noticed your comments before, but I still think the message line is 
+too long to unreadable. Anyway thanks for your reviewing.
 
 > 
-> 2. The reserve memory "OPT_SLOT_SIZE - PAGE_SIZE"  is waste.
->    kernel/kprobe.c used only one PAGE_SIZE slot memory.
-
-Good catch!
-Qi, can you make an array (or bit map) of usage flags and
-manage the reserved memory?
-
-#define OPT_INSN_PAGES (OPT_SLOT_SIZE/PAGE_SIZE)
-static bool insn_page_in_use[OPT_INSN_PAGES];
-
-void *alloc_optinsn_page(void)
-{
-	int i;
-
-	for (i = 0; i < OPT_INSN_PAGES; i++)
-		if (!insn_page_in_use[i])
-			goto found;
-	return NULL;
-found:
-	insn_page_in_use[i] = true;
-	return (void *)((unsigned long)optinsn_slot + PAGE_SIZE * i);
-}
-
-void free_optinsn_page(void *page)
-{
-	unsigned long idx = (unsigned long)page - (unsigned long)optinsn_slot;
-
-	WARN_ONCE(idx & (PAGE_SIZE - 1));
-	idx >>= PAGE_SHIFT;
-	if (WARN_ONCE(idx >= OPT_INSN_PAGES))
-		return;
-	insn_page_in_use[idx] = false;
-}
-
-Thank you,
-
-
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+> Reviewed-by: SeongJae Park <sj@kernel.org>
+> 
+> [1] https://lore.kernel.org/linux-mm/17421c73-2124-63c2-1925-dcea5c976711@linux.alibaba.co

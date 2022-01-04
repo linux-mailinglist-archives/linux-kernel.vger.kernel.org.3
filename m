@@ -2,70 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 110EF483E0C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 09:26:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1FC483DFD
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 09:20:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233999AbiADI01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 03:26:27 -0500
-Received: from grandeconsulting.jp ([119.245.216.91]:45515 "EHLO
-        grandeconsulting.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232221AbiADI00 (ORCPT
+        id S233951AbiADIUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 03:20:37 -0500
+Received: from mail-sh.amlogic.com ([58.32.228.43]:39621 "EHLO
+        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233729AbiADIUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 03:26:26 -0500
-X-Greylist: delayed 400 seconds by postgrey-1.27 at vger.kernel.org; Tue, 04 Jan 2022 03:26:26 EST
-Received: (qmail 11947 invoked by SAV 20220103.003 by uid 33700001); 4 Jan 2022 17:19:45 +0900
-To:     linux-kernel@vger.kernel.org
-Subject: =?ISO-2022-JP?B?GyRCIVolQSE8JWAlUyVrJUclIyVzJTAhWyQqTGQkJDlnJG8kOyQiJGokLCRIJCYkNCQ2JCQkXiQ5ISMbKEI=?=
-Date:   Tue, 4 Jan 2022 08:19:45 +0000
-From:   =?ISO-2022-JP?B?GyRCJTAlaSVzJUclMyVzJTUlayVGJSMlcyUwGyhC?= 
-        <info@grandeconsulting.jp>
-Reply-To: yoshizawa.hiroki@fullbleed.co.jp
-Message-ID: <87728f50f67f7794ad45d9d511ea957b@grandeconsulting.jp>
-X-Mailer: PHPMailer 5.2.22 (https://github.com/PHPMailer/PHPMailer)
+        Tue, 4 Jan 2022 03:20:36 -0500
+Received: from [10.18.29.173] (10.18.29.173) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Tue, 4 Jan
+ 2022 16:20:33 +0800
+Message-ID: <1f16f430-677e-d1f0-1a7f-bf1d1a7c3c47@amlogic.com>
+Date:   Tue, 4 Jan 2022 16:20:33 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ISO-2022-JP
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH V3 4/6] tty: serial: meson: The UART baud rate calculation
+ is described using the common clock code. Also added S4 chip uart Compatible.
+Content-Language: en-US
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     <linux-serial@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Vyacheslav <adeep@lexina.in>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>
+References: <20211230102110.3861-1-yu.tu@amlogic.com>
+ <20211230102110.3861-5-yu.tu@amlogic.com>
+ <CAFBinCCL-QaeSRCLzfyNXcRQZ7YC1D85rP2y4OGkAjCmQEqGgQ@mail.gmail.com>
+ <3e1e40aa-7865-0f7a-5772-e2ad96c8141d@amlogic.com>
+ <CAFBinCB2nF0TwRE1uJ4UTB_avcqRBfOHR1CDSe29dB1o-YjEHQ@mail.gmail.com>
+ <7278bace-a2b9-0cfc-55b3-c19311e3352e@amlogic.com>
+ <CAFBinCCwE1DbP+Y49o3WxNdeE11ZK=HcGbXa0Sq52tch+eNhrQ@mail.gmail.com>
+From:   Yu Tu <yu.tu@amlogic.com>
+In-Reply-To: <CAFBinCCwE1DbP+Y49o3WxNdeE11ZK=HcGbXa0Sq52tch+eNhrQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.18.29.173]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ijmk77md $BMM(B
-
-$B(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(B
-
-$B$3$NEY$O$*Ld$$9g$;D:$-@?$K$"$j$,$H$&$4$6$$$^$7$?!#(B
-
-$B2~$a$FC4Ev<T$h$j$4O"Mm$r$5$;$F$$$?$@$-$^$9!#(B
-
-
-$B(!$4Aw?.FbMF$N3NG'(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(B
-
-$B$*Ld$$9g$o$;<oN`!'(B $B$=$NB>$N$*Ld$$9g$o$;(B
-$B5.<RL>!'(B ?? You have unread messages from Melanie (2)! Click Here: http://bit.do/fSYTr?nrwv ??
-$B8&=$%3%s%F%s%D$r$*;}$A$NJ}$O%A%'%C%/$7$F$/$@$5$$(B
-$B8&=$%U%!%7%j%F!<%?$NJ}$O%A%'%C%/$7$F$/$@$5$$(B
-$B$*L>A0!'(B ijmk77md
-TEL$B!'(B 845705420307
-MAIL$B!'(B linux-kernel@vger.kernel.org
-
-$B$*Ld$$9g$o$;FbMF!'(B
-84qwz6c
-
-$B(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(B
-
-
-$B$3$NEY$O$*Ld$$9g$o$;=E$M$F$*Ni?=$7>e$2$^$9!#(B
-
-
-
-$B"(K\%a!<%k$K$*?4Ev$?$j$N$J$$>l9g$O!"@?$K$*<j?t$G$9$,2<5-$*Ld9g$;@h$^$G$4O"Mm$/$@$5$$!#(B
-
-$B(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(B
-
-$B!!3t<02q<R%0%i%s%G%3%s%5%k%F%#%s%0(B
-
-$B!!")(B102-0084
-$B!!El5~ET@iBeED6hFsHVD.(B9-3$B!!(BThe Base$B9mD.(B
-$B!!(BTel: 03-3239-4404 Fax: 03-3239-4414
-
-$B(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(,(B
-
+Hi Martin,
+	Thank you very much for your reply.
+On 2022/1/3 3:36, Martin Blumenstingl wrote:
+> [ EXTERNAL EMAIL ]
+> 
+> Hi,
+> 
+> On Sat, Jan 1, 2022 at 2:30 PM Yu Tu <yu.tu@amlogic.com> wrote:
+> [...]
+>>> Interesting, thanks for sharing that u-boot turns these clocks on.
+>>> Let's say someone wanted to make u-boot save power and turn off all
+>>> UART clocks except the one for uart_AO (where we typically connect the
+>>> serial console).
+>>> In that case the pclk of uart_C (just to choose an example here) is
+>>> turned off. Would there be a problem then accessing the registers of
+>>> uart_C before clk_prepare_enable is called?
+>> The way you describe it, it does hang. This would not be recommended on
+>> actual projects.
+>>
+>> At present, AmLogic chips are older than S4 Soc, and we have no way to
+>> deal with this problem. We have to tell customers not to use it in this
+>> way。Customers rarely use it in real projects.On the S4 SOC we will use
+>> a clock like the UART pclk to control the shutdown using two registers,
+>> one safe (need to operate in EL3) and one normal (EL1). It will only be
+>> closed if both registers are closed. This mainly prevents misoperation.
+> oh, interesting that there's some updates specifically with the S4 SoCs :-)
+> 
+>> With your experience, I'd like to know how you deal with this kind of
+>> problem.
+> Before this patch the driver simply turns on the clock from within
+> meson_uart_probe() (specifically it does so in
+> meson_uart_probe_clock()).
+> I think there's advanced power-saving techniques. Maybe for now we
+> keep it simple and just enable the clock(s) at probe time and disable
+> them at driver remove time. What do you think?
+> 
+I agree with you.
+> 
+> Best regards,
+> Martin
+> 

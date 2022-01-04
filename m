@@ -2,130 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 713534843A9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:47:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75F374843AB
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:48:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232999AbiADOrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:47:33 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:40572 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbiADOrc (ORCPT
+        id S234385AbiADOsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:48:14 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:60626 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230128AbiADOsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:47:32 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95FDB61486
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 14:47:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F199BC36AED;
-        Tue,  4 Jan 2022 14:47:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641307651;
-        bh=8oeeGDAP9rzSncCrj5L2Zqa/nZZ5MhuFbFdTeGZaRm8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HNeSuzprgRcso0bEij5sKNkivKcf8wKpna86CUQ7xi30u1wvjzgIIjFPDYLS17gBA
-         RCOs60EtytkjxST69TqKuVLDtBWAU+8mbcPpFXnboUXzasqrAEqBK6X/f/YcQbPQm4
-         VJVM7VJgmoDD6Q77phdFTPtRinSWEdGktlixY/r6FjI7Rv1MGOX0wIL1eKqMShTU/y
-         wzQd1WGOTT3TCYvuOQmwsx7M4SJsVPAio1qZqqnjfrHs9WIfNBMMnL1Gk2axHu9a4H
-         7k6mKmlYNLcTM12PM9GPvyKYQQzCUhbqUImVON5tk5W731Fl1cUb3eZA46kDX2Mpq2
-         /ePXb+vzUDhUQ==
-Date:   Tue, 4 Jan 2022 14:47:26 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-kernel@vger.kernel.org, Watson Chow <watson.chow@avnet.com>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Subject: Re: [PATCH 2/2] regulator: Add MAX20086-MAX20089 driver
-Message-ID: <YdRd/m3mOwcvvJ2L@sirena.org.uk>
-References: <20220102211124.18435-1-laurent.pinchart+renesas@ideasonboard.com>
- <20220102211124.18435-3-laurent.pinchart+renesas@ideasonboard.com>
- <YdRWwWmoQGQuUyLz@sirena.org.uk>
- <YdRa0GoSoX8CP694@pendragon.ideasonboard.com>
+        Tue, 4 Jan 2022 09:48:13 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 648FD1F43790
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1641307691;
+        bh=G+jVGmECfNW9PLCn0NHGgzigCEJfRk6KgWTuVOWIb3k=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=AgD77RERBYtR6rmleLLBnFWdCy/RukQMSW58ckAyF6LbE7yTBG/EMsyPXT1oarx7s
+         IBU/TRZrtwKkAwqaEi6sbrZ/14jpWO4YBcyWTX0CMEQxBJDO0NKWcRYyYFoPoZu7rs
+         fGPbYjKaqVwek5g7gYV37tjlWwEz9zMShKNzL9o+aU1PoLfGHd8jFt0jTYEmfdaACt
+         do4IRx/CrIJ9Ga4s3Dd2gTc2GWJWSf2Paz5kgo0fpGAl6sQd5i/by60lMA/5S9oaUG
+         igNQVaq6LDME37rC0D1aLWijwfIQCGRGZbJF+kHDL26Y5XfWT0OZZqIYbvjVcUduMz
+         zGG6dMx30eu3Q==
+Subject: Re: [PATCH] drm/bridge: parade-ps8640: Link device to ensure
+ suspend/resume order
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     a.hajda@samsung.com, narmstrong@baylibre.com,
+        laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, kernel@collabora.com,
+        linux-kernel@vger.kernel.org
+References: <20211102130428.444795-1-angelogioacchino.delregno@collabora.com>
+ <CAG3jFys2Js0urfL9q3nk_KDweLcX+cOZeURCk8=gyps9h6TPcA@mail.gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <3b0af96e-f833-5cd1-7725-5ec37faab9fb@collabora.com>
+Date:   Tue, 4 Jan 2022 15:48:08 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HN230c+fjCk4OvNj"
-Content-Disposition: inline
-In-Reply-To: <YdRa0GoSoX8CP694@pendragon.ideasonboard.com>
-X-Cookie: The horror... the horror!
+In-Reply-To: <CAG3jFys2Js0urfL9q3nk_KDweLcX+cOZeURCk8=gyps9h6TPcA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Il 04/01/22 15:22, Robert Foss ha scritto:
+> Hey AngeloGioacchino,
+> 
+> On Tue, 2 Nov 2021 at 14:08, AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+>>
+>> Entering suspend while the display attached to this bridge is still on
+>> makes the resume sequence to resume the bridge first, display last:
+>> when this happens, we get a timeout while resuming the bridge, as its
+>> MCU will get stuck due to the display being unpowered.
+>>
+>> On the other hand, on mt8173-elm, closing the lid makes the display to
+>> get powered off first, bridge last, so at resume time the sequence is
+>> swapped (compared to the first example) and everything just works
+>> as expected.
+>>
+>> Add a stateless device link to the DRM device that this bridge belongs
+>> to, ensuring a correct resume sequence and solving the unability to
+>> correctly resume bridge operation in the first mentioned example.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   drivers/gpu/drm/bridge/parade-ps8640.c | 22 ++++++++++++++++++++--
+>>   1 file changed, 20 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bridge/parade-ps8640.c
+>> index 45100edd745b..191cc196c9d1 100644
+>> --- a/drivers/gpu/drm/bridge/parade-ps8640.c
+>> +++ b/drivers/gpu/drm/bridge/parade-ps8640.c
+>> @@ -100,6 +100,7 @@ struct ps8640 {
+>>          struct regulator_bulk_data supplies[2];
+>>          struct gpio_desc *gpio_reset;
+>>          struct gpio_desc *gpio_powerdown;
+>> +       struct device_link *link;
+>>          bool powered;
+>>   };
+>>
+>> @@ -460,10 +461,23 @@ static int ps8640_bridge_attach(struct drm_bridge *bridge,
+>>                  goto err_aux_register;
+>>          }
+>>
+>> +       ps_bridge->link = device_link_add(bridge->dev->dev, dev, DL_FLAG_STATELESS);
+>> +       if (!ps_bridge->link) {
+>> +               dev_err(dev, "failed to create device link");
+>> +               ret = -EINVAL;
+>> +               goto err_devlink;
+>> +       }
+>> +
+>>          /* Attach the panel-bridge to the dsi bridge */
+>> -       return drm_bridge_attach(bridge->encoder, ps_bridge->panel_bridge,
+>> +       ret = drm_bridge_attach(bridge->encoder, ps_bridge->panel_bridge,
+>>                                   &ps_bridge->bridge, flags);
+>> +       if (ret)
+>> +               goto err_bridge_attach;
+>>
+>> +err_bridge_attach:
+>> +       device_link_del(ps_bridge->link);
+>> +err_devlink:
+>> +       drm_dp_aux_unregister(&ps_bridge->aux);
+>>   err_aux_register:
+>>          mipi_dsi_detach(dsi);
+>>   err_dsi_attach:
+>> @@ -473,7 +487,11 @@ static int ps8640_bridge_attach(struct drm_bridge *bridge,
+>>
+>>   static void ps8640_bridge_detach(struct drm_bridge *bridge)
+>>   {
+>> -       drm_dp_aux_unregister(&bridge_to_ps8640(bridge)->aux);
+>> +       struct ps8640 *ps_bridge = bridge_to_ps8640(bridge);
+>> +
+>> +       drm_dp_aux_unregister(&ps_bridge->aux);
+>> +       if (ps_bridge->link)
+>> +               device_link_del(ps_bridge->link);
+>>   }
+>>
+>>   static struct edid *ps8640_bridge_get_edid(struct drm_bridge *bridge,
+>> --
+>> 2.33.1
+>>
+> 
+> This patch does not apply on drm-misc-next, could you rebase it on the
+> current branch?
+> 
 
---HN230c+fjCk4OvNj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Tue, Jan 04, 2022 at 04:33:52PM +0200, Laurent Pinchart wrote:
-> On Tue, Jan 04, 2022 at 02:16:33PM +0000, Mark Brown wrote:
-
-> > > +	chip->num_outputs = num;
-
-> > The number of regulators the device supports should be known from the
-> > compatible, I'd expect a data table for this.  It should be possible to
-> > read the state of regulators not described in the DT.
-
-> Does this mean that the driver should register all regulators, even the
-> ones not described in DT ? Who would read the state ?
-
-Yes, just register everything.  Someone doing system debugging or
-bringup might want to read the state, and this also goes along with the
-ability to have the core pull the constraints out of the DT based on
-data supplied by the driver - the general goal is to have routine
-drivers simply register data tables with the core and need minimal code.
-
-> > > +	/* Get the chip out of low-power shutdown state. */
-> > > +	chip->gpio_en = devm_gpiod_get(chip->dev, "enable", GPIOD_OUT_HIGH);
-> > > +	if (IS_ERR(chip->gpio_en)) {
-> > > +		ret = PTR_ERR(chip->gpio_en);
-> > > +		dev_err(chip->dev, "Failed to get enable GPIO: %d\n", ret);
-> > > +		return ret;
-> > > +	}
-
-> > This one is more OK - it's changing the state of the outputs that's an
-> > issue.  I guess this might cause the outputs to come on though if the
-> > GPIO was left off by the bootloader which is awkward.  If there's
-> > nothing other than the outputs going on with the chip I would be tempted
-> > to map this onto the per regulator enable GPIO that the core supports,
-> > the core will then be able to manage the low power state at runtime.
-> > That's *probably* the least bad option we have with current interfaces.
-
-> While fishing for code I can copy in the always unfashionable cargocult
-> style, I came across max8973-regulator.c that handles the enable GPIO in
-> the following way:
-
-> 		if (ridata && (ridata->constraints.always_on ||
-> 			       ridata->constraints.boot_on))
-> 			gflags = GPIOD_OUT_HIGH;
-> 		else
-> 			gflags = GPIOD_OUT_LOW;
-> 		gflags |= GPIOD_FLAGS_BIT_NONEXCLUSIVE;
-> 		gpiod = devm_gpiod_get_optional(&client->dev,
-> 						"maxim,enable",
-> 						gflags);
-
-> Should I try to replicate that ? It gets more difficult with multiple
-> regulators that share the same GPIO. That's why I left it as-is.
-
-We should really factor that bit out to the core too, though at the
-minute we pass in a gpio_desc so it's too late.  Doing the above is
-probably best, though I wouldn't loose any sleep over it being missing.
-you should definitely set the _NONEXCLUSIVE flag.  If someone specifies
-an incompatible mix of settings in the machine constraints I wouldn't
-worry about it too much, there's limits on what we can sort out.
-
---HN230c+fjCk4OvNj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHUXf4ACgkQJNaLcl1U
-h9CAJAf/emvVn7bGWR/oxbvh1xYYw4nvP0c6jbImB4gyhS9G4lhnq0djJD8ruVDZ
-nXUzmFEO68U/Hg6RdNsU4eKMWF9A87Nx2CXeu5vRXKUEy8cVJjom9fpQNva5JtE5
-7sDsp3Kh4XmARcrg8rUPCY504JC3RL/3+IEDVzUmtBwWgVLAXJT6M5erv+FqdUqY
-mHf4DDFIHWvp/EnwR4dpI7R4yRvnVxS/9x1f5oKVRietNnw0B1JoRK1r/56o2A28
-/PBVlxPyZ6U827TNkDZcFbTvXzUsiY4o17kdPdt0OC+wRhb1K5fwxR3AgdJ4iAJv
-itjKhq/mli20g9b+MO4xNQlfRmLj8w==
-=mC/3
------END PGP SIGNATURE-----
-
---HN230c+fjCk4OvNj--
+Sure, I'll rebase it asap.

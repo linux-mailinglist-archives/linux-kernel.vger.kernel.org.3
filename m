@@ -2,103 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B307483F90
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:03:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A87483FCE
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230428AbiADKDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 05:03:19 -0500
-Received: from mail-il1-f199.google.com ([209.85.166.199]:56213 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbiADKDR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 05:03:17 -0500
-Received: by mail-il1-f199.google.com with SMTP id j6-20020a056e02218600b002b261165281so19262233ila.22
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 02:03:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=Q1E+t0oMoHaTGPrmwIqtIWewM2eKhWNWfmQTzKP2yFc=;
-        b=JWyLym4cxd6JZlFFhQ7Yia8O68i++jwPEtLopVGLx+8dYyebqGugx0wy3/L4qzCKCp
-         OmyDnWTQn6Le6ZbO//JHPvFutLUKn8jOz1ZA9pnhrayrecj8y+vrdlX9fQVuJInAp7Ux
-         CEVGVygopiXIKf+0N32x071WPxNgTdvmsRe3WIpUniHPQ/shnZ08s2kOiWnUsy0PXIM7
-         JO2GeI8dqtxpDxvh0iB2lcv0EhEW0fjymUvFDyBc8ogABlnAeUF127wmHTRoDrL7VZPS
-         EXPt3NSPBWWwxEjm9agfmHxT2EAARSifK9+AZX8cxXdIRU6Rri8h77uj/LNyyZJSONAh
-         UchQ==
-X-Gm-Message-State: AOAM532QQpcKI9jmN0flIguqVVt2hERV0yMZVy+DF+Az+yl6C4tSZOz/
-        jMV5rYc+AXjtjgq8fnRQEft9DyeTtkO6fJdFVjVVR2i5Cc49
-X-Google-Smtp-Source: ABdhPJwb5D4MVQ/aRrEp1R7orXxh5xPAkBXZqP74ra9SMUH8iJP2+ItSyiT7sW8AADzyGmwSG8BX4nLUOpvXItwAbpIWNtHnafKM
+        id S231326AbiADKXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 05:23:52 -0500
+Received: from mga07.intel.com ([134.134.136.100]:50805 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229772AbiADKXv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 05:23:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641291831; x=1672827831;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=cRmQp72roVP7l2p3EpKp9b++E4cZUwks/tvVGLmjE5Q=;
+  b=ahh7lMnNLUPBqEc7RAcWemkE4kC76CW9LE6dLuGNxTTwfjy8MBcgpqHd
+   KSkHvqcEt4eHxQshizk96+UYHtTEFUcRi3lBavCeK3OncXrQl515S2EqO
+   wYs0nux+e5TfeQUaUPP8wgLlF8PhhOnnH91RZBsb0ClqUsgCov4EpQGjg
+   UcPmpEfliNwDq2GZsnxmHFQ8WWllfwgIjVqRea8kGTFbj5CTKDZ7GdO2/
+   OM8BbyX4njwZKiW6e/W6Y6oMC0crKNbmYZ8pIbhcQIcGG3ecmJYim6/ZO
+   yB+rANcWrMpRf2avSzQCPtB73qjLsRty7NXKoZinqexW0fqLXZuU91x+D
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="305551924"
+X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
+   d="scan'208";a="305551924"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 02:23:50 -0800
+X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
+   d="scan'208";a="525991028"
+Received: from yzhao56-desk.sh.intel.com ([10.239.159.43])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 02:23:44 -0800
+Date:   Tue, 4 Jan 2022 18:06:12 +0800
+From:   Yan Zhao <yan.y.zhao@intel.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com
+Subject: Re: [PATCH v3 kvm/queue 14/16] KVM: Handle page fault for private
+ memory
+Message-ID: <20220104100612.GA19947@yzhao56-desk.sh.intel.com>
+Reply-To: Yan Zhao <yan.y.zhao@intel.com>
+References: <20211223123011.41044-1-chao.p.peng@linux.intel.com>
+ <20211223123011.41044-15-chao.p.peng@linux.intel.com>
+ <20220104014629.GA2330@yzhao56-desk.sh.intel.com>
+ <20220104091008.GA21806@chaop.bj.intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9f4c:: with SMTP id u12mr22203049iot.22.1641290597348;
- Tue, 04 Jan 2022 02:03:17 -0800 (PST)
-Date:   Tue, 04 Jan 2022 02:03:17 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000073ffa05d4bebff8@google.com>
-Subject: [syzbot] KMSAN: kernel-infoleak in ucma_init_qp_attr
-From:   syzbot <syzbot+6d532fa8f9463da290bc@syzkaller.appspotmail.com>
-To:     glider@google.com, jgg@ziepe.ca, leon@kernel.org,
-        liangwenpeng@huawei.com, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, liweihang@huawei.com,
-        syzkaller-bugs@googlegroups.com, tanxiaofei@huawei.com,
-        yuehaibing@huawei.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220104091008.GA21806@chaop.bj.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Jan 04, 2022 at 05:10:08PM +0800, Chao Peng wrote:
+> On Tue, Jan 04, 2022 at 09:46:35AM +0800, Yan Zhao wrote:
+> > On Thu, Dec 23, 2021 at 08:30:09PM +0800, Chao Peng wrote:
+> > > When a page fault from the secondary page table while the guest is
+> > > running happens in a memslot with KVM_MEM_PRIVATE, we need go
+> > > different paths for private access and shared access.
+> > > 
+> > >   - For private access, KVM checks if the page is already allocated in
+> > >     the memory backend, if yes KVM establishes the mapping, otherwise
+> > >     exits to userspace to convert a shared page to private one.
+> > >
+> > will this conversion be atomical or not?
+> > For example, after punching a hole in a private memory slot, will KVM
+> > see two notifications: one for invalidation of the whole private memory
+> > slot, and one for fallocate of the rest ranges besides the hole?
+> > Or, KVM only sees one invalidation notification for the hole?
+> 
+> Punching hole doesn't need to invalidate the whole memory slot. It only
+> send one invalidation notification to KVM for the 'hole' part.
+good :)
 
-syzbot found the following issue on:
+> 
+> Taking shared-to-private conversion as example it only invalidates the
+> 'hole' part (that usually only the portion of the whole memory) on the
+> shared fd,, and then fallocate the private memory in the private fd at
+> the 'hole'. The KVM invalidation notification happens when the shared
+> hole gets invalidated. The establishment of the private mapping happens
+> at subsequent KVM page fault handlers.
+> 
+> > Could you please show QEMU code about this conversion?
+> 
+> See below for the QEMU side conversion code. The above described
+> invalidation and fallocation will be two steps in this conversion. If
+> error happens in the middle then this error will be propagated to
+> kvm_run to do the proper action (e.g. may kill the guest?).
+> 
+> int ram_block_convert_range(RAMBlock *rb, uint64_t start, size_t length,
+>                             bool shared_to_private)
+> {
+>     int ret; 
+>     int fd_from, fd_to;
+> 
+>     if (!rb || rb->private_fd <= 0) { 
+>         return -1;
+>     }    
+> 
+>     if (!QEMU_PTR_IS_ALIGNED(start, rb->page_size) ||
+>         !QEMU_PTR_IS_ALIGNED(length, rb->page_size)) {
+>         return -1;
+>     }    
+> 
+>     if (length > rb->max_length) {
+>         return -1;
+>     }    
+> 
+>     if (shared_to_private) {
+>         fd_from = rb->fd;
+>         fd_to = rb->private_fd;
+>     } else {
+>         fd_from = rb->private_fd;
+>         fd_to = rb->fd;
+>     }    
+> 
+>     ret = ram_block_discard_range_fd(rb, start, length, fd_from);
+>     if (ret) {
+>         return ret; 
+>     }    
+> 
+>     if (fd_to > 0) { 
+>         return fallocate(fd_to, 0, start, length);
+>     }    
+> 
+>     return 0;
+> }
+> 
+Thanks. So QEMU will re-generate memslots and set KVM_MEM_PRIVATE
+accordingly? Will it involve slot deletion and create?
 
-HEAD commit:    81c325bbf94e kmsan: hooks: do not check memory in kmsan_in..
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=10c4260db00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2d8b9a11641dc9aa
-dashboard link: https://syzkaller.appspot.com/bug?extid=6d532fa8f9463da290bc
-compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
+> > 
+> > 
+> > >   - For shared access, KVM also checks if the page is already allocated
+> > >     in the memory backend, if yes then exit to userspace to convert a
+> > >     private page to shared one, otherwise it's treated as a traditional
+> > >     hva-based shared memory, KVM lets existing code to obtain a pfn with
+> > >     get_user_pages() and establish the mapping.
+> > > 
+> > > The above code assume private memory is persistent and pre-allocated in
+> > > the memory backend so KVM can use this information as an indicator for
+> > > a page is private or shared. The above check is then performed by
+> > > calling kvm_memfd_get_pfn() which currently is implemented as a
+> > > pagecache search but in theory that can be implemented differently
+> > > (i.e. when the page is even not mapped into host pagecache there should
+> > > be some different implementation).
+> > > 
+> > > Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> > > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> > > ---
+> > >  arch/x86/kvm/mmu/mmu.c         | 73 ++++++++++++++++++++++++++++++++--
+> > >  arch/x86/kvm/mmu/paging_tmpl.h | 11 +++--
+> > >  2 files changed, 77 insertions(+), 7 deletions(-)
+> > > 
+> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > > index 2856eb662a21..fbcdf62f8281 100644
+> > > --- a/arch/x86/kvm/mmu/mmu.c
+> > > +++ b/arch/x86/kvm/mmu/mmu.c
+> > > @@ -2920,6 +2920,9 @@ int kvm_mmu_max_mapping_level(struct kvm *kvm,
+> > >  	if (max_level == PG_LEVEL_4K)
+> > >  		return PG_LEVEL_4K;
+> > >  
+> > > +	if (kvm_slot_is_private(slot))
+> > > +		return max_level;
+> > > +
+> > >  	host_level = host_pfn_mapping_level(kvm, gfn, pfn, slot);
+> > >  	return min(host_level, max_level);
+> > >  }
+> > > @@ -3950,7 +3953,59 @@ static bool kvm_arch_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+> > >  				  kvm_vcpu_gfn_to_hva(vcpu, gfn), &arch);
+> > >  }
+> > >  
+> > > -static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault, int *r)
+> > > +static bool kvm_vcpu_is_private_gfn(struct kvm_vcpu *vcpu, gfn_t gfn)
+> > > +{
+> > > +	/*
+> > > +	 * At this time private gfn has not been supported yet. Other patch
+> > > +	 * that enables it should change this.
+> > > +	 */
+> > > +	return false;
+> > > +}
+> > > +
+> > > +static bool kvm_faultin_pfn_private(struct kvm_vcpu *vcpu,
+> > > +				    struct kvm_page_fault *fault,
+> > > +				    bool *is_private_pfn, int *r)
+> > > +{
+> > > +	int order;
+> > > +	int mem_convert_type;
+> > > +	struct kvm_memory_slot *slot = fault->slot;
+> > > +	long pfn = kvm_memfd_get_pfn(slot, fault->gfn, &order);
+> > For private memory slots, it's possible to have pfns backed by
+> > backends other than memfd, e.g. devicefd.
+> 
+> Surely yes, although this patch only supports memfd, but it's designed
+> to be extensible to support other memory backing stores than memfd. There
+> is one assumption in this design however: one private memslot can be
+> backed by only one type of such memory backing store, e.g. if the
+> devicefd you mentioned can independently provide memory for a memslot
+> then that's no issue.
+> 
+> >So is it possible to let those
+> > private memslots keep private and use traditional hva-based way?
+> 
+> Typically this fd-based private memory uses the 'offset' as the
+> userspace address to get a pfn from the backing store fd. But I believe
+> the current code does not prevent you from using the hva as the
+By hva-based way, I mean mmap is required for this fd.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+> userspace address, as long as your memory backing store understand that
+> address and can provide the pfn basing on it. But since you already have
+> the hva, you probably already mmap-ed the fd to userspace, that seems
+> not this private memory patch can protect you. Probably I didn't quite
+Yes, for this fd, though mapped in private memslot, there's no need to
+prevent QEMU/host from accessing it as it will not cause the severe machine
+check.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6d532fa8f9463da290bc@syzkaller.appspotmail.com
-
-=====================================================
-BUG: KMSAN: kernel-infoleak in instrument_copy_to_user include/linux/instrumented.h:121 [inline]
-BUG: KMSAN: kernel-infoleak in _copy_to_user+0x1c9/0x270 lib/usercopy.c:33
- instrument_copy_to_user include/linux/instrumented.h:121 [inline]
- _copy_to_user+0x1c9/0x270 lib/usercopy.c:33
- copy_to_user include/linux/uaccess.h:209 [inline]
- ucma_init_qp_attr+0x8c7/0xb10 drivers/infiniband/core/ucma.c:1242
- ucma_write+0x637/0x6c0 drivers/infiniband/core/ucma.c:1732
- vfs_write+0x8ce/0x2030 fs/read_write.c:588
- ksys_write+0x28b/0x510 fs/read_write.c:643
- __do_sys_write fs/read_write.c:655 [inline]
- __se_sys_write fs/read_write.c:652 [inline]
- __ia32_sys_write+0xdb/0x120 fs/read_write.c:652
- do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
- __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
- do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
- do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
- entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
-
-Local variable resp created at:
- ucma_init_qp_attr+0xa4/0xb10 drivers/infiniband/core/ucma.c:1214
- ucma_write+0x637/0x6c0 drivers/infiniband/core/ucma.c:1732
-
-Bytes 40-59 of 144 are uninitialized
-Memory access of size 144 starts at ffff888167523b00
-Data copied to user address 0000000020000100
-
-CPU: 1 PID: 25910 Comm: syz-executor.1 Not tainted 5.16.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-=====================================================
+> understand 'keep private' you mentioned here.
+'keep private' means allow this kind of private memslot which does not
+require protection from this private memory patch :)
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Thanks
+Yan
+> > Reasons below:
+> > 1. only memfd is supported in this patch set.
+> > 2. qemu/host read/write to those private memslots backing up by devicefd may
+> > not cause machine check.
+> > 

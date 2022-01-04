@@ -2,106 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E57CB484834
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:05:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BDBB48483D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:07:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236445AbiADTFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 14:05:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33990 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233413AbiADTFh (ORCPT
+        id S236455AbiADTHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 14:07:01 -0500
+Received: from mail-oi1-f171.google.com ([209.85.167.171]:45009 "EHLO
+        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234678AbiADTHA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 14:05:37 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17637C061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 11:05:37 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id w16so152370686edc.11
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 11:05:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BHZhRecbnrNsV806lQ/AQDXL1uUWSl9+nsQtoz3J/w8=;
-        b=kIQ8iSft5GaKN+9oQIid+73JnrPvFMIXxPg0F8iPF+BNEiwmQb+x9aeUdOAUe2mEUG
-         xlb/CMmmelIWhKhoVdYx9hoBrPCWurf7qfPGceQ6qUiPI1GKuxKM1t/H3QyJrlzUksaH
-         W80l4BnpjtSCEOZ+idx+xgR19Ppv7RmSxkb0Zbl164h73AR102R2PfTpeLWx4ZB3wAw9
-         DwrqzH1I0vFUYllj26MRRs6U1IonbteyjtESNvnSnpF1D3kSqKtJoFUgBXUtSG2vOuWR
-         6UA45Sip421Y8uiF+QrJOCaGjuzKNYo2NR3jM2sj3+xSv/BDbUzL4IbxUmDjONUsmrTN
-         bLTw==
+        Tue, 4 Jan 2022 14:07:00 -0500
+Received: by mail-oi1-f171.google.com with SMTP id be32so60783520oib.11;
+        Tue, 04 Jan 2022 11:07:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BHZhRecbnrNsV806lQ/AQDXL1uUWSl9+nsQtoz3J/w8=;
-        b=R7yoSnplZ3ihITgmvOhsdh6p9KI5CHGkz1l91BJ6YEwYbTCMUcoKKToA3l9+nxh8uK
-         KX+6PgyXhpnrzf17MCM1qIdPOTUwZ0DdobSy7Olbo1VLv0pjnEZQTuCWOQnwO/xb/m3m
-         39//dTazij7MuSogV+wi25YxJiaeXJ2ekNJgVtwFPbz0XzpfWExLcl6lenzHaGXmPYpj
-         WoaFicYIpn7Knt+cTXZLdk01un6Th1eQO5CJfp1K1oIe3L0UHTo1mvIeqiyi50kNzxRl
-         pHv0au+jHWGKSntCYzxJ5NGPdYQcirwfU5EcpoyJ2DqdFjmzw3KB55/V3JDWfYAZTKcT
-         pQsg==
-X-Gm-Message-State: AOAM531u7IsQwAfoCdE+5fCpe9DJ4CFI/dzXv6prmFobBanHsjgKGu/Y
-        ql3KrxvoHMWAy17Ocs86p4XUDFb5D3Dr/nSgKN8E/A==
-X-Google-Smtp-Source: ABdhPJy1U9UZkiHyOLoaOWBfMCy+IkS8ik/+Jb2NIaOBUMF01ZJ1DZtKRWC/LpVn22Okz4J60JbTUEqPC7IeQnStHB0=
-X-Received: by 2002:a17:906:7954:: with SMTP id l20mr39916216ejo.358.1641323135363;
- Tue, 04 Jan 2022 11:05:35 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8CgkkbPTMgwITurXcyYa8txS8XSAkqNrdvXpQYKmlLs=;
+        b=PW+Zbue2x9sV2A7jkKgm3L0/yF5RAmig5KXW3AQ0OYlPzVN4Z1uegLYyNUNd8SsrZX
+         /TytF5+gzGw14GaJrrXjUN+MuPePTuvy+BElpAFf3ZsjFB5F0j8w5ln2bP7sARW092e3
+         yJ625SkPFB0EUtUNAX8Lfm79qJq5z6dMv2fpaa4IDq/x+n5PgYvBYBnNO7bTrt7zNhUZ
+         1/o371Ap6KWv3Ct4rM3NaG5FkLPS67N3Esu0u2YDI3fLMrGGopBWny9A7bEzQlGGKbjL
+         9+iWmiuJWVo4uULU30mTc2gC6DPGecjXGJFv1rZRgJ+1O1GCZZKvndjZvhwvtgtF6io0
+         k+Mw==
+X-Gm-Message-State: AOAM531aiEwfFfPfCGnj86iMpS9+Tu2tOGOzUaDPE9xBKMlDd9b/j0HS
+        /mK1zUayrpjeZkgxtcR3bA==
+X-Google-Smtp-Source: ABdhPJw0hrSMFia3kzR3oD+Vdenn5ohLpgJhiNYL5ZTwCMdi+PUKKbvtKnFvGJJVRysmx2lanYsxeg==
+X-Received: by 2002:a05:6808:155:: with SMTP id h21mr31124067oie.121.1641323219578;
+        Tue, 04 Jan 2022 11:06:59 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id r17sm8378611otc.65.2022.01.04.11.06.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 11:06:59 -0800 (PST)
+Received: (nullmailer pid 1227279 invoked by uid 1000);
+        Tue, 04 Jan 2022 19:06:57 -0000
+Date:   Tue, 4 Jan 2022 13:06:57 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jesse Taube <mr.bossman075@gmail.com>
+Cc:     adrian.hunter@intel.com, linux-arm-kernel@lists.infradead.org,
+        abel.vesa@nxp.com, shawnguo@kernel.org, jirislaby@kernel.org,
+        nobuhiro1.iwamatsu@toshiba.co.jp, robh+dt@kernel.org,
+        festevam@gmail.com, linus.walleij@linaro.org,
+        linux-clk@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com, s.hauer@pengutronix.de,
+        devicetree@vger.kernel.org, soc@kernel.org,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        olof@lixom.net, mturquette@baylibre.com, linux-mmc@vger.kernel.org,
+        giulio.benetti@benettiengineering.com, sboyd@kernel.org,
+        linux-gpio@vger.kernel.org, Mr.Bossman075@gmail.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, linux@armlinux.org.uk, stefan@agner.ch,
+        ulf.hansson@linaro.org, aisheng.dong@nxp.com
+Subject: Re: [PATCH v7 2/7] ARM: dts: imxrt1050-pinfunc: Add pinctrl binding
+ header
+Message-ID: <YdSa0ScOpb/5sMF/@robh.at.kernel.org>
+References: <20220103233948.198119-1-Mr.Bossman075@gmail.com>
+ <20220103233948.198119-3-Mr.Bossman075@gmail.com>
 MIME-Version: 1.0
-References: <20211224163256.2a0f01af@canb.auug.org.au>
-In-Reply-To: <20211224163256.2a0f01af@canb.auug.org.au>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 4 Jan 2022 11:05:24 -0800
-Message-ID: <CAGS_qxrmxi3a9-HGxQMwJhPnR4xfzvYFOn36QcqDgitoHdfwHA@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the kunit-next tree with the jc_docs tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Harinder Singh <sharinder@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220103233948.198119-3-Mr.Bossman075@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 9:33 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Today's linux-next merge of the kunit-next tree got a conflict in:
->
->   Documentation/dev-tools/kunit/index.rst
->
-> between commit:
->
->   6c6213f4a29b ("Documentation: KUnit: Rewrite main page")
->
-> from the jc_docs tree and commit:
->
->   58b391d74630 ("Documentation: kunit: remove claims that kunit is a mocking framework")
->
-> from the kunit-next tree.
->
-> I fixed it up (I just used the former version) and can carry the fix as
+On Mon, 03 Jan 2022 18:39:43 -0500, Jesse Taube wrote:
+> From: Jesse Taube <mr.bossman075@gmail.com>
+> 
+> Add binding header for i.MXRT1050 pinctrl device tree.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+> [Jesse: move pinfunc from dt-bindings to dts folder]
+> ---
+> V1->V2:
+> * Move pinfunc from dt-binding to dts
+> * Change subject and description
+> * Change licence to "GPL-2.0+ OR MIT"
+> V2->V3:
+> * Change License comment style
+> V3->V4:
+> * Nothing done
+> V4->V5:
+> * Nothing done
+> V5->V6:
+> * Nothing done
+> V6->V7:
+> * Nothing done
+> ---
+>  arch/arm/boot/dts/imxrt1050-pinfunc.h | 993 ++++++++++++++++++++++++++
+>  1 file changed, 993 insertions(+)
+>  create mode 100644 arch/arm/boot/dts/imxrt1050-pinfunc.h
+> 
 
-Thanks for this.
 
-Harinder's patch should supersede my small fixup patch.
-It wasn't clear when Harinder's patches would land in the docs tree.
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
 
-But it looks like my patch two files that Harinder's didn't, specifically:
- Documentation/dev-tools/kunit/api/index.rst | 3 +--
- Documentation/dev-tools/kunit/api/test.rst  | 3 +--
+If a tag was not added on purpose, please state why and what changed.
 
-Shuah, Brendan: I can send a new version of 58b391d74630 that only
-updates those two files, if wanted.
-Or we can go with Stephen's fix, which looks good to me.
-
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
->
-> --
-> Cheers,
-> Stephen Rothwell

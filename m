@@ -2,100 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E8F4848FF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:53:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7C6484905
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:54:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231449AbiADTxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 14:53:37 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:37040 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229962AbiADTxg (ORCPT
+        id S231964AbiADTyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 14:54:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229962AbiADTyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 14:53:36 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 204Imvgk018871;
-        Tue, 4 Jan 2022 19:53:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=gJrZxwfTZYQL/Utzfoow+YBWBL1Ftq4ZELsOh7odyrw=;
- b=muTIsEE1B2CuATmGTZostSQOPCmAjE5j02hcCf55WwMB+fUHsnzY0O/vg4Slt5ynWbQw
- X1E6/tGZxKpULUzMM3c8N/mEGSC0n7G1SbRV6JXqPZ3f4ykfQu1MqAMWkMirM58eMyzF
- vmxseuAUqxwoMjjZhepfQMKTQbSJe5RM+CZrVqhbKg0/Pc7Nmnw9lE+s/isWTMEg4jLG
- 7SauEOmlhAOOMFukRlt05G+0mpN7Q+9bOKSWPWTxYnoutjP/bmjZWvjFiWcePxf88ebZ
- GEHJRPYg5sOVdEHpYWPSX+7CzCh1+RaqpQP2tyXO9flqISpjkXPQ9KrPWBEO+mRQy6hx Ng== 
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dch82nybh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Jan 2022 19:53:21 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 204Jm8n1014078;
-        Tue, 4 Jan 2022 19:53:18 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma03wdc.us.ibm.com with ESMTP id 3dcv2qrpky-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Jan 2022 19:53:18 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 204JrIcC35062072
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 4 Jan 2022 19:53:18 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 027AB28059;
-        Tue,  4 Jan 2022 19:53:18 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 334DE28058;
-        Tue,  4 Jan 2022 19:53:17 +0000 (GMT)
-Received: from oc6857751186.ibm.com (unknown [9.160.94.20])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue,  4 Jan 2022 19:53:17 +0000 (GMT)
-Subject: Re: [PATCH] powerpc/cacheinfo: use default_groups in kobj_type
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Parth Shah <parth@linux.ibm.com>,
-        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org
-References: <20220104155450.1291277-1-gregkh@linuxfoundation.org>
-From:   Tyrel Datwyler <tyreld@linux.ibm.com>
-Message-ID: <4f0fbbce-1601-7a59-7019-b78e695bc2bf@linux.ibm.com>
-Date:   Tue, 4 Jan 2022 11:53:16 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Tue, 4 Jan 2022 14:54:15 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BAEC061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 11:54:14 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id r5so33611428pgi.6
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 11:54:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cdmT5rfhNkWWjGcnFD7NuwPzzDkVYzXEr/P8sZKTqps=;
+        b=C129iTBGi8h6CtSob4CAxpAQiIkOcQ2FLgoMbKSA9DIAafCrkRlwq+5Qfsn/GP1s+B
+         xikZmG/3k+WSgN+5ZaLdmvqeTzfwgj8TplXAilI8TNQDeSi/tNPUjlGPn4NSfy1UxENO
+         i//ZI+GivXS5RUK7yDPzkN3qRs0Ym+9smT3g1qsuN95Ea87FjdxwDGuODadrif1G+SpH
+         4LKSBfFbXxaABx9uP3nsoBW97Tvvsz/RNEV3kGvBaSrnZf0bIAwYvNoStL07EcIsnfIX
+         XxcMb0PUauPFMPljnZKY+wTE66PWFaw3LHM5P7i9/xxcVK6NHuuuW91h4vh9Tqwde1gu
+         AFJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cdmT5rfhNkWWjGcnFD7NuwPzzDkVYzXEr/P8sZKTqps=;
+        b=NYAQFeHS/DVHtZ0LJpd3J9TXfpc3jZJ3TAEP5AQtRyKnLwB78z6I2gUe58a/X+bYdO
+         UGjcJsDySyZOOhOz1LusTJU1JZbSX8UEHjS5ZBUR8lEdqFRAW3kwnV6Ifq71il2BZny9
+         F2s69diqQ/hkrd/AotHytfOIKnlfppFa49PWyOmPE5/jPaif+zezNRM9KuU8ae87e6wV
+         DS395tAFvKeH3J+qPrUXbdrDjuKEozjv00cQk1oMiTh3w/SVKX8cfyGbjvK3+To/Ubwv
+         a+D1bB8WK8bDRVgr5y46MgpICt4O/NqcYdvaKC8rNwu5xHoBYFsr7o/moD8GeD2vhfMQ
+         9j5g==
+X-Gm-Message-State: AOAM531NAMFyOQUWx3fg92iTHCBZoU+B9Lr0peOXqNfn6OHSmsAp3J3X
+        DZw0/G284zMNdzZGG03e524nzY0EovVFnQ==
+X-Google-Smtp-Source: ABdhPJwbHVoGQWJnx4oFw2JlmF2TRIpvegfLjVIjVehkyjeU2NKQZtaHKzgL82XoXSOhYW8/Eew9aA==
+X-Received: by 2002:a63:207:: with SMTP id 7mr45574965pgc.624.1641326054197;
+        Tue, 04 Jan 2022 11:54:14 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id p37sm40318945pfh.97.2022.01.04.11.54.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 11:54:13 -0800 (PST)
+Date:   Tue, 4 Jan 2022 19:54:10 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yang Zhong <yang.zhong@intel.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, pbonzini@redhat.com, corbet@lwn.net,
+        shuah@kernel.org, jun.nakajima@intel.com, kevin.tian@intel.com,
+        jing2.liu@linux.intel.com, jing2.liu@intel.com,
+        guang.zeng@intel.com, wei.w.wang@intel.com
+Subject: Re: [PATCH v4 03/21] kvm: x86: Fix xstate_required_size() to follow
+ XSTATE alignment rule
+Message-ID: <YdSl4s78kj/U/5Bl@google.com>
+References: <20211229131328.12283-1-yang.zhong@intel.com>
+ <20211229131328.12283-4-yang.zhong@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220104155450.1291277-1-gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: -qb6CNl_uZf8bns4Y_ekk3MEyN4dDNkO
-X-Proofpoint-GUID: -qb6CNl_uZf8bns4Y_ekk3MEyN4dDNkO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-04_09,2022-01-04_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- mlxscore=0 clxscore=1011 impostorscore=0 spamscore=0 suspectscore=0
- lowpriorityscore=0 adultscore=0 malwarescore=0 priorityscore=1501
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201040126
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211229131328.12283-4-yang.zhong@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/4/22 7:54 AM, Greg Kroah-Hartman wrote:
-> There are currently 2 ways to create a set of sysfs files for a
-> kobj_type, through the default_attrs field, and the default_groups
-> field.  Move the powerpc cacheinfo sysfs code to use default_groups
-> field which has been the preferred way since aa30f47cf666 ("kobject: Add
-> support for default attribute groups to kobj_type") so that we can soon
-> get rid of the obsolete default_attrs field.
+On Wed, Dec 29, 2021, Yang Zhong wrote:
+> From: Jing Liu <jing2.liu@intel.com>
 > 
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> Cc: Paul Mackerras <paulus@samba.org>
-> Cc: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
-> Cc: Parth Shah <parth@linux.ibm.com>
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> CPUID.0xD.1.EBX enumerates the size of the XSAVE area (in compacted
+> format) required by XSAVES. If CPUID.0xD.i.ECX[1] is set for a state
+> component (i), this state component should be located on the next
+> 64-bytes boundary following the preceding state component in the
+> compacted layout.
+> 
+> Fix xstate_required_size() to follow the alignment rule. AMX is the
+> first state component with 64-bytes alignment to catch this bug.
+> 
+> Signed-off-by: Jing Liu <jing2.liu@intel.com>
+> Signed-off-by: Yang Zhong <yang.zhong@intel.com>
 > ---
+>  arch/x86/kvm/cpuid.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 07e9215e911d..148003e26cbb 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -42,7 +42,8 @@ static u32 xstate_required_size(u64 xstate_bv, bool compacted)
+>  		if (xstate_bv & 0x1) {
+>  		        u32 eax, ebx, ecx, edx, offset;
+>  		        cpuid_count(0xD, feature_bit, &eax, &ebx, &ecx, &edx);
+> -			offset = compacted ? ret : ebx;
+> +			/* ECX[1]: 64B alignment in compacted form */
+> +			offset = compacted ? ((ecx & 0x2) ? ALIGN(ret, 64) : ret) : ebx;
 
-Reviewed-by: Tyrel Datwyler <tyreld@linux.ibm.com>
+That is impressively difficult to read.
+
+			if (compacted)
+				offset = (ecx & 0x2) ? ALIGN(ret, 64) : ret;
+			else
+				offset = ebx;
+
+>  			ret = max(ret, offset + eax);
+>  		}
+>  

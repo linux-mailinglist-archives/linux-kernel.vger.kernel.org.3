@@ -2,84 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 988C6483F53
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 10:43:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17847483F7E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 10:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbiADJm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 04:42:59 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:17321 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbiADJmy (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 04:42:54 -0500
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JSnh00ND1z9s1Z;
-        Tue,  4 Jan 2022 17:41:52 +0800 (CST)
-Received: from dggpemm500015.china.huawei.com (7.185.36.181) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 4 Jan 2022 17:42:53 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500015.china.huawei.com
- (7.185.36.181) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 4 Jan
- 2022 17:42:52 +0800
-From:   Wang ShaoBo <bobo.shaobowang@huawei.com>
-To:     <rostedt@goodmis.org>
-CC:     <xiexiuqi@huawei.com>, <cj.chengjian@huawei.com>,
-        <liwei391@huawei.com>, <bristot@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] tracing/osnoise: Fix sparse warning in function start_kthread
-Date:   Tue, 4 Jan 2022 17:48:29 +0800
-Message-ID: <20220104094829.334872-1-bobo.shaobowang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        id S230361AbiADJ5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 04:57:09 -0500
+Received: from mail.credativ.com ([93.94.130.90]:46912 "EHLO mail.credativ.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230308AbiADJ5G (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 04:57:06 -0500
+X-Greylist: delayed 469 seconds by postgrey-1.27 at vger.kernel.org; Tue, 04 Jan 2022 04:57:06 EST
+Received: from localhost (localhost [127.0.0.1])
+        by mail.credativ.com (Postfix) with ESMTP id EC9E620067;
+        Tue,  4 Jan 2022 09:49:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=credativ.de; s=email;
+        t=1641289751; bh=M863bQvqJkCKLP3ueXjx9CKwToA3VdBDLVbhOgoGmtE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=okhF2KvDjIXXrw8kVQgwNxwr32ztAf9yLLoO2ZlrAB5ObZZVrpUZdItj1D1mOX9S0
+         6igaHeNL9slwllUH6Ju3+pt52ecJSauzxIyjENFduc7WWaU9cAZ8KEgPkAvHw/W14f
+         yO1jjL5t+ZHM0ri112uy/o85XFvU3919kFyKYHkjOMq/JEUmCyidfmCH0GcyjlYCGv
+         nywZEjt0G7/sR63rRXiXkqgs5u5hQmQMCnyLixOb8OChULn9Mdaw1C2wNIAm7V2TOo
+         wr+39Bm9lbuLdbgx8YwkPtqjohB4eVmahb62sBoK2kUWiF78KR1YCfUVQnHNHCtNE8
+         Z3kzpCLuacpjw==
+Received: from mail.credativ.com ([127.0.0.1])
+        by localhost (mail.credativ.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id HKT81m1ar6Dc; Tue,  4 Jan 2022 09:49:04 +0000 (UTC)
+Received: from softhammer.credativ.de (b2b-130-180-33-30.unitymedia.biz [130.180.33.30])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: bbl)
+        by mail.credativ.com (Postfix) with ESMTPSA id A8FA320028;
+        Tue,  4 Jan 2022 09:49:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=credativ.de; s=email;
+        t=1641289744; bh=M863bQvqJkCKLP3ueXjx9CKwToA3VdBDLVbhOgoGmtE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=hAEf6fqoduyzmiqAIkDHzsgIAplPP9emAkgPWY8xpvLZHkImQWC7HgDaOLWLs1uCJ
+         /0DS3u1juQyG4hu33odMDxTsqQDg8ghL+qYjnWSO/NBCF4o2fAiJfgm8omguWR/o6c
+         SCiHUxAmP2OEdkRzBUzptHr5TP3ZFv7gisAcrelEZuJy13B91tyq8o2CrXHWH14Kuj
+         qqydqU4dpU15gHD1NTSqqI6d+KVdG5FlsPyyapRp6OgAQIyXZkyJY6JpdwKboQClwl
+         sEgX6tLKhQhRNKoc6R+ZukpNCtJ7O538iF/ecbxZvkBzd4xtiqsx920Yxte1mGMpFW
+         Mdx/1P42dGskA==
+Received: by softhammer.credativ.de (Postfix, from userid 1000)
+        id 4JSnrJ1Gz6z9stv; Tue,  4 Jan 2022 10:49:04 +0100 (CET)
+Date:   Tue, 4 Jan 2022 10:49:04 +0100
+From:   Bastian Blank <bastian.blank@credativ.de>
+To:     Jeff Layton <jlayton@kernel.org>, Ilya Dryomov <idryomov@gmail.com>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: PROBLEM: SLAB use-after-free with ceph(fs)
+Message-ID: <YdQYEF9WCTWTAzOp@softhammer.credativ.lan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500015.china.huawei.com (7.185.36.181)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change main to main_func to fix following sparse warning:
+Moin
 
-kernel/trace/trace_osnoise.c: In function ‘start_kthread’:
-kernel/trace/trace_osnoise.c:1674:8: warning: ‘main’ is usually a function [-Wmain]
-  void *main = osnoise_main;
-        ^~~~
+A customer reported panics inside memory management.  Before all
+occurances there are reports about SLAB missmatch in the log.  The
+"crash" tool shows freelist corruption in the memory dump.  This makes
+this problem a use-after-free somewhere inside the ceph module.
 
-Signed-off-by: Wang ShaoBo <bobo.shaobowang@huawei.com>
----
- kernel/trace/trace_osnoise.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+The crashs happen during high load situations, while copying data
+between two cephfs.
 
-diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
-index 7520d43aed55..2bebf31d4baf 100644
---- a/kernel/trace/trace_osnoise.c
-+++ b/kernel/trace/trace_osnoise.c
-@@ -1691,17 +1691,17 @@ static void stop_per_cpu_kthreads(void)
- static int start_kthread(unsigned int cpu)
- {
- 	struct task_struct *kthread;
--	void *main = osnoise_main;
-+	void *main_func = osnoise_main;
- 	char comm[24];
- 
- 	if (timerlat_enabled()) {
- 		snprintf(comm, 24, "timerlat/%d", cpu);
--		main = timerlat_main;
-+		main_func = timerlat_main;
- 	} else {
- 		snprintf(comm, 24, "osnoise/%d", cpu);
- 	}
- 
--	kthread = kthread_create_on_cpu(main, NULL, cpu, comm);
-+	kthread = kthread_create_on_cpu(main_func, NULL, cpu, comm);
- 
- 	if (IS_ERR(kthread)) {
- 		pr_err(BANNER "could not start sampling thread\n");
+| [152791.777454] ceph:  dropping dirty+flushing - state for 00000000c039d4cc 1099526092092
+| [152791.777457] ------------[ cut here ]------------
+| [152791.777458] cache_from_obj: Wrong slab cache. jbd2_journal_handle but object is from kmalloc-256
+| [152791.777473] WARNING: CPU: 76 PID: 2676615 at mm/slab.h:521 kmem_cache_free+0x260/0x2b0
+[…]
+| [152791.777530] CPU: 76 PID: 2676615 Comm: kworker/76:2 Kdump: loaded Not tainted 5.4.0-81-generic #91-Ubuntu
+| [152791.777531] Hardware name: HPE ProLiant DL385 Gen10/ProLiant DL385 Gen10, BIOS A40 10/28/2021
+| [152791.777540] Workqueue: ceph-msgr ceph_con_workfn [libceph]
+| [152791.777542] RIP: 0010:kmem_cache_free+0x260/0x2b0
+[…]
+| [152791.777550] Call Trace:
+| [152791.777562]  ceph_free_cap_flush+0x1d/0x20 [ceph]
+| [152791.777568]  remove_session_caps_cb+0xcf/0x4b0 [ceph]
+| [152791.777573]  ceph_iterate_session_caps+0xc8/0x2a0 [ceph]
+| [152791.777578]  ? wake_up_session_cb+0xe0/0xe0 [ceph]
+| [152791.777583]  remove_session_caps+0x55/0x190 [ceph]
+| [152791.777587]  ? cleanup_session_requests+0x104/0x130 [ceph]
+| [152791.777592]  handle_session+0x4c7/0x5e0 [ceph]
+| [152791.777597]  dispatch+0x279/0x610 [ceph]
+| [152791.777602]  try_read+0x566/0x8c0 [libceph]
+
+They reported the same in all tested kernels since 5.4, up to 5.15.5 or
+so.  Sadly I have no tests with newer builds available.
+
+Any ideas how I can debug this further?
+
+Regards,
+Bastian
+
 -- 
-2.25.1
-
+Bastian Blank
+Berater
+Telefon: +49 2166 9901-194
+E-Mail: bastian.blank@credativ.de
+credativ GmbH, HRB Mönchengladbach 12080, USt-ID-Nummer: DE204566209
+Trompeterallee 108, 41189 Mönchengladbach
+Geschäftsführung: Dr. Michael Meskes, Geoff Richardson, Peter Lilley
+Unser Umgang mit personenbezogenen Daten unterliegt
+folgenden Bestimmungen: https://www.credativ.de/datenschutz

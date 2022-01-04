@@ -2,176 +2,391 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82426484135
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:50:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73ACD484138
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:52:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232649AbiADLuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 06:50:50 -0500
-Received: from giacobini.uberspace.de ([185.26.156.129]:42288 "EHLO
-        giacobini.uberspace.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbiADLur (ORCPT
+        id S232658AbiADLwC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jan 2022 06:52:02 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:29103 "EHLO
+        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230292AbiADLwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 06:50:47 -0500
-Received: (qmail 6661 invoked by uid 990); 4 Jan 2022 11:50:45 -0000
-Authentication-Results: giacobini.uberspace.de;
-        auth=pass (plain)
-Message-ID: <91bface3-975d-b79c-2da0-77e24e355fa7@eknoes.de>
-Date:   Tue, 4 Jan 2022 12:50:44 +0100
+        Tue, 4 Jan 2022 06:52:01 -0500
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-306-P79aPTRFO9GFVAC1xUXF9Q-1; Tue, 04 Jan 2022 06:51:57 -0500
+X-MC-Unique: P79aPTRFO9GFVAC1xUXF9Q-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D49EC344AF;
+        Tue,  4 Jan 2022 11:51:55 +0000 (UTC)
+Received: from comp-core-i7-2640m-0182e6.redhat.com (unknown [10.36.110.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5E7701F466;
+        Tue,  4 Jan 2022 11:51:52 +0000 (UTC)
+From:   Alexey Gladkov <legion@kernel.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Containers <containers@lists.linux.dev>
+Cc:     Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Daniel Walsh <dwalsh@redhat.com>,
+        Davidlohr Bueso <dbueso@suse.de>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Kirill Tkhai <ktkhai@virtuozzo.com>,
+        Manfred Spraul <manfred@colorfullife.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2] ipc: Store mqueue sysctls in the ipc namespace
+Date:   Tue,  4 Jan 2022 12:51:06 +0100
+Message-Id: <792dcae82bc228cd0bec1fa80ed4d2c9340b0f8f.1641296947.git.legion@kernel.org>
+In-Reply-To: <0f0408bb7fbf3187966a9bf19a98642a5d9669fe.1641225760.git.legion@kernel.org>
+References: <0f0408bb7fbf3187966a9bf19a98642a5d9669fe.1641225760.git.legion@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Content-Language: en-US
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Luiz Augusto Von Dentz <luiz.von.dentz@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>
-References: <36ec2e79-7544-ba14-8bdd-d748dfad0ea7@eknoes.de>
- <CABBYNZJwqb0xKa+iX4zOBYpZ2j0ZFbHPRztQ1z5xJL7kq6-9Ag@mail.gmail.com>
-From:   =?UTF-8?Q?S=c3=b6nke_Huster?= <soenke.huster@eknoes.de>
-Subject: Re: [BUG] Page Fault in hci_inquiry_result_with_rssi_evt
-In-Reply-To: <CABBYNZJwqb0xKa+iX4zOBYpZ2j0ZFbHPRztQ1z5xJL7kq6-9Ag@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Bar: /
-X-Rspamd-Report: MIME_GOOD(-0.1) BAYES_HAM(-2.999149) R_MIXED_CHARSET(0.625) SUSPICIOUS_RECIPS(1.5)
-X-Rspamd-Score: -0.974149
-Received: from unknown (HELO unkown) (::1)
-        by giacobini.uberspace.de (Haraka/2.8.28) with ESMTPSA; Tue, 04 Jan 2022 12:50:44 +0100
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=legion@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: kernel.org
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luiz,
+Right now, the mqueue sysctls take ipc namespaces into account in a
+rather hacky way. This works in most cases, but does not respect the
+user namespace.
 
-On 04.01.22 01:38, Luiz Augusto von Dentz wrote:
-> Hi Sönke,
-> 
-> On Mon, Jan 3, 2022 at 3:41 PM Sönke Huster <soenke.huster@eknoes.de> wrote:
->>
->> Hello,
->>
->> While fuzzing bluetooth-next I found the following bug:
->>
->> [   27.333034] BUG: unable to handle page fault for address: fffff61a1a1a1a1a
->> [   27.333241] #PF: supervisor read access in kernel mode
->> [   27.333241] #PF: error_code(0x0000) - not-present page
->> [   27.333241] PGD 6dfd2067 P4D 6dfd2067 PUD 0
->> [   27.333241] Oops: 0000 [#1] PREEMPT SMP KASAN NOPTI
->> [   27.333241] CPU: 0 PID: 45 Comm: kworker/u3:2 Not tainted 5.16.0-rc1+ #81
->> [   27.333241] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
->> [   27.333241] Workqueue: hci0 hci_rx_work
->> [   27.333241] RIP: 0010:hci_inquiry_result_with_rssi_evt+0xbc/0x950
->> [   27.333241] Code: 8b 04 24 48 c1 e8 03 42 80 3c 28 00 0f 85 20 07 00 00 48 8b 04 24 4c 8b 28 48 b8 00 00 00 00 00 fc ff df 4c 89 0
->> [   27.333241] RSP: 0018:ffffc900004ff9c8 EFLAGS: 00010212
->> [   27.333241] RAX: dffffc0000000000 RBX: 0000000000000022 RCX: ffffffff834663d1
->> [   27.333241] RDX: 1ffffa1a1a1a1a1a RSI: 0000000000000012 RDI: ffff88800affb074
->> [   27.333241] RBP: ffff88800aae0000 R08: ffffffff844ef360 R09: ffffffff83487b35
->> [   27.333241] R10: 000000000000002c R11: 0000000000000022 R12: ffff88800affb000
->> [   27.333241] R13: ffffd0d0d0d0d0d0 R14: 0000000000000000 R15: ffff88800aae0000
->> [   27.333241] FS:  0000000000000000(0000) GS:ffff88806ce00000(0000) knlGS:0000000000000000
->> [   27.333241] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->> [   27.333241] CR2: fffff61a1a1a1a1a CR3: 0000000004a26000 CR4: 00000000000006f0
->> [   27.333241] Call Trace:
->> [   27.333241]  <TASK>
->> [   27.333241]  ? wait_for_completion_io+0x270/0x270
->> [   27.333241]  ? hci_inquiry_result_evt+0x4b0/0x4b0
->> [   27.333241]  hci_event_packet+0x3b11/0x7b10
->> [   27.333241]  ? lock_chain_count+0x20/0x20
->> [   27.333241]  ? hci_cmd_status_evt.constprop.0+0x4ea0/0x4ea0
->> [   27.333241]  ? sysvec_reboot+0x50/0xc0
->> [   27.333241]  ? find_held_lock+0x2c/0x110
->> [   27.333241]  ? lock_release+0x3b2/0x6f0
->> [   27.333241]  ? skb_dequeue+0x110/0x1a0
->> [   27.333241]  ? mark_held_locks+0x9e/0xe0
->> [   27.333241]  ? lockdep_hardirqs_on_prepare+0x17b/0x400
->> [   27.333241]  hci_rx_work+0x4d3/0xb90
->> [   27.333241]  process_one_work+0x904/0x1590
->> [   27.333241]  ? lock_release+0x6f0/0x6f0
->> [   27.333241]  ? pwq_dec_nr_in_flight+0x230/0x230
->> [   27.333241]  ? rwlock_bug.part.0+0x90/0x90
->> [   27.333241]  ? _raw_spin_lock_irq+0x41/0x50
->> [   27.333241]  worker_thread+0x578/0x1310
->> [   27.333241]  ? process_one_work+0x1590/0x1590
->> [   27.333241]  kthread+0x3b2/0x490
->> [   27.333241]  ? _raw_spin_unlock_irq+0x1f/0x40
->> [   27.333241]  ? set_kthread_struct+0x100/0x100
->> [   27.333241]  ret_from_fork+0x22/0x30
->> [   27.333241]  </TASK>
->> [   27.333241] Modules linked in:
->> [   27.333241] CR2: fffff61a1a1a1a1a
->> [   27.333241] ---[ end trace 6a6825484c8fefa6 ]---
->> [   27.333241] RIP: 0010:hci_inquiry_result_with_rssi_evt+0xbc/0x950
->> [   27.333241] Code: 8b 04 24 48 c1 e8 03 42 80 3c 28 00 0f 85 20 07 00 00 48 8b 04 24 4c 8b 28 48 b8 00 00 00 00 00 fc ff df 4c 89 0
->> [   27.333241] RSP: 0018:ffffc900004ff9c8 EFLAGS: 00010212
->> [   27.333241] RAX: dffffc0000000000 RBX: 0000000000000022 RCX: ffffffff834663d1
->> [   27.333241] RDX: 1ffffa1a1a1a1a1a RSI: 0000000000000012 RDI: ffff88800affb074
->> [   27.333241] RBP: ffff88800aae0000 R08: ffffffff844ef360 R09: ffffffff83487b35
->> [   27.333241] R10: 000000000000002c R11: 0000000000000022 R12: ffff88800affb000
->> [   27.333241] R13: ffffd0d0d0d0d0d0 R14: 0000000000000000 R15: ffff88800aae0000
->> [   27.333241] FS:  0000000000000000(0000) GS:ffff88806ce00000(0000) knlGS:0000000000000000
->> [   27.333241] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->> [   27.333241] CR2: fffff61a1a1a1a1a CR3: 0000000004a26000 CR4: 00000000000006f0
->> [   27.379996] kworker/u3:2 (45) used greatest stack depth: 27736 bytes left
->>
->> It occurs when sending the following frame to the kernel:
->>
->> $ xxd crashes/hci_inquiry_result_with_rssi_evt
->> 00000000: 0422 24d0 d0d0 d0d0 d0ff ff              ."$........
->>
->> The bug was introduced with the commit "Bluetooth: HCI: Use skb_pull_data to parse Inquiry Result with RSSI event" (https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git/commit/?id=8d08d324fdcb7).
-> 
-> That is pretty weird, the data seems to be the following:
-> 
-> 04 -> HCI_EVENT_PKT
-> 22 -> HCI_EV_INQUIRY_RESULT_WITH_RSSI
-> 24 -> hci_ev_inquiry_result_rssi.num
-> d0 d0d0 d0d0 d0ff ff
-> 
-> But this should never evaluate to true for:
-> 
-> if (skb->len == flex_array_size(ev, res2->info, ev->res2->num)) {
-> ...
-> } else if (skb->len == flex_array_size(ev, res1->info, ev->res1->num)) {
-> 
+Within the user namespace, the user cannot change the /proc/sys/fs/mqueue/*
+parametres. This poses a problem in the rootless containers.
 
-I'm sorry, I forgot to mention the affected source code, the check seems to be too late. GDB says it is already happening in net/bluetooth/hci_event.c:4519:
+To solve this I changed the implementation of the mqueue sysctls just
+like some other sysctls.
 
-(gdb) list *hci_inquiry_result_with_rssi_evt+0x9b
-0xffffffff83470d8b is in hci_inquiry_result_with_rssi_evt (net/bluetooth/hci_event.c:4519).
-4514		struct inquiry_data data;
-4515		int i;
-4516	
-4517		bt_dev_dbg(hdev, "num_rsp %d", ev->res1->num);
-4518	
-4519		if (!ev->res1->num) # <- page fault here
-4520			return;
+Before this change:
 
-I just reproduced it on the HEAD of bluetooth-next (for-net-next-2021-12-29).
+$ echo 5 | unshare -r -U -i tee /proc/sys/fs/mqueue/msg_max
+tee: /proc/sys/fs/mqueue/msg_max: Permission denied
+5
 
+After this change:
 
-> These requires the data to be multiple of sizeof(struct
-> inquiry_info_rssi_pscan) = 15 bytes or sizeof(struct
-> inquiry_info_rssi) = 14 bytes respectively where the data left is just
-> 8 bytes long, besides with the number of entries being 0x24 this shall
-> be well beyond skb->len which shall have cause the else clause:
-> 
->   } else {
->       bt_dev_err(hdev, "Malformed HCI Event: 0x%2.2x",
->                          HCI_EV_INQUIRY_RESULT_WITH_RSSI);
->   }
-> 
+$ echo 5 | unshare -r -U -i tee /proc/sys/fs/mqueue/msg_max
+5
 
-I think prior to the commit that introduced that, the check was made before casting it to the struct, so from the "raw" skb->data:
+v2:
+* Fixed compilation problem if CONFIG_POSIX_MQUEUE_SYSCTL is not
+  specified.
 
--	int num_rsp = *((__u8 *) skb->data);
--	if ((skb->len - 1) / num_rsp != sizeof(struct inquiry_info_with_rssi)) {
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Alexey Gladkov <legion@kernel.org>
+---
+ include/linux/ipc_namespace.h |  18 ++++-
+ ipc/mq_sysctl.c               | 137 ++++++++++++++++++++--------------
+ ipc/mqueue.c                  |  10 +--
+ ipc/namespace.c               |   6 ++
+ 4 files changed, 106 insertions(+), 65 deletions(-)
 
-> Anyway the bluetooth-next has been updated since last week so I first
-> attempt to reproduce with a fresh clone of it since we did some fixups
-> since then.
-> 
+diff --git a/include/linux/ipc_namespace.h b/include/linux/ipc_namespace.h
+index b75395ec8d52..bcedc86a6f1d 100644
+--- a/include/linux/ipc_namespace.h
++++ b/include/linux/ipc_namespace.h
+@@ -10,6 +10,7 @@
+ #include <linux/ns_common.h>
+ #include <linux/refcount.h>
+ #include <linux/rhashtable-types.h>
++#include <linux/sysctl.h>
+ 
+ struct user_namespace;
+ 
+@@ -63,6 +64,11 @@ struct ipc_namespace {
+ 	unsigned int    mq_msg_default;
+ 	unsigned int    mq_msgsize_default;
+ 
++#ifdef CONFIG_POSIX_MQUEUE_SYSCTL
++	struct ctl_table_set	set;
++	struct ctl_table_header *sysctls;
++#endif
++
+ 	/* user_ns which owns the ipc ns */
+ 	struct user_namespace *user_ns;
+ 	struct ucounts *ucounts;
+@@ -169,14 +175,18 @@ static inline void put_ipc_ns(struct ipc_namespace *ns)
+ 
+ #ifdef CONFIG_POSIX_MQUEUE_SYSCTL
+ 
+-struct ctl_table_header;
+-extern struct ctl_table_header *mq_register_sysctl_table(void);
++void retire_mq_sysctls(struct ipc_namespace *ns);
++bool setup_mq_sysctls(struct ipc_namespace *ns);
+ 
+ #else /* CONFIG_POSIX_MQUEUE_SYSCTL */
+ 
+-static inline struct ctl_table_header *mq_register_sysctl_table(void)
++static inline void retire_mq_sysctls(struct ipc_namespace *ns)
+ {
+-	return NULL;
++}
++
++static inline bool setup_mq_sysctls(struct ipc_namespace *ns)
++{
++	return true;
+ }
+ 
+ #endif /* CONFIG_POSIX_MQUEUE_SYSCTL */
+diff --git a/ipc/mq_sysctl.c b/ipc/mq_sysctl.c
+index 72a92a08c848..56afb0503296 100644
+--- a/ipc/mq_sysctl.c
++++ b/ipc/mq_sysctl.c
+@@ -9,39 +9,9 @@
+ #include <linux/ipc_namespace.h>
+ #include <linux/sysctl.h>
+ 
+-#ifdef CONFIG_PROC_SYSCTL
+-static void *get_mq(struct ctl_table *table)
+-{
+-	char *which = table->data;
+-	struct ipc_namespace *ipc_ns = current->nsproxy->ipc_ns;
+-	which = (which - (char *)&init_ipc_ns) + (char *)ipc_ns;
+-	return which;
+-}
+-
+-static int proc_mq_dointvec(struct ctl_table *table, int write,
+-			    void *buffer, size_t *lenp, loff_t *ppos)
+-{
+-	struct ctl_table mq_table;
+-	memcpy(&mq_table, table, sizeof(mq_table));
+-	mq_table.data = get_mq(table);
+-
+-	return proc_dointvec(&mq_table, write, buffer, lenp, ppos);
+-}
+-
+-static int proc_mq_dointvec_minmax(struct ctl_table *table, int write,
+-		void *buffer, size_t *lenp, loff_t *ppos)
+-{
+-	struct ctl_table mq_table;
+-	memcpy(&mq_table, table, sizeof(mq_table));
+-	mq_table.data = get_mq(table);
+-
+-	return proc_dointvec_minmax(&mq_table, write, buffer,
+-					lenp, ppos);
+-}
+-#else
+-#define proc_mq_dointvec NULL
+-#define proc_mq_dointvec_minmax NULL
+-#endif
++#include <linux/stat.h>
++#include <linux/capability.h>
++#include <linux/slab.h>
+ 
+ static int msg_max_limit_min = MIN_MSGMAX;
+ static int msg_max_limit_max = HARD_MSGMAX;
+@@ -55,14 +25,14 @@ static struct ctl_table mq_sysctls[] = {
+ 		.data		= &init_ipc_ns.mq_queues_max,
+ 		.maxlen		= sizeof(int),
+ 		.mode		= 0644,
+-		.proc_handler	= proc_mq_dointvec,
++		.proc_handler	= proc_dointvec,
+ 	},
+ 	{
+ 		.procname	= "msg_max",
+ 		.data		= &init_ipc_ns.mq_msg_max,
+ 		.maxlen		= sizeof(int),
+ 		.mode		= 0644,
+-		.proc_handler	= proc_mq_dointvec_minmax,
++		.proc_handler	= proc_dointvec_minmax,
+ 		.extra1		= &msg_max_limit_min,
+ 		.extra2		= &msg_max_limit_max,
+ 	},
+@@ -71,7 +41,7 @@ static struct ctl_table mq_sysctls[] = {
+ 		.data		= &init_ipc_ns.mq_msgsize_max,
+ 		.maxlen		= sizeof(int),
+ 		.mode		= 0644,
+-		.proc_handler	= proc_mq_dointvec_minmax,
++		.proc_handler	= proc_dointvec_minmax,
+ 		.extra1		= &msg_maxsize_limit_min,
+ 		.extra2		= &msg_maxsize_limit_max,
+ 	},
+@@ -80,7 +50,7 @@ static struct ctl_table mq_sysctls[] = {
+ 		.data		= &init_ipc_ns.mq_msg_default,
+ 		.maxlen		= sizeof(int),
+ 		.mode		= 0644,
+-		.proc_handler	= proc_mq_dointvec_minmax,
++		.proc_handler	= proc_dointvec_minmax,
+ 		.extra1		= &msg_max_limit_min,
+ 		.extra2		= &msg_max_limit_max,
+ 	},
+@@ -89,32 +59,89 @@ static struct ctl_table mq_sysctls[] = {
+ 		.data		= &init_ipc_ns.mq_msgsize_default,
+ 		.maxlen		= sizeof(int),
+ 		.mode		= 0644,
+-		.proc_handler	= proc_mq_dointvec_minmax,
++		.proc_handler	= proc_dointvec_minmax,
+ 		.extra1		= &msg_maxsize_limit_min,
+ 		.extra2		= &msg_maxsize_limit_max,
+ 	},
+ 	{}
+ };
+ 
+-static struct ctl_table mq_sysctl_dir[] = {
+-	{
+-		.procname	= "mqueue",
+-		.mode		= 0555,
+-		.child		= mq_sysctls,
+-	},
+-	{}
+-};
++static struct ctl_table_set *
++set_lookup(struct ctl_table_root *root)
++{
++	return &current->nsproxy->ipc_ns->set;
++}
+ 
+-static struct ctl_table mq_sysctl_root[] = {
+-	{
+-		.procname	= "fs",
+-		.mode		= 0555,
+-		.child		= mq_sysctl_dir,
+-	},
+-	{}
++static int set_is_seen(struct ctl_table_set *set)
++{
++	return &current->nsproxy->ipc_ns->set == set;
++}
++
++static int set_permissions(struct ctl_table_header *head, struct ctl_table *table)
++{
++	struct ipc_namespace *ns = container_of(head->set, struct ipc_namespace, set);
++	int mode;
++
++	/* Allow users with CAP_SYS_RESOURCE unrestrained access */
++	if (ns_capable(ns->user_ns, CAP_SYS_RESOURCE))
++		mode = (table->mode & S_IRWXU) >> 6;
++	else
++	/* Allow all others at most read-only access */
++		mode = table->mode & S_IROTH;
++	return (mode << 6) | (mode << 3) | mode;
++}
++
++static struct ctl_table_root set_root = {
++	.lookup = set_lookup,
++	.permissions = set_permissions,
+ };
+ 
+-struct ctl_table_header *mq_register_sysctl_table(void)
++bool setup_mq_sysctls(struct ipc_namespace *ns)
+ {
+-	return register_sysctl_table(mq_sysctl_root);
++	struct ctl_table *tbl;
++
++	setup_sysctl_set(&ns->set, &set_root, set_is_seen);
++
++	tbl = kmemdup(mq_sysctls, sizeof(mq_sysctls), GFP_KERNEL);
++	if (tbl) {
++		int i;
++
++		for (i = 0; i < ARRAY_SIZE(mq_sysctls); i++) {
++			if (tbl[i].data == &init_ipc_ns.mq_queues_max)
++				tbl[i].data = &ns->mq_queues_max;
++
++			else if (tbl[i].data == &init_ipc_ns.mq_msg_max)
++				tbl[i].data = &ns->mq_msg_max;
++
++			else if (tbl[i].data == &init_ipc_ns.mq_msgsize_max)
++				tbl[i].data = &ns->mq_msgsize_max;
++
++			else if (tbl[i].data == &init_ipc_ns.mq_msg_default)
++				tbl[i].data = &ns->mq_msg_default;
++
++			else if (tbl[i].data == &init_ipc_ns.mq_msgsize_default)
++				tbl[i].data = &ns->mq_msgsize_default;
++			else
++				tbl[i].data = NULL;
++		}
++
++		ns->sysctls = __register_sysctl_table(&ns->set, "fs/mqueue", tbl);
++	}
++	if (!ns->sysctls) {
++		kfree(tbl);
++		retire_sysctl_set(&ns->set);
++		return false;
++	}
++
++	return true;
++}
++
++void retire_mq_sysctls(struct ipc_namespace *ns)
++{
++	struct ctl_table *tbl;
++
++	tbl = ns->sysctls->ctl_table_arg;
++	unregister_sysctl_table(ns->sysctls);
++	retire_sysctl_set(&ns->set);
++	kfree(tbl);
+ }
+diff --git a/ipc/mqueue.c b/ipc/mqueue.c
+index 5becca9be867..1b4a3be71636 100644
+--- a/ipc/mqueue.c
++++ b/ipc/mqueue.c
+@@ -163,8 +163,6 @@ static void remove_notification(struct mqueue_inode_info *info);
+ 
+ static struct kmem_cache *mqueue_inode_cachep;
+ 
+-static struct ctl_table_header *mq_sysctl_table;
+-
+ static inline struct mqueue_inode_info *MQUEUE_I(struct inode *inode)
+ {
+ 	return container_of(inode, struct mqueue_inode_info, vfs_inode);
+@@ -1713,8 +1711,10 @@ static int __init init_mqueue_fs(void)
+ 	if (mqueue_inode_cachep == NULL)
+ 		return -ENOMEM;
+ 
+-	/* ignore failures - they are not fatal */
+-	mq_sysctl_table = mq_register_sysctl_table();
++	if (!setup_mq_sysctls(&init_ipc_ns)) {
++		pr_warn("sysctl registration failed\n");
++		return -ENOMEM;
++	}
+ 
+ 	error = register_filesystem(&mqueue_fs_type);
+ 	if (error)
+@@ -1731,8 +1731,6 @@ static int __init init_mqueue_fs(void)
+ out_filesystem:
+ 	unregister_filesystem(&mqueue_fs_type);
+ out_sysctl:
+-	if (mq_sysctl_table)
+-		unregister_sysctl_table(mq_sysctl_table);
+ 	kmem_cache_destroy(mqueue_inode_cachep);
+ 	return error;
+ }
+diff --git a/ipc/namespace.c b/ipc/namespace.c
+index ae83f0f2651b..f760243ca685 100644
+--- a/ipc/namespace.c
++++ b/ipc/namespace.c
+@@ -59,6 +59,10 @@ static struct ipc_namespace *create_ipc_ns(struct user_namespace *user_ns,
+ 	if (err)
+ 		goto fail_put;
+ 
++	err = -ENOMEM;
++	if (!setup_mq_sysctls(ns))
++		goto fail_put;
++
+ 	sem_init_ns(ns);
+ 	msg_init_ns(ns);
+ 	shm_init_ns(ns);
+@@ -125,6 +129,8 @@ static void free_ipc_ns(struct ipc_namespace *ns)
+ 	msg_exit_ns(ns);
+ 	shm_exit_ns(ns);
+ 
++	retire_mq_sysctls(ns);
++
+ 	dec_ipc_namespaces(ns->ucounts);
+ 	put_user_ns(ns->user_ns);
+ 	ns_free_inum(&ns->ns);
+-- 
+2.33.0
 
-Btw, what is the best way to provide an easily reproducible bug report here, I did not figure that out yet. 
-
-Also, when searching for bugs (to ideally provide patches), I am currently searching on the HEAD of bluetooth-next. As far as I understood it, the tags "for-net-..." should be more or less stable, as they are merged to net-next which makes its way to mainline, right?

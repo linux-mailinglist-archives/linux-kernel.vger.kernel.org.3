@@ -2,94 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA9648464E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:57:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E98A484650
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:58:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235584AbiADQ44 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jan 2022 11:56:56 -0500
-Received: from mail4.swissbit.com ([176.95.1.100]:50810 "EHLO
-        mail4.swissbit.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234144AbiADQ4z (ORCPT
+        id S235597AbiADQ6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 11:58:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32772 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234144AbiADQ6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 11:56:55 -0500
-Received: from mail4.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 3E824123165;
-        Tue,  4 Jan 2022 17:56:53 +0100 (CET)
-Received: from mail4.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 269E91230C5;
-        Tue,  4 Jan 2022 17:56:53 +0100 (CET)
-X-TM-AS-ERS: 10.149.2.84-127.5.254.253
-X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
-X-DDEI-TLS-USAGE: Used
-Received: from ex.swissbit.com (SBDEEX02.sbitdom.lan [10.149.2.84])
-        by mail4.swissbit.com (Postfix) with ESMTPS;
-        Tue,  4 Jan 2022 17:56:53 +0100 (CET)
-Received: from sbdeex02.sbitdom.lan (10.149.2.84) by sbdeex02.sbitdom.lan
- (10.149.2.84) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Tue, 4 Jan 2022
- 17:56:51 +0100
-Received: from sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74]) by
- sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74%8]) with mapi id
- 15.02.0986.014; Tue, 4 Jan 2022 17:56:51 +0100
-From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
-To:     "jason.wessel@windriver.com" <jason.wessel@windriver.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
-CC:     "daniel.thompson@linaro.org" <daniel.thompson@linaro.org>,
-        "dianders@chromium.org" <dianders@chromium.org>,
-        "corbet@lwn.net" <corbet@lwn.net>
-Subject: [PATCH] Documentation: kgdb: Replace deprecated remotebaud
-Thread-Topic: [PATCH] Documentation: kgdb: Replace deprecated remotebaud
-Thread-Index: AQHYAYs+Ib/SRJEe7kagqhs3fpXf8A==
-Date:   Tue, 4 Jan 2022 16:56:51 +0000
-Message-ID: <13287b7914344c7995de27224cd2fa73@hyperstone.com>
-Accept-Language: en-US, de-DE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.154.1.4]
-Content-Type: text/plain;
-        charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        Tue, 4 Jan 2022 11:58:20 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EAEDC061761;
+        Tue,  4 Jan 2022 08:58:20 -0800 (PST)
+Received: from ip4d173d02.dynamic.kabel-deutschland.de ([77.23.61.2] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1n4n8c-0003Z6-Ub; Tue, 04 Jan 2022 17:58:19 +0100
+Message-ID: <bd81b15d-2da2-8f79-0372-ca9df9f00361@leemhuis.info>
+Date:   Tue, 4 Jan 2022 17:58:18 +0100
 MIME-Version: 1.0
-X-TMASE-Version: DDEI-5.1-8.6.1018-26634.001
-X-TMASE-Result: 10--1.028000-10.000000
-X-TMASE-MatchedRID: BFQSNthdAqJjFNgY8SnxHAvze7pC53SADibuessoYDZbCSrW8+l8cR/p
-        oFKGNxRgsAW6Ufavh1u4XjarCGCNGyxppiUy9o4cA9lly13c/gEohvgDyt5zb4sjejIjbRAxo8W
-        MkQWv6iUsOwD+dG3DyR34VqVOU/8EavP8b9lJtWr6C0ePs7A07SjXf4udBIoMGH4SZnl9Tbgc7c
-        DiVnHAmGOJXKrqfMjz9ZGwl/yz0nZWXGvUUmKP2w==
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-TMASE-INERTIA: 0-0;;;;
-X-TMASE-XGENCLOUD: 6c6567be-f0b5-415d-b386-9080bec47409-0-0-200-0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-BS
+To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     workflows@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+References: <2b9c093339322e2686140a486b978c0b03476f42.1641194004.git.linux@leemhuis.info>
+ <87ilv0xwjn.fsf@meer.lwn.net>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [PATCH v1] docs: 5.Posting.rst: describe Fixes: and Link: tags
+In-Reply-To: <87ilv0xwjn.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1641315500;e6b44096;
+X-HE-SMSGID: 1n4n8c-0003Z6-Ub
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The gdb remotebaud to set baudrate has been replaced in favor of
-set serial baud many years ago.
 
-Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
----
- Documentation/dev-tools/kgdb.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 03.01.22 23:51, Jonathan Corbet wrote:
+> Thorsten Leemhuis <linux@leemhuis.info> writes:
+> 
+>> Explain Fixes: and Link: tags in Documentation/process/5.Posting.rst,
+>> which are missing in this file for unknown reasons and only described in
+>> Documentation/process/submitting-patches.rst.
+>>
+>> Signed-off-by: Thorsten Leemhuis <linux@leemhuis.info>
+>> CC: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+>> ---
+>> Lo! If there is still a chance I'l like to get this patch into v5.17, as
+> 
+> I think that should be possible.  Send me a version with Randy's
+> comments addressed; I also had one nit below...
 
-diff --git a/Documentation/dev-tools/kgdb.rst b/Documentation/dev-tools/kgdb.rst
-index 43456244651a..7c90e111b364 100644
---- a/Documentation/dev-tools/kgdb.rst
-+++ b/Documentation/dev-tools/kgdb.rst
-@@ -557,7 +557,7 @@ Connecting with gdb to a serial port
-    Example (using a directly connected port)::
- 
-            % gdb ./vmlinux
--           (gdb) set remotebaud 115200
-+           (gdb) set serial baud 115200
-            (gdb) target remote /dev/ttyS0
- 
- 
--- 
-2.34.1
-Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
-Managing Director: Dr. Jan Peter Berns.
-Commercial register of local courts: Freiburg HRB381782
+Sounds good. Comments and nit addressed and sent out again:
 
+https://lore.kernel.org/linux-doc/c4a5f5e25fa84b26fd383bba6eafde4ab57c9de7.1641314856.git.linux@leemhuis.info/
+
+Ciao, Thorsten

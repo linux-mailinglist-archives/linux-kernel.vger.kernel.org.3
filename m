@@ -2,141 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E48484382
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:37:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1BB4484387
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:38:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234295AbiADOhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:37:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55994 "EHLO
+        id S234151AbiADOiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:38:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232904AbiADOhI (ORCPT
+        with ESMTP id S230044AbiADOiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:37:08 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49DAC061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 06:37:08 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id p14so27237572plf.3
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 06:37:08 -0800 (PST)
+        Tue, 4 Jan 2022 09:38:18 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E077C061761;
+        Tue,  4 Jan 2022 06:38:18 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id s4so42959654ljd.5;
+        Tue, 04 Jan 2022 06:38:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ba6Ub/A0lPMMoXtyIIeuHTcGAbNHFYM2vP9dl7sGMEk=;
-        b=ygG8Aq1rlaIlTiXCrdFc26v2RvT9Nl7oTAfZ0AZzanbdGWM6Un5f6uG/bJSGn6baUj
-         9A6DenkOZ20KRO615Bo3godzyIGVMHGpxb9VbR9mYEujNgaQKUcN/7MWkDnPwNCmvmzH
-         5ogH1Wvi1mn18g+CLoIV2FVyWYvVouywDtTM9mxmzqWSYFFuaA+f5gOgdynbfjRZ0XYx
-         ENrYMJmjDn9eBZYkLxUmwGZ2JL+xXuMZyIom/JYHTEwEhKItZn9+Z3U48BsexdBETxk9
-         Eu9Xvtp48VMZyFhLHiBl6LWT3bHTmHz8LdNPgU2j3EjmJCb0oAHWWuo0jkprLbvP7Z3/
-         eOiA==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=QmMHi/Yre/UvJNCL2dThOVThw7jS7V0hu2mmbclV+BI=;
+        b=jtGF+2+nKOBhGZ2YSUoM0HezwC5/hUsa45eaYe/TDnRf808bphxoMVyzds73Oi1hmA
+         REKLjoxwZdEGX3ZQCTa3VzZ/ZKowsQr2j1vkVfqd5k87gw/97PK/atla+tnsEsdfl4r4
+         ugM37WDj+x0W6iJO/FeeJpC3w1fY3QzIAN/J0oeZbC73rSI7qvkE4Gp48llEn7G9/MnA
+         VqYeAiOV2tWZelm4VQT7iOvEXXUEoVT+fiYyUdA4HcIpdNhNTt/ihTgIflkMBTEobjSm
+         2hRHU1COPnFP/koFs737hCFaCsmoT1AyNOZznc6QmeleFNK9WfQWTjQmvgqHGiL3tS+w
+         uqdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ba6Ub/A0lPMMoXtyIIeuHTcGAbNHFYM2vP9dl7sGMEk=;
-        b=3jOWiMTdvDXcONBIV28Ps20p+DvEEFVKfMoLILVq0x1g945yisE1F8UdPGRdjXXIIG
-         P6O5gv9Npxf2LfWSkXONKQvy52p31QNP/3kUfvWig2gzt97Vim+YhgnpJc9AdMny/hwG
-         ONY0YGJLdZwNFFCLBr02dvIkOMU+EL8eYwiIoJK64sqwWdOXJmTvif9IrXIT8R+rY5TI
-         p7/3sAKLaYZdWwBkwFNamoGYuAurJLxC1Z0JkvsRieFoJHXMV177V+pBrign3pMOoeGy
-         YZm2pVbQFd2Oj+WqiqpnnvcYaxEsqiznPPFZu69vudyFXecuEAjKQto3+MyEVnzaGv0a
-         /2cA==
-X-Gm-Message-State: AOAM533Oe+MsLbyvlMnr8vKDa0DTPHJA0yI43LhpO6zIOvXYPQw22bNs
-        bUjT1HtVZAhPrPNLzmgbmAr+LN4TIGMtTqmJylsX0A==
-X-Google-Smtp-Source: ABdhPJyxXpQ3SZaGckeNU85xnpDX3fWx3PiYQSh7DZvnd63LlPMNHQ9hKgz5OQgH6t6bwXvXkxZa/kmsDLJs+hz+Kz4=
-X-Received: by 2002:a17:90a:a6d:: with SMTP id o100mr61866726pjo.179.1641307028333;
- Tue, 04 Jan 2022 06:37:08 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QmMHi/Yre/UvJNCL2dThOVThw7jS7V0hu2mmbclV+BI=;
+        b=NF2BBub4+rl7BjbhpWA57VgCExHe/eWyPqfGStAUyESALv8wxtxxJi9xn5y/cLTJg8
+         acK+r1jOislWtMzbucq1/+kqD4Xe6Hz9uIop2Zin4HTZxmYJJxh3Y8TrCBBqndtNMxPh
+         jQLrd6yiQGCOFXKLr6AP637UE3NCec68Jeb46rWc2X5XWCcMmyIjooRLhEE8vsvgroei
+         wAY5jOA4bqDQX9BbdTxFXVicuNw3LIjOMKsYqPS+OzzNBtO0uvSUAOSpJunE/iBG0wSs
+         SAOsmL4tr3zO+nUdV8mAFUi6+60u/ywOh11cJqnoyg4OvcziWjLCc8KScEPAXnzO1EDo
+         yDQg==
+X-Gm-Message-State: AOAM5321ULtUt2MjCUQYbUcHNLpEhhSIWsyfZ5Do4lUUMplPeUmz32s4
+        tqPG4ZoUrr6P0peRrCD9gSE=
+X-Google-Smtp-Source: ABdhPJwwFTsGxRzatz9BIxV8yjARgio1lXfuEbGf1QxRZ5FV2Yu03x9GdT+vwQjYeEqYagadBvAv7w==
+X-Received: by 2002:a05:651c:98c:: with SMTP id b12mr40706698ljq.81.1641307096662;
+        Tue, 04 Jan 2022 06:38:16 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.235.38])
+        by smtp.gmail.com with ESMTPSA id y20sm2468175ljn.69.2022.01.04.06.38.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jan 2022 06:38:16 -0800 (PST)
+Message-ID: <adaafb2e-ac28-5f48-eb0b-8b55560f3bed@gmail.com>
+Date:   Tue, 4 Jan 2022 17:38:14 +0300
 MIME-Version: 1.0
-References: <20211110220050.2854-1-jirivanek1@gmail.com> <CAG3jFyvB-Dzd9YDJ7FrAC5avobL7Wfk-91E-DVeYWwfNcQLiLg@mail.gmail.com>
- <CAGWqDJ5ZKJ0skLnhfhC0cbzNnSo7HLY7Cqr2ZhOcb_YiHNsA1A@mail.gmail.com>
- <CAG3jFyt1nvtkDC2r3wc+3ky_VxtZ7s4Rto_+kMg6J_x1=QpO-Q@mail.gmail.com> <CAECvnWLivbpHQc1Qu0NowXFhSHgQModwcwG0=zviqmGPxnjUHg@mail.gmail.com>
-In-Reply-To: <CAECvnWLivbpHQc1Qu0NowXFhSHgQModwcwG0=zviqmGPxnjUHg@mail.gmail.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Tue, 4 Jan 2022 15:36:57 +0100
-Message-ID: <CAG3jFytx_vzwcLKa8p4RE5dbyjBe7NwMz5ECYwNF2utD7LDBLA@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge/tc358775: Fix for dual-link LVDS
-To:     =?UTF-8?B?SmnFmcOtIFZhbsSbaw==?= <jirivanek1@gmail.com>
-Cc:     Vinay Simha B N <simhavcs@gmail.com>,
-        Zheng Bin <zhengbin13@huawei.com>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: INFO: trying to register non-static key in hci_uart_tx_wakeup
+Content-Language: en-US
+To:     kvartet <xyru1999@gmail.com>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, sunhao.th@gmail.com
+References: <CAFkrUsjA1qai+1ysWS_LEUYcMGo+ZRF3v743q6k9e4roF6PWZw@mail.gmail.com>
+ <6338e7cd-80cb-11af-e3c0-edd740bb9e49@gmail.com>
+ <CAFkrUsgEJcMAdVUP3aUB7-H4YmUjFeii5754nPpOVh+vo3bnLA@mail.gmail.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <CAFkrUsgEJcMAdVUP3aUB7-H4YmUjFeii5754nPpOVh+vo3bnLA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Excellent.
+On 1/4/22 17:34, kvartet wrote:
+> We are so sorry for that. You can try the following websites, which
+> can be accessed without registration.
+> 
+> console output: https://paste.ubuntu.com/p/Bfpr8Gxtd4/
+> kernel config: https://paste.ubuntu.com/p/FDDNHDxtwz/
+> 
+> Sorry again and look forward to your reply!
+> 
+> 
 
-Jiri, can you add your Tested-by tag to this patch?
+Yeah, it works, thanks! Seems like removing "/plain/" gives an access 
+without ubuntu one account.
 
-On Tue, 4 Jan 2022 at 15:29, Ji=C5=99=C3=AD Van=C4=9Bk <jirivanek1@gmail.co=
-m> wrote:
->
-> Actually, this patch is based on testing with a real HW with dual-link LV=
-DS display (full HD) and it also matches with a datasheet. Without this fix=
- it does not work at all.
->
-> =C3=BAt 4. 1. 2022 v 14:51 odes=C3=ADlatel Robert Foss <robert.foss@linar=
-o.org> napsal:
->>
->> Jiri: Are you able to test this patch?
->>
->> Vinay: Could you supply a R-b tag, if you feel that it is warranted?
->>
->> On Tue, 14 Dec 2021 at 09:13, Vinay Simha B N <simhavcs@gmail.com> wrote=
-:
->> >
->> > Robert,
->> > I do not have the hardware to test this feature. Sorry for the late re=
-sponse.
->> >
->> > On Thu, Nov 18, 2021 at 8:20 PM Robert Foss <robert.foss@linaro.org> w=
-rote:
->> >>
->> >> + Zhen & Vinay
->> >>
->> >> This patch looks good in itself, but I would like to see a tested by
->> >> tag. At the very least testing for regression in single-link LVDS but
->> >> ideally some third party verification of this patch.
->> >>
->> >> On Wed, 10 Nov 2021 at 23:01, Jiri Vanek <jirivanek1@gmail.com> wrote=
-:
->> >> >
->> >> > Fixed wrong register shift for single/dual link LVDS output.
->> >> >
->> >> > Signed-off-by: Jiri Vanek <jirivanek1@gmail.com>
->> >> > ---
->> >> >  drivers/gpu/drm/bridge/tc358775.c | 2 +-
->> >> >  1 file changed, 1 insertion(+), 1 deletion(-)
->> >> >
->> >> > diff --git a/drivers/gpu/drm/bridge/tc358775.c b/drivers/gpu/drm/br=
-idge/tc358775.c
->> >> > index 2272adcc5b4a..1d6ec1baeff2 100644
->> >> > --- a/drivers/gpu/drm/bridge/tc358775.c
->> >> > +++ b/drivers/gpu/drm/bridge/tc358775.c
->> >> > @@ -241,7 +241,7 @@ static inline u32 TC358775_LVCFG_PCLKDIV(uint32=
-_t val)
->> >> >  }
->> >> >
->> >> >  #define TC358775_LVCFG_LVDLINK__MASK                         0x000=
-00002
->> >> > -#define TC358775_LVCFG_LVDLINK__SHIFT                        0
->> >> > +#define TC358775_LVCFG_LVDLINK__SHIFT                        1
->> >> >  static inline u32 TC358775_LVCFG_LVDLINK(uint32_t val)
->> >> >  {
->> >> >         return ((val) << TC358775_LVCFG_LVDLINK__SHIFT) &
->> >> > --
->> >> > 2.30.2
->> >> >
->> >
->> >
->> >
->> > --
->> > regards,
->> > vinaysimha
+
+With regards,
+Pavel Skripkin

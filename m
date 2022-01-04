@@ -2,224 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B623B4846F4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:26:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 116104846F7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235411AbiADR0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 12:26:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39310 "EHLO
+        id S235488AbiADR1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 12:27:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234749AbiADR0D (ORCPT
+        with ESMTP id S232884AbiADR1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 12:26:03 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332CFC061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 09:26:03 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id x7so83285337lfu.8
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 09:26:03 -0800 (PST)
+        Tue, 4 Jan 2022 12:27:05 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5CDEC061784
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 09:27:04 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id l4so23728144wmq.3
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 09:27:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=WI7lB1h5wzR1I5amS3/J/XjMPBvz/P5sBCVcxmVEb6g=;
-        b=OMiXrp20A1P+UWBlFyhfOkxCnq+sBHc6yZlhZnVZ7OVEOwVMMYK1ivGWdCIWQTWRip
-         SPK2nhJjpXO5iVLF37PSpqBhEHrvkSfDM2pxQvdU/WNrLW365k+hFye1+D6eU/c/IXXo
-         LOdMAILQQRfWDCR08GV8mnK7FmQL9geS33pEfWPecFozzwtNBooirRkMKCSaaGHOl51m
-         riB0Eka+KFABS3v+nmXQHX+/P9eIJFTpfOZdTs304aLI1ivvjExWMVIhc235t9SdQxin
-         PVgOih4W3xqoqysFob1zl+u7bsCqAaI1G3qswq6r/InvYOBigCwA2COhE+TUwaojfOAq
-         S9jA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=FkvEoZ+f1KklL29+roJfQw/3hslNdGuWFi/qt4fzI8M=;
+        b=R899uS41/RNeFFNpSnGxelyhgwPPMfXksBO72coQY7q6dqkyhx3hjShQ/aZvkwwHbd
+         6hO5XmIxz0mDI644+u1/1qDCDf3LrknftqzZa/B9l1SqcPAFYuTadf10B7Odh2voElbe
+         7X325pv1hQLekivXePmdeQCu9W8v/qiDYbiriGnagbZGEuT9AH70SkXXruldHvcjgf2C
+         ZbZ2Syg1iLg9CqKf2Eqod2C2/XNIWn46Z1FPr+ylBJgPMLE0ffpTRIy2u7cH8qo2vKDB
+         DuVCAKWSs+o2h6kWQYnzX1oeJzqcAlkmH9+qkbtIiVnUnMHagR+tM/WrmjlBpkh932FT
+         I/+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=WI7lB1h5wzR1I5amS3/J/XjMPBvz/P5sBCVcxmVEb6g=;
-        b=PJb50RLGNal4maTgJGfShIxnsYHmQR2m/oYNlcTbB7XGlqFG/tKrl++IHoog9HMXsA
-         47TfIm6zS2KItqOV90Hi/qYULD4Imr2Zvy8CRbr1M7pXZNg8sndx1FtoGdkPHceponoX
-         O2GiSduGwsXabhk0YfhEyz7r+PovWMxS7vr6aFGwqHj3VTG1B3ZoNmBqDFFT/PgeUn43
-         ihYRuk0SQqdw58qMtaYOtxQjAqMi7JcKb+0yFzTFRsh2ivn1UE5yWKopqX5pOgtIHOlc
-         k043/suvBPBLx1Yo/tgge4TOeeQGte5CnrcuBGlv5EoWRYMybZyBbJcyWkHZf51PlEUf
-         l3NA==
-X-Gm-Message-State: AOAM532qCVqyct1b4GKBOrIuGDFKuoKLC94TZUQZDe8VAHBErKjJ177L
-        pKaOLl9QWMdZXcLynavwjDn7X3sdP1eIpUxzRgudcg==
-X-Google-Smtp-Source: ABdhPJw8CT9FUQyCSpw151cYtBBTzAW6DKyeI4S1JIsi2Z3jQSPb/+4uOHm3HO73slTwxuU1Z1CZppFcgoHYgkIhIRk=
-X-Received: by 2002:a05:6512:32c5:: with SMTP id f5mr41463073lfg.550.1641317160619;
- Tue, 04 Jan 2022 09:26:00 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=FkvEoZ+f1KklL29+roJfQw/3hslNdGuWFi/qt4fzI8M=;
+        b=cX0Zb6h5mzXFNPlooXzOds9K/7qVQPMxpqAa43RebzFBXM9BJ98YoNL0rTZA4fnK5D
+         NOYkg54dyWVtLA6C+7uOb8kIhVTIgjqGoGvqNlad9yT4V1p79RMaxL3a6BNOHjll2pUk
+         eEOc8W+SnXMix0gNuDwG9e6gIWiBWCvgYlB90w8QXC4W1zRCTDGMdeQaBGF8IwOTWGHo
+         yw6PbLMquOGHC87rcCkEuukpfswE3dk/fegFNcrMKzN7sAqkZ11K1ceiz5BDfI2GqOnu
+         +4I5DpLm54QZ243Ipb0NjATFVHz3zJUYeS8Z7JlxvJ4JMlee9zzL7vScYmBko9bFdvHL
+         pFSQ==
+X-Gm-Message-State: AOAM532YkKzXvZHR7EuRj2OKOq3NNbTAbvjStLaX9lqnd0uUGv4Ba5Eu
+        GflZi+9yMaKOqc3YrgOf2YBhpg==
+X-Google-Smtp-Source: ABdhPJz5YFm5a05QEukbkxkYHFV4Q3kslnLu7Nlf+0vhzDrdejKouDenOe8oqoMDNNfTGkOd/4eeJQ==
+X-Received: by 2002:a05:600c:2904:: with SMTP id i4mr41957999wmd.61.1641317223293;
+        Tue, 04 Jan 2022 09:27:03 -0800 (PST)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id i8sm7945wmq.4.2022.01.04.09.27.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 09:27:02 -0800 (PST)
+Date:   Tue, 4 Jan 2022 17:27:01 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Christian =?utf-8?B?TMO2aGxl?= <CLoehle@hyperstone.com>
+Cc:     "jason.wessel@windriver.com" <jason.wessel@windriver.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dianders@chromium.org" <dianders@chromium.org>,
+        "corbet@lwn.net" <corbet@lwn.net>
+Subject: Re: [PATCH] Documentation: kgdb: Replace deprecated remotebaud
+Message-ID: <20220104172701.7ychluvlcts4anab@maple.lan>
+References: <13287b7914344c7995de27224cd2fa73@hyperstone.com>
 MIME-Version: 1.0
-References: <YdIfz+LMewetSaEB@gmail.com> <YdM4Z5a+SWV53yol@archlinux-ax161> <YdQlwnDs2N9a5Reh@gmail.com>
-In-Reply-To: <YdQlwnDs2N9a5Reh@gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 4 Jan 2022 09:25:48 -0800
-Message-ID: <CAKwvOdmCgBKiikP2Ja4PfJmVEnzNPGYe19MNd++a5D-asCBG2w@mail.gmail.com>
-Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree -v1:
- Eliminate the Linux kernel's "Dependency Hell"
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Al Viro <viro@zeniv.linux.org.uk>, llvm@lists.linux.dev,
-        ashimida <ashimida@linux.alibaba.com>,
-        Arnd Bergmann <arnd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <13287b7914344c7995de27224cd2fa73@hyperstone.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 4, 2022 at 2:47 AM Ingo Molnar <mingo@kernel.org> wrote:
->
->
-> * Nathan Chancellor <nathan@kernel.org> wrote:
->
-> > Hi Ingo,
-> >
-> > On Sun, Jan 02, 2022 at 10:57:35PM +0100, Ingo Molnar wrote:
-> > I took the series for a spin with clang and GCC on arm64 and x86_64 and
-> > I found a few warnings/errors.
->
-> Thank you!
->
-> > 1. Position of certain attributes
-> >
-> > In some commits, you move the cacheline_aligned attributes from after
-> > the closing brace on structures to before the struct keyword, which
-> > causes clang to warn (and error with CONFIG_WERROR):
-> >
-> > In file included from arch/arm64/kernel/asm-offsets.c:9:
-> > In file included from arch/arm64/kernel/../../../kernel/sched/per_task_=
-area_struct.h:33:
-> > In file included from ./include/linux/perf_event_api.h:17:
-> > In file included from ./include/linux/perf_event_types.h:41:
-> > In file included from ./include/linux/ftrace.h:18:
-> > In file included from ./arch/arm64/include/asm/ftrace.h:53:
-> > In file included from ./include/linux/compat.h:11:
-> > ./include/linux/fs_types.h:997:1: error: attribute '__aligned__' is ign=
-ored, place it after "struct" to apply attribute to type declaration [-Werr=
-or,-Wignored-attributes]
-> > ____cacheline_aligned
-> > ^
-> > ./include/linux/cache.h:41:46: note: expanded from macro '____cacheline=
-_aligned'
-> > #define ____cacheline_aligned __attribute__((__aligned__(SMP_CACHE_BYTE=
-S)))
->
-> Yeah, so this is a *really* stupid warning from Clang.
->
-> Putting the attribute after 'struct' risks the hard to track down bugs wh=
-en
-> a <linux/cache.h> inclusion is missing, which scenario I pointed out in
-> this commit:
->
->     headers/deps: dcache: Move the ____cacheline_aligned attribute to the=
- head of the definition
->
->     When changing <linux/dcache.h> I removed the <linux/spinlock_api.h> h=
-eader,
->     which caused a couple of hundred of mysterious, somewhat obscure link=
- time errors:
->
->       ld: net/sctp/tsnmap.o:(.bss+0x0): multiple definition of `____cache=
-line_aligned_in_smp'; init/do_mounts_rd.o:(.bss+0x0): first defined here
->       ld: net/sctp/tsnmap.o:(.bss+0x40): multiple definition of `____cach=
-eline_aligned'; init/do_mounts_rd.o:(.bss+0x40): first defined here
->       ld: net/sctp/debug.o:(.bss+0x0): multiple definition of `____cachel=
-ine_aligned_in_smp'; init/do_mounts_rd.o:(.bss+0x0): first defined here
->       ld: net/sctp/debug.o:(.bss+0x40): multiple definition of `____cache=
-line_aligned'; init/do_mounts_rd.o:(.bss+0x40): first defined here
->
->     After a bit of head-scratching, what happened is that 'struct dentry_=
-operations'
->     has the ____cacheline_aligned attribute at the tail of the type defin=
-ition -
->     which turned into a local variable definition when <linux/cache.h> wa=
-s not
->     included - which <linux/spinlock_api.h> includes into <linux/dcache.h=
-> indirectly.
->
->     There were no compile time errors, only link time errors.
->
->     Move the attribute to the head of the definition, in which case
->     a missing <linux/cache.h> inclusion creates an immediate build failur=
-e:
->
->       In file included from ./include/linux/fs.h:9,
->                        from ./include/linux/fsverity.h:14,
->                        from fs/verity/fsverity_private.h:18,
->                        from fs/verity/read_metadata.c:8:
->       ./include/linux/dcache.h:132:22: error: expected =E2=80=98;=E2=80=
-=99 before =E2=80=98struct=E2=80=99
->         132 | ____cacheline_aligned
->             |                      ^
->             |                      ;
->         133 | struct dentry_operations {
->             | ~~~~~~
->
->     No change in functionality.
->
->     Signed-off-by: Ingo Molnar <mingo@kernel.org>
->
-> Can this Clang warning be disabled?
+On Tue, Jan 04, 2022 at 04:56:51PM +0000, Christian Löhle wrote:
+> The gdb remotebaud to set baudrate has been replaced in favor of
+> set serial baud many years ago.
 
-Clang is warning that the attribute will be ignored because of that
-positioning. If you disable the warning, code will probably stop
-working as intended.  This warning has at least been helping us make
-the kernel coding style more consistent.
+I'd prefer to have a little more historical info in the patch header
+so that anyone still running gdb-7.6 has a better shot at finding out
+what is going on (some folks in the embedded world end up relying on
+surprisingly old cross-toolsets).
 
-This made me think of d5b421fe02827 ("docs: Explain the desired
-position of function attributes"), where we adding some text to
-Documentation/process/coding-style.rst about the positioning of
-__attribute__'s in function signatures, but I guess this case is data.
-We probably should add something to the coding style about attributes
-on data, too.
+In other words something more like:
 
-The C standards body is also working on standardizing attributes; at
-the least I expect some of these things to be ironed out more soon.
+  Using set remotebaud to set the baud rate was deprecated in
+  gdb-7.7 and completely removed from the command parser in gdb-7.8
+  (released in 2014). Adopt set serial baud instead.
 
->
-> > 2. Error with CONFIG_SHADOW_CALL_STACK
->
-> So this feature depends on Clang:
->
->  # Supported by clang >=3D 7.0
->  config CC_HAVE_SHADOW_CALL_STACK
->          def_bool $(cc-option, -fsanitize=3Dshadow-call-stack -ffixed-x18=
-)
->
-> No way to activate it under my GCC cross-build toolchain, right?
->
-> But ... I hacked the build mode on with GCC using this patch:
+Other than that the change looks good to me so with an improved
+description containing the above versions and dates this can be:
+Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
 
-Dan Li is working on a GCC patch. If you're up for building GCC from source=
-:
-https://gcc.gnu.org/pipermail/gcc-patches/2021-December/586204.html
 
---
+Thanks
 
-This is a really cool series Ingo.  I'm sure Arnd has seen it by now,
-but Arnd has been thinking about this area a lot, too.  I haven't but
-I have played with running "include what you use" on the kernel
-sources; Kconfig being the biggest impediment to that approach.
+Daniel.
 
-To me, I'm most nervous about "backsliding;" let's say this work
-lands, at some point probably years in the future, I assume without
-any form of automation that we might find ourselves at a similar point
-of header dependencies getting all tangled again.
 
-What are your thoughts on where/how/what we could automate to try to
-help developers in the future keep their header dependencies simpler?
-(Sorry if this was already answered in the cover letter)
-
-It would be really useful if you were planning a talk at something
-like plumbers how you go about making these changes.  I really hope
-once others understand your workflow that we might help with some form
-of automation.  Nice work!
---
-Thanks,
-~Nick Desaulniers
+> 
+> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+> ---
+>  Documentation/dev-tools/kgdb.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/dev-tools/kgdb.rst b/Documentation/dev-tools/kgdb.rst
+> index 43456244651a..7c90e111b364 100644
+> --- a/Documentation/dev-tools/kgdb.rst
+> +++ b/Documentation/dev-tools/kgdb.rst
+> @@ -557,7 +557,7 @@ Connecting with gdb to a serial port
+>     Example (using a directly connected port)::
+> 
+>             % gdb ./vmlinux
+> -           (gdb) set remotebaud 115200
+> +           (gdb) set serial baud 115200
+>             (gdb) target remote /dev/ttyS0
+> 
+> 
+> --
+> 2.34.1
+> Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+> Managing Director: Dr. Jan Peter Berns.
+> Commercial register of local courts: Freiburg HRB381782
+> 

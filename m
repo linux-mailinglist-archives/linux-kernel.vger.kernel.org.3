@@ -2,86 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C37148421A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:08:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF0F484217
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:07:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233315AbiADNIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 08:08:16 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49696 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232078AbiADNIN (ORCPT
+        id S233296AbiADNHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 08:07:54 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:36138 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233279AbiADNHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 08:08:13 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 625E96135E;
-        Tue,  4 Jan 2022 13:08:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 130B1C36AEF;
-        Tue,  4 Jan 2022 13:08:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641301692;
-        bh=mT5t79gxCgRdT1vNcMcGQnrvh/Z6pQHv2BwjqHfeFy8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fKRY9zkTPp3BP+ryztGtFWSEw0kyX0BM2Uf2v3VZK6GCUVOr6rnw3hzih2LhKe2Wi
-         YdL6yux9ihG5mBuIvYPn9TY2ER/O//0iHoOJ+kRPUZTH/pvUQr+jz5IqdmRogD9e9I
-         zMvA2mLwuJ2ds7EvjPMoNPox+9VGjjtx5nfvN100=
-Date:   Tue, 4 Jan 2022 14:04:09 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 02/14] driver core: Add dma_cleanup callback in
- bus_type
-Message-ID: <YdRFyXWay/bdSSem@kroah.com>
-References: <20220104015644.2294354-1-baolu.lu@linux.intel.com>
- <20220104015644.2294354-3-baolu.lu@linux.intel.com>
- <YdQcpHrV7NwUv+qc@infradead.org>
- <20220104123911.GE2328285@nvidia.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220104123911.GE2328285@nvidia.com>
+        Tue, 4 Jan 2022 08:07:53 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id C9A2E1F386;
+        Tue,  4 Jan 2022 13:07:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641301671; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tfjSgIg7XepgSJUbid2VyHDg323VjNL4qJ6wgeEpvuQ=;
+        b=t7B0BcFicuUynr5x7AL1eNGg49zlmxTbJGJWyp+rHuWH4GiimczcFtLkcPCqyO2UNi45fj
+        fREFdToDToGMwEG44vhKqQ7+dN/Oy0i3GLz+3u2g+gWs4MAjKuo9IeXQvzNBn4YAHOOcvl
+        A1Wj9z/0N2U5/HTx4xzbBZD4KZL01Ws=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641301671;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tfjSgIg7XepgSJUbid2VyHDg323VjNL4qJ6wgeEpvuQ=;
+        b=zmqNWuIrK+SlApL8VKqldEqu7JoA4V2VkwBHfKAJv5Thu/nsFs6+lWBfnIjhzof9dHSD7b
+        nqRpRFosyVxpHrBQ==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id A89A0A3B83;
+        Tue,  4 Jan 2022 13:07:51 +0000 (UTC)
+Date:   Tue, 04 Jan 2022 14:07:51 +0100
+Message-ID: <s5h35m3lkd4.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Len Brown <lenb@kernel.org>, Mark Gross <markgross@kernel.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Hans de Goede <hdegoede@redhat.com>,
+        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: (subset) [PATCH v6 00/10] Add support for CS35L41 in HDA systems
+In-Reply-To: <164096159451.2355590.17653987935012339046.b4-ty@kernel.org>
+References: <20211217115708.882525-1-tanureal@opensource.cirrus.com>
+        <164096159451.2355590.17653987935012339046.b4-ty@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 08:39:11AM -0400, Jason Gunthorpe wrote:
-> On Tue, Jan 04, 2022 at 02:08:36AM -0800, Christoph Hellwig wrote:
-> > All these bus callouts still looks horrible and just create tons of
-> > boilerplate code.
+On Fri, 31 Dec 2021 15:39:54 +0100,
+Mark Brown wrote:
 > 
-> Yes, Lu - Greg asked questions then didn't respond to their answers
-> meaning he accepts them, you should stick with the v4 version.
+> On Fri, 17 Dec 2021 11:56:58 +0000, Lucas Tanure wrote:
+> > Add support for laptops that have CS35L41 connected to an HDA
+> > codec by I2S and direct I2C connection to the CPU.
+> > 
+> > Laptops that use CS35L41 and are SPI will be added in the future,
+> > after the support for it is resolved at i2c-multi-instantiate driver.
+> > i2c-multi-instantiate thread: https://lkml.org/lkml/2021/12/10/557
+> > 
+> > [...]
+> 
+> Applied to
+> 
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+> 
+> Thanks!
+> 
+> [01/10] ASoC: cs35l41: Convert tables to shared source code
+>         commit: a87d42227cf5614fe0040ddd1fe642c54298b42c
+> [02/10] ASoC: cs35l41: Move cs35l41_otp_unpack to shared code
+>         commit: fe120d4cb6f6cd03007239e7c578b8703fe6d336
+> [03/10] ASoC: cs35l41: Move power initializations to reg_sequence
+>         commit: 062ce0593315e22aac527389dd6dd4328c49f0fb
+> [04/10] ASoC: cs35l41: Create shared function for errata patches
+>         commit: 8b2278604b6de27329ec7ed82ca696c4751111b6
+> [05/10] ASoC: cs35l41: Create shared function for setting channels
+>         commit: 3bc3e3da657f17c14df8ae8fab58183407bd7521
+> [06/10] ASoC: cs35l41: Create shared function for boost configuration
+>         commit: e8e4fcc047c6e0c5411faeb8cc29aed2e5036a00
 
-Trying to catch up on emails from the break, that was way down my list
-of things to get back to as it's messy and non-obvious.  I'll revisit it
-again after 5.17-rc1 is out, this is too late for that merge window
-anyway.
+Mark, could you send a PR including those for 5.17?
+The rest HD-audio part of the patch set depends on this new ASoC codec
+stuff (at least Kconfig), so I can't apply the patches before merging
+those.  The ACPI patch might be still not applicable through my tree,
+but it can be taken independently.
+
 
 thanks,
 
-greg k-h
+Takashi

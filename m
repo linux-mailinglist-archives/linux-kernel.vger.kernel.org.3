@@ -2,110 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74968484766
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:04:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24480484769
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:05:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233521AbiADSEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 13:04:15 -0500
-Received: from fanzine2.igalia.com ([213.97.179.56]:43254 "EHLO
-        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233070AbiADSEO (ORCPT
+        id S236080AbiADSFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 13:05:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48280 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233070AbiADSFD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 13:04:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version
-        :Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=gQt+rsQM2B7+yEGYuuKhCQquw5+qO0kTX2uHBXUI904=; b=kdEqKQB6hlKRYbeVXE/Xa0r/vi
-        QSuS/8K5Lx/wy6dDYwEjQPE9CVIiSoP1fupEeKKvT67w83NGtO7LOujyggqmgJo8ayvLCCtN9DSYB
-        x7tUMXJM8PdUjzlVKtc5fKorLPFHGym3XuzKQOUJZaoeZuJRjRnewEcxtrx7aqj5FOgKcjuGI6kmV
-        8PhALYlsb/KPOy3t6lcMdDyFpk20a/wBqYdzZRRuplOcuhzUOnJow/mh5P5jWigwb++HLnBgPCxFx
-        +k74jDFDsEVI0FKDAuHmVIJiVSZ+r+0eSq8DUuZn+7Lbc/8r4gNFvJ36qbfjKehOWoS8W9UuYupRl
-        e9C+ck8A==;
-Received: from 200-153-146-242.dsl.telesp.net.br ([200.153.146.242] helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1n4oAL-0009Yn-2h; Tue, 04 Jan 2022 19:04:09 +0100
-Subject: Re: pstore/ramoops - why only collect a partial dmesg?
-To:     "Luck, Tony" <tony.luck@intel.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "anton@enomsg.org" <anton@enomsg.org>,
-        "ccross@android.com" <ccross@android.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-        "Guilherme G. Piccoli" <kernel@gpiccoli.net>
-References: <a21201cf-1e5f-fed1-356d-42c83a66fa57@igalia.com>
- <2d1e9afa38474de6a8b1efc14925d095@intel.com>
- <0ca4c27a-a707-4d36-9689-b09ef715ac67@igalia.com>
- <a361c64213e7474ea39c97f7f7bd26ec@intel.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Message-ID: <c5a04638-90c2-8ec0-4573-a0e5d2e24b6b@igalia.com>
-Date:   Tue, 4 Jan 2022 15:03:54 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 4 Jan 2022 13:05:03 -0500
+X-Greylist: delayed 8655 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Jan 2022 10:05:02 PST
+Received: from proxima.lasnet.de (proxima.lasnet.de [IPv6:2a01:4f8:121:31eb:3::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC97C061761;
+        Tue,  4 Jan 2022 10:05:02 -0800 (PST)
+Received: from [IPV6:2003:e9:d728:ec47:4b31:73e4:34c5:505a] (p200300e9d728ec474b3173e434c5505a.dip0.t-ipconnect.de [IPv6:2003:e9:d728:ec47:4b31:73e4:34c5:505a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: stefan@datenfreihafen.org)
+        by proxima.lasnet.de (Postfix) with ESMTPSA id 0115BC0415;
+        Tue,  4 Jan 2022 19:04:58 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=datenfreihafen.org;
+        s=2021; t=1641319499;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DKQgdD9UVcoJQH9gQCvyiU77/QftK6OHmHhiDWE5QIg=;
+        b=n29ks7y+azv5RfM5srljIY8TOtYBNRriyQe3KisZ3F2HczxWmSJutqqJA1dUj5s2KulEl3
+        HUjsf12Dc11nVUu8Pd2gJuvFASp0NdT3ev4YWzEzGBhyPc5gvK7lpbzcI/yHRacapMj9iv
+        gaggDAp0pGnNiXtz1bTa/Epp2LTRl+HLe+D7ylf28psbyBw1NtWrIskrWWiG+Z1cyfkEI4
+        s0OB39ZLTs1x+FW9FhsCgmLDUle8SPHA38X+wV0HRswC33akrH9Kvx7ypesDMD8mqSoC7Y
+        7MYmTLmmcq+UXygAbmxbcGNPdp60fqJrsTTt47+hS8L3Ae6XvCUgeTlxk5BTkQ==
+Message-ID: <e8e73fcc-b902-4972-6001-84671361146d@datenfreihafen.org>
+Date:   Tue, 4 Jan 2022 19:04:58 +0100
 MIME-Version: 1.0
-In-Reply-To: <a361c64213e7474ea39c97f7f7bd26ec@intel.com>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Subject: Re: [PATCH v2] ieee802154: atusb: fix uninit value in
+ atusb_set_extended_addr
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+To:     Pavel Skripkin <paskripkin@gmail.com>, alex.aring@gmail.com,
+        davem@davemloft.net, kuba@kernel.org
+Cc:     linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexander Potapenko <glider@google.com>
+References: <CAB_54W50xKFCWZ5vYuDG2p4ijpd63cSutRrV4MLs9oasLmKgzQ@mail.gmail.com>
+ <20220103120925.25207-1-paskripkin@gmail.com>
+ <ed39cbe6-0885-a3ab-fc30-7c292e1acc53@datenfreihafen.org>
+ <5b0b8dc6-f038-bfaa-550c-dc23636f0497@gmail.com>
+From:   Stefan Schmidt <stefan@datenfreihafen.org>
+In-Reply-To: <5b0b8dc6-f038-bfaa-550c-dc23636f0497@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/01/2022 14:00, Luck, Tony wrote:
-> [...] 
-> Guilherme,
+Hello.
+
+On 04.01.22 18:27, Pavel Skripkin wrote:
+> On 1/4/22 18:40, Stefan Schmidt wrote:
+>>
+>> It compiles, but does not work on the real hardware.
+>>
+>> [    1.114698] usb 1-1: new full-speed USB device number 2 using uhci_hcd
+>> [    1.261691] usb 1-1: New USB device found, idVendor=20b7,
+>> idProduct=1540, bcdDevice= 0.01
+>> [    1.263421] usb 1-1: New USB device strings: Mfr=0, Product=0,
+>> SerialNumber=1
+>> [    1.264952] usb 1-1: SerialNumber: 4630333438371502231a
+>> [    1.278042] usb 1-1: ATUSB: AT86RF231 version 2
+>> [    1.281087] usb 1-1: Firmware: major: 0, minor: 3, hardware type:
+>> ATUSB (2)
+>> [    1.285191] usb 1-1: atusb_control_msg: req 0x01 val 0x0 idx 0x0,
+>> error -61
+>> [    1.286903] usb 1-1: failed to fetch extended address, random 
+>> address set
+>> [    1.288757] usb 1-1: atusb_probe: initialization failed, error = -61
+>> [    1.290922] atusb: probe of 1-1:1.0 failed with error -61
+>>
+>>
+>> Without your patch it works as expected:
+>>
+>> [    1.091925] usb 1-1: new full-speed USB device number 2 using uhci_hcd
+>> [    1.237743] usb 1-1: New USB device found, idVendor=20b7,
+>> idProduct=1540, bcdDevice= 0.01
+>> [    1.239788] usb 1-1: New USB device strings: Mfr=0, Product=0,
+>> SerialNumber=1
+>> [    1.241432] usb 1-1: SerialNumber: 4630333438371502231a
+>> [    1.255012] usb 1-1: ATUSB: AT86RF231 version 2
+>> [    1.258073] usb 1-1: Firmware: major: 0, minor: 3, hardware type:
+>> ATUSB (2)
+>> [    1.262170] usb 1-1: Firmware: build #132 Mo 28. Nov 16:20:35 CET 2016
+>> [    1.266195] usb 1-1: Read permanent extended address
+>> 10:e2:d5:ff:ff:00:02:e8 from device
+>>
 > 
-> Linux is indeed somewhat reluctant to hand out allocations > 2MB. :-(
+> Hi Stefan,
 > 
-> Do you really need the whole dmesg in the pstore dump?  The expectation
-> is that systems run normally for a while. During that time console logs are
-> saved off to /var/log/messages.
+> thanks for testing on real hw.
 > 
-> When the system crashes, the last part (the interesting bit!) of the console
-> log is lost.  The purpose of pstore is to save that last bit.
+> It looks like there is corner case, that Greg mentioned in this thread. 
+> atusb_get_and_show_build() reads firmware build info, which may have 
+> various length.
 > 
-> So while you could add code to ramoops to save multiple 2MB chunks, it
-> doesn't seem (to me) that it would add much value.
-> 
+> Maybe we can change atusb_control_msg() to usb_control_msg() in 
+> atusb_get_and_show_build(), since other callers do not have this problem
 
-Thanks again Tony, for the interesting points. So, I partially agree
-with you: indeed, in a normal situation we have all messages collected
-by some userspace daemon, and when some issue/oops happens, we can rely
-on pstore to collect the latest portion of the log buffer (2M is a
-bunch!) and "merge" that with the previously collected portion, likely
-saved in a /var/log/ file.
+That works for me.
 
-The problem is that our use case is a bit different: the idea is to rely
-on pstore/ramoops to collect the most information we can in a panic
-event, without the need of kdump. The latter is a pretty
-comprehensive/complete approach, but requires a bunch of memory reserved
-- it's a bit too much if we want just the task list, backtraces and
-memory state of the system, for example. And for that...we have the
-"panic_print" setting!
+I will also have a look at the use of the modern USB API for next. The 
+fix here has a higher prio for me to get in and backported though. Once 
+we have this we can look at bigger changes in atusb.
 
-There lies the issue: if I set panic_print to dump all backtraces, task
-info and memory state in a panic event, that information + the
-panic/oops and some previous relevant stuff, does it all fit in the 2M
-chunk? Likely so, but *if it doesn't fit*, we may lose _exactly_ the
-most important piece, which is the panic cause.
-
-The same way I have the "log_buf_len" tuning to determine how much size
-my log buffer has, I'd like to be able to effectively collect that much
-information using pstore/ramoops. Requiring that amount of space in an
-efi-pstore, for example, would be indeed really crazy! But ramoops is
-just a way for using some portion of the system RAM to save the log
-buffer, so I feel it'd be interesting to be able to properly collect
-full logs there, no matter the size of the logs. Of course, I'd like to
-see that as a setting, because the current behavior is great/enough for
-most of users I guess, as you pointed, and there's no need to change it
-by default.
-
-Let me know your thoughts and maybe others also have good opinions about
-that!
-Cheers,
-
-
-Guilherme
+regards
+Stefan Schmidt

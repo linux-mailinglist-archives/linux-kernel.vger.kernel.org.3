@@ -2,61 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEBD8483D4F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 08:57:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33238483D5F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 09:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233772AbiADH5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 02:57:08 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:54666 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233768AbiADH5I (ORCPT
+        id S233661AbiADIBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 03:01:46 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:52502 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232800AbiADIBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 02:57:08 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E5DFCB8116B
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 07:57:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 315B2C36AEF;
-        Tue,  4 Jan 2022 07:57:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641283025;
-        bh=NSJ0zTdBXcJWuUZOOPmyxo1EAOMSjDyoFTgmv/YJlAo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Kr2pK+rxZApN2H/ze4xyyXHbls1BroLStG49SrYoE2MLJxfZdI5yatFwTPW/PSVeS
-         p2BhdOY1UoEu3MaXUSzhmYi+Wn6RMpxQeq3vMLe7jOBhNNyWbOsPAJgE7PUUgKs9nz
-         iBAml9PJxzEAfAU+GvGNE4Z/RpwNWiYkMpkh2WrpaXynIk+WiTQbQLyG7fuwZL8y81
-         /KBfb+9FFpOhT0+nav/HjW2gxcLopGurGp5SU0sLZBDGxC55iGCqtqO77SaKMjIFEf
-         oHcdNCNfpsv77BrygfxHsbyT0VPhOLcaChIJEOfuEcq91xCHMslDCHQMDyII//GgDx
-         2xfInguavBzog==
-Message-ID: <2d841b67-27d0-df57-fff0-fa8fb2c4175c@kernel.org>
-Date:   Tue, 4 Jan 2022 15:57:02 +0800
+        Tue, 4 Jan 2022 03:01:44 -0500
+X-UUID: 6d3db91b548b4d75b020c454b1d636e0-20220104
+X-UUID: 6d3db91b548b4d75b020c454b1d636e0-20220104
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 25941840; Tue, 04 Jan 2022 16:01:42 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 4 Jan 2022 16:01:41 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 4 Jan
+ 2022 16:01:40 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 4 Jan 2022 16:01:38 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "Tzung-Bi Shih" <tzungbi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v3, 00/13] media: mtk-vcodec: support for MT8192 decoder
+Date:   Tue, 4 Jan 2022 16:01:25 +0800
+Message-ID: <20220104080138.7472-1-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2 2/5] erofs: use meta buffers for inode operations
-Content-Language: en-US
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>,
-        linux-erofs@lists.ozlabs.org, Liu Bo <bo.liu@linux.alibaba.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Yue Hu <huyue2@yulong.com>
-References: <20220102040017.51352-1-hsiangkao@linux.alibaba.com>
- <20220102040017.51352-3-hsiangkao@linux.alibaba.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20220102040017.51352-3-hsiangkao@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/1/2 12:00, Gao Xiang wrote:
-> Get rid of old erofs_get_meta_page() within inode operations by
-> using on-stack meta buffers in order to prepare subpage and folio
-> features.
-> 
-> Reviewed-by: Yue Hu <huyue2@yulong.com>
-> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+This series adds support for mt8192 h264 decoder. Firstly, need to refactor
+power/clock/interrupt interfaces for mt8192 is lat and core architecture.
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+Secondly, add new functions to get frame buffer size and resolution according
+to decoder capability from scp side. Then add callback function to get/put
+capture buffer in order to enable lat and core decoder in parallel. 
 
-Thanks,
+Then add to support MT21C compressed mode and fix v4l2-compliance fail.
+
+Lastly, extract H264 request api driver to let mt8183 and mt8192 use the same
+code, and adds mt8192 frame based h264 driver for stateless decoder.
+
+Patches 1 refactor power/clock/interrupt interface.
+Patches 2~4 get frame buffer size and resolution according to decoder capability.
+Patches 5~6 enable lat and core decode in parallel.
+Patch 7~10 add to support MT21C compressed mode and fix v4l2-compliance fail.
+patch 11 record capture queue format type
+Patch 12~13 extract h264 driver and add mt8192 frame based driver for h264 decoder.
+----
+Dependents on "Support multi hardware decode using of_platform_populate"[1].
+
+This patches are the second part used to add mt8192 h264 decoder. And the base part is [1].
+
+[1]https://patchwork.linuxtv.org/project/linux-media/cover/20211215061552.8523-1-yunfei.dong@mediatek.com/
+---
+changes compared with v2:
+- add new patch 11 to record capture queue format type.
+- separate patch 4 according to tzung-bi's suggestion.
+- re-write commit message for patch 5 according to tzung-bi's suggestion.
+changes compared with v1:
+- rewrite commit message for patch 12.
+- rewrite cover-letter message.
+---
+Yunfei Dong (13):
+  media: mtk-vcodec: Add vdec enable/disable hardware helpers
+  media: mtk-vcodec: Using firmware type to separate different firmware
+    architecture
+  media: mtk-vcodec: get capture queue buffer size from scp
+  media: mtk-vcodec: Read max resolution from dec_capability
+  media: mtk-vcodec: Call v4l2_m2m_set_dst_buffered() set capture buffer
+    buffered
+  media: mtk-vcodec: Refactor get and put capture buffer flow
+  media: mtk-vcodec: Refactor supported vdec formats and framesizes
+  media: mtk-vcodec: Add format to support MT21C
+  media: mtk-vcodec: disable vp8 4K capability
+  media: mtk-vcodec: Fix v4l2-compliance fail
+  media: mtk-vcodec: record capture queue format type
+  media: mtk-vcodec: Extract H264 common code
+  media: mtk-vcodec: Add h264 decoder driver for mt8192
+
+ drivers/media/platform/mtk-vcodec/Makefile    |   2 +
+ .../platform/mtk-vcodec/mtk_vcodec_dec.c      |  49 +-
+ .../platform/mtk-vcodec/mtk_vcodec_dec_drv.c  |   5 -
+ .../platform/mtk-vcodec/mtk_vcodec_dec_pm.c   | 168 +++--
+ .../platform/mtk-vcodec/mtk_vcodec_dec_pm.h   |   6 +-
+ .../mtk-vcodec/mtk_vcodec_dec_stateful.c      |  14 +-
+ .../mtk-vcodec/mtk_vcodec_dec_stateless.c     | 246 +++++--
+ .../platform/mtk-vcodec/mtk_vcodec_drv.h      |  27 +-
+ .../media/platform/mtk-vcodec/mtk_vcodec_fw.c |   6 +
+ .../media/platform/mtk-vcodec/mtk_vcodec_fw.h |   1 +
+ .../mtk-vcodec/vdec/vdec_h264_req_common.c    | 303 +++++++++
+ .../mtk-vcodec/vdec/vdec_h264_req_common.h    | 247 +++++++
+ .../mtk-vcodec/vdec/vdec_h264_req_if.c        | 402 +-----------
+ .../mtk-vcodec/vdec/vdec_h264_req_lat_if.c    | 620 ++++++++++++++++++
+ .../media/platform/mtk-vcodec/vdec_drv_if.c   |  28 +-
+ .../media/platform/mtk-vcodec/vdec_drv_if.h   |   1 +
+ .../media/platform/mtk-vcodec/vdec_ipi_msg.h  |  37 ++
+ .../platform/mtk-vcodec/vdec_msg_queue.c      |   2 +
+ .../media/platform/mtk-vcodec/vdec_vpu_if.c   |  55 +-
+ .../media/platform/mtk-vcodec/vdec_vpu_if.h   |  15 +
+ include/linux/remoteproc/mtk_scp.h            |   2 +
+ 21 files changed, 1681 insertions(+), 555 deletions(-)
+ create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_common.c
+ create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_common.h
+ create mode 100644 drivers/media/platform/mtk-vcodec/vdec/vdec_h264_req_lat_if.c
+
+-- 
+2.25.1
+

@@ -2,123 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4456F48450B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:45:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AE0484525
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:46:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234971AbiADPo4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jan 2022 10:44:56 -0500
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:38821 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234929AbiADPoy (ORCPT
+        id S235113AbiADPqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 10:46:10 -0500
+Received: from mail-oi1-f180.google.com ([209.85.167.180]:44688 "EHLO
+        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234013AbiADPpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 10:44:54 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id BE972E0005;
-        Tue,  4 Jan 2022 15:44:50 +0000 (UTC)
-Date:   Tue, 4 Jan 2022 16:44:49 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Alexander Aring <alex.aring@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        linux-wpan - ML <linux-wpan@vger.kernel.org>,
-        David Girault <david.girault@qorvo.com>,
-        Romuald Despres <romuald.despres@qorvo.com>,
-        Frederic Blain <frederic.blain@qorvo.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        kernel list <linux-kernel@vger.kernel.org>
-Subject: Re: [net-next 01/18] ieee802154: hwsim: Ensure proper channel
- selection at probe time
-Message-ID: <20220104164449.1179bfc7@xps13>
-In-Reply-To: <CAB_54W7BeSA+2GVzb9Yvz1kj12wkRSqHj9Ybr8cK7oYd7804RQ@mail.gmail.com>
-References: <20211222155743.256280-1-miquel.raynal@bootlin.com>
-        <20211222155743.256280-2-miquel.raynal@bootlin.com>
-        <CAB_54W7BeSA+2GVzb9Yvz1kj12wkRSqHj9Ybr8cK7oYd7804RQ@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Tue, 4 Jan 2022 10:45:52 -0500
+Received: by mail-oi1-f180.google.com with SMTP id be32so59964144oib.11;
+        Tue, 04 Jan 2022 07:45:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bR+VnRjjUTwZhvl7ylzl1ud079Lz2W/GxJ0fPmozOqM=;
+        b=4qFDW4fw00HfSlXbju0C9sJGUi/xpJxCBuitNWWKInhcwa8EFzBPPIINHLn/wkYiKb
+         orft6N+kErigVutXqL4vQoQv7s55KAAxDfbiLrKNZ4Mk1zBR0ITZwEvjdwStqjwhiZVL
+         n24gsCZGsYP/6KBUygxT5RBmwuzRFvp0YIvSpVBBRE5YywNBAC5+nGfQvgCtACKQxfEA
+         Gx9llaOMv5iCy/RPqmQyLKuItjHDd11jZWZcDtADzOqylWE5s/fG90Gcw+NRLir6IFwU
+         /dRNaIsErKReuCiM38GrNw/CsZcKCYy+q3oXZjep3BA+zJndSQsmR+o0Z8MutXodv0SL
+         Azsw==
+X-Gm-Message-State: AOAM530nJhHImJnpONSNsVgRNFdkHvTW+unY+4ph/Md9uZzcHWPyg0YB
+        JTrfJ9rulD9OTjo1uv4xNQ==
+X-Google-Smtp-Source: ABdhPJwmXBTcLbs7rkUj5WzWeJ2TvhW5C6c2JfagvvfUX27bxcz6n5/oI9/iWxKjToezekQheBMyRA==
+X-Received: by 2002:aca:6746:: with SMTP id b6mr35772057oiy.167.1641311152109;
+        Tue, 04 Jan 2022 07:45:52 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id c17sm7062803otn.72.2022.01.04.07.45.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 07:45:51 -0800 (PST)
+Received: (nullmailer pid 899058 invoked by uid 1000);
+        Tue, 04 Jan 2022 15:45:50 -0000
+Date:   Tue, 4 Jan 2022 09:45:50 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        Inki Dae <inki.dae@samsung.com>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Beomho Seo <beomho.seo@samsung.com>
+Subject: Re: [PATCH 4/5] dt-bindings: mfd: maxim,max77843: add MAX77843
+ bindings
+Message-ID: <YdRrrsp1/UFYx5GN@robh.at.kernel.org>
+References: <20211229124631.21576-1-krzysztof.kozlowski@canonical.com>
+ <20211229124631.21576-5-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211229124631.21576-5-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexander,
-
-alex.aring@gmail.com wrote on Tue, 28 Dec 2021 16:05:43 -0500:
-
-> Hi,
+On Wed, Dec 29, 2021 at 01:46:30PM +0100, Krzysztof Kozlowski wrote:
+> Document the bindings for MAX77843 MFD driver, based on Exynos5433 TM2
+> devicetree.  These are neither accurate nor finished bindings but at
+> least allow parsing existing DTS files.
 > 
-> On Wed, 22 Dec 2021 at 10:57, Miquel Raynal <miquel.raynal@bootlin.com> wrote:
-> >
-> > A default channel is selected by default (13), let's clarify that this
-> > is page 0 channel 13. Call the right helper to ensure the necessary
-> > configuration for this channel has been applied.
-> >
-> > So far there is very little configuration done in this helper but we
-> > will soon add more information (like the symbol duration which is
-> > missing) and having this helper called at probe time will prevent us to
-> > this type of initialization at two different locations.
-> >  
+> The example DTS was copied from existing DTS
+> (exynos5433-tm2-common.dtsi), so keep the license as GPL-2.0-only.
 > 
-> I see why this patch is necessary because in later patches the symbol
-> duration is set at ".set_channel()" callback like the at86rf230 driver
-> is doing it.
-> However there is an old TODO [0]. I think we should combine it and
-> implement it in ieee802154_set_channel() of "net/mac802154/cfg.c".
-> Also do the symbol duration setting according to the channel/page when
-> we call ieee802154_register_hw(), so we have it for the default
-> settings.
-
-While I totally agree on the background idea, I don't really see how
-this is possible. Every driver internally knows what it supports but
-AFAIU the core itself has no easy and standard access to it?
-
-Another question that I have: is the protocol and center frequency
-enough to always derive the symbol rate? I am not sure this is correct,
-but I thought not all symbol rates could be derived, like for example
-certain UWB PHY protocols which can use different PRF on a single
-channel which has an effect on the symbol duration?
-
-> > So far there is very little configuration done in this helper but thanks
-> > to this improvement, future enhancements in this area (like setting a
-> > symbol duration, which is missing) will be reflected automatically in
-> > the default probe state.
-> >
-> > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> > ---
-> >  drivers/net/ieee802154/mac802154_hwsim.c | 7 +++++--
-> >  1 file changed, 5 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/net/ieee802154/mac802154_hwsim.c b/drivers/net/ieee802154/mac802154_hwsim.c
-> > index 62ced7a30d92..b1a4ee7dceda 100644
-> > --- a/drivers/net/ieee802154/mac802154_hwsim.c
-> > +++ b/drivers/net/ieee802154/mac802154_hwsim.c
-> > @@ -778,8 +778,6 @@ static int hwsim_add_one(struct genl_info *info, struct device *dev,
-> >
-> >         ieee802154_random_extended_addr(&hw->phy->perm_extended_addr);
-> >
-> > -       /* hwsim phy channel 13 as default */
-> > -       hw->phy->current_channel = 13;
-> >         pib = kzalloc(sizeof(*pib), GFP_KERNEL);
-> >         if (!pib) {
-> >                 err = -ENOMEM;
-> > @@ -793,6 +791,11 @@ static int hwsim_add_one(struct genl_info *info, struct device *dev,
-> >         hw->flags = IEEE802154_HW_PROMISCUOUS | IEEE802154_HW_RX_DROP_BAD_CKSUM;  
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  .../bindings/mfd/maxim,max77843.yaml          | 144 ++++++++++++++++++
+>  1 file changed, 144 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77843.yaml
 > 
-> sadly this patch doesn't apply on current net-next/master because
-> IEEE802154_HW_RX_DROP_BAD_CKSUM is not set.
-> I agree that it should be set, so we need a patch for it.
+> diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77843.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77843.yaml
+> new file mode 100644
+> index 000000000000..7f3d74f254af
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/maxim,max77843.yaml
+> @@ -0,0 +1,144 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/maxim,max77843.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Maxim MAX77843 MicroUSB and Companion Power Management IC
+> +
+> +maintainers:
+> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> +
+> +description: |
+> +  This is a part of device tree bindings for Maxim MAX77843 MicroUSB
+> +  Integrated Circuit (MUIC).
+> +
+> +  The Maxim MAX77843 is a MicroUSB and Companion Power Management IC which
+> +  includes voltage current regulators, charger, fuel-gauge, haptic motor driver
+> +  and MicroUSB management IC.
+> +
+> +properties:
+> +  compatible:
+> +    const: maxim,max77843
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  extcon:
+> +    $ref: ../extcon/maxim,max77843.yaml
 
-Right, I just have a patch aside setting this to enforce beacons
-checksum were good. I can certainly set this flag officially.
+/schemas/extcon/...
 
-> 
-> - Alex
-> 
-> [0] https://elixir.bootlin.com/linux/v5.16-rc7/source/drivers/net/ieee802154/at86rf230.c#L1059
+> +
+> +  motor-driver:
+> +    type: object
+> +    properties:
+> +      compatible:
+> +        const: maxim,max77843-haptic
+> +
+> +      haptic-supply:
+> +        description: Power supply to the haptic motor
+> +
+> +      pwms:
+> +        maxItems: 1
+> +
+> +    required:
+> +      - compatible
+> +      - haptic-supply
+> +      - pwms
+> +
+> +  regulators:
+> +    $ref: ../regulator/maxim,max77843.yaml
 
+And here.
 
-Thanks,
-Miquèl
+With that,
+
+Reviewed-by: Rob Herring <robh@kernel.org>

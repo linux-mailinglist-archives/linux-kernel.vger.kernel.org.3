@@ -2,93 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4482E484AB3
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 23:26:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B42A484AB9
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 23:32:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235494AbiADW0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 17:26:09 -0500
-Received: from mail-oi1-f172.google.com ([209.85.167.172]:39592 "EHLO
-        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234768AbiADW0H (ORCPT
+        id S235539AbiADWb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 17:31:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53148 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235451AbiADWb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 17:26:07 -0500
-Received: by mail-oi1-f172.google.com with SMTP id x10so56652903oix.6;
-        Tue, 04 Jan 2022 14:26:06 -0800 (PST)
+        Tue, 4 Jan 2022 17:31:58 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B770DC06179B
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 14:31:57 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id bp20so84889581lfb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 14:31:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=drummond.us; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WCROm2fnDVp3gJHoFF4FSh0CLwqqTwPGgd5WC3cykAE=;
+        b=SpNAIy18+a+BDF8ohbOhhPTgn+rzzWGPHdpXue1Z95/qQvcACFPfls+EhsBOb9bJ5I
+         J4obAOpt6rzp6Cc6ysV/HzbOKr1fr3e+TeLO6bRMnYdo3Gyh9nb1rzv1ICxH2cvlIvP1
+         O7zLwOaJVfjhHVFevNE78XtRHOJLnOt4OvZNOrtO4+Qth9yQuKO3Y0zMqJxHhe1sPN68
+         AsVbfWMCG2xnfSZ0gRMgCWFuQi9faGM0w08EmIWjCfBZLojXQfuuYl5i08TleIW/7b/n
+         nzMZzBq9PSmCXV2xi+HfGLAjucKoCMHpfD9Bcb6PeCRSN1t/e4GZt0e33JDtOpwXUI3r
+         +ijA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JnOadLKUCLxTeQKKTc3saQOhwTodIVbhHkqdpkUyL30=;
-        b=WFYzZklu7ExpTwNpAloUxXp5mKb1feZSZPj1q4u3uuJGeMK9gsGAnMt6ITs56VOUlW
-         saDzVyarRYzoO8PnQ//4fbdkJ3gEw2se3vDBTlg8yiGE4dd9lAVdaRuLdIrLh7hGHl+l
-         cd9h9eDQJ7P+lLIz3AFLy53HnEY8Mma2yE20MxfY7xm5Gu5Rz1xCBd23QofbBRipVL0j
-         h1nq8HHtFw57vLv9UwZYNmOZIzUDnLHTt5sunAmVaOZSQ8uNv80en5OGozxWrokrCYyZ
-         cOPt/2uY6NW2hFr4g71FQzZN4jsauSM1CX10Zu+z0F3RsvDqXcJAHRKikHPi4/u+1DGE
-         Bqsg==
-X-Gm-Message-State: AOAM530QuBof6LR5xclmSiuhFuuSODYCV9QMi54uu1X2n6pTu0shnD2p
-        IZbZ2fOhCdNxn4AI5w+AKA==
-X-Google-Smtp-Source: ABdhPJxfmZnICaR0AFOGdWsnbelA0aJZsRc1Kgnndk6DcVeWC0CYljTp86RqQf43B5yP69zwu5wQGg==
-X-Received: by 2002:a05:6808:10d1:: with SMTP id s17mr395747ois.26.1641335166437;
-        Tue, 04 Jan 2022 14:26:06 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id c139sm7472227oob.31.2022.01.04.14.26.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 14:26:05 -0800 (PST)
-Received: (nullmailer pid 1557364 invoked by uid 1000);
-        Tue, 04 Jan 2022 22:26:04 -0000
-Date:   Tue, 4 Jan 2022 16:26:04 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     David Heidelberg <david@ixit.cz>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krishna Manikandan <mkrishn@codeaurora.org>,
-        ~okias/devicetree@lists.sr.ht, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Discussion: dt-bindings: display: msm:
- dsi-controller-main: fix the binding
-Message-ID: <YdTJfMXYXjavr8cZ@robh.at.kernel.org>
-References: <20211225205352.76827-1-david@ixit.cz>
- <CAA8EJpoVuNDS2uD2g8W_40XVO2jS=6GtRQFxAnyPpd_QuHim8g@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WCROm2fnDVp3gJHoFF4FSh0CLwqqTwPGgd5WC3cykAE=;
+        b=avz7rE1VwFrgpFvWNI72uHW63YsN6ng6M2Xh4lzmnlWRieY3nkC6O1zoqEAhH4rs6a
+         e8j9/dY4hfAObPLftXInzRR1R9xMnAsMNNQfnB0HtYAdRy3UqGXGpPq/M3umRATURCfk
+         BYeA1DvtQPEsxm9wQvVgzAj+8XbZKgXxolkplESlWyFjy9li8HT+H50YVk198ZvDAJb/
+         h8wmr36WD4ZAP+M95jEkvbiKPcnXv+ql6u+DR/xEqT0oOdmZsT/ukgU8BM+sRs92BeIn
+         aK06emJ7ZlY6ZnLX0/WUGvQsVr7+hYy0/udL2CtCRl9So1Qn/cl7fl5kxILXOSgqeJnd
+         P/Yg==
+X-Gm-Message-State: AOAM532d+GFlgH56rjeu1/4AGCEzPbv38KEA4wIGyN1Q4bPS1Les/21A
+        pc8UV+Q57FTx8NVk8QA2SDhscSl4fV4JV5Lt4LvRFg==
+X-Google-Smtp-Source: ABdhPJx1kX6sFLTseOkg2YWGeBhi1W6ClRmDNwQ/+U2YIr6vghHpml3Y6bKghVPjgaFOMW5MDitHq9bLobHNxLYmId8=
+X-Received: by 2002:a05:6512:ba9:: with SMTP id b41mr43938123lfv.529.1641335515666;
+ Tue, 04 Jan 2022 14:31:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA8EJpoVuNDS2uD2g8W_40XVO2jS=6GtRQFxAnyPpd_QuHim8g@mail.gmail.com>
+References: <20220103181956.983342-1-walt@drummond.us> <87iluzidod.fsf@email.froward.int.ebiederm.org>
+ <YdSzjPbVDVGKT4km@mit.edu> <87pmp79mxl.fsf@email.froward.int.ebiederm.org> <YdTI16ZxFFNco7rH@mit.edu>
+In-Reply-To: <YdTI16ZxFFNco7rH@mit.edu>
+From:   Walt Drummond <walt@drummond.us>
+Date:   Tue, 4 Jan 2022 14:31:44 -0800
+Message-ID: <CADCN6nzT-Dw-AabtwWrfVRDd5HzMS3EOy8WkeomicJF07nQyoA@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/8] signals: Support more than 64 signals
+To:     "Theodore Ts'o" <tytso@mit.edu>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>, aacraid@microsemi.com,
+        viro@zeniv.linux.org.uk, anna.schumaker@netapp.com, arnd@arndb.de,
+        bsegall@google.com, bp@alien8.de, chuck.lever@oracle.com,
+        bristot@redhat.com, dave.hansen@linux.intel.com,
+        dwmw2@infradead.org, dietmar.eggemann@arm.com, dinguyen@kernel.org,
+        geert@linux-m68k.org, gregkh@linuxfoundation.org, hpa@zytor.com,
+        idryomov@gmail.com, mingo@redhat.com, yzaikin@google.com,
+        ink@jurassic.park.msu.ru, jejb@linux.ibm.com, jmorris@namei.org,
+        bfields@fieldses.org, jlayton@kernel.org, jirislaby@kernel.org,
+        john.johansen@canonical.com, juri.lelli@redhat.com,
+        keescook@chromium.org, mcgrof@kernel.org,
+        martin.petersen@oracle.com, mattst88@gmail.com, mgorman@suse.de,
+        oleg@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
+        rth@twiddle.net, richard@nod.at, serge@hallyn.com,
+        rostedt@goodmis.org, tglx@linutronix.de,
+        trond.myklebust@hammerspace.com, vincent.guittot@linaro.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-m68k@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 26, 2021 at 02:34:08AM +0300, Dmitry Baryshkov wrote:
-> Hi,
-> 
-> On Sat, 25 Dec 2021 at 23:54, David Heidelberg <david@ixit.cz> wrote:
-> >
-> > This binding is not much validating the old DSI v2.
-> >
-> > Currently we don't differentiate old v2 from new versions,
-> > so we need to figure out how to validate them.
-> >
-> > I propose specific compatible depending on mdss version, but I would be
-> > glad, if someone with deeper knowledge proposed the names.
-> >
-> > I'm willing to implement it then and back from autodetection.
-> 
-> I'd suggest to use hardware-specific compatible for apq8064 (and maybe
-> other v2 hosts if somebody adds support). For example
-> "qcom,apq8064-dsi-ctrl" or "qcom,dsi-ctrl-apq8064" (no strong
-> preference here).
+The only standard tools that support SIGINFO are sleep, dd and ping,
+(and kill, for obvious reasons) so it's not like there's a vast hole
+in the tooling or something, nor is there a large legacy software base
+just waiting for SIGINFO to appear.   So while I very much enjoyed
+figuring out how to make SIGINFO work ...
 
-The former.
+I'll have the VSTATUS patch out in a little bit.
 
-> For 6G hosts it will probably make sense to use IP versions instead
-> ("qcom-dsi-ctrl-6g-v2.4.1").
+I also think there might be some merit in consolidating the 10
+'sigsetsize != sizeof(sigset_t)' checks in a macro and adding comments
+that wave people off on trying to do what I did.  If that would be
+useful, happy to provide the patch.
 
-Humm, we went down the path of version numbers for QCom blocks, but the 
-result was not much reuse of same version on more than 2-3 parts if 
-that. So stick with SoCs for naming unless there's a strong case that 
-version numbers to SoC parts is 1 to many.
-
-Rob
+On Tue, Jan 4, 2022 at 2:23 PM Theodore Ts'o <tytso@mit.edu> wrote:
+>
+> On Tue, Jan 04, 2022 at 04:05:26PM -0600, Eric W. Biederman wrote:
+> >
+> > That is all as expected, and does not demonstrate a regression would
+> > happen if SIGPWR were to treat SIG_DFL as SIG_IGN, as SIGWINCH, SIGCONT,
+> > SIGCHLD, SIGURG do.  It does show there is the possibility of problems.
+> >
+> > The practical question is does anything send SIGPWR to anything besides
+> > init, and expect the process to handle SIGPWR or terminate?
+>
+> So if I *cared* about SIGINFO, what I'd do is ask the systemd
+> developers and users list if there are any users of the sigpwr.target
+> feature that they know of.  And I'd also download all of the open
+> source UPS monitoring applications (and perhaps documentation of
+> closed-source UPS applications, such as for example APC's program) and
+> see if any of them are trying to send the SIGPWR signal.
+>
+> I don't personally think it's worth the effort to do that research,
+> but maybe other people care enough to do the work.
+>
+> > > I claim, though, that we could implement VSTATUS without implenting
+> > > the SIGINFO part of the feature.
+> >
+> > I agree that is the place to start.  And if we aren't going to use
+> > SIGINFO perhaps we could have an equally good notification method
+> > if anyone wants one.  Say call an ioctl and get an fd that can
+> > be read when a VSTATUS request comes in.
+> >
+> > SIGINFO vs SIGCONT vs a fd vs something else is something we can sort
+> > out when people get interested in modifying userspace.
+>
+>
+> Once VSTATUS support lands in the kernel, we can wait and see if there
+> is anyone who shows up wanting the SIGINFO functionality.  Certainly
+> we have no shortage of userspace notification interfaces in Linux.  :-)
+>
+>                                               - Ted

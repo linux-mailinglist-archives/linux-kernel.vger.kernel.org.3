@@ -2,52 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4D4483D03
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 08:38:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4F2483D09
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 08:39:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232604AbiADHiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 02:38:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiADHiF (ORCPT
+        id S232800AbiADHix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 02:38:53 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:54328 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229477AbiADHix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 02:38:05 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD31C061761;
-        Mon,  3 Jan 2022 23:38:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=OWaDAnifm56GHcbEAiqmG6sxl7
-        1qM9Vn2SItAVQ+af+OQv+Dw7s84FvDyHGpEgN187mrO54bq/na5Tb5uzzH07999yZK/IWNwGg9cU9
-        RC682MPKXMooYZaooU1jhkcWA24bGs5t2bI6n4A/r7OY2HQ71hJCOCOl9Q0Z20drZh6BuYLxm5gT5
-        Nfdnu0JuXrGheVHlY3kbe0RwgcR1Dp25SFTkywldvU5GKLrWOp9Fa9IXcCcDHqQ5GnUHnTHxv7GdV
-        x6NyZj5vhuLiUPRfhYC7hxa02C/U6mTZkb7zfCCD5z51yiIDEfou+kyf8IXiHqcXvco8nEgxPqaNk
-        e0iO9D2g==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n4eOS-00AWQE-JV; Tue, 04 Jan 2022 07:38:04 +0000
-Date:   Mon, 3 Jan 2022 23:38:04 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>, linux-api@vger.kernel.org
-Subject: Re: [PATCH 01/17] exit: Remove profile_task_exit & profile_munmap
-Message-ID: <YdP5XJL1pNRnX5q6@infradead.org>
-References: <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org>
- <20220103213312.9144-1-ebiederm@xmission.com>
+        Tue, 4 Jan 2022 02:38:53 -0500
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:d353:5de8:6c9d:602a])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 6614F1F4138F;
+        Tue,  4 Jan 2022 07:38:51 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1641281931;
+        bh=HocsvGOuLezQKsuF/xYuc+qqHeGMMKBZYDtcezq1e9Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XFDWOFExLpN8umM/K0Gci/w8z2/Cyj8zEQWJnfFS6Y4ZQPlNww70vqmss4D0kjU6w
+         oONmgrk1javAQzhJy0Wsc5FDVRpOottHgDXHFDoOHb4cPYamCGueEczFYZ3zTo5DsN
+         SPhQNvXRKQlFHlDCc++BzakMOmna9XlaAdAIzuL4KQ7fT/PAZWm4kHJDC0Y2zPVkGb
+         JE2Im/UizsXoDwUyKPSAyNZrJAPnuszadJiaPep6fEVbjkQQCinSQ2FFBINo5YEbgy
+         zRR6nLTiw79JBrHQcMLt74IZMoTEFVmlwPWqopadVK0xJf3LczNQh+Y49m1snt3i7b
+         syE9mmlmCoecQ==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        hverkuil-cisco@xs4all.nl, jernej.skrabec@gmail.com,
+        nicolas.dufresne@collabora.co.uk
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-staging@lists.linux.dev, kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v4 0/2] media: HEVC: RPS clean up
+Date:   Tue,  4 Jan 2022 08:38:40 +0100
+Message-Id: <20220104073842.1791639-1-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220103213312.9144-1-ebiederm@xmission.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good:
+This series aims to clean up Reference Picture Set usage and flags.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Long term flag was named with RPS prefix while it is not used for RPS
+but for mark long term references in DBP. Remane it and remove the two
+other useless RPS flags.
+
+Clarify documentation about RPS lists content and make sure that Hantro
+driver use them correctly (i.e without look up in DBP).
+
+version 4:
+- check flags with & and not ==
+- remove the 2 last patches which becomes useless since VPU ctrl-blk
+  driver introduction.
+
+version 3:
+- rebased on top of v5.16-rc1
+
+version 2:
+- change DPB field name from rps to flags
+
+GStreamer HEVC plugin merge request can be found here:
+https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/1079
+
+With those piece of code fluster score is 77/147.
+
+Benjamin Gaignard (2):
+  media: hevc: Remove RPS named flags
+  media: hevc: Embedded indexes in RPS
+
+ .../media/v4l/ext-ctrls-codec.rst             | 14 +++++-----
+ .../staging/media/hantro/hantro_g2_hevc_dec.c | 27 +++++--------------
+ .../staging/media/sunxi/cedrus/cedrus_h265.c  |  2 +-
+ include/media/hevc-ctrls.h                    |  6 ++---
+ 4 files changed, 16 insertions(+), 33 deletions(-)
+
+-- 
+2.30.2
+

@@ -2,107 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7A24849B4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:10:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D1924849B6
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:11:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233845AbiADVKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 16:10:15 -0500
-Received: from mga02.intel.com ([134.134.136.20]:38875 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232036AbiADVKO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 16:10:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641330614; x=1672866614;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=G36aykXQQrpfW0MXKdS8YAGr7r/cA/Ikf7GfLLebR6Q=;
-  b=GtpXaZ8RSWBcWNON2VDJK+D96aDuCcPUheWXqNkO3jCBhHaSlly8Oj7+
-   sPCHhUsCi114cPVfxTlfX9W6XZIP/IBBJ+Ans09nA/AaIqlhrWZCqY56T
-   4Qa0CeEiJ1AYA0PvLul3SSSgscHKe3b9HUhXRVRzOrYF6/PdnAREGYe45
-   zzYNplCl97wL0kqNLl6GwbdkyX3N7LzY55aIcUWc2kI1Jw/rJh08kt8iE
-   TQhROpQfuHpEhVujN1LtUXubhD9ATmYKOxZfx7XX4ynFYkqBJF8YFHzif
-   Cf+amN/CsRyxXUN9d8/wCGtLVzC5Boc3WVQt5qfEEKgABVWeYO9Chjyt+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="229616708"
-X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
-   d="scan'208";a="229616708"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 13:10:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
-   d="scan'208";a="472205156"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 04 Jan 2022 13:10:13 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n4r4O-000Fro-PA; Tue, 04 Jan 2022 21:10:12 +0000
-Date:   Wed, 5 Jan 2022 05:09:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [arm-de:upstream/remove_feec_energy_margin_rework 1/11]
- drivers/powercap/dtpm_cpu.c:85:48: error: expected ')' before ':' token
-Message-ID: <202201050536.YWxpqIkn-lkp@intel.com>
+        id S233869AbiADVLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 16:11:03 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59788 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232036AbiADVLC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 16:11:02 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E425A6144A;
+        Tue,  4 Jan 2022 21:11:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D6FBC36AEB;
+        Tue,  4 Jan 2022 21:11:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641330661;
+        bh=WVtVkmJS1DFn3oS5EZCk6Y6ibXX0ZfMgpBLPcLcYdHQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L1fYSTLnaHXcWVdJT5OjiISe1ilLRI41uTwljWqyyFkx8jQPcRwyFcyhhMziWIb/P
+         igSI7rQ0fjKfc0pe+ZsFXHJv3kN5OIJncK44IEQd7kuFxKahOhi7qXQB/SLmj/WoRd
+         5I16AhKLPDwlPymr38B2HW84JllgrBMPKV8b3PdlIFMry+muBlJSOrXqN1BBl4FXon
+         /zZSl9ihiNl8PgSUPNihUl1DGhOSLx1SyDXBMMb1ckgBIAMfu6IJbIe5UVBcUMOD1P
+         ZzRpNlMKMFpLZcXbTHBMrinCwsxwhzFQ+01gz8FKLC7S0GeSveR1g7TITxGdfu+cmG
+         nieDccmvP/B2A==
+Date:   Tue, 4 Jan 2022 13:10:59 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Salvatore Bonaccorso <carnil@debian.org>,
+        Chao Yu <chao@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Wenqing Liu <wenqingliu0120@gmail.com>
+Subject: Re: [PATCH 5.10 60/76] f2fs: fix to do sanity check on last xattr
+ entry in __f2fs_setxattr()
+Message-ID: <YdS341+t5Us9gol1@google.com>
+References: <20211227151324.694661623@linuxfoundation.org>
+ <20211227151326.779679392@linuxfoundation.org>
+ <YdNmdhsKS5ZWHOlB@eldamar.lan>
+ <12184f7c-3662-7fdc-d44f-23ef29102ddd@kernel.org>
+ <YdQZzAQg4vIQNXc4@eldamar.lan>
+ <YdQf5CZUYMJlamzp@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YdQf5CZUYMJlamzp@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.gitlab.arm.com/linux-arm/linux-de.git upstream/remove_feec_energy_margin_rework
-head:   8a0bdb78ce1cbb8e5e6768965874226b92b07b0e
-commit: 150e753e861285e82e9d7c593f1f26075c34e124 [1/11] sched, drivers: Remove max param from effective_cpu_util()/sched_cpu_util()
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220105/202201050536.YWxpqIkn-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        git remote add arm-de https://git.gitlab.arm.com/linux-arm/linux-de.git
-        git fetch --no-tags arm-de upstream/remove_feec_energy_margin_rework
-        git checkout 150e753e861285e82e9d7c593f1f26075c34e124
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On 01/04, Greg Kroah-Hartman wrote:
+> On Tue, Jan 04, 2022 at 10:56:28AM +0100, Salvatore Bonaccorso wrote:
+> > Hi,
+> > 
+> > On Tue, Jan 04, 2022 at 05:29:30PM +0800, Chao Yu wrote:
+> > > On 2022/1/4 5:11, Salvatore Bonaccorso wrote:
+> > > > Hi,
+> > > > 
+> > > > On Mon, Dec 27, 2021 at 04:31:15PM +0100, Greg Kroah-Hartman wrote:
+> > > > > From: Chao Yu <chao@kernel.org>
+> > > > > 
+> > > > > commit 5598b24efaf4892741c798b425d543e4bed357a1 upstream.
+> > > 
+> > > I've no idea.
+> > > 
+> > > I didn't add this line from v1 to v3:
+> > > 
+> > > https://lore.kernel.org/lkml/20211211154059.7173-1-chao@kernel.org/T/
+> > > https://lore.kernel.org/all/20211212071923.2398-1-chao@kernel.org/T/
+> > > https://lore.kernel.org/all/20211212091630.6325-1-chao@kernel.org/T/
+> > > 
+> > > Am I missing anything?
+> > 
+> > The line is added when a commit from "upstream" is added to the stable
+> > series to identify the upstream commit it is taken from for
+> > cherry-pick (or backport).
+> > 
+> > Strange so, that the fix is not in mainline actually yet.
+> 
+> I thought it was about to be sent to Linus.  Why has the f2fs maintainer
+> not sent a merge request to him to get this merged properly yet?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+It's very surprising that -stable can cherry-pick non-upstreamed patches based
+on the stable maintainer's self assumption. Please wait for being upstreamed.
 
-All errors (new ones prefixed by >>):
-
-   drivers/powercap/dtpm_cpu.c: In function 'scale_pd_power_uw':
->> drivers/powercap/dtpm_cpu.c:85:48: error: expected ')' before ':' token
-      85 |  return (power * ((sum_util << 10) / max) >> 10 : 0;
-         |         ~                                      ^~
-         |                                                )
->> drivers/powercap/dtpm_cpu.c:85:53: error: expected ';' before '}' token
-      85 |  return (power * ((sum_util << 10) / max) >> 10 : 0;
-         |                                                     ^
-         |                                                     ;
-      86 | }
-         | ~                                                    
+The patch is on track via -next.
+https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git/commit/?h=dev&id=5598b24efaf4892741c798b425d543e4bed357a1
 
 
-vim +85 drivers/powercap/dtpm_cpu.c
-
-    70	
-    71	static u64 scale_pd_power_uw(struct cpumask *pd_mask, u64 power)
-    72	{
-    73		unsigned long max, sum_util = 0;
-    74		int cpu;
-    75	
-    76		/*
-    77		 * The capacity is the same for all CPUs belonging to
-    78		 * the same perf domain.
-    79		 */
-    80		max = arch_scale_cpu_capacity(cpumask_first(pd_mask));
-    81	
-    82		for_each_cpu_and(cpu, pd_mask, cpu_online_mask)
-    83			sum_util += sched_cpu_util(cpu);
-    84	
-  > 85		return (power * ((sum_util << 10) / max) >> 10 : 0;
-    86	}
-    87	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
+> thanks,
+> 
+> greg k-h

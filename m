@@ -2,108 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47ACE483A7E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 03:10:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6348483A0B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 02:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232164AbiADCK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 21:10:26 -0500
-Received: from m12-16.163.com ([220.181.12.16]:4206 "EHLO m12-16.163.com"
+        id S231970AbiADBzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 20:55:18 -0500
+Received: from mga17.intel.com ([192.55.52.151]:26751 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229469AbiADCKZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 21:10:25 -0500
-X-Greylist: delayed 928 seconds by postgrey-1.27 at vger.kernel.org; Mon, 03 Jan 2022 21:10:23 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=anOjr
-        qvHO1Z4432Qm8RpuzEHkUu3oj36DsNbGYJrNVU=; b=KyKG1GHdAkxVeJp33G9eT
-        Y+5gs5+xSFU0+pcoKf26zFJj27qEsWPkRFDKCfHQIyhRhS1ldclaUs+RWcoDqM2n
-        c9us2PyYmVgl0zLc/s0XIZn5WQZSSHQ4+vnCjaWGwVl5PEDx1BOkidB0b2jYgWBw
-        zSTFK+ZSqmylrTXQ/MUWW8=
-Received: from localhost.localdomain (unknown [101.93.205.203])
-        by smtp12 (Coremail) with SMTP id EMCowADH_EHgqNNh6ZCeAw--.4698S2;
-        Tue, 04 Jan 2022 09:54:50 +0800 (CST)
-From:   Qinghua Jin <qhjin_dev@163.com>
-Cc:     qhjin_dev@163.com, Colin Ian King <colin.king@canonical.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] vfs: fix bug when opening a file with O_DIRECT on a file system that does not support it will leave an empty file
-Date:   Tue,  4 Jan 2022 09:53:58 +0800
-Message-Id: <20220104015358.57443-1-qhjin_dev@163.com>
-X-Mailer: git-send-email 2.30.2
+        id S229746AbiADBzP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 20:55:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641261315; x=1672797315;
+  h=cc:subject:to:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=SY0Ryi1NwGIpRAEonFk2jxPsk87fE1CBTswYWv3obpo=;
+  b=Z/fQkIy3+Hx8addrgWth+yQjCP0GF6kftfpDuNAWW4VxQ6D6q3wBbtJ+
+   t4dTmNfbcIcPgo6a8sqJ+fygGXFpLRlc/jcIKHK+SK30muvVq/aThMQf0
+   HqRlL8yRYZLclARzD+rgV3LXXAnTxwCqWCLeAqUe3VMqh5AjVVTovCRJa
+   Sk7D+5r7tVJmcA0leJFRq33TbY3Bm3cViYPSJch29JJmIeeWujZ9oc787
+   16BSzV1vgrh3f5e1Ve61UDILHF4c0bikiuA1yPFK+ocPGadYF778HDKmK
+   pD2wkOpUTjejVwG/6IVuKbnwTFDcyxsu33gK/mqWaqeg8MVssPeeD+Tq8
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="222813035"
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="222813035"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 17:55:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="525817281"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
+  by orsmga008.jf.intel.com with ESMTP; 03 Jan 2022 17:55:07 -0800
+Cc:     baolu.lu@linux.intel.com, Bjorn Helgaas <helgaas@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 03/13] PCI: pci_stub: Suppress kernel DMA ownership
+ auto-claiming
+To:     Jason Gunthorpe <jgg@nvidia.com>
+References: <568b6d1d-69df-98ad-a864-dd031bedd081@linux.intel.com>
+ <20211230222414.GA1805873@bhelgaas> <20211231004019.GH1779224@nvidia.com>
+ <5eb8650c-432f-bf06-c63d-6320199ef894@linux.intel.com>
+ <20220103195318.GA2328285@nvidia.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+Message-ID: <2bbe6e20-6b1a-64ae-a4c6-2f414a8665f2@linux.intel.com>
+Date:   Tue, 4 Jan 2022 09:54:31 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: EMCowADH_EHgqNNh6ZCeAw--.4698S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Cw1DKF1kCw4xCFWktry5Jwb_yoW8ZF4kpF
-        WfKa4UK34kJryIgF1kZa1vv3W0g34xGay7JrWkWa4DArnIvFyFgFWagF1kWr1YqF95Ar4F
-        qw45Aw1UWrW5AFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRLSdPUUUUU=
-X-Originating-IP: [101.93.205.203]
-X-CM-SenderInfo: ptkmx0hbgh4qqrwthudrp/1tbi7xN+HFr8Ad0C5gAAsA
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <20220103195318.GA2328285@nvidia.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Colin Ian King reported the following
+On 1/4/22 3:53 AM, Jason Gunthorpe wrote:
+> On Fri, Dec 31, 2021 at 09:10:43AM +0800, Lu Baolu wrote:
+> 
+>> We still need to call iommu_device_use_dma_api() in bus dma_configure()
+>> callback. But we can call iommu_device_unuse_dma_api() in the .probe()
+>> of vfio (and vfio-approved) drivers, so that we don't need the new flag
+>> anymore.
+> 
+> No, we can't. The action that iommu_device_use_dma_api() takes is to
+> not call probe, it obviously cannot be undone by code inside probe.
 
-1. create a minix file system and mount it
-2. open a file on the file system with O_RDWR | O_CREAT | O_TRUNC | O_DIRECT
-3. open fails with -EINVAL but leaves an empty file behind.  All other open() failures don't leave the
-failed open files behind.
+Yes. Agreed.
 
-The reason is because when checking the O_DIRECT in do_dentry_open, the inode has created, and later err
-processing can't remove the inode:
+> Jason
+> 
 
-        /* NB: we're sure to have correct a_ops only after f_op->open */
-        if (f->f_flags & O_DIRECT) {
-                if (!f->f_mapping->a_ops || !f->f_mapping->a_ops->direct_IO)
-                        return -EINVAL;
-        }
-
-The patch will check the O_DIRECT before creating the inode in lookup_open function.
-
-Signed-off-by: Qinghua Jin <qhjin_dev@163.com>
-Reported-by:  Colin Ian King <colin.king@canonical.com>
----
- fs/namei.c | 7 +++++++
- fs/open.c  | 6 ------
- 2 files changed, 7 insertions(+), 6 deletions(-)
-
-diff --git a/fs/namei.c b/fs/namei.c
-index 1f9d2187c765..24c6bcba702d 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -3277,6 +3277,13 @@ static struct dentry *lookup_open(struct nameidata *nd, struct file *file,
- 			goto out_dput;
- 		}
- 
-+		if (open_flag & O_DIRECT) {
-+			if (!dir_inode->i_mapping || !dir_inode->i_mapping->a_ops ||
-+					!dir_inode->i_mapping->a_ops->direct_IO) {
-+				error = -EINVAL;
-+				goto out_dput;
-+			}
-+		}
- 		error = dir_inode->i_op->create(mnt_userns, dir_inode, dentry,
- 						mode, open_flag & O_EXCL);
- 		if (error)
-diff --git a/fs/open.c b/fs/open.c
-index f732fb94600c..2829c3613c0f 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -838,12 +838,6 @@ static int do_dentry_open(struct file *f,
- 
- 	file_ra_state_init(&f->f_ra, f->f_mapping->host->i_mapping);
- 
--	/* NB: we're sure to have correct a_ops only after f_op->open */
--	if (f->f_flags & O_DIRECT) {
--		if (!f->f_mapping->a_ops || !f->f_mapping->a_ops->direct_IO)
--			return -EINVAL;
--	}
--
- 	/*
- 	 * XXX: Huge page cache doesn't support writing yet. Drop all page
- 	 * cache for this file before processing writes.
--- 
-2.30.2
-
-
+Best regards,
+baolu

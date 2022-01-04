@@ -2,103 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9690C48431D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:13:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E9D0484325
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:14:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234049AbiADONm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:13:42 -0500
-Received: from ivanoab7.miniserver.com ([37.128.132.42]:36342 "EHLO
-        www.kot-begemot.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232716AbiADONj (ORCPT
+        id S234051AbiADOOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:14:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50804 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233807AbiADOOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:13:39 -0500
-Received: from [192.168.18.6] (helo=jain.kot-begemot.co.uk)
-        by www.kot-begemot.co.uk with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <anton.ivanov@cambridgegreys.com>)
-        id 1n4kZ7-0008zn-RG; Tue, 04 Jan 2022 14:13:34 +0000
-Received: from jain.kot-begemot.co.uk ([192.168.3.3])
-        by jain.kot-begemot.co.uk with esmtp (Exim 4.94.2)
-        (envelope-from <anton.ivanov@cambridgegreys.com>)
-        id 1n4kZ3-001PmU-PR; Tue, 04 Jan 2022 14:13:27 +0000
-Subject: Re: [PATCH] um: virtio_uml: allow probing from devicetree
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Johannes Berg <johannes@sipsolutions.net>
-Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Rob Herring <robh+dt@kernel.org>, kernel <kernel@axis.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20211221090447.1567-1-vincent.whitchurch@axis.com>
- <5f104044649ec60ba93648e68c3df2183e032072.camel@sipsolutions.net>
- <20211222103417.GB25135@axis.com>
-From:   Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Message-ID: <a862c00c-0db4-e2b7-4ee7-958f3bdd856e@cambridgegreys.com>
-Date:   Tue, 4 Jan 2022 14:13:25 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 4 Jan 2022 09:14:53 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF996C061761;
+        Tue,  4 Jan 2022 06:14:52 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id by39so60872992ljb.2;
+        Tue, 04 Jan 2022 06:14:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=j+KR6yo0w4DU0VDvp5TpT7prkSMR0PFKueK7Af1t9HE=;
+        b=b+m+I2UnzuJQOE/3/rp2Z70kjc2h4wsah6JeJ9AbLMEHUMT2IrKvrOu0TZA7wUZEBV
+         EkevQokctBRj4sp+MFLFheu45uGdM/rGZWmvzugt2mtt5ITiWXX4Ye/9eRnpJOYDddng
+         zeVvnTKUxMVA7B6htKhDkLnEQgw86fXtpxsE6qgWdRYyNz+iyt9NlSbbyIMYRNJJitVB
+         frKvvEvKT31eDHOIaEx0crjwqX0k+tZCSXlMZcYVqc2YzUVxUC5Q86Wzox4ujyeaioNn
+         az8C/z0Hozuw1ns2ge4vobFGiN+7Lq7ft3DRBk0lleRi4P06GLkHIKtnLAgZjnmBKcfP
+         h0xQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=j+KR6yo0w4DU0VDvp5TpT7prkSMR0PFKueK7Af1t9HE=;
+        b=W8PsSr2of3lZzK7Voo88LWWfzZSIdedyyfzhHidwXN+PFjPA4dBi0DahrpkTGrNrQN
+         hi1VkyxHEC8jel3EclnrdjriIR8EhFi3DkR/4Dwg8k1YkeuvJAb1uyp6FrDc8x0kz/ER
+         6+yJHf6RaH01M6A4lID90El02l9y6SAuk3TSnBKk3f583ti1YRlXcAeTfs5V5H4e73mF
+         7eJgGIyaUfJtS+iBcOpPYGC5mjco9wFPjDCfE3icDSVxMgwZ+KPiFmCBzeN8EiPe0yWV
+         C0xJYLURu4ByvdhZONWSmTEAtiWGMUvF/s3u0Pyc/4eHcWNUArE8kdhktP0wkaZUDCc+
+         nKSw==
+X-Gm-Message-State: AOAM5314IMdcwhvi0gDPDcahrO+q2FUmlOXmJgjDIiqDyHp85nLu47Ll
+        StbanlEWoAUWX17/rEd+bYY=
+X-Google-Smtp-Source: ABdhPJylDt39BDuHM0Gi69h6JEKY1zQcf4T07X1J4U2kdHArDnWh5RDm/VhNV/dibeKJC7D+BtiN1g==
+X-Received: by 2002:a2e:854b:: with SMTP id u11mr31833344ljj.390.1641305690964;
+        Tue, 04 Jan 2022 06:14:50 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.235.38])
+        by smtp.gmail.com with ESMTPSA id c37sm3814430lfv.0.2022.01.04.06.14.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jan 2022 06:14:50 -0800 (PST)
+Message-ID: <6338e7cd-80cb-11af-e3c0-edd740bb9e49@gmail.com>
+Date:   Tue, 4 Jan 2022 17:14:49 +0300
 MIME-Version: 1.0
-In-Reply-To: <20211222103417.GB25135@axis.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: INFO: trying to register non-static key in hci_uart_tx_wakeup
 Content-Language: en-US
+To:     kvartet <xyru1999@gmail.com>, marcel@holtmann.org,
+        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Cc:     sunhao.th@gmail.com
+References: <CAFkrUsjA1qai+1ysWS_LEUYcMGo+ZRF3v743q6k9e4roF6PWZw@mail.gmail.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <CAFkrUsjA1qai+1ysWS_LEUYcMGo+ZRF3v743q6k9e4roF6PWZw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Score: -2.0
-X-Spam-Score: -1.0
-X-Clacks-Overhead: GNU Terry Pratchett
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 22/12/2021 10:34, Vincent Whitchurch wrote:
-> On Tue, Dec 21, 2021 at 09:48:26PM +0100, Johannes Berg wrote:
->> On Tue, 2021-12-21 at 10:04 +0100, Vincent Whitchurch wrote:
->>> Allow the virtio_uml device to be probed from the devicetree so that
->>> sub-devices can be specified using the standard virtio bindings, for
->>> example:
->>>
->>>    virtio@1 {
->>>      compatible = "virtio,uml";
->>>      socket-path = "i2c.sock";
->>>      virtio-device-id = <0x22>;
->>>
->>
->> Given this, maybe it should modify
->> Documentation/devicetree/bindings/virtio/virtio-device.yaml? Or actually
->> add a new Documentation/devicetree/bindings/virtio/uml.yaml I guess?
->>
->> +Rob, because I'm not really into any of this.
->>
->> Also, I'm not even sure we should/need to document the DT bits that are
->> basically only used for testing in the first place?
-
-If we start adding the UML devices themselves to the DT, we might as well add all of them.
-
-In the doc patch have described the DT support as mostly for development at this point.
-
-It can be a good alternative to the endless command line (especially for complex devices like f.e. l2tpv3).
-
-
+On 1/4/22 11:49, kvartet wrote:
+> Hello,
 > 
-> I wasn't sure either, but Rob was OK with not documenting some other
-> bindings which are only used for testing[0], so I assumed that that
-> applied here too:
+> When using Syzkaller to fuzz the latest Linux kernel, the following
+> crash was triggered.
 > 
->   [0] https://lore.kernel.org/all/5baa1ae6.1c69fb81.847f2.3ab1@mx.google.com/
-> 
-> Also, DT bindings are supposed to be generic and based on what the
-> hardware has, but here we have no hardware and something very Linux and
-> UML-specific.
-> 
->> Code looks good to me.
-> 
-> Thanks!
+> HEAD commit: a7904a538933 Linux 5.16-rc6
+> git tree: upstream
+> console output: https://paste.ubuntu.com/p/Bfpr8Gxtd4/plain/
+> kernel config: https://paste.ubuntu.com/p/FDDNHDxtwz/plain/
 > 
 
-Brgds,
+Btw, can you, please, use plain pastbin or something else, that does not 
+require a registration? I think, most people here do not have ubuntu one 
+account and don't want to have one. I saw people using google drive for 
+these kind of things
 
--- 
-Anton R. Ivanov
-Cambridgegreys Limited. Registered in England. Company Number 10273661
-https://www.cambridgegreys.com/
+
+Thanks for your reports!
+
+
+
+With regards,
+Pavel Skripkin

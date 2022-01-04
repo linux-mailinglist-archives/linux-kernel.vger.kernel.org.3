@@ -2,119 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC5DF483B03
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 04:35:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E34E483B08
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 04:39:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232623AbiADDfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 22:35:47 -0500
-Received: from mail-0201.mail-europe.com ([51.77.79.158]:47614 "EHLO
-        mail-0201.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiADDfq (ORCPT
+        id S232635AbiADDjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 22:39:48 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:59348 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229568AbiADDjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 22:35:46 -0500
-Date:   Tue, 04 Jan 2022 03:35:36 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail2; t=1641267343;
-        bh=CtQiq4lflRfXZBK4qlNWgLY+8xhc4BjhH8iVZ3/Y3hs=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc;
-        b=e8erSZ46x1E4Wc474MWY29MhGWwH4AXLAtxL7/jy08a0b5zfwSUsQV5eZkvudLf91
-         KQwACSRHzKs0u9bi/UEH2C7fizGnhQDejKlVQUUxNTavpLUzNNP5Ji8JvJAJeXb7J/
-         hc0h8y53A7BvjMYx5HrEGapInv2k2aU6ooYkk+YKw7WfNb1mveQ+28mm2Q1CidkCMV
-         k+RzZ+BRQZOrP8WLHrWGx1b4p5vPA7koXTHWDTS9XKy/MxkUOeOQsjgRnwAxewSd+z
-         MisQ57h6FtQytUMsnHuaKgmaRmcc+XzLPDpqPwEk5dHS13iLrodpQNjewNIrgo/aU+
-         ISDGVCZc9ELkg==
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@codeaurora.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
-From:   Yassine Oudjana <y.oudjana@protonmail.com>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
-Subject: [PATCH] ASoC: wcd9335: Keep a RX port value for each SLIM RX mux
-Message-ID: <20220104033356.343685-1-y.oudjana@protonmail.com>
+        Mon, 3 Jan 2022 22:39:47 -0500
+X-UUID: 18e2e8ac67c244a8a3cef5836274da93-20220104
+X-UUID: 18e2e8ac67c244a8a3cef5836274da93-20220104
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <biao.huang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1563600363; Tue, 04 Jan 2022 11:39:44 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 4 Jan 2022 11:39:43 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 4 Jan 2022 11:39:42 +0800
+From:   Biao Huang <biao.huang@mediatek.com>
+To:     <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Biao Huang <biao.huang@mediatek.com>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <srv_heupstream@mediatek.com>, <macpaul.lin@mediatek.com>,
+        <angelogioacchino.delregno@collabora.com>, <dkirjanov@suse.de>
+Subject: [PATCH net-next v11 0/6] MediaTek Ethernet Patches on MT8195
+Date:   Tue, 4 Jan 2022 11:39:34 +0800
+Message-ID: <20220104033940.5497-1-biao.huang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, rx_port_value is a single unsigned int that gets overwritten
-when slim_rx_mux_put() is called for any RX mux, then the same value is
-read when slim_rx_mux_get() is called for any of them. This results in
-slim_rx_mux_get() reporting the last value set by slim_rx_mux_put()
-regardless of which SLIM RX mux is in question.
+Changes in v11:
+1. add reivewed-by in "net: dt-bindings: dwmac: Convert mediatek-dwmac to
+   DT schema" as Rob's comments.
+2. fall back "net: dt-bindings: dwmac: add support for mt8195" to v8 version
+   as mentioned in previous reply(https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20211216055328.15953-7-biao.huang@mediatek.com/):
+   2.1 there is already a special clock named "rmii_internal", which need to
+       be put to the end of the clock list(driver special handling),
+       so we can't simply put new "mac_cg" for mt8195 to the end of the clock
+       list.
+   2.2 we prefer the if-then schema, which will make mt8195 clock list clearer
+       with some duplicated information.
+   2.3 we expect the future IC will follow mt2712 or mt8195, so we only need
+       add new IC name to compatible list for future IC, and will not make the
+       clock list binding files worse.
 
-Turn rx_port_value into an array and store a separate value for each
-SLIM RX mux.
+Changes in v10:
+1. add detailed description in "arm64: dts: mt2712: update ethernet
+   device node" to make the modifications clearer as Matthias's comments.
+2. modify dt-binding description as Rob's comments, and "make dtbs_check" runs
+   pass locally with "arm64: dts: mt2712: update ethernet device node"
+   in this series.
 
-Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
----
- sound/soc/codecs/wcd9335.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+Changes in v9:
+1. remove oneOf for 1 entry as Rob's comments.
+2. add new clocks to the end of existing clocks to simplify
+   the binding as Rob's comments.
 
-diff --git a/sound/soc/codecs/wcd9335.c b/sound/soc/codecs/wcd9335.c
-index bc5d68c53e5a..1e60db4056ad 100644
---- a/sound/soc/codecs/wcd9335.c
-+++ b/sound/soc/codecs/wcd9335.c
-@@ -341,7 +341,7 @@ struct wcd9335_codec {
- =09int reset_gpio;
- =09struct regulator_bulk_data supplies[WCD9335_MAX_SUPPLY];
-=20
--=09unsigned int rx_port_value;
-+=09unsigned int rx_port_value[WCD9335_RX_MAX];
- =09unsigned int tx_port_value;
- =09int hph_l_gain;
- =09int hph_r_gain;
-@@ -1269,10 +1269,11 @@ static const struct snd_kcontrol_new sb_tx8_mux =3D
- static int slim_rx_mux_get(struct snd_kcontrol *kc,
- =09=09=09   struct snd_ctl_elem_value *ucontrol)
- {
--=09struct snd_soc_dapm_context *dapm =3D snd_soc_dapm_kcontrol_dapm(kc);
--=09struct wcd9335_codec *wcd =3D dev_get_drvdata(dapm->dev);
-+=09struct snd_soc_dapm_widget *w =3D snd_soc_dapm_kcontrol_widget(kc);
-+=09struct wcd9335_codec *wcd =3D dev_get_drvdata(w->dapm->dev);
-+=09u32 port_id =3D w->shift;
-=20
--=09ucontrol->value.enumerated.item[0] =3D wcd->rx_port_value;
-+=09ucontrol->value.enumerated.item[0] =3D wcd->rx_port_value[port_id];
-=20
- =09return 0;
- }
-@@ -1286,9 +1287,9 @@ static int slim_rx_mux_put(struct snd_kcontrol *kc,
- =09struct snd_soc_dapm_update *update =3D NULL;
- =09u32 port_id =3D w->shift;
-=20
--=09wcd->rx_port_value =3D ucontrol->value.enumerated.item[0];
-+=09wcd->rx_port_value[port_id] =3D ucontrol->value.enumerated.item[0];
-=20
--=09switch (wcd->rx_port_value) {
-+=09switch (wcd->rx_port_value[port_id]) {
- =09case 0:
- =09=09list_del_init(&wcd->rx_chs[port_id].list);
- =09=09break;
-@@ -1309,11 +1310,11 @@ static int slim_rx_mux_put(struct snd_kcontrol *kc,
- =09=09=09      &wcd->dai[AIF4_PB].slim_ch_list);
- =09=09break;
- =09default:
--=09=09dev_err(wcd->dev, "Unknown AIF %d\n", wcd->rx_port_value);
-+=09=09dev_err(wcd->dev, "Unknown AIF %d\n", wcd->rx_port_value[port_id]);
- =09=09goto err;
- =09}
-=20
--=09snd_soc_dapm_mux_update_power(w->dapm, kc, wcd->rx_port_value,
-+=09snd_soc_dapm_mux_update_power(w->dapm, kc, wcd->rx_port_value[port_id],
- =09=09=09=09      e, update);
-=20
- =09return 0;
---=20
-2.34.1
+Changes in v8:
+1. add acked-by in "stmmac: dwmac-mediatek: add platform level clocks
+   management" patch
+
+Changes in v7:
+1. fix uninitialized warning as Jakub's comments.
+
+Changes in v6:
+1. update commit message as Jakub's comments.
+2. split mt8195 eth dts patch("arm64: dts: mt8195: add ethernet device
+   node") from this series, since mt8195 dtsi/dts basic patches is still
+   under reviewing.
+   https://patchwork.kernel.org/project/linux-mediatek/list/?series=579071
+   we'll resend mt8195 eth dts patch once all the dependent patches are
+   accepted.
+
+Changes in v5:
+1. remove useless inclusion in dwmac-mediatek.c as Angelo's comments.
+2. add acked-by in "net-next: stmmac: dwmac-mediatek: add support for
+   mt8195" patch
+
+Changes in v4:
+1. add changes in commit message in "net-next: dt-bindings: dwmac:
+   Convert mediatek-dwmac to DT schema" patch.
+2. remove ethernet-controller.yaml since snps,dwmac.yaml already include it.
+
+Changes in v3:
+1. Add prefix "net-next" to support new IC as Denis's suggestion.
+2. Split dt-bindings to two patches, one for conversion, and the other for
+   new IC.
+3. add a new patch to update device node in mt2712-evb.dts to accommodate to
+   changes in driver.
+4. remove unnecessary wrapper as Angelo's suggestion.
+5. Add acked-by in "net-next: stmmac: dwmac-mediatek: Reuse more common
+   features" patch.
+
+Changes in v2:
+1. fix errors/warnings in mediatek-dwmac.yaml with upgraded dtschema tools
+
+This series include 5 patches:
+1. add platform level clocks management for dwmac-mediatek
+2. resue more common features defined in stmmac_platform.c
+3. add ethernet entry for mt8195
+
+Biao Huang (6):
+  stmmac: dwmac-mediatek: add platform level clocks management
+  stmmac: dwmac-mediatek: Reuse more common features
+  arm64: dts: mt2712: update ethernet device node
+  net: dt-bindings: dwmac: Convert mediatek-dwmac to DT schema
+  stmmac: dwmac-mediatek: add support for mt8195
+  net: dt-bindings: dwmac: add support for mt8195
+
+ .../bindings/net/mediatek-dwmac.txt           |  91 ------
+ .../bindings/net/mediatek-dwmac.yaml          | 210 ++++++++++++
+ arch/arm64/boot/dts/mediatek/mt2712-evb.dts   |   1 +
+ arch/arm64/boot/dts/mediatek/mt2712e.dtsi     |  14 +-
+ .../ethernet/stmicro/stmmac/dwmac-mediatek.c  | 306 ++++++++++++++++--
+ 5 files changed, 503 insertions(+), 119 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/net/mediatek-dwmac.txt
+ create mode 100644 Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
+
+--
+2.18.0
 
 

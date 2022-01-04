@@ -2,112 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C268E4846B6
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:10:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5C3A4846AE
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:08:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233194AbiADRKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 12:10:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26359 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231733AbiADRKU (ORCPT
+        id S231504AbiADRIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 12:08:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35312 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230311AbiADRIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 12:10:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641316217;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PLTIaY5gg/CGkjyFI0nVD1Ynp1qrSv98dwVoxTGL/gk=;
-        b=Cw7HN3Rir7v0VIG3xMuVwuOsWwK5O2hiBFpQJIAJhwKOVZ1QqClc8V7UzC8kf7ZgFxJ+su
-        jQSS/g9nBD9UtQEijAunsYiAscU74ZwdTABSh8dM1TDTDq3hY58vwwtNqenayvNpT8wvZr
-        1z4q2ilXd/HMtEPeeCib8B5lMvrMwhk=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-610-ZasE3F_7PBe7FswaXiWtDA-1; Tue, 04 Jan 2022 12:10:16 -0500
-X-MC-Unique: ZasE3F_7PBe7FswaXiWtDA-1
-Received: by mail-wm1-f71.google.com with SMTP id o18-20020a05600c511200b00345c1603997so8199951wms.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 09:10:15 -0800 (PST)
+        Tue, 4 Jan 2022 12:08:42 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5EEAC061784
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 09:08:41 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id o7so43174217ioo.9
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 09:08:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eNWy2s9rz0FLnCuaNfyjnf9kuom2tgn2/ycw/EInc2I=;
+        b=pswDZTE8m9o1E7YgwGw4JHpc4nf4cyidZqzTNv0WZv44hV2N12KcXdzYX8OBYBVsSg
+         1mt0BMy74iRvSIdmHz18WPLL9UEXG9gcPgQmc3rrlA+AIaaHdZD7Y2G5aC96iLa2BEaW
+         ikp5oV3Ir4yr5Rld3A4FSbW4HVPrmXOGKrJ2lj9o0VCkFGM+Z7j7M3ka4JMgCEu511K+
+         Y5zyARniP7ovRKZefdS4iMMF/lsR4NrrEZz74gUImD1Rkz+lcjh4mhf6epnvIrfZ7X6V
+         GPCYvsYgjBhLcHK5u/BeHJ1As3iASGOVXT51Bl34JmAQ4QLtxDegIXPvNQ4BESPXLe+U
+         o1Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PLTIaY5gg/CGkjyFI0nVD1Ynp1qrSv98dwVoxTGL/gk=;
-        b=i/RLbrM7jlrpfnhnKiaS6ZAxczz3ZZr7xaVSK4feOhouA0pcyYviMZnVsPI+e2442x
-         fKtuP/UFLrvnfu1/6glX5ZXu12sxt0HYu1zpL1TLuDg8ibnn05HtCRFhkkO+7sXcylFE
-         rZ1xgX311KbNrbA2PiVq6cZWvDLY7SN/HqWtHfrWBHNIq7hvGgh+zf2cqk4mUnV2X7Ee
-         9gnmSUUz8E+z2yH4DsPmXv4AM26zJdT+HTHXGuwE0EL1+s5OsVvn5P39NI0fotw3xkYz
-         7+jtwMYbzTaS8Fg9j08VmyHLar80Usu6j7ACrYLCPG/u1Ja3Aq2tMbMX46QjBPDDJmR5
-         6xmA==
-X-Gm-Message-State: AOAM530irluBofGy+a2pJakjMDPZLeoCvDZLUhVQWRz6CI7nQCUrwISk
-        KM89qqfVHUh0WHheIWVD5yiKDnEbuqlSpcAtO/b17fJMid+mekTcjXe8Jqn3t5nJp22WzTD+EV0
-        EsLnCcsih6urQEC1ROsBJWEev
-X-Received: by 2002:a17:906:9f01:: with SMTP id fy1mr6911392ejc.475.1641316202908;
-        Tue, 04 Jan 2022 09:10:02 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzg4c8oC/snOnarWsLYe2OuhHx3dyq7Vui9X2KCh4F+Gwu3wSidctLFczPe7rbJzItTjhvIEQ==
-X-Received: by 2002:a17:906:9f01:: with SMTP id fy1mr6911372ejc.475.1641316202670;
-        Tue, 04 Jan 2022 09:10:02 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id w17sm14932963edu.48.2022.01.04.09.07.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 09:10:02 -0800 (PST)
-Message-ID: <b8e273bf-ae2c-cc5c-0d20-33f3dd12053c@redhat.com>
-Date:   Tue, 4 Jan 2022 18:07:32 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eNWy2s9rz0FLnCuaNfyjnf9kuom2tgn2/ycw/EInc2I=;
+        b=6B5friBZnb87O+6MvOPZ73HgUzl1DQ+2shAYHjSIi/EgVapJVcIdYH0AnvMMwDmjBY
+         vu1i7bF9k+ci79UBnKbR8PT+3O2qzQYHVTrUKS3+UArfwugzJMqncPwUVg9+bi6JH5qa
+         33HOwiQZX3cs0EILl15+ZZvs5pVpJCdgiWGb6lcqlH7CyQwUBXQ0CwejXI+7iY51uvKF
+         EzfhovAeal8nGpky+kduMqp0p9b0s02a9wnSyvcS4vik0qZJSwSFa71h8ATdBXmWx87r
+         Rs9lvCY03f9CaXF/Q68IFOxx9uRUdA4R9feEJidmyAcqAeXtJZl1TLsdh2FAmQhhtsi5
+         sPJw==
+X-Gm-Message-State: AOAM5309zTJ03rruFRpdqfN2ObnlMsvQw9h5vuOM3Or9BpRKV4ScCN2t
+        dSwuhYQEfW9sJyn9YYh6X/Rr68FtWKxgEOeH0OeNkw==
+X-Google-Smtp-Source: ABdhPJzy79VvXhXYiRGwOpMtjUD0yi61E9rAbv6x16EfhG2JnQ9J49w+3y+LnvkZSOQlGOsYp4j9tjfBcqYOadWbkgc=
+X-Received: by 2002:a02:294b:: with SMTP id p72mr18328692jap.263.1641316119537;
+ Tue, 04 Jan 2022 09:08:39 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: Possible nohz-full/RCU issue in arm64 KVM
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        paulmck <paulmck@kernel.org>, maz <maz@kernel.org>,
-        frederic <frederic@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        rcu <rcu@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Anup Patel <Anup.Patel@wdc.com>
-References: <d80e440375896f75d45e227d40af60ca7ba24ceb.camel@redhat.com>
- <YbyO40zDW/kvUHEE@FVFF77S0Q05N>
- <70f112072d9496d21901946ea82832d3ed3a8cb2.camel@redhat.com>
- <Ybyg1r/Q6EfeuXGV@FVFF77S0Q05N>
- <9ab8107f-ff41-6a9e-57e1-a261bea93aca@redhat.com>
- <YdR4N9QVYOzjowAb@FVFF77S0Q05N>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YdR4N9QVYOzjowAb@FVFF77S0Q05N>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20211230072030.302559-1-irogers@google.com> <YdRYk8Ic8qdEAhQz@krava>
+In-Reply-To: <YdRYk8Ic8qdEAhQz@krava>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 4 Jan 2022 09:08:27 -0800
+Message-ID: <CAP-5=fUbM-miTBqQNhuTdevBF7VMBmd=LH+GxXkP2_z5n9nmtQ@mail.gmail.com>
+Subject: Re: [PATCH v3 00/48] Refactor perf cpumap
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vineet Singh <vineet.singh@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, zhengjun.xing@intel.com,
+        eranian@google.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/4/22 17:39, Mark Rutland wrote:
-> My main issue here was just that it's really difficult to see how the
-> entry/exit logic is balanced, and I reckon we can solve that by splitting
-> guest_{enter,exit}_irqoff() into helper functions to handle the vtime
-> accounting separately from the context tracking, so that arch code can do
-> something like:
-> 
->    guest_timing_enter_irqoff();
->    
->    guest_eqs_enter_irqoff();
->    < actually run vCPU here >
->    guest_eqs_exit_irqoff();
->    
->    < handle pending IRQs here >
->    
->    guest_timing_exit_irqoff();
-> 
-> ... which I hope should work for RISC-V too.
-> 
-> I've had a go, and I've pushed out a WIP to:
-> 
->    https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/kvm/rcu
+On Tue, Jan 4, 2022 at 6:24 AM Jiri Olsa <jolsa@redhat.com> wrote:
+>
+> On Wed, Dec 29, 2021 at 11:19:41PM -0800, Ian Rogers wrote:
+> > Perf cpu map has various functions where a cpumap and index are passed
+> > in order to load the cpu. A problem with this is that the wrong index
+> > may be passed for the cpumap, causing problems like aggregation on the
+> > wrong CPU:
+> > https://lore.kernel.org/lkml/20211204023409.969668-1-irogers@google.com/
+> >
+> > This patch set refactors the cpu map API, reducing it and explicitly
+> > passing the cpu (rather than the pair) to functions that need
+> > it. Comments are added at the same time. Changes modify the same
+> > file/function more than once as refactoring and fixes are broken apart
+> > for the sake of bisection.
+> >
+> > v2. Incorproates fixes suggested Jiri Olsa, rewrites the evlist CPU
+> >     iterator in part in a way suggested by Riccardo Mancini. The new
+> >     fixes start at patch 23. The final change was suggested by John
+> >     Garry to make the CPUs have their own struct wrapper.
+> >
+> > v3. Incorporates fixes suggested by Namhyung Kim.
+> >
+> > Ian Rogers (48):
+>
+> you doubled the amount of patches from v1? ;-)
 
-Yes, you have a point and it makes sense for x86 too.  You can send me a 
-topic branch once you get all the acks.  Thanks!
+Ah yes, sorry about that. I wasn't trying to imply you'd reviewed the
+new patches but I see where the wording is confusing. I was worried
+about the number of patches, but less so after:
+https://lore.kernel.org/lkml/YdIfz+LMewetSaEB@gmail.com/
+:-)
 
-Paolo
+> I had small comments for the first 22 patches and would be ok
+> with them merged.. will try to go through the rest soon
 
+Thanks. The v1 wasn't as complete as I'd have liked and Namhyung had
+some feedback to that effect as well (it was great to get feedback to
+make sure I wasn't flogging a dead horse). For v4 I see a request to
+rename a variable/parameter, which I can do. I'll hold off a bit and
+send out a v4 later today hopefully.
+
+Thanks,
+Ian
+
+> thanks,
+> jirka
+>
+> >   libperf: Add comments to perf_cpu_map.
+> >   perf stat: Add aggr creators that are passed a cpu.
+> >   perf stat: Correct aggregation CPU map
+> >   perf stat: Switch aggregation to use for_each loop
+> >   perf stat: Switch to cpu version of cpu_map__get
+> >   perf cpumap: Switch cpu_map__build_map to cpu function
+> >   perf cpumap: Remove map+index get_socket
+> >   perf cpumap: Remove map+index get_die
+> >   perf cpumap: Remove map+index get_core
+> >   perf cpumap: Remove map+index get_node
+> >   perf cpumap: Add comments to aggr_cpu_id
+> >   perf cpumap: Remove unused cpu_map__socket
+> >   perf cpumap: Simplify equal function name.
+> >   perf cpumap: Rename empty functions.
+> >   perf cpumap: Document cpu__get_node and remove redundant function
+> >   perf cpumap: Remove map from function names that don't use a map.
+> >   perf cpumap: Remove cpu_map__cpu, use libperf function.
+> >   perf cpumap: Refactor cpu_map__build_map
+> >   perf cpumap: Rename cpu_map__get_X_aggr_by_cpu functions
+> >   perf cpumap: Move 'has' function to libperf
+> >   perf cpumap: Add some comments to cpu_aggr_map
+> >   perf cpumap: Trim the cpu_aggr_map
+> >   perf stat: Fix memory leak in check_per_pkg
+> >   perf cpumap: Add CPU to aggr_cpu_id
+> >   perf stat-display: Avoid use of core for CPU.
+> >   perf evsel: Derive CPUs and threads in alloc_counts
+> >   libperf: Switch cpu to more accurate cpu_map_idx
+> >   libperf: Use cpu not index for evsel mmap
+> >   perf counts: Switch name cpu to cpu_map_idx
+> >   perf stat: Rename aggr_data cpu to imply it's an index
+> >   perf stat: Use perf_cpu_map__for_each_cpu
+> >   perf script: Use for each cpu to aid readability
+> >   libperf: Allow NULL in perf_cpu_map__idx
+> >   perf evlist: Refactor evlist__for_each_cpu.
+> >   perf evsel: Pass cpu not cpu map index to synthesize
+> >   perf stat: Correct variable name for read counter
+> >   perf evsel: Rename CPU around get_group_fd
+> >   perf evsel: Reduce scope of evsel__ignore_missing_thread
+> >   perf evsel: Rename variable cpu to index
+> >   perf test: Use perf_cpu_map__for_each_cpu
+> >   perf stat: Correct check_per_pkg cpu
+> >   perf stat: Swap variable name cpu to index
+> >   libperf: Sync evsel documentation
+> >   perf bpf: Rename cpu to cpu_map_idx
+> >   perf c2c: Use more intention revealing iterator
+> >   perf script: Fix flipped index and cpu
+> >   perf stat: Correct first_shadow_cpu to return index
+> >   perf cpumap: Give CPUs their own type.
+> >
+> >  tools/lib/perf/Documentation/libperf.txt      |  11 +-
+> >  tools/lib/perf/cpumap.c                       | 131 +++--
+> >  tools/lib/perf/evlist.c                       |   4 +-
+> >  tools/lib/perf/evsel.c                        |  92 ++--
+> >  tools/lib/perf/include/internal/cpumap.h      |  18 +-
+> >  tools/lib/perf/include/internal/evlist.h      |   3 +-
+> >  tools/lib/perf/include/internal/evsel.h       |   4 +-
+> >  tools/lib/perf/include/internal/mmap.h        |   5 +-
+> >  tools/lib/perf/include/perf/cpumap.h          |   8 +-
+> >  tools/lib/perf/include/perf/evsel.h           |  10 +-
+> >  tools/lib/perf/libperf.map                    |   1 +
+> >  tools/lib/perf/mmap.c                         |   2 +-
+> >  tools/perf/arch/arm/util/cs-etm.c             |  16 +-
+> >  tools/perf/bench/epoll-ctl.c                  |   2 +-
+> >  tools/perf/bench/epoll-wait.c                 |   2 +-
+> >  tools/perf/bench/futex-hash.c                 |   2 +-
+> >  tools/perf/bench/futex-lock-pi.c              |   2 +-
+> >  tools/perf/bench/futex-requeue.c              |   2 +-
+> >  tools/perf/bench/futex-wake-parallel.c        |   2 +-
+> >  tools/perf/bench/futex-wake.c                 |   2 +-
+> >  tools/perf/builtin-c2c.c                      |  15 +-
+> >  tools/perf/builtin-ftrace.c                   |   2 +-
+> >  tools/perf/builtin-kmem.c                     |   2 +-
+> >  tools/perf/builtin-record.c                   |   2 +-
+> >  tools/perf/builtin-sched.c                    |  71 +--
+> >  tools/perf/builtin-script.c                   |  10 +-
+> >  tools/perf/builtin-stat.c                     | 516 +++++++++---------
+> >  tools/perf/tests/attr.c                       |   6 +-
+> >  tools/perf/tests/bitmap.c                     |   2 +-
+> >  tools/perf/tests/cpumap.c                     |   6 +-
+> >  tools/perf/tests/event_update.c               |   6 +-
+> >  tools/perf/tests/mem2node.c                   |   2 +-
+> >  tools/perf/tests/mmap-basic.c                 |   4 +-
+> >  tools/perf/tests/openat-syscall-all-cpus.c    |  39 +-
+> >  tools/perf/tests/stat.c                       |   3 +-
+> >  tools/perf/tests/topology.c                   |  43 +-
+> >  tools/perf/util/affinity.c                    |   2 +-
+> >  tools/perf/util/auxtrace.c                    |  12 +-
+> >  tools/perf/util/auxtrace.h                    |   5 +-
+> >  tools/perf/util/bpf_counter.c                 |  16 +-
+> >  tools/perf/util/bpf_counter.h                 |   4 +-
+> >  tools/perf/util/counts.c                      |   8 +-
+> >  tools/perf/util/counts.h                      |  14 +-
+> >  tools/perf/util/cpumap.c                      | 253 ++++-----
+> >  tools/perf/util/cpumap.h                      | 116 ++--
+> >  tools/perf/util/cputopo.c                     |   6 +-
+> >  tools/perf/util/env.c                         |  29 +-
+> >  tools/perf/util/env.h                         |   3 +-
+> >  tools/perf/util/evlist.c                      | 148 ++---
+> >  tools/perf/util/evlist.h                      |  50 +-
+> >  tools/perf/util/evsel.c                       | 143 ++---
+> >  tools/perf/util/evsel.h                       |  27 +-
+> >  tools/perf/util/expr.c                        |   2 +-
+> >  tools/perf/util/header.c                      |   6 +-
+> >  tools/perf/util/mmap.c                        |  19 +-
+> >  tools/perf/util/mmap.h                        |   3 +-
+> >  tools/perf/util/perf_api_probe.c              |  15 +-
+> >  tools/perf/util/python.c                      |   4 +-
+> >  tools/perf/util/record.c                      |  11 +-
+> >  .../scripting-engines/trace-event-python.c    |   6 +-
+> >  tools/perf/util/session.c                     |  10 +-
+> >  tools/perf/util/stat-display.c                | 138 ++---
+> >  tools/perf/util/stat-shadow.c                 | 308 +++++------
+> >  tools/perf/util/stat.c                        |  47 +-
+> >  tools/perf/util/stat.h                        |   9 +-
+> >  tools/perf/util/svghelper.c                   |   6 +-
+> >  tools/perf/util/synthetic-events.c            |  12 +-
+> >  tools/perf/util/synthetic-events.h            |   3 +-
+> >  tools/perf/util/util.h                        |   5 +-
+> >  69 files changed, 1333 insertions(+), 1155 deletions(-)
+> >
+> > --
+> > 2.34.1.448.ga2b2bfdf31-goog
+> >
+>

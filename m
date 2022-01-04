@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1958484940
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 21:23:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 706F4484942
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 21:24:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232714AbiADUXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 15:23:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51982 "EHLO
+        id S233257AbiADUXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 15:23:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232469AbiADUX3 (ORCPT
+        with ESMTP id S232699AbiADUXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 15:23:29 -0500
-Received: from mail-il1-x14a.google.com (mail-il1-x14a.google.com [IPv6:2607:f8b0:4864:20::14a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB9EC061792
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 12:23:28 -0800 (PST)
-Received: by mail-il1-x14a.google.com with SMTP id x8-20020a92dc48000000b002b2abc6e1cbso20226201ilq.20
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 12:23:28 -0800 (PST)
+        Tue, 4 Jan 2022 15:23:30 -0500
+Received: from mail-io1-xd4a.google.com (mail-io1-xd4a.google.com [IPv6:2607:f8b0:4864:20::d4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8243C061799
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 12:23:29 -0800 (PST)
+Received: by mail-io1-xd4a.google.com with SMTP id y141-20020a6bc893000000b00602098c8ec8so17554898iof.12
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 12:23:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=fCkZ7/e+hYvIbDYXQkjviNxl2J3KABaNVk4a8BK9wD4=;
-        b=a2nBE51uIsXqd+2ZR7+wBBjWQEPkP/TV10VJ/fpRKClx4yg8ZX4KuoSd24U+45HO0X
-         flK2lcMm6w41mpxLig5LGl52sk4pFMWo5ZAQrf/onEWZDpWkTzhQR20g8ZqikcWvBxj+
-         gOiJ/G/Ne0UWLdHkukzCd1V3so8Oi7bH7EvMN+ENrl2MHNxChPecPVFMpTUwEa6/UHWO
-         bF5rb2HERxnJtEAlomllUalJi8q+sca/N9RxdEagBZUZpVp8UVWHd/XabuiphBg89lby
-         8kIkEVtj28CxyvSBMncObqA5Qq1zvn9z8uJo0zinuAEhnSe5VceUtN2xDl9Up73Oh7SE
-         etQw==
+        bh=Gm5mSzJnPubh+bPnkbISvaZQVgA0kTKSOGEGn8nVWjU=;
+        b=ilhsezWKthTUtqpsdSola2Gj68MttNltfk8ExhAwOdfQIqix7QktbWfzUV+je7cr5o
+         YmN5GlRHe/SBGBBmSlmQkk/6UnsnUhPzlWhTigeEpYnxFt4GeH6ryAahWMvPHW19tiD2
+         YfFFAOYxGbuYA1mlwvF4quVpfN/AJ3L2X5c4D/rOOJlqgWfT9TMFR/Dyhx+BzmuvPY/4
+         Y+LaXguqr5y0OaZx7EBT9K37X4Yu2ns3FmraE0h1cVsggY87T0t61YEBWFdpTZNMKCAE
+         Kg1H8KMisUIo76tcomQpOtYSp7CrlXfOAM9ZqT6cpIUjz2JABOea4boOFWDRukGclRBs
+         Gqmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=fCkZ7/e+hYvIbDYXQkjviNxl2J3KABaNVk4a8BK9wD4=;
-        b=JvYqyXRPiDuSr4g13L/uDLHYD/bOawpzonT4NqtQtpf9mi7Uhb+M3ajvNbAuubxEdq
-         Ciw+0XVlBM7dWCVAMssMXk1/xAc/nzlxiLvhZP1cWb9yFmzfVZwrA3DecdrDUHFcTPdc
-         XMwZakBH9tC4Wg30a3un8dFYw2eg2ldsb7kj9ONLPdVJY6EbbQ9gnWdnQQzYPuX7BG6J
-         O80DT/qmrcrEXaa0hU3MG0IpARo/Nb68ZpTD6X6Okh0MJ+sGGeLK/9EVuUTbNuVpf4B9
-         GrCNEF0jrJ8rHbINE835KyYqdPBw3Ga+oKKDisGtQLFmIfB1PHpc20Pfpozz7pcx+Jfo
-         In7w==
-X-Gm-Message-State: AOAM531w6JxKUk+oolWc883aFKefERpIvb0VEY70nuEi4m9tY4EMpHte
-        xCoo0G/L45Zj3YSVA/cgXPLYJoSa6vA=
-X-Google-Smtp-Source: ABdhPJyZIS/ysa1F8gSy9uhKdsonTha6dh31L4yEw9+NhPs2ifZG7lTlAv/QRuHWYbQLELrcskJ9c5IKivg=
+        bh=Gm5mSzJnPubh+bPnkbISvaZQVgA0kTKSOGEGn8nVWjU=;
+        b=3v4YFa8691C7mYUByugLRjmQyFe+LN05dUpnFR2nmVKk2j2pr18BXOcUgleMYMoL7q
+         byoleEhRICmQwSGgB1p9uscTuNL0mPR7vwAhRvqZeEEiCcvmbi4Hbn50MTjb75qtxfaF
+         OlG2Ug/CyeHQ865WvYrl7QM9uGVf46YNBHsbYuSjWMdpSEtJ1AUQ9KhIQnQCFY4e9W0W
+         5PLHrcH0pZnotPyGD9k8IzzDbTfrY0hjEOW+qfRdpNJPmHaSeE2jjdjBuFvaX6OofUlt
+         MAPSE24LHX9k/VTk3UN4J5WACFRCc8zCH7jBsiRvR1FLSIZD9l4bdvCDYGGO0NAdP0OM
+         wlvQ==
+X-Gm-Message-State: AOAM532ky+TpTacB+WvS5u/GhZUnvV1VlJPIv+MX/rfZKd0cUZ98CbVQ
+        x5QIbXbarcIwaBGMais0l+PT4iz8Dkk=
+X-Google-Smtp-Source: ABdhPJyH8BmCuKJrQhMv35t5sLrC/zCh+HfH2gyY9iU4Mw2xyd9JtoiD0RilCH/986KjA1l55tLZ7zshiow=
 X-Received: from yuzhao.bld.corp.google.com ([2620:15c:183:200:6c8c:5506:7ca2:9dfd])
- (user=yuzhao job=sendgmr) by 2002:a05:6602:2c45:: with SMTP id
- x5mr24012131iov.98.1641327807961; Tue, 04 Jan 2022 12:23:27 -0800 (PST)
-Date:   Tue,  4 Jan 2022 13:22:24 -0700
+ (user=yuzhao job=sendgmr) by 2002:a05:6602:2a4e:: with SMTP id
+ k14mr24512100iov.197.1641327809359; Tue, 04 Jan 2022 12:23:29 -0800 (PST)
+Date:   Tue,  4 Jan 2022 13:22:25 -0700
 In-Reply-To: <20220104202227.2903605-1-yuzhao@google.com>
-Message-Id: <20220104202227.2903605-6-yuzhao@google.com>
+Message-Id: <20220104202227.2903605-7-yuzhao@google.com>
 Mime-Version: 1.0
 References: <20220104202227.2903605-1-yuzhao@google.com>
 X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
-Subject: [PATCH v6 5/9] mm: multigenerational lru: mm_struct list
+Subject: [PATCH v6 6/9] mm: multigenerational lru: aging
 From:   Yu Zhao <yuzhao@google.com>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>
@@ -80,795 +80,1180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To exploit spatial locality, the aging prefers to walk page tables to
-search for young PTEs. And this patch paves the way for that.
+To avoid confusions, the term "scan" will be applied to PTEs in a page
+table and pages on an lru list. It emphasizes on consecutive elements
+in a set rather than the data structure holding this set together.
 
-An mm_struct list is maintained for each memcg, and an mm_struct
-follows its owner task to the new memcg when this task is migrated.
+The aging produces young generations. Given an lruvec, it iterates
+lruvec_memcg()->mm_list and calls walk_page_range() with each
+mm_struct on this list to scan PTEs for accessed pages. On finding a
+young PTE, it clears the accessed bit and updates the gen counter of
+the page mapped by this PTE to (max_seq%MAX_NR_GENS)+1. After each
+iteration of this list, it increments max_seq. The aging is needed
+before the eviction can continue when max_seq-min_seq+1 reaches
+MIN_NR_GENS.
 
-To avoid confusions, the term "iteration" specifically means the
-traversal of an entire mm_struct list; the term "walk" will be applied
-to page tables and the rmap, as usual.
+To avoid confusions, the terms "promotion" and "demotion" will be
+applied to the multigenerational lru, as a new convention; the terms
+"activation" and "deactivation" will be applied to the active/inactive
+lru, as usual.
 
-A page table walker, i.e., a thread in the aging path, iterates an
-mm_struct list and calls walk_page_range() with each mm_struct on this
-list. The iteration finishes when it reaches the end of this list.
-When multiple page table walkers iterate the same list, each of them
-gets a unique mm_struct; therefore the aging can run concurrently.
+IOW, the aging promotes a page to the youngest generation when it
+finds this page accessed thru page tables; demotion happens
+consequently when it creates a new generation. Note that promotion
+doesn't require any lru list operations in the aging path, only the
+update of the gen counter and the lru sizes; demotion, unless as the
+result of the creation of a new generation, requires lru list
+operations, e.g., lru_deactivate_fn().
 
-This infra also provides the following optimizations:
-1) It tracks the usage of mm_struct's between context switches so that
-   page table walkers may skip processes that have been sleeping since
-   the last iteration.
-2) It provides generational Bloom filters to record populated branches
-   so that page table walkers may reduce their search space based on
-   the query results.
+The aging uses the following optimizations when walking page tables:
+1) It uses the accessed bit in non-leaf PMD entries, the hint from the
+   CPU scheduler and the Bloom filters to reduce its search space.
+2) It doesn't zigzag between a PGD table and the same PMD or PTE table
+   spanning multiple VMAs. In other words, it finishes all the VMAs
+   within the range of the same PMD or PTE table before it returns to
+   a PGD table. This improves the cache performance for workloads that
+   have large numbers of tiny VMAs, especially when
+   CONFIG_PGTABLE_LEVELS=5.
+
+The aging is only interested in accessed pages and therefore has the
+complexity of O(nr_hot_evictable_pages). The worst case scenario is
+the aging fails to exploit any spatial locality and the eviction has
+to promote all accessed pages when walking the rmap, which is similar
+to the active/inactive lru. However, generations still can provide
+better temporal locality.
 
 Signed-off-by: Yu Zhao <yuzhao@google.com>
 Tested-by: Konstantin Kharlamov <Hi-Angel@yandex.ru>
 ---
- fs/exec.c                  |   2 +
- include/linux/memcontrol.h |   5 +
- include/linux/mm_inline.h  |   5 +
- include/linux/mm_types.h   |  78 ++++++++
- include/linux/mmzone.h     |  61 +++++++
- kernel/exit.c              |   1 +
- kernel/fork.c              |   9 +
- kernel/sched/core.c        |   1 +
- mm/memcontrol.c            |  24 +++
- mm/vmscan.c                | 352 +++++++++++++++++++++++++++++++++++++
- 10 files changed, 538 insertions(+)
+ include/linux/memcontrol.h |   6 +
+ include/linux/mm.h         |   5 +
+ include/linux/mmzone.h     |  10 +
+ include/linux/oom.h        |  16 +
+ include/linux/swap.h       |   4 +
+ mm/oom_kill.c              |   4 +-
+ mm/rmap.c                  |   7 +
+ mm/vmscan.c                | 896 +++++++++++++++++++++++++++++++++++++
+ 8 files changed, 946 insertions(+), 2 deletions(-)
 
-diff --git a/fs/exec.c b/fs/exec.c
-index 537d92c41105..308aa88ca15f 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1005,6 +1005,7 @@ static int exec_mmap(struct mm_struct *mm)
- 	active_mm = tsk->active_mm;
- 	tsk->active_mm = mm;
- 	tsk->mm = mm;
-+	lru_gen_add_mm(mm);
- 	/*
- 	 * This prevents preemption while active_mm is being loaded and
- 	 * it and mm are being updated, which could cause problems for
-@@ -1015,6 +1016,7 @@ static int exec_mmap(struct mm_struct *mm)
- 	if (!IS_ENABLED(CONFIG_ARCH_WANT_IRQS_OFF_ACTIVATE_MM))
- 		local_irq_enable();
- 	activate_mm(active_mm, mm);
-+	lru_gen_use_mm(mm);
- 	if (IS_ENABLED(CONFIG_ARCH_WANT_IRQS_OFF_ACTIVATE_MM))
- 		local_irq_enable();
- 	tsk->mm->vmacache_seqnum = 0;
 diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 0c5c403f4be6..aba18cd101db 100644
+index aba18cd101db..028afdb81c10 100644
 --- a/include/linux/memcontrol.h
 +++ b/include/linux/memcontrol.h
-@@ -340,6 +340,11 @@ struct mem_cgroup {
- 	struct deferred_split deferred_split_queue;
- #endif
+@@ -1393,18 +1393,24 @@ mem_cgroup_print_oom_meminfo(struct mem_cgroup *memcg)
  
-+#ifdef CONFIG_LRU_GEN
-+	/* per-memcg mm_struct list */
-+	struct lru_gen_mm_list mm_list;
-+#endif
-+
- 	struct mem_cgroup_per_node *nodeinfo[];
- };
- 
-diff --git a/include/linux/mm_inline.h b/include/linux/mm_inline.h
-index 5f239f67f36b..717a2290acb3 100644
---- a/include/linux/mm_inline.h
-+++ b/include/linux/mm_inline.h
-@@ -110,6 +110,11 @@ static inline int lru_gen_from_seq(unsigned long seq)
- 	return seq % MAX_NR_GENS;
- }
- 
-+static inline int lru_hist_from_seq(unsigned long seq)
-+{
-+	return seq % NR_HIST_GENS;
-+}
-+
- static inline bool lru_gen_is_active(struct lruvec *lruvec, int gen)
+ static inline void lock_page_memcg(struct page *page)
  {
- 	unsigned long max_seq = lruvec->lrugen.max_seq;
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index c3a6e6209600..bdbd9390adb3 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -3,6 +3,7 @@
- #define _LINUX_MM_TYPES_H
- 
- #include <linux/mm_types_task.h>
-+#include <linux/sched.h>
- 
- #include <linux/auxvec.h>
- #include <linux/list.h>
-@@ -16,6 +17,8 @@
- #include <linux/page-flags-layout.h>
- #include <linux/workqueue.h>
- #include <linux/seqlock.h>
-+#include <linux/nodemask.h>
-+#include <linux/mmdebug.h>
- 
- #include <asm/mmu.h>
- 
-@@ -646,6 +649,22 @@ struct mm_struct {
- #ifdef CONFIG_IOMMU_SUPPORT
- 		u32 pasid;
- #endif
-+#ifdef CONFIG_LRU_GEN
-+		struct {
-+			/* this mm_struct is on lru_gen_mm_list */
-+			struct list_head list;
-+#ifdef CONFIG_MEMCG
-+			/* points to the memcg of "owner" above */
-+			struct mem_cgroup *memcg;
-+#endif
-+			/*
-+			 * Set when switching to this mm_struct, as a hint of
-+			 * whether it has been used since the last time per-node
-+			 * page table walkers cleared the corresponding bits.
-+			 */
-+			nodemask_t nodes;
-+		} lru_gen;
-+#endif /* CONFIG_LRU_GEN */
- 	} __randomize_layout;
- 
- 	/*
-@@ -672,6 +691,65 @@ static inline cpumask_t *mm_cpumask(struct mm_struct *mm)
- 	return (struct cpumask *)&mm->cpu_bitmap;
++	/* to match folio_memcg_rcu() */
++	rcu_read_lock();
  }
  
-+#ifdef CONFIG_LRU_GEN
-+
-+struct lru_gen_mm_list {
-+	/* mm_struct list for page table walkers */
-+	struct list_head fifo;
-+	/* protects the list above */
-+	spinlock_t lock;
-+};
-+
-+void lru_gen_add_mm(struct mm_struct *mm);
-+void lru_gen_del_mm(struct mm_struct *mm);
-+#ifdef CONFIG_MEMCG
-+void lru_gen_migrate_mm(struct mm_struct *mm);
-+#endif
-+
-+static inline void lru_gen_init_mm(struct mm_struct *mm)
+ static inline void unlock_page_memcg(struct page *page)
+ {
++	rcu_read_unlock();
+ }
+ 
+ static inline void folio_memcg_lock(struct folio *folio)
+ {
++	/* to match folio_memcg_rcu() */
++	rcu_read_lock();
+ }
+ 
+ static inline void folio_memcg_unlock(struct folio *folio)
+ {
++	rcu_read_unlock();
+ }
+ 
+ static inline void mem_cgroup_handle_over_high(void)
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index fadbf8e6abcd..3d42118b7f5e 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1599,6 +1599,11 @@ static inline unsigned long folio_pfn(struct folio *folio)
+ 	return page_to_pfn(&folio->page);
+ }
+ 
++static inline struct folio *pfn_folio(unsigned long pfn)
 +{
-+	INIT_LIST_HEAD(&mm->lru_gen.list);
-+#ifdef CONFIG_MEMCG
-+	mm->lru_gen.memcg = NULL;
-+#endif
-+	nodes_clear(mm->lru_gen.nodes);
++	return page_folio(pfn_to_page(pfn));
 +}
 +
-+static inline void lru_gen_use_mm(struct mm_struct *mm)
-+{
-+	/* unlikely but not a bug when racing with lru_gen_migrate_mm() */
-+	VM_WARN_ON(list_empty(&mm->lru_gen.list));
-+
-+	if (!(current->flags & PF_KTHREAD) && !nodes_full(mm->lru_gen.nodes))
-+		nodes_setall(mm->lru_gen.nodes);
-+}
-+
-+#else /* !CONFIG_LRU_GEN */
-+
-+static inline void lru_gen_add_mm(struct mm_struct *mm)
-+{
-+}
-+
-+static inline void lru_gen_del_mm(struct mm_struct *mm)
-+{
-+}
-+
-+#ifdef CONFIG_MEMCG
-+static inline void lru_gen_migrate_mm(struct mm_struct *mm)
-+{
-+}
-+#endif
-+
-+static inline void lru_gen_init_mm(struct mm_struct *mm)
-+{
-+}
-+
-+static inline void lru_gen_use_mm(struct mm_struct *mm)
-+{
-+}
-+
-+#endif /* CONFIG_LRU_GEN */
-+
- struct mmu_gather;
- extern void tlb_gather_mmu(struct mmu_gather *tlb, struct mm_struct *mm);
- extern void tlb_gather_mmu_fullmm(struct mmu_gather *tlb, struct mm_struct *mm);
+ /* MIGRATE_CMA and ZONE_MOVABLE do not allow pin pages */
+ #ifdef CONFIG_MIGRATION
+ static inline bool is_pinnable_page(struct page *page)
 diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index 371c7210d510..5b9bc2532c5b 100644
+index 5b9bc2532c5b..94af12507788 100644
 --- a/include/linux/mmzone.h
 +++ b/include/linux/mmzone.h
-@@ -335,6 +335,13 @@ struct lruvec;
- #define MIN_NR_GENS		2U
- #define MAX_NR_GENS		((unsigned int)CONFIG_NR_LRU_GENS)
- 
-+/* whether to keep historical stats for evicted generations */
-+#ifdef CONFIG_LRU_GEN_STATS
-+#define NR_HIST_GENS		((unsigned int)CONFIG_NR_LRU_GENS)
-+#else
-+#define NR_HIST_GENS		1U
-+#endif
-+
- struct lru_gen_struct {
- 	/* the aging increments the youngest generation number */
- 	unsigned long max_seq;
-@@ -350,6 +357,58 @@ struct lru_gen_struct {
- 	bool enabled;
+@@ -304,6 +304,7 @@ enum lruvec_flags {
  };
  
-+enum {
-+	MM_PTE_TOTAL,	/* total leaf entries */
-+	MM_PTE_OLD,	/* old leaf entries */
-+	MM_PTE_YOUNG,	/* young leaf entries */
-+	MM_PMD_TOTAL,	/* total non-leaf entries */
-+	MM_PMD_FOUND,	/* non-leaf entries found in Bloom filters */
-+	MM_PMD_ADDED,	/* non-leaf entries added to Bloom filters */
-+	NR_MM_STATS
-+};
-+
-+/* mnemonic codes for the mm stats above */
-+#define MM_STAT_CODES		"toydfa"
-+
-+/* double-buffering Bloom filters */
-+#define NR_BLOOM_FILTERS	2
-+
-+struct lru_gen_mm_state {
-+	/* set to max_seq after each iteration */
-+	unsigned long seq;
-+	/* where the current iteration starts (inclusive) */
-+	struct list_head *head;
-+	/* where the last iteration ends (exclusive) */
-+	struct list_head *tail;
-+	/* to wait for the last page table walker to finish */
-+	struct wait_queue_head wait;
-+	/* Bloom filters flip after each iteration */
-+	unsigned long *filters[NR_BLOOM_FILTERS];
-+	/* the mm stats for debugging */
-+	unsigned long stats[NR_HIST_GENS][NR_MM_STATS];
-+	/* the number of concurrent page table walkers */
-+	int nr_walkers;
-+};
-+
-+struct lru_gen_mm_walk {
-+	/* the lruvec under reclaim */
-+	struct lruvec *lruvec;
-+	/* unstable max_seq from lru_gen_struct */
-+	unsigned long max_seq;
-+	/* the next address within an mm to scan */
-+	unsigned long next_addr;
-+	/* to batch page table entries */
-+	unsigned long bitmap[BITS_TO_LONGS(MIN_LRU_BATCH)];
-+	/* to batch promoted pages */
-+	int nr_pages[MAX_NR_GENS][ANON_AND_FILE][MAX_NR_ZONES];
-+	/* to batch the mm stats */
-+	int mm_stats[NR_MM_STATS];
-+	/* total batched items */
-+	int batched;
-+	bool can_swap;
-+	bool full_scan;
-+};
-+
+ struct lruvec;
++struct page_vma_mapped_walk;
+ 
+ #define LRU_GEN_MASK		((BIT(LRU_GEN_WIDTH) - 1) << LRU_GEN_PGOFF)
+ #define LRU_REFS_MASK		((BIT(LRU_REFS_WIDTH) - 1) << LRU_REFS_PGOFF)
+@@ -410,6 +411,7 @@ struct lru_gen_mm_walk {
+ };
+ 
  void lru_gen_init_state(struct mem_cgroup *memcg, struct lruvec *lruvec);
++void lru_gen_look_around(struct page_vma_mapped_walk *pvmw);
  
  #ifdef CONFIG_MEMCG
-@@ -395,6 +454,8 @@ struct lruvec {
- #ifdef CONFIG_LRU_GEN
- 	/* evictable pages divided into generations */
- 	struct lru_gen_struct		lrugen;
-+	/* to concurrently iterate lru_gen_mm_list */
-+	struct lru_gen_mm_state		mm_state;
- #endif
- #ifdef CONFIG_MEMCG
- 	struct pglist_data *pgdat;
-diff --git a/kernel/exit.c b/kernel/exit.c
-index f702a6a63686..f8bf605c9ba5 100644
---- a/kernel/exit.c
-+++ b/kernel/exit.c
-@@ -463,6 +463,7 @@ void mm_update_next_owner(struct mm_struct *mm)
- 		goto retry;
- 	}
- 	WRITE_ONCE(mm->owner, c);
-+	lru_gen_migrate_mm(mm);
- 	task_unlock(c);
- 	put_task_struct(c);
- }
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 3244cc56b697..be1b58bf11bb 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -1078,6 +1078,7 @@ static struct mm_struct *mm_init(struct mm_struct *mm, struct task_struct *p,
- 		goto fail_nocontext;
- 
- 	mm->user_ns = get_user_ns(user_ns);
-+	lru_gen_init_mm(mm);
- 	return mm;
- 
- fail_nocontext:
-@@ -1120,6 +1121,7 @@ static inline void __mmput(struct mm_struct *mm)
- 	}
- 	if (mm->binfmt)
- 		module_put(mm->binfmt->module);
-+	lru_gen_del_mm(mm);
- 	mmdrop(mm);
+ void lru_gen_init_memcg(struct mem_cgroup *memcg);
+@@ -422,6 +424,10 @@ static inline void lru_gen_init_state(struct mem_cgroup *memcg, struct lruvec *l
+ {
  }
  
-@@ -2603,6 +2605,13 @@ pid_t kernel_clone(struct kernel_clone_args *args)
- 		get_task_struct(p);
- 	}
- 
-+	if (IS_ENABLED(CONFIG_LRU_GEN) && !(clone_flags & CLONE_VM)) {
-+		/* lock the task to synchronize with memcg migration */
-+		task_lock(p);
-+		lru_gen_add_mm(p->mm);
-+		task_unlock(p);
-+	}
++static inline void lru_gen_look_around(struct page_vma_mapped_walk *pvmw)
++{
++}
 +
- 	wake_up_new_task(p);
+ #ifdef CONFIG_MEMCG
+ static inline void lru_gen_init_memcg(struct mem_cgroup *memcg)
+ {
+@@ -1048,6 +1054,10 @@ typedef struct pglist_data {
  
- 	/* forking complete and child started to run, tell ptracer */
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 77563109c0ea..268b869d326e 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -4956,6 +4956,7 @@ context_switch(struct rq *rq, struct task_struct *prev,
- 		 * finish_task_switch()'s mmdrop().
- 		 */
- 		switch_mm_irqs_off(prev->active_mm, next->mm, next);
-+		lru_gen_use_mm(next->mm);
- 
- 		if (!prev->mm) {                        // from kernel
- 			/* will mmdrop() in finish_task_switch(). */
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index a4359a278e31..33576f6814b5 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -6135,6 +6135,29 @@ static void mem_cgroup_move_task(void)
- }
- #endif
+ 	unsigned long		flags;
  
 +#ifdef CONFIG_LRU_GEN
-+static void mem_cgroup_attach(struct cgroup_taskset *tset)
++	/* kswap mm walk data */
++	struct lru_gen_mm_walk	mm_walk;
++#endif
+ 	ZONE_PADDING(_pad2_)
+ 
+ 	/* Per-node vmstats */
+diff --git a/include/linux/oom.h b/include/linux/oom.h
+index 2db9a1432511..9c7a4fae0661 100644
+--- a/include/linux/oom.h
++++ b/include/linux/oom.h
+@@ -57,6 +57,22 @@ struct oom_control {
+ extern struct mutex oom_lock;
+ extern struct mutex oom_adj_mutex;
+ 
++#ifdef CONFIG_MMU
++extern struct task_struct *oom_reaper_list;
++extern struct wait_queue_head oom_reaper_wait;
++
++static inline bool oom_reaping_in_progress(void)
 +{
-+	struct cgroup_subsys_state *css;
-+	struct task_struct *task = NULL;
-+
-+	cgroup_taskset_for_each_leader(task, css, tset)
-+		break;
-+
-+	if (!task)
-+		return;
-+
-+	task_lock(task);
-+	if (task->mm && task->mm->owner == task)
-+		lru_gen_migrate_mm(task->mm);
-+	task_unlock(task);
++	/* a racy check can be used to reduce the chance of overkilling */
++	return READ_ONCE(oom_reaper_list) || !waitqueue_active(&oom_reaper_wait);
 +}
 +#else
-+static void mem_cgroup_attach(struct cgroup_taskset *tset)
++static inline bool oom_reaping_in_progress(void)
 +{
++	return false;
 +}
-+#endif /* CONFIG_LRU_GEN */
++#endif
 +
- static int seq_puts_memcg_tunable(struct seq_file *m, unsigned long value)
+ static inline void set_current_oom_origin(void)
  {
- 	if (value == PAGE_COUNTER_MAX)
-@@ -6478,6 +6501,7 @@ struct cgroup_subsys memory_cgrp_subsys = {
- 	.css_reset = mem_cgroup_css_reset,
- 	.css_rstat_flush = mem_cgroup_css_rstat_flush,
- 	.can_attach = mem_cgroup_can_attach,
-+	.attach = mem_cgroup_attach,
- 	.cancel_attach = mem_cgroup_cancel_attach,
- 	.post_attach = mem_cgroup_move_task,
- 	.dfl_cftypes = memory_files,
+ 	current->signal->oom_flag_origin = true;
+diff --git a/include/linux/swap.h b/include/linux/swap.h
+index d1ea44b31f19..bb93bba97115 100644
+--- a/include/linux/swap.h
++++ b/include/linux/swap.h
+@@ -137,6 +137,10 @@ union swap_header {
+  */
+ struct reclaim_state {
+ 	unsigned long reclaimed_slab;
++#ifdef CONFIG_LRU_GEN
++	/* per-thread mm walk data */
++	struct lru_gen_mm_walk *mm_walk;
++#endif
+ };
+ 
+ #ifdef __KERNEL__
+diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+index 1ddabefcfb5a..ef5860fc7d22 100644
+--- a/mm/oom_kill.c
++++ b/mm/oom_kill.c
+@@ -508,8 +508,8 @@ bool process_shares_mm(struct task_struct *p, struct mm_struct *mm)
+  * victim (if that is possible) to help the OOM killer to move on.
+  */
+ static struct task_struct *oom_reaper_th;
+-static DECLARE_WAIT_QUEUE_HEAD(oom_reaper_wait);
+-static struct task_struct *oom_reaper_list;
++DECLARE_WAIT_QUEUE_HEAD(oom_reaper_wait);
++struct task_struct *oom_reaper_list;
+ static DEFINE_SPINLOCK(oom_reaper_lock);
+ 
+ bool __oom_reap_task_mm(struct mm_struct *mm)
+diff --git a/mm/rmap.c b/mm/rmap.c
+index 163ac4e6bcee..2f023e6c0f82 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -73,6 +73,7 @@
+ #include <linux/page_idle.h>
+ #include <linux/memremap.h>
+ #include <linux/userfaultfd_k.h>
++#include <linux/mm_inline.h>
+ 
+ #include <asm/tlbflush.h>
+ 
+@@ -790,6 +791,12 @@ static bool page_referenced_one(struct page *page, struct vm_area_struct *vma,
+ 		}
+ 
+ 		if (pvmw.pte) {
++			if (lru_gen_enabled() && pte_young(*pvmw.pte) &&
++			    !(vma->vm_flags & (VM_SEQ_READ | VM_RAND_READ))) {
++				lru_gen_look_around(&pvmw);
++				referenced++;
++			}
++
+ 			if (ptep_clear_flush_young_notify(vma, address,
+ 						pvmw.pte)) {
+ 				/*
 diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 0e487c0ffe17..5eaf22aa446a 100644
+index 5eaf22aa446a..fbf1337a1632 100644
 --- a/mm/vmscan.c
 +++ b/mm/vmscan.c
-@@ -3095,6 +3095,342 @@ static bool __maybe_unused seq_is_valid(struct lruvec *lruvec)
- 	       get_nr_gens(lruvec, 0) <= MAX_NR_GENS;
+@@ -51,6 +51,8 @@
+ #include <linux/dax.h>
+ #include <linux/psi.h>
+ #include <linux/memory.h>
++#include <linux/pagewalk.h>
++#include <linux/shmem_fs.h>
+ 
+ #include <asm/tlbflush.h>
+ #include <asm/div64.h>
+@@ -1555,6 +1557,11 @@ static unsigned int shrink_page_list(struct list_head *page_list,
+ 		if (!sc->may_unmap && page_mapped(page))
+ 			goto keep_locked;
+ 
++		/* folio_update_gen() tried to promote this page? */
++		if (lru_gen_enabled() && !ignore_references &&
++		    page_mapped(page) && PageReferenced(page))
++			goto keep_locked;
++
+ 		may_enter_fs = (sc->gfp_mask & __GFP_FS) ||
+ 			(PageSwapCache(page) && (sc->gfp_mask & __GFP_IO));
+ 
+@@ -3047,6 +3054,15 @@ static bool can_age_anon_pages(struct pglist_data *pgdat,
+  *                          shorthand helpers
+  ******************************************************************************/
+ 
++#define DEFINE_MAX_SEQ(lruvec)						\
++	unsigned long max_seq = READ_ONCE((lruvec)->lrugen.max_seq)
++
++#define DEFINE_MIN_SEQ(lruvec)						\
++	unsigned long min_seq[ANON_AND_FILE] = {			\
++		READ_ONCE((lruvec)->lrugen.min_seq[0]),			\
++		READ_ONCE((lruvec)->lrugen.min_seq[1]),			\
++	}
++
+ #define for_each_gen_type_zone(gen, type, zone)				\
+ 	for ((gen) = 0; (gen) < MAX_NR_GENS; (gen)++)			\
+ 		for ((type) = 0; (type) < ANON_AND_FILE; (type)++)	\
+@@ -3077,6 +3093,12 @@ static struct lruvec *get_lruvec(struct mem_cgroup *memcg, int nid)
+ 	return pgdat ? &pgdat->__lruvec : NULL;
+ }
+ 
++static int get_swappiness(struct mem_cgroup *memcg)
++{
++	return mem_cgroup_get_nr_swap_pages(memcg) >= MIN_LRU_BATCH ?
++	       mem_cgroup_swappiness(memcg) : 0;
++}
++
+ static int get_nr_gens(struct lruvec *lruvec, int type)
+ {
+ 	return lruvec->lrugen.max_seq - lruvec->lrugen.min_seq[type] + 1;
+@@ -3431,6 +3453,869 @@ static bool get_next_mm(struct lruvec *lruvec, struct lru_gen_mm_walk *walk,
+ 	return last;
  }
  
 +/******************************************************************************
-+ *                          mm_struct list
++ *                          the aging
 + ******************************************************************************/
 +
-+static struct lru_gen_mm_list *get_mm_list(struct mem_cgroup *memcg)
++static void folio_update_gen(struct folio *folio, struct lru_gen_mm_walk *walk)
 +{
-+	static struct lru_gen_mm_list mm_list = {
-+		.fifo = LIST_HEAD_INIT(mm_list.fifo),
-+		.lock = __SPIN_LOCK_UNLOCKED(mm_list.lock),
-+	};
++	unsigned long old_flags, new_flags;
++	int type = folio_is_file_lru(folio);
++	int zone = folio_zonenum(folio);
++	int delta = folio_nr_pages(folio);
++	int old_gen, new_gen = lru_gen_from_seq(walk->max_seq);
 +
-+#ifdef CONFIG_MEMCG
-+	if (memcg)
-+		return &memcg->mm_list;
-+#endif
-+	return &mm_list;
++	do {
++		new_flags = old_flags = READ_ONCE(folio->flags);
++
++		/* for shrink_page_list() */
++		if (!(new_flags & LRU_GEN_MASK)) {
++			new_flags |= BIT(PG_referenced);
++			continue;
++		}
++
++		new_flags &= ~LRU_GEN_MASK;
++		new_flags |= (new_gen + 1UL) << LRU_GEN_PGOFF;
++	} while (new_flags != old_flags &&
++		 cmpxchg(&folio->flags, old_flags, new_flags) != old_flags);
++
++	old_gen = ((old_flags & LRU_GEN_MASK) >> LRU_GEN_PGOFF) - 1;
++	if (old_gen < 0 || old_gen == new_gen)
++		return;
++
++	walk->batched++;
++	walk->nr_pages[old_gen][type][zone] -= delta;
++	walk->nr_pages[new_gen][type][zone] += delta;
 +}
 +
-+void lru_gen_add_mm(struct mm_struct *mm)
++static int folio_inc_gen(struct lruvec *lruvec, struct folio *folio, bool reclaiming)
 +{
-+	int nid;
-+	struct mem_cgroup *memcg = get_mem_cgroup_from_mm(mm);
-+	struct lru_gen_mm_list *mm_list = get_mm_list(memcg);
++	unsigned long old_flags, new_flags;
++	int type = folio_is_file_lru(folio);
++	struct lru_gen_struct *lrugen = &lruvec->lrugen;
++	int new_gen, old_gen = lru_gen_from_seq(lrugen->min_seq[type]);
 +
-+	VM_BUG_ON_MM(!list_empty(&mm->lru_gen.list), mm);
-+#ifdef CONFIG_MEMCG
-+	VM_BUG_ON_MM(mm->lru_gen.memcg, mm);
-+	mm->lru_gen.memcg = memcg;
-+#endif
-+	spin_lock(&mm_list->lock);
++	do {
++		new_flags = old_flags = READ_ONCE(folio->flags);
++		VM_BUG_ON_FOLIO(!(new_flags & LRU_GEN_MASK), folio);
 +
-+	list_add_tail(&mm->lru_gen.list, &mm_list->fifo);
++		new_gen = ((new_flags & LRU_GEN_MASK) >> LRU_GEN_PGOFF) - 1;
++		/* folio_update_gen() has promoted this page? */
++		if (new_gen >= 0 && new_gen != old_gen)
++			return new_gen;
 +
-+	for_each_node(nid) {
-+		struct lruvec *lruvec = get_lruvec(memcg, nid);
++		new_gen = (old_gen + 1) % MAX_NR_GENS;
 +
-+		if (!lruvec)
++		new_flags &= ~LRU_GEN_MASK;
++		new_flags |= (new_gen + 1UL) << LRU_GEN_PGOFF;
++		/* for folio_end_writeback() */
++		if (reclaiming)
++			new_flags |= BIT(PG_reclaim);
++	} while (cmpxchg(&folio->flags, old_flags, new_flags) != old_flags);
++
++	lru_gen_balance_size(lruvec, folio, old_gen, new_gen);
++
++	return new_gen;
++}
++
++static void reset_batch_size(struct lruvec *lruvec, struct lru_gen_mm_walk *walk)
++{
++	int gen, type, zone;
++	struct lru_gen_struct *lrugen = &lruvec->lrugen;
++
++	walk->batched = 0;
++
++	for_each_gen_type_zone(gen, type, zone) {
++		enum lru_list lru = type * LRU_FILE;
++		int delta = walk->nr_pages[gen][type][zone];
++
++		if (!delta)
 +			continue;
 +
-+		if (lruvec->mm_state.tail == &mm_list->fifo)
-+			lruvec->mm_state.tail = lruvec->mm_state.tail->prev;
++		walk->nr_pages[gen][type][zone] = 0;
++		WRITE_ONCE(lrugen->nr_pages[gen][type][zone],
++			   lrugen->nr_pages[gen][type][zone] + delta);
++
++		if (lru_gen_is_active(lruvec, gen))
++			lru += LRU_ACTIVE;
++		lru_gen_update_size(lruvec, lru, zone, delta);
 +	}
-+
-+	spin_unlock(&mm_list->lock);
 +}
 +
-+void lru_gen_del_mm(struct mm_struct *mm)
++static int should_skip_vma(unsigned long start, unsigned long end, struct mm_walk *walk)
 +{
-+	int nid;
-+	struct lru_gen_mm_list *mm_list;
-+	struct mem_cgroup *memcg = NULL;
++	struct address_space *mapping;
++	struct vm_area_struct *vma = walk->vma;
++	struct lru_gen_mm_walk *priv = walk->private;
 +
-+	if (list_empty(&mm->lru_gen.list))
-+		return;
++	if (!vma_is_accessible(vma) || is_vm_hugetlb_page(vma) ||
++	    (vma->vm_flags & (VM_LOCKED | VM_SPECIAL | VM_SEQ_READ | VM_RAND_READ)))
++		return true;
 +
-+#ifdef CONFIG_MEMCG
-+	memcg = mm->lru_gen.memcg;
-+#endif
-+	mm_list = get_mm_list(memcg);
++	if (vma_is_anonymous(vma))
++		return !priv->can_swap;
 +
-+	spin_lock(&mm_list->lock);
++	if (WARN_ON_ONCE(!vma->vm_file || !vma->vm_file->f_mapping))
++		return true;
 +
-+	for_each_node(nid) {
-+		struct lruvec *lruvec = get_lruvec(memcg, nid);
++	mapping = vma->vm_file->f_mapping;
++	if (!mapping->a_ops->writepage)
++		return true;
 +
-+		if (!lruvec)
-+			continue;
-+
-+		if (lruvec->mm_state.tail == &mm->lru_gen.list)
-+			lruvec->mm_state.tail = lruvec->mm_state.tail->next;
-+
-+		if (lruvec->mm_state.head != &mm->lru_gen.list)
-+			continue;
-+
-+		lruvec->mm_state.head = lruvec->mm_state.head->next;
-+		if (lruvec->mm_state.head == &mm_list->fifo)
-+			WRITE_ONCE(lruvec->mm_state.seq, lruvec->mm_state.seq + 1);
-+	}
-+
-+	list_del_init(&mm->lru_gen.list);
-+
-+	spin_unlock(&mm_list->lock);
-+
-+#ifdef CONFIG_MEMCG
-+	mem_cgroup_put(mm->lru_gen.memcg);
-+	mm->lru_gen.memcg = NULL;
-+#endif
++	return (shmem_mapping(mapping) && !priv->can_swap) || mapping_unevictable(mapping);
 +}
-+
-+#ifdef CONFIG_MEMCG
-+void lru_gen_migrate_mm(struct mm_struct *mm)
-+{
-+	struct mem_cgroup *memcg;
-+
-+	lockdep_assert_held(&mm->owner->alloc_lock);
-+
-+	if (mem_cgroup_disabled())
-+		return;
-+
-+	rcu_read_lock();
-+	memcg = mem_cgroup_from_task(mm->owner);
-+	rcu_read_unlock();
-+	if (memcg == mm->lru_gen.memcg)
-+		return;
-+
-+	VM_BUG_ON_MM(!mm->lru_gen.memcg, mm);
-+	VM_BUG_ON_MM(list_empty(&mm->lru_gen.list), mm);
-+
-+	lru_gen_del_mm(mm);
-+	lru_gen_add_mm(mm);
-+}
-+#endif
 +
 +/*
-+ * Bloom filters with m=1<<15, k=2 and the false positive rates of ~1/5 when
-+ * n=10,000 and ~1/2 when n=20,000, where, conventionally, m is the number of
-+ * bits in a bitmap, k is the number of hash functions and n is the number of
-+ * inserted items.
-+ *
-+ * Page table walkers use one of the two filters to reduce their search space.
-+ * To get rid of non-leaf entries that no longer have enough leaf entries, the
-+ * aging uses the double-buffering technique to flip to the other filter each
-+ * time it creates a new generation. For non-leaf entries that have enough
-+ * leaf entries, the aging carries them over to the next generation in
-+ * walk_pmd_range(); the eviction also report them when walking the rmap
-+ * in lru_gen_look_around().
-+ *
-+ * For future optimizations:
-+ * 1) It's not necessary to keep both filters all the time. The spare one can be
-+ *    freed after the RCU grace period and reallocated if needed again.
-+ * 2) And when reallocating, it's worth scaling its size according to the number
-+ *    of inserted entries in the other filter, to reduce the memory overhead on
-+ *    small systems and false positives on large systems.
-+ * 3) Jenkins' hash function is an alternative to Knuth's.
++ * Some userspace memory allocators map many single-page VMAs. Instead of
++ * returning back to the PGD table for each of such VMAs, finish an entire PMD
++ * table to reduce zigzags and improve cache performance.
 + */
-+#define BLOOM_FILTER_SHIFT	15
-+
-+static inline int filter_gen_from_seq(unsigned long seq)
++static bool get_next_vma(struct mm_walk *walk, unsigned long mask, unsigned long size,
++			 unsigned long *start, unsigned long *end)
 +{
-+	return seq % NR_BLOOM_FILTERS;
-+}
++	unsigned long next = round_up(*end, size);
 +
-+static void get_item_key(void *item, int *key)
-+{
-+	u32 hash = hash_ptr(item, BLOOM_FILTER_SHIFT * 2);
++	VM_BUG_ON(mask & size);
++	VM_BUG_ON(*start >= *end);
++	VM_BUG_ON((next & mask) != (*start & mask));
 +
-+	BUILD_BUG_ON(BLOOM_FILTER_SHIFT * 2 > BITS_PER_TYPE(u32));
++	while (walk->vma) {
++		if (next >= walk->vma->vm_end) {
++			walk->vma = walk->vma->vm_next;
++			continue;
++		}
 +
-+	key[0] = hash & (BIT(BLOOM_FILTER_SHIFT) - 1);
-+	key[1] = hash >> BLOOM_FILTER_SHIFT;
-+}
++		if ((next & mask) != (walk->vma->vm_start & mask))
++			return false;
 +
-+static void clear_bloom_filter(struct lruvec *lruvec, unsigned long seq)
-+{
-+	unsigned long *filter;
-+	int gen = filter_gen_from_seq(seq);
++		if (should_skip_vma(walk->vma->vm_start, walk->vma->vm_end, walk)) {
++			walk->vma = walk->vma->vm_next;
++			continue;
++		}
 +
-+	lockdep_assert_held(&get_mm_list(lruvec_memcg(lruvec))->lock);
++		*start = max(next, walk->vma->vm_start);
++		next = (next | ~mask) + 1;
++		/* rounded-up boundaries can wrap to 0 */
++		*end = next && next < walk->vma->vm_end ? next : walk->vma->vm_end;
 +
-+	filter = lruvec->mm_state.filters[gen];
-+	if (filter) {
-+		bitmap_clear(filter, 0, BIT(BLOOM_FILTER_SHIFT));
-+		return;
++		return true;
 +	}
-+
-+	filter = bitmap_zalloc(BIT(BLOOM_FILTER_SHIFT), GFP_ATOMIC);
-+	WRITE_ONCE(lruvec->mm_state.filters[gen], filter);
-+}
-+
-+static void set_bloom_filter(struct lruvec *lruvec, unsigned long seq, void *item)
-+{
-+	int key[2];
-+	unsigned long *filter;
-+	int gen = filter_gen_from_seq(seq);
-+
-+	filter = READ_ONCE(lruvec->mm_state.filters[gen]);
-+	if (!filter)
-+		return;
-+
-+	get_item_key(item, key);
-+
-+	if (!test_bit(key[0], filter))
-+		set_bit(key[0], filter);
-+	if (!test_bit(key[1], filter))
-+		set_bit(key[1], filter);
-+}
-+
-+static bool test_bloom_filter(struct lruvec *lruvec, unsigned long seq, void *item)
-+{
-+	int key[2];
-+	unsigned long *filter;
-+	int gen = filter_gen_from_seq(seq);
-+
-+	filter = READ_ONCE(lruvec->mm_state.filters[gen]);
-+	if (!filter)
-+		return false;
-+
-+	get_item_key(item, key);
-+
-+	return test_bit(key[0], filter) && test_bit(key[1], filter);
-+}
-+
-+static void reset_mm_stats(struct lruvec *lruvec, struct lru_gen_mm_walk *walk, bool last)
-+{
-+	int i;
-+	int hist = lru_hist_from_seq(walk->max_seq);
-+
-+	lockdep_assert_held(&get_mm_list(lruvec_memcg(lruvec))->lock);
-+
-+	for (i = 0; i < NR_MM_STATS; i++) {
-+		WRITE_ONCE(lruvec->mm_state.stats[hist][i],
-+			   lruvec->mm_state.stats[hist][i] + walk->mm_stats[i]);
-+		walk->mm_stats[i] = 0;
-+	}
-+
-+	if (NR_HIST_GENS == 1 || !last)
-+		return;
-+
-+	hist = lru_hist_from_seq(walk->max_seq + 1);
-+	for (i = 0; i < NR_MM_STATS; i++)
-+		WRITE_ONCE(lruvec->mm_state.stats[hist][i], 0);
-+}
-+
-+static bool should_skip_mm(struct mm_struct *mm, struct lru_gen_mm_walk *walk)
-+{
-+	int type;
-+	unsigned long size = 0;
-+	struct pglist_data *pgdat = lruvec_pgdat(walk->lruvec);
-+
-+	if (!walk->full_scan && cpumask_empty(mm_cpumask(mm)) &&
-+	    !node_isset(pgdat->node_id, mm->lru_gen.nodes))
-+		return true;
-+
-+	for (type = !walk->can_swap; type < ANON_AND_FILE; type++) {
-+		size += type ? get_mm_counter(mm, MM_FILEPAGES) :
-+			       get_mm_counter(mm, MM_ANONPAGES) +
-+			       get_mm_counter(mm, MM_SHMEMPAGES);
-+	}
-+
-+	if (size < MIN_LRU_BATCH)
-+		return true;
-+
-+	if (mm_is_oom_victim(mm))
-+		return true;
-+
-+	if (!mmget_not_zero(mm))
-+		return true;
-+
-+	node_clear(pgdat->node_id, mm->lru_gen.nodes);
 +
 +	return false;
 +}
 +
-+static bool get_next_mm(struct lruvec *lruvec, struct lru_gen_mm_walk *walk,
-+			struct mm_struct **iter)
++static bool suitable_to_scan(int total, int young)
 +{
-+	bool first = false;
-+	bool last = true;
-+	struct mm_struct *mm = NULL;
-+	struct mem_cgroup *memcg = lruvec_memcg(lruvec);
-+	struct lru_gen_mm_list *mm_list = get_mm_list(memcg);
-+	struct lru_gen_mm_state *mm_state = &lruvec->mm_state;
++	int n = clamp_t(int, cache_line_size() / sizeof(pte_t), 2, 8);
 +
-+	/*
-+	 * There are four interesting cases for this page table walker:
-+	 * 1) It tries to start a new iteration of this list with a stale
-+	 *    max_seq; there is nothing to be done.
-+	 * 2) It's the first of the current generation, and it needs to prepare
-+	 *    the Bloom filter for the next generation.
-+	 * 3) It reaches the end of this list, and it needs to increment
-+	 *    mm_state->seq; the iteration is done.
-+	 * 4) It's the last of the current generation, and it needs to clear the
-+	 *    historical mm stats for the next generation.
-+	 */
-+	if (*iter)
-+		mmput_async(*iter);
-+	else if (walk->max_seq <= READ_ONCE(mm_state->seq))
-+		return false;
++	/* suitable if the average number of young PTEs per cacheline is >=1 */
++	return young * n >= total;
++}
 +
-+	spin_lock(&mm_list->lock);
++static bool walk_pte_range(pmd_t *pmd, unsigned long start, unsigned long end,
++			   struct mm_walk *walk)
++{
++	int i;
++	pte_t *pte;
++	spinlock_t *ptl;
++	unsigned long addr;
++	int total = 0;
++	int young = 0;
++	struct lru_gen_mm_walk *priv = walk->private;
++	struct mem_cgroup *memcg = lruvec_memcg(priv->lruvec);
++	struct pglist_data *pgdat = lruvec_pgdat(priv->lruvec);
 +
-+	VM_BUG_ON(walk->max_seq > mm_state->seq + 1);
-+	VM_BUG_ON(*iter && walk->max_seq < mm_state->seq);
-+	VM_BUG_ON(*iter && !mm_state->nr_walkers);
++	VM_BUG_ON(pmd_leaf(*pmd));
 +
-+	if (walk->max_seq <= mm_state->seq) {
-+		if (!*iter)
-+			last = false;
-+		goto done;
-+	}
++	pte = pte_offset_map_lock(walk->mm, pmd, start & PMD_MASK, &ptl);
++	arch_enter_lazy_mmu_mode();
++restart:
++	for (i = pte_index(start), addr = start; addr != end; i++, addr += PAGE_SIZE) {
++		struct folio *folio;
++		unsigned long pfn = pte_pfn(pte[i]);
 +
-+	if (mm_state->head == &mm_list->fifo) {
-+		VM_BUG_ON(mm_state->nr_walkers);
-+		mm_state->head = mm_state->head->next;
-+		first = true;
-+	}
++		total++;
++		priv->mm_stats[MM_PTE_TOTAL]++;
 +
-+	while (!mm && mm_state->head != &mm_list->fifo) {
-+		mm = list_entry(mm_state->head, struct mm_struct, lru_gen.list);
++		if (!pte_present(pte[i]) || is_zero_pfn(pfn))
++			continue;
 +
-+		mm_state->head = mm_state->head->next;
++		if (WARN_ON_ONCE(pte_devmap(pte[i]) || pte_special(pte[i])))
++			continue;
 +
-+		/* full scan for those added after the last iteration */
-+		if (mm_state->tail == &mm->lru_gen.list) {
-+			mm_state->tail = mm_state->tail->next;
-+			walk->full_scan = true;
++		if (!pte_young(pte[i])) {
++			priv->mm_stats[MM_PTE_OLD]++;
++			continue;
 +		}
 +
-+		if (should_skip_mm(mm, walk))
-+			mm = NULL;
++		VM_BUG_ON(!pfn_valid(pfn));
++		if (pfn < pgdat->node_start_pfn || pfn >= pgdat_end_pfn(pgdat))
++			continue;
++
++		folio = pfn_folio(pfn);
++		if (folio_nid(folio) != pgdat->node_id)
++			continue;
++
++		if (folio_memcg_rcu(folio) != memcg)
++			continue;
++
++		VM_BUG_ON(addr < walk->vma->vm_start || addr >= walk->vma->vm_end);
++		if (ptep_test_and_clear_young(walk->vma, addr, pte + i)) {
++			folio_update_gen(folio, priv);
++			priv->mm_stats[MM_PTE_YOUNG]++;
++			young++;
++		}
++
++		if (pte_dirty(pte[i]) && !folio_test_dirty(folio) &&
++		    !(folio_test_anon(folio) && folio_test_swapbacked(folio) &&
++		      !folio_test_swapcache(folio)))
++			folio_mark_dirty(folio);
 +	}
 +
-+	if (mm_state->head == &mm_list->fifo)
-+		WRITE_ONCE(mm_state->seq, mm_state->seq + 1);
++	if (i < PTRS_PER_PTE && get_next_vma(walk, PMD_MASK, PAGE_SIZE, &start, &end))
++		goto restart;
++
++	arch_leave_lazy_mmu_mode();
++	pte_unmap_unlock(pte, ptl);
++
++	return suitable_to_scan(total, young);
++}
++
++#if defined(CONFIG_TRANSPARENT_HUGEPAGE) || defined(CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG)
++static void walk_pmd_range_locked(pud_t *pud, unsigned long next, struct vm_area_struct *vma,
++				  struct mm_walk *walk, unsigned long *start)
++{
++	int i;
++	pmd_t *pmd;
++	spinlock_t *ptl;
++	struct lru_gen_mm_walk *priv = walk->private;
++	struct mem_cgroup *memcg = lruvec_memcg(priv->lruvec);
++	struct pglist_data *pgdat = lruvec_pgdat(priv->lruvec);
++
++	VM_BUG_ON(pud_leaf(*pud));
++
++	/* try to batch at most 1+MIN_LRU_BATCH+1 entries */
++	if (*start == -1) {
++		*start = next;
++		return;
++	}
++
++	i = next == -1 ? 0 : pmd_index(next) - pmd_index(*start);
++	if (i && i <= MIN_LRU_BATCH) {
++		__set_bit(i - 1, priv->bitmap);
++		return;
++	}
++
++	pmd = pmd_offset(pud, *start);
++	ptl = pmd_lock(walk->mm, pmd);
++	arch_enter_lazy_mmu_mode();
++
++	do {
++		struct folio *folio;
++		unsigned long pfn = pmd_pfn(pmd[i]);
++		unsigned long addr = i ? (*start & PMD_MASK) + i * PMD_SIZE : *start;
++
++		if (!pmd_present(pmd[i]) || is_huge_zero_pmd(pmd[i]))
++			goto next;
++
++		if (WARN_ON_ONCE(pmd_devmap(pmd[i])))
++			goto next;
++
++		if (!pmd_trans_huge(pmd[i])) {
++			if (IS_ENABLED(CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG))
++				pmdp_test_and_clear_young(vma, addr, pmd + i);
++			goto next;
++		}
++
++		VM_BUG_ON(!pfn_valid(pfn));
++		if (pfn < pgdat->node_start_pfn || pfn >= pgdat_end_pfn(pgdat))
++			goto next;
++
++		folio = pfn_folio(pfn);
++		if (folio_nid(folio) != pgdat->node_id)
++			goto next;
++
++		if (folio_memcg_rcu(folio) != memcg)
++			goto next;
++
++		VM_BUG_ON(addr < vma->vm_start || addr >= vma->vm_end);
++		if (pmdp_test_and_clear_young(vma, addr, pmd + i)) {
++			folio_update_gen(folio, priv);
++			priv->mm_stats[MM_PTE_YOUNG]++;
++		}
++
++		if (pmd_dirty(pmd[i]) && !folio_test_dirty(folio) &&
++		    !(folio_test_anon(folio) && folio_test_swapbacked(folio) &&
++		      !folio_test_swapcache(folio)))
++			folio_mark_dirty(folio);
++next:
++		i = i > MIN_LRU_BATCH ? 0 :
++		    find_next_bit(priv->bitmap, MIN_LRU_BATCH, i) + 1;
++	} while (i <= MIN_LRU_BATCH);
++
++	arch_leave_lazy_mmu_mode();
++	spin_unlock(ptl);
++
++	*start = -1;
++	bitmap_zero(priv->bitmap, MIN_LRU_BATCH);
++}
++#else
++static void walk_pmd_range_locked(pud_t *pud, unsigned long next, struct vm_area_struct *vma,
++				  struct mm_walk *walk, unsigned long *start)
++{
++}
++#endif
++
++static void walk_pmd_range(pud_t *pud, unsigned long start, unsigned long end,
++			   struct mm_walk *walk)
++{
++	int i;
++	pmd_t *pmd;
++	unsigned long next;
++	unsigned long addr;
++	struct vm_area_struct *vma;
++	unsigned long pos = -1;
++	struct lru_gen_mm_walk *priv = walk->private;
++#ifdef CONFIG_TRANSPARENT_HUGEPAGE
++	struct pglist_data *pgdat = lruvec_pgdat(priv->lruvec);
++#endif
++
++	VM_BUG_ON(pud_leaf(*pud));
++
++	/*
++	 * Finish an entire PMD in two passes: the first only reaches to PTE
++	 * tables to avoid taking the PMD lock; the second, if necessary, takes
++	 * the PMD lock to clear the accessed bit in PMD entries.
++	 */
++	pmd = pmd_offset(pud, start & PUD_MASK);
++restart:
++	/* walk_pte_range() may call get_next_vma() */
++	vma = walk->vma;
++	for (i = pmd_index(start), addr = start; addr != end; i++, addr = next) {
++		pmd_t val = pmd_read_atomic(pmd + i);
++
++		/* for pmd_read_atomic() */
++		barrier();
++
++		next = pmd_addr_end(addr, end);
++
++		if (!pmd_present(val)) {
++			priv->mm_stats[MM_PTE_TOTAL]++;
++			continue;
++		}
++
++#ifdef CONFIG_TRANSPARENT_HUGEPAGE
++		if (pmd_trans_huge(val)) {
++			unsigned long pfn = pmd_pfn(val);
++
++			priv->mm_stats[MM_PTE_TOTAL]++;
++
++			if (is_huge_zero_pmd(val))
++				continue;
++
++			if (!pmd_young(val)) {
++				priv->mm_stats[MM_PTE_OLD]++;
++				continue;
++			}
++
++			if (pfn < pgdat->node_start_pfn || pfn >= pgdat_end_pfn(pgdat))
++				continue;
++
++			walk_pmd_range_locked(pud, addr, vma, walk, &pos);
++			continue;
++		}
++#endif
++		priv->mm_stats[MM_PMD_TOTAL]++;
++
++#ifdef CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG
++		if (!pmd_young(val))
++			continue;
++
++		walk_pmd_range_locked(pud, addr, vma, walk, &pos);
++#endif
++		if (!priv->full_scan && !test_bloom_filter(priv->lruvec, priv->max_seq, pmd + i))
++			continue;
++
++		priv->mm_stats[MM_PMD_FOUND]++;
++
++		if (!walk_pte_range(&val, addr, next, walk))
++			continue;
++
++		set_bloom_filter(priv->lruvec, priv->max_seq + 1, pmd + i);
++
++		priv->mm_stats[MM_PMD_ADDED]++;
++	}
++
++	walk_pmd_range_locked(pud, -1, vma, walk, &pos);
++
++	if (i < PTRS_PER_PMD && get_next_vma(walk, PUD_MASK, PMD_SIZE, &start, &end))
++		goto restart;
++}
++
++static int walk_pud_range(p4d_t *p4d, unsigned long start, unsigned long end,
++			  struct mm_walk *walk)
++{
++	int i;
++	pud_t *pud;
++	unsigned long addr;
++	unsigned long next;
++	struct lru_gen_mm_walk *priv = walk->private;
++
++	VM_BUG_ON(p4d_leaf(*p4d));
++
++	pud = pud_offset(p4d, start & P4D_MASK);
++restart:
++	for (i = pud_index(start), addr = start; addr != end; i++, addr = next) {
++		pud_t val = READ_ONCE(pud[i]);
++
++		next = pud_addr_end(addr, end);
++
++		if (!pud_present(val) || WARN_ON_ONCE(pud_leaf(val)))
++			continue;
++
++		walk_pmd_range(&val, addr, next, walk);
++
++		if (priv->batched >= MAX_LRU_BATCH) {
++			end = (addr | ~PUD_MASK) + 1;
++			goto done;
++		}
++	}
++
++	if (i < PTRS_PER_PUD && get_next_vma(walk, P4D_MASK, PUD_SIZE, &start, &end))
++		goto restart;
++
++	end = round_up(end, P4D_SIZE);
 +done:
-+	if (*iter && !mm)
-+		mm_state->nr_walkers--;
-+	if (!*iter && mm)
-+		mm_state->nr_walkers++;
++	/* rounded-up boundaries can wrap to 0 */
++	priv->next_addr = end && walk->vma ? max(end, walk->vma->vm_start) : 0;
 +
-+	if (mm_state->nr_walkers)
-+		last = false;
++	return -EAGAIN;
++}
 +
-+	if (mm && first)
-+		clear_bloom_filter(lruvec, walk->max_seq + 1);
++static void walk_mm(struct lruvec *lruvec, struct mm_struct *mm, struct lru_gen_mm_walk *walk)
++{
++	static const struct mm_walk_ops mm_walk_ops = {
++		.test_walk = should_skip_vma,
++		.p4d_entry = walk_pud_range,
++	};
 +
-+	if (*iter || last)
-+		reset_mm_stats(lruvec, walk, last);
++	int err;
++#ifdef CONFIG_MEMCG
++	struct mem_cgroup *memcg = lruvec_memcg(lruvec);
++#endif
 +
-+	spin_unlock(&mm_list->lock);
++	walk->next_addr = FIRST_USER_ADDRESS;
 +
-+	*iter = mm;
++	do {
++		unsigned long start = walk->next_addr;
++		unsigned long end = mm->highest_vm_end;
 +
-+	return last;
++		err = -EBUSY;
++
++		rcu_read_lock();
++#ifdef CONFIG_MEMCG
++		if (memcg && atomic_read(&memcg->moving_account))
++			goto contended;
++#endif
++		if (!mmap_read_trylock(mm))
++			goto contended;
++
++		err = walk_page_range(mm, start, end, &mm_walk_ops, walk);
++
++		mmap_read_unlock(mm);
++
++		if (walk->batched) {
++			spin_lock_irq(&lruvec->lru_lock);
++			reset_batch_size(lruvec, walk);
++			spin_unlock_irq(&lruvec->lru_lock);
++		}
++contended:
++		rcu_read_unlock();
++
++		cond_resched();
++	} while (err == -EAGAIN && walk->next_addr && !mm_is_oom_victim(mm));
++}
++
++static struct lru_gen_mm_walk *alloc_mm_walk(void)
++{
++	if (!current->reclaim_state || !current->reclaim_state->mm_walk)
++		return kvzalloc(sizeof(struct lru_gen_mm_walk), GFP_KERNEL);
++
++	return current->reclaim_state->mm_walk;
++}
++
++static void free_mm_walk(struct lru_gen_mm_walk *walk)
++{
++	if (!current->reclaim_state || !current->reclaim_state->mm_walk)
++		kvfree(walk);
++}
++
++static void inc_min_seq(struct lruvec *lruvec)
++{
++	int gen, type;
++	struct lru_gen_struct *lrugen = &lruvec->lrugen;
++
++	VM_BUG_ON(!seq_is_valid(lruvec));
++
++	for (type = 0; type < ANON_AND_FILE; type++) {
++		if (get_nr_gens(lruvec, type) != MAX_NR_GENS)
++			continue;
++
++		WRITE_ONCE(lrugen->min_seq[type], lrugen->min_seq[type] + 1);
++	}
++}
++
++static bool try_to_inc_min_seq(struct lruvec *lruvec, bool can_swap)
++{
++	int gen, type, zone;
++	bool success = false;
++	struct lru_gen_struct *lrugen = &lruvec->lrugen;
++	DEFINE_MIN_SEQ(lruvec);
++
++	VM_BUG_ON(!seq_is_valid(lruvec));
++
++	for (type = !can_swap; type < ANON_AND_FILE; type++) {
++		while (lrugen->max_seq >= min_seq[type] + MIN_NR_GENS) {
++			gen = lru_gen_from_seq(min_seq[type]);
++
++			for (zone = 0; zone < MAX_NR_ZONES; zone++) {
++				if (!list_empty(&lrugen->lists[gen][type][zone]))
++					goto next;
++			}
++
++			min_seq[type]++;
++		}
++next:
++		;
++	}
++
++	/* see the comment in seq_is_valid() */
++	if (can_swap) {
++		min_seq[0] = min(min_seq[0], min_seq[1]);
++		min_seq[1] = max(min_seq[0], lrugen->min_seq[1]);
++	}
++
++	for (type = !can_swap; type < ANON_AND_FILE; type++) {
++		if (min_seq[type] == lrugen->min_seq[type])
++			continue;
++
++		WRITE_ONCE(lrugen->min_seq[type], min_seq[type]);
++		success = true;
++	}
++
++	return success;
++}
++
++static void inc_max_seq(struct lruvec *lruvec, unsigned long max_seq)
++{
++	int prev, next;
++	int type, zone;
++	struct lru_gen_struct *lrugen = &lruvec->lrugen;
++
++	spin_lock_irq(&lruvec->lru_lock);
++
++	VM_BUG_ON(!seq_is_valid(lruvec));
++
++	if (max_seq != lrugen->max_seq)
++		goto unlock;
++
++	inc_min_seq(lruvec);
++
++	/* update the active/inactive lru sizes for compatibility */
++	prev = lru_gen_from_seq(lrugen->max_seq - 1);
++	next = lru_gen_from_seq(lrugen->max_seq + 1);
++
++	for (type = 0; type < ANON_AND_FILE; type++) {
++		for (zone = 0; zone < MAX_NR_ZONES; zone++) {
++			enum lru_list lru = type * LRU_FILE;
++			long delta = lrugen->nr_pages[prev][type][zone] -
++				     lrugen->nr_pages[next][type][zone];
++
++			if (!delta)
++				continue;
++
++			lru_gen_update_size(lruvec, lru, zone, delta);
++			lru_gen_update_size(lruvec, lru + LRU_ACTIVE, zone, -delta);
++		}
++	}
++
++	WRITE_ONCE(lrugen->timestamps[next], jiffies);
++	/* make sure preceding modifications appear */
++	smp_store_release(&lrugen->max_seq, lrugen->max_seq + 1);
++unlock:
++	spin_unlock_irq(&lruvec->lru_lock);
++}
++
++static bool try_to_inc_max_seq(struct lruvec *lruvec, unsigned long max_seq,
++			       struct scan_control *sc, bool can_swap, bool full_scan)
++{
++	bool last;
++	struct lru_gen_mm_walk *walk;
++	struct mm_struct *mm = NULL;
++	struct lru_gen_struct *lrugen = &lruvec->lrugen;
++
++	VM_BUG_ON(max_seq > READ_ONCE(lrugen->max_seq));
++
++	/*
++	 * If the hardware doesn't automatically set the accessed bit, fallback
++	 * to lru_gen_look_around(), which only clears the accessed bit in a
++	 * handful of PTEs. Spreading the work out over a period of time usually
++	 * is less efficient, but it avoids bursty page faults.
++	 */
++	if (!full_scan && !arch_has_hw_pte_young(false)) {
++		inc_max_seq(lruvec, max_seq);
++		return true;
++	}
++
++	walk = alloc_mm_walk();
++	if (!walk)
++		return false;
++
++	walk->lruvec = lruvec;
++	walk->max_seq = max_seq;
++	walk->can_swap = can_swap;
++	walk->full_scan = full_scan;
++
++	do {
++		last = get_next_mm(lruvec, walk, &mm);
++		if (mm)
++			walk_mm(lruvec, mm, walk);
++
++		cond_resched();
++	} while (mm);
++
++	free_mm_walk(walk);
++
++	if (!last) {
++		if (!current_is_kswapd() && sc->priority < DEF_PRIORITY - 2)
++			wait_event_killable(lruvec->mm_state.wait,
++					    max_seq < READ_ONCE(lrugen->max_seq));
++
++		return max_seq < READ_ONCE(lrugen->max_seq);
++	}
++
++	VM_BUG_ON(max_seq != READ_ONCE(lrugen->max_seq));
++
++	inc_max_seq(lruvec, max_seq);
++	/* either this sees any waiters or they will see updated max_seq */
++	if (wq_has_sleeper(&lruvec->mm_state.wait))
++		wake_up_all(&lruvec->mm_state.wait);
++
++	wakeup_flusher_threads(WB_REASON_VMSCAN);
++
++	return true;
++}
++
++static long get_nr_evictable(struct lruvec *lruvec, unsigned long max_seq, unsigned long *min_seq,
++			     struct scan_control *sc, bool can_swap, bool *need_aging)
++{
++	int gen, type, zone;
++	long max = 0;
++	long min = 0;
++	struct lru_gen_struct *lrugen = &lruvec->lrugen;
++
++	/*
++	 * The upper bound of evictable pages is all eligible pages; the lower
++	 * bound is aged eligible file pages. The aging is due if the number of
++	 * aged generations and the number of aged eligible file pages are both
++	 * low.
++	 */
++	for (type = !can_swap; type < ANON_AND_FILE; type++) {
++		unsigned long seq;
++
++		for (seq = min_seq[type]; seq <= max_seq; seq++) {
++			long size = 0;
++
++			gen = lru_gen_from_seq(seq);
++
++			for (zone = 0; zone <= sc->reclaim_idx; zone++)
++				size += READ_ONCE(lrugen->nr_pages[gen][type][zone]);
++
++			max += size;
++			if (type && max_seq >= seq + MIN_NR_GENS)
++				min += size;
++		}
++	}
++
++	*need_aging = max_seq <= min_seq[1] + MIN_NR_GENS && min < MIN_LRU_BATCH;
++
++	return max > 0 ? max : 0;
++}
++
++static bool age_lruvec(struct lruvec *lruvec, struct scan_control *sc,
++		       unsigned long min_ttl)
++{
++	bool need_aging;
++	long nr_to_scan;
++	struct mem_cgroup *memcg = lruvec_memcg(lruvec);
++	int swappiness = get_swappiness(memcg);
++	DEFINE_MAX_SEQ(lruvec);
++	DEFINE_MIN_SEQ(lruvec);
++
++	if (mem_cgroup_below_min(memcg))
++		return false;
++
++	if (min_ttl) {
++		int gen = lru_gen_from_seq(min_seq[1]);
++		unsigned long birth = READ_ONCE(lruvec->lrugen.timestamps[gen]);
++
++		if (time_is_after_jiffies(birth + min_ttl))
++			return false;
++	}
++
++	nr_to_scan = get_nr_evictable(lruvec, max_seq, min_seq, sc, swappiness, &need_aging);
++	if (!nr_to_scan)
++		return false;
++
++	nr_to_scan >>= sc->priority;
++
++	if (!mem_cgroup_online(memcg))
++		nr_to_scan++;
++
++	if (nr_to_scan && need_aging && (!mem_cgroup_below_low(memcg) || sc->memcg_low_reclaim))
++		try_to_inc_max_seq(lruvec, max_seq, sc, swappiness, false);
++
++	return true;
++}
++
++/* to protect the working set of the last N jiffies */
++static unsigned long lru_gen_min_ttl __read_mostly;
++
++static void lru_gen_age_node(struct pglist_data *pgdat, struct scan_control *sc)
++{
++	struct mem_cgroup *memcg;
++	bool success = false;
++	unsigned long min_ttl = READ_ONCE(lru_gen_min_ttl);
++
++	VM_BUG_ON(!current_is_kswapd());
++
++	current->reclaim_state->mm_walk = &pgdat->mm_walk;
++
++	memcg = mem_cgroup_iter(NULL, NULL, NULL);
++	do {
++		struct lruvec *lruvec = mem_cgroup_lruvec(memcg, pgdat);
++
++		if (age_lruvec(lruvec, sc, min_ttl))
++			success = true;
++
++		cond_resched();
++	} while ((memcg = mem_cgroup_iter(NULL, memcg, NULL)));
++
++	if (!success && mutex_trylock(&oom_lock)) {
++		struct oom_control oc = {
++			.gfp_mask = sc->gfp_mask,
++			.order = sc->order,
++		};
++
++		if (!oom_reaping_in_progress())
++			out_of_memory(&oc);
++
++		mutex_unlock(&oom_lock);
++	}
++
++	current->reclaim_state->mm_walk = NULL;
++}
++
++/*
++ * This function exploits spatial locality when shrink_page_list() walks the
++ * rmap. It scans the vicinity of a young PTE in a PTE table and promotes
++ * accessed pages. If the scan was done cacheline efficiently, it adds the PMD
++ * entry pointing to this PTE table to the Bloom filter. This process is a
++ * feedback loop from the eviction to the aging.
++ */
++void lru_gen_look_around(struct page_vma_mapped_walk *pvmw)
++{
++	int i;
++	pte_t *pte;
++	unsigned long start;
++	unsigned long end;
++	unsigned long addr;
++	struct lru_gen_mm_walk *walk;
++	int total = 0;
++	int young = 0;
++	struct mem_cgroup *memcg = page_memcg(pvmw->page);
++	struct pglist_data *pgdat = page_pgdat(pvmw->page);
++	struct lruvec *lruvec = mem_cgroup_lruvec(memcg, pgdat);
++	DEFINE_MAX_SEQ(lruvec);
++
++	lockdep_assert_held(pvmw->ptl);
++	VM_BUG_ON_PAGE(PageLRU(pvmw->page), pvmw->page);
++
++	walk = current->reclaim_state ? current->reclaim_state->mm_walk : NULL;
++	if (!walk)
++		return;
++
++	walk->max_seq = max_seq;
++
++	start = max(pvmw->address & PMD_MASK, pvmw->vma->vm_start);
++	end = pmd_addr_end(pvmw->address, pvmw->vma->vm_end);
++
++	if (end - start > MIN_LRU_BATCH * PAGE_SIZE) {
++		if (pvmw->address - start < MIN_LRU_BATCH * PAGE_SIZE / 2)
++			end = start + MIN_LRU_BATCH * PAGE_SIZE;
++		else if (end - pvmw->address < MIN_LRU_BATCH * PAGE_SIZE / 2)
++			start = end - MIN_LRU_BATCH * PAGE_SIZE;
++		else {
++			start = pvmw->address - MIN_LRU_BATCH * PAGE_SIZE / 2;
++			end = pvmw->address + MIN_LRU_BATCH * PAGE_SIZE / 2;
++		}
++	}
++
++	pte = pvmw->pte - (pvmw->address - start) / PAGE_SIZE;
++
++	lock_page_memcg(pvmw->page);
++	arch_enter_lazy_mmu_mode();
++
++	for (i = 0, addr = start; addr != end; i++, addr += PAGE_SIZE) {
++		struct folio *folio;
++		unsigned long pfn = pte_pfn(pte[i]);
++
++		total++;
++
++		if (!pte_present(pte[i]) || is_zero_pfn(pfn))
++			continue;
++
++		if (WARN_ON_ONCE(pte_devmap(pte[i]) || pte_special(pte[i])))
++			continue;
++
++		if (!pte_young(pte[i]))
++			continue;
++
++		VM_BUG_ON(!pfn_valid(pfn));
++		if (pfn < pgdat->node_start_pfn || pfn >= pgdat_end_pfn(pgdat))
++			continue;
++
++		folio = pfn_folio(pfn);
++		if (folio_nid(folio) != pgdat->node_id)
++			continue;
++
++		if (folio_memcg_rcu(folio) != memcg)
++			continue;
++
++		VM_BUG_ON(addr < pvmw->vma->vm_start || addr >= pvmw->vma->vm_end);
++		if (ptep_test_and_clear_young(pvmw->vma, addr, pte + i)) {
++			folio_update_gen(folio, walk);
++			young++;
++		}
++
++		if (pte_dirty(pte[i]) && !folio_test_dirty(folio) &&
++		    !(folio_test_anon(folio) && folio_test_swapbacked(folio) &&
++		      !folio_test_swapcache(folio)))
++			__set_bit(i, walk->bitmap);
++	}
++
++	arch_leave_lazy_mmu_mode();
++	unlock_page_memcg(pvmw->page);
++
++	if (suitable_to_scan(total, young))
++		set_bloom_filter(lruvec, max_seq, pvmw->pmd);
++
++	for_each_set_bit(i, walk->bitmap, MIN_LRU_BATCH)
++		set_page_dirty(pte_page(pte[i]));
++
++	bitmap_zero(walk->bitmap, MIN_LRU_BATCH);
 +}
 +
  /******************************************************************************
   *                          state change
   ******************************************************************************/
-@@ -3252,6 +3588,7 @@ void lru_gen_init_state(struct mem_cgroup *memcg, struct lruvec *lruvec)
- 	int i;
- 	int gen, type, zone;
- 	struct lru_gen_struct *lrugen = &lruvec->lrugen;
-+	struct lru_gen_mm_list *mm_list = get_mm_list(memcg);
- 
- 	lrugen->max_seq = MIN_NR_GENS + 1;
- 	lrugen->enabled = lru_gen_enabled();
-@@ -3261,6 +3598,11 @@ void lru_gen_init_state(struct mem_cgroup *memcg, struct lruvec *lruvec)
- 
- 	for_each_gen_type_zone(gen, type, zone)
- 		INIT_LIST_HEAD(&lrugen->lists[gen][type][zone]);
-+
-+	lruvec->mm_state.seq = MIN_NR_GENS;
-+	lruvec->mm_state.head = &mm_list->fifo;
-+	lruvec->mm_state.tail = &mm_list->fifo;
-+	init_waitqueue_head(&lruvec->mm_state.wait);
- }
- 
- #ifdef CONFIG_MEMCG
-@@ -3268,6 +3610,9 @@ void lru_gen_init_memcg(struct mem_cgroup *memcg)
- {
- 	int nid;
- 
-+	INIT_LIST_HEAD(&memcg->mm_list.fifo);
-+	spin_lock_init(&memcg->mm_list.lock);
-+
- 	for_each_node(nid) {
- 		struct lruvec *lruvec = get_lruvec(memcg, nid);
- 
-@@ -3280,10 +3625,16 @@ void lru_gen_free_memcg(struct mem_cgroup *memcg)
- 	int nid;
- 
- 	for_each_node(nid) {
-+		int i;
- 		struct lruvec *lruvec = get_lruvec(memcg, nid);
- 
- 		VM_BUG_ON(memchr_inv(lruvec->lrugen.nr_pages, 0,
- 				     sizeof(lruvec->lrugen.nr_pages)));
-+
-+		for (i = 0; i < NR_BLOOM_FILTERS; i++) {
-+			bitmap_free(lruvec->mm_state.filters[i]);
-+			lruvec->mm_state.filters[i] = NULL;
-+		}
- 	}
- }
- #endif
-@@ -3292,6 +3643,7 @@ static int __init init_lru_gen(void)
- {
- 	BUILD_BUG_ON(MIN_NR_GENS + 1 >= MAX_NR_GENS);
- 	BUILD_BUG_ON(BIT(LRU_GEN_WIDTH) <= MAX_NR_GENS);
-+	BUILD_BUG_ON(sizeof(MM_STAT_CODES) != NR_MM_STATS + 1);
- 
- 	return 0;
+@@ -3649,6 +4534,12 @@ static int __init init_lru_gen(void)
  };
+ late_initcall(init_lru_gen);
+ 
++#else
++
++static void lru_gen_age_node(struct pglist_data *pgdat, struct scan_control *sc)
++{
++}
++
+ #endif /* CONFIG_LRU_GEN */
+ 
+ static void shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc)
+@@ -4536,6 +5427,11 @@ static void age_active_anon(struct pglist_data *pgdat,
+ 	struct mem_cgroup *memcg;
+ 	struct lruvec *lruvec;
+ 
++	if (lru_gen_enabled()) {
++		lru_gen_age_node(pgdat, sc);
++		return;
++	}
++
+ 	if (!can_age_anon_pages(pgdat, sc))
+ 		return;
+ 
 -- 
 2.34.1.448.ga2b2bfdf31-goog
 

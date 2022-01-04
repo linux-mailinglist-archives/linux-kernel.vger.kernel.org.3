@@ -2,84 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 404BD483C02
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 07:46:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E36AB483C0C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 07:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233019AbiADGqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 01:46:39 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:17320 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231807AbiADGqi (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 01:46:38 -0500
-Received: from dggpeml500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JSjmY692mz9s0r;
-        Tue,  4 Jan 2022 14:45:33 +0800 (CST)
-Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500022.china.huawei.com (7.185.36.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 4 Jan 2022 14:46:35 +0800
-Received: from [10.67.103.212] (10.67.103.212) by
- dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 4 Jan 2022 14:46:34 +0800
-Subject: Re: [PATCH 1/3] Documentation: update debugfs doc for Hisilicon SEC
-To:     Greg KH <gregkh@linuxfoundation.org>
-References: <20211225062718.41155-1-yekai13@huawei.com>
- <20211225062718.41155-2-yekai13@huawei.com> <YchH4g+mhfRQKXoX@kroah.com>
-CC:     <herbert@gondor.apana.org.au>, <linux-crypto@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <wangzhou1@hisilicon.com>,
-        <xuzaibo@huawei.com>
-From:   "yekai(A)" <yekai13@huawei.com>
-Message-ID: <1575f22a-f11c-3507-bd32-def3844e9bab@huawei.com>
-Date:   Tue, 4 Jan 2022 14:46:34 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        id S233104AbiADGrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 01:47:18 -0500
+Received: from verein.lst.de ([213.95.11.211]:48808 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233059AbiADGrN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 01:47:13 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id C4E6168AFE; Tue,  4 Jan 2022 07:47:08 +0100 (CET)
+Date:   Tue, 4 Jan 2022 07:47:08 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: make pdfdocs fails on Debian stable
+Message-ID: <20220104064708.GA15446@lst.de>
+References: <20220103163050.GA3151@lst.de> <20220103175814.5b22a6a7@coco.lan> <20220103171108.GB3422@lst.de> <20220103215831.2e65bb94@coco.lan>
 MIME-Version: 1.0
-In-Reply-To: <YchH4g+mhfRQKXoX@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.212]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
+In-Reply-To: <20220103215831.2e65bb94@coco.lan>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 03, 2022 at 09:58:31PM +0100, Mauro Carvalho Chehab wrote:
+> Ah, the error is specific to RCU.tex then?
 
+Yes.
 
-On 2021/12/26 18:45, Greg KH wrote:
-> On Sat, Dec 25, 2021 at 02:27:16PM +0800, Kai Ye wrote:
->> Update documentation describing DebugFS for function's QoS limiting.
->>
->> Signed-off-by: Kai Ye <yekai13@huawei.com>
->> ---
->>  Documentation/ABI/testing/debugfs-hisi-sec | 10 ++++++++++
->>  1 file changed, 10 insertions(+)
->>
->> diff --git a/Documentation/ABI/testing/debugfs-hisi-sec b/Documentation/ABI/testing/debugfs-hisi-sec
->> index 85feb4408e0f..9e50ceab94d2 100644
->> --- a/Documentation/ABI/testing/debugfs-hisi-sec
->> +++ b/Documentation/ABI/testing/debugfs-hisi-sec
->> @@ -14,6 +14,16 @@ Description:    One SEC controller has one PF and multiple VFs, each function
->>  		qm refers to.
->>  		Only available for PF.
->>
->> +What:           /sys/kernel/debug/hisi_sec2/<bdf>/alg_qos
->> +Date:           Jun 2021
->> +Contact:        linux-crypto@vger.kernel.org
->
-> No tabs?  Why not?
->
-> thanks,
->
-> greg k-h
-> .
->
+> 
+> You'll need to re-run xelatex with -interaction=interactive, in
+> order to be able to identify what's the root cause.
+> 
+> You could do this by using LATEXOPTS, e. g.:
+> 
+> 	$ make SPHINXDIRS=RCU LATEXOPTS="-interaction=interactive" pdfdocs
+> 
+> With that, LaTeX will stop at the offending line from the .tex file.
+> 
+> On a quick test here, I'm getting these at Fedora 35:
+> 
+> 	(/usr/share/texlive/texmf-dist/tex/latex/l3packages/xtemplate/xtemplate.sty)
+> 
+> 	! LaTeX Error: File `ctexhook.sty' not found.
+> 
+> 	Type X to quit or <RETURN> to proceed,
+> 	or enter new name. (Default extension: sty)
+> 
+> It seems that a recent change (probably to better address issues with 
+> Chinese and Japanese translation) added an extra dependency to some
+> stylesheet.
+> 
+> I solved it by installing this package: "texlive-ctex".
 
-I'm read the way it was written before，
-i will use the tabs on all Hisilicon Accelerator documentation.
+There is no texlive-ctex on Debian, but ctexhook.sty is installed as
+part of texlive-extra-utils.  Here are the last lines from the
+interactive run:
 
-thanks
-Kai.
+(/usr/share/texlive/texmf-dist/tex/latex/ctex/ctexhook.sty)
+(/usr/share/texlive/texmf-dist/tex/xelatex/xecjk/xeCJK.cfg))
+(/usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty)
+Writing index file RCU.idx
+(./RCU.aux)
+Runaway argument?
+{\contentsline {chapter}{\numberline {16}A Tour Through TREE\_RCU’s\ETC.
+! File ended while scanning use of \@writefile.
+<inserted text> 
+                \par 
+l.191 \begin{document}
+
+? 
+

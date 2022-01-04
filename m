@@ -2,111 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 865A448428F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:34:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A789484297
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233647AbiADNeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 08:34:46 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:53486 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233661AbiADNem (ORCPT
+        id S233546AbiADNhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 08:37:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229700AbiADNhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 08:34:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1641303282; x=1672839282;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dFfeySson+DcY9L2qqyi99YbeNz8/S8kE5nTdweljcA=;
-  b=qB+WecfuVDkTETgGZo28UN3GyVd1CYe+6tT3FuglVIKJqDUMembgRaYs
-   ESTR11V0zc3ryHcscUSTPkXXbP923wwU3wTp4coqSc6rETTKBuqDnZ/lq
-   +XlpuDmSOUxJnaN12jkcvzJAbMzhoH0zbHim9ZsPMV2U16sUQkVyoiwsX
-   9awr4zw7MQm05Wh4n8xFfMAy81bY0Juc6C1MSe7mTXmSvaH5qFCwipPw1
-   yqdTQa/7Lqty4lcS7IxLfcAIMroA3+BVfnPGXWDDsfjaPMh7O97HRX5c9
-   9FniMXoisR5XK2e8lGG7Jg2c+nwZW17e+Vjj/k7gxU5VPgWf9xlwy6/wc
-   Q==;
-IronPort-SDR: Zm9ryX6ThUQ435XZWTQeM8NY6E4nqwJXf43jLv9bWD0CZMCWIvVEHxsXglb05H3MKmd8tjKiIp
- 1zhf8ceh7WlSN3+Y93y0Qum5Gfq31RqDnj0yAK9E6aAWh8LUwgRdt/XnQUDzE9D003Gt0WcglO
- syrZ/NtfS0nZjksycxcGhy8cNDPe1B2hiX42MUk2fq6bLrmhJHuAXHXwOVqmyACTFDCewkig59
- 7lgUmITeSHUnnJ3EmxMEaIxbKgg/YAg8+BfsDxzkwzw9UzrtpV/CO6iHzBkkMdjU/Cj3w8L7Cu
- oKZNEfDEdFT5LV6yWAduZwja
-X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
-   d="scan'208";a="144275914"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Jan 2022 06:34:41 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 4 Jan 2022 06:34:41 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Tue, 4 Jan 2022 06:34:40 -0700
-Date:   Tue, 4 Jan 2022 14:36:54 +0100
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "vivien.didelot@gmail.com" <vivien.didelot@gmail.com>,
-        "andrew@lunn.ch" <andrew@lunn.ch>
-Subject: Re: [PATCH net-next v2 3/3] net: lan966x: Extend switchdev with mdb
- support
-Message-ID: <20220104133654.oaqtrnee6bxfs6fe@soft-dev3-1.localhost>
-References: <20220104101849.229195-1-horatiu.vultur@microchip.com>
- <20220104101849.229195-4-horatiu.vultur@microchip.com>
- <20220104111209.2ky2n5gdqaxzf5fh@skbuf>
+        Tue, 4 Jan 2022 08:37:13 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C417AC061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 05:37:13 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id f5so3368151pgk.12
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 05:37:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=D736xcW6mnSzdCeNa4cuzz73/79ln4mEm4aUwrA4o7g=;
+        b=H9KIaxj+4rUigwIZEcx9omWefyC8Cr+m2kkulm/BfX3ayl6owe1bEUUKGCG/8IrWKi
+         X+Y+gJk4PgNmY3f6SVp24N5TW2QGt2kflhnSH/J5dWBxw8RTOqd0lzsCagYumzAdJ4p0
+         gN9y9y/5GOr9FOY4navQhMx0B4Vt2cauY5MuCHy2KiGFoi+dIGH6xX5NvMaIRIs3TT1h
+         iRW1TZMRHSm4ZpzLoB+8P61blWZBpR3awOWhqbLJLiLon+bHkmp5aQ8SIRK1OWEb1CWI
+         GqUAtQCebmlmF2kV4OC+1CA+KxvBjEgoxp49ehpLx8lxCtnM04MyZXXCSnmPJtZKrPwy
+         NBxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=D736xcW6mnSzdCeNa4cuzz73/79ln4mEm4aUwrA4o7g=;
+        b=MT+TPsC8YlGaggexUdNAS7FZiFNi3DhuVzeJbprEbSourB6qZNGV7gN0UF9s0HCp5u
+         1nF2uFXoXihjrWHiUYttcGsiJWcxPsOqbRKXFrZN+qnSLcSIeSK3Z4Z3QDSOb7+DVryq
+         tZuNAA6txfmgQdkAns0oFU7W60WV9Jv3knt3FWF/lB9caArDyucgpuJr4dY3GvaJm+P1
+         AWFVS26NUu/qapVf9HcIYElAzp5idytE2N0Sgw+wT7okPpQKtm+nYfCj7xXRUIDCLtWP
+         qDf3Mky19dbdyNPJDenPuqI8VO3EL0EGmzZRnUkFxioYOlZBR0Wtyq04u2lmYFtGOmYu
+         yGCg==
+X-Gm-Message-State: AOAM532rTp76tkszbRgSCQJFL313cbmO+Nmw8PJ1+s23YEwwY96siFQS
+        Np/5YFDtE79IasJFle/+KN7wj2O4ZT6GJhAiGE58EQ==
+X-Google-Smtp-Source: ABdhPJws1bqBeVSXlUmBPeCwIC2GMIkSO+RxkrQ9CkAgsC669S9+4XmAOnJ4iVvmArIN/4+CNqraGyHUpsTWRPnDUY4=
+X-Received: by 2002:a63:854a:: with SMTP id u71mr43809083pgd.201.1641303433298;
+ Tue, 04 Jan 2022 05:37:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20220104111209.2ky2n5gdqaxzf5fh@skbuf>
+References: <20211119015804.3824027-1-xji@analogixsemi.com>
+In-Reply-To: <20211119015804.3824027-1-xji@analogixsemi.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Tue, 4 Jan 2022 14:37:02 +0100
+Message-ID: <CAG3jFytg88mWgA24ce4CbPKDA7HDdXOjC=AVxYrhv1c0Z5GTPA@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/bridge: anx7625: Check GPIO description to avoid crash
+To:     Xin Ji <xji@analogixsemi.com>
+Cc:     narmstrong@baylibre.com, dan.carpenter@oracle.com,
+        laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
+        sam@ravnborg.org, pihsun@chromium.org, tzungbi@google.com,
+        maxime@cerno.tech, drinkcat@google.com, hsinyi@chromium.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        bliang@analogixsemi.com, qwen@analogixsemi.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 01/04/2022 11:12, Vladimir Oltean wrote:
-> 
-> On Tue, Jan 04, 2022 at 11:18:49AM +0100, Horatiu Vultur wrote:
-> > +static int lan966x_mdb_ip_del(struct lan966x_port *port,
-> > +                           const struct switchdev_obj_port_mdb *mdb,
-> > +                           enum macaccess_entry_type type)
-> > +{
-> > +     bool cpu_port = netif_is_bridge_master(mdb->obj.orig_dev);
-> > +     struct lan966x *lan966x = port->lan966x;
-> > +     struct lan966x_mdb_entry *mdb_entry;
-> > +     unsigned char mac[ETH_ALEN];
-> > +
-> > +     mdb_entry = lan966x_mdb_entry_get(lan966x, mdb->addr, mdb->vid);
-> > +     if (!mdb_entry)
-> > +             return -ENOENT;
-> > +
-> > +     lan966x_mdb_encode_mac(mac, mdb_entry, type);
-> > +     lan966x_mac_forget(lan966x, mac, mdb_entry->vid, type);
-> > +
-> > +     if (cpu_port)
-> > +             mdb_entry->cpu_copy--;
-> 
-> Can you code this in such a way that you don't forget and then re-learn
-> the entry if you only do a cpu_copy-- which doesn't reach zero?
+On Fri, 19 Nov 2021 at 02:58, Xin Ji <xji@analogixsemi.com> wrote:
+>
+> As GPIO probe function "devm_gpiod_get_optional()" may return error
+> code, driver should identify GPIO desc as NULL to avoid crash.
+>
+> Acked-by: Tzung-Bi Shih <tzungbi@google.com>
+> Signed-off-by: Xin Ji <xji@analogixsemi.com>
+> ---
+>  drivers/gpu/drm/bridge/analogix/anx7625.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> index 001fb39d9919..652ae814246d 100644
+> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> @@ -1098,9 +1098,18 @@ static void anx7625_init_gpio(struct anx7625_data *platform)
+>         /* Gpio for chip power enable */
+>         platform->pdata.gpio_p_on =
+>                 devm_gpiod_get_optional(dev, "enable", GPIOD_OUT_LOW);
+> +       if (IS_ERR_OR_NULL(platform->pdata.gpio_p_on)) {
+> +               DRM_DEV_DEBUG_DRIVER(dev, "no enable gpio found\n");
+> +               platform->pdata.gpio_p_on = NULL;
+> +       }
+> +
+>         /* Gpio for chip reset */
+>         platform->pdata.gpio_reset =
+>                 devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
+> +       if (IS_ERR_OR_NULL(platform->pdata.gpio_reset)) {
+> +               DRM_DEV_DEBUG_DRIVER(dev, "no reset gpio found\n");
+> +               platform->pdata.gpio_reset = NULL;
+> +       }
+>
+>         if (platform->pdata.gpio_p_on && platform->pdata.gpio_reset) {
+>                 platform->pdata.low_power_mode = 1;
+> --
+> 2.25.1
+>
 
-I think it is possible to do this. I will do that.
-
-> 
-> > +     else
-> > +             mdb_entry->ports &= ~BIT(port->chip_port);
-> > +
-> > +     if (!mdb_entry->ports && !mdb_entry->cpu_copy) {
-> > +             list_del(&mdb_entry->list);
-> > +             kfree(mdb_entry);
-> > +             return 0;
-> > +     }
-> > +
-> > +     lan966x_mdb_encode_mac(mac, mdb_entry, type);
-> > +     return lan966x_mac_ip_learn(lan966x, mdb_entry->cpu_copy,
-> > +                                 mac, mdb_entry->vid, type);
-> > +}
-
--- 
-/Horatiu
+Reviewed-by: Robert Foss <robert.foss@linaro.org>

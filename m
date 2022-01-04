@@ -2,165 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9354B4842E1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:57:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 621B14842E3
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233905AbiADN5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 08:57:10 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:55482 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiADN5J (ORCPT
+        id S233914AbiADN6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 08:58:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229655AbiADN57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 08:57:09 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16BA4B810B3;
-        Tue,  4 Jan 2022 13:57:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47123C36AED;
-        Tue,  4 Jan 2022 13:57:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641304626;
-        bh=OZ0f7tUVt0pRqeuyYIwF4uJjwkRgSIkddO3+gxXzU28=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XPTU3Ic2LMotntRgbC7j3XdoRwKaXQd3itYu9WeU6v5J4oCfm6dF1o1MFDUCyLshj
-         7k335DQFq5lyvm3hWVZLxHvwwr4bGiuvzgwxEjTwjl/QZ395arVRRET3BDh84lZN/j
-         Zkey+mFkYaqwBOkKXUWrgXUlxjCc4hh0PxjHCOqtWOnO8FlWpVtt9iz1FIlqQn6UR8
-         JNp4NvwdkNAHuAbQx5h2wCVBz8gBkixppBOIcwbPv7dLcb2mF1RZYMYf1DyM9z1vo4
-         lXlq/dhdcSBsy8hfXVuvKT8DvJCNvJJp6YLP6yZPHHQRz6I6p+d3HtiaufgZ7l5KNu
-         kIadDSUcXpQow==
-Date:   Tue, 4 Jan 2022 13:56:59 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Rob Herring <robh@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vince Weaver <vincent.weaver@maine.edu>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-perf-users@vger.kernel.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH v13 3/5] arm64: perf: Add userspace counter access
- disable switch
-Message-ID: <20220104135658.GC1827@willie-the-truck>
-References: <20211208201124.310740-1-robh@kernel.org>
- <20211208201124.310740-4-robh@kernel.org>
- <CAMuHMdVcDxR9sGzc5pcnORiotonERBgc6dsXZXMd6wTvLGA9iw@mail.gmail.com>
+        Tue, 4 Jan 2022 08:57:59 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B864C061761;
+        Tue,  4 Jan 2022 05:57:59 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id i22so76337544wrb.13;
+        Tue, 04 Jan 2022 05:57:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=59Ui4pp6p+B2nOc6YIpTXZ1z31kKMahzP0uMH6D38aY=;
+        b=TQ7PiJhnTdkSwgadAr1WdaIR5NgxeFDWv1UsLO/+OoRruU2ROi3bJKmULSHxns20ky
+         bzodtNTc+jeeAFee1eCl3fAleUolVIcp7xpfSN/qcx+QouFRVCucJC2+TXOCLyNaLRyd
+         UQlwzLMalnCiJE0p6j0k5+9X/ivG/WpZ5gR74JcT8oQ4rfFsodykv3fits9aWxLIy0je
+         GrWCbhA3yQ6GDSTlU1SFS6sfF3UC1CpJoxN9HB5SRYB45mEch8OodyVzXOZF6c3S1API
+         2liWqSxnCRgae+v/BHDk8oshyqsLSyX0YOimj9G768JJWmuwehhzBoT9ccASacWM/8Uw
+         kEkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=59Ui4pp6p+B2nOc6YIpTXZ1z31kKMahzP0uMH6D38aY=;
+        b=g4zck0zy/HrhsrgV6EcZZCRBSfv1zFh2NPT1Ebab5T78iDyW/9Xux5a/O76qe3IcFn
+         GSfdAPUzPact09oT1CWP1g0GUjo+WFAr8GH0S1ouR8NcuPxro0AkEuIXNOmg9ktHk28u
+         wUZhLahxsq0b71yVHSXAPGQTs7BdhRi7jN5KJKGhPxm0cMgZWmjuBRulpIJ26ukivtQ5
+         Qgoa7oVw1ld+j3oyHUMPXlmsP4ZYVR1h+VaMbQRsRiienUiU1jueroWOiH4x8LOcQ0sw
+         eYhRZ2dehwsoPPFsV0jca7X1a+ESDh+9bMSojEEKqL2v3TvrOHaOMGGEt+bS2a/XBni9
+         yT6Q==
+X-Gm-Message-State: AOAM531qX/15H8rWjHgVIgIvON0bgcpJj2iqinInG9inSl4tbzgfUpor
+        GG6VcxuOsNfW/2LlsZlCuw9OPv8KQnQ=
+X-Google-Smtp-Source: ABdhPJx9Py9a5una5CMiAiQndYcFv41ilNpSEIX8LCYsrAjyRBjI1DZCM9F1XPo0eCbdtbVF8CP5Pw==
+X-Received: by 2002:a5d:4ccb:: with SMTP id c11mr40824831wrt.689.1641304677840;
+        Tue, 04 Jan 2022 05:57:57 -0800 (PST)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id a20sm32550780wmb.27.2022.01.04.05.57.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 05:57:57 -0800 (PST)
+Date:   Tue, 4 Jan 2022 14:57:55 +0100
+From:   Corentin Labbe <clabbe.montjoie@gmail.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     linus.walleij@linaro.org, ulli.kroll@googlemail.com,
+        kuba@kernel.org, davem@davemloft.net, andrew@lunn.ch,
+        hkallweit1@gmail.com, linux-arm-kernel@lists.infradead.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: net: phy: marvell: network working with generic PHY and not with
+ marvell PHY
+Message-ID: <YdRSY50wyF7u8KCA@Red>
+References: <YdQoOSXS98+Af1wO@Red>
+ <YdQsJnfqjaFrtC0m@shell.armlinux.org.uk>
+ <YdQwexJVfrdzEfZK@Red>
+ <YdQydK4GhI0P5RYL@shell.armlinux.org.uk>
+ <YdQ5i+//UITSbxS/@shell.armlinux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdVcDxR9sGzc5pcnORiotonERBgc6dsXZXMd6wTvLGA9iw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YdQ5i+//UITSbxS/@shell.armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
-
-On Tue, Dec 28, 2021 at 12:07:02PM +0100, Geert Uytterhoeven wrote:
-> On Wed, Dec 8, 2021 at 9:19 PM Rob Herring <robh@kernel.org> wrote:
-> > Like x86, some users may want to disable userspace PMU counter
-> > altogether. Add a sysctl 'perf_user_access' file to control userspace
-> > counter access. The default is '0' which is disabled. Writing '1'
-> > enables access.
-> >
-> > Note that x86 supports globally enabling user access by writing '2' to
-> > /sys/bus/event_source/devices/cpu/rdpmc. As there's not existing
-> > userspace support to worry about, this shouldn't be necessary for Arm.
-> > It could be added later if the need arises.
+Le Tue, Jan 04, 2022 at 12:11:55PM +0000, Russell King (Oracle) a écrit :
+> On Tue, Jan 04, 2022 at 11:41:40AM +0000, Russell King (Oracle) wrote:
+> > On Tue, Jan 04, 2022 at 12:33:15PM +0100, Corentin Labbe wrote:
+> > > Le Tue, Jan 04, 2022 at 11:14:46AM +0000, Russell King (Oracle) a écrit :
+> > > > On Tue, Jan 04, 2022 at 11:58:01AM +0100, Corentin Labbe wrote:
+> > > > > Hello
+> > > > > 
+> > > > > I have a gemini SSI 1328 box which has a cortina ethernet MAC with a Marvell 88E1118 as given by:
+> > > > > Marvell 88E1118 gpio-0:01: attached PHY driver (mii_bus:phy_addr=gpio-0:01, irq=POLL)
+> > > > > So booting with CONFIG_MARVELL_PHY=y lead to a non-working network with link set at 1Gbit
+> > > > > Setting 'max-speed = <100>;' (as current state in mainline dtb) lead to a working network.
+> > > > > By not working, I mean kernel started with ip=dhcp cannot get an IP.
+> > > > 
+> > > > How is the PHY connected to the host (which interface mode?) If it's
+> > > > RGMII, it could be that the wrong RGMII interface mode is specified in
+> > > > DT.
+> > > > 
+> > > 
+> > > The PHY is set as RGMII in DT (arch/arm/boot/dts/gemini-ssi1328.dts)
+> > > The only change to the mainline dtb is removing the max-speed.
+> > 
+> > So, it's using "rgmii" with no delay configured at the PHY with the
+> > speed limited to 100Mbps. You then remove the speed limitation and
+> > it doesn't work at 1Gbps.
+> > 
+> > I think I've seen this on other platforms (imx6 + ar8035) when the
+> > RGMII delay is not correctly configured - it will work at slower
+> > speeds but not 1G.
+> > 
+> > The RGMII spec specifies that there will be a delay - and the delay can
+> > be introduced by either the MAC, PHY or by PCB track routing. It sounds
+> > to me like your boot environment configures the PHY to introduce the
+> > necessary delay, but then, because the DT "rgmii" mode means "no delay
+> > at the PHY" when you use the Marvell driver (which respects that), the
+> > Marvell driver configures the PHY for no delay, resulting in a non-
+> > working situation at 1G.
+> > 
+> > I would suggest checking how the boot environment configures the PHY,
+> > and change the "rgmii" mode in DT to match. There is a description of
+> > the four RGMII modes in Documentation/networking/phy.rst that may help
+> > understand what each one means.
 > 
-> Thanks for your patch, which is now commit e2012600810c9ded ("arm64:
-> perf: Add userspace counter access disable switch") in arm64/for-next/core.
+> Hmm. Sorry, I'm leading you stray. It looks like the 88E1118 code does
+> not program any delays depending on the interface mode, so changing that
+> will have no effect.
 > 
-> This is causing two issues on Renesas Salvator-XS with R-Car H3.
-> One during kernel boot:
+> I suspect, looking at m88e1118_config_init(), that the write to register
+> 0x15 in the MSCR page could be the problem.
 > 
->      hw perfevents: enabled with armv8_cortex_a53 PMU driver, 7
-> counters available
->     +sysctl duplicate entry: /kernel//perf_user_access
->     +CPU: 0 PID: 1 Comm: swapper/0 Not tainted
-> 5.16.0-rc3-arm64-renesas-00003-ge2012600810c #1420
->     +Hardware name: Renesas Salvator-X 2nd version board based on r8a77951 (DT)
->     +Call trace:
->     + dump_backtrace+0x0/0x190
->     + show_stack+0x14/0x20
->     + dump_stack_lvl+0x88/0xb0
->     + dump_stack+0x14/0x2c
->     + __register_sysctl_table+0x384/0x818
->     + register_sysctl+0x20/0x28
->     + armv8_pmu_init.constprop.0+0x118/0x150
->     + armv8_a57_pmu_init+0x1c/0x28
->     + arm_pmu_device_probe+0x1b4/0x558
->     + armv8_pmu_device_probe+0x18/0x20
->     + platform_probe+0x64/0xd0
->     + really_probe+0xb4/0x2f8
->     + __driver_probe_device+0x74/0xd8
->     + driver_probe_device+0x3c/0xe0
->     + __driver_attach+0x80/0x110
->     + bus_for_each_dev+0x6c/0xc0
->     + driver_attach+0x20/0x28
->     + bus_add_driver+0x138/0x1e0
->     + driver_register+0x60/0x110
->     + __platform_driver_register+0x24/0x30
->     + armv8_pmu_driver_init+0x18/0x20
->     + do_one_initcall+0x15c/0x31c
->     + kernel_init_freeable+0x2f0/0x354
->     + kernel_init+0x20/0x120
->     + ret_from_fork+0x10/0x20
->      hw perfevents: enabled with armv8_cortex_a57 PMU driver, 7
-> counters available
+> 0x15 is 21, which is MII_88E1121_PHY_MSCR_REG. In other Marvell PHYs,
+> bits 4 and 5 are the tx and rx delays, both of which are set. Looking
+> at m88e1121_config_aneg_rgmii_delays(), this would seem to indicate
+> that the PHY is being placed into rgmii-id mode.
 > 
-> Presumably the same entry is added twice, once for the A53 PMU,
-> and a second time for the A57 PMU?
+> Can you try changing:
+> 
+> 	err = phy_write(phydev, 0x15, 0x1070);
+> 
+> to:
+> 
+> 	err = phy_write(phydev, 0x15, 0x1040);
+> 
+> and see what happens? Maybe trying other combinations of bits 4 and 5
+> to find a working combination.
+> 
 
-Looks like it, and perhaps that's also what is confusing systemd?
-Rob -- how come you didn't see this during your testing?
-
-Anywho, please can you try the untested diff below?
-
-Thanks,
-
-Will
-
---->8
-
-diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
-index 81cc9f0e718a..639f632aaa66 100644
---- a/arch/arm64/kernel/perf_event.c
-+++ b/arch/arm64/kernel/perf_event.c
-@@ -1214,6 +1214,14 @@ static struct ctl_table armv8_pmu_sysctl_table[] = {
-        { }
- };
- 
-+static void armv8_pmu_register_sysctl_table(void)
-+{
-+       static u32 tbl_registered = 0;
-+
-+       if (!cmpxchg_relaxed(&tbl_registered, 0, 1))
-+               register_sysctl("kernel", armv8_pmu_sysctl_table);
-+}
-+
- static int armv8_pmu_init(struct arm_pmu *cpu_pmu, char *name,
-                          int (*map_event)(struct perf_event *event),
-                          const struct attribute_group *events,
-@@ -1248,8 +1256,7 @@ static int armv8_pmu_init(struct arm_pmu *cpu_pmu, char *name,
-        cpu_pmu->attr_groups[ARMPMU_ATTR_GROUP_CAPS] = caps ?
-                        caps : &armv8_pmuv3_caps_attr_group;
- 
--       register_sysctl("kernel", armv8_pmu_sysctl_table);
--
-+       armv8_pmu_register_sysctl_table();
-        return 0;
- }
- 
-
+I tried more than all combinaisons (0x1010, 0x1020, 0x1030, 0x1040, 0x1050, 0x1060) without success.
+A phy_read() just before the phy_write() give 0x1040.
+I have also removed the phy_write() without success.

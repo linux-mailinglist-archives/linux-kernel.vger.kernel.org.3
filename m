@@ -2,320 +2,329 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A27484410
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:01:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2F34842D0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234565AbiADPBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 10:01:54 -0500
-Received: from foss.arm.com ([217.140.110.172]:60418 "EHLO foss.arm.com"
+        id S233866AbiADNx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 08:53:29 -0500
+Received: from mga06.intel.com ([134.134.136.31]:33230 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231872AbiADPBx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 10:01:53 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A926713A1;
-        Tue,  4 Jan 2022 07:01:52 -0800 (PST)
-Received: from [192.168.99.12] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0DAF43F774;
-        Tue,  4 Jan 2022 07:01:50 -0800 (PST)
-Message-ID: <6fb8371e-6c55-14eb-2488-6d34db6085d8@foss.arm.com>
-Date:   Tue, 4 Jan 2022 15:01:50 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 05/12] perf test: Add coresight test to check all threads
- get some data logged
-Content-Language: en-US
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
-        suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
-        mike.leach@linaro.org, inux-perf-users@vger.kernel.org,
-        acme@kernel.org
-References: <20211215160403.69264-1-carsten.haitzler@foss.arm.com>
- <20211215160403.69264-5-carsten.haitzler@foss.arm.com>
- <20220103070700.GA2660949@leoy-ThinkPad-X240s>
-From:   Carsten Haitzler <carsten.haitzler@foss.arm.com>
-Organization: Arm Ltd.
-In-Reply-To: <20220103070700.GA2660949@leoy-ThinkPad-X240s>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        id S233860AbiADNx3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 08:53:29 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="302977365"
+X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
+   d="scan'208";a="302977365"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 05:53:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
+   d="scan'208";a="472071291"
+Received: from otc-lr-04.jf.intel.com ([10.54.39.41])
+  by orsmga006.jf.intel.com with ESMTP; 04 Jan 2022 05:53:28 -0800
+From:   peterz@infradead.org
+To:     peterz@infradead.org, mingo@kernel.org, acme@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     hpa@zytor.com, ak@linux.intel.com,
+        Kan Liang <kan.liang@linux.intel.com>
+Subject: [PATCH 1/2] perf/x86/intel/lbr: Support LBR format V7
+Date:   Tue,  4 Jan 2022 08:51:16 -0800
+Message-Id: <1641315077-96661-1-git-send-email-peterz@infradead.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: "Peter Zijlstra (Intel)" <peterz@infradead.org>
 
+The Goldmont plus and Tremont have LBR format V7. The V7 has LBR_INFO,
+which is the same as LBR format V5. But V7 doesn't support TSX.
 
-On 1/3/22 07:07, Leo Yan wrote:
-> On Wed, Dec 15, 2021 at 04:03:56PM +0000, carsten.haitzler@foss.arm.com wrote:
->> From: Carsten Haitzler <carsten.haitzler@arm.com>
->>
->> This adds a test and test scripts to check that all threads in the
->> target binary end up logging some kind of coresight aux data and that
->> they are not missing.
->>
->> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
->> ---
->>   .../coresight_thread_loop_check_tid_10.sh     | 19 ++++
->>   .../coresight_thread_loop_check_tid_2.sh      | 19 ++++
->>   .../coresight_thread_loop_check_tid_250.sh    | 19 ++++
->>   .../perf/tests/shell/tools/coresight/Makefile |  3 +-
->>   .../tools/coresight/thread_loop/Makefile      | 29 +++++++
->>   .../tools/coresight/thread_loop/thread_loop.c | 86 +++++++++++++++++++
->>   6 files changed, 174 insertions(+), 1 deletion(-)
->>   create mode 100755 tools/perf/tests/shell/coresight_thread_loop_check_tid_10.sh
->>   create mode 100755 tools/perf/tests/shell/coresight_thread_loop_check_tid_2.sh
->>   create mode 100755 tools/perf/tests/shell/coresight_thread_loop_check_tid_250.sh
->>   create mode 100644 tools/perf/tests/shell/tools/coresight/thread_loop/Makefile
->>   create mode 100644 tools/perf/tests/shell/tools/coresight/thread_loop/thread_loop.c
->>
->> diff --git a/tools/perf/tests/shell/coresight_thread_loop_check_tid_10.sh b/tools/perf/tests/shell/coresight_thread_loop_check_tid_10.sh
->> new file mode 100755
->> index 000000000000..283ad9facdee
->> --- /dev/null
->> +++ b/tools/perf/tests/shell/coresight_thread_loop_check_tid_10.sh
->> @@ -0,0 +1,19 @@
->> +#!/bin/sh -e
->> +# Coresight / Thread Loop 10 Threads - Check TID
->> +
->> +# SPDX-License-Identifier: GPL-2.0
->> +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
->> +
->> +TEST="thread_loop"
->> +. $(dirname $0)/lib/coresight.sh
->> +ARGS="10 2000"
->> +DATV="check-tid-10th"
->> +DATA="$DATD/perf-$TEST-$DATV.data"
->> +STDO="$DATD/perf-$TEST-$DATV.stdout"
->> +
->> +SHOW_TID=1 perf record -s $PERFRECOPT -o "$DATA" "$BIN" $ARGS > $STDO
->> +
->> +perf_dump_aux_tid_verify "$DATA" "$STDO"
->> +
->> +err=$?
->> +exit $err
->> diff --git a/tools/perf/tests/shell/coresight_thread_loop_check_tid_2.sh b/tools/perf/tests/shell/coresight_thread_loop_check_tid_2.sh
->> new file mode 100755
->> index 000000000000..ce8ba534bba2
->> --- /dev/null
->> +++ b/tools/perf/tests/shell/coresight_thread_loop_check_tid_2.sh
->> @@ -0,0 +1,19 @@
->> +#!/bin/sh -e
->> +# Coresight / Thread Loop 2 Threads - Check TID
->> +
->> +# SPDX-License-Identifier: GPL-2.0
->> +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
->> +
->> +TEST="thread_loop"
->> +. $(dirname $0)/lib/coresight.sh
->> +ARGS="2 4000"
->> +DATV="check-tid-2th"
->> +DATA="$DATD/perf-$TEST-$DATV.data"
->> +STDO="$DATD/perf-$TEST-$DATV.stdout"
->> +
->> +SHOW_TID=1 perf record -s $PERFRECOPT -o "$DATA" "$BIN" $ARGS > $STDO
->> +
->> +perf_dump_aux_tid_verify "$DATA" "$STDO"
->> +
->> +err=$?
->> +exit $err
->> diff --git a/tools/perf/tests/shell/coresight_thread_loop_check_tid_250.sh b/tools/perf/tests/shell/coresight_thread_loop_check_tid_250.sh
->> new file mode 100755
->> index 000000000000..cb14581c1e68
->> --- /dev/null
->> +++ b/tools/perf/tests/shell/coresight_thread_loop_check_tid_250.sh
->> @@ -0,0 +1,19 @@
->> +#!/bin/sh -e
->> +# Coresight / Thread Loop 250 Threads - Check TID
->> +
->> +# SPDX-License-Identifier: GPL-2.0
->> +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
->> +
->> +TEST="thread_loop"
->> +. $(dirname $0)/lib/coresight.sh
->> +ARGS="250 100"
->> +DATV="check-tid-250th"
->> +DATA="$DATD/perf-$TEST-$DATV.data"
->> +STDO="$DATD/perf-$TEST-$DATV.stdout"
->> +
->> +SHOW_TID=1 perf record -s $PERFRECOPT -o "$DATA" "$BIN" $ARGS > $STDO
->> +
->> +perf_dump_aux_tid_verify "$DATA" "$STDO"
->> +
->> +err=$?
->> +exit $err
-> 
->  From this case I start to understand why the lib/coresight.sh sets
-> AUX buffer as 250MB, setting a large buffer size can capture trace
-> data for all threads, especially for big amount of threads.
-> 
-> Seems to me, if we test on server, this case can run for short time, but
-> I think (sorry if I am wrong) it might take much longer time to test on
-> the embedded system, which might cause testing failure by two factors:
-> 
-> - The resource (e.g. the required big memory size) is pressure for
->    embedded system;
-> - The execution time (IIRC, every test case should be finished within
->    5 minutes).
-> 
-> Do you think does it make sense for us to only use 32 threads or 64
-> threads for the testing and it can give us a good testing coverage,
-> and we don't need to maintain multiple cases for 2/10/250 threads?
+Without the patch, the associated misprediction and cycles information
+in the LBR_INFO may be lost on a Goldmont plus platform.
+For Tremont, the patch only impacts the non-PEBS events. Because of the
+adaptive PEBS, the LBR_INFO is always processed for a PEBS event.
 
-I actually tested on a dragonboard 845c dev board (with the RB3 - only 
-4gb RAM) and took this as a baseline for "embedded board testing" as 
-it's probably about normal for a modern dev board. I made sure my tests 
-din't run out of RAM on that and would complete in a "not forever" 
-timeframe. I can probably reduce the number of cases, but I did go for 
-good coverage for stress-testing. I was doing 250 threads for the many 
-many many core cases and want to ensure I keep all cores busy (or a very 
-large number of them) to stress things out. Dev boards commonly have 8 
-cores these days, but servers are pushing 256 cores already (or 64 x 4 
-way smt and now are beginning to see 128 real cores etc.). So wanted to 
-make sure I'm pushing both ends of the spectrum.
+Currently, two different ways are used to check the LBR capabilities,
+which make the codes complex and confusing.
+For the LBR format V4 and earlier, the global static lbr_desc array is
+used to store the flags for the LBR capabilities in each LBR format.
+For LBR format V5 and V6, the current code checks the version number
+for the LBR capabilities.
 
-> Thanks,
-> Leo
-> 
->> diff --git a/tools/perf/tests/shell/tools/coresight/Makefile b/tools/perf/tests/shell/tools/coresight/Makefile
->> index 723006ea827c..1edab729db76 100644
->> --- a/tools/perf/tests/shell/tools/coresight/Makefile
->> +++ b/tools/perf/tests/shell/tools/coresight/Makefile
->> @@ -5,7 +5,8 @@ include ../../../../../../tools/scripts/Makefile.arch
->>   include ../../../../../../tools/scripts/utilities.mak
->>   
->>   SUBDIRS = \
->> -	asm_pure_loop
->> +	asm_pure_loop \
->> +	thread_loop
->>   
->>   all: $(SUBDIRS)
->>   $(SUBDIRS):
->> diff --git a/tools/perf/tests/shell/tools/coresight/thread_loop/Makefile b/tools/perf/tests/shell/tools/coresight/thread_loop/Makefile
->> new file mode 100644
->> index 000000000000..424df4e8b0e6
->> --- /dev/null
->> +++ b/tools/perf/tests/shell/tools/coresight/thread_loop/Makefile
->> @@ -0,0 +1,29 @@
->> +# SPDX-License-Identifier: GPL-2.0
->> +# Carsten Haitzler <carsten.haitzler@arm.com>, 2021
->> +include ../Makefile.miniconfig
->> +
->> +BIN=thread_loop
->> +LIB=-pthread
->> +
->> +all: $(BIN)
->> +
->> +$(BIN): $(BIN).c
->> +ifdef CORESIGHT
->> +ifeq ($(ARCH),arm64)
->> +	$(Q)$(CC) $(BIN).c -o $(BIN) $(LIB)
->> +endif
->> +endif
->> +
->> +install-tests: all
->> +ifdef CORESIGHT
->> +ifeq ($(ARCH),arm64)
->> +	$(call QUIET_INSTALL, tests) \
->> +		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/tools/$(BIN)'; \
->> +		$(INSTALL) $(BIN) '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/tools/$(BIN)/$(BIN)'
->> +endif
->> +endif
->> +
->> +clean:
->> +	$(Q)$(RM) -f $(BIN)
->> +
->> +.PHONY: all clean install-tests
->> diff --git a/tools/perf/tests/shell/tools/coresight/thread_loop/thread_loop.c b/tools/perf/tests/shell/tools/coresight/thread_loop/thread_loop.c
->> new file mode 100644
->> index 000000000000..c0158fac7d0b
->> --- /dev/null
->> +++ b/tools/perf/tests/shell/tools/coresight/thread_loop/thread_loop.c
->> @@ -0,0 +1,86 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +// Carsten Haitzler <carsten.haitzler@arm.com>, 2021
->> +
->> +// define this for gettid()
->> +#define _GNU_SOURCE
->> +
->> +#include <stdio.h>
->> +#include <stdlib.h>
->> +#include <unistd.h>
->> +#include <string.h>
->> +#include <pthread.h>
->> +#include <sys/syscall.h>
->> +#ifndef SYS_gettid
->> +// gettid is 178 on arm64
->> +# define SYS_gettid 178
->> +#endif
->> +#define gettid() syscall(SYS_gettid)
->> +
->> +struct args {
->> +	unsigned int loops;
->> +	pthread_t th;
->> +	void *ret;
->> +};
->> +
->> +static void *thrfn(void *arg)
->> +{
->> +	struct args *a = arg;
->> +	int i = 0, len = a->loops;
->> +
->> +	if (getenv("SHOW_TID")) {
->> +		unsigned long long tid = gettid();
->> +
->> +		printf("%llu\n", tid);
->> +	}
->> +	asm volatile(
->> +		"loop:\n"
->> +		"add %[i], %[i], #1\n"
->> +		"cmp %[i], %[len]\n"
->> +		"blt loop\n"
->> +		: /* out */
->> +		: /* in */ [i] "r" (i), [len] "r" (len)
->> +		: /* clobber */
->> +	);
->> +	return (void *)(long)i;
->> +}
->> +
->> +static pthread_t new_thr(void *(*fn) (void *arg), void *arg)
->> +{
->> +	pthread_t t;
->> +	pthread_attr_t attr;
->> +
->> +	pthread_attr_init(&attr);
->> +	pthread_create(&t, &attr, fn, arg);
->> +	return t;
->> +}
->> +
->> +int main(int argc, char **argv)
->> +{
->> +	unsigned int i, len, thr;
->> +	pthread_t threads[256];
->> +	struct args args[256];
->> +
->> +	if (argc < 3) {
->> +		printf("ERR: %s [numthreads] [numloops (millions)]\n", argv[0]);
->> +		exit(1);
->> +	}
->> +
->> +	thr = atoi(argv[1]);
->> +	if ((thr < 1) || (thr > 256)) {
->> +		printf("ERR: threads 1-256\n");
->> +		exit(1);
->> +	}
->> +	len = atoi(argv[2]);
->> +	if ((len < 1) || (len > 4000)) {
->> +		printf("ERR: max loops 4000 (millions)\n");
->> +		exit(1);
->> +	}
->> +	len *= 1000000;
->> +	for (i = 0; i < thr; i++) {
->> +		args[i].loops = len;
->> +		args[i].th = new_thr(thrfn, &(args[i]));
->> +	}
->> +	for (i = 0; i < thr; i++)
->> +		pthread_join(args[i].th, &(args[i].ret));
->> +	return 0;
->> +}
->> -- 
->> 2.32.0
->>
+There are common LBR capabilities among LBR format versions. Several
+flags for the LBR capabilities are introduced into the struct x86_pmu.
+The flags, which can be shared among LBR formats, are used to check
+the LBR capabilities. Add intel_pmu_lbr_init() to set the flags
+accordingly at boot time.
+
+Tested-by: Kan Liang <kan.liang@linux.intel.com>
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+
+The patch is created by Peter Zijlstra. Kan splited the patch from
+the original one, added the description, did tiny modification
+(Change "lbr_from_tsx" to "lbr_has_tsx", which can be used for
+both LBR_FORMAT_EIP_FLAGS2 and LBR_FORMAT_INFO.) and finished tests.
+
+ arch/x86/events/intel/core.c |   2 +
+ arch/x86/events/intel/lbr.c  | 114 ++++++++++++++++++++++++-------------------
+ arch/x86/events/perf_event.h |  10 +++-
+ 3 files changed, 75 insertions(+), 51 deletions(-)
+
+diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+index ec6444f..187906e 100644
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -6343,6 +6343,8 @@ __init int intel_pmu_init(void)
+ 	}
+ 
+ 	if (x86_pmu.lbr_nr) {
++		intel_pmu_lbr_init();
++
+ 		pr_cont("%d-deep LBR, ", x86_pmu.lbr_nr);
+ 
+ 		/* only support branch_stack snapshot for perfmon >= v2 */
+diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
+index 8043213..b7228a1 100644
+--- a/arch/x86/events/intel/lbr.c
++++ b/arch/x86/events/intel/lbr.c
+@@ -8,14 +8,6 @@
+ 
+ #include "../perf_event.h"
+ 
+-static const enum {
+-	LBR_EIP_FLAGS		= 1,
+-	LBR_TSX			= 2,
+-} lbr_desc[LBR_FORMAT_MAX_KNOWN + 1] = {
+-	[LBR_FORMAT_EIP_FLAGS]  = LBR_EIP_FLAGS,
+-	[LBR_FORMAT_EIP_FLAGS2] = LBR_EIP_FLAGS | LBR_TSX,
+-};
+-
+ /*
+  * Intel LBR_SELECT bits
+  * Intel Vol3a, April 2011, Section 16.7 Table 16-10
+@@ -243,7 +235,7 @@ void intel_pmu_lbr_reset_64(void)
+ 	for (i = 0; i < x86_pmu.lbr_nr; i++) {
+ 		wrmsrl(x86_pmu.lbr_from + i, 0);
+ 		wrmsrl(x86_pmu.lbr_to   + i, 0);
+-		if (x86_pmu.intel_cap.lbr_format == LBR_FORMAT_INFO)
++		if (x86_pmu.lbr_has_info)
+ 			wrmsrl(x86_pmu.lbr_info + i, 0);
+ 	}
+ }
+@@ -305,11 +297,10 @@ enum {
+  */
+ static inline bool lbr_from_signext_quirk_needed(void)
+ {
+-	int lbr_format = x86_pmu.intel_cap.lbr_format;
+ 	bool tsx_support = boot_cpu_has(X86_FEATURE_HLE) ||
+ 			   boot_cpu_has(X86_FEATURE_RTM);
+ 
+-	return !tsx_support && (lbr_desc[lbr_format] & LBR_TSX);
++	return !tsx_support && x86_pmu.lbr_has_tsx;
+ }
+ 
+ static DEFINE_STATIC_KEY_FALSE(lbr_from_quirk_key);
+@@ -427,12 +418,12 @@ rdlbr_all(struct lbr_entry *lbr, unsigned int idx, bool need_info)
+ 
+ void intel_pmu_lbr_restore(void *ctx)
+ {
+-	bool need_info = x86_pmu.intel_cap.lbr_format == LBR_FORMAT_INFO;
+ 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+ 	struct x86_perf_task_context *task_ctx = ctx;
+-	int i;
+-	unsigned lbr_idx, mask;
++	bool need_info = x86_pmu.lbr_has_info;
+ 	u64 tos = task_ctx->tos;
++	unsigned lbr_idx, mask;
++	int i;
+ 
+ 	mask = x86_pmu.lbr_nr - 1;
+ 	for (i = 0; i < task_ctx->valid_lbrs; i++) {
+@@ -444,7 +435,7 @@ void intel_pmu_lbr_restore(void *ctx)
+ 		lbr_idx = (tos - i) & mask;
+ 		wrlbr_from(lbr_idx, 0);
+ 		wrlbr_to(lbr_idx, 0);
+-		if (x86_pmu.intel_cap.lbr_format == LBR_FORMAT_INFO)
++		if (need_info)
+ 			wrlbr_info(lbr_idx, 0);
+ 	}
+ 
+@@ -519,9 +510,9 @@ static void __intel_pmu_lbr_restore(void *ctx)
+ 
+ void intel_pmu_lbr_save(void *ctx)
+ {
+-	bool need_info = x86_pmu.intel_cap.lbr_format == LBR_FORMAT_INFO;
+ 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+ 	struct x86_perf_task_context *task_ctx = ctx;
++	bool need_info = x86_pmu.lbr_has_info;
+ 	unsigned lbr_idx, mask;
+ 	u64 tos;
+ 	int i;
+@@ -816,7 +807,6 @@ void intel_pmu_lbr_read_64(struct cpu_hw_events *cpuc)
+ {
+ 	bool need_info = false, call_stack = false;
+ 	unsigned long mask = x86_pmu.lbr_nr - 1;
+-	int lbr_format = x86_pmu.intel_cap.lbr_format;
+ 	u64 tos = intel_pmu_lbr_tos();
+ 	int i;
+ 	int out = 0;
+@@ -831,9 +821,7 @@ void intel_pmu_lbr_read_64(struct cpu_hw_events *cpuc)
+ 	for (i = 0; i < num; i++) {
+ 		unsigned long lbr_idx = (tos - i) & mask;
+ 		u64 from, to, mis = 0, pred = 0, in_tx = 0, abort = 0;
+-		int skip = 0;
+ 		u16 cycles = 0;
+-		int lbr_flags = lbr_desc[lbr_format];
+ 
+ 		from = rdlbr_from(lbr_idx, NULL);
+ 		to   = rdlbr_to(lbr_idx, NULL);
+@@ -845,37 +833,39 @@ void intel_pmu_lbr_read_64(struct cpu_hw_events *cpuc)
+ 		if (call_stack && !from)
+ 			break;
+ 
+-		if (lbr_format == LBR_FORMAT_INFO && need_info) {
+-			u64 info;
+-
+-			info = rdlbr_info(lbr_idx, NULL);
+-			mis = !!(info & LBR_INFO_MISPRED);
+-			pred = !mis;
+-			in_tx = !!(info & LBR_INFO_IN_TX);
+-			abort = !!(info & LBR_INFO_ABORT);
+-			cycles = (info & LBR_INFO_CYCLES);
+-		}
+-
+-		if (lbr_format == LBR_FORMAT_TIME) {
+-			mis = !!(from & LBR_FROM_FLAG_MISPRED);
+-			pred = !mis;
+-			skip = 1;
+-			cycles = ((to >> 48) & LBR_INFO_CYCLES);
+-
+-			to = (u64)((((s64)to) << 16) >> 16);
+-		}
+-
+-		if (lbr_flags & LBR_EIP_FLAGS) {
+-			mis = !!(from & LBR_FROM_FLAG_MISPRED);
+-			pred = !mis;
+-			skip = 1;
+-		}
+-		if (lbr_flags & LBR_TSX) {
+-			in_tx = !!(from & LBR_FROM_FLAG_IN_TX);
+-			abort = !!(from & LBR_FROM_FLAG_ABORT);
+-			skip = 3;
++		if (x86_pmu.lbr_has_info) {
++			if (need_info) {
++				u64 info;
++
++				info = rdlbr_info(lbr_idx, NULL);
++				mis = !!(info & LBR_INFO_MISPRED);
++				pred = !mis;
++				cycles = (info & LBR_INFO_CYCLES);
++				if (x86_pmu.lbr_has_tsx) {
++					in_tx = !!(info & LBR_INFO_IN_TX);
++					abort = !!(info & LBR_INFO_ABORT);
++				}
++			}
++		} else {
++			int skip = 0;
++
++			if (x86_pmu.lbr_from_flags) {
++				mis = !!(from & LBR_FROM_FLAG_MISPRED);
++				pred = !mis;
++				skip = 1;
++			}
++			if (x86_pmu.lbr_has_tsx) {
++				in_tx = !!(from & LBR_FROM_FLAG_IN_TX);
++				abort = !!(from & LBR_FROM_FLAG_ABORT);
++				skip = 3;
++			}
++			from = (u64)((((s64)from) << skip) >> skip);
++
++			if (x86_pmu.lbr_to_cycles) {
++				cycles = ((to >> 48) & LBR_INFO_CYCLES);
++				to = (u64)((((s64)to) << 16) >> 16);
++			}
+ 		}
+-		from = (u64)((((s64)from) << skip) >> skip);
+ 
+ 		/*
+ 		 * Some CPUs report duplicated abort records,
+@@ -1120,7 +1110,7 @@ static int intel_pmu_setup_hw_lbr_filter(struct perf_event *event)
+ 
+ 	if ((br_type & PERF_SAMPLE_BRANCH_NO_CYCLES) &&
+ 	    (br_type & PERF_SAMPLE_BRANCH_NO_FLAGS) &&
+-	    (x86_pmu.intel_cap.lbr_format == LBR_FORMAT_INFO))
++	    x86_pmu.lbr_has_info)
+ 		reg->config |= LBR_NO_INFO;
+ 
+ 	return 0;
+@@ -1706,6 +1696,30 @@ void intel_pmu_lbr_init_knl(void)
+ 		x86_pmu.intel_cap.lbr_format = LBR_FORMAT_EIP_FLAGS;
+ }
+ 
++void intel_pmu_lbr_init(void)
++{
++	switch (x86_pmu.intel_cap.lbr_format) {
++	case LBR_FORMAT_EIP_FLAGS2:
++		x86_pmu.lbr_has_tsx = 1;
++		fallthrough;
++	case LBR_FORMAT_EIP_FLAGS:
++		x86_pmu.lbr_from_flags = 1;
++		break;
++
++	case LBR_FORMAT_INFO:
++		x86_pmu.lbr_has_tsx = 1;
++		fallthrough;
++	case LBR_FORMAT_INFO2:
++		x86_pmu.lbr_has_info = 1;
++		break;
++
++	case LBR_FORMAT_TIME:
++		x86_pmu.lbr_from_flags = 1;
++		x86_pmu.lbr_to_cycles = 1;
++		break;
++	}
++}
++
+ /*
+  * LBR state size is variable based on the max number of registers.
+  * This calculates the expected state size, which should match
+diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
+index 5480db2..4f2cfac 100644
+--- a/arch/x86/events/perf_event.h
++++ b/arch/x86/events/perf_event.h
+@@ -215,7 +215,8 @@ enum {
+ 	LBR_FORMAT_EIP_FLAGS2	= 0x04,
+ 	LBR_FORMAT_INFO		= 0x05,
+ 	LBR_FORMAT_TIME		= 0x06,
+-	LBR_FORMAT_MAX_KNOWN    = LBR_FORMAT_TIME,
++	LBR_FORMAT_INFO2	= 0x07,
++	LBR_FORMAT_MAX_KNOWN    = LBR_FORMAT_INFO2,
+ };
+ 
+ enum {
+@@ -840,6 +841,11 @@ struct x86_pmu {
+ 	bool		lbr_double_abort;	   /* duplicated lbr aborts */
+ 	bool		lbr_pt_coexist;		   /* (LBR|BTS) may coexist with PT */
+ 
++	unsigned int	lbr_has_info:1;
++	unsigned int	lbr_has_tsx:1;
++	unsigned int	lbr_from_flags:1;
++	unsigned int	lbr_to_cycles:1;
++
+ 	/*
+ 	 * Intel Architectural LBR CPUID Enumeration
+ 	 */
+@@ -1392,6 +1398,8 @@ void intel_pmu_lbr_init_skl(void);
+ 
+ void intel_pmu_lbr_init_knl(void);
+ 
++void intel_pmu_lbr_init(void);
++
+ void intel_pmu_arch_lbr_init(void);
+ 
+ void intel_pmu_pebs_data_source_nhm(void);
+-- 
+2.7.4
+

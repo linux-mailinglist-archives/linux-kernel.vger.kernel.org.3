@@ -2,101 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B44EC48476F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:05:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF72484771
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236094AbiADSFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 13:05:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48484 "EHLO
+        id S236103AbiADSGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 13:06:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbiADSFz (ORCPT
+        with ESMTP id S236096AbiADSGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 13:05:55 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6596C061761;
-        Tue,  4 Jan 2022 10:05:54 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id d201so86432115ybc.7;
-        Tue, 04 Jan 2022 10:05:54 -0800 (PST)
+        Tue, 4 Jan 2022 13:06:35 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80065C061784
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 10:06:35 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id q14so34886443qtx.10
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 10:06:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tdQRUgSgwsJVMjTD8lJCE4WTI/seShOy5LEi4PlhXsI=;
-        b=PEtJpc0TB8gaBqgbOB/30nIwuGEJTxTljt+0TexaMKgIbcaUIbd0h0W0JVsMtUzaYR
-         6LUhIleBYN9P4uSm10Fh7LQk3xrHKEX/6I1sZ9UnOES6PD5jIJ9jh+kzT8sKvjvRzn4Z
-         siscCNd/Cdq0IYhF/SrGt7zz/4rDp7n7V8nnH8a+uFNm9EtSr08p0a7nYKCUqDE3t3Rr
-         HFHSsSjt5qzCOWG3L7ng/1QovhZ9siEDOp//y6Yex4AKjxOpL7iKmAPO2mRDJFOmoe2+
-         QLYcWrFyfSQxzodquUAovS/BFWVe8xu7z/0LJqiZ1V3GHI1kQJn9IHA0oZhieVn4rRml
-         VqZg==
+        d=toxicpanda-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5RKu6IuIqmq49BMD5LnbgPbbKed9H3mhBHP0VD+Ye6c=;
+        b=bH4v26yxUQjm4cWLarxsSFK/FSUA8Cq83MSbqyvKKF+U9ssGI1t2wukWVezRWXF+k8
+         bA6zREUN7SV3pUebV8HpwG1hWpByR6BmTqOwgbDXiazflHJR0u9dMDlZjSTgpG5OK8MG
+         +P42EAdzFtNxR1Tw94FqApCZKqC6Kmf1y9wCb5QB7rWK/tNmv5EiAIOeqHmDQqeqbyBy
+         Oq4+Wn8Bg0by3/GBN5H8PhT13vghmvuEQtXWgCnpIUl7xo/u1dukfdhUwZl0pSiDKMky
+         FNiQPKrZhCODpn9HBG/6lAvePDaU90LwfqeSEBH9HFWV8CLUuc3klImHvvp+tj3WC1Ar
+         0OMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tdQRUgSgwsJVMjTD8lJCE4WTI/seShOy5LEi4PlhXsI=;
-        b=t5m894TP41kSBFJwAxAyKoBAftSqj46ukq0CmMZOdr185bn00ZzzlnVkzqDizk1nr7
-         Mf/NtUmZ490E9sARhCPW0ZdZS90/urWUqp2oVav8ls+1NKcflRdvTCOZVfgIXpdjeODh
-         kfve7h8TvcPHGC+xhM4jrTmNApyROEGysZFtcc2Bkf02L0OOTQ9asuvmk+2BBp2sF/U3
-         Le43ihFQCUdf5Yfv2TH+LzmmWFWnjnwCNp9ds1Yx7uZHQ9ZwkQ4dxVDElne00FoJHJYN
-         A8ISMkwfL6soHsRPSnCTrU6Flil4cITyNySxuruYNHESuDRjr8nakDYml6cwFJbqPdxx
-         4sAA==
-X-Gm-Message-State: AOAM530VJFqtweKjLkudos70j46lEsWsiR5CYweleRxKnMv6UbwNtKQc
-        6t1hq9VS+ZoM35HdceqPlXJTKZxMxdJA+aUr0F4=
-X-Google-Smtp-Source: ABdhPJzEn0oYHHUiQctltIZAAad1QnBbXX+3LxQKurnei0B9hpH3oKTFCM+zlB/ZVSWmyRaJMUaN/IuchKiZNU7923s=
-X-Received: by 2002:a5b:bc1:: with SMTP id c1mr40734301ybr.669.1641319554084;
- Tue, 04 Jan 2022 10:05:54 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5RKu6IuIqmq49BMD5LnbgPbbKed9H3mhBHP0VD+Ye6c=;
+        b=ovFAGLD72ysFXwhzj1Ke79ifUkdXYpSsgLuKY4uMuxmNqchcyV7owZrRoggK/iYwK4
+         cMnveboRZ1AojGaIvJaWjCU4TOC30Cr2ZwFf0P/UPl4OmhSKkUkgEVxcvpLbfsOM8RVU
+         bugKDE0UZQa2YZBnJVs0vgRWuPUXGnwL731vapmMfMBeA+0VWef6gFPXwUvx/qRO0CM6
+         Ftlu6sULa/k3ZzisaEnq/bVwexILt1YETp2Z66IJth2RQ7qEepVsN9D7vHwD8YiE1bOP
+         FYuI3MEh6yVF4D9mLev1wGEdsK3q0KxO6ZQ+ao31M1Eyo5wlRBP+uFOW6Ax75oY0t2Gm
+         pcVg==
+X-Gm-Message-State: AOAM5307XhM8KYcsFaI1JxFgpgH/2qBRQFCnUMSRNUSeutx+hi8coeb4
+        PBjmAa89llKCbrU7GgFgGt7c7w==
+X-Google-Smtp-Source: ABdhPJzqTxALsN0VOvXgTQUjtVYXWrX+86Lp+vIhivpHeE975eTN2g/Nkq+f9gnjkysW6xhZ9C+Bzg==
+X-Received: by 2002:ac8:674d:: with SMTP id n13mr44576838qtp.491.1641319594564;
+        Tue, 04 Jan 2022 10:06:34 -0800 (PST)
+Received: from localhost (cpe-174-109-172-136.nc.res.rr.com. [174.109.172.136])
+        by smtp.gmail.com with ESMTPSA id i6sm3044186qtx.22.2022.01.04.10.06.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 10:06:33 -0800 (PST)
+Date:   Tue, 4 Jan 2022 13:06:32 -0500
+From:   Josef Bacik <josef@toxicpanda.com>
+To:     Yongji Xie <xieyongji@bytedance.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-block@vger.kernel.org, nbd@other.debian.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] nbd: Don't use workqueue to handle recv work
+Message-ID: <YdSMqKXv0PUkAwfl@localhost.localdomain>
+References: <20211227091241.103-1-xieyongji@bytedance.com>
+ <Ycycda8w/zHWGw9c@infradead.org>
+ <CACycT3usfTdzmK=gOsBf3=-0e8HZ3_0ZiBJqkWb_r7nki7xzYA@mail.gmail.com>
+ <YdMgCS1RMcb5V2RJ@localhost.localdomain>
+ <CACycT3vYt0XNV2GdjKjDS1iyWieY_OV4h=W1qqk_AAAahRZowA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20211222142025.30364-1-johan@kernel.org> <20211222142025.30364-2-johan@kernel.org>
-In-Reply-To: <20211222142025.30364-2-johan@kernel.org>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 4 Jan 2022 18:05:28 +0000
-Message-ID: <CA+V-a8vS6O8YDVutH_df+v3B093aSVqpeXv4FAoChxjOjEQkkg@mail.gmail.com>
-Subject: Re: [PATCH 1/4] media: davinci: vpif: fix unbalanced runtime PM get
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
-        Lad@xi.lan
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACycT3vYt0XNV2GdjKjDS1iyWieY_OV4h=W1qqk_AAAahRZowA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Johan,
+On Tue, Jan 04, 2022 at 01:31:47PM +0800, Yongji Xie wrote:
+> On Tue, Jan 4, 2022 at 12:10 AM Josef Bacik <josef@toxicpanda.com> wrote:
+> >
+> > On Thu, Dec 30, 2021 at 12:01:23PM +0800, Yongji Xie wrote:
+> > > On Thu, Dec 30, 2021 at 1:35 AM Christoph Hellwig <hch@infradead.org> wrote:
+> > > >
+> > > > On Mon, Dec 27, 2021 at 05:12:41PM +0800, Xie Yongji wrote:
+> > > > > The rescuer thread might take over the works queued on
+> > > > > the workqueue when the worker thread creation timed out.
+> > > > > If this happens, we have no chance to create multiple
+> > > > > recv threads which causes I/O hung on this nbd device.
+> > > >
+> > > > If a workqueue is used there aren't really 'receive threads'.
+> > > > What is the deadlock here?
+> > >
+> > > We might have multiple recv works, and those recv works won't quit
+> > > unless the socket is closed. If the rescuer thread takes over those
+> > > works, only the first recv work can run. The I/O needed to be handled
+> > > in other recv works would be hung since no thread can handle them.
+> > >
+> >
+> > I'm not following this explanation.  What is the rescuer thread you're talking
+> 
+> https://www.kernel.org/doc/html/latest/core-api/workqueue.html#c.rescuer_thread
+> 
 
-Thank you for the patch.
+Ahhh ok now I see, thanks, I didn't know this is how this worked.
 
-On Wed, Dec 22, 2021 at 2:20 PM Johan Hovold <johan@kernel.org> wrote:
->
-> Make sure to balance the runtime PM usage counter on driver unbind.
->
-> Fixes: 407ccc65bfd2 ("[media] davinci: vpif: add pm_runtime support")
-> Cc: stable@vger.kernel.org      # 3.9
-> Cc: Lad, Prabhakar <prabhakar.csengg@gmail.com>
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-> ---
->  drivers/media/platform/davinci/vpif.c | 1 +
->  1 file changed, 1 insertion(+)
->
-Reviewed-by: Lad Prabhakar <prabhakar.csengg@gmail.com>
+So what happens is we do the queue_work(), this needs to do a GFP_KERNEL
+allocation internally, we are unable to satisfy this, and thus the work gets
+pushed onto the rescuer thread.
 
-> diff --git a/drivers/media/platform/davinci/vpif.c b/drivers/media/platform/davinci/vpif.c
-> index 5a89d885d0e3..9752a5ec36f7 100644
-> --- a/drivers/media/platform/davinci/vpif.c
-> +++ b/drivers/media/platform/davinci/vpif.c
-> @@ -495,6 +495,7 @@ static int vpif_probe(struct platform_device *pdev)
->
->  static int vpif_remove(struct platform_device *pdev)
->  {
-> +       pm_runtime_put(&pdev->dev);
->         pm_runtime_disable(&pdev->dev);
->         return 0;
->  }
-> --
-> 2.32.0
->
+Then the rescuer thread can't be used in the future because it's doing this long
+running thing.
 
-Cheers,
-Prabhakar
+I think the correct thing to do here is simply drop the WQ_MEM_RECLAIM bit.  It
+makes sense for workqueue's that are handling the work of short lived works that
+are in the memory reclaim path.  That's not what these workers are doing, yes
+they are in the reclaim path, but they run the entire time the device is up.
+The actual work happens as they process incoming requests.  AFAICT
+WQ_MEM_RECLAIM doesn't affect the actual allocations that the worker thread
+needs to do, which is what I think the intention was in using WQ_MEM_RECLAIM,
+which isn't really what it's used for.
+
+tl;dr, just remove thee WQ_MEM_RECLAIM flag completely and I think that's good
+enough?  Thanks,
+
+Josef

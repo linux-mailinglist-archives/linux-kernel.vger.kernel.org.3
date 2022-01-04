@@ -2,105 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A01314843E1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:55:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB904843ED
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:56:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234331AbiADOzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:55:06 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38248 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiADOzE (ORCPT
+        id S234489AbiADO44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:56:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230365AbiADO4x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:55:04 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8F207B8163C;
-        Tue,  4 Jan 2022 14:55:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2375C36AE9;
-        Tue,  4 Jan 2022 14:54:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641308102;
-        bh=f3icQ/m7CajZ+VJvBYNNkvB5JOmyPouGV9LddxkO4UQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mgjFfOacSVcbUCgTqqwDxVkPATxlRDzMedwid53NvgthlGHoqpza1bq+kE3CFtGiv
-         oGVozRaF/w7Psdby7hRishvp8i8uVMOLfSaL0D9aZk64RGUgUhuz04+d98C/00erzF
-         GRlHz7cMGW3o2UgHaSQJpAh8ppClWSSva0GPUPTGQNPk4un6xp6KQViruy5HcNoZnJ
-         pWPh43v/RYS64Nth7z0dXeugiyeU8KJFZUwNONVHuQatzS0Q0v4QZGM5mc3MBpPejY
-         UjYF2TrBVxYWScn7yRaVknceWxRlqex4COFr+1OoZUbXW4RXXt4xY5fGt0YOvpQAQB
-         5KGC2G5rKEXMg==
-Date:   Tue, 4 Jan 2022 14:54:56 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
-Cc:     David Collins <quic_collinsd@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>, swboyd@chromium.org,
-        subbaram@codeaurora.org, Das Srinagesh <gurus@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V4 1/6] dt-bindings: regulator: Add
- "regulator-min-dropout-voltage-microvolt"
-Message-ID: <YdRfwL9uQQd/0etr@sirena.org.uk>
-References: <1637314953-4215-1-git-send-email-quic_c_skakit@quicinc.com>
- <1637314953-4215-2-git-send-email-quic_c_skakit@quicinc.com>
- <YZ+o9sQpECZSrieN@sirena.org.uk>
- <d828f2a1-03e8-d6ee-4ab7-39bf677093b7@quicinc.com>
- <Ya5VhkggWdjYyTHL@sirena.org.uk>
- <6a44cb99-6894-c9ce-4f1e-5dee0939598c@quicinc.com>
- <Ya97cnuwM+MuNMg3@sirena.org.uk>
- <23a47965-4ea9-5f6c-7e3c-27f5bd35f5b7@quicinc.com>
- <YbPCjbnH6cXQqy6S@sirena.org.uk>
- <012a0a96-ab0e-e844-12e1-f2272bf2506d@quicinc.com>
+        Tue, 4 Jan 2022 09:56:53 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADD7C061784
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 06:56:52 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id t26so76695812wrb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 06:56:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f8y3fxQ7Ixt8X6KzlM4QoJHjlMDWhk5dk98sHG3phE8=;
+        b=LnBgmJrGWXQSJznhBJE7nxnjt6hdhnRrlVkEdW/QZH+gDm/GnpetPv7QTsZX8pf/8b
+         cHfgr6n/Wm3EK3AJEjCNoYm6HmQbgcMMsVwHWjur2NzP5TnDVKc2nnp1oInjOu2+q6hd
+         1gnY07zR7Wb+Ufe59UmTXEEynlolGPNxTLcRerhKv0W4vtk6RVv1OuIE42MQltOi/1BF
+         Tshs6HHsmUsS+m5MDHlegZhacwkdZ+NYq+AC1j4gY8MdxfREkQHPUaSReq1LBuo010Ws
+         GICNQ97F95sXfLa4gRtAnbevuAblhYx3UcEeHdABqenh4BRMujIZl+5kNTbbwnwzThn3
+         WD2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f8y3fxQ7Ixt8X6KzlM4QoJHjlMDWhk5dk98sHG3phE8=;
+        b=KsJHYKU6E5p07drIv/WKUVSX/zm3fwSR1qLZ4o9AZ0Sdk/lztlBEEmugMwEfIX6658
+         kxL5GD+TdBh/kuBXdcUosjJKxx9mgNjXw9qt2Z/hxW1VRAx+UfrKRfDQwLnnLC7GcCOX
+         XjkFNPs/lVppPWzEYLh3bhaSsmljkg6W5Qz07pE8Qz2qqXvRKGTXbfVzHYEEwp9vG3qx
+         jyr3BuxBXCQd4ARocTcXbbMoha0/yR8dB3ZjcYoW2b8IghBljy4xhtVAtVioTDhVr2Ks
+         r51Dlyunz6Tk0nl5mevl5aVXJizuMNdI3kbPxn99X8/X2npoQJ+YO78ZrLiS+2CI0zff
+         KzIQ==
+X-Gm-Message-State: AOAM533rbUZqkrN1WXBYUdij8LanuFcekY0jXD0+oo+T+3orATl5MPks
+        g7X4G1cFKp9Lul+cE/dKRbEa7gctuas3eg==
+X-Google-Smtp-Source: ABdhPJzGZKFOs4DEcC/6CKGwfstjaCLEUD0B2urzy0Wb63F4ZVqkq++d9906q+a/ZlR7wvNjeeMIIA==
+X-Received: by 2002:a5d:5889:: with SMTP id n9mr42818211wrf.476.1641308211178;
+        Tue, 04 Jan 2022 06:56:51 -0800 (PST)
+Received: from localhost.localdomain ([2001:861:44c0:66c0:f6da:6ac:481:1df0])
+        by smtp.gmail.com with ESMTPSA id k10sm19309859wrz.113.2022.01.04.06.56.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 06:56:50 -0800 (PST)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-oxnas@groups.io,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>
+Subject: [PATCH v2 0/3] ARM: ox810se: Add Ethernet support
+Date:   Tue,  4 Jan 2022 15:56:43 +0100
+Message-Id: <20220104145646.135877-1-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="aPEEkehX3JTCtWCF"
-Content-Disposition: inline
-In-Reply-To: <012a0a96-ab0e-e844-12e1-f2272bf2506d@quicinc.com>
-X-Cookie: The horror... the horror!
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This adds support for the Synopsys DWMAC controller found in the
+OX820SE SoC, by using almost the same glue code as the OX820.
 
---aPEEkehX3JTCtWCF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Patch 1 & 2 are for net branch, patch 3 will be queued to arm-soc.
 
-On Mon, Jan 03, 2022 at 08:05:40PM +0530, Satya Priya Kakitapalli (Temp) wrote:
-> On 12/11/2021 2:41 AM, Mark Brown wrote:
+Changes since v1:
+- correctly update value read from register
+- add proper tag on patch 3 for arm-soc tree
 
-> > I'd think we should consider if it's better to support this
-> > dynamically at runtime based on load information and provide options for
-> > configuring the peak load information through DT instead for static
-> > configurations.  That would fit in with the stuff we have for managing
-> > modes on DCDCs (which isn't really deployed but is there) and the API we
-> > have for allowing client drivers to indicate their load requirements at
-> > runtime that fits in with that.  That'd allow us to only boost the
-> > headroom when it's really needed.
+Neil Armstrong (3):
+  dt-bindings: net: oxnas-dwmac: Add bindings for OX810SE
+  net: stmmac: dwmac-oxnas: Add support for OX810SE
+  ARM: dts: ox810se: Add Ethernet support
 
-> This means Dynamic headroom control feature needs to be implemented. I need
-> to explore more on this and gather info from team, Could we merge the
-> present driver with "static headroom" for now? I'll do a follow up series to
-> implement this feature.
+ .../devicetree/bindings/net/oxnas-dwmac.txt   |   3 +
+ arch/arm/boot/dts/ox810se-wd-mbwe.dts         |   4 +
+ arch/arm/boot/dts/ox810se.dtsi                |  18 +++
+ .../net/ethernet/stmicro/stmmac/dwmac-oxnas.c | 115 +++++++++++++-----
+ 4 files changed, 111 insertions(+), 29 deletions(-)
 
-I'd be happy to merge something with the headroom configured statically
-in the driver like we do for other devices - I guess if you set the
-highest headroom that should cover it.
+-- 
+2.25.1
 
---aPEEkehX3JTCtWCF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHUX8AACgkQJNaLcl1U
-h9BhtQf+L2r2wDroNeXGylRY4U6hq0q4A+rug1b0Z/Qvervdg9gBOKGNRqXnTnRX
-nqzFmlgkbrxJj8c8l/awd4GSaKks6/isvYqyXVVz8jHTHAN8oQz0vfMJdfRZUCKN
-fLJLckc/HgwVgHTZU9fTT/Z5sef9yJ426HwueHyhwmZkrBuBGCQisB7gncH/5QRY
-Je3U4w6teDpA7tlWo7MRY+KUIwPbOAuTY0QzUbWJL3eR4T7Cw2hp8rU7HuawkpQp
-4gkf6lZoTSkLcUpp+WDg7zJw7eRXseveFTFg+1DRFRa3TpgX7bHEy4K6rZgRGbVC
-k6OcTDSmHWwuKQ2mPh/J5uWpKQOTSg==
-=z85G
------END PGP SIGNATURE-----
-
---aPEEkehX3JTCtWCF--

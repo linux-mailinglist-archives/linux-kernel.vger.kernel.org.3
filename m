@@ -2,113 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B3E483AAA
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 03:45:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 825AE483AAD
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 03:46:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232390AbiADCpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 21:45:36 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:44599 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbiADCpf (ORCPT
+        id S232364AbiADCqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 21:46:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36472 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232222AbiADCql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 21:45:35 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JScRd0s4cz4y41;
-        Tue,  4 Jan 2022 13:45:32 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641264334;
-        bh=jECdWm5a2bm08cn1xeEt3cseg+eth5mPMHvM+B6Yyks=;
-        h=Date:From:To:Cc:Subject:From;
-        b=F0BD8TTEcCTjHKJRgEAIW2aoD7Zo+rExfGSrvHEwoR7eXRhCsxJigcivECu+krBZn
-         /uSRqKiHq2PrXv4yAvGAac5YfMP94e/DI7xivQd6VCuMeETPSH3rWCJutkhMePoa8N
-         31Z9qqEEFOaCFEbH5ZL9pW4Yz0NBq5NGf3WD66r7GZrg2jBN2a/JdNvXmTR10LTNNr
-         vixMa7I+VXtaDNBT1pHwhOcVniA6VUNd0GAYF1YRH4XOu/279KLvP7F5ksmN+m8wzj
-         CGdKToeMLIIeSwmQYkCYajROseXKMRIv1MAE7tq2W2qGfNd/ffxSpoL5QoqbkMwPN9
-         HUU3dQPNbUu+g==
-Date:   Tue, 4 Jan 2022 13:45:31 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Nitesh Narayan Lal <nitesh@redhat.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Shay Drory <shayd@nvidia.com>
-Subject: linux-next: manual merge of the tip tree with Linus' tree
-Message-ID: <20220104134531.6f6ded30@canb.auug.org.au>
+        Mon, 3 Jan 2022 21:46:41 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757BBC061761;
+        Mon,  3 Jan 2022 18:46:40 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id r4so35405333lfe.7;
+        Mon, 03 Jan 2022 18:46:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XwS+dVl5eiGqQaeH1qcWnqbx39W64a5YJhPs5tWYw7g=;
+        b=YXapyd2qG3y6Gyfh/8n/8oPRJItmRTXGr97OlealEHQMyM1zxhQqfY/s++lkwXIb4h
+         uqPK4wK28d+ZGbYX0HuUf0/4dYib8TgVwNelG8RYpSJnLHYyUtCnUngWUFN8hoP4M0Pq
+         83Mp0bYcIBxVzVQhGc811+L5v6q33/OfymddcRJCmxPspOl5ZdV+734O9gGYVe5LkRuu
+         SZCRr7i7UMgwopJlwo6Volz0cwnHxuq098HQO3915X0WVFMbYdMhuf/PQ322tTXCV30e
+         UQta80zF5BDFOEsSePVTDfp1pIJcO/LbjlpdNHPR8D8LR1ZGQ93sfsGg4o7LSGzFBfGw
+         89kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XwS+dVl5eiGqQaeH1qcWnqbx39W64a5YJhPs5tWYw7g=;
+        b=MhkpbP+EADvSQrgazFcw/2ZVp9wX07/I91iGkYkaHlcXdECirF0B38KywKqTihaeSF
+         xW5zHbXHWZv23ljy2N6boczRdfy5YFHfzfWqXusHkVa9USrZg985xOS60h9ErxIhUsTw
+         QNJM7XtW1IklnwwAFwld1s59zjpH7Ja3vI8EAtl/yevbmXOK9y2sDZIGv3oaF3M6YLXg
+         j+htkC8JYQOgcMliRfMUaodPKM2UlzfcDJbcCCK2ZhqDk2RN2xl62BrVD31KLL83zRyD
+         kwCvE9wI+yKheKiizSQFFb1l/Gy+yKzcbd3+MIIYo7ryJ6pjVvbf6w/6ceO3hN3bA5HD
+         Ogtw==
+X-Gm-Message-State: AOAM533IUVGATlz8q4UCZqWepvmSKMc9e+ssrYGOdUQinYEtIejsH8GO
+        tXawchkL8I49CmVQnUa2tNV0xOSPmEqqWD9McI4=
+X-Google-Smtp-Source: ABdhPJyf3/HeqXcc8LXsBeEU2licr8rlepkC/OaEN4ONlssLyRjB+M6ckTtp2DyRj/bMN5yED/Cwrj/hSJUE/u/+9bQ=
+X-Received: by 2002:a05:6512:3b26:: with SMTP id f38mr43643428lfv.374.1641264398765;
+ Mon, 03 Jan 2022 18:46:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/LVpyCBuhysS46Hv+6fagQ62";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20220104012406.27580-1-lizhijian@fujitsu.com>
+In-Reply-To: <20220104012406.27580-1-lizhijian@fujitsu.com>
+From:   Zhu Yanjun <zyjzyj2000@gmail.com>
+Date:   Tue, 4 Jan 2022 10:46:27 +0800
+Message-ID: <CAD=hENd7dQPVAOrLvZwQG=SHRdnzN-Y4Ag3V_b5vUTzh6Y0YjQ@mail.gmail.com>
+Subject: Re: [PATCH v2] RDMA/rxe: Get rid of redundant plus
+To:     Li Zhijian <lizhijian@fujitsu.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+        RDMA mailing list <linux-rdma@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Li Zhijian <lizhijian@cn.fujitsu.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/LVpyCBuhysS46Hv+6fagQ62
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jan 4, 2022 at 9:25 AM Li Zhijian <lizhijian@fujitsu.com> wrote:
+>
+> From: Li Zhijian <lizhijian@cn.fujitsu.com>
+>
+> Get rid of the duplicate plus in a line to be consistent with others.
+>
+> Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
 
-Hi all,
+Reviewed-by: Zhu Yanjun <zyjzyj2000@gmail.com>
 
-Today's linux-next merge of the tip tree got a conflict in:
+Zhu Yanjun
 
-  drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
-
-between commit:
-
-  26a7993c93a7 ("net/mlx5: Use first online CPU instead of hard coded CPU")
-
-from Linus' tree and commit:
-
-  7451e9ea8e20 ("net/mlx5: Use irq_set_affinity_and_hint()")
-
-from the tip tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
-index 163e01fe500e,54fb67cec544..000000000000
---- a/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
-@@@ -398,8 -398,8 +398,8 @@@ irq_pool_request_vector(struct mlx5_irq
-  	cpumask_copy(irq->mask, affinity);
-  	if (!irq_pool_is_sf_pool(pool) && !pool->xa_num_irqs.max &&
-  	    cpumask_empty(irq->mask))
- -		cpumask_set_cpu(0, irq->mask);
- +		cpumask_set_cpu(cpumask_first(cpu_online_mask), irq->mask);
-- 	irq_set_affinity_hint(irq->irqn, irq->mask);
-+ 	irq_set_affinity_and_hint(irq->irqn, irq->mask);
-  unlock:
-  	mutex_unlock(&pool->lock);
-  	return irq;
-
---Sig_/LVpyCBuhysS46Hv+6fagQ62
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHTtMsACgkQAVBC80lX
-0Gw+kwf9E7bT47f2dejb/SXw3fEwv9dgmt+DbZm2ziRredG/RLH6C7soNQxl2bkr
-XXR1cmVg6HCm0kh0s5hxVu81HiQ46SSHK6o0Dbz8OrDQ9ATYuRENK5H3g9X3qZFU
-HBAF18DAWcGOG00hwMqqHbG1Pm2ftSZ+Gs50XDdQi2sMFUVLef8ZKm+XjqEOhh9h
-q8TovKpMonmM/ez9GwB30hD7wY46VigNqtFjfIEf1X7WQ+FuqZDS57ynAD86OliL
-BzT9pnRDakaUPi8lSSykYTWzZZJpEgu2bSAdKjoCfBcqZBOv0Xr3cJ+yItzKeNS4
-M21iH6ZPmGhC2VQ9XggCmTUh4SrZXQ==
-=39wO
------END PGP SIGNATURE-----
-
---Sig_/LVpyCBuhysS46Hv+6fagQ62--
+> ---
+>  drivers/infiniband/sw/rxe/rxe_opcode.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/infiniband/sw/rxe/rxe_opcode.c b/drivers/infiniband/sw/rxe/rxe_opcode.c
+> index 3ef5a10a6efd..79122eeb4d82 100644
+> --- a/drivers/infiniband/sw/rxe/rxe_opcode.c
+> +++ b/drivers/infiniband/sw/rxe/rxe_opcode.c
+> @@ -879,9 +879,9 @@ struct rxe_opcode_info rxe_opcode[RXE_NUM_OPCODE] = {
+>                         [RXE_ATMETH]    = RXE_BTH_BYTES
+>                                                 + RXE_RDETH_BYTES
+>                                                 + RXE_DETH_BYTES,
+> -                       [RXE_PAYLOAD]   = RXE_BTH_BYTES +
+> +                       [RXE_PAYLOAD]   = RXE_BTH_BYTES
+>                                                 + RXE_ATMETH_BYTES
+> -                                               + RXE_DETH_BYTES +
+> +                                               + RXE_DETH_BYTES
+>                                                 + RXE_RDETH_BYTES,
+>                 }
+>         },
+> @@ -900,9 +900,9 @@ struct rxe_opcode_info rxe_opcode[RXE_NUM_OPCODE] = {
+>                         [RXE_ATMETH]    = RXE_BTH_BYTES
+>                                                 + RXE_RDETH_BYTES
+>                                                 + RXE_DETH_BYTES,
+> -                       [RXE_PAYLOAD]   = RXE_BTH_BYTES +
+> +                       [RXE_PAYLOAD]   = RXE_BTH_BYTES
+>                                                 + RXE_ATMETH_BYTES
+> -                                               + RXE_DETH_BYTES +
+> +                                               + RXE_DETH_BYTES
+>                                                 + RXE_RDETH_BYTES,
+>                 }
+>         },
+> --
+> 2.33.0
+>
+>
+>

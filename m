@@ -2,125 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80DDD483957
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 01:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42DB148395C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 01:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231278AbiADAAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 19:00:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55740 "EHLO
+        id S231374AbiADAEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 19:04:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiADAAu (ORCPT
+        with ESMTP id S231310AbiADAEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 19:00:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04252C061761
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 16:00:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2662F6121D
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 00:00:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C138C36AF5
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 00:00:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641254448;
-        bh=TNarL2hfu8eJEcGtDz9+dQGA77tHSc49VlWpuvPnZ1I=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Eo0d+CTN+FJuwECto80YDNRaqot6AcT3Bxh3XoliN0XewK/BjDNPG0IJYL4In1zX2
-         ZiuXIrm8SfnDNb5bMmNkrufSwrLApanTc7G+RtQlJj+rijosScqsTz9SwHvQLSBXLH
-         Uk2dcIKVJJ9NX87GoqC7Fk1dxMqCx+VJba42HV6AI1vJXjFU4lvQVgjqt2ZwcStE7+
-         kqa9OAjitm67zTlz8D8gCQnFnktwYLenpRFHNNgAfXGWo2DBYmltqnwXYROXpV0GCv
-         aJDVh8vm98EBjS7gM2ILCtHb8DmFQJa2VAnhsbnhkpWC6EIBmnjD1bwVJky0e2tOIH
-         3XPFll6PKc3YQ==
-Received: by mail-ed1-f43.google.com with SMTP id j21so141496962edt.9
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 16:00:48 -0800 (PST)
-X-Gm-Message-State: AOAM531Rlur/5RQlegNDsf1FrhHjpVLa0qj16bcPr4LXwYT3jp1ivqPd
-        Pbj2YBGBifOhl+31Y/Z8jiqV83ye9QsQioaesA==
-X-Google-Smtp-Source: ABdhPJyaz7BnlYjQMVi+kdPY5KTdRWwNiolCizpj3tNIG5pA43f+7YnaYUahBNDOYOQUnP476RsDvzNIT9t6xMhhfW8=
-X-Received: by 2002:a17:906:c109:: with SMTP id do9mr37211153ejc.48.1641254446823;
- Mon, 03 Jan 2022 16:00:46 -0800 (PST)
+        Mon, 3 Jan 2022 19:04:35 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A69C061761;
+        Mon,  3 Jan 2022 16:04:35 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id t123so30628902pfc.13;
+        Mon, 03 Jan 2022 16:04:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:cc:references:subject:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=LfI3AmZKBsaakQUxMJMZxrQzatevP8fdDjHAVNXBEcw=;
+        b=UO+OxBZLwdo8sEZXkJoSQHHXFHdzzTtK2600hNgUHDUUg+immGIdHUl6EQTXPGUDIg
+         SY/EWZ189HqBlX0LF5GPPV9LmSlRvow+yQXsrTAlhFTZcS1HSX0wPgkLoDQR4MNy6Egx
+         k2+N1ASj7q54HkmbwVr01xI/IOoxp/rT+S802bOW3rFmnCgm7gD/98Tj0r5sltj5HGS4
+         M++6KGX6RTm8271c0b57QO69G7PEQDAKgTDMcL+a0ueHHEmoBLloZ5Oh6/NITb9ZA6SC
+         UfYXqjq7poNvOM8pnV96FQn7JtuS4e+id3mUb46USQQ3jxdb6b5vemqgNrnBYLe9YuSa
+         ypgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:to:cc:references:subject:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=LfI3AmZKBsaakQUxMJMZxrQzatevP8fdDjHAVNXBEcw=;
+        b=rE7GD15cKI2vvNgcl7UYp83FSO3Gt5IyEQYO/OMC/KyszyHviGRKhFFDvDfYInE0RK
+         CLgsST5TNU6TKd1ZESNb1eSvnOikZWAp9jpT1JqHq4Qer1q1lAvxQf9uebRUbyxrAV5T
+         ukoSet4ARvk6lta+YgKQuCQm11hbXaooZHc6o6qpI1XeyKAkbuNMjpY6YsvgFrViWvBR
+         IlPhEFDBm5YfqU73hXKYqYqTz4CbwyQs+Y4+rmX28zXAD8QXGTPb0HCXiE0acnA8pC6Z
+         M/tFIeYN9szoAj2sbpBBLMC0pUUBM4lZQ+s3V8zgVcm4rNHnmmXAXPywv93kwj7OOV0h
+         cTvA==
+X-Gm-Message-State: AOAM531LNowlYLqgRGfV7KnOnYWYDE+b8uHShV4eypzOnTZ1v8f/omXT
+        A/NJONGktoAb4s1r20EjtQm8s4R0dTY=
+X-Google-Smtp-Source: ABdhPJwdjEZ7s5GS/TDvTueOPszVyYqTxb3u/qx6Kt+dhY+6HUqoZykiYG4U2MjmB20Jz0JxsM4exg==
+X-Received: by 2002:a63:154f:: with SMTP id 15mr41891786pgv.521.1641254674814;
+        Mon, 03 Jan 2022 16:04:34 -0800 (PST)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id s14sm39756399pfk.171.2022.01.03.16.04.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jan 2022 16:04:34 -0800 (PST)
+To:     corbet@lwn.net, mchehab@kernel.org
+Cc:     hch@lst.de, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <87mtkcxws9.fsf@meer.lwn.net>
+Subject: Re: [PATCH 1/1] scripts: sphinx-pre-install: add required ctex
+ dependency
+From:   Akira Yokosawa <akiyks@gmail.com>
+Message-ID: <eeb773ef-0354-be1f-8438-07e3324fa9f6@gmail.com>
+Date:   Tue, 4 Jan 2022 09:04:30 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20220103054706.8072-1-miles.chen@mediatek.com>
-In-Reply-To: <20220103054706.8072-1-miles.chen@mediatek.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Tue, 4 Jan 2022 08:00:54 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_-WX8p=Ba_4JPgnX4Wmh66bNF09RiP5C7+0=7V-ngdsLA@mail.gmail.com>
-Message-ID: <CAAOTY_-WX8p=Ba_4JPgnX4Wmh66bNF09RiP5C7+0=7V-ngdsLA@mail.gmail.com>
-Subject: Re: [PATCH v4] drm/mediatek: Fix mtk_cec_mask()
-To:     Miles Chen <miles.chen@mediatek.com>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Junzhi Zhao <junzhi.zhao@mediatek.com>,
-        Jie Qiu <jie.qiu@mediatek.com>,
-        Zhiqiang Lin <zhiqiang.lin@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <87mtkcxws9.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Miles:
+Hi,
 
-Miles Chen <miles.chen@mediatek.com> =E6=96=BC 2022=E5=B9=B41=E6=9C=883=E6=
-=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=881:47=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> In current implementation, mtk_cec_mask() writes val into target register
-> and ignores the mask. After talking to our hdmi experts, mtk_cec_mask()
-> should read a register, clean only mask bits, and update (val | mask) bit=
-s
-> to the register.
+On Mon, 03 Jan 2022 15:46:30 -0700, Jonathan Corbet <corbet@lwn.net> wrote:
+> Mauro Carvalho Chehab <mchehab@kernel.org> writes:
+> 
+>> After a change meant to fix support for oriental characters
+>> (Chinese, Japanese, Korean), ctex stylesheet is now a requirement
+>> for PDF output.
 
-Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+FWIW, ctexhook.sty is a new requirement of xeCJK.sty v3.8.7 released
+in June 2021.
 
->
-> Fixes: 8f83f26891e1 ("drm/mediatek: Add HDMI support")
->
-> Cc: Zhiqiang Lin <zhiqiang.lin@mediatek.com>
-> Cc: CK Hu <ck.hu@mediatek.com>
-> Cc: Matthias Brugger <matthias.bgg@gmail.com>
->
-> Signed-off-by: Miles Chen <miles.chen@mediatek.com>
->
-> ---
->
-> Change since v1:
-> add Fixes tag
->
-> Change since v2:
-> add explanation of mtk_cec_mask()
->
-> Change since v3:
-> change misleading subject and modify the commit message since this is a b=
-ug fix patch
->
-> ---
->  drivers/gpu/drm/mediatek/mtk_cec.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/mediatek/mtk_cec.c b/drivers/gpu/drm/mediate=
-k/mtk_cec.c
-> index e9cef5c0c8f7..cdfa648910b2 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_cec.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_cec.c
-> @@ -85,7 +85,7 @@ static void mtk_cec_mask(struct mtk_cec *cec, unsigned =
-int offset,
->         u32 tmp =3D readl(cec->regs + offset) & ~mask;
->
->         tmp |=3D val & mask;
-> -       writel(val, cec->regs + offset);
-> +       writel(tmp, cec->regs + offset);
->  }
->
->  void mtk_cec_set_hpd_event(struct device *dev,
-> --
-> 2.18.0
->
+        Thanks, Akira
+
+>>
+>> Reported-by: Christoph Hellwig <hch@lst.de>
+>> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+>> ---
+>>
+>> See [PATCH 0/1] at: https://lore.kernel.org/all/cover.1641243581.git.mchehab@kernel.org/
+>>
+>>  scripts/sphinx-pre-install | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/scripts/sphinx-pre-install b/scripts/sphinx-pre-install
+>> index 288e86a9d1e5..46aaab414098 100755
+>> --- a/scripts/sphinx-pre-install
+>> +++ b/scripts/sphinx-pre-install
+>> @@ -78,6 +78,7 @@ my %texlive = (
+>>  	'ucs.sty'            => 'texlive-ucs',
+>>  	'upquote.sty'        => 'texlive-upquote',
+>>  	'wrapfig.sty'        => 'texlive-wrapfig',
+>> +	'ctexhook.sty'       => 'texlive-ctex',
+>>  );
+> 
+> I've applied this, thanks.> 
+> jon
+
+

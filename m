@@ -2,145 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E56EB4844FF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:44:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4456F48450B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:45:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233945AbiADPo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 10:44:27 -0500
-Received: from mail-ot1-f42.google.com ([209.85.210.42]:43993 "EHLO
-        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232657AbiADPo0 (ORCPT
+        id S234971AbiADPo4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jan 2022 10:44:56 -0500
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:38821 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234929AbiADPoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 10:44:26 -0500
-Received: by mail-ot1-f42.google.com with SMTP id i5-20020a05683033e500b0057a369ac614so47784214otu.10;
-        Tue, 04 Jan 2022 07:44:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=88ToW1HxpPdWlQecnSmTubeVq6bgfhtdA0w+XJ2iNAI=;
-        b=bFSxP3i1ZXPo6uSeUP6W0FYHfjiO4KjGeki2++UJ8VOQQLHcUj9WPtttOFxRhoPGn5
-         947f1Zvug/i/M+JGoe5WLLsYHQeogYkHWcpnXo+zGoLcH/YM3ip1j/xEY6H0X4lqd9KW
-         b5GUXrHv9NASiNh+ikUryItFFXz2wT55x78bAn0zc5V0WsPynAG7BvWWa06tIIvdWzsl
-         3Yw7zcpBnhqtgqv35kJCnY6nIH56bftMvrLYPrbA/gQhK7X4o6g9yLlMYQpMs42tRdmr
-         mfLi3kWUrbeEKkEVHlWyB1P8bX/IRHfotx+fcR2B4badpWUTu4i3slgbeLLPqYUd72mC
-         VxFw==
-X-Gm-Message-State: AOAM531vC4xDAenhENwDhQ/omEHtiYDbjSpYM3q1QPq+Edcpz3mEsgPU
-        nHGVzvWPxS8UTYSaPNebtg==
-X-Google-Smtp-Source: ABdhPJxTKO48T7iMJ0FASBAz6U0gvPANFg6vuYbCKuBo12BXIhtRIkIl/HxfUzDKoNRt0JgdLt1R4w==
-X-Received: by 2002:a05:6830:1f3a:: with SMTP id e26mr36840685oth.233.1641311065950;
-        Tue, 04 Jan 2022 07:44:25 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id c9sm7944529oog.43.2022.01.04.07.44.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 07:44:25 -0800 (PST)
-Received: (nullmailer pid 896773 invoked by uid 1000);
-        Tue, 04 Jan 2022 15:44:24 -0000
-Date:   Tue, 4 Jan 2022 09:44:24 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Inki Dae <inki.dae@samsung.com>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Beomho Seo <beomho.seo@samsung.com>
-Subject: Re: [PATCH 3/5] regulator: dt-bindings:  maxim,max77843: add
- MAX77843 bindings
-Message-ID: <YdRrWGry08M+h2IZ@robh.at.kernel.org>
-References: <20211229124631.21576-1-krzysztof.kozlowski@canonical.com>
- <20211229124631.21576-4-krzysztof.kozlowski@canonical.com>
+        Tue, 4 Jan 2022 10:44:54 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id BE972E0005;
+        Tue,  4 Jan 2022 15:44:50 +0000 (UTC)
+Date:   Tue, 4 Jan 2022 16:44:49 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Alexander Aring <alex.aring@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        linux-wpan - ML <linux-wpan@vger.kernel.org>,
+        David Girault <david.girault@qorvo.com>,
+        Romuald Despres <romuald.despres@qorvo.com>,
+        Frederic Blain <frederic.blain@qorvo.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        kernel list <linux-kernel@vger.kernel.org>
+Subject: Re: [net-next 01/18] ieee802154: hwsim: Ensure proper channel
+ selection at probe time
+Message-ID: <20220104164449.1179bfc7@xps13>
+In-Reply-To: <CAB_54W7BeSA+2GVzb9Yvz1kj12wkRSqHj9Ybr8cK7oYd7804RQ@mail.gmail.com>
+References: <20211222155743.256280-1-miquel.raynal@bootlin.com>
+        <20211222155743.256280-2-miquel.raynal@bootlin.com>
+        <CAB_54W7BeSA+2GVzb9Yvz1kj12wkRSqHj9Ybr8cK7oYd7804RQ@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211229124631.21576-4-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 29, 2021 at 01:46:29PM +0100, Krzysztof Kozlowski wrote:
-> Document the bindings for MAX77843 regulator driver.  The bindings are
-> almost identical to MAX77693 bindings, except the actual names of
-> regulators.
+Hi Alexander,
 
-Same issues here as your other Maxim regulator conversions.
+alex.aring@gmail.com wrote on Tue, 28 Dec 2021 16:05:43 -0500:
+
+> Hi,
+> 
+> On Wed, 22 Dec 2021 at 10:57, Miquel Raynal <miquel.raynal@bootlin.com> wrote:
+> >
+> > A default channel is selected by default (13), let's clarify that this
+> > is page 0 channel 13. Call the right helper to ensure the necessary
+> > configuration for this channel has been applied.
+> >
+> > So far there is very little configuration done in this helper but we
+> > will soon add more information (like the symbol duration which is
+> > missing) and having this helper called at probe time will prevent us to
+> > this type of initialization at two different locations.
+> >  
+> 
+> I see why this patch is necessary because in later patches the symbol
+> duration is set at ".set_channel()" callback like the at86rf230 driver
+> is doing it.
+> However there is an old TODO [0]. I think we should combine it and
+> implement it in ieee802154_set_channel() of "net/mac802154/cfg.c".
+> Also do the symbol duration setting according to the channel/page when
+> we call ieee802154_register_hw(), so we have it for the default
+> settings.
+
+While I totally agree on the background idea, I don't really see how
+this is possible. Every driver internally knows what it supports but
+AFAIU the core itself has no easy and standard access to it?
+
+Another question that I have: is the protocol and center frequency
+enough to always derive the symbol rate? I am not sure this is correct,
+but I thought not all symbol rates could be derived, like for example
+certain UWB PHY protocols which can use different PRF on a single
+channel which has an effect on the symbol duration?
+
+> > So far there is very little configuration done in this helper but thanks
+> > to this improvement, future enhancements in this area (like setting a
+> > symbol duration, which is missing) will be reflected automatically in
+> > the default probe state.
+> >
+> > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> > ---
+> >  drivers/net/ieee802154/mac802154_hwsim.c | 7 +++++--
+> >  1 file changed, 5 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/net/ieee802154/mac802154_hwsim.c b/drivers/net/ieee802154/mac802154_hwsim.c
+> > index 62ced7a30d92..b1a4ee7dceda 100644
+> > --- a/drivers/net/ieee802154/mac802154_hwsim.c
+> > +++ b/drivers/net/ieee802154/mac802154_hwsim.c
+> > @@ -778,8 +778,6 @@ static int hwsim_add_one(struct genl_info *info, struct device *dev,
+> >
+> >         ieee802154_random_extended_addr(&hw->phy->perm_extended_addr);
+> >
+> > -       /* hwsim phy channel 13 as default */
+> > -       hw->phy->current_channel = 13;
+> >         pib = kzalloc(sizeof(*pib), GFP_KERNEL);
+> >         if (!pib) {
+> >                 err = -ENOMEM;
+> > @@ -793,6 +791,11 @@ static int hwsim_add_one(struct genl_info *info, struct device *dev,
+> >         hw->flags = IEEE802154_HW_PROMISCUOUS | IEEE802154_HW_RX_DROP_BAD_CKSUM;  
+> 
+> sadly this patch doesn't apply on current net-next/master because
+> IEEE802154_HW_RX_DROP_BAD_CKSUM is not set.
+> I agree that it should be set, so we need a patch for it.
+
+Right, I just have a patch aside setting this to enforce beacons
+checksum were good. I can certainly set this flag officially.
 
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  .../bindings/regulator/maxim,max77843.yaml    | 55 +++++++++++++++++++
->  1 file changed, 55 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/maxim,max77843.yaml
+> - Alex
 > 
-> diff --git a/Documentation/devicetree/bindings/regulator/maxim,max77843.yaml b/Documentation/devicetree/bindings/regulator/maxim,max77843.yaml
-> new file mode 100644
-> index 000000000000..1ab58c756d7c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/maxim,max77843.yaml
-> @@ -0,0 +1,55 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/maxim,max77843.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Maxim MAX77843 MicroUSB and Companion Power Management IC regulators
-> +
-> +maintainers:
-> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> +
-> +description: |
-> +  This is a part of device tree bindings for Maxim MAX77843 MicroUSB Integrated
-> +  Circuit (MUIC).
-> +
-> +  See also Documentation/devicetree/bindings/mfd/maxim,max77843.yaml for
-> +  additional information and example.
-> +
-> +properties:
-> +  compatible:
-> +    const: maxim,max77843-regulator
-> +
-> +patternProperties:
-> +  "^SAFEOUT[12]$":
-> +    type: object
-> +    $ref: regulator.yaml#
-> +    unevaluatedProperties: false
-> +    description: |
-> +      Safeout LDO regulator.
-> +
-> +    properties:
-> +      regulator-min-microvolt: true
-> +      regulator-max-microvolt: true
-> +
-> +    required:
-> +      - regulator-name
-> +
-> +  "^CHARGER$":
-> +    type: object
-> +    $ref: regulator.yaml#
-> +    unevaluatedProperties: false
-> +    description: |
-> +      Current regulator.
-> +
-> +    properties:
-> +      regulator-min-microamp: true
-> +      regulator-max-microamp: true
-> +
-> +    required:
-> +      - regulator-name
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> -- 
-> 2.32.0
-> 
-> 
+> [0] https://elixir.bootlin.com/linux/v5.16-rc7/source/drivers/net/ieee802154/at86rf230.c#L1059
+
+
+Thanks,
+Miquèl

@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB8048429C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B82648429F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233689AbiADNil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 08:38:41 -0500
-Received: from mga14.intel.com ([192.55.52.115]:55154 "EHLO mga14.intel.com"
+        id S233700AbiADNiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 08:38:46 -0500
+Received: from mga07.intel.com ([134.134.136.100]:25811 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233656AbiADNij (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S233663AbiADNij (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 4 Jan 2022 08:38:39 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1641303519; x=1672839519;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=1faGgl1n5RMDy4eY/oAFnPrRhLAJ+Ie+KfhM2G1o9gw=;
-  b=DGssk2yTp8y3WVpLVgil4oiS0/T6QP6I7zO6DwkI6XCgweSZyX+QyBqJ
-   t99UdgHvrgOFtRKDad8yRK94tfAlDxm+7V/DtpZnCUqJS/qC0AduyRS1W
-   2bBlzon9UYbrVuO2nC3hiJqOIm8Drf1Qozm4V/J2nqxISUN6XvxPMmYz+
-   nTlYmen3h12rXJ2O7qF/5c8m2X40AW4hWHEBQrdbZq4ERC/nhBiyG10wb
-   EMIUzpzIrnkID60cRHmkxBpf2sWitcE2bwMW03OeQeu9hOYBUR8N7pyEa
-   bN4Nv2fk0WRJfPGYNRonIis1y6EfyUeFB1npNX/0tmihnyEWJmOdcfGuj
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="242430114"
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=iKpVHqbLjmy+GnZIzKt6LP0hTcWqlU2qKV4ybnoaZ5Y=;
+  b=B3vBSms37MREx8C/cBFTA2e9CdmrVL10xiFtdNFbY3Rmd35Wqz8pO0A4
+   V8xnf0Aq+z8t18MhuQEfKPYmfz2OJGm6d5lp1s1HHoyTiOKsvMRxmFA3o
+   ZFlbt5tfpp9KzQBEJAKv9NVw0uJYw6Qrra3UbTu9CD4sICnAjkU1OGyO1
+   r1c3xMBh9QL1VJdZHs+ZadkPHNVsP/5ERaYR5Ex0ksEFv2AXStV38dkNY
+   3eO7uL3SG8TU9xbSmat9tJEg1ux5076yiLXd3uPiOAFgLtM0pVnPKxrsL
+   3aKQDw/fGH89dJuvrZ7cNVcs1LgVgz2nbYHsXvrW0j/ZxbFoL/0P5w8Ou
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="305576180"
 X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
-   d="scan'208";a="242430114"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 05:38:39 -0800
+   d="scan'208";a="305576180"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 05:38:39 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
-   d="scan'208";a="556169291"
+   d="scan'208";a="590678804"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 04 Jan 2022 05:38:35 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 04 Jan 2022 05:38:35 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id CFCB41F8; Tue,  4 Jan 2022 15:38:45 +0200 (EET)
+        id D87DC18E; Tue,  4 Jan 2022 15:38:45 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
@@ -50,77 +50,70 @@ Cc:     Richard Weinberger <richard@nod.at>,
         Michael Jamet <michael.jamet@intel.com>,
         Yehezkel Bernat <YehezkelShB@gmail.com>,
         Alexander Usyskin <alexander.usyskin@intel.com>
-Subject: [PATCH v1 1/5] nvmem: core: Remove unused devm_nvmem_unregister()
-Date:   Tue,  4 Jan 2022 15:38:39 +0200
-Message-Id: <20220104133843.44272-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 2/5] nvmem: core: Use devm_add_action_or_reset()
+Date:   Tue,  4 Jan 2022 15:38:40 +0200
+Message-Id: <20220104133843.44272-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220104133843.44272-1-andriy.shevchenko@linux.intel.com>
+References: <20220104133843.44272-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are no users and seems no will come of the devm_nvmem_unregister().
-Remove the function.
+Slightly simplify the devm_nvmem_register() by using the
+devm_add_action_or_reset().
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/nvmem/core.c           | 15 ---------------
- include/linux/nvmem-provider.h |  8 --------
- 2 files changed, 23 deletions(-)
+ drivers/nvmem/core.c | 22 +++++++++-------------
+ 1 file changed, 9 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-index 23a38dcf0fc4..fbf7dec775fb 100644
+index fbf7dec775fb..6946d14876dc 100644
 --- a/drivers/nvmem/core.c
 +++ b/drivers/nvmem/core.c
-@@ -952,21 +952,6 @@ static int devm_nvmem_match(struct device *dev, void *res, void *data)
- 	return *r == data;
+@@ -907,9 +907,9 @@ void nvmem_unregister(struct nvmem_device *nvmem)
  }
+ EXPORT_SYMBOL_GPL(nvmem_unregister);
  
--/**
-- * devm_nvmem_unregister() - Unregister previously registered managed nvmem
-- * device.
-- *
-- * @dev: Device that uses the nvmem device.
-- * @nvmem: Pointer to previously registered nvmem device.
-- *
-- * Return: Will be negative on error or zero on success.
-- */
--int devm_nvmem_unregister(struct device *dev, struct nvmem_device *nvmem)
--{
--	return devres_release(dev, devm_nvmem_release, devm_nvmem_match, nvmem);
--}
--EXPORT_SYMBOL(devm_nvmem_unregister);
--
- static struct nvmem_device *__nvmem_device_get(void *data,
- 			int (*match)(struct device *dev, const void *data))
+-static void devm_nvmem_release(struct device *dev, void *res)
++static void devm_nvmem_unregister(void *nvmem)
  {
-diff --git a/include/linux/nvmem-provider.h b/include/linux/nvmem-provider.h
-index 98efb7b5660d..99c01c43d7a8 100644
---- a/include/linux/nvmem-provider.h
-+++ b/include/linux/nvmem-provider.h
-@@ -133,8 +133,6 @@ void nvmem_unregister(struct nvmem_device *nvmem);
- struct nvmem_device *devm_nvmem_register(struct device *dev,
- 					 const struct nvmem_config *cfg);
- 
--int devm_nvmem_unregister(struct device *dev, struct nvmem_device *nvmem);
--
- void nvmem_add_cell_table(struct nvmem_cell_table *table);
- void nvmem_del_cell_table(struct nvmem_cell_table *table);
- 
-@@ -153,12 +151,6 @@ devm_nvmem_register(struct device *dev, const struct nvmem_config *c)
- 	return nvmem_register(c);
+-	nvmem_unregister(*(struct nvmem_device **)res);
++	nvmem_unregister(nvmem);
  }
  
--static inline int
--devm_nvmem_unregister(struct device *dev, struct nvmem_device *nvmem)
--{
--	return -EOPNOTSUPP;
--}
+ /**
+@@ -926,20 +926,16 @@ static void devm_nvmem_release(struct device *dev, void *res)
+ struct nvmem_device *devm_nvmem_register(struct device *dev,
+ 					 const struct nvmem_config *config)
+ {
+-	struct nvmem_device **ptr, *nvmem;
 -
- static inline void nvmem_add_cell_table(struct nvmem_cell_table *table) {}
- static inline void nvmem_del_cell_table(struct nvmem_cell_table *table) {}
+-	ptr = devres_alloc(devm_nvmem_release, sizeof(*ptr), GFP_KERNEL);
+-	if (!ptr)
+-		return ERR_PTR(-ENOMEM);
++	struct nvmem_device *nvmem;
++	int ret;
  
+ 	nvmem = nvmem_register(config);
++	if (IS_ERR(nvmem))
++		return nvmem;
+ 
+-	if (!IS_ERR(nvmem)) {
+-		*ptr = nvmem;
+-		devres_add(dev, ptr);
+-	} else {
+-		devres_free(ptr);
+-	}
++	ret = devm_add_action_or_reset(dev, devm_nvmem_unregister, nvmem);
++	if (ret)
++		return ERR_PTR(ret);
+ 
+ 	return nvmem;
+ }
 -- 
 2.34.1
 

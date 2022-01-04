@@ -2,96 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD46348480F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:48:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F076448481D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236310AbiADSsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 13:48:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
+        id S232178AbiADSxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 13:53:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233191AbiADSsI (ORCPT
+        with ESMTP id S236058AbiADSxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 13:48:08 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E5DC061784;
-        Tue,  4 Jan 2022 10:48:08 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id mj19so32034711pjb.3;
-        Tue, 04 Jan 2022 10:48:08 -0800 (PST)
+        Tue, 4 Jan 2022 13:53:31 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB99C061761;
+        Tue,  4 Jan 2022 10:53:31 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id lr15-20020a17090b4b8f00b001b19671cbebso4087693pjb.1;
+        Tue, 04 Jan 2022 10:53:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=vSK8/28CP9KIkcXPEPV3gMsZVBQeibcySwPx2JeGPls=;
-        b=E0sXlatkL37VBQBKT3QzkmzhW5+i008O11NLBGLxpHMZha/utBTR2qul0n481ba/5b
-         bIdjlN0ufSYhsZr2yLx7Pudp0IYh+hZ4co7YezE6aDiyPLW+fnUuA3EXugxqe7oFIXPL
-         V8UWPk4DCmYPOsC5hgRWezVsZ9HicxnDHY595MT8ZFKS4BwCpjOsO1FFHrHLkptjI5UN
-         cy0iw1E641r/QwFZ/fFZa2sD7yp+Ijq0x8HGFbPZemGNHk1MN0V8gI754vkU0v9kkbeJ
-         05kWOvssgaGu2vs/hSu6mrxI7z07QVXt8GksmCiGn6HH6OnISKdsJPrLTXGScNCUjqMH
-         y6ZQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=878RGf7G5xfSkN8ej4TdN81e7RTEV0mxJ9Xgt75AUUE=;
+        b=IJ77n83ECbSB+kdRdX5qjRc+aSZSJFT4uzLrnbpTK8jOWA8F2k59cLapDgE7ANO2gW
+         vwzq1tl60fYsbGIhkTv5MZkkYRuO6AOv9VS2GsAZ6i6J4tbKgOJLkOYs1Z4yyTFbAps2
+         QlRlDHzDfnMLbw8cJaP6hOnOnYxFzZ8OvLK2g2q0ZfQL5a7jTs4nId7I2oiAkrzPz+jC
+         cim0D1QhaICDtwJUiMtT5X1ZbY/xfvYeSFrkc+mJpuAIx+Tq5ps8vApku2wp+cwfP4He
+         2CTj4RDcT/4cVYc/Vt3Jtv67AkxStu7tibGpQPFUIPYUmBqqyNVWG1u4ROpmWSY+sCN9
+         Fo6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vSK8/28CP9KIkcXPEPV3gMsZVBQeibcySwPx2JeGPls=;
-        b=7U//Whb8FybS/ep44YrJmFSgKiTGqtdA5x/Zw7OntK2vwGfWWu4udO3M+88FYSeJP9
-         K1CtzFjQiEvW0o8SqmcozixQ1fmiE+kW8Gw33P2XB90i+EcxehjzGjYRIi32XNwNUlsd
-         AzWCMO5nH7L8gXxr5IKGxQ1OUawc1B1dFAA32vavsbqsGcp1tc620SyXGmwX2tHovSOS
-         7ainLD799peDU3E+pvq9OIiUpuzHLBouRbgM7YylAveF+6J6xPWQCTwpw+9Za/tOYh/f
-         FB4EFGqFI1Ba7W8Y1ewyUhMdJaG86GBINlqlFdm/HA8IyopDZfXSLSvmg8U++LDLm5+/
-         SaTg==
-X-Gm-Message-State: AOAM532ZP2CDIDcWKdLrUFxti3IjpiQObhHxx8WEc539JHazYFjJGw0x
-        ujIoslYMdi48svcTwSKuje6oyxrj8t4=
-X-Google-Smtp-Source: ABdhPJyZR7WN4U4OsO5dG3tpd/KD1LauKNOzYCveoA3OCZ+QpzD3ZssZnedqZXLg2DwjxcXlvoIpRQ==
-X-Received: by 2002:a17:90a:d510:: with SMTP id t16mr61981126pju.84.1641322087413;
-        Tue, 04 Jan 2022 10:48:07 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id l11sm9290932pfu.115.2022.01.04.10.48.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 10:48:06 -0800 (PST)
-Subject: Re: [PATCH 5.15 00/72] 5.15.13-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        stable@vger.kernel.org
-References: <20220104073845.629257314@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <02f94e92-e621-2ebe-7a55-b91460706069@gmail.com>
-Date:   Tue, 4 Jan 2022 10:48:05 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=878RGf7G5xfSkN8ej4TdN81e7RTEV0mxJ9Xgt75AUUE=;
+        b=NKQAOXpwEUpRpgKgBXwtKkiKtM9YX7FR+cNTcZu+SI3oCHmLYfpV/Iz4YLZ3C/zPdz
+         ddSQZh1SWfRq+/vCl1GWV++v9IrTzThXbGnNSwN8L9XhQSOfBHctCfPgCh/9hGzkFWvw
+         Hd3TQ7K5ezlPt61n6LUyX5/SSCAUssfSpFp0jG2jfWNCan6KlH4tYi/hQ3HC/uPeX/ls
+         /kyLvZTSfI3GTKe1s3inHf6FtFZxaupyEMndbFa7f/UQh4A6pR/v2Ji5KixSniuOZX8d
+         9t52urrB9Y3ia9bKKXfEyeZExaBaFWLcmGXFBruhF32UC85j9JpifXp4eZftj0h0ZbML
+         9S9w==
+X-Gm-Message-State: AOAM533XT9DBXlLtvM6G8VysC7clxAqGYtGg8/1ZYud7I1Y+g2YFXHk8
+        rdVZK0xZqfHom0nSoWuyATm2lq0zsRmadRDZ3cY=
+X-Google-Smtp-Source: ABdhPJzdLaJwn8kNn+k7D+hlUghYv6CNpvjQNRPwlSxXwCsTRX4ocx/Bt3dou1s7om3gsPL4T2blgTsQ5F/hdZA4GwY=
+X-Received: by 2002:a17:90b:798:: with SMTP id l24mr62011210pjz.122.1641322410956;
+ Tue, 04 Jan 2022 10:53:30 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220104073845.629257314@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20220104080943.113249-1-jolsa@kernel.org>
+In-Reply-To: <20220104080943.113249-1-jolsa@kernel.org>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 4 Jan 2022 10:53:19 -0800
+Message-ID: <CAADnVQKZcr38aXwN6DyV7C9Ernfwkz5nsx8pXapKGNmnZ1JMDQ@mail.gmail.com>
+Subject: Re: [RFC 00/13] kprobe/bpf: Add support to attach multiple kprobes
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/3/22 11:41 PM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.13 release.
-> There are 72 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 06 Jan 2022 07:38:29 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.13-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Tue, Jan 4, 2022 at 12:09 AM Jiri Olsa <jolsa@redhat.com> wrote:
+>
+> hi,
+> adding support to attach multiple kprobes within single syscall
+> and speed up attachment of many kprobes.
+>
+> The previous attempt [1] wasn't fast enough, so coming with new
+> approach that adds new kprobe interface.
+>
+> The attachment speed of of this approach (tested in bpftrace)
+> is now comparable to ftrace tracer attachment speed.. fast ;-)
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+What are the absolute numbers?
+How quickly a single bpf prog can attach to 1k kprobes?

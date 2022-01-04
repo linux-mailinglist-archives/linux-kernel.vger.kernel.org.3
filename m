@@ -2,179 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15BBB483EDF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 10:08:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E7D483EE0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 10:09:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbiADJIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 04:08:47 -0500
-Received: from rap-us.hgst.com ([199.255.44.250]:47796 "EHLO
-        usg-ed-osssrv.wdc.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229469AbiADJIr (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 04:08:47 -0500
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JSmxq0q13z1VSkV
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 01:08:47 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1641287326; x=1643879327; bh=GYwwYfBVEdez+pCDhOX8DoTs/GFi9lmZ5Mo
-        HYZ8c4j0=; b=l18M8CIgRrCoFjolJuD1X6Jv7ei3YikMvByud6Qgz7dCdroNzqZ
-        3KMchs/P/vrLnB5paqakje8d6kYvSiiakFP4xHA4mGSqPtbMjvJoatFhMxjgTeRe
-        gwZizAXTqDHGjONmakXQYS5Z5nH4r2Zc2afq1i52N2rhYVtS4TAVACihtrfmeJPX
-        /IerProLSxd3XH/YbdWzxTsK9NfH7OHyx7ZrO4fj6yvQeYudu+OnscL+rx3M8nwo
-        ZyqhKnnmAfwE6hePnRc1JQOFn+Leg+FS8JjWjsYFfpharC31MWvgAPtr3psgVtKr
-        I7owI4FSe/zfgmwte90mzeTTS0RH2+n5vCQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id dP_klBKg6Au9 for <linux-kernel@vger.kernel.org>;
-        Tue,  4 Jan 2022 01:08:46 -0800 (PST)
-Received: from [10.225.163.42] (unknown [10.225.163.42])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JSmxn65tBz1VSjC;
-        Tue,  4 Jan 2022 01:08:45 -0800 (PST)
-Message-ID: <27da2f5c-ca6c-1d64-3d05-5453f11e298f@opensource.wdc.com>
-Date:   Tue, 4 Jan 2022 18:08:44 +0900
+        id S230077AbiADJJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 04:09:45 -0500
+Received: from mga18.intel.com ([134.134.136.126]:35841 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229650AbiADJJo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 04:09:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641287384; x=1672823384;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Th+inFVG54Ia8AqsQkCMNngyTxRszwXkT5RY6W+AcX0=;
+  b=brYzBxF63nLz9BW+4sOU+ze0qnb36Kyho1Vvbjqctx/97afz+cNORFwe
+   TSpyS6+mv77p15tad19m1D1vWeCMPqeRtk+nbnkx1I/3412BXIZ2vHb95
+   b6GQ0EoQHpyGfOlxocbtrdeszGaCEPoNMO1AgGP/zAJTScOi3ovvj3O7R
+   epXS9Sg69WKctZU21YKWalN3EkjhaHRXCZAm963noeZHlgXtfDoSt72xg
+   ShZ2HRR+x7uTGfYT2f0rvHoB9R6sRVJF80kYfgsc0PY0ImXHCCvtLq9+m
+   v4N/uv25xOeVafwiqjdW2DyPfcmICrRYKCTvHEb5J3Tf1THVd31J8HIPo
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="229008496"
+X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
+   d="scan'208";a="229008496"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 01:09:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
+   d="scan'208";a="620580451"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 04 Jan 2022 01:09:41 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n4fp7-000F8l-0a; Tue, 04 Jan 2022 09:09:41 +0000
+Date:   Tue, 4 Jan 2022 17:08:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jessica Yu <jeyu@kernel.org>
+Cc:     kbuild-all@lists.01.org, Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] module: add in-kernel support for decompressing
+Message-ID: <202201041739.pqEpumnU-lkp@intel.com>
+References: <YdPa+w0xYkXXEE9s@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v3 3/3] ahci: AMD A85 FCH (Hudson D4): Skip 200 ms
- debounce delay in `sata_link_resume()`
-Content-Language: en-US
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211229161119.1006-1-pmenzel@molgen.mpg.de>
- <20211229161119.1006-3-pmenzel@molgen.mpg.de>
- <5c333718-eaa5-b41c-e8ea-59d6e01254aa@opensource.wdc.com>
- <19f6cd93-9bd7-60dc-4471-18022bcf456c@molgen.mpg.de>
- <7b64d1c3-f798-d64b-9ee3-9669d98f4e28@opensource.wdc.com>
- <fbfd865f-c88c-6ee1-6cb9-8194e170cd3a@molgen.mpg.de>
- <c6748a52-fc8f-3309-31c2-973a9e69a7e8@opensource.wdc.com>
- <33deca4a-abed-123c-9530-3f15740a3261@molgen.mpg.de>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <33deca4a-abed-123c-9530-3f15740a3261@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdPa+w0xYkXXEE9s@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/4/22 17:49, Paul Menzel wrote:
-> [cc: -dmitry, -guenter]
->=20
-> Dear Damien,
->=20
->=20
-> Am 04.01.22 um 09:36 schrieb Damien Le Moal:
->> On 12/31/21 16:08, Paul Menzel wrote:
->=20
->>> Am 31.12.21 um 01:52 schrieb Damien Le Moal:
->>>> On 12/30/21 20:08, Paul Menzel wrote:
->>>>>>>     	board_ahci_nomsi,
->>>>>>>     	board_ahci_noncq,
->>>>>>>     	board_ahci_nosntf,
->>>>>>> @@ -141,6 +142,13 @@ static const struct ata_port_info ahci_port_=
-info[] =3D {
->>>>>>>     		.udma_mask	=3D ATA_UDMA6,
->>>>>>>     		.port_ops	=3D &ahci_ops,
->>>>>>>     	},
->>>>>>> +	[board_ahci_nodbdelay] =3D {
->>>>>>> +		.flags		=3D AHCI_FLAG_COMMON,
->>>>>>> +		.link_flags	=3D ATA_LFLAG_NO_DB_DELAY,
->>>>>>> +		.pio_mask	=3D ATA_PIO4,
->>>>>>> +		.udma_mask	=3D ATA_UDMA6,
->>>>>>> +		.port_ops	=3D &ahci_ops,
->>>>>>> +	},
->>>>>>>     	[board_ahci_nomsi] =3D {
->>>>>>>     		AHCI_HFLAGS	(AHCI_HFLAG_NO_MSI),
->>>>>>>     		.flags		=3D AHCI_FLAG_COMMON,
->>>>>>> @@ -437,6 +445,7 @@ static const struct pci_device_id ahci_pci_tb=
-l[] =3D {
->>>>>>>     		board_ahci_al },
->>>>>>>     	/* AMD */
->>>>>>>     	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_HUDSON2_SATA_IDE), boar=
-d_ahci },
->>>>>>> +	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_HUDSON2_SATA_AHCI), board_=
-ahci_nodbdelay },
->>>>>>
->>>>>> Patch 1 introduces this macro in pci_ids.h, but it is used only he=
-re. So
->>>>>> to keep with the current style in this structure, drop the macro (=
-so
->>>>>> drop patch 1).
->>>>>
->>>>> I wait for your answer of the second patch, and then I am going to =
-sent v4.
->>>>
->>>> Let's use the numeric value. No macro definition needed.
->>>
->>> Alright. I am going to follow the maintainers wishes.
->>>
->>>>>>>     	{ PCI_VDEVICE(AMD, 0x7900), board_ahci }, /* AMD CZ */
->>>>>>>     	{ PCI_VDEVICE(AMD, 0x7901), board_ahci_mobile }, /* AMD Gree=
-n Sardine */
->>>>>>>     	/* AMD is using RAID class only for ahci controllers */
->>>>>
->>>>> Do you have a AHCI device at hand, where you could also test if
->>>>> everything works fine without the delay?
->>>>
->>>> Unfortunately, I do not have any board with this adapter.
->>>
->>> Sorry, we misunderstand each other. (I wrote a reply to my own patch =
-[1].)
->>>
->>> I think the delay is not necessary for any modern AHCI controller. It=
-=E2=80=99d
->>> be great, if you could test, if it=E2=80=99s also true on the systems=
- you have
->>> by just skipping the delay.
->>
->> I need to figure out how to safely test suspend/resume remotely (worki=
-ng
->> from home) :)
->=20
-> Please note, I tested the cold bootup, where `sata_link_resume()` is=20
-> also run.
+Hi Dmitry,
 
-OK. So it should be easy to test. Will try to have a look.
+I love your patch! Perhaps something to improve:
 
->=20
->> It would indeed be great to have the default as "no delay on resume" a=
-nd
->> add the delay only for chipsets that need it. However, it is unclear
->> which chipset need the delay, right?
->=20
-> Yes, it=E2=80=99s unclear for what chipset (PHY?) it was added, as the =
-git=20
-> history i not available in the repository, and I have not found it yet.
->=20
->> So I think we are stuck with switching chipsets to "no delay" one by
->> one by testing. Once the majority of drivers are converted, we can
->> reverse the default to be "no delay" and mark untested drivers as
->> needing the delay.
->=20
-> For easy testing, a new CLI parameter to skip the delay might be handy.
+[auto build test WARNING on kees/for-next/pstore]
+[also build test WARNING on linus/master jeyu/modules-next v5.16-rc8 next-20211224]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-You mean a sysfs attribute may be ?
-I am not sure it would help: on resume, the sysfs attributes would be
-recreated and get the default value, not a new one.
+url:    https://github.com/0day-ci/linux/commits/Dmitry-Torokhov/module-add-in-kernel-support-for-decompressing/20220104-133017
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/pstore
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220104/202201041739.pqEpumnU-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/dee0e9ca58491575033bc7911dd4fe8f7cea40e4
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Dmitry-Torokhov/module-add-in-kernel-support-for-decompressing/20220104-133017
+        git checkout dee0e9ca58491575033bc7911dd4fe8f7cea40e4
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
 
->=20
->=20
-> Kind regards,
->=20
-> Paul
->=20
->=20
->>> [1]: https://lore.kernel.org/linux-ide/20211227162658.11314-2-pmenzel=
-@molgen.mpg.de/T/#m697d2121463a4c946730e6b83940e12d6d7e6700
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from kernel/module.c:61:
+>> kernel/module-internal.h:42:5: warning: no previous prototype for 'module_decompress' [-Wmissing-prototypes]
+      42 | int module_decompress(struct load_info *info, const void *buf, size_t size)
+         |     ^~~~~~~~~~~~~~~~~
+>> kernel/module-internal.h:46:6: warning: no previous prototype for 'module_decompress_cleanup' [-Wmissing-prototypes]
+      46 | void module_decompress_cleanup(struct load_info *info)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
 
 
---=20
-Damien Le Moal
-Western Digital Research
+vim +/module_decompress +42 kernel/module-internal.h
+
+    37	
+    38	#ifdef CONFIG_MODULE_DECOMPRESS
+    39	int module_decompress(struct load_info *info, const void *buf, size_t size);
+    40	void module_decompress_cleanup(struct load_info *info);
+    41	#else
+  > 42	int module_decompress(struct load_info *info, const void *buf, size_t size)
+    43	{
+    44		return -EOPNOTSUPP;
+    45	}
+  > 46	void module_decompress_cleanup(struct load_info *info)
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

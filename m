@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DDB14843B1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CFAA4843B2
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:50:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234411AbiADOuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:50:06 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35086 "EHLO
+        id S234419AbiADOuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:50:09 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35142 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234396AbiADOuA (ORCPT
+        with ESMTP id S234435AbiADOuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:50:00 -0500
+        Tue, 4 Jan 2022 09:50:04 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6F307B81125
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 14:49:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FD80C36AF3;
-        Tue,  4 Jan 2022 14:49:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15532B81646
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 14:50:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7925C36AE9;
+        Tue,  4 Jan 2022 14:49:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641307798;
-        bh=WrWKpVgJLQAdQeNhZs1tCFJTul6BO40+uMOAm3lLUB4=;
+        s=k20201202; t=1641307801;
+        bh=5Wg5M9I3hKWSbc7MWsUiph0hQbWiXIBYvfHiAxqg/tg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cNNurJN/fidbldLKUBiTyVYObezMR2edKh58mg4Zz4I0cVqVPbebvnMnNI5YQc3Lo
-         87Gg9SqQ4zdsrs0k87YvIj0IhC/YK6kBSm+mA/epzMcPtAX2IIVwffA1W0AL2HMXPQ
-         iTcZYEC2LXZcY4ZmgJedi+sdpk+FzKPT5wrLXUq+uX0NX3R9DHiCFRhdYPnk0fehNq
-         SuCjgkKv7qQLJhj2/oV4RZyi6xnmcCRfFgqGiGOWnBLhBnWYpUxUNY60c8DoErl+h0
-         WvbTQCNoy/LfZ4cePzlhnQnYvKL1z2D0wFBcf5zQlHwtkSIQ9A0rih/eNfsoOpRW6x
-         yM2AOTij/dpFw==
+        b=EmucEgPMFjGrZvjt8jSq9mirg0iMoD6i6fSiSIPVlmI2yUcKM1XADHOZxv9ikKkr/
+         S/GC9o0Vd0ESzb+k2c3h4X/fceu65IWNNVZzeBfLh5VJQfEQtgHxiPuvbGc6dhd+SV
+         FVRwx71UvAFXUrBa05SUDo0PgSEidsmKFnFGvxVcseUYiBHFfQFw6LixQr6u/XHC3E
+         875vaJ6qhDePDtba6f+tOH04Z4oYpkB3ttTv4ECutJgUEnt0mQBw9psVnPRq+nlQTP
+         OmvG/t0+8PpWGh1iQSuPhYd/ZI27JVW5VWw0q+p/+d3D45dDc0pO1HR6Z+cXluctZW
+         UurQTJpWAblww==
 From:   Frederic Weisbecker <frederic@kernel.org>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -43,9 +43,9 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Zefan Li <lizefan.x@bytedance.com>,
         Paul Gortmaker <paul.gortmaker@windriver.com>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH 2/8] workqueue: Decouple HK_FLAG_WQ and HK_FLAG_DOMAIN cpumask fetch
-Date:   Tue,  4 Jan 2022 15:49:38 +0100
-Message-Id: <20220104144944.1278663-3-frederic@kernel.org>
+Subject: [PATCH 3/8] net: Decouple HK_FLAG_WQ and HK_FLAG_DOMAIN cpumask fetch
+Date:   Tue,  4 Jan 2022 15:49:39 +0100
+Message-Id: <20220104144944.1278663-4-frederic@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220104144944.1278663-1-frederic@kernel.org>
 References: <20220104144944.1278663-1-frederic@kernel.org>
@@ -77,29 +77,33 @@ Cc: Tejun Heo <tj@kernel.org>
 Cc: Zefan Li <lizefan.x@bytedance.com>
 Cc: Alex Belits <abelits@marvell.com>
 ---
- kernel/workqueue.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/core/net-sysfs.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 613917bbc4e7..dbd9ad4873fc 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -6017,13 +6017,13 @@ static void __init wq_numa_init(void)
- void __init workqueue_init_early(void)
+diff --git a/net/core/net-sysfs.c b/net/core/net-sysfs.c
+index 9c01c642cf9e..57181577f273 100644
+--- a/net/core/net-sysfs.c
++++ b/net/core/net-sysfs.c
+@@ -831,7 +831,7 @@ static ssize_t store_rps_map(struct netdev_rx_queue *queue,
  {
- 	int std_nice[NR_STD_WORKER_POOLS] = { 0, HIGHPRI_NICE_LEVEL };
--	int hk_flags = HK_FLAG_DOMAIN | HK_FLAG_WQ;
- 	int i, cpu;
+ 	struct rps_map *old_map, *map;
+ 	cpumask_var_t mask;
+-	int err, cpu, i, hk_flags;
++	int err, cpu, i;
+ 	static DEFINE_MUTEX(rps_map_mutex);
  
- 	BUILD_BUG_ON(__alignof__(struct pool_workqueue) < __alignof__(long long));
+ 	if (!capable(CAP_NET_ADMIN))
+@@ -847,8 +847,8 @@ static ssize_t store_rps_map(struct netdev_rx_queue *queue,
+ 	}
  
- 	BUG_ON(!alloc_cpumask_var(&wq_unbound_cpumask, GFP_KERNEL));
--	cpumask_copy(wq_unbound_cpumask, housekeeping_cpumask(hk_flags));
-+	cpumask_copy(wq_unbound_cpumask, housekeeping_cpumask(HK_FLAG_WQ));
-+	cpumask_and(wq_unbound_cpumask, wq_unbound_cpumask, housekeeping_cpumask(HK_FLAG_DOMAIN));
- 
- 	pwq_cache = KMEM_CACHE(pool_workqueue, SLAB_PANIC);
- 
+ 	if (!cpumask_empty(mask)) {
+-		hk_flags = HK_FLAG_DOMAIN | HK_FLAG_WQ;
+-		cpumask_and(mask, mask, housekeeping_cpumask(hk_flags));
++		cpumask_and(mask, mask, housekeeping_cpumask(HK_FLAG_DOMAIN));
++		cpumask_and(mask, mask, housekeeping_cpumask(HK_FLAG_WQ));
+ 		if (cpumask_empty(mask)) {
+ 			free_cpumask_var(mask);
+ 			return -EINVAL;
 -- 
 2.25.1
 

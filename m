@@ -2,110 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B1764845F0
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:23:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4753F4845F5
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:27:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235280AbiADQW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 11:22:57 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:59940 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230389AbiADQW4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 11:22:56 -0500
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 204FMt1K001843;
-        Tue, 4 Jan 2022 16:22:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : reply-to : subject : to : cc : references : from :
- in-reply-to : content-type : content-transfer-encoding; s=pp1;
- bh=Ql8RA90aOTIqFTbRlZizKwaJjGs9gw0ddh+sGz09gEM=;
- b=jNqjHYUz74Zgio1A09PcACQwMkk5Cf6CNDbusML+yvLM9/feok0glGQ3CVkk3zrx32Qh
- nkkT3RPzW67mh3ICxOPa8rv5MyZGGqLRPKSYJ0+deW5d2nUquRPXokiUUGKAcLZjMVU8
- sdqE0x+FG8MUfIWY6MvWp6fIU+wdY/zdsLF64htP2WszoAborrZ0qdQXcPv7AqFOkBA8
- 0vNIL83yB5wuY0nrooC9Mn1rI6Jj46jBD2sR6NiIePb8Sta5efsjxtHlhWuGE4eKKfMn
- RcNpNfXJocdiFIFKeywGT/fu2jT2pQtsaic6+eTBFniof1ViKMJ6VJ1+xVB9d0OakRAk sA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dcpk9c2c1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Jan 2022 16:22:53 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 204Fbbln011883;
-        Tue, 4 Jan 2022 16:22:53 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dcpk9c2bs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Jan 2022 16:22:53 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 204GMpRk025469;
-        Tue, 4 Jan 2022 16:22:52 GMT
-Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
-        by ppma01wdc.us.ibm.com with ESMTP id 3daekae918-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Jan 2022 16:22:52 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 204GMpV519595684
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 4 Jan 2022 16:22:51 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9274DB2065;
-        Tue,  4 Jan 2022 16:22:51 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AB06BB2068;
-        Tue,  4 Jan 2022 16:22:50 +0000 (GMT)
-Received: from [9.160.188.198] (unknown [9.160.188.198])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue,  4 Jan 2022 16:22:50 +0000 (GMT)
-Message-ID: <47dc7326-b802-6023-6144-7bf4309756b4@linux.ibm.com>
-Date:   Tue, 4 Jan 2022 11:22:50 -0500
+        id S235164AbiADQ1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 11:27:30 -0500
+Received: from smtp23.cstnet.cn ([159.226.251.23]:32966 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233569AbiADQ12 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 11:27:28 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowABHTVlTddRhwvQaBQ--.14235S2;
+        Wed, 05 Jan 2022 00:26:59 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     miquel.raynal@bootlin.com
+Cc:     kyungmin.park@samsung.com, richard@nod.at, vigneshr@ti.com,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v3] mtd: onenand: Check for error irq
+Date:   Wed,  5 Jan 2022 00:26:58 +0800
+Message-Id: <20220104162658.1988142-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Reply-To: jjherne@linux.ibm.com
-Subject: Re: [PATCH v17 01/15] s390/vfio-ap: Set pqap hook when vfio_ap module
- is loaded
-Content-Language: en-US
-To:     Tony Krowiak <akrowiak@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
-        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
-        alex.williamson@redhat.com, kwankhede@nvidia.com,
-        fiuczy@linux.ibm.com
-References: <20211021152332.70455-1-akrowiak@linux.ibm.com>
- <20211021152332.70455-2-akrowiak@linux.ibm.com>
-From:   "Jason J. Herne" <jjherne@linux.ibm.com>
-Organization: IBM
-In-Reply-To: <20211021152332.70455-2-akrowiak@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: _ru8ZU_yxg5p2cCjNyADkuM8aPpUJfXD
-X-Proofpoint-ORIG-GUID: zuut13pR7E_ACVYIS7lYugj4En_nkP1F
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-04_07,2022-01-04_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 bulkscore=0
- spamscore=0 impostorscore=0 adultscore=0 mlxscore=0 clxscore=1011
- malwarescore=0 suspectscore=0 lowpriorityscore=0 priorityscore=1501
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201040108
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowABHTVlTddRhwvQaBQ--.14235S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Aw1DAryDArWrCF4ktw1fWFg_yoW8GryxpF
+        s2kay3Crs5Kr1rCFZFyw1qvF15C3WxKrWUtFn0vry8A3s8Jw13ur95JFW2qFWUAFWrJw13
+        XF4YqFZ5CF1DuFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUka14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r1j
+        6r4UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r1j6r
+        4UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVWUMxAI
+        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
+        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
+        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
+        CI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+        6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUeGQDUUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/21/21 11:23, Tony Krowiak wrote:
+For the possible failure of the platform_get_irq(), the returned irq
+could be error number and will finally cause the failure of the
+request_irq().
+Consider that platform_get_irq() can now in certain cases return
+-EPROBE_DEFER, and the consequences of letting request_irq() effectively
+convert that into -EINVAL, even at probe time rather than later on.
+So it might be better to check just now.
 
-> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
-> index a604d51acfc8..05569d077d7f 100644
-> --- a/arch/s390/include/asm/kvm_host.h
-> +++ b/arch/s390/include/asm/kvm_host.h
-> @@ -799,16 +799,17 @@ struct kvm_s390_cpu_model {
->   	unsigned short ibc;
->   };
->   
-> -typedef int (*crypto_hook)(struct kvm_vcpu *vcpu);
-> +struct kvm_s390_crypto_hook {
-> +	int (*fcn)(struct kvm_vcpu *vcpu);
-> +};
+Fixes: 2c22120fbd01 ("MTD: OneNAND: interrupt based wait support")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+v3: Roll back to v1 commit message and correct the fixes tag.
+v2: Change the commit message.
+---
+ drivers/mtd/nand/onenand/generic.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Why are we storing a single function pointer inside a struct? Seems simpler to just use a 
-function pointer. What was the problem with the typedef that you are replacing?
+diff --git a/drivers/mtd/nand/onenand/generic.c b/drivers/mtd/nand/onenand/generic.c
+index 8b6f4da5d720..a4b8b65fe15f 100644
+--- a/drivers/mtd/nand/onenand/generic.c
++++ b/drivers/mtd/nand/onenand/generic.c
+@@ -53,7 +53,12 @@ static int generic_onenand_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	info->onenand.mmcontrol = pdata ? pdata->mmcontrol : NULL;
+-	info->onenand.irq = platform_get_irq(pdev, 0);
++
++	err = platform_get_irq(pdev, 0);
++	if (err < 0)
++		goto out_iounmap;
++
++	info->onenand.irq = err;
+ 
+ 	info->mtd.dev.parent = &pdev->dev;
+ 	info->mtd.priv = &info->onenand;
+-- 
+2.25.1
+

@@ -2,179 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0794F484327
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:16:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A76484329
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:17:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232837AbiADOQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:16:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
+        id S233844AbiADORo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:17:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbiADOQj (ORCPT
+        with ESMTP id S230361AbiADORn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:16:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A57C061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 06:16:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0835D6146C
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 14:16:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DBF0C36AED;
-        Tue,  4 Jan 2022 14:16:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641305798;
-        bh=UlDD+lGj5Cmhrg+RkbyzmbZ1P9SsNurPMWzCZUqMB7M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SeTy0Lgu/vGchW0QKXnwPlG8yFuHucitOyLI0gFFrtmW5dyMPtr8N3umyS7gwEISn
-         0CnePwX/tnmvsw9qn08Dd3UQBFcsHxl+HTE8d8zE1sCFnp/lVqjqI81HPQuNj5vwET
-         oHrVWyEG1ZpwCD1jOUh+Frd5oRx+HaFEEjlZcmgZIZjgjjxvdf0xfqra7N58MimxMH
-         KeweQnVAeJV99bv00VwEPE3E1HOFHi83d25Nu1Fe/uUwhFs5TbHIv4ACBCjJbn1Av2
-         XEgKkC+ApIB6ObeV36No19nkwtD47/OL/ELw4MV5SbskVzuPfB4g2OY3UFlWwytt9g
-         msJquGhKlkiIw==
-Date:   Tue, 4 Jan 2022 14:16:33 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Cc:     linux-kernel@vger.kernel.org, Watson Chow <watson.chow@avnet.com>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Subject: Re: [PATCH 2/2] regulator: Add MAX20086-MAX20089 driver
-Message-ID: <YdRWwWmoQGQuUyLz@sirena.org.uk>
-References: <20220102211124.18435-1-laurent.pinchart+renesas@ideasonboard.com>
- <20220102211124.18435-3-laurent.pinchart+renesas@ideasonboard.com>
+        Tue, 4 Jan 2022 09:17:43 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7365C061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 06:17:43 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id z9-20020a17090a7b8900b001b13558eadaso41034657pjc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 06:17:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tCh2rgII3hbRw94echP2rRCkkf7dv31cKpRI8aiSXTA=;
+        b=l1PuuWKzA4YNweLgk/f3pi3g7b816L7QVEBV0F33NTLz1JzxWTaf2rdltBVPpBjgYa
+         tGiUu6ZcHojdAHpJU7syxiCN1Pq3Vnh6IKe2hjVS7oZzf5ODjG6JRUtZ0xTU37eyurI9
+         OsljZimrHH1SVVxa0lF5flIjih1gMxTkc4wB3hG+pwZRvcB+gxyY9BZpfjSzD+ltvH9u
+         t1NNAAdEorHJJFg1G2JnaBV/pzQvxyguVsV3tQoqCNwR41W7q/Ts8MvNpD9Snz1QE93L
+         f//pCdW98dveSXJs9E6ovK9FV8jhzlqcTkjLtkVSG//IOjHfEC2EAn4td98TFfZoTUik
+         f6fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tCh2rgII3hbRw94echP2rRCkkf7dv31cKpRI8aiSXTA=;
+        b=FRhReRQWHGZvknCWCSaps8RAAaKkGzlNhTVYj1Drc5FBjfoj5CUBQisluMKhQv0XKX
+         ZbOwfKScflPyMXhh5ZrDfzdW8PaZ87DdSdPlWSkDU5XWML9RYgBPy2UWP2miyuwDmsqy
+         y1A5hfp4cn6xi/MebHhOTazTpBUIEXwsw3sGJ3N6AzwFUhjbW415ZmYgevKQu49xaNhW
+         ST0NDBluHlWfyNeIDSlOzey+6FYWpTP494sgxPecWGE9A9ST/7WcXIvokdeC2INFpkqo
+         LYfuDB7WU8jDwKUEr3ndx2BSlxlZVI3QwkpeJ/lXgsjpvztYS6szNGQZ3mcH14hBP/r5
+         6CeQ==
+X-Gm-Message-State: AOAM5303W1hD8R05rFj6AbQpjUfjvPTwkgk33fxfdGo4q8Cj1wByc5Wa
+        NNgfia5e3Estvd71pc1roKGDy9rgkrvzCtSgiPaVAA==
+X-Google-Smtp-Source: ABdhPJwDc7gBgmDrYJ15PsNoVnS2EGIzqnLgQ/NvooPZubtxchxczwltMUYunBj6IOSCZAVovVlg0oqzzWNjv2kAEbo=
+X-Received: by 2002:a17:902:c40f:b0:148:f2e0:3f6e with SMTP id
+ k15-20020a170902c40f00b00148f2e03f6emr48931658plk.65.1641305863209; Tue, 04
+ Jan 2022 06:17:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pj4qz6iEykajA1dF"
-Content-Disposition: inline
-In-Reply-To: <20220102211124.18435-3-laurent.pinchart+renesas@ideasonboard.com>
-X-Cookie: The horror... the horror!
+References: <20211130131113.126261-1-zhou1615@umn.edu>
+In-Reply-To: <20211130131113.126261-1-zhou1615@umn.edu>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Tue, 4 Jan 2022 15:17:32 +0100
+Message-ID: <CAG3jFytSB4HtFs3CZuFsiE1LCX+1BDY6MPAWSBxPwjx88fUF9Q@mail.gmail.com>
+Subject: Re: [PATCH] drm: bridge: cdns-mhdp8546: Fix a NULL pointer
+ dereference in cdns_mhdp_atomic_enable()
+To:     Zhou Qingyang <zhou1615@umn.edu>
+Cc:     kjlu@umn.edu, Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Airlie <airlied@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Parshuram Thombare <pthombar@cadence.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Yu Kuai <yukuai3@huawei.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Quentin Schulz <quentin.schulz@free-electrons.com>,
+        Yuti Amonkar <yamonkar@cadence.com>,
+        Swapnil Jakhade <sjakhade@cadence.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hey Zhou,
 
---pj4qz6iEykajA1dF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for submitting this patch.
 
-On Sun, Jan 02, 2022 at 11:11:24PM +0200, Laurent Pinchart wrote:
-
+On Tue, 30 Nov 2021 at 14:11, Zhou Qingyang <zhou1615@umn.edu> wrote:
+>
+> In cdns_mhdp_atomic_enable(), the return value of drm_mode_duplicate()
+> is assigned to mhdp_state->current_mode and used in drm_mode_set_name().
+> There is a dereference of it in drm_mode_set_name(), which could lead
+> to a NULL pointer dereference on failure of drm_mode_duplicate().
+>
+> Fix this bug by adding a check of mhdp_state->current_mode.
+>
+> This bug was found by a static analyzer. The analysis employs
+> differential checking to identify inconsistent security operations
+> (e.g., checks or kfrees) between two code paths and confirms that the
+> inconsistent operations are not recovered in the current function or
+> the callers, so they constitute bugs.
+>
+> Note that, as a bug found by static analysis, it can be a false
+> positive or hard to trigger. Multiple researchers have cross-reviewed
+> the bug.
+>
+> Builds with CONFIG_DRM_CDNS_MHDP8546=m show no new warnings,
+> and our static analyzer no longer warns about this code.
+>
+> Fixes: fb43aa0acdfd ("drm: bridge: Add support for Cadence MHDP8546 DPI/DP bridge")
+> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
 > ---
-> Changes since v0:
->=20
-> - Remove unused regulator_config members
-> - Drop unused header
-
-This is a *very* long list relative to something that was never posted
-:/
-
-> @@ -1415,4 +1424,3 @@ config REGULATOR_QCOM_LABIBB
->  	  for LCD display panel.
-> =20
->  endif
-> -
-
-Unrelated whitespace change.
-
-> --- /dev/null
-> +++ b/drivers/regulator/max20086-regulator.c
-> @@ -0,0 +1,333 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * max20086-regulator.c - MAX20086-MAX20089 camera power protector driver
-> + *
-
-Please keep the entire comment a C++ one so things look more
-intentional.
-
-> +#include <linux/regmap.h>
-> +#include <linux/regulator/driver.h>
-> +#include <linux/regulator/machine.h>
-
-It is worrying that a regulator driver should need the interfaces for
-machines...  the driver doesn't look like it actually does though.
-
-> +static int max20086_parse_regulators_dt(struct max20086 *chip)
-> +{
-> +	struct of_regulator_match matches[MAX20086_MAX_REGULATORS] =3D { };
-> +	struct device_node *node;
-> +	unsigned int i;
-> +	unsigned int n;
-> +	int num;
-
-You should be able to remove the stuff about looking for the regulators
-node and just set of_match and regulators_node in the descs.
-
-> +	num =3D of_regulator_match(chip->dev, node, matches,
-> +				 chip->info->num_outputs);
-> +	of_node_put(node);
-> +	if (num <=3D 0) {
-> +		dev_err(chip->dev, "Failed to match regulators\n");
-> +		return -EINVAL;
-> +	}
+>  drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+> index 5530fbf64f1e..347fbecf76a4 100644
+> --- a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+> +++ b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+> @@ -2040,6 +2040,11 @@ static void cdns_mhdp_atomic_enable(struct drm_bridge *bridge,
+>         mhdp_state = to_cdns_mhdp_bridge_state(new_state);
+>
+>         mhdp_state->current_mode = drm_mode_duplicate(bridge->dev, mode);
+> +       if (!mhdp_state->current_mode) {
+> +               ret = -ENOMEM;
+> +               goto out;
+> +       }
 > +
-> +	chip->num_outputs =3D num;
 
-The number of regulators the device supports should be known from the
-compatible, I'd expect a data table for this.  It should be possible to
-read the state of regulators not described in the DT.
+This appears to be a problem that is handled in other drivers, but the
+solution here does strike me as good.
 
-> +static const struct regmap_config max20086_regmap_config =3D {
-> +	.reg_bits =3D 8,
-> +	.val_bits =3D 8,
-> +	.writeable_reg =3D max20086_gen_is_writeable_reg,
-> +	.max_register =3D 0x9,
-> +	.cache_type =3D REGCACHE_NONE,
-> +};
+The out-label will schedule modeset_retry_work to be executed if
+ret==-ENOMEM. If drm_mode_duplicate() fails, we've had a memory
+allocation issue, and failing is probably the correct solution here.
+However cdns_mhdp_atomic_enable() does allow for signalling failures.
 
-No readback support?
-
-> +	/* Turn off all outputs. */
-> +	ret =3D regmap_update_bits(chip->regmap, MAX20086_REG_CONFIG,
-> +				 MAX20086_EN_MASK, 0);
-> +	if (ret < 0) {
-> +		dev_err(chip->dev, "Failed to disable outputs: %d\n", ret);
-> +		return ret;
-> +	}
-
-The driver should not do not do this - the driver should only configure
-the hardware if told to by the core which in turn will only do this if
-there's explicit permission to do so in the machine constraints.  We
-don't know what some system integrator might have thought to do with
-the device.
-
-> +	/* Get the chip out of low-power shutdown state. */
-> +	chip->gpio_en =3D devm_gpiod_get(chip->dev, "enable", GPIOD_OUT_HIGH);
-> +	if (IS_ERR(chip->gpio_en)) {
-> +		ret =3D PTR_ERR(chip->gpio_en);
-> +		dev_err(chip->dev, "Failed to get enable GPIO: %d\n", ret);
-> +		return ret;
-> +	}
-
-This one is more OK - it's changing the state of the outputs that's an
-issue.  I guess this might cause the outputs to come on though if the
-GPIO was left off by the bootloader which is awkward.  If there's
-nothing other than the outputs going on with the chip I would be tempted
-to map this onto the per regulator enable GPIO that the core supports,
-the core will then be able to manage the low power state at runtime.
-That's *probably* the least bad option we have with current interfaces.
-
-It's a real shame we can't easily get the GPIO state at startup for
-bootstrapping :/ =20
-
---pj4qz6iEykajA1dF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHUVsEACgkQJNaLcl1U
-h9DjSwf/RRqIkaF8C5VMn4PukjPBEUEO+0Og7p5PaGNCaZ6YWFJ/AyvB0psS+6tV
-q5LL2HAHYcS9fncHpXNQ3R265/X5wn+mX3f7KFjLlvlY8qWx/cwa0MH/YFAa+/q2
-uzpFPHcv92Tju+Ygj5wrbWHKlUU2tG7cElwbihpXfge2QwFlTSILo/F9zD8Pf8dd
-4FYm2pJjFrylZXfFmF4N89o0Kbt9yij5bM+6dWd1UP+wdSERKuZa18XqDWdoY5F6
-kCs+wa2yjtfGDUuyEOufEjClzU8pkbYV7ujyGt5paXj5eavqYVhB9/iDpY3+GzSb
-RiZvI/dCQBkBYvNKhu9of2r08EdCQQ==
-=LXcg
------END PGP SIGNATURE-----
-
---pj4qz6iEykajA1dF--
+>         drm_mode_set_name(mhdp_state->current_mode);
+>
+>         dev_dbg(mhdp->dev, "%s: Enabling mode %s\n", __func__, mode->name);
+> --
+> 2.25.1
+>

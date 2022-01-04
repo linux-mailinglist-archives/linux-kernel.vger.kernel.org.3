@@ -2,250 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03A87483FCE
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:23:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B23483F97
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:07:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231326AbiADKXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 05:23:52 -0500
-Received: from mga07.intel.com ([134.134.136.100]:50805 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229772AbiADKXv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 05:23:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641291831; x=1672827831;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=cRmQp72roVP7l2p3EpKp9b++E4cZUwks/tvVGLmjE5Q=;
-  b=ahh7lMnNLUPBqEc7RAcWemkE4kC76CW9LE6dLuGNxTTwfjy8MBcgpqHd
-   KSkHvqcEt4eHxQshizk96+UYHtTEFUcRi3lBavCeK3OncXrQl515S2EqO
-   wYs0nux+e5TfeQUaUPP8wgLlF8PhhOnnH91RZBsb0ClqUsgCov4EpQGjg
-   UcPmpEfliNwDq2GZsnxmHFQ8WWllfwgIjVqRea8kGTFbj5CTKDZ7GdO2/
-   OM8BbyX4njwZKiW6e/W6Y6oMC0crKNbmYZ8pIbhcQIcGG3ecmJYim6/ZO
-   yB+rANcWrMpRf2avSzQCPtB73qjLsRty7NXKoZinqexW0fqLXZuU91x+D
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="305551924"
-X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
-   d="scan'208";a="305551924"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 02:23:50 -0800
-X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
-   d="scan'208";a="525991028"
-Received: from yzhao56-desk.sh.intel.com ([10.239.159.43])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 02:23:44 -0800
-Date:   Tue, 4 Jan 2022 18:06:12 +0800
-From:   Yan Zhao <yan.y.zhao@intel.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com
-Subject: Re: [PATCH v3 kvm/queue 14/16] KVM: Handle page fault for private
- memory
-Message-ID: <20220104100612.GA19947@yzhao56-desk.sh.intel.com>
-Reply-To: Yan Zhao <yan.y.zhao@intel.com>
-References: <20211223123011.41044-1-chao.p.peng@linux.intel.com>
- <20211223123011.41044-15-chao.p.peng@linux.intel.com>
- <20220104014629.GA2330@yzhao56-desk.sh.intel.com>
- <20220104091008.GA21806@chaop.bj.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220104091008.GA21806@chaop.bj.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S229731AbiADKGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 05:06:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49886 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230459AbiADKGw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 05:06:52 -0500
+Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFADC061785
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 02:06:51 -0800 (PST)
+Received: by mail-wm1-x349.google.com with SMTP id r2-20020a05600c35c200b00345c3b82b22so15475859wmq.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 02:06:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=ZF/3kM88eYNmLwiH7enFxPeZPNmlUYuGyJsxSp7W0UQ=;
+        b=AO2G9GCmtDI1S0TdgEwc9atBqF6ggMDatPASrXizKs+yt+Yj9b3AsoInVVt1Lvo6M3
+         wKYpD03CvKbmKy/WETtinCXSJiYj4eCqKWUpn8w3ilGROMQJTkv4bGw49FWOPmuZlJKG
+         LOxsqV8mCinEv81N3CIrucNEijRFQI8DgHVGjKxKeisnYWmJSWJyHLCFrRZw0KT+7rzv
+         0GE0yPwzzVikbrF8P7y4FfFpD/F656TYADPFcAail7iqmUUYSi2bpNa8EHGgCPLDzWOd
+         J8iz2NkgBd5y8sYUhqcAleuM9GD9R5lGPz2r81A16H/wEmZJziaclsvGlqemZU7EjiiP
+         puTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=ZF/3kM88eYNmLwiH7enFxPeZPNmlUYuGyJsxSp7W0UQ=;
+        b=sJPVHC8+snGWir2POYGtgNtDqJjM6XV/d4PifEjPp7rgCNd530z6lkSJdeX86DY/RG
+         0vthN6QUTO23+7cA1cnpDI/HeaY9iBcaKkCx0/SolPpB/RjxZZfMneiUg67N5gUiYtIF
+         jubt8IEtIF/Tha+H0a021FEbBxgSPdX4WwIW2+qbaopCfkmBN0DKxTqPLfiUQsm2Zi9X
+         pjb5vm5F69+/OOKiE3IzVYpbtwHP/aO8BFYJ87xK/j12ul4il6g4AR/Z3vSm7Tb0cViw
+         UUy2ujOu6GjjLt0a+uezuGCwTMvwb3J8feP5hwy8N4DOWe7S3eFdUCve42QbWh3wN0A5
+         dP0Q==
+X-Gm-Message-State: AOAM531DDR477wmBM8p7BAwmckMWhb0wz9lV0L5vC9evoSIn5x057wDx
+        uyhixCqT+aGgeQKd6QvK1Ei8dD/m0GxtUA==
+X-Google-Smtp-Source: ABdhPJxVFY2DF6gdT3LCzjnsR5snRCP7ilJMyLq49qyjawxz4gHA8BB5t6nHJXG7hseAK+SLR3DDBSk08Iv/AQ==
+X-Received: from dbrazdil.lon.corp.google.com ([2a00:79e0:d:209:ab7e:2ff0:8fa0:3029])
+ (user=dbrazdil job=sendgmr) by 2002:a05:600c:4410:: with SMTP id
+ u16mr41101715wmn.46.1641290809819; Tue, 04 Jan 2022 02:06:49 -0800 (PST)
+Date:   Tue,  4 Jan 2022 10:06:43 +0000
+Message-Id: <20220104100645.1810028-1-dbrazdil@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
+Subject: [PATCH v6 0/2] Driver for Open Profile for DICE
+From:   David Brazdil <dbrazdil@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Frank Rowand <frowand.list@gmail.com>,
+        David Brazdil <dbrazdil@google.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Scull <ascull@google.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 05:10:08PM +0800, Chao Peng wrote:
-> On Tue, Jan 04, 2022 at 09:46:35AM +0800, Yan Zhao wrote:
-> > On Thu, Dec 23, 2021 at 08:30:09PM +0800, Chao Peng wrote:
-> > > When a page fault from the secondary page table while the guest is
-> > > running happens in a memslot with KVM_MEM_PRIVATE, we need go
-> > > different paths for private access and shared access.
-> > > 
-> > >   - For private access, KVM checks if the page is already allocated in
-> > >     the memory backend, if yes KVM establishes the mapping, otherwise
-> > >     exits to userspace to convert a shared page to private one.
-> > >
-> > will this conversion be atomical or not?
-> > For example, after punching a hole in a private memory slot, will KVM
-> > see two notifications: one for invalidation of the whole private memory
-> > slot, and one for fallocate of the rest ranges besides the hole?
-> > Or, KVM only sees one invalidation notification for the hole?
-> 
-> Punching hole doesn't need to invalidate the whole memory slot. It only
-> send one invalidation notification to KVM for the 'hole' part.
-good :)
+Open Profile for DICE is an open protocol for measured boot compatible
+with the Trusted Computing Group's Device Identifier Composition
+Engine (DICE) specification. The generated Compound Device Identifier
+(CDI) certificates represent the measured hardware/software combination
+and can be used by userspace for remote attestation and sealing.
 
-> 
-> Taking shared-to-private conversion as example it only invalidates the
-> 'hole' part (that usually only the portion of the whole memory) on the
-> shared fd,, and then fallocate the private memory in the private fd at
-> the 'hole'. The KVM invalidation notification happens when the shared
-> hole gets invalidated. The establishment of the private mapping happens
-> at subsequent KVM page fault handlers.
-> 
-> > Could you please show QEMU code about this conversion?
-> 
-> See below for the QEMU side conversion code. The above described
-> invalidation and fallocation will be two steps in this conversion. If
-> error happens in the middle then this error will be propagated to
-> kvm_run to do the proper action (e.g. may kill the guest?).
-> 
-> int ram_block_convert_range(RAMBlock *rb, uint64_t start, size_t length,
->                             bool shared_to_private)
-> {
->     int ret; 
->     int fd_from, fd_to;
-> 
->     if (!rb || rb->private_fd <= 0) { 
->         return -1;
->     }    
-> 
->     if (!QEMU_PTR_IS_ALIGNED(start, rb->page_size) ||
->         !QEMU_PTR_IS_ALIGNED(length, rb->page_size)) {
->         return -1;
->     }    
-> 
->     if (length > rb->max_length) {
->         return -1;
->     }    
-> 
->     if (shared_to_private) {
->         fd_from = rb->fd;
->         fd_to = rb->private_fd;
->     } else {
->         fd_from = rb->private_fd;
->         fd_to = rb->fd;
->     }    
-> 
->     ret = ram_block_discard_range_fd(rb, start, length, fd_from);
->     if (ret) {
->         return ret; 
->     }    
-> 
->     if (fd_to > 0) { 
->         return fallocate(fd_to, 0, start, length);
->     }    
-> 
->     return 0;
-> }
-> 
-Thanks. So QEMU will re-generate memslots and set KVM_MEM_PRIVATE
-accordingly? Will it involve slot deletion and create?
+This patchset adds DeviceTree bindings for the DICE device referencing
+a reserved memory region containing the CDIs, and a driver that exposes
+the memory region to userspace via a misc device.
 
-> > 
-> > 
-> > >   - For shared access, KVM also checks if the page is already allocated
-> > >     in the memory backend, if yes then exit to userspace to convert a
-> > >     private page to shared one, otherwise it's treated as a traditional
-> > >     hva-based shared memory, KVM lets existing code to obtain a pfn with
-> > >     get_user_pages() and establish the mapping.
-> > > 
-> > > The above code assume private memory is persistent and pre-allocated in
-> > > the memory backend so KVM can use this information as an indicator for
-> > > a page is private or shared. The above check is then performed by
-> > > calling kvm_memfd_get_pfn() which currently is implemented as a
-> > > pagecache search but in theory that can be implemented differently
-> > > (i.e. when the page is even not mapped into host pagecache there should
-> > > be some different implementation).
-> > > 
-> > > Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> > > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> > > ---
-> > >  arch/x86/kvm/mmu/mmu.c         | 73 ++++++++++++++++++++++++++++++++--
-> > >  arch/x86/kvm/mmu/paging_tmpl.h | 11 +++--
-> > >  2 files changed, 77 insertions(+), 7 deletions(-)
-> > > 
-> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > > index 2856eb662a21..fbcdf62f8281 100644
-> > > --- a/arch/x86/kvm/mmu/mmu.c
-> > > +++ b/arch/x86/kvm/mmu/mmu.c
-> > > @@ -2920,6 +2920,9 @@ int kvm_mmu_max_mapping_level(struct kvm *kvm,
-> > >  	if (max_level == PG_LEVEL_4K)
-> > >  		return PG_LEVEL_4K;
-> > >  
-> > > +	if (kvm_slot_is_private(slot))
-> > > +		return max_level;
-> > > +
-> > >  	host_level = host_pfn_mapping_level(kvm, gfn, pfn, slot);
-> > >  	return min(host_level, max_level);
-> > >  }
-> > > @@ -3950,7 +3953,59 @@ static bool kvm_arch_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
-> > >  				  kvm_vcpu_gfn_to_hva(vcpu, gfn), &arch);
-> > >  }
-> > >  
-> > > -static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault, int *r)
-> > > +static bool kvm_vcpu_is_private_gfn(struct kvm_vcpu *vcpu, gfn_t gfn)
-> > > +{
-> > > +	/*
-> > > +	 * At this time private gfn has not been supported yet. Other patch
-> > > +	 * that enables it should change this.
-> > > +	 */
-> > > +	return false;
-> > > +}
-> > > +
-> > > +static bool kvm_faultin_pfn_private(struct kvm_vcpu *vcpu,
-> > > +				    struct kvm_page_fault *fault,
-> > > +				    bool *is_private_pfn, int *r)
-> > > +{
-> > > +	int order;
-> > > +	int mem_convert_type;
-> > > +	struct kvm_memory_slot *slot = fault->slot;
-> > > +	long pfn = kvm_memfd_get_pfn(slot, fault->gfn, &order);
-> > For private memory slots, it's possible to have pfns backed by
-> > backends other than memfd, e.g. devicefd.
-> 
-> Surely yes, although this patch only supports memfd, but it's designed
-> to be extensible to support other memory backing stores than memfd. There
-> is one assumption in this design however: one private memslot can be
-> backed by only one type of such memory backing store, e.g. if the
-> devicefd you mentioned can independently provide memory for a memslot
-> then that's no issue.
-> 
-> >So is it possible to let those
-> > private memslots keep private and use traditional hva-based way?
-> 
-> Typically this fd-based private memory uses the 'offset' as the
-> userspace address to get a pfn from the backing store fd. But I believe
-> the current code does not prevent you from using the hva as the
-By hva-based way, I mean mmap is required for this fd.
+See https://pigweed.googlesource.com/open-dice for more details.
 
-> userspace address, as long as your memory backing store understand that
-> address and can provide the pfn basing on it. But since you already have
-> the hva, you probably already mmap-ed the fd to userspace, that seems
-> not this private memory patch can protect you. Probably I didn't quite
-Yes, for this fd, though mapped in private memslot, there's no need to
-prevent QEMU/host from accessing it as it will not cause the severe machine
-check.
+The patches are based on top of v5.16-rc8 and can also be found here:
+  https://android-kvm.googlesource.com/linux topic/dice_v6
 
-> understand 'keep private' you mentioned here.
-'keep private' means allow this kind of private memslot which does not
-require protection from this private memory patch :)
+Changes since v5:
+  * replaced 'additionalProperties' with 'unevaluatedProperties' in DT YAML
 
+Changes since v4:
+  * registered compatible in 'reserved_mem_matches'
+  * removed unnecessary DT node, only reserved-memory
+  * fixed typos in comments
 
-Thanks
-Yan
-> > Reasons below:
-> > 1. only memfd is supported in this patch set.
-> > 2. qemu/host read/write to those private memslots backing up by devicefd may
-> > not cause machine check.
-> > 
+Changes since v3:
+  * align with semantics of read/write
+  * fix kerneldoc warnings
+  * fix printf format warnings
+
+Changes since v2:
+  * renamed from 'dice' to 'open-dice'
+  * replaced ioctls with read/write
+  * replaced memzero_explicit with memset
+  * allowed multiple instances
+  * expanded Kconfig description
+
+Changes since v1:
+  * converted to miscdevice
+  * all mappings now write-combine to simplify semantics
+  * removed atomic state, any attempt at exclusive access
+  * simplified wipe, applied on ioctl, not on release
+  * fixed ioctl return value
+
+David Brazdil (2):
+  dt-bindings: reserved-memory: Open Profile for DICE
+  misc: open-dice: Add driver to expose DICE data to userspace
+
+ .../reserved-memory/google,open-dice.yaml     |  45 +++++
+ drivers/misc/Kconfig                          |  12 ++
+ drivers/misc/Makefile                         |   1 +
+ drivers/misc/open-dice.c                      | 188 ++++++++++++++++++
+ drivers/of/platform.c                         |   1 +
+ 5 files changed, 247 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/reserved-memory/google,open-dice.yaml
+ create mode 100644 drivers/misc/open-dice.c
+
+--
+2.34.1.448.ga2b2bfdf31-goog

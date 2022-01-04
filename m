@@ -2,100 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E57A4839C4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 02:24:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C10A04839C3
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 02:24:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231720AbiADBYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 20:24:20 -0500
-Received: from mail.cn.fujitsu.com ([183.91.158.132]:62276 "EHLO
-        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230227AbiADBYR (ORCPT
+        id S231707AbiADBYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 20:24:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230244AbiADBYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 20:24:17 -0500
-IronPort-Data: =?us-ascii?q?A9a23=3A2IBIV61XjWRRKtaTJ/bD5Ttzkn2cJEfYwER7XOP?=
- =?us-ascii?q?LsXnJ0T9002AEyzQYCGHTaf2DYDb3eNF2a9jjoEMCv8Ldzd42QQE+nZ1PZygU8?=
- =?us-ascii?q?JKaX7x1DatR0xu6d5SFFAQ+hyknQoGowPscEzmM9n9BDpC79SMmjfjQHeKnYAL?=
- =?us-ascii?q?5EnsZqTFMGX5JZS1Ly7ZRbr5A2bBVMivV0T/Ai5S31GyNh1aYBlkpB5er83uDi?=
- =?us-ascii?q?hhdVAQw5TTSbdgT1LPXeuJ84Jg3fcldJFOgKmVY83LTegrN8F251juxExYFAdX?=
- =?us-ascii?q?jnKv5c1ERX/jZOg3mZnh+AvDk20Yd4HdplPtT2Pk0MC+7jx2NnsJxyddMvJqYR?=
- =?us-ascii?q?xorP7HXhaIWVBww/yRWZPQXqeWcfCTh2SCU5wicG5f2+N18HUMkLI9Cor4vKW5?=
- =?us-ascii?q?L/P0cbjsKa3irg++xxpq4R/Nqi8BlK9PkVKsbu3d93XTaAOwgTJTrXarH/5lb0?=
- =?us-ascii?q?S02i8QIGuzRD+IdaDxyfFHabxhGEkkYBYh4n+qygHT7NTpCpzq9p6U4y3rSwRR?=
- =?us-ascii?q?8lrPkWOc50PTiqd59xx7e/zyZuT+iRExyCTBW8hLdmlrEuwMFtXqTtFouKYCF?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3Ab1CUa6H8nxVEPHC6pLqE1MeALOsnbusQ8zAX?=
- =?us-ascii?q?PiFKOHhom6mj+vxG88506faKslwssR0b+OxoW5PwJE80l6QFgrX5VI3KNGbbUQ?=
- =?us-ascii?q?CTXeNfBOXZowHIKmnX8+5x8eNaebFiNduYNzNHpPe/zA6mM9tI+rW6zJw=3D?=
-X-IronPort-AV: E=Sophos;i="5.88,258,1635177600"; 
-   d="scan'208";a="119923546"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 04 Jan 2022 09:24:15 +0800
-Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
-        by cn.fujitsu.com (Postfix) with ESMTP id 7F4414D146D4;
-        Tue,  4 Jan 2022 09:24:12 +0800 (CST)
-Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
- G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Tue, 4 Jan 2022 09:24:12 +0800
-Received: from FNSTPC.g08.fujitsu.local (10.167.226.45) by
- G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Tue, 4 Jan 2022 09:24:11 +0800
-From:   Li Zhijian <lizhijian@fujitsu.com>
-To:     <zyjzyj2000@gmail.com>, <jgg@ziepe.ca>, <leon@kernel.org>
-CC:     <linux-rdma@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Li Zhijian <lizhijian@cn.fujitsu.com>
-Subject: [PATCH v2] RDMA/rxe: Get rid of redundant plus
-Date:   Tue, 4 Jan 2022 09:24:06 +0800
-Message-ID: <20220104012406.27580-1-lizhijian@fujitsu.com>
-X-Mailer: git-send-email 2.33.0
+        Mon, 3 Jan 2022 20:24:18 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97162C061761;
+        Mon,  3 Jan 2022 17:24:17 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id j185so57191615oif.8;
+        Mon, 03 Jan 2022 17:24:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kL/xDKMjuR1h/hMg5dp9ic+lteqkyfcAsUQXbThPlAI=;
+        b=pG2keXEudoDJSGzwDhVn1MvdBWgyS/UZNBQhrMnwk4HGoHfXNPMVWVnzGxcilREfAF
+         SJyBB0W4DIOzpFcoOwnpJ7zh2W8SV/kP+y3bfTwRfk0Kyn6lZq7VPmvz8FtDuIyKWtTh
+         FZt3NrMIBJo8x8ZSnYanmj5k/kSMMBFdGQBYab5ahZemTezcgiuwdcCKS+uGzk39tWMq
+         K6iEWmHdmzezOpfGXzseKOK9BO6HvtVjc3AaMN1Y/WFa4rRJ7R0B6e6ibzCQFd8qebLp
+         tcYlmdPdnnpYPVweUE+O16NumkeA8KjlzTnco8oEf7EwjTlrdjAQegjYWzruzlHUz8MP
+         e73w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=kL/xDKMjuR1h/hMg5dp9ic+lteqkyfcAsUQXbThPlAI=;
+        b=7vuEZEDEBKYRR8VA0d8F5Qb/qQ4xUUc+YRabd0eg4sB6Tg3Aw1UhyMIS3mQxv5r5n7
+         1n4ZEiFl+wk0Tghbx+JrqqWNQ/yqr/IncGzPPcbTOhfNnw1+lECGfFzKbHtniWgq4qRp
+         uir3oJno8jnt7ZyOY9/3xc9Z06w3VA+9rXb5C8vKxJlOBe18Jx8t3xcBrvuBUWyPQaGI
+         PuL4l5ZHtU0VPvJr2+8SkIDbkNkc8POCxWgPIHCyrRs3Ugwx3dmj7wcFAoInsycSIy/t
+         QTgU9SzXRmkUnZaF8a+NA1pwZtcprEtkXxQWTJ2K623+GUNsny3WH/1MYWL51j1te+ea
+         SGrA==
+X-Gm-Message-State: AOAM531yOAHvdj5UBZJ7NaTH9QuQVkmkMjugckJBAi/mOXoMNqNkOYw6
+        XQ07eyDgZoyRnYpmK7OfeEk=
+X-Google-Smtp-Source: ABdhPJxpPFce25QeFtcTOsdBf/4KQibdKxwe2RXTl9lsZKISWLI2Avk7dj5FbEVl7LRfw5/9uT/N5A==
+X-Received: by 2002:aca:3556:: with SMTP id c83mr36922323oia.141.1641259457057;
+        Mon, 03 Jan 2022 17:24:17 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u22sm9049582oic.0.2022.01.03.17.24.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jan 2022 17:24:16 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 3 Jan 2022 17:24:15 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 4.14 00/19] 4.14.261-rc1 review
+Message-ID: <20220104012415.GB1572562@roeck-us.net>
+References: <20220103142052.068378906@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-yoursite-MailScanner-ID: 7F4414D146D4.ACA08
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: lizhijian@fujitsu.com
-X-Spam-Status: No
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220103142052.068378906@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li Zhijian <lizhijian@cn.fujitsu.com>
+On Mon, Jan 03, 2022 at 03:21:17PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.14.261 release.
+> There are 19 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 05 Jan 2022 14:20:40 +0000.
+> Anything received after that time might be too late.
+> 
 
-Get rid of the duplicate plus in a line to be consistent with others.
+Build results:
+	total: 168 pass: 168 fail: 0
+Qemu test results:
+	total: 421 pass: 421 fail: 0
 
-Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
----
- drivers/infiniband/sw/rxe/rxe_opcode.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-diff --git a/drivers/infiniband/sw/rxe/rxe_opcode.c b/drivers/infiniband/sw/rxe/rxe_opcode.c
-index 3ef5a10a6efd..79122eeb4d82 100644
---- a/drivers/infiniband/sw/rxe/rxe_opcode.c
-+++ b/drivers/infiniband/sw/rxe/rxe_opcode.c
-@@ -879,9 +879,9 @@ struct rxe_opcode_info rxe_opcode[RXE_NUM_OPCODE] = {
- 			[RXE_ATMETH]	= RXE_BTH_BYTES
- 						+ RXE_RDETH_BYTES
- 						+ RXE_DETH_BYTES,
--			[RXE_PAYLOAD]	= RXE_BTH_BYTES +
-+			[RXE_PAYLOAD]	= RXE_BTH_BYTES
- 						+ RXE_ATMETH_BYTES
--						+ RXE_DETH_BYTES +
-+						+ RXE_DETH_BYTES
- 						+ RXE_RDETH_BYTES,
- 		}
- 	},
-@@ -900,9 +900,9 @@ struct rxe_opcode_info rxe_opcode[RXE_NUM_OPCODE] = {
- 			[RXE_ATMETH]	= RXE_BTH_BYTES
- 						+ RXE_RDETH_BYTES
- 						+ RXE_DETH_BYTES,
--			[RXE_PAYLOAD]	= RXE_BTH_BYTES +
-+			[RXE_PAYLOAD]	= RXE_BTH_BYTES
- 						+ RXE_ATMETH_BYTES
--						+ RXE_DETH_BYTES +
-+						+ RXE_DETH_BYTES
- 						+ RXE_RDETH_BYTES,
- 		}
- 	},
--- 
-2.33.0
-
-
-
+Guenter

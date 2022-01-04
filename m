@@ -2,79 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4F74483BCE
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 07:03:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1179C483BD0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 07:04:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbiADGDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 01:03:34 -0500
-Received: from out28-5.mail.aliyun.com ([115.124.28.5]:43073 "EHLO
-        out28-5.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbiADGDc (ORCPT
+        id S232901AbiADGEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 01:04:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51362 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230181AbiADGEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 01:03:32 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1070646|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.00848475-0.00139035-0.990125;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047207;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=11;RT=11;SR=0;TI=SMTPD_---.MWR.1lZ_1641276209;
-Received: from sunxibot.allwinnertech.com(mailfrom:michael@allwinnertech.com fp:SMTPD_---.MWR.1lZ_1641276209)
-          by smtp.aliyun-inc.com(10.147.41.199);
-          Tue, 04 Jan 2022 14:03:29 +0800
-From:   Michael Wu <michael@allwinnertech.com>
-To:     ulf.hansson@linaro.org, mripard@kernel.org, wens@csie.org,
-        samuel@sholland.org, andre.przywara@arm.com
-Cc:     jernej.skrabec@gmail.com, linux-mmc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Michael Wu <michael@allwinnertech.com>
-Subject: [PATCH v2] mmc: sunxi-mmc: check ocr_avail on resource request
-Date:   Tue,  4 Jan 2022 14:03:25 +0800
-Message-Id: <20220104060325.3957-1-michael@allwinnertech.com>
-X-Mailer: git-send-email 2.29.0
+        Tue, 4 Jan 2022 01:04:32 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5700CC061761;
+        Mon,  3 Jan 2022 22:04:32 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id s1so30328022pga.5;
+        Mon, 03 Jan 2022 22:04:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DKw/IAK5THDPWlkH1ztOYcj33QLJ56CbVxqT4YIX96w=;
+        b=KYJe7ngf9iWAOKhyp5tCUigi9GiFs7LNYI7KqG95CNk8qBGvl5HoAlT6vcPWZLlkq3
+         o6CGqnNMXk/HuV+TCZNOzzmBkWrcdh7TcqmCwvLYln0bKkkREa9hDUKq6L6rT2ayHktH
+         /syNib+E7xfva9bOOI3sSM5C4MeEM+2XsNGQ1Cs+wcl6tu9jeRaFpCOnG2eRBJsCvza/
+         lder25O2K/XA104fIqFWua6ifha8vz3qFdN3DNzFtaJm1Wum49qxbyzpVk2dRWZs1JBN
+         DLwrkedjL4GP34KnlhBJLuhSfLpVTD6gUuu4DyPjhwmhpuUn7W04ltq9qzHxWIfOdHKj
+         sNyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DKw/IAK5THDPWlkH1ztOYcj33QLJ56CbVxqT4YIX96w=;
+        b=JXq2VH9yOQXeuoYcYYY/vcoJRImOrwBb/TZxLGsBLazIulxrq96YBA49H/q0f867NE
+         VWmAdT1WFrijn7VnTVMvMDHAMJ6A/41FdgE0kEHMg02cl3jUNWWOdwqzxa3SOKNiqHAX
+         hbzTPQWV1281Zbk+hOKOdPoJtMh1evtQ8ctaJiSJOYByXqX8je4f2rqg/yDd/Wg1BoPD
+         kcU8HKlkOw7DM5U3dAKVvhhEP0LDIhPg+UBDbvvG9Yez0vkkZDnY3AgDCDQpvzNBUGvV
+         Gkkn8FjeKy9Pxtd85VMH58zrIk+u0eEDcyyvD9CnIS1VA4yiEvdXTJTR/0akGKX/FpDQ
+         DA4g==
+X-Gm-Message-State: AOAM530OYiZId4lXksZaJQvKtBl/32LV6Cz/sUXxgOsnW0i4c3Tu3jWs
+        x9CKVc2GeCQSZr/+o6RhCZfEn0PX1CM=
+X-Google-Smtp-Source: ABdhPJyDo/n5w4VuuoZCxDnPzCYvNggjliTiX+2V3AsWopsWgVedaKy0VGHz2QPnumO4fksx5eCxHw==
+X-Received: by 2002:a05:6a00:2349:b0:4ba:98c6:48f6 with SMTP id j9-20020a056a00234900b004ba98c648f6mr49726664pfj.42.1641276271755;
+        Mon, 03 Jan 2022 22:04:31 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:a7d6:43d7:bbe3:3573])
+        by smtp.gmail.com with ESMTPSA id h5sm34246481pjc.27.2022.01.03.22.04.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jan 2022 22:04:30 -0800 (PST)
+Date:   Mon, 3 Jan 2022 22:04:28 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        linux-ide@vger.kernel.org, Guenter Roeck <groeck@chromium.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] ahci: AMD A85 FCH (Hudson D4): Skip 200 ms
+ debounce delay in `sata_link_resume()`
+Message-ID: <YdPjbGXwa/YEd38G@google.com>
+References: <20211229161119.1006-1-pmenzel@molgen.mpg.de>
+ <20211229161119.1006-3-pmenzel@molgen.mpg.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211229161119.1006-3-pmenzel@molgen.mpg.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some platforms have no regulator, discrete power devices are used instead.
-However, sunxi_mmc_probe does not catch this exception when regulator is
-absent in DTS. This leads to sd or eMMC init failure.
+Hi Paul,
 
-To solve this, a fixed vmmc regulator must be hooked up in DTS, like this:
-reg_dummy_vmmc: dummy_vmmc {
-	compatible = "regulator-fixed";
-	regulator-name = "dummy-vmmc";
-	regulator-min-microvolt = <3300000>;
-	regulator-max-microvolt = <3300000>;
-};
+On Wed, Dec 29, 2021 at 05:11:18PM +0100, Paul Menzel wrote:
+> 
+> Add the two Chromium OS developers Dmitry and Guenter to Cc, as to my
+> knowledge Chromium/Chrome OS also tries to boot very fast, and the Chromium
+> project has some CI infrastructure.
 
-mmc0:mmc@4020000 {
-	compatible = "allwinner,sun50i-a100-emmc";
-	device_type = "mmc0";
-	vmmc-supply = <&reg_dummy_vmmc>;
-}
+I am not sure if we can be of use here as Chrome OS devices are using
+either eMMC or NVME for storage. I do not recall devices using AHCI,
+maybe some very old ones way past EOL.
 
-In this patch, we print an error message and abort the probe process if
-the regulator is not specified in DTS.
+Thanks.
 
-Signed-off-by: Michael Wu <michael@allwinnertech.com>
----
- drivers/mmc/host/sunxi-mmc.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/mmc/host/sunxi-mmc.c b/drivers/mmc/host/sunxi-mmc.c
-index 2702736a1c57..0da74bddaf87 100644
---- a/drivers/mmc/host/sunxi-mmc.c
-+++ b/drivers/mmc/host/sunxi-mmc.c
-@@ -1300,6 +1300,11 @@ static int sunxi_mmc_resource_request(struct sunxi_mmc_host *host,
- 	if (ret)
- 		return ret;
- 
-+	if (!host->mmc->ocr_avail) {
-+		dev_err(&pdev->dev, "Could not get mmc regulator\n");
-+		return -EINVAL;
-+	}
-+
- 	host->reg_base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(host->reg_base))
- 		return PTR_ERR(host->reg_base);
 -- 
-2.29.0
-
+Dmitry

@@ -2,67 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA76C48458F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:55:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA87484579
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235389AbiADPza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 10:55:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46620 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235261AbiADPy7 (ORCPT
+        id S235289AbiADPzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 10:55:09 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49936 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233746AbiADPy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 10:54:59 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F0DC061395;
-        Tue,  4 Jan 2022 07:54:53 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 697211F43596
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1641311692;
-        bh=vzayMLDZjmuU/T7YRMHDZIjwrs5CK4WTNFLBnmYiBTM=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=mD36jnzaMKvD5o+7fxeQ1bkd+sQm/XLb8FjaIhnKMzkK2CsWfRbrZmigtOFTlt1/K
-         sAGzUAavQU3lTvSsdZS4u7UYa2Ik5Cs9xO7IKDfRjCa0TemdEZ2rn4JL7fbHr56a2h
-         Q3Mh+MZNkZlQSr7c6qXpeBIp57Qp/NXSgBql5uLQPPEVfqCX3IUxugzBTd1H/z5jIV
-         NxfsCqAp3cbZi0eb0jYP989vSqVVG6nelZoL78ISk34B0s8Ijq+EjScT+VfPbUIFWn
-         foxdsPlOvKVhui2Tk39F2rFq/5CBySmx5ULpDbH4j5TEyFkalGdxcuro/ws7hUF3O/
-         04kY2M0JoWVHQ==
-Subject: Re: [PATCH v3 07/33] iommu/mediatek: Add a flag DCM_DISABLE
-To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org,
-        Hsin-Yi Wang <hsinyi@chromium.org>, youlin.pei@mediatek.com,
-        anan.sun@mediatek.com, chao.hao@mediatek.com,
-        yen-chang.chen@mediatek.com
-References: <20210923115840.17813-1-yong.wu@mediatek.com>
- <20210923115840.17813-8-yong.wu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Message-ID: <4b48b8ee-422b-b3b1-acdc-4e0c0085a20a@collabora.com>
-Date:   Tue, 4 Jan 2022 16:54:48 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Tue, 4 Jan 2022 10:54:57 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2D43B81717
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 15:54:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3537EC36AE9;
+        Tue,  4 Jan 2022 15:54:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641311694;
+        bh=biHEX3X1hiu8B4U2lZ3rsIg7VqX3ceREmxqvAchS3/s=;
+        h=From:To:Cc:Subject:Date:From;
+        b=2ZXswZm9iTOA241CvC6ePPkA4hAeiwxRNOKGEDFazRIuOxnVCGM9bxOX4rA3VhiWz
+         QJwGo9QIyy952lyPRUyMq2zaPSZvQr9t6r3uVwizqsOD6EsRUDdd1IVv0HMo86vMDK
+         DLl5e1eOYrjeQaOxVyWfAPTrW0ktUpwR1T0z24iU=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
+        Parth Shah <parth@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH] powerpc/cacheinfo: use default_groups in kobj_type
+Date:   Tue,  4 Jan 2022 16:54:50 +0100
+Message-Id: <20220104155450.1291277-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <20210923115840.17813-8-yong.wu@mediatek.com>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2193; h=from:subject; bh=biHEX3X1hiu8B4U2lZ3rsIg7VqX3ceREmxqvAchS3/s=; b=owGbwMvMwCRo6H6F97bub03G02pJDIlXck+Viv2o4LX4zCS7zOTRWbm055lfFAL3Xv5UWOdQ7nO4 8550RywLgyATg6yYIsuXbTxH91ccUvQytD0NM4eVCWQIAxenAExE6BvD/Br3U4Zfl0e77jhWYePw3j N9R8itaIYFF3fbrVPx8ZRdfPj+24veDNsO+/EoAAA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 23/09/21 13:58, Yong Wu ha scritto:
-> In the infra iommu, we should disable DCM. add a new flag for this.
-> 
-> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+There are currently 2 ways to create a set of sysfs files for a
+kobj_type, through the default_attrs field, and the default_groups
+field.  Move the powerpc cacheinfo sysfs code to use default_groups
+field which has been the preferred way since aa30f47cf666 ("kobject: Add
+support for default attribute groups to kobj_type") so that we can soon
+get rid of the obsolete default_attrs field.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+Cc: Parth Shah <parth@linux.ibm.com>
+Cc: linuxppc-dev@lists.ozlabs.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ arch/powerpc/kernel/cacheinfo.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/arch/powerpc/kernel/cacheinfo.c b/arch/powerpc/kernel/cacheinfo.c
+index cf1be75b7833..00b0992be3e7 100644
+--- a/arch/powerpc/kernel/cacheinfo.c
++++ b/arch/powerpc/kernel/cacheinfo.c
+@@ -710,7 +710,7 @@ static struct kobj_attribute cache_shared_cpu_list_attr =
+ 	__ATTR(shared_cpu_list, 0444, shared_cpu_list_show, NULL);
+ 
+ /* Attributes which should always be created -- the kobject/sysfs core
+- * does this automatically via kobj_type->default_attrs.  This is the
++ * does this automatically via kobj_type->default_groups.  This is the
+  * minimum data required to uniquely identify a cache.
+  */
+ static struct attribute *cache_index_default_attrs[] = {
+@@ -720,6 +720,7 @@ static struct attribute *cache_index_default_attrs[] = {
+ 	&cache_shared_cpu_list_attr.attr,
+ 	NULL,
+ };
++ATTRIBUTE_GROUPS(cache_index_default);
+ 
+ /* Attributes which should be created if the cache device node has the
+  * right properties -- see cacheinfo_create_index_opt_attrs
+@@ -738,7 +739,7 @@ static const struct sysfs_ops cache_index_ops = {
+ static struct kobj_type cache_index_type = {
+ 	.release = cache_index_release,
+ 	.sysfs_ops = &cache_index_ops,
+-	.default_attrs = cache_index_default_attrs,
++	.default_groups = cache_index_default_groups,
+ };
+ 
+ static void cacheinfo_create_index_opt_attrs(struct cache_index_dir *dir)
+-- 
+2.34.1
+

@@ -2,199 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F2A48489D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:32:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B8544848A1
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:33:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiADTcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 14:32:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40138 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiADTcf (ORCPT
+        id S230005AbiADTdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 14:33:52 -0500
+Received: from mail-lf1-f42.google.com ([209.85.167.42]:40694 "EHLO
+        mail-lf1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230141AbiADTdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 14:32:35 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2ACDC061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 11:32:34 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id r5so33565335pgi.6
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 11:32:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XtOM86rcIDhUEVJJrSrXXYTFcIhTo09zqSW+wQ8NDvo=;
-        b=azfR1U8ASdhcYtfRtnAZwayPplqVw8gIHtDXlEu1mP8qzPVOO5nTx+MSAjRtmXd7Ei
-         jJUyEiK6xPa/tU8FvyTHrLK0nzy1VEfDHskJ/pxOpwEcRpHMD82M8iJwyA0i2r88OwXm
-         oqpPCNMWHEkbzngGI6P/VnHhewsnQ80j5qYEWEOEfLsHuqQbuifRD252TnEDABeU+PJX
-         APaimRTWjEIRoADsuTdEEtIx9I1I1J/1idBDlz4/YAvqR1TxxJrNeZWzWzwg4KxzxWbF
-         d3Jc8ndPU4cD8D66vaGDuvxYZcGzpSYChYdzefkGPIX4F7Ht+Scd7chbAVqCqXol3sIK
-         kvtQ==
+        Tue, 4 Jan 2022 14:33:51 -0500
+Received: by mail-lf1-f42.google.com with SMTP id r4so40761978lfe.7;
+        Tue, 04 Jan 2022 11:33:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XtOM86rcIDhUEVJJrSrXXYTFcIhTo09zqSW+wQ8NDvo=;
-        b=m0sfjZLwbiJ/I3+eQpmaXYYJTZWxabNHXSoas0CbVhPQT9m4Q3swxmOF6Hm34paTIt
-         sxWNMgjDCKqslBTHPFNxIplg5tMUdTZ09c629pBwakCPJxD5SniEKT1OWNIjOBSA+3uZ
-         Tz1QvtlCYM6nd11MGWGro7cKE20PtYyy1xQDQ499cWEBuNOqTzdIZlnxOzTrd6UN7OkC
-         HMqr5kBRkiZom6EBXZFmELOmbzGDrIXftkPHereugJ559AkQv+eLiirmzzAWLpdPQd9D
-         /bxLujF/uyW9WLYWeJUFLPHfJ0AuiWh6JFUuY2wVdJT48sPyh+Y97sKtR18FJmNDFlfR
-         KRTA==
-X-Gm-Message-State: AOAM533A8oTpXX+h0SkFUU0dNWpQJwSEbTeVMlSb17AEdSpgYV0KtkFs
-        lfz3C/FKfWUfJnAzQ9CnpSJlvQpVLV4wkw==
-X-Google-Smtp-Source: ABdhPJwX0owBE0gdeH1l7IQikJyn610QU+zyBIODbPFe8Wmbnp2eFSMK4ahfO1I7uaABUTa2vCmm3Q==
-X-Received: by 2002:a63:7b54:: with SMTP id k20mr15640347pgn.445.1641324754314;
-        Tue, 04 Jan 2022 11:32:34 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id u35sm9259767pfg.157.2022.01.04.11.32.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 11:32:33 -0800 (PST)
-Date:   Tue, 4 Jan 2022 19:32:30 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yang Zhong <yang.zhong@intel.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, pbonzini@redhat.com, corbet@lwn.net,
-        shuah@kernel.org, jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, jing2.liu@intel.com,
-        guang.zeng@intel.com, wei.w.wang@intel.com
-Subject: Re: [PATCH v4 10/21] kvm: x86: Add emulation for IA32_XFD
-Message-ID: <YdSgzsiBft/NgxdF@google.com>
-References: <20211229131328.12283-1-yang.zhong@intel.com>
- <20211229131328.12283-11-yang.zhong@intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SzeOzJpBlYRxW3ZGC/HtbwqKN8nz84Drg6aC2SWkkns=;
+        b=BH/YO6cIZbVR6YQt7bXvltsKkdXm9LAvNPTqLH3K/h9TGGlS8MVstCuvhUCXkObP0Y
+         1TSS/1z3Hoic9aFYQFX+lOA4kQ55HOUczrXfrCuJ6V7tRA5YJ1/7IMU8N3tNYxWvBwRf
+         O/f/qvW4Ycw+qJyD9E1NR/rPet/iwqn19/I2MT9wFTnx4dv4HqctM5i2fs2/0tnXy8PM
+         DhgdrrD27TzxPy0Udtg9SAGFspv3fX3zlNQ/Uc9AABY0Oqm3Qlu4GOHR7EaL/D1W/3eR
+         BhX4MtzI5x5Xy7pvGaFxbBxwo0r0MSTyz5H50ZEuC15O54XbUu8AdRQoRYIxjkPiRMHW
+         AOLQ==
+X-Gm-Message-State: AOAM531Q8A4fvZV93wXCqhkTDuEuufeD43nz4KsDhwADdzmTFeSoAOCj
+        M7xLXz2/ylfyqueZKyfE7z2rRFqtKgRrAFkEU68=
+X-Google-Smtp-Source: ABdhPJyRXOgqzyFL8LKi/7LVSPHWRmchBwEzWHoOnlSfR+ituWO4A8l1oh51jg9bVz5Occ8ou3L1M7YmXsU9E6ZnBCI=
+X-Received: by 2002:a05:6512:3a89:: with SMTP id q9mr43703809lfu.99.1641324830055;
+ Tue, 04 Jan 2022 11:33:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211229131328.12283-11-yang.zhong@intel.com>
+References: <4C0186FE-729D-4F77-947D-11933BA38818@gmail.com>
+ <CAM9d7ciroZswudPXAAs9Zo3_veFMugJJZ4XZWhGSKHdFPcDOjQ@mail.gmail.com> <64E36F38-E037-4561-8E0C-B288674A5BD9@gmail.com>
+In-Reply-To: <64E36F38-E037-4561-8E0C-B288674A5BD9@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 4 Jan 2022 11:33:38 -0800
+Message-ID: <CAM9d7cgzpyp03y3w009upnftK=24r8NtQFZB0t23pnc1PwyJug@mail.gmail.com>
+Subject: Re: Lock problems in linux/tools/perf/util/dso.c
+To:     Ryan Cai <ycaibb@gmail.com>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 29, 2021, Yang Zhong wrote:
-> From: Jing Liu <jing2.liu@intel.com>
-> 
-> Intel's eXtended Feature Disable (XFD) feature allows the software
-> to dynamically adjust fpstate buffer size for XSAVE features which
-> have large state.
-> 
-> Because fpstate has been expanded for all possible dynamic xstates
-> at KVM_SET_CPUID2, emulation of the IA32_XFD MSR is straightforward.
-> For write just call fpu_update_guest_xfd() to update the guest fpu
-> container once all the sanity checks are passed. For read then
-> return the cached value in the container.
-> 
-> Signed-off-by: Zeng Guang <guang.zeng@intel.com>
-> Signed-off-by: Wei Wang <wei.w.wang@intel.com>
-> Signed-off-by: Jing Liu <jing2.liu@intel.com>
-> Signed-off-by: Yang Zhong <yang.zhong@intel.com>
-> ---
->  arch/x86/kvm/x86.c | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index e50e97ac4408..36677b754ac9 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -1359,6 +1359,7 @@ static const u32 msrs_to_save_all[] = {
->  	MSR_F15H_PERF_CTL3, MSR_F15H_PERF_CTL4, MSR_F15H_PERF_CTL5,
->  	MSR_F15H_PERF_CTR0, MSR_F15H_PERF_CTR1, MSR_F15H_PERF_CTR2,
->  	MSR_F15H_PERF_CTR3, MSR_F15H_PERF_CTR4, MSR_F15H_PERF_CTR5,
-> +	MSR_IA32_XFD,
->  };
->  
->  static u32 msrs_to_save[ARRAY_SIZE(msrs_to_save_all)];
-> @@ -3669,6 +3670,19 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->  			return 1;
->  		vcpu->arch.msr_misc_features_enables = data;
->  		break;
-> +#ifdef CONFIG_X86_64
-> +	case MSR_IA32_XFD:
-> +		if (!msr_info->host_initiated &&
-> +		    !guest_cpuid_has(vcpu, X86_FEATURE_XFD))
-> +			return 1;
-> +
-> +		if (data & ~(XFEATURE_MASK_USER_DYNAMIC &
-> +			     vcpu->arch.guest_supported_xcr0))
-> +			return 1;
-> +
-> +		fpu_update_guest_xfd(&vcpu->arch.guest_fpu, data);
-> +		break;
-> +#endif
->  	default:
->  		if (kvm_pmu_is_valid_msr(vcpu, msr))
->  			return kvm_pmu_set_msr(vcpu, msr_info);
-> @@ -3989,6 +4003,15 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->  	case MSR_K7_HWCR:
->  		msr_info->data = vcpu->arch.msr_hwcr;
->  		break;
-> +#ifdef CONFIG_X86_64
-> +	case MSR_IA32_XFD:
-> +		if (!msr_info->host_initiated &&
-> +		    !guest_cpuid_has(vcpu, X86_FEATURE_XFD))
-> +			return 1;
-> +
-> +		msr_info->data = vcpu->arch.guest_fpu.fpstate->xfd;
-> +		break;
-> +#endif
->  	default:
->  		if (kvm_pmu_is_valid_msr(vcpu, msr_info->index))
->  			return kvm_pmu_get_msr(vcpu, msr_info);
-> @@ -6422,6 +6445,10 @@ static void kvm_init_msr_list(void)
->  			    min(INTEL_PMC_MAX_GENERIC, x86_pmu.num_counters_gp))
->  				continue;
->  			break;
-> +		case MSR_IA32_XFD:
-> +			if (!kvm_cpu_cap_has(X86_FEATURE_XFD))
-> +				continue;
+On Wed, Dec 29, 2021 at 6:42 PM Ryan Cai <ycaibb@gmail.com> wrote:
+>
+> Hi, Namhyung,
+>
+> 1. Indeed, I got wrong here.
+> 2. Yes, the branch should be if (pthread_mutex_lock(&dso__data_open_lock))
+> instead of if (pthread_mutex_lock(&dso__data_open_lock) < 0).
+>
+> Could I send a patch?
 
-I suspect the 32-bit host support is wrong.  The kernel's handle_xfd_event()
-checks for 64-bit support in addition to the CPU feature itself, which implies
-that the feature can be reported in boot_cpu_data for 32-bit kernels.
+Sure!
 
-  static bool handle_xfd_event(struct pt_regs *regs)
-  {
-	u64 xfd_err;
-	int err;
-
-	if (!IS_ENABLED(CONFIG_X86_64) || !cpu_feature_enabled(X86_FEATURE_XFD))
-		return false;
-
-	...
-  }
-
-In this specific case, that means KVM will tell userspace it needs to mgirate
-MSR_IA32_XFD, and then reject attempts to read/write the MSR.
-
-If 32-bit host kernels do not explicitly suppress X86_FEATURE_XFD, then KVM needs
-to do:
-
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 556555537a18..156ce332d55b 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -455,9 +455,11 @@ void kvm_set_cpu_caps(void)
- #ifdef CONFIG_X86_64
-        unsigned int f_gbpages = F(GBPAGES);
-        unsigned int f_lm = F(LM);
-+       unsigned int f_xfd = F(XFD);
- #else
-        unsigned int f_gbpages = 0;
-        unsigned int f_lm = 0;
-+       unsigned int f_xfd = 0;
- #endif
-        memset(kvm_cpu_caps, 0, sizeof(kvm_cpu_caps));
-
-@@ -545,7 +547,7 @@ void kvm_set_cpu_caps(void)
-        );
-
-        kvm_cpu_cap_mask(CPUID_D_1_EAX,
--               F(XSAVEOPT) | F(XSAVEC) | F(XGETBV1) | F(XSAVES) | F(XFD)
-+               F(XSAVEOPT) | F(XSAVEC) | F(XGETBV1) | F(XSAVES) | f_xfd
-        );
-
-        kvm_cpu_cap_init_scattered(CPUID_12_EAX,
-
-> +			break;
->  		default:
->  			break;
->  		}
+Thanks,
+Namhyung

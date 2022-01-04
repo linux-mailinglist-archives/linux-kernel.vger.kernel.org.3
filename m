@@ -2,104 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7873F483B21
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 04:42:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDAD2483B26
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 04:44:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbiADDmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 22:42:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:45800 "EHLO
+        id S231218AbiADDoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 22:44:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44616 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229487AbiADDmQ (ORCPT
+        by vger.kernel.org with ESMTP id S231165AbiADDoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 22:42:16 -0500
+        Mon, 3 Jan 2022 22:44:24 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641267735;
+        s=mimecast20190719; t=1641267864;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=SwFXhGn57Ik/8yv+mERRlVV9PBTKn9DgoCqspftrb0U=;
-        b=a8pJqXHPzDmTB6PBuBnPCPBYPUIkfewqfGlMHZqXtDM+f2GJ4b/0Kn9iQhToWzJIusdOAp
-        8nla3y5ZbYd0MEOfioO7ZljY4SgUFLXahA78b3jWVmws3m+4P00vysqiKxoaGbwpATGGiX
-        mnX1+09FlqnGMiH3dJXihGLJQIk/Ey0=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=U3bRp9PDw2PtdlQN7RsHKxoF/g+6HtYTrwOQVxpYpkg=;
+        b=ewJoEVH/asVTt1uuHPZuNvkintjY7r3X64UHDyxis0Y4qICDXE/MaFi1oUS6iMNgf2yx9n
+        2L0JGW/QlGFw0Dpy/2zUBwmH9Jw1u2Nxd1BhPONTIBTwR5bFcH7dbO0tvTv+gO4rTrtymp
+        oZjojhIoy0X4fCVfa2padaL5W4ppxvg=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-488-RYjsC8fsPZq_wrS8EH216w-1; Mon, 03 Jan 2022 22:42:14 -0500
-X-MC-Unique: RYjsC8fsPZq_wrS8EH216w-1
-Received: by mail-lf1-f71.google.com with SMTP id f17-20020a05651232d100b00429623cf219so5358430lfg.18
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 19:42:14 -0800 (PST)
+ us-mta-258-y33Vxt1-ODOz8MhgMLvHSQ-1; Mon, 03 Jan 2022 22:44:22 -0500
+X-MC-Unique: y33Vxt1-ODOz8MhgMLvHSQ-1
+Received: by mail-lf1-f72.google.com with SMTP id 28-20020ac24d5c000000b00425c507cfc0so7216750lfp.20
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 19:44:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=SwFXhGn57Ik/8yv+mERRlVV9PBTKn9DgoCqspftrb0U=;
-        b=T+MN+PPBOpRD7DvXOIWyehJNGNW8N8Oq3eEhlCcHkgx4n9Xwy6Mn9lMUAu0A04dh8j
-         Al/kKf/uizAZJ7rZ9/fCs6f/fUJn/Uo4Y4c9BE+UPJlmtmhqlsDAJko38BAl+YHvCyvV
-         7dJNmRgTENfCwZgKLJFdtJcqNpxNjcl11+VAFCWMxfbMDCrSZ3mn4U5ViwhwxKyLnrIt
-         oD5Tr0YCEu5AMcDxeDMG5nupXm59t+nZGBPNs0KJOrlM2OMOS8lQB6GckkLqlZdEYsuk
-         NyEggrLAi53SD8L++h0oy+ikka5vryHDksg0d6wNWbAr1ndARHvs7kHyxG3UBEyq0pFc
-         WCnQ==
-X-Gm-Message-State: AOAM532aXvHeYLms5/SHxUSaMQlO0244c2vMRSVg9a4cwGB2DzqjCJzi
-        JVHDvdZvBQKsq9awvpwe2FrJyrj7NAm96MZv08iYw5glDopu12wHVDKic7pNwgT++D5OqZxl07y
-        7YkB7Oi9+Lz5XpcHR+4a9RBLZDew5lY+YWrLbu3yC
-X-Received: by 2002:a05:651c:1a0d:: with SMTP id by13mr31580404ljb.107.1641267733037;
-        Mon, 03 Jan 2022 19:42:13 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx90ph1BuLv80bniEX7O6j0IQH75tTw6Q0lIGjPvVyZoAE/LEns1b2VVRYEkf3ISCOL4yV/IMQfDl7AdFba/cw=
-X-Received: by 2002:a05:651c:1a0d:: with SMTP id by13mr31580400ljb.107.1641267732858;
- Mon, 03 Jan 2022 19:42:12 -0800 (PST)
+        bh=U3bRp9PDw2PtdlQN7RsHKxoF/g+6HtYTrwOQVxpYpkg=;
+        b=GPMG8d0Z2WJfo5seGvhrGJq2vmCsdJlfCB7emblkh2sD8xDVlNz4OdGIxqQm4coqgr
+         ZYHMdelL3sL6Z9PeznFoOSYUsDXAwI/8PxJ6C6UYPO2JZpgB2twXgGG7HSlrJ2D7i+cq
+         Uwxk9sA74aL/V08jJxOXbYUVTU+tZ6W/vyoq7LzLSfjGPMcMJ3AHVLVPk8rTKDfrYCx6
+         sJJwikSgqTHipP7FkkQzhuSbozuvYAGji3iLfEXO2V3w3gpVwWbk09ID5cFgDWN/zajJ
+         jorqyWf7WRr92h8JnH3JybCC2qkdJsMfkI8sD/RyZa8VWr2BdUEBL4/Dlc+wvWU0Irgo
+         oWmQ==
+X-Gm-Message-State: AOAM531bo/sdwGH4pBgytuRgvJ2nD5DIPKZFDEX462usUyI59tRteLuI
+        AxDUJtWW5G7F6HM2cKIajjkapdp3ulwAStM9nrCdWSgVprU3ly06gULF7R5yTNiEG0Xp+igWE5F
+        2UQ/HdLioeaCPm1gLI1DSx1yYwbGB0tBWcRyPa48h
+X-Received: by 2002:a05:6512:22d6:: with SMTP id g22mr42525577lfu.199.1641267861341;
+        Mon, 03 Jan 2022 19:44:21 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwPfKa8UYDWk8yXRh/Tynib8SG3CWPXUC55CynDHAaf3IrbQwAAOOMAqfKLA5ICJGqVqiZgR88MAce8maqcssc=
+X-Received: by 2002:a05:6512:22d6:: with SMTP id g22mr42525557lfu.199.1641267861109;
+ Mon, 03 Jan 2022 19:44:21 -0800 (PST)
 MIME-Version: 1.0
-References: <20211224101007.1635703-1-jiasheng@iscas.ac.cn>
-In-Reply-To: <20211224101007.1635703-1-jiasheng@iscas.ac.cn>
+References: <20211224070404.54840-1-wang.yi59@zte.com.cn>
+In-Reply-To: <20211224070404.54840-1-wang.yi59@zte.com.cn>
 From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 4 Jan 2022 11:42:01 +0800
-Message-ID: <CACGkMEuTn4uaS5dfudF-X-Y0Rw0wH9VXcTkVsZJ_TUtxXGMBVw@mail.gmail.com>
-Subject: Re: [PATCH] virtio_ring: Check null pointer
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     mst <mst@redhat.com>,
+Date:   Tue, 4 Jan 2022 11:44:10 +0800
+Message-ID: <CACGkMEvdKATVvLVQtfPfSeev83Ajskg4gFoHDhWT7wrWEQ3FEA@mail.gmail.com>
+Subject: Re: [PATCH v2] vdpa: regist vhost-vdpa dev class
+To:     Yi Wang <wang.yi59@zte.com.cn>
+Cc:     mst <mst@redhat.com>, Stefano Garzarella <sgarzare@redhat.com>,
+        kvm <kvm@vger.kernel.org>,
         virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        xue.zhihong@zte.com.cn, wang.liang82@zte.com.cn,
+        Zhang Min <zhang.min9@zte.com.cn>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 24, 2021 at 6:10 PM Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
+On Fri, Dec 24, 2021 at 3:13 PM Yi Wang <wang.yi59@zte.com.cn> wrote:
 >
-> As the alloc_indirect_packed() returns kmalloc_array() that could
-> allocation fail and return null pointer, it should be check in order to
-> prevent the dereference of null pointer.
+> From: Zhang Min <zhang.min9@zte.com.cn>
 >
-> Fixes: 1ce9e6055fa0 ("virtio_ring: introduce packed ring support")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> Some applications like kata-containers need to acquire MAJOR/MINOR/DEVNAME
+> for devInfo [1], so regist vhost-vdpa dev class to expose uevent.
+
+Hi:
+
+I think we need to be more verbose here e.g:
+
+1) why can't we get major/minor with the current interface
+2) what kind of the uevent is required and not supported currently
+
+Thanks
+
+>
+> 1. https://github.com/kata-containers/kata-containers/blob/main/src/runtime/virtcontainers/device/config/config.go
+>
+> Signed-off-by: Zhang Min <zhang.min9@zte.com.cn>
+> Signed-off-by: Yi Wang <wang.yi59@zte.com.cn>
 > ---
->  drivers/virtio/virtio_ring.c | 5 +++++
->  1 file changed, 5 insertions(+)
+> v2: remove redundant vhost_vdpa_class reset and pr_warn, adjust location
+>     of *vhost_vdpa_class impl and class_destroy.
 >
-> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> index 71e16b53e9c1..30fd925165ac 100644
-> --- a/drivers/virtio/virtio_ring.c
-> +++ b/drivers/virtio/virtio_ring.c
-> @@ -991,7 +991,12 @@ static int virtqueue_add_indirect_packed(struct vring_virtqueue *vq,
->         dma_addr_t addr;
+>  drivers/vhost/vdpa.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 >
->         head = vq->packed.next_avail_idx;
+> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> index e3c4f059b21a..55e966c508c8 100644
+> --- a/drivers/vhost/vdpa.c
+> +++ b/drivers/vhost/vdpa.c
+> @@ -53,6 +53,7 @@ struct vhost_vdpa {
+>  static DEFINE_IDA(vhost_vdpa_ida);
+>
+>  static dev_t vhost_vdpa_major;
+> +static struct class *vhost_vdpa_class;
+>
+>  static void handle_vq_kick(struct vhost_work *work)
+>  {
+> @@ -1140,6 +1141,7 @@ static int vhost_vdpa_probe(struct vdpa_device *vdpa)
+>         v->dev.release = vhost_vdpa_release_dev;
+>         v->dev.parent = &vdpa->dev;
+>         v->dev.devt = MKDEV(MAJOR(vhost_vdpa_major), minor);
+> +       v->dev.class = vhost_vdpa_class;
+>         v->vqs = kmalloc_array(v->nvqs, sizeof(struct vhost_virtqueue),
+>                                GFP_KERNEL);
+>         if (!v->vqs) {
+> @@ -1197,6 +1199,10 @@ static int __init vhost_vdpa_init(void)
+>  {
+>         int r;
+>
+> +       vhost_vdpa_class = class_create(THIS_MODULE, "vhost-vdpa");
+> +       if (IS_ERR(vhost_vdpa_class))
+> +               return PTR_ERR(vhost_vdpa_class);
 > +
-
-Unnecessary changes.
-
-Other than this:
-
-Acked-by: Jason Wang <jasowang@redhat.com>
-
->         desc = alloc_indirect_packed(total_sg, gfp);
-> +       if (!desc) {
-> +               END_USE(vq);
-> +               return -ENOMEM;
-> +       }
+>         r = alloc_chrdev_region(&vhost_vdpa_major, 0, VHOST_VDPA_DEV_MAX,
+>                                 "vhost-vdpa");
+>         if (r)
+> @@ -1211,6 +1217,7 @@ static int __init vhost_vdpa_init(void)
+>  err_vdpa_register_driver:
+>         unregister_chrdev_region(vhost_vdpa_major, VHOST_VDPA_DEV_MAX);
+>  err_alloc_chrdev:
+> +       class_destroy(vhost_vdpa_class);
+>         return r;
+>  }
+>  module_init(vhost_vdpa_init);
+> @@ -1219,6 +1226,7 @@ static void __exit vhost_vdpa_exit(void)
+>  {
+>         vdpa_unregister_driver(&vhost_vdpa_driver);
+>         unregister_chrdev_region(vhost_vdpa_major, VHOST_VDPA_DEV_MAX);
+> +       class_destroy(vhost_vdpa_class);
+>  }
+>  module_exit(vhost_vdpa_exit);
 >
->         if (unlikely(vq->vq.num_free < 1)) {
->                 pr_debug("Can't add buf len 1 - avail = 0\n");
 > --
-> 2.25.1
+> 2.27.0
 >
 

@@ -2,144 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC614846EF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:23:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB7C84846F2
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:25:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235136AbiADRXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 12:23:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38704 "EHLO
+        id S235280AbiADRZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 12:25:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234711AbiADRXT (ORCPT
+        with ESMTP id S234711AbiADRZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 12:23:19 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918D1C061761;
-        Tue,  4 Jan 2022 09:23:19 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id e202so67309876ybf.4;
-        Tue, 04 Jan 2022 09:23:19 -0800 (PST)
+        Tue, 4 Jan 2022 12:25:42 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEFAC061784
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 09:25:42 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id r5so33292198pgi.6
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 09:25:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=a0fxJwxcEgSkj2eOcXcyDIdZlfD4jD3cTZQSlVi3VC4=;
-        b=g7lv72VwhePNwXMdQ/rFPweyWzUbE+AghjJN/3wfZVt2co0OW9JMC5Ev76qVJTjMBl
-         rPyqbW32YyH33Iy3nd79Jcb4DhmwAXCqP7heBhKL+L/0bqoib6tDBh49g9EUqzDtOccb
-         8RsudYJeMqrBxyyB4GhHIjV3AQeA4ifFk59hhOfVjSCJa2Ep2E+bhVg+9HdN1m7f+o4Q
-         BhS92lWreXqeGmSqUSGtCY+Xpm8YUC2s6yJm7Jb/xFhnmGiaW0q4XBR2M0iGggtQHMLN
-         05/yVW2US5XjPJF6LWQuYoGBIfyqDLjuYH6EDjG4R/MHzJK7tO23GHId8kOTajcLJTNy
-         06LQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Dt2cPCWEsFZ5AbysL4UkCn7JLhXrIdEBz/GoqAR1B90=;
+        b=NB45Tda4CCIIb04U+XDNPZB5azw6aHsshMgvWalK1tJ39OAsDe72/kEJOx2fW6bMeG
+         tdvxvimXmORNQJzTeQrOyhivszDBnLT8eQInnyfZfolZS7FmpwztJM3S9a9Qu4+VtC2M
+         XFGVtgFPc13suxJgngyMOg/NAezoiRxTuw4/UY7x4PKzEKqMPvcwvzWS3+Sl3S+Rxiu7
+         x/o3xwv5hYV55SYKUd/p7bh/PQkMYHKz4q4gbc4Lx5E4CtUdZ7SJt8TvcJyCLsrUsuGi
+         eBKr98sjqDjtwnHVKO4OGB2Tm3jkPAMw+iNPG/nrLuXah3b7/A2gYBxhdZrtoeZxuAxV
+         +j4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=a0fxJwxcEgSkj2eOcXcyDIdZlfD4jD3cTZQSlVi3VC4=;
-        b=YSvuYRDOQGeeXF6tLUIeGJBBSWMPbb8NdxYBR7Fu+nvhT95Op1dLYO+QwDrPQWqHwy
-         mhFjxFigCiBepEItB1KC7Knf1vXkhR08Z3mNyvhKjTUI2jcXAeCLvRBjrrZxDk7e9xwD
-         jCtOFZkG/UrTQ928vXEZnly6hZH2OyNWv5G6LudV7FL4AurwYpzSjxEdyOPqOXSA1yTE
-         uYXwRtoshGXHZK82EKCrU9fZz29gHtrJpjiY84OEH1lzU/2pmKJMVs2UwpLZq0by7wCY
-         lZKZ3Z+WJwu/Duh+MDf4warSVZSgafYFsqTiIw71Ydfu5SOWWN5Hun7x5d9gCj/DDRMX
-         hAgw==
-X-Gm-Message-State: AOAM5310JPA95uaiClCVE+4B0nvq/d/7avrYD1Lku7mqn1lxOqi32HB0
-        UZoH2vohaX6HHiy2Ms++Uzj9/eCX+1akkohxpZg=
-X-Google-Smtp-Source: ABdhPJzX8CvCO/xMMrYlbfQT3Al/CwKUdR85sCz+78pZQWHGLSP6nhp+UgQPf8uvwEeRWSqlSYbFS43MSBFm8BhQtnE=
-X-Received: by 2002:a25:44c:: with SMTP id 73mr47947529ybe.186.1641316998829;
- Tue, 04 Jan 2022 09:23:18 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Dt2cPCWEsFZ5AbysL4UkCn7JLhXrIdEBz/GoqAR1B90=;
+        b=mlTmJBDjcUJ2MBRBHIHtGqv4D8fIPLfGmG1YwAXDf1nMyXHlUj3SGuic9zfpzt0APz
+         qZ9gPiROGJ8DPBP26TxmkxJtcyZiXAhoQnXM4oHcZCx4KIzqZIGaFaelHr1YkDDabRnV
+         deZ3vOfdlWRtLyYxZfylCbpioPXj6BkxzlVA++jcjKzsG7D5JHiP33Fu6KG4BzKoUOex
+         zkuYW/5yz/+1UXwVzkeCUy3H4tcHn9dufJgdxTgvoHgKmaE941ZhnK5QWmWQ+rSVpIyM
+         rb/UkFYuzKA3PYVVXHyi4+kUUiE4Zm0fzRqeMih/xxuRVTIPsvmnTeWkXH/GVNgq747x
+         vSzA==
+X-Gm-Message-State: AOAM531vdvZoyCO/gjSJjWq8FTBEioxa1KTyIstm43fJfMees8Vf/LGU
+        eOI9D9QRCSoR4C9Sqrj4yv7Atw==
+X-Google-Smtp-Source: ABdhPJwQvdabyHoNNTGEbHXwTynNfe/NdjpWJGah72K6zT+sA3YPBHP0aoiMjx0n1cqTIwmYvhLhXQ==
+X-Received: by 2002:a05:6a00:2304:b0:4ba:4cbb:8289 with SMTP id h4-20020a056a00230400b004ba4cbb8289mr51337276pfh.79.1641317141421;
+        Tue, 04 Jan 2022 09:25:41 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id ip2sm36902413pjb.34.2022.01.04.09.25.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 09:25:40 -0800 (PST)
+Date:   Tue, 4 Jan 2022 17:25:37 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Like Xu <likexu@tencent.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 01/17] perf/x86/intel: Add EPT-Friendly PEBS for Ice
+ Lake Server
+Message-ID: <YdSDEUJQgJQfZjWD@google.com>
+References: <20211210133525.46465-1-likexu@tencent.com>
+ <20211210133525.46465-2-likexu@tencent.com>
+ <Yc321e9o16luwFK+@google.com>
+ <69ad949e-4788-0f93-46cb-6af6f79a9f24@gmail.com>
 MIME-Version: 1.0
-References: <20211223173015.22251-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211223173015.22251-7-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAHp75VeCwR-eP930s3miv-ux8=_P+vmdkhN+K=weTL1nwNA1ig@mail.gmail.com>
-In-Reply-To: <CAHp75VeCwR-eP930s3miv-ux8=_P+vmdkhN+K=weTL1nwNA1ig@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 4 Jan 2022 17:22:52 +0000
-Message-ID: <CA+V-a8snJU6YYtfcN_mWCJGxYnbNGrLdU+Y5g06mjV4dhsABMw@mail.gmail.com>
-Subject: Re: [PATCH 06/13] media: davinci: vpif: Use platform_get_irq_optional()
- to get the interrupt
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <69ad949e-4788-0f93-46cb-6af6f79a9f24@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On Fri, Dec 31, 2021, Like Xu wrote:
+> On 31/12/2021 2:13 am, Sean Christopherson wrote:
+> > On Fri, Dec 10, 2021, Like Xu wrote:
+> > > The new hardware facility supporting guest PEBS is only available on
+> > > Intel Ice Lake Server platforms for now. KVM will check this field
+> > > through perf_get_x86_pmu_capability() instead of hard coding the cpu
+> > > models in the KVM code. If it is supported, the guest PEBS capability
+> > > will be exposed to the guest.
+> > 
+> > So what exactly is this new feature?  I've speed read the cover letter and a few
+> > changelogs and didn't find anything that actually explained when this feature does.
+> > 
+> 
+> Please check Intel SDM Vol3 18.9.5 for this "EPT-Friendly PEBS" feature.
+> 
+> I assume when an unfamiliar feature appears in the patch SUBJECT,
+> the reviewer may search for the exact name in the specification.
 
-Thank you for the review.
+C'mon, seriously?  How the blazes am I supposed to know that the feature name
+is EPT-Friendly PEBS?  Or that it's even in the SDM (it's not in the year-old
+version of the SDM I currently have open) versus one of the many ISE docs?
 
-On Sat, Dec 25, 2021 at 5:32 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Sat, Dec 25, 2021 at 3:04 AM Lad Prabhakar
-> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> >
-> > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> > allocation of IRQ resources in DT core code, this causes an issue
-> > when using hierarchical interrupt domains using "interrupts" property
-> > in the node as this bypasses the hierarchical setup and messes up the
-> > irq chaining.
-> >
-> > In preparation for removal of static setup of IRQ resource from DT core
-> > code use platform_get_irq_optional().
-> >
-> > Also this patch propagates error code in case devm_request_irq()
-> > fails instead of returing -EINVAL.
->
-> returning
->
-> ...
->
-> > +       res_irq->flags = IORESOURCE_IRQ | irq_get_trigger_type(irq);
-> > +       res_irq->start = irq;
-> > +       res_irq->end = irq;
-> > +       res_irq->name = dev_of_node(&pdev->dev) ? of_node_full_name(pdev->dev.of_node) : NULL;
->
-> If you convert DEFINE_RES_NAMED() to return a compound literal, then
-> you may use it here like
->
-> res_irq = DEFINE_RES_NAMED(...);
->
-> or even do like this
->
-> if (dev_of_node(...))
->   res_irq = DEFINE_RES_IRQ_NAMED(...)
-> else
->   res_irq = DEFINE_RES_IRQ(...);
-> res_irq->flags |= irq_get_trigger_type(irq);
->
-There are quite a few users of DEFINE_RES_IRQ_NAMED()/DEFINE_RES_IRQ()
-changing this macos just for this single user tree wide doesn't make
-sense. Let me know if you think otherwise.
+This is not hard.  Please spend the 30 seconds it takes to write a small blurb
+so that reviewers don't have to spend 5+ minutes wondering WTF this does.
 
-> I'm not sure why you can't simply use the NAMED variant in both cases
-> (yes, I see that of_node_full_name() will return something, not NULL).
->
-> ...
->
-> > +       while ((err = platform_get_irq_optional(pdev, res_idx)) != -ENXIO) {
-> > +               if (err < 0)
-> > +                       goto vpif_unregister;
->
-> Needs a better error checking, i.e. consider 0 as no-IRQ (equivalent
-> to -ENXIO (note, OF code never returns 0 as valid vIRQ).
->
-Will fix that.
-
-> >                 res_idx++;
-> >         }
->
-> ...
->
-> > +       while ((err = platform_get_irq_optional(pdev, res_idx)) != -ENXIO) {
-> > +               if (err < 0)
-> > +                       goto vpif_unregister;
->
-> Ditto.
->
-Will fix that.
-
-Cheers,
-Prabhakar
+  Add support for EPT-Friendly PEBS, a new CPU feature that enlightens PEBS to
+  translate guest linear address through EPT, and facilitates handling VM-Exits
+  that occur when accessing PEBS records.  More information can be found in the
+  <date> release of Intel's SDM, Volume 3, 18.9.5 "EPT-Friendly PEBS".

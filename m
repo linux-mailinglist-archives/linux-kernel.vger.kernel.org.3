@@ -2,120 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 116104846F7
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6264846FA
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235488AbiADR1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 12:27:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39556 "EHLO
+        id S235576AbiADR1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 12:27:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232884AbiADR1F (ORCPT
+        with ESMTP id S232884AbiADR1b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 12:27:05 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5CDEC061784
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 09:27:04 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id l4so23728144wmq.3
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 09:27:04 -0800 (PST)
+        Tue, 4 Jan 2022 12:27:31 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C84C061761;
+        Tue,  4 Jan 2022 09:27:31 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id j11so81475296lfg.3;
+        Tue, 04 Jan 2022 09:27:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=FkvEoZ+f1KklL29+roJfQw/3hslNdGuWFi/qt4fzI8M=;
-        b=R899uS41/RNeFFNpSnGxelyhgwPPMfXksBO72coQY7q6dqkyhx3hjShQ/aZvkwwHbd
-         6hO5XmIxz0mDI644+u1/1qDCDf3LrknftqzZa/B9l1SqcPAFYuTadf10B7Odh2voElbe
-         7X325pv1hQLekivXePmdeQCu9W8v/qiDYbiriGnagbZGEuT9AH70SkXXruldHvcjgf2C
-         ZbZ2Syg1iLg9CqKf2Eqod2C2/XNIWn46Z1FPr+ylBJgPMLE0ffpTRIy2u7cH8qo2vKDB
-         DuVCAKWSs+o2h6kWQYnzX1oeJzqcAlkmH9+qkbtIiVnUnMHagR+tM/WrmjlBpkh932FT
-         I/+A==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=oEpnYAm67CBx/UycGy4K6PJ7NPnBfxvjloHj5Duq34Q=;
+        b=nVw2UAiB6xthSU977wls63qlOy/xOCnv8ZomXUTgIWL3zEdNoc6OyFtMlm/cOvg6r1
+         dLEi7/HHba0k9iYS016eh5ZjvBEzd7vqYDI0vg97d/IuEHhun7CJF7zRZBJ6RRuXl9He
+         QtaqH8xW++i7QlRATLPVS2VQq7QfjMYfdQvYQr1b11Dr4w+DL3vt7qrr1QSfCAMBd5FO
+         Lkf25fOMuhaHgUE3Q7i/sz56iBYNGxqk22eIcATQiWvZMFoCExIuJjef8YH2DwKu/x+1
+         FGaYiigyNFSMXgC239AE/mXgjfV9OOZHiuWxw5gwVR4iR5k9RWc7HXclCkOKMqCRX7ZI
+         nszw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=FkvEoZ+f1KklL29+roJfQw/3hslNdGuWFi/qt4fzI8M=;
-        b=cX0Zb6h5mzXFNPlooXzOds9K/7qVQPMxpqAa43RebzFBXM9BJ98YoNL0rTZA4fnK5D
-         NOYkg54dyWVtLA6C+7uOb8kIhVTIgjqGoGvqNlad9yT4V1p79RMaxL3a6BNOHjll2pUk
-         eEOc8W+SnXMix0gNuDwG9e6gIWiBWCvgYlB90w8QXC4W1zRCTDGMdeQaBGF8IwOTWGHo
-         yw6PbLMquOGHC87rcCkEuukpfswE3dk/fegFNcrMKzN7sAqkZ11K1ceiz5BDfI2GqOnu
-         +4I5DpLm54QZ243Ipb0NjATFVHz3zJUYeS8Z7JlxvJ4JMlee9zzL7vScYmBko9bFdvHL
-         pFSQ==
-X-Gm-Message-State: AOAM532YkKzXvZHR7EuRj2OKOq3NNbTAbvjStLaX9lqnd0uUGv4Ba5Eu
-        GflZi+9yMaKOqc3YrgOf2YBhpg==
-X-Google-Smtp-Source: ABdhPJz5YFm5a05QEukbkxkYHFV4Q3kslnLu7Nlf+0vhzDrdejKouDenOe8oqoMDNNfTGkOd/4eeJQ==
-X-Received: by 2002:a05:600c:2904:: with SMTP id i4mr41957999wmd.61.1641317223293;
-        Tue, 04 Jan 2022 09:27:03 -0800 (PST)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id i8sm7945wmq.4.2022.01.04.09.27.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 09:27:02 -0800 (PST)
-Date:   Tue, 4 Jan 2022 17:27:01 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Christian =?utf-8?B?TMO2aGxl?= <CLoehle@hyperstone.com>
-Cc:     "jason.wessel@windriver.com" <jason.wessel@windriver.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dianders@chromium.org" <dianders@chromium.org>,
-        "corbet@lwn.net" <corbet@lwn.net>
-Subject: Re: [PATCH] Documentation: kgdb: Replace deprecated remotebaud
-Message-ID: <20220104172701.7ychluvlcts4anab@maple.lan>
-References: <13287b7914344c7995de27224cd2fa73@hyperstone.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oEpnYAm67CBx/UycGy4K6PJ7NPnBfxvjloHj5Duq34Q=;
+        b=gbOc14JDbv2BQEyYNAFoO09Dw8mPEsnnRiQXZ8b6OpC6jgraAYVEsVAezaR2vNiVdA
+         Y8G+Fom0roYxyJHMa7m/qkUCDCoK1EtkcrydvaXuZD0Sud32hmx0B/uAGCn43KymCaWR
+         WTkDbp3B4QzkkFL0fm2M5jWMIkCxaWKWJyWaQti8GLZdB92jtoDcvOub1W8yAtOUt5Ho
+         H1l+J2oJQn+J/iHysRSTKDqfaOjRfjCwA3Ii2h5GaQi3xr4HMa82Gl9rYiJzvoFjaPvm
+         hjP6mdMVQFFavIrTtJAchWb7IWPtSRgz0Xl0UNHfcqpNptS0D0ezEb8eNrYXdhmDmjDa
+         QUqw==
+X-Gm-Message-State: AOAM531oymOJnrBwUfRzE9LF96/Fc7hR8BuDqspHhbmReHJOVwN9NR7Z
+        rLyp55og+9Jkcwh2D23Qi0s=
+X-Google-Smtp-Source: ABdhPJzcTWddpB4EQvW94F90YPyJtOXWx2ZegvKevNmhAZzYtRfDTtyzybQXGcnD+0YnfK/2who+zg==
+X-Received: by 2002:a05:6512:3056:: with SMTP id b22mr41917697lfb.142.1641317249615;
+        Tue, 04 Jan 2022 09:27:29 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.235.38])
+        by smtp.gmail.com with ESMTPSA id br34sm3949699lfb.305.2022.01.04.09.27.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jan 2022 09:27:29 -0800 (PST)
+Message-ID: <5b0b8dc6-f038-bfaa-550c-dc23636f0497@gmail.com>
+Date:   Tue, 4 Jan 2022 20:27:28 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <13287b7914344c7995de27224cd2fa73@hyperstone.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v2] ieee802154: atusb: fix uninit value in
+ atusb_set_extended_addr
+Content-Language: en-US
+To:     Stefan Schmidt <stefan@datenfreihafen.org>, alex.aring@gmail.com,
+        davem@davemloft.net, kuba@kernel.org
+Cc:     linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexander Potapenko <glider@google.com>
+References: <CAB_54W50xKFCWZ5vYuDG2p4ijpd63cSutRrV4MLs9oasLmKgzQ@mail.gmail.com>
+ <20220103120925.25207-1-paskripkin@gmail.com>
+ <ed39cbe6-0885-a3ab-fc30-7c292e1acc53@datenfreihafen.org>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <ed39cbe6-0885-a3ab-fc30-7c292e1acc53@datenfreihafen.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 04:56:51PM +0000, Christian Löhle wrote:
-> The gdb remotebaud to set baudrate has been replaced in favor of
-> set serial baud many years ago.
-
-I'd prefer to have a little more historical info in the patch header
-so that anyone still running gdb-7.6 has a better shot at finding out
-what is going on (some folks in the embedded world end up relying on
-surprisingly old cross-toolsets).
-
-In other words something more like:
-
-  Using set remotebaud to set the baud rate was deprecated in
-  gdb-7.7 and completely removed from the command parser in gdb-7.8
-  (released in 2014). Adopt set serial baud instead.
-
-Other than that the change looks good to me so with an improved
-description containing the above versions and dates this can be:
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
-
-
-Thanks
-
-Daniel.
-
-
+On 1/4/22 18:40, Stefan Schmidt wrote:
 > 
-> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
-> ---
->  Documentation/dev-tools/kgdb.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> It compiles, but does not work on the real hardware.
 > 
-> diff --git a/Documentation/dev-tools/kgdb.rst b/Documentation/dev-tools/kgdb.rst
-> index 43456244651a..7c90e111b364 100644
-> --- a/Documentation/dev-tools/kgdb.rst
-> +++ b/Documentation/dev-tools/kgdb.rst
-> @@ -557,7 +557,7 @@ Connecting with gdb to a serial port
->     Example (using a directly connected port)::
-> 
->             % gdb ./vmlinux
-> -           (gdb) set remotebaud 115200
-> +           (gdb) set serial baud 115200
->             (gdb) target remote /dev/ttyS0
+> [    1.114698] usb 1-1: new full-speed USB device number 2 using uhci_hcd
+> [    1.261691] usb 1-1: New USB device found, idVendor=20b7,
+> idProduct=1540, bcdDevice= 0.01
+> [    1.263421] usb 1-1: New USB device strings: Mfr=0, Product=0,
+> SerialNumber=1
+> [    1.264952] usb 1-1: SerialNumber: 4630333438371502231a
+> [    1.278042] usb 1-1: ATUSB: AT86RF231 version 2
+> [    1.281087] usb 1-1: Firmware: major: 0, minor: 3, hardware type:
+> ATUSB (2)
+> [    1.285191] usb 1-1: atusb_control_msg: req 0x01 val 0x0 idx 0x0,
+> error -61
+> [    1.286903] usb 1-1: failed to fetch extended address, random address set
+> [    1.288757] usb 1-1: atusb_probe: initialization failed, error = -61
+> [    1.290922] atusb: probe of 1-1:1.0 failed with error -61
 > 
 > 
-> --
-> 2.34.1
-> Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
-> Managing Director: Dr. Jan Peter Berns.
-> Commercial register of local courts: Freiburg HRB381782
+> Without your patch it works as expected:
 > 
+> [    1.091925] usb 1-1: new full-speed USB device number 2 using uhci_hcd
+> [    1.237743] usb 1-1: New USB device found, idVendor=20b7,
+> idProduct=1540, bcdDevice= 0.01
+> [    1.239788] usb 1-1: New USB device strings: Mfr=0, Product=0,
+> SerialNumber=1
+> [    1.241432] usb 1-1: SerialNumber: 4630333438371502231a
+> [    1.255012] usb 1-1: ATUSB: AT86RF231 version 2
+> [    1.258073] usb 1-1: Firmware: major: 0, minor: 3, hardware type:
+> ATUSB (2)
+> [    1.262170] usb 1-1: Firmware: build #132 Mo 28. Nov 16:20:35 CET 2016
+> [    1.266195] usb 1-1: Read permanent extended address
+> 10:e2:d5:ff:ff:00:02:e8 from device
+> 
+
+Hi Stefan,
+
+thanks for testing on real hw.
+
+It looks like there is corner case, that Greg mentioned in this thread. 
+atusb_get_and_show_build() reads firmware build info, which may have 
+various length.
+
+Maybe we can change atusb_control_msg() to usb_control_msg() in 
+atusb_get_and_show_build(), since other callers do not have this problem
+
+
+
+With regards,
+Pavel Skripkin

@@ -2,192 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B9D484371
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6AA48437A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:34:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234245AbiADOd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:33:59 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:37296 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232904AbiADOd6 (ORCPT
+        id S234262AbiADOe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:34:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55466 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232904AbiADOey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:33:58 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id F2DD7501;
-        Tue,  4 Jan 2022 15:33:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1641306837;
-        bh=CMmr6T7Svw4Hs4kGTcS1DsdgoT4ahqOk4AGToF3UrBk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ti/VK4kxmwqiSM+WvJkJvjoYkdp9nJ++InB81DZqFYYbGZOxudr4+UeL1FUa93pI4
-         zZXNI6N81RjDKh1qEG7w9ExIhMqZeTUZMjMDLaeGvFeP2CVy1LMRa81XhyAGoPk6E+
-         XUVZwXUjhe2NxSwjhP4Gq0G9UH7TmH3+JHgHSIac=
-Date:   Tue, 4 Jan 2022 16:33:52 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Watson Chow <watson.chow@avnet.com>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Subject: Re: [PATCH 2/2] regulator: Add MAX20086-MAX20089 driver
-Message-ID: <YdRa0GoSoX8CP694@pendragon.ideasonboard.com>
-References: <20220102211124.18435-1-laurent.pinchart+renesas@ideasonboard.com>
- <20220102211124.18435-3-laurent.pinchart+renesas@ideasonboard.com>
- <YdRWwWmoQGQuUyLz@sirena.org.uk>
+        Tue, 4 Jan 2022 09:34:54 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078A3C061761;
+        Tue,  4 Jan 2022 06:34:54 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id g80so64766074ybf.0;
+        Tue, 04 Jan 2022 06:34:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=1I8V+uRVCFde8TDw1Syj7IYeFiqjg/uEQaa3IZgcSIM=;
+        b=mH2ASWCXNWYTYQ9alZR/1t3Wck2R+vlUTMOapZnK+hDDwBwtoyBiFWiwiY0cohppS5
+         Ram0FqKQyb1Z2kAFtxKYdjRXfbUbQkzkldOINID9arbh0Fc5QoD2V/Hux0S/mArNj3Vu
+         yN2656APixeSzZrvZNNWI9keCwx1H3TPWtNzNqjsG+F090upzaT7UP5ZTS+wUiMcy2om
+         FpfAfXD+GRv0Q8DdukycG8v59FfjH7HEJlOsoZSwBAMG3z9FFbT0CT5P6zioA0d6tX/w
+         d0Oz0mTfnEIWEN6Y/We12rGs+eOFAI5TNZEkkOqB6iMiPWH82+JdJ1KtQ6pfmHLnEv0g
+         HoZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=1I8V+uRVCFde8TDw1Syj7IYeFiqjg/uEQaa3IZgcSIM=;
+        b=2kcf7sPuqUQMZpt5yYSIYaKzZVzDbeR+RBhfuHs1nSTPbddNTcxnh+1A8SgiBYhbm1
+         CnTH2/GQsfXGNEqIqnu7AcqMC3BJWHdHWHkEZaA+I0zmoIKfG4Pq5jMWF0u08ZHiB1bZ
+         uAULpmmx3Ffg6ml9fbOXFJ9B+ebY/SzrIHNJYXVzaRFuB9d24mU9k6/QUgwBT1oRJ203
+         BAZL+cRwxNSFPEwT74EVRat1RVzQawpGK4KZTGeZ1NknyPCma2fvp6V9iILT49e8mjHQ
+         b3R5nUyJC0pTsWqWWsZ0lxCPLxLzCGW+xAp5sl58e2MJeTY7YI3GNtG9uYoj6RbU+YX6
+         dgXg==
+X-Gm-Message-State: AOAM533FR46Yyn8O4WATOV3txmggO3/akpt5aL2A6x2++WNMCNvgDaME
+        f1m8FmfJYpWWrsuLrwFI2h8YHcXfc5VBnqU/xFM=
+X-Google-Smtp-Source: ABdhPJxgLTDOUdxKtPHOX3cG7eOARJMBZpSD/Q4L7hc1uYG+3yqK2qJ2ww2LO3vykV6WyzHwQ5UmTOUf/af+jbPd5mE=
+X-Received: by 2002:a25:44c5:: with SMTP id r188mr61357398yba.160.1641306893263;
+ Tue, 04 Jan 2022 06:34:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YdRWwWmoQGQuUyLz@sirena.org.uk>
+References: <CAFkrUsjA1qai+1ysWS_LEUYcMGo+ZRF3v743q6k9e4roF6PWZw@mail.gmail.com>
+ <6338e7cd-80cb-11af-e3c0-edd740bb9e49@gmail.com>
+In-Reply-To: <6338e7cd-80cb-11af-e3c0-edd740bb9e49@gmail.com>
+From:   kvartet <xyru1999@gmail.com>
+Date:   Tue, 4 Jan 2022 22:34:41 +0800
+Message-ID: <CAFkrUsgEJcMAdVUP3aUB7-H4YmUjFeii5754nPpOVh+vo3bnLA@mail.gmail.com>
+Subject: Re: INFO: trying to register non-static key in hci_uart_tx_wakeup
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, sunhao.th@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+We are so sorry for that. You can try the following websites, which
+can be accessed without registration.
 
-Thank you for the review.
+console output: https://paste.ubuntu.com/p/Bfpr8Gxtd4/
+kernel config: https://paste.ubuntu.com/p/FDDNHDxtwz/
 
-On Tue, Jan 04, 2022 at 02:16:33PM +0000, Mark Brown wrote:
-> On Sun, Jan 02, 2022 at 11:11:24PM +0200, Laurent Pinchart wrote:
-> 
-> > ---
-> > Changes since v0:
-> > 
-> > - Remove unused regulator_config members
-> > - Drop unused header
-> 
-> This is a *very* long list relative to something that was never posted
-> :/
+Sorry again and look forward to your reply!
 
-I've included it for reference for Watson. It's not meant for upstream,
-I'll drop it in v2.
 
-> > @@ -1415,4 +1424,3 @@ config REGULATOR_QCOM_LABIBB
-> >  	  for LCD display panel.
-> >  
-> >  endif
-> > -
-> 
-> Unrelated whitespace change.
+Best Regards,
+Yiru
 
-Oops.
-
-> > --- /dev/null
-> > +++ b/drivers/regulator/max20086-regulator.c
-> > @@ -0,0 +1,333 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > +/*
-> > + * max20086-regulator.c - MAX20086-MAX20089 camera power protector driver
-> > + *
-> 
-> Please keep the entire comment a C++ one so things look more
-> intentional.
-
-OK.
-
-> > +#include <linux/regmap.h>
-> > +#include <linux/regulator/driver.h>
-> > +#include <linux/regulator/machine.h>
-> 
-> It is worrying that a regulator driver should need the interfaces for
-> machines...  the driver doesn't look like it actually does though.
-
-I'll try to remove it.
-
-> > +static int max20086_parse_regulators_dt(struct max20086 *chip)
-> > +{
-> > +	struct of_regulator_match matches[MAX20086_MAX_REGULATORS] = { };
-> > +	struct device_node *node;
-> > +	unsigned int i;
-> > +	unsigned int n;
-> > +	int num;
-> 
-> You should be able to remove the stuff about looking for the regulators
-> node and just set of_match and regulators_node in the descs.
-
-I'll give it a try. I'm not very experienced with the regulator
-framework, sorry for the rookie mistakes.
-
-> > +	num = of_regulator_match(chip->dev, node, matches,
-> > +				 chip->info->num_outputs);
-> > +	of_node_put(node);
-> > +	if (num <= 0) {
-> > +		dev_err(chip->dev, "Failed to match regulators\n");
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	chip->num_outputs = num;
-> 
-> The number of regulators the device supports should be known from the
-> compatible, I'd expect a data table for this.  It should be possible to
-> read the state of regulators not described in the DT.
-
-Does this mean that the driver should register all regulators, even the
-ones not described in DT ? Who would read the state ?
-
-> > +static const struct regmap_config max20086_regmap_config = {
-> > +	.reg_bits = 8,
-> > +	.val_bits = 8,
-> > +	.writeable_reg = max20086_gen_is_writeable_reg,
-> > +	.max_register = 0x9,
-> > +	.cache_type = REGCACHE_NONE,
-> > +};
-> 
-> No readback support?
-
-I'll fix that.
-
-> > +	/* Turn off all outputs. */
-> > +	ret = regmap_update_bits(chip->regmap, MAX20086_REG_CONFIG,
-> > +				 MAX20086_EN_MASK, 0);
-> > +	if (ret < 0) {
-> > +		dev_err(chip->dev, "Failed to disable outputs: %d\n", ret);
-> > +		return ret;
-> > +	}
-> 
-> The driver should not do not do this - the driver should only configure
-> the hardware if told to by the core which in turn will only do this if
-> there's explicit permission to do so in the machine constraints.  We
-> don't know what some system integrator might have thought to do with
-> the device.
-
-I'll fix that too (I actually suspected the topic could get raised
-during review :-)).
-
-> > +	/* Get the chip out of low-power shutdown state. */
-> > +	chip->gpio_en = devm_gpiod_get(chip->dev, "enable", GPIOD_OUT_HIGH);
-> > +	if (IS_ERR(chip->gpio_en)) {
-> > +		ret = PTR_ERR(chip->gpio_en);
-> > +		dev_err(chip->dev, "Failed to get enable GPIO: %d\n", ret);
-> > +		return ret;
-> > +	}
-> 
-> This one is more OK - it's changing the state of the outputs that's an
-> issue.  I guess this might cause the outputs to come on though if the
-> GPIO was left off by the bootloader which is awkward.  If there's
-> nothing other than the outputs going on with the chip I would be tempted
-> to map this onto the per regulator enable GPIO that the core supports,
-> the core will then be able to manage the low power state at runtime.
-> That's *probably* the least bad option we have with current interfaces.
-
-While fishing for code I can copy in the always unfashionable cargocult
-style, I came across max8973-regulator.c that handles the enable GPIO in
-the following way:
-
-		if (ridata && (ridata->constraints.always_on ||
-			       ridata->constraints.boot_on))
-			gflags = GPIOD_OUT_HIGH;
-		else
-			gflags = GPIOD_OUT_LOW;
-		gflags |= GPIOD_FLAGS_BIT_NONEXCLUSIVE;
-		gpiod = devm_gpiod_get_optional(&client->dev,
-						"maxim,enable",
-						gflags);
-
-Should I try to replicate that ? It gets more difficult with multiple
-regulators that share the same GPIO. That's why I left it as-is.
-
-> It's a real shame we can't easily get the GPIO state at startup for
-> bootstrapping :/  
-
--- 
-Regards,
-
-Laurent Pinchart
+Pavel Skripkin <paskripkin@gmail.com> =E4=BA=8E2022=E5=B9=B41=E6=9C=884=E6=
+=97=A5=E5=91=A8=E4=BA=8C 22:14=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On 1/4/22 11:49, kvartet wrote:
+> > Hello,
+> >
+> > When using Syzkaller to fuzz the latest Linux kernel, the following
+> > crash was triggered.
+> >
+> > HEAD commit: a7904a538933 Linux 5.16-rc6
+> > git tree: upstream
+> > console output: https://paste.ubuntu.com/p/Bfpr8Gxtd4/plain/
+> > kernel config: https://paste.ubuntu.com/p/FDDNHDxtwz/plain/
+> >
+>
+> Btw, can you, please, use plain pastbin or something else, that does not
+> require a registration? I think, most people here do not have ubuntu one
+> account and don't want to have one. I saw people using google drive for
+> these kind of things
+>
+>
+> Thanks for your reports!
+>
+>
+>
+> With regards,
+> Pavel Skripkin

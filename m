@@ -2,88 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B0F48491E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 21:16:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9BA2484924
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 21:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232255AbiADUQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 15:16:31 -0500
-Received: from mail-oi1-f180.google.com ([209.85.167.180]:38513 "EHLO
-        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiADUQ3 (ORCPT
+        id S232301AbiADURX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 15:17:23 -0500
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:44592 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232263AbiADURW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 15:16:29 -0500
-Received: by mail-oi1-f180.google.com with SMTP id s73so61154502oie.5;
-        Tue, 04 Jan 2022 12:16:29 -0800 (PST)
+        Tue, 4 Jan 2022 15:17:22 -0500
+Received: by mail-ot1-f48.google.com with SMTP id w19-20020a056830061300b0058f1dd48932so48115765oti.11;
+        Tue, 04 Jan 2022 12:17:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=75KdaeRZ1jVa25k2aqyDkyMYUVMAqnMfp8vxvIY/EvM=;
-        b=xEk0wtRlgQQ9bO1CpmDfrw+bFyIWtrrl+/uN3pEHq0pz/J/o+qQjGWtOGN8M95+qYS
-         F4GqPPLx2p18iBW/70rc9XIz1ObIyP9sfDPb7VtkZsNgtodwiF46FeTzA2g3PPJV0X5L
-         NPMKCAzTz4erArOEuUgY0B/v4rQhIHPTi0ClWFmYhKBsWrCFTZgL7/ilYkeU8+7OFIim
-         Mx483ovykdZmXLg3va0GWo0KCDyuiOCQYcrVFSLzFqgXOqzwH8Gs9l5mFoiY8Kij9UX4
-         Sawyc9S7XfuUCNBY77rhh0a2VJgFBIFVcUE6lGiAYHbuImUT0zatbVHxxEEA5nAtSTFt
-         VWxg==
-X-Gm-Message-State: AOAM532hmmbZOk0K5nCiEspwD4NqBjS/n+TF508fCeWK4Jpd2Mvafiva
-        TeqKC26o0ypx04sui/jvjH0kyAh95Q==
-X-Google-Smtp-Source: ABdhPJwkJhG+egsjUnjaP/dqAPbfiVolA6ZKSBcVw6ZOEQkNx5bPZrT2/dlciwh//xOu4pUbzDKEGg==
-X-Received: by 2002:a05:6808:16a4:: with SMTP id bb36mr38016oib.112.1641327389124;
-        Tue, 04 Jan 2022 12:16:29 -0800 (PST)
+         :mime-version:content-disposition:in-reply-to;
+        bh=xZe6h9IZ5mJFq2lPFq6YgGUpqZsfKEUO/x8BTCF7yN8=;
+        b=UL+NF2DzGoPx9T6r89EPun3szbAXm4enh/yOH28Ls1SXLNlUslb107/lfOmxlbfwMM
+         P+GhMo77OUPk2VDZV74dHrPUUiBwG2EObaUCXEdlBU9oY/pxZBMnWb58c2dt5/cXneUo
+         Pd6ekwKa4DQh8DG3W70NzlBEsDJr+N48m6qU0Bs52P1jxvy6IhSZxlro/FYVEaVMnnqV
+         SUkhFSb3y+xenXrPnIbNr/IXhD01JcgURx6R5pj7AUmlWxoXDmDufnESzCKDrI3oj1PB
+         WxRWZe2Os9H7F2NF3ORcmNB/oDdRU9QlCZYRntuhG6KPCJguARCZKGntUCoXLEuwLiao
+         jaWg==
+X-Gm-Message-State: AOAM531mWgzQxsaj1bn9OHoRdoDMOsFtpM8nqeyAkpSSXlM/iLHQmaOY
+        TMWxJwndVWa4EB4mjEZEPA==
+X-Google-Smtp-Source: ABdhPJwmUKUS4CgC3yiAFqIrrdEqJt0bg69XyvKXXDZHS1Ii4fWEH+zKTJ0Inqnv4CrGY7/HgvOLhw==
+X-Received: by 2002:a9d:24e4:: with SMTP id z91mr36314328ota.11.1641327441715;
+        Tue, 04 Jan 2022 12:17:21 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id i28sm8164650otf.12.2022.01.04.12.16.28
+        by smtp.gmail.com with ESMTPSA id i25sm7712438otl.8.2022.01.04.12.17.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 12:16:28 -0800 (PST)
-Received: (nullmailer pid 1345397 invoked by uid 1000);
-        Tue, 04 Jan 2022 20:16:27 -0000
-Date:   Tue, 4 Jan 2022 14:16:27 -0600
+        Tue, 04 Jan 2022 12:17:21 -0800 (PST)
+Received: (nullmailer pid 1347163 invoked by uid 1000);
+        Tue, 04 Jan 2022 20:17:20 -0000
+Date:   Tue, 4 Jan 2022 14:17:20 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Subject: Re: [PATCH 3/5] dt-bindings: nvmem: allow referencing device defined
- cells by names
-Message-ID: <YdSrG3EGDHMmhm1Y@robh.at.kernel.org>
-References: <20211223110755.22722-1-zajec5@gmail.com>
- <20211223110755.22722-4-zajec5@gmail.com>
- <CAL_JsqK2TMu+h4MgQqjN0bvEzqdhsEviBwWiiR9hfNbC5eOCKg@mail.gmail.com>
- <f173d7a6-70e7-498f-8a04-b025c75f2b66@gmail.com>
+To:     Stanislav Jakubek <stano.jakubek@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH] dt-bindings: vendor-prefixes: add OnePlus
+Message-ID: <YdSrUB4FHyJjf/jV@robh.at.kernel.org>
+References: <20211223141002.GA5979@standask-GA-A55M-S2HP>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f173d7a6-70e7-498f-8a04-b025c75f2b66@gmail.com>
+In-Reply-To: <20211223141002.GA5979@standask-GA-A55M-S2HP>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 10:58:56PM +0100, Rafał Miłecki wrote:
-> On 23.12.2021 22:18, Rob Herring wrote:
-> > On Thu, Dec 23, 2021 at 7:08 AM Rafał Miłecki <zajec5@gmail.com> wrote:
-> > > 
-> > > From: Rafał Miłecki <rafal@milecki.pl>
-> > > 
-> > > Not every NVMEM has predefined cells at hardcoded addresses. Some
-> > > devices store cells in internal structs and custom formats. Referencing
-> > > such cells is still required to let other bindings use them.
-> > > 
-> > > Modify binding to require "reg" xor "label". The later one can be used
-> > > to match "dynamic" NVMEM cells by their names.
-> > 
-> > 'label' is supposed to correspond to a sticker on a port or something
-> > human identifiable. It generally should be something optional to
-> > making the OS functional. Yes, there are already some abuses of that,
-> > but this case is too far for me.
+On Thu, 23 Dec 2021 15:10:02 +0100, Stanislav Jakubek wrote:
+> Add vendor prefix for OnePlus (https://www.oneplus.com/)
 > 
-> Good to learn that!
+> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> "name" is special & not allowed I think.
 
-It's the node name essentially. Why is using node names not sufficient? 
-Do you have some specific examples?
-
-Rob
+Applied, thanks!

@@ -2,116 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1E7E483A03
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 02:54:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47ACE483A7E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 03:10:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231926AbiADByb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 20:54:31 -0500
-Received: from mga18.intel.com ([134.134.136.126]:25504 "EHLO mga18.intel.com"
+        id S232164AbiADCK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 21:10:26 -0500
+Received: from m12-16.163.com ([220.181.12.16]:4206 "EHLO m12-16.163.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230190AbiADBya (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 20:54:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641261270; x=1672797270;
-  h=cc:subject:to:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=Ss8QCGOz/6iEe4yePS2efWHOxCXd1yzggIK/DRLWMvI=;
-  b=ZoYyZpujkkdHngcCsm24I2UoM+xZIPytfbtZkImuGaBsEexq7f0hC1MC
-   wf7PvNMUhu+39ev5DkCMzXwhKtqnqlp3Lwt0BOKHHE1DFl0l+JiemAUkt
-   m0ac4trnNitHfJk208AVtNuhX6kWxSBY9OFSV+vn00UWOt83H5x1Se41b
-   ltRhKmr4P3ge4hmtk9evxkCzF1AVDoav1hPJ4t4de/HYWV2sD1/ouxgLf
-   haY+WD3Tt9UBMgW0JsfiqMYPgvtu667UnSFAfDIInGw6I0ySjfwBQCSfe
-   /QA/ewoPGEYEFQsJEHhd9HuXhtZSF9aGAM0oAf1pCdWwi49qwXI8LJb9M
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="228960990"
-X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="228960990"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 17:54:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="525816995"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by orsmga008.jf.intel.com with ESMTP; 03 Jan 2022 17:54:23 -0800
-Cc:     baolu.lu@linux.intel.com, Robin Murphy <robin.murphy@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 07/13] iommu: Add iommu_at[de]tach_device_shared() for
- multi-device groups
-To:     Jason Gunthorpe <jgg@nvidia.com>
-References: <20211217063708.1740334-1-baolu.lu@linux.intel.com>
- <20211217063708.1740334-8-baolu.lu@linux.intel.com>
- <dd797dcd-251a-1980-ca64-bb38e67a526f@arm.com>
- <20211221184609.GF1432915@nvidia.com>
- <aebbd9c7-a239-0f89-972b-a9059e8b218b@arm.com>
- <20211223005712.GA1779224@nvidia.com>
- <fea0fc91-ac4c-dfe4-f491-5f906bea08bd@linux.intel.com>
- <20211223140300.GC1779224@nvidia.com>
- <50b8bb0f-3873-b128-48e8-22f6142f7118@linux.intel.com>
- <20211224025036.GD1779224@nvidia.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Message-ID: <1a22fecf-9cba-76f8-7dc4-88a56b2457cd@linux.intel.com>
-Date:   Tue, 4 Jan 2022 09:53:47 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S229469AbiADCKZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 21:10:25 -0500
+X-Greylist: delayed 928 seconds by postgrey-1.27 at vger.kernel.org; Mon, 03 Jan 2022 21:10:23 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=anOjr
+        qvHO1Z4432Qm8RpuzEHkUu3oj36DsNbGYJrNVU=; b=KyKG1GHdAkxVeJp33G9eT
+        Y+5gs5+xSFU0+pcoKf26zFJj27qEsWPkRFDKCfHQIyhRhS1ldclaUs+RWcoDqM2n
+        c9us2PyYmVgl0zLc/s0XIZn5WQZSSHQ4+vnCjaWGwVl5PEDx1BOkidB0b2jYgWBw
+        zSTFK+ZSqmylrTXQ/MUWW8=
+Received: from localhost.localdomain (unknown [101.93.205.203])
+        by smtp12 (Coremail) with SMTP id EMCowADH_EHgqNNh6ZCeAw--.4698S2;
+        Tue, 04 Jan 2022 09:54:50 +0800 (CST)
+From:   Qinghua Jin <qhjin_dev@163.com>
+Cc:     qhjin_dev@163.com, Colin Ian King <colin.king@canonical.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] vfs: fix bug when opening a file with O_DIRECT on a file system that does not support it will leave an empty file
+Date:   Tue,  4 Jan 2022 09:53:58 +0800
+Message-Id: <20220104015358.57443-1-qhjin_dev@163.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <20211224025036.GD1779224@nvidia.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: EMCowADH_EHgqNNh6ZCeAw--.4698S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Cw1DKF1kCw4xCFWktry5Jwb_yoW8ZF4kpF
+        WfKa4UK34kJryIgF1kZa1vv3W0g34xGay7JrWkWa4DArnIvFyFgFWagF1kWr1YqF95Ar4F
+        qw45Aw1UWrW5AFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRLSdPUUUUU=
+X-Originating-IP: [101.93.205.203]
+X-CM-SenderInfo: ptkmx0hbgh4qqrwthudrp/1tbi7xN+HFr8Ad0C5gAAsA
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/24/21 10:50 AM, Jason Gunthorpe wrote:
->>> We don't need _USER anymore because iommu_group_set_dma_owner() always
->>> does detatch, and iommu_replace_group_domain() avoids ever reassigning
->>> default_domain. The sepecial USER behavior falls out automatically.
->> This means we will grow more group-centric interfaces. My understanding
->> is the opposite that we should hide the concept of group in IOMMU
->> subsystem, and the device drivers only faces device specific interfaces.
-> Ideally group interfaces would be reduced, but in this case VFIO needs
-> the group. It has sort of a fundamental problem with its uAPI that
-> expects the container is fully setup with a domain at the moment the
-> group is attached. So deferring domain setup to when the device is
-> available becomes a user visible artifact - and if this is important
-> or not is a whole research question that isn't really that important
-> for this series.
-> 
-> We also can't just pull a device out of thin air, a device that hasn't
-> been probed() hasn't even had dma_configure called! Let alone the
-> lifetime and locking problems with that kind of idea.
-> 
-> So.. leaving it as a group interface makes the most sense,
-> particularly for this series which is really about fixing the sharing
-> model in the iommu core and deleting the BUG_ONs.
+Colin Ian King reported the following
 
-I feel it makes more sense if we leave the attach_device/group
-refactoring patches into a separated series. I will come up with this
-new series so that people can review and comment on the real code.
+1. create a minix file system and mount it
+2. open a file on the file system with O_RDWR | O_CREAT | O_TRUNC | O_DIRECT
+3. open fails with -EINVAL but leaves an empty file behind.  All other open() failures don't leave the
+failed open files behind.
 
-Best regards,
-baolu
+The reason is because when checking the O_DIRECT in do_dentry_open, the inode has created, and later err
+processing can't remove the inode:
+
+        /* NB: we're sure to have correct a_ops only after f_op->open */
+        if (f->f_flags & O_DIRECT) {
+                if (!f->f_mapping->a_ops || !f->f_mapping->a_ops->direct_IO)
+                        return -EINVAL;
+        }
+
+The patch will check the O_DIRECT before creating the inode in lookup_open function.
+
+Signed-off-by: Qinghua Jin <qhjin_dev@163.com>
+Reported-by:  Colin Ian King <colin.king@canonical.com>
+---
+ fs/namei.c | 7 +++++++
+ fs/open.c  | 6 ------
+ 2 files changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/fs/namei.c b/fs/namei.c
+index 1f9d2187c765..24c6bcba702d 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -3277,6 +3277,13 @@ static struct dentry *lookup_open(struct nameidata *nd, struct file *file,
+ 			goto out_dput;
+ 		}
+ 
++		if (open_flag & O_DIRECT) {
++			if (!dir_inode->i_mapping || !dir_inode->i_mapping->a_ops ||
++					!dir_inode->i_mapping->a_ops->direct_IO) {
++				error = -EINVAL;
++				goto out_dput;
++			}
++		}
+ 		error = dir_inode->i_op->create(mnt_userns, dir_inode, dentry,
+ 						mode, open_flag & O_EXCL);
+ 		if (error)
+diff --git a/fs/open.c b/fs/open.c
+index f732fb94600c..2829c3613c0f 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -838,12 +838,6 @@ static int do_dentry_open(struct file *f,
+ 
+ 	file_ra_state_init(&f->f_ra, f->f_mapping->host->i_mapping);
+ 
+-	/* NB: we're sure to have correct a_ops only after f_op->open */
+-	if (f->f_flags & O_DIRECT) {
+-		if (!f->f_mapping->a_ops || !f->f_mapping->a_ops->direct_IO)
+-			return -EINVAL;
+-	}
+-
+ 	/*
+ 	 * XXX: Huge page cache doesn't support writing yet. Drop all page
+ 	 * cache for this file before processing writes.
+-- 
+2.30.2
+
+

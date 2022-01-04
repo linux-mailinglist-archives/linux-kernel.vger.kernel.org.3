@@ -2,177 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DB62484986
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 21:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1128D48497A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 21:53:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233661AbiADUzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 15:55:05 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:49271 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233562AbiADUzB (ORCPT
+        id S233549AbiADUw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 15:52:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58668 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233103AbiADUw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 15:55:01 -0500
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 204KqTfp016358
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 4 Jan 2022 15:52:30 -0500
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id EDA7015C00E1; Tue,  4 Jan 2022 15:52:28 -0500 (EST)
-Date:   Tue, 4 Jan 2022 15:52:28 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Walt Drummond <walt@drummond.us>, aacraid@microsemi.com,
-        viro@zeniv.linux.org.uk, anna.schumaker@netapp.com, arnd@arndb.de,
-        bsegall@google.com, bp@alien8.de, chuck.lever@oracle.com,
-        bristot@redhat.com, dave.hansen@linux.intel.com,
-        dwmw2@infradead.org, dietmar.eggemann@arm.com, dinguyen@kernel.org,
-        geert@linux-m68k.org, gregkh@linuxfoundation.org, hpa@zytor.com,
-        idryomov@gmail.com, mingo@redhat.com, yzaikin@google.com,
-        ink@jurassic.park.msu.ru, jejb@linux.ibm.com, jmorris@namei.org,
-        bfields@fieldses.org, jlayton@kernel.org, jirislaby@kernel.org,
-        john.johansen@canonical.com, juri.lelli@redhat.com,
-        keescook@chromium.org, mcgrof@kernel.org,
-        martin.petersen@oracle.com, mattst88@gmail.com, mgorman@suse.de,
-        oleg@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
-        rth@twiddle.net, richard@nod.at, serge@hallyn.com,
-        rostedt@goodmis.org, tglx@linutronix.de,
-        trond.myklebust@hammerspace.com, vincent.guittot@linaro.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        ceph-devel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-m68k@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [RFC PATCH 0/8] signals: Support more than 64 signals
-Message-ID: <YdSzjPbVDVGKT4km@mit.edu>
-References: <20220103181956.983342-1-walt@drummond.us>
- <87iluzidod.fsf@email.froward.int.ebiederm.org>
+        Tue, 4 Jan 2022 15:52:56 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C9EC061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 12:52:56 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id h15so49131029ljh.12
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 12:52:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=hQXt2kCpfG17wQ1j0L2RQe+/2vBRsqY/bfs0/xljrmk=;
+        b=Sl6kYQCb3QpKqVRvV+KqRiCE6mav78rEOgyuwrXmG0oiUQKGAudDcsSOVFG172QqKl
+         lsyMpFUhe750++f0TIjr8WLhKNIwA55tclWp1quOopzdmbV1mZ9mFZaXiIGJaBooFt84
+         YfT+wTiBvMjjxhs5SCX1VFbTct2ID3Jzhkd1PwGwGZ9S9fC2Bo+/QROM6dQClKSs1lW0
+         JGTsphOv1SZWSXCADf5NrWYYv+n8rJ3IpDbvvXCmgNdg10ixNAwAXZww7Clw1D5/KS20
+         Yt/ogRKlgnah9D/cpkkGxp9/ClIXSAFnsbdNiWoBBObKBHndH1kDZBovDxtrNcR+WIW7
+         dz4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hQXt2kCpfG17wQ1j0L2RQe+/2vBRsqY/bfs0/xljrmk=;
+        b=n1ZgpM2KB56jQ+X8a1PZ6BYhtw3W3cL1P381yR0CubHv52WwJH8rDQdsgm9BX6DvNO
+         UuniFpG1h8YzP9Vt2z0us+vTbrueyR8+7TPIz79206f7K05vJk2Fo9HRCL+BUcdPaCr+
+         K/B/BCKWnY6VyxUugC3DBl/Tfs05uEyXSv2EIv+UgOkbk0saPw/Xd9nr7pwpBNZigJn1
+         4KVOgbIXZcK22ghlKSuzy1RhvOY1c+AOtOjKJ0jCAhNzokO4AwZoktc7O+e+Ri0EN3T9
+         Xc2HpxyyW3M5TXszMc3kJB9Oq4zqTGrS8CWtwh2wXtneP+o6+e2uitsngwN9tgC3NBoO
+         GL6g==
+X-Gm-Message-State: AOAM531fz3Dip7Be/7G8ibX6QKX838DLxSDGMc4A8kh2LSGNs9kWnuRj
+        2qIJ8B7GybVQ+M6vHdYiD/U=
+X-Google-Smtp-Source: ABdhPJyQK7kBxykRgNtvFA6LuKt3Snmy/xF5WKSxPxjbxF5RTO+yMs1pT9KzaOvYRnmX1y1aOn55UQ==
+X-Received: by 2002:a05:651c:10a6:: with SMTP id k6mr40926577ljn.194.1641329574663;
+        Tue, 04 Jan 2022 12:52:54 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.235.38])
+        by smtp.gmail.com with ESMTPSA id c4sm4015245lfm.160.2022.01.04.12.52.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jan 2022 12:52:54 -0800 (PST)
+Message-ID: <f93b7f73-ce0f-2f95-d775-5d644c05ca21@gmail.com>
+Date:   Tue, 4 Jan 2022 23:52:53 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87iluzidod.fsf@email.froward.int.ebiederm.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH 5/5] staging: r8188eu: turbo scan is always off for
+ r8188eu
+Content-Language: en-US
+To:     Martin Kaiser <martin@kaiser.cx>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220102175932.89127-1-martin@kaiser.cx>
+ <20220102175932.89127-6-martin@kaiser.cx>
+ <6d33d346-b797-aeb3-8b1b-64332e05fb87@gmail.com>
+ <YdSzNFZ+DXX6gemR@martin-debian-1.paytec.ch>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <YdSzNFZ+DXX6gemR@martin-debian-1.paytec.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 12:00:34PM -0600, Eric W. Biederman wrote:
-> I dug through the previous conversations and there is a little debate
-> about what makes sense for SIGPWR to do by default.  Alan Cox remembered
-> SIGPWR was sent when the power was restored, so ignoring SIGPWR by
-> default made sense.  Ted Tso pointed out a different scenario where it
-> was reasonable for SIGPWR to be a terminating signal.
+On 1/4/22 23:51, Martin Kaiser wrote:
+> Hi Pavel,
 > 
-> So far no one has actually found any applications that will regress if
-> SIGPWR becomes ignored by default.  Furthermore on linux SIGPWR is only
-> defined to be sent to init, and init ignores all signals by default so
-> in practice SIGPWR is ignored by the only process that receives it
-> currently.
+> Thus wrote Pavel Skripkin (paskripkin@gmail.com):
+> 
+>> It's a bit unrelated to the patch, but I found it while reviewing this. It's
+>> in the same function rtl8188e_PHY_RF6052SetCckTxPower():
+> 
+>> 89: 	u32 TxAGC[2] = {0, 0};
+>> ...
+>> 92	u8 *ptr;
+>> ...
+>> 129	for (idx1 = RF_PATH_A; idx1 <= RF_PATH_B; idx1++) {
+>> 130		ptr = (u8 *)(&TxAGC[idx1]);
+>> 131		for (idx2 = 0; idx2 < 4; idx2++) {
+>> 132			if (*ptr > RF6052_MAX_TX_PWR)
+>> 133				*ptr = RF6052_MAX_TX_PWR;
+>> 134			ptr++;
+>> 135		}
+>> 136	}
+> 
+> 
+>> What is going on here? Code just checks and writes to random place on stack
+>> outside TxAGC array? I might be missing something, but it looks wrong...
+> 
+> TxAGC is two 32-bit values, i.e. 2 x 4 Bytes. The outer loop selects a
+> 32-bit array entry, the inner loop iterates over each byte of this entry
+> and checks that it is <= RF6052_MAX_TX_PWR. I don't think this writes past
+> the end of the TxAGC[] array.
+> 
 
-As it turns out, systemd does *not* ignore SIGPWR.  Instead, it will
-initiate the sigpwr target.  From the systemd.special man page:
+Oh.... I should have go to sleep earlier that evening, sorry. I've 
+missed, that this array is u32, but not u8.
 
-       sigpwr.target
-           A special target that is started when systemd receives the
-           SIGPWR process signal, which is normally sent by the kernel
-           or UPS daemons when power fails.
+Sorry for that noise :(
 
-And child processes of systemd are not ignoring SIGPWR.  Instead, they
-are getting terminated.
 
-<tytso@cwcc>
-41% /bin/sleep 50 &
-[1] 180671
-<tytso@cwcc>
-42% kill -PWR 180671
-[1]+  Power failure           /bin/sleep 50
 
-> Where I saw the last conversation falter was in making a persuasive
-> case of why SIGINFO was interesting to add.  Given a world of ssh
-> connections I expect a persuasive case can be made.  Especially if there
-> are a handful of utilities where it is already implemented that just
-> need to be built with SIGINFO defined.
 
-One thing that's perhaps worth disentangling is the value of
-supporting VSTATUS --- which is a control character much like VINTR
-(^C) or VQUIT (control backslash) which is set via the c_cc[] array in
-termios structure.  Quoting from the termios man page:
-
-       VSTATUS
-              (not in POSIX; not supported under Linux; status
-              request: 024, DC4, Ctrl-T).  Status character (STATUS).
-              Display status information at terminal, including state
-              of foreground process and amount of CPU time it has
-              consumed.  Also sends a SIGINFO signal (not supported on
-              Linux) to the foreground process group.
-
-The basic idea is that when you type C-t, you can find out information
-about the currently running process.  This is a feature that
-originally comes from TOPS-10's TENEX operating system, and it is
-supported today on FreeBSD and Mac OS.  For example, it might display
-something like this:
-
-load: 2.39  cmd: ping 5374 running 0.00u 0.00s
-
-The reason why SIGINFO is sent to the foreground process group is that
-it gives the process an opportunity print application specific
-information about currently running process.  For example, maybe the C
-compiler could print something like "parsing 2042 of 5000 header
-files", or some such.  :-)
-
-There are people who wish that Linux supported Control-T / VSTATUS,
-for example, just last week, on TUHS, the Unix greybeards list, there
-were two such heartfelt wishes for Control-T support from two such
-greybeards:
-
-    "It's my biggest annoyance with Linux that it doesn't [support
-    control-t]
-    - https://minnie.tuhs.org/pipermail/tuhs/2021-December/024849.html
-
-    "I personally can't stand using Linux, even casually for a very
-     short sys-admin task, because of this missing feature"
-    - https://minnie.tuhs.org/pipermail/tuhs/2021-December/024898.html
-
-I claim, though, that we could implement VSTATUS without implenting
-the SIGINFO part of the feature.  Previous few applications *ever*
-implemented SIGINFO signal handlers so they could give status
-information, it's the hard one, since we don't have any spare signals
-left.  If we were to repurpose some lesser used signal, whether it be
-SIGPWR, SIGLOST, or SIGSTKFLT, the danger is that there might be some
-userspace program (such as a UPS monitoring program which wants to
-trigger power fail handling, or a userspace NFSv4 process that wants
-to signal that it was unable to recover a file's file lock after a
-server reboot), and if we try to take over the signal assignment, it's
-possible that we might get surprised.  Furthermore, all of the
-possibly unused signals that we might try to reclaim terminate the
-process by default, and SIGINFO *has* to have a default signal
-handling action of Ignore, since otherwise typing Control-T will end
-up killing the current foreground application.
-
-Personally, I don't care all that much about VSTATUS support --- I
-used it when I was in university, but honestly, I've never missed it.
-But if there is someone who wants to try to implement VSTATUS, and
-make some Unix greybeards happy, and maybe even switch from FreeBSD to
-Linux as a result, go wild.  I'm not convinced, though, that adding
-the SIGINFO part of the support is worth the effort.
-
-Not only do almost no programs implement SIGINFO support, a lot of CPU
-bound programs where this might be actually useful, end up running a
-large number of processes in parallel.  Take the "parsing 2042 of 5000
-header files" example I gave above.  Consider what would happen if gcc
-implemented support for SIGINFO, but the user was running a "make -j
-16" and typed Control-T.   The result would be chaos!
-
-So if you really miss Control-T, and it's the only thing holding back
-a few FreeBSD users from Linux, I don't see the problem with
-implementing that part of the feature.  Why not just do the easy part
-of the feature which is perhaps 5% of the work, and might provide 99%
-of the benefit (at least for those people who care).
-
-> Without seeing the persuasive case for more signals I have to say that
-> adding more signals to the kernel sounds like a bad idea.
-
-Concur, 100%.
-
-						- Ted
+With regards,
+Pavel Skripkin

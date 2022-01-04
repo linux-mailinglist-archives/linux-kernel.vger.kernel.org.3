@@ -2,120 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1522D484625
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:45:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 131DE48462B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:47:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235475AbiADQpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 11:45:13 -0500
-Received: from relmlor2.renesas.com ([210.160.252.172]:28617 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233988AbiADQpM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 11:45:12 -0500
-X-IronPort-AV: E=Sophos;i="5.88,261,1635174000"; 
-   d="scan'208";a="106011511"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 05 Jan 2022 01:45:11 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 58B09400A10C;
-        Wed,  5 Jan 2022 01:45:09 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Nishanth Menon <nm@ti.com>, Santosh Shilimkar <ssantosh@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v5] soc: ti: smartreflex: Use platform_get_irq_optional() to get the interrupt
-Date:   Tue,  4 Jan 2022 16:45:04 +0000
-Message-Id: <20220104164504.24707-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
+        id S235488AbiADQrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 11:47:04 -0500
+Received: from mga05.intel.com ([192.55.52.43]:28915 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230369AbiADQrE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 11:47:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641314824; x=1672850824;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Xw6d11zyA032hxyNek04PzgstU6QQ78asDn4FrZ1lkI=;
+  b=X76lM61f7+aRNAotkp87FmwC0m0DOSLHYDFHFgmelWPwIGX6TJZnz9nz
+   cMj8wh0oavP4buf3+KmzRLNXojCLQHaBH6MNJL//dHso1Yj4MUCFVsOKr
+   EMLlteYCTs62l36QahZ80T0CpxAflfHGjts2Ds8kdL3Xj840U4/aVLIKM
+   GU3hHhNY+LkuKsdQ6XzzDljdL9rqEiARMAn82ZUynr7vh9pLzqUqiSCrN
+   n7zr7qwXzcon32fBQggsHO2KgBUCMphP0BmouBvHwwJfk/JYAr4j9CXgT
+   Xc0KHakQ1hvu9atbqFMPw/lDZkSM2mZ2MOcNTvMKZOOAxV3cDgXd9ZRUP
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="328598746"
+X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
+   d="scan'208";a="328598746"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 08:47:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
+   d="scan'208";a="470220816"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 04 Jan 2022 08:47:01 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n4mxh-000FeW-8l; Tue, 04 Jan 2022 16:47:01 +0000
+Date:   Wed, 5 Jan 2022 00:46:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [linux-stable-rc:queue/5.10 2766/9999] xillybus_of.c:undefined
+ reference to `devm_platform_ioremap_resource'
+Message-ID: <202201050034.Jg48FZlD-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-allocation of IRQ resources in DT core code, this causes an issue
-when using hierarchical interrupt domains using "interrupts" property
-in the node as this bypasses the hierarchical setup and messes up the
-irq chaining.
+Hi Heiko,
 
-In preparation for removal of static setup of IRQ resource from DT core
-code use platform_get_irq_optional().
+FYI, the error/warning still remains.
 
-While at it return 0 instead of returning ret in the probe success path.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.10
+head:   d6246530b6944329cf73012833f4debf8f24767d
+commit: ba02635769f18a9231aba6e032d65f1fa6c537b4 [2766/9999] init/Kconfig: make COMPILE_TEST depend on !S390
+config: s390-buildonly-randconfig-r003-20220104 (https://download.01.org/0day-ci/archive/20220105/202201050034.Jg48FZlD-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=ba02635769f18a9231aba6e032d65f1fa6c537b4
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/5.10
+        git checkout ba02635769f18a9231aba6e032d65f1fa6c537b4
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   s390-linux-ld: kernel/dma/coherent.o: in function `dma_init_coherent_memory':
+   coherent.c:(.text+0x1080): undefined reference to `memremap'
+   s390-linux-ld: coherent.c:(.text+0x12e0): undefined reference to `memunmap'
+   s390-linux-ld: kernel/dma/coherent.o: in function `dma_declare_coherent_memory':
+   coherent.c:(.text+0x17c8): undefined reference to `memunmap'
+   s390-linux-ld: drivers/irqchip/irq-al-fic.o: in function `al_fic_init_dt':
+   irq-al-fic.c:(.init.text+0xa8): undefined reference to `of_iomap'
+   s390-linux-ld: irq-al-fic.c:(.init.text+0x272): undefined reference to `iounmap'
+   s390-linux-ld: drivers/char/xillybus/xillybus_of.o: in function `xilly_drv_probe':
+>> xillybus_of.c:(.text+0x402): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `set_cis_map':
+   cistpl.c:(.text+0x22dc): undefined reference to `iounmap'
+   s390-linux-ld: cistpl.c:(.text+0x2360): undefined reference to `ioremap'
+   s390-linux-ld: cistpl.c:(.text+0x2630): undefined reference to `ioremap'
+   s390-linux-ld: cistpl.c:(.text+0x26a2): undefined reference to `iounmap'
+   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `release_cis_mem':
+   cistpl.c:(.text+0x486c): undefined reference to `iounmap'
+
 ---
-v4->v5:
-* Fixed missing return while using dev_err_probe().
-
-v3->v4:
-* Used dev_err_probe() to print error message
-* Returning 0 in probe success path.
-
-v2->v3
-* Switch back to platform_get_irq_optional()
-* Only print error in case of error, and not when interrupt is missing.
-
-v1->v2
-* Updated commit message
-* Drop check for IRQ0
-* Switched to using platform_get_irq() so that the probe won't
-  fail silently as requested by Nishanth.
-
-v1:
-* https://www.spinics.net/lists/arm-kernel/msg942549.html
----
- drivers/soc/ti/smartreflex.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/soc/ti/smartreflex.c b/drivers/soc/ti/smartreflex.c
-index b5b2fa538d5c..8a0e97a7edc6 100644
---- a/drivers/soc/ti/smartreflex.c
-+++ b/drivers/soc/ti/smartreflex.c
-@@ -819,7 +819,7 @@ static int omap_sr_probe(struct platform_device *pdev)
- {
- 	struct omap_sr *sr_info;
- 	struct omap_sr_data *pdata = pdev->dev.platform_data;
--	struct resource *mem, *irq;
-+	struct resource *mem;
- 	struct dentry *nvalue_dir;
- 	int i, ret = 0;
- 
-@@ -844,7 +844,11 @@ static int omap_sr_probe(struct platform_device *pdev)
- 	if (IS_ERR(sr_info->base))
- 		return PTR_ERR(sr_info->base);
- 
--	irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-+	ret = platform_get_irq_optional(pdev, 0);
-+	if (ret < 0 && ret != -ENXIO)
-+		return dev_err_probe(&pdev->dev, ret, "%s: failed to get IRQ resource\n", __func__);
-+	if (ret > 0)
-+		sr_info->irq = ret;
- 
- 	sr_info->fck = devm_clk_get(pdev->dev.parent, "fck");
- 	if (IS_ERR(sr_info->fck))
-@@ -870,9 +874,6 @@ static int omap_sr_probe(struct platform_device *pdev)
- 	sr_info->autocomp_active = false;
- 	sr_info->ip_type = pdata->ip_type;
- 
--	if (irq)
--		sr_info->irq = irq->start;
--
- 	sr_set_clk_length(sr_info);
- 
- 	list_add(&sr_info->node, &sr_list);
-@@ -926,7 +927,7 @@ static int omap_sr_probe(struct platform_device *pdev)
- 
- 	}
- 
--	return ret;
-+	return 0;
- 
- err_debugfs:
- 	debugfs_remove_recursive(sr_info->dbg_dir);
--- 
-2.17.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

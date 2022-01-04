@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBDF3484638
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:50:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E23A6484639
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:50:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235509AbiADQut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 11:50:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
+        id S235547AbiADQuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 11:50:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235519AbiADQun (ORCPT
+        with ESMTP id S235530AbiADQup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 11:50:43 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8ACEC061761;
-        Tue,  4 Jan 2022 08:50:42 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id o3so19202271wrh.10;
-        Tue, 04 Jan 2022 08:50:42 -0800 (PST)
+        Tue, 4 Jan 2022 11:50:45 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD40AC061799;
+        Tue,  4 Jan 2022 08:50:44 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id o3so19202446wrh.10;
+        Tue, 04 Jan 2022 08:50:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=w77GvWlSgMascBH89NQnwzeoXq/tPaE14mbfz3NGY9g=;
-        b=QGEbwJ+uXb88Rww2LqpLua4OMQCiFMB2So68nV1LjVzvwL2fAv6euwjOgYFcOpYD3X
-         HIhii2iLPpMQkMlDvA8MP9BWpVr+NzCn3qvAsmh6MWzpfRY8+l2Yv8yLTsetbM4WKRtG
-         b6Upgy5k1ce8ou5S/AN/dTY+IUKW/tJ9fmpiJXQNusIvga5uRGHj3/V8aQ7NhxZ85QJi
-         z1pwb9eVkE/R1/HJl2iAMyVNYGpXEbFGb9qD3mXl/DxoXuXtKuSXBbHVWv3Q5+xEddiK
-         gG86sBedG7vmXH8vAlY8ZXH18y0G0SBeYlff/WdDygiebl8M0xQXoWYdJ2rriFIkuXD7
-         T/gw==
+        bh=uItBLqifPHIkvaG/81UsdMNeHGIfIsL1t8XDlEwMbyg=;
+        b=n82p1OthFM88wrlR/TDLGRnWyVRBm/U2x/DXkOCaF4irtzWrz2NClNCKXf7Oc4llMv
+         EXuigpc7CxCBt0WNYg7UgUUqiFWh+UoLxGPWr57/N9IoNy/ZR1+/12m6A/FIkmUythcp
+         uTPyHR/vrSDGYPEiq9XIHDyahwWqfl48wF2ME7OznJNZhD7ayc0Ai4nw7tYhPmCdGTCW
+         gmDwh0SXUF6Zm29azJjDtMir1+/iOX/W/mKaoQDM2pGd1s+4T0QJfac+aS3VeGXQspzH
+         2eA56ofu3h2XgAXTabRPm+RiJDCjOZGU4ldpiU97RrP0Iv6QYy35qZ1WVWEB9/qn0JQl
+         burA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=w77GvWlSgMascBH89NQnwzeoXq/tPaE14mbfz3NGY9g=;
-        b=OPbNKa7AVr0gf127+oi1ZdIaMcX8er1S97wcmOapwd1riyg811P+Q5lAmRyI0H/2uC
-         42MEtlTp2yLR1DL7E/6+79DlyV9wXCh3Z4aWt9WyhAiEb1P8QxkatDwSDydtUhLy7Yi7
-         rLjTHImuog6TmP6j7DYAF+LwkjEyevSX1qxxmfeo/sHlvBlh7cgjTuLPqhQ5CdltbGhA
-         FCZ1pB68q2XIQKTHcJEb21AIpFikwThVJ9/9hVJEVfSYCP+B73Ras3YnWszBI5PNwLC9
-         G8n+WVP+hgbSOMQ1oYrrLPwrlVYdktNAgd8QBVxV1WgueWwgZiaUFpG54zZUdtxmxqVk
-         xEeQ==
-X-Gm-Message-State: AOAM530woPmnXfYbbH6gIk9ew/+aI6Q4psw5VW4YVDq6QOLhDaTM0O0R
-        CZGRLuuCIhg8IxwaKvrlLTDclAidmIXqUw==
-X-Google-Smtp-Source: ABdhPJxGHnWqBULMR3by+lYFpYK/RnUpFZGM2j9IkBYwVUEmwCSWQ2jnfD1Q5iwEfXIv2R3CNjNM1w==
-X-Received: by 2002:adf:c391:: with SMTP id p17mr20520736wrf.257.1641315041362;
-        Tue, 04 Jan 2022 08:50:41 -0800 (PST)
+        bh=uItBLqifPHIkvaG/81UsdMNeHGIfIsL1t8XDlEwMbyg=;
+        b=pcJGf4StZnEYggAIelE4aSXAS6k+uy4SgSyGyETKQUTMe4HHOiCObuBMdnQrne7OTF
+         8bgH7VfokPIKIGdgXD7Nj5Jc96M1mmNj2bIkjQogAboFi2N6MoKQOO1yixSKvqC89Ta6
+         xpBIMrny/FFT5wXNzEcWk3+J7pWp0i9FQWnrc3AZo5EqyCXjcyGsA+lkpAanU5emfmuJ
+         Gyqv/kwlgpcXshb1h3K2K40qXp+mrMyw5+rLWFYi7BKL3ewDi7UDV8dlHVFEVMHBytS2
+         zOkyUQxwWxtIUzVUzb4AiZhcu0uBe9vKF1Xmc2EdYumbpTQjrslr6sgVFXpmPLdKigqx
+         pu/w==
+X-Gm-Message-State: AOAM533r1eTiM7+yBCDEhThPBk2ebVep3NMLn8LxMTUL5j34cI5qz8u5
+        qsIP5n/vgpEvGnSGAVMPuQ0=
+X-Google-Smtp-Source: ABdhPJxbOUZpAZQyN2TLnfe6YlJBX4WOJzFI+2xwqQdIR8TZ/dS3YcNjrzpenAovy5BZyu+FFzIIDw==
+X-Received: by 2002:a5d:6d8a:: with SMTP id l10mr44006182wrs.270.1641315043123;
+        Tue, 04 Jan 2022 08:50:43 -0800 (PST)
 Received: from localhost.localdomain ([217.113.240.86])
-        by smtp.gmail.com with ESMTPSA id j85sm417696wmj.3.2022.01.04.08.50.39
+        by smtp.gmail.com with ESMTPSA id j85sm417696wmj.3.2022.01.04.08.50.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 08:50:41 -0800 (PST)
+        Tue, 04 Jan 2022 08:50:42 -0800 (PST)
 From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
 To:     jikos@kernel.org
 Cc:     benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
         linux-kernel@vger.kernel.org, alexhenrie24@gmail.com,
         =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH 1/3] HID: apple: Refactor key translation setup
-Date:   Tue,  4 Jan 2022 17:50:31 +0100
-Message-Id: <20220104165033.29421-2-jose.exposito89@gmail.com>
+Subject: [PATCH 2/3] HID: apple: Magic Keyboard first generation FN key mapping
+Date:   Tue,  4 Jan 2022 17:50:32 +0100
+Message-Id: <20220104165033.29421-3-jose.exposito89@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220104165033.29421-1-jose.exposito89@gmail.com>
 References: <20220104165033.29421-1-jose.exposito89@gmail.com>
@@ -66,70 +66,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code used to map the apple_key_translation structs is duplicated.
-Extract it to a common function.
+The function key mapping for the Magic Keyboard first generation (2007,
+2009 and 2011 aluminum wireless models) was not present and the default
+one was used instead.
 
-Refactor, no functional changes.
+This caused two main issues:
+
+ - The F5 and F6 keys were sending KEY_KBDILLUMDOWN and KEY_KBDILLUMUP;
+   however, the keyboard is not backlited.
+
+ - The keyboard has the APPLE_NUMLOCK_EMULATION quirk with F6 set as
+   the KEY_NUMLOCK key by "powerbook_numlock_keys". However, because F6
+   was mapped to KEY_KBDILLUMUP by the default mapping it was not
+   possible to switch the numlock status.
+   This means that, if numlock was enabled on session startup, it was
+   not possible to disable it without connecting another keyboard.
+
+Add a custom translation table for the device leaving F5 unassigned and
+using F6 as the KEY_NUMLOCK key.
 
 Signed-off-by: José Expósito <jose.exposito89@gmail.com>
 ---
- drivers/hid/hid-apple.c | 32 +++++++++++++++-----------------
- 1 file changed, 15 insertions(+), 17 deletions(-)
+ drivers/hid/hid-apple.c | 34 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 33 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
-index 2c9c5faa74a9..aa3d643e3615 100644
+index aa3d643e3615..bea752da4ac3 100644
 --- a/drivers/hid/hid-apple.c
 +++ b/drivers/hid/hid-apple.c
-@@ -174,6 +174,15 @@ static const struct apple_key_translation swapped_fn_leftctrl_keys[] = {
- 	{ }
+@@ -70,6 +70,27 @@ struct apple_key_translation {
+ 	u8 flags;
  };
  
-+static inline void apple_setup_key_translation(struct input_dev *input,
-+		const struct apple_key_translation *table)
-+{
-+	const struct apple_key_translation *trans;
++static const struct apple_key_translation magic_keyboard_alu_fn_keys[] = {
++	{ KEY_BACKSPACE, KEY_DELETE },
++	{ KEY_ENTER,	KEY_INSERT },
++	{ KEY_F1,	KEY_BRIGHTNESSDOWN, APPLE_FLAG_FKEY },
++	{ KEY_F2,	KEY_BRIGHTNESSUP,   APPLE_FLAG_FKEY },
++	{ KEY_F3,	KEY_SCALE,          APPLE_FLAG_FKEY },
++	{ KEY_F4,	KEY_DASHBOARD,      APPLE_FLAG_FKEY },
++	{ KEY_F6,	KEY_NUMLOCK,        APPLE_FLAG_FKEY },
++	{ KEY_F7,	KEY_PREVIOUSSONG,   APPLE_FLAG_FKEY },
++	{ KEY_F8,	KEY_PLAYPAUSE,      APPLE_FLAG_FKEY },
++	{ KEY_F9,	KEY_NEXTSONG,       APPLE_FLAG_FKEY },
++	{ KEY_F10,	KEY_MUTE,           APPLE_FLAG_FKEY },
++	{ KEY_F11,	KEY_VOLUMEDOWN,     APPLE_FLAG_FKEY },
++	{ KEY_F12,	KEY_VOLUMEUP,       APPLE_FLAG_FKEY },
++	{ KEY_UP,	KEY_PAGEUP },
++	{ KEY_DOWN,	KEY_PAGEDOWN },
++	{ KEY_LEFT,	KEY_HOME },
++	{ KEY_RIGHT,	KEY_END },
++	{ }
++};
 +
-+	for (trans = table; trans->from; trans++)
-+		set_bit(trans->to, input->keybit);
-+}
-+
- static const struct apple_key_translation *apple_find_translation(
- 		const struct apple_key_translation *table, u16 from)
- {
-@@ -359,27 +368,16 @@ static __u8 *apple_report_fixup(struct hid_device *hdev, __u8 *rdesc,
+ static const struct apple_key_translation macbookair_fn_keys[] = {
+ 	{ KEY_BACKSPACE, KEY_DELETE },
+ 	{ KEY_ENTER,	KEY_INSERT },
+@@ -223,7 +244,17 @@ static int hidinput_apple_event(struct hid_device *hid, struct input_dev *input,
+ 	}
  
- static void apple_setup_input(struct input_dev *input)
- {
--	const struct apple_key_translation *trans;
--
- 	set_bit(KEY_NUMLOCK, input->keybit);
+ 	if (fnmode) {
+-		if (hid->product >= USB_DEVICE_ID_APPLE_WELLSPRING4_ANSI &&
++		if (hid->product == USB_DEVICE_ID_APPLE_ALU_WIRELESS_ANSI ||
++		    hid->product == USB_DEVICE_ID_APPLE_ALU_WIRELESS_ISO ||
++		    hid->product == USB_DEVICE_ID_APPLE_ALU_WIRELESS_JIS ||
++		    hid->product == USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_ANSI ||
++		    hid->product == USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_ISO ||
++		    hid->product == USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_JIS ||
++		    hid->product == USB_DEVICE_ID_APPLE_ALU_WIRELESS_2011_ANSI ||
++		    hid->product == USB_DEVICE_ID_APPLE_ALU_WIRELESS_2011_ISO ||
++		    hid->product == USB_DEVICE_ID_APPLE_ALU_WIRELESS_2011_JIS)
++			table = magic_keyboard_alu_fn_keys;
++		else if (hid->product >= USB_DEVICE_ID_APPLE_WELLSPRING4_ANSI &&
+ 				hid->product <= USB_DEVICE_ID_APPLE_WELLSPRING4A_JIS)
+ 			table = macbookair_fn_keys;
+ 		else if (hid->product < 0x21d || hid->product >= 0x300)
+@@ -375,6 +406,7 @@ static void apple_setup_input(struct input_dev *input)
+ 	apple_setup_key_translation(input, powerbook_fn_keys);
+ 	apple_setup_key_translation(input, powerbook_numlock_keys);
+ 	apple_setup_key_translation(input, apple_iso_keyboard);
++	apple_setup_key_translation(input, magic_keyboard_alu_fn_keys);
  
- 	/* Enable all needed keys */
--	for (trans = apple_fn_keys; trans->from; trans++)
--		set_bit(trans->to, input->keybit);
--
--	for (trans = powerbook_fn_keys; trans->from; trans++)
--		set_bit(trans->to, input->keybit);
--
--	for (trans = powerbook_numlock_keys; trans->from; trans++)
--		set_bit(trans->to, input->keybit);
-+	apple_setup_key_translation(input, apple_fn_keys);
-+	apple_setup_key_translation(input, powerbook_fn_keys);
-+	apple_setup_key_translation(input, powerbook_numlock_keys);
-+	apple_setup_key_translation(input, apple_iso_keyboard);
- 
--	for (trans = apple_iso_keyboard; trans->from; trans++)
--		set_bit(trans->to, input->keybit);
--
--	if (swap_fn_leftctrl) {
--		for (trans = swapped_fn_leftctrl_keys; trans->from; trans++)
--			set_bit(trans->to, input->keybit);
--	}
-+	if (swap_fn_leftctrl)
-+		apple_setup_key_translation(input, swapped_fn_leftctrl_keys);
- }
- 
- static int apple_input_mapping(struct hid_device *hdev, struct hid_input *hi,
+ 	if (swap_fn_leftctrl)
+ 		apple_setup_key_translation(input, swapped_fn_leftctrl_keys);
 -- 
 2.25.1
 

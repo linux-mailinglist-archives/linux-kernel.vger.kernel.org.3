@@ -2,82 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1D44848CC
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A787B4848CF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:49:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbiADTtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 14:49:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
+        id S231374AbiADTt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 14:49:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbiADTtL (ORCPT
+        with ESMTP id S229821AbiADTt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 14:49:11 -0500
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A841C061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 11:49:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=Xt8XKfsUO3oqWyKUpvE4fUY2NxxfQmItdYwYbgqL7Q4=;
-        t=1641325751; x=1642535351; b=of3Ms5z9NAMeeG38c2+eIRZCAqYXbyWdB0c0CrjtaPm7kzP
-        HVRm+puzgAURhCG0woTq+8o0C1HFGcGfcHsgFxQXbq9jfoiqKGwadaIZXWhdmBvhcFvxShc6xQ8Lk
-        ytcVGW6Hq024OS9F1sLxTeCkdwOV2kcsfUVvilwYGBjccRXdGLZcMUiHKFqpucEggyq+kIE+sHwpc
-        3c4tY8fUPU5VWfyPaWhjukRUHczFrqYHEvR5Ju2tRu0Lqi4FyopdnWY94jUofoNObS9iNGnoX0g43
-        aEP8gE2zLsIkS/Cx7qSFDJtAj2hkeGpJuY/2Iz3VhvAQ/lBmKX8nAQiJQmj/Osag==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1n4pnu-001rmy-Oq;
-        Tue, 04 Jan 2022 20:49:06 +0100
-Message-ID: <41fe09354fc736fb1ff2cb429e035633f24176ce.camel@sipsolutions.net>
-Subject: Re: Occasional hung with UM after enable VMAP_STACK
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Walter Lozano <walter.lozano@collabora.com>,
-        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Sjoerd Simons <sjoerd.simons@collabora.com>,
-        ritesh sarraf <ritesh.sarraf@collabora.com>
-Date:   Tue, 04 Jan 2022 20:49:05 +0100
-In-Reply-To: <8c26a869-0cbe-a38c-8a8d-9f3f171f7e72@collabora.com>
-References: <be290dc3-db9c-2940-91bb-c91bf42fd8f6@collabora.com>
-         <d80e4e760171de3813895e3cbfcadf96aa6c8fb6.camel@sipsolutions.net>
-         <8c26a869-0cbe-a38c-8a8d-9f3f171f7e72@collabora.com>
+        Tue, 4 Jan 2022 14:49:26 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E1D7C061784
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 11:49:26 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id g130-20020a255288000000b0060ba07af29eso51907093ybb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 11:49:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=IEORO/iYFf2VjFKaMP/KExgfiXLrmBMQvly5qD2u6/4=;
+        b=tAhoweIQO71Ze0ID6fg4zlWkqUwdyH18QX3nbcYEDT/xwMwaquKeo+g/Q/ICA47sQJ
+         Z9BuOCYXu4JH7/o54egGn+5VR5oO05fFW3ismHUnRRDlcbAMT73Iw7YkhxBYZxd5c7uN
+         QTT8vbjWJWuUs53Xyo//0XvptuImAEWRNM469dQpf3/3A+BQ//eOncgt2eHuGcmS4NvM
+         eyQujjgrl5GtlrzHFqca/1ZZXIzk72X2Gb06xEFjQjDo1IDG8BRVUtlbdryEq8gnEi3w
+         dfTIBVSd6kwfI6HS/j8ujbFYWWC8voXcOtAO8drES2H9SyWnQX2nX1uShG6qWYqol4i8
+         VbcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=IEORO/iYFf2VjFKaMP/KExgfiXLrmBMQvly5qD2u6/4=;
+        b=tL59TT5SJ+ee5Hqavjl1YXAEo0mecoNCdeCi1+o0fQ2av4aj7l4o9If6AkBINrbGl4
+         97m35jgnpZxB3tvgBHhQjufsHW0UUoGc48YgKYTIBB4B7rrjgfoU7zGgO66mTlR/eyH2
+         Ge6nlfEO7hbXzGJjVneBMRupT9JMLaLSfauaxOIaNK3WSFPPp1v3nOGakysCn9T1Urrr
+         2RFUPg8RhSI63EWVIyEH4LwqbJ3GVNgr4eeA3eybkMGKouncUmuv50Oyhv648Qk7jcQM
+         7UmBChRu7I1XSX4brUegDZwB95xwKm13GPrs4rkksAbK0+YtNiPRu2g1RYnUQC6/IWLa
+         l81w==
+X-Gm-Message-State: AOAM5331upHJqGAhZ4GGIiHkc9R41/Rc3OneV/i/A2ciqTHWnvznZoPC
+        AgbAtIZCTA5WYk2kH3/AIP836UpZ7pOY
+X-Google-Smtp-Source: ABdhPJwaLkymY18bbNos6WDQ6le275/TDkIVa5kitH/PvBr+tgwSlGwMDCePL9Zm6bw7Dtaky1bj7klICSdl
+X-Received: from rananta-virt.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1bcc])
+ (user=rananta job=sendgmr) by 2002:a25:2f56:: with SMTP id
+ v83mr49594340ybv.94.1641325765316; Tue, 04 Jan 2022 11:49:25 -0800 (PST)
+Date:   Tue,  4 Jan 2022 19:49:07 +0000
+Message-Id: <20220104194918.373612-1-rananta@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
+Subject: [RFC PATCH v3 00/11] KVM: arm64: Add support for hypercall services selection
+From:   Raghavendra Rao Ananta <rananta@google.com>
+To:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Raghavendra Rao Anata <rananta@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-malware-bazaar: not-scanned
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-01-04 at 16:26 -0300, Walter Lozano wrote:
-> 
-> Thank you for your quick response. The Debian configuration on package 
-> user-mode-linux have these settings
-> 
-> CONFIG_HAVE_ARCH_VMAP_STACK=y
-> CONFIG_VMAP_STACK=y
+Hello,
 
-OK, so it actually _is_ enabled.
+Continuing the discussion from [1], the series tries to add support
+for the user-space to elect the hypercall services that it wishes
+to expose to the guest, rather than the guest discovering them
+unconditionally. The idea employed by the series was taken from
+[1] as suggested by Marc Z.
 
-> as you can see in [1]. I did run some tests disabling those settings, 
-> which passed without any hung.
-> 
-> Unfortunately the "occasional" behavior makes this issue a bit tricky to 
-> debug.
-> 
+In a broad sense, the idea is similar to the current implementation
+of PSCI interface- create a 'firmware psuedo-register' to handle the
+firmware revisions. The series extends this idea to all the other
+hypercalls such as TRNG (True Random Number Generator), PV_TIME
+(Paravirtualized Time), and PTP (Precision Time protocol).
 
-Right.
+For better categorization and future scaling, these firmware registers
+are categorized based on the service call owners, but unlike the
+existing firmware psuedo-registers, they hold the features supported
+in the form of a bitmap.
 
-Hm. I've been running our tests with it for about three months and
-haven't observed any hangs, but I guess that doesn't mean much.
+The capability, KVM_CAP_ARM_HVC_FW_REG_BMAP, is introduced to announce
+this extension, which returns the number of psuedo-firmware
+registers supported. During the VM initialization, the registers
+holds an upper-limit of the features supported by each one of them.
+It's expected that the VMMs discover the features provided by each
+register via GET_ONE_REG, and writeback the desired values using
+SET_ONE_REG. KVM allows this modification only until the VM has started.
 
-To be honest, I have no particular reason to even want it, other than
-that it catches accidental DMA from stack more easily ... so I guess if
-we can't find anything, we might as well revert it.
+Older VMMs can simply ignore the capability and the hypercall services
+will be exposed unconditionally to the guests, thus ensuring backward
+compatibility.
 
-Feels like it _should_ work though, since it's just a different location
-for the stack.
+The patches are based off of mainline kernel 5.16-rc8, with the selftest
+patches from [2] applied.
 
-johannes
+Patch-1 tracks if the VM has started running, which would be used in the
+upcoming patches.
+
+Patch-2 factors out the non-PSCI related interface from psci.c to
+hypercalls.c, as the series would extend the list in the upcoming
+patches.
+
+Patch-3 introduces the KVM_CAP_ARM_HVC_FW_REG_BMAP capability
+definition.
+
+Patch-4 sets up the framework for the bitmap firmware psuedo-registers.
+It includes read/write helpers for the registers, and a helper to check
+if a particular hypercall service is supported for the guest.
+It also adds the register KVM_REG_ARM_STD_HYP_BMAP to support ARM's
+standard secure services.
+
+Patch-5 introduces the firmware register, KVM_REG_ARM_STD_HYP_BMAP,
+which holds the standard hypervisor services (such as PV_TIME).
+
+Patch-6 introduces the firmware register, KVM_REG_ARM_VENDOR_HYP_BMAP,
+which holds the vendor specific hypercall services.
+
+Patch-7,8 Add the necessary documentation for the newly added firmware
+registers.
+
+Patch-9 imports the SMCCC definitions from linux/arm-smccc.h into tools/
+for further use in selftests.
+
+Patch-10 adds the selftest to test the guest (using 'hvc') and VMM
+interfaces (SET/GET_ONE_REG).
+
+Patch-11 adds these firmware registers into the get-reg-list selftest.
+
+[1]: https://lore.kernel.org/kvmarm/874kbcpmlq.wl-maz@kernel.org/T/
+[2]: https://lore.kernel.org/kvmarm/YUzgdbYk8BeCnHyW@google.com/
+
+Regards,
+Raghavendra
+
+v2 -> v3
+
+Addressed comments by Marc and Andrew:
+
+- Dropped kvm_vcpu_has_run_once() implementation.
+- Redifined kvm_vm_has_run_once() as kvm_vm_has_started() in the core
+  KVM code that introduces a new field, 'vm_started', to track this.
+- KVM_CAP_ARM_HVC_FW_REG_BMAP returns the number of psuedo-firmware
+  bitmap registers upon a 'read'. Support for 'write' removed.
+- Removed redundant spinlock, 'fw_reg_bmap_enabled' fields from the
+  hypercall descriptor structure.
+- A separate sub-struct to hold the bitmap info is removed. The bitmap
+  info is directly stored in the hypercall descriptor structure
+  (struct kvm_hvc_desc).
+
+v1 -> v2
+
+Addressed comments by Oliver (thanks!):
+
+- Introduced kvm_vcpu_has_run_once() and kvm_vm_has_run_once() in the
+  core kvm code, rather than relying on ARM specific vcpu->arch.has_run_once.
+- Writing to KVM_REG_ARM_PSCI_VERSION is done in hypercalls.c itself,
+  rather than separating out to psci.c.
+- Introduced KVM_CAP_ARM_HVC_FW_REG_BMAP to enable the extension.
+- Tracks the register accesses from VMM to decide whether to sanitize
+  a register or not, as opposed to sanitizing upon the first 'write'
+  in v1.
+- kvm_hvc_call_supported() is implemented using a direct switch-case
+  statement, instead of looping over all the registers to pick the
+  register for the function-id.
+- Replaced the register bit definitions with #defines, instead of enums.
+- Removed the patch v1-06/08 that imports the firmware register
+  definitions as it's not needed.
+- Separated out the documentations in its own patch, and the renaming
+  of hypercalls.rst to psci.rst into another patch.
+- Add the new firmware registers to get-reg-list KVM selftest.
+
+v1: https://lore.kernel.org/kvmarm/20211102002203.1046069-1-rananta@google.com/
+v2: https://lore.kernel.org/kvmarm/20211113012234.1443009-1-rananta@google.com/
+
+Raghavendra Rao Ananta (11):
+  KVM: Capture VM start
+  KVM: arm64: Factor out firmware register handling from psci.c
+  KVM: Introduce KVM_CAP_ARM_HVC_FW_REG_BMAP
+  KVM: arm64: Setup a framework for hypercall bitmap firmware registers
+  KVM: arm64: Add standard hypervisor firmware register
+  KVM: arm64: Add vendor hypervisor firmware register
+  Docs: KVM: Add doc for the bitmap firmware registers
+  Docs: KVM: Rename psci.rst to hypercalls.rst
+  tools: Import ARM SMCCC definitions
+  selftests: KVM: aarch64: Introduce hypercall ABI test
+  selftests: KVM: aarch64: Add the bitmap firmware registers to
+    get-reg-list
+
+ Documentation/virt/kvm/api.rst                |  21 +
+ Documentation/virt/kvm/arm/hypercalls.rst     | 128 +++++++
+ Documentation/virt/kvm/arm/psci.rst           |  77 ----
+ arch/arm64/include/asm/kvm_host.h             |  16 +
+ arch/arm64/include/uapi/asm/kvm.h             |  12 +
+ arch/arm64/kvm/arm.c                          |   4 +
+ arch/arm64/kvm/guest.c                        |   2 +-
+ arch/arm64/kvm/hypercalls.c                   | 311 ++++++++++++++-
+ arch/arm64/kvm/psci.c                         | 166 --------
+ arch/arm64/kvm/pvtime.c                       |   3 +
+ arch/arm64/kvm/trng.c                         |   8 +-
+ include/kvm/arm_hypercalls.h                  |  19 +
+ include/kvm/arm_psci.h                        |   7 -
+ include/linux/kvm_host.h                      |   3 +
+ include/uapi/linux/kvm.h                      |   1 +
+ tools/include/linux/arm-smccc.h               | 188 +++++++++
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/aarch64/get-reg-list.c      |   3 +
+ .../selftests/kvm/aarch64/hypercalls.c        | 358 ++++++++++++++++++
+ virt/kvm/kvm_main.c                           |   9 +
+ 21 files changed, 1078 insertions(+), 260 deletions(-)
+ create mode 100644 Documentation/virt/kvm/arm/hypercalls.rst
+ delete mode 100644 Documentation/virt/kvm/arm/psci.rst
+ create mode 100644 tools/include/linux/arm-smccc.h
+ create mode 100644 tools/testing/selftests/kvm/aarch64/hypercalls.c
+
+-- 
+2.34.1.448.ga2b2bfdf31-goog
+

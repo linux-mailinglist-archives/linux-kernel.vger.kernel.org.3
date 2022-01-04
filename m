@@ -2,200 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6774A484868
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:19:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FCCC48486E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:22:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236481AbiADTT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 14:19:26 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58192 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234888AbiADTTZ (ORCPT
+        id S236486AbiADTWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 14:22:44 -0500
+Received: from mail-qt1-f172.google.com ([209.85.160.172]:43604 "EHLO
+        mail-qt1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235922AbiADTWn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 14:19:25 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08DA66157B;
-        Tue,  4 Jan 2022 19:19:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E986DC36AE9;
-        Tue,  4 Jan 2022 19:19:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641323964;
-        bh=+AbdiA2QDIx5Rw7qEufzEF0BvoFs7ChX7a8iGJl0xic=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OyUm8GUjjI+bEpAJqxP6UUJpdsupJLY6gjaoearbedZB5aqT7S7OLGS3PBJ+luja4
-         20nIOBU7UKxwWcucLKqFSJ0S7ucrDJ9GQLo4lsxnUeFvfvcDQIOvFPm1ygfSpBJ8CB
-         4HOiIGUbdIG8Z5/oYn5u+3YAloxietyNIKltGOzJhKjKCxHM2ssuoxIm7v5zYpguTn
-         GyjAW4DYFF/1P+xoyb5vp2p5nXG8ViPHAxdX8liOzuOtLmHkScmhD8yU67GbCz1smZ
-         sTPVsSgvLoO/Om+Qc2fBm9wuQJwFOXSfseUvyEYj/VX7tRYcrMOEd+mM6CKf98GhX2
-         NGQO6/5ywSIqg==
-Date:   Tue, 4 Jan 2022 12:19:20 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        gregkh@linuxfoundation.org, jarkko@kernel.org,
-        linux-sgx@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH] [v3] x86/sgx: Fix NULL pointer dereference on non-SGX
- systems
-Message-ID: <YdSduKj1/4nmb5QF@archlinux-ax161>
-References: <20220104171527.5E8416A8@davehans-spike.ostc.intel.com>
+        Tue, 4 Jan 2022 14:22:43 -0500
+Received: by mail-qt1-f172.google.com with SMTP id q14so35115965qtx.10;
+        Tue, 04 Jan 2022 11:22:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wp74GlQdrHZUygQJsO+V0bS9xXwZMpUvkf88JMzgtUI=;
+        b=S9psh+zuay378HkrkoVBwVMzUiFZvB008JltiJbik1WBW23oBJs/5dCq6X/EuiVNc5
+         5hUWdLiYt2NBQo3sl0WRoIN/oPOvjQpLFkzxVfq+pezVUD9hxyoYdQEYacMa2zFt0x0m
+         Wrj2qXf3EhlGUAAQ6OPva3ce+O8Ilt+pMP5C2eSouIpDKFiCPobS24RB3JSjHM6M3I2D
+         lGzEd3mvRw5CNoHiY44z2ElMNI0LzYHCx1kWxLbDYhPhvBCJILHSag8qi0rclwGTh4Pj
+         rtBhxfpaLZJRxOANjkUjXERR/TpGhsySpnpMWxlq8BfN5KNw49jYb/+qsEM6+AqIBHXN
+         ZtOg==
+X-Gm-Message-State: AOAM533F/YqNAWyUsbMfcSfYR73Og7oPBlYDIJTNeQ2oYYM27Sdhs4hE
+        B8NL/oxNU48ORw1DVbpcOBzxp1ZDjU/wqdJ1iNU=
+X-Google-Smtp-Source: ABdhPJzEFbxzrYC0TOyO80xhUAfOpsOBwCh1vn3/vws42BMFnEhUDI8aBrqEEwT36cOuDAUZHDvVOj03sasQmfmfc/A=
+X-Received: by 2002:ac8:7c4e:: with SMTP id o14mr45310625qtv.80.1641324162737;
+ Tue, 04 Jan 2022 11:22:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220104171527.5E8416A8@davehans-spike.ostc.intel.com>
+References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien>
+ <CAJZ5v0i4xnesG=vfx7Y-wyeaGvjDeGcsaOVqhRLnV8YXk-m2gA@mail.gmail.com>
+ <alpine.DEB.2.22.394.2112281845180.24929@hadrien> <CAJZ5v0grayg9evWsB5ktKSFq=yA_AHoEWSfpSkQ=MVQ-=butfA@mail.gmail.com>
+ <alpine.DEB.2.22.394.2112291012030.24929@hadrien> <CAJZ5v0g5wDxYXA-V=Ex_Md82hgnj5K6Vr0tavFFVz=uBqo8wag@mail.gmail.com>
+ <alpine.DEB.2.22.394.2112301840360.15550@hadrien> <CAJZ5v0h38jh3gyTp9W0ws0yXyfK=F+TQ7VYRVx4aGXhNeSObEg@mail.gmail.com>
+ <alpine.DEB.2.22.394.2112301919240.15550@hadrien> <CAJZ5v0haa5QWvTUUg+wwSHvuWyk8pic1N0kox=E1ZKNrHSFuzw@mail.gmail.com>
+ <alpine.DEB.2.22.394.2112301942360.15550@hadrien> <CAJZ5v0im+Cke7tcNRav2VCyf5Qvi7qC29aF+9A1kVZZmt7cu6g@mail.gmail.com>
+ <alpine.DEB.2.22.394.2201031922110.3020@hadrien> <CAJZ5v0hsCjKA3EisK9s_S8Vb9Tgm4eps1FTKvUSfd9_JPh5wBQ@mail.gmail.com>
+ <alpine.DEB.2.22.394.2201032110590.3020@hadrien> <CAJZ5v0hFcRWPO859YWUKLdqkTrVA1WLqRjFWg1=WS8qGG5CTkQ@mail.gmail.com>
+ <alpine.DEB.2.22.394.2201041643520.3020@hadrien>
+In-Reply-To: <alpine.DEB.2.22.394.2201041643520.3020@hadrien>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 4 Jan 2022 20:22:31 +0100
+Message-ID: <CAJZ5v0i9Rh0Cm3Mbu3N8w6UmgJEnmThk4znWVcp9qeroabjsNw@mail.gmail.com>
+Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Francisco Jerez <currojerez@riseup.net>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 09:15:27AM -0800, Dave Hansen wrote:
-> 
-> From: Dave Hansen <dave.hansen@linux.intel.com>
-> 
-> == Problem ==
-> 
-> Nathan Chancellor reported an oops when aceessing the
-> 'sgx_total_bytes' sysfs file:
-> 
-> 	https://lore.kernel.org/all/YbzhBrimHGGpddDM@archlinux-ax161/
-> 
-> The sysfs output code accesses the sgx_numa_nodes[] array
-> unconditionally.  However, this array is allocated during SGX
-> initialization, which only occurs on systems where SGX is
-> supported.
-> 
-> If the sysfs file is accessed on systems without SGX support,
-> sgx_numa_nodes[] is NULL and an oops occurs.
-> 
-> == Solution ==
-> 
-> To fix this, hide the entire nodeX/x86/ attribute group on
-> systems without SGX support using the ->is_visible attribute
-> group callback.
-> 
-> Unfortunately, SGX is initialized via a device_initcall() which
-> occurs _after_ the ->is_visible() callback.  Instead of moving
-> SGX initialization earlier, call sysfs_update_group() during
-> SGX initialization to update the group visiblility.
-> 
-> This update requires moving the SGX sysfs code earlier in
-> sgx/main.c.  There are no code changes other than the addition of
-> arch_update_sysfs_visibility() and a minor whitespace fixup to
-> arch_node_attr_is_visible() which checkpatch caught.
-> 
-> Fixes: 50468e431335 ("x86/sgx: Add an attribute for the amount of SGX memory in a NUMA node")
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-> CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: linux-sgx@vger.kernel.org
-> Cc: x86@kernel.org
+On Tue, Jan 4, 2022 at 4:49 PM Julia Lawall <julia.lawall@inria.fr> wrote:
+>
+> I tried the whole experiment again on an Intel w2155 (one socket, 10
+> physical cores, pstates 12, 33, and 45).
+>
+> For the CPU there is a small jump a between 32 and 33 - less than for the
+> 6130.
+>
+> For the RAM, there is a big jump between 21 and 22.
+>
+> Combining them leaves a big jump between 21 and 22.
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+These jumps are most likely related to voltage increases.
 
-> ---
-> 
->  b/arch/x86/kernel/cpu/sgx/main.c |   65 ++++++++++++++++++++++++++++-----------
->  1 file changed, 47 insertions(+), 18 deletions(-)
-> 
-> diff -puN arch/x86/kernel/cpu/sgx/main.c~sgx-null-ptr arch/x86/kernel/cpu/sgx/main.c
-> --- a/arch/x86/kernel/cpu/sgx/main.c~sgx-null-ptr	2021-12-20 07:56:38.309584807 -0800
-> +++ b/arch/x86/kernel/cpu/sgx/main.c	2022-01-04 08:43:17.042821249 -0800
-> @@ -6,11 +6,13 @@
->  #include <linux/highmem.h>
->  #include <linux/kthread.h>
->  #include <linux/miscdevice.h>
-> +#include <linux/node.h>
->  #include <linux/pagemap.h>
->  #include <linux/ratelimit.h>
->  #include <linux/sched/mm.h>
->  #include <linux/sched/signal.h>
->  #include <linux/slab.h>
-> +#include <linux/sysfs.h>
->  #include <asm/sgx.h>
->  #include "driver.h"
->  #include "encl.h"
-> @@ -780,6 +782,48 @@ static inline u64 __init sgx_calc_sectio
->  	       ((high & GENMASK_ULL(19, 0)) << 32);
->  }
->  
-> +#ifdef CONFIG_NUMA
-> +static ssize_t sgx_total_bytes_show(struct device *dev, struct device_attribute *attr, char *buf)
-> +{
-> +	return sysfs_emit(buf, "%lu\n", sgx_numa_nodes[dev->id].size);
-> +}
-> +static DEVICE_ATTR_RO(sgx_total_bytes);
-> +
-> +static umode_t arch_node_attr_is_visible(struct kobject *kobj,
-> +		struct attribute *attr, int idx)
-> +{
-> +	/* Make all x86/ attributes invisible when SGX is not initialized: */
-> +	if (nodes_empty(sgx_numa_mask))
-> +		return 0;
-> +
-> +	return attr->mode;
-> +}
-> +
-> +static struct attribute *arch_node_dev_attrs[] = {
-> +	&dev_attr_sgx_total_bytes.attr,
-> +	NULL,
-> +};
-> +
-> +const struct attribute_group arch_node_dev_group = {
-> +	.name = "x86",
-> +	.attrs = arch_node_dev_attrs,
-> +	.is_visible = arch_node_attr_is_visible,
-> +};
-> +
-> +static void __init arch_update_sysfs_visibility(int nid)
-> +{
-> +	struct node *node = node_devices[nid];
-> +	int ret;
-> +
-> +	ret = sysfs_update_group(&node->dev.kobj, &arch_node_dev_group);
-> +
-> +	if (ret)
-> +		pr_err("sysfs update failed (%d), files may be invisible", ret);
-> +}
-> +#else /* !CONFIG_NUMA */
-> +static void __init arch_update_sysfs_visibility(int nid) {}
-> +#endif
-> +
->  static bool __init sgx_page_cache_init(void)
->  {
->  	u32 eax, ebx, ecx, edx, type;
-> @@ -826,6 +870,9 @@ static bool __init sgx_page_cache_init(v
->  			INIT_LIST_HEAD(&sgx_numa_nodes[nid].sgx_poison_page_list);
->  			node_set(nid, sgx_numa_mask);
->  			sgx_numa_nodes[nid].size = 0;
-> +
-> +			/* Make SGX-specific node sysfs files visible: */
-> +			arch_update_sysfs_visibility(nid);
->  		}
->  
->  		sgx_epc_sections[i].node =  &sgx_numa_nodes[nid];
-> @@ -903,24 +950,6 @@ int sgx_set_attribute(unsigned long *all
->  }
->  EXPORT_SYMBOL_GPL(sgx_set_attribute);
->  
-> -#ifdef CONFIG_NUMA
-> -static ssize_t sgx_total_bytes_show(struct device *dev, struct device_attribute *attr, char *buf)
-> -{
-> -	return sysfs_emit(buf, "%lu\n", sgx_numa_nodes[dev->id].size);
-> -}
-> -static DEVICE_ATTR_RO(sgx_total_bytes);
-> -
-> -static struct attribute *arch_node_dev_attrs[] = {
-> -	&dev_attr_sgx_total_bytes.attr,
-> -	NULL,
-> -};
-> -
-> -const struct attribute_group arch_node_dev_group = {
-> -	.name = "x86",
-> -	.attrs = arch_node_dev_attrs,
-> -};
-> -#endif /* CONFIG_NUMA */
-> -
->  static int __init sgx_init(void)
->  {
->  	int ret;
-> _
+> It seems that the definition of efficient is that there is no more cost
+> for the computation than the cost of simply having the machine doing any
+> computation at all.  It doesn't take into account the time and energy
+> required to do some actual amount of work.
+
+Well, that's not what I wanted to say.
+
+Of course, the configuration that requires less energy to be spent to
+do a given amount of work is more energy-efficient.  To measure this,
+the system needs to be given exactly the same amount of work for each
+run and the energy spent by it during each run needs to be compared.
+
+However, I think that you are interested in answering a different
+question: Given a specific amount of time (say T) to run the workload,
+what frequency to run the CPUs doing the work at in order to get the
+maximum amount of work done per unit of energy spent by the system (as
+a whole)?  Or, given 2 different frequency levels, which of them to
+run the CPUs at to get more work done per energy unit?
+
+The work / energy ratio can be estimated as
+
+W / E = C * f / P(f)
+
+where C is a constant and P(f) is the power drawn by the whole system
+while the CPUs doing the work are running at frequency f, and of
+course for the system discussed previously it is greater in the 2 GHz
+case.
+
+However P(f) can be divided into two parts, P_1(f) that really depends
+on the frequency and P_0 that does not depend on it.  If P_0 is large
+enough to dominate P(f), which is the case in the 10-20 range of
+P-states on the system in question, it is better to run the CPUs doing
+the work faster (as long as there is always enough work to do for
+them; see below).  This doesn't mean that P(f) is not a convex
+function of f, though.
+
+Moreover, this assumes that there will always be enough work for the
+system to do when running the busy CPUs at 2 GHz, or that it can go
+completely idle when it doesn't do any work, but let's see what
+happens if the amount of work to do is W_1 = C * 1 GHz * T and the
+system cannot go completely idle when the work is done.
+
+Then, nothing changes for the busy CPUs running at 1 GHz, but in the 2
+GHz case we get W = W_1 and E = P(2 GHz) * T/2 + P_0 * T/2, because
+the busy CPUs are only busy 1/2 of the time, but power P_0 is drawn by
+the system regardless.  Hence, in the 2 GHz case (assuming P(2 GHz) =
+120 W and P_0 = 90 W), we get
+
+W / E = 2 * C * 1 GHz / (P(2 GHz) + P_0) = 0.0095 * C * 1 GHz
+
+which is slightly less than the W / E ratio at 1 GHz approximately
+equal to 0.01 * C * 1 GHz (assuming P(1 GHz) = 100 W), so in these
+conditions it would be better to run the busy CPUs at 1 GHz.

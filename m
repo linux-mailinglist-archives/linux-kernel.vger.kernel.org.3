@@ -2,101 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F234843FA
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:57:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AFEB4843FD
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233067AbiADO5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:57:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232974AbiADO5k (ORCPT
+        id S234506AbiADO67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:58:59 -0500
+Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:52494 "EHLO
+        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231989AbiADO66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:57:40 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD89C061761;
-        Tue,  4 Jan 2022 06:57:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=9iomVx+1dyKtO7ifnBatBp+MkPLAfaNf9PXQTH5ZKCY=; b=nxjXLUm7MZFDMTTOTD6d+X1Hwr
-        trz/TxODNHcJNtM+lPi8f+nH7vupO5XHq6g06NoQthBjMkmnhSZDjORFDLEEJfHgMCS9cSXtQNgAP
-        I/ZNHdgtcQezgNn020+ZkaXETw1jI1wlBeZCMfPZ0rmcDXZOKYThW1xlcpv5OkB/r8jiDOe//eq7y
-        nlQz6HgpIVC4abrDJHNggJGLPcMNKpfC8y+RXAyGPdOi967G4V1xZ1WznRviu5jkGhaUiIAguwwr/
-        PYT0+BSbQwSIlyxg6iBng71FK621/j/ckdgqy0Re1gV5XsV/3JLU0Err+Un+fHn+GccVAkPnq17Eu
-        x4TPzH2A==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56566)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1n4lFm-00077c-IE; Tue, 04 Jan 2022 14:57:34 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1n4lFl-0007KF-4Y; Tue, 04 Jan 2022 14:57:33 +0000
-Date:   Tue, 4 Jan 2022 14:57:33 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Corentin Labbe <clabbe.montjoie@gmail.com>,
-        linus.walleij@linaro.org, ulli.kroll@googlemail.com,
-        kuba@kernel.org, davem@davemloft.net, hkallweit1@gmail.com,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        Tue, 4 Jan 2022 09:58:58 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0V0z5cF9_1641308333;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V0z5cF9_1641308333)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 04 Jan 2022 22:58:55 +0800
+Date:   Tue, 4 Jan 2022 22:58:53 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Jeffle Xu <jefflexu@linux.alibaba.com>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
+        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
+        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
         linux-kernel@vger.kernel.org
-Subject: Re: net: phy: marvell: network working with generic PHY and not with
- marvell PHY
-Message-ID: <YdRgXbpK6CFB/eCU@shell.armlinux.org.uk>
-References: <YdQoOSXS98+Af1wO@Red>
- <YdQsJnfqjaFrtC0m@shell.armlinux.org.uk>
- <YdQwexJVfrdzEfZK@Red>
- <YdQydK4GhI0P5RYL@shell.armlinux.org.uk>
- <YdQ5i+//UITSbxS/@shell.armlinux.org.uk>
- <YdRVovG9mgEWffkn@Red>
- <YdRZQl6U0y19P/0+@shell.armlinux.org.uk>
- <YdRdu3jFPnGd1DsH@lunn.ch>
+Subject: Re: [PATCH v1 07/23] erofs: add nodev mode
+Message-ID: <YdRgrWEDU8sJVExX@B-P7TQMD6M-0146.local>
+Mail-Followup-To: Jeffle Xu <jefflexu@linux.alibaba.com>,
+        dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
+        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
+        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
+        linux-kernel@vger.kernel.org
+References: <20211227125444.21187-1-jefflexu@linux.alibaba.com>
+ <20211227125444.21187-8-jefflexu@linux.alibaba.com>
+ <YdRattisu+ITYvvZ@B-P7TQMD6M-0146.local>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YdRdu3jFPnGd1DsH@lunn.ch>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <YdRattisu+ITYvvZ@B-P7TQMD6M-0146.local>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 03:46:19PM +0100, Andrew Lunn wrote:
-> > @@ -1227,16 +1227,18 @@ static int m88e1118_config_init(struct phy_device *phydev)
-> >  {
-> >  	int err;
-> >  
-> > -	/* Change address */
-> > -	err = marvell_set_page(phydev, MII_MARVELL_MSCR_PAGE);
-> > -	if (err < 0)
-> > -		return err;
-> > -
-> >  	/* Enable 1000 Mbit */
-> > -	err = phy_write(phydev, 0x15, 0x1070);
-> > +	err = phy_write_paged(phydev, MII_MARVELL_MSCR_PAGE,
-> > +			      MII_88E1121_PHY_MSCR_REG, 0x1070);
+On Tue, Jan 04, 2022 at 10:33:26PM +0800, Gao Xiang wrote:
+> On Mon, Dec 27, 2021 at 08:54:28PM +0800, Jeffle Xu wrote:
+> > Until then erofs is exactly blockdev based filesystem. In other using
+> > scenarios (e.g. container image), erofs needs to run upon files.
+> > 
+> > This patch introduces a new nodev mode, in which erofs could be mounted
+> > from a bootstrap blob file containing the complete erofs image.
+> > 
+> > The following patch will introduce a new mount option "uuid", by which
+> > users could specify the bootstrap blob file.
+> > 
+> > Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
 > 
-> Ah, yes, keeping this makes it more backwards compatible.
+> I think the order of some patches in this patchset can be improved.
 > 
-> It would be nice to replace the 0x1070 with #defines.
+> Take this patch as an example. This patch introduces a new mount
+> option called "uuid", so the kernel will just accept it (which
+> generates a user-visible impact) after this patch but it doesn't
+> actually work.
 > 
-> We already have:
+> Therefore, we actually have three different behaviors here:
+>  - kernel doesn't support "uuid" mount option completely;
+>  - kernel support "uuid" but it doesn't work;
+>  - kernel support "uuid" correctly (maybe after some random patch);
 > 
-> #define MII_88E1121_PHY_MSCR_RX_DELAY	BIT(5)
-> #define MII_88E1121_PHY_MSCR_TX_DELAY	BIT(4)
-> #define MII_88E1121_PHY_MSCR_DELAY_MASK	(BIT(5) | BIT(4))
+> Actually that is bad for bisecting since there are some commits
+> having temporary behaviors. And we don't know which commit
+> actually fully implements this "uuid" mount option.
 > 
-> Bits 6 is the MSB of the default MAC speed.
-> Bit 13 is the LSB of the default MAC speed. These two should default to 10b = 1000Mbps
-> Bit 12 is reserved, and should be written 1.
+> So personally I think the proper order is just like the bottom-up
+> approach, and make sure each patch can be tested / bisected
+> independently.
 
-Hmm, seems odd that these speed bits match BMCR, and I'm not sure why
-the default MAC speed would have any bearing on whether gigabit mode
-is enabled. If they default to 10b, then the write should have no effect
-unless boot firmware has changed them.
+Oh, I may misread this patch, but I still think we'd better to
+avoid dead paths "TODO" like this as much as possible.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Just do in the bottom-up way.
+
+Thanks,
+Gao Xiang

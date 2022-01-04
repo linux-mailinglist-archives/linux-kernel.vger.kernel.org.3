@@ -2,232 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 944A84842DD
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9354B4842E1
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbiADNzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 08:55:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46120 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiADNzI (ORCPT
+        id S233905AbiADN5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 08:57:10 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55482 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229655AbiADN5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 08:55:08 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E9FC061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 05:55:08 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id y130so83863731ybe.8
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 05:55:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=uICLl7ALMQbyPSU7KmBXA9OTc0fxri6yRq599PdZEK4=;
-        b=kGRkffB/vzcg98AS1YV5pMh/tmyyjXEmXl3l1QpeRnFprZyx6MpCwGM6eRU09S3F4G
-         bqFvcBokuAE8IKVz+dLNqdI8o+Zlcx9HYxMgyVB2A08KvnGzM/Jz+KZqg+7hCDBYI8pW
-         viCynoDXhHTwaWKQpqVmBjHa7Nr1JYAccjd3H/IQKgvfc/4ZnfsRcAlI4BHZQVha7zTx
-         UAOdXu2uJj6+ENWx5LTA7JmEnn9jHMxlklPaEqzuyN73r1G8DI92oZaicdx4GY5ZJohr
-         gfa49fIuz0dQO/xFmDe/cmNztwNzIhTvhQ8Y844QtYlh/YCZTiuk/uTJFKYDCU4JVz5Z
-         7Zbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=uICLl7ALMQbyPSU7KmBXA9OTc0fxri6yRq599PdZEK4=;
-        b=wkB+1DYAnNadxcWv1vJ9qT1V5prAMRzDaEu02MFkX/3LaZL2aN852TMvVhXgNgafIl
-         thsoaGSJqbiZXC/Zw+bputJUkM6WAcfArQpohrmxjufCMRtsXbV9+Osn112OG2EqMilo
-         MGIYQMWdSZFgcLJESRGIJg1KQnGOwLFtaKsFdzvNq9huf9WX0lTtKtPxRJI0Hb509K4x
-         KsO8VmvunjrWstM9hYZuq64nc9ThSrrJ74pBxQaZXNVuo69lAcFFuKGlV9t9NEX3krE3
-         Iw6n0EXTopfbccQz4zU7OiWPBbWhgBEZxDUdAQ6lB631byTwWRV8JhCDUmTWikusc7cm
-         ib2w==
-X-Gm-Message-State: AOAM530k7U+vc455QRRkt79ym4WIi73NF0+PsUz+Mdqfq6bzklcTmZv+
-        o2gRHw5r0DKSkMZ0c7AZcjbPsTOGHNFxOmJLCVY7LQ==
-X-Google-Smtp-Source: ABdhPJzzqIseI0oQdOtLu75NcsaQhp5C9T36Sdr822+Mr9yJhImaYv/fXv72XKnWiATEF0wqloGLNTHy7MR/Pp6yfGw=
-X-Received: by 2002:a25:b981:: with SMTP id r1mr54967879ybg.520.1641304507196;
- Tue, 04 Jan 2022 05:55:07 -0800 (PST)
+        Tue, 4 Jan 2022 08:57:09 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16BA4B810B3;
+        Tue,  4 Jan 2022 13:57:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47123C36AED;
+        Tue,  4 Jan 2022 13:57:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641304626;
+        bh=OZ0f7tUVt0pRqeuyYIwF4uJjwkRgSIkddO3+gxXzU28=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XPTU3Ic2LMotntRgbC7j3XdoRwKaXQd3itYu9WeU6v5J4oCfm6dF1o1MFDUCyLshj
+         7k335DQFq5lyvm3hWVZLxHvwwr4bGiuvzgwxEjTwjl/QZ395arVRRET3BDh84lZN/j
+         Zkey+mFkYaqwBOkKXUWrgXUlxjCc4hh0PxjHCOqtWOnO8FlWpVtt9iz1FIlqQn6UR8
+         JNp4NvwdkNAHuAbQx5h2wCVBz8gBkixppBOIcwbPv7dLcb2mF1RZYMYf1DyM9z1vo4
+         lXlq/dhdcSBsy8hfXVuvKT8DvJCNvJJp6YLP6yZPHHQRz6I6p+d3HtiaufgZ7l5KNu
+         kIadDSUcXpQow==
+Date:   Tue, 4 Jan 2022 13:56:59 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Rob Herring <robh@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vince Weaver <vincent.weaver@maine.edu>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-perf-users@vger.kernel.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH v13 3/5] arm64: perf: Add userspace counter access
+ disable switch
+Message-ID: <20220104135658.GC1827@willie-the-truck>
+References: <20211208201124.310740-1-robh@kernel.org>
+ <20211208201124.310740-4-robh@kernel.org>
+ <CAMuHMdVcDxR9sGzc5pcnORiotonERBgc6dsXZXMd6wTvLGA9iw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220103142051.979780231@linuxfoundation.org>
-In-Reply-To: <20220103142051.979780231@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 4 Jan 2022 19:24:55 +0530
-Message-ID: <CA+G9fYs8YtKsu+adOaswD-v8m0mkEsamJR5E-NRQ3rW-F32rfA@mail.gmail.com>
-Subject: Re: [PATCH 4.9 00/13] 4.9.296-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdVcDxR9sGzc5pcnORiotonERBgc6dsXZXMd6wTvLGA9iw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Jan 2022 at 19:52, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.9.296 release.
-> There are 13 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 05 Jan 2022 14:20:40 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.9.296-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.9.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
+Hi Geert,
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+On Tue, Dec 28, 2021 at 12:07:02PM +0100, Geert Uytterhoeven wrote:
+> On Wed, Dec 8, 2021 at 9:19 PM Rob Herring <robh@kernel.org> wrote:
+> > Like x86, some users may want to disable userspace PMU counter
+> > altogether. Add a sysctl 'perf_user_access' file to control userspace
+> > counter access. The default is '0' which is disabled. Writing '1'
+> > enables access.
+> >
+> > Note that x86 supports globally enabling user access by writing '2' to
+> > /sys/bus/event_source/devices/cpu/rdpmc. As there's not existing
+> > userspace support to worry about, this shouldn't be necessary for Arm.
+> > It could be added later if the need arises.
+> 
+> Thanks for your patch, which is now commit e2012600810c9ded ("arm64:
+> perf: Add userspace counter access disable switch") in arm64/for-next/core.
+> 
+> This is causing two issues on Renesas Salvator-XS with R-Car H3.
+> One during kernel boot:
+> 
+>      hw perfevents: enabled with armv8_cortex_a53 PMU driver, 7
+> counters available
+>     +sysctl duplicate entry: /kernel//perf_user_access
+>     +CPU: 0 PID: 1 Comm: swapper/0 Not tainted
+> 5.16.0-rc3-arm64-renesas-00003-ge2012600810c #1420
+>     +Hardware name: Renesas Salvator-X 2nd version board based on r8a77951 (DT)
+>     +Call trace:
+>     + dump_backtrace+0x0/0x190
+>     + show_stack+0x14/0x20
+>     + dump_stack_lvl+0x88/0xb0
+>     + dump_stack+0x14/0x2c
+>     + __register_sysctl_table+0x384/0x818
+>     + register_sysctl+0x20/0x28
+>     + armv8_pmu_init.constprop.0+0x118/0x150
+>     + armv8_a57_pmu_init+0x1c/0x28
+>     + arm_pmu_device_probe+0x1b4/0x558
+>     + armv8_pmu_device_probe+0x18/0x20
+>     + platform_probe+0x64/0xd0
+>     + really_probe+0xb4/0x2f8
+>     + __driver_probe_device+0x74/0xd8
+>     + driver_probe_device+0x3c/0xe0
+>     + __driver_attach+0x80/0x110
+>     + bus_for_each_dev+0x6c/0xc0
+>     + driver_attach+0x20/0x28
+>     + bus_add_driver+0x138/0x1e0
+>     + driver_register+0x60/0x110
+>     + __platform_driver_register+0x24/0x30
+>     + armv8_pmu_driver_init+0x18/0x20
+>     + do_one_initcall+0x15c/0x31c
+>     + kernel_init_freeable+0x2f0/0x354
+>     + kernel_init+0x20/0x120
+>     + ret_from_fork+0x10/0x20
+>      hw perfevents: enabled with armv8_cortex_a57 PMU driver, 7
+> counters available
+> 
+> Presumably the same entry is added twice, once for the A53 PMU,
+> and a second time for the A57 PMU?
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Looks like it, and perhaps that's also what is confusing systemd?
+Rob -- how come you didn't see this during your testing?
 
-## Build
-* kernel: 4.9.296-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-4.9.y
-* git commit: c154c6cb3efdb71f32e51470e61b791083fab40c
-* git describe: v4.9.295-14-gc154c6cb3efd
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.2=
-95-14-gc154c6cb3efd
+Anywho, please can you try the untested diff below?
 
-## Test Regressions (compared to v4.9.295)
-No test regressions found.
+Thanks,
 
-## Metric Regressions (compared to v4.9.295)
-No metric regressions found.
+Will
 
-## Test Fixes (compared to v4.9.295)
-No test fixes found.
+--->8
 
-## Metric Fixes (compared to v4.9.295)
-No metric fixes found.
+diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
+index 81cc9f0e718a..639f632aaa66 100644
+--- a/arch/arm64/kernel/perf_event.c
++++ b/arch/arm64/kernel/perf_event.c
+@@ -1214,6 +1214,14 @@ static struct ctl_table armv8_pmu_sysctl_table[] = {
+        { }
+ };
+ 
++static void armv8_pmu_register_sysctl_table(void)
++{
++       static u32 tbl_registered = 0;
++
++       if (!cmpxchg_relaxed(&tbl_registered, 0, 1))
++               register_sysctl("kernel", armv8_pmu_sysctl_table);
++}
++
+ static int armv8_pmu_init(struct arm_pmu *cpu_pmu, char *name,
+                          int (*map_event)(struct perf_event *event),
+                          const struct attribute_group *events,
+@@ -1248,8 +1256,7 @@ static int armv8_pmu_init(struct arm_pmu *cpu_pmu, char *name,
+        cpu_pmu->attr_groups[ARMPMU_ATTR_GROUP_CAPS] = caps ?
+                        caps : &armv8_pmuv3_caps_attr_group;
+ 
+-       register_sysctl("kernel", armv8_pmu_sysctl_table);
+-
++       armv8_pmu_register_sysctl_table();
+        return 0;
+ }
+ 
 
-## Test result summary
-total: 54919, pass: 43155, fail: 435, skip: 9846, xfail: 1483
-
-## Build Summary
-* arm: 254 total, 226 passed, 28 failed
-* arm64: 32 total, 32 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 19 total, 19 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 22 total, 22 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 31 total, 31 passed, 0 failed
-
-## Test suites summary
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org

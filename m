@@ -2,142 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B86F48432C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:17:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 415D148432F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:18:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233974AbiADORs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:17:48 -0500
-Received: from foss.arm.com ([217.140.110.172]:59772 "EHLO foss.arm.com"
+        id S234065AbiADOSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:18:06 -0500
+Received: from foss.arm.com ([217.140.110.172]:59790 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230361AbiADORq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:17:46 -0500
+        id S230361AbiADOSF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 09:18:05 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5DA0AED1;
-        Tue,  4 Jan 2022 06:17:45 -0800 (PST)
-Received: from [10.57.38.86] (unknown [10.57.38.86])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 94DC03F774;
-        Tue,  4 Jan 2022 06:17:44 -0800 (PST)
-Subject: Re: [PATCH 1/1] docs: automarkup.py: Fix invalid HTML link output and
- broken URI fragments
-To:     mchehab+huawei@kernel.org, nfraprado@protonmail.com,
-        corbet@lwn.net, linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20211216192704.413216-1-james.clark@arm.com>
- <20211216192704.413216-2-james.clark@arm.com>
-From:   James Clark <james.clark@arm.com>
-Message-ID: <9f490126-ef08-e3f3-3f5b-1a55874d8d7c@arm.com>
-Date:   Tue, 4 Jan 2022 14:17:43 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C8E93ED1;
+        Tue,  4 Jan 2022 06:18:04 -0800 (PST)
+Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E671C3F774;
+        Tue,  4 Jan 2022 06:18:02 -0800 (PST)
+Date:   Tue, 4 Jan 2022 14:17:52 +0000
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>, bhelgaas@google.com
+Cc:     Rob Herring <robh@kernel.org>, Jim Quinlan <jim2101024@gmail.com>,
+        linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        Saenz Julienne <nsaenzjulienne@suse.de>
+Subject: Re: [PATCH v10 0/7] PCI: brcmstb: root port turns on sub-device power
+Message-ID: <20220104141742.GA27804@lpieralisi>
+References: <20211209211407.8102-1-jim2101024@gmail.com>
+ <YbOf836C58fUSmCO@robh.at.kernel.org>
+ <d659ec6c-ddf8-87b9-ebf1-b32c3730d038@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20211216192704.413216-2-james.clark@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d659ec6c-ddf8-87b9-ebf1-b32c3730d038@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Dec 10, 2021 at 12:31:10PM -0800, Florian Fainelli wrote:
+> On 12/10/21 10:44 AM, Rob Herring wrote:
+> > On Thu, Dec 09, 2021 at 04:13:58PM -0500, Jim Quinlan wrote:
+> >> v10 -- Bindings commit example: in comment, refer to bridge under
+> >>        controller node as a root port. (Pali)
+> >>     -- Bindings commit example: remove three properties that are not
+> >>        appropriate for a PCIe endpoint node. (Rob)
+> >>
+> >> v9  -- Simplify where this mechanism works: instead of looking for
+> >>        regulators below every bridge, just look for them at the
+> >>        bridge under the root bus (root port).  Now there is no
+> >>        modification of portdrv_{pci,core}.c in this submission.
+> >>     -- Although Pali is working on support for probing native
+> >>        PCIe controller drivers, this work may take some time to
+> >>        implement and it still might not be able to accomodate
+> >>        our driver's requirements (e.g. vreg suspend/resume control).
+> >>     -- Move regulator suspend/resume control to Brcm RC driver.  It
+> >>        must reside there because (a) in order to know when to
+> >>        initiate linkup during resume and (b) to turn on the
+> >>        regulators before any config-space accesses occur.
+> > 
+> > You now have a mixture of 'generic' add/remove_bus hooks and the host 
+> > controller suspend/resume managing the regulators. I think long term, 
+> > the portdrv is going to be the right place for all of this with some 
+> > interface defined for link control. So I think this solution moves 
+> > sideways rather than towards anything common.
+> > 
+> > Unfortunately, the only leverage maintainers have to get folks to care 
+> > about any refactoring is to reject features. We're lucky to find anyone 
+> > to test refactoring when posted if done independently. There's a long 
+> > list of commits of PCI hosts that I've broken to prove that. So it's 
+> > up to Lorenzo and Bjorn on what they want to do here.
+> 
+> After version 10, it would seem pretty clear that we are still very much
+> committed to and interested in getting that set merged and do it the
+> most acceptable way possible. Common code with a single user is always a
+> little bit of a grey area to me as it tends to be developed to cater for
+> the specific needs of that single user, so the entire common aspect is
+> debatable. I suppose as long as we have the binding right, the code can
+> change at will.
+> 
+> Not trying to coerce Bjorn and Lorenzo into accepting these patches if
+> they don't feel comfortable, but what about getting it included so we
+> can sort of move on from that topic for a little bit (as we have other
+> PCIe changes coming in, supporting additional chips etc.) and we work
+> with Pali on a common solution and ensure it works on our pcie-brcmstb.c
+> based devices? We are not going to vanish and not come back looking at this.
 
+Sorry for being late on reviewing this set. I agree with both of you.
 
-On 16/12/2021 19:27, James Clark wrote:
-> Since commit d18b01789ae5 ("docs: Add automatic cross-reference for
-> documentation pages"), references that were already explicitly defined
-> with "ref:" and reffered to other pages with a path have been doubled.
-> This is reported as the following error by Firefox:
-> 
->   Start tag "a" seen but an element of the same type was already open.
->   End tag "a" violates nesting rules.
-> 
-> As well as the invalid HTML, this also obscures the URI fragment links
-> to subsections because the second link overrides the first. For example
-> on the page admin-guide/hw-vuln/mds.html the last link should be to the
-> "Default Mitigations" subsection using a # URI fragment:
-> 
->   admin-guide/hw-vuln/l1tf.html#default-mitigations
-> 
-> But it is obsured by a second link to the whole page:
-> 
->   admin-guide/hw-vuln/l1tf.html
-> 
+I don't think Bjorn had a chance to have a look at patch (4) now I am
+delegating it to him; I am not very keen on adding functionality to PCI
+core where it is still a question whether it can be reused by other
+drivers (forgive me if I missed some details on previous review
+versions).
 
-Bump. Is there a way this can be merged if there are no objections? It's
-preventing me from adding links in the docs.
+Is it possible to keep patch (4) brcmstb specific (ie keep the code
+out of PCI core for now), we then merge this series and help Pali
+implement a generic version based on Rob's suggestion ?
 
-Thanks
-James
+Just let me know please, thanks.
 
-> The full HTML with the double <a> tags looks like this:
-> 
->   <a class="reference internal" href="l1tf.html#default-mitigations">
->     <span class="std std-ref">
->       <a class="reference internal" href="l1tf.html">
->         <span class="doc">L1TF - L1 Terminal Fault</span>
->       </a>
->     </span>
->   </a>
-> 
-> After this commit, there is only a single link:
-> 
->   <a class="reference internal" href="l1tf.html#default-mitigations">
->     <span class="std std-ref">Documentation/admin-guide/hw-vuln//l1tf.rst</span>
->   </a>
-> 
-> Now that the second link is removed, the browser correctly jumps to the
-> default-mitigations subsection when clicking the link.
-> 
-> The fix is to check that nodes in the document to be modified are not
-> already references. A reference is counted as any text that is a
-> descendant of a reference type node. Only plain text should be converted
-> to new references, otherwise the doubling occurs.
-> 
-> Testing
-> =======
-> 
->  * Test that the build stdout is the same (ignoring ordering), and that
->    no new warnings are printed.
-> 
->  * Diff all .html files and check that the only modifications occur
->    to the bad double links.
-> 
->  * The auto linking of bare references to pages without "ref:" is still
->    working.
-> 
-> Fixes: d18b01789ae5 ("docs: Add automatic cross-reference for
->        documentation pages")
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->  Documentation/sphinx/automarkup.py | 18 +++++++++++++++---
->  1 file changed, 15 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/sphinx/automarkup.py b/Documentation/sphinx/automarkup.py
-> index acf5473002f3..3fee247b55b3 100644
-> --- a/Documentation/sphinx/automarkup.py
-> +++ b/Documentation/sphinx/automarkup.py
-> @@ -280,10 +280,22 @@ def auto_markup(app, doctree, name):
->      # avoid adding cross-references to functions that have been explicitly
->      # marked with cc:func:.
->      #
-> +    def text_but_not_a_reference(node):
-> +        if not isinstance(node, nodes.Text) or isinstance(node.parent, nodes.literal):
-> +            return False
-> +
-> +        child_of_reference = False
-> +        parent = node.parent
-> +        while parent:
-> +            if isinstance(parent, nodes.Referential):
-> +                child_of_reference = True
-> +                break
-> +            parent = parent.parent
-> +        return not child_of_reference
-> +
->      for para in doctree.traverse(nodes.paragraph):
-> -        for node in para.traverse(nodes.Text):
-> -            if not isinstance(node.parent, nodes.literal):
-> -                node.parent.replace(node, markup_refs(name, app, node))
-> +        for node in para.traverse(condition=text_but_not_a_reference):
-> +            node.parent.replace(node, markup_refs(name, app, node))
->  
->  def setup(app):
->      app.connect('doctree-resolved', auto_markup)
-> 
+Lorenzo

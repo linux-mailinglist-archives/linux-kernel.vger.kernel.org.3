@@ -2,636 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34312483B71
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 06:08:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5757C483B75
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 06:20:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiADFIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 00:08:30 -0500
-Received: from mga18.intel.com ([134.134.136.126]:65043 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229507AbiADFI1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 00:08:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641272906; x=1672808906;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VaYRldoJ+WAcFyrTltzKdsBb03lBvDiuu1Tis0KSL5A=;
-  b=f2CeC/M322vMLb+hGbWSycfRaMhr6qyk5pEfkDjpUgQwD8nia6DiH11w
-   P3nVYe/dE053sMESS6dy1tkmkzmLid8KxbpYXrAJcNXprm++YK4d0/w+O
-   DpFt0GkTL7CyCpovnNjh3ZH4PGi9QmHw0keQoJP/CyuJcG7VfqU2S2Qi8
-   sge2RaXzOBo/YBnddd1A3LTbqZLC4BRRZcq936EiGNL2rdPouF5xnMzmb
-   S8VH4Yze7CzLaUPzePHDUXfTISSfArD13IRd3EW51i9TbU/tDEhOW+zd+
-   G/K+YsJMnxTS8Goh4EuuB96Gyf2FwW9Q0+LoznWGs9s6r22+qRwW0ivTT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="228978256"
-X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
-   d="scan'208";a="228978256"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 21:08:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
-   d="scan'208";a="760275740"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 03 Jan 2022 21:08:24 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n4c3b-000EiZ-Da; Tue, 04 Jan 2022 05:08:23 +0000
-Date:   Tue, 4 Jan 2022 13:07:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        William Kucharski <william.kucharski@oracle.com>
-Subject: [willy-pagecache:for-next 6/49]
- drivers/net/ethernet/sfc/ef10.c:50:9: warning: shift count is negative
-Message-ID: <202201041341.IWW7EqP0-lkp@intel.com>
+        id S229814AbiADFTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 00:19:17 -0500
+Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:46559 "EHLO
+        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229501AbiADFTQ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 00:19:16 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id D906B32005D8;
+        Tue,  4 Jan 2022 00:19:14 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Tue, 04 Jan 2022 00:19:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=g0e5mC5FTUbVkZ+y/r+i6QJZzPp
+        kaBFL8g/OBJ4oIxk=; b=oW/QyltMmIj3+lA5W1Xu5pfwuwnAfQvHrvhXtbHiWwq
+        GZAlHrs7++QtLdYUhl0noFTkFhhQYds/blp1UO2a/h5NEzUhs229gonQ8nIkmhFR
+        4g/vx653UbdozHSGP/WcgaNbM3FfBr66QNuH+cqxjGSvNjTlkouXMfoAcWDPS0J2
+        WeDxTpfpODsp1s/aPmgGq/Zr0FB16t0fZo5yJ2G1tUgV1zTshTxSVWi4mUdCd0xm
+        PEFnWzS+q7XtVUCPENcLjo9wB9Rkp/OLFMbzLK56Vn3I/40iuusUgUIAgk0Eh6rE
+        Wxn7pen156Q5W1aZfWu7fiauhrpyC8cV4/78IFMxOGQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=g0e5mC
+        5FTUbVkZ+y/r+i6QJZzPpkaBFL8g/OBJ4oIxk=; b=L2O6/lI6J8THaxcy+wl3Tn
+        PWlGCNwA+UVJEQJ/XxpiiLuwUVx/T1pkouqZL9YW5fMd7zjXA7vdRW8JFQFX4A74
+        GeTDvUcEVXmNwHh4N/kgkE9jbW7eHhF48dtZdwN9+Di5W9o1UI0QCelDQ4Gf9bIl
+        y6lrxuYBm3JPUyRrewaQkELhMJ0xtBzgRWEW3s1+SFCNqZ/AOwlifTvUUoC+LINH
+        B+PivAfRspE+pakpUqe7Mg45LDxPNhy8kRLVYzRLc1ySFkKuiF9t08HQYH2O8n+B
+        n4KG8NspRuhKPTvsJVgWEDVgzTd73HzcK/BnUTuC7kCU84bYhKjeVMSsDmKeoznw
+        ==
+X-ME-Sender: <xms:0djTYVq9fb5hw3z5IfYj3KhHqu0QJHtG3kH98robCervjTuJ-_UihQ>
+    <xme:0djTYXqXlvYqghQT4snGtWqfW1w-VCnmH1u8MN15pjgD_AxvYLuchS3I2CWlf86rQ
+    c1twcmnkMyxGi9OYQ>
+X-ME-Received: <xmr:0djTYSNzDrJtO3CEbeQlA0S7wKk4Ip_pYdK_bikBXnZ8gomSHRoo4921TTrwzm14xy8IU2evsvHphgSmFTRV2g4F2C7U2azXVjMfBeXg3HOn7y5n0GlqfUkd565X>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrudefvddgjeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdljedtmdenucfjughrpeffhffvuffkfhggtggujgesthdtredttddt
+    vdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqeenuc
+    ggtffrrghtthgvrhhnpeeuuddvjeefffelgfeuveehfeegfeetfeetueduudfhudfhheev
+    leetveduleehjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:0djTYQ7kv44uqaZtpYmGJ3m-RHLr4BNlr1oaNmiP8PGNELaOOjkSuQ>
+    <xmx:0djTYU5yxMsuIBVZtjNUtMz7qfoXpuWACwnaeFyZwtURHLyI6_YOyA>
+    <xmx:0djTYYhbJca_5oa00AzfvT7Wkpf2q5gGB0AxY1XQ54N5nVuBGU11Yw>
+    <xmx:0tjTYf3o-oG-ZkV53osHasQYKru11pZFtIopgwtp2woWBRlVPdqAyQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 4 Jan 2022 00:19:12 -0500 (EST)
+Date:   Mon, 3 Jan 2022 23:19:11 -0600
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     arnd@arndb.de, giometti@enneenne.com, linux-kernel@vger.kernel.org,
+        thesven73@gmail.com, ojeda@kernel.org
+Subject: Re: [RFC char-misc-next 1/2] cdev: Add private pointer to struct cdev
+Message-ID: <20220104051911.ldwvwe65hc26bqbv@muhammad.localdomain>
+References: <cover.1641185192.git.dxu@dxuuu.xyz>
+ <34157f5e8dbaa1063dd76608e1e57244305460e8.1641185192.git.dxu@dxuuu.xyz>
+ <YdMCXierm0K6cVA/@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YdMCXierm0K6cVA/@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.infradead.org/users/willy/pagecache for-next
-head:   c45f479798001734025928cbbce2e42f6cedea1c
-commit: 442f739136ee2d6bff8f07524447d4e40217de62 [6/49] iov_iter: Add copy_folio_to_iter()
-config: x86_64-randconfig-a011-20220103 (https://download.01.org/0day-ci/archive/20220104/202201041341.IWW7EqP0-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b50fea47b6c454581fce89af359f3afe5154986c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add willy-pagecache git://git.infradead.org/users/willy/pagecache
-        git fetch --no-tags willy-pagecache for-next
-        git checkout 442f739136ee2d6bff8f07524447d4e40217de62
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/ethernet/sfc/
+Hi Greg,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for taking the time to respond.
 
-All warnings (new ones prefixed by >>):
+On Mon, Jan 03, 2022 at 03:04:14PM +0100, Greg KH wrote:
+> On Sun, Jan 02, 2022 at 09:01:39PM -0800, Daniel Xu wrote:
+> > struct cdev is a kobject managed struct, meaning kobject is ultimately
+> > responsible for deciding when the object is freed. Because kobject uses
+> > reference counts, it also means a cdev object isn't guaranteed to be
+> > cleaned up with a call to cdev_del() -- the cleanup may occur later.
+> > 
+> > Unfortunately, this can result in subtle use-after-free bugs when struct
+> > cdev is embedded in another struct, and the larger struct is freed
+> > immediately after cdev_del(). For example:
+> > 
+> >     struct contains_cdev {
+> >             struct cdev cdev;
+> >     }
+> > 
+> >     void init(struct contains_cdev *cc) {
+> >             cdev_init(&cc->cdev);
+> >     }
+> > 
+> >     void cleanup(struct contains_cdev *cc) {
+> >             cdev_del(&cc->cdev);
+> >             kfree(cc);
+> >     }
+> > 
+> > This kind of code can reliably trigger a KASAN splat with
+> > CONFIG_KASAN=y and CONFIG_DEBUG_KOBJECT_RELEASE=y.
+> > 
+> > A fairly palatable workaround is replacing cdev_init() with cdev_alloc()
+> > and storing a pointer instead. For example, this is totally fine:
+> > 
+> >     struct contains_cdev_ptr {
+> >             struct cdev *cdev;
+> >     }
+> > 
+> >     int init(struct contains_cdev_ptr *cc) {
+> >             cc->cdev = cdev_alloc();
+> >             if (!cc->cdev) {
+> >                     return -ENOMEM;
+> >             }
+> > 
+> >             return 0;
+> >     }
+> > 
+> >     void cleanup(struct contains_cdev_ptr *cc) {
+> >             cdev_del(cc->cdev);
+> >             kfree(cc);
+> >     }
+> > 
+> > The only downside from this workaround (other than the extra allocation)
+> > is that container_of() upcasts no longer work. This is quite unfortunate
+> > for any code that implements struct file_operations and wants to store
+> > extra data with a struct cdev. With cdev_alloc() pointer, it's no longer
+> > possible to do something like:
+> > 
+> >     struct contains_cdev *cc = container_of(inode->i_cdev,
+> >                                             struct contains_cdev,
+> >                                             cdev);
+> > 
+> > Thus, I propose to add a void *private field to struct cdev so that
+> > callers can store a pointer to the containing struct instead of using
+> > container_of().
+> > 
+> > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> > ---
+> >  include/linux/cdev.h | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/include/linux/cdev.h b/include/linux/cdev.h
+> > index 0e8cd6293deb..0e674e900512 100644
+> > --- a/include/linux/cdev.h
+> > +++ b/include/linux/cdev.h
+> > @@ -18,6 +18,7 @@ struct cdev {
+> >  	struct list_head list;
+> >  	dev_t dev;
+> >  	unsigned int count;
+> > +	void *private;
+> 
+> I understand your request here, but this is not how to use a cdev.  It
+> should be embedded in a larger structure, and then you can always "cast
+> out" to get the real structure here.
 
-   In file included from drivers/net/ethernet/sfc/ef10.c:7:
-   In file included from drivers/net/ethernet/sfc/net_driver.h:13:
-   In file included from include/linux/netdevice.h:37:
-   In file included from include/net/net_namespace.h:15:
-   In file included from include/net/flow.h:11:
-   In file included from include/linux/socket.h:8:
-   include/linux/uio.h:153:33: error: incomplete definition of type 'struct folio'
-           return copy_page_to_iter(&folio->page, offset, bytes, i);
-                                     ~~~~~^
-   include/linux/uio.h:13:8: note: forward declaration of 'struct folio'
-   struct folio;
-          ^
->> drivers/net/ethernet/sfc/ef10.c:50:9: warning: shift count is negative [-Wshift-count-negative]
-           return EFX_DWORD_FIELD(reg, EFX_WORD_1) == 0xb007 ?
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:185:2: note: expanded from macro 'EFX_DWORD_FIELD'
-           EFX_EXTRACT_DWORD(dword, EFX_LOW_BIT(field),            \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:165:3: note: expanded from macro 'EFX_EXTRACT_DWORD'
-           (EFX_EXTRACT32((dword).u32[0], 0, 31, low, high) &      \
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:141:2: note: expanded from macro 'EFX_EXTRACT32'
-           EFX_EXTRACT_NATIVE(le32_to_cpu(element), min, max, low, high)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:127:20: note: expanded from macro 'EFX_EXTRACT_NATIVE'
-            (native_element) << ((min) - (low)))
-                             ^  ~~~~~~~~~~~~~~~
->> drivers/net/ethernet/sfc/ef10.c:102:23: warning: shift count >= width of type [-Wshift-count-overflow]
-           nic_data->vf_index = MCDI_DWORD(outbuf, GET_FUNCTION_INFO_OUT_VF);
-                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/mcdi.h:218:2: note: expanded from macro 'MCDI_DWORD'
-           EFX_DWORD_FIELD(*_MCDI_DWORD(_buf, _field), EFX_DWORD_0)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:185:2: note: expanded from macro 'EFX_DWORD_FIELD'
-           EFX_EXTRACT_DWORD(dword, EFX_LOW_BIT(field),            \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:166:3: note: expanded from macro 'EFX_EXTRACT_DWORD'
-            EFX_MASK32((high) + 1 - (low)))
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:71:16: note: expanded from macro 'EFX_MASK32'
-            (((((u32) 1) << (width))) - 1))
-                         ^  ~~~~~~~
-   drivers/net/ethernet/sfc/ef10.c:127:3: warning: shift count >= width of type [-Wshift-count-overflow]
-                   MCDI_DWORD(outbuf, GET_CAPABILITIES_OUT_FLAGS1);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/mcdi.h:218:2: note: expanded from macro 'MCDI_DWORD'
-           EFX_DWORD_FIELD(*_MCDI_DWORD(_buf, _field), EFX_DWORD_0)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:185:2: note: expanded from macro 'EFX_DWORD_FIELD'
-           EFX_EXTRACT_DWORD(dword, EFX_LOW_BIT(field),            \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:166:3: note: expanded from macro 'EFX_EXTRACT_DWORD'
-            EFX_MASK32((high) + 1 - (low)))
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:71:16: note: expanded from macro 'EFX_MASK32'
-            (((((u32) 1) << (width))) - 1))
-                         ^  ~~~~~~~
-   drivers/net/ethernet/sfc/ef10.c:130:30: warning: shift count >= width of type [-Wshift-count-overflow]
-                   nic_data->datapath_caps2 = MCDI_DWORD(outbuf,
-                                              ^~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/mcdi.h:218:2: note: expanded from macro 'MCDI_DWORD'
-           EFX_DWORD_FIELD(*_MCDI_DWORD(_buf, _field), EFX_DWORD_0)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:185:2: note: expanded from macro 'EFX_DWORD_FIELD'
-           EFX_EXTRACT_DWORD(dword, EFX_LOW_BIT(field),            \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:166:3: note: expanded from macro 'EFX_EXTRACT_DWORD'
-            EFX_MASK32((high) + 1 - (low)))
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:71:16: note: expanded from macro 'EFX_MASK32'
-            (((((u32) 1) << (width))) - 1))
-                         ^  ~~~~~~~
-   drivers/net/ethernet/sfc/ef10.c:198:32: warning: shift count >= width of type [-Wshift-count-overflow]
-           nic_data->licensed_features = MCDI_QWORD(outbuf,
-                                         ^~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/mcdi.h:281:3: note: expanded from macro 'MCDI_QWORD'
-           (EFX_DWORD_FIELD(_MCDI_DWORD(_buf, _field)[0], EFX_DWORD_0) |   \
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:185:2: note: expanded from macro 'EFX_DWORD_FIELD'
-           EFX_EXTRACT_DWORD(dword, EFX_LOW_BIT(field),            \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:166:3: note: expanded from macro 'EFX_EXTRACT_DWORD'
-            EFX_MASK32((high) + 1 - (low)))
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:71:16: note: expanded from macro 'EFX_MASK32'
-            (((((u32) 1) << (width))) - 1))
-                         ^  ~~~~~~~
-   drivers/net/ethernet/sfc/ef10.c:198:32: warning: shift count >= width of type [-Wshift-count-overflow]
-           nic_data->licensed_features = MCDI_QWORD(outbuf,
-                                         ^~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/mcdi.h:282:7: note: expanded from macro 'MCDI_QWORD'
-           (u64)EFX_DWORD_FIELD(_MCDI_DWORD(_buf, _field)[1], EFX_DWORD_0) << 32)
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:185:2: note: expanded from macro 'EFX_DWORD_FIELD'
-           EFX_EXTRACT_DWORD(dword, EFX_LOW_BIT(field),            \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:166:3: note: expanded from macro 'EFX_EXTRACT_DWORD'
-            EFX_MASK32((high) + 1 - (low)))
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:71:16: note: expanded from macro 'EFX_MASK32'
-            (((((u32) 1) << (width))) - 1))
-                         ^  ~~~~~~~
-   drivers/net/ethernet/sfc/ef10.c:211:7: warning: shift count >= width of type [-Wshift-count-overflow]
-           rc = MCDI_DWORD(outbuf, GET_CLOCK_OUT_SYS_FREQ);
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/mcdi.h:218:2: note: expanded from macro 'MCDI_DWORD'
-           EFX_DWORD_FIELD(*_MCDI_DWORD(_buf, _field), EFX_DWORD_0)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:185:2: note: expanded from macro 'EFX_DWORD_FIELD'
-           EFX_EXTRACT_DWORD(dword, EFX_LOW_BIT(field),            \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:166:3: note: expanded from macro 'EFX_EXTRACT_DWORD'
-            EFX_MASK32((high) + 1 - (low)))
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:71:16: note: expanded from macro 'EFX_MASK32'
-            (((((u32) 1) << (width))) - 1))
-                         ^  ~~~~~~~
-   drivers/net/ethernet/sfc/ef10.c:267:27: warning: shift count >= width of type [-Wshift-count-overflow]
-                   efx->timer_quantum_ns = MCDI_DWORD(data,
-                                           ^~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/mcdi.h:218:2: note: expanded from macro 'MCDI_DWORD'
-           EFX_DWORD_FIELD(*_MCDI_DWORD(_buf, _field), EFX_DWORD_0)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:185:2: note: expanded from macro 'EFX_DWORD_FIELD'
-           EFX_EXTRACT_DWORD(dword, EFX_LOW_BIT(field),            \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:166:3: note: expanded from macro 'EFX_EXTRACT_DWORD'
-            EFX_MASK32((high) + 1 - (low)))
---
-   In file included from drivers/net/ethernet/sfc/mcdi.c:10:
-   In file included from drivers/net/ethernet/sfc/net_driver.h:13:
-   In file included from include/linux/netdevice.h:37:
-   In file included from include/net/net_namespace.h:15:
-   In file included from include/net/flow.h:11:
-   In file included from include/linux/socket.h:8:
-   include/linux/uio.h:153:33: error: incomplete definition of type 'struct folio'
-           return copy_page_to_iter(&folio->page, offset, bytes, i);
-                                     ~~~~~^
-   include/linux/uio.h:13:8: note: forward declaration of 'struct folio'
-   struct folio;
-          ^
->> drivers/net/ethernet/sfc/mcdi.c:175:3: warning: shift count is negative [-Wshift-count-negative]
-                   EFX_POPULATE_DWORD_7(hdr[0],
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:471:2: note: expanded from macro 'EFX_POPULATE_DWORD_7'
-           EFX_POPULATE_DWORD_8(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:469:2: note: expanded from macro 'EFX_POPULATE_DWORD_8'
-           EFX_POPULATE_DWORD_9(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:467:2: note: expanded from macro 'EFX_POPULATE_DWORD_9'
-           EFX_POPULATE_DWORD_10(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 14 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   drivers/net/ethernet/sfc/bitfield.h:256:3: note: expanded from macro 'EFX_INSERT_NATIVE'
-            EFX_INSERT_NATIVE64(min, max, low, high, value) :      \
-            ^
-   drivers/net/ethernet/sfc/bitfield.h:246:21: note: expanded from macro 'EFX_INSERT_NATIVE64'
-             (((u64) (value)) >> (min - low))))
-                              ^
-   include/uapi/linux/byteorder/little_endian.h:33:51: note: expanded from macro '__cpu_to_le32'
-   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
-                                                     ^
->> drivers/net/ethernet/sfc/mcdi.c:175:3: warning: shift count is negative [-Wshift-count-negative]
-                   EFX_POPULATE_DWORD_7(hdr[0],
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:471:2: note: expanded from macro 'EFX_POPULATE_DWORD_7'
-           EFX_POPULATE_DWORD_8(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:469:2: note: expanded from macro 'EFX_POPULATE_DWORD_8'
-           EFX_POPULATE_DWORD_9(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:467:2: note: expanded from macro 'EFX_POPULATE_DWORD_9'
-           EFX_POPULATE_DWORD_10(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 14 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   drivers/net/ethernet/sfc/bitfield.h:257:3: note: expanded from macro 'EFX_INSERT_NATIVE'
-            EFX_INSERT_NATIVE32(min, max, low, high, value))
-            ^
-   drivers/net/ethernet/sfc/bitfield.h:252:21: note: expanded from macro 'EFX_INSERT_NATIVE32'
-             (((u32) (value)) >> (min - low))))
-                              ^
-   include/uapi/linux/byteorder/little_endian.h:33:51: note: expanded from macro '__cpu_to_le32'
-   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
-                                                     ^
->> drivers/net/ethernet/sfc/mcdi.c:175:3: warning: shift count is negative [-Wshift-count-negative]
-                   EFX_POPULATE_DWORD_7(hdr[0],
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:471:2: note: expanded from macro 'EFX_POPULATE_DWORD_7'
-           EFX_POPULATE_DWORD_8(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:469:2: note: expanded from macro 'EFX_POPULATE_DWORD_8'
-           EFX_POPULATE_DWORD_9(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:467:2: note: expanded from macro 'EFX_POPULATE_DWORD_9'
-           EFX_POPULATE_DWORD_10(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 14 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   drivers/net/ethernet/sfc/bitfield.h:256:3: note: expanded from macro 'EFX_INSERT_NATIVE'
-            EFX_INSERT_NATIVE64(min, max, low, high, value) :      \
-            ^
-   drivers/net/ethernet/sfc/bitfield.h:246:21: note: expanded from macro 'EFX_INSERT_NATIVE64'
-             (((u64) (value)) >> (min - low))))
-                              ^
-   include/uapi/linux/byteorder/little_endian.h:33:51: note: expanded from macro '__cpu_to_le32'
-   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
-                                                     ^
->> drivers/net/ethernet/sfc/mcdi.c:175:3: warning: shift count is negative [-Wshift-count-negative]
-                   EFX_POPULATE_DWORD_7(hdr[0],
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:471:2: note: expanded from macro 'EFX_POPULATE_DWORD_7'
-           EFX_POPULATE_DWORD_8(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:469:2: note: expanded from macro 'EFX_POPULATE_DWORD_8'
-           EFX_POPULATE_DWORD_9(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:467:2: note: expanded from macro 'EFX_POPULATE_DWORD_9'
-           EFX_POPULATE_DWORD_10(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 14 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   drivers/net/ethernet/sfc/bitfield.h:257:3: note: expanded from macro 'EFX_INSERT_NATIVE'
-            EFX_INSERT_NATIVE32(min, max, low, high, value))
-            ^
-   drivers/net/ethernet/sfc/bitfield.h:252:21: note: expanded from macro 'EFX_INSERT_NATIVE32'
-             (((u32) (value)) >> (min - low))))
-                              ^
-   include/uapi/linux/byteorder/little_endian.h:33:51: note: expanded from macro '__cpu_to_le32'
-   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
-                                                     ^
->> drivers/net/ethernet/sfc/mcdi.c:175:3: warning: shift count is negative [-Wshift-count-negative]
-                   EFX_POPULATE_DWORD_7(hdr[0],
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:471:2: note: expanded from macro 'EFX_POPULATE_DWORD_7'
-           EFX_POPULATE_DWORD_8(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:469:2: note: expanded from macro 'EFX_POPULATE_DWORD_8'
-           EFX_POPULATE_DWORD_9(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:467:2: note: expanded from macro 'EFX_POPULATE_DWORD_9'
-           EFX_POPULATE_DWORD_10(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 14 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   drivers/net/ethernet/sfc/bitfield.h:256:3: note: expanded from macro 'EFX_INSERT_NATIVE'
-            EFX_INSERT_NATIVE64(min, max, low, high, value) :      \
-            ^
-   drivers/net/ethernet/sfc/bitfield.h:246:21: note: expanded from macro 'EFX_INSERT_NATIVE64'
-             (((u64) (value)) >> (min - low))))
-                              ^
-   include/uapi/linux/byteorder/little_endian.h:33:51: note: expanded from macro '__cpu_to_le32'
-   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
-                                                     ^
->> drivers/net/ethernet/sfc/mcdi.c:175:3: warning: shift count is negative [-Wshift-count-negative]
-                   EFX_POPULATE_DWORD_7(hdr[0],
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:471:2: note: expanded from macro 'EFX_POPULATE_DWORD_7'
-           EFX_POPULATE_DWORD_8(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:469:2: note: expanded from macro 'EFX_POPULATE_DWORD_8'
-           EFX_POPULATE_DWORD_9(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:467:2: note: expanded from macro 'EFX_POPULATE_DWORD_9'
-           EFX_POPULATE_DWORD_10(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 14 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   drivers/net/ethernet/sfc/bitfield.h:257:3: note: expanded from macro 'EFX_INSERT_NATIVE'
-            EFX_INSERT_NATIVE32(min, max, low, high, value))
-            ^
-   drivers/net/ethernet/sfc/bitfield.h:252:21: note: expanded from macro 'EFX_INSERT_NATIVE32'
-             (((u32) (value)) >> (min - low))))
-                              ^
-   include/uapi/linux/byteorder/little_endian.h:33:51: note: expanded from macro '__cpu_to_le32'
-   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
-                                                     ^
->> drivers/net/ethernet/sfc/mcdi.c:175:3: warning: shift count is negative [-Wshift-count-negative]
-                   EFX_POPULATE_DWORD_7(hdr[0],
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:471:2: note: expanded from macro 'EFX_POPULATE_DWORD_7'
-           EFX_POPULATE_DWORD_8(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:469:2: note: expanded from macro 'EFX_POPULATE_DWORD_8'
-           EFX_POPULATE_DWORD_9(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:467:2: note: expanded from macro 'EFX_POPULATE_DWORD_9'
-           EFX_POPULATE_DWORD_10(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 14 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   drivers/net/ethernet/sfc/bitfield.h:256:3: note: expanded from macro 'EFX_INSERT_NATIVE'
-            EFX_INSERT_NATIVE64(min, max, low, high, value) :      \
-            ^
-   drivers/net/ethernet/sfc/bitfield.h:246:21: note: expanded from macro 'EFX_INSERT_NATIVE64'
-             (((u64) (value)) >> (min - low))))
-                              ^
-   include/uapi/linux/byteorder/little_endian.h:33:51: note: expanded from macro '__cpu_to_le32'
-   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
-                                                     ^
->> drivers/net/ethernet/sfc/mcdi.c:175:3: warning: shift count is negative [-Wshift-count-negative]
-                   EFX_POPULATE_DWORD_7(hdr[0],
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:471:2: note: expanded from macro 'EFX_POPULATE_DWORD_7'
-           EFX_POPULATE_DWORD_8(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:469:2: note: expanded from macro 'EFX_POPULATE_DWORD_8'
-           EFX_POPULATE_DWORD_9(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:467:2: note: expanded from macro 'EFX_POPULATE_DWORD_9'
-           EFX_POPULATE_DWORD_10(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 14 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   drivers/net/ethernet/sfc/bitfield.h:257:3: note: expanded from macro 'EFX_INSERT_NATIVE'
-            EFX_INSERT_NATIVE32(min, max, low, high, value))
-            ^
-   drivers/net/ethernet/sfc/bitfield.h:252:21: note: expanded from macro 'EFX_INSERT_NATIVE32'
-             (((u32) (value)) >> (min - low))))
-                              ^
-   include/uapi/linux/byteorder/little_endian.h:33:51: note: expanded from macro '__cpu_to_le32'
-   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
-                                                     ^
->> drivers/net/ethernet/sfc/mcdi.c:175:3: warning: shift count is negative [-Wshift-count-negative]
-                   EFX_POPULATE_DWORD_7(hdr[0],
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:471:2: note: expanded from macro 'EFX_POPULATE_DWORD_7'
-           EFX_POPULATE_DWORD_8(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:469:2: note: expanded from macro 'EFX_POPULATE_DWORD_8'
-           EFX_POPULATE_DWORD_9(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:467:2: note: expanded from macro 'EFX_POPULATE_DWORD_9'
-           EFX_POPULATE_DWORD_10(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 14 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   drivers/net/ethernet/sfc/bitfield.h:256:3: note: expanded from macro 'EFX_INSERT_NATIVE'
-            EFX_INSERT_NATIVE64(min, max, low, high, value) :      \
-            ^
-   drivers/net/ethernet/sfc/bitfield.h:246:21: note: expanded from macro 'EFX_INSERT_NATIVE64'
-             (((u64) (value)) >> (min - low))))
-                              ^
-   include/uapi/linux/byteorder/little_endian.h:33:51: note: expanded from macro '__cpu_to_le32'
-   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
-                                                     ^
->> drivers/net/ethernet/sfc/mcdi.c:175:3: warning: shift count is negative [-Wshift-count-negative]
-                   EFX_POPULATE_DWORD_7(hdr[0],
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:471:2: note: expanded from macro 'EFX_POPULATE_DWORD_7'
-           EFX_POPULATE_DWORD_8(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:469:2: note: expanded from macro 'EFX_POPULATE_DWORD_8'
-           EFX_POPULATE_DWORD_9(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:467:2: note: expanded from macro 'EFX_POPULATE_DWORD_9'
-           EFX_POPULATE_DWORD_10(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 14 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   drivers/net/ethernet/sfc/bitfield.h:257:3: note: expanded from macro 'EFX_INSERT_NATIVE'
-            EFX_INSERT_NATIVE32(min, max, low, high, value))
-            ^
-   drivers/net/ethernet/sfc/bitfield.h:252:21: note: expanded from macro 'EFX_INSERT_NATIVE32'
-             (((u32) (value)) >> (min - low))))
-                              ^
-   include/uapi/linux/byteorder/little_endian.h:33:51: note: expanded from macro '__cpu_to_le32'
-   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
-                                                     ^
->> drivers/net/ethernet/sfc/mcdi.c:175:3: warning: shift count is negative [-Wshift-count-negative]
-                   EFX_POPULATE_DWORD_7(hdr[0],
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:471:2: note: expanded from macro 'EFX_POPULATE_DWORD_7'
-           EFX_POPULATE_DWORD_8(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:469:2: note: expanded from macro 'EFX_POPULATE_DWORD_8'
-           EFX_POPULATE_DWORD_9(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:467:2: note: expanded from macro 'EFX_POPULATE_DWORD_9'
-           EFX_POPULATE_DWORD_10(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 14 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   drivers/net/ethernet/sfc/bitfield.h:256:3: note: expanded from macro 'EFX_INSERT_NATIVE'
-            EFX_INSERT_NATIVE64(min, max, low, high, value) :      \
-            ^
-   drivers/net/ethernet/sfc/bitfield.h:246:21: note: expanded from macro 'EFX_INSERT_NATIVE64'
-             (((u64) (value)) >> (min - low))))
-                              ^
-   include/uapi/linux/byteorder/little_endian.h:33:51: note: expanded from macro '__cpu_to_le32'
-   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
-                                                     ^
->> drivers/net/ethernet/sfc/mcdi.c:175:3: warning: shift count is negative [-Wshift-count-negative]
-                   EFX_POPULATE_DWORD_7(hdr[0],
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:471:2: note: expanded from macro 'EFX_POPULATE_DWORD_7'
-           EFX_POPULATE_DWORD_8(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:469:2: note: expanded from macro 'EFX_POPULATE_DWORD_8'
-           EFX_POPULATE_DWORD_9(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:467:2: note: expanded from macro 'EFX_POPULATE_DWORD_9'
-           EFX_POPULATE_DWORD_10(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 14 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   drivers/net/ethernet/sfc/bitfield.h:257:3: note: expanded from macro 'EFX_INSERT_NATIVE'
-            EFX_INSERT_NATIVE32(min, max, low, high, value))
-            ^
-   drivers/net/ethernet/sfc/bitfield.h:252:21: note: expanded from macro 'EFX_INSERT_NATIVE32'
-             (((u32) (value)) >> (min - low))))
-                              ^
-   include/uapi/linux/byteorder/little_endian.h:33:51: note: expanded from macro '__cpu_to_le32'
-   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
-                                                     ^
-   drivers/net/ethernet/sfc/mcdi.c:187:3: warning: shift count is negative [-Wshift-count-negative]
-                   EFX_POPULATE_DWORD_7(hdr[0],
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:471:2: note: expanded from macro 'EFX_POPULATE_DWORD_7'
-           EFX_POPULATE_DWORD_8(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:469:2: note: expanded from macro 'EFX_POPULATE_DWORD_8'
-           EFX_POPULATE_DWORD_9(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:467:2: note: expanded from macro 'EFX_POPULATE_DWORD_9'
-           EFX_POPULATE_DWORD_10(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 14 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   drivers/net/ethernet/sfc/bitfield.h:256:3: note: expanded from macro 'EFX_INSERT_NATIVE'
-            EFX_INSERT_NATIVE64(min, max, low, high, value) :      \
-            ^
-   drivers/net/ethernet/sfc/bitfield.h:246:21: note: expanded from macro 'EFX_INSERT_NATIVE64'
-             (((u64) (value)) >> (min - low))))
-                              ^
-   include/uapi/linux/byteorder/little_endian.h:33:51: note: expanded from macro '__cpu_to_le32'
-   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
-                                                     ^
-   drivers/net/ethernet/sfc/mcdi.c:187:3: warning: shift count is negative [-Wshift-count-negative]
-                   EFX_POPULATE_DWORD_7(hdr[0],
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:471:2: note: expanded from macro 'EFX_POPULATE_DWORD_7'
-           EFX_POPULATE_DWORD_8(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:469:2: note: expanded from macro 'EFX_POPULATE_DWORD_8'
-           EFX_POPULATE_DWORD_9(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:467:2: note: expanded from macro 'EFX_POPULATE_DWORD_9'
-           EFX_POPULATE_DWORD_10(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 14 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   drivers/net/ethernet/sfc/bitfield.h:257:3: note: expanded from macro 'EFX_INSERT_NATIVE'
-            EFX_INSERT_NATIVE32(min, max, low, high, value))
-            ^
-   drivers/net/ethernet/sfc/bitfield.h:252:21: note: expanded from macro 'EFX_INSERT_NATIVE32'
-             (((u32) (value)) >> (min - low))))
-                              ^
-   include/uapi/linux/byteorder/little_endian.h:33:51: note: expanded from macro '__cpu_to_le32'
-   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
-                                                     ^
-   drivers/net/ethernet/sfc/mcdi.c:187:3: warning: shift count is negative [-Wshift-count-negative]
-                   EFX_POPULATE_DWORD_7(hdr[0],
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:471:2: note: expanded from macro 'EFX_POPULATE_DWORD_7'
-           EFX_POPULATE_DWORD_8(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:469:2: note: expanded from macro 'EFX_POPULATE_DWORD_8'
-           EFX_POPULATE_DWORD_9(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:467:2: note: expanded from macro 'EFX_POPULATE_DWORD_9'
-           EFX_POPULATE_DWORD_10(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 14 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   drivers/net/ethernet/sfc/bitfield.h:256:3: note: expanded from macro 'EFX_INSERT_NATIVE'
-            EFX_INSERT_NATIVE64(min, max, low, high, value) :      \
-            ^
-   drivers/net/ethernet/sfc/bitfield.h:246:21: note: expanded from macro 'EFX_INSERT_NATIVE64'
-             (((u64) (value)) >> (min - low))))
-                              ^
-   include/uapi/linux/byteorder/little_endian.h:33:51: note: expanded from macro '__cpu_to_le32'
-   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
-                                                     ^
-   drivers/net/ethernet/sfc/mcdi.c:187:3: warning: shift count is negative [-Wshift-count-negative]
-                   EFX_POPULATE_DWORD_7(hdr[0],
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:471:2: note: expanded from macro 'EFX_POPULATE_DWORD_7'
-           EFX_POPULATE_DWORD_8(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:469:2: note: expanded from macro 'EFX_POPULATE_DWORD_8'
-           EFX_POPULATE_DWORD_9(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sfc/bitfield.h:467:2: note: expanded from macro 'EFX_POPULATE_DWORD_9'
-           EFX_POPULATE_DWORD_10(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 14 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-..
+Hmm, I see. Is there a recommended method to avoid the use-after-free
+issue then? When `struct contains_cdev` is allocated on the heap we must
+free it at some point. IOW how do we ensure `struct contains_cdev` is
+only freed after the `struct cdev` is freed?
 
+> If you can't do that, then this
+> private pointer doesn't make much sense at all as it too would be
+> invalid.
 
-vim +50 drivers/net/ethernet/sfc/ef10.c
+I could be misunderstanding something here, but I don't see why the
+impossiblity of doing a container_of() implies the private pointer is
+also invalid. Could you please elaborate?
 
-8127d661e77f5e Ben Hutchings  2013-08-29   44  
-8127d661e77f5e Ben Hutchings  2013-08-29   45  static int efx_ef10_get_warm_boot_count(struct efx_nic *efx)
-8127d661e77f5e Ben Hutchings  2013-08-29   46  {
-8127d661e77f5e Ben Hutchings  2013-08-29   47  	efx_dword_t reg;
-8127d661e77f5e Ben Hutchings  2013-08-29   48  
-8127d661e77f5e Ben Hutchings  2013-08-29   49  	efx_readd(efx, &reg, ER_DZ_BIU_MC_SFT_STATUS);
-8127d661e77f5e Ben Hutchings  2013-08-29  @50  	return EFX_DWORD_FIELD(reg, EFX_WORD_1) == 0xb007 ?
-8127d661e77f5e Ben Hutchings  2013-08-29   51  		EFX_DWORD_FIELD(reg, EFX_WORD_0) : -EIO;
-8127d661e77f5e Ben Hutchings  2013-08-29   52  }
-8127d661e77f5e Ben Hutchings  2013-08-29   53  
-03714bbb22ebe0 Edward Cree    2017-12-18   54  /* On all EF10s up to and including SFC9220 (Medford1), all PFs use BAR 0 for
-03714bbb22ebe0 Edward Cree    2017-12-18   55   * I/O space and BAR 2(&3) for memory.  On SFC9250 (Medford2), there is no I/O
-03714bbb22ebe0 Edward Cree    2017-12-18   56   * bar; PFs use BAR 0/1 for memory.
-03714bbb22ebe0 Edward Cree    2017-12-18   57   */
-03714bbb22ebe0 Edward Cree    2017-12-18   58  static unsigned int efx_ef10_pf_mem_bar(struct efx_nic *efx)
-03714bbb22ebe0 Edward Cree    2017-12-18   59  {
-03714bbb22ebe0 Edward Cree    2017-12-18   60  	switch (efx->pci_dev->device) {
-03714bbb22ebe0 Edward Cree    2017-12-18   61  	case 0x0b03: /* SFC9250 PF */
-03714bbb22ebe0 Edward Cree    2017-12-18   62  		return 0;
-03714bbb22ebe0 Edward Cree    2017-12-18   63  	default:
-03714bbb22ebe0 Edward Cree    2017-12-18   64  		return 2;
-03714bbb22ebe0 Edward Cree    2017-12-18   65  	}
-03714bbb22ebe0 Edward Cree    2017-12-18   66  }
-03714bbb22ebe0 Edward Cree    2017-12-18   67  
-03714bbb22ebe0 Edward Cree    2017-12-18   68  /* All VFs use BAR 0/1 for memory */
-03714bbb22ebe0 Edward Cree    2017-12-18   69  static unsigned int efx_ef10_vf_mem_bar(struct efx_nic *efx)
-03714bbb22ebe0 Edward Cree    2017-12-18   70  {
-03714bbb22ebe0 Edward Cree    2017-12-18   71  	return 0;
-03714bbb22ebe0 Edward Cree    2017-12-18   72  }
-03714bbb22ebe0 Edward Cree    2017-12-18   73  
-8127d661e77f5e Ben Hutchings  2013-08-29   74  static unsigned int efx_ef10_mem_map_size(struct efx_nic *efx)
-8127d661e77f5e Ben Hutchings  2013-08-29   75  {
-02246a7f966c2e Shradha Shah   2015-05-06   76  	int bar;
-02246a7f966c2e Shradha Shah   2015-05-06   77  
-03714bbb22ebe0 Edward Cree    2017-12-18   78  	bar = efx->type->mem_bar(efx);
-02246a7f966c2e Shradha Shah   2015-05-06   79  	return resource_size(&efx->pci_dev->resource[bar]);
-8127d661e77f5e Ben Hutchings  2013-08-29   80  }
-8127d661e77f5e Ben Hutchings  2013-08-29   81  
-7a186f4703de6f Daniel Pieczko 2015-07-07   82  static bool efx_ef10_is_vf(struct efx_nic *efx)
-7a186f4703de6f Daniel Pieczko 2015-07-07   83  {
-7a186f4703de6f Daniel Pieczko 2015-07-07   84  	return efx->type->is_vf;
-7a186f4703de6f Daniel Pieczko 2015-07-07   85  }
-7a186f4703de6f Daniel Pieczko 2015-07-07   86  
-88a37de674f8a7 Shradha Shah   2015-05-20   87  #ifdef CONFIG_SFC_SRIOV
-88a37de674f8a7 Shradha Shah   2015-05-20   88  static int efx_ef10_get_vf_index(struct efx_nic *efx)
-88a37de674f8a7 Shradha Shah   2015-05-20   89  {
-88a37de674f8a7 Shradha Shah   2015-05-20   90  	MCDI_DECLARE_BUF(outbuf, MC_CMD_GET_FUNCTION_INFO_OUT_LEN);
-88a37de674f8a7 Shradha Shah   2015-05-20   91  	struct efx_ef10_nic_data *nic_data = efx->nic_data;
-88a37de674f8a7 Shradha Shah   2015-05-20   92  	size_t outlen;
-88a37de674f8a7 Shradha Shah   2015-05-20   93  	int rc;
-88a37de674f8a7 Shradha Shah   2015-05-20   94  
-88a37de674f8a7 Shradha Shah   2015-05-20   95  	rc = efx_mcdi_rpc(efx, MC_CMD_GET_FUNCTION_INFO, NULL, 0, outbuf,
-88a37de674f8a7 Shradha Shah   2015-05-20   96  			  sizeof(outbuf), &outlen);
-88a37de674f8a7 Shradha Shah   2015-05-20   97  	if (rc)
-88a37de674f8a7 Shradha Shah   2015-05-20   98  		return rc;
-88a37de674f8a7 Shradha Shah   2015-05-20   99  	if (outlen < sizeof(outbuf))
-88a37de674f8a7 Shradha Shah   2015-05-20  100  		return -EIO;
-88a37de674f8a7 Shradha Shah   2015-05-20  101  
-88a37de674f8a7 Shradha Shah   2015-05-20 @102  	nic_data->vf_index = MCDI_DWORD(outbuf, GET_FUNCTION_INFO_OUT_VF);
-88a37de674f8a7 Shradha Shah   2015-05-20  103  	return 0;
-88a37de674f8a7 Shradha Shah   2015-05-20  104  }
-88a37de674f8a7 Shradha Shah   2015-05-20  105  #endif
-88a37de674f8a7 Shradha Shah   2015-05-20  106  
+Just to be clear, the goal behind this private pointer isn't to access
+`struct contains_cdev` via a pointer to cdev after `struct contains_cdev`
+is already freed -- it's to avoid a (IMO) previously unavoidable
+use-after-free.
 
-:::::: The code at line 50 was first introduced by commit
-:::::: 8127d661e77f5ec410093bce411f540afa34593f sfc: Add support for Solarflare SFC9100 family
+I see this private pointer as the same as in `struct file`'s
+private_data pointer. There is no contract -- it's all up to the caller.
 
-:::::: TO: Ben Hutchings <bhutchings@solarflare.com>
-:::::: CC: Ben Hutchings <bhutchings@solarflare.com>
+> Ideally the kobject in the cdev structure would not be used by things
+> "outside" of the cdev core, but that ship seems long gone.  So just rely
+> on the structure that this kobject protects, and you should be fine.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+I'm also confused on this point. `struct cdev` has a kobject inside
+which manages the lifetime of cdev instances. But that doesn't protect
+any struct that embeds a `struct cdev` though, right?
+
+[...]
+
+Thanks,
+Daniel

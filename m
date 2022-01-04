@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6ACA48416C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 13:03:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FEF348416D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 13:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231519AbiADMDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 07:03:15 -0500
-Received: from mga01.intel.com ([192.55.52.88]:29016 "EHLO mga01.intel.com"
+        id S230392AbiADMDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 07:03:24 -0500
+Received: from mga17.intel.com ([192.55.52.151]:7344 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230392AbiADMDO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 07:03:14 -0500
+        id S230427AbiADMDW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 07:03:22 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641297794; x=1672833794;
+  t=1641297802; x=1672833802;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nXijfQsKVeJHZwZ1akwwHSS0QqvyR7zcD3/47bWcKds=;
-  b=ZrAzFVdBKyzkFN/MBge8Fsym8tEpCfCs/TA7xjJFaIfqzhCalRd9NO1y
-   BxQwEXARhZoVZ6epEpQH+yvu3v9kEXHmLe7VW3UT32LLsrjRSYkhDjcYV
-   4Y8V0WcJ4domfgGC/4QWnLo9Ei9eD6D+e0Qw3yxAb9RMK1vMdAhYPzQ4X
-   LLXFHHiH5Eg2n6+ubHbOoSj/vm7yvordZbjFXc7lu8sQ9BIpEmvWklvR9
-   RIv9vhuXvFsIvQRw8EfI7PdSxAip9dzal8XBgf46ND3LoUHNgYoyKsfQ6
-   ZooKcKjqmitt26RipjZM8dgUHtez69qp4xshdNMoYWihsirPiCTCvZLHL
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="266480238"
+  bh=Si4q1b2acvmzvksTGeaV8F4uObozN3IQZiVivl85Ni4=;
+  b=SVasCHrfHLxcLB8vajqtSCy1oFPR38Z/XMKVu31iwzcblbhsQa15yQNu
+   6JiN1GT5FPcC3GNkWSQBmZvIHLmw2TNX/v4EAqdCEJ9/8FzAMtnH1GRio
+   TI0s8LAi05cm2UTDTBVia4wW/RusZYBhcXtTIz5sUE4JFjrbXaGYUduQD
+   WeewuJKpYDWvjdAFgTqhofo+pI/4eCHEnZanPUKpjEfq1ypERkK5yO6OI
+   4h91A3rdQhOtWNiL/Nosh49Upov1jWdr44b7OjUwNYdevEJ1LpO1EW9uA
+   x1WsiDW3rjE8w5zjzIjgj9bHZoYklrO7VEkAaByGg/vIUaW61E1CA9k1/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="222885602"
 X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
-   d="scan'208";a="266480238"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 04:02:50 -0800
+   d="scan'208";a="222885602"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 04:02:49 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
-   d="scan'208";a="574002026"
+   d="scan'208";a="688546698"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 04 Jan 2022 04:02:48 -0800
+  by orsmga005.jf.intel.com with ESMTP; 04 Jan 2022 04:02:47 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1n4iWd-000FIZ-EP; Tue, 04 Jan 2022 12:02:47 +0000
-Date:   Tue, 4 Jan 2022 20:02:33 +0800
+        id 1n4iWd-000FIT-Ay; Tue, 04 Jan 2022 12:02:47 +0000
+Date:   Tue, 4 Jan 2022 20:02:36 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Felix Fietkau <nbd@nbd.name>
-Subject: [nbd168-wireless:mt76 14/63]
- drivers/net/wireless/mediatek/mt76/mt7915/mt7915.h:484:16: error: implicit
- declaration of function 'is_mt7915'
-Message-ID: <202201041929.zvGUbHKt-lkp@intel.com>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [jolsa-perf:kprobe/multi 9/14] kernel/bpf/syscall.c:3101:25: error:
+ implicit declaration of function 'get_kretprobe'
+Message-ID: <202201041923.vrtf9Rke-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -53,70 +52,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/nbd168/wireless mt76
-head:   f30499df8b27936cb612ef95630565bf06f48004
-commit: e17a21440b61fcd6086226569f638f5704467d14 [14/63] mt76: mt7915: rely on mt76_connac_mcu_alloc_sta_req
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220104/202201041929.zvGUbHKt-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.2.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git kprobe/multi
+head:   27d253a29de023f664387fcc049edeeaadf23c8e
+commit: b8b03607ea9875a92ea20941ebe6813fb052aeff [9/14] bpf: Add kprobe link for attaching raw kprobes
+config: i386-buildonly-randconfig-r001-20220104 (https://download.01.org/0day-ci/archive/20220104/202201041923.vrtf9Rke-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project b50fea47b6c454581fce89af359f3afe5154986c)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/nbd168/wireless/commit/e17a21440b61fcd6086226569f638f5704467d14
-        git remote add nbd168-wireless https://github.com/nbd168/wireless
-        git fetch --no-tags nbd168-wireless mt76
-        git checkout e17a21440b61fcd6086226569f638f5704467d14
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=b8b03607ea9875a92ea20941ebe6813fb052aeff
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf kprobe/multi
+        git checkout b8b03607ea9875a92ea20941ebe6813fb052aeff
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/net/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-Note: the nbd168-wireless/mt76 HEAD f30499df8b27936cb612ef95630565bf06f48004 builds fine.
-      It only hurts bisectability.
-
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/net/wireless/mediatek/mt76/mt7915/pci.c:11:
-   drivers/net/wireless/mediatek/mt76/mt7915/mt7915.h: In function 'mt7915_wtbl_size':
->> drivers/net/wireless/mediatek/mt76/mt7915/mt7915.h:484:16: error: implicit declaration of function 'is_mt7915' [-Werror=implicit-function-declaration]
-     484 |         return is_mt7915(&dev->mt76) ? MT7915_WTBL_SIZE : MT7916_WTBL_SIZE;
-         |                ^~~~~~~~~
-   cc1: some warnings being treated as errors
---
-   In file included from drivers/net/wireless/mediatek/mt76/mt7915/init.c:8:
-   drivers/net/wireless/mediatek/mt76/mt7915/mt7915.h: In function 'mt7915_wtbl_size':
->> drivers/net/wireless/mediatek/mt76/mt7915/mt7915.h:484:16: error: implicit declaration of function 'is_mt7915' [-Werror=implicit-function-declaration]
-     484 |         return is_mt7915(&dev->mt76) ? MT7915_WTBL_SIZE : MT7916_WTBL_SIZE;
-         |                ^~~~~~~~~
-   In file included from drivers/net/wireless/mediatek/mt76/mt7915/../mt76_connac_mcu.h:7,
-                    from drivers/net/wireless/mediatek/mt76/mt7915/mcu.h:7,
-                    from drivers/net/wireless/mediatek/mt76/mt7915/init.c:10:
-   drivers/net/wireless/mediatek/mt76/mt7915/../mt76_connac.h: At top level:
->> drivers/net/wireless/mediatek/mt76/mt7915/../mt76_connac.h:103:20: error: conflicting types for 'is_mt7915'; have 'bool(struct mt76_dev *)' {aka '_Bool(struct mt76_dev *)'}
-     103 | static inline bool is_mt7915(struct mt76_dev *dev)
-         |                    ^~~~~~~~~
-   In file included from drivers/net/wireless/mediatek/mt76/mt7915/init.c:8:
-   drivers/net/wireless/mediatek/mt76/mt7915/mt7915.h:484:16: note: previous implicit declaration of 'is_mt7915' with type 'int()'
-     484 |         return is_mt7915(&dev->mt76) ? MT7915_WTBL_SIZE : MT7916_WTBL_SIZE;
-         |                ^~~~~~~~~
-   cc1: some warnings being treated as errors
+   In file included from kernel/bpf/syscall.c:35:
+   include/linux/kprobes.h:77:21: error: field has incomplete type 'struct ftrace_ops'
+                   struct ftrace_ops ops;
+                                     ^
+   include/linux/ftrace.h:332:8: note: forward declaration of 'struct ftrace_ops'
+   struct ftrace_ops;
+          ^
+>> kernel/bpf/syscall.c:3101:25: error: implicit declaration of function 'get_kretprobe' [-Werror,-Wimplicit-function-declaration]
+           struct kretprobe *rp = get_kretprobe(ri);
+                                  ^
+   kernel/bpf/syscall.c:3101:25: note: did you mean 'get_kprobe'?
+   include/linux/kprobes.h:479:30: note: 'get_kprobe' declared here
+   static inline struct kprobe *get_kprobe(void *addr)
+                                ^
+   kernel/bpf/syscall.c:3101:20: warning: incompatible integer to pointer conversion initializing 'struct kretprobe *' with an expression of type 'int' [-Wint-conversion]
+           struct kretprobe *rp = get_kretprobe(ri);
+                             ^    ~~~~~~~~~~~~~~~~~
+   1 warning and 2 errors generated.
 
 
-vim +/is_mt7915 +484 drivers/net/wireless/mediatek/mt76/mt7915/mt7915.h
+vim +/get_kretprobe +3101 kernel/bpf/syscall.c
 
-e57b7901469fc0b Ryder Lee 2020-04-25  481  
-704f2ebdf4b17cb Bo Jiao   2021-12-20  482  static inline u16 mt7915_wtbl_size(struct mt7915_dev *dev)
-704f2ebdf4b17cb Bo Jiao   2021-12-20  483  {
-704f2ebdf4b17cb Bo Jiao   2021-12-20 @484  	return is_mt7915(&dev->mt76) ? MT7915_WTBL_SIZE : MT7916_WTBL_SIZE;
-704f2ebdf4b17cb Bo Jiao   2021-12-20  485  }
-704f2ebdf4b17cb Bo Jiao   2021-12-20  486  
-
-:::::: The code at line 484 was first introduced by commit
-:::::: 704f2ebdf4b17cb36bdc9d1379b84c41891cb351 mt76: mt7915: enlarge wcid size to 544
-
-:::::: TO: Bo Jiao <Bo.Jiao@mediatek.com>
-:::::: CC: Felix Fietkau <nbd@nbd.name>
+  3097	
+  3098	static int
+  3099	kretprobe_dispatcher(struct kretprobe_instance *ri, struct pt_regs *regs)
+  3100	{
+> 3101		struct kretprobe *rp = get_kretprobe(ri);
+  3102		struct bpf_kprobe_link *kprobe_link;
+  3103	
+  3104		kprobe_link = container_of(rp, struct bpf_kprobe_link, rp);
+  3105		return kprobe_link_prog_run(kprobe_link, regs);
+  3106	}
+  3107	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

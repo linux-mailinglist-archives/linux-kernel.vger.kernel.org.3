@@ -2,93 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2FA2484A6A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 23:08:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 909E0484A70
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 23:08:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235183AbiADWHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 17:07:55 -0500
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:41830 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbiADWHy (ORCPT
+        id S235216AbiADWIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 17:08:31 -0500
+Received: from slot0.jllresort.com ([62.197.136.5]:55261 "EHLO
+        slot0.jllresort.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235189AbiADWI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 17:07:54 -0500
-Received: by mail-ot1-f45.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so8069686otl.8;
-        Tue, 04 Jan 2022 14:07:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=WpuTEnMsfacvD0VOURlK31DWnAVBUgJmXM4X3B1dfVw=;
-        b=ESwvf2GL6leO2H/LypLn3p0gDz/P02Hk73G++uSypsIoFurtZua5ihO1EXTdrus7hg
-         pA4fzBHjbxeSCvBhlvPiMwFp4tY9t/gj9VEytF5c0IOPApRiFez/uAOGU3229v5QR12b
-         ZRqiCNK2LOLkhzoe/5LWURach7XMY0JQR/0EcqKNqfsSNsSnC60rq5hL7pExnJb8rLF/
-         FYzxJSXk5U2ZVqfvZtlbg3S86qrtDJH6LbtYiq/D6fXYVoDKY0+p7aji6Ml4uTQWhhWG
-         5u/0LWDb1eoJRstnOgwKyw2+C/+Z53geqjjzBQrcHVyRqGU2alZ+a2nuoOy/iOXkGHFK
-         8+CQ==
-X-Gm-Message-State: AOAM53202FBVLsL9mAeM3LKIrTPr18QFT8xAH0BxowvZy90DafM589pe
-        QF0GyRSqlKMqneBv7FgZEA==
-X-Google-Smtp-Source: ABdhPJwcOkAgoVIzZ4/aXLTGe5sAZbXE/iR7xEi+gBzUL+p6caHDpCCjUdLlmlzY3dynP6W95IYHeg==
-X-Received: by 2002:a05:6830:1d49:: with SMTP id p9mr37021965oth.108.1641334074202;
-        Tue, 04 Jan 2022 14:07:54 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id y14sm7531050otk.39.2022.01.04.14.07.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 14:07:53 -0800 (PST)
-Received: (nullmailer pid 1526475 invoked by uid 1000);
-        Tue, 04 Jan 2022 22:07:52 -0000
-Date:   Tue, 4 Jan 2022 16:07:52 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        openbmc@lists.ozlabs.org, Tomer Maimon <tmaimon77@gmail.com>,
-        Joel Stanley <joel@jms.id.au>, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>
-Subject: Re: [PATCH v3 1/9] dt-bindings: arm/npcm: Add binding for global
- control registers (GCR)
-Message-ID: <YdTFOLEbcWs8tu1D@robh.at.kernel.org>
-References: <20211224200935.93817-1-j.neuschaefer@gmx.net>
- <20211224200935.93817-2-j.neuschaefer@gmx.net>
+        Tue, 4 Jan 2022 17:08:29 -0500
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=jllresort.com;
+ h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding; i=ele.mon@jllresort.com;
+ bh=YDWzp14VIWtBkcPJLEhMcpbXs60=;
+ b=tQQdjWCaY18upTA0fzqrNGQx2UqZpUw+foinTGNkXDTKHW2yRjtsXDSHP5rlJYRU4sJoujEFNWw+
+   q6WDbAw62OgGKY7w6Lur0dEFTQ8iBZr3S/OuBkqjYneuhqnpEpUucuhInSTOL9EcoW/l6/4UW8JP
+   Apn5BdiibWJthHTpeBJ45oRXw2WDpBCaGXNvdte3lWZPIZtGHsXvoSQlyj6ijGD2giCfBJZ0d6kX
+   jqHSr5Sm2Ec/PWcZ3100UKc8c52GYeoCLpccCr8PInXijFCatAbgZ8BYjTqGZEWC251rLIvdarLb
+   10WUBpqGyVMYeNORpWmRrFuqkikZ6uX89jRJCQ==
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=jllresort.com;
+ b=U+TKegk4/510XGBYbKcEXmR15DVRvCtF6K3tmpaey3yb2d5wssTzjz2i0kz+kycE3Lz6gT9tfmYh
+   Eqbb7TnGU6W4s5PV33Xwhfer9Ygl4hQUJlCnzJDfWUeg0g6L1Wrz+VDAH5YInWqFNXYaXFgqdVKs
+   W2HL7KOQxPWWwlWqHFGqxg26iph/j7r26JwEG3FzG3z2ENnLroZ/+Q1ClgPUbPGVsUF3+EQTqHVD
+   8VGHmrpJzB3Y5tbTjaGXhMsue4XMeTiuaBu+xwUoTg9v3Kwm4eKgid5VfTThK/MQnEhHCTexc/DH
+   VgQq8X6HTXKZBc+N5eFvS8nT/dserDYnrW/C9g==;
+Reply-To: ayvazmustafa231@gmail.com
+From:   ele.mon@jllresort.com
+To:     linux-kernel@vger.kernel.org
+Subject: Attention:
+Date:   4 Jan 2022 23:08:21 +0100
+Message-ID: <20220104230821.88916C8687CE93A6@jllresort.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211224200935.93817-2-j.neuschaefer@gmx.net>
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 24, 2021 at 09:09:27PM +0100, Jonathan Neuschäfer wrote:
-> A nuvoton,*-gcr node is present in nuvoton-common-npcm7xx.dtsi and will
-> be added to nuvoton-wpcm450.dtsi. It is necessary for the NPCM7xx and
-> WPCM450 pinctrl drivers, and may later be used to retrieve SoC model and
-> version information.
-> 
-> This patch adds a binding to describe this node.
-> 
-> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-> 
-> ---
-> v3:
-> - Make a few changes suggested by Rob Herring
-> - Change name of mux-controller node to appease the linter
-> 
-> v2:
-> - https://lore.kernel.org/lkml/20211207210823.1975632-2-j.neuschaefer@gmx.net/
-> - Rename node in example to syscon@800000
-> - Add subnode to example
-> 
-> v1:
-> - https://lore.kernel.org/lkml/20210602120329.2444672-2-j.neuschaefer@gmx.net/
-> ---
->  .../bindings/arm/npcm/nuvoton,gcr.yaml        | 48 +++++++++++++++++++
->  1 file changed, 48 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/npcm/nuvoton,gcr.yaml
+Greetings to you linux-kernel,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+I was wondering if you got my previous email? I have been trying=20
+to reach you by email linux-kernel@vger.kernel.org, kindly get=20
+back to me swiftly, it is very important.
+
+Thanks
+Mustafa Ayvaz
+Email: mustafa.ayvaz@ayvazburosu.com

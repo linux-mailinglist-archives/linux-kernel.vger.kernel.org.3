@@ -2,410 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 590D0483C31
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 08:24:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B487B483C3B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 08:27:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233136AbiADHYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 02:24:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40540 "EHLO
+        id S233179AbiADH1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 02:27:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231707AbiADHYK (ORCPT
+        with ESMTP id S231707AbiADH1q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 02:24:10 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B312DC061761
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 23:24:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=unZt/mihnLz4hiFRhMdSNa/BS3qWIgq63iRhnByYYVo=; b=4XK7YTVKpcHOJQ2gmL79c4z2f9
-        jJaX1/gssDbCyd72XM2V54stpPPHQrrmRxm0hWbcIcuUl4jmPNKiM2HDdcsr5mgD8bUscbs2zuEcb
-        tbL8uN2+bQNs3ku89M9ISo4fCU0W+5lixEAKEt6ZFlUzP3+0Cl5bTAQhmQzwP7ONn8Dx6LjTvV4UO
-        p3HSyNEbQYnRG1hdrIabH2neIX6DTmZxB/sCz2DnBDcCp1cmrGyr3R8Bb9f+zjZj8+ZT5ezhZDPFd
-        HgYUgs01RG7jsVsbjm/X8UiFO/+8Pz4JwMx6GHFVk5QWLJIR+NM5rFzb8pEho4J0WhvrRQMig7tsF
-        6akbYjaA==;
-Received: from [2001:4bb8:184:3f95:15c:3e66:a12b:4469] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n4eAz-00AVXt-Q4; Tue, 04 Jan 2022 07:24:10 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     axboe@kernel.dk
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] task_work: simplify the task_work_add() interface
-Date:   Tue,  4 Jan 2022 08:24:07 +0100
-Message-Id: <20220104072407.165090-1-hch@lst.de>
-X-Mailer: git-send-email 2.30.2
+        Tue, 4 Jan 2022 02:27:46 -0500
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BC9C061761;
+        Mon,  3 Jan 2022 23:27:46 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: hector@marcansoft.com)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 56BCF419BC;
+        Tue,  4 Jan 2022 07:27:36 +0000 (UTC)
+From:   Hector Martin <marcan@marcan.st>
+To:     Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com
+Subject: [PATCH v2 00/35] brcmfmac: Support Apple T2 and M1 platforms
+Date:   Tue,  4 Jan 2022 16:26:23 +0900
+Message-Id: <20220104072658.69756-1-marcan@marcan.st>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provide a low-level task_work_add_nonotify interface that just adds
-the work to the list and open code the TWA_SIGNAL and TWA_NONE callers
-using it.  task_work_add() itself now only handles the common TWA_RESUME
-case and can drop the notify argument.
+Hi everyone,
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- arch/x86/kernel/cpu/mce/core.c |  2 +-
- arch/x86/mm/tlb.c              |  2 +-
- drivers/acpi/apei/ghes.c       |  3 +-
- drivers/android/binder.c       |  2 +-
- fs/file_table.c                |  2 +-
- fs/io-wq.c                     |  3 +-
- fs/io_uring.c                  | 16 +++++-----
- fs/namespace.c                 |  2 +-
- include/linux/task_work.h      | 11 ++-----
- include/linux/tracehook.h      |  2 +-
- kernel/events/uprobes.c        |  2 +-
- kernel/irq/manage.c            |  2 +-
- kernel/sched/fair.c            |  2 +-
- kernel/task_work.c             | 56 ++++++++++++++++++----------------
- kernel/time/posix-cpu-timers.c |  2 +-
- security/keys/keyctl.c         |  2 +-
- security/yama/yama_lsm.c       |  2 +-
- 17 files changed, 55 insertions(+), 58 deletions(-)
+Happy new year! This 35-patch series adds proper support for the
+Broadcom FullMAC chips used on Apple T2 and M1 platforms:
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 5818b837fd4d4..a9da9a968163c 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -1349,7 +1349,7 @@ static void queue_task_work(struct mce *m, char *msg, void (*func)(struct callba
- 	if (count > 1)
- 		return;
- 
--	task_work_add(current, &current->mce_kill_me, TWA_RESUME);
-+	task_work_add(current, &current->mce_kill_me);
- }
- 
- /* Handle unconfigured int18 (should never happen) */
-diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
-index a6cf56a149393..8db8f4f7001f8 100644
---- a/arch/x86/mm/tlb.c
-+++ b/arch/x86/mm/tlb.c
-@@ -355,7 +355,7 @@ static void l1d_flush_evaluate(unsigned long prev_mm, unsigned long next_mm,
- 	if (this_cpu_read(cpu_info.smt_active)) {
- 		clear_ti_thread_flag(&next->thread_info, TIF_SPEC_L1D_FLUSH);
- 		next->l1d_flush_kill.func = l1d_flush_force_sigbus;
--		task_work_add(next, &next->l1d_flush_kill, TWA_RESUME);
-+		task_work_add(next, &next->l1d_flush_kill);
- 	}
- }
- 
-diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-index 0c5c9acc6254e..12bd63b9af308 100644
---- a/drivers/acpi/apei/ghes.c
-+++ b/drivers/acpi/apei/ghes.c
-@@ -988,8 +988,7 @@ static void ghes_proc_in_irq(struct irq_work *irq_work)
- 		if (task_work_pending && current->mm != &init_mm) {
- 			estatus_node->task_work.func = ghes_kick_task_work;
- 			estatus_node->task_work_cpu = smp_processor_id();
--			ret = task_work_add(current, &estatus_node->task_work,
--					    TWA_RESUME);
-+			ret = task_work_add(current, &estatus_node->task_work);
- 			if (ret)
- 				estatus_node->task_work.func = NULL;
- 		}
-diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-index 8351c5638880b..eeef8dfde606b 100644
---- a/drivers/android/binder.c
-+++ b/drivers/android/binder.c
-@@ -1858,7 +1858,7 @@ static void binder_deferred_fd_close(int fd)
- 	close_fd_get_file(fd, &twcb->file);
- 	if (twcb->file) {
- 		filp_close(twcb->file, current->files);
--		task_work_add(current, &twcb->twork, TWA_RESUME);
-+		task_work_add(current, &twcb->twork);
- 	} else {
- 		kfree(twcb);
- 	}
-diff --git a/fs/file_table.c b/fs/file_table.c
-index 57edef16dce46..2fd8c17fd2708 100644
---- a/fs/file_table.c
-+++ b/fs/file_table.c
-@@ -369,7 +369,7 @@ void fput_many(struct file *file, unsigned int refs)
- 
- 		if (likely(!in_interrupt() && !(task->flags & PF_KTHREAD))) {
- 			init_task_work(&file->f_u.fu_rcuhead, ____fput);
--			if (!task_work_add(task, &file->f_u.fu_rcuhead, TWA_RESUME))
-+			if (!task_work_add(task, &file->f_u.fu_rcuhead))
- 				return;
- 			/*
- 			 * After this task has run exit_task_work(),
-diff --git a/fs/io-wq.c b/fs/io-wq.c
-index b9e447a956c0e..5136891e5bdc4 100644
---- a/fs/io-wq.c
-+++ b/fs/io-wq.c
-@@ -364,7 +364,8 @@ static bool io_queue_worker_create(struct io_worker *worker,
- 	atomic_inc(&wq->worker_refs);
- 	init_task_work(&worker->create_work, func);
- 	worker->create_index = acct->index;
--	if (!task_work_add(wq->task, &worker->create_work, TWA_SIGNAL)) {
-+	if (!task_work_add_nonotify(wq->task, &worker->create_work)) {
-+		set_notify_signal(wq->task);
- 		/*
- 		 * EXIT may have been set after checking it above, check after
- 		 * adding the task_work and remove any creation item if it is
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 6a4e6b029f04f..2b81d1591537c 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -2376,7 +2376,6 @@ static void io_req_task_work_add(struct io_kiocb *req, bool priority)
- {
- 	struct task_struct *tsk = req->task;
- 	struct io_uring_task *tctx = tsk->io_uring;
--	enum task_work_notify_mode notify;
- 	struct io_wq_work_node *node;
- 	unsigned long flags;
- 	bool running;
-@@ -2399,14 +2398,15 @@ static void io_req_task_work_add(struct io_kiocb *req, bool priority)
- 
- 	/*
- 	 * SQPOLL kernel thread doesn't need notification, just a wakeup. For
--	 * all other cases, use TWA_SIGNAL unconditionally to ensure we're
--	 * processing task_work. There's no reliable way to tell if TWA_RESUME
--	 * will do the job.
-+	 * all other cases, use set_notify_signal unconditionally to ensure
-+	 * we're processing the task_work. There's no reliable way to tell if
-+	 * task_work_add will do the job.
- 	 */
--	notify = (req->ctx->flags & IORING_SETUP_SQPOLL) ? TWA_NONE : TWA_SIGNAL;
--	if (likely(!task_work_add(tsk, &tctx->task_work, notify))) {
--		if (notify == TWA_NONE)
-+	if (likely(!task_work_add_nonotify(tsk, &tctx->task_work))) {
-+		if (req->ctx->flags & IORING_SETUP_SQPOLL)
- 			wake_up_process(tsk);
-+		else
-+			set_notify_signal(tsk);
- 		return;
- 	}
- 
-@@ -9668,7 +9668,7 @@ static __cold void io_ring_exit_work(struct work_struct *work)
- 					ctx_node);
- 		/* don't spin on a single task if cancellation failed */
- 		list_rotate_left(&ctx->tctx_list);
--		ret = task_work_add(node->task, &exit.task_work, TWA_SIGNAL);
-+		ret = task_work_add_nonotify(node->task, &exit.task_work);
- 		if (WARN_ON_ONCE(ret))
- 			continue;
- 
-diff --git a/fs/namespace.c b/fs/namespace.c
-index 4e026e366d734..8cbd03d67aa33 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -1235,7 +1235,7 @@ static void mntput_no_expire(struct mount *mnt)
- 		struct task_struct *task = current;
- 		if (likely(!(task->flags & PF_KTHREAD))) {
- 			init_task_work(&mnt->mnt_rcu, __cleanup_mnt);
--			if (!task_work_add(task, &mnt->mnt_rcu, TWA_RESUME))
-+			if (!task_work_add(task, &mnt->mnt_rcu))
- 				return;
- 		}
- 		if (llist_add(&mnt->mnt_llist, &delayed_mntput_list))
-diff --git a/include/linux/task_work.h b/include/linux/task_work.h
-index 5b8a93f288bb4..af27deee1a559 100644
---- a/include/linux/task_work.h
-+++ b/include/linux/task_work.h
-@@ -13,14 +13,9 @@ init_task_work(struct callback_head *twork, task_work_func_t func)
- 	twork->func = func;
- }
- 
--enum task_work_notify_mode {
--	TWA_NONE,
--	TWA_RESUME,
--	TWA_SIGNAL,
--};
--
--int task_work_add(struct task_struct *task, struct callback_head *twork,
--			enum task_work_notify_mode mode);
-+int task_work_add(struct task_struct *task, struct callback_head *twork);
-+int task_work_add_nonotify(struct task_struct *task,
-+		struct callback_head *twork);
- 
- struct callback_head *task_work_cancel_match(struct task_struct *task,
- 	bool (*match)(struct callback_head *, void *data), void *data);
-diff --git a/include/linux/tracehook.h b/include/linux/tracehook.h
-index 2564b7434b4d7..a2f916e9eca35 100644
---- a/include/linux/tracehook.h
-+++ b/include/linux/tracehook.h
-@@ -203,7 +203,7 @@ static inline void tracehook_notify_resume(struct pt_regs *regs)
- 
- /*
-  * called by exit_to_user_mode_loop() if ti_work & _TIF_NOTIFY_SIGNAL. This
-- * is currently used by TWA_SIGNAL based task_work, which requires breaking
-+ * is currently used by signal based task_work, which requires breaking
-  * wait loops to ensure that task_work is noticed and run.
-  */
- static inline void tracehook_notify_signal(void)
-diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-index 6357c3580d07b..6c12d9f0dc647 100644
---- a/kernel/events/uprobes.c
-+++ b/kernel/events/uprobes.c
-@@ -1823,7 +1823,7 @@ void uprobe_copy_process(struct task_struct *t, unsigned long flags)
- 
- 	t->utask->dup_xol_addr = area->vaddr;
- 	init_task_work(&t->utask->dup_xol_work, dup_xol_work);
--	task_work_add(t, &t->utask->dup_xol_work, TWA_RESUME);
-+	task_work_add(t, &t->utask->dup_xol_work);
- }
- 
- /*
-diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
-index f23ffd30385b1..4557319303374 100644
---- a/kernel/irq/manage.c
-+++ b/kernel/irq/manage.c
-@@ -1268,7 +1268,7 @@ static int irq_thread(void *data)
- 		handler_fn = irq_thread_fn;
- 
- 	init_task_work(&on_exit_work, irq_thread_dtor);
--	task_work_add(current, &on_exit_work, TWA_NONE);
-+	task_work_add_nonotify(current, &on_exit_work);
- 
- 	irq_thread_check_affinity(desc, action);
- 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 095b0aa378df0..9aaa900beb55b 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -2880,7 +2880,7 @@ static void task_tick_numa(struct rq *rq, struct task_struct *curr)
- 		curr->node_stamp += period;
- 
- 		if (!time_before(jiffies, curr->mm->numa_next_scan))
--			task_work_add(curr, work, TWA_RESUME);
-+			task_work_add(curr, work);
- 	}
- }
- 
-diff --git a/kernel/task_work.c b/kernel/task_work.c
-index 1698fbe6f0e13..4a547d80d6493 100644
---- a/kernel/task_work.c
-+++ b/kernel/task_work.c
-@@ -6,22 +6,16 @@
- static struct callback_head work_exited; /* all we need is ->next == NULL */
- 
- /**
-- * task_work_add - ask the @task to execute @work->func()
-+ * task_work_add_nonotify - ask the @task to execute @work->func()
-  * @task: the task which should run the callback
-  * @work: the callback to run
-  * @notify: how to notify the targeted task
-  *
-- * Queue @work for task_work_run() below and notify the @task if @notify
-- * is @TWA_RESUME or @TWA_SIGNAL. @TWA_SIGNAL works like signals, in that the
-- * it will interrupt the targeted task and run the task_work. @TWA_RESUME
-- * work is run only when the task exits the kernel and returns to user mode,
-- * or before entering guest mode. Fails if the @task is exiting/exited and thus
-- * it can't process this @work. Otherwise @work->func() will be called when the
-- * @task goes through one of the aforementioned transitions, or exits.
-+ * Queue @work for task_work_run() below.  If the targeted task is exiting, then
-+ * an error is returned and the work item is not queued. It's up to the caller
-+ * to arrange for an alternative mechanism in that case.
-  *
-- * If the targeted task is exiting, then an error is returned and the work item
-- * is not queued. It's up to the caller to arrange for an alternative mechanism
-- * in that case.
-+ * The caller needs to notify @task to make sure @work is actually run.
-  *
-  * Note: there is no ordering guarantee on works queued here. The task_work
-  * list is LIFO.
-@@ -29,8 +23,7 @@ static struct callback_head work_exited; /* all we need is ->next == NULL */
-  * RETURNS:
-  * 0 if succeeds or -ESRCH.
-  */
--int task_work_add(struct task_struct *task, struct callback_head *work,
--		  enum task_work_notify_mode notify)
-+int task_work_add_nonotify(struct task_struct *task, struct callback_head *work)
- {
- 	struct callback_head *head;
- 
-@@ -44,23 +37,32 @@ int task_work_add(struct task_struct *task, struct callback_head *work,
- 		work->next = head;
- 	} while (cmpxchg(&task->task_works, head, work) != head);
- 
--	switch (notify) {
--	case TWA_NONE:
--		break;
--	case TWA_RESUME:
--		set_notify_resume(task);
--		break;
--	case TWA_SIGNAL:
--		set_notify_signal(task);
--		break;
--	default:
--		WARN_ON_ONCE(1);
--		break;
--	}
--
- 	return 0;
- }
- 
-+/**
-+ * task_work_add - ask the @task to execute @work->func()
-+ * @task: the task which should run the callback
-+ * @work: the callback to run
-+ * @notify: how to notify the targeted task
-+ *
-+ * Queue @work using task_work_add_nonotify() and notify the task to actually
-+ * run it when the task exits the kernel and returns to user mode, or before
-+ * entering guest mode.
-+ *
-+ * RETURNS:
-+ * 0 if succeeds or -ESRCH.
-+ */
-+int task_work_add(struct task_struct *task, struct callback_head *work)
-+{
-+	int ret;
-+
-+	ret = task_work_add_nonotify(task, work);
-+	if (!ret)
-+		set_notify_resume(task);
-+	return ret;
-+}
-+
- /**
-  * task_work_cancel_match - cancel a pending work added by task_work_add()
-  * @task: the task which should execute the work
-diff --git a/kernel/time/posix-cpu-timers.c b/kernel/time/posix-cpu-timers.c
-index 96b4e78104266..c8808b32dc144 100644
---- a/kernel/time/posix-cpu-timers.c
-+++ b/kernel/time/posix-cpu-timers.c
-@@ -1201,7 +1201,7 @@ static inline void __run_posix_cpu_timers(struct task_struct *tsk)
- 
- 	/* Schedule task work to actually expire the timers */
- 	tsk->posix_cputimers_work.scheduled = true;
--	task_work_add(tsk, &tsk->posix_cputimers_work.work, TWA_RESUME);
-+	task_work_add(tsk, &tsk->posix_cputimers_work.work);
- }
- 
- static inline bool posix_cpu_timers_enable_work(struct task_struct *tsk,
-diff --git a/security/keys/keyctl.c b/security/keys/keyctl.c
-index 96a92a645216d..331a825ff6616 100644
---- a/security/keys/keyctl.c
-+++ b/security/keys/keyctl.c
-@@ -1693,7 +1693,7 @@ long keyctl_session_to_parent(void)
- 
- 	/* the replacement session keyring is applied just prior to userspace
- 	 * restarting */
--	ret = task_work_add(parent, newwork, TWA_RESUME);
-+	ret = task_work_add(parent, newwork);
- 	if (!ret)
- 		newwork = NULL;
- unlock:
-diff --git a/security/yama/yama_lsm.c b/security/yama/yama_lsm.c
-index 06e226166aab3..2af248939dd46 100644
---- a/security/yama/yama_lsm.c
-+++ b/security/yama/yama_lsm.c
-@@ -99,7 +99,7 @@ static void report_access(const char *access, struct task_struct *target,
- 	info->access = access;
- 	info->target = target;
- 	info->agent = agent;
--	if (task_work_add(current, &info->work, TWA_RESUME) == 0)
-+	if (task_work_add(current, &info->work) == 0)
- 		return; /* success */
- 
- 	WARN(1, "report_access called from exiting task");
+- BCM4355C1
+- BCM4364B2/B3
+- BCM4377B3
+- BCM4378B1
+- BCM4387C2
+
+As usual for Apple, things are ever so slightly different on these
+machines from every other Broadcom platform. In particular, besides
+the normal device/firmware support changes, a large fraction of this
+series deals with selecting and loading the correct firmware. These
+platforms use multiple dimensions for firmware selection, and the values
+for these dimensions are variously sourced from DT or OTP (see the
+commit message for #9 for the gory details).
+
+This is what is included:
+
+# 01: DT bindings (M1 platforms)
+
+On M1 platforms, we use the device tree to provide properties for PCIe
+devices like these cards. This patch re-uses the existing SDIO binding
+and adds the compatibles for these PCIe chips, plus the properties we
+need to correctly instantiate them:
+
+- brcm,board-type: Overrides the board-type which is used for firmware
+  selection on all platforms, which normally comes from the DMI device
+  name or the root node compatible. Apple have their own
+  mapping/identifier here ("island" name), so we prefix it with "apple,"
+  and use it as the board-type override.
+
+- apple,antenna-sku: Specifies the specific antenna configuration in a
+  produt. This would normally be filled in by the bootloader from
+  device-specific configuration data. On ACPI platforms, this is
+  provided via ACPI instead. This is used to build the funky Apple
+  firmware filenames. Note: it seems the antenna doesn't actually matter
+  for any of the above platforms (they are all aliases to the same files
+  and our firmware copier collapses down this dimension), but since
+  Apple do support having different firmware or NVRAM depending on
+  antenna SKU, we ough to support it in case it starts mattering on a
+  future platform.
+
+- brcm,cal-blob: A calibration blob for the Wi-Fi module, specific to a
+  given unit. On most platforms, this is stored in SROM on the module,
+  and does not need to be provided externally, but Apple instead stores
+  this in platform configuration for M1 machines and the driver needs to
+  upload it to the device after initializing the firmware. This has a
+  generic brcm name, since a priori this mechanism shouldn't be
+  Apple-specific, although chances are only Apple do it like this so far.
+
+# 02~09: Apple firmware selection (M1 platforms)
+
+These patches add support for choosing firmwares (binaries, CLM blobs,
+and NVRAM configs alike) using all the dimensions that Apple uses. The
+firmware files are renamed to conform to the existing brcmfmac
+convention. See the commit message for #9 for the gory details as to how
+these filenames are constructed. The data to make the firmware selection
+comes from the above DT properties and from an OTP ROM on the chips on
+M1 platforms.
+
+# 10~14: BCM4378 support (M1 T8103 platforms)
+
+These patches make changes required to support the BCM4378 chip present
+in Apple M1 (T8103) platforms. This includes adding support for passing
+in the MAC address via the DT (this is standard on DT platforms) since
+the chip does not have a burned-in MAC; adding support for PCIe core
+revs >64 (which moved around some registers); tweaking ring buffer
+sizes; and fixing a bug.
+
+# 15~20: BCM4355/4364/4377 support (T2 platforms)
+
+These patches add support for the chips found across T2 Mac platforms.
+This includes ACPI support for fetching properties instead of using DT,
+providing a buffer of entropy to the devices (required for some of the
+firmwares), and adding the required IDs. This also fixes the BCM4364
+firmware naming; it was added without consideration that there are two
+incompatible chip revisions. To avoid this ambiguity in the future, all
+the chips added by this series use firmware names ending in the revision
+(apple/brcm style, that is letter+number), so that future revisions can
+be added without creating confusion.
+
+# 21~27: BCM4387 support (M1 Pro/Max T600x platforms)
+
+These patches add support for the newer BCM4387 present in the recently
+launched M1 Pro/Max platforms. This chip requires a few changes to D11
+reset behavior and TCM size calculation to work properly, and it uses
+newer firmware which needs support for newer firmware interfaces
+in the cfg80211 support. Backwards compatibility is maintained via
+feature flags discovered at runtime from information provided by the
+firmware.
+
+A note on #26: it seems this chip broke the old hack of passing the PMK
+in hexdump form as a PSK, but it seems brcmfmac chips supported passing
+it in binary all along. I'm not sure why it was done this way in the
+Linux driver, but it seems OpenBSD always did it in binary and works
+with older chips, so this should be reasonably well tested. Any further
+insight as to why this was done this way would be appreciated.
+
+# 28~32: Fixes
+
+These are just random things I came across while developing this series.
+#31 is required to avoid a compile warning in subsequent patches. None
+of these are strictly required to support these chips/platforms.
+
+# 33-35: TxCap and calibration blobs
+
+These patches add support for uploading TxCap blobs, which are another
+kind of firmware blob that Apple platforms use (T2 and M1), as well as
+providing Wi-Fi calibration data from the device tree (M1).
+
+I'm not sure what the TxCap blobs do. Given the stray function
+prototype at [5], it would seem the Broadcom folks in charge of Linux
+drivers also know all about Apple's fancy OTP for firmware selection
+and the existence of TxCap blobs, so it would be great if you could
+share any insight here ;-)
+
+These patches are not required for the chips to function, but presumably
+having proper per-device calibration data available matters, and I
+assume the TxCap blobs aren't just for show either.
+
+# On firmware
+
+As you might expect, the firmware for these machines is not available
+under a redistributable license; however, every owner of one of these
+machines *is* implicitly licensed to posess the firmware, and the OS
+packages containing it are available under well-known URLs on Apple's
+CDN with no authentication.
+
+Our plan to support this is to propose a platform firmware mechanism,
+where platforms can provide a firmware package in the EFI system
+partition along with a manifest, and distros will extract it to
+/lib/firmware on boot or otherwise make it available to the kernel.
+
+Then, on M1 platforms, our install script, which performs all the
+bootloader installation steps required to run Linux on these machines in
+the first place, will also take care of copying the firmware from the
+base macOS image to the EFI partition. On T2 platforms, we'll provide an
+analogous script that users can manually run prior to a normal EFI Linux
+installation to just grab the firmware from /usr/share/firmware/wifi in
+the running macOS.
+
+There is an example firmware manifest at [1] which details the files
+copied by our firmware rename script [2], as of macOS 12.0.1.
+
+To test this series on a supported Mac today (T2 or M1), boot into macOS
+and run:
+
+$ git clone https://github.com/AsahiLinux/asahi-installer
+$ cd asahi-installer/src
+$ python -m firmware.wifi /usr/share/firmware/wifi firmware.tar
+
+Then copy firmware.tar to Linux and extract it into /lib/firmware.
+
+# Acknowledgements
+
+This patch series was developed referencing the OpenBSD support for the
+BCM4378 [3] and the bcmdhd-4359 GPL release [4], which contained some
+interesting tidbits about newer chips, registers, OTP, etc.
+
+[1] https://gist.github.com/marcan/5cfaad948e224279f09a4a79ccafd9b6
+[2] https://github.com/AsahiLinux/asahi-installer/blob/main/src/firmware/wifi.py
+[3] https://github.com/openbsd/src/blob/master/sys/dev/pci/if_bwfm_pci.c
+[4] https://github.com/StreamUnlimited/broadcom-bcmdhd-4359/
+[5] https://github.com/StreamUnlimited/broadcom-bcmdhd-4359/blob/master/dhd_pcie.h#L594
+
+# Known bugs
+
+WPA3 does not yet work on M1 platforms. This is probably more missing
+firmware interfaces; I'll look into it shortly and it can go into v3 or
+a separate add-on patch.
+
+# Changes since v1
+
+- Replaced new DT compatibles with pciXXXX,YYYY ones (this seems to be
+  the way to do it)
+- Replaced apple,module instance DT prop with brcm,board-type (more
+  generic)
+- Reduced stack usage of brcmf_pmksa_v3_op
+- Changed alt_paths/board_names to be a fixed, max size instead of
+  statically allocated.
+- Fixed broken build halfway through the series
+- Addressed other review comments (style/etc)
+- Fixed typos and other minor issues
+
+Hector Martin (35):
+  dt-bindings: net: bcm4329-fmac: Add Apple properties & chips
+  brcmfmac: pcie: Declare missing firmware files in pcie.c
+  brcmfmac: firmware: Handle per-board clm_blob files
+  brcmfmac: firmware: Support having multiple alt paths
+  brcmfmac: pcie/sdio/usb: Get CLM blob via standard firmware mechanism
+  brcmfmac: firmware: Support passing in multiple board_types
+  brcmfmac: pcie: Read Apple OTP information
+  brcmfmac: of: Fetch Apple properties
+  brcmfmac: pcie: Perform firmware selection for Apple platforms
+  brcmfmac: firmware: Allow platform to override macaddr
+  brcmfmac: msgbuf: Increase RX ring sizes to 1024
+  brcmfmac: pcie: Fix crashes due to early IRQs
+  brcmfmac: pcie: Support PCIe core revisions >= 64
+  brcmfmac: pcie: Add IDs/properties for BCM4378
+  ACPI / property: Support strings in Apple _DSM props
+  brcmfmac: acpi: Add support for fetching Apple ACPI properties
+  brcmfmac: pcie: Provide a buffer of random bytes to the device
+  brcmfmac: pcie: Add IDs/properties for BCM4355
+  brcmfmac: pcie: Add IDs/properties for BCM4377
+  brcmfmac: pcie: Perform correct BCM4364 firmware selection
+  brcmfmac: chip: Only disable D11 cores; handle an arbitrary number
+  brcmfmac: chip: Handle 1024-unit sizes for TCM blocks
+  brcmfmac: cfg80211: Add support for scan params v2
+  brcmfmac: feature: Add support for setting feats based on WLC version
+  brcmfmac: cfg80211: Add support for PMKID_V3 operations
+  brcmfmac: cfg80211: Pass the PMK in binary instead of hex
+  brcmfmac: pcie: Add IDs/properties for BCM4387
+  brcmfmac: pcie: Replace brcmf_pcie_copy_mem_todev with memcpy_toio
+  brcmfmac: pcie: Read the console on init and shutdown
+  brcmfmac: pcie: Release firmwares in the brcmf_pcie_setup error path
+  brcmfmac: firmware: Allocate space for default boardrev in nvram
+  brcmfmac: fwil: Constify iovar name arguments
+  brcmfmac: common: Add support for downloading TxCap blobs
+  brcmfmac: pcie: Load and provide TxCap blobs
+  brcmfmac: common: Add support for external calibration blobs
+
+ .../net/wireless/brcm,bcm4329-fmac.yaml       |  37 +-
+ drivers/acpi/x86/apple.c                      |  11 +-
+ .../broadcom/brcm80211/brcmfmac/Makefile      |   2 +
+ .../broadcom/brcm80211/brcmfmac/acpi.c        |  47 ++
+ .../broadcom/brcm80211/brcmfmac/bus.h         |  20 +-
+ .../broadcom/brcm80211/brcmfmac/cfg80211.c    | 178 +++++-
+ .../broadcom/brcm80211/brcmfmac/chip.c        |  36 +-
+ .../broadcom/brcm80211/brcmfmac/common.c      | 130 +++-
+ .../broadcom/brcm80211/brcmfmac/common.h      |  12 +
+ .../broadcom/brcm80211/brcmfmac/feature.c     |  49 ++
+ .../broadcom/brcm80211/brcmfmac/feature.h     |   6 +-
+ .../broadcom/brcm80211/brcmfmac/firmware.c    | 136 +++-
+ .../broadcom/brcm80211/brcmfmac/firmware.h    |   4 +-
+ .../broadcom/brcm80211/brcmfmac/fwil.c        |  34 +-
+ .../broadcom/brcm80211/brcmfmac/fwil.h        |  28 +-
+ .../broadcom/brcm80211/brcmfmac/fwil_types.h  | 157 ++++-
+ .../broadcom/brcm80211/brcmfmac/msgbuf.h      |   4 +-
+ .../wireless/broadcom/brcm80211/brcmfmac/of.c |  20 +-
+ .../broadcom/brcm80211/brcmfmac/pcie.c        | 599 +++++++++++++++---
+ .../broadcom/brcm80211/brcmfmac/sdio.c        |  39 +-
+ .../broadcom/brcm80211/brcmfmac/sdio.h        |   2 +
+ .../broadcom/brcm80211/brcmfmac/usb.c         |  23 +-
+ .../broadcom/brcm80211/include/brcm_hw_ids.h  |   8 +
+ include/linux/bcma/bcma_driver_chipcommon.h   |   1 +
+ 24 files changed, 1313 insertions(+), 270 deletions(-)
+ create mode 100644 drivers/net/wireless/broadcom/brcm80211/brcmfmac/acpi.c
+
 -- 
-2.30.2
+2.33.0
 

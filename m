@@ -2,135 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F374843AB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:48:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C2244843B9
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:50:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234385AbiADOsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:48:14 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:60626 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbiADOsN (ORCPT
+        id S234437AbiADOuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:50:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59166 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234489AbiADOub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:48:13 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 648FD1F43790
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1641307691;
-        bh=G+jVGmECfNW9PLCn0NHGgzigCEJfRk6KgWTuVOWIb3k=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=AgD77RERBYtR6rmleLLBnFWdCy/RukQMSW58ckAyF6LbE7yTBG/EMsyPXT1oarx7s
-         IBU/TRZrtwKkAwqaEi6sbrZ/14jpWO4YBcyWTX0CMEQxBJDO0NKWcRYyYFoPoZu7rs
-         fGPbYjKaqVwek5g7gYV37tjlWwEz9zMShKNzL9o+aU1PoLfGHd8jFt0jTYEmfdaACt
-         do4IRx/CrIJ9Ga4s3Dd2gTc2GWJWSf2Paz5kgo0fpGAl6sQd5i/by60lMA/5S9oaUG
-         igNQVaq6LDME37rC0D1aLWijwfIQCGRGZbJF+kHDL26Y5XfWT0OZZqIYbvjVcUduMz
-         zGG6dMx30eu3Q==
-Subject: Re: [PATCH] drm/bridge: parade-ps8640: Link device to ensure
- suspend/resume order
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     a.hajda@samsung.com, narmstrong@baylibre.com,
-        laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, kernel@collabora.com,
-        linux-kernel@vger.kernel.org
-References: <20211102130428.444795-1-angelogioacchino.delregno@collabora.com>
- <CAG3jFys2Js0urfL9q3nk_KDweLcX+cOZeURCk8=gyps9h6TPcA@mail.gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Message-ID: <3b0af96e-f833-5cd1-7725-5ec37faab9fb@collabora.com>
-Date:   Tue, 4 Jan 2022 15:48:08 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Tue, 4 Jan 2022 09:50:31 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C262C06179E;
+        Tue,  4 Jan 2022 06:50:28 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id z9so79543532edm.10;
+        Tue, 04 Jan 2022 06:50:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GBlU5YfS0xh/NPjUje9YpdMH2Kee00xn/sh6RC8/tns=;
+        b=CvzbQN7sP7+PrwMOFFdMqetLq8SV0XFxp+YSiR5zGaA1xexANnnRvIhpO6d6YNj9Rs
+         inXjl6u81KcWZyB/d0zOy+iNdJpOW4h17htfJYMoh+sO1/XafjGllOfrJrc81za34XRr
+         IhRMz7u9mC8aVJlO4LKWY8+MS0W8sU/II6pQeO2ophysH926eWrAQXUHkY9wZCStNvky
+         U/uH3tztNruWwWIrh6pUBFvnVHaZArdD058Qs35DWo4EtNtx6PZXUJyMHgAuyhmPjif8
+         sKB0bRDrrfxEGBFd6MX3GhRV7jQtfhurgFQr2OxiERoC8r+cE/pqcuTrMgFKNoljm+RN
+         1w3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GBlU5YfS0xh/NPjUje9YpdMH2Kee00xn/sh6RC8/tns=;
+        b=N3ph/nYkgARAPbhyYyQNpki9R7tGiSVluqVD2FHR/vEek1WwRF4JFiXc3xnnuiP4Z/
+         nO8hqqZB4/WjbowrvoxnKhuTaRa5+nuH4UtqrNTNFcQM1noVPU0LgCK8QNyYX6wIIfxc
+         yYjSCWemBzwESAx4ZTDq+YBH6SVe86CSruG2y6KqhpmTg+E1chE8Rg/nZ7pjdyY+4xk5
+         MkmNpMGLJaeWF3QTSXxF0pCCoznzhCf54NQbSVtlELsFrYOUV1L95FVFR7jjB3BB2lGC
+         snf8sUhlCvXr5mQgZuidBHti/23wF+sFrY25l3gcUDb+uf9OkDG8yacqcb99OF5TLU+A
+         Qwzg==
+X-Gm-Message-State: AOAM531bLTBr1Z3hunLZGIF6y669QTwdCxMJ9kzyVEpA9Rmez9fxrPEH
+        rYOgJ9U+AS2Bz/86NALfZx1hkjXpBainvxzixiQ=
+X-Google-Smtp-Source: ABdhPJyvYiypqLb98BWYXbcv2yFLdiRi0HyuYXn9J8TIppLhHHsZQlLvBENhmSOKVtwg/VCtCrEPVDr9eV+8luSf210=
+X-Received: by 2002:a17:907:6d8d:: with SMTP id sb13mr40133790ejc.132.1641307826780;
+ Tue, 04 Jan 2022 06:50:26 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAG3jFys2Js0urfL9q3nk_KDweLcX+cOZeURCk8=gyps9h6TPcA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20220104134512.18498-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220104134512.18498-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 4 Jan 2022 16:48:35 +0200
+Message-ID: <CAHp75Vcx1Ey-SHBCgBh1RM=PTBRcncGOwAx9_6PL+sDJtzezvw@mail.gmail.com>
+Subject: Re: [PATCH v4] soc: ti: smartreflex: Use platform_get_irq_optional()
+ to get the interrupt
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 04/01/22 15:22, Robert Foss ha scritto:
-> Hey AngeloGioacchino,
-> 
-> On Tue, 2 Nov 2021 at 14:08, AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
->>
->> Entering suspend while the display attached to this bridge is still on
->> makes the resume sequence to resume the bridge first, display last:
->> when this happens, we get a timeout while resuming the bridge, as its
->> MCU will get stuck due to the display being unpowered.
->>
->> On the other hand, on mt8173-elm, closing the lid makes the display to
->> get powered off first, bridge last, so at resume time the sequence is
->> swapped (compared to the first example) and everything just works
->> as expected.
->>
->> Add a stateless device link to the DRM device that this bridge belongs
->> to, ensuring a correct resume sequence and solving the unability to
->> correctly resume bridge operation in the first mentioned example.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> ---
->>   drivers/gpu/drm/bridge/parade-ps8640.c | 22 ++++++++++++++++++++--
->>   1 file changed, 20 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bridge/parade-ps8640.c
->> index 45100edd745b..191cc196c9d1 100644
->> --- a/drivers/gpu/drm/bridge/parade-ps8640.c
->> +++ b/drivers/gpu/drm/bridge/parade-ps8640.c
->> @@ -100,6 +100,7 @@ struct ps8640 {
->>          struct regulator_bulk_data supplies[2];
->>          struct gpio_desc *gpio_reset;
->>          struct gpio_desc *gpio_powerdown;
->> +       struct device_link *link;
->>          bool powered;
->>   };
->>
->> @@ -460,10 +461,23 @@ static int ps8640_bridge_attach(struct drm_bridge *bridge,
->>                  goto err_aux_register;
->>          }
->>
->> +       ps_bridge->link = device_link_add(bridge->dev->dev, dev, DL_FLAG_STATELESS);
->> +       if (!ps_bridge->link) {
->> +               dev_err(dev, "failed to create device link");
->> +               ret = -EINVAL;
->> +               goto err_devlink;
->> +       }
->> +
->>          /* Attach the panel-bridge to the dsi bridge */
->> -       return drm_bridge_attach(bridge->encoder, ps_bridge->panel_bridge,
->> +       ret = drm_bridge_attach(bridge->encoder, ps_bridge->panel_bridge,
->>                                   &ps_bridge->bridge, flags);
->> +       if (ret)
->> +               goto err_bridge_attach;
->>
->> +err_bridge_attach:
->> +       device_link_del(ps_bridge->link);
->> +err_devlink:
->> +       drm_dp_aux_unregister(&ps_bridge->aux);
->>   err_aux_register:
->>          mipi_dsi_detach(dsi);
->>   err_dsi_attach:
->> @@ -473,7 +487,11 @@ static int ps8640_bridge_attach(struct drm_bridge *bridge,
->>
->>   static void ps8640_bridge_detach(struct drm_bridge *bridge)
->>   {
->> -       drm_dp_aux_unregister(&bridge_to_ps8640(bridge)->aux);
->> +       struct ps8640 *ps_bridge = bridge_to_ps8640(bridge);
->> +
->> +       drm_dp_aux_unregister(&ps_bridge->aux);
->> +       if (ps_bridge->link)
->> +               device_link_del(ps_bridge->link);
->>   }
->>
->>   static struct edid *ps8640_bridge_get_edid(struct drm_bridge *bridge,
->> --
->> 2.33.1
->>
-> 
-> This patch does not apply on drm-misc-next, could you rebase it on the
-> current branch?
-> 
+On Tue, Jan 4, 2022 at 3:45 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+>
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypasses the hierarchical setup and messes up the
+> irq chaining.
+>
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq_optional().
+>
+> While at it return 0 instead of returning ret in the probe success path.
 
-Sure, I'll rebase it asap.
+...
+
+> +       ret = platform_get_irq_optional(pdev, 0);
+> +       if (ret < 0 && ret != -ENXIO) {
+
+> +               dev_err_probe(&pdev->dev, ret, "%s: failed to get IRQ resource\n", __func__);
+> +               return ret;
+
+return dev_err_probe(...); ?
+
+> +       }
+
+-- 
+With Best Regards,
+Andy Shevchenko

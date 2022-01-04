@@ -2,97 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A835A48453C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:51:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 601F64845A8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234106AbiADPvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 10:51:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
+        id S235105AbiADPya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 10:54:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232799AbiADPvy (ORCPT
+        with ESMTP id S235059AbiADPy2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 10:51:54 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B920C061761;
-        Tue,  4 Jan 2022 07:51:54 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id l4so23530321wmq.3;
-        Tue, 04 Jan 2022 07:51:53 -0800 (PST)
+        Tue, 4 Jan 2022 10:54:28 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF1EC061785;
+        Tue,  4 Jan 2022 07:54:27 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id b13so150170961edd.8;
+        Tue, 04 Jan 2022 07:54:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uIz2yUqwMyhBuN8YGnETBaxGt3m02AG4Hct/FwHTsQU=;
-        b=gR5YA141XiRw1cgI2hkrHAlkROrC/M2q9CYYmt0VLrZ5N19jCyVr4rABC6FC2suEl2
-         RYN+fF2uC+tfIakg7Hir1zSwHoRNRRG2XccKnu223D4EvpP8RjXjlbIAf2++wM6BYae7
-         9eVOM5338FVpZ0ly/kFY0O1Eacic5nJnLSBjEt4OODJ4QB0amU76LVD0hy6xrMxmy+R1
-         y3Hg8ZjAQWxsweu+knW+19fWaQ3Tb0H44orjE2f6AVWno9pS6Oz5yFFVLCtr+885BFxL
-         NVD5WwJDqiYY07rfbbeXp3bSAQvtJvxTE9I4FlSQfqjWeHTPswF/zdytIFhEjhMUkAC3
-         choA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Q2x+wXijL40/dBn2IHb9PB1Y4Yb2SM7TSz7hC/CJR1c=;
+        b=G3VKiBMgnGBR5MDj5uF0N86Vzvo6T7dGXO6MIxWbOUPSPxMn/rHYHjuWxMDUzqSOeR
+         C+u8M/PIUo0K0qnulZTIxVVC5Atebd+hnO6UyHTBE812WcsVDk/wRNWumHeASNrAnRkn
+         qEEuwRfmqmSQjUB1Pxd56V9AdBkL05KncYj+XLFL1OrkGYzE6h2mEz9lqKEofX/4k1IB
+         puPDDjmiuhmqeZtnRGV2Xlr7+bQJYcBJxmcW2IIMMBtOsklyX+bb5YbCsNj55E8UFzfW
+         Crk+5AB7Y6HhQvoLNWkWtc/blONTUof0hf8SV3JdEnBAbDcUY7CWuRhwAn7mupJSrKmp
+         YnAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uIz2yUqwMyhBuN8YGnETBaxGt3m02AG4Hct/FwHTsQU=;
-        b=KR/9p4DUgeqGfF6afxwJwUapuKeS27zHUmLlt2KMzfltxaqhJjEpnoW/8ZNJ3mS/GV
-         nMO2zJq8Hn5LUHCEMvKziIXiV0TA2iQqp31buslS5+Wm2Oqk0DICm25LuqwAEpa+5dKd
-         WN1V56WmK2+O8tqUBOEGMd5x/TxjQoQ2ccxr6XMjuzimfEE5yZG1/9YMyGTsL59Wv1pa
-         udrv9yadXVJ2ujOpTKX29TRxCBLSeBSa1Cftk3vW3zrE9aR4iCvB1yr5ZsleBDGgSZuU
-         l5EnRlL7rvUO/5Prnx83geY5vd5nuQgL5t9vdq5mnE+9+01DOLe0ymCojwp7JFabXRFG
-         LyjQ==
-X-Gm-Message-State: AOAM532UD82VeD06JMbii5wzhvOC0qZeK2OfPckHumyIw1WOadlT9kHA
-        A1O99/joDW0oU4j/L+wNOKXW2V6t7CI=
-X-Google-Smtp-Source: ABdhPJz4nf89nIW0fi4iCrT/EO75BEnTK2ifGpQri3TQSKu4PeGzd5kb0TgS2uQFBaDgsrMVIT8ZJA==
-X-Received: by 2002:a1c:4406:: with SMTP id r6mr42576627wma.42.1641311512179;
-        Tue, 04 Jan 2022 07:51:52 -0800 (PST)
-Received: from debian (host-2-98-43-34.as13285.net. [2.98.43.34])
-        by smtp.gmail.com with ESMTPSA id o11sm41171209wmq.15.2022.01.04.07.51.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 07:51:51 -0800 (PST)
-Date:   Tue, 4 Jan 2022 15:51:50 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 4.19 00/27] 4.19.224-rc1 review
-Message-ID: <YdRtFob8gcxqEIZE@debian>
-References: <20220103142052.162223000@linuxfoundation.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Q2x+wXijL40/dBn2IHb9PB1Y4Yb2SM7TSz7hC/CJR1c=;
+        b=p3nqxKibuPmgznCm0v2/xSs27WEVgSSX15SqpQ8gXfgEm5uVwSwMXC/kuhCQBrsyg6
+         dIbkuYPlHYhuwvwWVnH01NiEXP/3Jj2ReeNE2UIjV+w94P5aX56yt0pPWv4mFA79+jGC
+         rJm1yBtw5VdtjMjjBCH6GFDumoUj3r/QSIop5F4/Jca7+xxvzG5OfsTnPgb8n4l7U2LD
+         peevwOZjhUmBTDObxiULoqSb5scyn8S8Jd12QuYsq4utRoCd6FBX0s8LQIH3GK90GUwB
+         j0UOx0uW7PmwpUlvm6GEB1hSSrFTZcrf7KrRnSo1+JjQIqPiU6Ju1K2N02dcuK427VmL
+         xx7g==
+X-Gm-Message-State: AOAM531oV/d8Q66rQVGLAShMfxNgWNFtzlEQT7q8sLexDWbXpNgTynpJ
+        x6rStabsjPcEW/JTZ26jWWIUYqyBnpM9OMoXY0Xx4XM3mde96A==
+X-Google-Smtp-Source: ABdhPJx0eixYSPcvoMtIwZgtLZN8h6wzaet0JBt24EZMmeBLSJCejoV82JSn1t4Q6m2jZeN6OEjYN32Zykghsbespc8=
+X-Received: by 2002:a17:906:c450:: with SMTP id ck16mr38479995ejb.579.1641311666123;
+ Tue, 04 Jan 2022 07:54:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220103142052.162223000@linuxfoundation.org>
+References: <20220104153615.13393-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220104153615.13393-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 4 Jan 2022 17:52:35 +0200
+Message-ID: <CAHp75VcSQyPb8+5rGQ7=dZwTmstZy4JTJpxBJrjN35ghs2Ko4Q@mail.gmail.com>
+Subject: Re: [PATCH] gpio: rcar: Propagate errors from devm_request_irq()
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Tue, Jan 4, 2022 at 5:36 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+>
+> The driver overrides the error code returned by devm_request_irq() to
+> -ENOENT. Switch to propagating the error code upstream.
 
-On Mon, Jan 03, 2022 at 03:23:40PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.224 release.
-> There are 27 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 05 Jan 2022 14:20:40 +0000.
-> Anything received after that time might be too late.
+Thanks, FWIW,
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-Build test:
-mips (gcc version 11.2.1 20211214): 63 configs -> no failure
-arm (gcc version 11.2.1 20211214): 116 configs -> no new failure
-arm64 (gcc version 11.2.1 20211214): 2 configs -> no failure
-x86_64 (gcc version 11.2.1 20211214): 4 configs -> no failure
+> Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> This patch depends on [1].
+>
+> [1] https://lkml.org/lkml/2021/12/22/633
+> ---
+>  drivers/gpio/gpio-rcar.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-rcar.c b/drivers/gpio/gpio-rcar.c
+> index 437baecc434e..bd2e16d6e21c 100644
+> --- a/drivers/gpio/gpio-rcar.c
+> +++ b/drivers/gpio/gpio-rcar.c
+> @@ -552,10 +552,10 @@ static int gpio_rcar_probe(struct platform_device *pdev)
+>                 goto err0;
+>         }
+>
+> -       if (devm_request_irq(dev, p->irq_parent, gpio_rcar_irq_handler,
+> -                            IRQF_SHARED, name, p)) {
+> +       ret = devm_request_irq(dev, p->irq_parent, gpio_rcar_irq_handler,
+> +                              IRQF_SHARED, name, p);
+> +       if (ret) {
+>                 dev_err(dev, "failed to request IRQ\n");
+> -               ret = -ENOENT;
+>                 goto err1;
+>         }
+>
+> --
+> 2.17.1
+>
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
 
-[1]. https://openqa.qa.codethink.co.uk/tests/581
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
-
+-- 
+With Best Regards,
+Andy Shevchenko

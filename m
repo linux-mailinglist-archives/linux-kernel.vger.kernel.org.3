@@ -2,90 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D909C4839B3
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 02:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F234839B7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 02:19:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbiADBSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 20:18:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44418 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbiADBSq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 20:18:46 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE86C061761
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 17:18:45 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id bm14so142139642edb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 17:18:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=vPYPylu/98Q2wZZM/w4rmZqUVAQ2nljv0sqImxSuceg=;
-        b=d92KZIw6WlZk4JdgfgUo2VTokdvlLPXVuRKZqp2CNyeBkNtu2iPfRHxRD2kgEiNE6x
-         p0jgYEoOrFFkO90g9hkFyJimYi3F6QfmKVZtwg5uDeSqr8hpAdQPjpEDmSPVwCRsZIdc
-         kxdrf/fOwCzELLFTc2IY2760Wy4cR2oi64cOb9J5b+6+g5nzmI0ZKyGRzIqC+6YI6ZtW
-         onsAtoi2P80xS8UT7VGih1vj+CoMnsr1Pg/B7zmubnPTmTKhjVok7KARwi/YJiUsd5Lg
-         fTRKDB8Akaom2VDNq4FCons65TEJJa0T15AMlZAIrU0sdQ6EW9pWglphIZ207xwJeOmb
-         x3qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=vPYPylu/98Q2wZZM/w4rmZqUVAQ2nljv0sqImxSuceg=;
-        b=u9DXvNmI0BG1PjcZWWWbNyTGjm1Rdot1eKCOJa5q+DBq21PTkeo5MEwsjjk5s1uwSW
-         LGvDRzoltxDDj7T9oht2iK6aZ+VQhS7LniONtb9UzYb/tWmHKbzDaHMKhnaJAQbQbIWz
-         c5MQHSwBY8TTqgTDiOz2JAWiEHegTYC8PxKMVGptJSyads8Jp8LZKWP/hJadPD+4ETud
-         erTmvRdNB/byeuhbt27wsHj3r1EC32V25Vu+DU43pLu/sV/OOnCKdPB2e6ptfTLbFdnb
-         3emanGCbdUb1O4+7OHX6OvXMLuqBaRQs0AdtSGKe3oBMqbGn1uF2f1gURkcXwTQ7mb7n
-         3q6A==
-X-Gm-Message-State: AOAM530V0T9oSKTrfYvP3eD8wuAD4kvfS8Qda8I6HJMHPKH4GfRpuh7P
-        vS9zERsPGxRWtcmRiKbtKsI=
-X-Google-Smtp-Source: ABdhPJwgt+MODMBZgINs9djin/8PBnZ4GXCekRJyf4Pg81ul64tILeYeSSJ3WzTZH1OEnX7nTRJ4rg==
-X-Received: by 2002:a17:906:6d0e:: with SMTP id m14mr2922762ejr.37.1641259123911;
-        Mon, 03 Jan 2022 17:18:43 -0800 (PST)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id he13sm11007383ejc.221.2022.01.03.17.18.43
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 03 Jan 2022 17:18:43 -0800 (PST)
-From:   Wei Yang <richard.weiyang@gmail.com>
-To:     peterz@infradead.org, willy@infradead.org, vbabka@suse.cz,
-        akpm@linux-foundation.org, dhowells@redhat.com, will@kernel.org,
-        linyunsheng@huawei.com, feng.tang@intel.com, ebiederm@xmission.com,
-        aarcange@redhat.com
-Cc:     linux-kernel@vger.kernel.org, Wei Yang <richard.weiyang@gmail.com>
-Subject: [PATCH] mm: page->mapping folio->mapping should have the same offset
-Date:   Tue,  4 Jan 2022 01:17:34 +0000
-Message-Id: <20220104011734.21714-1-richard.weiyang@gmail.com>
-X-Mailer: git-send-email 2.11.0
+        id S231657AbiADBTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 20:19:06 -0500
+Received: from out0.migadu.com ([94.23.1.103]:48487 "EHLO out0.migadu.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229853AbiADBTD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 20:19:03 -0500
+Subject: Re: [PATCH] md/raid1: fix missing bitmap update w/o WriteMostly
+ devices
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1641259138;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0Va7Q4P8AouCq7aKXPP/3Ce0JskJ6ujhX9CWOE7Rn5g=;
+        b=Yu5xEyCcRGvYQqH8OR446kFCQzdt5jszyicOqXPf0ToEUtjKUZOJbG5eYG3HA5W2aZYrQn
+        BQ9IKjQtco7BwfCtAk/cC50anTfs02F4hMgA37ajsqqBIkPOAZAgN010/E3tBykein3H42
+        pB06yxOf5EsBMOPh3fr6OzfR8fzANlU=
+To:     Song Liu <song@kernel.org>, linux-raid@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>,
+        Norbert Warmuth <nwarmuth@t-online.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20220103230401.180704-1-song@kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Guoqing Jiang <guoqing.jiang@linux.dev>
+Message-ID: <842bd2f8-1903-6da9-8bbf-09229868c7dd@linux.dev>
+Date:   Tue, 4 Jan 2022 09:18:51 +0800
+MIME-Version: 1.0
+In-Reply-To: <20220103230401.180704-1-song@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In commit 7b230db3b8d3 ("mm: Introduce struct folio"), folio is
-introduced. This is a folio of page, so we need to make sure those
-members of folio should be at the same offset in page.
 
-The offset of mapping is not checked. This patch just add it.
 
-Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+On 1/4/22 7:04 AM, Song Liu wrote:
+> commit [1] causes missing bitmap updates when there isn't any WriteMostly
+> devices.
+>
+> Detailed steps to reproduce by Norbert (which somehow didn't make to lore):
+>
+>     # setup md10 (raid1) with two drives (1 GByte sparse files)
+>     dd if=/dev/zero of=disk1 bs=1024k seek=1024 count=0
+>     dd if=/dev/zero of=disk2 bs=1024k seek=1024 count=0
+>
+>     losetup /dev/loop11 disk1
+>     losetup /dev/loop12 disk2
+>
+>     mdadm --create /dev/md10 --level=1 --raid-devices=2 /dev/loop11 /dev/loop12
+>
+>     # add bitmap (aka write-intent log)
+>     mdadm /dev/md10 --grow --bitmap=internal
+>
+>     echo check > /sys/block/md10/md/sync_action
+>
+>     root:# cat /sys/block/md10/md/mismatch_cnt
+>     0
+>     root:#
+>
+>     # remove member drive disk2 (loop12)
+>     mdadm /dev/md10 -f loop12 ; mdadm /dev/md10 -r loop12
+>
+>     # modify degraded md device
+>     dd if=/dev/urandom of=/dev/md10 bs=512 count=1
+>
+>     # no blocks recorded as out of sync on the remaining member disk1/loop11
+>     root:# mdadm -X /dev/loop11 | grep Bitmap
+>               Bitmap : 16 bits (chunks), 0 dirty (0.0%)
+>     root:#
+>
+>     # re-add disk2, nothing synced because of empty bitmap
+>     mdadm /dev/md10 --re-add /dev/loop12
+>
+>     # check integrity again
+>     echo check > /sys/block/md10/md/sync_action
+>
+>     # disk1 and disk2 are no longer in sync, reads return differend data
+>     root:# cat /sys/block/md10/md/mismatch_cnt
+>     128
+>     root:#
+>
+>     # clean up
+>     mdadm -S /dev/md10
+>     losetup -d /dev/loop11
+>     losetup -d /dev/loop12
+>     rm disk1 disk2
+>
+> Fix this by moving the WriteMostly check to the if condition for
+> alloc_behind_master_bio().
+>
+> [1] commit fd3b6975e9c1 ("md/raid1: only allocate write behind bio for WriteMostly device")
+> Fixes: fd3b6975e9c1 ("md/raid1: only allocate write behind bio for WriteMostly device")
+> Cc: stable@vger.kernel.org # v5.12+
+> Cc: Guoqing Jiang <guoqing.jiang@linux.dev>
+> Cc: Jens Axboe <axboe@kernel.dk>
+> Reported-by: Norbert Warmuth <nwarmuth@t-online.de>
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Song Liu <song@kernel.org>
+> ---
+>   drivers/md/raid1.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/md/raid1.c b/drivers/md/raid1.c
+> index 7dc8026cf6ee..85505424f7a4 100644
+> --- a/drivers/md/raid1.c
+> +++ b/drivers/md/raid1.c
+> @@ -1496,12 +1496,13 @@ static void raid1_write_request(struct mddev *mddev, struct bio *bio,
+>   		if (!r1_bio->bios[i])
+>   			continue;
+>   
+> -		if (first_clone && test_bit(WriteMostly, &rdev->flags)) {
+> +		if (first_clone) {
+>   			/* do behind I/O ?
+>   			 * Not if there are too many, or cannot
+>   			 * allocate memory, or a reader on WriteMostly
+>   			 * is waiting for behind writes to flush */
+>   			if (bitmap &&
+> +			    test_bit(WriteMostly, &rdev->flags) &&
+>   			    (atomic_read(&bitmap->behind_writes)
+>   			     < mddev->bitmap_info.max_write_behind) &&
+>   			    !waitqueue_active(&bitmap->behind_wait)) {
 
----
-BYW, I am not sure why we compare ->compound_head and ->lru?
----
- include/linux/mm_types.h | 1 +
- 1 file changed, 1 insertion(+)
+Indeed, I missed that md_bitmap_startwrite should be always called for 
+the first clone.
 
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index c3a6e6209600..0a2de709fe40 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -288,6 +288,7 @@ static_assert(sizeof(struct page) == sizeof(struct folio));
- 	static_assert(offsetof(struct page, pg) == offsetof(struct folio, fl))
- FOLIO_MATCH(flags, flags);
- FOLIO_MATCH(lru, lru);
-+FOLIO_MATCH(mapping, mapping);
- FOLIO_MATCH(compound_head, lru);
- FOLIO_MATCH(index, index);
- FOLIO_MATCH(private, private);
--- 
-2.33.1
+Thanks,
+Guoqing
+
 

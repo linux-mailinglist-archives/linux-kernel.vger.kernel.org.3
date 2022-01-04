@@ -2,275 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75D4B484423
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:04:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E5F484425
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:04:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234631AbiADPES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 10:04:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34372 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233062AbiADPER (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 10:04:17 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628CBC061761;
-        Tue,  4 Jan 2022 07:04:17 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id j18so76763263wrd.2;
-        Tue, 04 Jan 2022 07:04:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=qRDKTEDCb+MtYyyGwc1k5PY8jOwrPWtqs0o9RjpMHjM=;
-        b=lCyBImadHLQVC2wMSk1XUH13tJ+y/6Olw09TQRGrp8LES8TDps4ciSvchR3B00Mv6Z
-         mFUDBwMjmdUZMVRfYsQxXHGg2rCtTTxkgcbieZVdFBYUyUMsnbwwIVeQFHG7iH8yNMGm
-         81I0CFn/rqnJ5693ryieXCloJi3bUu7pnzwDXqvjimCuyPINHTVL6G6AJ8m/zbm8Za+Z
-         uRxx0Y5Tbm2vMbGlFQijHPfnSFrhe0xB1Yvu8olcm3qKOTtwGID0cOmL7oVTOksXuF/w
-         GfyQekNrWWMsYaXy3HkqcXdDZoTieRRuOjZ1AVwU6d/d+AuhzXdnv7O9Ei3+HTKeepWK
-         0bZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=qRDKTEDCb+MtYyyGwc1k5PY8jOwrPWtqs0o9RjpMHjM=;
-        b=rYF7QvsFG1ZR+f0M9QNwb6vu2n2fr0ANB/HBjIzkukCwwN7tP98rY2+yNq3sU/9557
-         f3CVIqTkIXQkpXqkq+Y9GqxSo9Vs/ohoMyns+1nt5Bfv279+wvALYds/PQoYaHRSjmGV
-         7vP+SNNADlcxnoVsIuqxj1CgoFu8+jvKY8iSfF3xESn5/MPOW6tq/4NXJo8b/b3CGAcc
-         EjHD8EGpkAclOIYQltcj0kh8Zz6P4OeSzks/faPoE++XOyb8ofEdzHYjLBDi/LwcvX5t
-         4uDrxQeuU8/VuvQBwrRuVIOHJguasUjKsawv3Bw5pik1NgxvbvANzzA9G8gtdNYm57ri
-         qu/g==
-X-Gm-Message-State: AOAM530Zdyjh2maJUs0kkSDKxiO+t/gocS9dsqyX2sl0V2AmmUBG2MCA
-        J8pbOX5aqnG73rhLFjzLJaY=
-X-Google-Smtp-Source: ABdhPJzgvWabhG1M3rSzr5zbHOX2T2DeLBa7A6ro8AOInSmnFxZfWPC4ZnS5YSMVf1dDSoMCf2p/rw==
-X-Received: by 2002:a5d:6502:: with SMTP id x2mr31087112wru.90.1641308655801;
-        Tue, 04 Jan 2022 07:04:15 -0800 (PST)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id h3sm38681784wrt.94.2022.01.04.07.04.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 07:04:15 -0800 (PST)
-Date:   Tue, 4 Jan 2022 16:04:12 +0100
-From:   Corentin Labbe <clabbe.montjoie@gmail.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     linus.walleij@linaro.org, ulli.kroll@googlemail.com,
-        kuba@kernel.org, davem@davemloft.net, andrew@lunn.ch,
-        hkallweit1@gmail.com, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: net: phy: marvell: network working with generic PHY and not with
- marvell PHY
-Message-ID: <YdRh7Jq3WxkiJMbs@Red>
-References: <YdQoOSXS98+Af1wO@Red>
- <YdQsJnfqjaFrtC0m@shell.armlinux.org.uk>
- <YdQwexJVfrdzEfZK@Red>
- <YdQydK4GhI0P5RYL@shell.armlinux.org.uk>
- <YdQ5i+//UITSbxS/@shell.armlinux.org.uk>
- <YdRVovG9mgEWffkn@Red>
- <YdRZQl6U0y19P/0+@shell.armlinux.org.uk>
+        id S234639AbiADPEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 10:04:38 -0500
+Received: from foss.arm.com ([217.140.110.172]:60492 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233194AbiADPEh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 10:04:37 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0F0D113A1;
+        Tue,  4 Jan 2022 07:04:37 -0800 (PST)
+Received: from e123427-lin.arm.com (unknown [10.57.35.194])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A284F3F774;
+        Tue,  4 Jan 2022 07:04:34 -0800 (PST)
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/15] pci: mvebu: Various fixes
+Date:   Tue,  4 Jan 2022 15:04:28 +0000
+Message-Id: <164130858682.16382.8296252945836815553.b4-ty@arm.com>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20211125124605.25915-1-pali@kernel.org>
+References: <20211125124605.25915-1-pali@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YdRZQl6U0y19P/0+@shell.armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Tue, Jan 04, 2022 at 02:27:14PM +0000, Russell King (Oracle) a écrit :
-> On Tue, Jan 04, 2022 at 03:11:46PM +0100, Corentin Labbe wrote:
-> > Le Tue, Jan 04, 2022 at 12:11:55PM +0000, Russell King (Oracle) a écrit :
-> > > On Tue, Jan 04, 2022 at 11:41:40AM +0000, Russell King (Oracle) wrote:
-> > > > On Tue, Jan 04, 2022 at 12:33:15PM +0100, Corentin Labbe wrote:
-> > > > > Le Tue, Jan 04, 2022 at 11:14:46AM +0000, Russell King (Oracle) a écrit :
-> > > > > > On Tue, Jan 04, 2022 at 11:58:01AM +0100, Corentin Labbe wrote:
-> > > > > > > Hello
-> > > > > > > 
-> > > > > > > I have a gemini SSI 1328 box which has a cortina ethernet MAC with a Marvell 88E1118 as given by:
-> > > > > > > Marvell 88E1118 gpio-0:01: attached PHY driver (mii_bus:phy_addr=gpio-0:01, irq=POLL)
-> > > > > > > So booting with CONFIG_MARVELL_PHY=y lead to a non-working network with link set at 1Gbit
-> > > > > > > Setting 'max-speed = <100>;' (as current state in mainline dtb) lead to a working network.
-> > > > > > > By not working, I mean kernel started with ip=dhcp cannot get an IP.
-> > > > > > 
-> > > > > > How is the PHY connected to the host (which interface mode?) If it's
-> > > > > > RGMII, it could be that the wrong RGMII interface mode is specified in
-> > > > > > DT.
-> > > > > > 
-> > > > > 
-> > > > > The PHY is set as RGMII in DT (arch/arm/boot/dts/gemini-ssi1328.dts)
-> > > > > The only change to the mainline dtb is removing the max-speed.
-> > > > 
-> > > > So, it's using "rgmii" with no delay configured at the PHY with the
-> > > > speed limited to 100Mbps. You then remove the speed limitation and
-> > > > it doesn't work at 1Gbps.
-> > > > 
-> > > > I think I've seen this on other platforms (imx6 + ar8035) when the
-> > > > RGMII delay is not correctly configured - it will work at slower
-> > > > speeds but not 1G.
-> > > > 
-> > > > The RGMII spec specifies that there will be a delay - and the delay can
-> > > > be introduced by either the MAC, PHY or by PCB track routing. It sounds
-> > > > to me like your boot environment configures the PHY to introduce the
-> > > > necessary delay, but then, because the DT "rgmii" mode means "no delay
-> > > > at the PHY" when you use the Marvell driver (which respects that), the
-> > > > Marvell driver configures the PHY for no delay, resulting in a non-
-> > > > working situation at 1G.
-> > > > 
-> > > > I would suggest checking how the boot environment configures the PHY,
-> > > > and change the "rgmii" mode in DT to match. There is a description of
-> > > > the four RGMII modes in Documentation/networking/phy.rst that may help
-> > > > understand what each one means.
-> > > 
-> > > Hmm. Sorry, I'm leading you stray. It looks like the 88E1118 code does
-> > > not program any delays depending on the interface mode, so changing that
-> > > will have no effect.
-> > > 
-> > > I suspect, looking at m88e1118_config_init(), that the write to register
-> > > 0x15 in the MSCR page could be the problem.
-> > > 
-> > > 0x15 is 21, which is MII_88E1121_PHY_MSCR_REG. In other Marvell PHYs,
-> > > bits 4 and 5 are the tx and rx delays, both of which are set. Looking
-> > > at m88e1121_config_aneg_rgmii_delays(), this would seem to indicate
-> > > that the PHY is being placed into rgmii-id mode.
-> > > 
-> > > Can you try changing:
-> > > 
-> > > 	err = phy_write(phydev, 0x15, 0x1070);
-> > > 
-> > > to:
-> > > 
-> > > 	err = phy_write(phydev, 0x15, 0x1040);
-> > > 
-> > > and see what happens? Maybe trying other combinations of bits 4 and 5
-> > > to find a working combination.
-> > > 
-> > 
-> > Forget my other message, using 0x1040 lead to success.
-> > My problem was that I tried rgmii-id which net/ethernet/cortina does not support on some code path. (everything test PHY_INTERFACE_MODE_RGMII only)
-> > So I retry tests with original phy-mode = "rgmii".
-> > 
-> > So with the following changes everything is ok:
-> > diff --git a/arch/arm/boot/dts/gemini-ssi1328.dts b/arch/arm/boot/dts/gemini-ssi1328.dts
-> > index 113feb1c4922..7543d117a13a 100644
-> > --- a/arch/arm/boot/dts/gemini-ssi1328.dts
-> > +++ b/arch/arm/boot/dts/gemini-ssi1328.dts
-> > @@ -40,10 +40,6 @@ mdio0: mdio {
-> >                 phy0: ethernet-phy@1 {
-> >                         reg = <1>;
-> >                         device_type = "ethernet-phy";
-> > -                       /* We lack the knowledge of necessary GPIO to achieve
-> > -                        * Gigabit
-> > -                        */
-> > -                       max-speed = <100>;
-> >                 };
-> >                 /* WAN ICPlus IP101A */
-> >                 phy1: ethernet-phy@2 {
-> > diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
-> > index 4fcfca4e1702..af7fc9d8eaa7 100644
-> > --- a/drivers/net/phy/marvell.c
-> > +++ b/drivers/net/phy/marvell.c
-> > @@ -1233,7 +1233,7 @@ static int m88e1118_config_init(struct phy_device *phydev)
-> >                 return err;
-> >  
-> >         /* Enable 1000 Mbit */
-> > -       err = phy_write(phydev, 0x15, 0x1070);
-> > +       err = phy_write(phydev, 0x15, 0x1040);
-> >         if (err < 0)
-> >                 return err;
-> >  
+On Thu, 25 Nov 2021 13:45:50 +0100, Pali RohÃ¡r wrote:
+> This patch series contains various fixes for pci-mvebu.c driver. Only
+> bugfixes, no new features.
 > 
-> Okay, so we have two things that need fixing:
+> For pci-mvebu.c I have prepared another 30+ patches with cleanups and
+> new features, they are currently available in my git branch:
+> https://git.kernel.org/pub/scm/linux/kernel/git/pali/linux.git/log/?h=pci-mvebu
 > 
-> 1) We need m88e1118_config_init() to take note of the interface mode
-> if it's RGMII, and program MSCR appropriately.
-> 
-> 2) We need drivers/net/ethernet/cortina/gemini.c to accept any RGMII
-> interface mode.
-> 
-> Here's an untested patch for both - I've also converted the MSCR write
-> to be more modern. Please let me know if this resolves your issue.
-> We then need to consider whether it breaks any existing platform.
+> [...]
 
-Patch works for me.
-Furthermore, I have an other board with the same issue (but with a Realtek PHY).
-But in that case, it was just a missing rgmii-id (and your ethernet/cortina/gemini change).
+Dropped stable tags and applied on top of my pci/mvebu branch (please
+check I rebased commits correctly), thanks!
 
-Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
-Tested-on: gemini-ssi1328
-Tested-on: gemini-ns2502
+[01/15] PCI: mvebu: Check for valid ports
+        https://git.kernel.org/lpieralisi/pci/c/8cdabfdd5a
+[02/15] PCI: mvebu: Check for errors from pci_bridge_emul_init() call
+        https://git.kernel.org/lpieralisi/pci/c/5d18d702e5
+[03/15] PCI: mvebu: Check that PCI bridge specified in DT has function number zero
+        https://git.kernel.org/lpieralisi/pci/c/489bfc5187
+[04/15] PCI: mvebu: Handle invalid size of read config request
+        https://git.kernel.org/lpieralisi/pci/c/11c2bf4a20
+[05/15] PCI: mvebu: Disallow mapping interrupts on emulated bridges
+        https://git.kernel.org/lpieralisi/pci/c/319e6046bd
+[06/15] PCI: mvebu: Fix support for bus mastering and PCI_COMMAND on emulated bridge
+        https://git.kernel.org/lpieralisi/pci/c/e42b855837
+[07/15] PCI: mvebu: Do not modify PCI IO type bits in conf_write
+        https://git.kernel.org/lpieralisi/pci/c/2cf150216e
+[08/15] PCI: mvebu: Propagate errors when updating PCI_IO_BASE and PCI_MEM_BASE registers
+        https://git.kernel.org/lpieralisi/pci/c/e7a0187672
+[09/15] PCI: mvebu: Setup PCIe controller to Root Complex mode
+        https://git.kernel.org/lpieralisi/pci/c/df08ac0161
+[10/15] PCI: mvebu: Set PCI Bridge Class Code to PCI Bridge
+        https://git.kernel.org/lpieralisi/pci/c/f587775828
+[11/15] PCI: mvebu: Fix configuring secondary bus of PCIe Root Port via emulated bridge
+        https://git.kernel.org/lpieralisi/pci/c/91a8d79fc7
+[12/15] PCI: mvebu: Fix support for PCI_BRIDGE_CTL_BUS_RESET on emulated bridge
+        https://git.kernel.org/lpieralisi/pci/c/d75404cc08
+[13/15] PCI: mvebu: Fix support for PCI_EXP_DEVCTL on emulated bridge
+        https://git.kernel.org/lpieralisi/pci/c/ecae073e39
+[14/15] PCI: mvebu: Fix support for PCI_EXP_RTSTA on emulated bridge
+        https://git.kernel.org/lpieralisi/pci/c/838ff44a39
+[15/15] PCI: mvebu: Fix support for DEVCAP2, DEVCTL2 and LNKCTL2 registers on emulated bridge
+        https://git.kernel.org/lpieralisi/pci/c/4ab34548c5
 
-I wait for patch to be sent before sending DTB changes on my side.
-
-Thanks for your help
-
-> 
-> diff --git a/drivers/net/ethernet/cortina/gemini.c b/drivers/net/ethernet/cortina/gemini.c
-> index 07add311f65d..c78b99a497df 100644
-> --- a/drivers/net/ethernet/cortina/gemini.c
-> +++ b/drivers/net/ethernet/cortina/gemini.c
-> @@ -305,21 +305,21 @@ static void gmac_speed_set(struct net_device *netdev)
->  	switch (phydev->speed) {
->  	case 1000:
->  		status.bits.speed = GMAC_SPEED_1000;
-> -		if (phydev->interface == PHY_INTERFACE_MODE_RGMII)
-> +		if (phy_interface_mode_is_rgmii(phydev->interface))
->  			status.bits.mii_rmii = GMAC_PHY_RGMII_1000;
->  		netdev_dbg(netdev, "connect %s to RGMII @ 1Gbit\n",
->  			   phydev_name(phydev));
->  		break;
->  	case 100:
->  		status.bits.speed = GMAC_SPEED_100;
-> -		if (phydev->interface == PHY_INTERFACE_MODE_RGMII)
-> +		if (phy_interface_mode_is_rgmii(phydev->interface))
->  			status.bits.mii_rmii = GMAC_PHY_RGMII_100_10;
->  		netdev_dbg(netdev, "connect %s to RGMII @ 100 Mbit\n",
->  			   phydev_name(phydev));
->  		break;
->  	case 10:
->  		status.bits.speed = GMAC_SPEED_10;
-> -		if (phydev->interface == PHY_INTERFACE_MODE_RGMII)
-> +		if (phy_interface_mode_is_rgmii(phydev->interface))
->  			status.bits.mii_rmii = GMAC_PHY_RGMII_100_10;
->  		netdev_dbg(netdev, "connect %s to RGMII @ 10 Mbit\n",
->  			   phydev_name(phydev));
-> @@ -389,6 +389,9 @@ static int gmac_setup_phy(struct net_device *netdev)
->  		status.bits.mii_rmii = GMAC_PHY_GMII;
->  		break;
->  	case PHY_INTERFACE_MODE_RGMII:
-> +	case PHY_INTERFACE_MODE_RGMII_ID:
-> +	case PHY_INTERFACE_MODE_RGMII_TXID:
-> +	case PHY_INTERFACE_MODE_RGMII_RXID:
->  		netdev_dbg(netdev,
->  			   "RGMII: set GMAC0 and GMAC1 to MII/RGMII mode\n");
->  		status.bits.mii_rmii = GMAC_PHY_RGMII_100_10;
-> diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
-> index 4fcfca4e1702..ccf142ce55d8 100644
-> --- a/drivers/net/phy/marvell.c
-> +++ b/drivers/net/phy/marvell.c
-> @@ -1227,16 +1227,18 @@ static int m88e1118_config_init(struct phy_device *phydev)
->  {
->  	int err;
->  
-> -	/* Change address */
-> -	err = marvell_set_page(phydev, MII_MARVELL_MSCR_PAGE);
-> -	if (err < 0)
-> -		return err;
-> -
->  	/* Enable 1000 Mbit */
-> -	err = phy_write(phydev, 0x15, 0x1070);
-> +	err = phy_write_paged(phydev, MII_MARVELL_MSCR_PAGE,
-> +			      MII_88E1121_PHY_MSCR_REG, 0x1070);
->  	if (err < 0)
->  		return err;
->  
-> +	if (phy_interface_is_rgmii(phydev)) {
-> +		err = m88e1121_config_aneg_rgmii_delays(phydev);
-> +		if (err < 0)
-> +			return err;
-> +	}
-> +
->  	/* Change address */
->  	err = marvell_set_page(phydev, MII_MARVELL_LED_PAGE);
->  	if (err < 0)
-> 
-> -- 
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Thanks,
+Lorenzo

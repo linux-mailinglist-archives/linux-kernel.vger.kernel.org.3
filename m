@@ -2,170 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B7004842DA
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:54:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 944A84842DD
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:55:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233895AbiADNyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 08:54:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45990 "EHLO
+        id S230361AbiADNzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 08:55:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbiADNyf (ORCPT
+        with ESMTP id S229655AbiADNzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 08:54:35 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F9CC061761;
-        Tue,  4 Jan 2022 05:54:34 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id bm14so148817175edb.5;
-        Tue, 04 Jan 2022 05:54:34 -0800 (PST)
+        Tue, 4 Jan 2022 08:55:08 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E9FC061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 05:55:08 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id y130so83863731ybe.8
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 05:55:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=RpVl90tu1VudcwPIkxCnRiBMFYXENzbIbd3F9LCevcE=;
-        b=pftNXnGBP9rGQLjvObrL2IxSnUvr9WpBwHdVkbRAY9AVbmd372Y1qN34M+b0K5uzT6
-         Uf9+06lF+CIJn9WhjkQ1Wcl8CBNbgUWwmz/0gc2RoJvwSZw+G9nL61y2oGmDXLoOr08c
-         fvCrse6ThXBPEM6+MbN3DivSwYqAosG5WDff3JwhX0Ih50ZRWamwbe4ryerFiHsFzLrg
-         q3NIdzdw9QMIQmNui2R9cSQ75wy3Zutm/d+FH76Pe2aDmI33KvdKGYj8/6VyRsyXJ6Gj
-         ROAVF6E6JLOyKp1bXKGXqYBoAxyBehx9z8VSVEoQ4JX1CLA87ddg5uV06MKQ43KJgSfi
-         h0LQ==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=uICLl7ALMQbyPSU7KmBXA9OTc0fxri6yRq599PdZEK4=;
+        b=kGRkffB/vzcg98AS1YV5pMh/tmyyjXEmXl3l1QpeRnFprZyx6MpCwGM6eRU09S3F4G
+         bqFvcBokuAE8IKVz+dLNqdI8o+Zlcx9HYxMgyVB2A08KvnGzM/Jz+KZqg+7hCDBYI8pW
+         viCynoDXhHTwaWKQpqVmBjHa7Nr1JYAccjd3H/IQKgvfc/4ZnfsRcAlI4BHZQVha7zTx
+         UAOdXu2uJj6+ENWx5LTA7JmEnn9jHMxlklPaEqzuyN73r1G8DI92oZaicdx4GY5ZJohr
+         gfa49fIuz0dQO/xFmDe/cmNztwNzIhTvhQ8Y844QtYlh/YCZTiuk/uTJFKYDCU4JVz5Z
+         7Zbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=RpVl90tu1VudcwPIkxCnRiBMFYXENzbIbd3F9LCevcE=;
-        b=SlAmFG+kTrhmWleWHiIKbycBHSTRgJR8SjUAfJUrTMx6eQd4M14XU1Mr181oqvJgoA
-         sNv/8k3Be9FdxwEiDjTW67W/6hR6xZAuODc79DbQlGkt/1KiNTC05TwXjYCVY8/BfvPK
-         STw4RZyUb6whV/pKjZAO0nYFyfIJEYMftgWxAyz07PL1CAKcIbDBxO7QGcE+5cITNLko
-         ZASatNZ4szK21sB5Y9IwgQ1V1odMZyMDIf0C83htHbFnmAVefiQX482a3OEepJwJITRd
-         YGkxdXPgaEgEyqyuQvFQNkLhDSL2KLcoxGDtx6WfcbaUY4fXXtaXBTfdYT2PiW99IPl1
-         BiYQ==
-X-Gm-Message-State: AOAM532QY1Lj+MJqLtbqnUbox0U0FD49wsz32DfljMYWrjziTeUHoafh
-        hdkAYaqcpXFNRHub9CqR+QI=
-X-Google-Smtp-Source: ABdhPJw/CSFlsP/QAMlrC1V1/TOLkywsPYyIr83FJn+Ai6VmiIJRPTxJLnamZq4+J0QbklSXecEZIg==
-X-Received: by 2002:a17:906:7217:: with SMTP id m23mr37716359ejk.735.1641304473556;
-        Tue, 04 Jan 2022 05:54:33 -0800 (PST)
-Received: from gmail.com (0526F11B.dsl.pool.telekom.hu. [5.38.241.27])
-        by smtp.gmail.com with ESMTPSA id hd17sm11516052ejc.58.2022.01.04.05.54.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 05:54:33 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Tue, 4 Jan 2022 14:54:31 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: [PATCH] headers/uninline: Uninline single-use function:
- kobject_has_children()
-Message-ID: <YdRRl+jeAm/xfU8D@gmail.com>
-References: <YdIfz+LMewetSaEB@gmail.com>
- <20220103135400.4p5ezn3ntgpefuan@box.shutemov.name>
- <YdQnfyD0JzkGIzEN@gmail.com>
- <YdRM7I9E2WGU4GRg@kroah.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=uICLl7ALMQbyPSU7KmBXA9OTc0fxri6yRq599PdZEK4=;
+        b=wkB+1DYAnNadxcWv1vJ9qT1V5prAMRzDaEu02MFkX/3LaZL2aN852TMvVhXgNgafIl
+         thsoaGSJqbiZXC/Zw+bputJUkM6WAcfArQpohrmxjufCMRtsXbV9+Osn112OG2EqMilo
+         MGIYQMWdSZFgcLJESRGIJg1KQnGOwLFtaKsFdzvNq9huf9WX0lTtKtPxRJI0Hb509K4x
+         KsO8VmvunjrWstM9hYZuq64nc9ThSrrJ74pBxQaZXNVuo69lAcFFuKGlV9t9NEX3krE3
+         Iw6n0EXTopfbccQz4zU7OiWPBbWhgBEZxDUdAQ6lB631byTwWRV8JhCDUmTWikusc7cm
+         ib2w==
+X-Gm-Message-State: AOAM530k7U+vc455QRRkt79ym4WIi73NF0+PsUz+Mdqfq6bzklcTmZv+
+        o2gRHw5r0DKSkMZ0c7AZcjbPsTOGHNFxOmJLCVY7LQ==
+X-Google-Smtp-Source: ABdhPJzzqIseI0oQdOtLu75NcsaQhp5C9T36Sdr822+Mr9yJhImaYv/fXv72XKnWiATEF0wqloGLNTHy7MR/Pp6yfGw=
+X-Received: by 2002:a25:b981:: with SMTP id r1mr54967879ybg.520.1641304507196;
+ Tue, 04 Jan 2022 05:55:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdRM7I9E2WGU4GRg@kroah.com>
+References: <20220103142051.979780231@linuxfoundation.org>
+In-Reply-To: <20220103142051.979780231@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 4 Jan 2022 19:24:55 +0530
+Message-ID: <CA+G9fYs8YtKsu+adOaswD-v8m0mkEsamJR5E-NRQ3rW-F32rfA@mail.gmail.com>
+Subject: Re: [PATCH 4.9 00/13] 4.9.296-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 3 Jan 2022 at 19:52, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.9.296 release.
+> There are 13 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 05 Jan 2022 14:20:40 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.9.296-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.9.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+>
 
-* Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> On Tue, Jan 04, 2022 at 11:54:55AM +0100, Ingo Molnar wrote:
-> > There's one happy exception though, all the uninlining patches that 
-> > uninline a single-call function are probably fine as-is:
-> 
-> <snip>
-> 
-> >  3443e75fd1f8 headers/uninline: Uninline single-use function: kobject_has_children()
-> 
-> Let me go take this right now, no need for this to wait, it should be
-> out of kobject.h as you rightfully show there is only one user.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Sure - here you go!
+## Build
+* kernel: 4.9.296-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-4.9.y
+* git commit: c154c6cb3efdb71f32e51470e61b791083fab40c
+* git describe: v4.9.295-14-gc154c6cb3efd
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.2=
+95-14-gc154c6cb3efd
 
-Thanks,
+## Test Regressions (compared to v4.9.295)
+No test regressions found.
 
-	Ingo
+## Metric Regressions (compared to v4.9.295)
+No metric regressions found.
 
+## Test Fixes (compared to v4.9.295)
+No test fixes found.
 
-=============================>
-From: Ingo Molnar <mingo@kernel.org>
-Date: Sun, 29 Aug 2021 09:18:53 +0200
-Subject: [PATCH] headers/uninline: Uninline single-use function: kobject_has_children()
+## Metric Fixes (compared to v4.9.295)
+No metric fixes found.
 
-This was the only usage of <linux/kref_api.h> in <linux/kobject_api.h>,
-so we'll able to decouple the two after this change.
+## Test result summary
+total: 54919, pass: 43155, fail: 435, skip: 9846, xfail: 1483
 
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
----
- drivers/base/core.c     | 17 +++++++++++++++++
- include/linux/kobject.h | 17 -----------------
- 2 files changed, 17 insertions(+), 17 deletions(-)
+## Build Summary
+* arm: 254 total, 226 passed, 28 failed
+* arm64: 32 total, 32 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 19 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 22 total, 22 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 31 total, 31 passed, 0 failed
 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index fd034d742447..e1f2a5791c0e 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -3029,6 +3029,23 @@ static inline struct kobject *get_glue_dir(struct device *dev)
- 	return dev->kobj.parent;
- }
- 
-+/**
-+ * kobject_has_children - Returns whether a kobject has children.
-+ * @kobj: the object to test
-+ *
-+ * This will return whether a kobject has other kobjects as children.
-+ *
-+ * It does NOT account for the presence of attribute files, only sub
-+ * directories. It also assumes there is no concurrent addition or
-+ * removal of such children, and thus relies on external locking.
-+ */
-+static inline bool kobject_has_children(struct kobject *kobj)
-+{
-+	WARN_ON_ONCE(kref_read(&kobj->kref) == 0);
-+
-+	return kobj->sd && kobj->sd->dir.subdirs;
-+}
-+
- /*
-  * make sure cleaning up dir as the last step, we need to make
-  * sure .release handler of kobject is run with holding the
-diff --git a/include/linux/kobject.h b/include/linux/kobject.h
-index efd56f990a46..e1c600a377f7 100644
---- a/include/linux/kobject.h
-+++ b/include/linux/kobject.h
-@@ -117,23 +117,6 @@ extern void kobject_get_ownership(struct kobject *kobj,
- 				  kuid_t *uid, kgid_t *gid);
- extern char *kobject_get_path(struct kobject *kobj, gfp_t flag);
- 
--/**
-- * kobject_has_children - Returns whether a kobject has children.
-- * @kobj: the object to test
-- *
-- * This will return whether a kobject has other kobjects as children.
-- *
-- * It does NOT account for the presence of attribute files, only sub
-- * directories. It also assumes there is no concurrent addition or
-- * removal of such children, and thus relies on external locking.
-- */
--static inline bool kobject_has_children(struct kobject *kobj)
--{
--	WARN_ON_ONCE(kref_read(&kobj->kref) == 0);
--
--	return kobj->sd && kobj->sd->dir.subdirs;
--}
--
- struct kobj_type {
- 	void (*release)(struct kobject *kobj);
- 	const struct sysfs_ops *sysfs_ops;
+## Test suites summary
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

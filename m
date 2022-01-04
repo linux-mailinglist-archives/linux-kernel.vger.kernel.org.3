@@ -2,182 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 988F54839F1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 02:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D68D483A73
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 03:04:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231868AbiADBmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 20:42:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231863AbiADBma (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 20:42:30 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63275C061761
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 17:42:30 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id v22so32645143qtx.8
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 17:42:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bA+1Kfch/eEHX+p3OKR2yhTUBKCXwVdeM9Biyu299k4=;
-        b=V4aLrlwXyNbjx9n9aOLuJgkBYKuOtmVi16XsIW2IP/6Rk0BCOJgZ7B1V22NKkX3xE8
-         MdmY4SH07/rSPArbJ0U9EstMo65FLJP9XMOskCZ2mUTbVxQAZVVJ+zD2n2IfnA8JhUoY
-         aUXx46OsWhBxJUSACiTyg0wEB0GxRMtpjX3cYqx15IWSvBMHdCt6n6vcU/jqk/Qw9Ate
-         zz5PHY4wpNav/kWoYYA1AA/EumjNh6zcdCLrPJIOwYVjCWDaWkoQh8OJDL2tXdpqGXbI
-         /U8Cghp9AxBwsmCxwRAIyj9V38AIXLkkPkoSYFotEf4q8xAM6m1jkML5oeJryE95J4Mb
-         qXuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bA+1Kfch/eEHX+p3OKR2yhTUBKCXwVdeM9Biyu299k4=;
-        b=U/op4A3htCuO7RTkE96Fb7pw0xN0cZWAYnSSgW2k+TJIc6vacgVUjxa1CsRsLSH+ML
-         0y1zFB4cmLJINzyf/GPRm6WVpTdNIdX79wQ8PaYJ/KmuF9bPX7eMyVricrgZW3ayrJgg
-         L8mZZrHtdAqyvBwyOW1SLWelzAqd3+nA8hk/7yjsBe9mEEXIUaDwZfUfcT4E6OH4XTX1
-         KC5pgHSBJo9Nlu9PCk7+NstSwKtk6NCBES5NapLXdqnwCgBUZdcdscYrfajdFLn3WrE4
-         qCB8tikKjWyJJWz0TQkjJfSc6gSiLvJS/R//nIN7isYt6qF4pJzejfdbsYYKFpfAEi20
-         Ll/w==
-X-Gm-Message-State: AOAM5319un+nJaIFnJEneFuxXI3H/N2ZiqhAZhznFjgPG8IqOaysinfb
-        05oun4SDY/BjXqnLpivWJyrCN2ztPfPbLm164PsAqQH2tDk=
-X-Google-Smtp-Source: ABdhPJxNrV6RgUUxBNHOTX3wOigJb+qX/QV2VcJtOzcWEjwdEoGSOe5vHw/axcitIiggU+SZPbFlNC2K12MmnbvJ9wo=
-X-Received: by 2002:a05:622a:5cd:: with SMTP id d13mr41664680qtb.47.1641260549564;
- Mon, 03 Jan 2022 17:42:29 -0800 (PST)
-MIME-Version: 1.0
-References: <1640930555-12220-1-git-send-email-weidong.guanguan@gmail.com>
-In-Reply-To: <1640930555-12220-1-git-send-email-weidong.guanguan@gmail.com>
-From:   Baolin Wang <baolin.wang7@gmail.com>
-Date:   Tue, 4 Jan 2022 09:43:10 +0800
-Message-ID: <CADBw62qcAvJc7asZnF=6b8oFWq1Uk2iGynaBfSH2n07p_WexsA@mail.gmail.com>
-Subject: Re: [PATCH] clocksource: fix counter with 32bit may wrap around
-To:     weidong guan <weidong.guanguan@gmail.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        id S231733AbiADCEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 21:04:15 -0500
+Received: from mga14.intel.com ([192.55.52.115]:27108 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230200AbiADCEP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 21:04:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641261854; x=1672797854;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=rOuUJmbr74WI4ZIAyOLlAU0/SD3eXv+IaIUsKvmCi7c=;
+  b=L3NRKT5BCGJ3V7hKIyJhnX5wUnrB7mD+o2Qoc62IKaeJivCCXXAVSTjG
+   qvey9WHpZiiOhtlB3zAYwyuLzllE9HvC3ECCXB3VbQx+KwnQ8f26CkLJA
+   oWJ9C8SX8dHMSYaw5L4HmG1DqqEeYbsljAk6jRnOBxG0bj5/8IyyBbm2/
+   nmx9l7508COXDTTPfO5ed9zG6le/Cqsg8nT3v6EC4a+GGisuPCKXOXLUu
+   4T/4EeUnPEe8uyaOFV2NljktT3oVHm+y93PQ2lTRSzlEeDiW7xjPoPA0Z
+   Stj+e2mBg51fY2KaWz9LnmXpRRqX17VVQRlSpGEV9MuCYseBZFs0Xcezb
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="242348676"
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="242348676"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 18:04:14 -0800
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="512282072"
+Received: from yzhao56-desk.sh.intel.com ([10.239.159.43])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 18:04:06 -0800
+Date:   Tue, 4 Jan 2022 09:46:35 +0800
+From:   Yan Zhao <yan.y.zhao@intel.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "weidong.guan" <weidong.guan@unisoc.com>
-Content-Type: text/plain; charset="UTF-8"
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com
+Subject: Re: [PATCH v3 kvm/queue 14/16] KVM: Handle page fault for private
+ memory
+Message-ID: <20220104014629.GA2330@yzhao56-desk.sh.intel.com>
+Reply-To: Yan Zhao <yan.y.zhao@intel.com>
+References: <20211223123011.41044-1-chao.p.peng@linux.intel.com>
+ <20211223123011.41044-15-chao.p.peng@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211223123011.41044-15-chao.p.peng@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Fri, Dec 31, 2021 at 2:03 PM weidong guan <weidong.guanguan@gmail.com> wrote:
+On Thu, Dec 23, 2021 at 08:30:09PM +0800, Chao Peng wrote:
+> When a page fault from the secondary page table while the guest is
+> running happens in a memslot with KVM_MEM_PRIVATE, we need go
+> different paths for private access and shared access.
+> 
+>   - For private access, KVM checks if the page is already allocated in
+>     the memory backend, if yes KVM establishes the mapping, otherwise
+>     exits to userspace to convert a shared page to private one.
 >
-> From: "weidong.guan" <weidong.guan@unisoc.com>
->
-> When the system sleep time exceeds 30+ hours, counter with 32bit may wrap
+will this conversion be atomical or not?
+For example, after punching a hole in a private memory slot, will KVM
+see two notifications: one for invalidation of the whole private memory
+slot, and one for fallocate of the rest ranges besides the hole?
+Or, KVM only sees one invalidation notification for the hole?
+Could you please show QEMU code about this conversion?
 
-I am curious about which condition the system can suspend for more
-than 30+ hours, from my understanding, the phone will be woken up
-periodically.
 
-> around, resulting in insufficient sleep compensation time. So We should
-> enable 64bit counter mode of sprd timer and use the given mult/shift
-> to ensure that sufficient counts can be generated.
->
-> Signed-off-by: weidong.guan <weidong.guan@unisoc.com>
+>   - For shared access, KVM also checks if the page is already allocated
+>     in the memory backend, if yes then exit to userspace to convert a
+>     private page to shared one, otherwise it's treated as a traditional
+>     hva-based shared memory, KVM lets existing code to obtain a pfn with
+>     get_user_pages() and establish the mapping.
+> 
+> The above code assume private memory is persistent and pre-allocated in
+> the memory backend so KVM can use this information as an indicator for
+> a page is private or shared. The above check is then performed by
+> calling kvm_memfd_get_pfn() which currently is implemented as a
+> pagecache search but in theory that can be implemented differently
+> (i.e. when the page is even not mapped into host pagecache there should
+> be some different implementation).
+> 
+> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
 > ---
->  drivers/clocksource/timer-sprd.c | 31 ++++++++++++++++++++-----------
->  1 file changed, 20 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/clocksource/timer-sprd.c b/drivers/clocksource/timer-sprd.c
-> index 430cb99..7eac059 100644
-> --- a/drivers/clocksource/timer-sprd.c
-> +++ b/drivers/clocksource/timer-sprd.c
-> @@ -30,6 +30,7 @@
->  #define TIMER_VALUE_SHDW_HI    0x1c
->
->  #define TIMER_VALUE_LO_MASK    GENMASK(31, 0)
-> +#define TIMER_VALUE_64BIT_MASK GENMASK_ULL(63, 0)
->
->  static void sprd_timer_enable(void __iomem *base, u32 flag)
->  {
-> @@ -57,10 +58,12 @@ static void sprd_timer_disable(void __iomem *base)
->         writel_relaxed(val, base + TIMER_CTL);
->  }
->
-> -static void sprd_timer_update_counter(void __iomem *base, unsigned long cycles)
-> +static void
-> +sprd_timer_update_counter(void __iomem *base, unsigned long long cycles)
->  {
->         writel_relaxed(cycles & TIMER_VALUE_LO_MASK, base + TIMER_LOAD_LO);
-> -       writel_relaxed(0, base + TIMER_LOAD_HI);
-> +       writel_relaxed((cycles >> 32) & TIMER_VALUE_LO_MASK,
-> +                       base + TIMER_LOAD_HI);
->  }
->
->  static void sprd_timer_enable_interrupt(void __iomem *base)
-> @@ -82,7 +85,7 @@ static int sprd_timer_set_next_event(unsigned long cycles,
->         struct timer_of *to = to_timer_of(ce);
->
->         sprd_timer_disable(timer_of_base(to));
-> -       sprd_timer_update_counter(timer_of_base(to), cycles);
-> +       sprd_timer_update_counter(timer_of_base(to), (u64)cycles);
->         sprd_timer_enable(timer_of_base(to), 0);
->
->         return 0;
-> @@ -93,7 +96,8 @@ static int sprd_timer_set_periodic(struct clock_event_device *ce)
->         struct timer_of *to = to_timer_of(ce);
->
->         sprd_timer_disable(timer_of_base(to));
-> -       sprd_timer_update_counter(timer_of_base(to), timer_of_period(to));
-> +       sprd_timer_update_counter(timer_of_base(to),
-> +                                 (u64)timer_of_period(to));
->         sprd_timer_enable(timer_of_base(to), TIMER_CTL_PERIOD_MODE);
->
->         return 0;
-> @@ -162,15 +166,19 @@ static int __init sprd_timer_init(struct device_node *np)
->
->  static u64 sprd_suspend_timer_read(struct clocksource *cs)
->  {
-> -       return ~(u64)readl_relaxed(timer_of_base(&suspend_to) +
-> -                                  TIMER_VALUE_SHDW_LO) & cs->mask;
-> +       u64 value_hi, value_lo;
+>  arch/x86/kvm/mmu/mmu.c         | 73 ++++++++++++++++++++++++++++++++--
+>  arch/x86/kvm/mmu/paging_tmpl.h | 11 +++--
+>  2 files changed, 77 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 2856eb662a21..fbcdf62f8281 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -2920,6 +2920,9 @@ int kvm_mmu_max_mapping_level(struct kvm *kvm,
+>  	if (max_level == PG_LEVEL_4K)
+>  		return PG_LEVEL_4K;
+>  
+> +	if (kvm_slot_is_private(slot))
+> +		return max_level;
 > +
-> +       value_hi = (u64)readl_relaxed(timer_of_base(&suspend_to) + TIMER_VALUE_SHDW_HI);
-> +       value_lo = (u64)readl_relaxed(timer_of_base(&suspend_to) + TIMER_VALUE_SHDW_LO);
-> +       return ~(u64)((value_hi << 32) + value_lo) & cs->mask;
+>  	host_level = host_pfn_mapping_level(kvm, gfn, pfn, slot);
+>  	return min(host_level, max_level);
 >  }
->
->  static int sprd_suspend_timer_enable(struct clocksource *cs)
+> @@ -3950,7 +3953,59 @@ static bool kvm_arch_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+>  				  kvm_vcpu_gfn_to_hva(vcpu, gfn), &arch);
+>  }
+>  
+> -static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault, int *r)
+> +static bool kvm_vcpu_is_private_gfn(struct kvm_vcpu *vcpu, gfn_t gfn)
+> +{
+> +	/*
+> +	 * At this time private gfn has not been supported yet. Other patch
+> +	 * that enables it should change this.
+> +	 */
+> +	return false;
+> +}
+> +
+> +static bool kvm_faultin_pfn_private(struct kvm_vcpu *vcpu,
+> +				    struct kvm_page_fault *fault,
+> +				    bool *is_private_pfn, int *r)
+> +{
+> +	int order;
+> +	int mem_convert_type;
+> +	struct kvm_memory_slot *slot = fault->slot;
+> +	long pfn = kvm_memfd_get_pfn(slot, fault->gfn, &order);
+For private memory slots, it's possible to have pfns backed by
+backends other than memfd, e.g. devicefd. So is it possible to let those
+private memslots keep private and use traditional hva-based way?
+Reasons below:
+1. only memfd is supported in this patch set.
+2. qemu/host read/write to those private memslots backing up by devicefd may
+not cause machine check.
+
+Thanks
+Yan
+
+
+> +
+> +	if (kvm_vcpu_is_private_gfn(vcpu, fault->addr >> PAGE_SHIFT)) {
+> +		if (pfn < 0)
+> +			mem_convert_type = KVM_EXIT_MEM_MAP_PRIVATE;
+> +		else {
+> +			fault->pfn = pfn;
+> +			if (slot->flags & KVM_MEM_READONLY)
+> +				fault->map_writable = false;
+> +			else
+> +				fault->map_writable = true;
+> +
+> +			if (order == 0)
+> +				fault->max_level = PG_LEVEL_4K;
+> +			*is_private_pfn = true;
+> +			*r = RET_PF_FIXED;
+> +			return true;
+> +		}
+> +	} else {
+> +		if (pfn < 0)
+> +			return false;
+> +
+> +		kvm_memfd_put_pfn(pfn);
+> +		mem_convert_type = KVM_EXIT_MEM_MAP_SHARED;
+> +	}
+> +
+> +	vcpu->run->exit_reason = KVM_EXIT_MEMORY_ERROR;
+> +	vcpu->run->mem.type = mem_convert_type;
+> +	vcpu->run->mem.u.map.gpa = fault->gfn << PAGE_SHIFT;
+> +	vcpu->run->mem.u.map.size = PAGE_SIZE;
+> +	fault->pfn = -1;
+> +	*r = -1;
+> +	return true;
+> +}
+> +
+> +static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+> +			    bool *is_private_pfn, int *r)
 >  {
->         sprd_timer_update_counter(timer_of_base(&suspend_to),
-> -                                 TIMER_VALUE_LO_MASK);
-> -       sprd_timer_enable(timer_of_base(&suspend_to), TIMER_CTL_PERIOD_MODE);
-> +                                 TIMER_VALUE_64BIT_MASK);
-> +       sprd_timer_enable(timer_of_base(&suspend_to),
-> +                         TIMER_CTL_PERIOD_MODE|TIMER_CTL_64BIT_WIDTH);
->
->         return 0;
+>  	struct kvm_memory_slot *slot = fault->slot;
+>  	bool async;
+> @@ -3984,6 +4039,10 @@ static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+>  		}
+>  	}
+>  
+> +	if (kvm_slot_is_private(slot) &&
+> +	    kvm_faultin_pfn_private(vcpu, fault, is_private_pfn, r))
+> +		return *r == RET_PF_FIXED ? false : true;
+> +
+>  	async = false;
+>  	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, false, &async,
+>  					  fault->write, &fault->map_writable,
+> @@ -4044,6 +4103,7 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+>  	bool is_tdp_mmu_fault = is_tdp_mmu(vcpu->arch.mmu);
+>  
+>  	unsigned long mmu_seq;
+> +	bool is_private_pfn = false;
+>  	int r;
+>  
+>  	fault->gfn = fault->addr >> PAGE_SHIFT;
+> @@ -4063,7 +4123,7 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+>  	mmu_seq = vcpu->kvm->mmu_notifier_seq;
+>  	smp_rmb();
+>  
+> -	if (kvm_faultin_pfn(vcpu, fault, &r))
+> +	if (kvm_faultin_pfn(vcpu, fault, &is_private_pfn, &r))
+>  		return r;
+>  
+>  	if (handle_abnormal_pfn(vcpu, fault, ACC_ALL, &r))
+> @@ -4076,7 +4136,7 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+>  	else
+>  		write_lock(&vcpu->kvm->mmu_lock);
+>  
+> -	if (is_page_fault_stale(vcpu, fault, mmu_seq))
+> +	if (!is_private_pfn && is_page_fault_stale(vcpu, fault, mmu_seq))
+>  		goto out_unlock;
+>  
+>  	r = make_mmu_pages_available(vcpu);
+> @@ -4093,7 +4153,12 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+>  		read_unlock(&vcpu->kvm->mmu_lock);
+>  	else
+>  		write_unlock(&vcpu->kvm->mmu_lock);
+> -	kvm_release_pfn_clean(fault->pfn);
+> +
+> +	if (is_private_pfn)
+> +		kvm_memfd_put_pfn(fault->pfn);
+> +	else
+> +		kvm_release_pfn_clean(fault->pfn);
+> +
+>  	return r;
 >  }
-> @@ -183,10 +191,12 @@ static void sprd_suspend_timer_disable(struct clocksource *cs)
->  static struct clocksource suspend_clocksource = {
->         .name   = "sprd_suspend_timer",
->         .rating = 200,
-> +       .mult   = 0x1DCD650,
-> +       .shift  = 10,
-
-And why?
-
->         .read   = sprd_suspend_timer_read,
->         .enable = sprd_suspend_timer_enable,
->         .disable = sprd_suspend_timer_disable,
-> -       .mask   = CLOCKSOURCE_MASK(32),
-> +       .mask   = CLOCKSOURCE_MASK(64),
->         .flags  = CLOCK_SOURCE_IS_CONTINUOUS | CLOCK_SOURCE_SUSPEND_NONSTOP,
->  };
->
-> @@ -198,8 +208,7 @@ static int __init sprd_suspend_timer_init(struct device_node *np)
->         if (ret)
->                 return ret;
->
-> -       clocksource_register_hz(&suspend_clocksource,
-> -                               timer_of_rate(&suspend_to));
-> +       clocksource_register_hz(&suspend_clocksource, 0);
-
--- 
-Baolin Wang
+>  
+> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+> index 5b5bdac97c7b..640fd1e2fe4c 100644
+> --- a/arch/x86/kvm/mmu/paging_tmpl.h
+> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
+> @@ -825,6 +825,8 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+>  	int r;
+>  	unsigned long mmu_seq;
+>  	bool is_self_change_mapping;
+> +	bool is_private_pfn = false;
+> +
+>  
+>  	pgprintk("%s: addr %lx err %x\n", __func__, fault->addr, fault->error_code);
+>  	WARN_ON_ONCE(fault->is_tdp);
+> @@ -873,7 +875,7 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+>  	mmu_seq = vcpu->kvm->mmu_notifier_seq;
+>  	smp_rmb();
+>  
+> -	if (kvm_faultin_pfn(vcpu, fault, &r))
+> +	if (kvm_faultin_pfn(vcpu, fault, &is_private_pfn, &r))
+>  		return r;
+>  
+>  	if (handle_abnormal_pfn(vcpu, fault, walker.pte_access, &r))
+> @@ -901,7 +903,7 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+>  	r = RET_PF_RETRY;
+>  	write_lock(&vcpu->kvm->mmu_lock);
+>  
+> -	if (is_page_fault_stale(vcpu, fault, mmu_seq))
+> +	if (!is_private_pfn && is_page_fault_stale(vcpu, fault, mmu_seq))
+>  		goto out_unlock;
+>  
+>  	kvm_mmu_audit(vcpu, AUDIT_PRE_PAGE_FAULT);
+> @@ -913,7 +915,10 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+>  
+>  out_unlock:
+>  	write_unlock(&vcpu->kvm->mmu_lock);
+> -	kvm_release_pfn_clean(fault->pfn);
+> +	if (is_private_pfn)
+> +		kvm_memfd_put_pfn(fault->pfn);
+> +	else
+> +		kvm_release_pfn_clean(fault->pfn);
+>  	return r;
+>  }
+>  
+> -- 
+> 2.17.1
+> 
+> 

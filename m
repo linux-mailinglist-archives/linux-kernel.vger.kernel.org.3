@@ -2,96 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5304484795
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:13:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20B90484796
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:13:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236141AbiADSN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 13:13:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50198 "EHLO
+        id S236139AbiADSNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 13:13:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233069AbiADSNW (ORCPT
+        with ESMTP id S236107AbiADSNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 13:13:22 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A13EC061761;
-        Tue,  4 Jan 2022 10:13:22 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id l16so15537419plg.10;
-        Tue, 04 Jan 2022 10:13:22 -0800 (PST)
+        Tue, 4 Jan 2022 13:13:44 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3559C061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 10:13:43 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id q16so77863753wrg.7
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 10:13:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=whL2S6rtPh6h7+qTsELuJiawBHscqEuY+9HepRLG3ro=;
-        b=J69BO8D3+itfdYxlnhU2cVYjR8Mjov4Kax7HdFttPq11Q5457whwEh3V36edYlyJLD
-         wjq88InBMbfx/ZE3GdDptmvUxDykq208A83Coi5kjp9kdNtPW5LGL6evixzT9a8uTkiX
-         FwqeiCe5uiKZyVJmNtbTnAT+HP5zBUVhe+YQF/Jh6HbenrJ8qr2TOZXlDVaSx3/DJsuZ
-         c4Tb9xc/NbvdRLabmrJS1Y7TW0fCBuFGr50Itv4g0UFpMEE598OISPwvQsA/QMcE39Wg
-         IbHPp8uPq4E4KYO0/a+3lTUrPmEuScNBUuMn8yXGyiNMfh9eGN7kHK3V1ESZZJ8tgQwg
-         nOmQ==
+        d=colorfullife-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tq/rDftsObQfvSRPH80FancJA7G4hDd6gx/fOvyV3es=;
+        b=uIXdfs1/7JH68k3Wz2PeMCTpn7DHDz3TflgvLE66s/e9qPBymA/dISIAEEG/Rz+2NK
+         w64cUenmWv0CSkJHEz5i8WKMqdPJtpnLZ9tvByGWhWMiVE0NkuSfDG8e/X/jNjb7OxZ6
+         akaHvplE9bG4KWHd/V69UYPCzDxP2dPLNceEi1U4e9KgrSz/YsB8/sjGXaECq/z2we53
+         mvWnkCa+rGd1D65ZjUbfftvc7F+0JqUe0UCq/f5zZVrMxYmDlysTEQiFtOGnLP51raI2
+         /jZUR+IQHwFu6ZjLglblMf53VQLLshudfimKVfo8RkG4pONCxeHtBUucYA0wNrjjrrGE
+         zvsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=whL2S6rtPh6h7+qTsELuJiawBHscqEuY+9HepRLG3ro=;
-        b=m3V8NzIYSptof8jV42cGehlYADLD3BXCqQNaapmQvDPEYF/birEVRGyYMeABCp01tt
-         B0feqR4hjTjAbZXkMygWqBtWW8Fy6GBPj3mjWMgT0t6E9OvT0USMNA8qnQwOcoLvFEms
-         Rw6B/4iSQ4oyaGh7EJ+o4uQeyrwMSWz0Y94z6nVrt5RTfRUStE2ZiaK5V9RqSY/QtKyf
-         zk13YAuISuQE/mGscQInXr8Oy2Ns8dLn1M4RsmNN5JLGkCjajfmjYzFGOoiVL15UFO4P
-         i2aX4gsFYmZ+p+pvPwCRXyTVyi7qtNgu73P3uQYYn9Yk6aCuut917y5L5MePOiCUH4Jn
-         2K+w==
-X-Gm-Message-State: AOAM531LQK7aWeWXwKw4oFKVHk9C1jN/N/BDQphhHklKun+cYqxjiVrH
-        DbGyUKVo9BbL/xafz2BvkuuPrVHxJq8=
-X-Google-Smtp-Source: ABdhPJwyKf/xA3MxG+pfuAsBBecp2eAcDGCQ6fCYZLK3gH5Au/yoFL901uUQuihPvnJUhi2fR/Po9g==
-X-Received: by 2002:a17:903:28f:b0:149:43db:f3cf with SMTP id j15-20020a170903028f00b0014943dbf3cfmr51356351plr.104.1641320001383;
-        Tue, 04 Jan 2022 10:13:21 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id c9sm38509740pfc.61.2022.01.04.10.13.19
+        bh=tq/rDftsObQfvSRPH80FancJA7G4hDd6gx/fOvyV3es=;
+        b=bVgvXW88kTXtvV8gClpmYzyIhrQC5GKgFqBivR1KmHR/qga0VpejMq9RbooItUxviV
+         f9NMMW3s61TGzrI2RPdqwZtnrHBmEYxy8d43jjWZxJqfVxWp8mvOl8ag18PQok5bBl2B
+         AJpcWcS9q171/3bprnHzsvocljW5GLfaOJFkclzjs2H1kEC47WNTfmBzGzuAAROyLSD0
+         aXrwsG3QtQtMNgufAL4BJpFBrmytBDEXfQdLCRLLxCccOv3sEpsMgLSYVX7H59w9BW7d
+         zTGxOe2aViZEvquGh0qAPJIzimUNpK1qRC1GVN7m+S/pGwjBZbte/2/rU7jwlf7IXwCK
+         s8DQ==
+X-Gm-Message-State: AOAM531e7okFDOX/5EeAiWiaE3BEokjWUKwTvHy8jKlQ1D59KZhhHjDK
+        Iev+FXRAj2JUrr3ckVpwRn3ANQ==
+X-Google-Smtp-Source: ABdhPJzDtNxqWTb1FZnIvsklomGU5Qb0sIMun7griucJllmVkcsS1lodLhtkLGZbVpsa+AQmCGBniQ==
+X-Received: by 2002:a05:6000:1acd:: with SMTP id i13mr43276931wry.406.1641320022642;
+        Tue, 04 Jan 2022 10:13:42 -0800 (PST)
+Received: from ?IPV6:2003:d9:9708:b800:49a3:330d:2aba:c4a2? (p200300d99708b80049a3330d2abac4a2.dip0.t-ipconnect.de. [2003:d9:9708:b800:49a3:330d:2aba:c4a2])
+        by smtp.googlemail.com with ESMTPSA id g1sm39029132wri.103.2022.01.04.10.13.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 10:13:20 -0800 (PST)
-Subject: Re: [PATCH 5.4 00/36] 5.4.170-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        stable@vger.kernel.org
-References: <20220104073839.317902293@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <3146d623-b7fd-de2c-6845-87f59c06b6ed@gmail.com>
-Date:   Tue, 4 Jan 2022 10:13:18 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 04 Jan 2022 10:13:42 -0800 (PST)
+Message-ID: <c8edba64-9b4b-1ef8-f0b3-1b4beacf1551@colorfullife.com>
+Date:   Tue, 4 Jan 2022 19:13:40 +0100
 MIME-Version: 1.0
-In-Reply-To: <20220104073839.317902293@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2] ipc: Store mqueue sysctls in the ipc namespace
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+To:     Alexey Gladkov <legion@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Containers <containers@lists.linux.dev>
+Cc:     Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Daniel Walsh <dwalsh@redhat.com>,
+        Davidlohr Bueso <dbueso@suse.de>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Kirill Tkhai <ktkhai@virtuozzo.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        kernel test robot <lkp@intel.com>
+References: <0f0408bb7fbf3187966a9bf19a98642a5d9669fe.1641225760.git.legion@kernel.org>
+ <792dcae82bc228cd0bec1fa80ed4d2c9340b0f8f.1641296947.git.legion@kernel.org>
+From:   Manfred Spraul <manfred@colorfullife.com>
+In-Reply-To: <792dcae82bc228cd0bec1fa80ed4d2c9340b0f8f.1641296947.git.legion@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/3/22 11:40 PM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.170 release.
-> There are 36 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 06 Jan 2022 07:38:29 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.170-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Hi Alexey,
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+On 1/4/22 12:51, Alexey Gladkov wrote:
+> Right now, the mqueue sysctls take ipc namespaces into account in a
+> rather hacky way. This works in most cases, but does not respect the
+> user namespace.
+>
+> Within the user namespace, the user cannot change the /proc/sys/fs/mqueue/*
+> parametres. This poses a problem in the rootless containers.
+>
+> To solve this I changed the implementation of the mqueue sysctls just
+> like some other sysctls.
+>
+> Before this change:
+>
+> $ echo 5 | unshare -r -U -i tee /proc/sys/fs/mqueue/msg_max
+> tee: /proc/sys/fs/mqueue/msg_max: Permission denied
+> 5
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Could you crosscheck that all (relevant) allocations in ipc/mqueue.c use 
+GFP_KERNEL_ACCOUNT?
+
+We should not allow normal users to use up all memory.
+
+Otherwise:
+The idea is good, the limits do not really prevent using up all memory, 
+_ACCOUNT is the better approach.
+And with _ACCOUNT, it doesn't hurt that the namespace root is able to 
+set limits.
+
+
+--
+
+     Manfred
+

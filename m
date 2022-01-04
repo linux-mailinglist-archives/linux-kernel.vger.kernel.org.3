@@ -2,201 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 739BA483BAD
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 06:26:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A99483BB0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 06:28:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbiADF0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 00:26:50 -0500
-Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:52021 "EHLO
-        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230046AbiADF0s (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 00:26:48 -0500
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 0342C3201F4E;
-        Tue,  4 Jan 2022 00:26:46 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Tue, 04 Jan 2022 00:26:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=q/uGjEz3u6hJ9Wy+DckATc7YSLX
-        e92cnspAamWMzasc=; b=UTE5UyiqV7gDlT0RA0n3x4OCUgUNWQWJV9RQDKsjQTW
-        uCXnUhHQp9MfAn+4lzvj4JgpGO56ayOz60Sd0c8/ymDg33rbkkIs0Z35A7grxU6h
-        xlzq0+lnS+wv/0xA8po1UXtsgOFc7XSAbRss2nrVa6155WzqTE6yWqIEtVjMva0K
-        4WRtLeBN4Wis7TO1F18uIdiA2hxnDmWNzdyZFyEfVoyeroMKH2PTumJLdMISv3/5
-        GEjBz46PKs7gWQz+3uXCj8iHVfZDu5WrbetK/sJyvcqj6iU4BY4oTK2g6pb89qRQ
-        vp7hROIzB0VmO+J563oKDcurxZD+yDXtlSa7ggGD0ew==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=q/uGjE
-        z3u6hJ9Wy+DckATc7YSLXe92cnspAamWMzasc=; b=LpGpvPd3FO9vM9g42wB0si
-        lgP0b9/kolqywWJ4REdPp09Bl4BfFhUPPkZYiyXGLGOd5BXU0+3UKo7H++A/U9oU
-        5chJR71J2jtD+dJsMjmqYWktxF8HtdLZ8TMtAJ7HMvFldQ5QiMBce43fI4WPHFWP
-        NQCfRnWl1zDg2OgwhHXY50Xk/SBQuqSVNgt8/lKDExPqltXMe1eRGD93iS0P3Yp7
-        w0wePnQwCd7cttf8MLQvtWeI0pYpOlp5Vc80vI6WDPCW5U5Yikh1hy2Rg0u6n+dt
-        kF2aQnGanUliZYy0D/8BGREeS8gZPz2CW+4PjujSEMQ0DlJ53PO9uu/wEkOwqQqQ
-        ==
-X-ME-Sender: <xms:ltrTYVKI9puhZdViQ_g1f2LtvSOLqr_W-gInF1cpCzNJ6Qfx9sG74w>
-    <xme:ltrTYRLT__X3wpt5qarQO0sS5jfaTcMARszoiy8Tn1SfeqW-L8M7o3spkTQvzEN4c
-    dFUVsj-kQnrMbyO6w>
-X-ME-Received: <xmr:ltrTYdtih72HH_A-pYSmfOf-IJNqWGqqTc59uXFNTlbDu7zEKTXH_EnNHzmRVaDW-GTcurmpG2W4u8Ja8gWv9jdI4Uhz2EuAfjdL-Mu8Wxs4kpV92tk4OwrBRVlx>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrudefvddgkedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdljedtmdenucfjughrpeffhffvuffkfhggtggujgesthdtredttddt
-    vdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqeenuc
-    ggtffrrghtthgvrhhnpeeuuddvjeefffelgfeuveehfeegfeetfeetueduudfhudfhheev
-    leetveduleehjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:ltrTYWZFPaZdLpqFhUtM7QD3qn4wcC_E9SjL_N49I0miJQNKmXHqwg>
-    <xmx:ltrTYcb0u37XRCQud6k1wH25s6QntpIMecslsrdcKZKwlamno2IYfA>
-    <xmx:ltrTYaC4X6_Uqcvapi0UQYwgbRaHGmY4ydgF244ufIVcDanEJ3WtMQ>
-    <xmx:ltrTYTVLJqc5jDxpxfFgiatngFf1aMH8ygw_dythzjKCWeXKXpFbiQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 4 Jan 2022 00:26:45 -0500 (EST)
-Date:   Mon, 3 Jan 2022 23:26:44 -0600
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     arnd@arndb.de, giometti@enneenne.com, linux-kernel@vger.kernel.org,
-        thesven73@gmail.com, ojeda@kernel.org
-Subject: Re: [RFC char-misc-next 2/2] pps: Fix use-after-free cdev bug on
- module unload
-Message-ID: <20220104052644.j5y5c3s262fa4dac@muhammad.localdomain>
-References: <cover.1641185192.git.dxu@dxuuu.xyz>
- <bd7cb7db45c11f50495697ad23804a30a2e3b2d4.1641185192.git.dxu@dxuuu.xyz>
- <YdMC07NTx7sTRKtI@kroah.com>
+        id S230266AbiADF2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 00:28:38 -0500
+Received: from mga03.intel.com ([134.134.136.65]:20066 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230141AbiADF2e (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 00:28:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641274114; x=1672810114;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jR4G5QiHtyexyPM04IhixjSfmbgt0+Tr4sLEcSX7iq0=;
+  b=PHIj3oTFk9ptH76/AYcJ5ZdiwYyjRDrzRvcSYoiWXTKCPeIeky7PM6p8
+   1hWYxVBkSwEOxqyScvyog7/7uRmcmCf1FKiQy/jvsHET76S3qJJ4bwb+6
+   pO7vSzfXSU67aGopxrhlWjyk6iVFvaly7X+UqC+BTvbg5NJDWlU4RLyz+
+   6dq1VsvVFGEuA7VEIlYzuDl0gNtfWcIJt/trzOToqrqKjd3HsQRFfhjcU
+   C2LyHJH28idlL0HejMq+g3/J4SDnOvRjR5S86eMbElJnmica/1kIKUiXr
+   wpuuqhn9EJrh9/AFlsG3FKFLw7vOq852sMNT7EpUzwEAWayHHoZfSLq7O
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="242114612"
+X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
+   d="scan'208";a="242114612"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 21:28:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
+   d="scan'208";a="470042545"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 03 Jan 2022 21:28:28 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n4cN1-000Enk-CQ; Tue, 04 Jan 2022 05:28:27 +0000
+Date:   Tue, 4 Jan 2022 13:28:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexey Gladkov <legion@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Containers <containers@lists.linux.dev>
+Cc:     kbuild-all@lists.01.org,
+        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Daniel Walsh <dwalsh@redhat.com>,
+        Davidlohr Bueso <dbueso@suse.de>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Kirill Tkhai <ktkhai@virtuozzo.com>
+Subject: Re: [PATCH v1] ipc: Store mqueue sysctls in the ipc namespace
+Message-ID: <202201041311.fGbv03Y7-lkp@intel.com>
+References: <0f0408bb7fbf3187966a9bf19a98642a5d9669fe.1641225760.git.legion@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YdMC07NTx7sTRKtI@kroah.com>
+In-Reply-To: <0f0408bb7fbf3187966a9bf19a98642a5d9669fe.1641225760.git.legion@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 03, 2022 at 03:06:11PM +0100, Greg KH wrote:
-> On Sun, Jan 02, 2022 at 09:01:40PM -0800, Daniel Xu wrote:
-> > Previously, a use-after-free KASAN splat could be reliably triggered
-> > with:
-> > 
-> >     # insmod ./pps-ktimer.ko
-> >     # rmmod pps-ktimer.ko
-> >     <boom>
-> > 
-> > and CONFIG_DEBUG_KOBJECT_RELEASE=y.
-> > 
-> > This commit moves the driver to use cdev_alloc() instead of cdev_init()
-> > to decouple the lifetime of struct cdev from struct pps_device.
-> > 
-> > We also make use of the previous commit's new cdev->private field to
-> > store a pointer to the containing struct. We have to do this because
-> > container_of() does not work when we store a pointer to struct cdev.
-> > 
-> > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> > ---
-> >  drivers/pps/pps.c          | 20 +++++++++++---------
-> >  include/linux/pps_kernel.h |  2 +-
-> >  2 files changed, 12 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/drivers/pps/pps.c b/drivers/pps/pps.c
-> > index 22a65ad4e46e..97ce26f67806 100644
-> > --- a/drivers/pps/pps.c
-> > +++ b/drivers/pps/pps.c
-> > @@ -298,8 +298,7 @@ static long pps_cdev_compat_ioctl(struct file *file,
-> >  
-> >  static int pps_cdev_open(struct inode *inode, struct file *file)
-> >  {
-> > -	struct pps_device *pps = container_of(inode->i_cdev,
-> > -						struct pps_device, cdev);
-> > +	struct pps_device *pps = inode->i_cdev->private;
-> 
-> Why is this pointer now valid while the original structure that the cdev
-> lived in, not valid?  I do not think this really solves your problem,
-> only papers over the delay in removing the kobject that the config
-> option you enabled is trying to tell you is a problem.
+Hi Alexey,
 
-I'm confused here as well. The original structure that the cdev lived in
-is still valid here. I think this is the only way back to the containing
-structure if we choose to embed `struct cdev *` rather than `struct cdev`.
+Thank you for the patch! Yet something to improve:
 
-Unless you're suggesting the cdev is opened after the containing struct
-is already freed. In which case neither the original method (embeddeding
-`struct cdev`) nor the private pointer method would save us.
+[auto build test ERROR on linux/master]
+[also build test ERROR on hnaz-mm/master linus/master v5.16-rc8 next-20211224]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> 
-> >  	file->private_data = pps;
-> >  	kobject_get(&pps->dev->kobj);
-> >  	return 0;
-> > @@ -307,8 +306,7 @@ static int pps_cdev_open(struct inode *inode, struct file *file)
-> >  
-> >  static int pps_cdev_release(struct inode *inode, struct file *file)
-> >  {
-> > -	struct pps_device *pps = container_of(inode->i_cdev,
-> > -						struct pps_device, cdev);
-> > +	struct pps_device *pps = inode->i_cdev->private;
-> >  	kobject_put(&pps->dev->kobj);
-> >  	return 0;
-> >  }
-> > @@ -332,7 +330,7 @@ static void pps_device_destruct(struct device *dev)
-> >  {
-> >  	struct pps_device *pps = dev_get_drvdata(dev);
-> >  
-> > -	cdev_del(&pps->cdev);
-> > +	cdev_del(pps->cdev);
-> >  
-> >  	/* Now we can release the ID for re-use */
-> >  	pr_debug("deallocating pps%d\n", pps->id);
-> > @@ -368,10 +366,14 @@ int pps_register_cdev(struct pps_device *pps)
-> >  
-> >  	devt = MKDEV(MAJOR(pps_devt), pps->id);
-> >  
-> > -	cdev_init(&pps->cdev, &pps_cdev_fops);
-> > -	pps->cdev.owner = pps->info.owner;
-> > +	pps->cdev = cdev_alloc();
-> > +	if (!pps->cdev)
-> > +		goto free_idr;
-> > +	pps->cdev->owner = pps->info.owner;
-> > +	pps->cdev->ops = &pps_cdev_fops;
-> > +	pps->cdev->private = pps;
-> >  
-> > -	err = cdev_add(&pps->cdev, devt, 1);
-> > +	err = cdev_add(pps->cdev, devt, 1);
-> >  	if (err) {
-> >  		pr_err("%s: failed to add char device %d:%d\n",
-> >  				pps->info.name, MAJOR(pps_devt), pps->id);
-> > @@ -393,7 +395,7 @@ int pps_register_cdev(struct pps_device *pps)
-> >  	return 0;
-> >  
-> >  del_cdev:
-> > -	cdev_del(&pps->cdev);
-> > +	cdev_del(pps->cdev);
-> >  
-> >  free_idr:
-> >  	mutex_lock(&pps_idr_lock);
-> > diff --git a/include/linux/pps_kernel.h b/include/linux/pps_kernel.h
-> > index 78c8ac4951b5..4e401793880f 100644
-> > --- a/include/linux/pps_kernel.h
-> > +++ b/include/linux/pps_kernel.h
-> > @@ -56,7 +56,7 @@ struct pps_device {
-> >  
-> >  	unsigned int id;			/* PPS source unique ID */
-> >  	void const *lookup_cookie;		/* For pps_lookup_dev() only */
-> > -	struct cdev cdev;
-> > +	struct cdev *cdev;
-> 
-> So now who owns the lifecycle for the ppc_device structure?  You just
-> took it away from the cdev kobject, and replaced it with what?
+url:    https://github.com/0day-ci/linux/commits/Alexey-Gladkov/ipc-Store-mqueue-sysctls-in-the-ipc-namespace/20220104-000523
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 136057256686de39cc3a07c2e39ef6bc43003ff6
+config: microblaze-buildonly-randconfig-r003-20220103 (https://download.01.org/0day-ci/archive/20220104/202201041311.fGbv03Y7-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/637324916f39ec562ac383bfbc22ee9fcbfcb1c0
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Alexey-Gladkov/ipc-Store-mqueue-sysctls-in-the-ipc-namespace/20220104-000523
+        git checkout 637324916f39ec562ac383bfbc22ee9fcbfcb1c0
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=microblaze SHELL=/bin/bash
 
-Unless I'm misunderstanding, the lifecycle owner has not changed in this
-patch. AFAICT (and KASAN seems to agree with me) this is all still
-valid.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-FWIW other drivers store `struct cdev *` too. See fs/fuse/cuse.c's
-cuse_channel_open() and cuse_channel_release().
+All errors (new ones prefixed by >>):
 
-Sorry about any dumb questions -- still new to driver stuff.
+   microblaze-linux-ld: ipc/mqueue.o: in function `init_mqueue_fs':
+>> (.init.text+0x4c): undefined reference to `setup_mq_sysctls'
+   microblaze-linux-ld: ipc/namespace.o: in function `free_ipc':
+>> (.text+0x294): undefined reference to `retire_mq_sysctls'
+   microblaze-linux-ld: ipc/namespace.o: in function `copy_ipcs':
+>> (.text+0x1114): undefined reference to `setup_mq_sysctls'
 
-[...]
-
-Thanks,
-Daniel
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

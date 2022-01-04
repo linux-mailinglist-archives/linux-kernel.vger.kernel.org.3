@@ -2,76 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CCE34845D3
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:10:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBC6C4845D6
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:13:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235179AbiADQKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 11:10:55 -0500
-Received: from mail-wr1-f44.google.com ([209.85.221.44]:38645 "EHLO
-        mail-wr1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232163AbiADQKy (ORCPT
+        id S235193AbiADQN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 11:13:26 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:54360 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229956AbiADQNY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 11:10:54 -0500
-Received: by mail-wr1-f44.google.com with SMTP id e5so77161330wrc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 08:10:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dLfIM00O/Ipr0crkhKZyqpI5imxvGGmn0KKsbMAqWes=;
-        b=uN1ZdPaEjsvQWEJoS2Vu8KTYGGQzYvk5QzG3pP0Jmbgh4UZjWklVANb1GzqUkl6Ecr
-         zj7emgjF/Et3NpFif7D8njdiVzdl54X68Yqu7z6Lec0nCw2FdPS55YFprR9qtYPTFWbb
-         LfGnBFkk1FW0d3fHADMRMtkH5Vu7U9JBu6VoodONvZC/JvHKoVRUydK9JhcU+vOXHWQ6
-         AAjh6lJXGNppAvn3qAJPkv/UPwp9ESk33rroOMDm+2UIDX2ShMB2EotfrV6xXbEUDKSa
-         T1xOyJGe3eSkOiThX8+EaDVDT9VgoSpuY8S/opggAItts4EveL/yep7zlrU965Q5riq5
-         Civg==
-X-Gm-Message-State: AOAM533vyCHMByJTjjT6PKkfNjVIc72CPnWxW38BPfPY6lG75NKtx+ms
-        ZgVVXWpwBd6XZ4TImKAFaMoBxeX/0pc=
-X-Google-Smtp-Source: ABdhPJxAPRVEKFC6iEdVbnzKtmgbxeyx+Wsc6yqjkxA1VCzgkvg7TVaN0aQ8+ZqqWU4v4ZEUkUnhNA==
-X-Received: by 2002:a5d:420d:: with SMTP id n13mr38257101wrq.498.1641312653549;
-        Tue, 04 Jan 2022 08:10:53 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id h204sm38564690wmh.33.2022.01.04.08.10.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 08:10:53 -0800 (PST)
-Date:   Tue, 4 Jan 2022 16:10:51 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Wei Liu <wei.liu@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Tianyu Lan <ltykernel@gmail.com>, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, michael.h.kelley@microsoft.com,
-        kys@microsoft.com, Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        vkuznets@redhat.com, brijesh.singh@amd.com, konrad.wilk@oracle.com,
-        parri.andrea@gmail.com, thomas.lendacky@amd.com,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] Swiotlb: Add CONFIG_HAS_IOMEM check around memremap() in
- the swiotlb_mem_remap()
-Message-ID: <20220104161051.yyvxjfb7ghg67ryr@liuwe-devbox-debian-v2>
-References: <20211231165640.1245751-1-ltykernel@gmail.com>
- <YdKrxgnpT0Dc0t2T@infradead.org>
- <20220104145155.hm7j5byhddn4zhb2@liuwe-devbox-debian-v2>
- <20220104150307.GA23792@lst.de>
+        Tue, 4 Jan 2022 11:13:24 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 11120614BF
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 16:13:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C22AAC36AED;
+        Tue,  4 Jan 2022 16:13:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641312803;
+        bh=SYOuq4QCCHRXMqkBPeDi3N8aojaaAmUTN11Y3EnSLFw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pYHLsyIm8sARB68IALsDq2lM3CKxWn0HOloWJV3XcM4qEMMoYkv2dcGfky+i0LQbc
+         V1M1BIUHVg8Lqhn6T9xTLvtxY4KfqG7lf+VDq2jpgMfyOcX4eaSEwyYQMnBekJIS2g
+         8SRn8ewVsVk2FZH1j7J5hW5/HDl0+Jk2ot0Ls1hs=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Vasant Hegde <hegdevasant@linux.vnet.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH] powerpc/opal: use default_groups in kobj_type
+Date:   Tue,  4 Jan 2022 17:13:18 +0100
+Message-Id: <20220104161318.1306023-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220104150307.GA23792@lst.de>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2218; h=from:subject; bh=SYOuq4QCCHRXMqkBPeDi3N8aojaaAmUTN11Y3EnSLFw=; b=owGbwMvMwCRo6H6F97bub03G02pJDIlXimSKZzZG+yy2btCZqf84QsThxyN37qzlcya9+bVsoo3Z a1f9jlgWBkEmBlkxRZYv23iO7q84pOhlaHsaZg4rE8gQBi5OAZjIiQ0M82zfLUqMnKpaOVWOXT/89Y LI3d+v7GOYZ2MqfORJ7oMAySLG9TpRi1fKT1n/BgA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 04:03:07PM +0100, Christoph Hellwig wrote:
-> On Tue, Jan 04, 2022 at 02:51:55PM +0000, Wei Liu wrote:
-> > > Please stub out all of swiotlb_mem_remap instead of the ifdef inside the
-> > > function.
-> > 
-> > Does this look okay to you?
-> 
-> Yes, thanks!
+There are currently 2 ways to create a set of sysfs files for a
+kobj_type, through the default_attrs field, and the default_groups
+field.  Move the powerpc opal dump and elog sysfs code to use
+default_groups field which has been the preferred way since aa30f47cf666
+("kobject: Add support for default attribute groups to kobj_type") so
+that we can soon get rid of the obsolete default_attrs field.
 
-Thanks for confirming!
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: Joel Stanley <joel@jms.id.au>
+Cc: Vasant Hegde <hegdevasant@linux.vnet.ibm.com>
+Cc: linuxppc-dev@lists.ozlabs.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ arch/powerpc/platforms/powernv/opal-dump.c | 3 ++-
+ arch/powerpc/platforms/powernv/opal-elog.c | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-I will turn this into an ack and apply the diff to hyperv-next.
+diff --git a/arch/powerpc/platforms/powernv/opal-dump.c b/arch/powerpc/platforms/powernv/opal-dump.c
+index 717d1d30ade5..410ed5b9de29 100644
+--- a/arch/powerpc/platforms/powernv/opal-dump.c
++++ b/arch/powerpc/platforms/powernv/opal-dump.c
+@@ -208,11 +208,12 @@ static struct attribute *dump_default_attrs[] = {
+ 	&ack_attribute.attr,
+ 	NULL,
+ };
++ATTRIBUTE_GROUPS(dump_default);
+ 
+ static struct kobj_type dump_ktype = {
+ 	.sysfs_ops = &dump_sysfs_ops,
+ 	.release = &dump_release,
+-	.default_attrs = dump_default_attrs,
++	.default_groups = dump_default_groups,
+ };
+ 
+ static int64_t dump_read_info(uint32_t *dump_id, uint32_t *dump_size, uint32_t *dump_type)
+diff --git a/arch/powerpc/platforms/powernv/opal-elog.c b/arch/powerpc/platforms/powernv/opal-elog.c
+index 5821b0fa8614..554fdd7f88b8 100644
+--- a/arch/powerpc/platforms/powernv/opal-elog.c
++++ b/arch/powerpc/platforms/powernv/opal-elog.c
+@@ -144,11 +144,12 @@ static struct attribute *elog_default_attrs[] = {
+ 	&ack_attribute.attr,
+ 	NULL,
+ };
++ATTRIBUTE_GROUPS(elog_default);
+ 
+ static struct kobj_type elog_ktype = {
+ 	.sysfs_ops = &elog_sysfs_ops,
+ 	.release = &elog_release,
+-	.default_attrs = elog_default_attrs,
++	.default_groups = elog_default_groups,
+ };
+ 
+ /* Maximum size of a single log on FSP is 16KB */
+-- 
+2.34.1
 
-Wei.

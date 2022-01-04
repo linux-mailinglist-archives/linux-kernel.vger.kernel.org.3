@@ -2,104 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CB4F4847E4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C88834847D1
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:26:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236333AbiADScH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 13:32:07 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4333 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233271AbiADScG (ORCPT
+        id S236257AbiADS0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 13:26:30 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:33236 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236206AbiADS02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 13:32:06 -0500
-Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JT1N45Rwdz686rg;
-        Wed,  5 Jan 2022 02:28:52 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 4 Jan 2022 19:32:04 +0100
-Received: from localhost.localdomain (10.69.192.58) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 4 Jan 2022 18:32:01 +0000
-From:   John Garry <john.garry@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <jinpu.wang@cloud.ionos.com>, <Ajish.Koshy@microchip.com>,
-        <Viswas.G@microchip.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <damien.lemoal@opensource.wdc.com>, <vishakhavc@google.com>,
-        <ipylypiv@google.com>, <Ruksar.devadi@microchip.com>,
-        <Vasanthalakshmi.Tharmarajan@microchip.com>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH RFT] scsi: pm8001: Fix FW crash for maxcpus=1
-Date:   Wed, 5 Jan 2022 02:26:20 +0800
-Message-ID: <1641320780-81620-1-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
+        Tue, 4 Jan 2022 13:26:28 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id F00FF1F37F;
+        Tue,  4 Jan 2022 18:26:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641320787; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gCQy3yoyFL7ECUYAU0Ae6aUvtK+Hq4hiYnMytj5+eik=;
+        b=YK05IgeZLaqlRHJRD81Jr3Oh5vHQqFGLshx9xtpB7BFXFMrT+Np6Dx3fuaFwIQyqmirm8u
+        4j8AYIMWQvhHAL5Hnx8BioTAHsf/JdQalSROq9A7dfHWGkzG4MdRQYnCKHfGZGGbkdFgKS
+        REUsm064g7UiIFYclhkCU+RCJz0klAY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641320787;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gCQy3yoyFL7ECUYAU0Ae6aUvtK+Hq4hiYnMytj5+eik=;
+        b=9EWMIxklog7t5O4tilO9nSmkB3H6W8Zd5Y5nwPXvGAlAVC8audRwReWlcJFgMJPldYH/RA
+        cakI+rxBva851tCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CDE4B13B35;
+        Tue,  4 Jan 2022 18:26:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id hmG+MVKR1GEhfQAAMHmgww
+        (envelope-from <bp@suse.de>); Tue, 04 Jan 2022 18:26:26 +0000
+Date:   Tue, 4 Jan 2022 19:26:34 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Dov Murik <dovmurik@linux.ibm.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     linux-efi@vger.kernel.org, Ashish Kalra <ashish.kalra@amd.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Andrew Scull <ascull@google.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
+        Jim Cadden <jcadden@ibm.com>,
+        Daniele Buono <dbuono@linux.vnet.ibm.com>,
+        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 0/5] Allow guest access to EFI confidential computing
+ secret area
+Message-ID: <YdSRWmqdNY7jRcer@zn.tnic>
+References: <20211129114251.3741721-1-dovmurik@linux.ibm.com>
+ <YdNHgtuVoLofL4cW@zn.tnic>
+ <0280e20e-8459-dd35-0b7d-8dbc1e4a274a@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0280e20e-8459-dd35-0b7d-8dbc1e4a274a@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to the comment in check_fw_ready() we should not check the
-IOP1_READY field in register SCRATCH_PAD_1 for 8008 or 8009 controllers.
+On Tue, Jan 04, 2022 at 09:02:03AM +0200, Dov Murik wrote:
+> If the Guest Owner chooses to inject secrets via scp, it needs
+> to be sure it is scp-ing to the correct VM - the one that has SEV
+> enabled and was measured at launch.
 
-However we check this very field in process_oq() for processing the highest
-index interrupt vector. Change that function to not check IOP1_READY for
-those mentioned controllers, but do check ILA_READY in both cases.
+Hmm, I'd expect that to be part of the attestation dance. I admit,
+though, I have only listened about the whole attestation bla from the
+sidelines so I'm unclear whether that's part of that protocol. I guess
+Tom and Brijesh should have a better idea here.
 
-The reason I assume that this was not hit earlier was because we always
-allocated 64 MSI(X), and just did not pass the vector index check in
-process_oq(), i.e.  the handler never ran for vector index 63.
+> One way to achieve that would be to inject the guest's SSH private key
 
-Signed-off-by: John Garry <john.garry@huawei.com>
+Well, is that "one way" or *the way*?
 
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index 2101fc5761c3..77b8bb30615b 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -4162,9 +4162,16 @@ static int process_oq(struct pm8001_hba_info *pm8001_ha, u8 vec)
- 	u32 regval;
- 
- 	if (vec == (pm8001_ha->max_q_num - 1)) {
-+		u32 mipsall_ready;
-+
-+		if ((pm8001_ha->chip_id == chip_8008) ||
-+		    (pm8001_ha->chip_id == chip_8009))
-+			mipsall_ready = SCRATCH_PAD_MIPSALL_READY_8PORT;
-+		else
-+			mipsall_ready = SCRATCH_PAD_MIPSALL_READY_16PORT;
-+
- 		regval = pm8001_cr32(pm8001_ha, 0, MSGU_SCRATCH_PAD_1);
--		if ((regval & SCRATCH_PAD_MIPSALL_READY) !=
--					SCRATCH_PAD_MIPSALL_READY) {
-+		if ((regval & mipsall_ready) != mipsall_ready) {
- 			pm8001_ha->controller_fatal_error = true;
- 			pm8001_dbg(pm8001_ha, FAIL,
- 				   "Firmware Fatal error! Regval:0x%x\n",
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.h b/drivers/scsi/pm8001/pm80xx_hwi.h
-index c7e5d93bea92..c41ed039c92a 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.h
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.h
-@@ -1405,8 +1405,12 @@ typedef struct SASProtocolTimerConfig SASProtocolTimerConfig_t;
- #define SCRATCH_PAD_BOOT_LOAD_SUCCESS	0x0
- #define SCRATCH_PAD_IOP0_READY		0xC00
- #define SCRATCH_PAD_IOP1_READY		0x3000
--#define SCRATCH_PAD_MIPSALL_READY	(SCRATCH_PAD_IOP1_READY | \
-+#define SCRATCH_PAD_MIPSALL_READY_16PORT	(SCRATCH_PAD_IOP1_READY | \
- 					SCRATCH_PAD_IOP0_READY | \
-+					SCRATCH_PAD_ILA_READY | \
-+					SCRATCH_PAD_RAAE_READY)
-+#define SCRATCH_PAD_MIPSALL_READY_8PORT	(SCRATCH_PAD_IOP0_READY | \
-+					SCRATCH_PAD_ILA_READY | \
- 					SCRATCH_PAD_RAAE_READY)
- 
- /* boot loader state */
+> using the proposed efi_secret mechanism.  This way the Guest Owner is
+> sure it is talking to the correct guest and not to some other VM that
+> was started by the untrusted cloud provider (say, with SEV disabled so
+> the cloud provider can steal its memory content).
+
+Because we would need *some* way of verifying the owner is talking
+to the correct guest. And if so, this should be made part of the big
+picture of SEV guest attestation. Or is this part of that attestation
+dance?
+
+I guess I'm wondering where in the big picture this fits into?
+
+> Indeed this proposed efi_secret module is in use for enabling SEV
+> confidential containers using Kata containers [1], but there's nothing
+> specific in the current patch series about containers.  The patch series
+> just exposes the launch-injected SEV secrets to userspace as virtual files
+> (under securityfs).
+> 
+> [1] https://github.com/confidential-containers/attestation-agent/tree/main/src/kbc_modules/offline_sev_kbc
+
+So one of the aspects for this is to use it in automated deployments.
+
+> It boils down to: the confidential guest needs to have access to a
+> secret which the untrusted host can't read, and which is essential for
+> the normal operation of the guest.  This secret can be a decryption key,
+> an SSH private key, an API key to a Key Management system, etc.  If a
+> malicious cloud provider tries to start that VM without a secret (or
+> with the wrong one), the actual workload that the guest is supposed to
+> run will not execute meaningfully.
+> 
+> The proposed patch series exposes the SEV injected secrets as virtual
+> files, which can later be used as decryption keys (as done in the kata
+> confidential containers use-case), or SSH private keys, or any other
+> possible implementation.
+
+Right, and is this going to be the proper way to authenticate SEV guests
+to their owners or is this just another technique for safely supplying
+secrets into the guest?
+
+I hope I'm making some sense here...
+
 -- 
-2.26.2
+Regards/Gruss,
+    Boris.
 
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

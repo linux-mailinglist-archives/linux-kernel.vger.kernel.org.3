@@ -2,155 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0817C48496C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 21:46:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A9BD48496E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 21:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233301AbiADUqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 15:46:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
+        id S233365AbiADUs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 15:48:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233286AbiADUqe (ORCPT
+        with ESMTP id S233252AbiADUs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 15:46:34 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BB1C061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 12:46:33 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id p12so11371238qvj.6
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 12:46:33 -0800 (PST)
+        Tue, 4 Jan 2022 15:48:57 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360A0C061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 12:48:57 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id a203-20020a1c7fd4000000b003457874263aso439812wmd.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 12:48:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google;
+        d=colorfullife-com.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TWapPhsHYw3VtBoPQgmWd2yPfeI/3LTqvIBr/d8b8MA=;
-        b=eUsY5bx0KaZNUWF69TH1bVVX0ClCrXV/8+zehGbpDu27aJz407/M4e2Y4oO8MIOE7C
-         0IhQsaYyjYbs0Vkmg1EzpHEN3GCcHdTH0+zL0xg6fOm0sM2ZQf3IdvNYXu809V4ZyVM0
-         UgKS4CzdHOCLvOPYyVY3+Z4hNGkHA28eSa8AI=
+        bh=ooWecQNigVE8zIWQ771yQHVCG/Luw6UW39pf+jKA1Vo=;
+        b=1thCSJs4PrVpLeNSxTgucaZw90QODsEZGTxIgKA+IgwkZc+n/EjZVhSkBteE7E3faR
+         Egw88Tj5/edkUIiwUD8SS+ju0HINcNJq9TwKpyC0IHtPyDIIgK9au3vdAl1CMUN5IGMK
+         +yrcfhsnQBOOz4WPAFzfNQtbftAXxTfxyTEP0hCCIEAlNmTqbZ0kN1C0fEDHzLgrWpr3
+         o65eP6ON0Gtb81v4tALoeYam5fgpDCrnvUvga6Dzy1o8Ile5njWEazW748m+j/kQhbwb
+         IIuVJyXJG6xJ6+vS/Chfu+e4N66pR4vaZtMYNjri9jEHTbBR9cSK5/ZQBLZqxIHbTENX
+         GlqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=TWapPhsHYw3VtBoPQgmWd2yPfeI/3LTqvIBr/d8b8MA=;
-        b=csgYZpz/gK3VEeWSqEHGx+dVOqB2HsKSl+YBPMsDURZg6ZJTmVsPd/ypHaYU6nzEt6
-         guX1lO3gPn2S5uO1vd3czyuMgRiCUunH0k2VV7BBnSQyB6bEfIh1MgF1AoBhKbzTNHX1
-         Bgn0cTYFIC8xUt2PKEpSqDsROadyuUbN7iwwKNIzGddid/tL8v/U8S2WpJAn/hoXYRqF
-         XS0ynU4pWbsymtuTUIPqNsN0x5aExNqxcKnysZNyO4rdWo+HSltrIZ+VcdOVehVrMfFb
-         r4MHpbyIrGbpxdfgdCdfyzm69Wqz9/QfBzUy/QTDKqYW5amwhh+ZB70sGt/WPLw+3u8w
-         B1rg==
-X-Gm-Message-State: AOAM533qT1dbzPlyzNsS706h2OmcKD+co9eJyn2417wgTyEdiSYUEcHT
-        9CqhIiyudmRmDTnFhkADk818+w==
-X-Google-Smtp-Source: ABdhPJyo5ioGOfzcQV1Z4+h5S/0pv/JabmELhbJt3jcNITsDgK8amivYK96uZOZM8l8bApMp2O6nqg==
-X-Received: by 2002:a05:6214:c4f:: with SMTP id r15mr47994044qvj.22.1641329193040;
-        Tue, 04 Jan 2022 12:46:33 -0800 (PST)
-Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id bi9sm31266556qkb.60.2022.01.04.12.46.31
+        bh=ooWecQNigVE8zIWQ771yQHVCG/Luw6UW39pf+jKA1Vo=;
+        b=gZ1j6NToBiLFYAMulSjY1qK1K03LL/HgEODynOpVFsroRh/TtC01PUNDmFr7+2IV52
+         3N4Cb69f6fi0sbA5+HSVMlKl2/TRuaPF42FCiWnzdQt/IqLfmTX0bf5LCSLDj0XmIpyh
+         vq/3UTEabeqiSUv7IWHMt79AF3bfugDJFYrzf0UmSWbaG+qGmJ6y4Stz4Dfs1t7VBerq
+         7JJyuBQ22EPzZrStatkYQWkvVPOlysht+w5WlDQ7O21WumTG09AroT1fP/ApPF5kv/ny
+         5EruRoO64W/TUB6PZlr1b1hz7yTRmW0scCDdS0JKThYmDCrV0tN+UnuMrjD/8FT2pw6V
+         h8vA==
+X-Gm-Message-State: AOAM530L4C6TpD+4+z4QDmx1q8v28AMZjtIhU+Lx/nva3qKO7bUp/8dm
+        u195eJlp17L87vDTVW0MTaLmpA==
+X-Google-Smtp-Source: ABdhPJwT7chVjLZZVthjh2u2ySDREcM4f4FmRAV2iAdj4rzaWxb+jkT3krSbBBFGFBRdBSxfChSghw==
+X-Received: by 2002:a05:600c:3507:: with SMTP id h7mr103619wmq.122.1641329335647;
+        Tue, 04 Jan 2022 12:48:55 -0800 (PST)
+Received: from ?IPV6:2003:d9:9708:b800:49a3:330d:2aba:c4a2? (p200300d99708b80049a3330d2abac4a2.dip0.t-ipconnect.de. [2003:d9:9708:b800:49a3:330d:2aba:c4a2])
+        by smtp.googlemail.com with ESMTPSA id c12sm17293190wrr.7.2022.01.04.12.48.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 12:46:32 -0800 (PST)
-Message-ID: <c78c7f1f-40bc-1d3a-744f-199a613c4af1@ieee.org>
-Date:   Tue, 4 Jan 2022 14:46:31 -0600
+        Tue, 04 Jan 2022 12:48:55 -0800 (PST)
+Message-ID: <40ca86a1-ea36-0185-1ba5-c69005e46d3f@colorfullife.com>
+Date:   Tue, 4 Jan 2022 21:48:54 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v3] staging: greybus: audio: Check null pointer
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2] ipc: Store mqueue sysctls in the ipc namespace
 Content-Language: en-US
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, vaibhav.sr@gmail.com,
-        mgreer@animalcreek.com, johan@kernel.org, elder@kernel.org,
-        gregkh@linuxfoundation.org
-Cc:     greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20220104150628.1987906-1-jiasheng@iscas.ac.cn>
-From:   Alex Elder <elder@ieee.org>
-In-Reply-To: <20220104150628.1987906-1-jiasheng@iscas.ac.cn>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Alexey Gladkov <legion@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Containers <containers@lists.linux.dev>,
+        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Daniel Walsh <dwalsh@redhat.com>,
+        Davidlohr Bueso <dbueso@suse.de>,
+        Kirill Tkhai <ktkhai@virtuozzo.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        kernel test robot <lkp@intel.com>
+References: <0f0408bb7fbf3187966a9bf19a98642a5d9669fe.1641225760.git.legion@kernel.org>
+ <792dcae82bc228cd0bec1fa80ed4d2c9340b0f8f.1641296947.git.legion@kernel.org>
+ <c8edba64-9b4b-1ef8-f0b3-1b4beacf1551@colorfullife.com>
+ <87v8yzfilp.fsf@email.froward.int.ebiederm.org>
+From:   Manfred Spraul <manfred@colorfullife.com>
+In-Reply-To: <87v8yzfilp.fsf@email.froward.int.ebiederm.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/4/22 9:06 AM, Jiasheng Jiang wrote:
-> As the possible alloc failure of devm_kcalloc(), it could return null
-> pointer.
-> Therefore, 'strings' should be checked and return NULL if alloc fails to
-> prevent the dereference of the NULL pointer.
-> Also, the caller should also deal with the return value of the
-> gb_generate_enum_strings() and return -ENOMEM if returns NULL.
-> Moreover, because the memory allocated with devm_kzalloc() will be
-> freed automatically when the last reference to the device is dropped,
-> the 'gbe' in gbaudio_tplg_create_enum_kctl() and
-> gbaudio_tplg_create_enum_ctl() do not need to free manually.
-> But the 'control' in gbaudio_tplg_create_widget() and
-> gbaudio_tplg_process_kcontrols() has a specially error handle to
-> cleanup.
-> So it should be better to cleanup 'control' when fails.
-> 
-> Fixes: e65579e335da ("greybus: audio: topology: Enable enumerated control support")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Hello Eric,
 
-This looks good to me.  Thanks for fixing things.
+On 1/4/22 19:42, Eric W. Biederman wrote:
+> Manfred Spraul <manfred@colorfullife.com> writes:
+>   Hi Alexey,
+>> On 1/4/22 12:51, Alexey Gladkov wrote:
+>>> Right now, the mqueue sysctls take ipc namespaces into account in a
+>>> rather hacky way. This works in most cases, but does not respect the
+>>> user namespace.
+>>>
+>>> Within the user namespace, the user cannot change the /proc/sys/fs/mqueue/*
+>>> parametres. This poses a problem in the rootless containers.
+>>>
+>>> To solve this I changed the implementation of the mqueue sysctls just
+>>> like some other sysctls.
+>>>
+>>> Before this change:
+>>>
+>>> $ echo 5 | unshare -r -U -i tee /proc/sys/fs/mqueue/msg_max
+>>> tee: /proc/sys/fs/mqueue/msg_max: Permission denied
+>>> 5
+>> Could you crosscheck that all (relevant) allocations in ipc/mqueue.c
+>> use GFP_KERNEL_ACCOUNT?
+> They are not.
+>
+>> We should not allow normal users to use up all memory.
+>>
+>> Otherwise:
+>> The idea is good, the limits do not really prevent using up all
+>> memory, _ACCOUNT is the better approach.
+>> And with _ACCOUNT, it doesn't hurt that the namespace root is able to
+>> set limits.
+> Saying the cgroup kernel memory limit is the only thing that works, and
+> that is always better is silly.
+>
+>
+> First the cgroup kernel memory limits noted with ACCOUNT are not
+> acceptable on several kernel hot paths because they are so expensive.
 
-Reviewed-by: Alex Elder <elder@linaro.org>
+I was not aware that ACCOUNT allocations are very expensive.
 
-> ---
-> v3: Same code as v2, but remove the redundant message as requested.
-> v2: Updated to use common error processing at the end of both
-> gbaudio_tplg_create_widget() and gbaudio_tplg_process_kcontrols().
-> ---
->   drivers/staging/greybus/audio_topology.c | 15 +++++++++++++++
->   1 file changed, 15 insertions(+)
-> 
-> diff --git a/drivers/staging/greybus/audio_topology.c b/drivers/staging/greybus/audio_topology.c
-> index 1fc7727ab7be..6bba735d2e5c 100644
-> --- a/drivers/staging/greybus/audio_topology.c
-> +++ b/drivers/staging/greybus/audio_topology.c
-> @@ -147,6 +147,9 @@ static const char **gb_generate_enum_strings(struct gbaudio_module_info *gb,
->   
->   	items = le32_to_cpu(gbenum->items);
->   	strings = devm_kcalloc(gb->dev, items, sizeof(char *), GFP_KERNEL);
-> +	if (!strings)
-> +		return NULL;
-> +
->   	data = gbenum->names;
->   
->   	for (i = 0; i < items; i++) {
-> @@ -655,6 +658,8 @@ static int gbaudio_tplg_create_enum_kctl(struct gbaudio_module_info *gb,
->   	/* since count=1, and reg is dummy */
->   	gbe->items = le32_to_cpu(gb_enum->items);
->   	gbe->texts = gb_generate_enum_strings(gb, gb_enum);
-> +	if (!gbe->texts)
-> +		return -ENOMEM;
->   
->   	/* debug enum info */
->   	dev_dbg(gb->dev, "Max:%d, name_length:%d\n", gbe->items,
-> @@ -862,6 +867,8 @@ static int gbaudio_tplg_create_enum_ctl(struct gbaudio_module_info *gb,
->   	/* since count=1, and reg is dummy */
->   	gbe->items = le32_to_cpu(gb_enum->items);
->   	gbe->texts = gb_generate_enum_strings(gb, gb_enum);
-> +	if (!gbe->texts)
-> +		return -ENOMEM;
->   
->   	/* debug enum info */
->   	dev_dbg(gb->dev, "Max:%d, name_length:%d\n", gbe->items,
-> @@ -1034,6 +1041,10 @@ static int gbaudio_tplg_create_widget(struct gbaudio_module_info *module,
->   			csize += le16_to_cpu(gbenum->names_length);
->   			control->texts = (const char * const *)
->   				gb_generate_enum_strings(module, gbenum);
-> +			if (!control->texts) {
-> +				ret = -ENOMEM;
-> +				goto error;
-> +			}
->   			control->items = le32_to_cpu(gbenum->items);
->   		} else {
->   			csize = sizeof(struct gb_audio_control);
-> @@ -1183,6 +1194,10 @@ static int gbaudio_tplg_process_kcontrols(struct gbaudio_module_info *module,
->   			csize += le16_to_cpu(gbenum->names_length);
->   			control->texts = (const char * const *)
->   				gb_generate_enum_strings(module, gbenum);
-> +			if (!control->texts) {
-> +				ret = -ENOMEM;
-> +				goto error;
-> +			}
->   			control->items = le32_to_cpu(gbenum->items);
->   		} else {
->   			csize = sizeof(struct gb_audio_control);
-> 
+OTHO adding ACCOUNT resolved various out of memory crashes for IIRC 
+ipc/sem.c and/or ipc/msg.c. But we also do not have an RLIMIT for 
+ipc/sem.c or ipc/msg.c
+
+Let me rephrase my question:
+
+When we allow non-root users to write to /proc/sys/fs/mqueue/msg_max, 
+are there any _relevant_ allocations that bypass _all_ limits?
+
+As you write, we have RLIMIT_MSGQUEUE.
+
+And several allocations for ipc/mqueue already use ACCOUNT:
+
+- the messages themselves, via load_msg()/alloc_msg().
+
+- the inodes, via mqueue_inode_cachep().
+
+
+> Further the memory cgroup kernel memory limit is not always delegated to
+> non-root users, which precludes using the memory cgroup kernel memory
+> limit in many situations.
+>
+>
+> The RLIMIT_MQUEUE limit definitely works, and as I read the kernel
+> source correct it defaults to MQ_BYTES_MAX aka 819200.  A limit of
+> 800KiB should prevent using up all of system memory, except on very low
+> memory machines.
+
+I'd agree that 800 kB is not relevant. But we need to be certain that 
+there are no loopholes.
+
+I do not see anything relevant, e.g. 0-byte messages should be covered 
+by mq_maxmsg. But perhaps I overlook something.
+
+> So please let's not confuse apples and oranges, and let's use the tools
+> in the kernel where they work, and not set them up in contest with each
+> other.
+>
+> Rlimits with generous but real limits in general are good at catching
+> when a program misbehaves.  The cgroups are better at setting a total
+> memory cap.  In this case the rlimit cap is low enough it simply should
+> not matter.
+>
+> What has been fixed with the ucount rlimits is that (baring
+> implementation bugs) it is now not possible to create a user namespace
+> and escape your rlimits by using multiple users.
+I'll try to check the patch in detail in the next few days.
+
+
+--
+
+     Manfred
 

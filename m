@@ -2,123 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC654840AF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:19:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A5924840B1
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:20:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232130AbiADLTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 06:19:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38390 "EHLO
+        id S232137AbiADLUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 06:20:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232197AbiADLTd (ORCPT
+        with ESMTP id S231127AbiADLUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 06:19:33 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D407C061761;
-        Tue,  4 Jan 2022 03:19:32 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id z9so77215126edm.10;
-        Tue, 04 Jan 2022 03:19:32 -0800 (PST)
+        Tue, 4 Jan 2022 06:20:44 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD66C061761;
+        Tue,  4 Jan 2022 03:20:44 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id u20so31943687pfi.12;
+        Tue, 04 Jan 2022 03:20:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0xXZTc9fZWT+WzOM7EsRWouZq5pxfXz9JRFezikdzi8=;
-        b=XOQZBgJQXhp7jwaK2xQJOnQocHO7sVVeZ17LRxyrjjlPKp4kgtQllUd08nXq2qyvdY
-         qOkQPbb2/IDzTjoTkEpJqdNgGivi8Hz03zGoaGRNpBxu+B8yTwUsmnXnzNS7y9aRiYYl
-         24tym24j/qZ2SepQWI1M0dOTdOx8UEJTgdlOyElMJ0uJx+0l7Ex2SJK12kTtVh5mNhJy
-         RXF0a+xohxyo4bDSe8PBUPfPr8ckoTjB74A6M2aYrvgZVXK4jJDg4fE2miX6fNN3DNPe
-         QDi0O6YoCf8YbBhCw4wt205ND/SRJfbvaPAnWbmUo92+yQDkBOf7DN27ElBoQIujvVwz
-         dOeA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=43jwoc03WEbmmZwioDwFkhGaJRKAIQrMfi2IPHILK2c=;
+        b=PjPkB50c8TAK2w123ivcBHeD5VQY1n6OS9+Q3PHObFfYz1cIgJh3kck9v2UMzqGh3T
+         VKPxxQMkcbDYgui5jRt40TxSxpvlnJvtCIG1zHz5S5TQ/vmBIMvvATXYWMlf/SwVruvv
+         hNW+q09A32jeupKabYF3J7SlLweAc/NzdW7f0gKTEWaCGezBEscZ7W+BlrPSV21WWjJ2
+         KM28ionkNcRpnpLOR2ZXiuYgwt2m7mDsCbroNQaAg3/zcIHxZ2QL/M4aIvKW8/Qbul5Q
+         PXoZEgL9VqQbvX5y9NvZVhIy3Kds9kWt1fuYECNdQNIDTCUii/mfkhbZXVe1wsS2eUMv
+         ot7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=0xXZTc9fZWT+WzOM7EsRWouZq5pxfXz9JRFezikdzi8=;
-        b=picLgJqSyFyJwsJPtT/8mbBAJFaonbLCEvg5FfeVIM7vENyED2kpRNS10IiAekh7zf
-         Whx9v/i6wDVDR8kwlYcI9QUYXz9keQVTn/Y6S7AqavsK8ElYWiD9+cW7XLcxiEb5QIZV
-         WRsjK6ulthiQ6xEY1F09M7T12XLtg3g1S+fSZycrYHg/PF2KXjzqt2x5m6NiV/fU4/T1
-         oJlr6JDGeVuKKk74OR2s6BLxMXXpJ7EKR4MuFJimkTisQd658RttlIrGa5KfaVwYAl6Q
-         s/6vh9TY+MUEzxjhTbGI9yTsKXQmD7BjaONAUlpnnlT0qYDfBsTYcSC9x+xxvKjnR9nE
-         Zz/w==
-X-Gm-Message-State: AOAM5334sO+LE8QeBBmt148IkmXKRA4KwXUyQlMUJXVC73MxSNbaXFzc
-        KlSyGsKHWKq2Kd8ZhGuswFk=
-X-Google-Smtp-Source: ABdhPJzU1LTAvRzkzrJngNHQhrjxV8d54FMAeTWjQQomqnVon080q8WJJt+KWIac9eYzcQuhDCEQKw==
-X-Received: by 2002:a05:6402:424f:: with SMTP id g15mr49013361edb.316.1641295171204;
-        Tue, 04 Jan 2022 03:19:31 -0800 (PST)
-Received: from gmail.com (0526F11B.dsl.pool.telekom.hu. [5.38.241.27])
-        by smtp.gmail.com with ESMTPSA id b4sm7711322ejb.131.2022.01.04.03.19.30
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=43jwoc03WEbmmZwioDwFkhGaJRKAIQrMfi2IPHILK2c=;
+        b=ZfVFWnFAOqKRkARWnRf8lPSDt7MHePtYdA48AmhRJOBzGcB4L3XOTR2IY3NuN/by3I
+         VEva0vxfW02bGRo1+d48azqAH2Xzn7Mk0sgXKMny+3mETpZo+DR4eo4bnLh3g75zfJQf
+         u2bnvCLvZuNUgZKKseMWYG/RZ+A8D5/MubpTf06koe8Ux3e4tyqQuXH9N0FLL2qwPonr
+         b0wMD0kGSBW+OsakZJzka1r2kcRAJrgGTiG2tb8cdJuV0/broYQI2qh6OJ0Npkv3j5Bm
+         JSGGkwqUYyJiVBdEBwSMnwz6WWxlANFsHi64W+rdeLcMQhY6SOrPYkdl7k0mzPNmJxm1
+         fgTQ==
+X-Gm-Message-State: AOAM533YWVwQD0WmXvo0UuAcVa54BYX3Ssk/iLbFcQbT9yoLqRKGFmk9
+        G6kpPzen/IKjU3g67oXKXQw=
+X-Google-Smtp-Source: ABdhPJwSoNgMa51jrtEScKoF34mgUWtlr4CH+62tieINlCQozd4h/dSm7n5qf70w6uPNjpOuFIWW6w==
+X-Received: by 2002:a63:575c:: with SMTP id h28mr43354858pgm.171.1641295243889;
+        Tue, 04 Jan 2022 03:20:43 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id r10sm37119288pgn.4.2022.01.04.03.20.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 03:19:30 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Tue, 4 Jan 2022 12:19:29 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Al Viro <viro@zeniv.linux.org.uk>, llvm@lists.linux.dev
-Subject: [TREE] "Fast Kernel Headers" Tree WIP/development branch
-Message-ID: <YdQtQRMLWvsyIeFn@gmail.com>
-References: <YdIfz+LMewetSaEB@gmail.com>
- <YdM4Z5a+SWV53yol@archlinux-ax161>
- <YdQlwnDs2N9a5Reh@gmail.com>
+        Tue, 04 Jan 2022 03:20:43 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     tsbogend@alpha.franken.de
+Cc:     maz@kernel.org, ilya.lipnitskiy@gmail.com, chi.minghao@zte.com.cn,
+        ryazanov.s.a@gmail.com, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        CGEL ZTE <cgel.zte@gmail.com>
+Subject: [PATCH] mips/pci: remove redundant ret variable
+Date:   Tue,  4 Jan 2022 11:20:24 +0000
+Message-Id: <20220104112024.601765-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdQlwnDs2N9a5Reh@gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-* Ingo Molnar <mingo@kernel.org> wrote:
+Return value from rt3883_pci_r32() directly instead
+of taking this in another redundant variable.
 
-> > ########################################################################
-> > 
-> > I am very excited to see where this goes, it is a herculean effort but 
-> > I think it will be worth it in the long run. Let me know if there is 
-> > any more information or input that I can provide, cheers!
-> 
-> Your testing & patch sending efforts are much appreciated!! You'd help me 
-> most by continuing on the same path with new fast-headers releases as 
-> well, whenever you find the time. :-)
-> 
-> BTW., you can always pick up my latest Work-In-Progress branch from:
-> 
->    git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-> 
-> The 'master' branch will carry the release.
-> 
-> The sched/headers branch is already rebased to -rc8 and has some other 
-> changes as well. It should normally work, with less testing than the main 
-> releasees, but will at times have fixes at the tail waiting to be 
-> backmerged in a bisect-friendly way.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
+---
+ arch/mips/pci/pci-rt3883.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Ok, broke out the sched/headers WIP branch into a separate announcement, in 
-case others want to test:
+diff --git a/arch/mips/pci/pci-rt3883.c b/arch/mips/pci/pci-rt3883.c
+index d3c947fa2969..e07ae098bdd8 100644
+--- a/arch/mips/pci/pci-rt3883.c
++++ b/arch/mips/pci/pci-rt3883.c
+@@ -102,14 +102,12 @@ static u32 rt3883_pci_read_cfg32(struct rt3883_pci_controller *rpc,
+ 			       unsigned func, unsigned reg)
+ {
+ 	u32 address;
+-	u32 ret;
+ 
+ 	address = rt3883_pci_get_cfgaddr(bus, slot, func, reg);
+ 
+ 	rt3883_pci_w32(rpc, address, RT3883_PCI_REG_CFGADDR);
+-	ret = rt3883_pci_r32(rpc, RT3883_PCI_REG_CFGDATA);
+ 
+-	return ret;
++	return rt3883_pci_r32(rpc, RT3883_PCI_REG_CFGDATA);
+ }
+ 
+ static void rt3883_pci_write_cfg32(struct rt3883_pci_controller *rpc,
+-- 
+2.25.1
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-
-Note that I sometimes will update the 'master' branch as well, without a 
-standalone announcement, if there's some important fix or the previous 
-version moved away too much.
-
-Also, where I backmerged your fixes to manual commits I credited you with:
-
-   [ Fixes by Nathan Chancellor ]
-
-   Fixed-by: Nathan Chancellor <nathan@kernel.org>
-
-The (rare) exception would be straight dependency additions such as the 
-<linux/string.h> additions, which are auto-generated from scratch to keep 
-it maintainable & reviewable - if that's fine with you.
-
-Thanks,
-
-	Ingo

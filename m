@@ -2,122 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02FBC483A8D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 03:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 974F0483A92
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 03:24:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232109AbiADCXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 21:23:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59596 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiADCXa (ORCPT
+        id S232222AbiADCYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 21:24:00 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:42306
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232197AbiADCX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 21:23:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844E6C061761;
-        Mon,  3 Jan 2022 18:23:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 3 Jan 2022 21:23:59 -0500
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4BA6BB81097;
-        Tue,  4 Jan 2022 02:23:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00834C36AEE;
-        Tue,  4 Jan 2022 02:23:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641263008;
-        bh=yo9K4eq2nWadi9n6DwMwrPKCkaxagJTXM9A8ulfkQvU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c8M83bGTv8L2s2HzYnVqk+GSjNh1zjYBlrwZAwAl5Ip4esLJANiokzg1EzmzIgRZ0
-         KXP56vnrJ8D7Gv7tRnBLnlaJE/a1PmDwiSY3f6CNW9Fu+u7BbQRs90H8ehdgBLbvpN
-         JrTYCS96SJQe8LEzUOuirVHMsQmXfJHWpE8Jkha+9azmYCCssgCbYavG+ovUuqdhDe
-         MSPe1JRMvZqFCgFbGHx/5WyVGtdHNQJwtJb3nbZnV33i40SuvjjYMnzpOt7152aYjY
-         6JiZ9qu+s6wsi8kiB5s5oAb36QF7jpKsfg96SuPGDgyUR80K8EtRNK4zgk8qmrS6Dn
-         lsV0x0sKwLvMA==
-Date:   Mon, 3 Jan 2022 18:23:27 -0800
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Hao Sun <sunhao.th@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs@vger.kernel.org
-Subject: Re: BUG: unable to handle kernel NULL pointer dereference in
- xlog_cil_commit
-Message-ID: <20220104022327.GD31606@magnolia>
-References: <CACkBjsbaCmZK2wUExMqu_KKBr2jnEi-T6iEr=vzw4YS5g5DOOQ@mail.gmail.com>
- <20211006154327.GH24307@magnolia>
- <20211006222749.GE54211@dread.disaster.area>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 31857405F6
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 02:23:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1641263032;
+        bh=5cazmRarXDvXEd4JyRxvrVTfaRwqdqkKmDWF6lTNaUE=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=OC+a05owYoZbbBaZCe+95fUB4J6NHoJKYEFV0Bx/Xj/k2HCCFup/7Yct9Qo7JsEnU
+         bmGnnjw1O11lwpD+aQU52HZ1eQ33FhKZgfMv01vpRaMic5U/48V+AN3SzZ1c1HSCbZ
+         r+8BiWkSHhEpSW5154T0Rr3Bxf7z5GVwln888DtT1nWytI2ERpIcQ20Vi+MkDrJ195
+         e4LpQ4sov2S87gX5ZdVuHYkvL9trAA6/lZ+c8I4mRt+1w1uKU8cyDkB7cbK3kVcOBz
+         /cgrq3uomQcExBElDKTGCF+5IZXr5zfPVyvBlV6VWlXZpPY8fExQjBddQLKBz8tIw6
+         X/KOft12SXOYw==
+Received: by mail-oi1-f198.google.com with SMTP id s131-20020acac289000000b002c6a61fd43fso23305856oif.23
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 18:23:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5cazmRarXDvXEd4JyRxvrVTfaRwqdqkKmDWF6lTNaUE=;
+        b=vrBQkJCdmNUWRtEgbxzr2iRArMuxxUDQMTscviKPRCBJw+9HO9vRPazta0Al+sTuz5
+         iDSOJbo64fhS+nR6+2ANbJtmybqx6mk10xodP4GHAGqhzO0D0cRqNzDZhoyX41aKZvpA
+         oyfghTRYTK3q3aEkVyGJv8yKbtiJv5zz0OKHLuZJD0s+cWP5Mr9l0WcEygy9A0JwatqH
+         zo501NljjygAI+y3qEpMmuEItpHWZFv70mEGji+l9qTXtKsuKoUB/xZNJ1hYeoHQ4upz
+         QSq3m5oA+2rE9fjS4m+R1dLT1q+CDcGfxkqpJixGtxyXXHy8HFAGaTw8Tt50InoPCyqA
+         Xa9w==
+X-Gm-Message-State: AOAM533Jf40bTpfxJcnnCY6t84k0jraO5bGYpi84AS1JTGl3ABtoExbJ
+        c3QRZh0hBA0HVrOOyfNcUQoKRuPJ8EbXPIzdohO6v0PI/U/5Bd3rnp/sXFxN6oBNFdjALzo2y+K
+        VZLNJZAhVpaMFambuDwbq3ubt2gh8VJZToQG+B+5Ip28ME/eSHXsjVS7umg==
+X-Received: by 2002:a9d:24e4:: with SMTP id z91mr33904521ota.11.1641263030937;
+        Mon, 03 Jan 2022 18:23:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzPidDUDT7zkVJQH32VyKsgWKAjH6fZz3mxUzBG8x2j81B9Qp88ucqAoNaI+qAUs/lvK97Qw+QQyoy3s0UZ3/4=
+X-Received: by 2002:a9d:24e4:: with SMTP id z91mr33904498ota.11.1641263030633;
+ Mon, 03 Jan 2022 18:23:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211006222749.GE54211@dread.disaster.area>
+References: <20211224081914.345292-2-kai.heng.feng@canonical.com>
+ <20211229201814.GA1699315@bhelgaas> <CAAd53p74bHYmQJzKuriDrRWpJwXivfYCfNCsUjC47d1WKUZ=gQ@mail.gmail.com>
+ <SJ0PR11MB500869254A4E9DEEC1DF3B5DD7499@SJ0PR11MB5008.namprd11.prod.outlook.com>
+In-Reply-To: <SJ0PR11MB500869254A4E9DEEC1DF3B5DD7499@SJ0PR11MB5008.namprd11.prod.outlook.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Tue, 4 Jan 2022 10:23:38 +0800
+Message-ID: <CAAd53p4-Sxx+8bF4ZTA9R7L=bJHv2yTCPSoFHmPpHHPFd1Bx+g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] net: wwan: iosm: Keep device at D0 for s2idle case
+To:     "Kumar, M Chetan" <m.chetan.kumar@intel.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linuxwwan <linuxwwan@intel.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 07, 2021 at 09:27:49AM +1100, Dave Chinner wrote:
-> On Wed, Oct 06, 2021 at 08:43:27AM -0700, Darrick J. Wong wrote:
-> > On Wed, Oct 06, 2021 at 04:14:43PM +0800, Hao Sun wrote:
-> > > Hello,
-> > > 
-> > > When using Healer to fuzz the latest Linux kernel, the following crash
-> > > was triggered.
-> > > 
-> > > HEAD commit: 0513e464f900 Merge tag 'perf-tools-fixes-for-v5.15-2021-09-27'
-> > > git tree: upstream
-> > > console output:
-> > > https://drive.google.com/file/d/1vm5fDM220kkghoiGa3Aw_Prl4O_pqAXF/view?usp=sharing
-> > > kernel config: https://drive.google.com/file/d/1Jqhc4DpCVE8X7d-XBdQnrMoQzifTG5ho/view?usp=sharing
-> > > 
-> > > Sorry, I don't have a reproducer for this crash, hope the symbolized
-> > > report can help.
-> > > If you fix this issue, please add the following tag to the commit:
-> > > Reported-by: Hao Sun <sunhao.th@gmail.com>
-> > 
-> > So figure out how to fix the problem and send a patch.  You don't get to
-> > hand out fixit tasks like you're some kind of manager for people you
-> > don't employ.
-> 
-> I fully agree with this Darrick but, OTOH, the cynical, jaded
-> engineer in me says "I don't think people that run bots and
-> copy/paste their output to mailing lists have the capability to fix
-> the problems the bots find."
+On Mon, Jan 3, 2022 at 11:28 PM Kumar, M Chetan
+<m.chetan.kumar@intel.com> wrote:
+>
+> > -----Original Message-----
+> > From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > Sent: Thursday, December 30, 2021 6:31 AM
+> > To: Bjorn Helgaas <helgaas@kernel.org>
+> > Cc: Kumar, M Chetan <m.chetan.kumar@intel.com>; linuxwwan
+> > <linuxwwan@intel.com>; linux-pci@vger.kernel.org; linux-
+> > pm@vger.kernel.org; Loic Poulain <loic.poulain@linaro.org>; Sergey
+> > Ryazanov <ryazanov.s.a@gmail.com>; Johannes Berg
+> > <johannes@sipsolutions.net>; David S. Miller <davem@davemloft.net>;
+> > Jakub Kicinski <kuba@kernel.org>; netdev@vger.kernel.org; linux-
+> > kernel@vger.kernel.org; Rafael J. Wysocki <rjw@rjwysocki.net>; Vaibhav
+> > Gupta <vaibhavgupta40@gmail.com>
+> > Subject: Re: [PATCH 2/2] net: wwan: iosm: Keep device at D0 for s2idle case
+> >
+> > On Thu, Dec 30, 2021 at 4:18 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > >
+> > > [+cc Rafael, Vaibhav]
+> > >
+> > > On Fri, Dec 24, 2021 at 04:19:14PM +0800, Kai-Heng Feng wrote:
+> > > > We are seeing spurious wakeup caused by Intel 7560 WWAN on AMD
+> > laptops.
+> > > > This prevent those laptops to stay in s2idle state.
+> > > >
+> > > > From what I can understand, the intention of ipc_pcie_suspend() is
+> > > > to put the device to D3cold, and ipc_pcie_suspend_s2idle() is to
+> > > > keep the device at D0. However, the device can still be put to
+> > > > D3hot/D3cold by PCI core.
+> > > >
+> > > > So explicitly let PCI core know this device should stay at D0, to
+> > > > solve the spurious wakeup.
+>
+> Did you get a chance to check the cause of spurious wakeup ? Was there any
+> information device is trying to send while platform is entering suspend/
+> host sw missed to unsubscribe certain notifications which resulted in wake event.
 
-They gotta learn to level up (or leave us alone) somehow...
+Can you please let me know how to check it?
 
-> Quite frankly, it's even more of a waste of our time trying to
-> review crap patches and make suggestions to fix it and then going
-> around the review loop 15 times getting nowhere like we have in teh
-> past.
-> 
-> So, kvmalloc() sucks dogs balls, as I pointed out in this recent
-> patch in the intent whiteouts series:
-> 
-> https://lore.kernel.org/linux-xfs/20210902095927.911100-8-david@fromorbit.com/
-> 
-> Because of the crap implementation of kvmalloc(), we can't just pass
-> __GFP_NOFAIL because that will cause it to try to run
-> kmalloc_node(__GFP_NORETRY | __GFP_NOFAIL) and that will cause heads
-> to go all explodey. Not to mention that kvmalloc won't even allow
-> GFP_NOFS to be passed and still actually do the vmalloc() fallback.
-> 
-> So, basically, we've got to go back to doing an open coded kvmalloc
-> loop here that cannot fail. Because kvmalloc can fail and we can't
-> tell it that it must succeed or die trying.
-> 
-> That's what the above patch does - gets rid of the garbage kvmalloc
-> direct reclaim -> memory compaction behaviour, and wraps it in a
-> loop so that the fail-fast memory allocation semantics it uses does
-> not end up in a shadow buffer allocation failure.
-> 
-> So, yeah, I've already fixed this in my trees....
+>
+> In our internal test (x86 platform) we had not noticed such spurious wakeup but would
+> like to cross check by running few more tests.
 
-Er, do you want me to queue that patch for 5.17?  I had assumed it was
-only really needed for allison's patches, but I don't mind pushing it
-in sooner.
+Sure, let me know what tests you want me to run.
 
---D
+>
+> > > >
+> > > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > > > ---
+> > > >  drivers/net/wwan/iosm/iosm_ipc_pcie.c | 3 +++
+> > > >  1 file changed, 3 insertions(+)
+> > > >
+> > > > diff --git a/drivers/net/wwan/iosm/iosm_ipc_pcie.c
+> > > > b/drivers/net/wwan/iosm/iosm_ipc_pcie.c
+> > > > index d73894e2a84ed..af1d0e837fe99 100644
+> > > > --- a/drivers/net/wwan/iosm/iosm_ipc_pcie.c
+> > > > +++ b/drivers/net/wwan/iosm/iosm_ipc_pcie.c
+> > > > @@ -340,6 +340,9 @@ static int __maybe_unused
+> > > > ipc_pcie_suspend_s2idle(struct iosm_pcie *ipc_pcie)
+> > > >
+> > > >       ipc_imem_pm_s2idle_sleep(ipc_pcie->imem, true);
+> > > >
+> > > > +     /* Let PCI core know this device should stay at D0 */
+> > > > +     pci_save_state(ipc_pcie->pci);
+> > >
+> > > This is a weird and non-obvious way to say "this device should stay at
+> > > D0".  It's also fairly expensive since pci_save_state() does a lot of
+> > > slow PCI config reads.
+> >
+> > Yes, so I was waiting for feedback from IOSM devs what's the expected PCI
+> > state for the s2idle case.
+>
+> D3 is the expected state.
 
-> Cheers,
-> 
-> Dave.
-> -- 
-> Dave Chinner
-> david@fromorbit.com
+Is it D3hot or D3cold?
+
+Kai-Heng
+
+>
+> > Dave, can you drop it from netdev until IOSM devs confirm this patch is
+> > correct?
+>
+> Dave, please drop this patch from netdev.

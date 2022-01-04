@@ -2,74 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FF46483AE7
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 04:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA63483AEC
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 04:20:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232516AbiADDRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 22:17:33 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49016 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbiADDRb (ORCPT
+        id S232542AbiADDUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 22:20:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232531AbiADDUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 22:17:31 -0500
+        Mon, 3 Jan 2022 22:20:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638D7C061761;
+        Mon,  3 Jan 2022 19:20:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CF51611E2;
-        Tue,  4 Jan 2022 03:17:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05BEAC36AEF;
-        Tue,  4 Jan 2022 03:17:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2BC04B81115;
+        Tue,  4 Jan 2022 03:20:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E1C44C36AF3;
+        Tue,  4 Jan 2022 03:20:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641266250;
-        bh=N5aXv+g7yyoC2VpWDcYgU1XVT6uLufQ66vuWLo0gKIs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TDTSJ9mmX4Vb6JZx5S5sW+uOZdLDRoB+5jHX1Ez6JcWBdxItH1nF3PnAh83rmqbvV
-         ADPQzlyJrqtZqQFnvwu6qub2j0Y6MRAhFUX1fZInYpmbWrBjJAa8wzqTwWPGBAnEM7
-         mVgcIh4FdgoaNbxdtNneLmB/zLFZ5kW01sXCG8uhokOL3zZUoJJgnHRzuk3b011ROx
-         yiOt7x805ycxbMgxm2+qva1i8Zvo65/6K9yI2BwDEzxZbZc1KXyQIm41S0H1FkX28A
-         XypVPW+VFfWPX19lTidL5pBcUqRloEFIuchr/OOvZ5X98sGAoBDXUP92e+vfaCQG3G
-         nPwm5R/Ln8XGQ==
-Date:   Mon, 3 Jan 2022 19:17:29 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     Miaoqian Lin <linmq006@gmail.com>, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] Revert "net: phy: fixed_phy: Fix NULL vs
- IS_ERR() checking in __fixed_phy_register"
-Message-ID: <20220103191515.66280992@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20220102113557.302941-2-sam@ravnborg.org>
-References: <20220102113557.302941-1-sam@ravnborg.org>
-        <20220102113557.302941-2-sam@ravnborg.org>
+        s=k20201202; t=1641266408;
+        bh=4jwxRCNqPtC4VzdME2SM3zcSAs4vIbhinHJiJjfxbl8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=cWgmKVCgSLgCnZTTIX8l4BE/kiflqLc1mGTSOUaepdbcyQIbe6NECJBTSvvFKtTbR
+         3xc09DmLN/3cP3Nabf6HMZbYruMwmIBtDWFWb7v66ahrT4TqSN4dvdt/f9PzFCNeAB
+         J1L6fAKT1tVinPswB6ZCffO1JAeJd+xuRjTwbaXFGHPfOI3/YWzGQUL2iMd1k0P2Y1
+         /hJJBGrS584O4cvEpiI5ZbMd688Yaue30r06XZoDeTphoRGMLpvGDGsxvLQJONDzfV
+         ncFqR5b9tdJZygSc+QcMahemvWYDT5Ousa7kbn9hFyMbRXAnPBkDrcHgC0026DLNDF
+         HxGVxdhK/VPgQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CF45EF79408;
+        Tue,  4 Jan 2022 03:20:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] net: mdio: Demote probed message to debug print
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164126640884.16037.17897337774748931733.git-patchwork-notify@kernel.org>
+Date:   Tue, 04 Jan 2022 03:20:08 +0000
+References: <20220103194024.2620-1-f.fainelli@gmail.com>
+In-Reply-To: <20220103194024.2620-1-f.fainelli@gmail.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     netdev@vger.kernel.org, mbizon@freebox.fr, andrew@lunn.ch,
+        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        kuba@kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun,  2 Jan 2022 12:35:57 +0100 Sam Ravnborg wrote:
-> This reverts commit b45396afa4177f2b1ddfeff7185da733fade1dc3.
-> 
-> With the referenced patch applied the following error was seen
-> in the kernel log:
-> 
-> 	fec 2188000.ethernet: broken fixed-link specification
-> 	fec: probe of 2188000.ethernet failed with error -22
-> 
-> The problem is that the implementation makes the
-> link-gpios node mandatory - which is not the case.
-> 
-> fixed_phy_get_gpiod() may return -EPROBE_DEFER so this code needs
-> to use IS_ERR() check and the original code was fine.
-> 
-> Fixes: b45396afa417 ("net: phy: fixed_phy: Fix NULL vs IS_ERR() checking in __fixed_phy_register")
-> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-> Cc: Miaoqian Lin <linmq006@gmail.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
+Hello:
 
-This patch didn't register in patchwork for some reason, I applied 
-a very similar patch from Florian instead:
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-https://patchwork.kernel.org/project/netdevbpf/patch/20220103193453.1214961-1-f.fainelli@gmail.com/
+On Mon,  3 Jan 2022 11:40:24 -0800 you wrote:
+> On systems with large numbers of MDIO bus/muxes the message indicating
+> that a given MDIO bus has been successfully probed is repeated for as
+> many buses we have, which can eat up substantial boot time for no
+> reason, demote to a debug print.
+> 
+> Reported-by: Maxime Bizon <mbizon@freebox.fr>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> 
+> [...]
 
-Not sure why patchwork and lore did not see your posting, sorry :S
+Here is the summary with links:
+  - [net-next] net: mdio: Demote probed message to debug print
+    https://git.kernel.org/netdev/net-next/c/7590fc6f80ac
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

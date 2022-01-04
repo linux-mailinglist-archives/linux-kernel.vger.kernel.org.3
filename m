@@ -2,88 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7654C4848B9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:42:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC624848BC
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:44:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230525AbiADTmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 14:42:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42492 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230468AbiADTma (ORCPT
+        id S230245AbiADToh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 14:44:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:59821 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229861AbiADToc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 14:42:30 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12DDC061761;
-        Tue,  4 Jan 2022 11:42:29 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id y130so86716037ybe.8;
-        Tue, 04 Jan 2022 11:42:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ncAQv2DljIFRljclnMmZerc5ibGlEn4OCHalSWIpIz0=;
-        b=qGxFkqq0niJN+9BfjqTxTOL7ISmBhLHgksGbQyGGLrvdjq/K4oqZHQIaUp670c5rYp
-         0S9b+TQFw8v0Q20JMb5oFO0wlsZAVPNrZ8WpiRL6/C3EFEFkZawUbS+1FDH1Lktog8+b
-         dJ5mIvU/wEOCmEOdYS3BBhUUyvUGJXBu5TfYAYbM7hdACCPWUnS0xAISSsJwAk6QMmUJ
-         OZVQZ+UUYU5UYrJ4tg/HOYpr+ahDDANFTG331UdY+2K3x6cPAowlSoRVmRo14jCqxvXe
-         1xREBS1ejUsVePrMKeslsQv4tDb+sRHoGxpzuDeD72mFuX9XW3sLhMQ9C4fvLtaRzF3L
-         dsKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ncAQv2DljIFRljclnMmZerc5ibGlEn4OCHalSWIpIz0=;
-        b=XXRQxuhtSYQvHJ5qYSxN53tYufBm1HS6KPX/dvhSthSC1U8K6Ja8zA0V01pf5N5j7+
-         VCLl8eiyaXlQsNwJQ1gueM7fwuj7sbvpGqf31+UJBXPv6ft/gCnnMsfrVTuIpQTA6wiv
-         Z7aYdZLH76UKMsLABylpY6hqBYYCi6PrCmM5OUHW6IbUCL/5BHh3mLSGqwgDgm2qIbiB
-         Y6ulSAJaGw6g6uN0TUHnWOSOUmvqTOy2E7Y3G1JBiLWqP9KrPTN2LIzNh4s3LNTXFkYS
-         aRX2G2DvRvLAXZCbwkPsZ7HNhHX3cKk1IDRE1rw7XqePki+OitGaK/1RzlMZlBG8MeUO
-         RMig==
-X-Gm-Message-State: AOAM532ZQIlucxaiGlJYF56q4shA9xSuI6XbB1NDPHDl3pJdDuKyKj+c
-        ba0sWxST0CT2QP37I/hfWgXB2NXzzz5EQ2pdjTuJlpNqoJg=
-X-Google-Smtp-Source: ABdhPJyrY43dMscA0Lmdb8zzAF2wEyIUmc4f8XLCz707RSMKzYswtTwMQZK+h2bsD7LikX5NIkCs0N4Jg02ziZcHa0w=
-X-Received: by 2002:a25:7509:: with SMTP id q9mr46108130ybc.315.1641325348914;
- Tue, 04 Jan 2022 11:42:28 -0800 (PST)
+        Tue, 4 Jan 2022 14:44:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641325472;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pVpW4f5n/S0S6HV+zomyaoFiFeW+Dl4rjMkt6Jm1LkE=;
+        b=fOFRMsggBXxH8Y569Ca8ODEr9rdkepCJyuQK1vYv3HsstvUUZUFBDGKNC6SM9fP4ZUI7Kt
+        1+/AAnjhTuJsgYgzfMvEXXSELjCZzIPSJlku2WMHAji7DJAo2NHrUTeHyvtEEFPIINuwXV
+        kzWhCfOygSIjNiD01hbHZ9++QuaNkhM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-155-WIKoIBCFP9SpOYXJnQ47UA-1; Tue, 04 Jan 2022 14:44:29 -0500
+X-MC-Unique: WIKoIBCFP9SpOYXJnQ47UA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 57B3181EE62;
+        Tue,  4 Jan 2022 19:44:26 +0000 (UTC)
+Received: from redhat.com (unknown [10.22.32.209])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B63CF1948C;
+        Tue,  4 Jan 2022 19:44:24 +0000 (UTC)
+Date:   Tue, 4 Jan 2022 14:44:22 -0500
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        Russell Currey <ruscur@russell.cc>
+Subject: Re: [PATCH v2 03/13] powerpc/module_32: Fix livepatching for RO
+ modules
+Message-ID: <YdSjlgflqKi6Raof@redhat.com>
+References: <cover.1640017960.git.christophe.leroy@csgroup.eu>
+ <d5697157cb7dba3927e19aa17c915a83bc550bb2.1640017960.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-References: <20211224131300.18198-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211224131300.18198-5-prabhakar.mahadev-lad.rj@bp.renesas.com> <25bf8893-7369-954e-bd5b-f3d592af5b09@omp.ru>
-In-Reply-To: <25bf8893-7369-954e-bd5b-f3d592af5b09@omp.ru>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 4 Jan 2022 19:42:03 +0000
-Message-ID: <CA+V-a8uEALwWXhsBZB6ct482W6iexuGaguVT5zxJiGQ6nL7hYg@mail.gmail.com>
-Subject: Re: [PATCH v3 04/10] ata: pata_platform: Use platform_get_irq_optional()
- to get the interrupt
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d5697157cb7dba3927e19aa17c915a83bc550bb2.1640017960.git.christophe.leroy@csgroup.eu>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sergey,
+On Mon, Dec 20, 2021 at 04:38:09PM +0000, Christophe Leroy wrote:
+> Livepatching a loaded module involves applying relocations through
+> apply_relocate_add(), which attempts to write to read-only memory when
+> CONFIG_STRICT_MODULE_RWX=y.
+> 
+> R_PPC_ADDR16_LO, R_PPC_ADDR16_HI, R_PPC_ADDR16_HA and R_PPC_REL24 are
+> the types generated by the kpatch-build userspace tool or klp-convert
+> kernel tree observed applying a relocation to a post-init module.
+> 
+> Use patch_instruction() to patch those relocations.
+> 
+> Commit 8734b41b3efe ("powerpc/module_64: Fix livepatching for
+> RO modules") did similar change in module_64.
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Cc: Russell Currey <ruscur@russell.cc>
+> ---
+>  arch/powerpc/kernel/module_32.c | 44 ++++++++++++++++++++++-----------
+>  1 file changed, 30 insertions(+), 14 deletions(-)
+> 
+> diff --git a/arch/powerpc/kernel/module_32.c b/arch/powerpc/kernel/module_32.c
+> index a491ad481d85..a0432ef46967 100644
+> --- a/arch/powerpc/kernel/module_32.c
+> +++ b/arch/powerpc/kernel/module_32.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/bug.h>
+>  #include <linux/sort.h>
+>  #include <asm/setup.h>
+> +#include <asm/code-patching.h>
+>  
+>  /* Count how many different relocations (different symbol, different
+>     addend) */
+> @@ -174,15 +175,25 @@ static uint32_t do_plt_call(void *location,
+>  		entry++;
+>  	}
+>  
+> -	entry->jump[0] = PPC_RAW_LIS(_R12, PPC_HA(val));
+> -	entry->jump[1] = PPC_RAW_ADDI(_R12, _R12, PPC_LO(val));
+> -	entry->jump[2] = PPC_RAW_MTCTR(_R12);
+> -	entry->jump[3] = PPC_RAW_BCTR();
+> +	if (patch_instruction(&entry->jump[0], ppc_inst(PPC_RAW_LIS(_R12, PPC_HA(val)))))
+> +		return 0;
+> +	if (patch_instruction(&entry->jump[1], ppc_inst(PPC_RAW_ADDI(_R12, _R12, PPC_LO(val)))))
+> +		return 0;
+> +	if (patch_instruction(&entry->jump[2], ppc_inst(PPC_RAW_MTCTR(_R12))))
+> +		return 0;
+> +	if (patch_instruction(&entry->jump[3], ppc_inst(PPC_RAW_BCTR())))
+> +		return 0;
+>  
+>  	pr_debug("Initialized plt for 0x%x at %p\n", val, entry);
+>  	return (uint32_t)entry;
+>  }
+>  
+> +static int patch_location_16(uint32_t *loc, u16 value)
+> +{
+> +	loc = PTR_ALIGN_DOWN(loc, sizeof(u32));
+> +	return patch_instruction(loc, ppc_inst((*loc & 0xffff0000) | value));
+> +}
+> +
+>  int apply_relocate_add(Elf32_Shdr *sechdrs,
+>  		       const char *strtab,
+>  		       unsigned int symindex,
+> @@ -216,37 +227,42 @@ int apply_relocate_add(Elf32_Shdr *sechdrs,
+>  
+>  		case R_PPC_ADDR16_LO:
+>  			/* Low half of the symbol */
+> -			*(uint16_t *)location = value;
+> +			if (patch_location_16(location, PPC_LO(value)))
+> +				return -EFAULT;
+>  			break;
+>  
+>  		case R_PPC_ADDR16_HI:
+>  			/* Higher half of the symbol */
+> -			*(uint16_t *)location = (value >> 16);
+> +			if (patch_location_16(location, PPC_HI(value)))
+> +				return -EFAULT;
+>  			break;
+>  
+>  		case R_PPC_ADDR16_HA:
+> -			/* Sign-adjusted lower 16 bits: PPC ELF ABI says:
+> -			   (((x >> 16) + ((x & 0x8000) ? 1 : 0))) & 0xFFFF.
+> -			   This is the same, only sane.
+> -			 */
+> -			*(uint16_t *)location = (value + 0x8000) >> 16;
+> +			if (patch_location_16(location, PPC_HA(value)))
+> +				return -EFAULT;
+>  			break;
+>  
+>  		case R_PPC_REL24:
+>  			if ((int)(value - (uint32_t)location) < -0x02000000
+> -			    || (int)(value - (uint32_t)location) >= 0x02000000)
+> +			    || (int)(value - (uint32_t)location) >= 0x02000000) {
+>  				value = do_plt_call(location, value,
+>  						    sechdrs, module);
+> +				if (!value)
+> +					return -EFAULT;
+> +			}
+>  
+>  			/* Only replace bits 2 through 26 */
+>  			pr_debug("REL24 value = %08X. location = %08X\n",
+>  			       value, (uint32_t)location);
+>  			pr_debug("Location before: %08X.\n",
+>  			       *(uint32_t *)location);
+> -			*(uint32_t *)location
+> -				= (*(uint32_t *)location & ~0x03fffffc)
+> +			value = (*(uint32_t *)location & ~0x03fffffc)
+>  				| ((value - (uint32_t)location)
+>  				   & 0x03fffffc);
+> +
+> +			if (patch_instruction(location, ppc_inst(value)))
+> +				return -EFAULT;
+> +
+>  			pr_debug("Location after: %08X.\n",
+>  			       *(uint32_t *)location);
+>  			pr_debug("ie. jump to %08X+%08X = %08X\n",
+> -- 
+> 2.33.1
+> 
 
-Thank you for the review.
+IIRC, offlist we hacked up klp-convert to create the klp-relocations for
+a 32-bit target and then you hit the selftest late relocation crash, so
+I assume that part is happy after this fix. :)  Thanks again for the
+testing.
 
-On Mon, Dec 27, 2021 at 7:58 PM Sergey Shtylyov <s.shtylyov@omp.ru> wrote:
->
-> On 12/24/21 4:12 PM, Lad Prabhakar wrote:
->
-> > To be consistent with pata_of_platform driver use
-> > platform_get_irq_optional() instead of
-> > platform_get_resource(pdev, IORESOURCE_IRQ, 0).
->
->    But why can't we be consistent with the unpatched pata_of_platfrom(), and then
-> convert to platform_get_irq_optional() after merging both drivers?
->    I'd like to avoid patching the driver to be gone if possible...
->
-Basically to have members of struct pata_platform_priv{} in one shot,
-instead of changing them again and again. btw you are OK with patching
-for 06/10.
+For the livepatching implications,
 
-Cheers,
-Prabhakar
+Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
+
+-- Joe
+

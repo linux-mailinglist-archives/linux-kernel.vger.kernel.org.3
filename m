@@ -2,70 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 096C4484396
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:42:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE598484398
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:42:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234315AbiADOl5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jan 2022 09:41:57 -0500
-Received: from relay10.mail.gandi.net ([217.70.178.230]:55833 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234240AbiADOl4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:41:56 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 3FDDF24000C;
-        Tue,  4 Jan 2022 14:41:53 +0000 (UTC)
-Date:   Tue, 4 Jan 2022 15:41:51 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        linux-wpan@vger.kernel.org,
-        David Girault <david.girault@qorvo.com>,
-        Romuald Despres <romuald.despres@qorvo.com>,
-        Frederic Blain <frederic.blain@qorvo.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [net-next 08/18] net: ieee802154: Add support for internal PAN
- management
-Message-ID: <20220104154151.0d592bff@xps13>
-In-Reply-To: <20211222125555.576e60b3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-References: <20211222155743.256280-1-miquel.raynal@bootlin.com>
-        <20211222155743.256280-9-miquel.raynal@bootlin.com>
-        <20211222125555.576e60b3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S234320AbiADOmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:42:24 -0500
+Received: from ms.lwn.net ([45.79.88.28]:51072 "EHLO ms.lwn.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234262AbiADOmX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 09:42:23 -0500
+X-Greylist: delayed 57045 seconds by postgrey-1.27 at vger.kernel.org; Tue, 04 Jan 2022 09:42:23 EST
+Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id A0E98299;
+        Tue,  4 Jan 2022 14:42:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net A0E98299
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1641307342; bh=7ZuSoVaDF7HUoIoMH3MxtcdCVL8e7GEbds8CGOaH7J8=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Ce3gG6PQqzJuD6DW9fVFlZQlpw/QAIHkVkBKU5OczEF3viysxzKjLuTih/4qCkXAT
+         D0mmtuXeBn6m6SJ0UCy5/Ywn9RhQtUn8Vp9GHIW43UK46D/A93SsGXZmoeS8gPPlxI
+         7FfzhZYEmV6RsGsE5uxB4vgwpfvwbfiLrtjwFwB6AgVIO3lAZbKoGAZOuQTRW6pnPP
+         015hCR2ZU/AEQFfentrtfTI6fZeuq7Yipn1iYTwJ5py3cpWu85VPedOFhg1ntGhgfN
+         sPyLUnbKq7NkZ1jWnllq/PpDIxEwHig+KV9J7Rl2SBcTLCKV1x1dpSQ+wI3of1DKn5
+         Z7rPBW3RMitcw==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Thorsten Leemhuis <linux@leemhuis.info>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        workflows@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [RFC PATCH v1 2/2] docs: regressions.rst: rules of thumb for
+ handling regressions
+In-Reply-To: <ed8ffc6c-19cd-6558-7f7e-d7bdde4ecdb9@leemhuis.info>
+References: <cover.1641203216.git.linux@leemhuis.info>
+ <9a68f2fcb5fe599b76e278a61928e23eb950cd83.1641203216.git.linux@leemhuis.info>
+ <CAKXUXMx_J-enVGQtX6ZqKKRZ7SwZe203tLnQoJ=VLPz3tUhK+Q@mail.gmail.com>
+ <ed8ffc6c-19cd-6558-7f7e-d7bdde4ecdb9@leemhuis.info>
+Date:   Tue, 04 Jan 2022 07:42:26 -0700
+Message-ID: <87sfu3woj1.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jakub,
+Thorsten Leemhuis <linux@leemhuis.info> writes:
 
-kuba@kernel.org wrote on Wed, 22 Dec 2021 12:55:55 -0800:
+> On 04.01.22 13:16, Lukas Bulwahn wrote:
+>> On Mon, Jan 3, 2022 at 3:23 PM Thorsten Leemhuis <linux@leemhuis.info> wrote:
+>>> +Try to fix regressions quickly once the culprit got identified. Fixes for most
+>> 
+>> s/got/gets/ --- at least, that is what the gmail grammar spelling suggests :)
+>
+> Hmm, LanguageTool didn't complain. Not totally sure, maybe both
+> approaches are okay. But the variant suggested by the gmail checker
+> might be the better one.
 
-> On Wed, 22 Dec 2021 16:57:33 +0100 Miquel Raynal wrote:
-> > +/* Maximum number of PAN entries to store */
-> > +static int max_pan_entries = 100;
-> > +module_param(max_pan_entries, uint, 0644);
-> > +MODULE_PARM_DESC(max_pan_entries,
-> > +		 "Maximum number of PANs to discover per scan (default is 100)");
-> > +
-> > +static int pan_expiration = 60;
-> > +module_param(pan_expiration, uint, 0644);
-> > +MODULE_PARM_DESC(pan_expiration,
-> > +		 "Expiration of the scan validity in seconds (default is 60s)");  
-> 
-> Can these be per-device control knobs? Module params are rarely the
-> best answer.
+So we're deeply into nit territory, but "gets" would be the correct
+tense there.  Even better, though, is to avoid using "to get" in this
+way at all.  I'm informed that "to get" is one of the hardest verbs for
+non-native speakers, well, to get, so I try to avoid it in my own
+writing.  "once the culprit is identified" or "has been identified"
+would both be good here.
 
-I believe we can do that on a per FFD device basis (for now it will be
-on a per-device basis, but later when we will have the necessary
-information we might do something more fine grained). Would a couple of
-sysfs entries work?
+>> financial support) for such further
+>> documentation on the development process, please reach out to me and I
+>> will see what I can do.
 
-Thanks,
-Miquèl
+Financial support for documentation work?  Now there's a nice idea...:)
+
+(back to real work now)
+
+jon

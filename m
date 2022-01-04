@@ -2,123 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00BC24848AA
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:35:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 737E64848AF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:37:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbiADTf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 14:35:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:20034 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230300AbiADTfZ (ORCPT
+        id S230368AbiADThJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 14:37:09 -0500
+Received: from fanzine2.igalia.com ([213.97.179.56]:58576 "EHLO
+        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229697AbiADThH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 14:35:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641324925;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=M31283hPor/SMg1Hu2xm9ZT/xhUO7KMLt4Ra3PtJ46g=;
-        b=a0fdr4g5fmZGIvdmI9LAfwHDa2+tPVp37rw+4vwJyAo9KaUfhzbU/LniyTBMpuQzmdSV8/
-        CAQbIQyUG1x2V4lqIpXgAkd08KtC9iRBBv1e5L32QeRsiBMCaK37bI8Oe/3I4aIj5UzIeE
-        Z6pl+PtFGoJwJK7wuDmBEFifTpavbfM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-605-cGMCxWdAPTeBu14WgwCJ3g-1; Tue, 04 Jan 2022 14:35:22 -0500
-X-MC-Unique: cGMCxWdAPTeBu14WgwCJ3g-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 40F8181CCB4;
-        Tue,  4 Jan 2022 19:35:20 +0000 (UTC)
-Received: from redhat.com (unknown [10.22.32.209])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 911E95BE04;
-        Tue,  4 Jan 2022 19:35:15 +0000 (UTC)
-Date:   Tue, 4 Jan 2022 14:35:13 -0500
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>
-Subject: Re: [PATCH v2 01/13] livepatch: Fix build failure on 32 bits
- processors
-Message-ID: <YdShcXQwOaQnylo6@redhat.com>
-References: <cover.1640017960.git.christophe.leroy@csgroup.eu>
- <5288e11b018a762ea3351cc8fb2d4f15093a4457.1640017960.git.christophe.leroy@csgroup.eu>
+        Tue, 4 Jan 2022 14:37:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version
+        :Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=c79Cvyi3tuo9WddH41m2TtymOCs7U8J7heJs6dXudQ8=; b=svRBeHTRJns4oIluDmkept3Yev
+        s/akUraqokxa/ewz2G5aFGKEiDr8OqfqBlal+izIZqK0AhsmdyedebCjeDq8OBCFyZROhaJM38ddG
+        EJyGArTs9ncVcBhXLPcrdwbHrcrxZg5BU5N38fHtBOXQSD2W2LEsRoQnehteijDKUvcCSAESRFmWB
+        I2iHNCGybG2RyINDFAsPUAChtXpdNoqZiKJzTbRK2z7MPp2OnRbJsKC+PC+lazkfHse/UFZ6HOxZw
+        Ce9K2VxN/mUift8HTw9Qvdc9V0mC0XCqCZe0fGm12Q9kYylLU1gG4/rwy6lOdJFHyxV29MwBUsRz4
+        QvoJn+BA==;
+Received: from 200-153-146-242.dsl.telesp.net.br ([200.153.146.242] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1n4pcB-000Bpn-3m; Tue, 04 Jan 2022 20:36:59 +0100
+Subject: Re: pstore/ramoops - why only collect a partial dmesg?
+To:     "Luck, Tony" <tony.luck@intel.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "anton@enomsg.org" <anton@enomsg.org>,
+        "ccross@android.com" <ccross@android.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
+        "Guilherme G. Piccoli" <kernel@gpiccoli.net>
+References: <a21201cf-1e5f-fed1-356d-42c83a66fa57@igalia.com>
+ <2d1e9afa38474de6a8b1efc14925d095@intel.com>
+ <0ca4c27a-a707-4d36-9689-b09ef715ac67@igalia.com>
+ <a361c64213e7474ea39c97f7f7bd26ec@intel.com>
+ <c5a04638-90c2-8ec0-4573-a0e5d2e24b6b@igalia.com>
+ <8675f69c1643451b91f797b114dfc311@intel.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Message-ID: <b2d66d9f-15a6-415c-2485-44649027a1d5@igalia.com>
+Date:   Tue, 4 Jan 2022 16:36:43 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5288e11b018a762ea3351cc8fb2d4f15093a4457.1640017960.git.christophe.leroy@csgroup.eu>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+In-Reply-To: <8675f69c1643451b91f797b114dfc311@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 04:38:02PM +0000, Christophe Leroy wrote:
-> Trying to build livepatch on powerpc/32 results in:
-> 
-> 	kernel/livepatch/core.c: In function 'klp_resolve_symbols':
-> 	kernel/livepatch/core.c:221:23: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-> 	  221 |                 sym = (Elf64_Sym *)sechdrs[symndx].sh_addr + ELF_R_SYM(relas[i].r_info);
-> 	      |                       ^
-> 	kernel/livepatch/core.c:221:21: error: assignment to 'Elf32_Sym *' {aka 'struct elf32_sym *'} from incompatible pointer type 'Elf64_Sym *' {aka 'struct elf64_sym *'} [-Werror=incompatible-pointer-types]
-> 	  221 |                 sym = (Elf64_Sym *)sechdrs[symndx].sh_addr + ELF_R_SYM(relas[i].r_info);
-> 	      |                     ^
-> 	kernel/livepatch/core.c: In function 'klp_apply_section_relocs':
-> 	kernel/livepatch/core.c:312:35: error: passing argument 1 of 'klp_resolve_symbols' from incompatible pointer type [-Werror=incompatible-pointer-types]
-> 	  312 |         ret = klp_resolve_symbols(sechdrs, strtab, symndx, sec, sec_objname);
-> 	      |                                   ^~~~~~~
-> 	      |                                   |
-> 	      |                                   Elf32_Shdr * {aka struct elf32_shdr *}
-> 	kernel/livepatch/core.c:193:44: note: expected 'Elf64_Shdr *' {aka 'struct elf64_shdr *'} but argument is of type 'Elf32_Shdr *' {aka 'struct elf32_shdr *'}
-> 	  193 | static int klp_resolve_symbols(Elf64_Shdr *sechdrs, const char *strtab,
-> 	      |                                ~~~~~~~~~~~~^~~~~~~
-> 
-> Fix it by using the right types instead of forcing 64 bits types.
-> 
-> Fixes: 7c8e2bdd5f0d ("livepatch: Apply vmlinux-specific KLP relocations early")
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Acked-by: Petr Mladek <pmladek@suse.com>
-> ---
->  kernel/livepatch/core.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-> index 335d988bd811..c0789383807b 100644
-> --- a/kernel/livepatch/core.c
-> +++ b/kernel/livepatch/core.c
-> @@ -190,7 +190,7 @@ static int klp_find_object_symbol(const char *objname, const char *name,
->  	return -EINVAL;
->  }
->  
-> -static int klp_resolve_symbols(Elf64_Shdr *sechdrs, const char *strtab,
-> +static int klp_resolve_symbols(Elf_Shdr *sechdrs, const char *strtab,
->  			       unsigned int symndx, Elf_Shdr *relasec,
->  			       const char *sec_objname)
->  {
-> @@ -218,7 +218,7 @@ static int klp_resolve_symbols(Elf64_Shdr *sechdrs, const char *strtab,
->  	relas = (Elf_Rela *) relasec->sh_addr;
->  	/* For each rela in this klp relocation section */
->  	for (i = 0; i < relasec->sh_size / sizeof(Elf_Rela); i++) {
-> -		sym = (Elf64_Sym *)sechdrs[symndx].sh_addr + ELF_R_SYM(relas[i].r_info);
-> +		sym = (Elf_Sym *)sechdrs[symndx].sh_addr + ELF_R_SYM(relas[i].r_info);
->  		if (sym->st_shndx != SHN_LIVEPATCH) {
->  			pr_err("symbol %s is not marked as a livepatch symbol\n",
->  			       strtab + sym->st_name);
-> -- 
-> 2.33.1
-> 
+On 04/01/2022 15:46, Luck, Tony wrote:
+> That does change things ... I wonder how many megabytes you need
+> for a big system (hundreds of cores, thousands of tasks)!
 
-Thanks for finding and fixing, lgtm.
+Heheh indeed, this case would require a very big log buffer I guess! But
+our setup is not so big, only 4/8 CPUs, not so much RAM and not that
+many tasks expected, opposed to a big server with maybe multiple VMs,
+containers, etc...
 
-Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
+> 
+> This use case does look like it could use multiple chunks in ramoops.
 
--- Joe
+Cool, thanks! If nobody complains or show any reason in that ramoops
+shouldn't be changed to deal with multi-chunk dmesg, I'll try to come up
+with something then.
 
+Cheers,
+
+
+Guilherme

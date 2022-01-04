@@ -2,143 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9653C483C38
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 08:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C39ED483C83
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 08:29:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233166AbiADH1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 02:27:13 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:37202 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231707AbiADH1L (ORCPT
+        id S233355AbiADH3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 02:29:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41896 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233315AbiADH3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 02:27:11 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 4 Jan 2022 02:29:32 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A9DC061785;
+        Mon,  3 Jan 2022 23:29:31 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 529E3B81155;
-        Tue,  4 Jan 2022 07:27:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04620C36AE9;
-        Tue,  4 Jan 2022 07:27:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641281228;
-        bh=YAiWEaNKF4OI+SkuBr/lyYfKRYi/Gm5pnRDcrQZpCmU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p6Dr+J3eoIPr88f5SrpQUnwUrZXyoXl/kT2XVwpgjzziwr/C0+obD7+XFPCiS5pA7
-         LcOcSUxCPaH9WAurgjU7r0c4wPzq25/p67w0pWTMTlO2xSFot/3nCYkkTHfEZaY/aE
-         +8m2UB+PCmWQCSUeqB1Kj9ZqkVXPMfEwduaVkorc=
-Date:   Tue, 4 Jan 2022 08:27:06 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Walt Drummond <walt@drummond.us>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH 8/8] signals: Support BSD VSTATUS, KERNINFO and
- SIGINFO
-Message-ID: <YdP2yvYfmMp3QKKi@kroah.com>
-References: <20220103181956.983342-1-walt@drummond.us>
- <20220103181956.983342-9-walt@drummond.us>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JSklF5dqtz4y47;
+        Tue,  4 Jan 2022 18:29:29 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1641281370;
+        bh=fbSaf1pHEa71zu32XebT2YPown4Kq5T5oozgDhCx+y4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=XZdDeAgmyT5jlGOzHjctWbXbvpV7k9v8rToOTJsqxCimArBBLQkaD9uGR7eTjrYdg
+         /YFQ/RZAIikDQ5NyF1CtO2ifJlWMoxM+5Scm+8xao9j3kuG1hcmj6NqxPObBnvWire
+         dfA9Vm3rYO0BmNdQUI06dUEvfqcGkOu47TAaRSD8QoSTc8t71bKwLktoFCWyXL50qD
+         K7J/r9IcOZpXJUhgjI42xLD0YnzUvXznsoCjDa5x8+sYNZ0E8HoIwzPsF8VjAkstKy
+         dlhyFsQvoujeg/YaHSC9PEAuvH3epfG9D+3rGFtorEJkLsqUgq1Yhqd7Tu2jc0k2iH
+         Ynl791grFe3Aw==
+Date:   Tue, 4 Jan 2022 18:29:25 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     William Kucharski <william.kucharski@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the folio tree
+Message-ID: <20220104182925.0ee8fd17@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220103181956.983342-9-walt@drummond.us>
+Content-Type: multipart/signed; boundary="Sig_/jiUas6EpUPf7oy=aeGL6jnH";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 03, 2022 at 10:19:56AM -0800, Walt Drummond wrote:
-> Support TTY VSTATUS character, NOKERNINFO local control bit and the
-> signal SIGINFO, all as in 4.3BSD.
+--Sig_/jiUas6EpUPf7oy=aeGL6jnH
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I am sorry, but this changelog text does not make any sense to me at
-all.  It needs to be much more detailed and explain why you are doing
-this and what exactly it is doing as I have no idea.
+Hi all,
 
-Also, you seem to be adding new user/kernel apis here with no
-documentation that I can see, nor any tests.  So how is anyone supposed
-to use this?
+After merging the folio tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-And finally:
+In file included from include/linux/socket.h:8,
+                 from include/linux/compat.h:15,
+                 from arch/powerpc/kernel/asm-offsets.c:12:
+include/linux/uio.h: In function 'copy_folio_to_iter':
+include/linux/uio.h:153:33: error: invalid use of undefined type 'struct fo=
+lio'
+  153 |  return copy_page_to_iter(&folio->page, offset, bytes, i);
+      |                                 ^~
 
-> --- /dev/null
-> +++ b/drivers/tty/tty_status.c
-> @@ -0,0 +1,135 @@
-> +// SPDX-License-Identifier: GPL-1.0+
+Caused by commit
 
-Please no, you know better than that, and the checkpatch tool should
-have warned you.
+  442f739136ee ("iov_iter: Add copy_folio_to_iter()")
 
+struct folio is only forward declared in uio.h.  Presumably other builds
+include mm_types.h indirectly.
 
-> +/*
-> + * tty_status.c --- implements VSTATUS and TIOCSTAT from BSD4.3/4.4
-> + *
-> + */
-> +
-> +#include <linux/sched.h>
-> +#include <linux/mm.h>
-> +#include <linux/tty.h>
-> +#include <linux/sched/cputime.h>
-> +#include <linux/sched/loadavg.h>
-> +#include <linux/pid.h>
-> +#include <linux/slab.h>
-> +#include <linux/math64.h>
-> +
-> +#define MSGLEN (160 + TASK_COMM_LEN)
-> +
-> +inline unsigned long getRSSk(struct mm_struct *mm)
-> +{
-> +	if (mm == NULL)
-> +		return 0;
-> +	return get_mm_rss(mm) * PAGE_SIZE / 1024;
-> +}
-> +
-> +inline long nstoms(long l)
-> +{
-> +	l /= NSEC_PER_MSEC * 10;
-> +	if (l < 10)
-> +		l *= 10;
-> +	return l;
-> +}
-> +
-> +inline struct task_struct *compare(struct task_struct *new,
-> +				   struct task_struct *old)
-> +{
-> +	unsigned int ostate, nstate;
-> +
-> +	if (old == NULL)
-> +		return new;
-> +
-> +	ostate = task_state_index(old);
-> +	nstate = task_state_index(new);
-> +
-> +	if (ostate == nstate) {
-> +		if (old->start_time > new->start_time)
-> +			return old;
-> +		return new;
-> +	}
-> +
-> +	if (ostate < nstate)
-> +		return old;
-> +
-> +	return new;
-> +}
-> +
-> +struct task_struct *pick_process(struct pid *pgrp)
+I have used the folio tree from next-20211224 for today.
 
-Also, always run sparse on your changes, you have loads of new global
-functions for no reason.
+--=20
+Cheers,
+Stephen Rothwell
 
-thanks,
+--Sig_/jiUas6EpUPf7oy=aeGL6jnH
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-greg k-h
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHT91UACgkQAVBC80lX
+0Gz/VAf5AQ2ft9hJ59Aqy5TN24eHmPgPM8FyqiVenW4jk5ma2BiWJIaaQ6I6tgC5
+Trs85AIiKgEjajPfjgvcIeOqxdV4kVD20Ka+ZXTGnM5GQr6x0F3etKmmk/ZwRTwE
+x0WJa7onjADcdyZyvorR4tj9XdqC8gIjO7DA3DHCIMUYSorV8J+NwK7jeRNdAMBu
+F4hOsOpW7o2P+vW8NP9/6wnrWbZ+JRCPRlLxRfQmSdMqd2iGUVZAi28FFbqE1ReG
+r9rH/mb7yZ/klMi5QjJ5cBbB1QYbve/OzbsAVxcGQv3CLH+QXJhexJ9KxQ8YLIUH
+O45QBZ2zNiivo/2sBDGHA1EW9NjP1w==
+=sFJK
+-----END PGP SIGNATURE-----
+
+--Sig_/jiUas6EpUPf7oy=aeGL6jnH--

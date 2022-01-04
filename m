@@ -2,104 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27CF0483D9A
+	by mail.lfdr.de (Postfix) with ESMTP id 70D96483D9B
 	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 09:03:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233939AbiADICy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 03:02:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49768 "EHLO
+        id S233801AbiADIC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 03:02:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234042AbiADICX (ORCPT
+        with ESMTP id S233889AbiADIC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 03:02:23 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB50C0617A0;
-        Tue,  4 Jan 2022 00:02:23 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 4 Jan 2022 03:02:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA3CC0613B3
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 00:02:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JSlT93Wdxz4y4H;
-        Tue,  4 Jan 2022 19:02:21 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641283341;
-        bh=+jagbjeZ5GOmwxkcHyi/G7QBXs4r6KG+6i3WMny4jw8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jCfMZhdmWHtYrCRSPwZ+Jj0qpwDMMp8Vqf7LwjFJ4efZGvlL0AMAQIIqap15b2cir
-         qnTDYGasDdXUxo1HTddqDgvggA9BPpF31STucqX8Anm7LO1H0Jt43GTyuFRlkDRFH6
-         FqK59tshKGOSjtrr76kV2lI69fKbeOXyES4R9vIdhOV7e8grfrvVuy+HNIQdk9oOmS
-         iMQK3MuplH3wqtq8LzKUDMh/iaFmVJcik+QNbjo9F1/BAQgvhAd2h1wO8GK6sATsHP
-         5zheHWlV6ZDZj2ATUtRBhr/GMpgXJBuNJsfVVZtgKeOMCjaqYj2YgOOUk+0IVgejsQ
-         EbM2ETV5Ik6KQ==
-Date:   Tue, 4 Jan 2022 19:02:20 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the pm tree
-Message-ID: <20220104190220.45c8e0cf@canb.auug.org.au>
-In-Reply-To: <d485fb62-b576-f9b6-13bc-709a2c409240@gmail.com>
-References: <20220104111551.7f26e893@canb.auug.org.au>
-        <d485fb62-b576-f9b6-13bc-709a2c409240@gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 402FE612E1
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 08:02:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49C8DC36B02;
+        Tue,  4 Jan 2022 08:02:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641283348;
+        bh=QLZ6g2Ht0oArjMp/a0AaWtON7ynpwARL5ppGkT5fh7A=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=FEhzt3spd6tV89XViWZVhiGUVk9wmZHNgCl+HjA/iT92QUVZ499xqF9GLno8Cq50z
+         FKAMaUZLF8TBGuPKWZ0ZpgVZ4XUcBs+oOsqinvuRubhZGcNfnLAZAAIuDSSZwHTaM1
+         VoHh7suNxzBGZOiiY9rC1N8bO9Fqbq29Di+50SqIoJE04xeQImo14kTC8OqwMh6e1v
+         xg8hI+XzYTwaYHPpbU0iTKw3CkgTW3+deiwhIb0C5h0LJXq2c361j2kBDn71Wa3GAR
+         JzsRme55OMXOAwoM7I4QvUd2BbAabNN3VW/R4M6CfarKlstWO/4mR+ZqQ+nVlgQhc8
+         TuDl6bxu0SOQQ==
+Message-ID: <6151cc84-f2d2-f9e9-7884-567f202d65cc@kernel.org>
+Date:   Tue, 4 Jan 2022 16:02:25 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+=Twe.6.+LdJY68sTlUc5zr";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v3 3/5] erofs: use meta buffers for super operations
+Content-Language: en-US
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>,
+        linux-erofs@lists.ozlabs.org, Liu Bo <bo.liu@linux.alibaba.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Yue Hu <huyue2@yulong.com>
+References: <20220102040017.51352-4-hsiangkao@linux.alibaba.com>
+ <20220102081317.109797-1-hsiangkao@linux.alibaba.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20220102081317.109797-1-hsiangkao@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/+=Twe.6.+LdJY68sTlUc5zr
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2022/1/2 16:13, Gao Xiang wrote:
+> Get rid of old erofs_get_meta_page() within super operations by
+> using on-stack meta buffers in order to prepare subpage and folio
+> features.
+> 
+> Reviewed-by: Yue Hu <huyue2@yulong.com>
+> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 
-Hi Heiner,
+Reviewed-by: Chao Yu <chao@kernel.org>
 
-On Tue, 4 Jan 2022 08:29:28 +0100 Heiner Kallweit <hkallweit1@gmail.com> wr=
-ote:
->
-> The patch in the pm tree annotating pm_runtime_resume_and_get() as __must=
-_check
-> follows some fixes of pm_runtime_resume_and_get() usage that went through=
- other
-> trees. These fixes are in linux-next but don't seem to be in the pm tree.
-> We talk about:
-> f04b4fb47d83 ("ASoC: sh: rz-ssi: Check return value of pm_runtime_resume_=
-and_get()")
-
-In the sound-asoc tree.
-
-> 3d6b661330a7 ("crypto: stm32 - Revert broken pm_runtime_resume_and_get ch=
-anges")
-
-In the crypto tree.
-
-Both those are merged into linux-next after the pm tree.  If Linus did
-the same, the pm tree commit would break his build.  The only way you
-can have that pm tree commit in linux-next is to ask Andrew Morton to
-put it in the post linux-next part of his patch series.  Otherwise, it
-needs to be removed form the pm tree and wait until after the next
-merge window closes (or at least both the above trees have been merged
-by Linus).
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/+=Twe.6.+LdJY68sTlUc5zr
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHT/wwACgkQAVBC80lX
-0Gxw2gf/QRDQaS3RPEIJNBJkkWrvsiD5FZO65gX9xPWSx2baqplxASp/gWY73XtC
-5Y1ARgKV2Lb8LkkHuLvr31o+hK7Xa4F9PmwICyACn5CXG8YQBzZ5YikplCC1qaBA
-QRpkwYzY1OVKj9o2mP/8EVdCaq08gkQ/9Rju+P4cISyQtcMndmnJVKeGBbrc5t7f
-z0ZE1SjzkwNifFMHIeAzY1D8jkRbhWBPVKdKZNwaX4GnYIFUV8MOKelbm/scGgsK
-J7hgCFIV1gT21oTyKnyuf+jjb7ezzAyLNcDRXKh86xxVq2KdQXBwyY8VzWtz1tmV
-Gi1nSgU/bRmYPv2zjh5JDKsHjpUFBg==
-=gFjg
------END PGP SIGNATURE-----
-
---Sig_/+=Twe.6.+LdJY68sTlUc5zr--
+Thanks,

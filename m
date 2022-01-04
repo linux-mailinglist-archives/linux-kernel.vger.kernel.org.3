@@ -2,160 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7BEE483FBB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:20:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93A95483FBF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:21:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbiADKUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 05:20:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
+        id S231200AbiADKVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 05:21:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbiADKUu (ORCPT
+        with ESMTP id S231234AbiADKVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 05:20:50 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3DDC061761;
-        Tue,  4 Jan 2022 02:20:49 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id j83so88012928ybg.2;
-        Tue, 04 Jan 2022 02:20:49 -0800 (PST)
+        Tue, 4 Jan 2022 05:21:34 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1085C061785
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 02:21:34 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id iy13so30952013pjb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 02:21:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=YNESHVs4c6bCiKCrosQhZeVyya3r9mtgLbso/5Ne+8Q=;
-        b=OdbgrmBdhHTkQKOVltFAeP1zEOsiL8P6xnSadegUKnsX3Xi2abF1MQgMwIFdbfI0kg
-         9E1xQXLDeuOxO368WfTcqFpBPdCVzlseRLecMcYC48wp7BQ1wIGoESS36UaP2QIi4vAZ
-         7401gjlEQUBbX2j38uySsKHo/xH850n6LgdgL1+osT5QqQy6W61o8ubJW2gpHsaQT0sk
-         Oy8n7FWrb5iKyOp+VpuvCN2K/OWGBQLMWyyaI0Ba03TOa3SwjL4hQd16BqprCopMlA25
-         1Bf4rzHxi5kQSZeyH5U7MhTZQKvo86fiSKu04SEp/ELsp/o2VbiVgO0roXyQ+/m/K2tF
-         39Ug==
+        d=broadcom.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to;
+        bh=jwos4L19ZsL6C7rIxRau65ZAImLFd+l/yAgd9AjoBH4=;
+        b=iQtgQ5TS/uw34Er90P7HdMUl7Lbkg9Mt6K5GvjB4CGFr4AHzs3ZS/EHwM0cKz7dJjC
+         xqFmKaQgjhllK/I04Hv1741bitxm485PviKapkBBqFYoDp8Fhk6JWUaNDYnIV2q6H4+O
+         CFcJ1Z7E2B8Dt+mbeLypAoPvrhAccOkCOxG1M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=YNESHVs4c6bCiKCrosQhZeVyya3r9mtgLbso/5Ne+8Q=;
-        b=wtXehq4K1XcAZvArdEHwfmbEZtQzpohfLvYt9GADRIDV/jSwjkWONQWHi/x8t935x6
-         IyMiVdQQHk6bjRyPxfEpBLMs9XwhhhIwKQ8KtA+vV49jPgcGdVMpuYS00ffrXlPHii7O
-         iVUzykldBiid+JTdutDpNgRFA5+LRkxQ1OSxPEGlELFcqbzDmGDN/m/0U3Gw1gDr8byl
-         /0ohPxTM5Uql19JmHmwLVESnNuV3AIJgQkGJB2GOLewSLsvgpip+dUyDOCIJLJkwbsIn
-         RmHNBkBStmFLfX0kZ/sf3tjwSeUBDEfMsdu3JCCx8xSRb8+oXmFWTis7ZD3mb3NzMpWN
-         L5Yw==
-X-Gm-Message-State: AOAM531XYExdKt6VXUPnYgVaJfFy+0jS5hp3+lnvytLUZ/Gao58KBpdF
-        AXMtBXwWW27mtJ9yByP6YzCggNvRjlb9Tnm0X9U=
-X-Google-Smtp-Source: ABdhPJyouqVSr9bEWsE8p886kGMZzqwm31lwderokjoNEFrKNoiSnZe5khx26DE+l4mZIsUopTZiVbe+K/dB/1lzKuA=
-X-Received: by 2002:a25:da0e:: with SMTP id n14mr51082535ybf.35.1641291649005;
- Tue, 04 Jan 2022 02:20:49 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to;
+        bh=jwos4L19ZsL6C7rIxRau65ZAImLFd+l/yAgd9AjoBH4=;
+        b=dKy7d0pjH8G7ULV2gMw+jFi4bdXzGVEJfa/pZPgDlZaWE1crWbuEIAdAJEptJa+TI3
+         Fja6VISpU1KZmcftKBxk6ue3S5TwcAN5pOzH1/EmrE1epeJYqfx7SzfWtOZsbjJcibKp
+         hgXJ6LTiQVgUnE0a/hjFMaoqkdDFXSt0i9sFiu0+NPQkHELx9zV4p1yrhQjQuGnlfDJH
+         6rDhXabrJ0189AYjnF9g0y/XgPDlclifG4M8UQNlU0YJYh8zqyFVu+ECwQmT2OP3SxRp
+         ELQCvdDxaMVRIM3Zgrym9/SnqUJ6K46JiZ/TedqnHbVdFL72nniW2qLUAP+LIeknfJt7
+         w/jg==
+X-Gm-Message-State: AOAM530kXIYyxI4mEbnBX0fbWRvt5VWFVbvIDKnuqyZL57TfYK0YqBjq
+        0oV/Wbd4la9dP+KsjNna+dw4ow==
+X-Google-Smtp-Source: ABdhPJxt6OBthtvvZrLi+n+/1plQapFxmWrH4JXTjsSi2R+JGB6b5nzVoeHEvKC19iRBP2wNlW/OHw==
+X-Received: by 2002:a17:903:183:b0:149:2b6:65ff with SMTP id z3-20020a170903018300b0014902b665ffmr48440359plg.128.1641291694198;
+        Tue, 04 Jan 2022 02:21:34 -0800 (PST)
+Received: from [192.168.178.242] (f140230.upc-f.chello.nl. [80.56.140.230])
+        by smtp.gmail.com with ESMTPSA id h7sm42646573pfc.152.2022.01.04.02.21.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jan 2022 02:21:33 -0800 (PST)
+Message-ID: <a50d7d46-9298-3d4b-049d-4b3360c6efa7@broadcom.com>
+Date:   Tue, 4 Jan 2022 11:21:24 +0100
 MIME-Version: 1.0
-From:   kvartet <xyru1999@gmail.com>
-Date:   Tue, 4 Jan 2022 18:20:38 +0800
-Message-ID: <CAFkrUsirdW1j_nhFK23x99itQ7=eXqAWFK5xYo7Mjmg+8zPmLw@mail.gmail.com>
-Subject: possible deadlock in svm_vm_copy_asid_from
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Cc:     sunhao.th@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2 16/35] brcmfmac: acpi: Add support for fetching Apple
+ ACPI properties
+To:     Hector Martin <marcan@marcan.st>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com
+References: <20220104072658.69756-1-marcan@marcan.st>
+ <20220104072658.69756-17-marcan@marcan.st>
+From:   Arend van Spriel <arend.vanspriel@broadcom.com>
+In-Reply-To: <20220104072658.69756-17-marcan@marcan.st>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000006d775105d4bf0075"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+--0000000000006d775105d4bf0075
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-When using Syzkaller to fuzz the latest Linux kernel, the following
-crash was triggered.
+On 1/4/2022 8:26 AM, Hector Martin wrote:
+> On DT platforms, the module-instance and antenna-sku-info properties
+> are passed in the DT. On ACPI platforms, module-instance is passed via
+> the analogous Apple device property mechanism, while the antenna SKU
+> info is instead obtained via an ACPI method that grabs it from
+> non-volatile storage.
+> 
+> Add support for this, to allow proper firmware selection on Apple
+> platforms.
+> 
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>   .../broadcom/brcm80211/brcmfmac/Makefile      |  2 +
+>   .../broadcom/brcm80211/brcmfmac/acpi.c        | 47 +++++++++++++++++++
+>   .../broadcom/brcm80211/brcmfmac/common.c      |  1 +
+>   .../broadcom/brcm80211/brcmfmac/common.h      |  9 ++++
+>   4 files changed, 59 insertions(+)
+>   create mode 100644 drivers/net/wireless/broadcom/brcm80211/brcmfmac/acpi.c
+> 
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/Makefile b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/Makefile
+> index 13c13504a6e8..19009eb9db93 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/Makefile
+> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/Makefile
+> @@ -47,3 +47,5 @@ brcmfmac-$(CONFIG_OF) += \
+>   		of.o
+>   brcmfmac-$(CONFIG_DMI) += \
+>   		dmi.o
+> +brcmfmac-$(CONFIG_ACPI) += \
+> +		acpi.o
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/acpi.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/acpi.c
+> new file mode 100644
+> index 000000000000..2b1a4448b291
+> --- /dev/null
+> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/acpi.c
+> @@ -0,0 +1,47 @@
+> +// SPDX-License-Identifier: ISC
+> +/*
+> + * Copyright The Asahi Linux Contributors
+> + */
 
-HEAD commit: a7904a538933 Linux 5.16-rc6
-git tree: upstream
-console output: https://paste.ubuntu.com/p/GCRXrYQmMN/plain/
-kernel config: https://paste.ubuntu.com/p/FDDNHDxtwz/plain/
-C reproducer: https://paste.ubuntu.com/p/gD2D5wthDK/plain/
-Syzlang reproducer: https://paste.ubuntu.com/p/hTnbvmsW8r/plain/
+Common format for copyright statement (in this folder) seems to be:
 
-============================================
-WARNING: possible recursive locking detected
-5.16.0-rc6 #9 Not tainted
---------------------------------------------
-syz-executor.6/4919 is trying to acquire lock:
-ffffc9000afbb250 (&kvm->lock){+.+.}-{3:3}, at: sev_lock_two_vms
-arch/x86/kvm/svm/sev.c:1568 [inline]
-ffffc9000afbb250 (&kvm->lock){+.+.}-{3:3}, at:
-svm_vm_copy_asid_from+0x1bd/0x380 arch/x86/kvm/svm/sev.c:1988
+Copyright (c) <YEAR> <COPYRIGHT_HOLDER>
 
-but task is already holding lock:
-ffffc9000a703250 (&kvm->lock){+.+.}-{3:3}, at: sev_lock_two_vms
-arch/x86/kvm/svm/sev.c:1566 [inline]
-ffffc9000a703250 (&kvm->lock){+.+.}-{3:3}, at:
-svm_vm_copy_asid_from+0x188/0x380 arch/x86/kvm/svm/sev.c:1988
+Regards,
+Arend
 
-other info that might help us debug this:
- Possible unsafe locking scenario:
+--0000000000006d775105d4bf0075
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-       CPU0
-       ----
-  lock(&kvm->lock);
-  lock(&kvm->lock);
-
- *** DEADLOCK ***
-
- May be due to missing lock nesting notation
-
-1 lock held by syz-executor.6/4919:
- #0: ffffc9000a703250 (&kvm->lock){+.+.}-{3:3}, at: sev_lock_two_vms
-arch/x86/kvm/svm/sev.c:1566 [inline]
- #0: ffffc9000a703250 (&kvm->lock){+.+.}-{3:3}, at:
-svm_vm_copy_asid_from+0x188/0x380 arch/x86/kvm/svm/sev.c:1988
-
-stack backtrace:
-CPU: 1 PID: 4919 Comm: syz-executor.6 Not tainted 5.16.0-rc6 #9
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_deadlock_bug kernel/locking/lockdep.c:2956 [inline]
- check_deadlock kernel/locking/lockdep.c:2999 [inline]
- validate_chain kernel/locking/lockdep.c:3788 [inline]
- __lock_acquire.cold+0x168/0x3c3 kernel/locking/lockdep.c:5027
- lock_acquire kernel/locking/lockdep.c:5637 [inline]
- lock_acquire+0x1ab/0x520 kernel/locking/lockdep.c:5602
- __mutex_lock_common kernel/locking/mutex.c:607 [inline]
- __mutex_lock+0x151/0x1610 kernel/locking/mutex.c:740
- sev_lock_two_vms arch/x86/kvm/svm/sev.c:1568 [inline]
- svm_vm_copy_asid_from+0x1bd/0x380 arch/x86/kvm/svm/sev.c:1988
- kvm_vm_ioctl_enable_cap+0xf8/0xc40 arch/x86/kvm/x86.c:5829
- kvm_vm_ioctl_enable_cap_generic
-arch/x86/kvm/../../../virt/kvm/kvm_main.c:4241 [inline]
- kvm_vm_ioctl+0x3dd/0x23a0 arch/x86/kvm/../../../virt/kvm/kvm_main.c:4300
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:874 [inline]
- __se_sys_ioctl fs/ioctl.c:860 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fc4241dc89d
-Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
-89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fc422b4dc28 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007fc4242fbf60 RCX: 00007fc4241dc89d
-RDX: 0000000020000080 RSI: 000000004068aea3 RDI: 0000000000000004
-RBP: 00007fc42424900d R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc9816f67f R14: 00007fc4242fbf60 R15: 00007fc422b4ddc0
- </TASK>
-
-
-
-If you fix this issue, please add the following tag to the commit:
-Reported-by: Yiru Xu <xyru1999@gmail.com>
-
-
-Best Regards,
-Yiru
+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
+XSlOP9s1dqWlRRnnNxV7BVC87lkKKy0+1M2DOF6qRYQlnW4EfOyCToYLAG5zeV+AjepMoX6J9bUz
+yj4BlDtwH4HFjaRIlPPbdLshUA54/tV84x8woATuLGBq+hTZEpkZAgMBAAGjggHdMIIB2TAOBgNV
+HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
+Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
+KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
+Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
+dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
+OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
+MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
+BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFKb+3b9pz8zo
+0QsCHGb/p0UrBlU+MA0GCSqGSIb3DQEBCwUAA4IBAQCHisuRNqP0NfYfG3U3XF+bocf//aGLOCGj
+NvbnSbaUDT/ZkRFb9dQfDRVnZUJ7eDZWHfC+kukEzFwiSK1irDPZQAG9diwy4p9dM0xw5RXSAC1w
+FzQ0ClJvhK8PsjXF2yzITFmZsEhYEToTn2owD613HvBNijAnDDLV8D0K5gtDnVqkVB9TUAGjHsmo
+aAwIDFKdqL0O19Kui0WI1qNsu1tE2wAZk0XE9FG0OKyY2a2oFwJ85c5IO0q53U7+YePIwv4/J5aP
+OGM6lFPJCVnfKc3H76g/FyPyaE4AL/hfdNP8ObvCB6N/BVCccjNdglRsL2ewttAG3GM06LkvrLhv
+UCvjMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
+YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMMSnY
+h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAICMxJ8gqwRoi8GQ7r
+ZEYbotw57lRNVZ96qg6AdVkf5jAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
+BTEPFw0yMjAxMDQxMDIxMzRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
+AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
+BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEALKn+kwb2MtKuky6rIv9kcAdMtDzFv19BBFY9
+OEU82Xy3xxrSpnt03LbopcYbXWvjJThqIlWhZnheCtAaX6Uv6828jcAEMDg+4IIf848EOinIo2Rh
+fJYmLCcXg41qsMPlhxG1r8qm22HWsKwitjhRARKXgMEiM14jPlwpsGTqJooGw2vO4Tdwsb/x8bQc
+6U8sVE1eQtmWGtY/CKl60RLC2lDhy90JmYi9mEPfycj5DQTuZi2gmnE+JmROQlY1h899gchxfJHx
+W0EPqonfA1jjs5fnmjytEamHs0S/km9OT/ObhgZMaL2faQrBJ4Ng/Av4vjIeGmosf46noUynKBKe
+gQ==
+--0000000000006d775105d4bf0075--

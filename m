@@ -2,99 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B75104840D1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:28:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 246D94840E1
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:30:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbiADL20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 06:28:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
+        id S232299AbiADLai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 06:30:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232255AbiADL2X (ORCPT
+        with ESMTP id S229964AbiADLah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 06:28:23 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E90DC061761;
-        Tue,  4 Jan 2022 03:28:23 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id v11so31985514pfu.2;
-        Tue, 04 Jan 2022 03:28:23 -0800 (PST)
+        Tue, 4 Jan 2022 06:30:37 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E829C061761;
+        Tue,  4 Jan 2022 03:30:36 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id q14so139440733edi.3;
+        Tue, 04 Jan 2022 03:30:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8DPQAM5n/7CIbAlmu2xJBzlGFegSXdSezbkc3xUc1Cs=;
-        b=W1YB9jrfC5th/K0fddsWXfcj6l0G4wjQHJXLEB/E9pe6yd3jaXVCbk9KbavUIdgJRk
-         I5NmdQcGrNUBgP9zzMDgKmErzh1a+596fj2+WyPetGYh9Izz0jZRC/lOEHE3wwD4HUt3
-         dAV0yT9nCZuRgXP/kM7kDtfuOqoE/8Ff+GY/8m/bA5xcc2ChtrCFjzAiqXzYzdSkBeeK
-         NAn9iAipImAIMd7qMhtRncLwM2M0s1cVYYpffAOmuWlRzB5YqSrQr3mKBAc/z8Ahs4l5
-         PTAJpLVWHe/Fsl2K1z/EvhE92z8WvDmlY6/k9Zbpc67s+ZuyNm1jzh7E1PItleLUgkus
-         kgBw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0yty/Vql/ha5wH7OZotX+MYGyccXlZrjOYzGRLc8osI=;
+        b=Ob1v2V/1KmrPCwBo+PVBUCo0h9Yl9nquFidnZ8qBujjcJn1jOUUljpHnQMqCS7tPci
+         HLE7SFA0YHB334q34rR9tA8qGWWO4Ln2svhzpOTrj20UxtANmtpCZwCbZQ5UhvXQQC9E
+         Ve98gHi3SaDehDkyPzU5f88IztLdsJgRrbHNvKbXU1V1pzJV4OHgbOFmUG9H04JqpxlW
+         1aVJ1SxwLbAkxqS4REP4JvObUEJw1uppLw1yJnz4LMLzKPGx0OC+OugT4oNW4R/uvgw1
+         N2RfLJ7hUflX7cmDAffiCRRY+vkvO9OF0tD1Iv83TBSk/9a0j4XubYzDuvlW+qfak3pp
+         0AhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8DPQAM5n/7CIbAlmu2xJBzlGFegSXdSezbkc3xUc1Cs=;
-        b=RgP2UvSqvIG/1Tluzc7FnehBimvRisU9tLfS6ijTrj/QLzPMx/oXeTcobHPgtiTmsL
-         kXWfRwtbKtmyrd0+We+iQsN0L38rqr4Hk2uGjaDDxvm3ySA6W2dyB0GK1164X46pHhsi
-         GAksNBtJ1c0CYo5AWgEmAcxLELHaZP7BTJ96TvLl/+K/DIM09+64M/HQcLe0zmusJi4+
-         Sjhe2Y3X0Gw27EgG7hQEJTy7pxZCMIHq7Jja2czLw0M2Nm3TzVozFYtfOLCdAeLWCVVY
-         3qUiMFsGjpNjKQuVp6ZgEA6ClbzDqCt7wQkuRe7941KP62v5BV3YB2kJNU5YJtKBzC0W
-         g5BQ==
-X-Gm-Message-State: AOAM533AN2XqiC5Eb47Ejbz0zY+3r8PsBzoD6O35Qm9LUakjKJBGM56R
-        AzHdTkCpej1gYSWuHwMDj7lrT9Rs7+0=
-X-Google-Smtp-Source: ABdhPJzHX6L4/qEuItAyFZAaeyfEiQ+ko+9B3H8xNbwDjaxzynZvK0FJYwiQTBYZvV0xOD78m0q7hA==
-X-Received: by 2002:a63:4507:: with SMTP id s7mr43066703pga.252.1641295702911;
-        Tue, 04 Jan 2022 03:28:22 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id f4sm39404828pfj.25.2022.01.04.03.28.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 03:28:22 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     jdelvare@suse.com
-Cc:     linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>, CGEL ZTE <cgel.zte@gmail.com>
-Subject: [PATCH] drivers/hwmon: remove redundant res variable
-Date:   Tue,  4 Jan 2022 11:28:18 +0000
-Message-Id: <20220104112818.602025-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0yty/Vql/ha5wH7OZotX+MYGyccXlZrjOYzGRLc8osI=;
+        b=z900lw44t4Kt7PtqiyLHo5IHVL9je4y60XXOK9BjlcUfK5rZ4/12Na+6aJWt6n/Qih
+         tkpoGmQjrxpgbIL4MdBMRQZB5zsYJUlAZTzv98+3XYCOw6ua8jTiuc0HAxdHqAtwL9nP
+         eQMR41IaoIeFJ6M2U/0kxcc+NXiDUMusyKJ51JDgnHMqUUvraAX5wF44vpKQSSGHr9hD
+         clvtDUYBAUVHHXo7TMopuWKS2DYjl621/I9bNeugFjkNYRydNxb1ojTmlcS3mhkJ42Ux
+         6s9fn+UbaT2dzmzh0kg75m/ZBEPcn8M+9fYaKxtvWTYRaV2/G50b3Zw/vXqEvRK/v4uD
+         ekZg==
+X-Gm-Message-State: AOAM5313Zrx+jeXDuaT5H63MaKQBJ0f8LJgUsqD3VixaFWzOWWk6P3U8
+        g0fBHFlmGEQf13t2ABaDCrSNBWSpYsGwyYx5vTY=
+X-Google-Smtp-Source: ABdhPJzstuNjGXH7i4SJZO7W6jJ03BLb3g5gKSn1e6dIAouguCI/zvBRkWCkEcva7qTCxiSiFsVGFOqOCRh/YPwjBtU=
+X-Received: by 2002:a17:906:3ed0:: with SMTP id d16mr38212898ejj.636.1641295835170;
+ Tue, 04 Jan 2022 03:30:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220104072658.69756-1-marcan@marcan.st> <20220104072658.69756-7-marcan@marcan.st>
+In-Reply-To: <20220104072658.69756-7-marcan@marcan.st>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 4 Jan 2022 13:28:44 +0200
+Message-ID: <CAHp75VcXgVTZhPiPmbpAJr21xUopRXU6yi=wvyzs6ByR8C+rzw@mail.gmail.com>
+Subject: Re: [PATCH v2 06/35] brcmfmac: firmware: Support passing in multiple board_types
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:BROADCOM BRCM80211 IEEE802.11n WIRELESS DRIVER" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        SHA-cyfmac-dev-list@infineon.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+On Tue, Jan 4, 2022 at 9:28 AM Hector Martin <marcan@marcan.st> wrote:
+>
+> In order to make use of the multiple alt_path functionality, change
+> board_type to an array. Bus drivers can pass in a NULL-terminated list
+> of board type strings to try for the firmware fetch.
 
-Return value from inb_p() directly instead
-of taking this in another redundant variable.
+> +               /* strip extension at the end */
+> +               strscpy(alt_path, path, BRCMF_FW_NAME_LEN);
+> +               alt_path[suffix - path] = 0;
+>
+> -       alt_paths[0] = kstrdup(alt_path, GFP_KERNEL);
+> +               strlcat(alt_path, ".", BRCMF_FW_NAME_LEN);
+> +               strlcat(alt_path, board_types[i], BRCMF_FW_NAME_LEN);
+> +               strlcat(alt_path, suffix, BRCMF_FW_NAME_LEN);
+> +
+> +               alt_paths[i] = kstrdup(alt_path, GFP_KERNEL);
+> +               brcmf_dbg(TRACE, "FW alt path: %s\n", alt_paths[i]);
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
----
- drivers/hwmon/nct6683.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Consider replacing these string manipulations with kasprintf().
 
-diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
-index 6a9f420e7d32..ab02e967f73d 100644
---- a/drivers/hwmon/nct6683.c
-+++ b/drivers/hwmon/nct6683.c
-@@ -495,13 +495,10 @@ static inline long in_from_reg(u16 reg, u8 src)
- 
- static u16 nct6683_read(struct nct6683_data *data, u16 reg)
- {
--	int res;
--
- 	outb_p(0xff, data->addr + EC_PAGE_REG);		/* unlock */
- 	outb_p(reg >> 8, data->addr + EC_PAGE_REG);
- 	outb_p(reg & 0xff, data->addr + EC_INDEX_REG);
--	res = inb_p(data->addr + EC_DATA_REG);
--	return res;
-+	return inb_p(data->addr + EC_DATA_REG);
- }
- 
- static u16 nct6683_read16(struct nct6683_data *data, u16 reg)
 -- 
-2.25.1
-
+With Best Regards,
+Andy Shevchenko

@@ -2,115 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3856D484642
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A36484644
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235560AbiADQxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 11:53:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59918 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231665AbiADQxh (ORCPT
+        id S234046AbiADQyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 11:54:40 -0500
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:22284 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235576AbiADQyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 11:53:37 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D81CC061761;
-        Tue,  4 Jan 2022 08:53:37 -0800 (PST)
-Received: from ip4d173d02.dynamic.kabel-deutschland.de ([77.23.61.2] helo=truhe.fritz.box); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1n4n42-0001Kt-Jb; Tue, 04 Jan 2022 17:53:34 +0100
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-To:     linux-doc@vger.kernel.org
-Cc:     workflows@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH v2] docs: 5.Posting.rst: describe Fixes: and Link: tags
-Date:   Tue,  4 Jan 2022 17:53:33 +0100
-Message-Id: <c4a5f5e25fa84b26fd383bba6eafde4ab57c9de7.1641314856.git.linux@leemhuis.info>
-X-Mailer: git-send-email 2.31.1
+        Tue, 4 Jan 2022 11:54:38 -0500
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 204ClwJU003136;
+        Tue, 4 Jan 2022 10:54:37 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type;
+ s=PODMain02222019; bh=wtR/S16kh0dxL/tCa9AfNyWpssNmTbifcATxl0gQQlc=;
+ b=GzDe7k4VVF3v/L3HbBKRHcfQpgD3IDaDtmO4eCQuVEaQDdCTqdifKQDJx5BEl2vPPO4H
+ Bl6wgntcaUAIO1i+DEW/aVcEkjsmMKZ4Cqin5jmpA+9gOEq60mqYcENSKHujQkPn9qts
+ UBXZS+cO1Nr2INLqiC2I/7aLvbjRKqmzZCnz/W+GpVPAO5UB97uPImJi1WyucHKro0r/
+ 3O1efLkq6UlIK4NTyFsrkyXlrwnypX7qgbQNtJ6nQnEXAQGLlRUEevSddihA/uc2IgbS
+ j8AmhrajgCh0iXCO72iNJjJ7Io8hC7IOBH7YLDnJ/SURZ8hkP0WczLvXnkivebElFWQ6 xQ== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3dc1dx1806-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 04 Jan 2022 10:54:37 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Tue, 4 Jan
+ 2022 16:54:35 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Tue, 4 Jan 2022 16:54:35 +0000
+Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 93F49B10;
+        Tue,  4 Jan 2022 16:54:35 +0000 (UTC)
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     <lee.jones@linaro.org>
+CC:     <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>
+Subject: [RESEND PATCH] mfd: arizona: Add missing statics to the of_match_tables
+Date:   Tue, 4 Jan 2022 16:54:35 +0000
+Message-ID: <20220104165435.26782-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1641315217;b804d708;
-X-HE-SMSGID: 1n4n42-0001Kt-Jb
+Content-Type: text/plain
+X-Proofpoint-GUID: kdMjfku_IZ4ajNuc1c8moJp-hPQSK4uv
+X-Proofpoint-ORIG-GUID: kdMjfku_IZ4ajNuc1c8moJp-hPQSK4uv
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Explain Fixes: and Link: tags in Documentation/process/5.Posting.rst,
-which are missing in this file for unknown reasons and only described in
-Documentation/process/submitting-patches.rst.
+When the match tables were split for I2C and SPI a static should have
+been added since the tables are no longer exported.
 
-Signed-off-by: Thorsten Leemhuis <linux@leemhuis.info>
-CC: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Fixes: 3f65555c417c ("mfd: arizona: Split of_match table into I2C and SPI versions")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 ---
-Lo! If there is still a chance I'd like to get this patch into v5.17, as
-during my work as regression tracker I noticed quite a few developers
-seem to be unaware how the Link: tag should be used. Maybe in parts
-that's because Documentation/process/5.Posting.rst doesn't describe it
-yet, which described things from a another different angle than
-Documentation/process/submitting-patches.rst.
+ drivers/mfd/arizona-i2c.c | 2 +-
+ drivers/mfd/arizona-spi.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Ciao, Thorsten
-
-v2:
-- A few small fixes and changes as suggested by Randy and Jon (thx!)
-  during review
-
-v1:
-- First version as stand alone patch. It used to be the first patch of
-  this series that got abandoned after RFC/v2:
-  https://lore.kernel.org/all/cover.1639042966.git.linux@leemhuis.info/
-  Patch itself is unchanged, patch description slightly changed. Might
-  later submit other changes from that series separately, too, still
-  unsure.
----
- Documentation/process/5.Posting.rst | 29 ++++++++++++++++++++++-------
- 1 file changed, 22 insertions(+), 7 deletions(-)
-
-diff --git a/Documentation/process/5.Posting.rst b/Documentation/process/5.Posting.rst
-index 855a70b80269..bd36ecb29409 100644
---- a/Documentation/process/5.Posting.rst
-+++ b/Documentation/process/5.Posting.rst
-@@ -197,14 +197,29 @@ the build process, for example, or editor backup files) in the patch.  The
- file "dontdiff" in the Documentation directory can help in this regard;
- pass it to diff with the "-X" option.
+diff --git a/drivers/mfd/arizona-i2c.c b/drivers/mfd/arizona-i2c.c
+index 3ed810e81f631..6d83e6b9a692d 100644
+--- a/drivers/mfd/arizona-i2c.c
++++ b/drivers/mfd/arizona-i2c.c
+@@ -105,7 +105,7 @@ static const struct i2c_device_id arizona_i2c_id[] = {
+ MODULE_DEVICE_TABLE(i2c, arizona_i2c_id);
  
--The tags mentioned above are used to describe how various developers have
--been associated with the development of this patch.  They are described in
--detail in
--the :ref:`Documentation/process/submitting-patches.rst <submittingpatches>`
--document; what follows here is a brief summary.  Each of these lines has
--the format:
-+The tags already briefly mentioned above are used to provide insights how
-+the patch came into being. They are described in detail in the
-+:ref:`Documentation/process/submitting-patches.rst <submittingpatches>`
-+document; what follows here is a brief summary.
+ #ifdef CONFIG_OF
+-const struct of_device_id arizona_i2c_of_match[] = {
++static const struct of_device_id arizona_i2c_of_match[] = {
+ 	{ .compatible = "wlf,wm5102", .data = (void *)WM5102 },
+ 	{ .compatible = "wlf,wm5110", .data = (void *)WM5110 },
+ 	{ .compatible = "wlf,wm8280", .data = (void *)WM8280 },
+diff --git a/drivers/mfd/arizona-spi.c b/drivers/mfd/arizona-spi.c
+index 9fe06dda37829..98c87d3bd00fa 100644
+--- a/drivers/mfd/arizona-spi.c
++++ b/drivers/mfd/arizona-spi.c
+@@ -226,7 +226,7 @@ static const struct spi_device_id arizona_spi_ids[] = {
+ MODULE_DEVICE_TABLE(spi, arizona_spi_ids);
  
--::
-+One tag is used to refer to earlier commits which introduced problems fixed by
-+the patch::
-+
-+	Fixes: 1f2e3d4c5b6a ("The first line of the commit specified by the first 12 characters of its SHA-1 ID")
-+
-+Another tag is used for linking web pages with additional backgrounds or
-+details, for example a report about a bug fixed by the patch or a document
-+with a specification implemented by the patch::
-+
-+	Link: https://example.com/somewhere.html  optional-other-stuff
-+
-+Many maintainers when applying a patch also add this tag to link to the
-+latest public review posting of the patch; often this is automatically done
-+by tools like b4 or a git hook like the one described in
-+'Documentation/maintainer/configure-git.rst'.
-+
-+A third kind of tag is used to document who was involved in the development of
-+the patch. Each of these uses this format::
- 
- 	tag: Full Name <email address>  optional-other-stuff
- 
-
-base-commit: b36064425a18e29a3bad9c007b4dd1223f8aadc5
+ #ifdef CONFIG_OF
+-const struct of_device_id arizona_spi_of_match[] = {
++static const struct of_device_id arizona_spi_of_match[] = {
+ 	{ .compatible = "wlf,wm5102", .data = (void *)WM5102 },
+ 	{ .compatible = "wlf,wm5110", .data = (void *)WM5110 },
+ 	{ .compatible = "wlf,wm8280", .data = (void *)WM8280 },
 -- 
-2.31.1
+2.11.0
 

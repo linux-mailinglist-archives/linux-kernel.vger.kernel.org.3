@@ -2,123 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 575504848B1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7AE4848B5
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:41:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbiADThf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 14:37:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiADThd (ORCPT
+        id S230464AbiADTl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 14:41:27 -0500
+Received: from proxima.lasnet.de ([78.47.171.185]:35832 "EHLO
+        proxima.lasnet.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229851AbiADTl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 14:37:33 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B52AC061761;
-        Tue,  4 Jan 2022 11:37:32 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id x6so31172024lfa.5;
-        Tue, 04 Jan 2022 11:37:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MqDFLlq3VWxFS0cMOIJ3RThrgRba36XLCT0Etg8h8PA=;
-        b=d22zZX5UQQFvYJz1V0IqyvYKI17zkeJqguw4hTlCsfuc/BeMsTo+0EWw510A+Vl/zh
-         susy9OVa1Il1XZjt2DiB7jcpziadV5Xdb/el0dH+DZbLEsZwyJ9itP1EA2hoawe5d9eU
-         d4zvPjoKhUO8vdj1y80LTYJIh6Er47g/qaaQLewKp/XJlhn8xDGT9F/cPeUWLDAgAFb6
-         62X+j03BrlNm+5GWJtpuMwnjVzKP0DHqLsXor5OORoWBx/2Avo8UiVJy4MJKRRLRRsnM
-         cxkUrbURJ5l6NkWc8smAbaDwbmR0ip0nIUrMeaWzcXuBLVfhvEoXXQ/ZAS4UEp0Xc1ln
-         KAvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MqDFLlq3VWxFS0cMOIJ3RThrgRba36XLCT0Etg8h8PA=;
-        b=M8Nfyd63BCf+izTNemQcL5t9iuYWpXsIdEVdUFn62FEB84O79fp5gwZZ80oe/IhtKX
-         y6U9ARflmGdI76YuLNk29DCGUdBZHkws1kou+R4DcnszBe452xxkWb+TD3TdVOR4OfzS
-         Iu7xBUzcqQwK8hQ0oPBRCOGRiapbmoOcp3+ZmdaO2WgJSvhgKlAzpeGkSEoOhPIjupxd
-         //cUqTvgK1w3EuqyjKz8OBQMdLQwnkTXKu3NyK/b9Rl+uYVl+8SswrLsLKKuC/QBq0ej
-         GxMEXmKq4DbovA/wPpGOlB6q+bns1W8Ah35KxwcpqzaHQg2VFDIYNfgJ/omczrHw8Ddx
-         9oOQ==
-X-Gm-Message-State: AOAM530PSBvYu4Q/YJhS+Zo3CmBxOeVEpzW+VG3K1PlICnbeo8DutBsA
-        yYpNhRVbG6olMuyo1vmwtUVdPAIM1vgmqQ==
-X-Google-Smtp-Source: ABdhPJxE1b7joWTMcKyxqd2QwxBmI6VZjwN8/Q3c0BSzizxrMwMPSblooXHp47Nc+gRbdl4accQtQA==
-X-Received: by 2002:a05:6512:3485:: with SMTP id v5mr28180175lfr.495.1641325050872;
-        Tue, 04 Jan 2022 11:37:30 -0800 (PST)
-Received: from localhost (93-80-64-103.broadband.corbina.ru. [93.80.64.103])
-        by smtp.gmail.com with ESMTPSA id bp22sm3643453lfb.150.2022.01.04.11.37.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 11:37:30 -0800 (PST)
-From:   Mikhail Rudenko <mike.rudenko@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Mikhail Rudenko <mike.rudenko@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: dts: nanopi-neo-air: Add eMMC and bluetooth
-Date:   Tue,  4 Jan 2022 22:37:18 +0300
-Message-Id: <20220104193719.87091-1-mike.rudenko@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 4 Jan 2022 14:41:26 -0500
+Received: from [IPV6:2003:e9:d728:ec47:4b31:73e4:34c5:505a] (p200300e9d728ec474b3173e434c5505a.dip0.t-ipconnect.de [IPv6:2003:e9:d728:ec47:4b31:73e4:34c5:505a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: stefan@datenfreihafen.org)
+        by proxima.lasnet.de (Postfix) with ESMTPSA id DFE83C06A5;
+        Tue,  4 Jan 2022 20:41:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=datenfreihafen.org;
+        s=2021; t=1641325284;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hjy3EvrwBNl7xNcFwfzuQWvXD/OcYFQN8rXONXkBskc=;
+        b=Ls57IS7/wcEWlXMl34n7CJ9lqDZSXntdBSlER+rFn76ZKyPkQ65Wr4juVJHs1WH8pG43ME
+        uSHLuSikFVNRklcSKjIjzTet8Y6/QR8sWoVj9NWR3ojpt0P7kne47hNzmnl8KDx+uwXjtS
+        LvH7O2rIeCR3d6L4c/QUZ8iUAQazxEo84FMqGhUzmYxTHcZtc86LOxdTaF0NftYN0/DTLq
+        l/cUn5S1ufjpmgCGo/ymDQjbqFRJsPdjQ5sjPVTOT2etUkqa39TOT6iNiFJwapw9B7PIPp
+        MCXUVtbOHPtEqaM17z63IsNQIuIMJ+fd4DxdPN9Vkc73/wWO++uUDVXFH2CTwQ==
+Message-ID: <ab1ec1c0-389c-dcae-9cd8-6e6771a94178@datenfreihafen.org>
+Date:   Tue, 4 Jan 2022 20:41:23 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Subject: Re: [PATCH RFT] ieee802154: atusb: move to new USB API
+Content-Language: en-US
+To:     Alexander Aring <alex.aring@gmail.com>, Greg KH <greg@kroah.com>
+Cc:     Pavel Skripkin <paskripkin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-wpan - ML <linux-wpan@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        "# 3.19.x" <stable@vger.kernel.org>,
+        Alexander Potapenko <glider@google.com>
+References: <CAG_fn=VDEoQx5c7XzWX1yaYBd5y5FrG1aagrkv+SZ03c8TfQYQ@mail.gmail.com>
+ <20220102171943.28846-1-paskripkin@gmail.com> <YdL0GPxy4TdGDzOO@kroah.com>
+ <CAB_54W7HQmm1ncCEsTmZFR+GVf6p6Vz0RMWDJXAhXQcW4r3hUQ@mail.gmail.com>
+From:   Stefan Schmidt <stefan@datenfreihafen.org>
+In-Reply-To: <CAB_54W7HQmm1ncCEsTmZFR+GVf6p6Vz0RMWDJXAhXQcW4r3hUQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the bluetooth part of AP6212 chip (connected to UART3) and the
-onboard eMMC (connected to MMC2) for the NanoPi NEO Air board.
+Hello.
 
-Signed-off-by: Mikhail Rudenko <mike.rudenko@gmail.com>
----
- arch/arm/boot/dts/sun8i-h3-nanopi-neo-air.dts | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
+On 03.01.22 16:35, Alexander Aring wrote:
+> Hi,
+> 
+> On Mon, 3 Jan 2022 at 08:03, Greg KH <greg@kroah.com> wrote:
+>>
+>> On Sun, Jan 02, 2022 at 08:19:43PM +0300, Pavel Skripkin wrote:
+>>> Alexander reported a use of uninitialized value in
+>>> atusb_set_extended_addr(), that is caused by reading 0 bytes via
+>>> usb_control_msg().
+>>>
+>>> Since there is an API, that cannot read less bytes, than was requested,
+>>> let's move atusb driver to use it. It will fix all potintial bugs with
+>>> uninit values and make code more modern
+>>>
+>>> Fail log:
+>>>
+>>> BUG: KASAN: uninit-cmp in ieee802154_is_valid_extended_unicast_addr include/linux/ieee802154.h:310 [inline]
+>>> BUG: KASAN: uninit-cmp in atusb_set_extended_addr drivers/net/ieee802154/atusb.c:1000 [inline]
+>>> BUG: KASAN: uninit-cmp in atusb_probe.cold+0x29f/0x14db drivers/net/ieee802154/atusb.c:1056
+>>> Uninit value used in comparison: 311daa649a2003bd stack handle: 000000009a2003bd
+>>>   ieee802154_is_valid_extended_unicast_addr include/linux/ieee802154.h:310 [inline]
+>>>   atusb_set_extended_addr drivers/net/ieee802154/atusb.c:1000 [inline]
+>>>   atusb_probe.cold+0x29f/0x14db drivers/net/ieee802154/atusb.c:1056
+>>>   usb_probe_interface+0x314/0x7f0 drivers/usb/core/driver.c:396
+>>>
+>>> Fixes: 7490b008d123 ("ieee802154: add support for atusb transceiver")
+>>> Cc: stable@vger.kernel.org # 5.9
+>>> Reported-by: Alexander Potapenko <glider@google.com>
+>>> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+>>> ---
+>>>   drivers/net/ieee802154/atusb.c | 61 +++++++++++++++++++++-------------
+>>>   1 file changed, 38 insertions(+), 23 deletions(-)
+>>>
+>>> diff --git a/drivers/net/ieee802154/atusb.c b/drivers/net/ieee802154/atusb.c
+>>> index 23ee0b14cbfa..43befea0110f 100644
+>>> --- a/drivers/net/ieee802154/atusb.c
+>>> +++ b/drivers/net/ieee802154/atusb.c
+>>> @@ -80,10 +80,9 @@ struct atusb_chip_data {
+>>>    * in atusb->err and reject all subsequent requests until the error is cleared.
+>>>    */
+>>>
+>>> -static int atusb_control_msg(struct atusb *atusb, unsigned int pipe,
+>>> -                          __u8 request, __u8 requesttype,
+>>> -                          __u16 value, __u16 index,
+>>> -                          void *data, __u16 size, int timeout)
+>>> +static int atusb_control_msg_recv(struct atusb *atusb, __u8 request, __u8 requesttype,
+>>> +                               __u16 value, __u16 index,
+>>> +                               void *data, __u16 size, int timeout)
+>>
+>> Why do you need a wrapper function at all?  Why not just call the real
+>> usb functions instead?
 
-diff --git a/arch/arm/boot/dts/sun8i-h3-nanopi-neo-air.dts b/arch/arm/boot/dts/sun8i-h3-nanopi-neo-air.dts
-index be49eabbff94..cd3df12b6573 100644
---- a/arch/arm/boot/dts/sun8i-h3-nanopi-neo-air.dts
-+++ b/arch/arm/boot/dts/sun8i-h3-nanopi-neo-air.dts
-@@ -103,12 +103,40 @@ brcmf: bcrmf@1 {
- 	};
- };
- 
-+&mmc2 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mmc2_8bit_pins>;
-+	vmmc-supply = <&reg_vcc3v3>;
-+	vqmmc-supply = <&reg_vcc3v3>;
-+	bus-width = <8>;
-+	non-removable;
-+	status = "okay";
-+};
-+
- &uart0 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&uart0_pa_pins>;
- 	status = "okay";
- };
- 
-+&uart3 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart3_pins>, <&uart3_rts_cts_pins>;
-+	uart-has-rtscts;
-+	status = "okay";
-+
-+	bluetooth {
-+		compatible = "brcm,bcm43438-bt";
-+		clocks = <&rtc 1>;
-+		clock-names = "lpo";
-+		vbat-supply = <&reg_vcc3v3>;
-+		vddio-supply = <&reg_vcc3v3>;
-+		device-wakeup-gpios = <&pio 0 8 GPIO_ACTIVE_HIGH>; /* PA8 */
-+		host-wakeup-gpios = <&pio 0 7 GPIO_ACTIVE_HIGH>; /* PA7 */
-+		shutdown-gpios = <&pio 6 13 GPIO_ACTIVE_HIGH>; /* PG13 */
-+	};
-+};
-+
- &usbphy {
- 	/* USB VBUS is always on */
- 	status = "okay";
--- 
-2.34.1
+> ...
 
+>>
+>> I would recommend just moving to use the real USB functions and no
+>> wrapper function at all like this, it will make things more obvious and
+>> easier to understand over time.
+> 
+> okay.
+
+With the small fix handle the actual KASAN report applied now I am happy 
+to work with Pavel to get a patch using the newer USB API tested and 
+applied for -next.
+
+Pavel would you be willing to update your patch with the complete 
+removal of the atusb usb wrapper functions? Like Greg suggested. That 
+plus the porting to the newer USB API should be a good step forward.
+
+Happy to review and test your patches.
+
+regards
+Stefan Schmidt

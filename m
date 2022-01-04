@@ -2,97 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30BDA48442D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A24E484429
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:05:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234668AbiADPFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 10:05:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232087AbiADPFi (ORCPT
+        id S234649AbiADPFT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jan 2022 10:05:19 -0500
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:46145 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233194AbiADPFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 10:05:38 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CB3C061761;
-        Tue,  4 Jan 2022 07:05:38 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id e202so66151004ybf.4;
-        Tue, 04 Jan 2022 07:05:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BALCb4IQm/GwztxbFONFkzBgFbeC1YxSt8jC3/n5QF8=;
-        b=MBvr7j9wSDxa6r+DmF54Rv/yAt8b8hBI2IPx2tvGlSHlgD7PU5JsTUtrfdU0HPFyg9
-         SRNG87Uba7dDI3z3vHTqJlxhfgVDi1MmqMP4/R5AFausKLkZjGksTywEqzw+r/5zszl2
-         8jwSpD8WJajqW9JXtrcTv3vIbAjWKeZuxGCcnnsXov70QKCraWZNID3JhDqdzCm9Aeg7
-         JVD0TmqAU42OqLSt9on1NGyLr48UqwZaD/Gi0DLIiW4q0KjRT/rC5kJTx6eoQrezh3j+
-         XlSjiNa5aLXY38KekR+qoqxwswyugBM9jsquGXcUxn+uFH00d8yxbc93YdH+cQqOZNcE
-         D8mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BALCb4IQm/GwztxbFONFkzBgFbeC1YxSt8jC3/n5QF8=;
-        b=va95/ya5HaMxlfAKNjVc5YFR9bx0n/u+1GxFDSW7IphIwncAkNoFaw05CsiPAASEau
-         plFLao5emaJJp+Vd4Ldp87rKXmAo4NDcToqNQUvi4m96BB6Dvq2Kz98hKUjGMyu+vZYY
-         1+VNSorsud/k37oZie33F9N3Ob//FIYuKLrGX3bQkMDQsMIRp37B5aSYJ83rt8D0SvMu
-         1b6+JlpgLu4SHaPl9c7HxURD1n5mSV1XocT65PojS4S/sy3Hs8fuBM0Tdn46/YYLx85H
-         aJpY48StWbvvPT59+MsrIAJFxENHa4Ye/fhLnBQ5QirojsLZcYVboffY4f+mG/KW5B65
-         iDpA==
-X-Gm-Message-State: AOAM533Jg8YEDDQpwWjb1LtnldvF7doCt98byisX8703u5mUDZDApZ7M
-        UT09t3m8eWk4rE2YxcUOmfh6ebqMihP8S8G+f5rCjla1CSg=
-X-Google-Smtp-Source: ABdhPJxkDQuQ5UmgB51ZHBEfNedFXZU7ke8KQffBjb21iLwnDUSUnBe5hv/Xp36E/v3SfZ9GoSJfBmmElw4hIi7OPiw=
-X-Received: by 2002:a5b:bc1:: with SMTP id c1mr39737268ybr.669.1641308738036;
- Tue, 04 Jan 2022 07:05:38 -0800 (PST)
+        Tue, 4 Jan 2022 10:05:18 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 0BC1AFF809;
+        Tue,  4 Jan 2022 15:05:14 +0000 (UTC)
+Date:   Tue, 4 Jan 2022 16:05:13 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Alexander Aring <alex.aring@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        linux-wpan - ML <linux-wpan@vger.kernel.org>,
+        David Girault <david.girault@qorvo.com>,
+        Romuald Despres <romuald.despres@qorvo.com>,
+        Frederic Blain <frederic.blain@qorvo.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        kernel list <linux-kernel@vger.kernel.org>
+Subject: Re: [net-next 08/18] net: ieee802154: Add support for internal PAN
+ management
+Message-ID: <20220104160513.220b2901@xps13>
+In-Reply-To: <CAB_54W786n6_4FAMc7VMAX0nuyd6r2Hi+wYEEbd5Bjdrd8ArpA@mail.gmail.com>
+References: <20211222155743.256280-1-miquel.raynal@bootlin.com>
+        <20211222155743.256280-9-miquel.raynal@bootlin.com>
+        <CAB_54W786n6_4FAMc7VMAX0nuyd6r2Hi+wYEEbd5Bjdrd8ArpA@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220104134512.18498-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAHp75Vcx1Ey-SHBCgBh1RM=PTBRcncGOwAx9_6PL+sDJtzezvw@mail.gmail.com>
-In-Reply-To: <CAHp75Vcx1Ey-SHBCgBh1RM=PTBRcncGOwAx9_6PL+sDJtzezvw@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 4 Jan 2022 15:05:12 +0000
-Message-ID: <CA+V-a8uduHrVr4HWAgPt3YP_g27xhi4FdsrANn9S5mY0TBSvbg@mail.gmail.com>
-Subject: Re: [PATCH v4] soc: ti: smartreflex: Use platform_get_irq_optional()
- to get the interrupt
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 4, 2022 at 2:50 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Tue, Jan 4, 2022 at 3:45 PM Lad Prabhakar
-> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> >
-> > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> > allocation of IRQ resources in DT core code, this causes an issue
-> > when using hierarchical interrupt domains using "interrupts" property
-> > in the node as this bypasses the hierarchical setup and messes up the
-> > irq chaining.
-> >
-> > In preparation for removal of static setup of IRQ resource from DT core
-> > code use platform_get_irq_optional().
-> >
-> > While at it return 0 instead of returning ret in the probe success path.
->
-> ...
->
-> > +       ret = platform_get_irq_optional(pdev, 0);
-> > +       if (ret < 0 && ret != -ENXIO) {
->
-> > +               dev_err_probe(&pdev->dev, ret, "%s: failed to get IRQ resource\n", __func__);
-> > +               return ret;
->
-> return dev_err_probe(...); ?
->
-Argh my bad.
+Hi Alexander,
 
-Cheers,
-Prabhakar
+alex.aring@gmail.com wrote on Tue, 28 Dec 2021 17:22:38 -0500:
+
+> Hi,
+> 
+> On Wed, 22 Dec 2021 at 10:57, Miquel Raynal <miquel.raynal@bootlin.com> wrote:
+> >
+> > Let's introduce the basics of PAN management:
+> > - structures defining PANs
+> > - helpers for PANs registration
+> > - helpers discarding old PANs
+> >  
+> 
+> I think there exists a little misunderstanding about how the
+> architecture is between the structures wpan_phy, wpan_dev and
+> cfg802154.
+> 
+>  - wpan_phy: represents the PHY layer of IEEE 802154 and is a
+> registered device class.
+>  - wpan_dev: represents the MAC layer of IEEE 802154 and is a netdev interface.
+> 
+> You can have multiple wpan_dev operate on one wpan_phy. To my best
+> knowledge it's like having multiple access points running on one phy
+> (wireless) or macvlan on ethernet. You can actually do that with the
+> mac802154_hwsim driver. However as there exists currently no (as my
+> knowledge) hardware which supports e.g. multiple address filters we
+> wanted to be prepared for to support such handling. Although, there
+> exists some transceivers which support something like a "pan bridge"
+> which goes into such a direction.
+> 
+> What is a cfg802154 registered device? Well, at first it offers an
+> interface between SoftMAC and HardMAC from nl802154, that's the
+> cfg802154_ops structure. In theory a HardMAC transceiver would bypass
+> the SoftMAC stack by implementing "cfg802154_ops" on the driver layer
+> and try to do everything there as much as possible to support it. It
+> is not a registered device class but the instance is tight to a
+> wpan_phy. There can be multiple wpan_dev's (MAC layer instances on a
+> phy/cfg802154 registered device). We currently don't support a HardMAC
+> transceiver and I think because this misunderstanding came up.
+
+Thanks for the explanation, I think it helps because the relationship
+between wpan_dev and wpan_phy was not yet fully clear to me.
+
+In order to clarify further your explanation and be sure that I
+understand it the correct way, I tried to picture the above explanation
+into a figure. Would you mind looking at it and tell me if something
+does not fit?
+
+https://bootlin.com/~miquel/ieee802154.pdf
+
+Thanks,
+Miquèl

@@ -2,198 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EFA2484A4F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 23:00:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B53F3484A55
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 23:04:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235076AbiADWAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 17:00:20 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57120 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232504AbiADWAT (ORCPT
+        id S235093AbiADWEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 17:04:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46638 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232504AbiADWEE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 17:00:19 -0500
+        Tue, 4 Jan 2022 17:04:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E59C061761;
+        Tue,  4 Jan 2022 14:04:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7477E615C8;
-        Tue,  4 Jan 2022 22:00:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7C4AC36AF4;
-        Tue,  4 Jan 2022 22:00:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D5C4615C7;
+        Tue,  4 Jan 2022 22:04:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FA76C36AE0;
+        Tue,  4 Jan 2022 22:04:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641333618;
-        bh=0bNxva3vPLAvYpaAdpSuepoaCoKQQipx/GhAyegGbVo=;
+        s=k20201202; t=1641333843;
+        bh=L354uWkqpyFGbTc2T2lOANUV2rpXJgXvrwhCRapufHw=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=t+rXhHoLcOHJduijqYNRY8tlpXzVWh0KpYwk+rx6CkDbHFw6BWoQfc3dXLlcl/QFx
-         +kV+Z7BT64/xARfJOKkWifeu1AMyYJQFKfDHff+o/mgKAweYD+zH9+BhF7dptkNUTO
-         nI16YYjiCtACLrBZm7/ov98Ng3uHL5BBAyLMShiwuB5RxbHeTHQRyQpmOmLVPUEovT
-         DN+JF6bvRZwQCMyf2cNGPiOAUpMrNS6xvU/Nd+aaukmpYWRd3n481vuST5NmH43RyZ
-         DS3j1/aSAmWDAE4RVWLmiplHP5EnM9TQhn3QRQY/7v6RYL2suv8cYkTnjMw+oBjjrm
-         yNlw7OhM0TWbw==
-Received: by mail-ed1-f45.google.com with SMTP id f5so153927066edq.6;
-        Tue, 04 Jan 2022 14:00:18 -0800 (PST)
-X-Gm-Message-State: AOAM532lvLx0HMzogq+aAIA0KxyW70vfzP2Lxmqn/PvFTAwsSUfHb88c
-        ow41PJCBhXJbuLN0KAimiYnL/P1N4rXQ0jbo7g==
-X-Google-Smtp-Source: ABdhPJw1uhAiPnnIERGD8hUffX/5WwGrUbcSjfKqItL4XiR/0tBUqdIOj8MPuwRwRufmD5fbyNpWQWkXeqIby6m9mbY=
-X-Received: by 2002:a17:907:94c2:: with SMTP id dn2mr41415818ejc.325.1641333617085;
- Tue, 04 Jan 2022 14:00:17 -0800 (PST)
+        b=U33TgfLEc8jq4sWT4q2o5Sq5mfyRlMAlApGnBW1WDWl7dM1KwkneYhgKIlljIDqzf
+         q2bXDTsqhm3jNpi111iCKUCD954qCRq61WaRIUxr1qmeGa0DG2o3iIGpAvY2BCaNZ6
+         YavPDqyiLg3OYI9vtN2GviCoF3cqlqrs4+vz5hJpk3hcqMyItUo89f29Bf9Z4KRumA
+         SbAnkR0lB5gr4ruFbLmRB+6r29r9D0WflfiIMpOKY4/2tiM8KSUsxtsMm+XNuHxvoM
+         mCG4pJTxh1CdszuSvRAx2SvHUcNjdtpXaPWNEeBBYr+x8FRjdUfM5wnfWXpDB8MfV8
+         viPsBVSannXug==
+Received: by mail-ed1-f46.google.com with SMTP id m21so155102337edc.0;
+        Tue, 04 Jan 2022 14:04:03 -0800 (PST)
+X-Gm-Message-State: AOAM531pEI919PFXyusIcfY8mRNWhCsxYQVAACnzqr7+O4jd0rEqUffC
+        vbIdYCcjhQbEdrDVhx3fChqW+MACblSplxpLhw==
+X-Google-Smtp-Source: ABdhPJzWXbR+opDMZ47HZWGd5LvVBkP6EbJBGAe8frpS26RGPnAmEZl+6udHveZ0KMgOY0xIfvAsHtXqO9YH3wuribw=
+X-Received: by 2002:a17:906:7945:: with SMTP id l5mr40575041ejo.82.1641333841973;
+ Tue, 04 Jan 2022 14:04:01 -0800 (PST)
 MIME-Version: 1.0
-References: <20211221182826.2141789-1-jaschultzMS@gmail.com>
- <20211221182826.2141789-2-jaschultzMS@gmail.com> <YcJiBk5f071eJ5+n@robh.at.kernel.org>
- <DM6PR21MB13230483733ECB77304EC416A5429@DM6PR21MB1323.namprd21.prod.outlook.com>
- <CAL_JsqLuwvxkxeOmZQVOpMX_aA83LzEc4Tg+bkcFp3mUZYiTKw@mail.gmail.com> <DM6PR21MB1323319815EFD885339C8F9BA5429@DM6PR21MB1323.namprd21.prod.outlook.com>
-In-Reply-To: <DM6PR21MB1323319815EFD885339C8F9BA5429@DM6PR21MB1323.namprd21.prod.outlook.com>
+References: <20211221133937.173618-1-y.oudjana@protonmail.com>
+ <YcJgDToAY/vXXekl@robh.at.kernel.org> <20220104041303.349963-1-y.oudjana@protonmail.com>
+In-Reply-To: <20220104041303.349963-1-y.oudjana@protonmail.com>
 From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 4 Jan 2022 16:00:05 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJPq=B+DEGFvg_JNvDiZiig-wGetNJ4u8ssnJV_ADp4QQ@mail.gmail.com>
-Message-ID: <CAL_JsqJPq=B+DEGFvg_JNvDiZiig-wGetNJ4u8ssnJV_ADp4QQ@mail.gmail.com>
-Subject: Re: [EXTERNAL] Re: [PATCH RESEND v4 1/4] dt-bindings: platform:
- microsoft: Document surface xbl
-To:     Jarrett Schultz <jaschultz@microsoft.com>
-Cc:     Jarrett Schultz <jaschultzms@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Date:   Tue, 4 Jan 2022 16:03:49 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKCff0-d5vAXKsPQXr67zUfxgkkuOOM41i6Q5m1NLMnGA@mail.gmail.com>
+Message-ID: <CAL_JsqKCff0-d5vAXKsPQXr67zUfxgkkuOOM41i6Q5m1NLMnGA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: power: avs: qcom,cpr: Convert to DT schema
+To:     Yassine Oudjana <y.oudjana@protonmail.com>
+Cc:     Niklas Cassel <nks@flawful.org>,
+        Niklas Cassel <niklas.cassel@linaro.org>,
+        devicetree@vger.kernel.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 10:17 AM Jarrett Schultz
-<jaschultz@microsoft.com> wrote:
+On Mon, Jan 3, 2022 at 10:14 PM Yassine Oudjana
+<y.oudjana@protonmail.com> wrote:
 >
->
->
-> > -----Original Message-----
-> > From: Rob Herring <robh@kernel.org>
-> > Sent: Monday, December 27, 2021 9:46 AM
-> > To: Jarrett Schultz <jaschultz@microsoft.com>
-> > Cc: Jarrett Schultz <jaschultzms@gmail.com>; Andy Gross
-> > <agross@kernel.org>; bjorn.andersson@linaro.org; Hans de Goede
-> > <hdegoede@redhat.com>; Mark Gross <markgross@kernel.org>; Maximilian
-> > Luz <luzmaximilian@gmail.com>; Felipe Balbi <balbi@kernel.org>; linux-arm-
-> > msm@vger.kernel.org; platform-driver-x86@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; devicetree@vger.kernel.org
-> > Subject: Re: [EXTERNAL] Re: [PATCH RESEND v4 1/4] dt-bindings: platform:
-> > microsoft: Document surface xbl
-
-Please fix your mail client reply style.
-
+> On Tue, 21 Dec 2021 19:15:25 -0400, Rob Herring <robh@kernel.org> wrote:
+> > On Tue, Dec 21, 2021 at 01:40:05PM +0000, Yassine Oudjana wrote:
+> > > Convert qcom,cpr.txt to DT schema format.
+> > >
+> > > Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+> > > ---
+> > >  .../bindings/power/avs/qcom,cpr.txt           | 130 --------------
+> > >  .../bindings/power/avs/qcom,cpr.yaml          | 161 ++++++++++++++++++
+> > >  MAINTAINERS                                   |   2 +-
+> > >  3 files changed, 162 insertions(+), 131 deletions(-)
+> > >  delete mode 100644 Documentation/devicetree/bindings/power/avs/qcom,cpr.txt
+> > >  create mode 100644 Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml
 > >
-> > On Mon, Dec 27, 2021 at 10:54 AM Jarrett Schultz
-> > <jaschultz@microsoft.com> wrote:
-> > >
-> > >
-> > >
-> > > > -----Original Message-----
-> > > > From: Rob Herring <robh@kernel.org>
-> > > > Sent: Tuesday, December 21, 2021 5:24 PM
-> > > > To: Jarrett Schultz <jaschultzms@gmail.com>
-> > > > Cc: Andy Gross <agross@kernel.org>; bjorn.andersson@linaro.org; Hans
-> > > > de Goede <hdegoede@redhat.com>; Mark Gross
-> > <markgross@kernel.org>;
-> > > > Maximilian Luz <luzmaximilian@gmail.com>; Felipe Balbi
-> > > > <balbi@kernel.org>; linux-arm-msm@vger.kernel.org; platform-driver-
-> > > > x86@vger.kernel.org; linux-kernel@vger.kernel.org;
-> > > > devicetree@vger.kernel.org; Jarrett Schultz
-> > > > <jaschultz@microsoft.com>
-> > > > Subject: [EXTERNAL] Re: [PATCH RESEND v4 1/4] dt-bindings: platform:
-> > > > microsoft: Document surface xbl
-> > > >
-> > > > On Tue, Dec 21, 2021 at 10:28:23AM -0800, Jarrett Schultz wrote:
-> > > > > From: Jarrett Schultz <jaschultz@microsoft.com>
-> > > > >
-> > > > > Introduce yaml for surface xbl driver.
-> > > > >
-> > > > > Signed-off-by: Jarrett Schultz <jaschultz@microsoft.com>
-> > > > >
-> > > > > ---
-> > > > >
-> > > > > Changes in v4:
-> > > > >  - Addressed small formatting changes
-> > > > >  - Removed unnecessary lines
-> > > > >
-> > > > > ---
-> > > > >
-> > > > > Changes in v3:
-> > > > >  - Updated description to only pertain to the hardware
-> > > > >  - Updated the required field to properly reflect the binding
-> > > > >  - Removed the first example
-> > > > >  - Fixed the size of the reg field in the second example
-> > > > >
-> > > > > ---
-> > > > >
-> > > > > Changes in v2:
-> > > > >  - Removed json-schema dependence
-> > > > >  - Elaborated on description of driver
-> > > > >  - Updated example
-> > > > > ---
-> > > > >  .../platform/microsoft/surface-xbl.yaml       | 64 +++++++++++++++++++
-> > > > >  MAINTAINERS                                   |  7 ++
-> > > > >  2 files changed, 71 insertions(+)  create mode 100644
-> > > > > Documentation/devicetree/bindings/platform/microsoft/surface-xbl.y
-> > > > > aml
-> > > > >
-> > > > > diff --git
-> > > > > a/Documentation/devicetree/bindings/platform/microsoft/surface-
-> > > > xbl.yam
-> > > > > l
-> > > > > b/Documentation/devicetree/bindings/platform/microsoft/surface-
-> > > > xbl.yam
-> > > > > l
-> > > > > new file mode 100644
-> > > > > index 000000000000..df5a87a016f4
-> > > > > --- /dev/null
-> > > > > +++ b/Documentation/devicetree/bindings/platform/microsoft/surface
-> > > > > +++ -xbl
-> > > > > +++ .yaml
-> > > > > @@ -0,0 +1,64 @@
-> > > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML
-> > > > > +1.2
-> > > > > +---
-> > > > > +$id:
-> > > > >
-> > > >
-> > +https://nam06.safelinks.protection.outlook.com/?url=http%3A%2F%2Fde
-> > > > +vi
-> > > > > +cetree.org%2Fschemas%2Fplatform%2Fmicrosoft%2Fsurface-
-> > > > xbl.yaml%23&amp
-
-And this...
-
-Or trim the context if not relevant to the discussion.
-
-[...]
-
-> > > > > +examples:
-> > > > > +  - |
-> > > > > +    / {
-> > > > > +        compatible = "foo";
-> > > > > +        model = "foo";
-> > > >
-> > > > No need to make this the root node with a fake compatible.
-> > >
-> > > I included this root node in order to make #address-cells =
-> > > #size-cells = 2, since this example raises errors otherwise.
 > >
-> > Why does your example require 2 cells? You only have 4KB of address space.
+> > > diff --git a/Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml b/Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml
+> > > new file mode 100644
+> > > index 000000000000..852eb36eea93
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml
+> > > @@ -0,0 +1,161 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/power/avs/qcom,cpr.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Qualcomm Core Power Reduction (CPR) bindings
+> > > +
+> > > +maintainers:
+> > > +  - Niklas Cassel <nks@flawful.org>
+> > > +
+> > > +description: |
+> > > +  CPR (Core Power Reduction) is a technology to reduce core power on a CPU
+> > > +  or other device. Each OPP of a device corresponds to a "corner" that has
+> > > +  a range of valid voltages for a particular frequency. While the device is
+> > > +  running at a particular frequency, CPR monitors dynamic factors such as
+> > > +  temperature, etc. and suggests adjustments to the voltage to save power
+> > > +  and meet silicon characteristic requirements.
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    allOf:
+> >
+> > Don't need allOf with only 1 entry.
 >
-> The soc node that imem sits under in sm8150.dtsi defines it that way so for
-> continuity I figured that it would make sense for the example to mirror that.
-
-It's just an example. If you are just duplicating dts files, why have examples?
-
+> I get this from dt_binding_check without it:
 >
-> Also, should imem and xbl be documented in separate files?
+> Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml: properties:compatible: [{'items': [{'enum': ['qcom,qcs404-cpr']}, {'const': 'qcom,cpr'}]}] is not of type 'object', 'boolean'
 
-No. That depends more on the size of the schema. So it's a judgment
-call typically.
+Because you made 'compatible' a list rather than a dict/object.
+'allOf' is a list of subschemas though.
 
 Rob

@@ -2,67 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F035A4849B2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:09:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E7A24849B4
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:10:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233813AbiADVJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 16:09:29 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:35812 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232036AbiADVJ3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 16:09:29 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 2FAAC1F43DE3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1641330567;
-        bh=S9/BYZv6PF/gittsjCjf6Ha+s2qRbnqJMTXw19zodsE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=VlLXUvcijE8ot99aTIGJvj3yIPDf48f9CB5DQLS09WTm+98nYwVtQZ5JBxe/IzSlC
-         4ZVCFpa1hASJFuRYiiUYyWgoXjZE5ZJQAoNinGYqYQNQSZF55Aj9B5bWcxFbR0kgRn
-         m5dDs6NngW9biq7l4l1G1gp5xOiNRcQJH3B3dNz0H6G1SiEyJ1nySqJnjfPoc2v0My
-         6bLyk2TRNmejgVZ6QubIz/JuP2767HkYLLKgX5e64W+AYJB+PXE0qnY+fHWkhugH5Q
-         b5Zzqchjp8zaRbR1PqpnWY9uFRqQ4FkiYEIzwKGsVxLzaz9QdeR7TykbrrKSjaY/9a
-         6PXTb7d6J5J6Q==
-Date:   Wed, 5 Jan 2022 02:09:20 +0500
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     usama.anjum@collabora.com
-Subject: [PATCH] iio: frequency: admv1013: remove the always true condition
-Message-ID: <YdS3gJYtECMaDDjA@debian-BULLSEYE-live-builder-AMD64>
+        id S233845AbiADVKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 16:10:15 -0500
+Received: from mga02.intel.com ([134.134.136.20]:38875 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232036AbiADVKO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 16:10:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641330614; x=1672866614;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=G36aykXQQrpfW0MXKdS8YAGr7r/cA/Ikf7GfLLebR6Q=;
+  b=GtpXaZ8RSWBcWNON2VDJK+D96aDuCcPUheWXqNkO3jCBhHaSlly8Oj7+
+   sPCHhUsCi114cPVfxTlfX9W6XZIP/IBBJ+Ans09nA/AaIqlhrWZCqY56T
+   4Qa0CeEiJ1AYA0PvLul3SSSgscHKe3b9HUhXRVRzOrYF6/PdnAREGYe45
+   zzYNplCl97wL0kqNLl6GwbdkyX3N7LzY55aIcUWc2kI1Jw/rJh08kt8iE
+   TQhROpQfuHpEhVujN1LtUXubhD9ATmYKOxZfx7XX4ynFYkqBJF8YFHzif
+   Cf+amN/CsRyxXUN9d8/wCGtLVzC5Boc3WVQt5qfEEKgABVWeYO9Chjyt+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="229616708"
+X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
+   d="scan'208";a="229616708"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 13:10:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
+   d="scan'208";a="472205156"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 04 Jan 2022 13:10:13 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n4r4O-000Fro-PA; Tue, 04 Jan 2022 21:10:12 +0000
+Date:   Wed, 5 Jan 2022 05:09:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [arm-de:upstream/remove_feec_energy_margin_rework 1/11]
+ drivers/powercap/dtpm_cpu.c:85:48: error: expected ')' before ':' token
+Message-ID: <202201050536.YWxpqIkn-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-unsigned int variable is always greater than or equal to zero. Make the
-if condition simple.
+tree:   https://git.gitlab.arm.com/linux-arm/linux-de.git upstream/remove_feec_energy_margin_rework
+head:   8a0bdb78ce1cbb8e5e6768965874226b92b07b0e
+commit: 150e753e861285e82e9d7c593f1f26075c34e124 [1/11] sched, drivers: Remove max param from effective_cpu_util()/sched_cpu_util()
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220105/202201050536.YWxpqIkn-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        git remote add arm-de https://git.gitlab.arm.com/linux-arm/linux-de.git
+        git fetch --no-tags arm-de upstream/remove_feec_energy_margin_rework
+        git checkout 150e753e861285e82e9d7c593f1f26075c34e124
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/powercap/dtpm_cpu.c: In function 'scale_pd_power_uw':
+>> drivers/powercap/dtpm_cpu.c:85:48: error: expected ')' before ':' token
+      85 |  return (power * ((sum_util << 10) / max) >> 10 : 0;
+         |         ~                                      ^~
+         |                                                )
+>> drivers/powercap/dtpm_cpu.c:85:53: error: expected ';' before '}' token
+      85 |  return (power * ((sum_util << 10) / max) >> 10 : 0;
+         |                                                     ^
+         |                                                     ;
+      86 | }
+         | ~                                                    
+
+
+vim +85 drivers/powercap/dtpm_cpu.c
+
+    70	
+    71	static u64 scale_pd_power_uw(struct cpumask *pd_mask, u64 power)
+    72	{
+    73		unsigned long max, sum_util = 0;
+    74		int cpu;
+    75	
+    76		/*
+    77		 * The capacity is the same for all CPUs belonging to
+    78		 * the same perf domain.
+    79		 */
+    80		max = arch_scale_cpu_capacity(cpumask_first(pd_mask));
+    81	
+    82		for_each_cpu_and(cpu, pd_mask, cpu_online_mask)
+    83			sum_util += sched_cpu_util(cpu);
+    84	
+  > 85		return (power * ((sum_util << 10) / max) >> 10 : 0;
+    86	}
+    87	
+
 ---
- drivers/iio/frequency/admv1013.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/iio/frequency/admv1013.c b/drivers/iio/frequency/admv1013.c
-index 6cdeb50143af..3f3c478e9baa 100644
---- a/drivers/iio/frequency/admv1013.c
-+++ b/drivers/iio/frequency/admv1013.c
-@@ -348,7 +348,7 @@ static int admv1013_update_mixer_vgate(struct admv1013_state *st)
- 
- 	vcm = regulator_get_voltage(st->reg);
- 
--	if (vcm >= 0 && vcm < 1800000)
-+	if (vcm < 1800000)
- 		mixer_vgate = (2389 * vcm / 1000000 + 8100) / 100;
- 	else if (vcm > 1800000 && vcm < 2600000)
- 		mixer_vgate = (2375 * vcm / 1000000 + 125) / 100;
--- 
-2.30.2
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

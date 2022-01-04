@@ -2,104 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB7C84846F2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:25:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B623B4846F4
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:26:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235280AbiADRZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 12:25:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
+        id S235411AbiADR0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 12:26:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234711AbiADRZm (ORCPT
+        with ESMTP id S234749AbiADR0D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 12:25:42 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEFAC061784
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 09:25:42 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id r5so33292198pgi.6
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 09:25:42 -0800 (PST)
+        Tue, 4 Jan 2022 12:26:03 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332CFC061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 09:26:03 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id x7so83285337lfu.8
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 09:26:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Dt2cPCWEsFZ5AbysL4UkCn7JLhXrIdEBz/GoqAR1B90=;
-        b=NB45Tda4CCIIb04U+XDNPZB5azw6aHsshMgvWalK1tJ39OAsDe72/kEJOx2fW6bMeG
-         tdvxvimXmORNQJzTeQrOyhivszDBnLT8eQInnyfZfolZS7FmpwztJM3S9a9Qu4+VtC2M
-         XFGVtgFPc13suxJgngyMOg/NAezoiRxTuw4/UY7x4PKzEKqMPvcwvzWS3+Sl3S+Rxiu7
-         x/o3xwv5hYV55SYKUd/p7bh/PQkMYHKz4q4gbc4Lx5E4CtUdZ7SJt8TvcJyCLsrUsuGi
-         eBKr98sjqDjtwnHVKO4OGB2Tm3jkPAMw+iNPG/nrLuXah3b7/A2gYBxhdZrtoeZxuAxV
-         +j4A==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=WI7lB1h5wzR1I5amS3/J/XjMPBvz/P5sBCVcxmVEb6g=;
+        b=OMiXrp20A1P+UWBlFyhfOkxCnq+sBHc6yZlhZnVZ7OVEOwVMMYK1ivGWdCIWQTWRip
+         SPK2nhJjpXO5iVLF37PSpqBhEHrvkSfDM2pxQvdU/WNrLW365k+hFye1+D6eU/c/IXXo
+         LOdMAILQQRfWDCR08GV8mnK7FmQL9geS33pEfWPecFozzwtNBooirRkMKCSaaGHOl51m
+         riB0Eka+KFABS3v+nmXQHX+/P9eIJFTpfOZdTs304aLI1ivvjExWMVIhc235t9SdQxin
+         PVgOih4W3xqoqysFob1zl+u7bsCqAaI1G3qswq6r/InvYOBigCwA2COhE+TUwaojfOAq
+         S9jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Dt2cPCWEsFZ5AbysL4UkCn7JLhXrIdEBz/GoqAR1B90=;
-        b=mlTmJBDjcUJ2MBRBHIHtGqv4D8fIPLfGmG1YwAXDf1nMyXHlUj3SGuic9zfpzt0APz
-         qZ9gPiROGJ8DPBP26TxmkxJtcyZiXAhoQnXM4oHcZCx4KIzqZIGaFaelHr1YkDDabRnV
-         deZ3vOfdlWRtLyYxZfylCbpioPXj6BkxzlVA++jcjKzsG7D5JHiP33Fu6KG4BzKoUOex
-         zkuYW/5yz/+1UXwVzkeCUy3H4tcHn9dufJgdxTgvoHgKmaE941ZhnK5QWmWQ+rSVpIyM
-         rb/UkFYuzKA3PYVVXHyi4+kUUiE4Zm0fzRqeMih/xxuRVTIPsvmnTeWkXH/GVNgq747x
-         vSzA==
-X-Gm-Message-State: AOAM531vdvZoyCO/gjSJjWq8FTBEioxa1KTyIstm43fJfMees8Vf/LGU
-        eOI9D9QRCSoR4C9Sqrj4yv7Atw==
-X-Google-Smtp-Source: ABdhPJwQvdabyHoNNTGEbHXwTynNfe/NdjpWJGah72K6zT+sA3YPBHP0aoiMjx0n1cqTIwmYvhLhXQ==
-X-Received: by 2002:a05:6a00:2304:b0:4ba:4cbb:8289 with SMTP id h4-20020a056a00230400b004ba4cbb8289mr51337276pfh.79.1641317141421;
-        Tue, 04 Jan 2022 09:25:41 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id ip2sm36902413pjb.34.2022.01.04.09.25.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 09:25:40 -0800 (PST)
-Date:   Tue, 4 Jan 2022 17:25:37 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Like Xu <likexu@tencent.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 01/17] perf/x86/intel: Add EPT-Friendly PEBS for Ice
- Lake Server
-Message-ID: <YdSDEUJQgJQfZjWD@google.com>
-References: <20211210133525.46465-1-likexu@tencent.com>
- <20211210133525.46465-2-likexu@tencent.com>
- <Yc321e9o16luwFK+@google.com>
- <69ad949e-4788-0f93-46cb-6af6f79a9f24@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=WI7lB1h5wzR1I5amS3/J/XjMPBvz/P5sBCVcxmVEb6g=;
+        b=PJb50RLGNal4maTgJGfShIxnsYHmQR2m/oYNlcTbB7XGlqFG/tKrl++IHoog9HMXsA
+         47TfIm6zS2KItqOV90Hi/qYULD4Imr2Zvy8CRbr1M7pXZNg8sndx1FtoGdkPHceponoX
+         O2GiSduGwsXabhk0YfhEyz7r+PovWMxS7vr6aFGwqHj3VTG1B3ZoNmBqDFFT/PgeUn43
+         ihYRuk0SQqdw58qMtaYOtxQjAqMi7JcKb+0yFzTFRsh2ivn1UE5yWKopqX5pOgtIHOlc
+         k043/suvBPBLx1Yo/tgge4TOeeQGte5CnrcuBGlv5EoWRYMybZyBbJcyWkHZf51PlEUf
+         l3NA==
+X-Gm-Message-State: AOAM532qCVqyct1b4GKBOrIuGDFKuoKLC94TZUQZDe8VAHBErKjJ177L
+        pKaOLl9QWMdZXcLynavwjDn7X3sdP1eIpUxzRgudcg==
+X-Google-Smtp-Source: ABdhPJw8CT9FUQyCSpw151cYtBBTzAW6DKyeI4S1JIsi2Z3jQSPb/+4uOHm3HO73slTwxuU1Z1CZppFcgoHYgkIhIRk=
+X-Received: by 2002:a05:6512:32c5:: with SMTP id f5mr41463073lfg.550.1641317160619;
+ Tue, 04 Jan 2022 09:26:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <69ad949e-4788-0f93-46cb-6af6f79a9f24@gmail.com>
+References: <YdIfz+LMewetSaEB@gmail.com> <YdM4Z5a+SWV53yol@archlinux-ax161> <YdQlwnDs2N9a5Reh@gmail.com>
+In-Reply-To: <YdQlwnDs2N9a5Reh@gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 4 Jan 2022 09:25:48 -0800
+Message-ID: <CAKwvOdmCgBKiikP2Ja4PfJmVEnzNPGYe19MNd++a5D-asCBG2w@mail.gmail.com>
+Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree -v1:
+ Eliminate the Linux kernel's "Dependency Hell"
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Al Viro <viro@zeniv.linux.org.uk>, llvm@lists.linux.dev,
+        ashimida <ashimida@linux.alibaba.com>,
+        Arnd Bergmann <arnd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 31, 2021, Like Xu wrote:
-> On 31/12/2021 2:13 am, Sean Christopherson wrote:
-> > On Fri, Dec 10, 2021, Like Xu wrote:
-> > > The new hardware facility supporting guest PEBS is only available on
-> > > Intel Ice Lake Server platforms for now. KVM will check this field
-> > > through perf_get_x86_pmu_capability() instead of hard coding the cpu
-> > > models in the KVM code. If it is supported, the guest PEBS capability
-> > > will be exposed to the guest.
-> > 
-> > So what exactly is this new feature?  I've speed read the cover letter and a few
-> > changelogs and didn't find anything that actually explained when this feature does.
-> > 
-> 
-> Please check Intel SDM Vol3 18.9.5 for this "EPT-Friendly PEBS" feature.
-> 
-> I assume when an unfamiliar feature appears in the patch SUBJECT,
-> the reviewer may search for the exact name in the specification.
+On Tue, Jan 4, 2022 at 2:47 AM Ingo Molnar <mingo@kernel.org> wrote:
+>
+>
+> * Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> > Hi Ingo,
+> >
+> > On Sun, Jan 02, 2022 at 10:57:35PM +0100, Ingo Molnar wrote:
+> > I took the series for a spin with clang and GCC on arm64 and x86_64 and
+> > I found a few warnings/errors.
+>
+> Thank you!
+>
+> > 1. Position of certain attributes
+> >
+> > In some commits, you move the cacheline_aligned attributes from after
+> > the closing brace on structures to before the struct keyword, which
+> > causes clang to warn (and error with CONFIG_WERROR):
+> >
+> > In file included from arch/arm64/kernel/asm-offsets.c:9:
+> > In file included from arch/arm64/kernel/../../../kernel/sched/per_task_=
+area_struct.h:33:
+> > In file included from ./include/linux/perf_event_api.h:17:
+> > In file included from ./include/linux/perf_event_types.h:41:
+> > In file included from ./include/linux/ftrace.h:18:
+> > In file included from ./arch/arm64/include/asm/ftrace.h:53:
+> > In file included from ./include/linux/compat.h:11:
+> > ./include/linux/fs_types.h:997:1: error: attribute '__aligned__' is ign=
+ored, place it after "struct" to apply attribute to type declaration [-Werr=
+or,-Wignored-attributes]
+> > ____cacheline_aligned
+> > ^
+> > ./include/linux/cache.h:41:46: note: expanded from macro '____cacheline=
+_aligned'
+> > #define ____cacheline_aligned __attribute__((__aligned__(SMP_CACHE_BYTE=
+S)))
+>
+> Yeah, so this is a *really* stupid warning from Clang.
+>
+> Putting the attribute after 'struct' risks the hard to track down bugs wh=
+en
+> a <linux/cache.h> inclusion is missing, which scenario I pointed out in
+> this commit:
+>
+>     headers/deps: dcache: Move the ____cacheline_aligned attribute to the=
+ head of the definition
+>
+>     When changing <linux/dcache.h> I removed the <linux/spinlock_api.h> h=
+eader,
+>     which caused a couple of hundred of mysterious, somewhat obscure link=
+ time errors:
+>
+>       ld: net/sctp/tsnmap.o:(.bss+0x0): multiple definition of `____cache=
+line_aligned_in_smp'; init/do_mounts_rd.o:(.bss+0x0): first defined here
+>       ld: net/sctp/tsnmap.o:(.bss+0x40): multiple definition of `____cach=
+eline_aligned'; init/do_mounts_rd.o:(.bss+0x40): first defined here
+>       ld: net/sctp/debug.o:(.bss+0x0): multiple definition of `____cachel=
+ine_aligned_in_smp'; init/do_mounts_rd.o:(.bss+0x0): first defined here
+>       ld: net/sctp/debug.o:(.bss+0x40): multiple definition of `____cache=
+line_aligned'; init/do_mounts_rd.o:(.bss+0x40): first defined here
+>
+>     After a bit of head-scratching, what happened is that 'struct dentry_=
+operations'
+>     has the ____cacheline_aligned attribute at the tail of the type defin=
+ition -
+>     which turned into a local variable definition when <linux/cache.h> wa=
+s not
+>     included - which <linux/spinlock_api.h> includes into <linux/dcache.h=
+> indirectly.
+>
+>     There were no compile time errors, only link time errors.
+>
+>     Move the attribute to the head of the definition, in which case
+>     a missing <linux/cache.h> inclusion creates an immediate build failur=
+e:
+>
+>       In file included from ./include/linux/fs.h:9,
+>                        from ./include/linux/fsverity.h:14,
+>                        from fs/verity/fsverity_private.h:18,
+>                        from fs/verity/read_metadata.c:8:
+>       ./include/linux/dcache.h:132:22: error: expected =E2=80=98;=E2=80=
+=99 before =E2=80=98struct=E2=80=99
+>         132 | ____cacheline_aligned
+>             |                      ^
+>             |                      ;
+>         133 | struct dentry_operations {
+>             | ~~~~~~
+>
+>     No change in functionality.
+>
+>     Signed-off-by: Ingo Molnar <mingo@kernel.org>
+>
+> Can this Clang warning be disabled?
 
-C'mon, seriously?  How the blazes am I supposed to know that the feature name
-is EPT-Friendly PEBS?  Or that it's even in the SDM (it's not in the year-old
-version of the SDM I currently have open) versus one of the many ISE docs?
+Clang is warning that the attribute will be ignored because of that
+positioning. If you disable the warning, code will probably stop
+working as intended.  This warning has at least been helping us make
+the kernel coding style more consistent.
 
-This is not hard.  Please spend the 30 seconds it takes to write a small blurb
-so that reviewers don't have to spend 5+ minutes wondering WTF this does.
+This made me think of d5b421fe02827 ("docs: Explain the desired
+position of function attributes"), where we adding some text to
+Documentation/process/coding-style.rst about the positioning of
+__attribute__'s in function signatures, but I guess this case is data.
+We probably should add something to the coding style about attributes
+on data, too.
 
-  Add support for EPT-Friendly PEBS, a new CPU feature that enlightens PEBS to
-  translate guest linear address through EPT, and facilitates handling VM-Exits
-  that occur when accessing PEBS records.  More information can be found in the
-  <date> release of Intel's SDM, Volume 3, 18.9.5 "EPT-Friendly PEBS".
+The C standards body is also working on standardizing attributes; at
+the least I expect some of these things to be ironed out more soon.
+
+>
+> > 2. Error with CONFIG_SHADOW_CALL_STACK
+>
+> So this feature depends on Clang:
+>
+>  # Supported by clang >=3D 7.0
+>  config CC_HAVE_SHADOW_CALL_STACK
+>          def_bool $(cc-option, -fsanitize=3Dshadow-call-stack -ffixed-x18=
+)
+>
+> No way to activate it under my GCC cross-build toolchain, right?
+>
+> But ... I hacked the build mode on with GCC using this patch:
+
+Dan Li is working on a GCC patch. If you're up for building GCC from source=
+:
+https://gcc.gnu.org/pipermail/gcc-patches/2021-December/586204.html
+
+--
+
+This is a really cool series Ingo.  I'm sure Arnd has seen it by now,
+but Arnd has been thinking about this area a lot, too.  I haven't but
+I have played with running "include what you use" on the kernel
+sources; Kconfig being the biggest impediment to that approach.
+
+To me, I'm most nervous about "backsliding;" let's say this work
+lands, at some point probably years in the future, I assume without
+any form of automation that we might find ourselves at a similar point
+of header dependencies getting all tangled again.
+
+What are your thoughts on where/how/what we could automate to try to
+help developers in the future keep their header dependencies simpler?
+(Sorry if this was already answered in the cover letter)
+
+It would be really useful if you were planning a talk at something
+like plumbers how you go about making these changes.  I really hope
+once others understand your workflow that we might help with some form
+of automation.  Nice work!
+--
+Thanks,
+~Nick Desaulniers

@@ -2,108 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADBC6484968
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 21:45:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0817C48496C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 21:46:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233251AbiADUpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 15:45:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:59456 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232994AbiADUpq (ORCPT
+        id S233301AbiADUqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 15:46:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233286AbiADUqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 15:45:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641329146;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PYrqbdtdF3TH5qv2dr8q46HQl1ZSosdbS+NCJ8IVZW0=;
-        b=Ivy6TqZ47rTjGWnte//yzL1FAzabVlyvWV9Y3A8DPI2GahU6KdTLGvSFWbW92q35xXymnI
-        EkX42PJehq2Iq0mNnuW3xasuYJOi9ZbnIpxM4E6dCxJWbJQ4MDLjI6kiwTLXggif3cCkro
-        ZYeH0BKd4U7oxb9WgsXk+Hb703halUg=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-317-H0yrfMPyMcGKfcelAayQ2A-1; Tue, 04 Jan 2022 15:45:45 -0500
-X-MC-Unique: H0yrfMPyMcGKfcelAayQ2A-1
-Received: by mail-ed1-f69.google.com with SMTP id h6-20020a056402280600b003f9967993aeso5364501ede.10
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 12:45:44 -0800 (PST)
+        Tue, 4 Jan 2022 15:46:34 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BB1C061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 12:46:33 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id p12so11371238qvj.6
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 12:46:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ieee.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=TWapPhsHYw3VtBoPQgmWd2yPfeI/3LTqvIBr/d8b8MA=;
+        b=eUsY5bx0KaZNUWF69TH1bVVX0ClCrXV/8+zehGbpDu27aJz407/M4e2Y4oO8MIOE7C
+         0IhQsaYyjYbs0Vkmg1EzpHEN3GCcHdTH0+zL0xg6fOm0sM2ZQf3IdvNYXu809V4ZyVM0
+         UgKS4CzdHOCLvOPYyVY3+Z4hNGkHA28eSa8AI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=PYrqbdtdF3TH5qv2dr8q46HQl1ZSosdbS+NCJ8IVZW0=;
-        b=cZt0m+57SlnhEq4Z1CVw8FPC4ZUeEtFJzVKFNcBCUmknlRHNOQj0RibsBz3lUrsWon
-         erZ8d02lVwLfj23ImXHImgyzNW56E6ADSm3xnuD+9QWcdF+aC+zdyB9eBBtDhAGQiWQm
-         5hZPl8F6WJuJlmIOweMJmdIhCGYunbt03IUget1PGic85ODwCnt3JxIVe2EjxmNxwhEU
-         dk0IXQrsjdC9wwy3CzgUcW8pBzaWTQ/CJSeJ/jgeA41Oc+LYjytdqgfSx66NwcjDlibD
-         G4+iNX4ekkV1CSjMADC2BUPH2ejqeGyJhCCr1HhdUElwJghj7v07vpO25F4lU+JTRRmr
-         pf9g==
-X-Gm-Message-State: AOAM5325fE6bfpuIWUDbeXUIgEGcZTbG1EG8tTL2lvl3NOwHcuC9JuXG
-        SzYViNRjEFnEMTKT9o2+ey0HCHHxizXwPatmh15W7Z0takOLAfik/2sIRUDWBCV0G4dghrdQAu8
-        Wa1vuflb9YP/U0wXdWZSorw2N
-X-Received: by 2002:a17:906:9746:: with SMTP id o6mr3103303ejy.112.1641329143966;
-        Tue, 04 Jan 2022 12:45:43 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwMBe92plviw0jlSVwnEa2kU3pf6epuXjoKR1YY7Y5SakD1MSKrYxN09nCveIinmPB1gzQR0w==
-X-Received: by 2002:a17:906:9746:: with SMTP id o6mr3103286ejy.112.1641329143795;
-        Tue, 04 Jan 2022 12:45:43 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id f5sm15075159edu.38.2022.01.04.12.45.42
+        bh=TWapPhsHYw3VtBoPQgmWd2yPfeI/3LTqvIBr/d8b8MA=;
+        b=csgYZpz/gK3VEeWSqEHGx+dVOqB2HsKSl+YBPMsDURZg6ZJTmVsPd/ypHaYU6nzEt6
+         guX1lO3gPn2S5uO1vd3czyuMgRiCUunH0k2VV7BBnSQyB6bEfIh1MgF1AoBhKbzTNHX1
+         Bgn0cTYFIC8xUt2PKEpSqDsROadyuUbN7iwwKNIzGddid/tL8v/U8S2WpJAn/hoXYRqF
+         XS0ynU4pWbsymtuTUIPqNsN0x5aExNqxcKnysZNyO4rdWo+HSltrIZ+VcdOVehVrMfFb
+         r4MHpbyIrGbpxdfgdCdfyzm69Wqz9/QfBzUy/QTDKqYW5amwhh+ZB70sGt/WPLw+3u8w
+         B1rg==
+X-Gm-Message-State: AOAM533qT1dbzPlyzNsS706h2OmcKD+co9eJyn2417wgTyEdiSYUEcHT
+        9CqhIiyudmRmDTnFhkADk818+w==
+X-Google-Smtp-Source: ABdhPJyo5ioGOfzcQV1Z4+h5S/0pv/JabmELhbJt3jcNITsDgK8amivYK96uZOZM8l8bApMp2O6nqg==
+X-Received: by 2002:a05:6214:c4f:: with SMTP id r15mr47994044qvj.22.1641329193040;
+        Tue, 04 Jan 2022 12:46:33 -0800 (PST)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id bi9sm31266556qkb.60.2022.01.04.12.46.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 12:45:43 -0800 (PST)
-Message-ID: <c41a0458-1bfa-9dc6-71ce-f0433cd400e7@redhat.com>
-Date:   Tue, 4 Jan 2022 21:45:41 +0100
+        Tue, 04 Jan 2022 12:46:32 -0800 (PST)
+Message-ID: <c78c7f1f-40bc-1d3a-744f-199a613c4af1@ieee.org>
+Date:   Tue, 4 Jan 2022 14:46:31 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v4 18/21] kvm: x86: Add support for getting/setting
- expanded xstate buffer
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v3] staging: greybus: audio: Check null pointer
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Yang Zhong <yang.zhong@intel.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, corbet@lwn.net, shuah@kernel.org,
-        jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, jing2.liu@intel.com,
-        guang.zeng@intel.com, wei.w.wang@intel.com
-References: <20211229131328.12283-1-yang.zhong@intel.com>
- <20211229131328.12283-19-yang.zhong@intel.com> <YdSkDAruycpXhNUT@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YdSkDAruycpXhNUT@google.com>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, vaibhav.sr@gmail.com,
+        mgreer@animalcreek.com, johan@kernel.org, elder@kernel.org,
+        gregkh@linuxfoundation.org
+Cc:     greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20220104150628.1987906-1-jiasheng@iscas.ac.cn>
+From:   Alex Elder <elder@ieee.org>
+In-Reply-To: <20220104150628.1987906-1-jiasheng@iscas.ac.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/4/22 20:46, Sean Christopherson wrote:
-> On Wed, Dec 29, 2021, Yang Zhong wrote:
->> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
->> index bdf89c28d2ce..76e1941db223 100644
->> --- a/arch/x86/kvm/x86.c
->> +++ b/arch/x86/kvm/x86.c
->> @@ -4296,6 +4296,11 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->>   		else
->>   			r = 0;
->>   		break;
->> +	case KVM_CAP_XSAVE2:
->> +		r = kvm->vcpus[0]->arch.guest_fpu.uabi_size;
+On 1/4/22 9:06 AM, Jiasheng Jiang wrote:
+> As the possible alloc failure of devm_kcalloc(), it could return null
+> pointer.
+> Therefore, 'strings' should be checked and return NULL if alloc fails to
+> prevent the dereference of the NULL pointer.
+> Also, the caller should also deal with the return value of the
+> gb_generate_enum_strings() and return -ENOMEM if returns NULL.
+> Moreover, because the memory allocated with devm_kzalloc() will be
+> freed automatically when the last reference to the device is dropped,
+> the 'gbe' in gbaudio_tplg_create_enum_kctl() and
+> gbaudio_tplg_create_enum_ctl() do not need to free manually.
+> But the 'control' in gbaudio_tplg_create_widget() and
+> gbaudio_tplg_process_kcontrols() has a specially error handle to
+> cleanup.
+> So it should be better to cleanup 'control' when fails.
 > 
-> a) This does not compile against kvm/queue.
-> 
->     arch/x86/kvm/x86.c: In function ‘kvm_vm_ioctl_check_extension’:
->     arch/x86/kvm/x86.c:4317:24: error: ‘struct kvm’ has no member named ‘vcpus’
->      4317 |                 r = kvm->vcpus[0]->arch.guest_fpu.uabi_size;
-> 
-> b) vcpu0 is not guaranteed to be non-NULL at this point.
+> Fixes: e65579e335da ("greybus: audio: topology: Enable enumerated control support")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-Yang, you can post an incremental patch for this.  You can use the 
-highest bit of the guest-permitted xcr0 (i.e. the OR of KVM's supported 
-XCR0 an the guest-permitted dynamic features) and pass it to cpuid(0xD).
+This looks good to me.  Thanks for fixing things.
 
-Paolo
+Reviewed-by: Alex Elder <elder@linaro.org>
+
+> ---
+> v3: Same code as v2, but remove the redundant message as requested.
+> v2: Updated to use common error processing at the end of both
+> gbaudio_tplg_create_widget() and gbaudio_tplg_process_kcontrols().
+> ---
+>   drivers/staging/greybus/audio_topology.c | 15 +++++++++++++++
+>   1 file changed, 15 insertions(+)
+> 
+> diff --git a/drivers/staging/greybus/audio_topology.c b/drivers/staging/greybus/audio_topology.c
+> index 1fc7727ab7be..6bba735d2e5c 100644
+> --- a/drivers/staging/greybus/audio_topology.c
+> +++ b/drivers/staging/greybus/audio_topology.c
+> @@ -147,6 +147,9 @@ static const char **gb_generate_enum_strings(struct gbaudio_module_info *gb,
+>   
+>   	items = le32_to_cpu(gbenum->items);
+>   	strings = devm_kcalloc(gb->dev, items, sizeof(char *), GFP_KERNEL);
+> +	if (!strings)
+> +		return NULL;
+> +
+>   	data = gbenum->names;
+>   
+>   	for (i = 0; i < items; i++) {
+> @@ -655,6 +658,8 @@ static int gbaudio_tplg_create_enum_kctl(struct gbaudio_module_info *gb,
+>   	/* since count=1, and reg is dummy */
+>   	gbe->items = le32_to_cpu(gb_enum->items);
+>   	gbe->texts = gb_generate_enum_strings(gb, gb_enum);
+> +	if (!gbe->texts)
+> +		return -ENOMEM;
+>   
+>   	/* debug enum info */
+>   	dev_dbg(gb->dev, "Max:%d, name_length:%d\n", gbe->items,
+> @@ -862,6 +867,8 @@ static int gbaudio_tplg_create_enum_ctl(struct gbaudio_module_info *gb,
+>   	/* since count=1, and reg is dummy */
+>   	gbe->items = le32_to_cpu(gb_enum->items);
+>   	gbe->texts = gb_generate_enum_strings(gb, gb_enum);
+> +	if (!gbe->texts)
+> +		return -ENOMEM;
+>   
+>   	/* debug enum info */
+>   	dev_dbg(gb->dev, "Max:%d, name_length:%d\n", gbe->items,
+> @@ -1034,6 +1041,10 @@ static int gbaudio_tplg_create_widget(struct gbaudio_module_info *module,
+>   			csize += le16_to_cpu(gbenum->names_length);
+>   			control->texts = (const char * const *)
+>   				gb_generate_enum_strings(module, gbenum);
+> +			if (!control->texts) {
+> +				ret = -ENOMEM;
+> +				goto error;
+> +			}
+>   			control->items = le32_to_cpu(gbenum->items);
+>   		} else {
+>   			csize = sizeof(struct gb_audio_control);
+> @@ -1183,6 +1194,10 @@ static int gbaudio_tplg_process_kcontrols(struct gbaudio_module_info *module,
+>   			csize += le16_to_cpu(gbenum->names_length);
+>   			control->texts = (const char * const *)
+>   				gb_generate_enum_strings(module, gbenum);
+> +			if (!control->texts) {
+> +				ret = -ENOMEM;
+> +				goto error;
+> +			}
+>   			control->items = le32_to_cpu(gbenum->items);
+>   		} else {
+>   			csize = sizeof(struct gb_audio_control);
+> 
 

@@ -2,274 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00ECD483A48
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 02:59:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1528E483A4B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 03:00:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231415AbiADB7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 20:59:13 -0500
-Received: from mga05.intel.com ([192.55.52.43]:37557 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229757AbiADB7M (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 20:59:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641261552; x=1672797552;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=QSJSuixQj2c2RVpXtE8IShxwGNkHMzp6PO0/hCqGO3I=;
-  b=jUj3T7vnm9j+nNohbkRaWcTJdkiqeoeI2ZWV06arPhlKCfXgxSrIp+Ph
-   58IReFiURxbs0KzLX2sYxg7U1jlz8M7XngJ0a54brJHuNTLAwd78IFUvE
-   fr/sGZfkqds52KhmLDKmVw68iif/Lg3JkPGD50wTZe4bEbmabbekq/IGI
-   rhx9u06pQiCjMpUQH6MAjCFOmkR/+HHkRVeld0o//4Y4y07wx7JTF9vVf
-   4hZY0OnF5ZHFI6GfIYewHLMQQwjpZcC9VHUeuMrUQL/3CcDtFB95pYOYO
-   I43DF7WfNbM/LzuGpfrycQwNOL/pBSQuS6Mb7AJtWQvfW2SaDowgs+2jO
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="328482055"
-X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="328482055"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 17:59:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="667573411"
-Received: from allen-box.sh.intel.com ([10.239.159.118])
-  by fmsmga001.fm.intel.com with ESMTP; 03 Jan 2022 17:58:54 -0800
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>
-Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v5 14/14] iommu: Remove iommu group changes notifier
-Date:   Tue,  4 Jan 2022 09:56:44 +0800
-Message-Id: <20220104015644.2294354-15-baolu.lu@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220104015644.2294354-1-baolu.lu@linux.intel.com>
-References: <20220104015644.2294354-1-baolu.lu@linux.intel.com>
+        id S231173AbiADCAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 21:00:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229634AbiADCAB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 21:00:01 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA032C061761;
+        Mon,  3 Jan 2022 18:00:00 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id q16so73055675wrg.7;
+        Mon, 03 Jan 2022 18:00:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6bmFeTc+ASL2yNsdNEmUhNJpDw6o3ieqtOPJDyurw4U=;
+        b=jOU18gpNI07BebDSx25i0IEy4j+B13FpovX+vvFFZplKvaxLme6lEYRIZzvqYSLrYG
+         PTBgOsasKKdpjhQFTC+guybHmUjn1HZYrONe7Tai6qCXzSl9Po7OJmwSqu4K6z/UPvJO
+         b/B0ylJ41dCCe3WeLQ0oztorMZ4l6eY+GEUqBED7wPaqu0w5Ct+reycAJWmK4hJowtft
+         5KeuPIBYtTrEJBD0aq189J4q9Vkcm89UofrP3qzO4efJaYHBaaQ6vriU+CshQimNqFm2
+         9vHlIRtKKqG37rQ8XB0xytEInxYcI5tLY/ANnBZw+GBW6gLYWlakGBRNOVz6Oc0i9lQg
+         GtEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6bmFeTc+ASL2yNsdNEmUhNJpDw6o3ieqtOPJDyurw4U=;
+        b=qZJMky6cGZQX6d3TTd0bAzVzLZsBzTdBPsauagNwbuvyKYKUvM01vcshPlt4FmiWRF
+         bYrM4SkWug4NDHs9qYQooOVJBdzGG0VFtv81Nd3fDAOJLcyIcibk7Lhuem/oVmqhttIa
+         BqAkJ1oeXHMV1EIhb94vQ4wtvIe7oOSMgo8R6fNoq1F4ufARm9KRAtvGIeRMbOxGOV+h
+         qJ1shwkXd9w7miZkeaNRXcdbO9dxC9thvVaMRsAoXlxS4RDUhkwlmvcVrXrv8TxZ5yTd
+         mZMWE4Y24inC91oXz6NSuFfbpVRblJlyNXwwIllsSU+qUWTqjnFruMqbNA6jTqzTfaSx
+         OGyw==
+X-Gm-Message-State: AOAM532S4F3wN9CdurD0GVhmos8U4K1QFzKdVsXxzuOvpW5FFsSllUE0
+        jy9rISNQj5rWETOdRwV43nbTM5DR6U4Alw==
+X-Google-Smtp-Source: ABdhPJzpk9BAgAbip5RHU77Ozz3FaOjB2Np4QEC/+tTOQ6sTsCwqd4ABSDyfpTA+CrlMaX0inH1w4g==
+X-Received: by 2002:a05:6000:104f:: with SMTP id c15mr40103559wrx.665.1641261599260;
+        Mon, 03 Jan 2022 17:59:59 -0800 (PST)
+Received: from fuji.fritz.box (ip-89-161-76-237.tel.tkb.net.pl. [89.161.76.237])
+        by smtp.gmail.com with ESMTPSA id j17sm36422654wrp.68.2022.01.03.17.59.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jan 2022 17:59:58 -0800 (PST)
+From:   =?UTF-8?q?Tomasz=20Warnie=C5=82=C5=82o?= 
+        <tomasz.warniello@gmail.com>
+To:     corbet@lwn.net
+Cc:     =?UTF-8?q?Tomasz=20Warnie=C5=82=C5=82o?= 
+        <tomasz.warniello@gmail.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 00/15] Transform documentation into POD
+Date:   Tue,  4 Jan 2022 02:59:31 +0100
+Message-Id: <20220104015946.529524-1-tomasz.warniello@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The iommu group changes notifer is not referenced in the tree. Remove it
-to avoid dead code.
+This series transforms the free-form general comments - mainly the usage
+instructions and the meta information - into the standard Perl
+documentation format. Some of the original text is reduced out.
 
-Suggested-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
----
- include/linux/iommu.h | 23 -------------
- drivers/iommu/iommu.c | 75 -------------------------------------------
- 2 files changed, 98 deletions(-)
+The transformation includes language, paragraphing and editorial
+corrections.
 
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index 568f285468cf..408a6d2b3034 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -403,13 +403,6 @@ static inline void iommu_iotlb_gather_init(struct iommu_iotlb_gather *gather)
- 	};
- }
- 
--#define IOMMU_GROUP_NOTIFY_ADD_DEVICE		1 /* Device added */
--#define IOMMU_GROUP_NOTIFY_DEL_DEVICE		2 /* Pre Device removed */
--#define IOMMU_GROUP_NOTIFY_BIND_DRIVER		3 /* Pre Driver bind */
--#define IOMMU_GROUP_NOTIFY_BOUND_DRIVER		4 /* Post Driver bind */
--#define IOMMU_GROUP_NOTIFY_UNBIND_DRIVER	5 /* Pre Driver unbind */
--#define IOMMU_GROUP_NOTIFY_UNBOUND_DRIVER	6 /* Post Driver unbind */
--
- extern int bus_set_iommu(struct bus_type *bus, const struct iommu_ops *ops);
- extern int bus_iommu_probe(struct bus_type *bus);
- extern bool iommu_present(struct bus_type *bus);
-@@ -482,10 +475,6 @@ extern int iommu_group_for_each_dev(struct iommu_group *group, void *data,
- extern struct iommu_group *iommu_group_get(struct device *dev);
- extern struct iommu_group *iommu_group_ref_get(struct iommu_group *group);
- extern void iommu_group_put(struct iommu_group *group);
--extern int iommu_group_register_notifier(struct iommu_group *group,
--					 struct notifier_block *nb);
--extern int iommu_group_unregister_notifier(struct iommu_group *group,
--					   struct notifier_block *nb);
- extern int iommu_register_device_fault_handler(struct device *dev,
- 					iommu_dev_fault_handler_t handler,
- 					void *data);
-@@ -885,18 +874,6 @@ static inline void iommu_group_put(struct iommu_group *group)
- {
- }
- 
--static inline int iommu_group_register_notifier(struct iommu_group *group,
--						struct notifier_block *nb)
--{
--	return -ENODEV;
--}
--
--static inline int iommu_group_unregister_notifier(struct iommu_group *group,
--						  struct notifier_block *nb)
--{
--	return 0;
--}
--
- static inline
- int iommu_register_device_fault_handler(struct device *dev,
- 					iommu_dev_fault_handler_t handler,
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index ff0c8c1ad5af..72a95dea688e 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -18,7 +18,6 @@
- #include <linux/errno.h>
- #include <linux/iommu.h>
- #include <linux/idr.h>
--#include <linux/notifier.h>
- #include <linux/err.h>
- #include <linux/pci.h>
- #include <linux/bitops.h>
-@@ -40,7 +39,6 @@ struct iommu_group {
- 	struct kobject *devices_kobj;
- 	struct list_head devices;
- 	struct mutex mutex;
--	struct blocking_notifier_head notifier;
- 	void *iommu_data;
- 	void (*iommu_data_release)(void *iommu_data);
- 	char *name;
-@@ -627,7 +625,6 @@ struct iommu_group *iommu_group_alloc(void)
- 	mutex_init(&group->mutex);
- 	INIT_LIST_HEAD(&group->devices);
- 	INIT_LIST_HEAD(&group->entry);
--	BLOCKING_INIT_NOTIFIER_HEAD(&group->notifier);
- 
- 	ret = ida_simple_get(&iommu_group_ida, 0, 0, GFP_KERNEL);
- 	if (ret < 0) {
-@@ -902,10 +899,6 @@ int iommu_group_add_device(struct iommu_group *group, struct device *dev)
- 	if (ret)
- 		goto err_put_group;
- 
--	/* Notify any listeners about change to group. */
--	blocking_notifier_call_chain(&group->notifier,
--				     IOMMU_GROUP_NOTIFY_ADD_DEVICE, dev);
--
- 	trace_add_device_to_group(group->id, dev);
- 
- 	dev_info(dev, "Adding to iommu group %d\n", group->id);
-@@ -947,10 +940,6 @@ void iommu_group_remove_device(struct device *dev)
- 
- 	dev_info(dev, "Removing from iommu group %d\n", group->id);
- 
--	/* Pre-notify listeners that a device is being removed. */
--	blocking_notifier_call_chain(&group->notifier,
--				     IOMMU_GROUP_NOTIFY_DEL_DEVICE, dev);
--
- 	mutex_lock(&group->mutex);
- 	list_for_each_entry(tmp_device, &group->devices, list) {
- 		if (tmp_device->dev == dev) {
-@@ -1073,36 +1062,6 @@ void iommu_group_put(struct iommu_group *group)
- }
- EXPORT_SYMBOL_GPL(iommu_group_put);
- 
--/**
-- * iommu_group_register_notifier - Register a notifier for group changes
-- * @group: the group to watch
-- * @nb: notifier block to signal
-- *
-- * This function allows iommu group users to track changes in a group.
-- * See include/linux/iommu.h for actions sent via this notifier.  Caller
-- * should hold a reference to the group throughout notifier registration.
-- */
--int iommu_group_register_notifier(struct iommu_group *group,
--				  struct notifier_block *nb)
--{
--	return blocking_notifier_chain_register(&group->notifier, nb);
--}
--EXPORT_SYMBOL_GPL(iommu_group_register_notifier);
--
--/**
-- * iommu_group_unregister_notifier - Unregister a notifier
-- * @group: the group to watch
-- * @nb: notifier block to signal
-- *
-- * Unregister a previously registered group notifier block.
-- */
--int iommu_group_unregister_notifier(struct iommu_group *group,
--				    struct notifier_block *nb)
--{
--	return blocking_notifier_chain_unregister(&group->notifier, nb);
--}
--EXPORT_SYMBOL_GPL(iommu_group_unregister_notifier);
--
- /**
-  * iommu_register_device_fault_handler() - Register a device fault handler
-  * @dev: the device
-@@ -1651,14 +1610,8 @@ static int remove_iommu_group(struct device *dev, void *data)
- static int iommu_bus_notifier(struct notifier_block *nb,
- 			      unsigned long action, void *data)
- {
--	unsigned long group_action = 0;
- 	struct device *dev = data;
--	struct iommu_group *group;
- 
--	/*
--	 * ADD/DEL call into iommu driver ops if provided, which may
--	 * result in ADD/DEL notifiers to group->notifier
--	 */
- 	if (action == BUS_NOTIFY_ADD_DEVICE) {
- 		int ret;
- 
-@@ -1669,34 +1622,6 @@ static int iommu_bus_notifier(struct notifier_block *nb,
- 		return NOTIFY_OK;
- 	}
- 
--	/*
--	 * Remaining BUS_NOTIFYs get filtered and republished to the
--	 * group, if anyone is listening
--	 */
--	group = iommu_group_get(dev);
--	if (!group)
--		return 0;
--
--	switch (action) {
--	case BUS_NOTIFY_BIND_DRIVER:
--		group_action = IOMMU_GROUP_NOTIFY_BIND_DRIVER;
--		break;
--	case BUS_NOTIFY_BOUND_DRIVER:
--		group_action = IOMMU_GROUP_NOTIFY_BOUND_DRIVER;
--		break;
--	case BUS_NOTIFY_UNBIND_DRIVER:
--		group_action = IOMMU_GROUP_NOTIFY_UNBIND_DRIVER;
--		break;
--	case BUS_NOTIFY_UNBOUND_DRIVER:
--		group_action = IOMMU_GROUP_NOTIFY_UNBOUND_DRIVER;
--		break;
--	}
--
--	if (group_action)
--		blocking_notifier_call_chain(&group->notifier,
--					     group_action, dev);
--
--	iommu_group_put(group);
- 	return 0;
- }
- 
+The only change in the script execution flow is the replacement of the
+'usage' function with the native standard Perl 'pod2usage'.
+
+The TODO suggestion to write POD found in the script is ancient, thus
+I can't address its author with a "Suggested-by" tag.
+
+The process consists of 15 steps.
+
+Patches beginning with no 4 are disfunctional until no 10 has been
+applied.
+
+This version is in fact the first correction of v1. The first attempt to
+send it was a failure due to my lack of experience. It was weird in other
+ways too. Never mind the details.
+
+What I'm sending now mostly follows the advice received for v1. My reply is
+contained in the patches otherwise. I have also done a few bits differently
+to v1, as I found better solutions, etc.
+
+Ok, let's see how it gets through this time.
+
+PS. Jani Nikula and Jonathan Corbet - sorry for bothering you with a copy of
+		emails with you tagged in them that I sent to myself. This was unexpected.
+
+Tomasz Warniełło (15):
+  scripts: kernel-doc: Add the NAME section
+  scripts: kernel-doc: Add the SYNOPSIS section
+  scripts: kernel-doc: Relink argument parsing error handling to
+    pod2usage
+  scripts: kernel-doc: Translate the DESCRIPTION section
+  scripts: kernel-doc: Translate the "Output format selection"
+    subsection of OPTIONS
+  scripts: kernel-doc: Translate the "Output format selection modifier"
+    subsection of OPTIONS
+  scripts: kernel-doc: Translate the "Output selection" subsection of
+    OPTIONS
+  scripts: kernel-doc: Translate the "Output selection modifiers"
+    subsection of OPTIONS
+  scripts: kernel-doc: Translate the "Other parameters" subsection of
+    OPTIONS
+  scripts: kernel-doc: Replace the usage function
+  scripts: kernel-doc: Remove the "format of comments" comment block
+  scripts: kernel-doc: Archive the pre-git museum
+  scripts: kernel-doc: License cleanup
+  scripts: kernel-doc: Refresh the copyright lines
+  scripts: kernel-doc: Move the TODOs
+
+ scripts/kernel-doc | 390 ++++++++++++++++++++++-----------------------
+ 1 file changed, 194 insertions(+), 196 deletions(-)
+
+
+base-commit: 2a987e65025e2b79c6d453b78cb5985ac6e5eb26
 -- 
-2.25.1
+2.30.2
 

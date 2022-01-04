@@ -2,129 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C82B348416B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 13:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F78E48416E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 13:03:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbiADMCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 07:02:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiADMCO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 07:02:14 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A175C061761;
-        Tue,  4 Jan 2022 04:02:14 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id i22so75677922wrb.13;
-        Tue, 04 Jan 2022 04:02:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=iJCchn2X34ne9iX0z8o1f3UymboTeZK5qbmX+dn9QQI=;
-        b=JfiVlhnMPzA+jvSKV4ITc/KrSQp97QQgaA1FBiNnZBb/UhPU8YPlvD0Wi4KnX7GFNh
-         KsIZ62/drSwobPTlpHyv9+p64BkxYbnzdGN7gYnuE+kKw2XLeSR9Pziq3CVBlThgJ1VR
-         rh/plbAUSzyuFtQ6b04EAig8a6N2JSNHaZqdHdk3eoajmQt/jWcYhGZArGs33OUzMp9E
-         vozF9lM2hCwD0fkpRK+GlhNKrbcQRjO6I3JPxiJocAU6ZDxJZI+bkjiURUTceENPU1Gh
-         5kfTWHNSu+3lWCmRowMi2FsfAObcCH2Ix6SzwkLTOBLl7sRm74iyCoKn0K7CCOPHrhL4
-         Mp7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=iJCchn2X34ne9iX0z8o1f3UymboTeZK5qbmX+dn9QQI=;
-        b=Ziwp5k0p4Jo4lW3n+XxtmfG6SqBLKt5QUFJQBPuNYTieqh/e4Q2Zy8zo/jbkQ0u9Fm
-         GGbE4I9VoyoIOSpS/X97u098bbY+UuvJsBguBK2iDAxkCtymxMLCgn5O8djrGJW/4r8O
-         ETPQ4RFeGArv0goF6oliqp4MNsswV0znOSEwEzZR5BWbc91rAMY9QTOGSuzJ545ygaXj
-         1juotqpI1dr94IGPcy9XPYma45xEXtZdBqUxN6jnOaRaa83N6zectUXW5455S9bYw5vS
-         zDxt9x2IHpf6m6FB22gAPHfy1CcMRL3Kuk41poHVB3RBZF8z0PGpetpJ5D3yKPRaA5EK
-         HtZg==
-X-Gm-Message-State: AOAM532kCIawGRP5PQw7+Yo/Bq2WGfY2K2vFTX5of1LCfW7XDDfZu/g4
-        Km27r+1OAUqE2v6OvElUbpM=
-X-Google-Smtp-Source: ABdhPJwnvPlI2K3oopQjvmwG366MYxq9KF8B8OhI6kbksvbCi5nwHkvDJATS7pFQNkB5wh1PL+emoQ==
-X-Received: by 2002:adf:de84:: with SMTP id w4mr41123010wrl.67.1641297732567;
-        Tue, 04 Jan 2022 04:02:12 -0800 (PST)
-Received: from felia.fritz.box ([2001:16b8:2647:5a00:918:9389:3260:d714])
-        by smtp.gmail.com with ESMTPSA id d5sm15640703wrs.61.2022.01.04.04.02.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 04:02:12 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        linux-block@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] block: remove dead queue_dma_alignment branch from bio_map_user_iov()
-Date:   Tue,  4 Jan 2022 13:01:58 +0100
-Message-Id: <20220104120158.20177-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S231719AbiADMD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 07:03:27 -0500
+Received: from mga02.intel.com ([134.134.136.20]:21358 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231640AbiADMD0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 07:03:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641297806; x=1672833806;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1XgMCz4Mlnr2ia8fv8lQ+vtO7J2ecggPe6ov0PaY83c=;
+  b=Gdj80k5LN6kaKcziMVIW/Q2gUdVtk/FznFrutJdYOTYsKPP4KJs3kw5J
+   SfyFjQN/rWhjZOU22MdTewg7C8pGq0lyqN0enL+7/X7y/9eRPRQc2JEg6
+   BFZrSvcfVIsT1mCEqmVi/3wOAya3qsr7JkJSoz6NrfxNS8mDxykUoN9O7
+   olqQ5+5kaHEJvIKRQpaNkjJh8AyUqkg2pr86c11/aRqphbNN5t1EgsRzJ
+   Jth43ADR4rEm091JG2kYnHFIkC4Fi5Z82opiwCXMQTmyzEut+mlRjHqiw
+   4RnijAVySxFvA3psVTQh66feaa6yizQINystLi4QdJ8QrXNncDRvaoGj2
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="229527591"
+X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
+   d="scan'208";a="229527591"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 04:02:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
+   d="scan'208";a="667723301"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 04 Jan 2022 04:02:48 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n4iWd-000FIc-Fg; Tue, 04 Jan 2022 12:02:47 +0000
+Date:   Tue, 4 Jan 2022 20:02:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Huazhong Tan <tanhuazhong@huawei.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c:127:4: warning:
+ 'strncpy' output truncated before terminating nul copying as many bytes from
+ a string as its length
+Message-ID: <202201041959.jwL02W69-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If queue_dma_alignment(rq->q), then blk_rq_map_user_iov() will call
-bio_copy_user_iov() and not bio_map_user_iov(). So, bio_map_user_iov() does
-not need to handle the queue_dma_alignment(rq->q) case in any special way.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c9e6606c7fe92b50a02ce51dda82586ebdf99b48
+commit: 77e9184869c9fb00a482357ea8eef3bd7ae3d45a net: hns3: refactor dump bd info of debugfs
+date:   8 months ago
+config: x86_64-buildonly-randconfig-r006-20220103 (https://download.01.org/0day-ci/archive/20220104/202201041959.jwL02W69-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=77e9184869c9fb00a482357ea8eef3bd7ae3d45a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 77e9184869c9fb00a482357ea8eef3bd7ae3d45a
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/ethernet/hisilicon/hns3/
 
-Remove this dead branch from bio_map_user_iov().
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Suggested-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+All warnings (new ones prefixed by >>):
+
+   drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c: In function 'hns3_dbg_fill_content.constprop':
+>> drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c:127:4: warning: 'strncpy' output truncated before terminating nul copying as many bytes from a string as its length [-Wstringop-truncation]
+     127 |    strncpy(pos, items[i].name, strlen(items[i].name));
+         |    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c:125:4: warning: 'strncpy' output truncated before terminating nul copying as many bytes from a string as its length [-Wstringop-truncation]
+     125 |    strncpy(pos, result[i], strlen(result[i]));
+         |    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/strncpy +127 drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c
+
+   114	
+   115	static void hns3_dbg_fill_content(char *content, u16 len,
+   116					  const struct hns3_dbg_item *items,
+   117					  const char **result, u16 size)
+   118	{
+   119		char *pos = content;
+   120		u16 i;
+   121	
+   122		memset(content, ' ', len);
+   123		for (i = 0; i < size; i++) {
+   124			if (result)
+   125				strncpy(pos, result[i], strlen(result[i]));
+   126			else
+ > 127				strncpy(pos, items[i].name, strlen(items[i].name));
+   128	
+   129			pos += strlen(items[i].name) + items[i].interval;
+   130		}
+   131	
+   132		*pos++ = '\n';
+   133		*pos++ = '\0';
+   134	}
+   135	
+
 ---
- block/blk-map.c | 41 ++++++++++++++++++-----------------------
- 1 file changed, 18 insertions(+), 23 deletions(-)
-
-diff --git a/block/blk-map.c b/block/blk-map.c
-index 4526adde0156..1cccdb776905 100644
---- a/block/blk-map.c
-+++ b/block/blk-map.c
-@@ -260,31 +260,26 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
- 
- 		npages = DIV_ROUND_UP(offs + bytes, PAGE_SIZE);
- 
--		if (unlikely(offs & queue_dma_alignment(rq->q))) {
--			ret = -EINVAL;
--			j = 0;
--		} else {
--			for (j = 0; j < npages; j++) {
--				struct page *page = pages[j];
--				unsigned int n = PAGE_SIZE - offs;
--				bool same_page = false;
--
--				if (n > bytes)
--					n = bytes;
--
--				if (!bio_add_hw_page(rq->q, bio, page, n, offs,
--						     max_sectors, &same_page)) {
--					if (same_page)
--						put_page(page);
--					break;
--				}
--
--				added += n;
--				bytes -= n;
--				offs = 0;
-+		for (j = 0; j < npages; j++) {
-+			struct page *page = pages[j];
-+			unsigned int n = PAGE_SIZE - offs;
-+			bool same_page = false;
-+
-+			if (n > bytes)
-+				n = bytes;
-+
-+			if (!bio_add_hw_page(rq->q, bio, page, n, offs,
-+					     max_sectors, &same_page)) {
-+				if (same_page)
-+					put_page(page);
-+				break;
- 			}
--			iov_iter_advance(iter, added);
-+
-+			added += n;
-+			bytes -= n;
-+			offs = 0;
- 		}
-+		iov_iter_advance(iter, added);
- 		/*
- 		 * release the pages we didn't map into the bio, if any
- 		 */
--- 
-2.17.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

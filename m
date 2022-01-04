@@ -2,71 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1C64844C4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:36:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 966C24844D7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234904AbiADPgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 10:36:38 -0500
-Received: from relmlor1.renesas.com ([210.160.252.171]:32370 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S234864AbiADPgh (ORCPT
+        id S234997AbiADPih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 10:38:37 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:39662 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234912AbiADPi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 10:36:37 -0500
-X-IronPort-AV: E=Sophos;i="5.88,261,1635174000"; 
-   d="scan'208";a="105487996"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 05 Jan 2022 00:36:35 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 17E414009F7D;
-        Wed,  5 Jan 2022 00:36:33 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] gpio: rcar: Propagate errors from devm_request_irq()
-Date:   Tue,  4 Jan 2022 15:36:15 +0000
-Message-Id: <20220104153615.13393-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 4 Jan 2022 10:38:28 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id AE6FCCE1804;
+        Tue,  4 Jan 2022 15:38:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06FF4C36AF8;
+        Tue,  4 Jan 2022 15:38:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641310705;
+        bh=q3J++ppIXFGs4Zc7BRSjku9Sf288+Vh9wEACN8vGaUY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Ei62MY/0Yo6URqU+Id+DonIwUoAul+ZpuGo4TqGXPQLvV3jEltzw+69e0pe1jaZtM
+         zTAqbws1DuBRyt7gX6QKyrl+VRsxyN2DpVUF4pEOGDyGqQOaz4aiaWNQs9NFNHi/7L
+         x3xj7mAKTH2FACLUsdXagHaGwY7ci5TCdNikghqK3k9phjuSvZTUINpeekbBdfEWJU
+         gNe8Zbgmm2Llkr+mnkKwzaADczia/nr/6gpugDY7FWEzk4MjvjboT0fb9tKJIkaGkR
+         ygSvwlikm8dRHiIhgZOEqjQGpCCHLtWnLoqsx3Uu2wBH2fFk5B9kOSq8uHKjkWMI/L
+         N8idsmyL8T9Fw==
+Received: by mail-ed1-f49.google.com with SMTP id z9so80118123edm.10;
+        Tue, 04 Jan 2022 07:38:24 -0800 (PST)
+X-Gm-Message-State: AOAM53188MdY8NgwMVnXkHtzg7MpcGYl64ji3NgKxwzEF0+co1DL+8u2
+        UhDcEjWIROZKQa2TR7ExA2F2x0thzLutiUhoxQ==
+X-Google-Smtp-Source: ABdhPJzeuvUC4UoexfET3DhOEOU9wx5fuYXHhi72Y0OrlhYosLvDPgd32gKjmTbWPfbTvIxJanUf34tGd9xPHq6+aRc=
+X-Received: by 2002:a17:906:eb04:: with SMTP id mb4mr38698526ejb.27.1641310703360;
+ Tue, 04 Jan 2022 07:38:23 -0800 (PST)
+MIME-Version: 1.0
+References: <20220104134843.27382-1-liyao@cdjrlc.com>
+In-Reply-To: <20220104134843.27382-1-liyao@cdjrlc.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 4 Jan 2022 09:38:11 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLQnqYyPiPFSdnBnbc=P5Bcpfs0zrzrQQZ=woZTWXTkKg@mail.gmail.com>
+Message-ID: <CAL_JsqLQnqYyPiPFSdnBnbc=P5Bcpfs0zrzrQQZ=woZTWXTkKg@mail.gmail.com>
+Subject: Re: [PATCH] scripts/dtc: return true/false (not 1/0) from bool functions
+To:     Yao Li <liyao@cdjrlc.com>
+Cc:     Frank Rowand <frowand.list@gmail.com>, devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver overrides the error code returned by devm_request_irq() to
--ENOENT. Switch to propagating the error code upstream.
+On Tue, Jan 4, 2022 at 7:50 AM Yao Li <liyao@cdjrlc.com> wrote:
+>
+> Signed-off-by: Yao Li <liyao@cdjrlc.com>
+> ---
+>  scripts/dtc/util.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
-Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-This patch depends on [1].
+All dtc changes go to upstream dtc project (and list) first and the
+kernel copy gets sync'ed back.
 
-[1] https://lkml.org/lkml/2021/12/22/633
----
- drivers/gpio/gpio-rcar.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/gpio/gpio-rcar.c b/drivers/gpio/gpio-rcar.c
-index 437baecc434e..bd2e16d6e21c 100644
---- a/drivers/gpio/gpio-rcar.c
-+++ b/drivers/gpio/gpio-rcar.c
-@@ -552,10 +552,10 @@ static int gpio_rcar_probe(struct platform_device *pdev)
- 		goto err0;
- 	}
- 
--	if (devm_request_irq(dev, p->irq_parent, gpio_rcar_irq_handler,
--			     IRQF_SHARED, name, p)) {
-+	ret = devm_request_irq(dev, p->irq_parent, gpio_rcar_irq_handler,
-+			       IRQF_SHARED, name, p);
-+	if (ret) {
- 		dev_err(dev, "failed to request IRQ\n");
--		ret = -ENOENT;
- 		goto err1;
- 	}
- 
--- 
-2.17.1
-
+Rob

@@ -2,169 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0836548435B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B17FA484367
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:31:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234189AbiADO3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:29:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234174AbiADO3L (ORCPT
+        id S234219AbiADOb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:31:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28234 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234182AbiADOb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:29:11 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688A9C061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 06:29:11 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id n30-20020a17090a5aa100b001b2b6509685so3309016pji.3
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 06:29:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WvukAqqIMpExigFVa+1wXXFL04/zNpt+dsk6xQ5zeLE=;
-        b=pCa1FV0Tz/uvA2Z6W33ptJzic6KvrDtq39+8MrnZVLQcrULnLLYl6TcLNKMiDwArK1
-         f8UtS25nf5Kv4T4DC7d1jpPVjOOPH/4YD7Yb6v+TO5gQFCkgh84W6F5Xo1JHC5ugdDuc
-         opNdN0JdNj69t4kl6o0lf1kL7mIwwYrLTOC3N3cBir/wuTGNo+vgnV1xVWQBqkDxVyGh
-         14Gjj+zYWfz0w5aew3zRPUKwM1erIqNbuXabdArWawnhcrOgkZsi6OQUYjwNf9qN6p2R
-         kJpzG3wFw45qyUwK7cycRiRTDAb7s6FkdibziD/+A/s6qFLYQ0JW1hfcxKKD34blRQxW
-         KqkA==
+        Tue, 4 Jan 2022 09:31:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641306685;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PSbFiIkCa7pMhGDthWmAfMNT0dx4lGgrz3BAfDoZH5c=;
+        b=JnEIsbCTr22Sa5c6cNYIhBUQ62oGMMX6jMl/cLMplqh0yvDk/5RtQx09Hk7ZdQB9K3edaE
+        Z0GkrYVN33Pr+IGratkg4TbMngLrDjwuXFaPVkXhAP4dAre857JA4EwkQVDTfvP8Kp8Jy4
+        BvrGyB5bxdK+upTw5enAjyIiIilNA/Q=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-644-Ga6OhM20P5-3yp9XFRLVIg-1; Tue, 04 Jan 2022 09:31:24 -0500
+X-MC-Unique: Ga6OhM20P5-3yp9XFRLVIg-1
+Received: by mail-wm1-f71.google.com with SMTP id x21-20020a05600c21d500b00345a25ea8cfso365008wmj.5
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 06:31:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WvukAqqIMpExigFVa+1wXXFL04/zNpt+dsk6xQ5zeLE=;
-        b=DwsGOI43YhrlLQE6chRSaVlezUqlZSLUqdUHg249QI9M9ZHpsWxIYt6bKFaFmF4PyY
-         9FuJXqLrvPBEHA7zUinocoyGk2YwQUEEj5m/8gn38olX98EjPRd3U7WMJDjBqAT9mgq2
-         F1/HIplhulExxdTsrnwLV87iGXO+pjEYKTDjVZ9QW9AdUqNWp0ts2W7hiwfpuIi4cDSl
-         QokOUqpthTRylDSsGL2/n4o8ibliz5hvwxkDX7G6Sa4aA77Mcm2cIV8B+99sSVLOJefB
-         CT146oIMzWBCCe4SaZCHLI5r877tIgxVyPZ3VhIuD5eaUYa7OYmCBBFy8VqZ9K7pQ7XF
-         BLEg==
-X-Gm-Message-State: AOAM533QIc3sfkQ6h0SznuhCZhji96c8RJpQas2zo2NAuE3rSE4a8CW8
-        UxNkYZ5sK+1y2EfM4FoTnJ+bD7vx2hn/nThUsyum4g==
-X-Google-Smtp-Source: ABdhPJz/LplF3gfbp7D6wtf71ae2gJxJJVBqMdnj1fk+ayjLSUbdaDRYvvB+Xm+DybrPHlsSDc0XjkRgtuT1wLyB7hQ=
-X-Received: by 2002:a17:903:110c:b0:149:8018:e9d4 with SMTP id
- n12-20020a170903110c00b001498018e9d4mr36711837plh.117.1641306550920; Tue, 04
- Jan 2022 06:29:10 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=PSbFiIkCa7pMhGDthWmAfMNT0dx4lGgrz3BAfDoZH5c=;
+        b=Vs0b2vZlglzG4VVy9rtAssK7md0XBJv6bqN1SRqpfRCbL18lmDje/pzV77RHVy2OSN
+         7ME8grFNVGVL1OtXDj/tapzB7XKcEYknZzlfZvImiBE0FsgRFnq2dh5HxXyiQzPTBVHC
+         1Zcwi0jPJBRpkiuZ7TnrQvCVEFN+HsVSdhDhIC/rzEGNlHN51JrqJibA69EqerEf2Ucv
+         ML2QxTxRQHu60ShGupjEuLIlDAXhUNFfzf95ZAhrJTQcyaDaq5TeEwLHAiC44PSB6ANt
+         o5UEk0yRlh75S/WCcVt1Dgvcj2i32WQiQ5QPQjsnPiHNsocWXUwTHJ1pA0e/qykIRqOA
+         Ltmg==
+X-Gm-Message-State: AOAM533V1p0nZwsg2c8Dn0YX2BQ9C1WZ9gN2gG4YgspEomKz5c/7DEMh
+        uiiiUijb2arasYFzj1wM6RUBW2hnFhkerJh/j43wZ6BVQ0CrB57ap/TLuR9AnLmEKEDdqDNPSLs
+        shbT/lVZAlQZZa34mFZFEZSCt
+X-Received: by 2002:a1c:2b42:: with SMTP id r63mr35437017wmr.80.1641306682489;
+        Tue, 04 Jan 2022 06:31:22 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzoD394cIAvWOPJzX1c3qieoiNBQSBerEgc05mgXT5JV6oRQFZPfL/TP84Ze3JTIZi6PiROVQ==
+X-Received: by 2002:a1c:2b42:: with SMTP id r63mr35437000wmr.80.1641306682335;
+        Tue, 04 Jan 2022 06:31:22 -0800 (PST)
+Received: from [192.168.3.132] (p5b0c62bd.dip0.t-ipconnect.de. [91.12.98.189])
+        by smtp.gmail.com with ESMTPSA id a2sm43078904wri.17.2022.01.04.06.31.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jan 2022 06:31:21 -0800 (PST)
+Message-ID: <10ec73d4-6658-4f60-abe1-84ece53ca373@redhat.com>
+Date:   Tue, 4 Jan 2022 15:31:20 +0100
 MIME-Version: 1.0
-References: <20211222083350.18514-1-linmq006@gmail.com>
-In-Reply-To: <20211222083350.18514-1-linmq006@gmail.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Tue, 4 Jan 2022 15:29:00 +0100
-Message-ID: <CAG3jFysrEDzYVbpwDVK2OJYMsEKRqpcBexK__m08A6vevm=ubw@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: anx7625: Fix null vs IS_ERR() checking in anx7625_register_i2c_dummy_clients
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Pi-Hsun Shih <pihsun@chromium.org>,
-        Xin Ji <xji@analogixsemi.com>, Sam Ravnborg <sam@ravnborg.org>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: remove Xen tmem leftovers
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
+Cc:     Hugh Dickins <hughd@google.com>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20211224062246.1258487-1-hch@lst.de>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20211224062246.1258487-1-hch@lst.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Miaoqian,
+On 24.12.21 07:22, Christoph Hellwig wrote:
+> Hi all,
+> 
+> since the remove of the Xen tmem driver in 2019, the cleancache hooks are
+> entirely unused, as are large parts of frontswap.  This series against
+> linux-next (with the folio changes included) removes cleancaches, and cuts
+> down frontswap to the bits actually used by zswap.
+> 
 
-Thanks for submitting this fix.
+Just out of curiosity, why was tmem removed from Linux (or even Xen?).
+Do you have any information?
 
-On Wed, 22 Dec 2021 at 09:33, Miaoqian Lin <linmq006@gmail.com> wrote:
->
-> Since i2c_new_client_device() function return error pointers.
-> The i2c_new_dummy_device() function does not return NULL, It returns error
-> pointers too. Using IS_ERR() to check the return value to fix this.
->
-> Fixes: 8bdfc5dae4e3("drm/bridge: anx7625: Add anx7625 MIPI DSI/DPI to DP")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
->  drivers/gpu/drm/bridge/analogix/anx7625.c | 32 ++++++++++++++++-------
->  1 file changed, 23 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> index 1a871f6b6822..eb72aa6aedd6 100644
-> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> @@ -1637,40 +1637,54 @@ static const struct drm_bridge_funcs anx7625_bridge_funcs = {
->  static int anx7625_register_i2c_dummy_clients(struct anx7625_data *ctx,
->                                               struct i2c_client *client)
->  {
-> +       int err = 0;
-> +
->         ctx->i2c.tx_p0_client = i2c_new_dummy_device(client->adapter,
->                                                      TX_P0_ADDR >> 1);
-> -       if (!ctx->i2c.tx_p0_client)
-> -               return -ENOMEM;
-> +       if (IS_ERR(ctx->i2c.tx_p0_client))
-> +               return PTR_ERR(ctx->i2c.tx_p0_client);
->
->         ctx->i2c.tx_p1_client = i2c_new_dummy_device(client->adapter,
->                                                      TX_P1_ADDR >> 1);
-> -       if (!ctx->i2c.tx_p1_client)
-> +       if (IS_ERR(ctx->i2c.tx_p1_client)) {
-> +               err = PTR_ERR(ctx->i2c.tx_p1_client);
->                 goto free_tx_p0;
-> +       }
->
->         ctx->i2c.tx_p2_client = i2c_new_dummy_device(client->adapter,
->                                                      TX_P2_ADDR >> 1);
-> -       if (!ctx->i2c.tx_p2_client)
-> +       if (IS_ERR(ctx->i2c.tx_p2_client)) {
-> +               err = PTR_ERR(ctx->i2c.tx_p2_client);
->                 goto free_tx_p1;
-> +       }
->
->         ctx->i2c.rx_p0_client = i2c_new_dummy_device(client->adapter,
->                                                      RX_P0_ADDR >> 1);
-> -       if (!ctx->i2c.rx_p0_client)
-> +       if (IS_ERR(ctx->i2c.rx_p0_client)) {
-> +               err = PTR_ERR(ctx->i2c.rx_p0_client);
->                 goto free_tx_p2;
-> +       }
->
->         ctx->i2c.rx_p1_client = i2c_new_dummy_device(client->adapter,
->                                                      RX_P1_ADDR >> 1);
-> -       if (!ctx->i2c.rx_p1_client)
-> +       if (IS_ERR(ctx->i2c.rx_p1_client)) {
-> +               err = PTR_ERR(ctx->i2c.rx_p1_client);
->                 goto free_rx_p0;
-> +       }
->
->         ctx->i2c.rx_p2_client = i2c_new_dummy_device(client->adapter,
->                                                      RX_P2_ADDR >> 1);
-> -       if (!ctx->i2c.rx_p2_client)
-> +       if (IS_ERR(ctx->i2c.rx_p2_client)) {
-> +               err = PTR_ERR(ctx->i2c.rx_p2_client);
->                 goto free_rx_p1;
-> +       }
->
->         ctx->i2c.tcpc_client = i2c_new_dummy_device(client->adapter,
->                                                     TCPC_INTERFACE_ADDR >> 1);
-> -       if (!ctx->i2c.tcpc_client)
-> +       if (IS_ERR(ctx->i2c.tcpc_client)) {
-> +               err = PTR_ERR(ctx->i2c.tcpc_client);
->                 goto free_rx_p2;
-> +       }
->
->         return 0;
->
-> @@ -1687,7 +1701,7 @@ static int anx7625_register_i2c_dummy_clients(struct anx7625_data *ctx,
->  free_tx_p0:
->         i2c_unregister_device(ctx->i2c.tx_p0_client);
->
-> -       return -ENOMEM;
-> +       return err;
->  }
->
->  static void anx7625_unregister_i2c_dummy_clients(struct anx7625_data *ctx)
-> --
-> 2.17.1
->
+Happy to see this cleanup.
 
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+-- 
+Thanks,
+
+David / dhildenb
+

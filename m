@@ -2,221 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 946BB484231
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B4D48423C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:19:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233370AbiADNRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 08:17:55 -0500
-Received: from mga18.intel.com ([134.134.136.126]:57156 "EHLO mga18.intel.com"
+        id S233428AbiADNTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 08:19:53 -0500
+Received: from gloria.sntech.de ([185.11.138.130]:38740 "EHLO gloria.sntech.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229568AbiADNRw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 08:17:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641302272; x=1672838272;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=kJOqrUbJmYVCfX1CriSTBll9xoJcUY8icC5XZKh6Ifw=;
-  b=V2a1HPAcsVgQfzg+h4KhkwMFcmTGZ8B92BnXhfOuiiXvNNMEwPsJrkCA
-   PXcYs+pZg9bC9A+gA7HjXSWfgW3VIRvNcugcIk6M2GOBTiyPa4SeNwyvr
-   gFqlpy9GWIzsgh3rQKVpWHHTOkR5xhZJpusrDiKTCyU7nfEcUN7ko/CH3
-   8waL2dECyS0slLXKI/NKv/0cr90JVzz27c0+W3G2iNO9/u6JOPWYJiYvQ
-   dzRBguuQhYL3OE9QOoMXR3SEsS/JJpO/q99R5UcBSuNZPfMWMm3iw43/s
-   yRiwuiLh68ylg8HmkI5mQyqS6TBjZEmfD222H8gxNjDpaRL+GEBB1kH/Y
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="229040445"
-X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
-   d="scan'208";a="229040445"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 05:17:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
-   d="scan'208";a="526045611"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 04 Jan 2022 05:17:50 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n4jhG-000FO5-2P; Tue, 04 Jan 2022 13:17:50 +0000
-Date:   Tue, 04 Jan 2022 21:17:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 30fddd0b8484a19a6d49503265b2da33f1569ec4
-Message-ID: <61d448da.u6+SN783ST5mU7kD%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S231189AbiADNTw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 08:19:52 -0500
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1n4jj4-0004br-8W; Tue, 04 Jan 2022 14:19:42 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Cc:     Atish Patra <atish.patra@wdc.com>, Anup Patel <anup.patel@wdc.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heinrich Schuchardt <xypron.glpk@gmx.de>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Atish Patra <atishp@rivosinc.com>
+Subject: Re: [PATCH v5 1/5] RISC-V: KVM: Mark the existing SBI implementation as v01
+Date:   Tue, 04 Jan 2022 14:19:41 +0100
+Message-ID: <6615284.qex3tTltCR@diego>
+In-Reply-To: <20211118083912.981995-2-atishp@rivosinc.com>
+References: <20211118083912.981995-1-atishp@rivosinc.com> <20211118083912.981995-2-atishp@rivosinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 30fddd0b8484a19a6d49503265b2da33f1569ec4  Merge ras/core into tip/master
+Hi Atish,
 
-elapsed time: 3055m
+Am Donnerstag, 18. November 2021, 09:39:08 CET schrieb Atish Patra:
+> From: Atish Patra <atish.patra@wdc.com>
+> 
+> The existing SBI specification impelementation follows v0.1
+> specification. The latest specification allows more
+> scalability and performance improvements.
+> 
+> Rename the existing implementation as v01 and provide a way to allow
+> future extensions.
+> 
+> Reviewed-by: Anup Patel <anup.patel@wdc.com>
+> Signed-off-by: Atish Patra <atish.patra@wdc.com>
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> ---
 
-configs tested: 148
-configs skipped: 3
+> diff --git a/arch/riscv/kvm/vcpu_sbi.c b/arch/riscv/kvm/vcpu_sbi.c
+> index eb3c045edf11..32376906ff20 100644
+> --- a/arch/riscv/kvm/vcpu_sbi.c
+> +++ b/arch/riscv/kvm/vcpu_sbi.c
+> @@ -1,5 +1,5 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> -/**
+> +/*
+>   * Copyright (c) 2019 Western Digital Corporation or its affiliates.
+>   *
+>   * Authors:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+This got already fixed by [0]
+commit 0e2e64192100 ("riscv: kvm: fix non-kernel-doc comment block")
+so this patch doesn't apply cleanly anymore.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-sh                            shmin_defconfig
-xtensa                       common_defconfig
-arm                         cm_x300_defconfig
-m68k                        m5407c3_defconfig
-nios2                         3c120_defconfig
-arm                        spear6xx_defconfig
-mips                            ar7_defconfig
-powerpc                 mpc834x_mds_defconfig
-xtensa                         virt_defconfig
-powerpc                     ep8248e_defconfig
-mips                           ci20_defconfig
-powerpc                      chrp32_defconfig
-arm                          exynos_defconfig
-arc                        vdk_hs38_defconfig
-sh                        dreamcast_defconfig
-mips                           gcw0_defconfig
-arm                             rpc_defconfig
-arm                         nhk8815_defconfig
-powerpc                   motionpro_defconfig
-sh                         ap325rxa_defconfig
-ia64                                defconfig
-ia64                          tiger_defconfig
-mips                      loongson3_defconfig
-mips                           ip32_defconfig
-sh                   sh7724_generic_defconfig
-powerpc                       ppc64_defconfig
-arc                                 defconfig
-powerpc                     taishan_defconfig
-xtensa                  nommu_kc705_defconfig
-arm                        shmobile_defconfig
-arm64                            alldefconfig
-mips                         tb0226_defconfig
-arm                           viper_defconfig
-um                                  defconfig
-arm                  randconfig-c002-20220103
-arm                  randconfig-c002-20220102
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a015-20220102
-x86_64               randconfig-a012-20220102
-x86_64               randconfig-a014-20220102
-x86_64               randconfig-a013-20220102
-x86_64               randconfig-a011-20220102
-x86_64               randconfig-a016-20220102
-i386                 randconfig-a012-20220102
-i386                 randconfig-a016-20220102
-i386                 randconfig-a014-20220102
-i386                 randconfig-a015-20220102
-i386                 randconfig-a011-20220102
-i386                 randconfig-a013-20220102
-s390                 randconfig-r044-20220102
-arc                  randconfig-r043-20220102
-riscv                randconfig-r042-20220102
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                    rhel-8.3-kselftests
+This looks like it is a prerequisite for the sparse-hart-id series,
+so a respin might be in order.
 
-clang tested configs:
-arm                  randconfig-c002-20220102
-mips                 randconfig-c004-20220102
-i386                 randconfig-c001-20220102
-riscv                randconfig-c006-20220102
-powerpc              randconfig-c003-20220102
-s390                 randconfig-c005-20220102
-x86_64               randconfig-c007-20220102
-mips                           rs90_defconfig
-powerpc                   microwatt_defconfig
-arm                       aspeed_g4_defconfig
-powerpc                    socrates_defconfig
-arm                          pcm027_defconfig
-arm                    vt8500_v6_v7_defconfig
-powerpc                          allmodconfig
-mips                        omega2p_defconfig
-powerpc                 mpc836x_rdk_defconfig
-arm                            mmp2_defconfig
-arm                        mvebu_v5_defconfig
-hexagon                             defconfig
-mips                  cavium_octeon_defconfig
-mips                        maltaup_defconfig
-x86_64               randconfig-a001-20220102
-x86_64               randconfig-a002-20220102
-x86_64               randconfig-a003-20220102
-x86_64               randconfig-a005-20220102
-x86_64               randconfig-a004-20220102
-x86_64               randconfig-a006-20220102
-i386                 randconfig-a004-20220102
-i386                 randconfig-a001-20220102
-i386                 randconfig-a002-20220102
-i386                 randconfig-a003-20220102
-i386                 randconfig-a005-20220102
-i386                 randconfig-a006-20220102
-x86_64               randconfig-a014-20220103
-x86_64               randconfig-a013-20220103
-x86_64               randconfig-a011-20220103
-x86_64               randconfig-a012-20220103
-x86_64               randconfig-a015-20220103
-x86_64               randconfig-a016-20220103
-i386                 randconfig-a012-20220103
-i386                 randconfig-a014-20220103
-i386                 randconfig-a011-20220103
-i386                 randconfig-a013-20220103
-i386                 randconfig-a016-20220103
-i386                 randconfig-a015-20220103
-hexagon              randconfig-r045-20220102
-hexagon              randconfig-r041-20220102
+Heiko
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0e2e641921000ffc647b12918cdfcc504a9f6e3b
+
+> @@ -12,9 +12,25 @@
+>  #include <asm/csr.h>
+>  #include <asm/sbi.h>
+>  #include <asm/kvm_vcpu_timer.h>
+> +#include <asm/kvm_vcpu_sbi.h>
+>  
+> -#define SBI_VERSION_MAJOR			0
+> -#define SBI_VERSION_MINOR			1
+> +static int kvm_linux_err_map_sbi(int err)
+> +{
+> +	switch (err) {
+> +	case 0:
+> +		return SBI_SUCCESS;
+> +	case -EPERM:
+> +		return SBI_ERR_DENIED;
+> +	case -EINVAL:
+> +		return SBI_ERR_INVALID_PARAM;
+> +	case -EFAULT:
+> +		return SBI_ERR_INVALID_ADDRESS;
+> +	case -EOPNOTSUPP:
+> +		return SBI_ERR_NOT_SUPPORTED;
+> +	default:
+> +		return SBI_ERR_FAILURE;
+> +	};
+> +}
+>  
+>  static void kvm_riscv_vcpu_sbi_forward(struct kvm_vcpu *vcpu,
+>  				       struct kvm_run *run)
+> @@ -72,21 +88,19 @@ static void kvm_sbi_system_shutdown(struct kvm_vcpu *vcpu,
+>  	run->exit_reason = KVM_EXIT_SYSTEM_EVENT;
+>  }
+>  
+> -int kvm_riscv_vcpu_sbi_ecall(struct kvm_vcpu *vcpu, struct kvm_run *run)
+> +static int kvm_sbi_ext_v01_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+> +				      unsigned long *out_val,
+> +				      struct kvm_cpu_trap *utrap,
+> +				      bool *exit)
+>  {
+>  	ulong hmask;
+> -	int i, ret = 1;
+> +	int i, ret = 0;
+>  	u64 next_cycle;
+>  	struct kvm_vcpu *rvcpu;
+> -	bool next_sepc = true;
+>  	struct cpumask cm, hm;
+>  	struct kvm *kvm = vcpu->kvm;
+> -	struct kvm_cpu_trap utrap = { 0 };
+>  	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
+>  
+> -	if (!cp)
+> -		return -EINVAL;
+> -
+>  	switch (cp->a7) {
+>  	case SBI_EXT_0_1_CONSOLE_GETCHAR:
+>  	case SBI_EXT_0_1_CONSOLE_PUTCHAR:
+> @@ -95,8 +109,7 @@ int kvm_riscv_vcpu_sbi_ecall(struct kvm_vcpu *vcpu, struct kvm_run *run)
+>  		 * handled in kernel so we forward these to user-space
+>  		 */
+>  		kvm_riscv_vcpu_sbi_forward(vcpu, run);
+> -		next_sepc = false;
+> -		ret = 0;
+> +		*exit = true;
+>  		break;
+>  	case SBI_EXT_0_1_SET_TIMER:
+>  #if __riscv_xlen == 32
+> @@ -104,47 +117,42 @@ int kvm_riscv_vcpu_sbi_ecall(struct kvm_vcpu *vcpu, struct kvm_run *run)
+>  #else
+>  		next_cycle = (u64)cp->a0;
+>  #endif
+> -		kvm_riscv_vcpu_timer_next_event(vcpu, next_cycle);
+> +		ret = kvm_riscv_vcpu_timer_next_event(vcpu, next_cycle);
+>  		break;
+>  	case SBI_EXT_0_1_CLEAR_IPI:
+> -		kvm_riscv_vcpu_unset_interrupt(vcpu, IRQ_VS_SOFT);
+> +		ret = kvm_riscv_vcpu_unset_interrupt(vcpu, IRQ_VS_SOFT);
+>  		break;
+>  	case SBI_EXT_0_1_SEND_IPI:
+>  		if (cp->a0)
+>  			hmask = kvm_riscv_vcpu_unpriv_read(vcpu, false, cp->a0,
+> -							   &utrap);
+> +							   utrap);
+>  		else
+>  			hmask = (1UL << atomic_read(&kvm->online_vcpus)) - 1;
+> -		if (utrap.scause) {
+> -			utrap.sepc = cp->sepc;
+> -			kvm_riscv_vcpu_trap_redirect(vcpu, &utrap);
+> -			next_sepc = false;
+> +		if (utrap->scause)
+>  			break;
+> -		}
+> +
+>  		for_each_set_bit(i, &hmask, BITS_PER_LONG) {
+>  			rvcpu = kvm_get_vcpu_by_id(vcpu->kvm, i);
+> -			kvm_riscv_vcpu_set_interrupt(rvcpu, IRQ_VS_SOFT);
+> +			ret = kvm_riscv_vcpu_set_interrupt(rvcpu, IRQ_VS_SOFT);
+> +			if (ret < 0)
+> +				break;
+>  		}
+>  		break;
+>  	case SBI_EXT_0_1_SHUTDOWN:
+>  		kvm_sbi_system_shutdown(vcpu, run, KVM_SYSTEM_EVENT_SHUTDOWN);
+> -		next_sepc = false;
+> -		ret = 0;
+> +		*exit = true;
+>  		break;
+>  	case SBI_EXT_0_1_REMOTE_FENCE_I:
+>  	case SBI_EXT_0_1_REMOTE_SFENCE_VMA:
+>  	case SBI_EXT_0_1_REMOTE_SFENCE_VMA_ASID:
+>  		if (cp->a0)
+>  			hmask = kvm_riscv_vcpu_unpriv_read(vcpu, false, cp->a0,
+> -							   &utrap);
+> +							   utrap);
+>  		else
+>  			hmask = (1UL << atomic_read(&kvm->online_vcpus)) - 1;
+> -		if (utrap.scause) {
+> -			utrap.sepc = cp->sepc;
+> -			kvm_riscv_vcpu_trap_redirect(vcpu, &utrap);
+> -			next_sepc = false;
+> +		if (utrap->scause)
+>  			break;
+> -		}
+> +
+>  		cpumask_clear(&cm);
+>  		for_each_set_bit(i, &hmask, BITS_PER_LONG) {
+>  			rvcpu = kvm_get_vcpu_by_id(vcpu->kvm, i);
+> @@ -154,22 +162,97 @@ int kvm_riscv_vcpu_sbi_ecall(struct kvm_vcpu *vcpu, struct kvm_run *run)
+>  		}
+>  		riscv_cpuid_to_hartid_mask(&cm, &hm);
+>  		if (cp->a7 == SBI_EXT_0_1_REMOTE_FENCE_I)
+> -			sbi_remote_fence_i(cpumask_bits(&hm));
+> +			ret = sbi_remote_fence_i(cpumask_bits(&hm));
+>  		else if (cp->a7 == SBI_EXT_0_1_REMOTE_SFENCE_VMA)
+> -			sbi_remote_hfence_vvma(cpumask_bits(&hm),
+> +			ret = sbi_remote_hfence_vvma(cpumask_bits(&hm),
+>  						cp->a1, cp->a2);
+>  		else
+> -			sbi_remote_hfence_vvma_asid(cpumask_bits(&hm),
+> +			ret = sbi_remote_hfence_vvma_asid(cpumask_bits(&hm),
+>  						cp->a1, cp->a2, cp->a3);
+>  		break;
+>  	default:
+> +		ret = -EINVAL;
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_v01 = {
+> +	.extid_start = SBI_EXT_0_1_SET_TIMER,
+> +	.extid_end = SBI_EXT_0_1_SHUTDOWN,
+> +	.handler = kvm_sbi_ext_v01_handler,
+> +};
+> +
+> +static const struct kvm_vcpu_sbi_extension *sbi_ext[] = {
+> +	&vcpu_sbi_ext_v01,
+> +};
+> +
+> +const struct kvm_vcpu_sbi_extension *kvm_vcpu_sbi_find_ext(unsigned long extid)
+> +{
+> +	int i = 0;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(sbi_ext); i++) {
+> +		if (sbi_ext[i]->extid_start <= extid &&
+> +		    sbi_ext[i]->extid_end >= extid)
+> +			return sbi_ext[i];
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+> +int kvm_riscv_vcpu_sbi_ecall(struct kvm_vcpu *vcpu, struct kvm_run *run)
+> +{
+> +	int ret = 1;
+> +	bool next_sepc = true;
+> +	bool userspace_exit = false;
+> +	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
+> +	const struct kvm_vcpu_sbi_extension *sbi_ext;
+> +	struct kvm_cpu_trap utrap = { 0 };
+> +	unsigned long out_val = 0;
+> +	bool ext_is_v01 = false;
+> +
+> +	sbi_ext = kvm_vcpu_sbi_find_ext(cp->a7);
+> +	if (sbi_ext && sbi_ext->handler) {
+> +		if (cp->a7 >= SBI_EXT_0_1_SET_TIMER &&
+> +		    cp->a7 <= SBI_EXT_0_1_SHUTDOWN)
+> +			ext_is_v01 = true;
+> +		ret = sbi_ext->handler(vcpu, run, &out_val, &utrap, &userspace_exit);
+> +	} else {
+>  		/* Return error for unsupported SBI calls */
+>  		cp->a0 = SBI_ERR_NOT_SUPPORTED;
+> -		break;
+> +		goto ecall_done;
+> +	}
+> +
+> +	/* Handle special error cases i.e trap, exit or userspace forward */
+> +	if (utrap.scause) {
+> +		/* No need to increment sepc or exit ioctl loop */
+> +		ret = 1;
+> +		utrap.sepc = cp->sepc;
+> +		kvm_riscv_vcpu_trap_redirect(vcpu, &utrap);
+> +		next_sepc = false;
+> +		goto ecall_done;
+>  	}
+>  
+> +	/* Exit ioctl loop or Propagate the error code the guest */
+> +	if (userspace_exit) {
+> +		next_sepc = false;
+> +		ret = 0;
+> +	} else {
+> +		/**
+> +		 * SBI extension handler always returns an Linux error code. Convert
+> +		 * it to the SBI specific error code that can be propagated the SBI
+> +		 * caller.
+> +		 */
+> +		ret = kvm_linux_err_map_sbi(ret);
+> +		cp->a0 = ret;
+> +		ret = 1;
+> +	}
+> +ecall_done:
+>  	if (next_sepc)
+>  		cp->sepc += 4;
+> +	if (!ext_is_v01)
+> +		cp->a1 = out_val;
+>  
+>  	return ret;
+>  }
+> 
+
+
+
+

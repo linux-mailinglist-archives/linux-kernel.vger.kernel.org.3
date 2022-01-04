@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ADB04849AB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:05:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F035A4849B2
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:09:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233862AbiADVFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 16:05:02 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:56686 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233823AbiADVFB (ORCPT
+        id S233813AbiADVJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 16:09:29 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:35812 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232036AbiADVJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 16:05:01 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09392614B6;
-        Tue,  4 Jan 2022 21:05:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59ADFC36AE0;
-        Tue,  4 Jan 2022 21:05:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641330300;
-        bh=UqJw3mKeb1L+ok0+XSeNdOLrQu68Adeve9BZkDGU/gA=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=PnDkNfCkv+YJUUt+W4jQGo70zl4lsWo6YsvNXaq1Tz6e4MdalqkVKejvQljRJsVz3
-         +OPSP1wP5XD5F+lpgCrINcyW4XH6CILXbFC5NHfIZJBiIRbCaEAe+6F1BLAt9kEQaW
-         bquYv+kE5p+KOwJYfBGToixAPHuYi+ckNoiN1+O20a4C0jToM9uMBIE75OqhkWmL0+
-         40AwNChXURGuzBrElIyDoQUU0zKLO7+LxB5eodquZFvboLfnmxz1SznBCwUII4mxfJ
-         ErpxG7UgReCbbbrk4fr5EKJxOoOi7oYDgb67uL0bHYlcwgBLGagE2KeFEKEkgGnX04
-         7umGUseh4zWyA==
-Content-Type: text/plain; charset="utf-8"
+        Tue, 4 Jan 2022 16:09:29 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 2FAAC1F43DE3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1641330567;
+        bh=S9/BYZv6PF/gittsjCjf6Ha+s2qRbnqJMTXw19zodsE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VlLXUvcijE8ot99aTIGJvj3yIPDf48f9CB5DQLS09WTm+98nYwVtQZ5JBxe/IzSlC
+         4ZVCFpa1hASJFuRYiiUYyWgoXjZE5ZJQAoNinGYqYQNQSZF55Aj9B5bWcxFbR0kgRn
+         m5dDs6NngW9biq7l4l1G1gp5xOiNRcQJH3B3dNz0H6G1SiEyJ1nySqJnjfPoc2v0My
+         6bLyk2TRNmejgVZ6QubIz/JuP2767HkYLLKgX5e64W+AYJB+PXE0qnY+fHWkhugH5Q
+         b5Zzqchjp8zaRbR1PqpnWY9uFRqQ4FkiYEIzwKGsVxLzaz9QdeR7TykbrrKSjaY/9a
+         6PXTb7d6J5J6Q==
+Date:   Wed, 5 Jan 2022 02:09:20 +0500
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     usama.anjum@collabora.com
+Subject: [PATCH] iio: frequency: admv1013: remove the always true condition
+Message-ID: <YdS3gJYtECMaDDjA@debian-BULLSEYE-live-builder-AMD64>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1639866882-9578-1-git-send-email-abel.vesa@nxp.com>
-References: <1639866882-9578-1-git-send-email-abel.vesa@nxp.com>
-Subject: Re: [GIT PULL] clk: imx: Updates for v5.17
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     NXP Linux Team <linux-imx@nxp.com>, linux-clk@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-To:     Abel Vesa <abel.vesa@nxp.com>,
-        Mike Turquette <mturquette@baylibre.com>
-Date:   Tue, 04 Jan 2022 13:04:59 -0800
-User-Agent: alot/0.9.1
-Message-Id: <20220104210500.59ADFC36AE0@smtp.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Abel Vesa (2021-12-18 14:34:42)
-> The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0d=
-bf:
->=20
->   Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
->=20
-> are available in the Git repository at:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/abelvesa/linux.git/ tags/=
-clk-imx-5.17
->=20
-> for you to fetch changes up to 9dd81021084ff22cf88a180d720f4f4b47392059:
->=20
->   clk: imx8mp: Fix the parent clk of the audio_root_clk (2021-11-22 17:33=
-:12 +0200)
->=20
-> ----------------------------------------------------------------
+unsigned int variable is always greater than or equal to zero. Make the
+if condition simple.
 
-Thanks. Pulled into clk-next
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+ drivers/iio/frequency/admv1013.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/iio/frequency/admv1013.c b/drivers/iio/frequency/admv1013.c
+index 6cdeb50143af..3f3c478e9baa 100644
+--- a/drivers/iio/frequency/admv1013.c
++++ b/drivers/iio/frequency/admv1013.c
+@@ -348,7 +348,7 @@ static int admv1013_update_mixer_vgate(struct admv1013_state *st)
+ 
+ 	vcm = regulator_get_voltage(st->reg);
+ 
+-	if (vcm >= 0 && vcm < 1800000)
++	if (vcm < 1800000)
+ 		mixer_vgate = (2389 * vcm / 1000000 + 8100) / 100;
+ 	else if (vcm > 1800000 && vcm < 2600000)
+ 		mixer_vgate = (2375 * vcm / 1000000 + 125) / 100;
+-- 
+2.30.2
+

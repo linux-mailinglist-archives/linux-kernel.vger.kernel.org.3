@@ -2,118 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F6D64842C5
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:51:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4BD4842C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:51:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233825AbiADNvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 08:51:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45146 "EHLO
+        id S233828AbiADNvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 08:51:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232396AbiADNvJ (ORCPT
+        with ESMTP id S233827AbiADNve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 08:51:09 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 402BEC061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 05:51:09 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id i6so21113884pla.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 05:51:09 -0800 (PST)
+        Tue, 4 Jan 2022 08:51:34 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA69C061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 05:51:34 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id k69so92517836ybf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 05:51:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pl4XAHEQ/8O2Ge142ei3ws2XQwiYzzkkZ4WgI00Q9A4=;
-        b=jlYmyfhRBHeHp6eVn6FUzPaLbZ9Xp5/dsF8cd+jeZTgGUF7zk5bWqLqeDyeSqciDPi
-         DTMbVXTClm52Cyxapjym+leYK70NB5kb5nc1waQf8KNHrdRsS2P9ATMPoarbzHFlR2Ba
-         a0Zd9jlDypWm176VENklhdkJ+G96ilc7MKe/8/ZQFDBIAGafHJBuM/zvQVn9blvw55hR
-         7oTBfA4VHlak50Ntn6rO2Xipn8yADehXm+Ydbyt/CvxAjTK/ZiqIFbRbPjHodMtd2jLQ
-         YNSf0WfaYNAs8j10/ouO9NV1pG5JCeFPiiqV2u5jNrnj8GRTKDDNFEMeLxqFjMNxZeRE
-         FI6g==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=+7stB07F66gy7f2VANIvvg5E8xLAfpXtFohPRnaTtmY=;
+        b=MOD+Zv88AfSiXD9TtMDuvVQHaZVJyUAeaxECTeG9iw00CgAPOtVuaUrvRQgb+Kyo7a
+         YGKtd9w6xYgWXybFChpwQsY/Z7aOn47wsHW8BI3FN7zOA/x9QHpRwJoG4Njhmn7q+W3H
+         /X80Fs3tmiKe/HzVL1a9A/IU7em0sC/u3HuAEOu7eVddJJx97dwVt+Kyr1lM4+5InF/n
+         CSCj6fdhNf5kG1YKyn/e2yx7ros4b2Bsl+WbhpdxpVvzjz1/cR9a+FxL1rP3jz/N/CAm
+         c1h7GeOD0y9rIJZECxY+yXnLjmNmLkTJCqFgSwwAXzWjLyUEC3AZwkLwI0eebNddDkcT
+         UszQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pl4XAHEQ/8O2Ge142ei3ws2XQwiYzzkkZ4WgI00Q9A4=;
-        b=1YKq0zIVKilsmPJKj0m4GITpg9XOpG28ELH40EMWz4zjeNUQ0kZNDrnknakU6zyPxk
-         p7GfdWX1+4ed+61l6zKmC2CgItl5Hk3l88RLxhK6bIcEjWxnjuPEGLDPgUewcjDxEKob
-         b0r62HcNszNgO1PfF/8wp3iHvJB64eUO4bYzWIgamPNps5kAUjbLN8aOrklJe1n6Fddb
-         +Lobi8JvG2lg1wllYBhsNykawpsGY0UM8kNc1+UK1heHMQfW8an2a3TEEw7EBl1VVVGT
-         cOus4+pbD6PKUuhm/v5mL7TzXXMm8SMyQTWTbGFYjL61p58cJsvmfKhJkySYx94LRuik
-         odgg==
-X-Gm-Message-State: AOAM532ZJfLv8SsoPc9nYXYWS/YWZgWRNzGNe0oPhCqFV81C5soInPsJ
-        H3Uto59+++5zYoKXJR/PcQgGGTg5+o3CgfJeRe0uBw==
-X-Google-Smtp-Source: ABdhPJyRNJLYqv9dxj24ku2jZwDQnxxy2JHRkOhHG8QLRhakAedD18kPErE+JMSrY6BI5h8aYq6g9Nc+mhfZNJrfa9k=
-X-Received: by 2002:a17:90a:a6d:: with SMTP id o100mr61646660pjo.179.1641304268801;
- Tue, 04 Jan 2022 05:51:08 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=+7stB07F66gy7f2VANIvvg5E8xLAfpXtFohPRnaTtmY=;
+        b=Lv4o1BrwbVlN8zqVi4jsUSoQQUTC8WIJfq1ecYuRGPRDCH8+GcA3zbo0qnfraxXu31
+         w8TvtkfQ7PUOKv343KZf75GjDQCYFqehGbYqO1SLRc1vKnk1xA4/8DdWd7o3a1g2t//z
+         PX7HCCi+cnDhe+f72K9yBLbukFLr6q1dje1ZWEaaPkCmlED6T+F8r3ciofIZdYNPDqC9
+         TCyaJt/qey/Nb02r8Zcg4weRhwu//7j93yHC+MZ/wv8dAH7D4lX0+HzieKZ6cHH2Jlwa
+         gWpwsOGJTTOPtqNDJih8PPdgdaPrzaBTIO94kzG08tEBGwMYpcdXIl17C2n3C0OZh38I
+         Tyaw==
+X-Gm-Message-State: AOAM532DxUJJ0zqwsMNOhrxrgfRI8ObjKlF8hEeVRD8iZA9jOXWyCd/x
+        sdv0vXZ6sOuJKWbo0luhos5gWv/j6Au2IX8xE0M=
+X-Google-Smtp-Source: ABdhPJwY1D3h7V5MHnZOmyNzPYCobsd1mMk6JYbhfyblVkWwdST0DBL7VM9P3qB9mgRVm87RSwskLoWaZaxK9HrC9NA=
+X-Received: by 2002:a25:e70d:: with SMTP id e13mr58689415ybh.24.1641304292868;
+ Tue, 04 Jan 2022 05:51:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20211110220050.2854-1-jirivanek1@gmail.com> <CAG3jFyvB-Dzd9YDJ7FrAC5avobL7Wfk-91E-DVeYWwfNcQLiLg@mail.gmail.com>
- <CAGWqDJ5ZKJ0skLnhfhC0cbzNnSo7HLY7Cqr2ZhOcb_YiHNsA1A@mail.gmail.com>
-In-Reply-To: <CAGWqDJ5ZKJ0skLnhfhC0cbzNnSo7HLY7Cqr2ZhOcb_YiHNsA1A@mail.gmail.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Tue, 4 Jan 2022 14:50:57 +0100
-Message-ID: <CAG3jFyt1nvtkDC2r3wc+3ky_VxtZ7s4Rto_+kMg6J_x1=QpO-Q@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge/tc358775: Fix for dual-link LVDS
-To:     Vinay Simha B N <simhavcs@gmail.com>
-Cc:     Jiri Vanek <jirivanek1@gmail.com>,
-        Zheng Bin <zhengbin13@huawei.com>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
+Received: by 2002:a5b:f10:0:0:0:0:0 with HTTP; Tue, 4 Jan 2022 05:51:32 -0800 (PST)
+Reply-To: michelmadi01@gmail.com
+From:   Mr Michel Madi <ousmaneouedraogo05@gmail.com>
+Date:   Tue, 4 Jan 2022 13:51:32 +0000
+Message-ID: <CA+u7ZgSnVSJ4B5jscL7RiqPZ7vs2oQWV3ygY3oJVv4dnyH5-rg@mail.gmail.com>
+Subject: Request
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jiri: Are you able to test this patch?
+Dear Friend,
 
-Vinay: Could you supply a R-b tag, if you feel that it is warranted?
+Let me start by introducing myself, I am Mr Michel Madi Manager of
+Bank Of Africa Burkina Faso.
 
-On Tue, 14 Dec 2021 at 09:13, Vinay Simha B N <simhavcs@gmail.com> wrote:
->
-> Robert,
-> I do not have the hardware to test this feature. Sorry for the late response.
->
-> On Thu, Nov 18, 2021 at 8:20 PM Robert Foss <robert.foss@linaro.org> wrote:
->>
->> + Zhen & Vinay
->>
->> This patch looks good in itself, but I would like to see a tested by
->> tag. At the very least testing for regression in single-link LVDS but
->> ideally some third party verification of this patch.
->>
->> On Wed, 10 Nov 2021 at 23:01, Jiri Vanek <jirivanek1@gmail.com> wrote:
->> >
->> > Fixed wrong register shift for single/dual link LVDS output.
->> >
->> > Signed-off-by: Jiri Vanek <jirivanek1@gmail.com>
->> > ---
->> >  drivers/gpu/drm/bridge/tc358775.c | 2 +-
->> >  1 file changed, 1 insertion(+), 1 deletion(-)
->> >
->> > diff --git a/drivers/gpu/drm/bridge/tc358775.c b/drivers/gpu/drm/bridge/tc358775.c
->> > index 2272adcc5b4a..1d6ec1baeff2 100644
->> > --- a/drivers/gpu/drm/bridge/tc358775.c
->> > +++ b/drivers/gpu/drm/bridge/tc358775.c
->> > @@ -241,7 +241,7 @@ static inline u32 TC358775_LVCFG_PCLKDIV(uint32_t val)
->> >  }
->> >
->> >  #define TC358775_LVCFG_LVDLINK__MASK                         0x00000002
->> > -#define TC358775_LVCFG_LVDLINK__SHIFT                        0
->> > +#define TC358775_LVCFG_LVDLINK__SHIFT                        1
->> >  static inline u32 TC358775_LVCFG_LVDLINK(uint32_t val)
->> >  {
->> >         return ((val) << TC358775_LVCFG_LVDLINK__SHIFT) &
->> > --
->> > 2.30.2
->> >
->
->
->
-> --
-> regards,
-> vinaysimha
+I am writing you this letter based on the latest development at my
+Department which I will like to bring to your personal edification.
+(7.5 million U.S Dollars transfer claims).
+
+This is a legitimate transaction and I agreed to offer you 40% of this
+money as my foreign partner after confirmation of the fund in your
+bank account, if you are interested, get back to me with the following
+details below.
+
+(1)Your age........
+
+(2)Your occupation.....
+
+(3)Your marital status.....
+
+(4)Your full residential address.......
+
+(5)Your private phone and fax number and your complete name.......
+
+As soon as I receive these data's, I will forward to you the
+application form which you will complete and send to the bank to
+commence the processing of the transfer, you can get back to me
+through this my private email address (michelmadi01@gmail.com)
+
+
+Best Regard
+Mr. Michel Madi

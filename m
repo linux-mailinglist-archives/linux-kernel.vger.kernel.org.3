@@ -2,281 +2,413 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 845B64849C3
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:16:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA704849C7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233942AbiADVQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 16:16:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35864 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233916AbiADVQi (ORCPT
+        id S233957AbiADVX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 16:23:29 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:36594 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232604AbiADVX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 16:16:38 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C06C061761;
-        Tue,  4 Jan 2022 13:16:38 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id r16-20020a17090a0ad000b001b276aa3aabso1030576pje.0;
-        Tue, 04 Jan 2022 13:16:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:message-id:in-reply-to:references:subject:mime-version
-         :content-transfer-encoding;
-        bh=npTjTety+46FhNBHpTDwPtrds+SXleaCAqvAkUVFly0=;
-        b=RVsVVH1gcmIm5rKq5FAVE3wqzcYe/VIX6RPLRjzE+RmLTgwtSsHiTbdWRNSVK/+feO
-         tceMJzCWfsVjmQaJBmNvNCcPf7P7bHR2x/5ZhYg2BBlgePtQA0kkGzWCFRdo/YyPP4bu
-         06AbwtwJrcag8JY1DeyOStXtdVGVuOYdRue2oXB7dmYNQZUdflkr6+Xr3ppGUxXmP7Zb
-         YlVdF7R+9OamsKa6xIxirJA619q0pZxVCzWs9UDvpRfY3+USxnXshU1oXflKXeuzpZj9
-         +pUmB0qZJonpQKczXNHpi/xJ+FmlbO7b2RfuTzYOuJsZMTU3zSXBEtJkKWmY/Q0qqG4J
-         JTkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:message-id:in-reply-to:references
-         :subject:mime-version:content-transfer-encoding;
-        bh=npTjTety+46FhNBHpTDwPtrds+SXleaCAqvAkUVFly0=;
-        b=asT+rlm1o8ha+Lk6V1r7S47wkBpo7lAuDnyuYj6Df9eeJueK1/eHE870R2PQR151SI
-         ijp952RtSudxJ6OfMZxc9Wb3F2hZXp/JAkO+DV+XN4VzvWK+NwuFJ/Ze3Oc7ORthaS6B
-         4B1zj1cwhu/heUIxgJdhaEk+arBpP+4luxyZ5Utsw6FkUAY/dEOLQ/yZAccbjBvL6wp1
-         BhGizgzvD4viBtHkqtAii9D1Vtafqw2GKvvqrxHzZVUQqLX6OOulMNr0AztAMSy1goon
-         qtOO9+wzpXeXaNeH3OrXTFaVes77X+RO9PWz3ZjHZv5nhgfS5xjd8v/fmSxOnQ2DlhrT
-         gFfg==
-X-Gm-Message-State: AOAM530I9tq8hZ4DyEnoBCoHbTtLHiSMqIhSQ2+N3u6FBTtXwkoWthGA
-        6EJXvEPySMMP397NdEqFMyY=
-X-Google-Smtp-Source: ABdhPJyCh5fpuOjGgRimb654UjU3D0A2cz2oRwvewRN52GCZLWcu4nmzxVM7aPKKsAqR1LfEsox23Q==
-X-Received: by 2002:a17:90b:17c1:: with SMTP id me1mr278650pjb.131.1641330998376;
-        Tue, 04 Jan 2022 13:16:38 -0800 (PST)
-Received: from localhost ([71.236.223.183])
-        by smtp.gmail.com with ESMTPSA id x11sm225108pjq.52.2022.01.04.13.16.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 13:16:38 -0800 (PST)
-Date:   Tue, 04 Jan 2022 13:16:37 -0800
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     syzbot <syzbot+bb73e71cf4b8fd376a4f@syzkaller.appspotmail.com>,
-        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
-        jakub@cloudflare.com, john.fastabend@gmail.com, kafai@fb.com,
-        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        lmb@cloudflare.com, netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
-Message-ID: <61d4b9354cf9b_4679220874@john.notmuch>
-In-Reply-To: <00000000000006fee605d38f0418@google.com>
-References: <00000000000006fee605d38f0418@google.com>
-Subject: RE: [syzbot] KASAN: vmalloc-out-of-bounds Read in bpf_prog_put
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+        Tue, 4 Jan 2022 16:23:28 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B24B7B817F9;
+        Tue,  4 Jan 2022 21:23:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37DD5C36AEB;
+        Tue,  4 Jan 2022 21:23:25 +0000 (UTC)
+From:   Clark Williams <williams@redhat.com>
+Subject: [ANNOUNCE] 4.19.223-rt100
+Date:   Tue, 04 Jan 2022 21:22:45 -0000
+Message-ID: <164133136582.713651.8616556329027058758@puck.lan>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        John Kacur <jkacur@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Pavel Machek <pavel@denx.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    9eaa88c7036e Merge tag 'libata-5.16-rc6' of git://git.kern..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=10ed4143b00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=10f3f669b8093e95
-> dashboard link: https://syzkaller.appspot.com/bug?extid=bb73e71cf4b8fd376a4f
-> compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=112d6ca5b00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17393549b00000
-> 
-> The issue was bisected to:
-> 
-> commit 38207a5e81230d6ffbdd51e5fa5681be5116dcae
-> Author: John Fastabend <john.fastabend@gmail.com>
-> Date:   Fri Nov 19 18:14:17 2021 +0000
-> 
->     bpf, sockmap: Attach map progs to psock early for feature probes
-> 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13532e85b00000
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=10d32e85b00000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=17532e85b00000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+bb73e71cf4b8fd376a4f@syzkaller.appspotmail.com
-> Fixes: 38207a5e8123 ("bpf, sockmap: Attach map progs to psock early for feature probes")
-> 
-> ==================================================================
-> BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_put kernel/bpf/syscall.c:1812 [inline]
-> BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_put kernel/bpf/syscall.c:1812 [inline] kernel/bpf/syscall.c:1829
-> BUG: KASAN: vmalloc-out-of-bounds in bpf_prog_put+0x8c/0x4f0 kernel/bpf/syscall.c:1829 kernel/bpf/syscall.c:1829
-> Read of size 8 at addr ffffc90000e76038 by task syz-executor020/3641
-> 
-> CPU: 1 PID: 3641 Comm: syz-executor020 Not tainted 5.16.0-rc5-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  __dump_stack lib/dump_stack.c:88 [inline] lib/dump_stack.c:106
->  dump_stack_lvl+0x1dc/0x2d8 lib/dump_stack.c:106 lib/dump_stack.c:106
->  print_address_description+0x65/0x380 mm/kasan/report.c:247 mm/kasan/report.c:247
->  __kasan_report mm/kasan/report.c:433 [inline]
->  __kasan_report mm/kasan/report.c:433 [inline] mm/kasan/report.c:450
->  kasan_report+0x19a/0x1f0 mm/kasan/report.c:450 mm/kasan/report.c:450
->  __bpf_prog_put kernel/bpf/syscall.c:1812 [inline]
->  __bpf_prog_put kernel/bpf/syscall.c:1812 [inline] kernel/bpf/syscall.c:1829
->  bpf_prog_put+0x8c/0x4f0 kernel/bpf/syscall.c:1829 kernel/bpf/syscall.c:1829
->  bpf_prog_release+0x37/0x40 kernel/bpf/syscall.c:1837 kernel/bpf/syscall.c:1837
->  __fput+0x3fc/0x870 fs/file_table.c:280 fs/file_table.c:280
->  task_work_run+0x146/0x1c0 kernel/task_work.c:164 kernel/task_work.c:164
->  exit_task_work include/linux/task_work.h:32 [inline]
->  exit_task_work include/linux/task_work.h:32 [inline] kernel/exit.c:832
->  do_exit+0x705/0x24f0 kernel/exit.c:832 kernel/exit.c:832
->  do_group_exit+0x168/0x2d0 kernel/exit.c:929 kernel/exit.c:929
->  __do_sys_exit_group+0x13/0x20 kernel/exit.c:940 kernel/exit.c:940
->  __se_sys_exit_group+0x10/0x10 kernel/exit.c:938 kernel/exit.c:938
->  __x64_sys_exit_group+0x37/0x40 kernel/exit.c:938 kernel/exit.c:938
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline] arch/x86/entry/common.c:80
->  do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7f3b90ccd1d9
-> Code: Unable to access opcode bytes at RIP 0x7f3b90ccd1af.
-> RSP: 002b:00007ffdeec58318 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-> RAX: ffffffffffffffda RBX: 00007f3b90d41330 RCX: 00007f3b90ccd1d9
-> RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-> RBP: 0000000000000000 R08: ffffffffffffffc4 R09: 00007ffdeec58390
-> R10: 00007ffdeec58390 R11: 0000000000000246 R12: 00007f3b90d41330
-> R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
->  </TASK>
-> 
-> 
-> Memory state around the buggy address:
->  ffffc90000e75f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->  ffffc90000e75f80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-> >ffffc90000e76000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->                                         ^
->  ffffc90000e76080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->  ffffc90000e76100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-> ==================================================================
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+Hello RT-list!
 
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+I'm pleased to announce the 4.19.223-rt100 stable release.
 
-From f072b6529a5d41e9af8ed04d9f31108a0baa2eec Mon Sep 17 00:00:00 2001
-From: John Fastabend <john.fastabend@gmail.com>
-Date: Tue, 4 Jan 2022 11:10:38 -0800
-Subject: [PATCH bpf-next] bpf, sockmap: fix double bpf_prog_put on error case
- in map_link
+You can get this release via the git tree at:
 
-sock_map_link() is called to update a sockmap entry with a sk. But, if the
-sock_map_init_proto() call fails then we return an error to the map_update
-op against the sockmap. In the error path though we need to cleanup psock
-and dec the refcnt on any programs associated with the map, because we
-refcnt them early in the update process to ensure they are pinned for the
-psock. (This avoids a race where user deletes programs while also updating
-the map with new socks.)
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 
-In current code we do the prog refcnt dec explicitely by calling
-bpf_prog_put() when the program was found in the map. But, after commit
-'38207a5e81230' in this error path we've already done the prog to psock
-assignment so the programs have a reference from the psock as well. This
-then causes the psock tear down logic, invoked by sk_psock_put() in the
-error path, to similarly call bpf_prog_put on the programs there.
+  branch: v4.19-rt
+  Head SHA1: e0ac069fc57666e0fecff8b7a2839950b594d9c8
 
-To be explicit this logic does the prog->psock assignemnt
+Or to build 4.19.223-rt100 directly, the following patches should be applied:
 
-  if (msg_*)
-    psock_set_prog(...)
+  https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.19.tar.xz
 
-Then the error path under the out_progs label does a similar check and dec
-with,
+  https://www.kernel.org/pub/linux/kernel/v4.x/patch-4.19.223.xz
 
-  if (msg_*)
-     bpf_prog_put(...)
+  https://www.kernel.org/pub/linux/kernel/projects/rt/4.19/patch-4.19.223-rt100.patch.xz
 
-And the teardown logic sk_psock_put() does,
 
-  psock_set_prog(msg_*, NULL)
+You can also build from 4.19.221-rt99 by applying the incremental patch:
 
-triggering another bpf_prog_put(...). Then KASAN gives us this splat, found
-by syzbot because we've created an inbalance between bpf_prog_inc and
-bpf_prog_put calling put twice on the program.
+  https://www.kernel.org/pub/linux/kernel/projects/rt/4.19/incr/patch-4.19.221-rt99-rt100.patch.xz
 
-BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_put kernel/bpf/syscall.c:1812 [inline]
-BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_put kernel/bpf/syscall.c:1812 [inline] kernel/bpf/syscall.c:1829
-BUG: KASAN: vmalloc-out-of-bounds in bpf_prog_put+0x8c/0x4f0 kernel/bpf/syscall.c:1829 kernel/bpf/syscall.c:1829
-Read of size 8 at addr ffffc90000e76038 by task syz-executor020/3641
+Enjoy!
+Clark
 
-To fix clean up error path so it doesn't try to do the bpf_prog_put in the
-error path once progs are assigned then it relies on the normal psock
-tear down logic to do complete cleanup.
-
-For completness we also cover the case whereh sk_psock_init_strp() fails,
-but this is not expected because it indicates an incorrect socket type
-and should be caught earlier.
-
-Reported-by: syzbot+bb73e71cf4b8fd376a4f@syzkaller.appspotmail.com
-Fixes: 38207a5e8123 ("bpf, sockmap: Attach map progs to psock early for feature probes")
-Signed-off-by: John Fastabend <john.fastabend@gmail.com>
+Changes from v4.19.221-rt99:
 ---
- net/core/sock_map.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 9618ab6d7cc9..1827669eedd6 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -292,15 +292,23 @@ static int sock_map_link(struct bpf_map *map, struct sock *sk)
- 	if (skb_verdict)
- 		psock_set_prog(&psock->progs.skb_verdict, skb_verdict);
- 
-+	/* msg_* and stream_* programs references tracked in psock after this
-+	 * point. Reference dec and cleanup will occur through psock destructor
-+	 */
- 	ret = sock_map_init_proto(sk, psock);
--	if (ret < 0)
--		goto out_drop;
-+	if (ret < 0) {
-+		sk_psock_put(sk, psock);
-+		goto out;
-+	}
- 
- 	write_lock_bh(&sk->sk_callback_lock);
- 	if (stream_parser && stream_verdict && !psock->saved_data_ready) {
- 		ret = sk_psock_init_strp(sk, psock);
--		if (ret)
--			goto out_unlock_drop;
-+		if (ret) {
-+			write_unlock_bh(&sk->sk_callback_lock);
-+			sk_psock_put(sk, psock);
-+			goto out;
-+		}
- 		sk_psock_start_strp(sk, psock);
- 	} else if (!stream_parser && stream_verdict && !psock->saved_data_ready) {
- 		sk_psock_start_verdict(sk,psock);
-@@ -309,10 +317,6 @@ static int sock_map_link(struct bpf_map *map, struct sock *sk)
- 	}
- 	write_unlock_bh(&sk->sk_callback_lock);
- 	return 0;
--out_unlock_drop:
--	write_unlock_bh(&sk->sk_callback_lock);
--out_drop:
--	sk_psock_put(sk, psock);
- out_progs:
- 	if (skb_verdict)
- 		bpf_prog_put(skb_verdict);
-@@ -325,6 +329,7 @@ static int sock_map_link(struct bpf_map *map, struct sock *sk)
- out_put_stream_verdict:
- 	if (stream_verdict)
- 		bpf_prog_put(stream_verdict);
-+out:
- 	return ret;
- }
- 
--- 
-2.33.0
+Alyssa Ross (1):
+      dmaengine: st_fdma: fix MODULE_ALIAS
+
+Andrew Cooper (1):
+      x86/pkey: Fix undefined behaviour with PKRU_WD_BIT
+
+Ard Biesheuvel (2):
+      x86: Make ARCH_USE_MEMREMAP_PROT a generic Kconfig symbol
+      ARM: 9169/1: entry: fix Thumb2 bug in iWMMXt exception handling
+
+Armin Wolf (1):
+      hwmon: (dell-smm) Fix warning on /proc/i8k creation error
+
+Benjamin Tissoires (1):
+      HID: holtek: fix mouse probing
+
+Chao Yu (1):
+      f2fs: fix to do sanity check on last xattr entry in __f2fs_setxattr()
+
+Chen Jun (1):
+      tracing: Fix a kmemleak false positive in tracing_map
+
+Clark Williams (2):
+      Merge tag 'v4.19.223' into v4.19-rt
+      Linux 4.19.223-rt100
+
+Colin Ian King (1):
+      ALSA: drivers: opl3: Fix incorrect use of vp->state
+
+Cyril Novikov (1):
+      ixgbe: set X550 MDIO speed before talking to PHY
+
+Daniele Palmas (1):
+      USB: serial: option: add Telit FN990 compositions
+
+Dinh Nguyen (1):
+      ARM: socfpga: dts: fix qspi node compatible
+
+Dongliang Mu (1):
+      spi: change clk_disable_unprepare to clk_unprepare
+
+Eric Dumazet (2):
+      sch_cake: do not call cake_destroy() from cake_init()
+      sit: do not call ipip6_dev_free() from sit_init_net()
+
+Erik Ekman (1):
+      net/mlx4_en: Update reported link modes for 1/10G
+
+Fabien Dessenne (1):
+      pinctrl: stm32: consider the GPIO offset to expose all the GPIO lines
+
+Fabio Estevam (1):
+      ARM: dts: imx6ull-pinfunc: Fix CSI_DATA07__ESAI_TX0 pad name
+
+Federico Motta (2):
+      block, bfq: improve asymmetric scenarios detection
+      block, bfq: fix asymmetric scenarios detection
+
+Felix Fietkau (1):
+      mac80211: send ADDBA requests using the tid/queue of the aggregation session
+
+Fernando Fernandez Mancera (1):
+      bonding: fix ad_actor_system option setting to default
+
+Florian Fainelli (1):
+      net: systemport: Add global locking for descriptor lifecycle
+
+George Kennedy (2):
+      libata: if T_LENGTH is zero, dma direction should be DMA_NONE
+      scsi: scsi_debug: Sanity check block descriptor length in resp_mode_select()
+
+Greg Jesionowski (1):
+      net: usb: lan78xx: add Allied Telesis AT29M2-AF
+
+Greg Kroah-Hartman (3):
+      USB: gadget: bRequestType is a bitfield, not a enum
+      Linux 4.19.222
+      Linux 4.19.223
+
+Guenter Roeck (2):
+      hwmon: (lm90) Fix usage of CONFIG2 register in detect function
+      hwmon: (lm90) Do not report 'busy' status bit as alarm
+
+Haimin Zhang (1):
+      netdevsim: Zero-initialize memory for new map's value in function nsim_bpf_map_alloc
+
+Hangyu Hua (1):
+      rds: memory leak in __rds_conn_create()
+
+Harshit Mogalapalli (1):
+      net: netlink: af_netlink: Prevent empty skb by adding a check on len.
+
+Helge Deller (1):
+      parisc/agp: Annotate parisc agp init functions with __init
+
+Ignacy Gawędzki (1):
+      netfilter: fix regression in looped (broad|multi)cast's MAC handling
+
+J. Bruce Fields (1):
+      nfsd: fix use-after-free due to delegation race
+
+Jerome Marchand (1):
+      recordmcount.pl: look for jgnop instruction as well as bcrl on s390
+
+Jiasheng Jiang (4):
+      qlcnic: potential dereference null pointer of rx_queue->page_ring
+      fjes: Check for error irq
+      drivers: net: smc911x: Check for error irq
+      sfc: falcon: Check null pointer of rx_queue->page_ring
+
+Jimmy Wang (1):
+      USB: NO_LPM quirk Lenovo USB-C to Ethernet Adapher(RTL8153-04)
+
+Joe Thornber (1):
+      dm btree remove: fix use after free in rebalance_children()
+
+Johan Hovold (1):
+      USB: serial: cp210x: fix CP2105 GPIO registration
+
+Johannes Berg (2):
+      mac80211: track only QoS data frames for admission control
+      mac80211: validate extended element ID is present
+
+John David Anglin (1):
+      parisc: Correct completer in lws start
+
+José Expósito (2):
+      IB/qib: Fix memory leak in qib_user_sdma_queue_pkts()
+      Input: atmel_mxt_ts - fix double free in mxt_read_info_block
+
+Juergen Gross (5):
+      xen/blkfront: harden blkfront against event channel storms
+      xen/netfront: harden netfront against event channel storms
+      xen/console: harden hvc_xen against event channel storms
+      xen/netback: fix rx queue stall detection
+      xen/netback: don't queue unlimited number of packages
+
+Karen Sornek (1):
+      igb: Fix removal of unicast MAC filters of VFs
+
+Le Ma (1):
+      drm/amdgpu: correct register access for RLC_JUMP_TABLE_RESTORE
+
+Letu Ren (1):
+      igbvf: fix double free in `igbvf_probe`
+
+Lin Ma (3):
+      ax25: NPD bug when detaching AX25 device
+      hamradio: defer ax25 kfree after unregister_netdev
+      hamradio: improve the incomplete fix to avoid NPD
+
+Marian Postevca (1):
+      usb: gadget: u_ether: fix race in setting MAC address in setup phase
+
+Miklos Szeredi (2):
+      fuse: annotate lock in fuse_reverse_inval_entry()
+      ovl: fix warning in ovl_create_real()
+
+Nathan Chancellor (4):
+      soc/tegra: fuse: Fix bitwise vs. logical OR warning
+      net: lan78xx: Avoid unnecessary self assignment
+      mwifiex: Remove unnecessary braces from HostCmd_SET_SEQ_NO_BSS_INFO
+      Input: touchscreen - avoid bitwise vs logical OR warning
+
+Nicolas Pitre (1):
+      ARM: 8805/2: remove unneeded naked function usage
+
+Ondrej Jirman (1):
+      i2c: rk3x: Handle a spurious start completion interrupt flag
+
+Paolo Valente (3):
+      block, bfq: fix decrement of num_active_groups
+      block, bfq: fix queue removal from weights tree
+      block, bfq: fix use after free in bfq_bfqq_expire
+
+Paul Moore (1):
+      audit: improve robustness of the audit queue handling
+
+Pavel Skripkin (1):
+      media: mxl111sf: change mutex_init() location
+
+Philip Chen (1):
+      drm/msm/dsi: set default num_data_lanes
+
+Robert Marko (1):
+      arm64: dts: allwinner: orangepi-zero-plus: fix PHY mode
+
+Rémi Denis-Courmont (1):
+      phonet/pep: refuse to enable an unbound pipe
+
+Sasha Levin (1):
+      stable: clamp SUBLEVEL in 4.19
+
+Sean Christopherson (1):
+      KVM: VMX: Fix stale docs for kvm-intel.emulate_invalid_guest_state
+
+Stefan Agner (1):
+      ARM: 8800/1: use choice for kernel unwinders
+
+Stefan Roese (1):
+      PCI/MSI: Mask MSI-X vectors only on success
+
+Sudeep Holla (1):
+      firmware: arm_scpi: Fix string overflow in SCPI genpd driver
+
+Tadeusz Struk (1):
+      nfc: fix segfault in nfc_genl_dump_devices_done
+
+Thadeu Lima de Souza Cascardo (2):
+      ipmi: bail out if init_srcu_struct fails
+      ipmi: fix initialization when workqueue allocation fails
+
+Thomas Gleixner (1):
+      PCI/MSI: Clear PCI_MSIX_FLAGS_MASKALL on error
+
+Tom Lendacky (1):
+      x86/sme: Explicitly map new EFI memmap table as encrypted
+
+Willem de Bruijn (3):
+      net/packet: rx_owner_map depends on pg_vec
+      net: accept UFOv6 packages in virtio_net_hdr_to_skb
+      net: skip virtio_net_hdr_set_proto if protocol already set
+
+Wu Bo (1):
+      ipmi: Fix UAF when uninstall ipmi_si and ipmi_msghandler module
+
+Xiaoke Wang (1):
+      ALSA: jack: Check the return value of kstrdup()
+
+Yu Liao (1):
+      timekeeping: Really make sure wall_to_monotonic isn't positive
+---
+Documentation/admin-guide/kernel-parameters.txt    |   8 +-
+ Documentation/networking/bonding.txt               |  11 +-
+ Makefile                                           |   4 +-
+ arch/Kconfig                                       |   3 +
+ arch/arm/Kconfig.debug                             |  44 ++--
+ arch/arm/boot/dts/imx6ull-pinfunc.h                |   2 +-
+ arch/arm/boot/dts/socfpga_arria10_socdk_qspi.dts   |   2 +-
+ arch/arm/boot/dts/socfpga_arria5_socdk.dts         |   2 +-
+ arch/arm/boot/dts/socfpga_cyclone5_socdk.dts       |   2 +-
+ arch/arm/boot/dts/socfpga_cyclone5_sockit.dts      |   2 +-
+ arch/arm/boot/dts/socfpga_cyclone5_socrates.dts    |   2 +-
+ arch/arm/boot/dts/socfpga_cyclone5_sodia.dts       |   2 +-
+ arch/arm/boot/dts/socfpga_cyclone5_vining_fpga.dts |   4 +-
+ arch/arm/kernel/entry-armv.S                       |   8 +-
+ arch/arm/mm/copypage-fa.c                          |  35 ++-
+ arch/arm/mm/copypage-feroceon.c                    |  98 ++++---
+ arch/arm/mm/copypage-v4mc.c                        |  19 +-
+ arch/arm/mm/copypage-v4wb.c                        |  41 ++-
+ arch/arm/mm/copypage-v4wt.c                        |  37 ++-
+ arch/arm/mm/copypage-xsc3.c                        |  71 +++--
+ arch/arm/mm/copypage-xscale.c                      |  71 +++--
+ .../dts/allwinner/sun50i-h5-orangepi-zero-plus.dts |   2 +-
+ arch/parisc/kernel/syscall.S                       |   2 +-
+ arch/x86/Kconfig                                   |   6 +-
+ arch/x86/include/asm/pgtable.h                     |   4 +-
+ arch/x86/mm/ioremap.c                              |   4 +-
+ arch/x86/platform/efi/quirks.c                     |   3 +-
+ block/bfq-iosched.c                                | 287 +++++++++++++--------
+ block/bfq-iosched.h                                |  76 ++++--
+ block/bfq-wf2q.c                                   |  56 ++--
+ drivers/ata/libata-scsi.c                          |  15 +-
+ drivers/block/xen-blkfront.c                       |  15 +-
+ drivers/char/agp/parisc-agp.c                      |   6 +-
+ drivers/char/ipmi/ipmi_msghandler.c                |  21 +-
+ drivers/dma/st_fdma.c                              |   2 +-
+ drivers/firmware/scpi_pm_domain.c                  |  10 +-
+ drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c              |   4 +-
+ drivers/gpu/drm/msm/dsi/dsi_host.c                 |   2 +
+ drivers/hid/hid-holtek-mouse.c                     |  15 ++
+ drivers/hwmon/dell-smm-hwmon.c                     |   7 +-
+ drivers/hwmon/lm90.c                               |   8 +-
+ drivers/i2c/busses/i2c-rk3x.c                      |   4 +-
+ drivers/infiniband/hw/qib/qib_user_sdma.c          |   2 +-
+ drivers/input/touchscreen/atmel_mxt_ts.c           |   2 +-
+ drivers/input/touchscreen/of_touchscreen.c         |  18 +-
+ drivers/md/persistent-data/dm-btree-remove.c       |   2 +-
+ drivers/media/usb/dvb-usb-v2/mxl111sf.c            |  16 +-
+ drivers/net/bonding/bond_options.c                 |   2 +-
+ drivers/net/ethernet/broadcom/bcmsysport.c         |   5 +
+ drivers/net/ethernet/broadcom/bcmsysport.h         |   1 +
+ drivers/net/ethernet/intel/igb/igb_main.c          |  28 +-
+ drivers/net/ethernet/intel/igbvf/netdev.c          |   1 +
+ drivers/net/ethernet/intel/ixgbe/ixgbe_x550.c      |   3 +
+ drivers/net/ethernet/mellanox/mlx4/en_ethtool.c    |   6 +-
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h  |   2 +-
+ .../ethernet/qlogic/qlcnic/qlcnic_sriov_common.c   |  12 +-
+ .../net/ethernet/qlogic/qlcnic/qlcnic_sriov_pf.c   |   4 +-
+ drivers/net/ethernet/sfc/falcon/rx.c               |   5 +-
+ drivers/net/ethernet/smsc/smc911x.c                |   5 +
+ drivers/net/fjes/fjes_main.c                       |   5 +
+ drivers/net/hamradio/mkiss.c                       |   5 +-
+ drivers/net/netdevsim/bpf.c                        |   1 +
+ drivers/net/usb/lan78xx.c                          |  12 +-
+ drivers/net/wireless/marvell/mwifiex/cmdevt.c      |   4 +-
+ drivers/net/wireless/marvell/mwifiex/fw.h          |   8 +-
+ drivers/net/xen-netback/common.h                   |   1 +
+ drivers/net/xen-netback/rx.c                       |  77 ++++--
+ drivers/net/xen-netfront.c                         | 125 ++++++---
+ drivers/pci/msi.c                                  |  15 +-
+ drivers/pinctrl/stm32/pinctrl-stm32.c              |   8 +-
+ drivers/scsi/scsi_debug.c                          |   4 +-
+ drivers/soc/tegra/fuse/fuse-tegra.c                |   2 +-
+ drivers/soc/tegra/fuse/fuse.h                      |   2 +-
+ drivers/spi/spi-armada-3700.c                      |   2 +-
+ drivers/tty/hvc/hvc_xen.c                          |  30 ++-
+ drivers/usb/core/quirks.c                          |   3 +
+ drivers/usb/gadget/composite.c                     |   6 +-
+ drivers/usb/gadget/function/u_ether.c              |  15 +-
+ drivers/usb/gadget/legacy/dbgp.c                   |   6 +-
+ drivers/usb/gadget/legacy/inode.c                  |   6 +-
+ drivers/usb/serial/cp210x.c                        |   6 +-
+ drivers/usb/serial/option.c                        |   8 +
+ fs/f2fs/xattr.c                                    |   9 +-
+ fs/fuse/dir.c                                      |   2 +-
+ fs/nfsd/nfs4state.c                                |   9 +-
+ fs/overlayfs/dir.c                                 |   3 +-
+ fs/overlayfs/overlayfs.h                           |   1 +
+ fs/overlayfs/super.c                               |  12 +-
+ include/linux/virtio_net.h                         |  25 +-
+ kernel/audit.c                                     |  21 +-
+ kernel/time/timekeeping.c                          |   3 +-
+ kernel/trace/tracing_map.c                         |   3 +
+ lib/Kconfig.debug                                  |   6 +-
+ localversion-rt                                    |   2 +-
+ net/ax25/af_ax25.c                                 |   4 +-
+ net/ipv6/sit.c                                     |   1 -
+ net/mac80211/agg-tx.c                              |   2 +-
+ net/mac80211/mlme.c                                |  13 +-
+ net/mac80211/util.c                                |   2 +
+ net/netfilter/nfnetlink_log.c                      |   3 +-
+ net/netfilter/nfnetlink_queue.c                    |   3 +-
+ net/netlink/af_netlink.c                           |   5 +
+ net/nfc/netlink.c                                  |   6 +-
+ net/packet/af_packet.c                             |   5 +-
+ net/phonet/pep.c                                   |   2 +
+ net/rds/connection.c                               |   1 +
+ net/sched/sch_cake.c                               |   6 +-
+ scripts/recordmcount.pl                            |   2 +-
+ sound/core/jack.c                                  |   4 +
+ sound/drivers/opl3/opl3_midi.c                     |   2 +-
+ 110 files changed, 1022 insertions(+), 617 deletions(-)
+---

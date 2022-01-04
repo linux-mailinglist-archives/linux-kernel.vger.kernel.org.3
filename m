@@ -2,96 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44AC7483A94
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 03:29:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08955483A99
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 03:35:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232261AbiADC3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 21:29:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60950 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232245AbiADC3j (ORCPT
+        id S232281AbiADCet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 21:34:49 -0500
+Received: from mta-p7.oit.umn.edu ([134.84.196.207]:48912 "EHLO
+        mta-p7.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232120AbiADCer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 21:29:39 -0500
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30624C061784
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 18:29:39 -0800 (PST)
-Received: by mail-yb1-xb44.google.com with SMTP id d201so79914550ybc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 18:29:39 -0800 (PST)
+        Mon, 3 Jan 2022 21:34:47 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p7.oit.umn.edu (Postfix) with ESMTP id 4JScCB55Dxz9vcQr
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 02:34:46 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p7.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p7.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id fd-sUltsS47i for <linux-kernel@vger.kernel.org>;
+        Mon,  3 Jan 2022 20:34:46 -0600 (CST)
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p7.oit.umn.edu (Postfix) with ESMTPS id 4JScCB3MlTz9vcQh
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 20:34:46 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p7.oit.umn.edu 4JScCB3MlTz9vcQh
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p7.oit.umn.edu 4JScCB3MlTz9vcQh
+Received: by mail-pf1-f200.google.com with SMTP id t128-20020a628186000000b004bac607ec25so17711673pfd.11
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 18:34:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QwE8JmVaZMVjGKtYTKzHg5oYnNTcXLM3eaPcCyNjzP0=;
-        b=clKFPcLbJzKiUhKx+beJMiRJztw8LmSWxSvsesJ0+aN7u4+UHuNYrFIQv0lmrTOeTt
-         450lXNQn9XcybOpCzfzJkYil2anwiKGEbydTQeDQrph925qvo+gZi2ghUQcQUEUL9ggN
-         hALWM0V5HzkcSppyWvgNIN6DA4k3SqOEPgJe11R4PQR5QdVUxUDcQKikNcAgjMgFRD3k
-         adRNR92tpi0SFsDd5Dq0DSnc7hBjHi7tSd8mtIScOlGuhC6OqM1SeDk6EEqVOBz/LTql
-         YQ2o8fAAa+rGWyJO3d12NH8nj2+uU0iR4byv5SWeVcTOiRlvOYb06p9geGIHKY3VHAxl
-         z60g==
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CWsjvf5lJTjl1jfTfkc0TR1vLe+VA5l5rArUlTfHN8c=;
+        b=M/kLfQdjuHaT1Zp2/lozGdWmAj+7S7WYQEmrJoNfPXWpGXJGOb98/9hL9qXAfvcVlL
+         jNiyMYd2fzQATZKD8/lnt02G56ANzPhewVhOnAi+zYKbnlf563Jmw9lw1NftgwqFOjie
+         NiKljfNR9BbzKbuQ7bPYXLdEm1HW1pJqDOicUhFhWIJXK2/eKGJSp30tfQStmzQ2LR3F
+         sTgiuaFQXKhA403v2UnB0CP9ZPVGzAWkCoouBFHjebCcLHYdMiVCAncSWekvHZuFHARo
+         CtRywwBoWTP2N5BjCIEqBRXA+odGw4UDJq+h9qE0qkZDzb5+Wwgc24YsfyaRXQv0UdC6
+         K7rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QwE8JmVaZMVjGKtYTKzHg5oYnNTcXLM3eaPcCyNjzP0=;
-        b=XZ/IQqVUuFddPc/QmwHMVJ3EpE1G4y5NlPLTPhKpehAreqSw/qFF+x4gPjKIunSlJ0
-         QSKzCh6l2CV0LIeSJtRJIVUX2TBi8PIGHwKtzsZDMrmGh7wBTaOXlB2gBi46884HLqLH
-         O0brTN7ZHswFKvhQEhu6PNXkbH1VmB6Ii61hQjvYEGj1dvx+979ztJe2/27VJdRTrhT3
-         5a9p3sTw95Ubo3tfrPVFAWElFz0l76mGVVxU2BYq4b8VfcLgbhEQ83cDYMSpt9USaWxK
-         XYAEPaaG+VZOt4NW84HR3iovF6SSkBYyU/7PVNo8lHWpAmivKLTBZDMY/GEIB8CTXr/m
-         bk3g==
-X-Gm-Message-State: AOAM530wG+15psEJVHiVdFp4wBo1voIHIeVtfTe2OQcnFfkJ3jmE+ri8
-        UUpm+k9GF57ZJwfgc+hawSQuO4vSi/RCQ4E+GqqEF+lsNinteeznJWmi5Q==
-X-Google-Smtp-Source: ABdhPJyr9R2K20doWqMFSm6oR6rPxsWteustiBykGyvjhzMQp6Rz9gnbTshpV2L8bmCl5t76qWsavsVixU2lNGD4ekk=
-X-Received: by 2002:a25:1344:: with SMTP id 65mr57529351ybt.468.1641263378140;
- Mon, 03 Jan 2022 18:29:38 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CWsjvf5lJTjl1jfTfkc0TR1vLe+VA5l5rArUlTfHN8c=;
+        b=2qA9RjFsZK4CDIgX1EI9r68S+p1qiJurgB1VlZbhOh1WQYD8znFA4C0KX3QbN+gFey
+         1YzwAa1+VoeJWVNlUYy1wAiJBIezy/TR//q4ZjfltKjE4ICyRDNPvLaC/vK1hzaOOIQJ
+         8lypJpNhcIAI0f58zw+Ldln31fdfGUNsU9xbmEAxoJRVcLkjZTAzr9t9KKnqbrywM8uW
+         tiwhwlpR5pETcw71IkMscmy0r3pO9rMDNtnXATVcUTal94ZUaSyZIzaUz1kBJYh4QLDz
+         ERx06I97EMj0i7UTQQZdUspXnLUGUpz10geh4iUdUCyTT9Z0bpSbkMgoK6CZChJxzPh6
+         LCug==
+X-Gm-Message-State: AOAM533Xm4NPUAE4Onsv/1qkwK/biS0TsgZSUpaHB5YY/Khd2VKFvtEh
+        cxxw/uFlRdeGY4rllWk/G6k0a01449kZxYvAFEA+dgrDCJzRj1AxpiUjdgp4+cy+fBvzkocvQ1w
+        RnM5FLtgPIU97Gyy9SkWDFJ3cGPob
+X-Received: by 2002:a17:902:d2d0:b0:149:3d85:229d with SMTP id n16-20020a170902d2d000b001493d85229dmr47174419plc.151.1641263685689;
+        Mon, 03 Jan 2022 18:34:45 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzFEYXJYqg/6jMWwdU70fHqk5p6GTqGCHfajWL6APjOhUqOyr5o8h4CqTaOePD6co3tRk35dg==
+X-Received: by 2002:a17:902:d2d0:b0:149:3d85:229d with SMTP id n16-20020a170902d2d000b001493d85229dmr47174406plc.151.1641263685453;
+        Mon, 03 Jan 2022 18:34:45 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.4.62.162])
+        by smtp.gmail.com with ESMTPSA id p22sm36356236pfo.57.2022.01.03.18.34.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jan 2022 18:34:45 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Fei Li <fei1.li@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shuo Liu <shuo.a.liu@intel.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH] virt: acrn: fix a memory leak bug in acrn_dev_ioctl()
+Date:   Tue,  4 Jan 2022 10:34:39 +0800
+Message-Id: <20220104023439.33754-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211228020611.6582-1-hbh25y@gmail.com> <CAMuHMdXYuH6kgWCPjQhmd6Xi2N=oiyCSoE8U4NMg3tOrJ9bwDw@mail.gmail.com>
-In-Reply-To: <CAMuHMdXYuH6kgWCPjQhmd6Xi2N=oiyCSoE8U4NMg3tOrJ9bwDw@mail.gmail.com>
-From:   Hangyu Hua <hbh25y@gmail.com>
-Date:   Tue, 4 Jan 2022 10:29:27 +0800
-Message-ID: <CAOo-nLK3Coda+YPqy1eH=MKyrm36kTG+Uj2KZ5NL-002STzMUg@mail.gmail.com>
-Subject: Re: [PATCH v2] m68k/kernel: array out of bound access in process_uboot_commandline
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Andreas Schwab <schwab@linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, I think this patch may be forgotten. So I send this e-mail. And I
-cc Andreas
-who helped me fix the initial version of this patch.
+In acrn_dev_ioctl(), vm_param is not released or passed out on the 
+error path of "if ((vm_param->reserved0 | vm_param->reserved1) != 0)", 
+which could lead to a memory leak.
 
-Happy new year.
+Fix this bug by adding a kfree of vm_param on the error path.
 
-On Tue, Dec 28, 2021 at 4:40 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> CC greg
->
-> On Tue, Dec 28, 2021 at 3:06 AM Hangyu Hua <hbh25y@gmail.com> wrote:
-> >
-> > When the size of commandp >= size, array out of bound write occurs because
-> > len == 0.
-> >
-> > Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-> > ---
-> >  arch/m68k/kernel/uboot.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/m68k/kernel/uboot.c b/arch/m68k/kernel/uboot.c
-> > index 928dbd33fc4a..63eaf3c3ddcd 100644
-> > --- a/arch/m68k/kernel/uboot.c
-> > +++ b/arch/m68k/kernel/uboot.c
-> > @@ -101,5 +101,6 @@ __init void process_uboot_commandline(char *commandp, int size)
-> >         }
-> >
-> >         parse_uboot_commandline(commandp, len);
-> > -       commandp[len - 1] = 0;
-> > +       if (len > 0)
-> > +               commandp[len - 1] = 0;
-> >  }
-> > --
-> > 2.25.1
+This bug was found by a static analyzer.
+
+Builds with CONFIG_ACRN_GUEST=y, CONFIG_ACRN_HSM=y show no new warnings, 
+and our static analyzer no longer warns about this code.
+
+Fixes: 9c5137aedd11 (“9c5137aedd11 virt: acrn: Introduce VM management interfaces”)
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+The analysis employs differential checking to identify inconsistent
+security operations (e.g., checks or kfrees) between two code paths
+and confirms that the inconsistent operations are not recovered in 
+the current function or the callers, so they constitute bugs. 
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+ drivers/virt/acrn/hsm.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/virt/acrn/hsm.c b/drivers/virt/acrn/hsm.c
+index 5419794fccf1..205f4c637556 100644
+--- a/drivers/virt/acrn/hsm.c
++++ b/drivers/virt/acrn/hsm.c
+@@ -136,9 +136,11 @@ static long acrn_dev_ioctl(struct file *filp, unsigned int cmd,
+ 		if (IS_ERR(vm_param))
+ 			return PTR_ERR(vm_param);
+ 
+-		if ((vm_param->reserved0 | vm_param->reserved1) != 0)
+-			return -EINVAL;
+-
++		if ((vm_param->reserved0 | vm_param->reserved1) != 0) {
++			ret = -EINVAL;
++			kfree(vm_param);
++			break;
++		}
+ 		vm = acrn_vm_create(vm, vm_param);
+ 		if (!vm) {
+ 			ret = -EINVAL;
+-- 
+2.25.1
+

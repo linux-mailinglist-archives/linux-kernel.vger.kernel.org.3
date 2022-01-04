@@ -2,129 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAEE2483E79
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 09:50:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 783E8483E75
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 09:50:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234295AbiADIub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 03:50:31 -0500
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:51229 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234283AbiADItc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 03:49:32 -0500
-Received: from [192.168.0.3] (ip5f5aecde.dynamic.kabel-deutschland.de [95.90.236.222])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 3A13D61E5FE02;
-        Tue,  4 Jan 2022 09:49:30 +0100 (CET)
-Message-ID: <33deca4a-abed-123c-9530-3f15740a3261@molgen.mpg.de>
-Date:   Tue, 4 Jan 2022 09:49:29 +0100
+        id S234287AbiADIuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 03:50:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60754 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232894AbiADIuH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 03:50:07 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44712C061761;
+        Tue,  4 Jan 2022 00:50:07 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id d201so82127958ybc.7;
+        Tue, 04 Jan 2022 00:50:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=+gNtiVxoPcFMmHAi0IVREklEDEbSigV3EqXCOXXkxjM=;
+        b=Yzwkva2sQu6wuNDQyd6TaY043pQYr3U16bA1Qik7vfu67Wf/TDhj7W5uQRNSkFvUTC
+         meJPgXmenC1yAS7PHawaKhjPvlx2mvG59eAicRmTTAc7MI/6NwL710dtU+GO9p6C7wpH
+         rGdNXqwCYnkTJwfU8i3YhViEZSbP2z0BSfPx5iEt5qMtLO3yWzYHWwB/haCvI7mhjUJv
+         gMZvhyAmaB6S+Riqn+QJAhxZw8k9lYj0omaZxq0OrPO5bkG6pDMMMe8BmlTEugSgRYQr
+         ++REQmvXsXacXVxGVLAmhNSBP86oJj3nWhJKOWtlQZ8HNOsh8Hml5VIcsJ1VkSpp6LyY
+         4HGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=+gNtiVxoPcFMmHAi0IVREklEDEbSigV3EqXCOXXkxjM=;
+        b=m0qEOggw72ArwxNmhOuj1kbhUNkC3x0pxVXfX8SHldINdPdWmoncJGYwR4vaTBMCy7
+         0ENTOZPhlfq7lcF8CU2AQ5el23mIZPvQG78imEHW2tKwXavLOD9NTac5DrMVvUsATODL
+         d2MP2eE1T+4CF5/i1QJJ5Qip0uXINjHvwspIyV9+NCVnB8wFyWMp2SVXJDwAeXHljr8y
+         hwWpM1oK/S1kyFVx5+veXXYtg72MLnHuS1ksh2UBbuSARyUZQXqSZ3CDCpRIgfud6KNO
+         SvoQ2Om4TbGrzjy0mqt+amqv3adDkFXhcGUXXrthANx1Skiux1R+PEmuPpbfSfEUickG
+         4weA==
+X-Gm-Message-State: AOAM530UHbcryOuMAUL1bryd8DlMzmiKBN/CQ6LTR1tPUD5vlDCCCVHL
+        tHKRWh7JDgDOZjRrc+qpV8C94EyxC3VLD7PYHkHlUDh+dwYMKh/u
+X-Google-Smtp-Source: ABdhPJykcPuuEPvSYYg5wR/ziR5FoYoJSfIm+ZLkAau9PmvSUGGAWUGVTh9p0UbSyTF0OJPvx2MpP92zdqgvaC4d2fg=
+X-Received: by 2002:a25:da0e:: with SMTP id n14mr50755123ybf.35.1641286206529;
+ Tue, 04 Jan 2022 00:50:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v3 3/3] ahci: AMD A85 FCH (Hudson D4): Skip 200 ms
- debounce delay in `sata_link_resume()`
-Content-Language: en-US
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211229161119.1006-1-pmenzel@molgen.mpg.de>
- <20211229161119.1006-3-pmenzel@molgen.mpg.de>
- <5c333718-eaa5-b41c-e8ea-59d6e01254aa@opensource.wdc.com>
- <19f6cd93-9bd7-60dc-4471-18022bcf456c@molgen.mpg.de>
- <7b64d1c3-f798-d64b-9ee3-9669d98f4e28@opensource.wdc.com>
- <fbfd865f-c88c-6ee1-6cb9-8194e170cd3a@molgen.mpg.de>
- <c6748a52-fc8f-3309-31c2-973a9e69a7e8@opensource.wdc.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <c6748a52-fc8f-3309-31c2-973a9e69a7e8@opensource.wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From:   kvartet <xyru1999@gmail.com>
+Date:   Tue, 4 Jan 2022 16:49:55 +0800
+Message-ID: <CAFkrUsjA1qai+1ysWS_LEUYcMGo+ZRF3v743q6k9e4roF6PWZw@mail.gmail.com>
+Subject: INFO: trying to register non-static key in hci_uart_tx_wakeup
+To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Cc:     sunhao.th@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[cc: -dmitry, -guenter]
+Hello,
 
-Dear Damien,
+When using Syzkaller to fuzz the latest Linux kernel, the following
+crash was triggered.
 
+HEAD commit: a7904a538933 Linux 5.16-rc6
+git tree: upstream
+console output: https://paste.ubuntu.com/p/Bfpr8Gxtd4/plain/
+kernel config: https://paste.ubuntu.com/p/FDDNHDxtwz/plain/
 
-Am 04.01.22 um 09:36 schrieb Damien Le Moal:
-> On 12/31/21 16:08, Paul Menzel wrote:
-
->> Am 31.12.21 um 01:52 schrieb Damien Le Moal:
->>> On 12/30/21 20:08, Paul Menzel wrote:
->>>>>>     	board_ahci_nomsi,
->>>>>>     	board_ahci_noncq,
->>>>>>     	board_ahci_nosntf,
->>>>>> @@ -141,6 +142,13 @@ static const struct ata_port_info ahci_port_info[] = {
->>>>>>     		.udma_mask	= ATA_UDMA6,
->>>>>>     		.port_ops	= &ahci_ops,
->>>>>>     	},
->>>>>> +	[board_ahci_nodbdelay] = {
->>>>>> +		.flags		= AHCI_FLAG_COMMON,
->>>>>> +		.link_flags	= ATA_LFLAG_NO_DB_DELAY,
->>>>>> +		.pio_mask	= ATA_PIO4,
->>>>>> +		.udma_mask	= ATA_UDMA6,
->>>>>> +		.port_ops	= &ahci_ops,
->>>>>> +	},
->>>>>>     	[board_ahci_nomsi] = {
->>>>>>     		AHCI_HFLAGS	(AHCI_HFLAG_NO_MSI),
->>>>>>     		.flags		= AHCI_FLAG_COMMON,
->>>>>> @@ -437,6 +445,7 @@ static const struct pci_device_id ahci_pci_tbl[] = {
->>>>>>     		board_ahci_al },
->>>>>>     	/* AMD */
->>>>>>     	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_HUDSON2_SATA_IDE), board_ahci },
->>>>>> +	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_HUDSON2_SATA_AHCI), board_ahci_nodbdelay },
->>>>>
->>>>> Patch 1 introduces this macro in pci_ids.h, but it is used only here. So
->>>>> to keep with the current style in this structure, drop the macro (so
->>>>> drop patch 1).
->>>>
->>>> I wait for your answer of the second patch, and then I am going to sent v4.
->>>
->>> Let's use the numeric value. No macro definition needed.
->>
->> Alright. I am going to follow the maintainers wishes.
->>
->>>>>>     	{ PCI_VDEVICE(AMD, 0x7900), board_ahci }, /* AMD CZ */
->>>>>>     	{ PCI_VDEVICE(AMD, 0x7901), board_ahci_mobile }, /* AMD Green Sardine */
->>>>>>     	/* AMD is using RAID class only for ahci controllers */
->>>>
->>>> Do you have a AHCI device at hand, where you could also test if
->>>> everything works fine without the delay?
->>>
->>> Unfortunately, I do not have any board with this adapter.
->>
->> Sorry, we misunderstand each other. (I wrote a reply to my own patch [1].)
->>
->> I think the delay is not necessary for any modern AHCI controller. It’d
->> be great, if you could test, if it’s also true on the systems you have
->> by just skipping the delay.
-> 
-> I need to figure out how to safely test suspend/resume remotely (working
-> from home) :)
-
-Please note, I tested the cold bootup, where `sata_link_resume()` is 
-also run.
-
-> It would indeed be great to have the default as "no delay on resume" and
-> add the delay only for chipsets that need it. However, it is unclear
-> which chipset need the delay, right?
-
-Yes, it’s unclear for what chipset (PHY?) it was added, as the git 
-history i not available in the repository, and I have not found it yet.
-
-> So I think we are stuck with switching chipsets to "no delay" one by
-> one by testing. Once the majority of drivers are converted, we can
-> reverse the default to be "no delay" and mark untested drivers as
-> needing the delay.
-
-For easy testing, a new CLI parameter to skip the delay might be handy.
+Sorry, I don't have a reproducer for this crash, hope the symbolized
+report can help.
+If you fix this issue, please add the following tag to the commit:
+Reported-by: Yiru Xu <xyru1999@gmail.com>
 
 
-Kind regards,
+INFO: trying to register non-static key.
+The code is fine but needs lockdep annotation, or maybe
+you didn't initialize this object before use?
+turning off the locking correctness validator.
+CPU: 2 PID: 18524 Comm: syz-executor.5 Not tainted 5.16.0-rc6 #9
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ assign_lock_key kernel/locking/lockdep.c:951 [inline]
+ register_lock_class+0x148d/0x1950 kernel/locking/lockdep.c:1263
+ __lock_acquire+0x106/0x57e0 kernel/locking/lockdep.c:4906
+ lock_acquire kernel/locking/lockdep.c:5637 [inline]
+ lock_acquire+0x1ab/0x520 kernel/locking/lockdep.c:5602
+ percpu_down_read_trylock include/linux/percpu-rwsem.h:92 [inline]
+ hci_uart_tx_wakeup+0x12e/0x490 drivers/bluetooth/hci_ldisc.c:124
+ h5_timed_event+0x32f/0x6a0 drivers/bluetooth/hci_h5.c:188
+ call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1421
+ expire_timers kernel/time/timer.c:1466 [inline]
+ __run_timers.part.0+0x6b0/0xa90 kernel/time/timer.c:1734
+ __run_timers kernel/time/timer.c:1715 [inline]
+ run_timer_softirq+0xb6/0x1d0 kernel/time/timer.c:1747
+ __do_softirq+0x1d7/0x93b kernel/softirq.c:558
+ invoke_softirq kernel/softirq.c:432 [inline]
+ __irq_exit_rcu kernel/softirq.c:637 [inline]
+ irq_exit_rcu+0xf2/0x130 kernel/softirq.c:649
+ sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1097
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:638
+RIP: 0010:get_current arch/x86/include/asm/current.h:15 [inline]
+RIP: 0010:__sanitizer_cov_trace_pc+0x0/0x40 kernel/kcov.c:199
+Code: 02 8b 7e 81 e2 00 01 ff 00 75 10 65 48 8b 04 25 40 70 02 00 48
+8b 80 58 15 00 00 c3 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 <65> 48
+8b 0c 25 40 70 02 00 bf 02 00 00 00 48 89 ce 4c 8b 04 24 e8
+RSP: 0018:ffffc90006f5f300 EFLAGS: 00000246
+RAX: 0000000000000000 RBX: 0000000000000200 RCX: ffff888051915640
+RDX: 0000000000000000 RSI: ffff888051915640 RDI: 0000000000000002
+RBP: 0000000000000008 R08: ffffffff814c726d R09: 0000000000000000
+R10: 0000000000000007 R11: fffffbfff1b20a2a R12: 0000000000000000
+R13: 0000000000000001 R14: ffff888010c64c00 R15: ffffea0001826f00
+ queue_work_on+0xb3/0x110 kernel/workqueue.c:1552
+ queue_work include/linux/workqueue.h:502 [inline]
+ schedule_work include/linux/workqueue.h:563 [inline]
+ __vfree_deferred mm/vmalloc.c:2654 [inline]
+ vfree_atomic+0xac/0xe0 mm/vmalloc.c:2672
+ free_thread_stack kernel/fork.c:291 [inline]
+ release_task_stack kernel/fork.c:431 [inline]
+ put_task_stack+0x2a7/0x480 kernel/fork.c:442
+ finish_task_switch+0x591/0x820 kernel/sched/core.c:4884
+ context_switch kernel/sched/core.c:4975 [inline]
+ __schedule+0xce1/0x2530 kernel/sched/core.c:6253
+ preempt_schedule_common+0x4a/0xc0 kernel/sched/core.c:6419
+ preempt_schedule_thunk+0x16/0x18 arch/x86/entry/thunk_64.S:35
+ vprintk_emit+0x315/0x4a0 kernel/printk/printk.c:2246
+ vprintk+0x80/0x90 kernel/printk/printk_safe.c:50
+ _printk+0xba/0xed kernel/printk/printk.c:2266
+ show_free_areas+0x762/0xff0 mm/page_alloc.c:5892
+ show_mem+0x3e/0x1ab lib/show_mem.c:17
+ warn_alloc_show_mem mm/page_alloc.c:4198 [inline]
+ warn_alloc.cold+0x10e/0x17a mm/page_alloc.c:4221
+ __vmalloc_area_node mm/vmalloc.c:2964 [inline]
+ __vmalloc_node_range+0x84e/0xa30 mm/vmalloc.c:3065
+ alloc_thread_stack_node kernel/fork.c:244 [inline]
+ dup_task_struct kernel/fork.c:886 [inline]
+ copy_process+0x911/0x73e0 kernel/fork.c:2023
+ kernel_clone+0xe7/0x10c0 kernel/fork.c:2582
+ __do_sys_clone+0xc8/0x110 kernel/fork.c:2699
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fd4e55d41c5
+Code: 48 85 ff 74 3d 48 85 f6 74 38 48 83 ee 10 48 89 4e 08 48 89 3e
+48 89 d7 4c 89 c2 4d 89 c8 4c 8b 54 24 08 b8 38 00 00 00 0f 05 <48> 85
+c0 7c 13 74 01 c3 31 ed 58 5f ff d0 48 89 c7 b8 3c 00 00 00
+RSP: 002b:00007fff2aaa5b78 EFLAGS: 00000202 ORIG_RAX: 0000000000000038
+RAX: ffffffffffffffda RBX: 00007fd4e3e3b700 RCX: 00007fd4e55d41c5
+RDX: 00007fd4e3e3b9d0 RSI: 00007fd4e3e3adb0 RDI: 00000000003d0f00
+RBP: 00007fff2aaa5dd0 R08: 00007fd4e3e3b700 R09: 00007fd4e3e3b700
+R10: 00007fd4e3e3b9d0 R11: 0000000000000202 R12: 00007fff2aaa5c2e
+R13: 00007fff2aaa5c2f R14: 00007fff2aaa5dd0 R15: 00007fd4e3e3adc0
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0: 02 8b 7e 81 e2 00     add    0xe2817e(%rbx),%cl
+   6: 01 ff                 add    %edi,%edi
+   8: 00 75 10             add    %dh,0x10(%rbp)
+   b: 65 48 8b 04 25 40 70 mov    %gs:0x27040,%rax
+  12: 02 00
+  14: 48 8b 80 58 15 00 00 mov    0x1558(%rax),%rax
+  1b: c3                   retq
+  1c: 66 66 2e 0f 1f 84 00 data16 nopw %cs:0x0(%rax,%rax,1)
+  23: 00 00 00 00
+  27: 0f 1f 00             nopl   (%rax)
+* 2a: 65 48 8b 0c 25 40 70 mov    %gs:0x27040,%rcx <-- trapping instruction
+  31: 02 00
+  33: bf 02 00 00 00       mov    $0x2,%edi
+  38: 48 89 ce             mov    %rcx,%rsi
+  3b: 4c 8b 04 24           mov    (%rsp),%r8
+  3f: e8                   .byte 0xe8
 
-Paul
 
-
->> [1]: https://lore.kernel.org/linux-ide/20211227162658.11314-2-pmenzel@molgen.mpg.de/T/#m697d2121463a4c946730e6b83940e12d6d7e6700
+Best Regards,
+Yiru

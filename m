@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA3A484334
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:19:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A9B4484335
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:20:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbiADOTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:19:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42259 "EHLO
+        id S234094AbiADOUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:20:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:56926 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229702AbiADOTm (ORCPT
+        by vger.kernel.org with ESMTP id S229798AbiADOT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:19:42 -0500
+        Tue, 4 Jan 2022 09:19:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641305982;
+        s=mimecast20190719; t=1641305998;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=ztPwQbcR7E3FSo8LAE3RE42xQfVhZkttEdVXnDtSjVo=;
-        b=OsnpFKjPIsxCVdPiq+qCZ4V1iHxzJOKOf4GPj/JTpPgEqkBTqLWm/OAjsfY1PVlU4MyDrS
-        jWGCywiyCfNKRll/K5dpTcGOy39NnNyTlf7+hs6C+l2cVLoJDJszVf9Cz+SK36UmOs/Mi5
-        juxcRqau0p4K0DMVaTsPYfJoSRZvoDg=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=4o1dUpMKxkuScgdlrFDStdsyfxNC95K73l0Z6QXPvzQ=;
+        b=PGM7dWiqnTSgSGoq+S8Jj9kQT/3id8hI2leSYuvumrGuyI87cF5oSlO/mpQzpNivnhIGOi
+        bIV/NNjvhglGgVCnZ/oRjsl/Svi5mElmbTUh8wW/TRMjXoIol5FM8e+6QNg3GSvGnWv7p1
+        l59KUwTi7JR16Islh2qJWzPlhAEh/oE=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-644-6FE84vvENP6uuTnMoQBmDw-1; Tue, 04 Jan 2022 09:19:39 -0500
-X-MC-Unique: 6FE84vvENP6uuTnMoQBmDw-1
-Received: by mail-ed1-f71.google.com with SMTP id s7-20020a056402520700b003f841380832so25353391edd.5
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 06:19:39 -0800 (PST)
+ us-mta-527-Oy85sI_lMUaM9ARx2_QYGA-1; Tue, 04 Jan 2022 09:19:57 -0500
+X-MC-Unique: Oy85sI_lMUaM9ARx2_QYGA-1
+Received: by mail-ed1-f69.google.com with SMTP id o20-20020a056402439400b003f83cf1e472so25407232edc.18
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 06:19:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=ztPwQbcR7E3FSo8LAE3RE42xQfVhZkttEdVXnDtSjVo=;
-        b=V0/lRh42ybkS3R/20NL01MKJPJAjFQZAQlw2hGgA6NUuGGvFygmT+sq98NouzXX0yx
-         gQQFOhRDQWkqDcYLE9eEssN2gMgtvLZYJF1uo9DcxYOFvszNCliSfWFG8DR1KS1UeunY
-         uRJ2KbcqZLE5/fasKuSLLbM9DKokrbh/c7uW/JHyirNGYdg2/m6x0+eZ3Geaw4EOfuoX
-         uncXuca+IJt3gi4mFX2dqySr94Vze2YE2Ho+Niv3BAHBKhfpD3n3LrslgojrqOdZS7fD
-         iYhR14XBgypEeYFpzflf4IhILO62dnrVb5L+C2ciz6mlnjzdjDIpzFS2ISmOZdKNUKl2
-         1/VA==
-X-Gm-Message-State: AOAM5325i+U81s/fs2uWS65TrDpAyWVPw873+ZA4+pkqhB+lw+X2tRRw
-        JrfT8C8rDw2OOoqRLSr1DBICVVD8BCvEQqu6KDfH+DlETYaEdqxPPe66dw0+23FaqCOQV6blnxx
-        wzM56gPVR5upGd6QwI/d9fVkM
-X-Received: by 2002:a17:907:160b:: with SMTP id hb11mr41650578ejc.189.1641305978286;
-        Tue, 04 Jan 2022 06:19:38 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyiJHqaCQNImwOzgATU/PasDtEuAT2Pa4ZJzVW95oxpDZvx/sCFqJMS8e58GPQQ4vQKElCjaQ==
-X-Received: by 2002:a17:907:160b:: with SMTP id hb11mr41650554ejc.189.1641305978060;
-        Tue, 04 Jan 2022 06:19:38 -0800 (PST)
+        bh=4o1dUpMKxkuScgdlrFDStdsyfxNC95K73l0Z6QXPvzQ=;
+        b=SkrdHbdLoNGiob0oFkR74G1u2BhVC8lMC8KcKJCeZjdAzW08ixmh50G65zoEEzaYJV
+         qjacPtqXEoQrgYUaN1j2mTlIq7morETL9GzSthsiH+fMs0slEdLDb7koDULJyj/5b/uY
+         rjVWwG2D+tGRSjkS8ZG/sTgyVHhtzzCTLU5I6DYpHBeKHokHnMLginSX5Xz3e074M7nT
+         yJ7P7db5nsbe0qTPFMxKNDaDxACfQIEUwCACTJ3LwONshoJ2eJdMSxP0sg+O6lVP+4Da
+         tfLzr+UkoCnbbltTQwsmnWpsknscNGOn6M3khEJNyhr8C1iEAXuAWmXSYr4zPBO4FW9u
+         Nt3g==
+X-Gm-Message-State: AOAM530dfdiBitzxNH1dJZzFlJgNPWFc0/7jlrw6aqjTcCb/s1r+9hvs
+        vuuSrZenZryfyrXaSWDDjuaaYWuy3EOeVdGTsN6zUCmqNlsJ6aO/AohCFeJ8FwCbM12nBGG4FJG
+        gJyYFGuUhcy19HfG+IsoBDh9f
+X-Received: by 2002:a17:906:8981:: with SMTP id gg1mr14679878ejc.511.1641305996406;
+        Tue, 04 Jan 2022 06:19:56 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz185nPOkQ2E/XUIdj7/n9gpKbnEymZqBm+PWnqWGcUp6r7ZcjCZjXBRiSiu594U8svxpbQdQ==
+X-Received: by 2002:a17:906:8981:: with SMTP id gg1mr14679858ejc.511.1641305996239;
+        Tue, 04 Jan 2022 06:19:56 -0800 (PST)
 Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id 2sm4252772ejx.123.2022.01.04.06.19.37
+        by smtp.gmail.com with ESMTPSA id hb11sm11500426ejc.33.2022.01.04.06.19.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 06:19:37 -0800 (PST)
-Date:   Tue, 4 Jan 2022 15:19:35 +0100
+        Tue, 04 Jan 2022 06:19:46 -0800 (PST)
+Date:   Tue, 4 Jan 2022 15:19:44 +0100
 From:   Jiri Olsa <jolsa@redhat.com>
 To:     Ian Rogers <irogers@google.com>
 Cc:     Andi Kleen <ak@linux.intel.com>,
@@ -75,81 +75,97 @@ Cc:     Andi Kleen <ak@linux.intel.com>,
         Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
         linux-arm-kernel@lists.infradead.org, zhengjun.xing@intel.com,
         eranian@google.com
-Subject: Re: [PATCH v3 03/48] perf stat: Correct aggregation CPU map
-Message-ID: <YdRXd4jBUfduSSAY@krava>
+Subject: Re: [PATCH v3 08/48] perf cpumap: Remove map+index get_die
+Message-ID: <YdRXgF4OoFnU6MUo@krava>
 References: <20211230072030.302559-1-irogers@google.com>
- <20211230072030.302559-5-irogers@google.com>
+ <20211230072030.302559-10-irogers@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211230072030.302559-5-irogers@google.com>
+In-Reply-To: <20211230072030.302559-10-irogers@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 29, 2021 at 11:19:45PM -0800, Ian Rogers wrote:
-> Switch the perf_cpu_map in aggr_update_shadow from
-> the evlist to the counter's cpu map, so the index is appropriate. This
-> addresses a problem where uncore counts, with a cpumap like:
-> $ cat /sys/devices/uncore_imc_0/cpumask
-> 0,18
-> Don't aggregate counts in CPUs based on the index of those values in the
-> cpumap (0 and 1) but on the actual CPU (0 and 18). Thereby correcting
-> metric calculations in per-socket mode for counters without a full
-> cpumask.
+On Wed, Dec 29, 2021 at 11:19:50PM -0800, Ian Rogers wrote:
+> Migrate final users to appropriate cpu variant.
 > 
-> On a SkylakeX with a tweaked DRAM_BW_Use metric, to remove unnecessary
-> scaling, this gives:
-> 
-> Before:
-> $ /perf stat --per-socket -M DRAM_BW_Use -I 1000
->      1.001102293 S0        1              27.01 MiB  uncore_imc/cas_count_write/ #   103.00 DRAM_BW_Use
->      1.001102293 S0        1              30.22 MiB  uncore_imc/cas_count_read/
->      1.001102293 S0        1      1,001,102,293 ns   duration_time
->      1.001102293 S1        1              20.10 MiB  uncore_imc/cas_count_write/ #     0.00 DRAM_BW_Use
->      1.001102293 S1        1              32.74 MiB  uncore_imc/cas_count_read/
->      1.001102293 S1        0      <not counted> ns   duration_time
->      2.003517973 S0        1              83.04 MiB  uncore_imc/cas_count_write/ #   920.00 DRAM_BW_Use
->      2.003517973 S0        1             145.95 MiB  uncore_imc/cas_count_read/
->      2.003517973 S0        1      1,002,415,680 ns   duration_time
->      2.003517973 S1        1             302.45 MiB  uncore_imc/cas_count_write/ #     0.00 DRAM_BW_Use
->      2.003517973 S1        1             290.99 MiB  uncore_imc/cas_count_read/
->      2.003517973 S1        0      <not counted> ns   duration_time
-> 
-> After:
-> $ perf stat --per-socket -M DRAM_BW_Use -I 1000
->      1.001080840 S0        1              24.96 MiB  uncore_imc/cas_count_write/ #    54.00 DRAM_BW_Use
->      1.001080840 S0        1              33.64 MiB  uncore_imc/cas_count_read/
->      1.001080840 S0        1      1,001,080,840 ns   duration_time
->      1.001080840 S1        1              42.43 MiB  uncore_imc/cas_count_write/ #    84.00 DRAM_BW_Use
->      1.001080840 S1        1              47.05 MiB  uncore_imc/cas_count_read/
->      1.001080840 S1        0      <not counted> ns   duration_time
-> 
+> Reviewed-by: James Clark <james.clark@arm.com>
 > Signed-off-by: Ian Rogers <irogers@google.com>
 > ---
->  tools/perf/util/stat-display.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  tools/perf/tests/topology.c | 2 +-
+>  tools/perf/util/cpumap.c    | 9 ---------
+>  tools/perf/util/cpumap.h    | 1 -
+>  tools/perf/util/stat.c      | 2 +-
+>  4 files changed, 2 insertions(+), 12 deletions(-)
 > 
-> diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-> index 588601000f3f..b0fa81ffce61 100644
-> --- a/tools/perf/util/stat-display.c
-> +++ b/tools/perf/util/stat-display.c
-> @@ -526,7 +526,7 @@ static void aggr_update_shadow(struct perf_stat_config *config,
->  		evlist__for_each_entry(evlist, counter) {
->  			val = 0;
->  			for (cpu = 0; cpu < evsel__nr_cpus(counter); cpu++) {
-> -				s2 = config->aggr_get_id(config, evlist->core.cpus, cpu);
-> +				s2 = config->aggr_get_id(config, evsel__cpus(counter), cpu);
->  				if (!cpu_map__compare_aggr_cpu_id(s2, id))
->  					continue;
->  				val += perf_counts(counter->counts, cpu, 0)->val;
+> diff --git a/tools/perf/tests/topology.c b/tools/perf/tests/topology.c
+> index 69a64074b897..ce085b6f379b 100644
+> --- a/tools/perf/tests/topology.c
+> +++ b/tools/perf/tests/topology.c
+> @@ -136,7 +136,7 @@ static int check_cpu_topology(char *path, struct perf_cpu_map *map)
+>  
+>  	// Test that die ID contains socket and die
+>  	for (i = 0; i < map->nr; i++) {
+> -		id = cpu_map__get_die(map, i, NULL);
+> +		id = cpu_map__get_die_aggr_by_cpu(perf_cpu_map__cpu(map, i), NULL);
+>  		TEST_ASSERT_VAL("Die map - Socket ID doesn't match",
+>  			session->header.env.cpu[map->map[i]].socket_id == id.socket);
+>  
+> diff --git a/tools/perf/util/cpumap.c b/tools/perf/util/cpumap.c
+> index 342a5eaee9d3..ff91c32da688 100644
+> --- a/tools/perf/util/cpumap.c
+> +++ b/tools/perf/util/cpumap.c
+> @@ -216,15 +216,6 @@ struct aggr_cpu_id cpu_map__get_die_aggr_by_cpu(int cpu, void *data)
+>  	return id;
+>  }
+>  
+> -struct aggr_cpu_id cpu_map__get_die(struct perf_cpu_map *map, int idx,
+> -				    void *data)
+> -{
+> -	if (idx < 0 || idx > map->nr)
+> -		return cpu_map__empty_aggr_cpu_id();
+> -
+> -	return cpu_map__get_die_aggr_by_cpu(map->map[idx], data);
+> -}
+> -
+>  int cpu_map__get_core_id(int cpu)
+>  {
+>  	int value, ret = cpu__get_topology_int(cpu, "core_id", &value);
+> diff --git a/tools/perf/util/cpumap.h b/tools/perf/util/cpumap.h
+> index a53af24301d2..365ed69699e1 100644
+> --- a/tools/perf/util/cpumap.h
+> +++ b/tools/perf/util/cpumap.h
+> @@ -34,7 +34,6 @@ int cpu_map__get_socket_id(int cpu);
+>  struct aggr_cpu_id cpu_map__get_socket_aggr_by_cpu(int cpu, void *data);
+>  int cpu_map__get_die_id(int cpu);
+>  struct aggr_cpu_id cpu_map__get_die_aggr_by_cpu(int cpu, void *data);
+> -struct aggr_cpu_id cpu_map__get_die(struct perf_cpu_map *map, int idx, void *data);
+>  int cpu_map__get_core_id(int cpu);
+>  struct aggr_cpu_id cpu_map__get_core_aggr_by_cpu(int cpu, void *data);
+>  struct aggr_cpu_id cpu_map__get_core(struct perf_cpu_map *map, int idx, void *data);
+> diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
+> index 9eca1111fa52..5ed99bcfe91e 100644
+> --- a/tools/perf/util/stat.c
+> +++ b/tools/perf/util/stat.c
+> @@ -336,7 +336,7 @@ static int check_per_pkg(struct evsel *counter,
+>  	 * On multi-die system, die_id > 0. On no-die system, die_id = 0.
+>  	 * We use hashmap(socket, die) to check the used socket+die pair.
+>  	 */
+> -	d = cpu_map__get_die(cpus, cpu, NULL).die;
+> +	d = cpu_map__get_die_id(cpu);
+>  	if (d < 0)
+>  		return -1;
 
-makes sense, there's another instance of this in first_shadow_cpu
+looking on this I realized that probably we have broken
 
-thanks,
+  perf stat record
+  perf stat report
+
+if that report is run on different machine, because we
+take die from current system
+
+should be fixed in another patchset though
+
 jirka
-
-> -- 
-> 2.34.1.448.ga2b2bfdf31-goog
-> 
 

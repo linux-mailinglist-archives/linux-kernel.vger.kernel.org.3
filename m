@@ -2,338 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7790483F9B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:07:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9433A483F95
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:06:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231124AbiADKHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 05:07:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49924 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230523AbiADKG6 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 05:06:58 -0500
-Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B907C06179C
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 02:06:56 -0800 (PST)
-Received: by mail-wr1-x44a.google.com with SMTP id f13-20020adfe90d000000b001a15c110077so11464354wrm.8
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 02:06:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=2bOH2oJjIvdfSW7pk+D64LWeafheAKYSzcyVanqLfZc=;
-        b=E2Fy6UidtejNOcRBZEU6Hlsp5sOtbd32q4RBl3S4cJkr639I2kyBEIWznRFTmodGQX
-         UaRVfl1PmJEybaUKjAZKYcpv2QJT0n8icELIzkrOifsuOfhzA+3Ro50Oqe5sf6yh+DiN
-         ygpn/dNS8id+3PjOEvrhy2fzh8fVD0ASJztYYkoN3VCdWZZGRTpH35YxCCzmLYk5D5Pj
-         GKT1cyUdXau7Gyc9Sq89lumlTXx0oa9aqfgqGz+cdKrmlZfVUkcs+xNnullZeMyHvWtM
-         s60Vz5lcfND/CZ6BRQycYtcGkTw55TWbjG3r5hFp8rCTEwWj3MwOExl3A5M/54qCIIGS
-         cYQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=2bOH2oJjIvdfSW7pk+D64LWeafheAKYSzcyVanqLfZc=;
-        b=YPQYrnMQ/+xhiQMaatHuaaTheEz8/2TsgbkQxhkB0MBG81gKIat0R8JKfvS69VLXt6
-         QlvlKzylftyEX8CsSiaNV6Oz41XveguCIRIPD+8mJnYDDb15vxw+xElNBmr1+4Nm8aTO
-         BBYzO57QYMDpHnVhfrgydf78mqMZpPOkL2yHX0iJ6WacHV7dmkEbQTrgIfsPvsiTKmVE
-         ssIYem16MpC6ipZ7juEjcrkeifWMWFd80y+MGRFHbOQeQGAbclA9QAbrjVbslvcAdW9I
-         wgh9nZvQ+do6T5Ii+jUdcdp9266+7ndjbWEuFmzmzgoY9kZGOmcJvXz6G0MzsoJQT0VY
-         NmyA==
-X-Gm-Message-State: AOAM530f6EqQHeHOaWQsZ5sqW443UEljVFSu+oZ/GTnJZQkvWE1NAUsy
-        2uJexHdW7CL6RiftSr8tdcxW05Vu8fE7vg==
-X-Google-Smtp-Source: ABdhPJy5y7kMovWK/+Wzbr37Bh/et2OQoQyV2fz586BohWdRjieetJlZAz31j+Ve/gESo5gNFpLTVtHYpeTD0g==
-X-Received: from dbrazdil.lon.corp.google.com ([2a00:79e0:d:209:ab7e:2ff0:8fa0:3029])
- (user=dbrazdil job=sendgmr) by 2002:adf:e844:: with SMTP id
- d4mr40646736wrn.151.1641290814869; Tue, 04 Jan 2022 02:06:54 -0800 (PST)
-Date:   Tue,  4 Jan 2022 10:06:45 +0000
-In-Reply-To: <20220104100645.1810028-1-dbrazdil@google.com>
-Message-Id: <20220104100645.1810028-3-dbrazdil@google.com>
-Mime-Version: 1.0
-References: <20220104100645.1810028-1-dbrazdil@google.com>
-X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
-Subject: [PATCH v6 2/2] misc: open-dice: Add driver to expose DICE data to userspace
-From:   David Brazdil <dbrazdil@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Frank Rowand <frowand.list@gmail.com>,
-        David Brazdil <dbrazdil@google.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Scull <ascull@google.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S230448AbiADKGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 05:06:49 -0500
+Received: from mail-bn7nam10on2049.outbound.protection.outlook.com ([40.107.92.49]:37665
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229731AbiADKGt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 05:06:49 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GzgU1I7t/3JV+3GOX5kPvDDYpcpn8DKEG/F47/XuRbYiZkCZ34/G/ZZ4syXbycqQMNBmxeH+rGWk1xQSKbLXypO9V8pKtWXQ9cKc7WOsHjAl1AL3wxVAeqvMT/TfH/3e60tNWSf8WsHLl/5iCtTpklNlbf4rQyPqdz3kRwspdVkXf1x1Ip9ZvLVqxeKAyz46KW1sF/soq6OHE0IzLhg7+9MFcwmUH6qxVUZGPgtjegbB04OWmYjXIEg0Md84pZdxF+Wxo6p+SjZOjdJp+wlGpEhXgZPzEiSX26CVCDZJsEXnrzTct0GLo+Ok88eoaItYnnNHpCP/+uPEcLVhNVBxkQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mTDdHrt0tpfDd/JktQiDGe5pFCDTc/zVV0snoHutoko=;
+ b=MQE70vk7DVmu1gUb1NGlueGVJ+yqCE0pXzlTg925FXQ4o5MP4O93kjWFtsbVb3z3eOUTcaCt8VG+TMX/aLvA3nV1KIYNf872+dpn/udZMcQPBZbJXYTLG/+H/0XvSLqd+VJ0kVml1NSK2aw3AQ/6l1vpXX52N2dc0ySBk5MEP4iQ2099QuvKD5FtS6JivDzIZgKwIRnVvOHntDv8X1UC3mprh/vqrMApCvHU5Jl6xyjaXMprvy7ZKNTQDkl4LM0IeLpf3iFIWb6ct90hUFsiB7RGGqysxI+L1hoohpMLfRzyJoM5TudJWMQv7k7UwK8kglkuZYjo8Dk8cQmvv/8ucQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mTDdHrt0tpfDd/JktQiDGe5pFCDTc/zVV0snoHutoko=;
+ b=pdFjdIODrlvkXnO73waiPM56ObO7Pbj8RwNOD6HYKmB5wYZoBpLMVGwwzsvS7M3iRGJF5amB08k/pMl7y3gFs9+BzUyB/DO4oN0ity+Z9cAdspUoP5SRBO6r8inEqz6U8iDv9F5rFyNPe7toNZA/en0xVUOFguspRf/HCJu/p9uItGbcjVmK3FADbzCi0Xitxht+NnsdpRbDpfwiNHVyJlPUvs6OGHh5rsmwo0Heyd/kwOLaVoO4QEScjqHb2lnPAtmqET3800lgVjgxHq8CRIbLUmDTud+XCnB/KtnVgccd2gbrPfbwFZGrZcYgwC+ucpl3kz7Zd7xgBR8nlYFR1w==
+Received: from BN9PR12MB5273.namprd12.prod.outlook.com (2603:10b6:408:11e::22)
+ by BN9PR12MB5383.namprd12.prod.outlook.com (2603:10b6:408:104::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.14; Tue, 4 Jan
+ 2022 10:06:47 +0000
+Received: from BN9PR12MB5273.namprd12.prod.outlook.com
+ ([fe80::1476:9fcc:8d54:394f]) by BN9PR12MB5273.namprd12.prod.outlook.com
+ ([fe80::1476:9fcc:8d54:394f%3]) with mapi id 15.20.4844.016; Tue, 4 Jan 2022
+ 10:06:47 +0000
+From:   Akhil R <akhilrajeev@nvidia.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Wolfram Sang <wsa@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+Subject: RE: [PATCH 1/2] device property: Add device_irq_get_byname
+Thread-Topic: [PATCH 1/2] device property: Add device_irq_get_byname
+Thread-Index: AQHX8n7ghAR0sKU4N0uGdTUi4cpNNqw1MEwAgB1x03A=
+Date:   Tue, 4 Jan 2022 10:06:47 +0000
+Message-ID: <BN9PR12MB5273EDC94146B82B00763055C04A9@BN9PR12MB5273.namprd12.prod.outlook.com>
+References: <1639660402-31207-1-git-send-email-akhilrajeev@nvidia.com>
+ <1639660402-31207-2-git-send-email-akhilrajeev@nvidia.com>
+ <CAHp75VdXw_XvDN=T3fOmNOWsdfQ_xm2090z9uAq77oADPRcMzw@mail.gmail.com>
+In-Reply-To: <CAHp75VdXw_XvDN=T3fOmNOWsdfQ_xm2090z9uAq77oADPRcMzw@mail.gmail.com>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 618d656c-246f-49d3-815f-08d9cf69eb0b
+x-ms-traffictypediagnostic: BN9PR12MB5383:EE_
+x-microsoft-antispam-prvs: <BN9PR12MB5383FAF9FB67C6571E0ECF62C04A9@BN9PR12MB5383.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 7zMoV/0dVVoHSBLlOw/f1vL8TDffeqrQnyXu3lbM5iLrcXVDS4ciFp8MxvJM0JnnIiJjAB7u1FrOSwNdWAe39XW8KzwjF/iGhM1gvG/0nQ+oDoUW46ra6nF60xKfEBA5j3FhA7U2T5CBNrcMRVChpGdHwL++yP7UQOkacMxgyTDEEPYusLVt2YbbeqfZAM2Hd+yFFpRTvYH14SL8jy3t2pu5rO90CadTY+a5N3sL2ykH+zfok8o/7ZG6geFdZLo4iTL0CTTe0ezyeaAr885rW7GhDUtgO9BoGZQrakJ2IdqP++MCv1NAYwmHDovqpN3E93h4os0yTU/+UxEhetbMdpHcmE2T3iAtES2ovkwIBUItQJ/Yc4MofiuraRIEa7nEyAsAPtuhz+3k5KVu69A+dMLBDtOeiDvJ/HL5PDq4xD0ulpvyegzgKrt127u6EmwiiQ/OBinWnzNzi8vV1Gj+5DFzmpEVHnvaXkqsbyIUZV7Y0E/b4NdgjuMyxoy34spgmx3RC19sz3ts3a5uJNT62e7t8pR6fS7MfOAS2/mDIN7nLfaLyLzsG9WqJn6fVbbdcjAkzwUk5ChDR1JkOAPPfpvsc41qepSsccRTAUEKIsqPP7aHSPINoQRbwKOkSz7OJADs6+S1caQTzgIPYF5irFp7JymputT1mxuTQ2f+dsfaa8bbZR9iyePX6u2DG9C3QQEDKXiRUhdclR3aXph8YN+2GUatzXDz1pvjcO84Qo9KLTXGh5d33Pd/+hBLMwH61rYy8lseru/jDkGcyRP5k3kQN4WLOYp4W9qO11pzFpY=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5273.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(86362001)(7416002)(76116006)(54906003)(38070700005)(508600001)(8936002)(66476007)(7696005)(8676002)(966005)(5660300002)(6916009)(9686003)(2906002)(55016003)(6506007)(316002)(53546011)(38100700002)(64756008)(66556008)(66946007)(66446008)(55236004)(4326008)(26005)(71200400001)(52536014)(122000001)(33656002)(186003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?TR4wdk0xCqoW6teG48HVWsCp87xN3UBletp01aWyDt7lMenfjKRZ+Pi4OJ+O?=
+ =?us-ascii?Q?aAsoGuWAZI9Hpbs6yNOKy9GVq1OdCfaOlol58uJq/WUs9mmPGE7G5dxcFNWx?=
+ =?us-ascii?Q?BjljeX/VGyipw2rmdA9kruM6kMIcX4xwwLoaPbI8XyRIyUyLnOC0sf+xRDxI?=
+ =?us-ascii?Q?7Y9aXWnEvdu+O2PwfJrC1wL18qeaUKoKYRVTGPkc90fZFRan47oIFE1kribj?=
+ =?us-ascii?Q?tnPgV3dW0o4y0I0hjw1PNtV70HblpPcyscEptN1VrgbL1C7HzoDx6yTta057?=
+ =?us-ascii?Q?9+1VMGjiTA1w6Tsg3hlUnsRtY+uYlrEws992v4v+xS0p4saXjMgM5qlUYOlU?=
+ =?us-ascii?Q?m5gU/FKAr5AiMHnrkim8DxhFowUqwXJhwqLGGoLKBN2L/8qvHtel/LCAQZez?=
+ =?us-ascii?Q?GBQu0DKwGqcrrFrOYbi/kw3u3jaQVfXvs+Nnptsp+T6pT5LIIHk9ZHohroC8?=
+ =?us-ascii?Q?lIb2NvhH1eSMWgB0VewQjOygnv96JGwbxa4rPvwLikb2RglZq5O9x4qHxFS6?=
+ =?us-ascii?Q?89KyXtTvCnkKQzaAm4DhtQWggWsGGg8WtJAwMUhHTRbmhnZ70iuC0XQei9m+?=
+ =?us-ascii?Q?A4NrL+wqH9VlWcMjClYnII6wxnS0P9dHr1t43xsJzMYhFToRv20rq8du976e?=
+ =?us-ascii?Q?gx0kgT80VSB82VihywkOqDuLfFS86iNKDtivBm+dQIJn7JpJRhGvcorwXPyv?=
+ =?us-ascii?Q?KHLbSlzlkfm4CTXdUr0rkhkk4OQqte/Uee4qTpauLdVhhseF/rnnsnDYI+6S?=
+ =?us-ascii?Q?SG9VzrE1DYpDT+Cfsz02e/JduYucxcK4N4T6PXrriBPnRt9lqlT3B44r0Lg3?=
+ =?us-ascii?Q?wEo+ZMBK/6d0OJvgkSIR4UhOrH22E1yRChsHrm2bQHk7n919F2k8rWTlkNIF?=
+ =?us-ascii?Q?KpM5YxNpdJtS9/WzG5F1bYI+HIa+2zT9TtDjzZH2/+2Q7iD6S+hr1qdrA6qz?=
+ =?us-ascii?Q?ZjkkcmfPMHmezu5HphhbVXMa1+3T0mmS8LJJE7OjZAn/KrBLiiBZG9TsJdQm?=
+ =?us-ascii?Q?2/ND6hCkvO+eh3JmxZS0gelWlicWEtNCnYvPTeZ9o4c9K3XM65RQxxb8gdVk?=
+ =?us-ascii?Q?vYYv6axAhdIsAqOFbBwTH4gUiMvblKxU+DpA0P0eh2a2dkOVlwbaXCcFnoog?=
+ =?us-ascii?Q?FQt/yUhy9QfNa9I1vP4p53Uwd5kh5W8KEqdF7PT3jR3SiK44BM4C11T0L0qQ?=
+ =?us-ascii?Q?9qhSFQxb61nzc4/w9nb2fgeYDB5qd4L2Ha53CggOCkQKXi0KEko4BUrnkF6f?=
+ =?us-ascii?Q?1UfHXG4oCURqne/AsqRWsQcU+HWtbWO+A7VYKU9ftgErqcl0vDHnAg74gH8p?=
+ =?us-ascii?Q?3HphM0KcKhaWLI6uWF76XIM8qnXocfE1eOulGgXqLbNmRfFJCr3pDLQxoVOE?=
+ =?us-ascii?Q?pVG8Vdlt5bO+Cxm9qRQH1B2HBVug4P7JEkrvT55wqCtAYIdDVXNNmcWh3EFM?=
+ =?us-ascii?Q?euk/2laHtpPkkqE298hczMyJ3vb1DzLrj3rTY8QO77hZMkPpEQc+JKVrZP+J?=
+ =?us-ascii?Q?eVs6YZAXyw/I/9JGr+XO8WIWkg7qXIhOiwxiLm0msaRXWQ+jl8SiyVayF6zo?=
+ =?us-ascii?Q?6E0LmjMbxABTY6ImFXNxGx7wTGliw3/Rr+9Qrv84De8crEVcvRMRaEzjUjGP?=
+ =?us-ascii?Q?b66ZvJNksn483KEIXIdXqSU=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5273.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 618d656c-246f-49d3-815f-08d9cf69eb0b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jan 2022 10:06:47.0925
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +gu2lsJUQ0ujIX/b+Qu8vjHcFQ4YnJNcP7VkArgYV/clK0ij2NEAMBHUsDPat4sWwcJASyo/FMsOZEuW2DKYVg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5383
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Open Profile for DICE is an open protocol for measured boot compatible
-with the Trusted Computing Group's Device Identifier Composition
-Engine (DICE) specification. The generated Compound Device Identifier
-(CDI) certificates represent the hardware/software combination measured
-by DICE, and can be used for remote attestation and sealing.
+> On Thu, Dec 16, 2021 at 3:14 PM Akhil R <akhilrajeev@nvidia.com> wrote:
+> >
+> > Get interrupt by name from ACPI table as well.
+>=20
+> the interrupt resource
+>=20
+> > Add option to use 'interrupt-names' in _DSD which can map to interrupt
+> > by index. The implementation is similar to 'interrupt-names' in devicet=
+ree.
+> > Also add a common routine to get irq by name from devicetree and ACPI
+> > table.
+> >
+> > Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> > ---
+> >  drivers/base/property.c  | 35 +++++++++++++++++++++++++++++++++++
+> >  include/linux/property.h |  3 +++
+> >  2 files changed, 38 insertions(+)
+> >
+> > diff --git a/drivers/base/property.c b/drivers/base/property.c index
+> > cbe4fa2..7acf4fc 100644
+> > --- a/drivers/base/property.c
+> > +++ b/drivers/base/property.c
+> > @@ -920,6 +920,41 @@ int fwnode_irq_get(const struct fwnode_handle
+> > *fwnode, unsigned int index)  EXPORT_SYMBOL(fwnode_irq_get);
+> >
+> >  /**
+> > + * fwnode_irq_get_byname - Get IRQ from a fwnode using its name
+> > + * @fwnode:    Pointer to the firmware node
+> > + * @index:     IRQ name
+> > + *
+>=20
+> Needs a description to explain how the name is described.
+>=20
+> > + * Returns Linux IRQ number on success, errno otherwise.
+> > + */
+> > +int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const
+> > +char *name) {
+> > +       int index;
+> > +
+> > +       if (unlikely(!name))
+> > +               return -EINVAL;
+> > +
+> > +       index =3D fwnode_property_match_string(fwnode, "interrupt-names=
+",
+> name);
+> > +       if (index < 0)
+> > +               return index;
+>=20
+> This property ise needs to be described in the ACPI documentation:
+> https://www.kernel.org/doc/html/latest/firmware-
+> guide/acpi/enumeration.html
+>=20
+> Perhaps after the DMA section.
+Do you mean to document the complete interrupt usage in ACPI
+including getting interrupt by index or only the named interrupt part?
 
-Add a driver that exposes reserved memory regions populated by firmware
-with DICE CDIs and exposes them to userspace via a character device.
+Also please share if anything on the discussion we had previously.
 
-Userspace obtains the memory region's size from read() and calls mmap()
-to create a mapping of the memory region in its address space. The
-mapping is not allowed to be write+shared, giving userspace a guarantee
-that the data were not overwritten by another process.
-
-Userspace can also call write(), which triggers a wipe of the DICE data
-by the driver. Because both the kernel and userspace mappings use
-write-combine semantics, all clients observe the memory as zeroed after
-the syscall has returned.
-
-Acked-by: Rob Herring <robh@kernel.org>
-Cc: Andrew Scull <ascull@google.com>
-Cc: Will Deacon <will@kernel.org>
-Signed-off-by: David Brazdil <dbrazdil@google.com>
----
- drivers/misc/Kconfig     |  12 +++
- drivers/misc/Makefile    |   1 +
- drivers/misc/open-dice.c | 188 +++++++++++++++++++++++++++++++++++++++
- drivers/of/platform.c    |   1 +
- 4 files changed, 202 insertions(+)
- create mode 100644 drivers/misc/open-dice.c
-
-diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-index 0f5a49fc7c9e..a2b26426efba 100644
---- a/drivers/misc/Kconfig
-+++ b/drivers/misc/Kconfig
-@@ -470,6 +470,18 @@ config HISI_HIKEY_USB
- 	  switching between the dual-role USB-C port and the USB-A host ports
- 	  using only one USB controller.
- 
-+config OPEN_DICE
-+	tristate "Open Profile for DICE driver"
-+	depends on OF_RESERVED_MEM
-+	help
-+	  This driver exposes a DICE reserved memory region to userspace via
-+	  a character device. The memory region contains Compound Device
-+	  Identifiers (CDIs) generated by firmware as an output of DICE
-+	  measured boot flow. Userspace can use CDIs for remote attestation
-+	  and sealing.
-+
-+	  If unsure, say N.
-+
- source "drivers/misc/c2port/Kconfig"
- source "drivers/misc/eeprom/Kconfig"
- source "drivers/misc/cb710/Kconfig"
-diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-index a086197af544..70e800e9127f 100644
---- a/drivers/misc/Makefile
-+++ b/drivers/misc/Makefile
-@@ -59,3 +59,4 @@ obj-$(CONFIG_UACCE)		+= uacce/
- obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
- obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
- obj-$(CONFIG_HI6421V600_IRQ)	+= hi6421v600-irq.o
-+obj-$(CONFIG_OPEN_DICE)		+= open-dice.o
-diff --git a/drivers/misc/open-dice.c b/drivers/misc/open-dice.c
-new file mode 100644
-index 000000000000..f1819f951173
---- /dev/null
-+++ b/drivers/misc/open-dice.c
-@@ -0,0 +1,188 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2021 - Google LLC
-+ * Author: David Brazdil <dbrazdil@google.com>
-+ *
-+ * Driver for Open Profile for DICE.
-+ *
-+ * This driver takes ownership of a reserved memory region containing data
-+ * generated by the Open Profile for DICE measured boot protocol. The memory
-+ * contents are not interpreted by the kernel but can be mapped into a userspace
-+ * process via a misc device. Userspace can also request a wipe of the memory.
-+ *
-+ * Userspace can access the data with (w/o error handling):
-+ *
-+ *     fd = open("/dev/open-dice0", O_RDWR);
-+ *     read(fd, &size, sizeof(unsigned long));
-+ *     data = mmap(NULL, size, PROT_READ, MAP_PRIVATE, fd, 0);
-+ *     write(fd, NULL, 0); // wipe
-+ *     close(fd);
-+ */
-+
-+#include <linux/io.h>
-+#include <linux/miscdevice.h>
-+#include <linux/mm.h>
-+#include <linux/module.h>
-+#include <linux/of_reserved_mem.h>
-+#include <linux/platform_device.h>
-+
-+#define DRIVER_NAME "open-dice"
-+
-+struct open_dice_drvdata {
-+	spinlock_t lock;
-+	char name[16];
-+	struct reserved_mem *rmem;
-+	struct miscdevice misc;
-+};
-+
-+static inline struct open_dice_drvdata *to_open_dice_drvdata(struct file *filp)
-+{
-+	return container_of(filp->private_data, struct open_dice_drvdata, misc);
-+}
-+
-+static int open_dice_wipe(struct open_dice_drvdata *drvdata)
-+{
-+	void *kaddr;
-+
-+	spin_lock(&drvdata->lock);
-+	kaddr = devm_memremap(drvdata->misc.this_device, drvdata->rmem->base,
-+			      drvdata->rmem->size, MEMREMAP_WC);
-+	if (IS_ERR(kaddr)) {
-+		spin_unlock(&drvdata->lock);
-+		return PTR_ERR(kaddr);
-+	}
-+
-+	memset(kaddr, 0, drvdata->rmem->size);
-+	devm_memunmap(drvdata->misc.this_device, kaddr);
-+	spin_unlock(&drvdata->lock);
-+	return 0;
-+}
-+
-+/*
-+ * Copies the size of the reserved memory region to the user-provided buffer.
-+ */
-+static ssize_t open_dice_read(struct file *filp, char __user *ptr, size_t len,
-+			      loff_t *off)
-+{
-+	unsigned long val = to_open_dice_drvdata(filp)->rmem->size;
-+
-+	return simple_read_from_buffer(ptr, len, off, &val, sizeof(val));
-+}
-+
-+/*
-+ * Triggers a wipe of the reserved memory region. The user-provided pointer
-+ * is never dereferenced.
-+ */
-+static ssize_t open_dice_write(struct file *filp, const char __user *ptr,
-+			       size_t len, loff_t *off)
-+{
-+	if (open_dice_wipe(to_open_dice_drvdata(filp)))
-+		return -EIO;
-+
-+	/* Consume the input buffer. */
-+	return len;
-+}
-+
-+/*
-+ * Creates a mapping of the reserved memory region in user address space.
-+ */
-+static int open_dice_mmap(struct file *filp, struct vm_area_struct *vma)
-+{
-+	struct open_dice_drvdata *drvdata = to_open_dice_drvdata(filp);
-+
-+	/* Do not allow userspace to modify the underlying data. */
-+	if ((vma->vm_flags & VM_WRITE) && (vma->vm_flags & VM_SHARED))
-+		return -EPERM;
-+
-+	/* Create write-combine mapping so all clients observe a wipe. */
-+	vma->vm_page_prot = pgprot_writecombine(vma->vm_page_prot);
-+	vma->vm_flags |= VM_DONTCOPY | VM_DONTDUMP;
-+	return vm_iomap_memory(vma, drvdata->rmem->base, drvdata->rmem->size);
-+}
-+
-+static const struct file_operations open_dice_fops = {
-+	.owner = THIS_MODULE,
-+	.read = open_dice_read,
-+	.write = open_dice_write,
-+	.mmap = open_dice_mmap,
-+};
-+
-+static int __init open_dice_probe(struct platform_device *pdev)
-+{
-+	static unsigned int dev_idx;
-+	struct device *dev = &pdev->dev;
-+	struct reserved_mem *rmem;
-+	struct open_dice_drvdata *drvdata;
-+	int ret;
-+
-+	rmem = of_reserved_mem_lookup(dev->of_node);
-+	if (!rmem) {
-+		dev_err(dev, "failed to lookup reserved memory\n");
-+		return -EINVAL;
-+	}
-+
-+	if (!rmem->size || (rmem->size > ULONG_MAX)) {
-+		dev_err(dev, "invalid memory region size\n");
-+		return -EINVAL;
-+	}
-+
-+	if (!PAGE_ALIGNED(rmem->base) || !PAGE_ALIGNED(rmem->size)) {
-+		dev_err(dev, "memory region must be page-aligned\n");
-+		return -EINVAL;
-+	}
-+
-+	drvdata = devm_kmalloc(dev, sizeof(*drvdata), GFP_KERNEL);
-+	if (!drvdata)
-+		return -ENOMEM;
-+
-+	*drvdata = (struct open_dice_drvdata){
-+		.lock = __SPIN_LOCK_UNLOCKED(drvdata->lock),
-+		.rmem = rmem,
-+		.misc = (struct miscdevice){
-+			.parent	= dev,
-+			.name	= drvdata->name,
-+			.minor	= MISC_DYNAMIC_MINOR,
-+			.fops	= &open_dice_fops,
-+			.mode	= 0600,
-+		},
-+	};
-+
-+	/* Index overflow check not needed, misc_register() will fail. */
-+	snprintf(drvdata->name, sizeof(drvdata->name), DRIVER_NAME"%u", dev_idx++);
-+
-+	ret = misc_register(&drvdata->misc);
-+	if (ret) {
-+		dev_err(dev, "failed to register misc device '%s': %d\n",
-+			drvdata->name, ret);
-+		return ret;
-+	}
-+
-+	platform_set_drvdata(pdev, drvdata);
-+	return 0;
-+}
-+
-+static int open_dice_remove(struct platform_device *pdev)
-+{
-+	struct open_dice_drvdata *drvdata = platform_get_drvdata(pdev);
-+
-+	misc_deregister(&drvdata->misc);
-+	return 0;
-+}
-+
-+static const struct of_device_id open_dice_of_match[] = {
-+	{ .compatible = "google,open-dice" },
-+	{},
-+};
-+
-+static struct platform_driver open_dice_driver = {
-+	.remove = open_dice_remove,
-+	.driver = {
-+		.name = DRIVER_NAME,
-+		.of_match_table = open_dice_of_match,
-+	},
-+};
-+
-+module_platform_driver_probe(open_dice_driver, open_dice_probe);
-+
-+MODULE_LICENSE("GPL v2");
-+MODULE_AUTHOR("David Brazdil <dbrazdil@google.com>");
-diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-index b3faf89744aa..d659ed0be342 100644
---- a/drivers/of/platform.c
-+++ b/drivers/of/platform.c
-@@ -514,6 +514,7 @@ static const struct of_device_id reserved_mem_matches[] = {
- 	{ .compatible = "qcom,smem" },
- 	{ .compatible = "ramoops" },
- 	{ .compatible = "nvmem-rmem" },
-+	{ .compatible = "google,open-dice" },
- 	{}
- };
- 
--- 
-2.34.1.448.ga2b2bfdf31-goog
+Thanks,
+Akhil
 

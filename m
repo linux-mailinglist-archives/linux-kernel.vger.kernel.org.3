@@ -2,136 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA9C48491B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 21:10:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B0F48491E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 21:16:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232234AbiADUKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 15:10:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49084 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231449AbiADUKh (ORCPT
+        id S232255AbiADUQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 15:16:31 -0500
+Received: from mail-oi1-f180.google.com ([209.85.167.180]:38513 "EHLO
+        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230072AbiADUQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 15:10:37 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92692C061784
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 12:10:36 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id g11so84300998lfu.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 12:10:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=lzCOrsbgW0w9jAWs1oFFi9F+wrommK8KfX+OSG3gj2Y=;
-        b=az+EHXY9pTBZJoKv3IoGnqtUAJV5GsLJIoTWL6S1Q/0c3EaksAoN51sjzqRkkl8Hg7
-         d89EeYJZ3TlzAe67tTKe/lqff9DKHpqVyRbBP7eQLfFa+9h/3ikMTEHRrIGSoIZE7get
-         XjsWQyPKnIx5C0pgdKlZlLjaajfjPRFdXhE5wbhSBjhiqoKexqNdTRUbfVTsC7PgCeE6
-         OvNYMjub08si8/ZCmDySpDd9gsgowtg9m1tP70BzBKejFLeqUFpplLYlxN3sqvFOGOp1
-         Pa6nqksfwV4EZ5IKh3Uu/ygkeWhEd+7lfVPdB+5TPjOsFYU/7PQ4uknQRMRiICNDwE3O
-         iqcg==
+        Tue, 4 Jan 2022 15:16:29 -0500
+Received: by mail-oi1-f180.google.com with SMTP id s73so61154502oie.5;
+        Tue, 04 Jan 2022 12:16:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=lzCOrsbgW0w9jAWs1oFFi9F+wrommK8KfX+OSG3gj2Y=;
-        b=M5USRtRWc02IPFG1izdgZ64hMztJ6KmovBKmxwNWlzjrA4JJ1o7PfezQVZ4qNBOPAj
-         IkNO2fj7Sv/0FlifkvZgYgMm/MOoEjeFlqHRoG+juGTSmqKXOJ7VnGdGUCx1635ZzhEg
-         wI07Owr6vlxXdiY5tih9Jz5pMhmnPBzT4nwCD/O5/8XVp8c7fgXCvnZqYNr6X3/gDDVW
-         8DpZcndeAt7/wVvAFbXu/WXAVhnwqKXE9ROOLT5TWbMGt/F6gvXQnFAt8+9G0a1vffR6
-         XLqM2Q6tTG0OFDuVjj8uzKsW/Jzr9VD90NuUvtaQDLY01zjWcvvwyRvUv+HjfY3NVCdm
-         LojQ==
-X-Gm-Message-State: AOAM533MuCLXof/30koqWSrGyckm2/UiQ7TNfwniYJ1zUd5TwYBpn/gQ
-        vBdqIvV1mM44AML44cMqyQ/8qgWeicQJ2lPL
-X-Google-Smtp-Source: ABdhPJyCqZjQ+77g2R70TLcVSxo1SSCvL/Ne2NzxACJ5jd1EOGM9lscIxxPn4F+khfJnmhacyXgg4g==
-X-Received: by 2002:a05:6512:3f9f:: with SMTP id x31mr16806849lfa.391.1641327034373;
-        Tue, 04 Jan 2022 12:10:34 -0800 (PST)
-Received: from [192.168.1.102] (88-113-46-102.elisa-laajakaista.fi. [88.113.46.102])
-        by smtp.gmail.com with ESMTPSA id i12sm1098644lfr.119.2022.01.04.12.10.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 12:10:34 -0800 (PST)
-Subject: Re: [PATCH] usb: dwc3: dwc3-qcom: Add missing platform_device_put()
- in dwc3_qcom_acpi_register_core
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211231113641.31474-1-linmq006@gmail.com>
-From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Message-ID: <83d55401-d8b3-f709-c77a-fa0e09fda27f@linaro.org>
-Date:   Tue, 4 Jan 2022 22:10:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=75KdaeRZ1jVa25k2aqyDkyMYUVMAqnMfp8vxvIY/EvM=;
+        b=xEk0wtRlgQQ9bO1CpmDfrw+bFyIWtrrl+/uN3pEHq0pz/J/o+qQjGWtOGN8M95+qYS
+         F4GqPPLx2p18iBW/70rc9XIz1ObIyP9sfDPb7VtkZsNgtodwiF46FeTzA2g3PPJV0X5L
+         NPMKCAzTz4erArOEuUgY0B/v4rQhIHPTi0ClWFmYhKBsWrCFTZgL7/ilYkeU8+7OFIim
+         Mx483ovykdZmXLg3va0GWo0KCDyuiOCQYcrVFSLzFqgXOqzwH8Gs9l5mFoiY8Kij9UX4
+         Sawyc9S7XfuUCNBY77rhh0a2VJgFBIFVcUE6lGiAYHbuImUT0zatbVHxxEEA5nAtSTFt
+         VWxg==
+X-Gm-Message-State: AOAM532hmmbZOk0K5nCiEspwD4NqBjS/n+TF508fCeWK4Jpd2Mvafiva
+        TeqKC26o0ypx04sui/jvjH0kyAh95Q==
+X-Google-Smtp-Source: ABdhPJwkJhG+egsjUnjaP/dqAPbfiVolA6ZKSBcVw6ZOEQkNx5bPZrT2/dlciwh//xOu4pUbzDKEGg==
+X-Received: by 2002:a05:6808:16a4:: with SMTP id bb36mr38016oib.112.1641327389124;
+        Tue, 04 Jan 2022 12:16:29 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id i28sm8164650otf.12.2022.01.04.12.16.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 12:16:28 -0800 (PST)
+Received: (nullmailer pid 1345397 invoked by uid 1000);
+        Tue, 04 Jan 2022 20:16:27 -0000
+Date:   Tue, 4 Jan 2022 14:16:27 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH 3/5] dt-bindings: nvmem: allow referencing device defined
+ cells by names
+Message-ID: <YdSrG3EGDHMmhm1Y@robh.at.kernel.org>
+References: <20211223110755.22722-1-zajec5@gmail.com>
+ <20211223110755.22722-4-zajec5@gmail.com>
+ <CAL_JsqK2TMu+h4MgQqjN0bvEzqdhsEviBwWiiR9hfNbC5eOCKg@mail.gmail.com>
+ <f173d7a6-70e7-498f-8a04-b025c75f2b66@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20211231113641.31474-1-linmq006@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f173d7a6-70e7-498f-8a04-b025c75f2b66@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/31/21 1:36 PM, Miaoqian Lin wrote:
-> Add the missing platform_device_put() before return from
-> dwc3_qcom_acpi_register_core in the error handling case.
+On Thu, Dec 23, 2021 at 10:58:56PM +0100, Rafał Miłecki wrote:
+> On 23.12.2021 22:18, Rob Herring wrote:
+> > On Thu, Dec 23, 2021 at 7:08 AM Rafał Miłecki <zajec5@gmail.com> wrote:
+> > > 
+> > > From: Rafał Miłecki <rafal@milecki.pl>
+> > > 
+> > > Not every NVMEM has predefined cells at hardcoded addresses. Some
+> > > devices store cells in internal structs and custom formats. Referencing
+> > > such cells is still required to let other bindings use them.
+> > > 
+> > > Modify binding to require "reg" xor "label". The later one can be used
+> > > to match "dynamic" NVMEM cells by their names.
+> > 
+> > 'label' is supposed to correspond to a sticker on a port or something
+> > human identifiable. It generally should be something optional to
+> > making the OS functional. Yes, there are already some abuses of that,
+> > but this case is too far for me.
 > 
-
-The discovered issue is valid.
-
-Fixes: 2bc02355f8ba ("usb: dwc3: qcom: Add support for booting with ACPI")
-
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
->   drivers/usb/dwc3/dwc3-qcom.c | 8 +++++++-
->   1 file changed, 7 insertions(+), 1 deletion(-)
+> Good to learn that!
 > 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 3cb01cdd02c2..5257783f17b0 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -598,8 +598,10 @@ static int dwc3_qcom_acpi_register_core(struct platform_device *pdev)
->   	qcom->dwc3->dev.coherent_dma_mask = dev->coherent_dma_mask;
->   
->   	child_res = kcalloc(2, sizeof(*child_res), GFP_KERNEL);
-> -	if (!child_res)
-> +	if (!child_res) {
-> +		platform_device_put(qcom->dwc3);
->   		return -ENOMEM;
+> "name" is special & not allowed I think.
 
-Please do it in a unified way along all checks:
+It's the node name essentially. Why is using node names not sufficient? 
+Do you have some specific examples?
 
-		ret = -ENOMEM;
-		goto out;
-
-kfree(NULL) is legit, please utilize it.
-
-> +	}
->   
->   	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->   	if (!res) {
-> @@ -637,9 +639,13 @@ static int dwc3_qcom_acpi_register_core(struct platform_device *pdev)
->   	if (ret) {
->   		dev_err(&pdev->dev, "failed to add device\n");
->   		device_remove_software_node(&qcom->dwc3->dev);
-> +		goto out;
->   	}
-
-Please add a blank line here after the closing curly bracket.
-
-> +	kfree(child_res);
-> +	return 0;
->   
->   out:
-> +	platform_device_put(qcom->dwc3);
->   	kfree(child_res);
->   	return ret;
->   }
-> 
-
-Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-
---
-Best wishes,
-Vladimir
+Rob

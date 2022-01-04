@@ -2,86 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB094844B8
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:34:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE6EC4844C7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:38:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233655AbiADPez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 10:34:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41614 "EHLO
+        id S234909AbiADPi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 10:38:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbiADPey (ORCPT
+        with ESMTP id S233661AbiADPiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 10:34:54 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED61FC061761;
-        Tue,  4 Jan 2022 07:34:53 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id s1so76962993wra.6;
-        Tue, 04 Jan 2022 07:34:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=wUmxQ2CKmUZwcrN5uTGmilHnj2rnj+XkjhOUMtgeq20=;
-        b=g1LECz3y5ju9IcfvJz5hsPoUyZBUz3pK133gvGgSNX9xGSyfnT5Xf8AKEV2I5QLFjS
-         JZ2B7xSbgx66c+MdQOs90WCC/SB4Ka2PI7xMyyCMeHnzxxJUWNf4AB1zAkEQdaLGrW19
-         R/4btO4fvefAdXbNEEJ9gzf9sTM7CTnZ+ubtjbb2PVu1ThQDuE90+J9527wL33LJnTFt
-         bGFOmylU6fuC8e1peLPpEeMQ86qQm6wEMeXMdtGmNB1lVm4smgmBnVBiEX2QWjtUk3Wd
-         LvDmJgcSw+qKUJiKl/ZhD11vp6mhJ+K0K5/PQ7/zOraEoN8kZR1y1lIGVDqINr3om+pV
-         3IQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=wUmxQ2CKmUZwcrN5uTGmilHnj2rnj+XkjhOUMtgeq20=;
-        b=jmR22teU9ObtuJsSqvVxvw1argTaxP5C5zsWCdxS6zOw6EmFdrpudu85RCdRtzsKMr
-         0ucCM8RFN67UpOxt+0TSCjSFJcSPxL5w4vQoaIKFwQv5yqyd/uADfR0f5CvnUo5G+die
-         Hok6qT2dInA6IzMrjitZR237oWUGScn7pkoAVmZtzL72pY5UeM9udxyv6+P13o5EWY/J
-         v9eXBXgBKLlOlBRfwoObtSBEkkyh6IMf2/G87UkwDVuH2tSylSgaA0EMsq1GVcBqCdoZ
-         HWLOnGSgvNHmiDBvQfRgMqH8xU9B9slvAB7RCe452YZA4wQD3CCpUwFDJLrdvrIHByNH
-         nUGQ==
-X-Gm-Message-State: AOAM53012Cd1BqLeFCqRhi+tKzFsHWNFEFb1mWdiq/3m4UINT6NBJv6m
-        bEs2ygfGzn3zqZfUJZ6WOrk=
-X-Google-Smtp-Source: ABdhPJyA3hAT/SXsiTH53fThRpj8xpD7XnHj0ABuWCmDtywvBXdrguCfCeInuOOSKLyak3B6lG3qsw==
-X-Received: by 2002:a05:6000:38b:: with SMTP id u11mr43379975wrf.408.1641310492643;
-        Tue, 04 Jan 2022 07:34:52 -0800 (PST)
-Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id 11sm48820119wrz.63.2022.01.04.07.34.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 07:34:52 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.co.uk,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev, kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: Re: [PATCH v4 1/2] media: hevc: Remove RPS named flags
-Date:   Tue, 04 Jan 2022 16:34:51 +0100
-Message-ID: <2610538.mvXUDI8C0e@kista>
-In-Reply-To: <20220104073842.1791639-2-benjamin.gaignard@collabora.com>
-References: <20220104073842.1791639-1-benjamin.gaignard@collabora.com> <20220104073842.1791639-2-benjamin.gaignard@collabora.com>
+        Tue, 4 Jan 2022 10:38:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC05FC061761;
+        Tue,  4 Jan 2022 07:38:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 51918614CF;
+        Tue,  4 Jan 2022 15:38:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D982C36AE9;
+        Tue,  4 Jan 2022 15:38:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641310704;
+        bh=IvXybqAvGHkHohoxDtW3luo+IV3CGpGdFMVR8VHUbA4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=iC3Xpt1UU7slFI0TkzHOJaf7Xi3CQcepOGAkMJC6B4xa69O/5p6nC6iMgzR1fg1fO
+         Y/U5xZpcXKHpa05dmEtao2eEK7rEg1U2e7yiX621RNBQQatIOj8lx+7h3E+INCVEyY
+         Rfq6Rtxi0CMXbJ+fss5LHsHt57wFic99YK6IInJ7s+Kve8ebKQVQcKUIXEehoSOSGc
+         ebFLx7dnxeTleM1P0CsOwRrdnAAZxaGFpDPK/CLJFFvD2x6bTeySYAjrgKwMHmPETd
+         tM3BONJdeRxaU2LlggD1/+zh0cWyZvhUunXR/yVeUxD7zn1+oADBas1vFZRbrdQ0ma
+         4jtGSDhNfp/iQ==
+Received: by pali.im (Postfix)
+        id 7555096B; Tue,  4 Jan 2022 16:38:21 +0100 (CET)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 00/11] PCI: Small improvements for pci-bridge-emul and mvebu
+Date:   Tue,  4 Jan 2022 16:35:18 +0100
+Message-Id: <20220104153529.31647-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20211221141455.30011-1-pali@kernel.org>
+References: <20211221141455.30011-1-pali@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin!
+This patch series contains small improvements for pci-bridge-emul and
+mvebu drivers. This patch series is based on top of the patches:
+https://lore.kernel.org/linux-pci/20211125124605.25915-1-pali@kernel.org/
+(which are now in pci/mvebu branch)
 
-Dne torek, 04. januar 2022 ob 08:38:41 CET je Benjamin Gaignard napisal(a):
-> Marking a picture as long-term reference is valid for DPB but not for RPS.
-> Change flag name to match with it description in HEVC spec chapiter
-> "8.3.2 Decoding process for reference picture set".
-> Remove the other unused RPS flags.
-> 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In V2 was added comment into code explaining PCI_BRIDGE_EMUL_NO_PREFMEM_FORWARD
+and PCI_BRIDGE_EMUL_NO_IO_FORWARD flags.
 
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Pali Rohár (11):
+  MAINTAINERS: Add Pali Rohár as pci-mvebu.c maintainer
+  PCI: pci-bridge-emul: Make struct pci_bridge_emul_ops as const
+  PCI: pci-bridge-emul: Rename PCI_BRIDGE_EMUL_NO_PREFETCHABLE_BAR to
+    PCI_BRIDGE_EMUL_NO_PREFMEM_FORWARD
+  PCI: pci-bridge-emul: Add support for new flag
+    PCI_BRIDGE_EMUL_NO_IO_FORWARD
+  PCI: mvebu: Add help string for CONFIG_PCI_MVEBU option
+  PCI: mvebu: Remove duplicate nports assignment
+  PCI: mvebu: Set PCI_BRIDGE_EMUL_NO_IO_FORWARD when IO is unsupported
+  PCI: mvebu: Properly initialize vendor, device and revision of
+    emulated bridge
+  PCI: mvebu: Update comment for PCI_EXP_LNKCAP register on emulated
+    bridge
+  PCI: mvebu: Update comment for PCI_EXP_LNKCTL register on emulated
+    bridge
+  PCI: mvebu: Fix reporting Data Link Layer Link Active on emulated
+    bridge
 
-Best regards,
-Jernej
+ MAINTAINERS                           |  1 +
+ drivers/pci/controller/Kconfig        |  4 ++
+ drivers/pci/controller/pci-aardvark.c |  2 +-
+ drivers/pci/controller/pci-mvebu.c    | 64 ++++++++++++---------------
+ drivers/pci/pci-bridge-emul.c         | 11 ++++-
+ drivers/pci/pci-bridge-emul.h         | 14 +++++-
+ 6 files changed, 57 insertions(+), 39 deletions(-)
 
+-- 
+2.20.1
 

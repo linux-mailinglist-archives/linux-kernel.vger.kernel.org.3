@@ -2,114 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC60E484004
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:41:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C159484006
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:42:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbiADKlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 05:41:01 -0500
-Received: from foss.arm.com ([217.140.110.172]:57996 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229644AbiADKlA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 05:41:00 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 043871FB;
-        Tue,  4 Jan 2022 02:41:00 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.9.1])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 20FF33F5A1;
-        Tue,  4 Jan 2022 02:40:57 -0800 (PST)
-Date:   Tue, 4 Jan 2022 10:40:51 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Dan Li <ashimida@linux.alibaba.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org, samitolvanen@google.com,
-        maz@kernel.org, joey.gouly@arm.com, pcc@google.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] [RFC] aarch64: scs: reload shadow call stack in user
- exception entry
-Message-ID: <YdQkM8IlonhEhU/R@FVFF77S0Q05N>
-References: <20211228010604.109572-1-ashimida@linux.alibaba.com>
+        id S231445AbiADKma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 05:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58074 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229644AbiADKm3 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 05:42:29 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496D4C061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 02:42:29 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id g22so32380642pgn.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 02:42:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hfIMdib9TxYU83Yq6/1+x94iJVj27/gjNxj0nCIUnZQ=;
+        b=hseIhjJ7gIgUnuNAlcfeplsNBsP3jjj3fyixO1vf0Iapr7bPCnF6uzf/1WRdgaiEGG
+         UXopDWZ5sIeMj4RJmaCwk9AcntbB4IOT31NQwHNsRktPYo7G7ksCNAP3P/jPy2LPhVrr
+         vgI5GPSvTdi2CN/qE2jHlB6PFFiij4349sSgss74oLDSTpTnoyQwDCINMakwQO5AGdpR
+         Swgt419IBkmrv1lf65+b6cxoreTXdNpJ4pa2swsPJ0+mY0jCPvx8RZrtM3R7kV4RRnDk
+         qKnpYBxzUFiLqhW/WeRywq0SLMftjlM1XS0IeqaE73Nt5azt2VYnH1ytD6KQCcmGXMqx
+         p0KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hfIMdib9TxYU83Yq6/1+x94iJVj27/gjNxj0nCIUnZQ=;
+        b=f7679bMNq5knrmUZn2K3Pj2FjC5iKOSRbwphrjEgJPXQQFhIReTTX6OVrf2b1RTW0o
+         wS1zKp5S0KVFAyEMqagTx4x3JV4hBa2vOQ0kJ34QjXwKqgnOAjZzTBGkJMJ7pqjOdpnU
+         QPpPlr03RmlMcEeNPJWvcvdoIAtkhnEwJWMfmaKFhujqW+ao6E1QkyYhQkmV5u89sWCJ
+         vQOg2YRczaBPFiAR3bbLiKG22D2kLE2YcFTBsTVRowFPLC13bRe1p9eGkUgPSGVkjHwi
+         Z5RCFYldmrbnWRt8y/jzqNJdpt3+won0y16Qsm5u9UKBuiVSv6iw5gOV/dr+IzWi1HWe
+         tiFg==
+X-Gm-Message-State: AOAM533s1EMkfW7Yb+DM1deo5Aqz1eW7IxAIN9iPhC5XrMsx6f1XA+bG
+        GJPsVvjXXkV9hs0CDDuTATY=
+X-Google-Smtp-Source: ABdhPJyekr+/HCc4S1iUD9Wk1bLLzXUYiJQe5k8EP0fzYwfGZKR1m9n7LMoWNzXOV5kPrgFjkSUTYg==
+X-Received: by 2002:a63:ff4f:: with SMTP id s15mr43216991pgk.215.1641292948802;
+        Tue, 04 Jan 2022 02:42:28 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id o11sm42564988pfu.150.2022.01.04.02.42.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 02:42:28 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     lgirdwood@gmail.com
+Cc:     broonie@kernel.org, matthias.bgg@gmail.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>, CGEL ZTE <cgel.zte@gmail.com>
+Subject: [PATCH] drivers/regulator: remove redundant ret variable
+Date:   Tue,  4 Jan 2022 10:41:39 +0000
+Message-Id: <20220104104139.601031-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211228010604.109572-1-ashimida@linux.alibaba.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-On Mon, Dec 27, 2021 at 05:06:04PM -0800, Dan Li wrote:
-> When el0 exception occurs, kernel_entry/exit will load/save tsk->scs_sp
-> to ensure scs working properly. AFAIK, the SCS offset should always be
-> 0 at this time.
-> 
-> Is it reasonable to reload x18 to scs_base directly in kernel_entry
-> here, or am I missing something?
-> 
-> Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
+Return value from regmap_update_bits() directly instead
+of taking this in another redundant variable.
 
-AFAICT the saving here is just that we avoid storing the SCS SP upon return to
-EL0, and I suspect that in practice that's not measureable.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
+---
+ drivers/regulator/mt6380-regulator.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-So without numbers to show otherwise, I'd prefer to leave this as-is, though I
-agree that this patch should work.  If we do want to change this, I think we
-need a comment in the `kernel_exit` path to pair with the `scs_load` in
-`kernel_entry`.
+diff --git a/drivers/regulator/mt6380-regulator.c b/drivers/regulator/mt6380-regulator.c
+index 9efd8710a6f3..2e6b61d3b0cf 100644
+--- a/drivers/regulator/mt6380-regulator.c
++++ b/drivers/regulator/mt6380-regulator.c
+@@ -183,7 +183,7 @@ static const unsigned int ldo_volt_table4[] = {
+ static int mt6380_regulator_set_mode(struct regulator_dev *rdev,
+ 				     unsigned int mode)
+ {
+-	int ret, val = 0;
++	int val = 0;
+ 	struct mt6380_regulator_info *info = rdev_get_drvdata(rdev);
+ 
+ 	switch (mode) {
+@@ -199,10 +199,8 @@ static int mt6380_regulator_set_mode(struct regulator_dev *rdev,
+ 
+ 	val <<= ffs(info->modeset_mask) - 1;
+ 
+-	ret = regmap_update_bits(rdev->regmap, info->modeset_reg,
++	return regmap_update_bits(rdev->regmap, info->modeset_reg,
+ 				 info->modeset_mask, val);
+-
+-	return ret;
+ }
+ 
+ static unsigned int mt6380_regulator_get_mode(struct regulator_dev *rdev)
+-- 
+2.25.1
 
-Thanks,
-Mark.
-
-> ---
->  arch/arm64/include/asm/scs.h | 7 +++++++
->  arch/arm64/kernel/entry.S    | 3 +--
->  2 files changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/scs.h b/arch/arm64/include/asm/scs.h
-> index 8297bccf0784..2bc0d0575e75 100644
-> --- a/arch/arm64/include/asm/scs.h
-> +++ b/arch/arm64/include/asm/scs.h
-> @@ -9,6 +9,10 @@
->  #ifdef CONFIG_SHADOW_CALL_STACK
->  	scs_sp	.req	x18
->  
-> +	.macro scs_reload tsk
-> +	ldr	scs_sp, [\tsk, #TSK_TI_SCS_BASE]
-> +	.endm
-> +
->  	.macro scs_load tsk
->  	ldr	scs_sp, [\tsk, #TSK_TI_SCS_SP]
->  	.endm
-> @@ -17,6 +21,9 @@
->  	str	scs_sp, [\tsk, #TSK_TI_SCS_SP]
->  	.endm
->  #else
-> +	.macro scs_reload tsk
-> +	.endm
-> +
->  	.macro scs_load tsk
->  	.endm
->  
-> diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-> index bc6d5a970a13..57547a3e4f7c 100644
-> --- a/arch/arm64/kernel/entry.S
-> +++ b/arch/arm64/kernel/entry.S
-> @@ -265,7 +265,7 @@ alternative_if ARM64_HAS_ADDRESS_AUTH
->  alternative_else_nop_endif
->  1:
->  
-> -	scs_load tsk
-> +	scs_reload tsk
->  	.else
->  	add	x21, sp, #PT_REGS_SIZE
->  	get_current_task tsk
-> @@ -365,7 +365,6 @@ alternative_if ARM64_WORKAROUND_845719
->  alternative_else_nop_endif
->  #endif
->  3:
-> -	scs_save tsk
->  
->  	/* Ignore asynchronous tag check faults in the uaccess routines */
->  	ldr	x0, [tsk, THREAD_SCTLR_USER]
-> -- 
-> 2.17.1
-> 

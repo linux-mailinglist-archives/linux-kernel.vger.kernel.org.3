@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F4D64840F0
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E7C4840F4
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:35:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232363AbiADLfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 06:35:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
+        id S232376AbiADLft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 06:35:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231322AbiADLfF (ORCPT
+        with ESMTP id S229772AbiADLfs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 06:35:05 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4421BC061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 03:35:05 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id n30-20020a17090a5aa100b001b2b6509685so2820314pji.3
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 03:35:05 -0800 (PST)
+        Tue, 4 Jan 2022 06:35:48 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472A3C061761;
+        Tue,  4 Jan 2022 03:35:48 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id gj24so31160697pjb.0;
+        Tue, 04 Jan 2022 03:35:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=T1DGzBL1UAoUhku6PkAfehlR1NmuvOe9coYqLYbCZAU=;
-        b=BMo1G/okIcIn2fwT5PHfNlITTD9hL9LKTVcMNmlhBPEKpBiTy4q9xYpn6odb7/VihE
-         TiaSe7QfV2/4JSVablNaRI7ECNjR+wY6ErLdRGDxpsoNlDZAMN84XAi3B+lxT7df4wuw
-         VfxQF0yFdZ9x7Es09Yjwx8qQcXE63YrlmVzKSZd2QwhZZegIp40RbHZ/kOUbp2QvDwtt
-         HFWQAmYA1KT4L2B1br88r/78HtzbvUBHIfSrNU6fzoD8eDEkVPb3FvGHfvO4AoKFDdj7
-         uwL+Jx1ap5xoGHzR7olIScYZeniq3+rzNE2eMiZIgyU1s/gHwVwpKBAJ4bArX2dltgGD
-         TZlw==
+        bh=b5E68x2W5zpVerFC629iPQD7zlXfx3x75KC58E34nlo=;
+        b=pGnWoRU4I7MjP3aaVygr0ZxBB+smZegv8VsOoJcjtxCKf8+HWcPD6dBZH/vuaQwJ3G
+         +Lb3bVfWrjQFKQ71Hgf9F76WlFAeMlCaBeEIenrN8P7CFiYv3WhcymSbVZPjAAELnM48
+         haIlp73+Wwqw1rk/yVWHoy0ZXcrEnezn2nYKFHcibhonfLuDumoIrlaCysluzKq9hsi7
+         OlqLQAXhTxekq434W2V/zuGMsceeesoFbQZAfRqc19Y/lCbfO/KTYLFqDk9OcSGaKhOG
+         agtIJvW97YoT78UwHTdcEgYUTFvhHHM3QtJ/ut1+a3Ha9S+BmEMPWnCBerl0Dqmgpf1x
+         CpVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=T1DGzBL1UAoUhku6PkAfehlR1NmuvOe9coYqLYbCZAU=;
-        b=z7haZNDiFw6dDlT+Lk9i7RQ7Oz5e3H/K04GiwzNOlilf9CXRJ9oPemktNMcCSM+KgB
-         ZhBUJkwAcwGF3GfCGpP41EQKpATtmh4jHi5KbTNhgtdFriPhsMbND/APR50DqG4GTICV
-         +qTcH5L1q8PAIFlsfolf1GAlYpiLx/YOsONRsGygC6egsx11AnD5Z21gTfcgtfAhKFw3
-         0QK/RMCJnxVhSBtfJcoiOTnvH6r+6Pq/MY/OUJGhhF+zpNzTceGYk6UqCafRMhmRJiiV
-         cdI5oODo2zbYdT64iOgErNWlTMQeXrZxYZsh/SwrUGVbAc45MPZ++J0KaAzHIbOJ1Fx1
-         VNkw==
-X-Gm-Message-State: AOAM530x0ID0Csssq3vuTr3d6mWGjnTVsbzKj0tqAfK8oFR1MHaJ6F2q
-        +a0RDzNNwGSJwvBY1OCUEdn34EwgJTQ=
-X-Google-Smtp-Source: ABdhPJyCT1pXJ/FWoVfC+7MovOkPwlAXhvMAH7dhw79wyuFOJCRj5/0OGHXFdtqa9UuSBMRz50kSsQ==
-X-Received: by 2002:a17:902:b08b:b0:149:88bb:b477 with SMTP id p11-20020a170902b08b00b0014988bbb477mr34001657plr.137.1641296104831;
-        Tue, 04 Jan 2022 03:35:04 -0800 (PST)
+        bh=b5E68x2W5zpVerFC629iPQD7zlXfx3x75KC58E34nlo=;
+        b=D1neJXaCCJY+hyObD5YjCurEnpPKz7+49PllJY1jh7VamWSab96XU3lnRREevfUYbB
+         j9JvWQiPZF9VDB4naUI4K9PU5sk0vE2dRjPUC47MCEBVP4OIHUHrN1M0BOUzpKy6vtN+
+         z5IFyahQ7Ini+0ZyFxYAXvJ8U5OIFMSBZOMrRWo3je/0K+ux7ZGAnF+xCxT1DbZEh5zj
+         8qHu04EDASomvQMQbmjZOpLp1QGa028W+A5rWWAB3Is7JNkbsiVIFquaGH7D1r9dJwoa
+         pI8lxQi7Glp2A/Tw8HhKht/xEcu/QhcCWb6SFDG4/xaNGwdu9xEG/CQiiEQYXVfqPoWG
+         PV5g==
+X-Gm-Message-State: AOAM5331wlFj2HU9TxUoJl+JSK922RDgzzpN7j3m5l89C3S/AUWEm9nU
+        +htYVvTD0NoHu6gu+DBAVi8=
+X-Google-Smtp-Source: ABdhPJzjVORuawNQaDII410rm5jd8Vs6ycSv4UGoOffayUfbc11L2LbhS0w/E0lIEQ7ekqBoobgCeg==
+X-Received: by 2002:a17:903:234a:b0:148:a3e2:9f47 with SMTP id c10-20020a170903234a00b00148a3e29f47mr48921260plh.119.1641296147879;
+        Tue, 04 Jan 2022 03:35:47 -0800 (PST)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id f10sm46617824pfj.145.2022.01.04.03.35.02
+        by smtp.gmail.com with ESMTPSA id i9sm33165260pgc.27.2022.01.04.03.35.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 03:35:04 -0800 (PST)
+        Tue, 04 Jan 2022 03:35:47 -0800 (PST)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     gregkh@linuxfoundation.org
-Cc:     arve@android.com, tkjos@android.com, maco@android.com,
-        joel@joelfernandes.org, christian@brauner.io, hridya@google.com,
-        surenb@google.com, linux-kernel@vger.kernel.org,
+To:     ecree.xilinx@gmail.com
+Cc:     habetsm.xilinx@gmail.com, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>, CGEL ZTE <cgel.zte@gmail.com>
-Subject: [PATCH] drivers/android: remove redundant ret variable
-Date:   Tue,  4 Jan 2022 11:35:00 +0000
-Message-Id: <20220104113500.602158-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] ethernet/sfc: remove redundant rc variable
+Date:   Tue,  4 Jan 2022 11:35:43 +0000
+Message-Id: <20220104113543.602221-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -68,41 +67,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Return value from list_lru_count() directly instead
+Return value from efx_mcdi_rpc() directly instead
 of taking this in another redundant variable.
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
 ---
- drivers/android/binder_alloc.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ drivers/net/ethernet/sfc/mcdi_port_common.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
-index 340515f54498..4f221d1839f4 100644
---- a/drivers/android/binder_alloc.c
-+++ b/drivers/android/binder_alloc.c
-@@ -1049,18 +1049,14 @@ enum lru_status binder_alloc_free_page(struct list_head *item,
- static unsigned long
- binder_shrink_count(struct shrinker *shrink, struct shrink_control *sc)
+diff --git a/drivers/net/ethernet/sfc/mcdi_port_common.c b/drivers/net/ethernet/sfc/mcdi_port_common.c
+index c4fe3c48ac46..899cc1671004 100644
+--- a/drivers/net/ethernet/sfc/mcdi_port_common.c
++++ b/drivers/net/ethernet/sfc/mcdi_port_common.c
+@@ -71,7 +71,6 @@ int efx_mcdi_set_link(struct efx_nic *efx, u32 capabilities,
+ 		      u32 flags, u32 loopback_mode, u32 loopback_speed)
  {
--	unsigned long ret = list_lru_count(&binder_alloc_lru);
--	return ret;
-+	return list_lru_count(&binder_alloc_lru);
+ 	MCDI_DECLARE_BUF(inbuf, MC_CMD_SET_LINK_IN_LEN);
+-	int rc;
+ 
+ 	BUILD_BUG_ON(MC_CMD_SET_LINK_OUT_LEN != 0);
+ 
+@@ -80,9 +79,8 @@ int efx_mcdi_set_link(struct efx_nic *efx, u32 capabilities,
+ 	MCDI_SET_DWORD(inbuf, SET_LINK_IN_LOOPBACK_MODE, loopback_mode);
+ 	MCDI_SET_DWORD(inbuf, SET_LINK_IN_LOOPBACK_SPEED, loopback_speed);
+ 
+-	rc = efx_mcdi_rpc(efx, MC_CMD_SET_LINK, inbuf, sizeof(inbuf),
++	return efx_mcdi_rpc(efx, MC_CMD_SET_LINK, inbuf, sizeof(inbuf),
+ 			  NULL, 0, NULL);
+-	return rc;
  }
  
- static unsigned long
- binder_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
- {
--	unsigned long ret;
--
--	ret = list_lru_walk(&binder_alloc_lru, binder_alloc_free_page,
-+	return list_lru_walk(&binder_alloc_lru, binder_alloc_free_page,
- 			    NULL, sc->nr_to_scan);
--	return ret;
- }
- 
- static struct shrinker binder_shrinker = {
+ int efx_mcdi_loopback_modes(struct efx_nic *efx, u64 *loopback_modes)
 -- 
 2.25.1
 

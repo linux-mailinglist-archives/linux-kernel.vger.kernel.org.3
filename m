@@ -2,78 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 599D3483ED5
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 10:05:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F91483ED6
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 10:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbiADJFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 04:05:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiADJFv (ORCPT
+        id S230004AbiADJF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 04:05:59 -0500
+Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:41396 "EHLO
+        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229992AbiADJF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 04:05:51 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEF8C061761;
-        Tue,  4 Jan 2022 01:05:51 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id E59141F42D02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1641287150;
-        bh=LKHYs6cNRjJodREjyWXR9U6nFRgqGcHVmkVWUWSF8Wo=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=T57fmN1aV+VEjBJZF3unAIRoCILKIDjrVV2dmGpTZ2tIVcniUChypoEHcvauTAlaf
-         akuxrTMQOdRGUXM6nJXXEu+gP5MNnU8AR/c6il31bn+7hM5QfAMzgXbRW38QnBKgcB
-         WL9H06wTTKdhyDbw6c1YIz0Md6a2QlfMAW5lt+wUPtXMSsItG44YbiGWN3UcMkjUwo
-         h4SuJwixl1Y0GSI9nv6qjyIekwD86vH+lpXZJ2STy3hEp2ARohLqmmt01PgCiOe2Ec
-         OgM+HVu6igZ1fwpAsGj+goeDprqqX+dfEcJBYTRbJ0XusZA3fKPj9UAPgtrRmCoK8k
-         VBIYYQOGgHnCw==
-Subject: Re: [PATCH 2/2] dt-bindings: mediatek: add compatible for MT8186
- pwrap
-To:     Johnson Wang <johnson.wang@mediatek.com>, robh+dt@kernel.org,
-        matthias.bgg@gmail.com
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20211230114913.9829-1-johnson.wang@mediatek.com>
- <20211230114913.9829-3-johnson.wang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Message-ID: <e5992de7-2570-8610-8acf-78313ff74718@collabora.com>
-Date:   Tue, 4 Jan 2022 10:05:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Tue, 4 Jan 2022 04:05:57 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V0u6ZRm_1641287154;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V0u6ZRm_1641287154)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 04 Jan 2022 17:05:55 +0800
+Date:   Tue, 4 Jan 2022 17:05:53 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-erofs@lists.ozlabs.org, Liu Bo <bo.liu@linux.alibaba.com>,
+        LKML <linux-kernel@vger.kernel.org>, Yue Hu <huyue2@yulong.com>
+Subject: Re: [PATCH v2 1/5] erofs: introduce meta buffer operations
+Message-ID: <YdQN8Q4UsLgZVR+c@B-P7TQMD6M-0146.local>
+References: <20220102040017.51352-1-hsiangkao@linux.alibaba.com>
+ <20220102040017.51352-2-hsiangkao@linux.alibaba.com>
+ <6fbbd94a-7c68-6798-4248-d9c0807bd89d@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20211230114913.9829-3-johnson.wang@mediatek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <6fbbd94a-7c68-6798-4248-d9c0807bd89d@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 30/12/21 12:49, Johnson Wang ha scritto:
-> This adds dt-binding documentation of pwrap for Mediatek MT8186
-> SoCs Platform.
-> 
-> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
-> ---
->   Documentation/devicetree/bindings/soc/mediatek/pwrap.txt | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/mediatek/pwrap.txt b/Documentation/devicetree/bindings/soc/mediatek/pwrap.txt
-> index d74a7a5ae9f2..214a34633824 100644
-> --- a/Documentation/devicetree/bindings/soc/mediatek/pwrap.txt
-> +++ b/Documentation/devicetree/bindings/soc/mediatek/pwrap.txt
-> @@ -27,6 +27,7 @@ Required properties in pwrap device node.
->   	"mediatek,mt8135-pwrap" for MT8135 SoCs
->   	"mediatek,mt8173-pwrap" for MT8173 SoCs
->   	"mediatek,mt8183-pwrap" for MT8183 SoCs
-> +	"mediatek,mt8186-pwrap" for MT8186 SoCs
->   	"mediatek,mt8195-pwrap" for MT8195 SoCs
->   	"mediatek,mt8516-pwrap" for MT8516 SoCs
->   - interrupts: IRQ for pwrap in SOC
-> 
+Hi Chao,
 
-Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+On Tue, Jan 04, 2022 at 03:54:08PM +0800, Chao Yu wrote:
+> On 2022/1/2 12:00, Gao Xiang wrote:
+> > In order to support subpage and folio for all uncompressed files,
+> > introduce meta buffer descriptors, which can be effectively stored
+> > on stack, in place of meta page operations.
+> > 
+> > This converts the uncompressed data path to meta buffers.
+> > 
+> > Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+> > ---
+> >   fs/erofs/data.c     | 97 +++++++++++++++++++++++++++++++++++----------
+> >   fs/erofs/internal.h | 13 ++++++
+> >   2 files changed, 89 insertions(+), 21 deletions(-)
+> > 
+> > diff --git a/fs/erofs/data.c b/fs/erofs/data.c
+> > index 4f98c76ec043..6495e16a50a9 100644
+> > --- a/fs/erofs/data.c
+> > +++ b/fs/erofs/data.c
+> > @@ -22,6 +22,56 @@ struct page *erofs_get_meta_page(struct super_block *sb, erofs_blk_t blkaddr)
+> >   	return page;
+> >   }
+> > +void erofs_unmap_metabuf(struct erofs_buf *buf)
+> > +{
+> > +	if (buf->kmap_type == EROFS_KMAP)
+> > +		kunmap(buf->page);
+> > +	else if (buf->kmap_type == EROFS_KMAP_ATOMIC)
+> > +		kunmap_atomic(buf->base);
+> 
+> Once user calls this function, .base should be invalidated.
+> 
+> buf->base = NULL;
+
+Thanks for your suggestion!
+
+Since buf->kmap_type will be switched to EROFS_NO_KMAP, so buf->base
+is completely ignored (IOWs, it's unnecessary to reset buf->base..),
+however I'm fine to set buf->base = NULL here either.
+
+Thanks,
+Gao Xiang 
+
+> 
+> Otherwise, it looks good to me.
+> 
+> Reviewed-by: Chao Yu <chao@kernel.org>
+> 
+> Thanks,
+> 

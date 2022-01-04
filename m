@@ -2,45 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4AD483DEA
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 09:17:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 110EF483E0C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 09:26:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232747AbiADIQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 03:16:58 -0500
-Received: from verein.lst.de ([213.95.11.211]:49077 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229700AbiADIQ5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 03:16:57 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 4C82668AFE; Tue,  4 Jan 2022 09:16:54 +0100 (CET)
-Date:   Tue, 4 Jan 2022 09:16:54 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     Christoph Hellwig <hch@lst.de>, corbet@lwn.net,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org
-Subject: Re: make pdfdocs fails on Debian stable
-Message-ID: <20220104081654.GA17682@lst.de>
-References: <20220104064708.GA15446@lst.de> <8f21b702-abc2-c9aa-7593-9aff17e61ed1@gmail.com> <20220104073625.GA16910@lst.de> <df9183cc-aecb-6b8d-0580-92c2a678d69f@gmail.com> <20220104075655.GA17315@lst.de> <931f9f77-e418-4359-65b1-cb7432e37a0f@gmail.com>
+        id S233999AbiADI01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 03:26:27 -0500
+Received: from grandeconsulting.jp ([119.245.216.91]:45515 "EHLO
+        grandeconsulting.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232221AbiADI00 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 03:26:26 -0500
+X-Greylist: delayed 400 seconds by postgrey-1.27 at vger.kernel.org; Tue, 04 Jan 2022 03:26:26 EST
+Received: (qmail 11947 invoked by SAV 20220103.003 by uid 33700001); 4 Jan 2022 17:19:45 +0900
+To:     linux-kernel@vger.kernel.org
+Subject: =?ISO-2022-JP?B?GyRCIVolQSE8JWAlUyVrJUclIyVzJTAhWyQqTGQkJDlnJG8kOyQiJGokLCRIJCYkNCQ2JCQkXiQ5ISMbKEI=?=
+Date:   Tue, 4 Jan 2022 08:19:45 +0000
+From:   =?ISO-2022-JP?B?GyRCJTAlaSVzJUclMyVzJTUlayVGJSMlcyUwGyhC?= 
+        <info@grandeconsulting.jp>
+Reply-To: yoshizawa.hiroki@fullbleed.co.jp
+Message-ID: <87728f50f67f7794ad45d9d511ea957b@grandeconsulting.jp>
+X-Mailer: PHPMailer 5.2.22 (https://github.com/PHPMailer/PHPMailer)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <931f9f77-e418-4359-65b1-cb7432e37a0f@gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Type: text/plain; charset=ISO-2022-JP
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 05:07:20PM +0900, Akira Yokosawa wrote:
-> > Current linux-next.  But I've also seen it with mainline from a few days
-> > ago.
-> > 
-> 
-> Still can't reproduce with sphinx-build 4.3.2 on Debian bullseye.
-> 
-> What version of Sphinx are you using?
+ijmk77md 様
 
-The one that comes from Debian:
+──────────────────────────
 
-hch@brick:~/work/linux-next$ sphinx-build --version
-sphinx-build 3.4.3
+この度はお問い合せ頂き誠にありがとうございました。
+
+改めて担当者よりご連絡をさせていただきます。
+
+
+─ご送信内容の確認─────────────────
+
+お問い合わせ種類： その他のお問い合わせ
+貴社名： ?? You have unread messages from Melanie (2)! Click Here: http://bit.do/fSYTr?nrwv ??
+研修コンテンツをお持ちの方はチェックしてください
+研修ファシリテータの方はチェックしてください
+お名前： ijmk77md
+TEL： 845705420307
+MAIL： linux-kernel@vger.kernel.org
+
+お問い合わせ内容：
+84qwz6c
+
+──────────────────────────
+
+
+この度はお問い合わせ重ねてお礼申し上げます。
+
+
+
+※本メールにお心当たりのない場合は、誠にお手数ですが下記お問合せ先までご連絡ください。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+　株式会社グランデコンサルティング
+
+　〒102-0084
+　東京都千代田区二番町9-3　The Base麹町
+　Tel: 03-3239-4404 Fax: 03-3239-4414
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+

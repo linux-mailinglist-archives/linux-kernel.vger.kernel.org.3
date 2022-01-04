@@ -2,104 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C45484322
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:14:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9690C48431D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233793AbiADOOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:14:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbiADOOk (ORCPT
+        id S234049AbiADONm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:13:42 -0500
+Received: from ivanoab7.miniserver.com ([37.128.132.42]:36342 "EHLO
+        www.kot-begemot.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232716AbiADONj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:14:40 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2430C061761;
-        Tue,  4 Jan 2022 06:14:39 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id n30so36904178eda.13;
-        Tue, 04 Jan 2022 06:14:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2JWj20KokVmbJ1KQKxKTcG8eJrd73Z/FrzXrGHNXIYQ=;
-        b=imO7AvZwhSqnGrvwQeVkNBV4cnKH740zTDdLNAdNiGGp8f1uzMHM0ttEykYxr4BWkl
-         EkpRaK27dAFloGoRxR/z3ktW/nI2W1fjbRqdG/vW2Rzbz8W5GsA8BmfeRrBxDuIF6YAc
-         gsobO4KfR1xNVt8kv6nGcpxJJ9MlEx03qb2MIeox+TvS6rChq2QG/jh5F3+3fjer/OWF
-         EXugqwqpk99xC2zv8OvQkthpwRisIS48WSh2YJBvH28BpBkjlc+TAK11GHvyd2Zgw62T
-         cNZrAoybRhVa0DH0GWIto1H1D3kAStNkvi9lWPyoQ8gZFkO8lzTMRwINGVlA8fhIRLo5
-         s7bQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2JWj20KokVmbJ1KQKxKTcG8eJrd73Z/FrzXrGHNXIYQ=;
-        b=DsR2lMJofNzmgKf1icbosWwLFoDU5EA1iP/BLYwce7Gs8F8k+ODTbPYDJ4D5dUMNBv
-         snPZ2mW0lnfJ9s6lMN0Pf++HGEl1AVUl2P4MZtMUDLqLB6GdCGTZeuG9V/vr/Ar5MgH0
-         4IaOQWJ7E1TLR5zmnTkIHXgo856wdbGfQ5xlDooU9YN7W7PLtoUngsuAmFiJcrvSjpD1
-         Oh/8HBSekFOlzBQdyYNJ28o0p4qA9mJr/ACl7tYfsx16R0uVe6tYMEF7P/owj+JrOF5L
-         6irrro/Ik99nlufHghTL2OV11SRQgGfd+QJYU+rA4pg0OUBo7f7VGhlG46sziA+YjgiR
-         RPUw==
-X-Gm-Message-State: AOAM530IuWULbuDyBpNdWwR66K/MoKJyT0pMZFzegVfg/nX0wL6Ezk+C
-        PKc54qvtZ9udkQRsI+bpTR9nwHlVBPHEkcopBN0=
-X-Google-Smtp-Source: ABdhPJxFlwpFpUZdQ6bUszycW6INa0R+GLudK5872rFm8RVazA48OfXiqtyIAKFwq0RNQGHYzU8rSvivGo46xnrW/5g=
-X-Received: by 2002:a17:906:3ed0:: with SMTP id d16mr38660386ejj.636.1641305678365;
- Tue, 04 Jan 2022 06:14:38 -0800 (PST)
+        Tue, 4 Jan 2022 09:13:39 -0500
+Received: from [192.168.18.6] (helo=jain.kot-begemot.co.uk)
+        by www.kot-begemot.co.uk with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <anton.ivanov@cambridgegreys.com>)
+        id 1n4kZ7-0008zn-RG; Tue, 04 Jan 2022 14:13:34 +0000
+Received: from jain.kot-begemot.co.uk ([192.168.3.3])
+        by jain.kot-begemot.co.uk with esmtp (Exim 4.94.2)
+        (envelope-from <anton.ivanov@cambridgegreys.com>)
+        id 1n4kZ3-001PmU-PR; Tue, 04 Jan 2022 14:13:27 +0000
+Subject: Re: [PATCH] um: virtio_uml: allow probing from devicetree
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Johannes Berg <johannes@sipsolutions.net>
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Rob Herring <robh+dt@kernel.org>, kernel <kernel@axis.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20211221090447.1567-1-vincent.whitchurch@axis.com>
+ <5f104044649ec60ba93648e68c3df2183e032072.camel@sipsolutions.net>
+ <20211222103417.GB25135@axis.com>
+From:   Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Message-ID: <a862c00c-0db4-e2b7-4ee7-958f3bdd856e@cambridgegreys.com>
+Date:   Tue, 4 Jan 2022 14:13:25 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20220104072658.69756-1-marcan@marcan.st> <20220104072658.69756-13-marcan@marcan.st>
-In-Reply-To: <20220104072658.69756-13-marcan@marcan.st>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 4 Jan 2022 16:12:47 +0200
-Message-ID: <CAHp75VdeNhmRUW1mFY-H5vyzTRHZ9Y2dv03eo+rfcTQKjn9tuQ@mail.gmail.com>
-Subject: Re: [PATCH v2 12/35] brcmfmac: pcie: Fix crashes due to early IRQs
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:BROADCOM BRCM80211 IEEE802.11n WIRELESS DRIVER" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        SHA-cyfmac-dev-list@infineon.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211222103417.GB25135@axis.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -2.0
+X-Spam-Score: -1.0
+X-Clacks-Overhead: GNU Terry Pratchett
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 4, 2022 at 9:29 AM Hector Martin <marcan@marcan.st> wrote:
->
-> The driver was enabling IRQs before the message processing was
-> initialized. This could cause IRQs to come in too early and crash the
-> driver. Instead, move the IRQ enable and hostready to a bus preinit
-> function, at which point everything is properly initialized.
->
-> Fixes: 9e37f045d5e7 ("brcmfmac: Adding PCIe bus layer support.")
 
-You should gather fixes at the beginning of the series, and even
-possible to send them as a separate series. In the current state it's
-unclear if there are dependencies on your new feature (must not be for
-fixes that meant to be backported).
+
+On 22/12/2021 10:34, Vincent Whitchurch wrote:
+> On Tue, Dec 21, 2021 at 09:48:26PM +0100, Johannes Berg wrote:
+>> On Tue, 2021-12-21 at 10:04 +0100, Vincent Whitchurch wrote:
+>>> Allow the virtio_uml device to be probed from the devicetree so that
+>>> sub-devices can be specified using the standard virtio bindings, for
+>>> example:
+>>>
+>>>    virtio@1 {
+>>>      compatible = "virtio,uml";
+>>>      socket-path = "i2c.sock";
+>>>      virtio-device-id = <0x22>;
+>>>
+>>
+>> Given this, maybe it should modify
+>> Documentation/devicetree/bindings/virtio/virtio-device.yaml? Or actually
+>> add a new Documentation/devicetree/bindings/virtio/uml.yaml I guess?
+>>
+>> +Rob, because I'm not really into any of this.
+>>
+>> Also, I'm not even sure we should/need to document the DT bits that are
+>> basically only used for testing in the first place?
+
+If we start adding the UML devices themselves to the DT, we might as well add all of them.
+
+In the doc patch have described the DT support as mostly for development at this point.
+
+It can be a good alternative to the endless command line (especially for complex devices like f.e. l2tpv3).
+
+
+> 
+> I wasn't sure either, but Rob was OK with not documenting some other
+> bindings which are only used for testing[0], so I assumed that that
+> applied here too:
+> 
+>   [0] https://lore.kernel.org/all/5baa1ae6.1c69fb81.847f2.3ab1@mx.google.com/
+> 
+> Also, DT bindings are supposed to be generic and based on what the
+> hardware has, but here we have no hardware and something very Linux and
+> UML-specific.
+> 
+>> Code looks good to me.
+> 
+> Thanks!
+> 
+
+Brgds,
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Anton R. Ivanov
+Cambridgegreys Limited. Registered in England. Company Number 10273661
+https://www.cambridgegreys.com/

@@ -2,117 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A82A94843A0
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:45:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F24C54843A6
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:46:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234347AbiADOpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:45:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:60079 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234341AbiADOpA (ORCPT
+        id S234362AbiADOqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:46:31 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:40826 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231519AbiADOqa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:45:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641307499;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Tue, 4 Jan 2022 09:46:30 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 5FA55212B8;
+        Tue,  4 Jan 2022 14:46:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1641307589; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Y90lW9XmNLqfe3N1HpT0kR+V/FIjNg1yVaD+klmiyww=;
-        b=BDBzlG6eLp0U/ZnLURYPz11wvpc5TsZrY8vMhLH8UbbCiesIruAZGyDbBfbNLMZzwCakjV
-        0Y5fEYyaIjH+oHuSEUXiEleFlu/t85mSSIrEmamYwOdApv0DVGHUhHNSnmlkGHixi0JnF2
-        p1152PHbJiDKvhs0QnPp4UcyJ6q4OkI=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-326-nE8PwU3oMWaHkAeo0hv1SA-1; Tue, 04 Jan 2022 09:44:58 -0500
-X-MC-Unique: nE8PwU3oMWaHkAeo0hv1SA-1
-Received: by mail-wm1-f71.google.com with SMTP id c5-20020a1c3505000000b00345c92c27c6so15397408wma.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 06:44:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=Y90lW9XmNLqfe3N1HpT0kR+V/FIjNg1yVaD+klmiyww=;
-        b=i2mgkuXFeM9Fjd4pLxWSiCGoYsPc+yLUp+6OCkNqHNdjQUbnwHxM9YF+/3VCR2Hk4T
-         OlmwlIZuvKhWz8W7oGEZMNoZVeXjulUuPfWtBwHIrckg6Q5qKdd5S2+wamWpBqN8IDO/
-         KEMmKojAP3Z6e03Y5Ir+r+L1ugBDF//ZQdffFBN3HO+y6aeOs4dpr1k6KkjCCbFbjTAB
-         gZvH2L4LbKJxbpr+cXlJniWeGKkrTFyDfJbfw4pF0mYDdmQayfA9QEyevna2XH1Eor3a
-         1kqnGgJe7hmU/iFTT/azDbV/d7i6gmXnRpg6/DiFp7BWdY4rvaVvXHnJE2VlFyFLPC+j
-         fQCg==
-X-Gm-Message-State: AOAM530fdrwZjSpdAgqIRGFqAsS6slVas8SBJ9OJWMBMiAWpfILUmffh
-        g9w4y306Dfdc4Q28SIJ5v/mQ7uluo9d2R0rw9f3BGOkThMJxkLdNOyXb3UpbOBjAmqYDxXJ5pzY
-        OyaAD9jMpIPoWSptKizLuF8j0
-X-Received: by 2002:a05:600c:24c:: with SMTP id 12mr43693144wmj.191.1641307497003;
-        Tue, 04 Jan 2022 06:44:57 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy38Q/9u8LOHOsrUTzf3fHKPrilzJAKujndpWPoU4Syl/QxEJaGRpIbZH9NGE+YeD52mVPG5A==
-X-Received: by 2002:a05:600c:24c:: with SMTP id 12mr43693130wmj.191.1641307496791;
-        Tue, 04 Jan 2022 06:44:56 -0800 (PST)
-Received: from [192.168.3.132] (p5b0c62bd.dip0.t-ipconnect.de. [91.12.98.189])
-        by smtp.gmail.com with ESMTPSA id 9sm48470738wrz.90.2022.01.04.06.44.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 06:44:56 -0800 (PST)
-Message-ID: <01e42346-5b4d-8ccc-d485-5d866da7cf8d@redhat.com>
-Date:   Tue, 4 Jan 2022 15:44:55 +0100
+        bh=yTzDVTn5ksZWOrdG92R8By21jPJ8PhpzB9LehHRf0hg=;
+        b=F6GEaiAuA/eqxm+utrQIOuIRWGkiGFkBVUdQXCcsW7IwV3GnuW9gkl4gP4frvmRp6zrMZu
+        +z5JGg2JmxQszlyAr/C2HAaQ+MtsaUMPrn2AuBOdVSvXxKHsm44yYtqmmOcf6ub7B2wbU5
+        tfjVeoAZm6tvPN74l0lF/Zk+SU0Ifio=
+Received: from suse.cz (unknown [10.100.216.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 0800DA3B89;
+        Tue,  4 Jan 2022 14:46:29 +0000 (UTC)
+Date:   Tue, 4 Jan 2022 15:45:24 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        John Ogness <john.ogness@linutronix.de>
+Subject: Re: header circular dependencies
+Message-ID: <YdRdhE9z+Yyxwrhj@alley>
+References: <CAHp75Vdjp9_67xe0PeZ9LzcJ=eNxB0qVqPJqtFEvh3SDgcdODw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     Peng Liang <liangpeng10@huawei.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     akpm@linux-foundation.org, hughd@google.com,
-        xiexiangyou@huawei.com, zhengchuan@huawei.com,
-        wanghao232@huawei.com, "dgilbert@redhat.com" <dgilbert@redhat.com>
-References: <20211222123400.1659635-1-liangpeng10@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [RFC 0/1] memfd: Support mapping to zero page on reading
-In-Reply-To: <20211222123400.1659635-1-liangpeng10@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75Vdjp9_67xe0PeZ9LzcJ=eNxB0qVqPJqtFEvh3SDgcdODw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.12.21 13:33, Peng Liang wrote:
-> Hi all,
+On Wed 2021-12-22 21:08:39, Andy Shevchenko wrote:
+> `make headerdep` is full of printk.h circular dependencies, like
 > 
-> Recently we are working on implementing CRIU [1] for QEMU based on
-> Steven's work [2].  It will use memfd to allocate guest memory in order
-> to restore (inherit) it in the new QEMU process.  However, memfd will
-> allocate a new page for reading while anonymous memory will map to zero
-> page for reading.  For QEMU, memfd may cause that all memory are
-> allocated during the migration because QEMU will read all pages in
-> migration.  It may lead to OOM if over-committed memory is enabled,
-> which is usually enabled in public cloud.
+> include/kvm/arm_vgic.h:18: warning: recursive header inclusion
+> In file included from linux/printk.h,
+>                 from linux/dynamic_debug.h:188
+>                 from linux/printk.h:555 <-- here
 
-Hi,
+This one looks like false positive:
 
-it's the exact same problem as if just migrating a VM after inflating
-the balloon, or after reporting free memory to the hypervisor via
-virtio-balloon free page reporting.
+   + printk.h includes dynamic_debug.h when CONFIG_DYNAMIC_DEBUG_CORE
+   + dynamic_debug.h includes printk.h when !CONFIG_DYNAMIC_DEBUG_CORE
 
-Even populating the shared zero page still wastes CPU time and more
-importantly memory for page tables. Further, you'll end up reading the
-whole page to discover that you just populated the shared zeropage, far
-from optimal. Instead of doing that dance, just check if there is
-something worth reading at all.
+But there seem to be other cycles, for example:
 
-You could simply sense if a page is actually populated before going
-ahead and reading it for migration. I actually discussed that recently
-with Dave Gilbert.
+   + printk.h
+     + dynamic_debug.h
+       + jump_label.h
+	 + bug.h
+	   + asm/bug.h
+	     + printk.h
 
-For anonymous memory it's pretty straight forward via
-/proc/self/pagemap. For files you can use lseek.
+I guess that it somehow works _only_ because printk.h includes
+dynamic_debug.h late. It probably defines everything that is needed
+by bug.h early enough.
 
-https://lkml.kernel.org/r/20210923064618.157046-2-tiberiu.georgescu@nutanix.com
+> I'm wondering if it's a false positive?
+> In either case, can we teach the headerdep not to complain by fixing
+> the culprit?
 
-Contains some details. There was a discussion to eventually have a
-better bulk interface for it if it's necessary for performance.
+I am scratching my head how to clean this up. All the dependencies
+make sense. The main problem is that all headers provide a lot of
+inlined functionality. The inlining is often important either because
+of speed or because every caller needs to have its own data structure
+(struct _ddebug, struct static_key).
 
--- 
-Thanks,
+I can't find any good solution at the moment. But I am still slowed
+down after the holidays.
 
-David / dhildenb
-
+Best Regards,
+Petr

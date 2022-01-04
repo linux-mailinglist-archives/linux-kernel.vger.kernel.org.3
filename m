@@ -2,163 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31348484256
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:25:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C04CC484259
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:25:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233421AbiADNZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 08:25:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38986 "EHLO
+        id S233487AbiADNZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 08:25:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbiADNZD (ORCPT
+        with ESMTP id S232029AbiADNZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 08:25:03 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FA9C061761;
-        Tue,  4 Jan 2022 05:25:03 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id v22-20020a9d4e96000000b005799790cf0bso47208885otk.5;
-        Tue, 04 Jan 2022 05:25:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AZWJL+gXmk9nQBeyFLHDpAekZAv6FMjG6sXlfZgRTFM=;
-        b=QqwVDX4CcHzfd8gVVfUzvrjEPSM8kf3TC8a/0CLvsnk7bvRgnpdZ0P6rlhH4hYZX+o
-         wtn1TMk1arYpk+x+Ujrj5ry9JJzlPJyQuef3b+zOQE/OCP2YDOfqjs5tnafmDJbmLVQX
-         7PGXik4cyWM+uOm/FpQZcUoWzM6Tyn651d2tiMw+Uqhn7mEKvBufZUoc7cdz0yOADF0l
-         T49I/vgcWLgQnE9gfAdFuRx7OxEjmv6rk9HUkXOh+KYlnJbE2pqykJPPRsS+U1ADv+i1
-         YqEbmSiaUmNNKI0DhN42NbhUqWfNELekZverXOZuWkB3v6vkbj6USZT7JywubSjpjPpD
-         3wJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AZWJL+gXmk9nQBeyFLHDpAekZAv6FMjG6sXlfZgRTFM=;
-        b=6W+5oVgRzQR27XgoSr/ifjCuIYE3bJ+m+/ztAk7g2gQksFe3Xp8In3F4Fqk+XPCt36
-         SRsgxyeg6p9HgrnbOAcpbctR8R6KusM7+R8vgYFw9aItlbVH71Lm95fA7925CFoWvnJo
-         9aN87AySCcI0XAHkwukdLC65sF5xH1wJEzo4mOD5SMyfeY9XuwuEMK+5sC9vPQ/gzABO
-         4PwJiIqOV1nlSFE9lg6RZ2Ecz3lX8x4RLMz7waXx2XlCTlTff7Cpyug4KGHqxw1C79CF
-         XTY1SMGDzCf2B0N1y2ZmM1OvihxkjwdH5hfpXRuQAo+T1JnhZG7LxXdjTNtmVqr9+XWI
-         wMuw==
-X-Gm-Message-State: AOAM530+0smU5iawSdjVJn7xtqQ5gDIdPGYAsGbLVpxCiwdVZ1ihSXxz
-        trs7VciMfJdYmxDEufvOBNL5BODQSCueAN7DEko=
-X-Google-Smtp-Source: ABdhPJyG6Xy2yNlKmC/eifcIKXY8WzbwmhG0iqlYA6LUbahA6zSxu7E/QDfkgM6o0I9ljLdqr+W3sTMNafdrIVCeauI=
-X-Received: by 2002:a05:6830:4d1:: with SMTP id s17mr35692233otd.246.1641302702663;
- Tue, 04 Jan 2022 05:25:02 -0800 (PST)
+        Tue, 4 Jan 2022 08:25:18 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD529C061761;
+        Tue,  4 Jan 2022 05:25:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=dlRlk2wYEk2DcEqB0eWfT2wU9WqSJ+uo3N+tcXCm11Y=; b=KGMx4rfBbqbGNXr4D1mA4fjhfh
+        prgjQ8LufvAghOqFX3n7LpJZa7dIK0XyL5tKpCKnLpP2ahG/Or7tGusW2PkO0g6WumQpB0g9vGIjn
+        +kpHW3+GQjc+BdCxh0MANNaPiX6OEEvLO26mAWYKEqNBh6VzONfdOz1wY1jNyMVU7NWLQhmYkwTyx
+        kX5Xw0Myy6K75K0ZwFm9T0nklXDQvwnaSvUx0vt9HQ625UXKFJmK+gI8LrwH1WlHsc9SvibNtbuBO
+        zFxooRd09L1LIZi7fjB6KbA7fksTeo0wPKnBtMm9KSVitb/+EY33LyDRYRjDVMAW2Mh27sPtXdRe6
+        jFLWHteg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56562)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1n4joK-00071l-2M; Tue, 04 Jan 2022 13:25:08 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1n4joF-0007Gq-MK; Tue, 04 Jan 2022 13:25:03 +0000
+Date:   Tue, 4 Jan 2022 13:25:03 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     zhuyinbo <zhuyinbo@loongson.cn>
+Cc:     Andrew Lunn <andrew@lunn.ch>, hkallweit1@gmail.com,
+        davem@davemloft.net, kuba@kernel.org, masahiroy@kernel.org,
+        michal.lkml@markovi.net, ndesaulniers@google.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] modpost: file2alias: fixup mdio alias garbled
+ code in modules.alias
+Message-ID: <YdRKr4rxUj9EnDh3@shell.armlinux.org.uk>
+References: <1637919957-21635-1-git-send-email-zhuyinbo@loongson.cn>
+ <c6d37ae0-9ccb-a527-4f55-e96972813a53@gmail.com>
+ <YaYPMOJ/+OXIWcnj@shell.armlinux.org.uk>
+ <YabEHd+Z5SPAhAT5@lunn.ch>
+ <f91f4fff-8bdf-663b-68f5-b8ccbd0c187a@loongson.cn>
+ <257a0fbf-941e-2d9e-50b4-6e34d7061405@loongson.cn>
 MIME-Version: 1.0
-References: <CAFkrUsirdW1j_nhFK23x99itQ7=eXqAWFK5xYo7Mjmg+8zPmLw@mail.gmail.com>
-In-Reply-To: <CAFkrUsirdW1j_nhFK23x99itQ7=eXqAWFK5xYo7Mjmg+8zPmLw@mail.gmail.com>
-From:   Wanpeng Li <kernellwp@gmail.com>
-Date:   Tue, 4 Jan 2022 21:24:51 +0800
-Message-ID: <CANRm+CwHxxge61DGA=pmQfyY7F0iEdDMmTRWBOd5R_+m1XCFkA@mail.gmail.com>
-Subject: Re: possible deadlock in svm_vm_copy_asid_from
-To:     kvartet <xyru1999@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        syzkaller-bugs@googlegroups.com, sunhao.th@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <257a0fbf-941e-2d9e-50b4-6e34d7061405@loongson.cn>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jan 2022 at 19:01, kvartet <xyru1999@gmail.com> wrote:
->
-> Hello,
->
-> When using Syzkaller to fuzz the latest Linux kernel, the following
-> crash was triggered.
->
-> HEAD commit: a7904a538933 Linux 5.16-rc6
-> git tree: upstream
-> console output: https://paste.ubuntu.com/p/GCRXrYQmMN/plain/
-> kernel config: https://paste.ubuntu.com/p/FDDNHDxtwz/plain/
-> C reproducer: https://paste.ubuntu.com/p/gD2D5wthDK/plain/
-> Syzlang reproducer: https://paste.ubuntu.com/p/hTnbvmsW8r/plain/
->
-> ============================================
-> WARNING: possible recursive locking detected
-> 5.16.0-rc6 #9 Not tainted
-> --------------------------------------------
-> syz-executor.6/4919 is trying to acquire lock:
-> ffffc9000afbb250 (&kvm->lock){+.+.}-{3:3}, at: sev_lock_two_vms
-> arch/x86/kvm/svm/sev.c:1568 [inline]
-> ffffc9000afbb250 (&kvm->lock){+.+.}-{3:3}, at:
-> svm_vm_copy_asid_from+0x1bd/0x380 arch/x86/kvm/svm/sev.c:1988
->
-> but task is already holding lock:
-> ffffc9000a703250 (&kvm->lock){+.+.}-{3:3}, at: sev_lock_two_vms
-> arch/x86/kvm/svm/sev.c:1566 [inline]
-> ffffc9000a703250 (&kvm->lock){+.+.}-{3:3}, at:
-> svm_vm_copy_asid_from+0x188/0x380 arch/x86/kvm/svm/sev.c:1988
->
-> other info that might help us debug this:
->  Possible unsafe locking scenario:
->
->        CPU0
->        ----
->   lock(&kvm->lock);
->   lock(&kvm->lock);
->
->  *** DEADLOCK ***
->
->  May be due to missing lock nesting notation
->
-> 1 lock held by syz-executor.6/4919:
->  #0: ffffc9000a703250 (&kvm->lock){+.+.}-{3:3}, at: sev_lock_two_vms
-> arch/x86/kvm/svm/sev.c:1566 [inline]
->  #0: ffffc9000a703250 (&kvm->lock){+.+.}-{3:3}, at:
-> svm_vm_copy_asid_from+0x188/0x380 arch/x86/kvm/svm/sev.c:1988
->
-> stack backtrace:
-> CPU: 1 PID: 4919 Comm: syz-executor.6 Not tainted 5.16.0-rc6 #9
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> 1.13.0-1ubuntu1.1 04/01/2014
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->  print_deadlock_bug kernel/locking/lockdep.c:2956 [inline]
->  check_deadlock kernel/locking/lockdep.c:2999 [inline]
->  validate_chain kernel/locking/lockdep.c:3788 [inline]
->  __lock_acquire.cold+0x168/0x3c3 kernel/locking/lockdep.c:5027
->  lock_acquire kernel/locking/lockdep.c:5637 [inline]
->  lock_acquire+0x1ab/0x520 kernel/locking/lockdep.c:5602
->  __mutex_lock_common kernel/locking/mutex.c:607 [inline]
->  __mutex_lock+0x151/0x1610 kernel/locking/mutex.c:740
->  sev_lock_two_vms arch/x86/kvm/svm/sev.c:1568 [inline]
->  svm_vm_copy_asid_from+0x1bd/0x380 arch/x86/kvm/svm/sev.c:1988
->  kvm_vm_ioctl_enable_cap+0xf8/0xc40 arch/x86/kvm/x86.c:5829
->  kvm_vm_ioctl_enable_cap_generic
-> arch/x86/kvm/../../../virt/kvm/kvm_main.c:4241 [inline]
->  kvm_vm_ioctl+0x3dd/0x23a0 arch/x86/kvm/../../../virt/kvm/kvm_main.c:4300
->  vfs_ioctl fs/ioctl.c:51 [inline]
->  __do_sys_ioctl fs/ioctl.c:874 [inline]
->  __se_sys_ioctl fs/ioctl.c:860 [inline]
->  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7fc4241dc89d
-> Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
-> 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-> 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007fc422b4dc28 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> RAX: ffffffffffffffda RBX: 00007fc4242fbf60 RCX: 00007fc4241dc89d
-> RDX: 0000000020000080 RSI: 000000004068aea3 RDI: 0000000000000004
-> RBP: 00007fc42424900d R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> R13: 00007ffc9816f67f R14: 00007fc4242fbf60 R15: 00007fc422b4ddc0
->  </TASK>
+On Tue, Jan 04, 2022 at 09:11:56PM +0800, zhuyinbo wrote:
+> From the present point of view, no matter what the situation, my supplement
+> can cover udev or request_module for auto load module.
+> 
+> if that phy driver isn't platform driver my patch cover it I think there is
+> no doubt, if phy driver is platform driver and platform driver udev will
+> cover it. My only requestion is the request_module not work well.
+> 
+> about xgmiitorgmii_of_match that it belongs to platform driver load, please
+> you note. and about your doubt usepace whether disable module load that
+> module load function is okay becuase other device driver auto load is okay.
 
-Maybe mutex_lock_killable_nested(), I will have a try.
+xgmiitorgmii is *not* a platform driver.
 
-    Wanpeng
+> > Please report back what the following command produces on your
+> > problem system:
+> >
+> > /sbin/modprobe -vn mdio:00000001010000010000110111010001
+> >
+> > Thanks.
+> 
+> [root@localhost ~]# lsmod | grep marvell
+> [root@localhost ~]# ls
+> /lib/modules/4.19.190+/kernel/drivers/net/phy/marvell.ko
+> /lib/modules/4.19.190+/kernel/drivers/net/phy/marvell.ko
+> [root@localhost ~]# /sbin/modprobe -vn mdio:00000001010000010000110111010001
+> insmod /lib/modules/4.19.190+/kernel/drivers/net/phy/marvell.ko
+> insmod /lib/modules/4.19.190+/kernel/drivers/net/phy/marvell.ko
+> [root@localhost ~]#
+> [root@localhost ~]# cat /proc/sys/kernel/modprobe
+> /sbin/modprobe
+
+Great, so the current scheme using "mdio:<binary digits>" works
+perfectly for you. What is missing is having that modalias in the
+uevent file.
+
+So, my patch on the 4th December should cause the marvell module to
+be loaded at boot time. Please test that patch ASAP, which I have
+already asked you to do. I'll include it again in this email so you
+don't have to hunt for it.
+
+8<===
+From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Subject: [PATCH] net: phy: generate PHY mdio modalias
+
+The modalias string provided in the uevent sysfs file does not conform
+to the format used in PHY driver modules. One of the reasons is that
+udev loading of PHY driver modules has not been an expected use case.
+
+This patch changes the MODALIAS entry for only PHY devices from:
+        MODALIAS=of:Nethernet-phyT(null)
+to:
+        MODALIAS=mdio:00000000001000100001010100010011
+
+Other MDIO devices (such as DSA) remain as before.
+
+However, having udev automatically load the module has the advantage
+of making use of existing functionality to have the module loaded
+before the device is bound to the driver, thus taking advantage of
+multithreaded boot systems, potentially decreasing the boot time.
+
+However, this patch will not solve any issues with the driver module
+not being loaded prior to the network device needing to use the PHY.
+This is something that is completely out of control of any patch to
+change the uevent mechanism.
+
+Reported-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+---
+ drivers/net/phy/mdio_bus.c   |  8 ++++++++
+ drivers/net/phy/phy_device.c | 14 ++++++++++++++
+ include/linux/mdio.h         |  2 ++
+ 3 files changed, 24 insertions(+)
+
+diff --git a/drivers/net/phy/mdio_bus.c b/drivers/net/phy/mdio_bus.c
+index 4638d7375943..663bd98760fb 100644
+--- a/drivers/net/phy/mdio_bus.c
++++ b/drivers/net/phy/mdio_bus.c
+@@ -1010,8 +1010,16 @@ static int mdio_bus_match(struct device *dev, struct device_driver *drv)
+ 
+ static int mdio_uevent(struct device *dev, struct kobj_uevent_env *env)
+ {
++	struct mdio_device *mdio = to_mdio_device(dev);
+ 	int rc;
+ 
++	/* Use the device-specific uevent if specified */
++	if (mdio->bus_uevent) {
++		rc = mdio->bus_uevent(mdio, env);
++		if (rc != -ENODEV)
++			return rc;
++	}
++
+ 	/* Some devices have extra OF data and an OF-style MODALIAS */
+ 	rc = of_device_uevent_modalias(dev, env);
+ 	if (rc != -ENODEV)
+diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+index 23667658b9c6..f4c2057f0202 100644
+--- a/drivers/net/phy/phy_device.c
++++ b/drivers/net/phy/phy_device.c
+@@ -563,6 +563,19 @@ static int phy_request_driver_module(struct phy_device *dev, u32 phy_id)
+ 	return 0;
+ }
+ 
++static int phy_bus_uevent(struct mdio_device *mdiodev,
++			  struct kobj_uevent_env *env)
++{
++	struct phy_device *phydev;
++
++	phydev = container_of(mdiodev, struct phy_device, mdio);
++
++	add_uevent_var(env, "MODALIAS=" MDIO_MODULE_PREFIX MDIO_ID_FMT,
++		       MDIO_ID_ARGS(phydev->phy_id));
++
++	return 0;
++}
++
+ struct phy_device *phy_device_create(struct mii_bus *bus, int addr, u32 phy_id,
+ 				     bool is_c45,
+ 				     struct phy_c45_device_ids *c45_ids)
+@@ -582,6 +595,7 @@ struct phy_device *phy_device_create(struct mii_bus *bus, int addr, u32 phy_id,
+ 	mdiodev->dev.type = &mdio_bus_phy_type;
+ 	mdiodev->bus = bus;
+ 	mdiodev->bus_match = phy_bus_match;
++	mdiodev->bus_uevent = phy_bus_uevent;
+ 	mdiodev->addr = addr;
+ 	mdiodev->flags = MDIO_DEVICE_FLAG_PHY;
+ 	mdiodev->device_free = phy_mdio_device_free;
+diff --git a/include/linux/mdio.h b/include/linux/mdio.h
+index df9c96e56907..5c6676d3de23 100644
+--- a/include/linux/mdio.h
++++ b/include/linux/mdio.h
+@@ -38,6 +38,8 @@ struct mdio_device {
+ 	char modalias[MDIO_NAME_SIZE];
+ 
+ 	int (*bus_match)(struct device *dev, struct device_driver *drv);
++	int (*bus_uevent)(struct mdio_device *mdiodev,
++			  struct kobj_uevent_env *env);
+ 	void (*device_free)(struct mdio_device *mdiodev);
+ 	void (*device_remove)(struct mdio_device *mdiodev);
+ 
+-- 
+2.30.2
+
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

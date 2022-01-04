@@ -2,88 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED0AB484612
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:38:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 495A3484613
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:39:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235411AbiADQiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 11:38:52 -0500
-Received: from mga03.intel.com ([134.134.136.65]:1249 "EHLO mga03.intel.com"
+        id S235427AbiADQj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 11:39:28 -0500
+Received: from foss.arm.com ([217.140.110.172]:33614 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235378AbiADQiv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 11:38:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641314331; x=1672850331;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=yrlkfkw0EATYTcD13m01vf/iKb4S1IVr6BflCrHC4vI=;
-  b=lz2I2SPHLGpLd8x849WPMPoZuUtZsgRrw5dSyj+46deZwRq5ewqKHGT1
-   akRqC+CFdZ8mKwJaVWON1zKaRXGnvyfaO43fkiG1h/T6sp4+k8XHzE/Ln
-   o7yKAzuOUcIJF8BI5PLVj7TnkpGW5IVjd0FI4BetK1CeU8YtTDoeIIbE+
-   AUKR8c5n/A5wsUt6OAXMssLxaboltxG/Ljyf/XT4VkbkeB9kXfD5ic8Wb
-   a0Jgdy/hB3w+FL3I78KFCDRAFxwjMU6TnsHGJX7WpKXX+85pRHOnbSbDy
-   RYPtpjTySddmE9ZvWSMb0v8lveWSS325uey2+HsrguUpho/2zvsXAPhs2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="242211648"
-X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
-   d="scan'208";a="242211648"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 08:38:46 -0800
-X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
-   d="scan'208";a="526311879"
-Received: from djiang5-mobl1.amr.corp.intel.com (HELO [10.212.114.22]) ([10.212.114.22])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 08:38:45 -0800
-Message-ID: <d5a34c44-82e1-1d7c-1bb2-3fe257d6a572@intel.com>
-Date:   Tue, 4 Jan 2022 09:38:44 -0700
+        id S235378AbiADQj1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 11:39:27 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5941113A1;
+        Tue,  4 Jan 2022 08:39:27 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.9.1])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 638603F774;
+        Tue,  4 Jan 2022 08:39:25 -0800 (PST)
+Date:   Tue, 4 Jan 2022 16:39:19 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        paulmck <paulmck@kernel.org>, maz <maz@kernel.org>,
+        frederic <frederic@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        rcu <rcu@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Anup Patel <Anup.Patel@wdc.com>
+Subject: Re: Possible nohz-full/RCU issue in arm64 KVM
+Message-ID: <YdR4N9QVYOzjowAb@FVFF77S0Q05N>
+References: <d80e440375896f75d45e227d40af60ca7ba24ceb.camel@redhat.com>
+ <YbyO40zDW/kvUHEE@FVFF77S0Q05N>
+ <70f112072d9496d21901946ea82832d3ed3a8cb2.camel@redhat.com>
+ <Ybyg1r/Q6EfeuXGV@FVFF77S0Q05N>
+ <9ab8107f-ff41-6a9e-57e1-a261bea93aca@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] dmaengine: ioatdma: use default_groups in kobj_type
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org
-References: <20220104163330.1338824-1-gregkh@linuxfoundation.org>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20220104163330.1338824-1-gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9ab8107f-ff41-6a9e-57e1-a261bea93aca@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Dec 17, 2021 at 04:54:22PM +0100, Paolo Bonzini wrote:
+> On 12/17/21 15:38, Mark Rutland wrote:
+> > For example kvm_guest_enter_irqoff() calls guest_enter_irq_off() which calls
+> > vtime_account_guest_enter(), but kvm_guest_exit_irqoff() doesn't call
+> > guest_exit_irq_off() and the call to vtime_account_guest_exit() is open-coded
+> > elsewhere. Also, guest_enter_irq_off() conditionally calls
+> > rcu_virt_note_context_switch(), but I can't immediately spot anything on the
+> > exit side that corresponded with that, which looks suspicious.
+> 
+> rcu_note_context_switch() is a point-in-time notification; it's not strictly
+> necessary, but it may improve performance a bit by avoiding unnecessary IPIs
+> from the RCU subsystem.
+> 
+> There's no benefit from doing it when you're back from the guest, because at
+> that point the CPU is just running normal kernel code.
 
-On 1/4/2022 9:33 AM, Greg Kroah-Hartman wrote:
-> There are currently 2 ways to create a set of sysfs files for a
-> kobj_type, through the default_attrs field, and the default_groups
-> field.  Move the ioatdma sysfs code to use default_groups field which has
-> been the preferred way since aa30f47cf666 ("kobject: Add support for
-> default attribute groups to kobj_type") so that we can soon get rid of
-> the obsolete default_attrs field.
->
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: dmaengine@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+I see.
 
-Acked-by: Dave Jiang <dave.jiang@intel.com>
+My main issue here was just that it's really difficult to see how the
+entry/exit logic is balanced, and I reckon we can solve that by splitting
+guest_{enter,exit}_irqoff() into helper functions to handle the vtime
+accounting separately from the context tracking, so that arch code can do
+something like:
 
+  guest_timing_enter_irqoff();
+  
+  guest_eqs_enter_irqoff();
+  < actually run vCPU here >
+  guest_eqs_exit_irqoff();
+  
+  < handle pending IRQs here >
+  
+  guest_timing_exit_irqoff();
 
-> ---
->   drivers/dma/ioat/sysfs.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/dma/ioat/sysfs.c b/drivers/dma/ioat/sysfs.c
-> index aa44bcd6a356..168adf28c5b1 100644
-> --- a/drivers/dma/ioat/sysfs.c
-> +++ b/drivers/dma/ioat/sysfs.c
-> @@ -158,8 +158,9 @@ static struct attribute *ioat_attrs[] = {
->   	&intr_coalesce_attr.attr,
->   	NULL,
->   };
-> +ATTRIBUTE_GROUPS(ioat);
->   
->   struct kobj_type ioat_ktype = {
->   	.sysfs_ops = &ioat_sysfs_ops,
-> -	.default_attrs = ioat_attrs,
-> +	.default_groups = ioat_groups,
->   };
+... which I hope should work for RISC-V too.
+
+I've had a go, and I've pushed out a WIP to:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/kvm/rcu
+
+I also see we'll need to add some lockdep/irq-tracing management to arm64, and
+it probably makes sense to fold that into common helpers, so I'll have a play
+with that tomorrow.
+
+Thanks,
+Mark.

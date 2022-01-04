@@ -2,142 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C88834847D1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:26:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A2B4847D8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:28:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236257AbiADS0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 13:26:30 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:33236 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236206AbiADS02 (ORCPT
+        id S236206AbiADS2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 13:28:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234669AbiADS2S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 13:26:28 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id F00FF1F37F;
-        Tue,  4 Jan 2022 18:26:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1641320787; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gCQy3yoyFL7ECUYAU0Ae6aUvtK+Hq4hiYnMytj5+eik=;
-        b=YK05IgeZLaqlRHJRD81Jr3Oh5vHQqFGLshx9xtpB7BFXFMrT+Np6Dx3fuaFwIQyqmirm8u
-        4j8AYIMWQvhHAL5Hnx8BioTAHsf/JdQalSROq9A7dfHWGkzG4MdRQYnCKHfGZGGbkdFgKS
-        REUsm064g7UiIFYclhkCU+RCJz0klAY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1641320787;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gCQy3yoyFL7ECUYAU0Ae6aUvtK+Hq4hiYnMytj5+eik=;
-        b=9EWMIxklog7t5O4tilO9nSmkB3H6W8Zd5Y5nwPXvGAlAVC8audRwReWlcJFgMJPldYH/RA
-        cakI+rxBva851tCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CDE4B13B35;
-        Tue,  4 Jan 2022 18:26:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hmG+MVKR1GEhfQAAMHmgww
-        (envelope-from <bp@suse.de>); Tue, 04 Jan 2022 18:26:26 +0000
-Date:   Tue, 4 Jan 2022 19:26:34 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Dov Murik <dovmurik@linux.ibm.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     linux-efi@vger.kernel.org, Ashish Kalra <ashish.kalra@amd.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Andrew Scull <ascull@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
-        Jim Cadden <jcadden@ibm.com>,
-        Daniele Buono <dbuono@linux.vnet.ibm.com>,
-        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 0/5] Allow guest access to EFI confidential computing
- secret area
-Message-ID: <YdSRWmqdNY7jRcer@zn.tnic>
-References: <20211129114251.3741721-1-dovmurik@linux.ibm.com>
- <YdNHgtuVoLofL4cW@zn.tnic>
- <0280e20e-8459-dd35-0b7d-8dbc1e4a274a@linux.ibm.com>
+        Tue, 4 Jan 2022 13:28:18 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94DC0C061761;
+        Tue,  4 Jan 2022 10:28:17 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id x6so30783811lfa.5;
+        Tue, 04 Jan 2022 10:28:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=kOvNpEQcBPJr05GLCmJ/AWrJaYJ4SSJmOSNygEHkrtE=;
+        b=HMs/PkrHfTWIjr3rVqqrMJ/3V+BrhpJtllKuP+dNqnNGottQyxJrcae0KeuNhirJWz
+         64RMK4Ml62l+iPxoCXwrfknYWbI2G2WX2HQNYKChHCflebzL/VoSQh6teGvm4EbTtr36
+         UwWcu3/a5Yq9mgTaho1gz0eJTjNfdcbyKzzl3mddQY2d6s+x14tZFS9JYVL3uesigSZr
+         QidUwiCg2039upoh4X8IjXDj30cnbnntsGz+OWEG4B9AJp1Ts1O0963nB2WqOuelrKFh
+         iwzubGUsTRE14VytBy/HYLqM1+aFgQcMw/P8ofwnx8jtiQrI6GDq0aD9rgJRyArFm+76
+         4Qnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=kOvNpEQcBPJr05GLCmJ/AWrJaYJ4SSJmOSNygEHkrtE=;
+        b=1mheMO1K8UA0kJOaCzo22s7CM6OSfGTrU0cFs0FtU2BlM2Zy6SL9hqepxQUxQZi48Y
+         ne04e/ZteEjyGgZvzYpJrvRa7bg5zYUrWgd4EHj+kzberrzeQb33K02pMxfMCjUb3g//
+         9rXXbviIuaLcYA5F0gWg6XIFANlZI1NERI6arE76UYqEzKeraEG1bSlqtWkYz8yXhwYA
+         jP141MyGAhT/zKIeDuQGhoP/wMBMZI8izzOtQbqLuLU0I1f9GuCUPSdb+fErIecK5yYS
+         dRPMQCoOaAKyjJ0ue6MvZmUhet0hw+pCquINOdqH/L8sX98Zc33Jxu4/FnrbZSkKWElR
+         S0ew==
+X-Gm-Message-State: AOAM531+5BGnuCBLaRGmPveekbvSoTOJC0HcXIi+g1RUBkYFdtyzVHhe
+        TzTsdOA2/N5oTZoJ+seYEyE=
+X-Google-Smtp-Source: ABdhPJxUNOd+tte3KsNMLGZDZlP5K6G9WefrsczD8MfLDc4KrwRIcd7qMIUF9Qn6S8JuJZdf6GXKlQ==
+X-Received: by 2002:a05:6512:2116:: with SMTP id q22mr44591832lfr.258.1641320895886;
+        Tue, 04 Jan 2022 10:28:15 -0800 (PST)
+Received: from localhost.localdomain ([94.103.235.38])
+        by smtp.gmail.com with ESMTPSA id o5sm3916843lfk.162.2022.01.04.10.28.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 10:28:15 -0800 (PST)
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     stefan@datenfreihafen.org, alex.aring@gmail.com,
+        davem@davemloft.net, kuba@kernel.org, linux-wpan@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Pavel Skripkin <paskripkin@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Alexander Aring <aahringo@redhat.com>
+Subject: [PATCH v3] ieee802154: atusb: fix uninit value in atusb_set_extended_addr
+Date:   Tue,  4 Jan 2022 21:28:06 +0300
+Message-Id: <20220104182806.7188-1-paskripkin@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <e8e73fcc-b902-4972-6001-84671361146d@datenfreihafen.org>
+References: <e8e73fcc-b902-4972-6001-84671361146d@datenfreihafen.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0280e20e-8459-dd35-0b7d-8dbc1e4a274a@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 09:02:03AM +0200, Dov Murik wrote:
-> If the Guest Owner chooses to inject secrets via scp, it needs
-> to be sure it is scp-ing to the correct VM - the one that has SEV
-> enabled and was measured at launch.
+Alexander reported a use of uninitialized value in
+atusb_set_extended_addr(), that is caused by reading 0 bytes via
+usb_control_msg().
 
-Hmm, I'd expect that to be part of the attestation dance. I admit,
-though, I have only listened about the whole attestation bla from the
-sidelines so I'm unclear whether that's part of that protocol. I guess
-Tom and Brijesh should have a better idea here.
+Fix it by validating if the number of bytes transferred is actually
+correct, since usb_control_msg() may read less bytes, than was requested
+by caller.
 
-> One way to achieve that would be to inject the guest's SSH private key
+Fail log:
 
-Well, is that "one way" or *the way*?
+BUG: KASAN: uninit-cmp in ieee802154_is_valid_extended_unicast_addr include/linux/ieee802154.h:310 [inline]
+BUG: KASAN: uninit-cmp in atusb_set_extended_addr drivers/net/ieee802154/atusb.c:1000 [inline]
+BUG: KASAN: uninit-cmp in atusb_probe.cold+0x29f/0x14db drivers/net/ieee802154/atusb.c:1056
+Uninit value used in comparison: 311daa649a2003bd stack handle: 000000009a2003bd
+ ieee802154_is_valid_extended_unicast_addr include/linux/ieee802154.h:310 [inline]
+ atusb_set_extended_addr drivers/net/ieee802154/atusb.c:1000 [inline]
+ atusb_probe.cold+0x29f/0x14db drivers/net/ieee802154/atusb.c:1056
+ usb_probe_interface+0x314/0x7f0 drivers/usb/core/driver.c:396
 
-> using the proposed efi_secret mechanism.  This way the Guest Owner is
-> sure it is talking to the correct guest and not to some other VM that
-> was started by the untrusted cloud provider (say, with SEV disabled so
-> the cloud provider can steal its memory content).
+Fixes: 7490b008d123 ("ieee802154: add support for atusb transceiver")
+Reported-by: Alexander Potapenko <glider@google.com>
+Acked-by: Alexander Aring <aahringo@redhat.com>
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+---
 
-Because we would need *some* way of verifying the owner is talking
-to the correct guest. And if so, this should be made part of the big
-picture of SEV guest attestation. Or is this part of that attestation
-dance?
+Changes in v3:
+	- Changed atusb_control_msg() to usb_control_msg() in
+	  atusb_get_and_show_build(), since request there may read various length
+	  data
 
-I guess I'm wondering where in the big picture this fits into?
+Changes in v2:
+	- Reworked fix approach, since moving to new USB API is not
+	  suitable for backporting to stable kernels
 
-> Indeed this proposed efi_secret module is in use for enabling SEV
-> confidential containers using Kata containers [1], but there's nothing
-> specific in the current patch series about containers.  The patch series
-> just exposes the launch-injected SEV secrets to userspace as virtual files
-> (under securityfs).
-> 
-> [1] https://github.com/confidential-containers/attestation-agent/tree/main/src/kbc_modules/offline_sev_kbc
+---
+ drivers/net/ieee802154/atusb.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-So one of the aspects for this is to use it in automated deployments.
-
-> It boils down to: the confidential guest needs to have access to a
-> secret which the untrusted host can't read, and which is essential for
-> the normal operation of the guest.  This secret can be a decryption key,
-> an SSH private key, an API key to a Key Management system, etc.  If a
-> malicious cloud provider tries to start that VM without a secret (or
-> with the wrong one), the actual workload that the guest is supposed to
-> run will not execute meaningfully.
-> 
-> The proposed patch series exposes the SEV injected secrets as virtual
-> files, which can later be used as decryption keys (as done in the kata
-> confidential containers use-case), or SSH private keys, or any other
-> possible implementation.
-
-Right, and is this going to be the proper way to authenticate SEV guests
-to their owners or is this just another technique for safely supplying
-secrets into the guest?
-
-I hope I'm making some sense here...
-
+diff --git a/drivers/net/ieee802154/atusb.c b/drivers/net/ieee802154/atusb.c
+index 23ee0b14cbfa..2f5e7b31032a 100644
+--- a/drivers/net/ieee802154/atusb.c
++++ b/drivers/net/ieee802154/atusb.c
+@@ -93,7 +93,9 @@ static int atusb_control_msg(struct atusb *atusb, unsigned int pipe,
+ 
+ 	ret = usb_control_msg(usb_dev, pipe, request, requesttype,
+ 			      value, index, data, size, timeout);
+-	if (ret < 0) {
++	if (ret < size) {
++		ret = ret < 0 ? ret : -ENODATA;
++
+ 		atusb->err = ret;
+ 		dev_err(&usb_dev->dev,
+ 			"%s: req 0x%02x val 0x%x idx 0x%x, error %d\n",
+@@ -861,9 +863,9 @@ static int atusb_get_and_show_build(struct atusb *atusb)
+ 	if (!build)
+ 		return -ENOMEM;
+ 
+-	ret = atusb_control_msg(atusb, usb_rcvctrlpipe(usb_dev, 0),
+-				ATUSB_BUILD, ATUSB_REQ_FROM_DEV, 0, 0,
+-				build, ATUSB_BUILD_SIZE, 1000);
++	/* We cannot call atusb_control_msg() here, since this request may read various length data */
++	ret = usb_control_msg(atusb->usb_dev, usb_rcvctrlpipe(usb_dev, 0), ATUSB_BUILD,
++			      ATUSB_REQ_FROM_DEV, 0, 0, build, ATUSB_BUILD_SIZE, 1000);
+ 	if (ret >= 0) {
+ 		build[ret] = 0;
+ 		dev_info(&usb_dev->dev, "Firmware: build %s\n", build);
 -- 
-Regards/Gruss,
-    Boris.
+2.34.1
 
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

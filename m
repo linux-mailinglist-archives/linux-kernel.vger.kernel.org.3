@@ -2,102 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4204448410C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:41:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 029A648410E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232449AbiADLlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 06:41:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43436 "EHLO
+        id S232473AbiADLlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 06:41:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232327AbiADLls (ORCPT
+        with ESMTP id S232327AbiADLlv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 06:41:48 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B350C061761;
-        Tue,  4 Jan 2022 03:41:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=titoXQwkTQtPF0RW5RLXQyPOz3CoNfy3Us8bQFyRxUU=; b=V28Os2e9tG5qOMQm1tOh+sV0oG
-        LMbJkmxjVzumYkf4Oi1e0V0qHh9f78zvfHfHXgyxnDtTOITJ4uhnhY3bhh0coJcgWumC1JLo3qAxf
-        UWEbi2gjpmHm07yBqfE20wt1dYXZpRZTsAc8EAPFcNWbwR0TVi5+iK1mdlxchNpLvH2Oy32NhGRYs
-        csFnqv27u6B2QMcKVB60I7vdNMsc4A0upm9qQaBj8okEY/WUNXk7J0YnSPuAI35GIAC+LuW+GAndT
-        h6otIgSRX3pXfbXIpTGn5eAtAzHMt59YuJ/ZQCOkzzv+NABOyNhUCQbeX50IEjkvkdjuLx6xmwHen
-        Uw84RKeg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56554)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1n4iCE-0006w1-MZ; Tue, 04 Jan 2022 11:41:42 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1n4iCC-0007Cn-T3; Tue, 04 Jan 2022 11:41:40 +0000
-Date:   Tue, 4 Jan 2022 11:41:40 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Corentin Labbe <clabbe.montjoie@gmail.com>
-Cc:     linus.walleij@linaro.org, ulli.kroll@googlemail.com,
-        kuba@kernel.org, davem@davemloft.net, andrew@lunn.ch,
-        hkallweit1@gmail.com, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: net: phy: marvell: network working with generic PHY and not with
- marvell PHY
-Message-ID: <YdQydK4GhI0P5RYL@shell.armlinux.org.uk>
-References: <YdQoOSXS98+Af1wO@Red>
- <YdQsJnfqjaFrtC0m@shell.armlinux.org.uk>
- <YdQwexJVfrdzEfZK@Red>
+        Tue, 4 Jan 2022 06:41:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80A5C061761;
+        Tue,  4 Jan 2022 03:41:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A604B811B6;
+        Tue,  4 Jan 2022 11:41:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27A9CC36AE9;
+        Tue,  4 Jan 2022 11:41:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641296507;
+        bh=gmLzXCk+XCUIqYLhhlOH0oln3V/fnTwUQmNPvhxe3IY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Mm4vYpTGc65y345NH4JhQa7Gu3jZ/HTukDcgFTV3xPKqvPd+wooRImu9C32S95/MY
+         Iy6F1O1+rkeji4qjXa8/ONdEO6Lw7wKgOK2tyT3KA76BgVGFXGDKVJw3HEjEaPkgRn
+         S8aDDDr5KBO0lIrHib3ZpNRgo+6YcGpAKfaANHMZNa7Nd1xWo8/sH9/t4DxZ+pq6Mr
+         g/cI5hbUcjmBAyi56KcIrvwPu0/rXhTFLEIkwJWg2Ox7C1R43V7rYHUTqrdF9Z90kd
+         JARIkfp5enfecLoj7orSdJTsMGJO/9Ux8e3+mnfmjjVnmEUtNw8XEzu6RZZMQ66iBi
+         pW4UCMSJ9oVuw==
+Date:   Tue, 4 Jan 2022 13:41:43 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     syzbot <syzbot+6d532fa8f9463da290bc@syzkaller.appspotmail.com>
+Cc:     glider@google.com, jgg@ziepe.ca, liangwenpeng@huawei.com,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        liweihang@huawei.com, syzkaller-bugs@googlegroups.com,
+        tanxiaofei@huawei.com, yuehaibing@huawei.com
+Subject: Re: [syzbot] KMSAN: kernel-infoleak in ucma_init_qp_attr
+Message-ID: <YdQydxgthE47Xhab@unreal>
+References: <000000000000073ffa05d4bebff8@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YdQwexJVfrdzEfZK@Red>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <000000000000073ffa05d4bebff8@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 12:33:15PM +0100, Corentin Labbe wrote:
-> Le Tue, Jan 04, 2022 at 11:14:46AM +0000, Russell King (Oracle) a écrit :
-> > On Tue, Jan 04, 2022 at 11:58:01AM +0100, Corentin Labbe wrote:
-> > > Hello
-> > > 
-> > > I have a gemini SSI 1328 box which has a cortina ethernet MAC with a Marvell 88E1118 as given by:
-> > > Marvell 88E1118 gpio-0:01: attached PHY driver (mii_bus:phy_addr=gpio-0:01, irq=POLL)
-> > > So booting with CONFIG_MARVELL_PHY=y lead to a non-working network with link set at 1Gbit
-> > > Setting 'max-speed = <100>;' (as current state in mainline dtb) lead to a working network.
-> > > By not working, I mean kernel started with ip=dhcp cannot get an IP.
-> > 
-> > How is the PHY connected to the host (which interface mode?) If it's
-> > RGMII, it could be that the wrong RGMII interface mode is specified in
-> > DT.
-> > 
+On Tue, Jan 04, 2022 at 02:03:17AM -0800, syzbot wrote:
+> Hello,
 > 
-> The PHY is set as RGMII in DT (arch/arm/boot/dts/gemini-ssi1328.dts)
-> The only change to the mainline dtb is removing the max-speed.
+> syzbot found the following issue on:
+> 
+> HEAD commit:    81c325bbf94e kmsan: hooks: do not check memory in kmsan_in..
+> git tree:       https://github.com/google/kmsan.git master
+> console output: https://syzkaller.appspot.com/x/log.txt?x=10c4260db00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=2d8b9a11641dc9aa
+> dashboard link: https://syzkaller.appspot.com/bug?extid=6d532fa8f9463da290bc
+> compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
+> userspace arch: i386
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+6d532fa8f9463da290bc@syzkaller.appspotmail.com
+> 
+> =====================================================
+> BUG: KMSAN: kernel-infoleak in instrument_copy_to_user include/linux/instrumented.h:121 [inline]
+> BUG: KMSAN: kernel-infoleak in _copy_to_user+0x1c9/0x270 lib/usercopy.c:33
+>  instrument_copy_to_user include/linux/instrumented.h:121 [inline]
+>  _copy_to_user+0x1c9/0x270 lib/usercopy.c:33
+>  copy_to_user include/linux/uaccess.h:209 [inline]
+>  ucma_init_qp_attr+0x8c7/0xb10 drivers/infiniband/core/ucma.c:1242
+>  ucma_write+0x637/0x6c0 drivers/infiniband/core/ucma.c:1732
+>  vfs_write+0x8ce/0x2030 fs/read_write.c:588
+>  ksys_write+0x28b/0x510 fs/read_write.c:643
+>  __do_sys_write fs/read_write.c:655 [inline]
+>  __se_sys_write fs/read_write.c:652 [inline]
+>  __ia32_sys_write+0xdb/0x120 fs/read_write.c:652
+>  do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
+>  __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
+>  do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
+>  do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
+>  entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
+> 
+> Local variable resp created at:
+>  ucma_init_qp_attr+0xa4/0xb10 drivers/infiniband/core/ucma.c:1214
+>  ucma_write+0x637/0x6c0 drivers/infiniband/core/ucma.c:1732
+> 
+> Bytes 40-59 of 144 are uninitialized
+> Memory access of size 144 starts at ffff888167523b00
+> Data copied to user address 0000000020000100
+> 
+> CPU: 1 PID: 25910 Comm: syz-executor.1 Not tainted 5.16.0-rc5-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> =====================================================
 
-So, it's using "rgmii" with no delay configured at the PHY with the
-speed limited to 100Mbps. You then remove the speed limitation and
-it doesn't work at 1Gbps.
+We are not clearing GRH fields in ib_copy_ah_attr_to_user() if dst->is_global is not set.
+I'm testing the fix now and will post the patch after it will pass CI.
 
-I think I've seen this on other platforms (imx6 + ar8035) when the
-RGMII delay is not correctly configured - it will work at slower
-speeds but not 1G.
+Thanks
 
-The RGMII spec specifies that there will be a delay - and the delay can
-be introduced by either the MAC, PHY or by PCB track routing. It sounds
-to me like your boot environment configures the PHY to introduce the
-necessary delay, but then, because the DT "rgmii" mode means "no delay
-at the PHY" when you use the Marvell driver (which respects that), the
-Marvell driver configures the PHY for no delay, resulting in a non-
-working situation at 1G.
-
-I would suggest checking how the boot environment configures the PHY,
-and change the "rgmii" mode in DT to match. There is a description of
-the four RGMII modes in Documentation/networking/phy.rst that may help
-understand what each one means.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

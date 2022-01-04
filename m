@@ -2,119 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF7F483B68
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 06:04:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5DD483B70
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 06:08:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbiADFD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 00:03:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38134 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiADFD5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 00:03:57 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ACDAC061761;
-        Mon,  3 Jan 2022 21:03:57 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id a203-20020a1c7fd4000000b003457874263aso22050541wmd.2;
-        Mon, 03 Jan 2022 21:03:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bX3txH8dDchVX0wVCbxbqybQRQkhYo9my0ZLDA1n4oE=;
-        b=CV0S3MjYHGNdJsMzCoW1Ofj5SlNfSsTCDaf7bKHX39q0opZrkeY/o3vFxPMVMGJrC6
-         58kP6NQZgwJgT48g23rGuyMIqc+LCdBkf10tqUPF6vMFpznQMEShveWdQOrEIV407jUY
-         EFfbhZuTYPTA3hUZevN/RLpWsEL+C4zKvRHrP07XK9zaHFeW2Gg2Y9ADLqaZHa04SByu
-         8iXeKosc+sR+qiFyr6nzgQqfNkUBoMGSp7F9ayslzRlixUFFo2Tlqye9WSup/DeFyAoE
-         piFo58n++X07Nek1/zU90AR1KzdyA27r02GqTxFgqGd6tAjBBt234Z8YrCYxosF1RAD4
-         Ztig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bX3txH8dDchVX0wVCbxbqybQRQkhYo9my0ZLDA1n4oE=;
-        b=vipufBkx5HDoEgtSQ3R25FQoP7nrcbqVKozz67PPUVmyIkPfXFyTQiDJoVepkQ2YDX
-         TlnWtW1fxNVFIzN1E0NJOG6SkE0ZeTETtew7FKso6OQ1JsDO1CWSyfdR9F3xJZit88Pj
-         SsokTZraGo6nAjCSmd0fsulvuqak8yCyyGCyXtyqp67P2N+qRdtYA9kkM/HJyW1A6TkU
-         uZ8JjKC2d4+ZoSFVWqaQyEaa6T9dTud+rb+3+chB6+dY8YCXk1Xz6mq0XaCAiRE1/tPp
-         OZSataPB+tAtEeTPFebY1L2NhKawTSxIF5oqjGXWtBKL3++bcBARnAYMbbaR4p1g9NTQ
-         IsYQ==
-X-Gm-Message-State: AOAM531JuJMLgLM7rJ71YgJ6KFL5bXXXJh/hpT01hb1+Yp11bF1cly/P
-        8KQdtGkDlFGVhpPpL320dP+cnrRKylqwNuNpNpaqUK3/6wo=
-X-Google-Smtp-Source: ABdhPJwNB3Qvdq7axxA4E5eUQlzMMRCT1l0vcXYnVkl/wKpNoxh1CDFHqrOWJnDr7bZ2w3fKP43UxlRbq/S+YklMZ+M=
-X-Received: by 2002:a7b:c087:: with SMTP id r7mr41264307wmh.17.1641272635864;
- Mon, 03 Jan 2022 21:03:55 -0800 (PST)
+        id S229704AbiADFI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 00:08:27 -0500
+Received: from mga17.intel.com ([192.55.52.151]:15035 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229463AbiADFI0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 00:08:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641272906; x=1672808906;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Q+kCvHS6KtD47YREWb4CcTTnq2JF7XNJS+88ETlwsiY=;
+  b=YJoBLE9vyiLt/e90tJArQP1s9RnfY1PmSS6EtoXrF9Jaa2QcpdDnjsHV
+   AUenDk0xNCdchyEF8GSt2T42hfqNkiO36NPwp35WFDvFVE62G6sJR0qnb
+   +vJG5etfTMkm9unQZpx9otQqsPKt21i5EKytIyOQF+htBUzXzcpd07Xpm
+   3vc3OBXdu6dzpyplO7D1WPlWdEYCgwKBve5hNVcDk2+RAe7Iy7jiZQCQF
+   c/c4YeeicGJAQMTWPVBRpD6hFjl5p7W/JDn/x+OSEG1x7PHutqEIAjg/A
+   Ru3HM4z43if2IK4K0g2UB44UQtqVi3tzzcX0RXMWb8RkBQMhxTUWpArZn
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="222830420"
+X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
+   d="scan'208";a="222830420"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 21:08:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
+   d="scan'208";a="556054078"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 03 Jan 2022 21:08:23 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n4c3b-000EiL-8y; Tue, 04 Jan 2022 05:08:23 +0000
+Date:   Tue, 4 Jan 2022 13:07:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Subject: drivers/pci/controller/pcie-mt7621.c:224:6: error: implicit
+ declaration of function 'mips_cps_numiocu'
+Message-ID: <202201041305.X3oSuWBy-lkp@intel.com>
 MIME-Version: 1.0
-References: <Yc56ey6QKwaYg0yi@mit.edu> <20211231114903.60882-1-Jason@zx2c4.com>
- <Yc86TIah3w4waDEc@mit.edu>
-In-Reply-To: <Yc86TIah3w4waDEc@mit.edu>
-From:   Sandy Harris <sandyinchina@gmail.com>
-Date:   Tue, 4 Jan 2022 13:03:43 +0800
-Message-ID: <CACXcFmm2nKLHdqN27Ced2nLg=h2mSX_fKWFf-OkgArVRDi3xTw@mail.gmail.com>
-Subject: Re: [PATCH v2] random: avoid superfluous call to RDRAND in CRNG extraction
-To:     "Theodore Ts'o" <tytso@mit.edu>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If we are removing RDRAND, what about adding some
-cheaper mixing? Something along these lines?
+Hi Sergio,
 
-The current code's mixing is triggered only once in 2^32
-iterations, depends only on crng->state[], always changes
-the same state word, and introduces no new entropy.
+First bad commit (maybe != root cause):
 
-Make it happen more often, depend on a randomly initialised
-counter as well as state[], make a data-dependent choice of
-word to change, and use random_get_entropy().
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c9e6606c7fe92b50a02ce51dda82586ebdf99b48
+commit: 2bdd5238e756aac3ecbffc7c22b884485e84062e PCI: mt7621: Add MediaTek MT7621 PCIe host controller driver
+date:   3 months ago
+config: mips-randconfig-r024-20220102 (https://download.01.org/0day-ci/archive/20220104/202201041305.X3oSuWBy-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 104a827ea6de0cbe0f5faef4407552ede31d165c)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2bdd5238e756aac3ecbffc7c22b884485e84062e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2bdd5238e756aac3ecbffc7c22b884485e84062e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/pci/controller/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/pci/controller/pcie-mt7621.c:224:6: error: implicit declaration of function 'mips_cps_numiocu' [-Werror,-Wimplicit-function-declaration]
+           if (mips_cps_numiocu(0)) {
+               ^
+>> drivers/pci/controller/pcie-mt7621.c:232:3: error: implicit declaration of function 'write_gcr_reg1_base' [-Werror,-Wimplicit-function-declaration]
+                   write_gcr_reg1_base(entry->res->start);
+                   ^
+>> drivers/pci/controller/pcie-mt7621.c:233:3: error: implicit declaration of function 'write_gcr_reg1_mask' [-Werror,-Wimplicit-function-declaration]
+                   write_gcr_reg1_mask(mask | CM_GCR_REGn_MASK_CMTGT_IOCU0);
+                   ^
+   drivers/pci/controller/pcie-mt7621.c:233:3: note: did you mean 'write_gcr_reg1_base'?
+   drivers/pci/controller/pcie-mt7621.c:232:3: note: 'write_gcr_reg1_base' declared here
+                   write_gcr_reg1_base(entry->res->start);
+                   ^
+>> drivers/pci/controller/pcie-mt7621.c:233:30: error: use of undeclared identifier 'CM_GCR_REGn_MASK_CMTGT_IOCU0'
+                   write_gcr_reg1_mask(mask | CM_GCR_REGn_MASK_CMTGT_IOCU0);
+                                              ^
+>> drivers/pci/controller/pcie-mt7621.c:235:25: error: implicit declaration of function 'read_gcr_reg1_base' [-Werror,-Wimplicit-function-declaration]
+                            (unsigned long long)read_gcr_reg1_base(),
+                                                ^
+   drivers/pci/controller/pcie-mt7621.c:235:25: note: did you mean 'write_gcr_reg1_base'?
+   drivers/pci/controller/pcie-mt7621.c:232:3: note: 'write_gcr_reg1_base' declared here
+                   write_gcr_reg1_base(entry->res->start);
+                   ^
+>> drivers/pci/controller/pcie-mt7621.c:236:25: error: implicit declaration of function 'read_gcr_reg1_mask' [-Werror,-Wimplicit-function-declaration]
+                            (unsigned long long)read_gcr_reg1_mask());
+                                                ^
+   drivers/pci/controller/pcie-mt7621.c:236:25: note: did you mean 'read_gcr_reg1_base'?
+   drivers/pci/controller/pcie-mt7621.c:235:25: note: 'read_gcr_reg1_base' declared here
+                            (unsigned long long)read_gcr_reg1_base(),
+                                                ^
+   include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+           dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                            ^
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                       ^
+   6 errors generated.
+
+
+vim +/mips_cps_numiocu +224 drivers/pci/controller/pcie-mt7621.c
+
+e51844bf825169 drivers/staging/mt7621-pci/pci-mt7621.c Sergio Paracuellos 2018-11-24  210  
+b15606e63ea90c drivers/staging/mt7621-pci/pci-mt7621.c Sergio Paracuellos 2021-06-14  211  static int setup_cm_memory_region(struct pci_host_bridge *host)
+03f152e31f4ae8 drivers/staging/mt7621-pci/pci-mt7621.c John Crispin       2018-03-15  212  {
+b15606e63ea90c drivers/staging/mt7621-pci/pci-mt7621.c Sergio Paracuellos 2021-06-14  213  	struct mt7621_pcie *pcie = pci_host_bridge_priv(host);
+d936550784a23b drivers/staging/mt7621-pci/pci-mt7621.c Sergio Paracuellos 2018-11-04  214  	struct device *dev = pcie->dev;
+b15606e63ea90c drivers/staging/mt7621-pci/pci-mt7621.c Sergio Paracuellos 2021-06-14  215  	struct resource_entry *entry;
+03f152e31f4ae8 drivers/staging/mt7621-pci/pci-mt7621.c John Crispin       2018-03-15  216  	resource_size_t mask;
+8571c62d45cb7e drivers/staging/mt7621-pci/pci-mt7621.c Sergio Paracuellos 2018-08-03  217  
+b15606e63ea90c drivers/staging/mt7621-pci/pci-mt7621.c Sergio Paracuellos 2021-06-14  218  	entry = resource_list_first_type(&host->windows, IORESOURCE_MEM);
+b15606e63ea90c drivers/staging/mt7621-pci/pci-mt7621.c Sergio Paracuellos 2021-06-14  219  	if (!entry) {
+2bdd5238e756aa drivers/pci/controller/pcie-mt7621.c    Sergio Paracuellos 2021-09-22  220  		dev_err(dev, "cannot get memory resource\n");
+b15606e63ea90c drivers/staging/mt7621-pci/pci-mt7621.c Sergio Paracuellos 2021-06-14  221  		return -EINVAL;
+b15606e63ea90c drivers/staging/mt7621-pci/pci-mt7621.c Sergio Paracuellos 2021-06-14  222  	}
+b15606e63ea90c drivers/staging/mt7621-pci/pci-mt7621.c Sergio Paracuellos 2021-06-14  223  
+03f152e31f4ae8 drivers/staging/mt7621-pci/pci-mt7621.c John Crispin       2018-03-15 @224  	if (mips_cps_numiocu(0)) {
+d2bac2fd6daa91 drivers/staging/mt7621-pci/pci-mt7621.c Sergio Paracuellos 2018-11-04  225  		/*
+d2bac2fd6daa91 drivers/staging/mt7621-pci/pci-mt7621.c Sergio Paracuellos 2018-11-04  226  		 * FIXME: hardware doesn't accept mask values with 1s after
+d4e3a1f6cea79e drivers/staging/mt7621-pci/pci-mt7621.c NeilBrown          2018-05-04  227  		 * 0s (e.g. 0xffef), so it would be great to warn if that's
+d2bac2fd6daa91 drivers/staging/mt7621-pci/pci-mt7621.c Sergio Paracuellos 2018-11-04  228  		 * about to happen
+d2bac2fd6daa91 drivers/staging/mt7621-pci/pci-mt7621.c Sergio Paracuellos 2018-11-04  229  		 */
+b15606e63ea90c drivers/staging/mt7621-pci/pci-mt7621.c Sergio Paracuellos 2021-06-14  230  		mask = ~(entry->res->end - entry->res->start);
+03f152e31f4ae8 drivers/staging/mt7621-pci/pci-mt7621.c John Crispin       2018-03-15  231  
+b15606e63ea90c drivers/staging/mt7621-pci/pci-mt7621.c Sergio Paracuellos 2021-06-14 @232  		write_gcr_reg1_base(entry->res->start);
+03f152e31f4ae8 drivers/staging/mt7621-pci/pci-mt7621.c John Crispin       2018-03-15 @233  		write_gcr_reg1_mask(mask | CM_GCR_REGn_MASK_CMTGT_IOCU0);
+d936550784a23b drivers/staging/mt7621-pci/pci-mt7621.c Sergio Paracuellos 2018-11-04  234  		dev_info(dev, "PCI coherence region base: 0x%08llx, mask/settings: 0x%08llx\n",
+03f152e31f4ae8 drivers/staging/mt7621-pci/pci-mt7621.c John Crispin       2018-03-15 @235  			 (unsigned long long)read_gcr_reg1_base(),
+03f152e31f4ae8 drivers/staging/mt7621-pci/pci-mt7621.c John Crispin       2018-03-15 @236  			 (unsigned long long)read_gcr_reg1_mask());
+03f152e31f4ae8 drivers/staging/mt7621-pci/pci-mt7621.c John Crispin       2018-03-15  237  	}
+09dd629eeabb8a drivers/staging/mt7621-pci/pci-mt7621.c Sergio Paracuellos 2020-03-18  238  
+8571c62d45cb7e drivers/staging/mt7621-pci/pci-mt7621.c Sergio Paracuellos 2018-08-03  239  	return 0;
+8571c62d45cb7e drivers/staging/mt7621-pci/pci-mt7621.c Sergio Paracuellos 2018-08-03  240  }
+8571c62d45cb7e drivers/staging/mt7621-pci/pci-mt7621.c Sergio Paracuellos 2018-08-03  241  
+
+:::::: The code at line 224 was first introduced by commit
+:::::: 03f152e31f4ae89c37ab240f45dd77c8a916dd26 staging: mt7621-pci: MIPS/ralink: add MT7621 pcie driver
+
+:::::: TO: John Crispin <blogic@openwrt.org>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
 ---
- drivers/char/random.c | 22 ++++++++++++++++++++--
- 1 file changed, 20 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 605969ed0f96..d2be079f004d 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -985,6 +985,10 @@ static void crng_reseed(struct crng_state *crng,
-struct entropy_store *r)
-     }
- }
-
-+#define CC_SHIFT 8
-+#define CC_MASK ((1<<CC_SHIFT)-1)
-+static u32 cc_count = 0 ;
-+
- static void _extract_crng(struct crng_state *crng,
-               __u8 out[CHACHA_BLOCK_SIZE])
- {
-@@ -998,8 +1002,22 @@ static void _extract_crng(struct crng_state *crng,
-     if (arch_get_random_long(&v))
-         crng->state[14] ^= v;
-     chacha20_block(&crng->state[0], out);
--    if (crng->state[12] == 0)
--        crng->state[13]++;
-+        if (cc_count == 0)
-+                cc_count = crng->state[9] ^ random_get_entropy() ;
-+    switch ((crng->state[12] ^ cc_count) & CC_MASK)        {
-+                case 0:
-+                        cc_count = crng->state[10] ^ (cc_count>>CC_SHIFT);
-+                        break ;
-+                case 31: case 97: case 253:
-+                        crng->state[crng->state[13]&7]++;
-+                        break ;
-+                case 61: case 127:
-+                        crng->state[crng->state[11]&7] += random_get_entropy();
-+                        break ;
-+                default:
-+                        break ;
-+        }
-+        cc_count++ ;
-     spin_unlock_irqrestore(&crng->lock, flags);
- }
-
--- 
-Signed-off-by: Sandy Harris <sandyinchina@gmail.com>
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

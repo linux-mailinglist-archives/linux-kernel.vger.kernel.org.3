@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBB9E4845F7
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:29:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B4D84845FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235289AbiADQ3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 11:29:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54534 "EHLO
+        id S235326AbiADQdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 11:33:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbiADQ3x (ORCPT
+        with ESMTP id S229984AbiADQde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 11:29:53 -0500
+        Tue, 4 Jan 2022 11:33:34 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA46C061761;
-        Tue,  4 Jan 2022 08:29:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2587C061761;
+        Tue,  4 Jan 2022 08:33:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F3E461524;
-        Tue,  4 Jan 2022 16:29:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 490CBC36AE9;
-        Tue,  4 Jan 2022 16:29:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 52F66614E8;
+        Tue,  4 Jan 2022 16:33:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F2D8C36AEF;
+        Tue,  4 Jan 2022 16:33:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641313791;
-        bh=D7SL25ZoKNl3aSqzBkgk6IkgtYqSp/dzemHZP/AyLzM=;
+        s=korg; t=1641314013;
+        bh=vabCdgzGBopzaMxZsiqlElK4HXDziw223Sx8f6RNEnU=;
         h=From:To:Cc:Subject:Date:From;
-        b=yIxplB02qzDwIXE34iR71kgcbBJsc408sF2T23UpmYb4eq274cQXYom2IFVKqrtBR
-         MO9fVyGlOL0t1WuC02jaMD6a+naaxH28boergc2NuX8vOum0H3Jc7rzc6/7FbEoZuj
-         R6jzcsq3Nw75wTnMpbdIyQRvnO4cNWHnK4dYaqWQ=
+        b=fsPrZa12dtKnpY9P4Ik57sdPyPS98kMT02NEUpalVmhOfV0rdj5w3YP/Hg1VPRdj5
+         fogj6NK0ee8vx0fJ9UxIq6lL14HsJdhY3gFocIuR9opvD82haro3JjDY5BaN6q06wW
+         nQaZpcksval/Zb1RZRxxPXwffTk7uJ0VVmKIOA54=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
-        Jack Wang <jinpu.wang@ionos.com>, Jens Axboe <axboe@kernel.dk>,
-        linux-block@vger.kernel.org
-Subject: [PATCH] block/rnbd-clt-sysfs: use default_groups in kobj_type
-Date:   Tue,  4 Jan 2022 17:29:47 +0100
-Message-Id: <20220104162947.1320936-1-gregkh@linuxfoundation.org>
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org
+Subject: [PATCH] dmaengine: ioatdma: use default_groups in kobj_type
+Date:   Tue,  4 Jan 2022 17:33:30 +0100
+Message-Id: <20220104163330.1338824-1-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1464; h=from:subject; bh=D7SL25ZoKNl3aSqzBkgk6IkgtYqSp/dzemHZP/AyLzM=; b=owGbwMvMwCRo6H6F97bub03G02pJDIlXSn+nt/WtXaa6pWCJPs+5oLPWCx0M/++20Pg3743UMc0N /Q32HbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjCRPfUMC2ZP/3ztSx5j5VL5yS8c6h VWXu/8lc8wvyjohYX2958n8pdvKJML0GRaoWP+CQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1065; h=from:subject; bh=vabCdgzGBopzaMxZsiqlElK4HXDziw223Sx8f6RNEnU=; b=owGbwMvMwCRo6H6F97bub03G02pJDIlXym75pN9Lby3t23v6Zf29/6uem724oPJlzrn4WXZbL5gu qZte0BHLwiDIxCArpsjyZRvP0f0VhxS9DG1Pw8xhZQIZwsDFKQAT0b7GMFfaMvnxR4XKk9sS8yd9dr FU8D6t95hhwYHjLYF/bebeqJ8t5bf7lpLFJMXGbgA=
 X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -49,41 +47,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 There are currently 2 ways to create a set of sysfs files for a
 kobj_type, through the default_attrs field, and the default_groups
-field.  Move the rnbd controller sysfs code to use default_groups field
-which has been the preferred way since aa30f47cf666 ("kobject: Add
-support for default attribute groups to kobj_type") so that we can soon
-get rid of the obsolete default_attrs field.
+field.  Move the ioatdma sysfs code to use default_groups field which has
+been the preferred way since aa30f47cf666 ("kobject: Add support for
+default attribute groups to kobj_type") so that we can soon get rid of
+the obsolete default_attrs field.
 
-Cc: "Md. Haris Iqbal" <haris.iqbal@ionos.com>
-Cc: Jack Wang <jinpu.wang@ionos.com>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: linux-block@vger.kernel.org
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: dmaengine@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/block/rnbd/rnbd-clt-sysfs.c | 3 ++-
+ drivers/dma/ioat/sysfs.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/block/rnbd/rnbd-clt-sysfs.c b/drivers/block/rnbd/rnbd-clt-sysfs.c
-index 44e45af00e83..2be5d87a3ca6 100644
---- a/drivers/block/rnbd/rnbd-clt-sysfs.c
-+++ b/drivers/block/rnbd/rnbd-clt-sysfs.c
-@@ -452,6 +452,7 @@ static struct attribute *rnbd_dev_attrs[] = {
- 	&rnbd_clt_nr_poll_queues.attr,
+diff --git a/drivers/dma/ioat/sysfs.c b/drivers/dma/ioat/sysfs.c
+index aa44bcd6a356..168adf28c5b1 100644
+--- a/drivers/dma/ioat/sysfs.c
++++ b/drivers/dma/ioat/sysfs.c
+@@ -158,8 +158,9 @@ static struct attribute *ioat_attrs[] = {
+ 	&intr_coalesce_attr.attr,
  	NULL,
  };
-+ATTRIBUTE_GROUPS(rnbd_dev);
++ATTRIBUTE_GROUPS(ioat);
  
- void rnbd_clt_remove_dev_symlink(struct rnbd_clt_dev *dev)
- {
-@@ -474,7 +475,7 @@ void rnbd_clt_remove_dev_symlink(struct rnbd_clt_dev *dev)
- 
- static struct kobj_type rnbd_dev_ktype = {
- 	.sysfs_ops      = &kobj_sysfs_ops,
--	.default_attrs  = rnbd_dev_attrs,
-+	.default_groups = rnbd_dev_groups,
+ struct kobj_type ioat_ktype = {
+ 	.sysfs_ops = &ioat_sysfs_ops,
+-	.default_attrs = ioat_attrs,
++	.default_groups = ioat_groups,
  };
- 
- static int rnbd_clt_add_dev_kobj(struct rnbd_clt_dev *dev)
 -- 
 2.34.1
 

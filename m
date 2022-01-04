@@ -2,153 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1635E4846BF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:14:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F133E4846D5
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:15:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233839AbiADROr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 12:14:47 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:51484 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S234325AbiADROc (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 12:14:32 -0500
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 204G48t9024898;
-        Tue, 4 Jan 2022 18:14:17 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=wHPBT0wAHw5ib6wUpPmF/acTa+Fowr72BsBbL8DTsHo=;
- b=KQHHIZcVFbZjtI+fxihU0Nq30HSY0rAQr+22q6VQLt4cSpbss+UxC6Uxuu106WKR+KaA
- QwbnW4B1tLXIm3RB2SeFLqszyb1a/G1J1dVkpfreGdsvf4IdHWXfjGdz3euhqsavSV6X
- NVdJPaKZa77o9DBrcGW7zTfhQwgITwA+pY6QP8zN7hUBcL6Bx77o92tLPlMWHMB3xZLP
- f8//VOO0/EoarDPl8DCD5Dcw09riZtV1lwSF3hHX2tKNg5yWPmt28v4Lpt9Jg3GiBHJS
- H/Q8+saOQ1gyIXKAyVGDpdtvTgCfhAVZQiQuyoZqQqIp4Ngsh2l44MwSBC4UZho2xZRz Ag== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dcbt0kumc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Jan 2022 18:14:17 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7DD2A10002A;
-        Tue,  4 Jan 2022 18:14:15 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7156325805A;
-        Tue,  4 Jan 2022 18:14:15 +0100 (CET)
-Received: from lmecxl0912.lme.st.com (10.75.127.44) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 4 Jan
- 2022 18:14:14 +0100
-Subject: Re: [PATCH v2 1/5] dt-bindings: interrupt-controller: Update STM32
- EXTI interrupt controller
-To:     Marc Zyngier <maz@kernel.org>
-CC:     Rob Herring <robh@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <devicetree@vger.kernel.org>
-References: <20211215105847.2328-1-alexandre.torgue@foss.st.com>
- <20211215105847.2328-2-alexandre.torgue@foss.st.com>
- <YbueUmqyzwS9rOu5@robh.at.kernel.org>
- <3f8acbb8-0b7e-2f47-eefc-67e5a7632445@foss.st.com>
- <87bl1bwj2z.wl-maz@kernel.org>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-Message-ID: <e5754264-b263-1090-3017-1a6fec284614@foss.st.com>
-Date:   Tue, 4 Jan 2022 18:14:14 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <87bl1bwj2z.wl-maz@kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-04_08,2022-01-04_01,2021-12-02_01
+        id S234376AbiADRPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 12:15:33 -0500
+Received: from mga03.intel.com ([134.134.136.65]:4971 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234294AbiADRP2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 12:15:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641316528; x=1672852528;
+  h=subject:to:cc:from:date:message-id;
+  bh=mHAhhGsW98mrkuTgaYoayQ/f0o33+rOi96OFkqp8lO0=;
+  b=SRKqxRJAJqxeSuQUohbkBRzNEVMOGx80Tp3RQew/rh9DWtA1eQbxT677
+   u2qYWQUgvRHfceQ3qXU44Dkew/eSe6iwNDFnFig7opZOINIohmKf831/x
+   tJ0VSsICfewr/kFz2OqFu3YiRsIpFpI3WEKh8k6s9CSwO9YpI+vDhAjiq
+   Ui8dE0Gpae6qKhaaMZuCOgBg2QXoZXwDwHdnS7VtOnxAHC3po8p0Hidwo
+   9eWcTPwH/HjdlGk4yA2kpZy+dg8FR/tRP/8t3YXkFyDD5fhQCeRkk5OVF
+   8Tw6I3eO3dY1/iwHzn3q+Fa43Rv1+dXGtbO5BQM1MtRZ5JnD+9mox06yt
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="242220004"
+X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
+   d="scan'208";a="242220004"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 09:15:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
+   d="scan'208";a="556228829"
+Received: from davehans-spike.ostc.intel.com (HELO localhost.localdomain) ([10.165.28.105])
+  by orsmga001.jf.intel.com with ESMTP; 04 Jan 2022 09:15:27 -0800
+Subject: [PATCH] [v3] x86/sgx: Fix NULL pointer dereference on non-SGX systems
+To:     linux-kernel@vger.kernel.org
+Cc:     patches@lists.linux.dev, Dave Hansen <dave.hansen@linux.intel.com>,
+        nathan@kernel.org, gregkh@linuxfoundation.org, jarkko@kernel.org,
+        linux-sgx@vger.kernel.org, x86@kernel.org
+From:   Dave Hansen <dave.hansen@linux.intel.com>
+Date:   Tue, 04 Jan 2022 09:15:27 -0800
+Message-Id: <20220104171527.5E8416A8@davehans-spike.ostc.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc
 
-On 12/20/21 1:34 PM, Marc Zyngier wrote:
-> On Fri, 17 Dec 2021 13:39:11 +0000,
-> Alexandre TORGUE <alexandre.torgue@foss.st.com> wrote:
->>
->> On 12/16/21 9:15 PM, Rob Herring wrote:
->>> On Wed, Dec 15, 2021 at 11:58:43AM +0100, Alexandre Torgue wrote:
->>>> Document new entry "st,exti-mapping" which links EXTI lines with GIC
->>>> interrupt lines and add an include file to define EXTI interrupt type.
->>>>
->>>> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml b/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml
->>>> index d19c881b4abc..e08bb51e97a8 100644
->>>> --- a/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml
->>>> +++ b/Documentation/devicetree/bindings/interrupt-controller/st,stm32-exti.yaml
->>>> @@ -41,6 +41,17 @@ properties:
->>>>        description:
->>>>          Interrupts references to primary interrupt controller
->>>>    +  st,exti-mapping:
->>>> +    $ref: "/schemas/types.yaml#/definitions/uint32-matrix"
->>>> +    description: |
->>>> +            Define mapping between EXTI lines and GIC irq lines. Should be:
->>>> +            st,exti-mapping = <EXTI_LINE GIC_IRQ EXTI_TYPE>, ...;
->>>> +            With:
->>>> +            - EXTI_LINE: EXTI line number.
->>>> +            - GIC_IRQ: GIC IRQ associated to the EXTI line.
->>>> +            - EXTI_TYPE: STM32_EXTI_TYPE_CONFIGURABLE or STM32_EXTI_TYPE_DIRECT.
->>>> +              Defined in include/dt-bindings/interrupt-controller/stm32-exti.h
->>>
->>> No custom properties for this. See[1][2][3].
->>>
->>
->> Thanks for inputs. In my case the mapping consists to map an EXTI line
->> with a GIC irq line which could be done using interrupt-map (avoiding
->> to parse it in my driver).
-> 
-> The problem is that 'interrupt-map' defines an interrupt mapping
-> between an input and an output, and that mentioning the GIC in such a
-> table will only result in your EXTI to be bypassed.
-> 
-> 'interrupt-map' really is a dispatch table for targeting an interrupt
-> controller (or multiple controllers, even), but really isn't the
-> correct tool to carry configuration informations to an interrupt
-> controller driver.
+From: Dave Hansen <dave.hansen@linux.intel.com>
 
-Ok so let's forget "interrupt-map"
+== Problem ==
 
->> But for each EXTI/GIC association I would
->> like also to describe the EXTI_TYPE (which actually describe the well
->> irqchip to use inside my exti driver) . This property is not generic
->> and so I assume I can't use a generic binding such "interrupt-map".
->>
->> If the solution consists to use a common binding (i.e. interrupt-map)
->> plus a conversion table in exti driver to affect the well irq_chip to
->> the well EXTI line then we could envisage to keep the whole mapping
->> inside the driver (even if it's not the best solution).
-> 
-> A possible solution would be to have:
-> 
-> - A set of standard 'interrupts' properties describing the output
-> signals
-> 
-> - A set of properties describing the input to output mapping (if
-> relevant) and additional configuration information that for the
-> interrupt controller driver.
+Nathan Chancellor reported an oops when aceessing the
+'sgx_total_bytes' sysfs file:
 
-Does it means to have my own description of "interrupt" property using 
-xlate function in EXTI driver ?
+	https://lore.kernel.org/all/YbzhBrimHGGpddDM@archlinux-ax161/
 
-something like that:
+The sysfs output code accesses the sgx_numa_nodes[] array
+unconditionally.  However, this array is allocated during SGX
+initialization, which only occurs on systems where SGX is
+supported.
 
-interrupt = <GIC_SPI 6 EXTI_LINE EXTI_TYPE>, ...
+If the sysfs file is accessed on systems without SGX support,
+sgx_numa_nodes[] is NULL and an oops occurs.
 
-regards
-Alex
-> 
-> 	M.
-> 
+== Solution ==
 
+To fix this, hide the entire nodeX/x86/ attribute group on
+systems without SGX support using the ->is_visible attribute
+group callback.
+
+Unfortunately, SGX is initialized via a device_initcall() which
+occurs _after_ the ->is_visible() callback.  Instead of moving
+SGX initialization earlier, call sysfs_update_group() during
+SGX initialization to update the group visiblility.
+
+This update requires moving the SGX sysfs code earlier in
+sgx/main.c.  There are no code changes other than the addition of
+arch_update_sysfs_visibility() and a minor whitespace fixup to
+arch_node_attr_is_visible() which checkpatch caught.
+
+Fixes: 50468e431335 ("x86/sgx: Add an attribute for the amount of SGX memory in a NUMA node")
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: linux-sgx@vger.kernel.org
+Cc: x86@kernel.org
+---
+
+ b/arch/x86/kernel/cpu/sgx/main.c |   65 ++++++++++++++++++++++++++++-----------
+ 1 file changed, 47 insertions(+), 18 deletions(-)
+
+diff -puN arch/x86/kernel/cpu/sgx/main.c~sgx-null-ptr arch/x86/kernel/cpu/sgx/main.c
+--- a/arch/x86/kernel/cpu/sgx/main.c~sgx-null-ptr	2021-12-20 07:56:38.309584807 -0800
++++ b/arch/x86/kernel/cpu/sgx/main.c	2022-01-04 08:43:17.042821249 -0800
+@@ -6,11 +6,13 @@
+ #include <linux/highmem.h>
+ #include <linux/kthread.h>
+ #include <linux/miscdevice.h>
++#include <linux/node.h>
+ #include <linux/pagemap.h>
+ #include <linux/ratelimit.h>
+ #include <linux/sched/mm.h>
+ #include <linux/sched/signal.h>
+ #include <linux/slab.h>
++#include <linux/sysfs.h>
+ #include <asm/sgx.h>
+ #include "driver.h"
+ #include "encl.h"
+@@ -780,6 +782,48 @@ static inline u64 __init sgx_calc_sectio
+ 	       ((high & GENMASK_ULL(19, 0)) << 32);
+ }
+ 
++#ifdef CONFIG_NUMA
++static ssize_t sgx_total_bytes_show(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	return sysfs_emit(buf, "%lu\n", sgx_numa_nodes[dev->id].size);
++}
++static DEVICE_ATTR_RO(sgx_total_bytes);
++
++static umode_t arch_node_attr_is_visible(struct kobject *kobj,
++		struct attribute *attr, int idx)
++{
++	/* Make all x86/ attributes invisible when SGX is not initialized: */
++	if (nodes_empty(sgx_numa_mask))
++		return 0;
++
++	return attr->mode;
++}
++
++static struct attribute *arch_node_dev_attrs[] = {
++	&dev_attr_sgx_total_bytes.attr,
++	NULL,
++};
++
++const struct attribute_group arch_node_dev_group = {
++	.name = "x86",
++	.attrs = arch_node_dev_attrs,
++	.is_visible = arch_node_attr_is_visible,
++};
++
++static void __init arch_update_sysfs_visibility(int nid)
++{
++	struct node *node = node_devices[nid];
++	int ret;
++
++	ret = sysfs_update_group(&node->dev.kobj, &arch_node_dev_group);
++
++	if (ret)
++		pr_err("sysfs update failed (%d), files may be invisible", ret);
++}
++#else /* !CONFIG_NUMA */
++static void __init arch_update_sysfs_visibility(int nid) {}
++#endif
++
+ static bool __init sgx_page_cache_init(void)
+ {
+ 	u32 eax, ebx, ecx, edx, type;
+@@ -826,6 +870,9 @@ static bool __init sgx_page_cache_init(v
+ 			INIT_LIST_HEAD(&sgx_numa_nodes[nid].sgx_poison_page_list);
+ 			node_set(nid, sgx_numa_mask);
+ 			sgx_numa_nodes[nid].size = 0;
++
++			/* Make SGX-specific node sysfs files visible: */
++			arch_update_sysfs_visibility(nid);
+ 		}
+ 
+ 		sgx_epc_sections[i].node =  &sgx_numa_nodes[nid];
+@@ -903,24 +950,6 @@ int sgx_set_attribute(unsigned long *all
+ }
+ EXPORT_SYMBOL_GPL(sgx_set_attribute);
+ 
+-#ifdef CONFIG_NUMA
+-static ssize_t sgx_total_bytes_show(struct device *dev, struct device_attribute *attr, char *buf)
+-{
+-	return sysfs_emit(buf, "%lu\n", sgx_numa_nodes[dev->id].size);
+-}
+-static DEVICE_ATTR_RO(sgx_total_bytes);
+-
+-static struct attribute *arch_node_dev_attrs[] = {
+-	&dev_attr_sgx_total_bytes.attr,
+-	NULL,
+-};
+-
+-const struct attribute_group arch_node_dev_group = {
+-	.name = "x86",
+-	.attrs = arch_node_dev_attrs,
+-};
+-#endif /* CONFIG_NUMA */
+-
+ static int __init sgx_init(void)
+ {
+ 	int ret;
+_

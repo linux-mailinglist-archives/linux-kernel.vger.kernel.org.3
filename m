@@ -2,214 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0481E4847ED
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:34:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2104847EF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236355AbiADSek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 13:34:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
+        id S236363AbiADSes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 13:34:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233271AbiADSej (ORCPT
+        with ESMTP id S236364AbiADSer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 13:34:39 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0FDC061761;
-        Tue,  4 Jan 2022 10:34:39 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id iy13so32021329pjb.5;
-        Tue, 04 Jan 2022 10:34:39 -0800 (PST)
+        Tue, 4 Jan 2022 13:34:47 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 507FBC061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 10:34:47 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id t123so32903526pfc.13
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 10:34:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=CKSNn00/BiOS0SvuNfkaTCGRzG8dHHnuc8meOiDvCjY=;
-        b=Sme33SArj00KckuaM6P6MvrxNlbsZq2U4eEN5/tSEx0x6I6PDS9QLX4224ak9BiQai
-         G5QnIZ0XpF5bPTl9uwu/dhMbp9qA+lp8wFiXAxY1ZvQ451xY0jQNVkl9BwRqwBCQi3dR
-         PJv4pVKP9iiQeyq09YBtdyaSjPeFdhEk3QOy1gmGrzHfBT/U7ptWJ6mt22b9Vl4USj3M
-         EkkWj4gixfDuQ1A+sTef+KQ9tRQ+UKAVlXKz3pHW/DE6YZ1Xbden5OMuFf6k9gOM2ecY
-         kzlFArg3DX6N3d7S+U4SZ+J88ZUwDJpH9ypTASU1oQT+w1iH3tSDlQzG52Zl4A+mDntb
-         CL2g==
+        d=broadcom.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to;
+        bh=86zglt0+ePk7TbDH9E2urY9YKD7lUFYcZ+j1nyBIuG0=;
+        b=fM8TYJFMjWfaQRg5Q1N+zBg45LhvLddAuMDkLYce5YEsBVmx+SlVAyr2BKvxinUqVx
+         4z4An4BGr2giqVH+cLS8LCN9doQqIjZl4pV3op7+CyMOXP6YEv3CgR5tCW3Mwh8mvRTT
+         d54f8OJ/1uQuAc68rJshmDG+jucYdDXGGUfik=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=CKSNn00/BiOS0SvuNfkaTCGRzG8dHHnuc8meOiDvCjY=;
-        b=PegKj6vEHY8VP35iwEtO2eDGhypCRGze8FcIjoVs+GqrTRe7eSVFHz6lEbwBO/xGZ7
-         b58GDFMg956spMCLsJBuUo9JhBLFwz8LRQsO0OHMczjFPhKqiWJ6YrkPSzS/kwM/rUxd
-         EEXhsX/ji38m6z2iJrTAUkD0cQ7pTC6L9tYV5FkU90WdDvLLZQxwhuhNi0RndCoeY1Il
-         DruzHIY1cSsz2BezQfRS/0SHzxQA16EeaQD6KGsjMTj3MrIf6FHPv+L3LIUQAsQrTp1q
-         Ab5uOHp08Xod0T3ZBWW/sSv5GY+VU37E3sxhuh5cer6cobIyk6LhzWmLONsZ7btzaA/2
-         qdPw==
-X-Gm-Message-State: AOAM531/rWJTePuclZYijVlKm4rq80PnYRmjrYjugT9R17rPeaiXNDIk
-        0XIIvBpG7DJ2SAs6vc4CWlM=
-X-Google-Smtp-Source: ABdhPJz0IALYrhxCC7GbFZQ3jRKow5GPCrXVfzfIJ08+IhYJNyghSRA8FNfU0+UC4fCqsBkm3Y594A==
-X-Received: by 2002:a17:90a:bc8c:: with SMTP id x12mr55083541pjr.168.1641321278754;
-        Tue, 04 Jan 2022 10:34:38 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id p10sm42152336pfw.87.2022.01.04.10.34.36
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to;
+        bh=86zglt0+ePk7TbDH9E2urY9YKD7lUFYcZ+j1nyBIuG0=;
+        b=eLXnigWjMqCp1P9v/A9fnz3xqTbF2f5YOuLAwLDnJw0H09hYrpJLvV46SeAgCrxSm/
+         WYUsux0CytF+mLeNcKtC924BhCXu6vmkemDtW1SH/7eRqs1rlwpaOeuRHsAie+ic/zjU
+         KhNtyMxzTkE04sBtNLZZjEOCdQA+RCzZJHBu8sLhB/5l4tH6VxwM0WRMkLenTQgUe/Pg
+         UJ76kHj6pvXIapywk2eTLl1TLR6o2AMeIoCn/GVZU79zl6HBZ/wMAq15XQ+Kw0ucRDyX
+         Chs2pNaN7w/OVe5kzviK0jTV7sQk8dadcYYRnJTw4XVIfi8cokRfhw4TNwkQ63aCBB56
+         Sxbg==
+X-Gm-Message-State: AOAM5327RjjLHjW9UZjRsfdZJSOA9EgSHTrRza89Gi1IbMQfidOa4q7i
+        K/ZuBH/Xkd6lZgI2ZE29vxBuTQ==
+X-Google-Smtp-Source: ABdhPJz4uLAkhfLyR6EYx6OhDFJcpP0WSq2qKGbxiQzIg90flakGxqxoI+j4LAOlcfqeekTtmmcpYg==
+X-Received: by 2002:a62:75c6:0:b0:4bb:6e45:89c1 with SMTP id q189-20020a6275c6000000b004bb6e4589c1mr51991843pfc.6.1641321286735;
+        Tue, 04 Jan 2022 10:34:46 -0800 (PST)
+Received: from [10.136.8.222] ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id h10sm18442923pgi.56.2022.01.04.10.34.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 10:34:38 -0800 (PST)
-Subject: Re: [PATCH 1/9] mtd: rawnand: brcmnand: Allow SoC to provide I/O
- operations
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-mtd@lists.infradead.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Brian Norris <computersforpeace@gmail.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        Colin Ian King <colin.king@intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM SPECIFIC AMBA DRIVER (BCMA)" 
-        <linux-wireless@vger.kernel.org>,
-        "open list:BROADCOM STB NAND FLASH DRIVER" 
-        <bcm-kernel-feedback-list@broadcom.com>
-References: <20211223002225.3738385-1-f.fainelli@gmail.com>
- <20211223002225.3738385-2-f.fainelli@gmail.com>
- <20220103174953.40d7fa52@xps13>
- <299bf6ed-80e6-ad15-8dc7-5ededaca15c5@gmail.com>
- <20220104093221.6414aab9@xps13> <20220104095755.46858287@xps13>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <9e4c0120-e088-fca0-0194-c45fcf9181cb@gmail.com>
-Date:   Tue, 4 Jan 2022 10:34:35 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 04 Jan 2022 10:34:45 -0800 (PST)
+Message-ID: <c8c8942a-3247-4ac8-8878-9a5406480316@broadcom.com>
+Date:   Tue, 4 Jan 2022 10:34:43 -0800
 MIME-Version: 1.0
-In-Reply-To: <20220104095755.46858287@xps13>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v2 11/23] PCI: iproc: Rename iproc_pcie_bcma_ to
+ iproc_bcma_pcie_
+To:     Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org,
+        Fan Fei <ffclaire1224@gmail.com>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-arm-kernel@lists.infradead.org
+References: <20211223011054.1227810-1-helgaas@kernel.org>
+ <20211223011054.1227810-12-helgaas@kernel.org>
+From:   Ray Jui <ray.jui@broadcom.com>
+In-Reply-To: <20211223011054.1227810-12-helgaas@kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000047958705d4c5e4c3"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/4/22 12:57 AM, Miquel Raynal wrote:
-> Hi Miquel,
-> 
-> miquel.raynal@bootlin.com wrote on Tue, 4 Jan 2022 09:32:21 +0100:
-> 
->> Hi Florian,
->>
->> f.fainelli@gmail.com wrote on Mon, 3 Jan 2022 09:24:26 -0800:
->>
->>> On 1/3/2022 8:49 AM, Miquel Raynal wrote:  
->>>> Hi Florian,
->>>>
->>>> f.fainelli@gmail.com wrote on Wed, 22 Dec 2021 16:22:17 -0800:
->>>>     
->>>>> Allow a brcmnand_soc instance to provide a custom set of I/O operations
->>>>> which we will require when using this driver on a BCMA bus which is not
->>>>> directly memory mapped I/O. Update the nand_{read,write}_reg accordingly
->>>>> to use the SoC operations if provided.
->>>>>
->>>>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
->>>>> ---
->>>>>   drivers/mtd/nand/raw/brcmnand/brcmnand.c | 14 ++++++++++++--
->>>>>   drivers/mtd/nand/raw/brcmnand/brcmnand.h | 23 +++++++++++++++++++++++
->>>>>   2 files changed, 35 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
->>>>> index f75929783b94..7a1673b1b1af 100644
->>>>> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
->>>>> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
->>>>> @@ -594,13 +594,18 @@ enum {    
->>>>>   >>   static inline u32 nand_readreg(struct brcmnand_controller *ctrl, u32 offs)    
->>>>>   {
->>>>> +	if (brcmnand_soc_has_ops(ctrl->soc))
->>>>> +		return brcmnand_soc_read(ctrl->soc, offs);
->>>>>   	return brcmnand_readl(ctrl->nand_base + offs);
->>>>>   }    
->>>>>   >>   static inline void nand_writereg(struct brcmnand_controller *ctrl, u32 offs,    
->>>>>   				 u32 val)
->>>>>   {
->>>>> -	brcmnand_writel(val, ctrl->nand_base + offs);
->>>>> +	if (brcmnand_soc_has_ops(ctrl->soc))
->>>>> +		brcmnand_soc_write(ctrl->soc, val, offs);
->>>>> +	else
->>>>> +		brcmnand_writel(val, ctrl->nand_base + offs);
->>>>>   }    
->>>>>   >>   static int brcmnand_revision_init(struct brcmnand_controller *ctrl)    
->>>>> @@ -766,13 +771,18 @@ static inline void brcmnand_rmw_reg(struct brcmnand_controller *ctrl,    
->>>>>   >>   static inline u32 brcmnand_read_fc(struct brcmnand_controller *ctrl, int word)    
->>>>>   {
->>>>> +	if (brcmnand_soc_has_ops(ctrl->soc))
->>>>> +		return brcmnand_soc_read(ctrl->soc, ~0);
->>>>>   	return __raw_readl(ctrl->nand_fc + word * 4);
->>>>>   }    
->>>>>   >>   static inline void brcmnand_write_fc(struct brcmnand_controller *ctrl,    
->>>>>   				     int word, u32 val)
->>>>>   {
->>>>> -	__raw_writel(val, ctrl->nand_fc + word * 4);
->>>>> +	if (brcmnand_soc_has_ops(ctrl->soc))
->>>>> +		brcmnand_soc_write(ctrl->soc, val, ~0);
->>>>> +	else
->>>>> +		__raw_writel(val, ctrl->nand_fc + word * 4);
->>>>>   }    
->>>>>   >>   static inline void edu_writel(struct brcmnand_controller *ctrl,    
->>>>> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.h b/drivers/mtd/nand/raw/brcmnand/brcmnand.h
->>>>> index eb498fbe505e..a3f2ad5f6572 100644
->>>>> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.h
->>>>> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.h
->>>>> @@ -11,12 +11,19 @@    
->>>>>   >>   struct platform_device;    
->>>>>   struct dev_pm_ops;
->>>>> +struct brcmnand_io_ops;    
->>>>>   >>   struct brcmnand_soc {    
->>>>>   	bool (*ctlrdy_ack)(struct brcmnand_soc *soc);
->>>>>   	void (*ctlrdy_set_enabled)(struct brcmnand_soc *soc, bool en);
->>>>>   	void (*prepare_data_bus)(struct brcmnand_soc *soc, bool prepare,
->>>>>   				 bool is_param);
->>>>> +	const struct brcmnand_io_ops *ops;
->>>>> +};
->>>>> +
->>>>> +struct brcmnand_io_ops {
->>>>> +	u32 (*read_reg)(struct brcmnand_soc *soc, u32 offset);
->>>>> +	void (*write_reg)(struct brcmnand_soc *soc, u32 val, u32 offset);
->>>>>   };    
->>>>>   >>   static inline void brcmnand_soc_data_bus_prepare(struct brcmnand_soc *soc,    
->>>>> @@ -58,6 +65,22 @@ static inline void brcmnand_writel(u32 val, void __iomem *addr)
->>>>>   		writel_relaxed(val, addr);
->>>>>   }    
->>>>>   >> +static inline bool brcmnand_soc_has_ops(struct brcmnand_soc *soc)    
->>>>> +{
->>>>> +	return soc && soc->ops && soc->ops->read_reg && soc->ops->write_reg;
->>>>> +}
->>>>> +
->>>>> +static inline u32 brcmnand_soc_read(struct brcmnand_soc *soc, u32 offset)
->>>>> +{
->>>>> +	return soc->ops->read_reg(soc, offset);
->>>>> +}
->>>>> +
->>>>> +static inline void brcmnand_soc_write(struct brcmnand_soc *soc, u32 val,
->>>>> +				      u32 offset)
->>>>> +{
->>>>> +	soc->ops->write_reg(soc, val, offset);
->>>>> +}
->>>>> +    
->>>>
->>>> It might be worth looking into more optimized ways to do these checks,
->>>> in particular the read/write_reg ones because you're checking against
->>>> some static data which cannot be optimized out by the compiler but
->>>> won't change in the lifetime of the kernel.    
->>>
->>> I suppose I could add an addition if IS_ENABLED(CONFIG_MTD_NAND_BRCMNAND_BCMA) at the front of brcmnand_soc_has_ops(), would that address your concern or you have something else in mind?  
->>
->> I don't like much the #ifdef solution, instead you might think of
->> static keys, or even better using a regmap. Regmap implementation is
->> free, you can use either one way or the other and for almost no
->> overhead compared to the bunch of functions you have here.
-> 
-> Maybe regmaps will actually be slower than these regular if's. Perhaps
-> static keys are the best option?
+--00000000000047958705d4c5e4c3
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-OK static keys would probably work. I am not sure that the additional
-branches for each register access would actually be causing a noticeable
-performance impact. Pretty much any chip where this controller is used
-has a DMA interface that you program and kick, the PIO is already
-assumed to be slow, and each register access is about 200ns on STB chips
-at least.
--- 
-Florian
+
+
+On 12/22/2021 5:10 PM, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> Rename iproc_pcie_bcma_* to iproc_bcma_pcie_* for consistency with other
+> drivers.  No functional change intended.
+> 
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Ray Jui <rjui@broadcom.com>
+> Cc: Scott Branden <sbranden@broadcom.com>
+> Cc: bcm-kernel-feedback-list@broadcom.com
+> Cc: linux-arm-kernel@lists.infradead.org
+> ---
+>  drivers/pci/controller/pcie-iproc-bcma.c | 22 +++++++++++-----------
+>  1 file changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pcie-iproc-bcma.c b/drivers/pci/controller/pcie-iproc-bcma.c
+> index f918c713afb0..54b6e6d5bc64 100644
+> --- a/drivers/pci/controller/pcie-iproc-bcma.c
+> +++ b/drivers/pci/controller/pcie-iproc-bcma.c
+> @@ -23,7 +23,7 @@ static void bcma_pcie2_fixup_class(struct pci_dev *dev)
+>  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_BROADCOM, 0x8011, bcma_pcie2_fixup_class);
+>  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_BROADCOM, 0x8012, bcma_pcie2_fixup_class);
+>  
+> -static int iproc_pcie_bcma_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+> +static int iproc_bcma_pcie_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+>  {
+>  	struct iproc_pcie *pcie = dev->sysdata;
+>  	struct bcma_device *bdev = container_of(pcie->dev, struct bcma_device, dev);
+> @@ -31,7 +31,7 @@ static int iproc_pcie_bcma_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+>  	return bcma_core_irq(bdev, 5);
+>  }
+>  
+> -static int iproc_pcie_bcma_probe(struct bcma_device *bdev)
+> +static int iproc_bcma_pcie_probe(struct bcma_device *bdev)
+>  {
+>  	struct device *dev = &bdev->dev;
+>  	struct iproc_pcie *pcie;
+> @@ -64,33 +64,33 @@ static int iproc_pcie_bcma_probe(struct bcma_device *bdev)
+>  	if (ret)
+>  		return ret;
+>  
+> -	pcie->map_irq = iproc_pcie_bcma_map_irq;
+> +	pcie->map_irq = iproc_bcma_pcie_map_irq;
+>  
+>  	bcma_set_drvdata(bdev, pcie);
+>  
+>  	return iproc_pcie_setup(pcie, &bridge->windows);
+>  }
+>  
+> -static void iproc_pcie_bcma_remove(struct bcma_device *bdev)
+> +static void iproc_bcma_pcie_remove(struct bcma_device *bdev)
+>  {
+>  	struct iproc_pcie *pcie = bcma_get_drvdata(bdev);
+>  
+>  	iproc_pcie_remove(pcie);
+>  }
+>  
+> -static const struct bcma_device_id iproc_pcie_bcma_table[] = {
+> +static const struct bcma_device_id iproc_bcma_pcie_table[] = {
+>  	BCMA_CORE(BCMA_MANUF_BCM, BCMA_CORE_NS_PCIEG2, BCMA_ANY_REV, BCMA_ANY_CLASS),
+>  	{},
+>  };
+> -MODULE_DEVICE_TABLE(bcma, iproc_pcie_bcma_table);
+> +MODULE_DEVICE_TABLE(bcma, iproc_bcma_pcie_table);
+>  
+> -static struct bcma_driver iproc_pcie_bcma_driver = {
+> +static struct bcma_driver iproc_bcma_pcie_driver = {
+>  	.name		= KBUILD_MODNAME,
+> -	.id_table	= iproc_pcie_bcma_table,
+> -	.probe		= iproc_pcie_bcma_probe,
+> -	.remove		= iproc_pcie_bcma_remove,
+> +	.id_table	= iproc_bcma_pcie_table,
+> +	.probe		= iproc_bcma_pcie_probe,
+> +	.remove		= iproc_bcma_pcie_remove,
+>  };
+> -module_bcma_driver(iproc_pcie_bcma_driver);
+> +module_bcma_driver(iproc_bcma_pcie_driver);
+>  
+>  MODULE_AUTHOR("Hauke Mehrtens");
+>  MODULE_DESCRIPTION("Broadcom iProc PCIe BCMA driver");
+> 
+
+Acked-by: Ray Jui <ray.jui@broadcom.com>
+
+--00000000000047958705d4c5e4c3
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+Pi3DQoJNNR5cV1dw3cNMKQyHRziEjFTVmILshClu9AljdXzCUoHXDUbge8TIJ/fK36qTGCYWwA01
+rTB3drVX3FZq/Uqo0JnVcyP1dtYVzQIDAQABo4IB1TCCAdEwDgYDVR0PAQH/BAQDAgWgMIGjBggr
+BgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9j
+YWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVodHRwOi8v
+b2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNVHSAERjBE
+MEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20v
+cmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3JsLmdsb2Jh
+bHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAfBgNVHREEGDAWgRRyYXku
+anVpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdb
+NHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQU5E1VdIocTRYIpXh6e6OnGvwfrEgwDQYJKoZIhvcNAQEL
+BQADggEBADcZteuA4mZVmXNzp/tJky+9TS87L/xAogg4z+0bFDomA2JdNGKjraV7jE3LKHUyCQzU
+Bvp8xXjxCndLBgltr+2Fn/Dna/f29iAs4mPBxgPKhqnqpQuTo2DLID2LWU1SLI9ewIlROY57UCvO
+B6ni+9NcOot0MbKF2A1TnzJjWyd127CVyU5vL3un1/tbtmjiT4Ku8ZDoBEViuuWyhdB6TTEQiwDo
+2NxZdezRkkkq+RoNek6gmtl8IKmXsmr1dKIsRBtLQ0xu+kdX+zYJbAQymI1mkq8qCmFAe5aJkrNM
+NbsYBZGZlcox4dHWayCpn4sK+41xyJsmGrygY3zghqBuHPUxggJtMIICaQIBATBrMFsxCzAJBgNV
+BAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdD
+QyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxnTAexrtwIst251kUwDQYJYIZIAWUDBAIBBQCg
+gdQwLwYJKoZIhvcNAQkEMSIEIGSFPRXbJr5a3o7/4TKevaTeaWlXSB9fw9q6x/+r/dLBMBgGCSqG
+SIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDEwNDE4MzQ0N1owaQYJKoZI
+hvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG
+9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEF
+AASCAQAxat8Z2BKU37XpuvmL/9WtRznwIFZszkdCJ9fu8vtlLM7HLHvkTZTEZCTT5Ivkc+irkCGq
+ImnM1QiBSLanbTk7WqmZWFsBuicaik9ROSZxlMKpIiMBeUKUDOwUGtr8CPNQ2zTh8eHTdE5H8xnS
+0sjI3mhvgEzULaoXxWyFY4DRxeSm1NuIbS4qFJ6+BTZczfm7Jz9hIkFYHZMMGuvkMmm0bX0HZmIg
+Um7BIktmgkZhKSMSpTOXD/uJF+9GIbaGT8FkcYauRTn64GRwydRA8FugsVSvNwyCMzAqtR3VAC4M
+UbCvEWiHazvNc7gg89t8fYlfL2bFmhkrHq/PlkRczoJq
+--00000000000047958705d4c5e4c3--

@@ -2,120 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C7E5484033
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:56:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3BBD484036
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbiADK4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 05:56:04 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:55450 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229587AbiADK4D (ORCPT
+        id S231720AbiADK4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 05:56:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33088 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229504AbiADK4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 05:56:03 -0500
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20446B7Y031136;
-        Tue, 4 Jan 2022 11:55:42 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=gVar2L96vNK0GSvXXyCtjdPP+Y3DE498qYFhVjbbpxk=;
- b=EjRZWCKF2oqHrXw+GNXF88JZtYd+jp3WlrOb+Wc0JRe+rBgBmRWxhO0k6QYxkNOHEzIm
- I0Si21omhI8fOQZH3K4Oe6NCiAXJ1O7inDMptsYvfvr52QW4e90CGas2D5INB76DdRQL
- NRHDZ2awalo9HULCC3daXN81VnHWDMZu8iyIvNJg9+CD+hDTprQInstV8xAgwyqZY2MX
- 9u/D5mvLjJWGrAiZus0KJy/3YgpnABYwCqG/OdIxBrGvNKvvkBTbnBt3LO1R3ydNPV8H
- OGn8tWkJA9+0oNuJPA4mi0hCGXaR+98FNqh0W+GRdG7v+tvO5ihmr4lTjzExYK0pxVzF rQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dcewm1ku9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Jan 2022 11:55:42 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 670BF10002A;
-        Tue,  4 Jan 2022 11:55:41 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5CAED23693D;
-        Tue,  4 Jan 2022 11:55:41 +0100 (CET)
-Received: from lmecxl0993.lme.st.com (10.75.127.45) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 4 Jan
- 2022 11:55:40 +0100
-Subject: Re: [PATCH 2/3] drm/bridge/synopsys: dsi: extend the prototype of
- mode_valid()
-To:     Antonio Borneo <antonio.borneo@foss.st.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <linux-kernel@vger.kernel.org>
-References: <20211218215055.212421-1-antonio.borneo@foss.st.com>
- <20211218215055.212421-2-antonio.borneo@foss.st.com>
-From:   Philippe CORNU <philippe.cornu@foss.st.com>
-Message-ID: <4d731e12-0ecd-8f86-e5b7-89c03c23d2fc@foss.st.com>
-Date:   Tue, 4 Jan 2022 11:55:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 4 Jan 2022 05:56:42 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEE7C061761;
+        Tue,  4 Jan 2022 02:56:42 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id n30so34778453eda.13;
+        Tue, 04 Jan 2022 02:56:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=z5izaHa8Yu92LDDoFb1xPLy6Z706YGp0YBj7HbtCpUk=;
+        b=BxgwrlZpM7nQianx7SwyYuhm23kC0LaKP/VWl+GvFpiW6hEJrjUMNqtliTZSuWU57q
+         5b6TZGKb7h5hPOHzzGsueJLL2UwO0F/Z8GtVyrRWDn8vDIrrZESWOivnP5P3NF8Ro71g
+         zRn8ET7LfKEDg6QlHj8VO67gjfkMzZXiFO7Dqrnk5M5AXZh/BLPIZSktLnFPHwGsKe2l
+         NiMoozTplQtMrb+MvSwPxWLg0gUOggNyEMWh6UjQnDAdBvqbjIdUwmAEUTUrowXw5afk
+         0NtH+sInSAnVM/VXzSg7HBMgeoAuHmaohNsCtjGo1CZd6wjHbCUyWMr3cGjCGDi+sIuz
+         vsdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=z5izaHa8Yu92LDDoFb1xPLy6Z706YGp0YBj7HbtCpUk=;
+        b=i5oxAPF8SGL827qQuNv4wY77yJtF39cMw9/tI30XCr6qv5M6jZUjVkldh2FHuR14HN
+         wXRAXEK4td5mL9t3T/62sDwur2lu1FemqFw0UOX0aF2Lhj1pfftJShGtSYY/KJcC2eY8
+         ZWFFYu53QJCpUus75k3vmQU3Qr7lP75W7eRSbe/9koro2MMqIpiRKSJSgW2vOe9DiU9r
+         B80lrDezsMfeLwVUX7130+WgpEAXKxo8WKrSvt/0n0mbM5jpEfe+MuxgbHPR7lXfwXXR
+         1pzYJyLXwhXbGaKHdodiKEn/Xsvm6xcpxf0UnYLSNwMgqJ7mfGAxQdn56P6/Yd3GxnjS
+         fsyw==
+X-Gm-Message-State: AOAM532ifQMeoYLATTIsAJfRD/gHhxCZiZSCKmXqHwjjKtIjP6op6qKj
+        CkHS1rFqKstQtnkmzDTN+2g=
+X-Google-Smtp-Source: ABdhPJy8/Jr1RYDSn5PTcczK7FPK2eBXHF2KNo6Mn9CY46E6PfwlnHb/cHhlqNtMoDmofK5Tt8/G2g==
+X-Received: by 2002:a17:906:888f:: with SMTP id ak15mr38530951ejc.0.1641293800985;
+        Tue, 04 Jan 2022 02:56:40 -0800 (PST)
+Received: from gmail.com (0526F11B.dsl.pool.telekom.hu. [5.38.241.27])
+        by smtp.gmail.com with ESMTPSA id lv23sm11292605ejb.125.2022.01.04.02.56.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 02:56:40 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Tue, 4 Jan 2022 11:56:38 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Al Viro <viro@zeniv.linux.org.uk>, llvm@lists.linux.dev
+Subject: [DEBUG PATCH] DO NOT MERGE: Enable SHADOW_CALL_STACK on GCC builds,
+ for build testing
+Message-ID: <YdQn5kTyXUJmdH9r@gmail.com>
+References: <YdIfz+LMewetSaEB@gmail.com>
+ <YdM4Z5a+SWV53yol@archlinux-ax161>
+ <YdQlwnDs2N9a5Reh@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20211218215055.212421-2-antonio.borneo@foss.st.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-04_05,2022-01-04_01,2021-12-02_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdQlwnDs2N9a5Reh@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+* Ingo Molnar <mingo@kernel.org> wrote:
 
-On 12/18/21 10:50 PM, Antonio Borneo wrote:
-> To evaluate the validity of a video mode, some additional internal
-> value has to be passed to the platform implementation.
+> > 2. Error with CONFIG_SHADOW_CALL_STACK
 > 
-> Extend the prototype of mode_valid().
+> So this feature depends on Clang:
 > 
-> Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
-> ---
-> To: David Airlie <airlied@linux.ie>
-> To: Daniel Vetter <daniel@ffwll.ch>
-> To: Andrzej Hajda <a.hajda@samsung.com>
-> To: Neil Armstrong <narmstrong@baylibre.com>
-> To: Robert Foss <robert.foss@linaro.org>
-> To: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-> To: Jonas Karlman <jonas@kwiboo.se>
-> To: Jernej Skrabec <jernej.skrabec@gmail.com>
-> To: Yannick Fertre <yannick.fertre@foss.st.com>
-> To: Philippe Cornu <philippe.cornu@foss.st.com>
-> To: Benjamin Gaignard <benjamin.gaignard@linaro.org>
-> To: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-> To: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> To: Philipp Zabel <p.zabel@pengutronix.de>
-> To: dri-devel@lists.freedesktop.org
-> To: linux-stm32@st-md-mailman.stormreply.com
-> To: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> ---
->   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c | 5 ++++-
->   include/drm/bridge/dw_mipi_dsi.h              | 4 +++-
->   2 files changed, 7 insertions(+), 2 deletions(-)
+>  # Supported by clang >= 7.0
+>  config CC_HAVE_SHADOW_CALL_STACK
+>          def_bool $(cc-option, -fsanitize=shadow-call-stack -ffixed-x18)
 > 
+> No way to activate it under my GCC cross-build toolchain, right?
+> 
+> But ... I hacked the build mode on with GCC using this patch:
+> 
+> From: Ingo Molnar <mingo@kernel.org>
+> Date: Tue, 4 Jan 2022 11:26:09 +0100
+> Subject: [PATCH] DO NOT MERGE: Enable SHADOW_CALL_STACK on GCC builds, for build testing
+> 
+> NOT-Signed-off-by: Ingo Molnar <mingo@kernel.org>
 
-Hi Antonio,
-many thanks for your patch.
-(I should have done like that from the beginning as validating a mode in 
-dsi requires dsi related information...)
-Reviewed-by: Philippe Cornu <philippe.cornu@foss.st.com>
-Philippe :-)
+Ok, I've attached patch again instead embedding it in the middle of a long 
+discussion, for future reference.
+
+Thanks,
+
+	Ingo
+
+=====================>
+From: Ingo Molnar <mingo@kernel.org>
+Date: Tue, 4 Jan 2022 11:26:09 +0100
+Subject: [PATCH] DO NOT MERGE: Enable SHADOW_CALL_STACK on GCC builds, for build testing
+
+NOT-Signed-off-by: Ingo Molnar <mingo@kernel.org>
+---
+ Makefile           | 2 +-
+ arch/Kconfig       | 2 +-
+ arch/arm64/Kconfig | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 16d7f83ac368..bbab462e7509 100644
+--- a/Makefile
++++ b/Makefile
+@@ -888,7 +888,7 @@ LDFLAGS_vmlinux += --gc-sections
+ endif
+ 
+ ifdef CONFIG_SHADOW_CALL_STACK
+-CC_FLAGS_SCS	:= -fsanitize=shadow-call-stack
++CC_FLAGS_SCS	:=
+ KBUILD_CFLAGS	+= $(CC_FLAGS_SCS)
+ export CC_FLAGS_SCS
+ endif
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 4e56f66fdbcf..2103d9da4fe1 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -605,7 +605,7 @@ config ARCH_SUPPORTS_SHADOW_CALL_STACK
+ 
+ config SHADOW_CALL_STACK
+ 	bool "Clang Shadow Call Stack"
+-	depends on CC_IS_CLANG && ARCH_SUPPORTS_SHADOW_CALL_STACK
++	depends on ARCH_SUPPORTS_SHADOW_CALL_STACK
+ 	depends on DYNAMIC_FTRACE_WITH_REGS || !FUNCTION_GRAPH_TRACER
+ 	help
+ 	  This option enables Clang's Shadow Call Stack, which uses a
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index c4207cf9bb17..952f3e56e0a7 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -1183,7 +1183,7 @@ config ARCH_HAS_FILTER_PGPROT
+ 
+ # Supported by clang >= 7.0
+ config CC_HAVE_SHADOW_CALL_STACK
+-	def_bool $(cc-option, -fsanitize=shadow-call-stack -ffixed-x18)
++	def_bool y
+ 
+ config PARAVIRT
+ 	bool "Enable paravirtualization code"

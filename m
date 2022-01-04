@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2954849C8
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:24:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20BD94849C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:24:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233979AbiADVYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 16:24:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37572 "EHLO
+        id S234015AbiADVYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 16:24:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232604AbiADVYc (ORCPT
+        with ESMTP id S233169AbiADVYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 16:24:32 -0500
+        Tue, 4 Jan 2022 16:24:33 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9054C061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 13:24:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D83C061784
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 13:24:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 032E6615A9
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99BA4615B6
         for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 21:24:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51DF7C36AE0;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB919C36AF2;
         Tue,  4 Jan 2022 21:24:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641331471;
-        bh=oadbbm8ed/zVJYBY2vQxm49GQXjsJxHDADCWoBZrb7U=;
-        h=From:To:Cc:Subject:Date:From;
-        b=R2joPomknoMZ9vjLWEBgcyqdz34Afz2NHBQnCWmxyHa7vc9eum+GM8fSZMSm/fujf
-         C2DJ8vwm9OwbJll/6SlvFZccbgHCWiKUVLPuSrBuvobSD7Oq835tijkOAMTV+VwtnS
-         aTqyoBlJkESYDrlTtSmx4HHwKmwWLN8vCMTKfp3CyPibPQ0lufCAYTODz87A5ir1YG
-         8mCN6R1uj7HXOHZEm0FqFuDhTxzDWJyrVQOsf9mcn2SI+4Jky6ccgM+tf8e4aH5RzV
-         zit10XsbTfTx5WuLn664BDnGN9SibzwDxMj3CHn6b4M50gNft/K0z57fN8HVctWkud
-         2rgK0jq1iK6Nw==
+        s=k20201202; t=1641331472;
+        bh=YiWOX5NHugXaDJT6Ol1nD26li2vyW4k8fkEADYyvcpI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=S/XeR0ge7IecEcEoypLgMUedgfPysRkHsJRD3+yW2ljdA8Q2wPGq71noN3eDTlbc6
+         2/SAMRrXCjndlnTeiGs+bFaroRXJjwqWY64h9LQDmejyaR8NOdEQJubQTAiJVqCRzE
+         ZoF0f6h1DUEAScti5ZLYnfuVFmHnOHD20GcTCgMlW0xQES0vF7pJVcjB6eRwACRImo
+         EdBBH/cohz5xgJm70PGj4ofxBeyVXqzR6aBk3MM/xBexAfPacmjIdbZy3F7T1EYirf
+         NIVEgZOstRMqeuz+Kp0W1HFGhBsQ6OuLq8F/GxxvawQbeqrB2gXXM3Az/KpJTzjFOo
+         If7JG/hGy+wdA==
 From:   Jaegeuk Kim <jaegeuk@kernel.org>
 To:     linux-kernel@vger.kernel.org,
         linux-f2fs-devel@lists.sourceforge.net
 Cc:     Eric Biggers <ebiggers@google.com>, Chao Yu <chao@kernel.org>,
         Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [PATCH 1/6] f2fs: rework write preallocations
-Date:   Tue,  4 Jan 2022 13:24:14 -0800
-Message-Id: <20220104212419.1879225-1-jaegeuk@kernel.org>
+Subject: [PATCH 2/6] f2fs: reduce indentation in f2fs_file_write_iter()
+Date:   Tue,  4 Jan 2022 13:24:15 -0800
+Message-Id: <20220104212419.1879225-2-jaegeuk@kernel.org>
 X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
+In-Reply-To: <20220104212419.1879225-1-jaegeuk@kernel.org>
+References: <20220104212419.1879225-1-jaegeuk@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -49,306 +51,99 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Eric Biggers <ebiggers@google.com>
 
-f2fs_write_begin() assumes that all blocks were preallocated by
-default unless FI_NO_PREALLOC is explicitly set.  This invites data
-corruption, as there are cases in which not all blocks are preallocated.
-Commit 47501f87c61a ("f2fs: preallocate DIO blocks when forcing
-buffered_io") fixed one case, but there are others remaining.
-
-Fix up this logic by replacing this flag with FI_PREALLOCATED_ALL, which
-only gets set if all blocks for the current write were preallocated.
-
-Also clean up f2fs_preallocate_blocks(), move it to file.c, and make it
-handle some of the logic that was previously in write_iter() directly.
+Replace 'if (ret > 0)' with 'if (ret <= 0) goto out_unlock;'.
+No change in behavior.
 
 Signed-off-by: Eric Biggers <ebiggers@google.com>
 Reviewed-by: Chao Yu <chao@kernel.org>
 Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 ---
- fs/f2fs/data.c |  55 ++-------------------
- fs/f2fs/f2fs.h |   3 +-
- fs/f2fs/file.c | 131 +++++++++++++++++++++++++++++++------------------
- 3 files changed, 88 insertions(+), 101 deletions(-)
+ fs/f2fs/file.c | 64 +++++++++++++++++++++++++++-----------------------
+ 1 file changed, 34 insertions(+), 30 deletions(-)
 
-diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-index d8190e836a96..3db0f3049b90 100644
---- a/fs/f2fs/data.c
-+++ b/fs/f2fs/data.c
-@@ -1384,53 +1384,6 @@ static int __allocate_data_block(struct dnode_of_data *dn, int seg_type)
- 	return 0;
- }
- 
--int f2fs_preallocate_blocks(struct kiocb *iocb, struct iov_iter *from)
--{
--	struct inode *inode = file_inode(iocb->ki_filp);
--	struct f2fs_map_blocks map;
--	int flag;
--	int err = 0;
--	bool direct_io = iocb->ki_flags & IOCB_DIRECT;
--
--	map.m_lblk = F2FS_BLK_ALIGN(iocb->ki_pos);
--	map.m_len = F2FS_BYTES_TO_BLK(iocb->ki_pos + iov_iter_count(from));
--	if (map.m_len > map.m_lblk)
--		map.m_len -= map.m_lblk;
--	else
--		map.m_len = 0;
--
--	map.m_next_pgofs = NULL;
--	map.m_next_extent = NULL;
--	map.m_seg_type = NO_CHECK_TYPE;
--	map.m_may_create = true;
--
--	if (direct_io) {
--		map.m_seg_type = f2fs_rw_hint_to_seg_type(iocb->ki_hint);
--		flag = f2fs_force_buffered_io(inode, iocb, from) ?
--					F2FS_GET_BLOCK_PRE_AIO :
--					F2FS_GET_BLOCK_PRE_DIO;
--		goto map_blocks;
--	}
--	if (iocb->ki_pos + iov_iter_count(from) > MAX_INLINE_DATA(inode)) {
--		err = f2fs_convert_inline_inode(inode);
--		if (err)
--			return err;
--	}
--	if (f2fs_has_inline_data(inode))
--		return err;
--
--	flag = F2FS_GET_BLOCK_PRE_AIO;
--
--map_blocks:
--	err = f2fs_map_blocks(inode, &map, 1, flag);
--	if (map.m_len > 0 && err == -ENOSPC) {
--		if (!direct_io)
--			set_inode_flag(inode, FI_NO_PREALLOC);
--		err = 0;
--	}
--	return err;
--}
--
- void f2fs_do_map_lock(struct f2fs_sb_info *sbi, int flag, bool lock)
- {
- 	if (flag == F2FS_GET_BLOCK_PRE_AIO) {
-@@ -3340,12 +3293,10 @@ static int prepare_write_begin(struct f2fs_sb_info *sbi,
- 	int flag;
- 
- 	/*
--	 * we already allocated all the blocks, so we don't need to get
--	 * the block addresses when there is no need to fill the page.
-+	 * If a whole page is being written and we already preallocated all the
-+	 * blocks, then there is no need to get a block address now.
- 	 */
--	if (!f2fs_has_inline_data(inode) && len == PAGE_SIZE &&
--	    !is_inode_flag_set(inode, FI_NO_PREALLOC) &&
--	    !f2fs_verity_in_progress(inode))
-+	if (len == PAGE_SIZE && is_inode_flag_set(inode, FI_PREALLOCATED_ALL))
- 		return 0;
- 
- 	/* f2fs_lock_op avoids race between write CP and convert_inline_page */
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index ff37cdd7a6b7..6f196621f772 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -715,7 +715,7 @@ enum {
- 	FI_INLINE_DOTS,		/* indicate inline dot dentries */
- 	FI_DO_DEFRAG,		/* indicate defragment is running */
- 	FI_DIRTY_FILE,		/* indicate regular/symlink has dirty pages */
--	FI_NO_PREALLOC,		/* indicate skipped preallocated blocks */
-+	FI_PREALLOCATED_ALL,	/* all blocks for write were preallocated */
- 	FI_HOT_DATA,		/* indicate file is hot */
- 	FI_EXTRA_ATTR,		/* indicate file has extra attribute */
- 	FI_PROJ_INHERIT,	/* indicate file inherits projectid */
-@@ -3615,7 +3615,6 @@ void f2fs_update_data_blkaddr(struct dnode_of_data *dn, block_t blkaddr);
- int f2fs_reserve_new_blocks(struct dnode_of_data *dn, blkcnt_t count);
- int f2fs_reserve_new_block(struct dnode_of_data *dn);
- int f2fs_get_block(struct dnode_of_data *dn, pgoff_t index);
--int f2fs_preallocate_blocks(struct kiocb *iocb, struct iov_iter *from);
- int f2fs_reserve_block(struct dnode_of_data *dn, pgoff_t index);
- struct page *f2fs_get_read_data_page(struct inode *inode, pgoff_t index,
- 			int op_flags, bool for_write);
 diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index 92ec2699bc85..fc87d0f5b82b 100644
+index fc87d0f5b82b..808a7c24d993 100644
 --- a/fs/f2fs/file.c
 +++ b/fs/f2fs/file.c
-@@ -4235,10 +4235,77 @@ static ssize_t f2fs_file_read_iter(struct kiocb *iocb, struct iov_iter *iter)
- 	return ret;
- }
- 
-+/*
-+ * Preallocate blocks for a write request, if it is possible and helpful to do
-+ * so.  Returns a positive number if blocks may have been preallocated, 0 if no
-+ * blocks were preallocated, or a negative errno value if something went
-+ * seriously wrong.  Also sets FI_PREALLOCATED_ALL on the inode if *all* the
-+ * requested blocks (not just some of them) have been allocated.
-+ */
-+static int f2fs_preallocate_blocks(struct kiocb *iocb, struct iov_iter *iter)
-+{
-+	struct inode *inode = file_inode(iocb->ki_filp);
-+	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
-+	const loff_t pos = iocb->ki_pos;
-+	const size_t count = iov_iter_count(iter);
-+	struct f2fs_map_blocks map = {};
-+	bool dio = (iocb->ki_flags & IOCB_DIRECT) &&
-+		   !f2fs_force_buffered_io(inode, iocb, iter);
-+	int flag;
-+	int ret;
-+
-+	/* If it will be an out-of-place direct write, don't bother. */
-+	if (dio && f2fs_lfs_mode(sbi))
-+		return 0;
-+
-+	/* No-wait I/O can't allocate blocks. */
-+	if (iocb->ki_flags & IOCB_NOWAIT)
-+		return 0;
-+
-+	/* If it will be a short write, don't bother. */
-+	if (fault_in_iov_iter_readable(iter, count))
-+		return 0;
-+
-+	if (f2fs_has_inline_data(inode)) {
-+		/* If the data will fit inline, don't bother. */
-+		if (pos + count <= MAX_INLINE_DATA(inode))
-+			return 0;
-+		ret = f2fs_convert_inline_inode(inode);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	/* Do not preallocate blocks that will be written partially in 4KB. */
-+	map.m_lblk = F2FS_BLK_ALIGN(pos);
-+	map.m_len = F2FS_BYTES_TO_BLK(pos + count);
-+	if (map.m_len > map.m_lblk)
-+		map.m_len -= map.m_lblk;
-+	else
-+		map.m_len = 0;
-+	map.m_may_create = true;
-+	if (dio) {
-+		map.m_seg_type = f2fs_rw_hint_to_seg_type(inode->i_write_hint);
-+		flag = F2FS_GET_BLOCK_PRE_DIO;
-+	} else {
-+		map.m_seg_type = NO_CHECK_TYPE;
-+		flag = F2FS_GET_BLOCK_PRE_AIO;
-+	}
-+
-+	ret = f2fs_map_blocks(inode, &map, 1, flag);
-+	/* -ENOSPC is only a fatal error if no blocks could be allocated. */
-+	if (ret < 0 && !(ret == -ENOSPC && map.m_len > 0))
-+		return ret;
-+	if (ret == 0)
-+		set_inode_flag(inode, FI_PREALLOCATED_ALL);
-+	return map.m_len;
-+}
-+
- static ssize_t f2fs_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
- {
- 	struct file *file = iocb->ki_filp;
- 	struct inode *inode = file_inode(file);
-+	loff_t target_size;
-+	int preallocated;
- 	ssize_t ret;
- 
- 	if (unlikely(f2fs_cp_error(F2FS_I_SB(inode)))) {
-@@ -4262,84 +4329,54 @@ static ssize_t f2fs_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
- 
- 	if (unlikely(IS_IMMUTABLE(inode))) {
- 		ret = -EPERM;
--		goto unlock;
-+		goto out_unlock;
- 	}
- 
- 	if (is_inode_flag_set(inode, FI_COMPRESS_RELEASED)) {
- 		ret = -EPERM;
--		goto unlock;
-+		goto out_unlock;
+@@ -4338,44 +4338,48 @@ static ssize_t f2fs_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
  	}
  
  	ret = generic_write_checks(iocb, from);
- 	if (ret > 0) {
--		bool preallocated = false;
--		size_t target_size = 0;
--		int err;
--
--		if (fault_in_iov_iter_readable(from, iov_iter_count(from)))
--			set_inode_flag(inode, FI_NO_PREALLOC);
--
--		if ((iocb->ki_flags & IOCB_NOWAIT)) {
-+		if (iocb->ki_flags & IOCB_NOWAIT) {
- 			if (!f2fs_overwrite_io(inode, iocb->ki_pos,
- 						iov_iter_count(from)) ||
+-	if (ret > 0) {
+-		if (iocb->ki_flags & IOCB_NOWAIT) {
+-			if (!f2fs_overwrite_io(inode, iocb->ki_pos,
+-						iov_iter_count(from)) ||
++	if (ret <= 0)
++		goto out_unlock;
++
++	if (iocb->ki_flags & IOCB_NOWAIT) {
++		if (!f2fs_overwrite_io(inode, iocb->ki_pos,
++					iov_iter_count(from)) ||
  				f2fs_has_inline_data(inode) ||
  				f2fs_force_buffered_io(inode, iocb, from)) {
--				clear_inode_flag(inode, FI_NO_PREALLOC);
--				inode_unlock(inode);
- 				ret = -EAGAIN;
--				goto out;
-+				goto out_unlock;
- 			}
--			goto write;
+-				ret = -EAGAIN;
+-				goto out_unlock;
+-			}
+-		}
+-		if (iocb->ki_flags & IOCB_DIRECT) {
+-			ret = f2fs_convert_inline_inode(inode);
+-			if (ret)
+-				goto out_unlock;
+-		}
+-		/* Possibly preallocate the blocks for the write. */
+-		target_size = iocb->ki_pos + iov_iter_count(from);
+-		preallocated = f2fs_preallocate_blocks(iocb, from);
+-		if (preallocated < 0) {
+-			ret = preallocated;
++			ret = -EAGAIN;
+ 			goto out_unlock;
  		}
--
--		if (is_inode_flag_set(inode, FI_NO_PREALLOC))
--			goto write;
--
- 		if (iocb->ki_flags & IOCB_DIRECT) {
--			/*
--			 * Convert inline data for Direct I/O before entering
--			 * f2fs_direct_IO().
--			 */
--			err = f2fs_convert_inline_inode(inode);
--			if (err)
--				goto out_err;
--			/*
--			 * If force_buffere_io() is true, we have to allocate
--			 * blocks all the time, since f2fs_direct_IO will fall
--			 * back to buffered IO.
--			 */
--			if (!f2fs_force_buffered_io(inode, iocb, from) &&
--					f2fs_lfs_mode(F2FS_I_SB(inode)))
--				goto write;
-+			ret = f2fs_convert_inline_inode(inode);
-+			if (ret)
-+				goto out_unlock;
- 		}
--		preallocated = true;
-+		/* Possibly preallocate the blocks for the write. */
- 		target_size = iocb->ki_pos + iov_iter_count(from);
--
--		err = f2fs_preallocate_blocks(iocb, from);
--		if (err) {
--out_err:
--			clear_inode_flag(inode, FI_NO_PREALLOC);
--			inode_unlock(inode);
--			ret = err;
--			goto out;
-+		preallocated = f2fs_preallocate_blocks(iocb, from);
-+		if (preallocated < 0) {
-+			ret = preallocated;
++	}
+ 
+-		ret = __generic_file_write_iter(iocb, from);
++	if (iocb->ki_flags & IOCB_DIRECT) {
++		ret = f2fs_convert_inline_inode(inode);
++		if (ret)
 +			goto out_unlock;
- 		}
--write:
-+
- 		ret = __generic_file_write_iter(iocb, from);
--		clear_inode_flag(inode, FI_NO_PREALLOC);
++	}
++	/* Possibly preallocate the blocks for the write. */
++	target_size = iocb->ki_pos + iov_iter_count(from);
++	preallocated = f2fs_preallocate_blocks(iocb, from);
++	if (preallocated < 0) {
++		ret = preallocated;
++		goto out_unlock;
++	}
  
--		/* if we couldn't write data, we should deallocate blocks. */
--		if (preallocated && i_size_read(inode) < target_size) {
-+		/* Don't leave any preallocated blocks around past i_size. */
-+		if (preallocated > 0 && i_size_read(inode) < target_size) {
- 			down_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
- 			filemap_invalidate_lock(inode->i_mapping);
- 			f2fs_truncate(inode);
- 			filemap_invalidate_unlock(inode->i_mapping);
- 			up_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
- 		}
-+		clear_inode_flag(inode, FI_PREALLOCATED_ALL);
+-		/* Don't leave any preallocated blocks around past i_size. */
+-		if (preallocated > 0 && i_size_read(inode) < target_size) {
+-			down_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
+-			filemap_invalidate_lock(inode->i_mapping);
+-			f2fs_truncate(inode);
+-			filemap_invalidate_unlock(inode->i_mapping);
+-			up_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
+-		}
+-		clear_inode_flag(inode, FI_PREALLOCATED_ALL);
++	ret = __generic_file_write_iter(iocb, from);
  
- 		if (ret > 0)
- 			f2fs_update_iostat(F2FS_I_SB(inode), APP_WRITE_IO, ret);
+-		if (ret > 0)
+-			f2fs_update_iostat(F2FS_I_SB(inode), APP_WRITE_IO, ret);
++	/* Don't leave any preallocated blocks around past i_size. */
++	if (preallocated > 0 && i_size_read(inode) < target_size) {
++		down_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
++		filemap_invalidate_lock(inode->i_mapping);
++		f2fs_truncate(inode);
++		filemap_invalidate_unlock(inode->i_mapping);
++		up_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
  	}
--unlock:
-+out_unlock:
++
++	clear_inode_flag(inode, FI_PREALLOCATED_ALL);
++
++	if (ret > 0)
++		f2fs_update_iostat(F2FS_I_SB(inode), APP_WRITE_IO, ret);
++
+ out_unlock:
  	inode_unlock(inode);
  out:
- 	trace_f2fs_file_write_iter(inode, iocb->ki_pos,
 -- 
 2.34.1.448.ga2b2bfdf31-goog
 

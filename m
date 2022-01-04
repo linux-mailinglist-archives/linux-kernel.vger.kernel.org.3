@@ -2,145 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C42C4847EB
+	by mail.lfdr.de (Postfix) with ESMTP id 032834847EA
 	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236354AbiADSc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 13:32:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54858 "EHLO
+        id S236344AbiADScy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 13:32:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236339AbiADScx (ORCPT
+        with ESMTP id S233271AbiADScw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 13:32:53 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387B9C061761;
-        Tue,  4 Jan 2022 10:32:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Message-Id:Date:
-        Subject:Cc:To:From:Content-Type:Reply-To:Content-ID:Content-Description:
-        In-Reply-To:References; bh=lxT6nZC1HPw9SagH/7xCX+OmMsi0Jahj6Y8adGP53mw=; b=Q2
-        p+Pi+ue0KRfl4d3C986afG8aCxjgzbTmuAmWt9iBqIluqE+RxCrnYlU5n+kMzvcE/RvJL86hdc8Rr
-        m/ZeCUBiwm1ArXnRRrBkCMcn1rrkGDARjTi0HFgWjcf1DC/vkNaQf0BXa+ExhvdcqPs16NqfRanuB
-        Pi2eyUZKcSBwr62yoH3QQOjDVqRgkzws/KqRAq1YGFu4ZdOasYIbgN7QY6D2BH+TF1jUXvJUL2tZy
-        VzrpgxfWstyDE4rNLDsaSlqC9Iuu6FeR8wjVg9kSp6rAoFwiPwn04/BIjROkYP6rxwbKlZTglZqvX
-        LiFFnaanK2H7vjmVSuHrS3DVGPpCta1A==;
-Received: from [81.174.171.191] (helo=donbot.metanate.com)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1n4oc5-0002Jc-0W; Tue, 04 Jan 2022 18:32:49 +0000
-From:   John Keeping <john@metanate.com>
-To:     linux-usb@vger.kernel.org
-Cc:     John Keeping <john@metanate.com>, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavel Hofman <pavel.hofman@ivitera.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: gadget: u_audio: fix calculations for small bInterval
-Date:   Tue,  4 Jan 2022 18:32:42 +0000
-Message-Id: <20220104183243.718258-1-john@metanate.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 4 Jan 2022 13:32:52 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDE9C061761;
+        Tue,  4 Jan 2022 10:32:51 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id bm14so151941344edb.5;
+        Tue, 04 Jan 2022 10:32:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=H++mvP7xNJ7DkJfGLUkbXM0jLfOJX76p9y1OOLe38IQ=;
+        b=dLv9eyr7RYbaApqHcWxnR9DQAJNKH4nos5iEGJ3nd6j3GTVjJCUhVYOm25z6oP90RG
+         b2yubaWsMfweUUKfS9xpTnAlTYD4H1XpBymwiT2OH23jydLTRZPSj9oY8UIS/p7U920F
+         OlnzMQ9yVz48DjOOVgSVyFHYqRxjzqIABZZRQ3gEkp3RXQ/xmSeOOHURA8hEI5NCRMgr
+         1GnQUIVVw+NW8hJFt5+8ilgKCCCQ7S213z3ze+/G8PFQuau+ni9+QWnZPetM/pAY7dT+
+         cmMJ6OMqqr4q83W4AH95Orz/BUJIQQ1NWgGjfnjPuiEMZ6UrP/6X/5AkUCXyjrhzriAh
+         Axmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=H++mvP7xNJ7DkJfGLUkbXM0jLfOJX76p9y1OOLe38IQ=;
+        b=5f+sQl3M/XeDZTPyKT1541pNSOi5UkAksKmoHmyNSj6q3+EGKr0f7OJ0pr6cowkjHY
+         Nlb7oCc7kbdz3g6de9KdSY3PGpx/NR6tOezwbv3IH+sWMcChx0PInVK4Rn4efbELZV7N
+         8/u6o/nA2PXm/lnF+BI+GDKKfeklV5rCtITwsWgnBkcO5vQvYlCvzPOxrAPVsN/Ph1aW
+         wbAkOA5810fIAn0HJiLJpCiTuANz2w1FWxqIz0eppdVC7kBM5zRsOMbbuoYGM4Cwv7Xa
+         Wyuh4PdNfGT5GP17ANvpvk+j4TsIC1cH88ar7yBhZMFiQ8a//WjPkrlMsOgHR1H9GbfT
+         vwPQ==
+X-Gm-Message-State: AOAM531fZKEzNjnUiYB5sL/P77LNgA9lo22LpCtfjkOfWS/IcinIeImb
+        tX3F+7/CyEoQQxijTsxLvd8=
+X-Google-Smtp-Source: ABdhPJz1wuD9CF9yh60mz6/O58ZsWK4Aqh+WsdA/rHGDuVs+hncGhVqnjRjWWBMzBt/wD2wJWq2Llg==
+X-Received: by 2002:aa7:c655:: with SMTP id z21mr43537910edr.352.1641321170423;
+        Tue, 04 Jan 2022 10:32:50 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
+        by smtp.googlemail.com with ESMTPSA id jg34sm11710859ejc.74.2022.01.04.10.32.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jan 2022 10:32:50 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <ff29b36a-ffe4-8ba9-2856-cf96fcf33c0d@redhat.com>
+Date:   Tue, 4 Jan 2022 19:32:47 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated: YES
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v3 22/22] kvm: x86: Disable interception for IA32_XFD on
+ demand
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Jing Liu <jing2.liu@intel.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, corbet@lwn.net, shuah@kernel.org,
+        jun.nakajima@intel.com, kevin.tian@intel.com,
+        jing2.liu@linux.intel.com, guang.zeng@intel.com,
+        wei.w.wang@intel.com, yang.zhong@intel.com
+References: <20211222124052.644626-1-jing2.liu@intel.com>
+ <20211222124052.644626-23-jing2.liu@intel.com> <Ycu0KVq9PfuygKKx@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Ycu0KVq9PfuygKKx@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If bInterval is 1, then p_interval is 8000 and p_interval_mil is 8E9,
-which is too big for a 32-bit value.  While the storage is indeed
-64-bit, this value is used as the divisor in do_div() which will
-truncate it into a uint32_t leading to incorrect calculated values.
+On 12/29/21 02:04, Sean Christopherson wrote:
+> 
+> Speaking of nested, interception of #NM in vmx_update_exception_bitmap() is wrong
+> with respect to nested guests.  Until XFD is supported for L2, which I didn't see
+> in this series, #NM should not be intercepted while L2 is running.
 
-Switch back to keeping the base value in struct snd_uac_chip which fits
-easily into an int, meaning that the division can be done in two steps
-with the divisor fitting safely into a uint32_t on both steps.
+Why wouldn't L2 support XFD, since there are no new VMCS bits?  As long 
+as L0 knows what to do with XFD and XFD_ERR, it will do the right thing 
+no matter if L1 or L2 is running.
 
-Fixes: 6fec018a7e70 ("usb: gadget: u_audio.c: Adding Playback Pitch ctl for sync playback")
-Signed-off-by: John Keeping <john@metanate.com>
----
- drivers/usb/gadget/function/u_audio.c | 24 +++++++++++++-----------
- 1 file changed, 13 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
-index c46400be5464..4fb05f9576a6 100644
---- a/drivers/usb/gadget/function/u_audio.c
-+++ b/drivers/usb/gadget/function/u_audio.c
-@@ -76,8 +76,8 @@ struct snd_uac_chip {
- 	struct snd_pcm *pcm;
- 
- 	/* pre-calculated values for playback iso completion */
--	unsigned long long p_interval_mil;
- 	unsigned long long p_residue_mil;
-+	unsigned int p_interval;
- 	unsigned int p_framesize;
- };
- 
-@@ -194,21 +194,24 @@ static void u_audio_iso_complete(struct usb_ep *ep, struct usb_request *req)
- 		 * If there is a residue from this division, add it to the
- 		 * residue accumulator.
- 		 */
-+		unsigned long long p_interval_mil = uac->p_interval * 1000000ULL;
-+
- 		pitched_rate_mil = (unsigned long long)
- 				params->p_srate * prm->pitch;
- 		div_result = pitched_rate_mil;
--		do_div(div_result, uac->p_interval_mil);
-+		do_div(div_result, uac->p_interval);
-+		do_div(div_result, 1000000);
- 		frames = (unsigned int) div_result;
- 
- 		pr_debug("p_srate %d, pitch %d, interval_mil %llu, frames %d\n",
--				params->p_srate, prm->pitch, uac->p_interval_mil, frames);
-+				params->p_srate, prm->pitch, p_interval_mil, frames);
- 
- 		p_pktsize = min_t(unsigned int,
- 					uac->p_framesize * frames,
- 					ep->maxpacket);
- 
- 		if (p_pktsize < ep->maxpacket) {
--			residue_frames_mil = pitched_rate_mil - frames * uac->p_interval_mil;
-+			residue_frames_mil = pitched_rate_mil - frames * p_interval_mil;
- 			p_pktsize_residue_mil = uac->p_framesize * residue_frames_mil;
- 		} else
- 			p_pktsize_residue_mil = 0;
-@@ -222,11 +225,11 @@ static void u_audio_iso_complete(struct usb_ep *ep, struct usb_request *req)
- 		 * size and decrease the accumulator.
- 		 */
- 		div_result = uac->p_residue_mil;
--		do_div(div_result, uac->p_interval_mil);
-+		do_div(div_result, uac->p_interval);
-+		do_div(div_result, 1000000);
- 		if ((unsigned int) div_result >= uac->p_framesize) {
- 			req->length += uac->p_framesize;
--			uac->p_residue_mil -= uac->p_framesize *
--					   uac->p_interval_mil;
-+			uac->p_residue_mil -= uac->p_framesize * p_interval_mil;
- 			pr_debug("increased req length to %d\n", req->length);
- 		}
- 		pr_debug("remains uac->p_residue_mil %llu\n", uac->p_residue_mil);
-@@ -591,7 +594,7 @@ int u_audio_start_playback(struct g_audio *audio_dev)
- 	unsigned int factor;
- 	const struct usb_endpoint_descriptor *ep_desc;
- 	int req_len, i;
--	unsigned int p_interval, p_pktsize;
-+	unsigned int p_pktsize;
- 
- 	ep = audio_dev->in_ep;
- 	prm = &uac->p_prm;
-@@ -612,11 +615,10 @@ int u_audio_start_playback(struct g_audio *audio_dev)
- 	/* pre-compute some values for iso_complete() */
- 	uac->p_framesize = params->p_ssize *
- 			    num_channels(params->p_chmask);
--	p_interval = factor / (1 << (ep_desc->bInterval - 1));
--	uac->p_interval_mil = (unsigned long long) p_interval * 1000000;
-+	uac->p_interval = factor / (1 << (ep_desc->bInterval - 1));
- 	p_pktsize = min_t(unsigned int,
- 				uac->p_framesize *
--					(params->p_srate / p_interval),
-+					(params->p_srate / uac->p_interval),
- 				ep->maxpacket);
- 
- 	req_len = p_pktsize;
--- 
-2.34.1
-
+Paolo

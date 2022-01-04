@@ -2,184 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9433A483F95
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:06:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A96F483F9F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:08:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230448AbiADKGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 05:06:49 -0500
-Received: from mail-bn7nam10on2049.outbound.protection.outlook.com ([40.107.92.49]:37665
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229731AbiADKGt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 05:06:49 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GzgU1I7t/3JV+3GOX5kPvDDYpcpn8DKEG/F47/XuRbYiZkCZ34/G/ZZ4syXbycqQMNBmxeH+rGWk1xQSKbLXypO9V8pKtWXQ9cKc7WOsHjAl1AL3wxVAeqvMT/TfH/3e60tNWSf8WsHLl/5iCtTpklNlbf4rQyPqdz3kRwspdVkXf1x1Ip9ZvLVqxeKAyz46KW1sF/soq6OHE0IzLhg7+9MFcwmUH6qxVUZGPgtjegbB04OWmYjXIEg0Md84pZdxF+Wxo6p+SjZOjdJp+wlGpEhXgZPzEiSX26CVCDZJsEXnrzTct0GLo+Ok88eoaItYnnNHpCP/+uPEcLVhNVBxkQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mTDdHrt0tpfDd/JktQiDGe5pFCDTc/zVV0snoHutoko=;
- b=MQE70vk7DVmu1gUb1NGlueGVJ+yqCE0pXzlTg925FXQ4o5MP4O93kjWFtsbVb3z3eOUTcaCt8VG+TMX/aLvA3nV1KIYNf872+dpn/udZMcQPBZbJXYTLG/+H/0XvSLqd+VJ0kVml1NSK2aw3AQ/6l1vpXX52N2dc0ySBk5MEP4iQ2099QuvKD5FtS6JivDzIZgKwIRnVvOHntDv8X1UC3mprh/vqrMApCvHU5Jl6xyjaXMprvy7ZKNTQDkl4LM0IeLpf3iFIWb6ct90hUFsiB7RGGqysxI+L1hoohpMLfRzyJoM5TudJWMQv7k7UwK8kglkuZYjo8Dk8cQmvv/8ucQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mTDdHrt0tpfDd/JktQiDGe5pFCDTc/zVV0snoHutoko=;
- b=pdFjdIODrlvkXnO73waiPM56ObO7Pbj8RwNOD6HYKmB5wYZoBpLMVGwwzsvS7M3iRGJF5amB08k/pMl7y3gFs9+BzUyB/DO4oN0ity+Z9cAdspUoP5SRBO6r8inEqz6U8iDv9F5rFyNPe7toNZA/en0xVUOFguspRf/HCJu/p9uItGbcjVmK3FADbzCi0Xitxht+NnsdpRbDpfwiNHVyJlPUvs6OGHh5rsmwo0Heyd/kwOLaVoO4QEScjqHb2lnPAtmqET3800lgVjgxHq8CRIbLUmDTud+XCnB/KtnVgccd2gbrPfbwFZGrZcYgwC+ucpl3kz7Zd7xgBR8nlYFR1w==
-Received: from BN9PR12MB5273.namprd12.prod.outlook.com (2603:10b6:408:11e::22)
- by BN9PR12MB5383.namprd12.prod.outlook.com (2603:10b6:408:104::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.14; Tue, 4 Jan
- 2022 10:06:47 +0000
-Received: from BN9PR12MB5273.namprd12.prod.outlook.com
- ([fe80::1476:9fcc:8d54:394f]) by BN9PR12MB5273.namprd12.prod.outlook.com
- ([fe80::1476:9fcc:8d54:394f%3]) with mapi id 15.20.4844.016; Tue, 4 Jan 2022
- 10:06:47 +0000
-From:   Akhil R <akhilrajeev@nvidia.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Wolfram Sang <wsa@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
+        id S230459AbiADKIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 05:08:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229506AbiADKIZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 05:08:25 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02343C061761;
+        Tue,  4 Jan 2022 02:08:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=CeJbcRxNatDqSOdUSkpsMyqknIzDwpPrhNR0CEO5Mq8=; b=m7Jy2ahpCJtNi/CxWcKT+8g2bW
+        M/mvq/JPDSk4aKt3yvYyJRZG0BRhvNwzvsXh/MXyH2x93E6otKVA6SJ+cxzoi4eHH85S44DRDdhPC
+        HzdbvbxYSB/7s3snhVQtPxXldOLnyjWzXgMlOOVI2L2DXq1VWGdt5UOyFhy7dKiI+F6Hfvm9WZMds
+        QQgA+lL32KheVZ7FfZFHW7gursD0fzb5VP8DEvAMCynajQAHzCQFf3OZqZBEpTYekqKHScn0BoP2s
+        LJfx104qTzGAHt3i9tcORQeQN3dRRqvV/uwx36zT6scluWeDr5r2Cf6kfridj1T2fBFSnku6V1HM9
+        vV76sNVA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n4gjY-00B65Z-Bp; Tue, 04 Jan 2022 10:08:00 +0000
+Date:   Tue, 4 Jan 2022 02:08:00 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
         Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-Subject: RE: [PATCH 1/2] device property: Add device_irq_get_byname
-Thread-Topic: [PATCH 1/2] device property: Add device_irq_get_byname
-Thread-Index: AQHX8n7ghAR0sKU4N0uGdTUi4cpNNqw1MEwAgB1x03A=
-Date:   Tue, 4 Jan 2022 10:06:47 +0000
-Message-ID: <BN9PR12MB5273EDC94146B82B00763055C04A9@BN9PR12MB5273.namprd12.prod.outlook.com>
-References: <1639660402-31207-1-git-send-email-akhilrajeev@nvidia.com>
- <1639660402-31207-2-git-send-email-akhilrajeev@nvidia.com>
- <CAHp75VdXw_XvDN=T3fOmNOWsdfQ_xm2090z9uAq77oADPRcMzw@mail.gmail.com>
-In-Reply-To: <CAHp75VdXw_XvDN=T3fOmNOWsdfQ_xm2090z9uAq77oADPRcMzw@mail.gmail.com>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 618d656c-246f-49d3-815f-08d9cf69eb0b
-x-ms-traffictypediagnostic: BN9PR12MB5383:EE_
-x-microsoft-antispam-prvs: <BN9PR12MB5383FAF9FB67C6571E0ECF62C04A9@BN9PR12MB5383.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 7zMoV/0dVVoHSBLlOw/f1vL8TDffeqrQnyXu3lbM5iLrcXVDS4ciFp8MxvJM0JnnIiJjAB7u1FrOSwNdWAe39XW8KzwjF/iGhM1gvG/0nQ+oDoUW46ra6nF60xKfEBA5j3FhA7U2T5CBNrcMRVChpGdHwL++yP7UQOkacMxgyTDEEPYusLVt2YbbeqfZAM2Hd+yFFpRTvYH14SL8jy3t2pu5rO90CadTY+a5N3sL2ykH+zfok8o/7ZG6geFdZLo4iTL0CTTe0ezyeaAr885rW7GhDUtgO9BoGZQrakJ2IdqP++MCv1NAYwmHDovqpN3E93h4os0yTU/+UxEhetbMdpHcmE2T3iAtES2ovkwIBUItQJ/Yc4MofiuraRIEa7nEyAsAPtuhz+3k5KVu69A+dMLBDtOeiDvJ/HL5PDq4xD0ulpvyegzgKrt127u6EmwiiQ/OBinWnzNzi8vV1Gj+5DFzmpEVHnvaXkqsbyIUZV7Y0E/b4NdgjuMyxoy34spgmx3RC19sz3ts3a5uJNT62e7t8pR6fS7MfOAS2/mDIN7nLfaLyLzsG9WqJn6fVbbdcjAkzwUk5ChDR1JkOAPPfpvsc41qepSsccRTAUEKIsqPP7aHSPINoQRbwKOkSz7OJADs6+S1caQTzgIPYF5irFp7JymputT1mxuTQ2f+dsfaa8bbZR9iyePX6u2DG9C3QQEDKXiRUhdclR3aXph8YN+2GUatzXDz1pvjcO84Qo9KLTXGh5d33Pd/+hBLMwH61rYy8lseru/jDkGcyRP5k3kQN4WLOYp4W9qO11pzFpY=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5273.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(86362001)(7416002)(76116006)(54906003)(38070700005)(508600001)(8936002)(66476007)(7696005)(8676002)(966005)(5660300002)(6916009)(9686003)(2906002)(55016003)(6506007)(316002)(53546011)(38100700002)(64756008)(66556008)(66946007)(66446008)(55236004)(4326008)(26005)(71200400001)(52536014)(122000001)(33656002)(186003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?TR4wdk0xCqoW6teG48HVWsCp87xN3UBletp01aWyDt7lMenfjKRZ+Pi4OJ+O?=
- =?us-ascii?Q?aAsoGuWAZI9Hpbs6yNOKy9GVq1OdCfaOlol58uJq/WUs9mmPGE7G5dxcFNWx?=
- =?us-ascii?Q?BjljeX/VGyipw2rmdA9kruM6kMIcX4xwwLoaPbI8XyRIyUyLnOC0sf+xRDxI?=
- =?us-ascii?Q?7Y9aXWnEvdu+O2PwfJrC1wL18qeaUKoKYRVTGPkc90fZFRan47oIFE1kribj?=
- =?us-ascii?Q?tnPgV3dW0o4y0I0hjw1PNtV70HblpPcyscEptN1VrgbL1C7HzoDx6yTta057?=
- =?us-ascii?Q?9+1VMGjiTA1w6Tsg3hlUnsRtY+uYlrEws992v4v+xS0p4saXjMgM5qlUYOlU?=
- =?us-ascii?Q?m5gU/FKAr5AiMHnrkim8DxhFowUqwXJhwqLGGoLKBN2L/8qvHtel/LCAQZez?=
- =?us-ascii?Q?GBQu0DKwGqcrrFrOYbi/kw3u3jaQVfXvs+Nnptsp+T6pT5LIIHk9ZHohroC8?=
- =?us-ascii?Q?lIb2NvhH1eSMWgB0VewQjOygnv96JGwbxa4rPvwLikb2RglZq5O9x4qHxFS6?=
- =?us-ascii?Q?89KyXtTvCnkKQzaAm4DhtQWggWsGGg8WtJAwMUhHTRbmhnZ70iuC0XQei9m+?=
- =?us-ascii?Q?A4NrL+wqH9VlWcMjClYnII6wxnS0P9dHr1t43xsJzMYhFToRv20rq8du976e?=
- =?us-ascii?Q?gx0kgT80VSB82VihywkOqDuLfFS86iNKDtivBm+dQIJn7JpJRhGvcorwXPyv?=
- =?us-ascii?Q?KHLbSlzlkfm4CTXdUr0rkhkk4OQqte/Uee4qTpauLdVhhseF/rnnsnDYI+6S?=
- =?us-ascii?Q?SG9VzrE1DYpDT+Cfsz02e/JduYucxcK4N4T6PXrriBPnRt9lqlT3B44r0Lg3?=
- =?us-ascii?Q?wEo+ZMBK/6d0OJvgkSIR4UhOrH22E1yRChsHrm2bQHk7n919F2k8rWTlkNIF?=
- =?us-ascii?Q?KpM5YxNpdJtS9/WzG5F1bYI+HIa+2zT9TtDjzZH2/+2Q7iD6S+hr1qdrA6qz?=
- =?us-ascii?Q?ZjkkcmfPMHmezu5HphhbVXMa1+3T0mmS8LJJE7OjZAn/KrBLiiBZG9TsJdQm?=
- =?us-ascii?Q?2/ND6hCkvO+eh3JmxZS0gelWlicWEtNCnYvPTeZ9o4c9K3XM65RQxxb8gdVk?=
- =?us-ascii?Q?vYYv6axAhdIsAqOFbBwTH4gUiMvblKxU+DpA0P0eh2a2dkOVlwbaXCcFnoog?=
- =?us-ascii?Q?FQt/yUhy9QfNa9I1vP4p53Uwd5kh5W8KEqdF7PT3jR3SiK44BM4C11T0L0qQ?=
- =?us-ascii?Q?9qhSFQxb61nzc4/w9nb2fgeYDB5qd4L2Ha53CggOCkQKXi0KEko4BUrnkF6f?=
- =?us-ascii?Q?1UfHXG4oCURqne/AsqRWsQcU+HWtbWO+A7VYKU9ftgErqcl0vDHnAg74gH8p?=
- =?us-ascii?Q?3HphM0KcKhaWLI6uWF76XIM8qnXocfE1eOulGgXqLbNmRfFJCr3pDLQxoVOE?=
- =?us-ascii?Q?pVG8Vdlt5bO+Cxm9qRQH1B2HBVug4P7JEkrvT55wqCtAYIdDVXNNmcWh3EFM?=
- =?us-ascii?Q?euk/2laHtpPkkqE298hczMyJ3vb1DzLrj3rTY8QO77hZMkPpEQc+JKVrZP+J?=
- =?us-ascii?Q?eVs6YZAXyw/I/9JGr+XO8WIWkg7qXIhOiwxiLm0msaRXWQ+jl8SiyVayF6zo?=
- =?us-ascii?Q?6E0LmjMbxABTY6ImFXNxGx7wTGliw3/Rr+9Qrv84De8crEVcvRMRaEzjUjGP?=
- =?us-ascii?Q?b66ZvJNksn483KEIXIdXqSU=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 01/14] iommu: Add dma ownership management interfaces
+Message-ID: <YdQcgFhIMYvUwABV@infradead.org>
+References: <20220104015644.2294354-1-baolu.lu@linux.intel.com>
+ <20220104015644.2294354-2-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5273.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 618d656c-246f-49d3-815f-08d9cf69eb0b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jan 2022 10:06:47.0925
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +gu2lsJUQ0ujIX/b+Qu8vjHcFQ4YnJNcP7VkArgYV/clK0ij2NEAMBHUsDPat4sWwcJASyo/FMsOZEuW2DKYVg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5383
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220104015644.2294354-2-baolu.lu@linux.intel.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Thu, Dec 16, 2021 at 3:14 PM Akhil R <akhilrajeev@nvidia.com> wrote:
-> >
-> > Get interrupt by name from ACPI table as well.
->=20
-> the interrupt resource
->=20
-> > Add option to use 'interrupt-names' in _DSD which can map to interrupt
-> > by index. The implementation is similar to 'interrupt-names' in devicet=
-ree.
-> > Also add a common routine to get irq by name from devicetree and ACPI
-> > table.
-> >
-> > Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> > ---
-> >  drivers/base/property.c  | 35 +++++++++++++++++++++++++++++++++++
-> >  include/linux/property.h |  3 +++
-> >  2 files changed, 38 insertions(+)
-> >
-> > diff --git a/drivers/base/property.c b/drivers/base/property.c index
-> > cbe4fa2..7acf4fc 100644
-> > --- a/drivers/base/property.c
-> > +++ b/drivers/base/property.c
-> > @@ -920,6 +920,41 @@ int fwnode_irq_get(const struct fwnode_handle
-> > *fwnode, unsigned int index)  EXPORT_SYMBOL(fwnode_irq_get);
-> >
-> >  /**
-> > + * fwnode_irq_get_byname - Get IRQ from a fwnode using its name
-> > + * @fwnode:    Pointer to the firmware node
-> > + * @index:     IRQ name
-> > + *
->=20
-> Needs a description to explain how the name is described.
->=20
-> > + * Returns Linux IRQ number on success, errno otherwise.
-> > + */
-> > +int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const
-> > +char *name) {
-> > +       int index;
-> > +
-> > +       if (unlikely(!name))
-> > +               return -EINVAL;
-> > +
-> > +       index =3D fwnode_property_match_string(fwnode, "interrupt-names=
-",
-> name);
-> > +       if (index < 0)
-> > +               return index;
->=20
-> This property ise needs to be described in the ACPI documentation:
-> https://www.kernel.org/doc/html/latest/firmware-
-> guide/acpi/enumeration.html
->=20
-> Perhaps after the DMA section.
-Do you mean to document the complete interrupt usage in ACPI
-including getting interrupt by index or only the named interrupt part?
+On Tue, Jan 04, 2022 at 09:56:31AM +0800, Lu Baolu wrote:
+> Multiple devices may be placed in the same IOMMU group because they
+> cannot be isolated from each other. These devices must either be
+> entirely under kernel control or userspace control, never a mixture.
+> 
+> This adds dma ownership management in iommu core and exposes several
+> interfaces for the device drivers and the device userspace assignment
+> framework (i.e. vfio), so that any conflict between user and kernel
+> controlled DMA could be detected at the beginning.
+> 
+> The device driver oriented interfaces are,
+> 
+> 	int iommu_device_use_dma_api(struct device *dev);
+> 	void iommu_device_unuse_dma_api(struct device *dev);
+> 
+> Devices under kernel drivers control must call iommu_device_use_dma_api()
+> before driver probes. The driver binding process must be aborted if it
+> returns failure.
+> 
+> The vfio oriented interfaces are,
+> 
+> 	int iommu_group_set_dma_owner(struct iommu_group *group,
+> 				      void *owner);
+> 	void iommu_group_release_dma_owner(struct iommu_group *group);
+> 	bool iommu_group_dma_owner_claimed(struct iommu_group *group);
+> 
+> The device userspace assignment must be disallowed if the set dma owner
+> interface returns failure.
+> 
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Kevin Tian <kevin.tian@intel.com>
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> ---
+>  include/linux/iommu.h |  31 ++++++++
+>  drivers/iommu/iommu.c | 161 +++++++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 189 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index de0c57a567c8..568f285468cf 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -682,6 +682,13 @@ struct iommu_sva *iommu_sva_bind_device(struct device *dev,
+>  void iommu_sva_unbind_device(struct iommu_sva *handle);
+>  u32 iommu_sva_get_pasid(struct iommu_sva *handle);
+>  
+> +int iommu_device_use_dma_api(struct device *dev);
+> +void iommu_device_unuse_dma_api(struct device *dev);
+> +
+> +int iommu_group_set_dma_owner(struct iommu_group *group, void *owner);
+> +void iommu_group_release_dma_owner(struct iommu_group *group);
+> +bool iommu_group_dma_owner_claimed(struct iommu_group *group);
+> +
+>  #else /* CONFIG_IOMMU_API */
+>  
+>  struct iommu_ops {};
+> @@ -1082,6 +1089,30 @@ static inline struct iommu_fwspec *dev_iommu_fwspec_get(struct device *dev)
+>  {
+>  	return NULL;
+>  }
+> +
+> +static inline int iommu_device_use_dma_api(struct device *dev)
+> +{
+> +	return 0;
+> +}
+> +
+> +static inline void iommu_device_unuse_dma_api(struct device *dev)
+> +{
+> +}
+> +
+> +static inline int
+> +iommu_group_set_dma_owner(struct iommu_group *group, void *owner)
+> +{
+> +	return -ENODEV;
+> +}
+> +
+> +static inline void iommu_group_release_dma_owner(struct iommu_group *group)
+> +{
+> +}
+> +
+> +static inline bool iommu_group_dma_owner_claimed(struct iommu_group *group)
+> +{
+> +	return false;
+> +}
+>  #endif /* CONFIG_IOMMU_API */
+>  
+>  /**
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index 8b86406b7162..ff0c8c1ad5af 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -48,6 +48,8 @@ struct iommu_group {
+>  	struct iommu_domain *default_domain;
+>  	struct iommu_domain *domain;
+>  	struct list_head entry;
+> +	unsigned int owner_cnt;
+> +	void *owner;
+>  };
+>  
+>  struct group_device {
+> @@ -289,7 +291,12 @@ int iommu_probe_device(struct device *dev)
+>  	mutex_lock(&group->mutex);
+>  	iommu_alloc_default_domain(group, dev);
+>  
+> -	if (group->default_domain) {
+> +	/*
+> +	 * If device joined an existing group which has been claimed
+> +	 * for none kernel DMA purpose, avoid attaching the default
+> +	 * domain.
+> +	 */
+> +	if (group->default_domain && !group->owner) {
+>  		ret = __iommu_attach_device(group->default_domain, dev);
+>  		if (ret) {
+>  			mutex_unlock(&group->mutex);
+> @@ -2320,7 +2327,7 @@ static int __iommu_attach_group(struct iommu_domain *domain,
+>  {
+>  	int ret;
+>  
+> -	if (group->default_domain && group->domain != group->default_domain)
+> +	if (group->domain && group->domain != group->default_domain)
+>  		return -EBUSY;
+>  
+>  	ret = __iommu_group_for_each_dev(group, domain,
+> @@ -2357,7 +2364,11 @@ static void __iommu_detach_group(struct iommu_domain *domain,
+>  {
+>  	int ret;
+>  
+> -	if (!group->default_domain) {
+> +	/*
+> +	 * If group has been claimed for none kernel DMA purpose, avoid
+> +	 * re-attaching the default domain.
+> +	 */
 
-Also please share if anything on the discussion we had previously.
+none kernel reads odd.  But maybe drop that and just say 'claimed
+already' ala:
 
-Thanks,
-Akhil
-
+	/*
+	 * If the group has been claimed already, do not re-attach the default
+	 * domain.
+	 */

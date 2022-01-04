@@ -2,226 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40DF9484184
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 13:10:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E874484188
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 13:12:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232923AbiADMKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 07:10:24 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:31068 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231607AbiADMKW (ORCPT
+        id S232943AbiADMMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 07:12:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50544 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232904AbiADMMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 07:10:22 -0500
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JSrvL40dPz1DKST;
-        Tue,  4 Jan 2022 20:06:54 +0800 (CST)
-Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 4 Jan 2022 20:10:20 +0800
-Received: from [10.174.178.220] (10.174.178.220) by
- dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 4 Jan 2022 20:10:19 +0800
-Subject: Re: [PATCH] scsi: Do not break scan luns loop if add single lun
- failed
-To:     Steffen Maier <maier@linux.ibm.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        "Nilesh Javali" <njavali@marvell.com>,
-        <GR-QLogic-Storage-Upstream@marvell.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Martin Wilck <martin.wilck@suse.com>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Benjamin Block <bblock@linux.ibm.com>,
-        Ming Lei <ming.lei@redhat.com>
-CC:     Zhiqiang Liu <liuzhiqiang26@huawei.com>,
-        Feilong Lin <linfeilong@huawei.com>, Wu Bo <wubo40@huawei.com>
-References: <20211225232911.1117843-1-haowenchao@huawei.com>
- <aa72bd76-2af5-202d-8a2c-afb5a700b6c0@linux.ibm.com>
-From:   Wenchao Hao <haowenchao@huawei.com>
-Message-ID: <3aa3ea7e-334c-6382-88f9-34eaa6b355fe@huawei.com>
-Date:   Tue, 4 Jan 2022 20:10:19 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        Tue, 4 Jan 2022 07:12:02 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D2AC061761;
+        Tue,  4 Jan 2022 04:12:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=TFFCZLl2eneLOZlZGY6q1GbZK+goF4stAeNLc8bB24Y=; b=JCsLKVY7+IepRwzG9OQSMg6lT+
+        /uyxZw8iWsDVhcp+SZvOAmra5nAV9LuRlZaqkLF7tqh72Q0ShevMHPEKRbl8w6+q2pVQXba8+8n/M
+        57REDZWuEiMI7FndL/P4ASTgetgSuP1VQNGus36htmpQLr0ZuzW2iAeZc064CdDopwWqk7lI9f8er
+        K5JUbmK9xibXOKguOlREFBmL+C/nCHTnseyoloKuOEMU/oL3uUnz1KUjHk6J/ET/zAkSTDlE4dHE+
+        ujEi7eCNqGrvoRiAhGf69TjN7s6e+/FF1JIJDs6J2eRrBceWFoW2SRZoP1NEpZns3oXzNaoaccIbL
+        Lofdm+Bw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56556)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1n4ifU-0006ym-SF; Tue, 04 Jan 2022 12:11:56 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1n4ifT-0007Dp-Rq; Tue, 04 Jan 2022 12:11:55 +0000
+Date:   Tue, 4 Jan 2022 12:11:55 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Corentin Labbe <clabbe.montjoie@gmail.com>
+Cc:     linus.walleij@linaro.org, ulli.kroll@googlemail.com,
+        kuba@kernel.org, davem@davemloft.net, andrew@lunn.ch,
+        hkallweit1@gmail.com, linux-arm-kernel@lists.infradead.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: net: phy: marvell: network working with generic PHY and not with
+ marvell PHY
+Message-ID: <YdQ5i+//UITSbxS/@shell.armlinux.org.uk>
+References: <YdQoOSXS98+Af1wO@Red>
+ <YdQsJnfqjaFrtC0m@shell.armlinux.org.uk>
+ <YdQwexJVfrdzEfZK@Red>
+ <YdQydK4GhI0P5RYL@shell.armlinux.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <aa72bd76-2af5-202d-8a2c-afb5a700b6c0@linux.ibm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.220]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500017.china.huawei.com (7.185.36.178)
-X-CFilter-Loop: Reflected
+In-Reply-To: <YdQydK4GhI0P5RYL@shell.armlinux.org.uk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021/12/31 1:55, Steffen Maier wrote:
-> On 12/26/21 00:29, Wenchao Hao wrote:
->> Failed to add a single lun does not mean all luns are unaccessible,
->> if we break the scan luns loop, the other luns reported by REPORT LUNS
->> command would not be probed any more.
->>
->> In this case, we might loss some luns which are accessible.
+On Tue, Jan 04, 2022 at 11:41:40AM +0000, Russell King (Oracle) wrote:
+> On Tue, Jan 04, 2022 at 12:33:15PM +0100, Corentin Labbe wrote:
+> > Le Tue, Jan 04, 2022 at 11:14:46AM +0000, Russell King (Oracle) a �crit :
+> > > On Tue, Jan 04, 2022 at 11:58:01AM +0100, Corentin Labbe wrote:
+> > > > Hello
+> > > > 
+> > > > I have a gemini SSI 1328 box which has a cortina ethernet MAC with a Marvell 88E1118 as given by:
+> > > > Marvell 88E1118 gpio-0:01: attached PHY driver (mii_bus:phy_addr=gpio-0:01, irq=POLL)
+> > > > So booting with CONFIG_MARVELL_PHY=y lead to a non-working network with link set at 1Gbit
+> > > > Setting 'max-speed = <100>;' (as current state in mainline dtb) lead to a working network.
+> > > > By not working, I mean kernel started with ip=dhcp cannot get an IP.
+> > > 
+> > > How is the PHY connected to the host (which interface mode?) If it's
+> > > RGMII, it could be that the wrong RGMII interface mode is specified in
+> > > DT.
+> > > 
+> > 
+> > The PHY is set as RGMII in DT (arch/arm/boot/dts/gemini-ssi1328.dts)
+> > The only change to the mainline dtb is removing the max-speed.
 > 
-> Could you please add more details about the specific use case, where 
-> this actually was a problem, for my understanding?
+> So, it's using "rgmii" with no delay configured at the PHY with the
+> speed limited to 100Mbps. You then remove the speed limitation and
+> it doesn't work at 1Gbps.
 > 
+> I think I've seen this on other platforms (imx6 + ar8035) when the
+> RGMII delay is not correctly configured - it will work at slower
+> speeds but not 1G.
+> 
+> The RGMII spec specifies that there will be a delay - and the delay can
+> be introduced by either the MAC, PHY or by PCB track routing. It sounds
+> to me like your boot environment configures the PHY to introduce the
+> necessary delay, but then, because the DT "rgmii" mode means "no delay
+> at the PHY" when you use the Marvell driver (which respects that), the
+> Marvell driver configures the PHY for no delay, resulting in a non-
+> working situation at 1G.
+> 
+> I would suggest checking how the boot environment configures the PHY,
+> and change the "rgmii" mode in DT to match. There is a description of
+> the four RGMII modes in Documentation/networking/phy.rst that may help
+> understand what each one means.
 
-When REPORT LUNS returns 4 luns which are lun0, lun1, lun2 and lun3.
-If lun1 becomes inaccessible during the scan flow, 
-scsi_probe_and_add_lun() for lun1 would failed, lun2 and lun3 are still 
-accessible. scsi_report_lun_scan() would print error log and return 0, 
-and scsi_sequential_lun_scan() would not be called.
+Hmm. Sorry, I'm leading you stray. It looks like the 88E1118 code does
+not program any delays depending on the interface mode, so changing that
+will have no effect.
 
-In this scenario, lun2 and lun3 would not been probed and added any 
-more, so we loss them.
+I suspect, looking at m88e1118_config_init(), that the write to register
+0x15 in the MSCR page could be the problem.
 
->>
->> Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
->> ---
->>   drivers/scsi/scsi_scan.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
->> index 23e1c0acdeae..fee7ce082103 100644
->> --- a/drivers/scsi/scsi_scan.c
->> +++ b/drivers/scsi/scsi_scan.c
->> @@ -1476,13 +1476,13 @@ static int scsi_report_lun_scan(struct 
->> scsi_target *starget, blist_flags_t bflag
->>                   lun, NULL, NULL, rescan, NULL);
->>               if (res == SCSI_SCAN_NO_RESPONSE) {
->>                   /*
->> -                 * Got some results, but now none, abort.
->> +                 * Got some results, but now none, abort this lun
-> 
-> abort => skip ?
+0x15 is 21, which is MII_88E1121_PHY_MSCR_REG. In other Marvell PHYs,
+bits 4 and 5 are the tx and rx delays, both of which are set. Looking
+at m88e1121_config_aneg_rgmii_delays(), this would seem to indicate
+that the PHY is being placed into rgmii-id mode.
 
-Yes, "skip" looks better than "abort".
+Can you try changing:
 
-> 
->>                    */
->>                   sdev_printk(KERN_ERR, sdev,
->>                       "Unexpected response"
->>                       " from lun %llu while scanning, scan"
->>                       " aborted\n", (unsigned long long)lun);
-> 
-> That message would no longer be correct with your change, as it would 
-> not abort the scan any more.
+	err = phy_write(phydev, 0x15, 0x1070);
 
-I would change "abort" to "skip" which makes it better.
+to:
 
-> 
->> -                break;
->> +                continue;
->>               }
->>           }
->>       }
-> 
-> 
-> Wouldn't this change existing semantics for LLDDs intentionally 
-> returning -ENXIO from their slave_alloc() callback in certain cases?:
-> 
-> 
+	err = phy_write(phydev, 0x15, 0x1040);
 
-Yes, it would print error message like "Unexpected response ..." for 
-every failed lun. I think it's reasonable, so we can know every failed 
-lun in one scan flow.
+and see what happens? Maybe trying other combinations of bits 4 and 5
+to find a working combination.
 
->> static struct scsi_device *scsi_alloc_sdev(struct scsi_target *starget,
-> ...
->>     if (shost->hostt->slave_alloc) {
->>         ret = shost->hostt->slave_alloc(sdev);
->>         if (ret) {
->>             /*
->>              * if LLDD reports slave not present, don't clutter
->>              * console with alloc failure messages
->>              */
->>             if (ret == -ENXIO)
->>                 display_failure_msg = 0;
->>             goto out_device_destroy;
-> ...
->> out_device_destroy:
->>     __scsi_remove_device(sdev);
->> out:
->>     if (display_failure_msg)
->>         printk(ALLOC_FAILURE_MSG, __func__);
->>     return NULL;
-> 
-> 
-> scsi_probe_and_add_lun() [such as called by scsi_report_lun_scan() for 
-> the case at hand] converts this case into a SCSI_SCAN_NO_RESPONSE return 
-> value.
-> 
->> static int scsi_probe_and_add_lun(struct scsi_target *starget,
-> ...
->>     int res = SCSI_SCAN_NO_RESPONSE, result_len = 256;
-> ...
->>         sdev = scsi_alloc_sdev(starget, lun, hostdata);
->>     if (!sdev)
->>         goto out;
-> ...
->>  out:
->>     return res;
-> 
-> 
-> Such as being used by zfcp:
-> 
->> static int zfcp_scsi_slave_alloc(struct scsi_device *sdev)
->> {
-> ...
->>     unit = zfcp_unit_find(port, zfcp_scsi_dev_lun(sdev));
->>     if (unit)
->>         put_device(&unit->dev);
->>
->>     if (!unit && !(allow_lun_scan && npiv)) {
->>         put_device(&port->dev);
->>         return -ENXIO;
->                        ^^^^^^
-> 
-> which implements an initiator-based LUN masking that is necessary for 
-> shared HBAs virtualized without NPIV.
-> https://www.ibm.com/docs/en/linux-on-systems?topic=devices-manually-configured-fcp-luns 
-> 
-> 
-> While things might still work, as zfcp now "just" gets (much) more 
-> callbacks to slave_alloc() it has to end with -ENXIO, the user may get 
-> flooded with the error(!) sdev_printk on "Unexpected response from LUN 
-> ..." in scsi_report_lun_scan().
-> In the worst case, we could get this message now 64k - 1 times in a zfcp 
-> scenario connected to IBM DS8000 storage being able to map (all) 64k 
-> volumes to a single initiator (HBA), where the user via zfcp sysfs 
-> decided to use only the first lun reported (for the vHBA).
-> 
+I think if we discover a setting there that works, we may have a problem,
+since changing this could end up breaking some platforms. Looking at the
+commit history...
 
-64k - 1 times error log seems terrible. While I do not understand what 
-"where the user via zfcp sysfs decided to use only the first lun 
-reported (for the vHBA)" means.
+2f495c398edc net/phy/marvell: Expose IDs and flags in a .h and add dns323 LEDs setup flag
+605f196efbf8 phy: Add support for Marvell 88E1118 PHY
 
-Why would all luns slave_alloc() failed? This don't seem like a normal 
-scenario.
+and the second is a less than helpful commit message...
 
-> Other LLLDs also seem to intentionally return -ENXIO from slave_alloc() 
-> callbacks, such as but not limited to lpfc or qla2xxx:
-> 
->> int fc_slave_alloc(struct scsi_device *sdev)
->> {
->>     struct fc_rport *rport = starget_to_rport(scsi_target(sdev));
->>
->>     if (!rport || fc_remote_port_chkready(rport))
->>         return -ENXIO;
-> 
->> static int
->> qla2xxx_slave_alloc(struct scsi_device *sdev)
->> {
->>     struct fc_rport *rport = starget_to_rport(scsi_target(sdev));
->>
->>     if (!rport || fc_remote_port_chkready(rport))
->>         return -ENXIO;
-> 
-> 
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

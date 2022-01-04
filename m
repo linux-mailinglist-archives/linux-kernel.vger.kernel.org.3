@@ -2,166 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E843E4846AD
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:08:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C268E4846B6
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:10:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232991AbiADRHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 12:07:22 -0500
-Received: from mail-eopbgr150071.outbound.protection.outlook.com ([40.107.15.71]:19562
-        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230311AbiADRHU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 12:07:20 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DNiYi8e/EbnfWvCEYugDL+5Qc9TcHYo80DFxUY4zgDDe39JxJ7iKWGD9A9XVMjMXjVAphMcNIuy6Ab5NJGok0mXy3PKrcmhTnHQ2fxbu40htZPrbvRJFst0DTFRgGdnAEjOV+KQxBm4WxuxkanUfNK+yTTuky7jV4YyVLOamBRuuXSt/rQgy5au6LpiUfg1BUlv/Dv1KYonb+qeDUcQdhnRdWbpznicQEksimcc8MfjUpsItvPy9qa/eoNWda6IH95ImroybGjLj8nJms6jMX2Hbabt/1cQTlsn+0Pdi3ADfp422+sSwJR15+MSHuaQo1TvCBW/E/DHqta0DbmMD3A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CkzOv9FS08M/QQBh/jfjHY5z4Ru3eH9gwXtCrhXlXAw=;
- b=PdcR6iX9Lth3wViatcoBoGtFZ8CejWgCocnKzw+48ispD3s9mGxzv2cbl6W5vIgeSPwxrukqgpUllvU99Uv/9y8KgyUzan8QyUadFL7nIAHWmi/PI3GRqZPRqj0i8TLobbCHo+Y8ya8hPSBtsIpMrSifC/6S8iesKRp2pZBNwR1J1G9/j/+u4ZYOEYReJsCnx4goE5BilOfE3brfPw3k+o7Ji0CKyPVNnJf7gshrKrsg0BJwv7wVzfYUuUUDcs3IVICPpivZGHQJhrI4JMw4CeCXfiUJQWzgr9Q/Bqyd0esacwMb5+cCFF5SYSDOO7SYRVryiGIeIw2DqKxD0PIn9w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 194.138.21.73) smtp.rcpttodomain=kernel.org smtp.mailfrom=siemens.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=siemens.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CkzOv9FS08M/QQBh/jfjHY5z4Ru3eH9gwXtCrhXlXAw=;
- b=FTlGlDQ83D13SqXDif+KknFa2uQo5cQddyk6Q5by7nXB+lPoB7cGppZlqbxqXAfbGwb57Kg4zgHHXNI5ApJungz5PZPiNnztbstlrsZ+aRLBfMR6mh43GBRCweXL2ofBdX78PWnC8UfcqOm0oj5zDOOpUJHkzpYd9fDUID2rJVtIIJ7HcVvB463adrMi8/p8cPNevToi6BAmne0bYDhHceBn7RVi7IrNI1tASuejYfRSaOWyCYolUgTTTOnGiSL5MaQ7pKxF2NjplR3uI6BEm8UTK/2mVhZcJG18HMnZzsoObHDkn3/e2NF0UuXp8JpuPxHm5Y6GvIXeECPmbWAgPQ==
-Received: from DB9PR06CA0016.eurprd06.prod.outlook.com (2603:10a6:10:1db::21)
- by DB8PR10MB2809.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:ab::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Tue, 4 Jan
- 2022 17:07:18 +0000
-Received: from DB5EUR01FT026.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:10:1db:cafe::c4) by DB9PR06CA0016.outlook.office365.com
- (2603:10a6:10:1db::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.14 via Frontend
- Transport; Tue, 4 Jan 2022 17:07:18 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.73)
- smtp.mailfrom=siemens.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=siemens.com;
-Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
- 194.138.21.73 as permitted sender) receiver=protection.outlook.com;
- client-ip=194.138.21.73; helo=hybrid.siemens.com;
-Received: from hybrid.siemens.com (194.138.21.73) by
- DB5EUR01FT026.mail.protection.outlook.com (10.152.5.2) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4844.14 via Frontend Transport; Tue, 4 Jan 2022 17:07:18 +0000
-Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
- DEMCHDC9SNA.ad011.siemens.net (194.138.21.73) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 4 Jan 2022 18:07:18 +0100
-Received: from md1za8fc.ad001.siemens.net (158.92.8.107) by
- DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 4 Jan 2022 18:07:17 +0100
-Date:   Tue, 4 Jan 2022 18:07:15 +0100
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     Aaron Ma <aaron.ma@canonical.com>, <davem@davemloft.net>,
-        <hayeswang@realtek.com>, <tiwai@suse.de>,
-        <linux-usb@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] net: usb: r8152: Add MAC passthrough support for more
- Lenovo Docks
-Message-ID: <20220104180715.7ecb0980@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20220104065326.2a73f674@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-References: <20211116141917.31661-1-aaron.ma@canonical.com>
-        <20220104123814.32bf179e@md1za8fc.ad001.siemens.net>
-        <20220104065326.2a73f674@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S233194AbiADRKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 12:10:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26359 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231733AbiADRKU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 12:10:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641316217;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PLTIaY5gg/CGkjyFI0nVD1Ynp1qrSv98dwVoxTGL/gk=;
+        b=Cw7HN3Rir7v0VIG3xMuVwuOsWwK5O2hiBFpQJIAJhwKOVZ1QqClc8V7UzC8kf7ZgFxJ+su
+        jQSS/g9nBD9UtQEijAunsYiAscU74ZwdTABSh8dM1TDTDq3hY58vwwtNqenayvNpT8wvZr
+        1z4q2ilXd/HMtEPeeCib8B5lMvrMwhk=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-610-ZasE3F_7PBe7FswaXiWtDA-1; Tue, 04 Jan 2022 12:10:16 -0500
+X-MC-Unique: ZasE3F_7PBe7FswaXiWtDA-1
+Received: by mail-wm1-f71.google.com with SMTP id o18-20020a05600c511200b00345c1603997so8199951wms.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 09:10:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=PLTIaY5gg/CGkjyFI0nVD1Ynp1qrSv98dwVoxTGL/gk=;
+        b=i/RLbrM7jlrpfnhnKiaS6ZAxczz3ZZr7xaVSK4feOhouA0pcyYviMZnVsPI+e2442x
+         fKtuP/UFLrvnfu1/6glX5ZXu12sxt0HYu1zpL1TLuDg8ibnn05HtCRFhkkO+7sXcylFE
+         rZ1xgX311KbNrbA2PiVq6cZWvDLY7SN/HqWtHfrWBHNIq7hvGgh+zf2cqk4mUnV2X7Ee
+         9gnmSUUz8E+z2yH4DsPmXv4AM26zJdT+HTHXGuwE0EL1+s5OsVvn5P39NI0fotw3xkYz
+         7+jtwMYbzTaS8Fg9j08VmyHLar80Usu6j7ACrYLCPG/u1Ja3Aq2tMbMX46QjBPDDJmR5
+         6xmA==
+X-Gm-Message-State: AOAM530irluBofGy+a2pJakjMDPZLeoCvDZLUhVQWRz6CI7nQCUrwISk
+        KM89qqfVHUh0WHheIWVD5yiKDnEbuqlSpcAtO/b17fJMid+mekTcjXe8Jqn3t5nJp22WzTD+EV0
+        EsLnCcsih6urQEC1ROsBJWEev
+X-Received: by 2002:a17:906:9f01:: with SMTP id fy1mr6911392ejc.475.1641316202908;
+        Tue, 04 Jan 2022 09:10:02 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzg4c8oC/snOnarWsLYe2OuhHx3dyq7Vui9X2KCh4F+Gwu3wSidctLFczPe7rbJzItTjhvIEQ==
+X-Received: by 2002:a17:906:9f01:: with SMTP id fy1mr6911372ejc.475.1641316202670;
+        Tue, 04 Jan 2022 09:10:02 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
+        by smtp.googlemail.com with ESMTPSA id w17sm14932963edu.48.2022.01.04.09.07.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jan 2022 09:10:02 -0800 (PST)
+Message-ID: <b8e273bf-ae2c-cc5c-0d20-33f3dd12053c@redhat.com>
+Date:   Tue, 4 Jan 2022 18:07:32 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: Possible nohz-full/RCU issue in arm64 KVM
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        paulmck <paulmck@kernel.org>, maz <maz@kernel.org>,
+        frederic <frederic@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        rcu <rcu@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Anup Patel <Anup.Patel@wdc.com>
+References: <d80e440375896f75d45e227d40af60ca7ba24ceb.camel@redhat.com>
+ <YbyO40zDW/kvUHEE@FVFF77S0Q05N>
+ <70f112072d9496d21901946ea82832d3ed3a8cb2.camel@redhat.com>
+ <Ybyg1r/Q6EfeuXGV@FVFF77S0Q05N>
+ <9ab8107f-ff41-6a9e-57e1-a261bea93aca@redhat.com>
+ <YdR4N9QVYOzjowAb@FVFF77S0Q05N>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YdR4N9QVYOzjowAb@FVFF77S0Q05N>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [158.92.8.107]
-X-ClientProxiedBy: DEMCHDC8A1A.ad011.siemens.net (139.25.226.107) To
- DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 38753eba-a235-41f5-7dc0-08d9cfa4aa30
-X-MS-TrafficTypeDiagnostic: DB8PR10MB2809:EE_
-X-Microsoft-Antispam-PRVS: <DB8PR10MB2809977A3F4D61CC5CB551A8854A9@DB8PR10MB2809.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VsltuRCghmDkREJ3ArHwczhKY77tb2wTCTwvpu8LuvCEEMN1ocuw6gF73cWzFVvmbiQ+LHGi7kn2xIO6oFivqiaSpd74ITtKUzT0PNJ9stwPL751yXMrf8jSp4X3OUHE3hes6o7+7byf2Nqj5aLI116VKdutRJYF3PSLut74TJRb+MzhTssUU978mKFWJQvckt796eJ59Y7A5rPw7N6UidyWx7LcBb4Ps4LJMosyRo9pOgwNJ8jiGlMWfutGrdKv8fuvCJii0Gc1ukO2mAi2JrHui97y3nEnHvpcBny2BKbULOesM17ED7u7gh69hi8aZmtaB17VqtO2YzuLvkfctndgtA1SN/pnz+a2NQ2u4462Q3EktLMm6C2/168SR2YosxccsauWcfTUAfmprHvpjUogGnytXvVL4TScSaHR/MUP/KTcPbJ/mqe6f39FmjJu82yJmPEooaGTN/4G2pISY4QOYpZxMv0T2ZeyMm9hMkmEBe3y6Nu326mFCN7ZaYpD8nF1dsBZuskCpqP6gQIQZVApuoA9Yaccs4VONMxa1au7ABK1hJgJkHu0HkRT/el/19e4b4eoE04lNWuxF3smSv2ZcnDEln9ST5LtUpFpOIT0zhTM20HaukNbGlY06cZrBFvzVScJGka32NW91aXawhQmKnHyNDv60QeL2k0R8BlQiLR5UcwKKMJ8wRHu9i3lEAyd8a9uWxhpgESC1h495TMA0kE13LSK+eFetQi92PLrORjHX7LhWwKW1/rWEV7GFQjg60znbvnEqDEV+rD+/PCuHmpvkhiSJqHYSUKduVU=
-X-Forefront-Antispam-Report: CIP:194.138.21.73;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(40470700002)(46966006)(26005)(55016003)(83380400001)(9686003)(2906002)(36860700001)(70586007)(70206006)(16526019)(47076005)(186003)(7696005)(54906003)(6916009)(356005)(5660300002)(86362001)(8676002)(82310400004)(1076003)(8936002)(4326008)(40460700001)(956004)(81166007)(336012)(44832011)(498600001)(82960400001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jan 2022 17:07:18.5745
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 38753eba-a235-41f5-7dc0-08d9cfa4aa30
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.73];Helo=[hybrid.siemens.com]
-X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT026.eop-EUR01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR10MB2809
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Tue, 4 Jan 2022 06:53:26 -0800
-schrieb Jakub Kicinski <kuba@kernel.org>:
-
-> On Tue, 4 Jan 2022 12:38:14 +0100 Henning Schild wrote:
-> > This patch is wrong and taking the MAC inheritance way too far. Now
-> > any USB Ethernet dongle connected to a Lenovo USB Hub will go into
-> > inheritance (which is meant for docks).
-> > 
-> > It means that such dongles plugged directly into the laptop will do
-> > that, or travel adaptors/hubs which are not "active docks".
-> > 
-> > I have USB-Ethernet dongles on two desks and both stopped working as
-> > expected because they took the main MAC, even with it being used at
-> > the same time. The inheritance should (if at all) only be done for
-> > clearly identified docks and only for one r8152 instance ... not
-> > all. Maybe even double checking if that main PHY is "plugged" and
-> > monitoring it to back off as soon as it is.
-> > 
-> > With this patch applied users can not use multiple ethernet devices
-> > anymore ... if some of them are r8152 and connected to "Lenovo" ...
-> > which is more than likely!
-> > 
-> > Reverting that patch solved my problem, but i later went to
-> > disabling that very questionable BIOS feature to disable things for
-> > good without having to patch my kernel.
-> > 
-> > I strongly suggest to revert that. And if not please drop the
-> > defines of 
-> > > -		case DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2:
-> > > -		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:    
-> > 
-> > And instead of crapping out with "(unnamed net_device)
-> > (uninitialized): Invalid header when reading pass-thru MAC addr"
-> > when the BIOS feature is turned off, one might want to check
-> > DSDT/WMT1/ITEM/"MACAddressPassThrough" which is my best for asking
-> > the BIOS if the feature is wanted.  
+On 1/4/22 17:39, Mark Rutland wrote:
+> My main issue here was just that it's really difficult to see how the
+> entry/exit logic is balanced, and I reckon we can solve that by splitting
+> guest_{enter,exit}_irqoff() into helper functions to handle the vtime
+> accounting separately from the context tracking, so that arch code can do
+> something like:
 > 
-> Thank you for the report!
+>    guest_timing_enter_irqoff();
+>    
+>    guest_eqs_enter_irqoff();
+>    < actually run vCPU here >
+>    guest_eqs_exit_irqoff();
+>    
+>    < handle pending IRQs here >
+>    
+>    guest_timing_exit_irqoff();
 > 
-> Aaron, will you be able to fix this quickly? 5.16 is about to be
-> released.
+> ... which I hope should work for RISC-V too.
+> 
+> I've had a go, and I've pushed out a WIP to:
+> 
+>    https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/kvm/rcu
 
-If you guys agree with a revert and potentially other actions, i would
-be willing to help. In any case it is not super-urgent since we can
-maybe agree an regression and push it back into stable kernels.
+Yes, you have a point and it makes sense for x86 too.  You can send me a 
+topic branch once you get all the acks.  Thanks!
 
-I first wanted to place the report and see how people would react ...
-if you guys agree that this is a bug and the inheritance is going "way
-too far".
+Paolo
 
-But i would only do some repairs on the surface, the feature itself is
-horrific to say the least and i am very happy with that BIOS switch to
-ditch it for good. Giving the MAC out is something a dock physically
-blocking the original PHY could do ... but year ... only once and it
-might be pretty hard to say which r8152 is built-in from the hub and
-which is plugged in additionally in that very hub.
-Not to mention multiple hubs of the same type ... in a nice USB-C chain.
-
-MAC spoofing is something NetworkManager and others can take care of,
-or udev ... doing that in the driver is ... spooky.
-
-regards,
-Henning

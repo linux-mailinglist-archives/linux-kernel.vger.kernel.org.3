@@ -2,91 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B214843DB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:53:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A01314843E1
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233191AbiADOxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:53:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiADOx3 (ORCPT
+        id S234331AbiADOzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:55:06 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:38248 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229504AbiADOzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:53:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55AC4C061761;
-        Tue,  4 Jan 2022 06:53:29 -0800 (PST)
+        Tue, 4 Jan 2022 09:55:04 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E70CA612E7;
-        Tue,  4 Jan 2022 14:53:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01D2AC36AED;
-        Tue,  4 Jan 2022 14:53:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8F207B8163C;
+        Tue,  4 Jan 2022 14:55:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2375C36AE9;
+        Tue,  4 Jan 2022 14:54:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641308008;
-        bh=0y3hkgpNcGJVZzPYwC7KrnbZbGGnlR7BZtECqLgn7uA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=M4FpgfBHDjWLkSAutnr6OJl0w+HHGWaCjjXRfPZZ0jxQj1VZ4IZ1JuYHJNJhHP/eB
-         +FR8TvC3p8i9iYKYgi/f6AzbwqkBVAagzF8KQVcQuW1J98oGTgmkDEYOsd0qqAQ71K
-         W66bRITleZOgOJJE/G7px0hXfU5K5V+KSLsH7qm09z2rcgKxURjNRS4FBqv2c/7PxE
-         dvwXUkjinEfZD9298/wBDlA+SoTkLEfvY1fGF/hyqPgN5+OtY5z95DuulsU8QEbi14
-         hcEB1nypWwm0EgPzVcaPSUkI095Pqht58e185upg4tjp603k45/5ga3tcygNVdsJfj
-         i9Z4B4PouY5TQ==
-Date:   Tue, 4 Jan 2022 06:53:26 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Henning Schild <henning.schild@siemens.com>,
-        Aaron Ma <aaron.ma@canonical.com>
-Cc:     <davem@davemloft.net>, <hayeswang@realtek.com>, <tiwai@suse.de>,
-        <linux-usb@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] net: usb: r8152: Add MAC passthrough support for more
- Lenovo Docks
-Message-ID: <20220104065326.2a73f674@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20220104123814.32bf179e@md1za8fc.ad001.siemens.net>
-References: <20211116141917.31661-1-aaron.ma@canonical.com>
-        <20220104123814.32bf179e@md1za8fc.ad001.siemens.net>
+        s=k20201202; t=1641308102;
+        bh=f3icQ/m7CajZ+VJvBYNNkvB5JOmyPouGV9LddxkO4UQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mgjFfOacSVcbUCgTqqwDxVkPATxlRDzMedwid53NvgthlGHoqpza1bq+kE3CFtGiv
+         oGVozRaF/w7Psdby7hRishvp8i8uVMOLfSaL0D9aZk64RGUgUhuz04+d98C/00erzF
+         GRlHz7cMGW3o2UgHaSQJpAh8ppClWSSva0GPUPTGQNPk4un6xp6KQViruy5HcNoZnJ
+         pWPh43v/RYS64Nth7z0dXeugiyeU8KJFZUwNONVHuQatzS0Q0v4QZGM5mc3MBpPejY
+         UjYF2TrBVxYWScn7yRaVknceWxRlqex4COFr+1OoZUbXW4RXXt4xY5fGt0YOvpQAQB
+         5KGC2G5rKEXMg==
+Date:   Tue, 4 Jan 2022 14:54:56 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+Cc:     David Collins <quic_collinsd@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, swboyd@chromium.org,
+        subbaram@codeaurora.org, Das Srinagesh <gurus@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V4 1/6] dt-bindings: regulator: Add
+ "regulator-min-dropout-voltage-microvolt"
+Message-ID: <YdRfwL9uQQd/0etr@sirena.org.uk>
+References: <1637314953-4215-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1637314953-4215-2-git-send-email-quic_c_skakit@quicinc.com>
+ <YZ+o9sQpECZSrieN@sirena.org.uk>
+ <d828f2a1-03e8-d6ee-4ab7-39bf677093b7@quicinc.com>
+ <Ya5VhkggWdjYyTHL@sirena.org.uk>
+ <6a44cb99-6894-c9ce-4f1e-5dee0939598c@quicinc.com>
+ <Ya97cnuwM+MuNMg3@sirena.org.uk>
+ <23a47965-4ea9-5f6c-7e3c-27f5bd35f5b7@quicinc.com>
+ <YbPCjbnH6cXQqy6S@sirena.org.uk>
+ <012a0a96-ab0e-e844-12e1-f2272bf2506d@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="aPEEkehX3JTCtWCF"
+Content-Disposition: inline
+In-Reply-To: <012a0a96-ab0e-e844-12e1-f2272bf2506d@quicinc.com>
+X-Cookie: The horror... the horror!
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jan 2022 12:38:14 +0100 Henning Schild wrote:
-> This patch is wrong and taking the MAC inheritance way too far. Now any
-> USB Ethernet dongle connected to a Lenovo USB Hub will go into
-> inheritance (which is meant for docks).
-> 
-> It means that such dongles plugged directly into the laptop will do
-> that, or travel adaptors/hubs which are not "active docks".
-> 
-> I have USB-Ethernet dongles on two desks and both stopped working as
-> expected because they took the main MAC, even with it being used at the
-> same time. The inheritance should (if at all) only be done for clearly
-> identified docks and only for one r8152 instance ... not all. Maybe
-> even double checking if that main PHY is "plugged" and monitoring it to
-> back off as soon as it is.
-> 
-> With this patch applied users can not use multiple ethernet devices
-> anymore ... if some of them are r8152 and connected to "Lenovo" ...
-> which is more than likely!
-> 
-> Reverting that patch solved my problem, but i later went to disabling
-> that very questionable BIOS feature to disable things for good without
-> having to patch my kernel.
-> 
-> I strongly suggest to revert that. And if not please drop the defines of
-> 
-> > -		case DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2:
-> > -		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:  
-> 
-> And instead of crapping out with "(unnamed net_device) (uninitialized):
-> Invalid header when reading pass-thru MAC addr" when the BIOS feature
-> is turned off, one might want to check
-> DSDT/WMT1/ITEM/"MACAddressPassThrough" which is my best for asking the
-> BIOS if the feature is wanted.
 
-Thank you for the report!
+--aPEEkehX3JTCtWCF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Aaron, will you be able to fix this quickly? 5.16 is about to be
-released.
+On Mon, Jan 03, 2022 at 08:05:40PM +0530, Satya Priya Kakitapalli (Temp) wrote:
+> On 12/11/2021 2:41 AM, Mark Brown wrote:
+
+> > I'd think we should consider if it's better to support this
+> > dynamically at runtime based on load information and provide options for
+> > configuring the peak load information through DT instead for static
+> > configurations.  That would fit in with the stuff we have for managing
+> > modes on DCDCs (which isn't really deployed but is there) and the API we
+> > have for allowing client drivers to indicate their load requirements at
+> > runtime that fits in with that.  That'd allow us to only boost the
+> > headroom when it's really needed.
+
+> This means Dynamic headroom control feature needs to be implemented. I need
+> to explore more on this and gather info from team, Could we merge the
+> present driver with "static headroom" for now? I'll do a follow up series to
+> implement this feature.
+
+I'd be happy to merge something with the headroom configured statically
+in the driver like we do for other devices - I guess if you set the
+highest headroom that should cover it.
+
+--aPEEkehX3JTCtWCF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHUX8AACgkQJNaLcl1U
+h9BhtQf+L2r2wDroNeXGylRY4U6hq0q4A+rug1b0Z/Qvervdg9gBOKGNRqXnTnRX
+nqzFmlgkbrxJj8c8l/awd4GSaKks6/isvYqyXVVz8jHTHAN8oQz0vfMJdfRZUCKN
+fLJLckc/HgwVgHTZU9fTT/Z5sef9yJ426HwueHyhwmZkrBuBGCQisB7gncH/5QRY
+Je3U4w6teDpA7tlWo7MRY+KUIwPbOAuTY0QzUbWJL3eR4T7Cw2hp8rU7HuawkpQp
+4gkf6lZoTSkLcUpp+WDg7zJw7eRXseveFTFg+1DRFRa3TpgX7bHEy4K6rZgRGbVC
+k6OcTDSmHWwuKQ2mPh/J5uWpKQOTSg==
+=z85G
+-----END PGP SIGNATURE-----
+
+--aPEEkehX3JTCtWCF--

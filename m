@@ -2,170 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2A224840ED
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:34:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4D64840F0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:35:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232356AbiADLea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 06:34:30 -0500
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:59601 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232340AbiADLe1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 06:34:27 -0500
-Received: from [192.168.0.3] (ip5f5aecde.dynamic.kabel-deutschland.de [95.90.236.222])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id EE73661E5FE02;
-        Tue,  4 Jan 2022 12:34:24 +0100 (CET)
-Message-ID: <66edbfd4-063f-b995-0d15-982d365dd7d7@molgen.mpg.de>
-Date:   Tue, 4 Jan 2022 12:34:24 +0100
+        id S232363AbiADLfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 06:35:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231322AbiADLfF (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 06:35:05 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4421BC061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 03:35:05 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id n30-20020a17090a5aa100b001b2b6509685so2820314pji.3
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 03:35:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=T1DGzBL1UAoUhku6PkAfehlR1NmuvOe9coYqLYbCZAU=;
+        b=BMo1G/okIcIn2fwT5PHfNlITTD9hL9LKTVcMNmlhBPEKpBiTy4q9xYpn6odb7/VihE
+         TiaSe7QfV2/4JSVablNaRI7ECNjR+wY6ErLdRGDxpsoNlDZAMN84XAi3B+lxT7df4wuw
+         VfxQF0yFdZ9x7Es09Yjwx8qQcXE63YrlmVzKSZd2QwhZZegIp40RbHZ/kOUbp2QvDwtt
+         HFWQAmYA1KT4L2B1br88r/78HtzbvUBHIfSrNU6fzoD8eDEkVPb3FvGHfvO4AoKFDdj7
+         uwL+Jx1ap5xoGHzR7olIScYZeniq3+rzNE2eMiZIgyU1s/gHwVwpKBAJ4bArX2dltgGD
+         TZlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=T1DGzBL1UAoUhku6PkAfehlR1NmuvOe9coYqLYbCZAU=;
+        b=z7haZNDiFw6dDlT+Lk9i7RQ7Oz5e3H/K04GiwzNOlilf9CXRJ9oPemktNMcCSM+KgB
+         ZhBUJkwAcwGF3GfCGpP41EQKpATtmh4jHi5KbTNhgtdFriPhsMbND/APR50DqG4GTICV
+         +qTcH5L1q8PAIFlsfolf1GAlYpiLx/YOsONRsGygC6egsx11AnD5Z21gTfcgtfAhKFw3
+         0QK/RMCJnxVhSBtfJcoiOTnvH6r+6Pq/MY/OUJGhhF+zpNzTceGYk6UqCafRMhmRJiiV
+         cdI5oODo2zbYdT64iOgErNWlTMQeXrZxYZsh/SwrUGVbAc45MPZ++J0KaAzHIbOJ1Fx1
+         VNkw==
+X-Gm-Message-State: AOAM530x0ID0Csssq3vuTr3d6mWGjnTVsbzKj0tqAfK8oFR1MHaJ6F2q
+        +a0RDzNNwGSJwvBY1OCUEdn34EwgJTQ=
+X-Google-Smtp-Source: ABdhPJyCT1pXJ/FWoVfC+7MovOkPwlAXhvMAH7dhw79wyuFOJCRj5/0OGHXFdtqa9UuSBMRz50kSsQ==
+X-Received: by 2002:a17:902:b08b:b0:149:88bb:b477 with SMTP id p11-20020a170902b08b00b0014988bbb477mr34001657plr.137.1641296104831;
+        Tue, 04 Jan 2022 03:35:04 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id f10sm46617824pfj.145.2022.01.04.03.35.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 03:35:04 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     gregkh@linuxfoundation.org
+Cc:     arve@android.com, tkjos@android.com, maco@android.com,
+        joel@joelfernandes.org, christian@brauner.io, hridya@google.com,
+        surenb@google.com, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>, CGEL ZTE <cgel.zte@gmail.com>
+Subject: [PATCH] drivers/android: remove redundant ret variable
+Date:   Tue,  4 Jan 2022 11:35:00 +0000
+Message-Id: <20220104113500.602158-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: ata: For what PHY was debounce delay introduced? (was: [PATCH v3 3/3]
- ahci: AMD A85 FCH (Hudson D4): Skip 200 ms debounce delay in
- `sata_link_resume()`)
-Content-Language: en-US
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jeff Garzik <jeff@bloq.com>, Tejun Heo <tj@kernel.org>
-References: <20211229161119.1006-1-pmenzel@molgen.mpg.de>
- <20211229161119.1006-3-pmenzel@molgen.mpg.de>
- <5c333718-eaa5-b41c-e8ea-59d6e01254aa@opensource.wdc.com>
- <19f6cd93-9bd7-60dc-4471-18022bcf456c@molgen.mpg.de>
- <7b64d1c3-f798-d64b-9ee3-9669d98f4e28@opensource.wdc.com>
- <fbfd865f-c88c-6ee1-6cb9-8194e170cd3a@molgen.mpg.de>
- <c6748a52-fc8f-3309-31c2-973a9e69a7e8@opensource.wdc.com>
- <33deca4a-abed-123c-9530-3f15740a3261@molgen.mpg.de>
- <27da2f5c-ca6c-1d64-3d05-5453f11e298f@opensource.wdc.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <27da2f5c-ca6c-1d64-3d05-5453f11e298f@opensource.wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[cc: +jeff, +tejun]
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Dear Damien,
+Return value from list_lru_count() directly instead
+of taking this in another redundant variable.
 
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
+---
+ drivers/android/binder_alloc.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-Am 04.01.22 um 10:08 schrieb Damien Le Moal:
-> On 1/4/22 17:49, Paul Menzel wrote:
->> [cc: -dmitry, -guenter]
+diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
+index 340515f54498..4f221d1839f4 100644
+--- a/drivers/android/binder_alloc.c
++++ b/drivers/android/binder_alloc.c
+@@ -1049,18 +1049,14 @@ enum lru_status binder_alloc_free_page(struct list_head *item,
+ static unsigned long
+ binder_shrink_count(struct shrinker *shrink, struct shrink_control *sc)
+ {
+-	unsigned long ret = list_lru_count(&binder_alloc_lru);
+-	return ret;
++	return list_lru_count(&binder_alloc_lru);
+ }
+ 
+ static unsigned long
+ binder_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
+ {
+-	unsigned long ret;
+-
+-	ret = list_lru_walk(&binder_alloc_lru, binder_alloc_free_page,
++	return list_lru_walk(&binder_alloc_lru, binder_alloc_free_page,
+ 			    NULL, sc->nr_to_scan);
+-	return ret;
+ }
+ 
+ static struct shrinker binder_shrinker = {
+-- 
+2.25.1
 
->> Am 04.01.22 um 09:36 schrieb Damien Le Moal:
->>> On 12/31/21 16:08, Paul Menzel wrote:
->>
->>>> Am 31.12.21 um 01:52 schrieb Damien Le Moal:
->>>>> On 12/30/21 20:08, Paul Menzel wrote:
-
-[…]
-
-Jeff, Tejun, in `drivers/ata/libata-sata.c` contains a 200 ms sleep 
-delaying the boot noticeably for optimized setups, where Linux takes 
-less than 500 ms to start:
-
-```
-int sata_link_resume(struct ata_link *link, const unsigned long *params,
-                      unsigned long deadline)
-{
-[…]
-         /*
-          * Writes to SControl sometimes get ignored under certain
-          * controllers (ata_piix SIDPR).  Make sure DET actually is
-          * cleared.
-          */
-         do {
-                 scontrol = (scontrol & 0x0f0) | 0x300;
-                 if ((rc = sata_scr_write(link, SCR_CONTROL, scontrol)))
-                         return rc;
-                 /*
-                  * Some PHYs react badly if SStatus is pounded
-                  * immediately after resuming.  Delay 200ms before
-                  * debouncing.
-                  */
-                 if (!(link->flags & ATA_LFLAG_NO_DB_DELAY))
-                         ata_msleep(link->ap, 200);
-
-                 /* is SControl restored correctly? */
-                 if ((rc = sata_scr_read(link, SCR_CONTROL, &scontrol)))
-                         return rc;
-         } while ((scontrol & 0xf0f) != 0x300 && --tries);
-[…]
-}
-```
-
->>> It would indeed be great to have the default as "no delay on resume" and
->>> add the delay only for chipsets that need it. However, it is unclear
->>> which chipset need the delay, right?
->>
->> Yes, it’s unclear for what chipset (PHY?) it was added, as the git
->> history i not available in the repository, and I have not found it yet.
-
-I found the historical git archive [2], and Jeff’s commit 4effb658a0 
-from October 2003 [3] with the commit message
-
-> [libata] Merge Serial ATA core, and drivers for:
-> 
-> Intel ICH5 (production)
-> ServerWorks / Apple K2 (beta)
-> VIA (beta)
-> Silicon Image 3112 (broken!)
-> Various Promise (alpha/beta)
-
-adds the code below:
-
-```
-void sata_phy_reset(struct ata_port *ap)
-{
-[…]
-	/* wait for phy to become ready, if necessary */
-	do {
-		msleep(200);
-		sstatus = scr_read(ap, SCR_STATUS);
-		if ((sstatus & 0xf) != 1)
-			break;
-	} while (time_before(jiffies, timeout));
-[…]
-}
-```
-
-Later on Tejun refactored the code in commit d7bb4cc75759 ([PATCH] 
-libata-hp-prep: implement sata_phy_debounce()) [4], and clarified the 
-comment.
-
-(Sorry, if I mis-analyzed anything.)
-
-Jeff, Tejun, do you know, what chipsets/PHYs had trouble with being 
-queried right away? Only ata_piix?
-
->>> So I think we are stuck with switching chipsets to "no delay" one by
->>> one by testing. Once the majority of drivers are converted, we can
->>> reverse the default to be "no delay" and mark untested drivers as
->>> needing the delay.
->>
->> For easy testing, a new CLI parameter to skip the delay might be handy.
-> 
-> You mean a sysfs attribute may be ?
-> I am not sure it would help: on resume, the sysfs attributes would be
-> recreated and get the default value, not a new one.
-
-No, I mean a module parameter for `libata` like `ata_probe_timeout`. 
-Then users could test it during boot, and, if there are no issue, tell 
-us the ID.
-
-
-Kind regards,
-
-Paul
-
-
->>>> [1]: https://lore.kernel.org/linux-ide/20211227162658.11314-2-pmenzel@molgen.mpg.de/T/#m697d2121463a4c946730e6b83940e12d6d7e6700
-[2]: https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/
-[3]: 
-https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/commit/?id=4effb658a0f800e159c29a2d881cac76c326087a
-[4]: 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d7bb4cc7575929a60b0a718daa1bce87bea9a9cc

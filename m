@@ -2,84 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C443448446F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:19:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 570FE484471
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:21:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234419AbiADPTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 10:19:38 -0500
-Received: from mga14.intel.com ([192.55.52.115]:63278 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234631AbiADPTe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 10:19:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641309574; x=1672845574;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=3VPnlsuCUvPLaUETzLQLxoEOT+xx0yEw/SG76Pt1U58=;
-  b=NvVbEHhaCDNEf0rjXePHctAg7lwYCvfpz7wcAhUKZpVRdlLR4syvykOP
-   xprLcxeo+u2/CWRMuNiF2V4SkphJYQBRqcG0N4s534fGem8fM+AarpZwE
-   P3ohSV0y8rJsRHFvMz433jNMFn/3MEpNUWEYhRJu3szpQT/cJ8dHUOIap
-   xhlmO5HNVvJf1TILghOljBTcZMCpzgbUpp/yodJyEUkeETSa3pmq1RerC
-   vZjhpzfxr9Lh1PCcU86exF9/01YSs7fS8cfH/20efIM+sZsjCrRFj5oZ1
-   h9OmwAlgwqlhrqs0GsLRoTVEyCXFastZn/SiHzaHU6wxv56pUZ4T+BRTC
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="242447014"
-X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
-   d="scan'208";a="242447014"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 07:19:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
-   d="scan'208";a="526081114"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 04 Jan 2022 07:19:32 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 84D64120; Tue,  4 Jan 2022 17:19:42 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org
-Cc:     James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 1/1] KVM: arm64: vgic: Replace kernel.h with the necessary inclusions
-Date:   Tue,  4 Jan 2022 17:19:40 +0200
-Message-Id: <20220104151940.55399-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        id S233285AbiADPVu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jan 2022 10:21:50 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:49421 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232085AbiADPVt (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 10:21:49 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 0D16C200005;
+        Tue,  4 Jan 2022 15:21:47 +0000 (UTC)
+Date:   Tue, 4 Jan 2022 16:21:46 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     kyungmin.park@samsung.com, richard@nod.at, vigneshr@ti.com,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] mtd: onenand: Check for error irq
+Message-ID: <20220104162146.38c41e06@xps13>
+In-Reply-To: <20220104145854.1987853-1-jiasheng@iscas.ac.cn>
+References: <20220104145854.1987853-1-jiasheng@iscas.ac.cn>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The arm_vgic.h does not require all the stuff the kernel.h provides.
-Replace kernel.h inclusion with the list of what is really being used.
+Hi Jiasheng,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: updated commit message by dropping unrelated paragraph (Marc)
- include/kvm/arm_vgic.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+jiasheng@iscas.ac.cn wrote on Tue,  4 Jan 2022 22:58:54 +0800:
 
-diff --git a/include/kvm/arm_vgic.h b/include/kvm/arm_vgic.h
-index e602d848fc1a..bb30a6803d9f 100644
---- a/include/kvm/arm_vgic.h
-+++ b/include/kvm/arm_vgic.h
-@@ -5,9 +5,11 @@
- #ifndef __KVM_ARM_VGIC_H
- #define __KVM_ARM_VGIC_H
- 
--#include <linux/kernel.h>
-+#include <linux/bits.h>
- #include <linux/kvm.h>
- #include <linux/irqreturn.h>
-+#include <linux/kref.h>
-+#include <linux/mutex.h>
- #include <linux/spinlock.h>
- #include <linux/static_key.h>
- #include <linux/types.h>
--- 
-2.34.1
+> As it is possible that there is no suitable irq, platform_get_irq()
+> will return error number.
 
+             an
+
+> Therefore, it might be better to check it and return error if fails
+
+                                                      an        failed
+
+> to guarantee the success of the probe.
+
+in order to
+
+Actually in case of error it will not guarantee the success of the
+probe so I'm not sure what you are trying to solve here?
+
+Either the irq is mandatory and you may want to check its presence
+earlier, or it is not mandatory and you could use get_irq_optional()
+maybe.
+
+> Fixes: 26777d37216c ("mtd: Move onenand code base to drivers/mtd/nand/onenand")
+
+This Fixes tag is still wrong.
+
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+> Changelog:
+> 
+> v1 -> v2
+> 
+> * Change 1. Change the commit message.
+> ---
+>  drivers/mtd/nand/onenand/generic.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/mtd/nand/onenand/generic.c b/drivers/mtd/nand/onenand/generic.c
+> index 8b6f4da5d720..a4b8b65fe15f 100644
+> --- a/drivers/mtd/nand/onenand/generic.c
+> +++ b/drivers/mtd/nand/onenand/generic.c
+> @@ -53,7 +53,12 @@ static int generic_onenand_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	info->onenand.mmcontrol = pdata ? pdata->mmcontrol : NULL;
+> -	info->onenand.irq = platform_get_irq(pdev, 0);
+> +
+> +	err = platform_get_irq(pdev, 0);
+> +	if (err < 0)
+> +		goto out_iounmap;
+> +
+> +	info->onenand.irq = err;
+>  
+>  	info->mtd.dev.parent = &pdev->dev;
+>  	info->mtd.priv = &info->onenand;
+
+
+Thanks,
+Miquèl

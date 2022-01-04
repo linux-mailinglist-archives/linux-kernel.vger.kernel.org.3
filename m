@@ -2,66 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD66484729
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:43:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB4648472C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235913AbiADRnq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jan 2022 12:43:46 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:39485 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234403AbiADRnp (ORCPT
+        id S235922AbiADRn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 12:43:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43518 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235919AbiADRnz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 12:43:45 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id B0983200002;
-        Tue,  4 Jan 2022 17:43:41 +0000 (UTC)
-Date:   Tue, 4 Jan 2022 18:43:40 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Alexander Aring <alex.aring@gmail.com>
-Cc:     Nicolas Schodet <nico@ni.fr.eu.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        linux-wpan - ML <linux-wpan@vger.kernel.org>,
-        David Girault <david.girault@qorvo.com>,
-        Romuald Despres <romuald.despres@qorvo.com>,
-        Frederic Blain <frederic.blain@qorvo.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        kernel list <linux-kernel@vger.kernel.org>
-Subject: Re: [net-next 12/18] net: mac802154: Handle scan requests
-Message-ID: <20220104184340.0e977727@xps13>
-In-Reply-To: <CAB_54W41ZEoXzoD2_wadfMTY8anv9D9e2T5wRckdXjs7jKTTCA@mail.gmail.com>
-References: <20211222155743.256280-1-miquel.raynal@bootlin.com>
-        <20211222155743.256280-13-miquel.raynal@bootlin.com>
-        <CAB_54W6AZ+LGTcFsQjNx7uq=+R5v_kdF0Xm5kwWQ8ONtfOrmAw@mail.gmail.com>
-        <Ycx0mwQcFsmVqWVH@ni.fr.eu.org>
-        <CAB_54W41ZEoXzoD2_wadfMTY8anv9D9e2T5wRckdXjs7jKTTCA@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Tue, 4 Jan 2022 12:43:55 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BBF6C061785
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 09:43:55 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id i8so24819299pgt.13
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 09:43:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=13+cbru1EicSyFl290RL62qNhQ55+dHM2uIjjFzOwWQ=;
+        b=qiqd4ZBl5BqJHPRL1WkKqev6zYNCBKXygXrnDR+B8P5U+ncr+nyYGcNLR7VtJRMbR+
+         nu+XvQR0ZvTHDgijE3+Ephw/fASHy6xXWP0G97pDtjkfz1dKRsQLmc6PexXKZ6eOiTmr
+         wLjrAbgjf1xpI3WYhgSKqeScUoNRXJvAlDnLd371vsx/3pwzIE9KXiKfaj3I/ZdHjqA8
+         xBpOOwl5sZ+x9RvltjE0m8jfdToQt4TESxL7mb+P6lBPBE7kEi7z47aEbg/ZFbrTwxVh
+         thDTi9pkTIUf/VFrmufk4T+y2xu0pNllCtxK03hhz2Xp5v22QQLi5JXx3XoNiDlljx2j
+         eUEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=13+cbru1EicSyFl290RL62qNhQ55+dHM2uIjjFzOwWQ=;
+        b=mMsDknyLKBcCf5dGTfWHl2w+YNB2Md9mfKQmfCzIjEhkj/UMV/kJWPnEO7IydlsxpK
+         bvQH396VXO0zn+VA2AmDjciPNC7ky7mXpknHqGzKtz6jtgtEnjfQaj9Rx4UsdQmw1VxF
+         Y0AIGIlHA/N/eUs0IG0Wrk108fhfFBZd5TzwsEY1MFj2PhB6qVvGMsz9yWHxPbArWaKS
+         KxXbYAEWuPLllYyzRK5JhgUKgw/0BpHgTe4PY42mBptjMl2/M8ouJHTce5s8LkoVtI7v
+         6jyhUTUf66OCjQS+RWhBDm3d/y2R2UzCBUIH524q4vfofAbLb1/MZcFS98Q4qUIBWae3
+         jwKg==
+X-Gm-Message-State: AOAM532TxO0IHyqkcElYdQz+z+VCSVKE1yCf6EdDv+8+ANsZahMB4puo
+        SYaZopfAWUqalQ/q7WeX3mPzhw==
+X-Google-Smtp-Source: ABdhPJzQtrrXhdr9JNHtClHOyyxM1wCawkxYoqgHsdkj3QcxdAXEJm9cAZOEh3vO62LsqFUjGuIFog==
+X-Received: by 2002:a63:ba47:: with SMTP id l7mr46031570pgu.75.1641318234513;
+        Tue, 04 Jan 2022 09:43:54 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id n14sm34881764pgd.80.2022.01.04.09.43.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 09:43:53 -0800 (PST)
+Date:   Tue, 4 Jan 2022 17:43:50 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com
+Subject: Re: [PATCH v3 kvm/queue 05/16] KVM: Maintain ofs_tree for fast
+ memslot lookup by file offset
+Message-ID: <YdSHViDXGkjz5t/Q@google.com>
+References: <20211223123011.41044-1-chao.p.peng@linux.intel.com>
+ <20211223123011.41044-6-chao.p.peng@linux.intel.com>
+ <YcS5uStTallwRs0G@google.com>
+ <20211224035418.GA43608@chaop.bj.intel.com>
+ <YcuGGCo5pR31GkZE@google.com>
+ <20211231022636.GA7025@chaop.bj.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211231022636.GA7025@chaop.bj.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexander,
+On Fri, Dec 31, 2021, Chao Peng wrote:
+> On Tue, Dec 28, 2021 at 09:48:08PM +0000, Sean Christopherson wrote:
+> >KVM handles
+> > reverse engineering the memslot to get the offset and whatever else it needs.
+> > notify_fallocate() and other callbacks are unchanged, though they probably can
+> > drop the inode.
+> > 
+> > E.g. likely with bad math and handwaving on the overlap detection:
+> > 
+> > int kvm_private_fd_fallocate_range(void *owner, pgoff_t start, pgoff_t end)
+> > {
+> > 	struct kvm_memory_slot *slot = owner;
+> > 	struct kvm_gfn_range gfn_range = {
+> > 		.slot	   = slot,
+> > 		.start	   = (start - slot->private_offset) >> PAGE_SHIFT,
+> > 		.end	   = (end - slot->private_offset) >> PAGE_SHIFT,
+> > 		.may_block = true,
+> > 	};
+> > 
+> > 	if (!has_overlap(slot, start, end))
+> > 		return 0;
+> > 
+> > 	gfn_range.end = min(gfn_range.end, slot->base_gfn + slot->npages);
+> > 
+> > 	kvm_unmap_gfn_range(slot->kvm, &gfn_range);
+> > 	return 0;
+> > }
+> 
+> I understand this KVM side handling, but again one fd can have multiple
+> memslots. How shmem decides to notify which memslot from a list of
+> memslots when it invokes the notify_fallocate()? Or just notify all
+> the possible memslots then let KVM to check? 
 
-> I see that beacons are sent out with
-> "local->beacon.mhr.fc.dest_addr_mode = IEEE802154_NO_ADDRESSING;"
-> shouldn't that be a broadcast destination?
+Heh, yeah, those are the two choices.  :-)
 
-In the case of a beacon, 7.3.1.2 Beacon frame MHR field indicate:
+Either the backing store needs to support registering callbacks for specific,
+arbitrary ranges, or it needs to invoke all registered callbacks.  Invoking all
+callbacks has my vote; it's much simpler to implement and is unlikely to incur
+meaningful overhead.  _Something_ has to find the overlapping ranges, that cost
+doesn't magically go away if it's pushed into the backing store.
 
-	When the Frame Version field is 0b00–0b01:
-		— The Destination Addressing mode field shall be set to
-		indicated that the Destination Address and Destination
-		PAN ID fields are not present.
-
-So I think the NO_ADDRESSING choice here is legit. The destination
-field however is useful in the Enhanced beacon frame case, but that's
-not yet supported.
-
-Thanks,
-Miquèl
+Note, invoking all notifiers is also aligned with the mmu_notifier behavior.

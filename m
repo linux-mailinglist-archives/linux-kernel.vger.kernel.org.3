@@ -2,176 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89DAC483E70
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 09:46:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37A8F483E72
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 09:49:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234264AbiADIqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 03:46:03 -0500
-Received: from de-smtp-delivery-102.mimecast.com ([194.104.111.102]:36274 "EHLO
-        de-smtp-delivery-102.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232894AbiADIqC (ORCPT
+        id S234272AbiADItm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 03:49:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60650 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232894AbiADItl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 03:46:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1641285960;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=zig29lI0FBli9i07olSYzSOYhKOSKiw65K/bW14c/qA=;
-        b=anVYUCHdkfISnLZZz9K/x5+MFSaGtFuITVffy9kwCy+wziJZzGuuwUpVSnLWVl7HmmwVVm
-        X6TeGQcf7kEutCsbHLh76VX2FAdem5v6QvlzOhr4ypi+YzPnwawHl59WPx73JZZesEv7TD
-        LUqa9fT0psj5xEEjOaoIh25T03QLD5w=
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com
- (mail-db5eur01lp2059.outbound.protection.outlook.com [104.47.2.59]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-24-t3HJhfBfOmKOvcbqBXHbAA-1; Tue, 04 Jan 2022 09:45:59 +0100
-X-MC-Unique: t3HJhfBfOmKOvcbqBXHbAA-1
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iItbHmjXrUL3FCXQ+Uow5VCtgmP0N8kaRb2bBh3bwXoxtOnAcDQIvc3ga/ev9oCoZ7eTjG56QNuocAmAOJAmTU5LpW6GjrimP8W4Dhf8tTLzaXi9y5ICdH+521jm9uhg5nl2uOr19agBQpcyeL6/6aYK7BCuQhAUJLxcwnYNP9yvrBJE48q4Poei9jC5NYYQLpEVoeozEpVu0h+nj/CPa0vqRuUd4Kaj03jxSERNt6q0zerskP7a4Lfny2bhKiR+d8hk67cSFrswaz1rDllT7StrxDebxIs40884ywDCCrK+xWnwmQlWoZv+Bpql0+zoiA2LSBtj/7YxisaqZcQmUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zig29lI0FBli9i07olSYzSOYhKOSKiw65K/bW14c/qA=;
- b=DfzCodLg3azEFy6mavgpOHRojIX7B0m1PXsleSRpKI826tPzIvT6Jn8hUQaU47p04BEN7tTipW/v5zqCchWe01qHdFNui/or8L7i0WzW1xsGcTMZHvBFbinoOcb6XXvO+0lpPoLUG9eFQkD44pjrhwBJi09YM3MSMf14B4UYSUdSwCryzAZb7dwyeMi3qntJ/aOEGKh7Gy7RPtCozLcPsYE6pO7GewBuNgxdcGqPKzCbKVV9e14161kFgeFbeswKC0NAblDikcGdE7CXr6N7th0cGEO8GZqQLCqz9BN7V+zu3bV31X9g4UFo/TnllGaHPj67vFCjh4yVzZR7RUC1bQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR04MB5600.eurprd04.prod.outlook.com (2603:10a6:803:e7::16)
- by VI1PR04MB5741.eurprd04.prod.outlook.com (2603:10a6:803:df::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Tue, 4 Jan
- 2022 08:45:58 +0000
-Received: from VI1PR04MB5600.eurprd04.prod.outlook.com
- ([fe80::5951:a489:1cf0:19fe]) by VI1PR04MB5600.eurprd04.prod.outlook.com
- ([fe80::5951:a489:1cf0:19fe%6]) with mapi id 15.20.4844.016; Tue, 4 Jan 2022
- 08:45:58 +0000
-Message-ID: <a3df8bf3-d044-b7bb-3383-cd5239d6d4af@suse.com>
-Date:   Tue, 4 Jan 2022 09:46:06 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Content-Language: en-US
-To:     Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Cc:     "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        lkml <linux-kernel@vger.kernel.org>
-From:   Jan Beulich <jbeulich@suse.com>
-Subject: [PATCH] xen/x86: obtain upper 32 bits of video frame buffer address
- for Dom0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AS9PR06CA0035.eurprd06.prod.outlook.com
- (2603:10a6:20b:463::11) To VI1PR04MB5600.eurprd04.prod.outlook.com
- (2603:10a6:803:e7::16)
+        Tue, 4 Jan 2022 03:49:41 -0500
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70E9C061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 00:49:40 -0800 (PST)
+Received: by mail-vk1-xa2f.google.com with SMTP id l68so4240751vkh.4
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 00:49:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=U03uBIxPfThiblBP6Q6lubnyc+HItcY5qVTa/C4uzLI=;
+        b=eQ4avva1R16F3yHgnpKQvE4j14VvfOcSQDb+hKSbkH6o9dsIgHPtqsvdS5l81wF08A
+         eJwAyXoj4/nYwy+HEewSXlLcmPG2pHtaKJuRQpaNNk1KS6hIOWllXwHRS5viFr9glnWJ
+         ZSAk3I9nlyNLU2rNQhIsbjL9ZzfMmCUZI2JN/eW3+ZAnM8gvXTvEwEcnfwFRjOlmmf0E
+         7p/mJkkaf+yIUBhxo0sGDiE7ygpEyI5LyzUPSOlcjHOTCpJfeJIRTqca/mn26npSTECg
+         7VZDBjhojVVAQ/bg9kJRAFdBkbGV7qPa9JSsOUFbtW4Q/dTfTvZdRJvk4d9HwRBTQcMh
+         xFWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=U03uBIxPfThiblBP6Q6lubnyc+HItcY5qVTa/C4uzLI=;
+        b=DLnMa4g/RUIK+rr1EPoCocebd9Vg+8D+OPcYn8t9NzxiGNjMjX3MKd9lr9QqDcBHJ2
+         4yK15WtG8Ollnb6Nht9rwH4d70SnFgH5lf5TBhuhLR7V0pC2912HncxMPX8GdfqsIDbC
+         s1/Ss39kGmFiys84nAO4cBeF200iN8p4NPUr/Y64g/LSlMQVMGQqistA1B5o7WyliEoP
+         l+3NRBAApwaV8kyEy3zP0Ibg5VEwk7GphfwEya3or0u5L7OsUfbrEsZK4F8vDAUuHLgU
+         F4xNzKepR5bzNWMfG3nF4jXFVIUWzswY890DY7H1wIHjz/cKf+qXg+rnn2b+w70V61tk
+         Z3Dw==
+X-Gm-Message-State: AOAM5329YvlcX4wVRZSD576Vw7zlXhZpWWeQZUtWReduVhvTnO3SeYgE
+        gSQVd0g36avBGLmENsDxRbAgTVQ+kH7n0EFog8s=
+X-Google-Smtp-Source: ABdhPJzJbRZpqzJ+OprjZKJ7D/YnnV/A3Xf3wA8XYGB6ouBps8ht6RCNCO+bAE46HG95kMVjHbp4mYWf0wmuW00YKHQ=
+X-Received: by 2002:ac5:cb72:: with SMTP id l18mr16328117vkn.1.1641286179786;
+ Tue, 04 Jan 2022 00:49:39 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a21f6fc2-9f83-453f-47aa-08d9cf5ea0a7
-X-MS-TrafficTypeDiagnostic: VI1PR04MB5741:EE_
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-Microsoft-Antispam-PRVS: <VI1PR04MB57417F83F16D85A2DBD60C38B34A9@VI1PR04MB5741.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4941;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UbB91Ybudgq3IZF1Y7uwEMa1bVnXc9K79ttsAzPcFxc6JZYw5u1T9a8plhvl8EgUZxVaZTLIShmGfQ3e2QK1heKs/lwXSn+Vw2ZeEYcOafi42vltpSaLTf7s5kq3eGmCytgfD7hie9l1/ZUH/lxlwV0oXMG5Iq1Bc/bJR09QQghzh7bznrqsgS6ZnCghfzSQu2euaDnGO71JmI3Pm5d0tmC1U5AiP8OnwuGSPAdhDDg0fwV3pSoDZx78CsuIPeJrtJwfYt03E/z8K7yK4fKcHXQ6fvZ6r576k0uqZV4dGtcJi8hn+BOHTwnixfyvFKOA0nvYop8c7FPfcB6ZOpjWQXfPeilTv1l8iyChoL5d4DlqnozsqbZfsWc/lHGGkXV7zBAb7gCzRe3saUMcZ6XD/aDcwdUIuGzweeImLJGoGU1460V4vgOrORBBLGcvfIzPX5yDNqnwNOBw3tkBvPvI9qaWvtr+TnzODnT6OBIKvBairq6z8fIT13F/CqXUVY2Zf59lPTZigpi1RKXbZ4cb3ClqMlJqSJMChZ8Jrr6LJz+uiWwHxNDq1i/VbrbKgFukc4jDG0D7iNu3VAQzat9fRddcgQ5h3BqakiBRNJwkZ/vGqEEE495OGGaSQatSh8l0FFLgRAJb3OvID3HYZ9QBj3aUbW8+IqPNOn0HXw1BHF0yF+XIdHikZGNFDSbS0bHo5RBZ5DkVJ4PuA48vWslwlpIZ+3K9jZDVYsOCT1dBjtw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5600.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(2616005)(8676002)(6512007)(6486002)(66476007)(38100700002)(66556008)(83380400001)(5660300002)(26005)(54906003)(86362001)(66946007)(110136005)(36756003)(31686004)(4326008)(186003)(2906002)(31696002)(8936002)(508600001)(316002)(6666004)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Ulh5WWZoeTFKRUJteHpFRVZQTWhrWk1PUUd0N094UEJwc1lldzBLZXpUZk5n?=
- =?utf-8?B?aFlxNnJMK1NvR0dJWXVrbUZYdzRKZWJmRVI4UE1sRXhrcE8rdGVHVVB1Y3Rv?=
- =?utf-8?B?M01qbDJ3NytRTERtZWNRZENaQ0JEYzIwTERja0RSc1R1M05IRHZrMEZyTGY1?=
- =?utf-8?B?M1JYWW04VVc4bnE3N1k3cTY0emdwR0pMMlMvUTJzV3R2RkxBQTZoTnJBelRL?=
- =?utf-8?B?OVl1K296eTdZenhOV2hmZW5JT1czMkNRTmttcjNKMzlUb2w3dVB5dlNkVmxt?=
- =?utf-8?B?UlR0RkhnU0pCS1JkOUNzRlhlSFZjZGM4NXZzUE9yL3pmNHJkdWJGdTcxTml2?=
- =?utf-8?B?b0luYk1NdVdMSUJmd0lFbUk0ZjNNNEp1UG5lN2NpM2xRVkJCTG8vQUF5SE9B?=
- =?utf-8?B?YmRQaE16MUdiWndML1lscWRsQmZlVmRWTUdCRnQvRVBOUEYvS0M1cmQzenJz?=
- =?utf-8?B?eng2MnRVMm5Kbyt0T0tLcXhjc0tIWXRSYWRLV2cxY2JpdTMvcDZ0TE0wQnNK?=
- =?utf-8?B?cGtJdFU3WlFld3hLV3pHUHNpTFhoYS9lM3J6YU1lVkxLWS95RHNEWUJ5SlVz?=
- =?utf-8?B?STZPc3RoV0JFbGNPcWxydUYrSjdVd0FuMFZKbFdDbkphUGVuN2JrcEJpcHAx?=
- =?utf-8?B?ci9zQUwybHgvbVY0Y1Y4ZHpnME1lTHJMbjRLQmo0aU93bGdrMkJDSW5tSjFK?=
- =?utf-8?B?b2JMZzlDcUFDUWUrNjZRTE9ZOG1KOHd4RnFkR1h3dmVnSUNrRzVEMTZ4VWtM?=
- =?utf-8?B?aGVwNytqelhUSWJOcE4wdi9sYzhaUGxOUXFhU2VGVi95VEpKcmtqenJKNmJB?=
- =?utf-8?B?a1JWVmR3d0J1anlmQmhyNDFIT3BLZEIzL0o3dFBzaXh1M201Y1ZjSVRpbTFR?=
- =?utf-8?B?NXJiT2RDaG4xcmRLRGtIcnpYQXhZYy9hSjk2Tzc0UUxDUEFEcDJtbThBV3R2?=
- =?utf-8?B?RFp4MGZlbkU4M0xuUEx5cU9xQmw4VXdYMFdydlhIc0ZyVmY0VmpPTlQ0dkhz?=
- =?utf-8?B?ZHZwTlNLR2V4V1BtRU0zRlAvNk1tQ0dmZldLOTRaSzJmSFN2R2hXRWdwOEl2?=
- =?utf-8?B?UTZDYmZpRzU4czFFVUpENEFrQTBBaUFMTmJVaEg2RmdNdmRacXY0MVFIMVlx?=
- =?utf-8?B?Mnl6YWpFeFJPdEZyb2tzOXpoMFNDN0h4Y090YlR6dkdTM0pvemswNzlUcVdQ?=
- =?utf-8?B?K0lFZTNtU3JjaVBSN1pwSTJrampzVUZXcGxMdXdiZStvS2ZVVFRQYlExd3ln?=
- =?utf-8?B?VGEyV1JRWlpMVThRV2dZRlNORDVjVm54SGJjNGNYZW5lcExKRGpYV2x3VnFB?=
- =?utf-8?B?SHlOVjB4Unk0QmE5enJjWDY2SUE2dytkMUNWTUlrTVJDR2tSSlBLUmpHeGEv?=
- =?utf-8?B?cjBzUWlYVDV1ejVqZ2dyUmV6UDVwSHRZTjB6MmhybDlnOXpBWml6Vm85Qzll?=
- =?utf-8?B?dk82eDdEemluUlE4V0NLalN5TWEreVBBTmJPN2ViNEcxb25sbklKdW53dHVL?=
- =?utf-8?B?YzNPNWxaMXlNVHZzMlFOOVVQemU2SkhLUS9oVDhzeElKOENzVERZMEM3N2JK?=
- =?utf-8?B?RFFmR3lpVXU4M2s1SklVRGtFelZUanFtQ3RweHBLQzhjUkpxZzNpcExTanJS?=
- =?utf-8?B?cjlzcTlrS3RzdGMrZmgwTUUyVEJyQUkvZVdrWWYvWlRjMmxkakgzWFdUTUp6?=
- =?utf-8?B?dWMxNXVMN0Vrb0xxNFRzdldKT0d5ZW9hUHdpQTZKa1FVZDdaMXRhNG9qdXZB?=
- =?utf-8?B?MlNVTlloaDR3SE5tMm5vRG1HZkY2TUVGN1VaQ05ValZXYlh2N1ZDbGxGaXdq?=
- =?utf-8?B?cTJJS2RYdjltOGU4Zk9VeDVTUU5tTUxSY2NzWTRTMlMrdjhRUitJbmdGVXpE?=
- =?utf-8?B?cHVwM2UxLzdWa2MxZmFNNW0rSFRYK3ZsU0txWEkxbTdZV1BlK05rSGZBb2Nu?=
- =?utf-8?B?aUpTSXBnVkZ3aXZNV0ltZFloT1V4eWZoOHptb2N6alh5aTdPNXhFMDl2NW1I?=
- =?utf-8?B?a1MrR095TUxaNjExaHdJczdwRzFyeWxNQ2N1eU54SWx6VGxHR0pWaWJoYXZW?=
- =?utf-8?B?OEV3ZnlrYTNpN3pIWi9JOUNOVTJvYkRjbWsxRnc4TytxR2w3UWRzK0NiWnkz?=
- =?utf-8?B?cU53K0hqay9pQVVzam0yVWdqbjNYSTE3V0M3SmZNdlgxamU2RVlkaFpnT2Y4?=
- =?utf-8?Q?W3LWpW1gsmg29owOOuoki+s=3D?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a21f6fc2-9f83-453f-47aa-08d9cf5ea0a7
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5600.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jan 2022 08:45:57.9908
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: natWC3ljDtGmHAP882L/X1rrI/qShyae1aL1wGYqhPn+xJ+qaJ1N3nnobIEFaTIlBEfErNC7EmpKVNdXJo4g0A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5741
+References: <20211207124002.59877-1-liuqi115@huawei.com> <20211213183851.GD12405@willie-the-truck>
+ <20211214092657.5b9c26b4e3852602eced4fda@kernel.org> <CAAgTQPUKqFn9_ENKbfJkFjT3v9L2NiFAY2xvULEj_6wguqWYNg@mail.gmail.com>
+ <f4552c3e-8f1a-bef1-9396-39aa2405b486@huawei.com> <CAAgTQPWAK==cYPKeYNGE7nPGh0Y7Py4TcUoMPz76h15YNBNsLQ@mail.gmail.com>
+ <CAAgTQPWomoiGdVJxwYBmXOj7RegHM4TSa2+yKVTQFhBFg8PtLg@mail.gmail.com> <20220104113559.7dd1ff2cb575f62e0b01fb47@kernel.org>
+In-Reply-To: <20220104113559.7dd1ff2cb575f62e0b01fb47@kernel.org>
+From:   Jianhua Liu <jianhua.ljh@gmail.com>
+Date:   Tue, 4 Jan 2022 16:49:29 +0800
+Message-ID: <CAAgTQPUL-DPTD2-sPQzYB+Eoko7aw40-bhyE_9Kjd90qowQBfw@mail.gmail.com>
+Subject: Re: [PATCH v5] arm64: kprobe: Enable OPTPROBE for arm64
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     "liuqi (BA)" <liuqi115@huawei.com>, Will Deacon <will@kernel.org>,
+        Linuxarm <linuxarm@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>,
+        "Zengtao (B)" <prime.zeng@hisilicon.com>, robin.murphy@arm.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The hypervisor has been supplying this information for a couple of major
-releases. Make use of it. The need to set a flag in the capabilities
-field also points out that the prior setting of that field from the
-hypervisor interface's gbl_caps one was wrong, so that code gets deleted
-(there's also no equivalent of this in native boot code).
+On Tue, Jan 4, 2022 at 10:36 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>
+> Hi Jianhua,
+>
+> On Mon, 3 Jan 2022 17:03:33 +0800
+> Jianhua Liu <jianhua.ljh@gmail.com> wrote:
+>
+> > Hi Qi,
+> > I have tested your patch on UNISOC s9863a.
+> > Test case "kprobe_example & kretprobe_example" is OK.
+> >
+> > Two point:
+> > 1. backtrace is not perfect.
+> >    optprobe_common does not saved frame pointer,
+> >    backtrace lacks two calls.
+> > such as for dup_mm: lack copy_process-->dup_mm
+> > dup_mm backtrace from your patch:
+> > [  832.387066] CPU: 0 PID: 296 Comm: sh Not tainted 5.16.0-rc5+ #8
+> > [  832.387078] Hardware name: Spreadtrum SP9863A-1H10 Board (DT)
+> > [  832.387083] Call trace:
+> > [  832.387086]  dump_backtrace+0x0/0x1e0
+> > [  832.387103]  show_stack+0x24/0x30
+> > [  832.387112]  dump_stack_lvl+0x68/0x84
+> > [  832.387123]  dump_stack+0x18/0x34
+> > [  832.387131]  handler_pre+0x40/0x50 [kprobe_example]
+> > [  832.387143]  opt_pre_handler+0x84/0xc0
+> > [  832.387154]  optprobe_optimized_callback+0xec/0x164
+> > [  832.387164]  optprobe_common+0x70/0xc4
+> > [  832.387173]  kernel_clone+0x98/0x440
+> > [  832.387182]  __do_sys_clone+0x54/0x80
+> > [  832.387191]  __arm64_sys_clone+0x2c/0x40
+> > [  832.387199]  invoke_syscall+0x50/0x120
+> > [  832.387208]  el0_svc_common.constprop.0+0x4c/0xf4
+> > [  832.387217]  do_el0_svc+0x30/0x9c
+> > [  832.387225]  el0_svc+0x20/0x60
+> > [  832.387235]  el0t_64_sync_handler+0xe8/0xf0
+> > [  832.387242]  el0t_64_sync+0x1a0/0x1a4
+> >
+> >
+> > dup_mm backtrace from other:
+> > [  173.352294] CPU: 6 PID: 309 Comm: sh Not tainted 5.16.0-rc5+ #19
+> > [  173.352301] Hardware name: Spreadtrum SP9863A-1H10 Board (DT)
+> > [  173.352304] Call trace:
+> > [  173.352307]  dump_backtrace+0x0/0x1d4
+> > [  173.352319]  show_stack+0x18/0x24
+> > [  173.352326]  dump_stack_lvl+0x68/0x84
+> > [  173.352333]  dump_stack+0x18/0x34
+> > [  173.352338]  handler_pre+0x38/0x48 [kprobe_example]
+> > [  173.352347]  opt_pre_handler+0x74/0xb0
+> > [  173.352354]  optimized_callback+0x108/0x130
+> > [  173.352361]  optinsn_slot+0x258/0x1000
+> > [  173.352366]  dup_mm+0x4/0x4b0
+> > [  173.352373]  copy_process+0x1284/0x1360
+> > [  173.352378]  kernel_clone+0x5c/0x3c0
+> > [  173.352384]  __do_sys_clone+0x54/0x80
+> > [  173.352390]  __arm64_sys_clone+0x24/0x30
+> > [  173.352396]  invoke_syscall+0x48/0x114
+> > [  173.352402]  el0_svc_common.constprop.0+0x44/0xec
+> > [  173.352408]  do_el0_svc+0x24/0x90
+> > [  173.352413]  el0_svc+0x20/0x60
+> > [  173.352420]  el0t_64_sync_handler+0xe8/0xf0
+> > [  173.352427]  el0t_64_sync+0x1a0/0x1a4
+>
+> Is the second one with your patch?
+Yes, the second one is from my patch.
 
-Signed-off-by: Jan Beulich <jbeulich@suse.com>
+Thanks,
+Jianhua
 
---- a/arch/x86/xen/vga.c
-+++ b/arch/x86/xen/vga.c
-@@ -63,13 +63,17 @@ void __init xen_init_vga(const struct do
- 		}
- 
- 		if (size >= offsetof(struct dom0_vga_console_info,
--				     u.vesa_lfb.gbl_caps)
--		    + sizeof(info->u.vesa_lfb.gbl_caps))
--			screen_info->capabilities = info->u.vesa_lfb.gbl_caps;
--		if (size >= offsetof(struct dom0_vga_console_info,
- 				     u.vesa_lfb.mode_attrs)
- 		    + sizeof(info->u.vesa_lfb.mode_attrs))
- 			screen_info->vesa_attributes = info->u.vesa_lfb.mode_attrs;
-+
-+		if (size >= offsetof(struct dom0_vga_console_info,
-+				     u.vesa_lfb.ext_lfb_base)
-+		    + sizeof(info->u.vesa_lfb.ext_lfb_base)
-+		    && info->u.vesa_lfb.ext_lfb_base) {
-+			screen_info->ext_lfb_base = info->u.vesa_lfb.ext_lfb_base;
-+			screen_info->capabilities |= VIDEO_CAPABILITY_64BIT_BASE;
-+		}
- 		break;
- 	}
- }
---- a/include/xen/interface/xen.h
-+++ b/include/xen/interface/xen.h
-@@ -722,6 +722,9 @@ struct dom0_vga_console_info {
- 			uint32_t gbl_caps;
- 			/* Mode attributes (offset 0x0, VESA command 0x4f01). */
- 			uint16_t mode_attrs;
-+			uint16_t pad;
-+			/* high 32 bits of lfb_base */
-+			uint32_t ext_lfb_base;
- 		} vesa_lfb;
- 	} u;
- };
-
+>
+> >
+> > 2. The reserve memory "OPT_SLOT_SIZE - PAGE_SIZE"  is waste.
+> >    kernel/kprobe.c used only one PAGE_SIZE slot memory.
+>
+> Good catch!
+> Qi, can you make an array (or bit map) of usage flags and
+> manage the reserved memory?
+>
+> #define OPT_INSN_PAGES (OPT_SLOT_SIZE/PAGE_SIZE)
+> static bool insn_page_in_use[OPT_INSN_PAGES];
+>
+> void *alloc_optinsn_page(void)
+> {
+>         int i;
+>
+>         for (i = 0; i < OPT_INSN_PAGES; i++)
+>                 if (!insn_page_in_use[i])
+>                         goto found;
+>         return NULL;
+> found:
+>         insn_page_in_use[i] = true;
+>         return (void *)((unsigned long)optinsn_slot + PAGE_SIZE * i);
+> }
+>
+> void free_optinsn_page(void *page)
+> {
+>         unsigned long idx = (unsigned long)page - (unsigned long)optinsn_slot;
+>
+>         WARN_ONCE(idx & (PAGE_SIZE - 1));
+>         idx >>= PAGE_SHIFT;
+>         if (WARN_ONCE(idx >= OPT_INSN_PAGES))
+>                 return;
+>         insn_page_in_use[idx] = false;
+> }
+>
+> Thank you,
+>
+>
+>
+>
+> --
+> Masami Hiramatsu <mhiramat@kernel.org>

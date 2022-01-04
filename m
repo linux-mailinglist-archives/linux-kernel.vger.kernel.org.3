@@ -2,83 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDDB948424A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:23:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0CA48424D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:24:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231764AbiADNX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 08:23:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38610 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbiADNX1 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 08:23:27 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD49C061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 05:23:26 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id i3so93558459ybh.11
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 05:23:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=QTfSkYnv+xrG5qOtbv6Eb3qiI24wrwM8Z5gtVm3UF44=;
-        b=YAosn1U6OBB2+RabM3ynHbSV1zNV6fOnKEuXq+LZmbojyKWXfeAqGzNhPnk4DduSmb
-         SGZNTodS11iKNVJLgrFAAet7d7J3uLWB+Y/1WJAbc1B5qAgK5eI2/DO8F5xydDID4srX
-         z5pvwWhekxmN6wLyzyweabi3R+0OMpAz+JgJnZx02HogOgukELdgU3WxR/T2+JX7rXIW
-         L09DAepzomaySCpUxI/+auiTeppSZeBE3jTrlmCYAkrAs364/YltbsqzgHCN9BHXNRBq
-         1McqLTADzjRZnnYF/c1moPfkXU8O9+lpwkl6gwd8PrMD+QzIH1Fb/Jhz+bRFi5C/OKp5
-         J2wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=QTfSkYnv+xrG5qOtbv6Eb3qiI24wrwM8Z5gtVm3UF44=;
-        b=xN0sUaQButI2Vt9GO3C2jAm7ghifmRxPZoRjQn64TvzkmrVIC1feyHJeCphEP2gdkF
-         /BbidoIG+waECYn++cv6KB6vZM1wiY3RHfuc2x6d1ls4n+o2Q5N5QvCrc5C8amxpHyPN
-         ZT7OVQTHmavw8405WUzUNxNrXMW2QMVso4+6JeVb3pgNPLX0TE/MXHKIROQJiis+hhXI
-         6AhKMgghLvT/0kDeIFw9hkz3zBIodBeM3624C4cqWyNoxfH7xTz3KB3HelCMvbrCpbOC
-         T4YYFvy89tUbvOPdBFPTSqNt0cemhYkcDnVk8ZQSCvpqDw5oytEesUhW6CjmG9cSSyfT
-         eU0Q==
-X-Gm-Message-State: AOAM5324RBLnrNzDcEHYW+0omehIF2npMvl83fIRmfuF4PSAe1rgLTnb
-        E+p6PjGO5WzUc6VxE0mjBXaFhOAhbO7CFec9PAs=
-X-Google-Smtp-Source: ABdhPJzw8vOsyB+CgQxYuTM54xxOH5PD4+L0k1fSQqulAgwip0hTADtcw10N8lpHdIdoNUnBHG6OsN1AHWEyLXyjO2s=
-X-Received: by 2002:a25:c6c9:: with SMTP id k192mr60911814ybf.145.1641302605724;
- Tue, 04 Jan 2022 05:23:25 -0800 (PST)
+        id S232304AbiADNYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 08:24:10 -0500
+Received: from foss.arm.com ([217.140.110.172]:59170 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229884AbiADNYJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 08:24:09 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3304C1FB;
+        Tue,  4 Jan 2022 05:24:09 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.9.1])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 91CD63F774;
+        Tue,  4 Jan 2022 05:24:07 -0800 (PST)
+Date:   Tue, 4 Jan 2022 13:24:02 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>, maz <maz@kernel.org>,
+        Will Deacon <will@kernel.org>, paulmck <paulmck@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        rcu <rcu@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+        kvmarm@lists.cs.columbia.edu,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: Possible nohz-full/RCU issue in arm64 KVM
+Message-ID: <YdRJA79bs1Im7h01@FVFF77S0Q05N>
+References: <d80e440375896f75d45e227d40af60ca7ba24ceb.camel@redhat.com>
+ <YbyO40zDW/kvUHEE@FVFF77S0Q05N>
+ <20211220161014.GC918551@lothringen>
 MIME-Version: 1.0
-Received: by 2002:a05:7010:8ea1:b0:1f3:2574:1e5a with HTTP; Tue, 4 Jan 2022
- 05:23:25 -0800 (PST)
-Reply-To: mahamedaru016@gmail.com
-From:   "MESSAGE  From Mr. Mohamed Aru" <mohaabudu1@gmail.com>
-Date:   Tue, 4 Jan 2022 14:23:25 +0100
-Message-ID: <CAFLmopuL+zN4iFoxNKFPcNi6USyJW+jVaXPDJr-ZqUs8ZajeQQ@mail.gmail.com>
-Subject: CONTACT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211220161014.GC918551@lothringen>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Friend,
+On Mon, Dec 20, 2021 at 05:10:14PM +0100, Frederic Weisbecker wrote:
+> On Fri, Dec 17, 2021 at 01:21:39PM +0000, Mark Rutland wrote:
+> > On Fri, Dec 17, 2021 at 12:51:57PM +0100, Nicolas Saenz Julienne wrote:
+> > > Hi All,
+> > 
+> > Hi,
+> > 
+> > > arm64's guest entry code does the following:
+> > > 
+> > > int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+> > > {
+> > > 	[...]
+> > > 
+> > > 	guest_enter_irqoff();
+> > > 
+> > > 	ret = kvm_call_hyp_ret(__kvm_vcpu_run, vcpu);
+> > > 
+> > > 	[...]
+> > > 
+> > > 	local_irq_enable();
+> > > 
+> > > 	/*
+> > > 	 * We do local_irq_enable() before calling guest_exit() so
+> > > 	 * that if a timer interrupt hits while running the guest we
+> > > 	 * account that tick as being spent in the guest.  We enable
+> > > 	 * preemption after calling guest_exit() so that if we get
+> > > 	 * preempted we make sure ticks after that is not counted as
+> > > 	 * guest time.
+> > > 	 */
+> > > 	guest_exit();
+> > > 	[...]
+> > > }
+> > > 
+> > > 
+> > > On a nohz-full CPU, guest_{enter,exit}() delimit an RCU extended quiescent
+> > > state (EQS). Any interrupt happening between local_irq_enable() and
+> > > guest_exit() should disable that EQS. Now, AFAICT all el0 interrupt handlers
+> > > do the right thing if trggered in this context, but el1's won't. Is it
+> > > possible to hit an el1 handler (for example __el1_irq()) there?
+> > 
+> > I think you're right that the EL1 handlers can trigger here and won't exit the
+> > EQS.
+> > 
+> > I'm not immediately sure what we *should* do here. What does x86 do for an IRQ
+> > taken from a guest mode? I couldn't spot any handling of that case, but I'm not
+> > familiar enough with the x86 exception model to know if I'm looking in the
+> > right place.
+> 
+> This is one of the purposes of rcu_irq_enter(). el1 handlers don't call irq_enter()?
 
-I am Mr. Mohamed Aru. I am working with one of the prime banks in
-Burkina Faso. I have a business proposal which concerns the transfer
-of. $25,500,000.00 (Twenty Five Million Five Hundred Thousand US
-Dollars). into a foreign account. Everything about this transaction
-shall be legally done without any problem.
+Due to lockep/tracing/etc ordering, we don't use irq_enter() directly and
+instead call rcu_irq_enter() and irq_enter_rcu() separately. Critically we only
+call rcu_irq_enter() for IRQs taken from the idle thread, as this was
+previously thought to be the only place where we could take an IRQ from an EL1
+EQS.
 
-Further details of the transfer will be forwarded to you as soon as i
-receive your response. Please Reply me in my privet E-mail.
-(mahamedaru016@gmail.com) If you are willing to work with me, send me
-immediately the information listed below.
+See __el1_irq(), __enter_from_kernel_mode(), and __exit_to_kernel_mode() in
+arch/arm64/kernel/entry-common.c. The latter two are largely analogous to the
+common irqentry_enter9) and irqentry_exit() helpers in kernel/entry/common.c.
 
-Your   Name=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6
-Your   Nationality=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6
-Your  Age=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=
-=80=A6
-Your  Occupation=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6
-Your Mobile Telephone Line=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6
-Your Address=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=
-=E2=80=A6=E2=80=A6=E2=80=A6
-Thanks
-Mr. Mohamed Aru
+We need to either rework the KVM code or that entry code. I'll dig into this a
+bit more...
+
+Thanks,
+Mark.

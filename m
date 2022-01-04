@@ -2,108 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E08DC4846AF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:08:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B53794846B1
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:09:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231698AbiADRIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 12:08:53 -0500
-Received: from foss.arm.com ([217.140.110.172]:33912 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231733AbiADRIw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 12:08:52 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D40B913A1;
-        Tue,  4 Jan 2022 09:08:51 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.9.1])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A0ACF3F774;
-        Tue,  4 Jan 2022 09:08:49 -0800 (PST)
-Date:   Tue, 4 Jan 2022 17:08:46 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        James Morse <james.morse@arm.com>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Quentin Perret <qperret@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [GIT PULL] arm64: Support dynamic preemption v3
-Message-ID: <YdR/HnklL9y2Go9u@FVFF77S0Q05N>
-References: <20211220140142.922323-1-frederic@kernel.org>
+        id S233102AbiADRJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 12:09:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231733AbiADRJD (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 12:09:03 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C5CC061761;
+        Tue,  4 Jan 2022 09:09:02 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id a83-20020a1c9856000000b00344731e044bso1795041wme.1;
+        Tue, 04 Jan 2022 09:09:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=U2YI58CWBlzr16v5J8WPidWtDXJijtMt0ufrvo+0HGs=;
+        b=NdwPn7xUG+DszJtUCfJ9brWAhyOHgolMch76hx73HAh1UDLAK9BdyRZyh2gjfeeOYu
+         6vOuCgQ2j5gl18boCgblcDvNdCUaI1G/ss4gIDAVE7IQeeDn03jJy1jX50NKO0oFkGFa
+         xy6AhRtZrNO79HO+BZsK+7ok4JzRIE8skObK6b20tRg2QDh94dmDtMazlhftkZjeQzQZ
+         6Cz61K4zl67uv/KzgpnPiT63gu3tRytZSqE3ILY6bnFhtJDWaqoLLBh5V6DAnLdxdIJP
+         rThMlakmoUOhttj6uuXA/UsET/SUNv89Fah3rV05MV2ktYM570kN1fTAcPuLztIAl9j3
+         puBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=U2YI58CWBlzr16v5J8WPidWtDXJijtMt0ufrvo+0HGs=;
+        b=hdlAePcCOGErRO1fROYMEVhRdKzywe5HNzoCusSjIi97/A14VUewTHcpdQNfv1by08
+         2co+UZzh9r8j74kwSF5PFRi9Z3uXgxCey6IXG3Tk+/39JUPEIHMMEPnsowW4BpCrEqiZ
+         UD/CVIiDz9JDYhfEG/cn2a+iSMTWe2jDfUEq/fzhh8Pa+H0xsrY8xWquVXNAY49olOO/
+         h9c9cD5R6SfAZcqN5XjA0cPeqSpt8ZVdtNaa09aFTyU0W5XDr950rB5zn0K1GYkBRlaO
+         oERmLMjgSrAm7EgQxPrgaoKNafVNE9f9zpp/GLOntBKbfFyFQAclVKa3cL1GimoDoi6W
+         y8IQ==
+X-Gm-Message-State: AOAM5338t348pSPR31WC3p06kWj94t9Lz4TviRh8ncyl/EIQxOUpLW1l
+        8bC7YxIbMAXl+J1BRT3jEgA=
+X-Google-Smtp-Source: ABdhPJwYMWCtPR02Cz0ZJfUs8niaqMjO8aRN2BC3tRTOZKdf+I/Mddf0qX874X7DSJJp/o562a3m+g==
+X-Received: by 2002:a7b:c30e:: with SMTP id k14mr8154202wmj.74.1641316141293;
+        Tue, 04 Jan 2022 09:09:01 -0800 (PST)
+Received: from debian (host-2-98-43-34.as13285.net. [2.98.43.34])
+        by smtp.gmail.com with ESMTPSA id o15sm33021466wri.106.2022.01.04.09.09.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 09:09:00 -0800 (PST)
+Date:   Tue, 4 Jan 2022 17:08:59 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 5.15 00/72] 5.15.13-rc2 review
+Message-ID: <YdR/KyQk2GTGAVmK@debian>
+References: <20220104073845.629257314@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211220140142.922323-1-frederic@kernel.org>
+In-Reply-To: <20220104073845.629257314@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 03:01:37PM +0100, Frederic Weisbecker wrote:
-> Hi,
-> 
-> I haven't seen much comments on the static key based version from Mark
-> so I don't know which direction we'll eventually take.
+Hi Greg,
 
-Sorry; I had planned to rework that according to your comments, but I hadn't
-had a sufficient block of time to do so. I still intend to do that by
-v5.17-rc1.
+On Tue, Jan 04, 2022 at 08:41:12AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.13 release.
+> There are 72 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 06 Jan 2022 07:38:29 +0000.
+> Anything received after that time might be too late.
 
-> I still hope we can focus on a unified static call based implementation,
-> considering there are other users waiting on arm64 static calls.
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+mips: Booted on ci20 board. No regression.
 
-The only other user that I am aware of is in tracing, purely as a workaround
-for clang CFI having awful performance for modules, and CFI and static calls do
-not play well together to begin with due to the way function addresses get
-rewritten. I'd rather fix CFI than bodge around it, and that leaves no other
-users...
 
-My opinion is that the current shape of the static call API is ill-suited for
-arm64 (e.g. due to branch range limitations and so on), and so I'd rather avoid
-static calls on arm64. One reason I went for the static-call based trampoline
-was that it was functionally equivalent to building the out-of-line static call
-trampolines, but was architecture neutral, so I'd rather get that working for
-everyone.
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
-Thanks,
-Mark.
+--
+Regards
+Sudip
 
-> So here is a rebase against the latest tip:sched/core and arm64 static
-> call proposal.
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-> 	preempt/arm-v4
-> 
-> HEAD: 6fc1c7e3d83c4e06b019b041894d9bb25f37ac6c
-> 
-> Thanks,
-> 	Frederic
-> ---
-> 
-> Frederic Weisbecker (3):
->       sched/preempt: Prepare for supporting !CONFIG_GENERIC_ENTRY dynamic preemption
->       arm64: Implement IRQ exit preemption static call for dynamic preemption
->       arm64: Implement HAVE_PREEMPT_DYNAMIC
-> 
-> Ard Biesheuvel (2):
->       static_call: Use non-function types to refer to the trampolines
->       arm64: implement support for static call trampolines
-> 
-> 
->  arch/Kconfig                         |  1 -
->  arch/arm64/Kconfig                   |  3 ++
->  arch/arm64/include/asm/preempt.h     | 23 ++++++++++-
->  arch/arm64/include/asm/static_call.h | 40 +++++++++++++++++++
->  arch/arm64/kernel/entry-common.c     | 15 +++++--
->  arch/arm64/kernel/patching.c         | 77 ++++++++++++++++++++++++++++++++++--
->  arch/arm64/kernel/vmlinux.lds.S      |  1 +
->  include/linux/entry-common.h         |  3 +-
->  include/linux/static_call.h          |  4 +-
->  include/linux/static_call_types.h    | 11 ++++--
->  kernel/sched/core.c                  |  6 ++-
->  11 files changed, 168 insertions(+), 16 deletions(-)

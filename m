@@ -2,127 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E37483991
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 02:01:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D1C48399A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 02:01:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231526AbiADBBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 20:01:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40490 "EHLO
+        id S231562AbiADBBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 20:01:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbiADBBE (ORCPT
+        with ESMTP id S231534AbiADBBM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 20:01:04 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71E8C061761;
-        Mon,  3 Jan 2022 17:01:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=Rpq0CasVOhIvJE1oC2pxrzGmHvQGWTE5PPcm0QZMADc=; b=GBLyUbsC/eU3mQmLF9zxPK9mZ6
-        /A6jOPQ/lbM8cJU5p7YBGY9gFpYMkuCf+qYY4WnUvtZYhZSbhsSjiJFGE2TxR0YJJjNgqKalXFRrO
-        1FCgVK6pHghM5RQA1JjHrDIVl+aSn+lhmA1+kgns029M+isGZN+FUZ6V1wHRB3h9T6zkMg9TVP+wt
-        mh7kB8fm/42KhECMApSAewtHquwOtXp8oLqxDZLagIY2vWIKUZHC9v/H96GhdCPfJYro52J6z6kcV
-        uipLwIpmp32CgQNkUfe3U1SrR2pVOSBgxtLm+tAT1AM2UXD9UVB7XpE7Fjket73xpXlIm5YiJZERG
-        YjK0C1jQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n4YC8-005Ba4-Ig; Tue, 04 Jan 2022 01:00:56 +0000
-Message-ID: <50fa4eca-ce74-431f-8497-273d2c5956f2@infradead.org>
-Date:   Mon, 3 Jan 2022 17:00:53 -0800
+        Mon, 3 Jan 2022 20:01:12 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D47CC061784
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 17:01:11 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id x7so78271862lfu.8
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 17:01:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=drummond.us; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=FhCziXSDIVqEHeqdeTNAEnAmaxA2oTV83a7FYCmISUs=;
+        b=F3tiUyofNHmKDjVKk2XPN3VpXToJGh87luR1ns6i8fTdNqA4z8KYh9xx+TznQjoZjx
+         58TqlIC/Vj4aNPJdMn0Qd4bZbVRnPNzaiJsnWmPeQALXVgD8VLO6jDj+VHazpPTPSB/1
+         HWADwSJX1ZZu/dty1WaUP2KxY3Sw8VXiOiuQVgSrT0HZK6iCenP0DqyTmiLJ/HLXpAkt
+         XV2/Qm1/GSgSHGlTEcr7ZdTgUQFmUi8gJrn/bzNGljU+2Io9kcqa3WpeXo9FQyxn1hSi
+         ZpXEpEI9CKyeqqjCKo8dnjdUhHcpVlmwW0nTMezbw0pCmHnuNbP25JEqrHIUEfMvPFzO
+         WX5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=FhCziXSDIVqEHeqdeTNAEnAmaxA2oTV83a7FYCmISUs=;
+        b=6YN/c9UNsOGQJEIK462QYN9Xg5QZcgGlWdZNuG1319jkXafYSk7G/LogU0HeM3AaFi
+         RlcKhZLeU2XhelVoKW1EIF0skk5yvYfGxwmj91RVBfRdGODOVLmLcGRmtNz8q58yzMcu
+         UyVH+yh37Fs7EaE2QXgjUKhNWOJxhvkHzyg77ikGQPCn/3ADvXqr56duAc0ayTXNZRUZ
+         WyOnFuJPpgcAaj65cqDh8aUARoDZxYQN/ZzQQKTedLHNNjRdsTuYe9A99uniXhkqBXUF
+         SnqvwEWw3U878vmnJq+YlhpAHdVPNQUqGEZu+N6Q/x08mix8BPOksLh8vnDNHFobT7Um
+         y+uA==
+X-Gm-Message-State: AOAM532DLRqf32kraYMKiWP409uhUVW9mauzueSzy0wx1FXI2awshl8R
+        5HmiYAZNUvyIqzdC3HQSFtDBzjCpyF0w0Wt1XBdSyA==
+X-Google-Smtp-Source: ABdhPJwcgc1Ga1+rLCxU1YpJid0/47ry1/i0pez4n8tVA8yyD2kMd606iUiB5mCcPG+LT0NFgOGKtjbLaTH04xucoSo=
+X-Received: by 2002:a05:6512:2083:: with SMTP id t3mr41569950lfr.595.1641258069695;
+ Mon, 03 Jan 2022 17:01:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH 2/2] IB/rdmavt: modify rdmavt/qp.c for UML
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     linux-kernel@vger.kernel.org, Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-rdma@vger.kernel.org, linux-um@lists.infradead.org
-References: <20220102070623.24009-1-rdunlap@infradead.org>
- <20220103230445.GA2592848@nvidia.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220103230445.GA2592848@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20220103181956.983342-1-walt@drummond.us> <YdNE6UXRT02135Pd@zeniv-ca.linux.org.uk>
+In-Reply-To: <YdNE6UXRT02135Pd@zeniv-ca.linux.org.uk>
+From:   Walt Drummond <walt@drummond.us>
+Date:   Mon, 3 Jan 2022 17:00:58 -0800
+Message-ID: <CADCN6nx4VWtR79TBDTENRExjsa=KAGuUpyz06iu2EGmSTPyc+Q@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/8] signals: Support more than 64 signals
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     aacraid@microsemi.com, anna.schumaker@netapp.com, arnd@arndb.de,
+        bsegall@google.com, bp@alien8.de, chuck.lever@oracle.com,
+        bristot@redhat.com, dave.hansen@linux.intel.com,
+        dwmw2@infradead.org, dietmar.eggemann@arm.com, dinguyen@kernel.org,
+        geert@linux-m68k.org, gregkh@linuxfoundation.org, hpa@zytor.com,
+        idryomov@gmail.com, mingo@redhat.com, yzaikin@google.com,
+        ink@jurassic.park.msu.ru, jejb@linux.ibm.com, jmorris@namei.org,
+        bfields@fieldses.org, jlayton@kernel.org, jirislaby@kernel.org,
+        john.johansen@canonical.com, juri.lelli@redhat.com,
+        keescook@chromium.org, mcgrof@kernel.org,
+        martin.petersen@oracle.com, mattst88@gmail.com, mgorman@suse.de,
+        oleg@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
+        rth@twiddle.net, richard@nod.at, serge@hallyn.com,
+        rostedt@goodmis.org, tglx@linutronix.de,
+        trond.myklebust@hammerspace.com, vincent.guittot@linaro.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-m68k@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I simply wanted SIGINFO and VSTATUS, and that necessitated this. If
+the limit of 1024 rt signals is an issue, that's an extremely simple
+change to make.
 
 
-On 1/3/22 15:04, Jason Gunthorpe wrote:
-> On Sat, Jan 01, 2022 at 11:06:23PM -0800, Randy Dunlap wrote:
->> When building rdmavt for ARCH=um, qp.c has a build error on a reference
->> to the x86-specific cpuinfo field 'x86_cache_size'. This value is then
->> used to determine whether to use cacheless_memcpy() or not.
->> Provide a fake value to LLC for CONFIG_UML. Then provide a separate
->> verison of cacheless_memcpy() for CONFIG_UML that is just a plain
->> memcpy(), like the calling code uses.
->>
->> Prevents these build errors:
->>
->> ../drivers/infiniband/sw/rdmavt/qp.c: In function ‘rvt_wss_llc_size’:
->> ../drivers/infiniband/sw/rdmavt/qp.c:88:23: error: ‘struct cpuinfo_um’ has no member named ‘x86_cache_size’; did you mean ‘x86_capability’?
->>   return boot_cpu_data.x86_cache_size;
->>
->> ../drivers/infiniband/sw/rdmavt/qp.c: In function ‘cacheless_memcpy’:
->> ../drivers/infiniband/sw/rdmavt/qp.c:100:2: error: implicit declaration of function ‘__copy_user_nocache’; did you mean ‘copy_user_page’? [-Werror=implicit-function-declaration]
->>   __copy_user_nocache(dst, (void __user *)src, n, 0);
->>
->> Fixes: 68f5d3f3b654 ("um: add PCI over virtio emulation driver")
->> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->>  drivers/infiniband/sw/rdmavt/qp.c |   12 ++++++++++++
->>  1 file changed, 12 insertions(+)
->>
->> +++ linux-next-20211224/drivers/infiniband/sw/rdmavt/qp.c
->> @@ -84,10 +84,15 @@ EXPORT_SYMBOL(ib_rvt_state_ops);
->>  /* platform specific: return the last level cache (llc) size, in KiB */
->>  static int rvt_wss_llc_size(void)
->>  {
->> +#if !defined(CONFIG_UML)
->>  	/* assume that the boot CPU value is universal for all CPUs */
->>  	return boot_cpu_data.x86_cache_size;
->> +#else /* CONFIG_UML */
->> +	return 1024;	/* fake 1 MB LLC size */
->> +#endif
->>  }
->>  
->> +#if !defined(CONFIG_UML)
->>  /* platform specific: cacheless copy */
->>  static void cacheless_memcpy(void *dst, void *src, size_t n)
->>  {
->> @@ -99,6 +104,13 @@ static void cacheless_memcpy(void *dst,
->>  	 */
->>  	__copy_user_nocache(dst, (void __user *)src, n, 0);
->>  }
->> +#else
->> +/* for CONFIG_UML, this is just a plain memcpy() */
->> +static void cacheless_memcpy(void *dst, void *src, size_t n)
->> +{
->> +	memcpy(dst, src, n);
->> +}
->> +#endif
-> 
-> memcpy is not the same thing as __copy_user - the hint is in the
-> __user cast..
-> 
-> It should by copy_from_user(), I think, and this is all just somehow
-> broken to not check the return code.
 
-Thanks.
-
-> Why are you trying to make a HW driver compile on UML? Is there any
-> way to even use a driver like this in a UML environment?
-
-I'm just trying to clean up lots of UML build errors.
-I'm quite happy just making the driver depend on !UML.
-
-UML maintainers, what do you think?
-
-Thanks again.
-
--- 
-~Randy
+On Mon, Jan 3, 2022 at 10:48 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> On Mon, Jan 03, 2022 at 10:19:48AM -0800, Walt Drummond wrote:
+> > This patch set expands the number of signals in Linux beyond the
+> > current cap of 64.  It sets a new cap at the somewhat arbitrary limit
+> > of 1024 signals, both because it=E2=80=99s what GLibc and MUSL support =
+and
+> > because many architectures pad sigset_t or ucontext_t in the kernel to
+> > this cap.  This limit is not fixed and can be further expanded within
+> > reason.
+>
+> Could you explain the point of the entire exercise?  Why do we need more
+> rt signals in the first place?
+>
+> glibc has quite a bit of utterly pointless future-proofing.  So "they
+> allow more" is not a good reason - not without a plausible use-case,
+> at least.

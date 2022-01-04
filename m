@@ -2,85 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3FD2484761
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:02:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74968484766
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:04:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236065AbiADSCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 13:02:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47596 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234460AbiADSCG (ORCPT
+        id S233521AbiADSEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 13:04:15 -0500
+Received: from fanzine2.igalia.com ([213.97.179.56]:43254 "EHLO
+        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233070AbiADSEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 13:02:06 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0253AC061761;
-        Tue,  4 Jan 2022 10:02:06 -0800 (PST)
-Received: from ip4d173d02.dynamic.kabel-deutschland.de ([77.23.61.2] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1n4o8K-0008OH-5f; Tue, 04 Jan 2022 19:02:04 +0100
-Message-ID: <832e4888-f002-6930-ab91-a5d73e16dbd5@leemhuis.info>
-Date:   Tue, 4 Jan 2022 19:02:03 +0100
+        Tue, 4 Jan 2022 13:04:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version
+        :Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=gQt+rsQM2B7+yEGYuuKhCQquw5+qO0kTX2uHBXUI904=; b=kdEqKQB6hlKRYbeVXE/Xa0r/vi
+        QSuS/8K5Lx/wy6dDYwEjQPE9CVIiSoP1fupEeKKvT67w83NGtO7LOujyggqmgJo8ayvLCCtN9DSYB
+        x7tUMXJM8PdUjzlVKtc5fKorLPFHGym3XuzKQOUJZaoeZuJRjRnewEcxtrx7aqj5FOgKcjuGI6kmV
+        8PhALYlsb/KPOy3t6lcMdDyFpk20a/wBqYdzZRRuplOcuhzUOnJow/mh5P5jWigwb++HLnBgPCxFx
+        +k74jDFDsEVI0FKDAuHmVIJiVSZ+r+0eSq8DUuZn+7Lbc/8r4gNFvJ36qbfjKehOWoS8W9UuYupRl
+        e9C+ck8A==;
+Received: from 200-153-146-242.dsl.telesp.net.br ([200.153.146.242] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1n4oAL-0009Yn-2h; Tue, 04 Jan 2022 19:04:09 +0100
+Subject: Re: pstore/ramoops - why only collect a partial dmesg?
+To:     "Luck, Tony" <tony.luck@intel.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "anton@enomsg.org" <anton@enomsg.org>,
+        "ccross@android.com" <ccross@android.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
+        "Guilherme G. Piccoli" <kernel@gpiccoli.net>
+References: <a21201cf-1e5f-fed1-356d-42c83a66fa57@igalia.com>
+ <2d1e9afa38474de6a8b1efc14925d095@intel.com>
+ <0ca4c27a-a707-4d36-9689-b09ef715ac67@igalia.com>
+ <a361c64213e7474ea39c97f7f7bd26ec@intel.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Message-ID: <c5a04638-90c2-8ec0-4573-a0e5d2e24b6b@igalia.com>
+Date:   Tue, 4 Jan 2022 15:03:54 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-BS
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        workflows@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <cover.1641203216.git.linux@leemhuis.info>
- <9a68f2fcb5fe599b76e278a61928e23eb950cd83.1641203216.git.linux@leemhuis.info>
- <CAKXUXMx_J-enVGQtX6ZqKKRZ7SwZe203tLnQoJ=VLPz3tUhK+Q@mail.gmail.com>
- <ed8ffc6c-19cd-6558-7f7e-d7bdde4ecdb9@leemhuis.info>
- <87sfu3woj1.fsf@meer.lwn.net>
- <43cb0393-c161-f853-144d-f28c6557154f@infradead.org>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: [RFC PATCH v1 2/2] docs: regressions.rst: rules of thumb for
- handling regressions
-In-Reply-To: <43cb0393-c161-f853-144d-f28c6557154f@infradead.org>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <a361c64213e7474ea39c97f7f7bd26ec@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1641319326;17e607b6;
-X-HE-SMSGID: 1n4o8K-0008OH-5f
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04.01.22 16:09, Randy Dunlap wrote:
-> On 1/4/22 06:42, Jonathan Corbet wrote:
->> Thorsten Leemhuis <linux@leemhuis.info> writes:
->>
->>> On 04.01.22 13:16, Lukas Bulwahn wrote:
->>>> On Mon, Jan 3, 2022 at 3:23 PM Thorsten Leemhuis <linux@leemhuis.info> wrote:
->>>>> +Try to fix regressions quickly once the culprit got identified. Fixes for most
->>>>
->>>> s/got/gets/ --- at least, that is what the gmail grammar spelling suggests :)
->>>
->>> Hmm, LanguageTool didn't complain. Not totally sure, maybe both
->>> approaches are okay. But the variant suggested by the gmail checker
->>> might be the better one.
->>
->> So we're deeply into nit territory, but "gets" would be the correct
->> tense there.  Even better, though, is to avoid using "to get" in this
->> way at all.  I'm informed that "to get" is one of the hardest verbs for
->> non-native speakers, well, to get, so I try to avoid it in my own
->> writing.  "once the culprit is identified" or "has been identified"
->> would both be good here.
+On 04/01/2022 14:00, Luck, Tony wrote:
+> [...] 
+> Guilherme,
 > 
-> Agreed. Any uses of the verb get/got are best avoided.
+> Linux is indeed somewhat reluctant to hand out allocations > 2MB. :-(
+> 
+> Do you really need the whole dmesg in the pstore dump?  The expectation
+> is that systems run normally for a while. During that time console logs are
+> saved off to /var/log/messages.
+> 
+> When the system crashes, the last part (the interesting bit!) of the console
+> log is lost.  The purpose of pstore is to save that last bit.
+> 
+> So while you could add code to ramoops to save multiple 2MB chunks, it
+> doesn't seem (to me) that it would add much value.
+> 
 
-Ahh, good to known, thx to both of you. I guess my English teachers
-tried to put that into my head like 30 years ago, but I assume the lossy
-compression algorithm in there threw it away...
+Thanks again Tony, for the interesting points. So, I partially agree
+with you: indeed, in a normal situation we have all messages collected
+by some userspace daemon, and when some issue/oops happens, we can rely
+on pstore to collect the latest portion of the log buffer (2M is a
+bunch!) and "merge" that with the previously collected portion, likely
+saved in a /var/log/ file.
 
-Went through the document and removed all get/got, was not that hard
-most of the time.
+The problem is that our use case is a bit different: the idea is to rely
+on pstore/ramoops to collect the most information we can in a panic
+event, without the need of kdump. The latter is a pretty
+comprehensive/complete approach, but requires a bunch of memory reserved
+- it's a bit too much if we want just the task list, backtraces and
+memory state of the system, for example. And for that...we have the
+"panic_print" setting!
 
-Ciao, Thorsten
+There lies the issue: if I set panic_print to dump all backtraces, task
+info and memory state in a panic event, that information + the
+panic/oops and some previous relevant stuff, does it all fit in the 2M
+chunk? Likely so, but *if it doesn't fit*, we may lose _exactly_ the
+most important piece, which is the panic cause.
+
+The same way I have the "log_buf_len" tuning to determine how much size
+my log buffer has, I'd like to be able to effectively collect that much
+information using pstore/ramoops. Requiring that amount of space in an
+efi-pstore, for example, would be indeed really crazy! But ramoops is
+just a way for using some portion of the system RAM to save the log
+buffer, so I feel it'd be interesting to be able to properly collect
+full logs there, no matter the size of the logs. Of course, I'd like to
+see that as a setting, because the current behavior is great/enough for
+most of users I guess, as you pointed, and there's no need to change it
+by default.
+
+Let me know your thoughts and maybe others also have good opinions about
+that!
+Cheers,
 
 
-
+Guilherme

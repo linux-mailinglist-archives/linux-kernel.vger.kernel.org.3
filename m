@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7079B483A6B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 03:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88EEF483A68
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 03:01:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232424AbiADCAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 21:00:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
+        id S232375AbiADCAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 21:00:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232222AbiADCAK (ORCPT
+        with ESMTP id S232170AbiADCAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 21:00:10 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395F7C061799;
-        Mon,  3 Jan 2022 18:00:10 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id o3so14842633wrh.10;
-        Mon, 03 Jan 2022 18:00:10 -0800 (PST)
+        Mon, 3 Jan 2022 21:00:11 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDE0C0617A0;
+        Mon,  3 Jan 2022 18:00:11 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id o3so14842685wrh.10;
+        Mon, 03 Jan 2022 18:00:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=PQtuX7PnzQb1a86BihNMH5QlslE8Ui1MxXpx4wzRIaE=;
-        b=hG/CD/zWmn8lRNG7hIMn8AfcNWR5Upf9Ng5erTBZRbGF90VLTTPS5PGrSlR8b17LtS
-         NnIqa3OAB9lJvXISTlEig4a8uqJpsjlDuxxItOMk0xzP7mhsRlYTPDH9/xokqOuCOUvx
-         7oBgVNTr4gmpA/5WWXnIUANLDg62QYYc8fC96utMrk7vYU0+nCBnCPS9kVlMd5x8lxXe
-         0pzJmVi23Ax36J4nLjiqpczNzAzrgn91JSjLVAlbwaF6I6VBDmhnvH8C0Ok1l76Tg4hF
-         41w+0PNgmpFDIRXzrDfKM/rIyz4Gx3SKUIpEHjtyLFkzLkj8U7R1pHO/b2r42VTtB6Ys
-         3Z9A==
+        bh=Ar26/c+kIZBFJb+XnQqNFZG/AVeErXaJRatHs0lNH6o=;
+        b=hQnfUOWNahCdKeWzQ+6ERxXar+t2wmfvf12x7AAfzGg+Uudxo3/oScc9J/keEquxCe
+         Y03x44quqPabgOQSlC2vwK660gqVr6Jlmp+DU66bey/n599HTvB/BzbsyeomqUZbSs6w
+         dpOd9j0OLpKd2PmSoKjxzGPr0LK+3Cg8DJLDGEjpLcmhcKAXlDd50Jd9lVfQ5lQq12ml
+         KuolUTF3mNBKKQnNj4PcqSEa9hwNdFS4d3Y1dZ37iRdOWi+1IdYdFtWXaQTL2Jb8H3pI
+         2he3ppcztMYVhiYIHSyZip4kT+jLi2cZ5DM8zjVZbR+uAl/9k20avTj09B2bE5Vv85L5
+         PGiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PQtuX7PnzQb1a86BihNMH5QlslE8Ui1MxXpx4wzRIaE=;
-        b=UJOyV/D8pjQqmXOvpJgDCGE02Mkxd87slslpztpvRcNYwIchgDep/MWV5e6Awr1qMG
-         h9fYYspLir2twDKPPnYFT9fkgumF/E8oqwHlAQcCR1g4rSLwdi6GOII3hHtv9EYH74ft
-         Lj+6ae1IbPiGL8UbX0FUWUauSFbZH9WoEN0A5a1bhSGHc72xxM/cyc4pF4BbKvyfdY+3
-         h3PQ36a5AyuTwqv1Msu7KDs3G7ukrnH5lr8f51Z6AXy3pE3op1LBo3FLVIAio2MuZecq
-         AZVG6drAsIK0r+fEw71BfGoguB1H2iDpCia7ESWSc1u9fveIqIwfnkBb4ALJmm/msZjD
-         o5gQ==
-X-Gm-Message-State: AOAM530onOW/z1MY+kzIKBkovl1mtS6VEW1bnyTGM1HNSGXrofad9Wsg
-        3o5Sqph9oRRjRkHRQVOlse8=
-X-Google-Smtp-Source: ABdhPJz+s6TKmSDF3SORmTjVP+66m//a/ECamkarHGRRSkaNHv2RUlss+V4mITyI0P0eljwvTEFqOA==
-X-Received: by 2002:a05:6000:1acd:: with SMTP id i13mr40409713wry.406.1641261608888;
-        Mon, 03 Jan 2022 18:00:08 -0800 (PST)
+        bh=Ar26/c+kIZBFJb+XnQqNFZG/AVeErXaJRatHs0lNH6o=;
+        b=CJN8yERpwCYSqGMrsEF0Tjx80HeP+qNdKlrC9TGxOZj0k6VWaUX55Lb5ixNQ/Kwpx7
+         N0v+tJelV1s+7IxNvba4yPBCgVrdmRpYTY5KVyOVmszRo+OgCz06L8/uyCJcAD6lXtoe
+         DWdd+W89vY3+UJs9h4gSpyh3aU39u1xMIS43KA2Vont+c9zOlctnigAugSzcnN/DcCYb
+         1jztpL0OAf8TbLifYpoq94Suh2C3Vm8fMkg4pt9TKSAf9AcuBu0KThDvViQuhuXc/VRt
+         3tTpnt/VbDlprSeI26RGuEaJF6iWvMEZy1sqbSy9ECsHwuCx+FHeMsup0y+1u/eY6Ik9
+         N+FQ==
+X-Gm-Message-State: AOAM5336797jk3PNuVJLvMnPbK20U1eANmoeb32tja9c9nd1bpeQbrZg
+        VZhJpy5sGMV+o7OlFGV0KFg=
+X-Google-Smtp-Source: ABdhPJyLl5FmLAj4nJx99t3oXtH8nAHyoSwJLjkxd140QLtb9HwsvoxPzIXit5Sz/TeaqN3iFMVoWA==
+X-Received: by 2002:a5d:608c:: with SMTP id w12mr39780774wrt.384.1641261609806;
+        Mon, 03 Jan 2022 18:00:09 -0800 (PST)
 Received: from fuji.fritz.box (ip-89-161-76-237.tel.tkb.net.pl. [89.161.76.237])
-        by smtp.gmail.com with ESMTPSA id j17sm36422654wrp.68.2022.01.03.18.00.08
+        by smtp.gmail.com with ESMTPSA id j17sm36422654wrp.68.2022.01.03.18.00.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jan 2022 18:00:08 -0800 (PST)
+        Mon, 03 Jan 2022 18:00:09 -0800 (PST)
 From:   =?UTF-8?q?Tomasz=20Warnie=C5=82=C5=82o?= 
         <tomasz.warniello@gmail.com>
 To:     corbet@lwn.net
 Cc:     =?UTF-8?q?Tomasz=20Warnie=C5=82=C5=82o?= 
         <tomasz.warniello@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Subject: [PATCH v3 11/15] scripts: kernel-doc: Remove the "format of comments" comment block
-Date:   Tue,  4 Jan 2022 02:59:42 +0100
-Message-Id: <20220104015946.529524-12-tomasz.warniello@gmail.com>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 12/15] scripts: kernel-doc: Archive the pre-git museum
+Date:   Tue,  4 Jan 2022 02:59:43 +0100
+Message-Id: <20220104015946.529524-13-tomasz.warniello@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220104015946.529524-1-tomasz.warniello@gmail.com>
 References: <20220104015946.529524-1-tomasz.warniello@gmail.com>
@@ -68,151 +67,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As suggested by Jani Nikula in a reply to my first version of this
-transformation, Documentation/doc-guide/kernel-doc.rst can serve as the
-information hub for comment formatting. The section DESCRIPTION already
-points there, so the original comment block can just be removed.
+Jonathan Corbet suggested in a reply to my version 1, that these records
+can go, since that's what the git log is for. I don't agree.
 
-* Transform documentation into POD (11/15)
+The log begins at 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2. That's from
+2005. One of those entries is indeed logged, so kudos for having me check
+this. But not the older ones. Of course they can be found indirectly,
+but then...
+
+Why not just let them embellish the script tail?
+
+As you can see, they don't even require any formatting there.
+
+Are you sure you don't want them?
+
+* Transform documentation into POD (12/15)
 See step 1 for the series details.
 
-= Meta note =
-
-I guess, I should use the Suggested-by tag for credits.
-Maintainers, please correct this if I'm doing this wrong.
-
-Suggested-by: Jani Nikula <jani.nikula@linux.intel.com>
 Signed-off-by: Tomasz Warniełło <tomasz.warniello@gmail.com>
 ---
- scripts/kernel-doc | 115 ---------------------------------------------
- 1 file changed, 115 deletions(-)
+ scripts/kernel-doc | 43 ++++++++++++++++++++++---------------------
+ 1 file changed, 22 insertions(+), 21 deletions(-)
 
 diff --git a/scripts/kernel-doc b/scripts/kernel-doc
-index b4852c2ba243..493c024744b0 100755
+index 493c024744b0..0be723f6e3a2 100755
 --- a/scripts/kernel-doc
 +++ b/scripts/kernel-doc
-@@ -79,121 +79,6 @@ See Documentation/doc-guide/kernel-doc.rst for the documentation comment syntax.
- # 25/07/2012 - Added support for HTML5
- # -- Dan Luedtke <mail@danrl.de>
+@@ -54,31 +54,10 @@ See Documentation/doc-guide/kernel-doc.rst for the documentation comment syntax.
  
--#
--# format of comments.
--# In the following table, (...)? signifies optional structure.
--#                         (...)* signifies 0 or more structure elements
--# /**
--#  * function_name(:)? (- short description)?
--# (* @parameterx: (description of parameter x)?)*
--# (* a blank line)?
--#  * (Description:)? (Description of function)?
--#  * (section header: (section description)? )*
--#  (*)?*/
--#
--# So .. the trivial example would be:
--#
--# /**
--#  * my_function
--#  */
--#
--# If the Description: header tag is omitted, then there must be a blank line
--# after the last parameter specification.
--# e.g.
--# /**
--#  * my_function - does my stuff
--#  * @my_arg: its mine damnit
--#  *
--#  * Does my stuff explained.
--#  */
--#
--#  or, could also use:
--# /**
--#  * my_function - does my stuff
--#  * @my_arg: its mine damnit
--#  * Description: Does my stuff explained.
--#  */
--# etc.
--#
--# Besides functions you can also write documentation for structs, unions,
--# enums and typedefs. Instead of the function name you must write the name
--# of the declaration;  the struct/union/enum/typedef must always precede
--# the name. Nesting of declarations is not supported.
--# Use the argument mechanism to document members or constants.
--# e.g.
--# /**
--#  * struct my_struct - short description
--#  * @a: first member
--#  * @b: second member
--#  *
--#  * Longer description
--#  */
--# struct my_struct {
--#     int a;
--#     int b;
--# /* private: */
--#     int c;
--# };
--#
--# All descriptions can be multiline, except the short function description.
--#
--# For really longs structs, you can also describe arguments inside the
--# body of the struct.
--# eg.
--# /**
--#  * struct my_struct - short description
--#  * @a: first member
--#  * @b: second member
--#  *
--#  * Longer description
--#  */
--# struct my_struct {
--#     int a;
--#     int b;
--#     /**
--#      * @c: This is longer description of C
--#      *
--#      * You can use paragraphs to describe arguments
--#      * using this method.
--#      */
--#     int c;
--# };
--#
--# This should be use only for struct/enum members.
--#
--# You can also add additional sections. When documenting kernel functions you
--# should document the "Context:" of the function, e.g. whether the functions
--# can be called form interrupts. Unlike other sections you can end it with an
--# empty line.
--# A non-void function should have a "Return:" section describing the return
--# value(s).
--# Example-sections should contain the string EXAMPLE so that they are marked
--# appropriately in DocBook.
--#
--# Example:
--# /**
--#  * user_function - function that can only be called in user context
--#  * @a: some argument
--#  * Context: !in_interrupt()
--#  *
--#  * Some description
--#  * Example:
--#  *    user_function(22);
--#  */
--# ...
--#
--#
--# All descriptive text is further processed, scanning for the following special
--# patterns, which are highlighted appropriately.
--#
--# 'funcname()' - function
--# '$ENVVAR' - environmental variable
--# '&struct_name' - name of a structure (up to two words including 'struct')
--# '&struct_name.member' - name of a structure member
--# '@parameter' - name of a parameter
--# '%CONST' - name of a constant.
--# '``LITERAL``' - literal string without any spaces on it.
+ # more perldoc at the end of the file
+ 
+-# 18/01/2001 - 	Cleanups
+-# 		Functions prototyped as foo(void) same as foo()
+-# 		Stop eval'ing where we don't need to.
+-# -- huggie@earth.li
+-
+-# 27/06/2001 -  Allowed whitespace after initial "/**" and
+-#               allowed comments before function declarations.
+-# -- Christian Kreibich <ck@whoop.org>
+-
+ # Still to do:
+ # 	- add perldoc documentation
+ # 	- Look more closely at some of the scarier bits :)
+ 
+-# 26/05/2001 - 	Support for separate source and object trees.
+-#		Return error code.
+-# 		Keith Owens <kaos@ocs.com.au>
+-
+-# 23/09/2001 - Added support for typedefs, structs, enums and unions
+-#              Support for Context section; can be terminated using empty line
+-#              Small fixes (like spaces vs. \s in regex)
+-# -- Tim Jansen <tim@tjansen.de>
+-
+-# 25/07/2012 - Added support for HTML5
+-# -- Dan Luedtke <mail@danrl.de>
 -
  ## init lots of data
  
  my $errors = 0;
+@@ -2518,3 +2497,25 @@ Treat warnings as errors.
+ =back
+ 
+ =cut
++
++PRE-GIT MUSEUM
++
++Original formatting preserved for its historical value.
++
++# 18/01/2001 - 	Cleanups
++# 		Functions prototyped as foo(void) same as foo()
++# 		Stop eval'ing where we don't need to.
++# -- huggie@earth.li
++
++# 27/06/2001 -  Allowed whitespace after initial "/**" and
++#               allowed comments before function declarations.
++# -- Christian Kreibich <ck@whoop.org>
++
++# 26/05/2001 - 	Support for separate source and object trees.
++#		Return error code.
++# 		Keith Owens <kaos@ocs.com.au>
++
++# 23/09/2001 - Added support for typedefs, structs, enums and unions
++#              Support for Context section; can be terminated using empty line
++#              Small fixes (like spaces vs. \s in regex)
++# -- Tim Jansen <tim@tjansen.de>
 -- 
 2.30.2
 

@@ -2,153 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3054483B02
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 04:35:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB2E483AFF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 04:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232614AbiADDfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 22:35:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47180 "EHLO
+        id S232604AbiADDdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 22:33:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiADDfi (ORCPT
+        with ESMTP id S230139AbiADDdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 22:35:38 -0500
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCECC061761;
-        Mon,  3 Jan 2022 19:35:38 -0800 (PST)
-Received: by mail-ed1-x543.google.com with SMTP id z9so73108363edm.10;
-        Mon, 03 Jan 2022 19:35:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AuIuosmbbidkYClwyU4ykEf47p3eRp+JjfbfXY0TohU=;
-        b=A/m+VR/Xhpl7be79AB6FrgPtrRayR5efg0jb4lsqknlTCcSinhoW9BixHm8+41Immy
-         gcUGAZPKd7EG8+TW5kRa+58nlcIc5RxP8pEDo/QATzzWHQuGyeVXXsRXSHOpCRuO9iAN
-         SlofQJzdA08XO54Z26EucUDQ3wv0XdzTFFB++B0pyOEvU2lZ7J7roUC6Pxq4B1OXy5yU
-         Xl48xtz87SFyVCrkp31VZud3+X/vsBE+UVHyPKmbgUod8s+KJgexNduN5RrTUQUTliYg
-         4UWgRwgDFk3JB//5fsvFWjbmoSp4lunsvC2Zrgdj/h3GcY/Yl9Bv8HleQt2EP7SJ8gQe
-         9M9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AuIuosmbbidkYClwyU4ykEf47p3eRp+JjfbfXY0TohU=;
-        b=ffB+MEQMB5xgTSwd5elZ8JzjgbQPOc3h5bwJA2ycFO2e3c6QQ3TZr8tSKPBC7VnFR9
-         IrvQkozDjWdeRlIY7bu75/dwf9Drb7WnlArVKDPNCYjJrNPt5zhz/NjrVJ0H1B0F+FHT
-         5GoWnIkQtCOy4hkWXyV3/ZIv0S2oDCcinbf0Gkg3OvAZguZbBN3xAZvS2Fd0wmVubVQ3
-         wMZt0JrUSdifs4IAldP8cqKhXxFV1n14RBzBlpPKuU8Cw2lxQZhFf69EB4mWQtMnD0Mi
-         t2XV4IKvb7RuiE5HPvwefRzcQdpNcfyangQK4BtIkjvBE3/0eoHSN80uRrYYjvxacPaB
-         tlyQ==
-X-Gm-Message-State: AOAM530pDo3kiytMk5XRaAeTk6Wgs524/ByjQ8TzA6Ybjr0AgPM8glrp
-        0/zfDwD/OsQ2h/wwsXhZ896XhvsOF2FPXaVf11g=
-X-Google-Smtp-Source: ABdhPJwSNrtBb+JNBS+ecbLQjAGlxEXAKSO9H72Ly8Ag8YrgENAswKor0vrKQuRUgyK9xWcDDC9ZqBb9bv6nDReOJPg=
-X-Received: by 2002:a17:907:7e9e:: with SMTP id qb30mr36648397ejc.348.1641267336994;
- Mon, 03 Jan 2022 19:35:36 -0800 (PST)
+        Mon, 3 Jan 2022 22:33:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA06EC061761;
+        Mon,  3 Jan 2022 19:33:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A51A1B81097;
+        Tue,  4 Jan 2022 03:33:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C1D7C36AEF;
+        Tue,  4 Jan 2022 03:33:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641267228;
+        bh=6SCDZh3zSQ7jJbrqsOakjy6Lp1xDZYIsZFe+yuDkfzM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Dm4KN4izsID68V739IeMXBf7k3h3xE53KJ0is4a5QS9cHPPCwbvRyLC3LTnwrpXUt
+         +m7YziUkMBHfWlTHWd3QKPVM/xnrXa9qK4Cxkq6bf3V9tXe3T75trM5lPuNS0wihKq
+         +7Jiz2mgyJOsNUKWwcQlFqb4CCr3NjI1gL3Q2MFTCGDkznAjpoihitH/pvhDUatgza
+         DHl+b/ko4GMEGEhLwv4bUu9tSx2XuJ0edQXK+NJdX/Zi6gqgocHUdaxeERdcMYcO0k
+         Sn20HLmTjOdZKPifpNbV9iWNIDPKrl/usiOixPsOYLXNjAuKKWe67LeAaybi4cd4bZ
+         5k/cAmSGXOLCw==
+Date:   Mon, 3 Jan 2022 19:33:46 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Abdul Haleem <abdhalee@linux.vnet.ibm.com>
+Cc:     netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, saeedm@nvidia.com,
+        sachinp <sachinp@linux.vnet.ibm.com>
+Subject: Re: [5.16.0-rc7] net-next build broken on powerpc
+Message-ID: <20220103193346.048331ac@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <7c03768d-d948-c935-a7ab-b1f963ac7eed@linux.vnet.ibm.com>
+References: <7c03768d-d948-c935-a7ab-b1f963ac7eed@linux.vnet.ibm.com>
 MIME-Version: 1.0
-References: <20211230093240.1125937-1-imagedong@tencent.com>
- <YdOnTcSBq8z961da@pop-os.localdomain> <810dd93c-c6a2-6f8b-beb9-a2119c1876fb@gmail.com>
- <YdO6fL24CpHs6ByL@pop-os.localdomain>
-In-Reply-To: <YdO6fL24CpHs6ByL@pop-os.localdomain>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Tue, 4 Jan 2022 11:32:21 +0800
-Message-ID: <CADxym3avO5N55mmEmqyaQaZyxsPrc7hnG9XhqwMC8Y0OwOMshA@mail.gmail.com>
-Subject: Re: [PATCH v2 net-next 0/3] net: skb: introduce kfree_skb_with_reason()
- and use it for tcp and udp
-To:     Cong Wang <xiyou.wangcong@gmail.com>
-Cc:     David Ahern <dsahern@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        David Ahern <dsahern@kernel.org>, mingo@redhat.com,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        jonathan.lemon@gmail.com, alobakin@pm.me,
-        Kees Cook <keescook@chromium.org>,
-        Paolo Abeni <pabeni@redhat.com>, talalahmad@google.com,
-        haokexin@gmail.com, Menglong Dong <imagedong@tencent.com>,
-        atenart@kernel.org, bigeasy@linutronix.de,
-        Wei Wang <weiwan@google.com>, arnd@arndb.de, vvs@virtuozzo.com,
-        Cong Wang <cong.wang@bytedance.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Mengen Sun <mengensun@tencent.com>, mungerjiang@tencent.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 4, 2022 at 11:09 AM Cong Wang <xiyou.wangcong@gmail.com> wrote:
->
-> On Mon, Jan 03, 2022 at 07:01:30PM -0700, David Ahern wrote:
-> > On 1/3/22 6:47 PM, Cong Wang wrote:
-> > > On Thu, Dec 30, 2021 at 05:32:37PM +0800, menglong8.dong@gmail.com wrote:
-> > >> From: Menglong Dong <imagedong@tencent.com>
-> > >>
-> > >> In this series patch, the interface kfree_skb_with_reason() is
-> > >> introduced(), which is used to collect skb drop reason, and pass
-> > >> it to 'kfree_skb' tracepoint. Therefor, 'drop_monitor' or eBPF is
-> > >> able to monitor abnormal skb with detail reason.
-> > >>
-> > >
-> > > We already something close, __dev_kfree_skb_any(). Can't we unify
-> > > all of these?
-> >
-> > Specifically?
-> >
-> > The 'reason' passed around by those is either SKB_REASON_CONSUMED or
-> > SKB_REASON_DROPPED and is used to call kfree_skb vs consume_skb. i.e.,
-> > this is unrelated to this patch set and goal.
->
-> What prevents you extending it?
->
+On Mon, 3 Jan 2022 19:10:01 +0530 Abdul Haleem wrote:
+> Greeting's
+>=20
+> Today's netdev/net-next kernel 5.16.0-rc7 failed to build on my powerpc b=
+ox with below error
+>=20
+>  =C2=A0 CC [M]=C2=A0 drivers/net/ethernet/mellanox/mlx5/core/en_main.o
+> In file included from ./arch/powerpc/include/generated/asm/rwonce.h:1,
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 from ./include/linux/compiler.h:266,
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 from ./arch/powerpc/include/asm/cmpxchg.h:6,
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 from ./arch/powerpc/include/asm/atomic.h:11,
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 from ./include/linux/atomic.h:7,
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 from ./include/linux/refcount.h:95,
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 from ./include/net/act_api.h:9,
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 from ./include/net/tc_act/tc_gact.h:5,
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 from drivers/net/ethernet/mellanox/mlx5/core/en_ma=
+in.c:33:
+> drivers/net/ethernet/mellanox/mlx5/core/en_main.c: In function =E2=80=98m=
+lx5e_alloc_rq=E2=80=99:
+> ./include/linux/rcupdate.h:412:36: error: dereferencing pointer to incomp=
+lete type =E2=80=98struct bpf_prog=E2=80=99
+>  =C2=A0#define RCU_INITIALIZER(v) (typeof(*(v)) __force __rcu *)(v)
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^~~~
+> ./include/asm-generic/rwonce.h:55:33: note: in definition of macro =E2=80=
+=98__WRITE_ONCE=E2=80=99
+>  =C2=A0 *(volatile typeof(x) *)&(x) =3D (val);=C2=A0=C2=A0=C2=A0 \
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^~~
+> ./include/linux/rcupdate.h:854:3: note: in expansion of macro =E2=80=98WR=
+ITE_ONCE=E2=80=99
+>  =C2=A0=C2=A0 WRITE_ONCE(p, RCU_INITIALIZER(v)); \
+>  =C2=A0=C2=A0 ^~~~~~~~~~
+> ./include/linux/rcupdate.h:854:17: note: in expansion of macro =E2=80=98R=
+CU_INITIALIZER=E2=80=99
+>  =C2=A0=C2=A0 WRITE_ONCE(p, RCU_INITIALIZER(v)); \
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 ^~~~~~~~~~~~~~~
+> drivers/net/ethernet/mellanox/mlx5/core/en_main.c:569:2: note: in expansi=
+on of macro =E2=80=98RCU_INIT_POINTER=E2=80=99
+>  =C2=A0 RCU_INIT_POINTER(rq->xdp_prog, params->xdp_prog);
+>  =C2=A0 ^~~~~~~~~~~~~~~~
+> make[5]: *** [scripts/Makefile.build:287: drivers/net/ethernet/mellanox/m=
+lx5/core/en_main.o] Error 1
+>=20
 
-I think extending kfree_skb() with kfree_skb_reason() is more reasonable,
-considering the goal of kfree_skb() and __dev_kfree_skb_any().
+I can repro a powerpc build failure with ice, but I don't see anything
+wrong in mlx5 in an allmodconfig. The config you attached is invalid:
 
-> >
-> > >
-> > >
-> > >> In fact, this series patches are out of the intelligence of David
-> > >> and Steve, I'm just a truck man :/
-> > >>
-> > >
-> > > I think there was another discussion before yours, which I got involved
-> > > as well.
-> > >
-> > >> Previous discussion is here:
-> > >>
-> > >> https://lore.kernel.org/netdev/20211118105752.1d46e990@gandalf.local.home/
-> > >> https://lore.kernel.org/netdev/67b36bd8-2477-88ac-83a0-35a1eeaf40c9@gmail.com/
-> > >>
-> > >> In the first patch, kfree_skb_with_reason() is introduced and
-> > >> the 'reason' field is added to 'kfree_skb' tracepoint. In the
-> > >> second patch, 'kfree_skb()' in replaced with 'kfree_skb_with_reason()'
-> > >> in tcp_v4_rcv(). In the third patch, 'kfree_skb_with_reason()' is
-> > >> used in __udp4_lib_rcv().
-> > >>
-> > >
-> > > I don't follow all the discussions here, but IIRC it would be nice
-> > > if we can provide the SNMP stat code (for instance, TCP_MIB_CSUMERRORS) to
-> > > user-space, because those stats are already exposed to user-space, so
-> > > you don't have to invent new ones.
-> >
-> > Those SNMP macros are not unique and can not be fed into a generic
-> > kfree_skb_reason function.
->
-> Sure, you also have the skb itself, particularly skb protocol, with
-> these combined, it should be unique.
+.config:709:warning: symbol value 'm' invalid for HOTPLUG_PCI_SHPC
+.config:892:warning: symbol value 'm' invalid for NF_CT_PROTO_GRE
+.config:919:warning: symbol value 'm' invalid for NF_NAT_REDIRECT
+.config:922:warning: symbol value 'm' invalid for NF_TABLES_INET
+.config:1099:warning: symbol value 'm' invalid for NF_TABLES_IPV4
+.config:1104:warning: symbol value 'm' invalid for NF_TABLES_ARP
+.config:1146:warning: symbol value 'm' invalid for NF_TABLES_IPV6
+.config:1537:warning: symbol value 'm' invalid for NET_DEVLINK
+.config:2721:warning: symbol value 'm' invalid for ISDN_CAPI
+.config:3066:warning: symbol value 'm' invalid for HW_RANDOM_TPM
+.config:3589:warning: symbol value 'm' invalid for LIRC
+.config:5356:warning: symbol value 'm' invalid for FS_ENCRYPTION
 
-I thought about it before, but it's hard to use the reason in SNMP
-directly. First,
-the stats of SNMP are grouped, and the same skb protocol can use stats in
-different groups, which makes it hard to be unique. Second, SNMP is used to
-do statistics, not only drop statistics, which is a little different
-from the goal here.
-Third, it's not flexible enough to extend the new drop reason.
-
-Thanks!
-Menglong Dong
-
->
-> Thanks.
+I'll send a fix based on your error messages, it does look like
+en_main.c should include filter.h.

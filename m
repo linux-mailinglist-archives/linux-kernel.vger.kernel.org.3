@@ -2,15 +2,15 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F917484A0E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:42:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE25484A13
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:42:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234688AbiADVm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 16:42:29 -0500
-Received: from aposti.net ([89.234.176.197]:52048 "EHLO aposti.net"
+        id S234699AbiADVmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 16:42:39 -0500
+Received: from aposti.net ([89.234.176.197]:52066 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233569AbiADVm3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 16:42:29 -0500
+        id S234687AbiADVmh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 16:42:37 -0500
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     "Rafael J . Wysocki" <rafael@kernel.org>
 Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
@@ -22,9 +22,9 @@ Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-pm@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 1/8] PM: core: Remove DEFINE_UNIVERSAL_DEV_PM_OPS() macro
-Date:   Tue,  4 Jan 2022 21:42:07 +0000
-Message-Id: <20220104214214.198843-2-paul@crapouillou.net>
+Subject: [PATCH 2/8] PM: core: Remove static qualifier in DEFINE_SIMPLE_DEV_PM_OPS macro
+Date:   Tue,  4 Jan 2022 21:42:08 +0000
+Message-Id: <20220104214214.198843-3-paul@crapouillou.net>
 In-Reply-To: <20220104214214.198843-1-paul@crapouillou.net>
 References: <20220104214214.198843-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -33,63 +33,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The deprecated UNIVERSAL_DEV_PM_OPS() macro uses the provided callbacks
-for both runtime PM and system sleep, which is very likely to be a
-mistake, as a system sleep can be triggered while a given device is
-already PM-suspended, which would cause the suspend callback to be
-called twice.
-
-The amount of users of UNIVERSAL_DEV_PM_OPS() is also tiny (16
-occurences) compared to the number of places where
-SET_SYSTEM_SLEEP_PM_OPS() is used with pm_runtime_force_suspend() and
-pm_runtime_force_resume(), which makes me think that none of these cases
-are actually valid.
-
-As this macro is currently unused, remove it before someone starts to
-use it in yet another invalid case.
+Keep this macro in line with the other ones. This makes it possible to
+use them in the cases where the underlying dev_pm_ops structure is
+exported.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- include/linux/pm.h | 19 ++++++-------------
- 1 file changed, 6 insertions(+), 13 deletions(-)
+ include/linux/pm.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/include/linux/pm.h b/include/linux/pm.h
-index e1e9402180b9..31bbaafb06d2 100644
+index 31bbaafb06d2..389e600df233 100644
 --- a/include/linux/pm.h
 +++ b/include/linux/pm.h
-@@ -366,6 +366,12 @@ static const struct dev_pm_ops name = { \
+@@ -362,7 +362,7 @@ struct dev_pm_ops {
+  * to RAM and hibernation.
+  */
+ #define DEFINE_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+-static const struct dev_pm_ops name = { \
++const struct dev_pm_ops name = { \
  	SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
  }
  
-+/* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
-+#define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-+const struct dev_pm_ops __maybe_unused name = { \
-+	SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
-+}
-+
- /*
-  * Use this for defining a set of PM operations to be used in all situations
-  * (system suspend, hibernation or runtime PM).
-@@ -379,19 +385,6 @@ static const struct dev_pm_ops name = { \
-  * .resume_early(), to the same routines as .runtime_suspend() and
-  * .runtime_resume(), respectively (and analogously for hibernation).
-  */
--#define DEFINE_UNIVERSAL_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
--static const struct dev_pm_ops name = { \
--	SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
--	RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
--}
--
--/* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
--#define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
--const struct dev_pm_ops __maybe_unused name = { \
--	SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
--}
--
--/* Deprecated. Use DEFINE_UNIVERSAL_DEV_PM_OPS() instead. */
- #define UNIVERSAL_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
- const struct dev_pm_ops __maybe_unused name = { \
- 	SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
 -- 
 2.34.1
 

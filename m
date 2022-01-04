@@ -2,174 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FA3D484315
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:10:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B43448431A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:11:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234026AbiADOK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:10:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49902 "EHLO
+        id S234037AbiADOLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:11:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233914AbiADOKz (ORCPT
+        with ESMTP id S232739AbiADOLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:10:55 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA45C061761;
-        Tue,  4 Jan 2022 06:10:55 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id j21so148867155edt.9;
-        Tue, 04 Jan 2022 06:10:55 -0800 (PST)
+        Tue, 4 Jan 2022 09:11:52 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4523BC061761;
+        Tue,  4 Jan 2022 06:11:52 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id d198-20020a1c1dcf000000b0034569cdd2a2so1505605wmd.5;
+        Tue, 04 Jan 2022 06:11:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=a8if7WEaBEhVlQbuJ+SPa04Tu8qGjQYQiEyoCGpJscs=;
-        b=LlMTUeV/9GIKARbHsb3fpZpO0RUVzh7cOSPcOjKUP6hxa24CW+QglTS5ELhP4Ory3F
-         rMs47ZKsA//4iiLpvwYoNxDDKW3cVFQ2ur3BDpGDoZp5IeJIrs+DSmNkgMEG80YeInBn
-         Mwkrnv13plWBsLFv5CF9LlC7Lpc+KgrNq2cU5+Tg/9G5pTPfkWHoqwWP+aUgaWhb9+I8
-         UVcFc3p386b+xnAxCMtzmXGWBmiaSge/t7tj7EvXQUhIyqt5vpX39HeYgO6SUkFT7LFr
-         J/0H2jVLu7/6wz1Fo7h2tmP6zlrWQWxieVohfQsidgYVajc7aRnowFstHbeyQL7RW9UP
-         AbXQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=tKbvSu3VERuN7Mvus3JoKJojenLn23CI2Hzq+SUDqOY=;
+        b=BF3DV9EbIPtv17aplQ+LQxQ5Apbh+O1cohpA3RIJDEjCBGfr424HMWDvVNUOXYGJqS
+         4YDPBJR6CcKKHt+bUB6u12oy+mjlS/P6U8ZI96Ukw+391bBRBwtpDjSTD6hdwBrqT14s
+         ivKBL682gH0RdBUT+h+1QCkjPAqZWKE1ETHWOLWLwCqnCk7gWSCYp1D74mTtVxyEyIVp
+         WvHYJF5q5paBsIF7pYJeHr0Hqmtgl7bC/6SA3vvkUJYtAGzy1H2mhV/pbZR30mydn/TS
+         l57h4gah1+OWdsCw/XLzR3t3aCYCD6anGmcBMCfkLkGFNkxFeUCdJwQR1Oj3gh8mq7o0
+         47wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=a8if7WEaBEhVlQbuJ+SPa04Tu8qGjQYQiEyoCGpJscs=;
-        b=ZacVRp8UJOIcc4JXJPubYN2IhBv0afZrG3gaNiULmeiwHPqARyGU2AJAKmkl/Q01Iv
-         jmNIgEoe13bbZIwa6gz0IiYSM4PIFdR73XKniK8flLPzpbHNE0UdSTXqF52FUV18qh2b
-         RoRzFtvXP6GCOv/Ve2nMFSK7YevSFdeCqY4h4OFmNUDqUx/QI5DG6Iih5g79Pl5hM74D
-         /CGZtPzGT9kmPdamChB6RCf6QvutbNXXd6njlN+eG0MWjQ00OuvQJK9RCdRXzoLgNMpb
-         XWo9P9XOZ7OY3cdxQKYoJ3PcYn2pir+reepfIdDKnDE/KWACHxG1pFVZMUioYF4iX1Sn
-         S2Xg==
-X-Gm-Message-State: AOAM533Bsate3HKVN3K4Y9TbRdwKmk5ERoz2WenPTuQE29t6/e+Uo0/0
-        TcYepYAGU35vWURWazaAqbXYHhjDvq4=
-X-Google-Smtp-Source: ABdhPJw/QS1Tmzi9VOiAvjVnenf6NETBIc1gct9VYJv38pQPfzEwAIuhrsH2fjMJdY2vR9uY2qZLLQ==
-X-Received: by 2002:a17:906:974c:: with SMTP id o12mr38346721ejy.229.1641305454089;
-        Tue, 04 Jan 2022 06:10:54 -0800 (PST)
-Received: from gmail.com (0526F11B.dsl.pool.telekom.hu. [5.38.241.27])
-        by smtp.gmail.com with ESMTPSA id u1sm14770112edp.19.2022.01.04.06.10.53
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=tKbvSu3VERuN7Mvus3JoKJojenLn23CI2Hzq+SUDqOY=;
+        b=DPXjW5BUFw1B3+QSPagMuT0MnASWHkzItaStXLZH/pcNzJZqKIGzNezPioXSaKJVJf
+         ybYwbG5YQq7zx209WR3rc1NN3GG0296IJbE6JuKcaPAvZiiieJDFBcS01POfSiqLL1kk
+         957t6Nw3yB9t3JD+NbcVP6DbswiEX6WnH4nq9MAo5bx6Os2gmr52OKDDUgqG3Dgzfq7D
+         WTfYiMaM4bEhOXBMp8HhlyQMqx99skMJv2cW0SUfBeh+8iAF3F0O0DppPE7TZb79G9jS
+         7heg+Nrn8LJU1MikZgSHqJyfKqe85UzVi7C1DXru47GyW7rVsqN9c7hJMjzfsx5A7+Fk
+         WAgA==
+X-Gm-Message-State: AOAM532GHjiyjtn0x2pDC0CY0LeI4SNI3F1NMQu4VavdNd/Eb40WjYA5
+        YmqB0VDHE8V55ljeB4bB7Fs=
+X-Google-Smtp-Source: ABdhPJwbYdtuqP/NVCjJGtJUmcyh5xxQ+vSka6h/JOGSg3jrjpegz3qSzFFUzPQ2PvycACkyZYAVYA==
+X-Received: by 2002:a7b:c087:: with SMTP id r7mr42895428wmh.17.1641305510899;
+        Tue, 04 Jan 2022 06:11:50 -0800 (PST)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id h3sm38549890wrt.94.2022.01.04.06.11.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 06:10:53 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Tue, 4 Jan 2022 15:10:51 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: [PATCH] per_task: Remove the PER_TASK_BYTES hard-coded constant
-Message-ID: <YdRVawyDbHvI01uV@gmail.com>
-References: <YdIfz+LMewetSaEB@gmail.com>
- <YdLL0kaFhm6rp9NS@kroah.com>
- <YdLaMvaM9vq4W6f1@gmail.com>
+        Tue, 04 Jan 2022 06:11:50 -0800 (PST)
+Date:   Tue, 4 Jan 2022 15:11:46 +0100
+From:   Corentin Labbe <clabbe.montjoie@gmail.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     linus.walleij@linaro.org, ulli.kroll@googlemail.com,
+        kuba@kernel.org, davem@davemloft.net, andrew@lunn.ch,
+        hkallweit1@gmail.com, linux-arm-kernel@lists.infradead.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: net: phy: marvell: network working with generic PHY and not with
+ marvell PHY
+Message-ID: <YdRVovG9mgEWffkn@Red>
+References: <YdQoOSXS98+Af1wO@Red>
+ <YdQsJnfqjaFrtC0m@shell.armlinux.org.uk>
+ <YdQwexJVfrdzEfZK@Red>
+ <YdQydK4GhI0P5RYL@shell.armlinux.org.uk>
+ <YdQ5i+//UITSbxS/@shell.armlinux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <YdLaMvaM9vq4W6f1@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YdQ5i+//UITSbxS/@shell.armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-* Ingo Molnar <mingo@kernel.org> wrote:
-
-> There's one thing ugly about it, the fixed PER_TASK_BYTES limit, I plan 
-> to make ->per_task_array[] the last field of task_struct, i.e. change it 
+Le Tue, Jan 04, 2022 at 12:11:55PM +0000, Russell King (Oracle) a écrit :
+> On Tue, Jan 04, 2022 at 11:41:40AM +0000, Russell King (Oracle) wrote:
+> > On Tue, Jan 04, 2022 at 12:33:15PM +0100, Corentin Labbe wrote:
+> > > Le Tue, Jan 04, 2022 at 11:14:46AM +0000, Russell King (Oracle) a écrit :
+> > > > On Tue, Jan 04, 2022 at 11:58:01AM +0100, Corentin Labbe wrote:
+> > > > > Hello
+> > > > > 
+> > > > > I have a gemini SSI 1328 box which has a cortina ethernet MAC with a Marvell 88E1118 as given by:
+> > > > > Marvell 88E1118 gpio-0:01: attached PHY driver (mii_bus:phy_addr=gpio-0:01, irq=POLL)
+> > > > > So booting with CONFIG_MARVELL_PHY=y lead to a non-working network with link set at 1Gbit
+> > > > > Setting 'max-speed = <100>;' (as current state in mainline dtb) lead to a working network.
+> > > > > By not working, I mean kernel started with ip=dhcp cannot get an IP.
+> > > > 
+> > > > How is the PHY connected to the host (which interface mode?) If it's
+> > > > RGMII, it could be that the wrong RGMII interface mode is specified in
+> > > > DT.
+> > > > 
+> > > 
+> > > The PHY is set as RGMII in DT (arch/arm/boot/dts/gemini-ssi1328.dts)
+> > > The only change to the mainline dtb is removing the max-speed.
+> > 
+> > So, it's using "rgmii" with no delay configured at the PHY with the
+> > speed limited to 100Mbps. You then remove the speed limitation and
+> > it doesn't work at 1Gbps.
+> > 
+> > I think I've seen this on other platforms (imx6 + ar8035) when the
+> > RGMII delay is not correctly configured - it will work at slower
+> > speeds but not 1G.
+> > 
+> > The RGMII spec specifies that there will be a delay - and the delay can
+> > be introduced by either the MAC, PHY or by PCB track routing. It sounds
+> > to me like your boot environment configures the PHY to introduce the
+> > necessary delay, but then, because the DT "rgmii" mode means "no delay
+> > at the PHY" when you use the Marvell driver (which respects that), the
+> > Marvell driver configures the PHY for no delay, resulting in a non-
+> > working situation at 1G.
+> > 
+> > I would suggest checking how the boot environment configures the PHY,
+> > and change the "rgmii" mode in DT to match. There is a description of
+> > the four RGMII modes in Documentation/networking/phy.rst that may help
+> > understand what each one means.
+> 
+> Hmm. Sorry, I'm leading you stray. It looks like the 88E1118 code does
+> not program any delays depending on the interface mode, so changing that
+> will have no effect.
+> 
+> I suspect, looking at m88e1118_config_init(), that the write to register
+> 0x15 in the MSCR page could be the problem.
+> 
+> 0x15 is 21, which is MII_88E1121_PHY_MSCR_REG. In other Marvell PHYs,
+> bits 4 and 5 are the tx and rx delays, both of which are set. Looking
+> at m88e1121_config_aneg_rgmii_delays(), this would seem to indicate
+> that the PHY is being placed into rgmii-id mode.
+> 
+> Can you try changing:
+> 
+> 	err = phy_write(phydev, 0x15, 0x1070);
+> 
 > to:
 > 
->         u8                              per_task_area[];
+> 	err = phy_write(phydev, 0x15, 0x1040);
 > 
-> This actually became possible through the fixing of the x86 FPU code in the 
-> following fast-headers commit:
+> and see what happens? Maybe trying other combinations of bits 4 and 5
+> to find a working combination.
 > 
->    4ae0f28bc1c8 headers/deps: x86/fpu: Make task_struct::thread constant size
 
-So I implemented this approach - the patch below removes the PER_TASK_BYTES 
-hard-coded limit.
+Forget my other message, using 0x1040 lead to success.
+My problem was that I tried rgmii-id which net/ethernet/cortina does not support on some code path. (everything test PHY_INTERFACE_MODE_RGMII only)
+So I retry tests with original phy-mode = "rgmii".
 
-( Didn't make it variable size via per_task_area[] though - we *do* know 
-  its size after all at build time already, and known-size structures are 
-  better in general than tail-variable-array solutions:
-
-   - They work better with static checkers,
-   - and we actually want the offsets into thread_info to be small on embedded platforms
-
-  etc. )
-
-Thanks,
-
-	Ingo
-
-============================>
-From: Ingo Molnar <mingo@kernel.org>
-Date: Tue, 4 Jan 2022 13:48:05 +0100
-Subject: [PATCH] per_task: Remove the PER_TASK_BYTES hard-coded constant
-
-- Also remove the unnecessary <linux/sched/per_task_types.h> header.
-
-Not-Signed-off-by-yet: Ingo Molnar <mingo@kernel.org>
----
- include/linux/sched/per_task.h       | 3 ++-
- include/linux/sched/per_task_types.h | 7 -------
- kernel/sched/core.c                  | 4 ++++
- 3 files changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/include/linux/sched/per_task.h b/include/linux/sched/per_task.h
-index e20837e82681..a10538713a26 100644
---- a/include/linux/sched/per_task.h
-+++ b/include/linux/sched/per_task.h
-@@ -37,7 +37,6 @@
-  * A build-time check ensures that we haven't run out of available space.
-  */
+So with the following changes everything is ok:
+diff --git a/arch/arm/boot/dts/gemini-ssi1328.dts b/arch/arm/boot/dts/gemini-ssi1328.dts
+index 113feb1c4922..7543d117a13a 100644
+--- a/arch/arm/boot/dts/gemini-ssi1328.dts
++++ b/arch/arm/boot/dts/gemini-ssi1328.dts
+@@ -40,10 +40,6 @@ mdio0: mdio {
+                phy0: ethernet-phy@1 {
+                        reg = <1>;
+                        device_type = "ethernet-phy";
+-                       /* We lack the knowledge of necessary GPIO to achieve
+-                        * Gigabit
+-                        */
+-                       max-speed = <100>;
+                };
+                /* WAN ICPlus IP101A */
+                phy1: ethernet-phy@2 {
+diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
+index 4fcfca4e1702..af7fc9d8eaa7 100644
+--- a/drivers/net/phy/marvell.c
++++ b/drivers/net/phy/marvell.c
+@@ -1233,7 +1233,7 @@ static int m88e1118_config_init(struct phy_device *phydev)
+                return err;
  
--#include <linux/sched/per_task_types.h>
- #include <linux/compiler.h>
+        /* Enable 1000 Mbit */
+-       err = phy_write(phydev, 0x15, 0x1070);
++       err = phy_write(phydev, 0x15, 0x1040);
+        if (err < 0)
+                return err;
  
- #ifndef __PER_TASK_GEN
-@@ -61,4 +60,6 @@
- 
- #define per_task_container_of(var, name)	container_of((void *)(var) - per_task_offset(name), struct task_struct, per_task_area[0])
- 
-+#define PER_TASK_BYTES				(per_task_offset(_end))
-+
- #endif /* _LINUX_SCHED_PER_TASK_H */
-diff --git a/include/linux/sched/per_task_types.h b/include/linux/sched/per_task_types.h
-deleted file mode 100644
-index 8af8c10f8dae..000000000000
---- a/include/linux/sched/per_task_types.h
-+++ /dev/null
-@@ -1,7 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _LINUX_SCHED_PER_TASK_TYPES_H
--#define _LINUX_SCHED_PER_TASK_TYPES_H
--
--#define PER_TASK_BYTES 8192
--
--#endif /* _LINUX_SCHED_PER_TASK_TYPES_H */
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index bc38b19f6398..fdb5b99ae6e0 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -89,6 +89,8 @@
- #include "../../fs/io-wq.h"
- #include "../smpboot.h"
- 
-+#include "../../../kernel/sched/per_task_area_struct.h"
-+
- DEFINE_PER_TASK(unsigned int,				flags);
- 
- #ifdef CONFIG_THREAD_INFO_IN_TASK
-@@ -9481,6 +9483,8 @@ void __init per_task_init(void)
- {
- 	unsigned long per_task_bytes = per_task_offset(_end);
- 
-+	printk("per_task: sizeof(struct task_struct):          %ld bytes\n", sizeof(struct task_struct));
-+	printk("per_task: sizeof(struct task_struct_per_task): %ld bytes\n", sizeof(struct task_struct_per_task));
- 	printk("per_task: Using %ld per_task bytes, %ld bytes available\n", per_task_bytes, (long)PER_TASK_BYTES);
- 
- 	BUG_ON(per_task_offset(_end) > PER_TASK_BYTES);
+

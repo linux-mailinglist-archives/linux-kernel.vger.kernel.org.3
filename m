@@ -2,104 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C856A483B60
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 05:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFF7F483B68
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 06:04:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232904AbiADEzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 23:55:24 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:43930 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231536AbiADEzX (ORCPT
+        id S229662AbiADFD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 00:03:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38134 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229452AbiADFD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 23:55:23 -0500
-X-UUID: b3df56c9e49644eb80781541af80aa7a-20220104
-X-UUID: b3df56c9e49644eb80781541af80aa7a-20220104
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <sam.shih@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 512780051; Tue, 04 Jan 2022 12:55:18 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 4 Jan 2022 12:55:16 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 4 Jan 2022 12:55:17 +0800
-From:   Sam Shih <sam.shih@mediatek.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Weiyi Lu <weiyi.lu@mediatek.com>,
-        Ikjoon Jang <ikjn@chromium.org>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-CC:     John Crispin <john@phrozen.org>, Sam Shih <sam.shih@mediatek.com>
-Subject: [PATCH v8 0/3] Mediatek MT7986 basic clock support
-Date:   Tue, 4 Jan 2022 12:55:08 +0800
-Message-ID: <20220104045508.21614-1-sam.shih@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Tue, 4 Jan 2022 00:03:57 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ACDAC061761;
+        Mon,  3 Jan 2022 21:03:57 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id a203-20020a1c7fd4000000b003457874263aso22050541wmd.2;
+        Mon, 03 Jan 2022 21:03:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bX3txH8dDchVX0wVCbxbqybQRQkhYo9my0ZLDA1n4oE=;
+        b=CV0S3MjYHGNdJsMzCoW1Ofj5SlNfSsTCDaf7bKHX39q0opZrkeY/o3vFxPMVMGJrC6
+         58kP6NQZgwJgT48g23rGuyMIqc+LCdBkf10tqUPF6vMFpznQMEShveWdQOrEIV407jUY
+         EFfbhZuTYPTA3hUZevN/RLpWsEL+C4zKvRHrP07XK9zaHFeW2Gg2Y9ADLqaZHa04SByu
+         8iXeKosc+sR+qiFyr6nzgQqfNkUBoMGSp7F9ayslzRlixUFFo2Tlqye9WSup/DeFyAoE
+         piFo58n++X07Nek1/zU90AR1KzdyA27r02GqTxFgqGd6tAjBBt234Z8YrCYxosF1RAD4
+         Ztig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bX3txH8dDchVX0wVCbxbqybQRQkhYo9my0ZLDA1n4oE=;
+        b=vipufBkx5HDoEgtSQ3R25FQoP7nrcbqVKozz67PPUVmyIkPfXFyTQiDJoVepkQ2YDX
+         TlnWtW1fxNVFIzN1E0NJOG6SkE0ZeTETtew7FKso6OQ1JsDO1CWSyfdR9F3xJZit88Pj
+         SsokTZraGo6nAjCSmd0fsulvuqak8yCyyGCyXtyqp67P2N+qRdtYA9kkM/HJyW1A6TkU
+         uZ8JjKC2d4+ZoSFVWqaQyEaa6T9dTud+rb+3+chB6+dY8YCXk1Xz6mq0XaCAiRE1/tPp
+         OZSataPB+tAtEeTPFebY1L2NhKawTSxIF5oqjGXWtBKL3++bcBARnAYMbbaR4p1g9NTQ
+         IsYQ==
+X-Gm-Message-State: AOAM531JuJMLgLM7rJ71YgJ6KFL5bXXXJh/hpT01hb1+Yp11bF1cly/P
+        8KQdtGkDlFGVhpPpL320dP+cnrRKylqwNuNpNpaqUK3/6wo=
+X-Google-Smtp-Source: ABdhPJwNB3Qvdq7axxA4E5eUQlzMMRCT1l0vcXYnVkl/wKpNoxh1CDFHqrOWJnDr7bZ2w3fKP43UxlRbq/S+YklMZ+M=
+X-Received: by 2002:a7b:c087:: with SMTP id r7mr41264307wmh.17.1641272635864;
+ Mon, 03 Jan 2022 21:03:55 -0800 (PST)
 MIME-Version: 1.0
+References: <Yc56ey6QKwaYg0yi@mit.edu> <20211231114903.60882-1-Jason@zx2c4.com>
+ <Yc86TIah3w4waDEc@mit.edu>
+In-Reply-To: <Yc86TIah3w4waDEc@mit.edu>
+From:   Sandy Harris <sandyinchina@gmail.com>
+Date:   Tue, 4 Jan 2022 13:03:43 +0800
+Message-ID: <CACXcFmm2nKLHdqN27Ced2nLg=h2mSX_fKWFf-OkgArVRDi3xTw@mail.gmail.com>
+Subject: Re: [PATCH v2] random: avoid superfluous call to RDRAND in CRNG extraction
+To:     "Theodore Ts'o" <tytso@mit.edu>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series add basic clock support for mediatek mt7986 SoC.
-It is based on patch series "Add basic SoC support for mediatek mt7986"
-https://lore.kernel.org/all/20211018114009.13350-1-sam.shih@mediatek.com/
-that has been merged into matthias's tree recently:
-https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/log/?h=v5.16-next/dts64
+If we are removing RDRAND, what about adding some
+cheaper mixing? Something along these lines?
 
+The current code's mixing is triggered only once in 2^32
+iterations, depends only on crng->state[], always changes
+the same state word, and introduces no new entropy.
+
+Make it happen more often, depend on a randomly initialised
+counter as well as state[], make a data-dependent choice of
+word to change, and use random_get_entropy().
 ---
-v8: update the git message, and add a Reviewed-by tag for this series 
-v7: exclude DTS changes in the patch series
-v5: used builtin_platform_driver instead of CLK_OF_DECLARE
-    follow recent clk-mt8195 clock patch series:
-    https://lore.kernel.org/linux-arm-kernel/20210914021633.26377-1-chun-jie.chen@mediatek.com/
+ drivers/char/random.c | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
-v4:
-According to the maintainer¡¦s suggestion, this patch splits the previous
-thread into independent patch series.
-This patch include clock driver and device tree update
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 605969ed0f96..d2be079f004d 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -985,6 +985,10 @@ static void crng_reseed(struct crng_state *crng,
+struct entropy_store *r)
+     }
+ }
 
-Original thread:
-https://lore.kernel.org/all/20210914085137.31761-1-sam.shih@mediatek.com/
-https://lore.kernel.org/linux-arm-kernel/20210914085137.31761-2-sam.shih@mediatek.com/
----
-
-Sam Shih (3):
-  dt-bindings: clock: mediatek: document clk bindings for mediatek
-    mt7986 SoC
-  clk: mediatek: add mt7986 clock IDs
-  clk: mediatek: add mt7986 clock support
-
- .../arm/mediatek/mediatek,apmixedsys.txt      |   1 +
- .../bindings/arm/mediatek/mediatek,ethsys.txt |   1 +
- .../arm/mediatek/mediatek,infracfg.txt        |   1 +
- .../arm/mediatek/mediatek,sgmiisys.txt        |   2 +
- .../arm/mediatek/mediatek,topckgen.txt        |   1 +
- drivers/clk/mediatek/Kconfig                  |  17 +
- drivers/clk/mediatek/Makefile                 |   4 +
- drivers/clk/mediatek/clk-mt7986-apmixed.c     | 100 +++++
- drivers/clk/mediatek/clk-mt7986-eth.c         | 132 +++++++
- drivers/clk/mediatek/clk-mt7986-infracfg.c    | 224 ++++++++++++
- drivers/clk/mediatek/clk-mt7986-topckgen.c    | 342 ++++++++++++++++++
- include/dt-bindings/clock/mt7986-clk.h        | 169 +++++++++
- 12 files changed, 994 insertions(+)
- create mode 100644 drivers/clk/mediatek/clk-mt7986-apmixed.c
- create mode 100644 drivers/clk/mediatek/clk-mt7986-eth.c
- create mode 100644 drivers/clk/mediatek/clk-mt7986-infracfg.c
- create mode 100644 drivers/clk/mediatek/clk-mt7986-topckgen.c
- create mode 100644 include/dt-bindings/clock/mt7986-clk.h
++#define CC_SHIFT 8
++#define CC_MASK ((1<<CC_SHIFT)-1)
++static u32 cc_count = 0 ;
++
+ static void _extract_crng(struct crng_state *crng,
+               __u8 out[CHACHA_BLOCK_SIZE])
+ {
+@@ -998,8 +1002,22 @@ static void _extract_crng(struct crng_state *crng,
+     if (arch_get_random_long(&v))
+         crng->state[14] ^= v;
+     chacha20_block(&crng->state[0], out);
+-    if (crng->state[12] == 0)
+-        crng->state[13]++;
++        if (cc_count == 0)
++                cc_count = crng->state[9] ^ random_get_entropy() ;
++    switch ((crng->state[12] ^ cc_count) & CC_MASK)        {
++                case 0:
++                        cc_count = crng->state[10] ^ (cc_count>>CC_SHIFT);
++                        break ;
++                case 31: case 97: case 253:
++                        crng->state[crng->state[13]&7]++;
++                        break ;
++                case 61: case 127:
++                        crng->state[crng->state[11]&7] += random_get_entropy();
++                        break ;
++                default:
++                        break ;
++        }
++        cc_count++ ;
+     spin_unlock_irqrestore(&crng->lock, flags);
+ }
 
 -- 
-2.29.2
-
+Signed-off-by: Sandy Harris <sandyinchina@gmail.com>

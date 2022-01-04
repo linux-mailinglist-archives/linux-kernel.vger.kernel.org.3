@@ -2,106 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C214849D7
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:25:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 677234849D3
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:25:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234061AbiADVYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 16:24:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37654 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234121AbiADVYq (ORCPT
+        id S234113AbiADVYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 16:24:43 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37290 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232604AbiADVYg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 16:24:46 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDF7C061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 13:24:46 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id f5so153616278edq.6
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 13:24:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GqCKiYf+A5/18Td7yUtraHJy9LcjRCLCoUvNRD43+aU=;
-        b=MfmNtueDVHnsYYwF7606zl1wvwmIUnMkrmZ7STTEI1WpjAcevanPdDcs4OmFi2IheI
-         ZX6k3fGcbSo2/VuqQrrJ1JSFADXNPImGsiq3jIBXGy2+DjBDR2VH5ooOrmw0Bi5LsIxT
-         Rf15u9d3j01bbR65HG8J945P6mls16I7jrX9w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GqCKiYf+A5/18Td7yUtraHJy9LcjRCLCoUvNRD43+aU=;
-        b=u+WT71dHyfIlDQDFRqM8EPNfER7khlxw1k7XhaNl06FdxFgpFeEgn9qfyX8C/AWrTk
-         N0s+hEAFfE6Crvn6qKzDOnyaNhTyAwijYus2RRpFdNa5hQ4RQxOpv7CbLvKTN348LrnH
-         Ufp/uAuLGlQ9QeLFZpK9+BJ4K4awfjinnlFhmWzxVO9eTsPJYm9N7DuZQ7/V16Ft1yE1
-         n1JatVrNz/B2XKJ9VVqE3794z+dQXrqIPjRAOCS4Dc/VRFQR0fU67I73B3EqFaWrW/tT
-         qaSTloMzqCw0AUM4ELauC8fjeSwBwU1pLuOp7NerK9VZeIduNjMl5Ruu9NFJobd5Da+Z
-         itCg==
-X-Gm-Message-State: AOAM533Qi+dndxqgDnjy95L2hJQANpM2OXBPboFEFhUTIjdfVCVfpV7h
-        z6mUrXRR/iX52XLgFYcMzCV/MlOlj41WDNPRKMU=
-X-Google-Smtp-Source: ABdhPJwU2xDW7UiQEZrnaywNSe/pMyO/GvZ6XikhJR8tYNNhq48jZVtAHdBIVMLalixGW7tpX2O62g==
-X-Received: by 2002:a17:906:89a:: with SMTP id n26mr12206422eje.263.1641331484386;
-        Tue, 04 Jan 2022 13:24:44 -0800 (PST)
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
-        by smtp.gmail.com with ESMTPSA id ot19sm11707621ejb.63.2022.01.04.13.24.44
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 13:24:44 -0800 (PST)
-Received: by mail-ed1-f42.google.com with SMTP id f5so153616164edq.6
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 13:24:44 -0800 (PST)
-X-Received: by 2002:a05:6000:10d2:: with SMTP id b18mr43639104wrx.193.1641331473028;
- Tue, 04 Jan 2022 13:24:33 -0800 (PST)
+        Tue, 4 Jan 2022 16:24:36 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23A7AB817F9
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 21:24:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C360BC36AEF;
+        Tue,  4 Jan 2022 21:24:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641331473;
+        bh=y2xNY0HY9A8NbEEj2QHr8XwYq+oJ8/qQ05hA0+bUxvE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=L8gPJTIyYJhnh+PvPeFHxvApcEVYjc+mNu/Hw23asRo8I/vyJ4YisfgdctXMg6+q3
+         hf0SZKiBal3RDcv8jQfpr0BzmRv7AMj5/Pr4nAbjvDzuZGWks+6yHMrvZGbFmfzElK
+         wLg0js5EBfu7aTvBtv2SXnqJirxojgie2rPkLLyrt4tbzWE9F7OquLtUSg72vXvkMH
+         HO8bH3Pw0KG0AzSZql34w1B9WGANwg/nNKOzYeysRJJ05Z9K6t/SrXM0cNnY0W+o77
+         59vGDLTLPYNa2EVewV3KGFWZCByB5czGAMBdfIk+BNNqC1uk9iVOLRZhOxszyHtwmK
+         cgVZoMmJiK9SA==
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     Eric Biggers <ebiggers@google.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 5/6] f2fs: implement iomap operations
+Date:   Tue,  4 Jan 2022 13:24:18 -0800
+Message-Id: <20220104212419.1879225-5-jaegeuk@kernel.org>
+X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
+In-Reply-To: <20220104212419.1879225-1-jaegeuk@kernel.org>
+References: <20220104212419.1879225-1-jaegeuk@kernel.org>
 MIME-Version: 1.0
-References: <20220104202227.2903605-1-yuzhao@google.com> <20220104202227.2903605-3-yuzhao@google.com>
-In-Reply-To: <20220104202227.2903605-3-yuzhao@google.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 4 Jan 2022 13:24:17 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgvOqj6LUhNp8V5ddT8eZyYdFDzMZE73KgPggOnc28VWg@mail.gmail.com>
-Message-ID: <CAHk-=wgvOqj6LUhNp8V5ddT8eZyYdFDzMZE73KgPggOnc28VWg@mail.gmail.com>
-Subject: Re: [PATCH v6 2/9] mm: x86: add CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, page-reclaim@google.com,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 4, 2022 at 12:23 PM Yu Zhao <yuzhao@google.com> wrote:
->
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 5c2ccb85f2ef..5a4843242f09 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -85,6 +85,7 @@ config X86
-> +       select ARCH_HAS_NONLEAF_PMD_YOUNG       if X86_64
+From: Eric Biggers <ebiggers@google.com>
 
-Why is this limited to 64-bit?
+Implement 'struct iomap_ops' for f2fs, in preparation for making f2fs
+use iomap for direct I/O.
 
-I'm ok with that - maybe it's a simple case of "this is not worth
-doing on 32-bit", but I'd like the explanation to be written out.
+Note that this may be used for other things besides direct I/O in the
+future; however, for now I've only tested it for direct I/O.
 
-Right now the commit message literally points the architecture manual
-that sio relevant for both 32-bit and 64-bit - and then the patch
-itself makes it 64-bit only.
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+---
+ fs/f2fs/Kconfig |  1 +
+ fs/f2fs/data.c  | 56 +++++++++++++++++++++++++++++++++++++++++++++++++
+ fs/f2fs/f2fs.h  |  1 +
+ 3 files changed, 58 insertions(+)
 
-              Linus
+diff --git a/fs/f2fs/Kconfig b/fs/f2fs/Kconfig
+index 7eea3cfd894d..f46a7339d6cf 100644
+--- a/fs/f2fs/Kconfig
++++ b/fs/f2fs/Kconfig
+@@ -7,6 +7,7 @@ config F2FS_FS
+ 	select CRYPTO_CRC32
+ 	select F2FS_FS_XATTR if FS_ENCRYPTION
+ 	select FS_ENCRYPTION_ALGS if FS_ENCRYPTION
++	select FS_IOMAP
+ 	select LZ4_COMPRESS if F2FS_FS_LZ4
+ 	select LZ4_DECOMPRESS if F2FS_FS_LZ4
+ 	select LZ4HC_COMPRESS if F2FS_FS_LZ4HC
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 9c867de1ec29..57e6a6f0daf9 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -21,6 +21,7 @@
+ #include <linux/cleancache.h>
+ #include <linux/sched/signal.h>
+ #include <linux/fiemap.h>
++#include <linux/iomap.h>
+ 
+ #include "f2fs.h"
+ #include "node.h"
+@@ -4237,3 +4238,58 @@ void f2fs_destroy_bio_entry_cache(void)
+ {
+ 	kmem_cache_destroy(bio_entry_slab);
+ }
++
++static int f2fs_iomap_begin(struct inode *inode, loff_t offset, loff_t length,
++			    unsigned int flags, struct iomap *iomap,
++			    struct iomap *srcmap)
++{
++	struct f2fs_map_blocks map = {};
++	pgoff_t next_pgofs = 0;
++	int err;
++
++	map.m_lblk = bytes_to_blks(inode, offset);
++	map.m_len = bytes_to_blks(inode, offset + length - 1) - map.m_lblk + 1;
++	map.m_next_pgofs = &next_pgofs;
++	map.m_seg_type = f2fs_rw_hint_to_seg_type(inode->i_write_hint);
++	if (flags & IOMAP_WRITE)
++		map.m_may_create = true;
++
++	err = f2fs_map_blocks(inode, &map, flags & IOMAP_WRITE,
++			      F2FS_GET_BLOCK_DIO);
++	if (err)
++		return err;
++
++	iomap->offset = blks_to_bytes(inode, map.m_lblk);
++
++	if (map.m_flags & (F2FS_MAP_MAPPED | F2FS_MAP_UNWRITTEN)) {
++		iomap->length = blks_to_bytes(inode, map.m_len);
++		if (map.m_flags & F2FS_MAP_MAPPED) {
++			iomap->type = IOMAP_MAPPED;
++			iomap->flags |= IOMAP_F_MERGED;
++		} else {
++			iomap->type = IOMAP_UNWRITTEN;
++		}
++		if (WARN_ON_ONCE(!__is_valid_data_blkaddr(map.m_pblk)))
++			return -EINVAL;
++
++		iomap->bdev = map.m_bdev;
++		iomap->addr = blks_to_bytes(inode, map.m_pblk);
++	} else {
++		iomap->length = blks_to_bytes(inode, next_pgofs) -
++				iomap->offset;
++		iomap->type = IOMAP_HOLE;
++		iomap->addr = IOMAP_NULL_ADDR;
++	}
++
++	if (map.m_flags & F2FS_MAP_NEW)
++		iomap->flags |= IOMAP_F_NEW;
++	if ((inode->i_state & I_DIRTY_DATASYNC) ||
++	    offset + length > i_size_read(inode))
++		iomap->flags |= IOMAP_F_DIRTY;
++
++	return 0;
++}
++
++const struct iomap_ops f2fs_iomap_ops = {
++	.iomap_begin	= f2fs_iomap_begin,
++};
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index d7435fcb9658..8242f47304a5 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -3655,6 +3655,7 @@ int f2fs_init_post_read_processing(void);
+ void f2fs_destroy_post_read_processing(void);
+ int f2fs_init_post_read_wq(struct f2fs_sb_info *sbi);
+ void f2fs_destroy_post_read_wq(struct f2fs_sb_info *sbi);
++extern const struct iomap_ops f2fs_iomap_ops;
+ 
+ /*
+  * gc.c
+-- 
+2.34.1.448.ga2b2bfdf31-goog
+

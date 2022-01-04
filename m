@@ -2,45 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CD9484419
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:03:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8948A48441C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:03:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234601AbiADPDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 10:03:12 -0500
-Received: from verein.lst.de ([213.95.11.211]:50295 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234597AbiADPDL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 10:03:11 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id B659568AFE; Tue,  4 Jan 2022 16:03:07 +0100 (CET)
-Date:   Tue, 4 Jan 2022 16:03:07 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Wei Liu <wei.liu@kernel.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Tianyu Lan <ltykernel@gmail.com>, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, michael.h.kelley@microsoft.com,
-        kys@microsoft.com, Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        vkuznets@redhat.com, brijesh.singh@amd.com, konrad.wilk@oracle.com,
-        hch@lst.de, parri.andrea@gmail.com, thomas.lendacky@amd.com,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] Swiotlb: Add CONFIG_HAS_IOMEM check around memremap()
- in the swiotlb_mem_remap()
-Message-ID: <20220104150307.GA23792@lst.de>
-References: <20211231165640.1245751-1-ltykernel@gmail.com> <YdKrxgnpT0Dc0t2T@infradead.org> <20220104145155.hm7j5byhddn4zhb2@liuwe-devbox-debian-v2>
+        id S231734AbiADPDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 10:03:31 -0500
+Received: from mail-il1-f199.google.com ([209.85.166.199]:42896 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234598AbiADPDa (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 10:03:30 -0500
+Received: by mail-il1-f199.google.com with SMTP id b16-20020a92db10000000b002b3a09b269eso19739321iln.9
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 07:03:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=0vqYoUnftc9mdEB2IiFQ/k7igJoXunPY4Yl/oQfbqUk=;
+        b=BekpyXbiT8+m8UiB26b5gwVwkrjRTrIzDljakEI0fO5YKPe0nf+T7vetpNC2Om4y0L
+         WDAg8PHYXTQWx8k/xic+T/ezSEnARrt49vMGu5kwdA/X1R2wAin45iD2Hzy8boNSIQFp
+         EzfdMFSUwafG1nzIx1rUlRzH3BUO4cQ2U0vdM9j/aigHGfBhzoqU7p78XgV5to6M9smO
+         hRq5wcCzE5dgcPLZ+uXzBtsIvaMNbcI3zNS7lY3WrF14fjGGrqs4lJfbkQfe8AP7Afr/
+         6B/PFL6fqz9ZhvIf5ApSb0eG+IQk4ceNTyeGqmYwtR5njZGN46ygqfTS77HCDMCI9FUF
+         JPhg==
+X-Gm-Message-State: AOAM531LyqVnnHqhyUFvHKVWx40vLjeuZbxKMHph+yk4k3iEaFg1iXvQ
+        XKd0I0sO/lpp0Sph7eqcL4Q97Wf/eUrSi0aNaImzucPzJKch
+X-Google-Smtp-Source: ABdhPJxwhA2c2DvWHALhBAsb1Qa3jWcOJ88fFeArBIDNO7107nmDzkpgwXvLZvUeiQn4e5k/dxq1o0Xrs9oNNOWqtVwkJ+BEh6II
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220104145155.hm7j5byhddn4zhb2@liuwe-devbox-debian-v2>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Received: by 2002:a05:6638:770:: with SMTP id y16mr3540179jad.242.1641308609956;
+ Tue, 04 Jan 2022 07:03:29 -0800 (PST)
+Date:   Tue, 04 Jan 2022 07:03:29 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a9cf6105d4c2f0ee@google.com>
+Subject: [syzbot] net test error: BUG: program execution failed: executor NUM:
+ failed to write control pipe: write |NUM: broken pipe
+From:   syzbot <syzbot+acdc85fe587a899a4336@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 02:51:55PM +0000, Wei Liu wrote:
-> > Please stub out all of swiotlb_mem_remap instead of the ifdef inside the
-> > function.
-> 
-> Does this look okay to you?
+Hello,
 
-Yes, thanks!
+syzbot found the following issue on:
+
+HEAD commit:    4760abaac684 Merge branch 'mpr-len-checks' David Ahern says:
+git tree:       net
+console output: https://syzkaller.appspot.com/x/log.txt?x=10b49a35b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1a86c22260afac2f
+dashboard link: https://syzkaller.appspot.com/bug?extid=acdc85fe587a899a4336
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+acdc85fe587a899a4336@syzkaller.appspotmail.com
+
+2021/12/31 14:59:00 checking revisions...
+2021/12/31 14:59:01 testing simple program...
+executing program
+executing program
+executing program
+2021/12/31 14:59:12 BUG: program execution failed: executor 0: failed to write control pipe: write |1: broken pipe
+SYZFAIL: wrong response packet
+ (errno 16: Device or resource busy)
+loop exited with status 67
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

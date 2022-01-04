@@ -2,142 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37BAE4840B9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:24:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A26F4840BF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:25:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232168AbiADLYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 06:24:47 -0500
-Received: from mail-vk1-f173.google.com ([209.85.221.173]:35835 "EHLO
-        mail-vk1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiADLYq (ORCPT
+        id S232225AbiADLZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 06:25:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39598 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232257AbiADLY5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 06:24:46 -0500
-Received: by mail-vk1-f173.google.com with SMTP id c10so20287208vkn.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 03:24:46 -0800 (PST)
+        Tue, 4 Jan 2022 06:24:57 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66435C061799;
+        Tue,  4 Jan 2022 03:24:57 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id y16-20020a17090a6c9000b001b13ffaa625so40524406pjj.2;
+        Tue, 04 Jan 2022 03:24:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PO7WThJm8A1VltTWZS6VmCv6l32L8rM76DCuBVs8Jow=;
+        b=hueypFByEa9g4Nx1d4zgwZaoJ/WLmuOrRjeJKxmxRt4+PWNBMWTGMY+jpwuh4ZbsY+
+         GPmL1kIY8Qb2NEniifGoqg9u0QUvSRECjXTxovpiJk1BHSzanwa/klZ+4DcIQ3r/910b
+         zqCr6mqKtrwVDufaeOhN3IXgLnoFIEHeN89Cp2iEqDzMz7UAyZGSRKgaz8GV84r/kCgb
+         6yGfjrDNo6vUmi2TeeVlzdjIaoytBXZe/l+7+ANiqyjhkw623S1QEMvU3XYKKC4H9tSY
+         p5xIrH/MrlcEa7koyPwS/du/vjs0xnaK+OQE+5efJ6R4RXvVbb8imD6ujLcYxT17fCUJ
+         XX9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YXhqr9jwDQI3ARvEqLlZLvz2Y/xfNtJartfIabDWO6U=;
-        b=PxnADfivPeaV810BJDc2MBIUDDiMfS7Xc9Mp43UqMK9piBmDuRAlBRqvY7xF/lJRQM
-         uowStpfYxUiflVmk0GI/t7p5I80YTLXIoXaJvxRopmp+Ae+iCVwN3JIjxUehJNUtUrn8
-         G1t36CQYXfLyP7xXTmSntPBAYRCB7rIUQ7qpGi6J1XCDh/SUCYdIT03ha6o4SJVIHPUh
-         YYj2UJG6RoAPmjRd7x9oS5VuGR9XOcLhq5bCVU84LejmX7/XFildd+cRQURMq1PC04AY
-         hiYpxt4lhPtt8WpV19n5Wf/j+G4E9VxurVRHro0c81RtWZS/8l1j+BlXRrQdAZhmsurY
-         NESA==
-X-Gm-Message-State: AOAM530ukpEUOKLz4uB9Oks6udWlbzlW9ZfdSqAgLFYYpM9C/55StVDY
-        C6tHxdvigwkPdNAwCBN8M6k8c5wn+XsozQ==
-X-Google-Smtp-Source: ABdhPJwlcg9d0AR1TThhpU0RM9OXCJkdwpNJCHU8eqcIcAT3WWExbQYvFmN340ke0u9l7zKQrqigrg==
-X-Received: by 2002:a1f:ea02:: with SMTP id i2mr9018170vkh.39.1641295485398;
-        Tue, 04 Jan 2022 03:24:45 -0800 (PST)
-Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com. [209.85.221.180])
-        by smtp.gmail.com with ESMTPSA id u137sm3463145vku.42.2022.01.04.03.24.44
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 03:24:44 -0800 (PST)
-Received: by mail-vk1-f180.google.com with SMTP id h67so20560792vkh.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 03:24:44 -0800 (PST)
-X-Received: by 2002:a1f:2196:: with SMTP id h144mr16522529vkh.7.1641295484397;
- Tue, 04 Jan 2022 03:24:44 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PO7WThJm8A1VltTWZS6VmCv6l32L8rM76DCuBVs8Jow=;
+        b=j+RNf394penukAUviyyaveobajFUW602AXwLxBKH7DWPI2m8nrrIGDLBSEirNu/rJP
+         +jmxPQGDD1NN4mFO+FPgjHufIWP1nmyD4b3L+mJWpd7SLUg1ZdQMCkuiXhkKHPelXbd8
+         NepjYarUhXDmhFyCEyvHlQZRychLdK4mHSTAtlEX/fPDEBm9L6W2yE2tjTLDxUbO+hsK
+         DIAsxQ/wrm5LjMpFY9pFEXHH3jn9+CuEAam2QU6EhDyV0DAdfGBvLaY3RhAet9X40KmQ
+         k5eFBJMdXctLzxPAoVgnDRudn0NK//b2g2Tsna1vffC/F3pxg1W+IPZo7dY1DdBuGaTS
+         4uKQ==
+X-Gm-Message-State: AOAM5300L//H5prnf+I3VbCW+1aR/cMzo9cTtPpJ0RIOzYENjRTieWaS
+        2sEAnqAMtm/5n+uKIgxzo3A=
+X-Google-Smtp-Source: ABdhPJy0EjPeLhCFiZ2MCgqcQNvAWPN8LoKv9G8lUKwwF//2ImHUaJ3M996i+Qt9o/2IzulculP+YA==
+X-Received: by 2002:a17:902:7246:b0:149:636f:2fde with SMTP id c6-20020a170902724600b00149636f2fdemr44205356pll.9.1641295496934;
+        Tue, 04 Jan 2022 03:24:56 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id kb1sm46694172pjb.56.2022.01.04.03.24.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 03:24:56 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     hare@suse.com
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>, CGEL ZTE <cgel.zte@gmail.com>
+Subject: [PATCH] drivers/scsi: remove redundant error variable
+Date:   Tue,  4 Jan 2022 11:24:52 +0000
+Message-Id: <20220104112452.601899-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <5e001ec1-d3f1-bcb8-7f30-a6301fd9930c@omp.ru> <87pmp7volh.wl-maz@kernel.org>
- <CAMuHMdWjGUHZQhKDPASfpfNOiUg9HP2f3DsUsmJoijap29xpyQ@mail.gmail.com> <87mtkbvktb.wl-maz@kernel.org>
-In-Reply-To: <87mtkbvktb.wl-maz@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 4 Jan 2022 12:24:33 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUdU82Kes87zq-15buRTLv44k8XQJmmw3QoBq_rZmvGKw@mail.gmail.com>
-Message-ID: <CAMuHMdUdU82Kes87zq-15buRTLv44k8XQJmmw3QoBq_rZmvGKw@mail.gmail.com>
-Subject: Re: [PATCH] platform: finally disallow IRQ0 in platform_get_irq() and
- its ilk
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-On Tue, Jan 4, 2022 at 11:48 AM Marc Zyngier <maz@kernel.org> wrote:
-> On Tue, 04 Jan 2022 09:47:21 +0000,
-> Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Tue, Jan 4, 2022 at 10:26 AM Marc Zyngier <maz@kernel.org> wrote:
-> > > [Adding Geert]
-> > >
-> > > On Sat, 06 Nov 2021 20:26:47 +0000,
-> > > Sergey Shtylyov <s.shtylyov@omp.ru> wrote:
-> > > > The commit a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is
-> > > > invalid") only calls WARN() when IRQ0 is about to be returned, however
-> > > > using IRQ0 is considered invalid (according to Linus) outside the arch/
-> > > > code where it's used by the i8253 drivers. Many driver subsystems treat
-> > > > 0 specially (e.g. as an indication of the polling mode by libata), so
-> > > > the users of platform_get_irq[_byname]() in them would have to filter
-> > > > out IRQ0 explicitly and this (quite obviously) doesn't scale...
-> > > > Let's finally get this straight and return -EINVAL instead of IRQ0!
-> > > >
-> > > > Fixes: a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is invalid")
-> > > > Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-> >
-> > > > --- driver-core.orig/drivers/base/platform.c
-> > > > +++ driver-core/drivers/base/platform.c
-> > > > @@ -231,7 +231,8 @@ int platform_get_irq_optional(struct pla
-> > > >  out_not_found:
-> > > >       ret = -ENXIO;
-> > > >  out:
-> > > > -     WARN(ret == 0, "0 is an invalid IRQ number\n");
-> > > > +     if (WARN(!ret, "0 is an invalid IRQ number\n"))
-> > > > +             return -EINVAL;
-> > > >       return ret;
-> > > >  }
-> > > >  EXPORT_SYMBOL_GPL(platform_get_irq_optional);
-> > > > @@ -445,7 +446,8 @@ static int __platform_get_irq_byname(str
-> > > >
-> > > >       r = platform_get_resource_byname(dev, IORESOURCE_IRQ, name);
-> > > >       if (r) {
-> > > > -             WARN(r->start == 0, "0 is an invalid IRQ number\n");
-> > > > +             if (WARN(!r->start, "0 is an invalid IRQ number\n"))
-> > > > +                     return -EINVAL;
-> > > >               return r->start;
-> > > >       }
-> > >
-> > > Geert recently mentioned that a few architectures (such as sh?) still
-> > > use IRQ0 as something valid in limited cases.
-> >
-> > https://lore.kernel.org/all/CAMuHMdUg3=q7gyaVHP0XcYUOo3PQUUv8Hc8wp5faVQ+bTBpg4A@mail.gmail.com
-> >
-> > TL;DR: Probably only smsc911x Ethernet on the AP-SH4A-3A and
-> > AP-SH4AD-0A boards, which should trigger the warning since v5.8.
-> >
-> > > From my PoV, this patch is fine, but please be prepared to fix things
-> > > in a couple of years when someone decides to boot a recent kernel on
-> > > their pet dinosaur. With that in mind:
-> > >
-> > > Acked-by: Marc Zyngier <maz@kernel.org>
-> >
-> > TBH, I don't see much point in this patch, as the WARN() has been
-> > there since a while, and the end goal is to return zero instead of
-> > -ENXIO for no interrupt, right?
->
-> I think the end-goal is to never return 0. Either we return a valid
-> interrupt number, or we return an error. It should be the
-> responsibility of the caller to decide what they want to do in the
-> error case.
+Return value from ahd_linux_queue_abort_cmd() directly instead
+of taking this in another redundant variable.
 
-This is platform_get_irq_optional(). All other *_optional() APIs
-return 0 (or NULL[1]) in case the optional resource is not available.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
+---
+ drivers/scsi/aic7xxx/aic79xx_osm.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-[1] Most (all?) return pointers, NULL, or a negative error code.
+diff --git a/drivers/scsi/aic7xxx/aic79xx_osm.c b/drivers/scsi/aic7xxx/aic79xx_osm.c
+index 5d566d2b2997..928099163f0f 100644
+--- a/drivers/scsi/aic7xxx/aic79xx_osm.c
++++ b/drivers/scsi/aic7xxx/aic79xx_osm.c
+@@ -755,11 +755,7 @@ ahd_linux_biosparam(struct scsi_device *sdev, struct block_device *bdev,
+ static int
+ ahd_linux_abort(struct scsi_cmnd *cmd)
+ {
+-	int error;
+-	
+-	error = ahd_linux_queue_abort_cmd(cmd);
+-
+-	return error;
++	return ahd_linux_queue_abort_cmd(cmd);
+ }
+ 
+ /*
+-- 
+2.25.1
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

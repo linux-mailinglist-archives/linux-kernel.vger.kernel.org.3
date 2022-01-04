@@ -2,104 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91505484731
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:46:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1411484735
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:50:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235933AbiADRq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 12:46:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44090 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233839AbiADRq1 (ORCPT
+        id S235938AbiADRut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 12:50:49 -0500
+Received: from relmlor1.renesas.com ([210.160.252.171]:30825 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S233839AbiADRuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 12:46:27 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF2BC061784
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 09:46:27 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id j13so27598624plx.4
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 09:46:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pxdiDVXwa/ny97PWAQ3t8QcMG6dpbAX9omXQJzmLbgw=;
-        b=lQJYu6sb4BL1el4AGCZ5lZ4EDih746LFOjKLJPIaNu5nXj8XVn1Ri3YZ/ZthcnhXfT
-         8S/+oweJfPX+tMDFfIJAwXVWccaiGQP+tUky3Bq+tC0c0ARqjyKKUVGWdCVAmkaJl+Si
-         cTI5HezO/YZOC8D6vucmrV/2Rf37XpIRTuhHedn+Zjq5/i/tM6n85kXsdIepo5UDorNz
-         DrfXPDH18F6fbhX/Hs0ugWIrc89OIEMnY3aSxx2OO41w8VJTnS2U9vaiRs/lrUn7ytVn
-         gmMaV6JtBDS+tTdzc+F29ofWOf/cV6iRphoZQT//VQykqySV7ex6dsa/eOaH8Ysg3ADf
-         OZIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pxdiDVXwa/ny97PWAQ3t8QcMG6dpbAX9omXQJzmLbgw=;
-        b=xJO35CTQlvVJcJemfETdMl+6rNjXbEQeYW2SNfvgvCYAe0QjW4ksfBj1pMikXp+spp
-         5LT8HY87tqaBYvCp1hKi/vaarJkXqa39rdeGNhcPLMHjtgmlTj9TUKtl8zQbE4PxVsZb
-         AfPzpVjd6RKNlivVb9tzM66Wui546DlSEF1OXH1M+V+I7NR9m5say/EY9AJqoLhqUXHv
-         a5cH+roOKEyV786q5nKr9omxJ/3DP+wTbb+vTnXpZMotgtXNt8NWW7Z7Y3ZbhIefrXKB
-         7s0fJd7cmdhwi1rNpzJ4sG+D+sz9JXuHXl2JFA0FieT5nc8Dpev5RbHOQQI11jjjdBpT
-         YXTg==
-X-Gm-Message-State: AOAM531KjnyKwwVx/y5RvBBZ6BdxYmcgn/jkNaNQpIQUDZow8U7odWPD
-        +FqiFYfEgtNErFJhCzgu/c5yhiPpuVs+Xw==
-X-Google-Smtp-Source: ABdhPJwGkqo37L+3Tk3QppOQGxkb+oeT49yO+8jdPQ1tj2onFEAXJZyowk4PVLsggA+w5VJaSLIqNQ==
-X-Received: by 2002:a17:90a:d498:: with SMTP id s24mr62580529pju.46.1641318386765;
-        Tue, 04 Jan 2022 09:46:26 -0800 (PST)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id c24sm19236323pgm.67.2022.01.04.09.46.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 09:46:25 -0800 (PST)
-Date:   Tue, 4 Jan 2022 10:46:23 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] remoteproc: Fix NULL vs IS_ERR() checking in
- rproc_create_trace_file
-Message-ID: <20220104174623.GA540353@p14s>
-References: <20211227090645.18600-1-linmq006@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211227090645.18600-1-linmq006@gmail.com>
+        Tue, 4 Jan 2022 12:50:46 -0500
+X-IronPort-AV: E=Sophos;i="5.88,261,1635174000"; 
+   d="scan'208";a="105493655"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 05 Jan 2022 02:50:44 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id A87A240B3513;
+        Wed,  5 Jan 2022 02:50:42 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Al Cooper <alcooperx@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        linux-serial@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, linux-kernel@vger.kernel.org
+Subject: [PATCH] serial: 8250_bcm7271: Fix return error code in case of dma_alloc_coherent() failure
+Date:   Tue,  4 Jan 2022 17:50:08 +0000
+Message-Id: <20220104175009.7029-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good morning,
+In case of dma_alloc_coherent() failure return -ENOMEM instead of
+returning -EINVAL.
 
-On Mon, Dec 27, 2021 at 09:06:45AM +0000, Miaoqian Lin wrote:
-> The debugfs_create_file() function doesn't return NULL.
-> It returns error pointers.
+Fixes: c195438f1e84 ("serial: 8250_bcm7271: Propagate error codes from brcmuart_probe()")
+Reported-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+Hi All,
 
-You are correct.
+This patch applies to -next.
 
-> 
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
->  drivers/remoteproc/remoteproc_debugfs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/remoteproc/remoteproc_debugfs.c b/drivers/remoteproc/remoteproc_debugfs.c
-> index b5a1e3b697d9..a2409fe2f57b 100644
-> --- a/drivers/remoteproc/remoteproc_debugfs.c
-> +++ b/drivers/remoteproc/remoteproc_debugfs.c
-> @@ -390,7 +390,7 @@ struct dentry *rproc_create_trace_file(const char *name, struct rproc *rproc,
->  
->  	tfile = debugfs_create_file(name, 0400, rproc->dbg_dir, trace,
->  				    &trace_rproc_ops);
-> -	if (!tfile) {
-> +	if (IS_ERR(tfile)) {
->  		dev_err(&rproc->dev, "failed to create debugfs trace entry\n");
->  		return NULL;
+Cheers,
+Prabhakar
+---
+ drivers/tty/serial/8250/8250_bcm7271.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Please return PTR_ERR(tfile) and fix rproc_handle_trace() to do the right error
-check and propagate the error code if needed.
+diff --git a/drivers/tty/serial/8250/8250_bcm7271.c b/drivers/tty/serial/8250/8250_bcm7271.c
+index cc60a7874e8b..9b878d023dac 100644
+--- a/drivers/tty/serial/8250/8250_bcm7271.c
++++ b/drivers/tty/serial/8250/8250_bcm7271.c
+@@ -1075,7 +1075,7 @@ static int brcmuart_probe(struct platform_device *pdev)
+ 						   priv->rx_size,
+ 						   &priv->rx_addr, GFP_KERNEL);
+ 		if (!priv->rx_bufs) {
+-			ret = -EINVAL;
++			ret = -ENOMEM;
+ 			goto err;
+ 		}
+ 		priv->tx_size = UART_XMIT_SIZE;
+@@ -1083,7 +1083,7 @@ static int brcmuart_probe(struct platform_device *pdev)
+ 						  priv->tx_size,
+ 						  &priv->tx_addr, GFP_KERNEL);
+ 		if (!priv->tx_buf) {
+-			ret = -EINVAL;
++			ret = -ENOMEM;
+ 			goto err;
+ 		}
+ 	}
+-- 
+2.17.1
 
-Thanks,
-Mathieu
-
->  	}
-> -- 
-> 2.17.1
-> 

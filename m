@@ -2,55 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42CB9483D22
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 08:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA58483D24
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 08:44:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233683AbiADHnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 02:43:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45474 "EHLO
+        id S233693AbiADHov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 02:44:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbiADHnm (ORCPT
+        with ESMTP id S229757AbiADHou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 02:43:42 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F441C061761;
-        Mon,  3 Jan 2022 23:43:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=pqTPWf6iPV5Bcx2RGttdJKfervIMBZINiE3d6Dre1UE=; b=UiD/ThU0k7Ho9RkVpwrfHvJjBB
-        NrNVafQaMmlB15cuWymH9tSZqUDNcBd01kj4rTVHVicgGaIRSIxBsJU/EsArulWjI0AOilOxh6v73
-        3HpW1b91giViGSLnL0uuRqz72s1va8xB8Q7T2ZWkoWBjV3QEF7ywbbUtpv4d5LLonV//nKAoN2LwX
-        h6bgc9FW3Ymy5TKet706IPBo1Ut8MeSy5RArNf75sKlVrHkwcViqmGGcR0FzX6a5LCTWTG8p9Wpqj
-        Oi+G/6hXPeM2s85cZNvyU4QyGYs75Lso6dV7lBhpXOZ68aMXJlEP1/Q/VIVAqEQ8mjmT7l72Zpz3I
-        YNidTf5w==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n4eTr-00AXfk-72; Tue, 04 Jan 2022 07:43:39 +0000
-Date:   Mon, 3 Jan 2022 23:43:39 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-rdma@vger.kernel.org, linux-um@lists.infradead.org
-Subject: Re: [PATCH 2/2] IB/rdmavt: modify rdmavt/qp.c for UML
-Message-ID: <YdP6qx0G7ICcBu3f@infradead.org>
-References: <20220102070623.24009-1-rdunlap@infradead.org>
+        Tue, 4 Jan 2022 02:44:50 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3E2C061761
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 23:44:49 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id u13so79752919lff.12
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 23:44:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CsNGkAuTfXI5FN0re853yKsBlp1/TfiDupH7mdPtEH8=;
+        b=iLIudQiTyfDFYG/CACSF02mgQWXC5aLYLwa9g/2H8JEsh1VrCJl6nDz50rIl4zqHUl
+         ygOBrnzXzegoATZ+ELlPM94rvvsajU+fBFw8V3JabDkMleG7XsvJhIQea9k8oTFFlpo5
+         Yi7VDCdnDnzPtsRb7amOK0sV+skf1qsFsSKWM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CsNGkAuTfXI5FN0re853yKsBlp1/TfiDupH7mdPtEH8=;
+        b=3nJNgL/b/OM2m2aGGEETUctt+Q3JV/TIe6Q153yjlIP9uzwbQkJOWkc5JMkBmYNc3H
+         +7fZRy+55VJ6E9JFRTJ53VtjZ9K1+DTS5eINlEskGqAiTF4Bh5tgAwQs1F52fV0e8g0R
+         RLlR3DwUE2Qf5MsOWZnwNX5t9k7mn1Esw1mXCREXa0Asq5LTkOHHm90/eKmZCSbI9A7Z
+         nTkdm6l9Er+pIhYalEltpt0IFp+wuSeW7nGs+9SIFaQE3nZI/4ZJi8hZeZWDSSA/1cfk
+         Xni2W715IOxMFka0cZIteczEdCTV5qMopRoVM5bICYmenVRhry3U3+96vDuomyL9FQCx
+         GAlw==
+X-Gm-Message-State: AOAM533bNmyPGr/XdZnrRFjk5vGlSvBDqaYwwhmjIzgEpic7O21x2J2u
+        NvREXUtSckn3H8aTVWUEAyNY0W8KJGNrkByXM6p9oA==
+X-Google-Smtp-Source: ABdhPJw0YC6U4HEb98OAFpcmS4FVKcETi99MHEMDu4r06NwCCTOcXAZuz1wxcQjSjFJ4W/qnp4p37ec5ZL2rrahOJEo=
+X-Received: by 2002:a05:6512:e9a:: with SMTP id bi26mr41350197lfb.371.1641282288318;
+ Mon, 03 Jan 2022 23:44:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220102070623.24009-1-rdunlap@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+References: <20220103101855.17350-1-angelogioacchino.delregno@collabora.com> <20220103101855.17350-2-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220103101855.17350-2-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 4 Jan 2022 15:44:36 +0800
+Message-ID: <CAGXv+5EONgNiQDk0eOVSnVG_U6_=XSpDWADt73x2=tZPt1gL7Q@mail.gmail.com>
+Subject: Re: [PATCH 2/3] pinctrl: mediatek: pinctrl-paris: Simplify with dev_err_probe()
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     sean.wang@kernel.org, linus.walleij@linaro.org,
+        matthias.bgg@gmail.com, linux-mediatek@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yikes, this rdmavt code is completely fucked up and a very good example
-why people should not use __user casts or random internal helpers.
+On Mon, Jan 3, 2022 at 6:19 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Use the dev_err_probe() helper to simplify error handling during probe.
+>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-The right fix is to remove this crap entirely, and if the rdmavt
-maintainer think that they absolutely need a non-temporal memcpy they
-need to work to add a core API for it.
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>

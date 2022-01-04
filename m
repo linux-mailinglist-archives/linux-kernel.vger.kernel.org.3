@@ -2,218 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C5E4847F4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:35:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D174D4847F1
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:35:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236384AbiADSfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 13:35:04 -0500
-Received: from mail-am6eur05on2082.outbound.protection.outlook.com ([40.107.22.82]:60001
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236373AbiADSfC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 13:35:02 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UfMIaMt+ZIJxFZiAWw5nDgG8aV1bmQei7YWRAF20+Qok0mZ5dcOWWFPgAtd9RLNGb0FAQVrF6s1bOY4D2MYZ9ZTv9NozH5UsiyF/mEDARMS9iRYaVOsR8TgH0gV27TNjzYEClWC/W9ff09/cUi9hdptuVCL745by6ipx2WNGRkuqKYKS7+TlxFUlVceWkrZHKjPB6+OLfQBFkVfyZNRyaqMOGZHLpGcWf7Q0maVvcylft4KWs60KGbNwjVJa12jD3rseCaYFu6C50sAiQIUj4cKDHvMcUBN1SLiVEAvjPvkMzU5xmFwc5+x51BmG6gl+cUZGkESNOxHg/y4pp3fuPQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2zvDCDD5wFKKalxOxJ7/p8SZfAsbXvCiCoziHV8q/2w=;
- b=nlLHzjLxmouMNpiCNTzTZ1jGtTD9t/AjCTlY0nJIIiTJmvHV2PyYnPGBUaHcr6lL9JjsC4zVDDr6bCTbrRPTR+o3/Dp2uaQjK2f3dbk25dr+u94zT8hO21aP9RTQ1K0w5nyt4SPKpVwCYRwvGls04Pzf0/pB8AF0msXit6bHpFfjl2vLb/94tXDROBcmc/4FOGEBqW5NlA3f20FgrAZLTcTS1I9CRBd3sSAYPKpL7JnxKxHcr7baE0SvH97LnkMJC+lMnsqDr9G+eMi4MZzIe3GpkB8bAnKyh9Nnv8Hh8uz6LCByuYY31C3L+25+UYUQvpv5Bg3fozQ1IAPxHDQLzQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 194.138.21.73) smtp.rcpttodomain=canonical.com smtp.mailfrom=siemens.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=siemens.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2zvDCDD5wFKKalxOxJ7/p8SZfAsbXvCiCoziHV8q/2w=;
- b=g9Y8ZpoAYOU2DkwndGu1TttTELIhHNgjQ1vwkTk4lJm0nQtOgBxnU2PzhFTM/taE46wl3imvTaRLyHGSX1t2S1EJ8dEU5LGNC/Fy0ZIB1wRK2O9zRnJD+j4o4YjM2T5B7JR/ycOKuB8kDtBF44dWV6t2pukBhJjZ3kj+yl/bPoveYu1yuWJ5VFMbTqkBwf2xX41vBsvnS1q4jCBMo8MNX6pGa6d13GQ/Zn/8PefgBCp18V5XNz2UzsFRIlxNbAoLWnb5W2lvEPDNYqc4i8h/IqtjW2CA2IFPqAriPBNHy403spkbZRy0sq9GWhCInxPoOfg4tN1shWROjW7LSn3Pfw==
-Received: from AS9PR0301CA0055.eurprd03.prod.outlook.com
- (2603:10a6:20b:469::25) by HE1PR1001MB0986.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:3:72::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Tue, 4 Jan
- 2022 18:34:59 +0000
-Received: from VE1EUR01FT036.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:20b:469:cafe::4f) by AS9PR0301CA0055.outlook.office365.com
- (2603:10a6:20b:469::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.14 via Frontend
- Transport; Tue, 4 Jan 2022 18:34:59 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.73)
- smtp.mailfrom=siemens.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=siemens.com;
-Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
- 194.138.21.73 as permitted sender) receiver=protection.outlook.com;
- client-ip=194.138.21.73; helo=hybrid.siemens.com;
-Received: from hybrid.siemens.com (194.138.21.73) by
- VE1EUR01FT036.mail.protection.outlook.com (10.152.3.31) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4844.14 via Frontend Transport; Tue, 4 Jan 2022 18:34:58 +0000
-Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
- DEMCHDC9SNA.ad011.siemens.net (194.138.21.73) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 4 Jan 2022 19:34:58 +0100
-Received: from md1za8fc.ad001.siemens.net (158.92.8.107) by
- DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 4 Jan 2022 19:34:57 +0100
-Date:   Tue, 4 Jan 2022 19:34:55 +0100
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Aaron Ma <aaron.ma@canonical.com>
-CC:     Jakub Kicinski <kuba@kernel.org>, <davem@davemloft.net>,
-        <hayeswang@realtek.com>, <tiwai@suse.de>,
-        <linux-usb@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] net: usb: r8152: Add MAC passthrough support for more
- Lenovo Docks
-Message-ID: <20220104193455.6b8a21fc@md1za8fc.ad001.siemens.net>
-In-Reply-To: <601815fe-a10e-fe48-254c-ed2ef1accffc@canonical.com>
-References: <20211116141917.31661-1-aaron.ma@canonical.com>
-        <20220104123814.32bf179e@md1za8fc.ad001.siemens.net>
-        <20220104065326.2a73f674@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-        <20220104180715.7ecb0980@md1za8fc.ad001.siemens.net>
-        <601815fe-a10e-fe48-254c-ed2ef1accffc@canonical.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S236368AbiADSfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 13:35:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236364AbiADSfA (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 13:35:00 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5987C061784
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 10:34:59 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id gj24so32087073pjb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 10:34:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to;
+        bh=Mm8aME8N0rcTWMIherTmKiWUPPhEhVa++q/9fp0wLb4=;
+        b=Dv2EEZwY/9iHyVRg1BLtQyfN25nMhIf+40DZ/llMtKKzrUF7FhFDhdshey42WkiJeJ
+         knlNnyyHuqTcMIQ5MBB+6nrs/WvrpP+AVaOtEOW3v7ognXrbYr+bAfEkuUmNWSOadpkn
+         NFwViyd9I489A9WlYWGJz6ycgVp3RDbJeP2IM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to;
+        bh=Mm8aME8N0rcTWMIherTmKiWUPPhEhVa++q/9fp0wLb4=;
+        b=fQ9aRIwE6g4casikCL+pAZL8RIUoPdPLQaoDjCKEb7HWU6i5KPOmrR6lei+hxH0kL0
+         TTMSAuZvjCPMKUvWbIrCzBL3oYGStrG+BSkqJeEEYrLHXH/pt03wFpfLrhhmcjVV05Xc
+         AbUjrwUV1znXrQ0SNBmV/KMQQF31AUHkr7hbpQAgmkzd9l8q5uKzQlk/jADy7aeCWujK
+         eiuDrdHwMAI21li4rusYkYERSwiWZnTHokzQXKYiXMnIuUXiwWuFz/FAwb5mlz8Fj3CU
+         rLwujxAwucVPNLktIrNtskmgg8VgkvGvBiF3tCF+1YWBel+5VXmzHb2bcdknJmRmWIlI
+         maeg==
+X-Gm-Message-State: AOAM531w2ZK+/6KR6GdQF9VqZAXnGA7UZkzJp+SOKIVs7S9bVxrORaRQ
+        pA1gtvjdVOu405vMqZ0vfAEkAA==
+X-Google-Smtp-Source: ABdhPJwfanKPKjVi/4Eq4QtNwbpa7bU90y0Uc3G2cisLOEel4H1i+bNR1YWHNRYBD8G3oNLfII+keg==
+X-Received: by 2002:a17:90b:4c48:: with SMTP id np8mr62085778pjb.51.1641321299317;
+        Tue, 04 Jan 2022 10:34:59 -0800 (PST)
+Received: from [10.136.8.222] ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id j4sm11274395pfa.149.2022.01.04.10.34.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jan 2022 10:34:59 -0800 (PST)
+Message-ID: <567c6e66-1baf-2942-87fc-17c5e0f4b0b9@broadcom.com>
+Date:   Tue, 4 Jan 2022 10:34:57 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [158.92.8.107]
-X-ClientProxiedBy: DEMCHDC89XA.ad011.siemens.net (139.25.226.103) To
- DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 10968905-cf3f-46c9-2683-08d9cfb0e977
-X-MS-TrafficTypeDiagnostic: HE1PR1001MB0986:EE_
-X-Microsoft-Antispam-PRVS: <HE1PR1001MB0986C3BE22D88EAF0E808592854A9@HE1PR1001MB0986.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jKA19cSbaFOpr7LgXXJjk7pBxgxHX3lvWdXQx+MR2+xwYKnNBos8BBlNCQEdEIKqRTv2x5A1guEs9IJWAz1sOgdqiY8PJR24JXe5kd4MRhy78fe3IMWrn/rrsLtqzLS6zCWbyN34is9Pw0wi4WMQE0uGAJhhYn0obWcAu18fmOHsS2y00Ny9fHZYmsmzaJz1vFM/lz02ffuK0YzQF32tV0CoXpA8uSmf9MTmy7IMaOoxgOPxJCwKpaqCrZMav0we6rK/0nR/BTIHuSig4BHc5gV0011FZ7+ZeQtmvhk3s1Npm9Y3oksCKpcqPLgmZYIHVMla0WloI7DnlaRxPSabJJE75I2H1Lx2spFBIXNa8oW4NVw0rtaItjPfsT0pHby2/GcUXp/H44djFb5IpYN2RA2KgKeoUlClqHmOkJ18ZutuRWZ5OFs6Y69v8jT6nyIQo3rV3yE+UAntv+ox1oFvlC6gyXkrXay52Y/iTqoZggBtthcCO3ATgHVmMQtcMTKzmkHeG2tJlsvkjJaan9P1m7PWv3UwFIIJgdmyQp+lE0GIUWQm/xwIe01CTzwWBqvlk942XCfEc1+YLN1wtc1ga3oojEWmpJA7Hv6enhat48CuVcv3z+B9lB53EqPZwAweOfKvm3ysyAlJro8gdvJD+uiVVQf4c1tiJDx8mQOqb7/DvKVFHXsxSHQvX7swdkBegjp+JvlscuVD7wa3nX4XUMuxDN3P43EafPgmP7DqGZ0PTwxuGzDrvQaM492Tl7ZbGDMbWv0bZb38+RqmuRMTbLLdfYrxKixBf7ycI7lNqd0=
-X-Forefront-Antispam-Report: CIP:194.138.21.73;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(40470700002)(46966006)(36840700001)(7696005)(54906003)(4326008)(40460700001)(44832011)(2906002)(336012)(316002)(956004)(5660300002)(53546011)(186003)(356005)(9686003)(26005)(16526019)(82960400001)(81166007)(508600001)(55016003)(6916009)(82310400004)(83380400001)(1076003)(8936002)(86362001)(47076005)(70586007)(70206006)(8676002)(36860700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jan 2022 18:34:58.7260
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 10968905-cf3f-46c9-2683-08d9cfb0e977
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.73];Helo=[hybrid.siemens.com]
-X-MS-Exchange-CrossTenant-AuthSource: VE1EUR01FT036.eop-EUR01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR1001MB0986
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v2 12/23] PCI: iproc: Rename iproc_pcie_pltfm_ to
+ iproc_pltfm_pcie_
+To:     Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org,
+        Fan Fei <ffclaire1224@gmail.com>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-arm-kernel@lists.infradead.org
+References: <20211223011054.1227810-1-helgaas@kernel.org>
+ <20211223011054.1227810-13-helgaas@kernel.org>
+From:   Ray Jui <ray.jui@broadcom.com>
+In-Reply-To: <20211223011054.1227810-13-helgaas@kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000007ce8a05d4c5e5cd"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Wed, 5 Jan 2022 01:40:42 +0800
-schrieb Aaron Ma <aaron.ma@canonical.com>:
+--00000000000007ce8a05d4c5e5cd
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-> On 1/5/22 01:07, Henning Schild wrote:
-> > Am Tue, 4 Jan 2022 06:53:26 -0800
-> > schrieb Jakub Kicinski <kuba@kernel.org>:
-> >   
-> >> On Tue, 4 Jan 2022 12:38:14 +0100 Henning Schild wrote:  
-> >>> This patch is wrong and taking the MAC inheritance way too far.
-> >>> Now any USB Ethernet dongle connected to a Lenovo USB Hub will go
-> >>> into inheritance (which is meant for docks).
-> >>>
-> >>> It means that such dongles plugged directly into the laptop will
-> >>> do that, or travel adaptors/hubs which are not "active docks".
-> >>>
-> >>> I have USB-Ethernet dongles on two desks and both stopped working
-> >>> as expected because they took the main MAC, even with it being
-> >>> used at the same time. The inheritance should (if at all) only be
-> >>> done for clearly identified docks and only for one r8152 instance
-> >>> ... not all. Maybe even double checking if that main PHY is
-> >>> "plugged" and monitoring it to back off as soon as it is.
-> >>>
-> >>> With this patch applied users can not use multiple ethernet
-> >>> devices anymore ... if some of them are r8152 and connected to
-> >>> "Lenovo" ... which is more than likely!
-> >>>
-> >>> Reverting that patch solved my problem, but i later went to
-> >>> disabling that very questionable BIOS feature to disable things
-> >>> for good without having to patch my kernel.
-> >>>
-> >>> I strongly suggest to revert that. And if not please drop the
-> >>> defines of  
-> >>>> -		case DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2:
-> >>>> -		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:  
-> >>>
-> >>> And instead of crapping out with "(unnamed net_device)
-> >>> (uninitialized): Invalid header when reading pass-thru MAC addr"
-> >>> when the BIOS feature is turned off, one might want to check
-> >>> DSDT/WMT1/ITEM/"MACAddressPassThrough" which is my best for asking
-> >>> the BIOS if the feature is wanted.  
-> >>
-> >> Thank you for the report!
-> >>
-> >> Aaron, will you be able to fix this quickly? 5.16 is about to be
-> >> released.  
-> > 
-> > If you guys agree with a revert and potentially other actions, i
-> > would be willing to help. In any case it is not super-urgent since
-> > we can maybe agree an regression and push it back into stable
-> > kernels.
-> > 
-> > I first wanted to place the report and see how people would react
-> > ... if you guys agree that this is a bug and the inheritance is
-> > going "way too far".
-> > 
-> > But i would only do some repairs on the surface, the feature itself
-> > is horrific to say the least and i am very happy with that BIOS
-> > switch to ditch it for good. Giving the MAC out is something a dock
-> > physically blocking the original PHY could do ... but year ... only
-> > once and it might be pretty hard to say which r8152 is built-in
-> > from the hub and which is plugged in additionally in that very hub.
-> > Not to mention multiple hubs of the same type ... in a nice USB-C
-> > chain. 
+
+
+On 12/22/2021 5:10 PM, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
 > 
-> Yes, it's expected to be a mess if multiple r8152 are attached to
-> Lenovo USB-C/TBT docks. The issue had been discussed for several
-> times in LKML. Either lose this feature or add potential risk for
-> multiple r8152.
+> Rename iproc_pcie_pltfm_* to iproc_pltfm_pcie_* for consistency with other
+> drivers.  No functional change intended.
 > 
-> The idea is to make the Dock work which only ship with one r8152.
-> It's really hard to say r8152 is from dock or another plugin one.
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Ray Jui <rjui@broadcom.com>
+> Cc: Scott Branden <sbranden@broadcom.com>
+> Cc: bcm-kernel-feedback-list@broadcom.com
+> Cc: linux-arm-kernel@lists.infradead.org
+> ---
+>  drivers/pci/controller/pcie-iproc-platform.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
 > 
-> If revert this patch, then most users with the original shipped dock
-> may lose this feature. That's the problem this patch try to fix.
-
-I understand that. But i would say people can not expect such a crap
-feature on Linux, or we really need very good reasoning to cause MAC
-collisions with the real PHY and on top claim ETOOMANY of the dongles.
-
-The other vendors seem to check bits of the "golden" dongle. At least
-that is how i understand BD/AD/BND_MASK
-
-How about making it a module param and default to off, and dev_warn if
-BIOS has it turned on. That sounds like a reasonable compromise and
-whoever turns it on twice probably really wants it. (note that BIOS
-defaults to on ... so that was never intended by users, and corporate
-users might not be allowed/able to turn that off)
-
-MACs change ... all the time, people should use radius x509. The
-request is probably coming from corporate users, and they are all on a
-zero trust journey and will eventually stop relying on MACs anyways.
-
-And if ubuntu wants to cater by default, there can always be an udev
-rule or setting that module param to "on".
-
-> For now I suggest to disable it in BIOS if you got multiple r8152.
+> diff --git a/drivers/pci/controller/pcie-iproc-platform.c b/drivers/pci/controller/pcie-iproc-platform.c
+> index b93e7bda101b..538115246c79 100644
+> --- a/drivers/pci/controller/pcie-iproc-platform.c
+> +++ b/drivers/pci/controller/pcie-iproc-platform.c
+> @@ -37,7 +37,7 @@ static const struct of_device_id iproc_pcie_of_match_table[] = {
+>  };
+>  MODULE_DEVICE_TABLE(of, iproc_pcie_of_match_table);
+>  
+> -static int iproc_pcie_pltfm_probe(struct platform_device *pdev)
+> +static int iproc_pltfm_pcie_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+>  	struct iproc_pcie *pcie;
+> @@ -115,30 +115,30 @@ static int iproc_pcie_pltfm_probe(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -static int iproc_pcie_pltfm_remove(struct platform_device *pdev)
+> +static int iproc_pltfm_pcie_remove(struct platform_device *pdev)
+>  {
+>  	struct iproc_pcie *pcie = platform_get_drvdata(pdev);
+>  
+>  	return iproc_pcie_remove(pcie);
+>  }
+>  
+> -static void iproc_pcie_pltfm_shutdown(struct platform_device *pdev)
+> +static void iproc_pltfm_pcie_shutdown(struct platform_device *pdev)
+>  {
+>  	struct iproc_pcie *pcie = platform_get_drvdata(pdev);
+>  
+>  	iproc_pcie_shutdown(pcie);
+>  }
+>  
+> -static struct platform_driver iproc_pcie_pltfm_driver = {
+> +static struct platform_driver iproc_pltfm_pcie_driver = {
+>  	.driver = {
+>  		.name = "iproc-pcie",
+>  		.of_match_table = of_match_ptr(iproc_pcie_of_match_table),
+>  	},
+> -	.probe = iproc_pcie_pltfm_probe,
+> -	.remove = iproc_pcie_pltfm_remove,
+> -	.shutdown = iproc_pcie_pltfm_shutdown,
+> +	.probe = iproc_pltfm_pcie_probe,
+> +	.remove = iproc_pltfm_pcie_remove,
+> +	.shutdown = iproc_pltfm_pcie_shutdown,
+>  };
+> -module_platform_driver(iproc_pcie_pltfm_driver);
+> +module_platform_driver(iproc_pltfm_pcie_driver);
+>  
+>  MODULE_AUTHOR("Ray Jui <rjui@broadcom.com>");
+>  MODULE_DESCRIPTION("Broadcom iPROC PCIe platform driver");
 > 
-> Let me try to make some changes to limit this feature in one r8152.
 
-Which one? ;) And how to deal with the real NIC once you picked one?
-Looking forward, please Cc me.
+Acked-by: Ray Jui <ray.jui@broadcom.com>
 
-Henning
+--00000000000007ce8a05d4c5e5cd
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-> Aaron
-> 
-> 
-> > MAC spoofing is something NetworkManager and others can take care
-> > of, or udev ... doing that in the driver is ... spooky.
-> > 
-> > regards,
-> > Henning  
-
+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
+Pi3DQoJNNR5cV1dw3cNMKQyHRziEjFTVmILshClu9AljdXzCUoHXDUbge8TIJ/fK36qTGCYWwA01
+rTB3drVX3FZq/Uqo0JnVcyP1dtYVzQIDAQABo4IB1TCCAdEwDgYDVR0PAQH/BAQDAgWgMIGjBggr
+BgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9j
+YWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVodHRwOi8v
+b2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNVHSAERjBE
+MEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20v
+cmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3JsLmdsb2Jh
+bHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAfBgNVHREEGDAWgRRyYXku
+anVpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdb
+NHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQU5E1VdIocTRYIpXh6e6OnGvwfrEgwDQYJKoZIhvcNAQEL
+BQADggEBADcZteuA4mZVmXNzp/tJky+9TS87L/xAogg4z+0bFDomA2JdNGKjraV7jE3LKHUyCQzU
+Bvp8xXjxCndLBgltr+2Fn/Dna/f29iAs4mPBxgPKhqnqpQuTo2DLID2LWU1SLI9ewIlROY57UCvO
+B6ni+9NcOot0MbKF2A1TnzJjWyd127CVyU5vL3un1/tbtmjiT4Ku8ZDoBEViuuWyhdB6TTEQiwDo
+2NxZdezRkkkq+RoNek6gmtl8IKmXsmr1dKIsRBtLQ0xu+kdX+zYJbAQymI1mkq8qCmFAe5aJkrNM
+NbsYBZGZlcox4dHWayCpn4sK+41xyJsmGrygY3zghqBuHPUxggJtMIICaQIBATBrMFsxCzAJBgNV
+BAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdD
+QyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxnTAexrtwIst251kUwDQYJYIZIAWUDBAIBBQCg
+gdQwLwYJKoZIhvcNAQkEMSIEIJRhmUaHY+2JMT5qIvcG3UkHZDCjQmDf2m3IFF3dinMoMBgGCSqG
+SIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDEwNDE4MzQ1OVowaQYJKoZI
+hvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG
+9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEF
+AASCAQAdkebe6erwSxLSP6qg+JpvRhte6S5Ts8kRJW5b6kZbOkwKjCWSknUw3eWJtljFleYNeYRI
++el3kGROhq+hz9MAGkZ4d72k1RcNq21RFTs3iRAo1xct6pIRnMCsCTluc2n4m+CHDw59qrbLW+qF
+8lRw30GKgNOr9N9xRp5jWDvUuTE/IJJkYXU0RRHf/uXnmERPHjo68bj9/WkOLEAtVauEPwZozBKf
+emD6nHPCtwBHGnVp/tyrG2NuH2ysZrRm50Lb9nVzKWg4Bh34lOCa67HZY/AN3V0LQ7DH1WsK2OcW
+7gFzBWr3Ny+XFcHEYxThP8BOZnAx/nyVYx7vn1Iztsyf
+--00000000000007ce8a05d4c5e5cd--

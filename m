@@ -2,31 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E11C448458A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:55:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 814AD484592
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:55:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235332AbiADPzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 10:55:22 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:33370 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232465AbiADPzL (ORCPT
+        id S235426AbiADPzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 10:55:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46698 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235224AbiADPzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 10:55:11 -0500
+        Tue, 4 Jan 2022 10:55:15 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DFD6C061799;
+        Tue,  4 Jan 2022 07:55:14 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 0AD2E1F43593
+        with ESMTPSA id F32151F43595
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1641311709;
-        bh=3smna2rui85hd0ub3WLoyVobn8DHHP5eQqp8Q9TuRHo=;
+        s=mail; t=1641311712;
+        bh=/8hS6LpwGBUUv6Bdwdpig6occOMefCCzy4ycInHjP4Q=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=fqocVfDSEzNSK52a1s2yP91kT0QXrE28aLrYgLgVVnizYZzYBoHRC2lC+TVQDCOIe
-         Kz/qm0Giepgg9FQ/4K4GvgpSGVaLLfvKI5HIzdcKxPm3F55DCVGI9LMwRTNfZd8UK+
-         NvEMzUrqVmUOQq/DAbZWexY6h8ORgfusoKnRryDXpwAbyPmx9eRnZrTFORJNXtWkWY
-         K+XxN6vU06x1aNKWnUfWN89rFgo1OHflAJW+9/wEVjJMzmYCvMepROSGRUKb2PpMkF
-         QJfGCz3JyVqNMEiGDtSb+/rFXoMK2sD+jhT5m+lrC3iHDjA7319nckiAz8zh7T0wKR
-         TM5MCOR2+FQBw==
-Subject: Re: [PATCH v3 13/33] iommu/mediatek: Remove the power status checking
- in tlb flush all
+        b=MoyPcKM2zPie6sqOy7lKuFui5mjX8ibrAJNvWl3ML2rKF48WLGkJWcUO0Z4s4C9G2
+         uAn187S3kPvHaqvHtjqerxZ09KdgZxj5BWxADGZ6LiHC7kHWAT3EceohFOIjQOIH0j
+         53kdiXPAxeujVFJeEkRaTJ204HUuQtJBIi7xubo2GS2WQWO0YAI87QGDrCwovh1H8D
+         yhI05ILRgCxcmbMwFuzRpqts1hZs+b03uPpJsKlyJ0iolooNCmUu0I94DYHHs+/Euh
+         0oJ5JwvVlBIV6yBHoVyHvJuFLT/4Dd88nVUEj6/Zoe+6M+xi3AqH2hlNRDj1EnMYB7
+         LsFQLlUCm4HMw==
+Subject: Re: [PATCH v3 04/33] iommu/mediatek: Remove clk_disable in
+ mtk_iommu_remove
 To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
         Rob Herring <robh+dt@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
@@ -42,15 +45,15 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         anan.sun@mediatek.com, chao.hao@mediatek.com,
         yen-chang.chen@mediatek.com
 References: <20210923115840.17813-1-yong.wu@mediatek.com>
- <20210923115840.17813-14-yong.wu@mediatek.com>
+ <20210923115840.17813-5-yong.wu@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Message-ID: <1cb7458d-a012-2e84-82bd-7e4f30ed9162@collabora.com>
-Date:   Tue, 4 Jan 2022 16:55:06 +0100
+Message-ID: <f18d8bc0-f6da-9c20-941f-3880ff0d60fb@collabora.com>
+Date:   Tue, 4 Jan 2022 16:55:10 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20210923115840.17813-14-yong.wu@mediatek.com>
+In-Reply-To: <20210923115840.17813-5-yong.wu@mediatek.com>
 Content-Type: text/plain; charset=iso-8859-15; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -59,97 +62,38 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Il 23/09/21 13:58, Yong Wu ha scritto:
-> To simplify the code, Remove the power status checking in the
-> tlb_flush_all, remove this:
->     if (pm_runtime_get_if_in_use(data->dev) <= 0)
-> 	    continue;
+> After the commit b34ea31fe013 ("iommu/mediatek: Always enable the clk on
+> resume"), the iommu clock is controlled by the runtime callback.
+> thus remove the clk control in the mtk_iommu_remove.
 > 
-> After this patch, the mtk_iommu_tlb_flush_all will be called from
-> a) isr
-> b) pm runtime resume callback
-> c) tlb flush range fail case
-> d) iommu_create_device_direct_mappings
->     -> iommu_flush_iotlb_all
-> In first three cases, the power and clock always are enabled; d) is direct
-> mapping, the tlb flush is unnecessay since we already have tlb_flush_all
-> in the pm_runtime_resume callback. When the iommu's power status is
-> changed to active, the tlb always is clean.
+> Otherwise, it will warning like:
 > 
-> In addition, there still are 2 reasons that don't add PM status checking
-> in the tlb flush all:
-> a) Write tlb flush all register also is ok even though the HW has no
-> power and clocks. Write ignore.
-
-Do you mean that the register write seemingly succeeds but the hardware
-discards it?
-Please, reword the `a` sentence to be clearer.
-
-> b) pm_runtime_get_if_in_use(m4udev) is 0 when the tlb_flush_all
-> is called frm pm_runtime_resume cb. From this point, we can not add
-> this code above in this tlb_flush_all.
+> echo 14018000.iommu > /sys/bus/platform/drivers/mtk-iommu/unbind
 > 
+> [   51.413044] ------------[ cut here ]------------
+> [   51.413648] vpp0_smi_iommu already disabled
+> [   51.414233] WARNING: CPU: 2 PID: 157 at */v5.15-rc1/kernel/mediatek/
+>                            drivers/clk/clk.c:952 clk_core_disable+0xb0/0xb8
+> [   51.417174] Hardware name: MT8195V/C(ENG) (DT)
+> [   51.418635] pc : clk_core_disable+0xb0/0xb8
+> [   51.419177] lr : clk_core_disable+0xb0/0xb8
+> ...
+> [   51.429375] Call trace:
+> [   51.429694]  clk_core_disable+0xb0/0xb8
+> [   51.430193]  clk_core_disable_lock+0x24/0x40
+> [   51.430745]  clk_disable+0x20/0x30
+> [   51.431189]  mtk_iommu_remove+0x58/0x118
+> [   51.431705]  platform_remove+0x28/0x60
+> [   51.432197]  device_release_driver_internal+0x110/0x1f0
+> [   51.432873]  device_driver_detach+0x18/0x28
+> [   51.433418]  unbind_store+0xd4/0x108
+> [   51.433886]  drv_attr_store+0x24/0x38
+> [   51.434363]  sysfs_kf_write+0x40/0x58
+> [   51.434843]  kernfs_fop_write_iter+0x164/0x1e0
+> 
+> Fixes: b34ea31fe013 ("iommu/mediatek: Always enable the clk on resume")
+> Reported-by: Hsin-Yi Wang <hsinyi@chromium.org>
 > Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-> ---
->   drivers/iommu/mtk_iommu.c | 20 +++++++-------------
->   1 file changed, 7 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-> index e9e94944ed91..4a33b6c6b1db 100644
-> --- a/drivers/iommu/mtk_iommu.c
-> +++ b/drivers/iommu/mtk_iommu.c
-> @@ -204,10 +204,14 @@ static struct mtk_iommu_domain *to_mtk_domain(struct iommu_domain *dom)
->   	return container_of(dom, struct mtk_iommu_domain, domain);
->   }
->   
-> -static void mtk_iommu_tlb_do_flush_all(struct mtk_iommu_data *data)
-> +static void mtk_iommu_tlb_flush_all(struct mtk_iommu_data *data)
->   {
->   	unsigned long flags;
->   
-> +	/*
-> +	 * No need get power status since the HW PM status nearly is active
-> +	 * when entering here.
 
-Please reword this comment to explain the entire situation.
-
-> +	 */
->   	spin_lock_irqsave(&data->tlb_lock, flags);
->   	writel_relaxed(F_INVLD_EN1 | F_INVLD_EN0,
->   		       data->base + data->plat_data->inv_sel_reg);
-> @@ -216,16 +220,6 @@ static void mtk_iommu_tlb_do_flush_all(struct mtk_iommu_data *data)
->   	spin_unlock_irqrestore(&data->tlb_lock, flags);
->   }
->   
-> -static void mtk_iommu_tlb_flush_all(struct mtk_iommu_data *data)
-> -{
-> -	if (pm_runtime_get_if_in_use(data->dev) <= 0)
-> -		return;
-> -
-> -	mtk_iommu_tlb_do_flush_all(data);
-> -
-> -	pm_runtime_put(data->dev);
-> -}
-> -
->   static void mtk_iommu_tlb_flush_range_sync(unsigned long iova, size_t size,
->   					   struct mtk_iommu_data *data)
->   {
-> @@ -263,7 +257,7 @@ static void mtk_iommu_tlb_flush_range_sync(unsigned long iova, size_t size,
->   		if (ret) {
->   			dev_warn(data->dev,
->   				 "Partial TLB flush timed out, falling back to full flush\n");
-> -			mtk_iommu_tlb_do_flush_all(data);
-> +			mtk_iommu_tlb_flush_all(data);
->   		}
->   
->   		if (has_pm)
-> @@ -993,7 +987,7 @@ static int __maybe_unused mtk_iommu_runtime_resume(struct device *dev)
->   	 *
->   	 * Thus, Make sure the tlb always is clean after each PM resume.
->   	 */
-> -	mtk_iommu_tlb_do_flush_all(data);
-> +	mtk_iommu_tlb_flush_all(data);
->   
->   	/*
->   	 * Uppon first resume, only enable the clk and return, since the values of the
-> 
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 

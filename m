@@ -2,99 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE4C9483EAF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 10:02:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE0A483EB0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 10:02:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiADJCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 04:02:41 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:51434 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiADJCh (ORCPT
+        id S229821AbiADJCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 04:02:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35440 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229809AbiADJCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 04:02:37 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20492TJ8085537;
-        Tue, 4 Jan 2022 03:02:29 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1641286949;
-        bh=SSFKI9jF+2pXTo1KdebT/jchgYGF9m9VboCPAUuM6Y0=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=J1CzwysLDa6BM/o2zgCXWqJ4QoBpI+kXglDUrRDdnj19+E1noTpoxrdo9ubaAWHCT
-         H+r7yPklxqsQ0x55jpdNYUbMgHmDuCYAz6mrhzaSs+fC7w7RFD3F99jKSRiMpSNXU/
-         dpLWI77XETpyKs+qAtFO2Q3kSFGrB82uKClraz7Q=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20492T5R027477
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 4 Jan 2022 03:02:29 -0600
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 4
- Jan 2022 03:02:28 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 4 Jan 2022 03:02:28 -0600
-Received: from [10.24.69.159] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20492QI0109434;
-        Tue, 4 Jan 2022 03:02:26 -0600
-Subject: Re: [PATCH v2 0/5] PCI: Keystone: Misc fixes for TI's AM65x PCIe
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20211126083119.16570-1-kishon@ti.com>
-From:   Kishon Vijay Abraham I <kishon@ti.com>
-Message-ID: <20979d61-87a3-f9c5-8185-f8032431367d@ti.com>
-Date:   Tue, 4 Jan 2022 14:32:25 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 4 Jan 2022 04:02:45 -0500
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B7AC061784
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 01:02:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=J8SP7NEN+hIuyqCL/eIlpbtF7g/pnX73KKsNuQiMtkU=;
+        t=1641286965; x=1642496565; b=eT8NY9OgRq40r36gA7mJ2fP3x5SgfV5ZyaXT5LP8OPbvQQ3
+        x1MkayR8VBGb3QphGRzEdszLrd1mj123t6bcyoxl3yq6y1SQmm9rA+Rwttt66OnDn3dW9B096tSyJ
+        cByMtLZDpch8e1qY3fSi1JhALUuoVWazDhGP6zxbx3qEeRJ39aD218/H/1iYI2GLJmic4nUqqIomw
+        iakmhDl5ZCbXLYy5/H4ISBNurbjIyzYJUUbm/GEyL4n4OjNPyhYdYkx6cx9yWOKppZvDEMVJ2Ox54
+        qLcjO2Q46FjEdyvpGfERFeUq+Rr/b2zEUQ48QAbACPDT5if4ita5f9I5JhkRwJRg==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1n4fiN-001hdT-25;
+        Tue, 04 Jan 2022 10:02:43 +0100
+Message-ID: <25e9d4e4f8655bee5dc5e8a017c83d743effa4e7.camel@sipsolutions.net>
+Subject: Re: [PATCH 4/4] um: irq: Restore O_ASYNC upon exit
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Richard Weinberger <richard@nod.at>, linux-um@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, anton.ivanov@cambridgegreys.com
+Date:   Tue, 04 Jan 2022 10:02:41 +0100
+In-Reply-To: <20220101215810.13260-5-richard@nod.at>
+References: <20220101215810.13260-1-richard@nod.at>
+         <20220101215810.13260-5-richard@nod.at>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
 MIME-Version: 1.0
-In-Reply-To: <20211126083119.16570-1-kishon@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-malware-bazaar: not-scanned
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lorenzo,
+On Sat, 2022-01-01 at 22:58 +0100, Richard Weinberger wrote:
+> Just like with O_NONBLOCK, make sure UML clears O_ASYNC
+> upon exit when it set it.
+> 
 
-On 26/11/21 2:01 pm, Kishon Vijay Abraham I wrote:
-> Patch series includes miscellaneous fixes for TI's AM65x SoC
-> "PCI: keystone: Add workaround for Errata #i2037 (AM65x SR 1.0)"  has
-> already been sent before [1]
-> 
-> The other patch is to prevent PCIEPORTBUS driver to write to
-> MSI-X table (which is not mapped) leading to ~10sec delay
-> due to msix_mask_all().
-> 
-> v1 if the patch series is @ [2]
-> 
-> Changes from v1:
-> 1) Added two patches to fix 'dtbs_check'; a DT binding documentation
-> update and a driver update.
-> 2) Remove falling back to smaller DMA mask as suggested by Christoph.
-> 
-> [1] -> https://lore.kernel.org/r/20210325090026.8843-7-kishon@ti.com
-> [2] -> https://lore.kernel.org/r/20211110073343.12396-1-kishon@ti.com
-> 
-> Kishon Vijay Abraham I (5):
->   dt-bindings: PCI: ti,am65: Fix
->     "ti,syscon-pcie-id"/"ti,syscon-pcie-mode" to take argument
->   PCI: keystone: Use phandle argument from
->     "ti,syscon-pcie-id"/"ti,syscon-pcie-mode"
->   PCI: keystone: Add workaround for Errata #i2037 (AM65x SR 1.0)
->   PCI: keystone: Add quirk to mark AM654 RC BAR flag as IORESOURCE_UNSET
->   PCI: keystone: Set DMA mask and coherent DMA mask
-> 
->  .../bindings/pci/ti,am65-pci-ep.yaml          |  8 +-
->  .../bindings/pci/ti,am65-pci-host.yaml        | 16 +++-
->  drivers/pci/controller/dwc/pci-keystone.c     | 82 ++++++++++++++++++-
->  3 files changed, 96 insertions(+), 10 deletions(-)
+"when it set it" isn't really quite true - you always clear it, should
+it be similar to the O_NONBLOCK version to see the old mode?
 
-Can this be merged?
-
-Regards,
-Kishon
+johannes

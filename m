@@ -2,110 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 517F848488B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:28:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4509484890
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:30:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiADT2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 14:28:05 -0500
-Received: from mxout01.lancloud.ru ([45.84.86.81]:45966 "EHLO
-        mxout01.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiADT2E (ORCPT
+        id S229697AbiADTaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 14:30:30 -0500
+Received: from mail-oi1-f182.google.com ([209.85.167.182]:43724 "EHLO
+        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229508AbiADTa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 14:28:04 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout01.lancloud.ru E28C92063EC5
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH] platform: finally disallow IRQ0 in platform_get_irq() and
- its ilk
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <5e001ec1-d3f1-bcb8-7f30-a6301fd9930c@omp.ru>
- <YbJhu53WEmotslox@smile.fi.intel.com>
- <59f08001-7e1e-7fe2-28ba-045972bbae90@omp.ru>
- <YbM3T29wPZFLMu1D@smile.fi.intel.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <8a415980-990b-abae-6f60-dedd0c199583@omp.ru>
-Date:   Tue, 4 Jan 2022 22:27:58 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Tue, 4 Jan 2022 14:30:28 -0500
+Received: by mail-oi1-f182.google.com with SMTP id u21so47721764oie.10;
+        Tue, 04 Jan 2022 11:30:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Fp7mpV0jaGY/mBci3bW2viP27TakGFeuXQpYOq0ghhY=;
+        b=rd07o7jV/7gIBrOfwjjL+dsSZCIWy6NAqUUSF+Zahu7WS0TBYo9gmxLtWYyaSQFA2B
+         aoztWil5fy+Zxo+bXElQ4O7ycLJaW/6TavpbZ4wdTvbetFgwjXz8jV7O47oySiubEqkw
+         oKIbmFFxNB0AMezjSdCQoInqKjvmySA9RZoi6SAWIq+aW0ZprQM8lUH6A2LgYpwny3Fh
+         QDi2/zyg7geLXRnG0bO91pubBSrolgmD0xot3gyCgM/OEr50tLfhJsiLOthaiHVTuhvR
+         eYQ+/NuVR/YTC6L64LeiTuObqAtWJBnMfd0tsD3d5M9uKxO7/iU/2WHDt60EvHVR6pag
+         hfRA==
+X-Gm-Message-State: AOAM530ha3Au8WnXPeWHqlXzjWBYYNoRBwTzmxLUKivoloHcOcodvMpH
+        7ICn+OyyeM7fy5WWauZqwA==
+X-Google-Smtp-Source: ABdhPJxR+udq9ZViO2cj397JZRBYhhH5HT6XF2Y2AOr6hkSQFSItryyl69fzJh8TNOcXXyssw8NUPg==
+X-Received: by 2002:a05:6808:241:: with SMTP id m1mr39397412oie.169.1641324627810;
+        Tue, 04 Jan 2022 11:30:27 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id x26sm2075011ote.78.2022.01.04.11.30.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 11:30:27 -0800 (PST)
+Received: (nullmailer pid 1268031 invoked by uid 1000);
+        Tue, 04 Jan 2022 19:30:26 -0000
+Date:   Tue, 4 Jan 2022 13:30:26 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Alistair Francis <alistair@alistair23.me>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmitry.torokhov@gmail.com, alistair23@gmail.com,
+        linus.walleij@linaro.org, rydberg@bitmath.org,
+        andreas@kemnade.info,
+        =?iso-8859-1?Q?Myl=E8ne?= Josserand 
+        <mylene.josserand@free-electrons.com>
+Subject: Re: [PATCH v4 2/4] dt-bindings: input: Add Cypress TT2100
+ touchscreen controller
+Message-ID: <YdSgUgdETb12TEVf@robh.at.kernel.org>
+References: <20211222124603.326920-1-alistair@alistair23.me>
+ <20211222124603.326920-3-alistair@alistair23.me>
 MIME-Version: 1.0
-In-Reply-To: <YbM3T29wPZFLMu1D@smile.fi.intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211222124603.326920-3-alistair@alistair23.me>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/10/21 2:17 PM, Andy Shevchenko wrote:
-
-[...]
->>>> The commit a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is
->>>> invalid") only calls WARN() when IRQ0 is about to be returned, however
->>>> using IRQ0 is considered invalid (according to Linus) outside the arch/
->>>> code where it's used by the i8253 drivers. Many driver subsystems treat
->>>> 0 specially (e.g. as an indication of the polling mode by libata), so
->>>> the users of platform_get_irq[_byname]() in them would have to filter
->>>> out IRQ0 explicitly and this (quite obviously) doesn't scale...
->>>> Let's finally get this straight and return -EINVAL instead of IRQ0!
->>>
->>> You are changing the return value of platform_get_irq_optional().
->>> The problem here is the proposed change doesn't bring any value in such
->>> case. platform_get_irq_optional() should be able (at the end of the day)
->>> to return 3 types of values (as other APIs do):
->>> 	 > 0: success
->>> 	== 0: IRQ not found
->>> 	 < 0: an error that must be consumed by the caller
->>
->>    I remember that was in your patch that got reverted right after being merged. ;-)
->> IMHO returning both error code and 0 on failure is a sign of a misdesigned API, it
->> makes the failure check unnecessarily complex and error prone.
+On Wed, Dec 22, 2021 at 10:46:01PM +1000, Alistair Francis wrote:
+> From: Mylène Josserand <mylene.josserand@free-electrons.com>
 > 
-> I dunno what you are talking about when you mentioned "0 on failure" because 0
-> is not the failure, that's what I'm trying to tell.
-
-   OK.
- 
->>> 0 is unexpected result for non-optional APIs and there you may try to play
->>> tricks (like replacing it by error code).
->>>
->>> There was a discussion around the topic:
->>> https://lore.kernel.org/lkml/20210331144526.19439-1-andriy.shevchenko@linux.intel.com/T/#u
->>
->>    I don't see much of the discussion there...
+> Add the Cypress TrueTouch Generation 5 touchscreen device tree bindings
+> documentation. It can use I2C or SPI bus.
+> This touchscreen can handle some defined zone that are designed and
+> sent as button. To be able to customize the keycode sent, the
+> "linux,code" property in a "button" sub-node can be used.
 > 
-> Indeed, it was split between two threads. Another one is this:
-> https://lore.kernel.org/linux-serial/20210407101713.8694-1-andriy.shevchenko@linux.intel.com/T/#u
-
-   OK.
-
->>> Wanna help?
->>
->>    No, I'm afraid you're on your own here... 
-
-   Tell me please, how far you've got with this by now?
-   (I've already started to add the fixups to your patch -- unfortunately, this change has to be
-done atomically, not piecemeal.)
-
->>>> Fixes: a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is invalid")
->>>
->>> Not sure.
->>
->>    Why? It fixes gthe IRQ0 problem, so that you don't have to check for IRQ0 in many callers
->> (for the subsytems that treat 0 as s/th special, like polling mode)... If you have something
->> to improve, you can do that atop of this patch...
+> Signed-off-by: Mylène Josserand <mylene.josserand@free-electrons.com>
+> Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> ---
+>  .../input/touchscreen/cypress,tt21000.yaml    | 92 +++++++++++++++++++
+>  1 file changed, 92 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/input/touchscreen/cypress,tt21000.yaml
 > 
-> Because first we need to fix all users of platform_get_irq_optional().
+> diff --git a/Documentation/devicetree/bindings/input/touchscreen/cypress,tt21000.yaml b/Documentation/devicetree/bindings/input/touchscreen/cypress,tt21000.yaml
+> new file mode 100644
+> index 000000000000..5a721d789c87
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/input/touchscreen/cypress,tt21000.yaml
+> @@ -0,0 +1,92 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
 
-   I still don't understand why your issue should be fixed 1st -- but I don't really care about
-the order...
+Dual license new bindings. GPL-2.0-only OR BSD-2-Clause
 
-MBR, Sergey
+
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/input/touchscreen/cypress,tt21000.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Cypress TT2100 touchscreen controller
+> +
+> +description: The Cypress TT2100 series (also known as "CYTTSP5" after
+> +  the marketing name Cypress TrueTouch Standard Product series 5).
+> +
+> +maintainers:
+> +  - Alistair Francis <alistair@alistair23.me>
+> +
+> +allOf:
+> +  - $ref: touchscreen.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: cypress,tt21000
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  vdd-supply:
+> +    description: Regulator for voltage.
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +
+> +  linux,code:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: EV_ABS specific event code generated by the axis.
+> +
+> +patternProperties:
+> +  "^button-[0-9]+$":
+> +    type: object
+> +    properties:
+> +      linux,code:
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        description: Keycode to emit
+> +
+> +    required:
+> +      - linux,code
+> +
+> +    additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - vdd-supply
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    #include <dt-bindings/input/linux-event-codes.h>
+> +
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        touchscreen@24 {
+> +            compatible = "cypress,tt21000";
+> +            reg = <0x24>;
+> +            pinctrl-names = "default";
+> +            pinctrl-0 = <&tp_reset_ds203>;
+> +            interrupt-parent = <&pio>;
+> +            interrupts = <1 5 IRQ_TYPE_LEVEL_LOW>;
+> +            reset-gpios = <&pio 7 1 GPIO_ACTIVE_LOW>;
+> +            vdd-supply = <&reg_touch>;
+> +
+> +            button-0 {
+> +                linux,code = <KEY_HOMEPAGE>;
+> +            };
+> +
+> +            button-1 {
+> +                linux,code = <KEY_MENU>;
+> +            };
+> +
+> +            button-2 {
+> +                linux,code = <KEY_BACK>;
+> +            };
+> +        };
+> +    };
+> +...
+> -- 
+> 2.31.1
+> 
+> 

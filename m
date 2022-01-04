@@ -2,83 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61FB1483B42
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 05:22:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7118483B45
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 05:24:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232818AbiADEWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 23:22:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57310 "EHLO
+        id S232834AbiADEYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 23:24:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232805AbiADEWA (ORCPT
+        with ESMTP id S232825AbiADEYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 23:22:00 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B28C061784
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 20:22:00 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id e8so27367722ilm.13
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 20:22:00 -0800 (PST)
+        Mon, 3 Jan 2022 23:24:44 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B835C061784
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 20:24:44 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id q5so42715525ioj.7
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 20:24:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=b/ImgiPdbq2N+p166JQs3lDpTsm/xUH4BmSoapqHyKc=;
-        b=7ea+MipDKFNp8pexK4CQZQW07zkOWvhZT1++wlHsyUpyxqX5Qhm2vwbAXN+YCVBQew
-         opi95LEJXR4UOJM0skMcJA1295ySJmN7L/VQslmllJ3XpdRkfHn72uDTR/VeR6vkjAoK
-         ZduVZzn9gC4ua4v1kOIBsIqMJ1qWoI6/78Lu59LVoWDjvt3GnrpXr/jplZgkszM6/pS8
-         IP8eLmdfA+F3lWYIsyXWcP5JnIorQ2MrQ20zWKKM3wLfnGS7LWmqscyVfnz1VGmezXq3
-         Yvw0jL21PrFTAAXlYMbPtpDBKQ+QQRZXyrbai/SM6GeB4uIT78HlI1Tj8Lhv5g7PwFI8
-         4x0A==
+        h=from:to:cc:in-reply-to:references:subject:message-id:date
+         :mime-version:content-transfer-encoding;
+        bh=fysgzqADL/lBpOy4VPT5bc0kbkh347ywGZe1pIcOs5M=;
+        b=qeBt172nL1IAP3rTVlHJnaaBDgpYbvJHhH5lPOjRLyaO6KNi9t8oOe+4S1MHsuL9Lj
+         Ed4JlToLjjE5Xs0OBMzz739ioOgS/rlGl9eFdMtBnJTeIkbmfmfwyAWWPsLBDQ3Fc0vr
+         W4L9hbuF2EA9WcKHl1W2nZ0VWLrxfneO1dGlVcpf7vI3k7MBU+R1QMLz7aliW8RisBPX
+         PYW+vcNcyOd+lacwqzhK//8UIFjrUZOcpJYjvAol9RaQ8yeFoup8oNzPLhMPLN/f0INX
+         o2dDy4DMgXG360NUZkMG+hvd+q+DrA9qr64MR3XoxWGTMVaq8Rlcs/rCmr2ACne+tNZb
+         k1Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=b/ImgiPdbq2N+p166JQs3lDpTsm/xUH4BmSoapqHyKc=;
-        b=LKhPxLn3DN9w7AmZnOTCcGuKiCSlE03xbSD+fCUEEkv5u7/FQLEopMozEqrRA5QMgI
-         hVRgSmnQmbXKow5pfHnhmdH6PnDvu14AQ9ryQKMOTp6c0BPKXRk87Ffa9Q4IabdVtB/W
-         G2G0Gb9QxSeHr9IuCLpjBGcAPV+Z62dYFjeZPbz4b55TGO3H8Ci2UsLoN8Ecwg90DxzN
-         EHMcw6MeXmDmYLe26xKxwIt+8pHqehiLcon3TsAGSp+PvyfRPs4AdZRMGlJjin/yE/15
-         FB1TbLmtww1YsBTPhWvKYzFeijBaP0T4c7oKOYi7qarGB3daOApB9zfvuViFnxNQfdfG
-         LLHQ==
-X-Gm-Message-State: AOAM531Sw3ildEwkf/u6Zhj21w0CVJODjo9ou5MMmZu3SEL5h4eZEGMO
-        oT0623oyz9eoxC6NzudrRDqnKtj5GAlN4Q==
-X-Google-Smtp-Source: ABdhPJz0IkAokrq+laDzYrRe1EY6L7kFS2boZTpCjSOeMA/D10L9yQHi4GGVHJfWynOufboNa0dJEQ==
-X-Received: by 2002:a05:6e02:1a2c:: with SMTP id g12mr21401051ile.192.1641270119662;
-        Mon, 03 Jan 2022 20:21:59 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
+         :message-id:date:mime-version:content-transfer-encoding;
+        bh=fysgzqADL/lBpOy4VPT5bc0kbkh347ywGZe1pIcOs5M=;
+        b=EBMQrEl7VZyTAXc7NpRxwesjKKmDY8JSWr4vP3KcUqGeoOxp0K4MtG7yhs6FHPy4p0
+         8QqGW26Kui5sSk4OovJmVyFmio/x6gZ+tiRtu/vMbY3TTKNKB4XIoPmxSfGvHqEVebUW
+         AbFi1tc3i97QsHPxobGv+K9lqNNXYfB9MIMItW3vy1zcjVCd6Qlo5pqy0LbBgpnfIP2n
+         RmC4e6mReSFV1IF+nQ4VGuaweIp/nESCPs9jg78LZty+bcLptVkGFspHzzYYY1X/3s5K
+         DZp0fN3DzwvMU4kLPyiPo8Ma6p1TdkCmfjwgKnVYwe8JiClYfUVFEVZ5dj6NGCc5fFEz
+         vL3A==
+X-Gm-Message-State: AOAM530XMwNMrafI7B4c2ruMTinTO7SUMhGKsASIYXvKacQ+fUPmLrD9
+        fI3KhjqRGw0VIjsrfRsMHFsCL7t56W0iSQ==
+X-Google-Smtp-Source: ABdhPJxGj5WEFOVDh/ojNhTb+ma9rGNeAotZnvSLkrPSdnx9XVirxl9inzRwRgVtmcnpQig9LO7qCw==
+X-Received: by 2002:a05:6602:330e:: with SMTP id b14mr19580953ioz.192.1641270283348;
+        Mon, 03 Jan 2022 20:24:43 -0800 (PST)
 Received: from [192.168.1.116] ([66.219.217.159])
-        by smtp.gmail.com with ESMTPSA id g11sm22499972ild.52.2022.01.03.20.21.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jan 2022 20:21:59 -0800 (PST)
-Subject: Re: [GIT PULL] md-fixes 20220103
-To:     Song Liu <songliubraving@fb.com>,
-        linux-raid <linux-raid@vger.kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Norbert Warmuth <nwarmuth@t-online.de>,
-        Guoqing Jiang <jgq516@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <C0F28A74-39F7-4B12-BC8F-96E2FEBE0AD0@fb.com>
+        by smtp.gmail.com with ESMTPSA id y19sm19195536iov.23.2022.01.03.20.24.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jan 2022 20:24:43 -0800 (PST)
 From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <499b185d-ff9a-934e-7768-ec796244fa1a@kernel.dk>
-Date:   Mon, 3 Jan 2022 21:21:58 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-block@vger.kernel.org
+In-Reply-To: <20220103162408.742003-1-gregkh@linuxfoundation.org>
+References: <20220103162408.742003-1-gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] pktcdvd: convert to use attribute groups
+Message-Id: <164127028280.171067.13286005071410412665.b4-ty@kernel.dk>
+Date:   Mon, 03 Jan 2022 21:24:42 -0700
 MIME-Version: 1.0
-In-Reply-To: <C0F28A74-39F7-4B12-BC8F-96E2FEBE0AD0@fb.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/3/22 2:28 PM, Song Liu wrote:
-> Hi Jens, 
+On Mon, 3 Jan 2022 17:24:08 +0100, Greg Kroah-Hartman wrote:
+> There is no need to create kobject children of the pktcdvd device just
+> to display a subdirectory name.  Instead, use a named attribute group
+> which removes the extra kobjects and also fixes the userspace race where
+> the device is created yet tools like libudev can not see the attributes
+> as they think the subdirectories are some other sort of device.
 > 
-> Please consider pulling the following fix on top of your block-5.16 branch. 
-> It fixes a raid1 regression with missing bitmap updates.
+> 
+> [...]
 
-Pulled, thanks.
+Applied, thanks!
 
+[1/1] pktcdvd: convert to use attribute groups
+      commit: d5dbcca70182501bed99de85c224cef04c38ed92
+
+Best regards,
 -- 
 Jens Axboe
+
 

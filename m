@@ -2,144 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2425748452F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3534844EB
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:42:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232764AbiADPtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 10:49:07 -0500
-Received: from proxima.lasnet.de ([78.47.171.185]:52038 "EHLO
-        proxima.lasnet.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbiADPtG (ORCPT
+        id S233763AbiADPmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 10:42:37 -0500
+Received: from mail-oi1-f170.google.com ([209.85.167.170]:33730 "EHLO
+        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232689AbiADPme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 10:49:06 -0500
-X-Greylist: delayed 501 seconds by postgrey-1.27 at vger.kernel.org; Tue, 04 Jan 2022 10:49:06 EST
-Received: from [IPV6:2003:e9:d728:ec47:4b31:73e4:34c5:505a] (p200300e9d728ec474b3173e434c5505a.dip0.t-ipconnect.de [IPv6:2003:e9:d728:ec47:4b31:73e4:34c5:505a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: stefan@datenfreihafen.org)
-        by proxima.lasnet.de (Postfix) with ESMTPSA id 120EAC055C;
-        Tue,  4 Jan 2022 16:40:43 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=datenfreihafen.org;
-        s=2021; t=1641310843;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fzrSYWdpug8dV2D+vjEBY0DdwVSV7UgruGe2VxZhMYQ=;
-        b=wMtj+/+SQEzNvk7geCsi6F8u7AI0xwhhl98uuCWCZNgKfj6mugjmItNNOXweG1ESnJYKvv
-        1Xjpl9tjKW0IPX9xK5g/1C+TQM9blc0CxuUUqyhC5Q6G6OcW0s1Pt0Mj2WygkrGqz18Twk
-        H6OdYiPDZQTLzBd1Bq7ZVEP2gNpb5eexDji955LofwwI3j35/HloYjyUnoFaq7OgYSSCs6
-        ciYVNffIlOiuWFPj44xtDZIrE4LUBH/UyYTfUWZUPy2vmE9UESYZobGM0B6fgai+/TGGWs
-        JuR7TOHx22BlMHDf5G9fYwVGwNv+MvKy5CwqK6dsTsxFvhwkROqtxqRBBVwBpA==
-Message-ID: <ed39cbe6-0885-a3ab-fc30-7c292e1acc53@datenfreihafen.org>
-Date:   Tue, 4 Jan 2022 16:40:41 +0100
+        Tue, 4 Jan 2022 10:42:34 -0500
+Received: by mail-oi1-f170.google.com with SMTP id w7so39264719oiw.0;
+        Tue, 04 Jan 2022 07:42:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xJ2M22MiC6qHtE01uvX9QDbyqekJ6ZeZPa/LG0UiJNs=;
+        b=EgfNG7WEHh6yBy2mz7PHOfYMGTX7ix6TXxX4R08vTsTdW7vNg2yNM8UOXYnTO93MaC
+         oV6zzfyU9MN+23ulCkEvXt2wHyaU9q7o/JDzKRnKJXZ/IPQSf/GyfOsfqrq596LgVTnv
+         E4oUY4kRWCnUXAGj4TI3EnnvX0/5+BSX3xuMFMrRFWkvYG6vd8Ed+D608/sanuMILLe6
+         ZdULsZI4gXKk1D+XEf0/j1tLCinuemuTMLQ+UHma679huD+Eio6N9Di4+yLg5pTph89q
+         Jo8zGAIEWFHP65dMXuyP38K4ZSsDXC8FWrG+Nbu8g3jN9MTtBxMn47M+Gm8LMzJNRc+Q
+         BJeA==
+X-Gm-Message-State: AOAM530DKxZNKCYV9o1EMab1p3bUbiHI2NuZyXhrxJTxfPJJvsjIsGHS
+        uDIqGzIV7BDjOjze92mUhw==
+X-Google-Smtp-Source: ABdhPJzDLVAwUvkByszELJtXBV7b/HRkCQx6r7Ervxr45GWOAK69qShhw8QwUnKn7yf6JlY5Qz8nIg==
+X-Received: by 2002:aca:dbd5:: with SMTP id s204mr40194703oig.41.1641310954075;
+        Tue, 04 Jan 2022 07:42:34 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id 184sm9755640oih.58.2022.01.04.07.42.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 07:42:33 -0800 (PST)
+Received: (nullmailer pid 893832 invoked by uid 1000);
+        Tue, 04 Jan 2022 15:42:32 -0000
+Date:   Tue, 4 Jan 2022 09:42:32 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        Inki Dae <inki.dae@samsung.com>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Beomho Seo <beomho.seo@samsung.com>
+Subject: Re: [PATCH 2/5] dt-bindings: extcon: maxim,max77843: add MAX77843
+ bindings
+Message-ID: <YdRq6JVeeOVJj8ww@robh.at.kernel.org>
+References: <20211229124631.21576-1-krzysztof.kozlowski@canonical.com>
+ <20211229124631.21576-3-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.0
-Subject: Re: [PATCH v2] ieee802154: atusb: fix uninit value in
- atusb_set_extended_addr
-Content-Language: en-US
-To:     Pavel Skripkin <paskripkin@gmail.com>, alex.aring@gmail.com,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexander Potapenko <glider@google.com>
-References: <CAB_54W50xKFCWZ5vYuDG2p4ijpd63cSutRrV4MLs9oasLmKgzQ@mail.gmail.com>
- <20220103120925.25207-1-paskripkin@gmail.com>
-From:   Stefan Schmidt <stefan@datenfreihafen.org>
-In-Reply-To: <20220103120925.25207-1-paskripkin@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211229124631.21576-3-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
-
-On 03.01.22 13:09, Pavel Skripkin wrote:
-> Alexander reported a use of uninitialized value in
-> atusb_set_extended_addr(), that is caused by reading 0 bytes via
-> usb_control_msg().
+On Wed, Dec 29, 2021 at 01:46:28PM +0100, Krzysztof Kozlowski wrote:
+> Document the bindings for MAX77843 MUIC/extcon driver, based on
+> Exynos5433 TM2 devicetree.  These are neither accurate nor finished
+> bindings but at least allow parsing existing DTS files.
 > 
-> Fix it by validating if the number of bytes transferred is actually
-> correct, since usb_control_msg() may read less bytes, than was requested
-> by caller.
-> 
-> Fail log:
-> 
-> BUG: KASAN: uninit-cmp in ieee802154_is_valid_extended_unicast_addr include/linux/ieee802154.h:310 [inline]
-> BUG: KASAN: uninit-cmp in atusb_set_extended_addr drivers/net/ieee802154/atusb.c:1000 [inline]
-> BUG: KASAN: uninit-cmp in atusb_probe.cold+0x29f/0x14db drivers/net/ieee802154/atusb.c:1056
-> Uninit value used in comparison: 311daa649a2003bd stack handle: 000000009a2003bd
->   ieee802154_is_valid_extended_unicast_addr include/linux/ieee802154.h:310 [inline]
->   atusb_set_extended_addr drivers/net/ieee802154/atusb.c:1000 [inline]
->   atusb_probe.cold+0x29f/0x14db drivers/net/ieee802154/atusb.c:1056
->   usb_probe_interface+0x314/0x7f0 drivers/usb/core/driver.c:396
-> 
-> Fixes: 7490b008d123 ("ieee802154: add support for atusb transceiver")
-> Reported-by: Alexander Potapenko <glider@google.com>
-> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
+>  .../bindings/extcon/maxim,max77843.yaml       | 40 +++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/extcon/maxim,max77843.yaml
 > 
-> Changes in v2:
-> 	- Reworked fix approach, since moving to new USB API is not
-> 	  suitable for backporting to stable kernels
-> 
-> ---
->   drivers/net/ieee802154/atusb.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ieee802154/atusb.c b/drivers/net/ieee802154/atusb.c
-> index 23ee0b14cbfa..e6cc816dd7a1 100644
-> --- a/drivers/net/ieee802154/atusb.c
-> +++ b/drivers/net/ieee802154/atusb.c
-> @@ -93,7 +93,9 @@ static int atusb_control_msg(struct atusb *atusb, unsigned int pipe,
->   
->   	ret = usb_control_msg(usb_dev, pipe, request, requesttype,
->   			      value, index, data, size, timeout);
-> -	if (ret < 0) {
-> +	if (ret < size) {
-> +		ret = ret < 0 ? ret : -ENODATA;
+> diff --git a/Documentation/devicetree/bindings/extcon/maxim,max77843.yaml b/Documentation/devicetree/bindings/extcon/maxim,max77843.yaml
+> new file mode 100644
+> index 000000000000..1f15a6c700f6
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/extcon/maxim,max77843.yaml
+> @@ -0,0 +1,40 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/extcon/maxim,max77843.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->   		atusb->err = ret;
->   		dev_err(&usb_dev->dev,
->   			"%s: req 0x%02x val 0x%x idx 0x%x, error %d\n",
+> +title: Maxim MAX77843 MicroUSB and Companion Power Management IC Extcon
+> +
+> +maintainers:
+> +  - Chanwoo Choi <cw00.choi@samsung.com>
+> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> +
+> +description: |
+> +  This is a part of device tree bindings for Maxim MAX77843 MicroUSB
+> +  Integrated Circuit (MUIC).
+> +
+> +  See also Documentation/devicetree/bindings/mfd/maxim,max77843.yaml for
+> +  additional information and example.
+> +
+> +properties:
+> +  compatible:
+> +    const: maxim,max77843-muic
+> +
+> +  connector:
+> +    $ref: ../connector/usb-connector.yaml#
+
+/schemas/connector/...
+
+With that,
+
+Reviewed-by: Rob Herring <robh@kernel.org>
+
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/port
+> +    description:
+> +      Any connector to the data bus of this controller should be modelled using
+> +      the OF graph bindings specified
+> +    properties:
+> +      port:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +
+> +required:
+> +  - compatible
+> +  - connector
+> +
+> +additionalProperties: false
+> -- 
+> 2.32.0
 > 
-
-It compiles, but does not work on the real hardware.
-
-[    1.114698] usb 1-1: new full-speed USB device number 2 using uhci_hcd
-[    1.261691] usb 1-1: New USB device found, idVendor=20b7, 
-idProduct=1540, bcdDevice= 0.01
-[    1.263421] usb 1-1: New USB device strings: Mfr=0, Product=0, 
-SerialNumber=1
-[    1.264952] usb 1-1: SerialNumber: 4630333438371502231a
-[    1.278042] usb 1-1: ATUSB: AT86RF231 version 2
-[    1.281087] usb 1-1: Firmware: major: 0, minor: 3, hardware type: 
-ATUSB (2)
-[    1.285191] usb 1-1: atusb_control_msg: req 0x01 val 0x0 idx 0x0, 
-error -61
-[    1.286903] usb 1-1: failed to fetch extended address, random address set
-[    1.288757] usb 1-1: atusb_probe: initialization failed, error = -61
-[    1.290922] atusb: probe of 1-1:1.0 failed with error -61
-
-
-Without your patch it works as expected:
-
-[    1.091925] usb 1-1: new full-speed USB device number 2 using uhci_hcd
-[    1.237743] usb 1-1: New USB device found, idVendor=20b7, 
-idProduct=1540, bcdDevice= 0.01
-[    1.239788] usb 1-1: New USB device strings: Mfr=0, Product=0, 
-SerialNumber=1
-[    1.241432] usb 1-1: SerialNumber: 4630333438371502231a
-[    1.255012] usb 1-1: ATUSB: AT86RF231 version 2
-[    1.258073] usb 1-1: Firmware: major: 0, minor: 3, hardware type: 
-ATUSB (2)
-[    1.262170] usb 1-1: Firmware: build #132 Mo 28. Nov 16:20:35 CET 2016
-[    1.266195] usb 1-1: Read permanent extended address 
-10:e2:d5:ff:ff:00:02:e8 from device
-
-regards
-Stefan Schmidt
-
+> 

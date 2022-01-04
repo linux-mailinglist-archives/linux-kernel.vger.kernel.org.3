@@ -2,89 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1BB4484387
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:38:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DF5A48438A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:40:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234151AbiADOiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:38:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
+        id S234219AbiADOkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:40:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbiADOiS (ORCPT
+        with ESMTP id S230044AbiADOka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:38:18 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E077C061761;
-        Tue,  4 Jan 2022 06:38:18 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id s4so42959654ljd.5;
-        Tue, 04 Jan 2022 06:38:18 -0800 (PST)
+        Tue, 4 Jan 2022 09:40:30 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497D6C061761;
+        Tue,  4 Jan 2022 06:40:30 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id k21so82250723lfu.0;
+        Tue, 04 Jan 2022 06:40:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QmMHi/Yre/UvJNCL2dThOVThw7jS7V0hu2mmbclV+BI=;
-        b=jtGF+2+nKOBhGZ2YSUoM0HezwC5/hUsa45eaYe/TDnRf808bphxoMVyzds73Oi1hmA
-         REKLjoxwZdEGX3ZQCTa3VzZ/ZKowsQr2j1vkVfqd5k87gw/97PK/atla+tnsEsdfl4r4
-         ugM37WDj+x0W6iJO/FeeJpC3w1fY3QzIAN/J0oeZbC73rSI7qvkE4Gp48llEn7G9/MnA
-         VqYeAiOV2tWZelm4VQT7iOvEXXUEoVT+fiYyUdA4HcIpdNhNTt/ihTgIflkMBTEobjSm
-         2hRHU1COPnFP/koFs737hCFaCsmoT1AyNOZznc6QmeleFNK9WfQWTjQmvgqHGiL3tS+w
-         uqdA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ab0QEwSG8BDrjyDLCDXwNE8BTCoNpJU2Z1rDY4OSSxE=;
+        b=e+q02a2rXSOjPnMB0dV8zMxim3mBRFx1VQtORwuBbjRX2FAvV5pEuHPkatffBdMmgo
+         4sMS5cE/tc5DGUz02Q3QjXAysthquwNijVOyQwePvqzEvhixdibVjDDasIDPjOvfZ6Rs
+         KwDX+Gah7qTNOxCiv/zm1jhXHMVr2NARXpG9mfVbXN5k97rKv6tVQs8uOwQRZryDigG3
+         +Y/EAFGKCPggBp0pwHDbHq3Kwoj01DlhXa7LCKUrvUq1lGk2upcXhN82Jt1PgpPqP3mJ
+         m89rcQAkSS/GRQno0rFSxKMfcqYnFxHZw39+sUy+7eiwiOrtbp8tptmTck/v9xsTF5GL
+         s34Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QmMHi/Yre/UvJNCL2dThOVThw7jS7V0hu2mmbclV+BI=;
-        b=NF2BBub4+rl7BjbhpWA57VgCExHe/eWyPqfGStAUyESALv8wxtxxJi9xn5y/cLTJg8
-         acK+r1jOislWtMzbucq1/+kqD4Xe6Hz9uIop2Zin4HTZxmYJJxh3Y8TrCBBqndtNMxPh
-         jQLrd6yiQGCOFXKLr6AP637UE3NCec68Jeb46rWc2X5XWCcMmyIjooRLhEE8vsvgroei
-         wAY5jOA4bqDQX9BbdTxFXVicuNw3LIjOMKsYqPS+OzzNBtO0uvSUAOSpJunE/iBG0wSs
-         SAOsmL4tr3zO+nUdV8mAFUi6+60u/ywOh11cJqnoyg4OvcziWjLCc8KScEPAXnzO1EDo
-         yDQg==
-X-Gm-Message-State: AOAM5321ULtUt2MjCUQYbUcHNLpEhhSIWsyfZ5Do4lUUMplPeUmz32s4
-        tqPG4ZoUrr6P0peRrCD9gSE=
-X-Google-Smtp-Source: ABdhPJwwFTsGxRzatz9BIxV8yjARgio1lXfuEbGf1QxRZ5FV2Yu03x9GdT+vwQjYeEqYagadBvAv7w==
-X-Received: by 2002:a05:651c:98c:: with SMTP id b12mr40706698ljq.81.1641307096662;
-        Tue, 04 Jan 2022 06:38:16 -0800 (PST)
-Received: from [192.168.1.11] ([94.103.235.38])
-        by smtp.gmail.com with ESMTPSA id y20sm2468175ljn.69.2022.01.04.06.38.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 06:38:16 -0800 (PST)
-Message-ID: <adaafb2e-ac28-5f48-eb0b-8b55560f3bed@gmail.com>
-Date:   Tue, 4 Jan 2022 17:38:14 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ab0QEwSG8BDrjyDLCDXwNE8BTCoNpJU2Z1rDY4OSSxE=;
+        b=pNZKgHb9pcOc8LLeD4dM0zHAN716qWXzBbdKp3BGe5nXTz9Z9n3vY0iQHP0CSBLTHO
+         YthquJvvdDD+Nunxa+UPGASi/kmgfd7Nlm/OEDRYxiHws7gc9mAZnReKv2fLB374vKMF
+         HJ4dRhb9kgY627pemdIluy1SA6HBbSjQX2reXWkzBXO79w28t4r1n/A9bD6oz2Ir3KS+
+         WfRCe7Hy4LoXY8DV63KXbjv9Xxo+RlAasueW6Vt0wl6iYfpIXoU63+wWX9KsG57t+pxN
+         9KxgAHL4Yn4KWdo+jjUQBoParA4dazBaqsEHzPQVOb7q9I+EBLBQ3K4NDdi3FS9pK/Tn
+         DUUA==
+X-Gm-Message-State: AOAM533GVfTpsHKIYmAglDhGk/gINA5OAYDxlfIlXsOHUfD56XzhcvLo
+        dTfJV3oMdDzdaRPvVpNgtSjorAWzL4pprX1iBOE=
+X-Google-Smtp-Source: ABdhPJzaYz/XADZmxyEUH6OZK0zIxPj18T6xcN8ral7c+XVMFRFcmIezdaSIlqj/SyFxJicBnFbgV9ui4amstJ8bF8w=
+X-Received: by 2002:a05:6512:2249:: with SMTP id i9mr44883667lfu.100.1641307228600;
+ Tue, 04 Jan 2022 06:40:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: INFO: trying to register non-static key in hci_uart_tx_wakeup
-Content-Language: en-US
-To:     kvartet <xyru1999@gmail.com>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, sunhao.th@gmail.com
-References: <CAFkrUsjA1qai+1ysWS_LEUYcMGo+ZRF3v743q6k9e4roF6PWZw@mail.gmail.com>
- <6338e7cd-80cb-11af-e3c0-edd740bb9e49@gmail.com>
- <CAFkrUsgEJcMAdVUP3aUB7-H4YmUjFeii5754nPpOVh+vo3bnLA@mail.gmail.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <CAFkrUsgEJcMAdVUP3aUB7-H4YmUjFeii5754nPpOVh+vo3bnLA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220104135328.604-1-yuehaibing@huawei.com>
+In-Reply-To: <20220104135328.604-1-yuehaibing@huawei.com>
+From:   Aleksandr Mezin <mezin.alexander@gmail.com>
+Date:   Tue, 4 Jan 2022 20:40:17 +0600
+Message-ID: <CADnvcf+xszorFKv72wf0AMnNwr0r7O+2-KQWSt6tqaGzNKcUpg@mail.gmail.com>
+Subject: Re: [PATCH -next] hwmon: (nzxt-smart2) Fix build with CONFIG_PM=n
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/4/22 17:34, kvartet wrote:
-> We are so sorry for that. You can try the following websites, which
-> can be accessed without registration.
-> 
-> console output: https://paste.ubuntu.com/p/Bfpr8Gxtd4/
-> kernel config: https://paste.ubuntu.com/p/FDDNHDxtwz/
-> 
-> Sorry again and look forward to your reply!
-> 
-> 
+On Tue, Jan 4, 2022 at 7:54 PM YueHaibing <yuehaibing@huawei.com> wrote:
+>
+> drivers/hwmon/nzxt-smart2.c:707:12: error: 'nzxt_smart2_hid_reset_resume' defined but not used [-Werror=unused-function]
+>   707 | static int nzxt_smart2_hid_reset_resume(struct hid_device *hdev)
+>       |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> Move it into #ifdef block to fix this.
+>
+> Fixes: 0e43f31ee52f ("hwmon: add driver for NZXT RGB&Fan Controller/Smart Device v2.")
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> ---
+>  drivers/hwmon/nzxt-smart2.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
+> index 534d39b8908e..4963d630394a 100644
+> --- a/drivers/hwmon/nzxt-smart2.c
+> +++ b/drivers/hwmon/nzxt-smart2.c
+> @@ -704,6 +704,7 @@ static int nzxt_smart2_hid_raw_event(struct hid_device *hdev,
+>         return 0;
+>  }
+>
+> +#ifdef CONFIG_PM
+>  static int nzxt_smart2_hid_reset_resume(struct hid_device *hdev)
+>  {
+>         struct drvdata *drvdata = hid_get_drvdata(hdev);
+> @@ -720,6 +721,7 @@ static int nzxt_smart2_hid_reset_resume(struct hid_device *hdev)
+>
+>         return init_device(drvdata, drvdata->update_interval);
+>  }
+> +#endif
+>
+>  static int nzxt_smart2_hid_probe(struct hid_device *hdev,
+>                                  const struct hid_device_id *id)
+> --
+> 2.17.1
+>
 
-Yeah, it works, thanks! Seems like removing "/plain/" gives an access 
-without ubuntu one account.
+Hi.
 
-
-With regards,
-Pavel Skripkin
+It's already fixed:
+https://lore.kernel.org/all/20211228014813.832491-1-mezin.alexander@gmail.com/
+(and already in linux-next:
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/drivers/hwmon/nzxt-smart2.c?id=f103b2e5a6197586effb0b9a1b72c30b5d65b0cd
+)

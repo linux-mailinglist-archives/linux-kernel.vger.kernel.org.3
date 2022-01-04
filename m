@@ -2,200 +2,393 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20D31484744
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:57:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 788E7484747
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:57:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235974AbiADR5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 12:57:10 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:46752 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231519AbiADR5J (ORCPT
+        id S235987AbiADR51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 12:57:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46500 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231519AbiADR50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 12:57:09 -0500
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 204GIf7h013829;
-        Tue, 4 Jan 2022 17:56:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=aV/OgfM3SLXGO7B9cPAEOJRLJUDUJpkw/gc8iJCBYnE=;
- b=dIbkYZ1BHRw7OX9xltWhreYSveOyK1jPf+nJ9eXwIpHQIfxuNiG7gEQrM1RZ7Ikl+O7w
- N/BZgAQw4t3/0lcrGvu2VjnYjPkqY69wYsXJLYOaQv4YwhFsUVHOoWgdmiknJ+uAinAY
- j1o5M4xWL3e7j+Wt64yp34VMQ969MMoiGOBtp0ZWVmjQ8fa85tw8GKhHlMiXUULS53Ky
- prl+t7oTlfL3IG4XSRImHB5FIaLU9ndo22qtlQfHQc34ik9P7f8w963XaYV5dNiQyhzp
- o/PWG8fQUCm+UTy7ezHKB2ApsVuROqeu/iw3Bq9xdo5+mugTdTVcn+S9GKa+OyftG1a6 zw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dc3st2wd7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 04 Jan 2022 17:56:30 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 204HtkQu184320;
-        Tue, 4 Jan 2022 17:56:29 GMT
-Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam08lp2047.outbound.protection.outlook.com [104.47.73.47])
-        by userp3030.oracle.com with ESMTP id 3dac2wyh6n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 04 Jan 2022 17:56:28 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kwYnHFObGCNgM9Qp0etkWtfIu6eOkIALQsMon5dh2FDbv3+J0EqPMxO1K0sc/TZwirWFPIRrLGzCi3NB0oqLo2V4NQW2dXuyiSm/7Gorq/yMUT31qWNeAu69vtuZvOwU2wYFv3smpZbpz1IOO+R5ornVAShYJ1B9UMD7J5LWEXyHigoTnOxegRAh1xv79DNzT5B9XNkVgo6SuFtf/mf7Goz32im19kq2m9gNPbL2Xa+zCjLINc6RDi0PO0glnL6mdV+vXMDgDHlr5y5+U66yjDyQZVF8/FsUuDfl9KpL327SbzbbrhKvVQrrDCcT6QESWfZu2Jzr7N6dYkI8MB1bxg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aV/OgfM3SLXGO7B9cPAEOJRLJUDUJpkw/gc8iJCBYnE=;
- b=aADaRnRMJdk0bkgk2Svxs7LnqmIlQ0rjlsPvr4Fi8lv0vOj1MQPybTxLYILy6Mo7Jp6DyQ/0xXHbF+i7L/DH1wxUbTfUGwiEA8P9+lfjkzAWBDg70sZMv7sgilZY36duthtQPf5Qmr/K5QivYTGMF1odDgrwZ3lip1taEVQ+AcGKq0+pO2tgitefTqiGmOpSnbA3dRhx9LKA0GGB07cjQVWb7tdVs/0Ue1GGQlPNMWZugARQCKadOuNTHSEVLbEAH7U92/Iq/UnyOqXG5bWgw7PxwBV1oUKKal46mRNAtz6z86eYQd7Ia0Agaer4MHSSz9/pD7I/MxjFIRMn4SzCPg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aV/OgfM3SLXGO7B9cPAEOJRLJUDUJpkw/gc8iJCBYnE=;
- b=Vt0iXkZ8UpM8je2Vv8CRDJ7qBK7qAAmfugEA0S2yaTtsqlu3B3KGAS7Uv3vs50Rpx1VMdpF5c2YItp3DG5Sij/fr9RwrRVTRw5X2ieC9xlptPlmk5+dirlIA8zVvynqGRjn6S5qaroFpIj5MOpIuRYoHCQsj7cxoWQlCuf7+Fb4=
-Received: from SN6PR10MB2576.namprd10.prod.outlook.com (2603:10b6:805:44::15)
- by SN6PR10MB2462.namprd10.prod.outlook.com (2603:10b6:805:47::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Tue, 4 Jan
- 2022 17:56:26 +0000
-Received: from SN6PR10MB2576.namprd10.prod.outlook.com
- ([fe80::4c8c:47df:f81e:f412]) by SN6PR10MB2576.namprd10.prod.outlook.com
- ([fe80::4c8c:47df:f81e:f412%5]) with mapi id 15.20.4844.016; Tue, 4 Jan 2022
- 17:56:26 +0000
-Date:   Tue, 4 Jan 2022 11:56:16 -0600
-From:   Venu Busireddy <venu.busireddy@oracle.com>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v8 13/40] x86/kernel: Make the bss.decrypted section
- shared in RMP table
-Message-ID: <YdSKQKSTS83cRzGZ@dt>
-References: <20211210154332.11526-1-brijesh.singh@amd.com>
- <20211210154332.11526-14-brijesh.singh@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211210154332.11526-14-brijesh.singh@amd.com>
-X-ClientProxiedBy: SA0PR11CA0057.namprd11.prod.outlook.com
- (2603:10b6:806:d0::32) To SN6PR10MB2576.namprd10.prod.outlook.com
- (2603:10b6:805:44::15)
+        Tue, 4 Jan 2022 12:57:26 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC86C061761;
+        Tue,  4 Jan 2022 09:57:26 -0800 (PST)
+Received: from ip4d173d02.dynamic.kabel-deutschland.de ([77.23.61.2] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1n4o3m-0006GG-Ol; Tue, 04 Jan 2022 18:57:23 +0100
+Message-ID: <72fcaa40-5884-710f-58b6-bf40a1f58e57@leemhuis.info>
+Date:   Tue, 4 Jan 2022 18:57:22 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 95e79e83-aeb6-4036-137d-08d9cfab86c6
-X-MS-TrafficTypeDiagnostic: SN6PR10MB2462:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR10MB2462482AC262A5089C774DD2E64A9@SN6PR10MB2462.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oujahH+ZiVXz/2GGXbdWZrhw3vNEVL9+nexdHhZINQSNdQuXT2SsvD24vT/qgHob0pbmAuEpt7oHyxqwudB2M5x25/rPvKZm0TEkDEYWWhYNxcg9PVt3vpHuXUO68r+ex1r4Yh6tfz9Oy2Igbgr05iqlSCp/tDC3/9hxPIly4oDCZ1ZEedbjKpNqxfbEvLbbQIw1AiKE74rLRqESsUZnz6fY1y39+HZRb+pAIhzr8w9WqawEWdQG91u1Zp+cl3QOJfcaRqRY5XpsA4TL+oNmErecFB+2thqO8jrk2dGW2AO4IB7Zy8eQtBtBJOrjIgPZ8RflLiDN7GdGXK8FvDzLCPLJ6OV0b91gEWn9Az1HofJar4+/Uo0d+EhbIji9Q+pYva4d4G8syy1RHYU//NPdLYXblKUmSph8r/cJXEBJnYHb5Jkoy5jz0xMfPfsMoxNSkF1JZ4TeTT1GxLukWlKX2KEf4+o8B0wPjk1rK6uVi/mRuqqStZC5Kmu7W+RFmrWJdjFM4eRT7lI2K+xcA8nljLN5BV439nCo/CZA63R8Qh0wASnJkCOJDOv1d8UxSvpmUyJpgDRZk4MfBFp52JpOgRLTL9sv2Ad/93M65Dv/sJKVDLHjs3Q92VPkaBJJ+hx+5SjH1MRu2lgGJ9EXDS5f7Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB2576.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(366004)(6916009)(316002)(33716001)(6486002)(186003)(6666004)(86362001)(44832011)(54906003)(508600001)(4001150100001)(4326008)(7406005)(7416002)(66946007)(6512007)(8936002)(66556008)(2906002)(83380400001)(66476007)(38100700002)(53546011)(26005)(6506007)(8676002)(9686003)(5660300002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bZyoPmZmAFotav5XoGCHsrUEht4eIPIcbDv4UqTu+5jA3QB6v0FWIYmV48tp?=
- =?us-ascii?Q?l0c/TiPRs6UBz7kX4LKFCZpvrQn6eQpjf0b7Y8WUHV2HD6/pdAZp4G8L7uVt?=
- =?us-ascii?Q?U76AAtlL9Tk5ZvDMS36WMQ9pM7Kfss3+/tnSR5lF9Cj0GAS8SzVz3TSjiWpX?=
- =?us-ascii?Q?a4iabGKK2cOPCi6C18sxoNHvPAU6HqMLJMVgLGTEHHdv3J4djsaOTsADZqLC?=
- =?us-ascii?Q?7CUKoFmn5L56Tm6EllSk4jQjzNj5j/mAEZBNfM23aeO7VAnKajipy13BT2Af?=
- =?us-ascii?Q?XsArQvlRvSkFFGcydFJ70mBmOl08zfw7kJ7Kj2xnBuaYEOdb6Asn+YfPp3qm?=
- =?us-ascii?Q?Nwz0u2KS8/q5M37bx2PIx9QWR25p8mEwXsrHxCGR4gsCKidpYkCluLEPHlBM?=
- =?us-ascii?Q?KXcWwX4FENW42EymeW+Cdr0UCMsjinoJ9Fi7rSd11ZenlSWf6iYP5Vw/CxAk?=
- =?us-ascii?Q?sKMtjBW9ynU4MFnOwwDnxat+sMZguqJiL1QCdXlhyGHroQgw2EjLsaIVSH++?=
- =?us-ascii?Q?nNPlysXEIckxf1dhEJqxB/8TaWF9geGfOB7XzQ9ARxahlPkJy53LKC7JbOeF?=
- =?us-ascii?Q?60rf5QST3R8A/8r5Xn1ayhLiDoL8mBdvOhtsF5b6hHi9Nf8tJYZT01K6WdFh?=
- =?us-ascii?Q?oY1hwEqE6PMTVvRlJ0K89Aaw7vLH7RnVrX1sPAO9nV/g+S9fzxKfp1UA07+1?=
- =?us-ascii?Q?2fmxrWoDMOUxR3yVF0Xhe/hQwu7FFd+tbDZDY9zim340CnzJ9xr/es2P6KdC?=
- =?us-ascii?Q?Ag6pXOD88nWtQdeQw5frJ0G7JCoz2kS5GY/CK0hHvoZRIFD6H/UemHXdbQbX?=
- =?us-ascii?Q?F2mrcbs82N4dQZM8NEU+lhj46ZTLMXpkjBi12gTsSQdmfjVYaEZiwd2BonL2?=
- =?us-ascii?Q?frdRyKieEhcBTqW5Y2HX5ug0UrTklDB2Yo89KgITuD+IjHyTkf3bsJQI2IuC?=
- =?us-ascii?Q?VjHoO8X8PeIpIu2fqFnah28puavB23O3aCiMlih81T/cZQ9d3s4oPRwoGPvq?=
- =?us-ascii?Q?rW+nvrbY2mEvWkvtcrWVM+KiTGBXQc9CisOvtnl6BMk8vi6Bcdm1Nr+YDytr?=
- =?us-ascii?Q?uINmNXEJFgZHloKbFA7earnF34YID7H/A1QtXQWuN2Ts2sOTW8mGACKkyM3Q?=
- =?us-ascii?Q?vc1tyYXlxTW/vbxtF7uHaTGW5UvAoqDLlwbReuelQY6KfsYumt2FU4LAhPe5?=
- =?us-ascii?Q?YB7uLP1NK9gAJCMLKLUMJJ4ooV3qzFze8Ze/6UgvIKFD4P9cBGPFS/mPEfcU?=
- =?us-ascii?Q?jA1F7zlVCOJB4DXFICMbcOeDLq5j5PK2a845FhWg3E61CGRhAoa3LuefdFLj?=
- =?us-ascii?Q?6gEG6NgtzcewUp/VRDk38gc4kaAobFsG/JP/ZzjrF2gm0NbtiiTaEuzmA8VW?=
- =?us-ascii?Q?ZyvUIlxc5tAbbZRvSHIOeSsE+0kCy1ui9eITHBiRcI7LqyOFpGLnGUFH9cs2?=
- =?us-ascii?Q?iV6AAR1PvbuVCGtWwx/hU6yYlZ1sNAPBaCXrQpOpYoUqF8nRsIx7YVRTDJFM?=
- =?us-ascii?Q?yatrhyLnvn8gKw2BK/E4O/3FrqFDB5lM+VMFGg32ErbgE+f3PIKAsFtkuOn9?=
- =?us-ascii?Q?ARzCtLO79pt5BhGovLCX1OrLeBibipLeKdPwWnLklAc/QIlUw6CdM8cbSjpt?=
- =?us-ascii?Q?7f5u5sxY475bZQKFkS81xQfBF3hXhktgxjWDJY2aW5pa7KnYwxxFpyQjCHWz?=
- =?us-ascii?Q?cPZHjQ=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 95e79e83-aeb6-4036-137d-08d9cfab86c6
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB2576.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jan 2022 17:56:25.9809
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FVWDPR2Hd6uypnzbt4LpczHLQ5v/1tKC/TzoaxA1bRoAwLjzbIFS+9lLXcMqOYRY1vgW9KQlQfK9YU8stfTmPfx7KJ6wRNLLMj8s/SS9avo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2462
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10217 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999 mlxscore=0
- suspectscore=0 spamscore=0 phishscore=0 malwarescore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2201040120
-X-Proofpoint-GUID: CXsZh6t48v_8KWiEHYhlqld48H-CPeJn
-X-Proofpoint-ORIG-GUID: CXsZh6t48v_8KWiEHYhlqld48H-CPeJn
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-BS
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        workflows@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>
+References: <cover.1641203216.git.linux@leemhuis.info>
+ <7b71a1262b8b72d30154203bb14f00db7d4170ef.1641203216.git.linux@leemhuis.info>
+ <CAKXUXMy-RT5kc5yzafQyxRQ1pfY2-K3KE9iAxFXvcB2o0V+ceQ@mail.gmail.com>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [RFC PATCH v1 1/2] docs: add a document about regression handling
+In-Reply-To: <CAKXUXMy-RT5kc5yzafQyxRQ1pfY2-K3KE9iAxFXvcB2o0V+ceQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1641319046;2e4bdc63;
+X-HE-SMSGID: 1n4o3m-0006GG-Ol
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-10 09:43:05 -0600, Brijesh Singh wrote:
-> The encryption attribute for the bss.decrypted region is cleared in the
-> initial page table build. This is because the section contains the data
-> that need to be shared between the guest and the hypervisor.
+
+On 04.01.22 15:17, Lukas Bulwahn wrote:
+> On Mon, Jan 3, 2022 at 3:23 PM Thorsten Leemhuis <linux@leemhuis.info> wrote:
+>>
+>> Create a document explaining various aspects around regression handling
+>> and tracking both for users and developers. Among others describe the
+>> first rule of Linux kernel development and what it means in practice.
+>> Also explain what a regression actually is and how to report them
+>> properly. The text additionally provides a brief introduction to the bot
+>> the kernel's regression tracker users to facilitate the work. To sum
+>> things up, provide a few quotes from Linus to show how serious the he
+>> takes regressions.
+>>
+>> [...]
+>
+> [lots of helpful suggestions for fixes and small improvements]
+
+Many thx, addressed all of them, not worth commenting on each of them
+individually.
+
+
+>> +What is the goal of the 'no regressions rule'?
+>> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> +
+>> +Users should feel safe when updating kernel versions and not have to worry
+>> +something might break. This is in the interest of the kernel developers to make
+>> +updating attractive: they don't want users to stay on stable or longterm Linux
+>> +series either abandoned or more than one and a half year old, as `those might
+>> +have known problems, security issues, or other aspects already improved in later
+>> +versions
+>> +<http://www.kroah.com/log/blog/2018/08/24/what-stable-kernel-should-i-use/>`_.
+>> +
+> Maybe add something like this:
 > 
-> When SEV-SNP is active, just clearing the encryption attribute in the
-> page table is not enough. The page state need to be updated in the RMP
-> table.
+> A larger user community means more exposure and more confidence that
+> any critical bug introduced is likely to be found closer to the point
+> in time it was introduced, and hence the shipped kernels have less
+> critical bugs.
 > 
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> ---
->  arch/x86/kernel/head64.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-> index fa02402dcb9b..72c5082a3ba4 100644
-> --- a/arch/x86/kernel/head64.c
-> +++ b/arch/x86/kernel/head64.c
-> @@ -143,7 +143,14 @@ static unsigned long sme_postprocess_startup(struct boot_params *bp, pmdval_t *p
->  	if (sme_get_me_mask()) {
->  		vaddr = (unsigned long)__start_bss_decrypted;
->  		vaddr_end = (unsigned long)__end_bss_decrypted;
-> +
->  		for (; vaddr < vaddr_end; vaddr += PMD_SIZE) {
-> +			/*
-> +			 * When SEV-SNP is active then transition the page to shared in the RMP
-> +			 * table so that it is consistent with the page table attribute change.
-> +			 */
-> +			early_snp_set_memory_shared(__pa(vaddr), __pa(vaddr), PTRS_PER_PMD);
+> Just to close the line of thought here.
 
-Shouldn't the first argument be vaddr as below?
+Hmmm. How about this instead:
 
-   			early_snp_set_memory_shared(vaddr, __pa(vaddr), PTRS_PER_PMD);
+The kernel developers also want to make it simple and appealing for
+users to test the latest (pre-)release, as it's a lot easier to track
+down and fix problems, if they are reported shortly after being introduced.
+> Okay, that is how far I got reading for now.
 
-Venu
+Great, many thx for your help, much appreciated. FWIW, find below the
+current version of the plain text which contains a few more fixes. Note,
+thunderbird will insert wrong line breaks here.
 
+Ciao, Thorsten
+
+
+
+Does it qualify as a regression if a newer kernel works slower or makes
+the system consume more energy?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It does, but the difference has to be significant. A five percent
+slow-down in a micro-benchmark thus is unlikely to qualify as
+regression, unless it also influences the results of a broad benchmark
+by more than one percent. If in doubt, ask for advice.
+
+Is it a regression, if an externally developed kernel module is
+incompatible with a newer kernel?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+No, as the 'no regression' rule is about interfaces and services the
+Linux kernel provides to the userland. It thus does not cover building
+or running externally developed kernel modules, as they run in
+kernel-space and use occasionally changed internal interfaces to hook
+into the kernel.
+
+How are regressions handled that are caused by a fix for security
+vulnerability?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In extremely rare situations security issues can't be fixed without
+causing regressions; those are given way, as they are the lesser evil in
+the end. Luckily this almost always can be avoided, as key developers
+for the affected area and often Linus Torvalds himself try very hard to
+fix security issues without causing regressions.
+
+If you nevertheless face such a case, check the mailing list archives if
+people tried their best to avoid the regression; if in doubt, ask for
+advice as outlined above.
+
+What happens if fixing a regression is impossible without causing
+another regression?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Sadly these things happen, but luckily not very often; if they occur,
+expert developers of the affected code area should look into the issue
+to find a fix that avoids regressions or at least their impact. If you
+run into such a situation you thus do what was outlined already for
+regressions caused by security fixes: check earlier discussions if
+people already tried their best and ask for advice if in doubt.
+
+A quick note while at it: these situations could be avoided, if you
+would regularly give mainline pre-releases (say v5.15-rc1 or -rc3) from
+each cycle a test run. This is best explained by imagining a change
+integrated between Linux v5.14 and v5.15-rc1 which causes a regression,
+but at the same time is a hard requirement for some other improvement
+applied for 5.15-rc1. All these changes often can simply be reverted and
+the regression thus solved, if someone finds and reports it before 5.15
+is released. A few days or weeks later after the release this solution
+might become impossible, if some software starts to rely on aspects
+introduced by one of the follow-up changes: reverting all changes would
+cause regressions for users of said software and thus out of the question.
+
+A feature I relied on was removed months ago, but I only noticed now.
+Does that qualify as regression?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It does, but often it's hard to fix them due to the aspects outlined in
+the previous section. It hence needs to be dealt with on a case-by-case
+basis; this is another reason why it's in your interest to regularly
+test mainline releases.
+
+Does the 'no regression' rule apply if I seem to be the only person in
+the world that is affected by a regression?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It does, but only for practical usage: the Linux developers want to be
+free to remove support for hardware only to be found in attics and
+museums anymore.
+
+Note, sometimes regressions can't be avoided to make progress -- and the
+latter is needed to prevent Linux from stagnation. Hence, if only very
+few users seem to be affected by a regression, it for the greater good
+might be in their and everyone else's interest to not insist on the
+rule. Especially if there is an easy way to circumvent the regression
+somehow, for example by updating some software or using a kernel
+parameter created just for this purpose.
+
+Does the regression rule apply for code in the staging tree as well?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Not according to the `help text for the configuration option covering
+all staging code
+<https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/staging/Kconfig>`_,
+which since its early days states::
+
+       Please note that these drivers are under heavy development, may or
+       may not work, and may contain userspace interfaces that most likely
+       will be changed in the near future.
+
+The staging developers nevertheless often adhere to the 'no regressions'
+rule, but sometimes bend it to make progress. That's for example why
+some users had to deal with (often negligible) regressions when a WiFi
+driver from the staging tree was replaced by a totally different one
+written from scratch.
+
+Why do later versions have to be 'compiled with a similar configuration'?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Because the Linux kernel developers sometimes integrate changes known to
+cause regressions, but make them optional and disable them in the
+kernel's default configuration. This trick allows progress, as the 'no
+regressions' rule otherwise would lead to stagnation. Consider for
+example a new security feature which blocks access to some kernel
+interfaces often abused by malware, but at the same time are required to
+run a few rarely used applications. The outlined trick makes both camps
+happy: people using these applications can leave the new security
+feature off, while everyone else can enable it without running into trouble.
+
+How to create a configuration similar to the one of an older kernel?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Start a known-good kernel and configure the newer Linux version with
+``make olddefconfig``. This makes the kernel's build scripts pick up the
+configuration file (the `.config` file) from the running kernel as base
+for the new one you are about to compile; afterwards they set all new
+configuration options to their default value, which disables new
+features that might cause regressions.
+
+Can I report a regression with vanilla kernels provided by someone else
+to the upstream Linux kernel developers?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Only if the newer kernel was compiled with a similar configuration file
+as the older one (see above), as your provider might have enabled some
+known-to-be incompatible feature in the newer kernel. If in a doubt,
+report this problem to the provider and ask for advice.
+
+
+More details about regressions relevant for developers
+------------------------------------------------------
+
+What should I do, if I suspect a change I'm working on might cause
+regressions?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Evaluate how big the risk of regressions is, for example by performing a
+code search in Linux distributions and Git forges. Also consider asking
+other developers or projects likely to be affected to evaluate or even
+test the proposed change; if problems surface, maybe some middle ground
+acceptable for all can be found.
+
+If the risk of regressions in the end seems to be relatively small, go
+ahead with the change, but let all involved parties know about the risk.
+Hence, make sure your patch description makes this aspect obvious. Once
+the change is merged, tell the Linux kernel's regression tracker and the
+regressions mailing list about the risk, so everyone has the change on
+the radar in case reports trickle in. Depending on the risk, you also
+might want to ask the subsystem maintainer to mention the issue in his
+pull request to mainline.
+
+
+Everything developers need to know about regression tracking
+------------------------------------------------------------
+
+Do I have to use regzbot?
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It's in the interest of everyone if you do, as kernel maintainers like
+Linus Torvalds partly rely on regzbot's tracking in their work -- for
+example when deciding to release a new version or extend the development
+phase. For this they need to be aware of all unfixed regression; to do
+that, Linus is known to look into the weekly reports sent by regzbot.
+
+Do I have to tell regzbot about every regression I stumble upon?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ideally yes: we are all humans and easily forget problems when something
+more important unexpectedly comes up -- for example a bigger problem in
+the Linux kernel or something in real life that's keeping us away from
+keyboards for a while. Hence, it's best to tell regzbot about every
+regression, except when you immediately write a fix and commit it to a
+tree regularly merged to the affected kernel series.
+
+Why does the Linux kernel need a regression tracker, and why does he
+utilize regzbot?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Rules like 'no regressions' need someone to enforce them, otherwise they
+are broken either accidentally or on purpose. History has shown that
+this is true for the Linux kernel as well. That's why Thorsten
+volunteered to keep an eye on things.
+
+Tracking regressions completely manually has proven to be exhausting and
+demotivating, which is why earlier attempts to establish it failed after
+a while. To prevent this from happening again, Thorsten developed
+Regzbot to facilitate the work, with the long term goal to automate
+regression tracking as much as possible for everyone involved.
+
+How does regression tracking work with regzbot?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The bot keeps track of all the reports and monitors their fixing
+progress. It tries to do that with as little overhead as possible for
+both reporters and developers.
+
+In fact, only reporters or someone helping them are burdened with an
+extra duty: they need to tell regzbot about the regression report using
+one of the ``#regzbot introduced`` commands outlined above.
+
+For developers there normally is no extra work involved, they just need
+to do something that's expected from them already: add 'Link:' tags to
+the patch description pointing to all reports about the issue fixed.
+
+Thanks to these tags regzbot can associate regression reports with
+patches to fix the issue, whenever they are posted for review or applied
+to a git tree. The bot additionally watches out for replies to the
+report. All this data combined provides a good impression about the
+current status of the fixing process.
+
+How to see which regressions regzbot tracks currently?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Check `regzbot's web-interface
+<https://linux-regtracking.leemhuis.info/regzbot/>`_ for the latest
+info; alternatively, `search for the latest regression report
+<https://lore.kernel.org/lkml/?q=%22Linux+regressions+report%22+f%3Aregzbot>`_,
+which regzbot normally sends out once a week on Sunday evening (UTC),
+which is a few hours before Linus usually publishes new (pre-)releases.
+
+What places is regzbot monitoring?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Regzbot is watching the most important Linux mailing lists as well as
+the linux-next, mainline and stable/longterm git repositories.
+
+How to interact with regzbot?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Everyone can interact with the bot using mails containing `regzbot
+commands`, which need to be in their own paragraph (IOW: they need to be
+separated from the rest of the mail using blank lines). One such command
+is ``#regzbot introduced <version or commit>``, which adds a report to
+the tracking, as already described above; ``#regzbot ^introduced
+<version or commit>`` is another such command, which makes regzbot
+consider the parent mail as a report for a regression which it starts to
+track.
+
+Once one of those two commands has been utilized, other regzbot commands
+can be used. You can write them below one of the `introduced` commands
+or in replies to the mail that used one of them or itself is a reply to
+that mail:
+
+ * Set or update the title::
+
+       #regzbot title: foo
+
+ * Link to a related discussion (for example the posting of a patch to
+fix the issue) and monitor it::
+
+       #regzbot monitor:
+https://lore.kernel.org/all/30th.anniversary.repost@klaava.Helsinki.FI/
+
+   Monitoring only works for lore.kernel.org; regzbot will consider all
+messages in that thread as related to the fixing process.
+
+ * Point to a place with further details, like a bug tracker or a
+related mailing list post::
+
+       #regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=123456789
+
+ * Mark a regression as fixed by a commit that is heading upstream or
+already landed::
+
+       #regzbot fixed-by: 1f2e3d4c5d
+
+ * Mark a regression as a duplicate of another one already tracked by
+regzbot::
+
+       #regzbot dup-of:
+https://lore.kernel.org/all/30th.anniversary.repost@klaava.Helsinki.FI/
+
+ * Mark a regression as invalid::
+
+       #regzbot invalid: wasn't a regression, problem has always existed
+
+Is there more to tell about regzbot and its commands?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+More detailed and up-to-date information about the Linux kernels
+regression tracking bot can be found on its `project page
+<https://gitlab.com/knurd42/regzbot>`_, which among others contains a
+`getting started guide
+<https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md>`_
+and `reference documentation
+<https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md>`_
+which both are more in-depth.

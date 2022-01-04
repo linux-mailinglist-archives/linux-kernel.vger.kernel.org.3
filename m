@@ -2,88 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B3A2483FCB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:23:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 990AA483FC7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:22:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbiADKXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 05:23:03 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:56440 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229772AbiADKXC (ORCPT
+        id S231310AbiADKWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 05:22:38 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59592 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229772AbiADKWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 05:23:02 -0500
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2049fOoO016847;
-        Tue, 4 Jan 2022 11:22:45 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=YLhIJgp0QDsY/sWYMawGW0AnOmaioaTH8accCu7RGNQ=;
- b=sz2mBr5K2UqoVrk+Z1+APYcgpv5cxMGNcP5kOn9IhGgw9KfILOCOgYw87D6oMEY53L2k
- 7aUyiep8qDnYmOvSlwWejEfF37wET3KqA12RCEQUNyNcWL+Bq+wmugCGq4SKGs+0YzSS
- N/5SlV4YUMrTxX+dU/7i01qGsV1+02mdrUjyLoH44fbUdP6RmPvwhznMzVfr4rOZ7p2h
- gbBkjzAIouA6xQwaEdejzWS4/01uGypjuajaQiAej3f0ukQXVng7jLXKLsaV+T/GabIo
- ylk53kCH/Bnq1r3v5y9JWFUiX1ZBW9Lg9ndlVe1gHr5cR6MBhr0nuPWO9DsIZSPKl8gV aw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dccdnsw9k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Jan 2022 11:22:44 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 98FBC10002A;
-        Tue,  4 Jan 2022 11:22:43 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6FCBC233C72;
-        Tue,  4 Jan 2022 11:22:43 +0100 (CET)
-Received: from lmecxl0993.lme.st.com (10.75.127.45) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 4 Jan
- 2022 11:22:42 +0100
-Subject: Re: [PATCH 1/5] drm/stm: ltdc: switch to regmap
-To:     Yannick Fertre <yannick.fertre@foss.st.com>,
-        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20211215214738.19946-1-yannick.fertre@foss.st.com>
-From:   Philippe CORNU <philippe.cornu@foss.st.com>
-Message-ID: <71173a7e-a367-f5ea-1b6e-97e73f69a7da@foss.st.com>
-Date:   Tue, 4 Jan 2022 11:22:16 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 4 Jan 2022 05:22:32 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2144961311;
+        Tue,  4 Jan 2022 10:22:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC842C36AEB;
+        Tue,  4 Jan 2022 10:22:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641291751;
+        bh=juGCHWXZ82rSP6vUi7Im0z1iI5+iYRDhfx46SdS0lfM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vX2UDCJ/SIcOuW/65tB/Ea8zuWq+WN1BuB7rAVE1uq+OIUTkLSRaeSNxHBItzR6rl
+         FIRvzTrnOXYtvymXOJoUqSF3ETtn+QmQeqzU6LBrIK50kLS6uUVeNGTzqR/j8AH6g4
+         edShgHi0HYyD1oT7FWKsuElFthvRVqNS0tMZkEZY=
+Date:   Tue, 4 Jan 2022 11:22:28 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Salvatore Bonaccorso <carnil@debian.org>
+Cc:     Chao Yu <chao@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Wenqing Liu <wenqingliu0120@gmail.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: Re: [PATCH 5.10 60/76] f2fs: fix to do sanity check on last xattr
+ entry in __f2fs_setxattr()
+Message-ID: <YdQf5CZUYMJlamzp@kroah.com>
+References: <20211227151324.694661623@linuxfoundation.org>
+ <20211227151326.779679392@linuxfoundation.org>
+ <YdNmdhsKS5ZWHOlB@eldamar.lan>
+ <12184f7c-3662-7fdc-d44f-23ef29102ddd@kernel.org>
+ <YdQZzAQg4vIQNXc4@eldamar.lan>
 MIME-Version: 1.0
-In-Reply-To: <20211215214738.19946-1-yannick.fertre@foss.st.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-04_04,2022-01-01_01,2021-12-02_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdQZzAQg4vIQNXc4@eldamar.lan>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/15/21 10:47 PM, Yannick Fertre wrote:
-> Replace the legacy register access by regmap API.
+On Tue, Jan 04, 2022 at 10:56:28AM +0100, Salvatore Bonaccorso wrote:
+> Hi,
 > 
-> Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
-> ---
->   drivers/gpu/drm/stm/ltdc.c | 138 ++++++++++++++++++-------------------
->   drivers/gpu/drm/stm/ltdc.h |   1 +
->   2 files changed, 68 insertions(+), 71 deletions(-)
+> On Tue, Jan 04, 2022 at 05:29:30PM +0800, Chao Yu wrote:
+> > On 2022/1/4 5:11, Salvatore Bonaccorso wrote:
+> > > Hi,
+> > > 
+> > > On Mon, Dec 27, 2021 at 04:31:15PM +0100, Greg Kroah-Hartman wrote:
+> > > > From: Chao Yu <chao@kernel.org>
+> > > > 
+> > > > commit 5598b24efaf4892741c798b425d543e4bed357a1 upstream.
+> > 
+> > I've no idea.
+> > 
+> > I didn't add this line from v1 to v3:
+> > 
+> > https://lore.kernel.org/lkml/20211211154059.7173-1-chao@kernel.org/T/
+> > https://lore.kernel.org/all/20211212071923.2398-1-chao@kernel.org/T/
+> > https://lore.kernel.org/all/20211212091630.6325-1-chao@kernel.org/T/
+> > 
+> > Am I missing anything?
 > 
+> The line is added when a commit from "upstream" is added to the stable
+> series to identify the upstream commit it is taken from for
+> cherry-pick (or backport).
+> 
+> Strange so, that the fix is not in mainline actually yet.
 
+I thought it was about to be sent to Linus.  Why has the f2fs maintainer
+not sent a merge request to him to get this merged properly yet?
 
-Hi Yannick,
-many thanks for your patch.
-Acked-by: Philippe Cornu <philippe.cornu@foss.st.com>
-Reviewed-by: Philippe Cornu <philippe.cornu@foss.st.com>
-Philippe :-)
+thanks,
+
+greg k-h

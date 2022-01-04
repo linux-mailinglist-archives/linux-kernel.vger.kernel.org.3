@@ -2,111 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BAF6484952
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 21:30:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A833484955
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 21:31:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232842AbiADUaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 15:30:30 -0500
-Received: from mxout03.lancloud.ru ([45.84.86.113]:52018 "EHLO
-        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232255AbiADUa1 (ORCPT
+        id S232879AbiADUbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 15:31:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53910 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232255AbiADUbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 15:30:27 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru E06A5208D54A
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH] platform: finally disallow IRQ0 in platform_get_irq() and
- its ilk
-To:     Marc Zyngier <maz@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-References: <5e001ec1-d3f1-bcb8-7f30-a6301fd9930c@omp.ru>
- <87pmp7volh.wl-maz@kernel.org>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <c3bf828d-ac47-19f2-ee0b-ebf3105a38cb@omp.ru>
-Date:   Tue, 4 Jan 2022 23:30:23 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Tue, 4 Jan 2022 15:31:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AF0C061761;
+        Tue,  4 Jan 2022 12:31:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 626DB6157D;
+        Tue,  4 Jan 2022 20:31:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CACCCC36AED;
+        Tue,  4 Jan 2022 20:31:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641328304;
+        bh=iAG8B3ZpKh/tvy6iG5URP7IbImgaSPzk9TUk4eHefQg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Yi7zREne0VxnunBWcxx0IIhDo5zqKfxFv+Py2S+vGhxGTw/FYpPEbLQvZX3ziBhn8
+         Y65C5kuG0ZlxpPSA13cdcZRq4biW4S2KTPIqAPo5irHXzwQbhBk1cI8gN5zAqdtZ3a
+         mtpACCr6qjIHHQFcvrmlTlA7bx1KLDMK2VzI7wgfwNwZsyl9dmgk2/fIBtbyiXgRff
+         gplJGIzB1zvAXGH3KIqD6zXM8ZKbSFan8iRA5LBlc01fW1M2hTOMh9rbSeXLv4x83i
+         34A8yhmfRoJFRkjOHN86ajJXeY3BA4hVtSXpOUIw/hXa36Tkay9abdm04J0uSZHZMf
+         XwupkN9zxsmww==
+Received: by mail-ed1-f44.google.com with SMTP id j6so152991504edw.12;
+        Tue, 04 Jan 2022 12:31:44 -0800 (PST)
+X-Gm-Message-State: AOAM532HRPEY85LE+KWZnHSBM57JpWQ4yiUnE1ReeP9kRd5nluL3LmGI
+        gEr/Su55CXeoLtdUn0p4bmHo8i+n2VLguEWg+g==
+X-Google-Smtp-Source: ABdhPJwPtVu84Gbmxpg5haak5g6wrYjBHdIwwCb7MqqLp2qJ0r9HYDUdg3yiXzkAioz1RVciVqWCihfQlPWZviDmnPA=
+X-Received: by 2002:a17:906:eb04:: with SMTP id mb4mr39454430ejb.27.1641328303114;
+ Tue, 04 Jan 2022 12:31:43 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <87pmp7volh.wl-maz@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+References: <1635487055-18494-1-git-send-email-lh.kuo@sunplus.com>
+ <1636444705-17883-1-git-send-email-lh.kuo@sunplus.com> <1636444705-17883-3-git-send-email-lh.kuo@sunplus.com>
+ <YaQu3dCQD4FG7ete@robh.at.kernel.org> <f5607fa7ad9c49a7bfcce02eac834838@sphcmbx02.sunplus.com.tw>
+ <CAL_JsqK=7ma_LwMMoW7yfVoBfPN0hBJsPbp4ojtk0kt3k=+O1w@mail.gmail.com> <1eb97e1aca9c4c8d8f1e17c51f2792ac@sphcmbx02.sunplus.com.tw>
+In-Reply-To: <1eb97e1aca9c4c8d8f1e17c51f2792ac@sphcmbx02.sunplus.com.tw>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 4 Jan 2022 14:31:31 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKJJutPpc-xRK0y+t8s=jpqkBmHMgaFK1mnEcxPT98vjQ@mail.gmail.com>
+Message-ID: <CAL_JsqKJJutPpc-xRK0y+t8s=jpqkBmHMgaFK1mnEcxPT98vjQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] devicetree bindings mmc Add bindings doc for
+ Sunplus SP7021
+To:     =?UTF-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
+Cc:     "LH.Kuo" <lhjeff911@gmail.com>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "daniel.thompson@linaro.org" <daniel.thompson@linaro.org>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "qinjian@cqplus1.com" <qinjian@cqplus1.com>,
+        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+On Tue, Nov 30, 2021 at 7:59 PM Lh Kuo =E9=83=AD=E5=8A=9B=E8=B1=AA <lh.Kuo@=
+sunplus.com> wrote:
+>
+> > > > > +properties:
+> > > > > +  compatible:
+> > > > > +    enum:
+> > > > > +      - sunplus,sp7021-card1
+> > > > > +      - sunplus,sp7021-sdio
+> > > >
+> > > > What's the difference between these 2 blocks?
+> > > >
+> > >
+> > > One for SD card One for SDIO
+> >
+> > If the programming model is the same, then it should be the same compat=
+ible string. We have various
+> > properties to handle differences like bus width, card detect or not, et=
+c.
+> >
+>
+> SDIO and SDCARD still need to set the date and CMD decoding differences.
 
-On 1/4/22 12:26 PM, Marc Zyngier wrote:
+I still don't understand. A host controller should be able to
+initialize a card enough to tell what kind it is. And we have things
+defined in DT like 'no-sd' and 'no-mmc'.
 
-[...]
->> The commit a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is
->> invalid") only calls WARN() when IRQ0 is about to be returned, however
->> using IRQ0 is considered invalid (according to Linus) outside the arch/
->> code where it's used by the i8253 drivers. Many driver subsystems treat
->> 0 specially (e.g. as an indication of the polling mode by libata), so
->> the users of platform_get_irq[_byname]() in them would have to filter
->> out IRQ0 explicitly and this (quite obviously) doesn't scale...
->> Let's finally get this straight and return -EINVAL instead of IRQ0!
->>
->> Fixes: a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is invalid")
->> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
->>
->> ---
->> The patch is against the 'driver-core-linus' branch of Greg Kroah-Hartman's
->> 'driver-core.git' repo.
->>
->>  drivers/base/platform.c |    6 ++++--
->>  1 file changed, 4 insertions(+), 2 deletions(-)
->>
->> Index: driver-core/drivers/base/platform.c
->> ===================================================================
->> --- driver-core.orig/drivers/base/platform.c
->> +++ driver-core/drivers/base/platform.c
->> @@ -231,7 +231,8 @@ int platform_get_irq_optional(struct pla
->>  out_not_found:
->>  	ret = -ENXIO;
->>  out:
->> -	WARN(ret == 0, "0 is an invalid IRQ number\n");
->> +	if (WARN(!ret, "0 is an invalid IRQ number\n"))
->> +		return -EINVAL;
->>  	return ret;
->>  }
->>  EXPORT_SYMBOL_GPL(platform_get_irq_optional);
->> @@ -445,7 +446,8 @@ static int __platform_get_irq_byname(str
->>  
->>  	r = platform_get_resource_byname(dev, IORESOURCE_IRQ, name);
->>  	if (r) {
->> -		WARN(r->start == 0, "0 is an invalid IRQ number\n");
->> +		if (WARN(!r->start, "0 is an invalid IRQ number\n"))
->> +			return -EINVAL;
->>  		return r->start;
->>  	}
-> 
-> Geert recently mentioned that a few architectures (such as sh?) still
-> use IRQ0 as something valid in limited cases.
+Looking at the driver, the difference appears to be just setting a
+register to the mode (eMMC/SD/SDIO). That's not a difference in the
+h/w block which is when different compatibles would be appropriate. A
+property, if anything, is the right thing to do here.
 
-   Yeah, valid IRQ0 on some SH boards -- which I believe could soon be addressed.
-
-> From my PoV, this patch is fine, but please be prepared to fix things
-> in a couple of years when someone decides to boot a recent kernel on
-> their pet dinosaur. With that in mind:
-
-   Of course, I'm prepared.
-
-> 
-> Acked-by: Marc Zyngier <maz@kernel.org>
-
-   Thank you!
-
-MBR, Sergey
+Rob

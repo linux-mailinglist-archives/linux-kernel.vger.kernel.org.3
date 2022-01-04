@@ -2,62 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 633D5484480
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C643484485
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:28:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234678AbiADP0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 10:26:49 -0500
-Received: from foss.arm.com ([217.140.110.172]:60794 "EHLO foss.arm.com"
+        id S234790AbiADP14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 10:27:56 -0500
+Received: from mga02.intel.com ([134.134.136.20]:8859 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232085AbiADP0t (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 10:26:49 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8956F13A1;
-        Tue,  4 Jan 2022 07:26:48 -0800 (PST)
-Received: from e123427-lin.arm.com (unknown [10.57.35.194])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 99EAA3F774;
-        Tue,  4 Jan 2022 07:26:46 -0800 (PST)
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     bhelgaas@google.com, Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Nirmal Patel <nirmal.patel@linux.intel.com>,
-        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Jonathan Derrick <jonathan.derrick@linux.dev>
-Subject: Re: [PATCH v3] PCI: vmd: Honor ACPI _OSC on PCIe features
-Date:   Tue,  4 Jan 2022 15:26:40 +0000
-Message-Id: <164130998680.26818.6364463233506760132.b4-ty@arm.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20211203031541.1428904-1-kai.heng.feng@canonical.com>
-References: <20211203031541.1428904-1-kai.heng.feng@canonical.com>
+        id S231189AbiADP14 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 10:27:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641310076; x=1672846076;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=slqc+GZKvR4BwvK+tcSNwUuglkJ5OqLCdfP9vfTJWpM=;
+  b=IEincwQx2we5npoQD8k4fPPbg/J0insyrUMIdHR4pf4xo4EXiDmNTtbF
+   BVegL1NIvp/xNc3fr0KfyWaoZVyRyrMm6F1OTod2S9JkEplJEY2ae6V4U
+   119nI9pQINECbcy5w8w1S62TbR1qfS2kltY0lnfDpTtwXWmoQYgou9hb/
+   jU6v3tT5BrLx8g+hSzR/iE0GHspO4PX7FtjceEBbxCYWznw32+7bX4QC0
+   OL8JgM6jctJI0HYHRA7tpElmT7uhRGfzKMoZLjVIvt4lzZ+GuFOTcX+uM
+   OWO/pfYprOmyvdXwJSVZpYhNZMsXwy+aRNVVplT+sSMQqP+m/EyUuS+dA
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="229556293"
+X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
+   d="scan'208";a="229556293"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 07:27:55 -0800
+X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
+   d="scan'208";a="760464912"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 07:27:51 -0800
+Received: by lahna (sSMTP sendmail emulation); Tue, 04 Jan 2022 17:27:48 +0200
+Date:   Tue, 4 Jan 2022 17:27:48 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Alexander Usyskin <alexander.usyskin@intel.com>
+Subject: Re: [PATCH v1 5/5] thunderbolt: Drop duplicate NULL checks around
+ nvmem_unregister()
+Message-ID: <YdRndPUqeOfCqQgo@lahna>
+References: <20220104133843.44272-1-andriy.shevchenko@linux.intel.com>
+ <20220104133843.44272-5-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220104133843.44272-5-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Dec 2021 11:15:41 +0800, Kai-Heng Feng wrote:
-> When Samsung PCIe Gen4 NVMe is connected to Intel ADL VMD, the
-> combination causes AER message flood and drags the system performance
-> down.
+On Tue, Jan 04, 2022 at 03:38:43PM +0200, Andy Shevchenko wrote:
+> Since nvmem_unregister() checks for NULL, no need to repeat in
+> the caller. Drop duplicate NULL checks.
 > 
-> The issue doesn't happen when VMD mode is disabled in BIOS, since AER
-> isn't enabled by acpi_pci_root_create() . When VMD mode is enabled, AER
-> is enabled regardless of _OSC:
-> [    0.410076] acpi PNP0A08:00: _OSC: platform does not support [AER]
-> ...
-> [    1.486704] pcieport 10000:e0:06.0: AER: enabled with IRQ 146
-> 
-> [...]
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Applied to pci/vmd, thanks!
-
-[1/1] PCI: vmd: Honor ACPI _OSC on PCIe features
-      https://git.kernel.org/lpieralisi/pci/c/04b12ef163
-
-Thanks,
-Lorenzo
+Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>

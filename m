@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A95483FBF
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:21:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11DBB483FC3
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:22:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbiADKVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 05:21:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53228 "EHLO
+        id S229737AbiADKWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 05:22:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231234AbiADKVe (ORCPT
+        with ESMTP id S230004AbiADKWP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 05:21:34 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1085C061785
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 02:21:34 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id iy13so30952013pjb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 02:21:34 -0800 (PST)
+        Tue, 4 Jan 2022 05:22:15 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1E5C061785
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 02:22:15 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id v16so30977339pjn.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 02:22:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to;
-        bh=jwos4L19ZsL6C7rIxRau65ZAImLFd+l/yAgd9AjoBH4=;
-        b=iQtgQ5TS/uw34Er90P7HdMUl7Lbkg9Mt6K5GvjB4CGFr4AHzs3ZS/EHwM0cKz7dJjC
-         xqFmKaQgjhllK/I04Hv1741bitxm485PviKapkBBqFYoDp8Fhk6JWUaNDYnIV2q6H4+O
-         CFcJ1Z7E2B8Dt+mbeLypAoPvrhAccOkCOxG1M=
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:in-reply-to;
+        bh=0/3Xr0ugKzxotUleYcRnTbBNbie1h9r+lWpSA/dNO3c=;
+        b=VqwZ40nJpdhkC4pF/KLKC7Vpu4944xaAeq505Q/qG0HoDAvHudGccvoPLb/SMd/ILm
+         MKHV48G5HGSj067ZibC9mAdy6pZKdESbWHWzy2ofdyDqSZVP9r+Dbz7h1QpfRDun2xyN
+         SOJIP5rM4Vk/uWWfP5xiLo1Ozmd3ZLzQw4sWw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to;
-        bh=jwos4L19ZsL6C7rIxRau65ZAImLFd+l/yAgd9AjoBH4=;
-        b=dKy7d0pjH8G7ULV2gMw+jFi4bdXzGVEJfa/pZPgDlZaWE1crWbuEIAdAJEptJa+TI3
-         Fja6VISpU1KZmcftKBxk6ue3S5TwcAN5pOzH1/EmrE1epeJYqfx7SzfWtOZsbjJcibKp
-         hgXJ6LTiQVgUnE0a/hjFMaoqkdDFXSt0i9sFiu0+NPQkHELx9zV4p1yrhQjQuGnlfDJH
-         6rDhXabrJ0189AYjnF9g0y/XgPDlclifG4M8UQNlU0YJYh8zqyFVu+ECwQmT2OP3SxRp
-         ELQCvdDxaMVRIM3Zgrym9/SnqUJ6K46JiZ/TedqnHbVdFL72nniW2qLUAP+LIeknfJt7
-         w/jg==
-X-Gm-Message-State: AOAM530kXIYyxI4mEbnBX0fbWRvt5VWFVbvIDKnuqyZL57TfYK0YqBjq
-        0oV/Wbd4la9dP+KsjNna+dw4ow==
-X-Google-Smtp-Source: ABdhPJxt6OBthtvvZrLi+n+/1plQapFxmWrH4JXTjsSi2R+JGB6b5nzVoeHEvKC19iRBP2wNlW/OHw==
-X-Received: by 2002:a17:903:183:b0:149:2b6:65ff with SMTP id z3-20020a170903018300b0014902b665ffmr48440359plg.128.1641291694198;
-        Tue, 04 Jan 2022 02:21:34 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:in-reply-to;
+        bh=0/3Xr0ugKzxotUleYcRnTbBNbie1h9r+lWpSA/dNO3c=;
+        b=uRtVWXTcioOFbgn7uo1EY+C22Xv6AvDclD5UmPNXkDvR+1Ganr7PH5EKiZlFuCUSHV
+         V4tB9JoGd/H0wjGLlHPN4yqkoJhBsNFryqKXQIcBnJQklqhKZGeHTqm6oozFOFJfl4u8
+         TcV+4IG4z3FJeKA/RkghhTCncPBSTAuGnbGquO6N2aapqhjPLrIQboHOTRX3TCscpMBM
+         +04Dexdyl7m329O5JAwjL64IFqXKMVykjeY77cnxwej2Z0DT4M4RDrwioHSbcg/lR/aO
+         Htz6KwjY2hB7c1c+ImUn7Y/DWCWY1l4I7ZSMCk7MwJJyGaEEqDGfShBDH44MrjQaFpIV
+         e71g==
+X-Gm-Message-State: AOAM533B2R+gz0sToszIiP/1dz9eNy3uOnx5cYGjpRSVLueAMcb+m5h1
+        94mGB53+CxELe8PKGaIadCpXOg==
+X-Google-Smtp-Source: ABdhPJxcAS92Du1KNKt08kVYq1Kk+rtxnwKYSImxzZle8WQbyjWwNYbSqhfytRKlnrFLb8G/Rl/MlQ==
+X-Received: by 2002:a17:902:ec8d:b0:149:4934:2f73 with SMTP id x13-20020a170902ec8d00b0014949342f73mr48559300plg.26.1641291734881;
+        Tue, 04 Jan 2022 02:22:14 -0800 (PST)
 Received: from [192.168.178.242] (f140230.upc-f.chello.nl. [80.56.140.230])
-        by smtp.gmail.com with ESMTPSA id h7sm42646573pfc.152.2022.01.04.02.21.26
+        by smtp.gmail.com with ESMTPSA id d23sm35499702pgm.37.2022.01.04.02.22.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 02:21:33 -0800 (PST)
-Message-ID: <a50d7d46-9298-3d4b-049d-4b3360c6efa7@broadcom.com>
-Date:   Tue, 4 Jan 2022 11:21:24 +0100
+        Tue, 04 Jan 2022 02:22:13 -0800 (PST)
+Message-ID: <aeff20d6-03e7-b071-79c8-7a7e10d2d686@broadcom.com>
+Date:   Tue, 4 Jan 2022 11:22:05 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
-Subject: Re: [PATCH v2 16/35] brcmfmac: acpi: Add support for fetching Apple
- ACPI properties
+From:   Arend van Spriel <arend.vanspriel@broadcom.com>
+Subject: Re: [PATCH v2 06/35] brcmfmac: firmware: Support passing in multiple
+ board_types
 To:     Hector Martin <marcan@marcan.st>,
         Kalle Valo <kvalo@codeaurora.org>,
         "David S. Miller" <davem@davemloft.net>,
@@ -80,68 +81,70 @@ Cc:     Sven Peter <sven@svenpeter.dev>,
         linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
         SHA-cyfmac-dev-list@infineon.com
 References: <20220104072658.69756-1-marcan@marcan.st>
- <20220104072658.69756-17-marcan@marcan.st>
-From:   Arend van Spriel <arend.vanspriel@broadcom.com>
-In-Reply-To: <20220104072658.69756-17-marcan@marcan.st>
+ <20220104072658.69756-7-marcan@marcan.st>
+In-Reply-To: <20220104072658.69756-7-marcan@marcan.st>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000006d775105d4bf0075"
+        boundary="000000000000da635805d4bf02e4"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000006d775105d4bf0075
+--000000000000da635805d4bf02e4
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 1/4/2022 8:26 AM, Hector Martin wrote:
-> On DT platforms, the module-instance and antenna-sku-info properties
-> are passed in the DT. On ACPI platforms, module-instance is passed via
-> the analogous Apple device property mechanism, while the antenna SKU
-> info is instead obtained via an ACPI method that grabs it from
-> non-volatile storage.
+> In order to make use of the multiple alt_path functionality, change
+> board_type to an array. Bus drivers can pass in a NULL-terminated list
+> of board type strings to try for the firmware fetch.
 > 
-> Add support for this, to allow proper firmware selection on Apple
-> platforms.
-> 
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
 > Signed-off-by: Hector Martin <marcan@marcan.st>
 > ---
->   .../broadcom/brcm80211/brcmfmac/Makefile      |  2 +
->   .../broadcom/brcm80211/brcmfmac/acpi.c        | 47 +++++++++++++++++++
->   .../broadcom/brcm80211/brcmfmac/common.c      |  1 +
->   .../broadcom/brcm80211/brcmfmac/common.h      |  9 ++++
->   4 files changed, 59 insertions(+)
->   create mode 100644 drivers/net/wireless/broadcom/brcm80211/brcmfmac/acpi.c
+>   .../broadcom/brcm80211/brcmfmac/firmware.c    | 35 ++++++++++++-------
+>   .../broadcom/brcm80211/brcmfmac/firmware.h    |  2 +-
+>   .../broadcom/brcm80211/brcmfmac/pcie.c        |  4 ++-
+>   .../broadcom/brcm80211/brcmfmac/sdio.c        |  2 +-
+>   4 files changed, 27 insertions(+), 16 deletions(-)
 > 
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/Makefile b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/Makefile
-> index 13c13504a6e8..19009eb9db93 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/Makefile
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/Makefile
-> @@ -47,3 +47,5 @@ brcmfmac-$(CONFIG_OF) += \
->   		of.o
->   brcmfmac-$(CONFIG_DMI) += \
->   		dmi.o
-> +brcmfmac-$(CONFIG_ACPI) += \
-> +		acpi.o
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/acpi.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/acpi.c
-> new file mode 100644
-> index 000000000000..2b1a4448b291
-> --- /dev/null
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/acpi.c
-> @@ -0,0 +1,47 @@
-> +// SPDX-License-Identifier: ISC
-> +/*
-> + * Copyright The Asahi Linux Contributors
-> + */
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
+> index 7570dbf22cdd..054ea3ed133e 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
+> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
+> @@ -594,28 +594,39 @@ static int brcmf_fw_complete_request(const struct firmware *fw,
+>   	return (cur->flags & BRCMF_FW_REQF_OPTIONAL) ? 0 : ret;
+>   }
+>   
+> -static int brcm_alt_fw_paths(const char *path, const char *board_type,
+> +static int brcm_alt_fw_paths(const char *path, struct brcmf_fw *fwctx,
+>   			     const char *alt_paths[BRCMF_FW_MAX_ALT_PATHS])
+>   {
+> +	const char **board_types = fwctx->req->board_types;
+> +	unsigned int i;
+>   	char alt_path[BRCMF_FW_NAME_LEN];
+>   	const char *suffix;
+>   
+>   	memset(alt_paths, 0, array_size(sizeof(*alt_paths),
+>   					BRCMF_FW_MAX_ALT_PATHS));
+>   
+> +	if (!board_types[0])
+> +		return -ENOENT;
+> +
+>   	suffix = strrchr(path, '.');
+>   	if (!suffix || suffix == path)
+>   		return -EINVAL;
+>   
+> -	/* strip extension at the end */
+> -	strscpy(alt_path, path, BRCMF_FW_NAME_LEN);
+> -	alt_path[suffix - path] = 0;
+> +	for (i = 0; i < BRCMF_FW_MAX_ALT_PATHS; i++) {
+> +		if (!board_types[i])
+> +		    break;
 
-Common format for copyright statement (in this folder) seems to be:
+Indentation error
 
-Copyright (c) <YEAR> <COPYRIGHT_HOLDER>
-
-Regards,
-Arend
-
---0000000000006d775105d4bf0075
+--000000000000da635805d4bf02e4
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -212,14 +215,14 @@ aAwIDFKdqL0O19Kui0WI1qNsu1tE2wAZk0XE9FG0OKyY2a2oFwJ85c5IO0q53U7+YePIwv4/J5aP
 OGM6lFPJCVnfKc3H76g/FyPyaE4AL/hfdNP8ObvCB6N/BVCccjNdglRsL2ewttAG3GM06LkvrLhv
 UCvjMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
 YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMMSnY
-h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAICMxJ8gqwRoi8GQ7r
-ZEYbotw57lRNVZ96qg6AdVkf5jAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yMjAxMDQxMDIxMzRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
+h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCT44OBZdv38+JUx3kA
+69DDhN/Mda4aBFXss+DBHAfx/jAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
+BTEPFw0yMjAxMDQxMDIyMTVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
 AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
-BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEALKn+kwb2MtKuky6rIv9kcAdMtDzFv19BBFY9
-OEU82Xy3xxrSpnt03LbopcYbXWvjJThqIlWhZnheCtAaX6Uv6828jcAEMDg+4IIf848EOinIo2Rh
-fJYmLCcXg41qsMPlhxG1r8qm22HWsKwitjhRARKXgMEiM14jPlwpsGTqJooGw2vO4Tdwsb/x8bQc
-6U8sVE1eQtmWGtY/CKl60RLC2lDhy90JmYi9mEPfycj5DQTuZi2gmnE+JmROQlY1h899gchxfJHx
-W0EPqonfA1jjs5fnmjytEamHs0S/km9OT/ObhgZMaL2faQrBJ4Ng/Av4vjIeGmosf46noUynKBKe
-gQ==
---0000000000006d775105d4bf0075--
+BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAh/7w91/MLBcXEWdD/TYvOAaTQ5SYNnHQd6MW
+weeXVpUZEieBsUyQt0PB0pRmnL6KwXMfrBncCjTquAV/Ozllw+bifa4m0pQuVV8l9gR+1EjcPZEM
+tBYOJi5hFP2bDgNcSsxG2mMXYtYw0A2PEgwlz+EgjbDgUTN7zK7UzPHkHRsmfHHp2+7O85bvUHJ2
+vY0OWo39Ij4szIwPUuIcAk5qdM0toH4yqfNlX+qm99GbWDxIanuDRtYoQoZF+qZ2MIaBw92u8F15
+CaZ0GwAA555VDHi5ABopELOHtOUSS80AxW4bngDzuycNfm7ga2cD+9WULpCbpm2/tD8OXseVZi0d
+NQ==
+--000000000000da635805d4bf02e4--

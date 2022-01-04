@@ -2,184 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46EA8484113
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF1B484116
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:42:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232500AbiADLmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 06:42:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43600 "EHLO
+        id S232505AbiADLmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 06:42:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232462AbiADLmY (ORCPT
+        with ESMTP id S229535AbiADLmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 06:42:24 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95995C061761;
-        Tue,  4 Jan 2022 03:42:24 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.94.2)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1n4iCs-0000EF-2L; Tue, 04 Jan 2022 12:42:22 +0100
-Date:   Tue, 4 Jan 2022 11:42:14 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH v11 1/3] net: ethernet: mtk_eth_soc: fix return values and
- refactor MDIO ops
-Message-ID: <YdQylhz+WNkxZDMn@makrotopia.org>
+        Tue, 4 Jan 2022 06:42:53 -0500
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CACC061761;
+        Tue,  4 Jan 2022 03:42:53 -0800 (PST)
+Received: by mail-ua1-x931.google.com with SMTP id p37so62498973uae.8;
+        Tue, 04 Jan 2022 03:42:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=m4rgCak0Y9ZrCMU21woyKJsa31R1qg64vWqt4VKQQ3k=;
+        b=IzCpAbYVZioYR9Od9vcrXsOz6Mi3CGFvj2dtqdCPKx1W6FmfGj0huYuuqOtX3PJnYg
+         Xb+sBVLM2XBMUl7yC+jG5cK+gcGE8E+DfkxfGCSB4MNCesajwW651JonNCF+M20ens52
+         OEPLvLLVVyCqQTad3RAudM1ODcBBL/w3r6uSbWuGso4CPYfdv0ZPIs44n9zwJ4JzMahU
+         /VjuMw3uPfkMrtHeMOCvgyJScygWCd5fcgxcyFesevMJUm2P1sWzhNgQGArXZPt6MTQV
+         5XL/3qe6vU1IOfK8ukgSUGA9sdvUEVxfrP9qL+Sv7xDYKosV5MTy5AWdnqQVOfwPzl8q
+         8x6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=m4rgCak0Y9ZrCMU21woyKJsa31R1qg64vWqt4VKQQ3k=;
+        b=2n+3USbNyGrfnj/hhnaw4U6S5b2O+bUuzamYEEUg7lsqpMOhUCIlsdctI62F8yHniW
+         VwjnJZdIEXiv245DzUBwp3NGM5YfFjZPgnXg7T3/kGRKHuNrw9ZE64IlE0oHqOGd+Yor
+         ptblnnFB2MZguJUb0ewlGpq+Z49N/X8wkRe6JTwwjtw/PgPy2iEdPUuogLfCqOnqcuPd
+         6ZHznw0PEnOlp41+2+/b6eq+9RQlqBh4P7VUBGcwFjCVJoTtqSMg5mj7sOrWfuhXro2d
+         c0+0mSckK859ILm2BHW4cMBezdKuBiJJo9ER9XwRNUaea7yAL4jzSq9+g1sp9Bys5YZL
+         Y9KQ==
+X-Gm-Message-State: AOAM532UzBDHQXFfyX8vksS36oePL/9+OpJdXNKt7uzQKGZA5DKgrhsx
+        T9nruKek41NnO5Dy1ackYmJt6leAqWPW31kuewk=
+X-Google-Smtp-Source: ABdhPJwpwLdODTduulsppAKKohovKvY52jZQdN90JjMhEfBtMauArOtpJ1OgyT2Kg236K47JxfkmG4BmK+qquIIz/PY=
+X-Received: by 2002:ab0:48d1:: with SMTP id y17mr649108uac.12.1641296572254;
+ Tue, 04 Jan 2022 03:42:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20210715141742.15072-1-andrea.merello@gmail.com>
+ <20211028101840.24632-1-andrea.merello@gmail.com> <20211028101840.24632-7-andrea.merello@gmail.com>
+ <20211028120405.6ffb01d1@jic23-huawei> <CAN8YU5Orbbzq-eDxmrR00xHwXQ=0LU2G3_yEtHGMkbVhmdcqgg@mail.gmail.com>
+ <20211114162032.425ab36d@jic23-huawei>
+In-Reply-To: <20211114162032.425ab36d@jic23-huawei>
+Reply-To: andrea.merello@gmail.com
+From:   Andrea Merello <andrea.merello@gmail.com>
+Date:   Tue, 4 Jan 2022 12:42:40 +0100
+Message-ID: <CAN8YU5NO5mcrPa5ZCB3XnAb=3N3cyXZUT=gH5G+EbnM-En0a3Q@mail.gmail.com>
+Subject: Re: [v2 06/10] iio: document bno055 private sysfs attributes
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Matt Ranostay <matt.ranostay@konsulko.com>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Andrea Merello <andrea.merello@iit.it>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of returning -1 (-EPERM) when MDIO bus is stuck busy
-while writing or 0xffff if it happens while reading, return the
-appropriate -ETIMEDOUT. Also fix return type to int instead of u32.
-Refactor functions to use bitfield helpers instead of having various
-masking and shifting constants in the code, which also results in the
-register definitions in the header file being more obviously related
-to what is stated in the MediaTek's Reference Manual.
+Sorry for the huge delay...
 
-Fixes: 656e705243fd0 ("net-next: mediatek: add support for MT7623 ethernet")
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
-v11: also address return value of mtk_mdio_busy_wait
-v10: unchanged
-v9: improved formatting and Cc missing maintainer
-v8: switch to bitfield helper macros
-v7: remove unneeded variables
-v6: further clean up functions and more cleanly separate patches
-v5: fix wrong variable name in first patch covered by follow-up patch
-v4: clean-up return values and types, split into two commits
-v3: return -1 instead of 0xffff on error in _mtk_mdio_write
-v2: use MII_DEVADDR_C45_SHIFT and MII_REGADDR_C45_MASK to extract
-    device id and register address. Unify read and write functions to
-    have identical types and parameter names where possible as we are
-    anyway already replacing both function bodies.
+> There is still a units question though.  Should we express the ranges
+> in _processed or _raw units?  Or do we make it explicit and call it
+> rangeprocessed for example?  For some devices the range will naturally
+> be expressed as the range of ADC raw values, so there is definite room
+> for confusion if we don't make it clear in the name.
+>
+> I'm open to other suggestions of how we name this to avoid falling into
+> any heffalump traps.
 
- drivers/net/ethernet/mediatek/mtk_eth_soc.c | 53 ++++++++++++---------
- drivers/net/ethernet/mediatek/mtk_eth_soc.h | 16 +++++--
- 2 files changed, 41 insertions(+), 28 deletions(-)
+You are right: this might lead to confusion.. Making it explicit in
+the name seems a good idea.
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-index bcb91b01e69f5..3809ea6e31ce2 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-@@ -91,46 +91,53 @@ static int mtk_mdio_busy_wait(struct mtk_eth *eth)
- 	}
- 
- 	dev_err(eth->dev, "mdio: MDIO timeout\n");
--	return -1;
-+	return -ETIMEDOUT;
- }
- 
--static u32 _mtk_mdio_write(struct mtk_eth *eth, u32 phy_addr,
--			   u32 phy_register, u32 write_data)
-+static int _mtk_mdio_write(struct mtk_eth *eth, u32 phy_addr, u32 phy_reg,
-+			   u32 write_data)
- {
--	if (mtk_mdio_busy_wait(eth))
--		return -1;
-+	int ret;
- 
--	write_data &= 0xffff;
-+	ret = mtk_mdio_busy_wait(eth);
-+	if (ret)
-+		return ret;
- 
--	mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START | PHY_IAC_WRITE |
--		(phy_register << PHY_IAC_REG_SHIFT) |
--		(phy_addr << PHY_IAC_ADDR_SHIFT) | write_data,
-+	mtk_w32(eth, PHY_IAC_ACCESS |
-+		     PHY_IAC_START_C22 |
-+		     PHY_IAC_CMD_WRITE |
-+		     PHY_IAC_REG(phy_reg) |
-+		     PHY_IAC_ADDR(phy_addr) |
-+		     PHY_IAC_DATA(write_data),
- 		MTK_PHY_IAC);
- 
--	if (mtk_mdio_busy_wait(eth))
--		return -1;
-+	ret = mtk_mdio_busy_wait(eth);
-+	if (ret < 0)
-+		return ret;
- 
- 	return 0;
- }
- 
--static u32 _mtk_mdio_read(struct mtk_eth *eth, int phy_addr, int phy_reg)
-+static int _mtk_mdio_read(struct mtk_eth *eth, u32 phy_addr, u32 phy_reg)
- {
--	u32 d;
-+	int ret;
- 
--	if (mtk_mdio_busy_wait(eth))
--		return 0xffff;
-+	ret = mtk_mdio_busy_wait(eth);
-+	if (ret)
-+		return ret;
- 
--	mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START | PHY_IAC_READ |
--		(phy_reg << PHY_IAC_REG_SHIFT) |
--		(phy_addr << PHY_IAC_ADDR_SHIFT),
-+	mtk_w32(eth, PHY_IAC_ACCESS |
-+		     PHY_IAC_START_C22 |
-+		     PHY_IAC_CMD_C22_READ |
-+		     PHY_IAC_REG(phy_reg) |
-+		     PHY_IAC_ADDR(phy_addr),
- 		MTK_PHY_IAC);
- 
--	if (mtk_mdio_busy_wait(eth))
--		return 0xffff;
--
--	d = mtk_r32(eth, MTK_PHY_IAC) & 0xffff;
-+	ret = mtk_mdio_busy_wait(eth);
-+	if (ret < 0)
-+		return ret;
- 
--	return d;
-+	return mtk_r32(eth, MTK_PHY_IAC) & PHY_IAC_DATA_MASK;
- }
- 
- static int mtk_mdio_write(struct mii_bus *bus, int phy_addr,
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-index 5ef70dd8b49c6..f2d90639d7ed1 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-@@ -341,11 +341,17 @@
- /* PHY Indirect Access Control registers */
- #define MTK_PHY_IAC		0x10004
- #define PHY_IAC_ACCESS		BIT(31)
--#define PHY_IAC_READ		BIT(19)
--#define PHY_IAC_WRITE		BIT(18)
--#define PHY_IAC_START		BIT(16)
--#define PHY_IAC_ADDR_SHIFT	20
--#define PHY_IAC_REG_SHIFT	25
-+#define PHY_IAC_REG_MASK	GENMASK(29, 25)
-+#define PHY_IAC_REG(x)		FIELD_PREP(PHY_IAC_REG_MASK, (x))
-+#define PHY_IAC_ADDR_MASK	GENMASK(24, 20)
-+#define PHY_IAC_ADDR(x)		FIELD_PREP(PHY_IAC_ADDR_MASK, (x))
-+#define PHY_IAC_CMD_MASK	GENMASK(19, 18)
-+#define PHY_IAC_CMD_WRITE	FIELD_PREP(PHY_IAC_CMD_MASK, 1)
-+#define PHY_IAC_CMD_C22_READ	FIELD_PREP(PHY_IAC_CMD_MASK, 2)
-+#define PHY_IAC_START_MASK	GENMASK(17, 16)
-+#define PHY_IAC_START_C22	FIELD_PREP(PHY_IAC_START_MASK, 1)
-+#define PHY_IAC_DATA_MASK	GENMASK(15, 0)
-+#define PHY_IAC_DATA(x)		FIELD_PREP(PHY_IAC_DATA_MASK, (x))
- #define PHY_IAC_TIMEOUT		HZ
- 
- #define MTK_MAC_MISC		0x1000c
--- 
-2.34.1
+I've looked at other iio sysfs attributes in the DOC.  It seems  that
+"thesh" and "roc" attributes allows for both preprocessed and raw
+data: I found e.g. "<type>[Y][_name]_<raw|input>_thresh_value", but
+the related "what" entries written above all seem to omit both "_raw"
+and "_input"; I don't understand why.
 
+In any case, maybe we can stick to that already-existent naming schema?
+
+Assuming the pattern is correct, then wouldn't it be
+"in_accel_raw_range"  (or "in_accel_x_raw_range", in case it could
+have different values for each axis) or "in_accel_input_range" in case
+range applies to preprocessed vals, etc ?
+
+
+Andrea

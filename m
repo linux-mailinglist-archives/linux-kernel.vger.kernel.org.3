@@ -2,232 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D174D4847F1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:35:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87EC14847FA
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:36:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236368AbiADSfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 13:35:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
+        id S236378AbiADSgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 13:36:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236364AbiADSfA (ORCPT
+        with ESMTP id S229543AbiADSgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 13:35:00 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5987C061784
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 10:34:59 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id gj24so32087073pjb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 10:34:59 -0800 (PST)
+        Tue, 4 Jan 2022 13:36:52 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3DE7C061761;
+        Tue,  4 Jan 2022 10:36:51 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id z9so82018105edm.10;
+        Tue, 04 Jan 2022 10:36:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to;
-        bh=Mm8aME8N0rcTWMIherTmKiWUPPhEhVa++q/9fp0wLb4=;
-        b=Dv2EEZwY/9iHyVRg1BLtQyfN25nMhIf+40DZ/llMtKKzrUF7FhFDhdshey42WkiJeJ
-         knlNnyyHuqTcMIQ5MBB+6nrs/WvrpP+AVaOtEOW3v7ognXrbYr+bAfEkuUmNWSOadpkn
-         NFwViyd9I489A9WlYWGJz6ycgVp3RDbJeP2IM=
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZE5U0vM24EpvrhbcMYz6etgOBCEzcX+TELpWaNM7ER0=;
+        b=bZTKsOtT0SR13Cw2XIVqRkCVT0V/TME94gCx0uguPkDbFsxe6SEWfawmaJYTUz5BQY
+         dehvditKiugSxP5f8OOcChyLs6Mx25OqWSUkp8IlbnCaIsuJsXxZZQiBT4u4mSdXZUE6
+         F+HthoqB0uTNP/AxkOP0yx1QSi7B81nMf+JdBly7chyr2KG2NBOLHrS2mrWfYBPI+6bB
+         uRJkagDVHm8aaJDpRQjmO+QshyC+5mefmZaA1UqlZr6tYaSr5hp3I6YZ/Pe0gxeJU7at
+         LU6VW2WimkD8U0xkzwfXffhFcQQpYBh/XtQcBmDO9Wa3mdWHo9RU2/4WrRzX8NUwOSwS
+         B88w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to;
-        bh=Mm8aME8N0rcTWMIherTmKiWUPPhEhVa++q/9fp0wLb4=;
-        b=fQ9aRIwE6g4casikCL+pAZL8RIUoPdPLQaoDjCKEb7HWU6i5KPOmrR6lei+hxH0kL0
-         TTMSAuZvjCPMKUvWbIrCzBL3oYGStrG+BSkqJeEEYrLHXH/pt03wFpfLrhhmcjVV05Xc
-         AbUjrwUV1znXrQ0SNBmV/KMQQF31AUHkr7hbpQAgmkzd9l8q5uKzQlk/jADy7aeCWujK
-         eiuDrdHwMAI21li4rusYkYERSwiWZnTHokzQXKYiXMnIuUXiwWuFz/FAwb5mlz8Fj3CU
-         rLwujxAwucVPNLktIrNtskmgg8VgkvGvBiF3tCF+1YWBel+5VXmzHb2bcdknJmRmWIlI
-         maeg==
-X-Gm-Message-State: AOAM531w2ZK+/6KR6GdQF9VqZAXnGA7UZkzJp+SOKIVs7S9bVxrORaRQ
-        pA1gtvjdVOu405vMqZ0vfAEkAA==
-X-Google-Smtp-Source: ABdhPJwfanKPKjVi/4Eq4QtNwbpa7bU90y0Uc3G2cisLOEel4H1i+bNR1YWHNRYBD8G3oNLfII+keg==
-X-Received: by 2002:a17:90b:4c48:: with SMTP id np8mr62085778pjb.51.1641321299317;
-        Tue, 04 Jan 2022 10:34:59 -0800 (PST)
-Received: from [10.136.8.222] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id j4sm11274395pfa.149.2022.01.04.10.34.57
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZE5U0vM24EpvrhbcMYz6etgOBCEzcX+TELpWaNM7ER0=;
+        b=q26fEQBMQLWYlQgjzEOTfVtKr3sHxK81Gy458DvAWr46vEdR6xxwQ8mTXYhjfPnt1C
+         UhdcQ+l+il03jFr/F83KEKb5Of+n2w+YXWHe85HNc/zHXVt7WN8FW6n08lcp+wp899se
+         Pe8EHZ5lsx5ZWsuzNgjAdZ2LWK41d2DBuWKt56UmWwyO+I4yiI2j6+ylYrDvbm5tMT3h
+         mDy2tr/k4Oyz/pptIPHXTzG/kGhMv06lxUzDMC4TrI2G7brpZmoXpq4V9QOfABw0WuLt
+         rTpZPk1WiOrl9W3GI8CdQ03u7hJJ47GsTzeyG7Vc8m9smjW3qPZ3oHUyR462UUFbDeHy
+         TR3g==
+X-Gm-Message-State: AOAM532MgMaUXfvjM2PFOYvqn12NPpXHCxqc8j/HYuzrr2QM42NTd1lO
+        8nURpl5op0eFt3pa7OYwgUo=
+X-Google-Smtp-Source: ABdhPJyeZEb01hhLiVti+YB+CYU1jAKYTcmhM6awaH7CMwFWUcMsajOTi6vNFmWidl5GhvOTYaO4/w==
+X-Received: by 2002:a17:906:eb04:: with SMTP id mb4mr39189145ejb.27.1641321410431;
+        Tue, 04 Jan 2022 10:36:50 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
+        by smtp.googlemail.com with ESMTPSA id z22sm213115edd.68.2022.01.04.10.36.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 10:34:59 -0800 (PST)
-Message-ID: <567c6e66-1baf-2942-87fc-17c5e0f4b0b9@broadcom.com>
-Date:   Tue, 4 Jan 2022 10:34:57 -0800
+        Tue, 04 Jan 2022 10:36:50 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <d43887b6-630c-446e-caee-dcbaa72f2466@redhat.com>
+Date:   Tue, 4 Jan 2022 19:36:48 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v2 12/23] PCI: iproc: Rename iproc_pcie_pltfm_ to
- iproc_pltfm_pcie_
-To:     Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org,
-        Fan Fei <ffclaire1224@gmail.com>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org
-References: <20211223011054.1227810-1-helgaas@kernel.org>
- <20211223011054.1227810-13-helgaas@kernel.org>
-From:   Ray Jui <ray.jui@broadcom.com>
-In-Reply-To: <20211223011054.1227810-13-helgaas@kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000007ce8a05d4c5e5cd"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v4 00/21] AMX Support in KVM
+Content-Language: en-US
+To:     Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, corbet@lwn.net, shuah@kernel.org
+Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
+        jing2.liu@linux.intel.com, jing2.liu@intel.com,
+        guang.zeng@intel.com, wei.w.wang@intel.com
+References: <20211229131328.12283-1-yang.zhong@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211229131328.12283-1-yang.zhong@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000007ce8a05d4c5e5cd
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-
-
-On 12/22/2021 5:10 PM, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
+On 12/29/21 14:13, Yang Zhong wrote:
+> Highly appreciate for your review. This version mostly addressed the comments
+> from Sean. Most comments are adopted except three which are not closed and
+> need more discussions:
 > 
-> Rename iproc_pcie_pltfm_* to iproc_pltfm_pcie_* for consistency with other
-> drivers.  No functional change intended.
+>    - Move the entire xfd write emulation code to x86.c. Doing so requires
+>      introducing a new kvm_x86_ops callback to disable msr write bitmap.
+>      According to Paolo's earlier comment he prefers to handle it in vmx.c.
+
+Yes, I do.
+
+>    - Directly check msr_bitmap in update_exception_bitmap() (for
+>      trapping #NM) and vcpu_enter_guest() (for syncing guest xfd after
+>      vm-exit) instead of introducing an extra flag in the last patch. However,
+>      doing so requires another new kvm_x86_ops callback for checking
+>      msr_bitmap since vcpu_enter_guest() is x86 common code. Having an
+>      extra flag sounds simpler here (at least for the initial AMX support).
+>      It does penalize nested guest with one xfd sync per exit, but it's not
+>      worse than a normal guest which initializes xfd but doesn't run
+>      AMX applications at all. Those could be improved afterwards.
+
+The thing to do here would be to move 
+MAX_POSSIBLE_PASSTHROUGH_MSRS/MAX_DIRECT_ACCESS_MSRS from VMX/SVM to 
+core code.  For now we can keep the flag.
+
+>    - Disable #NM trap for nested guest. This version still chooses to always
+>      trap #NM (regardless in L1 or L2) as long as xfd write interception is disabled.
+>      In reality #NM is rare if nested guest doesn't intend to run AMX applications
+>      and always-trap is safer than dynamic trap for the basic support in case
+>      of any oversight here.
+
+Sean was justifying this with lack of support for nested AMX, but I'm 
+not sure actually what is missing at all.  That is, an L1 hypervisor 
+could expose AMX to L2, and then an L2->L0->L2 exit/reentry would have 
+to trap #NM.  Otherwise it would miss an XFD_ERR update.
+
+So the patches look good now.
+
+Paolo
+
+> (Jing is temporarily leave for family reason, Yang helped work out this version)
 > 
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Ray Jui <rjui@broadcom.com>
-> Cc: Scott Branden <sbranden@broadcom.com>
-> Cc: bcm-kernel-feedback-list@broadcom.com
-> Cc: linux-arm-kernel@lists.infradead.org
+> ----
+> v3->v4:
+>    - Verify kvm selftest for AMX (Paolo)
+>    - Move fpstate buffer expansion from kvm_vcpu_after_set_cpuid () to
+>      kvm_check_cpuid() and improve patch description (Sean)
+>    - Drop 'preemption' word in #NM interception patch (Sean)
+>    - Remove 'trap_nm' flag. Replace it by: (Sean)
+>      * Trapping #NM according to guest_fpu::xfd when write to xfd is
+>        intercepted.
+>      * Always trapping #NM when xfd write interception is disabled
+>    - Use better name for #NM related functions (Sean)
+>    - Drop '#ifdef CONFIG_X86_64' in __kvm_set_xcr (Sean)
+>    - Update description for KVM_CAP_XSAVE2 and prevent the guest from
+>      using the wrong ioctl (Sean)
+>    - Replace 'xfd_out_of_sync' with a better name (Sean)
+> 
+> v2->v3:
+>    - Trap #NM until write IA32_XFD with a non-zero value (Thomas)
+>    - Revise return value in __xstate_request_perm() (Thomas)
+>    - Revise doc for KVM_GET_SUPPORTED_CPUID (Paolo)
+>    - Add Thomas's reviewed-by on one patch
+>    - Reorder disabling read interception of XFD_ERR patch (Paolo)
+>    - Move disabling r/w interception of XFD from x86.c to vmx.c (Paolo)
+>    - Provide the API doc together with the new KVM_GET_XSAVE2 ioctl (Paolo)
+>    - Make KVM_CHECK_EXTENSION(KVM_CAP_XSAVE2) return minimum size of struct
+>      kvm_xsave (4K) (Paolo)
+>    - Request permission at the start of vm_create_with_vcpus() in selftest
+>    - Request permission conditionally when XFD is supported (Paolo)
+> 
+> v1->v2:
+>    - Live migration supported and verified with a selftest
+>    - Rebase to Thomas's new series for guest fpstate reallocation [1]
+>    - Expand fpstate at KVM_SET_CPUID2 instead of when emulating XCR0
+>      and IA32_XFD (Thomas/Paolo)
+>    - Accordingly remove all exit-to-userspace stuff
+>    - Intercept #NM to save guest XFD_ERR and restore host/guest value
+>      at preemption on/off boundary (Thomas)
+>    - Accordingly remove all xfd_err logic in preemption callback and
+>      fpu_swap_kvm_fpstate()
+>    - Reuse KVM_SET_XSAVE to handle both legacy and expanded buffer (Paolo)
+>    - Don't return dynamic bits w/o prctl() in KVM_GET_SUPPORTED_CPUID (Paolo)
+>    - Check guest permissions for dynamic features in CPUID[0xD] instead
+>      of only for AMX at KVM_SET_CPUID (Paolo)
+>    - Remove dynamic bit check for 32-bit guest in __kvm_set_xcr() (Paolo)
+>    - Fix CPUID emulation for 0x1d and 0x1e (Paolo)
+>    - Move "disable interception" to the end of the series (Paolo)
+> 
+> This series brings AMX (Advanced Matrix eXtensions) virtualization support
+> to KVM. The preparatory series from Thomas [1] is also included.
+> 
+> A large portion of the changes in this series is to deal with eXtended
+> Feature Disable (XFD) which allows resizing of the fpstate buffer to
+> support dynamically-enabled XSTATE features with large state component
+> (e.g. 8K for AMX).
+> 
+> There are a lot of simplications when comparing v2/v3 to the original
+> proposal [2] and the first version [3]. Thanks to Thomas and Paolo for
+> many good suggestions.
+> 
+> The support is based on following key changes:
+> 
+>    - Guest permissions for dynamically-enabled XSAVE features
+> 
+>      Native tasks have to request permission via prctl() before touching
+>      a dynamic-resized XSTATE compoenent. Introduce guest permissions
+>      for the similar purpose. Userspace VMM is expected to request guest
+>      permission only once when the first vCPU is created.
+> 
+>      KVM checks guest permission in KVM_SET_CPUID2. Setting XFD in guest
+>      cpuid w/o proper permissions fails this operation. In the meantime,
+>      unpermitted features are also excluded in KVM_GET_SUPPORTED_CPUID.
+> 
+>    - Extend fpstate reallocation mechanism to cover guest fpu
+> 
+>      Unlike native tasks which have reallocation triggered from #NM
+>      handler, guest fpstate reallocation is requested by KVM when it
+>      identifies the intention on using dynamically-enabled XSAVE
+>      features inside guest.
+> 
+>      Extend fpu core to allow KVM request fpstate buffer expansion
+>      for a guest fpu containter.
+> 
+>    - Trigger fpstate reallocation in KVM
+> 
+>      This could be done either statically (before guest runs) or
+>      dynamically (in the emulation path). According to discussion [1]
+>      we decide to statically enable all xfeatures allowed by guest perm
+>      in KVM_SET_CPUID2, with fpstate buffer sized accordingly. This spares
+>      a lot of code and also avoid imposing an ordered restore sequence
+>      (XCR0, XFD and XSTATE) to userspace VMM.
+> 
+>    - RDMSR/WRMSR emulation for IA32_XFD
+> 
+>      Because fpstate expansion is completed in KVM_SET_CPUID2, emulating
+>      r/w access to IA32_XFD simply involves the xfd field in the guest
+>      fpu container. If write and guest fpu is currently active, the
+>      software state (guest_fpstate::xfd and per-cpu xfd cache) is also
+>      updated.
+> 
+>    - RDMSR/WRMSR emulation for XFD_ERR
+> 
+>      When XFD causes an instruction to generate #NM, XFD_ERR contains
+>      information about which disabled state components are being accessed.
+>      It'd be problematic if the XFD_ERR value generated in guest is
+>      consumed/clobbered by the host before the guest itself doing so.
+> 
+>      Intercept #NM exception to save the guest XFD_ERR value when write
+>      IA32_XFD with a non-zero value for 1st time. There is at most one
+>      interception per guest task given a dynamic feature.
+> 
+>      RDMSR/WRMSR emulation uses the saved value. The host value (always
+>      ZERO outside of the host #NM handler) is restored before enabling
+>      preemption. The saved guest value is restored right before entering
+>      the guest (with preemption disabled).
+> 
+>    - Get/set dynamic xfeature state for migration
+> 
+>      Introduce new capability (KVM_CAP_XSAVE2) to deal with >4KB fpstate
+>      buffer. Reading this capability returns the size of the current
+>      guest fpstate (e.g. after expansion). Userspace VMM uses a new ioctl
+>      (KVM_GET_XSAVE2) to read guest fpstate from the kernel and reuses
+>      the existing ioctl (KVM_SET_XSAVE) to update guest fpsate to the
+>      kernel. KVM_SET_XSAVE is extended to do properly_sized memdup_user()
+>      based on the guest fpstate.
+> 
+>    - Expose related cpuid bits to guest
+> 
+>      The last step is to allow exposing XFD, AMX_TILE, AMX_INT8 and
+>      AMX_BF16 in guest cpuid. Adding those bits into kvm_cpu_caps finally
+>      activates all previous logics in this series
+> 
+>    - Optimization: disable interception for IA32_XFD
+> 
+>      IA32_XFD can be frequently updated by the guest, as it is part of
+>      the task state and swapped in context switch when prev and next have
+>      different XFD setting. Always intercepting WRMSR can easily cause
+>      non-negligible overhead.
+> 
+>      Disable r/w emulation for IA32_XFD after intercepting the first
+>      WRMSR(IA32_XFD) with a non-zero value. However MSR passthrough
+>      implies the software state (guest_fpstate::xfd and per-cpu xfd
+>      cache) might be out of sync with MSR. This suggests KVM needs to
+>      re-sync them at VM-exit before preemption is enabled.
+> 
+> Thanks Jun Nakajima and Kevin Tian for the design suggestions when this
+> version is being internally worked on.
+> 
+> [1] https://lore.kernel.org/all/20211214022825.563892248@linutronix.de/
+> [2] https://www.spinics.net/lists/kvm/msg259015.html
+> [3] https://lore.kernel.org/lkml/20211208000359.2853257-1-yang.zhong@intel.com/
+> 
+> Thanks,
+> Yang
+> 
 > ---
->  drivers/pci/controller/pcie-iproc-platform.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
 > 
-> diff --git a/drivers/pci/controller/pcie-iproc-platform.c b/drivers/pci/controller/pcie-iproc-platform.c
-> index b93e7bda101b..538115246c79 100644
-> --- a/drivers/pci/controller/pcie-iproc-platform.c
-> +++ b/drivers/pci/controller/pcie-iproc-platform.c
-> @@ -37,7 +37,7 @@ static const struct of_device_id iproc_pcie_of_match_table[] = {
->  };
->  MODULE_DEVICE_TABLE(of, iproc_pcie_of_match_table);
->  
-> -static int iproc_pcie_pltfm_probe(struct platform_device *pdev)
-> +static int iproc_pltfm_pcie_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
->  	struct iproc_pcie *pcie;
-> @@ -115,30 +115,30 @@ static int iproc_pcie_pltfm_probe(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> -static int iproc_pcie_pltfm_remove(struct platform_device *pdev)
-> +static int iproc_pltfm_pcie_remove(struct platform_device *pdev)
->  {
->  	struct iproc_pcie *pcie = platform_get_drvdata(pdev);
->  
->  	return iproc_pcie_remove(pcie);
->  }
->  
-> -static void iproc_pcie_pltfm_shutdown(struct platform_device *pdev)
-> +static void iproc_pltfm_pcie_shutdown(struct platform_device *pdev)
->  {
->  	struct iproc_pcie *pcie = platform_get_drvdata(pdev);
->  
->  	iproc_pcie_shutdown(pcie);
->  }
->  
-> -static struct platform_driver iproc_pcie_pltfm_driver = {
-> +static struct platform_driver iproc_pltfm_pcie_driver = {
->  	.driver = {
->  		.name = "iproc-pcie",
->  		.of_match_table = of_match_ptr(iproc_pcie_of_match_table),
->  	},
-> -	.probe = iproc_pcie_pltfm_probe,
-> -	.remove = iproc_pcie_pltfm_remove,
-> -	.shutdown = iproc_pcie_pltfm_shutdown,
-> +	.probe = iproc_pltfm_pcie_probe,
-> +	.remove = iproc_pltfm_pcie_remove,
-> +	.shutdown = iproc_pltfm_pcie_shutdown,
->  };
-> -module_platform_driver(iproc_pcie_pltfm_driver);
-> +module_platform_driver(iproc_pltfm_pcie_driver);
->  
->  MODULE_AUTHOR("Ray Jui <rjui@broadcom.com>");
->  MODULE_DESCRIPTION("Broadcom iPROC PCIe platform driver");
+> 
+> Guang Zeng (1):
+>    kvm: x86: Add support for getting/setting expanded xstate buffer
+> 
+> Jing Liu (11):
+>    kvm: x86: Fix xstate_required_size() to follow XSTATE alignment rule
+>    kvm: x86: Exclude unpermitted xfeatures at KVM_GET_SUPPORTED_CPUID
+>    x86/fpu: Make XFD initialization in __fpstate_reset() a function
+>      argument
+>    kvm: x86: Check and enable permitted dynamic xfeatures at
+>      KVM_SET_CPUID2
+>    kvm: x86: Add emulation for IA32_XFD
+>    x86/fpu: Prepare xfd_err in struct fpu_guest
+>    kvm: x86: Intercept #NM for saving IA32_XFD_ERR
+>    kvm: x86: Emulate IA32_XFD_ERR for guest
+>    kvm: x86: Disable RDMSR interception of IA32_XFD_ERR
+>    kvm: x86: Add XCR0 support for Intel AMX
+>    kvm: x86: Add CPUID support for Intel AMX
+> 
+> Kevin Tian (3):
+>    x86/fpu: Provide fpu_update_guest_perm_features() for guest
+>    x86/fpu: Provide fpu_update_guest_xfd() for IA32_XFD emulation
+>    kvm: x86: Disable interception for IA32_XFD on demand
+> 
+> Thomas Gleixner (5):
+>    x86/fpu: Extend fpu_xstate_prctl() with guest permissions
+>    x86/fpu: Prepare guest FPU for dynamically enabled FPU features
+>    x86/fpu: Add guest support to xfd_enable_feature()
+>    x86/fpu: Add uabi_size to guest_fpu
+>    x86/fpu: Provide fpu_sync_guest_vmexit_xfd_state()
+> 
+> Wei Wang (1):
+>    kvm: selftests: Add support for KVM_CAP_XSAVE2
+> 
+>   Documentation/virt/kvm/api.rst                |  46 +++++-
+>   arch/x86/include/asm/cpufeatures.h            |   2 +
+>   arch/x86/include/asm/fpu/api.h                |  11 ++
+>   arch/x86/include/asm/fpu/types.h              |  32 ++++
+>   arch/x86/include/asm/kvm_host.h               |   1 +
+>   arch/x86/include/uapi/asm/kvm.h               |  16 +-
+>   arch/x86/include/uapi/asm/prctl.h             |  26 ++--
+>   arch/x86/kernel/fpu/core.c                    | 104 ++++++++++++-
+>   arch/x86/kernel/fpu/xstate.c                  | 147 +++++++++++-------
+>   arch/x86/kernel/fpu/xstate.h                  |  15 +-
+>   arch/x86/kernel/process.c                     |   2 +
+>   arch/x86/kvm/cpuid.c                          |  99 +++++++++---
+>   arch/x86/kvm/vmx/vmcs.h                       |   5 +
+>   arch/x86/kvm/vmx/vmx.c                        |  45 +++++-
+>   arch/x86/kvm/vmx/vmx.h                        |   2 +-
+>   arch/x86/kvm/x86.c                            | 105 ++++++++++++-
+>   include/uapi/linux/kvm.h                      |   4 +
+>   tools/arch/x86/include/uapi/asm/kvm.h         |  16 +-
+>   tools/include/uapi/linux/kvm.h                |   3 +
+>   .../testing/selftests/kvm/include/kvm_util.h  |   2 +
+>   .../selftests/kvm/include/x86_64/processor.h  |  10 ++
+>   tools/testing/selftests/kvm/lib/kvm_util.c    |  32 ++++
+>   .../selftests/kvm/lib/x86_64/processor.c      |  67 +++++++-
+>   .../testing/selftests/kvm/x86_64/evmcs_test.c |   2 +-
+>   tools/testing/selftests/kvm/x86_64/smm_test.c |   2 +-
+>   .../testing/selftests/kvm/x86_64/state_test.c |   2 +-
+>   .../kvm/x86_64/vmx_preemption_timer_test.c    |   2 +-
+>   27 files changed, 691 insertions(+), 109 deletions(-)
 > 
 
-Acked-by: Ray Jui <ray.jui@broadcom.com>
-
---00000000000007ce8a05d4c5e5cd
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-Pi3DQoJNNR5cV1dw3cNMKQyHRziEjFTVmILshClu9AljdXzCUoHXDUbge8TIJ/fK36qTGCYWwA01
-rTB3drVX3FZq/Uqo0JnVcyP1dtYVzQIDAQABo4IB1TCCAdEwDgYDVR0PAQH/BAQDAgWgMIGjBggr
-BgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9j
-YWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVodHRwOi8v
-b2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNVHSAERjBE
-MEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20v
-cmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3JsLmdsb2Jh
-bHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAfBgNVHREEGDAWgRRyYXku
-anVpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdb
-NHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQU5E1VdIocTRYIpXh6e6OnGvwfrEgwDQYJKoZIhvcNAQEL
-BQADggEBADcZteuA4mZVmXNzp/tJky+9TS87L/xAogg4z+0bFDomA2JdNGKjraV7jE3LKHUyCQzU
-Bvp8xXjxCndLBgltr+2Fn/Dna/f29iAs4mPBxgPKhqnqpQuTo2DLID2LWU1SLI9ewIlROY57UCvO
-B6ni+9NcOot0MbKF2A1TnzJjWyd127CVyU5vL3un1/tbtmjiT4Ku8ZDoBEViuuWyhdB6TTEQiwDo
-2NxZdezRkkkq+RoNek6gmtl8IKmXsmr1dKIsRBtLQ0xu+kdX+zYJbAQymI1mkq8qCmFAe5aJkrNM
-NbsYBZGZlcox4dHWayCpn4sK+41xyJsmGrygY3zghqBuHPUxggJtMIICaQIBATBrMFsxCzAJBgNV
-BAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdD
-QyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxnTAexrtwIst251kUwDQYJYIZIAWUDBAIBBQCg
-gdQwLwYJKoZIhvcNAQkEMSIEIJRhmUaHY+2JMT5qIvcG3UkHZDCjQmDf2m3IFF3dinMoMBgGCSqG
-SIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDEwNDE4MzQ1OVowaQYJKoZI
-hvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG
-9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEF
-AASCAQAdkebe6erwSxLSP6qg+JpvRhte6S5Ts8kRJW5b6kZbOkwKjCWSknUw3eWJtljFleYNeYRI
-+el3kGROhq+hz9MAGkZ4d72k1RcNq21RFTs3iRAo1xct6pIRnMCsCTluc2n4m+CHDw59qrbLW+qF
-8lRw30GKgNOr9N9xRp5jWDvUuTE/IJJkYXU0RRHf/uXnmERPHjo68bj9/WkOLEAtVauEPwZozBKf
-emD6nHPCtwBHGnVp/tyrG2NuH2ysZrRm50Lb9nVzKWg4Bh34lOCa67HZY/AN3V0LQ7DH1WsK2OcW
-7gFzBWr3Ny+XFcHEYxThP8BOZnAx/nyVYx7vn1Iztsyf
---00000000000007ce8a05d4c5e5cd--

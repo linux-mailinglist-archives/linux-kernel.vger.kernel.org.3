@@ -2,205 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8290D484AA4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 23:24:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3D1E484AAC
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 23:25:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235425AbiADWYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 17:24:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
+        id S234157AbiADWZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 17:25:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235396AbiADWYO (ORCPT
+        with ESMTP id S235466AbiADWZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 17:24:14 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB42FC061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 14:24:14 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id h33-20020a17090a29a400b001b20b7d48dfso24852667pjd.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 14:24:14 -0800 (PST)
+        Tue, 4 Jan 2022 17:25:02 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D69CC061785
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 14:25:02 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id j83so93613161ybg.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 14:25:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=7YCEEnOPj4KefNq/L+wc30dtC7OQCX+FrwepcfjVLCk=;
-        b=i/4d5jHHzbNLD0plqavS+PSO1WxSe0NYT9QbWG0z3poJM5oXjubaAcJxaiWWreP0cR
-         5RiMCt5v4DQTomdHVkq3iLNdYX/yVKtHxPDMl0I2XHVIuxuFSqZGpHeGMYz88UG7O0Xu
-         r9RMfDw8lVa4ABXKEpKplbdcb/JYd+BYaRDzoBG8Fr3Bxq/Fuv6XAleGIBpGAsP24c2L
-         HqWZEkpkGx0zcwj6E2VFzL8t+653tIMfzyZ7+Kfvyk9YsriAmimD4EL1W9ulKiubY+wC
-         kTTycdGDGkg1fP1SB4auPTUcB25a0h9QpzkssNErteZUcjHkYQW6SJMRWAO3Yz3vGlS4
-         Lpfg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M1QBXQhRunHeAehYIycTouhYj3cWM9KC3mhyXs9mkLo=;
+        b=o6v1LBQqqRQ1zjkCWy52ZvZ0ojpbkR7cq552qjmx+/nvTq0KeEc9jgIvIn5OXCyCw4
+         Wh18TNUQ1uRdDTNTa7GgXUsrFmDVynzlWfVfJaxwdtofFJffId8VrkGYZDle6e7UzHwr
+         9X+6zEXV396nLI1t3jmCR/DzYW25hLBvbl+c+hXlGDvwphF14U0K8bzyIm4wsWHJKGid
+         20qhKJAOv1YyhM1yl8kqN96nSoBLcOzC3hrI5hfA76i+tvYc2hkgSm2cY2C9VkMS1O4T
+         OsOcE1YxbzzzMN3QpLkmsmSB+tln/Ux7x5l5fK/LBMDfVpxUZk9Q+9LKT051MpTA0J91
+         dhoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=7YCEEnOPj4KefNq/L+wc30dtC7OQCX+FrwepcfjVLCk=;
-        b=FYIontelbIkeh2CaGPO9xSTDxxYePXivOGH9GP6yqbxOwk/SLKRPufAEEWflc1XFDz
-         K0MWTZYj7qK/GVkjGFrTrkhNuB56lUKyA0H4k8RlIrv6JDPn0srTBHCC68thnhmuNTnJ
-         FuJzdc3u4tv2oHDqPBmyP+lSPK40rlNdPU5r4C6Ud7sML6Fz9tEYqjEUhQXM+FykvvMr
-         53pfOvJWD7x3lm75vofMGB3cl5LjcY8f9B6xdgoSeb91ZiFsGxAx7jFyIuMVDj3pDVMW
-         k3v72i1Iaq56pEwNJvB1aZEtgRpw9T0YWp0Mn4LJXX3mcmx8wamioN+HELxdnrDigrcE
-         pMlA==
-X-Gm-Message-State: AOAM53013TAl+H+icEngj01qgKK/L3TnS4Lz64nZ+BVoEtrEH85X/eVF
-        z7xV2fZyAQ73ir9fAcMN315AqrpW8fVe9A==
-X-Google-Smtp-Source: ABdhPJxu2rUxV1GLYPjz1MbyUkhsmMVGZu7fNO7fjMU2hGoO4haOYMv5RYTU3zN2gckKhL0PGXE0N4uc4PQ3Fg==
-X-Received: from shakeelb.svl.corp.google.com ([2620:15c:2cd:202:15c6:5bd2:a484:dc2e])
- (user=shakeelb job=sendgmr) by 2002:a63:2c06:: with SMTP id
- s6mr44845822pgs.55.1641335054261; Tue, 04 Jan 2022 14:24:14 -0800 (PST)
-Date:   Tue,  4 Jan 2022 14:23:41 -0800
-Message-Id: <20220104222341.3972772-1-shakeelb@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
-Subject: [PATCH v4] memcg: add per-memcg vmalloc stat
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>, Roman Gushchin <guro@fb.com>,
-        Muchun Song <songmuchun@bytedance.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Shakeel Butt <shakeelb@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M1QBXQhRunHeAehYIycTouhYj3cWM9KC3mhyXs9mkLo=;
+        b=6hknOCvK322LXDR9ha0VZWb5X/rfaUOSu1M2zLhDBolMdpfcZzLWg3pHwIvuo42f1k
+         KcuuRs6BxS7a5cCtEGvJCiKWS34I/fc3CnWWl+w6JyAbkO4f1FUERJBVIs2jZHPw5/j2
+         9UeuoAP9QNfFUO3VryROhGGazflc0NcgglT7KG637MyEu5BkiXBISZj/1e51BAWxvlP+
+         F1ZBJ3cCGFcyicrHrqam0zYQQ87mvp6Vnlf6EiAU5SRTZ8nWk3o0i1AuOxUHUbQyjXTG
+         +dOPZSud8mKtyvd4pYqZKPlGL/0b04DpfsvHyyuosYtcJ849yxOkwSMtVpQpea9aLX3a
+         RznQ==
+X-Gm-Message-State: AOAM533BKsgE4J5ezZbFkHTqwfRiPuf5UkTNKppEk8Pfxn6ENImhrPX2
+        2dlmc5H7jUGG/FoPsNKZKLV9BeTL1U4sbGLczKRgiA==
+X-Google-Smtp-Source: ABdhPJzq5ogUegZNf9ozNumlO/uYc6UTXT6bPaLKzFqUs0x82NmJYMfbRfSmN21Zgp2e6BfQHjNyHZidvdhDPxj0jjg=
+X-Received: by 2002:a25:d109:: with SMTP id i9mr49121946ybg.1.1641335101172;
+ Tue, 04 Jan 2022 14:25:01 -0800 (PST)
+MIME-Version: 1.0
+References: <YbHIaq9a0CtqRulE@dhcp22.suse.cz> <CAJuCfpHwNS8RFPF9nzaSB8Br8Jah5_dcnQeatRZp60vmX5n6Vg@mail.gmail.com>
+ <YbIzOR13uPOI5EMB@dhcp22.suse.cz> <CAJuCfpHs_25TQ7pHDhPXghA46jmXa5N2OOeBByE-sn+dQ-aM2w@mail.gmail.com>
+ <CAJuCfpHZOojVXCDXPOA7kgrZqNWw_BzRmbKQXz3FOCHwa-LopQ@mail.gmail.com>
+ <Ybsn2hJZXRofwuv+@cmpxchg.org> <CAJuCfpGMTcyVikNrQR7Y1E54JAjgs5zFBry=DTDidJmD1YWpUg@mail.gmail.com>
+ <CAJuCfpEHJTqG+PkAPJknf5_41ZKFqjk8pY=gTg_VZgsfY-=9Tg@mail.gmail.com>
+ <Yc1spBeXal373b4A@dhcp22.suse.cz> <CAJuCfpGNCX=Z=Bi0N7DAj=CXdLqJOqQ_8kq_HQNaLhAvA5tjPw@mail.gmail.com>
+ <YdLn+192/0HfNJyl@dhcp22.suse.cz> <35c340a6-96f-28a0-2b7b-2f9fbddc01f@google.com>
+In-Reply-To: <35c340a6-96f-28a0-2b7b-2f9fbddc01f@google.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 4 Jan 2022 14:24:50 -0800
+Message-ID: <CAJuCfpFm-4GSu4D_tWMV0a08LNVLjksEnRgRfaYvbciK=wCScA@mail.gmail.com>
+Subject: Re: [PATCH 4/3] mm: drop MMF_OOM_SKIP from exit_mmap
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Roman Gushchin <guro@fb.com>, Rik van Riel <riel@surriel.com>,
+        Minchan Kim <minchan@kernel.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Christian Brauner <christian@brauner.io>,
+        Christoph Hellwig <hch@infradead.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jann Horn <jannh@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Jan Engelhardt <jengelh@inai.de>,
+        Tim Murray <timmurray@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel-team <kernel-team@android.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kvmalloc* allocation functions can fallback to vmalloc allocations
-and more often on long running machines. In addition the kernel does
-have __GFP_ACCOUNT kvmalloc* calls. So, often on long running machines,
-the memory.stat does not tell the complete picture which type of memory
-is charged to the memcg. So add a per-memcg vmalloc stat.
+On Mon, Jan 3, 2022 at 1:16 PM Hugh Dickins <hughd@google.com> wrote:
+>
+> On Mon, 3 Jan 2022, Michal Hocko wrote:
+> > On Thu 30-12-21 09:29:40, Suren Baghdasaryan wrote:
+> > > On Thu, Dec 30, 2021 at 12:24 AM Michal Hocko <mhocko@suse.com> wrote:
+> > > >
+> > > > It would be really great to make unlock_range oom reaper aware IMHO.
+> > >
+> > > What exactly do you envision? Say unlock_range() knows that it's
+> > > racing with __oom_reap_task_mm() and that calling follow_page() is
+> > > unsafe without locking, what should it do?
+> >
+> > My original plan was to make the page lock conditional and use
+> > trylocking from the oom reaper (aka lockless context). It is OK to
+> > simply bail out and leave some mlocked memory behind if there is a
+> > contention on a specific page. The overall objective is to free as much
+> > memory as possible, not all of it.
+> >
+> > IIRC Hugh was not a fan of this approach and he has mentioned that the
+> > lock might not be even really needed and that the area would benefit
+> > from a clean up rather than oom reaper specific hacks. I do tend to
+> > agree with that. I just never managed to find any spare time for that
+> > though and heavily mlocked oom victims tend to be really rare.
+>
+> I forget when that was, and what I had in mind at that time.
+> But yes, by now I am very sure that munlocking needs a cleanup.
+>
+> And I do have that cleanup (against a much older tree), but never
+> the time to rebase or post or shepherd it through N revisions.
 
-Signed-off-by: Shakeel Butt <shakeelb@google.com>
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-Acked-by: Roman Gushchin <guro@fb.com>
+How old was that tree?
 
----
-Changes since v3:
-- Removed area->page[0] checks and moved to page by page accounting as
-  suggested by Michal
+>
+> It was 22 files changed, 464 insertions, 706 deletions:
+> which is too much to help with this immediate oom reaper question.
+>
+> I'd better not drive this discussion further off-course; but it pains
+> me to see munlock_vma_pages obstructing, knowing there's a better way.
+>
+> I wonder: what if I were to steal time and promise to post a
+> rebased series against 5.17-rc1 or rc2: not support it thereafter,
+> but might there be someone to pick it up and shepherd it through?
+> But there's no answer to that, without you seeing what it's like.
 
-Changes since v2:
-- remove cast, per Muchun
-- add area->page[0] check, per Michal
+I would be interested in taking a look and see if it can be upstreamed
+and supported without bugging you too much.
+Thanks,
+Suren.
 
-Changes since v1:
-- page_memcg() within rcu lock as suggested by Muchun.
-
- Documentation/admin-guide/cgroup-v2.rst |  3 +++
- include/linux/memcontrol.h              | 21 +++++++++++++++++++++
- mm/memcontrol.c                         |  1 +
- mm/vmalloc.c                            | 13 +++++++++++--
- 4 files changed, 36 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index 82c8dc91b2be..5aa368d165da 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -1314,6 +1314,9 @@ PAGE_SIZE multiple when read back.
- 	  sock (npn)
- 		Amount of memory used in network transmission buffers
- 
-+	  vmalloc (npn)
-+		Amount of memory used for vmap backed memory.
-+
- 	  shmem
- 		Amount of cached filesystem data that is swap-backed,
- 		such as tmpfs, shm segments, shared anonymous mmap()s
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index d76dad703580..b72d75141e12 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -33,6 +33,7 @@ enum memcg_stat_item {
- 	MEMCG_SWAP = NR_VM_NODE_STAT_ITEMS,
- 	MEMCG_SOCK,
- 	MEMCG_PERCPU_B,
-+	MEMCG_VMALLOC,
- 	MEMCG_NR_STAT,
- };
- 
-@@ -944,6 +945,21 @@ static inline void mod_memcg_state(struct mem_cgroup *memcg,
- 	local_irq_restore(flags);
- }
- 
-+static inline void mod_memcg_page_state(struct page *page,
-+					int idx, int val)
-+{
-+	struct mem_cgroup *memcg;
-+
-+	if (mem_cgroup_disabled())
-+		return;
-+
-+	rcu_read_lock();
-+	memcg = page_memcg(page);
-+	if (memcg)
-+		mod_memcg_state(memcg, idx, val);
-+	rcu_read_unlock();
-+}
-+
- static inline unsigned long memcg_page_state(struct mem_cgroup *memcg, int idx)
- {
- 	return READ_ONCE(memcg->vmstats.state[idx]);
-@@ -1399,6 +1415,11 @@ static inline void mod_memcg_state(struct mem_cgroup *memcg,
- {
- }
- 
-+static inline void mod_memcg_page_state(struct page *page,
-+					int idx, int val)
-+{
-+}
-+
- static inline unsigned long memcg_page_state(struct mem_cgroup *memcg, int idx)
- {
- 	return 0;
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 101b22a23096..56ed6b5dd328 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -1375,6 +1375,7 @@ static const struct memory_stat memory_stats[] = {
- 	{ "pagetables",			NR_PAGETABLE			},
- 	{ "percpu",			MEMCG_PERCPU_B			},
- 	{ "sock",			MEMCG_SOCK			},
-+	{ "vmalloc",			MEMCG_VMALLOC			},
- 	{ "shmem",			NR_SHMEM			},
- 	{ "file_mapped",		NR_FILE_MAPPED			},
- 	{ "file_dirty",			NR_FILE_DIRTY			},
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index eb6e527a6b77..bdc7222f87d4 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -31,6 +31,7 @@
- #include <linux/kmemleak.h>
- #include <linux/atomic.h>
- #include <linux/compiler.h>
-+#include <linux/memcontrol.h>
- #include <linux/llist.h>
- #include <linux/bitops.h>
- #include <linux/rbtree_augmented.h>
-@@ -2624,12 +2625,13 @@ static void __vunmap(const void *addr, int deallocate_pages)
- 
- 	if (deallocate_pages) {
- 		unsigned int page_order = vm_area_page_order(area);
--		int i;
-+		int i, step = 1U << page_order;
- 
--		for (i = 0; i < area->nr_pages; i += 1U << page_order) {
-+		for (i = 0; i < area->nr_pages; i += step) {
- 			struct page *page = area->pages[i];
- 
- 			BUG_ON(!page);
-+			mod_memcg_page_state(page, MEMCG_VMALLOC, -step);
- 			__free_pages(page, page_order);
- 			cond_resched();
- 		}
-@@ -2964,6 +2966,13 @@ static void *__vmalloc_area_node(struct vm_struct *area, gfp_t gfp_mask,
- 		page_order, nr_small_pages, area->pages);
- 
- 	atomic_long_add(area->nr_pages, &nr_vmalloc_pages);
-+	if (gfp_mask & __GFP_ACCOUNT) {
-+		int i, step = 1U << page_order;
-+
-+		for (i = 0; i < area->nr_pages; i += step)
-+			mod_memcg_page_state(area->pages[i], MEMCG_VMALLOC,
-+					     step);
-+	}
- 
- 	/*
- 	 * If not enough pages were obtained to accomplish an
--- 
-2.34.1.448.ga2b2bfdf31-goog
-
+>
+> Hugh

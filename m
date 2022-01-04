@@ -2,88 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9C4C483EB4
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 10:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8495C483EB7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 10:04:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbiADJDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 04:03:36 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:51558 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbiADJDf (ORCPT
+        id S229851AbiADJEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 04:04:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35750 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229837AbiADJEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 04:03:35 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20493TOb085788;
-        Tue, 4 Jan 2022 03:03:29 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1641287009;
-        bh=TwTfLCgT1Ye2TYDl4sqf2pvBQnKw8kixcDRFpionW3k=;
-        h=Subject:To:References:From:Date:In-Reply-To;
-        b=e/ku9Al+MXqTjPawc6Z1PI0foQnkkMhvT0qgNX8RPz9mULEYJ2kHyz2EF+Q4Bftz8
-         E1hTzNr3B3XoqjWNhhpbW3nGz+GLnzoz0h1awKgk//I0lNl/m9/OldxXPeiFqChJNX
-         WNNcRx4e0uk1BCXcJETsVpArLJjDfQG/UhT2S45w=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20493TBr054433
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 4 Jan 2022 03:03:29 -0600
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 4
- Jan 2022 03:03:29 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 4 Jan 2022 03:03:29 -0600
-Received: from [10.24.69.159] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20493RPE095669;
-        Tue, 4 Jan 2022 03:03:27 -0600
-Subject: Re: [PATCH] PCI: endpoint: set_msi: return -EINVAL when interrupts
- num is smaller than 1
-To:     Li Chen <lchen@ambarella.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>
-References: <CH2PR19MB402491B9E503694DBCAC6005A07C9@CH2PR19MB4024.namprd19.prod.outlook.com>
-From:   Kishon Vijay Abraham I <kishon@ti.com>
-Message-ID: <1402c8bb-f5af-8a34-ee79-31c32eb26379@ti.com>
-Date:   Tue, 4 Jan 2022 14:33:26 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 4 Jan 2022 04:04:06 -0500
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C912C061761;
+        Tue,  4 Jan 2022 01:04:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=LIpGUA+BIUuIAA5mn06eiD0IWkKRl9vPozuSU1YrjFw=;
+        t=1641287046; x=1642496646; b=SF3yFNpMOZiMSIMDEKf8NpaBYrj1BVzrdHa0lJj+lLLZ9gR
+        CAUahblriIFZxAfzf0KOnJYktn8RggvQDIqFvfd4nekQBo6gFnWqiusk8B9xPceO2DiPF0IwcZ0PO
+        ouZzeEgVP/inR5ypXCFSvNWG5v/d5I3CwQ3jEThGmkbv6JjPzZYH0yjLlkLrZJMSf62+8+PO1l4nT
+        kMIh7gRy/i3yzfqz/vmwX4hTGNIr9i1kdRmOQbHYvp8QzumQqN9xBzi9SBcJSKgKTAdagMnIRz2cd
+        J1IYN4+8XpLpNVR+dggwhwhR5/diXH6zca3M2qPoPrjofPM/U4u94a/yqek9icWA==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1n4fjg-001het-NC;
+        Tue, 04 Jan 2022 10:04:04 +0100
+Message-ID: <0523cc8788bfe47ffba185d0436a7c77c85c6e4c.camel@sipsolutions.net>
+Subject: Re: Build regressions/improvements in v5.16-rc7
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-crypto@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org
+Date:   Tue, 04 Jan 2022 10:04:03 +0100
+In-Reply-To: <alpine.DEB.2.22.394.2112271142250.1704790@ramsan.of.borg>
+References: <20211227083126.1153239-1-geert@linux-m68k.org>
+         <alpine.DEB.2.22.394.2112271142250.1704790@ramsan.of.borg>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
 MIME-Version: 1.0
-In-Reply-To: <CH2PR19MB402491B9E503694DBCAC6005A07C9@CH2PR19MB4024.namprd19.prod.outlook.com>
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-malware-bazaar: not-scanned
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 2021-12-27 at 11:44 +0100, Geert Uytterhoeven wrote:
+> 
+> sparc64-gcc11/sparc-allmodconfig
+> 
+>    + /kisskb/src/drivers/video/fbdev/nvidia/nvidia.c: error: passing argument 1 of 'iounmap' discards 'volatile' qualifier from pointer target type [-Werror=discarded-qualifiers]:  => 1439:10, 1414:10
+> 
+
+This should be fixed by
+
+commit 5f174ec3c1d62013f86db6597249174d8cb227b2
+Author: Al Viro <viro@zeniv.linux.org.uk>
+Date:   Mon Sep 20 21:32:49 2021 +0000
+
+    logic_io instance of iounmap() needs volatile on argument
 
 
-On 21/12/21 8:29 am, Li Chen wrote:
-> There is no sense to go further if we have no interrupts.
-> 
-> Signed-off-by: Li Chen <lchen@ambarella.com>
+when it lands.
 
-Reviewed-by: Kishon Vijay Abraham I <kishon@ti.com>
-> ---
->  drivers/pci/endpoint/pci-epc-core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
-> index 38621558d3975..3bc9273d0a082 100644
-> --- a/drivers/pci/endpoint/pci-epc-core.c
-> +++ b/drivers/pci/endpoint/pci-epc-core.c
-> @@ -334,7 +334,7 @@ int pci_epc_set_msi(struct pci_epc *epc, u8 func_no, u8 vfunc_no, u8 interrupts)
->  	u8 encode_int;
->  
->  	if (IS_ERR_OR_NULL(epc) || func_no >= epc->max_functions ||
-> -	    interrupts > 32)
-> +	    interrupts < 1 || interrupts > 32)
->  		return -EINVAL;
->  
->  	if (vfunc_no > 0 && (!epc->max_vfs || vfunc_no > epc->max_vfs[func_no]))
-> 
+johannes

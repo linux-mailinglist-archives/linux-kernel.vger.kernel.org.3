@@ -2,100 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 375904848C2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:46:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2333D4848C7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:46:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbiADTq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 14:46:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43350 "EHLO
+        id S231231AbiADTqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 14:46:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231150AbiADTqZ (ORCPT
+        with ESMTP id S231217AbiADTqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 14:46:25 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B1CC061792
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 11:46:25 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id l10-20020a17090a384a00b001b22190e075so658922pjf.3
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 11:46:25 -0800 (PST)
+        Tue, 4 Jan 2022 14:46:37 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670E8C061792
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 11:46:37 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id 8so33123704pfo.4
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 11:46:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=uThA5FJw+dwxP5q++/tTAbh+tNweLJGvh47FjBpqGRo=;
-        b=gYssr4nYDq/Y3+lyFNjL8a/kAr0+h1DoizKirqYRNxRwBPdTiOpC2fClt8PLj5PioV
-         ITC+PZlcZu6Ru2sQvwsBpdFdWpcl6hPw+yTs8CjlNZXG0tUzLuYS5hSTH00jMJAzU8UY
-         uJxWx5mPFh5+FpSj81jveeSvyh7ch4ZpVfE6Z/b9Rf8rCXbCn3UUpOljEANTHqMK7egI
-         geD2OOfkwaa+LXrqvK9mOB2dzYBX1eLpUEE/UnZRBzumC2CkSTPYLUFiskAaXd/6x0rW
-         daUjg6u1wZxKIlPUfo7/DfQgsPeQgIolcStC6AOFc9ZEhI2BE8XdUIUpT0IDPiFSagcT
-         C1Rg==
+        d=broadcom.com; s=google;
+        h=from:to:cc:date:message-id:in-reply-to:references:user-agent
+         :subject:mime-version;
+        bh=wgNeYCtrymTIkc3sqgAJU9v3yOnDzhVcJrXHoNdomGw=;
+        b=fnk6shPGt4mLwIiN5V+KMC/v4iGqd837Oo6ONR9Eoe4crvrQX89OKBwHYL3S09BLxD
+         R55fuKqjYAm9pvd/iaw7jeC4siIfmbAal/GtGTXdxjydkG6LPBJvlhnW5EcpqkTF4YjR
+         tNwO4eZwhD6SFvdNy5F59I3eYDljcUHHHN8r4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=uThA5FJw+dwxP5q++/tTAbh+tNweLJGvh47FjBpqGRo=;
-        b=ZtHgxBKQrlPwUGKWIP2Juwxky1gnksWI/hhEHIwfqjNllFV1PPPQprfv2GSS2uFVW0
-         7uygVil9Q3lNHvKTK+Z6SDHOivEYyd6QvWmRmTw2QzKvnPQM+nJ0U/Ao4FdapnYLUdx9
-         Co2oWQttS3SVjP9BS7gyXRqyZT9hLm74kz6HGhEXdeWpsPOd5Ccz2CBrxFx6ibiqCE00
-         4bQPdB1eaNmNs6xMeVscn0uT2t9Uc1nCGlyR6D/NN9/1eLTbBY9OJs2F9Dk0WQvFvTvq
-         BZqspnHmd2TRGJD4VaRM/H8k7lpo3uTRDMvivyO6/bJRdQbLHOCeZmNFxSH2DXpj/U+9
-         kuTw==
-X-Gm-Message-State: AOAM531yuQmASsW0O8ZL9okcjUe+pqblNNjXz8+xj7t/IxrKEO/0Vv/o
-        barCGDdNGYY87+g2olijXHkSgtGT0QtFlg==
-X-Google-Smtp-Source: ABdhPJxOhvfqjVRSu3Uh0kWA/rFpq2kE/HV9U/iDlkJYMs9kVQd/lZ4z4ZSruVEzSWvKrzoEVCeAfg==
-X-Received: by 2002:a17:90b:2247:: with SMTP id hk7mr61350318pjb.126.1641325584736;
-        Tue, 04 Jan 2022 11:46:24 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id g11sm35641497pgn.26.2022.01.04.11.46.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 11:46:24 -0800 (PST)
-Date:   Tue, 4 Jan 2022 19:46:20 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yang Zhong <yang.zhong@intel.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, pbonzini@redhat.com, corbet@lwn.net,
-        shuah@kernel.org, jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, jing2.liu@intel.com,
-        guang.zeng@intel.com, wei.w.wang@intel.com
-Subject: Re: [PATCH v4 18/21] kvm: x86: Add support for getting/setting
- expanded xstate buffer
-Message-ID: <YdSkDAruycpXhNUT@google.com>
-References: <20211229131328.12283-1-yang.zhong@intel.com>
- <20211229131328.12283-19-yang.zhong@intel.com>
+        h=x-gm-message-state:from:to:cc:date:message-id:in-reply-to
+         :references:user-agent:subject:mime-version;
+        bh=wgNeYCtrymTIkc3sqgAJU9v3yOnDzhVcJrXHoNdomGw=;
+        b=vfjnDbDCjZB0wHWxR0uwmWtv8ZlFF5wX7IYSbWeTCE4kLlj2DCbn4X7D2J+Fe/2qsb
+         cLpA6KMaDIxezCWF7DsN4eYXKbOzSCOFY8+q+HqSTsg6a1KwvxkMIVAM/L8VO8L6cBje
+         ErAvz/60vi59RWmkJH5Pg+1l0q8E/cbxQVkQZrsxdQb6qtMq9ZiA73fty7UB2jWMM/LL
+         D22ocbft47rA5awAxEd4C75mdVqaCOMdLdPkQNaLDdBWD7nRkzRk2Nii/UvQvQpja0W8
+         SEl/IXa9Y+5HcTPaPCHnaS5H5QgOCDUWYZuV5ITz4pV7n2YbDmYbcEva1xhJvLWBjy4V
+         mHMA==
+X-Gm-Message-State: AOAM532fiwFXtnA4gvJN0M/wvV+UA+VOTdAF9N3opcO6llRO6dOBn+1e
+        8QnP8wLIPn2vseKv0ybxSqlK2A==
+X-Google-Smtp-Source: ABdhPJzcn8Mg+FCPER4ceqy8hmq+FlExP4+JejlJRWDRdiFfMNc5K5/YFJFCq0oj95NxB8BxbqhMhg==
+X-Received: by 2002:a05:6a00:18a9:b0:4ba:cba6:868e with SMTP id x41-20020a056a0018a900b004bacba6868emr51578435pfh.20.1641325596823;
+        Tue, 04 Jan 2022 11:46:36 -0800 (PST)
+Received: from [192.168.178.38] (f140230.upc-f.chello.nl. [80.56.140.230])
+        by smtp.gmail.com with ESMTPSA id s34sm45209428pfg.198.2022.01.04.11.46.27
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 04 Jan 2022 11:46:35 -0800 (PST)
+From:   Arend Van Spriel <arend.vanspriel@broadcom.com>
+To:     Hector Martin <marcan@marcan.st>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        "Chi-hsien Lin" <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+CC:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        "Pieter-Paul Giesberts" <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>,
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        <SHA-cyfmac-dev-list@infineon.com>
+Date:   Tue, 04 Jan 2022 20:46:24 +0100
+Message-ID: <17e26a0de80.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
+In-Reply-To: <20220104072658.69756-24-marcan@marcan.st>
+References: <20220104072658.69756-1-marcan@marcan.st>
+ <20220104072658.69756-24-marcan@marcan.st>
+User-Agent: AquaMail/1.33.0 (build: 103300102)
+Subject: Re: [PATCH v2 23/35] brcmfmac: cfg80211: Add support for scan params v2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211229131328.12283-19-yang.zhong@intel.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000002de45c05d4c6e534"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 29, 2021, Yang Zhong wrote:
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index bdf89c28d2ce..76e1941db223 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -4296,6 +4296,11 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->  		else
->  			r = 0;
->  		break;
-> +	case KVM_CAP_XSAVE2:
-> +		r = kvm->vcpus[0]->arch.guest_fpu.uabi_size;
+--0000000000002de45c05d4c6e534
+Content-Type: text/plain; format=flowed; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-a) This does not compile against kvm/queue.
+On January 4, 2022 8:30:51 AM Hector Martin <marcan@marcan.st> wrote:
 
-   arch/x86/kvm/x86.c: In function ‘kvm_vm_ioctl_check_extension’:
-   arch/x86/kvm/x86.c:4317:24: error: ‘struct kvm’ has no member named ‘vcpus’
-    4317 |                 r = kvm->vcpus[0]->arch.guest_fpu.uabi_size;
+> This new API version is required for at least the BCM4387 firmware. Add
+> support for it, with a fallback to the v1 API.
+>
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+> .../broadcom/brcm80211/brcmfmac/cfg80211.c    | 113 ++++++++++++++----
+> .../broadcom/brcm80211/brcmfmac/feature.c     |   1 +
+> .../broadcom/brcm80211/brcmfmac/feature.h     |   4 +-
+> .../broadcom/brcm80211/brcmfmac/fwil_types.h  |  49 +++++++-
+> 4 files changed, 145 insertions(+), 22 deletions(-)
 
-b) vcpu0 is not guaranteed to be non-NULL at this point.
+Compiling this patch with C=2 gives following warnings:
 
-> +		if (r < sizeof(struct kvm_xsave))
-> +			r = sizeof(struct kvm_xsave);
-> +		break;
->  	default:
->  		break;
->  	}
+drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1086:28: 
+warning: incorrect type in assignment (different base types)
+drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1086:28: 
+expected restricted __le16 [usertype] version
+drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1086:28: got int
+drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1148:38: 
+warning: incorrect type in assignment (different base types)
+drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1148:38: 
+expected restricted __le32 [usertype] scan_type
+drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1148:38: got int
+drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:789:30: 
+warning: incorrect type in assignment (different base types)
+drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:789:30: 
+expected unsigned char [usertype] scan_type
+drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:789:30: got 
+restricted __le32 [usertype] scan_type
+
+Will check if this is a valid warning.
+
+Regards,
+Arend
+
+
+
+
+--0000000000002de45c05d4c6e534
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+XSlOP9s1dqWlRRnnNxV7BVC87lkKKy0+1M2DOF6qRYQlnW4EfOyCToYLAG5zeV+AjepMoX6J9bUz
+yj4BlDtwH4HFjaRIlPPbdLshUA54/tV84x8woATuLGBq+hTZEpkZAgMBAAGjggHdMIIB2TAOBgNV
+HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
+Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
+KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
+Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
+dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
+OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
+MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
+BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFKb+3b9pz8zo
+0QsCHGb/p0UrBlU+MA0GCSqGSIb3DQEBCwUAA4IBAQCHisuRNqP0NfYfG3U3XF+bocf//aGLOCGj
+NvbnSbaUDT/ZkRFb9dQfDRVnZUJ7eDZWHfC+kukEzFwiSK1irDPZQAG9diwy4p9dM0xw5RXSAC1w
+FzQ0ClJvhK8PsjXF2yzITFmZsEhYEToTn2owD613HvBNijAnDDLV8D0K5gtDnVqkVB9TUAGjHsmo
+aAwIDFKdqL0O19Kui0WI1qNsu1tE2wAZk0XE9FG0OKyY2a2oFwJ85c5IO0q53U7+YePIwv4/J5aP
+OGM6lFPJCVnfKc3H76g/FyPyaE4AL/hfdNP8ObvCB6N/BVCccjNdglRsL2ewttAG3GM06LkvrLhv
+UCvjMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
+YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMMSnY
+h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDMZS4qo7HamO7EirlF
+37pLdoRZTyh1WCIYmWHKDBOzfTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
+BTEPFw0yMjAxMDQxOTQ2MzdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
+AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
+BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAYjvAh/SVAZS21nzQHFPLM+O8amS1JAYCVmSa
+h1XXVka5Esh/l7U86HFRSiNQsaSpnG7g9NGbAd+P744qG9TVfMBp07jAPYuEntGaPksBjAFJ1VVP
+c/H9PvK26+9fHFHTwtSNNolBW5huY2JSoJyRrp7VE4l/N1RMutnGcepDs+ca+6J63iwsZt0XyAYN
+Y9n98ho8SsV4g7W+CBSO032u21NB+cwYqC6pUkbWnQdUs+0F+AFLkiN0MF/7WHH3iF0aFpHX5h2Q
+nba1fNnEm4vv+IVzmZmHcno+Mj6RSON63qXENIeVC4f2Y+tXKENc14ri2JatgEzpFxQb3KtbfExX
++w==
+--0000000000002de45c05d4c6e534--

@@ -2,170 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA61484B1E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 00:18:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2C85484B20
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 00:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236306AbiADXS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 18:18:26 -0500
-Received: from out2-smtp.messagingengine.com ([66.111.4.26]:39787 "EHLO
-        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236256AbiADXSZ (ORCPT
+        id S236332AbiADXTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 18:19:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35612 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235736AbiADXTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 18:18:25 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8A3B05C017C;
-        Tue,  4 Jan 2022 18:18:24 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Tue, 04 Jan 2022 18:18:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=axVMBjIr/XhRKABCeCcLgnPbHr1
-        sgLS8A+upCHYVmH4=; b=PgJtxgwefwSS2LS81uYLAi3umYX0eSm8Abwh+YZjpKF
-        qkgUwUA4DERRhJt769aENe+T+weEJOXAu2fbWtkH08yMP0s1t6AbXpKaWDqoWZmE
-        Vaj+7NOLf/PTvVYlY5xOVE7IbPVinQywDpKYRWselp8aapQaq+PYRoIfQuaQsmdt
-        +v7vZzVYhjc6jqtCtGOilm4UcCETgtF/ZS/hLQanHNuBAUenH023kq9rYBBfC5vy
-        6UG4N/MSStSXHyB+dMNsJ2CS2p2WcPdaWF5G4oStII8eqJnrfoeTzGxZs3Dp5z1p
-        ITonEkbY6yvgSkpcHDcRihlib7loY9cQrc1uhxPcOHQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=axVMBj
-        Ir/XhRKABCeCcLgnPbHr1sgLS8A+upCHYVmH4=; b=L5I45CSFBGPgr5QAhuILtg
-        LEwRi5QDca723+K4k7bMw7do09yWruW7Hg5X46Bzj7SyGQVEmbBVxSwWesVosM4n
-        NhzQirCAbUmWNHnhcXVxHWUCJDk2o8J4aicyVc78Ffa03YxXQNtiTMjKGiY5jZJF
-        GhETTH8YKOuS2oR5RV6UICUa0gOJup9rXggnGfcVp0Frg4lAdrYQbNvw31YUlV8h
-        a4vRfRbB+MpA7Ch875PNqwMrgghcorAMY9On8nGAh4clHUCrGMZPG7RCEIOIdalr
-        P3jvQJJ52AvArGidf5UqRnTtt7vDxhH4/Ih2/0/VFDooCjXv0FpV7J+Sd3vV5vGg
-        ==
-X-ME-Sender: <xms:v9XUYddgPdlzTw0HMUfWJGw0458UwpV_3TG6zIYtg7eZ72vlVHsGXg>
-    <xme:v9XUYbOBTaQMF-Z4qGa8jYPz7r5IC0JpsaQJIJma6MYXWUgLO67R_kdJJ7Ro3y7G5
-    F6PRc5wddcrcc2KQ1c>
-X-ME-Received: <xmr:v9XUYWhj61njxHztSrTMaTNPjIM5KRRnEVq9udrCUHB4UKI84rTAKdozIC_FoIsePPIoxl0G54ICdRaaTBLm8pb93-H64WnhVyTnww>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrudefgedgtdeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdlfeehmdenucfjughrpeffhffvuffkfhggtggujgesghdtreertddt
-    vdenucfhrhhomheprfgrthhrihgtkhcuhghilhhlihgrmhhsuceophgrthhrihgtkhessh
-    htfigtgidrgiihiieqnecuggftrfgrthhtvghrnhepgeehheefffegkeevhedthffgudfh
-    geefgfdthefhkedtleffveekgfeuffehtdeinecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepphgrthhrihgtkhesshhtfigtgidrgiihii
-X-ME-Proxy: <xmx:v9XUYW8vTN2cISxaV-rUqwLf6MP2xfIAaDI1-azT7y9b6-nkLijuBQ>
-    <xmx:v9XUYZuwpeR019OdUwAoU-ADZw1JUe1bR3jABq7TSdq-L_Ee96AU8Q>
-    <xmx:v9XUYVEQAvFKCSPvD264Mpt6n-GgnMgV7VW2HBibMVrsWCuiRoH92w>
-    <xmx:wNXUYdipMNB9uLf8truu575ADZ5RkeVaO-hcIGM8jmDbNx27jfsWOQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 4 Jan 2022 18:18:23 -0500 (EST)
-Date:   Tue, 4 Jan 2022 17:18:22 -0600
-From:   Patrick Williams <patrick@stwcx.xyz>
-To:     Potin Lai <potin.lai@quantatw.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: dts: aspeed: update dts of Bletchley platform
-Message-ID: <YdTVvuXiPPRaMw99@heinlein>
-References: <20220104093008.624-1-potin.lai@quantatw.com>
+        Tue, 4 Jan 2022 18:19:16 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A71C061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 15:19:16 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n4t5F-0003SH-U3; Wed, 05 Jan 2022 00:19:13 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n4t5E-008UtF-AY; Wed, 05 Jan 2022 00:19:11 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n4t5D-0004Al-Ao; Wed, 05 Jan 2022 00:19:11 +0100
+Date:   Wed, 5 Jan 2022 00:19:08 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Guenter Roeck <groeck@google.com>
+Cc:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kernel@pengutronix.de
+Subject: Re: [PATCH v2] platform/chrome: cros_ec: Make cros_ec_unregister()
+ return return void
+Message-ID: <20220104231908.tmcubfbywn5yywpt@pengutronix.de>
+References: <20211019203850.3833915-1-u.kleine-koenig@pengutronix.de>
+ <CABXOdTeOO=Yf37_p1c8HVigkqqRyR90RqRDaLk5qxxp3jAGgEA@mail.gmail.com>
+ <20211020071753.wltjslmimb6wtlp5@pengutronix.de>
+ <CABXOdTcgbobZwVarxXt8J+MTB2v4fO5uq+wZWCTwWsg=4mQTzg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="W1cbhE6m1lnx5SC8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hy43p6xcc4bai3sm"
 Content-Disposition: inline
-In-Reply-To: <20220104093008.624-1-potin.lai@quantatw.com>
+In-Reply-To: <CABXOdTcgbobZwVarxXt8J+MTB2v4fO5uq+wZWCTwWsg=4mQTzg@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---W1cbhE6m1lnx5SC8
-Content-Type: text/plain; charset=us-ascii
+--hy43p6xcc4bai3sm
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Potin,
+Hello,
 
-A few minor comments.  You might want to leave more information in the devi=
-ce
-tree for a few of these since they seem like non-obvious settings.
-
-On Tue, Jan 04, 2022 at 05:30:08PM +0800, Potin Lai wrote:
-> updates:
-> * seperate leds into multiple groups
-> * switch sled numbering to 1-based
-> * disable inchip rtc
-> * add flash1 in fmc
-> * switch spi2 pnor using spi-gpio
-> * update gpio-line-names
+On Wed, Oct 20, 2021 at 05:54:24AM -0700, Guenter Roeck wrote:
+> On Wed, Oct 20, 2021 at 12:17 AM Uwe Kleine-K=F6nig
+> <u.kleine-koenig@pengutronix.de> wrote:
+> >
+> > Up to now cros_ec_unregister() returns zero unconditionally. Make it
+> > return void instead which makes it easier to see in the callers that
+> > there is no error to handle.
+> >
+> > Also the return value of i2c, platform and spi remove callbacks is
+> > ignored anyway.
+> >
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 >=20
-> Signed-off-by: Potin Lai <potin.lai@quantatw.com>
-> ---
->  .../dts/aspeed-bmc-facebook-bletchley.dts     | 277 +++++++++++-------
->  1 file changed, 163 insertions(+), 114 deletions(-)
->=20
-> diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts b/arch/a=
-rm/boot/dts/aspeed-bmc-facebook-bletchley.dts
-> index f973ea883b97..d617cfebcb18 100644
-> --- a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
-> +++ b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
-=2E..
-> =20
->  &rtc {
-> -	status =3D "okay";
-> +	status =3D "disabled";
->  };
+> Reviewed-by: Guenter Roeck <groeck@chromium.org>
 
-Since it is more atypical to disable the in-chip RTC would you mind leaving=
- a
-comment in the DTS as to why?  I see we have the nxp,pcf85263 later on.
+This patch is one of the very few ones that are still required to change
+spi_driver::remove to return void.
 
->  &spi2 {
->  	status =3D "okay";
-> -	pinctrl-names =3D "default";
-> -	pinctrl-0 =3D <&pinctrl_spi2_default>;
-> +
-> +	compatible =3D "spi-gpio";
-> +	#address-cells =3D <1>;
-> +	#size-cells =3D <0>;
-> +
-> +	gpio-sck =3D <&gpio0 ASPEED_GPIO(X, 3) GPIO_ACTIVE_HIGH>;
-> +	gpio-mosi =3D <&gpio0 ASPEED_GPIO(X, 4) GPIO_ACTIVE_HIGH>;
-> +	gpio-miso =3D <&gpio0 ASPEED_GPIO(X, 5) GPIO_ACTIVE_HIGH>;
-> +	num-chipselects =3D <1>;
-> +	cs-gpios =3D <&gpio0 ASPEED_GPIO(X, 0) GPIO_ACTIVE_LOW>;
-> =20
->  	flash@0 {
->  		status =3D "okay";
->  		m25p,fast-read;
->  		label =3D "pnor";
-> -		spi-max-frequency =3D <100000000>;
-> +		spi-max-frequency =3D <12000000>;
->  	};
->  };
+It doesn't appear in next up to now. Who feels responsible to merge it?
+If it's still possible to go in during the next merge window this would
+be great. I guess we'll have to prepare an unmutable branch to change
+struct spi_driver and the patch can also be included there.
 
-Why is this one being changed to spi-gpio?  That is significantly worse
-performance.  Is there another (non-NOR) SPI device on this bus that is mis=
-sing
-=66rom the device tree?
+Whatever works best for the involved maintainers ... I just have to know
+your preferences.
+
+Best regards
+Uwe
 
 --=20
-Patrick Williams
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---W1cbhE6m1lnx5SC8
+--hy43p6xcc4bai3sm
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAmHU1bwACgkQqwNHzC0A
-wRm1Vg//bMJ6Nm1kWD23OZ+wx3jg/9vRCWRaq+BJPYvMqgPSsoIaUw9l17lb5Z9s
-f7+TS0B02/BtDf6e+LmC2vpAhphEREOglK/KWQAwLwniKhdvybmrjycJFvMF7PGB
-RdejodtBRLg6ZilwBgZtrUTwqm4qEqUZvXMjVLEgmlE1igyU5N02Ak2fILSSQMLi
-l6QmeTcS0OlRwp5Y3RGumCqZ6usRl/NPNmH7RJmAbWvTnbORUiSCHLp8Jvmn4Lzh
-h/C37zb9wqIbC4346AeV7ds44ms4kC+iwuifKAfAizMXwWDjaz/Vi1nfOHePj9Kx
-AhxrhwBRQYOD0XPXLFQpHpJvC6fpUbB7fSpxJqbSVByM+r/e6BkP5OcfacY9EOvC
-4VnMsiAW3atzr6/JdUkqu7KhhleT3N8/y6X2xSzwbrrivqGSIOcPFpRXbTkJCHWb
-qh1ZfCpE4O26T8c+2Nf4EY0ZAzHz0PQxrIIiA9A+McaBhDSE9ZAlrCXDuR8+1I5Q
-HsU8FE7nmlqTrZ/2rw8jzTFiom1jzzQ7KJl2oNsMXUJyCGaS3ZgnjLmcZL43snza
-zrgpPyIt5Q/aFL0bJjHA9EitroG1AneUWEuxUbzz47h/8HNVaL9O10NWzWmZjQxB
-OFADq6a+vd7veiUygTG4cfMt1mBTWyXK32bOgNTWVOqgHpGz9KE=
-=asHv
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHU1ekACgkQwfwUeK3K
+7AmEFQf/b0Q3HCrfq2wCfnvpmLqeInh7OX6tVUomK1t2qmyr1lwEQlaOevsZ3WRx
+6moTKWckp5Fq3PUhX2jPBYVfJAPHWG5HT8/v66jPmO0+KW3dASOdGMZllotUJfk0
+pTkoR0o61kTu+SijIJFtmO/Wv19Spp23mwfZGPjP+CfZJN7jZMpER8lW82i0vzFi
+3ecdTta87grDteKF9ye6WQplfRX7/QdnUjGjd+e8oOgtpRJwTu38la9Q+282138N
+gga9ebCROoQgq95wrrM9wl3pX28WYW70/kfqwbYKG6jIJSfEYT/mdFq0WI7kxcVE
+nlqADIeexJ/WlBoqSWoEZVNWNwZ97Q==
+=PIhq
 -----END PGP SIGNATURE-----
 
---W1cbhE6m1lnx5SC8--
+--hy43p6xcc4bai3sm--

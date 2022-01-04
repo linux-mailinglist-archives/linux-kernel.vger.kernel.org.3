@@ -2,109 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5557483AA8
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 03:45:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B3E483AAA
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 03:45:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232382AbiADCpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 21:45:19 -0500
-Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:45714 "EHLO
-        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229807AbiADCpS (ORCPT
+        id S232390AbiADCpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 21:45:36 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:44599 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230296AbiADCpf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 21:45:18 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=houwenlong93@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0V0np1PC_1641264315;
-Received: from localhost(mailfrom:houwenlong93@linux.alibaba.com fp:SMTPD_---0V0np1PC_1641264315)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 04 Jan 2022 10:45:16 +0800
-From:   Hou Wenlong <houwenlong93@linux.alibaba.com>
-To:     kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: eventfd: Fix false positive RCU usage warning
-Date:   Tue,  4 Jan 2022 10:45:15 +0800
-Message-Id: <ab1358b84c60e6c942c270e3fe1a32bfa3177f3c.1641264282.git.houwenlong93@linux.alibaba.com>
-X-Mailer: git-send-email 2.31.1
+        Mon, 3 Jan 2022 21:45:35 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JScRd0s4cz4y41;
+        Tue,  4 Jan 2022 13:45:32 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1641264334;
+        bh=jECdWm5a2bm08cn1xeEt3cseg+eth5mPMHvM+B6Yyks=;
+        h=Date:From:To:Cc:Subject:From;
+        b=F0BD8TTEcCTjHKJRgEAIW2aoD7Zo+rExfGSrvHEwoR7eXRhCsxJigcivECu+krBZn
+         /uSRqKiHq2PrXv4yAvGAac5YfMP94e/DI7xivQd6VCuMeETPSH3rWCJutkhMePoa8N
+         31Z9qqEEFOaCFEbH5ZL9pW4Yz0NBq5NGf3WD66r7GZrg2jBN2a/JdNvXmTR10LTNNr
+         vixMa7I+VXtaDNBT1pHwhOcVniA6VUNd0GAYF1YRH4XOu/279KLvP7F5ksmN+m8wzj
+         CGdKToeMLIIeSwmQYkCYajROseXKMRIv1MAE7tq2W2qGfNd/ffxSpoL5QoqbkMwPN9
+         HUU3dQPNbUu+g==
+Date:   Tue, 4 Jan 2022 13:45:31 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Nitesh Narayan Lal <nitesh@redhat.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Shay Drory <shayd@nvidia.com>
+Subject: linux-next: manual merge of the tip tree with Linus' tree
+Message-ID: <20220104134531.6f6ded30@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/LVpyCBuhysS46Hv+6fagQ62";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following false positive warning:
-[   20.995979] =============================
-[   20.996878] WARNING: suspicious RCU usage
-[   20.997792] 5.16.0-rc4+ #57 Not tainted
-[   20.998651] -----------------------------
-[   20.999544] arch/x86/kvm/../../../virt/kvm/eventfd.c:484 RCU-list traversed in non-reader section!!
-[   21.001490]
-[   21.001490] other info that might help us debug this:
-[   21.001490]
-[   21.003240]
-[   21.003240] rcu_scheduler_active = 2, debug_locks = 1
-[   21.004662] 3 locks held by fc_vcpu 0/330:
-[   21.005573]  #0: ffff8884835fc0b0 (&vcpu->mutex){+.+.}-{3:3}, at: kvm_vcpu_ioctl+0x88/0x6f0 [kvm]
-[   21.007617]  #1: ffffc90004c0bb68 (&kvm->srcu){....}-{0:0}, at: vcpu_enter_guest+0x600/0x1860 [kvm]
-[   21.009627]  #2: ffffc90004c0c1d0 (&kvm->irq_srcu){....}-{0:0}, at: kvm_notify_acked_irq+0x36/0x180 [kvm]
-[   21.011732]
-[   21.011732] stack backtrace:
-[   21.012733] CPU: 26 PID: 330 Comm: fc_vcpu 0 Not tainted 5.16.0-rc4+
-[   21.014189] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
-[   21.016565] Call Trace:
-[   21.017105]  <TASK>
-[   21.017591]  dump_stack_lvl+0x44/0x57
-[   21.018467]  kvm_notify_acked_gsi+0x6b/0x70 [kvm]
-[   21.019533]  kvm_notify_acked_irq+0x8d/0x180 [kvm]
-[   21.020616]  kvm_ioapic_update_eoi+0x92/0x240 [kvm]
-[   21.021736]  kvm_apic_set_eoi_accelerated+0x2a/0xe0 [kvm]
-[   21.022968]  handle_apic_eoi_induced+0x3d/0x60 [kvm_intel]
-[   21.024168]  vmx_handle_exit+0x19c/0x6a0 [kvm_intel]
-[   21.025255]  vcpu_enter_guest+0x66e/0x1860 [kvm]
-[   21.026303]  ? lock_acquire+0x27f/0x300
-[   21.027166]  ? lock_is_held_type+0xdf/0x130
-[   21.028090]  ? kvm_arch_vcpu_ioctl_run+0x438/0x7f0 [kvm]
-[   21.029286]  ? kvm_arch_vcpu_ioctl_run+0x11a/0x7f0 [kvm]
-[   21.030485]  kvm_arch_vcpu_ioctl_run+0x438/0x7f0 [kvm]
-[   21.031647]  kvm_vcpu_ioctl+0x38a/0x6f0 [kvm]
-[   21.032647]  ? __fget_files+0x156/0x220
-[   21.033522]  __x64_sys_ioctl+0x89/0xc0
-[   21.034360]  ? syscall_trace_enter.isra.18+0xea/0x260
-[   21.035478]  do_syscall_64+0x3a/0x90
-[   21.036259]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+--Sig_/LVpyCBuhysS46Hv+6fagQ62
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Since srcu read lock is held, it's a false positive warning.
-Use hlist_for_each_entry_srcu() instead of hlist_for_each_entry_rcu()
-as it also checkes if the right lock is held.
+Hi all,
 
-Signed-off-by: Hou Wenlong <houwenlong93@linux.alibaba.com>
----
- virt/kvm/eventfd.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Today's linux-next merge of the tip tree got a conflict in:
 
-diff --git a/virt/kvm/eventfd.c b/virt/kvm/eventfd.c
-index 2ad013b8bde9..59b1dd4a549e 100644
---- a/virt/kvm/eventfd.c
-+++ b/virt/kvm/eventfd.c
-@@ -463,8 +463,8 @@ bool kvm_irq_has_notifier(struct kvm *kvm, unsigned irqchip, unsigned pin)
- 	idx = srcu_read_lock(&kvm->irq_srcu);
- 	gsi = kvm_irq_map_chip_pin(kvm, irqchip, pin);
- 	if (gsi != -1)
--		hlist_for_each_entry_rcu(kian, &kvm->irq_ack_notifier_list,
--					 link)
-+		hlist_for_each_entry_srcu(kian, &kvm->irq_ack_notifier_list,
-+					  link, srcu_read_lock_held(&kvm->irq_srcu))
- 			if (kian->gsi == gsi) {
- 				srcu_read_unlock(&kvm->irq_srcu, idx);
- 				return true;
-@@ -480,8 +480,8 @@ void kvm_notify_acked_gsi(struct kvm *kvm, int gsi)
- {
- 	struct kvm_irq_ack_notifier *kian;
- 
--	hlist_for_each_entry_rcu(kian, &kvm->irq_ack_notifier_list,
--				 link)
-+	hlist_for_each_entry_srcu(kian, &kvm->irq_ack_notifier_list,
-+				  link, srcu_read_lock_held(&kvm->irq_srcu))
- 		if (kian->gsi == gsi)
- 			kian->irq_acked(kian);
- }
--- 
-2.31.1
+  drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
 
+between commit:
+
+  26a7993c93a7 ("net/mlx5: Use first online CPU instead of hard coded CPU")
+
+from Linus' tree and commit:
+
+  7451e9ea8e20 ("net/mlx5: Use irq_set_affinity_and_hint()")
+
+from the tip tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
+index 163e01fe500e,54fb67cec544..000000000000
+--- a/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
+@@@ -398,8 -398,8 +398,8 @@@ irq_pool_request_vector(struct mlx5_irq
+  	cpumask_copy(irq->mask, affinity);
+  	if (!irq_pool_is_sf_pool(pool) && !pool->xa_num_irqs.max &&
+  	    cpumask_empty(irq->mask))
+ -		cpumask_set_cpu(0, irq->mask);
+ +		cpumask_set_cpu(cpumask_first(cpu_online_mask), irq->mask);
+- 	irq_set_affinity_hint(irq->irqn, irq->mask);
++ 	irq_set_affinity_and_hint(irq->irqn, irq->mask);
+  unlock:
+  	mutex_unlock(&pool->lock);
+  	return irq;
+
+--Sig_/LVpyCBuhysS46Hv+6fagQ62
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHTtMsACgkQAVBC80lX
+0Gw+kwf9E7bT47f2dejb/SXw3fEwv9dgmt+DbZm2ziRredG/RLH6C7soNQxl2bkr
+XXR1cmVg6HCm0kh0s5hxVu81HiQ46SSHK6o0Dbz8OrDQ9ATYuRENK5H3g9X3qZFU
+HBAF18DAWcGOG00hwMqqHbG1Pm2ftSZ+Gs50XDdQi2sMFUVLef8ZKm+XjqEOhh9h
+q8TovKpMonmM/ez9GwB30hD7wY46VigNqtFjfIEf1X7WQ+FuqZDS57ynAD86OliL
+BzT9pnRDakaUPi8lSSykYTWzZZJpEgu2bSAdKjoCfBcqZBOv0Xr3cJ+yItzKeNS4
+M21iH6ZPmGhC2VQ9XggCmTUh4SrZXQ==
+=39wO
+-----END PGP SIGNATURE-----
+
+--Sig_/LVpyCBuhysS46Hv+6fagQ62--

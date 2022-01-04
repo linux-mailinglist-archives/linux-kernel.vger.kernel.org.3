@@ -2,99 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92AC5484B07
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 00:04:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD61484B11
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 00:09:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236066AbiADXEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 18:04:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60526 "EHLO
+        id S236128AbiADXJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 18:09:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235651AbiADXEp (ORCPT
+        with ESMTP id S235297AbiADXI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 18:04:45 -0500
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F72C061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 15:04:45 -0800 (PST)
-Received: by mail-ua1-x92f.google.com with SMTP id e19so19997764uaa.11
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 15:04:45 -0800 (PST)
+        Tue, 4 Jan 2022 18:08:59 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344E1C061761;
+        Tue,  4 Jan 2022 15:08:59 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id p1-20020a1c7401000000b00345c2d068bdso638942wmc.3;
+        Tue, 04 Jan 2022 15:08:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=LGTDOKUFi7zO+d79pWO817pqCCSEiZUvdJ5m+8rvxCA=;
-        b=Vq2UWrZRZ/V3IkL5xQPw4sK457GrJq/WGgnD994N8UpM5fE4ZpVWKkQjEJSUlRCC+S
-         N80GiReieK9NC9xQVyvz9BhxYpwc7LWf6W4aM36q8k0Q69cY4+L2TfuN/oxwngrztnXF
-         grm2OJ2nWYPzJUuXJoi/p4GKhsZup4A6WaVvS/mI2TD1KIyXvGEZgG33WSiJ6ccRLS1r
-         jFxOohSEa8Jgp0MojMyyxYnPe5RJvAsOP5jXHv6Qqsrb6ENA2zOEmpT6XzjnESBDuUGP
-         kDVZmzUh6zyRshn0uZqGSzMas96FCWFCWJbaEtXUxGcZ2vshAc44NreDhAWTpkUIfqvl
-         c2LQ==
+        bh=kh8Gfm9+uyUN7wr5xX2KRQaXD7QaZKY7AK/XNvHYC3E=;
+        b=hZ6NJRccRCpO4CMIa3yzlhVLl0z63iFcwmvcFPbrifR+2TEYupPRZAk64v5tnDsGSg
+         hW1d8cse0R1802dRcEN4zjv93j+qP908LXcxlkfRpFTcVXwJ7Qxk3sGAxO/6ZikuMmf7
+         h5uLtH7IGByBpsPCm1QWSdxeTqwZJKlHQBQ6P3I70jHBTq3GnQbpqpCLzWF6PHv+x34w
+         zaUQBDs4uCx4ki2JvNBQCFabiTaPpmEN3023spR7Emf2SaigCnqdGJog6InJsOrhCbLP
+         TvT0wCgzn8Narm7MUDFRn3TdbIEur+DgjBYJA5V5qZjQ3Gt4GBhitW085KyJcO/shgMW
+         6vfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=LGTDOKUFi7zO+d79pWO817pqCCSEiZUvdJ5m+8rvxCA=;
-        b=cA0I1qLF+9rlphgC1DefwiQF/saOh0fi2CmqM66vFJCDcf+6qqPraTVSnd48BG+ErI
-         Z2gUVNlpqcRfDwFKXUYamyxIe3D/uPiKDJgF0wGbqQESt1B0V9rTMF8TdAF5j28bJe71
-         5XsHym5/qPyQfSYASDK0coWSyMOfLEVHhegq4HUY3sWgjv+9AHYSLZ7WYIxxZn6kXoFM
-         vJd+BRPhh6pVzjsoUYNRN5MCNyDi32pBFyNUgtisX6UXxdZp6/orHbtY6uBjNFe7UlWQ
-         FpNfrUvR4M3h3MeWhC5sRgjihO+JfsHCVJxLmDL6C5l5B/YOGV5ALM4cf125eB8nWZJ8
-         P3UA==
-X-Gm-Message-State: AOAM5304KfSYTh3hsL3wW/57vx57duR+xsIBtjrDEaWpb/eDAamMgpO2
-        ei2WMt8UWlR5qk0xYb2oH21dGY2rxQq0AZozb8nWRg==
-X-Google-Smtp-Source: ABdhPJzrzdQ9oZ8c9KxNThr7KVaZnd8IRIGK4zN+HrR/xQOECiyYuhQgixfNU7D+urgXsf2w6BRuPu+/B7sopDGcZBs=
-X-Received: by 2002:ab0:6201:: with SMTP id m1mr13499007uao.25.1641337483580;
- Tue, 04 Jan 2022 15:04:43 -0800 (PST)
+        bh=kh8Gfm9+uyUN7wr5xX2KRQaXD7QaZKY7AK/XNvHYC3E=;
+        b=MEglmiqze3fzShM3TjKxgOgLSYFeICmWCT/yFC+vrMZHruW5N/kQqOtXc/Rn2AtZbY
+         DgDV0NW0AdGurSsoDxG6TP7jAiOJfmjMAg1wLyK5/2ZB4k8qESp6M+1MJB++gMbtMa1i
+         pKW/IDdWmuPsLP8nNOZMvV7DKtGCMVcD7TTHOWri/CDBN9QmInxnGid1P6i39QFL09D8
+         1SpiqVyJj89Y3ssAftEAVXM1/JZ7ojxmBPi10Z+KCwCnpusDCyo0gVKgRb8SCSmib6Ji
+         /mwbjZaXGBttIEOpKwHSre3dn0kL6pgbW8qeENVgtC9eLFGJ2FbL7PLU8fDCBG1J31k4
+         Yjrg==
+X-Gm-Message-State: AOAM533IhhFBbz697ZZgeZn6tZ9OjTJMiKw3eLXUCGdHw1Mh/sGLJBwy
+        2pxmm54a2s2F82MWO7NQ3YuO+oW/xZVuFmIY3dA=
+X-Google-Smtp-Source: ABdhPJw6JV+p9Y5d9AhSPvSYGnLv28wD82+I6JVIkMGJ8gQt31cjL/s7aJ+8oKcUz3dn3JH+bE9+wNG74VoskgbqPI8=
+X-Received: by 2002:a05:600c:3b12:: with SMTP id m18mr456253wms.54.1641337737792;
+ Tue, 04 Jan 2022 15:08:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20211123000102.4052105-1-almasrymina@google.com>
- <YaMBGQGNLqPd6D6f@casper.infradead.org> <CAHS8izM5as_AmN4bSmZd1P7aSXZ86VAfXgyooZivyf7-E5gZcQ@mail.gmail.com>
-In-Reply-To: <CAHS8izM5as_AmN4bSmZd1P7aSXZ86VAfXgyooZivyf7-E5gZcQ@mail.gmail.com>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Tue, 4 Jan 2022 15:04:31 -0800
-Message-ID: <CAHS8izNw87-L=rEwJF7_9WCaAcXLn2dUe68h_SbLErJoSUDzzg@mail.gmail.com>
-Subject: Re: [PATCH v7] mm: Add PM_THP_MAPPED to /proc/pid/pagemap
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        David Hildenbrand <david@redhat.com>,
-        "Paul E . McKenney" <paulmckrcu@fb.com>,
-        Yu Zhao <yuzhao@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Xu <peterx@redhat.com>,
-        Ivan Teterevkov <ivan.teterevkov@nutanix.com>,
-        Florian Schmidt <florian.schmidt@nutanix.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-doc@vger.kernel.org
+References: <20211222155743.256280-1-miquel.raynal@bootlin.com>
+ <20211222155743.256280-2-miquel.raynal@bootlin.com> <CAB_54W7BeSA+2GVzb9Yvz1kj12wkRSqHj9Ybr8cK7oYd7804RQ@mail.gmail.com>
+ <20220104164449.1179bfc7@xps13>
+In-Reply-To: <20220104164449.1179bfc7@xps13>
+From:   Alexander Aring <alex.aring@gmail.com>
+Date:   Tue, 4 Jan 2022 18:08:46 -0500
+Message-ID: <CAB_54W6LG4SKdS4HDSj1o2A64UiA6BEv_Bh_5e9WCyyJKeAbtg@mail.gmail.com>
+Subject: Re: [net-next 01/18] ieee802154: hwsim: Ensure proper channel
+ selection at probe time
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        linux-wpan - ML <linux-wpan@vger.kernel.org>,
+        David Girault <david.girault@qorvo.com>,
+        Romuald Despres <romuald.despres@qorvo.com>,
+        Frederic Blain <frederic.blain@qorvo.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        kernel list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 4:22 PM Mina Almasry <almasrymina@google.com> wrote:
->
-> On Sat, Nov 27, 2021 at 8:10 PM Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > On Mon, Nov 22, 2021 at 04:01:02PM -0800, Mina Almasry wrote:
-> > > Add PM_THP_MAPPED MAPPING to allow userspace to detect whether a given virt
-> > > address is currently mapped by a transparent huge page or not.  Example
-> > > use case is a process requesting THPs from the kernel (via a huge tmpfs
-> > > mount for example), for a performance critical region of memory.  The
-> > > userspace may want to query whether the kernel is actually backing this
-> > > memory by hugepages or not.
-> >
-> > But what is userspace going to _do_ differently if the kernel hasn't
-> > backed the memory with huge pages?
->
-> Sorry for the late reply here.
->
-> My plan is to expose this information as metrics right now and:
-> 1. Understand the kind of hugepage backing we're actually getting if any.
-> 2. If there are drops in hugepage backing we can investigate the
-> cause, whether it's due to normal memory fragmentation or some
-> bug/issue.
-> 3. Schedule machines for reboots to defragment the memory if the
-> hugepage backing is too low.
-> 4. Possibly motivate future work to improve hugepage backing if our
-> numbers are too low.
+Hi,
 
-Friendly ping on this. It has been reviewed by a few folks and after
-Matthew had questions about the use case which I've answered in the
-email above. Matthew, are you opposed to this patch?
+On Tue, 4 Jan 2022 at 10:44, Miquel Raynal <miquel.raynal@bootlin.com> wrote:
+>
+> Hi Alexander,
+>
+> alex.aring@gmail.com wrote on Tue, 28 Dec 2021 16:05:43 -0500:
+>
+> > Hi,
+> >
+> > On Wed, 22 Dec 2021 at 10:57, Miquel Raynal <miquel.raynal@bootlin.com> wrote:
+> > >
+> > > A default channel is selected by default (13), let's clarify that this
+> > > is page 0 channel 13. Call the right helper to ensure the necessary
+> > > configuration for this channel has been applied.
+> > >
+> > > So far there is very little configuration done in this helper but we
+> > > will soon add more information (like the symbol duration which is
+> > > missing) and having this helper called at probe time will prevent us to
+> > > this type of initialization at two different locations.
+> > >
+> >
+> > I see why this patch is necessary because in later patches the symbol
+> > duration is set at ".set_channel()" callback like the at86rf230 driver
+> > is doing it.
+> > However there is an old TODO [0]. I think we should combine it and
+> > implement it in ieee802154_set_channel() of "net/mac802154/cfg.c".
+> > Also do the symbol duration setting according to the channel/page when
+> > we call ieee802154_register_hw(), so we have it for the default
+> > settings.
+>
+> While I totally agree on the background idea, I don't really see how
+> this is possible. Every driver internally knows what it supports but
+> AFAIU the core itself has no easy and standard access to it?
+>
+
+I am a little bit confused here, because a lot of timing related
+things in the phy information rate points to "x times symbols". If
+this value depends on the transceiver, how are they compatible then?
+
+> Another question that I have: is the protocol and center frequency
+> enough to always derive the symbol rate? I am not sure this is correct,
+> but I thought not all symbol rates could be derived, like for example
+> certain UWB PHY protocols which can use different PRF on a single
+> channel which has an effect on the symbol duration?
+
+Regarding UWB PHY I see that for values like LIFS/SIFS they reference
+a "preambleSymbols" value which is defined.
+
+I need to do more research regarding this.
+
+- Alex

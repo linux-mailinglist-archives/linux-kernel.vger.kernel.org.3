@@ -2,199 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2258848465D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:04:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31AAC484694
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 18:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235622AbiADREK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 12:04:10 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:44908 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230253AbiADREJ (ORCPT
+        id S235646AbiADRFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 12:05:13 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:64362 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235631AbiADRE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 12:04:09 -0500
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 204GJB7G014889;
-        Tue, 4 Jan 2022 17:04:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=UsfgvgSwoVgqW+6vAySJ7ebtOY1BLt5+PoIBsDBtvwg=;
- b=PtUkVQydiJ+TGE8ga3f8vCfsY3j8CmdJO0x03dmHzKiPdukdEHvTgsWYQ5AOWiDnCcic
- 1AHoQyzX60tSmOP2TfTQ1+wSabQian8AOTnaFlaysRF4SZAPnbGRs1PSBgJXfAiUtouN
- GzenuOIrVTC/JCiHkoYEMXYyHgze4yQJXD8EB40w/5TSWou2Z9l4cn7+miTy07PUp+2Y
- 49Stl2mwT9ze110uDycKE1KuVa9jxZzQxoRDkzh8rxKeRinT+OpgJd6eS2AaK49tPi7g
- f5QsEGXOJRneoWY8JfUvRGJ4hcfbwrwauMk5WJ6st6TZyOdULwKGdZAwPdWG9FscfKqr IQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dc9d91wd9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 04 Jan 2022 17:04:02 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 204H1koY180747;
-        Tue, 4 Jan 2022 17:04:01 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2171.outbound.protection.outlook.com [104.47.58.171])
-        by userp3030.oracle.com with ESMTP id 3dac2ww38k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 04 Jan 2022 17:04:01 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=loyN5mYYCkvCaeIXRpaEbDxBWUa8CR4dsCp1VKhKJB6MYgR1PUiKePIlCPVZe6hgM+BoOzLmR+bm4fIapXANmiYNwtTwxsigOCfLBeXlH2ziBUKPIKIFitj7cCnc8QbrR+KUfIjtB94gG6+tMfaQ86G2Xo+ngRBGA7oEo07UWtsbF35Ir/exEMHcGV866I/PweAWk/Ad6g1y8hVjBLh6HVFS+B7VGZQRHUErDshQWSr1zpsm5SmUqimPxgLUsuc4SHwEsUUGBxRb75RZ34jpSSHAhNPTT691gN46j7BWlEV3yU9PUI6B376q9FbM2nXReAHigc6Y2OKYmPbpXgLtHw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UsfgvgSwoVgqW+6vAySJ7ebtOY1BLt5+PoIBsDBtvwg=;
- b=B2WsGjjmZOBIJauVBGo5xHUiG0jdPmXfOVHGfekq/WW1UQCoxqG6xTTg/1pzsIcj67GWVy9fjKezPnj2pRxkSrrhhbBLxGFWmr9lvOket7fmL5UfMWhz8ZLlMeZcdA/yuEiK1fYKHhsANHY8tbGrypshr6JQsM5CDu210nJxX4AuUOFga6mLX30X+aSde7DDkk1oGUfOqwzViQd7L2y5C3Mfdjny+vs+AIupsBWQTeIzt1RWzut6hdHhUUdCq3FXwghU85KX4q386OHCY82lK22NhwAlHam37wQ7dWLcEdPa27UVHdELGjW6UvFhnMlTbwWNcIiuNrsIJKy6FyQWDg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UsfgvgSwoVgqW+6vAySJ7ebtOY1BLt5+PoIBsDBtvwg=;
- b=hyVSl+LOzZ++2imkbM1j7ObOhiDz4jBgj4gEZJfPJFZo/lkOYn0a5+aM60JZH3KVUn0G8h5/6xd8hdpWLEYkN7zYdg9SG0EdZ0P8duqvRVja41VJqxCm9IC80vhCohzYnxbSO/6CE6ARXXTS91bUpIMmqrBEgxrkaqIBhXyEXhE=
-Received: from BLAPR10MB5009.namprd10.prod.outlook.com (2603:10b6:208:321::10)
- by MN2PR10MB4302.namprd10.prod.outlook.com (2603:10b6:208:199::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Tue, 4 Jan
- 2022 17:03:59 +0000
-Received: from BLAPR10MB5009.namprd10.prod.outlook.com
- ([fe80::8d84:1f40:881:7b12]) by BLAPR10MB5009.namprd10.prod.outlook.com
- ([fe80::8d84:1f40:881:7b12%5]) with mapi id 15.20.4867.007; Tue, 4 Jan 2022
- 17:03:59 +0000
-Message-ID: <16260904-c1ce-dc18-224b-03a131a92007@oracle.com>
-Date:   Tue, 4 Jan 2022 12:03:53 -0500
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [PATCH] xen/x86: obtain upper 32 bits of video frame buffer
- address for Dom0
-Content-Language: en-US
-To:     Jan Beulich <jbeulich@suse.com>
-Cc:     "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Juergen Gross <jgross@suse.com>
-References: <a3df8bf3-d044-b7bb-3383-cd5239d6d4af@suse.com>
- <bfab8ff9-9762-f90d-3f25-b57362f05b0b@oracle.com>
- <17df4307-ace8-8798-5bce-16f4843ed830@suse.com>
-From:   Boris Ostrovsky <boris.ostrovsky@oracle.com>
-In-Reply-To: <17df4307-ace8-8798-5bce-16f4843ed830@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN7PR04CA0221.namprd04.prod.outlook.com
- (2603:10b6:806:127::16) To BLAPR10MB5009.namprd10.prod.outlook.com
- (2603:10b6:208:321::10)
+        Tue, 4 Jan 2022 12:04:58 -0500
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 204Fh82F023009;
+        Tue, 4 Jan 2022 17:04:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=EsxvluwOSv2mM7fi63RNyyg0yw8+zQfSCfPdx6g/8Ok=;
+ b=ejB9RpIk7V1mB+ee7T2cfWhTK3hPPyQVqTOJFEpAlUHq9+Qd/VcOCPS6Of5FxhLh7kYt
+ Kgq0crUNz9M70zLOCX0WdvEgaKwWT2BBfPagnggjsm/Q4IBcbHoj7QV/eh00aXWJFpsv
+ GeUltck2EYkmUv235NmWPr4iUFt8Hr5Ksq+pYKUgaOTieaoFWspsoPLr4YUjse9UbLBm
+ UrZsxD3IrcEZb91SDKEWdb4S//JmlY0QCW8wyVU8ibIOjKe1F5ms4DFFxvDyVqZmicgn
+ CA3U7sw9w8GZgR/DcZpBAChTh68RFu75xBJ056q3xQb7gX7HIIPbPtUhMtLQSqXv5Y48 2g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dckgp0csq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Jan 2022 17:04:31 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 204H0fMq030987;
+        Tue, 4 Jan 2022 17:04:31 GMT
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dckgp0csb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Jan 2022 17:04:31 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 204H2eXG008776;
+        Tue, 4 Jan 2022 17:04:30 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma01wdc.us.ibm.com with ESMTP id 3daekaf111-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Jan 2022 17:04:29 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 204H4TfV36503990
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 4 Jan 2022 17:04:29 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 097EEAC059;
+        Tue,  4 Jan 2022 17:04:29 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DDCB7AC060;
+        Tue,  4 Jan 2022 17:04:28 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue,  4 Jan 2022 17:04:28 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.vnet.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     zohar@linux.ibm.com, serge@hallyn.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH v8 00/19] ima: Namespace IMA with audit support in IMA-ns
+Date:   Tue,  4 Jan 2022 12:03:57 -0500
+Message-Id: <20220104170416.1923685-1-stefanb@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.31.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ljZWy1RDYMvqv0OJKTZcFywMI4tngGDM
+X-Proofpoint-ORIG-GUID: Dfi_SvISXWBb0I-pZT1d9atKMT_6iaEx
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1bba41c0-7504-4f24-cfc2-08d9cfa43329
-X-MS-TrafficTypeDiagnostic: MN2PR10MB4302:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR10MB430262F81C212462D164453E8A4A9@MN2PR10MB4302.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: f4KPGjcvxUZQWT7we7IPxfg7ia8CAY2LT0Y+qXqZGznk0pX9mN59oh2Zd5O1Goia0V6bKj0qZYyUZ+74kf67OV6wGEH58ax6X1ThHmnn/XesycBy2Nd/M48c+49EysVLa1pcdpyHUdWszKOns4jBIihJCVX5DroMREme/doJPBMNakqMkk9yHFnj6ylSVv01I02Q/jQ9nqjHBwH9NGuojfgdUw/sJQr3k18pR6BGC5+jBmJpp9EPfS0aS/ICKzVvg4nejpw1n5urNbGHgDT+lnA/0wywwMo5SQzUzjNmalq1IeONgWzJBazDLIZXWVbB5PM7NTNojMquVzYwpIAjyEzW0cDBdJr1pytD+mg4LqZnbLiKk+y8hoYgXFRs3rxaV75o2i9QX9G50p01RRLkZJIDAzP39Glf845kOV8u0YffbccNCPtrgsefNjGcdvgrJuZk4OX4cZK9YxKPyZNd6u6GLzOG48wvcXehlbcbEC/XJPK6A4n+Z7h/Te0HwmbL0D1rDrtp9vWO0UxHLYvF2u+m1VL1gKsPm7xzU5+Ui623y08y6tJFA6TGt7BamS2d5nfBY5R7VSnDQYZOxUy3eq+tQUhIGbxugP1IhIrYLBl8HVAliyk3OfCPBsTC7teLVfuSD1S5IuNbdTe4pHhUE7aEjcrZfZKmf5a7zdrMSneEs3aSybykt7bTU/vt2uSJQanVkjPtAvAP0uM6jmlOo68vIiFZmzsttrwnyw3Ls2I=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5009.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(508600001)(66556008)(8936002)(31686004)(186003)(316002)(8676002)(6512007)(6506007)(4326008)(66946007)(66476007)(2616005)(53546011)(86362001)(36756003)(31696002)(38100700002)(2906002)(5660300002)(83380400001)(44832011)(54906003)(6916009)(26005)(6666004)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a0xxdDc1bTc0VjVDOER0dUpaeXNTY0NrTlJCOERRc3FScHdpdTZ4THp4VmJ2?=
- =?utf-8?B?K3RyTDNmUG5XelREajN2SndtOGEyUVVIaVE1TElHbnJOaVZ0VUNnbER0T3pM?=
- =?utf-8?B?ckRYVWl2bkVRUWNvQ1NZZEZQSHl5WVFxT2RrWWtOdlc2VXBEY2NlT3Y4amM4?=
- =?utf-8?B?TU8xYkNIOFI2SHhWZGptdFVXSWlXSnZCenowTzNnSmU4SmFUa3FCSEYraXZ5?=
- =?utf-8?B?VlYyTENFSzZXRnpSTDJ6QmJ2T3FRQWNwR1A3SWxHWHpmQ3ZPYk0yYnA3NkJ4?=
- =?utf-8?B?VnBKWkRoSUdONFhOeFQwbnpRWlRqYVlrRWsvd3lyMlpNWDFicnpqU0UyL25Q?=
- =?utf-8?B?QkRnQnZld0xKczErQjMxbUtta3lJRmRDZlNLWmdVenJNQzY1cmFuMFd1MDdU?=
- =?utf-8?B?NzNFWUdhbzhtWWpqRDJaZDVFN0dUU0cwbHp1clNMU3prZ3gzejBKaENQNnBU?=
- =?utf-8?B?Qk9vRXBya1cwbkdLUG5YbG53MTNTZnp3K3BlT2hmWC9LVjZlM1N2V0hxY2o0?=
- =?utf-8?B?MklBMHpLcWlGNGFDRmlQQktWazlQd3Z6RFUrclJLYjNEZjh0SUl5amVrNGZr?=
- =?utf-8?B?bUZwV1grUzJrK1B2R0FsMXVYelJRTER4R3B4d3gzem9DTFpJTmxvbmdTK3ht?=
- =?utf-8?B?Q0tvd2FFV3h6OWFTVmh6cU5RZFMvZVN6d1JSYWFVY2RRb0FwaGFTc1lvT2dY?=
- =?utf-8?B?VEpCdUE2Tk82dE1BMUNSYlVCOGh4WEdyeFA0WEdmT2RUcG5kK1JodFcrdk81?=
- =?utf-8?B?b0JoWTNDRUhyWS9YYm1HZzdUZnoyQWNWbCtDbW40cWkzYXphR0tWbTRwSGdC?=
- =?utf-8?B?YU8ydUdNUTRqbFRkT3BQcDFMOVllcGhMZHpXeWJnWjQ3WjBTcWVMcjRGbUNa?=
- =?utf-8?B?MkorM0kxb2R2dkdjTHRaUmJzSTNwNGE0VGR6M1VDQlJna0U2Z0s5RVZXR2RF?=
- =?utf-8?B?M2tqV2ZUUVFQNVBWT2JOVHlvQkVjY09RUnpHRnB2R1QxRmpjWnVpVWppYlpC?=
- =?utf-8?B?c09DSjJzYkc0YWFKUUZQa1MyL04wb2ZnVERMZVBkM0Jaak9xVklqWmpzcGVB?=
- =?utf-8?B?MzRTRWR5eDA4RWRZTHh5UHZBL2w0TE5yNmVxdEtVbjhGenhodUg0bkdBTUdJ?=
- =?utf-8?B?dHNzc0NRejZLOUdIeWdBVWp3aW00TnNQOWhDNG9IeG5scjVyMU53aDB1d0JN?=
- =?utf-8?B?WmhNcmI0dkJhRWhFNHFQRkhnR29pZnVycE1acEVXVGpJdXBlQWlKK0pIMENl?=
- =?utf-8?B?aDNYeEsxdWJ4ZkQ5aFU5UXBXT0d6VE8wODlMWjNuMzR5NjgzRDZjSCsycmxS?=
- =?utf-8?B?TXl0Q0ZDZC9sV1lKV3BHWE5MSmgwUlEzeWZNSXhoRThvOUE0TkFCcFYxSjRF?=
- =?utf-8?B?RFBKUUxVajVLcDF4ME54cHgvS2Iwa3puT2NZdlNndnFQSTV3SXl0ZjhCMWRx?=
- =?utf-8?B?M1h4VDlUNTVzYmtINkU1aXdTanlmaVRzYkJ2NlprUkgzR0h6a2ptRzJDdEF5?=
- =?utf-8?B?NENNM0VnS0hJSWRSWU1Pam43NFh0U3gveWV6L1h0RG51N1NsdEorV3N1eHls?=
- =?utf-8?B?RHBWOXFySmYvcm8rNWZWaUxFRVRiS0owTlZLOVpSeTZ6TEVBdnUrVHFzOU1P?=
- =?utf-8?B?MHhYcWduTVdZeWk1NTlhUHVEZnJFcndvS1RjZFdEZFRTeGFFc0x4bDhoQ05V?=
- =?utf-8?B?Nk1ETmIwcXpIRzB6UVFEaVN3eFZRUHZpbUNKYlBpeWh4UlFNQk10ZmZ4OWhD?=
- =?utf-8?B?RGE0eEtCeWRVQmw3aElUTE0xUXMzYW90RFgyUWtjcVRNQmc4UkhXTDZyWTcv?=
- =?utf-8?B?dzdIdkpZcHk2ajI3VkpTTWFqWXNWcmFuRlJEQkE2OFp4c3M4WHQyUlFHME94?=
- =?utf-8?B?OTNKMjR0TnZCUTJ1dDVCelBobjQ2WXV0SURHNTBrS3RnTEYxczZMRVNZdXpp?=
- =?utf-8?B?RGg2NkdXU2k1dzAzN3kxaGV5Q2FRdnp3NVovZEZLRk8yZkJrTEFUMThIdnpS?=
- =?utf-8?B?MTZHQnBqdzM3UUdTbUhPU2dzSG9jdWZZUnB5RVpRcmk1WEJLOThjdGNwclNT?=
- =?utf-8?B?Mmo4YSsxNTQ5aDBKZHI5MzFvM0dOL0RRVDR6UzVLd213RXVqbXNyWFBRWUVM?=
- =?utf-8?B?b3dFYVpILzV0eVhuY0NxRk1PZnFPQk9ob2lkdEFGOVVSY0Y3N1diYTNYdWZ4?=
- =?utf-8?B?VUo2Sk9NRE1mK3VzdVFpTG9FSlJEb2N0aXNLdjF6NG8yTXFYM1J1cEVPUnJM?=
- =?utf-8?B?UXdMT1VaeTZsVkZTU3FkUVY5YjRRPT0=?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1bba41c0-7504-4f24-cfc2-08d9cfa43329
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5009.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jan 2022 17:03:59.1322
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qMpFlOCZFgxmBNUNUM/s20J4j1+PqcenaZ1a3x97dFqqd45Ds53s77RiaWZqHJbCufvDK8fgtmw7XsP8hu9UO0H7PYUu/pecydIsxPRmmFc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB4302
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10216 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999 mlxscore=0
- suspectscore=0 spamscore=0 phishscore=0 malwarescore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2201040114
-X-Proofpoint-ORIG-GUID: t63ILhanXgBp-89bdCO9U-rVeHXLpeQJ
-X-Proofpoint-GUID: t63ILhanXgBp-89bdCO9U-rVeHXLpeQJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-04_08,2022-01-04_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ adultscore=0 spamscore=0 mlxlogscore=999 mlxscore=0 clxscore=1015
+ lowpriorityscore=0 impostorscore=0 priorityscore=1501 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201040114
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Stefan Berger <stefanb@linux.ibm.com>
 
-On 1/4/22 11:54 AM, Jan Beulich wrote:
-> On 04.01.2022 17:50, Boris Ostrovsky wrote:
->> On 1/4/22 3:46 AM, Jan Beulich wrote:
->>> The hypervisor has been supplying this information for a couple of major
->>> releases. Make use of it. The need to set a flag in the capabilities
->>> field also points out that the prior setting of that field from the
->>> hypervisor interface's gbl_caps one was wrong, so that code gets deleted
->>> (there's also no equivalent of this in native boot code).
->>>
->>> Signed-off-by: Jan Beulich <jbeulich@suse.com>
->>>
->>> --- a/arch/x86/xen/vga.c
->>> +++ b/arch/x86/xen/vga.c
->>> @@ -63,13 +63,17 @@ void __init xen_init_vga(const struct do
->>>    		}
->>>    
->>>    		if (size >= offsetof(struct dom0_vga_console_info,
->>> -				     u.vesa_lfb.gbl_caps)
->>> -		    + sizeof(info->u.vesa_lfb.gbl_caps))
->>> -			screen_info->capabilities = info->u.vesa_lfb.gbl_caps;
->>> -		if (size >= offsetof(struct dom0_vga_console_info,
->>>    				     u.vesa_lfb.mode_attrs)
->>>    		    + sizeof(info->u.vesa_lfb.mode_attrs))
->>
->> Do we still need this test? All 4.0+ hypervisors will have mode_attrs.
-> Perhaps this could also be dropped, but unlike the capabilities part
-> I'd view this as an unrelated change.
+The goal of this series of patches is to start with the namespacing of
+IMA and support auditing within an IMA namespace (IMA-ns) as the first
+step.
+
+In this series the IMA namespace is piggy backing on the user namespace
+and therefore an IMA namespace is created when a user namespace is
+created, although this is done late when SecurityFS is mounted inside
+a user namespace. The advantage of piggy backing on the user namespace
+is that the user namespace can provide the keys infrastructure that IMA
+appraisal support will need later on.
+
+We chose the goal of supporting auditing within an IMA namespace since it
+requires the least changes to IMA. Following this series, auditing within
+an IMA namespace can be activated by a user running the following lines
+that rely on a statically linked busybox to be installed on the host for
+execution within the minimal container environment:
+
+mkdir -p rootfs/{bin,mnt,proc}
+cp /sbin/busybox rootfs/bin
+cp /sbin/busybox rootfs/bin/busybox2
+echo >> rootfs/bin/busybox2
+PATH=/bin unshare --user --map-root-user --mount-proc --pid --fork \
+  --root rootfs busybox sh -c \
+ "busybox mount -t securityfs /mnt /mnt; \
+  busybox echo 'audit func=BPRM_CHECK mask=MAY_EXEC' > /mnt/ima/policy; \
+  busybox2 cat /mnt/ima/policy"
+
+[busybox2 is used to demonstrate 2 audit messages; see below]
+
+Following the audit log on the host the last line cat'ing the IMA policy
+inside the namespace would have been audited. Unfortunately the auditing
+line is not distinguishable from one stemming from actions on the host.
+The hope here is that Richard Brigg's container id support for auditing
+would help resolve the problem.
+
+The following lines added to a suitable IMA policy on the host would
+cause the execution of the commands inside the container (by uid 1000)
+to be measured and audited as well on the host, thus leading to two
+auditing messages for the 'busybox2 cat' above and log entries in IMA's
+system log.
+
+echo -e "measure func=BPRM_CHECK mask=MAY_EXEC uid=1000\n" \
+        "audit func=BPRM_CHECK mask=MAY_EXEC uid=1000\n" \
+    > /sys/kernel/security/ima/policy
+
+The goal of supporting measurement and auditing by the host, of actions
+occurring within IMA namespaces, is that users, particularly root,
+should not be able to evade the host's IMA policy just by spawning
+new IMA namespaces, running programs there, and discarding the namespaces
+again. This is achieved through 'hierarchical processing' of file
+accesses that are evaluated against the policy of the namespace where
+the action occurred and against all namespaces' and their policies leading
+back to the root IMA namespace (init_ima_ns).
+
+The patch series adds support for a virtualized SecurityFS with a few
+new API calls that are used by IMA namespacing. Only the data relevant
+to the IMA namespace are shown. The files and directories of other
+security subsystems (TPM, evm, Tomoyo, safesetid) are not showing
+up when secruityfs is mounted inside a user namespace.
+
+Much of the code leading up to the virtualization of SecurityFS deals
+with moving IMA's variables from various files into the IMA namespace
+structure called 'ima_namespace'. When it comes to determining the
+current IMA namespace I took the approach to get the current IMA
+namespace (get_current_ns()) on the top level and pass the pointer all
+the way down to those functions that now need access to the ima_namespace
+to get to their variables. This later on comes in handy once hierarchical
+processing is implemented in this series where we walk the list of
+namespaces backwards and again need to pass the pointer into functions.
+
+This patch also introduces usage of CAP_MAC_ADMIN to allow access to the
+IMA policy via reduced capabilities. We would again later on use this
+capability to allow users to set file extended attributes for IMA
+appraisal support.
+
+My tree with these patches is here:
+
+git fetch https://github.com/stefanberger/linux-ima-namespaces v5.16-rc8+imans.v8.posted
+
+Regards,
+   Stefan
+
+Links to previous postings:
+v1: https://lore.kernel.org/linux-integrity/20211130160654.1418231-1-stefanb@linux.ibm.com/T/#t
+v2: https://lore.kernel.org/linux-integrity/20211203023118.1447229-1-stefanb@linux.ibm.com/T/#t
+v3: https://lore.kernel.org/linux-integrity/6240b686-89cf-2e31-1c1b-ebdcf1e972c1@linux.ibm.com/T/#t
+v4: https://lore.kernel.org/linux-integrity/20211207202127.1508689-1-stefanb@linux.ibm.com/T/#t
+v5: https://lore.kernel.org/linux-integrity/20211208221818.1519628-1-stefanb@linux.ibm.com/T/#t
+v6: https://lore.kernel.org/linux-integrity/20211210194736.1538863-1-stefanb@linux.ibm.com/T/#t
+v7: https://lore.kernel.org/linux-integrity/20211217100659.2iah5prshavjk6v6@wittgenstein/T/#t
+
+v8:
+ - Rearranged patches to support lazy creation of IMA namespaces
+ - Fixed issue related to re-auditing of a modified file. This required the
+   introduction of ns_status structure connected to list starting on an iint
+ - Fixed issue related to display of uid and gid in IMA policy to show uid
+   and gid values relative to the user namespace
+ - Handling of error code during hierarchical processing
+
+v7:
+ - Dropped 2 patches related to key queues; using &init_ima_ns for all calls
+   from functions related to key queues where calls need ima_namespace
+ - Moved ima_namespace to security/integrity/ima/ima.h
+ - Extended API descriptions with ns parameter where needed
+ - Using init_ima_ns in functions related to appraisal and xattrs
+ - SecurityFS: Using ima_ns_from_file() to get ns pointer 
+ - Reformatted to 80 columns per line
+
+v6:
+ - Removed kref and pointer to user_ns in ima_namespace (patch 1)
+ - Moved only the policy file dentry into ima_namespace; other dentries are on
+   stack now and can be discarded
+ - Merged James's patch simplifying securityfs_remove and dropping dget()
+ - Added patch with Christian's suggestion to tie opened SecurityFS file to
+   the user/IMA namespace it belongs to
+ - Passing missing ima_namespace parameter in functions in ima_kexec.c (ppc64)
+ - Reverted v5's change to patch 4 related to protection of ima_namespace
+
+v5:
+ - Followed Christian's suggestions on patch 1. Also, reverted increased reference
+   counter on init_user_ns since ima_ns doesn't take reference to its user_ns.
+ - No addtional reference is taken on securityfs dentries for user_ns != init_user_ns.
+   Updated documentation and removed cleanup of dentries on superblock kill.
+   (patches 12 & 16)
+ - Moved else branch to earlier patch (patch 11)
+ - Protect ima_namespace by taking reference on user namespace for delayed work queue.
+   (patch 4)
+
+v4:
+ - For consistency moved 'ns = get_current_ns()' to top of functions
+ - Merge in James's latest SecurityFS patch
+
+v3:
+ - Further modifications to virtualized SecurityFS following James's posted patch
+ - Dropping of early teardown for user_namespaces since not needed anymore
+
+v2:
+ - Folllwed Christian's suggestion to virtualize securitytfs; no more securityfs_ns
+ - Followed James's advice for late 'population' of securityfs for IMA namespaces
+ - Squashed 2 patches dealing with capabilities
+ - Added missing 'depends on USER_NS' to Kconfig
+ - Added missing 'static' to several functions
 
 
-Right.
 
+Mehmet Kayaalp (2):
+  integrity/ima: Define ns_status for storing namespaced iint data
+  ima: Namespace audit status flags
 
->   Furthermore even a new hypervisor
-> would be free to omit the field, provided it also sets size low enough.
+Stefan Berger (17):
+  securityfs: Extend securityfs with namespacing support
+  ima: Define ima_namespace structure and implement basic functions
+  ima: Move policy related variables into ima_namespace
+  ima: Move ima_htable into ima_namespace
+  ima: Move measurement list related variables into ima_namespace
+  ima: Move some IMA policy and filesystem related variables into
+    ima_namespace
+  ima: Move dentry into ima_namespace and others onto stack
+  ima: Use mac_admin_ns_capable() to check corresponding capability
+  ima: Only accept AUDIT rules for non-init_ima_ns namespaces for now
+  ima: Implement hierarchical processing of file accesses
+  ima: Implement ima_free_policy_rules() for freeing of an ima_namespace
+  userns: Add pointer to ima_namespace to user_namespace
+  ima: Add functions for creation and freeing of an ima_namespace
+  ima: Enable re-auditing of modified files
+  ima: Setup securityfs for IMA namespace
+  ima: Show owning user namespace's uid and gid when displaying policy
+  ima: Enable IMA namespaces
 
+ include/linux/capability.h                   |   6 +
+ include/linux/ima.h                          |  44 +++
+ include/linux/user_namespace.h               |   4 +
+ init/Kconfig                                 |  13 +
+ kernel/user.c                                |   4 +
+ kernel/user_namespace.c                      |   2 +
+ security/inode.c                             |  81 ++++-
+ security/integrity/iint.c                    |  13 +
+ security/integrity/ima/Makefile              |   3 +-
+ security/integrity/ima/ima.h                 | 215 ++++++++++--
+ security/integrity/ima/ima_api.c             |  34 +-
+ security/integrity/ima/ima_appraise.c        |  28 +-
+ security/integrity/ima/ima_asymmetric_keys.c |   4 +-
+ security/integrity/ima/ima_fs.c              | 147 +++++---
+ security/integrity/ima/ima_init.c            |  19 +-
+ security/integrity/ima/ima_init_ima_ns.c     |  47 +++
+ security/integrity/ima/ima_kexec.c           |  15 +-
+ security/integrity/ima/ima_main.c            | 212 +++++++++---
+ security/integrity/ima/ima_ns.c              |  83 +++++
+ security/integrity/ima/ima_ns_status.c       | 335 +++++++++++++++++++
+ security/integrity/ima/ima_policy.c          | 196 ++++++-----
+ security/integrity/ima/ima_queue.c           |  61 ++--
+ security/integrity/ima/ima_queue_keys.c      |  11 +-
+ security/integrity/ima/ima_template.c        |   5 +-
+ security/integrity/integrity.h               |   4 +
+ 25 files changed, 1288 insertions(+), 298 deletions(-)
+ create mode 100644 security/integrity/ima/ima_init_ima_ns.c
+ create mode 100644 security/integrity/ima/ima_ns.c
+ create mode 100644 security/integrity/ima/ima_ns_status.c
 
-If this is allowed, how would we deal with hypervisor dropping some other random field here? Have we had a precedent of this happening?
-
-
-I think it's safe to drop these checks. In fact, most of them in this function (except for the last one, obviously).
-
-
-
--boris
+-- 
+2.31.1
 

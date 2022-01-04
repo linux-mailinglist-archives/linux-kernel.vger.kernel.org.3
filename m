@@ -2,85 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18FC14843F8
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F234843FA
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:57:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233084AbiADO5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:57:25 -0500
-Received: from mail-qt1-f175.google.com ([209.85.160.175]:34707 "EHLO
-        mail-qt1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234518AbiADO5U (ORCPT
+        id S233067AbiADO5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:57:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232974AbiADO5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:57:20 -0500
-Received: by mail-qt1-f175.google.com with SMTP id o17so34341814qtk.1;
-        Tue, 04 Jan 2022 06:57:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WSJgFExu/X7wt2tCNz4jIqrdOE7wTC6/5Y//ZXGA70g=;
-        b=l4/UrgaQkblLCgtA4hA2w2HUl34I2FviCZZ+/Fuw57lCRXt6QuiHOldR8710Cut99U
-         xNNRfm4vofhigRSZOvFaw+MZn8j6rAtg6Wh++D2Mm+pPGDL4pvokG6LCJMrkFUoqjOji
-         Q7U6fji4ejXS2/jcalxoGpToMxt6fu4GvKk1A36h80uJXXqKzG/xo35leEYEljuwQPhH
-         DHviEPOO2J7UKfxslXKSeG8E21r/GP3+oRUCTDnqL4p9vFNmzvGNRH4+5frTNnUfITnU
-         9xlLJJmtdYRGA7clsVQZlExVi64oGcQaDnKyOs/UxSq+8PLRGriSPNAsl4NULxsyY8Kl
-         ZqEQ==
-X-Gm-Message-State: AOAM532OEbnDuixp9ANda5R1WcOfvSmePY/Lco0C/oCa239A4pjIAl1W
-        SOfCcDCfP9ATG6nB2aXRsraV7l1veT8zPHSG7TVaSMGJ
-X-Google-Smtp-Source: ABdhPJxMgNo/xF6dU5+Nzut94xdyfTKHf2qUDqB6uRRKoU2Ihc9s9sMectG5DEeB22/MV2U+0cO/0k+61KwpUMv2L20=
-X-Received: by 2002:ac8:7c4e:: with SMTP id o14mr44266202qtv.80.1641308239742;
- Tue, 04 Jan 2022 06:57:19 -0800 (PST)
+        Tue, 4 Jan 2022 09:57:40 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD89C061761;
+        Tue,  4 Jan 2022 06:57:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=9iomVx+1dyKtO7ifnBatBp+MkPLAfaNf9PXQTH5ZKCY=; b=nxjXLUm7MZFDMTTOTD6d+X1Hwr
+        trz/TxODNHcJNtM+lPi8f+nH7vupO5XHq6g06NoQthBjMkmnhSZDjORFDLEEJfHgMCS9cSXtQNgAP
+        I/ZNHdgtcQezgNn020+ZkaXETw1jI1wlBeZCMfPZ0rmcDXZOKYThW1xlcpv5OkB/r8jiDOe//eq7y
+        nlQz6HgpIVC4abrDJHNggJGLPcMNKpfC8y+RXAyGPdOi967G4V1xZ1WznRviu5jkGhaUiIAguwwr/
+        PYT0+BSbQwSIlyxg6iBng71FK621/j/ckdgqy0Re1gV5XsV/3JLU0Err+Un+fHn+GccVAkPnq17Eu
+        x4TPzH2A==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56566)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1n4lFm-00077c-IE; Tue, 04 Jan 2022 14:57:34 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1n4lFl-0007KF-4Y; Tue, 04 Jan 2022 14:57:33 +0000
+Date:   Tue, 4 Jan 2022 14:57:33 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Corentin Labbe <clabbe.montjoie@gmail.com>,
+        linus.walleij@linaro.org, ulli.kroll@googlemail.com,
+        kuba@kernel.org, davem@davemloft.net, hkallweit1@gmail.com,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: net: phy: marvell: network working with generic PHY and not with
+ marvell PHY
+Message-ID: <YdRgXbpK6CFB/eCU@shell.armlinux.org.uk>
+References: <YdQoOSXS98+Af1wO@Red>
+ <YdQsJnfqjaFrtC0m@shell.armlinux.org.uk>
+ <YdQwexJVfrdzEfZK@Red>
+ <YdQydK4GhI0P5RYL@shell.armlinux.org.uk>
+ <YdQ5i+//UITSbxS/@shell.armlinux.org.uk>
+ <YdRVovG9mgEWffkn@Red>
+ <YdRZQl6U0y19P/0+@shell.armlinux.org.uk>
+ <YdRdu3jFPnGd1DsH@lunn.ch>
 MIME-Version: 1.0
-References: <20220104111551.7f26e893@canb.auug.org.au> <d485fb62-b576-f9b6-13bc-709a2c409240@gmail.com>
- <20220104190220.45c8e0cf@canb.auug.org.au> <c905fd23-19c1-218f-819b-b8ae3434f48c@gmail.com>
-In-Reply-To: <c905fd23-19c1-218f-819b-b8ae3434f48c@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 4 Jan 2022 15:57:08 +0100
-Message-ID: <CAJZ5v0i4SNV+NRHW9f0epJu9UAALxD3C3abJjPTJM81Uy292EQ@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the pm tree
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdRdu3jFPnGd1DsH@lunn.ch>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 4, 2022 at 3:43 PM Heiner Kallweit <hkallweit1@gmail.com> wrote:
->
-> On 04.01.2022 09:02, Stephen Rothwell wrote:
-> > Hi Heiner,
-> >
-> > On Tue, 4 Jan 2022 08:29:28 +0100 Heiner Kallweit <hkallweit1@gmail.com> wrote:
-> >>
-> >> The patch in the pm tree annotating pm_runtime_resume_and_get() as __must_check
-> >> follows some fixes of pm_runtime_resume_and_get() usage that went through other
-> >> trees. These fixes are in linux-next but don't seem to be in the pm tree.
-> >> We talk about:
-> >> f04b4fb47d83 ("ASoC: sh: rz-ssi: Check return value of pm_runtime_resume_and_get()")
-> >
-> > In the sound-asoc tree.
-> >
-> >> 3d6b661330a7 ("crypto: stm32 - Revert broken pm_runtime_resume_and_get changes")
-> >
-> > In the crypto tree.
-> >
-> > Both those are merged into linux-next after the pm tree.  If Linus did
-> > the same, the pm tree commit would break his build.  The only way you
-> > can have that pm tree commit in linux-next is to ask Andrew Morton to
-> > put it in the post linux-next part of his patch series.  Otherwise, it
-> > needs to be removed form the pm tree and wait until after the next
-> > merge window closes (or at least both the above trees have been merged
-> > by Linus).
-> >
-> Rafael,
-> can you take care of this?
+On Tue, Jan 04, 2022 at 03:46:19PM +0100, Andrew Lunn wrote:
+> > @@ -1227,16 +1227,18 @@ static int m88e1118_config_init(struct phy_device *phydev)
+> >  {
+> >  	int err;
+> >  
+> > -	/* Change address */
+> > -	err = marvell_set_page(phydev, MII_MARVELL_MSCR_PAGE);
+> > -	if (err < 0)
+> > -		return err;
+> > -
+> >  	/* Enable 1000 Mbit */
+> > -	err = phy_write(phydev, 0x15, 0x1070);
+> > +	err = phy_write_paged(phydev, MII_MARVELL_MSCR_PAGE,
+> > +			      MII_88E1121_PHY_MSCR_REG, 0x1070);
+> 
+> Ah, yes, keeping this makes it more backwards compatible.
+> 
+> It would be nice to replace the 0x1070 with #defines.
+> 
+> We already have:
+> 
+> #define MII_88E1121_PHY_MSCR_RX_DELAY	BIT(5)
+> #define MII_88E1121_PHY_MSCR_TX_DELAY	BIT(4)
+> #define MII_88E1121_PHY_MSCR_DELAY_MASK	(BIT(5) | BIT(4))
+> 
+> Bits 6 is the MSB of the default MAC speed.
+> Bit 13 is the LSB of the default MAC speed. These two should default to 10b = 1000Mbps
+> Bit 12 is reserved, and should be written 1.
 
-Done.
+Hmm, seems odd that these speed bits match BMCR, and I'm not sure why
+the default MAC speed would have any bearing on whether gigabit mode
+is enabled. If they default to 10b, then the write should have no effect
+unless boot firmware has changed them.
 
-I've dropped the commit in question from pm-core and I'm going to add
-it back and submit by the end of the merge window.
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

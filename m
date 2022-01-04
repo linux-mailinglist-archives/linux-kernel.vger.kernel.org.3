@@ -2,332 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A524483E38
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 09:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D3B7483E4C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 09:37:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232716AbiADIgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 03:36:00 -0500
-Received: from prt-mail.chinatelecom.cn ([42.123.76.223]:44531 "EHLO
-        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229677AbiADIf7 (ORCPT
+        id S234174AbiADIg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 03:36:59 -0500
+Received: from rap-us.hgst.com ([199.255.44.250]:8742 "EHLO
+        usg-ed-osssrv.wdc.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232833AbiADIg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 03:35:59 -0500
-HMM_SOURCE_IP: 172.18.0.48:50060.1552238767
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-10.133.11.244 (unknown [172.18.0.48])
-        by chinatelecom.cn (HERMES) with SMTP id 1F26828010C;
-        Tue,  4 Jan 2022 16:35:44 +0800 (CST)
-X-189-SAVE-TO-SEND: sunshouxin@chinatelecom.cn
-Received: from  ([172.18.0.48])
-        by app0024 with ESMTP id b3cbcd7a8cda46f6a56cfeadbce6c24c for jay.vosburgh@canonical.com;
-        Tue, 04 Jan 2022 16:35:51 CST
-X-Transaction-ID: b3cbcd7a8cda46f6a56cfeadbce6c24c
-X-Real-From: sunshouxin@chinatelecom.cn
-X-Receive-IP: 172.18.0.48
-X-MEDUSA-Status: 0
-Sender: sunshouxin@chinatelecom.cn
-Message-ID: <d257be6c-de77-7fcd-d540-d04d8f9316ee@chinatelecom.cn>
-Date:   Tue, 4 Jan 2022 16:35:39 +0800
+        Tue, 4 Jan 2022 03:36:58 -0500
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JSmF64DHcz1VSkV
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 00:36:58 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1641285418; x=1643877419; bh=qtKKOE3E1z7pNq08UoVpTBZZqsFXu8otZze
+        XBbo/oMo=; b=HZs1na7lJWkAVgi4txBWERyRgsFBdI0+UXinJOEgXpwsPssa1zv
+        3BGzUtlFwgtNszAhjMszDdMHgY/oFig4cTY5rBJhIXP8ev4GMgPhTvzFkp5S+5we
+        P0mFSSxUl1FF7IbDtuYiUBWxGlF5FJ0A70+trZIHbcs7CYurAYMqZs98KcCqnlom
+        b94g11q123ZvgnKKM/3s7T/LkKE6sr3ORcgjaw02+nS74UnDVN/DZYAhoztm6VkH
+        DyDPo8wFxIABn6H9VosV+IZdHBFzNg/aGtGqpBZZYpBSnOkYaO9r2SfTbIl6zNWG
+        ToA75HC536/7LvA5CKhnfxp7dHFxw9NR2FA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id v9_N12gmWtDL for <linux-kernel@vger.kernel.org>;
+        Tue,  4 Jan 2022 00:36:58 -0800 (PST)
+Received: from [10.225.163.42] (unknown [10.225.163.42])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JSmF46TGSz1VSjC;
+        Tue,  4 Jan 2022 00:36:56 -0800 (PST)
+Message-ID: <c6748a52-fc8f-3309-31c2-973a9e69a7e8@opensource.wdc.com>
+Date:   Tue, 4 Jan 2022 17:36:55 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v5] net: bonding: Add support for IPV6 ns/na to
- balance-alb/balance-tlb mode
-From:   =?UTF-8?B?5a2Z5a6I6ZGr?= <sunshouxin@chinatelecom.cn>
-To:     Jay Vosburgh <jay.vosburgh@canonical.com>
-Cc:     vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, huyd12@chinatelecom.cn
-References: <20211224142512.44182-1-sunshouxin@chinatelecom.cn>
- <24897.1640637370@famine>
- <db66dccf-0c84-d22d-fb2f-f99d3ce2371d@chinatelecom.cn>
-In-Reply-To: <db66dccf-0c84-d22d-fb2f-f99d3ce2371d@chinatelecom.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v3 3/3] ahci: AMD A85 FCH (Hudson D4): Skip 200 ms
+ debounce delay in `sata_link_resume()`
+Content-Language: en-US
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     linux-ide@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        linux-kernel@vger.kernel.org
+References: <20211229161119.1006-1-pmenzel@molgen.mpg.de>
+ <20211229161119.1006-3-pmenzel@molgen.mpg.de>
+ <5c333718-eaa5-b41c-e8ea-59d6e01254aa@opensource.wdc.com>
+ <19f6cd93-9bd7-60dc-4471-18022bcf456c@molgen.mpg.de>
+ <7b64d1c3-f798-d64b-9ee3-9669d98f4e28@opensource.wdc.com>
+ <fbfd865f-c88c-6ee1-6cb9-8194e170cd3a@molgen.mpg.de>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <fbfd865f-c88c-6ee1-6cb9-8194e170cd3a@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/31/21 16:08, Paul Menzel wrote:
+> Dear Damien,
+>=20
+>=20
+> Am 31.12.21 um 01:52 schrieb Damien Le Moal:
+>> On 12/30/21 20:08, Paul Menzel wrote:
+>>>>>    	board_ahci_nomsi,
+>>>>>    	board_ahci_noncq,
+>>>>>    	board_ahci_nosntf,
+>>>>> @@ -141,6 +142,13 @@ static const struct ata_port_info ahci_port_in=
+fo[] =3D {
+>>>>>    		.udma_mask	=3D ATA_UDMA6,
+>>>>>    		.port_ops	=3D &ahci_ops,
+>>>>>    	},
+>>>>> +	[board_ahci_nodbdelay] =3D {
+>>>>> +		.flags		=3D AHCI_FLAG_COMMON,
+>>>>> +		.link_flags	=3D ATA_LFLAG_NO_DB_DELAY,
+>>>>> +		.pio_mask	=3D ATA_PIO4,
+>>>>> +		.udma_mask	=3D ATA_UDMA6,
+>>>>> +		.port_ops	=3D &ahci_ops,
+>>>>> +	},
+>>>>>    	[board_ahci_nomsi] =3D {
+>>>>>    		AHCI_HFLAGS	(AHCI_HFLAG_NO_MSI),
+>>>>>    		.flags		=3D AHCI_FLAG_COMMON,
+>>>>> @@ -437,6 +445,7 @@ static const struct pci_device_id ahci_pci_tbl[=
+] =3D {
+>>>>>    		board_ahci_al },
+>>>>>    	/* AMD */
+>>>>>    	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_HUDSON2_SATA_IDE), board_a=
+hci },
+>>>>> +	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_HUDSON2_SATA_AHCI), board_ah=
+ci_nodbdelay },
+>>>>
+>>>> Patch 1 introduces this macro in pci_ids.h, but it is used only here=
+. So
+>>>> to keep with the current style in this structure, drop the macro (so
+>>>> drop patch 1).
+>>>
+>>> I wait for your answer of the second patch, and then I am going to se=
+nt v4.
+>>
+>> Let's use the numeric value. No macro definition needed.
+>=20
+> Alright. I am going to follow the maintainers wishes.
+>=20
+>>>>>    	{ PCI_VDEVICE(AMD, 0x7900), board_ahci }, /* AMD CZ */
+>>>>>    	{ PCI_VDEVICE(AMD, 0x7901), board_ahci_mobile }, /* AMD Green S=
+ardine */
+>>>>>    	/* AMD is using RAID class only for ahci controllers */
+>>>
+>>> Do you have a AHCI device at hand, where you could also test if
+>>> everything works fine without the delay?
+>>
+>> Unfortunately, I do not have any board with this adapter.
+>=20
+> Sorry, we misunderstand each other. (I wrote a reply to my own patch [1=
+].)
+>=20
+> I think the delay is not necessary for any modern AHCI controller. It=E2=
+=80=99d=20
+> be great, if you could test, if it=E2=80=99s also true on the systems y=
+ou have=20
+> by just skipping the delay.
 
-Any comments will be appreciated.
+I need to figure out how to safely test suspend/resume remotely (working
+from home) :)
+
+It would indeed be great to have the default as "no delay on resume" and
+add the delay only for chipsets that need it. However, it is unclear
+which chipset need the delay, right ? So I think we are stuck with
+switching chipsets to "no delay" one by one by testing. Once the
+majority of drivers are converted, we can reverse the default to be "no
+delay" and mark untested drivers as needing the delay.
+
+>=20
+>=20
+> Kind regards,
+>=20
+> Paul
+>=20
+>=20
+> [1]:=20
+> https://lore.kernel.org/linux-ide/20211227162658.11314-2-pmenzel@molgen=
+.mpg.de/T/#m697d2121463a4c946730e6b83940e12d6d7e6700
 
 
-在 2021/12/28 11:01, 孙守鑫 写道:
->
-> 在 2021/12/28 4:36, Jay Vosburgh 写道:
->> Sun Shouxin <sunshouxin@chinatelecom.cn> wrote:
->>
->>> Since ipv6 neighbor solicitation and advertisement messages
->>> isn't handled gracefully in bonding6 driver, we can see packet
->>> drop due to inconsistency bewteen mac address in the option
->>> message and source MAC .
->>>
->>> Another examples is ipv6 neighbor solicitation and advertisement
->>> messages from VM via tap attached to host brighe, the src mac
->>> mighe be changed through balance-alb mode, but it is not synced
->>> with Link-layer address in the option message.
->>>
->>> The patch implements bond6's tx handle for ipv6 neighbor
->>> solicitation and advertisement messages.
->>     I'm not sure what you've changed here for v5 as there's no
->> changelog, but I believe the observed problems to be a transmit side
->> effect (i.e., it is induced by the balance-tlb mode balancing of
->> outgoing traffic).  As such, the tlb side will rebalance all of the
->> traffic every ten seconds, so any MAC ND_OPT_*_LL_ADDR option
->> assignments in the outgoing NS/NA datagrams will only be valid for that
->> length of time, correct?
->
->
-> Yes,  MAC ND_OPT_*_LL_ADDR option assignments in the outgoing NS/NA
-> datagrams will only be valid for that length of time ,and then,
-> it will be inconsistensy in the next ten seconds.
->
->
->>     The topology diagram and example that you've removed from the
->> commit log with v5 said, in part, that the issue arose because the
->> LL_ADDR option MAC didn't match the actual source MAC.  Since tlb mode
->> can reshuffle the flows every ten seconds, how did the proposed solution
->> work reliably?
->
->
-> In function alb_set_nd_option, we will change the LL_ADDR option Mac
-> to the source Mac. This could work in this conditon.
->
->
->>
->>     In any event, my real question is whether simply disabling tlb
->> balancing for NS/NA datagrams will resolve the observed issues (i.e.,
->> have bond_xmit_tlb_slave_get return NULL for IPv6 NS/NA datagrams).
->> Doing so will cause all NS/NA traffic to egress through the active
->> interface.  There's already a test in your logic to check for the
->> tx_slave != bond->curr_active_slave, so presumably everything works
->> correctly if the NS/NA goes out on the curr_active_slave.  If the "edit
->> NS/NA datagrams" solution works even in the face of rebalance of
->> traffic, then would simply assigning all NS/NA traffic to the
->> curr_active_slave eliminate the problem?
->
->
-> Yes, assigning all Ns/Na traffic to the curr_active_slave can resolve the
-> difference between mac in the Ns/Na options with the source mac.
-> But this makes the rlb doesn't work in the alb mode,
-> one interface with bond6 will not receive any ingress packets.
-> It is mismatch Bond6 specification.
->
->
->>
->>     -J
->>
->>> Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
->>> Reported-by: kernel test robot <lkp@intel.com>
->>> Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
->>> ---
->>> drivers/net/bonding/bond_alb.c | 149 +++++++++++++++++++++++++++++++++
->>> 1 file changed, 149 insertions(+)
->>>
->>> diff --git a/drivers/net/bonding/bond_alb.c 
->>> b/drivers/net/bonding/bond_alb.c
->>> index 533e476988f2..485e4863a365 100644
->>> --- a/drivers/net/bonding/bond_alb.c
->>> +++ b/drivers/net/bonding/bond_alb.c
->>> @@ -22,6 +22,8 @@
->>> #include <asm/byteorder.h>
->>> #include <net/bonding.h>
->>> #include <net/bond_alb.h>
->>> +#include <net/ndisc.h>
->>> +#include <net/ip6_checksum.h>
->>>
->>> static const u8 mac_v6_allmcast[ETH_ALEN + 2] __long_aligned = {
->>>     0x33, 0x33, 0x00, 0x00, 0x00, 0x01
->>> @@ -1269,6 +1271,137 @@ static int alb_set_mac_address(struct 
->>> bonding *bond, void *addr)
->>>     return res;
->>> }
->>>
->>> +/*determine if the packet is NA or NS*/
->>> +static bool __alb_determine_nd(struct icmp6hdr *hdr)
->>> +{
->>> +    if (hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
->>> +        hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION) {
->>> +        return true;
->>> +    }
->>> +
->>> +    return false;
->>> +}
->>> +
->>> +static void alb_change_nd_option(struct sk_buff *skb, void *data)
->>> +{
->>> +    struct nd_msg *msg = (struct nd_msg *)skb_transport_header(skb);
->>> +    struct nd_opt_hdr *nd_opt = (struct nd_opt_hdr *)msg->opt;
->>> +    struct net_device *dev = skb->dev;
->>> +    struct icmp6hdr *icmp6h = icmp6_hdr(skb);
->>> +    struct ipv6hdr *ip6hdr = ipv6_hdr(skb);
->>> +    u8 *lladdr = NULL;
->>> +    u32 ndoptlen = skb_tail_pointer(skb) - 
->>> (skb_transport_header(skb) +
->>> +                offsetof(struct nd_msg, opt));
->>> +
->>> +    while (ndoptlen) {
->>> +        int l;
->>> +
->>> +        switch (nd_opt->nd_opt_type) {
->>> +        case ND_OPT_SOURCE_LL_ADDR:
->>> +        case ND_OPT_TARGET_LL_ADDR:
->>> +            lladdr = ndisc_opt_addr_data(nd_opt, dev);
->>> +            break;
->>> +
->>> +        default:
->>> +            lladdr = NULL;
->>> +            break;
->>> +        }
->>> +
->>> +        l = nd_opt->nd_opt_len << 3;
->>> +
->>> +        if (ndoptlen < l || l == 0)
->>> +            return;
->>> +
->>> +        if (lladdr) {
->>> +            memcpy(lladdr, data, dev->addr_len);
->>> +            icmp6h->icmp6_cksum = 0;
->>> +
->>> +            icmp6h->icmp6_cksum = csum_ipv6_magic(&ip6hdr->saddr,
->>> +                                  &ip6hdr->daddr,
->>> +                        ntohs(ip6hdr->payload_len),
->>> +                        IPPROTO_ICMPV6,
->>> +                        csum_partial(icmp6h,
->>> + ntohs(ip6hdr->payload_len), 0));
->>> +            return;
->>> +        }
->>> +        ndoptlen -= l;
->>> +        nd_opt = ((void *)nd_opt) + l;
->>> +    }
->>> +}
->>> +
->>> +static u8 *alb_get_lladdr(struct sk_buff *skb)
->>> +{
->>> +    struct nd_msg *msg = (struct nd_msg *)skb_transport_header(skb);
->>> +    struct nd_opt_hdr *nd_opt = (struct nd_opt_hdr *)msg->opt;
->>> +    struct net_device *dev = skb->dev;
->>> +    u8 *lladdr = NULL;
->>> +    u32 ndoptlen = skb_tail_pointer(skb) - 
->>> (skb_transport_header(skb) +
->>> +                offsetof(struct nd_msg, opt));
->>> +
->>> +    while (ndoptlen) {
->>> +        int l;
->>> +
->>> +        switch (nd_opt->nd_opt_type) {
->>> +        case ND_OPT_SOURCE_LL_ADDR:
->>> +        case ND_OPT_TARGET_LL_ADDR:
->>> +            lladdr = ndisc_opt_addr_data(nd_opt, dev);
->>> +            break;
->>> +
->>> +        default:
->>> +            break;
->>> +        }
->>> +
->>> +        l = nd_opt->nd_opt_len << 3;
->>> +
->>> +        if (ndoptlen < l || l == 0)
->>> +            return NULL;
->>> +
->>> +        if (lladdr)
->>> +            return lladdr;
->>> +
->>> +        ndoptlen -= l;
->>> +        nd_opt = ((void *)nd_opt) + l;
->>> +    }
->>> +
->>> +    return lladdr;
->>> +}
->>> +
->>> +static void alb_set_nd_option(struct sk_buff *skb, struct bonding 
->>> *bond,
->>> +                  struct slave *tx_slave)
->>> +{
->>> +    struct ipv6hdr *ip6hdr;
->>> +    struct icmp6hdr *hdr;
->>> +
->>> +    if (skb->protocol == htons(ETH_P_IPV6)) {
->>> +        if (tx_slave && tx_slave !=
->>> +            rcu_access_pointer(bond->curr_active_slave)) {
->>> +            ip6hdr = ipv6_hdr(skb);
->>> +            if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
->>> +                hdr = icmp6_hdr(skb);
->>> +                if (__alb_determine_nd(hdr))
->>> +                    alb_change_nd_option(skb, 
->>> tx_slave->dev->dev_addr);
->>> +            }
->>> +        }
->>> +    }
->>> +}
->>> +
->>> +static bool alb_determine_nd(struct sk_buff *skb, struct bonding 
->>> *bond)
->>> +{
->>> +    struct ipv6hdr *ip6hdr;
->>> +    struct icmp6hdr *hdr;
->>> +
->>> +    if (skb->protocol == htons(ETH_P_IPV6)) {
->>> +        ip6hdr = ipv6_hdr(skb);
->>> +        if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
->>> +            hdr = icmp6_hdr(skb);
->>> +            if (__alb_determine_nd(hdr))
->>> +                return true;
->>> +        }
->>> +    }
->>> +
->>> +    return false;
->>> +}
->>> +
->>> /************************ exported alb functions 
->>> ************************/
->>>
->>> int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
->>> @@ -1350,6 +1483,9 @@ struct slave *bond_xmit_tlb_slave_get(struct 
->>> bonding *bond,
->>>         switch (skb->protocol) {
->>>         case htons(ETH_P_IP):
->>>         case htons(ETH_P_IPV6):
->>> +            if (alb_determine_nd(skb, bond))
->>> +                break;
->>> +
->>>             hash_index = bond_xmit_hash(bond, skb);
->>>             if (bond->params.tlb_dynamic_lb) {
->>>                 tx_slave = tlb_choose_channel(bond,
->>> @@ -1446,6 +1582,18 @@ struct slave *bond_xmit_alb_slave_get(struct 
->>> bonding *bond,
->>>             break;
->>>         }
->>>
->>> +        if (alb_determine_nd(skb, bond)) {
->>> +            u8 *lladdr;
->>> +
->>> +            lladdr = alb_get_lladdr(skb);
->>> +            if (lladdr) {
->>> +                if (!bond_slave_has_mac_rx(bond, lladdr)) {
->>> +                    do_tx_balance = false;
->>> +                    break;
->>> +                }
->>> +            }
->>> +        }
->>> +
->>>         hash_start = (char *)&ip6hdr->daddr;
->>>         hash_size = sizeof(ip6hdr->daddr);
->>>         break;
->>> @@ -1489,6 +1637,7 @@ netdev_tx_t bond_alb_xmit(struct sk_buff *skb, 
->>> struct net_device *bond_dev)
->>>     struct slave *tx_slave = NULL;
->>>
->>>     tx_slave = bond_xmit_alb_slave_get(bond, skb);
->>> +    alb_set_nd_option(skb, bond, tx_slave);
->>>     return bond_do_alb_xmit(skb, bond, tx_slave);
->>> }
->>>
->>>
->>> base-commit: 7a29b11da9651ef6a970e2f6bfd276f053aeb06a
->>> -- 
->>> 2.27.0
->>>
->> ---
->>     -Jay Vosburgh, jay.vosburgh@canonical.com
+--=20
+Damien Le Moal
+Western Digital Research

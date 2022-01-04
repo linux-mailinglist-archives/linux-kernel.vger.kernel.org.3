@@ -2,89 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79CB7484288
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:31:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 465A2484281
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:29:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233634AbiADNbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 08:31:03 -0500
-Received: from mga01.intel.com ([192.55.52.88]:34504 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230287AbiADNbC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 08:31:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641303062; x=1672839062;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=YSDR7VqnIEeScX1Ku+T5goZVV0p2a1T6EU3r17XKwSo=;
-  b=TX7/rIMyfc9IuuvW8hKdNJ+lZYFku4YMrAwYdZNQIwEVxFYe9PmM5EkG
-   vbr3THLzyjpi1tCZ/BTJGcXBEnhSaYyMoazf9EPe2VM84fsVddSmqoukZ
-   k/n8+2mwBpPFaDow2RBugYm05aDbQs4hnNEbfly9391aryy5z704J6/1a
-   if5R2Oq+hROBTt0iz+SYNVTtL428W8HLvS5sNv4HmlN03gOZwc3AZuEKy
-   A7r7dxFg1kR4S7LfJS/XnBEM3/OcUKpGI4PqZp2vnaG4r48ZyzzJlmcZo
-   csgjYmMRmdgP9YLkeKpGjECCG3vc/W6tTKsGBMEUmgBAeGcC7drmOevXD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="266490495"
-X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
-   d="scan'208";a="266490495"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 05:31:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
-   d="scan'208";a="526049715"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga008.jf.intel.com with ESMTP; 04 Jan 2022 05:30:58 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 204DUvm7014924;
-        Tue, 4 Jan 2022 13:30:57 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        id S233615AbiADN3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 08:29:55 -0500
+Received: from mail-0301.mail-europe.com ([188.165.51.139]:56589 "EHLO
+        mail-0301.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233651AbiADN3y (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 08:29:54 -0500
+Date:   Tue, 04 Jan 2022 13:29:42 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail2; t=1641302990;
+        bh=ddOT8Uc+zAx4EeLE9VJ+W8yoFZ2uDF6RSAmpP8fOn38=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:From:To:Cc;
+        b=v8loG2w4cAXm+7XwVjVcpfYfczMxcFecsdq8N5vv5JsXU1IVo5a0S8cwqC3OkFgY+
+         O/5mUd8ikegyWfIXXE+WGcRwfcIMGDjZXa0CgGg4iOu396jACCeoHzBsZ2x+Pqb2e4
+         aq95QmTsY5P59beSi9OeEi+y49+rDyJaTBndDBbJvtxqPnJtEMNYNMqQ0WvDqCUEDB
+         GH6LGDCNPGiK3pKLt/R6JNGwtbja6jMmnHPByHSjNjwKk5JIfTWLTLVUQmmD3Trows
+         PMM4aDAMm52ltd9ejG21Zmca4uWwsR2p2mXG24G4/OpgFDykUxUUJh/PgrF58c+V4h
+         CtVpodEbZZAmw==
+To:     Rob Herring <robh+dt@kernel.org>, Ilia Lin <ilia.lin@kernel.org>,
+        Niklas Cassel <nks@flawful.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+From:   Yassine Oudjana <y.oudjana@protonmail.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [Intel-wired-lan] [PATCH] intel: Simplify DMA setting
-Date:   Tue,  4 Jan 2022 14:29:36 +0100
-Message-Id: <20220104132936.252202-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <c7a34d0096eb4ba98dd9ce5b64ba079126cab708.1641255235.git.christophe.jaillet@wanadoo.fr>
-References: <c7a34d0096eb4ba98dd9ce5b64ba079126cab708.1641255235.git.christophe.jaillet@wanadoo.fr>
+Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
+Subject: [PATCH 6/7] arm64: dts: qcom: qcs404: Rename CPU and CPR OPP tables
+Message-ID: <20220104132618.391799-7-y.oudjana@protonmail.com>
+In-Reply-To: <20220104132618.391799-1-y.oudjana@protonmail.com>
+References: <20220104132618.391799-1-y.oudjana@protonmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Date: Tue, 4 Jan 2022 01:15:20 +0100
+Rename CPU and CPR OPP table node names to match the nodename pattern
+defined in the opp-v2-base DT schema.
 
-> As stated in [1], dma_set_mask() with a 64-bit mask will never fail if
-> dev->dma_mask is non-NULL.
-> So, if it fails, the 32 bits case will also fail for the same reason.
-> 
-> Simplify code and remove some dead code accordingly.
-> 
-> [1]: https://lkml.org/lkml/2021/6/7/398
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/net/ethernet/intel/e1000e/netdev.c    | 22 ++++++-------------
->  drivers/net/ethernet/intel/i40e/i40e_main.c   |  9 +++-----
->  drivers/net/ethernet/intel/iavf/iavf_main.c   |  9 +++-----
->  drivers/net/ethernet/intel/ice/ice_main.c     |  2 --
->  drivers/net/ethernet/intel/ixgb/ixgb_main.c   | 19 +++++-----------
->  drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 20 ++++++-----------
->  .../net/ethernet/intel/ixgbevf/ixgbevf_main.c | 20 +++++------------
->  7 files changed, 31 insertions(+), 70 deletions(-)
+Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+---
+ arch/arm64/boot/dts/qcom/qcs404.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I like it, thanks!
+diff --git a/arch/arm64/boot/dts/qcom/qcs404.dtsi b/arch/arm64/boot/dts/qco=
+m/qcs404.dtsi
+index 6db753b49326..3f06f7cd3cf2 100644
+--- a/arch/arm64/boot/dts/qcom/qcs404.dtsi
++++ b/arch/arm64/boot/dts/qcom/qcs404.dtsi
+@@ -110,7 +110,7 @@ CPU_SLEEP_0: cpu-sleep-0 {
+ =09=09};
+ =09};
+=20
+-=09cpu_opp_table: cpu-opp-table {
++=09cpu_opp_table: opp-table-cpu {
+ =09=09compatible =3D "operating-points-v2-kryo-cpu";
+ =09=09opp-shared;
+=20
+@@ -128,7 +128,7 @@ opp-1401600000 {
+ =09=09};
+ =09};
+=20
+-=09cpr_opp_table: cpr-opp-table {
++=09cpr_opp_table: opp-table-cpr {
+ =09=09compatible =3D "operating-points-v2-qcom-level";
+=20
+ =09=09cpr_opp1: opp1 {
+--=20
+2.34.1
 
-Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 
-Tony might ask to split it into per-driver patches tho, will see.
-
---- 8< ---
-
-Al

@@ -2,15 +2,15 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EACB484A23
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C23F6484A28
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:43:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234929AbiADVnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 16:43:07 -0500
-Received: from aposti.net ([89.234.176.197]:52144 "EHLO aposti.net"
+        id S234947AbiADVnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 16:43:14 -0500
+Received: from aposti.net ([89.234.176.197]:52174 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234908AbiADVnA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 16:43:00 -0500
+        id S234908AbiADVnM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 16:43:12 -0500
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     "Rafael J . Wysocki" <rafael@kernel.org>
 Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
@@ -22,9 +22,9 @@ Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-pm@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 5/8] PM: runtime: Add EXPORT[_GPL]_RUNTIME_DEV_PM_OPS macros
-Date:   Tue,  4 Jan 2022 21:42:11 +0000
-Message-Id: <20220104214214.198843-6-paul@crapouillou.net>
+Subject: [PATCH 6/8] mmc: mxc: Make dev_pm_ops struct static
+Date:   Tue,  4 Jan 2022 21:42:12 +0000
+Message-Id: <20220104214214.198843-7-paul@crapouillou.net>
 In-Reply-To: <20220104214214.198843-1-paul@crapouillou.net>
 References: <20220104214214.198843-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -33,32 +33,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similar to EXPORT[_GPL]_SIMPLE_DEV_PM_OPS, but for users with runtime-PM
-suspend/resume callbacks.
+The new DEFINE_SIMPLE_DEV_PM_OPS() macro does not set the "static"
+qualifier anymore, so we can add it here, as the underlying dev_pm_ops
+struct is only used in this file.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- include/linux/pm_runtime.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/mmc/host/mxcmmc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-index 4af454d29281..a7f862a26c03 100644
---- a/include/linux/pm_runtime.h
-+++ b/include/linux/pm_runtime.h
-@@ -36,6 +36,13 @@
- 			   pm_runtime_force_resume, suspend_fn, \
- 			   resume_fn, idle_fn)
+diff --git a/drivers/mmc/host/mxcmmc.c b/drivers/mmc/host/mxcmmc.c
+index 98c218bd6669..40b6878bea6c 100644
+--- a/drivers/mmc/host/mxcmmc.c
++++ b/drivers/mmc/host/mxcmmc.c
+@@ -1210,7 +1210,7 @@ static int mxcmci_resume(struct device *dev)
+ 	return ret;
+ }
  
-+#define EXPORT_RUNTIME_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
-+	_EXPORT_DEV_PM_OPS(name, pm_runtime_force_suspend, pm_runtime_force_resume, \
-+			   suspend_fn, resume_fn, idle_fn, "")
-+#define EXPORT_GPL_RUNTIME_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
-+	_EXPORT_DEV_PM_OPS(name, pm_runtime_force_suspend, pm_runtime_force_resume, \
-+			   suspend_fn, resume_fn, idle_fn, "_gpl")
-+
- #ifdef CONFIG_PM
- extern struct workqueue_struct *pm_wq;
+-DEFINE_SIMPLE_DEV_PM_OPS(mxcmci_pm_ops, mxcmci_suspend, mxcmci_resume);
++static DEFINE_SIMPLE_DEV_PM_OPS(mxcmci_pm_ops, mxcmci_suspend, mxcmci_resume);
  
+ static struct platform_driver mxcmci_driver = {
+ 	.probe		= mxcmci_probe,
 -- 
 2.34.1
 

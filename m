@@ -2,85 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F26B4842CC
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:52:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D14C44842CF
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:53:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233844AbiADNwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 08:52:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45526 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiADNwu (ORCPT
+        id S233847AbiADNxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 08:53:10 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:44896 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229535AbiADNxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 08:52:50 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4295C061761;
-        Tue,  4 Jan 2022 05:52:49 -0800 (PST)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 0F67392009C; Tue,  4 Jan 2022 14:52:48 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 0BBB192009B;
-        Tue,  4 Jan 2022 13:52:48 +0000 (GMT)
-Date:   Tue, 4 Jan 2022 13:52:47 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-cc:     Douglas Gilbert <dgilbert@interlog.com>,
-        Khalid Aziz <khalid@gonehiking.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Christoph Hellwig <hch@lst.de>, Nix <nix@esperi.org.uk>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] scsi: Set allocation length to 255 for ATA
- Information VPD page
-In-Reply-To: <yq1tuek347m.fsf@ca-mkp.ca.oracle.com>
-Message-ID: <alpine.DEB.2.21.2201032324230.56863@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2201020010540.56863@angie.orcam.me.uk> <alpine.DEB.2.21.2201020030130.56863@angie.orcam.me.uk> <d9eaa1f8-7abb-645b-d624-5069205c6983@interlog.com> <alpine.DEB.2.21.2201032017290.56863@angie.orcam.me.uk>
- <yq1tuek347m.fsf@ca-mkp.ca.oracle.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Tue, 4 Jan 2022 08:53:10 -0500
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 204B2g5v030926;
+        Tue, 4 Jan 2022 14:52:54 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : from : to
+ : references : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=praGwGEYsgBaggT9u2yedfPPFakmcyA85Vqx86E0DLw=;
+ b=eRJKRUJJP3Glsf478hzyyAE32YEW/QwN0nnEOsAGNFZsoZvPFbtDd/W5h7fVfw/f44T2
+ crzn2TTt1KtlpXOo9fOBULANNAS/GXAaTY16ADSoBi0iqbRLGW5fhzirEwLFoYiUFCZs
+ axE14gZElZ4e1Ei3BdK8uGVRTdfNf4KVbmYsVPOzbQw72pw5NedhyFBw2WJu/ZdGL5nm
+ o2udpmgEUElmIkVGSlW2864otVvo6C6b8h7PYTn5podQ+YkihTzV4KU6B6MxnbKBHLVS
+ tonBpdmrNZ3bv4ML46n6xAdaXZp+SJOfDIo0QGVS8gOKDkEUVY7llaFdkN0Lfy00ID5D zA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dcewm29a2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Jan 2022 14:52:54 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4396A10002A;
+        Tue,  4 Jan 2022 14:52:54 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2E76D24241C;
+        Tue,  4 Jan 2022 14:52:54 +0100 (CET)
+Received: from lmecxl0993.lme.st.com (10.75.127.50) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 4 Jan
+ 2022 14:52:53 +0100
+Subject: Re: [PATCH] drm/stm: remove conflicting framebuffers
+From:   Philippe CORNU <philippe.cornu@foss.st.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20211206134735.13537-1-yannick.fertre@foss.st.com>
+ <10c5672d-a228-ed9e-2f32-1ce9ae86dbcc@suse.de>
+ <58cc264b-7b46-7869-1c38-f6d79a4daafe@foss.st.com>
+Message-ID: <5c58402b-9219-2789-f8c1-67cf2149beac@foss.st.com>
+Date:   Tue, 4 Jan 2022 14:52:52 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <58cc264b-7b46-7869-1c38-f6d79a4daafe@foss.st.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG1NODE2.st.com (10.75.127.2) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-04_06,2022-01-04_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Martin,
 
-> >  So I do have all the reasons to conclude this value has indeed been 
-> > arbitrarily chosen, don't I?
+
+On 12/14/21 11:15 AM, Philippe CORNU wrote:
 > 
-> The SAT spec defines the contents of the first part of the page. The
-> trailing 512 bytes are defined in the ATA spec.
-
- I think that would best be reflected in code somehow as lone `64' doesn't 
-say anything really.
-
-> > If you insist that the value of 64 stay, then please come up with a
-> > suitable macro name to define along with SCSI_VPD_PG_LEN that reflects
-> > the meaning of 64 in this context and I'll be happy to update 3/3
-> > accordingly, but please explain why the value of 64 is any better than
-> > 255 here and the inconsistency with the buffer size justified.
 > 
-> Can please you try the following patch?
+> On 12/6/21 3:23 PM, Thomas Zimmermann wrote:
+>> Hi
+>>
+>> Am 06.12.21 um 14:47 schrieb Yannick Fertre:
+>>> In case of using simplefb or another conflicting framebuffer,
+>>> call drm_aperture_remove_framebuffers() to remove memory allocated.
+>>>
+>>> Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+>>
+>> The patch should have contained a note that this is version 2 of the 
+>> change with a short changelog. Anyway
+>>
+>> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+>>
+>> Best regards
+>> Thomas
+>>
+>>> ---
+>>>   drivers/gpu/drm/stm/drv.c | 5 +++++
+>>>   1 file changed, 5 insertions(+)
+>>>
+>>> diff --git a/drivers/gpu/drm/stm/drv.c b/drivers/gpu/drm/stm/drv.c
+>>> index 222869b232ae..9f441aadf2d5 100644
+>>> --- a/drivers/gpu/drm/stm/drv.c
+>>> +++ b/drivers/gpu/drm/stm/drv.c
+>>> @@ -14,6 +14,7 @@
+>>>   #include <linux/of_platform.h>
+>>>   #include <linux/pm_runtime.h>
+>>> +#include <drm/drm_aperture.h>
+>>>   #include <drm/drm_atomic.h>
+>>>   #include <drm/drm_atomic_helper.h>
+>>>   #include <drm/drm_drv.h>
+>>> @@ -183,6 +184,10 @@ static int stm_drm_platform_probe(struct 
+>>> platform_device *pdev)
+>>>       DRM_DEBUG("%s\n", __func__);
+>>> +    ret = drm_aperture_remove_framebuffers(false, &drv_driver);
+>>> +    if (ret)
+>>> +        return ret;
+>>> +
+> 
+> Hi Yannick,
+> and many thanks for your patch.
+> Acked-by: Philippe Cornu <philippe.cornu@foss.st.com>
+> Philippe :-)
+> 
+> 
+>>>       dma_set_coherent_mask(dev, DMA_BIT_MASK(32));
+>>>       ddev = drm_dev_alloc(&drv_driver, dev);
+>>>
+>>
 
- I have tried it and it's neutral, that is with 1/3 applied the HBA still 
-works and with 1/3 removed it still breaks (2/3 and 3/3 obviously don't 
-build anymore).  Unsurprisingly, as it's the call to `scsi_get_vpd_page' 
-rather than `scsi_get_vpd_buf' that causes an issue here.
-
- I think the latter function isn't called in my setup, and it's not clear 
-to me anymore after so long why I didn't poke at it.  It looks to me like 
-the `retry_pg' code there can be gone now with your update in place as it 
-duplicates buffer sizing, and with that included it'll be a nice clean-up.
-
- NB you'll need to adjust drivers/scsi/mpt3sas/mpt3sas_scsih.c accordingly 
-if we are to move forward with this change, as it's another user of the 
-SCSI_VPD_PG_LEN macro.
-
- Given what has been said in the discussion so far would you consider 2/3
-and 3/3 unnecessary?  In the course of verifying your change I have looked 
-through our code again and found that inline magic numbers are there in 
-several though not all places where `scsi_get_vpd_page' gets called, so I 
-think it would make sense to get rid of them all at once with a single 
-self-contained change.
-
- Thank you for your input and the extra fix.
-
-  Maciej
+Applied on drm-misc-next.
+Many thanks for your patch,
+Philippe :-)

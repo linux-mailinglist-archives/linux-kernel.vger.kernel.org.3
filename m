@@ -2,114 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 029A648410E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46EA8484113
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:42:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232473AbiADLlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 06:41:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43444 "EHLO
+        id S232500AbiADLmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 06:42:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232327AbiADLlv (ORCPT
+        with ESMTP id S232462AbiADLmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 06:41:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80A5C061761;
-        Tue,  4 Jan 2022 03:41:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A604B811B6;
-        Tue,  4 Jan 2022 11:41:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27A9CC36AE9;
-        Tue,  4 Jan 2022 11:41:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641296507;
-        bh=gmLzXCk+XCUIqYLhhlOH0oln3V/fnTwUQmNPvhxe3IY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Mm4vYpTGc65y345NH4JhQa7Gu3jZ/HTukDcgFTV3xPKqvPd+wooRImu9C32S95/MY
-         Iy6F1O1+rkeji4qjXa8/ONdEO6Lw7wKgOK2tyT3KA76BgVGFXGDKVJw3HEjEaPkgRn
-         S8aDDDr5KBO0lIrHib3ZpNRgo+6YcGpAKfaANHMZNa7Nd1xWo8/sH9/t4DxZ+pq6Mr
-         g/cI5hbUcjmBAyi56KcIrvwPu0/rXhTFLEIkwJWg2Ox7C1R43V7rYHUTqrdF9Z90kd
-         JARIkfp5enfecLoj7orSdJTsMGJO/9Ux8e3+mnfmjjVnmEUtNw8XEzu6RZZMQ66iBi
-         pW4UCMSJ9oVuw==
-Date:   Tue, 4 Jan 2022 13:41:43 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     syzbot <syzbot+6d532fa8f9463da290bc@syzkaller.appspotmail.com>
-Cc:     glider@google.com, jgg@ziepe.ca, liangwenpeng@huawei.com,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        liweihang@huawei.com, syzkaller-bugs@googlegroups.com,
-        tanxiaofei@huawei.com, yuehaibing@huawei.com
-Subject: Re: [syzbot] KMSAN: kernel-infoleak in ucma_init_qp_attr
-Message-ID: <YdQydxgthE47Xhab@unreal>
-References: <000000000000073ffa05d4bebff8@google.com>
+        Tue, 4 Jan 2022 06:42:24 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95995C061761;
+        Tue,  4 Jan 2022 03:42:24 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.94.2)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1n4iCs-0000EF-2L; Tue, 04 Jan 2022 12:42:22 +0100
+Date:   Tue, 4 Jan 2022 11:42:14 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH v11 1/3] net: ethernet: mtk_eth_soc: fix return values and
+ refactor MDIO ops
+Message-ID: <YdQylhz+WNkxZDMn@makrotopia.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <000000000000073ffa05d4bebff8@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 02:03:17AM -0800, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    81c325bbf94e kmsan: hooks: do not check memory in kmsan_in..
-> git tree:       https://github.com/google/kmsan.git master
-> console output: https://syzkaller.appspot.com/x/log.txt?x=10c4260db00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=2d8b9a11641dc9aa
-> dashboard link: https://syzkaller.appspot.com/bug?extid=6d532fa8f9463da290bc
-> compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
-> userspace arch: i386
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+6d532fa8f9463da290bc@syzkaller.appspotmail.com
-> 
-> =====================================================
-> BUG: KMSAN: kernel-infoleak in instrument_copy_to_user include/linux/instrumented.h:121 [inline]
-> BUG: KMSAN: kernel-infoleak in _copy_to_user+0x1c9/0x270 lib/usercopy.c:33
->  instrument_copy_to_user include/linux/instrumented.h:121 [inline]
->  _copy_to_user+0x1c9/0x270 lib/usercopy.c:33
->  copy_to_user include/linux/uaccess.h:209 [inline]
->  ucma_init_qp_attr+0x8c7/0xb10 drivers/infiniband/core/ucma.c:1242
->  ucma_write+0x637/0x6c0 drivers/infiniband/core/ucma.c:1732
->  vfs_write+0x8ce/0x2030 fs/read_write.c:588
->  ksys_write+0x28b/0x510 fs/read_write.c:643
->  __do_sys_write fs/read_write.c:655 [inline]
->  __se_sys_write fs/read_write.c:652 [inline]
->  __ia32_sys_write+0xdb/0x120 fs/read_write.c:652
->  do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
->  __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
->  do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
->  do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
->  entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
-> 
-> Local variable resp created at:
->  ucma_init_qp_attr+0xa4/0xb10 drivers/infiniband/core/ucma.c:1214
->  ucma_write+0x637/0x6c0 drivers/infiniband/core/ucma.c:1732
-> 
-> Bytes 40-59 of 144 are uninitialized
-> Memory access of size 144 starts at ffff888167523b00
-> Data copied to user address 0000000020000100
-> 
-> CPU: 1 PID: 25910 Comm: syz-executor.1 Not tainted 5.16.0-rc5-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> =====================================================
+Instead of returning -1 (-EPERM) when MDIO bus is stuck busy
+while writing or 0xffff if it happens while reading, return the
+appropriate -ETIMEDOUT. Also fix return type to int instead of u32.
+Refactor functions to use bitfield helpers instead of having various
+masking and shifting constants in the code, which also results in the
+register definitions in the header file being more obviously related
+to what is stated in the MediaTek's Reference Manual.
 
-We are not clearing GRH fields in ib_copy_ah_attr_to_user() if dst->is_global is not set.
-I'm testing the fix now and will post the patch after it will pass CI.
+Fixes: 656e705243fd0 ("net-next: mediatek: add support for MT7623 ethernet")
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
+v11: also address return value of mtk_mdio_busy_wait
+v10: unchanged
+v9: improved formatting and Cc missing maintainer
+v8: switch to bitfield helper macros
+v7: remove unneeded variables
+v6: further clean up functions and more cleanly separate patches
+v5: fix wrong variable name in first patch covered by follow-up patch
+v4: clean-up return values and types, split into two commits
+v3: return -1 instead of 0xffff on error in _mtk_mdio_write
+v2: use MII_DEVADDR_C45_SHIFT and MII_REGADDR_C45_MASK to extract
+    device id and register address. Unify read and write functions to
+    have identical types and parameter names where possible as we are
+    anyway already replacing both function bodies.
 
-Thanks
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c | 53 ++++++++++++---------
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h | 16 +++++--
+ 2 files changed, 41 insertions(+), 28 deletions(-)
 
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+index bcb91b01e69f5..3809ea6e31ce2 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+@@ -91,46 +91,53 @@ static int mtk_mdio_busy_wait(struct mtk_eth *eth)
+ 	}
+ 
+ 	dev_err(eth->dev, "mdio: MDIO timeout\n");
+-	return -1;
++	return -ETIMEDOUT;
+ }
+ 
+-static u32 _mtk_mdio_write(struct mtk_eth *eth, u32 phy_addr,
+-			   u32 phy_register, u32 write_data)
++static int _mtk_mdio_write(struct mtk_eth *eth, u32 phy_addr, u32 phy_reg,
++			   u32 write_data)
+ {
+-	if (mtk_mdio_busy_wait(eth))
+-		return -1;
++	int ret;
+ 
+-	write_data &= 0xffff;
++	ret = mtk_mdio_busy_wait(eth);
++	if (ret)
++		return ret;
+ 
+-	mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START | PHY_IAC_WRITE |
+-		(phy_register << PHY_IAC_REG_SHIFT) |
+-		(phy_addr << PHY_IAC_ADDR_SHIFT) | write_data,
++	mtk_w32(eth, PHY_IAC_ACCESS |
++		     PHY_IAC_START_C22 |
++		     PHY_IAC_CMD_WRITE |
++		     PHY_IAC_REG(phy_reg) |
++		     PHY_IAC_ADDR(phy_addr) |
++		     PHY_IAC_DATA(write_data),
+ 		MTK_PHY_IAC);
+ 
+-	if (mtk_mdio_busy_wait(eth))
+-		return -1;
++	ret = mtk_mdio_busy_wait(eth);
++	if (ret < 0)
++		return ret;
+ 
+ 	return 0;
+ }
+ 
+-static u32 _mtk_mdio_read(struct mtk_eth *eth, int phy_addr, int phy_reg)
++static int _mtk_mdio_read(struct mtk_eth *eth, u32 phy_addr, u32 phy_reg)
+ {
+-	u32 d;
++	int ret;
+ 
+-	if (mtk_mdio_busy_wait(eth))
+-		return 0xffff;
++	ret = mtk_mdio_busy_wait(eth);
++	if (ret)
++		return ret;
+ 
+-	mtk_w32(eth, PHY_IAC_ACCESS | PHY_IAC_START | PHY_IAC_READ |
+-		(phy_reg << PHY_IAC_REG_SHIFT) |
+-		(phy_addr << PHY_IAC_ADDR_SHIFT),
++	mtk_w32(eth, PHY_IAC_ACCESS |
++		     PHY_IAC_START_C22 |
++		     PHY_IAC_CMD_C22_READ |
++		     PHY_IAC_REG(phy_reg) |
++		     PHY_IAC_ADDR(phy_addr),
+ 		MTK_PHY_IAC);
+ 
+-	if (mtk_mdio_busy_wait(eth))
+-		return 0xffff;
+-
+-	d = mtk_r32(eth, MTK_PHY_IAC) & 0xffff;
++	ret = mtk_mdio_busy_wait(eth);
++	if (ret < 0)
++		return ret;
+ 
+-	return d;
++	return mtk_r32(eth, MTK_PHY_IAC) & PHY_IAC_DATA_MASK;
+ }
+ 
+ static int mtk_mdio_write(struct mii_bus *bus, int phy_addr,
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+index 5ef70dd8b49c6..f2d90639d7ed1 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+@@ -341,11 +341,17 @@
+ /* PHY Indirect Access Control registers */
+ #define MTK_PHY_IAC		0x10004
+ #define PHY_IAC_ACCESS		BIT(31)
+-#define PHY_IAC_READ		BIT(19)
+-#define PHY_IAC_WRITE		BIT(18)
+-#define PHY_IAC_START		BIT(16)
+-#define PHY_IAC_ADDR_SHIFT	20
+-#define PHY_IAC_REG_SHIFT	25
++#define PHY_IAC_REG_MASK	GENMASK(29, 25)
++#define PHY_IAC_REG(x)		FIELD_PREP(PHY_IAC_REG_MASK, (x))
++#define PHY_IAC_ADDR_MASK	GENMASK(24, 20)
++#define PHY_IAC_ADDR(x)		FIELD_PREP(PHY_IAC_ADDR_MASK, (x))
++#define PHY_IAC_CMD_MASK	GENMASK(19, 18)
++#define PHY_IAC_CMD_WRITE	FIELD_PREP(PHY_IAC_CMD_MASK, 1)
++#define PHY_IAC_CMD_C22_READ	FIELD_PREP(PHY_IAC_CMD_MASK, 2)
++#define PHY_IAC_START_MASK	GENMASK(17, 16)
++#define PHY_IAC_START_C22	FIELD_PREP(PHY_IAC_START_MASK, 1)
++#define PHY_IAC_DATA_MASK	GENMASK(15, 0)
++#define PHY_IAC_DATA(x)		FIELD_PREP(PHY_IAC_DATA_MASK, (x))
+ #define PHY_IAC_TIMEOUT		HZ
+ 
+ #define MTK_MAC_MISC		0x1000c
+-- 
+2.34.1
+

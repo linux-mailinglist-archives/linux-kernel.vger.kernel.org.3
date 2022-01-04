@@ -2,94 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A388A484AA3
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 23:23:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8290D484AA4
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 23:24:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235407AbiADWXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 17:23:54 -0500
-Received: from ip-16.mailobj.net ([213.182.54.16]:44980 "EHLO msg-6.mailo.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235396AbiADWXw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 17:23:52 -0500
-X-Greylist: delayed 1148 seconds by postgrey-1.27 at vger.kernel.org; Tue, 04 Jan 2022 17:23:51 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailoo.org; s=mailo;
-        t=1641335021; bh=D9+yesqlorbnAPS/+e8RpkomkpiH25w35KF85YKftws=;
-        h=X-EA-Auth:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
-         References:Content-Type:MIME-Version:Content-Transfer-Encoding;
-        b=deEhpTXGDzfZDyLq+M2IB6Gg63C8ZizhFRc6EhvmgCPG9VvhPPjnIPXizUTePHn9N
-         /UmtQC9ZceL+5623ZBdJMtFs+02FfCqHfCtWqLSgJR8weg/GkhHemLtGrvKuiXp+yk
-         Xmdc2mWkM7qhLHK5i54uum43Hz+/znn6iqtDqRAI=
-Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
-        via proxy.mailoo.org [213.182.55.207]
-        Tue,  4 Jan 2022 23:23:41 +0100 (CET)
-X-EA-Auth: dkBh22kJ20/hvolg0DJ9p+rXilUkNG/qYu7BqATLamBRCWe11wYuObjSvXCVh0j77U2DiA4iqmaYbpymvTVNxhbiOyBvrnJEg4zzQ4dIvQk=
-Message-ID: <f15a477aa01e2e972f54d1c36fa24df9cce48506.camel@mailoo.org>
-Subject: Re: [PATCH v2 1/3] arm64: dts: qcom: sc7280: Add nodes for va tx
- and rx macros and external codecs
-From:   Vincent Knecht <vincent.knecht@mailoo.org>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rohitkr@codeaurora.org,
-        srinivas.kandagatla@linaro.org, dianders@chromium.org,
-        swboyd@chromium.org, judyhsiao@chromium.org
-Cc:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Date:   Tue, 04 Jan 2022 23:23:40 +0100
-In-Reply-To: <1641208380-15510-2-git-send-email-quic_srivasam@quicinc.com>
-References: <1641208380-15510-1-git-send-email-quic_srivasam@quicinc.com>
-         <1641208380-15510-2-git-send-email-quic_srivasam@quicinc.com>
+        id S235425AbiADWYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 17:24:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235396AbiADWYO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 17:24:14 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB42FC061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 14:24:14 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id h33-20020a17090a29a400b001b20b7d48dfso24852667pjd.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 14:24:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=7YCEEnOPj4KefNq/L+wc30dtC7OQCX+FrwepcfjVLCk=;
+        b=i/4d5jHHzbNLD0plqavS+PSO1WxSe0NYT9QbWG0z3poJM5oXjubaAcJxaiWWreP0cR
+         5RiMCt5v4DQTomdHVkq3iLNdYX/yVKtHxPDMl0I2XHVIuxuFSqZGpHeGMYz88UG7O0Xu
+         r9RMfDw8lVa4ABXKEpKplbdcb/JYd+BYaRDzoBG8Fr3Bxq/Fuv6XAleGIBpGAsP24c2L
+         HqWZEkpkGx0zcwj6E2VFzL8t+653tIMfzyZ7+Kfvyk9YsriAmimD4EL1W9ulKiubY+wC
+         kTTycdGDGkg1fP1SB4auPTUcB25a0h9QpzkssNErteZUcjHkYQW6SJMRWAO3Yz3vGlS4
+         Lpfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=7YCEEnOPj4KefNq/L+wc30dtC7OQCX+FrwepcfjVLCk=;
+        b=FYIontelbIkeh2CaGPO9xSTDxxYePXivOGH9GP6yqbxOwk/SLKRPufAEEWflc1XFDz
+         K0MWTZYj7qK/GVkjGFrTrkhNuB56lUKyA0H4k8RlIrv6JDPn0srTBHCC68thnhmuNTnJ
+         FuJzdc3u4tv2oHDqPBmyP+lSPK40rlNdPU5r4C6Ud7sML6Fz9tEYqjEUhQXM+FykvvMr
+         53pfOvJWD7x3lm75vofMGB3cl5LjcY8f9B6xdgoSeb91ZiFsGxAx7jFyIuMVDj3pDVMW
+         k3v72i1Iaq56pEwNJvB1aZEtgRpw9T0YWp0Mn4LJXX3mcmx8wamioN+HELxdnrDigrcE
+         pMlA==
+X-Gm-Message-State: AOAM53013TAl+H+icEngj01qgKK/L3TnS4Lz64nZ+BVoEtrEH85X/eVF
+        z7xV2fZyAQ73ir9fAcMN315AqrpW8fVe9A==
+X-Google-Smtp-Source: ABdhPJxu2rUxV1GLYPjz1MbyUkhsmMVGZu7fNO7fjMU2hGoO4haOYMv5RYTU3zN2gckKhL0PGXE0N4uc4PQ3Fg==
+X-Received: from shakeelb.svl.corp.google.com ([2620:15c:2cd:202:15c6:5bd2:a484:dc2e])
+ (user=shakeelb job=sendgmr) by 2002:a63:2c06:: with SMTP id
+ s6mr44845822pgs.55.1641335054261; Tue, 04 Jan 2022 14:24:14 -0800 (PST)
+Date:   Tue,  4 Jan 2022 14:23:41 -0800
+Message-Id: <20220104222341.3972772-1-shakeelb@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
+Subject: [PATCH v4] memcg: add per-memcg vmalloc stat
+From:   Shakeel Butt <shakeelb@google.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>, Roman Gushchin <guro@fb.com>,
+        Muchun Song <songmuchun@bytedance.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Shakeel Butt <shakeelb@google.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TGUgbHVuZGkgMDMgamFudmllciAyMDIyIMOgIDE2OjQyICswNTMwLCBTcmluaXZhc2EgUmFvIE1h
-bmRhZGFwdSBhIMOpY3JpdMKgOgo+IFNDNzI4MCBoYXMgVkEsIFRYIGFuZCBSWCBtYWNyb3Mgd2l0
-aCBTb3VuZFdpcmUgQ29udHJvbGxlcnMgdG8gYXR0YWNoIHdpdGgKPiBjb2RlY3MgbGlrZSBXQ0Q5
-Mzh4LCBtYXg5ODM2MGEgdXNpbmcgc291bmR3aXJlIG1hc3RlcnMgYW5kIGkycyBidXMuCj4gQWRk
-IHRoZXNlIG5vZGVzIGZvciBzYzcyODAgYmFzZWQgcGxhdGZvcm1zIGF1ZGlvIHVzZSBjYXNlLgo+
-IEFkZCB0bG1tIGdwaW8gcHJvcGVydHkgaW4gd2NkOTM4eCBub2RlIGZvciBzd2l0Y2hpbmcgQ1RJ
-QS9PTVRQIEhlYWRzZXQuCj4gCj4gU2lnbmVkLW9mZi1ieTogU3Jpbml2YXNhIFJhbyBNYW5kYWRh
-cHUgPHF1aWNfc3JpdmFzYW1AcXVpY2luYy5jb20+Cj4gQ28tZGV2ZWxvcGVkLWJ5OiBWZW5rYXRh
-IFByYXNhZCBQb3R0dXJ1IDxxdWljX3BvdHR1cnVAcXVpY2luYy5jb20+Cj4gU2lnbmVkLW9mZi1i
-eTogVmVua2F0YSBQcmFzYWQgUG90dHVydSA8cXVpY19wb3R0dXJ1QHF1aWNpbmMuY29tPgo+IC0t
-LQo+IMKgYXJjaC9hcm02NC9ib290L2R0cy9xY29tL3NjNzI4MC1jcmQuZHRzwqAgfMKgwqAgNCAr
-Kwo+IMKgYXJjaC9hcm02NC9ib290L2R0cy9xY29tL3NjNzI4MC1pZHAuZHRzaSB8wqAgNTIgKysr
-KysrKysrKysrKysKPiDCoGFyY2gvYXJtNjQvYm9vdC9kdHMvcWNvbS9zYzcyODAuZHRzacKgwqDC
-oMKgIHwgMTEzICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysKPiDCoDMgZmlsZXMgY2hh
-bmdlZCwgMTY5IGluc2VydGlvbnMoKykKClsuLi5dCgoKPiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm02
-NC9ib290L2R0cy9xY29tL3NjNzI4MC1pZHAuZHRzaSBiL2FyY2gvYXJtNjQvYm9vdC9kdHMvcWNv
-bS9zYzcyODAtaWRwLmR0c2kKPiBpbmRleCBkZGViNTA4Li45NDYxNGM5IDEwMDY0NAo+IC0tLSBh
-L2FyY2gvYXJtNjQvYm9vdC9kdHMvcWNvbS9zYzcyODAtaWRwLmR0c2kKPiArKysgYi9hcmNoL2Fy
-bTY0L2Jvb3QvZHRzL3Fjb20vc2M3MjgwLWlkcC5kdHNpCj4gQEAgLTYzNiwzICs2MzYsNTUgQEAK
-PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGJpYXMtcHVsbC11cDsKPiDCoMKgwqDC
-oMKgwqDCoMKgfTsKPiDCoH07Cj4gKwo+ICsmc3dyMCB7Cj4gK8KgwqDCoMKgwqDCoMKgd2NkX3J4
-OiB3Y2Q5Mzh4LXJ4ewoKU3BhY2UgYmVmb3JlIGJyYWNlLi4uCgo+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqBjb21wYXRpYmxlID0gInNkdzIwMjE3MDEwZDAwIjsKPiArwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgcmVnID0gPDAgND47Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoCNzb3VuZC1kYWktY2VsbHMgPSA8MT47Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoHFjb20scngtcG9ydC1tYXBwaW5nID0gPDEgMiAzIDQgNT47Cj4gK8KgwqDCoMKg
-wqDCoMKgfTsKPiArfTsKPiArCj4gKyZzd3IxIHsKPiArwqDCoMKgwqDCoMKgwqB3Y2RfdHg6IHdj
-ZDkzOHgtdHh7CgpEaXR0by4uLgoKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY29t
-cGF0aWJsZSA9ICJzZHcyMDIxNzAxMGQwMCI7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoHJlZyA9IDwwIDM+Owo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAjc291bmQt
-ZGFpLWNlbGxzID0gPDE+Owo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBxY29tLHR4
-LXBvcnQtbWFwcGluZyA9IDwxIDIgMyA0PjsKPiArwqDCoMKgwqDCoMKgwqB9Owo+ICt9Owo+ICsK
-PiArJnNvYyB7Cj4gK8KgwqDCoMKgwqDCoMKgbWF4OTgzNjBhOiBhdWRpby1jb2RlYy0wIHsKPiAr
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY29tcGF0aWJsZSA9ICJtYXhpbSxtYXg5ODM2
-MGEiOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBwaW5jdHJsLW5hbWVzID0gImRl
-ZmF1bHQiOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBwaW5jdHJsLTAgPSA8JmFt
-cF9lbj47Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHNkbW9kZS1ncGlvcyA9IDwm
-dGxtbSA2MyBHUElPX0FDVElWRV9ISUdIPjsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgI3NvdW5kLWRhaS1jZWxscyA9IDwwPjsKPiArwqDCoMKgwqDCoMKgwqB9Owo+ICsKPiArwqDC
-oMKgwqDCoMKgwqB3Y2Q5Mzh4OiBjb2RlYyB7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoGNvbXBhdGlibGUgPSAicWNvbSx3Y2Q5MzgwLWNvZGVjIjsKPiArwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgI3NvdW5kLWRhaS1jZWxscyA9IDwxPjsKPiArCj4gK8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoHJlc2V0LWdwaW9zID0gPCZ0bG1tIDgzIDA+OwoKR1BJT19BQ1RJ
-VkVfSElHSCA/Cgo=
+The kvmalloc* allocation functions can fallback to vmalloc allocations
+and more often on long running machines. In addition the kernel does
+have __GFP_ACCOUNT kvmalloc* calls. So, often on long running machines,
+the memory.stat does not tell the complete picture which type of memory
+is charged to the memcg. So add a per-memcg vmalloc stat.
 
+Signed-off-by: Shakeel Butt <shakeelb@google.com>
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Acked-by: Roman Gushchin <guro@fb.com>
 
+---
+Changes since v3:
+- Removed area->page[0] checks and moved to page by page accounting as
+  suggested by Michal
+
+Changes since v2:
+- remove cast, per Muchun
+- add area->page[0] check, per Michal
+
+Changes since v1:
+- page_memcg() within rcu lock as suggested by Muchun.
+
+ Documentation/admin-guide/cgroup-v2.rst |  3 +++
+ include/linux/memcontrol.h              | 21 +++++++++++++++++++++
+ mm/memcontrol.c                         |  1 +
+ mm/vmalloc.c                            | 13 +++++++++++--
+ 4 files changed, 36 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+index 82c8dc91b2be..5aa368d165da 100644
+--- a/Documentation/admin-guide/cgroup-v2.rst
++++ b/Documentation/admin-guide/cgroup-v2.rst
+@@ -1314,6 +1314,9 @@ PAGE_SIZE multiple when read back.
+ 	  sock (npn)
+ 		Amount of memory used in network transmission buffers
+ 
++	  vmalloc (npn)
++		Amount of memory used for vmap backed memory.
++
+ 	  shmem
+ 		Amount of cached filesystem data that is swap-backed,
+ 		such as tmpfs, shm segments, shared anonymous mmap()s
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index d76dad703580..b72d75141e12 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -33,6 +33,7 @@ enum memcg_stat_item {
+ 	MEMCG_SWAP = NR_VM_NODE_STAT_ITEMS,
+ 	MEMCG_SOCK,
+ 	MEMCG_PERCPU_B,
++	MEMCG_VMALLOC,
+ 	MEMCG_NR_STAT,
+ };
+ 
+@@ -944,6 +945,21 @@ static inline void mod_memcg_state(struct mem_cgroup *memcg,
+ 	local_irq_restore(flags);
+ }
+ 
++static inline void mod_memcg_page_state(struct page *page,
++					int idx, int val)
++{
++	struct mem_cgroup *memcg;
++
++	if (mem_cgroup_disabled())
++		return;
++
++	rcu_read_lock();
++	memcg = page_memcg(page);
++	if (memcg)
++		mod_memcg_state(memcg, idx, val);
++	rcu_read_unlock();
++}
++
+ static inline unsigned long memcg_page_state(struct mem_cgroup *memcg, int idx)
+ {
+ 	return READ_ONCE(memcg->vmstats.state[idx]);
+@@ -1399,6 +1415,11 @@ static inline void mod_memcg_state(struct mem_cgroup *memcg,
+ {
+ }
+ 
++static inline void mod_memcg_page_state(struct page *page,
++					int idx, int val)
++{
++}
++
+ static inline unsigned long memcg_page_state(struct mem_cgroup *memcg, int idx)
+ {
+ 	return 0;
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 101b22a23096..56ed6b5dd328 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -1375,6 +1375,7 @@ static const struct memory_stat memory_stats[] = {
+ 	{ "pagetables",			NR_PAGETABLE			},
+ 	{ "percpu",			MEMCG_PERCPU_B			},
+ 	{ "sock",			MEMCG_SOCK			},
++	{ "vmalloc",			MEMCG_VMALLOC			},
+ 	{ "shmem",			NR_SHMEM			},
+ 	{ "file_mapped",		NR_FILE_MAPPED			},
+ 	{ "file_dirty",			NR_FILE_DIRTY			},
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index eb6e527a6b77..bdc7222f87d4 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -31,6 +31,7 @@
+ #include <linux/kmemleak.h>
+ #include <linux/atomic.h>
+ #include <linux/compiler.h>
++#include <linux/memcontrol.h>
+ #include <linux/llist.h>
+ #include <linux/bitops.h>
+ #include <linux/rbtree_augmented.h>
+@@ -2624,12 +2625,13 @@ static void __vunmap(const void *addr, int deallocate_pages)
+ 
+ 	if (deallocate_pages) {
+ 		unsigned int page_order = vm_area_page_order(area);
+-		int i;
++		int i, step = 1U << page_order;
+ 
+-		for (i = 0; i < area->nr_pages; i += 1U << page_order) {
++		for (i = 0; i < area->nr_pages; i += step) {
+ 			struct page *page = area->pages[i];
+ 
+ 			BUG_ON(!page);
++			mod_memcg_page_state(page, MEMCG_VMALLOC, -step);
+ 			__free_pages(page, page_order);
+ 			cond_resched();
+ 		}
+@@ -2964,6 +2966,13 @@ static void *__vmalloc_area_node(struct vm_struct *area, gfp_t gfp_mask,
+ 		page_order, nr_small_pages, area->pages);
+ 
+ 	atomic_long_add(area->nr_pages, &nr_vmalloc_pages);
++	if (gfp_mask & __GFP_ACCOUNT) {
++		int i, step = 1U << page_order;
++
++		for (i = 0; i < area->nr_pages; i += step)
++			mod_memcg_page_state(area->pages[i], MEMCG_VMALLOC,
++					     step);
++	}
+ 
+ 	/*
+ 	 * If not enough pages were obtained to accomplish an
+-- 
+2.34.1.448.ga2b2bfdf31-goog
 

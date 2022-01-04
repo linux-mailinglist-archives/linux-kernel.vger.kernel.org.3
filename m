@@ -2,118 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A8D4841A0
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 13:23:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 410294841A2
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 13:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232992AbiADMX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 07:23:56 -0500
-Received: from mxout03.lancloud.ru ([45.84.86.113]:42080 "EHLO
-        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbiADMX4 (ORCPT
+        id S232968AbiADMZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 07:25:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53522 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230311AbiADMZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 07:23:56 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 79C4920F406F
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH] platform: finally disallow IRQ0 in platform_get_irq() and
- its ilk
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Marc Zyngier <maz@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <5e001ec1-d3f1-bcb8-7f30-a6301fd9930c@omp.ru>
- <87pmp7volh.wl-maz@kernel.org>
- <CAMuHMdWjGUHZQhKDPASfpfNOiUg9HP2f3DsUsmJoijap29xpyQ@mail.gmail.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <f176d16c-000e-f886-754e-1fc222f80230@omp.ru>
-Date:   Tue, 4 Jan 2022 15:23:50 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <CAMuHMdWjGUHZQhKDPASfpfNOiUg9HP2f3DsUsmJoijap29xpyQ@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+        Tue, 4 Jan 2022 07:25:20 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA46C061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 04:25:20 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id i65-20020a252244000000b0060b2e5fd54cso51222227ybi.13
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 04:25:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=prQTiZLznLqZ5+2hB9O27N1xUv+Alw1+Gsfjs0LUolU=;
+        b=L/dp4Nhdz0lOG7M3GRsqIH/D6Zs9eJevRNLaTGWU2eKSPxFQQ7dUJqWpv1ogLXogea
+         cMYA44jT047mndDVGbQ+KM4wVLljxO7uPPiJWeCYiaS+q6scQtlZwjou6dYt4NzLqvSo
+         9R3NKz/0nLuaptqGZVGi8Vk8dqnLweFpPxSMN5RkUleQFPxbCXF8+xlF90C8Tu53tEji
+         IpdWz1xQBjYcitr4JO2PTEE3w535AXFwK6l68R7j3lfbQIsWZR8zrC+jThap/VjSfJBw
+         y3OQkkzmaAQ1441UNw8h7aztUv4y2ReP5g0e+xswUTHXOfX4cRWANGaVbHqWqkw3Xjyj
+         gqbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=prQTiZLznLqZ5+2hB9O27N1xUv+Alw1+Gsfjs0LUolU=;
+        b=qe67GbqKskrwPUDGHgrkuv250U2SXhd46D47+dNyJYwJClJ3xL5LiFI5j8QQQ+9ceW
+         G5xhhqNhTlyk5X6m8h3tlbZfeuoE6GxO7QmmvdI/uXuuwzxDN7RhO1SEAxUjur12SRqu
+         Q8N8M15804CEks3Ri5eHJo3X0biWJbbNfVWjCNgnPWEjShNXrxCPb8sHiFIxhJSnoXc/
+         6kYfUx4lCaV+43ZC5tDZCxlHE2Ne4UyLKTR2EamDO1yQAEWQTTVMHIvq0Y1a3vjJpisi
+         5HK6M9yIYlaOKTnRyMf6DSioRDnrm5Xn6tOQRmKdleYyXZs/z37gMcquw2XO0zujZ3va
+         Me6A==
+X-Gm-Message-State: AOAM532y1Lm0Oo/PiGjbKlQDTxz1n+DnsIEbFbrEfJ9LiEvltTXIcuik
+        AfUo/ouHAC9Xr+vTNqrKFwAtn7693A==
+X-Google-Smtp-Source: ABdhPJz2gAA4J1A21mPQygq6+T6rFoBtqZJVjXY6aMYrh4yrjZ7M5WvXgxvSREJsqzeEZ6sl6vWREcwNLg==
+X-Received: from wjack.tao.corp.google.com ([2401:fa00:fd:203:fe84:812d:a171:4b7e])
+ (user=wjack job=sendgmr) by 2002:a25:cc55:: with SMTP id l82mr52843990ybf.408.1641299119492;
+ Tue, 04 Jan 2022 04:25:19 -0800 (PST)
+Date:   Tue,  4 Jan 2022 20:24:59 +0800
+Message-Id: <20220104122500.338870-1-wjack@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
+Subject: [PATCH v1] power: supply: add dock type
+From:   Jack Wu <wjack@google.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Jack Wu <wjack@google.com>, kernel-team@android.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/4/22 12:47 PM, Geert Uytterhoeven wrote:
+Add dock power_supply_type for the drivers which supports dock can
+register a power supply class device with POWER_SUPPLY_TYPE_DOCK.
 
-[...]
->>> The commit a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is
->>> invalid") only calls WARN() when IRQ0 is about to be returned, however
->>> using IRQ0 is considered invalid (according to Linus) outside the arch/
->>> code where it's used by the i8253 drivers. Many driver subsystems treat
->>> 0 specially (e.g. as an indication of the polling mode by libata), so
->>> the users of platform_get_irq[_byname]() in them would have to filter
->>> out IRQ0 explicitly and this (quite obviously) doesn't scale...
->>> Let's finally get this straight and return -EINVAL instead of IRQ0!
->>>
->>> Fixes: a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is invalid")
->>> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-> 
->>> --- driver-core.orig/drivers/base/platform.c
->>> +++ driver-core/drivers/base/platform.c
->>> @@ -231,7 +231,8 @@ int platform_get_irq_optional(struct pla
->>>  out_not_found:
->>>       ret = -ENXIO;
->>>  out:
->>> -     WARN(ret == 0, "0 is an invalid IRQ number\n");
->>> +     if (WARN(!ret, "0 is an invalid IRQ number\n"))
->>> +             return -EINVAL;
->>>       return ret;
->>>  }
->>>  EXPORT_SYMBOL_GPL(platform_get_irq_optional);
->>> @@ -445,7 +446,8 @@ static int __platform_get_irq_byname(str
->>>
->>>       r = platform_get_resource_byname(dev, IORESOURCE_IRQ, name);
->>>       if (r) {
->>> -             WARN(r->start == 0, "0 is an invalid IRQ number\n");
->>> +             if (WARN(!r->start, "0 is an invalid IRQ number\n"))
->>> +                     return -EINVAL;
->>>               return r->start;
->>>       }
->>
->> Geert recently mentioned that a few architectures (such as sh?) still
->> use IRQ0 as something valid in limited cases.
-> 
-> https://lore.kernel.org/all/CAMuHMdUg3=q7gyaVHP0XcYUOo3PQUUv8Hc8wp5faVQ+bTBpg4A@mail.gmail.com
-> 
-> TL;DR: Probably only smsc911x Ethernet on the AP-SH4A-3A and
-> AP-SH4AD-0A boards, which should trigger the warning since v5.8.
+Signed-off-by: Jack Wu <wjack@google.com>
+---
+ Documentation/ABI/testing/sysfs-class-power | 2 +-
+ drivers/power/supply/power_supply_sysfs.c   | 1 +
+ include/linux/power_supply.h                | 1 +
+ 3 files changed, 3 insertions(+), 1 deletion(-)
 
-   Gr... indeed these use IRQ0 and should cause WARN. Do you have any idea how to avoid this?
+diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
+index f7904efc4cfa..854299a0d36f 100644
+--- a/Documentation/ABI/testing/sysfs-class-power
++++ b/Documentation/ABI/testing/sysfs-class-power
+@@ -34,7 +34,7 @@ Description:
+ 		Describes the main type of the supply.
+ 
+ 		Access: Read
+-		Valid values: "Battery", "UPS", "Mains", "USB", "Wireless"
++		Valid values: "Battery", "UPS", "Mains", "USB", "Wireless", "Dock"
+ 
+ **Battery and USB properties**
+ 
+diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+index c3d7cbcd4fad..53494b56bbb4 100644
+--- a/drivers/power/supply/power_supply_sysfs.c
++++ b/drivers/power/supply/power_supply_sysfs.c
+@@ -57,6 +57,7 @@ static const char * const POWER_SUPPLY_TYPE_TEXT[] = {
+ 	[POWER_SUPPLY_TYPE_USB_PD_DRP]		= "USB_PD_DRP",
+ 	[POWER_SUPPLY_TYPE_APPLE_BRICK_ID]	= "BrickID",
+ 	[POWER_SUPPLY_TYPE_WIRELESS]		= "Wireless",
++	[POWER_SUPPLY_TYPE_DOCK]		= "Dock",
+ };
+ 
+ static const char * const POWER_SUPPLY_USB_TYPE_TEXT[] = {
+diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+index 9ca1f120a211..fa80eaa54242 100644
+--- a/include/linux/power_supply.h
++++ b/include/linux/power_supply.h
+@@ -187,6 +187,7 @@ enum power_supply_type {
+ 	POWER_SUPPLY_TYPE_USB_PD_DRP,		/* PD Dual Role Port */
+ 	POWER_SUPPLY_TYPE_APPLE_BRICK_ID,	/* Apple Charging Method */
+ 	POWER_SUPPLY_TYPE_WIRELESS,		/* Wireless */
++	POWER_SUPPLY_TYPE_DOCK,			/* Dock Charging */
+ };
+ 
+ enum power_supply_usb_type {
+-- 
+2.34.1.448.ga2b2bfdf31-goog
 
->> From my PoV, this patch is fine, but please be prepared to fix things
->> in a couple of years when someone decides to boot a recent kernel on
->> their pet dinosaur. With that in mind:
->>
->> Acked-by: Marc Zyngier <maz@kernel.org>
-> 
-> TBH, I don't see much point in this patch, as the WARN() has been
-> there since a while,
-
-   Yet there's WARN() -- which (at the end of day) should be avoided.
-
-> and the end goal is to return zero instead of
-> -ENXIO for no interrupt, right?
-
-   I don't care that much about platform_get_irq_optional() (Andy does),
-I do care about its caller, platform_get_irq(). The end goal here is to
-avoid WARN() and avoid having to handle IRQ0 in this function's callers.
-
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-[...]
-
-MBR, Sergey

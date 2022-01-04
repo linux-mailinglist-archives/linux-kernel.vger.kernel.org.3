@@ -2,94 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17795484B22
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 00:22:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 695B4484B26
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 00:27:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236356AbiADXWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 18:22:21 -0500
-Received: from mga05.intel.com ([192.55.52.43]:61437 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234277AbiADXWU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 18:22:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641338540; x=1672874540;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SGQtGG2CLoHFdMZhX3UAsNYja1VzFXWjyMBEuuiW5ws=;
-  b=mn1I+qR0LwC2Bc6hebOJ+4DbfmdciFy6m8dbBd6hQAKVTdskmgHwjnsq
-   6fxgU7whSp5RCRw2FRPT/+XJXSX2AND6EDl7IeGlZchlukucdxIe1JlUN
-   cc6PizsHyHwxEwWeSx0/BdMPrBdyjKvY4+xOXFvbuQ/xxVnZOYtlQ9VO9
-   i+7mWm6GpMfIdcVVlmrDAnFQWngXZXCXRhK0I7LgN+NnecJ1o5H4qrfpW
-   /GzaZ2e9acJVskfcoAoEuItq3oIHIF2eUtJKxNFVSvpcTv9IreB+FHxA0
-   VtnL2abH5mpbP6PyOfYzwcfCk+npmmCDReEO93AzTrFI1nOdETzvSlW0J
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="328665377"
-X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
-   d="scan'208";a="328665377"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 15:22:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
-   d="scan'208";a="574173049"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 04 Jan 2022 15:22:17 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n4t8C-000G0K-KL; Tue, 04 Jan 2022 23:22:16 +0000
-Date:   Wed, 5 Jan 2022 07:22:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, jassisinghbrar@gmail.com,
-        robh+dt@kernel.org, shawnguo@kernel.org
-Cc:     kbuild-all@lists.01.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        aisheng.dong@nxp.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 3/7] mailbox: imx: Add support for identifying SCU wakeup
- source from sysfs
-Message-ID: <202201050712.94b9xX70-lkp@intel.com>
-References: <20220104062547.2103016-4-peng.fan@oss.nxp.com>
+        id S236395AbiADX1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 18:27:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234152AbiADX1m (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 18:27:42 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE90C061761;
+        Tue,  4 Jan 2022 15:27:42 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id j6so154479264edw.12;
+        Tue, 04 Jan 2022 15:27:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2Cv5WeOv7Tkjfvs0p7bNFLZQbOHjCEbvTG2WwZ+PJtE=;
+        b=PZHDaNYG74eVQ9et4VXd8d/3UwzfH8cmtITrfpQmpyDu6Goc4ENYNhH0DUtd4/67WX
+         2jsEEEPKqh3jF0E/0Nrkek3i75ca7Q3PpOIVlbA5bvoUBmMu7lmnDNulJT4y4JhAQbjj
+         gutduxC+9yRGxHCoRpiIfsCFRxHa+9rOPas/JsHulNW1ivo1bps+H2Mmfe4NG7OEcrud
+         FCbP0mbdyXcRr7lZDJEhdVhJeL42B7jgAdot3UYgghV8YHYof4YmvffRozcp/o+ILm9o
+         0VMZSj5hy25IknttuNbhM8BcWtMLPyBgMGyVQ2UQFAne4tEbgdfMvTbdfWaVVaxKgIGJ
+         tMJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=2Cv5WeOv7Tkjfvs0p7bNFLZQbOHjCEbvTG2WwZ+PJtE=;
+        b=4lYjegzwdQb/gXYb1ZXQ8zqp6syvhFBoT9+uJjDMs6DCsoFDs9eMg2xBAXfB2/NLdn
+         Ex3dSUbkqrHBT1gQ5VB2uCaQy/KzLmPx03+h1drrYni/3ehWBuaOgOGoNR4coihV1ZM/
+         00AavYa+Q8qeQigFdtVNaXxbEeo4cAelL4cD0Pnpth4xC1qvWvYKfF3gnow69KP80sIN
+         iKBWRbgKHgi3aEbYBluCtKDsjNTedzxXL91H4rIgdoX68cPGGMwgf8euI3GAar/z+3x8
+         TtbnOt3qFQBiqH7XYd8OKbZOv8Aqgayv+3zZGFKwOw38VtNQiDBMGRXvgWl76uHOKq+j
+         vkNg==
+X-Gm-Message-State: AOAM532lbOKBhF/cBP83kpNw/DuYtOQs5mR9g8EF1Ijvfvh/oUQiiLeA
+        r4EFC3hlJoIPGehy1XMQISg=
+X-Google-Smtp-Source: ABdhPJxl9tdpWTHh5kromFvL3xd6HsedGO3y5SpmPIKgfg199U+Ewr19JV/Kv7f3tnBe6Pgj0XEcAQ==
+X-Received: by 2002:a17:906:6d95:: with SMTP id h21mr34285853ejt.190.1641338860742;
+        Tue, 04 Jan 2022 15:27:40 -0800 (PST)
+Received: from gmail.com ([5.38.241.27])
+        by smtp.gmail.com with ESMTPSA id u21sm15267600eds.8.2022.01.04.15.27.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 15:27:40 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Wed, 5 Jan 2022 00:27:36 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH] per_task: Remove the PER_TASK_BYTES hard-coded constant
+Message-ID: <YdTX6Mg/GgGvfi7j@gmail.com>
+References: <YdIfz+LMewetSaEB@gmail.com>
+ <YdLL0kaFhm6rp9NS@kroah.com>
+ <YdLaMvaM9vq4W6f1@gmail.com>
+ <YdRVawyDbHvI01uV@gmail.com>
+ <YdRkS1iq6wtgbI3b@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220104062547.2103016-4-peng.fan@oss.nxp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YdRkS1iq6wtgbI3b@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Peng,
 
-Thank you for the patch! Yet something to improve:
+* Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
 
-[auto build test ERROR on shawnguo/for-next]
-[also build test ERROR on robh/for-next linus/master v5.16-rc8]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> On Tue, Jan 04, 2022 at 03:10:51PM +0100, Ingo Molnar wrote:
+> > * Ingo Molnar <mingo@kernel.org> wrote:
+> 
+> > +++ b/kernel/sched/core.c
+> 
+> > +#include "../../../kernel/sched/per_task_area_struct.h"
+> 
+> #include "per_task_area_struct.h" ?
 
-url:    https://github.com/0day-ci/linux/commits/Peng-Fan-OSS/mailbox-imx-misc-fix-and-SECO-MU-support/20220104-142853
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
-config: mips-allmodconfig (https://download.01.org/0day-ci/archive/20220105/202201050712.94b9xX70-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/565bba9e401bda77a3c936df0262681cd2622d80
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Peng-Fan-OSS/mailbox-imx-misc-fix-and-SECO-MU-support/20220104-142853
-        git checkout 565bba9e401bda77a3c936df0262681cd2622d80
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+Indeed - fixed.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks,
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "pm_system_irq_wakeup" [drivers/mailbox/imx-mailbox.ko] undefined!
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+	Ingo

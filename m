@@ -2,191 +2,397 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D661483F42
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 10:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C022483F4A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 10:41:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbiADJjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 04:39:01 -0500
-Received: from mail-eopbgr1300129.outbound.protection.outlook.com ([40.107.130.129]:6172
-        "EHLO APC01-HK2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229689AbiADJjB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 04:39:01 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HfLZZHkrhfpx6QfM8dpDc38mVOUOXkePhS+sE+jg6NzszsY1QNXr8bK4xe0dwaUHL6VA7j1Vp8oKqhJrqdkMV8g3kuw8rTdToxFuBLWjhJcBdzXt9Q9wiRkRPJF+rgD945pfIRZMaeSg1Ie3+lU+9+pQzdrQ3C9Ow6bKc+5ll+obZE/MMt8znN6CFEVR+X2H26p9pgSlVOhcGsC6qXdXB5cPCd7JK+G6tBxxdw1gCNktjo1V1wIrzLv8SSFnCPSwe5EtCxWzaGNDYUUc3ljzrVvCVAtifRIRAeMIOFObeq+jVMN05jwHDrMRVvsBn+lwSvhDEN5zQ+k1bOONcWlgSQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vFHgVdc+BtcM0FrXnzBJhO5G1URSiZksY0uA+6vOp2A=;
- b=GHkfu73PYJttv+eFoGMLOdhtSwyUOKVSriMDHnrXrqtax17BYZPi4qyLZQ/cv9yuhI621XPBuN+NdVegVVCMcDhIxiir8QVJ8y3Zg5he+kjImvmgJrNptimW4NgINGg3IFUzbGgd5zNCqv+rMwrLNPTgQmz4POeNyn/mH4JNWPm7BZj/zShOhDi5ji6O4z+Vchopf3KMm4NABD2eci69tCgKGZeCfm113i1AEPltAvD4yrULEAIxI48L8cyU/KO5Dc//uEPhSK/Y6LpuUacrM8ZjIiTkMzS8SoDeJKzmK3F490+UHlFx8m9/39bE2bDi83YaA0JF0zsNKUlrRiFsYQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vFHgVdc+BtcM0FrXnzBJhO5G1URSiZksY0uA+6vOp2A=;
- b=Y1P3CfXS9pURxM0Zs8nImt89wN+e/jEXlWmpmulWAGWjdUootYfv1pBEMSY8XxGTMevK1K9U8XRCO87E2cvqRP8BMgK0R7m1w19BWQ9e6Id3ReelhtVNrYeNnD0hBzyTp6328d0HH6sLWzmyj3K9GIbBpPbjPqoNcrBaeJyM9ws=
-Received: from PSAPR06MB4021.apcprd06.prod.outlook.com (2603:1096:301:37::11)
- by PSAPR06MB4408.apcprd06.prod.outlook.com (2603:1096:301:8e::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Tue, 4 Jan
- 2022 09:38:57 +0000
-Received: from PSAPR06MB4021.apcprd06.prod.outlook.com
- ([fe80::81a5:768b:64a1:b284]) by PSAPR06MB4021.apcprd06.prod.outlook.com
- ([fe80::81a5:768b:64a1:b284%6]) with mapi id 15.20.4844.016; Tue, 4 Jan 2022
- 09:38:57 +0000
-From:   =?gb2312?B?1dS+/L/8?= <bernard@vivo.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: =?gb2312?B?tPC4tDogW1BBVENIXSBncHUvZHJtOiBmaXggcG90ZW50aWFsIG1lbWxlYWsg?=
- =?gb2312?Q?in_error_branch?=
-Thread-Topic: [PATCH] gpu/drm: fix potential memleak in error branch
-Thread-Index: AQHX2ugw7dR2aqqt/0CHm7T8Pf0La6xMt96AgAYsGGA=
-Date:   Tue, 4 Jan 2022 09:38:57 +0000
-Message-ID: <PSAPR06MB40216FB1425E72891B6A6B28DF4A9@PSAPR06MB4021.apcprd06.prod.outlook.com>
-References: <20211116124751.31181-1-bernard@vivo.com>
- <ACIArwAdEzJlxV*UItyRxarz.9.1640948962309.Hmail.bernard@vivo.com.@PDg3emdvaGh2emEuZnNmQGludGVsLmNvbT4=>
-In-Reply-To: <ACIArwAdEzJlxV*UItyRxarz.9.1640948962309.Hmail.bernard@vivo.com.@PDg3emdvaGh2emEuZnNmQGludGVsLmNvbT4=>
-Accept-Language: en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 638d1184-66b5-487f-5a70-08d9cf6607dc
-x-ms-traffictypediagnostic: PSAPR06MB4408:EE_
-x-microsoft-antispam-prvs: <PSAPR06MB440810CBDC60917BE65FB027DF4A9@PSAPR06MB4408.apcprd06.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: GGOEcx6DDIya8c6yAvDKsjtt6qmSFDiU6DKr/wotsra4PTMzilhU17GcJboPaD6Hquuly3RyvaTOh1D5lKH+MfggL23UwOvorQNMkb1ksyn1Wj09t5yB+mIArkHLDf1kytbUqc2a7frq+d/ivuI+zqt9fE5yGMreAE+ZerANMcF1uiOBnoYNhE/j8g8Qo2TL+z1D93/vIH7FiU0JSiNZw21zE6ohFECbR8smcqy3qUaijwidttFuwvdMD/K52/Cxqax+wJVvbcC/7QPqsAkMXWNMGUzsF44dv71pXfs34XJbZg1CFU7BEUhwoUiR9NWMSbq7RhL5wYkPrMLezLa3o/hs+gfuaJer6T8qaNmxKmeY8iBfIx7yKHzyw2cwcchg73hJ95NlaNKudBaREoQ2LICm1w92hdMOJbLJIZjUnibKU3Ua58WUxdmdZ7urIdjqTBB5mZi5BkEC+xTyY2Fmqpuj94JnXeKqCkvdQ8CXE7kmEvVb3Ah1eploisiWl1jvkfUUkbZQrP7UM6GAzCIydtjMROgPRU/s4ZslTmmlTULZg3zE+aY38P58QtFq7BeoifihDkBxRbBHp+wDLJ7UE/J2vrczBbMpuy/zis0PNyA5UPceFb8RE6zq0GkFKJpE5Sd04txDzrFGK2rKutPHsfv3tt0OU5kt3R6cXuYHSqkkCeVROE9bn4pUrq8NpVAqQ6GrNGBDewXlEVvPh04FRQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PSAPR06MB4021.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(86362001)(66476007)(224303003)(71200400001)(83380400001)(33656002)(38070700005)(316002)(5660300002)(26005)(186003)(85182001)(6506007)(7696005)(8936002)(38100700002)(76116006)(122000001)(9686003)(66946007)(508600001)(66556008)(55016003)(110136005)(2906002)(66446008)(52536014)(64756008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?gb2312?B?VDRQYVIyNzBqYkh4bmF1RFh4N1lkT0IvZXZsMGNxYmpNeTF1cjlvSkxaZ3pC?=
- =?gb2312?B?dTh6K1h1QkJ1UWc2cGp6VmdjREMvd3Y4N0VBSW1RMXFHTzFxckpkR3hkalBv?=
- =?gb2312?B?bHRoZFYvN3NJZHM3QlVJczB4cnJlcnN1Ui9YMmZmVHlqS2RVZ0dmUkFzZjlM?=
- =?gb2312?B?UUgvQy9qRVhkZUtOZmIrU1B3bnF4dFpFS0JTOHNERmtCb01nUU9PYmQ1bVFr?=
- =?gb2312?B?SENTK2I1WThreVFxNlkwRWdpSUlNQzdURmVIR3MyMFhaYmk1Q2d0RkpSTHQ1?=
- =?gb2312?B?VXljeHdTTXlqMGtVVHRtQVhLZ0dnRU5aR2htQnV5MkNWcFJsZE5kRnkwalh0?=
- =?gb2312?B?bElDNXlDNitRM0hEYmVUclQwVGxkbnF0Qk53azJhUXR3TlBPQUpIa1MwaEdx?=
- =?gb2312?B?ZHZPY3hmWUZrZmNmY1k5TXVDaVZWNUpvTmhPMmFCdjJjWVJ1Um9aVnlHQjhn?=
- =?gb2312?B?b0lJUERXMmF3SVVKRUtzRUVHRnh6dlRhVTJsMWdJenNNTzFiZFZCbmh5M3lJ?=
- =?gb2312?B?Z2MreW1teFArSzV5SVArZTRFSnhjNmhrd2M5WmRHRWllWU1va1RFNnVhOXhZ?=
- =?gb2312?B?M2ZNWGdsaXQ2RVRXa2UwYXlIWGpWVE1xSllCby9DWEQ1am5yeGVVVG9hSk8z?=
- =?gb2312?B?SmlJQm5oL3hwOEkwdXhtdU1mcEgydnlyeTZCNUx5WXZ3OUltL2ludFFHejhB?=
- =?gb2312?B?L2R1Y2I3cVNyZXRSS1ZrRTJISHRNK0pRdE9Ib2JjTzNyU0Zpa0dWcG5PdHBa?=
- =?gb2312?B?QXJqVjV4VXh4clZLQUNsNWs0VzRhU0luaTdKb3FhSFNYNVlHYndWZnh1QWZV?=
- =?gb2312?B?OEhjcGgraldFM1FtMHVGUks1Tit3Z1dmRmxLYUU3TDJJalZFYWtETE1hZjBx?=
- =?gb2312?B?ZU5CdnFOeTVJYWUybVhmbC9lZFVEdHhHRWUrNnpyazFMMXplclFkRXJrY2xB?=
- =?gb2312?B?aXNhVjBJd2NJUEh4ZlRYcGxOZVBnQjVycVRDbE1ZL0hsVVZ4WWQ1NzR2cGZY?=
- =?gb2312?B?dzlRTUJTT1JHQVdzQ2RpZnM1YzVkQi9xUjNPc0hZa0JTYlQxNVU5d3ErTVpS?=
- =?gb2312?B?RmRVZVF5UVZyYmp4Qk9waGlQN095OFNVSzJBTWZVbjNPcU9VZXl2ZW9nVVB3?=
- =?gb2312?B?K3Yzc0dqZW5YbzUzWUFPVFVlRXlPUCtFcU1mZGRaMm1CV200WmN6WlRaOExh?=
- =?gb2312?B?aFNRMGhUdjZqYTlQYzJsL0xZcnVEL09xL1h6UlZsTXk4bzMzT3lZNEZUeTBl?=
- =?gb2312?B?NDZTZDYwWmpRampOZThQMUtVNE1wYXNXZklhQmhTbWU4M2RsQUg2SWs5d0M5?=
- =?gb2312?B?MVVaaC9Ca1BCd21CTkptaXliMTJzZm5taVpVMlV5UWdURm8xN3NsbWkxM1pL?=
- =?gb2312?B?aUFsZDh5OW9FTFhQMnM5bTZmdzRkTnNXUUVaeVZHczhHK2F4dldMTUhza1l6?=
- =?gb2312?B?RDY0Q1gvdGt4SWFJM0Zyd3h1Yk9HMmFma09vTHc2TUJYa1VBS0NodWdXLy9V?=
- =?gb2312?B?alpZYUUyYnlxZjZ5b3FzbzVWMER4QitTb3NNaXltSzFGdnM0YzNCR282djQ0?=
- =?gb2312?B?cnJmMFhEWmZ3MzBJQm9FUjUyV2YwM1hhVFNkUWhyRWdLVVZNbHJNSEE2YVdC?=
- =?gb2312?B?TEJwRk9UTG1OYlpmYnd4RkFpL0x2cTJEV1EwSjNzVUNQWUUrTXZjMS84Yk1v?=
- =?gb2312?B?SFdncW83SXVmYVc1cENkSGxqTHJzdExtdVIxUUd4K2kzbXpieS9LRW9Sc0NT?=
- =?gb2312?B?ZHN0OGEreTkxZk9TUmRHcG5sWDNnL2FWdmRWS0l1V2xCUFZIUS9XQ2MxYkxn?=
- =?gb2312?B?aWd4ZG82UTNRTFhmN2NUUkFLWURETUF1bG5aeHQ3Rys1T3FEZ0NTV0JTVGY0?=
- =?gb2312?B?Y1JwS0tQNmtadTNQdUU0Rm5Sb09EMFAxOUt2MzNGdm9BaU1xdEIwNThZa21u?=
- =?gb2312?B?UEE0ekxaTHdZOUlJUDlvZ2xPczdzWHlXbTNIRENEUmlTaVRnczU3c0pMb2E5?=
- =?gb2312?B?ZzlUQ2dZY0ZCN2xpY1M4ZFl3RkZEWUhWQ3RSRjc2ZENVWUgxcUdBbzhEZUwx?=
- =?gb2312?B?TEhvZFdoRWtkZ2YzZmhCam1BZ2hoNk0yaUIvN1g2M0hDcHB3bTFxck1lc09s?=
- =?gb2312?B?MXBPYlpjb3VVNzlhSU5Ha2hjamlXbVg3bmI2SUp3MkJnSGtubE5XZWd4S2ht?=
- =?gb2312?B?Znc9PQ==?=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        id S229954AbiADJlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 04:41:36 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:36517 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229507AbiADJld (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 04:41:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1641289293; x=1672825293;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=DgJ6Xuh2PHoRZ8rZsp93rnKZTsUZWQyUENbe2AOtC+o=;
+  b=kNBCgbvi71wSy0ZWjQRAecmG3R1rS2jK6qtK6PGhK4FW1yg630+1J//9
+   doIThN7YtqI2Bn4QnPIeupY/kdZIviOCQcjk3QJ+BIcuFeQ1TvOk/juhF
+   dWo3ew/P7wSgK2Z+2gL4V52WbC/7HZqrt3F1xgqU8FA73yEkKX40aRGow
+   g0pdmm2uW5Fng7QkXAnMjOQv6QzQNU1EhuawQv7wmRD/GmLtVs3PECC4x
+   l8GOApqgxpKFgDghhHjjQC8j7q6PLtRGfwN4OBt8lHiqoNmsrXQVEWP30
+   KfvmrTShFhq74+kldmoZDq+R7cN7NV7igk7yhZZTKmCpVX50PRL6zASC7
+   w==;
+IronPort-SDR: aVH4hRmGIOv+FA2MA8xoCKCgDyax0yQephhlbpQ7sspddauNsTOR4ftGbXa22v6vnptc0CiNRv
+ yiZwsAnq5hXmn/JFlKr4GWaQYfhozM8fewbpB36Co+J/yRqta4NCpo1QL2koZIM4XYpaLaQFo4
+ MuKkr3hu/J136RpBJ3+Nnut2UDTTom5h8yEil9EKI7r5JVnwb05QkL/WTwr5V5rGcaRouG/pW8
+ 6InPNxE7l+cbGuwsFmtUL+sMqzWmocxN9q9AB9crcDQYK0vOBCPmN7wogrFTB2NH1EALeGKtpe
+ XQHDI3Qw349uBUFBtQKSqR6C
+X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
+   d="scan'208";a="144257295"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Jan 2022 02:41:33 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 4 Jan 2022 02:41:32 -0700
+Received: from kavya-HP-Compaq-6000-Pro-SFF-PC.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Tue, 4 Jan 2022 02:41:29 -0700
+From:   Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+To:     <arnd@arndb.de>, <olof@lixom.net>, <robh+dt@kernel.org>,
+        <nicolas.ferre@microchip.com>
+CC:     <soc@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Manohar.Puri@microchip.com>, <Kavyasree.Kotagiri@microchip.com>
+Subject: [PATCH v2] ARM: dts: add DT for lan966x SoC and 2-port board pcb8291
+Date:   Tue, 4 Jan 2022 15:11:13 +0530
+Message-ID: <20220104094113.3338-1-kavyasree.kotagiri@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PSAPR06MB4021.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 638d1184-66b5-487f-5a70-08d9cf6607dc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jan 2022 09:38:57.3256
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8glc69S/LV5GjgmdTQY4b6vsmljyx6NUAhVb5+/Jfnls9JKlev+UM5uhBtz5j5WNTP2aWSYaSigfdf9hjskF9A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR06MB4408
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LS0tLS3Tyrz+1K28/i0tLS0tDQq3orz+yMs6IGJlcm5hcmRAdml2by5jb20gPGJlcm5hcmRAdml2
-by5jb20+ILT6se0gSmFuaSBOaWt1bGENCreiy83KsbzkOiAyMDIxxOoxMtTCMzHI1SAxOTowOQ0K
-ytW8/sjLOiDV1L78v/wgPGJlcm5hcmRAdml2by5jb20+OyBNYWFydGVuIExhbmtob3JzdCA8bWFh
-cnRlbi5sYW5raG9yc3RAbGludXguaW50ZWwuY29tPjsgTWF4aW1lIFJpcGFyZCA8bXJpcGFyZEBr
-ZXJuZWwub3JnPjsgVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+OyBEYXZp
-ZCBBaXJsaWUgPGFpcmxpZWRAbGludXguaWU+OyBEYW5pZWwgVmV0dGVyIDxkYW5pZWxAZmZ3bGwu
-Y2g+OyBkcmktZGV2ZWxAbGlzdHMuZnJlZWRlc2t0b3Aub3JnOyBsaW51eC1rZXJuZWxAdmdlci5r
-ZXJuZWwub3JnDQqzrcvNOiDV1L78v/wgPGJlcm5hcmRAdml2by5jb20+DQrW98ziOiBSZTogW1BB
-VENIXSBncHUvZHJtOiBmaXggcG90ZW50aWFsIG1lbWxlYWsgaW4gZXJyb3IgYnJhbmNoDQoNCk9u
-IFR1ZSwgMTYgTm92IDIwMjEsIEJlcm5hcmQgWmhhbyA8YmVybmFyZEB2aXZvLmNvbT4gd3JvdGU6
-DQo+IFRoaXMgcGF0Y2ggdHJ5IHRvIGZpeCBwb3RlbnRpYWwgbWVtbGVhayBpbiBlcnJvciBicmFu
-Y2guDQoNCj5QbGVhc2UgZWxhYm9yYXRlLg0KDQpIaSBKYW5pOg0KDQpUaGlzIHBhdGNoIHRyeSB0
-byBmaXggcG90ZW50aWFsIG1lbWxlYWsgaW4gZXJyb3IgYnJhbmNoLg0KRm9yIGV4YW1wbGU6DQpu
-djUwX3Nvcl9jcmVhdGUgLT5udjUwX21zdG1fbmV3LT4gZHJtX2RwX21zdF90b3BvbG9neV9tZ3Jf
-aW5pdA0KSW4gZnVuY3Rpb24gZHJtX2RwX21zdF90b3BvbG9neV9tZ3JfaW5pdCwgdGhlcmUgYXJl
-IGZpdmUgZXJyb3IgYnJhbmNoZXMsIGVycm9yIGJyYW5jaCBqdXN0IHJldHVybiBlcnJvciBjb2Rl
-LCBubyBmcmVlIGNhbGxlZC4gDQpBbmQgd2Ugc2VlIHRoYXQgdGhlIGNhbGxlciBkaWRuYHQgZG8g
-dGhlIGRybV9kcF9tc3RfdG9wb2xvZ3lfbWdyX2Rlc3Ryb3kgam9iLg0KSSBhbSBub3Qgc3VyZSBp
-ZiB0aGVyZSBzb21lIGdhcCwgSSB0aGluayB0aGlzIG1heSBicmluZyBpbiB0aGUgcmlzayBvZiBt
-ZW1sZWFrIGlzc3VlLg0KVGhhbmtzIQ0KDQpCUi8vQmVybmFyZA0KDQo+QlIsDQo+SmFuaS4NCg0K
-DQo+DQo+IFNpZ25lZC1vZmYtYnk6IEJlcm5hcmQgWmhhbyA8YmVybmFyZEB2aXZvLmNvbT4NCj4g
-LS0tDQo+ICBkcml2ZXJzL2dwdS9kcm0vZHJtX2RwX21zdF90b3BvbG9neS5jIHwgMjIgKysrKysr
-KysrKysrKysrKy0tLS0tLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDE2IGluc2VydGlvbnMoKyksIDYg
-ZGVsZXRpb25zKC0pDQo+DQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2RwX21z
-dF90b3BvbG9neS5jIA0KPiBiL2RyaXZlcnMvZ3B1L2RybS9kcm1fZHBfbXN0X3RvcG9sb2d5LmMN
-Cj4gaW5kZXggZjNkNzllZGE5NGJiLi5mNzNiMTgwZGVlNzMgMTAwNjQ0DQo+IC0tLSBhL2RyaXZl
-cnMvZ3B1L2RybS9kcm1fZHBfbXN0X3RvcG9sb2d5LmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJt
-L2RybV9kcF9tc3RfdG9wb2xvZ3kuYw0KPiBAQCAtNTUwMSw3ICs1NTAxLDEwIEBAIGludCBkcm1f
-ZHBfbXN0X3RvcG9sb2d5X21ncl9pbml0KHN0cnVjdCBkcm1fZHBfbXN0X3RvcG9sb2d5X21nciAq
-bWdyLA0KPiAgCQkJCSBpbnQgbWF4X2xhbmVfY291bnQsIGludCBtYXhfbGlua19yYXRlLA0KPiAg
-CQkJCSBpbnQgY29ubl9iYXNlX2lkKQ0KPiAgew0KPiAtCXN0cnVjdCBkcm1fZHBfbXN0X3RvcG9s
-b2d5X3N0YXRlICptc3Rfc3RhdGU7DQo+ICsJc3RydWN0IGRybV9kcF9tc3RfdG9wb2xvZ3lfc3Rh
-dGUgKm1zdF9zdGF0ZSA9IE5VTEw7DQo+ICsNCj4gKwltZ3ItPnBheWxvYWRzID0gTlVMTDsNCj4g
-KwltZ3ItPnByb3Bvc2VkX3ZjcGlzID0gTlVMTDsNCj4gIA0KPiAgCW11dGV4X2luaXQoJm1nci0+
-bG9jayk7DQo+ICAJbXV0ZXhfaW5pdCgmbWdyLT5xbG9jayk7DQo+IEBAIC01NTIzLDcgKzU1MjYs
-NyBAQCBpbnQgZHJtX2RwX21zdF90b3BvbG9neV9tZ3JfaW5pdChzdHJ1Y3QgZHJtX2RwX21zdF90
-b3BvbG9neV9tZ3IgKm1nciwNCj4gIAkgKi8NCj4gIAltZ3ItPmRlbGF5ZWRfZGVzdHJveV93cSA9
-IGFsbG9jX29yZGVyZWRfd29ya3F1ZXVlKCJkcm1fZHBfbXN0X3dxIiwgMCk7DQo+ICAJaWYgKG1n
-ci0+ZGVsYXllZF9kZXN0cm95X3dxID09IE5VTEwpDQo+IC0JCXJldHVybiAtRU5PTUVNOw0KPiAr
-CQlnb3RvIG91dDsNCj4gIA0KPiAgCUlOSVRfV09SSygmbWdyLT53b3JrLCBkcm1fZHBfbXN0X2xp
-bmtfcHJvYmVfd29yayk7DQo+ICAJSU5JVF9XT1JLKCZtZ3ItPnR4X3dvcmssIGRybV9kcF90eF93
-b3JrKTsgQEAgLTU1MzksMTggKzU1NDIsMTggQEAgDQo+IGludCBkcm1fZHBfbXN0X3RvcG9sb2d5
-X21ncl9pbml0KHN0cnVjdCBkcm1fZHBfbXN0X3RvcG9sb2d5X21nciAqbWdyLA0KPiAgCW1nci0+
-Y29ubl9iYXNlX2lkID0gY29ubl9iYXNlX2lkOw0KPiAgCWlmIChtYXhfcGF5bG9hZHMgKyAxID4g
-c2l6ZW9mKG1nci0+cGF5bG9hZF9tYXNrKSAqIDggfHwNCj4gIAkgICAgbWF4X3BheWxvYWRzICsg
-MSA+IHNpemVvZihtZ3ItPnZjcGlfbWFzaykgKiA4KQ0KPiAtCQlyZXR1cm4gLUVJTlZBTDsNCj4g
-KwkJZ290byBmYWlsZWQ7DQo+ICAJbWdyLT5wYXlsb2FkcyA9IGtjYWxsb2MobWF4X3BheWxvYWRz
-LCBzaXplb2Yoc3RydWN0IGRybV9kcF9wYXlsb2FkKSwgR0ZQX0tFUk5FTCk7DQo+ICAJaWYgKCFt
-Z3ItPnBheWxvYWRzKQ0KPiAtCQlyZXR1cm4gLUVOT01FTTsNCj4gKwkJZ290byBmYWlsZWQ7DQo+
-ICAJbWdyLT5wcm9wb3NlZF92Y3BpcyA9IGtjYWxsb2MobWF4X3BheWxvYWRzLCBzaXplb2Yoc3Ry
-dWN0IGRybV9kcF92Y3BpICopLCBHRlBfS0VSTkVMKTsNCj4gIAlpZiAoIW1nci0+cHJvcG9zZWRf
-dmNwaXMpDQo+IC0JCXJldHVybiAtRU5PTUVNOw0KPiArCQlnb3RvIGZhaWxlZDsNCj4gIAlzZXRf
-Yml0KDAsICZtZ3ItPnBheWxvYWRfbWFzayk7DQo+ICANCj4gIAltc3Rfc3RhdGUgPSBremFsbG9j
-KHNpemVvZigqbXN0X3N0YXRlKSwgR0ZQX0tFUk5FTCk7DQo+ICAJaWYgKG1zdF9zdGF0ZSA9PSBO
-VUxMKQ0KPiAtCQlyZXR1cm4gLUVOT01FTTsNCj4gKwkJZ290byBmYWlsZWQ7DQo+ICANCj4gIAlt
-c3Rfc3RhdGUtPnRvdGFsX2F2YWlsX3Nsb3RzID0gNjM7DQo+ICAJbXN0X3N0YXRlLT5zdGFydF9z
-bG90ID0gMTsNCj4gQEAgLTU1NjMsNiArNTU2NiwxMyBAQCBpbnQgZHJtX2RwX21zdF90b3BvbG9n
-eV9tZ3JfaW5pdChzdHJ1Y3QgZHJtX2RwX21zdF90b3BvbG9neV9tZ3IgKm1nciwNCj4gIAkJCQkg
-ICAgJmRybV9kcF9tc3RfdG9wb2xvZ3lfc3RhdGVfZnVuY3MpOw0KPiAgDQo+ICAJcmV0dXJuIDA7
-DQo+ICsNCj4gK2ZhaWxlZDoNCj4gKwlrZnJlZShtZ3ItPnByb3Bvc2VkX3ZjcGlzKTsNCj4gKwlr
-ZnJlZShtZ3ItPnBheWxvYWRzKTsNCj4gKwlkZXN0cm95X3dvcmtxdWV1ZShtZ3ItPmRlbGF5ZWRf
-ZGVzdHJveV93cSk7DQo+ICtvdXQ6DQo+ICsJcmV0dXJuIC1FTk9NRU07DQo+ICB9DQo+ICBFWFBP
-UlRfU1lNQk9MKGRybV9kcF9tc3RfdG9wb2xvZ3lfbWdyX2luaXQpOw0KDQotLQ0KSmFuaSBOaWt1
-bGEsIEludGVsIE9wZW4gU291cmNlIEdyYXBoaWNzIENlbnRlcg0K
+This patch adds basic DT for Microchip lan966x SoC and associated board
+pcb8291(2-port EVB). Adds peripherals required to allow booting: IRQs,
+clocks, timers, memory, flexcoms, GPIOs. Also adds other peripherals like
+crypto(AES,SHA), DMA and watchdog.
+
+Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+---
+v1 -> v2:
+- Moved flx3 usart0 node to dtsi file.
+- Removed status="okay" for dma0 to maintain consistency across nodes
+  (which means enabling dma0 by default)
+
+ arch/arm/boot/dts/Makefile            |   2 +
+ arch/arm/boot/dts/lan966x.dtsi        | 243 ++++++++++++++++++++++++++
+ arch/arm/boot/dts/lan966x_pcb8291.dts |  49 ++++++
+ 3 files changed, 294 insertions(+)
+ create mode 100644 arch/arm/boot/dts/lan966x.dtsi
+ create mode 100644 arch/arm/boot/dts/lan966x_pcb8291.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 0de64f237cd8..dc1bd216ed58 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -723,6 +723,8 @@ dtb-$(CONFIG_SOC_IMX7D) += \
+ dtb-$(CONFIG_SOC_IMX7ULP) += \
+ 	imx7ulp-com.dtb \
+ 	imx7ulp-evk.dtb
++dtb-$(CONFIG_SOC_LAN966) += \
++	lan966x_pcb8291.dtb
+ dtb-$(CONFIG_SOC_LS1021A) += \
+ 	ls1021a-moxa-uc-8410a.dtb \
+ 	ls1021a-qds.dtb \
+diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
+new file mode 100644
+index 000000000000..bc9084752409
+--- /dev/null
++++ b/arch/arm/boot/dts/lan966x.dtsi
+@@ -0,0 +1,243 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * lan966x.dtsi - Device Tree Include file for Microchip LAN966x family SoC
++ *
++ * Copyright (C) 2021 Microchip Technology, Inc. and its subsidiaries
++ *
++ * Author: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
++ *
++ */
++
++#include <dt-bindings/interrupt-controller/irq.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/mfd/atmel-flexcom.h>
++#include <dt-bindings/dma/at91.h>
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/clock/microchip,lan966x.h>
++
++/ {
++	model = "Microchip LAN966x family SoC";
++	compatible = "microchip,lan966x";
++	interrupt-parent = <&gic>;
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		cpu@0 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a7";
++			clock-frequency = <600000000>;
++			reg = <0x0>;
++		};
++	};
++
++	memory@60000000 {
++		device_type = "memory";
++		reg = <0x60000000 0x40000000>;  /* 1GB */
++	};
++
++	clocks {
++		sys_clk: sys_clk {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clock-frequency = <162500000>;
++		};
++
++		cpu_clk: cpu_clk {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clock-frequency = <600000000>;
++		};
++
++		ddr_clk: ddr_clk {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clock-frequency = <300000000>;
++		};
++
++		nic_clk: nic_clk {
++			compatible = "fixed-clock";
++			#clock-cells = <0>;
++			clock-frequency = <200000000>;
++		};
++	};
++
++	clks: clock-controller@e00c00a8 {
++		compatible = "microchip,lan966x-gck";
++		#clock-cells = <1>;
++		clocks = <&cpu_clk>, <&ddr_clk>, <&sys_clk>;
++		clock-names = "cpu", "ddr", "sys";
++		reg = <0xe00c00a8 0x38>;
++	};
++
++	timer {
++		compatible = "arm,armv7-timer";
++		interrupt-parent = <&gic>;
++		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
++		clock-frequency = <37500000>;
++		arm,cpu-registers-not-fw-configured;
++	};
++
++	soc {
++		compatible = "simple-bus";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges;
++
++		flx0: flexcom@e0040000 {
++			compatible = "atmel,sama5d2-flexcom";
++			reg = <0xe0040000 0x100>;
++			clocks = <&clks GCK_ID_FLEXCOM0>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0x0 0xe0040000 0x800>;
++			status = "disabled";
++		};
++
++		flx1: flexcom@e0044000 {
++			compatible = "atmel,sama5d2-flexcom";
++			reg = <0xe0044000 0x100>;
++			clocks = <&clks GCK_ID_FLEXCOM1>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0x0 0xe0044000 0x800>;
++			status = "disabled";
++		};
++
++		trng: trng@e0048000 {
++			compatible = "atmel,at91sam9g45-trng";
++			reg = <0xe0048000 0x100>;
++			clocks = <&nic_clk>;
++			status = "disabled";
++		};
++
++		aes: aes@e004c000 {
++			compatible = "atmel,at91sam9g46-aes";
++			reg = <0xe004c000 0x100>;
++			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
++			dmas = <&dma0 AT91_XDMAC_DT_PERID(13)>,
++			       <&dma0 AT91_XDMAC_DT_PERID(12)>;
++			dma-names = "rx", "tx";
++			clocks = <&nic_clk>;
++			clock-names = "aes_clk";
++		};
++
++		flx2: flexcom@e0060000 {
++			compatible = "atmel,sama5d2-flexcom";
++			reg = <0xe0060000 0x100>;
++			clocks = <&clks GCK_ID_FLEXCOM2>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0x0 0xe0060000 0x800>;
++			status = "disabled";
++		};
++
++		flx3: flexcom@e0064000 {
++			compatible = "atmel,sama5d2-flexcom";
++			reg = <0xe0064000 0x100>;
++			clocks = <&clks GCK_ID_FLEXCOM3>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0x0 0xe0064000 0x800>;
++			status = "disabled";
++
++			usart0: serial@200 {
++				compatible = "atmel,at91sam9260-usart";
++				reg = <0x200 0x200>;
++				interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&nic_clk>;
++				clock-names = "usart";
++				atmel,fifo-size = <32>;
++				status = "disabled";
++			};
++		};
++
++		dma0: dma-controller@e0068000 {
++			compatible = "microchip,sama7g5-dma";
++			reg = <0xe0068000 0x1000>;
++			interrupts = <GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>;
++			#dma-cells = <1>;
++			clocks = <&nic_clk>;
++			clock-names = "dma_clk";
++		};
++
++		sha: sha@e006c000 {
++			compatible = "atmel,at91sam9g46-sha";
++			reg = <0xe006c000 0xec>;
++			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
++			dmas = <&dma0 AT91_XDMAC_DT_PERID(14)>;
++			dma-names = "tx";
++			clocks = <&nic_clk>;
++			clock-names = "sha_clk";
++		};
++
++		flx4: flexcom@e0070000 {
++			compatible = "atmel,sama5d2-flexcom";
++			reg = <0xe0070000 0x100>;
++			clocks = <&clks GCK_ID_FLEXCOM4>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0x0 0xe0070000 0x800>;
++			status = "disabled";
++		};
++
++		timer0: timer@e008c000 {
++			compatible = "snps,dw-apb-timer";
++			reg = <0xe008c000 0x400>;
++			clocks = <&nic_clk>;
++			clock-names = "timer";
++			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
++		};
++
++		watchdog: watchdog@e0090000 {
++			compatible = "snps,dw-wdt";
++			reg = <0xe0090000 0x1000>;
++			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&nic_clk>;
++		};
++
++		can0: can@e081c000 {
++			compatible = "bosch,m_can";
++			reg = <0xe081c000 0xfc>, <0x00100000 0x4000>;
++			reg-names = "m_can", "message_ram";
++			interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "int0", "int1";
++			clocks = <&clks GCK_ID_MCAN0>, <&clks GCK_ID_MCAN0>;
++			clock-names = "hclk", "cclk";
++			assigned-clocks = <&clks GCK_ID_MCAN0>;
++			assigned-clock-rates = <40000000>;
++			bosch,mram-cfg = <0x0 0 0 64 0 0 32 32>;
++			status = "disabled";
++		};
++
++		gpio: pinctrl@e2004064 {
++			compatible = "microchip,lan966x-pinctrl";
++			reg = <0xe2004064 0xb4>,
++			    <0xe2010024 0x138>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			gpio-ranges = <&gpio 0 0 78>;
++			interrupt-controller;
++			interrupts = <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
++			#interrupt-cells = <2>;
++		};
++
++		gic: interrupt-controller@e8c11000 {
++			compatible = "arm,gic-400", "arm,cortex-a7-gic";
++			#interrupt-cells = <3>;
++			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-controller;
++			reg = <0xe8c11000 0x1000>,
++			      <0xe8c12000 0x2000>,
++			      <0xe8c14000 0x2000>,
++			      <0xe8c16000 0x2000>;
++		};
++	};
++};
+diff --git a/arch/arm/boot/dts/lan966x_pcb8291.dts b/arch/arm/boot/dts/lan966x_pcb8291.dts
+new file mode 100644
+index 000000000000..3ff86f15ea3d
+--- /dev/null
++++ b/arch/arm/boot/dts/lan966x_pcb8291.dts
+@@ -0,0 +1,49 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * lan966x_pcb8291.dts - Device Tree file for PCB8291
++ */
++/dts-v1/;
++#include "lan966x.dtsi"
++
++/ {
++	model = "Microchip EVB - LAN9662";
++	compatible = "microchip,lan9662-pcb8291", "microchip,lan9662", "microchip,lan966";
++};
++
++&gpio {
++	fc_shrd7_pins: fc_shrd7-pins {
++		pins = "GPIO_49";
++		function = "fc_shrd7";
++	};
++
++	fc_shrd8_pins: fc_shrd8-pins {
++		pins = "GPIO_54";
++		function = "fc_shrd8";
++	};
++
++	fc3_b_pins: fcb3-spi-pins {
++		/* SCK, RXD, TXD */
++		pins = "GPIO_51", "GPIO_52", "GPIO_53";
++		function = "fc3_b";
++	};
++};
++
++&can0 {
++	status = "okay";
++};
++
++&flx3 {
++	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
++	status = "okay";
++
++	usart0: serial@200 {
++		pinctrl-0 = <&fc3_b_pins>, <&fc_shrd7_pins>, <&fc_shrd8_pins>;
++		pinctrl-names = "default";
++		status = "okay";
++	};
++};
++
++&trng {
++	status = "okay";
++};
++
+-- 
+2.17.1
+

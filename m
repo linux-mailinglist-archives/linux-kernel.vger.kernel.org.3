@@ -2,117 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA9748436F
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:33:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B9D484371
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:34:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234240AbiADOdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:33:31 -0500
-Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:41455 "EHLO
-        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231607AbiADOda (ORCPT
+        id S234245AbiADOd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:33:59 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:37296 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232904AbiADOd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:33:30 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0V0xwPNn_1641306806;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V0xwPNn_1641306806)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 04 Jan 2022 22:33:28 +0800
-Date:   Tue, 4 Jan 2022 22:33:26 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Jeffle Xu <jefflexu@linux.alibaba.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
-        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
-        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 07/23] erofs: add nodev mode
-Message-ID: <YdRattisu+ITYvvZ@B-P7TQMD6M-0146.local>
-Mail-Followup-To: Jeffle Xu <jefflexu@linux.alibaba.com>,
-        dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
-        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
-        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
-        linux-kernel@vger.kernel.org
-References: <20211227125444.21187-1-jefflexu@linux.alibaba.com>
- <20211227125444.21187-8-jefflexu@linux.alibaba.com>
+        Tue, 4 Jan 2022 09:33:58 -0500
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id F2DD7501;
+        Tue,  4 Jan 2022 15:33:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1641306837;
+        bh=CMmr6T7Svw4Hs4kGTcS1DsdgoT4ahqOk4AGToF3UrBk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ti/VK4kxmwqiSM+WvJkJvjoYkdp9nJ++InB81DZqFYYbGZOxudr4+UeL1FUa93pI4
+         zZXNI6N81RjDKh1qEG7w9ExIhMqZeTUZMjMDLaeGvFeP2CVy1LMRa81XhyAGoPk6E+
+         XUVZwXUjhe2NxSwjhP4Gq0G9UH7TmH3+JHgHSIac=
+Date:   Tue, 4 Jan 2022 16:33:52 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Watson Chow <watson.chow@avnet.com>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Subject: Re: [PATCH 2/2] regulator: Add MAX20086-MAX20089 driver
+Message-ID: <YdRa0GoSoX8CP694@pendragon.ideasonboard.com>
+References: <20220102211124.18435-1-laurent.pinchart+renesas@ideasonboard.com>
+ <20220102211124.18435-3-laurent.pinchart+renesas@ideasonboard.com>
+ <YdRWwWmoQGQuUyLz@sirena.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211227125444.21187-8-jefflexu@linux.alibaba.com>
+In-Reply-To: <YdRWwWmoQGQuUyLz@sirena.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 08:54:28PM +0800, Jeffle Xu wrote:
-> Until then erofs is exactly blockdev based filesystem. In other using
-> scenarios (e.g. container image), erofs needs to run upon files.
+Hi Mark,
+
+Thank you for the review.
+
+On Tue, Jan 04, 2022 at 02:16:33PM +0000, Mark Brown wrote:
+> On Sun, Jan 02, 2022 at 11:11:24PM +0200, Laurent Pinchart wrote:
 > 
-> This patch introduces a new nodev mode, in which erofs could be mounted
-> from a bootstrap blob file containing the complete erofs image.
+> > ---
+> > Changes since v0:
+> > 
+> > - Remove unused regulator_config members
+> > - Drop unused header
 > 
-> The following patch will introduce a new mount option "uuid", by which
-> users could specify the bootstrap blob file.
+> This is a *very* long list relative to something that was never posted
+> :/
+
+I've included it for reference for Watson. It's not meant for upstream,
+I'll drop it in v2.
+
+> > @@ -1415,4 +1424,3 @@ config REGULATOR_QCOM_LABIBB
+> >  	  for LCD display panel.
+> >  
+> >  endif
+> > -
 > 
-> Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
+> Unrelated whitespace change.
 
-I think the order of some patches in this patchset can be improved.
+Oops.
 
-Take this patch as an example. This patch introduces a new mount
-option called "uuid", so the kernel will just accept it (which
-generates a user-visible impact) after this patch but it doesn't
-actually work.
-
-Therefore, we actually have three different behaviors here:
- - kernel doesn't support "uuid" mount option completely;
- - kernel support "uuid" but it doesn't work;
- - kernel support "uuid" correctly (maybe after some random patch);
-
-Actually that is bad for bisecting since there are some commits
-having temporary behaviors. And we don't know which commit
-actually fully implements this "uuid" mount option.
-
-So personally I think the proper order is just like the bottom-up
-approach, and make sure each patch can be tested / bisected
-independently.
-
-> ---
->  fs/erofs/data.c     | 13 ++++++++---
->  fs/erofs/internal.h |  1 +
->  fs/erofs/super.c    | 56 +++++++++++++++++++++++++++++++++------------
->  3 files changed, 53 insertions(+), 17 deletions(-)
+> > --- /dev/null
+> > +++ b/drivers/regulator/max20086-regulator.c
+> > @@ -0,0 +1,333 @@
+> > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > +/*
+> > + * max20086-regulator.c - MAX20086-MAX20089 camera power protector driver
+> > + *
 > 
-> diff --git a/fs/erofs/data.c b/fs/erofs/data.c
-> index 477aaff0c832..61fa431d0713 100644
-> --- a/fs/erofs/data.c
-> +++ b/fs/erofs/data.c
-> @@ -11,11 +11,18 @@
->  
->  struct page *erofs_get_meta_page(struct super_block *sb, erofs_blk_t blkaddr)
->  {
-> -	struct address_space *const mapping = sb->s_bdev->bd_inode->i_mapping;
-> +	struct address_space *mapping;
->  	struct page *page;
->  
-> -	page = read_cache_page_gfp(mapping, blkaddr,
-> -				   mapping_gfp_constraint(mapping, ~__GFP_FS));
+> Please keep the entire comment a C++ one so things look more
+> intentional.
 
-Apart from the recommendation above, if my understanding is
-correct, I think after we implement fscache_aops, 
-read_cache_page_gfp() can work with proper fscache mapping.
+OK.
 
-So no need to implement something like erofs_readpage_from_fscache()
-later (at least for the case here.)
+> > +#include <linux/regmap.h>
+> > +#include <linux/regulator/driver.h>
+> > +#include <linux/regulator/machine.h>
+> 
+> It is worrying that a regulator driver should need the interfaces for
+> machines...  the driver doesn't look like it actually does though.
 
-Thanks,
-Gao Xiang
+I'll try to remove it.
 
-> +	if (sb->s_bdev) {
-> +		mapping = sb->s_bdev->bd_inode->i_mapping;
-> +		page = read_cache_page_gfp(mapping, blkaddr,
-> +				mapping_gfp_constraint(mapping, ~__GFP_FS));
-> +	} else {
-> +		/* TODO: data path in nodev mode */
-> +		page = ERR_PTR(-EINVAL);
-> +	}
-> +
+> > +static int max20086_parse_regulators_dt(struct max20086 *chip)
+> > +{
+> > +	struct of_regulator_match matches[MAX20086_MAX_REGULATORS] = { };
+> > +	struct device_node *node;
+> > +	unsigned int i;
+> > +	unsigned int n;
+> > +	int num;
+> 
+> You should be able to remove the stuff about looking for the regulators
+> node and just set of_match and regulators_node in the descs.
+
+I'll give it a try. I'm not very experienced with the regulator
+framework, sorry for the rookie mistakes.
+
+> > +	num = of_regulator_match(chip->dev, node, matches,
+> > +				 chip->info->num_outputs);
+> > +	of_node_put(node);
+> > +	if (num <= 0) {
+> > +		dev_err(chip->dev, "Failed to match regulators\n");
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	chip->num_outputs = num;
+> 
+> The number of regulators the device supports should be known from the
+> compatible, I'd expect a data table for this.  It should be possible to
+> read the state of regulators not described in the DT.
+
+Does this mean that the driver should register all regulators, even the
+ones not described in DT ? Who would read the state ?
+
+> > +static const struct regmap_config max20086_regmap_config = {
+> > +	.reg_bits = 8,
+> > +	.val_bits = 8,
+> > +	.writeable_reg = max20086_gen_is_writeable_reg,
+> > +	.max_register = 0x9,
+> > +	.cache_type = REGCACHE_NONE,
+> > +};
+> 
+> No readback support?
+
+I'll fix that.
+
+> > +	/* Turn off all outputs. */
+> > +	ret = regmap_update_bits(chip->regmap, MAX20086_REG_CONFIG,
+> > +				 MAX20086_EN_MASK, 0);
+> > +	if (ret < 0) {
+> > +		dev_err(chip->dev, "Failed to disable outputs: %d\n", ret);
+> > +		return ret;
+> > +	}
+> 
+> The driver should not do not do this - the driver should only configure
+> the hardware if told to by the core which in turn will only do this if
+> there's explicit permission to do so in the machine constraints.  We
+> don't know what some system integrator might have thought to do with
+> the device.
+
+I'll fix that too (I actually suspected the topic could get raised
+during review :-)).
+
+> > +	/* Get the chip out of low-power shutdown state. */
+> > +	chip->gpio_en = devm_gpiod_get(chip->dev, "enable", GPIOD_OUT_HIGH);
+> > +	if (IS_ERR(chip->gpio_en)) {
+> > +		ret = PTR_ERR(chip->gpio_en);
+> > +		dev_err(chip->dev, "Failed to get enable GPIO: %d\n", ret);
+> > +		return ret;
+> > +	}
+> 
+> This one is more OK - it's changing the state of the outputs that's an
+> issue.  I guess this might cause the outputs to come on though if the
+> GPIO was left off by the bootloader which is awkward.  If there's
+> nothing other than the outputs going on with the chip I would be tempted
+> to map this onto the per regulator enable GPIO that the core supports,
+> the core will then be able to manage the low power state at runtime.
+> That's *probably* the least bad option we have with current interfaces.
+
+While fishing for code I can copy in the always unfashionable cargocult
+style, I came across max8973-regulator.c that handles the enable GPIO in
+the following way:
+
+		if (ridata && (ridata->constraints.always_on ||
+			       ridata->constraints.boot_on))
+			gflags = GPIOD_OUT_HIGH;
+		else
+			gflags = GPIOD_OUT_LOW;
+		gflags |= GPIOD_FLAGS_BIT_NONEXCLUSIVE;
+		gpiod = devm_gpiod_get_optional(&client->dev,
+						"maxim,enable",
+						gflags);
+
+Should I try to replicate that ? It gets more difficult with multiple
+regulators that share the same GPIO. That's why I left it as-is.
+
+> It's a real shame we can't easily get the GPIO state at startup for
+> bootstrapping :/  
+
+-- 
+Regards,
+
+Laurent Pinchart

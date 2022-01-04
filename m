@@ -2,88 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F24C54843A6
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:46:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1A64843A5
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:46:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234362AbiADOqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:46:31 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:40826 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231519AbiADOqa (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:46:30 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 5FA55212B8;
-        Tue,  4 Jan 2022 14:46:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1641307589; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yTzDVTn5ksZWOrdG92R8By21jPJ8PhpzB9LehHRf0hg=;
-        b=F6GEaiAuA/eqxm+utrQIOuIRWGkiGFkBVUdQXCcsW7IwV3GnuW9gkl4gP4frvmRp6zrMZu
-        +z5JGg2JmxQszlyAr/C2HAaQ+MtsaUMPrn2AuBOdVSvXxKHsm44yYtqmmOcf6ub7B2wbU5
-        tfjVeoAZm6tvPN74l0lF/Zk+SU0Ifio=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 0800DA3B89;
-        Tue,  4 Jan 2022 14:46:29 +0000 (UTC)
-Date:   Tue, 4 Jan 2022 15:45:24 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        John Ogness <john.ogness@linutronix.de>
-Subject: Re: header circular dependencies
-Message-ID: <YdRdhE9z+Yyxwrhj@alley>
-References: <CAHp75Vdjp9_67xe0PeZ9LzcJ=eNxB0qVqPJqtFEvh3SDgcdODw@mail.gmail.com>
+        id S234360AbiADOq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:46:26 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:50896 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231519AbiADOqY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 09:46:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=Ud2jEnjGhrKvClBdA1a2WDyh6jHKcxWAWDDYyIRsGk0=; b=tQqzpviI6bB84IlZ0GaWEC7Sc+
+        URKX2jrs31pTvEouEzWKbnvJvWgmaEeHEWXOdsuVXhZ82O+Gjijch0fOp1JBwttwZd49SYT6onwDT
+        EYok7dm9PHLBeD5J4liIOKv+Ce1nXQQ9TGAhMZbc1qntHqeok9AX35FoG+Qnb8OJ1/dI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1n4l4t-000TOh-5U; Tue, 04 Jan 2022 15:46:19 +0100
+Date:   Tue, 4 Jan 2022 15:46:19 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Corentin Labbe <clabbe.montjoie@gmail.com>,
+        linus.walleij@linaro.org, ulli.kroll@googlemail.com,
+        kuba@kernel.org, davem@davemloft.net, hkallweit1@gmail.com,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: net: phy: marvell: network working with generic PHY and not with
+ marvell PHY
+Message-ID: <YdRdu3jFPnGd1DsH@lunn.ch>
+References: <YdQoOSXS98+Af1wO@Red>
+ <YdQsJnfqjaFrtC0m@shell.armlinux.org.uk>
+ <YdQwexJVfrdzEfZK@Red>
+ <YdQydK4GhI0P5RYL@shell.armlinux.org.uk>
+ <YdQ5i+//UITSbxS/@shell.armlinux.org.uk>
+ <YdRVovG9mgEWffkn@Red>
+ <YdRZQl6U0y19P/0+@shell.armlinux.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHp75Vdjp9_67xe0PeZ9LzcJ=eNxB0qVqPJqtFEvh3SDgcdODw@mail.gmail.com>
+In-Reply-To: <YdRZQl6U0y19P/0+@shell.armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2021-12-22 21:08:39, Andy Shevchenko wrote:
-> `make headerdep` is full of printk.h circular dependencies, like
-> 
-> include/kvm/arm_vgic.h:18: warning: recursive header inclusion
-> In file included from linux/printk.h,
->                 from linux/dynamic_debug.h:188
->                 from linux/printk.h:555 <-- here
+> @@ -1227,16 +1227,18 @@ static int m88e1118_config_init(struct phy_device *phydev)
+>  {
+>  	int err;
+>  
+> -	/* Change address */
+> -	err = marvell_set_page(phydev, MII_MARVELL_MSCR_PAGE);
+> -	if (err < 0)
+> -		return err;
+> -
+>  	/* Enable 1000 Mbit */
+> -	err = phy_write(phydev, 0x15, 0x1070);
+> +	err = phy_write_paged(phydev, MII_MARVELL_MSCR_PAGE,
+> +			      MII_88E1121_PHY_MSCR_REG, 0x1070);
 
-This one looks like false positive:
+Ah, yes, keeping this makes it more backwards compatible.
 
-   + printk.h includes dynamic_debug.h when CONFIG_DYNAMIC_DEBUG_CORE
-   + dynamic_debug.h includes printk.h when !CONFIG_DYNAMIC_DEBUG_CORE
+It would be nice to replace the 0x1070 with #defines.
 
-But there seem to be other cycles, for example:
+We already have:
 
-   + printk.h
-     + dynamic_debug.h
-       + jump_label.h
-	 + bug.h
-	   + asm/bug.h
-	     + printk.h
+#define MII_88E1121_PHY_MSCR_RX_DELAY	BIT(5)
+#define MII_88E1121_PHY_MSCR_TX_DELAY	BIT(4)
+#define MII_88E1121_PHY_MSCR_DELAY_MASK	(BIT(5) | BIT(4))
 
-I guess that it somehow works _only_ because printk.h includes
-dynamic_debug.h late. It probably defines everything that is needed
-by bug.h early enough.
+Bits 6 is the MSB of the default MAC speed.
+Bit 13 is the LSB of the default MAC speed. These two should default to 10b = 1000Mbps
+Bit 12 is reserved, and should be written 1.
 
-> I'm wondering if it's a false positive?
-> In either case, can we teach the headerdep not to complain by fixing
-> the culprit?
-
-I am scratching my head how to clean this up. All the dependencies
-make sense. The main problem is that all headers provide a lot of
-inlined functionality. The inlining is often important either because
-of speed or because every caller needs to have its own data structure
-(struct _ddebug, struct static_key).
-
-I can't find any good solution at the moment. But I am still slowed
-down after the holidays.
-
-Best Regards,
-Petr
+    Andrew

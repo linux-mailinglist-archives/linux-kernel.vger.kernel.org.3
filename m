@@ -2,100 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB9348398B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 01:53:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E37483991
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 02:01:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbiADAxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 19:53:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38798 "EHLO
+        id S231526AbiADBBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 20:01:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiADAxL (ORCPT
+        with ESMTP id S230044AbiADBBE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 19:53:11 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7CBC061761
-        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 16:53:10 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id v10-20020a05600c214a00b00345e59928eeso15316596wml.0
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 16:53:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=TF6gg6PjL+Tsr1CHCrq4s5UF/4QUoUyXUoUiUtXWHtA=;
-        b=ngi9q2+NcICpPWxuy4wq2HcFqzGEHDBC0s4hhNpjDyF56eQDSfBuU/NXw324BlTnX6
-         cIn4+wHaVvaj+SSCV5JdUr13I6D6GaExB49lRBygkFL8nxqHrBVTLq1w19GOqpauJeDF
-         wcT9yEmseTDt7gYbVpQKTL5eGwLlOl/PpubKdwM59JebO9rWYoRuySMd/jizNIJjMpGm
-         2W4HNlRAbzIt/bVSzIBALVhKLA7V8ax5qToUJgw/pddvwItK7OVb3UjncEttVzNcYMhC
-         Dd4UAyH99sNT1yK7OyG9cGUahcPlc8AR0oWurcuL+AKJ+6UaWehhndnUwgaHPJT8ThqH
-         /sXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=TF6gg6PjL+Tsr1CHCrq4s5UF/4QUoUyXUoUiUtXWHtA=;
-        b=nsKeBm0JGib4O1u0uy5J+Q99Sb4IvwZixuZyJQKb8/t6ggfckIYxAewNR50aVGYRtc
-         kjzN0bbC0VuRGKfgJqJScPC7CYSM9QLumZLVZBuuo+VR4mcdEjtYGgfRToS1idX4UJIK
-         guS3jz+19h0YR611DJNrEpvEL6U3SHLf9pejcTS3GW9GKyodfnr958i8HhHbaIs82ngM
-         fHydPcfv7M8s23TaxUKDHAeRhfJBEEbrRsllCZ5IbS/UDvmiF/G2Rf1FSbTDLspAp4HP
-         AWQynJVvZYR5yMzmQL/p1hmUUMHtKige5ZrNVdMMOZTWpmqlr3cQ+b+DQM25BWErMqJ3
-         A53Q==
-X-Gm-Message-State: AOAM531eg9kUr2Lb2pdgJAKlnGffr06eM59wnVKvsWDE7EpCn+13ng2w
-        Ox4VeArSf57mFvCjSu9QnAnaF/Y5TVyUVz1jIgg=
-X-Google-Smtp-Source: ABdhPJxKGEDTgR59hxcJKfpqrR+3NLO/JvnB0h8mdd3hiQhTrKLibYyLKgGpbAhCEHy1Mumf2E58PpDmSg7J93tXpAs=
-X-Received: by 2002:a1c:8013:: with SMTP id b19mr39354068wmd.35.1641257588483;
- Mon, 03 Jan 2022 16:53:08 -0800 (PST)
+        Mon, 3 Jan 2022 20:01:04 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71E8C061761;
+        Mon,  3 Jan 2022 17:01:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=Rpq0CasVOhIvJE1oC2pxrzGmHvQGWTE5PPcm0QZMADc=; b=GBLyUbsC/eU3mQmLF9zxPK9mZ6
+        /A6jOPQ/lbM8cJU5p7YBGY9gFpYMkuCf+qYY4WnUvtZYhZSbhsSjiJFGE2TxR0YJJjNgqKalXFRrO
+        1FCgVK6pHghM5RQA1JjHrDIVl+aSn+lhmA1+kgns029M+isGZN+FUZ6V1wHRB3h9T6zkMg9TVP+wt
+        mh7kB8fm/42KhECMApSAewtHquwOtXp8oLqxDZLagIY2vWIKUZHC9v/H96GhdCPfJYro52J6z6kcV
+        uipLwIpmp32CgQNkUfe3U1SrR2pVOSBgxtLm+tAT1AM2UXD9UVB7XpE7Fjket73xpXlIm5YiJZERG
+        YjK0C1jQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n4YC8-005Ba4-Ig; Tue, 04 Jan 2022 01:00:56 +0000
+Message-ID: <50fa4eca-ce74-431f-8497-273d2c5956f2@infradead.org>
+Date:   Mon, 3 Jan 2022 17:00:53 -0800
 MIME-Version: 1.0
-Received: by 2002:adf:e4c8:0:0:0:0:0 with HTTP; Mon, 3 Jan 2022 16:53:08 -0800 (PST)
-Reply-To: tailorkathymilbourne@gmail.com
-From:   Tailor Milbourne <mrtimeduru@gmail.com>
-Date:   Tue, 4 Jan 2022 01:53:08 +0100
-Message-ID: <CANyi=+4442ug=kNgwy_2bsgMSZXA=eLhHGFrY-YM=kdJRz1xoA@mail.gmail.com>
-Subject: I HOPE YOU RECEIVED MY MESSAGE
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH 2/2] IB/rdmavt: modify rdmavt/qp.c for UML
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-rdma@vger.kernel.org, linux-um@lists.infradead.org
+References: <20220102070623.24009-1-rdunlap@infradead.org>
+ <20220103230445.GA2592848@nvidia.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220103230445.GA2592848@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-Dear friend
 
-Thanks for honoring my mail. I am Tailor Kathy Milbourne from the
-United States of America, a 35years old soldier, presently living in
-Syria. My birthday is 10th February. I=E2=80=99m seriously in search of a m=
-an
-I can trust, a man that will love me the way I am, believe in me, a
-reliable man I can spend the rest of my life loving him and him loving
-me. I=E2=80=99m divorced because of a bad attitude of a bad man which I=E2=
-=80=99m not
-ready to share with you till we know each other better. However, I
-have got a 7years old daughter, she is staying with her Nanny for the
-past two years, I can=E2=80=99t say I=E2=80=99m a bad mother; but it=E2=80=
-=99s because of my
-job nature, which I=E2=80=99m ready to give up and face my daughter and my =
-new
-life.  I'm a very decent woman and I do have regards and respect for
-men, caring, loving, honest understanding, Sincere, Energetic, Kind,
-Trustworthy, Faithful, Family oriented, Emotional, Romantic and Sexy.
-I'm looking forward to meeting a man who is, loving, caring, kind,
-honest, sincere, down to earth, kind and faithful, a Good man who is
-serious about relationships.
 
-I'm here to meet my Sweet love and life partner, Someone I can call my hone=
-y.
+On 1/3/22 15:04, Jason Gunthorpe wrote:
+> On Sat, Jan 01, 2022 at 11:06:23PM -0800, Randy Dunlap wrote:
+>> When building rdmavt for ARCH=um, qp.c has a build error on a reference
+>> to the x86-specific cpuinfo field 'x86_cache_size'. This value is then
+>> used to determine whether to use cacheless_memcpy() or not.
+>> Provide a fake value to LLC for CONFIG_UML. Then provide a separate
+>> verison of cacheless_memcpy() for CONFIG_UML that is just a plain
+>> memcpy(), like the calling code uses.
+>>
+>> Prevents these build errors:
+>>
+>> ../drivers/infiniband/sw/rdmavt/qp.c: In function ‘rvt_wss_llc_size’:
+>> ../drivers/infiniband/sw/rdmavt/qp.c:88:23: error: ‘struct cpuinfo_um’ has no member named ‘x86_cache_size’; did you mean ‘x86_capability’?
+>>   return boot_cpu_data.x86_cache_size;
+>>
+>> ../drivers/infiniband/sw/rdmavt/qp.c: In function ‘cacheless_memcpy’:
+>> ../drivers/infiniband/sw/rdmavt/qp.c:100:2: error: implicit declaration of function ‘__copy_user_nocache’; did you mean ‘copy_user_page’? [-Werror=implicit-function-declaration]
+>>   __copy_user_nocache(dst, (void __user *)src, n, 0);
+>>
+>> Fixes: 68f5d3f3b654 ("um: add PCI over virtio emulation driver")
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>>  drivers/infiniband/sw/rdmavt/qp.c |   12 ++++++++++++
+>>  1 file changed, 12 insertions(+)
+>>
+>> +++ linux-next-20211224/drivers/infiniband/sw/rdmavt/qp.c
+>> @@ -84,10 +84,15 @@ EXPORT_SYMBOL(ib_rvt_state_ops);
+>>  /* platform specific: return the last level cache (llc) size, in KiB */
+>>  static int rvt_wss_llc_size(void)
+>>  {
+>> +#if !defined(CONFIG_UML)
+>>  	/* assume that the boot CPU value is universal for all CPUs */
+>>  	return boot_cpu_data.x86_cache_size;
+>> +#else /* CONFIG_UML */
+>> +	return 1024;	/* fake 1 MB LLC size */
+>> +#endif
+>>  }
+>>  
+>> +#if !defined(CONFIG_UML)
+>>  /* platform specific: cacheless copy */
+>>  static void cacheless_memcpy(void *dst, void *src, size_t n)
+>>  {
+>> @@ -99,6 +104,13 @@ static void cacheless_memcpy(void *dst,
+>>  	 */
+>>  	__copy_user_nocache(dst, (void __user *)src, n, 0);
+>>  }
+>> +#else
+>> +/* for CONFIG_UML, this is just a plain memcpy() */
+>> +static void cacheless_memcpy(void *dst, void *src, size_t n)
+>> +{
+>> +	memcpy(dst, src, n);
+>> +}
+>> +#endif
+> 
+> memcpy is not the same thing as __copy_user - the hint is in the
+> __user cast..
+> 
+> It should by copy_from_user(), I think, and this is all just somehow
+> broken to not check the return code.
 
-I attached my pictures for you. I need to see your pictures, also tell
-me more about you, and always know that I am ready for anything and to
-relocate to be with my dream man, I will relocate to your country to
-start a new life.
+Thanks.
 
-.
+> Why are you trying to make a HW driver compile on UML? Is there any
+> way to even use a driver like this in a UML environment?
 
-Please do get back to me as soon as possible because i will be leaving
-here in two weeks and i will be heading to your country, so always
-keep in touch
+I'm just trying to clean up lots of UML build errors.
+I'm quite happy just making the driver depend on !UML.
 
-Yours sincerely
+UML maintainers, what do you think?
 
-Tailor Milbourne
+Thanks again.
+
+-- 
+~Randy

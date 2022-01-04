@@ -2,90 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 495A3484613
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:39:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 374F648462E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235427AbiADQj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 11:39:28 -0500
-Received: from foss.arm.com ([217.140.110.172]:33614 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235378AbiADQj1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 11:39:27 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5941113A1;
-        Tue,  4 Jan 2022 08:39:27 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.9.1])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 638603F774;
-        Tue,  4 Jan 2022 08:39:25 -0800 (PST)
-Date:   Tue, 4 Jan 2022 16:39:19 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        paulmck <paulmck@kernel.org>, maz <maz@kernel.org>,
-        frederic <frederic@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        rcu <rcu@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Anup Patel <Anup.Patel@wdc.com>
-Subject: Re: Possible nohz-full/RCU issue in arm64 KVM
-Message-ID: <YdR4N9QVYOzjowAb@FVFF77S0Q05N>
-References: <d80e440375896f75d45e227d40af60ca7ba24ceb.camel@redhat.com>
- <YbyO40zDW/kvUHEE@FVFF77S0Q05N>
- <70f112072d9496d21901946ea82832d3ed3a8cb2.camel@redhat.com>
- <Ybyg1r/Q6EfeuXGV@FVFF77S0Q05N>
- <9ab8107f-ff41-6a9e-57e1-a261bea93aca@redhat.com>
+        id S235504AbiADQsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 11:48:00 -0500
+Received: from mailout.easymail.ca ([64.68.200.34]:34786 "EHLO
+        mailout.easymail.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235478AbiADQsA (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 11:48:00 -0500
+X-Greylist: delayed 503 seconds by postgrey-1.27 at vger.kernel.org; Tue, 04 Jan 2022 11:47:59 EST
+Received: from localhost (localhost [127.0.0.1])
+        by mailout.easymail.ca (Postfix) with ESMTP id 5EFADC7F1A;
+        Tue,  4 Jan 2022 16:39:35 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at emo01-pco.easydns.vpn
+Received: from mailout.easymail.ca ([127.0.0.1])
+        by localhost (emo01-pco.easydns.vpn [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 3SsEdDYT7Fnq; Tue,  4 Jan 2022 16:39:35 +0000 (UTC)
+Received: from mail.gonehiking.org (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        by mailout.easymail.ca (Postfix) with ESMTPA id 13D47C7EDF;
+        Tue,  4 Jan 2022 16:39:35 +0000 (UTC)
+Received: from [192.168.1.4] (internal [192.168.1.4])
+        by mail.gonehiking.org (Postfix) with ESMTP id 1AE7F3EF3C;
+        Tue,  4 Jan 2022 09:39:33 -0700 (MST)
+Message-ID: <a6a99a33-9124-bbc5-610b-a67d7af76c4a@gonehiking.org>
+Date:   Tue, 4 Jan 2022 09:39:33 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9ab8107f-ff41-6a9e-57e1-a261bea93aca@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v3 1/3] scsi: Provide for avoiding trailing allocation
+ length with VPD inquiries
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Khalid Aziz <khalid@gonehiking.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Nix <nix@esperi.org.uk>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <alpine.DEB.2.21.2201020010540.56863@angie.orcam.me.uk>
+ <alpine.DEB.2.21.2201020021000.56863@angie.orcam.me.uk>
+ <20220103082338.GA28606@lst.de>
+From:   Khalid Aziz and Shuah Khan <azizkhan@gonehiking.org>
+In-Reply-To: <20220103082338.GA28606@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 04:54:22PM +0100, Paolo Bonzini wrote:
-> On 12/17/21 15:38, Mark Rutland wrote:
-> > For example kvm_guest_enter_irqoff() calls guest_enter_irq_off() which calls
-> > vtime_account_guest_enter(), but kvm_guest_exit_irqoff() doesn't call
-> > guest_exit_irq_off() and the call to vtime_account_guest_exit() is open-coded
-> > elsewhere. Also, guest_enter_irq_off() conditionally calls
-> > rcu_virt_note_context_switch(), but I can't immediately spot anything on the
-> > exit side that corresponded with that, which looks suspicious.
-> 
-> rcu_note_context_switch() is a point-in-time notification; it's not strictly
-> necessary, but it may improve performance a bit by avoiding unnecessary IPIs
-> from the RCU subsystem.
-> 
-> There's no benefit from doing it when you're back from the guest, because at
-> that point the CPU is just running normal kernel code.
+On 1/3/22 01:23, Christoph Hellwig wrote:
+> On Sun, Jan 02, 2022 at 11:23:45PM +0000, Maciej W. Rozycki wrote:
+>> Allow SCSI hosts to request avoiding trailing allocation length with VPD
+>> inquiries, and use the mechanism to work around an issue with at least
+>> some BusLogic MultiMaster host bus adapters and observed with the BT-958
+>> model specifically where issuing commands that return less data than
+>> provided for causes fatal failures:
+> Wouldn't it make more sesnse to hide this quirk insde of
+> scsi_vpd_inquiry to also handle the scsi_get_vpd_buf case?  Something
+> like:
+>
+>
+> diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
+> index 211aace69c22c..194a51f772aaa 100644
+> --- a/drivers/scsi/scsi.c
+> +++ b/drivers/scsi/scsi.c
+> @@ -289,8 +289,8 @@ EXPORT_SYMBOL(scsi_track_queue_full);
+>    *
+>    * Returns size of the vpd page on success or a negative error number.
+>    */
+> -static int scsi_vpd_inquiry(struct scsi_device *sdev, unsigned char *buffer,
+> -							u8 page, unsigned len)
+> +static int __scsi_vpd_inquiry(struct scsi_device *sdev, unsigned char *buffer,
+> +		u8 page, unsigned len)
+>   {
+>   	int result;
+>   	unsigned char cmd[16];
+> @@ -321,6 +321,20 @@ static int scsi_vpd_inquiry(struct scsi_device *sdev, unsigned char *buffer,
+>   	return get_unaligned_be16(&buffer[2]) + 4;
+>   }
+>   
+> +static int scsi_vpd_inquiry(struct scsi_device *sdev, unsigned char *buffer,
+> +		u8 page, unsigned len)
+> +{
+> +	if (sdev->host->no_trailing_allocation_length) {
+> +		int ret = __scsi_vpd_inquiry(sdev, buffer, page, min(4U, len));
+> +
+> +		if (ret < 4)
+> +			return ret;
+> +		len = min_t(unsigned int, ret, len);
+> +	}
+> +
+> +	return __scsi_vpd_inquiry(sdev, buffer, page, len);
+> +}
+> +
+>   /**
+>    * scsi_get_vpd_page - Get Vital Product Data from a SCSI device
+>    * @sdev: The device to ask
 
-I see.
+This is certainly better. It consolidates all the special cases for 
+getting VPD pages in one location and ensures no cases are missed.
 
-My main issue here was just that it's really difficult to see how the
-entry/exit logic is balanced, and I reckon we can solve that by splitting
-guest_{enter,exit}_irqoff() into helper functions to handle the vtime
-accounting separately from the context tracking, so that arch code can do
-something like:
-
-  guest_timing_enter_irqoff();
-  
-  guest_eqs_enter_irqoff();
-  < actually run vCPU here >
-  guest_eqs_exit_irqoff();
-  
-  < handle pending IRQs here >
-  
-  guest_timing_exit_irqoff();
-
-... which I hope should work for RISC-V too.
-
-I've had a go, and I've pushed out a WIP to:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/kvm/rcu
-
-I also see we'll need to add some lockdep/irq-tracing management to arm64, and
-it probably makes sense to fold that into common helpers, so I'll have a play
-with that tomorrow.
-
-Thanks,
-Mark.
+--
+Khalid

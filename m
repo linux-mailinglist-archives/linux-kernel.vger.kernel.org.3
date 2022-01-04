@@ -2,92 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D99744849FB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:39:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54CA64849FE
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234296AbiADVjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 16:39:31 -0500
-Received: from ivanoab7.miniserver.com ([37.128.132.42]:36378 "EHLO
-        www.kot-begemot.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234145AbiADVj2 (ORCPT
+        id S234361AbiADVkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 16:40:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41226 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234324AbiADVkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 16:39:28 -0500
-Received: from [192.168.18.6] (helo=jain.kot-begemot.co.uk)
-        by www.kot-begemot.co.uk with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <anton.ivanov@kot-begemot.co.uk>)
-        id 1n4rWa-0000cY-He; Tue, 04 Jan 2022 21:39:24 +0000
-Received: from madding.kot-begemot.co.uk ([192.168.3.98])
-        by jain.kot-begemot.co.uk with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <anton.ivanov@kot-begemot.co.uk>)
-        id 1n4rWW-001pwP-7x; Tue, 04 Jan 2022 21:39:18 +0000
-Subject: Re: Occasional hung with UM after enable VMAP_STACK
-To:     Walter Lozano <walter.lozano@collabora.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Sjoerd Simons <sjoerd.simons@collabora.com>,
-        ritesh sarraf <ritesh.sarraf@collabora.com>
-References: <be290dc3-db9c-2940-91bb-c91bf42fd8f6@collabora.com>
- <d80e4e760171de3813895e3cbfcadf96aa6c8fb6.camel@sipsolutions.net>
- <8c26a869-0cbe-a38c-8a8d-9f3f171f7e72@collabora.com>
-From:   Anton Ivanov <anton.ivanov@kot-begemot.co.uk>
-Message-ID: <94613ccb-ab4d-851d-01d0-dfa72b73fdb0@kot-begemot.co.uk>
-Date:   Tue, 4 Jan 2022 21:39:15 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 4 Jan 2022 16:40:18 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876E1C061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 13:40:18 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id m21so154898364edc.0
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 13:40:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BJ+v55yUFiLI/4g7mFYq1QZLgbrpUXzZ9wJ+9sDmYqY=;
+        b=dshp9e3zGhy1oAbNcYfkNWToEIOghrWZ0wBynLm22Q25H7Twu0+1Vn2n4vbi7LXHG7
+         yzTSzC+9R9UVB6CXb1YasX8uRVerZbDEuDYu5lMPCZFXFJw8bany1Esz2QXiOcdcWYmU
+         3/R0fH5lIcn9lDrWfU7WvV2t0+2TPrylTlYIw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BJ+v55yUFiLI/4g7mFYq1QZLgbrpUXzZ9wJ+9sDmYqY=;
+        b=tI3QyVUHQgSnBbDWJPrPJy1Jo8+CAlIpEynhqF9j6nPxORBl86lXzzaqrqWHYFCR23
+         Hp8UZ2HVSlHvfKc9ZXJXqhT6+ImNnQjrBE+uifG7lvXFCT280v/Ippk2o4CpgPCpebVI
+         lX0qR+1uoLYZxR+vtrjhfQLqObS0WQk/lzH0qmbbZUDVOCk+MjNj6hGLfFPdZQPrhOEa
+         oALC2ffBPGlx2Y9y0vTpdO4lw8Nx0pVkVtfB7dDmmumo8oMAXR3yPTUc4grdSBaR+UTe
+         jad1CjaWCY6IvbwGUBIKlY7l5IUivfSMxqoDiiuk08vVhMOV8hC4ZqvdC9KnKKglaWuU
+         IZ/A==
+X-Gm-Message-State: AOAM531LFy0M2A1zDbW9d1YghsXryRclF8NLY308MPuGqW1N+JfMSIsY
+        /7nv4qQEiDp6+DOdylGyEAIazhF8ujiy05ANIwc=
+X-Google-Smtp-Source: ABdhPJwsSa9ack5YBdUFRg1qQGpl/Xs3+mPOct2Dj1gNmXVwjLlvAqIoE4ULYQGkHCM0cDvuN+ImAg==
+X-Received: by 2002:aa7:d5c5:: with SMTP id d5mr50820664eds.251.1641332416991;
+        Tue, 04 Jan 2022 13:40:16 -0800 (PST)
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
+        by smtp.gmail.com with ESMTPSA id ck14sm15145054edb.5.2022.01.04.13.40.16
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jan 2022 13:40:16 -0800 (PST)
+Received: by mail-wm1-f54.google.com with SMTP id p1-20020a1c7401000000b00345c2d068bdso512014wmc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 13:40:16 -0800 (PST)
+X-Received: by 2002:a05:600c:4f13:: with SMTP id l19mr243370wmq.152.1641332405774;
+ Tue, 04 Jan 2022 13:40:05 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <8c26a869-0cbe-a38c-8a8d-9f3f171f7e72@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: -2.0
-X-Spam-Score: -1.0
-X-Clacks-Overhead: GNU Terry Pratchett
+References: <20220104202227.2903605-1-yuzhao@google.com> <20220104202227.2903605-10-yuzhao@google.com>
+In-Reply-To: <20220104202227.2903605-10-yuzhao@google.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 4 Jan 2022 13:39:49 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjc3vpQfSTzJ8DwCVfmj6Mhq16d375cMPOgFB5A1EL2tw@mail.gmail.com>
+Message-ID: <CAHk-=wjc3vpQfSTzJ8DwCVfmj6Mhq16d375cMPOgFB5A1EL2tw@mail.gmail.com>
+Subject: Re: [PATCH v6 9/9] mm: multigenerational lru: Kconfig
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, page-reclaim@google.com,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/01/2022 19:26, Walter Lozano wrote:
-> Hi Johannes,
-> 
-> On 1/4/22 16:04, Johannes Berg wrote:
->> On Tue, 2022-01-04 at 15:10 -0300, Walter Lozano wrote:
->>> Hi all,
->>>
->>> I noticed that after "um: enable VMAP_STACK" [1] I experienced some
->>> occasional hung in my Gitlab CI jobs that use user-mode-linux to build
->>> distro images.
->>>
->> Did you actually *enable* VMAP_STACK in the config as well? The commit
->> just makes it *possible* to enable it, you still have to set it
->> yourself. So you should be able to easily check with/without that
->> setting.
-> 
-> Thank you for your quick response. The Debian configuration on package 
-> user-mode-linux have these settings
-> 
-> CONFIG_HAVE_ARCH_VMAP_STACK=y
-> CONFIG_VMAP_STACK=y
-> 
-> 
-> as you can see in [1]. I did run some tests disabling those settings, 
-> which passed without any hung.
-> 
-> Unfortunately the "occasional" behavior makes this issue a bit tricky to 
-> debug.
-> 
-> Regards,
-> 
-> Walter
-> 
-> [1] 
-> https://salsa.debian.org/uml-team/user-mode-linux/-/blob/master/config.amd64#L321 
-> 
-> 
+On Tue, Jan 4, 2022 at 12:23 PM Yu Zhao <yuzhao@google.com> wrote:
+>
+> Add configuration options for the multigenerational lru.
+>         def_bool ARCH_HAS_SET_DIRECT_MAP && !EMBEDDED
+>
+> +config NR_LRU_GENS
+> +       int "Max number of generations"
+> +       depends on LRU_GEN
+> +       range 4 31
+> +       default 4
+> +       help
+> +         This option uses order_base_2(N+1) bits in page flags.
+> +
+> +         Do not configure more generations than you plan to use. They have a
+> +         per-memcg and per-node memory overhead.
+> +
+> +config TIERS_PER_GEN
+> +       int "Number of tiers per generation"
+> +       depends on LRU_GEN
+> +       range 2 5
+> +       default 4
+> +       help
+> +         This option uses N-2 bits in page flags.
+> +
+> +         Larger values generally provide better protection for page cache when
+> +         under heavy buffered I/O workloads.
 
-Just to narrow things down - 64 bit or 32 bit?
+These are not appropriate questions to ask users.
 
--- 
-Anton R. Ivanov
-https://www.kot-begemot.co.uk/
+No user has any idea what the answer should be. And no, we don't add
+"benchmark tuning Kconfig questions" to the kernel. We leave those
+kinds of games to companies that need to fake their benchmark numbers.
+
+If *you* can't give a good number for these config options, then no
+user or distro can either.
+
+So just pick a number, and stand by it.
+
+Don't do this kind of "I don't know what the right number is, so I'll
+just push the blame on the user".
+
+                Linus

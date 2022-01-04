@@ -2,143 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70AED484309
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:06:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 844A748430C
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:09:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232750AbiADOGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:06:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
+        id S232716AbiADOJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:09:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbiADOGn (ORCPT
+        with ESMTP id S230400AbiADOJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:06:43 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CE4C061761;
-        Tue,  4 Jan 2022 06:06:43 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id g26so81935556lfv.11;
-        Tue, 04 Jan 2022 06:06:42 -0800 (PST)
+        Tue, 4 Jan 2022 09:09:18 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57363C061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 06:09:18 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id e202so65658886ybf.4
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 06:09:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to;
-        bh=HoqgMl2n4h1rswstJszaOEFazvx0RgkLaBo73mTE2QA=;
-        b=bUIjlZWSGMBMg0Vnig7JUwuXm7r39cU965e43gc+Tl053aKax02wu1XH8zrSxjO3uu
-         7592Ff6NdGjVWvjM6IjdKmjqTh6eOFmhUdiPYnTg1+HD3bokmD41ZI/FvYGPnl2/bf1v
-         051/J6cS2Y0jNtLpr4PXl4Of1iU2JlMjbjReSgmZhb/5SWe16xtW5EVVyw9KjW45NWPc
-         rJkZxC8KAOcS8cSkUFtfN9O1Uk3xawEqhO+GKlXqCAnIHxTjpEAKj8x7RtU1ZogT86us
-         vO1D2x2AhfEn3F6DAdQuSCaYHHdbPTudXvg22DizULsXy3tovT3JdL8Fjp1xwtuOGuEh
-         qgFQ==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=dg7NwXj41AsQ/qJ5jdOtHVRpnjmX7NbUwhoahNpZzOc=;
+        b=Qqm/5vsRBZsuI20C/AWeC0ISY/uxnS8zjKSG3JQDeBJstmzhnSqKnX7iwnV+UOTa6g
+         GinDhxXcBWL8RMisk4EUrFyoEh5yvjiGEXGDFdLD++mGrPkDWqJ8Jkfoug617X9CyzYR
+         q0yHgmNHXH5MKTmkjLmjJNFKV4zEiUP1v8iS+FnZSPQlgiwbK9Rp8t1GdcUWEh5j9PS4
+         aJvgQGbL+/Kqs0q8XF6Jruj8sBjrykAKaJe5uI3lhJ667Ol/qp5E6cbEqCFxO2Z0JCbk
+         3E5DGKxj5vnRCVKcdHkca+v0RKvhoD0QmVOpQxdhUBxVluw4lkFDkduNavPhUlE9+K53
+         yt3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to;
-        bh=HoqgMl2n4h1rswstJszaOEFazvx0RgkLaBo73mTE2QA=;
-        b=dJX2S/fCwdsMBvl8JTAUNN9iyrkI1AaGmpzzYtnezLRZim8U5YsmsYyBDnSiKZIFuI
-         FLPpHhvR503OdBlTzlkMsqBEUmjn+OICrXciR4cu1zLYFM4nTHEzwi+PJjJ9cvuuZWA2
-         zx/QTN0innyiYifxhZqG/RD9GtZFvQwhGrRaTZtIdJP2XWW0UbUAzID5rqZ3AhIIBZuy
-         cJHTySspxxX9XsPJTS93MwfbTOu5KJ7BrlgU1nX3T34FJ84BkSZIEygoi4qRScCFJv4r
-         RtH4/IWyi5EINHS2IB+JQiRmcgKfLZcUBb9G0Z6+/6ZU6vl0IBBGKkPGNd51PZgrVaOi
-         lg9Q==
-X-Gm-Message-State: AOAM531dIlzK6XqKBS7h/vybozXyXNhl1KBdp4n+c3rKSdEiFYdINX47
-        o003VoX7xwbQlFWn4t0axg4=
-X-Google-Smtp-Source: ABdhPJz7Juw/tz6F9foPJT99w/WRPGT/PB/NtLt/ft3gt9HFgFdygMLZLIb7eaKjB3N3cnWp+c/Y5g==
-X-Received: by 2002:a05:6512:16a6:: with SMTP id bu38mr22931403lfb.454.1641305201303;
-        Tue, 04 Jan 2022 06:06:41 -0800 (PST)
-Received: from [192.168.1.11] ([94.103.235.38])
-        by smtp.gmail.com with ESMTPSA id l14sm3922338lfg.90.2022.01.04.06.06.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 06:06:40 -0800 (PST)
-Content-Type: multipart/mixed; boundary="------------Abq1EaETT00qTeX0ojmvcZWG"
-Message-ID: <e907527f-c071-c5f1-e83a-3786c750cd45@gmail.com>
-Date:   Tue, 4 Jan 2022 17:06:38 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=dg7NwXj41AsQ/qJ5jdOtHVRpnjmX7NbUwhoahNpZzOc=;
+        b=b7vsFRMIQSrY+iv1eIh8QL9nON2oKFopakKdMlsp0LSdqxqDiC5KaEGnvyIE27/jH+
+         4V7Pahpc8UFHwn4KxoDTP87tzx60tS6f2hYzCpcI/uIGzbbeo/8XFgumUO00Iohl5P2a
+         rGR8jb/vxOItWn1/ZjAZt6u+AKoPoJTAzWC6bneOSQcyZj10LUjHUermYfTtLVR6BF0y
+         HkxNUROilG6zfGw2x1nZ+Jky7TBcWcLKog8kgByCtvn+4LavJe6+MgHTPIlv0gpXDq8R
+         C4rX1fV7RLTbBmZ6C7NfAab6FKeegKlKxyG0Ma0RYs+TaHMmITaWiCjdrdD9Y4gW112c
+         2plg==
+X-Gm-Message-State: AOAM532rjiyrLiW2TeZduFQ6jeKA+IQxYWU/ZUyjjhJZHg4hwbWoqxps
+        H6ryIqJ6Aa07uDa5d7XP34AiNhHKLIxUiuY6idJ2QA==
+X-Google-Smtp-Source: ABdhPJxE/IEOtSQC3RMU88/ubuQL9ulhbbLbGM/fj20+oHHQqRCBNQhT/YxM88euY1aVWnNznh6IZD+qI1MrYA9tAoE=
+X-Received: by 2002:a25:73c7:: with SMTP id o190mr11291559ybc.108.1641305357414;
+ Tue, 04 Jan 2022 06:09:17 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: INFO: trying to register non-static key in hci_uart_tx_wakeup
-Content-Language: en-US
-To:     kvartet <xyru1999@gmail.com>, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Cc:     sunhao.th@gmail.com
-References: <CAFkrUsjA1qai+1ysWS_LEUYcMGo+ZRF3v743q6k9e4roF6PWZw@mail.gmail.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <CAFkrUsjA1qai+1ysWS_LEUYcMGo+ZRF3v743q6k9e4roF6PWZw@mail.gmail.com>
+References: <20220103142050.763904028@linuxfoundation.org>
+In-Reply-To: <20220103142050.763904028@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 4 Jan 2022 19:39:06 +0530
+Message-ID: <CA+G9fYuA41RQZwOXCAyT0Hrw1Ga555EWwDH5LJf-X7QrG2s9Lg@mail.gmail.com>
+Subject: Re: [PATCH 4.4 00/11] 4.4.298-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------Abq1EaETT00qTeX0ojmvcZWG
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Mon, 3 Jan 2022 at 19:51, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.4.298 release.
+> There are 11 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 05 Jan 2022 14:20:40 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.4.298-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-On 1/4/22 11:49, kvartet wrote:
-> Hello,
-> 
-> When using Syzkaller to fuzz the latest Linux kernel, the following
-> crash was triggered.
-> 
-> HEAD commit: a7904a538933 Linux 5.16-rc6
-> git tree: upstream
-> console output: https://paste.ubuntu.com/p/Bfpr8Gxtd4/plain/
-> kernel config: https://paste.ubuntu.com/p/FDDNHDxtwz/plain/
-> 
-> Sorry, I don't have a reproducer for this crash, hope the symbolized
-> report can help.
-> If you fix this issue, please add the following tag to the commit:
-> Reported-by: Yiru Xu <xyru1999@gmail.com>
-> 
-> 
-> INFO: trying to register non-static key.
-> The code is fine but needs lockdep annotation, or maybe
-> you didn't initialize this object before use?
-> turning off the locking correctness validator.
-> CPU: 2 PID: 18524 Comm: syz-executor.5 Not tainted 5.16.0-rc6 #9
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> 1.13.0-1ubuntu1.1 04/01/2014
-> Call Trace:
->   <IRQ>
->   __dump_stack lib/dump_stack.c:88 [inline]
->   dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->   assign_lock_key kernel/locking/lockdep.c:951 [inline]
->   register_lock_class+0x148d/0x1950 kernel/locking/lockdep.c:1263
->   __lock_acquire+0x106/0x57e0 kernel/locking/lockdep.c:4906
->   lock_acquire kernel/locking/lockdep.c:5637 [inline]
->   lock_acquire+0x1ab/0x520 kernel/locking/lockdep.c:5602
->   percpu_down_read_trylock include/linux/percpu-rwsem.h:92 [inline]
->   hci_uart_tx_wakeup+0x12e/0x490 drivers/bluetooth/hci_ldisc.c:124
->   h5_timed_event+0x32f/0x6a0 drivers/bluetooth/hci_h5.c:188
->   call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1421
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-hci_uart_proto.open() functions register timer, which may call 
-hci_uart_tx_wakeup(), so we need to initalize rwsem before calling
-hci_uart_proto.open()
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Just for thoughts
+## Build
+* kernel: 4.4.298-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-4.4.y
+* git commit: a1c4d899b5013233346ba4f33d952c391f0fe7fb
+* git describe: v4.4.297-12-ga1c4d899b501
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.4.y/build/v4.4.2=
+97-12-ga1c4d899b501
 
+## Test Regressions (compared to v4.4.297)
+No test regressions found.
 
-With regards,
-Pavel Skripkin
+## Metric Regressions (compared to v4.4.297)
+No metric regressions found.
 
---------------Abq1EaETT00qTeX0ojmvcZWG
-Content-Type: text/plain; charset=UTF-8; name="ph"
-Content-Disposition: attachment; filename="ph"
-Content-Transfer-Encoding: base64
+## Test Fixes (compared to v4.4.297)
+No test fixes found.
 
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvYmx1ZXRvb3RoL2hjaV9zZXJkZXYuYyBiL2RyaXZlcnMv
-Ymx1ZXRvb3RoL2hjaV9zZXJkZXYuYwppbmRleCAzYjAwZDgyZDM2Y2YuLjRjZGE4OTBjZTY0
-NyAxMDA2NDQKLS0tIGEvZHJpdmVycy9ibHVldG9vdGgvaGNpX3NlcmRldi5jCisrKyBiL2Ry
-aXZlcnMvYmx1ZXRvb3RoL2hjaV9zZXJkZXYuYwpAQCAtMzA1LDYgKzMwNSw4IEBAIGludCBo
-Y2lfdWFydF9yZWdpc3Rlcl9kZXZpY2Uoc3RydWN0IGhjaV91YXJ0ICpodSwKIAlpZiAoZXJy
-KQogCQlyZXR1cm4gZXJyOwogCisJcGVyY3B1X2luaXRfcndzZW0oJmh1LT5wcm90b19sb2Nr
-KTsKKwogCWVyciA9IHAtPm9wZW4oaHUpOwogCWlmIChlcnIpCiAJCWdvdG8gZXJyX29wZW47
-CkBAIC0zMjcsNyArMzI5LDYgQEAgaW50IGhjaV91YXJ0X3JlZ2lzdGVyX2RldmljZShzdHJ1
-Y3QgaGNpX3VhcnQgKmh1LAogCiAJSU5JVF9XT1JLKCZodS0+aW5pdF9yZWFkeSwgaGNpX3Vh
-cnRfaW5pdF93b3JrKTsKIAlJTklUX1dPUksoJmh1LT53cml0ZV93b3JrLCBoY2lfdWFydF93
-cml0ZV93b3JrKTsKLQlwZXJjcHVfaW5pdF9yd3NlbSgmaHUtPnByb3RvX2xvY2spOwogCiAJ
-LyogT25seSB3aGVuIHZlbmRvciBzcGVjaWZpYyBzZXR1cCBjYWxsYmFjayBpcyBwcm92aWRl
-ZCwgY29uc2lkZXIKIAkgKiB0aGUgbWFudWZhY3R1cmVyIGluZm9ybWF0aW9uIHZhbGlkLiBU
-aGlzIGF2b2lkcyBmaWxsaW5nIGluIHRoZQo=
+## Metric Fixes (compared to v4.4.297)
+No metric fixes found.
 
---------------Abq1EaETT00qTeX0ojmvcZWG--
+## Test result summary
+total: 32658, pass: 26026, fail: 62, skip: 5888, xfail: 682
+
+## Build Summary
+* arm: 129 total, 129 passed, 0 failed
+* arm64: 31 total, 31 passed, 0 failed
+* i386: 18 total, 18 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 22 total, 22 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 30 total, 24 passed, 6 failed
+
+## Test suites summary
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* packetdrill
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

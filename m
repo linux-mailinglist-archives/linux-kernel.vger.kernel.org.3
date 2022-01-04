@@ -2,133 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B14AB483F8C
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:01:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01AD3483F8F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:03:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230400AbiADKBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 05:01:07 -0500
-Received: from mga04.intel.com ([192.55.52.120]:44306 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229779AbiADKBG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 05:01:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641290466; x=1672826466;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xIUgqatUPuYifspp9DAu75NvWEx4AEcObXpKvRZoiSk=;
-  b=FsZ1Dpt72ZEEmoaTh1k5EOFn2aICCQ/YTd1/VphxTcUtFmaIkRX8JtM+
-   8utYnWD0VddU74BNVrmBllN0zIBPMPb2fUC0rnNdWRyn2zIwNgbBLiJdS
-   FLzHBnK+rMgvgmOSadlF7lpFL0y0HJ39ccrkjUDiurYfiIOSPD+oY8fPF
-   tSAAoC0tl22F2G7/d9QicVqv3oExAHV2VTaH2ufsauZXGbOjBZc9ODcM3
-   JFREqZDDeWTLQHXqOkqZ0N2sFrgyMloZPLHii19cSLbcd7VySUUWORRBb
-   X4ECj6qYj8ufQkc2eqF5tjdM2wWZzOF2RId8YtS5a3mBjaznsAleREnMA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="241014769"
-X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
-   d="scan'208";a="241014769"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 02:00:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
-   d="scan'208";a="472008525"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 04 Jan 2022 02:00:43 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n4gcV-000FBr-1k; Tue, 04 Jan 2022 10:00:43 +0000
-Date:   Tue, 4 Jan 2022 17:59:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Palmer <daniel@0x0f.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [chenxing:msc313_mainlining 66/86]
- drivers/irqchip/irq-msc313-pm-wakeup.c:132:9: warning: ignoring return value
- of 'request_irq' declared with attribute 'warn_unused_result'
-Message-ID: <202201041740.4jmJEDh7-lkp@intel.com>
+        id S230415AbiADKDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 05:03:18 -0500
+Received: from mail-il1-f200.google.com ([209.85.166.200]:48975 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229779AbiADKDR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 05:03:17 -0500
+Received: by mail-il1-f200.google.com with SMTP id k1-20020a92c9c1000000b002b43128af01so19310929ilq.15
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 02:03:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=J8A1XgGlAEaiBhKwX89IXTy/77Y1cHQmnJJ+Cm54414=;
+        b=BIgTnrqv1KqWp5j7RvTp2nZXk3I6IETLf8V+bcnQY8iXMkVlUs6pgAm1onbQWsKRNX
+         AEfT248pnJTNnLjVhpJ+C3GxPOCZmp5UeLn3a76a1sPJPY5UsFV8QJTUUI8Ynx7sVhhw
+         mlmNvrgBsaSiVJqk8sbFOOBGRT8owLTU2dZmwghARV8Ii9F1H22+ApDzyfecKnYV1xl9
+         BErV1PzznMBQiuaUUgBOa5ZCnJ7xv8oVf1cGMYbTXtWbVpcN8q/EMtSerEsDSdf3yxy2
+         APHbFwCF1XSKY9WRX1S/e0DCTHNDOuyIVuy/UnbshsIBuLvS0znKm+DnskP0qU0KlACk
+         2u3A==
+X-Gm-Message-State: AOAM5310x497L8m9VBFuuXDfYHjq+5KUvhyEVlFiP5e9BQEmiW69Wpxj
+        qOaATcacnnaqaZCfsuvYy7IHN6pUhiOtd1VhqbR0tINr5AGW
+X-Google-Smtp-Source: ABdhPJzles1c3lbSI8RKsh2tmGlxY6oCdCe7Kuh7VZ11Hlf51gfYD6EOoV8vUrtYUPkoVwJgwt1DoWsHO//Fi7R2pEi9XS87MeK8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Received: by 2002:a6b:5111:: with SMTP id f17mr22689256iob.180.1641290597159;
+ Tue, 04 Jan 2022 02:03:17 -0800 (PST)
+Date:   Tue, 04 Jan 2022 02:03:17 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000004591305d4bebf11@google.com>
+Subject: [syzbot] KMSAN: uninit-value in mpol_rebind_task (2)
+From:   syzbot <syzbot+217f792c92599518a2ab@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, glider@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://github.com/linux-chenxing/linux.git msc313_mainlining
-head:   2269f75a5b53b9a05d21d432ad75f5e41b344814
-commit: 73b030d3e228a0412a9e13ae129032467467c31e [66/86] irqchip: MStar wakeup intc
-config: h8300-buildonly-randconfig-r003-20220103 (https://download.01.org/0day-ci/archive/20220104/202201041740.4jmJEDh7-lkp@intel.com/config)
-compiler: h8300-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/linux-chenxing/linux/commit/73b030d3e228a0412a9e13ae129032467467c31e
-        git remote add chenxing git://github.com/linux-chenxing/linux.git
-        git fetch --no-tags chenxing msc313_mainlining
-        git checkout 73b030d3e228a0412a9e13ae129032467467c31e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=h8300 SHELL=/bin/bash drivers/clocksource/ drivers/irqchip/
+Hello,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+syzbot found the following issue on:
 
-All warnings (new ones prefixed by >>):
+HEAD commit:    81c325bbf94e kmsan: hooks: do not check memory in kmsan_in..
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=112b8f7db00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2d8b9a11641dc9aa
+dashboard link: https://syzkaller.appspot.com/bug?extid=217f792c92599518a2ab
+compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13366ea5b00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14526cb3b00000
 
-   drivers/irqchip/irq-msc313-pm-wakeup.c: In function 'msc313_pm_wakeup_intc_of_init':
->> drivers/irqchip/irq-msc313-pm-wakeup.c:132:9: warning: ignoring return value of 'request_irq' declared with attribute 'warn_unused_result' [-Wunused-result]
-     132 |         request_irq(irq, msc313_pm_wakeup_intc_chainedhandler, IRQF_SHARED,
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     133 |                                 "pmsleep", domain);
-         |                                 ~~~~~~~~~~~~~~~~~~
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+217f792c92599518a2ab@syzkaller.appspotmail.com
 
+=====================================================
+BUG: KMSAN: uninit-value in mpol_rebind_policy mm/mempolicy.c:352 [inline]
+BUG: KMSAN: uninit-value in mpol_rebind_task+0x2ac/0x2c0 mm/mempolicy.c:368
+ mpol_rebind_policy mm/mempolicy.c:352 [inline]
+ mpol_rebind_task+0x2ac/0x2c0 mm/mempolicy.c:368
+ cpuset_change_task_nodemask kernel/cgroup/cpuset.c:1711 [inline]
+ cpuset_attach+0x787/0x15e0 kernel/cgroup/cpuset.c:2278
+ cgroup_migrate_execute+0x1023/0x1d20 kernel/cgroup/cgroup.c:2515
+ cgroup_migrate kernel/cgroup/cgroup.c:2771 [inline]
+ cgroup_attach_task+0x540/0x8b0 kernel/cgroup/cgroup.c:2804
+ __cgroup1_procs_write+0x5cc/0x7a0 kernel/cgroup/cgroup-v1.c:520
+ cgroup1_tasks_write+0x94/0xb0 kernel/cgroup/cgroup-v1.c:539
+ cgroup_file_write+0x4c2/0x9e0 kernel/cgroup/cgroup.c:3852
+ kernfs_fop_write_iter+0x66a/0x9f0 fs/kernfs/file.c:296
+ call_write_iter include/linux/fs.h:2162 [inline]
+ new_sync_write fs/read_write.c:503 [inline]
+ vfs_write+0x1318/0x2030 fs/read_write.c:590
+ ksys_write+0x28b/0x510 fs/read_write.c:643
+ __do_sys_write fs/read_write.c:655 [inline]
+ __se_sys_write fs/read_write.c:652 [inline]
+ __x64_sys_write+0xdb/0x120 fs/read_write.c:652
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-vim +132 drivers/irqchip/irq-msc313-pm-wakeup.c
+Uninit was created at:
+ slab_post_alloc_hook mm/slab.h:524 [inline]
+ slab_alloc_node mm/slub.c:3251 [inline]
+ slab_alloc mm/slub.c:3259 [inline]
+ kmem_cache_alloc+0x902/0x11c0 mm/slub.c:3264
+ mpol_new mm/mempolicy.c:293 [inline]
+ do_set_mempolicy+0x421/0xb70 mm/mempolicy.c:853
+ kernel_set_mempolicy mm/mempolicy.c:1504 [inline]
+ __do_sys_set_mempolicy mm/mempolicy.c:1510 [inline]
+ __se_sys_set_mempolicy+0x44c/0xb60 mm/mempolicy.c:1507
+ __x64_sys_set_mempolicy+0xd8/0x110 mm/mempolicy.c:1507
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-    97	
-    98	static int __init msc313_pm_wakeup_intc_of_init(struct device_node *node,
-    99					   struct device_node *parent)
-   100	{
-   101		int ret = 0, irq;
-   102		struct regmap *pmsleep;
-   103		struct msc313_sleep_intc *intc;
-   104		struct irq_domain *domain;
-   105	
-   106		irq = of_irq_get(node, 0);
-   107		if (irq <= 0)
-   108			return irq;
-   109	
-   110		pmsleep = syscon_regmap_lookup_by_phandle(node, "mstar,pmsleep");
-   111		if (IS_ERR(pmsleep))
-   112			return PTR_ERR(pmsleep);
-   113	
-   114		intc = kzalloc(sizeof(*intc), GFP_KERNEL);
-   115		if (!intc)
-   116			return -ENOMEM;
-   117	
-   118		intc->mask = regmap_field_alloc(pmsleep, field_mask);
-   119		intc->type = regmap_field_alloc(pmsleep, field_type);
-   120		intc->status = regmap_field_alloc(pmsleep, field_status);
-   121	
-   122		/* The masks survive deep sleep so clear them. */
-   123		regmap_field_write(intc->mask, ~0);
-   124	
-   125		domain = irq_domain_add_linear(node, NUM_IRQ,
-   126				&msc313_pm_wakeup_intc_domain_ops, intc);
-   127		if (!domain) {
-   128			ret = -ENOMEM;
-   129			goto out_free;
-   130		}
-   131	
- > 132		request_irq(irq, msc313_pm_wakeup_intc_chainedhandler, IRQF_SHARED,
-   133					"pmsleep", domain);
-   134	
-   135		return 0;
-   136	
-   137	out_free:
-   138		kfree(intc);
-   139		return ret;
-   140	}
-   141	
+CPU: 1 PID: 3479 Comm: syz-executor124 Not tainted 5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+=====================================================
+
 
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

@@ -2,102 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF1B484116
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 087BD484118
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:43:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232505AbiADLmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 06:42:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43712 "EHLO
+        id S231490AbiADLnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 06:43:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiADLmx (ORCPT
+        with ESMTP id S229535AbiADLnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 06:42:53 -0500
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CACC061761;
-        Tue,  4 Jan 2022 03:42:53 -0800 (PST)
-Received: by mail-ua1-x931.google.com with SMTP id p37so62498973uae.8;
-        Tue, 04 Jan 2022 03:42:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=m4rgCak0Y9ZrCMU21woyKJsa31R1qg64vWqt4VKQQ3k=;
-        b=IzCpAbYVZioYR9Od9vcrXsOz6Mi3CGFvj2dtqdCPKx1W6FmfGj0huYuuqOtX3PJnYg
-         Xb+sBVLM2XBMUl7yC+jG5cK+gcGE8E+DfkxfGCSB4MNCesajwW651JonNCF+M20ens52
-         OEPLvLLVVyCqQTad3RAudM1ODcBBL/w3r6uSbWuGso4CPYfdv0ZPIs44n9zwJ4JzMahU
-         /VjuMw3uPfkMrtHeMOCvgyJScygWCd5fcgxcyFesevMJUm2P1sWzhNgQGArXZPt6MTQV
-         5XL/3qe6vU1IOfK8ukgSUGA9sdvUEVxfrP9qL+Sv7xDYKosV5MTy5AWdnqQVOfwPzl8q
-         8x6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=m4rgCak0Y9ZrCMU21woyKJsa31R1qg64vWqt4VKQQ3k=;
-        b=2n+3USbNyGrfnj/hhnaw4U6S5b2O+bUuzamYEEUg7lsqpMOhUCIlsdctI62F8yHniW
-         VwjnJZdIEXiv245DzUBwp3NGM5YfFjZPgnXg7T3/kGRKHuNrw9ZE64IlE0oHqOGd+Yor
-         ptblnnFB2MZguJUb0ewlGpq+Z49N/X8wkRe6JTwwjtw/PgPy2iEdPUuogLfCqOnqcuPd
-         6ZHznw0PEnOlp41+2+/b6eq+9RQlqBh4P7VUBGcwFjCVJoTtqSMg5mj7sOrWfuhXro2d
-         c0+0mSckK859ILm2BHW4cMBezdKuBiJJo9ER9XwRNUaea7yAL4jzSq9+g1sp9Bys5YZL
-         Y9KQ==
-X-Gm-Message-State: AOAM532UzBDHQXFfyX8vksS36oePL/9+OpJdXNKt7uzQKGZA5DKgrhsx
-        T9nruKek41NnO5Dy1ackYmJt6leAqWPW31kuewk=
-X-Google-Smtp-Source: ABdhPJwpwLdODTduulsppAKKohovKvY52jZQdN90JjMhEfBtMauArOtpJ1OgyT2Kg236K47JxfkmG4BmK+qquIIz/PY=
-X-Received: by 2002:ab0:48d1:: with SMTP id y17mr649108uac.12.1641296572254;
- Tue, 04 Jan 2022 03:42:52 -0800 (PST)
+        Tue, 4 Jan 2022 06:43:37 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8FAC061761;
+        Tue,  4 Jan 2022 03:43:37 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.94.2)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1n4iE2-0000F0-JM; Tue, 04 Jan 2022 12:43:34 +0100
+Date:   Tue, 4 Jan 2022 11:43:28 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH v11 2/3] net: mdio: add helpers to extract clause 45 regad
+ and devad fields
+Message-ID: <YdQy4HOftY6ASoJH@makrotopia.org>
 MIME-Version: 1.0
-References: <20210715141742.15072-1-andrea.merello@gmail.com>
- <20211028101840.24632-1-andrea.merello@gmail.com> <20211028101840.24632-7-andrea.merello@gmail.com>
- <20211028120405.6ffb01d1@jic23-huawei> <CAN8YU5Orbbzq-eDxmrR00xHwXQ=0LU2G3_yEtHGMkbVhmdcqgg@mail.gmail.com>
- <20211114162032.425ab36d@jic23-huawei>
-In-Reply-To: <20211114162032.425ab36d@jic23-huawei>
-Reply-To: andrea.merello@gmail.com
-From:   Andrea Merello <andrea.merello@gmail.com>
-Date:   Tue, 4 Jan 2022 12:42:40 +0100
-Message-ID: <CAN8YU5NO5mcrPa5ZCB3XnAb=3N3cyXZUT=gH5G+EbnM-En0a3Q@mail.gmail.com>
-Subject: Re: [v2 06/10] iio: document bno055 private sysfs attributes
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Matt Ranostay <matt.ranostay@konsulko.com>,
-        Alexandru Ardelean <ardeleanalex@gmail.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Andrea Merello <andrea.merello@iit.it>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry for the huge delay...
+From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
 
-> There is still a units question though.  Should we express the ranges
-> in _processed or _raw units?  Or do we make it explicit and call it
-> rangeprocessed for example?  For some devices the range will naturally
-> be expressed as the range of ADC raw values, so there is definite room
-> for confusion if we don't make it clear in the name.
->
-> I'm open to other suggestions of how we name this to avoid falling into
-> any heffalump traps.
+Add a couple of helpers and definitions to extract the clause 45 regad
+and devad fields from the regnum passed into MDIO drivers.
 
-You are right: this might lead to confusion.. Making it explicit in
-the name seems a good idea.
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Tested-by: Daniel Golle <daniel@makrotopia.org>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
+v11: unchanged, added Reviewed-by: line from Andrew Lunn
+v10: correct order of SoB lines
+v9: unchanged
+v8: First inclusing upon comment on mailing list
 
-I've looked at other iio sysfs attributes in the DOC.  It seems  that
-"thesh" and "roc" attributes allows for both preprocessed and raw
-data: I found e.g. "<type>[Y][_name]_<raw|input>_thresh_value", but
-the related "what" entries written above all seem to omit both "_raw"
-and "_input"; I don't understand why.
+ include/linux/mdio.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-In any case, maybe we can stick to that already-existent naming schema?
+diff --git a/include/linux/mdio.h b/include/linux/mdio.h
+index 9f3587a61e145..ecac96d52e010 100644
+--- a/include/linux/mdio.h
++++ b/include/linux/mdio.h
+@@ -7,6 +7,7 @@
+ #define __LINUX_MDIO_H__
+ 
+ #include <uapi/linux/mdio.h>
++#include <linux/bitfield.h>
+ #include <linux/mod_devicetable.h>
+ 
+ /* Or MII_ADDR_C45 into regnum for read/write on mii_bus to enable the 21 bit
+@@ -14,6 +15,7 @@
+  */
+ #define MII_ADDR_C45		(1<<30)
+ #define MII_DEVADDR_C45_SHIFT	16
++#define MII_DEVADDR_C45_MASK	GENMASK(20, 16)
+ #define MII_REGADDR_C45_MASK	GENMASK(15, 0)
+ 
+ struct gpio_desc;
+@@ -381,6 +383,16 @@ static inline u32 mdiobus_c45_addr(int devad, u16 regnum)
+ 	return MII_ADDR_C45 | devad << MII_DEVADDR_C45_SHIFT | regnum;
+ }
+ 
++static inline u16 mdiobus_c45_regad(u32 regnum)
++{
++	return FIELD_GET(MII_REGADDR_C45_MASK, regnum);
++}
++
++static inline u16 mdiobus_c45_devad(u32 regnum)
++{
++	return FIELD_GET(MII_DEVADDR_C45_MASK, regnum);
++}
++
+ static inline int __mdiobus_c45_read(struct mii_bus *bus, int prtad, int devad,
+ 				     u16 regnum)
+ {
+-- 
+2.34.1
 
-Assuming the pattern is correct, then wouldn't it be
-"in_accel_raw_range"  (or "in_accel_x_raw_range", in case it could
-have different values for each axis) or "in_accel_input_range" in case
-range applies to preprocessed vals, etc ?
-
-
-Andrea

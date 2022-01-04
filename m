@@ -2,90 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 032834847EA
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0481E4847ED
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:34:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236344AbiADScy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 13:32:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54850 "EHLO
+        id S236355AbiADSek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 13:34:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233271AbiADScw (ORCPT
+        with ESMTP id S233271AbiADSej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 13:32:52 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDE9C061761;
-        Tue,  4 Jan 2022 10:32:51 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id bm14so151941344edb.5;
-        Tue, 04 Jan 2022 10:32:51 -0800 (PST)
+        Tue, 4 Jan 2022 13:34:39 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0FDC061761;
+        Tue,  4 Jan 2022 10:34:39 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id iy13so32021329pjb.5;
+        Tue, 04 Jan 2022 10:34:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=H++mvP7xNJ7DkJfGLUkbXM0jLfOJX76p9y1OOLe38IQ=;
-        b=dLv9eyr7RYbaApqHcWxnR9DQAJNKH4nos5iEGJ3nd6j3GTVjJCUhVYOm25z6oP90RG
-         b2yubaWsMfweUUKfS9xpTnAlTYD4H1XpBymwiT2OH23jydLTRZPSj9oY8UIS/p7U920F
-         OlnzMQ9yVz48DjOOVgSVyFHYqRxjzqIABZZRQ3gEkp3RXQ/xmSeOOHURA8hEI5NCRMgr
-         1GnQUIVVw+NW8hJFt5+8ilgKCCCQ7S213z3ze+/G8PFQuau+ni9+QWnZPetM/pAY7dT+
-         cmMJ6OMqqr4q83W4AH95Orz/BUJIQQ1NWgGjfnjPuiEMZ6UrP/6X/5AkUCXyjrhzriAh
-         Axmw==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=CKSNn00/BiOS0SvuNfkaTCGRzG8dHHnuc8meOiDvCjY=;
+        b=Sme33SArj00KckuaM6P6MvrxNlbsZq2U4eEN5/tSEx0x6I6PDS9QLX4224ak9BiQai
+         G5QnIZ0XpF5bPTl9uwu/dhMbp9qA+lp8wFiXAxY1ZvQ451xY0jQNVkl9BwRqwBCQi3dR
+         PJv4pVKP9iiQeyq09YBtdyaSjPeFdhEk3QOy1gmGrzHfBT/U7ptWJ6mt22b9Vl4USj3M
+         EkkWj4gixfDuQ1A+sTef+KQ9tRQ+UKAVlXKz3pHW/DE6YZ1Xbden5OMuFf6k9gOM2ecY
+         kzlFArg3DX6N3d7S+U4SZ+J88ZUwDJpH9ypTASU1oQT+w1iH3tSDlQzG52Zl4A+mDntb
+         CL2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=H++mvP7xNJ7DkJfGLUkbXM0jLfOJX76p9y1OOLe38IQ=;
-        b=5f+sQl3M/XeDZTPyKT1541pNSOi5UkAksKmoHmyNSj6q3+EGKr0f7OJ0pr6cowkjHY
-         Nlb7oCc7kbdz3g6de9KdSY3PGpx/NR6tOezwbv3IH+sWMcChx0PInVK4Rn4efbELZV7N
-         8/u6o/nA2PXm/lnF+BI+GDKKfeklV5rCtITwsWgnBkcO5vQvYlCvzPOxrAPVsN/Ph1aW
-         wbAkOA5810fIAn0HJiLJpCiTuANz2w1FWxqIz0eppdVC7kBM5zRsOMbbuoYGM4Cwv7Xa
-         Wyuh4PdNfGT5GP17ANvpvk+j4TsIC1cH88ar7yBhZMFiQ8a//WjPkrlMsOgHR1H9GbfT
-         vwPQ==
-X-Gm-Message-State: AOAM531fZKEzNjnUiYB5sL/P77LNgA9lo22LpCtfjkOfWS/IcinIeImb
-        tX3F+7/CyEoQQxijTsxLvd8=
-X-Google-Smtp-Source: ABdhPJz1wuD9CF9yh60mz6/O58ZsWK4Aqh+WsdA/rHGDuVs+hncGhVqnjRjWWBMzBt/wD2wJWq2Llg==
-X-Received: by 2002:aa7:c655:: with SMTP id z21mr43537910edr.352.1641321170423;
-        Tue, 04 Jan 2022 10:32:50 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id jg34sm11710859ejc.74.2022.01.04.10.32.48
+        bh=CKSNn00/BiOS0SvuNfkaTCGRzG8dHHnuc8meOiDvCjY=;
+        b=PegKj6vEHY8VP35iwEtO2eDGhypCRGze8FcIjoVs+GqrTRe7eSVFHz6lEbwBO/xGZ7
+         b58GDFMg956spMCLsJBuUo9JhBLFwz8LRQsO0OHMczjFPhKqiWJ6YrkPSzS/kwM/rUxd
+         EEXhsX/ji38m6z2iJrTAUkD0cQ7pTC6L9tYV5FkU90WdDvLLZQxwhuhNi0RndCoeY1Il
+         DruzHIY1cSsz2BezQfRS/0SHzxQA16EeaQD6KGsjMTj3MrIf6FHPv+L3LIUQAsQrTp1q
+         Ab5uOHp08Xod0T3ZBWW/sSv5GY+VU37E3sxhuh5cer6cobIyk6LhzWmLONsZ7btzaA/2
+         qdPw==
+X-Gm-Message-State: AOAM531/rWJTePuclZYijVlKm4rq80PnYRmjrYjugT9R17rPeaiXNDIk
+        0XIIvBpG7DJ2SAs6vc4CWlM=
+X-Google-Smtp-Source: ABdhPJz0IALYrhxCC7GbFZQ3jRKow5GPCrXVfzfIJ08+IhYJNyghSRA8FNfU0+UC4fCqsBkm3Y594A==
+X-Received: by 2002:a17:90a:bc8c:: with SMTP id x12mr55083541pjr.168.1641321278754;
+        Tue, 04 Jan 2022 10:34:38 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id p10sm42152336pfw.87.2022.01.04.10.34.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 10:32:50 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <ff29b36a-ffe4-8ba9-2856-cf96fcf33c0d@redhat.com>
-Date:   Tue, 4 Jan 2022 19:32:47 +0100
+        Tue, 04 Jan 2022 10:34:38 -0800 (PST)
+Subject: Re: [PATCH 1/9] mtd: rawnand: brcmnand: Allow SoC to provide I/O
+ operations
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-mtd@lists.infradead.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Colin Ian King <colin.king@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM SPECIFIC AMBA DRIVER (BCMA)" 
+        <linux-wireless@vger.kernel.org>,
+        "open list:BROADCOM STB NAND FLASH DRIVER" 
+        <bcm-kernel-feedback-list@broadcom.com>
+References: <20211223002225.3738385-1-f.fainelli@gmail.com>
+ <20211223002225.3738385-2-f.fainelli@gmail.com>
+ <20220103174953.40d7fa52@xps13>
+ <299bf6ed-80e6-ad15-8dc7-5ededaca15c5@gmail.com>
+ <20220104093221.6414aab9@xps13> <20220104095755.46858287@xps13>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <9e4c0120-e088-fca0-0194-c45fcf9181cb@gmail.com>
+Date:   Tue, 4 Jan 2022 10:34:35 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v3 22/22] kvm: x86: Disable interception for IA32_XFD on
- demand
+In-Reply-To: <20220104095755.46858287@xps13>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Jing Liu <jing2.liu@intel.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, corbet@lwn.net, shuah@kernel.org,
-        jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, guang.zeng@intel.com,
-        wei.w.wang@intel.com, yang.zhong@intel.com
-References: <20211222124052.644626-1-jing2.liu@intel.com>
- <20211222124052.644626-23-jing2.liu@intel.com> <Ycu0KVq9PfuygKKx@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Ycu0KVq9PfuygKKx@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/29/21 02:04, Sean Christopherson wrote:
+On 1/4/22 12:57 AM, Miquel Raynal wrote:
+> Hi Miquel,
 > 
-> Speaking of nested, interception of #NM in vmx_update_exception_bitmap() is wrong
-> with respect to nested guests.  Until XFD is supported for L2, which I didn't see
-> in this series, #NM should not be intercepted while L2 is running.
+> miquel.raynal@bootlin.com wrote on Tue, 4 Jan 2022 09:32:21 +0100:
+> 
+>> Hi Florian,
+>>
+>> f.fainelli@gmail.com wrote on Mon, 3 Jan 2022 09:24:26 -0800:
+>>
+>>> On 1/3/2022 8:49 AM, Miquel Raynal wrote:  
+>>>> Hi Florian,
+>>>>
+>>>> f.fainelli@gmail.com wrote on Wed, 22 Dec 2021 16:22:17 -0800:
+>>>>     
+>>>>> Allow a brcmnand_soc instance to provide a custom set of I/O operations
+>>>>> which we will require when using this driver on a BCMA bus which is not
+>>>>> directly memory mapped I/O. Update the nand_{read,write}_reg accordingly
+>>>>> to use the SoC operations if provided.
+>>>>>
+>>>>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+>>>>> ---
+>>>>>   drivers/mtd/nand/raw/brcmnand/brcmnand.c | 14 ++++++++++++--
+>>>>>   drivers/mtd/nand/raw/brcmnand/brcmnand.h | 23 +++++++++++++++++++++++
+>>>>>   2 files changed, 35 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+>>>>> index f75929783b94..7a1673b1b1af 100644
+>>>>> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+>>>>> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+>>>>> @@ -594,13 +594,18 @@ enum {    
+>>>>>   >>   static inline u32 nand_readreg(struct brcmnand_controller *ctrl, u32 offs)    
+>>>>>   {
+>>>>> +	if (brcmnand_soc_has_ops(ctrl->soc))
+>>>>> +		return brcmnand_soc_read(ctrl->soc, offs);
+>>>>>   	return brcmnand_readl(ctrl->nand_base + offs);
+>>>>>   }    
+>>>>>   >>   static inline void nand_writereg(struct brcmnand_controller *ctrl, u32 offs,    
+>>>>>   				 u32 val)
+>>>>>   {
+>>>>> -	brcmnand_writel(val, ctrl->nand_base + offs);
+>>>>> +	if (brcmnand_soc_has_ops(ctrl->soc))
+>>>>> +		brcmnand_soc_write(ctrl->soc, val, offs);
+>>>>> +	else
+>>>>> +		brcmnand_writel(val, ctrl->nand_base + offs);
+>>>>>   }    
+>>>>>   >>   static int brcmnand_revision_init(struct brcmnand_controller *ctrl)    
+>>>>> @@ -766,13 +771,18 @@ static inline void brcmnand_rmw_reg(struct brcmnand_controller *ctrl,    
+>>>>>   >>   static inline u32 brcmnand_read_fc(struct brcmnand_controller *ctrl, int word)    
+>>>>>   {
+>>>>> +	if (brcmnand_soc_has_ops(ctrl->soc))
+>>>>> +		return brcmnand_soc_read(ctrl->soc, ~0);
+>>>>>   	return __raw_readl(ctrl->nand_fc + word * 4);
+>>>>>   }    
+>>>>>   >>   static inline void brcmnand_write_fc(struct brcmnand_controller *ctrl,    
+>>>>>   				     int word, u32 val)
+>>>>>   {
+>>>>> -	__raw_writel(val, ctrl->nand_fc + word * 4);
+>>>>> +	if (brcmnand_soc_has_ops(ctrl->soc))
+>>>>> +		brcmnand_soc_write(ctrl->soc, val, ~0);
+>>>>> +	else
+>>>>> +		__raw_writel(val, ctrl->nand_fc + word * 4);
+>>>>>   }    
+>>>>>   >>   static inline void edu_writel(struct brcmnand_controller *ctrl,    
+>>>>> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.h b/drivers/mtd/nand/raw/brcmnand/brcmnand.h
+>>>>> index eb498fbe505e..a3f2ad5f6572 100644
+>>>>> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.h
+>>>>> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.h
+>>>>> @@ -11,12 +11,19 @@    
+>>>>>   >>   struct platform_device;    
+>>>>>   struct dev_pm_ops;
+>>>>> +struct brcmnand_io_ops;    
+>>>>>   >>   struct brcmnand_soc {    
+>>>>>   	bool (*ctlrdy_ack)(struct brcmnand_soc *soc);
+>>>>>   	void (*ctlrdy_set_enabled)(struct brcmnand_soc *soc, bool en);
+>>>>>   	void (*prepare_data_bus)(struct brcmnand_soc *soc, bool prepare,
+>>>>>   				 bool is_param);
+>>>>> +	const struct brcmnand_io_ops *ops;
+>>>>> +};
+>>>>> +
+>>>>> +struct brcmnand_io_ops {
+>>>>> +	u32 (*read_reg)(struct brcmnand_soc *soc, u32 offset);
+>>>>> +	void (*write_reg)(struct brcmnand_soc *soc, u32 val, u32 offset);
+>>>>>   };    
+>>>>>   >>   static inline void brcmnand_soc_data_bus_prepare(struct brcmnand_soc *soc,    
+>>>>> @@ -58,6 +65,22 @@ static inline void brcmnand_writel(u32 val, void __iomem *addr)
+>>>>>   		writel_relaxed(val, addr);
+>>>>>   }    
+>>>>>   >> +static inline bool brcmnand_soc_has_ops(struct brcmnand_soc *soc)    
+>>>>> +{
+>>>>> +	return soc && soc->ops && soc->ops->read_reg && soc->ops->write_reg;
+>>>>> +}
+>>>>> +
+>>>>> +static inline u32 brcmnand_soc_read(struct brcmnand_soc *soc, u32 offset)
+>>>>> +{
+>>>>> +	return soc->ops->read_reg(soc, offset);
+>>>>> +}
+>>>>> +
+>>>>> +static inline void brcmnand_soc_write(struct brcmnand_soc *soc, u32 val,
+>>>>> +				      u32 offset)
+>>>>> +{
+>>>>> +	soc->ops->write_reg(soc, val, offset);
+>>>>> +}
+>>>>> +    
+>>>>
+>>>> It might be worth looking into more optimized ways to do these checks,
+>>>> in particular the read/write_reg ones because you're checking against
+>>>> some static data which cannot be optimized out by the compiler but
+>>>> won't change in the lifetime of the kernel.    
+>>>
+>>> I suppose I could add an addition if IS_ENABLED(CONFIG_MTD_NAND_BRCMNAND_BCMA) at the front of brcmnand_soc_has_ops(), would that address your concern or you have something else in mind?  
+>>
+>> I don't like much the #ifdef solution, instead you might think of
+>> static keys, or even better using a regmap. Regmap implementation is
+>> free, you can use either one way or the other and for almost no
+>> overhead compared to the bunch of functions you have here.
+> 
+> Maybe regmaps will actually be slower than these regular if's. Perhaps
+> static keys are the best option?
 
-Why wouldn't L2 support XFD, since there are no new VMCS bits?  As long 
-as L0 knows what to do with XFD and XFD_ERR, it will do the right thing 
-no matter if L1 or L2 is running.
-
-Paolo
+OK static keys would probably work. I am not sure that the additional
+branches for each register access would actually be causing a noticeable
+performance impact. Pretty much any chip where this controller is used
+has a DMA interface that you program and kick, the PIO is already
+assumed to be slow, and each register access is about 200ns on STB chips
+at least.
+-- 
+Florian

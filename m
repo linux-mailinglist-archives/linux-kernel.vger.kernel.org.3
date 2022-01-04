@@ -2,86 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4753F4845F5
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:27:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB9E4845F7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 17:29:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235164AbiADQ1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 11:27:30 -0500
-Received: from smtp23.cstnet.cn ([159.226.251.23]:32966 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233569AbiADQ12 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 11:27:28 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-03 (Coremail) with SMTP id rQCowABHTVlTddRhwvQaBQ--.14235S2;
-        Wed, 05 Jan 2022 00:26:59 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     miquel.raynal@bootlin.com
-Cc:     kyungmin.park@samsung.com, richard@nod.at, vigneshr@ti.com,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v3] mtd: onenand: Check for error irq
-Date:   Wed,  5 Jan 2022 00:26:58 +0800
-Message-Id: <20220104162658.1988142-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S235289AbiADQ3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 11:29:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229984AbiADQ3x (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 11:29:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA46C061761;
+        Tue,  4 Jan 2022 08:29:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F3E461524;
+        Tue,  4 Jan 2022 16:29:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 490CBC36AE9;
+        Tue,  4 Jan 2022 16:29:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641313791;
+        bh=D7SL25ZoKNl3aSqzBkgk6IkgtYqSp/dzemHZP/AyLzM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=yIxplB02qzDwIXE34iR71kgcbBJsc408sF2T23UpmYb4eq274cQXYom2IFVKqrtBR
+         MO9fVyGlOL0t1WuC02jaMD6a+naaxH28boergc2NuX8vOum0H3Jc7rzc6/7FbEoZuj
+         R6jzcsq3Nw75wTnMpbdIyQRvnO4cNWHnK4dYaqWQ=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+        Jack Wang <jinpu.wang@ionos.com>, Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org
+Subject: [PATCH] block/rnbd-clt-sysfs: use default_groups in kobj_type
+Date:   Tue,  4 Jan 2022 17:29:47 +0100
+Message-Id: <20220104162947.1320936-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1464; h=from:subject; bh=D7SL25ZoKNl3aSqzBkgk6IkgtYqSp/dzemHZP/AyLzM=; b=owGbwMvMwCRo6H6F97bub03G02pJDIlXSn+nt/WtXaa6pWCJPs+5oLPWCx0M/++20Pg3743UMc0N /Q32HbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjCRPfUMC2ZP/3ztSx5j5VL5yS8c6h VWXu/8lc8wvyjohYX2958n8pdvKJML0GRaoWP+CQA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowABHTVlTddRhwvQaBQ--.14235S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Aw1DAryDArWrCF4ktw1fWFg_yoW8GryxpF
-        s2kay3Crs5Kr1rCFZFyw1qvF15C3WxKrWUtFn0vry8A3s8Jw13ur95JFW2qFWUAFWrJw13
-        XF4YqFZ5CF1DuFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUka14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r1j
-        6r4UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r1j6r
-        4UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVWUMxAI
-        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
-        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
-        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
-        CI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
-        6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUeGQDUUUUU=
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the possible failure of the platform_get_irq(), the returned irq
-could be error number and will finally cause the failure of the
-request_irq().
-Consider that platform_get_irq() can now in certain cases return
--EPROBE_DEFER, and the consequences of letting request_irq() effectively
-convert that into -EINVAL, even at probe time rather than later on.
-So it might be better to check just now.
+There are currently 2 ways to create a set of sysfs files for a
+kobj_type, through the default_attrs field, and the default_groups
+field.  Move the rnbd controller sysfs code to use default_groups field
+which has been the preferred way since aa30f47cf666 ("kobject: Add
+support for default attribute groups to kobj_type") so that we can soon
+get rid of the obsolete default_attrs field.
 
-Fixes: 2c22120fbd01 ("MTD: OneNAND: interrupt based wait support")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc: "Md. Haris Iqbal" <haris.iqbal@ionos.com>
+Cc: Jack Wang <jinpu.wang@ionos.com>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: linux-block@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
-v3: Roll back to v1 commit message and correct the fixes tag.
-v2: Change the commit message.
----
- drivers/mtd/nand/onenand/generic.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/block/rnbd/rnbd-clt-sysfs.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mtd/nand/onenand/generic.c b/drivers/mtd/nand/onenand/generic.c
-index 8b6f4da5d720..a4b8b65fe15f 100644
---- a/drivers/mtd/nand/onenand/generic.c
-+++ b/drivers/mtd/nand/onenand/generic.c
-@@ -53,7 +53,12 @@ static int generic_onenand_probe(struct platform_device *pdev)
- 	}
+diff --git a/drivers/block/rnbd/rnbd-clt-sysfs.c b/drivers/block/rnbd/rnbd-clt-sysfs.c
+index 44e45af00e83..2be5d87a3ca6 100644
+--- a/drivers/block/rnbd/rnbd-clt-sysfs.c
++++ b/drivers/block/rnbd/rnbd-clt-sysfs.c
+@@ -452,6 +452,7 @@ static struct attribute *rnbd_dev_attrs[] = {
+ 	&rnbd_clt_nr_poll_queues.attr,
+ 	NULL,
+ };
++ATTRIBUTE_GROUPS(rnbd_dev);
  
- 	info->onenand.mmcontrol = pdata ? pdata->mmcontrol : NULL;
--	info->onenand.irq = platform_get_irq(pdev, 0);
-+
-+	err = platform_get_irq(pdev, 0);
-+	if (err < 0)
-+		goto out_iounmap;
-+
-+	info->onenand.irq = err;
+ void rnbd_clt_remove_dev_symlink(struct rnbd_clt_dev *dev)
+ {
+@@ -474,7 +475,7 @@ void rnbd_clt_remove_dev_symlink(struct rnbd_clt_dev *dev)
  
- 	info->mtd.dev.parent = &pdev->dev;
- 	info->mtd.priv = &info->onenand;
+ static struct kobj_type rnbd_dev_ktype = {
+ 	.sysfs_ops      = &kobj_sysfs_ops,
+-	.default_attrs  = rnbd_dev_attrs,
++	.default_groups = rnbd_dev_groups,
+ };
+ 
+ static int rnbd_clt_add_dev_kobj(struct rnbd_clt_dev *dev)
 -- 
-2.25.1
+2.34.1
 

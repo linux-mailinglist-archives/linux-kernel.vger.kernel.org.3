@@ -2,175 +2,431 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A11484103
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:38:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F80548410A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:40:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232411AbiADLiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 06:38:22 -0500
-Received: from mail-eopbgr00046.outbound.protection.outlook.com ([40.107.0.46]:2096
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230166AbiADLiU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 06:38:20 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JwgOvSwRw2MRi12vv4xNNAoCKyzUKKZu6q6hJCux/I/pXVKLYRVxkSlGvrJU4az68fk2bd4Tuyrzs9clWvNWWmTMhy4t1usLetp6BPX10yoCps3ZAKPduqVJhtOsTp3zxK0zrY+5kjLIfFHPF3WIGxD3kjE6T+n+UOU3X+9s4kWccJ0A911sRy955zmyFm8PtkxMv3ZbMxZb/D5PZSqMZ4n7zk0+hbfJCnUjZcyPXsvGe6o1dD7QrgVYP1SevF4ettuv1kcr0afb7WFUv4qjcHAGf8aRN2nGAxdhUUnK+u7r7QNFxlUFU9Ysf+csucXWcZsZnW1/0l+GYbDJNjL7/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zJ9F2JqgP+RafjOsIHZdERztQrTtQ02DYxLtaV2SsKI=;
- b=JpC7PLe4bHBRjmC1LnrPBpLyTyEi7IPAF1x2+A9R7vxQVWhloLA+7FFUgaFNj7f0rdj+ClHB9luEBATSxOB95bDKu6Vv2FRP3in3T2LjssAj32plMeIgWicx977NZ50iSfIFMRM9qDdiL5/KZyQguzm7VQCvZoltSR58ILOUqjV+jGnINygDurE3qQOAMCbKq6/XVUbfNbnNQNBuSFmDabxV71Xym62cYUugXBf2OitQdyNqA8wLmiKWffT2EmRqIx0wY2+chAjHVvd6Xiu0TwKX6e/NSkI8Je7Q6c83E7Hz+VR2xDc8yVilRVJyU7TbGLPthi9UFMpyLWXi9xkbvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 194.138.21.71) smtp.rcpttodomain=canonical.com smtp.mailfrom=siemens.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=siemens.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zJ9F2JqgP+RafjOsIHZdERztQrTtQ02DYxLtaV2SsKI=;
- b=AvxGy8nUx+HhCIemWppq9jPxlXP2Av2cEXQK5fIo9w4+MNk4sEIw/OCie2x0ytQIfVhUU3eX8agxnFP6RBMpzskjpbeltH76AkZFKfF2WBuDgTl1a7VKFwfD5Gf7cpgopQav4BnRLAyrAjao/w5QrY80pHpJCzTokqhJ89zbspULpFoaZL1PJtWkM47Ob19pHAAvPV1+3nJ39dSUVd5+ZnCecouu7BbetRXuCc/34W2r7mJNsWLvbFM0YM/AmAYtAv80KscR5DDFNxEgnFJrHfxAFJNIXdW8LSAfGH5H3bzAIRwKfozivYBV3VIit2Cg6CMyRCgQX5wbx496ltofTQ==
-Received: from DB9PR05CA0008.eurprd05.prod.outlook.com (2603:10a6:10:1da::13)
- by AM0PR10MB2370.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:d7::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.13; Tue, 4 Jan
- 2022 11:38:18 +0000
-Received: from DB5EUR01FT038.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:10:1da:cafe::f1) by DB9PR05CA0008.outlook.office365.com
- (2603:10a6:10:1da::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.14 via Frontend
- Transport; Tue, 4 Jan 2022 11:38:18 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.71)
- smtp.mailfrom=siemens.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=siemens.com;
-Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
- 194.138.21.71 as permitted sender) receiver=protection.outlook.com;
- client-ip=194.138.21.71; helo=hybrid.siemens.com;
-Received: from hybrid.siemens.com (194.138.21.71) by
- DB5EUR01FT038.mail.protection.outlook.com (10.152.4.191) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4844.14 via Frontend Transport; Tue, 4 Jan 2022 11:38:18 +0000
-Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
- DEMCHDC9SKA.ad011.siemens.net (194.138.21.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 4 Jan 2022 12:38:17 +0100
-Received: from md1za8fc.ad001.siemens.net (167.87.0.7) by
- DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 4 Jan 2022 12:38:17 +0100
-Date:   Tue, 4 Jan 2022 12:38:14 +0100
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Aaron Ma <aaron.ma@canonical.com>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>, <hayeswang@realtek.com>,
-        <tiwai@suse.de>, <linux-usb@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] net: usb: r8152: Add MAC passthrough support for more
- Lenovo Docks
-Message-ID: <20220104123814.32bf179e@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20211116141917.31661-1-aaron.ma@canonical.com>
-References: <20211116141917.31661-1-aaron.ma@canonical.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S232431AbiADLkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 06:40:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232419AbiADLkN (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 06:40:13 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9FFEC061761;
+        Tue,  4 Jan 2022 03:40:12 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id 139so75695019ybd.3;
+        Tue, 04 Jan 2022 03:40:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=7C3FpU/yuL9QU2o/yrunzaCR75pcnIXMC+mxGFaMH9k=;
+        b=o8iExUzolcdqu0q75Y9bgohWZwmhltmhssWqwRLRwTTyLPep3IUFF/oZoCjae6Ht0o
+         yoNJLK0++o2DF27IHPydLn41RAJHZ9XCgt30Ydeeo5L83ytF6h1J6RIS7qDQ3BF5PPwp
+         Bg4ni1gDRcMD5wZE/pfUj8eRvB5K19/cVk0wVfRbOSRDUKt07SMN4eoAXHZZAe1COKe1
+         zc/i3yvASpuEc0CdX+qtdBXauvtZsFjrboOelFoPF/ccV5Dteae3HvITfIGOQOJlEbgK
+         UggCRFDGV0mFYOUrOo5zdz+4uLajkyAhk6qT7Od9k2MRRImlkN9auJWm6BdHS7XcU9h0
+         bevw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=7C3FpU/yuL9QU2o/yrunzaCR75pcnIXMC+mxGFaMH9k=;
+        b=mRS792/8Q+/0x/772Lsbb7kviZW+gsAN72PPw2oI1RInaMRIIZa15w2uyg+m4b4BzV
+         PVO3mglHZWgy8QaxmmgK9niCsYLKz2xu7dgWYWgEHnejGG4NJwGY9VQ1Rf4asg+RsvZ7
+         i2FyXjdEhy8+q9xI/7fHklXoOqWRpYmGQDjAnQKbjT/22xwomKEbLhwSUVh1XsWsHelE
+         rBdPHrFbiwdt2UGnE0UdYSGE8/zfZgmIHOsQwsNPX3jx9atoLWsdPmCE1KWkUH+zPXw2
+         lgOmGUV+BdS4dVW0qe2vrIG9iI3YTOYCXxpb7kl7yM6RNgJIeuLs5UhCgVvfvkClcvN1
+         NLYA==
+X-Gm-Message-State: AOAM532Y2KP3DonkWsIOUMdrK7PJ6e1detikn6UCKPOnAt9DKUvnbfkh
+        ZN1AOiQ9+PnJOZwiq1A0/kfupJcvqMGme5R3hy2u+IJW61NccA==
+X-Google-Smtp-Source: ABdhPJxFWwabLwek5/CKneKT/E6/G7cN2Ee9cXqjfQkB3D0otnVKE4beORmfrYU4hMS9htg5XPjU8T7yYe3/TcfhBl8=
+X-Received: by 2002:a25:b293:: with SMTP id k19mr55341624ybj.627.1641296412030;
+ Tue, 04 Jan 2022 03:40:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.87.0.7]
-X-ClientProxiedBy: DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) To
- DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 80931c7e-e1fe-435c-c9b4-08d9cf76b404
-X-MS-TrafficTypeDiagnostic: AM0PR10MB2370:EE_
-X-Microsoft-Antispam-PRVS: <AM0PR10MB237002782E044BC4091C4DE3854A9@AM0PR10MB2370.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 68xzEBTXD5Mnenirnyc9WQM2/jO2TWZb6Coew39WsXZXNCoH5zjA3R4XdETdzbAz0VFQSkS7wu5dt3h027K8jC0S3c99GzC2ZgHgoHDai8KzIK4DMcoaN5kmoRioyVyenJNfb//oj8qeZYXtSCxyHU4t2EWIng3qu/0lhZsIJu/u/aSrrAgL3wBZy+yU6YwizrUWryrzXvIoz0+uJD+vABb4N6TX0Fz+PadJRWKDOCsqVsyzEde6VJUQnl59BZs7COQOFXPG0495/LTJdy7bPPgq8ZiKiyYTKanyAtveQopXKvvD3a/xyxHjmMuZ9A/8csQ6QdUo57o4u6tRwOe/QsShnPPVar/JsV/sAzvBQvO+cRLYvTW+Er7HdsJiJp8cvDkLfoeeElfKjW80ZOVYIX75ocbU9IA+K5rO+qIGRbTyvEIRoXEuTHMdal7O6fLFiw2pEY6ktNGAn9rT9borO9TLDx5z/A1hdssnHO3CTxhEVhb8P7Y0I3JtM8VCFh+jh85iB2EkmCKVJqd71/hEFINBCrqtnMUFMHD5qU2mlRvdvyqSBFiBpzBnKyUc8gXPOV4Thd/H9+vgURkY+DehfJZ3YKbJCvocJd0MY1THpEXzTdASagxSDKQZcERq49BKysA98/JsDy9cf5Te2hRi1J3rGKKjmqJUbFo/zLCPm4JjAMNIQVmhSZ6Lzo8IsOQlvAFTqIPkpEYpt7pKFyr1HoNoPUA8hv+aOW1t7mka0TjivxqpA0ZHJvoD2bVpo2JF/5G6BVefSR4Z0w4887w5Y5XY8tabhBip5/zwASqDybE=
-X-Forefront-Antispam-Report: CIP:194.138.21.71;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(40470700002)(36840700001)(46966006)(44832011)(36860700001)(82310400004)(186003)(7696005)(54906003)(8936002)(356005)(83380400001)(81166007)(16526019)(2906002)(26005)(6666004)(9686003)(55016003)(498600001)(47076005)(70206006)(956004)(336012)(40460700001)(70586007)(8676002)(4326008)(5660300002)(82960400001)(86362001)(6916009)(1076003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jan 2022 11:38:18.2157
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 80931c7e-e1fe-435c-c9b4-08d9cf76b404
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.71];Helo=[hybrid.siemens.com]
-X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT038.eop-EUR01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR10MB2370
+From:   kvartet <xyru1999@gmail.com>
+Date:   Tue, 4 Jan 2022 19:40:01 +0800
+Message-ID: <CAFkrUsjwz_aJusruvm23_HmQOrxuMtOzokjGYqPZngW87v=Lbw@mail.gmail.com>
+Subject: INFO: task hung in blk_trace_ioctl
+To:     Jens Axboe <axboe@kernel.dk>, Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Cc:     sunhao.th@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch is wrong and taking the MAC inheritance way too far. Now any
-USB Ethernet dongle connected to a Lenovo USB Hub will go into
-inheritance (which is meant for docks).
+Hello,
 
-It means that such dongles plugged directly into the laptop will do
-that, or travel adaptors/hubs which are not "active docks".
+When using Syzkaller to fuzz the latest Linux kernel, the following
+crash was triggered.
 
-I have USB-Ethernet dongles on two desks and both stopped working as
-expected because they took the main MAC, even with it being used at the
-same time. The inheritance should (if at all) only be done for clearly
-identified docks and only for one r8152 instance ... not all. Maybe
-even double checking if that main PHY is "plugged" and monitoring it to
-back off as soon as it is.
+HEAD commit: a7904a538933 Linux 5.16-rc6
+git tree: upstream
+console output: https://paste.ubuntu.com/p/c57Y7mpvMj/plain/
+kernel config: https://paste.ubuntu.com/p/FDDNHDxtwz/plain/
 
-With this patch applied users can not use multiple ethernet devices
-anymore ... if some of them are r8152 and connected to "Lenovo" ...
-which is more than likely!
+Sorry, I don't have a reproducer for this crash, hope the symbolized
+report can help.
 
-Reverting that patch solved my problem, but i later went to disabling
-that very questionable BIOS feature to disable things for good without
-having to patch my kernel.
+If you fix this issue, please add the following tag to the commit:
+Reported-by: Yiru Xu <xyru1999@gmail.com>
 
-I strongly suggest to revert that. And if not please drop the defines of
+INFO: task syz-executor.4:8184 blocked for more than 143 seconds.
+      Not tainted 5.16.0-rc6 #9
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor.4  state:D stack:29536 pid: 8184 ppid: 28604 flags:0x00000004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:4972 [inline]
+ __schedule+0xcd9/0x2530 kernel/sched/core.c:6253
+ schedule+0xd2/0x260 kernel/sched/core.c:6326
+ schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6385
+ __mutex_lock_common kernel/locking/mutex.c:680 [inline]
+ __mutex_lock+0xc48/0x1610 kernel/locking/mutex.c:740
+ blk_trace_ioctl+0xab/0x270 kernel/trace/blktrace.c:725
+ blkdev_common_ioctl+0x66c/0x1930 block/ioctl.c:529
+ blkdev_ioctl+0x2ca/0x800 block/ioctl.c:603
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:874 [inline]
+ __se_sys_ioctl fs/ioctl.c:860 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fc154d6689d
+RSP: 002b:00007fc153695c28 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007fc154e86100 RCX: 00007fc154d6689d
+RDX: 0000000000000000 RSI: 0000000000001276 RDI: 0000000000000004
+RBP: 00007fc154dd300d R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffd12e481ef R14: 00007fc154e86100 R15: 00007fc153695dc0
+ </TASK>
 
-> -		case DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2:
-> -		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
+Showing all locks held in the system:
+1 lock held by khungtaskd/39:
+ #0: ffffffff8bb80e20 (rcu_read_lock){....}-{1:2}, at:
+debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6458
+3 locks held by jbd2/sda-8/3025:
+2 locks held by systemd-journal/3047:
+ #0: ffff888104518f88 (mapping.invalidate_lock){++++}-{3:3}, at:
+filemap_invalidate_lock_shared include/linux/fs.h:838 [inline]
+ #0: ffff888104518f88 (mapping.invalidate_lock){++++}-{3:3}, at:
+filemap_fault+0x1537/0x2400 mm/filemap.c:3096
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at: __perform_reclaim
+mm/page_alloc.c:4585 [inline]
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at:
+__alloc_pages_direct_reclaim mm/page_alloc.c:4609 [inline]
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at:
+__alloc_pages_slowpath.constprop.0+0x760/0x21b0 mm/page_alloc.c:5007
+2 locks held by systemd-udevd/3063:
+ #0: ffff88810451a378 (mapping.invalidate_lock){++++}-{3:3}, at:
+filemap_invalidate_lock_shared include/linux/fs.h:838 [inline]
+ #0: ffff88810451a378 (mapping.invalidate_lock){++++}-{3:3}, at:
+filemap_fault+0x1537/0x2400 mm/filemap.c:3096
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at: __perform_reclaim
+mm/page_alloc.c:4585 [inline]
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at:
+__alloc_pages_direct_reclaim mm/page_alloc.c:4609 [inline]
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at:
+__alloc_pages_slowpath.constprop.0+0x760/0x21b0 mm/page_alloc.c:5007
+2 locks held by systemd-timesyn/3122:
+ #0: ffff88810451a378 (mapping.invalidate_lock){++++}-{3:3}, at:
+filemap_invalidate_lock_shared include/linux/fs.h:838 [inline]
+ #0: ffff88810451a378 (mapping.invalidate_lock){++++}-{3:3}, at:
+filemap_fault+0x1537/0x2400 mm/filemap.c:3096
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at: __perform_reclaim
+mm/page_alloc.c:4585 [inline]
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at:
+__alloc_pages_direct_reclaim mm/page_alloc.c:4609 [inline]
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at:
+__alloc_pages_slowpath.constprop.0+0x760/0x21b0 mm/page_alloc.c:5007
+2 locks held by sd-resolve/3125:
+ #0: ffff88810451a378 (mapping.invalidate_lock){++++}-{3:3}, at:
+filemap_invalidate_lock_shared include/linux/fs.h:838 [inline]
+ #0: ffff88810451a378 (mapping.invalidate_lock){++++}-{3:3}, at:
+filemap_fault+0x1537/0x2400 mm/filemap.c:3096
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at: __perform_reclaim
+mm/page_alloc.c:4585 [inline]
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at:
+__alloc_pages_direct_reclaim mm/page_alloc.c:4609 [inline]
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at:
+__alloc_pages_slowpath.constprop.0+0x760/0x21b0 mm/page_alloc.c:5007
+2 locks held by in:imklog/6788:
+ #0: ffff888019825550 (mapping.invalidate_lock){++++}-{3:3}, at:
+filemap_invalidate_lock_shared include/linux/fs.h:838 [inline]
+ #0: ffff888019825550 (mapping.invalidate_lock){++++}-{3:3}, at:
+filemap_fault+0x1537/0x2400 mm/filemap.c:3096
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at: __perform_reclaim
+mm/page_alloc.c:4585 [inline]
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at:
+__alloc_pages_direct_reclaim mm/page_alloc.c:4609 [inline]
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at:
+__alloc_pages_slowpath.constprop.0+0x760/0x21b0 mm/page_alloc.c:5007
+2 locks held by cron/6320:
+ #0: ffff88810451a378 (mapping.invalidate_lock){++++}-{3:3}, at:
+filemap_invalidate_lock_shared include/linux/fs.h:838 [inline]
+ #0: ffff88810451a378 (mapping.invalidate_lock){++++}-{3:3}, at:
+filemap_fault+0x1537/0x2400 mm/filemap.c:3096
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at: __perform_reclaim
+mm/page_alloc.c:4585 [inline]
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at:
+__alloc_pages_direct_reclaim mm/page_alloc.c:4609 [inline]
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at:
+__alloc_pages_slowpath.constprop.0+0x760/0x21b0 mm/page_alloc.c:5007
+2 locks held by agetty/6353:
+ #0: ffff88810bb0b098 (&tty->ldisc_sem){++++}-{0:0}, at:
+tty_ldisc_ref_wait+0x22/0x80 drivers/tty/tty_ldisc.c:252
+ #1: ffffc900026232e8 (&ldata->atomic_read_lock){+.+.}-{3:3}, at:
+n_tty_read+0x8db/0x1250 drivers/tty/n_tty.c:2113
+2 locks held by syz-fuzzer/6713:
+ #0: ffff888026de2d70 (mapping.invalidate_lock){++++}-{3:3}, at:
+filemap_invalidate_lock_shared include/linux/fs.h:838 [inline]
+ #0: ffff888026de2d70 (mapping.invalidate_lock){++++}-{3:3}, at:
+filemap_fault+0x1537/0x2400 mm/filemap.c:3096
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at: __perform_reclaim
+mm/page_alloc.c:4585 [inline]
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at:
+__alloc_pages_direct_reclaim mm/page_alloc.c:4609 [inline]
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at:
+__alloc_pages_slowpath.constprop.0+0x760/0x21b0 mm/page_alloc.c:5007
+2 locks held by syz-fuzzer/6714:
+ #0: ffff888026de2d70 (mapping.invalidate_lock){++++}-{3:3}, at:
+filemap_invalidate_lock_shared include/linux/fs.h:838 [inline]
+ #0: ffff888026de2d70 (mapping.invalidate_lock){++++}-{3:3}, at:
+filemap_fault+0x1537/0x2400 mm/filemap.c:3096
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at: __perform_reclaim
+mm/page_alloc.c:4585 [inline]
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at:
+__alloc_pages_direct_reclaim mm/page_alloc.c:4609 [inline]
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at:
+__alloc_pages_slowpath.constprop.0+0x760/0x21b0 mm/page_alloc.c:5007
+2 locks held by syz-fuzzer/6715:
+ #0: ffff888026de2d70 (mapping.invalidate_lock){++++}-{3:3}, at:
+filemap_invalidate_lock_shared include/linux/fs.h:838 [inline]
+ #0: ffff888026de2d70 (mapping.invalidate_lock){++++}-{3:3}, at:
+filemap_fault+0x1537/0x2400 mm/filemap.c:3096
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at: __perform_reclaim
+mm/page_alloc.c:4585 [inline]
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at:
+__alloc_pages_direct_reclaim mm/page_alloc.c:4609 [inline]
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at:
+__alloc_pages_slowpath.constprop.0+0x760/0x21b0 mm/page_alloc.c:5007
+2 locks held by syz-fuzzer/6716:
+ #0: ffff888026de2d70 (mapping.invalidate_lock){++++}-{3:3}, at:
+filemap_invalidate_lock_shared include/linux/fs.h:838 [inline]
+ #0: ffff888026de2d70 (mapping.invalidate_lock){++++}-{3:3}, at:
+filemap_fault+0x1537/0x2400 mm/filemap.c:3096
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at: __perform_reclaim
+mm/page_alloc.c:4585 [inline]
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at:
+__alloc_pages_direct_reclaim mm/page_alloc.c:4609 [inline]
+ #1: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at:
+__alloc_pages_slowpath.constprop.0+0x760/0x21b0 mm/page_alloc.c:5007
+2 locks held by kworker/u8:4/9919:
+3 locks held by kworker/1:14/11580:
+5 locks held by kworker/u9:7/28673:
+2 locks held by syz-executor.1/4457:
+ #0: ffff8880202da460 (sb_writers#5){.+.+}-{0:0}, at:
+do_unlinkat+0x17f/0x660 fs/namei.c:4146
+ #1: ffff88811b4c0de8 (&type->i_mutex_dir_key#4/1){+.+.}-{3:3}, at:
+inode_lock_nested include/linux/fs.h:818 [inline]
+ #1: ffff88811b4c0de8 (&type->i_mutex_dir_key#4/1){+.+.}-{3:3}, at:
+do_unlinkat+0x269/0x660 fs/namei.c:4150
+1 lock held by syz-executor.5/5778:
+ #0: ffffffff8c353758 (tomoyo_ss){....}-{0:0}, at:
+tomoyo_check_open_permission+0xe8/0x370 security/tomoyo/file.c:761
+3 locks held by syz-executor.4/8180:
+ #0: ffff88810720bd20 (&q->debugfs_mutex){+.+.}-{3:3}, at:
+blk_trace_ioctl+0xab/0x270 kernel/trace/blktrace.c:725
+ #1: ffffffff8bbe0f08 (relay_channels_mutex){+.+.}-{3:3}, at:
+relay_open kernel/relay.c:518 [inline]
+ #1: ffffffff8bbe0f08 (relay_channels_mutex){+.+.}-{3:3}, at:
+relay_open+0x389/0x9d0 kernel/relay.c:477
+ #2: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at: __perform_reclaim
+mm/page_alloc.c:4585 [inline]
+ #2: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at:
+__alloc_pages_direct_reclaim mm/page_alloc.c:4609 [inline]
+ #2: ffffffff8bca5140 (fs_reclaim){+.+.}-{0:0}, at:
+__alloc_pages_slowpath.constprop.0+0x760/0x21b0 mm/page_alloc.c:5007
+1 lock held by syz-executor.4/8184:
+ #0: ffff88810720bd20 (&q->debugfs_mutex){+.+.}-{3:3}, at:
+blk_trace_ioctl+0xab/0x270 kernel/trace/blktrace.c:725
 
-And instead of crapping out with "(unnamed net_device) (uninitialized):
-Invalid header when reading pass-thru MAC addr" when the BIOS feature
-is turned off, one might want to check
-DSDT/WMT1/ITEM/"MACAddressPassThrough" which is my best for asking the
-BIOS if the feature is wanted.
+=============================================
 
-regards,
-Henning
+NMI backtrace for cpu 2
+CPU: 2 PID: 39 Comm: khungtaskd Not tainted 5.16.0-rc6 #9
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ nmi_cpu_backtrace.cold+0x47/0x144 lib/nmi_backtrace.c:111
+ nmi_trigger_cpumask_backtrace+0x1a1/0x1e0 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:210 [inline]
+ watchdog+0xcc8/0x1010 kernel/hung_task.c:295
+ kthread+0x405/0x4f0 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+Sending NMI from CPU 2 to CPUs 0-1,3:
+NMI backtrace for cpu 0
+CPU: 0 PID: 28673 Comm: kworker/u9:7 Not tainted 5.16.0-rc6 #9
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+Workqueue: events_unbound toggle_allocation_gate
+RIP: 0010:csd_lock_wait kernel/smp.c:440 [inline]
+RIP: 0010:smp_call_function_many_cond+0x3db/0xc20 kernel/smp.c:969
+Code: 0b 00 85 ed 74 4d 48 b8 00 00 00 00 00 fc ff df 4d 89 f4 4c 89
+f5 49 c1 ec 03 83 e5 07 49 01 c4 83 c5 03 e8 17 6f 0b 00 f3 90 <41> 0f
+b6 04 24 40 38 c5 7c 08 84 c0 0f 85 a2 06 00 00 8b 43 08 31
+RSP: 0018:ffffc90002b47a10 EFLAGS: 00000246
+RAX: 0000000000000000 RBX: ffff888063f3fca0 RCX: ffff888040a58000
+RDX: 0000000000000000 RSI: ffff888040a58000 RDI: 0000000000000002
+RBP: 0000000000000003 R08: ffffffff816bfe59 R09: 0000000000000000
+R10: 0000000000000005 R11: fffffbfff1fee128 R12: ffffed100c7e7f95
+R13: 0000000000000002 R14: ffff888063f3fca8 R15: 0000000000000001
+FS:  0000000000000000(0000) GS:ffff888063e00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000000043cfec CR3: 000000000b88e000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ on_each_cpu_cond_mask+0x56/0xa0 kernel/smp.c:1135
+ on_each_cpu include/linux/smp.h:71 [inline]
+ text_poke_sync arch/x86/kernel/alternative.c:1112 [inline]
+ text_poke_bp_batch+0x355/0x560 arch/x86/kernel/alternative.c:1350
+ text_poke_flush arch/x86/kernel/alternative.c:1451 [inline]
+ text_poke_finish+0x16/0x30 arch/x86/kernel/alternative.c:1458
+ arch_jump_label_transform_apply+0x13/0x20 arch/x86/kernel/jump_label.c:146
+ jump_label_update+0x32d/0x440 kernel/jump_label.c:830
+ static_key_disable_cpuslocked+0x156/0x1c0 kernel/jump_label.c:207
+ static_key_disable+0x16/0x20 kernel/jump_label.c:215
+ toggle_allocation_gate mm/kfence/core.c:746 [inline]
+ toggle_allocation_gate+0x183/0x390 mm/kfence/core.c:724
+ process_one_work+0x9df/0x16d0 kernel/workqueue.c:2298
+ worker_thread+0x90/0xed0 kernel/workqueue.c:2445
+ kthread+0x405/0x4f0 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+NMI backtrace for cpu 3
+CPU: 3 PID: 9919 Comm: kworker/u8:4 Not tainted 5.16.0-rc6 #9
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+Workqueue: bat_events batadv_nc_worker
+RIP: 0010:__sanitizer_cov_trace_pc+0x15/0x40 kernel/kcov.c:200
+Code: 8b 80 58 15 00 00 c3 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00
+65 48 8b 0c 25 40 70 02 00 bf 02 00 00 00 48 89 ce 4c 8b 04 24 <e8> 76
+ff ff ff 84 c0 74 20 48 8b 91 48 15 00 00 8b 89 44 15 00 00
+RSP: 0018:ffffc90018eefc28 EFLAGS: 00000046
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffff88802dd50000
+RDX: 0000000000000000 RSI: ffff88802dd50000 RDI: 0000000000000002
+RBP: ffffffff88df98b1 R08: ffffffff817d7f4c R09: 0000000000000000
+R10: 0000000000000005 R11: ffffed1006758a98 R12: ffff888017e456d8
+R13: ffff888017e44c80 R14: dffffc0000000000 R15: ffffffff88df99e0
+FS:  0000000000000000(0000) GS:ffff888135d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f6177701270 CR3: 000000003157d000 CR4: 0000000000350ee0
+Call Trace:
+ <TASK>
+ trace_hardirqs_off+0x2c/0x1b0 kernel/trace/trace_preemptirq.c:79
+ __local_bh_enable_ip+0xc3/0x110 kernel/softirq.c:365
+ spin_unlock_bh include/linux/spinlock.h:394 [inline]
+ batadv_nc_purge_paths+0x2d1/0x400 net/batman-adv/network-coding.c:475
+ batadv_nc_worker+0x287/0x770 net/batman-adv/network-coding.c:726
+ process_one_work+0x9df/0x16d0 kernel/workqueue.c:2298
+ worker_thread+0x90/0xed0 kernel/workqueue.c:2445
+ kthread+0x405/0x4f0 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+NMI backtrace for cpu 1
+CPU: 1 PID: 3025 Comm: jbd2/sda-8 Not tainted 5.16.0-rc6 #9
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+RIP: 0010:__sanitizer_cov_trace_pc+0x1c/0x40 kernel/kcov.c:200
+Code: 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 65 48 8b 0c 25 40 70
+02 00 bf 02 00 00 00 48 89 ce 4c 8b 04 24 e8 76 ff ff ff 84 c0 <74> 20
+48 8b 91 48 15 00 00 8b 89 44 15 00 00 48 8b 02 48 83 c0 01
+RSP: 0018:ffffc9000cba68b8 EFLAGS: 00000246
+RAX: 0000000000000000 RBX: fffffffffffffffe RCX: ffff88801ed9d640
+RDX: 0000000000000000 RSI: ffff88801ed9d640 RDI: 0000000000000002
+RBP: ffff888013f46788 R08: ffffffff81a24171 R09: fffffffffffffffe
+R10: 0000000000000007 R11: fffffbfff1b20a2a R12: 0000000000000004
+R13: 0000000000000000 R14: ffffc9000cba6930 R15: dffffc0000000000
+FS:  0000000000000000(0000) GS:ffff888135c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000477f80 CR3: 00000000218ee000 CR4: 0000000000350ee0
+Call Trace:
+ <TASK>
+ list_empty include/linux/list.h:284 [inline]
+ rwsem_is_contended include/linux/rwsem.h:121 [inline]
+ shrink_slab mm/vmscan.c:942 [inline]
+ shrink_slab+0x1a1/0x6f0 mm/vmscan.c:906
+ shrink_node_memcgs mm/vmscan.c:3131 [inline]
+ shrink_node+0x883/0x1df0 mm/vmscan.c:3252
+ shrink_zones mm/vmscan.c:3485 [inline]
+ do_try_to_free_pages+0x4f6/0x1440 mm/vmscan.c:3541
+ try_to_free_pages+0x2a6/0x760 mm/vmscan.c:3776
+ __perform_reclaim mm/page_alloc.c:4588 [inline]
+ __alloc_pages_direct_reclaim mm/page_alloc.c:4609 [inline]
+ __alloc_pages_slowpath.constprop.0+0x807/0x21b0 mm/page_alloc.c:5007
+ __alloc_pages+0x5ab/0x6e0 mm/page_alloc.c:5382
+ alloc_pages+0x115/0x240 mm/mempolicy.c:2191
+ __stack_depot_save+0x3db/0x520 lib/stackdepot.c:359
+ save_stack+0x15e/0x1e0 mm/page_owner.c:120
+ __set_page_owner+0x45/0x300 mm/page_owner.c:181
+ set_page_owner include/linux/page_owner.h:31 [inline]
+ post_alloc_hook mm/page_alloc.c:2412 [inline]
+ prep_new_page+0x1a6/0x240 mm/page_alloc.c:2418
+ get_page_from_freelist+0x1eed/0x3b50 mm/page_alloc.c:4149
+ __alloc_pages_cpuset_fallback mm/page_alloc.c:4231 [inline]
+ __alloc_pages_may_oom mm/page_alloc.c:4322 [inline]
+ __alloc_pages_slowpath.constprop.0+0x1d34/0x21b0 mm/page_alloc.c:5051
+ __alloc_pages+0x5ab/0x6e0 mm/page_alloc.c:5382
+ alloc_pages+0x115/0x240 mm/mempolicy.c:2191
+ folio_alloc+0x1c/0x70 mm/mempolicy.c:2201
+ filemap_alloc_folio+0x282/0x3d0 mm/filemap.c:1036
+ __filemap_get_folio+0x3d7/0x1080 mm/filemap.c:1951
+ pagecache_get_page+0x2c/0x1a0 mm/folio-compat.c:125
+ find_or_create_page include/linux/pagemap.h:489 [inline]
+ grow_dev_page fs/buffer.c:949 [inline]
+ grow_buffers fs/buffer.c:1014 [inline]
+ __getblk_slow fs/buffer.c:1041 [inline]
+ __getblk_gfp+0x240/0xb80 fs/buffer.c:1334
+ __getblk include/linux/buffer_head.h:382 [inline]
+ jbd2_journal_get_descriptor_buffer+0x10a/0x410 fs/jbd2/journal.c:1014
+ journal_submit_commit_record.part.0+0x89/0xa20 fs/jbd2/commit.c:131
+ journal_submit_commit_record fs/jbd2/commit.c:128 [inline]
+ jbd2_journal_commit_transaction+0x3ffd/0x6c90 fs/jbd2/commit.c:925
+ kjournald2+0x1d0/0x930 fs/jbd2/journal.c:213
+ kthread+0x405/0x4f0 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0: 0b 00                or     (%rax),%eax
+   2: 85 ed                test   %ebp,%ebp
+   4: 74 4d                je     0x53
+   6: 48 b8 00 00 00 00 00 movabs $0xdffffc0000000000,%rax
+   d: fc ff df
+  10: 4d 89 f4              mov    %r14,%r12
+  13: 4c 89 f5              mov    %r14,%rbp
+  16: 49 c1 ec 03          shr    $0x3,%r12
+  1a: 83 e5 07              and    $0x7,%ebp
+  1d: 49 01 c4              add    %rax,%r12
+  20: 83 c5 03              add    $0x3,%ebp
+  23: e8 17 6f 0b 00        callq  0xb6f3f
+  28: f3 90                pause
+* 2a: 41 0f b6 04 24        movzbl (%r12),%eax <-- trapping instruction
+  2f: 40 38 c5              cmp    %al,%bpl
+  32: 7c 08                jl     0x3c
+  34: 84 c0                test   %al,%al
+  36: 0f 85 a2 06 00 00    jne    0x6de
+  3c: 8b 43 08              mov    0x8(%rbx),%eax
+  3f: 31                    .byte 0x31
 
-Am Tue, 16 Nov 2021 22:19:17 +0800
-schrieb Aaron Ma <aaron.ma@canonical.com>:
 
-> Like ThinkaPad Thunderbolt 4 Dock, more Lenovo docks start to use the
-> original Realtek USB ethernet chip ID 0bda:8153.
-> 
-> Lenovo Docks always use their own IDs for usb hub, even for older
-> Docks. If parent hub is from Lenovo, then r8152 should try MAC
-> passthrough. Verified on Lenovo TBT3 dock too.
-> 
-> Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
-> ---
->  drivers/net/usb/r8152.c | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> index 4a02f33f0643..f9877a3e83ac 100644
-> --- a/drivers/net/usb/r8152.c
-> +++ b/drivers/net/usb/r8152.c
-> @@ -9603,12 +9603,9 @@ static int rtl8152_probe(struct usb_interface
-> *intf, netdev->hw_features &= ~NETIF_F_RXCSUM;
->  	}
->  
-> -	if (le16_to_cpu(udev->descriptor.idVendor) ==
-> VENDOR_ID_LENOVO) {
-> -		switch (le16_to_cpu(udev->descriptor.idProduct)) {
-> -		case DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2:
-> -		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
-> -			tp->lenovo_macpassthru = 1;
-> -		}
-> +	if (udev->parent &&
-> +
-> le16_to_cpu(udev->parent->descriptor.idVendor) == VENDOR_ID_LENOVO) {
-> +		tp->lenovo_macpassthru = 1;
->  	}
->  
->  	if (le16_to_cpu(udev->descriptor.bcdDevice) == 0x3011 &&
-> udev->serial &&
 
+Best Regards,
+Yiru

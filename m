@@ -2,168 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B87483956
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 01:00:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80DDD483957
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 01:00:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbiADAAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 19:00:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
+        id S231278AbiADAAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 19:00:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiADAAW (ORCPT
+        with ESMTP id S229487AbiADAAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 19:00:22 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD49C061761;
-        Mon,  3 Jan 2022 16:00:22 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id u20so30662037pfi.12;
-        Mon, 03 Jan 2022 16:00:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=dK21mIGORj0/9MnxfJAN9rJMFqp9YwgpsAaZ0YwupJ0=;
-        b=PEFyB2y+rikSCEhzLMrLDC6JUltEWl3FA9BMYZtxTkTtA6lmKnNKgyNajS/8kiI3it
-         nKt1+mZlnvtifXZAEC3LTUNPq5b51Yu04egS2Z3jXM7wFytMx97zJCqwcoqhf7C+DinO
-         i4ZvQcA4pIZ/29Jm3+BXcDox4+YEbFA5TaKwDYIRAiTI5ER8rxtnbJU0rpsGQV1w8OGt
-         uU2Hf1YRf0oD8y0zCoebpRz90ms0ks4l067S16IFar2jEhEV2fxM/Qg1io5v/DgcKdNG
-         B7oD4/F8IMaqsUAhGKeN2SUzedFtqjTN9jwnR44H9AzVBrbLlmEQMOUm2v7EbILXlJ3R
-         Si/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=dK21mIGORj0/9MnxfJAN9rJMFqp9YwgpsAaZ0YwupJ0=;
-        b=IR1O2dFc+lfT1tg7sXRKyjeQ19/YinKD2TjAAq6a9s6TzKf9JsED2dfksGd+9tHCkA
-         f3yeXWqvMX3qF8nz86SX/5tPgffsY6FbUQdlfLBRu7pi+6T51EHj0X86Ktvu98jBxHx4
-         lPMwgT0oZq53DTTDd9Y/9OZcqyZCaLBapas49MZNXgpHBZ8h332Ijsjmau0YsENp3blQ
-         cPLmHOEqT5oUnQMfNKi0fCq8rUadjI5V/TUf+coo0BYDmBi6VfwEaqvQSsthNnWjp8IR
-         EvcIV7ibLgac89Njw+wsV0Sb3MFdSkDPb/7nU/+ANsZxI69yZB0tl/G+F+nQd5uw6aT8
-         Ly8Q==
-X-Gm-Message-State: AOAM531BUjrxRpokUeqzz7jNjAZkP5sGiO/nJM13HUGXgu9B0eGuGh+x
-        30GOYn+6rCYyPhJ05HE8Z20=
-X-Google-Smtp-Source: ABdhPJzAzA6W7S2xt0tKZ7VPj4qY7YtFYkLe6WXZt/yfjcjwYFEm/810sSh2Tj62da1CaiKyBhQUVw==
-X-Received: by 2002:a65:679a:: with SMTP id e26mr42060845pgr.280.1641254422036;
-        Mon, 03 Jan 2022 16:00:22 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:a7d6:43d7:bbe3:3573])
-        by smtp.gmail.com with ESMTPSA id b11sm42106435pfv.39.2022.01.03.16.00.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jan 2022 16:00:21 -0800 (PST)
-Date:   Mon, 3 Jan 2022 16:00:18 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Felix Singer <felixsinger@posteo.net>,
-        Matt DeVillier <matt.devillier@gmail.com>
-Subject: Re: Upstream support of Google Chromebook keyboards (udev,
- xkeyboard-config)?
-Message-ID: <YdOOElXuwxkKlU59@google.com>
-References: <41f9d4f9-eb3a-7a5d-3d69-5361dd9124fc@molgen.mpg.de>
+        Mon, 3 Jan 2022 19:00:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04252C061761
+        for <linux-kernel@vger.kernel.org>; Mon,  3 Jan 2022 16:00:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2662F6121D
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 00:00:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C138C36AF5
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 00:00:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641254448;
+        bh=TNarL2hfu8eJEcGtDz9+dQGA77tHSc49VlWpuvPnZ1I=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Eo0d+CTN+FJuwECto80YDNRaqot6AcT3Bxh3XoliN0XewK/BjDNPG0IJYL4In1zX2
+         ZiuXIrm8SfnDNb5bMmNkrufSwrLApanTc7G+RtQlJj+rijosScqsTz9SwHvQLSBXLH
+         Uk2dcIKVJJ9NX87GoqC7Fk1dxMqCx+VJba42HV6AI1vJXjFU4lvQVgjqt2ZwcStE7+
+         kqa9OAjitm67zTlz8D8gCQnFnktwYLenpRFHNNgAfXGWo2DBYmltqnwXYROXpV0GCv
+         aJDVh8vm98EBjS7gM2ILCtHb8DmFQJa2VAnhsbnhkpWC6EIBmnjD1bwVJky0e2tOIH
+         3XPFll6PKc3YQ==
+Received: by mail-ed1-f43.google.com with SMTP id j21so141496962edt.9
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Jan 2022 16:00:48 -0800 (PST)
+X-Gm-Message-State: AOAM531Rlur/5RQlegNDsf1FrhHjpVLa0qj16bcPr4LXwYT3jp1ivqPd
+        Pbj2YBGBifOhl+31Y/Z8jiqV83ye9QsQioaesA==
+X-Google-Smtp-Source: ABdhPJyaz7BnlYjQMVi+kdPY5KTdRWwNiolCizpj3tNIG5pA43f+7YnaYUahBNDOYOQUnP476RsDvzNIT9t6xMhhfW8=
+X-Received: by 2002:a17:906:c109:: with SMTP id do9mr37211153ejc.48.1641254446823;
+ Mon, 03 Jan 2022 16:00:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <41f9d4f9-eb3a-7a5d-3d69-5361dd9124fc@molgen.mpg.de>
+References: <20220103054706.8072-1-miles.chen@mediatek.com>
+In-Reply-To: <20220103054706.8072-1-miles.chen@mediatek.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Tue, 4 Jan 2022 08:00:54 +0800
+X-Gmail-Original-Message-ID: <CAAOTY_-WX8p=Ba_4JPgnX4Wmh66bNF09RiP5C7+0=7V-ngdsLA@mail.gmail.com>
+Message-ID: <CAAOTY_-WX8p=Ba_4JPgnX4Wmh66bNF09RiP5C7+0=7V-ngdsLA@mail.gmail.com>
+Subject: Re: [PATCH v4] drm/mediatek: Fix mtk_cec_mask()
+To:     Miles Chen <miles.chen@mediatek.com>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Junzhi Zhao <junzhi.zhao@mediatek.com>,
+        Jie Qiu <jie.qiu@mediatek.com>,
+        Zhiqiang Lin <zhiqiang.lin@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+Hi, Miles:
 
-On Mon, Dec 27, 2021 at 05:18:44PM +0100, Paul Menzel wrote:
-> Dear Linux folks,
-> 
-> 
-> Installing a non-Chromium OS distribution like Debian on a Google
-> Chromebook, in this case a Dell Latitude 5400 Chrome (google/sarien), not
-> all keys work as expected.
+Miles Chen <miles.chen@mediatek.com> =E6=96=BC 2022=E5=B9=B41=E6=9C=883=E6=
+=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=881:47=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> In current implementation, mtk_cec_mask() writes val into target register
+> and ignores the mask. After talking to our hdmi experts, mtk_cec_mask()
+> should read a register, clean only mask bits, and update (val | mask) bit=
+s
+> to the register.
 
-Looking at the issues you are referencing you are flashing a 3rd party
-firmware on the device so I am unable to comment on behavior of that
-firmware, however:
+Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
 
-> 
-> 1.  Non-working super key and two function keys on Google Chromebook Dell
-> Latitute 5400 Chrome (google/sarien) [1]
-
-There is no "super" key on Chromebooks. The "globe" key you see is
-supposed to select next keyboard layout. This is the udev hwdb entry
-that we have for Sarien/Arcada devices in our tree:
-
-# Copyright 2019 The Chromium OS Authors. All rights reserved.
-# Distributed under the terms of the GNU General Public License v2
-
-#
-# Special keyboard mapping for the Sarien project. The keyboard emits both
-# function and action scan codes depending on Fn-modifier key.
-
-evdev:atkbd:dmi:bvn*:bvr*:bd*:svnDell*:pnSarien:pvr*
-evdev:atkbd:dmi:bvn*:bvr*:bd*:svnDell*:pnArcada:pvr*
- KEYBOARD_KEY_ea=back
- KEYBOARD_KEY_e7=refresh
- KEYBOARD_KEY_d5=full_screen
- KEYBOARD_KEY_d6=scale
- KEYBOARD_KEY_95=brightnessdown
- KEYBOARD_KEY_91=brightnessup
- KEYBOARD_KEY_a0=mute
- KEYBOARD_KEY_ae=volumedown
- KEYBOARD_KEY_b0=volumeup
- KEYBOARD_KEY_8b=switchvideomode
- KEYBOARD_KEY_d8=sleep
- KEYBOARD_KEY_d4=kbd_layout_next
-
-
-(Note that on Chrome OS we are transitioning from F1-F10 being primary
-key codes emitted by the kernel to what we call "action" codes - back,
-refresh, etc).
-
-> 2.  Wrong caps lock key and function key mappings on Google Chromebook Dell
-> Latitute 5400 Chrome (google/sarien) [2]
-
-There is no CapsLock on Chromebooks either. We are using "search" or
-"launcher" key which is actually Left Meta in place of CapsLock.
-
-> 
-> Peter replied, this should be fixed in udev, so it’s not directly related to
-> the Linux kernel, as the Linux kernel exposes the scancodes(?) just fine.
-> But what is the upstream process for this in general? Chromium OS carries
-> `91-chromeos-keyboard.rules` for example.
-> 
-> systemd/udev currently has an entry for two Google Chromebook models in
-> `hwdb.d/60-keyboard.hwdb` [4]:
-> 
->     ######################### FIXED MODEL DEVICES
-> #############################
->     # This section lists devices which require special handling in their key
->     # code to keysym mapping by setting the xkb model.
->     # The model must be an xkb compatible model (defined with
-> XKB_FIXED_MODEL).
-> 
->     # Chromebooks
->     evdev:atkbd:dmi:bvn*:bvr*:bd*:svnHewlett-Packard*:pnFalco:pvr*
->     evdev:atkbd:dmi:bvn*:bvr*:bd*:svnAcer*:pnPeppy:pvr*
->      XKB_FIXED_MODEL="chromebook"
-
-Yes, that is the right place for it. You submit a PR against systemd
-with the new mappings.
-
-> 
-> The Dell Chromebooks, unfortunately, also use the embedded controller with
-> Dell’s proprietary firmware (Wilco(?)), and not Chrome EC making special
-> handling necessary. `91-chromeos-keyboard.rules` has
-> 
->     # Wilco keyboard (5220W-C) for Chrome OS
->     SUBSYSTEM=="input", \
->       ATTRS{idVendor}=="413c", ATTRS{idProduct}=="2510", \
->       ENV{CROS_KEYBOARD_TOP_ROW_LAYOUT}="3", \
->       ENV{ID_INPUT_KEYBOARD}="1"
-
-This is only needed on Chrome OS to let Chrome know how to map the
-"action" scancodes back to F1-F10 when they are chorded with "launcher"
-key. This is Chrome on Chrome OS-specfic behavior and is of no interest
-to other parties.
-
-Thanks.
- 
--- 
-Dmitry
+>
+> Fixes: 8f83f26891e1 ("drm/mediatek: Add HDMI support")
+>
+> Cc: Zhiqiang Lin <zhiqiang.lin@mediatek.com>
+> Cc: CK Hu <ck.hu@mediatek.com>
+> Cc: Matthias Brugger <matthias.bgg@gmail.com>
+>
+> Signed-off-by: Miles Chen <miles.chen@mediatek.com>
+>
+> ---
+>
+> Change since v1:
+> add Fixes tag
+>
+> Change since v2:
+> add explanation of mtk_cec_mask()
+>
+> Change since v3:
+> change misleading subject and modify the commit message since this is a b=
+ug fix patch
+>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_cec.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/mediatek/mtk_cec.c b/drivers/gpu/drm/mediate=
+k/mtk_cec.c
+> index e9cef5c0c8f7..cdfa648910b2 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_cec.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_cec.c
+> @@ -85,7 +85,7 @@ static void mtk_cec_mask(struct mtk_cec *cec, unsigned =
+int offset,
+>         u32 tmp =3D readl(cec->regs + offset) & ~mask;
+>
+>         tmp |=3D val & mask;
+> -       writel(val, cec->regs + offset);
+> +       writel(tmp, cec->regs + offset);
+>  }
+>
+>  void mtk_cec_set_hpd_event(struct device *dev,
+> --
+> 2.18.0
+>

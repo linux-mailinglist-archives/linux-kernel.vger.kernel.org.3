@@ -2,106 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F482484828
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:57:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A083748482D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:58:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236417AbiADS52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 13:57:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:54349 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235913AbiADS50 (ORCPT
+        id S236430AbiADS6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 13:58:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60546 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234390AbiADS6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 13:57:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641322646;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=J5/oRp09czNHRuOEhgWyRyTW+iAZaeWjdUNct+kTpW0=;
-        b=c/Qp+koVhxTf7l39ky/kn7CoMEpTEJqN8RJpniK4v81MYgF7Kr454fSPNuKxLZnmFxgck6
-        56UGhY5hebxup1hBfPX69Edv9jtqBUEKhfWrQO2pcTIPCW6ZZnotoouv9MOlbtSqXuA7Mu
-        vKpr5F64dVxyYmec4gv0zCMnVkp7UKU=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-323-E8TnPCdyMWS7tA1L4qqfRg-1; Tue, 04 Jan 2022 13:57:25 -0500
-X-MC-Unique: E8TnPCdyMWS7tA1L4qqfRg-1
-Received: by mail-qk1-f199.google.com with SMTP id q5-20020a05620a0d8500b004738c1b48beso21565558qkl.7
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 10:57:25 -0800 (PST)
+        Tue, 4 Jan 2022 13:58:14 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F048C061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 10:58:14 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id 8so33011435pfo.4
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 10:58:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=axl0zitI3Sg0+7afMtdoHSwJ4SSyjtKwYA8uyUIl7eY=;
+        b=Zzkz8OA6YPii0rzndeTnldcofz+TH8pyBChvpIG57PjzyCB5Yx8fGj7rgfXWl5RciV
+         mbj258BttrVYhqiAnu5imaMhY5mpQZ8mHvgynMXp6zXy3krz8jtKfxAx9LVXCYNeakH0
+         vA4lpuid2T/CY1JvBl+zm83uTEHEsG9rFnAtj3MxUjgm2GyzqQNqrYDYmwI/7s3RcMj9
+         TsALeolijp/1qAdrya7SyZh2IHtC1TGpvnEewIztORyTK3Kh0teXGPgT4WkiWvsCJ3I9
+         Mkkc1CM60dDl8XCkwjom1wV6Luz6J+16ZHlER87KoVJSDkYoCG9ZZqUVbxBJmhZ6nQoC
+         R1Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=J5/oRp09czNHRuOEhgWyRyTW+iAZaeWjdUNct+kTpW0=;
-        b=356ZnZ1jD17mQWCp08pb503WYWtL9XmKndO7yK/sJOtkbZFlzwd/9SZIzZI5SIUj8k
-         +nDPWfwB+a0rgrjl+RDgYwkGCstLv2NiUMfAx29AJCFuGooU05GHeVYXkHq3zkIcgUgX
-         LU04ezUIKp0PYwmGvi5l/us4FLbsGL1LCyOswdlt9ceA2bYnYjsOSZkmgcAXTZYmnHBm
-         gsjwZRhxjK7HzCoejOhH5Sg64KmgduqTxqG3yHQMl9XN0XHNJD8WUtJsi7tilabSQHmr
-         5eXgo1NAySOkC9ef8790WaLEMvUx4VMqLuUgAMI5ofeZ2ND9euiu35A3luoHEn+1sB8W
-         7ZpQ==
-X-Gm-Message-State: AOAM532ssE5SfAbOa7uh3lJCW0L8kEJcHAG9d5MiBDWVu25qUhI5llsD
-        cHdZMz4xPWWI+bDDoLrUMQ1f4a3qxqEIOyLvQNAhrAKE0Y4LD5hekm70IIMpD2gu/vaaRbk1I50
-        3z5hOt3QO+etr2HqWfqZ1/ZrSzP7KKP9zeiHFJAYR
-X-Received: by 2002:ac8:4a0e:: with SMTP id x14mr46061151qtq.345.1641322644540;
-        Tue, 04 Jan 2022 10:57:24 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzY5Jb8OM0ChHLxAtBitQbRhduI6iTYF7RWU97ZON70BVaBcUtDPP4ln05Ykg45Jk6Z3AEJnPL9BvW00sROAkI=
-X-Received: by 2002:ac8:4a0e:: with SMTP id x14mr46061135qtq.345.1641322644295;
- Tue, 04 Jan 2022 10:57:24 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=axl0zitI3Sg0+7afMtdoHSwJ4SSyjtKwYA8uyUIl7eY=;
+        b=GpeKVuoPFGFMDDagiIZ3cnvBYWzU958rzH0cg2gxlQ+TCO1JnByo/Qm2zoYMnAVg0R
+         AnFIrkxbDAkyD19bob9LzO7+6952/EfYdD9yjA48ZiM6NjnspXGhnn6JoTJviUii27EL
+         l7FAu6B96y9NEt7xopO2s2V044LuOt6WnEQSr16YFBBrKKRqc6P+1acp9bWSvluJQPDZ
+         cSD7B3rbFltBvb4ASdHE6a3MFHU7kEfW416RU94uQku9OIxI7TrqKqSON1TrjBYg/87U
+         2DDzoCf6cYZZ07jZ2+pAtPrrKr/S3MmH1o7vnF5pCOdqD6w4eg8p48LtW4kDONi1EmwG
+         FU/A==
+X-Gm-Message-State: AOAM532zdToAS8GQdiGrOOzjnWmcfEQM6jjLTToR6QAK6G1g4mzOsAmF
+        mBAx+ZlK9Gz3WE79DC71NXltNVfimpQlvA==
+X-Google-Smtp-Source: ABdhPJwvR+kVa4AEEEWFabGelN15sAtob49/MiZw8AlotNXTLtqzIVXazOlvxrUN547b0AWgTa7rFQ==
+X-Received: by 2002:a62:6501:0:b0:4bc:9bc9:5231 with SMTP id z1-20020a626501000000b004bc9bc95231mr12720144pfb.0.1641322693454;
+        Tue, 04 Jan 2022 10:58:13 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id t126sm35042663pgc.61.2022.01.04.10.58.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 10:58:12 -0800 (PST)
+Date:   Tue, 4 Jan 2022 18:58:09 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Jing Liu <jing2.liu@intel.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, corbet@lwn.net, shuah@kernel.org,
+        jun.nakajima@intel.com, kevin.tian@intel.com,
+        jing2.liu@linux.intel.com, guang.zeng@intel.com,
+        wei.w.wang@intel.com, yang.zhong@intel.com
+Subject: Re: [PATCH v3 22/22] kvm: x86: Disable interception for IA32_XFD on
+ demand
+Message-ID: <YdSYwR5NDfJ6LIrU@google.com>
+References: <20211222124052.644626-1-jing2.liu@intel.com>
+ <20211222124052.644626-23-jing2.liu@intel.com>
+ <Ycu0KVq9PfuygKKx@google.com>
+ <ff29b36a-ffe4-8ba9-2856-cf96fcf33c0d@redhat.com>
 MIME-Version: 1.0
-References: <e8e73fcc-b902-4972-6001-84671361146d@datenfreihafen.org> <20220104182806.7188-1-paskripkin@gmail.com>
-In-Reply-To: <20220104182806.7188-1-paskripkin@gmail.com>
-From:   Alexander Aring <aahringo@redhat.com>
-Date:   Tue, 4 Jan 2022 13:57:13 -0500
-Message-ID: <CAK-6q+jkQqZ-Mog2Bwq2EGWFYv-vYtSYRJMqJUARm=C+Cd+uRA@mail.gmail.com>
-Subject: Re: [PATCH v3] ieee802154: atusb: fix uninit value in atusb_set_extended_addr
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     stefan@datenfreihafen.org, alex.aring@gmail.com,
-        davem@davemloft.net, Jakub Kicinski <kuba@kernel.org>,
-        linux-wpan@vger.kernel.org,
-        Network Development <netdev@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Alexander Potapenko <glider@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ff29b36a-ffe4-8ba9-2856-cf96fcf33c0d@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Jan 04, 2022, Paolo Bonzini wrote:
+> On 12/29/21 02:04, Sean Christopherson wrote:
+> > 
+> > Speaking of nested, interception of #NM in vmx_update_exception_bitmap() is wrong
+> > with respect to nested guests.  Until XFD is supported for L2, which I didn't see
+> > in this series, #NM should not be intercepted while L2 is running.
+> 
+> Why wouldn't L2 support XFD, since there are no new VMCS bits?  As long as
+> L0 knows what to do with XFD and XFD_ERR, it will do the right thing no
+> matter if L1 or L2 is running.
 
-On Tue, Jan 4, 2022 at 1:28 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
->
-> Alexander reported a use of uninitialized value in
-> atusb_set_extended_addr(), that is caused by reading 0 bytes via
-> usb_control_msg().
->
-> Fix it by validating if the number of bytes transferred is actually
-> correct, since usb_control_msg() may read less bytes, than was requested
-> by caller.
->
-> Fail log:
->
-> BUG: KASAN: uninit-cmp in ieee802154_is_valid_extended_unicast_addr include/linux/ieee802154.h:310 [inline]
-> BUG: KASAN: uninit-cmp in atusb_set_extended_addr drivers/net/ieee802154/atusb.c:1000 [inline]
-> BUG: KASAN: uninit-cmp in atusb_probe.cold+0x29f/0x14db drivers/net/ieee802154/atusb.c:1056
-> Uninit value used in comparison: 311daa649a2003bd stack handle: 000000009a2003bd
->  ieee802154_is_valid_extended_unicast_addr include/linux/ieee802154.h:310 [inline]
->  atusb_set_extended_addr drivers/net/ieee802154/atusb.c:1000 [inline]
->  atusb_probe.cold+0x29f/0x14db drivers/net/ieee802154/atusb.c:1056
->  usb_probe_interface+0x314/0x7f0 drivers/usb/core/driver.c:396
->
-> Fixes: 7490b008d123 ("ieee802154: add support for atusb transceiver")
-> Reported-by: Alexander Potapenko <glider@google.com>
-> Acked-by: Alexander Aring <aahringo@redhat.com>
-> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-> ---
->
-> Changes in v3:
->         - Changed atusb_control_msg() to usb_control_msg() in
->           atusb_get_and_show_build(), since request there may read various length
->           data
->
-
-Thanks for catching this.
-
-- Alex
-
+I incorrectly assumed there was something L0 needed to do in order to support
+nested XFD.

@@ -2,66 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC249484220
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:09:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D48D4484236
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:18:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233319AbiADNJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 08:09:07 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:36168 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiADNJD (ORCPT
+        id S233394AbiADNSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 08:18:15 -0500
+Received: from forward102o.mail.yandex.net ([37.140.190.182]:50074 "EHLO
+        forward102o.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233374AbiADNSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 08:09:03 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id CB76B1F37F;
-        Tue,  4 Jan 2022 13:09:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1641301742; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QzgcpTNiBUmfwXnzGEhmPrP9Mo+srsFroAQ2OAHiqOM=;
-        b=ondmDVqgk178Mgeb6ilSxVBfsPDz9FuV0qmBaGAGbJzkB0jWNBQI4zoS7VM2eaVPUFvfAE
-        LLasJ4Se2LMyItctDd92o4g6pCC7lbKXQSP0+2VwYvt/cS2tP6lS2+X+PfWdWnykOiYo+3
-        Hf6OZecB+Nad2ObkQDrKl9l7RaK8niA=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id AA677A3B83;
-        Tue,  4 Jan 2022 13:09:02 +0000 (UTC)
-Date:   Tue, 4 Jan 2022 14:09:02 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
-        void@manifault.com
-Subject: Re: [PATCH -next] livepatch: Fix missing unlock on error in
- klp_enable_patch()
-Message-ID: <YdRG7oSUICq+Y+gE@alley>
-References: <20211225025115.475348-1-yangyingliang@huawei.com>
- <YdL+QdAv3MtRSKJy@alley>
+        Tue, 4 Jan 2022 08:18:13 -0500
+X-Greylist: delayed 481 seconds by postgrey-1.27 at vger.kernel.org; Tue, 04 Jan 2022 08:18:13 EST
+Received: from sas1-d367461f7756.qloud-c.yandex.net (sas1-d367461f7756.qloud-c.yandex.net [IPv6:2a02:6b8:c08:fe02:0:640:d367:461f])
+        by forward102o.mail.yandex.net (Yandex) with ESMTP id 4E43A6FF8F96;
+        Tue,  4 Jan 2022 16:10:11 +0300 (MSK)
+Received: from sas8-c6148047b62a.qloud-c.yandex.net (sas8-c6148047b62a.qloud-c.yandex.net [2a02:6b8:c1b:2a11:0:640:c614:8047])
+        by sas1-d367461f7756.qloud-c.yandex.net (mxback/Yandex) with ESMTP id 4AW5QZu7sy-AAeqSsAc;
+        Tue, 04 Jan 2022 16:10:11 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ngs.ru; s=mail; t=1641301811;
+        bh=aibARZXcrbaH73cgf7JYe3AOlnf+khcVeoZ8dUhPUzU=;
+        h=In-Reply-To:References:Date:From:To:Subject:Message-ID;
+        b=glXZYpuCYsqoyUdestY38yqE7WbeJNGBQlBwjBr67dfk8FU9kDUzCaoKxt1Fixe15
+         kG620PRYwAcaobVXE2JASyqSVQhiYOW33D8BQ0+BgMMlFgbgVbiLGkau1gP+yIB7yV
+         +ZIdKkZJEuKioTcYeep2obPdIfDc64Y8RSyOqmmk=
+Authentication-Results: sas1-d367461f7756.qloud-c.yandex.net; dkim=pass header.i=@ngs.ru
+Received: by sas8-c6148047b62a.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id ICpEPId7tD-A9Q4rHxQ;
+        Tue, 04 Jan 2022 16:10:10 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+X-Yandex-Fwd: 2
+Subject: Re: error fn f7 (asus)
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, jprvita@gmail.com,
+        andy@infradead.org
+References: <625e12e1-aee0-8b3c-8a4d-98e74739153c@ngs.ru>
+ <3440f96b-291f-cd5e-7fc3-c3e9c0959f22@infradead.org>
+From:   "jack_solovey@ngs.ru" <jack_solovey@ngs.ru>
+Message-ID: <1180fe71-07c5-9de6-1d50-a16010773bcc@ngs.ru>
+Date:   Tue, 4 Jan 2022 20:10:08 +0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdL+QdAv3MtRSKJy@alley>
+In-Reply-To: <3440f96b-291f-cd5e-7fc3-c3e9c0959f22@infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-01-03 14:46:42, Petr Mladek wrote:
-> On Sat 2021-12-25 10:51:15, Yang Yingliang wrote:
-> > Add missing unlock when try_module_get() fails in klp_enable_patch().
-> > 
-> > Fixes: bf01c2975925 ("livepatch: Fix kobject refcount bug on klp_init_patch_early failure path")
-> > Reported-by: Hulk Robot <hulkci@huawei.com>
-> > Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> 
-> JFYI, the patch has been committed into livepatch.git,
-> branch for-5.17/fixes.
+03.04.2020 10:19, Randy Dunlap пишет:
+> [adding Cc's]
+>
+> On 3/8/20 11:43 PM, jack_solovey@ngs.ru wrote:
+>> Hello, sorry this machine translation.
+>>
+>> Laptop  Asus N56V
+>> Prior to kernel 5, the FN+F7 buttons turned off the laptop screen.
+>> Starting with kernel 5, these buttons turn on standby mode.
+>> I have to use core 4.18
+>>
+>> Linux Asus-N56VB 4.18.0-25-generic #26~18.04.1-Ubuntu SMP Thu Jun 27 07:28:31 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
+>>
+>> Whether it is planned to return the legacy function to the fn+f7 buttons to disable the main monitor.
+> Hi,
+>
+> Possibly caused by 78f3ac76d9e5219589718b9e4733bee21627b3f5
+> (platform/x86: asus-wmi: Tell the EC the OS will handle the display off hotkey).
+>
+Hello.
+Please tell me, is there anything to be done to solve this problem?
 
-Just for record. I had to rebase the branch for-5.17/fixes because of
-missing Signed-off. I have updated Fixes: line to match the hash
-of the rebased commit. I hope that this fixed all my pre-holidays
-mistakes.
+-- 
+___________________
+С уважением,
+Соловей Евгений
 
-Best Regards,
-Petr

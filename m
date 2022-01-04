@@ -2,89 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC4BD4842C9
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:51:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F26B4842CC
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233828AbiADNvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 08:51:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45244 "EHLO
+        id S233844AbiADNwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 08:52:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233827AbiADNve (ORCPT
+        with ESMTP id S229535AbiADNwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 08:51:34 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA69C061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 05:51:34 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id k69so92517836ybf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 05:51:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=+7stB07F66gy7f2VANIvvg5E8xLAfpXtFohPRnaTtmY=;
-        b=MOD+Zv88AfSiXD9TtMDuvVQHaZVJyUAeaxECTeG9iw00CgAPOtVuaUrvRQgb+Kyo7a
-         YGKtd9w6xYgWXybFChpwQsY/Z7aOn47wsHW8BI3FN7zOA/x9QHpRwJoG4Njhmn7q+W3H
-         /X80Fs3tmiKe/HzVL1a9A/IU7em0sC/u3HuAEOu7eVddJJx97dwVt+Kyr1lM4+5InF/n
-         CSCj6fdhNf5kG1YKyn/e2yx7ros4b2Bsl+WbhpdxpVvzjz1/cR9a+FxL1rP3jz/N/CAm
-         c1h7GeOD0y9rIJZECxY+yXnLjmNmLkTJCqFgSwwAXzWjLyUEC3AZwkLwI0eebNddDkcT
-         UszQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=+7stB07F66gy7f2VANIvvg5E8xLAfpXtFohPRnaTtmY=;
-        b=Lv4o1BrwbVlN8zqVi4jsUSoQQUTC8WIJfq1ecYuRGPRDCH8+GcA3zbo0qnfraxXu31
-         w8TvtkfQ7PUOKv343KZf75GjDQCYFqehGbYqO1SLRc1vKnk1xA4/8DdWd7o3a1g2t//z
-         PX7HCCi+cnDhe+f72K9yBLbukFLr6q1dje1ZWEaaPkCmlED6T+F8r3ciofIZdYNPDqC9
-         TCyaJt/qey/Nb02r8Zcg4weRhwu//7j93yHC+MZ/wv8dAH7D4lX0+HzieKZ6cHH2Jlwa
-         gWpwsOGJTTOPtqNDJih8PPdgdaPrzaBTIO94kzG08tEBGwMYpcdXIl17C2n3C0OZh38I
-         Tyaw==
-X-Gm-Message-State: AOAM532DxUJJ0zqwsMNOhrxrgfRI8ObjKlF8hEeVRD8iZA9jOXWyCd/x
-        sdv0vXZ6sOuJKWbo0luhos5gWv/j6Au2IX8xE0M=
-X-Google-Smtp-Source: ABdhPJwY1D3h7V5MHnZOmyNzPYCobsd1mMk6JYbhfyblVkWwdST0DBL7VM9P3qB9mgRVm87RSwskLoWaZaxK9HrC9NA=
-X-Received: by 2002:a25:e70d:: with SMTP id e13mr58689415ybh.24.1641304292868;
- Tue, 04 Jan 2022 05:51:32 -0800 (PST)
+        Tue, 4 Jan 2022 08:52:50 -0500
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4295C061761;
+        Tue,  4 Jan 2022 05:52:49 -0800 (PST)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 0F67392009C; Tue,  4 Jan 2022 14:52:48 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 0BBB192009B;
+        Tue,  4 Jan 2022 13:52:48 +0000 (GMT)
+Date:   Tue, 4 Jan 2022 13:52:47 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+cc:     Douglas Gilbert <dgilbert@interlog.com>,
+        Khalid Aziz <khalid@gonehiking.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Christoph Hellwig <hch@lst.de>, Nix <nix@esperi.org.uk>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] scsi: Set allocation length to 255 for ATA
+ Information VPD page
+In-Reply-To: <yq1tuek347m.fsf@ca-mkp.ca.oracle.com>
+Message-ID: <alpine.DEB.2.21.2201032324230.56863@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2201020010540.56863@angie.orcam.me.uk> <alpine.DEB.2.21.2201020030130.56863@angie.orcam.me.uk> <d9eaa1f8-7abb-645b-d624-5069205c6983@interlog.com> <alpine.DEB.2.21.2201032017290.56863@angie.orcam.me.uk>
+ <yq1tuek347m.fsf@ca-mkp.ca.oracle.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Received: by 2002:a5b:f10:0:0:0:0:0 with HTTP; Tue, 4 Jan 2022 05:51:32 -0800 (PST)
-Reply-To: michelmadi01@gmail.com
-From:   Mr Michel Madi <ousmaneouedraogo05@gmail.com>
-Date:   Tue, 4 Jan 2022 13:51:32 +0000
-Message-ID: <CA+u7ZgSnVSJ4B5jscL7RiqPZ7vs2oQWV3ygY3oJVv4dnyH5-rg@mail.gmail.com>
-Subject: Request
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Friend,
+Martin,
 
-Let me start by introducing myself, I am Mr Michel Madi Manager of
-Bank Of Africa Burkina Faso.
+> >  So I do have all the reasons to conclude this value has indeed been 
+> > arbitrarily chosen, don't I?
+> 
+> The SAT spec defines the contents of the first part of the page. The
+> trailing 512 bytes are defined in the ATA spec.
 
-I am writing you this letter based on the latest development at my
-Department which I will like to bring to your personal edification.
-(7.5 million U.S Dollars transfer claims).
+ I think that would best be reflected in code somehow as lone `64' doesn't 
+say anything really.
 
-This is a legitimate transaction and I agreed to offer you 40% of this
-money as my foreign partner after confirmation of the fund in your
-bank account, if you are interested, get back to me with the following
-details below.
+> > If you insist that the value of 64 stay, then please come up with a
+> > suitable macro name to define along with SCSI_VPD_PG_LEN that reflects
+> > the meaning of 64 in this context and I'll be happy to update 3/3
+> > accordingly, but please explain why the value of 64 is any better than
+> > 255 here and the inconsistency with the buffer size justified.
+> 
+> Can please you try the following patch?
 
-(1)Your age........
+ I have tried it and it's neutral, that is with 1/3 applied the HBA still 
+works and with 1/3 removed it still breaks (2/3 and 3/3 obviously don't 
+build anymore).  Unsurprisingly, as it's the call to `scsi_get_vpd_page' 
+rather than `scsi_get_vpd_buf' that causes an issue here.
 
-(2)Your occupation.....
+ I think the latter function isn't called in my setup, and it's not clear 
+to me anymore after so long why I didn't poke at it.  It looks to me like 
+the `retry_pg' code there can be gone now with your update in place as it 
+duplicates buffer sizing, and with that included it'll be a nice clean-up.
 
-(3)Your marital status.....
+ NB you'll need to adjust drivers/scsi/mpt3sas/mpt3sas_scsih.c accordingly 
+if we are to move forward with this change, as it's another user of the 
+SCSI_VPD_PG_LEN macro.
 
-(4)Your full residential address.......
+ Given what has been said in the discussion so far would you consider 2/3
+and 3/3 unnecessary?  In the course of verifying your change I have looked 
+through our code again and found that inline magic numbers are there in 
+several though not all places where `scsi_get_vpd_page' gets called, so I 
+think it would make sense to get rid of them all at once with a single 
+self-contained change.
 
-(5)Your private phone and fax number and your complete name.......
+ Thank you for your input and the extra fix.
 
-As soon as I receive these data's, I will forward to you the
-application form which you will complete and send to the bank to
-commence the processing of the transfer, you can get back to me
-through this my private email address (michelmadi01@gmail.com)
-
-
-Best Regard
-Mr. Michel Madi
+  Maciej

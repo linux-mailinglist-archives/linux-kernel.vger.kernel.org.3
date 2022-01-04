@@ -2,191 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41ED5484030
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C7E5484033
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:56:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231694AbiADKzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 05:55:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiADKzE (ORCPT
+        id S231707AbiADK4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 05:56:04 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:55450 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229587AbiADK4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 05:55:04 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F87C061761;
-        Tue,  4 Jan 2022 02:55:03 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id o6so146935710edc.4;
-        Tue, 04 Jan 2022 02:55:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qo7MfwZ/KvNpjLuX0AalrXe+EU3+SzyKgCuKC89+8c4=;
-        b=NGf/rKn9vWkj9qozFbjNNnV9j8eC5rUkcfuD4uGJDZTi9EqIfyGQuCAZCYLYvxVL+j
-         D2XUKIigcbnlF/ZKD+jiSVhcHFBI8UZHQFa1qduTLTiF6EaXlzvSp0I08OJ0ETEyscLd
-         52/EC5pTEdMYdgWP9VhkQLY7IzkZAjX1Cqe5uguNw9pjSz2aREyrAJxpJBiWOaOjbDcY
-         hxifUQ08qcvxlQiX6YbynLvQ3h6ZjYsLaZLoGrS8f1IxySJqzqcyXaZFkGQOGjWC7Ki7
-         eoURmLyD2eqLANp3k7uKQrXSRZ2Y7ybAZZTSKM4mtHN/tf8Gp5YJKh4+1GUGNcMVkr2d
-         OKEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=qo7MfwZ/KvNpjLuX0AalrXe+EU3+SzyKgCuKC89+8c4=;
-        b=KlwgPfqrbTQGGn2pDEhuuOpQH8M/feyHvHxt9MQzaBkYsNyYXqxwddm2HS86yeFmnO
-         8wzu6eEDQF/MqeKBq3i2NKVwQGoScQ11u26WFd17WmjCicTXcSXepwO7/YAj3hOY1C23
-         JZZphviQFHvTT6uk7YwWCpc5FitRMT6YqEM7x2UJxXb94FOGvdqxCA4tlCYs12eRgCIi
-         HCSXURjV7sf7NPgi4Tut28YnAMhl/i7sifwMQEdHv6qfOX3abajwd92wKLe8MLlKJgPc
-         +hdfgWoVSuyEIWyiAGQFcq2z0hyCsRU9r+tj+Q2sUnWB2aM3rtkuf8pR24kuFLZDIsWO
-         wokQ==
-X-Gm-Message-State: AOAM531CdXhQt7BdA88VUhdZrX8lccG7bhXDV/nRnjR1EEP79pV+Lz3A
-        Yv0+FEFdne5h8jaxDgApnGY=
-X-Google-Smtp-Source: ABdhPJxtKN50K9MstX41PEfhh5ZqKvj5aiuYqdpWjdJYc1a2wJqYiP0rHn00NPsG5lTBuORZ7H6LJw==
-X-Received: by 2002:a17:907:7050:: with SMTP id ws16mr39068192ejb.153.1641293702510;
-        Tue, 04 Jan 2022 02:55:02 -0800 (PST)
-Received: from gmail.com (0526F11B.dsl.pool.telekom.hu. [5.38.241.27])
-        by smtp.gmail.com with ESMTPSA id x20sm12864682edd.28.2022.01.04.02.55.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 02:55:02 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Tue, 4 Jan 2022 11:54:55 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
- -v1: Eliminate the Linux kernel's "Dependency Hell"
-Message-ID: <YdQnfyD0JzkGIzEN@gmail.com>
-References: <YdIfz+LMewetSaEB@gmail.com>
- <20220103135400.4p5ezn3ntgpefuan@box.shutemov.name>
+        Tue, 4 Jan 2022 05:56:03 -0500
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20446B7Y031136;
+        Tue, 4 Jan 2022 11:55:42 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=gVar2L96vNK0GSvXXyCtjdPP+Y3DE498qYFhVjbbpxk=;
+ b=EjRZWCKF2oqHrXw+GNXF88JZtYd+jp3WlrOb+Wc0JRe+rBgBmRWxhO0k6QYxkNOHEzIm
+ I0Si21omhI8fOQZH3K4Oe6NCiAXJ1O7inDMptsYvfvr52QW4e90CGas2D5INB76DdRQL
+ NRHDZ2awalo9HULCC3daXN81VnHWDMZu8iyIvNJg9+CD+hDTprQInstV8xAgwyqZY2MX
+ 9u/D5mvLjJWGrAiZus0KJy/3YgpnABYwCqG/OdIxBrGvNKvvkBTbnBt3LO1R3ydNPV8H
+ OGn8tWkJA9+0oNuJPA4mi0hCGXaR+98FNqh0W+GRdG7v+tvO5ihmr4lTjzExYK0pxVzF rQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dcewm1ku9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Jan 2022 11:55:42 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 670BF10002A;
+        Tue,  4 Jan 2022 11:55:41 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5CAED23693D;
+        Tue,  4 Jan 2022 11:55:41 +0100 (CET)
+Received: from lmecxl0993.lme.st.com (10.75.127.45) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 4 Jan
+ 2022 11:55:40 +0100
+Subject: Re: [PATCH 2/3] drm/bridge/synopsys: dsi: extend the prototype of
+ mode_valid()
+To:     Antonio Borneo <antonio.borneo@foss.st.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <linux-kernel@vger.kernel.org>
+References: <20211218215055.212421-1-antonio.borneo@foss.st.com>
+ <20211218215055.212421-2-antonio.borneo@foss.st.com>
+From:   Philippe CORNU <philippe.cornu@foss.st.com>
+Message-ID: <4d731e12-0ecd-8f86-e5b7-89c03c23d2fc@foss.st.com>
+Date:   Tue, 4 Jan 2022 11:55:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220103135400.4p5ezn3ntgpefuan@box.shutemov.name>
+In-Reply-To: <20211218215055.212421-2-antonio.borneo@foss.st.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-04_05,2022-01-04_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-\
-* Kirill A. Shutemov <kirill@shutemov.name> wrote:
 
-> On Sun, Jan 02, 2022 at 10:57:35PM +0100, Ingo Molnar wrote:
-> >  - As to testing & runtime behavior: while all of these patches are 
-> >    intended to be bug-free, I did find a couple of semi-bugs in the kernel 
-> >    where a specific order of headers guaranteed a particular code 
-> >    generation outcome - and if that header order was disturbed, the kernel 
-> >    would silently break and fail to boot ...
+
+On 12/18/21 10:50 PM, Antonio Borneo wrote:
+> To evaluate the validity of a video mode, some additional internal
+> value has to be passed to the platform implementation.
 > 
-> Looks like you are doing a lot of uninlining. Do you see any runtime
-> performance degradation with the patchset?
+> Extend the prototype of mode_valid().
+> 
+> Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+> ---
+> To: David Airlie <airlied@linux.ie>
+> To: Daniel Vetter <daniel@ffwll.ch>
+> To: Andrzej Hajda <a.hajda@samsung.com>
+> To: Neil Armstrong <narmstrong@baylibre.com>
+> To: Robert Foss <robert.foss@linaro.org>
+> To: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+> To: Jonas Karlman <jonas@kwiboo.se>
+> To: Jernej Skrabec <jernej.skrabec@gmail.com>
+> To: Yannick Fertre <yannick.fertre@foss.st.com>
+> To: Philippe Cornu <philippe.cornu@foss.st.com>
+> To: Benjamin Gaignard <benjamin.gaignard@linaro.org>
+> To: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+> To: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> To: Philipp Zabel <p.zabel@pengutronix.de>
+> To: dri-devel@lists.freedesktop.org
+> To: linux-stm32@st-md-mailman.stormreply.com
+> To: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
+>   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c | 5 ++++-
+>   include/drm/bridge/dw_mipi_dsi.h              | 4 +++-
+>   2 files changed, 7 insertions(+), 2 deletions(-)
+> 
 
-I haven't tested that yet - and it's pretty hard to performance test 
-uninlining patches directly.
-
-But what I've done is that I basically looked at the context and tried to 
-make a judgement call based on generated code.
-
-In all the uninlining patches where I thought it might not be clear whether 
-it's proper to uninline I added detailed analysis, such as this one:
-
-  commit d94530f1abcbfd2500e90e151e7c67ff48ab3259
-  Author: Ingo Molnar <mingo@kernel.org>
-  Date:   Sat Nov 20 18:20:58 2021 +0100
-
-    headers/uninline: Uninline multi-use function: put_page()
-    
-    Ever since the page_is_devmap_managed() logic was added to put_page() in:
-    
-      07d802699528: ("mm: devmap: refactor 1-based refcounting for ZONE_DEVICE pages")
-    
-    put_page() has become a much larger function of over 2 dozen instructions:
-
-    0000000000004d30 <put_page>:
-        4d30:       e8 00 00 00 00          call   4d35 <put_page+0x5>
-        4d35:       55                      push   %rbp
-        4d36:       48 8b 47 08             mov    0x8(%rdi),%rax
-        4d3a:       48 8d 50 ff             lea    -0x1(%rax),%rdx
-        4d3e:       a8 01                   test   $0x1,%al
-        4d40:       48 89 e5                mov    %rsp,%rbp
-        4d43:       48 0f 45 fa             cmovne %rdx,%rdi
-        4d47:       66 90                   xchg   %ax,%ax
-        4d49:       f0 ff 4f 34             lock decl 0x34(%rdi)
-        4d4d:       74 27                   je     4d76 <put_page+0x46>
-        4d4f:       5d                      pop    %rbp
-        4d50:       c3                      ret
-        4d51:       48 8b 07                mov    (%rdi),%rax
-        4d54:       48 c1 e8 33             shr    $0x33,%rax
-        4d58:       83 e0 07                and    $0x7,%eax
-        4d5b:       83 f8 04                cmp    $0x4,%eax
-        4d5e:       75 e9                   jne    4d49 <put_page+0x19>
-        4d60:       48 8b 47 08             mov    0x8(%rdi),%rax
-        4d64:       8b 40 68                mov    0x68(%rax),%eax
-        4d67:       83 e8 01                sub    $0x1,%eax
-        4d6a:       83 f8 01                cmp    $0x1,%eax
-        4d6d:       77 da                   ja     4d49 <put_page+0x19>
-        4d6f:       e8 00 00 00 00          call   4d74 <put_page+0x44>
-        4d74:       5d                      pop    %rbp
-        4d75:       c3                      ret
-        4d76:       e8 00 00 00 00          call   4d7b <put_page+0x4b>
-        4d7b:       5d                      pop    %rbp
-        4d7c:       c3                      ret
-    
-    Uninline it.
-    
-    To counter some of the runtime overhead of the extra function call,
-    inline the __put_page() instance into put_page() - this is now
-    possible without extra bloat.
-    
-    There's a measurable improvement in vmlinux text size, on a distro
-    kernel build, by ~4 KB.
-    
-    Doing so also decouples <linux/mm_api.h> from <linux/memremap.h>.
-    
-    Signed-off-by: Ingo Molnar <mingo@kernel.org>
-
-I think it's pretty much a given that we don't want to inline 2 dozen 
-instructions for every put_page() call and we don't need performance 
-testing.
-
-Admittedly my 'judgement call' was colored by the overall goal to decouple 
-types and headers, so please do double check! None of the uninlining 
-patches are critical to this tree - there's various other ways headers can 
-be decoupled other than uninlining.
-
-There's one happy exception though, all the uninlining patches that 
-uninline a single-call function are probably fine as-is:
-
- ef1028c44345 headers/uninline: Uninline single-use function: mips: page_size_ftlb()
- 98bc89e85e3f headers/uninline: Uninline single-use function: set_page_links()
- e368b54381e9 headers/uninline: Uninline single-use function: cpupid_to_nid()
- 36b59978a96d headers/uninline: Uninline single-use function: wb_domain_size_changed()
- 4c95e8f21924 headers/uninline: Uninline single-use function: skb_metadata_differs()
- 28195c3f7eba headers/uninline: Uninline single-use function: for_each_netdev_feature()
- 3c82b720eb01 headers/uninline: Uninline single-use function: SPI_STATISTICS_ADD_*()
- e7c48e440df3 headers/uninline: Uninline single-use function: qdisc_run()
- ba0bfe18c8cc headers/uninline: Uninline single-use function: dev_validate_header()
- 3443e75fd1f8 headers/uninline: Uninline single-use function: kobject_has_children()
- 0e15d2fb85f9 headers/uninline: Uninline single-use function: xfrm_dev_state_free()
- 45d5233e1f5f headers/uninline: Uninline single-use function: flow_dissector_init_keys()
- 7a897b0747b2 headers/uninline: Uninline single-use function: reqsk_alloc()
- f9003f1bd834 headers/uninline: Uninline single-use function: skb_propagate_pfmemalloc()
- 54ea5750f484 headers/uninline: Uninline single-use function: syscall_tracepoint_update()
- 5a1dc0bca4a4 headers/uninline: Uninline single-use function: proc_sys_poll_event()
- 0af72df4042d headers/uninline: Uninline single-use function: ep_take_care_of_epollwakeup()
- 13a8bd09a93a headers/uninline: Uninline single-use function: ptrace_event_pid()
- f2b8980d4178 headers/uninline: Uninline single-use function: itimerspec64_valid()
- ec111205e6de headers/uninline: Uninline single-use function: sk_under_cgroup_hierarchy()
- d623ba9eb252 headers/uninline: Uninline single-use function: wb_find_current() and wb_get_create_current()
-
-Thanks,
-
-	Ingo
+Hi Antonio,
+many thanks for your patch.
+(I should have done like that from the beginning as validating a mode in 
+dsi requires dsi related information...)
+Reviewed-by: Philippe Cornu <philippe.cornu@foss.st.com>
+Philippe :-)

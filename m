@@ -2,131 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DBAA484438
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:07:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F7D7484445
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234644AbiADPHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 10:07:07 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:37218 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232106AbiADPHG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 10:07:06 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowAAnLlZ1YtRh6qLGBQ--.57883S2;
-        Tue, 04 Jan 2022 23:06:30 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     elder@ieee.org, vaibhav.sr@gmail.com, mgreer@animalcreek.com,
-        johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org
-Cc:     greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v3] staging: greybus: audio: Check null pointer
-Date:   Tue,  4 Jan 2022 23:06:28 +0800
-Message-Id: <20220104150628.1987906-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S234689AbiADPJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 10:09:44 -0500
+Received: from mail-ot1-f44.google.com ([209.85.210.44]:41933 "EHLO
+        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232106AbiADPJo (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 10:09:44 -0500
+Received: by mail-ot1-f44.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so6757395otl.8;
+        Tue, 04 Jan 2022 07:09:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3fNpTZaUUWS8pNu7Z1i39rMhdF3vva9BPhlRLzG5t3U=;
+        b=M88rwpFApHyVIx+aq26NR3wL+6ZOdojnDeEeq4JwK64YbC9/4XICQNqtBhp0QAoUKZ
+         kDIyRi/ZCXFLaBf3hiX0dBd4zzXKf4ZRjUwtWvbDDixcM3kCJYmf1sXWfxW0hqza36cW
+         Gf9PjkZe2+K0gq33jA6AShr8H7qS8LBOusYXfNu1/0pF1FdCk5TGW6qVj4mQjuH5xZWz
+         rxuc7cEZYbQg8mXivsppaPbkQTT6A7GTxYiQbxQ5hkf9545pOaO2XQyNWdq3wfWmsEl9
+         ySfC7yUxjUA8fxspxfPJM/OGzxsW5de0+uLwYDuIDl9fOVAbmUZKdN20uVxBtH+nUk4C
+         cmEg==
+X-Gm-Message-State: AOAM530AC/odDxz7TqOPEsVePpdzE3sNcwBzXDmfyP9tlUv/sYGrSzU+
+        k1QzP6S1YJF7HlphgsPrNg==
+X-Google-Smtp-Source: ABdhPJxXjg4g63hJgQsj67dfIJjSpRy5lUSjbL2UcU2zKSTRR4cRKv47dMOhfrj6TDa5dpCSeI05/w==
+X-Received: by 2002:a05:6830:4d6:: with SMTP id s22mr36640079otd.270.1641308983233;
+        Tue, 04 Jan 2022 07:09:43 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id q5sm9981694oiv.2.2022.01.04.07.09.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 07:09:42 -0800 (PST)
+Received: (nullmailer pid 840400 invoked by uid 1000);
+        Tue, 04 Jan 2022 15:09:41 -0000
+Date:   Tue, 4 Jan 2022 09:09:41 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [PATCH 1/4] dt-bindings: leds: maxim,max77693: convert to
+ dtschema
+Message-ID: <YdRjNUMht6HjVM7s@robh.at.kernel.org>
+References: <20211228163930.35524-1-krzysztof.kozlowski@canonical.com>
+ <20211228163930.35524-2-krzysztof.kozlowski@canonical.com>
+ <1640799296.482933.824019.nullmailer@robh.at.kernel.org>
+ <bedc4126-7536-a7f9-b833-d06f383ec15d@canonical.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowAAnLlZ1YtRh6qLGBQ--.57883S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXF48AFW3JryUXw1fAr1rCrg_yoW5uw17pF
-        sYkrnrCr4DJasIyFs7Ar1rZwnxZrykKFWUK3y7uws0vwsIqrW09ay3KFyYvF43uF1rZw40
-        ka10vw45J3WqqrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-        n2kIc2xKxwCY02Avz4vE14v_XrWl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
-        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
-        17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
-        C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI
-        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
-        evJa73UjIFyTuYvjfU5Q6JUUUUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bedc4126-7536-a7f9-b833-d06f383ec15d@canonical.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the possible alloc failure of devm_kcalloc(), it could return null
-pointer.
-Therefore, 'strings' should be checked and return NULL if alloc fails to
-prevent the dereference of the NULL pointer.
-Also, the caller should also deal with the return value of the
-gb_generate_enum_strings() and return -ENOMEM if returns NULL.
-Moreover, because the memory allocated with devm_kzalloc() will be
-freed automatically when the last reference to the device is dropped,
-the 'gbe' in gbaudio_tplg_create_enum_kctl() and
-gbaudio_tplg_create_enum_ctl() do not need to free manually.
-But the 'control' in gbaudio_tplg_create_widget() and
-gbaudio_tplg_process_kcontrols() has a specially error handle to
-cleanup.
-So it should be better to cleanup 'control' when fails.
+On Thu, Dec 30, 2021 at 11:53:37AM +0100, Krzysztof Kozlowski wrote:
+> On 29/12/2021 18:34, Rob Herring wrote:
+> > On Tue, 28 Dec 2021 17:39:27 +0100, Krzysztof Kozlowski wrote:
+> >> Convert the LEDs bindings of Maxim MAX77693 MUIC to DT schema format.
+> >> The existing bindings were defined in ../bindings/mfd/max77693.txt.
+> >>
+> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> >> ---
+> >>  .../bindings/leds/maxim,max77693.yaml         | 105 ++++++++++++++++++
+> >>  1 file changed, 105 insertions(+)
+> >>  create mode 100644 Documentation/devicetree/bindings/leds/maxim,max77693.yaml
+> >>
+> > 
+> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> > 
+> > yamllint warnings/errors:
+> > 
+> > dtschema/dtc warnings/errors:
+> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/leds/common.example.dt.yaml: led-controller@0: 'reg' does not match any of the regexes: '^([a-z]+-)?led[01]?$', 'pinctrl-[0-9]+'
+> > 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/leds/maxim,max77693.yaml
+> > 
+> > doc reference errors (make refcheckdocs):
+> > Documentation/devicetree/bindings/leds/maxim,max77693.yaml: Documentation/devicetree/bindings/mfd/maxim,max77693.yaml
+> > 
+> > See https://patchwork.ozlabs.org/patch/1573762
+> > 
+> > This check can fail if there are any dependencies. The base for a patch
+> > series is generally the most recent rc1.
+> > 
+> 
+> I updated my yamllint and dtschema, run with DT_CHECKER_FLAGS=-m but
+> still cannot reproduce it. Probably because I based on linux-next, so
+> maybe this was a fixed issue in leds/common.yaml.
 
-Fixes: e65579e335da ("greybus: audio: topology: Enable enumerated control support")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-v3: Same code as v2, but remove the redundant message as requested.
-v2: Updated to use common error processing at the end of both
-gbaudio_tplg_create_widget() and gbaudio_tplg_process_kcontrols().
----
- drivers/staging/greybus/audio_topology.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+Are you setting DT_SCHEMA_FILES, because the error is in 
+common.yaml but caused by this schema.
 
-diff --git a/drivers/staging/greybus/audio_topology.c b/drivers/staging/greybus/audio_topology.c
-index 1fc7727ab7be..6bba735d2e5c 100644
---- a/drivers/staging/greybus/audio_topology.c
-+++ b/drivers/staging/greybus/audio_topology.c
-@@ -147,6 +147,9 @@ static const char **gb_generate_enum_strings(struct gbaudio_module_info *gb,
- 
- 	items = le32_to_cpu(gbenum->items);
- 	strings = devm_kcalloc(gb->dev, items, sizeof(char *), GFP_KERNEL);
-+	if (!strings)
-+		return NULL;
-+
- 	data = gbenum->names;
- 
- 	for (i = 0; i < items; i++) {
-@@ -655,6 +658,8 @@ static int gbaudio_tplg_create_enum_kctl(struct gbaudio_module_info *gb,
- 	/* since count=1, and reg is dummy */
- 	gbe->items = le32_to_cpu(gb_enum->items);
- 	gbe->texts = gb_generate_enum_strings(gb, gb_enum);
-+	if (!gbe->texts)
-+		return -ENOMEM;
- 
- 	/* debug enum info */
- 	dev_dbg(gb->dev, "Max:%d, name_length:%d\n", gbe->items,
-@@ -862,6 +867,8 @@ static int gbaudio_tplg_create_enum_ctl(struct gbaudio_module_info *gb,
- 	/* since count=1, and reg is dummy */
- 	gbe->items = le32_to_cpu(gb_enum->items);
- 	gbe->texts = gb_generate_enum_strings(gb, gb_enum);
-+	if (!gbe->texts)
-+		return -ENOMEM;
- 
- 	/* debug enum info */
- 	dev_dbg(gb->dev, "Max:%d, name_length:%d\n", gbe->items,
-@@ -1034,6 +1041,10 @@ static int gbaudio_tplg_create_widget(struct gbaudio_module_info *module,
- 			csize += le16_to_cpu(gbenum->names_length);
- 			control->texts = (const char * const *)
- 				gb_generate_enum_strings(module, gbenum);
-+			if (!control->texts) {
-+				ret = -ENOMEM;
-+				goto error;
-+			}
- 			control->items = le32_to_cpu(gbenum->items);
- 		} else {
- 			csize = sizeof(struct gb_audio_control);
-@@ -1183,6 +1194,10 @@ static int gbaudio_tplg_process_kcontrols(struct gbaudio_module_info *module,
- 			csize += le16_to_cpu(gbenum->names_length);
- 			control->texts = (const char * const *)
- 				gb_generate_enum_strings(module, gbenum);
-+			if (!control->texts) {
-+				ret = -ENOMEM;
-+				goto error;
-+			}
- 			control->items = le32_to_cpu(gbenum->items);
- 		} else {
- 			csize = sizeof(struct gb_audio_control);
--- 
-2.25.1
+Clearly, 'reg' is not defined here. And there is no change to 
+common.yaml in next.
 
+Rob

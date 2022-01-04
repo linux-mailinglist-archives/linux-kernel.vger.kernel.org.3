@@ -2,119 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96771484802
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:45:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43043484807
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:46:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235746AbiADSpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 13:45:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57632 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiADSpT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 13:45:19 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D81C061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 10:45:19 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id f5so152083469edq.6
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 10:45:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kI7lvNJiYPzLyL1Je0qvpRBcO19V08nghbpJc6sg03Q=;
-        b=O0l9LFOhe0v3r9xfQXVq7v4rwX3xK7UVbh17OAJbou3mDbSswePNdZq99CXPQ5vIbQ
-         oDK6mHyvhN+fMCZYW134EsLULbvrAGYOKLuxUb7c4HjdN6JyBCmbvSofoCrh26sjcQVP
-         Sv3wocV4KjjJ9qTWC0/NqJ1QLM6rKPr9OZG4g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kI7lvNJiYPzLyL1Je0qvpRBcO19V08nghbpJc6sg03Q=;
-        b=SfNAHe9MRxdEQdUvzbTOl9Ep7fxzXW8HlQs7e7jjwqK/UfY9OypOsSgOAS3Bq4DsYx
-         utS3W+Kc9UUpImJZAIyR2xGKtQfDHvM8Ax3dT2FKeDatqMNRMBcGg6UJUkhmv6RbyEto
-         uz6bWFR0le7dI+txeSHos7X7XHfYHiytWqyzUltnEXaavljfeRGmnikOOwF3fO1KamKG
-         3QkN6VM5QTpvOUPnxht9TWlK0NA9eMFQkKp9LVp1hs1wgheHrf1aiZcIAt4LwPxba/Tf
-         31jvtAo60Yd3H9Gxm3MFMSFGl7myuR5dDNpxqUXzymkkyjIbbAABwenwKexBJyVGCE3b
-         b2cQ==
-X-Gm-Message-State: AOAM532ADOJN4nYOtPBQ8zX0VQQDS5nArtkl+RwGwm6DmnQQLE+0dVld
-        I4IVJcObvEq2CQjJUwVqw6U7npkAQfJvUnSn
-X-Google-Smtp-Source: ABdhPJyTKhCqu78VvWXofQLMnyftctj0AzatraL5aEc8t7d6cPOSphFjbJc7yW5kqvy+3fyXXTk9NQ==
-X-Received: by 2002:a05:6402:2789:: with SMTP id b9mr39876391ede.329.1641321917177;
-        Tue, 04 Jan 2022 10:45:17 -0800 (PST)
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com. [209.85.128.50])
-        by smtp.gmail.com with ESMTPSA id 27sm11645257ejm.41.2022.01.04.10.45.16
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 10:45:16 -0800 (PST)
-Received: by mail-wm1-f50.google.com with SMTP id a203-20020a1c7fd4000000b003457874263aso219265wmd.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 10:45:16 -0800 (PST)
-X-Received: by 2002:a7b:c305:: with SMTP id k5mr13487467wmj.144.1641321915993;
- Tue, 04 Jan 2022 10:45:15 -0800 (PST)
+        id S236266AbiADSqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 13:46:05 -0500
+Received: from mga11.intel.com ([192.55.52.93]:8097 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235760AbiADSqE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 13:46:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641321963; x=1672857963;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=g0ZcKJFZgmRMr233dJxlXK1q6yi4YxrDIR4D4biNHjA=;
+  b=k6atAjlMPDbFh/TfX7UAxe6jtcuRAKvU0Vm1XxjY3Wgvf5GHOz43Pf/S
+   3TBL62E+dTacSt2I1PWBYmRuKbKdp7pE9r+vmWBzbF7dXPArDQ8nLDSGe
+   oZ4ZB3wavU0NdnGauKAxKU512liQgoCUxY7Eg6fy3df2EtK7is628aRzy
+   B9rGODPaNZRyjTsPZFSxmpoBLDiCFCHfpBly0NhylWgiBoP6q1/yeU2e1
+   UKJXCGuAgfC3wlChTvbzmOfDWEIuaGIDrytJlDEAvQFTcpDV1MyKPgleE
+   fWOwQDi6uvJmimCobzO5fnx9y+Q5zmqO3V64Q/KoNgs13mHEUI316Wzzx
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="239817975"
+X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
+   d="scan'208";a="239817975"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 10:46:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
+   d="scan'208";a="470252713"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga003.jf.intel.com with ESMTP; 04 Jan 2022 10:46:02 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 4 Jan 2022 10:46:02 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 4 Jan 2022 10:46:01 -0800
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.020;
+ Tue, 4 Jan 2022 10:46:01 -0800
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "anton@enomsg.org" <anton@enomsg.org>,
+        "ccross@android.com" <ccross@android.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
+        "Guilherme G. Piccoli" <kernel@gpiccoli.net>
+Subject: RE: pstore/ramoops - why only collect a partial dmesg?
+Thread-Topic: pstore/ramoops - why only collect a partial dmesg?
+Thread-Index: AQHX/MKP8AekIclEL0GvU4ZDFIVyq6xR+V6AgAFdcoD//8ds4IAAmToA//+EJJA=
+Date:   Tue, 4 Jan 2022 18:46:01 +0000
+Message-ID: <8675f69c1643451b91f797b114dfc311@intel.com>
+References: <a21201cf-1e5f-fed1-356d-42c83a66fa57@igalia.com>
+ <2d1e9afa38474de6a8b1efc14925d095@intel.com>
+ <0ca4c27a-a707-4d36-9689-b09ef715ac67@igalia.com>
+ <a361c64213e7474ea39c97f7f7bd26ec@intel.com>
+ <c5a04638-90c2-8ec0-4573-a0e5d2e24b6b@igalia.com>
+In-Reply-To: <c5a04638-90c2-8ec0-4573-a0e5d2e24b6b@igalia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.200.16
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org> <20211213225350.27481-1-ebiederm@xmission.com>
-In-Reply-To: <20211213225350.27481-1-ebiederm@xmission.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 4 Jan 2022 10:44:59 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiS2P+p9VJXV_fWd5ntashbA0QVzJx15rTnWOCAAVJU_Q@mail.gmail.com>
-Message-ID: <CAHk-=wiS2P+p9VJXV_fWd5ntashbA0QVzJx15rTnWOCAAVJU_Q@mail.gmail.com>
-Subject: Re: [PATCH 1/8] signal: Make SIGKILL during coredumps an explicit
- special case
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 2:54 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
->
->
->         if (signal->flags & (SIGNAL_GROUP_EXIT | SIGNAL_GROUP_COREDUMP)) {
-> -               if (!(signal->flags & SIGNAL_GROUP_EXIT))
-> -                       return sig == SIGKILL;
-> +               struct core_state *core_state = signal->core_state;
-> +               if (core_state) {
-
-This change is very confusing.
-
-Also, why does it do that 'signal->core_state->dumper.task', when we
-already know that it's the same as 'signal->group_exit_task'?
-
-The only thing that sets 'signal->core_state' also sets
-'signal->group_exit_task', and the call chain has set both to the same
-task.
-
-So the code is odd and makes little sense.
-
-But what's even more odd is how it
-
- (a) sends the SIGKILL to somebody else
-
- (b) does *NOT* send SIGKILL to itself
-
-Now, (a) is explained in the commit message. The intent is to signal
-the core dumper.
-
-But (b) looks like a fundamental change in semantics. The target of
-the SIGKILL is still running, might be in some loop in the kernel that
-wants to be interrupted by a fatal signal, and you expressly disabled
-the code that would send that fatal signal.
-
-If I send SIGKILL to thread A, then that SIGKILL had *better* be
-delivered. To thread A, which may be in a "mutex_lock_killable()" or
-whatever else.
-
-The fact that thread B may be in the process of trying to dump core
-doesn't change that at all, as far as I can see.
-
-So I think this patch is fundamentally buggy and wrong. Or at least
-needs much more explanation of why you'd not send SIGKILL to the
-target thread.
-
-               Linus
+PiBUaGVyZSBsaWVzIHRoZSBpc3N1ZTogaWYgSSBzZXQgcGFuaWNfcHJpbnQgdG8gZHVtcCBhbGwg
+YmFja3RyYWNlcywgdGFzaw0KPiBpbmZvIGFuZCBtZW1vcnkgc3RhdGUgaW4gYSBwYW5pYyBldmVu
+dCwgdGhhdCBpbmZvcm1hdGlvbiArIHRoZQ0KPiBwYW5pYy9vb3BzIGFuZCBzb21lIHByZXZpb3Vz
+IHJlbGV2YW50IHN0dWZmLCBkb2VzIGl0IGFsbCBmaXQgaW4gdGhlIDJNDQo+IGNodW5rPyBMaWtl
+bHkgc28sIGJ1dCAqaWYgaXQgZG9lc24ndCBmaXQqLCB3ZSBtYXkgbG9zZSBfZXhhY3RseV8gdGhl
+DQo+IG1vc3QgaW1wb3J0YW50IHBpZWNlLCB3aGljaCBpcyB0aGUgcGFuaWMgY2F1c2UuDQoNClRo
+YXQgZG9lcyBjaGFuZ2UgdGhpbmdzIC4uLiBJIHdvbmRlciBob3cgbWFueSBtZWdhYnl0ZXMgeW91
+IG5lZWQNCmZvciBhIGJpZyBzeXN0ZW0gKGh1bmRyZWRzIG9mIGNvcmVzLCB0aG91c2FuZHMgb2Yg
+dGFza3MpIQ0KDQpUaGlzIHVzZSBjYXNlIGRvZXMgbG9vayBsaWtlIGl0IGNvdWxkIHVzZSBtdWx0
+aXBsZSBjaHVua3MgaW4gcmFtb29wcy4NCg0KLVRvbnkNCg==

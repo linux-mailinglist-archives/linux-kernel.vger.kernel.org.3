@@ -2,188 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D27F4847FC
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:37:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AD61484805
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:45:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236388AbiADShm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 4 Jan 2022 13:37:42 -0500
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:33031 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiADShm (ORCPT
+        id S236165AbiADSpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 13:45:31 -0500
+Received: from out01.mta.xmission.com ([166.70.13.231]:34288 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236016AbiADSpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 13:37:42 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 5BA126000B;
-        Tue,  4 Jan 2022 18:37:37 +0000 (UTC)
-Date:   Tue, 4 Jan 2022 19:37:36 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-mtd@lists.infradead.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Brian Norris <computersforpeace@gmail.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        Colin Ian King <colin.king@intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM SPECIFIC AMBA DRIVER (BCMA)" 
-        <linux-wireless@vger.kernel.org>,
-        "open list:BROADCOM STB NAND FLASH DRIVER" 
-        <bcm-kernel-feedback-list@broadcom.com>
-Subject: Re: [PATCH 1/9] mtd: rawnand: brcmnand: Allow SoC to provide I/O
- operations
-Message-ID: <20220104193736.7eb6a445@xps13>
-In-Reply-To: <9e4c0120-e088-fca0-0194-c45fcf9181cb@gmail.com>
-References: <20211223002225.3738385-1-f.fainelli@gmail.com>
-        <20211223002225.3738385-2-f.fainelli@gmail.com>
-        <20220103174953.40d7fa52@xps13>
-        <299bf6ed-80e6-ad15-8dc7-5ededaca15c5@gmail.com>
-        <20220104093221.6414aab9@xps13>
-        <20220104095755.46858287@xps13>
-        <9e4c0120-e088-fca0-0194-c45fcf9181cb@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Tue, 4 Jan 2022 13:45:30 -0500
+Received: from in02.mta.xmission.com ([166.70.13.52]:38356)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n4ooJ-00AWSX-OT; Tue, 04 Jan 2022 11:45:27 -0700
+Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:34406 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n4ooG-009lH8-NT; Tue, 04 Jan 2022 11:45:27 -0700
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Manfred Spraul <manfred@colorfullife.com>
+Cc:     Alexey Gladkov <legion@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Containers <containers@lists.linux.dev>,
+        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Daniel Walsh <dwalsh@redhat.com>,
+        Davidlohr Bueso <dbueso@suse.de>,
+        Kirill Tkhai <ktkhai@virtuozzo.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        kernel test robot <lkp@intel.com>
+References: <0f0408bb7fbf3187966a9bf19a98642a5d9669fe.1641225760.git.legion@kernel.org>
+        <792dcae82bc228cd0bec1fa80ed4d2c9340b0f8f.1641296947.git.legion@kernel.org>
+        <c8edba64-9b4b-1ef8-f0b3-1b4beacf1551@colorfullife.com>
+Date:   Tue, 04 Jan 2022 12:42:26 -0600
+In-Reply-To: <c8edba64-9b4b-1ef8-f0b3-1b4beacf1551@colorfullife.com> (Manfred
+        Spraul's message of "Tue, 4 Jan 2022 19:13:40 +0100")
+Message-ID: <87v8yzfilp.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain
+X-XM-SPF: eid=1n4ooG-009lH8-NT;;;mid=<87v8yzfilp.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/8QAMUU0CQxDO5ZSmCJ3j4bo1E1Zb8js0=
+X-SA-Exim-Connect-IP: 68.110.24.146
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa01.xmission.com
+X-Spam-Level: 
+X-Spam-Status: No, score=0.5 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,XMSubLong autolearn=disabled
+        version=3.4.2
+X-Spam-Virus: No
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.7 XMSubLong Long Subject
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa01 1397; Body=1 Fuz1=1 Fuz2=1]
+X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Manfred Spraul <manfred@colorfullife.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 399 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 3.9 (1.0%), b_tie_ro: 2.7 (0.7%), parse: 0.71
+        (0.2%), extract_message_metadata: 8 (2.1%), get_uri_detail_list: 1.20
+        (0.3%), tests_pri_-1000: 5 (1.3%), tests_pri_-950: 1.04 (0.3%),
+        tests_pri_-900: 0.84 (0.2%), tests_pri_-90: 70 (17.7%), check_bayes:
+        69 (17.3%), b_tokenize: 6 (1.5%), b_tok_get_all: 8 (2.0%),
+        b_comp_prob: 1.80 (0.5%), b_tok_touch_all: 50 (12.6%), b_finish: 0.77
+        (0.2%), tests_pri_0: 297 (74.4%), check_dkim_signature: 0.39 (0.1%),
+        check_dkim_adsp: 3.4 (0.9%), poll_dns_idle: 0.17 (0.0%), tests_pri_10:
+        2.5 (0.6%), tests_pri_500: 7 (1.7%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v2] ipc: Store mqueue sysctls in the ipc namespace
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Florian,
 
-f.fainelli@gmail.com wrote on Tue, 4 Jan 2022 10:34:35 -0800:
+Manfred Spraul <manfred@colorfullife.com> writes:
+>
+ Hi Alexey,
+>
+> On 1/4/22 12:51, Alexey Gladkov wrote:
+>> Right now, the mqueue sysctls take ipc namespaces into account in a
+>> rather hacky way. This works in most cases, but does not respect the
+>> user namespace.
+>>
+>> Within the user namespace, the user cannot change the /proc/sys/fs/mqueue/*
+>> parametres. This poses a problem in the rootless containers.
+>>
+>> To solve this I changed the implementation of the mqueue sysctls just
+>> like some other sysctls.
+>>
+>> Before this change:
+>>
+>> $ echo 5 | unshare -r -U -i tee /proc/sys/fs/mqueue/msg_max
+>> tee: /proc/sys/fs/mqueue/msg_max: Permission denied
+>> 5
+>
+> Could you crosscheck that all (relevant) allocations in ipc/mqueue.c
+> use GFP_KERNEL_ACCOUNT?
 
-> On 1/4/22 12:57 AM, Miquel Raynal wrote:
-> > Hi Miquel,
-> > 
-> > miquel.raynal@bootlin.com wrote on Tue, 4 Jan 2022 09:32:21 +0100:
-> >   
-> >> Hi Florian,
-> >>
-> >> f.fainelli@gmail.com wrote on Mon, 3 Jan 2022 09:24:26 -0800:
-> >>  
-> >>> On 1/3/2022 8:49 AM, Miquel Raynal wrote:    
-> >>>> Hi Florian,
-> >>>>
-> >>>> f.fainelli@gmail.com wrote on Wed, 22 Dec 2021 16:22:17 -0800:
-> >>>>       
-> >>>>> Allow a brcmnand_soc instance to provide a custom set of I/O operations
-> >>>>> which we will require when using this driver on a BCMA bus which is not
-> >>>>> directly memory mapped I/O. Update the nand_{read,write}_reg accordingly
-> >>>>> to use the SoC operations if provided.
-> >>>>>
-> >>>>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> >>>>> ---
-> >>>>>   drivers/mtd/nand/raw/brcmnand/brcmnand.c | 14 ++++++++++++--
-> >>>>>   drivers/mtd/nand/raw/brcmnand/brcmnand.h | 23 +++++++++++++++++++++++
-> >>>>>   2 files changed, 35 insertions(+), 2 deletions(-)
-> >>>>>
-> >>>>> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> >>>>> index f75929783b94..7a1673b1b1af 100644
-> >>>>> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> >>>>> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> >>>>> @@ -594,13 +594,18 @@ enum {      
-> >>>>>   >>   static inline u32 nand_readreg(struct brcmnand_controller *ctrl, u32 offs)      
-> >>>>>   {
-> >>>>> +	if (brcmnand_soc_has_ops(ctrl->soc))
-> >>>>> +		return brcmnand_soc_read(ctrl->soc, offs);
-> >>>>>   	return brcmnand_readl(ctrl->nand_base + offs);
-> >>>>>   }      
-> >>>>>   >>   static inline void nand_writereg(struct brcmnand_controller *ctrl, u32 offs,      
-> >>>>>   				 u32 val)
-> >>>>>   {
-> >>>>> -	brcmnand_writel(val, ctrl->nand_base + offs);
-> >>>>> +	if (brcmnand_soc_has_ops(ctrl->soc))
-> >>>>> +		brcmnand_soc_write(ctrl->soc, val, offs);
-> >>>>> +	else
-> >>>>> +		brcmnand_writel(val, ctrl->nand_base + offs);
-> >>>>>   }      
-> >>>>>   >>   static int brcmnand_revision_init(struct brcmnand_controller *ctrl)      
-> >>>>> @@ -766,13 +771,18 @@ static inline void brcmnand_rmw_reg(struct brcmnand_controller *ctrl,      
-> >>>>>   >>   static inline u32 brcmnand_read_fc(struct brcmnand_controller *ctrl, int word)      
-> >>>>>   {
-> >>>>> +	if (brcmnand_soc_has_ops(ctrl->soc))
-> >>>>> +		return brcmnand_soc_read(ctrl->soc, ~0);
-> >>>>>   	return __raw_readl(ctrl->nand_fc + word * 4);
-> >>>>>   }      
-> >>>>>   >>   static inline void brcmnand_write_fc(struct brcmnand_controller *ctrl,      
-> >>>>>   				     int word, u32 val)
-> >>>>>   {
-> >>>>> -	__raw_writel(val, ctrl->nand_fc + word * 4);
-> >>>>> +	if (brcmnand_soc_has_ops(ctrl->soc))
-> >>>>> +		brcmnand_soc_write(ctrl->soc, val, ~0);
-> >>>>> +	else
-> >>>>> +		__raw_writel(val, ctrl->nand_fc + word * 4);
-> >>>>>   }      
-> >>>>>   >>   static inline void edu_writel(struct brcmnand_controller *ctrl,      
-> >>>>> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.h b/drivers/mtd/nand/raw/brcmnand/brcmnand.h
-> >>>>> index eb498fbe505e..a3f2ad5f6572 100644
-> >>>>> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.h
-> >>>>> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.h
-> >>>>> @@ -11,12 +11,19 @@      
-> >>>>>   >>   struct platform_device;      
-> >>>>>   struct dev_pm_ops;
-> >>>>> +struct brcmnand_io_ops;      
-> >>>>>   >>   struct brcmnand_soc {      
-> >>>>>   	bool (*ctlrdy_ack)(struct brcmnand_soc *soc);
-> >>>>>   	void (*ctlrdy_set_enabled)(struct brcmnand_soc *soc, bool en);
-> >>>>>   	void (*prepare_data_bus)(struct brcmnand_soc *soc, bool prepare,
-> >>>>>   				 bool is_param);
-> >>>>> +	const struct brcmnand_io_ops *ops;
-> >>>>> +};
-> >>>>> +
-> >>>>> +struct brcmnand_io_ops {
-> >>>>> +	u32 (*read_reg)(struct brcmnand_soc *soc, u32 offset);
-> >>>>> +	void (*write_reg)(struct brcmnand_soc *soc, u32 val, u32 offset);
-> >>>>>   };      
-> >>>>>   >>   static inline void brcmnand_soc_data_bus_prepare(struct brcmnand_soc *soc,      
-> >>>>> @@ -58,6 +65,22 @@ static inline void brcmnand_writel(u32 val, void __iomem *addr)
-> >>>>>   		writel_relaxed(val, addr);
-> >>>>>   }      
-> >>>>>   >> +static inline bool brcmnand_soc_has_ops(struct brcmnand_soc *soc)      
-> >>>>> +{
-> >>>>> +	return soc && soc->ops && soc->ops->read_reg && soc->ops->write_reg;
-> >>>>> +}
-> >>>>> +
-> >>>>> +static inline u32 brcmnand_soc_read(struct brcmnand_soc *soc, u32 offset)
-> >>>>> +{
-> >>>>> +	return soc->ops->read_reg(soc, offset);
-> >>>>> +}
-> >>>>> +
-> >>>>> +static inline void brcmnand_soc_write(struct brcmnand_soc *soc, u32 val,
-> >>>>> +				      u32 offset)
-> >>>>> +{
-> >>>>> +	soc->ops->write_reg(soc, val, offset);
-> >>>>> +}
-> >>>>> +      
-> >>>>
-> >>>> It might be worth looking into more optimized ways to do these checks,
-> >>>> in particular the read/write_reg ones because you're checking against
-> >>>> some static data which cannot be optimized out by the compiler but
-> >>>> won't change in the lifetime of the kernel.      
-> >>>
-> >>> I suppose I could add an addition if IS_ENABLED(CONFIG_MTD_NAND_BRCMNAND_BCMA) at the front of brcmnand_soc_has_ops(), would that address your concern or you have something else in mind?    
-> >>
-> >> I don't like much the #ifdef solution, instead you might think of
-> >> static keys, or even better using a regmap. Regmap implementation is
-> >> free, you can use either one way or the other and for almost no
-> >> overhead compared to the bunch of functions you have here.  
-> > 
-> > Maybe regmaps will actually be slower than these regular if's. Perhaps
-> > static keys are the best option?  
-> 
-> OK static keys would probably work. I am not sure that the additional
-> branches for each register access would actually be causing a noticeable
-> performance impact. Pretty much any chip where this controller is used
-> has a DMA interface that you program and kick, the PIO is already
-> assumed to be slow, and each register access is about 200ns on STB chips
-> at least.
+They are not.
 
-I see. I'll let you decide what you prefer, I won't block if you stick
-to the regular if/else implementation.
+> We should not allow normal users to use up all memory.
+>
+> Otherwise:
+> The idea is good, the limits do not really prevent using up all
+> memory, _ACCOUNT is the better approach.
+> And with _ACCOUNT, it doesn't hurt that the namespace root is able to
+> set limits.
 
-Thanks,
-Miquèl
+Saying the cgroup kernel memory limit is the only thing that works, and
+that is always better is silly.
+
+
+First the cgroup kernel memory limits noted with ACCOUNT are not
+acceptable on several kernel hot paths because they are so expensive.
+
+Further the memory cgroup kernel memory limit is not always delegated to
+non-root users, which precludes using the memory cgroup kernel memory
+limit in many situations.
+
+
+The RLIMIT_MQUEUE limit definitely works, and as I read the kernel
+source correct it defaults to MQ_BYTES_MAX aka 819200.  A limit of
+800KiB should prevent using up all of system memory, except on very low
+memory machines.
+
+
+So please let's not confuse apples and oranges, and let's use the tools
+in the kernel where they work, and not set them up in contest with each
+other.
+
+Rlimits with generous but real limits in general are good at catching
+when a program misbehaves.  The cgroups are better at setting a total
+memory cap.  In this case the rlimit cap is low enough it simply should
+not matter.
+
+What has been fixed with the ucount rlimits is that (baring
+implementation bugs) it is now not possible to create a user namespace
+and escape your rlimits by using multiple users.
+
+Eric

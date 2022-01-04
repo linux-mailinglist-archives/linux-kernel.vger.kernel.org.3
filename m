@@ -2,86 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C63483DAA
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 09:07:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E54D7483DAC
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 09:08:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232626AbiADIH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 03:07:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232556AbiADIHY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 03:07:24 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDFEC061761;
-        Tue,  4 Jan 2022 00:07:23 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id o63-20020a17090a0a4500b001b1c2db8145so40051965pjo.5;
-        Tue, 04 Jan 2022 00:07:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=chAdkmt9mGlLdT8NC3d5bJUWTSNgWZ4fLUZ3IUs+cNM=;
-        b=eqKb7YQrjCYsfxANbusZS7p9ccp8uPrg7PwRXONul7QMhMUBPcx3LCbDpQTnMkCWaW
-         MXbIuMecmfkUhxxkmjB1nvNGzckc20WBMxPwv+KszZBYGQWVDJ7DE0eXrvFvKFtwtNeE
-         9S3KNbWb5CQ1gurleG6zjU6RHqScpPgdrrsOsY5K6BkOGSDk4O3uuIBpb0DA/SHTF5Uy
-         oRfsvp9ZbeLtX8SJq5Icp/thiotYhNG3oAXCWJ426b0oLSp5gqEHnFNdsJDIdFg7HRQn
-         p6ZOXQPJkMrZyA+a4/Iiy6HqRmub31RGWWZDvbMezbM4Y7ZSILsZQDS1MqRFzQspHqhq
-         7JZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=chAdkmt9mGlLdT8NC3d5bJUWTSNgWZ4fLUZ3IUs+cNM=;
-        b=QBIoJf5TPicLEy2Zpj6VQ6XrxgvA4HlHM+Stujcz1NzGWtAH844htjh8si5CcLR3Yh
-         Cq6BApmUxnr2HVD+kstmKc1RKuf72sO2ahxUZZ9gI8ZaRZ1POh2W0ZaTW/rEYOFUzR0G
-         az79YGfrPPrC31N9tYrn0Ir9ci4xK+ZJae9DnnM8WivaoMgzcOg73T2W7YkDth4YEOzq
-         vXKxsR9WUK6jBcxAJxce4ob8IUBXRLF+8KAT41T8XQvo4RPoI2dc3WiXdJmV0S9pX1oB
-         WjV7D25zu2p9l+3A/KMwHMvXqZgp52AIBydOmdL6y4i3+EiGS8zbJ81Hf5r/0CZbu8j4
-         rn3Q==
-X-Gm-Message-State: AOAM532Xhco2fN33LzJwumNmIjOzxQBK2OvjuYW732s/rCaqVjUkEXkO
-        X2cq2ZOuq9QDrXtg+D8SENfE4D+IOAs=
-X-Google-Smtp-Source: ABdhPJyDtfgf4YWv71JHpHdevIW8eEJRiLHSsuo4bL2FUfFayRzoWpgj/X26BORkS3LHqgcFT9gxCw==
-X-Received: by 2002:a17:902:bc86:b0:149:8dd5:a382 with SMTP id bb6-20020a170902bc8600b001498dd5a382mr31988097plb.52.1641283643413;
-        Tue, 04 Jan 2022 00:07:23 -0800 (PST)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id e21sm23924174pff.24.2022.01.04.00.07.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 00:07:23 -0800 (PST)
-Subject: Re: make pdfdocs fails on Debian stable
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mchehab@kernel.org
-References: <20220104064708.GA15446@lst.de>
- <8f21b702-abc2-c9aa-7593-9aff17e61ed1@gmail.com>
- <20220104073625.GA16910@lst.de>
- <df9183cc-aecb-6b8d-0580-92c2a678d69f@gmail.com>
- <20220104075655.GA17315@lst.de>
-From:   Akira Yokosawa <akiyks@gmail.com>
-Message-ID: <931f9f77-e418-4359-65b1-cb7432e37a0f@gmail.com>
-Date:   Tue, 4 Jan 2022 17:07:20 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S232710AbiADIIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 03:08:14 -0500
+Received: from mga11.intel.com ([192.55.52.93]:24017 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232556AbiADIIM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 03:08:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641283692; x=1672819692;
+  h=date:from:to:subject:message-id:references:mime-version:
+   content-transfer-encoding:in-reply-to;
+  bh=JGVqO0RNhQRkgwtOPexDl3xMWwH0tmSCVRe71/2iLKU=;
+  b=a358jR6k8GEjOK5BmvYa5jZ3hoL7yrMl8NsjxncnQATTFgd5vrtHWQpi
+   kDufG8+d5mIYdNtiMCAT32Bxu3FoRglLe0EBnRVp8x/GAcrlrRHbr07mI
+   JNcnEyTa3czCN0bK91NvnuQGte09V/CqBc7DokNhxiQsndGS9wC4Mg7fn
+   iIWKLhuVkT5dCJI+0ApGWROMqKzWWCghV2qdq4JtG5ieRiVHV9DvDqbRq
+   O5zGeHC6Tcjb7m6+1OVzFSkDA2Jz7r9bwNr+p5MsEivH8UncwZyQi9eyF
+   9Bu7Jk6xfC6OmiipZQnyGN8xE654qizuYeklWPr+/jU3mJD9Rvwy1TzcB
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="239720505"
+X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
+   d="scan'208";a="239720505"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 00:08:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
+   d="scan'208";a="470083575"
+Received: from louislifei-optiplex-7050.sh.intel.com (HELO louislifei-OptiPlex-7050) ([10.239.154.151])
+  by orsmga003.jf.intel.com with ESMTP; 04 Jan 2022 00:08:08 -0800
+Date:   Tue, 4 Jan 2022 16:09:02 +0800
+From:   Li Fei1 <fei1.li@intel.com>
+To:     zhou1615@umn.edu, kjlu@umn.edu, reinette.chatre@intel.com,
+        zhi.a.wang@intel.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, fei1.li@intel.com
+Subject: Re: [PATCH] virt: acrn: fix a memory leak bug in acrn_dev_ioctl()
+Message-ID: <20220104080902.GA7254@louislifei-OptiPlex-7050>
+References: <20220104024729.GA26952@louislifei-OptiPlex-7050>
+ <20220104034501.45715-1-zhou1615@umn.edu>
+ <20220104035032.GA27848@louislifei-OptiPlex-7050>
+ <YdP5N3lYqF09dLPv@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <20220104075655.GA17315@lst.de>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YdP5N3lYqF09dLPv@kroah.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jan 2022 08:56:55 +0100, Christoph Hellwig wrote:
-> On Tue, Jan 04, 2022 at 04:53:15PM +0900, Akira Yokosawa wrote:
->> Hmm, I can't reproduce this on docs-next.
->> On which tree are you building RCU.pdf?
+On Tue, Jan 04, 2022 at 08:37:27AM +0100, Greg KH wrote:
+> On Tue, Jan 04, 2022 at 11:50:33AM +0800, Li Fei1 wrote:
+> > On Tue, Jan 04, 2022 at 11:45:01AM +0800, Zhou Qingyang wrote:
+> > > In acrn_dev_ioctl(), vm_param is not released or passed out on the 
+> > > error path of "if ((vm_param->reserved0 | vm_param->reserved1) != 0)", 
+> > > which could lead to a memory leak.
+> > > 
+> > > Fix this bug by adding a kfree of vm_param on the error path.
+> > > 
+> > > This bug was found by a static analyzer.
+> > > 
+> > > Builds with CONFIG_ACRN_GUEST=y, CONFIG_ACRN_HSM=y show no new warnings, 
+> > > and our static analyzer no longer warns about this code.
+> > > 
+> > > Fixes: 9c5137aedd11 (“9c5137aedd11 virt: acrn: Introduce VM management interfaces”)
+> > > Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+> > > ---
+> > > The analysis employs differential checking to identify inconsistent
+> > > security operations (e.g., checks or kfrees) between two code paths
+> > > and confirms that the inconsistent operations are not recovered in 
+> > > the current function or the callers, so they constitute bugs. 
+> > > 
+> > > Note that, as a bug found by static analysis, it can be a false
+> > > positive or hard to trigger. Multiple researchers have cross-reviewed
+> > > the bug.
+> > > 
+> > > Changes in v2:
+> > >   -  Fix the same bug in ACRN_IOCTL_SET_VCPU_REGS.
+Hi Qingyang
+
+I think the "Changes in v2" was not fixes the code in commit "9c5137aedd11 virt: acrn: Introduce VM management interfaces", but in commit 2ad2aaee1bc9 "virt: acrn: Introduce an ioctl to set vCPU registers state".
+Would you please to split this patch into two and please replace “...” with "..." in your commit message.
+
+Thanks.
+
+
+> > > 
+> > 
+> > Signed-off-by: Fei Li <fei1.li@intel.com>
+Please ignore my "Signed-off" here. Sorry.
 > 
-> Current linux-next.  But I've also seen it with mainline from a few days
-> ago.
+> For the multiple obvious reasons (not the least being you didn't even
+> run it through our normal testing scripts), I am not going to take this
+> change, sorry.
 > 
-
-Still can't reproduce with sphinx-build 4.3.2 on Debian bullseye.
-
-What version of Sphinx are you using?
-
+> Fei, please be more careful in the future.
+> 
+> greg k-h

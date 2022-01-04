@@ -2,86 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2184484400
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:59:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA1C2484403
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:59:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234529AbiADO7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:59:25 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:36374 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231989AbiADO7Z (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:59:25 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowADHz5+vYNRhFHfGBQ--.33414S2;
-        Tue, 04 Jan 2022 22:58:55 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     miquel.raynal@bootlin.com
-Cc:     kyungmin.park@samsung.com, richard@nod.at, vigneshr@ti.com,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] mtd: onenand: Check for error irq
-Date:   Tue,  4 Jan 2022 22:58:54 +0800
-Message-Id: <20220104145854.1987853-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S234547AbiADO7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:59:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33304 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234533AbiADO7x (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 09:59:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531C3C061784;
+        Tue,  4 Jan 2022 06:59:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB095B8160D;
+        Tue,  4 Jan 2022 14:59:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23F62C36AED;
+        Tue,  4 Jan 2022 14:59:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641308390;
+        bh=0YtB+fbCghSHxYyJ14GrAVcGcHtvp6iLQGuLPtMgyjw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R/qfnbgl6yOtWE+9DWR3GlTnJtJ8NDZUSWh7P7jdvOHBIYLJOCjyHUsuy/WGzUQSW
+         Vz0tHfDRmZh2wmwB2m2DYgTC1VTYoP8fROISgc8jeN5LC5m6BeAm/Ye7NseckOi8rP
+         GxdAEJ5j0uhUl/eVNHPT4aScSkfnJKIlPn3ba2o13CK4JYQhtrI75r7tjxrVCo6yCl
+         rw0rstDmvc4d56JEAIB6g2ejKCaijKU2lqxmdLxsSOHp+ZN1l537KylCmfJoEZz1FP
+         aqJoImxAG9D8KC995/tZrDSYKA8+BR7wmGBIVEUz5Qf6M9KL0c7T3h8RTikpzOJM6+
+         rHcb1FcxWo6QQ==
+Date:   Tue, 4 Jan 2022 14:59:45 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     madvenka@linux.microsoft.com
+Cc:     mark.rutland@arm.com, jpoimboe@redhat.com, ardb@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
+        linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 03/10] arm64: Rename stackframe to unwind_state
+Message-ID: <YdRg4YoQK1q2D18w@sirena.org.uk>
+References: <0d0eb36f348fb5a6af6eb592c0525f6e94007328>
+ <20220103165212.9303-1-madvenka@linux.microsoft.com>
+ <20220103165212.9303-4-madvenka@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowADHz5+vYNRhFHfGBQ--.33414S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Wr13tw18Gr4UWrWUGF15urg_yoWkArc_CF
-        sa9FyxGrW0yr97u3Zxtw1fAr92kF4DWr1DZa90qrsIq345tFyFq3yDuF15ur17u34UKFy5
-        Cry5X3yxAw13JjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbc8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Jr0_
-        Gr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW5XwCF
-        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-        cVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUO4E_DUUUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="U1asr6fzYkExICKZ"
+Content-Disposition: inline
+In-Reply-To: <20220103165212.9303-4-madvenka@linux.microsoft.com>
+X-Cookie: The horror... the horror!
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As it is possible that there is no suitable irq, platform_get_irq()
-will return error number.
-Therefore, it might be better to check it and return error if fails
-to guarantee the success of the probe.
 
-Fixes: 26777d37216c ("mtd: Move onenand code base to drivers/mtd/nand/onenand")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
+--U1asr6fzYkExICKZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-v1 -> v2
+On Mon, Jan 03, 2022 at 10:52:05AM -0600, madvenka@linux.microsoft.com wrot=
+e:
+> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+>=20
+> Rename "struct stackframe" to "struct unwind_state" for consistency and
+> better naming. Accordingly, rename variable/argument "frame" to "state".
 
-* Change 1. Change the commit message.
----
- drivers/mtd/nand/onenand/generic.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Reviewed-by: Mark Brown <broonie@kernel.org>
 
-diff --git a/drivers/mtd/nand/onenand/generic.c b/drivers/mtd/nand/onenand/generic.c
-index 8b6f4da5d720..a4b8b65fe15f 100644
---- a/drivers/mtd/nand/onenand/generic.c
-+++ b/drivers/mtd/nand/onenand/generic.c
-@@ -53,7 +53,12 @@ static int generic_onenand_probe(struct platform_device *pdev)
- 	}
- 
- 	info->onenand.mmcontrol = pdata ? pdata->mmcontrol : NULL;
--	info->onenand.irq = platform_get_irq(pdev, 0);
-+
-+	err = platform_get_irq(pdev, 0);
-+	if (err < 0)
-+		goto out_iounmap;
-+
-+	info->onenand.irq = err;
- 
- 	info->mtd.dev.parent = &pdev->dev;
- 	info->mtd.priv = &info->onenand;
--- 
-2.25.1
+--U1asr6fzYkExICKZ
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHUYOAACgkQJNaLcl1U
+h9C3Mwf+LOgVjCyi17Y+q629sBRAy3dgrQnMQaFZOWSyWyj+xPJAA+8JsHkFQxB9
+6XYWlBXe41+4TUWTdGjbZQxvyKO5Pb0+5eG6+wWtPBBsD2CVSersJFEA6qwvNiYr
+Tn4662TUCqZNaU/QHvk3WQZcmqBGtXj5J/m62ZtZ1bjHCffYoSa0tc7zEfG//bb6
+C6e6UtcgF8HhKEk0bD4K0cPU63FPO8belLpd2j4xnR5RmT9cFPojQAOtwPv+0Xu/
+y61Q7Bo0B5wcO7o6ZiP+yci/Uo8/v1xwQb86CoijYqGQBsVhpi5ceWtn75QP6Fce
+Mdi7+rBMC+D7mZvF/6P3O6/F428mkA==
+=K8ED
+-----END PGP SIGNATURE-----
+
+--U1asr6fzYkExICKZ--

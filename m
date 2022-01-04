@@ -2,60 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5AC4849A1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4A84849E6
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:33:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233774AbiADVAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 16:00:44 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:50207 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233740AbiADVAn (ORCPT
+        id S234125AbiADVdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 16:33:11 -0500
+Received: from 3.mo584.mail-out.ovh.net ([46.105.57.129]:56353 "EHLO
+        3.mo584.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233848AbiADVdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 16:00:43 -0500
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 204L0UVV019108
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 4 Jan 2022 16:00:30 -0500
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 2D81115C00E1; Tue,  4 Jan 2022 16:00:30 -0500 (EST)
-Date:   Tue, 4 Jan 2022 16:00:30 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     kvartet <xyru1999@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        sunhao.th@gmail.com
-Subject: Re: INFO: task hung in __filemap_get_folio
-Message-ID: <YdS1bk5txXiJynXV@mit.edu>
-References: <CAFkrUsjD2HSRHdZ9yKANa0pLe8rhwPXKbU+E-A7K+td3jS5ZVA@mail.gmail.com>
- <YdSPb5Q6HytIi6w9@casper.infradead.org>
+        Tue, 4 Jan 2022 16:33:10 -0500
+Received: from player728.ha.ovh.net (unknown [10.109.143.79])
+        by mo584.mail-out.ovh.net (Postfix) with ESMTP id 1C267238E9
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 20:56:09 +0000 (UTC)
+Received: from milecki.pl (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
+        (Authenticated sender: rafal@milecki.pl)
+        by player728.ha.ovh.net (Postfix) with ESMTPSA id D340D25E4B2BB;
+        Tue,  4 Jan 2022 20:56:02 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-98R0026380bf79-739d-4914-9f9d-9982a54db208,
+                    711BEDA5BDA1217D757D3668A2C77AE5119AF47D) smtp.auth=rafal@milecki.pl
+X-OVh-ClientIp: 194.187.74.233
+Message-ID: <0463d60e-b58e-84cc-df5e-d5030e8fdc1d@milecki.pl>
+Date:   Tue, 4 Jan 2022 21:56:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdSPb5Q6HytIi6w9@casper.infradead.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: [PATCH 3/5] dt-bindings: nvmem: allow referencing device defined
+ cells by names
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+References: <20211223110755.22722-1-zajec5@gmail.com>
+ <20211223110755.22722-4-zajec5@gmail.com>
+ <CAL_JsqK2TMu+h4MgQqjN0bvEzqdhsEviBwWiiR9hfNbC5eOCKg@mail.gmail.com>
+ <f173d7a6-70e7-498f-8a04-b025c75f2b66@gmail.com>
+ <YdSrG3EGDHMmhm1Y@robh.at.kernel.org>
+ <49a2b78e-67a8-2e5c-f0c4-542851eabbf2@gmail.com>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+In-Reply-To: <49a2b78e-67a8-2e5c-f0c4-542851eabbf2@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 12999921799475342199
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrudeffedgudegfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgsehtkeertddtfeejnecuhfhrohhmpeftrghfrghlucfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpeejteeludegjedtveehteeiudehgfetvdegffdtvdefvdeiveejgeelffelgedtueenucfkpheptddrtddrtddrtddpudelgedrudekjedrjeegrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejvdekrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprhgrfhgrlhesmhhilhgvtghkihdrphhlpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 06:18:23PM +0000, Matthew Wilcox wrote:
-> On Tue, Jan 04, 2022 at 07:44:10PM +0800, kvartet wrote:
-> > Hello,
-> > 
-> > When using Syzkaller to fuzz the latest Linux kernel, the following
-> > crash was triggered.
+On 4.01.2022 21:50, Rafał Miłecki wrote:
+> On 4.01.2022 21:16, Rob Herring wrote:
+>> On Thu, Dec 23, 2021 at 10:58:56PM +0100, Rafał Miłecki wrote:
+>>> On 23.12.2021 22:18, Rob Herring wrote:
+>>>> On Thu, Dec 23, 2021 at 7:08 AM Rafał Miłecki <zajec5@gmail.com> wrote:
+>>>>>
+>>>>> From: Rafał Miłecki <rafal@milecki.pl>
+>>>>>
+>>>>> Not every NVMEM has predefined cells at hardcoded addresses. Some
+>>>>> devices store cells in internal structs and custom formats. Referencing
+>>>>> such cells is still required to let other bindings use them.
+>>>>>
+>>>>> Modify binding to require "reg" xor "label". The later one can be used
+>>>>> to match "dynamic" NVMEM cells by their names.
+>>>>
+>>>> 'label' is supposed to correspond to a sticker on a port or something
+>>>> human identifiable. It generally should be something optional to
+>>>> making the OS functional. Yes, there are already some abuses of that,
+>>>> but this case is too far for me.
+>>>
+>>> Good to learn that!
+>>>
+>>> "name" is special & not allowed I think.
+>>
+>> It's the node name essentially. Why is using node names not sufficient?
+>> Do you have some specific examples?
 > 
-> This isn't a crash, it's a notification of a hang.  More than likely
-> syzbot is playing with RT scheduling again.
+> I tried to explain in
+> [PATCH 1/5] dt-bindings: nvmem: add "label" property to allow more flexible cells names
+> that some vendors come with fancy names that can't fit node names.
 > 
-> We do not need more people running syzbot.  We need more people tracking
-> down and fixing the syzbot reports that already exist.
+> Broadcom's NVRAM examples:
+> 0:macaddr
+> 1:macaddr
+> 2:macaddr
+> 0:ccode
+> 1:ccode
+> 2:ccode
+> 0:regrev
 
-One of the syzbot spam reported by kvartet was a hang in the jbd2
-layer, while it was waiting for processes to complete running handles,
-and the oom killer lock was reported as being involved.  At which
-point, I stopped reading or caring about *any* of the syzbot
-complaints being reported by kvartet....
+In other words I'd like to have something like:
 
-					- Ted
+nvram@1eff0000 {
+	compatible = "brcm,nvram";
+	reg = <0x1eff0000 0x10000>;
+
+	mac: cell-0 {
+		label = "1:macaddr";
+	};
+};
+
+ethernet@1000 {
+	compatible = "brcm,ethernet";
+	reg = <0x1000 0x1000>;
+	nvmem-cells = <&mac>;
+	nvmem-cell-names = "mac-address";
+};

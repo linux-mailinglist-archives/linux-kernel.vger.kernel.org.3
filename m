@@ -2,119 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0795F48413E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:57:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C756484146
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:59:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232658AbiADL5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 06:57:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46982 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiADL5D (ORCPT
+        id S232707AbiADL7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 06:59:39 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:3679 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230292AbiADL7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 06:57:03 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7AC3C061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 03:57:02 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id s1so31004975pga.5
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 03:57:02 -0800 (PST)
+        Tue, 4 Jan 2022 06:59:36 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7qz4IOP4tQz6MVqNRs763jv/JpxIVCzSerIqjO9KVko=;
-        b=akyWELdrqaMAzl+2u09k1siH03kmBuljuWevsTKn1MKWsv4RxLbC91yNXgeVnihFLy
-         BZl9MxSdEKAJb61U47jRSZil0FvHd0Us300+yNsKCroJ0s7xApGir6uFNjmBed8Lrs0W
-         nSTHtffY1vSOjK92/eysLhB+fiFm2KITapxdhIscazqv61h7luzo1YtcOE2Xrdmjq6vo
-         ZnBIE7IUodgKn/aSLdvM0aZQNCtU9eKq1m9pbzTyDMdviSDcY+bCXwgKsoxbuBs5NpyF
-         /fYOrJIatvWrwMi+hdohh2rQ6Sdy94B3O4hEpIl/GJXO6q3cKcEq0bF/dOfHGe5TpayW
-         XzOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7qz4IOP4tQz6MVqNRs763jv/JpxIVCzSerIqjO9KVko=;
-        b=Pzm/r9f+DpnoH0/sQuKVaoLl4JWzI8gEw5DJY/3k0A9oZY97Xn2RI05gd9ROsUPYII
-         F8P5xsR7ZS54ic19xpWyQr3C6Gt8DMt4huvoJLpWgfDqZfExpUM52BnSCJSZVKOcF7af
-         GjXu4xoEimNQJx/IY6snTF9We7dHN3uzFmHnuANX6wTU4nUoaVLFd61vLrvistBC6mwd
-         4RcfBevGY3Z2x/+hYehp1bathXNZGnX8gJU0x56aMvrtWErsacPclWZR3qVDAKYszxRK
-         5/vB4CPSC+a4CqLWrWcCucR2NckIxuJtLUdgVGf1kTf00YYwY7UQPqmvOafvuvdbhAAp
-         q5/A==
-X-Gm-Message-State: AOAM533fxBRXes93wwyCJvPw8Jpo7vOx0xaI90gDwL7Lzs21LLUZtLHt
-        jkq5hh+KGCRKs8GLV7Hms9D0upEbk8WjqqX+ya7auA==
-X-Google-Smtp-Source: ABdhPJzMeT/jerydzvJxQ9/6wchNhHmZXkPXPOHChg26wvS1FiPbEWYjw7SN+cUnWOvaq/P4AkteJjt6VgH0XBpaArQ=
-X-Received: by 2002:aa7:8f37:0:b0:4bb:a19:d3aa with SMTP id
- y23-20020aa78f37000000b004bb0a19d3aamr50952958pfr.1.1641297422211; Tue, 04
- Jan 2022 03:57:02 -0800 (PST)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1641297576; x=1672833576;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=OP/lvMMVw+0Of1bLjB7oFFNrCpJbfhAYUrbKN8w8Buw=;
+  b=GdmSlTDNAvmAkh19lgc529irUOYGoTjFnCjBNuGLqYQOw4a7d0i33nXJ
+   Aotdl4KVlzcntM1RKoUaJ5S/BuxqWnK1BM67XbSl44Rmhhkt+0wuybbhY
+   0ou2ZmZAR/94GhDKR3uVh/a0d5pLBfP87urafCQ39t3X1MjvDb/7KFNJc
+   M=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 04 Jan 2022 03:59:35 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 03:59:35 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 4 Jan 2022 03:59:34 -0800
+Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 4 Jan 2022 03:59:30 -0800
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+To:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
+        <bjorn.andersson@linaro.org>, <greg@kroah.com>
+CC:     <linux-kernel@vger.kernel.org>, <tsoni@codeaurora.org>,
+        <psodagud@codeaurora.org>, <satyap@codeaurora.org>,
+        <pheragu@codeaurora.org>, <rnayak@codeaurora.org>,
+        <sibis@codeaurora.org>, <saiprakash.ranjan@codeaurora.org>,
+        <quic_schowdhu@quicinc.com>
+Subject: [PATCH V3 0/7] Add Embedded USB Debugger (EUD) driver
+Date:   Tue, 4 Jan 2022 17:28:13 +0530
+Message-ID: <cover.1641288286.git.quic_schowdhu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20211218215055.212421-1-antonio.borneo@foss.st.com> <20c77dc1-7e7e-ec0e-f545-593d1cfeb3b3@foss.st.com>
-In-Reply-To: <20c77dc1-7e7e-ec0e-f545-593d1cfeb3b3@foss.st.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Tue, 4 Jan 2022 12:56:51 +0100
-Message-ID: <CAG3jFyu-btTaP+6YFTzPi13jD3RyqAWQq1QJUk3A_dVKjT4T4w@mail.gmail.com>
-Subject: Re: [PATCH 1/3] drm/stm: dsi: move lane capability detection in probe()
-To:     Philippe CORNU <philippe.cornu@foss.st.com>
-Cc:     Antonio Borneo <antonio.borneo@foss.st.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        dri-devel@lists.freedesktop.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jan 2022 at 11:47, Philippe CORNU <philippe.cornu@foss.st.com> wrote:
->
->
->
-> On 12/18/21 10:50 PM, Antonio Borneo wrote:
-> > There is no need to re-compute the dsi lane capability because it
-> > only depends on dsi hw version.
-> > Since dsi hw version is detected at probe(), move there also the
-> > assignment of dsi lane capability.
-> >
-> > Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
-> > ---
-> > To: David Airlie <airlied@linux.ie>
-> > To: Daniel Vetter <daniel@ffwll.ch>
-> > To: Andrzej Hajda <a.hajda@samsung.com>
-> > To: Neil Armstrong <narmstrong@baylibre.com>
-> > To: Robert Foss <robert.foss@linaro.org>
-> > To: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-> > To: Jonas Karlman <jonas@kwiboo.se>
-> > To: Jernej Skrabec <jernej.skrabec@gmail.com>
-> > To: Yannick Fertre <yannick.fertre@foss.st.com>
-> > To: Philippe Cornu <philippe.cornu@foss.st.com>
-> > To: Benjamin Gaignard <benjamin.gaignard@linaro.org>
-> > To: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-> > To: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> > To: Philipp Zabel <p.zabel@pengutronix.de>
-> > To: dri-devel@lists.freedesktop.org
-> > To: linux-stm32@st-md-mailman.stormreply.com
-> > To: linux-arm-kernel@lists.infradead.org
-> > Cc: linux-kernel@vger.kernel.org
-> > ---
-> >   drivers/gpu/drm/stm/dw_mipi_dsi-stm.c | 16 ++++++++--------
-> >   1 file changed, 8 insertions(+), 8 deletions(-)
-> >
->
-> Hi Antonio,
-> many thanks for your patch.
-> Acked-by: Philippe Cornu <philippe.cornu@foss.st.com>
-> Reviewed-by: Philippe Cornu <philippe.cornu@foss.st.com>
-> Philippe :-)
+This is a series of patches that implements a driver for the control
+peripheral, EUD (Embedded USB Debugger). The EUD is a mini-USB hub
+implemented on chip to support the USB-based debug and trace capabilities.
+Apart from debug capabilities, EUD has a control peripheral. Control
+Peripheral is on when EUD is on and gets signals like USB attach, pet
+EUD etc. EUD driver listens to events like USB attach or detach and then
+informs the USB about these events via ROLE-SWITCH. At regular intervals,
+the EUD driver receives an interrupt to pet the driver indicating that
+the software is functional.
 
-Thanks for the series and the Acks.
+Changes in V3
 
-Applied series to drm-misc-next
+* Removed the patch for registration of EUD connector as it is no longer
+  required.
+  
+* Added the description to include EUD in usb-connector.yaml  
+
+* Implemented comments on V2 of the patch.
+
+Changes in V2
+
+* Fixed the yaml issue and also implemented comments on yaml in V1.
+
+Changes in V1
+
+* EUD has now been mapped as a separate DT node as it is an independent QCOM IP.
+
+* EUD is attached to the connector child of dwc3 via port end point since EUD
+  driver needs the connector for role-switching.
+
+* EUD driver has been moved now to drivers/soc/qcom/qcom_eud.c.
+
+* All the comments from version 0 of the patch has been implemented.
+
+Souradeep Chowdhury (7):
+  dt-bindings: Add the yaml bindings for EUD
+  dt-bindings: connector: Add property for EUD type-C connector
+  bindings: usb: dwc3: Update dwc3 properties for EUD connector
+  soc: qcom: eud: Add driver support for Embedded USB Debugger(EUD)
+  arm64: dts: qcom: sc7280: Add EUD dt node and dwc3 connector
+  arm64: dts: qcom: sc7280: Set the default dr_mode for usb2
+  MAINTAINERS: Add maintainer entry for EUD
+
+ Documentation/ABI/testing/sysfs-driver-eud         |   9 +
+ .../bindings/connector/usb-connector.yaml          |   7 +-
+ .../devicetree/bindings/soc/qcom/qcom,eud.yaml     |  50 ++++
+ .../devicetree/bindings/usb/snps,dwc3.yaml         |   6 +
+ MAINTAINERS                                        |   8 +
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts            |   4 +
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |  25 ++
+ drivers/soc/qcom/Kconfig                           |  10 +
+ drivers/soc/qcom/Makefile                          |   1 +
+ drivers/soc/qcom/qcom_eud.c                        | 260 +++++++++++++++++++++
+ 10 files changed, 379 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-eud
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
+ create mode 100644 drivers/soc/qcom/qcom_eud.c
+
+-- 
+2.7.4
+

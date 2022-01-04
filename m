@@ -2,187 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9651483B81
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 06:23:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 739BA483BAD
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 06:26:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbiADFXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 00:23:48 -0500
-Received: from mga06.intel.com ([134.134.136.31]:55289 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230071AbiADFXr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 00:23:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641273827; x=1672809827;
-  h=cc:subject:to:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=uXKPyRWOnxNU5FJs1OVLLK8xkyzVa8K8E1f+yzjqR1k=;
-  b=K7kmWI0+BmIMTL172ZO1Kzbt9oorCc1+11QIYhH8qb0AcyWp9aIqKafa
-   ELlNynP5lec9UwxhOuSreWdAryLstqtKsOdLAGjzdjJrPxf0xFl2/ocHx
-   pbVr4m5ttj7NK9YLIYQgMMMHeqImV+pGSQZcnID4B845AfhiDWdcUbcau
-   EGdCD6v3Yg0UZAwIiRex+u8BynLyDxdHmZNsOkN3pQfyMqweR3lo2R//h
-   ebtLGqSqeZ62eMyZ1wn//Di2+PdL2T/H5Qu9uoWYg0HUbfjtbui30X5hG
-   LZwsk2tqCjwJ5r8u9deCdorO6cnnsbvOYI3XtRHyUg4y2/PNcyXmpF7QB
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="302911991"
-X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
-   d="scan'208";a="302911991"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 21:23:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
-   d="scan'208";a="525866862"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by orsmga008.jf.intel.com with ESMTP; 03 Jan 2022 21:23:39 -0800
-Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 00/13] Fix BUG_ON in vfio_iommu_group_notifier()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>
-References: <20211217063708.1740334-1-baolu.lu@linux.intel.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Message-ID: <d7ca046e-37fe-937b-d7cf-55af3839f0a0@linux.intel.com>
-Date:   Tue, 4 Jan 2022 13:23:02 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S230181AbiADF0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 00:26:50 -0500
+Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:52021 "EHLO
+        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230046AbiADF0s (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 00:26:48 -0500
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 0342C3201F4E;
+        Tue,  4 Jan 2022 00:26:46 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Tue, 04 Jan 2022 00:26:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=q/uGjEz3u6hJ9Wy+DckATc7YSLX
+        e92cnspAamWMzasc=; b=UTE5UyiqV7gDlT0RA0n3x4OCUgUNWQWJV9RQDKsjQTW
+        uCXnUhHQp9MfAn+4lzvj4JgpGO56ayOz60Sd0c8/ymDg33rbkkIs0Z35A7grxU6h
+        xlzq0+lnS+wv/0xA8po1UXtsgOFc7XSAbRss2nrVa6155WzqTE6yWqIEtVjMva0K
+        4WRtLeBN4Wis7TO1F18uIdiA2hxnDmWNzdyZFyEfVoyeroMKH2PTumJLdMISv3/5
+        GEjBz46PKs7gWQz+3uXCj8iHVfZDu5WrbetK/sJyvcqj6iU4BY4oTK2g6pb89qRQ
+        vp7hROIzB0VmO+J563oKDcurxZD+yDXtlSa7ggGD0ew==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=q/uGjE
+        z3u6hJ9Wy+DckATc7YSLXe92cnspAamWMzasc=; b=LpGpvPd3FO9vM9g42wB0si
+        lgP0b9/kolqywWJ4REdPp09Bl4BfFhUPPkZYiyXGLGOd5BXU0+3UKo7H++A/U9oU
+        5chJR71J2jtD+dJsMjmqYWktxF8HtdLZ8TMtAJ7HMvFldQ5QiMBce43fI4WPHFWP
+        NQCfRnWl1zDg2OgwhHXY50Xk/SBQuqSVNgt8/lKDExPqltXMe1eRGD93iS0P3Yp7
+        w0wePnQwCd7cttf8MLQvtWeI0pYpOlp5Vc80vI6WDPCW5U5Yikh1hy2Rg0u6n+dt
+        kF2aQnGanUliZYy0D/8BGREeS8gZPz2CW+4PjujSEMQ0DlJ53PO9uu/wEkOwqQqQ
+        ==
+X-ME-Sender: <xms:ltrTYVKI9puhZdViQ_g1f2LtvSOLqr_W-gInF1cpCzNJ6Qfx9sG74w>
+    <xme:ltrTYRLT__X3wpt5qarQO0sS5jfaTcMARszoiy8Tn1SfeqW-L8M7o3spkTQvzEN4c
+    dFUVsj-kQnrMbyO6w>
+X-ME-Received: <xmr:ltrTYdtih72HH_A-pYSmfOf-IJNqWGqqTc59uXFNTlbDu7zEKTXH_EnNHzmRVaDW-GTcurmpG2W4u8Ja8gWv9jdI4Uhz2EuAfjdL-Mu8Wxs4kpV92tk4OwrBRVlx>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrudefvddgkedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdljedtmdenucfjughrpeffhffvuffkfhggtggujgesthdtredttddt
+    vdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqeenuc
+    ggtffrrghtthgvrhhnpeeuuddvjeefffelgfeuveehfeegfeetfeetueduudfhudfhheev
+    leetveduleehjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:ltrTYWZFPaZdLpqFhUtM7QD3qn4wcC_E9SjL_N49I0miJQNKmXHqwg>
+    <xmx:ltrTYcb0u37XRCQud6k1wH25s6QntpIMecslsrdcKZKwlamno2IYfA>
+    <xmx:ltrTYaC4X6_Uqcvapi0UQYwgbRaHGmY4ydgF244ufIVcDanEJ3WtMQ>
+    <xmx:ltrTYTVLJqc5jDxpxfFgiatngFf1aMH8ygw_dythzjKCWeXKXpFbiQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 4 Jan 2022 00:26:45 -0500 (EST)
+Date:   Mon, 3 Jan 2022 23:26:44 -0600
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     arnd@arndb.de, giometti@enneenne.com, linux-kernel@vger.kernel.org,
+        thesven73@gmail.com, ojeda@kernel.org
+Subject: Re: [RFC char-misc-next 2/2] pps: Fix use-after-free cdev bug on
+ module unload
+Message-ID: <20220104052644.j5y5c3s262fa4dac@muhammad.localdomain>
+References: <cover.1641185192.git.dxu@dxuuu.xyz>
+ <bd7cb7db45c11f50495697ad23804a30a2e3b2d4.1641185192.git.dxu@dxuuu.xyz>
+ <YdMC07NTx7sTRKtI@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <20211217063708.1740334-1-baolu.lu@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdMC07NTx7sTRKtI@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/17/21 2:36 PM, Lu Baolu wrote:
-> Hi folks,
+On Mon, Jan 03, 2022 at 03:06:11PM +0100, Greg KH wrote:
+> On Sun, Jan 02, 2022 at 09:01:40PM -0800, Daniel Xu wrote:
+> > Previously, a use-after-free KASAN splat could be reliably triggered
+> > with:
+> > 
+> >     # insmod ./pps-ktimer.ko
+> >     # rmmod pps-ktimer.ko
+> >     <boom>
+> > 
+> > and CONFIG_DEBUG_KOBJECT_RELEASE=y.
+> > 
+> > This commit moves the driver to use cdev_alloc() instead of cdev_init()
+> > to decouple the lifetime of struct cdev from struct pps_device.
+> > 
+> > We also make use of the previous commit's new cdev->private field to
+> > store a pointer to the containing struct. We have to do this because
+> > container_of() does not work when we store a pointer to struct cdev.
+> > 
+> > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> > ---
+> >  drivers/pps/pps.c          | 20 +++++++++++---------
+> >  include/linux/pps_kernel.h |  2 +-
+> >  2 files changed, 12 insertions(+), 10 deletions(-)
+> > 
+> > diff --git a/drivers/pps/pps.c b/drivers/pps/pps.c
+> > index 22a65ad4e46e..97ce26f67806 100644
+> > --- a/drivers/pps/pps.c
+> > +++ b/drivers/pps/pps.c
+> > @@ -298,8 +298,7 @@ static long pps_cdev_compat_ioctl(struct file *file,
+> >  
+> >  static int pps_cdev_open(struct inode *inode, struct file *file)
+> >  {
+> > -	struct pps_device *pps = container_of(inode->i_cdev,
+> > -						struct pps_device, cdev);
+> > +	struct pps_device *pps = inode->i_cdev->private;
 > 
-> The iommu group is the minimal isolation boundary for DMA. Devices in
-> a group can access each other's MMIO registers via peer to peer DMA
-> and also need share the same I/O address space.
-> 
-> Once the I/O address space is assigned to user control it is no longer
-> available to the dma_map* API, which effectively makes the DMA API
-> non-working.
-> 
-> Second, userspace can use DMA initiated by a device that it controls
-> to access the MMIO spaces of other devices in the group. This allows
-> userspace to indirectly attack any kernel owned device and it's driver.
-> 
-> Therefore groups must either be entirely under kernel control or
-> userspace control, never a mixture. Unfortunately some systems have
-> problems with the granularity of groups and there are a couple of
-> important exceptions:
-> 
->   - pci_stub allows the admin to block driver binding on a device and
->     make it permanently shared with userspace. Since PCI stub does not
->     do DMA it is safe, however the admin must understand that using
->     pci_stub allows userspace to attack whatever device it was bound
->     it.
-> 
->   - PCI bridges are sometimes included in groups. Typically PCI bridges
->     do not use DMA, and generally do not have MMIO regions.
-> 
-> Generally any device that does not have any MMIO registers is a
-> possible candidate for an exception.
-> 
-> Currently vfio adopts a workaround to detect violations of the above
-> restrictions by monitoring the driver core BOUND event, and hardwiring
-> the above exceptions. Since there is no way for vfio to reject driver
-> binding at this point, BUG_ON() is triggered if a violation is
-> captured (kernel driver BOUND event on a group which already has some
-> devices assigned to userspace). Aside from the bad user experience
-> this opens a way for root userspace to crash the kernel, even in high
-> integrity configurations, by manipulating the module binding and
-> triggering the BUG_ON.
-> 
-> This series solves this problem by making the user/kernel ownership a
-> core concept at the IOMMU layer. The driver core enforces kernel
-> ownership while drivers are bound and violations now result in a error
-> codes during probe, not BUG_ON failures.
-> 
-> Patch partitions:
->    [PATCH 1-4]: Detect DMA ownership conflicts during driver binding;
->    [PATCH 5-8]: Add security context management for assigned devices;
->    [PATCH 9-13]: Various cleanups.
-> 
-> This is also part one of three initial series for IOMMUFD:
->   * Move IOMMU Group security into the iommu layer
->   - Generic IOMMUFD implementation
->   - VFIO ability to consume IOMMUFD
-> 
-> Change log:
-> v1: initial post
->    - https://lore.kernel.org/linux-iommu/20211115020552.2378167-1-baolu.lu@linux.intel.com/
-> 
-> v2:
->    - https://lore.kernel.org/linux-iommu/20211128025051.355578-1-baolu.lu@linux.intel.com/
-> 
->    - Move kernel dma ownership auto-claiming from driver core to bus
->      callback. [Greg/Christoph/Robin/Jason]
->      https://lore.kernel.org/linux-iommu/20211115020552.2378167-1-baolu.lu@linux.intel.com/T/#m153706912b770682cb12e3c28f57e171aa1f9d0c
-> 
->    - Code and interface refactoring for iommu_set/release_dma_owner()
->      interfaces. [Jason]
->      https://lore.kernel.org/linux-iommu/20211115020552.2378167-1-baolu.lu@linux.intel.com/T/#mea70ed8e4e3665aedf32a5a0a7db095bf680325e
-> 
->    - [NEW]Add new iommu_attach/detach_device_shared() interfaces for
->      multiple devices group. [Robin/Jason]
->      https://lore.kernel.org/linux-iommu/20211115020552.2378167-1-baolu.lu@linux.intel.com/T/#mea70ed8e4e3665aedf32a5a0a7db095bf680325e
-> 
->    - [NEW]Use iommu_attach/detach_device_shared() in drm/tegra drivers.
-> 
->    - Refactoring and description refinement.
-> 
-> v3:
->    - https://lore.kernel.org/linux-iommu/20211206015903.88687-1-baolu.lu@linux.intel.com/
-> 
->    - Rename bus_type::dma_unconfigure to bus_type::dma_cleanup. [Greg]
->      https://lore.kernel.org/linux-iommu/c3230ace-c878-39db-1663-2b752ff5384e@linux.intel.com/T/#m6711e041e47cb0cbe3964fad0a3466f5ae4b3b9b
-> 
->    - Avoid _platform_dma_configure for platform_bus_type::dma_configure.
->      [Greg]
->      https://lore.kernel.org/linux-iommu/c3230ace-c878-39db-1663-2b752ff5384e@linux.intel.com/T/#m43fc46286611aa56a5c0eeaad99d539e5519f3f6
-> 
->    - Patch "0012-iommu-Add-iommu_at-de-tach_device_shared-for-mult.patch"
->      and "0018-drm-tegra-Use-the-iommu-dma_owner-mechanism.patch" have
->      been tested by Dmitry Osipenko <digetx@gmail.com>.
-> 
-> v4:
->    - Remove unnecessary tegra->domain chech in the tegra patch. (Jason)
->    - Remove DMA_OWNER_NONE. (Joerg)
->    - Change refcount to unsigned int. (Christoph)
->    - Move mutex lock into group set_dma_owner functions. (Christoph)
->    - Add kernel doc for iommu_attach/detach_domain_shared(). (Christoph)
->    - Move dma auto-claim into driver core. (Jason/Christoph)
+> Why is this pointer now valid while the original structure that the cdev
+> lived in, not valid?  I do not think this really solves your problem,
+> only papers over the delay in removing the kobject that the config
+> option you enabled is trying to tell you is a problem.
 
-Thank you very much for the review comments. A new version has been
-posted.
+I'm confused here as well. The original structure that the cdev lived in
+is still valid here. I think this is the only way back to the containing
+structure if we choose to embed `struct cdev *` rather than `struct cdev`.
 
-https://lore.kernel.org/linux-iommu/20220104015644.2294354-1-baolu.lu@linux.intel.com/
+Unless you're suggesting the cdev is opened after the containing struct
+is already freed. In which case neither the original method (embeddeding
+`struct cdev`) nor the private pointer method would save us.
 
-Best regards,
-baolu
+> 
+> >  	file->private_data = pps;
+> >  	kobject_get(&pps->dev->kobj);
+> >  	return 0;
+> > @@ -307,8 +306,7 @@ static int pps_cdev_open(struct inode *inode, struct file *file)
+> >  
+> >  static int pps_cdev_release(struct inode *inode, struct file *file)
+> >  {
+> > -	struct pps_device *pps = container_of(inode->i_cdev,
+> > -						struct pps_device, cdev);
+> > +	struct pps_device *pps = inode->i_cdev->private;
+> >  	kobject_put(&pps->dev->kobj);
+> >  	return 0;
+> >  }
+> > @@ -332,7 +330,7 @@ static void pps_device_destruct(struct device *dev)
+> >  {
+> >  	struct pps_device *pps = dev_get_drvdata(dev);
+> >  
+> > -	cdev_del(&pps->cdev);
+> > +	cdev_del(pps->cdev);
+> >  
+> >  	/* Now we can release the ID for re-use */
+> >  	pr_debug("deallocating pps%d\n", pps->id);
+> > @@ -368,10 +366,14 @@ int pps_register_cdev(struct pps_device *pps)
+> >  
+> >  	devt = MKDEV(MAJOR(pps_devt), pps->id);
+> >  
+> > -	cdev_init(&pps->cdev, &pps_cdev_fops);
+> > -	pps->cdev.owner = pps->info.owner;
+> > +	pps->cdev = cdev_alloc();
+> > +	if (!pps->cdev)
+> > +		goto free_idr;
+> > +	pps->cdev->owner = pps->info.owner;
+> > +	pps->cdev->ops = &pps_cdev_fops;
+> > +	pps->cdev->private = pps;
+> >  
+> > -	err = cdev_add(&pps->cdev, devt, 1);
+> > +	err = cdev_add(pps->cdev, devt, 1);
+> >  	if (err) {
+> >  		pr_err("%s: failed to add char device %d:%d\n",
+> >  				pps->info.name, MAJOR(pps_devt), pps->id);
+> > @@ -393,7 +395,7 @@ int pps_register_cdev(struct pps_device *pps)
+> >  	return 0;
+> >  
+> >  del_cdev:
+> > -	cdev_del(&pps->cdev);
+> > +	cdev_del(pps->cdev);
+> >  
+> >  free_idr:
+> >  	mutex_lock(&pps_idr_lock);
+> > diff --git a/include/linux/pps_kernel.h b/include/linux/pps_kernel.h
+> > index 78c8ac4951b5..4e401793880f 100644
+> > --- a/include/linux/pps_kernel.h
+> > +++ b/include/linux/pps_kernel.h
+> > @@ -56,7 +56,7 @@ struct pps_device {
+> >  
+> >  	unsigned int id;			/* PPS source unique ID */
+> >  	void const *lookup_cookie;		/* For pps_lookup_dev() only */
+> > -	struct cdev cdev;
+> > +	struct cdev *cdev;
+> 
+> So now who owns the lifecycle for the ppc_device structure?  You just
+> took it away from the cdev kobject, and replaced it with what?
+
+Unless I'm misunderstanding, the lifecycle owner has not changed in this
+patch. AFAICT (and KASAN seems to agree with me) this is all still
+valid.
+
+FWIW other drivers store `struct cdev *` too. See fs/fuse/cuse.c's
+cuse_channel_open() and cuse_channel_release().
+
+Sorry about any dumb questions -- still new to driver stuff.
+
+[...]
+
+Thanks,
+Daniel

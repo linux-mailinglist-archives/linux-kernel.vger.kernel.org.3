@@ -2,105 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A46748439D
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:43:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A82A94843A0
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:45:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234337AbiADOng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:43:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57470 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234151AbiADOnf (ORCPT
+        id S234347AbiADOpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:45:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:60079 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234341AbiADOpA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:43:35 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A865C061761;
-        Tue,  4 Jan 2022 06:43:35 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id f134-20020a1c1f8c000000b00345c05bc12dso1561550wmf.3;
-        Tue, 04 Jan 2022 06:43:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=haW+R5LZt/7A48CppgWQ47GOZelWaEypF3zOPD1WT9s=;
-        b=COThv360hLgWFyu/xbIh6xIziRgocf1fohix2c0yhImq6cYLu2vOkcTChdWOxRSabZ
-         +7aIAXPe5kuvT9N7mdStZK5eGR2IYin0xo6HrZK2T4D0xHG/WXWGIoVEHrTHRjkahvq/
-         8AoGb6+pQULo/92bf/ogfl3tkXm3H8UVgr75RX142ZgddPq71mtg8iXP+SiMMQphQfkD
-         SzvNK+vRIY+9lS1q6Qbx5AK1Wuv0Ttjr7VurwE/qthCGuQpvrpfTf6hWiT6A+X8CgLg3
-         6evvAV2k6AWmvzLd5R7sZEImQoSYSexn+b4eCQDuwnb4S0QfBbpw1Z72drcANeWk3naq
-         wP+Q==
+        Tue, 4 Jan 2022 09:45:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641307499;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y90lW9XmNLqfe3N1HpT0kR+V/FIjNg1yVaD+klmiyww=;
+        b=BDBzlG6eLp0U/ZnLURYPz11wvpc5TsZrY8vMhLH8UbbCiesIruAZGyDbBfbNLMZzwCakjV
+        0Y5fEYyaIjH+oHuSEUXiEleFlu/t85mSSIrEmamYwOdApv0DVGHUhHNSnmlkGHixi0JnF2
+        p1152PHbJiDKvhs0QnPp4UcyJ6q4OkI=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-326-nE8PwU3oMWaHkAeo0hv1SA-1; Tue, 04 Jan 2022 09:44:58 -0500
+X-MC-Unique: nE8PwU3oMWaHkAeo0hv1SA-1
+Received: by mail-wm1-f71.google.com with SMTP id c5-20020a1c3505000000b00345c92c27c6so15397408wma.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 06:44:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=haW+R5LZt/7A48CppgWQ47GOZelWaEypF3zOPD1WT9s=;
-        b=eR8Mdkhq4QzKm/FfT1rKnOg7lNeCendrPnJvT15OQf2NfRPlJVwP7CXiLLxJZ0yr2S
-         M/jfsPXX4RxJoEC9Fgd4TdWZwGPyQUdb8AGLJ+OqsZajpsLnJoqtR5css9h4x3uJlH+J
-         P45XsTWjNsXrRC6P9GL4yCBunOCOSDkre9eg6a6siaVQwsrDsdDfLYXU+b2+ThCKVO12
-         UpAnlklt6rqkTEHTt4C6G0naGP6h47GAjMTY8qXts+Xkn6BKL+guEN8u3AA77a6t2AVc
-         ILYzX2jgxY72dlY88q6unxaVqH74q0pV2R5YKRkc7RrFEyoO5Q/EbQBwVCqy7aogBVvM
-         4TfQ==
-X-Gm-Message-State: AOAM531SF4AYO6Wc6x547BBz8rGE94VNkoeEsWr2mNnO601HbuuFim7w
-        ++xlT/9FSGpcSUXnZZVUDIyFP6fbPtE=
-X-Google-Smtp-Source: ABdhPJwmpOkl0r4hrLezxT3IfnTjZOpfndGOUO2UQIg13qpZwBegqLbWp2ducd7rgoNqKTY2xWOWGw==
-X-Received: by 2002:a05:600c:1e8b:: with SMTP id be11mr43037806wmb.125.1641307414196;
-        Tue, 04 Jan 2022 06:43:34 -0800 (PST)
-Received: from ?IPV6:2003:ea:8f2f:5b00:f9ee:e9e3:d08e:f6e9? (p200300ea8f2f5b00f9eee9e3d08ef6e9.dip0.t-ipconnect.de. [2003:ea:8f2f:5b00:f9ee:e9e3:d08e:f6e9])
-        by smtp.googlemail.com with ESMTPSA id ba18sm1711544wrb.40.2022.01.04.06.43.33
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=Y90lW9XmNLqfe3N1HpT0kR+V/FIjNg1yVaD+klmiyww=;
+        b=i2mgkuXFeM9Fjd4pLxWSiCGoYsPc+yLUp+6OCkNqHNdjQUbnwHxM9YF+/3VCR2Hk4T
+         OlmwlIZuvKhWz8W7oGEZMNoZVeXjulUuPfWtBwHIrckg6Q5qKdd5S2+wamWpBqN8IDO/
+         KEMmKojAP3Z6e03Y5Ir+r+L1ugBDF//ZQdffFBN3HO+y6aeOs4dpr1k6KkjCCbFbjTAB
+         gZvH2L4LbKJxbpr+cXlJniWeGKkrTFyDfJbfw4pF0mYDdmQayfA9QEyevna2XH1Eor3a
+         1kqnGgJe7hmU/iFTT/azDbV/d7i6gmXnRpg6/DiFp7BWdY4rvaVvXHnJE2VlFyFLPC+j
+         fQCg==
+X-Gm-Message-State: AOAM530fdrwZjSpdAgqIRGFqAsS6slVas8SBJ9OJWMBMiAWpfILUmffh
+        g9w4y306Dfdc4Q28SIJ5v/mQ7uluo9d2R0rw9f3BGOkThMJxkLdNOyXb3UpbOBjAmqYDxXJ5pzY
+        OyaAD9jMpIPoWSptKizLuF8j0
+X-Received: by 2002:a05:600c:24c:: with SMTP id 12mr43693144wmj.191.1641307497003;
+        Tue, 04 Jan 2022 06:44:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy38Q/9u8LOHOsrUTzf3fHKPrilzJAKujndpWPoU4Syl/QxEJaGRpIbZH9NGE+YeD52mVPG5A==
+X-Received: by 2002:a05:600c:24c:: with SMTP id 12mr43693130wmj.191.1641307496791;
+        Tue, 04 Jan 2022 06:44:56 -0800 (PST)
+Received: from [192.168.3.132] (p5b0c62bd.dip0.t-ipconnect.de. [91.12.98.189])
+        by smtp.gmail.com with ESMTPSA id 9sm48470738wrz.90.2022.01.04.06.44.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 06:43:33 -0800 (PST)
-Message-ID: <c905fd23-19c1-218f-819b-b8ae3434f48c@gmail.com>
-Date:   Tue, 4 Jan 2022 15:43:28 +0100
+        Tue, 04 Jan 2022 06:44:56 -0800 (PST)
+Message-ID: <01e42346-5b4d-8ccc-d485-5d866da7cf8d@redhat.com>
+Date:   Tue, 4 Jan 2022 15:44:55 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: linux-next: build failure after merge of the pm tree
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <20220104111551.7f26e893@canb.auug.org.au>
- <d485fb62-b576-f9b6-13bc-709a2c409240@gmail.com>
- <20220104190220.45c8e0cf@canb.auug.org.au>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-In-Reply-To: <20220104190220.45c8e0cf@canb.auug.org.au>
+To:     Peng Liang <liangpeng10@huawei.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     akpm@linux-foundation.org, hughd@google.com,
+        xiexiangyou@huawei.com, zhengchuan@huawei.com,
+        wanghao232@huawei.com, "dgilbert@redhat.com" <dgilbert@redhat.com>
+References: <20211222123400.1659635-1-liangpeng10@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [RFC 0/1] memfd: Support mapping to zero page on reading
+In-Reply-To: <20211222123400.1659635-1-liangpeng10@huawei.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04.01.2022 09:02, Stephen Rothwell wrote:
-> Hi Heiner,
+On 22.12.21 13:33, Peng Liang wrote:
+> Hi all,
 > 
-> On Tue, 4 Jan 2022 08:29:28 +0100 Heiner Kallweit <hkallweit1@gmail.com> wrote:
->>
->> The patch in the pm tree annotating pm_runtime_resume_and_get() as __must_check
->> follows some fixes of pm_runtime_resume_and_get() usage that went through other
->> trees. These fixes are in linux-next but don't seem to be in the pm tree.
->> We talk about:
->> f04b4fb47d83 ("ASoC: sh: rz-ssi: Check return value of pm_runtime_resume_and_get()")
-> 
-> In the sound-asoc tree.
-> 
->> 3d6b661330a7 ("crypto: stm32 - Revert broken pm_runtime_resume_and_get changes")
-> 
-> In the crypto tree.
-> 
-> Both those are merged into linux-next after the pm tree.  If Linus did
-> the same, the pm tree commit would break his build.  The only way you
-> can have that pm tree commit in linux-next is to ask Andrew Morton to
-> put it in the post linux-next part of his patch series.  Otherwise, it
-> needs to be removed form the pm tree and wait until after the next
-> merge window closes (or at least both the above trees have been merged
-> by Linus).
-> 
-Rafael,
-can you take care of this?
-To avoid such issues I think next time I'd route all dependent patches
-through one tree and just get the ACK from the other involved maintainers.
+> Recently we are working on implementing CRIU [1] for QEMU based on
+> Steven's work [2].  It will use memfd to allocate guest memory in order
+> to restore (inherit) it in the new QEMU process.  However, memfd will
+> allocate a new page for reading while anonymous memory will map to zero
+> page for reading.  For QEMU, memfd may cause that all memory are
+> allocated during the migration because QEMU will read all pages in
+> migration.  It may lead to OOM if over-committed memory is enabled,
+> which is usually enabled in public cloud.
 
-Thank you, Heiner
+Hi,
+
+it's the exact same problem as if just migrating a VM after inflating
+the balloon, or after reporting free memory to the hypervisor via
+virtio-balloon free page reporting.
+
+Even populating the shared zero page still wastes CPU time and more
+importantly memory for page tables. Further, you'll end up reading the
+whole page to discover that you just populated the shared zeropage, far
+from optimal. Instead of doing that dance, just check if there is
+something worth reading at all.
+
+You could simply sense if a page is actually populated before going
+ahead and reading it for migration. I actually discussed that recently
+with Dave Gilbert.
+
+For anonymous memory it's pretty straight forward via
+/proc/self/pagemap. For files you can use lseek.
+
+https://lkml.kernel.org/r/20210923064618.157046-2-tiberiu.georgescu@nutanix.com
+
+Contains some details. There was a discussion to eventually have a
+better bulk interface for it if it's necessary for performance.
+
+-- 
+Thanks,
+
+David / dhildenb
+

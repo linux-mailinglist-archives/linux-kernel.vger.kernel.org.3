@@ -2,134 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9161B48487B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:24:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E66C048487F
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:25:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236509AbiADTYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 14:24:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
+        id S236525AbiADTZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 14:25:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236501AbiADTYP (ORCPT
+        with ESMTP id S233519AbiADTZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 14:24:15 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D4EC061799
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 11:24:15 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id m18so34713159qtk.3
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 11:24:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TZnN/ekIiFI7YDu1RJ14VoHgg/SvWeBKADvtqP6Xvao=;
-        b=o3IVc42jFcW61803tFE5FwNQYrOrcDJBt+DpBKR5uHBrh1bIaC2CvcRT7+xRjVDY1C
-         eNlSlKEPNweadCMc6tJLqAaW1gqfZru+NpeL4riqX7HJ/S4uztwgpm8heGbsidc/arJC
-         h4hc3LJxW3BBrSxLZtvU8vGZIlgFHVLsx4/p3KyiyBOMu1NUvUrUQ75OWdBA3+LSrCkK
-         14G9Sbev6IUGfziyQihxNOLBjUeSKoTfJVh8dKRPE6nKfHH+PFHeLEEHSXj8ECfygki8
-         bxKohZwJjhj6MkPkOzGM/FpkjSbIh1l6ZLymV4fqCCxrmDRqa89Ge+vdfMRk331ptkG0
-         qxzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TZnN/ekIiFI7YDu1RJ14VoHgg/SvWeBKADvtqP6Xvao=;
-        b=0NXdp+unIibJn9Z7BztlOtQAbx1yw6sVjFznbTgTAzBc5Voyg4DqZOoxKRq1WVxoqL
-         Jrt4qrIBMjSPPkJREg81iCJaIf13fHTgDAOSryELeRypeDZeo5xaec0vTwtXYlmbpgDy
-         NMyzLU6ucRdVKKbv9jWa8+V3jEE2r/A0PaUG5P84QN6I+ZBoAT6olI4KzAHhqa0hKTd/
-         b6K+c7M7OZz1YHZ5y8bbSBLMLafpBCyYQM643WLX0uKCHp8I0uxRZ3fnATJ7N28bgKDA
-         kkxsSHbZpC7bKKbZu5fcW4RmA1Yth7gsJnhb1NEjvIAnndVAHEWO66r8ACApxwyMlih+
-         XHBg==
-X-Gm-Message-State: AOAM530XcIubm+BDPY/w9h0TlcQGfbhcvr3dpiJ+xknZSg3ObiBkrmIu
-        FeByS3GxYbl8BeFMCczWJ5yGepTDCDQCmsBCY3TOLQAarzQ=
-X-Google-Smtp-Source: ABdhPJzRhX3wsj4n4S42GkZmHF+WEnhBS9Xn3mENJeyyFeJGSZffN5l0EXkco/7DwanHHZ3LfAye1yMqBCcJxrDdO/M=
-X-Received: by 2002:ac8:47d3:: with SMTP id d19mr46178448qtr.72.1641324254143;
- Tue, 04 Jan 2022 11:24:14 -0800 (PST)
+        Tue, 4 Jan 2022 14:25:19 -0500
+Received: from proxima.lasnet.de (proxima.lasnet.de [IPv6:2a01:4f8:121:31eb:3::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC83C061761;
+        Tue,  4 Jan 2022 11:25:18 -0800 (PST)
+Received: from [IPV6:2003:e9:d728:ec47:4b31:73e4:34c5:505a] (p200300e9d728ec474b3173e434c5505a.dip0.t-ipconnect.de [IPv6:2003:e9:d728:ec47:4b31:73e4:34c5:505a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: stefan@datenfreihafen.org)
+        by proxima.lasnet.de (Postfix) with ESMTPSA id CEE48C0415;
+        Tue,  4 Jan 2022 20:25:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=datenfreihafen.org;
+        s=2021; t=1641324317;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bw3hpNQowQK11PHaZnn5IhTyLqHlg1dmT/+wocBWB+A=;
+        b=ve+OL/AvIGLVMZQjagL89I7SCFIr0h9EHDZ5Apw1iwLuVm+rWjK9pH0N4UUPWAgp1IC643
+        31MsUxhnNXofNqWUVHOVxRzl+K+3/fgG3LpkeECJaCG9biD+lslTfQopQOVu9/qSRwX6EW
+        NIWYUIhaO3HKg0LEnIRHn/5jN1m3x7EwG5ee9go3VQq6dTOUBI8YsksksPCgfgidnBsi38
+        rj8YwWHCR+RZaiZY39eeUnuxIt0TARDFcWC7MXyAS+L1wKQmdw3/2ikVjRe0KrANpsCG9h
+        /dQniN9zR+h+kRNxXLfig4Gqfea30GngBP21LKz8H8u7ETP7527M5DiAfCbKlw==
+Message-ID: <3b35da92-0468-cc08-b7aa-d9d52af74291@datenfreihafen.org>
+Date:   Tue, 4 Jan 2022 20:25:16 +0100
 MIME-Version: 1.0
-References: <cover.1641288286.git.quic_schowdhu@quicinc.com> <baf41480be71bd4472fe09c2993e43a780554d94.1641288286.git.quic_schowdhu@quicinc.com>
-In-Reply-To: <baf41480be71bd4472fe09c2993e43a780554d94.1641288286.git.quic_schowdhu@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 4 Jan 2022 22:24:03 +0300
-Message-ID: <CAA8EJpo-pLbWH3t0MN-pV0RV=0+wt47qcU3oDbaXcDG1NQq6ow@mail.gmail.com>
-Subject: Re: [PATCH V3 5/7] arm64: dts: qcom: sc7280: Add EUD dt node and dwc3 connector
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, pure.logic@nexus-software.ie,
-        bjorn.andersson@linaro.org, greg@kroah.com,
-        linux-kernel@vger.kernel.org, tsoni@codeaurora.org,
-        psodagud@codeaurora.org, satyap@codeaurora.org,
-        pheragu@codeaurora.org, rnayak@codeaurora.org,
-        sibis@codeaurora.org, saiprakash.ranjan@codeaurora.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Subject: Re: [PATCH v3] ieee802154: atusb: fix uninit value in
+ atusb_set_extended_addr
+Content-Language: en-US
+To:     Alexander Aring <aahringo@redhat.com>,
+        Pavel Skripkin <paskripkin@gmail.com>
+Cc:     alex.aring@gmail.com, davem@davemloft.net,
+        Jakub Kicinski <kuba@kernel.org>, linux-wpan@vger.kernel.org,
+        Network Development <netdev@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Alexander Potapenko <glider@google.com>
+References: <e8e73fcc-b902-4972-6001-84671361146d@datenfreihafen.org>
+ <20220104182806.7188-1-paskripkin@gmail.com>
+ <CAK-6q+jkQqZ-Mog2Bwq2EGWFYv-vYtSYRJMqJUARm=C+Cd+uRA@mail.gmail.com>
+From:   Stefan Schmidt <stefan@datenfreihafen.org>
+In-Reply-To: <CAK-6q+jkQqZ-Mog2Bwq2EGWFYv-vYtSYRJMqJUARm=C+Cd+uRA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jan 2022 at 15:00, Souradeep Chowdhury
-<quic_schowdhu@quicinc.com> wrote:
->
-> Add the Embedded USB Debugger(EUD) device tree node. The
-> node contains EUD base register region and EUD mode
-> manager register regions along with the interrupt entry.
-> Also add the connector to EUD which is mapped as the child
-> of dwc3. The connector is attached to EUD via port. Also add
-> the role-switch property to dwc3 node.
->
-> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/sc7280.dtsi | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index 53a21d0..2d14e5c 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -1315,6 +1315,18 @@
->                                 phys = <&usb_2_hsphy>;
->                                 phy-names = "usb2-phy";
->                                 maximum-speed = "high-speed";
-> +                               usb-role-switch;
-> +                               usb_con: eud_usb_connector {
+Hello.
 
-Is this node meant to be named connector instead?
+On 04.01.22 19:57, Alexander Aring wrote:
+> Hi,
+> 
+> On Tue, Jan 4, 2022 at 1:28 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
+>>
+>> Alexander reported a use of uninitialized value in
+>> atusb_set_extended_addr(), that is caused by reading 0 bytes via
+>> usb_control_msg().
+>>
+>> Fix it by validating if the number of bytes transferred is actually
+>> correct, since usb_control_msg() may read less bytes, than was requested
+>> by caller.
+>>
+>> Fail log:
+>>
+>> BUG: KASAN: uninit-cmp in ieee802154_is_valid_extended_unicast_addr include/linux/ieee802154.h:310 [inline]
+>> BUG: KASAN: uninit-cmp in atusb_set_extended_addr drivers/net/ieee802154/atusb.c:1000 [inline]
+>> BUG: KASAN: uninit-cmp in atusb_probe.cold+0x29f/0x14db drivers/net/ieee802154/atusb.c:1056
+>> Uninit value used in comparison: 311daa649a2003bd stack handle: 000000009a2003bd
+>>   ieee802154_is_valid_extended_unicast_addr include/linux/ieee802154.h:310 [inline]
+>>   atusb_set_extended_addr drivers/net/ieee802154/atusb.c:1000 [inline]
+>>   atusb_probe.cold+0x29f/0x14db drivers/net/ieee802154/atusb.c:1056
+>>   usb_probe_interface+0x314/0x7f0 drivers/usb/core/driver.c:396
+>>
+>> Fixes: 7490b008d123 ("ieee802154: add support for atusb transceiver")
+>> Reported-by: Alexander Potapenko <glider@google.com>
+>> Acked-by: Alexander Aring <aahringo@redhat.com>
+>> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+>> ---
+>>
+>> Changes in v3:
+>>          - Changed atusb_control_msg() to usb_control_msg() in
+>>            atusb_get_and_show_build(), since request there may read various length
+>>            data
+>>
+> 
+> Thanks for catching this.
 
-> +                                       compatible = "qcom,usb-connector-eud",
-> +                                                    "usb-c-connector";
-> +                                       ports {
-> +                                               port@0 {
-> +                                                       usb2_role_switch: endpoint {
-> +                                                               remote-endpoint = <&eud_ep>;
-> +                                                       };
-> +                                               };
-> +                                       };
-> +                               };
->                         };
->                 };
->
-> @@ -1339,6 +1351,19 @@
->                         interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
->                 };
->
-> +               eud:  eud@88e0000 {
-> +                       compatible = "qcom,sc7280-eud","qcom,eud";
-> +                       reg = <0 0x88e0000 0 0x2000>,
-> +                             <0 0x88e2000 0 0x1000>;
-> +                       interrupt-parent = <&pdc>;
-> +                       interrupts = <11 IRQ_TYPE_LEVEL_HIGH>;
-> +                       port {
-> +                               eud_ep: endpoint {
-> +                                       remote-endpoint = <&usb2_role_switch>;
-> +                               };
-> +                       };
-> +               };
-> +
->                 nsp_noc: interconnect@a0c0000 {
->                         reg = <0 0x0a0c0000 0 0x10000>;
->                         compatible = "qcom,sc7280-nsp-noc";
-> --
-> 2.7.4
->
+Test passed my testing.
 
 
--- 
-With best wishes
-Dmitry
+This patch has been applied to the wpan tree and will be
+part of the next pull request to net. Thanks!
+
+regards
+Stefan Schmidt

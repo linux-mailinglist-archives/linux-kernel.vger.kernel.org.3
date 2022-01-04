@@ -2,193 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABC624848BC
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:44:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 375904848C2
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:46:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbiADToh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 14:44:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:59821 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229861AbiADToc (ORCPT
+        id S231202AbiADTq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 14:46:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43350 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231150AbiADTqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 14:44:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641325472;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pVpW4f5n/S0S6HV+zomyaoFiFeW+Dl4rjMkt6Jm1LkE=;
-        b=fOFRMsggBXxH8Y569Ca8ODEr9rdkepCJyuQK1vYv3HsstvUUZUFBDGKNC6SM9fP4ZUI7Kt
-        1+/AAnjhTuJsgYgzfMvEXXSELjCZzIPSJlku2WMHAji7DJAo2NHrUTeHyvtEEFPIINuwXV
-        kzWhCfOygSIjNiD01hbHZ9++QuaNkhM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-155-WIKoIBCFP9SpOYXJnQ47UA-1; Tue, 04 Jan 2022 14:44:29 -0500
-X-MC-Unique: WIKoIBCFP9SpOYXJnQ47UA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 57B3181EE62;
-        Tue,  4 Jan 2022 19:44:26 +0000 (UTC)
-Received: from redhat.com (unknown [10.22.32.209])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B63CF1948C;
-        Tue,  4 Jan 2022 19:44:24 +0000 (UTC)
-Date:   Tue, 4 Jan 2022 14:44:22 -0500
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        Russell Currey <ruscur@russell.cc>
-Subject: Re: [PATCH v2 03/13] powerpc/module_32: Fix livepatching for RO
- modules
-Message-ID: <YdSjlgflqKi6Raof@redhat.com>
-References: <cover.1640017960.git.christophe.leroy@csgroup.eu>
- <d5697157cb7dba3927e19aa17c915a83bc550bb2.1640017960.git.christophe.leroy@csgroup.eu>
+        Tue, 4 Jan 2022 14:46:25 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B1CC061792
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 11:46:25 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id l10-20020a17090a384a00b001b22190e075so658922pjf.3
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 11:46:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=uThA5FJw+dwxP5q++/tTAbh+tNweLJGvh47FjBpqGRo=;
+        b=gYssr4nYDq/Y3+lyFNjL8a/kAr0+h1DoizKirqYRNxRwBPdTiOpC2fClt8PLj5PioV
+         ITC+PZlcZu6Ru2sQvwsBpdFdWpcl6hPw+yTs8CjlNZXG0tUzLuYS5hSTH00jMJAzU8UY
+         uJxWx5mPFh5+FpSj81jveeSvyh7ch4ZpVfE6Z/b9Rf8rCXbCn3UUpOljEANTHqMK7egI
+         geD2OOfkwaa+LXrqvK9mOB2dzYBX1eLpUEE/UnZRBzumC2CkSTPYLUFiskAaXd/6x0rW
+         daUjg6u1wZxKIlPUfo7/DfQgsPeQgIolcStC6AOFc9ZEhI2BE8XdUIUpT0IDPiFSagcT
+         C1Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=uThA5FJw+dwxP5q++/tTAbh+tNweLJGvh47FjBpqGRo=;
+        b=ZtHgxBKQrlPwUGKWIP2Juwxky1gnksWI/hhEHIwfqjNllFV1PPPQprfv2GSS2uFVW0
+         7uygVil9Q3lNHvKTK+Z6SDHOivEYyd6QvWmRmTw2QzKvnPQM+nJ0U/Ao4FdapnYLUdx9
+         Co2oWQttS3SVjP9BS7gyXRqyZT9hLm74kz6HGhEXdeWpsPOd5Ccz2CBrxFx6ibiqCE00
+         4bQPdB1eaNmNs6xMeVscn0uT2t9Uc1nCGlyR6D/NN9/1eLTbBY9OJs2F9Dk0WQvFvTvq
+         BZqspnHmd2TRGJD4VaRM/H8k7lpo3uTRDMvivyO6/bJRdQbLHOCeZmNFxSH2DXpj/U+9
+         kuTw==
+X-Gm-Message-State: AOAM531yuQmASsW0O8ZL9okcjUe+pqblNNjXz8+xj7t/IxrKEO/0Vv/o
+        barCGDdNGYY87+g2olijXHkSgtGT0QtFlg==
+X-Google-Smtp-Source: ABdhPJxOhvfqjVRSu3Uh0kWA/rFpq2kE/HV9U/iDlkJYMs9kVQd/lZ4z4ZSruVEzSWvKrzoEVCeAfg==
+X-Received: by 2002:a17:90b:2247:: with SMTP id hk7mr61350318pjb.126.1641325584736;
+        Tue, 04 Jan 2022 11:46:24 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id g11sm35641497pgn.26.2022.01.04.11.46.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 11:46:24 -0800 (PST)
+Date:   Tue, 4 Jan 2022 19:46:20 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yang Zhong <yang.zhong@intel.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, pbonzini@redhat.com, corbet@lwn.net,
+        shuah@kernel.org, jun.nakajima@intel.com, kevin.tian@intel.com,
+        jing2.liu@linux.intel.com, jing2.liu@intel.com,
+        guang.zeng@intel.com, wei.w.wang@intel.com
+Subject: Re: [PATCH v4 18/21] kvm: x86: Add support for getting/setting
+ expanded xstate buffer
+Message-ID: <YdSkDAruycpXhNUT@google.com>
+References: <20211229131328.12283-1-yang.zhong@intel.com>
+ <20211229131328.12283-19-yang.zhong@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <d5697157cb7dba3927e19aa17c915a83bc550bb2.1640017960.git.christophe.leroy@csgroup.eu>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211229131328.12283-19-yang.zhong@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 04:38:09PM +0000, Christophe Leroy wrote:
-> Livepatching a loaded module involves applying relocations through
-> apply_relocate_add(), which attempts to write to read-only memory when
-> CONFIG_STRICT_MODULE_RWX=y.
-> 
-> R_PPC_ADDR16_LO, R_PPC_ADDR16_HI, R_PPC_ADDR16_HA and R_PPC_REL24 are
-> the types generated by the kpatch-build userspace tool or klp-convert
-> kernel tree observed applying a relocation to a post-init module.
-> 
-> Use patch_instruction() to patch those relocations.
-> 
-> Commit 8734b41b3efe ("powerpc/module_64: Fix livepatching for
-> RO modules") did similar change in module_64.
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Cc: Russell Currey <ruscur@russell.cc>
-> ---
->  arch/powerpc/kernel/module_32.c | 44 ++++++++++++++++++++++-----------
->  1 file changed, 30 insertions(+), 14 deletions(-)
-> 
-> diff --git a/arch/powerpc/kernel/module_32.c b/arch/powerpc/kernel/module_32.c
-> index a491ad481d85..a0432ef46967 100644
-> --- a/arch/powerpc/kernel/module_32.c
-> +++ b/arch/powerpc/kernel/module_32.c
-> @@ -18,6 +18,7 @@
->  #include <linux/bug.h>
->  #include <linux/sort.h>
->  #include <asm/setup.h>
-> +#include <asm/code-patching.h>
->  
->  /* Count how many different relocations (different symbol, different
->     addend) */
-> @@ -174,15 +175,25 @@ static uint32_t do_plt_call(void *location,
->  		entry++;
+On Wed, Dec 29, 2021, Yang Zhong wrote:
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index bdf89c28d2ce..76e1941db223 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -4296,6 +4296,11 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>  		else
+>  			r = 0;
+>  		break;
+> +	case KVM_CAP_XSAVE2:
+> +		r = kvm->vcpus[0]->arch.guest_fpu.uabi_size;
+
+a) This does not compile against kvm/queue.
+
+   arch/x86/kvm/x86.c: In function ‘kvm_vm_ioctl_check_extension’:
+   arch/x86/kvm/x86.c:4317:24: error: ‘struct kvm’ has no member named ‘vcpus’
+    4317 |                 r = kvm->vcpus[0]->arch.guest_fpu.uabi_size;
+
+b) vcpu0 is not guaranteed to be non-NULL at this point.
+
+> +		if (r < sizeof(struct kvm_xsave))
+> +			r = sizeof(struct kvm_xsave);
+> +		break;
+>  	default:
+>  		break;
 >  	}
->  
-> -	entry->jump[0] = PPC_RAW_LIS(_R12, PPC_HA(val));
-> -	entry->jump[1] = PPC_RAW_ADDI(_R12, _R12, PPC_LO(val));
-> -	entry->jump[2] = PPC_RAW_MTCTR(_R12);
-> -	entry->jump[3] = PPC_RAW_BCTR();
-> +	if (patch_instruction(&entry->jump[0], ppc_inst(PPC_RAW_LIS(_R12, PPC_HA(val)))))
-> +		return 0;
-> +	if (patch_instruction(&entry->jump[1], ppc_inst(PPC_RAW_ADDI(_R12, _R12, PPC_LO(val)))))
-> +		return 0;
-> +	if (patch_instruction(&entry->jump[2], ppc_inst(PPC_RAW_MTCTR(_R12))))
-> +		return 0;
-> +	if (patch_instruction(&entry->jump[3], ppc_inst(PPC_RAW_BCTR())))
-> +		return 0;
->  
->  	pr_debug("Initialized plt for 0x%x at %p\n", val, entry);
->  	return (uint32_t)entry;
->  }
->  
-> +static int patch_location_16(uint32_t *loc, u16 value)
-> +{
-> +	loc = PTR_ALIGN_DOWN(loc, sizeof(u32));
-> +	return patch_instruction(loc, ppc_inst((*loc & 0xffff0000) | value));
-> +}
-> +
->  int apply_relocate_add(Elf32_Shdr *sechdrs,
->  		       const char *strtab,
->  		       unsigned int symindex,
-> @@ -216,37 +227,42 @@ int apply_relocate_add(Elf32_Shdr *sechdrs,
->  
->  		case R_PPC_ADDR16_LO:
->  			/* Low half of the symbol */
-> -			*(uint16_t *)location = value;
-> +			if (patch_location_16(location, PPC_LO(value)))
-> +				return -EFAULT;
->  			break;
->  
->  		case R_PPC_ADDR16_HI:
->  			/* Higher half of the symbol */
-> -			*(uint16_t *)location = (value >> 16);
-> +			if (patch_location_16(location, PPC_HI(value)))
-> +				return -EFAULT;
->  			break;
->  
->  		case R_PPC_ADDR16_HA:
-> -			/* Sign-adjusted lower 16 bits: PPC ELF ABI says:
-> -			   (((x >> 16) + ((x & 0x8000) ? 1 : 0))) & 0xFFFF.
-> -			   This is the same, only sane.
-> -			 */
-> -			*(uint16_t *)location = (value + 0x8000) >> 16;
-> +			if (patch_location_16(location, PPC_HA(value)))
-> +				return -EFAULT;
->  			break;
->  
->  		case R_PPC_REL24:
->  			if ((int)(value - (uint32_t)location) < -0x02000000
-> -			    || (int)(value - (uint32_t)location) >= 0x02000000)
-> +			    || (int)(value - (uint32_t)location) >= 0x02000000) {
->  				value = do_plt_call(location, value,
->  						    sechdrs, module);
-> +				if (!value)
-> +					return -EFAULT;
-> +			}
->  
->  			/* Only replace bits 2 through 26 */
->  			pr_debug("REL24 value = %08X. location = %08X\n",
->  			       value, (uint32_t)location);
->  			pr_debug("Location before: %08X.\n",
->  			       *(uint32_t *)location);
-> -			*(uint32_t *)location
-> -				= (*(uint32_t *)location & ~0x03fffffc)
-> +			value = (*(uint32_t *)location & ~0x03fffffc)
->  				| ((value - (uint32_t)location)
->  				   & 0x03fffffc);
-> +
-> +			if (patch_instruction(location, ppc_inst(value)))
-> +				return -EFAULT;
-> +
->  			pr_debug("Location after: %08X.\n",
->  			       *(uint32_t *)location);
->  			pr_debug("ie. jump to %08X+%08X = %08X\n",
-> -- 
-> 2.33.1
-> 
-
-IIRC, offlist we hacked up klp-convert to create the klp-relocations for
-a 32-bit target and then you hit the selftest late relocation crash, so
-I assume that part is happy after this fix. :)  Thanks again for the
-testing.
-
-For the livepatching implications,
-
-Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
-
--- Joe
-

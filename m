@@ -2,121 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A9F4843F2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:57:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B85004843F5
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:57:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234527AbiADO5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60804 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234483AbiADO4z (ORCPT
+        id S234557AbiADO5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:57:13 -0500
+Received: from mail-m17657.qiye.163.com ([59.111.176.57]:59660 "EHLO
+        mail-m17657.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234483AbiADO5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:56:55 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F773C061785
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 06:56:55 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id f134-20020a1c1f8c000000b00345c05bc12dso1583337wmf.3
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 06:56:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=EjC9RoatGf4NuVo6mZRinaRaNOZbl6EwcNrtjHiT4O4=;
-        b=pVKyM/tpT8WV2u9dQSjWb2R2+yIp2RFRzYSVHtO1Z9f1E6ly/Q+A1sfyVjPJHK8nda
-         1CJXRxRLD/OQW9iXB6ddlL2BwpjbSXUNER2HA30aAcMNpF2hWRWBjQ1MfdRgBaSszfaT
-         7gC90tLlau/wWwAL8N8gqPmmRrrwOGD9o4epZ1DKNRWUDzPi0AEY0Z1hFazx9ec6m/eg
-         0MjTRqsZiLYS/tQqN6amr22bO4z8G4xpIz9HXtXucEYIkivGLk84vl2f2pAZdOJ0EqfT
-         44zO+/qQYMZQBqdw8zLkXXo/17FcLasTNYxAPFykx6ZMU5vw3N1D12Or/eZzMTe4QhEw
-         AAug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=EjC9RoatGf4NuVo6mZRinaRaNOZbl6EwcNrtjHiT4O4=;
-        b=kqBnwsNThJetA43i6Gy7LJoqF5wkQ6VRlB+NvwOhDPA3REzWtBagl9Zi/qDY6OyOTJ
-         zBc42HITBxBFyDlcbRbqaIAW+4/cUs7ahV94d8gNr/QLbloSXOSXIiPGTuHtpPS5LjMr
-         O8LV9IlZh9ltLNCwP1lnr3FxgkV9w+5ivI0SzZO76Sa0DT9G/dk1JEInqSBWKfx8QWAO
-         XFHcNQKCB8abjwXWd6esWUFzEnp6cwMUMi0wDR5AvaWj6H3dtYcnVkF1u/qykQ2pthi+
-         Gb5flaBqmWsNlD9QywgTH8g+67iedQxiq+7Ab16zAoRy49qndFgmCI4fC3UuY7K1/Elf
-         OoRg==
-X-Gm-Message-State: AOAM530YF6+EuOFpfeE0GV9AZslG0beBnz5G3hzxQ9uCYGDtFJFmLze0
-        B4RohD7NXrW3mT61jr3VVOvyefeD7ZdB2A==
-X-Google-Smtp-Source: ABdhPJxFptGtlJldG0ByIqvEYEbbrflwjVjobp1qK+74UeP6+B5JY8OVsdELT/IyNlyDInC3z44YDQ==
-X-Received: by 2002:a1c:4c08:: with SMTP id z8mr41067300wmf.48.1641308214010;
-        Tue, 04 Jan 2022 06:56:54 -0800 (PST)
-Received: from localhost.localdomain ([2001:861:44c0:66c0:f6da:6ac:481:1df0])
-        by smtp.gmail.com with ESMTPSA id k10sm19309859wrz.113.2022.01.04.06.56.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 06:56:53 -0800 (PST)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-oxnas@groups.io,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>
-Subject: [PATCH arm-soc-next v2 3/3] ARM: dts: ox810se: Add Ethernet support
-Date:   Tue,  4 Jan 2022 15:56:46 +0100
-Message-Id: <20220104145646.135877-4-narmstrong@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220104145646.135877-1-narmstrong@baylibre.com>
-References: <20220104145646.135877-1-narmstrong@baylibre.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Tue, 4 Jan 2022 09:57:06 -0500
+DKIM-Signature: a=rsa-sha256;
+        b=WahZq+y3AikCNe/exLHi/0ybc0w3qC5cqUDbQKJ34IH0g4scsH/3VrVnU07S2VhQa5+pNwYb2J5Gebs179v7ge2CR2Sc0Jdt9B7eDoBFJCnVTuT2psbPnXxg05QUPBrngMU2ZmiB2xWCzeofEd6/RzRNyo344tHLszhpXnEFCzI=;
+        s=default; c=relaxed/relaxed; d=vivo.com; v=1;
+        bh=XTw2N7E7lKxzJ8b3zO8P0M0zLQGt1OIHCzEObglDE0c=;
+        h=date:mime-version:subject:message-id:from;
+Received: from vivo-600-G6.vivo.xyz (unknown [109.244.72.201])
+        by mail-m17657.qiye.163.com (Hmail) with ESMTPA id 824E3280162;
+        Tue,  4 Jan 2022 22:57:01 +0800 (CST)
+From:   Yaqin Pan <akingchen@vivo.com>
+To:     gregkh@linuxfoundation.org
+Cc:     akingchen@vivo.com, balbi@kernel.org, devicetree@vger.kernel.org,
+        kernel@vivo.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org
+Subject: Re: [PATCH v3 1/2] usb: dwc3: Add a quirk to set GUCTL.SPRSCTRLTRANSEN bit.
+Date:   Tue,  4 Jan 2022 22:56:55 +0800
+Message-Id: <20220104145655.4802-1-akingchen@vivo.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <YdL7iDbNk0cct1Bs@kroah.com>
+References: <YdL7iDbNk0cct1Bs@kroah.com>
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
+        kWDxoPAgseWUFZKDYvK1lXWShZQUhPN1dZLVlBSVdZDwkaFQgSH1lBWRofSx1WHUpLQ0pKS0NOSh
+        lLVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWVVLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Kww6DQw6LT5WFws*Hx4rTwkr
+        Ni0wFBxVSlVKTU9KSEtDSUlJS0lNVTMWGhIXVRoQEhUcGBMeFTsNEg0UVRgUFkVZV1kSC1lBWUpL
+        QlVJT09VTElVSUtKWVdZCAFZQU9PS0o3Bg++
+X-HM-Tid: 0a7e2597f14cda03kuws824e3280162
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add nodes for the embedded Synopsys DWMAC Ethernet controller.
+On Thu, 2022-01-03 13:35 UTC Greg Kroah-Hartman wrote:
+>On Fri, Dec 31, 2021 at 07:59:31PM +0800, Yaqin Pan wrote:
+>> On Thu, 30 Dec 2021 16:48:09 +0100 Greg Kroah-Hartman wrote:
+>> >On Thu, Dec 30, 2021 at 11:36:12PM +0800, Yaqin Pan wrote:
+>> >> On Thu, 30 Dec 2021 15:12:27 +0100 Greg Kroah-Hartman wrote:
+>> >> >> This quirk is only for dwc3 host mode.
+>> >> >> the dwc3 controller can't emurate some devices successfully.
+>> >> >> For example, TF card reader (aaaa:8816):
+>> >> >> failed log
+>> >> >> usb 1-1: new high-speed USB device number 2 using xhci-hcd
+>> >> >> usb 1-1: device descriptor read/all, error -110
+>> >> >> >From the usb analyzer, always return NAK in the data phase.
+>> >> >> if enable the GUCTL.SPRSCTRLTRANSEN bit. then the log is:
+>> >> >> usb 2-1: new high-speed USB device number 3 using xhci-hcd
+>> >> >> usb 2-1: New USB device found, idVendor=aaaa,
+>> >> >> idProduct=8816, bcdDevice=13.08
+>> >> >> usb 2-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+>> >> >> usb 2-1: Product: MXT USB Device
+>> >> >> usb 2-1: Manufacturer: MXTronics
+>> >> >> usb 2-1: SerialNumber: 150101v01
+>> >> >> usb 2-1: New USB device found, VID=aaaa, PID=8816
+>> >> >> 
+>> >> >> Some devices are slow in responding to Control transfers.
+>> >> >> Scheduling mulitiple transactions in one microframe/frame
+>> >> >> can cause the devices to misbehave. if this qurik is enabled,
+>> >> >> the host controller schedules transations for a Control transfer
+>> >> >> in defferent microframes/frame.
+>> >> >
+>> >> >If this is needed for all devices (i.e. you do not know what device is
+>> >> >going to be plugged in), why not just enable it for all controllers?
+>> >> >Why whould you NOT want this enabled?
+>> >> >
+>> >> >Or is this a broken hardware device and only specific host controllers
+>> >> >need this?  If so, how do we know which ones need this set and which do
+>> >> >not?
+>> >> 
+>> >> I think not all dwc3 controllers need this. For cell phone,customers may
+>> >> use various usb devices, we can enable this quirk to fix some compatibility
+>> >> issues. For some chip platform of qcom, i encounter this issue, not every
+>> >> platform i encounter this problem.
+>> >> 
+>> >> If enabled for all controllers, it will reduce the speed of Control transfers. 
+>> >> So i think it would be better for user to enable it by their own purposes.
+>> >
+>> >But how do hardware vendors know to enable this?  Can we trigger off of
+>> >PCI ids?  Do we need a list of quirks to show which host controllers are
+>> >broken this way?
+>> >
+>> >Burying something as basic as "reliable device connection" in a DT quirk
+>> >seems very sloppy to me.  We want reliable systems, right?
+>> 
+>> Yes, we want reliable systems. But i don't have a good ideal about this issue.
+>> when we meet this problem, and from the dwc-usb3 controller datasheet,we know
+>> enable one bit in dwc-usb3 controller's register can fixed this issue.
+>> 
+>> Of course, i can list the host controllers that i used broken this way if needed.
+>
+>Please have a list of controller that this is needed for, and add the
+>quirk for them only.  Don't require this to be in a DT file as that will
+>never be noticed.
 
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
----
- arch/arm/boot/dts/ox810se-wd-mbwe.dts |  4 ++++
- arch/arm/boot/dts/ox810se.dtsi        | 18 ++++++++++++++++++
- 2 files changed, 22 insertions(+)
+The dwc3-core i list below:
+qcom,sm8350-dwc3;
+qcom,sm7325-dwc3;
+qcom,sm6225-dwc3;
+....
+And i will try to contact with qcom for further help.
 
-diff --git a/arch/arm/boot/dts/ox810se-wd-mbwe.dts b/arch/arm/boot/dts/ox810se-wd-mbwe.dts
-index 7e2fcb220aea..c59e06ff2423 100644
---- a/arch/arm/boot/dts/ox810se-wd-mbwe.dts
-+++ b/arch/arm/boot/dts/ox810se-wd-mbwe.dts
-@@ -103,6 +103,10 @@ rtc0: rtc@48 {
- 	};
- };
- 
-+&etha {
-+	status = "okay";
-+};
-+
- &uart1 {
- 	status = "okay";
- 
-diff --git a/arch/arm/boot/dts/ox810se.dtsi b/arch/arm/boot/dts/ox810se.dtsi
-index 0755e5864c4a..96c0745f7b70 100644
---- a/arch/arm/boot/dts/ox810se.dtsi
-+++ b/arch/arm/boot/dts/ox810se.dtsi
-@@ -81,6 +81,24 @@ soc {
- 		ranges;
- 		interrupt-parent = <&intc>;
- 
-+		etha: ethernet@40400000 {
-+			compatible = "oxsemi,ox810se-dwmac", "snps,dwmac";
-+			reg = <0x40400000 0x2000>;
-+			interrupts = <8>;
-+			interrupt-names = "macirq";
-+			mac-address = [000000000000]; /* Filled in by U-Boot */
-+			phy-mode = "rgmii";
-+
-+			clocks = <&stdclk 6>, <&gmacclk>;
-+			clock-names = "gmac", "stmmaceth";
-+			resets = <&reset 6>;
-+
-+			/* Regmap for sys registers */
-+			oxsemi,sys-ctrl = <&sys>;
-+
-+			status = "disabled";
-+		};
-+
- 		apb-bridge@44000000 {
- 			#address-cells = <1>;
- 			#size-cells = <1>;
--- 
-2.25.1
+thanks,
+
+Yaqin pan
 

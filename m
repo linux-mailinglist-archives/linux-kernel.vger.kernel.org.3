@@ -2,115 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5793483D41
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 08:53:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8528483D45
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 08:54:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233733AbiADHxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 02:53:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47716 "EHLO
+        id S233743AbiADHyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 02:54:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233492AbiADHxV (ORCPT
+        with ESMTP id S232089AbiADHyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 02:53:21 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D67C061761;
-        Mon,  3 Jan 2022 23:53:21 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id g11-20020a17090a7d0b00b001b2c12c7273so1298185pjl.0;
-        Mon, 03 Jan 2022 23:53:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=yfmsxVwIeHzReYZYAuXrHEPSnFq8YqvOzxGd1jc1pgE=;
-        b=mhVXLBrnJ5mz4AAh89cglgwMJRKGk94+Zf3Z7skwSEQ2yiO4oB85IUVFFmvjb12q8e
-         tLFfk1tYPJ/mc84ICY0aNfV2UL6Oims2XFlzWPy80vwx5SV+vEa4a6YK46OUASKNSnv+
-         47xinofnb/Qxt5EddAoq6Duhmf9j3ZslBG2JASSnG7tcUBd2a0phfBGl3T+ZyHt4XjA1
-         qB1yaIDuLlOAMReH7G00Lws7/vyTYTY1tXoBtWtYX6LNEVX0KhICKz9PaICYMRXXXaU3
-         r5f3O0a9wSMDA+dQbK+5WOBpaoZFDmgMp+9iSy4XxxzyPzqO5BpeoYywxlUHpyf82S4/
-         o+aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=yfmsxVwIeHzReYZYAuXrHEPSnFq8YqvOzxGd1jc1pgE=;
-        b=fZp3Y8QQ/FryzIeRFGZrnXZ01r46mFp0MufgP3pRdut1F0lJQzVthevj5uuucVOzpX
-         iIj8507TUNzKLq1JimgItnoVpAU9HjDAJ1jZO2TMVWgtzUzj/TuxPKPYMuRGD4q3drGO
-         uOHQIrTTjxgws8Q2tiqSZHTiK3vy1TroPhiiXcPq4djcv9uIxnBFm66ZvjVF2Me1JUJo
-         SH4EyM/W84NGV63DVa7yk8O2Vq/I6X4degxNvDn5CyJ3Xnjsl1jnqCM5SPuQwhEaLmII
-         J0WIkUJ7TP85XpIU8dcaklZ5AnER/XeoYjso3rKvYKaYxxNKTmTBp8MGKL0TlTo3jp1s
-         6Shg==
-X-Gm-Message-State: AOAM53310zY0OaOpnmkTBEI21A2usEGzmKv10GvOIcfKASYcFVhmlVCu
-        fFRcVSlengZy8QYzj5hLfqM=
-X-Google-Smtp-Source: ABdhPJygFGFfdQBdf8MfkznSw7yHtZqAwT5o0FZ9IemaLgQ5L0Byiauo/IQ+E8oOAe9odzJjlJwdaw==
-X-Received: by 2002:a17:902:bb8c:b0:149:8f60:a526 with SMTP id m12-20020a170902bb8c00b001498f60a526mr31659967pls.25.1641282800842;
-        Mon, 03 Jan 2022 23:53:20 -0800 (PST)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id e7sm21070512pfv.9.2022.01.03.23.53.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jan 2022 23:53:20 -0800 (PST)
-Subject: Re: make pdfdocs fails on Debian stable
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mchehab@kernel.org
-References: <20220104064708.GA15446@lst.de>
- <8f21b702-abc2-c9aa-7593-9aff17e61ed1@gmail.com>
- <20220104073625.GA16910@lst.de>
-From:   Akira Yokosawa <akiyks@gmail.com>
-Message-ID: <df9183cc-aecb-6b8d-0580-92c2a678d69f@gmail.com>
-Date:   Tue, 4 Jan 2022 16:53:15 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 4 Jan 2022 02:54:08 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDBAC061761;
+        Mon,  3 Jan 2022 23:54:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=7JZR+ofc7UyFvHZxU4JrzGD3GHSK3kyHHLrc9YPopOI=; b=tMXyiyDU6sYA0CpXrn6aG1N7e7
+        6Aq2CSPnFwG0IdHlKvZzLnbQXhfuA4sB4iK6cS2mHrJgzJNbwkbDM5rE7zl+ii6o09//KJoqa/AdV
+        UbQptxz4X91o3uMj9GsGrYneSuC9pl/D/vXYA3DCJo8gjJfPSXYgBygqTbq4hhpS4GEXOPGyPyNtu
+        zKezFvz9N11ZQKKWYyh1MD/nvFDUuZvW6fCtqBt/HSzWf8/1WmugmC1jnFMDTstOETWhsf/7nHxkC
+        3WH6Th04blAtpaOIATs51YuVenYejLs2dAH7/pEO6QSmnOG708/4P39Ftb0Y2aibhZLSon6Byqf6N
+        4YrrAM0A==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n4edx-00AZQe-0S; Tue, 04 Jan 2022 07:54:05 +0000
+Date:   Mon, 3 Jan 2022 23:54:04 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Li Zhijian <lizhijian@fujitsu.com>
+Cc:     zyjzyj2000@gmail.com, jgg@ziepe.ca, leon@kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Li Zhijian <lizhijian@cn.fujitsu.com>
+Subject: Re: [PATCH v2] RDMA/rxe: Get rid of redundant plus
+Message-ID: <YdP9HHjeA8WPiBvf@infradead.org>
+References: <20220104012406.27580-1-lizhijian@fujitsu.com>
 MIME-Version: 1.0
-In-Reply-To: <20220104073625.GA16910@lst.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220104012406.27580-1-lizhijian@fujitsu.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jan 2022 08:36:25 +0100, Christoph Hellwig wrote:
-> On Tue, Jan 04, 2022 at 04:32:14PM +0900, Akira Yokosawa wrote:
->> I suspect you are suffering from corrupt RCU.aux (or whatever other
->> intermediate files xelatex generates).
->>
->> What happens you run
->>
->>     $ make cleandocs
->>
->> before
->>
->>     $ make SPHINXDIRS=RCU LATEXOPTS="-interaction=interactive" pdfdocs
->>
->> ?
-> 
-> The last lines of that below:
-> 
-> LaTeX Warning: Float too large for page by 8477.29312pt on input line 10581.
-> 
-> 
-> LaTeX Warning: Hyper reference `Design/Memory-Ordering/Tree-RCU-Memory-Ordering
-> :forcing-quiescent-states' on page 104 undefined on input line 10593.
-> 
-> 
-> LaTeX Warning: Float too large for page by 9533.29312pt on input line 11384.
-> 
-> 
-> LaTeX Warning: Hyper reference `Design/Memory-Ordering/Tree-RCU-Memory-Ordering
-> :forcing-quiescent-states' on page 104 undefined on input line 11394.
-> 
-> [104] [105] [106]
-> ! Dimension too large.
-> \color@b@x ... #3}\kern \fboxsep }\dimen@ \ht \z@ 
->                                                   \advance \dimen@ \fboxsep ...
-> l.12718 \end{sphinxVerbatim}
-> 
-> ? 
-> 
+On Tue, Jan 04, 2022 at 09:24:06AM +0800, Li Zhijian wrote:
+> --- a/drivers/infiniband/sw/rxe/rxe_opcode.c
+> +++ b/drivers/infiniband/sw/rxe/rxe_opcode.c
+> @@ -879,9 +879,9 @@ struct rxe_opcode_info rxe_opcode[RXE_NUM_OPCODE] = {
+>  			[RXE_ATMETH]	= RXE_BTH_BYTES
+>  						+ RXE_RDETH_BYTES
+>  						+ RXE_DETH_BYTES,
+> -			[RXE_PAYLOAD]	= RXE_BTH_BYTES +
+> +			[RXE_PAYLOAD]	= RXE_BTH_BYTES
+>  						+ RXE_ATMETH_BYTES
+> -						+ RXE_DETH_BYTES +
+> +						+ RXE_DETH_BYTES
+>  						+ RXE_RDETH_BYTES,
+>  		}
+>  	},
+> @@ -900,9 +900,9 @@ struct rxe_opcode_info rxe_opcode[RXE_NUM_OPCODE] = {
+>  			[RXE_ATMETH]	= RXE_BTH_BYTES
+>  						+ RXE_RDETH_BYTES
+>  						+ RXE_DETH_BYTES,
+> -			[RXE_PAYLOAD]	= RXE_BTH_BYTES +
+> +			[RXE_PAYLOAD]	= RXE_BTH_BYTES
+>  						+ RXE_ATMETH_BYTES
+> -						+ RXE_DETH_BYTES +
+> +						+ RXE_DETH_BYTES
+>  						+ RXE_RDETH_BYTES,
+>  		}
+>  	},
 
-Hmm, I can't reproduce this on docs-next.
-On which tree are you building RCU.pdf?
-
-        Thanks, Akira
-
+Please fix this up to always have the + on the continuing line which
+is the normal kernel style.

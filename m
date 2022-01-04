@@ -2,130 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B25484A02
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D917484A09
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:42:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234439AbiADVlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 16:41:04 -0500
-Received: from mga17.intel.com ([192.55.52.151]:22400 "EHLO mga17.intel.com"
+        id S234612AbiADVmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 16:42:24 -0500
+Received: from aposti.net ([89.234.176.197]:52028 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230306AbiADVlC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 16:41:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641332462; x=1672868462;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=V5GBLO28HA1qHefPgttUTWzbts5Zi2s1QaOWvDNcSqc=;
-  b=aGYaJ1ZoMB5hPYc1xoNM/qSEaLRg8qy9pMEvW3BWgqnRg1VrJWftfPB6
-   YP17zmOL5lp1JGvha82qaaFvn/9pPL9P6JvG/DUv18NhDUixE7ILVDIqW
-   FEkWt3O0aS/629iXE/igMKx7TQ7ACoO7pjzj9K9Pr1l6hlU7o0bCJvFtN
-   ZAM8WhBC+W1WS23ZgLjefiA8n1prctEObMWmg7vfa2A9SClol/jEGPEx+
-   /ND9h3aC7pkyukGK2N3pQFH48zLMzpF6FUSbx0a2NBOZ6gIgV8GoJETTP
-   dLpvNBFp8MXlRio3ZK+XSaxz+Lc/bIjuBzmr9w9d8lt5f0D4gDmZ7Ye+9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="222980236"
-X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
-   d="scan'208";a="222980236"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 13:41:01 -0800
-X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
-   d="scan'208";a="611227532"
-Received: from djiang5-mobl1.amr.corp.intel.com (HELO [10.212.114.22]) ([10.212.114.22])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 13:41:01 -0800
-Message-ID: <36975790-c9f8-a6f6-cbc2-493da4bdd8c1@intel.com>
-Date:   Tue, 4 Jan 2022 14:41:00 -0700
+        id S233569AbiADVmW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 16:42:22 -0500
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-pm@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 0/8] DEV_PM_OPS macros rework
+Date:   Tue,  4 Jan 2022 21:42:06 +0000
+Message-Id: <20220104214214.198843-1-paul@crapouillou.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: linux-next: manual merge of the dmaengine tree with the
- dmaengine-fixes tree
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mark Brown <broonie@kernel.org>
-References: <20211214172437.1552740-1-broonie@kernel.org>
- <CAMuHMdUQjKOp6B7_-pG8t8OzrH=H+dYjn65YMHHy7CLaw6OU1g@mail.gmail.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <CAMuHMdUQjKOp6B7_-pG8t8OzrH=H+dYjn65YMHHy7CLaw6OU1g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On 12/28/2021 2:09 AM, Geert Uytterhoeven wrote:
-> On Wed, Dec 15, 2021 at 10:53 AM <broonie@kernel.org> wrote:
->> Today's linux-next merge of the dmaengine tree got a conflict in:
->>
->>    drivers/dma/idxd/submit.c
->>
->> between commit:
->>
->>    8affd8a4b5ce3 ("dmaengine: idxd: fix missed completion on abort path")
->>
->> from the dmaengine-fixes tree and commit:
->>
->>    5d78abb6fbc97 ("dmaengine: idxd: rework descriptor free path on failure")
->>
->> from the dmaengine tree.
->>
->> I fixed it up (see below) and can carry the fix as necessary. This
->> is now fixed as far as linux-next is concerned, but any non trivial
->> conflicts should be mentioned to your upstream maintainer when your tree
->> is submitted for merging.  You may also want to consider cooperating
->> with the maintainer of the conflicting tree to minimise any particularly
->> complex conflicts.
->>
->> diff --cc drivers/dma/idxd/submit.c
->> index 83452fbbb168b,569815a84e95b..0000000000000
->> --- a/drivers/dma/idxd/submit.c
->> +++ b/drivers/dma/idxd/submit.c
->> @@@ -134,20 -120,32 +125,43 @@@ static void llist_abort_desc(struct idx
->>          spin_unlock(&ie->list_lock);
->>
->>          if (found)
->> -               complete_desc(found, IDXD_COMPLETE_ABORT);
->> +               idxd_dma_complete_txd(found, IDXD_COMPLETE_ABORT, false);
->>   +
->>   +      /*
->> -        * complete_desc() will return desc to allocator and the desc can be
->> -        * acquired by a different process and the desc->list can be modified.
->> -        * Delete desc from list so the list trasversing does not get corrupted
->> -        * by the other process.
->> ++       * completing the descriptor will return desc to allocator and
->> ++       * the desc can be acquired by a different process and the
->> ++       * desc->list can be modified.  Delete desc from list so the
->> ++       * list trasversing does not get corrupted by the other process.
-> traversing
->
->>   +       */
->>   +      list_for_each_entry_safe(d, t, &flist, list) {
->>   +              list_del_init(&d->list);
->> -               complete_desc(d, IDXD_COMPLETE_NORMAL);
->> ++              idxd_dma_complete_txd(d, IDXD_COMPLETE_NORMAL, false);
-> Is "false" correct here?
+This set of commits rework a bit the *_DEV_PM_OPS() macros that were
+introduced recently.
 
-Hi Geert, took a closer look today. I believe it should be 'true' here 
-since this is a normal completion that needs to release the descriptors. 
-Sorry about the previous incorrect response.
+- Remove the DEFINE_UNIVERSAL_DEV_PM_OPS() macro, since I highly doubt
+  anything is going to use it. The macro it replaces
+  (UNIVERSAL_DEV_PM_OPS) seems to only be used incorrectly in code that
+  hasn't been updated in ages.
+
+- Remove the static qualifier in DEFINE_SIMPLE_DEV_PM_OPS, so that the
+  macro is more in line with what's done elsewhere in the kernel.
+
+- Add a DEFINE_RUNTIME_DEV_PM_OPS() macro, for use with drivers that use
+  runtime PM, and use runtime_pm_force_suspend/runtime_pm_force_resume
+  as their system sleep callbacks.
+
+- Add EXPORT_*_DEV_PM_OPS macros, which can be used for when the
+  underlying dev_pm_ops is to be exported. With CONFIG_PM set, the
+  symbol is exported as you would expect. With CONFIG_PM disabled, the
+  dev_pm_ops is garbage-collected along with the suspend/resume
+  callbacks.
+
+- Update the two places which used DEFINE_SIMPLE_DEV_PM_OPS, to add back
+  the "static" qualifier that was stripped from the macro.
+
+- Update one driver to use EXPORT_RUNTIME_DEV_PM_OPS(), just to showcase
+  how to use this macro in the case where a dev_pm_ops is to be
+  exported.
+  Note that the driver itself is GPL, and the symbol is only used within
+  a GPL driver, so I would assume the symbol would be exported as GPL.
+  But it was not the case in the original code, so I did not change the
+  behaviour.
+
+Feedback welcome.
+
+Cheers,
+-Paul
 
 
+Paul Cercueil (8):
+  PM: core: Remove DEFINE_UNIVERSAL_DEV_PM_OPS() macro
+  PM: core: Remove static qualifier in DEFINE_SIMPLE_DEV_PM_OPS macro
+  PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS macros
+  PM: runtime: Add DEFINE_RUNTIME_DEV_PM_OPS() macro
+  PM: runtime: Add EXPORT[_GPL]_RUNTIME_DEV_PM_OPS macros
+  mmc: mxc: Make dev_pm_ops struct static
+  mmc: jz4740: Make dev_pm_ops struct static
+  iio: gyro: mpu3050: Use new PM macros
 
->
->>   +      }
->>    }
-> Gr{oetje,eeting}s,
->
->                          Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                  -- Linus Torvalds
+ drivers/iio/gyro/mpu3050-core.c | 13 +++-----
+ drivers/iio/gyro/mpu3050-i2c.c  |  2 +-
+ drivers/mmc/host/jz4740_mmc.c   |  4 +--
+ drivers/mmc/host/mxcmmc.c       |  2 +-
+ include/linux/pm.h              | 53 +++++++++++++++++++++++----------
+ include/linux/pm_runtime.h      | 21 +++++++++++++
+ 6 files changed, 67 insertions(+), 28 deletions(-)
+
+-- 
+2.34.1
+

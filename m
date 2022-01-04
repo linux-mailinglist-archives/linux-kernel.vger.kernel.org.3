@@ -2,161 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 630A7484313
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:10:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FA3D484315
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:10:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234009AbiADOKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:10:10 -0500
-Received: from mail-qt1-f173.google.com ([209.85.160.173]:40715 "EHLO
-        mail-qt1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233914AbiADOKI (ORCPT
+        id S234026AbiADOK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:10:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49902 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233914AbiADOKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:10:08 -0500
-Received: by mail-qt1-f173.google.com with SMTP id l17so34096409qtk.7;
-        Tue, 04 Jan 2022 06:10:08 -0800 (PST)
+        Tue, 4 Jan 2022 09:10:55 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA45C061761;
+        Tue,  4 Jan 2022 06:10:55 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id j21so148867155edt.9;
+        Tue, 04 Jan 2022 06:10:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=a8if7WEaBEhVlQbuJ+SPa04Tu8qGjQYQiEyoCGpJscs=;
+        b=LlMTUeV/9GIKARbHsb3fpZpO0RUVzh7cOSPcOjKUP6hxa24CW+QglTS5ELhP4Ory3F
+         rMs47ZKsA//4iiLpvwYoNxDDKW3cVFQ2ur3BDpGDoZp5IeJIrs+DSmNkgMEG80YeInBn
+         Mwkrnv13plWBsLFv5CF9LlC7Lpc+KgrNq2cU5+Tg/9G5pTPfkWHoqwWP+aUgaWhb9+I8
+         UVcFc3p386b+xnAxCMtzmXGWBmiaSge/t7tj7EvXQUhIyqt5vpX39HeYgO6SUkFT7LFr
+         J/0H2jVLu7/6wz1Fo7h2tmP6zlrWQWxieVohfQsidgYVajc7aRnowFstHbeyQL7RW9UP
+         AbXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eSJCpKrzVTZ0DRHEgcn2i6+0lS6LrPG+CWjHR6R6Hnk=;
-        b=j7p6y1MLkHA1OP2QJV6TEJWVqiXkLiZI9qs7aBQrXr39yr6zml7H+sQhQchrc11k2F
-         zpeWu/TO1r/Ug0FYAR5K6xiG2swn2OkKaaZZc05IeqQi2mfk7geRMYaibQ7oVyCW8XtP
-         eYUGUaIjhNSRXDRruPxMRrN1EFAqW4RHCYF0n0xGrlcc1ktEtMhg7boGesdsYc6FbIZ7
-         NQGj4mc0yMfdzJoSCdjeZoXPxXo+TBdipssJYY/pBQbCHAKvGBWnThR3AppOi9Uen6Sr
-         CjAK6aydpyvIrburcVnWfzMG+6Cd18agG6rDsNp1+d7e7QEXM/41b2PEoh+RN3lW2nmg
-         ix3Q==
-X-Gm-Message-State: AOAM530obTSz4uGOmhyawWAzWCw/a1hRi6MIEBhLKyWiEVyYyXJbGmcf
-        I6j3AhfRQuQGtZvXsvpT7+8OQ3KKO2IYZ/AukV4=
-X-Google-Smtp-Source: ABdhPJyCIhpgxTSRTj7lzFPUo7NOOuzxWqEwokm/Ef4PcUgUQzwerLkXpOPHVhFk7snyadHJmzuprBtVuOkv+Cc8sPE=
-X-Received: by 2002:ac8:7c4e:: with SMTP id o14mr44069322qtv.80.1641305407638;
- Tue, 04 Jan 2022 06:10:07 -0800 (PST)
-MIME-Version: 1.0
-References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien>
- <878rwdse9o.fsf@riseup.net> <alpine.DEB.2.22.394.2112281745240.24929@hadrien>
- <CAJZ5v0i4xnesG=vfx7Y-wyeaGvjDeGcsaOVqhRLnV8YXk-m2gA@mail.gmail.com>
- <alpine.DEB.2.22.394.2112281845180.24929@hadrien> <CAJZ5v0grayg9evWsB5ktKSFq=yA_AHoEWSfpSkQ=MVQ-=butfA@mail.gmail.com>
- <alpine.DEB.2.22.394.2112291012030.24929@hadrien> <CAJZ5v0g5wDxYXA-V=Ex_Md82hgnj5K6Vr0tavFFVz=uBqo8wag@mail.gmail.com>
- <alpine.DEB.2.22.394.2112301840360.15550@hadrien> <CAJZ5v0h38jh3gyTp9W0ws0yXyfK=F+TQ7VYRVx4aGXhNeSObEg@mail.gmail.com>
- <alpine.DEB.2.22.394.2112301919240.15550@hadrien> <CAJZ5v0haa5QWvTUUg+wwSHvuWyk8pic1N0kox=E1ZKNrHSFuzw@mail.gmail.com>
- <alpine.DEB.2.22.394.2112301942360.15550@hadrien> <CAJZ5v0im+Cke7tcNRav2VCyf5Qvi7qC29aF+9A1kVZZmt7cu6g@mail.gmail.com>
- <alpine.DEB.2.22.394.2201031922110.3020@hadrien> <CAJZ5v0hsCjKA3EisK9s_S8Vb9Tgm4eps1FTKvUSfd9_JPh5wBQ@mail.gmail.com>
- <alpine.DEB.2.22.394.2201032110590.3020@hadrien>
-In-Reply-To: <alpine.DEB.2.22.394.2201032110590.3020@hadrien>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 4 Jan 2022 15:09:56 +0100
-Message-ID: <CAJZ5v0hFcRWPO859YWUKLdqkTrVA1WLqRjFWg1=WS8qGG5CTkQ@mail.gmail.com>
-Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Francisco Jerez <currojerez@riseup.net>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=a8if7WEaBEhVlQbuJ+SPa04Tu8qGjQYQiEyoCGpJscs=;
+        b=ZacVRp8UJOIcc4JXJPubYN2IhBv0afZrG3gaNiULmeiwHPqARyGU2AJAKmkl/Q01Iv
+         jmNIgEoe13bbZIwa6gz0IiYSM4PIFdR73XKniK8flLPzpbHNE0UdSTXqF52FUV18qh2b
+         RoRzFtvXP6GCOv/Ve2nMFSK7YevSFdeCqY4h4OFmNUDqUx/QI5DG6Iih5g79Pl5hM74D
+         /CGZtPzGT9kmPdamChB6RCf6QvutbNXXd6njlN+eG0MWjQ00OuvQJK9RCdRXzoLgNMpb
+         XWo9P9XOZ7OY3cdxQKYoJ3PcYn2pir+reepfIdDKnDE/KWACHxG1pFVZMUioYF4iX1Sn
+         S2Xg==
+X-Gm-Message-State: AOAM533Bsate3HKVN3K4Y9TbRdwKmk5ERoz2WenPTuQE29t6/e+Uo0/0
+        TcYepYAGU35vWURWazaAqbXYHhjDvq4=
+X-Google-Smtp-Source: ABdhPJw/QS1Tmzi9VOiAvjVnenf6NETBIc1gct9VYJv38pQPfzEwAIuhrsH2fjMJdY2vR9uY2qZLLQ==
+X-Received: by 2002:a17:906:974c:: with SMTP id o12mr38346721ejy.229.1641305454089;
+        Tue, 04 Jan 2022 06:10:54 -0800 (PST)
+Received: from gmail.com (0526F11B.dsl.pool.telekom.hu. [5.38.241.27])
+        by smtp.gmail.com with ESMTPSA id u1sm14770112edp.19.2022.01.04.06.10.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 06:10:53 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Tue, 4 Jan 2022 15:10:51 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+        Thomas Gleixner <tglx@linutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: [PATCH] per_task: Remove the PER_TASK_BYTES hard-coded constant
+Message-ID: <YdRVawyDbHvI01uV@gmail.com>
+References: <YdIfz+LMewetSaEB@gmail.com>
+ <YdLL0kaFhm6rp9NS@kroah.com>
+ <YdLaMvaM9vq4W6f1@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdLaMvaM9vq4W6f1@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 3, 2022 at 9:51 PM Julia Lawall <julia.lawall@inria.fr> wrote:
->
->
->
-> On Mon, 3 Jan 2022, Rafael J. Wysocki wrote:
->
-> > On Mon, Jan 3, 2022 at 7:23 PM Julia Lawall <julia.lawall@inria.fr> wrote:
-> > >
-> > > > > > Can you please run the 32 spinning threads workload (ie. on one
-> > > > > > package) and with P-state locked to 10 and then to 20 under turbostat
-> > > > > > and send me the turbostat output for both runs?
-> > > > >
-> > > > > Attached.
-> > > > >
-> > > > > Pstate 10: spin_minmax_10_dahu-9_5.15.0freq_schedutil_11.turbo
-> > > > > Pstate 20: spin_minmax_20_dahu-9_5.15.0freq_schedutil_11.turbo
-> > > >
-> > > > Well, in  both cases there is only 1 CPU running and it is running at
-> > > > 1 GHz (ie. P-state 10) all the time as far as I can say.
-> > >
-> > > It looks better now.  I included 1 core (core 0) for pstates 10, 20, and
-> > > 21, and 32 cores (socket 0) for the same pstates.
-> >
-> > OK, so let's first consider the runs where 32 cores (entire socket 0)
-> > are doing the work.
-> >
-> > This set of data clearly shows that running the busy cores at 1 GHz
-> > takes less energy than running them at 2 GHz (the ratio of these
-> > numbers is roughly 2/3 if I got that right).  This means that P-state
-> > 10 is more energy efficient than P-state 20, as expected.
->
-> Here all the threads always spin for 10 seconds.
 
-That escaped me, sorry.
+* Ingo Molnar <mingo@kernel.org> wrote:
 
->  But if they had a fixed
-> amount of work to do, they should finish twice as fast at pstate 20.
-> Currently, we have 708J at pstate 10 and 905J at pstate 20, but if we can
-> divide the time at pstate 20 by 2, we should be around 450J, which is much
-> less than 708J.
+> There's one thing ugly about it, the fixed PER_TASK_BYTES limit, I plan 
+> to make ->per_task_array[] the last field of task_struct, i.e. change it 
+> to:
+> 
+>         u8                              per_task_area[];
+> 
+> This actually became possible through the fixing of the x86 FPU code in the 
+> following fast-headers commit:
+> 
+>    4ae0f28bc1c8 headers/deps: x86/fpu: Make task_struct::thread constant size
 
-But socket 1 is idle and only slightly affected by P-state changes in
-the range below P-state 21, so the difference that matters here is
-between socket 0 running at 1 GHz and that socket running  at 2 GHz,
-which is 420 J vs 620 J (rounded to the closest multiple of 10 J).
+So I implemented this approach - the patch below removes the PER_TASK_BYTES 
+hard-coded limit.
 
-> turbostat -J sleep 5 shows 105J, so we're still ahead.
->
-> I haven't yet tried the actual experiment of spinning for 5 seconds and
-> then sleeping for 5 seconds, though.
->
-> >
-> > However, the cost of running at 2.1 GHz is much greater than the cost
-> > of running at 2 GHz and I'm still thinking that this is attributable
-> > to some kind of voltage increase between P-state 20 and P-state 21
-> > (which, interestingly enough, affects the second "idle" socket too).
-> >
-> > In the other set of data, where only 1 CPU is doing the work, P-state
-> > 10 is still more energy-efficient than P-state 20,
->
-> Actually, this doesn't seem to be the case.  It's surely due to the
-> approximation of the result, but the consumption is slightly lower for
-> pstate 20.  With more runs it probably averages out to around the same.
+( Didn't make it variable size via per_task_area[] though - we *do* know 
+  its size after all at build time already, and known-size structures are 
+  better in general than tail-variable-array solutions:
 
-First of all, the cost of keeping a socket in the state in which CPUs
-can execute code (referred to as PS0 sometimes) is relatively large on
-that system.
+   - They work better with static checkers,
+   - and we actually want the offsets into thread_info to be small on embedded platforms
 
-Because socket 1 spending the vast majority of time in PC2 (in which
-instructions cannot be executed by the CPUs in it) consistently draws
-around 29 W when CPUs in socket 0 run at 1-2 GHz, the power needed to
-keep socket 0 in PC0 must be larger than this and it looks like it is
-around 30 W for the given range of P-states (because it cannot exceed
-the total power needed to run 1 CPU at 1 GHz). Running 1 CPU 100% busy
-on top of that makes around 1% of a difference which is likely below
-the accuracy of the power meter (ie. in the noise).
+  etc. )
 
-In the case when all of the 16 cores (32 CPUs) in socket 0 are running
-we have the 29 J drawn by socket 1 (idle), around 30 W drawn by the
-memory (on both sockets), 30 W drawn by socket 0 just because it is in
-PC0 all the time and the power drawn because the cores are actually
-running.  That last part is around 12 W when they are running at 1 GHz
-or around 32 W when they are running at 2 GHz, so if the running cores
-alone are taken into consideration, the latter is still more expensive
-after all even if work is done twice as fast then.
+Thanks,
 
-However, in practice everything counts, not just the running cores
-alone, so what is more efficient really depends on the use case.
+	Ingo
 
-For example, if it is known that at least 1 CPU will be 100% busy all
-the time, the power drawn by socket 1 (mostly in PC2), by the memory
-and in order to hold socket 0 in PC0 will need to be drawn anyway and
-in that case 1 GHz is more efficient.
+============================>
+From: Ingo Molnar <mingo@kernel.org>
+Date: Tue, 4 Jan 2022 13:48:05 +0100
+Subject: [PATCH] per_task: Remove the PER_TASK_BYTES hard-coded constant
 
-If the system as a whole can be completely idle at least from time to
-time (in which state it will draw much less power as a whole), though,
-it is likely more efficient to run the CPUs at 2 GHz.
+- Also remove the unnecessary <linux/sched/per_task_types.h> header.
+
+Not-Signed-off-by-yet: Ingo Molnar <mingo@kernel.org>
+---
+ include/linux/sched/per_task.h       | 3 ++-
+ include/linux/sched/per_task_types.h | 7 -------
+ kernel/sched/core.c                  | 4 ++++
+ 3 files changed, 6 insertions(+), 8 deletions(-)
+
+diff --git a/include/linux/sched/per_task.h b/include/linux/sched/per_task.h
+index e20837e82681..a10538713a26 100644
+--- a/include/linux/sched/per_task.h
++++ b/include/linux/sched/per_task.h
+@@ -37,7 +37,6 @@
+  * A build-time check ensures that we haven't run out of available space.
+  */
+ 
+-#include <linux/sched/per_task_types.h>
+ #include <linux/compiler.h>
+ 
+ #ifndef __PER_TASK_GEN
+@@ -61,4 +60,6 @@
+ 
+ #define per_task_container_of(var, name)	container_of((void *)(var) - per_task_offset(name), struct task_struct, per_task_area[0])
+ 
++#define PER_TASK_BYTES				(per_task_offset(_end))
++
+ #endif /* _LINUX_SCHED_PER_TASK_H */
+diff --git a/include/linux/sched/per_task_types.h b/include/linux/sched/per_task_types.h
+deleted file mode 100644
+index 8af8c10f8dae..000000000000
+--- a/include/linux/sched/per_task_types.h
++++ /dev/null
+@@ -1,7 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _LINUX_SCHED_PER_TASK_TYPES_H
+-#define _LINUX_SCHED_PER_TASK_TYPES_H
+-
+-#define PER_TASK_BYTES 8192
+-
+-#endif /* _LINUX_SCHED_PER_TASK_TYPES_H */
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index bc38b19f6398..fdb5b99ae6e0 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -89,6 +89,8 @@
+ #include "../../fs/io-wq.h"
+ #include "../smpboot.h"
+ 
++#include "../../../kernel/sched/per_task_area_struct.h"
++
+ DEFINE_PER_TASK(unsigned int,				flags);
+ 
+ #ifdef CONFIG_THREAD_INFO_IN_TASK
+@@ -9481,6 +9483,8 @@ void __init per_task_init(void)
+ {
+ 	unsigned long per_task_bytes = per_task_offset(_end);
+ 
++	printk("per_task: sizeof(struct task_struct):          %ld bytes\n", sizeof(struct task_struct));
++	printk("per_task: sizeof(struct task_struct_per_task): %ld bytes\n", sizeof(struct task_struct_per_task));
+ 	printk("per_task: Using %ld per_task bytes, %ld bytes available\n", per_task_bytes, (long)PER_TASK_BYTES);
+ 
+ 	BUG_ON(per_task_offset(_end) > PER_TASK_BYTES);

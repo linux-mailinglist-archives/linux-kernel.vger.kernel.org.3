@@ -2,63 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8B3484204
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C37148421A
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 14:08:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233257AbiADNCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 08:02:49 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:35850 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233247AbiADNCr (ORCPT
+        id S233315AbiADNIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 08:08:16 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:49696 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232078AbiADNIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 08:02:47 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 5D9D91F37F;
-        Tue,  4 Jan 2022 13:02:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1641301366; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DVLLhEQYQWh7fsPPxI8AmUA0ONkykTLg8cvTVO+Pk/U=;
-        b=I3+IEreJklrxH+PfSeSz1kn7cQukiK0NHvGC5B9p3mYoKgqj5wrmN+728hkRGpIRh68DtE
-        3v8Q1ldOXlWAGp9H0JF2UaCSeeZHmerbOJsmcvxC3KRUTdCMvnugqI78NCSvRLwPh5yIDM
-        tKps63EtVKcY9tHZamTPwIL3alJFAQg=
-Received: from suse.cz (unknown [10.100.224.162])
+        Tue, 4 Jan 2022 08:08:13 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3F7D4A3B8A;
-        Tue,  4 Jan 2022 13:02:45 +0000 (UTC)
-Date:   Tue, 4 Jan 2022 14:02:45 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the livepatching
- tree
-Message-ID: <YdRFdRx0IuPhJmTZ@alley>
-References: <20211224080027.63028aa9@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 625E96135E;
+        Tue,  4 Jan 2022 13:08:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 130B1C36AEF;
+        Tue,  4 Jan 2022 13:08:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641301692;
+        bh=mT5t79gxCgRdT1vNcMcGQnrvh/Z6pQHv2BwjqHfeFy8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fKRY9zkTPp3BP+ryztGtFWSEw0kyX0BM2Uf2v3VZK6GCUVOr6rnw3hzih2LhKe2Wi
+         YdL6yux9ihG5mBuIvYPn9TY2ER/O//0iHoOJ+kRPUZTH/pvUQr+jz5IqdmRogD9e9I
+         zMvA2mLwuJ2ds7EvjPMoNPox+9VGjjtx5nfvN100=
+Date:   Tue, 4 Jan 2022 14:04:09 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 02/14] driver core: Add dma_cleanup callback in
+ bus_type
+Message-ID: <YdRFyXWay/bdSSem@kroah.com>
+References: <20220104015644.2294354-1-baolu.lu@linux.intel.com>
+ <20220104015644.2294354-3-baolu.lu@linux.intel.com>
+ <YdQcpHrV7NwUv+qc@infradead.org>
+ <20220104123911.GE2328285@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211224080027.63028aa9@canb.auug.org.au>
+In-Reply-To: <20220104123911.GE2328285@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2021-12-24 08:00:27, Stephen Rothwell wrote:
-> Hi all,
+On Tue, Jan 04, 2022 at 08:39:11AM -0400, Jason Gunthorpe wrote:
+> On Tue, Jan 04, 2022 at 02:08:36AM -0800, Christoph Hellwig wrote:
+> > All these bus callouts still looks horrible and just create tons of
+> > boilerplate code.
 > 
-> Commit
-> 
->   bf01c2975925 ("livepatch: Fix kobject refcount bug on klp_init_patch_early failure path")
-> 
-> is missing a Signed-off-by from its committer.
+> Yes, Lu - Greg asked questions then didn't respond to their answers
+> meaning he accepts them, you should stick with the v4 version.
 
-Thanks a lot for catching this. It should be fixed now.
+Trying to catch up on emails from the break, that was way down my list
+of things to get back to as it's messy and non-obvious.  I'll revisit it
+again after 5.17-rc1 is out, this is too late for that merge window
+anyway.
 
-Best Regards,
-Petr
+thanks,
+
+greg k-h

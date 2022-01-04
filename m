@@ -2,160 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A30484A7B
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 23:10:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C1D8484A7E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 23:12:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235250AbiADWJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 17:09:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48060 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231725AbiADWJw (ORCPT
+        id S235255AbiADWMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 17:12:24 -0500
+Received: from mail-oi1-f174.google.com ([209.85.167.174]:33695 "EHLO
+        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231725AbiADWMX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 17:09:52 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC23AC061761;
-        Tue,  4 Jan 2022 14:09:51 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id k21so84827972lfu.0;
-        Tue, 04 Jan 2022 14:09:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=J+tOL9aMBTynfbO5F5IU1d3i5H7vwKI9tttVAfJxxGo=;
-        b=aS5gsRuJvKrVBvBjl/Qv/73+UDYrsukVayLyAFFOTjh2wUnczIUFg74tLFKjdTJfwB
-         NS/KZDlQDwovNy6XOSuAR78XSWkLRk3REZu0ij+7yHv7svkVMuLBsFLGz6StWpU+mR7u
-         1FVMTYxfdUo/w6ayUpQFW49HF/a7RCw3PqL+NIBzx5j+t1GP+WxsvFpzj9K4sRBq2Xvz
-         QKsgHULpYQHouP+gyBJgF4n/8UtfD52kL/00MaQzEHSerZ60+9Lnf8+h6lPR6EuFhT3L
-         DVjvsXXlM/IZmWKwQvYWQsMg78FPo7ORO+JsfCjUhqPIUN8RHMGS4Q4vawxQ6g7zHwmv
-         at5w==
+        Tue, 4 Jan 2022 17:12:23 -0500
+Received: by mail-oi1-f174.google.com with SMTP id w7so40770329oiw.0;
+        Tue, 04 Jan 2022 14:12:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=J+tOL9aMBTynfbO5F5IU1d3i5H7vwKI9tttVAfJxxGo=;
-        b=qCKoqU+16a3wuAKcm5XcMmpApH8tLFvTLvXJaY+Xt4L6sTnQSNVEiw/mFrC8gPem4o
-         Dpfb7C69f47cyS/QtcDT/yUBdEeNeaWjQb8OE2N9yvHKpMlNBXfdcolpRxIPadlx4cPQ
-         FmMHSwh7mUTqUk+dOHRD+aMRQMvV8Mxo8++CjmnRSl4aGv/8nGyT2V6Yc/GwBl0sRfp3
-         K1lFe8Ca65xfUrkbtM1vg6ePAwvjD4dc0rDhITkt782EOHSAlisf9NzXuC2gWA2be47X
-         bsvlNG8F66TWEiBToAQs+RYsoxYfXp4Z3cJ45LO23J1DhZTPkKDkT7v+f6vgTLtXl0vV
-         GM3w==
-X-Gm-Message-State: AOAM533hfGnPyqgMHX4lRd3QH/a3KX7AFe/1ofJpixdR1hwX4KR6OQ+l
-        +3WTsQ/bU1ZlHOqZ9E7Rahc=
-X-Google-Smtp-Source: ABdhPJwJjIwEF+zefQ2eGIPjV+eC1WWmcKPEqDAXegj0HkQephGbAVfsgOqZwbildelu2ACZAt/Yvw==
-X-Received: by 2002:a05:6512:3d8b:: with SMTP id k11mr44058704lfv.212.1641334190236;
-        Tue, 04 Jan 2022 14:09:50 -0800 (PST)
-Received: from [192.168.2.145] (46-138-43-24.dynamic.spd-mgts.ru. [46.138.43.24])
-        by smtp.googlemail.com with ESMTPSA id t16sm3593004ljk.28.2022.01.04.14.09.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 14:09:49 -0800 (PST)
-Subject: Re: [PATCH v2 04/35] brcmfmac: firmware: Support having multiple alt
- paths
-To:     Hector Martin <marcan@marcan.st>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Zxat3RxZ2kL6hVjxEg9Pud3VyF3p+RYKJBac3eG1N4Y=;
+        b=p6IkxNqCdDLJddUthHbejGcgv19Iocqxu5fVvM5Qscimn7QGIaQj/OMPTGbD9sbwsW
+         mZ807OKcbc7bBx6ohY5Q+rQz1EOP7QnR3/7dB4JnHLLmevqltkBc9Br7vgtU4SOPVzC4
+         vZz2J9TFTATgYBEk+7OcMuUidzdQIF2GPYdz7NTeVFzq85qh3W/moIEFd1XGhnxnNxAt
+         UweUlj9+9LADVESeG1LeiMPAWU2LFXWbHAqNIYDHCyUt+venIdoXGj3adYOtesHDHZ6J
+         E4ioULe/8lFLU/iJdBm5KDKqXKgSSB6nuZiQsHMlzAr6yf2nt8wB7CA/Ret2YlOSzz8l
+         QVmg==
+X-Gm-Message-State: AOAM533Amsbnm6R0Ye6q+htETj1YrGY/y1qq0u0R/84BvdXKbUdwibfV
+        V2RX8rHwy3TTrr9MqdhS/Hc+5RtbFA==
+X-Google-Smtp-Source: ABdhPJzKklA8L9Ga3Uu5ApL9Su61SC8+C1UDzKMN6qYRyq2KiheeDRYnHu8/n6rnH31NuYcAyKwz+Q==
+X-Received: by 2002:aca:902:: with SMTP id 2mr319380oij.79.1641334343260;
+        Tue, 04 Jan 2022 14:12:23 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id h14sm7631620otr.4.2022.01.04.14.12.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 14:12:22 -0800 (PST)
+Received: (nullmailer pid 1534010 invoked by uid 1000);
+        Tue, 04 Jan 2022 22:12:21 -0000
+Date:   Tue, 4 Jan 2022 16:12:21 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        openbmc@lists.ozlabs.org, Tomer Maimon <tmaimon77@gmail.com>,
+        Joel Stanley <joel@jms.id.au>, linux-kernel@vger.kernel.org,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com
-References: <20220104072658.69756-1-marcan@marcan.st>
- <20220104072658.69756-5-marcan@marcan.st>
- <5ddde705-f3fa-ff78-4d43-7a02d6efaaa6@gmail.com>
- <7c8d5655-a041-e291-95c1-be200233f87f@marcan.st>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <8394dbcd-f500-b1ae-fcd8-15485d8c0888@gmail.com>
-Date:   Wed, 5 Jan 2022 01:09:45 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>
+Subject: Re: [PATCH v3 4/9] dt-bindings: pinctrl: Add Nuvoton WPCM450
+Message-ID: <YdTGRY+n9XY522jg@robh.at.kernel.org>
+References: <20211224200935.93817-1-j.neuschaefer@gmx.net>
+ <20211224200935.93817-5-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
-In-Reply-To: <7c8d5655-a041-e291-95c1-be200233f87f@marcan.st>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211224200935.93817-5-j.neuschaefer@gmx.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-04.01.2022 11:43, Hector Martin пишет:
->>> +static int brcm_alt_fw_paths(const char *path, const char *board_type,
->>> +			     const char *alt_paths[BRCMF_FW_MAX_ALT_PATHS])>  {
->>>  	char alt_path[BRCMF_FW_NAME_LEN];
->>>  	const char *suffix;
->>>  
->>> +	memset(alt_paths, 0, array_size(sizeof(*alt_paths),
->>> +					BRCMF_FW_MAX_ALT_PATHS));
->> You don't need to use array_size() since size of a fixed array is
->> already known.
->>
->> memset(alt_paths, 0, sizeof(alt_paths));
-> It's a function argument, so that doesn't work and actually throws a
-> warning. Array function argument notation is informative only; they
-> behave strictly equivalent to pointers. Try it:
+On Fri, Dec 24, 2021 at 09:09:30PM +0100, Jonathan Neusch�fer wrote:
+> This binding is heavily based on the one for NPCM7xx, because the
+> hardware is similar. There are some notable differences, however:
 > 
-> $ cat test.c
-> #include <stdio.h>
+> - The addresses of GPIO banks are not physical addresses but simple
+>   indices (0 to 7), because the GPIO registers are not laid out in
+>   convenient blocks.
+> - Pinmux settings can explicitly specify that the GPIO mode is used.
 > 
-> void foo(char x[42])
-> {
-> 	printf("%ld\n", sizeof(x));
-> }
+> Certain pins support blink patterns in hardware. This is currently not
+> modelled in the DT binding.
 > 
-> int main() {
-> 	char x[42];
+> Signed-off-by: Jonathan Neusch�fer <j.neuschaefer@gmx.net>
 > 
-> 	foo(x);
-> }
-> $ gcc test.c
-> test.c: In function ‘foo’:
-> test.c:5:31: warning: ‘sizeof’ on array function parameter ‘x’ will
-> return size of ‘char *’ [-Wsizeof-array-argument]
->     5 |         printf("%ld\n", sizeof(x));
->       |                               ^
-> test.c:3:15: note: declared here
->     3 | void foo(char x[42])
->       |          ~~~~~^~~~~
-> $ ./a.out
-> 8
+> 
+> ---
+> v3:
+> - Make changes suggested by Rob Herring
+> - Fix lint errors
+> - Simplify child node patterns
+> - Remove if/type=object/then trick
+> - Reduce interrupts.maxItems to 3: 4 aren't necessary
+> - Replace list of gpio0/1/2/etc. with pattern
+> - Remove nuvoton,interrupt-map again, to simplify the binding
+> - Make tuples clearer
+> 
+> v2:
+> - https://lore.kernel.org/lkml/20211207210823.1975632-5-j.neuschaefer@gmx.net/
+> - Move GPIO into subnodes
+> - Improve use of quotes
+> - Remove unnecessary minItems/maxItems lines
+> - Remove "phandle: true"
+> - Use separate prefixes for pinmux and pincfg nodes
+> - Add nuvoton,interrupt-map property
+> - Make it possible to set pinmux to GPIO explicitly
+> 
+> v1:
+> - https://lore.kernel.org/lkml/20210602120329.2444672-5-j.neuschaefer@gmx.net/
+> ---
+>  .../pinctrl/nuvoton,wpcm450-pinctrl.yaml      | 159 ++++++++++++++++++
+>  1 file changed, 159 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml
+> new file mode 100644
+> index 0000000000000..2d15737b5815e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml
+> @@ -0,0 +1,159 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pinctrl/nuvoton,wpcm450-pinctrl.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Nuvoton WPCM450 pin control and GPIO
+> +
+> +maintainers:
+> +  - Jonathan Neusch�fer <j.neuschaefer@gmx.net>
+> +
+> +properties:
+> +  compatible:
+> +    const: nuvoton,wpcm450-pinctrl
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+> +
+> +patternProperties:
+> +  # There are three kinds of subnodes:
+> +  # 1. a GPIO controller node for each GPIO bank
+> +  # 2. a pinmux node configures pin muxing for a group of pins (e.g. rmii2)
+> +  # 3. a pinconf node configures properties of a single pin
+> +
+> +  "^gpio":
 
-Then please use "const char **alt_paths" for the function argument to
-make code cleaner and add another argument to pass the number of array
-elements.
+'^gpio@[0-7]$'
 
-static int brcm_alt_fw_paths(const char *path, const char *board_type,
-			     const char **alt_paths, unsigned int num_paths)
-{
-	size_t alt_paths_size = array_size(sizeof(*alt_paths), num_paths);
-	
-	memset(alt_paths, 0, alt_paths_size);
-}
+> +    type: object
+> +
+> +    description:
+> +      Eight GPIO banks (gpio@0 to gpio@7), that each contain between 14 and 18
+> +      GPIOs. Some GPIOs support interrupts.
+> +
+> +    properties:
+> +      reg:
+> +        description: GPIO bank number (0-7)
 
-...
+reg:
+  minimum: 0
+  maximum: 7
 
-Maybe even better create a dedicated struct for the alt_paths:
+But there's not an actual register address range you could use instead?
 
-struct brcmf_fw_alt_paths {
-	const char *alt_paths[BRCMF_FW_MAX_ALT_PATHS];
-	unsigned int index;
-};
-
-and then use the ".index" in the brcm_free_alt_fw_paths(). I suppose
-this will make code a bit nicer and easier to follow.
+> +
+> +      gpio-controller: true
+> +
+> +      "#gpio-cells":
+> +        const: 2
+> +
+> +      interrupt-controller: true
+> +
+> +      "#interrupt-cells":
+> +        const: 2
+> +
+> +      interrupts:
+> +        maxItems: 3
+> +        description:
+> +          The interrupts associated with this GPIO bank
+> +
+> +    required:
+> +      - reg
+> +      - gpio-controller
+> +      - '#gpio-cells'
+> +
+> +  "^mux-":
+> +    $ref: pinmux-node.yaml#
+> +
+> +    properties:
+> +      groups:
+> +        description:
+> +          One or more groups of pins to mux to a certain function
+> +        items:
+> +          enum: [ smb3, smb4, smb5, scs1, scs2, scs3, smb0, smb1, smb2, bsp,
+> +                  hsp1, hsp2, r1err, r1md, rmii2, r2err, r2md, kbcc, dvo,
+> +                  clko, smi, uinc, gspi, mben, xcs2, xcs1, sdio, sspi, fi0,
+> +                  fi1, fi2, fi3, fi4, fi5, fi6, fi7, fi8, fi9, fi10, fi11,
+> +                  fi12, fi13, fi14, fi15, pwm0, pwm1, pwm2, pwm3, pwm4, pwm5,
+> +                  pwm6, pwm7, hg0, hg1, hg2, hg3, hg4, hg5, hg6, hg7 ]
+> +      function:
+> +        description:
+> +          The function that a group of pins is muxed to
+> +        enum: [ smb3, smb4, smb5, scs1, scs2, scs3, smb0, smb1, smb2, bsp,
+> +                hsp1, hsp2, r1err, r1md, rmii2, r2err, r2md, kbcc, dvo0,
+> +                dvo1, dvo2, dvo3, dvo4, dvo5, dvo6, dvo7, clko, smi, uinc,
+> +                gspi, mben, xcs2, xcs1, sdio, sspi, fi0, fi1, fi2, fi3, fi4,
+> +                fi5, fi6, fi7, fi8, fi9, fi10, fi11, fi12, fi13, fi14, fi15,
+> +                pwm0, pwm1, pwm2, pwm3, pwm4, pwm5, pwm6, pwm7, hg0, hg1,
+> +                hg2, hg3, hg4, hg5, hg6, hg7, gpio ]
+> +
+> +    dependencies:
+> +      groups: [ function ]
+> +      function: [ groups ]
+> +
+> +    additionalProperties: false
+> +
+> +  "^cfg-":
+> +    $ref: pincfg-node.yaml#
+> +
+> +    properties:
+> +      pins:
+> +        description:
+> +          A list of pins to configure in certain ways, such as enabling
+> +          debouncing
+> +        items:
+> +          pattern: "^gpio1?[0-9]{1,2}$"
+> +
+> +      input-debounce: true
+> +
+> +    additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    pinctrl: pinctrl@b8003000 {
+> +      compatible = "nuvoton,wpcm450-pinctrl";
+> +      reg = <0xb8003000 0x1000>;
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      gpio0: gpio@0 {
+> +        reg = <0>;
+> +        gpio-controller;
+> +        #gpio-cells = <2>;
+> +        interrupts = <2 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <3 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <4 IRQ_TYPE_LEVEL_HIGH>;
+> +      };
+> +
+> +      mux-rmii2 {
+> +        groups = "rmii2";
+> +        function = "rmii2";
+> +      };
+> +
+> +      pinmux_uid: mux-uid {
+> +        groups = "gspi", "sspi";
+> +        function = "gpio";
+> +      };
+> +
+> +      pinctrl_uid: cfg-uid {
+> +        pins = "gpio14";
+> +        input-debounce = <1>;
+> +      };
+> +    };
+> +
+> +    gpio-keys {
+> +      compatible = "gpio-keys";
+> +      pinctrl-names = "default";
+> +      pinctrl-0 = <&pinctrl_uid>, <&pinmux_uid>;
+> +
+> +      uid {
+> +        label = "UID";
+> +        linux,code = <102>;
+> +        gpios = <&gpio0 14 GPIO_ACTIVE_HIGH>;
+> +      };
+> +    };
+> --
+> 2.30.2
+> 
+> 

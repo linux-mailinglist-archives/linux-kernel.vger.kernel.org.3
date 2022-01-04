@@ -2,79 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B474484531
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F6448451E
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 16:45:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233825AbiADPtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 10:49:11 -0500
-Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:62141
-        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230352AbiADPtJ (ORCPT
+        id S235143AbiADPpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 10:45:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235059AbiADPpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 10:49:09 -0500
-IronPort-Data: =?us-ascii?q?A9a23=3AYUT76KpX7Pi54w4vrSRUHGaGhKteBmIOZBIvgKr?=
- =?us-ascii?q?LsJaIsI5as4F+vjZLDG7QP/yMYzbyc4t3O4rnpE4AvZLRx9FgTQBkpHthQiMRo?=
- =?us-ascii?q?6IpJ/zJdxaqZ3v6wu7rFR88sZ1GMrEsFC2FJ5Pljk/F3oPJ8D8shclkepKmULS?=
- =?us-ascii?q?eYnkpGVc+IMscoUkLd9AR09cAbeeRU1vlVePa+6UzCXf9s9JGGjp8B5Gr9HuDi?=
- =?us-ascii?q?M/PVAYw5TTSUxzkUGj2zBH5BLpHTU24wuCRroN8RoZWTM6bpF21E/+wwvsjNj+?=
- =?us-ascii?q?luu6TnkwiQrfeJwmDjBK6WYDy314c9mpriP99baVHAatUo2zhc9RZyshJtJX2T?=
- =?us-ascii?q?Q42N6nIsOUbSRhRVS9kVUFD0OaZeSjh75b7I0ruNiGEL+9VJFs/M4QV/s50DHt?=
- =?us-ascii?q?I+PheLyoCBjiImvisx7C2UOR+rt4iN8T2JMUZt20I5SrDDPAnX5nYBb3D49NCw?=
- =?us-ascii?q?Sk5islmGffYetpfaDxzYRCGaBpKUn8TBZQ0tOSlnH/yd3tfsl39jbQ2+WXIzEp?=
- =?us-ascii?q?yzb3kKvLRe9qDX8ITmVyXzkrC/mLkElQCMfSBxjeftHGhnOnCmWX8Qo16PLm58?=
- =?us-ascii?q?ON6xV6e3GoeDDUIWlah5/q0kEizX5RYMUN80i8vq6c13FamQtn0Q1uzp3vslgY?=
- =?us-ascii?q?RR9dKAcU77g+Xw6bZ6grfAXILJhZDdcYn8ss7QTgr/kWEk9PgGXpkt7j9YWyc8?=
- =?us-ascii?q?LyZqy/0NjUUMXMFeQcATA0M+d6lp5s85i8j5P4L/LWd14KuX2iqmnbU/G5u2vM?=
- =?us-ascii?q?JgNBNzKuhu1bKn1qRSlHyZlZdzm3qsqiNt2uVvLKYWrE=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AEiMVIqq3h3H7HEkOOnPxhSoaV5oLeYIsimQD?=
- =?us-ascii?q?101hICG9E/bo7vxG88516faZslwssTIb6LK90dC7L080rKQV3WBzB8bAYOCFgh?=
- =?us-ascii?q?rPEGgK1+KLqAEIcBeTygcy78pdmudFebjN5PVB/KLHyRj9OewJhPOA9Lmshe/Y?=
- =?us-ascii?q?xXsodwd3cKtthj0YNu/eKDwQeDV7?=
-X-IronPort-AV: E=Sophos;i="5.88,261,1635199200"; 
-   d="scan'208";a="1608662"
-Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 16:49:07 +0100
-Date:   Tue, 4 Jan 2022 16:49:06 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-cc:     Francisco Jerez <currojerez@riseup.net>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
-In-Reply-To: <CAJZ5v0hFcRWPO859YWUKLdqkTrVA1WLqRjFWg1=WS8qGG5CTkQ@mail.gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2201041643520.3020@hadrien>
-References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien> <CAJZ5v0i4xnesG=vfx7Y-wyeaGvjDeGcsaOVqhRLnV8YXk-m2gA@mail.gmail.com> <alpine.DEB.2.22.394.2112281845180.24929@hadrien> <CAJZ5v0grayg9evWsB5ktKSFq=yA_AHoEWSfpSkQ=MVQ-=butfA@mail.gmail.com>
- <alpine.DEB.2.22.394.2112291012030.24929@hadrien> <CAJZ5v0g5wDxYXA-V=Ex_Md82hgnj5K6Vr0tavFFVz=uBqo8wag@mail.gmail.com> <alpine.DEB.2.22.394.2112301840360.15550@hadrien> <CAJZ5v0h38jh3gyTp9W0ws0yXyfK=F+TQ7VYRVx4aGXhNeSObEg@mail.gmail.com>
- <alpine.DEB.2.22.394.2112301919240.15550@hadrien> <CAJZ5v0haa5QWvTUUg+wwSHvuWyk8pic1N0kox=E1ZKNrHSFuzw@mail.gmail.com> <alpine.DEB.2.22.394.2112301942360.15550@hadrien> <CAJZ5v0im+Cke7tcNRav2VCyf5Qvi7qC29aF+9A1kVZZmt7cu6g@mail.gmail.com>
- <alpine.DEB.2.22.394.2201031922110.3020@hadrien> <CAJZ5v0hsCjKA3EisK9s_S8Vb9Tgm4eps1FTKvUSfd9_JPh5wBQ@mail.gmail.com> <alpine.DEB.2.22.394.2201032110590.3020@hadrien> <CAJZ5v0hFcRWPO859YWUKLdqkTrVA1WLqRjFWg1=WS8qGG5CTkQ@mail.gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Tue, 4 Jan 2022 10:45:20 -0500
+Received: from smtp-42a8.mail.infomaniak.ch (smtp-42a8.mail.infomaniak.ch [IPv6:2001:1600:4:17::42a8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB4CC061799;
+        Tue,  4 Jan 2022 07:45:15 -0800 (PST)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4JSxlD3GlszN3PJM;
+        Tue,  4 Jan 2022 16:45:12 +0100 (CET)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4JSxl90l7RzljnTb;
+        Tue,  4 Jan 2022 16:45:08 +0100 (CET)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Alejandro Colomar <alx.manpages@gmail.com>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Heimes <christian@python.org>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Paul Moore <paul@paul-moore.com>,
+        =?UTF-8?q?Philippe=20Tr=C3=A9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        Xiaoming Ni <nixiaoming@huawei.com>,
+        Yin Fengwei <fengwei.yin@intel.com>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [PATCH v18 0/4] Add trusted_for(2) (was O_MAYEXEC)
+Date:   Tue,  4 Jan 2022 16:50:20 +0100
+Message-Id: <20220104155024.48023-1-mic@digikod.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I tried the whole experiment again on an Intel w2155 (one socket, 10
-physical cores, pstates 12, 33, and 45).
+Hi,
 
-For the CPU there is a small jump a between 32 and 33 - less than for the
-6130.
+This new patch series moves some code (from sysctl.c to fs.c) to fit
+with the recent sysctl refactoring included in next-20220104.  As a
+result, a new patch moves back the proc_dointvec_minmax_sysadmin()
+helper to sysctl.c to make it also usable by the new fs.trusted_for
+sysctl.  I also increased the syscall IDs to align with the new
+set_mempolicy_home_node syscall.  These are cosmetic changes and I kept
+the Acked-by and Signed-off-by from the original patches.  I'd like to
+get one for the new patch moving proc_dointvec_minmax_sysadmin() though.
 
-For the RAM, there is a big jump between 21 and 22.
+This patch series has been open for review for a long time and got a lot
+of feedbacks (and bikeshedding) which were all considered.
 
-Combining them leaves a big jump between 21 and 22.
+Andrew, can you please consider to merge this into your tree?  Without
+reply and since I heard no objection, I'll go ahead and merge it in
+-next after the merge window closes.
 
-It seems that the definition of efficient is that there is no more cost
-for the computation than the cost of simply having the machine doing any
-computation at all.  It doesn't take into account the time and energy
-required to do some actual amount of work.
+Overview
+========
 
-julia
+The final goal of this patch series is to enable the kernel to be a
+global policy manager by entrusting processes with access control at
+their level.  To reach this goal, two complementary parts are required:
+* user space needs to be able to know if it can trust some file
+  descriptor content for a specific usage;
+* and the kernel needs to make available some part of the policy
+  configured by the system administrator.
+
+Primary goal of trusted_for(2)
+==============================
+
+This new syscall enables user space to ask the kernel: is this file
+descriptor's content trusted to be used for this purpose?  The set of
+usage currently only contains execution, but other may follow (e.g.
+configuration, sensitive data).  If the kernel identifies the file
+descriptor as trustworthy for this usage, user space should then take
+this information into account.  The "execution" usage means that the
+content of the file descriptor is trusted according to the system policy
+to be executed by user space, which means that it interprets the content
+or (try to) maps it as executable memory.
+
+A simple system-wide security policy can be set by the system
+administrator through a sysctl configuration consistent with the mount
+points or the file access rights.  The documentation explains the
+prerequisites.
+
+It is important to note that this can only enable to extend access
+control managed by the kernel.  Hence it enables current access control
+mechanism to be extended and become a superset of what they can
+currently control.  Indeed, the security policy could also be delegated
+to an LSM, either a MAC system or an integrity system.  For instance,
+this is required to close a major IMA measurement/appraisal interpreter
+integrity gap by bringing the ability to check the use of scripts [1].
+Other uses are expected, such as for magic-links [2], SGX integration
+[3], bpffs [4].
+
+Complementary W^X protections can be brought by SELinux, IPE [5] and
+trampfd [6].
+
+System call description
+=======================
+
+trusted_for(int fd, enum trusted_for_usage usage, u32 flags);
+
+@fd is the file descriptor to check.
+
+@usage identifies the user space usage intended for @fd: only
+TRUSTED_FOR_EXECUTION for now, but trusted_for_usage could be extended
+to identify other usages (e.g. configuration, sensitive data).
+
+@flags must be 0 for now but it could be used in the future to do
+complementary checks (e.g. signature or integrity requirements, origin
+of the file).
+
+This system call returns 0 on success, or -EACCES if the kernel policy
+denies the specified usage (which should be enforced by the caller).
+
+The first patch contains the full syscall and sysctl documentation.
+
+Prerequisite of its use
+=======================
+
+User space needs to adapt to take advantage of this new feature.  For
+example, the PEP 578 [7] (Runtime Audit Hooks) enables Python 3.8 to be
+extended with policy enforcement points related to code interpretation,
+which can be used to align with the PowerShell audit features.
+Additional Python security improvements (e.g. a limited interpreter
+without -c, stdin piping of code) are on their way [8].
+
+Examples
+========
+
+The initial idea comes from CLIP OS 4 and the original implementation
+has been used for more than 13 years:
+https://github.com/clipos-archive/clipos4_doc
+Chrome OS has a similar approach:
+https://chromium.googlesource.com/chromiumos/docs/+/master/security/noexec_shell_scripts.md
+
+Userland patches can be found here:
+https://github.com/clipos-archive/clipos4_portage-overlay/search?q=O_MAYEXEC
+Actually, there is more than the O_MAYEXEC changes (which matches this search)
+e.g., to prevent Python interactive execution. There are patches for
+Bash, Wine, Java (Icedtea), Busybox's ash, Perl and Python. There are
+also some related patches which do not directly rely on O_MAYEXEC but
+which restrict the use of browser plugins and extensions, which may be
+seen as scripts too:
+https://github.com/clipos-archive/clipos4_portage-overlay/tree/master/www-client
+
+An introduction to O_MAYEXEC was given at the Linux Security Summit
+Europe 2018 - Linux Kernel Security Contributions by ANSSI:
+https://www.youtube.com/watch?v=chNjCRtPKQY&t=17m15s
+The "write xor execute" principle was explained at Kernel Recipes 2018 -
+CLIP OS: a defense-in-depth OS:
+https://www.youtube.com/watch?v=PjRE0uBtkHU&t=11m14s
+See also a first LWN article about O_MAYEXEC and a new one about
+trusted_for(2) and its background:
+* https://lwn.net/Articles/820000/
+* https://lwn.net/Articles/832959/
+
+This can be tested with CONFIG_SYSCTL.  I would really appreciate
+constructive comments on this patch series.
+
+[1] https://lore.kernel.org/lkml/20211014130125.6991-1-zohar@linux.ibm.com/
+[2] https://lore.kernel.org/lkml/20190904201933.10736-6-cyphar@cyphar.com/
+[3] https://lore.kernel.org/lkml/CALCETrVovr8XNZSroey7pHF46O=kj_c5D9K8h=z2T_cNrpvMig@mail.gmail.com/
+[4] https://lore.kernel.org/lkml/CALCETrVeZ0eufFXwfhtaG_j+AdvbzEWE0M3wjXMWVEO7pj+xkw@mail.gmail.com/
+[5] https://lore.kernel.org/lkml/20200406221439.1469862-12-deven.desai@linux.microsoft.com/
+[6] https://lore.kernel.org/lkml/20200922215326.4603-1-madvenka@linux.microsoft.com/
+[7] https://www.python.org/dev/peps/pep-0578/
+[8] https://lore.kernel.org/lkml/0c70debd-e79e-d514-06c6-4cd1e021fa8b@python.org/
+
+Previous versions:
+v17: https://lore.kernel.org/r/20211115185304.198460-1-mic@digikod.net/
+v16: https://lore.kernel.org/r/20211110190626.257017-1-mic@digikod.net/
+v15: https://lore.kernel.org/r/20211012192410.2356090-1-mic@digikod.net/
+v14: https://lore.kernel.org/r/20211008104840.1733385-1-mic@digikod.net/
+v13: https://lore.kernel.org/r/20211007182321.872075-1-mic@digikod.net/
+v12: https://lore.kernel.org/r/20201203173118.379271-1-mic@digikod.net/
+v11: https://lore.kernel.org/r/20201019164932.1430614-1-mic@digikod.net/
+v10: https://lore.kernel.org/r/20200924153228.387737-1-mic@digikod.net/
+v9: https://lore.kernel.org/r/20200910164612.114215-1-mic@digikod.net/
+v8: https://lore.kernel.org/r/20200908075956.1069018-1-mic@digikod.net/
+v7: https://lore.kernel.org/r/20200723171227.446711-1-mic@digikod.net/
+v6: https://lore.kernel.org/r/20200714181638.45751-1-mic@digikod.net/
+v5: https://lore.kernel.org/r/20200505153156.925111-1-mic@digikod.net/
+v4: https://lore.kernel.org/r/20200430132320.699508-1-mic@digikod.net/
+v3: https://lore.kernel.org/r/20200428175129.634352-1-mic@digikod.net/
+v2: https://lore.kernel.org/r/20190906152455.22757-1-mic@digikod.net/
+v1: https://lore.kernel.org/r/20181212081712.32347-1-mic@digikod.net/
+
+Regards,
+
+Mickaël Salaün (4):
+  printk: Move back proc_dointvec_minmax_sysadmin() to sysctl.c
+  fs: Add trusted_for(2) syscall implementation and related sysctl
+  arch: Wire up trusted_for(2)
+  selftest/interpreter: Add tests for trusted_for(2) policies
+
+ Documentation/admin-guide/sysctl/fs.rst       |  50 +++
+ arch/alpha/kernel/syscalls/syscall.tbl        |   1 +
+ arch/arm/tools/syscall.tbl                    |   1 +
+ arch/arm64/include/asm/unistd.h               |   2 +-
+ arch/arm64/include/asm/unistd32.h             |   2 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |   1 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |   1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |   1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |   1 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |   1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |   1 +
+ arch/s390/kernel/syscalls/syscall.tbl         |   1 +
+ arch/sh/kernel/syscalls/syscall.tbl           |   1 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |   1 +
+ fs/open.c                                     | 133 +++++++
+ fs/proc/proc_sysctl.c                         |   2 +-
+ include/linux/syscalls.h                      |   1 +
+ include/linux/sysctl.h                        |   3 +
+ include/uapi/asm-generic/unistd.h             |   5 +-
+ include/uapi/linux/trusted-for.h              |  18 +
+ kernel/printk/sysctl.c                        |   9 -
+ kernel/sysctl.c                               |   9 +
+ tools/testing/selftests/Makefile              |   1 +
+ .../testing/selftests/interpreter/.gitignore  |   2 +
+ tools/testing/selftests/interpreter/Makefile  |  21 +
+ tools/testing/selftests/interpreter/config    |   1 +
+ .../selftests/interpreter/trust_policy_test.c | 362 ++++++++++++++++++
+ 32 files changed, 625 insertions(+), 12 deletions(-)
+ create mode 100644 include/uapi/linux/trusted-for.h
+ create mode 100644 tools/testing/selftests/interpreter/.gitignore
+ create mode 100644 tools/testing/selftests/interpreter/Makefile
+ create mode 100644 tools/testing/selftests/interpreter/config
+ create mode 100644 tools/testing/selftests/interpreter/trust_policy_test.c
+
+
+base-commit: 6b8d4927540e416878113f0f7e273ddc939291f3
+-- 
+2.34.1
+

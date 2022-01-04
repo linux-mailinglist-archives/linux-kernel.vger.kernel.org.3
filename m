@@ -2,117 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF0A484B14
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 00:11:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA61484B1E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 00:18:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236207AbiADXK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 18:10:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33764 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235297AbiADXK5 (ORCPT
+        id S236306AbiADXS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 18:18:26 -0500
+Received: from out2-smtp.messagingengine.com ([66.111.4.26]:39787 "EHLO
+        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236256AbiADXSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 18:10:57 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACDFC061761;
-        Tue,  4 Jan 2022 15:10:56 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id s1so79264465wrg.1;
-        Tue, 04 Jan 2022 15:10:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dghhemCEyLat9M9H4ByRCHavgb5QYg8+E2Svdwn+RCM=;
-        b=ZRamoy/kvpRtZQ1Yl+YjkSZARB/hyR8NDOVh1Lu731WNdUa2B5qdhmf/vnwVu6q299
-         Gg9rzjY23A0N4Lptyt5qqw2SKQjAwxGxwvK/MqUUt9bDQFY2n0jM1gtBegGJ+sdIo5wQ
-         PwFBs8Ukn0Iy2eURKY4flKTKLrjXGU+mHi/ocPlQ4IUCT+bRYKtEy727QdeN9lYLz16K
-         raFt+9x5m1i9QXfeuuHTl0K3gzvxP2UCZS2pI1vZUMyIFWi4psMKspmmVxraQQfRn+ch
-         8a8WfC9D6AefaBSGsjlN9UeDpDgoKah8+YElmH2b2ZFj2smTGjhboQzkNy9Z3KuYj1fV
-         7veA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dghhemCEyLat9M9H4ByRCHavgb5QYg8+E2Svdwn+RCM=;
-        b=TD67kUm7wAcrs9bbIoWgow6lfqMiDn6sf/WKOIuZpTV64BsJ0Wjn1xVdrwvAr5v7c/
-         ep3H9Z3mCdd1q5QfgWWWyxoHoLx6fydXxuaBqtmNXLVer2RDK7BoUbK0YY0cEDtMfWF1
-         oa/lj8/R1hk7N633nloCXH89DaQb+LEA7uZqkM15RbYrBmNrp52U9lnZzxY9oiv5irGk
-         oFR2VbPf/DOJv56AAZbblp45AZzu2rL4jtw8QzQwIZuD7qQ8Ph6bn+t4cFkaQrXs4RKS
-         f8zPhf0832Fep6nWuX/7sH2mBeUz2VewLk5mO3KKsB2h6wZyxPxKx5Pl6BsTAx7hIZVZ
-         Kwow==
-X-Gm-Message-State: AOAM53311AgHj+HnZfwD6jqXRFlrnjmYyZP4plOILNUgOiDV18fsqHTj
-        t7zPKvXHqC8paPsSHIbJI0K+t1iaBqUqP7NnAUs=
-X-Google-Smtp-Source: ABdhPJxb+I3Kfb0YlojJ6PdB1V9GVaW5OyFKDJMjRmbKiN6la6G5y/xd/zjpxWZBmjFKIf5ei98XRO5wShtxiI/+VGM=
-X-Received: by 2002:a5d:46cf:: with SMTP id g15mr45328673wrs.207.1641337855473;
- Tue, 04 Jan 2022 15:10:55 -0800 (PST)
+        Tue, 4 Jan 2022 18:18:25 -0500
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 8A3B05C017C;
+        Tue,  4 Jan 2022 18:18:24 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Tue, 04 Jan 2022 18:18:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=axVMBjIr/XhRKABCeCcLgnPbHr1
+        sgLS8A+upCHYVmH4=; b=PgJtxgwefwSS2LS81uYLAi3umYX0eSm8Abwh+YZjpKF
+        qkgUwUA4DERRhJt769aENe+T+weEJOXAu2fbWtkH08yMP0s1t6AbXpKaWDqoWZmE
+        Vaj+7NOLf/PTvVYlY5xOVE7IbPVinQywDpKYRWselp8aapQaq+PYRoIfQuaQsmdt
+        +v7vZzVYhjc6jqtCtGOilm4UcCETgtF/ZS/hLQanHNuBAUenH023kq9rYBBfC5vy
+        6UG4N/MSStSXHyB+dMNsJ2CS2p2WcPdaWF5G4oStII8eqJnrfoeTzGxZs3Dp5z1p
+        ITonEkbY6yvgSkpcHDcRihlib7loY9cQrc1uhxPcOHQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=axVMBj
+        Ir/XhRKABCeCcLgnPbHr1sgLS8A+upCHYVmH4=; b=L5I45CSFBGPgr5QAhuILtg
+        LEwRi5QDca723+K4k7bMw7do09yWruW7Hg5X46Bzj7SyGQVEmbBVxSwWesVosM4n
+        NhzQirCAbUmWNHnhcXVxHWUCJDk2o8J4aicyVc78Ffa03YxXQNtiTMjKGiY5jZJF
+        GhETTH8YKOuS2oR5RV6UICUa0gOJup9rXggnGfcVp0Frg4lAdrYQbNvw31YUlV8h
+        a4vRfRbB+MpA7Ch875PNqwMrgghcorAMY9On8nGAh4clHUCrGMZPG7RCEIOIdalr
+        P3jvQJJ52AvArGidf5UqRnTtt7vDxhH4/Ih2/0/VFDooCjXv0FpV7J+Sd3vV5vGg
+        ==
+X-ME-Sender: <xms:v9XUYddgPdlzTw0HMUfWJGw0458UwpV_3TG6zIYtg7eZ72vlVHsGXg>
+    <xme:v9XUYbOBTaQMF-Z4qGa8jYPz7r5IC0JpsaQJIJma6MYXWUgLO67R_kdJJ7Ro3y7G5
+    F6PRc5wddcrcc2KQ1c>
+X-ME-Received: <xmr:v9XUYWhj61njxHztSrTMaTNPjIM5KRRnEVq9udrCUHB4UKI84rTAKdozIC_FoIsePPIoxl0G54ICdRaaTBLm8pb93-H64WnhVyTnww>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrudefgedgtdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdlfeehmdenucfjughrpeffhffvuffkfhggtggujgesghdtreertddt
+    vdenucfhrhhomheprfgrthhrihgtkhcuhghilhhlihgrmhhsuceophgrthhrihgtkhessh
+    htfigtgidrgiihiieqnecuggftrfgrthhtvghrnhepgeehheefffegkeevhedthffgudfh
+    geefgfdthefhkedtleffveekgfeuffehtdeinecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepphgrthhrihgtkhesshhtfigtgidrgiihii
+X-ME-Proxy: <xmx:v9XUYW8vTN2cISxaV-rUqwLf6MP2xfIAaDI1-azT7y9b6-nkLijuBQ>
+    <xmx:v9XUYZuwpeR019OdUwAoU-ADZw1JUe1bR3jABq7TSdq-L_Ee96AU8Q>
+    <xmx:v9XUYVEQAvFKCSPvD264Mpt6n-GgnMgV7VW2HBibMVrsWCuiRoH92w>
+    <xmx:wNXUYdipMNB9uLf8truu575ADZ5RkeVaO-hcIGM8jmDbNx27jfsWOQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 4 Jan 2022 18:18:23 -0500 (EST)
+Date:   Tue, 4 Jan 2022 17:18:22 -0600
+From:   Patrick Williams <patrick@stwcx.xyz>
+To:     Potin Lai <potin.lai@quantatw.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: aspeed: update dts of Bletchley platform
+Message-ID: <YdTVvuXiPPRaMw99@heinlein>
+References: <20220104093008.624-1-potin.lai@quantatw.com>
 MIME-Version: 1.0
-References: <20211222155743.256280-1-miquel.raynal@bootlin.com>
- <20211222155743.256280-2-miquel.raynal@bootlin.com> <CAB_54W7BeSA+2GVzb9Yvz1kj12wkRSqHj9Ybr8cK7oYd7804RQ@mail.gmail.com>
- <20220104164449.1179bfc7@xps13> <CAB_54W6LG4SKdS4HDSj1o2A64UiA6BEv_Bh_5e9WCyyJKeAbtg@mail.gmail.com>
-In-Reply-To: <CAB_54W6LG4SKdS4HDSj1o2A64UiA6BEv_Bh_5e9WCyyJKeAbtg@mail.gmail.com>
-From:   Alexander Aring <alex.aring@gmail.com>
-Date:   Tue, 4 Jan 2022 18:10:44 -0500
-Message-ID: <CAB_54W6o-wBD2wu7sohCD0ack5PR_wqc2NqOnYC6WEVV5VF8FQ@mail.gmail.com>
-Subject: Re: [net-next 01/18] ieee802154: hwsim: Ensure proper channel
- selection at probe time
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        linux-wpan - ML <linux-wpan@vger.kernel.org>,
-        David Girault <david.girault@qorvo.com>,
-        Romuald Despres <romuald.despres@qorvo.com>,
-        Frederic Blain <frederic.blain@qorvo.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        kernel list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="W1cbhE6m1lnx5SC8"
+Content-Disposition: inline
+In-Reply-To: <20220104093008.624-1-potin.lai@quantatw.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Tue, 4 Jan 2022 at 18:08, Alexander Aring <alex.aring@gmail.com> wrote:
->
-> Hi,
->
-> On Tue, 4 Jan 2022 at 10:44, Miquel Raynal <miquel.raynal@bootlin.com> wrote:
-> >
-> > Hi Alexander,
-> >
-> > alex.aring@gmail.com wrote on Tue, 28 Dec 2021 16:05:43 -0500:
-> >
-> > > Hi,
-> > >
-> > > On Wed, 22 Dec 2021 at 10:57, Miquel Raynal <miquel.raynal@bootlin.com> wrote:
-> > > >
-> > > > A default channel is selected by default (13), let's clarify that this
-> > > > is page 0 channel 13. Call the right helper to ensure the necessary
-> > > > configuration for this channel has been applied.
-> > > >
-> > > > So far there is very little configuration done in this helper but we
-> > > > will soon add more information (like the symbol duration which is
-> > > > missing) and having this helper called at probe time will prevent us to
-> > > > this type of initialization at two different locations.
-> > > >
-> > >
-> > > I see why this patch is necessary because in later patches the symbol
-> > > duration is set at ".set_channel()" callback like the at86rf230 driver
-> > > is doing it.
-> > > However there is an old TODO [0]. I think we should combine it and
-> > > implement it in ieee802154_set_channel() of "net/mac802154/cfg.c".
-> > > Also do the symbol duration setting according to the channel/page when
-> > > we call ieee802154_register_hw(), so we have it for the default
-> > > settings.
-> >
-> > While I totally agree on the background idea, I don't really see how
-> > this is possible. Every driver internally knows what it supports but
-> > AFAIU the core itself has no easy and standard access to it?
-> >
->
-> I am a little bit confused here, because a lot of timing related
-> things in the phy information rate points to "x times symbols". If
+--W1cbhE6m1lnx5SC8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-s/rate/base/
+Hi Potin,
 
-- Alex
+A few minor comments.  You might want to leave more information in the devi=
+ce
+tree for a few of these since they seem like non-obvious settings.
+
+On Tue, Jan 04, 2022 at 05:30:08PM +0800, Potin Lai wrote:
+> updates:
+> * seperate leds into multiple groups
+> * switch sled numbering to 1-based
+> * disable inchip rtc
+> * add flash1 in fmc
+> * switch spi2 pnor using spi-gpio
+> * update gpio-line-names
+>=20
+> Signed-off-by: Potin Lai <potin.lai@quantatw.com>
+> ---
+>  .../dts/aspeed-bmc-facebook-bletchley.dts     | 277 +++++++++++-------
+>  1 file changed, 163 insertions(+), 114 deletions(-)
+>=20
+> diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts b/arch/a=
+rm/boot/dts/aspeed-bmc-facebook-bletchley.dts
+> index f973ea883b97..d617cfebcb18 100644
+> --- a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
+> +++ b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
+=2E..
+> =20
+>  &rtc {
+> -	status =3D "okay";
+> +	status =3D "disabled";
+>  };
+
+Since it is more atypical to disable the in-chip RTC would you mind leaving=
+ a
+comment in the DTS as to why?  I see we have the nxp,pcf85263 later on.
+
+>  &spi2 {
+>  	status =3D "okay";
+> -	pinctrl-names =3D "default";
+> -	pinctrl-0 =3D <&pinctrl_spi2_default>;
+> +
+> +	compatible =3D "spi-gpio";
+> +	#address-cells =3D <1>;
+> +	#size-cells =3D <0>;
+> +
+> +	gpio-sck =3D <&gpio0 ASPEED_GPIO(X, 3) GPIO_ACTIVE_HIGH>;
+> +	gpio-mosi =3D <&gpio0 ASPEED_GPIO(X, 4) GPIO_ACTIVE_HIGH>;
+> +	gpio-miso =3D <&gpio0 ASPEED_GPIO(X, 5) GPIO_ACTIVE_HIGH>;
+> +	num-chipselects =3D <1>;
+> +	cs-gpios =3D <&gpio0 ASPEED_GPIO(X, 0) GPIO_ACTIVE_LOW>;
+> =20
+>  	flash@0 {
+>  		status =3D "okay";
+>  		m25p,fast-read;
+>  		label =3D "pnor";
+> -		spi-max-frequency =3D <100000000>;
+> +		spi-max-frequency =3D <12000000>;
+>  	};
+>  };
+
+Why is this one being changed to spi-gpio?  That is significantly worse
+performance.  Is there another (non-NOR) SPI device on this bus that is mis=
+sing
+=66rom the device tree?
+
+--=20
+Patrick Williams
+
+--W1cbhE6m1lnx5SC8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAmHU1bwACgkQqwNHzC0A
+wRm1Vg//bMJ6Nm1kWD23OZ+wx3jg/9vRCWRaq+BJPYvMqgPSsoIaUw9l17lb5Z9s
+f7+TS0B02/BtDf6e+LmC2vpAhphEREOglK/KWQAwLwniKhdvybmrjycJFvMF7PGB
+RdejodtBRLg6ZilwBgZtrUTwqm4qEqUZvXMjVLEgmlE1igyU5N02Ak2fILSSQMLi
+l6QmeTcS0OlRwp5Y3RGumCqZ6usRl/NPNmH7RJmAbWvTnbORUiSCHLp8Jvmn4Lzh
+h/C37zb9wqIbC4346AeV7ds44ms4kC+iwuifKAfAizMXwWDjaz/Vi1nfOHePj9Kx
+AhxrhwBRQYOD0XPXLFQpHpJvC6fpUbB7fSpxJqbSVByM+r/e6BkP5OcfacY9EOvC
+4VnMsiAW3atzr6/JdUkqu7KhhleT3N8/y6X2xSzwbrrivqGSIOcPFpRXbTkJCHWb
+qh1ZfCpE4O26T8c+2Nf4EY0ZAzHz0PQxrIIiA9A+McaBhDSE9ZAlrCXDuR8+1I5Q
+HsU8FE7nmlqTrZ/2rw8jzTFiom1jzzQ7KJl2oNsMXUJyCGaS3ZgnjLmcZL43snza
+zrgpPyIt5Q/aFL0bJjHA9EitroG1AneUWEuxUbzz47h/8HNVaL9O10NWzWmZjQxB
+OFADq6a+vd7veiUygTG4cfMt1mBTWyXK32bOgNTWVOqgHpGz9KE=
+=asHv
+-----END PGP SIGNATURE-----
+
+--W1cbhE6m1lnx5SC8--

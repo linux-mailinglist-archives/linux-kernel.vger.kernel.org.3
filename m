@@ -2,109 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 443CE483AAB
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 03:46:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BC3C483AAE
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 03:49:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231345AbiADCqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 21:46:38 -0500
-Received: from mga17.intel.com ([192.55.52.151]:30082 "EHLO mga17.intel.com"
+        id S231404AbiADCtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 3 Jan 2022 21:49:17 -0500
+Received: from mx1.cqplus1.com ([113.204.237.245]:40234 "EHLO mx1.cqplus1.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230296AbiADCqi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 21:46:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641264398; x=1672800398;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=H96Tm0F+TQLNdpxg3zs/3n8g4VOZzuPmeC4q3qc1jM8=;
-  b=PMmUA9fk4QP3P/CYJYm9OwRfRPXXovEZKt5nQ+JeiMgbXVHE1TLcF7hx
-   S9zy+LXZoL8wGipnMSfxmgJErJMHWrPTTsVkX6Qt0CP42aTgAaOs8GoRS
-   qyzYZMadcthr0NZY7cLQsMJIN0nQyM8F4kni//ImPilMcWZQmQoRDChM2
-   bxHAtGKPgFvCXpfGE5pnamsuAZV9gHxJVM7Lmq+Vh1ksZaAhc3MwjX0Zb
-   SPzHaHJgdi2j+DSbzz5YAmn4BrTCBhx4dkawWkIFhfU5owO/RKbMQCqi6
-   DPJX6nFs2BRvretLXdEYMMY2wom7vSlDZeI+YfZalDyYbolgqiV9sT0Xi
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="222817884"
-X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="222817884"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 18:46:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="610923983"
-Received: from louislifei-optiplex-7050.sh.intel.com (HELO louislifei-OptiPlex-7050) ([10.239.154.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 03 Jan 2022 18:46:36 -0800
-Date:   Tue, 4 Jan 2022 10:47:29 +0800
-From:   Li Fei1 <fei1.li@intel.com>
-To:     Zhou Qingyang <zhou1615@umn.edu>
-Cc:     kjlu@umn.edu, reinette.chatre@intel.com, zhi.a.wang@intel.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        fei1.li@intel.com
-Subject: Re: [PATCH] virt: acrn: fix a memory leak bug in acrn_dev_ioctl()
-Message-ID: <20220104024729.GA26952@louislifei-OptiPlex-7050>
-References: <20220104023439.33754-1-zhou1615@umn.edu>
+        id S229705AbiADCtR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 21:49:17 -0500
+X-MailGates: (flag:1,DYNAMIC,RELAY,NOHOST,LAN:PASS)(compute_score:DELIVE
+        R,40,3)
+Received: from 172.27.96.203
+        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(24939:0:AUTH_RELAY)
+        (envelope-from <xt.hu@cqplus1.com>); Tue, 04 Jan 2022 10:48:16 +0800 (CST)
+Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
+ CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 4 Jan 2022 10:48:17 +0800
+Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
+ ([::1]) with mapi id 15.01.2375.017; Tue, 4 Jan 2022 10:48:17 +0800
+From:   =?utf-8?B?eHQuaHVb6IOh5YWI6Z+sXQ==?= <xt.hu@cqplus1.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
+        =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
+Subject: RE: [PATCH v4 2/2] watchdog: Add watchdog driver for Sunplus SP7021
+Thread-Topic: [PATCH v4 2/2] watchdog: Add watchdog driver for Sunplus SP7021
+Thread-Index: AQHX/HdP855TMpH9jEyra1LjiDLk4axPU+mAgALb2gA=
+Date:   Tue, 4 Jan 2022 02:48:17 +0000
+Message-ID: <eae1abf41ef44f1186c6c781a15516c9@cqplus1.com>
+References: <20211229054308.63168-1-xt.hu@cqplus1.com>
+ <20211229054308.63168-3-xt.hu@cqplus1.com>
+ <20220102150027.GA2806117@roeck-us.net>
+In-Reply-To: <20220102150027.GA2806117@roeck-us.net>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.28.110.16]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220104023439.33754-1-zhou1615@umn.edu>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 10:34:39AM +0800, Zhou Qingyang wrote:
-> In acrn_dev_ioctl(), vm_param is not released or passed out on the 
-> error path of "if ((vm_param->reserved0 | vm_param->reserved1) != 0)", 
-> which could lead to a memory leak.
-> 
-> Fix this bug by adding a kfree of vm_param on the error path.
-> 
-> This bug was found by a static analyzer.
-> 
-> Builds with CONFIG_ACRN_GUEST=y, CONFIG_ACRN_HSM=y show no new warnings, 
-> and our static analyzer no longer warns about this code.
-> 
-> Fixes: 9c5137aedd11 (“9c5137aedd11 virt: acrn: Introduce VM management interfaces”)
-> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-> ---
-> The analysis employs differential checking to identify inconsistent
-> security operations (e.g., checks or kfrees) between two code paths
-> and confirms that the inconsistent operations are not recovered in 
-> the current function or the callers, so they constitute bugs. 
-> 
-> Note that, as a bug found by static analysis, it can be a false
-> positive or hard to trigger. Multiple researchers have cross-reviewed
-> the bug.
-> 
-Hi Qingyang
-
-Thanks a lot to fix this issue. Would you please to help to fix the same issue
-in ACRN_IOCTL_SET_VCPU_REGS case ?
-
-
->  drivers/virt/acrn/hsm.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/virt/acrn/hsm.c b/drivers/virt/acrn/hsm.c
-> index 5419794fccf1..205f4c637556 100644
-> --- a/drivers/virt/acrn/hsm.c
-> +++ b/drivers/virt/acrn/hsm.c
-> @@ -136,9 +136,11 @@ static long acrn_dev_ioctl(struct file *filp, unsigned int cmd,
->  		if (IS_ERR(vm_param))
->  			return PTR_ERR(vm_param);
->  
-> -		if ((vm_param->reserved0 | vm_param->reserved1) != 0)
-> -			return -EINVAL;
-> -
-> +		if ((vm_param->reserved0 | vm_param->reserved1) != 0) {
-> +			ret = -EINVAL;
-> +			kfree(vm_param);
-> +			break;
-> +		}
->  		vm = acrn_vm_create(vm, vm_param);
->  		if (!vm) {
->  			ret = -EINVAL;
-> -- 
-> 2.25.1
-> 
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBHdWVudGVyIFJvZWNrIFttYWls
+dG86Z3JvZWNrN0BnbWFpbC5jb21dIE9uIEJlaGFsZiBPZiBHdWVudGVyIFJvZWNrDQo+IFNlbnQ6
+IFN1bmRheSwgSmFudWFyeSAyLCAyMDIyIDExOjAwIFBNDQo+IFRvOiB4dC5odVvog6HlhYjpn6xd
+IDx4dC5odUBjcXBsdXMxLmNvbT4NCj4gQ2M6IHdpbUBsaW51eC13YXRjaGRvZy5vcmc7IHAuemFi
+ZWxAcGVuZ3V0cm9uaXguZGU7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7DQo+IGxpbnV4
+LXdhdGNoZG9nQHZnZXIua2VybmVsLm9yZzsgcm9iaCtkdEBrZXJuZWwub3JnOyBkZXZpY2V0cmVl
+QHZnZXIua2VybmVsLm9yZzsgV2VsbHMgTHUg5ZGC6Iqz6aiwDQo+IDx3ZWxscy5sdUBzdW5wbHVz
+LmNvbT47IHFpbmppYW5b6KaD5YGlXSA8cWluamlhbkBjcXBsdXMxLmNvbT4NCj4gU3ViamVjdDog
+UmU6IFtQQVRDSCB2NCAyLzJdIHdhdGNoZG9nOiBBZGQgd2F0Y2hkb2cgZHJpdmVyIGZvciBTdW5w
+bHVzIFNQNzAyMQ0KPiANCj4gT24gV2VkLCBEZWMgMjksIDIwMjEgYXQgMDE6NDM6MDhQTSArMDgw
+MCwgWGlhbnRhbyBIdSB3cm90ZToNCj4gPiBTdW5wbHVzIFNQNzAyMSByZXF1aXJlcyB3YXRjaGRv
+ZyB0aW1lciBzdXBwb3J0Lg0KPiA+IEFkZCB3YXRjaGRvZyBkcml2ZXIgdG8gZW5hYmxlIHRoaXMu
+DQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBYaWFudGFvIEh1IDx4dC5odUBjcXBsdXMxLmNvbT4N
+Cj4gPiAtLS0NCj4gPiBDaGFuZ2VzIGluIHY0DQo+ID4gIC0gRHJvcCB0aGUgdW51c2VkIHZhcmli
+bGUgc3RydWN0IHJlc291cmNlICp3ZHRfcmVzLg0KPiA+ICAtIERyb3AgdGhlIG9wZXJhdGlvbnMg
+cmVsYXRlZCB0byBhZGRyZXNzIDB4OWMwMDAyNzQuDQo+ID4gICAgUHV0IGl0IGluIGJvb3Rsb2Fk
+ZXIgYmVmb3JlIGVudHJ5IGtlcm5lbCBib290IGluIHYzLg0KPiA+DQo+ID4uLi4NCj4gPiArew0K
+PiA+ICsJd2Rldi0+dGltZW91dCA9IHRpbWVvdXQ7DQo+ID4gKwlzcF93ZHRfcGluZyh3ZGV2KTsN
+Cj4gDQo+IFRoaXMgaXMgZXhhY3RseSB3aGF0IHRoZSBjYWxsaW5nIGNvZGUgZG9lcyBpZiB0aGVy
+ZSBpcyBubyBzZXRfdGltZW91dA0KPiBmdW5jdGlvbiwgc28geW91IGNhbiBqdXN0IGRyb3AgdGhp
+cyBmdW5jdGlvbiwNCj4gDQoNCk9LLiBJIHdpbGwgZHJvcCBpdC4NCg0KPiA+IC4uLg0KPiA+ICsN
+Cj4gPiArCWVyciA9IGNsa19wcmVwYXJlX2VuYWJsZShwcml2LT5jbGspOw0KPiA+ICsJaWYgKGVy
+cikgew0KPiA+ICsJCWRldl9lcnIoZGV2LCAiQ2xvY2sgY2FuJ3QgYmUgZW5hYmxlZCBjb3JyZWN0
+bHlcbiIpOw0KPiA+ICsJCXJldHVybiBlcnI7DQo+ID4gKwl9DQo+ID4gKw0KPiA+ICsJLyogVGhl
+IHRpbWVyIGFuZCB3YXRjaGRvZyBzaGFyZWQgdGhlIFNUQyByZXNldCAqLw0KPiA+ICsJcHJpdi0+
+cnN0YyA9IGRldm1fcmVzZXRfY29udHJvbF9nZXRfc2hhcmVkKGRldiwgTlVMTCk7DQo+ID4gKwlp
+ZiAoIUlTX0VSUihwcml2LT5yc3RjKSkNCj4gPiArCQlyZXNldF9jb250cm9sX2RlYXNzZXJ0KHBy
+aXYtPnJzdGMpOw0KPiA+ICsNCj4gPiArCWVyciA9IGRldm1fYWRkX2FjdGlvbl9vcl9yZXNldChk
+ZXYsIHNwX3Jlc2V0X2NvbnRyb2xfYXNzZXJ0LA0KPiA+ICsJCQkJICAgICAgIHByaXYtPnJzdGMp
+Ow0KPiA+ICsJaWYgKGVycikNCj4gPiArCQlyZXR1cm4gZXJyOw0KPiA+ICsNCj4gDQo+IGRldm1f
+YWRkX2FjdGlvbl9vcl9yZXNldCgpIGFib3ZlIHNob3VsZCBvbmx5IGJlIGNhbGxlZCBpZg0KPiBk
+ZXZtX3Jlc2V0X2NvbnRyb2xfZ2V0X3NoYXJlZCBzdWNjZWVkcy4NCj4gDQoNCk9LLiBJIHdpbGwg
+bW9kaWZ5IGl0Lg0KDQo+ID4gKwllcnIgPSBkZXZtX2FkZF9hY3Rpb25fb3JfcmVzZXQoZGV2LCBz
+cF9jbGtfZGlzYWJsZV91bnByZXBhcmUsDQo+ID4gKwkJCQkgICAgICAgcHJpdi0+Y2xrKTsNCj4g
+DQo+IFRoaXMgc2hvdWxkIGJlIGNhbGxlZCBpbW1lZGlhdGVseSBhZnRlciBjbGtfcHJlcGFyZV9l
+bmFibGUoKS4NCj4gDQoNCk9LLiBJIHdpbGwgbW9kaWZ5IGl0Lg0KDQo+ID4gKwlpZiAoZXJyKQ0K
+PiA+ICsJCXJldHVybiBlcnI7DQo+ID4gLi4uDQo=

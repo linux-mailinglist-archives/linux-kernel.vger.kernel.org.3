@@ -2,106 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF5A48438A
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:40:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 635B848438D
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 15:41:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234219AbiADOkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 09:40:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbiADOka (ORCPT
+        id S234295AbiADOk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 09:40:59 -0500
+Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:40138 "EHLO
+        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234240AbiADOk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 09:40:30 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497D6C061761;
-        Tue,  4 Jan 2022 06:40:30 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id k21so82250723lfu.0;
-        Tue, 04 Jan 2022 06:40:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ab0QEwSG8BDrjyDLCDXwNE8BTCoNpJU2Z1rDY4OSSxE=;
-        b=e+q02a2rXSOjPnMB0dV8zMxim3mBRFx1VQtORwuBbjRX2FAvV5pEuHPkatffBdMmgo
-         4sMS5cE/tc5DGUz02Q3QjXAysthquwNijVOyQwePvqzEvhixdibVjDDasIDPjOvfZ6Rs
-         KwDX+Gah7qTNOxCiv/zm1jhXHMVr2NARXpG9mfVbXN5k97rKv6tVQs8uOwQRZryDigG3
-         +Y/EAFGKCPggBp0pwHDbHq3Kwoj01DlhXa7LCKUrvUq1lGk2upcXhN82Jt1PgpPqP3mJ
-         m89rcQAkSS/GRQno0rFSxKMfcqYnFxHZw39+sUy+7eiwiOrtbp8tptmTck/v9xsTF5GL
-         s34Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ab0QEwSG8BDrjyDLCDXwNE8BTCoNpJU2Z1rDY4OSSxE=;
-        b=pNZKgHb9pcOc8LLeD4dM0zHAN716qWXzBbdKp3BGe5nXTz9Z9n3vY0iQHP0CSBLTHO
-         YthquJvvdDD+Nunxa+UPGASi/kmgfd7Nlm/OEDRYxiHws7gc9mAZnReKv2fLB374vKMF
-         HJ4dRhb9kgY627pemdIluy1SA6HBbSjQX2reXWkzBXO79w28t4r1n/A9bD6oz2Ir3KS+
-         WfRCe7Hy4LoXY8DV63KXbjv9Xxo+RlAasueW6Vt0wl6iYfpIXoU63+wWX9KsG57t+pxN
-         9KxgAHL4Yn4KWdo+jjUQBoParA4dazBaqsEHzPQVOb7q9I+EBLBQ3K4NDdi3FS9pK/Tn
-         DUUA==
-X-Gm-Message-State: AOAM533GVfTpsHKIYmAglDhGk/gINA5OAYDxlfIlXsOHUfD56XzhcvLo
-        dTfJV3oMdDzdaRPvVpNgtSjorAWzL4pprX1iBOE=
-X-Google-Smtp-Source: ABdhPJzaYz/XADZmxyEUH6OZK0zIxPj18T6xcN8ral7c+XVMFRFcmIezdaSIlqj/SyFxJicBnFbgV9ui4amstJ8bF8w=
-X-Received: by 2002:a05:6512:2249:: with SMTP id i9mr44883667lfu.100.1641307228600;
- Tue, 04 Jan 2022 06:40:28 -0800 (PST)
+        Tue, 4 Jan 2022 09:40:58 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R601e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0V0y0W7N_1641307254;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V0y0W7N_1641307254)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 04 Jan 2022 22:40:56 +0800
+Date:   Tue, 4 Jan 2022 22:40:54 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Jeffle Xu <jefflexu@linux.alibaba.com>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
+        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
+        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 13/23] erofs: implement fscache-based data read
+Message-ID: <YdRcdqIUkqIIw6EP@B-P7TQMD6M-0146.local>
+Mail-Followup-To: Jeffle Xu <jefflexu@linux.alibaba.com>,
+        dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
+        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
+        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
+        linux-kernel@vger.kernel.org
+References: <20211227125444.21187-1-jefflexu@linux.alibaba.com>
+ <20211227125444.21187-14-jefflexu@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20220104135328.604-1-yuehaibing@huawei.com>
-In-Reply-To: <20220104135328.604-1-yuehaibing@huawei.com>
-From:   Aleksandr Mezin <mezin.alexander@gmail.com>
-Date:   Tue, 4 Jan 2022 20:40:17 +0600
-Message-ID: <CADnvcf+xszorFKv72wf0AMnNwr0r7O+2-KQWSt6tqaGzNKcUpg@mail.gmail.com>
-Subject: Re: [PATCH -next] hwmon: (nzxt-smart2) Fix build with CONFIG_PM=n
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211227125444.21187-14-jefflexu@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 4, 2022 at 7:54 PM YueHaibing <yuehaibing@huawei.com> wrote:
->
-> drivers/hwmon/nzxt-smart2.c:707:12: error: 'nzxt_smart2_hid_reset_resume' defined but not used [-Werror=unused-function]
->   707 | static int nzxt_smart2_hid_reset_resume(struct hid_device *hdev)
->       |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> Move it into #ifdef block to fix this.
->
-> Fixes: 0e43f31ee52f ("hwmon: add driver for NZXT RGB&Fan Controller/Smart Device v2.")
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+On Mon, Dec 27, 2021 at 08:54:34PM +0800, Jeffle Xu wrote:
+> This patch implements the data plane of reading data from bootstrap blob
+> file over fscache.
+> 
+> Be noted that currently compressed layout is not supported yet.
+> 
+> Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
 > ---
->  drivers/hwmon/nzxt-smart2.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
-> index 534d39b8908e..4963d630394a 100644
-> --- a/drivers/hwmon/nzxt-smart2.c
-> +++ b/drivers/hwmon/nzxt-smart2.c
-> @@ -704,6 +704,7 @@ static int nzxt_smart2_hid_raw_event(struct hid_device *hdev,
->         return 0;
+>  fs/erofs/fscache.c  | 91 +++++++++++++++++++++++++++++++++++++++++++++
+>  fs/erofs/inode.c    |  6 ++-
+>  fs/erofs/internal.h |  1 +
+>  3 files changed, 97 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
+> index 325f5663836b..bfcec831d58a 100644
+> --- a/fs/erofs/fscache.c
+> +++ b/fs/erofs/fscache.c
+> @@ -65,6 +65,97 @@ struct page *erofs_readpage_from_fscache(struct erofs_cookie_ctx *ctx,
+>  	return page;
 >  }
->
-> +#ifdef CONFIG_PM
->  static int nzxt_smart2_hid_reset_resume(struct hid_device *hdev)
->  {
->         struct drvdata *drvdata = hid_get_drvdata(hdev);
-> @@ -720,6 +721,7 @@ static int nzxt_smart2_hid_reset_resume(struct hid_device *hdev)
->
->         return init_device(drvdata, drvdata->update_interval);
->  }
-> +#endif
->
->  static int nzxt_smart2_hid_probe(struct hid_device *hdev,
->                                  const struct hid_device_id *id)
-> --
-> 2.17.1
->
+>  
+> +static inline void do_copy_page(struct page *from, struct page *to,
+> +				size_t offset, size_t len)
+> +{
+> +	char *vfrom, *vto;
+> +
+> +	vfrom = kmap_atomic(from);
+> +	vto = kmap_atomic(to);
+> +	memcpy(vto, vfrom + offset, len);
+> +	kunmap_atomic(vto);
+> +	kunmap_atomic(vfrom);
+> +}
+> +
+> +static int erofs_fscache_do_readpage(struct file *file, struct page *page)
+> +{
+> +	struct inode *inode = page->mapping->host;
+> +	struct erofs_inode *vi = EROFS_I(inode);
+> +	struct super_block *sb = inode->i_sb;
+> +	struct erofs_map_blocks map;
+> +	erofs_off_t o_la, pa;
+> +	size_t offset, len;
+> +	struct page *ipage;
+> +	int ret;
+> +
+> +	if (erofs_inode_is_data_compressed(vi->datalayout)) {
+> +		erofs_info(sb, "compressed layout not supported yet");
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	o_la = page_offset(page);
+> +	map.m_la = o_la;
+> +
+> +	ret = erofs_map_blocks(inode, &map, EROFS_GET_BLOCKS_RAW);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (!(map.m_flags & EROFS_MAP_MAPPED)) {
+> +		zero_user(page, 0, PAGE_SIZE);
+> +		return 0;
+> +	}
+> +
+> +	/*
+> +	 * 1) For FLAT_PLAIN/FLAT_INLINE layout, the output map.m_la shall be
+> +	 * equal to o_la, and the output map.m_pa is exactly the physical
+> +	 * address of o_la.
+> +	 * 2) For CHUNK_BASED layout, the output map.m_la is rounded down to the
+> +	 * nearest chunk boundary, and the output map.m_pa is actually the
+> +	 * physical address of this chunk boundary. So we need to recalculate
+> +	 * the actual physical address of o_la.
+> +	 */
+> +	pa = map.m_pa + o_la - map.m_la;
+> +
+> +	ipage = erofs_get_meta_page(sb, erofs_blknr(pa));
+> +	if (IS_ERR(ipage))
+> +		return PTR_ERR(ipage);
+> +
+> +	/*
+> +	 * @offset refers to the page offset inside @ipage.
+> +	 * 1) Except for the inline layout, the offset shall all be 0, and @pa
+> +	 * shall be aligned with EROFS_BLKSIZ in this case. Thus we can
+> +	 * conveniently get the offset from @pa.
+> +	 * 2) While for the inline layout, the offset may be non-zero. Since
+> +	 * currently only flat layout supports inline, we can calculate the
+> +	 * offset from the corresponding physical address.
+> +	 */
+> +	offset = erofs_blkoff(pa);
+> +	len = min_t(u64, map.m_llen, PAGE_SIZE);
+> +
+> +	do_copy_page(ipage, page, offset, len);
 
-Hi.
+If my understanding is correct, I still have no idea why we need to
+copy data here even if fscache can do direct I/O for us without extra
+efforts.
 
-It's already fixed:
-https://lore.kernel.org/all/20211228014813.832491-1-mezin.alexander@gmail.com/
-(and already in linux-next:
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/drivers/hwmon/nzxt-smart2.c?id=f103b2e5a6197586effb0b9a1b72c30b5d65b0cd
-)
+I think the only case would be tail-packing inline (which should go
+through metadata path), otherwise, all data is block-aligned. So
+fscache can handle it directly.
+
+Thanks,
+Gao Xiang

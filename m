@@ -2,102 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A833484955
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 21:31:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3BF2484957
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 21:35:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232879AbiADUbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 15:31:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53910 "EHLO
+        id S232714AbiADUfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 15:35:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232255AbiADUbp (ORCPT
+        with ESMTP id S232133AbiADUe7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 15:31:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AF0C061761;
-        Tue,  4 Jan 2022 12:31:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 626DB6157D;
-        Tue,  4 Jan 2022 20:31:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CACCCC36AED;
-        Tue,  4 Jan 2022 20:31:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641328304;
-        bh=iAG8B3ZpKh/tvy6iG5URP7IbImgaSPzk9TUk4eHefQg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Yi7zREne0VxnunBWcxx0IIhDo5zqKfxFv+Py2S+vGhxGTw/FYpPEbLQvZX3ziBhn8
-         Y65C5kuG0ZlxpPSA13cdcZRq4biW4S2KTPIqAPo5irHXzwQbhBk1cI8gN5zAqdtZ3a
-         mtpACCr6qjIHHQFcvrmlTlA7bx1KLDMK2VzI7wgfwNwZsyl9dmgk2/fIBtbyiXgRff
-         gplJGIzB1zvAXGH3KIqD6zXM8ZKbSFan8iRA5LBlc01fW1M2hTOMh9rbSeXLv4x83i
-         34A8yhmfRoJFRkjOHN86ajJXeY3BA4hVtSXpOUIw/hXa36Tkay9abdm04J0uSZHZMf
-         XwupkN9zxsmww==
-Received: by mail-ed1-f44.google.com with SMTP id j6so152991504edw.12;
-        Tue, 04 Jan 2022 12:31:44 -0800 (PST)
-X-Gm-Message-State: AOAM532HRPEY85LE+KWZnHSBM57JpWQ4yiUnE1ReeP9kRd5nluL3LmGI
-        gEr/Su55CXeoLtdUn0p4bmHo8i+n2VLguEWg+g==
-X-Google-Smtp-Source: ABdhPJwPtVu84Gbmxpg5haak5g6wrYjBHdIwwCb7MqqLp2qJ0r9HYDUdg3yiXzkAioz1RVciVqWCihfQlPWZviDmnPA=
-X-Received: by 2002:a17:906:eb04:: with SMTP id mb4mr39454430ejb.27.1641328303114;
- Tue, 04 Jan 2022 12:31:43 -0800 (PST)
+        Tue, 4 Jan 2022 15:34:59 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338AAC061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 12:34:59 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id x15so27837272plg.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 12:34:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OMgPsxT7s5PUJzgh0jesH43SAy7zYp7IDqaflLd8kOc=;
+        b=BnDklxMF7GBWTXml42AjnB8XOURccxORWmexAsnJvQUg+zPmhAke+angtUP+2jxFp5
+         8YuDGsxl76thTZaW0BtpYLlfafDST7n2NfpnIhBs6q9ZH+guJqzDHCK0uuDvrlG2/nEZ
+         Em/cMx0FJ+AmI3oeRyFDN/JKVwYfc3rgodds2IwwfSXBaD+4o+gmdx3w/xee2pPrNZuO
+         v67koTt5zCsm2lO1T3pHwa51JCNtiPLfnqr478W5NnIK9QdzD7AgxSxGfFVzZ7Us9QqP
+         mi2ifaursDFUk4PZduCJHC4SCrmaZM45O5/b6TwXc2Hav2yfvqZmy/HaWeCVrOz4ThGf
+         bhfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OMgPsxT7s5PUJzgh0jesH43SAy7zYp7IDqaflLd8kOc=;
+        b=h7tXo6UnXjUfSE+v+9P3kUAHkc6vovfdqb8QSqDlktLfv+VTw9w/BAW4z4wJ/gF9s0
+         HbPwloFcTOF6hBTF41rOX73gaCJrvtym7eysDbw/DDX+ZneleZ23/sMvejfD8agAHLLn
+         b4NQu6mkKbWS78+V16Y+c5HUCWymCmFW6AEwjpYeMCBRawvwyPKE3N0cv/YdFzYFM+TB
+         PI+urxFc00/vsQ8+p0JdBxxlg1pvRuvjReoLn59fFS6ohhfzc3uYvniFI2zVIgB9obRc
+         UBexB0LusMJPSYB39A8ua0hOb2KmQKklwOxChobqY+ette0h6IaMwZZnKyeXe5Ln2CRn
+         5ymA==
+X-Gm-Message-State: AOAM530TUTK5p/h4uXHfE4YwGH2wiTiLVWvlj+jX0K7yvfiXPbiHmaJt
+        14FEnh107eXrV1TipSEOhKOhww==
+X-Google-Smtp-Source: ABdhPJzDELlvn+sVviC6DXPdOsKXoAEYSXl3/DER8ndMXGraW8vZtyulFLLmGVGlcwUtk4Ty0nd5hQ==
+X-Received: by 2002:a17:903:2307:b0:149:1bb6:fc28 with SMTP id d7-20020a170903230700b001491bb6fc28mr50288398plh.84.1641328498636;
+        Tue, 04 Jan 2022 12:34:58 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id y3sm187543pju.37.2022.01.04.12.34.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 12:34:58 -0800 (PST)
+Date:   Tue, 4 Jan 2022 20:34:54 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Lai Jiangshan <laijs@linux.alibaba.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [RFC PATCH 2/6] KVM: X86: Walk shadow page starting with
+ shadow_root_level
+Message-ID: <YdSvbsb5wt/WURtw@google.com>
+References: <20211210092508.7185-1-jiangshanlai@gmail.com>
+ <20211210092508.7185-3-jiangshanlai@gmail.com>
 MIME-Version: 1.0
-References: <1635487055-18494-1-git-send-email-lh.kuo@sunplus.com>
- <1636444705-17883-1-git-send-email-lh.kuo@sunplus.com> <1636444705-17883-3-git-send-email-lh.kuo@sunplus.com>
- <YaQu3dCQD4FG7ete@robh.at.kernel.org> <f5607fa7ad9c49a7bfcce02eac834838@sphcmbx02.sunplus.com.tw>
- <CAL_JsqK=7ma_LwMMoW7yfVoBfPN0hBJsPbp4ojtk0kt3k=+O1w@mail.gmail.com> <1eb97e1aca9c4c8d8f1e17c51f2792ac@sphcmbx02.sunplus.com.tw>
-In-Reply-To: <1eb97e1aca9c4c8d8f1e17c51f2792ac@sphcmbx02.sunplus.com.tw>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 4 Jan 2022 14:31:31 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKJJutPpc-xRK0y+t8s=jpqkBmHMgaFK1mnEcxPT98vjQ@mail.gmail.com>
-Message-ID: <CAL_JsqKJJutPpc-xRK0y+t8s=jpqkBmHMgaFK1mnEcxPT98vjQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] devicetree bindings mmc Add bindings doc for
- Sunplus SP7021
-To:     =?UTF-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
-Cc:     "LH.Kuo" <lhjeff911@gmail.com>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "daniel.thompson@linaro.org" <daniel.thompson@linaro.org>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "qinjian@cqplus1.com" <qinjian@cqplus1.com>,
-        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211210092508.7185-3-jiangshanlai@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 7:59 PM Lh Kuo =E9=83=AD=E5=8A=9B=E8=B1=AA <lh.Kuo@=
-sunplus.com> wrote:
->
-> > > > > +properties:
-> > > > > +  compatible:
-> > > > > +    enum:
-> > > > > +      - sunplus,sp7021-card1
-> > > > > +      - sunplus,sp7021-sdio
-> > > >
-> > > > What's the difference between these 2 blocks?
-> > > >
-> > >
-> > > One for SD card One for SDIO
-> >
-> > If the programming model is the same, then it should be the same compat=
-ible string. We have various
-> > properties to handle differences like bus width, card detect or not, et=
-c.
-> >
->
-> SDIO and SDCARD still need to set the date and CMD decoding differences.
+On Fri, Dec 10, 2021, Lai Jiangshan wrote:
+> From: Lai Jiangshan <laijs@linux.alibaba.com>
+> 
+> Walking from the root page of the shadow page table should start with
+> the level of the shadow page table: shadow_root_level.
+> 
+> Also change a small defect in audit_mappings(), it is believed
+> that the current walking level is more valuable to print.
+> 
+> Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
+> ---
+>  arch/x86/kvm/mmu/mmu_audit.c | 5 ++---
 
-I still don't understand. A host controller should be able to
-initialize a card enough to tell what kind it is. And we have things
-defined in DT like 'no-sd' and 'no-mmc'.
-
-Looking at the driver, the difference appears to be just setting a
-register to the mode (eMMC/SD/SDIO). That's not a difference in the
-h/w block which is when different compatibles would be appropriate. A
-property, if anything, is the right thing to do here.
-
-Rob
+I vote we remove mmu_audit.c.  It has bitrotted horribly, and none of the
+current set of KVM developers even knows how to use it effectively.

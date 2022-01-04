@@ -2,72 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D800A48499E
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 21:59:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E5AC4849A1
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233716AbiADU75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 15:59:57 -0500
-Received: from mail-ot1-f48.google.com ([209.85.210.48]:42499 "EHLO
-        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbiADU7z (ORCPT
+        id S233774AbiADVAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 16:00:44 -0500
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:50207 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233740AbiADVAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 15:59:55 -0500
-Received: by mail-ot1-f48.google.com with SMTP id a26-20020a9d6e9a000000b0058f37eeb861so46241611otr.9;
-        Tue, 04 Jan 2022 12:59:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=irr7k9WjHOmJ1YLN5lbPwCTIBIRcYE8/vZ494T/bTMg=;
-        b=cPyUai5ZC1AS10p/shJC+HMxNSuByaKJuV3JaLpeTHS7DIqlJokfR7N62n3liAJE1h
-         fQWwh9rHFF+OTj7kwZWIx0XzWTrXOiObyHCcVqC4WdpZpt7acLxX2lRs0VPKUPeEJBkQ
-         4ry2F+QxleUu2coFQ/j9hepkYM+6cp6kxjKBmcM1GeiRf9Igl+voHqCPflR16ETNGdPt
-         oFTbetRJi4KDgSXojdDgj3rWnDgzRFREstdq4U03o1Gmvbp1jWkXp2obrrvkXjuxzunn
-         7e6kwEXgLq2DVEEigGzXwHL0U4uv9HJUpiJYG9UzofalvmglkYqMCyW/uFYuK5nMrnKO
-         6VYw==
-X-Gm-Message-State: AOAM530xwmU1Gej+0SpC9zHpHcdVmcNTyUbajTt24JJgSTK529KFrFp4
-        L3JmBmmS4bRniW8k7dyrPw==
-X-Google-Smtp-Source: ABdhPJzRM2EzDosfFdGftQKJS1uo3od2R7dvSm/nIDtoE0Hpp3D/O8EKelNHkF8nsgPMd1gu/qqFtw==
-X-Received: by 2002:a05:6830:2303:: with SMTP id u3mr37240697ote.61.1641329995099;
-        Tue, 04 Jan 2022 12:59:55 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id n26sm9752025oij.5.2022.01.04.12.59.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 12:59:54 -0800 (PST)
-Received: (nullmailer pid 1417166 invoked by uid 1000);
-        Tue, 04 Jan 2022 20:59:53 -0000
-Date:   Tue, 4 Jan 2022 14:59:53 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Sam Ravnborg <sam@ravnborg.org>, Simha BN <simhavcs@gmail.com>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        ~okias/devicetree@lists.sr.ht
-Subject: Re: [PATCH] dt-bindings: display: enable port jdi,lt070me05000
-Message-ID: <YdS1ScWx0e6OCoZK@robh.at.kernel.org>
-References: <20211224195354.78362-1-david@ixit.cz>
+        Tue, 4 Jan 2022 16:00:43 -0500
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 204L0UVV019108
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 4 Jan 2022 16:00:30 -0500
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 2D81115C00E1; Tue,  4 Jan 2022 16:00:30 -0500 (EST)
+Date:   Tue, 4 Jan 2022 16:00:30 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     kvartet <xyru1999@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        sunhao.th@gmail.com
+Subject: Re: INFO: task hung in __filemap_get_folio
+Message-ID: <YdS1bk5txXiJynXV@mit.edu>
+References: <CAFkrUsjD2HSRHdZ9yKANa0pLe8rhwPXKbU+E-A7K+td3jS5ZVA@mail.gmail.com>
+ <YdSPb5Q6HytIi6w9@casper.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211224195354.78362-1-david@ixit.cz>
+In-Reply-To: <YdSPb5Q6HytIi6w9@casper.infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Dec 2021 20:53:54 +0100, David Heidelberg wrote:
-> Enable port inside panel bindings.
+On Tue, Jan 04, 2022 at 06:18:23PM +0000, Matthew Wilcox wrote:
+> On Tue, Jan 04, 2022 at 07:44:10PM +0800, kvartet wrote:
+> > Hello,
+> > 
+> > When using Syzkaller to fuzz the latest Linux kernel, the following
+> > crash was triggered.
 > 
-> Fixes warnings generated by `make qcom-apq8064-asus-nexus7-flo.dtb` as:
-> arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dt.yaml: panel@0: 'port' does not match any of the regexes: 'pinctrl-[0-9]+'
-> 	From schema: Documentation/devicetree/bindings/display/panel/jdi,lt070me05000.yaml
+> This isn't a crash, it's a notification of a hang.  More than likely
+> syzbot is playing with RT scheduling again.
 > 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
->  .../devicetree/bindings/display/panel/jdi,lt070me05000.yaml     | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+> We do not need more people running syzbot.  We need more people tracking
+> down and fixing the syzbot reports that already exist.
 
-Applied, thanks!
+One of the syzbot spam reported by kvartet was a hang in the jbd2
+layer, while it was waiting for processes to complete running handles,
+and the oom killer lock was reported as being involved.  At which
+point, I stopped reading or caring about *any* of the syzbot
+complaints being reported by kvartet....
+
+					- Ted

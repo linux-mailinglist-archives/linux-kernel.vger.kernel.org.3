@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D73834847AC
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:21:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED0254847AD
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 19:21:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236224AbiADSVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 13:21:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52076 "EHLO
+        id S236255AbiADSVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 13:21:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236218AbiADSVA (ORCPT
+        with ESMTP id S236226AbiADSVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 13:21:00 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D69E8C061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 10:20:59 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id 205so32959109pfu.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 10:20:59 -0800 (PST)
+        Tue, 4 Jan 2022 13:21:01 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF59C061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 10:21:01 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id x194so10201668pgx.4
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 10:21:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/OgD+1kWhVDFGsOMLPv8+TTwuz9ad9aYKJ0zjiXSkOw=;
-        b=c1UJvf+1WNbPluWHI7jTeUsM9FNF2WuV8o1AU8v51YBuqXZaZHh6mktbGTpyHIBLG2
-         Ju3R5gX5TqUbtZ0WjZLBpY2Nhb46wkT2Om377m17/Aooy9CWJfBgR9zhgVlMEuhqVZJo
-         fvTPFoClTnVYpYXfQnvCO1+MNpHPlaTW09FTJ6Hgua34S6sqacUjYi/NAKWO3keerjWO
-         eDsWIiO7VfMnMQ6QsljwQTMGYMMK1Drs1oMJPKrCyVWpoPsZEOgd6cWzNCu6FAk/MWO2
-         OEhfGmamZ45nsQrTULyYIuJtlItkJVKbeiNbinr4b5cwQoaRcbnaBJd9a2bqPK/2Ko/t
-         VryQ==
+        bh=VYq5HaT8fh+HA5zuj+et2czeHhoMoR0tY8OEaaIg5MI=;
+        b=F8wUQUCjJemjck11oIO14hEdefVCIdTZ2lXCjc1Qvha/r4mFP/DP8O+9G3zro09DLv
+         M0/Qx0/iLj2m5P8J8uzwbGT7U5v2ukgJJyWyAC+pFReRfl0smE4RRkpQQc6PMCa8FKOD
+         g6OHlWZqZbCb9PCL5fFU+mnyXO8x3GuzC8/Omy0MJKExwBkheAhbZKJG6WGiquDNzQfE
+         ZqnrSOIkMOwxsy1Ix2Nv+SdWEFgEopoR2ovawIf/snTF3wZ1kP3L478+BuTfBfiJFl65
+         ms3Y3Xhp8adsH4AYpkVEiwTpY5frydWPP7ZS5GLztllbmp9JPPUoHq/gI4kVfMzg+SIx
+         cwFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=/OgD+1kWhVDFGsOMLPv8+TTwuz9ad9aYKJ0zjiXSkOw=;
-        b=PcaI2XuMH4/GgAhJNtIi0NTRii7vOm2k5NAzCsEKott66T6xlkZpeG4m+sKk/C0m1c
-         /sPcx/Yht7smOzQunKqRUBE3fOF5p+cqE0oYZUtTiFBF7/ETWyqLV8yWfcFpxD7qbei2
-         U4ZHUtJaVbGmtq4na7lIganju5hELNH/wMry+qfboLqmIAr7CYgJnFkeBD1Sizg5aD/c
-         nIxf25mSMHcUYnaULrJeFreu2y1Bowc46MXacL+emJ077Bvrg8cApctMTMjJzkk5yVDf
-         Sa8ZYd6ofp5h7DaHvpheGYv+9/iibidhUKwQtHDHKhD9SV3f0wtjkC0cytFy4iV+ehP4
-         yQZA==
-X-Gm-Message-State: AOAM530kfdUF8V+3QYBnZaoMh5Pjt8NqaS5CbAwHmzUxMJEcuKKBxHbQ
-        OaWnHDb+UZPy4ffL3UVxlGE=
-X-Google-Smtp-Source: ABdhPJz0bOUlSC1tglohlS2ZiCy+5vfa51TXk1QhKtfVGC2wFKwAJvYGbgMZK/JpSfwB80uy1SR0DQ==
-X-Received: by 2002:aa7:9298:0:b0:4ba:7d3a:1742 with SMTP id j24-20020aa79298000000b004ba7d3a1742mr51519275pfa.62.1641320459321;
-        Tue, 04 Jan 2022 10:20:59 -0800 (PST)
+        bh=VYq5HaT8fh+HA5zuj+et2czeHhoMoR0tY8OEaaIg5MI=;
+        b=oG+XnAh6ok5xJLAZJzIWui+dQJztHs0tsW0/Aux3J5jQP/4xhr4MNiewHbmvoYvpIP
+         iP0uOu60FeQFS6BXtD663oCm7BmhFQOOFz5j7q/35nA0i8w7O8a0PnB7fblezr+70X14
+         417KgPZdFAYq+bvT+A2z6GLrYjHZriyo8O9+ZdOuBSnqSRLBVqt+boht3iYm29MeIwAR
+         Ev8cTtMEFSFSXBiIDtr7u5kHrI3T26Y6az0f1SrPZsYrg1ZQpwT5b01EMD6BOVnet6Dg
+         3Ww5zWNxcjzxypkbuKN8Sn183HH/HTsTXnUGGYvpykosppsuZZsABfhkTWA7fy5b26DI
+         gzog==
+X-Gm-Message-State: AOAM533Yqoy5MMb6B5yAaVkB+miBGlDsKkT+rVw5l+nfXCXJlZC/0pgI
+        AvlYwfU0AMnO78WqyUvpjaA=
+X-Google-Smtp-Source: ABdhPJz+vw6o44p1+lP4OPQhSszRz3b4lElAvTGnwnlHjUUWZInpW+xTt6N+2rbcH2bvhEiRi2iUyg==
+X-Received: by 2002:a05:6a00:1386:b0:4ba:b454:70bc with SMTP id t6-20020a056a00138600b004bab45470bcmr51639379pfg.19.1641320460625;
+        Tue, 04 Jan 2022 10:21:00 -0800 (PST)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:c6f0:4abf:2548:40ff:6d1])
-        by smtp.gmail.com with ESMTPSA id g10sm10097684pfo.103.2022.01.04.10.20.57
+        by smtp.gmail.com with ESMTPSA id g10sm10097684pfo.103.2022.01.04.10.20.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 10:20:58 -0800 (PST)
+        Tue, 04 Jan 2022 10:21:00 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -57,9 +57,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Andi Kleen <ak@linux.intel.com>,
         Ian Rogers <irogers@google.com>
-Subject: [PATCH 1/6] perf lock: Convert lockhash_table to use hlist
-Date:   Tue,  4 Jan 2022 10:20:49 -0800
-Message-Id: <20220104182054.25009-2-namhyung@kernel.org>
+Subject: [PATCH 2/6] perf lock: Change type of lock_stat->addr to u64
+Date:   Tue,  4 Jan 2022 10:20:50 -0800
+Message-Id: <20220104182054.25009-3-namhyung@kernel.org>
 X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
 In-Reply-To: <20220104182054.25009-1-namhyung@kernel.org>
 References: <20220104182054.25009-1-namhyung@kernel.org>
@@ -69,82 +69,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The hlist_head has a single entry so we can save some memory.
+As evsel__intval() returns u64, we can just use it as is.
 
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/builtin-lock.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ tools/perf/builtin-lock.c | 35 +++++++++--------------------------
+ 1 file changed, 9 insertions(+), 26 deletions(-)
 
 diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-index d70131b7b1b1..43139166f02e 100644
+index 43139166f02e..c4b5c3d71ae3 100644
 --- a/tools/perf/builtin-lock.c
 +++ b/tools/perf/builtin-lock.c
-@@ -38,13 +38,13 @@ static struct perf_session *session;
- #define LOCKHASH_BITS		12
- #define LOCKHASH_SIZE		(1UL << LOCKHASH_BITS)
- 
--static struct list_head lockhash_table[LOCKHASH_SIZE];
-+static struct hlist_head lockhash_table[LOCKHASH_SIZE];
- 
- #define __lockhashfn(key)	hash_long((unsigned long)key, LOCKHASH_BITS)
- #define lockhashentry(key)	(lockhash_table + __lockhashfn((key)))
- 
- struct lock_stat {
--	struct list_head	hash_entry;
-+	struct hlist_node	hash_entry;
+@@ -47,12 +47,7 @@ struct lock_stat {
+ 	struct hlist_node	hash_entry;
  	struct rb_node		rb;		/* used for sorting */
  
- 	/*
-@@ -317,10 +317,10 @@ static struct lock_stat *pop_from_result(void)
+-	/*
+-	 * FIXME: evsel__intval() returns u64,
+-	 * so address of lockdep_map should be treated as 64bit.
+-	 * Is there more better solution?
+-	 */
+-	void			*addr;		/* address of lockdep_map, used as ID */
++	u64			addr;		/* address of lockdep_map, used as ID */
+ 	char			*name;		/* for strcpy(), we cannot use const */
  
- static struct lock_stat *lock_stat_findnew(void *addr, const char *name)
+ 	unsigned int		nr_acquire;
+@@ -106,7 +101,7 @@ struct lock_seq_stat {
+ 	struct list_head        list;
+ 	int			state;
+ 	u64			prev_event_time;
+-	void                    *addr;
++	u64                     addr;
+ 
+ 	int                     read_count;
+ };
+@@ -315,7 +310,7 @@ static struct lock_stat *pop_from_result(void)
+ 	return container_of(node, struct lock_stat, rb);
+ }
+ 
+-static struct lock_stat *lock_stat_findnew(void *addr, const char *name)
++static struct lock_stat *lock_stat_findnew(u64 addr, const char *name)
  {
--	struct list_head *entry = lockhashentry(addr);
-+	struct hlist_head *entry = lockhashentry(addr);
+ 	struct hlist_head *entry = lockhashentry(addr);
  	struct lock_stat *ret, *new;
+@@ -361,7 +356,7 @@ struct trace_lock_handler {
+ 			     struct perf_sample *sample);
+ };
  
--	list_for_each_entry(ret, entry, hash_entry) {
-+	hlist_for_each_entry(ret, entry, hash_entry) {
- 		if (ret->addr == addr)
- 			return ret;
- 	}
-@@ -339,7 +339,7 @@ static struct lock_stat *lock_stat_findnew(void *addr, const char *name)
- 	strcpy(new->name, name);
- 	new->wait_time_min = ULLONG_MAX;
+-static struct lock_seq_stat *get_seq(struct thread_stat *ts, void *addr)
++static struct lock_seq_stat *get_seq(struct thread_stat *ts, u64 addr)
+ {
+ 	struct lock_seq_stat *seq;
  
--	list_add(&new->hash_entry, entry);
-+	hlist_add_head(&new->hash_entry, entry);
- 	return new;
+@@ -400,16 +395,13 @@ enum acquire_flags {
+ static int report_lock_acquire_event(struct evsel *evsel,
+ 				     struct perf_sample *sample)
+ {
+-	void *addr;
+ 	struct lock_stat *ls;
+ 	struct thread_stat *ts;
+ 	struct lock_seq_stat *seq;
+ 	const char *name = evsel__strval(evsel, sample, "name");
+-	u64 tmp	 = evsel__intval(evsel, sample, "lockdep_addr");
++	u64 addr = evsel__intval(evsel, sample, "lockdep_addr");
+ 	int flag = evsel__intval(evsel, sample, "flags");
  
- alloc_failed:
-@@ -781,7 +781,7 @@ static void dump_map(void)
+-	memcpy(&addr, &tmp, sizeof(void *));
+-
+ 	ls = lock_stat_findnew(addr, name);
+ 	if (!ls)
+ 		return -ENOMEM;
+@@ -472,15 +464,12 @@ static int report_lock_acquire_event(struct evsel *evsel,
+ static int report_lock_acquired_event(struct evsel *evsel,
+ 				      struct perf_sample *sample)
+ {
+-	void *addr;
+ 	struct lock_stat *ls;
+ 	struct thread_stat *ts;
+ 	struct lock_seq_stat *seq;
+ 	u64 contended_term;
+ 	const char *name = evsel__strval(evsel, sample, "name");
+-	u64 tmp = evsel__intval(evsel, sample, "lockdep_addr");
+-
+-	memcpy(&addr, &tmp, sizeof(void *));
++	u64 addr = evsel__intval(evsel, sample, "lockdep_addr");
  
+ 	ls = lock_stat_findnew(addr, name);
+ 	if (!ls)
+@@ -535,14 +524,11 @@ static int report_lock_acquired_event(struct evsel *evsel,
+ static int report_lock_contended_event(struct evsel *evsel,
+ 				       struct perf_sample *sample)
+ {
+-	void *addr;
+ 	struct lock_stat *ls;
+ 	struct thread_stat *ts;
+ 	struct lock_seq_stat *seq;
+ 	const char *name = evsel__strval(evsel, sample, "name");
+-	u64 tmp = evsel__intval(evsel, sample, "lockdep_addr");
+-
+-	memcpy(&addr, &tmp, sizeof(void *));
++	u64 addr = evsel__intval(evsel, sample, "lockdep_addr");
+ 
+ 	ls = lock_stat_findnew(addr, name);
+ 	if (!ls)
+@@ -590,14 +576,11 @@ static int report_lock_contended_event(struct evsel *evsel,
+ static int report_lock_release_event(struct evsel *evsel,
+ 				     struct perf_sample *sample)
+ {
+-	void *addr;
+ 	struct lock_stat *ls;
+ 	struct thread_stat *ts;
+ 	struct lock_seq_stat *seq;
+ 	const char *name = evsel__strval(evsel, sample, "name");
+-	u64 tmp = evsel__intval(evsel, sample, "lockdep_addr");
+-
+-	memcpy(&addr, &tmp, sizeof(void *));
++	u64 addr = evsel__intval(evsel, sample, "lockdep_addr");
+ 
+ 	ls = lock_stat_findnew(addr, name);
+ 	if (!ls)
+@@ -782,7 +765,7 @@ static void dump_map(void)
  	pr_info("Address of instance: name of class\n");
  	for (i = 0; i < LOCKHASH_SIZE; i++) {
--		list_for_each_entry(st, &lockhash_table[i], hash_entry) {
-+		hlist_for_each_entry(st, &lockhash_table[i], hash_entry) {
- 			pr_info(" %p: %s\n", st->addr, st->name);
+ 		hlist_for_each_entry(st, &lockhash_table[i], hash_entry) {
+-			pr_info(" %p: %s\n", st->addr, st->name);
++			pr_info(" %#llx: %s\n", (unsigned long long)st->addr, st->name);
  		}
  	}
-@@ -838,7 +838,7 @@ static void sort_result(void)
- 	struct lock_stat *st;
- 
- 	for (i = 0; i < LOCKHASH_SIZE; i++) {
--		list_for_each_entry(st, &lockhash_table[i], hash_entry) {
-+		hlist_for_each_entry(st, &lockhash_table[i], hash_entry) {
- 			insert_to_result(st, compare);
- 		}
- 	}
-@@ -990,7 +990,7 @@ int cmd_lock(int argc, const char **argv)
- 	int rc = 0;
- 
- 	for (i = 0; i < LOCKHASH_SIZE; i++)
--		INIT_LIST_HEAD(lockhash_table + i);
-+		INIT_HLIST_HEAD(lockhash_table + i);
- 
- 	argc = parse_options_subcommand(argc, argv, lock_options, lock_subcommands,
- 					lock_usage, PARSE_OPT_STOP_AT_NON_OPTION);
+ }
 -- 
 2.34.1.448.ga2b2bfdf31-goog
 

@@ -2,319 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1CE34848F7
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 014414848FA
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:51:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231559AbiADTvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 14:51:17 -0500
-Received: from foss.arm.com ([217.140.110.172]:34988 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231462AbiADTvQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 14:51:16 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 76D9E1FB;
-        Tue,  4 Jan 2022 11:51:15 -0800 (PST)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id AABDF3F66F;
-        Tue,  4 Jan 2022 11:51:14 -0800 (PST)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v3] ACPI: PCC: Implement OperationRegion handler for the PCC Type 3 subtype
-Date:   Tue,  4 Jan 2022 19:51:08 +0000
-Message-Id: <20220104195108.995359-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.25.1
+        id S231886AbiADTvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 14:51:37 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43666 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230330AbiADTvf (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 14:51:35 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A9EF5B817E6;
+        Tue,  4 Jan 2022 19:51:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D451EC36AE0;
+        Tue,  4 Jan 2022 19:51:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641325892;
+        bh=cQ/rc+xgMIav90Ds4PeJcvf7zZYgv1fP8vCoGLbssPg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=puPO3nqx7d+GmkSnNXC9G/AwtAKKKIx5FFMh2BSWETEC8piTt3HhpmhgJCm98QHVH
+         y/XMmpOWMLQV8NituJS5gbr6X5opgeZDKv81GLIIKzxu+/Jra8SMb6aapkAAvdBWm/
+         CBfIMrzJHV7jgzQMomqmxIKesqm7U0pSQzrk2vLUzv1DJ16bzodSZl8Bg7EbEl+a33
+         OID1XSa9lqITxrbok2oLDQvq3jfbrRTLbdzRZYwAZduED5Bq/h2mV7r6YLmoa8TlEY
+         NqK/Hjk3Od+jbelNeGl+AIUlO71/UfaQ7hGOF44Az+k9Do/OaPiQqToVBZucqfYKrw
+         NEQV0vU3TNw6Q==
+Date:   Tue, 4 Jan 2022 13:51:30 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 09/14] PCI: portdrv: Suppress kernel DMA ownership
+ auto-claiming
+Message-ID: <20220104195130.GA117830@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220104192614.GL2328285@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PCC OpRegion provides a mechanism to communicate with the platform
-directly from the AML. PCCT provides the list of PCC channel available
-in the platform, a subset or all of them can be used in PCC Opregion.
+On Tue, Jan 04, 2022 at 03:26:14PM -0400, Jason Gunthorpe wrote:
+> On Tue, Jan 04, 2022 at 11:06:31AM -0600, Bjorn Helgaas wrote:
+> 
+> > > The existing vfio framework allows the portdrv driver to be bound
+> > > to the bridge while its downstream devices are assigned to user space.
+> > 
+> > I.e., the existing VFIO framework allows a switch to be in the same
+> > IOMMU group as the devices below it, even though the switch has a
+> > kernel driver and the other devices may have userspace drivers?
+> 
+> Yes, this patch exists to maintain current VFIO behavior which has this
+> same check.
+> 
+> I belive the basis for VFIO doing this is that the these devices
+> cannot do DMA, so don't care about the DMA API or the group->domain,
+> and do not expose MMIO memory so do not care about the P2P attack.
 
-This patch registers the PCC OpRegion handler before ACPI tables are
-loaded. This relies on the special context data passed to identify and
-set up the PCC channel before the OpRegion handler is executed for the
-first time.
+"These devices" means bridges, right?  Not sure why we wouldn't care
+about the P2P attack.
 
-Typical PCC Opregion declaration looks like this:
+PCIe switches use MSI or MSI-X for hotplug, PME, etc, so they do DMA
+for that.  Is that not relevant here?
 
-OperationRegion (PFRM, PCC, 2, 0x74)
-Field (PFRM, ByteAcc, NoLock, Preserve)
-{
-    SIGN,   32,
-    FLGS,   32,
-    LEN,    32,
-    CMD,    32,
-    DATA,   800
-}
+Is there something that *prohibits* a bridge from having
+device-specific functionality including DMA?
 
-It contains four named double words followed by 100 bytes of buffer
-names DATA.
-
-ASL can fill out the buffer something like:
-
-    /* Create global or local buffer */
-    Name (BUFF, Buffer (0x0C){})
-    /* Create double word fields over the buffer */
-    CreateDWordField (BUFF, 0x0, WD0)
-    CreateDWordField (BUFF, 0x04, WD1)
-    CreateDWordField (BUFF, 0x08, WD2)
-
-    /* Fill the named fields */
-    WD0 = 0x50434300
-    SIGN = BUFF
-    WD0 = 1
-    FLGS = BUFF
-    WD0 = 0x10
-    LEN = BUFF
-
-    /* Fill the payload in the DATA buffer */
-    WD0 = 0
-    WD1 = 0x08
-    WD2 = 0
-    DATA = BUFF
-
-    /* Write to CMD field to trigger handler */
-    WD0 = 0x4404
-    CMD = BUFF
-
-This buffer is received by acpi_pcc_opregion_space_handler. This
-handler will fetch the complete buffer via internal_pcc_buffer.
-
-The setup handler will receive the special PCC context data which will
-contain the PCC channel index which used to set up the channel. The
-buffer pointer and length is saved in region context which is then used
-in the handler.
-
-(kernel test robot: Build failure with CONFIG_ACPI_DEBUGGER)
-Link: https://lore.kernel.org/r/202201041539.feAV0l27-lkp@intel.com
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Rafael J. Wysocki <rafael@kernel.org>
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
----
- drivers/acpi/Kconfig    |  17 ++++++
- drivers/acpi/Makefile   |   1 +
- drivers/acpi/acpi_pcc.c | 120 ++++++++++++++++++++++++++++++++++++++++
- drivers/acpi/bus.c      |   1 +
- include/linux/acpi.h    |   6 ++
- 5 files changed, 145 insertions(+)
- create mode 100644 drivers/acpi/acpi_pcc.c
-
-v2[2]-v3:
-	- Fixed build with CONFIG_ACPI_DEBUGGER enabled
-	  Looks like return_ACPI_STATUS is supposed to be used only
-	  in core ACPICA
-
-v1[0]-v2[2]:
-	- Addressed all the comments from Rafael[1]
-
-[0] https://lore.kernel.org/r/20211222190919.137550-1-sudeep.holla@arm.com/
-[1] https://lore.kernel.org/r/CAJZ5v0jWJVSFS3KTavfCTzxWq-Q361nGDCWf+VLXRu-9Z4MJsQ@mail.gmail.com
-[2] https://lore.kernel.org/r/20220103155838.616580-1-sudeep.holla@arm.com
-
-diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
-index 91f1da16934d..8cdc7860b6e6 100644
---- a/drivers/acpi/Kconfig
-+++ b/drivers/acpi/Kconfig
-@@ -546,6 +546,23 @@ config ACPI_PPTT
- 	bool
- endif
- 
-+config ACPI_PCC
-+	bool "ACPI PCC Address Space"
-+	depends on PCC
-+	default y
-+	help
-+	  The PCC Address Space also referred as PCC Operation Region pertains
-+	  to the region of PCC subspace that succeeds the PCC signature.
-+
-+	  The PCC Operation Region works in conjunction with the PCC Table
-+	  (Platform Communications Channel Table). PCC subspaces that are
-+	  marked for use as PCC Operation Regions must not be used as PCC
-+	  subspaces for the standard ACPI features such as CPPC, RASF, PDTT and
-+	  MPST. These standard features must always use the PCC Table instead.
-+
-+	  Enable this feature if you want to set up and install the PCC Address
-+	  Space handler to handle PCC OpRegion in the firmware.
-+
- source "drivers/acpi/pmic/Kconfig"
- 
- config ACPI_VIOT
-diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
-index d3dc79298ce3..f47032769f69 100644
---- a/drivers/acpi/Makefile
-+++ b/drivers/acpi/Makefile
-@@ -67,6 +67,7 @@ acpi-$(CONFIG_ACPI_LPIT)	+= acpi_lpit.o
- acpi-$(CONFIG_ACPI_GENERIC_GSI) += irq.o
- acpi-$(CONFIG_ACPI_WATCHDOG)	+= acpi_watchdog.o
- acpi-$(CONFIG_ACPI_PRMT)	+= prmt.o
-+acpi-$(CONFIG_ACPI_PCC)		+= acpi_pcc.o
- 
- # Address translation
- acpi-$(CONFIG_ACPI_ADXL)	+= acpi_adxl.o
-diff --git a/drivers/acpi/acpi_pcc.c b/drivers/acpi/acpi_pcc.c
-new file mode 100644
-index 000000000000..41e3ebd204ff
---- /dev/null
-+++ b/drivers/acpi/acpi_pcc.c
-@@ -0,0 +1,120 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Author: Sudeep Holla <sudeep.holla@arm.com>
-+ * Copyright 2021 Arm Limited
-+ *
-+ * The PCC Address Space also referred as PCC Operation Region pertains to the
-+ * region of PCC subspace that succeeds the PCC signature. The PCC Operation
-+ * Region works in conjunction with the PCC Table(Platform Communications
-+ * Channel Table). PCC subspaces that are marked for use as PCC Operation
-+ * Regions must not be used as PCC subspaces for the standard ACPI features
-+ * such as CPPC, RASF, PDTT and MPST. These standard features must always use
-+ * the PCC Table instead.
-+ *
-+ * This driver sets up the PCC Address Space and installs an handler to enable
-+ * handling of PCC OpRegion in the firmware.
-+ *
-+ */
-+#include <linux/kernel.h>
-+#include <linux/acpi.h>
-+#include <linux/completion.h>
-+#include <linux/idr.h>
-+#include <linux/io.h>
-+
-+#include <acpi/pcc.h>
-+
-+struct pcc_data {
-+	struct pcc_mbox_chan *pcc_chan;
-+	void __iomem *pcc_comm_addr;
-+	struct completion done;
-+	struct mbox_client cl;
-+	struct acpi_pcc_info ctx;
-+};
-+
-+struct acpi_pcc_info pcc_ctx;
-+
-+static void pcc_rx_callback(struct mbox_client *cl, void *m)
-+{
-+	struct pcc_data *data = container_of(cl, struct pcc_data, cl);
-+
-+	complete(&data->done);
-+}
-+
-+static acpi_status
-+acpi_pcc_address_space_setup(acpi_handle region_handle, u32 function,
-+			     void *handler_context,  void **region_context)
-+{
-+	struct pcc_data *data;
-+	struct acpi_pcc_info *ctx = handler_context;
-+	struct pcc_mbox_chan *pcc_chan;
-+
-+	data = kzalloc(sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return AE_NO_MEMORY;
-+
-+	data->cl.rx_callback = pcc_rx_callback;
-+	data->cl.knows_txdone = true;
-+	data->ctx.length = ctx->length;
-+	data->ctx.subspace_id = ctx->subspace_id;
-+	data->ctx.internal_buffer = ctx->internal_buffer;
-+
-+	init_completion(&data->done);
-+	data->pcc_chan = pcc_mbox_request_channel(&data->cl, ctx->subspace_id);
-+	if (IS_ERR(data->pcc_chan)) {
-+		pr_err("Failed to find PCC channel for subspace %d\n",
-+		       ctx->subspace_id);
-+		return AE_NOT_FOUND;
-+	}
-+
-+	pcc_chan = data->pcc_chan;
-+	data->pcc_comm_addr = acpi_os_ioremap(pcc_chan->shmem_base_addr,
-+					      pcc_chan->shmem_size);
-+	if (!data->pcc_comm_addr) {
-+		pr_err("Failed to ioremap PCC comm region mem for %d\n",
-+		       ctx->subspace_id);
-+		return AE_NO_MEMORY;
-+	}
-+
-+	*region_context = data;
-+	return AE_OK;
-+}
-+
-+static acpi_status
-+acpi_pcc_address_space_handler(u32 function, acpi_physical_address addr,
-+			       u32 bits, acpi_integer *value,
-+			       void *handler_context, void *region_context)
-+{
-+	int ret;
-+	struct pcc_data *data = region_context;
-+
-+	reinit_completion(&data->done);
-+
-+	/* Write to Shared Memory */
-+	memcpy_toio(data->pcc_comm_addr, (void *)value, data->ctx.length);
-+
-+	ret = mbox_send_message(data->pcc_chan->mchan, NULL);
-+	if (ret < 0)
-+		return AE_ERROR;
-+
-+	if (data->pcc_chan->mchan->mbox->txdone_irq)
-+		wait_for_completion(&data->done);
-+
-+	mbox_client_txdone(data->pcc_chan->mchan, ret);
-+
-+	memcpy_fromio(value, data->pcc_comm_addr, data->ctx.length);
-+
-+	return AE_OK;
-+}
-+
-+void __init acpi_init_pcc(void)
-+{
-+	acpi_status status;
-+
-+	status = acpi_install_address_space_handler(ACPI_ROOT_OBJECT,
-+						    ACPI_ADR_SPACE_PLATFORM_COMM,
-+						    &acpi_pcc_address_space_handler,
-+						    &acpi_pcc_address_space_setup,
-+						    &pcc_ctx);
-+	if (ACPI_FAILURE(status))
-+		pr_alert("OperationRegion handler could not be installed\n");
-+}
-diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-index dd535b4b9a16..75a61626eddd 100644
---- a/drivers/acpi/bus.c
-+++ b/drivers/acpi/bus.c
-@@ -1320,6 +1320,7 @@ static int __init acpi_init(void)
- 		pr_debug("%s: kset create error\n", __func__);
- 
- 	init_prmt();
-+	acpi_init_pcc();
- 	result = acpi_bus_init();
- 	if (result) {
- 		kobject_put(acpi_kobj);
-diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-index 6c0798db6bde..eaeb4b9255bc 100644
---- a/include/linux/acpi.h
-+++ b/include/linux/acpi.h
-@@ -1389,6 +1389,12 @@ static inline int find_acpi_cpu_cache_topology(unsigned int cpu, int level)
- }
- #endif
- 
-+#ifdef CONFIG_ACPI_PCC
-+void acpi_init_pcc(void);
-+#else
-+static inline void acpi_init_pcc(void) { }
-+#endif
-+
- #ifdef CONFIG_ACPI
- extern void acpi_device_notify(struct device *dev);
- extern void acpi_device_notify_remove(struct device *dev);
-
-base-commit: 7a716cec17d19211715a34b426aafc3fadb22de6
--- 
-2.25.1
-
+I know some bridges have device-specific BARs for performance counters
+and the like.

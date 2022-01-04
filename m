@@ -2,413 +2,353 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA704849C7
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:23:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2954849C8
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 22:24:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233957AbiADVX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 16:23:29 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36594 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232604AbiADVX2 (ORCPT
+        id S233979AbiADVYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 16:24:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232604AbiADVYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 16:23:28 -0500
+        Tue, 4 Jan 2022 16:24:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9054C061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 13:24:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B24B7B817F9;
-        Tue,  4 Jan 2022 21:23:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37DD5C36AEB;
-        Tue,  4 Jan 2022 21:23:25 +0000 (UTC)
-From:   Clark Williams <williams@redhat.com>
-Subject: [ANNOUNCE] 4.19.223-rt100
-Date:   Tue, 04 Jan 2022 21:22:45 -0000
-Message-ID: <164133136582.713651.8616556329027058758@puck.lan>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        John Kacur <jkacur@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Pavel Machek <pavel@denx.de>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 032E6615A9
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 21:24:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51DF7C36AE0;
+        Tue,  4 Jan 2022 21:24:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641331471;
+        bh=oadbbm8ed/zVJYBY2vQxm49GQXjsJxHDADCWoBZrb7U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=R2joPomknoMZ9vjLWEBgcyqdz34Afz2NHBQnCWmxyHa7vc9eum+GM8fSZMSm/fujf
+         C2DJ8vwm9OwbJll/6SlvFZccbgHCWiKUVLPuSrBuvobSD7Oq835tijkOAMTV+VwtnS
+         aTqyoBlJkESYDrlTtSmx4HHwKmwWLN8vCMTKfp3CyPibPQ0lufCAYTODz87A5ir1YG
+         8mCN6R1uj7HXOHZEm0FqFuDhTxzDWJyrVQOsf9mcn2SI+4Jky6ccgM+tf8e4aH5RzV
+         zit10XsbTfTx5WuLn664BDnGN9SibzwDxMj3CHn6b4M50gNft/K0z57fN8HVctWkud
+         2rgK0jq1iK6Nw==
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     Eric Biggers <ebiggers@google.com>, Chao Yu <chao@kernel.org>,
+        Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 1/6] f2fs: rework write preallocations
+Date:   Tue,  4 Jan 2022 13:24:14 -0800
+Message-Id: <20220104212419.1879225-1-jaegeuk@kernel.org>
+X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello RT-list!
+From: Eric Biggers <ebiggers@google.com>
 
-I'm pleased to announce the 4.19.223-rt100 stable release.
+f2fs_write_begin() assumes that all blocks were preallocated by
+default unless FI_NO_PREALLOC is explicitly set.  This invites data
+corruption, as there are cases in which not all blocks are preallocated.
+Commit 47501f87c61a ("f2fs: preallocate DIO blocks when forcing
+buffered_io") fixed one case, but there are others remaining.
 
-You can get this release via the git tree at:
+Fix up this logic by replacing this flag with FI_PREALLOCATED_ALL, which
+only gets set if all blocks for the current write were preallocated.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
+Also clean up f2fs_preallocate_blocks(), move it to file.c, and make it
+handle some of the logic that was previously in write_iter() directly.
 
-  branch: v4.19-rt
-  Head SHA1: e0ac069fc57666e0fecff8b7a2839950b594d9c8
-
-Or to build 4.19.223-rt100 directly, the following patches should be applied:
-
-  https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.19.tar.xz
-
-  https://www.kernel.org/pub/linux/kernel/v4.x/patch-4.19.223.xz
-
-  https://www.kernel.org/pub/linux/kernel/projects/rt/4.19/patch-4.19.223-rt100.patch.xz
-
-
-You can also build from 4.19.221-rt99 by applying the incremental patch:
-
-  https://www.kernel.org/pub/linux/kernel/projects/rt/4.19/incr/patch-4.19.221-rt99-rt100.patch.xz
-
-Enjoy!
-Clark
-
-Changes from v4.19.221-rt99:
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+Reviewed-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 ---
+ fs/f2fs/data.c |  55 ++-------------------
+ fs/f2fs/f2fs.h |   3 +-
+ fs/f2fs/file.c | 131 +++++++++++++++++++++++++++++++------------------
+ 3 files changed, 88 insertions(+), 101 deletions(-)
+
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index d8190e836a96..3db0f3049b90 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -1384,53 +1384,6 @@ static int __allocate_data_block(struct dnode_of_data *dn, int seg_type)
+ 	return 0;
+ }
+ 
+-int f2fs_preallocate_blocks(struct kiocb *iocb, struct iov_iter *from)
+-{
+-	struct inode *inode = file_inode(iocb->ki_filp);
+-	struct f2fs_map_blocks map;
+-	int flag;
+-	int err = 0;
+-	bool direct_io = iocb->ki_flags & IOCB_DIRECT;
+-
+-	map.m_lblk = F2FS_BLK_ALIGN(iocb->ki_pos);
+-	map.m_len = F2FS_BYTES_TO_BLK(iocb->ki_pos + iov_iter_count(from));
+-	if (map.m_len > map.m_lblk)
+-		map.m_len -= map.m_lblk;
+-	else
+-		map.m_len = 0;
+-
+-	map.m_next_pgofs = NULL;
+-	map.m_next_extent = NULL;
+-	map.m_seg_type = NO_CHECK_TYPE;
+-	map.m_may_create = true;
+-
+-	if (direct_io) {
+-		map.m_seg_type = f2fs_rw_hint_to_seg_type(iocb->ki_hint);
+-		flag = f2fs_force_buffered_io(inode, iocb, from) ?
+-					F2FS_GET_BLOCK_PRE_AIO :
+-					F2FS_GET_BLOCK_PRE_DIO;
+-		goto map_blocks;
+-	}
+-	if (iocb->ki_pos + iov_iter_count(from) > MAX_INLINE_DATA(inode)) {
+-		err = f2fs_convert_inline_inode(inode);
+-		if (err)
+-			return err;
+-	}
+-	if (f2fs_has_inline_data(inode))
+-		return err;
+-
+-	flag = F2FS_GET_BLOCK_PRE_AIO;
+-
+-map_blocks:
+-	err = f2fs_map_blocks(inode, &map, 1, flag);
+-	if (map.m_len > 0 && err == -ENOSPC) {
+-		if (!direct_io)
+-			set_inode_flag(inode, FI_NO_PREALLOC);
+-		err = 0;
+-	}
+-	return err;
+-}
+-
+ void f2fs_do_map_lock(struct f2fs_sb_info *sbi, int flag, bool lock)
+ {
+ 	if (flag == F2FS_GET_BLOCK_PRE_AIO) {
+@@ -3340,12 +3293,10 @@ static int prepare_write_begin(struct f2fs_sb_info *sbi,
+ 	int flag;
+ 
+ 	/*
+-	 * we already allocated all the blocks, so we don't need to get
+-	 * the block addresses when there is no need to fill the page.
++	 * If a whole page is being written and we already preallocated all the
++	 * blocks, then there is no need to get a block address now.
+ 	 */
+-	if (!f2fs_has_inline_data(inode) && len == PAGE_SIZE &&
+-	    !is_inode_flag_set(inode, FI_NO_PREALLOC) &&
+-	    !f2fs_verity_in_progress(inode))
++	if (len == PAGE_SIZE && is_inode_flag_set(inode, FI_PREALLOCATED_ALL))
+ 		return 0;
+ 
+ 	/* f2fs_lock_op avoids race between write CP and convert_inline_page */
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index ff37cdd7a6b7..6f196621f772 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -715,7 +715,7 @@ enum {
+ 	FI_INLINE_DOTS,		/* indicate inline dot dentries */
+ 	FI_DO_DEFRAG,		/* indicate defragment is running */
+ 	FI_DIRTY_FILE,		/* indicate regular/symlink has dirty pages */
+-	FI_NO_PREALLOC,		/* indicate skipped preallocated blocks */
++	FI_PREALLOCATED_ALL,	/* all blocks for write were preallocated */
+ 	FI_HOT_DATA,		/* indicate file is hot */
+ 	FI_EXTRA_ATTR,		/* indicate file has extra attribute */
+ 	FI_PROJ_INHERIT,	/* indicate file inherits projectid */
+@@ -3615,7 +3615,6 @@ void f2fs_update_data_blkaddr(struct dnode_of_data *dn, block_t blkaddr);
+ int f2fs_reserve_new_blocks(struct dnode_of_data *dn, blkcnt_t count);
+ int f2fs_reserve_new_block(struct dnode_of_data *dn);
+ int f2fs_get_block(struct dnode_of_data *dn, pgoff_t index);
+-int f2fs_preallocate_blocks(struct kiocb *iocb, struct iov_iter *from);
+ int f2fs_reserve_block(struct dnode_of_data *dn, pgoff_t index);
+ struct page *f2fs_get_read_data_page(struct inode *inode, pgoff_t index,
+ 			int op_flags, bool for_write);
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index 92ec2699bc85..fc87d0f5b82b 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -4235,10 +4235,77 @@ static ssize_t f2fs_file_read_iter(struct kiocb *iocb, struct iov_iter *iter)
+ 	return ret;
+ }
+ 
++/*
++ * Preallocate blocks for a write request, if it is possible and helpful to do
++ * so.  Returns a positive number if blocks may have been preallocated, 0 if no
++ * blocks were preallocated, or a negative errno value if something went
++ * seriously wrong.  Also sets FI_PREALLOCATED_ALL on the inode if *all* the
++ * requested blocks (not just some of them) have been allocated.
++ */
++static int f2fs_preallocate_blocks(struct kiocb *iocb, struct iov_iter *iter)
++{
++	struct inode *inode = file_inode(iocb->ki_filp);
++	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
++	const loff_t pos = iocb->ki_pos;
++	const size_t count = iov_iter_count(iter);
++	struct f2fs_map_blocks map = {};
++	bool dio = (iocb->ki_flags & IOCB_DIRECT) &&
++		   !f2fs_force_buffered_io(inode, iocb, iter);
++	int flag;
++	int ret;
++
++	/* If it will be an out-of-place direct write, don't bother. */
++	if (dio && f2fs_lfs_mode(sbi))
++		return 0;
++
++	/* No-wait I/O can't allocate blocks. */
++	if (iocb->ki_flags & IOCB_NOWAIT)
++		return 0;
++
++	/* If it will be a short write, don't bother. */
++	if (fault_in_iov_iter_readable(iter, count))
++		return 0;
++
++	if (f2fs_has_inline_data(inode)) {
++		/* If the data will fit inline, don't bother. */
++		if (pos + count <= MAX_INLINE_DATA(inode))
++			return 0;
++		ret = f2fs_convert_inline_inode(inode);
++		if (ret)
++			return ret;
++	}
++
++	/* Do not preallocate blocks that will be written partially in 4KB. */
++	map.m_lblk = F2FS_BLK_ALIGN(pos);
++	map.m_len = F2FS_BYTES_TO_BLK(pos + count);
++	if (map.m_len > map.m_lblk)
++		map.m_len -= map.m_lblk;
++	else
++		map.m_len = 0;
++	map.m_may_create = true;
++	if (dio) {
++		map.m_seg_type = f2fs_rw_hint_to_seg_type(inode->i_write_hint);
++		flag = F2FS_GET_BLOCK_PRE_DIO;
++	} else {
++		map.m_seg_type = NO_CHECK_TYPE;
++		flag = F2FS_GET_BLOCK_PRE_AIO;
++	}
++
++	ret = f2fs_map_blocks(inode, &map, 1, flag);
++	/* -ENOSPC is only a fatal error if no blocks could be allocated. */
++	if (ret < 0 && !(ret == -ENOSPC && map.m_len > 0))
++		return ret;
++	if (ret == 0)
++		set_inode_flag(inode, FI_PREALLOCATED_ALL);
++	return map.m_len;
++}
++
+ static ssize_t f2fs_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
+ {
+ 	struct file *file = iocb->ki_filp;
+ 	struct inode *inode = file_inode(file);
++	loff_t target_size;
++	int preallocated;
+ 	ssize_t ret;
+ 
+ 	if (unlikely(f2fs_cp_error(F2FS_I_SB(inode)))) {
+@@ -4262,84 +4329,54 @@ static ssize_t f2fs_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
+ 
+ 	if (unlikely(IS_IMMUTABLE(inode))) {
+ 		ret = -EPERM;
+-		goto unlock;
++		goto out_unlock;
+ 	}
+ 
+ 	if (is_inode_flag_set(inode, FI_COMPRESS_RELEASED)) {
+ 		ret = -EPERM;
+-		goto unlock;
++		goto out_unlock;
+ 	}
+ 
+ 	ret = generic_write_checks(iocb, from);
+ 	if (ret > 0) {
+-		bool preallocated = false;
+-		size_t target_size = 0;
+-		int err;
+-
+-		if (fault_in_iov_iter_readable(from, iov_iter_count(from)))
+-			set_inode_flag(inode, FI_NO_PREALLOC);
+-
+-		if ((iocb->ki_flags & IOCB_NOWAIT)) {
++		if (iocb->ki_flags & IOCB_NOWAIT) {
+ 			if (!f2fs_overwrite_io(inode, iocb->ki_pos,
+ 						iov_iter_count(from)) ||
+ 				f2fs_has_inline_data(inode) ||
+ 				f2fs_force_buffered_io(inode, iocb, from)) {
+-				clear_inode_flag(inode, FI_NO_PREALLOC);
+-				inode_unlock(inode);
+ 				ret = -EAGAIN;
+-				goto out;
++				goto out_unlock;
+ 			}
+-			goto write;
+ 		}
+-
+-		if (is_inode_flag_set(inode, FI_NO_PREALLOC))
+-			goto write;
+-
+ 		if (iocb->ki_flags & IOCB_DIRECT) {
+-			/*
+-			 * Convert inline data for Direct I/O before entering
+-			 * f2fs_direct_IO().
+-			 */
+-			err = f2fs_convert_inline_inode(inode);
+-			if (err)
+-				goto out_err;
+-			/*
+-			 * If force_buffere_io() is true, we have to allocate
+-			 * blocks all the time, since f2fs_direct_IO will fall
+-			 * back to buffered IO.
+-			 */
+-			if (!f2fs_force_buffered_io(inode, iocb, from) &&
+-					f2fs_lfs_mode(F2FS_I_SB(inode)))
+-				goto write;
++			ret = f2fs_convert_inline_inode(inode);
++			if (ret)
++				goto out_unlock;
+ 		}
+-		preallocated = true;
++		/* Possibly preallocate the blocks for the write. */
+ 		target_size = iocb->ki_pos + iov_iter_count(from);
+-
+-		err = f2fs_preallocate_blocks(iocb, from);
+-		if (err) {
+-out_err:
+-			clear_inode_flag(inode, FI_NO_PREALLOC);
+-			inode_unlock(inode);
+-			ret = err;
+-			goto out;
++		preallocated = f2fs_preallocate_blocks(iocb, from);
++		if (preallocated < 0) {
++			ret = preallocated;
++			goto out_unlock;
+ 		}
+-write:
++
+ 		ret = __generic_file_write_iter(iocb, from);
+-		clear_inode_flag(inode, FI_NO_PREALLOC);
+ 
+-		/* if we couldn't write data, we should deallocate blocks. */
+-		if (preallocated && i_size_read(inode) < target_size) {
++		/* Don't leave any preallocated blocks around past i_size. */
++		if (preallocated > 0 && i_size_read(inode) < target_size) {
+ 			down_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
+ 			filemap_invalidate_lock(inode->i_mapping);
+ 			f2fs_truncate(inode);
+ 			filemap_invalidate_unlock(inode->i_mapping);
+ 			up_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
+ 		}
++		clear_inode_flag(inode, FI_PREALLOCATED_ALL);
+ 
+ 		if (ret > 0)
+ 			f2fs_update_iostat(F2FS_I_SB(inode), APP_WRITE_IO, ret);
+ 	}
+-unlock:
++out_unlock:
+ 	inode_unlock(inode);
+ out:
+ 	trace_f2fs_file_write_iter(inode, iocb->ki_pos,
+-- 
+2.34.1.448.ga2b2bfdf31-goog
 
-Alyssa Ross (1):
-      dmaengine: st_fdma: fix MODULE_ALIAS
-
-Andrew Cooper (1):
-      x86/pkey: Fix undefined behaviour with PKRU_WD_BIT
-
-Ard Biesheuvel (2):
-      x86: Make ARCH_USE_MEMREMAP_PROT a generic Kconfig symbol
-      ARM: 9169/1: entry: fix Thumb2 bug in iWMMXt exception handling
-
-Armin Wolf (1):
-      hwmon: (dell-smm) Fix warning on /proc/i8k creation error
-
-Benjamin Tissoires (1):
-      HID: holtek: fix mouse probing
-
-Chao Yu (1):
-      f2fs: fix to do sanity check on last xattr entry in __f2fs_setxattr()
-
-Chen Jun (1):
-      tracing: Fix a kmemleak false positive in tracing_map
-
-Clark Williams (2):
-      Merge tag 'v4.19.223' into v4.19-rt
-      Linux 4.19.223-rt100
-
-Colin Ian King (1):
-      ALSA: drivers: opl3: Fix incorrect use of vp->state
-
-Cyril Novikov (1):
-      ixgbe: set X550 MDIO speed before talking to PHY
-
-Daniele Palmas (1):
-      USB: serial: option: add Telit FN990 compositions
-
-Dinh Nguyen (1):
-      ARM: socfpga: dts: fix qspi node compatible
-
-Dongliang Mu (1):
-      spi: change clk_disable_unprepare to clk_unprepare
-
-Eric Dumazet (2):
-      sch_cake: do not call cake_destroy() from cake_init()
-      sit: do not call ipip6_dev_free() from sit_init_net()
-
-Erik Ekman (1):
-      net/mlx4_en: Update reported link modes for 1/10G
-
-Fabien Dessenne (1):
-      pinctrl: stm32: consider the GPIO offset to expose all the GPIO lines
-
-Fabio Estevam (1):
-      ARM: dts: imx6ull-pinfunc: Fix CSI_DATA07__ESAI_TX0 pad name
-
-Federico Motta (2):
-      block, bfq: improve asymmetric scenarios detection
-      block, bfq: fix asymmetric scenarios detection
-
-Felix Fietkau (1):
-      mac80211: send ADDBA requests using the tid/queue of the aggregation session
-
-Fernando Fernandez Mancera (1):
-      bonding: fix ad_actor_system option setting to default
-
-Florian Fainelli (1):
-      net: systemport: Add global locking for descriptor lifecycle
-
-George Kennedy (2):
-      libata: if T_LENGTH is zero, dma direction should be DMA_NONE
-      scsi: scsi_debug: Sanity check block descriptor length in resp_mode_select()
-
-Greg Jesionowski (1):
-      net: usb: lan78xx: add Allied Telesis AT29M2-AF
-
-Greg Kroah-Hartman (3):
-      USB: gadget: bRequestType is a bitfield, not a enum
-      Linux 4.19.222
-      Linux 4.19.223
-
-Guenter Roeck (2):
-      hwmon: (lm90) Fix usage of CONFIG2 register in detect function
-      hwmon: (lm90) Do not report 'busy' status bit as alarm
-
-Haimin Zhang (1):
-      netdevsim: Zero-initialize memory for new map's value in function nsim_bpf_map_alloc
-
-Hangyu Hua (1):
-      rds: memory leak in __rds_conn_create()
-
-Harshit Mogalapalli (1):
-      net: netlink: af_netlink: Prevent empty skb by adding a check on len.
-
-Helge Deller (1):
-      parisc/agp: Annotate parisc agp init functions with __init
-
-Ignacy Gawędzki (1):
-      netfilter: fix regression in looped (broad|multi)cast's MAC handling
-
-J. Bruce Fields (1):
-      nfsd: fix use-after-free due to delegation race
-
-Jerome Marchand (1):
-      recordmcount.pl: look for jgnop instruction as well as bcrl on s390
-
-Jiasheng Jiang (4):
-      qlcnic: potential dereference null pointer of rx_queue->page_ring
-      fjes: Check for error irq
-      drivers: net: smc911x: Check for error irq
-      sfc: falcon: Check null pointer of rx_queue->page_ring
-
-Jimmy Wang (1):
-      USB: NO_LPM quirk Lenovo USB-C to Ethernet Adapher(RTL8153-04)
-
-Joe Thornber (1):
-      dm btree remove: fix use after free in rebalance_children()
-
-Johan Hovold (1):
-      USB: serial: cp210x: fix CP2105 GPIO registration
-
-Johannes Berg (2):
-      mac80211: track only QoS data frames for admission control
-      mac80211: validate extended element ID is present
-
-John David Anglin (1):
-      parisc: Correct completer in lws start
-
-José Expósito (2):
-      IB/qib: Fix memory leak in qib_user_sdma_queue_pkts()
-      Input: atmel_mxt_ts - fix double free in mxt_read_info_block
-
-Juergen Gross (5):
-      xen/blkfront: harden blkfront against event channel storms
-      xen/netfront: harden netfront against event channel storms
-      xen/console: harden hvc_xen against event channel storms
-      xen/netback: fix rx queue stall detection
-      xen/netback: don't queue unlimited number of packages
-
-Karen Sornek (1):
-      igb: Fix removal of unicast MAC filters of VFs
-
-Le Ma (1):
-      drm/amdgpu: correct register access for RLC_JUMP_TABLE_RESTORE
-
-Letu Ren (1):
-      igbvf: fix double free in `igbvf_probe`
-
-Lin Ma (3):
-      ax25: NPD bug when detaching AX25 device
-      hamradio: defer ax25 kfree after unregister_netdev
-      hamradio: improve the incomplete fix to avoid NPD
-
-Marian Postevca (1):
-      usb: gadget: u_ether: fix race in setting MAC address in setup phase
-
-Miklos Szeredi (2):
-      fuse: annotate lock in fuse_reverse_inval_entry()
-      ovl: fix warning in ovl_create_real()
-
-Nathan Chancellor (4):
-      soc/tegra: fuse: Fix bitwise vs. logical OR warning
-      net: lan78xx: Avoid unnecessary self assignment
-      mwifiex: Remove unnecessary braces from HostCmd_SET_SEQ_NO_BSS_INFO
-      Input: touchscreen - avoid bitwise vs logical OR warning
-
-Nicolas Pitre (1):
-      ARM: 8805/2: remove unneeded naked function usage
-
-Ondrej Jirman (1):
-      i2c: rk3x: Handle a spurious start completion interrupt flag
-
-Paolo Valente (3):
-      block, bfq: fix decrement of num_active_groups
-      block, bfq: fix queue removal from weights tree
-      block, bfq: fix use after free in bfq_bfqq_expire
-
-Paul Moore (1):
-      audit: improve robustness of the audit queue handling
-
-Pavel Skripkin (1):
-      media: mxl111sf: change mutex_init() location
-
-Philip Chen (1):
-      drm/msm/dsi: set default num_data_lanes
-
-Robert Marko (1):
-      arm64: dts: allwinner: orangepi-zero-plus: fix PHY mode
-
-Rémi Denis-Courmont (1):
-      phonet/pep: refuse to enable an unbound pipe
-
-Sasha Levin (1):
-      stable: clamp SUBLEVEL in 4.19
-
-Sean Christopherson (1):
-      KVM: VMX: Fix stale docs for kvm-intel.emulate_invalid_guest_state
-
-Stefan Agner (1):
-      ARM: 8800/1: use choice for kernel unwinders
-
-Stefan Roese (1):
-      PCI/MSI: Mask MSI-X vectors only on success
-
-Sudeep Holla (1):
-      firmware: arm_scpi: Fix string overflow in SCPI genpd driver
-
-Tadeusz Struk (1):
-      nfc: fix segfault in nfc_genl_dump_devices_done
-
-Thadeu Lima de Souza Cascardo (2):
-      ipmi: bail out if init_srcu_struct fails
-      ipmi: fix initialization when workqueue allocation fails
-
-Thomas Gleixner (1):
-      PCI/MSI: Clear PCI_MSIX_FLAGS_MASKALL on error
-
-Tom Lendacky (1):
-      x86/sme: Explicitly map new EFI memmap table as encrypted
-
-Willem de Bruijn (3):
-      net/packet: rx_owner_map depends on pg_vec
-      net: accept UFOv6 packages in virtio_net_hdr_to_skb
-      net: skip virtio_net_hdr_set_proto if protocol already set
-
-Wu Bo (1):
-      ipmi: Fix UAF when uninstall ipmi_si and ipmi_msghandler module
-
-Xiaoke Wang (1):
-      ALSA: jack: Check the return value of kstrdup()
-
-Yu Liao (1):
-      timekeeping: Really make sure wall_to_monotonic isn't positive
----
-Documentation/admin-guide/kernel-parameters.txt    |   8 +-
- Documentation/networking/bonding.txt               |  11 +-
- Makefile                                           |   4 +-
- arch/Kconfig                                       |   3 +
- arch/arm/Kconfig.debug                             |  44 ++--
- arch/arm/boot/dts/imx6ull-pinfunc.h                |   2 +-
- arch/arm/boot/dts/socfpga_arria10_socdk_qspi.dts   |   2 +-
- arch/arm/boot/dts/socfpga_arria5_socdk.dts         |   2 +-
- arch/arm/boot/dts/socfpga_cyclone5_socdk.dts       |   2 +-
- arch/arm/boot/dts/socfpga_cyclone5_sockit.dts      |   2 +-
- arch/arm/boot/dts/socfpga_cyclone5_socrates.dts    |   2 +-
- arch/arm/boot/dts/socfpga_cyclone5_sodia.dts       |   2 +-
- arch/arm/boot/dts/socfpga_cyclone5_vining_fpga.dts |   4 +-
- arch/arm/kernel/entry-armv.S                       |   8 +-
- arch/arm/mm/copypage-fa.c                          |  35 ++-
- arch/arm/mm/copypage-feroceon.c                    |  98 ++++---
- arch/arm/mm/copypage-v4mc.c                        |  19 +-
- arch/arm/mm/copypage-v4wb.c                        |  41 ++-
- arch/arm/mm/copypage-v4wt.c                        |  37 ++-
- arch/arm/mm/copypage-xsc3.c                        |  71 +++--
- arch/arm/mm/copypage-xscale.c                      |  71 +++--
- .../dts/allwinner/sun50i-h5-orangepi-zero-plus.dts |   2 +-
- arch/parisc/kernel/syscall.S                       |   2 +-
- arch/x86/Kconfig                                   |   6 +-
- arch/x86/include/asm/pgtable.h                     |   4 +-
- arch/x86/mm/ioremap.c                              |   4 +-
- arch/x86/platform/efi/quirks.c                     |   3 +-
- block/bfq-iosched.c                                | 287 +++++++++++++--------
- block/bfq-iosched.h                                |  76 ++++--
- block/bfq-wf2q.c                                   |  56 ++--
- drivers/ata/libata-scsi.c                          |  15 +-
- drivers/block/xen-blkfront.c                       |  15 +-
- drivers/char/agp/parisc-agp.c                      |   6 +-
- drivers/char/ipmi/ipmi_msghandler.c                |  21 +-
- drivers/dma/st_fdma.c                              |   2 +-
- drivers/firmware/scpi_pm_domain.c                  |  10 +-
- drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c              |   4 +-
- drivers/gpu/drm/msm/dsi/dsi_host.c                 |   2 +
- drivers/hid/hid-holtek-mouse.c                     |  15 ++
- drivers/hwmon/dell-smm-hwmon.c                     |   7 +-
- drivers/hwmon/lm90.c                               |   8 +-
- drivers/i2c/busses/i2c-rk3x.c                      |   4 +-
- drivers/infiniband/hw/qib/qib_user_sdma.c          |   2 +-
- drivers/input/touchscreen/atmel_mxt_ts.c           |   2 +-
- drivers/input/touchscreen/of_touchscreen.c         |  18 +-
- drivers/md/persistent-data/dm-btree-remove.c       |   2 +-
- drivers/media/usb/dvb-usb-v2/mxl111sf.c            |  16 +-
- drivers/net/bonding/bond_options.c                 |   2 +-
- drivers/net/ethernet/broadcom/bcmsysport.c         |   5 +
- drivers/net/ethernet/broadcom/bcmsysport.h         |   1 +
- drivers/net/ethernet/intel/igb/igb_main.c          |  28 +-
- drivers/net/ethernet/intel/igbvf/netdev.c          |   1 +
- drivers/net/ethernet/intel/ixgbe/ixgbe_x550.c      |   3 +
- drivers/net/ethernet/mellanox/mlx4/en_ethtool.c    |   6 +-
- drivers/net/ethernet/qlogic/qlcnic/qlcnic_sriov.h  |   2 +-
- .../ethernet/qlogic/qlcnic/qlcnic_sriov_common.c   |  12 +-
- .../net/ethernet/qlogic/qlcnic/qlcnic_sriov_pf.c   |   4 +-
- drivers/net/ethernet/sfc/falcon/rx.c               |   5 +-
- drivers/net/ethernet/smsc/smc911x.c                |   5 +
- drivers/net/fjes/fjes_main.c                       |   5 +
- drivers/net/hamradio/mkiss.c                       |   5 +-
- drivers/net/netdevsim/bpf.c                        |   1 +
- drivers/net/usb/lan78xx.c                          |  12 +-
- drivers/net/wireless/marvell/mwifiex/cmdevt.c      |   4 +-
- drivers/net/wireless/marvell/mwifiex/fw.h          |   8 +-
- drivers/net/xen-netback/common.h                   |   1 +
- drivers/net/xen-netback/rx.c                       |  77 ++++--
- drivers/net/xen-netfront.c                         | 125 ++++++---
- drivers/pci/msi.c                                  |  15 +-
- drivers/pinctrl/stm32/pinctrl-stm32.c              |   8 +-
- drivers/scsi/scsi_debug.c                          |   4 +-
- drivers/soc/tegra/fuse/fuse-tegra.c                |   2 +-
- drivers/soc/tegra/fuse/fuse.h                      |   2 +-
- drivers/spi/spi-armada-3700.c                      |   2 +-
- drivers/tty/hvc/hvc_xen.c                          |  30 ++-
- drivers/usb/core/quirks.c                          |   3 +
- drivers/usb/gadget/composite.c                     |   6 +-
- drivers/usb/gadget/function/u_ether.c              |  15 +-
- drivers/usb/gadget/legacy/dbgp.c                   |   6 +-
- drivers/usb/gadget/legacy/inode.c                  |   6 +-
- drivers/usb/serial/cp210x.c                        |   6 +-
- drivers/usb/serial/option.c                        |   8 +
- fs/f2fs/xattr.c                                    |   9 +-
- fs/fuse/dir.c                                      |   2 +-
- fs/nfsd/nfs4state.c                                |   9 +-
- fs/overlayfs/dir.c                                 |   3 +-
- fs/overlayfs/overlayfs.h                           |   1 +
- fs/overlayfs/super.c                               |  12 +-
- include/linux/virtio_net.h                         |  25 +-
- kernel/audit.c                                     |  21 +-
- kernel/time/timekeeping.c                          |   3 +-
- kernel/trace/tracing_map.c                         |   3 +
- lib/Kconfig.debug                                  |   6 +-
- localversion-rt                                    |   2 +-
- net/ax25/af_ax25.c                                 |   4 +-
- net/ipv6/sit.c                                     |   1 -
- net/mac80211/agg-tx.c                              |   2 +-
- net/mac80211/mlme.c                                |  13 +-
- net/mac80211/util.c                                |   2 +
- net/netfilter/nfnetlink_log.c                      |   3 +-
- net/netfilter/nfnetlink_queue.c                    |   3 +-
- net/netlink/af_netlink.c                           |   5 +
- net/nfc/netlink.c                                  |   6 +-
- net/packet/af_packet.c                             |   5 +-
- net/phonet/pep.c                                   |   2 +
- net/rds/connection.c                               |   1 +
- net/sched/sch_cake.c                               |   6 +-
- scripts/recordmcount.pl                            |   2 +-
- sound/core/jack.c                                  |   4 +
- sound/drivers/opl3/opl3_midi.c                     |   2 +-
- 110 files changed, 1022 insertions(+), 617 deletions(-)
----

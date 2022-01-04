@@ -2,135 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4FD2483EBA
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 10:04:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D65E483ECE
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 10:05:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbiADJEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 04:04:47 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:45936 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbiADJEq (ORCPT
+        id S229956AbiADJFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 04:05:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36036 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229932AbiADJFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 04:04:46 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20494WBh110377;
-        Tue, 4 Jan 2022 03:04:32 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1641287072;
-        bh=We3dvzK5GrcT4Ae0TTa+3toTAl46R4VDvGJazgXnUs4=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=ceU83156UsJKnOKSSpW8Hln86C+1MOk3+mxLTuoySx4dhQ2/XnbRyfTJYLuipRDS1
-         /ket2hLOcezKuj9F3WRlL7ry9NH9H1OgOcAVCARvQBp4j2fAOGlTRgvjKEh1WUOhzf
-         3aBqI2Q/gGZwYzQAPv6earNQnS12zf3eFBWFm+ZE=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20494WZf102604
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 4 Jan 2022 03:04:32 -0600
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 4
- Jan 2022 03:04:32 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 4 Jan 2022 03:04:32 -0600
-Received: from [10.24.69.159] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20494TID097728;
-        Tue, 4 Jan 2022 03:04:30 -0600
-Subject: Re: [PATCH v2] PCI: endpoint: Use DMA channel's 'dev' for
- dma_map_single()
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20211116142342.21689-1-kishon@ti.com>
-From:   Kishon Vijay Abraham I <kishon@ti.com>
-Message-ID: <5589ccbc-af34-e5ff-ff2e-f694c4ea696e@ti.com>
-Date:   Tue, 4 Jan 2022 14:34:29 +0530
+        Tue, 4 Jan 2022 04:05:20 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A3EC061761;
+        Tue,  4 Jan 2022 01:05:19 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 773941F42D02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1641287118;
+        bh=Xi4ZY9J9nQvNXvhCwkB/X5eLzOcvVw0qtIjUE13RnLU=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=WUaXsPuY6FKnIU8lBBBqM1LvEk/x6qaAWekIWkPjFP2qFjwsJL1sGLbcvPrJWOd9I
+         NWKKkWvqtzTye/SlhBuLVGGC3lOLUR83pgwxWoeV6wcO+tWFkOxQoO9J+/plXLGIr/
+         QF50/nc8H3X6YdRIsgkwFBPQ24ZeZ0SPcNfBFFU88hjy3/i3MilXlM741r7EVR46I0
+         rj+6gzwNQamuKgx10edf1ZuVkmTcbFTi9l9Ws6IXHm167OMAiYjGZky1n38gTcORdE
+         yHfeoneiOtv+L6UazXoDiFxUCPI3H6cJZuvnVGbwvm+Jrz07mPNK+mkI3W7YSRix0q
+         e/JUAEwxQO/4Q==
+Subject: Re: [PATCH 1/2] soc: mediatek: pwrap: add pwrap driver for MT8186 SoC
+To:     Johnson Wang <johnson.wang@mediatek.com>, robh+dt@kernel.org,
+        matthias.bgg@gmail.com
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20211230114913.9829-1-johnson.wang@mediatek.com>
+ <20211230114913.9829-2-johnson.wang@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <3dd41039-0151-4ee0-3940-3aceeaff17d1@collabora.com>
+Date:   Tue, 4 Jan 2022 10:05:15 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20211116142342.21689-1-kishon@ti.com>
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20211230114913.9829-2-johnson.wang@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lorenzo,
-
-On 16/11/21 7:53 pm, Kishon Vijay Abraham I wrote:
-> For the case where the pci-epf-test driver uses DMA for transferring
-> data to the root complex device, dma_map_single() is used to map virtual
-> address to a physical address (address accessible by DMA controller) and
-> provided to the DMAengine API for transferring data. Here instead of
-> using the PCIe endpoint controller's 'dev' for dma_map_single(), provide
-> DMA channel's 'dev' for dma_map_single() since the data transfer is
-> actually done by DMA.
+Il 30/12/21 12:49, Johnson Wang ha scritto:
+> MT8186 are highly integrated SoC and use PMIC_MT6366 for
+> power management. This patch adds pwrap master driver to
+> access PMIC_MT6366.
 > 
-> Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
+> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
 
-Can this patch be merged?
+Hello Johnson,
+thanks for the patch!
 
-Thanks,
-Kishon
+However, there's something to improve...
 
 > ---
-> Changes from v1:
-> Use dmaengine_get_dma_device() to get dma device from channel
-> V1: https://lore.kernel.org/r/20211115044944.31103-1-kishon@ti.com
->  drivers/pci/endpoint/functions/pci-epf-test.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>   drivers/soc/mediatek/mtk-pmic-wrap.c | 86 ++++++++++++++++++++++++++--
+>   1 file changed, 80 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-> index 90d84d3bc868..51f5b0b7b225 100644
-> --- a/drivers/pci/endpoint/functions/pci-epf-test.c
-> +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
-> @@ -314,12 +314,12 @@ static int pci_epf_test_read(struct pci_epf_test *epf_test)
->  	u32 crc32;
->  	bool use_dma;
->  	phys_addr_t phys_addr;
-> +	struct device *dma_dev;
->  	phys_addr_t dst_phys_addr;
->  	struct timespec64 start, end;
->  	struct pci_epf *epf = epf_test->epf;
->  	struct device *dev = &epf->dev;
->  	struct pci_epc *epc = epf->epc;
-> -	struct device *dma_dev = epf->epc->dev.parent;
->  	enum pci_barno test_reg_bar = epf_test->test_reg_bar;
->  	struct pci_epf_test_reg *reg = epf_test->reg[test_reg_bar];
->  
-> @@ -353,6 +353,7 @@ static int pci_epf_test_read(struct pci_epf_test *epf_test)
->  			goto err_dma_map;
->  		}
->  
-> +		dma_dev = dmaengine_get_dma_device(epf_test->dma_chan);
->  		dst_phys_addr = dma_map_single(dma_dev, buf, reg->size,
->  					       DMA_FROM_DEVICE);
->  		if (dma_mapping_error(dma_dev, dst_phys_addr)) {
-> @@ -402,12 +403,12 @@ static int pci_epf_test_write(struct pci_epf_test *epf_test)
->  	void *buf;
->  	bool use_dma;
->  	phys_addr_t phys_addr;
-> +	struct device *dma_dev;
->  	phys_addr_t src_phys_addr;
->  	struct timespec64 start, end;
->  	struct pci_epf *epf = epf_test->epf;
->  	struct device *dev = &epf->dev;
->  	struct pci_epc *epc = epf->epc;
-> -	struct device *dma_dev = epf->epc->dev.parent;
->  	enum pci_barno test_reg_bar = epf_test->test_reg_bar;
->  	struct pci_epf_test_reg *reg = epf_test->reg[test_reg_bar];
->  
-> @@ -444,6 +445,7 @@ static int pci_epf_test_write(struct pci_epf_test *epf_test)
->  			goto err_map_addr;
->  		}
->  
-> +		dma_dev = dmaengine_get_dma_device(epf_test->dma_chan);
->  		src_phys_addr = dma_map_single(dma_dev, buf, reg->size,
->  					       DMA_TO_DEVICE);
->  		if (dma_mapping_error(dma_dev, src_phys_addr)) {
-> 
+> diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c b/drivers/soc/mediatek/mtk-pmic-wrap.c
+> index 952bc554f443..4af713274468 100644
+> --- a/drivers/soc/mediatek/mtk-pmic-wrap.c
+> +++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
+> @@ -30,6 +30,7 @@
+>   #define PWRAP_GET_WACS_REQ(x)		(((x) >> 19) & 0x00000001)
+>   #define PWRAP_STATE_SYNC_IDLE0		BIT(20)
+>   #define PWRAP_STATE_INIT_DONE0		BIT(21)
+> +#define PWRAP_STATE_INIT_DONE0_V2	BIT(22)
+>   #define PWRAP_STATE_INIT_DONE1		BIT(15)
+>   
+>   /* macro for WACS FSM */
+> @@ -77,6 +78,8 @@
+>   #define PWRAP_CAP_INT1_EN	BIT(3)
+>   #define PWRAP_CAP_WDT_SRC1	BIT(4)
+>   #define PWRAP_CAP_ARB		BIT(5)
+> +#define PWRAP_CAP_MONITOR_V2	BIT(6)
+> +#define PWRAP_CAP_ARB_V2	BIT(8)
+>   
+>   /* defines for slave device wrapper registers */
+>   enum dew_regs {
+> @@ -1063,6 +1066,55 @@ static int mt8516_regs[] = {
+>   	[PWRAP_MSB_FIRST] =		0x170,
+>   };
+>   
+> +static int mt8186_regs[] = {
+> +	[PWRAP_MUX_SEL] =		0x0,
+> +	[PWRAP_WRAP_EN] =		0x4,
+> +	[PWRAP_DIO_EN] =		0x8,
+> +	[PWRAP_RDDMY] =			0x20,
+> +	[PWRAP_CSHEXT_WRITE] =		0x24,
+> +	[PWRAP_CSHEXT_READ] =		0x28,
+> +	[PWRAP_CSLEXT_WRITE] =		0x2C,
+> +	[PWRAP_CSLEXT_READ] =		0x30,
+> +	[PWRAP_EXT_CK_WRITE] =		0x34,
+> +	[PWRAP_STAUPD_CTRL] =		0x3C,
+> +	[PWRAP_STAUPD_GRPEN] =		0x40,
+> +	[PWRAP_EINT_STA0_ADR] =		0x44,
+> +	[PWRAP_EINT_STA1_ADR] =		0x48,
+> +	[PWRAP_INT_CLR] =		0xC8,
+> +	[PWRAP_INT_FLG] =		0xC4,
+> +	[PWRAP_MAN_EN] =		0x7C,
+> +	[PWRAP_MAN_CMD] =		0x80,
+> +	[PWRAP_WACS0_EN] =		0x8C,
+> +	[PWRAP_WACS1_EN] =		0x94,
+> +	[PWRAP_WACS2_EN] =		0x9C,
+> +	[PWRAP_INIT_DONE0] =		0x90,
+> +	[PWRAP_INIT_DONE1] =		0x98,
+> +	[PWRAP_INIT_DONE2] =		0xA0,
+> +	[PWRAP_INT_EN] =		0xBC,
+> +	[PWRAP_INT1_EN] =		0xCC,
+> +	[PWRAP_INT1_FLG] =		0xD4,
+> +	[PWRAP_INT1_CLR] =		0xD8,
+> +	[PWRAP_TIMER_EN] =		0xF0,
+> +	[PWRAP_WDT_UNIT] =		0xF8,
+> +	[PWRAP_WDT_SRC_EN] =		0xFC,
+> +	[PWRAP_WDT_SRC_EN_1] =		0x100,
+> +	[PWRAP_WDT_FLG] =		0x104,
+> +	[PWRAP_SPMINF_STA] =		0x1B4,
+> +	[PWRAP_DCM_EN] =		0x1EC,
+> +	[PWRAP_DCM_DBC_PRD] =		0x1F0,
+> +	[PWRAP_GPSINF_0_STA] =		0x204,
+> +	[PWRAP_GPSINF_1_STA] =		0x208,
+> +	[PWRAP_WACS0_CMD] =		0xC00,
+> +	[PWRAP_WACS0_RDATA] =		0xC04,
+> +	[PWRAP_WACS0_VLDCLR] =		0xC08,
+> +	[PWRAP_WACS1_CMD] =		0xC10,
+> +	[PWRAP_WACS1_RDATA] =		0xC14,
+> +	[PWRAP_WACS1_VLDCLR] =		0xC18,
+> +	[PWRAP_WACS2_CMD] =		0xC20,
+> +	[PWRAP_WACS2_RDATA] =		0xC24,
+> +	[PWRAP_WACS2_VLDCLR] =		0xC28,
+> +};
+> +
+>   enum pmic_type {
+>   	PMIC_MT6323,
+>   	PMIC_MT6351,
+> @@ -1083,6 +1135,7 @@ enum pwrap_type {
+>   	PWRAP_MT8135,
+>   	PWRAP_MT8173,
+>   	PWRAP_MT8183,
+> +	PWRAP_MT8186,
+>   	PWRAP_MT8195,
+>   	PWRAP_MT8516,
+>   };
+> @@ -1535,6 +1588,7 @@ static int pwrap_init_cipher(struct pmic_wrapper *wrp)
+>   	case PWRAP_MT6779:
+>   	case PWRAP_MT6797:
+>   	case PWRAP_MT8173:
+> +	case PWRAP_MT8186:
+>   	case PWRAP_MT8516:
+>   		pwrap_writel(wrp, 1, PWRAP_CIPHER_EN);
+>   		break;
+> @@ -2069,6 +2123,19 @@ static struct pmic_wrapper_type pwrap_mt8516 = {
+>   	.init_soc_specific = NULL,
+>   };
+>   
+> +static struct pmic_wrapper_type pwrap_mt8186 = {
+> +	.regs = mt8186_regs,
+> +	.type = PWRAP_MT8186,
+> +	.arb_en_all = 0xfb27f,
+> +	.int_en_all = 0xfffffffe, /* disable WatchDog Timeout for bit 1 */
+> +	.int1_en_all =  0x000017ff, /* disable Matching interrupt for bit 13 */
+> +	.spi_w = PWRAP_MAN_CMD_SPI_WRITE,
+> +	.wdt_src = PWRAP_WDT_SRC_MASK_ALL,
+> +	.caps = PWRAP_CAP_INT1_EN | PWRAP_CAP_MONITOR_V2 | PWRAP_CAP_ARB_V2,
+> +	.init_reg_clock = pwrap_common_init_reg_clock,
+> +	.init_soc_specific = NULL,
+> +};
+> +
+>   static const struct of_device_id of_pwrap_match_tbl[] = {
+>   	{
+>   		.compatible = "mediatek,mt2701-pwrap",
+> @@ -2097,6 +2164,9 @@ static const struct of_device_id of_pwrap_match_tbl[] = {
+>   	}, {
+>   		.compatible = "mediatek,mt8183-pwrap",
+>   		.data = &pwrap_mt8183,
+> +	}, {
+> +		.compatible = "mediatek,mt8186-pwrap",
+> +		.data = &pwrap_mt8186,
+>   	}, {
+>   		.compatible = "mediatek,mt8195-pwrap",
+>   		.data = &pwrap_mt8195,
+> @@ -2112,7 +2182,7 @@ MODULE_DEVICE_TABLE(of, of_pwrap_match_tbl);
+>   static int pwrap_probe(struct platform_device *pdev)
+>   {
+>   	int ret, irq;
+> -	u32 mask_done;
+> +	u32 rdata;
+>   	struct pmic_wrapper *wrp;
+>   	struct device_node *np = pdev->dev.of_node;
+>   	const struct of_device_id *of_slave_id = NULL;
+> @@ -2207,12 +2277,16 @@ static int pwrap_probe(struct platform_device *pdev)
+>   		}
+>   	}
+>   
+> -	if (HAS_CAP(wrp->master->caps, PWRAP_CAP_ARB))
+> -		mask_done = PWRAP_STATE_INIT_DONE1;
+> +	if (!HAS_CAP(wrp->master->caps, PWRAP_CAP_ARB))
+> +		rdata = pwrap_readl(wrp, PWRAP_WACS2_RDATA) &
+> +				    PWRAP_STATE_INIT_DONE0;
+> +	else if (!HAS_CAP(wrp->master->caps, PWRAP_CAP_ARB_V2))
+> +		rdata = pwrap_readl(wrp, PWRAP_WACS2_RDATA) &
+> +				    PWRAP_STATE_INIT_DONE0_V2;
+
+Why are you changing the logic here?
+I think that assigning to `mask_done` is a good option, reducing duplication and
+also reducing the amount of changes for this patch.
+
+That said, I would simply do it as follows:
+
+	if (HAS_CAP(wrp->master->caps, PWRAP_CAP_ARB))
+
+		mask_done = PWRAP_STATE_INIT_DONE1;
+
+	else if (HAS_CAP(wrp->master->caps, PWRAP_CAP_ARB_V2))
+
+		mask_done = PWRAP_STATE_INIT_DONE0_V2;
+
+	else
+
+		mask_done = PWRAP_STATE_INIT_DONE0;
+
+Regards,
+- Angelo

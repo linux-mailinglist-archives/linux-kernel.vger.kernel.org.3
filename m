@@ -2,189 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21CE64840C2
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B86784840C6
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 12:25:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232042AbiADLZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 06:25:28 -0500
-Received: from mga12.intel.com ([192.55.52.136]:22963 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231201AbiADLZ0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 06:25:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641295526; x=1672831526;
-  h=from:to:subject:in-reply-to:references:date:message-id:
-   mime-version:content-transfer-encoding;
-  bh=x4D4/s4oQtbYCG/969o8arY4TX/i3CQNj+SMyZLVQM8=;
-  b=J1zjKlTWQSnBtAS5ite3i9turBSJD7Zdso8DdrOTI/6qvRMnbDW+SXwy
-   lhqJdDVrwz6zUzMZ1PLpurptscboi+51lbY3cONKSlLFqIiUyBfSlAnvL
-   IeAIoUWe/ogpe0zICbm5J+OxHWXf+gXoMRq5JxeLd5S4MwtXwYJAL1Izy
-   1Tru+m2sNZK0RK0QBBsRfonyiylzTNabXS7wNcCF+4e4wXKrpnqT+uRBF
-   hW4kPOzpbkwuaV2+4tasqESVB+AyPUFNTWN4klqjTJaM8N2oB5bhuT+X6
-   j2ZOLCeAmK3GchuyDqiO0Tia2hYcxzmYv9A/cAWwh/B2xKlZr9EY8tt1a
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="222199748"
-X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
-   d="scan'208";a="222199748"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 03:25:25 -0800
-X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
-   d="scan'208";a="488164956"
-Received: from gtobin-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.11.253])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 03:25:22 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     =?utf-8?B?6LW15Yab5aWO?= <bernard@vivo.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: =?utf-8?B?562U5aSNOg==?= [PATCH] gpu/drm: fix potential memleak
- in error branch
-In-Reply-To: <PSAPR06MB40216FB1425E72891B6A6B28DF4A9@PSAPR06MB4021.apcprd06.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20211116124751.31181-1-bernard@vivo.com>
- <ACIArwAdEzJlxV*UItyRxarz.9.1640948962309.Hmail.bernard@vivo.com.@PDg3emdvaGh2emEuZnNmQGludGVsLmNvbT4=>
- <PSAPR06MB40216FB1425E72891B6A6B28DF4A9@PSAPR06MB4021.apcprd06.prod.outlook.com>
-Date:   Tue, 04 Jan 2022 13:25:19 +0200
-Message-ID: <87k0ffu4io.fsf@intel.com>
+        id S232221AbiADLZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 06:25:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39824 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229884AbiADLZu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 06:25:50 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71329C061761;
+        Tue,  4 Jan 2022 03:25:50 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id rj2-20020a17090b3e8200b001b1944bad25so2790787pjb.5;
+        Tue, 04 Jan 2022 03:25:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=C7PlsrZmkmw1dwadd6snlv+j19gs+J67k6Ar8dpYo9s=;
+        b=D1/Gg1QeEGmwykg1bz7ati5WfxbzjsbtIFmdpyMW/yWuGR3zQhHfa4NEOloPtOtjWD
+         eXV/vzaxlQDKlSzKG2Y888exOY5+6OVVnklyuVBjb5kvo9Atp+G5ET3iYXshibZfg+AP
+         HvBg6drQRv1iU6jQgV2PBCb5/961Owe+GxWGhcie4zmhANIoyJ+cMDAcht7fmq8g9rSQ
+         GvnbQnnt83tsOXKz+B39CDJCxtPYagmmh+7KYcBxOq1Epri1cbALUivzceVSrAkGCPmk
+         5JesPtJ9Y9eFYkokOu2c0YrH+Z9H5FVZQWKLrqOBYX41i3IsIMvO1zNm7EVBzCA4ugyZ
+         kXzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=C7PlsrZmkmw1dwadd6snlv+j19gs+J67k6Ar8dpYo9s=;
+        b=gHMN2Dcvku02Ffj/498hvcsNL6yBz/TDA8KGazq+Jefh61l1VTPtY6wmLg9iuL0RFN
+         sX/949TxLf4Rd2wEIAXaZ1fEpTzY/du123dNCTtavVzHEc9lFvOwY6jco9LVsUs5kBY2
+         L6uf2+kT1V0Yjs8VkdJIgNIiXv72flp0weY18Cp96+HLaJ0vLVEyKytFNKJ0CxRSg2js
+         UqLC2x5QCrlr0+MS34LMyHxRPLBwAbo94JovgMN+tpQOzy4NNd9/MbgXu5tqFsE30kh3
+         xtBREeN6H8CRoegB16p3mghOskoNgrKAclhTXrBBAzDGqZAGnDA4gIyHCx3NxsKtgptj
+         P+ew==
+X-Gm-Message-State: AOAM531PP34pvR39A3pKvu3q1KTfyxq8yLgj5JroYZtCVKm1yZArZgrm
+        xEG1VHvFyY3F3LIf3ZCvi78=
+X-Google-Smtp-Source: ABdhPJxoUEMRxA3KH1bowDD9/35VotMFoLpdgp1guXcyEfxBBd0pNwQ3Ugs+HIe4RUaSARO3YQINrA==
+X-Received: by 2002:a17:903:3013:b0:149:5ba0:4f80 with SMTP id o19-20020a170903301300b001495ba04f80mr45675901pla.87.1641295549957;
+        Tue, 04 Jan 2022 03:25:49 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id n20sm36936608pjt.40.2022.01.04.03.25.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 03:25:49 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     damien.lemoal@opensource.wdc.com
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>, CGEL ZTE <cgel.zte@gmail.com>
+Subject: [PATCH] drivers/ata: remove redundant val variable
+Date:   Tue,  4 Jan 2022 11:25:45 +0000
+Message-Id: <20220104112545.601962-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 04 Jan 2022, =E8=B5=B5=E5=86=9B=E5=A5=8E <bernard@vivo.com> wrote:
-> -----=E9=82=AE=E4=BB=B6=E5=8E=9F=E4=BB=B6-----
-> =E5=8F=91=E4=BB=B6=E4=BA=BA: bernard@vivo.com <bernard@vivo.com> =E4=BB=
-=A3=E8=A1=A8 Jani Nikula
-> =E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4: 2021=E5=B9=B412=E6=9C=8831=E6=97=A5=
- 19:09
-> =E6=94=B6=E4=BB=B6=E4=BA=BA: =E8=B5=B5=E5=86=9B=E5=A5=8E <bernard@vivo.co=
-m>; Maarten Lankhorst <maarten.lankhorst@linux.intel.com>; Maxime Ripard <m=
-ripard@kernel.org>; Thomas Zimmermann <tzimmermann@suse.de>; David Airlie <=
-airlied@linux.ie>; Daniel Vetter <daniel@ffwll.ch>; dri-devel@lists.freedes=
-ktop.org; linux-kernel@vger.kernel.org
-> =E6=8A=84=E9=80=81: =E8=B5=B5=E5=86=9B=E5=A5=8E <bernard@vivo.com>
-> =E4=B8=BB=E9=A2=98: Re: [PATCH] gpu/drm: fix potential memleak in error b=
-ranch
->
-> On Tue, 16 Nov 2021, Bernard Zhao <bernard@vivo.com> wrote:
->> This patch try to fix potential memleak in error branch.
->
->>Please elaborate.
->
-> Hi Jani:
->
-> This patch try to fix potential memleak in error branch.
-> For example:
-> nv50_sor_create ->nv50_mstm_new-> drm_dp_mst_topology_mgr_init
-> In function drm_dp_mst_topology_mgr_init, there are five error branches, =
-error branch just return error code, no free called.=20
-> And we see that the caller didn`t do the drm_dp_mst_topology_mgr_destroy =
-job.
-> I am not sure if there some gap, I think this may bring in the risk of me=
-mleak issue.
-> Thanks!
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-This should be part of the commit message.
+Return value from DIV_ROUND_UP() directly instead
+of taking this in another redundant variable.
 
->
-> BR//Bernard
->
->>BR,
->>Jani.
->
->
->>
->> Signed-off-by: Bernard Zhao <bernard@vivo.com>
->> ---
->>  drivers/gpu/drm/drm_dp_mst_topology.c | 22 ++++++++++++++++------
->>  1 file changed, 16 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/drm_dp_mst_topology.c=20
->> b/drivers/gpu/drm/drm_dp_mst_topology.c
->> index f3d79eda94bb..f73b180dee73 100644
->> --- a/drivers/gpu/drm/drm_dp_mst_topology.c
->> +++ b/drivers/gpu/drm/drm_dp_mst_topology.c
->> @@ -5501,7 +5501,10 @@ int drm_dp_mst_topology_mgr_init(struct drm_dp_ms=
-t_topology_mgr *mgr,
->>  				 int max_lane_count, int max_link_rate,
->>  				 int conn_base_id)
->>  {
->> -	struct drm_dp_mst_topology_state *mst_state;
->> +	struct drm_dp_mst_topology_state *mst_state =3D NULL;
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
+---
+ drivers/ata/pata_octeon_cf.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-This is superfluous.
+diff --git a/drivers/ata/pata_octeon_cf.c b/drivers/ata/pata_octeon_cf.c
+index b5a3f710d76d..70f91800fe9e 100644
+--- a/drivers/ata/pata_octeon_cf.c
++++ b/drivers/ata/pata_octeon_cf.c
+@@ -73,16 +73,12 @@ MODULE_PARM_DESC(enable_dma,
+  */
+ static unsigned int ns_to_tim_reg(unsigned int tim_mult, unsigned int nsecs)
+ {
+-	unsigned int val;
+-
+ 	/*
+ 	 * Compute # of eclock periods to get desired duration in
+ 	 * nanoseconds.
+ 	 */
+-	val = DIV_ROUND_UP(nsecs * (octeon_get_io_clock_rate() / 1000000),
++	return DIV_ROUND_UP(nsecs * (octeon_get_io_clock_rate() / 1000000),
+ 			  1000 * tim_mult);
+-
+-	return val;
+ }
+ 
+ static void octeon_cf_set_boot_reg_cfg(int cs, unsigned int multiplier)
+-- 
+2.25.1
 
-Other than that,
-
-Reviewed-by: Jani Nikula <jani.nikula@intel.com>
-
-
->> +
->> +	mgr->payloads =3D NULL;
->> +	mgr->proposed_vcpis =3D NULL;
->>=20=20
->>  	mutex_init(&mgr->lock);
->>  	mutex_init(&mgr->qlock);
->> @@ -5523,7 +5526,7 @@ int drm_dp_mst_topology_mgr_init(struct drm_dp_mst=
-_topology_mgr *mgr,
->>  	 */
->>  	mgr->delayed_destroy_wq =3D alloc_ordered_workqueue("drm_dp_mst_wq", 0=
-);
->>  	if (mgr->delayed_destroy_wq =3D=3D NULL)
->> -		return -ENOMEM;
->> +		goto out;
->>=20=20
->>  	INIT_WORK(&mgr->work, drm_dp_mst_link_probe_work);
->>  	INIT_WORK(&mgr->tx_work, drm_dp_tx_work); @@ -5539,18 +5542,18 @@=20
->> int drm_dp_mst_topology_mgr_init(struct drm_dp_mst_topology_mgr *mgr,
->>  	mgr->conn_base_id =3D conn_base_id;
->>  	if (max_payloads + 1 > sizeof(mgr->payload_mask) * 8 ||
->>  	    max_payloads + 1 > sizeof(mgr->vcpi_mask) * 8)
->> -		return -EINVAL;
->> +		goto failed;
->>  	mgr->payloads =3D kcalloc(max_payloads, sizeof(struct drm_dp_payload),=
- GFP_KERNEL);
->>  	if (!mgr->payloads)
->> -		return -ENOMEM;
->> +		goto failed;
->>  	mgr->proposed_vcpis =3D kcalloc(max_payloads, sizeof(struct drm_dp_vcp=
-i *), GFP_KERNEL);
->>  	if (!mgr->proposed_vcpis)
->> -		return -ENOMEM;
->> +		goto failed;
->>  	set_bit(0, &mgr->payload_mask);
->>=20=20
->>  	mst_state =3D kzalloc(sizeof(*mst_state), GFP_KERNEL);
->>  	if (mst_state =3D=3D NULL)
->> -		return -ENOMEM;
->> +		goto failed;
->>=20=20
->>  	mst_state->total_avail_slots =3D 63;
->>  	mst_state->start_slot =3D 1;
->> @@ -5563,6 +5566,13 @@ int drm_dp_mst_topology_mgr_init(struct drm_dp_ms=
-t_topology_mgr *mgr,
->>  				    &drm_dp_mst_topology_state_funcs);
->>=20=20
->>  	return 0;
->> +
->> +failed:
->> +	kfree(mgr->proposed_vcpis);
->> +	kfree(mgr->payloads);
->> +	destroy_workqueue(mgr->delayed_destroy_wq);
->> +out:
->> +	return -ENOMEM;
->>  }
->>  EXPORT_SYMBOL(drm_dp_mst_topology_mgr_init);
->
-> --
-> Jani Nikula, Intel Open Source Graphics Center
-
---=20
-Jani Nikula, Intel Open Source Graphics Center

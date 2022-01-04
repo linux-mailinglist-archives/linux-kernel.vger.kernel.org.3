@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2123483DDA
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 09:11:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A8B483DDD
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 09:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234097AbiADIL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 03:11:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55366 "EHLO
+        id S233909AbiADILa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 03:11:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27995 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233983AbiADILA (ORCPT
+        by vger.kernel.org with ESMTP id S234149AbiADILI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 03:11:00 -0500
+        Tue, 4 Jan 2022 03:11:08 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641283860;
+        s=mimecast20190719; t=1641283867;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=uDTf/DGOXxIRO6kbaoXtydGSDRn5G2e6XLZL3XY5bwo=;
-        b=fENM+a/lWCRoTH+IzKvPDiJ8PPchrPlGbbQJUtZyCMjULZ/1jn5PwDXO90XWhovlnef8Mq
-        oJJuAbd7HLTWP0g0AgtKUtfzVYOxusDH3j37/sUkl9cpxm6Nxqb+KFPnojkI8pAkBMcjeZ
-        vgQ88swtJEdXS2Wd6kWXSLsGpP/NHWU=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=n1Sn68YOpfQdWqtYtUrgCV+sac3UqaI1SOKuBByB+TA=;
+        b=ifQyikBVw4X8yU49j0b2BVUZ7C7SIUHx2P5aeqLEyFpKc0n1pot3QuwfJlMRjOUpJvQNLC
+        DEM2yE+7ln7bJi3g4OHxakt2yw4JSYwY3rzyNCSz6NWweXnH6IpWQ6smSzkxyQ+xvSTZcs
+        BahRS/5TjFYSw3DfZbBhpUQ4xGXeaEI=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-466-FduBQx0qPcyjrsJc2Tp_4A-1; Tue, 04 Jan 2022 03:10:59 -0500
-X-MC-Unique: FduBQx0qPcyjrsJc2Tp_4A-1
-Received: by mail-ed1-f70.google.com with SMTP id y10-20020a056402358a00b003f88b132849so24910353edc.0
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 00:10:58 -0800 (PST)
+ us-mta-470-ymtHuzebP3eu9PSjtI_JRQ-1; Tue, 04 Jan 2022 03:11:05 -0500
+X-MC-Unique: ymtHuzebP3eu9PSjtI_JRQ-1
+Received: by mail-ed1-f69.google.com with SMTP id v18-20020a056402349200b003f8d3b7ee8dso21273605edc.23
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 00:11:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=uDTf/DGOXxIRO6kbaoXtydGSDRn5G2e6XLZL3XY5bwo=;
-        b=LztD2UFsOsYzPWopTy02fWdWb5QJFJWfIML5BwjpcQL5cibRHvuUFmIsbQ5dvD5nzP
-         MI8oQiZKn1AdksyhQEonFLgLNTVBqtdrWoPp0KTRRTmPU7KQEWn07aLmxLnAeWHdgRVz
-         YoyLHqKnxMi3PH1lA++U16Y2tnIV0c6sqwRMVbKzqOwvRT4dZXNvnvhNauzsWuIe2Q33
-         ZrfHhjNRUaH2+6KF1UfRzvjFME0Zgh8RpN1Y3JBohIIxC7RD6s+ofb2IpxpzsNYnGtlc
-         TLfiY7ozEulduyLQ/S/RJ9zEdY5y4o2nIAvgn2qQzGCWS8hP/czpZQQN/Re+cTdX7Ga4
-         QGLA==
-X-Gm-Message-State: AOAM532AVDS+6EIU0/grxToU8Xb36FKai6doJASVXI0FUKviXuzBBNG0
-        RloCb6NGJNPZ8vXy3C5vLhaVnFk+iYgBBBPJmgOzxOOTf5yZ508bKpwQzsSfqsJLh3K1+7b34vr
-        h3ZAeAAyeDPStQhQiAyFs4K1F
-X-Received: by 2002:aa7:d783:: with SMTP id s3mr47284039edq.172.1641283857963;
-        Tue, 04 Jan 2022 00:10:57 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxBMvHVw8fcuawLiGOLreMDQWzlHCbdPW8CKjAs+4VUl7EscPuiyQQnMoKFCTlLhYONR9SQ9g==
-X-Received: by 2002:aa7:d783:: with SMTP id s3mr47284028edq.172.1641283857793;
-        Tue, 04 Jan 2022 00:10:57 -0800 (PST)
+        bh=n1Sn68YOpfQdWqtYtUrgCV+sac3UqaI1SOKuBByB+TA=;
+        b=CnpNVAgi6g22zwRAvxShc4NQaTA/I5um74FNp+ORcvANPnFD6i7lpl1mP3FF6qWUaP
+         v4Kqu2X05zlJ5In8+XIROfpLZGCm2L5gJC7atUCMtjC71DtPmnD5BkjsayqLflgUZrkv
+         4OIYAatV4Y7/AQ5o7uJitduS3sAybvtUjU6IoHXCeV+RdY+URedeeOfaeiYdU7iVBN9f
+         RNjnLUwJ3w3UshBSF5XLRcx68HUhs/DYGLw7jEnVh96CeyvueLqJH48Am78d+BJdZzRZ
+         3f88P3yUjudq2NYYcVJTOzFxPV3To/+KqCSOOrxiMK0abF8acMPrCd4i1sa1xIf3kmz4
+         6XyA==
+X-Gm-Message-State: AOAM530SIm8Pv4M1aa63qztCYpiuH119iqrgMQIHVDh9RsHWyFL+3DaK
+        6iOVsj8DnLOS/dRzAzjF3AWkl8MzJJ5Laf+frzeV4s+LQAYexwtR35cYzNoEbBzE9Un9Ls3Nr8k
+        +lzfrU6y6MM0xcAQCod7WAptl
+X-Received: by 2002:a17:907:3fa0:: with SMTP id hr32mr40732552ejc.196.1641283864068;
+        Tue, 04 Jan 2022 00:11:04 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxY0vOWIbWrowC6YTp97SbKilX2ZYMN/pSg5z78CfP/qlYGdHEk+p7bdrBYems4kOONH6Q1LQ==
+X-Received: by 2002:a17:907:3fa0:: with SMTP id hr32mr40732544ejc.196.1641283863934;
+        Tue, 04 Jan 2022 00:11:03 -0800 (PST)
 Received: from krava.redhat.com (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id hb17sm11158384ejc.195.2022.01.04.00.10.57
+        by smtp.gmail.com with ESMTPSA id v8sm14318341edt.10.2022.01.04.00.11.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 00:10:57 -0800 (PST)
+        Tue, 04 Jan 2022 00:11:03 -0800 (PST)
 From:   Jiri Olsa <jolsa@redhat.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
@@ -68,9 +68,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
         Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
         "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 12/13] selftest/bpf: Add raw kprobe attach test
-Date:   Tue,  4 Jan 2022 09:09:42 +0100
-Message-Id: <20220104080943.113249-13-jolsa@kernel.org>
+Subject: [PATCH 13/13] selftest/bpf: Add bpf_cookie test for raw_k[ret]probe
+Date:   Tue,  4 Jan 2022 09:09:43 +0100
+Message-Id: <20220104080943.113249-14-jolsa@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220104080943.113249-1-jolsa@kernel.org>
 References: <20220104080943.113249-1-jolsa@kernel.org>
@@ -80,183 +80,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding raw kprobe attach test that uses new interface
-to attach multiple kprobes with new kprobe link.
+Adding bpf_cookie test for raw_k[ret]probes.
 
-The test is attaching to bpf_fentry_test* functions and
-single trampoline program to use bpf_prog_test_run to
-trigger bpf_fentry_test* functions.
+Using the bpf_link_create interface directly and single
+trampoline program to trigger the bpf_fentry_test1
+execution.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- .../bpf/prog_tests/raw_kprobe_test.c          | 92 +++++++++++++++++++
- .../testing/selftests/bpf/progs/raw_kprobe.c  | 58 ++++++++++++
- 2 files changed, 150 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_kprobe_test.c
- create mode 100644 tools/testing/selftests/bpf/progs/raw_kprobe.c
+ .../selftests/bpf/prog_tests/bpf_cookie.c     | 42 +++++++++++++++++++
+ .../selftests/bpf/progs/test_bpf_cookie.c     | 24 ++++++++++-
+ 2 files changed, 65 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/raw_kprobe_test.c b/tools/testing/selftests/bpf/prog_tests/raw_kprobe_test.c
-new file mode 100644
-index 000000000000..5ade44c57c9e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/raw_kprobe_test.c
-@@ -0,0 +1,92 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include "raw_kprobe.skel.h"
-+#include "trace_helpers.h"
-+
-+static void test_skel_api(void)
-+{
-+	struct raw_kprobe *skel = NULL;
-+	__u32 duration = 0, retval;
-+	int err, prog_fd;
-+
-+	skel = raw_kprobe__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "raw_kprobe__open_and_load"))
-+		goto cleanup;
-+
-+	err = raw_kprobe__attach(skel);
-+	if (!ASSERT_OK(err, "raw_kprobe__attach"))
-+		goto cleanup;
-+
-+	prog_fd = bpf_program__fd(skel->progs.test1);
-+	err = bpf_prog_test_run(prog_fd, 1, NULL, 0,
-+				NULL, NULL, &retval, &duration);
-+	ASSERT_OK(err, "test_run");
-+	ASSERT_EQ(retval, 0, "test_run");
-+
-+	ASSERT_EQ(skel->bss->test2_result, 8, "test2_result");
-+	ASSERT_EQ(skel->bss->test3_result, 8, "test3_result");
-+
-+cleanup:
-+	raw_kprobe__destroy(skel);
-+}
-+
-+static void test_link_api(void)
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+index 5eea3c3a40fe..aee01dd3a823 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+@@ -57,6 +57,46 @@ static void kprobe_subtest(struct test_bpf_cookie *skel)
+ 	bpf_link__destroy(retlink2);
+ }
+ 
++static void rawkprobe_subtest(struct test_bpf_cookie *skel)
 +{
 +	DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts);
 +	int err, prog_fd, link1_fd = -1, link2_fd = -1;
-+	struct raw_kprobe *skel = NULL;
 +	__u32 duration = 0, retval;
-+	__u64 addrs[8];
++	__u64 addr;
 +
-+	skel = raw_kprobe__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "fentry_raw_skel_load"))
-+		goto cleanup;
++	kallsyms_find("bpf_fentry_test1", &addr);
 +
-+	kallsyms_find("bpf_fentry_test1", &addrs[0]);
-+	kallsyms_find("bpf_fentry_test2", &addrs[1]);
-+	kallsyms_find("bpf_fentry_test3", &addrs[2]);
-+	kallsyms_find("bpf_fentry_test4", &addrs[3]);
-+	kallsyms_find("bpf_fentry_test5", &addrs[4]);
-+	kallsyms_find("bpf_fentry_test6", &addrs[5]);
-+	kallsyms_find("bpf_fentry_test7", &addrs[6]);
-+	kallsyms_find("bpf_fentry_test8", &addrs[7]);
++	opts.kprobe.addrs = (__u64) &addr;
++	opts.kprobe.cnt = 1;
++	opts.kprobe.bpf_cookie = 0x1;
++	prog_fd = bpf_program__fd(skel->progs.handle_raw_kprobe);
 +
-+	opts.kprobe.addrs = (__u64) addrs;
-+	opts.kprobe.cnt = 8;
-+
-+	prog_fd = bpf_program__fd(skel->progs.test2);
 +	link1_fd = bpf_link_create(prog_fd, 0, BPF_TRACE_RAW_KPROBE, &opts);
-+	if (!ASSERT_GE(link1_fd, 0, "link_fd"))
-+		goto cleanup;
++	if (!ASSERT_GE(link1_fd, 0, "link1_fd"))
++		return;
 +
 +	opts.flags = BPF_F_KPROBE_RETURN;
-+	prog_fd = bpf_program__fd(skel->progs.test3);
++	opts.kprobe.bpf_cookie = 0x2;
++	prog_fd = bpf_program__fd(skel->progs.handle_raw_kretprobe);
++
 +	link2_fd = bpf_link_create(prog_fd, 0, BPF_TRACE_RAW_KPROBE, &opts);
-+	if (!ASSERT_GE(link2_fd, 0, "link_fd"))
++	if (!ASSERT_GE(link2_fd, 0, "link2_fd"))
 +		goto cleanup;
 +
-+	skel->bss->test2_result = 0;
-+	skel->bss->test3_result = 0;
-+
-+	prog_fd = bpf_program__fd(skel->progs.test1);
++	prog_fd = bpf_program__fd(skel->progs.raw_trigger);
 +	err = bpf_prog_test_run(prog_fd, 1, NULL, 0,
 +				NULL, NULL, &retval, &duration);
 +	ASSERT_OK(err, "test_run");
 +	ASSERT_EQ(retval, 0, "test_run");
 +
-+	ASSERT_EQ(skel->bss->test2_result, 8, "test2_result");
-+	ASSERT_EQ(skel->bss->test3_result, 8, "test3_result");
++	ASSERT_EQ(skel->bss->raw_kprobe_res, 0x1, "raw_kprobe_res");
++	ASSERT_EQ(skel->bss->raw_kretprobe_res, 0x2, "raw_kretprobe_res");
 +
 +cleanup:
-+	if (link1_fd != -1)
-+		close(link1_fd);
-+	if (link2_fd != -1)
-+		close(link2_fd);
-+	raw_kprobe__destroy(skel);
++	close(link1_fd);
++	close(link2_fd);
 +}
 +
-+void test_raw_kprobe_test(void)
+ static void uprobe_subtest(struct test_bpf_cookie *skel)
+ {
+ 	DECLARE_LIBBPF_OPTS(bpf_uprobe_opts, opts);
+@@ -243,6 +283,8 @@ void test_bpf_cookie(void)
+ 
+ 	if (test__start_subtest("kprobe"))
+ 		kprobe_subtest(skel);
++	if (test__start_subtest("rawkprobe"))
++		rawkprobe_subtest(skel);
+ 	if (test__start_subtest("uprobe"))
+ 		uprobe_subtest(skel);
+ 	if (test__start_subtest("tracepoint"))
+diff --git a/tools/testing/selftests/bpf/progs/test_bpf_cookie.c b/tools/testing/selftests/bpf/progs/test_bpf_cookie.c
+index 2d3a7710e2ce..409f87464b1f 100644
+--- a/tools/testing/selftests/bpf/progs/test_bpf_cookie.c
++++ b/tools/testing/selftests/bpf/progs/test_bpf_cookie.c
+@@ -8,8 +8,9 @@
+ int my_tid;
+ 
+ int kprobe_res;
+-int kprobe_multi_res;
+ int kretprobe_res;
++int raw_kprobe_res;
++int raw_kretprobe_res;
+ int uprobe_res;
+ int uretprobe_res;
+ int tp_res;
+@@ -37,6 +38,27 @@ int handle_kretprobe(struct pt_regs *ctx)
+ 	return 0;
+ }
+ 
++SEC("kprobe/bpf_fentry_test1")
++int handle_raw_kprobe(struct pt_regs *ctx)
 +{
-+	test_skel_api();
-+	test_link_api();
++	update(ctx, &raw_kprobe_res);
++	return 0;
 +}
-diff --git a/tools/testing/selftests/bpf/progs/raw_kprobe.c b/tools/testing/selftests/bpf/progs/raw_kprobe.c
-new file mode 100644
-index 000000000000..baf7086203f9
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/raw_kprobe.c
-@@ -0,0 +1,58 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
 +
-+char _license[] SEC("license") = "GPL";
++SEC("kretprobe/bpf_fentry_test1")
++int handle_raw_kretprobe(struct pt_regs *ctx)
++{
++	update(ctx, &raw_kretprobe_res);
++	return 0;
++}
 +
-+extern const void bpf_fentry_test1 __ksym;
-+extern const void bpf_fentry_test2 __ksym;
-+extern const void bpf_fentry_test3 __ksym;
-+extern const void bpf_fentry_test4 __ksym;
-+extern const void bpf_fentry_test5 __ksym;
-+extern const void bpf_fentry_test6 __ksym;
-+extern const void bpf_fentry_test7 __ksym;
-+extern const void bpf_fentry_test8 __ksym;
-+
-+/* No tests, just to trigger bpf_fentry_test* through tracing test_run */
++/* just to trigger bpf_fentry_test1 through tracing test_run */
 +SEC("fentry/bpf_modify_return_test")
-+int BPF_PROG(test1)
++int BPF_PROG(raw_trigger)
 +{
 +	return 0;
 +}
 +
-+__u64 test2_result = 0;
-+
-+SEC("kprobe/bpf_fentry_test*")
-+int test2(struct pt_regs *ctx)
-+{
-+	__u64 addr = bpf_get_func_ip(ctx);
-+
-+	test2_result += (const void *) addr == &bpf_fentry_test1 ||
-+			(const void *) addr == &bpf_fentry_test2 ||
-+			(const void *) addr == &bpf_fentry_test3 ||
-+			(const void *) addr == &bpf_fentry_test4 ||
-+			(const void *) addr == &bpf_fentry_test5 ||
-+			(const void *) addr == &bpf_fentry_test6 ||
-+			(const void *) addr == &bpf_fentry_test7 ||
-+			(const void *) addr == &bpf_fentry_test8;
-+	return 0;
-+}
-+
-+__u64 test3_result = 0;
-+
-+SEC("kretprobe/bpf_fentry_test*")
-+int test3(struct pt_regs *ctx)
-+{
-+	__u64 addr = bpf_get_func_ip(ctx);
-+
-+	test3_result += (const void *) addr == &bpf_fentry_test1 ||
-+			(const void *) addr == &bpf_fentry_test2 ||
-+			(const void *) addr == &bpf_fentry_test3 ||
-+			(const void *) addr == &bpf_fentry_test4 ||
-+			(const void *) addr == &bpf_fentry_test5 ||
-+			(const void *) addr == &bpf_fentry_test6 ||
-+			(const void *) addr == &bpf_fentry_test7 ||
-+			(const void *) addr == &bpf_fentry_test8;
-+	return 0;
-+}
+ SEC("uprobe/trigger_func")
+ int handle_uprobe(struct pt_regs *ctx)
+ {
 -- 
 2.33.1
 

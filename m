@@ -2,99 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B369483FB1
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:17:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0243483FB7
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 11:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231169AbiADKQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 05:16:49 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:21184 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231147AbiADKQr (ORCPT
+        id S231194AbiADKSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 05:18:54 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58100 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230208AbiADKSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 05:16:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1641291406; x=1672827406;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dRYARUHei31enuqRahGGzA296fgpHte2654n07syC9c=;
-  b=TfJwUmvOlXaoUoZsOXSZ2LRUP7DtXVFgY68nbO3irlTdQxyUIb1a3l3B
-   mUQ1uHz9kuSgfpQ79Oab6wyiWrJ4JfYzRJtv4St8T4sSboM2/4ooL8DJY
-   aTMEMrKQ0JpHSK7NJR3ufWboRkYu914mwvXwOO1f//W252hgGeSXAorEX
-   tPPU8pP/wTC8CufGvm7tcNwRpQRwdLcHI1pBY+QyffZi0/R1n4Wn/PvF3
-   hc5y6vxMZPKn+qRv1wTcRIO/KHZFeSrCvUIyEYg/h1ad/dMGB51s7baaF
-   7iNsUn4xMqTyzMXx2Kn9YKNeO8X268wmiW/gjGUT1b9m0aIAuKFfSV2YD
-   g==;
-IronPort-SDR: WV7FbLTctoC4rsP0sV5iDoVPeTv2QMQ2g+Kw4dh7RexAQ/eHE1zWk9w2FtceYxVpwxuxRvtQUP
- EJtrP+vucaJPTVknF/FVUJiC+E3XYmLWdOFTLzT4RcpaDu+1NhoUNihRdrUlFGXKRLfg9ls1+s
- fs/ogaA50An6cq7T/6QJqn/Axydp0tGXTKeWJihyCNO64pAS3ytkzjpjTzq3L+v1t+yMtNYvlD
- QEz/CtqwKZRi/t+D/2GhON+pM4Pty7A2nP48e0NzAxQVARpZEMnBM3pJCB0BfcgPAOuY0bRrvz
- hwYmQKzyFF7B4fSAaS3qAGEB
-X-IronPort-AV: E=Sophos;i="5.88,260,1635231600"; 
-   d="scan'208";a="141568088"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Jan 2022 03:16:46 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 4 Jan 2022 03:16:46 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Tue, 4 Jan 2022 03:16:44 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <UNGLinuxDriver@microchip.com>, <davem@davemloft.net>,
-        <kuba@kernel.org>, <f.fainelli@gmail.com>,
-        <vivien.didelot@gmail.com>, <vladimir.oltean@nxp.com>,
-        <andrew@lunn.ch>, Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next v2 2/3] net: lan966x: Add PGID_FIRST and PGID_LAST
+        Tue, 4 Jan 2022 05:18:53 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABBB76130A
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 10:18:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FD27C36AE9;
+        Tue,  4 Jan 2022 10:18:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641291532;
+        bh=8/HEmyqRV2Qs+y4O+h7sf7endKMT2MF5HWeUoTBUMS0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wiBdkg23wKz3095eEGrUW5EAuWQZt0sOXzn7gUyKQxcv5VyChOXPbG1xHDFdt1Gys
+         ++JlI04La2+irMyzET3o0NNv3m1LOVNjhei150qZFOKz0jjex+fWnmgcAUR5nQ3f8k
+         IsHwyQd8hLfy48yJE0sCFCyBTQY/LuUbOdEbQ6Vs=
 Date:   Tue, 4 Jan 2022 11:18:48 +0100
-Message-ID: <20220104101849.229195-3-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220104101849.229195-1-horatiu.vultur@microchip.com>
-References: <20220104101849.229195-1-horatiu.vultur@microchip.com>
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Zhou Qingyang <zhou1615@umn.edu>
+Cc:     kjlu@umn.edu, Fei Li <fei1.li@intel.com>,
+        Shuo Liu <shuo.a.liu@intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] virt: acrn: fix memory leak in acrn_dev_ioctl()
+Message-ID: <YdQfCGf8qr5zZJef@kroah.com>
+References: <20220104085321.94485-1-zhou1615@umn.edu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220104085321.94485-1-zhou1615@umn.edu>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The first entries in the PGID table are used by the front ports while
-the last entries are used for different purposes like flooding mask,
-copy to CPU, etc. So add these macros to define which entries can be
-used for general purpose.
+On Tue, Jan 04, 2022 at 04:53:21PM +0800, Zhou Qingyang wrote:
+> In acrn_dev_ioctl(), cpu_regs is not released or passed out on several 
+> error paths which could lead to memory leak bug.
+> 
+> Fix this bug by adding kfree of cpu_regs on error paths.
+> 
+> This bug was found by a static analyzer.
+> 
+> Builds with CONFIG_ACRN_GUEST=y, CONFIG_ACRN_HSM=y show no new warnings,
+> and our static analyzer no longer warns about this code.
+> 
+> Fixes: 2ad2aaee1bc9 ("virt: acrn: Introduce an ioctl to set vCPU registers state")
+> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+> ---
+> The analysis employs differential checking to identify inconsistent
+> security operations (e.g., checks or kfrees) between two code paths
+> and confirms that the inconsistent operations are not recovered in
+> the current function or the callers, so they constitute bugs.
+> 
+> Note that, as a bug found by static analysis, it can be a false
+> positive or hard to trigger. Multiple researchers have cross-reviewed
+> the bug.
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- drivers/net/ethernet/microchip/lan966x/lan966x_main.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Then why have all of those researchers put their reviewed-by on this
+change?
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-index f70e54526f53..190d62ced3fd 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-@@ -30,7 +30,11 @@
- /* Reserved amount for (SRC, PRIO) at index 8*SRC + PRIO */
- #define QSYS_Q_RSRV			95
- 
-+#define CPU_PORT			8
-+
- /* Reserved PGIDs */
-+#define PGID_FIRST			(CPU_PORT + 1)
-+#define PGID_LAST			PGID_CPU
- #define PGID_CPU			(PGID_AGGR - 6)
- #define PGID_UC				(PGID_AGGR - 5)
- #define PGID_BC				(PGID_AGGR - 4)
-@@ -44,8 +48,6 @@
- #define LAN966X_SPEED_100		2
- #define LAN966X_SPEED_10		3
- 
--#define CPU_PORT			8
--
- /* MAC table entry types.
-  * ENTRYTYPE_NORMAL is subject to aging.
-  * ENTRYTYPE_LOCKED is not subject to aging.
--- 
-2.33.0
+Note that your university is still in many kernel maintainer's
+ignore-list (myself included, I dug this up as I saw Fei's response.)
+Please work with your administration and the process that is currently
+happening in order to give you all the needed training so you will not
+keep causing these types of basic errors that keep your patches from
+being accepted.
 
+*plonk*
+
+greg k-h

@@ -2,70 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE704484896
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:31:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB5A484898
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 20:32:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbiADTb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 14:31:29 -0500
-Received: from mail-ot1-f49.google.com ([209.85.210.49]:40644 "EHLO
-        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiADTb2 (ORCPT
+        id S229962AbiADTcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 14:32:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39994 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229508AbiADTb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 14:31:28 -0500
-Received: by mail-ot1-f49.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so48545359otj.7;
-        Tue, 04 Jan 2022 11:31:27 -0800 (PST)
+        Tue, 4 Jan 2022 14:31:59 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7071C061761;
+        Tue,  4 Jan 2022 11:31:58 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id k69so95318625ybf.1;
+        Tue, 04 Jan 2022 11:31:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ZUmYnewajUUvHDk12rdHt48TosSqpa/5GnoBuuSoIB4=;
+        b=Br4tWtLeLrkstlqQrIPO2tqHJ9NB387n/tvG8oatYpD4PmEDpDDxMfZq8YLD2TGvuT
+         5UpQUl4wmsE6G4mwC7u7e+znKMiM96tbv0bMRgSimm68CV2MZBuKetH5O4lsOYtSxUqx
+         h1vFTp49QtEPgMZHrMAp4DUkv9Y+GGYMCdUwasNSctWkN0KldojsJIaRkBIJ9SX5C2wP
+         IWxYnzo+I3k9MazDiPfUuSSxxcgiI0NWhmKiElCjNozdjvQ2cYr5CgFfkxfNRxg05tPh
+         CwOrzqiWsZUEWVNFk8eeWfzel4bsM4G4ZKe5KxlMh9G5g5eiO1Gd3kU9cEE+HjJBOL37
+         WE+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KTGs3+rdHyCKA35lj1ufu+1n2FGA4o6nnx82oWhTh/I=;
-        b=nTHSPjgmL4ssC2V6e1g75ZS0d+aq/qpG1xrTo6fQrDWVG25QoofRerc95G0zs0FQpQ
-         65SSjz4aP9Won+y4d2YUX6BSgTPdkGfSKSFqHCQNkhGZHvQN9aBpucffBzpYfAnVdC7T
-         jHAeu1XeGJ7ZRMG/GN1xXwsoZLh31L4rZhVFFyvY+7CFs7rKFDLxN0c3rW9+zWWkScSv
-         phxEGpKa9odXKgwwEhen0rjMt21THhBLxXCSxQlttZe3KFpaSV1UH8XxbxjSPLvtbNSL
-         DbhozZm+EI73zhkh7emiJ/b3uCqXJlUF2z1FWGt5X5V9s+Iy7imCMHBRiJGkRfLRaIXD
-         1r+g==
-X-Gm-Message-State: AOAM532g3I+lJSeuHxz2PH8Y26jF6Sontngb5uuFFKsXNldVcwOOG+zw
-        j3k+kQDB6iltQ244e7rdrw==
-X-Google-Smtp-Source: ABdhPJwORFRXYaYQCIVPXzdG+4AMu81mGLj9/SF0d0fDR/VzwnoWuvyIkrkPOgTDTqn6KlHe7tk2Xg==
-X-Received: by 2002:a05:6830:2b25:: with SMTP id l37mr37284224otv.298.1641324687296;
-        Tue, 04 Jan 2022 11:31:27 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id bh12sm10034224oib.25.2022.01.04.11.31.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 11:31:26 -0800 (PST)
-Received: (nullmailer pid 1269921 invoked by uid 1000);
-        Tue, 04 Jan 2022 19:31:25 -0000
-Date:   Tue, 4 Jan 2022 13:31:25 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Prabhakar <prabhakar.csengg@gmail.com>,
-        linux-gpio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH] dt-bindings: pinctrl: renesas,rzg2l-pinctrl: Add
- description for power-source property
-Message-ID: <YdSgjf5TYtwjDJWj@robh.at.kernel.org>
-References: <20211222145901.23661-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ZUmYnewajUUvHDk12rdHt48TosSqpa/5GnoBuuSoIB4=;
+        b=hxdWoj+TEEJePUnR2jh4wLOTcJ2cN/4wsuaKVMd7Pvhe0xSkwJyeaj1LRUNenZ2Qcl
+         ImY8lo8ca5N+Ouomsa6520CmgXBe99LFvQZjtyWzQh9WCqBidI1tqRmKZIXbntlmKga3
+         Xpg2MSJlPHaX7YPqBn5AZDZ1OemEHa0mS77FXm4QNR7Vnq/qhCxcbLSlOO/VkBrW/Jk+
+         9FNdMhWKoCiLPjI8GruoLi1UW3FusDDiWL0cYDhaXY/eWDBXPRTxhJT1FsqNZHLY996+
+         ezpizL36PSBOe7VkzmL1Vsp6Xxp2qCPVbh+CUojwaxwz/GUza1YHCu97G9+X+czJrevm
+         v05A==
+X-Gm-Message-State: AOAM53257wy2bVC2XotvrgRZr+PydXoekPWsVxaUBK0VwuclOgcjH/lL
+        LnPu7bMXPDxf1I2JOfdbRo0eUizyEHdcTVmtJWs=
+X-Google-Smtp-Source: ABdhPJzGkKTPjiGZXa8KTqv7wwDAr49A+dkxXNihb8pFbpigM24bqwkdF8iFdJD/KJjzbL2JfUUYrjy0j5apnlY/stQ=
+X-Received: by 2002:a25:7189:: with SMTP id m131mr67230099ybc.284.1641324717682;
+ Tue, 04 Jan 2022 11:31:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211222145901.23661-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <36ec2e79-7544-ba14-8bdd-d748dfad0ea7@eknoes.de>
+ <CABBYNZJwqb0xKa+iX4zOBYpZ2j0ZFbHPRztQ1z5xJL7kq6-9Ag@mail.gmail.com> <91bface3-975d-b79c-2da0-77e24e355fa7@eknoes.de>
+In-Reply-To: <91bface3-975d-b79c-2da0-77e24e355fa7@eknoes.de>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Tue, 4 Jan 2022 11:31:46 -0800
+Message-ID: <CABBYNZLrXh-Zc8wHSzZkvpx0oZGLsR0r_59V2zhAmtRQXTC9yg@mail.gmail.com>
+Subject: Re: [BUG] Page Fault in hci_inquiry_result_with_rssi_evt
+To:     =?UTF-8?Q?S=C3=B6nke_Huster?= <soenke.huster@eknoes.de>
+Cc:     "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Luiz Augusto Von Dentz <luiz.von.dentz@intel.com>,
+        Marcel Holtmann <marcel@holtmann.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Dec 2021 14:59:01 +0000, Lad Prabhakar wrote:
-> Add description for "power-source" property mentioning the values in enum
-> are in millivolts.
-> 
-> Suggested-by: Pavel Machek <pavel@denx.de>
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->  .../devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml       | 1 +
->  1 file changed, 1 insertion(+)
-> 
+Hi S=C3=B6nke,
 
-Acked-by: Rob Herring <robh@kernel.org>
+On Tue, Jan 4, 2022 at 3:50 AM S=C3=B6nke Huster <soenke.huster@eknoes.de> =
+wrote:
+>
+> Hi Luiz,
+>
+> On 04.01.22 01:38, Luiz Augusto von Dentz wrote:
+> > Hi S=C3=B6nke,
+> >
+> > On Mon, Jan 3, 2022 at 3:41 PM S=C3=B6nke Huster <soenke.huster@eknoes.=
+de> wrote:
+> >>
+> >> Hello,
+> >>
+> >> While fuzzing bluetooth-next I found the following bug:
+> >>
+> >> [   27.333034] BUG: unable to handle page fault for address: fffff61a1=
+a1a1a1a
+> >> [   27.333241] #PF: supervisor read access in kernel mode
+> >> [   27.333241] #PF: error_code(0x0000) - not-present page
+> >> [   27.333241] PGD 6dfd2067 P4D 6dfd2067 PUD 0
+> >> [   27.333241] Oops: 0000 [#1] PREEMPT SMP KASAN NOPTI
+> >> [   27.333241] CPU: 0 PID: 45 Comm: kworker/u3:2 Not tainted 5.16.0-rc=
+1+ #81
+> >> [   27.333241] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), =
+BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
+> >> [   27.333241] Workqueue: hci0 hci_rx_work
+> >> [   27.333241] RIP: 0010:hci_inquiry_result_with_rssi_evt+0xbc/0x950
+> >> [   27.333241] Code: 8b 04 24 48 c1 e8 03 42 80 3c 28 00 0f 85 20 07 0=
+0 00 48 8b 04 24 4c 8b 28 48 b8 00 00 00 00 00 fc ff df 4c 89 0
+> >> [   27.333241] RSP: 0018:ffffc900004ff9c8 EFLAGS: 00010212
+> >> [   27.333241] RAX: dffffc0000000000 RBX: 0000000000000022 RCX: ffffff=
+ff834663d1
+> >> [   27.333241] RDX: 1ffffa1a1a1a1a1a RSI: 0000000000000012 RDI: ffff88=
+800affb074
+> >> [   27.333241] RBP: ffff88800aae0000 R08: ffffffff844ef360 R09: ffffff=
+ff83487b35
+> >> [   27.333241] R10: 000000000000002c R11: 0000000000000022 R12: ffff88=
+800affb000
+> >> [   27.333241] R13: ffffd0d0d0d0d0d0 R14: 0000000000000000 R15: ffff88=
+800aae0000
+> >> [   27.333241] FS:  0000000000000000(0000) GS:ffff88806ce00000(0000) k=
+nlGS:0000000000000000
+> >> [   27.333241] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >> [   27.333241] CR2: fffff61a1a1a1a1a CR3: 0000000004a26000 CR4: 000000=
+00000006f0
+> >> [   27.333241] Call Trace:
+> >> [   27.333241]  <TASK>
+> >> [   27.333241]  ? wait_for_completion_io+0x270/0x270
+> >> [   27.333241]  ? hci_inquiry_result_evt+0x4b0/0x4b0
+> >> [   27.333241]  hci_event_packet+0x3b11/0x7b10
+> >> [   27.333241]  ? lock_chain_count+0x20/0x20
+> >> [   27.333241]  ? hci_cmd_status_evt.constprop.0+0x4ea0/0x4ea0
+> >> [   27.333241]  ? sysvec_reboot+0x50/0xc0
+> >> [   27.333241]  ? find_held_lock+0x2c/0x110
+> >> [   27.333241]  ? lock_release+0x3b2/0x6f0
+> >> [   27.333241]  ? skb_dequeue+0x110/0x1a0
+> >> [   27.333241]  ? mark_held_locks+0x9e/0xe0
+> >> [   27.333241]  ? lockdep_hardirqs_on_prepare+0x17b/0x400
+> >> [   27.333241]  hci_rx_work+0x4d3/0xb90
+> >> [   27.333241]  process_one_work+0x904/0x1590
+> >> [   27.333241]  ? lock_release+0x6f0/0x6f0
+> >> [   27.333241]  ? pwq_dec_nr_in_flight+0x230/0x230
+> >> [   27.333241]  ? rwlock_bug.part.0+0x90/0x90
+> >> [   27.333241]  ? _raw_spin_lock_irq+0x41/0x50
+> >> [   27.333241]  worker_thread+0x578/0x1310
+> >> [   27.333241]  ? process_one_work+0x1590/0x1590
+> >> [   27.333241]  kthread+0x3b2/0x490
+> >> [   27.333241]  ? _raw_spin_unlock_irq+0x1f/0x40
+> >> [   27.333241]  ? set_kthread_struct+0x100/0x100
+> >> [   27.333241]  ret_from_fork+0x22/0x30
+> >> [   27.333241]  </TASK>
+> >> [   27.333241] Modules linked in:
+> >> [   27.333241] CR2: fffff61a1a1a1a1a
+> >> [   27.333241] ---[ end trace 6a6825484c8fefa6 ]---
+> >> [   27.333241] RIP: 0010:hci_inquiry_result_with_rssi_evt+0xbc/0x950
+> >> [   27.333241] Code: 8b 04 24 48 c1 e8 03 42 80 3c 28 00 0f 85 20 07 0=
+0 00 48 8b 04 24 4c 8b 28 48 b8 00 00 00 00 00 fc ff df 4c 89 0
+> >> [   27.333241] RSP: 0018:ffffc900004ff9c8 EFLAGS: 00010212
+> >> [   27.333241] RAX: dffffc0000000000 RBX: 0000000000000022 RCX: ffffff=
+ff834663d1
+> >> [   27.333241] RDX: 1ffffa1a1a1a1a1a RSI: 0000000000000012 RDI: ffff88=
+800affb074
+> >> [   27.333241] RBP: ffff88800aae0000 R08: ffffffff844ef360 R09: ffffff=
+ff83487b35
+> >> [   27.333241] R10: 000000000000002c R11: 0000000000000022 R12: ffff88=
+800affb000
+> >> [   27.333241] R13: ffffd0d0d0d0d0d0 R14: 0000000000000000 R15: ffff88=
+800aae0000
+> >> [   27.333241] FS:  0000000000000000(0000) GS:ffff88806ce00000(0000) k=
+nlGS:0000000000000000
+> >> [   27.333241] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >> [   27.333241] CR2: fffff61a1a1a1a1a CR3: 0000000004a26000 CR4: 000000=
+00000006f0
+> >> [   27.379996] kworker/u3:2 (45) used greatest stack depth: 27736 byte=
+s left
+> >>
+> >> It occurs when sending the following frame to the kernel:
+> >>
+> >> $ xxd crashes/hci_inquiry_result_with_rssi_evt
+> >> 00000000: 0422 24d0 d0d0 d0d0 d0ff ff              ."$........
+> >>
+> >> The bug was introduced with the commit "Bluetooth: HCI: Use skb_pull_d=
+ata to parse Inquiry Result with RSSI event" (https://git.kernel.org/pub/sc=
+m/linux/kernel/git/bluetooth/bluetooth-next.git/commit/?id=3D8d08d324fdcb7)=
+.
+> >
+> > That is pretty weird, the data seems to be the following:
+> >
+> > 04 -> HCI_EVENT_PKT
+> > 22 -> HCI_EV_INQUIRY_RESULT_WITH_RSSI
+> > 24 -> hci_ev_inquiry_result_rssi.num
+> > d0 d0d0 d0d0 d0ff ff
+> >
+> > But this should never evaluate to true for:
+> >
+> > if (skb->len =3D=3D flex_array_size(ev, res2->info, ev->res2->num)) {
+> > ...
+> > } else if (skb->len =3D=3D flex_array_size(ev, res1->info, ev->res1->nu=
+m)) {
+> >
+>
+> I'm sorry, I forgot to mention the affected source code, the check seems =
+to be too late. GDB says it is already happening in net/bluetooth/hci_event=
+.c:4519:
+>
+> (gdb) list *hci_inquiry_result_with_rssi_evt+0x9b
+> 0xffffffff83470d8b is in hci_inquiry_result_with_rssi_evt (net/bluetooth/=
+hci_event.c:4519).
+> 4514            struct inquiry_data data;
+> 4515            int i;
+> 4516
+> 4517            bt_dev_dbg(hdev, "num_rsp %d", ev->res1->num);
+> 4518
+> 4519            if (!ev->res1->num) # <- page fault here
+> 4520                    return;
+>
+> I just reproduced it on the HEAD of bluetooth-next (for-net-next-2021-12-=
+29).
+
+That would mean there is less data than the hci_ev.min_len, but that
+is checked in hci_event_func prior to calling the hci_ev.func:
+
+if (skb->len < ev->min_len) {
+bt_dev_err(hdev, "unexpected event 0x%2.2x length: %u < %u",
+   event, skb->len, ev->min_len);
+return;
+}
+
+>
+> > These requires the data to be multiple of sizeof(struct
+> > inquiry_info_rssi_pscan) =3D 15 bytes or sizeof(struct
+> > inquiry_info_rssi) =3D 14 bytes respectively where the data left is jus=
+t
+> > 8 bytes long, besides with the number of entries being 0x24 this shall
+> > be well beyond skb->len which shall have cause the else clause:
+> >
+> >   } else {
+> >       bt_dev_err(hdev, "Malformed HCI Event: 0x%2.2x",
+> >                          HCI_EV_INQUIRY_RESULT_WITH_RSSI);
+> >   }
+> >
+>
+> I think prior to the commit that introduced that, the check was made befo=
+re casting it to the struct, so from the "raw" skb->data:
+>
+> -       int num_rsp =3D *((__u8 *) skb->data);
+> -       if ((skb->len - 1) / num_rsp !=3D sizeof(struct inquiry_info_with=
+_rssi)) {
+
+That is still being checked, anyway that would cause a page fault when
+accessing num_rsp so I don't understand why it would cause a page
+fault now when previously it didn't even check if there were any bytes
+to be read, perhaps there is some memory alignment at play.
+
+> > Anyway the bluetooth-next has been updated since last week so I first
+> > attempt to reproduce with a fresh clone of it since we did some fixups
+> > since then.
+> >
+>
+> Btw, what is the best way to provide an easily reproducible bug report he=
+re, I did not figure that out yet.
+>
+> Also, when searching for bugs (to ideally provide patches), I am currentl=
+y searching on the HEAD of bluetooth-next. As far as I understood it, the t=
+ags "for-net-..." should be more or less stable, as they are merged to net-=
+next which makes its way to mainline, right?
+
+Yep, those are the tags we sent to net-next but in general
+bluetooth-next shall also be stable since we run CI on every patch
+nowadays.
+
+--=20
+Luiz Augusto von Dentz

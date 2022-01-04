@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97DFC483D96
+	by mail.lfdr.de (Postfix) with ESMTP id 4DF90483D95
 	for <lists+linux-kernel@lfdr.de>; Tue,  4 Jan 2022 09:03:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233974AbiADICd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 03:02:33 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:34066 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233871AbiADICB (ORCPT
+        id S233880AbiADICb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 03:02:31 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:53312 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233885AbiADICC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 03:02:01 -0500
-X-UUID: 11d2cfbb5824468eaf7426bfe7ab199f-20220104
-X-UUID: 11d2cfbb5824468eaf7426bfe7ab199f-20220104
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        Tue, 4 Jan 2022 03:02:02 -0500
+X-UUID: 10960c3cd39c42b8bc85ea32ead3203f-20220104
+X-UUID: 10960c3cd39c42b8bc85ea32ead3203f-20220104
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 473442449; Tue, 04 Jan 2022 16:01:57 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2019372065; Tue, 04 Jan 2022 16:01:59 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
  mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 4 Jan 2022 16:01:55 +0800
+ Tue, 4 Jan 2022 16:01:57 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 4 Jan 2022 16:01:54 +0800
+ Transport; Tue, 4 Jan 2022 16:01:55 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Alexandre Courbot <acourbot@chromium.org>,
@@ -51,9 +51,9 @@ CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
         <srv_heupstream@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v3, 10/13] media: mtk-vcodec: Fix v4l2-compliance fail
-Date:   Tue, 4 Jan 2022 16:01:35 +0800
-Message-ID: <20220104080138.7472-11-yunfei.dong@mediatek.com>
+Subject: [PATCH v3, 11/13] media: mtk-vcodec: record capture queue format type
+Date:   Tue, 4 Jan 2022 16:01:36 +0800
+Message-ID: <20220104080138.7472-12-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220104080138.7472-1-yunfei.dong@mediatek.com>
 References: <20220104080138.7472-1-yunfei.dong@mediatek.com>
@@ -65,33 +65,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Need to use default pic info when get pic info fail.
+Capture queue format type is difference for different platform,
+need to calculate capture buffer size according to capture queue
+format type in scp.
 
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 ---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c | 2 ++
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h | 2 ++
+ 2 files changed, 4 insertions(+)
 
 diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-index 34ee4a0092ff..75210eb829d0 100644
+index 75210eb829d0..4533cb44551d 100644
 --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
 +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-@@ -478,11 +478,14 @@ static int vidioc_vdec_s_fmt(struct file *file, void *priv,
- 		ctx->picinfo.pic_w = pix_mp->width;
- 		ctx->picinfo.pic_h = pix_mp->height;
- 
-+		/*
-+		 * If get pic info fail, need to use the default pic info params, or
-+		 * v4l2-compliance will fail
-+		 */
- 		ret = vdec_if_get_param(ctx, GET_PARAM_PIC_INFO, &ctx->picinfo);
- 		if (ret) {
- 			mtk_v4l2_err("[%d]Error!! Get GET_PARAM_PICTURE_INFO Fail",
- 				     ctx->id);
--			return -EINVAL;
+@@ -468,6 +468,8 @@ static int vidioc_vdec_s_fmt(struct file *file, void *priv,
+ 			}
+ 			ctx->state = MTK_STATE_INIT;
  		}
++	} else {
++		ctx->capture_fourcc = fmt->fourcc;
+ 	}
  
- 		ctx->last_decoded_picinfo = ctx->picinfo;
+ 	/*
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+index 6c084a172e4b..364d2d794af4 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+@@ -277,6 +277,7 @@ struct vdec_pic_info {
+  *		     to be used with encoder and stateful decoder.
+  * @is_flushing: set to true if flushing is in progress.
+  * @current_codec: current set input codec, in V4L2 pixel format
++ * @capture_fourcc: capture queue type in V4L2 pixel format
+  *
+  * @colorspace: enum v4l2_colorspace; supplemental to pixelformat
+  * @ycbcr_enc: enum v4l2_ycbcr_encoding, Y'CbCr encoding
+@@ -324,6 +325,7 @@ struct mtk_vcodec_ctx {
+ 	bool is_flushing;
+ 
+ 	u32 current_codec;
++	u32 capture_fourcc;
+ 
+ 	enum v4l2_colorspace colorspace;
+ 	enum v4l2_ycbcr_encoding ycbcr_enc;
 -- 
 2.25.1
 

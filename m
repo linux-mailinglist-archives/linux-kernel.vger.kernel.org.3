@@ -2,81 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 728F5485A1D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:39:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BBBB485A22
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:40:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244125AbiAEUju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 15:39:50 -0500
-Received: from mail-wm1-f41.google.com ([209.85.128.41]:54152 "EHLO
-        mail-wm1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244112AbiAEUjs (ORCPT
+        id S244133AbiAEUkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 15:40:16 -0500
+Received: from smtp02.smtpout.orange.fr ([80.12.242.124]:64667 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244112AbiAEUkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 15:39:48 -0500
-Received: by mail-wm1-f41.google.com with SMTP id l4so448827wmq.3;
-        Wed, 05 Jan 2022 12:39:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NzWH85whQT3ssvhGdVpZa/al7Evd5XgLfYaXBu8Oz3Q=;
-        b=LbTXv0rbKFH9CAIAOCw/yPovyh899Sz0HxENIg8P6q3w4mO17+pHyhc+18MH9e4qZQ
-         Nj4P4fEqo8HIUwF524B2pBit41RAFVBwRM+QkJa9yJSiIToORfbGv81RBKoI7XY8d+yv
-         U3/ZeaT5cArSBJVwJssrh/ycyB5Ks2VdgktwbmMJEXmQ9xLWDWtXRo/h6vAIHehggk54
-         bceOr0ybkqLjmCOt+/7vPwQEty1pcElRDG43hH5SvM8It/6XB0OW8EHLNcX5oWCvlQKr
-         O3CI7EBAUWmca6eM44p735/tF0RX2MwbBS302ZLvFF9olL/GxcVenbZZ2r1yWSaEiOnM
-         U1lw==
-X-Gm-Message-State: AOAM532FyWkdv9bGHSs+bhnDO06Cs4i1l7J3D/ZGi25FAzE9P+oVZBhq
-        EV8Xpc4od2I7H5U434ZCYTOEqBC08Ag=
-X-Google-Smtp-Source: ABdhPJzeg9XfNfmEmKoiUYIxQZkc9FAE2L9R/R5bTrCkgqFpvlNg3fKVxQ4TQQ90IjJW7Ne5ycEA6A==
-X-Received: by 2002:a05:600c:19d0:: with SMTP id u16mr4354421wmq.148.1641415187586;
-        Wed, 05 Jan 2022 12:39:47 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id n4sm36060wrc.1.2022.01.05.12.39.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 12:39:47 -0800 (PST)
-Date:   Wed, 5 Jan 2022 20:39:45 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Juan Vazquez <juvazq@linux.microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, mikelley@microsoft.com,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Drivers: hv: vmbus: Initialize request offers message
- for Isolation VM
-Message-ID: <20220105203945.wyh33cws43enviwx@liuwe-devbox-debian-v2>
-References: <20220105192746.23046-1-juvazq@linux.microsoft.com>
+        Wed, 5 Jan 2022 15:40:09 -0500
+Received: from [192.168.1.18] ([90.11.185.88])
+        by smtp.orange.fr with ESMTPA
+        id 5D4nnyvDrBazo5D4nn0JZy; Wed, 05 Jan 2022 21:40:08 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Wed, 05 Jan 2022 21:40:08 +0100
+X-ME-IP: 90.11.185.88
+Message-ID: <7d9a565e-5a5c-003a-b1e1-7bdf72f29efa@wanadoo.fr>
+Date:   Wed, 5 Jan 2022 21:40:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220105192746.23046-1-juvazq@linux.microsoft.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH] drm/msm/dp: Fix a potential double free in an error
+ handling path
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>, airlied@linux.ie,
+        bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        quic_abhinavk@quicinc.com, quic_khsieh@quicinc.com,
+        robdclark@gmail.com, sean@poorly.run
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <6fd20c8779d6b03a5b54509af25b478049482087.1640531508.git.christophe.jaillet@wanadoo.fr>
+ <CAE-0n52jDxkfYbsQPzKjSeD4rimTz1p2gaDRFpK-LLxxNV31Ow@mail.gmail.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <CAE-0n52jDxkfYbsQPzKjSeD4rimTz1p2gaDRFpK-LLxxNV31Ow@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 11:27:46AM -0800, Juan Vazquez wrote:
-> Initialize memory of request offers message to be sent to the host so
-> padding or uninitialized fields do not leak guest memory contents.
+Le 05/01/2022 à 21:09, Stephen Boyd a écrit :
+> Quoting Christophe JAILLET (2021-12-26 07:14:05)
+>> 'dp_bridge' is devm_alloc'ed, so there is no need to free it explicitly or
+>> there will be a double free().
+>>
+>> Fixes: 8a3b4c17f863 ("drm/msm/dp: employ bridge mechanism for display enable and disable")
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> ---
 > 
-> Signed-off-by: Juan Vazquez <juvazq@linux.microsoft.com>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> 
 
-Applied to hyperv-next. Thanks.
+and
 
-> ---
->  drivers/hv/channel_mgmt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hv/channel_mgmt.c b/drivers/hv/channel_mgmt.c
-> index 2829575fd9b7..60375879612f 100644
-> --- a/drivers/hv/channel_mgmt.c
-> +++ b/drivers/hv/channel_mgmt.c
-> @@ -1554,7 +1554,7 @@ int vmbus_request_offers(void)
->  	struct vmbus_channel_msginfo *msginfo;
->  	int ret;
->  
-> -	msginfo = kmalloc(sizeof(*msginfo) +
-> +	msginfo = kzalloc(sizeof(*msginfo) +
->  			  sizeof(struct vmbus_channel_message_header),
->  			  GFP_KERNEL);
->  	if (!msginfo)
-> -- 
-> 2.32.0
-> 
+ >
+ > Reviewed-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+ >
+
+
+Hi,
+
+Just for your information, it has also been reported by Dan Carpenter 1 
+or 2 weeks before me and is part of -next in commit 48d0cf4a7cf2.
+
+CJ

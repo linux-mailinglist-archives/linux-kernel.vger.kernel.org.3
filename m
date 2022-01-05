@@ -2,108 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC751484ECC
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 08:40:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F7B8484ECF
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 08:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238149AbiAEHke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 02:40:34 -0500
-Received: from mga14.intel.com ([192.55.52.115]:58613 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238130AbiAEHkc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 02:40:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641368432; x=1672904432;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=40Lnf+baSm67V658AjUqQ6irVu4JpmrkRKU6Zn0OZpI=;
-  b=ZaFtRvqOOzqdDDL3912gd5110gpGg6VKbx9mlj1qE+YZyrDk+TINupIw
-   GN5Elvh6C/vPh2ztbD9QQqnK5itGG19AQKrqu7IAvWMTSYaIoZjYAtt/o
-   nUPm5HjzWqEwbLA5wGMmAupZ/gQ3OWKUunWs7cOjSM9GcYQw/EWiOSI8k
-   pfpP1E1RcdcnnLJqd4ICZgxsaK9JIvaMlkALZQjI4n2I97nxseU7IbjSd
-   ZXra3Tzz8aojclwh8WsRru3Irw/6NSAVBl3K4/E0uPdwexNeIn2MuLcSw
-   aHX9B0yKw8zjIFfSkvBTmtWM2kcRPTyLme73Edi+K/dRxLxGpg/++98Ec
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242595164"
-X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
-   d="scan'208";a="242595164"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 23:40:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
-   d="scan'208";a="526532002"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 04 Jan 2022 23:40:29 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n50uK-000GNa-Of; Wed, 05 Jan 2022 07:40:28 +0000
-Date:   Wed, 5 Jan 2022 15:40:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Subject: Re: [PATCH V2 3/3] nvmem: add driver handling U-Boot environment
- variables
-Message-ID: <202201051502.yOxThsL0-lkp@intel.com>
-References: <20211230090449.11808-3-zajec5@gmail.com>
+        id S238178AbiAEHmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 02:42:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238168AbiAEHmM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 02:42:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B0AC061761;
+        Tue,  4 Jan 2022 23:42:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 11150B817C3;
+        Wed,  5 Jan 2022 07:42:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3385C36AE3;
+        Wed,  5 Jan 2022 07:42:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641368528;
+        bh=tah8ZqyBAPZaiCsGR/M7lDgq65lnx8P0HIpYzkp1OAE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u+xIeEvpxk1HyE4dK03D8OWKAw9JGc4CmN2fB3QZZag1mXjZzNmzvFqyLzGiLJ+gp
+         m4+1FYpIhE+r750F785Kdk0s0rvprxFx+JWiIO1CUFe6/W7BYW+vjyIvp9YEq/9OYt
+         +lqFUnS+LgBKtmMKfHqlm9NzNTWjwBGcxsKhob/pws0ju+5nKMEuLK4yi7p6x2yCHT
+         db2KHh6NHVW1thwOoD4hhusg+Dx6ORLisFgwW8r+0PvgpmHrV/Hz8JhaPpepb4BICs
+         SWR5xNJ6OUfVtqhZk4JpeG+1gpNJ90EZELv7cIvVBA86evx6//9IghYxYrv9jY/UVX
+         fnejhvCPwcSWg==
+Date:   Wed, 5 Jan 2022 13:12:04 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org
+Subject: Re: [PATCH] dmaengine: ioatdma: use default_groups in kobj_type
+Message-ID: <YdVLzCAtiZHfdhn9@matsya>
+References: <20220104163330.1338824-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211230090449.11808-3-zajec5@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220104163330.1338824-1-gregkh@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Rafał,
+On 04-01-22, 17:33, Greg Kroah-Hartman wrote:
+> There are currently 2 ways to create a set of sysfs files for a
+> kobj_type, through the default_attrs field, and the default_groups
+> field.  Move the ioatdma sysfs code to use default_groups field which has
+> been the preferred way since aa30f47cf666 ("kobject: Add support for
+> default attribute groups to kobj_type") so that we can soon get rid of
+> the obsolete default_attrs field.
 
-I love your patch! Yet something to improve:
+Applied, thanks
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on mtd/mtd/next mtd/mtd/fixes linus/master v5.16-rc8]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Rafa-Mi-ecki/mtd-core-call-devm_of_platform_populate-for-MTD-devices/20211230-170531
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: nios2-randconfig-r013-20220105 (https://download.01.org/0day-ci/archive/20220105/202201051502.yOxThsL0-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/52f6be4712d04b927cd356dd95940bd76f1f5b97
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Rafa-Mi-ecki/mtd-core-call-devm_of_platform_populate-for-MTD-devices/20211230-170531
-        git checkout 52f6be4712d04b927cd356dd95940bd76f1f5b97
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   nios2-linux-ld: drivers/nvmem/u-boot-env.o: in function `u_boot_env_read':
-   u-boot-env.c:(.text+0x2c): undefined reference to `mtd_read'
-   u-boot-env.c:(.text+0x2c): relocation truncated to fit: R_NIOS2_CALL26 against `mtd_read'
-   nios2-linux-ld: drivers/nvmem/u-boot-env.o: in function `u_boot_env_parse':
-   u-boot-env.c:(.text+0x2d4): undefined reference to `mtd_read'
-   u-boot-env.c:(.text+0x2d4): relocation truncated to fit: R_NIOS2_CALL26 against `mtd_read'
->> nios2-linux-ld: u-boot-env.c:(.text+0x314): undefined reference to `mtd_read'
-   u-boot-env.c:(.text+0x314): relocation truncated to fit: R_NIOS2_CALL26 against `mtd_read'
-   nios2-linux-ld: drivers/nvmem/u-boot-env.o: in function `u_boot_env_probe':
-   u-boot-env.c:(.text+0x4ec): undefined reference to `get_mtd_device_nm'
-   u-boot-env.c:(.text+0x4ec): relocation truncated to fit: R_NIOS2_CALL26 against `get_mtd_device_nm'
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+~Vinod

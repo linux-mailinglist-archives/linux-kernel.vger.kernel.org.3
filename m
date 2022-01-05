@@ -2,298 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62526485190
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 12:03:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F65485195
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 12:04:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239586AbiAELDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 06:03:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46782 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239579AbiAELDx (ORCPT
+        id S239594AbiAELEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 06:04:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51856 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235119AbiAELEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 06:03:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641380633;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2Bn5J92jb9VCDdlzZ06HPXHfYjgq++ytq59wMITpuvg=;
-        b=Y6gV/GnxYJAPemGvXF+v0djWrY8m9BRNyv+9KAOAMYTriXMgLD12R0XLXoi2gZwI0+2Vp2
-        W8crJJGyrVexktcwnzQgYgvykfjpU1Q1hICQmAX++SAfuueDlL0NSTYOqlJVhN5Wy0b38E
-        AklMYxELes2t8q+NEh7MbLuHE5Rorqc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-504-cX5u5NJfNLWY3qV1pr_g9w-1; Wed, 05 Jan 2022 06:03:48 -0500
-X-MC-Unique: cX5u5NJfNLWY3qV1pr_g9w-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A3831101AFA7;
-        Wed,  5 Jan 2022 11:03:46 +0000 (UTC)
-Received: from starship (unknown [10.40.192.177])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6972C708D2;
-        Wed,  5 Jan 2022 11:03:42 +0000 (UTC)
-Message-ID: <628ac6d9b16c6b3a2573f717df0d2417df7caddb.camel@redhat.com>
-Subject: Re: [PATCH v2 3/5] KVM: SVM: fix race between interrupt delivery
- and AVIC inhibition
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Joerg Roedel <joro@8bytes.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Ingo Molnar <mingo@redhat.com>
-Date:   Wed, 05 Jan 2022 13:03:41 +0200
-In-Reply-To: <YdTPvdY6ysjXMpAU@google.com>
-References: <20211213104634.199141-1-mlevitsk@redhat.com>
-         <20211213104634.199141-4-mlevitsk@redhat.com> <YdTPvdY6ysjXMpAU@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 5 Jan 2022 06:04:43 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAA2C061761
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 03:04:42 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1n545t-0008W1-8N; Wed, 05 Jan 2022 12:04:37 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1n545q-0004qQ-DW; Wed, 05 Jan 2022 12:04:34 +0100
+Date:   Wed, 5 Jan 2022 12:04:34 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        David Jander <david@protonic.nl>,
+        Robin van der Gracht <robin@protonic.nl>,
+        dri-devel@lists.freedesktop.org,
+        Jonathan Cameron <jic23@kernel.org>
+Subject: Re: [PATCH v1 4/4] ARM: dts: imx6dl: plym2m, prtvt7, victgo:  make
+ use of new resistive-adc-touch driver
+Message-ID: <20220105110434.GG303@pengutronix.de>
+References: <20211122124310.2796505-1-o.rempel@pengutronix.de>
+ <20211122124310.2796505-4-o.rempel@pengutronix.de>
+ <20211206010627.GK4216@dragon>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211206010627.GK4216@dragon>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 11:58:52 up 25 days, 19:44, 81 users,  load average: 1.02, 1.06,
+ 1.07
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-01-04 at 22:52 +0000, Sean Christopherson wrote:
-> On Mon, Dec 13, 2021, Maxim Levitsky wrote:
-> > If svm_deliver_avic_intr is called just after the target vcpu's AVIC got
-> > inhibited, it might read a stale value of vcpu->arch.apicv_active
-> > which can lead to the target vCPU not noticing the interrupt.
-> > 
-> > To fix this use load-acquire/store-release so that, if the target vCPU
-> > is IN_GUEST_MODE, we're guaranteed to see a previous disabling of the
-> > AVIC.  If AVIC has been disabled in the meanwhile, proceed with the
-> > KVM_REQ_EVENT-based delivery.
-> > 
-> > All this complicated logic is actually exactly how we can handle an
-> > incomplete IPI vmexit; the only difference lies in who sets IRR, whether
-> > KVM or the processor.
-> > 
-> > Also incomplete IPI vmexit, has the same races as svm_deliver_avic_intr.
-> > therefore just reuse the avic_kick_target_vcpu for it as well.
-> > 
-> > Reported-by: Maxim Levitsky <mlevitsk@redhat.com>
-> 
-> Heh, probably don't need a Reported-by for a patch you wrote :-)
+Hi Shawn,
 
-Paolo gave me this version, I pretty much sent it as is. We had few iterations
-of this patch before though we agreed that the race is finally gone.
+sorry for the delay, I just came back to work.
 
+On Mon, Dec 06, 2021 at 09:06:28AM +0800, Shawn Guo wrote:
+> On Mon, Nov 22, 2021 at 01:43:10PM +0100, Oleksij Rempel wrote:
+> > The tsc2046 is an ADC used as touchscreen controller. To share as mach
+> > code as possible, we should use it as actual ADC + virtual tochscreen
+> > controller.
+> > With this patch we make use of the new kernel IIO and HID infrastructure.
+> > 
+> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 > 
-> > Co-developed-with: Paolo Bonzini <pbonzini@redhat.com>
-> 
-> Co-developed-by: is preferred, and should be accompanied by Paolo's SoB.
+> One space is enough in subject "victgo:  make".
 
-First time I use this format, so I didn't knew about this.
+done.
 
-> 
-> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
 > > ---
-> >  arch/x86/kvm/svm/avic.c | 85 +++++++++++++++++++++++++----------------
-> >  arch/x86/kvm/x86.c      |  4 +-
-> >  2 files changed, 55 insertions(+), 34 deletions(-)
+> >  arch/arm/boot/dts/imx6dl-plym2m.dts | 55 ++++++++++++++++++++---------
+> >  arch/arm/boot/dts/imx6dl-prtvt7.dts | 53 ++++++++++++++++++++-------
+> >  arch/arm/boot/dts/imx6dl-victgo.dts | 55 +++++++++++++++++++++--------
+> >  3 files changed, 120 insertions(+), 43 deletions(-)
 > > 
-> > diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> > index 90364d02f22aa..34f62da2fbadd 100644
-> > --- a/arch/x86/kvm/svm/avic.c
-> > +++ b/arch/x86/kvm/svm/avic.c
-> > @@ -289,6 +289,47 @@ static int avic_init_backing_page(struct kvm_vcpu *vcpu)
-> >  	return 0;
-> >  }
-> >  
-> > +static void avic_kick_target_vcpu(struct kvm_vcpu *vcpu)
-> > +{
-> > +	bool in_guest_mode;
+> > diff --git a/arch/arm/boot/dts/imx6dl-plym2m.dts b/arch/arm/boot/dts/imx6dl-plym2m.dts
+> > index 60fe5f14666e..e2afedae85cb 100644
+> > --- a/arch/arm/boot/dts/imx6dl-plym2m.dts
+> > +++ b/arch/arm/boot/dts/imx6dl-plym2m.dts
+> > @@ -101,6 +101,17 @@ reg_12v0: regulator-12v0 {
+> >  		regulator-min-microvolt = <12000000>;
+> >  		regulator-max-microvolt = <12000000>;
+> >  	};
 > > +
-> > +	/*
-> > +	 * vcpu->arch.apicv_active is read after vcpu->mode.  Pairs
-> 
-> This should say "must be read", not "is read".  It's obvious from the code that
-> apicv_active is read second, the comment is there to say that it _must_ be read
-> after vcpu->mode.
-> 
-> > +	 * with smp_store_release in vcpu_enter_guest.
-> > +	 */
-> > +	in_guest_mode = (smp_load_acquire(&vcpu->mode) == IN_GUEST_MODE);
-> 
-> IMO, it's marginally clear to initialize the bool.
-> 
-> 	bool in_guest_mode = (smp_load_acquire(&vcpu->mode) == IN_GUEST_MODE);
-> 
-> > +	if (READ_ONCE(vcpu->arch.apicv_active)) {
-> > +		if (in_guest_mode) {
-> > +			/*
-> > +			 * Signal the doorbell to tell hardware to inject the IRQ if the vCPU
-> > +			 * is in the guest.  If the vCPU is not in the guest, hardware will
-> > +			 * automatically process AVIC interrupts at VMRUN.
-> 
-> Might as well wrap these comments at 80 chars since they're being moved.  Or
-> maybe even better....
-> 
-> 	/* blah blah blah */
-> 	if (!READ_ONCE(vcpu->arch.apicv_active)) {
-> 		kvm_make_request(KVM_REQ_EVENT, vcpu);
-> 		kvm_vcpu_kick(vcpu);
-> 		return;
-> 	}
-> 
-> 	if (in_guest_mode) {
-> 		...
-> 	} else {
-> 		....
-> 	}
-> 
-> ...so that the existing comments can be preserved as is.
-> 
-> > +			 *
-> > +			 * Note, the vCPU could get migrated to a different pCPU at any
-> > +			 * point, which could result in signalling the wrong/previous
-> > +			 * pCPU.  But if that happens the vCPU is guaranteed to do a
-> > +			 * VMRUN (after being migrated) and thus will process pending
-> > +			 * interrupts, i.e. a doorbell is not needed (and the spurious
-> > +			 * one is harmless).
-> > +			 */
-> > +			int cpu = READ_ONCE(vcpu->cpu);
-> > +			if (cpu != get_cpu())
-> > +				wrmsrl(SVM_AVIC_DOORBELL, kvm_cpu_get_apicid(cpu));
-> > +			put_cpu();
-> > +		} else {
-> > +			/*
-> > +			 * Wake the vCPU if it was blocking.  KVM will then detect the
-> > +			 * pending IRQ when checking if the vCPU has a wake event.
-> > +			 */
-> > +			kvm_vcpu_wake_up(vcpu);
-> > +		}
-> > +	} else {
-> > +		/* Compare this case with __apic_accept_irq.  */
-> 
-> Honestly, this comment isn't very helpful.  It only takes a few lines to say:
-> 
-> 		/*
-> 		 * Manually signal the event, the __apic_accept_irq() fallback
-> 		 * path can't be used if AVIC is disabled after the vector is
-> 		 * already queued in the vIRR.
-> 		 */
-> 
-> (incorporating more feedback below)
-> 
-> > +		kvm_make_request(KVM_REQ_EVENT, vcpu);
-> > +		kvm_vcpu_kick(vcpu);
-> > +	}
-> > +}
-> > +
-> >  static void avic_kick_target_vcpus(struct kvm *kvm, struct kvm_lapic *source,
-> >  				   u32 icrl, u32 icrh)
-> >  {
-> > @@ -304,8 +345,10 @@ static void avic_kick_target_vcpus(struct kvm *kvm, struct kvm_lapic *source,
-> >  	kvm_for_each_vcpu(i, vcpu, kvm) {
-> >  		if (kvm_apic_match_dest(vcpu, source, icrl & APIC_SHORT_MASK,
-> >  					GET_APIC_DEST_FIELD(icrh),
-> > -					icrl & APIC_DEST_MASK))
-> > -			kvm_vcpu_wake_up(vcpu);
-> > +					icrl & APIC_DEST_MASK)) {
-> > +			vcpu->arch.apic->irr_pending = true;
-> > +			avic_kick_target_vcpu(vcpu);
-> > +		}
-> >  	}
-> >  }
+> > +	touchscreen {
+> > +		compatible = "resistive-adc-touch";
+> > +		io-channels = <&adc 1>, <&adc 3>, <&adc 4>, <&adc 5>;
+> > +		io-channel-names = "y", "z1", "z2", "x";
+> > +		touchscreen-min-pressure = <64687>;
+> > +		touchscreen-inverted-x;
+> > +		touchscreen-inverted-y;
+> > +		touchscreen-x-plate-ohms = <300>;
+> > +		touchscreen-y-plate-ohms = <800>;
+> > +	};
+> >  };
 > >  
-> > @@ -671,9 +714,12 @@ void svm_load_eoi_exitmap(struct kvm_vcpu *vcpu, u64 *eoi_exit_bitmap)
+> >  &can1 {
+> > @@ -129,26 +140,38 @@ &ecspi2 {
+> >  	pinctrl-0 = <&pinctrl_ecspi2>;
+> >  	status = "okay";
 > >  
-> >  int svm_deliver_avic_intr(struct kvm_vcpu *vcpu, int vec)
-> >  {
-> > -	if (!vcpu->arch.apicv_active)
-> > -		return -1;
-> > -
-> > +	/*
-> > +	 * Below, we have to handle anyway the case of AVIC being disabled
-> > +	 * in the middle of this function, and there is hardly any overhead
-> > +	 * if AVIC is disabled.  So, we do not bother returning -1 and handle
-> > +	 * the kick ourselves for disabled APICv.
+> > -	touchscreen@0 {
+> > -		compatible = "ti,tsc2046";
+> > +	adc: adc@0 {
 > 
-> Hmm, my preference would be to keep the "return -1" even though apicv_active must
-> be rechecked.  That would help highlight that returning "failure" after this point
-> is not an option as it would result in kvm_lapic_set_irr() being called twice.
+> Isn't label name "adc" too generic?
 
-I don't mind either - this will fix the tracepoint I recently added to report the
-number of interrupts that were delivered by AVIC/APICv - with this patch,
-all of them count as such.
+I do not have strong opinion about this. Currently we have no
+restrictions for the node names:
+Documentation/devicetree/bindings/iio/adc/ti,tsc2046.yaml
+Documentation/devicetree/bindings/iio/adc/adc.yaml
 
+I can name it touchscreen-adc@0 or something like this. What are your
+preferences?
 
-I will also address all other feedback about the comments and send new version soon.
-
-Thanks for the review!
-Best regards,
-	Maxim Levitsky
-
-> 
-> > +	 */
-> >  	kvm_lapic_set_irr(vec, vcpu->arch.apic);
-> >  
-> >  	/*
-> > @@ -684,34 +730,7 @@ int svm_deliver_avic_intr(struct kvm_vcpu *vcpu, int vec)
-> >  	 * the doorbell if the vCPU is already running in the guest.
-> >  	 */
-> >  	smp_mb__after_atomic();
-> > -
-> > -	/*
-> > -	 * Signal the doorbell to tell hardware to inject the IRQ if the vCPU
-> > -	 * is in the guest.  If the vCPU is not in the guest, hardware will
-> > -	 * automatically process AVIC interrupts at VMRUN.
-> > -	 */
-> > -	if (vcpu->mode == IN_GUEST_MODE) {
-> > -		int cpu = READ_ONCE(vcpu->cpu);
-> > -
-> > -		/*
-> > -		 * Note, the vCPU could get migrated to a different pCPU at any
-> > -		 * point, which could result in signalling the wrong/previous
-> > -		 * pCPU.  But if that happens the vCPU is guaranteed to do a
-> > -		 * VMRUN (after being migrated) and thus will process pending
-> > -		 * interrupts, i.e. a doorbell is not needed (and the spurious
-> > -		 * one is harmless).
-> > -		 */
-> > -		if (cpu != get_cpu())
-> > -			wrmsrl(SVM_AVIC_DOORBELL, kvm_cpu_get_apicid(cpu));
-> > -		put_cpu();
-> > -	} else {
-> > -		/*
-> > -		 * Wake the vCPU if it was blocking.  KVM will then detect the
-> > -		 * pending IRQ when checking if the vCPU has a wake event.
-> > -		 */
-> > -		kvm_vcpu_wake_up(vcpu);
-> > -	}
-> > -
-> > +	avic_kick_target_vcpu(vcpu);
-> >  	return 0;
-> >  }
-> >  
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index 85127b3e3690b..81a74d86ee5eb 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -9869,7 +9869,9 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
-> >  	 * result in virtual interrupt delivery.
-> >  	 */
-> >  	local_irq_disable();
-> > -	vcpu->mode = IN_GUEST_MODE;
-> > +
-> > +	/* Store vcpu->apicv_active before vcpu->mode.  */
-> > +	smp_store_release(&vcpu->mode, IN_GUEST_MODE);
-> >  
-> >  	srcu_read_unlock(&vcpu->kvm->srcu, vcpu->srcu_idx);
-> >  
-> > -- 
-> > 2.26.3
-> > 
-
-
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

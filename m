@@ -2,59 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9239A484C8E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 03:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41AE0484C8F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 03:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237125AbiAEChF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 21:37:05 -0500
-Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:47330 "EHLO
-        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236989AbiAEChE (ORCPT
+        id S237129AbiAECig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 21:38:36 -0500
+Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:54334 "EHLO
+        out30-57.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235991AbiAECif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 21:37:04 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V1-t5Gh_1641350221;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V1-t5Gh_1641350221)
+        Tue, 4 Jan 2022 21:38:35 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=jkchen@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V1.21Yh_1641350311;
+Received: from localhost(mailfrom:jkchen@linux.alibaba.com fp:SMTPD_---0V1.21Yh_1641350311)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 05 Jan 2022 10:37:02 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     t.schramm@manjaro.org
-Cc:     sre@kernel.org, linus.walleij@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] power: supply_core: fix application of sizeof to pointer
-Date:   Wed,  5 Jan 2022 10:37:00 +0800
-Message-Id: <20220105023700.10966-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+          Wed, 05 Jan 2022 10:38:32 +0800
+From:   Jay Chen <jkchen@linux.alibaba.com>
+To:     mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
+        leo.yan@linaro.org, alexander.shishkin@linux.intel.com,
+        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
+        linux-kernel@vger.kernel.org
+Cc:     zhangliguang@linux.alibaba.com
+Subject: [RESEND PATCH] coresight: change tmc from misc device to cdev device
+Date:   Wed,  5 Jan 2022 10:38:31 +0800
+Message-Id: <20220105023832.4729-1-jkchen@linux.alibaba.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The coccinelle check report:
-./drivers/power/supply/cw2015_battery.c:692:12-18: ERROR: application of
-sizeof to pointer
+Currently, there are 130 etr and etf on our machine,
+but the current coresight tmc driver uses misc_register
+to register the device, which leads to the error that
+the device number is not enough.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Fixes: 25fd330370ac ("power: supply_core: Pass pointer to battery info")
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+coresight-tmc: probe of xxxxx failed with error -16
+
+This patch changes the device registration method
+to cdev's dynamic registration method to solve the
+problem of insufficient device numbers.
+
+Signed-off-by: Jay Chen <jkchen@linux.alibaba.com>
 ---
- drivers/power/supply/cw2015_battery.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../hwtracing/coresight/coresight-tmc-core.c  | 91 +++++++++++++++----
+ drivers/hwtracing/coresight/coresight-tmc.h   | 11 ++-
+ 2 files changed, 82 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/power/supply/cw2015_battery.c b/drivers/power/supply/cw2015_battery.c
-index 0c87ad0dbf71..728e2a6cc9c3 100644
---- a/drivers/power/supply/cw2015_battery.c
-+++ b/drivers/power/supply/cw2015_battery.c
-@@ -689,7 +689,7 @@ static int cw_bat_probe(struct i2c_client *client)
- 	if (ret) {
- 		/* Allocate an empty battery */
- 		cw_bat->battery = devm_kzalloc(&client->dev,
--					       sizeof(cw_bat->battery),
-+					       sizeof(*cw_bat->battery),
- 					       GFP_KERNEL);
- 		if (!cw_bat->battery)
- 			return -ENOMEM;
+diff --git a/drivers/hwtracing/coresight/coresight-tmc-core.c b/drivers/hwtracing/coresight/coresight-tmc-core.c
+index d0276af82494..55a131c059fe 100644
+--- a/drivers/hwtracing/coresight/coresight-tmc-core.c
++++ b/drivers/hwtracing/coresight/coresight-tmc-core.c
+@@ -12,7 +12,6 @@
+ #include <linux/io.h>
+ #include <linux/err.h>
+ #include <linux/fs.h>
+-#include <linux/miscdevice.h>
+ #include <linux/mutex.h>
+ #include <linux/property.h>
+ #include <linux/uaccess.h>
+@@ -31,6 +30,12 @@ DEFINE_CORESIGHT_DEVLIST(etb_devs, "tmc_etb");
+ DEFINE_CORESIGHT_DEVLIST(etf_devs, "tmc_etf");
+ DEFINE_CORESIGHT_DEVLIST(etr_devs, "tmc_etr");
+ 
++static DEFINE_IDA(tmc_ida);
++static dev_t tmc_major;
++static struct class *tmc_class;
++
++#define TMC_DEV_MAX	(MINORMASK + 1)
++
+ void tmc_wait_for_tmcready(struct tmc_drvdata *drvdata)
+ {
+ 	struct coresight_device *csdev = drvdata->csdev;
+@@ -147,7 +152,7 @@ static int tmc_open(struct inode *inode, struct file *file)
+ {
+ 	int ret;
+ 	struct tmc_drvdata *drvdata = container_of(file->private_data,
+-						   struct tmc_drvdata, miscdev);
++						   struct tmc_drvdata, cdev);
+ 
+ 	ret = tmc_read_prepare(drvdata);
+ 	if (ret)
+@@ -179,7 +184,7 @@ static ssize_t tmc_read(struct file *file, char __user *data, size_t len,
+ 	char *bufp;
+ 	ssize_t actual;
+ 	struct tmc_drvdata *drvdata = container_of(file->private_data,
+-						   struct tmc_drvdata, miscdev);
++						   struct tmc_drvdata, cdev);
+ 	actual = tmc_get_sysfs_trace(drvdata, *ppos, len, &bufp);
+ 	if (actual <= 0)
+ 		return 0;
+@@ -200,7 +205,7 @@ static int tmc_release(struct inode *inode, struct file *file)
+ {
+ 	int ret;
+ 	struct tmc_drvdata *drvdata = container_of(file->private_data,
+-						   struct tmc_drvdata, miscdev);
++						   struct tmc_drvdata, cdev);
+ 
+ 	ret = tmc_read_unprepare(drvdata);
+ 	if (ret)
+@@ -451,6 +456,7 @@ static int tmc_probe(struct amba_device *adev, const struct amba_id *id)
+ {
+ 	int ret = 0;
+ 	u32 devid;
++	dev_t devt;
+ 	void __iomem *base;
+ 	struct device *dev = &adev->dev;
+ 	struct coresight_platform_data *pdata = NULL;
+@@ -546,14 +552,32 @@ static int tmc_probe(struct amba_device *adev, const struct amba_id *id)
+ 		goto out;
+ 	}
+ 
+-	drvdata->miscdev.name = desc.name;
+-	drvdata->miscdev.minor = MISC_DYNAMIC_MINOR;
+-	drvdata->miscdev.fops = &tmc_fops;
+-	ret = misc_register(&drvdata->miscdev);
++	ret = ida_simple_get(&tmc_ida, 0, TMC_DEV_MAX, GFP_KERNEL);
++	if (ret < 0)
++		goto err_coresight_unregister;
++
++	cdev_init(&drvdata->cdev.cdev, &tmc_fops);
++	drvdata->cdev.cdev.owner = THIS_MODULE;
++	devt = MKDEV(MAJOR(tmc_major), ret);
++	ret = cdev_add(&drvdata->cdev.cdev, devt, 1);
+ 	if (ret)
+-		coresight_unregister(drvdata->csdev);
+-	else
++		goto err_free_tmc_ida;
++
++	drvdata->cdev.dev = device_create(tmc_class, NULL, devt, &drvdata->cdev, desc.name);
++	if (IS_ERR(drvdata->cdev.dev)) {
++		ret = PTR_ERR(drvdata->cdev.dev);
++		goto err_delete_cdev;
++	} else
+ 		pm_runtime_put(&adev->dev);
++
++	return 0;
++
++err_delete_cdev:
++	cdev_del(&drvdata->cdev.cdev);
++err_free_tmc_ida:
++	ida_simple_remove(&tmc_ida, MINOR(devt));
++err_coresight_unregister:
++	coresight_unregister(drvdata->csdev);
+ out:
+ 	return ret;
+ }
+@@ -583,13 +607,11 @@ static void tmc_shutdown(struct amba_device *adev)
+ static void tmc_remove(struct amba_device *adev)
+ {
+ 	struct tmc_drvdata *drvdata = dev_get_drvdata(&adev->dev);
++	struct device *dev = drvdata->cdev.dev;
+ 
+-	/*
+-	 * Since misc_open() holds a refcount on the f_ops, which is
+-	 * etb fops in this case, device is there until last file
+-	 * handler to this device is closed.
+-	 */
+-	misc_deregister(&drvdata->miscdev);
++	ida_simple_remove(&tmc_ida, MINOR(dev->devt));
++	device_destroy(tmc_class, dev->devt);
++	cdev_del(&drvdata->cdev.cdev);
+ 	coresight_unregister(drvdata->csdev);
+ }
+ 
+@@ -618,7 +640,42 @@ static struct amba_driver tmc_driver = {
+ 	.id_table	= tmc_ids,
+ };
+ 
+-module_amba_driver(tmc_driver);
++static int __init tmc_init(void)
++{
++	int ret;
++
++	ret = alloc_chrdev_region(&tmc_major, 0, TMC_DEV_MAX, "tmc");
++	if (ret < 0) {
++		pr_err("tmc: failed to allocate char dev region\n");
++		return ret;
++	}
++
++	tmc_class = class_create(THIS_MODULE, "tmc");
++	if (IS_ERR(tmc_class)) {
++		pr_err("tmc: failed to create class\n");
++		unregister_chrdev_region(tmc_major, TMC_DEV_MAX);
++		return PTR_ERR(tmc_class);
++	}
++
++	ret = amba_driver_register(&tmc_driver);
++	if (ret) {
++		pr_err("tmc: error registering amba driver\n");
++		class_destroy(tmc_class);
++		unregister_chrdev_region(tmc_major, TMC_DEV_MAX);
++	}
++
++	return ret;
++}
++
++static void __exit tmc_exit(void)
++{
++	amba_driver_unregister(&tmc_driver);
++	class_destroy(tmc_class);
++	unregister_chrdev_region(tmc_major, TMC_DEV_MAX);
++}
++
++module_init(tmc_init);
++module_exit(tmc_exit);
+ 
+ MODULE_AUTHOR("Pratik Patel <pratikp@codeaurora.org>");
+ MODULE_DESCRIPTION("Arm CoreSight Trace Memory Controller driver");
+diff --git a/drivers/hwtracing/coresight/coresight-tmc.h b/drivers/hwtracing/coresight/coresight-tmc.h
+index 6bec20a392b3..11441c6b9c26 100644
+--- a/drivers/hwtracing/coresight/coresight-tmc.h
++++ b/drivers/hwtracing/coresight/coresight-tmc.h
+@@ -7,9 +7,9 @@
+ #ifndef _CORESIGHT_TMC_H
+ #define _CORESIGHT_TMC_H
+ 
++#include <linux/cdev.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/idr.h>
+-#include <linux/miscdevice.h>
+ #include <linux/mutex.h>
+ #include <linux/refcount.h>
+ 
+@@ -163,11 +163,16 @@ struct etr_buf {
+ 	void				*private;
+ };
+ 
++struct tmc_cdev {
++	struct cdev cdev;
++	struct device *dev;
++};
++
+ /**
+  * struct tmc_drvdata - specifics associated to an TMC component
+  * @base:	memory mapped base address for this component.
+  * @csdev:	component vitals needed by the framework.
+- * @miscdev:	specifics to handle "/dev/xyz.tmc" entry.
++ * @tmc_cdev:	specifics to handle "/dev/xyz.tmc" entry.
+  * @spinlock:	only one at a time pls.
+  * @pid:	Process ID of the process being monitored by the session
+  *		that is using this component.
+@@ -191,7 +196,7 @@ struct etr_buf {
+ struct tmc_drvdata {
+ 	void __iomem		*base;
+ 	struct coresight_device	*csdev;
+-	struct miscdevice	miscdev;
++	struct tmc_cdev		cdev;
+ 	spinlock_t		spinlock;
+ 	pid_t			pid;
+ 	bool			reading;
 -- 
-2.20.1.7.g153144c
+2.27.0
 

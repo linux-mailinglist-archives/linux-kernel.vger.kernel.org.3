@@ -2,93 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9347B4850ED
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:17:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF2C4850F5
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:17:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239338AbiAEKR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 05:17:27 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:44892 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235244AbiAEKRZ (ORCPT
+        id S239358AbiAEKRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 05:17:44 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4343 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239340AbiAEKRf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 05:17:25 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 736C22110B;
-        Wed,  5 Jan 2022 10:17:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1641377843; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=R3a4/jDffI/RE5UZn9PXmI80o+ierKeptaswzlJpcyo=;
-        b=RxikGIxLDjGHCsCe9FuOETZmtVE3HYzG1kGVdliKVZ4FiW2Doh7xiyAM4LGof5z6w7F4zx
-        gNpKekcjDGu0YqrSYJAaFjLKGFTykOrPJUJl3xL2kXj7rcYC7/k9LpVmWX+r2j/KGx2H4s
-        DMTDWh1QV/GtNe4wp75ldw8K6eSX0sY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1641377843;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=R3a4/jDffI/RE5UZn9PXmI80o+ierKeptaswzlJpcyo=;
-        b=L2a7f1n0FrbGB+86/a1M9bqdPqG9ljjfyu30BlMf7g3qgHrbXhVMZ88NiBMwmdUQU48h3J
-        mVQyYqZmoxC+P+CA==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 59557A3B84;
-        Wed,  5 Jan 2022 10:17:23 +0000 (UTC)
-Date:   Wed, 5 Jan 2022 11:17:23 +0100 (CET)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     David Vernet <void@manifault.com>
-cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jpoimboe@redhat.com, pmladek@suse.com, jikos@kernel.org,
-        joe.lawrence@redhat.com
-Subject: Re: [PATCH] livepatch: Avoid CPU hogging with cond_resched
-In-Reply-To: <20211229215646.830451-1-void@manifault.com>
-Message-ID: <alpine.LSU.2.21.2201051045540.12365@pobox.suse.cz>
-References: <20211229215646.830451-1-void@manifault.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Wed, 5 Jan 2022 05:17:35 -0500
+Received: from fraeml706-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JTQK409VWz67twb;
+        Wed,  5 Jan 2022 18:12:40 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.20; Wed, 5 Jan 2022 11:17:32 +0100
+Received: from localhost (10.47.83.118) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 5 Jan
+ 2022 10:17:31 +0000
+Date:   Wed, 5 Jan 2022 10:17:37 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        "Lars-Peter Clausen" <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Arnd Bergmann" <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, <list@opendingux.net>,
+        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mips@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 0/8] DEV_PM_OPS macros rework
+Message-ID: <20220105101737.00000957@Huawei.com>
+In-Reply-To: <20220104214214.198843-1-paul@crapouillou.net>
+References: <20220104214214.198843-1-paul@crapouillou.net>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.83.118]
+X-ClientProxiedBy: lhreml704-chm.china.huawei.com (10.201.108.53) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Dec 2021, David Vernet wrote:
+On Tue, 4 Jan 2022 21:42:06 +0000
+Paul Cercueil <paul@crapouillou.net> wrote:
 
-> When initializing a 'struct klp_object' in klp_init_object_loaded(), and
-> performing relocations in klp_resolve_symbols(), klp_find_object_symbol()
-> is invoked to look up the address of a symbol in an already-loaded module
-> (or vmlinux). This, in turn, calls kallsyms_on_each_symbol() or
-> module_kallsyms_on_each_symbol() to find the address of the symbol that is
-> being patched.
+> Hi,
 > 
-> It turns out that symbol lookups often take up the most CPU time when
-> enabling and disabling a patch, and may hog the CPU and cause other tasks
-> on that CPU's runqueue to starve -- even in paths where interrupts are
-> enabled.  For example, under certain workloads, enabling a KLP patch with
-> many objects or functions may cause ksoftirqd to be starved, and thus for
-> interrupts to be backlogged and delayed. This may end up causing TCP
-> retransmits on the host where the KLP patch is being applied, and in
-> general, may cause any interrupts serviced by softirqd to be delayed while
-> the patch is being applied.
+> This set of commits rework a bit the *_DEV_PM_OPS() macros that were
+> introduced recently.
 > 
-> So as to ensure that kallsyms_on_each_symbol() does not end up hogging the
-> CPU, this patch adds a call to cond_resched() in kallsyms_on_each_symbol()
-> and module_kallsyms_on_each_symbol(), which are invoked when doing a symbol
-> lookup in vmlinux and a module respectively.  Without this patch, if a
-> live-patch is applied on a 36-core Intel host with heavy TCP traffic, a
-> ~10x spike is observed in TCP retransmits while the patch is being applied.
-> Additionally, collecting sched events with perf indicates that ksoftirqd is
-> awakened ~1.3 seconds before it's eventually scheduled.  With the patch, no
-> increase in TCP retransmit events is observed, and ksoftirqd is scheduled
-> shortly after it's awakened.
+> - Remove the DEFINE_UNIVERSAL_DEV_PM_OPS() macro, since I highly doubt
+>   anything is going to use it. The macro it replaces
+>   (UNIVERSAL_DEV_PM_OPS) seems to only be used incorrectly in code that
+>   hasn't been updated in ages.
 > 
-> Signed-off-by: David Vernet <void@manifault.com>
+> - Remove the static qualifier in DEFINE_SIMPLE_DEV_PM_OPS, so that the
+>   macro is more in line with what's done elsewhere in the kernel.
+> 
+> - Add a DEFINE_RUNTIME_DEV_PM_OPS() macro, for use with drivers that use
+>   runtime PM, and use runtime_pm_force_suspend/runtime_pm_force_resume
+>   as their system sleep callbacks.
+> 
+> - Add EXPORT_*_DEV_PM_OPS macros, which can be used for when the
+>   underlying dev_pm_ops is to be exported. With CONFIG_PM set, the
+>   symbol is exported as you would expect. With CONFIG_PM disabled, the
+>   dev_pm_ops is garbage-collected along with the suspend/resume
+>   callbacks.
+> 
+> - Update the two places which used DEFINE_SIMPLE_DEV_PM_OPS, to add back
+>   the "static" qualifier that was stripped from the macro.
+> 
+> - Update one driver to use EXPORT_RUNTIME_DEV_PM_OPS(), just to showcase
+>   how to use this macro in the case where a dev_pm_ops is to be
+>   exported.
+>   Note that the driver itself is GPL, and the symbol is only used within
+>   a GPL driver, so I would assume the symbol would be exported as GPL.
+>   But it was not the case in the original code, so I did not change the
+>   behaviour.
+> 
+> Feedback welcome.
 
-Acked-by: Miroslav Benes <mbenes@suse.cz>
+Comments on individual patches (in particular bad pick for that final example ;)
 
-I had similar ideas Petr mentioned elsewhere, but I, also, have no strong 
-opinion about it. Especially when livepatch is the only user of the said 
-interface.
+Given how late we are in the cycle, I'd argue we 'need' patches 2 (+ 5,6 which
+should probably be all one patch to avoid introducing then fixing a warning in
+different patches).  The others could wait for the following cycle if needed.
 
-M
+It would slow down a few patches I have queued up behind this, but most of them
+would be unaffected so it wouldn't annoy me too much. Can't speak for others
+however!
+
+Jonathan
+
+> 
+> Cheers,
+> -Paul
+> 
+> 
+> Paul Cercueil (8):
+>   PM: core: Remove DEFINE_UNIVERSAL_DEV_PM_OPS() macro
+>   PM: core: Remove static qualifier in DEFINE_SIMPLE_DEV_PM_OPS macro
+>   PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS macros
+>   PM: runtime: Add DEFINE_RUNTIME_DEV_PM_OPS() macro
+>   PM: runtime: Add EXPORT[_GPL]_RUNTIME_DEV_PM_OPS macros
+>   mmc: mxc: Make dev_pm_ops struct static
+>   mmc: jz4740: Make dev_pm_ops struct static
+>   iio: gyro: mpu3050: Use new PM macros
+> 
+>  drivers/iio/gyro/mpu3050-core.c | 13 +++-----
+>  drivers/iio/gyro/mpu3050-i2c.c  |  2 +-
+>  drivers/mmc/host/jz4740_mmc.c   |  4 +--
+>  drivers/mmc/host/mxcmmc.c       |  2 +-
+>  include/linux/pm.h              | 53 +++++++++++++++++++++++----------
+>  include/linux/pm_runtime.h      | 21 +++++++++++++
+>  6 files changed, 67 insertions(+), 28 deletions(-)
+> 
+

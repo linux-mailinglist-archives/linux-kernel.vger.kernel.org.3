@@ -2,188 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD864852D0
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:39:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4BE24852F5
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:42:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240410AbiAEMhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 07:37:00 -0500
-Received: from mga04.intel.com ([192.55.52.120]:6467 "EHLO mga04.intel.com"
+        id S234346AbiAEMkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 07:40:32 -0500
+Received: from foss.arm.com ([217.140.110.172]:44288 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240158AbiAEMgP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 07:36:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641386175; x=1672922175;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+VhmcyZLI52kxigvxsRrOyN1WGA41WgS5IooB8rfF4I=;
-  b=McaGpxguhubMcvau3s4M0vs0uQ8agd72/gxWHcehKwtYTkdvO3uwJM45
-   lhJhK7dXzwCg4nX5GTKGjG1r+jfNO0O2xg8bfUkJxwINO3K+xmEffkbFB
-   elpebTQ/jF+bWj28/4yw9SGY0r6iWOpiQEb11cyPUC285Ojp+H/XzTw0i
-   3LnlkGN+xc5KRLXblGtGLWKVxV3BJqQUqUJ+vYYWZrluc9VqFFsZdaB0p
-   F4fQAz5pBHP7fNprlA1h7AV2aYnPm4fKg2Ky7qHfr8vslOamDpbhVm3so
-   Obll0Bv58jpFsfnWVR2TrXggRZ6GasYAgg5Af3N2m08oE5rrEuO1dMJEz
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="241249395"
-X-IronPort-AV: E=Sophos;i="5.88,263,1635231600"; 
-   d="scan'208";a="241249395"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 04:35:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,263,1635231600"; 
-   d="scan'208";a="591004905"
-Received: from 984fee00bf64.jf.intel.com ([10.165.54.77])
-  by fmsmga004.fm.intel.com with ESMTP; 05 Jan 2022 04:35:43 -0800
-From:   Yang Zhong <yang.zhong@intel.com>
-To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, pbonzini@redhat.com, corbet@lwn.net,
-        shuah@kernel.org, seanjc@google.com
-Cc:     jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, jing2.liu@intel.com,
-        guang.zeng@intel.com, wei.w.wang@intel.com, yang.zhong@intel.com
-Subject: [PATCH v5 21/21] kvm: x86: Disable interception for IA32_XFD on demand
-Date:   Wed,  5 Jan 2022 04:35:32 -0800
-Message-Id: <20220105123532.12586-22-yang.zhong@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220105123532.12586-1-yang.zhong@intel.com>
-References: <20220105123532.12586-1-yang.zhong@intel.com>
+        id S234151AbiAEMjQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 07:39:16 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 081AF2B;
+        Wed,  5 Jan 2022 04:39:15 -0800 (PST)
+Received: from [10.163.72.138] (unknown [10.163.72.138])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6232A3F5A1;
+        Wed,  5 Jan 2022 04:39:12 -0800 (PST)
+Subject: Re: [PATCH 4/4] coresight: trbe: Workaround TRBE trace data
+ corruption
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        coresight@lists.linaro.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1641359159-22726-1-git-send-email-anshuman.khandual@arm.com>
+ <1641359159-22726-5-git-send-email-anshuman.khandual@arm.com>
+ <adbe2a0a-4ed8-4b86-453d-94fec96757e2@arm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <03220d4a-281e-20b5-0962-3831ce3a8ec1@arm.com>
+Date:   Wed, 5 Jan 2022 18:09:15 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <adbe2a0a-4ed8-4b86-453d-94fec96757e2@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kevin Tian <kevin.tian@intel.com>
 
-Always intercepting IA32_XFD causes non-negligible overhead when this
-register is updated frequently in the guest.
 
-Disable r/w emulation after intercepting the first WRMSR(IA32_XFD)
-with a non-zero value.
+On 1/5/22 5:29 PM, Suzuki K Poulose wrote:
+> On 05/01/2022 05:05, Anshuman Khandual wrote:
+>> TRBE implementations affected by Arm erratum #1902691 might corrupt trace
+>> data or deadlock, when it's being written into the memory. Workaround this
+>> problem in the driver, by preventing TRBE initialization on affected cpus.
+>> This adds a new cpu errata in arm64 errata framework and also updates TRBE
+>> driver as required.
+>>
+>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>> Cc: Will Deacon <will@kernel.org>
+>> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+>> Cc: Suzuki Poulose <suzuki.poulose@arm.com>
+>> Cc: coresight@lists.linaro.org
+>> Cc: linux-doc@vger.kernel.org
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>> ---
+>>   Documentation/arm64/silicon-errata.rst       |  2 ++
+>>   arch/arm64/Kconfig                           | 16 ++++++++++++++++
+>>   arch/arm64/kernel/cpu_errata.c               |  9 +++++++++
+>>   arch/arm64/tools/cpucaps                     |  1 +
+>>   drivers/hwtracing/coresight/coresight-trbe.c | 12 ++++++++++++
+>>   5 files changed, 40 insertions(+)
+>>
+>> diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
+>> index e0ef3e9a4b8b..50018f60c4d4 100644
+>> --- a/Documentation/arm64/silicon-errata.rst
+>> +++ b/Documentation/arm64/silicon-errata.rst
+>> @@ -56,6 +56,8 @@ stable kernels.
+>>   +----------------+-----------------+-----------------+-----------------------------+
+>>   | ARM            | Cortex-A510     | #2038923        | ARM64_ERRATUM_2038923       |
+>>   +----------------+-----------------+-----------------+-----------------------------+
+>> +| ARM            | Cortex-A510     | #1902691        | ARM64_ERRATUM_1902691       |
+>> ++----------------+-----------------+-----------------+-----------------------------+
+>>   | ARM            | Cortex-A53      | #826319         | ARM64_ERRATUM_826319        |
+>>   +----------------+-----------------+-----------------+-----------------------------+
+>>   | ARM            | Cortex-A53      | #827319         | ARM64_ERRATUM_827319        |
+>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+>> index 026e34fb6fad..1ea5c3b4aac0 100644
+>> --- a/arch/arm64/Kconfig
+>> +++ b/arch/arm64/Kconfig
+>> @@ -819,6 +819,22 @@ config ARM64_ERRATUM_2038923
+>>           If unsure, say Y.
+>>   +config ARM64_ERRATUM_1902691
+>> +    bool "Cortex-A510: 1902691: workaround TRBE trace corruption"
+>> +    depends on CORESIGHT_TRBE
+>> +    default y
+>> +    help
+>> +      This option adds the workaround for ARM Cortex-A510 erratum 1902691.
+>> +
+>> +      Affected Cortex-A510 core might cause trace data corruption, when being written
+>> +      into the memory. Effectively TRBE is broken and hence cannot be used to capture
+>> +      trace data.
+>> +
+>> +      Work around this problem in the driver by just preventing TRBE initialization on
+>> +      affected cpus.
+>> +
+>> +      If unsure, say Y.
+>> +
+> 
+> It might be better to add :
+> 
+> "The firmware must have disabled the access to TRBE for the kernel on such implementations. This will cover the kernel for any firmware that
+> doesn't do this already"
 
-Disable WRMSR emulation implies that IA32_XFD becomes out-of-sync
-with the software states in fpstate and the per-cpu xfd cache. This
-leads to two additional changes accordingly:
+Right, will add it.
 
-  - Call fpu_sync_guest_vmexit_xfd_state() after vm-exit to bring
-    software states back in-sync with the MSR, before handle_exit_irqoff()
-    is called.
+> 
+> 
+>>   config CAVIUM_ERRATUM_22375
+>>       bool "Cavium erratum 22375, 24313"
+>>       default y
+>> diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
+>> index 60b0c1f1d912..a3336dfb5a8a 100644
+>> --- a/arch/arm64/kernel/cpu_errata.c
+>> +++ b/arch/arm64/kernel/cpu_errata.c
+>> @@ -615,6 +615,15 @@ const struct arm64_cpu_capabilities arm64_errata[] = {   
+>>           /* Cortex-A510 r0p0 - r0p2 */
+>>           ERRATA_MIDR_REV_RANGE(MIDR_CORTEX_A510, 0, 0, 2)
+>>       },
+>> +#endif
+>> +#ifdef CONFIG_ARM64_ERRATUM_1902691
+>> +    {
+>> +        .desc = "ARM erratum 1902691",
+>> +        .capability = ARM64_WORKAROUND_1902691,
+>> +
+>> +        /* Cortex-A510 r0p0 - r0p1 */
+>> +        ERRATA_MIDR_REV_RANGE(MIDR_CORTEX_A510, 0, 0, 1)
+>> +    },
+>>   #endif
+>>       {
+>>       }
+>> diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
+>> index 45a06d36d080..e7719e8f18de 100644
+>> --- a/arch/arm64/tools/cpucaps
+>> +++ b/arch/arm64/tools/cpucaps
+>> @@ -57,6 +57,7 @@ WORKAROUND_1508412
+>>   WORKAROUND_1542419
+>>   WORKAROUND_2064142
+>>   WORKAROUND_2038923
+>> +WORKAROUND_1902691
+>>   WORKAROUND_TRBE_OVERWRITE_FILL_MODE
+>>   WORKAROUND_TSB_FLUSH_FAILURE
+>>   WORKAROUND_TRBE_WRITE_OUT_OF_RANGE
+>> diff --git a/drivers/hwtracing/coresight/coresight-trbe.c b/drivers/hwtracing/coresight/coresight-trbe.c
+>> index 0689c6dab96d..b9b4e34fac15 100644
+>> --- a/drivers/hwtracing/coresight/coresight-trbe.c
+>> +++ b/drivers/hwtracing/coresight/coresight-trbe.c
+>> @@ -93,12 +93,14 @@ struct trbe_buf {
+>>   #define TRBE_WORKAROUND_WRITE_OUT_OF_RANGE    1
+>>   #define TRBE_WORKAROUND_SYSREG_WRITE_FAILURE    2
+>>   #define TRBE_WORKAROUND_CORRUPTION_WITH_ENABLE    3
+>> +#define TRBE_IS_BROKEN    4
+>>     static int trbe_errata_cpucaps[] = {
+>>       [TRBE_WORKAROUND_OVERWRITE_FILL_MODE] = ARM64_WORKAROUND_TRBE_OVERWRITE_FILL_MODE,
+>>       [TRBE_WORKAROUND_WRITE_OUT_OF_RANGE] = ARM64_WORKAROUND_TRBE_WRITE_OUT_OF_RANGE,
+>>       [TRBE_WORKAROUND_SYSREG_WRITE_FAILURE] = ARM64_WORKAROUND_2064142,
+>>       [TRBE_WORKAROUND_CORRUPTION_WITH_ENABLE] = ARM64_WORKAROUND_2038923,
+>> +    [TRBE_IS_BROKEN] = ARM64_WORKAROUND_1902691,
+>>       -1,        /* Sentinel, must be the last entry */
+>>   };
+>>   @@ -181,6 +183,11 @@ static inline bool trbe_may_corrupt_with_enable(struct trbe_cpudata *cpudata)
+>>       return trbe_has_erratum(cpudata, TRBE_WORKAROUND_CORRUPTION_WITH_ENABLE);
+>>   }
+>>   +static inline bool trbe_is_broken(struct trbe_cpudata *cpudata)
+>> +{
+>> +    return trbe_has_erratum(cpudata, TRBE_IS_BROKEN);
+>> +}
+>> +
+>>   static int trbe_alloc_node(struct perf_event *event)
+>>   {
+>>       if (event->cpu == -1)
+>> @@ -1291,6 +1298,11 @@ static void arm_trbe_probe_cpu(void *info)
+>>        */
+>>       trbe_check_errata(cpudata);
+>>   +    if (trbe_is_broken(cpudata)) {
+>> +        pr_err("TRBE might corrupt the trace on cpu %d\n", cpu);
+> 
+> It may be better to say:
+> 
+>         "Disabling TRBE on CPU%d due to erratum"
 
-  - Always trap #NM once write interception is disabled for IA32_XFD.
-    The #NM exception is rare if the guest doesn't use dynamic
-    features. Otherwise, there is at most one exception per guest
-    task given a dynamic feature.
+Mention the erratum #1902691 as well or not required ?
 
-p.s. We have confirmed that SDM is being revised to say that
-when setting IA32_XFD[18] the AMX register state is not guaranteed
-to be preserved. This clarification avoids adding mess for a creative
-guest which sets IA32_XFD[18]=1 before saving active AMX state to
-its own storage.
-
-Signed-off-by: Kevin Tian <kevin.tian@intel.com>
-Signed-off-by: Jing Liu <jing2.liu@intel.com>
-Signed-off-by: Yang Zhong <yang.zhong@intel.com>
----
- arch/x86/include/asm/kvm_host.h |  1 +
- arch/x86/kvm/vmx/vmx.c          | 24 +++++++++++++++++++-----
- arch/x86/kvm/vmx/vmx.h          |  2 +-
- arch/x86/kvm/x86.c              |  8 ++++++++
- 4 files changed, 29 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 5d97f4adc1cb..2e8ffe269c23 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -647,6 +647,7 @@ struct kvm_vcpu_arch {
- 	u64 smi_count;
- 	bool tpr_access_reporting;
- 	bool xsaves_enabled;
-+	bool xfd_no_write_intercept;
- 	u64 ia32_xss;
- 	u64 microcode_version;
- 	u64 arch_capabilities;
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index b601dc8a7f13..a3be4b02df2c 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -162,6 +162,7 @@ static u32 vmx_possible_passthrough_msrs[MAX_POSSIBLE_PASSTHROUGH_MSRS] = {
- 	MSR_FS_BASE,
- 	MSR_GS_BASE,
- 	MSR_KERNEL_GS_BASE,
-+	MSR_IA32_XFD,
- 	MSR_IA32_XFD_ERR,
- #endif
- 	MSR_IA32_SYSENTER_CS,
-@@ -764,10 +765,11 @@ void vmx_update_exception_bitmap(struct kvm_vcpu *vcpu)
- 	}
- 
- 	/*
--	 * Trap #NM if guest xfd contains a non-zero value so guest XFD_ERR
--	 * can be saved timely.
-+	 * Disabling xfd interception indicates that dynamic xfeatures
-+	 * might be used in the guest. Always trap #NM in this case
-+	 * to save guest xfd_err timely.
- 	 */
--	if (vcpu->arch.guest_fpu.fpstate->xfd)
-+	if (vcpu->arch.xfd_no_write_intercept)
- 		eb |= (1u << NM_VECTOR);
- 
- 	vmcs_write32(EXCEPTION_BITMAP, eb);
-@@ -1978,9 +1980,21 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		break;
- 	case MSR_IA32_XFD:
- 		ret = kvm_set_msr_common(vcpu, msr_info);
--		/* Update #NM interception according to guest xfd */
--		if (!ret)
-+		/*
-+		 * Always intercepting WRMSR could incur non-negligible
-+		 * overhead given xfd might be changed frequently in
-+		 * guest context switch. Disable write interception
-+		 * upon the first write with a non-zero value (indicating
-+		 * potential usage on dynamic xfeatures). Also update
-+		 * exception bitmap to trap #NM for proper virtualization
-+		 * of guest xfd_err.
-+		 */
-+		if (!ret && data) {
-+			vmx_disable_intercept_for_msr(vcpu, MSR_IA32_XFD,
-+						      MSR_TYPE_RW);
-+			vcpu->arch.xfd_no_write_intercept = true;
- 			vmx_update_exception_bitmap(vcpu);
-+		}
- 		break;
- #endif
- 	case MSR_IA32_SYSENTER_CS:
-diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-index e0922c80c9d1..7f2c82e7f38f 100644
---- a/arch/x86/kvm/vmx/vmx.h
-+++ b/arch/x86/kvm/vmx/vmx.h
-@@ -352,7 +352,7 @@ struct vcpu_vmx {
- 	struct lbr_desc lbr_desc;
- 
- 	/* Save desired MSR intercept (read: pass-through) state */
--#define MAX_POSSIBLE_PASSTHROUGH_MSRS	14
-+#define MAX_POSSIBLE_PASSTHROUGH_MSRS	15
- 	struct {
- 		DECLARE_BITMAP(read, MAX_POSSIBLE_PASSTHROUGH_MSRS);
- 		DECLARE_BITMAP(write, MAX_POSSIBLE_PASSTHROUGH_MSRS);
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 92a1ea13ad51..df0150671b98 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -10084,6 +10084,14 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
- 	vcpu->mode = OUTSIDE_GUEST_MODE;
- 	smp_wmb();
- 
-+	/*
-+	 * Sync xfd before calling handle_exit_irqoff() which may
-+	 * rely on the fact that guest_fpu::xfd is up-to-date (e.g.
-+	 * in #NM irqoff handler).
-+	 */
-+	if (vcpu->arch.xfd_no_write_intercept)
-+		fpu_sync_guest_vmexit_xfd_state();
-+
- 	static_call(kvm_x86_handle_exit_irqoff)(vcpu);
- 
- 	if (vcpu->arch.guest_fpu.xfd_err)
+> 
+> Otherwise looks good to me.
+> 
+> Suzuki

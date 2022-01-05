@@ -2,135 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C152E485410
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 15:06:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F32D548547C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 15:27:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240546AbiAEOG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 09:06:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36698 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236938AbiAEOGU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 09:06:20 -0500
-Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3B8C061761;
-        Wed,  5 Jan 2022 06:06:20 -0800 (PST)
-Received: by mail-ua1-x934.google.com with SMTP id u6so61838456uaq.0;
-        Wed, 05 Jan 2022 06:06:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TXzc+NNhHR7zkiqOhJjsY/heE4Nlk/EZ4wy3/3ZxxcY=;
-        b=ICLs3I8qx/pXJEJVCvyD+a2RrTir/BHMm2narjNq4HebsRI5t0eGBH2dInNDq45nhi
-         jmRVZWT8PhoRoclMO+/4L2wNUPSNuv4l9POAzMsxYhgd+/dK29R1V47BvYLmPecSBFpq
-         6X3dvWWFeeKmqqO72MdLsrKytYQne9PgkJTG8fD7oJbk7KYcBw/mmVp+Pkd7UNR4GhuS
-         vwqSmdPtgp7CYWiijdwlOvdq5wdxxzI1GZ18nLpQfDkXrGkIbP/+wlE91LIgG2U1fjim
-         0emZZUitvFi0nqczjymI7aj2IVHrtmw105YuaoH1ygAH3UV+iGxQVv1iYbuo2XMJLDa2
-         UQZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TXzc+NNhHR7zkiqOhJjsY/heE4Nlk/EZ4wy3/3ZxxcY=;
-        b=2wJNNlKZWWKiFOBa2ac87Bd3agJTPHUj/5vHuL0T+j+NNPqH8c6yWKoeqsQecE/Wfn
-         KczOVa+AEeow/j/JEIykWdlE9p8dTHhJ/t8qoxC10TukfH0bBOOrxPKTJehDaQScsAO6
-         qrgz1wcP9iOP6SC8pDs0AoN75RsOeUmS1diHKCsA9a9RgDPSYELvntho/B78Uk8LH3T3
-         ia7GBm+hrmx+CCmnmLVJ47UijJ/IjZZA6LBVrBiZzJFcIRPz3X135Uh7ZhlJV0wOAskC
-         jud0hI9iQMk2sbxISyvxJMb+OYI2s4RqlhffaZcONqtrOotRICd/sFYQc/6lR1VIBUuy
-         EOIA==
-X-Gm-Message-State: AOAM530dz4eGAfjPkka6qrrXOUFUw9j7Ha5eI8NABfoRwZmBYDlkhxhU
-        AskO1fW5DYQcToFSl5D6qVbnEvBqMZ38tZ1u8IM=
-X-Google-Smtp-Source: ABdhPJzNGCQQ3JRtn8gm/Jq+m9bvCIx7w7LsXCDZGYAJQPObX1tdlEpbjCWGmGefVUDLrEEHVNhotR6kU23+Flxa3z4=
-X-Received: by 2002:a05:6102:dc9:: with SMTP id e9mr16237622vst.17.1641391579464;
- Wed, 05 Jan 2022 06:06:19 -0800 (PST)
+        id S240920AbiAEO0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 09:26:51 -0500
+Received: from m12-17.163.com ([220.181.12.17]:33028 "EHLO m12-17.163.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240697AbiAEO0g (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 09:26:36 -0500
+X-Greylist: delayed 913 seconds by postgrey-1.27 at vger.kernel.org; Wed, 05 Jan 2022 09:26:34 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=xiy2D
+        fGe1Nt0R7TS0c0Zb4mwqiQ/2lfKjWEIJ40UTjE=; b=GRgN/elyG2u58YHaVlCEG
+        ADTy9LHHecKLd9PWPjutd2NNyNsiFro0CVG2hFd8F2fgiRH3r69MURPvPS6DUz0q
+        NYvoxGBP45ygXH0L0dU70tPgG1NhkRTSvjubUiT/6r6c9YqDz2TfvQvyHfxeUtWE
+        B7jIj6bmXbOgI0NjySeGDo=
+Received: from localhost.localdomain (unknown [183.194.153.98])
+        by smtp13 (Coremail) with SMTP id EcCowACHp_+OptVheUmzGQ--.30771S2;
+        Wed, 05 Jan 2022 22:09:23 +0800 (CST)
+From:   Baole Fang <fbl718@163.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Jeremy Szu <jeremy.szu@canonical.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        Hui Wang <hui.wang@canonical.com>,
+        Cameron Berkenpas <cam@neo-zeon.de>,
+        Kailang Yang <kailang@realtek.com>, Sami Loone <sami@loone.fi>,
+        Elia Devito <eliadevito@gmail.com>,
+        alsa-devel@alsa-project.org (moderated list:SOUND),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     gregkh@linuxfoundation.org, Baole Fang <fbl718@163.com>
+Subject: [PATCH] ALSA: hda/realtek: Add quirk for Legion Y9000X 2020
+Date:   Wed,  5 Jan 2022 22:08:54 +0800
+Message-Id: <20220105140856.4855-1-fbl718@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211203192454.32624-1-sergio.paracuellos@gmail.com> <20220105140132.GA7208@lpieralisi>
-In-Reply-To: <20220105140132.GA7208@lpieralisi>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Wed, 5 Jan 2022 15:06:08 +0100
-Message-ID: <CAMhs-H-zCpc0GnogKHKfMOBM_FcSKxvewzi7us0eHUay7g8ZaA@mail.gmail.com>
-Subject: Re: [PATCH v3] PCI: mt7621: Convert driver into 'bool'
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     linux-pci <linux-pci@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: EcCowACHp_+OptVheUmzGQ--.30771S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7AF1kZw4xZF1DXr1DCF1ftFb_yoW8Kw18pF
+        WrAwn5Wr4kXFnayr43Ar4jgry8Gan3Cr48CFy5Aw1xZan3uFsrGrWFg3yavryDGrZ7GrZx
+        Xr1kZas8WrW5Xw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UVq2iUUUUU=
+X-Originating-IP: [183.194.153.98]
+X-CM-SenderInfo: 5ieoliqy6rljoofrz/1tbiGBN-6Vv2gDMBYQAAsj
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lorenzo,
+Legion Y9000X 2020 has a speaker, but the speaker doesn't work.
+This can be fixed by applying alc285_fixup_ideapad_s740_coef
+to fix the speaker's coefficients.
+Besides, to support the transition between the speaker and the headphone,
+alc287_fixup_legion_15imhg05_speakers needs to be run.
 
-On Wed, Jan 5, 2022 at 3:01 PM Lorenzo Pieralisi
-<lorenzo.pieralisi@arm.com> wrote:
->
-> On Fri, Dec 03, 2021 at 08:24:54PM +0100, Sergio Paracuellos wrote:
-> > Driver is not ready yet to be compiled as a module since it depends on some
-> > MIPS not exported symbols. We have the following current problems:
-> >
-> > Building mips:allmodconfig ... failed
-> > --------------
-> > Error log:
-> > ERROR: modpost: missing MODULE_LICENSE() in drivers/pci/controller/pcie-mt7621.o
-> > ERROR: modpost: "mips_cm_unlock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > ERROR: modpost: "mips_cpc_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > ERROR: modpost: "mips_cm_lock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > ERROR: modpost: "mips_cm_is64" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > ERROR: modpost: "mips_gcr_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> >
-> > Temporarily move from 'tristate' to 'bool' until a better solution is ready.
-> >
-> > Also RALINK is redundant because SOC_MT7621 already depends on it. Hence,
-> > simplify condition.
-> >
-> > Fixes: 2bdd5238e756 ("PCI: mt7621: Add MediaTek MT7621 PCIe host controller driver").
-> > Reviewed-and-tested-by: Guenter Roeck <linux@roeck-us.net>
-> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > ---
-> > Changes in v3:
-> >  - Adjust subject to follow convention:
-> >     s/PCI: mt7621: Kconfig:/PCI: mt7621:/
-> > Changes in v2:
-> >  - Add Guenter's 'Reviewed-and-tested-by'.
-> >  - s/after/until
-> >  drivers/pci/controller/Kconfig | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
-> > index 93b141110537..7fc5135ffbbf 100644
-> > --- a/drivers/pci/controller/Kconfig
-> > +++ b/drivers/pci/controller/Kconfig
-> > @@ -332,8 +332,8 @@ config PCIE_APPLE
-> >         If unsure, say Y if you have an Apple Silicon system.
-> >
-> >  config PCIE_MT7621
-> > -     tristate "MediaTek MT7621 PCIe Controller"
-> > -     depends on (RALINK && SOC_MT7621) || (MIPS && COMPILE_TEST)
-> > +     bool "MediaTek MT7621 PCIe Controller"
-> > +     depends on SOC_MT7621 || (MIPS && COMPILE_TEST)
-> >       select PHY_MT7621_PCI
-> >       default SOC_MT7621
-> >       help
-> > --
-> > 2.33.0
-> >
->
-> Hi Sergio,
->
-> I believe this is still to be pulled in some tree, just asking for
-> confirmation, please let me know and I will queue it.
+Signed-off-by: Baole Fang <fbl718@163.com>
+---
+ sound/pci/hda/patch_realtek.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-This is already in Linus'tree [0].
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 28255e752c4a..c7232f9be690 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -6784,6 +6784,8 @@ enum {
+ 	ALC256_FIXUP_SYSTEM76_MIC_NO_PRESENCE,
+ 	ALC233_FIXUP_NO_AUDIO_JACK,
+ 	ALC256_FIXUP_MIC_NO_PRESENCE_AND_RESUME,
++	ALC285_FIXUP_LEGION_Y9000X_SPEAKERS,
++	ALC285_FIXUP_LEGION_Y9000X_AUTOMUTE,
+ };
+ 
+ static const struct hda_fixup alc269_fixups[] = {
+@@ -8380,6 +8382,18 @@ static const struct hda_fixup alc269_fixups[] = {
+ 		.chained = true,
+ 		.chain_id = ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF,
+ 	},
++	[ALC285_FIXUP_LEGION_Y9000X_SPEAKERS] = {
++		.type = HDA_FIXUP_FUNC,
++		.v.func = alc285_fixup_ideapad_s740_coef,
++		.chained = true,
++		.chain_id = ALC285_FIXUP_LEGION_Y9000X_AUTOMUTE,
++	},
++	[ALC285_FIXUP_LEGION_Y9000X_AUTOMUTE] = {
++		.type = HDA_FIXUP_FUNC,
++		.v.func = alc287_fixup_legion_15imhg05_speakers,
++		.chained = true,
++		.chain_id = ALC269_FIXUP_THINKPAD_ACPI,
++	},
+ 	[ALC287_FIXUP_LEGION_15IMHG05_SPEAKERS] = {
+ 		.type = HDA_FIXUP_VERBS,
+ 		//.v.verbs = legion_15imhg05_coefs,
+@@ -8923,6 +8937,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x17aa, 0x31af, "ThinkCentre Station", ALC623_FIXUP_LENOVO_THINKSTATION_P340),
+ 	SND_PCI_QUIRK(0x17aa, 0x3818, "Lenovo C940", ALC298_FIXUP_LENOVO_SPK_VOLUME),
+ 	SND_PCI_QUIRK(0x17aa, 0x3827, "Ideapad S740", ALC285_FIXUP_IDEAPAD_S740_COEF),
++	SND_PCI_QUIRK(0x17aa, 0x3824, "Legion Y9000X 2020", ALC285_FIXUP_LEGION_Y9000X_SPEAKERS),
+ 	SND_PCI_QUIRK(0x17aa, 0x3843, "Yoga 9i", ALC287_FIXUP_IDEAPAD_BASS_SPK_AMP),
+ 	SND_PCI_QUIRK(0x17aa, 0x3813, "Legion 7i 15IMHG05", ALC287_FIXUP_LEGION_15IMHG05_SPEAKERS),
+ 	SND_PCI_QUIRK(0x17aa, 0x3852, "Lenovo Yoga 7 14ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
+-- 
+2.25.1
 
->
-> Thanks,
-> Lorenzo
 
-Best regards,
-    Sergio Paracuellos
-
-[0]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/pci/controller?id=aa50faff4416c869b52dff68a937c84d29e12f4b

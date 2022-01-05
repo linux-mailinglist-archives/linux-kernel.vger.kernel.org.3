@@ -2,120 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA43485184
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A081A4851B3
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 12:20:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239568AbiAEK5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 05:57:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:46395 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239561AbiAEK5J (ORCPT
+        id S239637AbiAELUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 06:20:00 -0500
+Received: from www.linux-watchdog.org ([185.87.125.42]:44616 "EHLO
+        www.linux-watchdog.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229667AbiAELT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 05:57:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641380228;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UBy6hI7L7HTM1Yr+Z3hpduy38cqpSc0OdU4IcEZRTBk=;
-        b=SJq8aw0kbhl/+kOvuOan6RzQsctg+icysAS4wwlA4uULjtOvAM9d1Hrdxdc+54HIkCRDvS
-        4HsGsqVeFSQ6T1tLwjAmwoDRzxkM7HJj73IZJ722maPov3Lr9IqsL3dNLm5yFdEaS4hUdz
-        pnChjzi5PWcuhvlgNPD9/BjtdpUvpyI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-561-5BwaaFdlPVqrFH4JAfhbJg-1; Wed, 05 Jan 2022 05:57:03 -0500
-X-MC-Unique: 5BwaaFdlPVqrFH4JAfhbJg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 96071760C1;
-        Wed,  5 Jan 2022 10:57:01 +0000 (UTC)
-Received: from starship (unknown [10.40.192.177])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D44121F420;
-        Wed,  5 Jan 2022 10:56:53 +0000 (UTC)
-Message-ID: <69ebeb828f92cc01ac74836bd298216b25f68eda.camel@redhat.com>
-Subject: Re: [PATCH v2 4/5] KVM: x86: don't touch irr_pending in
- kvm_apic_update_apicv when inhibiting it
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Joerg Roedel <joro@8bytes.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Ingo Molnar <mingo@redhat.com>
-Date:   Wed, 05 Jan 2022 12:56:52 +0200
-In-Reply-To: <YdTQ3ewNzNOKoXCN@google.com>
-References: <20211213104634.199141-1-mlevitsk@redhat.com>
-         <20211213104634.199141-5-mlevitsk@redhat.com> <YdTQ3ewNzNOKoXCN@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 5 Jan 2022 06:19:58 -0500
+X-Greylist: delayed 595 seconds by postgrey-1.27 at vger.kernel.org; Wed, 05 Jan 2022 06:19:58 EST
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+        id 8A91B409E9; Wed,  5 Jan 2022 10:42:04 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 8A91B409E9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+        s=odk20180602; t=1641375724;
+        bh=9N04zDKHmWi/Ax4vZBHgaCc9+vFD2bgpCFA4bgoWL7Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eXtfdWRcIh9Vdq3Ttnx+/l8VRJto+CkgyA8h9OXDu1EC378Nop6A43HUJgMyJV/vR
+         6hRDquX680Cvorhjv7aaFVtDVGRO3CmkjTn62x1OasryG7XOJbZ9b8BkWSa5A1dfDy
+         m6ey9ak5cq0pvnbYFNi+E+Ni1n1cohOjJzk5X5E0=
+Date:   Wed, 5 Jan 2022 10:42:04 +0100
+From:   Wim Van Sebroeck <wim@linux-watchdog.org>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Sander Vanheule <sander@svanheule.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: remove typo from REALTEK OTTO WATCHDOG
+ section
+Message-ID: <20220105094204.GA7303@www.linux-watchdog.org>
+References: <20220104154414.21496-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220104154414.21496-1-lukas.bulwahn@gmail.com>
+User-Agent: Mutt/1.5.20 (2009-12-10)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-01-04 at 22:57 +0000, Sean Christopherson wrote:
-> On Mon, Dec 13, 2021, Maxim Levitsky wrote:
-> > kvm_apic_update_apicv is called when AVIC is still active, thus IRR bits
-> > can be set by the CPU after it was called, and won't cause the irr_pending
-> > to be set to true.
-> > 
-> > Also the logic in avic_kick_target_vcpu doesn't expect a race with this
-> > function.
-> > 
-> > To make it simple, just keep irr_pending set to true and
-> > let the next interrupt injection to the guest clear it.
-> > 
-> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > ---
-> >  arch/x86/kvm/lapic.c | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> > index baca9fa37a91c..6e1fbbf4c508b 100644
-> > --- a/arch/x86/kvm/lapic.c
-> > +++ b/arch/x86/kvm/lapic.c
-> > @@ -2312,7 +2312,10 @@ void kvm_apic_update_apicv(struct kvm_vcpu *vcpu)
-> >  		apic->irr_pending = true;
-> >  		apic->isr_count = 1;
-> >  	} else {
-> > -		apic->irr_pending = (apic_search_irr(apic) != -1);
-> > +		/*
-> > +		 * Don't touch irr_pending, let it be cleared when
-> > +		 * we process the interrupt
+Hi Lukas,
+
+> Commit 489119bf75e6 ("watchdog: Add Realtek Otto watchdog timer") adds the
+> REALTEK OTTO WATCHDOG section in MAINTAINERS and one file entry refers to
+> driver/watchdog/realtek_otto_wdt.c. The actual top-level directory name is
+> drivers, not driver, though.
 > 
-> Please don't use pronouns in comments, e.g. who is "we" in this context?  Please
-> also say _why_.  IIUC, this could more precisely be:
-
-Yes, good point. I will fix this.
-
-Best regards,
-	Maxim Levitsky
-
+> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains:
 > 
-> 		/*
-> 		 * Don't clear irr_pending, searching the IRR can race with
-> 		 * updates from the CPU as APICv is still active from hardware's
-> 		 * perspective.  The flag will be cleared as appropriate when
-> 		 * KVM injects the interrupt.
-> 		 */
+>     warning: no file matches	F:	driver/watchdog/realtek_otto_wdt.c
 > 
-> > +		 */
-> >  		apic->isr_count = count_vectors(apic->regs + APIC_ISR);
-> >  	}
-> >  }
-> > -- 
-> > 2.26.3
-> > 
+> Remove this obvious typo in the file entry.
+> 
+> Fixes: 489119bf75e6 ("watchdog: Add Realtek Otto watchdog timer")
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+>  MAINTAINERS | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index f7bf491409cf..b4fcc2bb7c54 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16307,7 +16307,7 @@ M:	Sander Vanheule <sander@svanheule.net>
+>  L:	linux-watchdog@vger.kernel.org
+>  S:	Maintained
+>  F:	Documentation/devicetree/bindings/watchdog/realtek,otto-wdt.yaml
+> -F:	driver/watchdog/realtek_otto_wdt.c
+> +F:	drivers/watchdog/realtek_otto_wdt.c
+>  
+>  REALTEK RTL83xx SMI DSA ROUTER CHIPS
+>  M:	Linus Walleij <linus.walleij@linaro.org>
+> -- 
+> 2.17.1
+> 
 
+Since I had to do some other changes on the tree, I changed it directly in the original patch.
+
+Kind regards,
+Wim.
 

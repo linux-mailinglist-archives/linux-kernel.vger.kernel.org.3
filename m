@@ -2,201 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 766D1485A71
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 22:10:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A8D485A74
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 22:12:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244354AbiAEVKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 16:10:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49308 "EHLO
+        id S244365AbiAEVMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 16:12:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244352AbiAEVKC (ORCPT
+        with ESMTP id S244353AbiAEVMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 16:10:02 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFFBC061201
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 13:10:01 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id o3-20020a9d4043000000b0058f31f4312fso828831oti.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 13:10:01 -0800 (PST)
+        Wed, 5 Jan 2022 16:12:38 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42EC9C061201
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 13:12:38 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id o1so371383ilo.6
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 13:12:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=GNdXeJAgUyRmDGiwYrY80oM6MegVT5rNLhczJIKJgLs=;
-        b=fphekuQIeDoMeRgFsdNPxKE88i9NZ70/onKEZ1FNwyHkn3eDW66TlLOY0zGHMZnMSK
-         0CfvPvWJrULbwegUqeK/HiQwEzNxlmLSN/4/8k4FseQLHxDVg/o5YJOjUdfTyCO1OEYP
-         kb7zWDhP0Gz2XpaHjVzhHFDNmK6Gp90oOghOA=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+IvGtL/Cdr/WsdAI8BblKEPdwrJXksPcRkkKFt5itRQ=;
+        b=ZaehH+x5c0zMI/IfYQs/P2s8KjVJpoFcoUPnh+aQ843si2v3nD3DC7aBVH2zE+H7IV
+         XtKaomiGdT9vzvdrdiYMNczQ4NKF5buM1kOQS4NV1m8sbZ7/KvWCfG6wlcavCzgDRu3z
+         IcI7k4fHp3NQ8f1SrS8r5KhG3fearM36RhnFmjv5QN+q4bMI8CpX03N+yOPa4NpnXfdV
+         u7ez66TZ5917ahjPpH/7swu5B4GjVkgttA13c7TRCjugt20r8n4f0zTa9bIJ1pCFcC69
+         PhdYDdzGv14ETQauuHZaLzl4lRqnrBcSApmHgmYtJAwIvVNNup/UqMg0qa8XdhM6Q1XM
+         f0hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=GNdXeJAgUyRmDGiwYrY80oM6MegVT5rNLhczJIKJgLs=;
-        b=e0bpn4tk+Vyz11kJreQaJivjqmFfvUIvKgXzBzWAFV4vxd8XBoDDKTmKpIboQlfna+
-         FRX7s+zhzInIFycUX/IEKyqv98tpH5Aigoiun1YKZg5tfBqwD4GmlMTnpsbC7qgIMP48
-         vPGpQZgK4Q9gmuy+n5Bomu0FNmHuA/UZzHDxFRFteM9UP2uq4Fr+aPWk26w/YaNSNp+1
-         Vyd7rd+kB7o8ySpkieNKIWuygfj7MXuLiQyiIwM/b1XMmTc3OGbaaQmmLU7L8uOn+Kih
-         h/XQhJ45XPDW+W8KkAdPBfoIkMrLOYKIAd+mzi4NdpWiDW1/m2lynmhZrI8AlCIke7Ba
-         eAEQ==
-X-Gm-Message-State: AOAM5308DSYUqnPVos3V6snKXuGSCg1aylzXToe3ZWHlUDiN9VcH++kE
-        enu/Yrl6vxuEJtBjsnLT6MaCYkvuWkJmF2c6GCFnkA==
-X-Google-Smtp-Source: ABdhPJy+Pnm2rxcxWxPMuwbgavxWUvf/qfRlFc0pILUt8sXiujUxMGq01EZplZFi70PuN14XUcluAz+pJnZrBAHarxY=
-X-Received: by 2002:a9d:2243:: with SMTP id o61mr39525756ota.126.1641417000709;
- Wed, 05 Jan 2022 13:10:00 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 5 Jan 2022 13:10:00 -0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+IvGtL/Cdr/WsdAI8BblKEPdwrJXksPcRkkKFt5itRQ=;
+        b=1A8fu5Qdi0SI0AWnb18F2YcbkJ3ho7CN/4XCs+3aUkExv2J9Qy45jQTFRmPaGz+lCK
+         bAdDc7+X/5yOBjHG963pVMhyfmpyHf0y/6F13+6p7748vnF61+OsyvcTJuIjnpiBxDQE
+         EWJiGYglt9sLUhIP4i+J9ukldZCD99qrcM4lOx6USZgSajJQ1IOnu4tqDpCcrMiraZeJ
+         SJTQSMXOEYkvcWADaUKf2QdxPmtOL62+LHQQzAACfwjdIVqmxBxdiCUeIZyvgAicLTsN
+         GB50LfSqdmeR2R4vwE+VPmuo/EJuiaiDzkL/TOito5MVmhUQGvv7Nm/XWturC5tcrHtF
+         V8Ow==
+X-Gm-Message-State: AOAM532aFlSE+E3iaXz9+/CinDvXNYjsYnJ7R6h2lhE1mRreksCwaSA8
+        IC1ZU+Gh5CDtC8CCle9MiLkMmA==
+X-Google-Smtp-Source: ABdhPJw1baUlWmMI6qXqkj6NLFvmqM5nQ0X8KL8YRZ2jVPVCm0ebJk8cq3iWAIKjjYEoHOCd/Ir/iA==
+X-Received: by 2002:a05:6e02:148c:: with SMTP id n12mr27203549ilk.51.1641417157408;
+        Wed, 05 Jan 2022 13:12:37 -0800 (PST)
+Received: from google.com ([2620:15c:183:200:5b02:855e:267d:5b0])
+        by smtp.gmail.com with ESMTPSA id z16sm907465ilz.60.2022.01.05.13.12.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 13:12:36 -0800 (PST)
+Date:   Wed, 5 Jan 2022 14:12:33 -0700
+From:   Yu Zhao <yuzhao@google.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, page-reclaim@google.com,
+        the arch/x86 maintainers <x86@kernel.org>
+Subject: Re: [PATCH v6 0/9] Multigenerational LRU Framework
+Message-ID: <YdYJwRQ22qgRsS63@google.com>
+References: <20220104202227.2903605-1-yuzhao@google.com>
+ <YdSuSHa/Vjl6bPkg@google.com>
+ <CAHk-=whMbX+GUBY=Fyxo3r-XVvfNyFA+4hUJS7UxgYDxf9Wbcw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1641208380-15510-4-git-send-email-quic_srivasam@quicinc.com>
-References: <1641208380-15510-1-git-send-email-quic_srivasam@quicinc.com> <1641208380-15510-4-git-send-email-quic_srivasam@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Wed, 5 Jan 2022 13:10:00 -0800
-Message-ID: <CAE-0n5069ehb97ybJV7Z0FXnODvRBuy-w6r1KJSfZnHece7k1A@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: sc7280: add sound card support
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        devicetree@vger.kernel.org, dianders@chromium.org,
-        judyhsiao@chromium.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        rohitkr@codeaurora.org, srinivas.kandagatla@linaro.org
-Cc:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whMbX+GUBY=Fyxo3r-XVvfNyFA+4hUJS7UxgYDxf9Wbcw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Srinivasa Rao Mandadapu (2022-01-03 03:13:00)
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> index 3449d56..63b1184 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> @@ -637,6 +637,99 @@
->         };
->  };
->
-> +&sound {
-> +       compatible = "google,sc7280-herobrine";
-> +       model = "sc7280-wcd938x-max98360a-1mic";
-> +       status = "okay";
-> +       audio-routing =
-> +               "IN1_HPHL", "HPHL_OUT",
-> +               "IN2_HPHR", "HPHR_OUT",
-> +               "AMIC1", "MIC BIAS1",
-> +               "AMIC2", "MIC BIAS2",
-> +               "VA DMIC0", "MIC BIAS3",
-> +               "VA DMIC1", "MIC BIAS3",
-> +               "VA DMIC2", "MIC BIAS1",
-> +               "VA DMIC3", "MIC BIAS1",
-> +               "TX SWR_ADC0", "ADC1_OUTPUT",
-> +               "TX SWR_ADC1", "ADC2_OUTPUT",
-> +               "TX SWR_ADC2", "ADC3_OUTPUT",
-> +               "TX SWR_DMIC0", "DMIC1_OUTPUT",
-> +               "TX SWR_DMIC1", "DMIC2_OUTPUT",
-> +               "TX SWR_DMIC2", "DMIC3_OUTPUT",
-> +               "TX SWR_DMIC3", "DMIC4_OUTPUT",
-> +               "TX SWR_DMIC4", "DMIC5_OUTPUT",
-> +               "TX SWR_DMIC5", "DMIC6_OUTPUT",
-> +               "TX SWR_DMIC6", "DMIC7_OUTPUT",
-> +               "TX SWR_DMIC7", "DMIC8_OUTPUT";
-> +
-> +               qcom,msm-mbhc-hphl-swh = <1>;
-> +               qcom,msm-mbhc-gnd-swh = <1>;
+On Tue, Jan 04, 2022 at 01:43:13PM -0800, Linus Torvalds wrote:
+> On Tue, Jan 4, 2022 at 12:30 PM Yu Zhao <yuzhao@google.com> wrote:
+> >
+> > My goal is to get it merged asap so that users can reap the benefits
+> > and I can push the sequels. Please examine the data provided -- I
+> > think the unprecedented coverage and the magnitude of the improvements
+> > warrant a green light.
+> 
+> I'll leave this to Andrew. I had some stylistic nits, but all the
+> actual complexity is in that aging and eviction, and while I looked at
+> the patches, I certainly couldn't make much of a judgement on them.
+> 
+> The proof is in the numbers, and they look fine, but who knows what
+> happens when others test it. I don't see anything that looks worrisome
+> per se, I just see the silly small things that made me go "Eww".
 
-Why are these last extra tabbed?
-
-> +
-> +       #address-cells = <1>;
-> +       #size-cells = <0>;
-> +       #sound-dai-cells = <0>;
-> +
-> +       dai-link@6 {
-> +               link-name = "WCD Playback";
-> +               reg = <LPASS_CDC_DMA_RX0>;
-> +               cpu {
-> +                       sound-dai = <&lpass_cpu LPASS_CDC_DMA_RX0>;
-> +               };
-> +
-> +               codec {
-> +                       sound-dai = <&wcd938x 0>, <&swr0 0>, <&rxmacro 0>;
-> +               };
-> +       };
-> +
-> +       dai-link@19 {
-> +               link-name = "WCD Capture";
-> +               reg = <LPASS_CDC_DMA_TX3>;
-> +               cpu {
-> +                       sound-dai = <&lpass_cpu LPASS_CDC_DMA_TX3>;
-> +               };
-> +
-> +               codec {
-> +                       sound-dai = <&wcd938x 1>, <&swr1 0>, <&txmacro 0>;
-> +               };
-> +       };
-> +
-> +       dai-link@1 {
-> +               link-name = "Secondary MI2S Playback";
-> +               reg = <MI2S_SECONDARY>;
-> +               cpu {
-> +                       sound-dai = <&lpass_cpu MI2S_SECONDARY>;
-> +               };
-> +
-> +               codec {
-> +                       sound-dai = <&max98360a>;
-> +               };
-> +       };
-> +
-> +       dai-link@5 {
-> +               link-name = "DP Playback";
-> +               reg = <LPASS_DP_RX>;
-> +               cpu {
-> +                       sound-dai = <&lpass_cpu LPASS_DP_RX>;
-> +               };
-> +
-> +               codec {
-> +                               sound-dai = <&msm_dp>;
-
-Why double tabbed?
-
-> +               };
-> +       };
-> +
-> +       dai-link@25 {
-> +               link-name = "DMIC Capture";
-> +               reg = <LPASS_CDC_DMA_VA_TX0>;
-> +               cpu {
-> +                       sound-dai = <&lpass_cpu LPASS_CDC_DMA_VA_TX0>;
-> +               };
-> +
-> +               codec {
-> +                       sound-dai = <&vamacro 0>;
-> +               };
-> +       };
-
-The order of the nodes seems arbitrary. Is there any sort order that can
-be used to avoid conflicts in the future? Maybe the reg property because
-that's how we sort the SoC node.
-
-> +};
-> +
->  &swr0 {
->         wcd_rx: wcd938x-rx{
->                 compatible = "sdw20217010d00";
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index 68c7755..57bc5ef 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -2786,6 +2786,9 @@
->
->                 };
->
-> +               sound: sound {
-
-Is this really necessary? Certainly it shouldn't be in the SoC node as
-it doesn't have a reg property.
-
-> +               };
-> +
->                 usb_1_hsphy: phy@88e3000 {
->                         compatible = "qcom,sc7280-usb-hs-phy",
->                                      "qcom,usb-snps-hs-7nm-phy";
-> --
-> 2.7.4
->
+I appreciate your time, I'll address all your comments togather with
+others' in the next spin, after I hear from Andrew. (I'm assuming he
+will have comments too.)

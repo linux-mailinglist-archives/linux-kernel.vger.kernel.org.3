@@ -2,169 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C91D64851F7
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 12:43:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 714424851FB
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 12:44:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236324AbiAELne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 06:43:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51780 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229622AbiAELnd (ORCPT
+        id S239773AbiAELol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 06:44:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60750 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235676AbiAELoj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 06:43:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641383012;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vZRqLCV1AQpi4/pbS4HKIi2vod3d/KjNFKlZbvvJOJw=;
-        b=IY3MTieLduVVmc9WITDOn4pO6gsThvz1A3DFOaAlLPtJueU6XH7+KYiRlIGiEb1kj7GoCC
-        7ANkq6cb8WjtyhV/4sXe8e2utP0W/zfFUJ1T9ZMIDyEB814Y7C2Bs8WItCv3YoXixjuT+o
-        61nYOZOFH7RUWjdeTGk3i97N8LujNyk=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-29-zbQfdpH4NOKP8jrcjxF_pA-1; Wed, 05 Jan 2022 06:43:31 -0500
-X-MC-Unique: zbQfdpH4NOKP8jrcjxF_pA-1
-Received: by mail-wr1-f71.google.com with SMTP id e21-20020adf9bd5000000b001a472da8091so222827wrc.17
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 03:43:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=vZRqLCV1AQpi4/pbS4HKIi2vod3d/KjNFKlZbvvJOJw=;
-        b=V1NRR/yKhT1AK7GL+Y7xKWUK6sSsaBOYk4l5ErplTbPeMlscitoq35n5HB0Jk712OS
-         7S6njQkKYNB01Pwv/2bFJMk4ZJfg/ZLQx99lLuxuP7/WpziaLLUO5UQwMIRugtMrz8WC
-         4i5wfWKKnnVQyHUjzei7JQfbH2klxtzPExUbEsPt0XsISqyPEN+ctUB2VgX2zjCojpvi
-         /slD2rW/N78X2PofoBCXrx5AI5bVYZd5hNcl5LUhLkfI8fl9oOyu25kJDdsArHt6Mjqq
-         EtyUhJUFUeQOBO9vRo/t19Z3nBrrcIgbttknyDcllJmN6lVpUbkbrBVAfmZeQEElrhOv
-         45sw==
-X-Gm-Message-State: AOAM531zRRUAtDFNdEgxwnK5xLTdmqPvKxOQFhj+rtY1Qfrx+3xOGgaD
-        JJwnyr+4Uk3DIYJ1bNdSu2vWsEX/fYzth46AnqbdMLQ/H+3MvX+AQINJyeDPQSRw4ZSXBcRA49L
-        aVryrCyThXZ6yQK2kccek2P7z
-X-Received: by 2002:a05:6000:10c4:: with SMTP id b4mr45048000wrx.514.1641383010396;
-        Wed, 05 Jan 2022 03:43:30 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx0ND3sp1KAm9XvjE31Azjsac5utQcfs8uXXLrux4uumEKa2/x8xhMt+qfPbb1B2mJgzhIwuA==
-X-Received: by 2002:a05:6000:10c4:: with SMTP id b4mr45047983wrx.514.1641383010177;
-        Wed, 05 Jan 2022 03:43:30 -0800 (PST)
-Received: from work-vm (cpc109025-salf6-2-0-cust480.10-2.cable.virginm.net. [82.30.61.225])
-        by smtp.gmail.com with ESMTPSA id f8sm43265636wry.16.2022.01.05.03.43.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 03:43:29 -0800 (PST)
-Date:   Wed, 5 Jan 2022 11:43:25 +0000
-From:   "Dr. David Alan Gilbert" <dgilbert@redhat.com>
-To:     Borislav Petkov <bp@suse.de>
-Cc:     Dov Murik <dovmurik@linux.ibm.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        linux-efi@vger.kernel.org, Ashish Kalra <ashish.kalra@amd.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Andrew Scull <ascull@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
-        Jim Cadden <jcadden@ibm.com>,
-        Daniele Buono <dbuono@linux.vnet.ibm.com>,
-        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 0/5] Allow guest access to EFI confidential computing
- secret area
-Message-ID: <YdWEXRt7Ixm6/+Dq@work-vm>
-References: <20211129114251.3741721-1-dovmurik@linux.ibm.com>
- <YdNHgtuVoLofL4cW@zn.tnic>
- <0280e20e-8459-dd35-0b7d-8dbc1e4a274a@linux.ibm.com>
- <YdSRWmqdNY7jRcer@zn.tnic>
+        Wed, 5 Jan 2022 06:44:39 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1FCC061784
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 03:44:39 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1n54iF-0003Vf-RG; Wed, 05 Jan 2022 12:44:15 +0100
+Received: from pengutronix.de (2a03-f580-87bc-d400-7899-4998-133d-b4b9.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:7899:4998:133d:b4b9])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 6D7DF6D18F8;
+        Wed,  5 Jan 2022 11:44:11 +0000 (UTC)
+Date:   Wed, 5 Jan 2022 12:44:10 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     syzbot <syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com>
+Cc:     anthony.l.nguyen@intel.com, davem@davemloft.net,
+        eric.dumazet@gmail.com, hawk@kernel.org,
+        intel-wired-lan-owner@osuosl.org, intel-wired-lan@lists.osuosl.org,
+        jesse.brandeburg@intel.com, kuba@kernel.org,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, socketcan@hartkopp.net,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] kernel BUG in pskb_expand_head
+Message-ID: <20220105114410.brzea3f5flgn5nl2@pengutronix.de>
+References: <0000000000007ea16705d0cfbb53@google.com>
+ <0000000000000fbea205d388d749@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pvmbkuebz5fmhav3"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YdSRWmqdNY7jRcer@zn.tnic>
-User-Agent: Mutt/2.1.3 (2021-09-10)
+In-Reply-To: <0000000000000fbea205d388d749@google.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Borislav Petkov (bp@suse.de) wrote:
-> On Tue, Jan 04, 2022 at 09:02:03AM +0200, Dov Murik wrote:
-> > If the Guest Owner chooses to inject secrets via scp, it needs
-> > to be sure it is scp-ing to the correct VM - the one that has SEV
-> > enabled and was measured at launch.
-> 
-> Hmm, I'd expect that to be part of the attestation dance. I admit,
-> though, I have only listened about the whole attestation bla from the
-> sidelines so I'm unclear whether that's part of that protocol. I guess
-> Tom and Brijesh should have a better idea here.
 
-There's more than one type of dance; this partially varies
-depending on the system (SEV/TDX etc) and also depends on how you depend
-to boot your VM (separate kernel or VM disk).   Also it's important to
-note that when the dance happens varies - in SEV and SEV-ES this happens
-before the guest executes any code.
-So at the end of the dance, the guest owner hands over that secret - but
-only then does the geust start booting; that secret has to go somewhere
-to be used by something later.
-For example, something might pull out that key and use it to decrypt a
-disk that then has other secrets on it (e.g. your ssh key).
+--pvmbkuebz5fmhav3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Dave
+On 19.12.2021 16:19:20, syzbot wrote:
+>  skb_over_panic net/core/skbuff.c:118 [inline]
+>  skb_over_panic net/core/skbuff.c:118 [inline] net/core/skbuff.c:1986
+>  skb_put.cold+0x24/0x24 net/core/skbuff.c:1986 net/core/skbuff.c:1986
+>  isotp_rcv_cf net/can/isotp.c:570 [inline]
+>  isotp_rcv_cf net/can/isotp.c:570 [inline] net/can/isotp.c:668
+>  isotp_rcv+0xa38/0x1e30 net/can/isotp.c:668 net/can/isotp.c:668
 
-> > One way to achieve that would be to inject the guest's SSH private key
-> 
-> Well, is that "one way" or *the way*?
-> 
-> > using the proposed efi_secret mechanism.  This way the Guest Owner is
-> > sure it is talking to the correct guest and not to some other VM that
-> > was started by the untrusted cloud provider (say, with SEV disabled so
-> > the cloud provider can steal its memory content).
-> 
-> Because we would need *some* way of verifying the owner is talking
-> to the correct guest. And if so, this should be made part of the big
-> picture of SEV guest attestation. Or is this part of that attestation
-> dance?
-> 
-> I guess I'm wondering where in the big picture this fits into?
-> 
-> > Indeed this proposed efi_secret module is in use for enabling SEV
-> > confidential containers using Kata containers [1], but there's nothing
-> > specific in the current patch series about containers.  The patch series
-> > just exposes the launch-injected SEV secrets to userspace as virtual files
-> > (under securityfs).
-> > 
-> > [1] https://github.com/confidential-containers/attestation-agent/tree/main/src/kbc_modules/offline_sev_kbc
-> 
-> So one of the aspects for this is to use it in automated deployments.
-> 
-> > It boils down to: the confidential guest needs to have access to a
-> > secret which the untrusted host can't read, and which is essential for
-> > the normal operation of the guest.  This secret can be a decryption key,
-> > an SSH private key, an API key to a Key Management system, etc.  If a
-> > malicious cloud provider tries to start that VM without a secret (or
-> > with the wrong one), the actual workload that the guest is supposed to
-> > run will not execute meaningfully.
-> > 
-> > The proposed patch series exposes the SEV injected secrets as virtual
-> > files, which can later be used as decryption keys (as done in the kata
-> > confidential containers use-case), or SSH private keys, or any other
-> > possible implementation.
-> 
-> Right, and is this going to be the proper way to authenticate SEV guests
-> to their owners or is this just another technique for safely supplying
-> secrets into the guest?
-> 
-> I hope I'm making some sense here...
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
-> 
--- 
-Dr. David Alan Gilbert / dgilbert@redhat.com / Manchester, UK
+> struct tpcon {
+> 	int idx;
+> 	int len;
+        ^^^
+> 	u32 state;
+> 	u8 bs;
+> 	u8 sn;
+> 	u8 ll_dl;
+> 	u8 buf[MAX_MSG_LENGTH + 1];
+> };
+>=20
+> static int isotp_rcv_ff(struct sock *sk, struct canfd_frame *cf, int ae)
+> {
 
+[...]
+
+> 	/* Check for FF_DL escape sequence supporting 32 bit PDU length */
+> 	if (so->rx.len) {
+> 		ff_pci_sz =3D FF_PCI_SZ12;
+> 	} else {
+> 		/* FF_DL =3D 0 =3D> get real length from next 4 bytes */
+> 		so->rx.len =3D cf->data[ae + 2] << 24;
+> 		so->rx.len +=3D cf->data[ae + 3] << 16;
+> 		so->rx.len +=3D cf->data[ae + 4] << 8;
+> 		so->rx.len +=3D cf->data[ae + 5];
+> 		ff_pci_sz =3D FF_PCI_SZ32;
+> 	}
+
+Full 32 Bit PDUs don't work with struct tpcon::len being an "int". I
+think converting it to "unsigned int" should be done.
+
+[...]
+
+> }
+>=20
+> static int isotp_rcv_cf(struct sock *sk, struct canfd_frame *cf, int ae,
+> 			struct sk_buff *skb)
+> {
+> 	struct isotp_sock *so =3D isotp_sk(sk);
+> 	struct sk_buff *nskb;
+> 	int i;
+>=20
+> 	if (so->rx.state !=3D ISOTP_WAIT_DATA)
+> 		return 0;
+>=20
+> 	/* drop if timestamp gap is less than force_rx_stmin nano secs */
+> 	if (so->opt.flags & CAN_ISOTP_FORCE_RXSTMIN) {
+> 		if (ktime_to_ns(ktime_sub(skb->tstamp, so->lastrxcf_tstamp)) <
+> 		    so->force_rx_stmin)
+> 			return 0;
+>=20
+> 		so->lastrxcf_tstamp =3D skb->tstamp;
+> 	}
+>=20
+> 	hrtimer_cancel(&so->rxtimer);
+>=20
+> 	/* CFs are never longer than the FF */
+> 	if (cf->len > so->rx.ll_dl)
+> 		return 1;
+>=20
+> 	/* CFs have usually the LL_DL length */
+> 	if (cf->len < so->rx.ll_dl) {
+> 		/* this is only allowed for the last CF */
+> 		if (so->rx.len - so->rx.idx > so->rx.ll_dl - ae - N_PCI_SZ)
+> 			return 1;
+> 	}
+>=20
+> 	if ((cf->data[ae] & 0x0F) !=3D so->rx.sn) {
+> 		/* wrong sn detected - report 'illegal byte sequence' */
+> 		sk->sk_err =3D EILSEQ;
+> 		if (!sock_flag(sk, SOCK_DEAD))
+> 			sk_error_report(sk);
+>=20
+> 		/* reset rx state */
+> 		so->rx.state =3D ISOTP_IDLE;
+> 		return 1;
+> 	}
+> 	so->rx.sn++;
+> 	so->rx.sn %=3D 16;
+>=20
+> 	for (i =3D ae + N_PCI_SZ; i < cf->len; i++) {
+> 		so->rx.buf[so->rx.idx++] =3D cf->data[i];
+> 		if (so->rx.idx >=3D so->rx.len)
+> 			break;
+> 	}
+>=20
+> 	if (so->rx.idx >=3D so->rx.len) {
+> 		/* we are done */
+> 		so->rx.state =3D ISOTP_IDLE;
+>=20
+> 		if ((so->opt.flags & ISOTP_CHECK_PADDING) &&
+> 		    check_pad(so, cf, i + 1, so->opt.rxpad_content)) {
+> 			/* malformed PDU - report 'not a data message' */
+> 			sk->sk_err =3D EBADMSG;
+> 			if (!sock_flag(sk, SOCK_DEAD))
+> 				sk_error_report(sk);
+> 			return 1;
+> 		}
+>=20
+> 		nskb =3D alloc_skb(so->rx.len, gfp_any());
+> 		if (!nskb)
+> 			return 1;
+>=20
+> 		memcpy(skb_put(nskb, so->rx.len), so->rx.buf,
+                       ^^^^^^^
+> 		       so->rx.len);
+
+This is where the skb_over_panic() happens.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--pvmbkuebz5fmhav3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHVhIcACgkQqclaivrt
+76mBngf7Bm/34wnau/lFJUMXxyFtcxMVjizZum0kCMtMp2ZnYDP1z1vz0vQLYwfL
++QMi7i4lNu2Be7FLZrB4Vqh0wDrtw5nv67Bff3UnWoMlyZCr6Oq1rbEdWue+F1uk
+SE/TideImjzKVlcYze/p3dCTYPhnu2h2nvjQ7iRfApiOrGEYyRDawCG2rhcOO2ke
+og60OLmP4bv7sfGLzpGZtnAzR+GxnLFC4pa7I1QH4ry62uzBTlDHE8g1ebM2bwfB
+q/jcxK28uPZ7pU30y3DF/obRvJ1PUPBKfYr461VNHPLxg2CVh/3JJDfNAr6VcdvS
+uTcgP18dcs5u2hMK2yWlmT6Yfi4Qow==
+=30q3
+-----END PGP SIGNATURE-----
+
+--pvmbkuebz5fmhav3--

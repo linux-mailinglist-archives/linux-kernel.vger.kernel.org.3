@@ -2,104 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E626F485352
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 14:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDBA948536F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 14:21:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237006AbiAENPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 08:15:50 -0500
-Received: from mga09.intel.com ([134.134.136.24]:10282 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237019AbiAENPt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 08:15:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641388549; x=1672924549;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tf3VjKdx5lZUJulujJQfWa3C1zHWAeUFsoR64Ph5AAA=;
-  b=iTwGRBZ9DT/B+OudgZlsFemg8I/Bt0sB54GuyCCE+AdofcBl7TWQaY1Y
-   ygd0P+b4bCQVUFIorr3JpXuJres4h5pjGBA/P9/+/JXxgB9o01T9wS2vD
-   yYNjtrVquEOwt9lSxW/UbIxWFTLOXlB4nIACkvjj97UVsP/lbNPc1H7zy
-   X4hVXO+v9qpB8noMbZCbFRi4vSv0xjhumCkOpgHhKXXvcOtosF0l5K+bU
-   094GTMV2w403MpK/DdEbNaEwvMkN99GPr7ZctlZ2QXtTE68DrYyY8F7ie
-   /1fv6lGEU9V3Uf7gDRFYitx/5xgbA4CIKyAEAeBl5xvrrordxmG1zgmqI
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242231889"
-X-IronPort-AV: E=Sophos;i="5.88,263,1635231600"; 
-   d="scan'208";a="242231889"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 05:15:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
-   d="scan'208";a="488563397"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 05 Jan 2022 05:15:41 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n568i-000Geh-Tz; Wed, 05 Jan 2022 13:15:40 +0000
-Date:   Wed, 5 Jan 2022 21:15:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
-Subject: drivers/remoteproc/remoteproc_debugfs.c:395:10: warning:
- incompatible integer to pointer conversion returning 'long' from a function
- with result type 'struct dentry *'
-Message-ID: <202201052108.jYZEx2yr-lkp@intel.com>
+        id S240232AbiAENVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 08:21:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54838 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240097AbiAENUx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 08:20:53 -0500
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87680C061761;
+        Wed,  5 Jan 2022 05:20:52 -0800 (PST)
+Received: by mail-pj1-x1044.google.com with SMTP id jw3so33853387pjb.4;
+        Wed, 05 Jan 2022 05:20:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7Kq4c8juE/76qRYRMXs2lRmxlZAz+IUatIP4ilaj/U8=;
+        b=FhEushG+NbzS34uQM16aiw4qNHSQsgJc+WpJovQnanI/MvACDqdr+BWjtvvppqjqe+
+         kwgtqtF9BBpcNWbqqM9v5kYt0j17yWeG0FApC/jDwTiN9sMwAHSM4y0tRRPOQy37r1G+
+         GgcmwRmPU8QXWVkAN7Zcfc5yIfoeKEqh8L3DUe5GtjAHp3q1g0H0mR2XokX5sM7HAcnZ
+         p+iAXqhEehKEZiOfS3bPDkyPNjur9bq+5rGs2Cqqbu/b2llDvxnU0FaqruCs4SzQolOM
+         CIB+raF4YvzVlW75MoTQWKbZB735wHcUpoazJKJQUM2dVvbASvkw286JOZ57LA1Mxfg1
+         eMQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7Kq4c8juE/76qRYRMXs2lRmxlZAz+IUatIP4ilaj/U8=;
+        b=JuPUI/0pMI29JI9NFdpn92fWPdcd5Gygxw3aN4k437rhjcZPAmx1+fCe0Oaze1JVaK
+         R3K2Uxd3Jf0zR05Dk2kPjsl8K1jgP9wT/Ag+lCOTMZqqy1fTPDLSsUXMQb4Q0oT2HiuL
+         UTh+uznesCV7DKJ8+zO6qJKxRNF+sRg1bPVTxYpJVwwkkTlkcZk+qsLE9eILelq+hhk4
+         067kuUPhToLcqtqq1lqTWEvS38Y8ZpW45DRfyg6FeMwyShsHsLLdkmJjA1i/KpDXQKDL
+         nrA0ffTJ10Mipx7y71Gnl41hUI3Ecd9K+tHfYOWIPFhnFDiAnqtFqW8B43DeMQOI6gC3
+         frFA==
+X-Gm-Message-State: AOAM533fEZrEp5cPETgZdy2HEjHzIyWpNDj4HpOUi1N9K1uV+99MOhn2
+        evEhrdmd1RGZpzoBnSgg++o=
+X-Google-Smtp-Source: ABdhPJwU8Ch1WwInyAZUimpDw3jwMVHk8mF/C0YBiVKcpXMPw5GRtTJnQofqROE+SKZktisEtbHajg==
+X-Received: by 2002:a17:90a:fa6:: with SMTP id 35mr3984087pjz.165.1641388852020;
+        Wed, 05 Jan 2022 05:20:52 -0800 (PST)
+Received: from localhost.localdomain ([43.132.141.9])
+        by smtp.gmail.com with ESMTPSA id q17sm16227771pfj.119.2022.01.05.05.20.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 05:20:51 -0800 (PST)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     kuba@kernel.org, daniel@iogearbox.net
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        edumazet@google.com, shuah@kernel.org, ast@kernel.org,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>
+Subject: [PATCH v3 net-next 0/2] net: bpf: handle return value of post_bind{4,6} and add selftests for it
+Date:   Wed,  5 Jan 2022 21:18:47 +0800
+Message-Id: <20220105131849.2559506-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220105-144328/Miaoqian-Lin/remoteproc-Fix-NULL-vs-IS_ERR-checking-in-rproc_create_trace_file/20211227-170725
-head:   e2c26738760efa9568ce3fef6180fb4311e28d08
-commit: e2c26738760efa9568ce3fef6180fb4311e28d08 remoteproc: Fix NULL vs IS_ERR() checking in rproc_create_trace_file
-date:   6 hours ago
-config: i386-randconfig-a016-20220105 (https://download.01.org/0day-ci/archive/20220105/202201052108.jYZEx2yr-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d5b6e30ed3acad794dd0aec400e617daffc6cc3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/e2c26738760efa9568ce3fef6180fb4311e28d08
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review UPDATE-20220105-144328/Miaoqian-Lin/remoteproc-Fix-NULL-vs-IS_ERR-checking-in-rproc_create_trace_file/20211227-170725
-        git checkout e2c26738760efa9568ce3fef6180fb4311e28d08
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/remoteproc/
+From: Menglong Dong <imagedong@tencent.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The return value of BPF_CGROUP_RUN_PROG_INET{4,6}_POST_BIND() in
+__inet_bind() is not handled properly. While the return value
+is non-zero, it will set inet_saddr and inet_rcv_saddr to 0 and
+exit:
+exit:
 
-All warnings (new ones prefixed by >>):
+        err = BPF_CGROUP_RUN_PROG_INET4_POST_BIND(sk);
+        if (err) {
+                inet->inet_saddr = inet->inet_rcv_saddr = 0;
+                goto out_release_sock;
+        }
 
->> drivers/remoteproc/remoteproc_debugfs.c:395:10: warning: incompatible integer to pointer conversion returning 'long' from a function with result type 'struct dentry *' [-Wint-conversion]
-                   return PTR_ERR(tfile);
-                          ^~~~~~~~~~~~~~
-   1 warning generated.
+Let's take UDP for example and see what will happen. For UDP
+socket, it will be added to 'udp_prot.h.udp_table->hash' and
+'udp_prot.h.udp_table->hash2' after the sk->sk_prot->get_port()
+called success. If 'inet->inet_rcv_saddr' is specified here,
+then 'sk' will be in the 'hslot2' of 'hash2' that it don't belong
+to (because inet_saddr is changed to 0), and UDP packet received
+will not be passed to this sock. If 'inet->inet_rcv_saddr' is not
+specified here, the sock will work fine, as it can receive packet
+properly, which is wired, as the 'bind()' is already failed.
+
+To undo the get_port() operation, introduce the 'put_port' field
+for 'struct proto'. For TCP proto, it is inet_put_port(); For UDP
+proto, it is udp_lib_unhash(); For icmp proto, it is
+ping_unhash().
+
+Therefore, after sys_bind() fail caused by
+BPF_CGROUP_RUN_PROG_INET4_POST_BIND(), it will be unbinded, which
+means that it can try to be binded to another port.
+
+The second patch is the selftests for this modification.
+
+Changes since v2:
+- NULL check for sk->sk_prot->put_port
+
+Changes since v1:
+- introduce 'put_port' field for 'struct proto'
+- add selftests for it
 
 
-vim +395 drivers/remoteproc/remoteproc_debugfs.c
+Menglong Dong (2):
+  net: bpf: handle return value of 
+    BPF_CGROUP_RUN_PROG_INET{4,6}_POST_BIND()
+  bpf: selftests: add bind retry for post_bind{4, 6}
 
-   385	
-   386	struct dentry *rproc_create_trace_file(const char *name, struct rproc *rproc,
-   387					       struct rproc_debug_trace *trace)
-   388	{
-   389		struct dentry *tfile;
-   390	
-   391		tfile = debugfs_create_file(name, 0400, rproc->dbg_dir, trace,
-   392					    &trace_rproc_ops);
-   393		if (IS_ERR(tfile)) {
-   394			dev_err(&rproc->dev, "failed to create debugfs trace entry\n");
- > 395			return PTR_ERR(tfile);
-   396		}
-   397	
-   398		return tfile;
-   399	}
-   400	
+ include/net/sock.h                      |   1 +
+ net/ipv4/af_inet.c                      |   2 +
+ net/ipv4/ping.c                         |   1 +
+ net/ipv4/tcp_ipv4.c                     |   1 +
+ net/ipv4/udp.c                          |   1 +
+ net/ipv6/af_inet6.c                     |   2 +
+ net/ipv6/ping.c                         |   1 +
+ net/ipv6/tcp_ipv6.c                     |   1 +
+ net/ipv6/udp.c                          |   1 +
+ tools/testing/selftests/bpf/test_sock.c | 166 +++++++++++++++++++++---
+ 10 files changed, 157 insertions(+), 20 deletions(-)
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+2.27.0
+

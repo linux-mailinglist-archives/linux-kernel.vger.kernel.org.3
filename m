@@ -2,178 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93AEC484D40
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 06:06:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55A38484D42
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 06:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233089AbiAEFGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 00:06:31 -0500
-Received: from foss.arm.com ([217.140.110.172]:39204 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233303AbiAEFG1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 00:06:27 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B428A1042;
-        Tue,  4 Jan 2022 21:06:26 -0800 (PST)
-Received: from p8cg001049571a15.arm.com (unknown [10.163.72.138])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1AC523F66F;
-        Tue,  4 Jan 2022 21:06:23 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        coresight@lists.linaro.org, linux-doc@vger.kernel.org,
+        id S236196AbiAEFHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 00:07:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55712 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232448AbiAEFHW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 00:07:22 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDDCC061761;
+        Tue,  4 Jan 2022 21:07:22 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id g11-20020a17090a7d0b00b001b2c12c7273so2839689pjl.0;
+        Tue, 04 Jan 2022 21:07:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HtUTiGpsTde1X5A1jivBo6b68WjtAAtIn2n2cSL/Q6E=;
+        b=UhGqUlTLbLLlPrm9lgrdVcv8PlnfubKVVaRa5RUkPAKP0LPR56oy8D+Aldm5gikNNM
+         nol2O4pxt+inNh3zD4SNYpARfZFqyXpZVHm61Y88c/zF78Or8PlUK+k+GCkRoP5FS2x9
+         +uxsWvU47Ua37qXysTaLcdjPA5KdLwROjXLIkSsbppX7Mk5cMCdgYy70vbwcuxlqYYWu
+         NduC8ZgSLXmVdpg802Ucm9n1z8JVVHXNY947GrC/WNriu1/ZykGP5zmUZykEkKJo1WyA
+         +floNGFWQONvKXBmGRoTTjZsIKSGjoGRjDUiTP+Z+Z36yIIIZCuZkoxLD0hxzpGfEfiK
+         499w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HtUTiGpsTde1X5A1jivBo6b68WjtAAtIn2n2cSL/Q6E=;
+        b=LJirXa0DLWYoIkPtFXWalXnMIGT3OpqKMfTDKZJgR0BvNh8PnL/Hb3UXfDVxGDNv6f
+         aioeOjwXx1kkN2LGlVq+k+CYhnWeZ9/fpHpC4nLqZyZ7WKuM1Dr5geK9xblRDcj9ajXc
+         QUfFIQsq2CgqUHkaAPiLYhszlmXvf/ZiFcBX8o/z8yUvJ782NicUP+Z7L0SmKHMJdnBO
+         vYD7zxHfxTn4SmnU8io9+B+v7zLpEwDiBnV0jYMty1r1zHRrD+Gf/unfKT4XnRcy+PyL
+         PSwOh3JZG/+ZVPqNVoUMGSTYxUemFrqu0iDw40YEc0kdbjpkbZ8f4SmorqAeXvySheX7
+         Tqaw==
+X-Gm-Message-State: AOAM533FZ4T0JI4FKBBFp3eY+D+cjFG6BzSs/eb1nJIp5Pj7qriWX5bq
+        j4TFSdEuNXV2VDeeGlMau2M=
+X-Google-Smtp-Source: ABdhPJyqdHf3V2rCKUBmS28AK9K1wA49eo7hlul6hZIn9Eh6HzYfiUOW1MsNmXwZtYCO6Hf0elhZuQ==
+X-Received: by 2002:a17:903:11c9:b0:149:bef4:2d7d with SMTP id q9-20020a17090311c900b00149bef42d7dmr10950329plh.48.1641359241623;
+        Tue, 04 Jan 2022 21:07:21 -0800 (PST)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id 93sm976441pjo.26.2022.01.04.21.07.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 21:07:21 -0800 (PST)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] coresight: trbe: Workaround TRBE trace data corruption
-Date:   Wed,  5 Jan 2022 10:35:59 +0530
-Message-Id: <1641359159-22726-5-git-send-email-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1641359159-22726-1-git-send-email-anshuman.khandual@arm.com>
-References: <1641359159-22726-1-git-send-email-anshuman.khandual@arm.com>
+Subject: [PATCH RESEND] KVM: x86/pmu: Make top-down.slots event unavailable in supported leaf
+Date:   Wed,  5 Jan 2022 13:07:11 +0800
+Message-Id: <20220105050711.67280-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.33.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TRBE implementations affected by Arm erratum #1902691 might corrupt trace
-data or deadlock, when it's being written into the memory. Workaround this
-problem in the driver, by preventing TRBE initialization on affected cpus.
-This adds a new cpu errata in arm64 errata framework and also updates TRBE
-driver as required.
+From: Like Xu <likexu@tencent.com>
 
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: Suzuki Poulose <suzuki.poulose@arm.com>
-Cc: coresight@lists.linaro.org
-Cc: linux-doc@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+When we choose to disable the fourth fixed counter TOPDOWN.SLOTS,
+we need to also reduce the length of the 0AH.EBX bit vector, which
+enumerates architecture performance monitoring events, and set
+0AH.EBX.[bit 7] to 1 if the new value of EAX[31:24] is still > 7.
+
+Fixes: 2e8cd7a3b8287 ("kvm: x86: limit the maximum number of vPMU fixed counters to 3")
+Signed-off-by: Like Xu <likexu@tencent.com>
 ---
- Documentation/arm64/silicon-errata.rst       |  2 ++
- arch/arm64/Kconfig                           | 16 ++++++++++++++++
- arch/arm64/kernel/cpu_errata.c               |  9 +++++++++
- arch/arm64/tools/cpucaps                     |  1 +
- drivers/hwtracing/coresight/coresight-trbe.c | 12 ++++++++++++
- 5 files changed, 40 insertions(+)
+ arch/x86/kvm/cpuid.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
-index e0ef3e9a4b8b..50018f60c4d4 100644
---- a/Documentation/arm64/silicon-errata.rst
-+++ b/Documentation/arm64/silicon-errata.rst
-@@ -56,6 +56,8 @@ stable kernels.
- +----------------+-----------------+-----------------+-----------------------------+
- | ARM            | Cortex-A510     | #2038923        | ARM64_ERRATUM_2038923       |
- +----------------+-----------------+-----------------+-----------------------------+
-+| ARM            | Cortex-A510     | #1902691        | ARM64_ERRATUM_1902691       |
-++----------------+-----------------+-----------------+-----------------------------+
- | ARM            | Cortex-A53      | #826319         | ARM64_ERRATUM_826319        |
- +----------------+-----------------+-----------------+-----------------------------+
- | ARM            | Cortex-A53      | #827319         | ARM64_ERRATUM_827319        |
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 026e34fb6fad..1ea5c3b4aac0 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -819,6 +819,22 @@ config ARM64_ERRATUM_2038923
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 0b920e12bb6d..1f0131145296 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -782,6 +782,21 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+ 		eax.split.mask_length = cap.events_mask_len;
  
- 	  If unsure, say Y.
- 
-+config ARM64_ERRATUM_1902691
-+	bool "Cortex-A510: 1902691: workaround TRBE trace corruption"
-+	depends on CORESIGHT_TRBE
-+	default y
-+	help
-+	  This option adds the workaround for ARM Cortex-A510 erratum 1902691.
+ 		edx.split.num_counters_fixed = min(cap.num_counters_fixed, MAX_FIXED_COUNTERS);
 +
-+	  Affected Cortex-A510 core might cause trace data corruption, when being written
-+	  into the memory. Effectively TRBE is broken and hence cannot be used to capture
-+	  trace data.
++		/*
++		 * The 8th Intel pre-defined architectural event (Topdown Slots) will be supported
++		 * if the 4th fixed counter exists && EAX[31:24] > 7 && EBX[7] = 0.
++		 *
++		 * Currently, KVM needs to set EAX[31:24] < 8 or EBX[7] == 1
++		 * to make this event unavailable in a consistent way.
++		 */
++		if (edx.split.num_counters_fixed < 4) {
++			if (eax.split.mask_length > 7)
++				eax.split.mask_length--;
++			if (eax.split.mask_length > 7)
++				cap.events_mask |= BIT_ULL(7);
++		}
 +
-+	  Work around this problem in the driver by just preventing TRBE initialization on
-+	  affected cpus.
-+
-+	  If unsure, say Y.
-+
- config CAVIUM_ERRATUM_22375
- 	bool "Cavium erratum 22375, 24313"
- 	default y
-diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
-index 60b0c1f1d912..a3336dfb5a8a 100644
---- a/arch/arm64/kernel/cpu_errata.c
-+++ b/arch/arm64/kernel/cpu_errata.c
-@@ -615,6 +615,15 @@ const struct arm64_cpu_capabilities arm64_errata[] = {
- 		/* Cortex-A510 r0p0 - r0p2 */
- 		ERRATA_MIDR_REV_RANGE(MIDR_CORTEX_A510, 0, 0, 2)
- 	},
-+#endif
-+#ifdef CONFIG_ARM64_ERRATUM_1902691
-+	{
-+		.desc = "ARM erratum 1902691",
-+		.capability = ARM64_WORKAROUND_1902691,
-+
-+		/* Cortex-A510 r0p0 - r0p1 */
-+		ERRATA_MIDR_REV_RANGE(MIDR_CORTEX_A510, 0, 0, 1)
-+	},
- #endif
- 	{
- 	}
-diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
-index 45a06d36d080..e7719e8f18de 100644
---- a/arch/arm64/tools/cpucaps
-+++ b/arch/arm64/tools/cpucaps
-@@ -57,6 +57,7 @@ WORKAROUND_1508412
- WORKAROUND_1542419
- WORKAROUND_2064142
- WORKAROUND_2038923
-+WORKAROUND_1902691
- WORKAROUND_TRBE_OVERWRITE_FILL_MODE
- WORKAROUND_TSB_FLUSH_FAILURE
- WORKAROUND_TRBE_WRITE_OUT_OF_RANGE
-diff --git a/drivers/hwtracing/coresight/coresight-trbe.c b/drivers/hwtracing/coresight/coresight-trbe.c
-index 0689c6dab96d..b9b4e34fac15 100644
---- a/drivers/hwtracing/coresight/coresight-trbe.c
-+++ b/drivers/hwtracing/coresight/coresight-trbe.c
-@@ -93,12 +93,14 @@ struct trbe_buf {
- #define TRBE_WORKAROUND_WRITE_OUT_OF_RANGE	1
- #define TRBE_WORKAROUND_SYSREG_WRITE_FAILURE	2
- #define TRBE_WORKAROUND_CORRUPTION_WITH_ENABLE	3
-+#define TRBE_IS_BROKEN	4
- 
- static int trbe_errata_cpucaps[] = {
- 	[TRBE_WORKAROUND_OVERWRITE_FILL_MODE] = ARM64_WORKAROUND_TRBE_OVERWRITE_FILL_MODE,
- 	[TRBE_WORKAROUND_WRITE_OUT_OF_RANGE] = ARM64_WORKAROUND_TRBE_WRITE_OUT_OF_RANGE,
- 	[TRBE_WORKAROUND_SYSREG_WRITE_FAILURE] = ARM64_WORKAROUND_2064142,
- 	[TRBE_WORKAROUND_CORRUPTION_WITH_ENABLE] = ARM64_WORKAROUND_2038923,
-+	[TRBE_IS_BROKEN] = ARM64_WORKAROUND_1902691,
- 	-1,		/* Sentinel, must be the last entry */
- };
- 
-@@ -181,6 +183,11 @@ static inline bool trbe_may_corrupt_with_enable(struct trbe_cpudata *cpudata)
- 	return trbe_has_erratum(cpudata, TRBE_WORKAROUND_CORRUPTION_WITH_ENABLE);
- }
- 
-+static inline bool trbe_is_broken(struct trbe_cpudata *cpudata)
-+{
-+	return trbe_has_erratum(cpudata, TRBE_IS_BROKEN);
-+}
-+
- static int trbe_alloc_node(struct perf_event *event)
- {
- 	if (event->cpu == -1)
-@@ -1291,6 +1298,11 @@ static void arm_trbe_probe_cpu(void *info)
- 	 */
- 	trbe_check_errata(cpudata);
- 
-+	if (trbe_is_broken(cpudata)) {
-+		pr_err("TRBE might corrupt the trace on cpu %d\n", cpu);
-+		goto cpu_clear;
-+	}
-+
- 	/*
- 	 * If the TRBE is affected by erratum TRBE_WORKAROUND_OVERWRITE_FILL_MODE,
- 	 * we must always program the TBRPTR_EL1, 256bytes from a page
+ 		edx.split.bit_width_fixed = cap.bit_width_fixed;
+ 		if (cap.version)
+ 			edx.split.anythread_deprecated = 1;
 -- 
-2.25.1
+2.33.1
 

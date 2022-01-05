@@ -2,105 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5EAC485060
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 10:52:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E91485065
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 10:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239083AbiAEJwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 04:52:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35288 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239073AbiAEJwG (ORCPT
+        id S239091AbiAEJwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 04:52:50 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4335 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229755AbiAEJwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 04:52:06 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22AB9C061761;
-        Wed,  5 Jan 2022 01:52:06 -0800 (PST)
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 1FCD01F44273;
-        Wed,  5 Jan 2022 09:52:04 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1641376324;
-        bh=YOlZt4wlWDPgzl3ELAotsQoHSGbdiyMS1ERP5Zojv2w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HKDb9+W/5fgRZqr8su3iW5HhgJtmgHqUTGr2z6th03Wq99Z81PfsYztZKiC0UCzzM
-         yGdjoUci7xc/pKwwMIsdaViofCFzkWbnxFIyADfjvfT9LrbtFr2Nu6qVhXOZmZVNE4
-         YyT2XDAf8DHrBkJnZXT+7cuSIHkBFkYLx3ae37VAGU2WWBR5Ki3C/AdjpgN19QS0E8
-         U68T+FyE1dDVvhbCpCNJpEIGs9IFitVgdNNDFYcHaGiw2Lw3ogWtRqBgbSY4S/f9pO
-         YqONNzVL31SyK+F8G3c37n7t/zwpLhF4MvQN5cZEpABKc1XgmZLOhduvTGbdT1PwZM
-         uonWeT/drGRGg==
-Date:   Wed, 5 Jan 2022 10:52:00 +0100
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     Apurva Nandan <a-nandan@ti.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Mark Brown <broonie@kernel.org>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Alexander Lobakin <alobakin@pm.me>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <p.yadav@ti.com>
-Subject: Re: [PATCH v3 09/17] mtd: spinand: Add change_mode() in
- manufacturer_ops
-Message-ID: <20220105105200.67037833@collabora.com>
-In-Reply-To: <20220101074250.14443-10-a-nandan@ti.com>
-References: <20220101074250.14443-1-a-nandan@ti.com>
-        <20220101074250.14443-10-a-nandan@ti.com>
-Organization: Collabora
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
+        Wed, 5 Jan 2022 04:52:49 -0500
+Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JTPqG33Ygz67XhV;
+        Wed,  5 Jan 2022 17:50:18 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.20; Wed, 5 Jan 2022 10:52:46 +0100
+Received: from localhost (10.47.83.118) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 5 Jan
+ 2022 09:52:45 +0000
+Date:   Wed, 5 Jan 2022 09:52:52 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        "Lars-Peter Clausen" <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Arnd Bergmann" <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, <list@opendingux.net>,
+        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mips@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 1/8] PM: core: Remove DEFINE_UNIVERSAL_DEV_PM_OPS()
+ macro
+Message-ID: <20220105095252.00007f7f@Huawei.com>
+In-Reply-To: <20220104214214.198843-2-paul@crapouillou.net>
+References: <20220104214214.198843-1-paul@crapouillou.net>
+        <20220104214214.198843-2-paul@crapouillou.net>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.83.118]
+X-ClientProxiedBy: lhreml704-chm.china.huawei.com (10.201.108.53) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 1 Jan 2022 13:12:42 +0530
-Apurva Nandan <a-nandan@ti.com> wrote:
+On Tue, 4 Jan 2022 21:42:07 +0000
+Paul Cercueil <paul@crapouillou.net> wrote:
 
-> Introduce change_mode() manufacturer_op to let the vendor provide the
-> implementation of switching of SPI IO modes.
+> The deprecated UNIVERSAL_DEV_PM_OPS() macro uses the provided callbacks
+> for both runtime PM and system sleep, which is very likely to be a
+> mistake, as a system sleep can be triggered while a given device is
+> already PM-suspended, which would cause the suspend callback to be
+> called twice.
 > 
-> The method to switch to different SPI IO mode may vary across
-> manufacturers. For example, for Winbond, Octal DTR is enabled by
-> writing values to the volatile configuration register. So, let the
-> manufacturer's code have their own implementation for switching to
-> any given SPI IO mode. Manufacturer's code need to take care, if
-> the requested protocol change is allowed/needed and how to apply
-> it.
+> The amount of users of UNIVERSAL_DEV_PM_OPS() is also tiny (16
+> occurences) compared to the number of places where
+> SET_SYSTEM_SLEEP_PM_OPS() is used with pm_runtime_force_suspend() and
+> pm_runtime_force_resume(), which makes me think that none of these cases
+> are actually valid.
 > 
-> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
+> As this macro is currently unused, remove it before someone starts to
+> use it in yet another invalid case.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+I suspect there are cases where calling suspend twice doesn't matter, but
+it does seem unlikely to be particularly helpful.
+
+So, makes sense to drop this unless there is some subtlety I'm missing.
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
 > ---
->  include/linux/mtd/spinand.h | 3 +++
->  1 file changed, 3 insertions(+)
+>  include/linux/pm.h | 19 ++++++-------------
+>  1 file changed, 6 insertions(+), 13 deletions(-)
 > 
-> diff --git a/include/linux/mtd/spinand.h b/include/linux/mtd/spinand.h
-> index 5dae0649f2fb..ad924271a248 100644
-> --- a/include/linux/mtd/spinand.h
-> +++ b/include/linux/mtd/spinand.h
-> @@ -298,6 +298,7 @@ struct spinand_devid {
->  /**
->   * struct manufacurer_ops - SPI NAND manufacturer specific operations
->   * @init: initialize a SPI NAND device
-> + * @change_mode: switch the SPI NAND flash to a specific SPI protocol
->   * @cleanup: cleanup a SPI NAND device
->   *
->   * Each SPI NAND manufacturer driver should implement this interface so that
-> @@ -305,6 +306,8 @@ struct spinand_devid {
->   */
->  struct spinand_manufacturer_ops {
->  	int (*init)(struct spinand_device *spinand);
-> +	int (*change_mode)(struct spinand_device *spinand,
-> +			   const enum spinand_protocol protocol);
-
-Protocol or mode? Pick one and stick to it. Given you already use
-protocol elsewhere, maybe s/select_mode/select_protocol/.
-
->  	void (*cleanup)(struct spinand_device *spinand);
->  };
+> diff --git a/include/linux/pm.h b/include/linux/pm.h
+> index e1e9402180b9..31bbaafb06d2 100644
+> --- a/include/linux/pm.h
+> +++ b/include/linux/pm.h
+> @@ -366,6 +366,12 @@ static const struct dev_pm_ops name = { \
+>  	SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+>  }
 >  
+> +/* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
+> +#define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> +const struct dev_pm_ops __maybe_unused name = { \
+> +	SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> +}
+> +
+>  /*
+>   * Use this for defining a set of PM operations to be used in all situations
+>   * (system suspend, hibernation or runtime PM).
+> @@ -379,19 +385,6 @@ static const struct dev_pm_ops name = { \
+>   * .resume_early(), to the same routines as .runtime_suspend() and
+>   * .runtime_resume(), respectively (and analogously for hibernation).
+>   */
+> -#define DEFINE_UNIVERSAL_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
+> -static const struct dev_pm_ops name = { \
+> -	SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> -	RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
+> -}
+> -
+> -/* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
+> -#define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> -const struct dev_pm_ops __maybe_unused name = { \
+> -	SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> -}
+> -
+> -/* Deprecated. Use DEFINE_UNIVERSAL_DEV_PM_OPS() instead. */
+>  #define UNIVERSAL_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
+>  const struct dev_pm_ops __maybe_unused name = { \
+>  	SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
 

@@ -2,224 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2564850D2
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:13:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50DD84850D7
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:14:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239292AbiAEKNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 05:13:12 -0500
-Received: from foss.arm.com ([217.140.110.172]:42894 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234106AbiAEKNL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 05:13:11 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5A7A61042;
-        Wed,  5 Jan 2022 02:13:11 -0800 (PST)
-Received: from [10.57.85.117] (unknown [10.57.85.117])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1BEE33F774;
-        Wed,  5 Jan 2022 02:13:09 -0800 (PST)
-Message-ID: <77d59823-b975-e3ba-3aa4-fac5c61bb69f@arm.com>
-Date:   Wed, 5 Jan 2022 10:13:06 +0000
+        id S239300AbiAEKOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 05:14:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234106AbiAEKOj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 05:14:39 -0500
+X-Greylist: delayed 12369 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 05 Jan 2022 02:14:39 PST
+Received: from cavan.codon.org.uk (cavan.codon.org.uk [IPv6:2a00:1098:84:22e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D97C061761;
+        Wed,  5 Jan 2022 02:14:38 -0800 (PST)
+Received: by cavan.codon.org.uk (Postfix, from userid 1000)
+        id BB17A4250A; Wed,  5 Jan 2022 10:14:37 +0000 (GMT)
+Date:   Wed, 5 Jan 2022 10:14:37 +0000
+From:   Matthew Garrett <mjg59@srcf.ucam.org>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     jmorris@namei.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Kees Cook <keescook@chromium.org>, x86@kernel.org
+Subject: Re: [PATCH V40 12/29] x86: Lock down IO port access when the kernel
+ is locked down
+Message-ID: <20220105101437.GA32516@srcf.ucam.org>
+References: <20190820001805.241928-1-matthewgarrett@google.com>
+ <20190820001805.241928-13-matthewgarrett@google.com>
+ <CAAd53p6d2CsZcwaX0ZtjmOmQv1Dru4qmM-uRxtHJi0k5PnFMFQ@mail.gmail.com>
+ <20220105064827.GA30988@srcf.ucam.org>
+ <CAAd53p5A9ajyP=8edXW20MB1eLRAF3SsmXfdnkA2isBJD2Bd+w@mail.gmail.com>
+ <20220105072010.GA31134@srcf.ucam.org>
+ <CAAd53p6VcAo0MVMWerTag42cWFE2ifzdQ=AFmGd9a=2gFjgv5A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [PATCH 3/4] coresight: trbe: Work around the invalid prohibited
- states
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        coresight@lists.linaro.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1641359159-22726-1-git-send-email-anshuman.khandual@arm.com>
- <1641359159-22726-4-git-send-email-anshuman.khandual@arm.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <1641359159-22726-4-git-send-email-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAd53p6VcAo0MVMWerTag42cWFE2ifzdQ=AFmGd9a=2gFjgv5A@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anshuman
-
-On 05/01/2022 05:05, Anshuman Khandual wrote:
-> TRBE implementations affected by Arm erratum #2038923 might get TRBE into
-> an inconsistent view on whether trace is prohibited within the CPU. As a
-> result, the trace buffer or trace buffer state might be corrupted. This
-> happens after TRBE buffer has been enabled by setting TRBLIMITR_EL1.E,
-> followed by just a single context synchronization event before execution
-> changes from a context, in which trace is prohibited to one where it isn't,
-> or vice versa. In these mentioned conditions, the view of whether trace is
-> prohibited is inconsistent between parts of the CPU, and the trace buffer
-> or the trace buffer state might be corrupted.
+On Wed, Jan 05, 2022 at 06:05:26PM +0800, Kai-Heng Feng wrote:
+> On Wed, Jan 5, 2022 at 3:20 PM Matthew Garrett <mjg59@srcf.ucam.org> wrote:
+> >
+> > On Wed, Jan 05, 2022 at 02:57:57PM +0800, Kai-Heng Feng wrote:
+> >
+> > > The affected system from the customer has SecureBoot enabled (and
+> > > hence lockdown), and the kernel upgrade surprisingly broke ioperm()
+> > > usage.
+> >
+> > Which kernel was being used that was signed but didn't implement
+> > lockdown? That sounds, uh, bad.
 > 
-> Work around this problem in the TRBE driver by preventing an inconsistent
-> view of whether the trace is prohibited or not based on TRBLIMITR_EL1.E by
-> immediately following a change to TRBLIMITR_EL1.E with at least one ISB
-> instruction before an ERET, or two ISB instructions if no ERET is to take
-> place. This adds a new cpu errata in arm64 errata framework and also
-> updates TRBE driver as required.
+> It was upgraded from older distro release. Older kernels don't have lockdown.
+
+But have a signed bootloader? Which releases?
+
+> > There's two main choices:
+> >
+> > 1) Disable secure boot on the system in question - if there's a need to
+> > run userland that can do arbitrary port IO then secure boot isn't
+> > providing any meaningful security benefit in any case.
 > 
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Suzuki Poulose <suzuki.poulose@arm.com>
-> Cc: coresight@lists.linaro.org
-> Cc: linux-doc@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
->   Documentation/arm64/silicon-errata.rst       |  2 +
->   arch/arm64/Kconfig                           | 23 ++++++++++
->   arch/arm64/kernel/cpu_errata.c               |  9 ++++
->   arch/arm64/tools/cpucaps                     |  1 +
->   drivers/hwtracing/coresight/coresight-trbe.c | 47 +++++++++++++++-----
->   5 files changed, 72 insertions(+), 10 deletions(-)
+> How so?
+> Other security features are still incredible valuable, we don't want
+> to toss them out just because someone has to use ioperm().
 
-As with the previous patch, it may be a good idea to split the
-patch to arm64 and trbe parts.
+Because having the ability to do port io allows you to tamper with the 
+running kernel and disable all the other security boundaries, making 
+them pointless. Many PCI devices have a port IO side channel into MMIO 
+BARs for use in early boot, so if an attacker can fill that BAR as they 
+wish and then modify the BAR to map it into the kernel address space 
+(and fix up the bridges appropriately), or if the port IO interface can 
+be used to trigger DMA, the outcomes are pretty bad. The point of 
+lockdown is to disable every plausible interface for userland (even uid 
+0) to have access to any interfaces that would let them insert modified 
+code into ring 0 - port IO is definitely one of those interfaces. An 
+attacker could just take a kernel that allows ioperm(), add an initramfs 
+containing their payload, boot, hotpatch the kernel to disable lockdown, 
+and then kexec into their backdoored payload.
 
+> >
+> > 2) Implement a kernel driver that abstracts the hardware access away
+> > from userland, and ensures that all the accesses are performed in a safe
+> > way.
+> >
+> > Doing port IO from userland is almost always a terrible idea - it
+> > usually involves indexed accesses (you write an address to one port and
+> > then write or read data from another), and if two processes are trying
+> > to do this simultaneously (either because SMP or because one process
+> > gets preempted after writing the address but before accessing the data
+> > register), and in that case you can end up with accesses to the wrong
+> > register as a result. You really want this sort of thing to be mediated
+> > by the kernel, both from a safety perspective and to ensure appropriate
+> > synchronisation.
 > 
-> diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
-> index c9b30e6c2b6c..e0ef3e9a4b8b 100644
-> --- a/Documentation/arm64/silicon-errata.rst
-> +++ b/Documentation/arm64/silicon-errata.rst
-> @@ -54,6 +54,8 @@ stable kernels.
->   +----------------+-----------------+-----------------+-----------------------------+
->   | ARM            | Cortex-A510     | #2064142        | ARM64_ERRATUM_2064142       |
->   +----------------+-----------------+-----------------+-----------------------------+
-> +| ARM            | Cortex-A510     | #2038923        | ARM64_ERRATUM_2038923       |
-> ++----------------+-----------------+-----------------+-----------------------------+
->   | ARM            | Cortex-A53      | #826319         | ARM64_ERRATUM_826319        |
->   +----------------+-----------------+-----------------+-----------------------------+
->   | ARM            | Cortex-A53      | #827319         | ARM64_ERRATUM_827319        |
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 2105b68d88db..026e34fb6fad 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -796,6 +796,29 @@ config ARM64_ERRATUM_2064142
->   
->   	  If unsure, say Y.
->   
-> +config ARM64_ERRATUM_2038923
-> +	bool "Cortex-A510: 2038923: workaround TRBE corruption with enable"
-> +	depends on CORESIGHT_TRBE
-> +	default y
-> +	help
-> +	  This option adds the workaround for ARM Cortex-A510 erratum 2038923.
-> +
-> +	  Affected Cortex-A510 core might cause an inconsistent view on whether trace is
-> +	  prohibited within the CPU. As a result, the trace buffer or trace buffer state
-> +	  might be corrupted. This happens after TRBE buffer has been enabled by setting
-> +	  TRBLIMITR_EL1.E, followed by just a single context synchronization event before
-> +	  execution changes from a context, in which trace is prohibited to one where it
-> +	  isn't, or vice versa. In these mentioned conditions, the view of whether trace
-> +	  is prohibited is inconsistent between parts of the CPU, and the trace buffer or
-> +	  the trace buffer state might be corrupted.
-> +
-> +	  Work around this in the driver by preventing an inconsistent view of whether the
-> +	  trace is prohibited or not based on TRBLIMITR_EL1.E by immediately following a
-> +	  change to TRBLIMITR_EL1.E with at least one ISB instruction before an ERET, or
-> +	  two ISB instructions if no ERET is to take place.
-> +
-> +	  If unsure, say Y.
-> +
->   config CAVIUM_ERRATUM_22375
->   	bool "Cavium erratum 22375, 24313"
->   	default y
-> diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
-> index cbb7d5a9aee7..60b0c1f1d912 100644
-> --- a/arch/arm64/kernel/cpu_errata.c
-> +++ b/arch/arm64/kernel/cpu_errata.c
-> @@ -607,6 +607,15 @@ const struct arm64_cpu_capabilities arm64_errata[] = {
->   		ERRATA_MIDR_REV_RANGE(MIDR_CORTEX_A510, 0, 0, 2)
->   	},
->   #endif
-> +#ifdef CONFIG_ARM64_ERRATUM_2038923
-> +	{
-> +		.desc = "ARM erratum 2038923",
-> +		.capability = ARM64_WORKAROUND_2038923,
-> +
-> +		/* Cortex-A510 r0p0 - r0p2 */
-> +		ERRATA_MIDR_REV_RANGE(MIDR_CORTEX_A510, 0, 0, 2)
-> +	},
-> +#endif
->   	{
->   	}
->   };
-> diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
-> index fca3cb329e1d..45a06d36d080 100644
-> --- a/arch/arm64/tools/cpucaps
-> +++ b/arch/arm64/tools/cpucaps
-> @@ -56,6 +56,7 @@ WORKAROUND_1463225
->   WORKAROUND_1508412
->   WORKAROUND_1542419
->   WORKAROUND_2064142
-> +WORKAROUND_2038923
->   WORKAROUND_TRBE_OVERWRITE_FILL_MODE
->   WORKAROUND_TSB_FLUSH_FAILURE
->   WORKAROUND_TRBE_WRITE_OUT_OF_RANGE
-> diff --git a/drivers/hwtracing/coresight/coresight-trbe.c b/drivers/hwtracing/coresight/coresight-trbe.c
-> index ec24b62b2cec..0689c6dab96d 100644
-> --- a/drivers/hwtracing/coresight/coresight-trbe.c
-> +++ b/drivers/hwtracing/coresight/coresight-trbe.c
-> @@ -92,11 +92,13 @@ struct trbe_buf {
->   #define TRBE_WORKAROUND_OVERWRITE_FILL_MODE	0
->   #define TRBE_WORKAROUND_WRITE_OUT_OF_RANGE	1
->   #define TRBE_WORKAROUND_SYSREG_WRITE_FAILURE	2
-> +#define TRBE_WORKAROUND_CORRUPTION_WITH_ENABLE	3
->   
->   static int trbe_errata_cpucaps[] = {
->   	[TRBE_WORKAROUND_OVERWRITE_FILL_MODE] = ARM64_WORKAROUND_TRBE_OVERWRITE_FILL_MODE,
->   	[TRBE_WORKAROUND_WRITE_OUT_OF_RANGE] = ARM64_WORKAROUND_TRBE_WRITE_OUT_OF_RANGE,
->   	[TRBE_WORKAROUND_SYSREG_WRITE_FAILURE] = ARM64_WORKAROUND_2064142,
-> +	[TRBE_WORKAROUND_CORRUPTION_WITH_ENABLE] = ARM64_WORKAROUND_2038923,
->   	-1,		/* Sentinel, must be the last entry */
->   };
->   
-> @@ -174,6 +176,11 @@ static inline bool trbe_may_fail_sysreg_write(struct trbe_cpudata *cpudata)
->   	return trbe_has_erratum(cpudata, TRBE_WORKAROUND_SYSREG_WRITE_FAILURE);
->   }
->   
-> +static inline bool trbe_may_corrupt_with_enable(struct trbe_cpudata *cpudata)
-> +{
+> Agree, let me start a discussion with them.
 
-minor nit: trbe_needs_{ctxt_sync, isb}_after_enable() ?
-
-> +	return trbe_has_erratum(cpudata, TRBE_WORKAROUND_CORRUPTION_WITH_ENABLE);
-> +}
-> +
->   static int trbe_alloc_node(struct perf_event *event)
->   {
->   	if (event->cpu == -1)
-> @@ -187,6 +194,30 @@ static inline void trbe_drain_buffer(void)
->   	dsb(nsh);
->   }
->   
-> +static inline void set_trbe_enabled(struct trbe_cpudata *cpudata)
-> +{
-> +	u64 trblimitr = read_sysreg_s(SYS_TRBLIMITR_EL1);
-
-minor nit: This implies we do the TRBE programming in the following
-manner in the common case (i.e, TRBE enabled in the beginning of a
-session).
-   -> set TRBE LIMIT
-   -> read TRBE LIMIT
-   -> set TRBE ENABLED
-
-Could we please optimize this ? I believe the buf->trbe_limit
-must hold the LIMITR value at any point in time. And thus this
-function could simply be :
-
-set_trbe_enabled(trbe_buf)
-{
-	limitr = trbe_buf->limit | LIMITR_ENABLE
-	write(limitr, TRBLIMITR_EL1);
-	...
-}
-
-Otherwise looks good to me
-
-Suzuki
+Sounds good.

@@ -2,96 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD2E4857F5
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:09:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A6A04857FF
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:12:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242752AbiAESJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 13:09:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36304 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242736AbiAESJt (ORCPT
+        id S242778AbiAESMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 13:12:35 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38654 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242736AbiAESMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 13:09:49 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D10CC061245
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 10:09:49 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id t23so144266oiw.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 10:09:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=landley-net.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=oxp1dnAx7p9DYOl98ZnSPxRU0b5qEUGHEusACTvziFs=;
-        b=8XGjFISVzC7ZnNmnPd7+gjn8O65PKPZyMsylZMLEsPeA9yuyhyMb0OH7O3eRGl2RoV
-         oBftKINJpS4V+0OPEaKjCJ9cw9JdPAE8Z00I7SIBtF/3UphM9Pjpy6t7aiLlAMtQJwjS
-         hlRGHWnKkzqJRrjPhNYMujuj/gWaxGpF9KGNUuTV98lIj0KfiyC/9tHbfhu97aX2wdIj
-         zHBU99oS4/ySFa/Y7GW6Ha2yKY9NfUSx0Gg+bEitbSyUpgYXzlRiS9REbNcQKc84wKvu
-         G+kwyzbEE6+sJWHkuxi8eTAFaQn0s0sgJZOrqupUvtCxK6Pl614/W704mYRWacP1qBDD
-         p3qQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=oxp1dnAx7p9DYOl98ZnSPxRU0b5qEUGHEusACTvziFs=;
-        b=MHiAhxoxUQnYKixtNYO0t15Wm06yMfb//+kPYZCZqRNHC97QiUqzBbx47V1FRlVWvk
-         UU+QBhMcPquqh5T3nieeoDLX+EzJcnwIt/8glpQX8TOti8wAxsyai694txLOcPdMWiQu
-         m3gE17JGOg35mkcdYYja0QsBJgGsTBqezKIEaiyQSN8bmekCqMvdzei3Jph9BWNnaSSd
-         FLrQ+ZnztzZ//UqZkz67yk9KlIw4vz8rDT6WbsmD9nyXvw+nO4OJbMk6GfLgyy1JgjAs
-         hff8lLJkY6hlSQYMUjCjJVEGCqYDTK5k3Wvv5ShKXAf2el7WIhHaSjlodDWtN+XHXPa9
-         GaQQ==
-X-Gm-Message-State: AOAM531JelPEvPMs6rwtMvI+L1pZaIR3r8GAYLp8fLcgLmZt77xTP9Jg
-        VFBSPbV8YBL0GxJZzVr/OdQ0PA==
-X-Google-Smtp-Source: ABdhPJyRzxosjo9cuegGXGAeq/Xgxh22F6q0OwYTkGPqLqb14ekHqVR1VniMm8ezI7m+vOqJkJgOIA==
-X-Received: by 2002:aca:907:: with SMTP id 7mr3641898oij.128.1641406188741;
-        Wed, 05 Jan 2022 10:09:48 -0800 (PST)
-Received: from [192.168.86.166] ([136.62.4.88])
-        by smtp.gmail.com with ESMTPSA id u14sm8746763ote.62.2022.01.05.10.09.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jan 2022 10:09:48 -0800 (PST)
-Subject: Re: [PATCH] sh: sq: use default_groups in kobj_type
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org
-References: <20220104162240.1309639-1-gregkh@linuxfoundation.org>
- <4622e641-1423-e72a-4f6d-5f2cc747a148@landley.net>
- <YdXa7y+3seYoV85z@kroah.com>
-From:   Rob Landley <rob@landley.net>
-Message-ID: <616fabc9-cf79-4c84-a1cc-6ecede77fa9c@landley.net>
-Date:   Wed, 5 Jan 2022 12:11:25 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 5 Jan 2022 13:12:33 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 319E76186E;
+        Wed,  5 Jan 2022 18:12:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86A1BC36AE0;
+        Wed,  5 Jan 2022 18:12:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641406350;
+        bh=1171XJwm1v/PulkFnAieJP983+An49f4YwMoJU08ZfY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nWn/JuTGixcFXT48t84+1b4oKeUMJWE+/eNez7UjXuQo48HXoQ836yzTuko5QN9LI
+         62G1DC6hUtta2Q7rpOxWImksLXPwkzrBrYS6WhO+HC0/f6I7QdmBx+qtM6LFtiNzlW
+         sSfSv6OXfGJc3oGSPqHK6OMk5SWhEVIeGygz/VBBYcYktH2mDxxDANWAk5xEeYKZIp
+         EP7osuMcpT+TKgUFzBXOCzCpXzQI9sjKz2HZxpmOLjBcMsn3C+GS9T58AfNhPoB5NG
+         Vs6BnLTxzjvQ4W323hvKdhY11ZU8caQCNDIrtDUiQsoMeqbs6olGT5AIeGiK7aMuIk
+         HbVoI0B/j5shA==
+Date:   Wed, 5 Jan 2022 10:12:30 -0800
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, dan.j.williams@intel.com,
+        david@fromorbit.com, hch@infradead.org, jane.chu@oracle.com
+Subject: Re: [PATCH v9 02/10] dax: Introduce holder for dax_device
+Message-ID: <20220105181230.GC398655@magnolia>
+References: <20211226143439.3985960-1-ruansy.fnst@fujitsu.com>
+ <20211226143439.3985960-3-ruansy.fnst@fujitsu.com>
 MIME-Version: 1.0
-In-Reply-To: <YdXa7y+3seYoV85z@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211226143439.3985960-3-ruansy.fnst@fujitsu.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/5/22 11:52 AM, Greg Kroah-Hartman wrote:
-> On Wed, Jan 05, 2022 at 11:46:28AM -0600, Rob Landley wrote:
->> On 1/4/22 10:22 AM, Greg Kroah-Hartman wrote:
->> > There are currently 2 ways to create a set of sysfs files for a
->> > kobj_type, through the default_attrs field, and the default_groups
->> > field.  Move the sh sq sysfs code to use default_groups field which has
->> > been the preferred way since aa30f47cf666 ("kobject: Add support for
->> > default attribute groups to kobj_type") so that we can soon get rid of
->> > the obsolete default_attrs field.
->> 
->> Let's see, sh4-specific, depends on CONFIG_SH_STORE_QUEUES... it built but I'm
->> not finding an "sq" entry under /proc. (Or anything with "mapping" in it...)
->> 
->> Oh well, probably right? Didn't break anything for me:
->> 
->> Tested-by: Rob Landley <rob@landley.net>
+On Sun, Dec 26, 2021 at 10:34:31PM +0800, Shiyang Ruan wrote:
+> To easily track filesystem from a pmem device, we introduce a holder for
+> dax_device structure, and also its operation.  This holder is used to
+> remember who is using this dax_device:
+>  - When it is the backend of a filesystem, the holder will be the
+>    instance of this filesystem.
+>  - When this pmem device is one of the targets in a mapped device, the
+>    holder will be this mapped device.  In this case, the mapped device
+>    has its own dax_device and it will follow the first rule.  So that we
+>    can finally track to the filesystem we needed.
 > 
-> Thanks!  Seems to pass 0-day testing as well :)
+> The holder and holder_ops will be set when filesystem is being mounted,
+> or an target device is being activated.
 > 
-> Should I take this in my tree?
+> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+> ---
+>  drivers/dax/super.c | 62 +++++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/dax.h | 29 +++++++++++++++++++++
+>  2 files changed, 91 insertions(+)
+> 
+> diff --git a/drivers/dax/super.c b/drivers/dax/super.c
+> index c46f56e33d40..94c51f2ee133 100644
+> --- a/drivers/dax/super.c
+> +++ b/drivers/dax/super.c
+> @@ -20,15 +20,20 @@
+>   * @inode: core vfs
+>   * @cdev: optional character interface for "device dax"
+>   * @private: dax driver private data
+> + * @holder_data: holder of a dax_device: could be filesystem or mapped device
+>   * @flags: state and boolean properties
+> + * @ops: operations for dax_device
+> + * @holder_ops: operations for the inner holder
+>   */
+>  struct dax_device {
+>  	struct inode inode;
+>  	struct cdev cdev;
+>  	void *private;
+>  	struct percpu_rw_semaphore rwsem;
+> +	void *holder_data;
+>  	unsigned long flags;
+>  	const struct dax_operations *ops;
+> +	const struct dax_holder_operations *holder_ops;
+>  };
+>  
+>  static dev_t dax_devt;
+> @@ -192,6 +197,29 @@ int dax_zero_page_range(struct dax_device *dax_dev, pgoff_t pgoff,
+>  }
+>  EXPORT_SYMBOL_GPL(dax_zero_page_range);
+>  
+> +int dax_holder_notify_failure(struct dax_device *dax_dev, u64 off,
+> +			      u64 len, int mf_flags)
+> +{
+> +	int rc;
+> +
+> +	dax_read_lock(dax_dev);
+> +	if (!dax_alive(dax_dev)) {
+> +		rc = -ENXIO;
+> +		goto out;
+> +	}
+> +
+> +	if (!dax_dev->holder_ops) {
+> +		rc = -EOPNOTSUPP;
+> +		goto out;
+> +	}
+> +
+> +	rc = dax_dev->holder_ops->notify_failure(dax_dev, off, len, mf_flags);
+> +out:
+> +	dax_read_unlock(dax_dev);
+> +	return rc;
+> +}
+> +EXPORT_SYMBOL_GPL(dax_holder_notify_failure);
+> +
+>  #ifdef CONFIG_ARCH_HAS_PMEM_API
+>  void arch_wb_cache_pmem(void *addr, size_t size);
+>  void dax_flush(struct dax_device *dax_dev, void *addr, size_t size)
+> @@ -254,6 +282,10 @@ void kill_dax(struct dax_device *dax_dev)
+>  		return;
+>  	dax_write_lock(dax_dev);
+>  	clear_bit(DAXDEV_ALIVE, &dax_dev->flags);
+> +
+> +	/* clear holder data */
+> +	dax_dev->holder_ops = NULL;
+> +	dax_dev->holder_data = NULL;
+>  	dax_write_unlock(dax_dev);
+>  }
+>  EXPORT_SYMBOL_GPL(kill_dax);
+> @@ -401,6 +433,36 @@ void put_dax(struct dax_device *dax_dev)
+>  }
+>  EXPORT_SYMBOL_GPL(put_dax);
+>  
+> +void dax_register_holder(struct dax_device *dax_dev, void *holder,
+> +		const struct dax_holder_operations *ops)
+> +{
+> +	if (!dax_alive(dax_dev))
+> +		return;
+> +
+> +	dax_dev->holder_data = holder;
+> +	dax_dev->holder_ops = ops;
 
-Yes please.
+Shouldn't this return an error code if the dax device is dead or if
+someone already registered a holder?  I'm pretty sure XFS should not
+bind to a dax device if someone else already registered for it...
 
-Rob
+...unless you want to use a notifier chain for failure events so that
+there can be multiple consumers of dax failure events?
+
+--D
+
+> +}
+> +EXPORT_SYMBOL_GPL(dax_register_holder);
+> +
+> +void dax_unregister_holder(struct dax_device *dax_dev)
+> +{
+> +	if (!dax_alive(dax_dev))
+> +		return;
+> +
+> +	dax_dev->holder_data = NULL;
+> +	dax_dev->holder_ops = NULL;
+> +}
+> +EXPORT_SYMBOL_GPL(dax_unregister_holder);
+> +
+> +void *dax_get_holder(struct dax_device *dax_dev)
+> +{
+> +	if (!dax_alive(dax_dev))
+> +		return NULL;
+> +
+> +	return dax_dev->holder_data;
+> +}
+> +EXPORT_SYMBOL_GPL(dax_get_holder);
+> +
+>  /**
+>   * inode_dax: convert a public inode into its dax_dev
+>   * @inode: An inode with i_cdev pointing to a dax_dev
+> diff --git a/include/linux/dax.h b/include/linux/dax.h
+> index a146bfb80804..e16a9e0ee857 100644
+> --- a/include/linux/dax.h
+> +++ b/include/linux/dax.h
+> @@ -44,6 +44,22 @@ struct dax_operations {
+>  #if IS_ENABLED(CONFIG_DAX)
+>  struct dax_device *alloc_dax(void *private, const struct dax_operations *ops,
+>  		unsigned long flags);
+> +struct dax_holder_operations {
+> +	/*
+> +	 * notify_failure - notify memory failure into inner holder device
+> +	 * @dax_dev: the dax device which contains the holder
+> +	 * @offset: offset on this dax device where memory failure occurs
+> +	 * @len: length of this memory failure event
+> +	 * @flags: action flags for memory failure handler
+> +	 */
+> +	int (*notify_failure)(struct dax_device *dax_dev, u64 offset,
+> +			u64 len, int mf_flags);
+> +};
+> +
+> +void dax_register_holder(struct dax_device *dax_dev, void *holder,
+> +		const struct dax_holder_operations *ops);
+> +void dax_unregister_holder(struct dax_device *dax_dev);
+> +void *dax_get_holder(struct dax_device *dax_dev);
+>  void put_dax(struct dax_device *dax_dev);
+>  void kill_dax(struct dax_device *dax_dev);
+>  void dax_write_cache(struct dax_device *dax_dev, bool wc);
+> @@ -71,6 +87,17 @@ static inline bool daxdev_mapping_supported(struct vm_area_struct *vma,
+>  	return dax_synchronous(dax_dev);
+>  }
+>  #else
+> +static inline void dax_register_holder(struct dax_device *dax_dev, void *holder,
+> +		const struct dax_holder_operations *ops)
+> +{
+> +}
+> +static inline void dax_unregister_holder(struct dax_device *dax_dev)
+> +{
+> +}
+> +static inline void *dax_get_holder(struct dax_device *dax_dev)
+> +{
+> +	return NULL;
+> +}
+>  static inline struct dax_device *alloc_dax(void *private,
+>  		const struct dax_operations *ops, unsigned long flags)
+>  {
+> @@ -209,6 +236,8 @@ size_t dax_copy_to_iter(struct dax_device *dax_dev, pgoff_t pgoff, void *addr,
+>  		size_t bytes, struct iov_iter *i);
+>  int dax_zero_page_range(struct dax_device *dax_dev, pgoff_t pgoff,
+>  			size_t nr_pages);
+> +int dax_holder_notify_failure(struct dax_device *dax_dev, u64 off, u64 len,
+> +		int mf_flags);
+>  void dax_flush(struct dax_device *dax_dev, void *addr, size_t size);
+>  
+>  ssize_t dax_iomap_rw(struct kiocb *iocb, struct iov_iter *iter,
+> -- 
+> 2.34.1
+> 
+> 
+> 

@@ -2,116 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 463DD485B36
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 23:02:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28BD2485B3C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 23:03:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244690AbiAEWCH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Jan 2022 17:02:07 -0500
-Received: from mout.kundenserver.de ([212.227.126.187]:49747 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244642AbiAEWCC (ORCPT
+        id S244691AbiAEWDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 17:03:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32982 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244642AbiAEWC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 17:02:02 -0500
-Received: from mail-wm1-f41.google.com ([209.85.128.41]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M7NaW-1n1uxv35XY-007hna; Wed, 05 Jan 2022 23:01:59 +0100
-Received: by mail-wm1-f41.google.com with SMTP id v10-20020a05600c214a00b00345e59928eeso2736886wml.0;
-        Wed, 05 Jan 2022 14:01:59 -0800 (PST)
-X-Gm-Message-State: AOAM530LLCee5i1yUP9LQpNn48kA7LYt/o5hQ+6HY27z9Cr8eCAERnCi
-        lc9TvKnBwLil3QOig906vnI/DaliHbD0kPVWOzQ=
-X-Google-Smtp-Source: ABdhPJwWrJlXfB7Nw+0BaPIxgI7LOoxc/sQFNbwbtKTUGMDZoFcEpkmKZYZVzhQrqMDtvs9qGlRu6A0/mwiCTmf+DH0=
-X-Received: by 2002:a1c:7418:: with SMTP id p24mr4649674wmc.82.1641420119336;
- Wed, 05 Jan 2022 14:01:59 -0800 (PST)
-MIME-Version: 1.0
-References: <0b8bacb36e111d2621c2c0459b20b1da9f4375c0.1641137463.git.christophe.jaillet@wanadoo.fr>
- <CAK8P3a2XwFveAd8nSCexZG3_UZga2PQ+EXHxQLGaWkLjCwrBxQ@mail.gmail.com> <bc95636a-8b67-b0cd-dc18-b21ac4b83962@wanadoo.fr>
-In-Reply-To: <bc95636a-8b67-b0cd-dc18-b21ac4b83962@wanadoo.fr>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 5 Jan 2022 17:01:47 -0500
-X-Gmail-Original-Message-ID: <CAK8P3a1g1zQtY6o1hnXGxe5moZ5-z9vR4fuN8VPtSvKipALMcw@mail.gmail.com>
-Message-ID: <CAK8P3a1g1zQtY6o1hnXGxe5moZ5-z9vR4fuN8VPtSvKipALMcw@mail.gmail.com>
-Subject: Re: [PATCH] alpha: Remove usage of the deprecated "pci-dma-compat.h" API
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
+        Wed, 5 Jan 2022 17:02:59 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769BCC061212
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 14:02:58 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id i8so349918pgt.13
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 14:02:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=YKCFFRAciZpcdqJmTFTjz+wKvbhjzm225M4aIDaCuiU=;
+        b=fW9ulu/h4JJhF3zfksJLWMb/bqR8giX/dFE0CouDR+T4lybi6lRauIYAouP9mYL2XX
+         YguWms/IVaiZ3ZDCwIsKnjiIpWbcleacvZ/EO7P0mqySNH9ebGIcBvSMfi/iaLmwASwe
+         2TlHkMJirJyvPG3B30LCRQ1HdqX38PzwsH4j8PyaMwKJiOg8OC8vWl1TGwkY5wOioE2K
+         GqaN3SZNTMLLsyolLb/ExYbL9PgCKZxj1oaZkD2S2bVAWDfqROpz0mplyuwiV1bqPgo4
+         xWF2cFWOwG70irBz41p2OphNPPmUXrSGaQUwvoSs6suQBfsw7AgL669rhPB5Uu7wAo7P
+         nsoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YKCFFRAciZpcdqJmTFTjz+wKvbhjzm225M4aIDaCuiU=;
+        b=eO6AqN+6y2Qtegar01CZA+rmKYKAFHL8odU+8ppiaYWYgo9tBIWQep5bvRuSQ8bVq3
+         DHe1k4AeuQxg7EOVl+Y92JPxZZkMv9To8cv30oEJBWUi5migXG0v+A1oXpbn0qgm5w+R
+         uHrP2vfpZC61epablJz9atbGkj2DcSaKPnTDN4cp8zQdy/GMSXGUICTl6xRG7NlKU5Lc
+         XPVZZ87SLWUSMErs7NlSir+f79uOsdoki9c1Qg08NCXo0Cer45uUu+LgfglelRHPu+tR
+         dqGJyQsuukd8qWxnFKrwC/QVMJtnSdAPhJlV7ISAz16yj/WEyj1xoGR0ZNkvHR+jSWbz
+         UPNw==
+X-Gm-Message-State: AOAM533VicaCcLkzSeiIM86V+53oufTUx91rjyh5Qyw9rTc2wJ49qAY4
+        HlwCuqpDUBzVZnobCX2uEStPrg==
+X-Google-Smtp-Source: ABdhPJy1j3iKKZs35n/KzJTCkqL0HcCrjjmYG6bssNBIFzGISkV5H8QpwsTR9BEo9HcizmPRobCqBQ==
+X-Received: by 2002:a62:7c58:0:b0:4bb:314b:86b9 with SMTP id x85-20020a627c58000000b004bb314b86b9mr57302956pfc.84.1641420177751;
+        Wed, 05 Jan 2022 14:02:57 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id 36sm20676pgq.94.2022.01.05.14.02.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 14:02:57 -0800 (PST)
+Date:   Wed, 5 Jan 2022 22:02:53 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Nathan Tempelman <natet@google.com>,
+        Marc Orr <marcorr@google.com>,
+        Steve Rutherford <srutherford@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Ricardo Koller <ricarkol@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
         David Hildenbrand <david@redhat.com>,
-        martin.oliveira@eideticom.com, alpha <linux-alpha@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:rTuykiNwVBEIeSjZ1o+zSrehe1GeftgEXky0h6A5f1OgD5OzPQi
- DYeuP2goCHuxnZG0aI4pQyCOdbO9HcPNjVPsO3zKyYuzSw1ilZgmXzSTehnk05hFailBA70
- SDCFg07PN7Fi9DNmeU7RwGpX91KAN3HnbLsI5aFUILiLdp4WH58SkGJHLtZbLXIMV4J+vzn
- LG1owcs3ov5sSPZVPhtZQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:MzWvNzcU5G8=:IusAjEuZopj/TQAQ9S/+ay
- DVng8zjnXalssmCXVX+vZXFQOahIbxh/Nw9JghZEWn2E2hSOzjVF/BRdiEjq/4l1WYLgvBGUJ
- XRQ2DIF8v/EZm5I9a/ARVL1cQGXYNLbE8xNpAmk0iZnD3WVEL5b/vShtnfrCIFRaf6PQx0xa5
- FyTNKFU3H5jNgpzVEOrxFRwASB3D+wRH8xz1jmcYnbHe5as98WiwuiP7CHarxKwxBA6Sn5X/Z
- Ty8469UHjo+UldID2Rux6lSLiyG0uEmuaB8JqhmnvwIKOKd3GNQVQqscA3FY0K3m23vZW41PO
- Sti/clYtauf6o/hmjmXaOUc4CLA8u5OSIsOxi2KqpgyDW7o76NwxU8aOjEZNJS4OzhE4bpl9D
- qGVbicPpD4eJAQZFQnfLwZicwIDac/WtA0Dt5qa1Q6bPih3UWFzAyL0IqRbRJjBuWH6Hmq1vI
- rEi4ehBtYvvShwksM31I1C0hXPD4t6G/h8xUL7zJ/ZkmkwXPOfrMMxCL8ayqRliU1S7P+WC91
- ga6865FhFcCCvwxa/OukEej+Oy1SN3uTsWzpYM3ae3SJbrm48Er/RPrZO5H/BJRqL11+HUiwI
- QmMsFHVmQGKL3vxJ6UuFl/WMOaNONkUb/TW8RSzIAv4gCcFP2+mHS9mAhBMn0kpZKkdbwyCXd
- LQwpPlx1df9bygNcI/vS8mbPCIJ2WtyNzqKkB6d8McUPrkHjyYDKVdeZdMaXBaj9VxtQ=
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        kvmarm@lists.cs.columbia.edu
+Subject: Re: [RFC PATCH 00/10] KVM: selftests: Add support for
+ test-selectable ucall implementations
+Message-ID: <YdYVjfMqf+GjsU+p@google.com>
+References: <20211210164620.11636-1-michael.roth@amd.com>
+ <Yc4gcJdhxthBKUUd@google.com>
+ <20220104233517.kxjbdw4t7taymab5@amd.com>
+ <YdTjnRZQID5IabK0@google.com>
+ <20220105170244.jwr6i2erecbhx3fz@amd.com>
+ <YdXYuaoXJux6lHrF@google.com>
+ <20220105191107.qx67wf2coc3q6giu@amd.com>
+ <YdX0SRoBXReggrVA@google.com>
+ <20220105213519.g746jzf756nax562@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220105213519.g746jzf756nax562@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 5, 2022 at 4:23 PM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
-> Le 03/01/2022 à 02:51, Arnd Bergmann a écrit :
-> > On Sun, Jan 2, 2022 at 10:32 AM Christophe JAILLET
-> > It looks like the number of remaining files that use the old
-> > interfaces has gone down
-> > a lot more since you last sent these patches. I would suggest you send them as a
-> > series that includes the patch to remove the header as the last change, and
-> > ask Andrew to pick up the ones that remain after this resend into the -mm tree,
-> > possibly after the next -rc1. How many patches do you have left?
-> >
->
-> This would be ~ 10 patches.
-> I sent recently some missing ones because I was not aware of
-> --include-headers. So .h files were missing in my previous patches.
->
->
-> The main remaining issue is linked to files in message/fusion.
-> The patches are big.
-> They have to be looked at carefully because it touches some GFP flags
-> when s/pci_alloc_consistent/dma_alloc_coherent/.
->
-> My last try did not get any attention.
-> Even [1] which is purely mechanical
->
-> I'll try another approach without trying to turn some (hidden)
-> GFP_ATOMIC into GFP_KERNEL.
-> 1st patch: only mechanical changes done with coccinelle, leaving GFP_ATOMIC
-> 2nd patch: add some FIXME comments explaining why some could be turned
-> into GFP_KERNEL
-> 3rd patch: remove the comments and update the GFP flags accordingly.
->
-> So, a maintainer could either apply 1 (no risk at all, should even
-> generate the same .o file), or 1+2 (only FIXME comments for future
-> analysis) or 1+2+3 for full clean-up (if he trusts me and/or has time to
-> check my explanations).
->
-> This way, I hope that some could at least apply the first one.
+On Wed, Jan 05, 2022, Michael Roth wrote:
+> On Wed, Jan 05, 2022 at 07:40:57PM +0000, Sean Christopherson wrote:
+> > As for ucall_init(), I think the best approach would be to make kvm_vm_elf_load()
+> > a static and replace all calls with:
+> > 
+> > 	kvm_vm_load_guest(vm);
+> > 
+> > where its implementation is:
+> > 
+> >   void kvm_vm_load_guest(struct kvm_vm *vm)
+> >   {
+> >   	kvm_vm_elf_load(vm, program_invocation_name);
+> > 
+> > 	ucall_init(vm);
+> >   }
+> > 
+> > The logic being that if a test creates a VM but never loads any code into the guest,
+> > e.g. kvm_create_max_vcpus, then it _can't_ make ucalls.
+> 
+> Makes sense. And if different ops are needed for vmgexit()/tdcall() it
+> could be something like (if based on patches 1-5 of this series, and
+> extending vm_guest_mode as you suggested earlier):
+> 
+>    void kvm_vm_load_guest(struct kvm_vm *vm)
+>    {
+> 
+>      kvm_vm_elf_load(vm, program_invocation_name);
+>   
+>      if (vm->mode == VM_MODE_SEV)
+>   	    ucall_init_ops(vm, ucall_ops_pio_vmgexit);
+>      else (vm->vm_type == VM_MODE_TDX)
 
-If it's down to 10 patches, just send them as a series with Andrew Morton,
-Christoph Hellwig and me as recipients, in addition to the respective
-subsystem maintainers. Christoph and I can make sure that every
-patch is reviewed and then it's either the subsystem maintainers that pick
-them up, and one of us that applies all the remaining ones in the mm,
-dma-mapping, or asm-generic trees.
+I don't think we want to do this here, but instead down in the arch-specific
+ucall_init().  Also, not sure if I was clear before (can't tell what you interpreted
+based on the above snippet), but I think we'll want VM_MODE_SEV etc... to be
+modifiers on top of the VA/PA stuff.
 
-What I've seen from your patches all looks good, and I just want
-them to be done, no need to wait forever for maintainers to reply
-when they have had their chance several times before.
+>   	    ucall_init_ops(vm, ucall_ops_pio_tdcall);
+>      else
+>   	    ucall_init_ops(vm, ucall_ops_pio);
+> 
+> Shame we have to update all the kvm_vm_elf_load() call-sites, but
+> they'd end up potentially breaking things if left as-is anyway.
+> 
+> Were you planning on sending patches for these changes, or should I incorporate
+> your prototype and take a stab at the other changes as part of v2 of this
+> series?
 
-          Arnd
+Nope, all yours.  Thanks!

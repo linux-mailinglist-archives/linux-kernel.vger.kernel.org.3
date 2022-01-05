@@ -2,131 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8935F4858E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 20:07:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B89C74858E3
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 20:07:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243309AbiAETHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 14:07:00 -0500
-Received: from mail-dm3nam07on2069.outbound.protection.outlook.com ([40.107.95.69]:3040
-        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S243343AbiAETGj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 14:06:39 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BPw/Y1kLboOS6ZUUHQpD9klbstDQpo5pSUQYyV2qvfu+k7rNmUhQs2GIlDKQKwTLBvJn1/F79z56m3VFKXMCYH7SLP/tuw6nNn5S6F+VOSrenhHU+6S3dIy22v/S1XX1p/E+RW+EV343WSCfcy7EsHeHsQu1UFlymjObY26bn+fGBOBf6MX6jBwAegjBwwXg/l1hi3Qg4yUPMUT6SYc/GBlVBNDnfTdLk7JW0XbY+PzDz7xyIWq70bK2K48CXwMiDhdsXK72RiKuryqB69hkXBOcHQrI7U+0y6l+uNSTW4bCcjyyGqFbCNNatcJJPNdwDsRqaMOo8lWm5qOqhFJp1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M9w9MbWwhj7AkL0EkVe1UlEi5NQZcn49ih4SKBVNPbw=;
- b=Crw2jEKwRJIX3VaBlOfnG4OH09gQmYaxefrQWj/auDYFoeI8PgHgOFsCVVtYq8okuZvbPm8gZRBUvJtc5LO2TQ5rtcLdJ/srS2tuEq3QzAOoQrFiV6dJVtl541k5cm1GfbV5zqMhkFb3NFU7iJoXG6VOWW9R7Pf25LEV8DO0c6eMJC5+IyAqZSiBxIZ00WTigycMzSo92jis2qEkK/5PMW/RR12f1B1LsTkDyzKkpJj2tibxYaH0qDEFksVjfYSyFc6k5bVkejHnEklGVUNgbNJi90mwlZheIDp905c57KJmvxEab0LqwaSHrJkc1N8Y3VAIls1/CX7vX3B4SbFqEA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M9w9MbWwhj7AkL0EkVe1UlEi5NQZcn49ih4SKBVNPbw=;
- b=KJaeO8GJbSGjuklv2AYEa+dsLehMaZLPQAfl5n74nXNDJUTBHzwsLGL6UULAumRChOSSmZxxXJyxgBLYnfEHERBQdmQ/MYaviFHNlkK8HYtbTdB8rrTCBhNoUBPkT+jhPFh3w5hmdB0S0RgfboM/VdRoRYBKVTIEbOuFfEmA+gnJtfZShnd2fOYURhPMzBhEJc7QfB5wALYXINGG7bZj09Y3KN9EhHcharbS4eQAosdXhMxaDEpA3Jo7SmEB5K7NC3NTDU6gse8tf8L+VTp3Buif87+HVkijizoKJI6b1kjXIH6gM+/uPvKDS5SCIP1bCrBlmmOnM7b5GJa5yS/H8w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
- by BL1PR12MB5301.namprd12.prod.outlook.com (2603:10b6:208:31f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9; Wed, 5 Jan
- 2022 19:06:37 +0000
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::464:eb3d:1fde:e6af]) by BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::464:eb3d:1fde:e6af%5]) with mapi id 15.20.4867.009; Wed, 5 Jan 2022
- 19:06:37 +0000
-Date:   Wed, 5 Jan 2022 15:06:33 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Dust Li <dust.li@linux.alibaba.com>
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Leon Romanovsky <leon@kernel.org>
-Subject: Re: [PATCH rdma-next] RDMA/mlx5: print wc status on CQE error and
- dump needed
-Message-ID: <20220105190633.GC2861973@nvidia.com>
-References: <20211227123806.47530-1-dust.li@linux.alibaba.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211227123806.47530-1-dust.li@linux.alibaba.com>
-X-ClientProxiedBy: SJ0PR13CA0002.namprd13.prod.outlook.com
- (2603:10b6:a03:2c0::7) To BL0PR12MB5506.namprd12.prod.outlook.com
- (2603:10b6:208:1cb::22)
+        id S243346AbiAETHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 14:07:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49568 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243338AbiAETHf (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 14:07:35 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15749C061245
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 11:07:35 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id z29so332582edl.7
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 11:07:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IyMNvvq0PEPzslt4MSGCkpasRaRMjefk5SUq0r41MJo=;
+        b=HCszAIvsRbzHlCtHIRPeDuKPDcR1lrL6BkCRu+HjowLsRZyE6WlMB5UCoxalh9VvvT
+         kNldojtQrvE7JFw+ZnKXRQn72R/lUyGgBVxRVVw5o7OJlhyAP9cJ50FBeLDiJcWfJb0N
+         YXqwklj0PcrrhPDeOOqJIDM2iPvpqRymF2iBU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IyMNvvq0PEPzslt4MSGCkpasRaRMjefk5SUq0r41MJo=;
+        b=k207KUzQt50hebVJpLcpZlqvvOm2m+0oeZNcgd0t/QFHQU1z4p2EuEPNKx/9w5rgsL
+         Gsx8zRIySuaAZV/nX2yirRfBv3jtHnzpLloeqwqefr7BlhBbxh2ZUjiYMhLQV5Z3HbPN
+         SLiG6hS13KmaiHwaqyhnFWTB4XXYJUPuFUqDEoDOYNPFaZrtBYKKMdgmflAiDLt9JsWR
+         dS76Kca/Kd3RCiByFLZPCBaM+g33j2SH/PE/E5vua/ftFlu/W78tdGK1+4nHsXyVxAju
+         XrnIqs3bSUwb8zy9b+xXsRXvZ6iICxItwWq9MGlB+n2FB4Z1cp6X1VXmUoYJg2l2HoLa
+         RnUA==
+X-Gm-Message-State: AOAM530yTaUqiXiIGHR2nHef4ULE9/OyJ7YI1WxO0v0DImqaJjLdTsqb
+        qvkJ7iz4pmBLGhhCg20Asllz4E/HHMFp2CbtoME=
+X-Google-Smtp-Source: ABdhPJyXOx35AwjuSXoWaFSXYSHyKbjcR4GXpKqJ3597HRDn4A7GcFC94ynO1bUIFG8r5iL0ZcNM6w==
+X-Received: by 2002:a05:6402:350:: with SMTP id r16mr805333edw.375.1641409653517;
+        Wed, 05 Jan 2022 11:07:33 -0800 (PST)
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
+        by smtp.gmail.com with ESMTPSA id w18sm16051360edr.67.2022.01.05.11.07.29
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jan 2022 11:07:30 -0800 (PST)
+Received: by mail-wr1-f44.google.com with SMTP id k18so150201wrg.11
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 11:07:29 -0800 (PST)
+X-Received: by 2002:a05:6000:10d2:: with SMTP id b18mr47391843wrx.193.1641409649356;
+ Wed, 05 Jan 2022 11:07:29 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: afff5ff3-8744-47ca-e4cd-08d9d07e7f36
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5301:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB53014F87BB75A4A5DF76959CC24B9@BL1PR12MB5301.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sNzO6aQlUkUMvylsBvDDMCCEhxZXXEMBv5D7dQOUaX8sN840Ckc1jEmw18Cs6CrljXufxF09KYRzfV3E6TVgI9u5lr/DWFcJthKk2uC3kPe9buDyTh3O25Osj2fvICzeyfrOXENNfzEcBoIfT5P5bFSywi2fYIMlQZUYroz0nSjfDbBKVi1wrIihY3ZQof1VN9xg/SuGkerJy5+gMOoD0pPAvE1iz6H9Ogd1ZhejF9epTT8Y/KJPFtobIFxGW3E2DhbObVNC6f9bEixfUSKAd1BlAoGgq94W6xLhCwIooS2WeMPaNFuMX7dx0KCI40hTjLMJ2bRadj51nwsEq0VVjJfgzGq/6clrJPXUZG75YPfWG62gvvbC5SzmLhBXA2WLojgZM/SkDmWz9fDSIhX9ZTWCHCCojILZCPPHeaSRfk8Cw13FxXsMoh7tY0qvlgHGxtV4iqxXrOM4jCoErmHfxdAQcPFUEqvZ+m/PHwuFwjdtuYuCXIiGBUkGYYI8G2CH3Wm9uH57M8O0eUKAO2qLWKpN7Vz+haOYtum1tgCjBIdw7G2fKghOWNFZH7v7SazlS83xy1RSWSdKNQT+vb971Sm2CqWVnCORhOcVwAqNIrzid89Z3PaLz/pmtAP5qrHQXnf4ALLJQGC+bJnGJHH2XZ7g9pC4XZGQX8BuPlMZxJ/CDXt/2HSKeCYfS1qLF6G0mKFCv+r0IAiSV2eLIjW95A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(316002)(38100700002)(8936002)(6506007)(6512007)(8676002)(2616005)(66476007)(86362001)(66946007)(6486002)(66556008)(186003)(4326008)(33656002)(5660300002)(508600001)(2906002)(26005)(36756003)(83380400001)(6666004)(1076003)(6916009)(505234007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LX4UZXWk/VvkZEZYt6d5yXo8tKHhKh4ZRBJS/SfVujo+fuWUGhiEY/OD46wp?=
- =?us-ascii?Q?1QTQltLUmYqHzyyo71FcpZnDNM3IGMApxcKLHm/Ivy3/5z1bDjlXC1kW4udz?=
- =?us-ascii?Q?5zcWg/fxEE4y+EjKdQzgI2VQnjsMyG4bV+ol4c4kQourSWgsr7V9UdPc+Csj?=
- =?us-ascii?Q?E/NEwNwGJ4pmeW+9FiOHLQbZzZ7tyDZj1JUdlhpffKejyIK36LwbACNfNxf7?=
- =?us-ascii?Q?Swqjd7Qk1e48SYPhByfDgiqsoDlaRF69455+3AJtBjTAJxrU8H0UkmSHPzYQ?=
- =?us-ascii?Q?XlRaxP6KEgTMQ/2dJSY2Iw8+GkLXJPmjfiZ1riBtBIFwxEu7DYCl/hXvlNIJ?=
- =?us-ascii?Q?mOvwkS31aGdDnZV82LZFB3vyYMwklXBBu4oAS7soc3+smg9NJZ0SFrNWfGJQ?=
- =?us-ascii?Q?wfsnkglSuHojPMvc1LJskBh3rp9UoJVFAQhgFSdbmAEdN3BNSxdlmIjVgeGN?=
- =?us-ascii?Q?X0yRTNYusO5qTtsU5bumMRIILWiruZUWxYjh0GbOiWXDlTJ90KVOxz2T7d/+?=
- =?us-ascii?Q?ZBwK4UVweRGuKOzl2IyZbm7NsJjLKs1ZDjyrtzQr2fcgWKmQHjilrndAjfon?=
- =?us-ascii?Q?er0/ruqdweZDwVexorunDPOfF0XnxVR7bh71flyEF6iH2AywV3YXdbYUVe82?=
- =?us-ascii?Q?joWUE6HUwLMObYvkFppVUCkLBl15nARcEev20UkX7kqWUJT3exXmuMlQPpGf?=
- =?us-ascii?Q?PClQq2zDOsGMsPCI/gSCMw9KzFbDBgPb8jIEL74lQudMi3CNxvcpG9KQ9kLt?=
- =?us-ascii?Q?vsxpySLKHWC2tMpnbjOltvQpIoR7dG5LB84zkdkQhansRhUwB7vwXZdEiG8l?=
- =?us-ascii?Q?1LR98788jdR/j7Z/GByIgXlcLLDvjgmumuupFaCZT0SVcCRBGM2SEtMFEoy7?=
- =?us-ascii?Q?2OxwkXoukdZbpV3J6+raE6fkgeolhYfrLVmL8/bUjeawu9kyfSDcykSriOW7?=
- =?us-ascii?Q?UZivE4K9pQVbRipNcWnEoDxtoujZMTPlk1sSXo0XJf5BW5YvUNmYcWYpnPON?=
- =?us-ascii?Q?aSyetlwsz+qffoM8HfT+nPalqFBcwzmV54IZwnKe8/GvLJNLLsvIhpgpTodE?=
- =?us-ascii?Q?a5dHJuLibDrh/8rgy/qPgedNm4tR5c549pkMmvCX2Hi4odtN3T2NkTusOVUE?=
- =?us-ascii?Q?vBQf/FOo3zojFPXHKILOTTL7giTRWglrC9thxCy3xeXLZQobMbhUQpSKVPIu?=
- =?us-ascii?Q?QhYApMtL2fSBIOElAvZy3KcDsEvoM2dWUWUM816JzTsGFArH1C81nlyr3QV/?=
- =?us-ascii?Q?JfRqBVEI7CvhDA//bvZ28BBxKgVY0FQlHbPVHTbQFsq2Vd+5W1cVew/KVeVb?=
- =?us-ascii?Q?ZdB1NFqvT6Z4BMbaA2DmsBbrMmiaYXzuBhbRIkywXvqWv+7sYbLLIUiXqAe1?=
- =?us-ascii?Q?UUfb1Jgh+Jrc1Ur3Vf94xfmDiyd0pfKr29K6VKRhja2FUzhHOzTCIpkf0Vx2?=
- =?us-ascii?Q?skcay2KX/JP/HLqvDRfphL/pJUbkspttraJhsMWzwWNQMXiD84jsLe30AaKk?=
- =?us-ascii?Q?mhpAtCwqClwc786Ahd7ttP4Br5IcthoK4xefJ6KPqlTTP6xEw50f0FZ6sVpn?=
- =?us-ascii?Q?bnby4SrOM+jrHVySrC8=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: afff5ff3-8744-47ca-e4cd-08d9d07e7f36
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2022 19:06:37.4176
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6GmCAnHNuKCCg083kiVH7hVU2SpLXFwMfDZp+2LTLxwF+1wt8Ix4meavtrHtd/W8
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5301
+References: <000000000000e8f8f505d0e479a5@google.com> <20211211015620.1793-1-hdanton@sina.com>
+ <YbQUSlq76Iv5L4cC@sol.localdomain> <YdW3WfHURBXRmn/6@sol.localdomain> <CAHk-=wjqh_R9w4-=wfegut2C0Bg=sJaPrayk39JRCkZc=O+gsw@mail.gmail.com>
+In-Reply-To: <CAHk-=wjqh_R9w4-=wfegut2C0Bg=sJaPrayk39JRCkZc=O+gsw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 5 Jan 2022 11:07:13 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjddvNbZBuvh9m_2VYFC1W7HvbP33mAzkPGOCHuVi5fJg@mail.gmail.com>
+Message-ID: <CAHk-=wjddvNbZBuvh9m_2VYFC1W7HvbP33mAzkPGOCHuVi5fJg@mail.gmail.com>
+Subject: Re: psi_trigger_poll() is completely broken
+To:     Eric Biggers <ebiggers@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Hillf Danton <hdanton@sina.com>,
+        syzbot <syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Linux-MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 08:38:06PM +0800, Dust Li wrote:
-> mlx5_handle_error_cqe() only dump the content of the CQE
-> which is raw hex data, and not straighforward for debug.
-> Print WC status message when we got CQE error and dump is
-> need.
-> 
-> Here is an example of how the dmesg log looks like with this:
-> [166755.330649] infiniband mlx5_0: mlx5_handle_error_cqe:333:(pid 0): WC error: 10, message: remote access error
-> [166755.332323] infiniband mlx5_0: dump_cqe:272:(pid 0): dump error cqe
-> [166755.332944] 00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> [166755.333574] 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> [166755.334202] 00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> [166755.334837] 00000030: 00 00 00 00 00 00 88 13 08 03 61 b3 1e a1 42 d3
-> 
-> Signed-off-by: Dust Li <dust.li@linux.alibaba.com>
-> Acked-by: Leon Romanovsky <leonro@nvidia.com>
-> ---
->  drivers/infiniband/hw/mlx5/cq.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+On Wed, Jan 5, 2022 at 10:50 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> That would require that 'psi_trigger_replace()' serialize with the
+> waitqueue lock (easy)
 
-Applied to for-next, thanks
+I take the "easy" back. The other side of that serialization would
+require that the poll() side also re-lookup the trigger pointer under
+that same lock.
 
-Jason
+And you can't do that with the waitqueue lock, because 'poll_wait()'
+does the add_wait_queue() internally, and that will take the waitqueue
+lock. So you can't take and hold the waitqueue lock in the caller in
+poll, it would just deadlock.
+
+And not holding the lock over the call would mean that you'd have a
+small race between adding a new poll waiter, and checking that the
+trigger is still the same one.
+
+We could use another lock - the code in kernel/sched/psi.c already does
+
+        mutex_lock(&seq->lock);
+        psi_trigger_replace(&seq->private, new);
+        mutex_unlock(&seq->lock);
+
+and could use that same lock around the poll sequence too.
+
+But the cgroup_pressure_write() code doesn't even do that, and
+concurrent writes aren't serialized at all (much less concurrent
+poll() calls).
+
+Side note: it looks like concurrent writes in the
+cgroup_pressure_write() is literally broken. Because
+psi_trigger_replace() is *not* handling concurrency, and does that
+
+        struct psi_trigger *old = *trigger_ptr;
+        ....
+        if (old)
+                kref_put(&old->refcount, psi_trigger_destroy);
+
+assuming that the caller holds some lock that makes '*trigger_ptr' a
+stable thing.
+
+Again, kernel/sched/psi.c itself does that already, but the cgroup
+code doesn't seem to.
+
+So the bugs in this area go deeper than "just" poll(). The whole
+psi_trigger_replace() thing is literally broken even ignoring the
+poll() interactions.
+
+Whoever came up with that stupid "replace existing trigger with a
+write()" model should feel bad. It's garbage, and it's actively buggy
+in multiple ways.
+
+                  Linus

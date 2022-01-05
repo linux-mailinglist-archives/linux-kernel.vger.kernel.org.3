@@ -2,84 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA224855C3
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:23:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A474855C6
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241422AbiAEPWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 10:22:51 -0500
-Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:54895 "EHLO
-        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241413AbiAEPWt (ORCPT
+        id S241433AbiAEPXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 10:23:13 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:55974 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241424AbiAEPXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 10:22:49 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0V11dpZL_1641396160;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V11dpZL_1641396160)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 05 Jan 2022 23:22:45 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     ecree.xilinx@gmail.com
-Cc:     habetsm.xilinx@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-        john.fastabend@gmail.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] sfc: Use swap() instead of open coding it
-Date:   Wed,  5 Jan 2022 23:22:37 +0800
-Message-Id: <20220105152237.45991-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Wed, 5 Jan 2022 10:23:12 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C7F8617C9;
+        Wed,  5 Jan 2022 15:23:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C31A7C36AE0;
+        Wed,  5 Jan 2022 15:23:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641396191;
+        bh=ee5Owo3zU5vxkUxfJCeUQuvv8yMKNI4iRfO6jmetJQ4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=m579DXS9iq/ymOI4ZYUnx7B941if1nNEh9yl45zNk3rugpq+87IPVeo2rjyAAov87
+         EC8zXM51rU4ItLwIGU+yIgBgEJnPsWmWTAlaOT5aLj9O0zt8mF/U7DSr2UClcL9Jzd
+         MpvNjt9QyFcTtQH1nnFyr2juOBZjQMWd82WYYsmw=
+Date:   Wed, 5 Jan 2022 16:23:08 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH] headers/uninline: Uninline single-use function:
+ kobject_has_children()
+Message-ID: <YdW33ITu4Hz3+kid@kroah.com>
+References: <YdIfz+LMewetSaEB@gmail.com>
+ <20220103135400.4p5ezn3ntgpefuan@box.shutemov.name>
+ <YdQnfyD0JzkGIzEN@gmail.com>
+ <YdRM7I9E2WGU4GRg@kroah.com>
+ <YdRRl+jeAm/xfU8D@gmail.com>
+ <YdRjRWHgvnqVe8UZ@kroah.com>
+ <YdRkZqGuKCZcRbov@kroah.com>
+ <YdTiF5dVeizYtIDS@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdTiF5dVeizYtIDS@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clean the following coccicheck warning:
+On Wed, Jan 05, 2022 at 01:11:03AM +0100, Ingo Molnar wrote:
+> 
+> * Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> 
+> > On Tue, Jan 04, 2022 at 04:09:57PM +0100, Greg Kroah-Hartman wrote:
+> > > On Tue, Jan 04, 2022 at 02:54:31PM +0100, Ingo Molnar wrote:
+> > > > 
+> > > > * Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> > > > 
+> > > > > On Tue, Jan 04, 2022 at 11:54:55AM +0100, Ingo Molnar wrote:
+> > > > > > There's one happy exception though, all the uninlining patches that 
+> > > > > > uninline a single-call function are probably fine as-is:
+> > > > > 
+> > > > > <snip>
+> > > > > 
+> > > > > >  3443e75fd1f8 headers/uninline: Uninline single-use function: kobject_has_children()
+> > > > > 
+> > > > > Let me go take this right now, no need for this to wait, it should be
+> > > > > out of kobject.h as you rightfully show there is only one user.
+> > > > 
+> > > > Sure - here you go!
+> > > 
+> > > I just picked it out of your git tree already :)
+> > > 
+> > > Along those lines, any objection to me taking at least one other one?
+> > > 3f8757078d27 ("headers/prep: usb: gadget: Fix namespace collision") and
+> 
+> Ack.
+> 
+> > > 6fb993fa3832 ("headers/deps: USB: Optimize <linux/usb/ch9.h>
+> 
+> Ack.
 
-./drivers/net/ethernet/sfc/efx_channels.c:870:36-37: WARNING opportunity
-for swap().
+This one required me to fix up a usb core file that was only including
+this .h file and not kernel.h which it also needed.  Now resolved in my
+tree.
 
-./drivers/net/ethernet/sfc/efx_channels.c:824:36-37: WARNING opportunity
-for swap().
+> > > dependencies, remove <linux/device.h>") look like I can take now into my
+> > > USB tree with no problems.
+> > 
+> > Also these look good to go now:
+> > 	bae9ddd98195 ("headers/prep: Fix non-standard header section: drivers/usb/cdns3/core.h")
+> 
+> Ack.
+> 
+> > 	c027175b37e5 ("headers/prep: Fix non-standard header section: drivers/usb/host/ohci-tmio.c")
+> 
+> Ack.
+> 
+> Note that these latter two patches just simplified the task of my 
+> (simplistic) tooling, which is basically a shell script that inserts
+> header dependencies to the head of .c and .h files, right in front of
+> the first #include line it encounters.
+> 
+> These two patches do have some marginal clean-up value too, so I'm not 
+> opposed to merging them - just wanted to declare their true role. :-)
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/net/ethernet/sfc/efx_channels.c | 14 ++++----------
- 1 file changed, 4 insertions(+), 10 deletions(-)
+They all are sane cleanups, so I've taken them in my tree now.  Make
+your patchset a bit smaller against 5.17-rc1 when that comes around :)
 
-diff --git a/drivers/net/ethernet/sfc/efx_channels.c b/drivers/net/ethernet/sfc/efx_channels.c
-index b015d1f2e204..ead550ae2709 100644
---- a/drivers/net/ethernet/sfc/efx_channels.c
-+++ b/drivers/net/ethernet/sfc/efx_channels.c
-@@ -819,11 +819,8 @@ int efx_realloc_channels(struct efx_nic *efx, u32 rxq_entries, u32 txq_entries)
- 	old_txq_entries = efx->txq_entries;
- 	efx->rxq_entries = rxq_entries;
- 	efx->txq_entries = txq_entries;
--	for (i = 0; i < efx->n_channels; i++) {
--		channel = efx->channel[i];
--		efx->channel[i] = other_channel[i];
--		other_channel[i] = channel;
--	}
-+	for (i = 0; i < efx->n_channels; i++)
-+		swap(efx->channel[i], other_channel[i]);
- 
- 	/* Restart buffer table allocation */
- 	efx->next_buffer_table = next_buffer_table;
-@@ -865,11 +862,8 @@ int efx_realloc_channels(struct efx_nic *efx, u32 rxq_entries, u32 txq_entries)
- 	/* Swap back */
- 	efx->rxq_entries = old_rxq_entries;
- 	efx->txq_entries = old_txq_entries;
--	for (i = 0; i < efx->n_channels; i++) {
--		channel = efx->channel[i];
--		efx->channel[i] = other_channel[i];
--		other_channel[i] = channel;
--	}
-+	for (i = 0; i < efx->n_channels; i++)
-+		swap(efx->channel[i], other_channel[i]);
- 	goto out;
- }
- 
--- 
-2.20.1.7.g153144c
+thanks,
 
+greg k-h

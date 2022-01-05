@@ -2,98 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9146485631
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:50:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2EE2485634
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241683AbiAEPuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 10:50:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241661AbiAEPt7 (ORCPT
+        id S241701AbiAEPv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 10:51:27 -0500
+Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:47864
+        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241661AbiAEPvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 10:49:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C107C061245;
-        Wed,  5 Jan 2022 07:49:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 5 Jan 2022 10:51:19 -0500
+Received: from localhost.localdomain (unknown [222.129.35.96])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E8EC6179C;
-        Wed,  5 Jan 2022 15:49:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC910C36AE9;
-        Wed,  5 Jan 2022 15:49:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641397798;
-        bh=uDYG/IJoBKEoZh832BQxUsG+vyQ8MDYSgq+gprMQZjs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tWN45LEnYa4XxwE0cD1n4KegcPxZSM9z2lAbWG9UBdGAgXFBg+5YcpOPMGuJUIwMm
-         xsL49YKwMER98DdIlcm30OeFOm0aW9xmE6nbry7vpR6aHBGPCxUCqlWCrV5ZPXYq5j
-         s/xoe+ecZ0c5p9Fa/4WPcEP/4Ay6B7o0rhKD3ncYX+s/fB4b8ijsz+miGLJajeDvB5
-         0ibjN/pn3YIgO/qkvTkVFM4ilEa0MYQip2BPzqeQgy/1waafTPBbOHzu3oOE0oFnn2
-         ZckkEYN6Hw2V1yJZbjj4CK4Byiiy/25ISTChN8d2jsD45VsyXIkwCgc1hJT4SZagwo
-         JbQYrVIRmW86A==
-Received: by pali.im (Postfix)
-        id 5035782A; Wed,  5 Jan 2022 16:49:55 +0100 (CET)
-Date:   Wed, 5 Jan 2022 16:49:55 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        PCI <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 08/11] PCI: mvebu: Use child_ops API
-Message-ID: <20220105154955.lxhnhjgjsiwhuffq@pali>
-References: <20220105150239.9628-1-pali@kernel.org>
- <20220105150239.9628-9-pali@kernel.org>
- <CAL_Jsq+1hoAUVOzyOGZ1vVMsChhHJJpzk5HNU4Gi=Luy_8LArA@mail.gmail.com>
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 5EB083FCC6;
+        Wed,  5 Jan 2022 15:51:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1641397877;
+        bh=tId8JYRxg2oP+VXE++C2q9o8HqxEgkuCA0qN7l8VohE=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=lTc3OV4gjX9KbR41jGNoIM89Qpd099P0EXLs4dTh92f8cPcXpnZnGVOmJaQjOwRNC
+         5jod4T8nPfUoXCuxdjSKySm3GsiJdiPrKr7tcwizs+x7J+FzV+9at/QBaOWdrRnxHQ
+         eGDP0l4WTpeOuxSlLLhWJllxpRUSbPGhHoyks42MfSPs31Jcv+GkScSou4c6GaDGGC
+         nWmcvx6TE0NnoW/Y1uG6rYaBCGeqCXONY14Xs6AINZRwuujOpm8HYTrw9rDZS9N/hZ
+         zuA9R8Vmqx9BlcYsF0IiNRSqfLlfhGdCHXz60ShYfRLjBXeT1InGWh4osmvwPlQ+Td
+         B6KXQwxIOiqzA==
+From:   Aaron Ma <aaron.ma@canonical.com>
+To:     aaron.ma@canonical.com, kuba@kernel.org,
+        henning.schild@siemens.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     davem@davemloft.net, hayeswang@realtek.com, tiwai@suse.de
+Subject: [PATCH] Revert "net: usb: r8152: Add MAC passthrough support for more Lenovo Docks"
+Date:   Wed,  5 Jan 2022 23:51:02 +0800
+Message-Id: <20220105155102.8557-1-aaron.ma@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_Jsq+1hoAUVOzyOGZ1vVMsChhHJJpzk5HNU4Gi=Luy_8LArA@mail.gmail.com>
-User-Agent: NeoMutt/20180716
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday 05 January 2022 09:41:51 Rob Herring wrote:
-> > @@ -347,6 +375,11 @@ static int mvebu_pcie_hw_wr_conf(struct mvebu_pcie_port *port,
-> >         return PCIBIOS_SUCCESSFUL;
-> >  }
-> >
-> > +static struct pci_ops mvebu_pcie_child_ops = {
-> > +       .read = mvebu_pcie_child_rd_conf,
-> > +       .write = mvebu_pcie_child_wr_conf,
-> > +};
-> > +
-> >  /*
-> >   * Remove windows, starting from the largest ones to the smallest
-> >   * ones.
-> > @@ -862,25 +895,12 @@ static int mvebu_pcie_wr_conf(struct pci_bus *bus, u32 devfn,
-> >  {
-> >         struct mvebu_pcie *pcie = bus->sysdata;
-> >         struct mvebu_pcie_port *port;
-> > -       int ret;
-> >
-> >         port = mvebu_pcie_find_port(pcie, bus, devfn);
-> >         if (!port)
-> >                 return PCIBIOS_DEVICE_NOT_FOUND;
-> 
-> It would be nice to go from 'bus' to 'bridge' ptr directly, but I
-> still had this in my version. I guess a standard RP struct as part of
-> decoupling host bridges from RPs would solve this issue.
+This reverts commit f77b83b5bbab53d2be339184838b19ed2c62c0a5.
 
-Hello!
+This change breaks multiple usb to ethernet dongles attached on Lenovo
+USB hub.
 
-The problem is somewhere else. This driver is misusing bus 0 for doing
-non-transparent bus-bridging between multiple PCI domains by registering
-roots ports across all domains into domain 0, bus 0. All details are
-in this my patch which documents this strange driver behavior:
-https://lore.kernel.org/linux-pci/20211125124605.25915-12-pali@kernel.org/
+Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
+---
+ drivers/net/usb/r8152.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-So the correct solution is is split these multidomain mixing and then
-every domain would have exactly one root port (as it is designed in HW).
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index f9877a3e83ac..4a02f33f0643 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -9603,9 +9603,12 @@ static int rtl8152_probe(struct usb_interface *intf,
+ 		netdev->hw_features &= ~NETIF_F_RXCSUM;
+ 	}
+ 
+-	if (udev->parent &&
+-			le16_to_cpu(udev->parent->descriptor.idVendor) == VENDOR_ID_LENOVO) {
+-		tp->lenovo_macpassthru = 1;
++	if (le16_to_cpu(udev->descriptor.idVendor) == VENDOR_ID_LENOVO) {
++		switch (le16_to_cpu(udev->descriptor.idProduct)) {
++		case DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2:
++		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
++			tp->lenovo_macpassthru = 1;
++		}
+ 	}
+ 
+ 	if (le16_to_cpu(udev->descriptor.bcdDevice) == 0x3011 && udev->serial &&
+-- 
+2.30.2
+

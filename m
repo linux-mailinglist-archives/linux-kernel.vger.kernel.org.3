@@ -2,92 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C6B485795
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 18:45:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54BA948579C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 18:47:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242495AbiAERpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 12:45:30 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:58606 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237699AbiAERpU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 12:45:20 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 02AC0CE0451;
-        Wed,  5 Jan 2022 17:45:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C534C36AE0;
-        Wed,  5 Jan 2022 17:45:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641404717;
-        bh=Q3V6GchDz78dmmg78l3g/qEnjx4BoPVZZK1V2rhQnWg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ofv2KE4rUB3IDE5zL0LXmcN71knBnGoHLvDV2Kto/Au/uS6xKi4fnQx0ec7kw172w
-         BbDNFOrbPnuJOnu/tQCE3V9lQ2JSWQ1I1m7/yWycIU8F9uEsfOdXaldGfOgLh1Xgpb
-         D3biVEQT9XNIZXsP9hMsWsnfhqjojMiwV0zHGZ1smVOUaE0AlOMQDfH+Vwpzjde+IZ
-         4EI8Mn5CNoE2cfdgQzkACRm6y5W/dHKF/2rQvfDraCSyxaoyV29AuGF8wzBFLrrjtU
-         Mhcf9BXbMVP9aEwYgBR/xsrhHli0xmRbJ4N5MsmsisGMstkwuV+eqF9nmkciju8Qzq
-         y0rPZl0QRkSeA==
-Date:   Wed, 5 Jan 2022 09:45:17 -0800
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
+        id S242515AbiAERqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 12:46:55 -0500
+Received: from mga09.intel.com ([134.134.136.24]:35733 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242509AbiAERqw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 12:46:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641404812; x=1672940812;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HG/5iccwAFaXwpkSi5oT26UvgeoYhpgBrYfY7nFNaIU=;
+  b=GNn81nuHZEv4Ht2ZyJ5jWQNQT5mI0b/iI+Q2NviLkzJzgyM5FcxQpoKq
+   3+KeXkIPRcm+/JC27LeW/NR8nLKFUG4MG86dXpPX2ax1lk6wxvisMzMzQ
+   3dKo6d2nOD2XMKFLmPtN5npsZ/uiZjQ0DFz8CUoKQK5VI+KoNotm5AStF
+   e0QNr6atBrzJ/dp4cc2BHo97T/G4EKVvBDISu4meRkdBJSb98ksQxthSo
+   L1yibD1RIELsl+HsoU1lsSNk7+jR5DbB9HZbRlf9s2d1cU7dFuYGV2sIZ
+   uz7tnRw5ndWx7+bsDdRMW5YSXkkoNAV/TlI0jBlQJPf6hHuLDQekW2vwA
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242292507"
+X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
+   d="scan'208";a="242292507"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 09:46:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
+   d="scan'208";a="513052828"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 05 Jan 2022 09:46:48 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n5AN5-000Gtv-NX; Wed, 05 Jan 2022 17:46:47 +0000
+Date:   Thu, 6 Jan 2022 01:45:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        david <david@fromorbit.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jane Chu <jane.chu@oracle.com>
-Subject: Re: [PATCH v9 01/10] dax: Use percpu rwsem for
- dax_{read,write}_lock()
-Message-ID: <20220105174517.GI31606@magnolia>
-References: <20211226143439.3985960-1-ruansy.fnst@fujitsu.com>
- <20211226143439.3985960-2-ruansy.fnst@fujitsu.com>
- <CAPcyv4gkxuFRGh57nYrpS8mXo+5j-7=KGNn-gULgLGthZQPo2g@mail.gmail.com>
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     kbuild-all@lists.01.org, Sudeep Holla <sudeep.holla@arm.com>
+Subject: [RFC PATCH] ACPI: PCC: pcc_ctx can be static
+Message-ID: <20220105174554.GA29945@1e936cf764ba>
+References: <20220103155838.616580-1-sudeep.holla@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPcyv4gkxuFRGh57nYrpS8mXo+5j-7=KGNn-gULgLGthZQPo2g@mail.gmail.com>
+In-Reply-To: <20220103155838.616580-1-sudeep.holla@arm.com>
+X-Patchwork-Hint: ignore
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 02:44:08PM -0800, Dan Williams wrote:
-> On Sun, Dec 26, 2021 at 6:35 AM Shiyang Ruan <ruansy.fnst@fujitsu.com> wrote:
-> >
-> > In order to introduce dax holder registration, we need a write lock for
-> > dax.
-> 
-> As far as I can see, no, a write lock is not needed while the holder
-> is being registered.
-> 
-> The synchronization that is needed is to make sure that the device
-> stays live over the registration event, and that any in-flight holder
-> operations are flushed before the device transitions from live to
-> dead, and that in turn relates to the live state of the pgmap.
-> 
-> The dax device cannot switch from live to dead without first flushing
-> all readers, so holding dax_read_lock() over the register holder event
-> should be sufficient.
+drivers/acpi/acpi_pcc.c:34:22: warning: symbol 'pcc_ctx' was not declared. Should it be static?
 
-...and perhaps add a comment describing that this is what the
-synchronization primitive is really protecting against?  The first time
-I read through this patchset, I assumed the rwsem was protecting
-&dax_hosts and was confused when I saw the one use of dax_write_lock.
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
+ acpi_pcc.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---D
-
-> If you are worried about 2 or more potential
-> holders colliding at registration time, I would expect that's already
-> prevented by block device exclusive holder synchronization, but you
-> could also use cmpxchg and a single pointer to a 'struct dax_holder {
-> void *holder_data, struct dax_holder_operations *holder_ops }'. If you
-> are worried about memory_failure triggering while the filesystem is
-> shutting down it can do a synchronize_srcu(&dax_srcu) if it really
-> needs to ensure that the notify path is idle after removing the holder
-> registration.
-> 
-> ...are there any cases remaining not covered by the above suggestions?
+diff --git a/drivers/acpi/acpi_pcc.c b/drivers/acpi/acpi_pcc.c
+index 64552fdb73470..9df4d740b52a6 100644
+--- a/drivers/acpi/acpi_pcc.c
++++ b/drivers/acpi/acpi_pcc.c
+@@ -31,7 +31,7 @@ struct pcc_data {
+ 	struct acpi_pcc_info ctx;
+ };
+ 
+-struct acpi_pcc_info pcc_ctx;
++static struct acpi_pcc_info pcc_ctx;
+ 
+ static void pcc_rx_callback(struct mbox_client *cl, void *m)
+ {

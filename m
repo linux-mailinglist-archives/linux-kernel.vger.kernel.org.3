@@ -2,123 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B34485339
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 14:07:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A753485331
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 14:05:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236825AbiAENHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 08:07:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236830AbiAENHB (ORCPT
+        id S236788AbiAENFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 08:05:09 -0500
+Received: from mail-il1-f198.google.com ([209.85.166.198]:45736 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236072AbiAENFH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 08:07:01 -0500
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2179C061761;
-        Wed,  5 Jan 2022 05:07:00 -0800 (PST)
-Received: by mail-ed1-x541.google.com with SMTP id z9so91825987edm.10;
-        Wed, 05 Jan 2022 05:07:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WnNpFiRXIcbe/rQ88mzpqZm3Y+nspDIbixstGluci7A=;
-        b=pfpod37ny0k6n+YjaesFuw2FbJmXlSV4dPobriBgBQxhnB69Wl+WH1oG7S82S2yq2X
-         mcAtWS8ZqrREZCPm9Ix9sSk3u+EFjI79zCEt0vdgV2qXBVjIhk3im0xv2WFrrB1o0DP7
-         OYmmJPYZGhrmSNi5vNIfLGwRu7Wy3MUrwB3XENFie4ppriIuIQ0KYX9/GvspopDSaFEY
-         +2pFcYaP/kKLszrXWwvqz2b36BKMCQfYZXM1Mb+TDTdkme8CgCtJy34O5EXXREfEUa+z
-         66jmQgVvUd9neaih7HYehix0sCKcYwd9Xb7onAQbcC/NBiaA3Az11TptE62O+U6/IBT9
-         hQ6Q==
+        Wed, 5 Jan 2022 08:05:07 -0500
+Received: by mail-il1-f198.google.com with SMTP id k14-20020a056e021a8e00b002b4b2388c48so20930437ilv.12
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 05:05:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WnNpFiRXIcbe/rQ88mzpqZm3Y+nspDIbixstGluci7A=;
-        b=X7hSgCJAU6zFihnixkIYWXb9FE7g5MtgOp2Dgy6SG+NccIyf9gBTW5gQhBQSDrRuDy
-         1BQ9dceyJ6CFH3TJ/qtmNPIQmQ0ixlN4+dkTAFQtWLFIzAH9UCcXCDzP36HoiYVzsI4B
-         9yJfUQ7aJTTWRQ2saGudhrAzel8o4KQpfA/sL/lkZynzBsk1zsAPUYjebwL35CIvA/k1
-         b/+tm67KXiJJXFMFJ6GiP8blbet1Djin+Lg0ZYuxY9uVm8/mJ2KSKNFq2SkGUQZryq1d
-         dk3xiFF1Y1bwa/NthtmRSvowVgBohktVsvBJcZILwMkyGmlqOFID+RHVCwtnxGMZ5xiI
-         /L+w==
-X-Gm-Message-State: AOAM533rOdrRJio/2wzhVRrmPHxFNlwbrdF4fErfInCA3b3dLgAyTABb
-        Iy0+Q7eAne6H2R/i4YBGMauIG99vbRiaWukJci4=
-X-Google-Smtp-Source: ABdhPJzg7Pyai++3/6t0wLyt+p4dh9JqbkdiR+BepUJpIJ4cfmb2VRJvuHA0eclte6uT2u0Abhl6sL+huMVq3GKwayk=
-X-Received: by 2002:a17:906:9912:: with SMTP id zl18mr751316ejb.348.1641388019538;
- Wed, 05 Jan 2022 05:06:59 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=HSRdWTMwZ0NVGbhn82fv0ZdfTEVZeKB9Mpbh30gZMkU=;
+        b=SSRHAyWTfS7g7Zn5uduoscuUBmvrpK+quXyJCUDVvqaBCcA4Zd3A8hl3FFEOWaeEiu
+         foo0ThcI6hQv7AXNWEnK6p17mxBWsZZqFdHVOjrgh6pJlm4q9vwCFKY5Wt7MlB5YvrbS
+         OU3I79EzpUgnJLyhIMpp6AfPVfg7299YNUnRDXnRPDJ5eiq1latqhkF1tYJAFDf7iXQq
+         Av7KSHo6jGHhX3eso/qXIJ0RwG5KO+GoMmHwvMk6FhZVplFNR09vES/KLjt76rgdrM6U
+         RlEoHw4GxdD7spWZwtRjo3CQPNDVbWaPw1jKJXGv0bYIsiyFnW6Bt23jMbHaYhsV/VP4
+         Z5DQ==
+X-Gm-Message-State: AOAM533JBB3U23wN86hxCK3oJ1q6jzzOXiE5LR3Ru/PRPqBsvt3xGYkc
+        jX4V5QBBXG/wi0YmjdHyGrczC/98SFnS70mD7/vEpFzR6rLJ
+X-Google-Smtp-Source: ABdhPJy5x96xjIKmmkdWPCYacNAFMeYNDaWDDSM8GrSzjPCLFjWw7wZ0/pJUL3qkYuuidqhU5Y+GAzF7q6+5X9nh6352KMTjpd7z
 MIME-Version: 1.0
-References: <20211230080305.1068950-1-imagedong@tencent.com>
- <20211230080305.1068950-2-imagedong@tencent.com> <5cf64605-7005-ac06-6ee1-18547910697a@iogearbox.net>
-In-Reply-To: <5cf64605-7005-ac06-6ee1-18547910697a@iogearbox.net>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Wed, 5 Jan 2022 21:03:13 +0800
-Message-ID: <CADxym3aBqBPAMT59dbDoAHvVyXq9ZQBc99Z+kje40UmzHUp+QQ@mail.gmail.com>
-Subject: Re: [PATCH v2 net-next 1/2] net: bpf: handle return value of BPF_CGROUP_RUN_PROG_INET{4,6}_POST_BIND()
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Menglong Dong <imagedong@tencent.com>
+X-Received: by 2002:a02:cf82:: with SMTP id w2mr24004765jar.314.1641387906942;
+ Wed, 05 Jan 2022 05:05:06 -0800 (PST)
+Date:   Wed, 05 Jan 2022 05:05:06 -0800
+In-Reply-To: <66341bb1-a479-cdc8-0928-3c882ac77712@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000021c8c305d4d56799@google.com>
+Subject: Re: [syzbot] KMSAN: uninit-value in ax88178_reset
+From:   syzbot <syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com>
+To:     andrew@lunn.ch, davem@davemloft.net, glider@google.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux@rempel-privat.de,
+        netdev@vger.kernel.org, paskripkin@gmail.com,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 5, 2022 at 9:01 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->
-> On 12/30/21 9:03 AM, menglong8.dong@gmail.com wrote:
-> [...]
-> > diff --git a/include/net/sock.h b/include/net/sock.h
-> > index 44cc25f0bae7..f5fc0432374e 100644
-> > --- a/include/net/sock.h
-> > +++ b/include/net/sock.h
-> > @@ -1209,6 +1209,7 @@ struct proto {
-> >       void                    (*unhash)(struct sock *sk);
-> >       void                    (*rehash)(struct sock *sk);
-> >       int                     (*get_port)(struct sock *sk, unsigned short snum);
-> > +     void                    (*put_port)(struct sock *sk);
-> >   #ifdef CONFIG_BPF_SYSCALL
-> >       int                     (*psock_update_sk_prot)(struct sock *sk,
-> >                                                       struct sk_psock *psock,
-> > diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-> > index 5d18d32557d2..8784e72d4b8b 100644
-> > --- a/net/ipv4/af_inet.c
-> > +++ b/net/ipv4/af_inet.c
-> > @@ -531,6 +531,8 @@ int __inet_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
-> >                       err = BPF_CGROUP_RUN_PROG_INET4_POST_BIND(sk);
-> >                       if (err) {
-> >                               inet->inet_saddr = inet->inet_rcv_saddr = 0;
-> > +                             if (sk->sk_prot->get_port)
-> > +                                     sk->sk_prot->put_port(sk);
-> >                               goto out_release_sock;
-> >                       }
-> >               }
-> [...]
-> > diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
-> > index d1636425654e..ddfc6821e682 100644
-> > --- a/net/ipv6/af_inet6.c
-> > +++ b/net/ipv6/af_inet6.c
-> > @@ -413,6 +413,8 @@ static int __inet6_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
-> >                       if (err) {
-> >                               sk->sk_ipv6only = saved_ipv6only;
-> >                               inet_reset_saddr(sk);
-> > +                             if (sk->sk_prot->get_port)
-> > +                                     sk->sk_prot->put_port(sk);
-> >                               goto out;
-> >                       }
-> >               }
->
-> I presume both tests above should test for non-zero sk->sk_prot->put_port
-> callback given that is what they end up calling when true, no?
->
+Hello,
 
-You are right, I think that I made a big mistake here...:/
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Thanks!
-Menglong Dong
+Reported-and-tested-by: syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         81c325bb kmsan: hooks: do not check memory in kmsan_in..
+git tree:       https://github.com/google/kmsan.git master
+kernel config:  https://syzkaller.appspot.com/x/.config?x=46a956fc7a887c60
+dashboard link: https://syzkaller.appspot.com/bug?extid=6ca9f7867b77c2d316ac
+compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=10d0da73b00000
+
+Note: testing is done by a robot and is best-effort only.

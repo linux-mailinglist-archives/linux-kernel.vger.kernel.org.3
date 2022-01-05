@@ -2,132 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2C448523C
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:04:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1657B485238
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:04:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236389AbiAEMEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 07:04:50 -0500
-Received: from mga18.intel.com ([134.134.136.126]:48520 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239972AbiAEMEm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 07:04:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641384282; x=1672920282;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kYIb/dOGRrqK3IjlCBA1zi0pKK37fygCdMsbt9ergPk=;
-  b=lxAdILwGc+wCrLMrjyG+wc/Fn+kAc/7zv4InaZfPMCtqykNFJU7nxU5d
-   Krsd4uwv3fxMBV+pxWpcRYcQQkDUTnk/2DVE/5SVnmm+ZfoDwcKjvcJH1
-   QQvy0zVnRRhJduVbd3vZDEt9aE6Np653IGx/raJ/3dy1rZ5ac8Zuzf5z/
-   UMFcIxQs/dw+BBgNftZAuHRjDUBZxyzXAjOYnG7t88dUS/RRaoq2naEm/
-   iRSL/Oh0+bUmY03kDTg0oCnKVBsyYgeqCuvV/+bxP8PA38RtPIXTzcuaK
-   nis6C8rA75+5+xxdnOAD898j0R55FRKJW0iLyAA9Q1x/NIUmhuGkTh2wm
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="229242469"
-X-IronPort-AV: E=Sophos;i="5.88,263,1635231600"; 
-   d="scan'208";a="229242469"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 04:04:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,263,1635231600"; 
-   d="scan'208";a="472469743"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 05 Jan 2022 04:04:38 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n551x-000Ga0-Sy; Wed, 05 Jan 2022 12:04:37 +0000
-Date:   Wed, 5 Jan 2022 20:03:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: net/ipv6/ip6_gre.c:861:20: warning: unused function
- 'ip6gre_tnl_addr_conflict'
-Message-ID: <202201051937.PF3UZQy3-lkp@intel.com>
+        id S239925AbiAEMEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 07:04:22 -0500
+Received: from mail-il1-f198.google.com ([209.85.166.198]:46911 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239923AbiAEMEV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 07:04:21 -0500
+Received: by mail-il1-f198.google.com with SMTP id i9-20020a056e021d0900b002b3e956903dso21335559ila.13
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 04:04:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=vlosiNkLfvR5wFR8TE+UyXMuDj/qYsdFOTsef1bsPDY=;
+        b=OEm9v2EZx9Db/kQ87wrMAuB/T59SlAlJTrsau7z8OtiG6JlOGsJJGEXPsFklxLGyOL
+         LgFu0p7DHUFOPgn0lWtwEb8qPvm/Z+Do41Sk1apBxyGOAxUv3BUQihD2NQ2/xqPoH/Uv
+         6kOFj6zF8wkSmGYDTXIW/wrc6UX8D9bpivS1gsTFoh6WEu5PQjE8vYP3xVcajM2iJzq2
+         W/ZpzpWMezRcTCcl6I0Brz25EoNtaihBhOCr6LxbuBsaqRdhbtdhf9PPXe+wLBIHjbWT
+         G96c1pcHMAyoL6hKifEVpVZOjh3258dxPb4mHOVtJMkZqtnEl5Uja+ydtDKIXSWnL0Vd
+         eSsQ==
+X-Gm-Message-State: AOAM530VlN/o2uAm1/CpVvqPlcQs9vuXF1LXvDxwAJh48dTNvODX3Cff
+        UtVt+U1aob1sUPqZqjN8RVnmMCLMaAyGa1rDhPWaN61VJfkj
+X-Google-Smtp-Source: ABdhPJyMTyM54skcRggviO4qzMc1f3d5yRrSmguwztxsHvvTv5T5FnnyD1crPPg10YPD68gbQiLbXAosYdSfSZzctvOwGxJDT7MZ
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Received: by 2002:a05:6638:160d:: with SMTP id x13mr24582724jas.120.1641384260891;
+ Wed, 05 Jan 2022 04:04:20 -0800 (PST)
+Date:   Wed, 05 Jan 2022 04:04:20 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cf7a2405d4d48d3b@google.com>
+Subject: [syzbot] KMSAN: uninit-value in ax88178_reset
+From:   syzbot <syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com>
+To:     andrew@lunn.ch, davem@davemloft.net, glider@google.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux@rempel-privat.de,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c9e6606c7fe92b50a02ce51dda82586ebdf99b48
-commit: 919067cc845f323a80b6fe987b64238bd82d309e net: add CONFIG_PCPU_DEV_REFCNT
-date:   10 months ago
-config: mips-randconfig-r002-20220105 (https://download.01.org/0day-ci/archive/20220105/202201051937.PF3UZQy3-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d5b6e30ed3acad794dd0aec400e617daffc6cc3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=919067cc845f323a80b6fe987b64238bd82d309e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 919067cc845f323a80b6fe987b64238bd82d309e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/msm/ fs/ net/ipv6/
+Hello,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+syzbot found the following issue on:
 
-All warnings (new ones prefixed by >>):
+HEAD commit:    b0a8b5053e8b kmsan: core: add dependency on DEBUG_KERNEL
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=159cf693b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=46a956fc7a887c60
+dashboard link: https://syzkaller.appspot.com/bug?extid=6ca9f7867b77c2d316ac
+compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14413193b00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=127716a3b00000
 
->> net/ipv6/ip6_gre.c:861:20: warning: unused function 'ip6gre_tnl_addr_conflict'
-   static inline bool ip6gre_tnl_addr_conflict(const struct ip6_tnl
-   ^
-   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
-   .set mips64r2
-   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/atomic.h", .line = 154, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
-   1: ll $1, $2 # atomic_fetch_sub
-   subu $0, $1, $3
-   sc $0, $2
-   beqz $0, 1b
-   .set pop
-   move $0, $1
-   '
-   clang-14: error: clang frontend command failed with exit code 70 (use -v to see invocation)
-   clang version 14.0.0 (git://gitmirror/llvm_project d5b6e30ed3acad794dd0aec400e617daffc6cc3d)
-   Target: mipsel-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-d5b6e30ed3/bin
-   clang-14: note: diagnostic msg:
-   Makefile arch drivers fs include kernel net nr_bisected scripts sound source usr
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com
 
+asix 1-1:0.0 eth1: Failed to read reg index 0x0000: -32
+asix 1-1:0.0 eth1: Failed to read reg index 0x0000: -32
+=====================================================
+BUG: KMSAN: uninit-value in ax88178_reset+0xfd2/0x1590 drivers/net/usb/asix_devices.c:946 drivers/net/usb/asix_devices.c:946
+ ax88178_reset+0xfd2/0x1590 drivers/net/usb/asix_devices.c:946 drivers/net/usb/asix_devices.c:946
+ usbnet_open+0x16d/0x1940 drivers/net/usb/usbnet.c:894 drivers/net/usb/usbnet.c:894
+ __dev_open+0x920/0xb90 net/core/dev.c:1490 net/core/dev.c:1490
+ __dev_change_flags+0x4da/0xd40 net/core/dev.c:8796 net/core/dev.c:8796
+ dev_change_flags+0xf5/0x280 net/core/dev.c:8867 net/core/dev.c:8867
+ devinet_ioctl+0xfc1/0x3060 net/ipv4/devinet.c:1144 net/ipv4/devinet.c:1144
+ inet_ioctl+0x59f/0x820 net/ipv4/af_inet.c:969 net/ipv4/af_inet.c:969
+ sock_do_ioctl net/socket.c:1118 [inline]
+ sock_do_ioctl net/socket.c:1118 [inline] net/socket.c:1235
+ sock_ioctl+0xa3f/0x13d0 net/socket.c:1235 net/socket.c:1235
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:874 [inline]
+ vfs_ioctl fs/ioctl.c:51 [inline] fs/ioctl.c:860
+ __do_sys_ioctl fs/ioctl.c:874 [inline] fs/ioctl.c:860
+ __se_sys_ioctl+0x2df/0x4a0 fs/ioctl.c:860 fs/ioctl.c:860
+ __x64_sys_ioctl+0xd8/0x110 fs/ioctl.c:860 fs/ioctl.c:860
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline] arch/x86/entry/common.c:82
+ do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-vim +/ip6gre_tnl_addr_conflict +861 net/ipv6/ip6_gre.c
+Local variable status created at:
+ ax88178_reset+0x69/0x1590
+ usbnet_open+0x16d/0x1940 drivers/net/usb/usbnet.c:894 drivers/net/usb/usbnet.c:894
 
-c12b395a46646b xeb@mail.ru 2012-08-10  846  
-c12b395a46646b xeb@mail.ru 2012-08-10  847  /**
-7ccbdff13e8df6 Sun Lianwen 2018-05-03  848   * ip6gre_tnl_addr_conflict - compare packet addresses to tunnel's own
-c12b395a46646b xeb@mail.ru 2012-08-10  849   *   @t: the outgoing tunnel device
-c12b395a46646b xeb@mail.ru 2012-08-10  850   *   @hdr: IPv6 header from the incoming packet
-c12b395a46646b xeb@mail.ru 2012-08-10  851   *
-c12b395a46646b xeb@mail.ru 2012-08-10  852   * Description:
-c12b395a46646b xeb@mail.ru 2012-08-10  853   *   Avoid trivial tunneling loop by checking that tunnel exit-point
-c12b395a46646b xeb@mail.ru 2012-08-10  854   *   doesn't match source of incoming packet.
-c12b395a46646b xeb@mail.ru 2012-08-10  855   *
-c12b395a46646b xeb@mail.ru 2012-08-10  856   * Return:
-c12b395a46646b xeb@mail.ru 2012-08-10  857   *   1 if conflict,
-c12b395a46646b xeb@mail.ru 2012-08-10  858   *   0 else
-c12b395a46646b xeb@mail.ru 2012-08-10  859   **/
-c12b395a46646b xeb@mail.ru 2012-08-10  860  
-c12b395a46646b xeb@mail.ru 2012-08-10 @861  static inline bool ip6gre_tnl_addr_conflict(const struct ip6_tnl *t,
-c12b395a46646b xeb@mail.ru 2012-08-10  862  	const struct ipv6hdr *hdr)
-c12b395a46646b xeb@mail.ru 2012-08-10  863  {
-c12b395a46646b xeb@mail.ru 2012-08-10  864  	return ipv6_addr_equal(&t->parms.raddr, &hdr->saddr);
-c12b395a46646b xeb@mail.ru 2012-08-10  865  }
-c12b395a46646b xeb@mail.ru 2012-08-10  866  
+CPU: 1 PID: 3057 Comm: dhcpcd Not tainted 5.16.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+=====================================================
 
-:::::: The code at line 861 was first introduced by commit
-:::::: c12b395a46646bab69089ce7016ac78177f6001f gre: Support GRE over IPv6
-
-:::::: TO: xeb@mail.ru <xeb@mail.ru>
-:::::: CC: David S. Miller <davem@davemloft.net>
 
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

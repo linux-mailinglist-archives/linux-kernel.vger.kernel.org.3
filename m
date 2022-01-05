@@ -2,83 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01D5C484CB2
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 04:08:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1D00484CB6
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 04:11:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237177AbiAEDID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 22:08:03 -0500
-Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:56010 "EHLO
-        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236041AbiAEDIC (ORCPT
+        id S237187AbiAEDLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 22:11:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58548 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236041AbiAEDLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 22:08:02 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R331e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=alios_sys_security@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V1.8XrV_1641352079;
-Received: from localhost(mailfrom:alios_sys_security@linux.alibaba.com fp:SMTPD_---0V1.8XrV_1641352079)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 05 Jan 2022 11:08:00 +0800
-From:   AliOS system security <alios_sys_security@linux.alibaba.com>
-To:     catalin.marinas@arm.com, will@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        AliOS system security <alios_sys_security@linux.alibaba.com>
-Subject: [PATCH] arm64: fix build error when use rodata_enabled
-Date:   Wed,  5 Jan 2022 11:07:55 +0800
-Message-Id: <1641352075-25200-1-git-send-email-alios_sys_security@linux.alibaba.com>
-X-Mailer: git-send-email 2.7.4
+        Tue, 4 Jan 2022 22:11:45 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31599C061761;
+        Tue,  4 Jan 2022 19:11:45 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id q5so46673984ioj.7;
+        Tue, 04 Jan 2022 19:11:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IMyyM+cm/4zgW6gK2Q24P1qUEMGMqSi4aV5povWdYxg=;
+        b=DP7qEAGfFjeQnwkdkoB0rkJPG9gQk53cacaKnVDlaj6bcWfuXnPDEM6W+NkUmk7fgg
+         jmrwSRkGuJf7mvQHYtgOWKIdQZMy0nxEgznlsqcuvoJt7qCVXfOkOipneNIN/DcDq66o
+         9Wh/znA6XjFdg6ly77noe7YbG4bI7FOxmTY0vCCPfEJu4V7fGnpzvHFC+EXdSEWv3ai0
+         FpsTxgZeDa/QAl5Ukx0oso7R42U/pxaIRNzQseaQqfCVuUACEJaSNVgG5ZE2Dyp0k28C
+         wLYDLjJqsvbdUx8kEa7pdyYwWmgkwUF7pu5JaIEG50t4iPvWFMLZz8xJoWTwf3E/IGvD
+         ef9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IMyyM+cm/4zgW6gK2Q24P1qUEMGMqSi4aV5povWdYxg=;
+        b=AACGDLx6zQgVR+xFkn64ZIHoHMB82ySTsmgUpCpckrT9BXEbn3hWugo98PUp4UXITa
+         i0f0do7jiRpO5pjUrNF8vUwWV6B4jTg8wb5grHLj1KisB/Hhy5sdkj/NSyvs9puWJbod
+         WFyvSiDo7Kqgx0cNkTW1+uHwDNaRVr5TI3gjuumn0m2JtuTpYG5FNhrzbSTTjlnYWKMS
+         5nsqN6nuvCvgj2BgGFlWQkM+L1k7eGRdfkYUxA1JpKxpJh2dn5TmnlPru545eGSSS04l
+         /TkvHhR84Rg0N8DUaFa2c4xFHDd6l/64WPPu0BVC6H883hbT2pD3+a6Vr3KWonRe4Jz6
+         S26Q==
+X-Gm-Message-State: AOAM532imbAL+XyDSd814hBmca6Zc30WN6O5B+wK2fTCrT/6Fef1hwD5
+        L/V6MLErzkbpHK77+3Y6edlNkXGD7qwEr0CW+fA=
+X-Google-Smtp-Source: ABdhPJwFZuLTEcrDNVDLTQUmhJ5I01cER28bYtGD5fUJeXSq8GoX384iOZ2fnXXUeS6u7A2m1ed8SzDuiiuOyWVnxCI=
+X-Received: by 2002:a02:114a:: with SMTP id 71mr17204247jaf.88.1641352304583;
+ Tue, 04 Jan 2022 19:11:44 -0800 (PST)
+MIME-Version: 1.0
+References: <20211210092508.7185-1-jiangshanlai@gmail.com> <20211210092508.7185-6-jiangshanlai@gmail.com>
+ <YdTCKoTgI5IgOvln@google.com>
+In-Reply-To: <YdTCKoTgI5IgOvln@google.com>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Wed, 5 Jan 2022 11:11:33 +0800
+Message-ID: <CAJhGHyAOyR6yGdyxsKydt_+HboGjxc-psbbSCqsrBo4WgUgQsQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 5/6] KVM: X86: Alloc pae_root shadow page
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Lai Jiangshan <laijs@linux.alibaba.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rodata_enabled should be used when CONFIG_STRICT_KERNEL_RWX
-or CONFIG_STRICT_MODULE_RWX is selected
+On Wed, Jan 5, 2022 at 5:54 AM Sean Christopherson <seanjc@google.com> wrote:
 
-Signed-off-by: AliOS system security <alios_sys_security@linux.alibaba.com>
----
- arch/arm64/mm/mmu.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+> >
+> > default_pae_pdpte is needed because the cpu expect PAE pdptes are
+> > present when VMenter.
+>
+> That's incorrect.  Neither Intel nor AMD require PDPTEs to be present.  Not present
+> is perfectly ok, present with reserved bits is what's not allowed.
+>
+> Intel SDM:
+>   A VM entry that checks the validity of the PDPTEs uses the same checks that are
+>   used when CR3 is loaded with MOV to CR3 when PAE paging is in use[7].  If MOV to CR3
+>   would cause a general-protection exception due to the PDPTEs that would be loaded
+>   (e.g., because a reserved bit is set), the VM entry fails.
+>
+>   7. This implies that (1) bits 11:9 in each PDPTE are ignored; and (2) if bit 0
+>      (present) is clear in one of the PDPTEs, bits 63:1 of that PDPTE are ignored.
 
-diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-index acfae9b..47f8754 100644
---- a/arch/arm64/mm/mmu.c
-+++ b/arch/arm64/mm/mmu.c
-@@ -596,6 +596,7 @@ static void __init map_kernel_segment(pgd_t *pgdp, void *va_start, void *va_end,
- 	vm_area_add_early(vma);
- }
- 
-+#if defined(CONFIG_STRICT_KERNEL_RWX) || defined(CONFIG_STRICT_MODULE_RWX)
- static int __init parse_rodata(char *arg)
- {
- 	int ret = strtobool(arg, &rodata_enabled);
-@@ -613,11 +614,16 @@ static int __init parse_rodata(char *arg)
- 	return 0;
- }
- early_param("rodata", parse_rodata);
-+#endif
- 
- #ifdef CONFIG_UNMAP_KERNEL_AT_EL0
- static int __init map_entry_trampoline(void)
- {
--	pgprot_t prot = rodata_enabled ? PAGE_KERNEL_ROX : PAGE_KERNEL_EXEC;
-+	pgprot_t prot = PAGE_KERNEL_EXEC;
-+#if defined(CONFIG_STRICT_KERNEL_RWX) || defined(CONFIG_STRICT_MODULE_RWX)
-+	if (rodata_enabled)
-+		prot = PAGE_KERNEL_ROX;
-+#endif
- 	phys_addr_t pa_start = __pa_symbol(__entry_tramp_text_start);
- 
- 	/* The trampoline is always mapped and can therefore be global */
-@@ -672,7 +678,11 @@ static void __init map_kernel(pgd_t *pgdp)
- 	 * mapping to install SW breakpoints. Allow this (only) when
- 	 * explicitly requested with rodata=off.
- 	 */
--	pgprot_t text_prot = rodata_enabled ? PAGE_KERNEL_ROX : PAGE_KERNEL_EXEC;
-+	pgprot_t text_prot = PAGE_KERNEL_EXEC;
-+#if defined(CONFIG_STRICT_KERNEL_RWX) || defined(CONFIG_STRICT_MODULE_RWX)
-+	if (rodata_enabled)
-+		text_prot = PAGE_KERNEL_ROX;
-+#endif
- 
- 	/*
- 	 * If we have a CPU that supports BTI and a kernel built for
--- 
-2.7.4
+But in practice, the VM entry fails if the present bit is not set in
+the PDPTE for
+the linear address being accessed (when EPT enabled at least).  The host kvm
+complains and dumps the vmcs state.
 
+Setting a default pdpte is the simplest way to solve it.

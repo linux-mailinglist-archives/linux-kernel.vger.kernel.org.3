@@ -2,186 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4A1D485300
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:48:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A94C7485304
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:49:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235662AbiAEMsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 07:48:39 -0500
-Received: from foss.arm.com ([217.140.110.172]:44346 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229485AbiAEMsg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 07:48:36 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EE27A2B;
-        Wed,  5 Jan 2022 04:48:35 -0800 (PST)
-Received: from [10.163.72.138] (unknown [10.163.72.138])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1ABD03F5A1;
-        Wed,  5 Jan 2022 04:48:33 -0800 (PST)
-Subject: =?UTF-8?B?UmU6IOWbnuWkje+8mltQQVRDSF0gYXJtNjQ6IGZpeCBidWlsZCBlcnJv?=
- =?UTF-8?Q?r_when_use_rodata=5fenabled?=
-To:     AliOS system security <alios_sys_security@linux.alibaba.com>,
-        "catalin.marinas" <catalin.marinas@arm.com>, will <will@kernel.org>
-Cc:     linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <1641352075-25200-1-git-send-email-alios_sys_security@linux.alibaba.com>
- <0432f592-789b-7c92-8d7a-99191d7bc669@arm.com>
- <6f37012b-b082-457f-9aee-2315a461c031.alios_sys_security@linux.alibaba.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <0380f75f-ac8f-5f0f-93e7-20ed07a0d549@arm.com>
-Date:   Wed, 5 Jan 2022 18:18:37 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S235866AbiAEMtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 07:49:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47486 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229485AbiAEMt0 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 07:49:26 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B4AC061761;
+        Wed,  5 Jan 2022 04:49:25 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id j11so87121472lfg.3;
+        Wed, 05 Jan 2022 04:49:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to;
+        bh=uBxaYOlKR0ToYVXuF/1xoWyiN6Wy6vsyVIMnJ/g5hOI=;
+        b=S9nsO8+C0RflUbe72fWrFhQnZWg5jNMqRbY55wZFgUGkv9u9f7wJOKIdtP84e1SWma
+         owvhOJhJVtATwKGW//nLd6m7KZqSvxV3qyt3/z8Gj05pqwgzykW2j9oKlaIr/4ZK3Qnd
+         fM4/op7oO7qHQAeocgz04rTb4bw89O1jimKi84UmQaSYyHT7BExfUv1g1/KFKMeRCrp1
+         +Xz+o/eoUZ838AVjwzq/PP3i3aEJzlEjkpNkGHvr2QLhgkV+KHh2l6g9+mj9ZCz8pOi/
+         Ve0fXQgEOEFWyw97cpFCW9+vMQI26WuymSFCyweE2xaxZEIe8vuP4/W2mIHuxNjaStxm
+         EUhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to;
+        bh=uBxaYOlKR0ToYVXuF/1xoWyiN6Wy6vsyVIMnJ/g5hOI=;
+        b=nJqMq0OBy4Hths6xCWmBgcJybF4fqe5kaxlpVUVvmMfu5xXAZnoE0oR7p+zSm6eq/c
+         UJZCf5/Oepq+JSEuFV0d/N9K5sTtorFKzX06A/wSPXQm26rXUbeScjKhnnZxyTFU8UAu
+         nwfK0Wyewdzq284r/WQnaNtZdSYYZERll08vnhCJmfgD7dz3d1gzrl2mHfiOVqQ6gztd
+         BlzLHKVAEONkU4lEVE86ReP+Lb5tciev8DzzHqX0YVfBmAxnKV7xjK/HZJwWd+4UCJ8h
+         0crj9gRqgBnyDV9SZnaGaZTO8KH8o/au14534F3dt8BaFwI+bFs9D/vfigbQ91mrmBQz
+         GnvQ==
+X-Gm-Message-State: AOAM533SXCmdb/MJtvrve+/UnTGvoXLaB3aZGDu809v7zaY1tuq3AkE/
+        NYNfrdeHpQQ/8UjLQDb792Y=
+X-Google-Smtp-Source: ABdhPJxcgBCA7/UtpNHWqPqmIlQV3tZp5X+xIxu58RNiQ4V3fYYzrnBBWBl5z3etRgx+TVbTjA1v9g==
+X-Received: by 2002:a05:6512:3b07:: with SMTP id f7mr46453153lfv.567.1641386963530;
+        Wed, 05 Jan 2022 04:49:23 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.235.38])
+        by smtp.gmail.com with ESMTPSA id o19sm3059505ljp.58.2022.01.05.04.49.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jan 2022 04:49:22 -0800 (PST)
+Content-Type: multipart/mixed; boundary="------------OozWciv4hOffijXngRVx3KIi"
+Message-ID: <66341bb1-a479-cdc8-0928-3c882ac77712@gmail.com>
+Date:   Wed, 5 Jan 2022 15:49:20 +0300
 MIME-Version: 1.0
-In-Reply-To: <6f37012b-b082-457f-9aee-2315a461c031.alios_sys_security@linux.alibaba.com>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [syzbot] KMSAN: uninit-value in ax88178_reset
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+To:     syzbot <syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com>,
+        andrew@lunn.ch, davem@davemloft.net, glider@google.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux@rempel-privat.de,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <000000000000cf7a2405d4d48d3b@google.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <000000000000cf7a2405d4d48d3b@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is a multi-part message in MIME format.
+--------------OozWciv4hOffijXngRVx3KIi
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-
-On 1/5/22 6:07 PM, AliOS system security wrote:
+On 1/5/22 15:04, syzbot wrote:
 > Hello,
-> When I commen out these configs like below to disable rodata function for debug purpose
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    b0a8b5053e8b kmsan: core: add dependency on DEBUG_KERNEL
+> git tree:       https://github.com/google/kmsan.git master
+> console output: https://syzkaller.appspot.com/x/log.txt?x=159cf693b00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=46a956fc7a887c60
+> dashboard link: https://syzkaller.appspot.com/bug?extid=6ca9f7867b77c2d316ac
+> compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14413193b00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=127716a3b00000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com
+> 
+> asix 1-1:0.0 eth1: Failed to read reg index 0x0000: -32
+> asix 1-1:0.0 eth1: Failed to read reg index 0x0000: -32
+> =====================================================
+> BUG: KMSAN: uninit-value in ax88178_reset+0xfd2/0x1590 drivers/net/usb/asix_devices.c:946 drivers/net/usb/asix_devices.c:946
+>   ax88178_reset+0xfd2/0x1590 drivers/net/usb/asix_devices.c:946 drivers/net/usb/asix_devices.c:946
+>   usbnet_open+0x16d/0x1940 drivers/net/usb/usbnet.c:894 drivers/net/usb/usbnet.c:894
+>   __dev_open+0x920/0xb90 net/core/dev.c:1490 net/core/dev.c:1490
+>   __dev_change_flags+0x4da/0xd40 net/core/dev.c:8796 net/core/dev.c:8796
+>   dev_change_flags+0xf5/0x280 net/core/dev.c:8867 net/core/dev.c:8867
+>   devinet_ioctl+0xfc1/0x3060 net/ipv4/devinet.c:1144 net/ipv4/devinet.c:1144
+>   inet_ioctl+0x59f/0x820 net/ipv4/af_inet.c:969 net/ipv4/af_inet.c:969
+>   sock_do_ioctl net/socket.c:1118 [inline]
+>   sock_do_ioctl net/socket.c:1118 [inline] net/socket.c:1235
+>   sock_ioctl+0xa3f/0x13d0 net/socket.c:1235 net/socket.c:1235
+>   vfs_ioctl fs/ioctl.c:51 [inline]
+>   __do_sys_ioctl fs/ioctl.c:874 [inline]
+>   vfs_ioctl fs/ioctl.c:51 [inline] fs/ioctl.c:860
+>   __do_sys_ioctl fs/ioctl.c:874 [inline] fs/ioctl.c:860
+>   __se_sys_ioctl+0x2df/0x4a0 fs/ioctl.c:860 fs/ioctl.c:860
+>   __x64_sys_ioctl+0xd8/0x110 fs/ioctl.c:860 fs/ioctl.c:860
+>   do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+>   do_syscall_x64 arch/x86/entry/common.c:51 [inline] arch/x86/entry/common.c:82
+>   do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82 arch/x86/entry/common.c:82
+>   entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> Local variable status created at:
+>   ax88178_reset+0x69/0x1590
+>   usbnet_open+0x16d/0x1940 drivers/net/usb/usbnet.c:894 drivers/net/usb/usbnet.c:894
 
-Then it's a modified custom kernel, not mainline anymore.
+Again usbnet_read_cmd() returns 0.
 
-> 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 3bb0b67..40fbd85 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -36,8 +36,8 @@ config ARM64
->         select ARCH_HAS_SET_DIRECT_MAP
->         select ARCH_HAS_SET_MEMORY
->         select ARCH_STACKWALK
-> -       select ARCH_HAS_STRICT_KERNEL_RWX
-> -       select ARCH_HAS_STRICT_MODULE_RWX
-> +#      select ARCH_HAS_STRICT_KERNEL_RWX
-> +#      select ARCH_HAS_STRICT_MODULE_RWX
->         select ARCH_HAS_SYNC_DMA_FOR_DEVICE
-> 
-> then build failed with below log:
-> arch/arm64/mm/mmu.c: In function ‘parse_rodata’:
-> arch/arm64/mm/mmu.c:601:28: error: ‘rodata_enabled’ undeclared (first use in this function); did you mean ‘kasan_enabled’?
->   int ret = strtobool(arg, &rodata_enabled);
->                             ^~~~~~~~~~~~~~
->                             kasan_enabled
-> arch/arm64/mm/mmu.c:601:28: note: each undeclared identifier is reported only once for each function it appears in
->   CC      net/core/skbuff.o
-> arch/arm64/mm/mmu.c: In function ‘map_entry_trampoline’:
-> arch/arm64/mm/mmu.c:620:18: error: ‘rodata_enabled’ undeclared (first use in this function); did you mean ‘kasan_enabled’?
->   pgprot_t prot = rodata_enabled ? PAGE_KERNEL_ROX : PAGE_KERNEL_EXEC;
+It seems reasonable to mark asix_read_cmd() as __must_check, so let's do 
+it and add missing error handling
 
-These build errors are caused on a modified kernel, not mainline.
+#syz test: https://github.com/google/kmsan.git master
 
-> 
-> I hope these configs can be used at least for function test.
-> And wrap around variable when it is defined within macro should be better. 
 
-If the config options are not user selectable (which is the case here), they
-should not be used for testing. Because there might be already assumptions in
-the kernel, around its availability.
 
-> 
-> Thanks!
-> 
->     ------------------------------------------------------------------
->     发件人：Anshuman Khandual <anshuman.khandual@arm.com>
->     发送时间：2022年1月5日(星期三) 17:21
->     收件人：AliOS system security <alios_sys_security@linux.alibaba.com>; catalin.marinas <catalin.marinas@arm.com>; will <will@kernel.org>
->     抄　送：linux-arm-kernel <linux-arm-kernel@lists.infradead.org>; linux-kernel <linux-kernel@vger.kernel.org>
->     主　题：Re: [PATCH] arm64: fix build error when use rodata_enabled
-> 
->     Hello,
-> 
->     On 1/5/22 8:37 AM, AliOS system security wrote:
->     > rodata_enabled should be used when CONFIG_STRICT_KERNEL_RWX
->     > or CONFIG_STRICT_MODULE_RWX is selected
-> 
->     Both these configs get selected invariably with CONFIG_ARM64 in the
->     platform config file (arch/arm64/Kconfig). I guess there can not be
->     any such situation, where both configs will be missing/not selected
->     given ARCH_OPTIONAL_KERNEL_RWX[or _DEFAULT] is not enabled on arm64.
-> 
->     config ARM64
->             def_bool y
->             select ACPI_CCA_REQUIRED if ACPI
->      .....
->             select ARCH_HAS_STRICT_KERNEL_RWX
->             select ARCH_HAS_STRICT_MODULE_RWX
->      .....
-> 
->     Hence for all practical purpose, rodata_enabled could be considered
->     always available. I am sure there other similar situations as well,
->     where code elements are not wrapped around if the config option is
->     always present.
-> 
->     > 
->     > Signed-off-by: AliOS system security <alios_sys_security@linux.alibaba.com>
-> 
->     Also please refer Documentation/process/submitting-patches.rst for
->     the rules regarding names, that can be used for a commit sign off.
-> 
->     ------------------------------------------------------------------------
->     then you just add a line saying::
-> 
->             Signed-off-by: Random J Developer <random@developer.example.org>
-> 
->     using your real name (sorry, no pseudonyms or anonymous contributions.)
->     ------------------------------------------------------------------------
-> 
->     - Anshuman
-> 
->     > ---
->     >  arch/arm64/mm/mmu.c | 14 ++++++++++++--
->     >  1 file changed, 12 insertions(+), 2 deletions(-)
->     > 
->     > diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
->     > index acfae9b..47f8754 100644
->     > --- a/arch/arm64/mm/mmu.c
->     > +++ b/arch/arm64/mm/mmu.c
->     > @@ -596,6 +596,7 @@ static void __init map_kernel_segment(pgd_t *pgdp, void *va_start, void *va_end,
->     >   vm_area_add_early(vma);
->     >  }
->     >  
->     > +#if defined(CONFIG_STRICT_KERNEL_RWX) || defined(CONFIG_STRICT_MODULE_RWX)
->     >  static int __init parse_rodata(char *arg)
->     >  {
->     >   int ret = strtobool(arg, &rodata_enabled);
->     > @@ -613,11 +614,16 @@ static int __init parse_rodata(char *arg)
->     >   return 0;
->     >  }
->     >  early_param("rodata", parse_rodata);
->     > +#endif
->     >  
->     >  #ifdef CONFIG_UNMAP_KERNEL_AT_EL0
->     >  static int __init map_entry_trampoline(void)
->     >  {
->     > - pgprot_t prot = rodata_enabled ? PAGE_KERNEL_ROX : PAGE_KERNEL_EXEC;
->     > + pgprot_t prot = PAGE_KERNEL_EXEC;
->     > +#if defined(CONFIG_STRICT_KERNEL_RWX) || defined(CONFIG_STRICT_MODULE_RWX)
->     > + if (rodata_enabled)
->     > +  prot = PAGE_KERNEL_ROX;
->     > +#endif
->     >   phys_addr_t pa_start = __pa_symbol(__entry_tramp_text_start);
->     >  
->     >   /* The trampoline is always mapped and can therefore be global */
->     > @@ -672,7 +678,11 @@ static void __init map_kernel(pgd_t *pgdp)
->     >    * mapping to install SW breakpoints. Allow this (only) when
->     >    * explicitly requested with rodata=off.
->     >    */
->     > - pgprot_t text_prot = rodata_enabled ? PAGE_KERNEL_ROX : PAGE_KERNEL_EXEC;
->     > + pgprot_t text_prot = PAGE_KERNEL_EXEC;
->     > +#if defined(CONFIG_STRICT_KERNEL_RWX) || defined(CONFIG_STRICT_MODULE_RWX)
->     > + if (rodata_enabled)
->     > +  text_prot = PAGE_KERNEL_ROX;
->     > +#endif
->     >  
->     >   /*
->     >    * If we have a CPU that supports BTI and a kernel built for
->     > 
-> 
-> 
+With regards,
+Pavel Skripkin
+--------------OozWciv4hOffijXngRVx3KIi
+Content-Type: text/plain; charset=UTF-8; name="ph"
+Content-Disposition: attachment; filename="ph"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L3VzYi9hc2l4LmggYi9kcml2ZXJzL25ldC91c2Iv
+YXNpeC5oCmluZGV4IDJhMWUzMWRlZmU3MS4uNDMzNGFhZmFiNTlhIDEwMDY0NAotLS0gYS9k
+cml2ZXJzL25ldC91c2IvYXNpeC5oCisrKyBiL2RyaXZlcnMvbmV0L3VzYi9hc2l4LmgKQEAg
+LTE5Miw4ICsxOTIsOCBAQCBleHRlcm4gY29uc3Qgc3RydWN0IGRyaXZlcl9pbmZvIGF4ODgx
+NzJhX2luZm87CiAvKiBBU0lYIHNwZWNpZmljIGZsYWdzICovCiAjZGVmaW5lIEZMQUdfRUVQ
+Uk9NX01BQwkJKDFVTCA8PCAwKSAgLyogaW5pdCBkZXZpY2UgTUFDIGZyb20gZWVwcm9tICov
+CiAKLWludCBhc2l4X3JlYWRfY21kKHN0cnVjdCB1c2JuZXQgKmRldiwgdTggY21kLCB1MTYg
+dmFsdWUsIHUxNiBpbmRleCwKLQkJICB1MTYgc2l6ZSwgdm9pZCAqZGF0YSwgaW50IGluX3Bt
+KTsKK2ludCBfX211c3RfY2hlY2sgYXNpeF9yZWFkX2NtZChzdHJ1Y3QgdXNibmV0ICpkZXYs
+IHU4IGNtZCwgdTE2IHZhbHVlLCB1MTYgaW5kZXgsCisJCQkgICAgICAgdTE2IHNpemUsIHZv
+aWQgKmRhdGEsIGludCBpbl9wbSk7CiAKIGludCBhc2l4X3dyaXRlX2NtZChzdHJ1Y3QgdXNi
+bmV0ICpkZXYsIHU4IGNtZCwgdTE2IHZhbHVlLCB1MTYgaW5kZXgsCiAJCSAgIHUxNiBzaXpl
+LCB2b2lkICpkYXRhLCBpbnQgaW5fcG0pOwpkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvdXNi
+L2FzaXhfY29tbW9uLmMgYi9kcml2ZXJzL25ldC91c2IvYXNpeF9jb21tb24uYwppbmRleCA3
+MTY4Mjk3MGJlNTguLmRmNjM3ZDgyODRhYiAxMDA2NDQKLS0tIGEvZHJpdmVycy9uZXQvdXNi
+L2FzaXhfY29tbW9uLmMKKysrIGIvZHJpdmVycy9uZXQvdXNiL2FzaXhfY29tbW9uLmMKQEAg
+LTExLDggKzExLDggQEAKIAogI2RlZmluZSBBWF9IT1NUX0VOX1JFVFJJRVMJMzAKIAotaW50
+IGFzaXhfcmVhZF9jbWQoc3RydWN0IHVzYm5ldCAqZGV2LCB1OCBjbWQsIHUxNiB2YWx1ZSwg
+dTE2IGluZGV4LAotCQkgIHUxNiBzaXplLCB2b2lkICpkYXRhLCBpbnQgaW5fcG0pCitpbnQg
+X19tdXN0X2NoZWNrIGFzaXhfcmVhZF9jbWQoc3RydWN0IHVzYm5ldCAqZGV2LCB1OCBjbWQs
+IHUxNiB2YWx1ZSwgdTE2IGluZGV4LAorCQkJICAgICAgIHUxNiBzaXplLCB2b2lkICpkYXRh
+LCBpbnQgaW5fcG0pCiB7CiAJaW50IHJldDsKIAlpbnQgKCpmbikoc3RydWN0IHVzYm5ldCAq
+LCB1OCwgdTgsIHUxNiwgdTE2LCB2b2lkICosIHUxNik7CkBAIC0yNyw5ICsyNywxMiBAQCBp
+bnQgYXNpeF9yZWFkX2NtZChzdHJ1Y3QgdXNibmV0ICpkZXYsIHU4IGNtZCwgdTE2IHZhbHVl
+LCB1MTYgaW5kZXgsCiAJcmV0ID0gZm4oZGV2LCBjbWQsIFVTQl9ESVJfSU4gfCBVU0JfVFlQ
+RV9WRU5ET1IgfCBVU0JfUkVDSVBfREVWSUNFLAogCQkgdmFsdWUsIGluZGV4LCBkYXRhLCBz
+aXplKTsKIAotCWlmICh1bmxpa2VseShyZXQgPCAwKSkKKwlpZiAodW5saWtlbHkocmV0IDwg
+c2l6ZSkpIHsKKwkJcmV0ID0gcmV0IDwgMCA/IHJldCA6IC1FTk9EQVRBOworCiAJCW5ldGRl
+dl93YXJuKGRldi0+bmV0LCAiRmFpbGVkIHRvIHJlYWQgcmVnIGluZGV4IDB4JTA0eDogJWRc
+biIsCiAJCQkgICAgaW5kZXgsIHJldCk7CisJfQogCiAJcmV0dXJuIHJldDsKIH0KZGlmZiAt
+LWdpdCBhL2RyaXZlcnMvbmV0L3VzYi9hc2l4X2RldmljZXMuYyBiL2RyaXZlcnMvbmV0L3Vz
+Yi9hc2l4X2RldmljZXMuYwppbmRleCA0NTE0ZDM1ZWY0YzQuLjZiMmZiZGY0ZTBmZCAxMDA2
+NDQKLS0tIGEvZHJpdmVycy9uZXQvdXNiL2FzaXhfZGV2aWNlcy5jCisrKyBiL2RyaXZlcnMv
+bmV0L3VzYi9hc2l4X2RldmljZXMuYwpAQCAtNzU1LDcgKzc1NSwxMiBAQCBzdGF0aWMgaW50
+IGF4ODg3NzJfYmluZChzdHJ1Y3QgdXNibmV0ICpkZXYsIHN0cnVjdCB1c2JfaW50ZXJmYWNl
+ICppbnRmKQogCXByaXYtPnBoeV9hZGRyID0gcmV0OwogCXByaXYtPmVtYmRfcGh5ID0gKChw
+cml2LT5waHlfYWRkciAmIDB4MWYpID09IDB4MTApOwogCi0JYXNpeF9yZWFkX2NtZChkZXYs
+IEFYX0NNRF9TVEFUTU5HU1RTX1JFRywgMCwgMCwgMSwgJmNoaXBjb2RlLCAwKTsKKwlyZXQg
+PSBhc2l4X3JlYWRfY21kKGRldiwgQVhfQ01EX1NUQVRNTkdTVFNfUkVHLCAwLCAwLCAxLCAm
+Y2hpcGNvZGUsIDApOworCWlmIChyZXQgPCAwKSB7CisJCW5ldGRldl9kYmcoZGV2LT5uZXQs
+ICJGYWlsZWQgdG8gcmVhZCBTVEFUTU5HU1RTX1JFRzogJWRcbiIsIHJldCk7CisJCXJldHVy
+biByZXQ7CisJfQorCiAJY2hpcGNvZGUgJj0gQVhfQ0hJUENPREVfTUFTSzsKIAogCXJldCA9
+IChjaGlwY29kZSA9PSBBWF9BWDg4NzcyX0NISVBDT0RFKSA/IGF4ODg3NzJfaHdfcmVzZXQo
+ZGV2LCAwKSA6CkBAIC05MjAsMTEgKzkyNSwyMSBAQCBzdGF0aWMgaW50IGF4ODgxNzhfcmVz
+ZXQoc3RydWN0IHVzYm5ldCAqZGV2KQogCWludCBncGlvMCA9IDA7CiAJdTMyIHBoeWlkOwog
+Ci0JYXNpeF9yZWFkX2NtZChkZXYsIEFYX0NNRF9SRUFEX0dQSU9TLCAwLCAwLCAxLCAmc3Rh
+dHVzLCAwKTsKKwlyZXQgPSBhc2l4X3JlYWRfY21kKGRldiwgQVhfQ01EX1JFQURfR1BJT1Ms
+IDAsIDAsIDEsICZzdGF0dXMsIDApOworCWlmIChyZXQgPCAwKSB7CisJCW5ldGRldl9kYmco
+ZGV2LT5uZXQsICJGYWlsZWQgdG8gcmVhZCBHUElPUzogJWRcbiIsIHJldCk7CisJCXJldHVy
+biByZXQ7CisJfQorCiAJbmV0ZGV2X2RiZyhkZXYtPm5ldCwgIkdQSU8gU3RhdHVzOiAweCUw
+NHhcbiIsIHN0YXR1cyk7CiAKIAlhc2l4X3dyaXRlX2NtZChkZXYsIEFYX0NNRF9XUklURV9F
+TkFCTEUsIDAsIDAsIDAsIE5VTEwsIDApOwotCWFzaXhfcmVhZF9jbWQoZGV2LCBBWF9DTURf
+UkVBRF9FRVBST00sIDB4MDAxNywgMCwgMiwgJmVlcHJvbSwgMCk7CisJcmV0ID0gYXNpeF9y
+ZWFkX2NtZChkZXYsIEFYX0NNRF9SRUFEX0VFUFJPTSwgMHgwMDE3LCAwLCAyLCAmZWVwcm9t
+LCAwKTsKKwlpZiAocmV0IDwgMCkgeworCQluZXRkZXZfZGJnKGRldi0+bmV0LCAiRmFpbGVk
+IHRvIHJlYWQgRUVQUk9NOiAlZFxuIiwgcmV0KTsKKwkJcmV0dXJuIHJldDsKKwl9CisKIAlh
+c2l4X3dyaXRlX2NtZChkZXYsIEFYX0NNRF9XUklURV9ESVNBQkxFLCAwLCAwLCAwLCBOVUxM
+LCAwKTsKIAogCW5ldGRldl9kYmcoZGV2LT5uZXQsICJFRVBST00gaW5kZXggMHgxNyBpcyAw
+eCUwNHhcbiIsIGVlcHJvbSk7Cg==
+
+--------------OozWciv4hOffijXngRVx3KIi--

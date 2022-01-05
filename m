@@ -2,170 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2385484E9D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 08:14:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA561484E9E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 08:15:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237973AbiAEHOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 02:14:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56128 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236412AbiAEHOv (ORCPT
+        id S237984AbiAEHP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 02:15:29 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:8702 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S236412AbiAEHP1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 02:14:51 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121EAC061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 23:14:50 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id e202so72537324ybf.4
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 23:14:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ar70wR0uLqi2vs94HMsJBd4iJvsCR4GfURTETOA2peg=;
-        b=SD0W30ayy7Ht5hRyPFvOr5WbZyHVyQN18ZhFUk+IIBAnlLcM1tBlRnBEzDcFl6OSJL
-         uI7M6gwsXpNSFE3e04UHM/uN3Sp6TUP45ODbxnjduSZfhXWqiG6B5VZe4Bf5mg2/Lc+1
-         u7+6ipOmw9UMoFdyTVfAAZwN2luyZVwUzc9NQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ar70wR0uLqi2vs94HMsJBd4iJvsCR4GfURTETOA2peg=;
-        b=xfbYrvNSojCCgtSxn91vD6emIEs95fLUssIKKJx0nmCqjRqVcfBH9Hm7Z3k7KWBYSJ
-         24VXAX7GUyLqEeAlVV9eG1rZdzIm6+CNXwPkJ8ITndEbi5PAvMKTbLUBdhMP4Q0+WZY8
-         GE4aOWqmunyRljlf5y3ZvN1ZFfTygms0bP6Lu12+1jRR5Bt7QSgJ8rd4zNZdfHIM8SaC
-         A64MWbnpCKPE1QYZDZNnrEIs8PbmZj/GYI6GYRfucWRIm/u+DMCQBJnK8/O08sjV+P7h
-         JCsL2rdshUqrcTZObRiz4jvIDGpnGOuYJ1Apu1b2iP6UGlI8oFouQ4HNTttEO+n+q9tT
-         Tnpg==
-X-Gm-Message-State: AOAM531d/gKnR1IcDCMLUd+7T/qplu/tZ5jlF+klHaYkK/QB2HsSS6uY
-        K4uKfJgMy06/qMEdZqlixLdj/52PYP7PcDGt3eBQPA==
-X-Google-Smtp-Source: ABdhPJzMM9JD+YzU8GTpgvjQLU5j4pITzxMThzVJzImk/yziKs0vvTKMKEFlvsFvSU4M8Z5KLi8KkuIpUIk9t+9Hk2k=
-X-Received: by 2002:a5b:350:: with SMTP id q16mr545180ybp.639.1641366890092;
- Tue, 04 Jan 2022 23:14:50 -0800 (PST)
+        Wed, 5 Jan 2022 02:15:27 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2055lRAx025650;
+        Wed, 5 Jan 2022 07:15:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=dVJpHv+YjbftGIJ9ukse8fTknYro987ItK6Z8bBfpok=;
+ b=dBIJFzeY7d99vaicfSOp7KTlo/3T6ITILcklh+ojCIm20Wake1YI0wTYTVoKQgProZNi
+ 06Ze5/kIOPrQ2xSBQxvNmu3pmvVyc0yFuQcpfIPWAiwQyraaewstGpVuSOcQV4A/EKqI
+ l8NdWlMaAaAppiJj7ZA6fr3MuKe9uiegcsS+i748EQ/iWQ7JdmRiJzo1ij+5Q8bdgGMQ
+ csdBfo0fu0JP4I2Rs3fizOqZJ6v2DdC2J7SsGPO0Iyv7b36Tyt8iHmflKRbo8LiCsuUj
+ XdAZKXmwBKo9WoeJbpy0IDeWbkkAN5g4cgCDNQPXMdpwRTxnFti10a3dNIM/T4A/Hxwq sA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dcmawk1xk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jan 2022 07:15:16 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2056xGrS009622;
+        Wed, 5 Jan 2022 07:15:16 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dcmawk1ww-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jan 2022 07:15:16 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2057CYE6014034;
+        Wed, 5 Jan 2022 07:15:14 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03fra.de.ibm.com with ESMTP id 3daek9e1s3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jan 2022 07:15:14 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2057FBuJ31588702
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 5 Jan 2022 07:15:11 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9D70EA4053;
+        Wed,  5 Jan 2022 07:15:11 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1C3D5A4055;
+        Wed,  5 Jan 2022 07:15:07 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.211.124.62])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  5 Jan 2022 07:15:06 +0000 (GMT)
+From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+To:     peterz@infradead.org, acme@kernel.org, jolsa@kernel.org
+Cc:     linux-kernel@vger.kernel.org, songliubraving@fb.com,
+        maddy@linux.vnet.ibm.com, kjain@linux.ibm.com, mingo@redhat.com,
+        eranian@google.com
+Subject: [PATCH V3] perf/core: Avoid calling perf_mux_hrtimer_restart multiple times when scheduling event groups
+Date:   Wed,  5 Jan 2022 12:45:02 +0530
+Message-Id: <20220105071502.42988-1-atrajeev@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <20211129034317.2964790-1-stevensd@google.com> <20211129034317.2964790-5-stevensd@google.com>
- <Yc4G23rrSxS59br5@google.com>
-In-Reply-To: <Yc4G23rrSxS59br5@google.com>
-From:   David Stevens <stevensd@chromium.org>
-Date:   Wed, 5 Jan 2022 16:14:39 +0900
-Message-ID: <CAD=HUj5Q6rW8UyxAXUa3o93T0LBqGQb7ScPj07kvuM3txHMMrQ@mail.gmail.com>
-Subject: Re: [PATCH v5 4/4] KVM: mmu: remove over-aggressive warnings
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: iJKwv11VdxGhqy9oJ-sDyDVN21US1238
+X-Proofpoint-ORIG-GUID: kdyXdkOF_rBRZIB5n3T4x2BnWugu4_j2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-05_02,2022-01-04_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
+ impostorscore=0 priorityscore=1501 mlxscore=0 bulkscore=0
+ lowpriorityscore=0 suspectscore=0 spamscore=0 mlxlogscore=999 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201050046
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 31, 2021 at 4:22 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Mon, Nov 29, 2021, David Stevens wrote:
-> > From: David Stevens <stevensd@chromium.org>
-> >
-> > Remove two warnings that require ref counts for pages to be non-zero, as
-> > mapped pfns from follow_pfn may not have an initialized ref count.
-> >
-> > Signed-off-by: David Stevens <stevensd@chromium.org>
-> > ---
-> >  arch/x86/kvm/mmu/mmu.c | 7 -------
-> >  virt/kvm/kvm_main.c    | 2 +-
-> >  2 files changed, 1 insertion(+), 8 deletions(-)
-> >
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index 0626395ff1d9..7c4c7fededf0 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -621,13 +621,6 @@ static int mmu_spte_clear_track_bits(struct kvm *kvm, u64 *sptep)
-> >
-> >       pfn = spte_to_pfn(old_spte);
-> >
-> > -     /*
-> > -      * KVM does not hold the refcount of the page used by
-> > -      * kvm mmu, before reclaiming the page, we should
-> > -      * unmap it from mmu first.
-> > -      */
-> > -     WARN_ON(!kvm_is_reserved_pfn(pfn) && !page_count(pfn_to_page(pfn)));
-> > -
-> >       if (is_accessed_spte(old_spte))
-> >               kvm_set_pfn_accessed(pfn);
-> >
-> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > index 16a8a71f20bf..d81edcb3e107 100644
-> > --- a/virt/kvm/kvm_main.c
-> > +++ b/virt/kvm/kvm_main.c
-> > @@ -170,7 +170,7 @@ bool kvm_is_zone_device_pfn(kvm_pfn_t pfn)
-> >        * the device has been pinned, e.g. by get_user_pages().  WARN if the
-> >        * page_count() is zero to help detect bad usage of this helper.
->
-> Stale comment.
->
-> >        */
-> > -     if (!pfn_valid(pfn) || WARN_ON_ONCE(!page_count(pfn_to_page(pfn))))
-> > +     if (!pfn_valid(pfn) || !page_count(pfn_to_page(pfn)))
->
-> Hrm, I know the whole point of this series is to support pages without an elevated
-> refcount, but this WARN was extremely helpful in catching several use-after-free
-> bugs in the TDP MMU.  We talked about burying a slow check behind MMU_WARN_ON, but
-> that isn't very helpful because no one runs with MMU_WARN_ON, and this is also a
-> type of check that's most useful if it runs in production.
->
-> IIUC, this series explicitly disallows using pfns that have a struct page without
-> refcounting, and the issue with the WARN here is that kvm_is_zone_device_pfn() is
-> called by kvm_is_reserved_pfn() before ensure_pfn_ref() rejects problematic pages,
-> i.e. triggers false positive.
->
-> So, can't we preserve the use-after-free benefits of the check by moving it to
-> where KVM releases the PFN?  I.e.
->
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index fbca2e232e94..675b835525fa 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -2904,15 +2904,19 @@ EXPORT_SYMBOL_GPL(kvm_release_pfn_dirty);
->
->  void kvm_set_pfn_dirty(kvm_pfn_t pfn)
->  {
-> -       if (!kvm_is_reserved_pfn(pfn) && !kvm_is_zone_device_pfn(pfn))
-> +       if (!kvm_is_reserved_pfn(pfn) && !kvm_is_zone_device_pfn(pfn)) {
-> +               WARN_ON_ONCE(!page_count(pfn_to_page(pfn)));
->                 SetPageDirty(pfn_to_page(pfn));
-> +       }
->  }
->  EXPORT_SYMBOL_GPL(kvm_set_pfn_dirty);
+Perf uses multiplexing if there are more events to be scheduled than the
+available counters. With multiplexing, event groups will be rotated at
+specified interval of time which is set using "hrtimer". During event
+scheduling, if any of the event group fails to schedule, multiplexing
+gets enabled by setting "rotate_necessary" for that event context and
+starting the hrtimer by calling "perf_mux_hrtimer_restart".
 
-I'm still seeing this warning show up via __handle_changed_spte
-calling kvm_set_pfn_dirty:
+Patch adds an optimisation to avoid calling "perf_mux_hrtimer_restart"
+multiple times if already rotate_necessary is set for that context.
+Even though "perf_mux_hrtimer_restart" will just return if hrtimer is
+already active, this could avoid the overhead of calling this function
+multiple times if there are many event groups. Patch adds the check to
+avoid calling perf_mux_hrtimer_restart() for each event group on
+every schedule.
 
-[  113.350473]  kvm_set_pfn_dirty+0x26/0x3e
-[  113.354861]  __handle_changed_spte+0x452/0x4f6
-[  113.359841]  __handle_changed_spte+0x452/0x4f6
-[  113.364819]  __handle_changed_spte+0x452/0x4f6
-[  113.369790]  zap_gfn_range+0x1de/0x27a
-[  113.373992]  kvm_tdp_mmu_zap_invalidated_roots+0x64/0xb8
-[  113.379945]  kvm_mmu_zap_all_fast+0x18c/0x1c1
-[  113.384827]  kvm_page_track_flush_slot+0x55/0x87
-[  113.390000]  kvm_set_memslot+0x137/0x455
-[  113.394394]  kvm_delete_memslot+0x5c/0x91
-[  113.398888]  __kvm_set_memory_region+0x3c0/0x5e6
-[  113.404061]  kvm_set_memory_region+0x45/0x74
-[  113.408844]  kvm_vm_ioctl+0x563/0x60c
+Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+Acked-by: Song Liu <song@kernel.org>
+---
+Changelog:
+From v2 -> v3:
+- Added Acked-by from Song Liu
+From v1 -> v2:
+- Rebased on top of latest kernel source.
 
-I wasn't seeing it for my particular test case, but the gfn aging code
-might trigger the warning as well.
+ kernel/events/core.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-I don't know if setting the dirty/accessed bits in non-refcounted
-struct pages is problematic. The only way I can see to avoid it would
-be to try to map from the spte to the vma and then check its flags. If
-setting the flags is benign, then we'd need to do that lookup to
-differentiate the safe case from the use-after-free case. Do you have
-any advice on how to handle this?
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 30d94f68c5bd..cc293b4360f6 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -3753,8 +3753,10 @@ static int merge_sched_in(struct perf_event *event, void *data)
+ 			perf_cgroup_event_disable(event, ctx);
+ 			perf_event_set_state(event, PERF_EVENT_STATE_ERROR);
+ 		} else {
+-			ctx->rotate_necessary = 1;
+-			perf_mux_hrtimer_restart(cpuctx);
++			if (!ctx->rotate_necessary) {
++				ctx->rotate_necessary = 1;
++				perf_mux_hrtimer_restart(cpuctx);
++			}
+ 			group_update_userpage(event);
+ 		}
+ 	}
+-- 
+2.33.0
 
--David

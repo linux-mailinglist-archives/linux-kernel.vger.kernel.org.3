@@ -2,126 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A25F485AF5
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 22:47:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D66AC485AF7
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 22:48:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244580AbiAEVre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 16:47:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57636 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244577AbiAEVrT (ORCPT
+        id S234688AbiAEVs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 16:48:27 -0500
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:37469 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234070AbiAEVsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 16:47:19 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DDF1C061245;
-        Wed,  5 Jan 2022 13:47:19 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id n30-20020a17090a5aa100b001b2b6509685so396921pji.3;
-        Wed, 05 Jan 2022 13:47:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WXiynHfff1QyF0kCg/WK+39NSHycE0ztcW8/CVkTVZM=;
-        b=mfMSLyIf3L2aI8kNRaikm3oksBjAqBiunrJwRV35L5TRuqDs3ccaJmDyXqjYpauqRU
-         thnDTlMs+sbaPVD6JOsnbnMi0dss2rugbgpoHKzQ90E82kv+6X9sphMneP4cxTz/dGak
-         zbB9mykmpixaCb0ecoemKNWcOR/e0dOf8wH4FxTVzRDzTsbVFfiIs/0E9mppEl2I9J/L
-         h/bG+MPa4+yFqHK3Ak1wcBEMS11CCT3+g9UhXE8wyQtKGNO5FcYGbxIZ7GKhwdDb6dCG
-         d4dmL6BY6TgP1ZwKKbUh+spoS7py6f+qCFtEM4wgkAfKMviCG7pF48XMs0YR49wegJ+S
-         gTqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WXiynHfff1QyF0kCg/WK+39NSHycE0ztcW8/CVkTVZM=;
-        b=sChHUjHGhKHLaVRAlK/UXYIa1STi20cHQ/5w8fZR0Iy/JsNPXnajMLoohtLAbPN0uN
-         kGiEvo7SIvk9eZL0kPFGRAiFau7Jw1c4BDtZtx3pOi5vaWJoKfgdwf9B+c8sEiGZmunk
-         Xc2VnHEVzbUFXqMfecwL/t7yDVpqwQJfpatSyRuxZRRG0VQVqVRiZd0IMeUoUpHdJFXu
-         qnNQVja8RH4C6xqMvPdVnzjI+nmMrmmFrEU2SdZxsYhpUmoo/qC4ionwGuY0nKNsCWmC
-         gxhv71KGCVeswoqBs54tYLYF/js+w7t5abI/RFoDV9R6AuKNCgMfemY/qo6J9cTkZvTY
-         iNzA==
-X-Gm-Message-State: AOAM5322TUxZRXN5lzNHsqRTykFTloi2Ia5mR7hkWLvP8tJWZvlA1z/W
-        yMS2Vvi1zY0Q2BJl992CYyzqApPQe1KhuEqJqL4=
-X-Google-Smtp-Source: ABdhPJwHFuUGSbUZ7sqlq6GcSKsSc1ildEHYHDGdnIxlCiTdfDDxMW2u4hnH2n62y7jrKV0l6Q3PVNBj41QAoVuUcuE=
-X-Received: by 2002:a17:902:e149:b0:149:9b8e:1057 with SMTP id
- d9-20020a170902e14900b001499b8e1057mr33484968pla.144.1641419238758; Wed, 05
- Jan 2022 13:47:18 -0800 (PST)
+        Wed, 5 Jan 2022 16:48:24 -0500
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 3F36858050E;
+        Wed,  5 Jan 2022 16:48:23 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 05 Jan 2022 16:48:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=from
+        :to:cc:subject:date:message-id:reply-to:mime-version
+        :content-transfer-encoding; s=fm2; bh=XuWtzwLjwrz+Pbdt4BURzbEzIj
+        SMHmc6+71DP0kr+2E=; b=uXAApkQxB/AHFvFh1fVn4pkg+KKcnsaui9GQg+9dH2
+        SFYnWmEe/ldaxJywT/GwaCyzOGCO7m3X3o7M2ae4OZ5FwshRwxYqmF2HHcYSBN+l
+        9cN0zSWwU+iJgj48GoYpZARjxLtIxBz/MEaf4nXDalkH9VxbNETon9AOq2B6V5Yn
+        R8ua7i82K3DpMMPVPOF/w6LsKrCuyc6TjyNOvKROMMETe9xzLO5cC3Ffps0owCmH
+        QYsGLqdUmE4xmYJmg2PhMyrjcINl8V8GMjpIKvOphS/M1lNkpn6mljULn5plg5Iq
+        noSas0MQqxTl2XI75bT9fLaUwmm2bgOM6d0/rSYCDrow==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:reply-to:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=XuWtzw
+        Ljwrz+Pbdt4BURzbEzIjSMHmc6+71DP0kr+2E=; b=HvGpC6u6DuKlQgEP1Gev3q
+        Rgt0hQDTeg3WsXqtwHcudSdbaKQu8JDpLAweDlFjaFqFA7lBZ/9bDgR795dTixy1
+        f7V42zwWZwyXcowz+luRUA+bGINa/MWHjF86ilacqzjFnEC+fuqbVISuOs6o3llr
+        KHjupyMVFFsCrGDqF96lDXqj2pt/0rnU+UBL3KtG+8VkyeP4l1hjavc8D11hjFy8
+        zY+IhJp6cdJJxerPIaHnBgnoxlLPg5S12HwGq8A/So6NCYMGFgywYRAJ56G4DFsE
+        zMSvfMWf6lZgS8RlKZvtuQs77mBhI1iFNJO38LfEOHPApe271dGpBTxzAZKPzi8g
+        ==
+X-ME-Sender: <xms:JhLWYVKXz0XA-qpUi52ORQJ3b_vlMtwapPHJBVHKj_u8hnWMqZtHDw>
+    <xme:JhLWYRI25R7Exx_bhZKo2mRzyd3q9dVvcisZIUCr31t90YK1E4xvbWaGsmUPpj_de
+    BJetflZTamAnZXawQ>
+X-ME-Received: <xmr:JhLWYduJJIK6sAiI5lQNR2rS0BCbdvheZt-9dhfIDkum0PZ9kGFM9vJpYTRMPYLLxXF9xtHR>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrudefjedgieekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkfforhgggfestdhqredtredttdenucfhrhhomhepkghiucgjrghn
+    uceoiihirdihrghnsehsvghnthdrtghomheqnecuggftrfgrthhtvghrnhepteeiiedtje
+    fghfefueekjedvueeftddvudelhfetudffiefgfeetheeghfdvgedunecuffhomhgrihhn
+    pehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpeiiihdrhigrnhesshgvnhhtrdgtohhm
+X-ME-Proxy: <xmx:JhLWYWbgMIL6YDHpejS7gaz3xF3GYtJHhXnUYyFsNUqmiljYKpIE3Q>
+    <xmx:JhLWYcbztubtuPOSHETmw9gpNOrWQHFUkEEHVSpmQ4TOAFs0hRhHMw>
+    <xmx:JhLWYaBLWIq4Yx8-4V6VLWCHmTnK9L_CQAWAl-5CipObOrjm1hOrNA>
+    <xmx:JxLWYYT6deCytecTH9xSlMQ4YWXiP-dvNcZMaqJzj3Q7ESFepFN1pw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 5 Jan 2022 16:48:21 -0500 (EST)
+From:   Zi Yan <zi.yan@sent.com>
+To:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org,
+        iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Eric Ren <renzhengeek@gmail.com>, Zi Yan <ziy@nvidia.com>
+Subject: [RFC PATCH v3 0/8] Use pageblock_order for cma and alloc_contig_range alignment.
+Date:   Wed,  5 Jan 2022 16:47:48 -0500
+Message-Id: <20220105214756.91065-1-zi.yan@sent.com>
+X-Mailer: git-send-email 2.34.1
+Reply-To: Zi Yan <ziy@nvidia.com>
 MIME-Version: 1.0
-References: <20220104171058.22580-1-avagin@gmail.com> <77862a7a-3fd2-ff2b-8136-93482f98ed3c@gmail.com>
-In-Reply-To: <77862a7a-3fd2-ff2b-8136-93482f98ed3c@gmail.com>
-From:   Andrei Vagin <avagin@gmail.com>
-Date:   Wed, 5 Jan 2022 13:47:08 -0800
-Message-ID: <CANaxB-zM1EhPR1f4tubCQTMEMAuRAtAWYZsWFTVhfeqYMHhKdg@mail.gmail.com>
-Subject: Re: [PATCH] fs/pipe: use kvcalloc to allocate a pipe_buffer array
-To:     Dmitry Safonov <0x7f454c46@gmail.com>
-Cc:     linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 4, 2022 at 10:54 PM Dmitry Safonov <0x7f454c46@gmail.com> wrote:
->
-> On 1/4/22 17:10, Andrei Vagin wrote:
-> > Right now, kcalloc is used to allocate a pipe_buffer array.  The size of
-> > the pipe_buffer struct is 40 bytes. kcalloc allows allocating reliably
-> > chunks with sizes less or equal to PAGE_ALLOC_COSTLY_ORDER (3). It means
-> > that the maximum pipe size is 3.2MB in this case.
-> >
-> > In CRIU, we use pipes to dump processes memory. CRIU freezes a target
-> > process, injects a parasite code into it and then this code splices
-> > memory into pipes. If a maximum pipe size is small, we need to
-> > do many iterations or create many pipes.
-> >
-> > kvcalloc attempt to allocate physically contiguous memory, but upon
-> > failure, fall back to non-contiguous (vmalloc) allocation and so it
-> > isn't limited by PAGE_ALLOC_COSTLY_ORDER.
-> >
-> > The maximum pipe size for non-root users is limited by
-> > the /proc/sys/fs/pipe-max-size sysctl that is 1MB by default, so only
-> > the root user will be able to trigger vmalloc allocations.
-> >
-> > Cc: Dmitry Safonov <0x7f454c46@gmail.com>
-> > Signed-off-by: Andrei Vagin <avagin@gmail.com>
->
-> Good idea!
->
-> I wonder if you need to apply this on the top:
->
-> diff --git a/fs/pipe.c b/fs/pipe.c
-> index 45565773ec33..b4ccafffa350 100644
-> --- a/fs/pipe.c
-> +++ b/fs/pipe.c
-> @@ -605,7 +605,7 @@ pipe_write(struct kiocb *iocb, struct iov_iter *from)
->  static long pipe_ioctl(struct file *filp, unsigned int cmd, unsigned
-> long arg)
->  {
->         struct pipe_inode_info *pipe = filp->private_data;
-> -       int count, head, tail, mask;
-> +       unsigned int count, head, tail, mask;
->
->         switch (cmd) {
->         case FIONREAD:
-> @@ -827,7 +827,7 @@ struct pipe_inode_info *alloc_pipe_info(void)
->
->  void free_pipe_info(struct pipe_inode_info *pipe)
->  {
-> -       int i;
-> +       unsigned int i;
->
->  #ifdef CONFIG_WATCH_QUEUE
->         if (pipe->watch_queue) {
-> --->8---
->
-> Otherwise this loop in free_pipe_info() may become lockup on some ugly
-> platforms with INTMAX allocation reachable, I think. I may be wrong :-)
+From: Zi Yan <ziy@nvidia.com>
 
-This change looks reasonable, it makes types of local variables consistent
-with proper fields of pipe_inode_info. But right now, the maximum pipe size
-is limited by (1<<31) (look at round_pipe_size) and so we don't have a real
-issue here.
+Hi all,
 
-Thanks,
-Andrei
+This patchset tries to remove the MAX_ORDER - 1 alignment requirement for C=
+MA
+and alloc_contig_range(). It prepares for my upcoming changes to make MAX_O=
+RDER
+adjustable at boot time[1]. It is on top of mmotm-2021-12-29-20-07.
+
+The MAX_ORDER - 1 alignment requirement comes from that alloc_contig_range()
+isolates pageblocks to remove free memory from buddy allocator but isolating
+only a subset of pageblocks within a page spanning across multiple pagebloc=
+ks
+causes free page accounting issues. Isolated page might not be put into the
+right free list, since the code assumes the migratetype of the first pagebl=
+ock
+as the whole free page migratetype. This is based on the discussion at [2].
+
+To remove the requirement, this patchset:
+1. still isolates pageblocks at MAX_ORDER - 1 granularity;
+2. but saves the pageblock migratetypes outside the specified range of
+   alloc_contig_range() and restores them after all pages within the range
+   become free after __alloc_contig_migrate_range();
+3. only checks unmovable pages within the range instead of MAX_ORDER - 1 al=
+igned
+   range during isolation to avoid alloc_contig_range() failure when pagebl=
+ocks
+   within a MAX_ORDER - 1 aligned range are allocated separately.
+3. splits free pages spanning multiple pageblocks at the beginning and the =
+end
+   of the range and puts the split pages to the right migratetype free lists
+   based on the pageblock migratetypes;
+4. returns pages not in the range as it did before.
+
+Isolation needs to be done at MAX_ORDER - 1 granularity, because otherwise
+either 1) it is needed to detect to-be-isolated page size (free, PageHuge, =
+THP,
+or other PageCompound) to make sure all pageblocks belonging to a single pa=
+ge
+are isolated together and later restore pageblock migratetypes outside the
+range, or 2) assuming isolation happens at pageblock granularity, a free pa=
+ge
+with multi-migratetype pageblocks can seen in free page path and needs
+to be split and freed at pageblock granularity.
+
+One optimization might come later:
+1. make MIGRATE_ISOLATE a separate bit to avoid saving and restoring existi=
+ng
+   migratetypes before and after isolation respectively.
+
+Feel free to give comments and suggestions. Thanks.
+
+
+[1] https://lore.kernel.org/linux-mm/20210805190253.2795604-1-zi.yan@sent.c=
+om/
+[2] https://lore.kernel.org/linux-mm/d19fb078-cb9b-f60f-e310-fdeea1b947d2@r=
+edhat.com/
+
+Zi Yan (8):
+  mm: page_alloc: avoid merging non-fallbackable pageblocks with others.
+  mm: compaction: handle non-lru compound pages properly in
+    isolate_migratepages_block().
+  mm: migrate: allocate the right size of non hugetlb or THP compound
+    pages.
+  mm: make alloc_contig_range work at pageblock granularity
+  mm: page_isolation: check specified range for unmovable pages during
+    isolation.
+  mm: cma: use pageblock_order as the single alignment
+  drivers: virtio_mem: use pageblock size as the minimum virtio_mem
+    size.
+  arch: powerpc: adjust fadump alignment to be pageblock aligned.
+
+ arch/powerpc/include/asm/fadump-internal.h |   4 +-
+ drivers/virtio/virtio_mem.c                |   3 +-
+ include/linux/mmzone.h                     |  11 +-
+ include/linux/page-isolation.h             |   3 +-
+ kernel/dma/contiguous.c                    |   2 +-
+ mm/cma.c                                   |   6 +-
+ mm/compaction.c                            |  10 +-
+ mm/memory_hotplug.c                        |  12 +-
+ mm/migrate.c                               |  11 +-
+ mm/page_alloc.c                            | 328 +++++++++++----------
+ mm/page_isolation.c                        | 148 +++++++++-
+ 11 files changed, 353 insertions(+), 185 deletions(-)
+
+--=20
+2.34.1
+

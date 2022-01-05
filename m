@@ -2,69 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F25485599
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:16:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FCD848559B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:16:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241294AbiAEPPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 10:15:13 -0500
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:55782
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241195AbiAEPPD (ORCPT
+        id S241238AbiAEPQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 10:16:09 -0500
+Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:53489 "EHLO
+        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236858AbiAEPP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 10:15:03 -0500
-Received: from localhost.localdomain (unknown [222.129.35.96])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id A0CD740037;
-        Wed,  5 Jan 2022 15:14:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641395699;
-        bh=krm5g8tFpp7LgpQcwpESkXdJo63TQKvHZazL6m/HHi0=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=Eu/gnRUzGwknoS3eYlS1bO6b/zqTyAs9NXMyHFl9D7/UjGzyk+v/MI5LKqEswOBKq
-         zamxYSxusaj42Dc4K4FrVOIGYaTqLJ+oigqPqdoxmw66vHD0s+P3BF8SFTMsbTUKys
-         etj2jt4Wn0lyF9HSThyhKEJkB9iAn+kkio/Sth3A1OEpaYxcqMAIgAfhQf+lLvQode
-         Qb46fGGwuBq+4wqMFt/do0u9cdwdk7OJNjZ08PaQDJgc0RouFWcxe8l8ailNee017K
-         wmXZCt+RaZwAKTw3GcyMn5rxR67gJUiBxE3LxnWxxnYOA3C9FeA4iOE+sBxH9+JjEF
-         f2w0A0E8YbPHw==
-From:   Aaron Ma <aaron.ma@canonical.com>
-To:     aaron.ma@canonical.com, kuba@kernel.org,
-        henning.schild@siemens.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     davem@davemloft.net, hayeswang@realtek.com, tiwai@suse.de
-Subject: [PATCH 3/3] net: usb: r8152: remove unused definition
-Date:   Wed,  5 Jan 2022 23:14:27 +0800
-Message-Id: <20220105151427.8373-3-aaron.ma@canonical.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220105151427.8373-1-aaron.ma@canonical.com>
-References: <20220105151427.8373-1-aaron.ma@canonical.com>
+        Wed, 5 Jan 2022 10:15:57 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R231e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V12-5P9_1641395738;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V12-5P9_1641395738)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 05 Jan 2022 23:15:55 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     djwong@kernel.org
+Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH v2] xfs: Remove redundant assignment of mp
+Date:   Wed,  5 Jan 2022 23:15:36 +0800
+Message-Id: <20220105151536.39062-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
----
- drivers/net/usb/r8152.c | 3 ---
- 1 file changed, 3 deletions(-)
+mp is being initialized to log->l_mp but this is never read
+as record is overwritten later on. Remove the redundant
+assignment.
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 7cf2faf8d088..7cd3b1db062a 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -773,9 +773,6 @@ enum rtl8152_flags {
- 	RX_EPROTO,
- };
+Cleans up the following clang-analyzer warning:
+
+fs/xfs/xfs_log_recover.c:3543:20: warning: Value stored to 'mp' during
+its initialization is never read [clang-analyzer-deadcode.DeadStores].
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+Changes in v2:
+ -Remove mp = log->l_mp.
+
+ fs/xfs/xfs_log_recover.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/fs/xfs/xfs_log_recover.c b/fs/xfs/xfs_log_recover.c
+index 8ecb9a8567b7..96c997ed2ec8 100644
+--- a/fs/xfs/xfs_log_recover.c
++++ b/fs/xfs/xfs_log_recover.c
+@@ -3550,8 +3550,6 @@ xlog_recover_check_summary(
+ 	uint64_t		ifree;
+ 	int			error;
  
--#define DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2	0x3082
--#define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2		0xa387
+-	mp = log->l_mp;
 -
- struct tally_counter {
- 	__le64	tx_packets;
- 	__le64	rx_packets;
+ 	freeblks = 0LL;
+ 	itotal = 0LL;
+ 	ifree = 0LL;
 -- 
-2.30.2
+2.20.1.7.g153144c
 

@@ -2,141 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44BF948565A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 17:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E1748565B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 17:02:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241777AbiAEQBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 11:01:39 -0500
-Received: from de-smtp-delivery-102.mimecast.com ([194.104.109.102]:44952 "EHLO
-        de-smtp-delivery-102.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241767AbiAEQBf (ORCPT
+        id S241784AbiAEQCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 11:02:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35344 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241768AbiAEQCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 11:01:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1641398493;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kg6voqSLeXjxloQMpoPwCAPsTBjG1QiNl5oztge+bec=;
-        b=nnQb7/HqGy3+Ylf4LSzbAdfvMWaC7BqPyZuo46Hu5a27ao66L89icWNmx1yMDEoABDjNVS
-        55Ubfudp/S3Wvz/9Td0wK8pis1ubLKl/xex3MQNMHpekBsgwsAL/ova6oi2rpFfrbQ4l70
-        C0yjjPUMR4WiV74Z9rGFUloif1yNXGE=
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com
- (mail-db3eur04lp2059.outbound.protection.outlook.com [104.47.12.59]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-17-TFAZpPQmNVipB6czbjsd6w-2; Wed, 05 Jan 2022 17:01:32 +0100
-X-MC-Unique: TFAZpPQmNVipB6czbjsd6w-2
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=igNq40s8EhoxY3rlyH+QpFxWjXQk+J6LKhkucqzJNl/KA66f+Z5zYQvu4hzMIQE6Um04CIHqGVSc9D0PMw8caxiUNWLjDrBf8GlWVTe4Dpp0GoKUyy9fJjkOsjpjs5tG3O7zwpms6JkYPIJ2socTFZWHjXLodsg4cNsaSDF7gPeHJBtRiqKildhtTZGAXKX70fPJP3Z+GJArawfc8PKIJuYssti6rMdFh+l/4RTcc6CU22NrbxtqjHFul8/2nAVVMZeRggVFIR6TatwtY0DguZU37wB347iaYX2zgNF0EkSZU/LjcwJ6TqIilnuweksL5Yz44aFPRjao9JcK9pIRoA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Er1H+TKMZKSFZxFos1bJ89VKkDRiNUthspDEZYxQVu8=;
- b=ArrIsrQm8t0z0Y2q9RCiFUNdbkWOh7O18UQs6WKqx3KSNqAJSBAZ05ypEu9t+teJFjjZdhBcg/ud1klim84dIadM3kf2DJXem5vTdmuXzy6fut5J/m0+xx9JGgY0JQ3M/7IUEKqjL0ndFUWF/B2n6ulUmcTXZwFvnk69EH+qU0qglw/mGjN4rgqymlufMn8ux5VGLh6WictyGpQQL4cPw2ZDmCjt8eZpP/AfOq0gk7T0IcWaLQQTsCkgT2Msz6G8wl8Mc2/2yKMYo/oNimRd8ianUkJsbOYPN+AeZ5Cx4zDyRuLBLMgCwdx1yyZ8D+rrikRJfyHpE2OENEn2pEnsOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from DB7PR04MB5050.eurprd04.prod.outlook.com (2603:10a6:10:22::23)
- by DBBPR04MB7897.eurprd04.prod.outlook.com (2603:10a6:10:1e7::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Wed, 5 Jan
- 2022 16:01:30 +0000
-Received: from DB7PR04MB5050.eurprd04.prod.outlook.com
- ([fe80::e9d6:1be9:d046:af1]) by DB7PR04MB5050.eurprd04.prod.outlook.com
- ([fe80::e9d6:1be9:d046:af1%7]) with mapi id 15.20.4844.016; Wed, 5 Jan 2022
- 16:01:30 +0000
-Message-ID: <394d86b6-bb22-9b44-fa1e-8fdc6366d55e@suse.com>
-Date:   Wed, 5 Jan 2022 17:01:28 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] Revert "net: usb: r8152: Add MAC passthrough support for
- more Lenovo Docks"
-Content-Language: en-US
-To:     Aaron Ma <aaron.ma@canonical.com>, kuba@kernel.org,
-        henning.schild@siemens.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-CC:     davem@davemloft.net, hayeswang@realtek.com, tiwai@suse.de
-References: <20220105155102.8557-1-aaron.ma@canonical.com>
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20220105155102.8557-1-aaron.ma@canonical.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: AM6P191CA0016.EURP191.PROD.OUTLOOK.COM
- (2603:10a6:209:8b::29) To DB7PR04MB5050.eurprd04.prod.outlook.com
- (2603:10a6:10:22::23)
+        Wed, 5 Jan 2022 11:02:09 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9F8C061245
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 08:02:09 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id p13so53848256lfh.13
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 08:02:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gBkpPRxPBrgVRcWsMjmSOYkN6FZPnWUWn6/2jYAWcpU=;
+        b=aehbFJjOUVFKd5fk4C5kxL14VZFD3t97EGJtt4MU01koVL5ZQ4ZpvLvBKNzvQP0Q8i
+         DpzkiaQSVYe1qvBNe7UpcsOUZfImsSM0rvTil7Yt6+z6WmBoVOP1Nyh9RSxpxeVpaou4
+         5KWNwG5VvqQccOr/4kEWdLTRIKRNCtYIXanxTKVwHWS0ywj4H6PL4Xe25tM6T16uMcNV
+         UAX3tvD6vUeISoynXh+o2CQDfOvyTrfdM6EEBMbwCiVUoEOohWEYul+VFP5j2fip182a
+         1g1TEmM5pWmbnswWsW4ko1rCesb8rxU3u7XjXAJirotVIdMX74OA99aUeDJmQpgDWr72
+         5Onw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gBkpPRxPBrgVRcWsMjmSOYkN6FZPnWUWn6/2jYAWcpU=;
+        b=Yxz2uoqSSBjRP+19PYAZJMSCqkGhVVX5EIZ2+m6gdARaPsuzIfbG3vuubljVJ7u9rW
+         wEmDKTB237QJzTGCAlPpuEQSVEogHAWjbe+mTToX4132vYtgmWEJ17abVuF7Ppw/M4TK
+         vnhWzaX1S7ECVn2ddLDHA5RW7aOozkiGj11J47rPJRopJOGFBnP3YODCnofScXxXf2pj
+         8BaItL37jt5qtPflyfKGn8wZs5poWUimFY8iD6AYrlntvcX/8a5806xqk+hDSReE+z0u
+         xxHjV/mMrGkNdX0i1+2lrWAUzv/WJI06GM7P652MzsGQk+fZR46ylIaNqoYc7bLkswZK
+         F57g==
+X-Gm-Message-State: AOAM533ETIjGYj5nv1zjffnAKJSKS3MMzcTsea32LvoOV2PtnJEpcV3m
+        6RhUgeud376EApFRHTzNFv8oXA==
+X-Google-Smtp-Source: ABdhPJzuKVDPdybonX0TPh5o90zWF5hL67lvPnG0De5r4++1P/JggA8GgTlxSWcvKQLgcVBz3i+PRg==
+X-Received: by 2002:a05:6512:ad1:: with SMTP id n17mr41520966lfu.53.1641398527645;
+        Wed, 05 Jan 2022 08:02:07 -0800 (PST)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id b14sm4226749lff.31.2022.01.05.08.02.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 08:02:06 -0800 (PST)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 6637910425A; Wed,  5 Jan 2022 19:02:26 +0300 (+03)
+Date:   Wed, 5 Jan 2022 19:02:26 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, luto@kernel.org,
+        peterz@infradead.org, sathyanarayanan.kuppuswamy@linux.intel.com,
+        aarcange@redhat.com, ak@linux.intel.com, dan.j.williams@intel.com,
+        david@redhat.com, hpa@zytor.com, jgross@suse.com,
+        jmattson@google.com, joro@8bytes.org, jpoimboe@redhat.com,
+        knsathya@kernel.org, pbonzini@redhat.com, sdeep@vmware.com,
+        seanjc@google.com, tony.luck@intel.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 19/26] x86/tdx: Make pages shared in ioremap()
+Message-ID: <20220105160226.c3fzhrymeacnzxjg@box.shutemov.name>
+References: <20220103141705.6hqflhwykqmtfim6@black.fi.intel.com>
+ <YdMIWAT42el4D6wJ@zn.tnic>
+ <20220103151516.pfcz2pap5l7r2rzv@box.shutemov.name>
+ <b4b54116-1cd7-468a-0889-d497268cbfb2@intel.com>
+ <20220103181059.ui5eloufw5gsojcb@box.shutemov.name>
+ <20220104191424.oly2gqm4ltzj5wo3@box.shutemov.name>
+ <0e0c38e2-67ad-1f51-c44b-d3c3d505e40a@intel.com>
+ <20220105003108.mr7zyd5oyaaxmnmv@box.shutemov.name>
+ <50dfa0db-fcd1-3c54-d982-237d2c9df431@intel.com>
+ <3fd5d9b4-87ac-4f3e-bb89-60813808389b@amd.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: dbdff89e-3a04-43fc-474d-08d9d064a332
-X-MS-TrafficTypeDiagnostic: DBBPR04MB7897:EE_
-X-Microsoft-Antispam-PRVS: <DBBPR04MB7897782108E88C8E7ADFFECFC74B9@DBBPR04MB7897.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:241;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LhjibfcY3RIJ7ieEIpKPag5IYEQjQwxz9kviv4TvG8VF2sshL1xSbfFaQ8Jj+OPcPALXrEmRm4YAJBjCr2+/ZgLQipPmHsnAiNQnHdCL72BAy7J60oMfAOkwx50AvKHAvJOuKkbTptMvLy+Z72ERE8I9mlAFPX7yEnPIJvGZkZRJLf3Ow0K/cg4+i7VPa8fuYHFQ9pNWbI5Td5ePURxWJ2BCdtKKKH940iRN42xJt63bslkbs32CKERSowe6rIEh46bprzLVpNC3DU5Q4jQz7ACwE4+Qr12nzKIqCAKvWP+ZBqbXbWdV0gwvkTCQeY/1ZmCNYPdERYBb4R10WdDmhRVaV8SvvnX/Ny5Lk3rYMT3avTqZjuGvX1Znu0F4IVrYorcQvj7JbY0Ziz3SalfVxOMZF8PLTFuwsmaOaHO3Phwuz/u9Qzs7MzsquIK1rZgkaem5IKNyMdUdYiAoyXKKdL+NLkstViJvL4n+niKH8DPQ4yTS/6EvoKF6t9l6UUpY7/i/7KTKyjafXTin19UbViCd94zop44EE73aXOu56mw9dNE7/T+1wZztwlGDMIPVwLFWTOelYxsJ/NPuGK2kcQlomkmJtprBhM5ETvfj+pgKlWoTKabDvqVove5NFzwbu5NfnicCpTg8RupF9QLWJpDlpjOIPqKaYC+vi2xp2s0HldrnJJOHPZkA52+PijDujnUCzdkZdrR59DVJC2881nn+oPg96F2+oZb9ZudGekg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB5050.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(6512007)(31696002)(186003)(53546011)(6506007)(36756003)(5660300002)(4744005)(86362001)(2616005)(4326008)(8936002)(31686004)(38100700002)(8676002)(508600001)(316002)(66946007)(6486002)(2906002)(66556008)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZBM/B+X/Auc0opAAhoTSoNa1uRxr3veI31MwWyaqXsRstKqi850MtZt/QshG?=
- =?us-ascii?Q?APHZyBCZxkQ0GgBo57lfrI7qtmMnF+fUO+uzEBXfir2ZaUdoUSmxpTYUOxRK?=
- =?us-ascii?Q?TJUij4lMSYjh90BxRUegqfAAj6+NELaAlHtLHyQ9a0D4XCSe5/kuRR14VQZE?=
- =?us-ascii?Q?taY8/jYFzae4YDerKYGkjiLVNwy7du+UtJTlZKf4U9XpeRob/rIQdhneZtI5?=
- =?us-ascii?Q?ogr9baHGfCvmOngboijOHg52YHV6sQt4d0dsA1ebesOBVu3tuEcwy3ihvc8G?=
- =?us-ascii?Q?2Bfv6Y0Gjfw7EvZAhv9DFnnVyVg+ZqD9NqtIhX1q471/7ZeZoj/B5JiEo3pX?=
- =?us-ascii?Q?WsREBUn0YjQEQkVrX19YrZsUVOJqG6X99HKi1vKmMMC3KgUExoU5TjF756yG?=
- =?us-ascii?Q?N5VQ3FGh8xB08ixWl9WzcXGfZz3IdyFZt567ZlhEg8nz7RFSJhQn6kHvmIjR?=
- =?us-ascii?Q?KXeNugRo/Q0R3IOd4f2TcGGB6HCOKJh1TLqmK6k+JGCbnUqP3IgDIkRYDVj8?=
- =?us-ascii?Q?9Nt7pLawvVf3mQRlrhg3tB6xqPDyGFwGOfpqgcwEyp4uYHOEEUar5csP34T8?=
- =?us-ascii?Q?n/lBH96+LJCyBL1oolG+/GngNl4J7VTBLVCbJYwcmRIZbq/CV1yC2faA5X2u?=
- =?us-ascii?Q?1KhZfivrHKhBbEuvf0kxf+LBoqj2UrarNLEJFlgqXThPCNACisBlid49NvVO?=
- =?us-ascii?Q?bCjttkR5TpoqOxUQfcwwogIdqO9kwth15HsHfN97LrVbxLw7QOdutAq0hrHC?=
- =?us-ascii?Q?EnHeNHXSHAFUb1ql23uIaW7HBnV8CTXDLrzrnzfDCs8Ki0V4HNLD5FwZJC15?=
- =?us-ascii?Q?i1TVL0z4aDQhACT3ug37jQ8Di1wfpFCoXLHwrXCXLz0BzhvkWhfxjYmpD5ps?=
- =?us-ascii?Q?PwaCS7DKn5+kV+mMk7mhihCuKOHxQcrG8tLLJ6uB+O7TP6TdrR9JyYgz0s4X?=
- =?us-ascii?Q?iEyR6mzDWij+mwMj/y9LZKH7LVpXfivq5RxDk7WSPmTI7+zBYG7j6jqY8hzu?=
- =?us-ascii?Q?9/AD2ILgUYXlMx0qxPyo+sQkrzx+Fca1ebKPRTeGxFxh+T0RcYDU4xWaspGc?=
- =?us-ascii?Q?Ul/xj6ouDBDQZ2BrYDtk4r9gGb11DtMsfg0kR6sheWbTSLTWHeimu4g0R3LF?=
- =?us-ascii?Q?fqxhwFxyCmruL3WezuUQ+UCAP/zyM2Bqe6goWGEKu/flFmYOBd2TPHZ8AGta?=
- =?us-ascii?Q?6DWCjlSmog+Dsrk+yKSu6pIc0CWdcbm7+wYiVY5ZS/qCrDPwvPEN6PVAfF2+?=
- =?us-ascii?Q?FLw4rrbwLyF6H1n88HO+TivEPsjo94uQeII+qMlMkZG6FGCl6xaEvRCuOH2N?=
- =?us-ascii?Q?ZQhswJeWfjGrHtIfNx+ovG+hAPhJxa4e1SQ8reI3XiXviu6X39zLaEeKHzI+?=
- =?us-ascii?Q?yxN+lBevK5Uo8BFITwEmad1Sx/ujKIXLtSI5zccpxxdYeZZLZSw5a7Jb6JEB?=
- =?us-ascii?Q?jS3IbvUV+6Gj+EQgBCTT87gBDbb9IBqLULtWumQvv9iA9sxXZjFiro8ofUvs?=
- =?us-ascii?Q?zCe1UxL5UB3/Xphb0vLA/zEndVs0Kd1JXDfkFyEVAQ5jNMlaqLyfxb8O8e9K?=
- =?us-ascii?Q?7iQTdMnBYJqiyenAuIx4Os4HyTNryrW352I+SUKP7ybZRDJ/eZO28lOSI29J?=
- =?us-ascii?Q?skwICF0lFfmvQJHKy8aXROz48IOmtkC/RVCWgIJemrnGWJdkHgnqluLjc3nL?=
- =?us-ascii?Q?ucIpnnKGMAtI7hYhZtPpgX+vrtI=3D?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dbdff89e-3a04-43fc-474d-08d9d064a332
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB5050.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2022 16:01:30.4423
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Wt15SDHAcCGMIG2xj9dUdI4IdFEhyHfyh7gN/Ed3XjtAOqBuWK/UVJbeH5AuD/2Q5gzLQiMbzQlYclMkk+z65A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7897
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3fd5d9b4-87ac-4f3e-bb89-60813808389b@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 05, 2022 at 08:16:49AM -0600, Tom Lendacky wrote:
+> On 1/4/22 6:43 PM, Dave Hansen wrote:
+> > On 1/4/22 4:31 PM, Kirill A. Shutemov wrote:
+> > > On Tue, Jan 04, 2022 at 12:36:06PM -0800, Dave Hansen wrote:
+> > > > @@ -57,7 +58,6 @@ typedef struct { unsigned long iopte; }
+> > > >   typedef struct { unsigned long pmd; } pmd_t;
+> > > >   typedef struct { unsigned long pgd; } pgd_t;
+> > > >   typedef struct { unsigned long ctxd; } ctxd_t;
+> > > > -typedef struct { unsigned long pgprot; } pgprot_t;
+> > > >   typedef struct { unsigned long iopgprot; } iopgprot_t;
+> > > >   #define pte_val(x)	((x).pte)
+> > > > @@ -85,7 +85,6 @@ typedef unsigned long iopte_t;
+> > > >   typedef unsigned long pmd_t;
+> > > >   typedef unsigned long pgd_t;
+> > > >   typedef unsigned long ctxd_t;
+> > > > -typedef unsigned long pgprot_t;
+> > > >   typedef unsigned long iopgprot_t;
+> > > >   #define pte_val(x)	(x)
+> > > 
+> > > Any arch that use STRICT_MM_TYPECHECKS hacks will get broken if compiled
+> > > without the define (as sparc by default).
+> > 
+> > My read of STRICT_MM_TYPECHECKS was that "typedef unsigned long
+> > pgprot_t" produces better code, but "typedef struct { unsigned long
+> > pgprot; } pgprot_t;" produces better type checking.
+> > 
+> > I just compiled these patches on sparc with no issues.
+> > 
+> > ...
+> > > Is it the way to go we want?
+> > 
+> > I _think_ this was all a result of some review feedback from Tom
+> > Lendacky about where the encryption-modifying pgprot helpers got placed
+> > in the code.  I don't feel strongly about it, but I'm not quite sure
+> > that this is worth the trouble.
+> > 
+> > I'd be curious what Tom thinks now that he's gotten a peek at what it's
+> > going to take to address his concerns.
+> 
+> I have vague memories of pgprot_t and what a pain it could be, which is why
+> my feedback suggested putting it in cc_platform.c, but said there might be
+> issues :)
+> 
+> I'm fine with it living somewhere else, just thought it would be nice to
+> have everything consolidated, if possible.
 
-On 05.01.22 16:51, Aaron Ma wrote:
-> This reverts commit f77b83b5bbab53d2be339184838b19ed2c62c0a5.
->
-> This change breaks multiple usb to ethernet dongles attached on Lenovo
-> USB hub.
+In this case I would rather leave it in <asm/pgtable.h>. We still can
+rename it to cc_pgprot_decrypted()/cc_pgprot_encrypted().
 
-Hi,
-
-now we should maybe discuss a sensible way to identify device
-that should use passthrough. Are your reasons to not have a list
-of devices maintainability or is it impossible?
-
-=C2=A0=C2=A0=C2=A0 Regards
-=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 Oliver
-
+-- 
+ Kirill A. Shutemov

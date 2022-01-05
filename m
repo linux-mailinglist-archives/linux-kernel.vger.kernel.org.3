@@ -2,112 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5BEB4859F5
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:22:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C78DA4859F8
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:23:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243998AbiAEUWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 15:22:13 -0500
-Received: from mail-wm1-f52.google.com ([209.85.128.52]:35483 "EHLO
-        mail-wm1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243981AbiAEUWG (ORCPT
+        id S244005AbiAEUX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 15:23:29 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:11952 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243981AbiAEUX0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 15:22:06 -0500
-Received: by mail-wm1-f52.google.com with SMTP id v10-20020a05600c214a00b00345e59928eeso2622774wml.0;
-        Wed, 05 Jan 2022 12:22:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UK+yHTCDLoYvdAcJv06f7NV5dgtFwTsJAMI8c0LxaJI=;
-        b=eWYmg/lBBDEsxBRWdD/P7o9LOUwmlHD0F2DYeQB3ZEolqV3StuQlN6inc4g949mhiv
-         N5lD1Vd29PrxqA4kTkcKTi9QIl+hyKzVNA2PKd7yccFk+7GnK94Juq8fOAwUfgHCl2mD
-         Yx0ARVw7SFlLcmetYWF8aBsvtZFVCGpngTRQFxw2e7mb0x5BUC4t9BnhNJacHU0fHtbx
-         R7kX7gSEd0/3jd1KJlS9ks4FFUz36kRUDLIdeC17RpoZZVO50JhingYjOhJTxXV4lH7k
-         Cd3RbSJfuGV6NUaCk8LHFIkGGIPhPlXiJSjhSWQ1E8I5hUjYaERqg9lRq5FuadXJsVGr
-         K/Cg==
-X-Gm-Message-State: AOAM533v+RZdV5KPdADZB2SnHRS0XO7OZjmb6aq/JcTFC7zUwA8XK/jE
-        VgXEzrfGq1LuPRmQ+0gy0z4=
-X-Google-Smtp-Source: ABdhPJzKuTpU4FH0VhdYUuruenzfWqA2Yp7Scnif9ohKWhVGSldrl9gDCARTHFH7xUu7WhmyXkLNqw==
-X-Received: by 2002:a05:600c:1f19:: with SMTP id bd25mr4338996wmb.42.1641414125375;
-        Wed, 05 Jan 2022 12:22:05 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id u12sm41306599wrf.60.2022.01.05.12.22.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 12:22:04 -0800 (PST)
-Date:   Wed, 5 Jan 2022 20:22:03 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     linux-hyperv@vger.kernel.org,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] Drivers: hv: balloon: Temporary disable the driver
- on ARM64 when PAGE_SIZE != 4k
-Message-ID: <20220105202203.evk7uckmephnu3ev@liuwe-devbox-debian-v2>
-References: <20220105165028.1343706-1-vkuznets@redhat.com>
+        Wed, 5 Jan 2022 15:23:26 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 205JnIdk023862;
+        Wed, 5 Jan 2022 20:23:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=U6KcrYf76CYBoxXJ2C50jdfzFdGQy4doODkR1eRg3mQ=;
+ b=dGQouNd+lrshMLbrL8pfOkowE5G2AXz2pX47JdOUQcaweObQPfXHGB2078Fhy6349Jod
+ K2xRUyGc+2sVoG5/mDuR0CzCxnm2NR0VCE1nbxuslhAa5UhPM1cZIw/+ytv3iylXRVYA
+ G5598g4N+aa9xpRuwFOTKeFq+laxWCyfPQ4Uu2YFkrbah3k/15TEwN56O+/fO7aE8eun
+ X0OcDq2aUsHL0ZL2Fq0obQgQlJZ4YK4kXhYeaz/R3R7R+fGvcJJ6BSqYgqdm5PNQAGgE
+ UvgR1KlmfnWYtVGjS/SzN8X6QBQOOLTKc97i8ZW5uKNDbFP7rHkf8nW6fmseyck/JrqE BQ== 
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dck05twdu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jan 2022 20:23:16 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 205KJ7go029542;
+        Wed, 5 Jan 2022 20:23:16 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma02dal.us.ibm.com with ESMTP id 3daekbe78m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jan 2022 20:23:16 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 205KNE5r19792368
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 5 Jan 2022 20:23:14 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BC331BE061;
+        Wed,  5 Jan 2022 20:23:14 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 642DBBE054;
+        Wed,  5 Jan 2022 20:23:14 +0000 (GMT)
+Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.73.224])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed,  5 Jan 2022 20:23:14 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-fsi@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, joel@jms.id.au, jk@ozlabs.org,
+        alistair@popple.id.au, eajames@linux.ibm.com
+Subject: [PATCH] fsi: occ: Fetch OCC response header again to avoid checksum failure
+Date:   Wed,  5 Jan 2022 14:23:13 -0600
+Message-Id: <20220105202313.27510-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220105165028.1343706-1-vkuznets@redhat.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: BwhVA-tj4LPKcsNkGKZ2N0wgGfn68tgJ
+X-Proofpoint-GUID: BwhVA-tj4LPKcsNkGKZ2N0wgGfn68tgJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-05_06,2022-01-04_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 mlxscore=0 phishscore=0 adultscore=0 clxscore=1011
+ malwarescore=0 bulkscore=0 mlxlogscore=999 impostorscore=0 suspectscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201050130
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 05:50:28PM +0100, Vitaly Kuznetsov wrote:
-> Hyper-V ballooning and memory hotplug protocol always seems to assume
-> 4k page size so all PFNs in the structures used for communication are
-> 4k PFNs. In case a different page size is in use on the guest (e.g.
-> 64k), things go terribly wrong all over:
-> - When reporting statistics, post_status() reports them in guest pages
-> and hypervisor sees very low memory usage.
-> - When ballooning, guest reports back PFNs of the allocated pages but
-> the hypervisor treats them as 4k PFNs.
-> - When unballooning or memory hotplugging, PFNs coming from the host
-> are 4k PFNs and they may not even be 64k aligned making it difficult
-> to handle.
-> 
-> While statistics and ballooning requests would be relatively easy to
-> handle by converting between guest and hypervisor page sizes in the
-> communication structures, handling unballooning and memory hotplug
-> requests seem to be harder. In particular, when ballooning up
-> alloc_balloon_pages() shatters huge pages so unballooning request can
-> be handled for any part of it. It is not possible to shatter a 64k
-> page into 4k pages so it's unclear how to handle unballooning for a
-> sub-range if such request ever comes so we can't just report a 64k
-> page as 16 separate 4k pages.
-> 
+In the event that the driver state is reset, and the previous OCC
+operation had a sequence number of 1, there is the possibility that
+the SRAM buffer is updated in between fetching the OCC response header
+and the rest of the data (since the sequence number match is really a
+false positive). This results in a checksum failure. To avoid this
+condition, simply fetch the whole response rather than skipping the
+header when fetching the rest of the response.
 
-How does virtio-balloon handle it? Does its protocol handle different
-page sizes?
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
+---
+ drivers/fsi/fsi-occ.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/fsi/fsi-occ.c b/drivers/fsi/fsi-occ.c
+index 7eaab1be0aa4..660c3fc43be5 100644
+--- a/drivers/fsi/fsi-occ.c
++++ b/drivers/fsi/fsi-occ.c
+@@ -546,10 +546,15 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
+ 	dev_dbg(dev, "resp_status=%02x resp_data_len=%d\n",
+ 		resp->return_status, resp_data_length);
+ 
+-	/* Grab the rest */
++	/*
++	 * Grab the rest, including the occ response header again, just in case
++	 * it changed in between our two getsram operations (this can happen
++	 * despite the sequence number check if the driver state is reset). The
++	 * data length shouldn't change at OCC runtime, and the response
++	 * status, which may have changed, has to be checked by users anyway.
++	 */
+ 	if (resp_data_length > 1) {
+-		/* already got 3 bytes resp, also need 2 bytes checksum */
+-		rc = occ_getsram(occ, 8, &resp->data[3], resp_data_length - 1);
++		rc = occ_getsram(occ, 0, resp, resp_data_length + 7);
+ 		if (rc)
+ 			goto done;
+ 	}
+-- 
+2.27.0
 
-> Ideally, the protocol between the guest and the host should be changed
-> to allow for different guest page sizes.
-> 
-> While there's no solution for the above mentioned problems, it seems
-> we're better off without the driver in problematic cases.
-> 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  drivers/hv/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hv/Kconfig b/drivers/hv/Kconfig
-> index 0747a8f1fcee..fb353a13e5c4 100644
-> --- a/drivers/hv/Kconfig
-> +++ b/drivers/hv/Kconfig
-> @@ -25,7 +25,7 @@ config HYPERV_UTILS
->  
->  config HYPERV_BALLOON
->  	tristate "Microsoft Hyper-V Balloon driver"
-> -	depends on HYPERV
-> +	depends on HYPERV && (X86 || (ARM64 && ARM64_4K_PAGES))
->  	select PAGE_REPORTING
->  	help
->  	  Select this option to enable Hyper-V Balloon driver.
-> -- 
-> 2.33.1
-> 

@@ -2,99 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A2554857DF
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:04:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F8C4857E2
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:05:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242707AbiAESEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 13:04:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242686AbiAESEF (ORCPT
+        id S242727AbiAESEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 13:04:35 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:34122 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242712AbiAESEY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 13:04:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE45C061245
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 10:04:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 5 Jan 2022 13:04:24 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 724A1B81CE7
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 18:04:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13CFCC36AE0;
-        Wed,  5 Jan 2022 18:04:00 +0000 (UTC)
-Date:   Wed, 5 Jan 2022 18:03:57 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Jianyong Wu <jianyong.wu@arm.com>
-Cc:     will@kernel.org, anshuman.khandual@arm.com,
-        akpm@linux-foundation.org, david@redhat.com,
-        quic_qiancai@quicinc.com, ardb@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        gshan@redhat.com, justin.he@arm.com, nd@arm.com
-Subject: Re: [PATCH v3] arm64/mm: avoid fixmap race condition when create pud
- mapping
-Message-ID: <YdXdjcJ7jbnkFsqp@arm.com>
-References: <20211216082812.165387-1-jianyong.wu@arm.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DEABD1F37F;
+        Wed,  5 Jan 2022 18:04:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1641405861; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=I285agTL7MMNPRyO3Wp0TqKsq8WVrLiSnho8jMPnTkc=;
+        b=aFsCA1NnRlrdQX1xT7reIq3L0VKqZSlIvdXLA7XJhLNT/q89yCOFr5XON4VbVZ7G7cvBpm
+        HgZpjo44U4Co78g3KMsxUq5JYI6+JPe1N4QKevGPjRmwEcGI5lvuZgdw/k0sbscvbcnc04
+        U5AyWHBn19jEbSdt+moEurjPuqZKS3o=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BCC0113C03;
+        Wed,  5 Jan 2022 18:04:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id SnV9LaXd1WFaNAAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 05 Jan 2022 18:04:21 +0000
+Date:   Wed, 5 Jan 2022 19:04:20 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     pbonzini@redhat.com, seanjc@google.com, tj@kernel.org,
+        lizefan.x@bytedance.com, hannes@cmpxchg.org, dmatlack@google.com,
+        jiangshanlai@gmail.com, kvm@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] KVM: Move VM's worker kthreads back to the original
+ cgroups before exiting.
+Message-ID: <20220105180420.GC6464@blackbody.suse.cz>
+References: <20211222225350.1912249-1-vipinsh@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211216082812.165387-1-jianyong.wu@arm.com>
+In-Reply-To: <20211222225350.1912249-1-vipinsh@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 04:28:12PM +0800, Jianyong Wu wrote:
-> The 'fixmap' is a global resource and is used recursively by
-> create pud mapping(), leading to a potential race condition in the
-> presence of a concurrent call to alloc_init_pud():
-> 
-> kernel_init thread                          virtio-mem workqueue thread
-> ==================                          ===========================
-> 
->   alloc_init_pud(...)                       alloc_init_pud(...)
->   pudp = pud_set_fixmap_offset(...)         pudp = pud_set_fixmap_offset(...)
->   READ_ONCE(*pudp)
->   pud_clear_fixmap(...)
->                                             READ_ONCE(*pudp) // CRASH!
-> 
-> As kernel may sleep during creating pud mapping, introduce a mutex lock to
-> serialise use of the fixmap entries by alloc_init_pud().
-> 
-> Signed-off-by: Jianyong Wu <jianyong.wu@arm.com>
+Hi Vipin.
 
-I tried to queue this patch but with certain configurations it doesn't
-boot under Qemu. Starting from defconfig, update .config with (I had
-this in one of my build scripts):
+On Wed, Dec 22, 2021 at 10:53:50PM +0000, Vipin Sharma <vipinsh@google.com> wrote:
+> VM worker kthreads can linger in the VM process's cgroup for sometime
+> after KVM terminates the VM process.
 
-$ ./scripts/config \
-		-e DEBUG_KERNEL \
-		-e DEBUG_PAGEALLOC \
-		-e DEBUG_PAGEALLOC_ENABLE_DEFAULT \
-		-e DEBUG_WX \
-		-e DEBUG_SET_MODULE_RONX \
-		-e DEBUG_ALIGN_RODATA \
-		-e ARM64_PTDUMP_DEBUGFS \
-		-e DEBUG_OBJECTS \
-		-e DEBUG_OBJECTS_FREE \
-		-e DEBUG_OBJECTS_TIMERS \
-		-e DEBUG_KOBJECT_RELEASE \
-		-e DEBUG_LOCKING_API_SELFTESTS \
-		-e DEBUG_PREEMPT \
-		-e DEBUG_TIMEKEEPING \
-		-e DEBUG_VM \
-		-e DEBUG_VM_VMACACHE \
-		-e DEBUG_VM_RB \
-		-e DEBUG_VM_PGFLAGS \
-		-e DEBUG_VIRTUAL \
-		-e DEBUG_LIST \
-		-e DEBUG_PI_LIST \
-		-e DEBUG_SG \
-		-e PROVE_LOCKING \
-		-e DEBUG_RT_MUTEXES \
-		-e DEBUG_ATOMIC_SLEEP \
-		-e ATOMIC64_SELFTEST
+Why is it a problem? And how long are we talking about?
 
-It stop after exiting the EFI boot services. I did not have time to
-debug.
+> A VM process can terminate between the time window of exit_mm() to
+> cgroup_exit(), leaving only worker kthreads in the cgroup.
 
--- 
-Catalin
+Even kthreads should eventually have PF_EXITING set, they shouldd be
+treated as "user-space" zombies by cgroups, i.e. mostly invisible (e.g.
+it doesn't prevent rmdir'ing the cgroup).
+
+(And after the last task_struct reference is gone, the cgroup structs
+can be released too. Maybe the cause is holding the reference to the KVM
+worker thread somewhere for too long.)
+
+> Moving worker kthreads back to the original cgroup (kthreadd_task's
+> cgroup) makes sure that cgroup is empty as soon as the main VM process
+> is terminated.
+
+BTW this used to be done for "user-space" tasks too (migrate to root
+cgroup) but it was replaced with the less transactional "ignore zombies"
+approach. So this change seems inconsistent.
+
+
+Regards,
+Michal

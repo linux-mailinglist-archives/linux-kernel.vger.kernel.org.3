@@ -2,193 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09162485B2D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 22:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1626485B33
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 23:01:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244654AbiAEV4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 16:56:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59774 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244642AbiAEV4g (ORCPT
+        id S244676AbiAEWBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 17:01:21 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34034 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244642AbiAEWBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 16:56:36 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD91C061201
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 13:56:36 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id f5so337838pgk.12
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 13:56:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xdjsovFc/nON5wnse3BZmRrklvHqQCIYLQiW2THlrxY=;
-        b=O42b2Evp887BBH/weMa6uzm2GzWnJjAEotSFojeuIq35IcjmJvV2yhGTgkEdApvF1U
-         NSMaQ9+CB6t1l88C0Eo4AJkfHRlncQrfF0a+7qEXoHxylhCo6LnHchr6tfBVZZ9QDu4R
-         OCaPhsYtuC0Z/fhSpaErPyG+QphuL0qpe20hpre1hzOWl3Nkd7j4ke9mGl2JnGaIG9+q
-         n7b1GzeF3nt3wzn8mmqPuBHGh5F3IvrX/obtqsHNUwli7V7cwkq6Gc6rAIrGwfK29HFe
-         UDUPwb+zybcBlNQr2y1q6ZA8wAdJl2E5eMUgxDTGc9DosM2HX6CoyX+x6PGcHi4ZzZFn
-         yCPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xdjsovFc/nON5wnse3BZmRrklvHqQCIYLQiW2THlrxY=;
-        b=G5qGVgI4Tzw6wQsso+boi4JRmttxg92gj8tV9QKSNs7UWaLxT/7Z3A/lPh9GxNoDdp
-         LMqY0S5A+lvfT/jzgGTTqkdF1wLvdfmgQCLKF05RBmnnRwdG4K4DNlxRg6VpT7GO3H1U
-         oQ4ZlgYzdlfX7fFxfrErQ7IwOeHkWfz/TeVRpF5qCppUMKjjHOzzbFMu3mPX4M8Oj7Rk
-         hdbGtbwBh2NS05aGGTklEDg88UVIDR3RMn41qeKhzHlPDylA0iKkLwEUqCxbov8QhP09
-         MvZifiVwedbOQqMnCGx90YegR2fcVS2Q2xZgHNagsPY9dLVOPzA0q/QQ2J/sM8L7OUeE
-         khfw==
-X-Gm-Message-State: AOAM531RDoDupfvSEb8jverC7KSBp/Chlw+ptl/0fmWWzNqCk5OUbjJ1
-        96nyGBIjqv+cVqzaLVdB9ZsWvJgQbVME7Q==
-X-Google-Smtp-Source: ABdhPJz5RLD0EsXCSaV6qR9HhnUxioq0GE8qo9I3/CQHwFLJ7pJDpx480F84CSaZ4BU1nQLg9ce7Zw==
-X-Received: by 2002:a65:55c7:: with SMTP id k7mr50241731pgs.511.1641419795683;
-        Wed, 05 Jan 2022 13:56:35 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id mi5sm3860300pjb.21.2022.01.05.13.56.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 13:56:35 -0800 (PST)
-Date:   Wed, 5 Jan 2022 21:56:31 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Joerg Roedel <joro@8bytes.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: Re: [PATCH v2 5/5] KVM: SVM: allow AVIC to co-exist with a nested
- guest running
-Message-ID: <YdYUD22otUIF3fqR@google.com>
-References: <20211213104634.199141-1-mlevitsk@redhat.com>
- <20211213104634.199141-6-mlevitsk@redhat.com>
+        Wed, 5 Jan 2022 17:01:19 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69124B81E1E;
+        Wed,  5 Jan 2022 22:01:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19CDDC36AE9;
+        Wed,  5 Jan 2022 22:01:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641420077;
+        bh=fGwTRDuVF+fKROM7EVE56WWnOBQmtM9MvKOiwSb97EU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=kKMNYrQoE/kJKn7YgT4SuEu2Ihru/LMcoIqTYdl5SYtDpDKjvWz3iLeBiAIM4tUZu
+         GSROL5U0sEuC5Qg9DMR1Ic8Acps1SvmLR7fEceTxE2S/0OEFBcD8xo4V34ScATZltY
+         LqFZSTn9hnt3w3j89LPYIJU1G4RnIS1e2yoz2jMU08rK0P/QQcD9rlZ6YaTCW1TpYF
+         9jRjr0KlDTPRwG6FLZXWC78Vu1Dc/nhdo7nSet9IVaDbJEhtmfZ0Bz2FZyapk9LK3H
+         dTWUdhNgRjsPl/HCa9HHS/B0aZSLbOatwee5dnLCgyrfZHoRpp8l0xe4q0mLfXetRG
+         /VgJlJ4C0QbDA==
+Received: by mail-wm1-f42.google.com with SMTP id l4so576101wmq.3;
+        Wed, 05 Jan 2022 14:01:17 -0800 (PST)
+X-Gm-Message-State: AOAM530u/AZtvoKnqaIRbjvrw/mvSzIxdn+NXLxzrLAgUC8iYycgRoV3
+        oPD7Qz0M3sNJQgzHf58KdnvSU8njC3U+TWxkKTw=
+X-Google-Smtp-Source: ABdhPJxzvAuf64nd+pKFSeKKJjOM9uB1guqN3HkcOSX+PZ+qq8aWvjetqRzveAEsdlJiXdsoDnRlWaMb/udbrs97tAw=
+X-Received: by 2002:a05:600c:1991:: with SMTP id t17mr4568252wmq.25.1641420075501;
+ Wed, 05 Jan 2022 14:01:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211213104634.199141-6-mlevitsk@redhat.com>
+References: <CAHmME9oPcEjRnqDesPNKJNOsT+i9vmWRxy9c62t+Xu9Nohsi2A@mail.gmail.com>
+ <20220103123152.1043972-1-Jason@zx2c4.com> <YdOhMPwL9sXllm8X@gondor.apana.org.au>
+ <CAMj1kXFhygHnB12g9MD0wMo_deZ6xd7FMEzbrvEvKVtqYdskAQ@mail.gmail.com> <YdYTUCR2GM/6CXmF@gmail.com>
+In-Reply-To: <YdYTUCR2GM/6CXmF@gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 5 Jan 2022 23:01:04 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXHS8Gr9wbbbzvX+7u7qk0bAhgTpQw-bEB5Y_gmrcJ8iGw@mail.gmail.com>
+Message-ID: <CAMj1kXHS8Gr9wbbbzvX+7u7qk0bAhgTpQw-bEB5Y_gmrcJ8iGw@mail.gmail.com>
+Subject: Re: [PATCH v7] lib/crypto: blake2s: include as built-in
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 13, 2021, Maxim Levitsky wrote:
-> @@ -1486,6 +1485,12 @@ struct kvm_x86_ops {
->  	int (*complete_emulated_msr)(struct kvm_vcpu *vcpu, int err);
->  
->  	void (*vcpu_deliver_sipi_vector)(struct kvm_vcpu *vcpu, u8 vector);
-> +
-> +	/*
-> +	 * Returns false if for some reason APICv (e.g guest mode)
-> +	 * must be inhibited on this vCPU
+On Wed, 5 Jan 2022 at 22:53, Eric Biggers <ebiggers@kernel.org> wrote:
+>
+> On Tue, Jan 04, 2022 at 06:02:52PM +0100, Ard Biesheuvel wrote:
+> > The only downside here is that the ARM/x86 accelerated shashes and the
+> > generic shash now use the same core transform, right?
+>
+> I don't see how this is the case, given that crypto/blake2s_generic.c still uses
+> blake2s_compress_generic(), not blake2s_compress().
+>
 
-Comment is wrong, code returns 'true' if AVIC is inhibited due to is_guest_mode().
-Even better, rename the hook to something that's more self-documenting.
+Ah ok, I stand corrected then.
 
-vcpu_is_apicv_inhibited() jumps to mind, but that's a bad name since it's not
-called by kvm_vcpu_apicv_active().  Maybe vcpu_has_apicv_inhibit_condition()?
-
-> +	 */
-> +	bool (*apicv_check_inhibit)(struct kvm_vcpu *vcpu);
->  };
->  
->  struct kvm_x86_nested_ops {
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index 34f62da2fbadd..5a8304938f51e 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -734,6 +734,11 @@ int svm_deliver_avic_intr(struct kvm_vcpu *vcpu, int vec)
->  	return 0;
->  }
->  
-> +bool avic_is_vcpu_inhibited(struct kvm_vcpu *vcpu)
-
-This should follow whatever wording we decide on for the kvm_x86_ops hook.  In
-isolation, this name is too close to kvm_vcpu_apicv_active() and could be wrongly
-assumed to mean that APICv is not inhibited for _any_ reason on this vCPU if it
-returns false.
-
-> +{
-> +	return is_guest_mode(vcpu);
-> +}
-> +
->  bool svm_dy_apicv_has_pending_interrupt(struct kvm_vcpu *vcpu)
->  {
->  	return false;
-
-...
-
-> @@ -4486,6 +4493,7 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
->  	.complete_emulated_msr = svm_complete_emulated_msr,
->  
->  	.vcpu_deliver_sipi_vector = svm_vcpu_deliver_sipi_vector,
-> +	.apicv_check_inhibit = avic_is_vcpu_inhibited,
-
-This can technically be NULL if nested=0.
-
->  };
->  
->  /*
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index daa8ca84afccd..545684ea37353 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -590,6 +590,7 @@ void svm_load_eoi_exitmap(struct kvm_vcpu *vcpu, u64 *eoi_exit_bitmap);
->  void svm_hwapic_irr_update(struct kvm_vcpu *vcpu, int max_irr);
->  void svm_hwapic_isr_update(struct kvm_vcpu *vcpu, int max_isr);
->  int svm_deliver_avic_intr(struct kvm_vcpu *vcpu, int vec);
-> +bool avic_is_vcpu_inhibited(struct kvm_vcpu *vcpu);
->  bool svm_dy_apicv_has_pending_interrupt(struct kvm_vcpu *vcpu);
->  int svm_update_pi_irte(struct kvm *kvm, unsigned int host_irq,
->  		       uint32_t guest_irq, bool set);
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 81a74d86ee5eb..125599855af47 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -9161,6 +9161,10 @@ static int inject_pending_event(struct kvm_vcpu *vcpu, bool *req_immediate_exit)
->  		r = kvm_check_nested_events(vcpu);
->  		if (r < 0)
->  			goto out;
-> +
-> +		/* Nested VM exit might need to update APICv status */
-> +		if (kvm_check_request(KVM_REQ_APICV_UPDATE, vcpu))
-> +			kvm_vcpu_update_apicv(vcpu);
->  	}
->  
->  	/* try to inject new event if pending */
-> @@ -9538,6 +9542,10 @@ void kvm_vcpu_update_apicv(struct kvm_vcpu *vcpu)
->  	down_read(&vcpu->kvm->arch.apicv_update_lock);
->  
->  	activate = kvm_apicv_activated(vcpu->kvm);
-> +
-> +	if (kvm_x86_ops.apicv_check_inhibit)
-> +		activate = activate && !kvm_x86_ops.apicv_check_inhibit(vcpu);
-
-Might as well use Use static_call().  This would also be a candidate for
-DEFINE_STATIC_CALL_RET0, though that's overkill if this is the only call site.
-
-> +
->  	if (vcpu->arch.apicv_active == activate)
->  		goto out;
->  
-> @@ -9935,7 +9943,10 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
->  		 * per-VM state, and responsing vCPUs must wait for the update
->  		 * to complete before servicing KVM_REQ_APICV_UPDATE.
->  		 */
-> -		WARN_ON_ONCE(kvm_apicv_activated(vcpu->kvm) != kvm_vcpu_apicv_active(vcpu));
-> +		if (!is_guest_mode(vcpu))
-> +			WARN_ON_ONCE(kvm_apicv_activated(vcpu->kvm) != kvm_vcpu_apicv_active(vcpu));
-> +		else
-> +			WARN_ON(kvm_vcpu_apicv_active(vcpu));
-
-Won't this fire on VMX?
-
->  
->  		exit_fastpath = static_call(kvm_x86_run)(vcpu);
->  		if (likely(exit_fastpath != EXIT_FASTPATH_REENTER_GUEST))
-> -- 
-> 2.26.3
-> 
+So what are your thoughts on this? Should we keep the shashes while
+they have no users?

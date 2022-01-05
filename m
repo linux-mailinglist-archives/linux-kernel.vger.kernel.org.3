@@ -2,98 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74DB548571B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 18:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6CE748571C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 18:13:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242172AbiAERMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 12:12:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51404 "EHLO
+        id S242181AbiAERMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 12:12:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242157AbiAERMt (ORCPT
+        with ESMTP id S242174AbiAERMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 12:12:49 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B55C061245;
-        Wed,  5 Jan 2022 09:12:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=+nGTDSzdqfLc59semsZfycw3vy5N0uRxQd7QNz1AX40=; b=idqvKdZ9BNPkysHsgHIKYpBaNV
-        jwgnB0HX31G0i2SBq/jMNx9BFbjzY8vegori0mTUC7obfAyNPvhHA3Ku3iIFnRpIkp7TkKYeUfqwG
-        6fuVsjtWq/bXd2iUh1clnXk7OJbmxwy4ew0vmNwOAW1KaS5YF3zCTx7Vn4ZhlYWNv60g8IoKeg5W7
-        rOp1KjKNQlqqCBihDQ5ojYLK81aPNmx6LomidmZpoARGtWluCBrRz0QsnmbAqBdIXeG8r32RNE2xw
-        7CVPMGjOUNl9k4rImvYhisooJbPKM2vwj1fHero6kUfjPwKB1zNC0H8P7t2xkFYjluZkzypZZdLZ7
-        kHysBy6g==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n59qA-00EkDH-W9; Wed, 05 Jan 2022 17:12:46 +0000
-Message-ID: <45492ddd-42f1-674f-af27-5e0a0aace8c9@infradead.org>
-Date:   Wed, 5 Jan 2022 09:12:43 -0800
+        Wed, 5 Jan 2022 12:12:54 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04916C061201
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 09:12:54 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id t19so35726077pfg.9
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 09:12:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :content-transfer-encoding;
+        bh=AgZz4Jvn4UqP9xwmH4duaA6yKjFU9WedUqxetranecg=;
+        b=kUZsjJotxO8SNdldNAiiVqJRbpR4OX22LcO+VHk7Knf8Dm0kODuyoFdAnsU9DK56Xb
+         CDPDtF3M7ka39ulyAFWN1eFZmN/NtAqIvFc4rnD71FgLakOclnqnB/DyA53yC0RJ88mS
+         Rapkxq3c5rpb4J+6m7TfE3PW+tNJbcX5EUv1k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding;
+        bh=AgZz4Jvn4UqP9xwmH4duaA6yKjFU9WedUqxetranecg=;
+        b=zOugUhZ4dYHm5xyGa4X6XIel6Bbbz+9Eee1SZYf1rJbN7qGhsTSA9u4QpHGV9hEoPH
+         9qrgJYPKayfKOUghTIiuIEIuWrt2hgtxSuHQ32+XfQs+8HI51W4nW8kSt4Ak48x3io9z
+         PH/HkvKKhI6b2Ok+2zzVeHZEWGDo8UWHY7f3MCbGiG/4U4oP9OaWe79eyoYTUYvEJmKZ
+         jRy/Ze+hTBhkeR7kUHb0yXipbERJqfA3Bek8rLa5AGQWQylCNy9IgMko5uD3/PFLGsee
+         e5TmHr86srDO18+8kne+j6XAu/Pht4GjbhmG3i5CFndmZ9ncFu23Uw8hkFnMvZCtMNtw
+         2VuA==
+X-Gm-Message-State: AOAM531+rzAssFm3L3jBtCpz7ZFNcJFdqZAPiEfF299wxJiXDNYT3MQl
+        WZwmceSjTq8GpJtZut7E5Why/w==
+X-Google-Smtp-Source: ABdhPJzFBKhs2g7ekTyWrbm7eZV/AyCOF7m5Dr6k2OdOc4HNrOSX3nlikGTn/xtAKlnkq3oGtiUZIQ==
+X-Received: by 2002:a63:7c0f:: with SMTP id x15mr10075999pgc.431.1641402773545;
+        Wed, 05 Jan 2022 09:12:53 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id cm20sm3152256pjb.28.2022.01.05.09.12.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 09:12:53 -0800 (PST)
+Date:   Wed, 5 Jan 2022 09:12:52 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Subject: [GIT PULL] pstore update for v5.17-rc1
+Message-ID: <202201050912.9C8AA2AD6@keescook>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: mdadm regression tests fail
-Content-Language: en-US
-To:     Bruce Dubbs <bruce.dubbs@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-raid@vger.kernel.org
-Cc:     "Douglas R. Reno" <renodr2002@gmail.com>,
-        Pierre Labastie <pierre.labastie@neuf.fr>
-References: <c4c17b11-16f4-ef70-5897-02f923907963@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <c4c17b11-16f4-ef70-5897-02f923907963@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi.
-[adding linux-raid mailing list]
+Hi Linus,
 
+Please pull this tiny pstore update for v5.17-rc1. The pstore tree has
+been pretty quiet, which just a single change queued up.
 
-On 1/4/22 10:55, Bruce Dubbs wrote:
-> I am trying to document the mdadm-4.2 installation procedures for our book,
-> https://www.linuxfromscratch.org/blfs/view/svn/postlfs/mdadm.html
-> 
-> For testing, I am doing a simple:
-> 
->   make
->   sudo ./test --keep-going --logdir=test-logs --save-logs
-> 
-> But I get failures for about half the tests.
-> 
-> Digging in a bit I just ran:
-> 
->  sudo ./test --tests=00raid0 --logdir=test-logs
-> 
-> This is the first test that fails.  With some hacking, it appears that the first portion of this test that fails is:
-> 
->   mdadm -CR $md0 -e0.90 -l0 -n4 $dev0 $dev1 $dev2 $dev3
-> 
-> This resolves to
-> 
->   mdadm -CR /dev/md0 -e0.90 -l0 -n4 /dev/loop0 /dev/loop1 /dev/loop2 /dev/loop3
-> 
-> There is not a lot of error output in the test, so I manually ran:
-> 
->   dd if=/dev/zero of=/tmp/mdtest0 count=20000 bs=1K
->   losetup /dev/loop0 /tmp/mdtest0
-> 
-> For /dev/loop[0123]
-> 
-> Then I ran
-> 
->   mdadm -CR /dev/md0 -e0.90 -l0 -n4 /dev/loop0 /dev/loop1 /dev/loop2 /dev/loop3
->   mdadm: 0.90 metadata does not support layouts for RAID0
-> 
-> My question is whether the regression tests in the tarball are valid for mdadm-4.2?
-> 
->   -- Bruce Dubbs
->      linuxfromscratch.org
-> 
-> Note: The kernel is version 5.15.12.
+Thanks!
+
+-Kees
+
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
+
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/pstore-v5.17-rc1
+
+for you to fetch changes up to a5d05b07961a2df47d3b4aae3bdae61ac095a43c:
+
+  pstore/ftrace: Allow immediate recording (2021-11-18 10:29:52 -0800)
+
+----------------------------------------------------------------
+pstore update for v5.17-rc1
+
+- Add boot param for early ftrace recording in pstore (Uwe Kleine-K�nig)
+
+----------------------------------------------------------------
+Uwe Kleine-K�nig (1):
+      pstore/ftrace: Allow immediate recording
+
+ fs/pstore/ftrace.c | 46 ++++++++++++++++++++++++++++++----------------
+ 1 file changed, 30 insertions(+), 16 deletions(-)
 
 -- 
-~Randy
+Kees Cook

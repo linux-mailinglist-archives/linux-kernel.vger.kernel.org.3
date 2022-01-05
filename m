@@ -2,120 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03C02484FE4
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 10:19:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8BE8484FEA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 10:20:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbiAEJTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 04:19:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
+        id S238799AbiAEJTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 04:19:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiAEJTK (ORCPT
+        with ESMTP id S238798AbiAEJTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 04:19:10 -0500
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E592FC061761;
-        Wed,  5 Jan 2022 01:19:09 -0800 (PST)
-Received: by mail-qv1-xf2c.google.com with SMTP id o10so36973218qvc.5;
-        Wed, 05 Jan 2022 01:19:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:date:subject:from:to:cc:message-id:thread-topic
-         :references:in-reply-to:mime-version:content-transfer-encoding;
-        bh=Zy2ZAgaAUpRCCsLx1xedFVKI27rg6BQh6wtggQkfm18=;
-        b=ju8aYAAQkIEpSn2l+mGJJ8XwVY0UkKWS3zVqJXK4pOkNDn/TcErUidu0lFmjMtx8au
-         dprcOM41IVBlJbxGsBAqPV/hHzOgeMpu5dcltwJ+6gi0p4LxOVeCPCnvujvwr1Q7OkmA
-         47afq9se7zhUTCK0PWLLFelzkafz7/kA5WIWhygoEEcpucVQu/5kFbuOBetkiW9jGnUP
-         iNzE3O8RofC0dFfKKyniKiZha/VYyr18Pr2lEkVdimekHLRpBbrFEa/0qPNoIiEyrO4B
-         5eeSP0cr9FipLkcevjLOKZpG96B2Q2IlF+4NwWKre6XQVvGrm5IT8zXyXJQHR9q6VPHo
-         nn8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:user-agent:date:subject:from:to:cc:message-id
-         :thread-topic:references:in-reply-to:mime-version
-         :content-transfer-encoding;
-        bh=Zy2ZAgaAUpRCCsLx1xedFVKI27rg6BQh6wtggQkfm18=;
-        b=ZhMgpraHEqjDFNChox+lojvXkZ1AFBfxf3vkRy89jEYCqp6efSi7/oCezucO9++Qxy
-         eRNp5RVevz0B9qdy/ZDHH6F01rKlbJ1ci4l9z9r/uadFRKZYt66FzfEoF6LNeIxkUpHX
-         Vao2PXSeyq0ZBEu0L+/0kHPUbQsca6f079PXCYDAnZ5gWf8+2Rws9/SluGUxNX3oHSsZ
-         1qVkLk32ktXqXxOIoMcu97ufIKD+gVLIsqGn3pSRZsfPJmB7Sh8uyjBg5s7FCCbhBbVX
-         uby8XHOfihpiFViyuwmvHBqm8ZT9JPoFm5aYzDpohoDB+Pcuif0bK6cfmnQecntiBsC1
-         3HYA==
-X-Gm-Message-State: AOAM5330GUP/7KM7z8irHoZ9ZMJJXbxI9vHIc9i6JpQX1GMgvAv2Wgfp
-        yqMo7tvIXHlkAVaq5jJouJM=
-X-Google-Smtp-Source: ABdhPJx/PKjVfCCWveTe/ICqyQ4BObYTFbBS4bclzxtYJCZr5fnQA4JGdcDIQaiMKqumsNoHwoB94w==
-X-Received: by 2002:ad4:5cac:: with SMTP id q12mr49611014qvh.37.1641374348977;
-        Wed, 05 Jan 2022 01:19:08 -0800 (PST)
-Received: from [30.135.82.253] ([23.98.35.75])
-        by smtp.gmail.com with ESMTPSA id q12sm35069189qtx.16.2022.01.05.01.19.02
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 05 Jan 2022 01:19:08 -0800 (PST)
-User-Agent: Microsoft-MacOutlook/16.56.21121100
-Date:   Wed, 05 Jan 2022 17:19:00 +0800
-Subject: Re: [PATCH] af_unix: missing lock releases in af_unix.c
-From:   Ryan Cai <ycaibb@gmail.com>
-To:     Shoaib Rao <rao.shoaib@oracle.com>, <davem@davemloft.net>,
-        <kuba@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
-        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <cong.wang@bytedance.com>, <viro@zeniv.linux.org.uk>,
-        <edumazet@google.com>, <jiang.wang@bytedance.com>,
-        <christian.brauner@ubuntu.com>, <kuniyu@amazon.co.jp>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>
-Message-ID: <9BADB912-9338-4798-94C4-AA6268C4CA06@gmail.com>
-Thread-Topic: [PATCH] af_unix: missing lock releases in af_unix.c
-References: <20220103135830.59118-1-ycaibb@gmail.com>
- <555a3e2b-3981-672d-c6cf-5ecb357d2fa6@oracle.com>
-In-Reply-To: <555a3e2b-3981-672d-c6cf-5ecb357d2fa6@oracle.com>
-Mime-version: 1.0
-Content-type: text/plain;
-        charset="UTF-8"
-Content-transfer-encoding: quoted-printable
+        Wed, 5 Jan 2022 04:19:47 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753A7C061784;
+        Wed,  5 Jan 2022 01:19:47 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 94B421F4418B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1641374380;
+        bh=LtPln65A6ei52Ra5ZjIGNfl8BDcMmtmHYl7VlsiP1xg=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=WeCznSwpIMye2KpsUdvAVVZNyalPfXKzOTWEV1f9p2m5MTBnUQpbcTbNoekHCpHHM
+         maA+JfSIrPNCU6lJwoiaOeFaADAkUuKf4JmcsHWk1zNSQaimunp7ih5W7fC4fzdiAo
+         Jbyac8O5RNycRom9gONqtTWkkI1307pWNXGAmhdoQHkBfDi2tLRcVNXIp6q00D7koP
+         65Hs6Xz10Jm3hBcxbGk/FnjErk7WEvqyfVFqzqoX1E4zqik6Ir6kjQtAY3mzXxMKHm
+         2MpYcYS7WF0fgawmnBeyTWCQeyBY0k7MZCoTuM1SyLJkEzAbbNtgNOIwP9EpiP/mvw
+         1qaz/05d5OO/A==
+Subject: Re: [PATCH 2/2] remoteproc: mediatek: Support mt8186 scp
+To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org
+References: <20220104114706.27461-1-allen-kh.cheng@mediatek.com>
+ <20220104114706.27461-3-allen-kh.cheng@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <5722750a-dc1a-3242-6371-90236b98d07b@collabora.com>
+Date:   Wed, 5 Jan 2022 10:19:37 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <20220104114706.27461-3-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Shoaib
+Il 04/01/22 12:47, allen-kh.cheng ha scritto:
+> Add SCP support for mt8186
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
 
-          After further checking, the lock is indeed released at the out_fr=
-ee. My patch is invalid. Sorry for the inconvenience.
-
-Best,
-Ryan
-
-=EF=BB=BFOn 4/1/2022, 2:47 AM, "Shoaib Rao" <rao.shoaib@oracle.com> wrote:
-
-
-    On 1/3/22 05:58, Ryan Cai wrote:
-    > In method __unix_dgram_recvmsg, the lock u->iolock is not released wh=
-en skb is true and loop breaks.
-    >
-    > Signed-off-by: Ryan Cai <ycaibb@gmail.com>
-    > ---
-    >   net/unix/af_unix.c | 1 +
-    >   1 file changed, 1 insertion(+)
-    >
-    > diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-    > index b0bfc78e421c..b97972948d9d 100644
-    > --- a/net/unix/af_unix.c
-    > +++ b/net/unix/af_unix.c
-    > @@ -2305,6 +2305,7 @@ int __unix_dgram_recvmsg(struct sock *sk, struc=
-t msghdr *msg, size_t size,
-    >   		if (skb) {
-    >   			if (!(flags & MSG_PEEK))
-    >   				scm_stat_del(sk, skb);
-    > +			mutex_unlock(&u->iolock);
-    >   			break;
-    >   		}
-    >  =20
-
-    It seems to me that the unlock at the end will release the mutex?
-
-    out_free:
-             skb_free_datagram(sk, skb);
-             mutex_unlock(&u->iolock);
-
-    Shoaib
-
-
-
+Reviewed-By: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>

@@ -2,185 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 669B74853E9
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 14:58:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E47B34853FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 14:59:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240475AbiAEN6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 08:58:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34802 "EHLO
+        id S240501AbiAEN7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 08:59:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240470AbiAEN56 (ORCPT
+        with ESMTP id S236920AbiAEN7r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 08:57:58 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CB9C061761
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 05:57:58 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id h7so44727441lfu.4
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 05:57:58 -0800 (PST)
+        Wed, 5 Jan 2022 08:59:47 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8395BC061784
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 05:59:47 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id w13so84434130ybs.13
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 05:59:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=q8pF2tkMHXrzMZTrOC7iAxy/+sODMzNZLCINoVG646c=;
-        b=wqKnLqRj+vbSZk+zGzMgwGA7M4g5ml5adiibcIDI4+L0ScfB541bvcoTHYiHsPDHWV
-         mMEp1EhIuImqHr1bT8EpxED6sue5uvVpF6wbDrGiY1cm0zz4KxZnpoBXx/vT5Qvx8+il
-         8tGsLl/lFOXEP0zVLklQKDCXqL5gPlVwOqeTmzOCnj6qQGS+dDNw5TAxAUxLDIGBg/Qz
-         vbkX5VA+aLHuH0n8blXcYhiQRMH4EhFXd17MBmH2dI9L+vDpeyEvjplcMZVHERJYMLhr
-         9eDcEuDLkSXzzjBKhKJj8RYjaa4MJu5bacHHnjVqYLu2+M3vrdTE/urFjR82zU5qksu4
-         gC7A==
+        bh=CdzQyjY5hqTLLbgLkmGfp9qCD/7m7uZ7D8CWL463CGI=;
+        b=DKFJ6zVQdxHrZjjtodVBjScySxl8xBm7Tl5Lmk0Bma980+S9vVVF8BJITstPy7Wc9D
+         efg3PTYem23BEf6G2mnuinQdmFw/3FQXkepSiXyuU4JIYJqvj0n/O/Sl40OFxCHd/2a3
+         DyNyydT9KLuBo4hUXXzNqh/M9OqrHZHBBI4+Xf2JdoqIRZEVcSEvNtgLbmn0IgUqRHT4
+         rMEYjngGWIEATdFF4hDYyaM8ZvALL/w4CiBp/zoonNA1J1KAmoPIUSF5N8HLA1H8mDPX
+         86pdtRPwOCjY40q0sqaysU1y8cGE7xXBXMPepKHR3RkLdUeBQ32juFwEOVxfZ/VFpL09
+         u45g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=q8pF2tkMHXrzMZTrOC7iAxy/+sODMzNZLCINoVG646c=;
-        b=vDzf7JdtH8d/b/YVlgQANzbH8cJA5wnff9ES1WuiCVq/jwEZmkc5Wfe/XrNwJxeZop
-         38orAms8nhfccRwRnPhbKwm5rqADB8L+e2UsvRqFrqQ+seBvVWiIK4SW8rBbzt+LL6jL
-         phi8Cu9w6cxQ9AoRLHGWPR141pXvXkTMv54oV2HXdJn9BuPTVXf8A6HsOX9PdXr0yiih
-         z8B1lX4G6huEVzkBmQykDBzfZcC7wyA4XhHoP3nZsX7dacILu2BVAW3i8ypOzfOpqJ1P
-         x0Bl7m8pIdtumflL/At1nFtvc4SpWRZl1/GjLH9MHbo2yVBf86luRyZT4S9czJZX2ukj
-         aV1Q==
-X-Gm-Message-State: AOAM532WgZq8eoj2HSsYXSbP9zUnBzK81Ev9HKcafey/HeCFgYeUBunx
-        8kmcJL5pn/X9YFnK4JHAKbnCKsFv4M0rrJZMAW6PTw==
-X-Google-Smtp-Source: ABdhPJwF6FxqkTrMl5tNOJiMqWBkxjEYB7VKP1QLdptsLoMtoQBzHLiykU/IarkbuQVP33HWZhaiIRp6wy8TdzoHCGg=
-X-Received: by 2002:a05:6512:3d17:: with SMTP id d23mr46346264lfv.523.1641391076394;
- Wed, 05 Jan 2022 05:57:56 -0800 (PST)
+        bh=CdzQyjY5hqTLLbgLkmGfp9qCD/7m7uZ7D8CWL463CGI=;
+        b=BtK0a0z72PaEDtq21AXKuHkA1HnN4RE8geVTlKSzOGrb2qhePhftEu+u9biTH6zGec
+         gYNMHd2HF8LaDtrT0yt1UMtGknTRdHddYr9xcvuEKq2HBLk4pnZA0yCmLBD+10wFFJ+u
+         ED9oxtUfC7ybJNVvnrriL/FwTb3uTDr6DkEA38rEXUQW0jEF8nkRtUZbzIYlNzuqDzsK
+         IBEcMQMmt5GbmUsoFEPs7/IAXMssVuaMNEH5GCnHoaZW/leWNnohd0SjSd+2Z+cYdkM1
+         gES+M2qxhhxRkumtM5wsFu+3A2BoOl78cAEkkobLw24w5EnAQZzCqb7+nu+DH/c5JTwz
+         f4TQ==
+X-Gm-Message-State: AOAM533btxwMVY39zKD5E4PxHSKnZdLGEFw3OrQutM70/QcLyRM9QLC9
+        RK25+m4KxetC9ykECFk5BURSbJwMBG/IvS2PIWrtmw==
+X-Google-Smtp-Source: ABdhPJw+d9DDc+GIjxSi45vfBLmvd2Dwq45WZpQ75nvgh0khtizNH9V5jXiYKdJPKGCMoHpJSfFEdqNnJt3My0YsAjs=
+X-Received: by 2002:a25:9d82:: with SMTP id v2mr67705675ybp.383.1641391186426;
+ Wed, 05 Jan 2022 05:59:46 -0800 (PST)
 MIME-Version: 1.0
-References: <20211222093802.22357-1-vincent.guittot@linaro.org>
- <20211222093802.22357-2-vincent.guittot@linaro.org> <9e526482-905c-e759-8aa6-1ff84bb5b2a3@arm.com>
- <CAKfTPtBR3BWCwEaJe0Cq6K5__zNxfU7FFo2f0bpOPkvzxKdiww@mail.gmail.com> <8f39d837-2589-4f7b-5232-1ed134fb1ad7@arm.com>
-In-Reply-To: <8f39d837-2589-4f7b-5232-1ed134fb1ad7@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 5 Jan 2022 14:57:45 +0100
-Message-ID: <CAKfTPtCVD40GiDEG0pnU+k-nwMAh2PSu_OXq4w3k0A0zR4cLpw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] sched/pelt: Don't sync hardly util_sum with uti_avg
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org,
-        rickyiu@google.com, odin@uged.al, sachinp@linux.vnet.ibm.com,
-        naresh.kamboju@linaro.org
+References: <0000000000007ea16705d0cfbb53@google.com> <000000000000c7845605d4d3f0a0@google.com>
+In-Reply-To: <000000000000c7845605d4d3f0a0@google.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 5 Jan 2022 05:59:35 -0800
+Message-ID: <CANn89i+LbcWn3xoYU-eMjjmQPz0x1pSAat2OpF=i0+RByc-h4w@mail.gmail.com>
+Subject: Re: [syzbot] kernel BUG in pskb_expand_head
+To:     syzbot <syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com>
+Cc:     anthony.l.nguyen@intel.com, changbin.du@intel.com,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        David Miller <davem@davemloft.net>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        intel-wired-lan-owner@osuosl.org, intel-wired-lan@lists.osuosl.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        netdev <netdev@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Yajun Deng <yajun.deng@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Jan 2022 at 14:15, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+On Wed, Jan 5, 2022 at 3:20 AM syzbot
+<syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com> wrote:
 >
-> On 04/01/2022 14:42, Vincent Guittot wrote:
-> > On Tue, 4 Jan 2022 at 12:47, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
-> >>
-> >> On 22/12/2021 10:38, Vincent Guittot wrote:
+> syzbot has found a reproducer for the following issue on:
 >
-> [...]
+> HEAD commit:    c9e6606c7fe9 Linux 5.16-rc8
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=148351c3b00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=32f9fa260d7413b4
+> dashboard link: https://syzkaller.appspot.com/bug?extid=4c63f36709a642f801c5
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15435e2bb00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12f4508db00000
 >
-> >> I still wonder whether the regression only comes from the changes in
-> >> update_cfs_rq_load_avg(), introduced by 1c35b07e6d39.
-> >> And could be fixed only by this part of the patch-set (A):
-> >
-> > I have been able to trigger the warning even with (A) though It took
-> > much more time.
-> > And I have been able to catch wrong situations  (with additional
-> > traces) in the 3 places A, B and C
->
-> OK. By wrong situation you mean '_sum < _avg * MIN_DIVIDER' ?
 
-not only.
-also util_sum == 0 but util_avg !=0 in different places although these
-situation didn't trigger sched_warn because some other sync happened
-before the periodic call of __update_blocked_fair
-or if nr_running == 1 and  and task's util_avg/sum > cfs' util_avg/sum
-just before removing the task
+This C repro looks legit, bug should be in CAN layer.
 
+> The issue was bisected to:
 >
-> >> @@ -3677,15 +3706,22 @@ update_cfs_rq_load_avg(u64 now, struct cfs_rq
-> >> *cfs_rq)
-> >>
-> >>     r = removed_load;
-> >>     sub_positive(&sa->load_avg, r);
-> >> -   sa->load_sum = sa->load_avg * divider;
-> >> +   sub_positive(&sa->load_sum, r * divider);
-> >> +   sa->load_sum = max_t(u32, sa->load_sum, sa->load_avg * MIN_DIVIDER);
-> >>
-> >>     r = removed_util;
-> >>     sub_positive(&sa->util_avg, r);
-> >> -   sa->util_sum = sa->util_avg * divider;
-> >> +   sub_positive(&sa->util_sum, r * divider);
-> >> +   sa->util_sum = max_t(u32, sa->util_sum, sa->util_avg * MIN_DIVIDER);
-> >>
-> >>     r = removed_runnable;
-> >>     sub_positive(&sa->runnable_avg, r);
-> >> -   sa->runnable_sum = sa->runnable_avg * divider;
-> >> +   sub_positive(&sa->runnable_sum, r * divider);
-> >> +   sa->runnable_sum = max_t(u32, sa->runnable_sum,
-> >> +                                 sa->runnable_avg * MIN_DIVIDER);
-> >>
-> >> i.e. w/o changing update_tg_cfs_X() (and
-> >> detach_entity_load_avg()/dequeue_load_avg()).
-> >>
-> >> update_load_avg()
-> >>   update_cfs_rq_load_avg()    <---
-> >>   propagate_entity_load_avg()
-> >>     update_tg_cfs_X()         <---
-> >>
-> >>
-> >> I didn't see the SCHED_WARN_ON() [cfs_rq_is_decayed()] when looping on
-> >> hackbench in several different sched group levels on
-> >> [Hikey620 (Arm64, 8 CPUs, SMP, 4 taskgroups: A/B C/D E/F G/H), >12h uptime].
-> >
-> > IIRC, it was with hikey960 with cgroup v1
-> > As a side note, I never trigger the problem with dragonboard845 and cgroup v2
+> commit e4b8954074f6d0db01c8c97d338a67f9389c042f
+> Author: Eric Dumazet <edumazet@google.com>
+> Date:   Tue Dec 7 01:30:37 2021 +0000
 >
-> OK, just started a test on hikey960 cgroupv1. Let's see if I can catch it.
->
-> [...]
->
-> >>> @@ -3780,7 +3799,11 @@ static void detach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
-> >>>
-> >>>       dequeue_load_avg(cfs_rq, se);
-> >>>       sub_positive(&cfs_rq->avg.util_avg, se->avg.util_avg);
-> >>> -     cfs_rq->avg.util_sum = cfs_rq->avg.util_avg * divider;
-> >>> +     sub_positive(&cfs_rq->avg.util_sum, se->avg.util_sum);
-> >>> +     /* See update_tg_cfs_util() */
-> >>> +     cfs_rq->avg.util_sum = max_t(u32, cfs_rq->avg.util_sum,
-> >>> +                                       cfs_rq->avg.util_avg * MIN_DIVIDER);
-> >>> +
-> >>
-> >> Maybe add a:
-> >>
-> >> Fixes: fcf6631f3736 ("sched/pelt: Ensure that *_sum is always synced
-> >> with *_avg")
-> >
-> > I spent time thinking about adding fixes tag. There is no crash/warn
-> > so far so should we propagate it back in LTS for better performance ?
->
-> Not sure I understand. What do you mean by 'should we propagate it back
-> in LTS'?
+>     netlink: add net device refcount tracker to struct ethnl_req_info
 
-Sorry I had any stables in mind and not only LTS.
-
-Some of the changes done in PELT signal propagation that replace
-subtracting util_sum  by using util_avg * divider instead, are related
-to other problems with sched group hierarchy and
-throttling/unthrottling. I'm not 100% confident that using fixes tag
-to backport this on stables doesn't need to backport more patches on
-other areas in order to not resurrect old problems. So I wonder if
-it's worth  backporting this on stables
+Ignore this bisection, an unrelated commit whent in its way.
 
 >
-> [...]
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=109e6fcbb00000
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=129e6fcbb00000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=149e6fcbb00000
 >
-> >> This max_t() should make sure that `_sum is always >= _avg *
-> >> MIN_DIVIDER`. Which is not the case sometimes. Currently this is done in
-> >>
-> >> (1) update_cfs_rq_load_avg()
-> >> (2) detach_entity_load_avg() and dequeue_load_avg()
-> >> (3) update_tg_cfs_X()
-> >>
-> >> but not in attach_entity_load_avg(), enqueue_load_avg(). What's the
-> >> reason for this?
-> >
-> > Main reason is that I have never seen the problem.
-> > Then, the problem comes from subtracting task's value whereas here we
-> > always add positive value
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com
+> Fixes: e4b8954074f6 ("netlink: add net device refcount tracker to struct ethnl_req_info")
 >
-> OK, I see. The add_positive()'s in update_tg_cfs_X() deal w/ `long` values.
+> skbuff: skb_over_panic: text:ffffffff88235fb8 len:4096 put:4096 head:ffff888021cb8400 data:ffff888021cb8400 tail:0x1000 end:0xc0 dev:<NULL>
+> ------------[ cut here ]------------
+> kernel BUG at net/core/skbuff.c:113!
+> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 1 PID: 19 Comm: ksoftirqd/1 Not tainted 5.16.0-rc8-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:skb_panic+0x16c/0x16e net/core/skbuff.c:113
+> Code: f8 4c 8b 4c 24 10 8b 4b 70 41 56 45 89 e8 4c 89 e2 41 57 48 89 ee 48 c7 c7 e0 4b ad 8a ff 74 24 10 ff 74 24 20 e8 6e 24 c2 ff <0f> 0b e8 74 92 38 f8 4c 8b 64 24 18 e8 da 47 7f f8 48 c7 c1 80 58
+> RSP: 0018:ffffc90000d979e0 EFLAGS: 00010286
+> RAX: 000000000000008b RBX: ffff888021ccb500 RCX: 0000000000000000
+> RDX: ffff88801196d700 RSI: ffffffff815f0948 RDI: fffff520001b2f2e
+> RBP: ffffffff8aad58c0 R08: 000000000000008b R09: 0000000000000000
+> R10: ffffffff815ea6ee R11: 0000000000000000 R12: ffffffff88235fb8
+> R13: 0000000000001000 R14: ffffffff8aad4ba0 R15: 00000000000000c0
+> FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f886c8cc718 CR3: 000000007ad6d000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  skb_over_panic net/core/skbuff.c:118 [inline]
+>  skb_put.cold+0x24/0x24 net/core/skbuff.c:1990
+>  isotp_rcv_cf net/can/isotp.c:570 [inline]
+>  isotp_rcv+0xa38/0x1e30 net/can/isotp.c:668
+>  deliver net/can/af_can.c:574 [inline]
+>  can_rcv_filter+0x445/0x8d0 net/can/af_can.c:635
+>  can_receive+0x31d/0x580 net/can/af_can.c:665
+>  can_rcv+0x120/0x1c0 net/can/af_can.c:696
+>  __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5465
+>  __netif_receive_skb+0x24/0x1b0 net/core/dev.c:5579
+>  process_backlog+0x2a5/0x6c0 net/core/dev.c:6455
+>  __napi_poll+0xaf/0x440 net/core/dev.c:7023
+>  napi_poll net/core/dev.c:7090 [inline]
+>  net_rx_action+0x801/0xb40 net/core/dev.c:7177
+>  __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
+>  run_ksoftirqd kernel/softirq.c:921 [inline]
+>  run_ksoftirqd+0x2d/0x60 kernel/softirq.c:913
+>  smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
+>  kthread+0x405/0x4f0 kernel/kthread.c:327
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+>  </TASK>
+> Modules linked in:
+> ---[ end trace 9f06028ec4daf4be ]---
+> RIP: 0010:skb_panic+0x16c/0x16e net/core/skbuff.c:113
+> Code: f8 4c 8b 4c 24 10 8b 4b 70 41 56 45 89 e8 4c 89 e2 41 57 48 89 ee 48 c7 c7 e0 4b ad 8a ff 74 24 10 ff 74 24 20 e8 6e 24 c2 ff <0f> 0b e8 74 92 38 f8 4c 8b 64 24 18 e8 da 47 7f f8 48 c7 c1 80 58
+> RSP: 0018:ffffc90000d979e0 EFLAGS: 00010286
+> RAX: 000000000000008b RBX: ffff888021ccb500 RCX: 0000000000000000
+> RDX: ffff88801196d700 RSI: ffffffff815f0948 RDI: fffff520001b2f2e
+> RBP: ffffffff8aad58c0 R08: 000000000000008b R09: 0000000000000000
+> R10: ffffffff815ea6ee R11: 0000000000000000 R12: ffffffff88235fb8
+> R13: 0000000000001000 R14: ffffffff8aad4ba0 R15: 00000000000000c0
+> FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f886c8cc718 CR3: 000000007ad6d000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>

@@ -2,80 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C14485708
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 18:04:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D60485711
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 18:07:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242121AbiAEREB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 12:04:01 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:59796 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242123AbiAERDv (ORCPT
+        id S242145AbiAERHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 12:07:21 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:45010 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242142AbiAERHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 12:03:51 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0670D1F37C;
-        Wed,  5 Jan 2022 17:03:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1641402230; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jNu2mn341ZGkz1uVIEx0qvJ64WIUA3ihYU6sd+dalP4=;
-        b=a5mPAC4sor3NED+DLzF1SX/nfY1Edr7PivWLrdq/lHJP12IhSgcKewgofXKxjkPaeY340T
-        4xrXOrP4lGpoE2jl+SK/hK6e/dIsis29ZMk6IqTQlqngz/NizMkDFnBi6u9uv8dF0wVLmG
-        a+WYr+qet6/IcLBwshKnda+aIGzEM/g=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ADA4313BF9;
-        Wed,  5 Jan 2022 17:03:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id TwVkKXXP1WEIGwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Wed, 05 Jan 2022 17:03:49 +0000
-Date:   Wed, 5 Jan 2022 18:03:48 +0100
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     willy@infradead.org, akpm@linux-foundation.org, hannes@cmpxchg.org,
-        mhocko@kernel.org, vdavydov.dev@gmail.com, shakeelb@google.com,
-        guro@fb.com, shy828301@gmail.com, alexs@kernel.org,
-        richard.weiyang@gmail.com, david@fromorbit.com,
-        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
-        jaegeuk@kernel.org, chao@kernel.org, kari.argillander@gmail.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-nfs@vger.kernel.org,
-        zhengqi.arch@bytedance.com, duanxiongchun@bytedance.com,
-        fam.zheng@bytedance.com, smuchun@gmail.com
-Subject: Re: [PATCH v5 13/16] mm: memcontrol: reuse memory cgroup ID for kmem
- ID
-Message-ID: <20220105170348.GA21070@blackbody.suse.cz>
-References: <20211220085649.8196-1-songmuchun@bytedance.com>
- <20211220085649.8196-14-songmuchun@bytedance.com>
+        Wed, 5 Jan 2022 12:07:20 -0500
+Received: by mail-io1-f71.google.com with SMTP id i188-20020a6b3bc5000000b00601decb6241so20934919ioa.11
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 09:07:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=LT9mjlWKUcOxEoDHLR8Lx02AdDDKYTNX5FyA18BMsYg=;
+        b=vKex8V7cnEcvHhUAFTurYUKYO0zQUvZs30ujciHD7legJFJO/6u6a4l3LefYJCVivG
+         kplQT+qSdf/Q4Ot04Q8ovVwr0cO3/poFc0e5/F/c0HZPa2cD5bTVUK9t4G2wdjuws1Wr
+         ZaX72gGhMo4j9IvzJFdDrG7pBCe51Bx74ZesEEJVtZMzScXfw394exsE1/l4mGjITXZL
+         HrHoaAIf0Vz7gOKaKzvsrh+jtDZ5i7Nfc8hAPO35PcRcqINVLKyuzwOChz+nf7cz8/B4
+         YAtkKDSjclmAw4IIo/2Ws30I+IjS2CQ5pK6FRr45rqcKAZCpk5vBFLuhPlgr0GcSzUTn
+         X+Ng==
+X-Gm-Message-State: AOAM530fG/rjN/G/EDeSFjCZFaQxLF008u7ib+1EtQLCcUNTcEl+sfMS
+        s4PplAWMUHHDnRNS46Zhvms7mJUTG4ukvg3iOfH37vurJhmY
+X-Google-Smtp-Source: ABdhPJzez4IwyI7mFVbzEive5MPPzk2HT3jOx5a5V3+bmuQLKp9Nw7HZlaQIOtkhZ2P1MUB+iA8r5DQv1ygxJcoyOSUSKz4jMA0h
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211220085649.8196-14-songmuchun@bytedance.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Received: by 2002:a5d:9d92:: with SMTP id ay18mr26063533iob.130.1641402439542;
+ Wed, 05 Jan 2022 09:07:19 -0800 (PST)
+Date:   Wed, 05 Jan 2022 09:07:19 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000057aae805d4d8c9c7@google.com>
+Subject: [syzbot] WARNING in fixup_exception
+From:   syzbot <syzbot+d9a0f6db5058ce56e260@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bp@alien8.de,
+        bpf@vger.kernel.org, daniel@iogearbox.net,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+        netdev@vger.kernel.org, peterz@infradead.org,
+        songliubraving@fb.com, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de, x86@kernel.org, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 04:56:46PM +0800, Muchun Song <songmuchun@bytedance.com> wrote:
-> There are two idrs being used by memory cgroup, one is for kmem ID,
-> another is for memory cgroup ID. The maximum ID of both is 64Ki.
-> Both of them can limit the total number of memory cgroups.
-> Actually, we can reuse memory cgroup ID for kmem ID to simplify the
-> code.
+Hello,
 
-An interesting improvement.
+syzbot found the following issue on:
 
-I'm a bit dense -- what's the purpose the MEM_CGROUP_ID_DIFF offset?
-Couldn't this deduplication be extended to only use mem_cgroup.id.id
-instead of mem_cgroup.kmemcg_id? (With a boolean telling whether kmem
-accounting is active.)
+HEAD commit:    800829388818 mm: vmscan: reduce throttling due to a failur..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=100bafc3b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1a86c22260afac2f
+dashboard link: https://syzkaller.appspot.com/bug?extid=d9a0f6db5058ce56e260
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=154be92bb00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=112fd30bb00000
 
-Thanks,
-Michal
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d9a0f6db5058ce56e260@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+General protection fault in user access. Non-canonical address?
+WARNING: CPU: 0 PID: 2529 at arch/x86/mm/extable.c:57 ex_handler_uaccess arch/x86/mm/extable.c:57 [inline]
+WARNING: CPU: 0 PID: 2529 at arch/x86/mm/extable.c:57 fixup_exception+0x5da/0x690 arch/x86/mm/extable.c:140
+Modules linked in:
+CPU: 0 PID: 2529 Comm: syz-executor223 Not tainted 5.16.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:ex_handler_uaccess arch/x86/mm/extable.c:57 [inline]
+RIP: 0010:fixup_exception+0x5da/0x690 arch/x86/mm/extable.c:140
+Code: 0c 31 ff 89 de e8 06 f5 42 00 84 db 0f 85 9b fc ff ff e8 19 f1 42 00 48 c7 c7 20 59 a9 89 c6 05 49 33 48 0c 01 e8 52 cf cb 07 <0f> 0b e9 7c fc ff ff e8 fa f0 42 00 48 89 de 48 c7 c7 c0 59 a9 89
+RSP: 0018:ffffc90003bf7bf0 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff88801dbd0000 RSI: ffffffff815f0948 RDI: fffff5200077ef70
+RBP: ffffffff8b6d0044 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff815ea6ee R11: 0000000000000000 R12: ffffc90003bf7cc8
+R13: 000000000000000d R14: ffffc90003bf7d48 R15: 0000000000000000
+FS:  00007f46f7487700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f46f7d44190 CR3: 0000000022544000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __exc_general_protection arch/x86/kernel/traps.c:601 [inline]
+ exc_general_protection+0xed/0x300 arch/x86/kernel/traps.c:562
+ asm_exc_general_protection+0x1e/0x30 arch/x86/include/asm/idtentry.h:562
+RIP: 0010:__put_user_nocheck_2+0x3/0x11
+Code: 00 00 48 39 d9 73 74 0f 01 cb 88 01 31 c9 0f 01 ca c3 66 0f 1f 44 00 00 48 bb ff ef ff ff ff 7f 00 00 48 39 d9 73 54 0f 01 cb <66> 89 01 31 c9 0f 01 ca c3 0f 1f 44 00 00 48 bb fd ef ff ff ff 7f
+RSP: 0018:ffffc90003bf7d78 EFLAGS: 00050293
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0006020200000004
+RDX: ffff88801dbd0000 RSI: ffffffff86d1fba8 RDI: 0000000000000003
+RBP: ffff888077ff01a8 R08: 0000000000000002 R09: 0000000000000001
+R10: ffffffff86d1fb95 R11: 0000000000000000 R12: 0006020200000004
+R13: ffff888077ff0258 R14: 0000000000000000 R15: 0000000000000000
+ vhost_put_used_flags drivers/vhost/vhost.c:969 [inline]
+ vhost_update_used_flags+0x1a3/0x3d0 drivers/vhost/vhost.c:1969
+ vhost_vq_init_access+0x114/0x5c0 drivers/vhost/vhost.c:2013
+ vhost_net_set_backend drivers/vhost/net.c:1548 [inline]
+ vhost_net_ioctl+0xbad/0x1740 drivers/vhost/net.c:1705
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:874 [inline]
+ __se_sys_ioctl fs/ioctl.c:860 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f46f7d02839
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 31 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f46f7487208 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f46f7d8a278 RCX: 00007f46f7d02839
+RDX: 0000000020000000 RSI: 000000004008af30 RDI: 0000000000000003
+RBP: 00007f46f7d8a270 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f46f7d8a27c
+R13: 00007ffc8471e10f R14: 00007f46f7487300 R15: 0000000000022000
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	00 00                	add    %al,(%rax)
+   2:	48 39 d9             	cmp    %rbx,%rcx
+   5:	73 74                	jae    0x7b
+   7:	0f 01 cb             	stac
+   a:	88 01                	mov    %al,(%rcx)
+   c:	31 c9                	xor    %ecx,%ecx
+   e:	0f 01 ca             	clac
+  11:	c3                   	retq
+  12:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+  18:	48 bb ff ef ff ff ff 	movabs $0x7fffffffefff,%rbx
+  1f:	7f 00 00
+  22:	48 39 d9             	cmp    %rbx,%rcx
+  25:	73 54                	jae    0x7b
+  27:	0f 01 cb             	stac
+* 2a:	66 89 01             	mov    %ax,(%rcx) <-- trapping instruction
+  2d:	31 c9                	xor    %ecx,%ecx
+  2f:	0f 01 ca             	clac
+  32:	c3                   	retq
+  33:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+  38:	48                   	rex.W
+  39:	bb fd ef ff ff       	mov    $0xffffeffd,%ebx
+  3e:	ff                   	(bad)
+  3f:	7f                   	.byte 0x7f
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

@@ -2,75 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43D27485CB7
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 00:58:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE28485CB9
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 00:59:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245646AbiAEX6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 18:58:03 -0500
-Received: from mail-4018.proton.ch ([185.70.40.18]:11807 "EHLO
-        mail-4018.proton.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245594AbiAEX5u (ORCPT
+        id S245645AbiAEX7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 18:59:08 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:35072 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239615AbiAEX7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 18:57:50 -0500
-Date:   Wed, 05 Jan 2022 23:57:44 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
-        s=protonmail; t=1641427067;
-        bh=20o01XlA0KPZSVp+vlUsACYY1X55JbN6UgC7f+UelqM=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:From:To:Cc;
-        b=KU7HMLxThumPxf7UkHKfua0m3uvjETarY89Q6xNfLsKAupnOUDSGwLh4gFmmjIooM
-         PwI6oSoozg8F0sxWHrQbwxLILF6a3gxDkVY5PKJNCv9StTxCxaGLHPVDF/pAqPWuk6
-         XJlpuNFfEWZRBr0waV3YyrIUN37BIX7WUVO4cQQU5smtfteLpKX0rkpNCADCWpwX6W
-         Y2K6n2MuJRDtnUVWxpoMrVqzp2WaNHMpb7JsacVeM2tMFuqJkcxGIAboKpTyef6XW6
-         aw3JYeTsq5ixP+ApGdEAng42e1/xrPs/MiL/DrHZD/I3ebikszo+4uLqm6dZvZLz+6
-         y63PAAChf+wvA==
-To:     Tomohito Esaki <etom@igel.co.jp>
-From:   Simon Ser <contact@emersion.fr>
-Cc:     dri-devel@lists.freedesktop.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?utf-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        =?utf-8?Q?Michel_D=C3=A4nzer?= <mdaenzer@redhat.com>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        Mark Yacoub <markyacoub@chromium.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        Evan Quan <evan.quan@amd.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@chromium.org>,
-        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        nouveau@lists.freedesktop.org,
-        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
-        Takanari Hayama <taki@igel.co.jp>
-Reply-To: Simon Ser <contact@emersion.fr>
-Subject: Re: [RFC PATCH 0/3] Add support modifiers for drivers whose planes only support linear layout
-Message-ID: <OCRYf0WjHfvIDxKeXD9eR8KiweNqCTcuy5QUapIIYgtas4x2m_nNc6mDZGnhO-y1H_yYh0O8qzzgAWdExGyK-FjUExqXY1CDlCtSDevNmWg=@emersion.fr>
-In-Reply-To: <20211222052727.19725-1-etom@igel.co.jp>
-References: <20211222052727.19725-1-etom@igel.co.jp>
+        Wed, 5 Jan 2022 18:59:01 -0500
+Received: from [192.168.254.32] (unknown [47.187.212.181])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 15A6C20B7179;
+        Wed,  5 Jan 2022 15:59:00 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 15A6C20B7179
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1641427140;
+        bh=isMsZ9PjYpeZF+DylXH2CoVWmE+GQLqJiZb61eOCKOE=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=ItwAkrsl4Etr04TzIlcPXDoiKY0ij+1jXREZcKRlvNXP3hgcZjpM0f3oVxlt/qc+u
+         v1uZBCl9ySBPd/rddAtGKxFsYMhvK5e5j8ekfnjDPfSMJdJM2lbd0Xlx2sdy6dzUAk
+         N7HeAAh56tc8u1/HX/lIzMpvB6aM5jl+ug3W5ZlE=
+Subject: Re: [PATCH v12 07/10] arm64: Introduce stack trace reliability checks
+ in the unwinder
+To:     Mark Brown <broonie@kernel.org>
+Cc:     mark.rutland@arm.com, jpoimboe@redhat.com, ardb@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
+        linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <0d0eb36f348fb5a6af6eb592c0525f6e94007328>
+ <20220103165212.9303-1-madvenka@linux.microsoft.com>
+ <20220103165212.9303-8-madvenka@linux.microsoft.com>
+ <YdXOQTXscVaVFMJ3@sirena.org.uk>
+From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+Message-ID: <85156eb8-df63-29c0-cbfc-37bc0356d9e8@linux.microsoft.com>
+Date:   Wed, 5 Jan 2022 17:58:59 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+In-Reply-To: <YdXOQTXscVaVFMJ3@sirena.org.uk>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for working on this! I've pushed a patch [1] to drm-misc-next which
-touches the same function, can you rebase your patches on top of it?
+Thanks for the review. Do you have any comments on:
 
-[1]: https://patchwork.freedesktop.org/patch/467940/?series=3D98255&rev=3D3
+[PATCH v12 04/10] arm64: Split unwind_init()
+[PATCH v12 10/10] arm64: Select HAVE_RELIABLE_STACKTRACE
+
+Madhavan
+
+On 1/5/22 10:58 AM, Mark Brown wrote:
+> On Mon, Jan 03, 2022 at 10:52:09AM -0600, madvenka@linux.microsoft.com wrote:
+>> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+>>
+>> There are some kernel features and conditions that make a stack trace
+>> unreliable. Callers may require the unwinder to detect these cases.
+>> E.g., livepatch.
+> 
+> Reviwed-by: Mark Brown <broonie@kernel.org>
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> 

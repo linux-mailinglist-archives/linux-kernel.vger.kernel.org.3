@@ -2,146 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 378CF4853E7
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 14:57:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A70B04853F3
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 14:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240468AbiAEN5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 08:57:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34726 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240458AbiAEN5j (ORCPT
+        id S240486AbiAEN6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 08:58:50 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:44950 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240470AbiAEN6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 08:57:39 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8769C061792
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 05:57:39 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id d1so97710860ybh.6
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 05:57:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=q8VC82293G3QI/P2kAIl5VJN7S08d7ZmIRunRrjYEoA=;
-        b=AqGuah6QksnrhmrxMbulpI/61PSR00Oc4IDmCW5ib4li+2tqhH20IdW7wj6ygAxXL4
-         fExIsJBeIIR1MBk3YjW9lY/OTXy4mrmFsciIVZ302iIHr7Q2Z0yh+LITMNHnXXYSeR9p
-         iIqngnLfiGBiTr5DBnGRPI1cVoqeTYTAoMAg9pwFlAlATot0V0fA81H9efVSU3NzAs/4
-         G8cCRUoBOryU9/Bzk+P2LMJr2Hgop8jq2EO6BJVU8UCeYApqFMA9UdkYwGK06oxyH65h
-         qZ0pd7pAbc7mgESxKwMOW6Di+ca3zhC2pjm29G36O/8yKUqbDOHnwZd2rZrhsdxT7EZE
-         2KYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q8VC82293G3QI/P2kAIl5VJN7S08d7ZmIRunRrjYEoA=;
-        b=MM1LMVCGMk4YLtVXSafTymLilZQ2bd6BVtdkmU8kwJ1HxJifvsPA4RA3snIg38JqO1
-         OnXZ521R1ZiN78g2aSSbTlV/4c+IormPfWlntYJXoCGpE889z0jnmsaF9ahWhhIyuspT
-         UxGPW6WAqXPQJbfwQGSwDq7iMmNZI6GJF80bGSISpljbHCV7EGY5pC4oOQwKaUqidONQ
-         +kbNpZDmry/q4DLlyoCxNOaEGyakdNu64UXrqU2JXDBl5rrur6BBrD8Rg7vQN1GpniHS
-         jiwffScqQ9yVuNbh9QfRv6EFvNcLXTp2gergUSXfULf9s+9GwCH24AX4DhL4N27lMBsg
-         zYmg==
-X-Gm-Message-State: AOAM532HwL70RbKDeN3LcgtOmA5pvNj8Ojk4Z/6BgFDfbpvLt0dnjTMd
-        muTgR8JTIhhDVq0YgFQ6x+ZxjtXYmfH9bzrZ1amM4S6MnW8ZWA==
-X-Google-Smtp-Source: ABdhPJzWXFwL4M4RioBFZGKwwxrE/9qIDA5084D+/r9nJDVn4FK01peXlX2OqQ8TudAdR2uBavCeTXEOszbm61wDi+Q=
-X-Received: by 2002:a25:824c:: with SMTP id d12mr54015007ybn.5.1641391058295;
- Wed, 05 Jan 2022 05:57:38 -0800 (PST)
+        Wed, 5 Jan 2022 08:58:49 -0500
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 205DZ65G029790;
+        Wed, 5 Jan 2022 14:58:11 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=Pi8i2Rh/8xlQj2KiipQSZiBQ+/fK2HKLJA5JcF9t370=;
+ b=HGxl099ZZK8Nvm8wXjAhIB70Kt4C5J73BV31mgvx0uhVl9FL2rFpj1ZyKazN0vklfsqe
+ ytTyVmc5Ebr5zJo+3s5ptI7d4DQOFasYNI/U015L5VEoF5YfTlVdpdBIOqZmP4J3rckq
+ bzqAmJwOomKncapthITx3YH3Dp46YKB0gQzIOUPuinZ09qCzr6hi6SDGLAGQg0SCTq0H
+ 7EudboXy14wBT8eMchU/tUDp1niMFo/xUOKpWdNdzqc8/+IhCiq5GFv4GLDz3NWlW7KM
+ R+zV43xn6lytN2Kae7CWnwm0GXMFO1KwiloSmKgt5FsCDkvVHJZfa0fK9oce+l3MhInk SA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dd7k91may-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jan 2022 14:58:11 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4436810002A;
+        Wed,  5 Jan 2022 14:58:09 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 25BED24D5F0;
+        Wed,  5 Jan 2022 14:58:09 +0100 (CET)
+Received: from localhost (10.75.127.46) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 5 Jan 2022 14:58:08
+ +0100
+From:   Christophe Kerello <christophe.kerello@foss.st.com>
+To:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <robh+dt@kernel.org>, <srinivas.kandagatla@linaro.org>
+CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <devicetree@vger.kernel.org>, <chenshumin86@sina.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>
+Subject: [PATCH 0/3] mtd: rawnand: stm32_fmc2: Add NAND Write Protect support
+Date:   Wed, 5 Jan 2022 14:57:31 +0100
+Message-ID: <20220105135734.271313-1-christophe.kerello@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220105131849.2559506-1-imagedong@tencent.com> <20220105131849.2559506-3-imagedong@tencent.com>
-In-Reply-To: <20220105131849.2559506-3-imagedong@tencent.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 5 Jan 2022 05:57:27 -0800
-Message-ID: <CANn89iLMNK0Yo=5LmcV=NMLmAUEZsb1V__V5bY+ZNh347UE-xg@mail.gmail.com>
-Subject: Re: [PATCH v3 net-next 2/2] bpf: selftests: add bind retry for
- post_bind{4, 6}
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Menglong Dong <imagedong@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-05_03,2022-01-04_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 5, 2022 at 5:21 AM <menglong8.dong@gmail.com> wrote:
->
-> From: Menglong Dong <imagedong@tencent.com>
->
-> With previous patch, kernel is able to 'put_port' after sys_bind()
-> fails. Add the test for that case: rebind another port after
-> sys_bind() fails. If the bind success, it means previous bind
-> operation is already undoed.
->
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> ---
->  tools/testing/selftests/bpf/test_sock.c | 166 +++++++++++++++++++++---
->  1 file changed, 146 insertions(+), 20 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/test_sock.c b/tools/testing/selftests/bpf/test_sock.c
-> index e8edd3dd3ec2..68525d68d4e5 100644
-> --- a/tools/testing/selftests/bpf/test_sock.c
-> +++ b/tools/testing/selftests/bpf/test_sock.c
-> @@ -35,12 +35,15 @@ struct sock_test {
->         /* Endpoint to bind() to */
->         const char *ip;
->         unsigned short port;
-> +       unsigned short port_retry;
->         /* Expected test result */
->         enum {
->                 LOAD_REJECT,
->                 ATTACH_REJECT,
->                 BIND_REJECT,
->                 SUCCESS,
-> +               RETRY_SUCCESS,
-> +               RETRY_REJECT
->         } result;
->  };
->
-> @@ -60,6 +63,7 @@ static struct sock_test tests[] = {
->                 0,
->                 NULL,
->                 0,
-> +               0,
->                 LOAD_REJECT,
->         },
+This patchset adds the management of the WP# signal in FMC2 driver.
+WP will be disabled in probe/resume callbacks and will be enabled
+in remove/suspend callbacks.
 
+This patchset also fixes a conflict on wp-gpios property between
+MTD and NVMEN.
 
-I assume we tried C99 initializers here, and this failed for some reason ?
+Christophe Kerello (3):
+  dt-binding: mtd: nand: Document the wp-gpios property
+  mtd: rawnand: stm32_fmc2: Add NAND Write Protect support
+  nvmem: core: Fix a conflict between MTD and NVMEM on wp-gpios property
 
-diff --git a/tools/testing/selftests/bpf/test_sock.c
-b/tools/testing/selftests/bpf/test_sock.c
-index e8edd3dd3ec2..b57ce9f3eabf 100644
---- a/tools/testing/selftests/bpf/test_sock.c
-+++ b/tools/testing/selftests/bpf/test_sock.c
-@@ -54,13 +54,13 @@ static struct sock_test tests[] = {
-                        BPF_MOV64_IMM(BPF_REG_0, 1),
-                        BPF_EXIT_INSN(),
-                },
--               BPF_CGROUP_INET4_POST_BIND,
--               BPF_CGROUP_INET4_POST_BIND,
--               0,
--               0,
--               NULL,
--               0,
--               LOAD_REJECT,
-+               .expected_attach_type = BPF_CGROUP_INET4_POST_BIND,
-+               .attach_type = BPF_CGROUP_INET4_POST_BIND,
-+               .domain = 0,
-+               .type = 0,
-+               .ip = NULL,
-+               .port = 0,
-+               .result = LOAD_REJECT,
-        },
-        {
-                "bind4 load with invalid access: mark",
+ .../bindings/mtd/nand-controller.yaml         |  7 ++++
+ drivers/mtd/nand/raw/stm32_fmc2_nand.c        | 40 ++++++++++++++++++-
+ drivers/nvmem/core.c                          |  2 +-
+ 3 files changed, 47 insertions(+), 2 deletions(-)
+
+-- 
+2.25.1
+

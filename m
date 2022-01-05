@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FCD848559B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:16:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D026848559E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:16:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241238AbiAEPQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 10:16:09 -0500
-Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:53489 "EHLO
-        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236858AbiAEPP5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 10:15:57 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R231e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V12-5P9_1641395738;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V12-5P9_1641395738)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 05 Jan 2022 23:15:55 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     djwong@kernel.org
-Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH v2] xfs: Remove redundant assignment of mp
-Date:   Wed,  5 Jan 2022 23:15:36 +0800
-Message-Id: <20220105151536.39062-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        id S241259AbiAEPQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 10:16:15 -0500
+Received: from aposti.net ([89.234.176.197]:42226 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237011AbiAEPQI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 10:16:08 -0500
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, list@opendingux.net,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH v2 0/2] hwmon: Add "label" attribute v2
+Date:   Wed,  5 Jan 2022 15:15:49 +0000
+Message-Id: <20220105151551.20285-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mp is being initialized to log->l_mp but this is never read
-as record is overwritten later on. Remove the redundant
-assignment.
+Hi Jean, Guenter,
 
-Cleans up the following clang-analyzer warning:
+A V2 of my patchset which allows specifying a hwmon device's label from
+Device Tree. When the "label" device property is present, its value is
+exported to the userspace via the "label" sysfs attribute.
 
-fs/xfs/xfs_log_recover.c:3543:20: warning: Value stored to 'mp' during
-its initialization is never read [clang-analyzer-deadcode.DeadStores].
+This is useful for userspace to be able to identify an individual device
+when multiple individual chips are present in the system.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
-Changes in v2:
- -Remove mp = log->l_mp.
+Note that this mechanism already exists in IIO.
 
- fs/xfs/xfs_log_recover.c | 2 --
- 1 file changed, 2 deletions(-)
+Patch [1/2] documents the ABI change.
+Patch [2/2] adds the change to the core drivers/hwmon/hwmon.c file.
 
-diff --git a/fs/xfs/xfs_log_recover.c b/fs/xfs/xfs_log_recover.c
-index 8ecb9a8567b7..96c997ed2ec8 100644
---- a/fs/xfs/xfs_log_recover.c
-+++ b/fs/xfs/xfs_log_recover.c
-@@ -3550,8 +3550,6 @@ xlog_recover_check_summary(
- 	uint64_t		ifree;
- 	int			error;
- 
--	mp = log->l_mp;
--
- 	freeblks = 0LL;
- 	itotal = 0LL;
- 	ifree = 0LL;
+Changes from v1:
+- The label is cached into the hwmon_device structure
+- hwmon_dev_name_is_visible() renamed to hwmon_dev_attr_is_visible()
+- Add missing <linux/property.h> include
+- The DT binding documentation of the "label" property has been dropped,
+  and the "label" property is now supported directly in dtschema.
+
+Cheers,
+-Paul
+
+
+Paul Cercueil (2):
+  ABI: hwmon: Document "label" sysfs attribute
+  hwmon: Add "label" attribute
+
+ Documentation/ABI/testing/sysfs-class-hwmon |  8 +++++
+ Documentation/hwmon/sysfs-interface.rst     |  4 +++
+ drivers/hwmon/hwmon.c                       | 34 +++++++++++++++++++--
+ 3 files changed, 43 insertions(+), 3 deletions(-)
+
 -- 
-2.20.1.7.g153144c
+2.34.1
 

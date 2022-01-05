@@ -2,242 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E01D485A18
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA5BD485A1B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:39:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244165AbiAEUha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 15:37:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41810 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244100AbiAEUhG (ORCPT
+        id S244105AbiAEUjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 15:39:42 -0500
+Received: from mail.efficios.com ([167.114.26.124]:33246 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244099AbiAEUjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 15:37:06 -0500
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B88CBC061212
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 12:37:05 -0800 (PST)
-Received: by mail-vk1-xa2d.google.com with SMTP id b77so372544vka.11
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 12:37:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=58UUNS0DgBb5XBf4k5/ZZBZVEZ/F2R7SYVQLoWIj1HA=;
-        b=fX+lEplRyG8vV/rbGDaMDBkro3Dd7ZReV90UVRE16HASlm8S2TnG4eyO36HxLagfxC
-         DKWGqgcWRiZ+6vA1oIKqF70eJJDmgTsyqY3R+5YVbLBpN/Ixl4BQm+9k/kT+Ucu3ya3a
-         1oEfbOmfvc/F4Q+KE7et3tbzzSUXPsaE4QC3y2rsRnpActB5nRvxDH3OIQfc5C77RIfZ
-         RVbJbe6PLBKWvXevVtrm4hCR6NA+368cVHGv7ddjtn4CpTXvrGwPnHIR0n01yS46SpWe
-         X0RwQ6zc+NVXrmVCiX1Ef89lgdkwvoCWkqeDwx1keXJvJp/yYEZr0zFOfYganynJfhtk
-         FOng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=58UUNS0DgBb5XBf4k5/ZZBZVEZ/F2R7SYVQLoWIj1HA=;
-        b=KqQa7n3ZJCGf+CfOU8FJPvcBPMIoUFv/MOSya2/2VjAr7mKg6ELV+96OdAAnP5aXit
-         L826nr4Pc9lyIE9wldv2U5G18eQZnbPtfGMzumwsgxSosIkirHKEL45wgj+r5zB/yfrT
-         pb0rI+RDHKcT2Z69pyzjfeYGGTZVw7DXqCQiHixrPZ5oNvUm3jJL+aRpMRJpjmmR4HBG
-         VDL79uAOC75e4yR8kMs4IFTx0Kpabc+oO7orElMZn3TKoMGwEPjUID74LgJW5AAckL6R
-         VKvvhdZyNTppRcBJ7fi8a+5xaChTv+jdebDVnQLgXefbNrpLapX0Zh7HY/TxdHwhI9dc
-         41uQ==
-X-Gm-Message-State: AOAM530ulnIUeFZoN6ESmCGFYpCIJDufowYVIkTeU1PI5vhVu3hG+aC2
-        X3Us6r8X3kLflsS4GNYm8L8=
-X-Google-Smtp-Source: ABdhPJy7ViyvCGvd5plXY6x2N828NyNFgLUBwtfksiRWcyFa4kHPgvShSwmH3dvex5TRUXalSxLdrw==
-X-Received: by 2002:a1f:218e:: with SMTP id h136mr19995820vkh.41.1641415024917;
-        Wed, 05 Jan 2022 12:37:04 -0800 (PST)
-Received: from localhost.localdomain ([181.22.170.52])
-        by smtp.gmail.com with ESMTPSA id t130sm7860vkc.32.2022.01.05.12.37.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 12:37:04 -0800 (PST)
-From:   Gaston Gonzalez <gascoar@gmail.com>
-To:     linux-staging@lists.linux.dev
-Cc:     gregkh@linuxfoundation.org, nsaenz@kernel.org,
-        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
-        juerg.haefliger@canonical.com, rdunlap@infradead.org,
-        dave.stevenson@raspberrypi.com, stefan.wahren@i2se.com,
-        unixbhaskar@gmail.com, mitaliborkar810@gmail.com,
-        phil@raspberrypi.com, len.baker@gmx.com,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org, gascoar@gmail.com
-Subject: [PATCH 6/6] staging: vc04_services: rename BM2835 to BCM2835 in headers comments
-Date:   Wed,  5 Jan 2022 17:35:48 -0300
-Message-Id: <19acea9e9da0d3ebb1a7e6bce511a3c09e8c80c3.1641414449.git.gascoar@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1641414449.git.gascoar@gmail.com>
-References: <cover.1641414449.git.gascoar@gmail.com>
+        Wed, 5 Jan 2022 15:39:39 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 83B673C9809;
+        Wed,  5 Jan 2022 15:39:38 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id FbqI1sBWzjtz; Wed,  5 Jan 2022 15:39:37 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id CFFA13C95C0;
+        Wed,  5 Jan 2022 15:39:37 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com CFFA13C95C0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1641415177;
+        bh=utAt7L+QSW4ZeE1CsZsobUlkZJDy5lBZN/Y6L3fUl9k=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=NfwlNLhGUzsEsZ/Te9HaSZuVfLina0WqSK+ZyjcRSIeF7ybDFlImwtNJyPvh2YVnF
+         W4GSmRcMSfUzzhRHJfTfxDnD6PzVEUUBxoVXPHbFsvKqLxF1G+3akBWBXwUrTzjmEl
+         awkAvXhdwy7FdlZk2lvrp1lJRlkv9EWL7Z7SmCAqsvRomngd1oXGbVgbfBvIaokD8y
+         KYY0/cihQKt2FnLBX/6hWd/dB2sKi24GWnOsntx/pwfgfQ9XCX3Bbjf8G/R7A+vba2
+         B5qX6pvpEoB9IRAiXixJcY1IgS1IpFrpxplx3I5ODps/8MuumkZkyo9/VtpdeI8u/C
+         Md5kRE7GUVNMw==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Mt3U6jItNVuz; Wed,  5 Jan 2022 15:39:37 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id BFE7F3C9374;
+        Wed,  5 Jan 2022 15:39:37 -0500 (EST)
+Date:   Wed, 5 Jan 2022 15:39:37 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     linux-kernel <linux-kernel@vger.kernel.org>,
+        lttng-dev <lttng-dev@lists.lttng.org>, rp <rp@svcs.cs.pdx.edu>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Message-ID: <1604976069.5148.1641415177661.JavaMail.zimbra@efficios.com>
+Subject: [RELEASE] Userspace RCU 0.11.4, 0.12.3 and 0.13.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4180 (ZimbraWebClient - FF95 (Linux)/8.8.15_GA_4177)
+Thread-Index: hFOmTmvfinaOxKagaO3L6KLVzo7LIA==
+Thread-Topic: Userspace RCU 0.11.4, 0.12.3 and 0.13.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the kernel, when referring to the chip BCM2835, it is more suitable
-to use BCM2835 to BM2835. To avoid confusion, and to make things more
-consistent, rename the headers titles accordingly.
+Hi,
 
-Suggested-by: Stefan Wahren <stefan.wahren@i2se.com>
-Signed-off-by: Gaston Gonzalez <gascoar@gmail.com>
----
- drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c | 2 +-
- drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.h | 2 +-
- drivers/staging/vc04_services/bcm2835-camera/controls.c       | 2 +-
- drivers/staging/vc04_services/vchiq-mmal/mmal-common.h        | 2 +-
- drivers/staging/vc04_services/vchiq-mmal/mmal-encodings.h     | 2 +-
- drivers/staging/vc04_services/vchiq-mmal/mmal-msg-common.h    | 2 +-
- drivers/staging/vc04_services/vchiq-mmal/mmal-msg-format.h    | 2 +-
- drivers/staging/vc04_services/vchiq-mmal/mmal-msg-port.h      | 2 +-
- drivers/staging/vc04_services/vchiq-mmal/mmal-msg.h           | 2 +-
- drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h    | 2 +-
- drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c         | 2 +-
- drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h         | 2 +-
- 12 files changed, 12 insertions(+), 12 deletions(-)
+This is a release announcement for the currently maintained stable
+branches of the Userspace RCU library. Please note that 0.11.4 is
+the last release of the 0.11 stable branch, which is reaching end
+of life. Users facing issues with the 0.11 stable branch are expected
+to upgrade to 0.12.3 or 0.13.1.
 
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-index c729b1b7de71..597c51e8ddf4 100644
---- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-+++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Broadcom BM2835 V4L2 driver
-+ * Broadcom BCM2835 V4L2 driver
-  *
-  * Copyright © 2013 Raspberry Pi (Trading) Ltd.
-  *
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.h b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.h
-index 84ba789af120..0f0c6f7a3764 100644
---- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.h
-+++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /*
-- * Broadcom BM2835 V4L2 driver
-+ * Broadcom BCM2835 V4L2 driver
-  *
-  * Copyright © 2013 Raspberry Pi (Trading) Ltd.
-  *
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/controls.c b/drivers/staging/vc04_services/bcm2835-camera/controls.c
-index 178fb310b89a..eb722f16fb91 100644
---- a/drivers/staging/vc04_services/bcm2835-camera/controls.c
-+++ b/drivers/staging/vc04_services/bcm2835-camera/controls.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Broadcom BM2835 V4L2 driver
-+ * Broadcom BCM2835 V4L2 driver
-  *
-  * Copyright © 2013 Raspberry Pi (Trading) Ltd.
-  *
-diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-common.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-common.h
-index 5bd7410a034a..b33129403a30 100644
---- a/drivers/staging/vc04_services/vchiq-mmal/mmal-common.h
-+++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-common.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /*
-- * Broadcom BM2835 V4L2 driver
-+ * Broadcom BCM2835 V4L2 driver
-  *
-  * Copyright © 2013 Raspberry Pi (Trading) Ltd.
-  *
-diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-encodings.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-encodings.h
-index 2be9941a1f30..e15ae7b24f73 100644
---- a/drivers/staging/vc04_services/vchiq-mmal/mmal-encodings.h
-+++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-encodings.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /*
-- * Broadcom BM2835 V4L2 driver
-+ * Broadcom BCM2835 V4L2 driver
-  *
-  * Copyright © 2013 Raspberry Pi (Trading) Ltd.
-  *
-diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-common.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-common.h
-index 342c9b670f7e..d77e15f25dda 100644
---- a/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-common.h
-+++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-common.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /*
-- * Broadcom BM2835 V4L2 driver
-+ * Broadcom BCM2835 V4L2 driver
-  *
-  * Copyright © 2013 Raspberry Pi (Trading) Ltd.
-  *
-diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-format.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-format.h
-index a118efd21d98..1e996d8cd283 100644
---- a/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-format.h
-+++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-format.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /*
-- * Broadcom BM2835 V4L2 driver
-+ * Broadcom BCM2835 V4L2 driver
-  *
-  * Copyright © 2013 Raspberry Pi (Trading) Ltd.
-  *
-diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-port.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-port.h
-index 3fa3f2a578f0..6ee4c1ed7f19 100644
---- a/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-port.h
-+++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-port.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /*
-- * Broadcom BM2835 V4L2 driver
-+ * Broadcom BCM2835 V4L2 driver
-  *
-  * Copyright © 2013 Raspberry Pi (Trading) Ltd.
-  *
-diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-msg.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-msg.h
-index b636e889c8a1..471413248a14 100644
---- a/drivers/staging/vc04_services/vchiq-mmal/mmal-msg.h
-+++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-msg.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /*
-- * Broadcom BM2835 V4L2 driver
-+ * Broadcom BCM2835 V4L2 driver
-  *
-  * Copyright © 2013 Raspberry Pi (Trading) Ltd.
-  *
-diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h
-index a1e39b1b1701..2277e05b1e31 100644
---- a/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h
-+++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /*
-- * Broadcom BM2835 V4L2 driver
-+ * Broadcom BCM2835 V4L2 driver
-  *
-  * Copyright © 2013 Raspberry Pi (Trading) Ltd.
-  *
-diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-index 76d3f0399964..cb6cdbfaf6ec 100644
---- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-+++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Broadcom BM2835 V4L2 driver
-+ * Broadcom BCM2835 V4L2 driver
-  *
-  * Copyright © 2013 Raspberry Pi (Trading) Ltd.
-  *
-diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
-index 1dc81ecf9268..6006e29232b3 100644
---- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
-+++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /*
-- * Broadcom BM2835 V4L2 driver
-+ * Broadcom BCM2835 V4L2 driver
-  *
-  * Copyright © 2013 Raspberry Pi (Trading) Ltd.
-  *
+The content of those bug fix releases is fairly straightforward,
+and the change log small enough to be shown in this release
+announcement (see below).
+
+Feedback is as always welcome!
+
+Thanks,
+
+Mathieu
+
+Project website: https://liburcu.org
+Git repository: git://git.liburcu.org/urcu.git
+
+Changelog:
+
+2022-01-05 Userspace RCU 0.13.1
+        * fix: properly detect 'cmpxchg' on x86-32
+        * fix: use urcu-tls compat with c++ compiler
+        * fix: remove autoconf features default value in help message
+        * fix: add missing pkgconfig file for memb flavour lib
+        * Make temporary variable in _rcu_dereference non-const
+        * Fix: x86 and s390: uatomic __hp() macro C++ support
+        * Fix: x86 and s390: uatomic __hp() macro clang support
+        * Fix: x86 and s390 uatomic: __hp() macro warning with gcc 11
+        * Fix: changelog: v0.13.0 was released in 2021
+
+2022-01-05 Userspace RCU 0.12.3
+        * fix: use urcu-tls compat with c++ compiler
+        * fix: add missing pkgconfig file for memb flavour lib
+        * Make temporary variable in _rcu_dereference non-const
+        * Fix: x86 and s390: uatomic __hp() macro C++ support
+        * Fix: x86 and s390: uatomic __hp() macro clang support
+        * Fix: x86 and s390 uatomic: __hp() macro warning with gcc 11
+        * Document known ABI issue in README.md
+        * fix: clock_gettime on macOs
+        * Fix: rculist header: use parenthesis around macro parameters
+        * Fix: rcuhlist header: use parenthesis around macro parameters
+        * Fix: hlist header: use parenthesis around macro parameters
+        * Fix: list.h: use parenthesis around macro parameters, caa_container_of()
+        * Fix: hlist iteration relies on undefined behavior
+        * Fix: use __atomic_load() rather than atomic load explicit
+        * Fix: use atomic load memory_order_consume for rcu_dereference on C11/C++11
+        * fix: warnings on non-Linux platforms
+        * fix: HAVE_SCHED_SETAFFINITY is not defined
+        * Add git review config to stable branch
+        * fix: include 'sys/endian.h' on FreeBSD
+        * cleanup: explicitly mark unused parameters (-Wunused-parameter)
+        * fix: shadowed local variable (-Wshadow)
+        * cleanup: all functions have declarations (-Wmissing-prototypes)
+        * Import libtap from babeltrace
+
+2022-01-05 Userspace RCU 0.11.4
+        * fix: add missing pkgconfig file for memb flavour lib
+        * Make temporary variable in _rcu_dereference non-const
+        * Fix: x86 and s390: uatomic __hp() macro C++ support
+        * Fix: x86 and s390: uatomic __hp() macro clang support
+        * Fix: x86 and s390 uatomic: __hp() macro warning with gcc 11
+        * Document known ABI issue in README.md
+        * fix: clock_gettime on macOs
+        * Fix: rculist header: use parenthesis around macro parameters
+        * Fix: rcuhlist header: use parenthesis around macro parameters
+        * Fix: hlist header: use parenthesis around macro parameters
+        * Fix: list.h: use parenthesis around macro parameters, caa_container_of()
+        * Fix: hlist iteration relies on undefined behavior
+        * Fix: use __atomic_load() rather than atomic load explicit
+        * Fix: use atomic load memory_order_consume for rcu_dereference on C11/C++11
+        * Fix: gitreview defaultbranch should be stable-0.11
+        * fix: warnings on non-Linux platforms
+        * fix: HAVE_SCHED_SETAFFINITY is not defined
+        * Add git review config to stable branch
+        * fix: include 'sys/endian.h' on FreeBSD
+        * cleanup: explicitly mark unused parameters (-Wunused-parameter)
+        * fix: shadowed local variable (-Wshadow)
+        * cleanup: all functions have declarations (-Wmissing-prototypes)
+        * Import libtap from babeltrace
+
 -- 
-2.34.1
-
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

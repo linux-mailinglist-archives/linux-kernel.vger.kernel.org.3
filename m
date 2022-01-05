@@ -2,95 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E044857AA
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 18:51:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 220CB4857AC
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 18:51:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242536AbiAERvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 12:51:08 -0500
-Received: from mga02.intel.com ([134.134.136.20]:29110 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242546AbiAERuv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 12:50:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641405051; x=1672941051;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PpHonwmhKdYWwGE2Kj85rE7+8+B24Ps/OyDD+RJ+PS4=;
-  b=dhiYpLiPh+klDlnGr/Ffoc486S+852fb9/FLR7BjVKW2TzOQgL1kV9SI
-   gIbvsQbtkBqYT3qjnLXeCOkCo1CBhZbKI1Qqr9xMrAxkaOgCZza72KSTH
-   U0fssEFrpc2zlQAF+X3X84EfTBzIrtb5ffoSY5TlYtChWbn8QV0KBC8sg
-   CZBD1jAMEFH/iRPiHjpA/sLa3QEC50SAc6fW3y4owuxfrodWtzmwA0soj
-   puTBQ/9NsEDQF8hjhakLJSB3zCTSL442xonXCwn+2DCZ4UBki9a4kuW8m
-   BiYckSC9tuWJ8/95Co69YKCEpoF6Qj0q2P/9Rtq7BccfYtxjKbqkCG/M0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="229815450"
-X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
-   d="scan'208";a="229815450"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 09:50:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
-   d="scan'208";a="621140591"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 05 Jan 2022 09:50:48 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n5AQx-000Gu3-Oz; Wed, 05 Jan 2022 17:50:47 +0000
-Date:   Thu, 6 Jan 2022 01:50:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     kbuild-all@lists.01.org, Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH v2] ACPI: PCC: Implement OperationRegion handler for the
- PCC Type 3 subtype
-Message-ID: <202201060154.xBYcdXiV-lkp@intel.com>
-References: <20220103155838.616580-1-sudeep.holla@arm.com>
+        id S242549AbiAERvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 12:51:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60270 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242568AbiAERvT (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 12:51:19 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E5EFC0611FD
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 09:51:19 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id p37so32505pfh.4
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 09:51:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=02jPdn5t6Ff/0d55zQvjcjTFcLTmmCYTOM0kxLOQ3iQ=;
+        b=Cueq/b8lSSVzXegMttx9Vx8pSA/UhhD3m1o20cmLoHcVqhZ6XXgaaXVafKRtYqDlyj
+         8IWvTSJ4pZRKFoIIksCwBB2tNfs2J0aGabT4tNvI3Hlm9znMm1dx0KTz0GpJYxFfRyHY
+         jrH0+K1kTBtqfXd1eTy28XjLXNBnJl+uTMPKOOb+xyXPkVBi4JzW3e3Rcs83nN7N7//g
+         6UgSi1nSCBXw0Gt5bX2BgStF2nDTix2tKCIs4SamDY8bgF/zCgAck1Z87gI1rkvMRt5m
+         x9rAHWDk//z8+cJw72x+/WCoqS7t1n0w1qB+W9LfWPbidp95ahJF+UwGN3CcSJCWjYTp
+         Okzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=02jPdn5t6Ff/0d55zQvjcjTFcLTmmCYTOM0kxLOQ3iQ=;
+        b=RSlVf0jFpgbyWeqXZ2r5D0gag0PMaIycZNAdn/O5dAOVxfmzsvBfhVBKje+GUe/RvJ
+         iacIEOSJFeLEKuLF5LMPnRxDm3kKep/W8q1X5Qrbajo91Hk2gNiC/UNDZRfrWu7Az8BQ
+         cepZmJ4p6MK9X1nt3/md++T92BB5JytH7xy4dRuj6tsX7tWlf5BZ3KhVG31iuFC8N1nY
+         S9/nF0Jj4wVMD6AK8z+e2M15uVB0gR8MwE0duGHs/M//mHsen0ABF28vuV3oNHhs5ZhE
+         j5McXyNK6tH346mm15/wo7w01LHx5L1yPPzQ/n7AkXvzG9Fsv5VNm3QMPhq7GXhAQUJy
+         29dw==
+X-Gm-Message-State: AOAM533qwH/PE/z+geaHU0bYuYXoi5p3RmZD9bT2bPRl3Cbpj4lNgBlA
+        wZEaa+ARP49pMFwPF8DiQ9zFtWOx2+RP4ZK77sb63Q==
+X-Google-Smtp-Source: ABdhPJzLGp9Lu53gKwRN5ecOY+UDsR90b4q8ivNS1uGwZU7RHIkl+SxX9b3LNJIDkOIJFrv+kyaNYuHnIMw14ADw3RU=
+X-Received: by 2002:a63:854a:: with SMTP id u71mr48636668pgd.201.1641405078557;
+ Wed, 05 Jan 2022 09:51:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220103155838.616580-1-sudeep.holla@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220105104826.1418-1-linmq006@gmail.com>
+In-Reply-To: <20220105104826.1418-1-linmq006@gmail.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Wed, 5 Jan 2022 18:51:07 +0100
+Message-ID: <CAG3jFyvUcGgELW=N4OXwU_SVtV9YpyKQynTj2Oz77P_C1YMOkg@mail.gmail.com>
+Subject: Re: [PATCH] drm/bridge: nwl-dsi: Fix PM disable depth imbalance in nwl_dsi_probe
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Fabio Estevam <festevam@gmail.com>,
+        =?UTF-8?Q?Guido_G=C3=BCnther?= <agx@sigxcpu.org>,
+        Robert Chiras <robert.chiras@nxp.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sudeep,
+Hey Miaoqian,
 
-I love your patch! Perhaps something to improve:
+Thanks for submitting this patch!
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on next-20220105]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+On Wed, 5 Jan 2022 at 11:48, Miaoqian Lin <linmq006@gmail.com> wrote:
+>
+> The pm_runtime_enable will increase power disable depth.
+> Thus a pairing decrement is needed on the error handling
+> path to keep it balanced according to context.
+>
+> Fixes: 44cfc62 ("drm/bridge: Add NWL MIPI DSI host controller support")
 
-url:    https://github.com/0day-ci/linux/commits/Sudeep-Holla/ACPI-PCC-Implement-OperationRegion-handler-for-the-PCC-Type-3-subtype/20220104-000003
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220106/202201060154.xBYcdXiV-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/1dbcdc47eadc8c55659410fc03d067f3438a386a
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Sudeep-Holla/ACPI-PCC-Implement-OperationRegion-handler-for-the-PCC-Type-3-subtype/20220104-000003
-        git checkout 1dbcdc47eadc8c55659410fc03d067f3438a386a
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
+In the future, please use 12 chars of the hash. I'll fix it this time,
+but please use 12 characters going forward.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>  drivers/gpu/drm/bridge/nwl-dsi.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c b/drivers/gpu/drm/bridge/nwl-dsi.c
+> index a7389a0facfb..fc3ad9fab867 100644
+> --- a/drivers/gpu/drm/bridge/nwl-dsi.c
+> +++ b/drivers/gpu/drm/bridge/nwl-dsi.c
+> @@ -1206,6 +1206,7 @@ static int nwl_dsi_probe(struct platform_device *pdev)
+>
+>         ret = nwl_dsi_select_input(dsi);
+>         if (ret < 0) {
+> +               pm_runtime_disable(dev);
+>                 mipi_dsi_host_unregister(&dsi->dsi_host);
+>                 return ret;
+>         }
+> --
+> 2.17.1
+>
 
+Fixed commit hash length, added my r-b and applied to drm-misc-next.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/acpi/acpi_pcc.c:34:22: sparse: sparse: symbol 'pcc_ctx' was not declared. Should it be static?
-
-Please review and possibly fold the followup patch.
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Reviewed-by: Robert Foss <robert.foss@linaro.org>

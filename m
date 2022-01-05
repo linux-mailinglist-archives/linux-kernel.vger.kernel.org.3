@@ -2,182 +2,353 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FD32484EF9
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 09:01:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78FEA484EFB
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 09:05:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238286AbiAEIBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 03:01:35 -0500
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:52310
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229880AbiAEIBd (ORCPT
+        id S238301AbiAEIFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 03:05:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229880AbiAEIFG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 03:01:33 -0500
-Received: from [192.168.1.7] (unknown [222.129.35.96])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 5 Jan 2022 03:05:06 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50BA2C061761;
+        Wed,  5 Jan 2022 00:05:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id A416841938;
-        Wed,  5 Jan 2022 08:01:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641369692;
-        bh=9wD1JxRaWZs6Kc2SP2+CnPTzm85J12Nvcvl6p/eRMLE=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=QjmV1ZULSzSO6nBJ5n+WoUXzcLUNWXQQMJt5gICawmVShOeGp/p4/oOfu2Q66n3xm
-         QuyIlfPjMX9XMbZYKgS5hejabzcRQexZRiFzTyGyEa+MuzNrBbo585BTm9fMlZV9JX
-         ruOZD1cn1NlHDD4ogU9KkXW4U7M2ilsmD0nA8TwuNQZEeZuCTvJg+IGqQrnUv12vXE
-         EOys0dn1Lpi5s3YdWGGY6nV36dVWL8RE/+mLAT4475xX5WJg20M9gOxJBUP30NRKTB
-         8TATsqtuQOVBEadcRlXzl2h+nU9abUIoi8k8rkPpOWxtWEkgjUFNbE8PdKJPUlCE22
-         C1/lOUebDBoLQ==
-Message-ID: <fc72ca69-9043-dc46-6548-dbc3c4d40289@canonical.com>
-Date:   Wed, 5 Jan 2022 16:01:24 +0800
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8B398CE1B19;
+        Wed,  5 Jan 2022 08:05:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB3DEC36AE9;
+        Wed,  5 Jan 2022 08:05:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641369901;
+        bh=+yrla173Hc+EeGA2WY+vT2jwEipKTidLid3MuTj5K7I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JcEhWAW+Mczv4haLtAbYbBjIQpEXg/qs+qzeCctReW57+z/NtnOV4LAZ1HCF3lZR/
+         2z60n5NqzVsc9uk1zNrfN9DTGcrDHIh1wSRVCy+T+svS9fNJW5Ns4XtMuWF6Nx9+iy
+         eQyMLQF+wvdxCniLhtE/I7ECij46ILoxmK1zyQZDgJJ81MQcsEb7hbpQF+Y1zU8NyR
+         QyMXEXrTV7qmVazQ3XAO+RoChbnkVabBbIiAcBoiOXZAXZZx+TfLUAM8yOE8piwBHU
+         squjFAaXduGZn82GU6k3FlQDuUulkir0NhqJ3T/oSjIFOtOWUDQhbIJCyz9UwuLzsd
+         klejVFNWcBYcw==
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Leon Romanovsky <leonro@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+Subject: [PATCH rdma-next] RDMA/mad: Delete duplicated init_query_mad functions
+Date:   Wed,  5 Jan 2022 10:04:56 +0200
+Message-Id: <af6f35c590ff5ef56d0137351b8b295af0f7c13c.1641369858.git.leonro@nvidia.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] net: usb: r8152: Check used MAC passthrough address
-Content-Language: en-US
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     kuba@kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        hayeswang@realtek.com, tiwai@suse.de
-References: <20220105061747.7104-1-aaron.ma@canonical.com>
- <20220105082355.79d44349@md1za8fc.ad001.siemens.net>
- <20220105083238.4278d331@md1za8fc.ad001.siemens.net>
- <e71f3dfd-5f17-6cdc-8f1b-9b5ad15ca793@canonical.com>
- <20220105085525.31873db2@md1za8fc.ad001.siemens.net>
-From:   Aaron Ma <aaron.ma@canonical.com>
-In-Reply-To: <20220105085525.31873db2@md1za8fc.ad001.siemens.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Leon Romanovsky <leonro@nvidia.com>
 
+Several drivers used same function to initialize query MAD,
+so move that function to global header file.
 
-On 1/5/22 15:55, Henning Schild wrote:
-> Am Wed, 5 Jan 2022 15:38:51 +0800
-> schrieb Aaron Ma <aaron.ma@canonical.com>:
-> 
->> On 1/5/22 15:32, Henning Schild wrote:
->>> Am Wed, 5 Jan 2022 08:23:55 +0100
->>> schrieb Henning Schild <henning.schild@siemens.com>:
->>>    
->>>> Hi Aaron,
->>>>
->>>> if this or something similar goes in, please add another patch to
->>>> remove the left-over defines.
->>>>   
->>
->> Sure, I will do it.
->>
->>>> Am Wed,  5 Jan 2022 14:17:47 +0800
->>>> schrieb Aaron Ma <aaron.ma@canonical.com>:
->>>>   
->>>>> When plugin multiple r8152 ethernet dongles to Lenovo Docks
->>>>> or USB hub, MAC passthrough address from BIOS should be
->>>>> checked if it had been used to avoid using on other dongles.
->>>>>
->>>>> Currently builtin r8152 on Dock still can't be identified.
->>>>> First detected r8152 will use the MAC passthrough address.
->>>>>
->>>>> Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
->>>>> ---
->>>>>    drivers/net/usb/r8152.c | 10 ++++++++++
->>>>>    1 file changed, 10 insertions(+)
->>>>>
->>>>> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
->>>>> index f9877a3e83ac..77f11b3f847b 100644
->>>>> --- a/drivers/net/usb/r8152.c
->>>>> +++ b/drivers/net/usb/r8152.c
->>>>> @@ -1605,6 +1605,7 @@ static int
->>>>> vendor_mac_passthru_addr_read(struct r8152 *tp, struct sockaddr
->>>>> *sa) char *mac_obj_name; acpi_object_type mac_obj_type;
->>>>>    	int mac_strlen;
->>>>> +	struct net_device *ndev;
->>>>>    
->>>>>    	if (tp->lenovo_macpassthru) {
->>>>>    		mac_obj_name = "\\MACA";
->>>>> @@ -1662,6 +1663,15 @@ static int
->>>>> vendor_mac_passthru_addr_read(struct r8152 *tp, struct sockaddr
->>>>> *sa) ret = -EINVAL; goto amacout;
->>>>>    	}
->>>>> +	rcu_read_lock();
->>>>> +	for_each_netdev_rcu(&init_net, ndev) {
->>>>> +		if (strncmp(buf, ndev->dev_addr, 6) == 0) {
->>>>> +			rcu_read_unlock();
->>>>> +			goto amacout;
->>>>
->>>> Since the original PCI netdev will always be there, that would
->>>> disable inheritance would it not?
->>>> I guess a strncmp(MODULE_NAME, info->driver, strlen(MODULE_NAME))
->>>> is needed as well.
->>>>   
->>
->> PCI ethernet could be a builtin one on dock since there will be TBT4
->> dock.
-> 
-> In my X280 there is a PCI device in the laptop, always there. And its
-> MAC is the one found in ACPI. Did not try but i think for such devices
-> there would never be inheritance even if one wanted and used a Lenovo
-> dock that is supposed to do it.
-> 
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+---
+ drivers/infiniband/hw/mlx4/main.c            | 24 +++++++-------------
+ drivers/infiniband/hw/mlx5/mad.c             | 18 +++++++--------
+ drivers/infiniband/hw/mlx5/mlx5_ib.h         |  8 -------
+ drivers/infiniband/hw/mthca/mthca_provider.c | 20 +++++-----------
+ include/rdma/ib_smi.h                        | 12 +++++++++-
+ 5 files changed, 34 insertions(+), 48 deletions(-)
 
-There will more TBT4 docks in market, the new ethernet is just the same as
-PCI device, connected by thunderbolt.
+diff --git a/drivers/infiniband/hw/mlx4/main.c b/drivers/infiniband/hw/mlx4/main.c
+index d66ce7694bbe..1c3d97229988 100644
+--- a/drivers/infiniband/hw/mlx4/main.c
++++ b/drivers/infiniband/hw/mlx4/main.c
+@@ -85,14 +85,6 @@ static enum rdma_link_layer mlx4_ib_port_link_layer(struct ib_device *device,
+ 
+ static struct workqueue_struct *wq;
+ 
+-static void init_query_mad(struct ib_smp *mad)
+-{
+-	mad->base_version  = 1;
+-	mad->mgmt_class    = IB_MGMT_CLASS_SUBN_LID_ROUTED;
+-	mad->class_version = 1;
+-	mad->method	   = IB_MGMT_METHOD_GET;
+-}
+-
+ static int check_flow_steering_support(struct mlx4_dev *dev)
+ {
+ 	int eth_num_ports = 0;
+@@ -471,7 +463,7 @@ static int mlx4_ib_query_device(struct ib_device *ibdev,
+ 	if (!in_mad || !out_mad)
+ 		goto out;
+ 
+-	init_query_mad(in_mad);
++	ib_init_query_mad(in_mad);
+ 	in_mad->attr_id = IB_SMP_ATTR_NODE_INFO;
+ 
+ 	err = mlx4_MAD_IFC(to_mdev(ibdev), MLX4_MAD_IFC_IGNORE_KEYS,
+@@ -669,7 +661,7 @@ static int ib_link_query_port(struct ib_device *ibdev, u32 port,
+ 	if (!in_mad || !out_mad)
+ 		goto out;
+ 
+-	init_query_mad(in_mad);
++	ib_init_query_mad(in_mad);
+ 	in_mad->attr_id  = IB_SMP_ATTR_PORT_INFO;
+ 	in_mad->attr_mod = cpu_to_be32(port);
+ 
+@@ -721,7 +713,7 @@ static int ib_link_query_port(struct ib_device *ibdev, u32 port,
+ 
+ 	/* If reported active speed is QDR, check if is FDR-10 */
+ 	if (props->active_speed == IB_SPEED_QDR) {
+-		init_query_mad(in_mad);
++		ib_init_query_mad(in_mad);
+ 		in_mad->attr_id = MLX4_ATTR_EXTENDED_PORT_INFO;
+ 		in_mad->attr_mod = cpu_to_be32(port);
+ 
+@@ -848,7 +840,7 @@ int __mlx4_ib_query_gid(struct ib_device *ibdev, u32 port, int index,
+ 	if (!in_mad || !out_mad)
+ 		goto out;
+ 
+-	init_query_mad(in_mad);
++	ib_init_query_mad(in_mad);
+ 	in_mad->attr_id  = IB_SMP_ATTR_PORT_INFO;
+ 	in_mad->attr_mod = cpu_to_be32(port);
+ 
+@@ -870,7 +862,7 @@ int __mlx4_ib_query_gid(struct ib_device *ibdev, u32 port, int index,
+ 		}
+ 	}
+ 
+-	init_query_mad(in_mad);
++	ib_init_query_mad(in_mad);
+ 	in_mad->attr_id  = IB_SMP_ATTR_GUID_INFO;
+ 	in_mad->attr_mod = cpu_to_be32(index / 8);
+ 
+@@ -917,7 +909,7 @@ static int mlx4_ib_query_sl2vl(struct ib_device *ibdev, u32 port,
+ 	if (!in_mad || !out_mad)
+ 		goto out;
+ 
+-	init_query_mad(in_mad);
++	ib_init_query_mad(in_mad);
+ 	in_mad->attr_id  = IB_SMP_ATTR_SL_TO_VL_TABLE;
+ 	in_mad->attr_mod = 0;
+ 
+@@ -971,7 +963,7 @@ int __mlx4_ib_query_pkey(struct ib_device *ibdev, u32 port, u16 index,
+ 	if (!in_mad || !out_mad)
+ 		goto out;
+ 
+-	init_query_mad(in_mad);
++	ib_init_query_mad(in_mad);
+ 	in_mad->attr_id  = IB_SMP_ATTR_PKEY_TABLE;
+ 	in_mad->attr_mod = cpu_to_be32(index / 32);
+ 
+@@ -1990,7 +1982,7 @@ static int init_node_data(struct mlx4_ib_dev *dev)
+ 	if (!in_mad || !out_mad)
+ 		goto out;
+ 
+-	init_query_mad(in_mad);
++	ib_init_query_mad(in_mad);
+ 	in_mad->attr_id = IB_SMP_ATTR_NODE_DESC;
+ 	if (mlx4_is_master(dev->dev))
+ 		mad_ifc_flags |= MLX4_MAD_IFC_NET_VIEW;
+diff --git a/drivers/infiniband/hw/mlx5/mad.c b/drivers/infiniband/hw/mlx5/mad.c
+index 29a888b22789..293ed709e5ed 100644
+--- a/drivers/infiniband/hw/mlx5/mad.c
++++ b/drivers/infiniband/hw/mlx5/mad.c
+@@ -291,7 +291,7 @@ int mlx5_query_ext_port_caps(struct mlx5_ib_dev *dev, unsigned int port)
+ 	if (!in_mad || !out_mad)
+ 		goto out;
+ 
+-	init_query_mad(in_mad);
++	ib_init_query_mad(in_mad);
+ 	in_mad->attr_id = MLX5_ATTR_EXTENDED_PORT_INFO;
+ 	in_mad->attr_mod = cpu_to_be32(port);
+ 
+@@ -318,7 +318,7 @@ static int mlx5_query_mad_ifc_smp_attr_node_info(struct ib_device *ibdev,
+ 	if (!in_mad)
+ 		return -ENOMEM;
+ 
+-	init_query_mad(in_mad);
++	ib_init_query_mad(in_mad);
+ 	in_mad->attr_id = IB_SMP_ATTR_NODE_INFO;
+ 
+ 	err = mlx5_MAD_IFC(to_mdev(ibdev), 1, 1, 1, NULL, NULL, in_mad,
+@@ -405,7 +405,7 @@ int mlx5_query_mad_ifc_node_desc(struct mlx5_ib_dev *dev, char *node_desc)
+ 	if (!in_mad || !out_mad)
+ 		goto out;
+ 
+-	init_query_mad(in_mad);
++	ib_init_query_mad(in_mad);
+ 	in_mad->attr_id = IB_SMP_ATTR_NODE_DESC;
+ 
+ 	err = mlx5_MAD_IFC(dev, 1, 1, 1, NULL, NULL, in_mad, out_mad);
+@@ -430,7 +430,7 @@ int mlx5_query_mad_ifc_node_guid(struct mlx5_ib_dev *dev, __be64 *node_guid)
+ 	if (!in_mad || !out_mad)
+ 		goto out;
+ 
+-	init_query_mad(in_mad);
++	ib_init_query_mad(in_mad);
+ 	in_mad->attr_id = IB_SMP_ATTR_NODE_INFO;
+ 
+ 	err = mlx5_MAD_IFC(dev, 1, 1, 1, NULL, NULL, in_mad, out_mad);
+@@ -456,7 +456,7 @@ int mlx5_query_mad_ifc_pkey(struct ib_device *ibdev, u32 port, u16 index,
+ 	if (!in_mad || !out_mad)
+ 		goto out;
+ 
+-	init_query_mad(in_mad);
++	ib_init_query_mad(in_mad);
+ 	in_mad->attr_id  = IB_SMP_ATTR_PKEY_TABLE;
+ 	in_mad->attr_mod = cpu_to_be32(index / 32);
+ 
+@@ -485,7 +485,7 @@ int mlx5_query_mad_ifc_gids(struct ib_device *ibdev, u32 port, int index,
+ 	if (!in_mad || !out_mad)
+ 		goto out;
+ 
+-	init_query_mad(in_mad);
++	ib_init_query_mad(in_mad);
+ 	in_mad->attr_id  = IB_SMP_ATTR_PORT_INFO;
+ 	in_mad->attr_mod = cpu_to_be32(port);
+ 
+@@ -496,7 +496,7 @@ int mlx5_query_mad_ifc_gids(struct ib_device *ibdev, u32 port, int index,
+ 
+ 	memcpy(gid->raw, out_mad->data + 8, 8);
+ 
+-	init_query_mad(in_mad);
++	ib_init_query_mad(in_mad);
+ 	in_mad->attr_id  = IB_SMP_ATTR_GUID_INFO;
+ 	in_mad->attr_mod = cpu_to_be32(index / 8);
+ 
+@@ -530,7 +530,7 @@ int mlx5_query_mad_ifc_port(struct ib_device *ibdev, u32 port,
+ 
+ 	/* props being zeroed by the caller, avoid zeroing it here */
+ 
+-	init_query_mad(in_mad);
++	ib_init_query_mad(in_mad);
+ 	in_mad->attr_id  = IB_SMP_ATTR_PORT_INFO;
+ 	in_mad->attr_mod = cpu_to_be32(port);
+ 
+@@ -596,7 +596,7 @@ int mlx5_query_mad_ifc_port(struct ib_device *ibdev, u32 port,
+ 	if (props->active_speed == 4) {
+ 		if (dev->port_caps[port - 1].ext_port_cap &
+ 		    MLX_EXT_PORT_CAP_FLAG_EXTENDED_PORT_INFO) {
+-			init_query_mad(in_mad);
++			ib_init_query_mad(in_mad);
+ 			in_mad->attr_id = MLX5_ATTR_EXTENDED_PORT_INFO;
+ 			in_mad->attr_mod = cpu_to_be32(port);
+ 
+diff --git a/drivers/infiniband/hw/mlx5/mlx5_ib.h b/drivers/infiniband/hw/mlx5/mlx5_ib.h
+index 93065492dcb8..8c6cbf7ec7ec 100644
+--- a/drivers/infiniband/hw/mlx5/mlx5_ib.h
++++ b/drivers/infiniband/hw/mlx5/mlx5_ib.h
+@@ -1456,14 +1456,6 @@ extern const struct uapi_definition mlx5_ib_flow_defs[];
+ extern const struct uapi_definition mlx5_ib_qos_defs[];
+ extern const struct uapi_definition mlx5_ib_std_types_defs[];
+ 
+-static inline void init_query_mad(struct ib_smp *mad)
+-{
+-	mad->base_version  = 1;
+-	mad->mgmt_class    = IB_MGMT_CLASS_SUBN_LID_ROUTED;
+-	mad->class_version = 1;
+-	mad->method	   = IB_MGMT_METHOD_GET;
+-}
+-
+ static inline int is_qp1(enum ib_qp_type qp_type)
+ {
+ 	return qp_type == MLX5_IB_QPT_HW_GSI || qp_type == IB_QPT_GSI;
+diff --git a/drivers/infiniband/hw/mthca/mthca_provider.c b/drivers/infiniband/hw/mthca/mthca_provider.c
+index ceee23ebc0f2..c46df53f26cf 100644
+--- a/drivers/infiniband/hw/mthca/mthca_provider.c
++++ b/drivers/infiniband/hw/mthca/mthca_provider.c
+@@ -50,14 +50,6 @@
+ #include <rdma/mthca-abi.h>
+ #include "mthca_memfree.h"
+ 
+-static void init_query_mad(struct ib_smp *mad)
+-{
+-	mad->base_version  = 1;
+-	mad->mgmt_class    = IB_MGMT_CLASS_SUBN_LID_ROUTED;
+-	mad->class_version = 1;
+-	mad->method    	   = IB_MGMT_METHOD_GET;
+-}
+-
+ static int mthca_query_device(struct ib_device *ibdev, struct ib_device_attr *props,
+ 			      struct ib_udata *uhw)
+ {
+@@ -78,7 +70,7 @@ static int mthca_query_device(struct ib_device *ibdev, struct ib_device_attr *pr
+ 
+ 	props->fw_ver              = mdev->fw_ver;
+ 
+-	init_query_mad(in_mad);
++	ib_init_query_mad(in_mad);
+ 	in_mad->attr_id = IB_SMP_ATTR_NODE_INFO;
+ 
+ 	err = mthca_MAD_IFC(mdev, 1, 1,
+@@ -140,7 +132,7 @@ static int mthca_query_port(struct ib_device *ibdev,
+ 
+ 	/* props being zeroed by the caller, avoid zeroing it here */
+ 
+-	init_query_mad(in_mad);
++	ib_init_query_mad(in_mad);
+ 	in_mad->attr_id  = IB_SMP_ATTR_PORT_INFO;
+ 	in_mad->attr_mod = cpu_to_be32(port);
+ 
+@@ -234,7 +226,7 @@ static int mthca_query_pkey(struct ib_device *ibdev,
+ 	if (!in_mad || !out_mad)
+ 		goto out;
+ 
+-	init_query_mad(in_mad);
++	ib_init_query_mad(in_mad);
+ 	in_mad->attr_id  = IB_SMP_ATTR_PKEY_TABLE;
+ 	in_mad->attr_mod = cpu_to_be32(index / 32);
+ 
+@@ -263,7 +255,7 @@ static int mthca_query_gid(struct ib_device *ibdev, u32 port,
+ 	if (!in_mad || !out_mad)
+ 		goto out;
+ 
+-	init_query_mad(in_mad);
++	ib_init_query_mad(in_mad);
+ 	in_mad->attr_id  = IB_SMP_ATTR_PORT_INFO;
+ 	in_mad->attr_mod = cpu_to_be32(port);
+ 
+@@ -274,7 +266,7 @@ static int mthca_query_gid(struct ib_device *ibdev, u32 port,
+ 
+ 	memcpy(gid->raw, out_mad->data + 8, 8);
+ 
+-	init_query_mad(in_mad);
++	ib_init_query_mad(in_mad);
+ 	in_mad->attr_id  = IB_SMP_ATTR_GUID_INFO;
+ 	in_mad->attr_mod = cpu_to_be32(index / 8);
+ 
+@@ -1006,7 +998,7 @@ static int mthca_init_node_data(struct mthca_dev *dev)
+ 	if (!in_mad || !out_mad)
+ 		goto out;
+ 
+-	init_query_mad(in_mad);
++	ib_init_query_mad(in_mad);
+ 	in_mad->attr_id = IB_SMP_ATTR_NODE_DESC;
+ 
+ 	err = mthca_MAD_IFC(dev, 1, 1,
+diff --git a/include/rdma/ib_smi.h b/include/rdma/ib_smi.h
+index fdb8633cbaff..fc16b826b2c1 100644
+--- a/include/rdma/ib_smi.h
++++ b/include/rdma/ib_smi.h
+@@ -144,5 +144,15 @@ ib_get_smp_direction(struct ib_smp *smp)
+ #define IB_NOTICE_TRAP_DR_NOTICE	0x80
+ #define IB_NOTICE_TRAP_DR_TRUNC		0x40
+ 
+-
++/**
++ * ib_init_query_mad - Initialize query MAD.
++ * @mad: MAD to initialize.
++ */
++static inline void ib_init_query_mad(struct ib_smp *mad)
++{
++	mad->base_version = IB_MGMT_BASE_VERSION;
++	mad->mgmt_class = IB_MGMT_CLASS_SUBN_LID_ROUTED;
++	mad->class_version = 1;
++	mad->method = IB_MGMT_METHOD_GET;
++}
+ #endif /* IB_SMI_H */
+-- 
+2.33.1
 
-For exmaple, connect a TBT4 dock which uses i225 pcie base ethernet,
-then connect another TBT3 dock which uses r8152.
-If skip PCI check, then i225 and r8152 will use the same MAC.
-
-Aaron
-
-> Maybe i should try the patch but it seems like it defeats inheritance
-> completely. Well depending on probe order ...
-> 
-> regards,
-> Henning
-> 
-> 
->>>> Maybe leave here with
->>>> netif_info()
->>>>   
->>
->> Not good to print in rcu lock.
->>
->>>> And move the whole block up, we can skip the whole ACPI story if we
->>>> find the MAC busy.
->>>
->>> That is wrong, need to know that MAC so can not move up too much.
->>> But maybe above the is_valid_ether_addr
->>
->> The MAC passthough address is read from ACPI.
->> ACPI read only happens once during r8152 driver probe.
->> To keep the lock less time, do it after is_valid_ether_addr.
->>
->>>
->>> Henning
->>>    
->>>>> +		}
->>>>> +	}
->>>>> +	rcu_read_unlock();
->>>>
->>>> Not sure if this function is guaranteed to only run once at a time,
->>>> otherwise i think that is a race. Multiple instances could make it
->>>> to this very point at the same time.
->>>>   
->>
->> Run once for one device.
->> So add a safe lock.
->>
->> Aaron
->>
->>>> Henning
->>>>   
->>>>>    	memcpy(sa->sa_data, buf, 6);
->>>>>    	netif_info(tp, probe, tp->netdev,
->>>>>    		   "Using pass-thru MAC addr %pM\n",
->>>>> sa->sa_data);
->>>>   
->>>    
-> 

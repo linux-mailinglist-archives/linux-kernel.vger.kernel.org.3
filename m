@@ -2,140 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F6B48515E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:47:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 516EC48515F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:48:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239483AbiAEKrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 05:47:49 -0500
-Received: from foss.arm.com ([217.140.110.172]:43224 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235139AbiAEKrr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 05:47:47 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 241401042;
-        Wed,  5 Jan 2022 02:47:47 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.10.193])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EF87B3F5A1;
-        Wed,  5 Jan 2022 02:47:45 -0800 (PST)
-Date:   Wed, 5 Jan 2022 10:47:35 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     AliOS system security <alios_sys_security@linux.alibaba.com>
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        catalin.marinas@arm.com, will@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: fix build error when use rodata_enabled
-Message-ID: <YdV3RzQcGb2xFPhS@FVFF77S0Q05N>
-References: <1641352075-25200-1-git-send-email-alios_sys_security@linux.alibaba.com>
- <0432f592-789b-7c92-8d7a-99191d7bc669@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0432f592-789b-7c92-8d7a-99191d7bc669@arm.com>
+        id S239487AbiAEKse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 05:48:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229456AbiAEKsd (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 05:48:33 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBB9C061761
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 02:48:33 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id 200so35194667pgg.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 02:48:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=nBmNBAQ4hWVtra8c2jSUbNZPXDwdJxy3lN7QmYn/eTU=;
+        b=FrtT2pI+Irbd3Aj5ERh5/QdY2C+8WwZYcvyoiDoOBHzPkv5svtVS9sDDfWwsvvNclT
+         q08BZAfQ7cv8v89JJHnEY+LZijGtgJ9287Oqrt1pI4DC46DgPM3M4ZxwkDZwrBpkE+8q
+         Qqo+CRHXSwiLUAAUsTqalYkrecvWqX83vUgKlXDaFMbPDuEVNrRtFA/TBcCNtY/y48Ff
+         vf2aiXH+truLbK6Ny003rLCWMbAal1vU/HK3eUlpZRyuGbraQDqGYLXJf8faOlkJ4IuI
+         ga/+PAGCXBjg//NJlNF2sRIf8aS8fjS2qlbadbgR8DFyWfs0i9FKhyhWD+N/6lm+oGN4
+         Zfog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=nBmNBAQ4hWVtra8c2jSUbNZPXDwdJxy3lN7QmYn/eTU=;
+        b=1o9BCBg0//HCJEx4ZL/wl3+gB52JOyoKlv1RUnRH5JjByrwepRut+PI4o8YfSUrohh
+         kgi5+SKIALKjWJrsb5Seezk9LUxHAYUw40We0S1Xu4wVvB8iLOnlh3M/waph57xbhvuF
+         f9gB6BqTBWFX2eMJfqJOGoPDPdRNAMRyEFgZh2QP10NvSjpsvdRS8g7kUuq08K8J2Qqf
+         8xjTfpY8UTBozZBssvxTbtV9l2+U6AA/TH6o5V14Bbm1tgIxRfclTpcJR8CZLltqHQmY
+         QURFPXEljE3rzQzBckOiyFKErQKLaiRke7WK3zuW4x0xH6DJM6E3r4lfprFnFUxMM0Gu
+         k2ig==
+X-Gm-Message-State: AOAM532tUMs5p0Tq8JJFHg6tQmt0fIDQ9IHAK/yk6G6LcezshCgJxjj2
+        A/342raBcaSwjzDMaOmgqgQ=
+X-Google-Smtp-Source: ABdhPJyRYj9zO9mX7/fkJBF4fCaILWvFlHOwDxKg4WhdQkF5WcUHW0h4c7JZWHsQOCyNDd96N6HP2Q==
+X-Received: by 2002:a05:6a00:198a:b0:4bb:4621:f074 with SMTP id d10-20020a056a00198a00b004bb4621f074mr54759563pfl.69.1641379713067;
+        Wed, 05 Jan 2022 02:48:33 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id 27sm34878181pgx.81.2022.01.05.02.48.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 02:48:32 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+Cc:     linmq006@gmail.com, Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Fabio Estevam <festevam@gmail.com>,
+        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>,
+        Robert Chiras <robert.chiras@nxp.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/bridge: nwl-dsi: Fix PM disable depth imbalance in nwl_dsi_probe
+Date:   Wed,  5 Jan 2022 10:48:26 +0000
+Message-Id: <20220105104826.1418-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 02:51:05PM +0530, Anshuman Khandual wrote:
-> Hello,
-> 
-> On 1/5/22 8:37 AM, AliOS system security wrote:
-> > rodata_enabled should be used when CONFIG_STRICT_KERNEL_RWX
-> > or CONFIG_STRICT_MODULE_RWX is selected
+The pm_runtime_enable will increase power disable depth.
+Thus a pairing decrement is needed on the error handling
+path to keep it balanced according to context.
 
-Further to Anshuman's comments here, for a build issue, please include the
-specific build error in the commit log, and describe the configuration where
-this manifests.
+Fixes: 44cfc62 ("drm/bridge: Add NWL MIPI DSI host controller support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/gpu/drm/bridge/nwl-dsi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-For the reasons Anshuman gives below I do not see how this can be a problem in
-mainline.
+diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c b/drivers/gpu/drm/bridge/nwl-dsi.c
+index a7389a0facfb..fc3ad9fab867 100644
+--- a/drivers/gpu/drm/bridge/nwl-dsi.c
++++ b/drivers/gpu/drm/bridge/nwl-dsi.c
+@@ -1206,6 +1206,7 @@ static int nwl_dsi_probe(struct platform_device *pdev)
+ 
+ 	ret = nwl_dsi_select_input(dsi);
+ 	if (ret < 0) {
++		pm_runtime_disable(dev);
+ 		mipi_dsi_host_unregister(&dsi->dsi_host);
+ 		return ret;
+ 	}
+-- 
+2.17.1
 
-Thanks,
-Mark.
-
-> Both these configs get selected invariably with CONFIG_ARM64 in the
-> platform config file (arch/arm64/Kconfig). I guess there can not be
-> any such situation, where both configs will be missing/not selected
-> given ARCH_OPTIONAL_KERNEL_RWX[or _DEFAULT] is not enabled on arm64.
-> 
-> config ARM64
->         def_bool y
->         select ACPI_CCA_REQUIRED if ACPI
-> 	.....
->         select ARCH_HAS_STRICT_KERNEL_RWX
->         select ARCH_HAS_STRICT_MODULE_RWX
-> 	.....
-> 
-> Hence for all practical purpose, rodata_enabled could be considered
-> always available. I am sure there other similar situations as well,
-> where code elements are not wrapped around if the config option is
-> always present.
-> 
-> > 
-> > Signed-off-by: AliOS system security <alios_sys_security@linux.alibaba.com>
-> 
-> Also please refer Documentation/process/submitting-patches.rst for
-> the rules regarding names, that can be used for a commit sign off.
-> 
-> ------------------------------------------------------------------------
-> then you just add a line saying::
-> 
->         Signed-off-by: Random J Developer <random@developer.example.org>
-> 
-> using your real name (sorry, no pseudonyms or anonymous contributions.)
-> ------------------------------------------------------------------------
-> 
-> - Anshuman
-> 
-> > ---
-> >  arch/arm64/mm/mmu.c | 14 ++++++++++++--
-> >  1 file changed, 12 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-> > index acfae9b..47f8754 100644
-> > --- a/arch/arm64/mm/mmu.c
-> > +++ b/arch/arm64/mm/mmu.c
-> > @@ -596,6 +596,7 @@ static void __init map_kernel_segment(pgd_t *pgdp, void *va_start, void *va_end,
-> >  	vm_area_add_early(vma);
-> >  }
-> >  
-> > +#if defined(CONFIG_STRICT_KERNEL_RWX) || defined(CONFIG_STRICT_MODULE_RWX)
-> >  static int __init parse_rodata(char *arg)
-> >  {
-> >  	int ret = strtobool(arg, &rodata_enabled);
-> > @@ -613,11 +614,16 @@ static int __init parse_rodata(char *arg)
-> >  	return 0;
-> >  }
-> >  early_param("rodata", parse_rodata);
-> > +#endif
-> >  
-> >  #ifdef CONFIG_UNMAP_KERNEL_AT_EL0
-> >  static int __init map_entry_trampoline(void)
-> >  {
-> > -	pgprot_t prot = rodata_enabled ? PAGE_KERNEL_ROX : PAGE_KERNEL_EXEC;
-> > +	pgprot_t prot = PAGE_KERNEL_EXEC;
-> > +#if defined(CONFIG_STRICT_KERNEL_RWX) || defined(CONFIG_STRICT_MODULE_RWX)
-> > +	if (rodata_enabled)
-> > +		prot = PAGE_KERNEL_ROX;
-> > +#endif
-> >  	phys_addr_t pa_start = __pa_symbol(__entry_tramp_text_start);
-> >  
-> >  	/* The trampoline is always mapped and can therefore be global */
-> > @@ -672,7 +678,11 @@ static void __init map_kernel(pgd_t *pgdp)
-> >  	 * mapping to install SW breakpoints. Allow this (only) when
-> >  	 * explicitly requested with rodata=off.
-> >  	 */
-> > -	pgprot_t text_prot = rodata_enabled ? PAGE_KERNEL_ROX : PAGE_KERNEL_EXEC;
-> > +	pgprot_t text_prot = PAGE_KERNEL_EXEC;
-> > +#if defined(CONFIG_STRICT_KERNEL_RWX) || defined(CONFIG_STRICT_MODULE_RWX)
-> > +	if (rodata_enabled)
-> > +		text_prot = PAGE_KERNEL_ROX;
-> > +#endif
-> >  
-> >  	/*
-> >  	 * If we have a CPU that supports BTI and a kernel built for
-> > 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

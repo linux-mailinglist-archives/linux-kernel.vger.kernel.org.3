@@ -2,79 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A1548566D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 17:05:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 829C5485685
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 17:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241817AbiAEQFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 11:05:42 -0500
-Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:48676
-        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241809AbiAEQFj (ORCPT
+        id S241866AbiAEQLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 11:11:42 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:46674 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241849AbiAEQLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 11:05:39 -0500
-Received: from [192.168.1.13] (unknown [222.129.35.96])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 5 Jan 2022 11:11:35 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 4250D3F360;
-        Wed,  5 Jan 2022 16:05:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641398737;
-        bh=YziyOsgf7ZDsM9VRsrK2Nhw2vPk0wpVYr+7Cq3B2PkY=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=WXUnH4iurx2Xm1g5bfiE/9TyomCoz7j0ee50MXE2bxK1fsH7j8fN+zKHBVlRkrnHa
-         cVUVcAPuMuK68D8mVzY5I1wJUEgwr62BF3AbFWggFTjHJLT1Dof8VMAKanYlYgqexm
-         HIg6pyJNUfxpz2i3J9+1+MOorHC41ypZZXIHX9rGJZKo0Yn1WEdTblHO8+pRxLI1TN
-         3hxik+HRo7Zo1wjd/Z/k6FVTWFy9LF0oyPJOo9hNS8niwsLK9IfrkMQH5mITjUPWmN
-         IjngSxZ5f8GKr0/2CNVirv2HDltm2nWZ0BBVt8Ah/jtknBwR6M2oAQPS7zENgLOonZ
-         1phtod7sS6W+A==
-Message-ID: <fa192218-4fc8-678f-8b40-95b85e36097e@canonical.com>
-Date:   Thu, 6 Jan 2022 00:05:28 +0800
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34CD36164D;
+        Wed,  5 Jan 2022 16:11:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FC5CC36AE0;
+        Wed,  5 Jan 2022 16:11:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641399094;
+        bh=ZKKlCVjotxQ/mWW+wBX7WNgKdj9sFqeaW4C5i3zAAK8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U6CTWgBp2mHIz528O9KmNIS/Lo349/KB4sc5YDeWhjmTVRBNElXaHcuj6qF5z/XzK
+         8nlMoczvRyJPEqTWZUt7fCnWcL+HWQfFlkhc/66vz9ZssFWyDdfyuRQIEBR4QekWpZ
+         D98i7JXIYWZqMBzg+NSTqniWxvjEwakxV/+7MQwJdS1B9qdAtVpHaSkwoP3wCNL5M2
+         eTQIp4MKdS9syGrutbWyBsBzZ877pK/nFsuSfp5yMHPi1r7jxJGUAN4DhsAyP7CPc6
+         ggLTN/96IU9htJM4m0s4NkZzd7upk5myqkogSpei6fy185zAa5OCao3KRebfjUXJXP
+         sCOnLPTwoiXng==
+Date:   Wed, 5 Jan 2022 16:11:30 +0000
+From:   Filipe Manana <fdmanana@kernel.org>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH v2] btrfs: Remove redundant assignment of slot and leaf
+Message-ID: <YdXDMjJcUKLwJdiW@debian9.Home>
+References: <20220105150758.29670-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] Revert "net: usb: r8152: Add MAC passthrough support for
- more Lenovo Docks"
-Content-Language: en-US
-To:     Oliver Neukum <oneukum@suse.com>, kuba@kernel.org,
-        henning.schild@siemens.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     davem@davemloft.net, hayeswang@realtek.com, tiwai@suse.de
-References: <20220105155102.8557-1-aaron.ma@canonical.com>
- <394d86b6-bb22-9b44-fa1e-8fdc6366d55e@suse.com>
-From:   Aaron Ma <aaron.ma@canonical.com>
-In-Reply-To: <394d86b6-bb22-9b44-fa1e-8fdc6366d55e@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220105150758.29670-1-jiapeng.chong@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 1/6/22 00:01, Oliver Neukum wrote:
+On Wed, Jan 05, 2022 at 11:07:58PM +0800, Jiapeng Chong wrote:
+> From: chongjiapeng <jiapeng.chong@linux.alibaba.com>
 > 
-> On 05.01.22 16:51, Aaron Ma wrote:
->> This reverts commit f77b83b5bbab53d2be339184838b19ed2c62c0a5.
->>
->> This change breaks multiple usb to ethernet dongles attached on Lenovo
->> USB hub.
+> slot and leaf are being initialized to path->slots[0] and
+> path->nodes[0], but this is never read as slot and leaf
+> is overwritten later on. Remove the redundant assignment.
 > 
-> Hi,
+> Cleans up the following clang-analyzer warning:
 > 
-> now we should maybe discuss a sensible way to identify device
-> that should use passthrough. Are your reasons to not have a list
-> of devices maintainability or is it impossible?
+> fs/btrfs/tree-log.c:6125:7: warning: Value stored to 'slot' during its
+> initialization is never read [clang-analyzer-deadcode.DeadStores].
 > 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: chongjiapeng <jiapeng.chong@linux.alibaba.com>
+> ---
+> Changes in v2:
+>   -Remove redundant assignment of leaf.
+> 
+>  fs/btrfs/tree-log.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
+> index 4b89ac769347..d99cda0acd95 100644
+> --- a/fs/btrfs/tree-log.c
+> +++ b/fs/btrfs/tree-log.c
+> @@ -6188,8 +6188,6 @@ static int log_new_ancestors(struct btrfs_trans_handle *trans,
+>  		if (ret < 0)
+>  			return ret;
+>  
+> -		leaf = path->nodes[0];
+> -		slot = path->slots[0];
 
-The USB to ethernet ID is 0bda:8153. It's is original Realtek 8153 ID.
-It's impossible.
+No, this is not correct.
 
-And ocp data are 0.
-No way to identify it's from dock.
+Right before those assignments we called btrfs_search_slot(), which updates
+path->nodes and path->slots, and we need those updated values below.
 
-Aaron
+The redundant assignments are not these two, but instead the ones when the
+variables are declared at the top of the loop:
 
->      Regards
->          Oliver
+   struct extent_buffer *leaf = path->nodes[0];
+   int slot = path->slots[0];
+
+Thanks.
+
+>  		if (slot >= btrfs_header_nritems(leaf)) {
+>  			ret = btrfs_next_leaf(root, path);
+>  			if (ret < 0)
+> -- 
+> 2.19.1.6.gb485710b
 > 

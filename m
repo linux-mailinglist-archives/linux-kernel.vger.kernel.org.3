@@ -2,88 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9853484D20
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 05:38:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9DF0484D24
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 05:40:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237369AbiAEEiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 23:38:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
+        id S237379AbiAEEkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 23:40:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236146AbiAEEin (ORCPT
+        with ESMTP id S237365AbiAEEj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 23:38:43 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56157C061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 20:38:43 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id lr15-20020a17090b4b8f00b001b19671cbebso5234842pjb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 20:38:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9aN3MVYr/eRiJOMan2AXOKnS6rXengbNHdl8ukrLg8Q=;
-        b=chEtXgMW/jgHH/5DCnTuHZPiW24an6y7pTIn6Bri/8i5+OkXl0tqt2S7a+d0oSw1E6
-         xbtlp37n8UM20bQ01v5rnPHEouHragXKMDHapP4i0yTDa+XcMQaX/775+tWkZuJJI2vg
-         swNdxC+/1am+Oc0aKKQ6fJH875639pDBDRp92+yxyLkiv0rW4npI1pkt202WC9wp0Lcr
-         8VrobxfB0h/zJnmtsKeD3YTpoCd363/I0tWhPdJfS1S6EOaAa8nwZCPWe8bUy41ieWZ4
-         zOX+8hBZbqSuZDRqgy5XTrDIJHounAjhDqXV2sWFyFTtp+1DbOlGl4QA0C7oRZm0Kj45
-         N8Fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9aN3MVYr/eRiJOMan2AXOKnS6rXengbNHdl8ukrLg8Q=;
-        b=MGoqCN3qV2bIY2RuMyU9uyTR/I0V2zY7xI9fWRzIgaqjW0pn2BoJFyX04TTRlSHuyt
-         mmYPOhtGMvYKeybxebop8GBPt0JB0Ig1eGDqXXtrKQBhKVYnzTApkoi0bY3ZPgtQQntx
-         64ishlxP8W3EUY5c+fnzwTp2IcJrAnfmgVe/jrPNI+HPkAKSGsx59+Izw8lmpl50ILCQ
-         Y49rkQkGixwvrMj6TsBq24k/I3eQjnyf8UEX7Ll9GhRYuJrWezshckjEEAh2SL+6JHNx
-         I8XzWlkbF8pqdIJmb9/PoE83WLq8QIKswF6Q2BFByEhXR//Dl0gdnwO2mnLajD76sgXE
-         53uw==
-X-Gm-Message-State: AOAM532ibOFsg/kV8xbCH8ZohKz1VBirjM1Y0T7HGbgrKUth7SVlulQc
-        ypUH5buqGvDh15jI415+DlERLg==
-X-Google-Smtp-Source: ABdhPJzFZp6NmebEnmYEZa1fqT6Z51iGeMByHFmL64WhfozHkp665fRhYI8myvlJR41cr27d3/HV2w==
-X-Received: by 2002:a17:903:11cd:b0:149:bf70:2031 with SMTP id q13-20020a17090311cd00b00149bf702031mr10495508plh.40.1641357522727;
-        Tue, 04 Jan 2022 20:38:42 -0800 (PST)
-Received: from hsinchu16.internal.sifive.com (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id j8sm36172812pgf.21.2022.01.04.20.38.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 20:38:42 -0800 (PST)
-From:   Zong Li <zong.li@sifive.com>
-To:     robh+dt@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, krzysztof.kozlowski@canonical.com,
-        conor.dooley@microchip.com, geert@linux-m68k.org,
-        bin.meng@windriver.com, green.wan@sifive.com, vkoul@kernel.org,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Cc:     Zong Li <zong.li@sifive.com>
-Subject: [PATCH 0/3] Determine number of DMA channels by 'dma-channels' property
-Date:   Wed,  5 Jan 2022 12:38:36 +0800
-Message-Id: <cover.1641289490.git.zong.li@sifive.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 4 Jan 2022 23:39:59 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801F9C061761;
+        Tue,  4 Jan 2022 20:39:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=i6uYjQM6a+w//FCMGzjfe0KtBTgocro5T9Tkc6vxins=; b=NeTlfINWf+IFbE4Az2T9/P0eVE
+        aA5vY9D1w5ArKSl3EJx0PSAVrzmxBcLW47YG54b8dGACGKjZGvCu79NSwszQomhyOR2LVisqgGrm4
+        LBIrQfjljvI+LUysEmND531G7CTV9G49mDkbD3TXufevdcKM1co5Dl6HV2WHbjHhoTGvDA2gGFPFm
+        3r5wbQSrjFEXTjDsQHaiaJnDipB7NhxTf9Q6UHZLZb+leRtyPON4/yGzNkbI7oF1tyqF3V98EfxDi
+        ZUgr8zYAW8M4DenCKbzNG2PdE+NFgQzp4e+kmYCaHV9iJOnv6i8BfTUXYHh1GiTD4pg0D8yBGr7Nt
+        Piw6dRoA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n4y5P-00EGSs-US; Wed, 05 Jan 2022 04:39:43 +0000
+Date:   Wed, 5 Jan 2022 04:39:43 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        David Hildenbrand <david@redhat.com>,
+        "Paul E . McKenney" <paulmckrcu@fb.com>,
+        Yu Zhao <yuzhao@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Xu <peterx@redhat.com>,
+        Ivan Teterevkov <ivan.teterevkov@nutanix.com>,
+        Florian Schmidt <florian.schmidt@nutanix.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v7] mm: Add PM_THP_MAPPED to /proc/pid/pagemap
+Message-ID: <YdUhD8ju+y0TGQzq@casper.infradead.org>
+References: <20211123000102.4052105-1-almasrymina@google.com>
+ <YaMBGQGNLqPd6D6f@casper.infradead.org>
+ <CAHS8izM5as_AmN4bSmZd1P7aSXZ86VAfXgyooZivyf7-E5gZcQ@mail.gmail.com>
+ <CAHS8izNw87-L=rEwJF7_9WCaAcXLn2dUe68h_SbLErJoSUDzzg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHS8izNw87-L=rEwJF7_9WCaAcXLn2dUe68h_SbLErJoSUDzzg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PDMA driver currently assumes there are four channels by default, it
-might cause the error if there is actually less than four channels.
-Change that by getting number of channel dynamically from device tree.
+On Tue, Jan 04, 2022 at 03:04:31PM -0800, Mina Almasry wrote:
+> On Mon, Dec 13, 2021 at 4:22 PM Mina Almasry <almasrymina@google.com> wrote:
+> >
+> > On Sat, Nov 27, 2021 at 8:10 PM Matthew Wilcox <willy@infradead.org> wrote:
+> > >
+> > > On Mon, Nov 22, 2021 at 04:01:02PM -0800, Mina Almasry wrote:
+> > > > Add PM_THP_MAPPED MAPPING to allow userspace to detect whether a given virt
+> > > > address is currently mapped by a transparent huge page or not.  Example
+> > > > use case is a process requesting THPs from the kernel (via a huge tmpfs
+> > > > mount for example), for a performance critical region of memory.  The
+> > > > userspace may want to query whether the kernel is actually backing this
+> > > > memory by hugepages or not.
+> > >
+> > > But what is userspace going to _do_ differently if the kernel hasn't
+> > > backed the memory with huge pages?
+> >
+> > Sorry for the late reply here.
+> >
+> > My plan is to expose this information as metrics right now and:
+> > 1. Understand the kind of hugepage backing we're actually getting if any.
+> > 2. If there are drops in hugepage backing we can investigate the
+> > cause, whether it's due to normal memory fragmentation or some
+> > bug/issue.
+> > 3. Schedule machines for reboots to defragment the memory if the
+> > hugepage backing is too low.
+> > 4. Possibly motivate future work to improve hugepage backing if our
+> > numbers are too low.
+> 
+> Friendly ping on this. It has been reviewed by a few folks and after
+> Matthew had questions about the use case which I've answered in the
+> email above. Matthew, are you opposed to this patch?
 
-This patch set contains the dts and dt-bindings change.
-
-Zong Li (3):
-  riscv: dts: Add dma-channels property in dma node
-  dt-bindings: Add dma-channels for pdma device node
-  dmaengine: sf-pdma: Get number of channel by device tree
-
- .../bindings/dma/sifive,fu540-c000-pdma.yaml      |  6 ++++++
- arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi |  1 +
- arch/riscv/boot/dts/sifive/fu540-c000.dtsi        |  1 +
- drivers/dma/sf-pdma/sf-pdma.c                     | 15 +++++++++------
- drivers/dma/sf-pdma/sf-pdma.h                     |  8 ++------
- 5 files changed, 19 insertions(+), 12 deletions(-)
-
--- 
-2.31.1
-
+I'm not convinced you need more than the existing stats
+(THP_FAULT_FALLBACK) for the information you claim to want.

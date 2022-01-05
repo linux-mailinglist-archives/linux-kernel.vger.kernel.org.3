@@ -2,131 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC449485192
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 12:04:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2107F48532B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 14:02:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235163AbiAELEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 06:04:20 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:31141 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235066AbiAELES (ORCPT
+        id S236723AbiAENCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 08:02:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236072AbiAENCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 06:04:18 -0500
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JTRPd5krbzRhds;
-        Wed,  5 Jan 2022 19:01:41 +0800 (CST)
-Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 5 Jan 2022 19:04:16 +0800
-Received: from huawei.com (10.175.101.6) by dggpemm500017.china.huawei.com
- (7.185.36.178) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 5 Jan
- 2022 19:04:16 +0800
-From:   Wenchao Hao <haowenchao@huawei.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Zhiqiang Liu <liuzhiqiang26@huawei.com>,
-        Wenchao Hao <haowenchao@huawei.com>
-Subject: [PATCH v3] ata: libata-scsi: simplify __ata_scsi_queuecmd()
-Date:   Wed, 5 Jan 2022 19:13:54 -0500
-Message-ID: <20220106001354.2029046-1-haowenchao@huawei.com>
-X-Mailer: git-send-email 2.32.0
+        Wed, 5 Jan 2022 08:02:48 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCFD2C061761
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 05:02:48 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id c9-20020a17090a1d0900b001b2b54bd6c5so3863207pjd.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 05:02:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rajagiritech-edu-in.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=Sq+YH2KnVlJmyDADPywaTY6NZXadER99K34iexlNEOg=;
+        b=mQbEx4V+V2082a2bb/S8PC8XHXOsWFmmwHFYsIQXwIQjf3HnzjGrvkc5eEOOXh5FiC
+         /6Rqe09RXtRu3K+TC+7n+rJMwPte7xJdVO16Ezel/wh6rQ2XBSIXfKiyoRoyFyVSoyox
+         IOH8F8XsPeIdk5yk0Bj8V9njmhMivvAKmBydfcAbZ9nJVsy8hrP7ZcwMi+k56ZH/xCSd
+         2eYukq6BSIG/EfolWK8DiUCRxbI8xCIfEYvVubsAdISd9PNMi6giRv6f7BvkhJ8u23se
+         IZbPqEnDF8CYamG149H+9O8kUPDfafFgqdGOW2ZvpTOFciWdpYMFeM0QBTnj8Q+OYaPG
+         9wDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=Sq+YH2KnVlJmyDADPywaTY6NZXadER99K34iexlNEOg=;
+        b=q96AFGyxgtxupFO8YPiqyxVEw8+QSy8YnQTW4SsFUnNhR7j/siZM3RKTKlPAJ1Aced
+         9RoI8Hhb38eioijsuvaHdAas2ZwPGDz5nAkJpekH6PsANLjdJBQ/zQiRoLvX/VGZprM2
+         B9anfXxIQFm6HlMJF3esuuMmTTGyQIG1QmMt6eFXJl3p9sCgkRA+oTJZerEScaJFdITz
+         ZIxJkxgAZ5GltsbsQpK1QbgIaU7jiI8GC4sa7yF/ZQkxbGGiWdtteu1a8ErlVhzofZ1D
+         v1h6bu0HzaHcgwDD7ZHFj3VlSkM6hD0o4ncML4cOEh6CrYnm2mm8H21qgtRu8XjzU/1y
+         HmOA==
+X-Gm-Message-State: AOAM53155NmHYLuW2qixeqMaApNspeOyC2CORIwPE8icROHnkdUvZz93
+        45HPae84wUVWDCnea7UIO4oz/Q==
+X-Google-Smtp-Source: ABdhPJxZAUHBZj/r8O2FDVuO/e69DeFHSxlrAVCqW9SXxGAKBkAh5zaSizG4QnbxtPyK6Rg03RO9Lg==
+X-Received: by 2002:a17:903:1249:b0:149:a59c:145a with SMTP id u9-20020a170903124900b00149a59c145amr26404893plh.108.1641387768366;
+        Wed, 05 Jan 2022 05:02:48 -0800 (PST)
+Received: from [192.168.1.32] ([122.164.22.119])
+        by smtp.gmail.com with ESMTPSA id s9sm36687827pfw.174.2022.01.05.05.02.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 05:02:47 -0800 (PST)
+Message-ID: <54461ffb9ebe34e673e6730f3e9cc94218ad2f49.camel@rajagiritech.edu.in>
+Subject: Re: [PATCH 5.15 00/72] 5.15.13-rc2 review
+From:   Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org
+Date:   Wed, 05 Jan 2022 18:32:43 +0530
+In-Reply-To: <20220104073845.629257314@linuxfoundation.org>
+References: <20220104073845.629257314@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.1-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500017.china.huawei.com (7.185.36.178)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is just a clean code. Since each branch of "if" state would check
-scmd->cmd_len, so move the check of scmd->cmd_len out of "if" state to
-simplify parameters check.
+On Tue, 2022-01-04 at 08:41 +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.13 release.
+> There are 72 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 06 Jan 2022 07:38:29 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+>         
+> https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.13-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-
+> stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
+ hello,
 
-After the check of scmd->cmd_len is out of "if" state, we can remove
-one redundant "if" state.
+There was a compilation error....
 
-Remove a redundant variable "rc" by hand.
+-----------x--------------x------------------x--
+MODPOST vmlinux.symvers
+  MODINFO modules.builtin.modinfo
+  GEN     modules.builtin
+BTF: .tmp_vmlinux.btf: pahole (pahole) is not available
+Failed to generate BTF for vmlinux
+Try to disable CONFIG_DEBUG_INFO_BTF
+make: *** [Makefile:1183: vmlinux] Error 1
 
-This patch do not change origin function logic.
 
-Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
----
- drivers/ata/libata-scsi.c | 45 ++++++++++++++++++---------------------
- 1 file changed, 21 insertions(+), 24 deletions(-)
+---------x--------------x-------------x---
 
-diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
-index a16ef0030..ed8be585a 100644
---- a/drivers/ata/libata-scsi.c
-+++ b/drivers/ata/libata-scsi.c
-@@ -3958,42 +3958,39 @@ int __ata_scsi_queuecmd(struct scsi_cmnd *scmd, struct ata_device *dev)
- {
- 	u8 scsi_op = scmd->cmnd[0];
- 	ata_xlat_func_t xlat_func;
--	int rc = 0;
-+
-+	if (unlikely(!scmd->cmd_len))
-+		goto bad_cdb_len;
- 
- 	if (dev->class == ATA_DEV_ATA || dev->class == ATA_DEV_ZAC) {
--		if (unlikely(!scmd->cmd_len || scmd->cmd_len > dev->cdb_len))
-+		if (unlikely(scmd->cmd_len > dev->cdb_len))
- 			goto bad_cdb_len;
- 
- 		xlat_func = ata_get_xlat_func(dev, scsi_op);
--	} else {
--		if (unlikely(!scmd->cmd_len))
--			goto bad_cdb_len;
-+	} else if (likely((scsi_op != ATA_16) || !atapi_passthru16)) {
-+		/* relay SCSI command to ATAPI device */
-+		int len = COMMAND_SIZE(scsi_op);
- 
--		xlat_func = NULL;
--		if (likely((scsi_op != ATA_16) || !atapi_passthru16)) {
--			/* relay SCSI command to ATAPI device */
--			int len = COMMAND_SIZE(scsi_op);
--			if (unlikely(len > scmd->cmd_len ||
--				     len > dev->cdb_len ||
--				     scmd->cmd_len > ATAPI_CDB_LEN))
--				goto bad_cdb_len;
-+		if (unlikely(len > scmd->cmd_len ||
-+			     len > dev->cdb_len ||
-+			     scmd->cmd_len > ATAPI_CDB_LEN))
-+			goto bad_cdb_len;
- 
--			xlat_func = atapi_xlat;
--		} else {
--			/* ATA_16 passthru, treat as an ATA command */
--			if (unlikely(scmd->cmd_len > 16))
--				goto bad_cdb_len;
-+		xlat_func = atapi_xlat;
-+	} else {
-+		/* ATA_16 passthru, treat as an ATA command */
-+		if (unlikely(scmd->cmd_len > 16))
-+			goto bad_cdb_len;
- 
--			xlat_func = ata_get_xlat_func(dev, scsi_op);
--		}
-+		xlat_func = ata_get_xlat_func(dev, scsi_op);
- 	}
- 
- 	if (xlat_func)
--		rc = ata_scsi_translate(dev, scmd, xlat_func);
--	else
--		ata_scsi_simulate(dev, scmd);
-+		return ata_scsi_translate(dev, scmd, xlat_func);
- 
--	return rc;
-+	ata_scsi_simulate(dev, scmd);
-+
-+	return 0;
- 
-  bad_cdb_len:
- 	scmd->result = DID_ERROR << 16;
+i did CONFIG_DEBUG_INFO_BTF=n  in .config and then compilation was
+success.
+
+Compiled and booted  5.15.13-rc2+. dmesg gave no major  problems.
+
+Tested-by: Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
+
 -- 
-2.32.0
-
+software engineer
+rajagiri school of engineering and technology - autonomous

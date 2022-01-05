@@ -2,194 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A03485BB5
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 23:33:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3788485BB7
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 23:33:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245071AbiAEWd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 17:33:26 -0500
-Received: from mail-dm6nam10on2047.outbound.protection.outlook.com ([40.107.93.47]:33159
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S245052AbiAEWdY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 17:33:24 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D+CmWPgxdoEAdmqiJ7JtNgtbC0y+9hAGo//53QGcAPoFnKHI3BjGwoWqoMemh4qt1ZFh5amI/ejsc+GFy7ACkYmZrIdlSpFA9hXumoST5HlNkZfuuSpcHI3m/PAeQiRxftVKA3Tow5InbS5c6HKEkDtZT2tDX7qDGN5cqQac06zV4l1SK97X0BsCzXCqsEfg7A1RGyDBq5nICJUJLusM4YN7A6E7IwArBpz6OEgovW+RtnsXotNxvHnSTMIli1DwATTyIySN6onSgEO23ywDdb4LUrMBevjSld5E/NUJh9x8M386SEnfz3r1WiqpRwPFDzVytGX/G+QGET5nCC3XKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mI9fGJNSDSeDVRj3b/ragI3b4Qd32j/j/dczaV02WTE=;
- b=a2QNRk44XEVUvQidcKv2pp3SHuHtL/dQuBKB9tdPXZmAg01Ewqv9tOXEsYX/IdhPnAUyQnDlWA+aR/lI+J7lQ6YpPMvh5MGR8NQoOGT3qxNZyNp1tEsQrgSkE8Ey/0FuhFdQ/zN5yZyPdbp8PDdL0tSNfyEN/NtF5BKNGSNQaf5T1M5sLFo4RGriGF97tWvVcid6tjdj7l6GU88fkRlQs8JIq4sCg49naMg5WvvU+Cu+k9A2F3C7Lv+t1Dg2JiLS/+gkZTEWyedwXWBrsDHmcAM/rnIVY7cl3QtR3Ixx/2f3zLKAK+L6l5SKhrGXKTwXa1rvnj7zj8B2g1V1PZadiw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mI9fGJNSDSeDVRj3b/ragI3b4Qd32j/j/dczaV02WTE=;
- b=mIeClyOGlOY1SMTUfc8pXv3RNonsXkMLsPk1zeIopV7dT7Ltj7HPfXbqHdK0TjdaUwFdI5oLIAitqvi9c978+VQ+qwWHzgdQMrZ0tPLR7l6M4WKAZk3BjZ5ouNb1Ko0H6EUGf+UAWsy7c0wdX8LxMadBldaV8+Ngj9gX32Q2OXU=
-Received: from MWHPR14CA0069.namprd14.prod.outlook.com (2603:10b6:300:81::31)
- by CY4PR12MB1125.namprd12.prod.outlook.com (2603:10b6:903:43::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Wed, 5 Jan
- 2022 22:33:22 +0000
-Received: from CO1NAM11FT054.eop-nam11.prod.protection.outlook.com
- (2603:10b6:300:81:cafe::a5) by MWHPR14CA0069.outlook.office365.com
- (2603:10b6:300:81::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7 via Frontend
- Transport; Wed, 5 Jan 2022 22:33:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CO1NAM11FT054.mail.protection.outlook.com (10.13.174.70) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4867.7 via Frontend Transport; Wed, 5 Jan 2022 22:33:22 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Wed, 5 Jan
- 2022 16:33:20 -0600
-Date:   Wed, 5 Jan 2022 16:32:45 -0600
-From:   Michael Roth <michael.roth@amd.com>
-To:     Sean Christopherson <seanjc@google.com>
-CC:     <linux-kselftest@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
-        Nathan Tempelman <natet@google.com>,
-        Marc Orr <marcorr@google.com>,
-        Steve Rutherford <srutherford@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Ricardo Koller <ricarkol@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        "Janosch Frank" <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Claudio Imbrenda" <imbrenda@linux.ibm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        "Suzuki K Poulose" <suzuki.poulose@arm.com>,
-        <kvmarm@lists.cs.columbia.edu>
-Subject: Re: [RFC PATCH 00/10] KVM: selftests: Add support for
- test-selectable ucall implementations
-Message-ID: <20220105223245.2qebwfphyf2t43ni@amd.com>
-References: <20211210164620.11636-1-michael.roth@amd.com>
- <Yc4gcJdhxthBKUUd@google.com>
- <20220104233517.kxjbdw4t7taymab5@amd.com>
- <YdTjnRZQID5IabK0@google.com>
- <20220105170244.jwr6i2erecbhx3fz@amd.com>
- <YdXYuaoXJux6lHrF@google.com>
- <20220105191107.qx67wf2coc3q6giu@amd.com>
- <YdX0SRoBXReggrVA@google.com>
- <20220105213519.g746jzf756nax562@amd.com>
- <YdYVjfMqf+GjsU+p@google.com>
+        id S245084AbiAEWdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 17:33:33 -0500
+Received: from out02.mta.xmission.com ([166.70.13.232]:58600 "EHLO
+        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245076AbiAEWda (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 17:33:30 -0500
+Received: from in01.mta.xmission.com ([166.70.13.51]:37110)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n5EqW-00Dgtr-Im; Wed, 05 Jan 2022 15:33:28 -0700
+Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:50552 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n5EqV-00Bkwt-J2; Wed, 05 Jan 2022 15:33:28 -0700
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+        <20211208202532.16409-4-ebiederm@xmission.com>
+        <YdUzjrLAlRiNLQp2@zeniv-ca.linux.org.uk>
+Date:   Wed, 05 Jan 2022 16:33:19 -0600
+In-Reply-To: <YdUzjrLAlRiNLQp2@zeniv-ca.linux.org.uk> (Al Viro's message of
+        "Wed, 5 Jan 2022 05:58:38 +0000")
+Message-ID: <87czl56ceo.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YdYVjfMqf+GjsU+p@google.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB03.amd.com
- (10.181.40.144)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2f6923fe-8589-4b0b-c689-08d9d09b6160
-X-MS-TrafficTypeDiagnostic: CY4PR12MB1125:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR12MB11259BE39B3698FA1D27E922954B9@CY4PR12MB1125.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PCq4HRz4CI/hhEzfpCKMnAsUwcDb5sYJ8S28ARQzEuaCfdJeYXWKKdW8DZzcatPnLYMmMkQd97IyBy4AeXMdaZpjrKdB17OIuWVkFsKX/Fjgnvn+mHrysiSEqqRXOuDlPBvi9QQZgIqOl4iBM6QJJGGVth48ci55IH+1G3Q8NhJfXVNY66o1CAEWb8+mn0s120F/46fN1OQ/hdIJprHaNnLXlBXFFEaYRzrV3VetdJJjNyPtw/3pwupKy6WYN7hD9FElaa6c3Nb9yMWKNExUrzMlD7y5RIghrCkBxaG2cf/LpbHscbLpWu2MTTaJGSJF65Ip1EuuWdA4UwpcDaxnSkSidGiWnu0r8RqWR7tLTjR5Wx/PjeSyU6fSbBzixI8hjv5KL6LNQk7+YonzsFmMvPQDUyl2pMu0lT2DrPBdFgdmTtuokCFjf7LWUNI8u+THq9CwdckcchXKqTOBuGkVELG7L1QEtsunw5WCZP2rPeghn1gqdwbq46nImqUmR30VYT1j19hQ8CPmPXAFHiI4HOhyFozsT1WQTU+1yS7P4UGUYQUjtuMqmQmGfP0xKtvOBSYRxzRY87mcJZ3Zs6lEjLss7r6oIvskpliP4FQ9oxa3UFb/QH5SzqrBQJJWZsUiK5hQSECRKTpVsYYrPUOCpHMvKETAh8Hu9UUbkAIzPc7sqjErUqk9S9kP9OaveZEbDeAWYYjD9MLxB0eUJTaSMNUrXj57uhkR2LTbQsAEe9kHY9XH3mvPWle86JooDLuhTZp6Bmg52yNWktQK4cvv2O7alvRN9q2EYoFBHnZxjdY=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(40470700002)(46966006)(1076003)(47076005)(508600001)(16526019)(186003)(81166007)(40460700001)(36756003)(54906003)(8936002)(36860700001)(83380400001)(26005)(86362001)(316002)(336012)(426003)(6666004)(8676002)(7416002)(4326008)(2906002)(356005)(2616005)(70586007)(70206006)(44832011)(5660300002)(6916009)(82310400004)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2022 22:33:22.0157
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2f6923fe-8589-4b0b-c689-08d9d09b6160
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT054.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1125
+Content-Type: text/plain
+X-XM-SPF: eid=1n5EqV-00Bkwt-J2;;;mid=<87czl56ceo.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/Yfmn+oTCiK18n1oxnyRtCXguQm/Nklvg=
+X-SA-Exim-Connect-IP: 68.110.24.146
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa03.xmission.com
+X-Spam-Level: ***
+X-Spam-Status: No, score=3.2 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XMNoVowels,
+        XMSubLong,XM_B_SpammyWords,XM_Body_Dirty_Words autolearn=disabled
+        version=3.4.2
+X-Spam-Virus: No
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  1.5 XMNoVowels Alpha-numberic number with no vowels
+        *  0.7 XMSubLong Long Subject
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa03 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  1.0 XM_Body_Dirty_Words Contains a dirty word
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+        *  0.2 XM_B_SpammyWords One or more commonly used spammy words
+X-Spam-DCC: XMission; sa03 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Al Viro <viro@zeniv.linux.org.uk>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 429 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 4.8 (1.1%), b_tie_ro: 3.3 (0.8%), parse: 1.07
+        (0.2%), extract_message_metadata: 11 (2.6%), get_uri_detail_list: 1.74
+        (0.4%), tests_pri_-1000: 8 (1.9%), tests_pri_-950: 1.02 (0.2%),
+        tests_pri_-900: 0.82 (0.2%), tests_pri_-90: 94 (21.9%), check_bayes:
+        92 (21.5%), b_tokenize: 5 (1.2%), b_tok_get_all: 7 (1.7%),
+        b_comp_prob: 1.72 (0.4%), b_tok_touch_all: 75 (17.4%), b_finish: 0.79
+        (0.2%), tests_pri_0: 295 (68.7%), check_dkim_signature: 0.38 (0.1%),
+        check_dkim_adsp: 1.72 (0.4%), poll_dns_idle: 0.37 (0.1%),
+        tests_pri_10: 2.7 (0.6%), tests_pri_500: 7 (1.7%), rewrite_mail: 0.00
+        (0.0%)
+Subject: Re: [PATCH 04/10] exit: Stop poorly open coding do_task_dead in make_task_dead
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 10:02:53PM +0000, Sean Christopherson wrote:
-> On Wed, Jan 05, 2022, Michael Roth wrote:
-> > On Wed, Jan 05, 2022 at 07:40:57PM +0000, Sean Christopherson wrote:
-> > > As for ucall_init(), I think the best approach would be to make kvm_vm_elf_load()
-> > > a static and replace all calls with:
-> > > 
-> > > 	kvm_vm_load_guest(vm);
-> > > 
-> > > where its implementation is:
-> > > 
-> > >   void kvm_vm_load_guest(struct kvm_vm *vm)
-> > >   {
-> > >   	kvm_vm_elf_load(vm, program_invocation_name);
-> > > 
-> > > 	ucall_init(vm);
-> > >   }
-> > > 
-> > > The logic being that if a test creates a VM but never loads any code into the guest,
-> > > e.g. kvm_create_max_vcpus, then it _can't_ make ucalls.
-> > 
-> > Makes sense. And if different ops are needed for vmgexit()/tdcall() it
-> > could be something like (if based on patches 1-5 of this series, and
-> > extending vm_guest_mode as you suggested earlier):
-> > 
-> >    void kvm_vm_load_guest(struct kvm_vm *vm)
-> >    {
-> > 
-> >      kvm_vm_elf_load(vm, program_invocation_name);
-> >   
-> >      if (vm->mode == VM_MODE_SEV)
-> >   	    ucall_init_ops(vm, ucall_ops_pio_vmgexit);
-> >      else (vm->vm_type == VM_MODE_TDX)
-> 
-> I don't think we want to do this here, but instead down in the arch-specific
-> ucall_init().  Also, not sure if I was clear before (can't tell what you interpreted
-> based on the above snippet), but I think we'll want VM_MODE_SEV etc... to be
-> modifiers on top of the VA/PA stuff.
+Al Viro <viro@zeniv.linux.org.uk> writes:
 
-Ok, something like this (with additional ones added as-needed)?
+> On Wed, Dec 08, 2021 at 02:25:26PM -0600, Eric W. Biederman wrote:
+>> When the kernel detects it is oops or otherwise force killing a task
+>> while it exits the code poorly attempts to permanently stop the task
+>> from scheduling.
+>> 
+>> I say poorly because it is possible for a task in TASK_UINTERRUPTIBLE
+>> to be woken up.
+>> 
+>> As it makes no sense for the task to continue call do_task_dead
+>> instead which actually does the work and permanently removes the task
+>> from the scheduler.  Guaranteeing the task will never be woken
+>> up again.
+>
+> NAK.  This is not all do_task_dead() leads to - see what finish_task_switch()
+> does upon seeing TASK_DEAD:
+>                 /* Task is done with its stack. */
+> 		put_task_stack(prev);
+> 		put_task_struct_rcu_user(prev);
+>
+>
+> Now take a look at the comment just before that check for PF_EXITING -
+> the point is to leave the task leaked, rather than proceeding with
+> freeing the sucker.
+>
+> We are not going through the normal "turn zombie" motions, including
+> waking wait(2) callers up, etc.  Going ahead and freeing it could
+> fuck the things up quite badly.
 
-  #define VM_MODE_DEFAULT VM_MODE_PXXV48_4K
-  +#define SEV_VM_MODE_DEFAULT SEV_VM_MODE_PXXV48_4K
+I believe I was thinking this task won't be reaped because release_task
+can never be called.  Which I admit depending on where we oops in
+do_exit is not strictly true.
 
-  enum vm_guest_mode {
-    ...
-    VM_MODE_PXXV48_4K,
-    ...
-    NUM_VM_MODES,
-  + SEV_VM_MODE_PXXV48_4K,
-  + NUM_VM_MODES_EXTENDED,
-  }
+We can guarantee the leak with:
+	
+	tsk->exit_state = EXIT_DEAD;
+        refcount_inc(&tsk->rcu_users);
 
-> 
-> >   	    ucall_init_ops(vm, ucall_ops_pio_tdcall);
-> >      else
-> >   	    ucall_init_ops(vm, ucall_ops_pio);
-> > 
-> > Shame we have to update all the kvm_vm_elf_load() call-sites, but
-> > they'd end up potentially breaking things if left as-is anyway.
-> > 
-> > Were you planning on sending patches for these changes, or should I incorporate
-> > your prototype and take a stab at the other changes as part of v2 of this
-> > series?
-> 
-> Nope, all yours.  Thanks!
 
-Thanks for the suggestions!
+It just feels wrong to me to have something dead and broken sticking around
+the scheduler queue.  Especially as something could come along and wake
+it up and then what do we do.
+
+Hmm.  I think we want that tsk->exit_state = EXIT_DEAD regardless to
+prevent it from being reaped and possibly causing more harm.
+
+Eric

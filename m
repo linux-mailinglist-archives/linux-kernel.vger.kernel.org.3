@@ -2,124 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10B99485B8B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 23:20:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9770485B91
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 23:22:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244848AbiAEWUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 17:20:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36900 "EHLO
+        id S244880AbiAEWWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 17:22:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244826AbiAEWTd (ORCPT
+        with ESMTP id S244842AbiAEWW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 17:19:33 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574FDC061245;
-        Wed,  5 Jan 2022 14:19:28 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JTkRb0srmz4xnF;
-        Thu,  6 Jan 2022 09:19:23 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641421163;
-        bh=QfDjSUj+Bm1/JoRgYzugmB60OsqL++bY3C4BCxzpAVw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=CPNFhlnPI2e/VloHquRN7DqRN9MBDvvHY057ULTc4XqvnT+C9jCWoDXPVG2+SVFQo
-         5acWM/cgVqs8x8hLKp5nRmrhmLaZIstH3Ljv9D3j5yCUXss1mB1qUrq4UjwOJhE51m
-         lyGHoBFUlQ7XS9vbRs+cNBOJMMIq8fyh9dQ6sxVeqYgMzF0Et66J8FF7LMenK9enpV
-         7bD5hPnzelilHl2+gNb1W1HnlmTigbUEFVsp7/UWlfZn6Pp+zNgveBYGIfiATBJ8ip
-         ecsClE9z/oZoXj+ZHf3PL3TVNPLZ5eSQj+cTKT0+N8kEe8JAi+NjprvRy2ScVOSgql
-         IjrD0v8MigTGg==
-Date:   Thu, 6 Jan 2022 09:19:21 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Kajol Jain <kjain@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the perf tree
-Message-ID: <20220106091921.3fa617bc@canb.auug.org.au>
+        Wed, 5 Jan 2022 17:22:27 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6110C061245
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 14:22:27 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id n16so631606plc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 14:22:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=sUkgqFDFiDtGVPAUgU6Xa5ITE/sInAze9iX46Pb2MMM=;
+        b=hsw8ppEFMFavAQBLMRV81zeXSO4N9aaulrhq4zBMNKCIvOHYGwhepxxDE5YbvBogUL
+         PqHhS6Xmpa0TYh63N01wJPn4zqRQpFNgm9oxqA4d5AlYKRYwrsUsP65RPp8OyR3x+ail
+         OmUsFdsXixIG/2HXpIkLMYZX38j5tamqjcxIBeIznNt8gusyjVJD/odIX1Gvpd7Co0v/
+         yvduhyMO2zYaEUvNaQBpHOOe+2sT1UUuduZli34eSLImebr84FFfnHJWIY7W9T/Do/7w
+         ExMUUg37iCz/843yWtOeNScDqfXqPolmYi9Ksa2As5Lnc2cgxMWKs9rm2kKACJiQ4p+h
+         dNqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=sUkgqFDFiDtGVPAUgU6Xa5ITE/sInAze9iX46Pb2MMM=;
+        b=lGY+jCnhOEW0I986ymuTHomOsv9sO/+BIprcaxrFA4mY/9yWAktEk0ytaGnX6JR3A3
+         ZPX/5RlJmBJMm6A5JlwwzADhfxfxxzoPeo6HUTON4kKLeKbVVSrpMX3Wy57DFQfph/9D
+         vH6Rm2/bsW/V0dXfHG8z+h8aYNg1qMMT3AKRPll8VrjftnVY8aT/Bux0oB0Rn69seiu6
+         BBWe3jlOsb/Jbl+iPf29JwQTs/szwAGWmXajpSGjMqPv/zkfnY5HcpAh/HuE10P5dEUY
+         khyNOVWdd+QP10joqqV+1br34MmWeI7CmoDMreB2m5DFYrK5IwUbhFlt+OWoov9EVxG4
+         ww8A==
+X-Gm-Message-State: AOAM533+u5vv4mBIMbDfSID6PlgCoHJPq4meyKvaLB8NG4kPs8J1Klzq
+        vK8fTmyzgPjHH7+nGPVmN0ntYQ==
+X-Google-Smtp-Source: ABdhPJzV0453KxEmLbbliY/F1QMex40PViYGaR8yL4+U0XEANUOTELIy6hs/rP6QmX4zFV3P9pUY2Q==
+X-Received: by 2002:a17:90b:180a:: with SMTP id lw10mr6597393pjb.57.1641421346908;
+        Wed, 05 Jan 2022 14:22:26 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id x40sm102352pfu.185.2022.01.05.14.22.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 14:22:26 -0800 (PST)
+Date:   Wed, 5 Jan 2022 22:22:23 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yang Zhong <yang.zhong@intel.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, pbonzini@redhat.com, corbet@lwn.net,
+        shuah@kernel.org, jun.nakajima@intel.com, kevin.tian@intel.com,
+        jing2.liu@linux.intel.com, jing2.liu@intel.com,
+        guang.zeng@intel.com, wei.w.wang@intel.com
+Subject: Re: [PATCH v5 12/21] kvm: x86: Intercept #NM for saving IA32_XFD_ERR
+Message-ID: <YdYaH7buoApEVPOg@google.com>
+References: <20220105123532.12586-1-yang.zhong@intel.com>
+ <20220105123532.12586-13-yang.zhong@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ad2mF1w6wTRuKxYawgn1ioK";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220105123532.12586-13-yang.zhong@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ad2mF1w6wTRuKxYawgn1ioK
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Jan 05, 2022, Yang Zhong wrote:
+> @@ -6399,6 +6424,26 @@ static void handle_interrupt_nmi_irqoff(struct kvm_vcpu *vcpu,
+>  	kvm_after_interrupt(vcpu);
+>  }
+>  
+> +static void handle_nm_fault_irqoff(struct kvm_vcpu *vcpu)
+> +{
+> +	/*
+> +	 * Save xfd_err to guest_fpu before interrupt is enabled, so the
+> +	 * MSR value is not clobbered by the host activity before the guest
+> +	 * has chance to consume it.
+> +	 *
+> +	 * We should not blindly read xfd_err here, since this exception
 
-Hi all,
+Nit, avoid "we", and explain what KVM does (or doesn't) do, not what KVM "should"
+do, e.g. just say
 
-After merging the perf tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+	 * Do not blindly read ...
 
-In file included from include/linux/perf_event.h:17,
-                 from arch/powerpc/perf/isa207-common.h:12,
-                 from arch/powerpc/perf/isa207-common.c:9:
-arch/powerpc/perf/isa207-common.c: In function 'isa207_find_source':
-include/uapi/linux/perf_event.h:1339:11: error: 'PERF_MEM_HOPS_2' undeclare=
-d (first use in this function); did you mean 'PERF_MEM_HOPS_0'?
- 1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
-      |           ^~~~~~~~~
-arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF=
-_MEM_S'
-  273 | #define P(a, b)    PERF_MEM_S(a, b)
-      |                    ^~~~~~~~~~
-arch/powerpc/perf/isa207-common.c:240:51: note: in expansion of macro 'P'
-  240 |     ret |=3D PH(LVL, REM_RAM1) | REM | LEVEL(RAM) | P(HOPS, 2);
-      |                                                   ^
-include/uapi/linux/perf_event.h:1339:11: note: each undeclared identifier i=
-s reported only once for each function it appears in
- 1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
-      |           ^~~~~~~~~
-arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF=
-_MEM_S'
-  273 | #define P(a, b)    PERF_MEM_S(a, b)
-      |                    ^~~~~~~~~~
-arch/powerpc/perf/isa207-common.c:240:51: note: in expansion of macro 'P'
-  240 |     ret |=3D PH(LVL, REM_RAM1) | REM | LEVEL(RAM) | P(HOPS, 2);
-      |                                                   ^
-include/uapi/linux/perf_event.h:1339:11: error: 'PERF_MEM_HOPS_3' undeclare=
-d (first use in this function); did you mean 'PERF_MEM_HOPS_0'?
- 1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
-      |           ^~~~~~~~~
-arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF=
-_MEM_S'
-  273 | #define P(a, b)    PERF_MEM_S(a, b)
-      |                    ^~~~~~~~~~
-arch/powerpc/perf/isa207-common.c:244:51: note: in expansion of macro 'P'
-  244 |     ret |=3D PH(LVL, REM_RAM2) | REM | LEVEL(RAM) | P(HOPS, 3);
-      |                                                   ^
+> +	 * might be caused by L1 interception on a platform which doesn't
+> +	 * support xfd at all.
+> +	 *
+> +	 * Do it conditionally upon guest_fpu::xfd. xfd_err matters
+> +	 * only when xfd contains a non-zero value.
+> +	 *
+> +	 * Queuing exception is done in vmx_handle_exit. See comment there.
 
-Caused by commit
+Another nit, it's worth explaining why XFD_ERR needs to be read here regardless
+of is_guest_mode().  E.g.
 
-  af2b24f228a0 ("perf powerpc: Add data source encodings for power10 platfo=
-rm")
+	 * Injecting the #NM back into the guest is handled in the standard path
+	 * as an #NM in L2 may be reflected into L1 as a VM-Exit.  Read XFD_ERR
+	 * even if the #NM is from L2, as L1 may have exposed XFD to L2.
 
-It looks like patch 1/4 of this series is missing ...
+Side topic, in a follow up series/patch, it's probably worth adding support in
+nested_vmx_prepare_msr_bitmap() to allow passthrough of the MSRs to L2.
 
-I have used the perf tree from next-20220105 for today.
+> +	 */
+> +	if (vcpu->arch.guest_fpu.fpstate->xfd)
+> +		rdmsrl(MSR_IA32_XFD_ERR, vcpu->arch.guest_fpu.xfd_err);
+> +}
+> +
+>  static void handle_exception_nmi_irqoff(struct vcpu_vmx *vmx)
+>  {
+>  	const unsigned long nmi_entry = (unsigned long)asm_exc_nmi_noist;
+> @@ -6407,6 +6452,9 @@ static void handle_exception_nmi_irqoff(struct vcpu_vmx *vmx)
+>  	/* if exit due to PF check for async PF */
+>  	if (is_page_fault(intr_info))
+>  		vmx->vcpu.arch.apf.host_apf_flags = kvm_read_and_reset_apf_flags();
+> +	/* if exit due to NM, handle before interrupts are enabled */
 
---=20
-Cheers,
-Stephen Rothwell
+Nit, drop this comment, it's slightly misleading since the #NM isn't fully handled
+here.  The comment in handle_nm_fault_irqoff() is more than sufficient.
 
---Sig_/ad2mF1w6wTRuKxYawgn1ioK
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHWGWkACgkQAVBC80lX
-0GwPFAf/TiloP1qFatishWP3Y03cnXzCVOaarDGWUcg5mrz+NNa82eqGF/kZaMb5
-bToevb+403g72ChHNdbfR94s+4kSF2rVFimLX2BC++hy0L7i8oHH9AEFek5dammC
-E6I9lnM6OwFaSjs0ugheeD0hszishpQd8zEGs/1kYasz4RsGd2YYtY0vBxIgrIi3
-nCQRSFx5RcFMoZm4CRiIk9f50ePKHhKrvDr11s29J9/NpxPOCorouUIdMpAm2YO6
-OZhArysYQcLadW1di02fKJOStTt+WSbvg09wO1YE3N+Y5hr4BbForZS8UlkNjCMi
-DoWdwOIzaiBapQJMq/BDizUFUXZZkQ==
-=WwQb
------END PGP SIGNATURE-----
-
---Sig_/ad2mF1w6wTRuKxYawgn1ioK--
+> +	else if (is_nm_fault(intr_info))
+> +		handle_nm_fault_irqoff(&vmx->vcpu);
+>  	/* Handle machine checks before interrupts are enabled */
+>  	else if (is_machine_check(intr_info))
+>  		kvm_machine_check();
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 21ce65220e38..2c988f8ca616 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -9953,6 +9953,9 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+>  	if (test_thread_flag(TIF_NEED_FPU_LOAD))
+>  		switch_fpu_return();
+>  
+> +	if (vcpu->arch.guest_fpu.xfd_err)
+> +		wrmsrl(MSR_IA32_XFD_ERR, vcpu->arch.guest_fpu.xfd_err);
+> +
+>  	if (unlikely(vcpu->arch.switch_db_regs)) {
+>  		set_debugreg(0, 7);
+>  		set_debugreg(vcpu->arch.eff_db[0], 0);
+> @@ -10016,6 +10019,9 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+>  
+>  	static_call(kvm_x86_handle_exit_irqoff)(vcpu);
+>  
+> +	if (vcpu->arch.guest_fpu.xfd_err)
+> +		wrmsrl(MSR_IA32_XFD_ERR, 0);
+> +
+>  	/*
+>  	 * Consume any pending interrupts, including the possible source of
+>  	 * VM-Exit on SVM and any ticks that occur between VM-Exit and now.

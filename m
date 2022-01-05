@@ -2,92 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC7C4855FC
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:37:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 315274855FF
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241561AbiAEPha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 10:37:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241550AbiAEPhL (ORCPT
+        id S241580AbiAEPhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 10:37:39 -0500
+Received: from mail-il1-f199.google.com ([209.85.166.199]:53079 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241555AbiAEPhZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 10:37:11 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A719DC061245;
-        Wed,  5 Jan 2022 07:37:10 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id f5so163669506edq.6;
-        Wed, 05 Jan 2022 07:37:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=IUKwGI9uAX6PYPoRB8Gc90h0oTgFN8Bu0rvMiUFNi5U=;
-        b=IuI8aayf6o1krrqgG9a5vwEePOnTfQJSqNzjVMpcnIF62P887eUSC9vfNVM6sIRPPN
-         4RoSlU2mO7p4Ik7kzXr1Q2VFdQFNmSXo857a4Bs8C29L0NM75oFStF38+vEJV7R6wx6t
-         h1WLeYSapuQXxItef4iV/vX/VPCIj2MGWNqHqVKtmYqB7T/TxtcvGLvWJMVv4kb0jkOz
-         VRFnnGce+rr7tK6i85H0e7uB7bTS/xLJY9k+zhyDTDeI2ONgsIoFL/21+jCCzqEF2Q6b
-         RrDJwJfn/PF6NNLRV47IHRrVB8HSwI3MzxXNqM4/6FvGte589oARnjEBCmtcHXRkYHX7
-         OD9g==
+        Wed, 5 Jan 2022 10:37:25 -0500
+Received: by mail-il1-f199.google.com with SMTP id u15-20020a056e02080f00b002b2d3206e35so21698428ilm.19
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 07:37:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=IUKwGI9uAX6PYPoRB8Gc90h0oTgFN8Bu0rvMiUFNi5U=;
-        b=6cwTmLcCeJruehL6ZCKpce8yXNsfUcF2Rm4RGlVFZAHeHzlfTNh/j9bkCjgtFng/Vw
-         49YvOojqp5nXN2uFmuX9bqaQ/KJ2zZv+0hIC/c7V1DH08zXAC/A/4k5JRY/3rARqx2fZ
-         dIZkQ+UlV+tIBS1Mp2bfhgjZ43oervuxKw1vTqvWWEydAwXyruWNqYIMG/xGfgCpt+2e
-         F41V6ykaDq/mdOlxGOeP1cFo95QjcHdqjsdyuXhVRSA0Ub1YMSu1MqGKaY+vVb2Ic+OT
-         6r4yXBnw+nrnRGwbD2S8c6ifC39Qer8UAiD0H8Iwj+IWSA6AV//8JWFOlhogqW9DbuW4
-         Ak2w==
-X-Gm-Message-State: AOAM533DnPUXa//RJO3Wy9XOAkfcrTL8+0v2ngHw7mYEvlPcT5ep16fk
-        TRUQ0WHHBScXS4+LCrVYGLZF5F5Ti/E=
-X-Google-Smtp-Source: ABdhPJy1fi1qZja7Sbk+Q2F5UOdV+lzqZVrjT3Y3y12frTUZVirNIov72AFlPPyZAuQDDMslXK9SMQ==
-X-Received: by 2002:a50:fd9a:: with SMTP id o26mr14488918edt.199.1641397029323;
-        Wed, 05 Jan 2022 07:37:09 -0800 (PST)
-Received: from localhost.localdomain ([46.249.74.23])
-        by smtp.gmail.com with ESMTPSA id d7sm307621edt.74.2022.01.05.07.37.07
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 05 Jan 2022 07:37:08 -0800 (PST)
-From:   Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-To:     tomba@kernel.org, sumit.semwal@linaro.org, christian.koenig@amd.com
-Cc:     openpvrsgx-devgroup@letux.org, merlijn@wizzup.org,
-        philipp@uvos.xyz, airlied@linux.ie, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-omap@vger.kernel.org,
-        Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-Subject: [PATCH] drm: omapdrm: Fix implicit dma_buf fencing
-Date:   Wed,  5 Jan 2022 17:36:58 +0200
-Message-Id: <1641397018-29872-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
-X-Mailer: git-send-email 1.9.1
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Jy1CJc27wQ4wDQC/r+ZYnpdYqk//0eAj4PnvGdOY2/g=;
+        b=hQxX9VhTVDZxv+28iBDyT89wKb7dWpSOFAQ6uPO4ibON0gLkpTgFKfGfuX21VAjBoF
+         QpPJdtamkSxuI3O1dzGTAEBQFDWjw32pVCt4MQVCMMP9OKfWgp+G9LfWd+amrXFmnLqe
+         mFA57cmri8qOkOxokHvnFb/n3NMG1Ctktslk6ZPQ9k7xHCFZxzOi2dHagtkABxn1wMqX
+         B5Nb9rtNgGfydfRWfXDvZTlPZrbiNN0p9JKYy0q0OX0D0we5X1H8Wz59mBrsM5qeJgAT
+         FcFDDfsFhcEzeQGsXfBTWENSh7Kxy4V7I/qY2HMtztcrrcPHh/Nco+6B+8cmgMWJMlsw
+         w0cA==
+X-Gm-Message-State: AOAM531B/pbiAftR31uxiNVM5R8yBThG9l3i9T/RxzpWonmeKNWIOLvf
+        3Nnqo3DvHZobO8wNamUboZzBr6068z0sy9wH3O8+65511yLL
+X-Google-Smtp-Source: ABdhPJyLeZL65/iy2MGtgSk9775W6qgsdKc2IP3lJQADB3Fttr26MviFEbb5dWoHgw9SGCmR5+xtawbSgn4fWMm+x9beGySDsXzI
+MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:1b88:: with SMTP id h8mr23708673ili.263.1641397044747;
+ Wed, 05 Jan 2022 07:37:24 -0800 (PST)
+Date:   Wed, 05 Jan 2022 07:37:24 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c9a3fb05d4d787a3@google.com>
+Subject: [syzbot] WARNING in signalfd_cleanup
+From:   syzbot <syzbot+5426c7ed6868c705ca14@syzkaller.appspotmail.com>
+To:     changbin.du@intel.com, daniel@iogearbox.net, davem@davemloft.net,
+        edumazet@google.com, hkallweit1@gmail.com, kuba@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk, yajun.deng@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently omapdrm driver does not initialize dma_buf_export_info resv
-member, which leads to a new dma_resv being allocated and attached to
-the exported dma_buf. This leads to the issue that fences created on
-dma_buf objects imported by other drivers are ignored by omapdrm, as only
-fences in gem object resv are waited on. This leads to various issues like
-displaying incomplete frames.
+Hello,
 
-Fix that by initializing dma_buf resv to the resv of the gem object being
-exported.
+syzbot found the following issue on:
 
-Signed-off-by: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
+HEAD commit:    6b8d4927540e Add linux-next specific files for 20220104
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=159d88e3b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=45c9bbbf2ae8e3d3
+dashboard link: https://syzkaller.appspot.com/bug?extid=5426c7ed6868c705ca14
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=117be65db00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15a75c8db00000
+
+The issue was bisected to:
+
+commit e4b8954074f6d0db01c8c97d338a67f9389c042f
+Author: Eric Dumazet <edumazet@google.com>
+Date:   Tue Dec 7 01:30:37 2021 +0000
+
+    netlink: add net device refcount tracker to struct ethnl_req_info
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12bca4e3b00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=11bca4e3b00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=16bca4e3b00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5426c7ed6868c705ca14@syzkaller.appspotmail.com
+Fixes: e4b8954074f6 ("netlink: add net device refcount tracker to struct ethnl_req_info")
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3604 at kernel/sched/wait.c:245 __wake_up_pollfree+0x40/0x50 kernel/sched/wait.c:246
+Modules linked in:
+CPU: 0 PID: 3604 Comm: syz-executor714 Not tainted 5.16.0-rc8-next-20220104-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:__wake_up_pollfree+0x40/0x50 kernel/sched/wait.c:245
+Code: f3 ff ff 48 8d 6b 40 48 b8 00 00 00 00 00 fc ff df 48 89 ea 48 c1 ea 03 80 3c 02 00 75 11 48 8b 43 40 48 39 c5 75 03 5b 5d c3 <0f> 0b 5b 5d c3 48 89 ef e8 13 d8 69 00 eb e5 cc 48 c1 e7 06 48 63
+RSP: 0018:ffffc90001aaf9f8 EFLAGS: 00010083
+RAX: ffff88801cd623f0 RBX: ffff88801bec8048 RCX: 0000000000000000
+RDX: 1ffff110037d9011 RSI: 0000000000000004 RDI: 0000000000000001
+RBP: ffff88801bec8088 R08: 0000000000000000 R09: ffff88801bec804b
+R10: ffffed10037d9009 R11: 0000000000000000 R12: ffff88801bec8040
+R13: ffff88801e029d40 R14: dffffc0000000000 R15: ffff88807eb50000
+FS:  00005555573ad300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000200000c0 CR3: 000000001e5e4000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ wake_up_pollfree include/linux/wait.h:271 [inline]
+ signalfd_cleanup+0x42/0x60 fs/signalfd.c:38
+ __cleanup_sighand kernel/fork.c:1596 [inline]
+ __cleanup_sighand+0x72/0xb0 kernel/fork.c:1593
+ __exit_signal kernel/exit.c:159 [inline]
+ release_task+0xc02/0x17e0 kernel/exit.c:200
+ wait_task_zombie kernel/exit.c:1117 [inline]
+ wait_consider_task+0x2fa6/0x3b80 kernel/exit.c:1344
+ do_wait_thread kernel/exit.c:1407 [inline]
+ do_wait+0x6ca/0xce0 kernel/exit.c:1524
+ kernel_wait4+0x14c/0x260 kernel/exit.c:1687
+ __do_sys_wait4+0x13f/0x150 kernel/exit.c:1715
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7facd6682386
+Code: 0f 1f 40 00 31 c9 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 49 89 ca 64 8b 04 25 18 00 00 00 85 c0 75 11 b8 3d 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 5a c3 90 48 83 ec 28 89 54 24 14 48 89 74 24
+RSP: 002b:00007ffdb91adef8 EFLAGS: 00000246 ORIG_RAX: 000000000000003d
+RAX: ffffffffffffffda RBX: 000000000000c646 RCX: 00007facd6682386
+RDX: 0000000040000001 RSI: 00007ffdb91adf14 RDI: 00000000ffffffff
+RBP: 0000000000000f17 R08: 0000000000000032 R09: 00007ffdb91ec080
+R10: 0000000000000000 R11: 0000000000000246 R12: 431bde82d7b634db
+R13: 00007ffdb91adf14 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
+
 ---
- drivers/gpu/drm/omapdrm/omap_gem_dmabuf.c | 1 +
- 1 file changed, 1 insertion(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/gpu/drm/omapdrm/omap_gem_dmabuf.c b/drivers/gpu/drm/omapdrm/omap_gem_dmabuf.c
-index f1f93cabb61e..a111e5c91925 100644
---- a/drivers/gpu/drm/omapdrm/omap_gem_dmabuf.c
-+++ b/drivers/gpu/drm/omapdrm/omap_gem_dmabuf.c
-@@ -88,6 +88,7 @@ struct dma_buf *omap_gem_prime_export(struct drm_gem_object *obj, int flags)
- 	exp_info.size = omap_gem_mmap_size(obj);
- 	exp_info.flags = flags;
- 	exp_info.priv = obj;
-+	exp_info.resv = obj->resv;
- 
- 	return drm_gem_dmabuf_export(obj->dev, &exp_info);
- }
--- 
-2.20.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

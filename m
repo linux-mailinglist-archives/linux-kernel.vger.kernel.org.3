@@ -2,266 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4270C484E5D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 07:29:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3269484E61
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 07:30:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231838AbiAEG2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 01:28:54 -0500
-Received: from mga05.intel.com ([192.55.52.43]:10151 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231226AbiAEG2w (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 01:28:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641364132; x=1672900132;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=R4LxQJYszF/u/f5BeYXO0e51VwhoyCxemYgl6dbn0rc=;
-  b=TZ4XdtBqZDK/An8gJcduI5irnpZDP/DsWFECqZibUh7CBWIIdBVfYsAn
-   hBwOYN094lBzyaaGxeK4QDIHiABAZaw6e630WsMs3z3VZUI9dh7inF8NR
-   d0YmNa3l56gru5tlibDSQWut++ofA7oS1qqkwsdnCDiKwzMxjZblxwJx2
-   d07mCJFGa7okywy7XJaRdTBt/Fy3KEPeKYAOSPB6MmqBG3650plnlqL+T
-   wsgPJxM+MAhwn7y9+Zme9SdAZs3u6y9DZ8AuGQ0tOqHR+MnCdSCs686BN
-   R8YYEfdyCyJo5QMThdTFjozGEF+L3VnCHpUXpFLA1NiYHWrfP/yHgAHQx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="328723686"
-X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
-   d="scan'208";a="328723686"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 22:28:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
-   d="scan'208";a="526385523"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
-  by orsmga008.jf.intel.com with ESMTP; 04 Jan 2022 22:28:44 -0800
-Date:   Wed, 5 Jan 2022 14:28:10 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Yan Zhao <yan.y.zhao@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com
-Subject: Re: [PATCH v3 kvm/queue 14/16] KVM: Handle page fault for private
- memory
-Message-ID: <20220105062810.GB25283@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20211223123011.41044-1-chao.p.peng@linux.intel.com>
- <20211223123011.41044-15-chao.p.peng@linux.intel.com>
- <20220104014629.GA2330@yzhao56-desk.sh.intel.com>
- <20220104091008.GA21806@chaop.bj.intel.com>
- <20220104100612.GA19947@yzhao56-desk.sh.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220104100612.GA19947@yzhao56-desk.sh.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S232394AbiAEG36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 01:29:58 -0500
+Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:58263 "EHLO
+        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231960AbiAEG34 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 01:29:56 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V1.XyUT_1641364133;
+Received: from e02h04404.eu6sqa(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0V1.XyUT_1641364133)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 05 Jan 2022 14:29:54 +0800
+From:   Wen Gu <guwen@linux.alibaba.com>
+To:     kgraul@linux.ibm.com, davem@davemloft.net, kuba@kernel.org
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net v3] net/smc: Reset conn->lgr when link group registration fails
+Date:   Wed,  5 Jan 2022 14:28:53 +0800
+Message-Id: <1641364133-61284-1-git-send-email-guwen@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 06:06:12PM +0800, Yan Zhao wrote:
-> On Tue, Jan 04, 2022 at 05:10:08PM +0800, Chao Peng wrote:
-> > On Tue, Jan 04, 2022 at 09:46:35AM +0800, Yan Zhao wrote:
-> > > On Thu, Dec 23, 2021 at 08:30:09PM +0800, Chao Peng wrote:
-> > > > When a page fault from the secondary page table while the guest is
-> > > > running happens in a memslot with KVM_MEM_PRIVATE, we need go
-> > > > different paths for private access and shared access.
-> > > > 
-> > > >   - For private access, KVM checks if the page is already allocated in
-> > > >     the memory backend, if yes KVM establishes the mapping, otherwise
-> > > >     exits to userspace to convert a shared page to private one.
-> > > >
-> > > will this conversion be atomical or not?
-> > > For example, after punching a hole in a private memory slot, will KVM
-> > > see two notifications: one for invalidation of the whole private memory
-> > > slot, and one for fallocate of the rest ranges besides the hole?
-> > > Or, KVM only sees one invalidation notification for the hole?
-> > 
-> > Punching hole doesn't need to invalidate the whole memory slot. It only
-> > send one invalidation notification to KVM for the 'hole' part.
-> good :)
-> 
-> > 
-> > Taking shared-to-private conversion as example it only invalidates the
-> > 'hole' part (that usually only the portion of the whole memory) on the
-> > shared fd,, and then fallocate the private memory in the private fd at
-> > the 'hole'. The KVM invalidation notification happens when the shared
-> > hole gets invalidated. The establishment of the private mapping happens
-> > at subsequent KVM page fault handlers.
-> > 
-> > > Could you please show QEMU code about this conversion?
-> > 
-> > See below for the QEMU side conversion code. The above described
-> > invalidation and fallocation will be two steps in this conversion. If
-> > error happens in the middle then this error will be propagated to
-> > kvm_run to do the proper action (e.g. may kill the guest?).
-> > 
-> > int ram_block_convert_range(RAMBlock *rb, uint64_t start, size_t length,
-> >                             bool shared_to_private)
-> > {
-> >     int ret; 
-> >     int fd_from, fd_to;
-> > 
-> >     if (!rb || rb->private_fd <= 0) { 
-> >         return -1;
-> >     }    
-> > 
-> >     if (!QEMU_PTR_IS_ALIGNED(start, rb->page_size) ||
-> >         !QEMU_PTR_IS_ALIGNED(length, rb->page_size)) {
-> >         return -1;
-> >     }    
-> > 
-> >     if (length > rb->max_length) {
-> >         return -1;
-> >     }    
-> > 
-> >     if (shared_to_private) {
-> >         fd_from = rb->fd;
-> >         fd_to = rb->private_fd;
-> >     } else {
-> >         fd_from = rb->private_fd;
-> >         fd_to = rb->fd;
-> >     }    
-> > 
-> >     ret = ram_block_discard_range_fd(rb, start, length, fd_from);
-> >     if (ret) {
-> >         return ret; 
-> >     }    
-> > 
-> >     if (fd_to > 0) { 
-> >         return fallocate(fd_to, 0, start, length);
-> >     }    
-> > 
-> >     return 0;
-> > }
-> > 
-> Thanks. So QEMU will re-generate memslots and set KVM_MEM_PRIVATE
-> accordingly? Will it involve slot deletion and create?
+SMC connections might fail to be registered to a link group due to
+things like unable to find a link to assign to in its creation. As
+a result, connection creation will return a failure and most
+resources related to the connection won't be applied or initialized,
+such as conn->abort_work or conn->lnk.
 
-KVM will not re-generate memslots when do the conversion, instead, it
-does unmap/map a range on the same memslot. For memslot with tag
-KVM_MEM_PRIVATE, it always have two mappings (private/shared) but at a
-time only one is effective. What conversion does is to turn off the
-existing mapping and turn on the other mapping for specified range in
-that slot.
+If smc_conn_free() is invoked later, it will try to access the
+resources related to the connection, which wasn't initialized, thus
+causing a panic.
 
-> 
-> > > 
-> > > 
-> > > >   - For shared access, KVM also checks if the page is already allocated
-> > > >     in the memory backend, if yes then exit to userspace to convert a
-> > > >     private page to shared one, otherwise it's treated as a traditional
-> > > >     hva-based shared memory, KVM lets existing code to obtain a pfn with
-> > > >     get_user_pages() and establish the mapping.
-> > > > 
-> > > > The above code assume private memory is persistent and pre-allocated in
-> > > > the memory backend so KVM can use this information as an indicator for
-> > > > a page is private or shared. The above check is then performed by
-> > > > calling kvm_memfd_get_pfn() which currently is implemented as a
-> > > > pagecache search but in theory that can be implemented differently
-> > > > (i.e. when the page is even not mapped into host pagecache there should
-> > > > be some different implementation).
-> > > > 
-> > > > Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> > > > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> > > > ---
-> > > >  arch/x86/kvm/mmu/mmu.c         | 73 ++++++++++++++++++++++++++++++++--
-> > > >  arch/x86/kvm/mmu/paging_tmpl.h | 11 +++--
-> > > >  2 files changed, 77 insertions(+), 7 deletions(-)
-> > > > 
-> > > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > > > index 2856eb662a21..fbcdf62f8281 100644
-> > > > --- a/arch/x86/kvm/mmu/mmu.c
-> > > > +++ b/arch/x86/kvm/mmu/mmu.c
-> > > > @@ -2920,6 +2920,9 @@ int kvm_mmu_max_mapping_level(struct kvm *kvm,
-> > > >  	if (max_level == PG_LEVEL_4K)
-> > > >  		return PG_LEVEL_4K;
-> > > >  
-> > > > +	if (kvm_slot_is_private(slot))
-> > > > +		return max_level;
-> > > > +
-> > > >  	host_level = host_pfn_mapping_level(kvm, gfn, pfn, slot);
-> > > >  	return min(host_level, max_level);
-> > > >  }
-> > > > @@ -3950,7 +3953,59 @@ static bool kvm_arch_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
-> > > >  				  kvm_vcpu_gfn_to_hva(vcpu, gfn), &arch);
-> > > >  }
-> > > >  
-> > > > -static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault, int *r)
-> > > > +static bool kvm_vcpu_is_private_gfn(struct kvm_vcpu *vcpu, gfn_t gfn)
-> > > > +{
-> > > > +	/*
-> > > > +	 * At this time private gfn has not been supported yet. Other patch
-> > > > +	 * that enables it should change this.
-> > > > +	 */
-> > > > +	return false;
-> > > > +}
-> > > > +
-> > > > +static bool kvm_faultin_pfn_private(struct kvm_vcpu *vcpu,
-> > > > +				    struct kvm_page_fault *fault,
-> > > > +				    bool *is_private_pfn, int *r)
-> > > > +{
-> > > > +	int order;
-> > > > +	int mem_convert_type;
-> > > > +	struct kvm_memory_slot *slot = fault->slot;
-> > > > +	long pfn = kvm_memfd_get_pfn(slot, fault->gfn, &order);
-> > > For private memory slots, it's possible to have pfns backed by
-> > > backends other than memfd, e.g. devicefd.
-> > 
-> > Surely yes, although this patch only supports memfd, but it's designed
-> > to be extensible to support other memory backing stores than memfd. There
-> > is one assumption in this design however: one private memslot can be
-> > backed by only one type of such memory backing store, e.g. if the
-> > devicefd you mentioned can independently provide memory for a memslot
-> > then that's no issue.
-> > 
-> > >So is it possible to let those
-> > > private memslots keep private and use traditional hva-based way?
-> > 
-> > Typically this fd-based private memory uses the 'offset' as the
-> > userspace address to get a pfn from the backing store fd. But I believe
-> > the current code does not prevent you from using the hva as the
-> By hva-based way, I mean mmap is required for this fd.
-> 
-> > userspace address, as long as your memory backing store understand that
-> > address and can provide the pfn basing on it. But since you already have
-> > the hva, you probably already mmap-ed the fd to userspace, that seems
-> > not this private memory patch can protect you. Probably I didn't quite
-> Yes, for this fd, though mapped in private memslot, there's no need to
-> prevent QEMU/host from accessing it as it will not cause the severe machine
-> check.
-> 
-> > understand 'keep private' you mentioned here.
-> 'keep private' means allow this kind of private memslot which does not
-> require protection from this private memory patch :)
+Here is an example, a SMC-R connection failed to be registered
+to a link group and conn->lnk is NULL. The following crash will
+happen if smc_conn_free() tries to access conn->lnk in
+smc_cdc_tx_dismiss_slots().
 
-Then I think such memory can be the shared part of memory of the
-KVM_MEM_PRIVATE memslot. As said above, this is initially supported :)
+ BUG: kernel NULL pointer dereference, address: 0000000000000168
+ #PF: supervisor read access in kernel mode
+ #PF: error_code(0x0000) - not-present page
+ PGD 0 P4D 0
+ Oops: 0000 [#1] PREEMPT SMP PTI
+ CPU: 4 PID: 68 Comm: kworker/4:1 Kdump: loaded Tainted: G E     5.16.0-rc5+ #52
+ Workqueue: smc_hs_wq smc_listen_work [smc]
+ RIP: 0010:smc_wr_tx_dismiss_slots+0x1e/0xc0 [smc]
+ Call Trace:
+  <TASK>
+  smc_conn_free+0xd8/0x100 [smc]
+  smc_lgr_cleanup_early+0x15/0x90 [smc]
+  smc_listen_work+0x302/0x1230 [smc]
+  ? process_one_work+0x25c/0x600
+  process_one_work+0x25c/0x600
+  worker_thread+0x4f/0x3a0
+  ? process_one_work+0x600/0x600
+  kthread+0x15d/0x1a0
+  ? set_kthread_struct+0x40/0x40
+  ret_from_fork+0x1f/0x30
+  </TASK>
 
-Chao
-> 
-> 
-> Thanks
-> Yan
-> > > Reasons below:
-> > > 1. only memfd is supported in this patch set.
-> > > 2. qemu/host read/write to those private memslots backing up by devicefd may
-> > > not cause machine check.
-> > > 
+This patch tries to fix this by resetting conn->lgr to NULL if an
+abnormal exit occurs in smc_lgr_register_conn(), thus avoiding the
+crash caused by accessing the uninitialized resources in smc_conn_free().
+And the new created link group will be terminated if smc connections
+can't be registered to it.
+
+Fixes: 56bc3b2094b4 ("net/smc: assign link to a new connection")
+Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
+---
+v1->v2:
+- Reset conn->lgr to NULL in smc_lgr_register_conn().
+- Only free new created link group.
+v2->v3:
+- Using __smc_lgr_terminate() instead of smc_lgr_schedule_free_work()
+  for an immediate free.
+---
+ net/smc/smc_core.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/net/smc/smc_core.c b/net/smc/smc_core.c
+index 412bc85..0201f99 100644
+--- a/net/smc/smc_core.c
++++ b/net/smc/smc_core.c
+@@ -171,8 +171,10 @@ static int smc_lgr_register_conn(struct smc_connection *conn, bool first)
+ 
+ 	if (!conn->lgr->is_smcd) {
+ 		rc = smcr_lgr_conn_assign_link(conn, first);
+-		if (rc)
++		if (rc) {
++			conn->lgr = NULL;
+ 			return rc;
++		}
+ 	}
+ 	/* find a new alert_token_local value not yet used by some connection
+ 	 * in this link group
+@@ -1835,8 +1837,14 @@ int smc_conn_create(struct smc_sock *smc, struct smc_init_info *ini)
+ 		write_lock_bh(&lgr->conns_lock);
+ 		rc = smc_lgr_register_conn(conn, true);
+ 		write_unlock_bh(&lgr->conns_lock);
+-		if (rc)
++		if (rc) {
++			spin_lock_bh(lgr_lock);
++			if (!list_empty(&lgr->list))
++				list_del_init(&lgr->list);
++			spin_unlock_bh(lgr_lock);
++			__smc_lgr_terminate(lgr, true);
+ 			goto out;
++		}
+ 	}
+ 	conn->local_tx_ctrl.common.type = SMC_CDC_MSG_TYPE;
+ 	conn->local_tx_ctrl.len = SMC_WR_TX_SIZE;
+-- 
+1.8.3.1
+

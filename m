@@ -2,113 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E86F484BCE
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 01:40:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81183484BCF
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 01:40:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236779AbiAEAkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 19:40:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
+        id S236787AbiAEAkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 19:40:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235357AbiAEAkg (ORCPT
+        with ESMTP id S235357AbiAEAkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 19:40:36 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1933C061761;
-        Tue,  4 Jan 2022 16:40:35 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id n30so42929547eda.13;
-        Tue, 04 Jan 2022 16:40:35 -0800 (PST)
+        Tue, 4 Jan 2022 19:40:45 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A57C061784
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 16:40:45 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id c14-20020a17090a674e00b001b31e16749cso75432pjm.4
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 16:40:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fN42ziO4udJZOMwfp7U3CaF0v31ogcDT0UpfTa7XxeQ=;
-        b=EGjTKa0Ym3rjGhs+OIu1mp+QfRepLT6s0RxLzvTTrxKsSkwAE9OxRjekyQvkKzf7nh
-         vQivcFRIVKF1+H1lya6DEy/em2pSjTzFtfgvirj+LlqdiEFeyMjreCRWelV/p42kp7uJ
-         Sf4lO2/sIDXH1zkUzZYlE8HXrCwS9triGrizzmVWoZOL2Km4s1fQWgm9aw6Su8ltQyMw
-         HisOiAxs7+F25Xag0NqFBfF+lK+MrzHu8EmtGLdy2FCsd8T/MWw9y4ChwhfncbAJZPAy
-         UqHc2M/3RMN7Dmkah+L+zrp9an6yYTJzKhgSMo3rdTF1jIxys74260C0BKs87SoRrygJ
-         bD5A==
+        d=lixom-net.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M+QqjubRXMhaOO4Im1+kXv4s6y4fFwhi8A1rks4WSNk=;
+        b=OAk4wXvl42AsV0OgVKihUBANkadpnqLzbM5lLR7TYgqaZJmPb117e1b+cj4mf5i99U
+         LHlz8PLnNYadlPYRwsUcw+tTQHZpRQlD7UWIH1mzV+RmB1Tg36eEjZ7nzl0VJNiPiP7+
+         EiE6woRb9XV+jFoRU1HIots89H6g8RjObfHt4aWvhMenhpOZJk1svUfLaLAhRSpVXGGf
+         rE9E/cvBgRqg1RdSGCGSuWFq5O4kWZHkasR1JeojUZ7V/RlwPXwpWDLhKghCpLS1/j/Z
+         afLcLZWBNbVfK5a1dg+mHfUvmbpCw5y3XfkX/QAsIp7V68n9aKuoUQPPi6xB+QcOgIbW
+         B58A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=fN42ziO4udJZOMwfp7U3CaF0v31ogcDT0UpfTa7XxeQ=;
-        b=y4VNeX+WzepQlBC317pklLNDO79xsXNIjmbS+M+lxkv3WyHSvW1WrNx++oxjTLo6UP
-         K5FMH4GtgA09aC6UYiYTWxDuaIh1nOJyzigijAn5fR9yB9W03t8q/nk95hOusn8UVyw1
-         gd0DkWThnOoXb+guSCFBaf15hV/UJH02T1JpuxfsuvQ8qZnAlFFbJwoS9wNw4qybyMy6
-         dSmtW/Q682yJmrwPDFJY55eN3/uqxRzwwPuWlKnErW/hFvKB0R8JR17nJWGEJU8IAlSI
-         3AIqCkqBM53dyBwIXVEMeS/jPlGyCPlYCratvZ4w7UcInHh6l2Q6+9aAwBTFfQrZXU8F
-         z4fw==
-X-Gm-Message-State: AOAM530zdebJiwyjWdHSRyGnbdGguWH7ZKfyguPRjSkW4GODBbeDVVXW
-        ltRahZ7bo4UUj7syQL6lhdw=
-X-Google-Smtp-Source: ABdhPJyPBkxLWiu9fIEY9pd/2arX3HKg/G3CQ12wOwDqfECEZAZnss3CAKK7bj8OfePAzYg/Y5pShA==
-X-Received: by 2002:a05:6402:5cf:: with SMTP id n15mr48741951edx.6.1641343234290;
-        Tue, 04 Jan 2022 16:40:34 -0800 (PST)
-Received: from gmail.com (0526F11B.dsl.pool.telekom.hu. [5.38.241.27])
-        by smtp.gmail.com with ESMTPSA id k12sm11775890ejx.119.2022.01.04.16.40.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 16:40:33 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Wed, 5 Jan 2022 01:40:32 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Al Viro <viro@zeniv.linux.org.uk>, llvm@lists.linux.dev
-Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
- -v1: Eliminate the Linux kernel's "Dependency Hell"
-Message-ID: <YdTpAJxgI+s9Wwgi@gmail.com>
-References: <YdIfz+LMewetSaEB@gmail.com>
- <YdM4Z5a+SWV53yol@archlinux-ax161>
- <YdQlwnDs2N9a5Reh@gmail.com>
- <YdSI9LmZE+FZAi1K@archlinux-ax161>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M+QqjubRXMhaOO4Im1+kXv4s6y4fFwhi8A1rks4WSNk=;
+        b=b8yfY0ZFiFW3Ja2ZriJ/mxT9HVFJqwLj5ikU7Z4gzCo8l2pY2c3Pjn9rNn+t73o0d3
+         9JUq4aWzLIix3NaB+l+Y37/bj2kDteK7IVVsWocQfwI4WK7U5kI/xjZ5NXt0KmHNBPWg
+         JM5GSH3l4ETQzJcy7rnAuRAJmvEui+hC2v2rLyBBG/Iyw84PlocRCPr3yOHQnh8/1gnf
+         hyv0D9Z+yyJWGXdgNnGCyqdfuMkfnMClcDU99GOll5JH+DroC6HpgPOhV3sYzLqNVDLW
+         TOCTrj9TJbqtvSByccM1FnMqW42cQQR7gGzo2NF+ELlNGbWKBBJxUQTgvFvUKaOEVdb/
+         6m4A==
+X-Gm-Message-State: AOAM532fBJRzN2It5Gust0vgahHSFu0mylmuCDtEtDQ0LNW8PWPKDk3D
+        usfmztho88WeldmfzKSLh/qIQCpSBTMGPJE4mzIbgw==
+X-Google-Smtp-Source: ABdhPJzAR8BXRI9t45W3S6Ga+iKqottCy1N8a/hjba/fckLGAl6sxvFZkGRjZwL6qdQfmKZpByykP1PNdJ7IIngCHHk=
+X-Received: by 2002:a17:90b:3143:: with SMTP id ip3mr1168992pjb.34.1641343245158;
+ Tue, 04 Jan 2022 16:40:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdSI9LmZE+FZAi1K@archlinux-ax161>
+References: <CAK8P3a0RDZpLtWjMEU1QVWSjOoqRAH6QxQ+ZQnJc8LwaV7m+JQ@mail.gmail.com>
+ <7e480da8-0d54-2d62-0a8e-184901c974b6@gmail.com> <ee2c92da-030c-b92f-0f41-1fdbbeed47c7@gmail.com>
+In-Reply-To: <ee2c92da-030c-b92f-0f41-1fdbbeed47c7@gmail.com>
+From:   Olof Johansson <olof@lixom.net>
+Date:   Tue, 4 Jan 2022 16:40:34 -0800
+Message-ID: <CAOesGMgx99GJ3gQmdgauSs3aF8xr4FgcgsELRz4HSVXmujHJnQ@mail.gmail.com>
+Subject: Re: [GIT PULL 0/5] SoC changes for 5.17
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        SoC Team <soc@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Florian,
 
-* Nathan Chancellor <nathan@kernel.org> wrote:
+On Tue, Jan 4, 2022 at 1:58 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>
+> On 12/24/21 9:11 AM, Florian Fainelli wrote:
+> > Hi Arnd, Olof,
+> >
+> > On 12/23/2021 13:31, Arnd Bergmann wrote:
+> >> I'm sending out the pull requests for 5.17 early, as I won't have
+> >> access to
+> >> my workstation for the next two weeks. With only 760 non-merge commits,
+> >> this again feels quieter than the massive previous merge window, but the
+> >> number of changed lines was actually slightly higher.
+> >>
+> >> There are very few changes aside from devicetree patches, most of
+> >> which are for the i.MX, Tegra, Qualcomm, Apple, K3 and Aspeed
+> >> platforms.
+> >>
+> >> We have a couple of new SoCs in existing families:
+> >>
+> >>   - Qualcomm Snapdragon 8 Gen1
+> >>   - Qualcomm Snapdragon SDX65
+> >>   - NXP i.MX8ULP
+> >>   - Texas Instruments j721s2
+> >>   - Renesas R-Car S4-8
+> >>
+> >> The time between product announcement and kernel support is fairly short
+> >> for all of these, which is nice. In particular the two Snapdragons
+> >> were only
+> >> announced this month and are the current high end of Qualcomm's products.
+> >> On the other end of the spectrum, we also add support for ST SPEAr320s,
+> >> which was launched 10 years ago.
+> >>
+> >> Aside from the Arm chips, there is also a pull request for a new
+> >> RISC-V SoC,
+> >> the Starfive JH7100, including some of the basic drivers to make it boot.
+> >
+> > There seems to half of the submitted Broadcom SoCs pull request missing
+> > in this one, was there issues with those below:
+> >
+> > defconfigs:
+> >
+> > https://lore.kernel.org/linux-arm-kernel/20211221220642.2862218-1-f.fainelli@gmail.com/
+> >
+> > https://lore.kernel.org/linux-arm-kernel/20211221220642.2862218-2-f.fainelli@gmail.com/
+> >
+> >
+> > drivers:
+> >
+> > https://lore.kernel.org/linux-arm-kernel/20211221220642.2862218-5-f.fainelli@gmail.com/
+> >
+> >
+> > Should I resend or fix something in those? Thanks!
+>
+>
+> Arnd, Olof, do I need to resend the 3 pull requests mentioned above?
+> Thanks and happy new year.
 
-> > I.e. I think the bug was simply to make main.c aware of the array, now 
-> > that the INIT_THREAD initialization is done there.
-> 
-> Yes, that seems right.
-> 
-> Unfortunately, while the kernel now builds, it does not boot in QEMU. I 
-> tried to checkout at 9006a48618cc0cacd3f59ff053e6509a9af5cc18 to see if I 
-> could reproduce that breakage there but the build errors out at that 
-> change (I do see notes of bisection breakage in some of the commits) so I 
-> assume that is expected.
+I'm about to make a pass of merges, likely tomorrow -- I had to get my
+Honeycomb working again since it hosts all the trees and mailboxes for
+me.
 
-Yeah, there's a breakage window on ARM64, I'll track down that 
-bisectability bug.
+No need to resend at this time.
 
-Decoupling thread_info and task_struct incrementally, so that it bisects 
-cleanly on all architectures, was always a big challenge. :-/
 
-> There is no output, even with earlycon, so it seems like something is 
-> going wrong in early boot code. I am not very familiar with the SCS code 
-> so I will see if I can debug this with gdb later (I'll try to see if it 
-> is reproducible with GCC as well; as Nick mentions, there is support 
-> being added to it and I don't mind building from source).
-
-Just to make sure: with SCS disabled the same kernel boots fine?
-
-> Sure thing, I will continue to follow this and test it as much as I can 
-> to make sure everything continues to work well!
-
-Thank you!
-
-	Ingo
+-Olof

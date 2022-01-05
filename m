@@ -2,103 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C05485318
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB24748531A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:58:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236606AbiAEM4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 07:56:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
+        id S236573AbiAEM6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 07:58:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235965AbiAEM4j (ORCPT
+        with ESMTP id S235965AbiAEM6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 07:56:39 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3382C061761;
-        Wed,  5 Jan 2022 04:56:39 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id l15so14468216pls.7;
-        Wed, 05 Jan 2022 04:56:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=pPTnnFDZ1+dEAgEFTmiqXGXGW+Zq8maAM3d4dtNv7OA=;
-        b=leB0DAAq2hFztVJ5MxPombH0DHMtJsPeNZcp5d01NlhrPBbKTW3jP6+r2Y28OdSUeF
-         wYbtG1N8aX308FVEcDPsFiSFU3DJIUX9cEOVC0tDVF54rIKPkN95xCfiHgLuMTn1Oupt
-         Zz2WauHS0VjOA5Cbboxq2y/WW5Fla6r1TJSjnnU5N6LNobk57QQeAsb7l3hwWu/yNLrw
-         ryrJWb49cj2r+G+Vmuc9xbWku39dEHl2loZkt0xEb5j1jueJorhoHfEfrlitvBvtSDEa
-         qT8tLw3oc/6H8kYRBjhYRP4Sxo3raluCTXsfE/mFD5/PF1LsdDnqZltuFd99dMNX648D
-         vCtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=pPTnnFDZ1+dEAgEFTmiqXGXGW+Zq8maAM3d4dtNv7OA=;
-        b=uaXyIoAMwq5uBTxwQUdHIWMKAwCN+JQXWMH0A+A4kzC7YSrRlDgG3MKR8HgqTbKTsH
-         p+71pVY5I7rJhAvvcHChBAMVOtwjAbYfmtrLBnlFdBCmO1iCcfS+Ul4VWCMaVV+rmGhi
-         2DpPJdcet/GL7b0G4u2HXvJu4mkwlyQaVIz3ZGevvV9rz/wY+yXQj5DNSa9wbAqONaHd
-         FvHghg9JdEKOibOyMtpR120xVVT67VWH5h+Tg1qwsp8KsjQaULcWIcK4rT7OIaAKua5x
-         fiO22zIJPlGwZ0L1k60jJoJ7dszrd7DuW1st4InBPWgvmqH2MPsd6V+dW1AKzLugCP6s
-         g7SA==
-X-Gm-Message-State: AOAM533HzS4FpOkQ3AN6294kUvgW971A11SRykKw+e5E+MdwstxYkbIz
-        n2yy6NaIeDgASFsboFT5gR8=
-X-Google-Smtp-Source: ABdhPJzb29eoxT4uPyOXr7pcJfdD/DEWfaOS6qbIEeFyE1HmRX//qrtlQRHC37vJBqPyTnGruCZreQ==
-X-Received: by 2002:a17:902:9894:b0:149:8a72:98ae with SMTP id s20-20020a170902989400b001498a7298aemr38401469plp.132.1641387399257;
-        Wed, 05 Jan 2022 04:56:39 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id d17sm42901005pfl.125.2022.01.05.04.56.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 04:56:39 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-Cc:     linmq006@gmail.com, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alexandru Ardelean <ardeleanalex@gmail.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Adriana Reus <adi.reus@gmail.com>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] iio: gyro: bmg160: Fix error handling in bmg160_core_probe
-Date:   Wed,  5 Jan 2022 12:56:30 +0000
-Message-Id: <20220105125633.21989-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+        Wed, 5 Jan 2022 07:58:45 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64456C061761
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 04:58:45 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: wlozano)
+        with ESMTPSA id C658D1F44882
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1641387523;
+        bh=yNIafW9es9iDBNSQ/Z9On8LylzWUxeHdxcDf8KMevu8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Uz12lUBT86dTKzlw85feeUUvK0m1ni1+Pq8j1N7osSGPfIWbWarxgzWt5rdZVqo69
+         Wkv9eHV67rAtbgjdEWL3xTcaFIGJJ5KjAjTf51/p0Zn9cOZFBpArdQLHE5k5RX8xvN
+         nB7rE6xwz7VRzVmfC/Gotb2ezNgIsMigY9aCeDo4JHpHjvEyIsTB35b08U4PplYFFs
+         5XfRNnDf46byemcpc7I/tbK37dG9/rh6uTCw+XKVum8ZWm6yVxBKL1+YglT1YWAfMd
+         6zaUPLM/UBhdBiQBKRU2ZEe7ihPzZbSVypcatR5OQSDfHPa0IeWYPV32GvDg8eeAMF
+         jPmeu3CPdFbnA==
+Message-ID: <7a228120-f8fa-53ce-8857-32330968eebb@collabora.com>
+Date:   Wed, 5 Jan 2022 09:58:36 -0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: Occasional hung with UM after enable VMAP_STACK
+Content-Language: en-US
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Sjoerd Simons <sjoerd.simons@collabora.com>,
+        ritesh sarraf <ritesh.sarraf@collabora.com>
+References: <be290dc3-db9c-2940-91bb-c91bf42fd8f6@collabora.com>
+ <d80e4e760171de3813895e3cbfcadf96aa6c8fb6.camel@sipsolutions.net>
+ <8c26a869-0cbe-a38c-8a8d-9f3f171f7e72@collabora.com>
+ <41fe09354fc736fb1ff2cb429e035633f24176ce.camel@sipsolutions.net>
+From:   Walter Lozano <walter.lozano@collabora.com>
+In-Reply-To: <41fe09354fc736fb1ff2cb429e035633f24176ce.camel@sipsolutions.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pm_runtime_enable will increase power disable depth.
-If the probe fails, we should use pm_runtime_disable() to balance
-pm_runtime_enable(). In the PM Runtime docs:
-    Drivers in ->remove() callback should undo the runtime PM changes done
-    in ->probe(). Usually this means calling pm_runtime_disable(),
-    pm_runtime_dont_use_autosuspend() etc.
-We should do this in error handling.
+Hi Johannes,
 
-Fixes: 7d0ead5 ("iio: Reconcile operation order between iio_register/unregister and pm functions")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/iio/gyro/bmg160_core.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+On 1/4/22 16:49, Johannes Berg wrote:
+> On Tue, 2022-01-04 at 16:26 -0300, Walter Lozano wrote:
+>> Thank you for your quick response. The Debian configuration on package
+>> user-mode-linux have these settings
+>>
+>> CONFIG_HAVE_ARCH_VMAP_STACK=y
+>> CONFIG_VMAP_STACK=y
+> OK, so it actually _is_ enabled.
+>
+>> as you can see in [1]. I did run some tests disabling those settings,
+>> which passed without any hung.
+>>
+>> Unfortunately the "occasional" behavior makes this issue a bit tricky to
+>> debug.
+>>
+> Right.
+>
+> Hm. I've been running our tests with it for about three months and
+> haven't observed any hangs, but I guess that doesn't mean much.
 
-diff --git a/drivers/iio/gyro/bmg160_core.c b/drivers/iio/gyro/bmg160_core.c
-index 17b939a367ad..81a6d09788bd 100644
---- a/drivers/iio/gyro/bmg160_core.c
-+++ b/drivers/iio/gyro/bmg160_core.c
-@@ -1188,11 +1188,14 @@ int bmg160_core_probe(struct device *dev, struct regmap *regmap, int irq,
- 	ret = iio_device_register(indio_dev);
- 	if (ret < 0) {
- 		dev_err(dev, "unable to register iio device\n");
--		goto err_buffer_cleanup;
-+		goto err_pm_cleanup;
- 	}
- 
- 	return 0;
- 
-+err_pm_cleanup:
-+	pm_runtime_dont_use_autosuspend(dev);
-+	pm_runtime_disable(dev);
- err_buffer_cleanup:
- 	iio_triggered_buffer_cleanup(indio_dev);
- err_trigger_unregister:
+The issue is very rare at least in my setup, I had to prepare a test 
+environment to stress the system in order to be able to reproduce it 
+more or less consistently. I will continue investigating and share any 
+useful information.
+
+> To be honest, I have no particular reason to even want it, other than
+> that it catches accidental DMA from stack more easily ... so I guess if
+> we can't find anything, we might as well revert it.
+
+I hope we will be able to find the root cause of the issue.
+
+> Feels like it _should_ work though, since it's just a different location
+> for the stack.
+
+
+I see. Thank you again for your quick reply, I will keep you updated.
+
+Regards,
+
+Walter
+
 -- 
-2.17.1
+Walter Lozano
+Collabora Ltd.
 

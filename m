@@ -2,202 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC79D48542D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 15:15:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5942B485487
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 15:30:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240606AbiAEOP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 09:15:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240596AbiAEOPu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 09:15:50 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493F8C061784
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 06:15:50 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1n574n-0001Kb-1G; Wed, 05 Jan 2022 15:15:41 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1n574h-0007uo-SA; Wed, 05 Jan 2022 15:15:35 +0100
-Date:   Wed, 5 Jan 2022 15:15:35 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, linux@rempel-privat.de,
-        andrew@lunn.ch, oneukum@suse.com, robert.foss@collabora.com,
-        freddy@asix.com.tw, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com
-Subject: Re: [PATCH RFT] net: asix: add proper error handling of usb read
- errors
-Message-ID: <20220105141535.GI303@pengutronix.de>
-References: <20220105131952.15693-1-paskripkin@gmail.com>
+        id S237136AbiAEO3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 09:29:03 -0500
+Received: from mga06.intel.com ([134.134.136.31]:45841 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240705AbiAEO3C (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 09:29:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641392942; x=1672928942;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Hi1CUxQYFQ0/ZFDZ2lA363BDyHuRYgNCeTWBGpt3iyA=;
+  b=feDcLEAhBFK8JoT/iuJqqPRXxTpV6GPCbnnLrcJZibjBwg91zdnV6s6P
+   cB1p0AImHjzbkV8Mv/Aghi9gvNToMaW80GJBcHnO3YGI2hpUnHFLzf9XH
+   PhSEmVzt4Erhqh1cfuY46HJRuSMhTNqINQs/XNzK9KFen6y5b4ov0NzUp
+   ED4WFXg9xQ1+dUHvLVY9pcSU2+oKocjtzPKMPkjMFiHwLiqetgxMn4VUU
+   ZkiqmbhdDPMJq48rXCDp0f2yzcqy0LL8iFrldGEptiClGo5II7yLcN0P+
+   x0IUlNsbbtB4BwAf9IFFtKiTQPXyktq61XGipKJiIZAExc1G8sU3G4GZX
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="303204299"
+X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
+   d="scan'208";a="303204299"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 06:16:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
+   d="scan'208";a="668104128"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 05 Jan 2022 06:16:43 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n575m-000GiY-J0; Wed, 05 Jan 2022 14:16:42 +0000
+Date:   Wed, 5 Jan 2022 22:16:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Roman Bacik <roman.bacik@broadcom.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     kbuild-all@lists.01.org, bcm-kernel-feedback-list@broadcom.com,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: iproc: Set all 24 bits of PCI class code
+Message-ID: <202201052225.XMsg2fG3-lkp@intel.com>
+References: <20220105093552.27542-1-pali@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220105131952.15693-1-paskripkin@gmail.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 15:15:04 up 25 days, 23:00, 79 users,  load average: 1.10, 1.15,
- 1.20
+In-Reply-To: <20220105093552.27542-1-pali@kernel.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 04:19:52PM +0300, Pavel Skripkin wrote:
-> Syzbot once again hit uninit value in asix driver. The problem still the
-> same -- asix_read_cmd() reads less bytes, than was requested by caller.
-> 
-> Since all read requests are performed via asix_read_cmd() let's catch
-> usb related error there and add __must_check notation to be sure all
-> callers actually check return value.
-> 
-> So, this patch adds sanity check inside asix_read_cmd(), that simply
-> checks if bytes read are not less, than was requested and adds missing
-> error handling of asix_read_cmd() all across the driver code.
-> 
-> Fixes: d9fe64e51114 ("net: asix: Add in_pm parameter")
-> Reported-and-tested-by: syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com
-> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Hi "Pali,
 
-Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
+I love your patch! Yet something to improve:
 
-Thank you!
+[auto build test ERROR on helgaas-pci/next]
+[also build test ERROR on v5.16-rc8 next-20220105]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> ---
->  drivers/net/usb/asix.h         |  4 ++--
->  drivers/net/usb/asix_common.c  | 19 +++++++++++++------
->  drivers/net/usb/asix_devices.c | 21 ++++++++++++++++++---
->  3 files changed, 33 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/net/usb/asix.h b/drivers/net/usb/asix.h
-> index 2a1e31defe71..4334aafab59a 100644
-> --- a/drivers/net/usb/asix.h
-> +++ b/drivers/net/usb/asix.h
-> @@ -192,8 +192,8 @@ extern const struct driver_info ax88172a_info;
->  /* ASIX specific flags */
->  #define FLAG_EEPROM_MAC		(1UL << 0)  /* init device MAC from eeprom */
->  
-> -int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
-> -		  u16 size, void *data, int in_pm);
-> +int __must_check asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
-> +			       u16 size, void *data, int in_pm);
->  
->  int asix_write_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
->  		   u16 size, void *data, int in_pm);
-> diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
-> index 71682970be58..524805285019 100644
-> --- a/drivers/net/usb/asix_common.c
-> +++ b/drivers/net/usb/asix_common.c
-> @@ -11,8 +11,8 @@
->  
->  #define AX_HOST_EN_RETRIES	30
->  
-> -int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
-> -		  u16 size, void *data, int in_pm)
-> +int __must_check asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
-> +			       u16 size, void *data, int in_pm)
->  {
->  	int ret;
->  	int (*fn)(struct usbnet *, u8, u8, u16, u16, void *, u16);
-> @@ -27,9 +27,12 @@ int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
->  	ret = fn(dev, cmd, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
->  		 value, index, data, size);
->  
-> -	if (unlikely(ret < 0))
-> +	if (unlikely(ret < size)) {
-> +		ret = ret < 0 ? ret : -ENODATA;
-> +
->  		netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
->  			    index, ret);
-> +	}
->  
->  	return ret;
->  }
-> @@ -79,7 +82,7 @@ static int asix_check_host_enable(struct usbnet *dev, int in_pm)
->  				    0, 0, 1, &smsr, in_pm);
->  		if (ret == -ENODEV)
->  			break;
-> -		else if (ret < sizeof(smsr))
-> +		else if (ret < 0)
->  			continue;
->  		else if (smsr & AX_HOST_EN)
->  			break;
-> @@ -579,8 +582,12 @@ int asix_mdio_read_nopm(struct net_device *netdev, int phy_id, int loc)
->  		return ret;
->  	}
->  
-> -	asix_read_cmd(dev, AX_CMD_READ_MII_REG, phy_id,
-> -		      (__u16)loc, 2, &res, 1);
-> +	ret = asix_read_cmd(dev, AX_CMD_READ_MII_REG, phy_id,
-> +			    (__u16)loc, 2, &res, 1);
-> +	if (ret < 0) {
-> +		mutex_unlock(&dev->phy_mutex);
-> +		return ret;
-> +	}
->  	asix_set_hw_mii(dev, 1);
->  	mutex_unlock(&dev->phy_mutex);
->  
-> diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-> index 4514d35ef4c4..6b2fbdf4e0fd 100644
-> --- a/drivers/net/usb/asix_devices.c
-> +++ b/drivers/net/usb/asix_devices.c
-> @@ -755,7 +755,12 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
->  	priv->phy_addr = ret;
->  	priv->embd_phy = ((priv->phy_addr & 0x1f) == 0x10);
->  
-> -	asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG, 0, 0, 1, &chipcode, 0);
-> +	ret = asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG, 0, 0, 1, &chipcode, 0);
-> +	if (ret < 0) {
-> +		netdev_dbg(dev->net, "Failed to read STATMNGSTS_REG: %d\n", ret);
-> +		return ret;
-> +	}
-> +
->  	chipcode &= AX_CHIPCODE_MASK;
->  
->  	ret = (chipcode == AX_AX88772_CHIPCODE) ? ax88772_hw_reset(dev, 0) :
-> @@ -920,11 +925,21 @@ static int ax88178_reset(struct usbnet *dev)
->  	int gpio0 = 0;
->  	u32 phyid;
->  
-> -	asix_read_cmd(dev, AX_CMD_READ_GPIOS, 0, 0, 1, &status, 0);
-> +	ret = asix_read_cmd(dev, AX_CMD_READ_GPIOS, 0, 0, 1, &status, 0);
-> +	if (ret < 0) {
-> +		netdev_dbg(dev->net, "Failed to read GPIOS: %d\n", ret);
-> +		return ret;
-> +	}
-> +
->  	netdev_dbg(dev->net, "GPIO Status: 0x%04x\n", status);
->  
->  	asix_write_cmd(dev, AX_CMD_WRITE_ENABLE, 0, 0, 0, NULL, 0);
-> -	asix_read_cmd(dev, AX_CMD_READ_EEPROM, 0x0017, 0, 2, &eeprom, 0);
-> +	ret = asix_read_cmd(dev, AX_CMD_READ_EEPROM, 0x0017, 0, 2, &eeprom, 0);
-> +	if (ret < 0) {
-> +		netdev_dbg(dev->net, "Failed to read EEPROM: %d\n", ret);
-> +		return ret;
-> +	}
-> +
->  	asix_write_cmd(dev, AX_CMD_WRITE_DISABLE, 0, 0, 0, NULL, 0);
->  
->  	netdev_dbg(dev->net, "EEPROM index 0x17 is 0x%04x\n", eeprom);
-> -- 
-> 2.34.1
-> 
-> 
+url:    https://github.com/0day-ci/linux/commits/Pali-Roh-r/PCI-iproc-Set-all-24-bits-of-PCI-class-code/20220105-173704
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
+config: arm-randconfig-c002-20220105 (https://download.01.org/0day-ci/archive/20220105/202201052225.XMsg2fG3-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/8ef1acfb84c08a0331930f9a60884fdd6d7c5e88
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Pali-Roh-r/PCI-iproc-Set-all-24-bits-of-PCI-class-code/20220105-173704
+        git checkout 8ef1acfb84c08a0331930f9a60884fdd6d7c5e88
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/pci/controller/
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/pci/controller/pcie-iproc.c: In function 'iproc_pcie_check_link':
+>> drivers/pci/controller/pcie-iproc.c:798:18: error: 'PCI_CLASS_BRIDGE_PCI_NORMAL' undeclared (first use in this function); did you mean 'PCI_CLASS_BRIDGE_PCMCIA'?
+     798 |         class |= PCI_CLASS_BRIDGE_PCI_NORMAL;
+         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                  PCI_CLASS_BRIDGE_PCMCIA
+   drivers/pci/controller/pcie-iproc.c:798:18: note: each undeclared identifier is reported only once for each function it appears in
+
+
+vim +798 drivers/pci/controller/pcie-iproc.c
+
+   765	
+   766	static int iproc_pcie_check_link(struct iproc_pcie *pcie)
+   767	{
+   768		struct device *dev = pcie->dev;
+   769		u32 hdr_type, link_ctrl, link_status, class, val;
+   770		bool link_is_active = false;
+   771	
+   772		/*
+   773		 * PAXC connects to emulated endpoint devices directly and does not
+   774		 * have a Serdes.  Therefore skip the link detection logic here.
+   775		 */
+   776		if (pcie->ep_is_internal)
+   777			return 0;
+   778	
+   779		val = iproc_pcie_read_reg(pcie, IPROC_PCIE_LINK_STATUS);
+   780		if (!(val & PCIE_PHYLINKUP) || !(val & PCIE_DL_ACTIVE)) {
+   781			dev_err(dev, "PHY or data link is INACTIVE!\n");
+   782			return -ENODEV;
+   783		}
+   784	
+   785		/* make sure we are not in EP mode */
+   786		iproc_pci_raw_config_read32(pcie, 0, PCI_HEADER_TYPE, 1, &hdr_type);
+   787		if ((hdr_type & 0x7f) != PCI_HEADER_TYPE_BRIDGE) {
+   788			dev_err(dev, "in EP mode, hdr=%#02x\n", hdr_type);
+   789			return -EFAULT;
+   790		}
+   791	
+   792		/* force class to PCI_CLASS_BRIDGE_PCI_NORMAL (0x060400) */
+   793	#define PCI_BRIDGE_CTRL_REG_OFFSET	0x43c
+   794	#define PCI_BRIDGE_CTRL_REG_CLASS_MASK	0xffffff
+   795		iproc_pci_raw_config_read32(pcie, 0, PCI_BRIDGE_CTRL_REG_OFFSET,
+   796					    4, &class);
+   797		class &= ~PCI_BRIDGE_CTRL_REG_CLASS_MASK;
+ > 798		class |= PCI_CLASS_BRIDGE_PCI_NORMAL;
+   799		iproc_pci_raw_config_write32(pcie, 0, PCI_BRIDGE_CTRL_REG_OFFSET,
+   800					     4, class);
+   801	
+   802		/* check link status to see if link is active */
+   803		iproc_pci_raw_config_read32(pcie, 0, IPROC_PCI_EXP_CAP + PCI_EXP_LNKSTA,
+   804					    2, &link_status);
+   805		if (link_status & PCI_EXP_LNKSTA_NLW)
+   806			link_is_active = true;
+   807	
+   808		if (!link_is_active) {
+   809			/* try GEN 1 link speed */
+   810	#define PCI_TARGET_LINK_SPEED_MASK	0xf
+   811	#define PCI_TARGET_LINK_SPEED_GEN2	0x2
+   812	#define PCI_TARGET_LINK_SPEED_GEN1	0x1
+   813			iproc_pci_raw_config_read32(pcie, 0,
+   814						    IPROC_PCI_EXP_CAP + PCI_EXP_LNKCTL2,
+   815						    4, &link_ctrl);
+   816			if ((link_ctrl & PCI_TARGET_LINK_SPEED_MASK) ==
+   817			    PCI_TARGET_LINK_SPEED_GEN2) {
+   818				link_ctrl &= ~PCI_TARGET_LINK_SPEED_MASK;
+   819				link_ctrl |= PCI_TARGET_LINK_SPEED_GEN1;
+   820				iproc_pci_raw_config_write32(pcie, 0,
+   821						IPROC_PCI_EXP_CAP + PCI_EXP_LNKCTL2,
+   822						4, link_ctrl);
+   823				msleep(100);
+   824	
+   825				iproc_pci_raw_config_read32(pcie, 0,
+   826						IPROC_PCI_EXP_CAP + PCI_EXP_LNKSTA,
+   827						2, &link_status);
+   828				if (link_status & PCI_EXP_LNKSTA_NLW)
+   829					link_is_active = true;
+   830			}
+   831		}
+   832	
+   833		dev_info(dev, "link: %s\n", link_is_active ? "UP" : "DOWN");
+   834	
+   835		return link_is_active ? 0 : -ENODEV;
+   836	}
+   837	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

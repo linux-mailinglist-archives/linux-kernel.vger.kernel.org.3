@@ -2,183 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA0C848564D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:57:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C80C485657
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 17:00:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241755AbiAEP5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 10:57:48 -0500
-Received: from mail-eopbgr60076.outbound.protection.outlook.com ([40.107.6.76]:51267
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231191AbiAEP5m (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 10:57:42 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g0hbztrJO4JLPVff1LXNDNNyXiw8NDdkn6NRYHW7QeJhGwhUvQkN3i6NH5uiLXEVZffYNWq4QUoRy6E/rBbkciWbFGeeShTffEIrtzKLBu9l0q1lvRu5YDIy/4TfQpBDedrrB7lNpZ3eKk7v63VEPZ4ZXPKUbDQXld+o93Ew+Db+Ii9oiSfsM7y4r0jzYZpzXfJGNMVFKFOIDYEK1tWgDYZf1ByTiPkztmA3HgPE8SzfY43T0IZMkQUWx/h+TK+VrYbpRX14wR51BsWiFDHWQranJIe+0ZXnU6FtHLSG0cKFa6zjkwaJOax4cjEy4FM3bnjVW8wONrNvp79VC7QYww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7RIo+7ZW95vhR4dTA8T5OljUJ9IJ08lgRJxvfdB5qlE=;
- b=n2Qd19HIC2lJx3lpCuvBmwDOh8G9J1KiJkHiaWir3BnGsCz1pHS8B3KGoxGkL7RRR2cFbSUA8R0Ee+a0SWkx3LaExymhZr3KIoMZX/jI2d3dTq+KSzckOoPNsWBwrD4jXZeE+PewcVThwXSFv21zVtek8xewFkONLxizUjDQ/XMyP2Xup3scvqvmPd+iwEw2Cg5HhHUYwsS5nQOlhPgylMsd1XnGhnLdrcWrbeItUsEwiv45jN9vQu0/b3a88zkV3MPVNjhC+ET+uq5AAc/7E9+mnSGGvACUj+1LzIhh6PmJOHcYIOZds4hXRmEA6yIi/8pq7dPStqSIBxpwt++nzA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 194.138.21.71) smtp.rcpttodomain=canonical.com smtp.mailfrom=siemens.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=siemens.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7RIo+7ZW95vhR4dTA8T5OljUJ9IJ08lgRJxvfdB5qlE=;
- b=yQedLdfe7WjDLiLY/4Qre8rNhxMwPqSEJgYKfnAO5292xOpKZs8SutzGJI/ZtuDNTMbX087kEEkwlnuSZGd9ZD7jU8vzHeSuZU09r/Pr50vWcfxQ94SqQBjno4s08Qf9JoM1jIHcvORiX550wq6mSdhQ8vNHC86lmvIVxkGNkfxthCVuMaWMcDAt9ZGCLzCIpCT0G6BqkIlBJxjPmi73XqNrG/gn1eFPAq46ardDZmTS0hxDFEoliesioD3+R9+LDxKn/K/cojVC/RANhiLUhKIBvmXd6hAfr9fSRJoJuf/TmZFeobU8A/PXcUDP5zIMH9u6b+sVDB1v8wEZMIExrw==
-Received: from AM6PR0502CA0053.eurprd05.prod.outlook.com
- (2603:10a6:20b:56::30) by VI1PR10MB3520.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:800:13a::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7; Wed, 5 Jan
- 2022 15:57:39 +0000
-Received: from VE1EUR01FT017.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:20b:56:cafe::ec) by AM6PR0502CA0053.outlook.office365.com
- (2603:10a6:20b:56::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.18 via Frontend
- Transport; Wed, 5 Jan 2022 15:57:39 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.71)
- smtp.mailfrom=siemens.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=siemens.com;
-Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
- 194.138.21.71 as permitted sender) receiver=protection.outlook.com;
- client-ip=194.138.21.71; helo=hybrid.siemens.com;
-Received: from hybrid.siemens.com (194.138.21.71) by
- VE1EUR01FT017.mail.protection.outlook.com (10.152.2.226) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4867.7 via Frontend Transport; Wed, 5 Jan 2022 15:57:39 +0000
-Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
- DEMCHDC9SKA.ad011.siemens.net (194.138.21.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 5 Jan 2022 16:57:38 +0100
-Received: from md1za8fc.ad001.siemens.net (139.25.68.217) by
- DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 5 Jan 2022 16:57:38 +0100
-Date:   Wed, 5 Jan 2022 16:57:35 +0100
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Aaron Ma <aaron.ma@canonical.com>
-CC:     <kuba@kernel.org>, <linux-usb@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <davem@davemloft.net>, <hayeswang@realtek.com>, <tiwai@suse.de>
-Subject: Re: [PATCH 1/3 v3] net: usb: r8152: Check used MAC passthrough
- address
-Message-ID: <20220105165735.38b629b7@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20220105151427.8373-1-aaron.ma@canonical.com>
-References: <20220105151427.8373-1-aaron.ma@canonical.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S241765AbiAEQAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 11:00:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241756AbiAEQAU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 11:00:20 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CB5C061201
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 08:00:20 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id o30so23322431wms.4
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 08:00:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=OsIo63TaJf5IMnoCC04rGUJ5yO3jh/yMaxDgfSCEg3A=;
+        b=zHgQTr15GcuEmqgs5pY/TFxSoDxtYxBhz0Lo6+zoUnt9pkevuN0ihHBqfKUo5pa7pS
+         jlJFjSemCr2pNeW6BHCrgmxuTeYSo3A2FA6HkAYHKLRegmMMAyIpnRUSiwyuVC0eveHm
+         gy6gpUPCnIUantWtktjTeWiutkyP2QGhTBjProouYGWuBtw+IO3ZlG4R37G13uuSZ9o+
+         okMUYL0HQoGtPCpbv9sFDQ5/KzcQLK4OPlOyvTAFunEnm4Zjbw+Vs3ienKu2u4ieKx/9
+         ZMUIP7oqkhWmmH5tJcPEuIyHFNBC87IPeyPMspNnPDWAimOZ2aHqyXVnXPfV9+xNrrBB
+         05Qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=OsIo63TaJf5IMnoCC04rGUJ5yO3jh/yMaxDgfSCEg3A=;
+        b=azNdEnJlSaXsXjdKNZtTgPH4HMy9PqaXUZCkqH+MN+sgeetmmsn2Q+OAspc6iO0Gb+
+         ctHhWGaLltTRwi9xJbHi+yy24s2xDDI8Z3vEh3Z82Yq5mGRRUK3k+aqxDQvpHu/hoCCJ
+         CsoRHC1AzFvaFP5qbxfcS+6gQbVMmL8I0UKiCtaa/luYKugUVqyNilXHXLnk8PmiMLDf
+         kehbDbCuotzumgOy7XDjSdtuERMZ+tQLN8Pa3oXEr2qMVc+cSogGXkGr4DVAG7HCPxcd
+         9m4SK84KAt/Bnni0pffJ/CY62bnkp9QeDoQKhxVXSInmuNdkIW9NSfH06+sTdBYWJHKi
+         zRAQ==
+X-Gm-Message-State: AOAM530Q4tuXmRQ6v/YfdkONekhRm1+MsvWiZPBc2fiRTCfT5zPy/cth
+        /3nhSSH+7XBpf1gUHkYDzUAbEA==
+X-Google-Smtp-Source: ABdhPJwe8DDWfcyC6KbDtO8Xoq30PvrV29yHpsaNgEBsUGb11Gk8yrxaQv77LC6DepasDzirBCCh0g==
+X-Received: by 2002:a05:600c:2f97:: with SMTP id t23mr2345181wmn.85.1641398418421;
+        Wed, 05 Jan 2022 08:00:18 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:9997:55b1:2e48:dc4a? ([2a01:e34:ed2f:f020:9997:55b1:2e48:dc4a])
+        by smtp.googlemail.com with ESMTPSA id a2sm47146853wri.17.2022.01.05.08.00.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jan 2022 08:00:17 -0800 (PST)
+Subject: Re: [PATCH v5 2/6] powercap/drivers/dtpm: Add hierarchy creation
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     rjw@rjwysocki.net, lukasz.luba@arm.com, robh@kernel.org,
+        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@kernel.org>
+References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
+ <20211218130014.4037640-3-daniel.lezcano@linaro.org>
+ <CAPDyKFrLTsUxG8JHdK33h2BT8pxeHk6kiU-4uGrvxUhcQKg3Sw@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <8fcc0ef8-b0c7-da73-434f-31c88896aed5@linaro.org>
+Date:   Wed, 5 Jan 2022 17:00:16 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [139.25.68.217]
-X-ClientProxiedBy: DEMCHDC89XA.ad011.siemens.net (139.25.226.103) To
- DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1bce4969-c1d5-43a2-6c28-08d9d0641997
-X-MS-TrafficTypeDiagnostic: VI1PR10MB3520:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR10MB3520A8335A12607C96657AF6854B9@VI1PR10MB3520.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: huZS4CO35BvFiU6zqPEVWSfTDtu+QdRJXHedgXOW0EkFeF/YXfzglim84YQ5rQ4rAg4F+pRndSoSYWSKqcjysTijSEteGaOjWY0o6Z2690mXp6ZGzH3SxuaNhiHhQ6fRyR+nxdSU6+y9ukRXgEeWEtG05WhXnhbAL7k7NjpWTqYlKomoJhhu9fE5JvaliEgIboEw8PW46MVRRbT5ijvVj8so+ZskvTK00HpvTix3jTpcfTcGIxBk0b4rszQKQvqm3BdCmWWaYNX26kPb4thiTlE1ZA7mtKbnM3crpG/h/zy0eTZh1U0ernckQTgcXR9ZIit238VAXXwxehuHPEuJd8p/efNF7oYJpk4+h0mXYplb2j7L04a5/7TtI1pY6PnxmxhCj/cSw5EUAx88/fclt5VdIYbDuCZa1jMxFVEKIDzYMlv0kkc8B5hNZzwlLjtorp9t3QXqwOe2JCca2eNcL7KgaqmUFHsE5whN63tw7f4eJBaOAtj12FMAPpzOBg++E5UG6+L+J6decSpTZ206s4IeVrXt6MG2Sj9DPMqMnNTbdyTZZS1Wb+BEltVnoMB0VQahskFTd6rnAHnkawlaCS+cEeJlLLrxP7mmCTg2C8XCxBWpI2y4oRZBn3/TCjw6g+JyAPCe6heb9helGpj0QMD6PerH6EkK/yw1D8LpdWd97ATNC5q974tJOS84ggM0iMFcDB2zD3rLE8ipcOWACYv3g1bH57qOupRNo17wM9wxDBYZfm0GVvS144TcbrUOgnOFwpDEuPUtA0WTKYCKUGJ0U3p+lP7HX63eWYyINeIVBLGKJT337JPourljJ2GHvs7FoUsw2QtqlTrlIQqFvLrxQqdxUlnG/wUpEgERDFl1hVoGCzwbnO32gr3hwYQk
-X-Forefront-Antispam-Report: CIP:194.138.21.71;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700002)(7696005)(16526019)(966005)(186003)(26005)(508600001)(8936002)(8676002)(86362001)(2906002)(54906003)(82960400001)(81166007)(5660300002)(4326008)(47076005)(83380400001)(55016003)(40460700001)(82310400004)(356005)(336012)(70586007)(70206006)(44832011)(956004)(9686003)(1076003)(36860700001)(6916009)(316002)(6666004)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2022 15:57:39.3671
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1bce4969-c1d5-43a2-6c28-08d9d0641997
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.71];Helo=[hybrid.siemens.com]
-X-MS-Exchange-CrossTenant-AuthSource: VE1EUR01FT017.eop-EUR01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB3520
+In-Reply-To: <CAPDyKFrLTsUxG8JHdK33h2BT8pxeHk6kiU-4uGrvxUhcQKg3Sw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ok this now will claim only the first plugged in dongle. Probably as
-you wanted it. But still breaking my always two ethernet cables and no
-"lenovo dock" anywhere.
+On 31/12/2021 14:45, Ulf Hansson wrote:
 
-Still feels very wrong to me, but i have no clue how it is supposed to
-work. Lenovo documentation talks about PXE use-cases ... which means
-BIOS is spoofing and not OS. OS should probably just take the active
-MAC instead of the one from EEPROM.
-But it also has a link to one "dock" that is really just a dongle. And
-the whole thing is super dated.
+[ ... ]
 
-https://support.lenovo.com/ie/en/solutions/ht503574
-
-Henning
-
-Am Wed,  5 Jan 2022 23:14:25 +0800
-schrieb Aaron Ma <aaron.ma@canonical.com>:
-
-> When plugin multiple r8152 ethernet dongles to Lenovo Docks
-> or USB hub, MAC passthrough address from BIOS should be
-> checked if it had been used to avoid using on other dongles.
+>> +static struct dtpm *dtpm_setup_dt(const struct dtpm_node *hierarchy,
+>> +                                 struct dtpm *parent)
+>> +{
+>> +       struct dtpm_descr *dtpm_descr;
+>> +       struct device_node *np;
+>> +       int ret;
+>> +
+>> +       np = of_find_node_by_path(hierarchy->name);
+>> +       if (!np) {
+>> +               pr_err("Failed to find '%s'\n", hierarchy->name);
+>> +               return ERR_PTR(-ENXIO);
+>> +       }
+>> +
+>> +       for_each_dtpm_table(dtpm_descr) {
+>> +
+>> +               ret = dtpm_descr->setup(parent, np);
 > 
-> Currently builtin r8152 on Dock still can't be identified.
-> First detected r8152 will use the MAC passthrough address.
+> This will unconditionally call the ->setup callback() for each dtpm
+> desc in the dtpm table. At this point the ->setup() callback has not
+> been assigned by anyone that uses DTPM_DECLARE(), so if this would be
+> called, it would trigger a NULL pointer dereference error.
 > 
-> v2:
-> Skip builtin PCI MAC address which is share MAC address with
-> passthrough MAC.
-> Check thunderbolt based ethernet.
-> 
-> v3:
-> Add return value.
-> 
-> Fixes: f77b83b5bbab ("net: usb: r8152: Add MAC passthrough support for
-> more Lenovo Docks")
-> Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
-> ---
->  drivers/net/usb/r8152.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> index f9877a3e83ac..2483dc421dff 100644
-> --- a/drivers/net/usb/r8152.c
-> +++ b/drivers/net/usb/r8152.c
-> @@ -25,6 +25,7 @@
->  #include <linux/atomic.h>
->  #include <linux/acpi.h>
->  #include <linux/firmware.h>
-> +#include <linux/pci.h>
->  #include <crypto/hash.h>
->  #include <linux/usb/r8152.h>
->  
-> @@ -1605,6 +1606,7 @@ static int vendor_mac_passthru_addr_read(struct
-> r8152 *tp, struct sockaddr *sa) char *mac_obj_name;
->  	acpi_object_type mac_obj_type;
->  	int mac_strlen;
-> +	struct net_device *ndev;
->  
->  	if (tp->lenovo_macpassthru) {
->  		mac_obj_name = "\\MACA";
-> @@ -1662,6 +1664,19 @@ static int
-> vendor_mac_passthru_addr_read(struct r8152 *tp, struct sockaddr *sa)
-> ret = -EINVAL; goto amacout;
->  	}
-> +	rcu_read_lock();
-> +	for_each_netdev_rcu(&init_net, ndev) {
-> +		if (ndev->dev.parent && dev_is_pci(ndev->dev.parent)
-> &&
-> +
-> !pci_is_thunderbolt_attached(to_pci_dev(ndev->dev.parent)))
-> +			continue;
-> +		if (strncmp(buf, ndev->dev_addr, 6) == 0) {
-> +			ret = -EINVAL;
-> +			rcu_read_unlock();
-> +			goto amacout;
-> +		}
-> +	}
-> +	rcu_read_unlock();
-> +
->  	memcpy(sa->sa_data, buf, 6);
->  	netif_info(tp, probe, tp->netdev,
->  		   "Using pass-thru MAC addr %pM\n", sa->sa_data);
+> On the other hand, we don't have someone calling
+> dtpm_create_hierarchy() yet, so this code doesn't get exercised, but
 
+Yes, that is the reason why the test is not here.
+
+> it still looks a bit odd to me. Maybe squashing patch2 and patch3 is
+> an option?
+Sure
+
+>> +               if (ret) {
+>> +                       pr_err("Failed to setup '%s': %d\n", hierarchy->name, ret);
+>> +                       of_node_put(np);
+>> +                       return ERR_PTR(ret);
+>> +               }
+>> +
+>> +               of_node_put(np);
+> 
+> This will be called for every loop in the dtpm table. This is wrong,
+> you only want to call it once, outside the loop.
+
+Right, good catch
+
+>> +       }
+>> +
+>> +       /*
+>> +        * By returning a NULL pointer, we let know the caller there
+>> +        * is no child for us as we are a leaf of the tree
+>> +        */
+>> +       return NULL;
+>> +}
+>> +
+>> +typedef struct dtpm * (*dtpm_node_callback_t)(const struct dtpm_node *, struct dtpm *);
+>> +
+>> +dtpm_node_callback_t dtpm_node_callback[] = {
+>> +       [DTPM_NODE_VIRTUAL] = dtpm_setup_virtual,
+>> +       [DTPM_NODE_DT] = dtpm_setup_dt,
+>> +};
+>> +
+>> +static int dtpm_for_each_child(const struct dtpm_node *hierarchy,
+>> +                              const struct dtpm_node *it, struct dtpm *parent)
+>> +{
+>> +       struct dtpm *dtpm;
+>> +       int i, ret;
+>> +
+>> +       for (i = 0; hierarchy[i].name; i++) {
+>> +
+>> +               if (hierarchy[i].parent != it)
+>> +                       continue;
+>> +
+>> +               dtpm = dtpm_node_callback[hierarchy[i].type](&hierarchy[i], parent);
+>> +               if (!dtpm || IS_ERR(dtpm))
+>> +                       continue;
+>> +
+>> +               ret = dtpm_for_each_child(hierarchy, &hierarchy[i], dtpm);
+> 
+> Why do you need to recursively call dtpm_for_each_child() here?
+> 
+> Is there a restriction on how the dtpm core code manages adding
+> children/parents?
+
+[ ... ]
+
+The recursive call is needed given the structure of the tree in an array
+in order to connect with the parent.
+
+
+>> + *
+>> + * struct dtpm_node hierarchy[] = {
+>> + *     [0] { .name = "topmost" },
+> 
+> For clarity, I think we should also specify DTPM_NODE_VIRTUAL here.
+> 
+>> + *      [1] { .name = "package", .parent = &hierarchy[0] },
+> 
+> Ditto.
+
+Sure
+
+[ ... ]
+
+>> +static int __init init_dtpm(void)
+>> +{
+>>         pct = powercap_register_control_type(NULL, "dtpm", NULL);
+>>         if (IS_ERR(pct)) {
+>>                 pr_err("Failed to register control type\n");
+>>                 return PTR_ERR(pct);
+>>         }
+> 
+> It looks like powercap_register_control_type() should be able to be
+> called from dtpm_create_hierarchy(). In this way we can simply drop
+> the initcall below, altogether.
+>
+> Of course, that assumes that dtpm_create_hierachy() is being called
+> from a regular module_platform_driver() path - or at least from a
+> later initcall than fs_initcall(), which is when the "powercap_class"
+> is being registered. But that sounds like a reasonable assumption we
+> should be able to make, no?
+
+Yes, agree. Good suggestion, I will do the change.
+
+[ ... ]
+
+>>  int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm *parent);
+>>
+>> +int dtpm_create_hierarchy(struct of_device_id *dtpm_match_table);
+> 
+> To start simple, I think dtpm_create_hiearchy() is the sufficient
+> interface to add at this point.
+> 
+> However, it's quite likely that it's going to be called from a regular
+> module (SoC specific platform driver), which means it needs to manage
+> ->remove() operations too. Anyway, I am fine if we look into that as
+> improvements on top of the $subject series.
+
+Yes, ATM, the modules can not be unloaded on purpose. The removal can be
+added later
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

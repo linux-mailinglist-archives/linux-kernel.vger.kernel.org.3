@@ -2,147 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEED44855A6
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:17:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE394855A7
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:17:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241236AbiAEPQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 10:16:54 -0500
-Received: from aposti.net ([89.234.176.197]:42302 "EHLO aposti.net"
+        id S237107AbiAEPRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 10:17:41 -0500
+Received: from m43-7.mailgun.net ([69.72.43.7]:58781 "EHLO m43-7.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241296AbiAEPQd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 10:16:33 -0500
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, list@opendingux.net,
-        Paul Cercueil <paul@crapouillou.net>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>
-Subject: [PATCH v2 2/2] hwmon: Add "label" attribute
-Date:   Wed,  5 Jan 2022 15:15:51 +0000
-Message-Id: <20220105151551.20285-3-paul@crapouillou.net>
-In-Reply-To: <20220105151551.20285-1-paul@crapouillou.net>
-References: <20220105151551.20285-1-paul@crapouillou.net>
+        id S237011AbiAEPRe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 10:17:34 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1641395854; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=S9AtsjfAyxkE1VRytr2/1sWSS6u/ZAMynfW/PfWhtss=; b=EjQCbvnz8HbyfCIQBB3AY5B/lEKFcHwBEppb7NFldlF4xLOsGM5/B+Ga/ZjGSg+SqS93dpMQ
+ nHYuOBk4h24T89RRnQXbVwiR3fijgtYfOZLAi4uENezmCTTc732x8/8h+ORfAzVV8cIj1KrL
+ Ye24r9Np7athjpdhqZrkn1NvgPI=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
+ 61d5b68d7d878c8ded433e97 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 05 Jan 2022 15:17:33
+ GMT
+Sender: charante=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 823A5C4361A; Wed,  5 Jan 2022 15:17:32 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.0 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.29.110] (unknown [49.37.146.141])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: charante)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id ED612C4338F;
+        Wed,  5 Jan 2022 15:17:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org ED612C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Subject: Re: [PATCH v2] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED for
+ shmem
+To:     Shakeel Butt <shakeelb@google.com>,
+        Charan Teja Reddy <quic_charante@quicinc.com>
+Cc:     hughd@google.com, akpm@linux-foundation.org, vbabka@suse.cz,
+        rientjes@google.com, david@redhat.com, mhocko@suse.com,
+        surenb@google.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <1638442253-1591-1-git-send-email-quic_charante@quicinc.com>
+ <CALvZod6fSkdV6oSyxsv0+gcRfZ=H9Uaw=7=t902U85fWJStuzA@mail.gmail.com>
+ <4a5cde83-c673-6af0-702f-f8b59e05a397@codeaurora.org>
+From:   Charan Teja Kalla <charante@codeaurora.org>
+Message-ID: <08d3c298-1568-1ea2-8215-0dffa1c5a089@codeaurora.org>
+Date:   Wed, 5 Jan 2022 20:47:25 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <4a5cde83-c673-6af0-702f-f8b59e05a397@codeaurora.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a label is defined in the device tree for this device add that
-to the device specific attributes. This is useful for userspace to
-be able to identify an individual device when multiple identical
-chips are present in the system.
+Firstly, Apologies for taking such a long time for the next spin. Posted
+V3 @
+https://patchwork.kernel.org/project/linux-mm/patch/1641395025-7922-1-git-send-email-quic_charante@quicinc.com/
+. Please provide your comments.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Tested-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
----
+On 12/6/2021 12:59 PM, Charan Teja Kalla wrote:
+> Thanks Shakeel for your valuable inputs!!
+> 
+> On 12/2/2021 11:24 PM, Shakeel Butt wrote:
+>> On Thu, Dec 2, 2021 at 2:51 AM Charan Teja Reddy
+>> <quic_charante@quicinc.com> wrote:
+>>>
+>>> From: Charan Teja Reddy <charante@codeaurora.org>
+>>>
+>>> Currently fadvise(2) is supported only for the files that doesn't
+>>> associated with noop_backing_dev_info thus for the files, like shmem,
+>>> fadvise results into NOP. But then there is file_operations->fadvise()
+>>> that lets the file systems to implement their own fadvise
+>>> implementation. Use this support to implement some of the POSIX_FADV_XXX
+>>> functionality for shmem files.
+>>>
+>>> This patch aims to implement POSIX_FADV_WILLNEED and POSIX_FADV_DONTNEED
+>>> advices to shmem files which can be helpful for the drivers who may want
+>>> to manage the shmem pages of the files that are created through
+>>> shmem_file_setup[_with_mnt]().  An example usecase may be like, driver
+>>> can create the shmem file of the size equal to its requirements and
+>>> map the pages for DMA and then pass the fd to user. The user who knows
+>>> well about the usage of these pages can now decide when these pages are
+>>> not required push them to swap through DONTNEED thus free up memory well
+>>> in advance rather than relying on the reclaim and use WILLNEED when it
+>>> decide that they are useful in the near future. IOW, it lets the clients
+>>> to free up/read the memory when it wants to. Another usecase is that GEM
+>>> objets which are currenlty allocated and managed through shmem files can
+>>> use vfs_fadvise(DONT|WILLNEED) on shmem fd when the driver comes to
+>>> know(like through some hints from user space) that GEM objects are not
+>>> going to use/will need in the near future.
+>>
+>> The proposed semantics of POSIX_FADV_DONTNEED is actually similar to
+>> MADV_PAGEOUT and different from MADV_DONTNEED. This is a user facing
+>> API and this difference will cause confusion.
+> 
+> man pages [1] says that "POSIX_FADV_DONTNEED attempts to free cached
+> pages associated with the specified region." This statement, IIUC,  on
+> issuing this FADV, it is expected to free the file cache pages. And it
+> is implementation defined If the dirty pages may be attempted to
+> writeback. And the unwritten dirty pages will not be freed.  And thus
+> for Shmem files this is being done by dirtying the page and pushing out
+> to swap.
+> 
+> So, Isn't the FADV_DONTNEED also covers the semantics of MADV_PAGEOUT
+> for file pages? IOW, what is the purpose of PAGEOUT for the file pages.
+> Or I am missing some trivial logic in your comment here?
+> 
+> Coming to MADV_DONTNEED[2], on the mapped shmem files doesn't have any
+> effect as the pages of those shmem files can still be in RAM. Subsequent
+> accesses of pages in the range will succeed from the up-to-date contents
+> of the underlying mapped file. IOW, the pages are still be present in
+> the cache. Am I wrong here?
+> 
+> [1] https://man7.org/linux/man-pages/man2/posix_fadvise.2.html
+> [2] https://man7.org/linux/man-pages/man2/madvise.2.html
+> 
+> 
+>>
+> 
 
-Notes:
-    v2: - Cache label into hwmon_device
-        - Rename hwmon_dev_name_is_visible() to hwmon_dev_attr_is_visible()
-	- Add missing <linux/property.h> include
-
- drivers/hwmon/hwmon.c | 34 +++++++++++++++++++++++++++++++---
- 1 file changed, 31 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 3501a3ead4ba..22e1b47c09fc 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -18,6 +18,7 @@
- #include <linux/list.h>
- #include <linux/module.h>
- #include <linux/pci.h>
-+#include <linux/property.h>
- #include <linux/slab.h>
- #include <linux/string.h>
- #include <linux/thermal.h>
-@@ -30,6 +31,7 @@
- 
- struct hwmon_device {
- 	const char *name;
-+	const char *label;
- 	struct device dev;
- 	const struct hwmon_chip_info *chip;
- 	struct list_head tzdata;
-@@ -71,17 +73,29 @@ name_show(struct device *dev, struct device_attribute *attr, char *buf)
- }
- static DEVICE_ATTR_RO(name);
- 
-+static ssize_t
-+label_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%s\n", to_hwmon_device(dev)->label);
-+}
-+static DEVICE_ATTR_RO(label);
-+
- static struct attribute *hwmon_dev_attrs[] = {
- 	&dev_attr_name.attr,
-+	&dev_attr_label.attr,
- 	NULL
- };
- 
--static umode_t hwmon_dev_name_is_visible(struct kobject *kobj,
-+static umode_t hwmon_dev_attr_is_visible(struct kobject *kobj,
- 					 struct attribute *attr, int n)
- {
- 	struct device *dev = kobj_to_dev(kobj);
-+	struct hwmon_device *hdev = to_hwmon_device(dev);
- 
--	if (to_hwmon_device(dev)->name == NULL)
-+	if (attr == &dev_attr_name.attr && hdev->name == NULL)
-+		return 0;
-+
-+	if (attr == &dev_attr_label.attr && hdev->label == NULL)
- 		return 0;
- 
- 	return attr->mode;
-@@ -89,7 +103,7 @@ static umode_t hwmon_dev_name_is_visible(struct kobject *kobj,
- 
- static const struct attribute_group hwmon_dev_attr_group = {
- 	.attrs		= hwmon_dev_attrs,
--	.is_visible	= hwmon_dev_name_is_visible,
-+	.is_visible	= hwmon_dev_attr_is_visible,
- };
- 
- static const struct attribute_group *hwmon_dev_attr_groups[] = {
-@@ -117,6 +131,7 @@ static void hwmon_dev_release(struct device *dev)
- 	if (hwdev->group.attrs)
- 		hwmon_free_attrs(hwdev->group.attrs);
- 	kfree(hwdev->groups);
-+	kfree(hwdev->label);
- 	kfree(hwdev);
- }
- 
-@@ -733,6 +748,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
- 			const struct attribute_group **groups)
- {
- 	struct hwmon_device *hwdev;
-+	const char *label;
- 	struct device *hdev;
- 	int i, err, id;
- 
-@@ -752,6 +768,18 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
- 		goto ida_remove;
- 	}
- 
-+	if (device_property_present(dev, "label")) {
-+		err = device_property_read_string(dev, "label", &label);
-+		if (err < 0)
-+			goto free_hwmon;
-+
-+		hwdev->label = kstrdup(label, GFP_KERNEL);
-+		if (hwdev->label == NULL) {
-+			err = -ENOMEM;
-+			goto free_hwmon;
-+		}
-+	}
-+
- 	hdev = &hwdev->dev;
- 
- 	if (chip) {
 -- 
-2.34.1
-
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora
+Forum, a Linux Foundation Collaborative Project

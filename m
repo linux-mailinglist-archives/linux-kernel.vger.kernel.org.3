@@ -2,85 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B6648506C
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 10:54:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53724485077
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 10:57:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239100AbiAEJx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 04:53:58 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4336 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbiAEJx5 (ORCPT
+        id S234354AbiAEJ5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 04:57:07 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:36127 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233977AbiAEJ5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 04:53:57 -0500
-Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JTPnp2QQbz67r9d;
-        Wed,  5 Jan 2022 17:49:02 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.20; Wed, 5 Jan 2022 10:53:54 +0100
-Received: from localhost (10.47.83.118) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 5 Jan
- 2022 09:53:54 +0000
-Date:   Wed, 5 Jan 2022 09:54:00 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        "Lars-Peter Clausen" <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Arnd Bergmann" <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, <list@opendingux.net>,
-        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mips@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 2/8] PM: core: Remove static qualifier in
- DEFINE_SIMPLE_DEV_PM_OPS macro
-Message-ID: <20220105095400.0000356b@Huawei.com>
-In-Reply-To: <20220104214214.198843-3-paul@crapouillou.net>
-References: <20220104214214.198843-1-paul@crapouillou.net>
-        <20220104214214.198843-3-paul@crapouillou.net>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Wed, 5 Jan 2022 04:57:05 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JTPz33N5vz4xd4;
+        Wed,  5 Jan 2022 20:57:03 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1641376623;
+        bh=VTmX2R4HSdwFz82qEnB2fsXtHFPWqJiaom/H53uprwo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Sm71md3JTbA7KNKorEWwNxCHD4nooZV+OuhS5B7qT0irTiXnhsaBhczMzrFQaqUeU
+         Pcf1E7inimjHjRrWnGRriZAWDI5fhy83E77z6M3vXxVWusQOk7VzYjBeqM8V0Jw3OY
+         d35AzX2EvN7bl2BXJHU4D7bVb5CxyomAJ1pTU/TkaiXnDi9l3Fx4qRwXzvgx4WaIhu
+         yZjetOHZVkJGeHZWEnRRP5cholwBc1E+FIWGXZQSqLOidaeNnjk0/z0uFoGVyR969c
+         lZupnfnDwevAI9AFmuPzQD/j9+0aBhaRb7iUdGxlDD+mrUjwDTzuM8Xo8RpEz7230A
+         b530WH8gQCNxg==
+Date:   Wed, 5 Jan 2022 20:57:02 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commits in the libata tree
+Message-ID: <20220105205702.557f492a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.83.118]
-X-ClientProxiedBy: lhreml704-chm.china.huawei.com (10.201.108.53) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; boundary="Sig_/cyIgUkYJcOUF91vIkkN31PH";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jan 2022 21:42:08 +0000
-Paul Cercueil <paul@crapouillou.net> wrote:
+--Sig_/cyIgUkYJcOUF91vIkkN31PH
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Keep this macro in line with the other ones. This makes it possible to
-> use them in the cases where the underlying dev_pm_ops structure is
-> exported.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Hi all,
 
+Commits
 
-> ---
->  include/linux/pm.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/pm.h b/include/linux/pm.h
-> index 31bbaafb06d2..389e600df233 100644
-> --- a/include/linux/pm.h
-> +++ b/include/linux/pm.h
-> @@ -362,7 +362,7 @@ struct dev_pm_ops {
->   * to RAM and hibernation.
->   */
->  #define DEFINE_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> -static const struct dev_pm_ops name = { \
-> +const struct dev_pm_ops name = { \
->  	SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
->  }
->  
+  b3a1ea642b5f ("ata: sata_dwc_460ex: drop DEBUG_NCQ")
+  8fb32f1d555c ("ata: libata: tracepoints for bus-master DMA")
 
+are missing a Signed-off-by from their committers.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/cyIgUkYJcOUF91vIkkN31PH
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHVa24ACgkQAVBC80lX
+0GwU/gf/R7sBWyqf45tNw4mRhUmmJ7jWxe6VHd/JYU+RSzSUEZJLuCH2Cy5sNm9W
++rbIbtPXE/DBj9hHy2J8f8ZfETRHJhVWYH+/uuch1RmOrUurx16U3fITgwOCV0NQ
+aTw2m/TGoGoIBJuWVcq2iSky+sWQNnqJjFFd5Cx5lxc6/YMO/1zmmItm4hnnf5kq
+aLPHkTkPndGJ1bWqDQ7ljbP3aHv8C00KH1Z5ZnZu0tbkoc2x3O9qyMY6Lu2AzHfS
+s9U8GB6QJIIp7cM5SVwe6q8Z1D+D3lMsQ/qeXgILUKr4ogbSig+izomXl2KGw8S/
+ZkXlgCWTOd3KKo1CHsjJW8nr69b8jg==
+=00vV
+-----END PGP SIGNATURE-----
+
+--Sig_/cyIgUkYJcOUF91vIkkN31PH--

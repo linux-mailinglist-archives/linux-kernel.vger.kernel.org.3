@@ -2,106 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B57484CD2
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 04:20:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EECEC484CDA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 04:25:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237219AbiAEDUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 22:20:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48538 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234507AbiAEDUi (ORCPT
+        id S233163AbiAEDZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 22:25:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230020AbiAEDZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 22:20:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641352835;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EV+4L4V3EbdXjbiDS2bLBmpAyubhZUkCxgXn/7JcQ3s=;
-        b=FRlknS2CovWQ50MnffuSrJU62pPgJ0YzsGz49CXCq6Pz+KV3hXneZT4QCelH5TZWiwxMni
-        eZCes2eRP/0OtWvTFLS4T0+cSRnedC54tEQJXFojLlcUQtvPihXvqyIKL7LzW/uTh3Hr/5
-        dpuT0N4ruZy49AtAD8B2n5rmnKUcooI=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-260-ZmlV0xsLPx-Wzl3AbSLwgQ-1; Tue, 04 Jan 2022 22:20:34 -0500
-X-MC-Unique: ZmlV0xsLPx-Wzl3AbSLwgQ-1
-Received: by mail-lf1-f70.google.com with SMTP id a28-20020ac2505c000000b0042524c397cfso8733819lfm.1
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 19:20:33 -0800 (PST)
+        Tue, 4 Jan 2022 22:25:03 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F354C061792
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 19:25:03 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id 196so33952080pfw.10
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 19:25:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=wkuN5scY3yiYZRl2fRuA4WGrOv7r3w+Jln9UFNacBQM=;
+        b=sMREvPRxGZUwa08eFtR2hiuXSNQvK2z3b4UkIDQKPgoibmig3YKSC5pe3mtAttY7h4
+         XwK6GVkzJlAQFD2wxzX0eBRmZPIqCLwyrJwVVyBuYbzzF8v1N7MwQVj3P7PuIuTVvo0A
+         rEP82aGHqFCbL7ltVQA9rwNIlRiurCUsJqIQJ75u9fKPGEUjWr+Bd51S25yKt9bNwyWq
+         rcSVy1OCjWXA6fj3PLmN+GdKcNL6LzYc5Ao8OxtZok7AYQCkWdnX56ev9cPw3c3+UGgs
+         dVVe/F8gBmvEA8sYC1WCJBKNz2MM65RNUa7GnJFiSHqVSKWr0g4rG/r7YmFBeeHCDHyO
+         Sfog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EV+4L4V3EbdXjbiDS2bLBmpAyubhZUkCxgXn/7JcQ3s=;
-        b=wKK1o+H/RmRoEnWNZzrlv+jOpjGWVlOPd0hiCKOksCM4C8pddSoYu9C1EUVc091Wph
-         gsQ74Cnv6qy8nkM6r/xyj5AMqeCVKud0gLvpiVUGxMd8nuxjuuFCZK4UaWocOCnW8n+q
-         2sj1lq0xYjEvBO2rrkyYcV7WS6toAbmpowZQwdggWk2iuSfbrZHZ4juO4W9C2ifDC60A
-         uO7lXpACUBTzA9aXa6Z9GA+0kuRsDxyO2oH3SpskgS9EzHF0+0j6DL7ynKUZPrVeI76q
-         MwUwULTJWh1gfgXhkqrIHLtOa4Lu2NzEK7n5pybyaEl4JV8z2EWTcCKFwDrlKd3RRJzo
-         sroA==
-X-Gm-Message-State: AOAM532/7HWyjWbRD8up3uzDzTYCAJZ74RMUlqMuWDfwUgPRwZX93PiJ
-        NXii3za7vzKRaxDYT1IXvz16THQduyFha3b0S+5pCLfKHrIPg2ZY4tfiusnbANedLXQD6IPPS1S
-        1CDB+LqzZCO/HHDlWhMClFIfhgvBSYn76r31PEy02
-X-Received: by 2002:a2e:a177:: with SMTP id u23mr16009623ljl.217.1641352832648;
-        Tue, 04 Jan 2022 19:20:32 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzUQbE7b2+xQ4lqIM1r/2/rFDsfrFuYo71pp02AsvjbJyrfkhtBFuB2kvLjfNaqo/yGETaXf2YgGdMIUwsDKZY=
-X-Received: by 2002:a2e:a177:: with SMTP id u23mr16009618ljl.217.1641352832413;
- Tue, 04 Jan 2022 19:20:32 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=wkuN5scY3yiYZRl2fRuA4WGrOv7r3w+Jln9UFNacBQM=;
+        b=M+LhTLYx3nCT24j5NMb+rBSIAutBET8lzbw/ieLfuCvJH+ylLx6OZBKT1TwexCByvw
+         gu+r4nXryEQwXHw6nIKfr1EWr+tGS63ckQndSCrjrFpW9IiGFWi5tZepxqCI/0Vr0Tuh
+         TuQlsVBpeVcMtEOuZEvnv8tzBS6eT4w4Vyuz5IcT6d5s6RSBL9essIC4GeD+wbVBiqkP
+         z+/5yu5px9c/JSBKmHhUbUqgu6C/+vTWBFaIFNiGwcA7CU1EybRh7GmI0jzkxPDJceti
+         2EhS78YmS2m9pD2bZzybwine1+J1mveY6GMHWsogXK5IDQrLENL8RkVsG33ltRtVKSSt
+         wNvQ==
+X-Gm-Message-State: AOAM531V7FGl0XHGJGtaQBp34RCwreIWxp4hmv98jM+C44O4JlxOx+KZ
+        v6uqrYqGLr06MzjmTURK54rQpQ==
+X-Google-Smtp-Source: ABdhPJwILBGPaWIQmEOPR6iQ9ZbM+KK4UsIg1jEugYbcKOG7KIm+OYdMXveHNWvOBlsyyUCtrfOdgA==
+X-Received: by 2002:a63:8149:: with SMTP id t70mr46472429pgd.71.1641353102364;
+        Tue, 04 Jan 2022 19:25:02 -0800 (PST)
+Received: from google.com ([2620:15c:2ce:200:b78:5a0b:6f2e:23e9])
+        by smtp.gmail.com with ESMTPSA id a15sm663138pjo.49.2022.01.04.19.24.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 19:25:02 -0800 (PST)
+Date:   Tue, 4 Jan 2022 19:24:56 -0800
+From:   =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Miroslav Benes <mbenes@suse.cz>, Borislav Petkov <bp@alien8.de>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available
+ to nuke pos-based search
+Message-ID: <20220105032456.hs3od326sdl4zjv4@google.com>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
+ <20211223002209.1092165-3-alexandr.lobakin@intel.com>
+ <Yc2Tqc69W9ukKDI1@zn.tnic>
+ <CAFP8O3K1mkiCGMTEeuSifZtr2piHsKTjP5TOA25nqpv2SrbzYQ@mail.gmail.com>
+ <alpine.LSU.2.21.2201031447140.15051@pobox.suse.cz>
+ <20220103160615.7904-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-References: <20220104151251.1988036-1-jiasheng@iscas.ac.cn>
-In-Reply-To: <20220104151251.1988036-1-jiasheng@iscas.ac.cn>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 5 Jan 2022 11:20:21 +0800
-Message-ID: <CACGkMEtZsBPnzLiTnMGAwrbC2Sjqj2mh6+L56BR4qqLyDXrxTQ@mail.gmail.com>
-Subject: Re: [PATCH v2] virtio_ring: Check null pointer
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     mst <mst@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220103160615.7904-1-alexandr.lobakin@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 4, 2022 at 11:13 PM Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
+On 2022-01-03, Alexander Lobakin wrote:
+>From: Miroslav Benes <mbenes@suse.cz>
+>Date: Mon, 3 Jan 2022 14:55:42 +0100 (CET)
 >
-> As the alloc_indirect_packed() returns kmalloc_array() that could
-> allocation fail and return null pointer, it should be check in order to
-> prevent the dereference of null pointer.
->
-> Fixes: 1ce9e6055fa0 ("virtio_ring: introduce packed ring support")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
-> v2: Remove the redundant empty line.
-> ---
->  drivers/virtio/virtio_ring.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> index 71e16b53e9c1..2923d8a68dc3 100644
-> --- a/drivers/virtio/virtio_ring.c
-> +++ b/drivers/virtio/virtio_ring.c
-> @@ -992,6 +992,10 @@ static int virtqueue_add_indirect_packed(struct vring_virtqueue *vq,
->
->         head = vq->packed.next_avail_idx;
->         desc = alloc_indirect_packed(total_sg, gfp);
-> +       if (!desc) {
-> +               END_USE(vq);
-> +               return -ENOMEM;
+>> On Thu, 30 Dec 2021, Fāng-ruì Sòng wrote:
+>>
+>> > On Thu, Dec 30, 2021 at 3:11 AM Borislav Petkov <bp@alien8.de> wrote:
+>> > >
+>> > > On Thu, Dec 23, 2021 at 01:21:56AM +0100, Alexander Lobakin wrote:
+>> > > > [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available to nuke pos-based search
+>>
+>> ...
+>>
+>> > Apologies since I haven't read the patch series.
+>> >
+>> > The option does not exist in ld.lld and I am a bit concerning about
+>> > its semantics: https://maskray.me/blog/2020-11-15-explain-gnu-linker-options#z-unique-symbol
+>> >
+>> > I thought that someone forwarded my comments (originally posted months
+>> > on a feature request ago) here but seems not.
+>> > (I am a ld.lld maintainer.)
+>>
+>> Do you mean
+>> https://lore.kernel.org/all/20210123225928.z5hkmaw6qjs2gu5g@google.com/T/#u
+>> ?
+>>
+>> Unfortunately, it did not lead anywhere. I think that '-z unique-symbol'
+>> option should work fine as long as the live patching is concerned. Maybe I
+>> misunderstood but your concerns mentioned at the blog do not apply. The
+>> stability is not an issue for us since we (KLP) always work with already
+>> built and fixed kernel. And(at least) GCC already uses number suffices for
+>> IPA clones and it has not been a problem anywhere.
 
-Just notice this:
+The stability problem may not happen frequently but is possible if the
+compiler performs some IPA with new code.
 
-My tree contains this commit: fc6d70f40b3d0 ("virtio_ring: check desc
-== NULL when using indirect with packed"). It has fixed the wrong
-error value but not the END_USE().
+Such disturbence is probably more likely with LTO or PGO.
+For Clang LTO, Makefile currently specifies -mllvm -import-instr-limit=5.
+If a function close to the boundary happens to cross the boundary,
+if inlined into other translation units, the stability issue may affect
+many translation units.
 
-Thanks
-
-> +       }
+>LLD doesn't have such an option, so FG-KASLR + livepatching builds
+>wouldn't be available for LLVM with the current approach (or we'd
+>still need a stub that prints "FG-KASLR is not compatible with
+>sympos != 0").
+>Unfortunately, I discovered this a bit late, just after sending this
+>revision.
 >
->         if (unlikely(vq->vq.num_free < 1)) {
->                 pr_debug("Can't add buf len 1 - avail = 0\n");
-> --
-> 2.25.1
->
+>OTOH, there's no easy alternative. <file + function> pair looks
+>appealing, but is it even possible for now to implement in the
+>kernel without much refactoring?
 
+<file + symbol> pair looks good to me and will solve the stability problem.

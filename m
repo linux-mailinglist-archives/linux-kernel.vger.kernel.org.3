@@ -2,87 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 486D348592D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 20:28:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E9B485930
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 20:31:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243532AbiAET2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 14:28:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54398 "EHLO
+        id S243537AbiAETbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 14:31:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243475AbiAET20 (ORCPT
+        with ESMTP id S231584AbiAETa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 14:28:26 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821D4C061212
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 11:28:26 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id b1so354939ilj.2
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 11:28:26 -0800 (PST)
+        Wed, 5 Jan 2022 14:30:59 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3253C061201
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 11:30:58 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id e128so394601iof.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 11:30:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=qnPSvaXhWMxjQ74hplnccXSTlLN2N/ubhChG+ptPHa4=;
-        b=jyxD1uHRxTRV4QDq1nDmGvyqfJG1PLzoDjLEwIYlT3VUa7zaSGva6Rp2XLIl0AMheQ
-         MdPtEyYKcUYJz3C7VE6RGTZn42V2TuumBrslFnXgcght/Q9ECdaapoTupAhoioXRAipq
-         +zzlFmMbErr5KzdrW61Mcx2l/o6IkTILvnWMRowxXeFtf9rrafdHiCTo1E9U3TcJGKvv
-         9VmwILazCy7g0Tp0y7bf2jvhgVgMhwb7/maMuQxxjPXg3+YyUbICXlTGp35OCgajFk6N
-         A2Bywzo15hHzIu4pc7GacaAPjQF4ix91W95klNkv0uMba0MmLsWqMTYzN3q+krGsL/zz
-         tOBg==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=DMDyVFtwDqG7zCTgnBPM/RrWzwScfQ0OQCuIiJfEtKw=;
+        b=uG54arT6RqfHaPHgXk3nwdqxgRz3XKT51x0cp9cpIHnDAtHjqpq/vLdnGsGX5dL9VG
+         wWYqTbSM/II/30qgOZO/ZTDB/CniH4t6V5H50ufWhSD3Sp4t6P1i2OsUgUznfKbkpSUz
+         OWAA/OxZj0NyMJfUbOEkbzzKIzyXZVKsMSMjWpsFD3RrnIqVULqyb0Zj6RRGMwERk3hF
+         Vk6S5vpBBP6Ir/OhepgzAL3JGVbia44TiG72J1uedmXvdHvWw8RyQ2vwT+cqEyffmLQ/
+         aEQsS0BLo+NZqScB42EreMzOEbNYZ7mJGkEGlDsBKYl5fmgc+DJ4B+wQxicWQIcoKJ+S
+         SaJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=qnPSvaXhWMxjQ74hplnccXSTlLN2N/ubhChG+ptPHa4=;
-        b=ZxhTd7hEJBTYZaJUcX1srr7u8vt8MapF+SX0s43qvEOkfC/PNic3RLf32T3y+prIte
-         k6Y/zUGYai30Cf3Qh91e5vT7ixzZWNgyw6IriTSnE5bDYQgQ//Dw163IjXEXtcTvgj2t
-         jtKhObbOkwpGU96pz+lfaIFvroGrEtipKkkARUAz+PVxptlZFAQD4rM9J7AB9Om3d7AY
-         2qMnHn7Tlqjf1/3Al10SSsWf5ZkeDTijoBiLrdBMro2MpVEP6L+Sp8zIvNYqP6lYkNXh
-         UXJb32Fj9a0DTV8He0ZurAxiUzaYY8Igzzok+ONik1v/PIM1r34aZU1Xq0Y+h2dqNwoK
-         vgOA==
-X-Gm-Message-State: AOAM531XdKNZ8H21++M8IkfSUOOvh/S69hFP58KD1USbctdMuL8DasC5
-        KuXrQeCoJpr27j6Xjg5E0gNedjYsuxv+SA==
-X-Google-Smtp-Source: ABdhPJy/IvlhNzu0sViPTQcIz68vdHn2MySBd9y7zXAI/yXlMFQN1L+qOTP4sM4ICSmA7u7RUFEuLQ==
-X-Received: by 2002:a05:6e02:1aa3:: with SMTP id l3mr26680283ilv.251.1641410905465;
-        Wed, 05 Jan 2022 11:28:25 -0800 (PST)
-Received: from x1.localdomain ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id x5sm229481iov.32.2022.01.05.11.28.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 11:28:25 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=DMDyVFtwDqG7zCTgnBPM/RrWzwScfQ0OQCuIiJfEtKw=;
+        b=j/mNhBEeK0niElh6/4/7DYA2xSjtTg2rh2PjC2/9MH70ysC54HTqM5qUaX0YGkKM9s
+         sRzb2HWvJWmz0z2sEwggdREqENr93odAqmJq8zTQJKTXVnXE2dzyrcGOTUXLYR+GVRAf
+         GKCGs/kNMDbPIbI/8OAnnh/D1Ba/04aYWfmftlk3SLXn4Dmc4E9qXowXUxYWTfW6FKxH
+         7cm1+/tzI9wX9uxs7sAUGgG00Tfq9AqO/hinbqrgeTOE8FQi+VMqhMuYQ4CMPdPCFcO6
+         AnGWrUl/Rs7430EXfmAtRmYqpVX9jkh5XHEkL9aCmoMHlgWirET/fEBa2PCcceSIZiDQ
+         dl6g==
+X-Gm-Message-State: AOAM530ny0dOJ4T7+b70DgddjeJLj/GCXZgu1for4LvM9zZxYvo9dCOq
+        QoYI5avb0Eu78H/wwk6XyapnF/rLg9WpdQ==
+X-Google-Smtp-Source: ABdhPJxAjdF18pppt7QsGuUeqs5t3GeE6qeeALB1KYU5MTy/EqK6/mPlT+h5EUjSykkKLKsxA7R0vQ==
+X-Received: by 2002:a5d:944a:: with SMTP id x10mr25007319ior.18.1641411058036;
+        Wed, 05 Jan 2022 11:30:58 -0800 (PST)
+Received: from [192.168.1.30] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id z13sm6024551iln.43.2022.01.05.11.30.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jan 2022 11:30:57 -0800 (PST)
+Subject: Re: [PATCH] io_uring: remove unused para
+To:     GuoYong Zheng <zhenggy@chinatelecom.cn>, asml.silence@gmail.com
+Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1641377522-1851-1-git-send-email-zhenggy@chinatelecom.cn>
 From:   Jens Axboe <axboe@kernel.dk>
-To:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jack Wang <jinpu.wang@ionos.com>,
-        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
-        linux-block@vger.kernel.org
-In-Reply-To: <20220104162947.1320936-1-gregkh@linuxfoundation.org>
-References: <20220104162947.1320936-1-gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] block/rnbd-clt-sysfs: use default_groups in kobj_type
-Message-Id: <164141090490.316016.4253885398568107482.b4-ty@kernel.dk>
-Date:   Wed, 05 Jan 2022 12:28:24 -0700
+Message-ID: <296e66fa-e8a1-4888-92e3-6f5093c5378d@kernel.dk>
+Date:   Wed, 5 Jan 2022 12:30:56 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1641377522-1851-1-git-send-email-zhenggy@chinatelecom.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jan 2022 17:29:47 +0100, Greg Kroah-Hartman wrote:
-> There are currently 2 ways to create a set of sysfs files for a
-> kobj_type, through the default_attrs field, and the default_groups
-> field.  Move the rnbd controller sysfs code to use default_groups field
-> which has been the preferred way since aa30f47cf666 ("kobject: Add
-> support for default attribute groups to kobj_type") so that we can soon
-> get rid of the obsolete default_attrs field.
-> 
-> [...]
+On 1/5/22 2:12 AM, GuoYong Zheng wrote:
+> Para res2 is not used in __io_complete_rw, remove it.
 
-Applied, thanks!
+Applied, but changed 'para' to parameter. Please just spell it out,
+there's no point in being too verbose here. Also added a Fixes tag:
 
-[1/1] block/rnbd-clt-sysfs: use default_groups in kobj_type
-      commit: 050f461e28c5d13f327353d660ffad2603ce7ac1
+https://git.kernel.dk/cgit/linux-block/commit/?h=for-5.17/io_uring&id=00f6e68b8d59bf006db54e3e257684f44d26195c
 
-Best regards,
+Thank you!
+
 -- 
 Jens Axboe
-
 

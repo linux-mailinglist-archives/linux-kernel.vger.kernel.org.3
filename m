@@ -2,86 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A081A4851B3
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 12:20:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8916F48518D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 12:03:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239637AbiAELUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 06:20:00 -0500
-Received: from www.linux-watchdog.org ([185.87.125.42]:44616 "EHLO
-        www.linux-watchdog.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiAELT6 (ORCPT
+        id S239577AbiAELDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 06:03:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51504 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235128AbiAELDL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 06:19:58 -0500
-X-Greylist: delayed 595 seconds by postgrey-1.27 at vger.kernel.org; Wed, 05 Jan 2022 06:19:58 EST
-Received: by www.linux-watchdog.org (Postfix, from userid 500)
-        id 8A91B409E9; Wed,  5 Jan 2022 10:42:04 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 8A91B409E9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
-        s=odk20180602; t=1641375724;
-        bh=9N04zDKHmWi/Ax4vZBHgaCc9+vFD2bgpCFA4bgoWL7Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eXtfdWRcIh9Vdq3Ttnx+/l8VRJto+CkgyA8h9OXDu1EC378Nop6A43HUJgMyJV/vR
-         6hRDquX680Cvorhjv7aaFVtDVGRO3CmkjTn62x1OasryG7XOJbZ9b8BkWSa5A1dfDy
-         m6ey9ak5cq0pvnbYFNi+E+Ni1n1cohOjJzk5X5E0=
-Date:   Wed, 5 Jan 2022 10:42:04 +0100
-From:   Wim Van Sebroeck <wim@linux-watchdog.org>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Sander Vanheule <sander@svanheule.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: remove typo from REALTEK OTTO WATCHDOG
- section
-Message-ID: <20220105094204.GA7303@www.linux-watchdog.org>
-References: <20220104154414.21496-1-lukas.bulwahn@gmail.com>
+        Wed, 5 Jan 2022 06:03:11 -0500
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA33EC061761
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 03:03:11 -0800 (PST)
+Received: by mail-yb1-xb43.google.com with SMTP id o185so89655536ybo.12
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 03:03:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=0N9qNU7XMr1iCrMw5iuO3cNdEW2jTXl9dhs46vp1OHU=;
+        b=lguv1sRxjxoys9euIGza2qEOkOfB3VC2S7IBS3mrRi/97ZPoSDd+XZZfN+SGV6t6iJ
+         6HRXCrKH1Gd9dlNk1V/sp1GxcOuijT2rWFrme6eBP5PqG6A66KkJCwvsMwTdcROj36+F
+         /LLHoGcUYGAHXh5bFF0NkKlRj2u/GuXelcNNdbyYlIi1PN03FF0dNeAYCDJQeTgstGfK
+         cS+K9TwN26YQ0bLG1J/nv8//eLnry4CQjAKpyYhrqqEIpRYPd3/scN82505HBR3AxM3d
+         phXwIjntz9ZMcMkxPU222Eqg2HdCo/RNz1zTKoNnjkUQZ/f9ocLRLRdcq4xNrD011bkh
+         6xyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=0N9qNU7XMr1iCrMw5iuO3cNdEW2jTXl9dhs46vp1OHU=;
+        b=QkgPb0GeNV33ZngtyrsZ5qPZ8scsfrgrII71BS5tQl9lCHU5zSPwCDevXd4cIDGeaV
+         9+fVPztd7KB/VM8d+faA4sMr0PG4qgjYFDdLiF1wPQbKJlaarSiEK0ey7BdsuVcTdWzg
+         OEDaztNGzCeez5JXNaC9uFkOeNJms/tvX55Tz4RiX9zm2NVfpReZkbEePO5ZygfZD0Q7
+         IxmZRfuzZE2ZRU1OkHbTitQDQb37kVD5FIKq4m0pYNxKcvDfIiQbaxE19RxJ7LOrV2Ps
+         iIuapDGtVvlWGfYnbDa9iDAV0582f3wkeaQR2Jl1rzoCfLKFffm9/UVOU3D0d4ibxEnE
+         Ox+g==
+X-Gm-Message-State: AOAM530hrC/qTAJ07t6OlD1WVETqs9tAmVeZjRA2z4CJnTwK4Rfqsq1K
+        58A2dR9Qpi9l3N2pSpi+13VjiFxjzqL8S3GU6g==
+X-Google-Smtp-Source: ABdhPJx1e8ZdjEB5UUIi1v6qiP3PS+DxWco8xaDNnHN1dsxOTD0SPXJHSmatsU7Nupq+/u5V+2R6BRwX52NPXxSbrn8=
+X-Received: by 2002:a25:aa88:: with SMTP id t8mr58151126ybi.198.1641380590917;
+ Wed, 05 Jan 2022 03:03:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220104154414.21496-1-lukas.bulwahn@gmail.com>
-User-Agent: Mutt/1.5.20 (2009-12-10)
+Reply-To: fre0707lo@gmail.com
+Sender: pastorjoyulah0@gmail.com
+Received: by 2002:a05:7000:19c1:0:0:0:0 with HTTP; Wed, 5 Jan 2022 03:03:10
+ -0800 (PST)
+From:   "Ms. Lori" <udom4395@gmail.com>
+Date:   Wed, 5 Jan 2022 12:03:10 +0100
+X-Google-Sender-Auth: 2idq38LMEFXqfUI2KySISdukuaM
+Message-ID: <CAM9JWETGcBAY+Kz5xoMmWi5UkfBApNPU2HQG53EEQWjOqwU2=Q@mail.gmail.com>
+Subject: Let's work together
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lukas,
+Dear friend,
 
-> Commit 489119bf75e6 ("watchdog: Add Realtek Otto watchdog timer") adds the
-> REALTEK OTTO WATCHDOG section in MAINTAINERS and one file entry refers to
-> driver/watchdog/realtek_otto_wdt.c. The actual top-level directory name is
-> drivers, not driver, though.
-> 
-> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains:
-> 
->     warning: no file matches	F:	driver/watchdog/realtek_otto_wdt.c
-> 
-> Remove this obvious typo in the file entry.
-> 
-> Fixes: 489119bf75e6 ("watchdog: Add Realtek Otto watchdog timer")
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index f7bf491409cf..b4fcc2bb7c54 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16307,7 +16307,7 @@ M:	Sander Vanheule <sander@svanheule.net>
->  L:	linux-watchdog@vger.kernel.org
->  S:	Maintained
->  F:	Documentation/devicetree/bindings/watchdog/realtek,otto-wdt.yaml
-> -F:	driver/watchdog/realtek_otto_wdt.c
-> +F:	drivers/watchdog/realtek_otto_wdt.c
->  
->  REALTEK RTL83xx SMI DSA ROUTER CHIPS
->  M:	Linus Walleij <linus.walleij@linaro.org>
-> -- 
-> 2.17.1
-> 
+My name is Ms. Lori. I am from Washington, United States and I work as
+a Foreign Operations Manager at a reputable bank. I am the account
+manager for one of our deceased clients, an oil and gas contractor who
+died of a heart attack in 2012. He had a fixed deposit account with
+our bank in the amount of $6,300,000.00 million. And he didn't specify
+a next heir when he opened the account. He died without any closest
+registered relative as he had been divorced for a long time and had no
+children. I decided to contact you for our mutual benefit, knowing
+that you have the same last name as my deceased client.
 
-Since I had to do some other changes on the tree, I changed it directly in the original patch.
-
-Kind regards,
-Wim.
-
+I am very pleased to see your name and I look forward to your
+cooperation in presenting you to the bank as the next of kin and I
+guarantee that this will be done under a legitimate arrangement that
+will protect us from any breach of the law. And for your participation
+in this deal, you will receive 50% of the total amount after the money
+is transferred to you, and I will receive 50%. If you are interested,
+please contact me for more procedures.

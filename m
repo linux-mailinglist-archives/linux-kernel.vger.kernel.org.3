@@ -2,193 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40AC5485158
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:45:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C6D348515A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:46:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239469AbiAEKpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 05:45:38 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56820 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235139AbiAEKph (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 05:45:37 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 57209B81A0F;
-        Wed,  5 Jan 2022 10:45:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E043EC36AEB;
-        Wed,  5 Jan 2022 10:45:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641379535;
-        bh=epw0L1zm/nLJn6FhMCujuVDMIsyZYGTVDtwQZhVZKG8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MH3tdHVPwbJgamXMZEUsiFyp8+eLlvfOavQWUcCkJkMFDg/H0Sz/iosJO+6TCCgY9
-         TdOLc+5Q1ijSHqTcnQNNKnEX3o1YFeLhrZ1AF2ak7mxDJ078NXAqeyuYzyeLu7s2BZ
-         hcno1A8lRqrK1Yus+PORY49iK3iyPFp3W0TtljFABRrkEEQ4bwvV2rSEVNxeI6Y99V
-         C8J8EwbXHwlmVVTSfHgNid4o58bYUhTfMc76pBN2uEufDMQYvsw1dFgP5vSYTyvpOT
-         xe3zkrey8dZtdg2Z6WwFlmGg4z9vJWg+PcVGTKPa8ezHjdY/EiMJoTHyOeKeDMqybr
-         6LoHrz3kxEchg==
-Date:   Wed, 5 Jan 2022 10:45:26 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>
-Subject: Re: [PATCH v6 1/9] mm: x86, arm64: add arch_has_hw_pte_young()
-Message-ID: <20220105104526.GA3015@willie-the-truck>
-References: <20220104202227.2903605-1-yuzhao@google.com>
- <20220104202227.2903605-2-yuzhao@google.com>
+        id S239472AbiAEKqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 05:46:11 -0500
+Received: from foss.arm.com ([217.140.110.172]:43194 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235139AbiAEKqL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 05:46:11 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 738971042;
+        Wed,  5 Jan 2022 02:46:10 -0800 (PST)
+Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AB2583F774;
+        Wed,  5 Jan 2022 02:46:08 -0800 (PST)
+Date:   Wed, 5 Jan 2022 10:46:02 +0000
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Ilkka Koskinen <ilkka@os.amperecomputing.com>
+Cc:     guohanjun@huawei.com, sudeep.holla@arm.com, rafael@kernel.org,
+        linux@armlinux.org.uk, lenb@kernel.org, robert.moore@intel.com,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, patches@amperecomputing.com,
+        scott@os.amperecomputing.com, darren@os.amperecomputing.com,
+        james.morse@arm.com
+Subject: Re: [PATCH v3 2/2] ACPI: AGDI: Add driver for Arm Generic Diagnostic
+ Dump and Reset device
+Message-ID: <20220105104602.GA4752@lpieralisi>
+References: <20211231033725.21109-1-ilkka@os.amperecomputing.com>
+ <20211231033725.21109-3-ilkka@os.amperecomputing.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220104202227.2903605-2-yuzhao@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211231033725.21109-3-ilkka@os.amperecomputing.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 01:22:20PM -0700, Yu Zhao wrote:
-> Some architectures automatically set the accessed bit in PTEs, e.g.,
-> x86 and arm64 v8.2. On architectures that don't have this capability,
-> clearing the accessed bit in a PTE usually triggers a page fault
-> following the TLB miss of this PTE.
+[+James, for SDEI bits]
+
+On Thu, Dec 30, 2021 at 07:37:25PM -0800, Ilkka Koskinen wrote:
+> ACPI for Arm Components 1.1 Platform Design Document v1.1 [0] specifices
+> Arm Generic Diagnostic Device Interface (AGDI). It allows an admin to
+> issue diagnostic dump and reset via an SDEI event or an interrupt.
+> This patch implements SDEI path.
 > 
-> Being aware of this capability can help make better decisions, e.g.,
-> whether to spread the work out over a period of time to avoid bursty
-> page faults when trying to clear the accessed bit in a large number of
-> PTEs.
+> [0] https://developer.arm.com/documentation/den0093/latest/
 > 
-> Signed-off-by: Yu Zhao <yuzhao@google.com>
-> Tested-by: Konstantin Kharlamov <Hi-Angel@yandex.ru>
+> Signed-off-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
 > ---
->  arch/arm64/include/asm/cpufeature.h |  5 +++++
->  arch/arm64/include/asm/pgtable.h    | 13 ++++++++-----
->  arch/arm64/kernel/cpufeature.c      | 19 +++++++++++++++++++
->  arch/arm64/tools/cpucaps            |  1 +
->  arch/x86/include/asm/pgtable.h      |  6 +++---
->  include/linux/pgtable.h             | 13 +++++++++++++
->  mm/memory.c                         | 14 +-------------
->  7 files changed, 50 insertions(+), 21 deletions(-)
+>  drivers/acpi/arm64/Kconfig  |   8 +++
+>  drivers/acpi/arm64/Makefile |   1 +
+>  drivers/acpi/arm64/agdi.c   | 125 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 134 insertions(+)
+>  create mode 100644 drivers/acpi/arm64/agdi.c
 > 
-> diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
-> index ef6be92b1921..99518b4b2a9e 100644
-> --- a/arch/arm64/include/asm/cpufeature.h
-> +++ b/arch/arm64/include/asm/cpufeature.h
-> @@ -779,6 +779,11 @@ static inline bool system_supports_tlb_range(void)
->  		cpus_have_const_cap(ARM64_HAS_TLB_RANGE);
->  }
+> diff --git a/drivers/acpi/arm64/Kconfig b/drivers/acpi/arm64/Kconfig
+> index 6dba187f4f2e..24869ba5b365 100644
+> --- a/drivers/acpi/arm64/Kconfig
+> +++ b/drivers/acpi/arm64/Kconfig
+> @@ -8,3 +8,11 @@ config ACPI_IORT
 >  
-> +static inline bool system_has_hw_af(void)
+>  config ACPI_GTDT
+>  	bool
+> +
+> +config ACPI_AGDI
+> +	bool "Arm Generic Diagnostic Dump and Reset Device Interface"
+> +	depends on ARM_SDE_INTERFACE
+> +	help
+> +	  Arm Generic Diagnostic Dump and Reset Device Interface (AGDI) is
+> +	  a standard that enables issuing a non-maskable diagnostic dump and
+> +	  reset command.
+> diff --git a/drivers/acpi/arm64/Makefile b/drivers/acpi/arm64/Makefile
+> index 66acbe77f46e..7b9e4045659d 100644
+> --- a/drivers/acpi/arm64/Makefile
+> +++ b/drivers/acpi/arm64/Makefile
+> @@ -1,4 +1,5 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+> +obj-$(CONFIG_ACPI_AGDI) 	+= agdi.o
+>  obj-$(CONFIG_ACPI_IORT) 	+= iort.o
+>  obj-$(CONFIG_ACPI_GTDT) 	+= gtdt.o
+>  obj-y				+= dma.o
+> diff --git a/drivers/acpi/arm64/agdi.c b/drivers/acpi/arm64/agdi.c
+> new file mode 100644
+> index 000000000000..6525ccbae5c1
+> --- /dev/null
+> +++ b/drivers/acpi/arm64/agdi.c
+> @@ -0,0 +1,125 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * This file implements handling of
+> + * Arm Generic Diagnostic Dump and Reset Interface table (AGDI)
+> + *
+> + * Copyright (c) 2021, Ampere Computing LLC
+> + */
+> +
+> +#define pr_fmt(fmt) "ACPI: AGDI: " fmt
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +#include <linux/module.h>
+> +#include <linux/kernel.h>
+> +#include <linux/acpi.h>
+> +#include <linux/arm_sdei.h>
+> +#include <linux/io.h>
+
+Nit: alphabetical order.
+
+> +
+> +struct agdi_data {
+> +	int sdei_event;
+> +};
+> +
+> +static int agdi_sdei_handler(u32 sdei_event, struct pt_regs *regs, void *arg)
 > +{
-> +	return IS_ENABLED(CONFIG_ARM64_HW_AFDBM) && cpus_have_const_cap(ARM64_HW_AF);
+> +	nmi_panic(regs, "Arm Generic Diagnostic Dump and Reset SDEI event issued");
+> +	return 0;
 > +}
 > +
->  extern int do_emulate_mrs(struct pt_regs *regs, u32 sys_reg, u32 rt);
->  
->  static inline u32 id_aa64mmfr0_parange_to_phys_shift(int parange)
-> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> index c4ba047a82d2..e736f47436c7 100644
-> --- a/arch/arm64/include/asm/pgtable.h
-> +++ b/arch/arm64/include/asm/pgtable.h
-> @@ -999,13 +999,16 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
->   * page after fork() + CoW for pfn mappings. We don't always have a
->   * hardware-managed access flag on arm64.
->   */
-> -static inline bool arch_faults_on_old_pte(void)
-> +static inline bool arch_has_hw_pte_young(bool local)
->  {
-> -	WARN_ON(preemptible());
-> +	if (local) {
-> +		WARN_ON(preemptible());
-> +		return cpu_has_hw_af();
+> +static int agdi_sdei_probe(struct platform_device *pdev,
+> +			   struct agdi_data *adata)
+> +{
+> +	int err;
+> +
+> +	err = sdei_event_register(adata->sdei_event, agdi_sdei_handler, pdev);
+> +	if (err) {
+> +		dev_err(&pdev->dev, "Failed to register for SDEI event %d",
+> +			adata->sdei_event);
+> +		return err;
 > +	}
->  
-> -	return !cpu_has_hw_af();
-> +	return system_has_hw_af();
->  }
-> -#define arch_faults_on_old_pte		arch_faults_on_old_pte
-> +#define arch_has_hw_pte_young		arch_has_hw_pte_young
->  
->  /*
->   * Experimentally, it's cheap to set the access flag in hardware and we
-> @@ -1013,7 +1016,7 @@ static inline bool arch_faults_on_old_pte(void)
->   */
->  static inline bool arch_wants_old_prefaulted_pte(void)
->  {
-> -	return !arch_faults_on_old_pte();
-> +	return arch_has_hw_pte_young(true);
->  }
->  #define arch_wants_old_prefaulted_pte	arch_wants_old_prefaulted_pte
->  
-> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-> index 6f3e677d88f1..5bb553ee2c0e 100644
-> --- a/arch/arm64/kernel/cpufeature.c
-> +++ b/arch/arm64/kernel/cpufeature.c
-> @@ -2171,6 +2171,25 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
->  		.matches = has_hw_dbm,
->  		.cpu_enable = cpu_enable_hw_dbm,
->  	},
-> +	{
-> +		/*
-> +		 * __cpu_setup always enables this capability. But if the boot
-> +		 * CPU has it and a late CPU doesn't, the absent
-> +		 * ARM64_CPUCAP_OPTIONAL_FOR_LATE_CPU will prevent this late CPU
-> +		 * from going online. There is neither known hardware does that
-> +		 * nor obvious reasons to design hardware works that way, hence
-> +		 * no point leaving the door open here. If the need arises, a
-> +		 * new weak system feature flag should do the trick.
-> +		 */
-> +		.desc = "Hardware update of the Access flag",
-> +		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
-> +		.capability = ARM64_HW_AF,
-> +		.sys_reg = SYS_ID_AA64MMFR1_EL1,
-> +		.sign = FTR_UNSIGNED,
-> +		.field_pos = ID_AA64MMFR1_HADBS_SHIFT,
-> +		.min_field_value = 1,
-> +		.matches = has_cpuid_feature,
+> +
+> +	err = sdei_event_enable(adata->sdei_event);
+> +	if (err)  {
+> +		sdei_event_unregister(adata->sdei_event);
+> +		dev_err(&pdev->dev, "Failed to enable event %d\n",
+> +			adata->sdei_event);
+> +		return err;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int agdi_probe(struct platform_device *pdev)
+> +{
+> +	struct agdi_data *adata;
+> +
+> +	adata = dev_get_platdata(&pdev->dev);
+> +	if (!adata)
+> +		return -EINVAL;
+> +
+> +	return agdi_sdei_probe(pdev, adata);
+> +}
+> +
+> +static int agdi_remove(struct platform_device *pdev)
+> +{
+> +	struct agdi_data *adata = platform_get_drvdata(pdev);
+> +
+> +	sdei_event_disable(adata->sdei_event);
+> +	sdei_event_unregister(adata->sdei_event);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver agdi_driver = {
+> +	.driver = {
+> +		.name = "agdi",
 > +	},
->  #endif
->  	{
->  		.desc = "CRC32 instructions",
-> diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
-> index 870c39537dd0..56e4ef5d95fa 100644
-> --- a/arch/arm64/tools/cpucaps
-> +++ b/arch/arm64/tools/cpucaps
-> @@ -36,6 +36,7 @@ HAS_STAGE2_FWB
->  HAS_SYSREG_GIC_CPUIF
->  HAS_TLB_RANGE
->  HAS_VIRT_HOST_EXTN
-> +HW_AF
->  HW_DBM
->  KVM_PROTECTED_MODE
->  MISMATCHED_CACHE_TYPE
+> +	.probe = agdi_probe,
+> +	.remove = agdi_remove,
+> +};
 
-As discussed in the previous threads, we really don't need the complexity
-of the additional cap for the arm64 part. Please can you just use the
-existing code instead? It's both simpler and, as you say, it's equivalent
-for existing hardware.
+May I ask why we need a platform device (and driver) to register
+an SDEI event ?
 
-That way, this patch just ends up being a renaming exercise and we're all
-good.
+> +static int __init agdi_init(void)
+> +{
+> +	int ret;
+> +	acpi_status status;
+> +	struct acpi_table_agdi *agdi_table;
+> +	struct agdi_data pdata;
+> +	struct platform_device *pdev;
+> +
+> +	if (acpi_disabled)
+> +		return 0;
+
+Why don't we call agdi_init() from acpi_init() as we do for IORT/VIOT ?
+
+I don't think it is necessary to add a device_initcall(), with related
+ordering dependencies.
+
+> +
+> +	status = acpi_get_table(ACPI_SIG_AGDI, 0,
+> +				(struct acpi_table_header **) &agdi_table);
+> +	if (ACPI_FAILURE(status))
+> +		return -ENODEV;
+> +
+> +	if (agdi_table->flags & ACPI_AGDI_SIGNALING_MODE) {
+
+Is this because specs need updating ?
+
+> +		pr_warn("Interrupt signaling is not supported");
+> +		ret = -ENODEV;
+> +		goto err_put_table;
+> +	}
+> +
+> +	pdata.sdei_event = agdi_table->sdei_event;
+> +
+> +	pdev = platform_device_register_data(NULL, "agdi", 0, &pdata, sizeof(pdata));
+> +	if (IS_ERR(pdev)) {
+> +		ret = PTR_ERR(pdev);
+> +		goto err_put_table;
+> +	}
+> +
+> +	ret = platform_driver_register(&agdi_driver);
+> +	if (ret)
+> +		goto err_device_unregister;
+> +
+> +	acpi_put_table((struct acpi_table_header *)agdi_table);
+> +	return 0;
+> +
+> +err_device_unregister:
+> +	platform_device_unregister(pdev);
+> +err_put_table:
+> +	acpi_put_table((struct acpi_table_header *)agdi_table);
+> +	return ret;
+> +}
+> +device_initcall(agdi_init);
+
+See above.
 
 Thanks,
-
-Will
+Lorenzo

@@ -2,256 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41AE0484C8F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 03:38:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A49484C94
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 03:49:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237129AbiAECig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 21:38:36 -0500
-Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:54334 "EHLO
-        out30-57.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235991AbiAECif (ORCPT
+        id S237135AbiAECtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 21:49:23 -0500
+Received: from out162-62-57-137.mail.qq.com ([162.62.57.137]:38241 "EHLO
+        out162-62-57-137.mail.qq.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234406AbiAECtW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 21:38:35 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=jkchen@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V1.21Yh_1641350311;
-Received: from localhost(mailfrom:jkchen@linux.alibaba.com fp:SMTPD_---0V1.21Yh_1641350311)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 05 Jan 2022 10:38:32 +0800
-From:   Jay Chen <jkchen@linux.alibaba.com>
-To:     mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
-        leo.yan@linaro.org, alexander.shishkin@linux.intel.com,
-        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhangliguang@linux.alibaba.com
-Subject: [RESEND PATCH] coresight: change tmc from misc device to cdev device
-Date:   Wed,  5 Jan 2022 10:38:31 +0800
-Message-Id: <20220105023832.4729-1-jkchen@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 4 Jan 2022 21:49:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1641350958;
+        bh=DiR89cuqK5nwQkdSsy0jlBGAmICzO/O7TboVT/RXNfU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=WNQgs5EjmwYwucBwitqK70t212J7FHHaQYuvnZZwfBtpksN+GfD6F/p1kPff1pW1x
+         h1h2Ay5EUub9nqjpFPKZeWQJgNEc0ed6E+tL4UoSS9Um3ljtL4JFl2JzfQo2N6cWHt
+         9uCjEK7LEhXPK86wa2XEDhNVFgn28RSspW5Nd/X8=
+Received: from fedora.. ([119.32.47.91])
+        by newxmesmtplogicsvrszc8.qq.com (NewEsmtp) with SMTP
+        id B750F492; Wed, 05 Jan 2022 10:45:53 +0800
+X-QQ-mid: xmsmtpt1641350753tsskxxku7
+Message-ID: <tencent_13C536D91764B05D794CBCF3156C963E6C0A@qq.com>
+X-QQ-XMAILINFO: MOCbvwhB0vcJQ+8wG9wgzxHzXmU1fLT1HaqIWxKnj4pm3oI3OBNt8u4XEl0vXW
+         ELpnpGu9jC2DCoPI9WNN6hiKSv6QiO4/djV2pBLEsl+K7SJXllIZxyVMTGoMKBzB957bK+5ehHHu
+         pL9vhvSs1v0NgWSCEvImhpGhXCTEMwr19rry2T6IikwGBoTLmGNNV31x+loxV0IDfCFotKfd3/iT
+         9vphfoUyYQbV4nLysh1+4E/izet8X6iN7oKxx3KFCKD73kXMkw3CfTsxmfKzSvBUu/XNZupbSZ26
+         5Fl/yfK/05Lyb874nd8evjLtkfUP2VIFbuurBf3FzWh8MzvF5Geqzc7kO0eM4T+7qftNGHLrzjBf
+         19bHaKxV6DXRotSwfGsuaYdsB+gM+cp5Vd0EZnIHhjEWWghBILURvN/E6vueLpQfg4dt7xa8Lufj
+         Ng2hU82BrhqEPDMZeHKHathhYp2uxcHsBJcc9P+DZs/3BDIBJECZ+3sO0F1h4Y1PZe0ZVyzlwnyL
+         6QLyafY3bKRWGETYe1FPvVtejzdOIU9J8ttdbSq2/wbancdPW3LZvb8Voho5q6HY6ROj0T+GTPe5
+         nrpPxim9hF6mQLPVqi195fusbqz0TqiqQ04jgPrHudbYpvcyt/SkyeNNgdpVyneNPD28yqMQmdqX
+         wRhLebWC8ylpmMM8usYMJr3qO46hmGB1ZlsW8CBKbFhT1KL9gPBRmQvEiBWp8f9c8KqpgfDy7Mb6
+         0uSp5TDEMmD02HdWcpdt5c28jcrl6HcrZJCoOWusD3rf/lKlimOCGx5XmOTTC3HQId7wfyVLOE6c
+         IpUTvoXZLMD9J8OLxIeD9RuZZJmj6hLUOuBFrLsfLkFVGg4TCjnpyJ/WYZNWysUvdNjdnl+2NiDT
+         7a5fAhJAN3IdX2nki/CqZX+7iqWL2Oe0uiDJQmQTO5
+From:   conleylee@foxmail.com
+To:     robh@kernel.org, mripard@kernel.org, wens@csie.org
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, conley <conleylee@foxmail.com>
+Subject: [PATCH v2 1/2] sun7i-a20-marsboard.dts: add marsboard-a20 support
+Date:   Wed,  5 Jan 2022 10:45:50 +0800
+X-OQ-MSGID: <20220105024551.807713-1-conleylee@foxmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <YdS1GVkRopRSoD5S@robh.at.kernel.org>
+References: <YdS1GVkRopRSoD5S@robh.at.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, there are 130 etr and etf on our machine,
-but the current coresight tmc driver uses misc_register
-to register the device, which leads to the error that
-the device number is not enough.
+From: conley <conleylee@foxmail.com>
 
-coresight-tmc: probe of xxxxx failed with error -16
+ARM dts: sun7i: Add Marsboard A20 board
 
-This patch changes the device registration method
-to cdev's dynamic registration method to solve the
-problem of insufficient device numbers.
+This patch add support for Marsboard A20 board.
 
-Signed-off-by: Jay Chen <jkchen@linux.alibaba.com>
+The Marsboard A20 is a A20 based SBC with 1G RAM, 8G Flash, micro SD
+card slot , SATA socketm 10/100 ethernet, HDMI port, 4 USB2.0 ports, 2
+USB2.0 OTG, USB WIFI(RTL8188EU) with antenna.
+
+Change since v1.
+  - Spearate biddings and dts as two patches.
+  - use SPDX tag
+
+Signed-off-by: conley <conleylee@foxmail.com>
 ---
- .../hwtracing/coresight/coresight-tmc-core.c  | 91 +++++++++++++++----
- drivers/hwtracing/coresight/coresight-tmc.h   | 11 ++-
- 2 files changed, 82 insertions(+), 20 deletions(-)
+ arch/arm/boot/dts/Makefile                |   1 +
+ arch/arm/boot/dts/sun7i-a20-marsboard.dts | 183 ++++++++++++++++++++++
+ 2 files changed, 184 insertions(+)
+ create mode 100644 arch/arm/boot/dts/sun7i-a20-marsboard.dts
 
-diff --git a/drivers/hwtracing/coresight/coresight-tmc-core.c b/drivers/hwtracing/coresight/coresight-tmc-core.c
-index d0276af82494..55a131c059fe 100644
---- a/drivers/hwtracing/coresight/coresight-tmc-core.c
-+++ b/drivers/hwtracing/coresight/coresight-tmc-core.c
-@@ -12,7 +12,6 @@
- #include <linux/io.h>
- #include <linux/err.h>
- #include <linux/fs.h>
--#include <linux/miscdevice.h>
- #include <linux/mutex.h>
- #include <linux/property.h>
- #include <linux/uaccess.h>
-@@ -31,6 +30,12 @@ DEFINE_CORESIGHT_DEVLIST(etb_devs, "tmc_etb");
- DEFINE_CORESIGHT_DEVLIST(etf_devs, "tmc_etf");
- DEFINE_CORESIGHT_DEVLIST(etr_devs, "tmc_etr");
- 
-+static DEFINE_IDA(tmc_ida);
-+static dev_t tmc_major;
-+static struct class *tmc_class;
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 0de64f237cd8..4628a2617313 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1219,6 +1219,7 @@ dtb-$(CONFIG_MACH_SUN7I) += \
+ 	sun7i-a20-icnova-swac.dtb \
+ 	sun7i-a20-lamobo-r1.dtb \
+ 	sun7i-a20-linutronix-testbox-v2.dtb \
++	sun7i-a20-marsboard.dtb \
+ 	sun7i-a20-m3.dtb \
+ 	sun7i-a20-mk808c.dtb \
+ 	sun7i-a20-olimex-som-evb.dtb \
+diff --git a/arch/arm/boot/dts/sun7i-a20-marsboard.dts b/arch/arm/boot/dts/sun7i-a20-marsboard.dts
+new file mode 100644
+index 000000000000..7ab6aa30fee6
+--- /dev/null
++++ b/arch/arm/boot/dts/sun7i-a20-marsboard.dts
+@@ -0,0 +1,183 @@
++// SPDX-License-Identifier: LGPL-2.1+
++/*
++ * Copyright 2021 Conley Lee
++ * Conley Lee <conleylee@foxmail.com>
++ */
 +
-+#define TMC_DEV_MAX	(MINORMASK + 1)
++/dts-v1/;
++#include "sun7i-a20.dtsi"
++#include "sunxi-common-regulators.dtsi"
 +
- void tmc_wait_for_tmcready(struct tmc_drvdata *drvdata)
- {
- 	struct coresight_device *csdev = drvdata->csdev;
-@@ -147,7 +152,7 @@ static int tmc_open(struct inode *inode, struct file *file)
- {
- 	int ret;
- 	struct tmc_drvdata *drvdata = container_of(file->private_data,
--						   struct tmc_drvdata, miscdev);
-+						   struct tmc_drvdata, cdev);
- 
- 	ret = tmc_read_prepare(drvdata);
- 	if (ret)
-@@ -179,7 +184,7 @@ static ssize_t tmc_read(struct file *file, char __user *data, size_t len,
- 	char *bufp;
- 	ssize_t actual;
- 	struct tmc_drvdata *drvdata = container_of(file->private_data,
--						   struct tmc_drvdata, miscdev);
-+						   struct tmc_drvdata, cdev);
- 	actual = tmc_get_sysfs_trace(drvdata, *ppos, len, &bufp);
- 	if (actual <= 0)
- 		return 0;
-@@ -200,7 +205,7 @@ static int tmc_release(struct inode *inode, struct file *file)
- {
- 	int ret;
- 	struct tmc_drvdata *drvdata = container_of(file->private_data,
--						   struct tmc_drvdata, miscdev);
-+						   struct tmc_drvdata, cdev);
- 
- 	ret = tmc_read_unprepare(drvdata);
- 	if (ret)
-@@ -451,6 +456,7 @@ static int tmc_probe(struct amba_device *adev, const struct amba_id *id)
- {
- 	int ret = 0;
- 	u32 devid;
-+	dev_t devt;
- 	void __iomem *base;
- 	struct device *dev = &adev->dev;
- 	struct coresight_platform_data *pdata = NULL;
-@@ -546,14 +552,32 @@ static int tmc_probe(struct amba_device *adev, const struct amba_id *id)
- 		goto out;
- 	}
- 
--	drvdata->miscdev.name = desc.name;
--	drvdata->miscdev.minor = MISC_DYNAMIC_MINOR;
--	drvdata->miscdev.fops = &tmc_fops;
--	ret = misc_register(&drvdata->miscdev);
-+	ret = ida_simple_get(&tmc_ida, 0, TMC_DEV_MAX, GFP_KERNEL);
-+	if (ret < 0)
-+		goto err_coresight_unregister;
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/interrupt-controller/irq.h>
 +
-+	cdev_init(&drvdata->cdev.cdev, &tmc_fops);
-+	drvdata->cdev.cdev.owner = THIS_MODULE;
-+	devt = MKDEV(MAJOR(tmc_major), ret);
-+	ret = cdev_add(&drvdata->cdev.cdev, devt, 1);
- 	if (ret)
--		coresight_unregister(drvdata->csdev);
--	else
-+		goto err_free_tmc_ida;
++/ {
++	model = "HAOYU Electronics Marsboard A20";
++	compatible = "haoyu,a20-marsboard", "allwinner,sun7i-a20";
 +
-+	drvdata->cdev.dev = device_create(tmc_class, NULL, devt, &drvdata->cdev, desc.name);
-+	if (IS_ERR(drvdata->cdev.dev)) {
-+		ret = PTR_ERR(drvdata->cdev.dev);
-+		goto err_delete_cdev;
-+	} else
- 		pm_runtime_put(&adev->dev);
++	aliases {
++		serial0 = &uart0;
++	};
 +
-+	return 0;
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
 +
-+err_delete_cdev:
-+	cdev_del(&drvdata->cdev.cdev);
-+err_free_tmc_ida:
-+	ida_simple_remove(&tmc_ida, MINOR(devt));
-+err_coresight_unregister:
-+	coresight_unregister(drvdata->csdev);
- out:
- 	return ret;
- }
-@@ -583,13 +607,11 @@ static void tmc_shutdown(struct amba_device *adev)
- static void tmc_remove(struct amba_device *adev)
- {
- 	struct tmc_drvdata *drvdata = dev_get_drvdata(&adev->dev);
-+	struct device *dev = drvdata->cdev.dev;
- 
--	/*
--	 * Since misc_open() holds a refcount on the f_ops, which is
--	 * etb fops in this case, device is there until last file
--	 * handler to this device is closed.
--	 */
--	misc_deregister(&drvdata->miscdev);
-+	ida_simple_remove(&tmc_ida, MINOR(dev->devt));
-+	device_destroy(tmc_class, dev->devt);
-+	cdev_del(&drvdata->cdev.cdev);
- 	coresight_unregister(drvdata->csdev);
- }
- 
-@@ -618,7 +640,42 @@ static struct amba_driver tmc_driver = {
- 	.id_table	= tmc_ids,
- };
- 
--module_amba_driver(tmc_driver);
-+static int __init tmc_init(void)
-+{
-+	int ret;
++	hdmi-connector {
++		compatible = "hdmi-connector";
++		type = "a";
 +
-+	ret = alloc_chrdev_region(&tmc_major, 0, TMC_DEV_MAX, "tmc");
-+	if (ret < 0) {
-+		pr_err("tmc: failed to allocate char dev region\n");
-+		return ret;
-+	}
-+
-+	tmc_class = class_create(THIS_MODULE, "tmc");
-+	if (IS_ERR(tmc_class)) {
-+		pr_err("tmc: failed to create class\n");
-+		unregister_chrdev_region(tmc_major, TMC_DEV_MAX);
-+		return PTR_ERR(tmc_class);
-+	}
-+
-+	ret = amba_driver_register(&tmc_driver);
-+	if (ret) {
-+		pr_err("tmc: error registering amba driver\n");
-+		class_destroy(tmc_class);
-+		unregister_chrdev_region(tmc_major, TMC_DEV_MAX);
-+	}
-+
-+	return ret;
-+}
-+
-+static void __exit tmc_exit(void)
-+{
-+	amba_driver_unregister(&tmc_driver);
-+	class_destroy(tmc_class);
-+	unregister_chrdev_region(tmc_major, TMC_DEV_MAX);
-+}
-+
-+module_init(tmc_init);
-+module_exit(tmc_exit);
- 
- MODULE_AUTHOR("Pratik Patel <pratikp@codeaurora.org>");
- MODULE_DESCRIPTION("Arm CoreSight Trace Memory Controller driver");
-diff --git a/drivers/hwtracing/coresight/coresight-tmc.h b/drivers/hwtracing/coresight/coresight-tmc.h
-index 6bec20a392b3..11441c6b9c26 100644
---- a/drivers/hwtracing/coresight/coresight-tmc.h
-+++ b/drivers/hwtracing/coresight/coresight-tmc.h
-@@ -7,9 +7,9 @@
- #ifndef _CORESIGHT_TMC_H
- #define _CORESIGHT_TMC_H
- 
-+#include <linux/cdev.h>
- #include <linux/dma-mapping.h>
- #include <linux/idr.h>
--#include <linux/miscdevice.h>
- #include <linux/mutex.h>
- #include <linux/refcount.h>
- 
-@@ -163,11 +163,16 @@ struct etr_buf {
- 	void				*private;
- };
- 
-+struct tmc_cdev {
-+	struct cdev cdev;
-+	struct device *dev;
++		port {
++			hdmi_con_in: endpoint {
++				remote-endpoint = <&hdmi_out_con>;
++			};
++		};
++	};
 +};
 +
- /**
-  * struct tmc_drvdata - specifics associated to an TMC component
-  * @base:	memory mapped base address for this component.
-  * @csdev:	component vitals needed by the framework.
-- * @miscdev:	specifics to handle "/dev/xyz.tmc" entry.
-+ * @tmc_cdev:	specifics to handle "/dev/xyz.tmc" entry.
-  * @spinlock:	only one at a time pls.
-  * @pid:	Process ID of the process being monitored by the session
-  *		that is using this component.
-@@ -191,7 +196,7 @@ struct etr_buf {
- struct tmc_drvdata {
- 	void __iomem		*base;
- 	struct coresight_device	*csdev;
--	struct miscdevice	miscdev;
-+	struct tmc_cdev		cdev;
- 	spinlock_t		spinlock;
- 	pid_t			pid;
- 	bool			reading;
++&ahci {
++	target-supply = <&reg_ahci_5v>;
++	status = "okay";
++};
++
++&codec {
++	status = "okay";
++};
++
++&cpu0 {
++	cpu-supply = <&reg_dcdc2>;
++};
++
++&de {
++	status = "okay";
++};
++
++&ehci0 {
++	status = "okay";
++};
++
++&ehci1 {
++	status = "okay";
++};
++
++&gmac_mii_pins {
++	pins = "PA0", "PA1", "PA2",
++	"PA3", "PA4", "PA5", "PA6",
++	"PA7", "PA8", "PA9", "PA10",
++	"PA11", "PA12", "PA13", "PA14",
++	"PA15", "PA16", "PA17";
++};
++
++&gmac {
++	pinctrl-names = "default";
++	pinctrl-0 = <&gmac_mii_pins>;
++	phy-handle = <&phy0>;
++	phy-mode = "mii";
++	status = "okay";
++};
++
++&hdmi {
++	status = "okay";
++};
++
++&hdmi_out {
++	hdmi_out_con: endpoint {
++		remote-endpoint = <&hdmi_con_in>;
++	};
++};
++
++&i2c0 {
++	status = "okay";
++
++	axp209: pmic@34 {
++		reg = <0x34>;
++		interrupt-parent = <&nmi_intc>;
++		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
++	};
++};
++
++&mmc0 {
++	vmmc-supply = <&reg_vcc3v3>;
++	bus-width = <4>;
++	cd-gpios = <&pio 7 10 GPIO_ACTIVE_LOW>; /* PH10 */
++	status = "okay";
++};
++
++&gmac_mdio {
++	phy0: ethernet-phy@0 {
++		reg = <0>;
++	};
++};
++
++&ohci0 {
++	status = "okay";
++};
++
++&ohci1 {
++	status = "okay";
++};
++
++&otg_sram {
++	status = "okay";
++};
++
++&reg_ahci_5v {
++	status = "okay";
++};
++
++#include "axp209.dtsi"
++
++&ac_power_supply {
++	status = "okay";
++};
++
++&reg_dcdc2 {
++	regulator-always-on;
++	regulator-min-microvolt = <1000000>;
++	regulator-max-microvolt = <1450000>;
++	regulator-name = "vdd-cpu";
++};
++
++&reg_dcdc3 {
++	regulator-always-on;
++	regulator-min-microvolt = <1000000>;
++	regulator-max-microvolt = <1400000>;
++	regulator-name = "vdd-int-dll";
++};
++
++&reg_ldo1 {
++	regulator-name = "vdd-rtc";
++};
++
++&reg_ldo2 {
++	regulator-always-on;
++	regulator-min-microvolt = <3000000>;
++	regulator-max-microvolt = <3000000>;
++	regulator-name = "avcc";
++};
++
++&reg_usb1_vbus {
++	status = "okay";
++};
++
++&reg_usb2_vbus {
++	status = "okay";
++};
++
++&uart0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart0_pb_pins>;
++	status = "okay";
++};
++
++&usb_otg {
++	dr_mode = "otg";
++	status = "okay";
++};
++
++&usbphy {
++	usb0_id_det-gpios = <&pio 7 4 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; /* PH4 */
++	usb1_vbus-supply = <&reg_usb1_vbus>;
++	usb2_vbus-supply = <&reg_usb2_vbus>;
++	status = "okay";
++};
 -- 
-2.27.0
+2.31.1
 

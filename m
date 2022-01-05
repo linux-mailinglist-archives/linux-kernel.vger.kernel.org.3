@@ -2,85 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E1B1485399
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 14:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43C3A4853A1
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 14:35:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240366AbiAENa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 08:30:26 -0500
-Received: from mail-oi1-f178.google.com ([209.85.167.178]:35778 "EHLO
-        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233322AbiAENaY (ORCPT
+        id S240388AbiAENft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 08:35:49 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:28970 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233322AbiAENfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 08:30:24 -0500
-Received: by mail-oi1-f178.google.com with SMTP id m6so64445056oim.2;
-        Wed, 05 Jan 2022 05:30:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+zF0DYhczYohQzVtQksUxrHBVJTvqinpDR5pxsDDR8M=;
-        b=H+CHhFTl6NBZaQ0fcLZp4GIU4YWA16+pJGQoLNnxqVPssWjnGKhSXesB1yvdicdmEq
-         MfqfOy+plBvRL3cAemt6DAxKz0CTbBnIE/LiZonIg1Tje11K3YQJYOlKY8Im4bA9YF6v
-         2bwxTiaIi+EuYOptZVqSvHHzRpFTdqzMZ8dfWh31mhGKfKXighQgaeGoHhEVlD78jsko
-         cTrRWWDox9ygi1yqnXdHIANl2ImzDUn4kNUKNfxPZjHi3rzR0rndfPtSsKpn2MtLYy9A
-         Mcvj6X0wUus+uuyQ0SnF763tBvfizmZymWKjLD8thOfvpcltxMVHw587H+kfydJ0/3hC
-         6yMg==
-X-Gm-Message-State: AOAM533qjaePOG2ruKmlraogja00kut1tuNEdtOPEicmr4XwqybUfKzP
-        s6gAFYAqx5qEfx/OCgMcMQ==
-X-Google-Smtp-Source: ABdhPJw1d5ah49d3Jl3IsUw0xrOgpEkxfYxAa2QPu9MPmIFKwyRRk2oGBlauz6+RNW3y6n6OMTzriw==
-X-Received: by 2002:aca:5a87:: with SMTP id o129mr2609359oib.114.1641389423719;
-        Wed, 05 Jan 2022 05:30:23 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id ay40sm10287652oib.1.2022.01.05.05.30.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 05:30:23 -0800 (PST)
-Received: (nullmailer pid 2950533 invoked by uid 1000);
-        Wed, 05 Jan 2022 13:30:21 -0000
-Date:   Wed, 5 Jan 2022 07:30:21 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Tony Lindgren <tony@atomide.com>, linux-crypto@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org
-Subject: Re: [PATCH 1/8] dt-bindings: rng: apm,x-gene-rng: convert APM RNG to
- dtschema
-Message-ID: <YdWdbac/WQloqU57@robh.at.kernel.org>
-References: <20211227183251.132525-1-krzysztof.kozlowski@canonical.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211227183251.132525-1-krzysztof.kozlowski@canonical.com>
+        Wed, 5 Jan 2022 08:35:47 -0500
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 205AavW4002841;
+        Wed, 5 Jan 2022 13:35:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=JCtG+qvIRUceUIqjbmYOWO6F7GjTYRbnQN4/z6HdpA8=;
+ b=W3vt3sw4M8+tPsixTpXDawGnTCuoW3WxSK7fS0WTNqxcjI0o8+/n3oz/BKE4Y78nocvk
+ dNRLmlLON0PYKr5x8X5m7y3LS/L/z0E+fRiokglX4YklIwRhpuCao0PAsLG2yhAn5iUU
+ l3MWy3JS38jEzdM6CY8q69k/DbyW04Kv1S5BjtQz8yI4jaRXv0YJl1pk+cCrmbxKMTFI
+ MyizmsiCC7sxZUWInoeYr5nhDOGlVdlUJ4ecmVxtMchL+XOwAp/d/R3xmmh/WFyPpP7o
+ a1rX63kiGh/1tzP3NysOorRg8SNPlQn8gRmlXCRiFmISkNHY1cL0yUctk5AN1EER1RvM rg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dcp4tf6tu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jan 2022 13:35:47 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 205CpMx0025643;
+        Wed, 5 Jan 2022 13:35:46 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dcp4tf6sg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jan 2022 13:35:46 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 205DXxnr016323;
+        Wed, 5 Jan 2022 13:35:44 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 3daek9syp3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jan 2022 13:35:44 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 205DZgFC35324378
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 5 Jan 2022 13:35:42 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0A8094C040;
+        Wed,  5 Jan 2022 13:35:42 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 546C74C050;
+        Wed,  5 Jan 2022 13:35:41 +0000 (GMT)
+Received: from sig-9-65-80-221.ibm.com (unknown [9.65.80.221])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  5 Jan 2022 13:35:41 +0000 (GMT)
+Message-ID: <4dc32716cf6e226539ad56cef9a372d26fc54dcc.camel@linux.ibm.com>
+Subject: Re: [PATCH v4] ima: silence measurement list hexdump during kexec
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Bruno Meneguele <bmeneg@redhat.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 05 Jan 2022 08:35:40 -0500
+In-Reply-To: <20211229020303.357610-1-bmeneg@redhat.com>
+References: <20211229020303.357610-1-bmeneg@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 0daHKGgcCEfTHQqwkmGTLDqd6GQdkRhR
+X-Proofpoint-GUID: -jHT0Z7cgJID2KQteURKwCSXUoYKw99r
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-05_03,2022-01-04_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ clxscore=1015 priorityscore=1501 impostorscore=0 adultscore=0
+ mlxlogscore=999 lowpriorityscore=0 mlxscore=0 suspectscore=0 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201050090
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 07:32:44PM +0100, Krzysztof Kozlowski wrote:
-> Convert the APM X-Gene RNG bindings to DT schema.
+On Tue, 2021-12-28 at 23:03 -0300, Bruno Meneguele wrote:
+> Direclty calling print_hex_dump() dumps the IMA measurement list on soft
+
+^Directly
+
+> resets (kexec) straight to the syslog (kmsg/dmesg) without considering the
+> DEBUG flag or the dynamic debug state, causing the output to be always
+> printed, including during boot time.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  .../devicetree/bindings/rng/apm,rng.txt       | 17 -------
->  .../bindings/rng/apm,x-gene-rng.yaml          | 47 +++++++++++++++++++
->  2 files changed, 47 insertions(+), 17 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/rng/apm,rng.txt
->  create mode 100644 Documentation/devicetree/bindings/rng/apm,x-gene-rng.yaml
+> Since this output is only valid for IMA debugging, but not necessary on
+> normal kexec operation, print_hex_dump_debug() adheres to the pr_debug()
+> behavior: the dump is only printed to syslog when DEBUG is defined or when
+> explicitly requested by the user through dynamic debugging.
+> 
+> Signed-off-by: Bruno Meneguele <bmeneg@redhat.com>
 
-Series applied, thanks.
+Thanks, Bruno.  This patch is now queued in #next-integrity-testing.
 
-Rob
+Mimi
+

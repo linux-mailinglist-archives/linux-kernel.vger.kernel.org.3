@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 539AA485B0B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 22:50:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EDB4485B09
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 22:49:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244607AbiAEVt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 16:49:28 -0500
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:60899 "EHLO
+        id S244665AbiAEVtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 16:49:13 -0500
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:34605 "EHLO
         new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235063AbiAEVs3 (ORCPT
+        by vger.kernel.org with ESMTP id S234117AbiAEVs3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 5 Jan 2022 16:48:29 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 73DD3580569;
-        Wed,  5 Jan 2022 16:48:28 -0500 (EST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 4AB4D580571;
+        Wed,  5 Jan 2022 16:48:29 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Wed, 05 Jan 2022 16:48:28 -0500
+  by compute1.internal (MEProxy); Wed, 05 Jan 2022 16:48:29 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=from
         :to:cc:subject:date:message-id:in-reply-to:references:reply-to
-        :mime-version:content-transfer-encoding; s=fm2; bh=kJxpjApBzoVvC
-        kd49IN11sRCxgdbdXjwUm6fGe2ajOg=; b=W9rMnsZRyKPY8hxaUtB1n45xh/WyS
-        fg4Hd6Wv7LLs3JFu45mfiZqlQkvgxYzRQXfumen4MEH/Jwzlli73/5/pvMeraycO
-        9eKEoyFnpmYyLHznxRj6xK++R6NCUXFAVU8oXlPGXgxRR2Wgg3+oF6b6ZDvMahUV
-        GpxYVYWNEkOoKLXIkG1rE+Bw44KmtUlQZzw9Ofns2eNpZrNWcpNgy6pLxxJrTvgU
-        TVw/gddpMjYKFZxlwg7hzcuzu3rmYBYAnkK+TzJM6TLXsTeaFrdv+ytH17+QQyu5
-        EiFrxm4fmZSmrLIj9T2ZcfRdSl4RWpD9X5ZT7XnA6zxCyKnNedvOIXE4Q==
+        :mime-version:content-transfer-encoding; s=fm2; bh=8yuexR1+nrtHG
+        SO8wGNcV0MvB+tGU4p0S4nQ2u6/h9Y=; b=kNcgqXMU4/n+0YyMRK0TyVMysDqOh
+        yGnxu3188w1RZak/r6C5GGCMGkYAvYZrGUXVsCm5C/Jb9fk2x8P+Zhkbv2juEiHF
+        Xx9yXwsMcFZDgw14URi8KOX4Gq3BjiqSdCn8GKzv3NQXWRkliOB0JVHVM8uS81kz
+        FXWoyZvcC8pdi2IY2HIDM9KJjv4NSShQ3V/ljJO+UE1AAlyWOJHG3t1nZ3upZM6c
+        K6hHMhVO16bR2AATD8DVfvQ/aYyij27BJTE7NIUx0TvMRg4mNtuYCz5coZkOImzw
+        Rby2nrBx/WVcBJxX1xpgf8EFekNemKmfyEiUBjB3mQtzUXARZkQ3mfEPA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:reply-to:subject
         :to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=kJxpjApBzoVvCkd49IN11sRCxgdbdXjwUm6fGe2ajOg=; b=kO2uSSXr
-        joqeXbL1xK0ixZIGTvPiqETF+2nWYNLoYKVIwY6GFJd5q7eyqoaLTSADlAqszsgE
-        4xC/fNTrHhSs9Nwjdv6/bJBZ/OOKplWUVcto1VtAd7FNtVL1wsjtsyWNEW6PzXDr
-        lq7NT6H1BtpUP0ZnYTMnoJrAdSVOE/AdkxGW6HtbYC8YoY759LdF8HcZNChLieK9
-        3eu4QU+b1qTGTIXi7R5S+K8CnkmU5UWP4pugbG6M3uA0XOPIPbcYtzJ19FwsUBsv
-        5QqK9zyUkYcjCvYWg+6Pz8yZ2OWlB7yPjORFhAaPt5LxBT7V2xhsma2gSya5PG3R
-        xRuXzouDZOqy8g==
-X-ME-Sender: <xms:LBLWYWb8pnt3gJlcg5g-T6u79E_2Af2rLJp4znktJAE-__pTi_VPaQ>
-    <xme:LBLWYZY32xYXACJ4iOhznsEnObo5voZMbZRENDWw99oD4CB017Q1TeYxO5ZY-aTp5
-    cWOy6PF8b-CpdAl9Q>
-X-ME-Received: <xmr:LBLWYQ_H7_hAoPoFCDBCDNBQ1XI9Qz4wuBPjK0lRmGmKoy9nzsF03AZh-zJHed0fsu2PyV1R>
+        fm1; bh=8yuexR1+nrtHGSO8wGNcV0MvB+tGU4p0S4nQ2u6/h9Y=; b=PhZUATg9
+        FmZKLL8OPTeqjkwnPLyfUAOaHv5EhgMImn/cYWCeGVksMiYYzIciYyMSBtwa1hDH
+        zCMqdscamUNJ9VbKXUa+IXBcuZ4nNEh60LtYJw1Gyy7ZrarTM7wCpYBEirVm+okP
+        YES7YEJcbaR5e1IzVbtjM+zqax4CfbcEuaxE6NvYyGcm+/aJJ5AVvkeBkZgiJuFq
+        6idpjFtqRH2qzA1FEI/Uln2s5XO78fxP3GhFfLNoCsG+v6WvjpSukS8udRI4XDeu
+        yJj7Gmw41fOmt1fCiz7dqFk+yuPnwHiyM29QUQlFw2sp8YKAXCccMuYCYuzG/BA2
+        DQReGxxAcIFXcg==
+X-ME-Sender: <xms:LRLWYQPVidpmgi01iA-MzZbuDuRhT6Z_IJjKkBfP34fKrxdB3GTGRw>
+    <xme:LRLWYW-AyiLLpcJde4tItRbz_921Vw_Be1O8-D_3ARqY5j5MeIw-G6ZDKLkPiAqMM
+    fabpTHp8Wvjadrqgg>
+X-ME-Received: <xmr:LRLWYXTBUF87OXxBul7SmmYv5X2QdNgcUKdPg2JXNJS8qbfmKQuYz1B3f8TGEP5BJp_-22cV>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrudefjedgieekucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -49,12 +49,12 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrudefjedgieekucetufdoteggod
     dvueduuefhgefhheeiuedvtedvuefgieegveetueeiueehtdegudehfeelnecuvehluhhs
     thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepiihirdihrghnsehsvg
     hnthdrtghomh
-X-ME-Proxy: <xmx:LBLWYYqnpjM7X2z35zJm-t3130OJYUFdHO_tlxXOnhVsD1TQSGkztQ>
-    <xmx:LBLWYRoW9xO3w5MQXAA1bKujGIT5_Vyhpt5YXAhpmYOM45KLBt0fNQ>
-    <xmx:LBLWYWRh7uqZcmsFVJGEhb2_FFELd-RgKAJPImwBsvjCWvgwqQiRJw>
-    <xmx:LBLWYfhbO5lBwGfRQ-bwsvZ5ndMJXiTlSy3f-Bq-4hnr6O5Rg9HcPw>
+X-ME-Proxy: <xmx:LRLWYYsCBFereavIdxgPqU4MOOT3p7BIVnUwwIExBXietPI4jPWS8w>
+    <xmx:LRLWYYe7ZcX5PSG-JXwLG-eqVMgwlXFXAbwWTb-NcNTuScSBOo3bQQ>
+    <xmx:LRLWYc2-Jua3FPZLC43ywFWwFVHK36Ata-2S4GvbOxjWi2yu6fx06A>
+    <xmx:LRLWYe3ONauEy1XZrRc2lxpCjRBxgKLaO5tTCuBjiiinzKzKitiBhw>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 5 Jan 2022 16:48:27 -0500 (EST)
+ 5 Jan 2022 16:48:28 -0500 (EST)
 From:   Zi Yan <zi.yan@sent.com>
 To:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -67,9 +67,9 @@ Cc:     linux-kernel@vger.kernel.org,
         iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
         Mel Gorman <mgorman@techsingularity.net>,
         Eric Ren <renzhengeek@gmail.com>, Zi Yan <ziy@nvidia.com>
-Subject: [RFC PATCH v3 7/8] drivers: virtio_mem: use pageblock size as the minimum virtio_mem size.
-Date:   Wed,  5 Jan 2022 16:47:55 -0500
-Message-Id: <20220105214756.91065-8-zi.yan@sent.com>
+Subject: [RFC PATCH v3 8/8] arch: powerpc: adjust fadump alignment to be pageblock aligned.
+Date:   Wed,  5 Jan 2022 16:47:56 -0500
+Message-Id: <20220105214756.91065-9-zi.yan@sent.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220105214756.91065-1-zi.yan@sent.com>
 References: <20220105214756.91065-1-zi.yan@sent.com>
@@ -82,30 +82,30 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Zi Yan <ziy@nvidia.com>
 
-alloc_contig_range() now only needs to be aligned to pageblock_order,
-drop virtio_mem size requirement that it needs to be the max of
-pageblock_order and MAX_ORDER.
+CMA only requires pageblock alignment now. Change CMA alignment in
+fadump too.
 
 Signed-off-by: Zi Yan <ziy@nvidia.com>
 ---
- drivers/virtio/virtio_mem.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ arch/powerpc/include/asm/fadump-internal.h | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/virtio/virtio_mem.c b/drivers/virtio/virtio_mem.c
-index a6a78685cfbe..2664dc16d0f9 100644
---- a/drivers/virtio/virtio_mem.c
-+++ b/drivers/virtio/virtio_mem.c
-@@ -2481,8 +2481,7 @@ static int virtio_mem_init_hotplug(struct virtio_mem =
-*vm)
- 	 * - Is required for now for alloc_contig_range() to work reliably -
- 	 *   it doesn't properly handle smaller granularity on ZONE_NORMAL.
- 	 */
--	sb_size =3D max_t(uint64_t, MAX_ORDER_NR_PAGES,
--			pageblock_nr_pages) * PAGE_SIZE;
-+	sb_size =3D pageblock_nr_pages * PAGE_SIZE;
- 	sb_size =3D max_t(uint64_t, vm->device_block_size, sb_size);
+diff --git a/arch/powerpc/include/asm/fadump-internal.h b/arch/powerpc/incl=
+ude/asm/fadump-internal.h
+index 52189928ec08..fbfca85b4200 100644
+--- a/arch/powerpc/include/asm/fadump-internal.h
++++ b/arch/powerpc/include/asm/fadump-internal.h
+@@ -20,9 +20,7 @@
+ #define memblock_num_regions(memblock_type)	(memblock.memblock_type.cnt)
 =20
- 	if (sb_size < memory_block_size_bytes() && !force_bbm) {
+ /* Alignment per CMA requirement. */
+-#define FADUMP_CMA_ALIGNMENT	(PAGE_SIZE <<				\
+-				 max_t(unsigned long, MAX_ORDER - 1,	\
+-				 pageblock_order))
++#define FADUMP_CMA_ALIGNMENT	(PAGE_SIZE << pageblock_order)
+=20
+ /* FAD commands */
+ #define FADUMP_REGISTER			1
 --=20
 2.34.1
 

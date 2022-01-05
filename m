@@ -2,181 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B1948581B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:23:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D528485820
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:24:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242859AbiAESXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 13:23:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242847AbiAESXT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 13:23:19 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DCCC061245
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 10:23:19 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id c2so125021pfc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 10:23:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=O3txqHljQl/GCNxyCJxfFojCjkO470bmaKiTOmC1xSE=;
-        b=iDaMKn+q7SGqX3ujdNUGLIq8rR9uST+ZG/7EUkKHkYITiY/9guw1ZRXf3Ht59Dz2kA
-         IljULJEO3i+pPOzOnZXhD3vALfxADxcPKVZqVKrO/pzmcxvaa37+fRTER/WdpRu2YXiH
-         XqA6bprq+O3qlgt6rpbnONeUrs2A5iUPw0Rr1Oy1rrK9MTDAm9TcPBdRKFW5yS4YufWJ
-         Npd4V2aXugQPk341QkO2dH7kuWmID7i5orec/rVIGU1QPRTl8oafYAQgyLhqEOk1JFG/
-         fpy6WAxwAtIUhlSp+IGClZEoLSmXUYQNHBB+0UeoK9tpNTY6HPYa/lBmoGxCn8zwKVzT
-         bdLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O3txqHljQl/GCNxyCJxfFojCjkO470bmaKiTOmC1xSE=;
-        b=Y/mxXk3gHxo1q3Ndce5jT4W9mUsLeR54e1CXI3wUGTkR1jNE6Eh7n7PVKhkzXAQXoP
-         3n7uv2EXRygB/WubghQKV2qWK6VK9xNUYUrRfS6FgjnKsYT6yIgvxChUTUfO9PALuWT7
-         cbjgNosmZAGN8PTTfFAuTNYwAoju9tTI4Nm47DNGNymtqLiUfPdVrd8S6VjasKGAtzOv
-         cdtR0t4gAzd7CPJeiLJoH3DH7GRX2X+vzHSXP3OQnYHVUwcsSl+4EuFcV4qnMdrJGhp+
-         UA2r+Z4CWYl5KmmQgqBkR0dXDEK+IDjQjZD7AO0msxU14sAwI9s8AqGapZ0ArpeVr+va
-         Iq8A==
-X-Gm-Message-State: AOAM530QAXF3FbOowqVMrgoN5DPvY1lC8h+dAgLWeHDCC4kkzPIvZ5k0
-        0s4spVA0BOwPazK+R8hGon5D1LEEDF+Kd1/m5RsFDg==
-X-Google-Smtp-Source: ABdhPJxoBP/aT1AEtcGz3BudjHksIAmWp/YqSFrZQveftZYxEW3pAAMJ+2H/kJ2DcT1CwoBX6W8azzzA4zy/f9WM0+k=
-X-Received: by 2002:a63:710f:: with SMTP id m15mr18291969pgc.40.1641406998932;
- Wed, 05 Jan 2022 10:23:18 -0800 (PST)
+        id S242870AbiAESYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 13:24:41 -0500
+Received: from mail-dm6nam12on2065.outbound.protection.outlook.com ([40.107.243.65]:63832
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S242861AbiAESYk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 13:24:40 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GzSq06ACN4Wck5sknol3KxzrLmA1rnXmb5WHkjuZTwkKnLrevh592dan1uaDX3iv9miyNT8sgKiM3btP7VJo2oSYw95lzQUl7Q/QYHvyJtMzkt7VnJeYWZmK5xyg3mOrORl1G3NBXF5B5zF1zKvbTLt2cttmd8lMGmaRmYNgbuechBsbTVu1gZasIqL4O5N9qM2GGj5DZ3pQi5gu+Pf09hIZvdnqUxiUuC9vXQaMLCJY9fizAxoQsXNTl3TXahSW632UjQiOCtREXQymHnZ0tQE2Voc+rehYQwRI2LmRqKD7OPZ+6XKgtb4Q6Ye9BbQu+liAo3L6TIoObrCQzPQh2A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bdnsbSfL6Us8ijfNtg2vTN+EBYfZUMZnfngiZtSMAhE=;
+ b=RCqvR70mHnonokFaFcDtkVJDkxg0LMmh6pRUJrTp8+thz+ppazBAOZTNZoH20eJXQrGm5ZY41+34QIQWEVPrr9GdYbo/WwdP/mtV/Qh0zUWF61VsLrf8m7T7AsQG2o4chFXt/XSHOfme476GD0gRbs7ldkDFUVAtGucLV8TRBYzD3pVs76FmQfMiXrySMK3q8+AbhWwjmlJ6KGahVPnINeUT4bVj6FmvXYxnhnde1chk5ORFJlnu270FtlXQQukjaBHcczWyfG4A5OreIr5utqrUM8J2LeEPAqPcMPSq1anJYSjSB8/lEN7HOffe2aMyLKrAtv2j61vpZoMRG7jPQA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bdnsbSfL6Us8ijfNtg2vTN+EBYfZUMZnfngiZtSMAhE=;
+ b=dhMoWzjUZF70EolwFnjC4e4VmxSLdZAm3nClkUqzYBWVjGgLkz0bXU/qPzbQ5YYbvxSJy+zauRrk0pj7qoCKWOLKf29uFnr15CERFbVPgMISZ4E85w3HioHRsexl9TG9EO7hh81A5/a3C4dV/4UyTv1PwxdwrSpVfHSJaJl05UJrjNfWgZBchcUIR/55Uc1Q053jHPcCfGb2c2R/HEfFbNA+7IKoTIkiAZtGYUT+EBkB60pYVC0ncgkfB1RIwKywSPolnQeWlB2Vsd/v+cwYFoXRUWeXNUK20lMCXHkILA6toDdiYtDBupSviDTF5q64TRjvN86gPpMygcFQxVV4iQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
+ by BL1PR12MB5189.namprd12.prod.outlook.com (2603:10b6:208:308::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7; Wed, 5 Jan
+ 2022 18:24:39 +0000
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::464:eb3d:1fde:e6af]) by BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::464:eb3d:1fde:e6af%5]) with mapi id 15.20.4867.009; Wed, 5 Jan 2022
+ 18:24:38 +0000
+Date:   Wed, 5 Jan 2022 14:24:36 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     dledford@redhat.com, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] RDMA/uverbs: Check for null return of kmalloc_array
+Message-ID: <20220105182436.GA2855076@nvidia.com>
+References: <20211231093315.1917667-1-jiasheng@iscas.ac.cn>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211231093315.1917667-1-jiasheng@iscas.ac.cn>
+X-ClientProxiedBy: YTXPR0101CA0033.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b00::46) To BL0PR12MB5506.namprd12.prod.outlook.com
+ (2603:10b6:208:1cb::22)
 MIME-Version: 1.0
-References: <20211226143439.3985960-1-ruansy.fnst@fujitsu.com>
- <20211226143439.3985960-3-ruansy.fnst@fujitsu.com> <20220105181230.GC398655@magnolia>
-In-Reply-To: <20220105181230.GC398655@magnolia>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Wed, 5 Jan 2022 10:23:08 -0800
-Message-ID: <CAPcyv4iTaneUgdBPnqcvLr4Y_nAxQp31ZdUNkSRPsQ=9CpMWHg@mail.gmail.com>
-Subject: Re: [PATCH v9 02/10] dax: Introduce holder for dax_device
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        david <david@fromorbit.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jane Chu <jane.chu@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8c326f2b-043a-4a51-1f05-08d9d078a224
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5189:EE_
+X-Microsoft-Antispam-PRVS: <BL1PR12MB5189B02FE975CD2591930216C24B9@BL1PR12MB5189.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dknrRXev/hFZxNILWQiOWn3Qod3JtTNbSGDD++KHUsWNIKBDs+5ndYU5fUPiIIvYyvJo/UX+UZIA470iAmd5tve28pPuGKocUpbfIR/TRkHx3oKqIZncAJ7dOiMUIIvA9qg3kKlgNhjq29ypNsPqXdn5+NiyVUdJSjWhIEwz7TTUcQArQA+V+MMd1HSfatT11GldZriB2ZzsJm05m8nERELhQ7b4WAjCf2CSFpDilCi2CMBL+XokndFq7dXqzVbsZfO/orDN9d5NutP3nFPxPSj70Cv2iomeS5TzpqPN9TSmq8xDrFjU3GexhZw/L+c2pxBANiKSupbdmE70J9pY3D1asK8ghRfwOP47gSpcZytKYQr99NTctQUt160LGV5V/3NFKSF3OKklC4BoypCwNOxjf3LPGfkVA6haZGRnUUd4jimPSGwfian96Ggo3i5DIifmVJrWmYaZqq6IOao+yyLMNU46WbjaC2TZrkc593YycKELbKQsCqIPiDs9mhLMeWR6QbvXEprsJWTF1s//2rCCHLD1GqzCJ6r0d1fEcsqVRExv7vguos3BtTpV5vCVOgVXEk0v475fXotH3VEibCtu1i3LI2XGJ5ZEbc5p0E1rUa4pDU1pUEMtBktFkW8eBEtv5n7WWfO0N27N2mpsJg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8676002)(33656002)(83380400001)(4326008)(8936002)(2906002)(5660300002)(6486002)(36756003)(1076003)(2616005)(6512007)(6506007)(4744005)(6916009)(38100700002)(316002)(26005)(508600001)(186003)(86362001)(66476007)(66556008)(66946007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6VhoEw/ubgK/PUPX6Vh0t7sDM2++n+AvEFnssBoLwp5g1eldohRiNYAkA9vd?=
+ =?us-ascii?Q?3X4/+SlPKjTVSpRFXW/6XjItoDDcawnBSaRxTSSmse/k9JmoMs2rcBDpg5hb?=
+ =?us-ascii?Q?GZRWAT+m5sxN2aXaNVYkuCivsGAh97arHHk2vjNd5WpQqoVXJhBwySN7GUny?=
+ =?us-ascii?Q?jQSqJANWg3PeHS5G3U26xyH6/RCeTqYLtVk8J9lxfnlmsj+IKE2QqDhlCfZJ?=
+ =?us-ascii?Q?VtSKk9LCKF5U2q+GFMUlpR+tQ5lyoTTCMP/kmXjNCO3JtG3SeUlqRz5+c08H?=
+ =?us-ascii?Q?5WfCzFJv9FKWTMoKy4Lx1MyA7aT2zZaqlxZfzxup3WDQl5CpkR29+XeF3lKK?=
+ =?us-ascii?Q?rBjR0mMlOi9QOByE1Fx0mzt5dENAZDYafTS6pBMF70qQ1lu13435YwvXBfY7?=
+ =?us-ascii?Q?nJicFWn5cgupvoC6tvliQ51N5K86wGwvUnZE8pxgDYcEtW6pbVGU2BVfVux3?=
+ =?us-ascii?Q?HlaICWWGmm0qhYCoEpwn4SR90t/YeHOe1cVCXhUJl7dFALQMDXjiuhXRGMEm?=
+ =?us-ascii?Q?fJ5oxqExESYYNJodX3it0YMgGqjUFpn1iZTQEh2zhGAQi0YONIPY0/EnRD2w?=
+ =?us-ascii?Q?ROazzMil14ISZimkUpaXMrqzXnTOKMIHNlA6lI90Xrs+hF0w/8UA6jofIM4U?=
+ =?us-ascii?Q?RiK5eFXERsvwdY7vQh9+0xTJFeDSK+b91F1d0aIAD4XjM2uV6/2VOkMGPobl?=
+ =?us-ascii?Q?MFOeel+Z5vMiQrWO8GPLBtUa7XTceIg2rz8zmurDwOSrftXdH8I1+zAX09uT?=
+ =?us-ascii?Q?XX9t7vqU3lt6zr/OOTjp7Lti9OC/0Emxrdg+foLWVgIYdUuYCElWGOAYuXBc?=
+ =?us-ascii?Q?rVledcuJXWWViPOylZzOWNFkkeZtgaTt3Ti7ysenFPlLAtfQDfEF+J0cvGRF?=
+ =?us-ascii?Q?0lxyXgKfF7tOBtBLdUDB8m7AQuzkClfPI2QRdgAu9GZj3wHFNhRfKIy7zwaG?=
+ =?us-ascii?Q?PWu+Th2E1LJ6eLKKvMx2cp3QVOyXP+lhmp2K+qPW5Lg1ApsTU503+cjzy3/L?=
+ =?us-ascii?Q?vfrBDpxoiwzpNBdh8ULdjM9I9gqZCfnhUcjuQMFDS1Gfq5BgnqQoulajGWJN?=
+ =?us-ascii?Q?lwb9E8U34Vu586u9JwsLgyH9TujM1FPKaKP6yyfzga8SBpRxmFIRRds0/AU7?=
+ =?us-ascii?Q?ug2kjguRXT4b4mV42gKdiGbPNqvqSxVNavBr7EjKbd0I0DITHDGDQpL46iLm?=
+ =?us-ascii?Q?c0knBAcKUcbg3xTNAdji2DzWXNSGzC4Ia6s50t/mmt+pUl1fmcTtNMJ8HDKO?=
+ =?us-ascii?Q?j4qsAUwP0SnEksFfOumyoVHu3Qmuuee13Plxu+LCRyw669Lno1B4+L00oBof?=
+ =?us-ascii?Q?xQrJOGAyP2spOhNPdnbcE2kIWpdGqhhdi5lO5A8cIhERWzL1lzxcuqRcibju?=
+ =?us-ascii?Q?O6Z8uCCL8ooT4IvUEOcHJTuYvjzUoDf6b3wRgB7K+q/sASMZKsZ+jUbzDLbs?=
+ =?us-ascii?Q?K9Fhj+/nO7ojs/M3NOqTAo2+Vd9PavqSasFf/L0lDlNRwnRRWmiXZ7/pJ5qL?=
+ =?us-ascii?Q?f1CaSCAfvmgzYT1VuOV1Xwi/5lFrZuRFMrWm7u2PHL864RzA/hwGItZxKk7x?=
+ =?us-ascii?Q?aBYpgWGYkD7etTHB91k=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8c326f2b-043a-4a51-1f05-08d9d078a224
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2022 18:24:38.7376
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8LIg4a/3vvxQ2hE8+bhmpN8xjf9fyz7iSn/YKEsilqG9not5OshJ78Nrkvb3btxY
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5189
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 5, 2022 at 10:12 AM Darrick J. Wong <djwong@kernel.org> wrote:
->
-> On Sun, Dec 26, 2021 at 10:34:31PM +0800, Shiyang Ruan wrote:
-> > To easily track filesystem from a pmem device, we introduce a holder for
-> > dax_device structure, and also its operation.  This holder is used to
-> > remember who is using this dax_device:
-> >  - When it is the backend of a filesystem, the holder will be the
-> >    instance of this filesystem.
-> >  - When this pmem device is one of the targets in a mapped device, the
-> >    holder will be this mapped device.  In this case, the mapped device
-> >    has its own dax_device and it will follow the first rule.  So that we
-> >    can finally track to the filesystem we needed.
-> >
-> > The holder and holder_ops will be set when filesystem is being mounted,
-> > or an target device is being activated.
-> >
-> > Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-> > ---
-> >  drivers/dax/super.c | 62 +++++++++++++++++++++++++++++++++++++++++++++
-> >  include/linux/dax.h | 29 +++++++++++++++++++++
-> >  2 files changed, 91 insertions(+)
-> >
-> > diff --git a/drivers/dax/super.c b/drivers/dax/super.c
-> > index c46f56e33d40..94c51f2ee133 100644
-> > --- a/drivers/dax/super.c
-> > +++ b/drivers/dax/super.c
-> > @@ -20,15 +20,20 @@
-> >   * @inode: core vfs
-> >   * @cdev: optional character interface for "device dax"
-> >   * @private: dax driver private data
-> > + * @holder_data: holder of a dax_device: could be filesystem or mapped device
-> >   * @flags: state and boolean properties
-> > + * @ops: operations for dax_device
-> > + * @holder_ops: operations for the inner holder
-> >   */
-> >  struct dax_device {
-> >       struct inode inode;
-> >       struct cdev cdev;
-> >       void *private;
-> >       struct percpu_rw_semaphore rwsem;
-> > +     void *holder_data;
-> >       unsigned long flags;
-> >       const struct dax_operations *ops;
-> > +     const struct dax_holder_operations *holder_ops;
-> >  };
-> >
-> >  static dev_t dax_devt;
-> > @@ -192,6 +197,29 @@ int dax_zero_page_range(struct dax_device *dax_dev, pgoff_t pgoff,
-> >  }
-> >  EXPORT_SYMBOL_GPL(dax_zero_page_range);
-> >
-> > +int dax_holder_notify_failure(struct dax_device *dax_dev, u64 off,
-> > +                           u64 len, int mf_flags)
-> > +{
-> > +     int rc;
-> > +
-> > +     dax_read_lock(dax_dev);
-> > +     if (!dax_alive(dax_dev)) {
-> > +             rc = -ENXIO;
-> > +             goto out;
-> > +     }
-> > +
-> > +     if (!dax_dev->holder_ops) {
-> > +             rc = -EOPNOTSUPP;
-> > +             goto out;
-> > +     }
-> > +
-> > +     rc = dax_dev->holder_ops->notify_failure(dax_dev, off, len, mf_flags);
-> > +out:
-> > +     dax_read_unlock(dax_dev);
-> > +     return rc;
-> > +}
-> > +EXPORT_SYMBOL_GPL(dax_holder_notify_failure);
-> > +
-> >  #ifdef CONFIG_ARCH_HAS_PMEM_API
-> >  void arch_wb_cache_pmem(void *addr, size_t size);
-> >  void dax_flush(struct dax_device *dax_dev, void *addr, size_t size)
-> > @@ -254,6 +282,10 @@ void kill_dax(struct dax_device *dax_dev)
-> >               return;
-> >       dax_write_lock(dax_dev);
-> >       clear_bit(DAXDEV_ALIVE, &dax_dev->flags);
-> > +
-> > +     /* clear holder data */
-> > +     dax_dev->holder_ops = NULL;
-> > +     dax_dev->holder_data = NULL;
-> >       dax_write_unlock(dax_dev);
-> >  }
-> >  EXPORT_SYMBOL_GPL(kill_dax);
-> > @@ -401,6 +433,36 @@ void put_dax(struct dax_device *dax_dev)
-> >  }
-> >  EXPORT_SYMBOL_GPL(put_dax);
-> >
-> > +void dax_register_holder(struct dax_device *dax_dev, void *holder,
-> > +             const struct dax_holder_operations *ops)
-> > +{
-> > +     if (!dax_alive(dax_dev))
-> > +             return;
-> > +
-> > +     dax_dev->holder_data = holder;
-> > +     dax_dev->holder_ops = ops;
->
-> Shouldn't this return an error code if the dax device is dead or if
-> someone already registered a holder?  I'm pretty sure XFS should not
-> bind to a dax device if someone else already registered for it...
+On Fri, Dec 31, 2021 at 05:33:15PM +0800, Jiasheng Jiang wrote:
+> Because of the possible failure of the allocation, data might be NULL
+> pointer and will cause the dereference of the NULL pointer later.
+> Therefore, it might be better to check it and return -ENOMEM.
+> 
+> Fixes: 6884c6c4bd09 ("RDMA/verbs: Store the write/write_ex uapi entry points in the uverbs_api")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+> ---
+>  drivers/infiniband/core/uverbs_uapi.c | 3 +++
+>  1 file changed, 3 insertions(+)
 
-Agree, yes.
+Applied to for-rc, thanks
 
->
-> ...unless you want to use a notifier chain for failure events so that
-> there can be multiple consumers of dax failure events?
-
-No, I would hope not. It should be 1:1 holders to dax-devices. Similar
-ownership semantics like bd_prepare_to_claim().
+Jason

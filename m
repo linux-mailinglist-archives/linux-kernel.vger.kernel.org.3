@@ -2,125 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85A9A485BB1
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 23:32:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A03485BB5
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 23:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245059AbiAEWcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 17:32:13 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:59192 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245052AbiAEWcI (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 17:32:08 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E158C617D5
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 22:32:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC3ECC36AE9;
-        Wed,  5 Jan 2022 22:32:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641421927;
-        bh=+hYP4qVyGmZPt9bki7UAz8cSVMAh+3SjozPNm642HKw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=l+MVf6K8Z4MXXkVnKZNEub6x3DUBtnm7J6tklbFgkkYzo+BRGV3gvdZ32SUY7SD8L
-         UMC1gWaa58INQXUjTvq2CucV4ifRJFeREoGi03T3TmWZPaU+ZfZWsJZGNnKCluYEuH
-         3HzT5u1k6M8H1cxxqzBl6Ed91QvC///cbN+pTxinaUBVNXtX+zBoUU6U1x7fRrEVVc
-         7+a0dgL2j6LSRq4Jdaf/+AHo2GpntNbxEK+txiX2F/UjrDmlG5nV7N74WOlauJQsmR
-         B3txBkK/tgnm4bOTFBvJ+20jejol/bya0fBs1zsmTKJOPVKhVZFukZJyAaTjqX+5CW
-         IRiiqto9UB3nQ==
-Date:   Thu, 6 Jan 2022 07:32:03 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Xiangyang Zhang <xyz.sun.ok@gmail.com>, mingo@redhat.com,
-        Masami Hiramatsu <mhiramat@kernel.org>, oleg@redhat.com,
-        namhyung.kim@lge.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tracing/kprobes: 'nmissed' not showed correctly for
- kretprobe
-Message-Id: <20220106073203.123c4f7e38cc07eccd02aa9b@kernel.org>
-In-Reply-To: <20220105142208.1dbc20cc@gandalf.local.home>
-References: <20211211150032.7568-1-xyz.sun.ok@gmail.com>
-        <20220105141556.12fb2ceb@gandalf.local.home>
-        <20220105142208.1dbc20cc@gandalf.local.home>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S245071AbiAEWd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 17:33:26 -0500
+Received: from mail-dm6nam10on2047.outbound.protection.outlook.com ([40.107.93.47]:33159
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S245052AbiAEWdY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 17:33:24 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=D+CmWPgxdoEAdmqiJ7JtNgtbC0y+9hAGo//53QGcAPoFnKHI3BjGwoWqoMemh4qt1ZFh5amI/ejsc+GFy7ACkYmZrIdlSpFA9hXumoST5HlNkZfuuSpcHI3m/PAeQiRxftVKA3Tow5InbS5c6HKEkDtZT2tDX7qDGN5cqQac06zV4l1SK97X0BsCzXCqsEfg7A1RGyDBq5nICJUJLusM4YN7A6E7IwArBpz6OEgovW+RtnsXotNxvHnSTMIli1DwATTyIySN6onSgEO23ywDdb4LUrMBevjSld5E/NUJh9x8M386SEnfz3r1WiqpRwPFDzVytGX/G+QGET5nCC3XKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mI9fGJNSDSeDVRj3b/ragI3b4Qd32j/j/dczaV02WTE=;
+ b=a2QNRk44XEVUvQidcKv2pp3SHuHtL/dQuBKB9tdPXZmAg01Ewqv9tOXEsYX/IdhPnAUyQnDlWA+aR/lI+J7lQ6YpPMvh5MGR8NQoOGT3qxNZyNp1tEsQrgSkE8Ey/0FuhFdQ/zN5yZyPdbp8PDdL0tSNfyEN/NtF5BKNGSNQaf5T1M5sLFo4RGriGF97tWvVcid6tjdj7l6GU88fkRlQs8JIq4sCg49naMg5WvvU+Cu+k9A2F3C7Lv+t1Dg2JiLS/+gkZTEWyedwXWBrsDHmcAM/rnIVY7cl3QtR3Ixx/2f3zLKAK+L6l5SKhrGXKTwXa1rvnj7zj8B2g1V1PZadiw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mI9fGJNSDSeDVRj3b/ragI3b4Qd32j/j/dczaV02WTE=;
+ b=mIeClyOGlOY1SMTUfc8pXv3RNonsXkMLsPk1zeIopV7dT7Ltj7HPfXbqHdK0TjdaUwFdI5oLIAitqvi9c978+VQ+qwWHzgdQMrZ0tPLR7l6M4WKAZk3BjZ5ouNb1Ko0H6EUGf+UAWsy7c0wdX8LxMadBldaV8+Ngj9gX32Q2OXU=
+Received: from MWHPR14CA0069.namprd14.prod.outlook.com (2603:10b6:300:81::31)
+ by CY4PR12MB1125.namprd12.prod.outlook.com (2603:10b6:903:43::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Wed, 5 Jan
+ 2022 22:33:22 +0000
+Received: from CO1NAM11FT054.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:300:81:cafe::a5) by MWHPR14CA0069.outlook.office365.com
+ (2603:10b6:300:81::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7 via Frontend
+ Transport; Wed, 5 Jan 2022 22:33:22 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CO1NAM11FT054.mail.protection.outlook.com (10.13.174.70) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4867.7 via Frontend Transport; Wed, 5 Jan 2022 22:33:22 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Wed, 5 Jan
+ 2022 16:33:20 -0600
+Date:   Wed, 5 Jan 2022 16:32:45 -0600
+From:   Michael Roth <michael.roth@amd.com>
+To:     Sean Christopherson <seanjc@google.com>
+CC:     <linux-kselftest@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
+        Nathan Tempelman <natet@google.com>,
+        Marc Orr <marcorr@google.com>,
+        Steve Rutherford <srutherford@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Ricardo Koller <ricarkol@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        "Janosch Frank" <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        "Claudio Imbrenda" <imbrenda@linux.ibm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        "Suzuki K Poulose" <suzuki.poulose@arm.com>,
+        <kvmarm@lists.cs.columbia.edu>
+Subject: Re: [RFC PATCH 00/10] KVM: selftests: Add support for
+ test-selectable ucall implementations
+Message-ID: <20220105223245.2qebwfphyf2t43ni@amd.com>
+References: <20211210164620.11636-1-michael.roth@amd.com>
+ <Yc4gcJdhxthBKUUd@google.com>
+ <20220104233517.kxjbdw4t7taymab5@amd.com>
+ <YdTjnRZQID5IabK0@google.com>
+ <20220105170244.jwr6i2erecbhx3fz@amd.com>
+ <YdXYuaoXJux6lHrF@google.com>
+ <20220105191107.qx67wf2coc3q6giu@amd.com>
+ <YdX0SRoBXReggrVA@google.com>
+ <20220105213519.g746jzf756nax562@amd.com>
+ <YdYVjfMqf+GjsU+p@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <YdYVjfMqf+GjsU+p@google.com>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB03.amd.com
+ (10.181.40.144)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2f6923fe-8589-4b0b-c689-08d9d09b6160
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1125:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR12MB11259BE39B3698FA1D27E922954B9@CY4PR12MB1125.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PCq4HRz4CI/hhEzfpCKMnAsUwcDb5sYJ8S28ARQzEuaCfdJeYXWKKdW8DZzcatPnLYMmMkQd97IyBy4AeXMdaZpjrKdB17OIuWVkFsKX/Fjgnvn+mHrysiSEqqRXOuDlPBvi9QQZgIqOl4iBM6QJJGGVth48ci55IH+1G3Q8NhJfXVNY66o1CAEWb8+mn0s120F/46fN1OQ/hdIJprHaNnLXlBXFFEaYRzrV3VetdJJjNyPtw/3pwupKy6WYN7hD9FElaa6c3Nb9yMWKNExUrzMlD7y5RIghrCkBxaG2cf/LpbHscbLpWu2MTTaJGSJF65Ip1EuuWdA4UwpcDaxnSkSidGiWnu0r8RqWR7tLTjR5Wx/PjeSyU6fSbBzixI8hjv5KL6LNQk7+YonzsFmMvPQDUyl2pMu0lT2DrPBdFgdmTtuokCFjf7LWUNI8u+THq9CwdckcchXKqTOBuGkVELG7L1QEtsunw5WCZP2rPeghn1gqdwbq46nImqUmR30VYT1j19hQ8CPmPXAFHiI4HOhyFozsT1WQTU+1yS7P4UGUYQUjtuMqmQmGfP0xKtvOBSYRxzRY87mcJZ3Zs6lEjLss7r6oIvskpliP4FQ9oxa3UFb/QH5SzqrBQJJWZsUiK5hQSECRKTpVsYYrPUOCpHMvKETAh8Hu9UUbkAIzPc7sqjErUqk9S9kP9OaveZEbDeAWYYjD9MLxB0eUJTaSMNUrXj57uhkR2LTbQsAEe9kHY9XH3mvPWle86JooDLuhTZp6Bmg52yNWktQK4cvv2O7alvRN9q2EYoFBHnZxjdY=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(40470700002)(46966006)(1076003)(47076005)(508600001)(16526019)(186003)(81166007)(40460700001)(36756003)(54906003)(8936002)(36860700001)(83380400001)(26005)(86362001)(316002)(336012)(426003)(6666004)(8676002)(7416002)(4326008)(2906002)(356005)(2616005)(70586007)(70206006)(44832011)(5660300002)(6916009)(82310400004)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2022 22:33:22.0157
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f6923fe-8589-4b0b-c689-08d9d09b6160
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT054.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1125
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Jan 2022 14:22:08 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> Resending again, this time with Masami's working email address.
-> 
-> On Wed, 5 Jan 2022 14:15:56 -0500
-> Steven Rostedt <rostedt@goodmis.org> wrote:
-> 
-> > On Sat, 11 Dec 2021 23:00:32 +0800
-> > Xiangyang Zhang <xyz.sun.ok@gmail.com> wrote:
-> > 
-> > > The 'nmissed' column of the 'kprobe_profile' file for kretprobe is
-> > > always zero, because 'nmissed' for kretprobe is maintained in
-> > > 'tk->rp.nmissed' but not in 'tk->rp.kp.nmissed'
+On Wed, Jan 05, 2022 at 10:02:53PM +0000, Sean Christopherson wrote:
+> On Wed, Jan 05, 2022, Michael Roth wrote:
+> > On Wed, Jan 05, 2022 at 07:40:57PM +0000, Sean Christopherson wrote:
+> > > As for ucall_init(), I think the best approach would be to make kvm_vm_elf_load()
+> > > a static and replace all calls with:
 > > > 
-> > > Fixes: c31ffb3ff633 ("tracing/kprobes: Factor out struct trace_probe")
-> > > Signed-off-by: Xiangyang Zhang <xyz.sun.ok@gmail.com>
-> > > ---
-> > >  kernel/trace/trace_kprobe.c | 4 +++-
-> > >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > > 	kvm_vm_load_guest(vm);
 > > > 
-> > > diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-> > > index d10c01948e68..2b9de6826e94 100644
-> > > --- a/kernel/trace/trace_kprobe.c
-> > > +++ b/kernel/trace/trace_kprobe.c
-> > > @@ -1175,15 +1175,17 @@ static int probes_profile_seq_show(struct seq_file *m, void *v)
-> > >  {
-> > >  	struct dyn_event *ev = v;
-> > >  	struct trace_kprobe *tk;
-> > > +	unsigned long nmissed = 0;  
+> > > where its implementation is:
+> > > 
+> > >   void kvm_vm_load_guest(struct kvm_vm *vm)
+> > >   {
+> > >   	kvm_vm_elf_load(vm, program_invocation_name);
+> > > 
+> > > 	ucall_init(vm);
+> > >   }
+> > > 
+> > > The logic being that if a test creates a VM but never loads any code into the guest,
+> > > e.g. kvm_create_max_vcpus, then it _can't_ make ucalls.
 > > 
-> > No need to initialize this to zero, the first use is an assignment.
+> > Makes sense. And if different ops are needed for vmgexit()/tdcall() it
+> > could be something like (if based on patches 1-5 of this series, and
+> > extending vm_guest_mode as you suggested earlier):
 > > 
-> > >  
-> > >  	if (!is_trace_kprobe(ev))
-> > >  		return 0;
-> > >  
-> > >  	tk = to_trace_kprobe(ev);
-> > > +	nmissed = tk->rp.handler ? tk->rp.nmissed : tk->rp.kp.nmissed;
-> > >  	seq_printf(m, "  %-44s %15lu %15lu\n",
-> > >  		   trace_probe_name(&tk->tp),
-> > >  		   trace_kprobe_nhit(tk),
-> > > -		   tk->rp.kp.nmissed);
-> > > +		   nmissed);  
+> >    void kvm_vm_load_guest(struct kvm_vm *vm)
+> >    {
 > > 
-> > Masami, what's your thoughts on this patch?
-
-OK, this is a good catch :), but there are 2 issues.
-
-1. kretprobe can be skipped by 2 reasons, shortage of kretprobe_instance which
-is counted by rp.nmissed, and kprobe itself is missed by some reason (this
-can be happen if KPROBE_EVENTS_ON_NOTRACE=n. Thus, better solution is to show
-'tk->rp.nmissed + tk->rp.kp.nmissed'.
-
-2. the commit c31ffb3ff633 is not actual commit which introduce this issue.
-  this was introduced by 4a846b443b4e ("tracing/kprobes: Cleanup kprobe tracer code.")
-
-'git blame' tells you the commit which changes that line, but that can be just
-a refactoring (renaming). I recommend you to search the correct one by 'git log -p'.
-
-Thank you,
-
-> > 
-> > -- Steve
-> > 
-> > >  
-> > >  	return 0;
-> > >  }  
-> > 
+> >      kvm_vm_elf_load(vm, program_invocation_name);
+> >   
+> >      if (vm->mode == VM_MODE_SEV)
+> >   	    ucall_init_ops(vm, ucall_ops_pio_vmgexit);
+> >      else (vm->vm_type == VM_MODE_TDX)
 > 
+> I don't think we want to do this here, but instead down in the arch-specific
+> ucall_init().  Also, not sure if I was clear before (can't tell what you interpreted
+> based on the above snippet), but I think we'll want VM_MODE_SEV etc... to be
+> modifiers on top of the VA/PA stuff.
 
+Ok, something like this (with additional ones added as-needed)?
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+  #define VM_MODE_DEFAULT VM_MODE_PXXV48_4K
+  +#define SEV_VM_MODE_DEFAULT SEV_VM_MODE_PXXV48_4K
+
+  enum vm_guest_mode {
+    ...
+    VM_MODE_PXXV48_4K,
+    ...
+    NUM_VM_MODES,
+  + SEV_VM_MODE_PXXV48_4K,
+  + NUM_VM_MODES_EXTENDED,
+  }
+
+> 
+> >   	    ucall_init_ops(vm, ucall_ops_pio_tdcall);
+> >      else
+> >   	    ucall_init_ops(vm, ucall_ops_pio);
+> > 
+> > Shame we have to update all the kvm_vm_elf_load() call-sites, but
+> > they'd end up potentially breaking things if left as-is anyway.
+> > 
+> > Were you planning on sending patches for these changes, or should I incorporate
+> > your prototype and take a stab at the other changes as part of v2 of this
+> > series?
+> 
+> Nope, all yours.  Thanks!
+
+Thanks for the suggestions!

@@ -2,109 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F36B248585C
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7B1248585E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:32:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242985AbiAESbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 13:31:45 -0500
-Received: from aposti.net ([89.234.176.197]:41922 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243023AbiAESbR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 13:31:17 -0500
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pm@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 6/6] iio: pressure: bmp280: Use new PM macros
-Date:   Wed,  5 Jan 2022 18:29:39 +0000
-Message-Id: <20220105182939.106885-7-paul@crapouillou.net>
-In-Reply-To: <20220105182939.106885-1-paul@crapouillou.net>
-References: <20220105182939.106885-1-paul@crapouillou.net>
+        id S243062AbiAEScN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 13:32:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242992AbiAESbj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 13:31:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3242DC061201
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 10:31:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E29BBB81D0E
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 18:31:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB1A9C36AE3;
+        Wed,  5 Jan 2022 18:31:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641407496;
+        bh=zE+7ffio+O9uJrwxJfyDIOj3L0z6ifW32qNmwf1FA3U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eeydPoE84v4MKL6GSE8oBVVlpoXS/9hT0UqM8e+bjRkHeoK8duRTH2+ixq8gepOdd
+         fd324jb4J9onsTE9ZSJGbM655PSF+Ni0odw0MlebHnzdvj7ugY+ov2LN4ce2UfSCWk
+         kGcGOCAbM3fAXiwSL5ekNoVexRit9n770PaTxCXo=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gabriel Somlo <somlo@cmu.edu>,
+        "Michael S. Tsirkin" <mst@redhat.com>, qemu-devel@nongnu.org
+Subject: [PATCH] qemu_fw_cfg: use default_groups in kobj_type
+Date:   Wed,  5 Jan 2022 19:31:33 +0100
+Message-Id: <20220105183133.2812848-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1898; h=from:subject; bh=zE+7ffio+O9uJrwxJfyDIOj3L0z6ifW32qNmwf1FA3U=; b=owGbwMvMwCRo6H6F97bub03G02pJDIlXn7Bed3q+1jA1e/uq2UVeKU9ZnnNHeyp92FnB5DNh3XS2 qkvzO2JZGASZGGTFFFm+bOM5ur/ikKKXoe1pmDmsTCBDGLg4BWAiVfcZ5oqZLX4ttOKekBxfXfXaCM evtecXCjEs2HDaSdxTj+m9l0/7wdqlH7fsYmAPAQA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the new EXPORT_RUNTIME_DEV_PM_OPS() macro. It allows the underlying
-dev_pm_ops struct as well as the suspend/resume callbacks to be detected
-as dead code in the case where CONFIG_PM is disabled, without having to
-wrap everything inside #ifdef CONFIG_PM guards.
+There are currently 2 ways to create a set of sysfs files for a
+kobj_type, through the default_attrs field, and the default_groups
+field.  Move the firmware qemu_fw_cfg sysfs code to use default_groups
+field which has been the preferred way since aa30f47cf666 ("kobject: Add
+support for default attribute groups to kobj_type") so that we can soon
+get rid of the obsolete default_attrs field.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Cc: Gabriel Somlo <somlo@cmu.edu>
+Cc: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: qemu-devel@nongnu.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
+ drivers/firmware/qemu_fw_cfg.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Notes:
-    v2: New patch
-
- drivers/iio/pressure/bmp280-core.c | 11 ++---------
- drivers/iio/pressure/bmp280-i2c.c  |  2 +-
- drivers/iio/pressure/bmp280-spi.c  |  2 +-
- 3 files changed, 4 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/iio/pressure/bmp280-core.c b/drivers/iio/pressure/bmp280-core.c
-index 6b7da40f99c8..bf8167f43c56 100644
---- a/drivers/iio/pressure/bmp280-core.c
-+++ b/drivers/iio/pressure/bmp280-core.c
-@@ -1138,7 +1138,6 @@ int bmp280_common_probe(struct device *dev,
+diff --git a/drivers/firmware/qemu_fw_cfg.c b/drivers/firmware/qemu_fw_cfg.c
+index 172c751a4f6c..c62f05420d32 100644
+--- a/drivers/firmware/qemu_fw_cfg.c
++++ b/drivers/firmware/qemu_fw_cfg.c
+@@ -395,7 +395,7 @@ static void fw_cfg_sysfs_cache_cleanup(void)
+ 	}
  }
- EXPORT_SYMBOL(bmp280_common_probe);
  
--#ifdef CONFIG_PM
- static int bmp280_runtime_suspend(struct device *dev)
- {
- 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
-@@ -1159,15 +1158,9 @@ static int bmp280_runtime_resume(struct device *dev)
- 	usleep_range(data->start_up_time, data->start_up_time + 100);
- 	return data->chip_info->chip_config(data);
- }
--#endif /* CONFIG_PM */
+-/* default_attrs: per-entry attributes and show methods */
++/* per-entry attributes and show methods */
  
--const struct dev_pm_ops bmp280_dev_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
--				pm_runtime_force_resume)
--	SET_RUNTIME_PM_OPS(bmp280_runtime_suspend,
--			   bmp280_runtime_resume, NULL)
--};
--EXPORT_SYMBOL(bmp280_dev_pm_ops);
-+EXPORT_RUNTIME_DEV_PM_OPS(bmp280_dev_pm_ops, bmp280_runtime_suspend,
-+			  bmp280_runtime_resume, NULL);
+ #define FW_CFG_SYSFS_ATTR(_attr) \
+ struct fw_cfg_sysfs_attribute fw_cfg_sysfs_attr_##_attr = { \
+@@ -428,6 +428,7 @@ static struct attribute *fw_cfg_sysfs_entry_attrs[] = {
+ 	&fw_cfg_sysfs_attr_name.attr,
+ 	NULL,
+ };
++ATTRIBUTE_GROUPS(fw_cfg_sysfs_entry);
  
- MODULE_AUTHOR("Vlad Dogaru <vlad.dogaru@intel.com>");
- MODULE_DESCRIPTION("Driver for Bosch Sensortec BMP180/BMP280 pressure and temperature sensor");
-diff --git a/drivers/iio/pressure/bmp280-i2c.c b/drivers/iio/pressure/bmp280-i2c.c
-index 8b03ea15c0d0..35045bd92846 100644
---- a/drivers/iio/pressure/bmp280-i2c.c
-+++ b/drivers/iio/pressure/bmp280-i2c.c
-@@ -58,7 +58,7 @@ static struct i2c_driver bmp280_i2c_driver = {
- 	.driver = {
- 		.name	= "bmp280",
- 		.of_match_table = bmp280_of_i2c_match,
--		.pm = &bmp280_dev_pm_ops,
-+		.pm = pm_ptr(&bmp280_dev_pm_ops),
- 	},
- 	.probe		= bmp280_i2c_probe,
- 	.id_table	= bmp280_i2c_id,
-diff --git a/drivers/iio/pressure/bmp280-spi.c b/drivers/iio/pressure/bmp280-spi.c
-index 625b86878ad8..41f6cc56d229 100644
---- a/drivers/iio/pressure/bmp280-spi.c
-+++ b/drivers/iio/pressure/bmp280-spi.c
-@@ -109,7 +109,7 @@ static struct spi_driver bmp280_spi_driver = {
- 	.driver = {
- 		.name = "bmp280",
- 		.of_match_table = bmp280_of_spi_match,
--		.pm = &bmp280_dev_pm_ops,
-+		.pm = pm_ptr(&bmp280_dev_pm_ops),
- 	},
- 	.id_table = bmp280_spi_id,
- 	.probe = bmp280_spi_probe,
+ /* sysfs_ops: find fw_cfg_[entry, attribute] and call appropriate show method */
+ static ssize_t fw_cfg_sysfs_attr_show(struct kobject *kobj, struct attribute *a,
+@@ -454,7 +455,7 @@ static void fw_cfg_sysfs_release_entry(struct kobject *kobj)
+ 
+ /* kobj_type: ties together all properties required to register an entry */
+ static struct kobj_type fw_cfg_sysfs_entry_ktype = {
+-	.default_attrs = fw_cfg_sysfs_entry_attrs,
++	.default_groups = fw_cfg_sysfs_entry_groups,
+ 	.sysfs_ops = &fw_cfg_sysfs_attr_ops,
+ 	.release = fw_cfg_sysfs_release_entry,
+ };
 -- 
 2.34.1
 

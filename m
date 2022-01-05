@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A85A94855AF
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:18:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93AD24855B3
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:20:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236822AbiAEPSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 10:18:23 -0500
-Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:60435 "EHLO
-        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241329AbiAEPSM (ORCPT
+        id S241329AbiAEPUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 10:20:17 -0500
+Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:58639 "EHLO
+        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241250AbiAEPUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 10:18:12 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R351e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0V127ybZ_1641395873;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V127ybZ_1641395873)
+        Wed, 5 Jan 2022 10:20:14 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R331e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V127yqg_1641396007;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V127yqg_1641396007)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 05 Jan 2022 23:17:59 +0800
+          Wed, 05 Jan 2022 23:20:12 +0800
 From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     saeedm@nvidia.com
-Cc:     leon@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+To:     giovanni.cabiddu@intel.com
+Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        qat-linux@intel.com, linux-crypto@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
         Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] net/mlx5e: Fix missing error code in mlx5e_rx_reporter_err_icosq_cqe_recover()
-Date:   Wed,  5 Jan 2022 23:17:51 +0800
-Message-Id: <20220105151751.40723-1-jiapeng.chong@linux.alibaba.com>
+Subject: [PATCH] crypto: qat - Unsigned comparison with less than zero
+Date:   Wed,  5 Jan 2022 23:20:05 +0800
+Message-Id: <20220105152005.43305-1-jiapeng.chong@linux.alibaba.com>
 X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -33,37 +33,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The error code is missing in this code scenario, add the error code
-'-EINVAL' to the return value 'err'.
+Fix coccicheck warning:
 
-Eliminate the follow smatch warning:
-
-drivers/net/ethernet/mellanox/mlx5/core/en/reporter_rx.c:91
-mlx5e_rx_reporter_err_icosq_cqe_recover() warn: missing error code
-'err'.
+./drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c:67:5-8: WARNING:
+Unsigned expression compared with zero: ret < 0.
 
 Reported-by: Abaci Robot <abaci@linux.alibaba.com>
 Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en/reporter_rx.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_rx.c
-index 2684e9da9f41..ceb21573db6c 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_rx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_rx.c
-@@ -87,8 +87,10 @@ static int mlx5e_rx_reporter_err_icosq_cqe_recover(void *ctx)
- 		goto out;
- 	}
+diff --git a/drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c b/drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c
+index 6d10edc40aca..68d39c833332 100644
+--- a/drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c
++++ b/drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c
+@@ -52,7 +52,7 @@ static const char *const dev_cfg_services[] = {
+ static int get_service_enabled(struct adf_accel_dev *accel_dev)
+ {
+ 	char services[ADF_CFG_MAX_VAL_LEN_IN_BYTES] = {0};
+-	u32 ret;
++	int ret;
  
--	if (state != MLX5_SQC_STATE_ERR)
-+	if (state != MLX5_SQC_STATE_ERR) {
-+		err = -EINVAL;
- 		goto out;
-+	}
- 
- 	mlx5e_deactivate_rq(rq);
- 	if (xskrq)
+ 	ret = adf_cfg_get_param_value(accel_dev, ADF_GENERAL_SEC,
+ 				      ADF_SERVICES_ENABLED, services);
 -- 
 2.20.1.7.g153144c
 

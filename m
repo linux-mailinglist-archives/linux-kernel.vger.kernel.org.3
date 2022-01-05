@@ -2,90 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB946484E78
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 07:50:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26E76484E7C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 07:53:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237732AbiAEGuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 01:50:05 -0500
-Received: from todd.t-8ch.de ([159.69.126.157]:40711 "EHLO todd.t-8ch.de"
+        id S237795AbiAEGw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 01:52:57 -0500
+Received: from mga06.intel.com ([134.134.136.31]:17379 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229759AbiAEGuC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 01:50:02 -0500
-Date:   Wed, 5 Jan 2022 07:49:59 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1641365400;
-        bh=afrKCOqNubeiPYf4TQvcYsO4O7woEkun/NZnSzhJmB0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bSKMNX6/W1IBeitY5sfihEqq17clNJCbw7+sQUR87j5l6I4jTXj6cDC0bH0c6VYDD
-         y2ce/0NzjWIsudlb+MMKJHRBrD4A/rJoOaIcafIKjuVDrvgukBt4IAnQG3JZiy05UR
-         tEKDJ+sdPx5y6LT3BVX3VbJ2P/HMKLzWEmr214hw=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] power: supply: validate size of power_supply_attrs
- at compiletime
-Message-ID: <5bbd9f31-f6b5-4554-958c-71ec9ebd0363@t-8ch.de>
-References: <52cedbd4-7db2-7d81-f6c6-e6f6b7436545@gmail.com>
- <20220105064239.2689-2-linux@weissschuh.net>
+        id S229759AbiAEGw4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 01:52:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641365576; x=1672901576;
+  h=cc:subject:to:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=NfLc3B58P2xIUXLczC9zkU0pb72XnW/r7ysxWZe4Nnw=;
+  b=ShMpdl0jmPfZmtTtFE04uwMekIluZUELtKLmOHatMLNy/BfzxFmDMaue
+   D3OH4xBc3E7ygmU+Dh68R5tRq6qLVUtgyuEdsnYNSTu6w6WJYJ5jUpNUx
+   SsBJJ30ZvM71Untl57j/YQkreI6AvGr++DBOyG4N4zmlJtMVkcfxnC+Pv
+   8kO6sw6D0CoX9JvP9Iv3Jhub9Sy35VPAM1uMhhfXvcrXx6OZtmqq95whn
+   HRb0O6KTHLwP3C/mCfCMv894Ng+7CwH2HGY+rm8Womt06DBgTfoUjy5lA
+   gn9749xxdzZa9PUhI69399y6EUfJf9IL7SIioPwPyFeKT+3q/9UkqlqlQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="303134244"
+X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
+   d="scan'208";a="303134244"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 22:52:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
+   d="scan'208";a="526391598"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
+  by orsmga008.jf.intel.com with ESMTP; 04 Jan 2022 22:52:48 -0800
+Cc:     baolu.lu@linux.intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 00/14] Fix BUG_ON in vfio_iommu_group_notifier()
+To:     Jason Gunthorpe <jgg@nvidia.com>
+References: <20220104015644.2294354-1-baolu.lu@linux.intel.com>
+ <20220104124800.GF2328285@nvidia.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+Message-ID: <f42e5d09-6578-98a4-a0f3-097f69bb7c3a@linux.intel.com>
+Date:   Wed, 5 Jan 2022 14:52:11 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220105064239.2689-2-linux@weissschuh.net>
-Jabber-ID: thomas@t-8ch.de
-X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
-X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
+In-Reply-To: <20220104124800.GF2328285@nvidia.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian, Hans,
+Hi Jason,
 
-On 2022-01-05 07:42+0100, Thomas Weißschuh wrote:
-> For each member of enum power_supply_property a matching entry in
-> power_supply_attrs is needed.
-> Add a basic test at compiletime to validate this in addition to the
-> existing runtime testing.
+On 1/4/22 8:48 PM, Jason Gunthorpe wrote:
+> On Tue, Jan 04, 2022 at 09:56:30AM +0800, Lu Baolu wrote:
 > 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
->  drivers/power/supply/power_supply_sysfs.c | 2 ++
->  include/linux/power_supply.h              | 2 ++
->  2 files changed, 4 insertions(+)
+>> v5:
+>>    - Move kernel dma ownership auto-claiming from driver core to bus
+>>      callback. (Greg)
+>>    - Refactor the iommu interfaces to make them more specific.
+>>      (Jason/Robin)
+>>    - Simplify the dma ownership implementation by removing the owner
+>>      type. (Jason)
+>>    - Commit message refactoring for PCI drivers. (Bjorn)
+>>    - Move iommu_attach/detach_device() improvement patches into another
+>>      series as there are a lot of code refactoring and cleanup staffs
+>>      in various device drivers.
 > 
-> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-> index 491ffec7bf47..2565052a7a8c 100644
-> --- a/drivers/power/supply/power_supply_sysfs.c
-> +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -403,6 +403,8 @@ void power_supply_init_attrs(struct device_type *dev_type)
->  {
->  	int i;
->  
-> +	BUILD_BUG_ON(ARRAY_SIZE(power_supply_attrs) != __POWER_SUPPLY_PROP_CNT);
-> +
->  	dev_type->groups = power_supply_attr_groups;
->  
->  	for (i = 0; i < ARRAY_SIZE(power_supply_attrs); i++) {
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index 71f0379c2af8..60853f26e25f 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -172,6 +172,8 @@ enum power_supply_property {
->  	POWER_SUPPLY_PROP_MODEL_NAME,
->  	POWER_SUPPLY_PROP_MANUFACTURER,
->  	POWER_SUPPLY_PROP_SERIAL_NUMBER,
-> +
-> +	__POWER_SUPPLY_PROP_CNT
->  };
->  
->  enum power_supply_type {
-> -- 
-> 2.34.1
+> Since you already have the code you should make this 'other series'
+> right now. It should delete iommu_group_attach() and fix
+> iommu_device_attach().
+
+Yes. I am doing the functional and compile tests. I will post it once I
+complete the testing.
+
+> 
+> You also didn't really do my suggestion, this messes up the normal
+> __iommu_attach_group()/__iommu_detach_group() instead of adding the
+> clear to purpose iommu_replace_group() for VFIO to use. This just
+> makes it more difficult to normalize the APIs.
+
+I didn't forget that. :-) It's part of the new series.
+
+> 
+> Otherwise it does seem to have turned out to be more understandable.
+> 
+> Jason
 > 
 
-Please ignore this patch. It does not do what is tries to do. Sorry for the
-noise.
-
-Thomas
+Best regards,
+baolu

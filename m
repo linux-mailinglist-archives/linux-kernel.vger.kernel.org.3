@@ -2,105 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1657B485238
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:04:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3103548523B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:04:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239925AbiAEMEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 07:04:22 -0500
-Received: from mail-il1-f198.google.com ([209.85.166.198]:46911 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239923AbiAEMEV (ORCPT
+        id S239939AbiAEMEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 07:04:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37066 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239923AbiAEMEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 07:04:21 -0500
-Received: by mail-il1-f198.google.com with SMTP id i9-20020a056e021d0900b002b3e956903dso21335559ila.13
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 04:04:21 -0800 (PST)
+        Wed, 5 Jan 2022 07:04:33 -0500
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577CFC061761
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 04:04:33 -0800 (PST)
+Received: by mail-oi1-x241.google.com with SMTP id w80so25701775oie.9
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 04:04:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=WfKbQ69tpNDlxWAcpXPlrrVEyxRTmjJnTPBXX/EkFcs=;
+        b=eM1v7VUK7MG2rZHEJGNCLgP2GYI9SbtQYS1J0ov7eSL3hcRYeFQ/9Eb3urrbQPRQy0
+         ymKuFPFWx+pM891RnqxtASZozC1i8077Rb8Av/sT3C0W2VZj/pmRLG91yLYhouO4+oIE
+         lue/k5KuSGpSrBRqMbg3AR/hQlm32H4VrOcWDZW/gzh5m9eaKopX9U9KZlYdBnaIF5JI
+         Mvrye84JcRUcBCws9A4A4lp5C0iRabH5AyVHMscdkUOPQr0Xi/k5jlIaYL/CS9AgJXEa
+         /qCKGkLy9y7zSO//bPAXHxSuJqOSR+LZECRmni5Szrx4kvhS1AyG0bwAM60NWduffLTw
+         O6vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=vlosiNkLfvR5wFR8TE+UyXMuDj/qYsdFOTsef1bsPDY=;
-        b=OEm9v2EZx9Db/kQ87wrMAuB/T59SlAlJTrsau7z8OtiG6JlOGsJJGEXPsFklxLGyOL
-         LgFu0p7DHUFOPgn0lWtwEb8qPvm/Z+Do41Sk1apBxyGOAxUv3BUQihD2NQ2/xqPoH/Uv
-         6kOFj6zF8wkSmGYDTXIW/wrc6UX8D9bpivS1gsTFoh6WEu5PQjE8vYP3xVcajM2iJzq2
-         W/ZpzpWMezRcTCcl6I0Brz25EoNtaihBhOCr6LxbuBsaqRdhbtdhf9PPXe+wLBIHjbWT
-         G96c1pcHMAyoL6hKifEVpVZOjh3258dxPb4mHOVtJMkZqtnEl5Uja+ydtDKIXSWnL0Vd
-         eSsQ==
-X-Gm-Message-State: AOAM530VlN/o2uAm1/CpVvqPlcQs9vuXF1LXvDxwAJh48dTNvODX3Cff
-        UtVt+U1aob1sUPqZqjN8RVnmMCLMaAyGa1rDhPWaN61VJfkj
-X-Google-Smtp-Source: ABdhPJyMTyM54skcRggviO4qzMc1f3d5yRrSmguwztxsHvvTv5T5FnnyD1crPPg10YPD68gbQiLbXAosYdSfSZzctvOwGxJDT7MZ
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=WfKbQ69tpNDlxWAcpXPlrrVEyxRTmjJnTPBXX/EkFcs=;
+        b=CPOrVGM7Icp9UTzIQCOb2dPmd7E2WXf7iTnx1SgXxwF1AihuQnZCgG6SgGFZZWdNyP
+         H02gvdymbv/5lxEAXUrZfkf908DjCGr1i+lKsNVqgOXzjLq15I12qUuQ/wmv3m5tqMTB
+         OVkHkHmCkCzAqEQaRNPdJWS53/KN+yCbu80wTpqIoXoBdqDhhO6Mg24ADEN2Cui0XwQo
+         YCAvdAO8Nx1K0lb7nvY6cXTpf7h2ew9tHKJF1WXwy4Npuj/gwAozHnTynBVfm/oSddrF
+         27RNwLvKItdlZv3GIDkcgdknaX7sqfgr+1QKVrjJrnGpGkGDHp7VxmrzxE/lr1wcvKxV
+         QJIQ==
+X-Gm-Message-State: AOAM532ki6VQf2QjpJ+jF4u4ElW6Zy3b6ixTuHTxGM47S8NKr/nB5Xpj
+        RakafAt0tl4NmxudQXyG0bOdun0h96c91lIfqvE=
+X-Google-Smtp-Source: ABdhPJwzMZ8+ufN063YfCTeMq6d8tXHzdhYeico4qzamvHCbG8UjvtivE6Q7U/ERdsNIIhyvFQToA7CcP3Ya0M8BuGY=
+X-Received: by 2002:aca:4283:: with SMTP id p125mr2169177oia.35.1641384272534;
+ Wed, 05 Jan 2022 04:04:32 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:160d:: with SMTP id x13mr24582724jas.120.1641384260891;
- Wed, 05 Jan 2022 04:04:20 -0800 (PST)
-Date:   Wed, 05 Jan 2022 04:04:20 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cf7a2405d4d48d3b@google.com>
-Subject: [syzbot] KMSAN: uninit-value in ax88178_reset
-From:   syzbot <syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com>
-To:     andrew@lunn.ch, davem@davemloft.net, glider@google.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux@rempel-privat.de,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Reply-To: maryjosen62@gmail.com
+Sender: alexanderwillams21@gmail.com
+Received: by 2002:a8a:a85:0:0:0:0:0 with HTTP; Wed, 5 Jan 2022 04:04:31 -0800 (PST)
+From:   mary <maryjosen38@gmail.com>
+Date:   Wed, 5 Jan 2022 12:04:31 +0000
+X-Google-Sender-Auth: IphaviYQdCcjLasJJMbUtCgRA_s
+Message-ID: <CALDYJF80fjoLzAXo7wT0zLt+O9LO4r9VWpbG5s6Oni02yMsEfA@mail.gmail.com>
+Subject: GREETINGS
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Dearest beloved one,
 
-syzbot found the following issue on:
+I am Mrs.Mary josen from Northern Ireland, 68 years old,
 
-HEAD commit:    b0a8b5053e8b kmsan: core: add dependency on DEBUG_KERNEL
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=159cf693b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=46a956fc7a887c60
-dashboard link: https://syzkaller.appspot.com/bug?extid=6ca9f7867b77c2d316ac
-compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14413193b00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=127716a3b00000
+ I'm married to Mr. Daniel josen. who was a contractor with the
+government of Ivory Coast for eleven years,
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com
+ before he died in the year 2014 after a brief illness that lasted
+only four days.
 
-asix 1-1:0.0 eth1: Failed to read reg index 0x0000: -32
-asix 1-1:0.0 eth1: Failed to read reg index 0x0000: -32
-=====================================================
-BUG: KMSAN: uninit-value in ax88178_reset+0xfd2/0x1590 drivers/net/usb/asix_devices.c:946 drivers/net/usb/asix_devices.c:946
- ax88178_reset+0xfd2/0x1590 drivers/net/usb/asix_devices.c:946 drivers/net/usb/asix_devices.c:946
- usbnet_open+0x16d/0x1940 drivers/net/usb/usbnet.c:894 drivers/net/usb/usbnet.c:894
- __dev_open+0x920/0xb90 net/core/dev.c:1490 net/core/dev.c:1490
- __dev_change_flags+0x4da/0xd40 net/core/dev.c:8796 net/core/dev.c:8796
- dev_change_flags+0xf5/0x280 net/core/dev.c:8867 net/core/dev.c:8867
- devinet_ioctl+0xfc1/0x3060 net/ipv4/devinet.c:1144 net/ipv4/devinet.c:1144
- inet_ioctl+0x59f/0x820 net/ipv4/af_inet.c:969 net/ipv4/af_inet.c:969
- sock_do_ioctl net/socket.c:1118 [inline]
- sock_do_ioctl net/socket.c:1118 [inline] net/socket.c:1235
- sock_ioctl+0xa3f/0x13d0 net/socket.c:1235 net/socket.c:1235
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:874 [inline]
- vfs_ioctl fs/ioctl.c:51 [inline] fs/ioctl.c:860
- __do_sys_ioctl fs/ioctl.c:874 [inline] fs/ioctl.c:860
- __se_sys_ioctl+0x2df/0x4a0 fs/ioctl.c:860 fs/ioctl.c:860
- __x64_sys_ioctl+0xd8/0x110 fs/ioctl.c:860 fs/ioctl.c:860
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_x64 arch/x86/entry/common.c:51 [inline] arch/x86/entry/common.c:82
- do_syscall_64+0x54/0xd0 arch/x86/entry/common.c:82 arch/x86/entry/common.c:82
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+ We were married for twenty seven years  without any child,
 
-Local variable status created at:
- ax88178_reset+0x69/0x1590
- usbnet_open+0x16d/0x1940 drivers/net/usb/usbnet.c:894 drivers/net/usb/usbnet.c:894
+   which makes me an unhappy woman. Now I am affected with cancer of
+the lung and breast with a partial stroke which has affected my
+speech. I can no longer talk well and half of my body is paralyzed, I
+sent this
 
-CPU: 1 PID: 3057 Comm: dhcpcd Not tainted 5.16.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-=====================================================
+          email to you with the help of my private female nurse.
+
+My condition is really deteriorating day by day and it is really
+giving me lots to think about.  This has prompted my decision to
+donate all I have for charity;  After going through your profile,
+
+I decided to donate to you the sum of  (4,500,000.00 EURO) which I
+inherited from my late husband.
+to you as my investment manager. I want you to build an Orphanage home
+with my name ( Mary josen) in your country.
+
+       If you are willing and able to do this task for the sake of humanity
+
+I will give all relevant information that will authorize the release
+and transfer of the money to you as my duly assigned representative.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+your sister,
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Mrs, Mary josen

@@ -2,103 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50DD84850D7
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:14:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE3C64850DE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:15:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239300AbiAEKOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 05:14:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40534 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234106AbiAEKOj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 05:14:39 -0500
-X-Greylist: delayed 12369 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 05 Jan 2022 02:14:39 PST
-Received: from cavan.codon.org.uk (cavan.codon.org.uk [IPv6:2a00:1098:84:22e::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D97C061761;
-        Wed,  5 Jan 2022 02:14:38 -0800 (PST)
-Received: by cavan.codon.org.uk (Postfix, from userid 1000)
-        id BB17A4250A; Wed,  5 Jan 2022 10:14:37 +0000 (GMT)
-Date:   Wed, 5 Jan 2022 10:14:37 +0000
-From:   Matthew Garrett <mjg59@srcf.ucam.org>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     jmorris@namei.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Kees Cook <keescook@chromium.org>, x86@kernel.org
-Subject: Re: [PATCH V40 12/29] x86: Lock down IO port access when the kernel
- is locked down
-Message-ID: <20220105101437.GA32516@srcf.ucam.org>
-References: <20190820001805.241928-1-matthewgarrett@google.com>
- <20190820001805.241928-13-matthewgarrett@google.com>
- <CAAd53p6d2CsZcwaX0ZtjmOmQv1Dru4qmM-uRxtHJi0k5PnFMFQ@mail.gmail.com>
- <20220105064827.GA30988@srcf.ucam.org>
- <CAAd53p5A9ajyP=8edXW20MB1eLRAF3SsmXfdnkA2isBJD2Bd+w@mail.gmail.com>
- <20220105072010.GA31134@srcf.ucam.org>
- <CAAd53p6VcAo0MVMWerTag42cWFE2ifzdQ=AFmGd9a=2gFjgv5A@mail.gmail.com>
+        id S239318AbiAEKPu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Jan 2022 05:15:50 -0500
+Received: from aposti.net ([89.234.176.197]:48484 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229984AbiAEKPt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 05:15:49 -0500
+Date:   Wed, 05 Jan 2022 10:15:36 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 3/8] PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS macros
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Message-Id: <06F85R.46PNU7YFWD631@crapouillou.net>
+In-Reply-To: <20220105100332.000001c1@Huawei.com>
+References: <20220104214214.198843-1-paul@crapouillou.net>
+        <20220104214214.198843-4-paul@crapouillou.net>
+        <20220105100332.000001c1@Huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAd53p6VcAo0MVMWerTag42cWFE2ifzdQ=AFmGd9a=2gFjgv5A@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 06:05:26PM +0800, Kai-Heng Feng wrote:
-> On Wed, Jan 5, 2022 at 3:20 PM Matthew Garrett <mjg59@srcf.ucam.org> wrote:
-> >
-> > On Wed, Jan 05, 2022 at 02:57:57PM +0800, Kai-Heng Feng wrote:
-> >
-> > > The affected system from the customer has SecureBoot enabled (and
-> > > hence lockdown), and the kernel upgrade surprisingly broke ioperm()
-> > > usage.
-> >
-> > Which kernel was being used that was signed but didn't implement
-> > lockdown? That sounds, uh, bad.
+Hi Jonathan,
+
+Le mer., janv. 5 2022 at 10:03:32 +0000, Jonathan Cameron 
+<Jonathan.Cameron@Huawei.com> a écrit :
+> On Tue, 4 Jan 2022 21:42:09 +0000
+> Paul Cercueil <paul@crapouillou.net> wrote:
 > 
-> It was upgraded from older distro release. Older kernels don't have lockdown.
-
-But have a signed bootloader? Which releases?
-
-> > There's two main choices:
-> >
-> > 1) Disable secure boot on the system in question - if there's a need to
-> > run userland that can do arbitrary port IO then secure boot isn't
-> > providing any meaningful security benefit in any case.
+>>  These macros are defined conditionally, according to CONFIG_PM:
+>>  - if CONFIG_PM is enabled, these macros resolve to
+>>    DEFINE_SIMPLE_DEV_PM_OPS(), and the dev_pm_ops symbol will be
+>>    exported.
+>> 
+>>  - if CONFIG_PM is disabled, these macros will result in a dummy 
+>> static
+>>    dev_pm_ops to be created with the __maybe_unused flag. The 
+>> dev_pm_ops
+>>    will then be discarded by the compiler, along with the provided
+>>    callback functions if they are not used anywhere else.
+>> 
+>>  In the second case, the symbol is not exported, which should be
+>>  perfectly fine - users of the symbol should all use the pm_ptr() or
+>>  pm_sleep_ptr() macro, so the dev_pm_ops marked as "extern" in the
+>>  client's code will never be accessed.
+>> 
+>>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>  ---
+>>   include/linux/pm.h | 33 ++++++++++++++++++++++++++++++---
+>>   1 file changed, 30 insertions(+), 3 deletions(-)
+>> 
+>>  diff --git a/include/linux/pm.h b/include/linux/pm.h
+>>  index 389e600df233..a1ce29566aea 100644
+>>  --- a/include/linux/pm.h
+>>  +++ b/include/linux/pm.h
+>>  @@ -8,6 +8,7 @@
+>>   #ifndef _LINUX_PM_H
+>>   #define _LINUX_PM_H
+>> 
+>>  +#include <linux/export.h>
+>>   #include <linux/list.h>
+>>   #include <linux/workqueue.h>
+>>   #include <linux/spinlock.h>
+>>  @@ -357,14 +358,40 @@ struct dev_pm_ops {
+>>   #define SET_RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
+>>   #endif
+>> 
+>>  +#define _DEFINE_DEV_PM_OPS(name, \
+>>  +			   suspend_fn, resume_fn, \
+>>  +			   runtime_suspend_fn, runtime_resume_fn, idle_fn) \
+>>  +const struct dev_pm_ops name = { \
+>>  +	SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+>>  +	RUNTIME_PM_OPS(runtime_suspend_fn, runtime_resume_fn, idle_fn) \
+>>  +}
+>>  +
 > 
-> How so?
-> Other security features are still incredible valuable, we don't want
-> to toss them out just because someone has to use ioperm().
-
-Because having the ability to do port io allows you to tamper with the 
-running kernel and disable all the other security boundaries, making 
-them pointless. Many PCI devices have a port IO side channel into MMIO 
-BARs for use in early boot, so if an attacker can fill that BAR as they 
-wish and then modify the BAR to map it into the kernel address space 
-(and fix up the bridges appropriately), or if the port IO interface can 
-be used to trigger DMA, the outcomes are pretty bad. The point of 
-lockdown is to disable every plausible interface for userland (even uid 
-0) to have access to any interfaces that would let them insert modified 
-code into ring 0 - port IO is definitely one of those interfaces. An 
-attacker could just take a kernel that allows ioperm(), add an initramfs 
-containing their payload, boot, hotpatch the kernel to disable lockdown, 
-and then kexec into their backdoored payload.
-
-> >
-> > 2) Implement a kernel driver that abstracts the hardware access away
-> > from userland, and ensures that all the accesses are performed in a safe
-> > way.
-> >
-> > Doing port IO from userland is almost always a terrible idea - it
-> > usually involves indexed accesses (you write an address to one port and
-> > then write or read data from another), and if two processes are trying
-> > to do this simultaneously (either because SMP or because one process
-> > gets preempted after writing the address but before accessing the data
-> > register), and in that case you can end up with accesses to the wrong
-> > register as a result. You really want this sort of thing to be mediated
-> > by the kernel, both from a safety perspective and to ensure appropriate
-> > synchronisation.
+> one blank line probably enough.
 > 
-> Agree, let me start a discussion with them.
+>>  +
+>>   /*
+>>    * Use this if you want to use the same suspend and resume 
+>> callbacks for suspend
+>>    * to RAM and hibernation.
+>>    */
+>>   #define DEFINE_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+>>  -const struct dev_pm_ops name = { \
+>>  -	SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+>>  -}
+>>  +	_DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL)
+>>  +
+>>  +#ifdef CONFIG_PM
+>>  +#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, 
+>> runtime_suspend_fn, \
+>>  +			   runtime_resume_fn, idle_fn, sec) \
+>>  +	_DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, 
+>> runtime_suspend_fn, \
+>>  +			   runtime_resume_fn, idle_fn); \
+>>  +	_EXPORT_SYMBOL(name, sec)
+>>  +#else
+>>  +#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, 
+>> runtime_suspend_fn, \
+>>  +			   runtime_resume_fn, idle_fn, sec) \
+>>  +static __maybe_unused _DEFINE_DEV_PM_OPS(__static_##name, 
+>> suspend_fn, \
+>>  +					 resume_fn, runtime_suspend_fn, \
+>>  +					 runtime_resume_fn, idle_fn)
+>>  +#endif
+>>  +
+>>  +#define EXPORT_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+>>  +	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, 
+>> "")
+>>  +#define EXPORT_GPL_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+>>  +	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, 
+>> "_gpl")
+> 
+> So you can get away with these two cases because the 
+> SYSTEM_SLEEP_PM_OPS() all have
+> pm_sleep_ptr() wrappers.  However, _EXPORT_DEV_PM_OPS() could be used 
+> directly and
+> would require __maybe_unused for the RUNTIME_PM_OPS() parameters 
+> which isn't ideal.
 
-Sounds good.
+I don't see why. On both cases (CONFIG_PM enabled/disabled) the 
+runtime-PM callbacks are referenced directly, so at no point do they 
+appear as unused; therefore __maybe_unused is not needed.
+
+Cheers,
+-Paul
+
+> Maybe I'm missing some reason that isn't a problem though as easy to 
+> get lost in
+> these macros. :)
+> 
+> You could argue that the _ is meant to indicate that macro shouldn't 
+> be used directly
+> but I'm not that optimistic.
+> 
+> Jonathan
+> 
+> 
+> 
+>> 
+>>   /* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
+>>   #define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> 
+
+

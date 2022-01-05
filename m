@@ -2,154 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9770485B91
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 23:22:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA4B485B96
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 23:26:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244880AbiAEWWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 17:22:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37544 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244842AbiAEWW1 (ORCPT
+        id S244897AbiAEW0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 17:26:02 -0500
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:43445 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244883AbiAEWZ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 17:22:27 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6110C061245
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 14:22:27 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id n16so631606plc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 14:22:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=sUkgqFDFiDtGVPAUgU6Xa5ITE/sInAze9iX46Pb2MMM=;
-        b=hsw8ppEFMFavAQBLMRV81zeXSO4N9aaulrhq4zBMNKCIvOHYGwhepxxDE5YbvBogUL
-         PqHhS6Xmpa0TYh63N01wJPn4zqRQpFNgm9oxqA4d5AlYKRYwrsUsP65RPp8OyR3x+ail
-         OmUsFdsXixIG/2HXpIkLMYZX38j5tamqjcxIBeIznNt8gusyjVJD/odIX1Gvpd7Co0v/
-         yvduhyMO2zYaEUvNaQBpHOOe+2sT1UUuduZli34eSLImebr84FFfnHJWIY7W9T/Do/7w
-         ExMUUg37iCz/843yWtOeNScDqfXqPolmYi9Ksa2As5Lnc2cgxMWKs9rm2kKACJiQ4p+h
-         dNqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sUkgqFDFiDtGVPAUgU6Xa5ITE/sInAze9iX46Pb2MMM=;
-        b=lGY+jCnhOEW0I986ymuTHomOsv9sO/+BIprcaxrFA4mY/9yWAktEk0ytaGnX6JR3A3
-         ZPX/5RlJmBJMm6A5JlwwzADhfxfxxzoPeo6HUTON4kKLeKbVVSrpMX3Wy57DFQfph/9D
-         vH6Rm2/bsW/V0dXfHG8z+h8aYNg1qMMT3AKRPll8VrjftnVY8aT/Bux0oB0Rn69seiu6
-         BBWe3jlOsb/Jbl+iPf29JwQTs/szwAGWmXajpSGjMqPv/zkfnY5HcpAh/HuE10P5dEUY
-         khyNOVWdd+QP10joqqV+1br34MmWeI7CmoDMreB2m5DFYrK5IwUbhFlt+OWoov9EVxG4
-         ww8A==
-X-Gm-Message-State: AOAM533+u5vv4mBIMbDfSID6PlgCoHJPq4meyKvaLB8NG4kPs8J1Klzq
-        vK8fTmyzgPjHH7+nGPVmN0ntYQ==
-X-Google-Smtp-Source: ABdhPJzV0453KxEmLbbliY/F1QMex40PViYGaR8yL4+U0XEANUOTELIy6hs/rP6QmX4zFV3P9pUY2Q==
-X-Received: by 2002:a17:90b:180a:: with SMTP id lw10mr6597393pjb.57.1641421346908;
-        Wed, 05 Jan 2022 14:22:26 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id x40sm102352pfu.185.2022.01.05.14.22.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 14:22:26 -0800 (PST)
-Date:   Wed, 5 Jan 2022 22:22:23 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yang Zhong <yang.zhong@intel.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, pbonzini@redhat.com, corbet@lwn.net,
-        shuah@kernel.org, jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, jing2.liu@intel.com,
-        guang.zeng@intel.com, wei.w.wang@intel.com
-Subject: Re: [PATCH v5 12/21] kvm: x86: Intercept #NM for saving IA32_XFD_ERR
-Message-ID: <YdYaH7buoApEVPOg@google.com>
-References: <20220105123532.12586-1-yang.zhong@intel.com>
- <20220105123532.12586-13-yang.zhong@intel.com>
+        Wed, 5 Jan 2022 17:25:59 -0500
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id CD77B1BF203;
+        Wed,  5 Jan 2022 22:25:56 +0000 (UTC)
+Date:   Wed, 5 Jan 2022 23:25:56 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: isl1208: avoid unnecessary rc variable tests
+Message-ID: <YdYa9IY2dM4BrAH0@piout.net>
+References: <20220105193440.151359-1-hugo@hugovil.com>
+ <YdX5BocOfHE/0twa@piout.net>
+ <20220105153446.82214b48a4c77ec960ce03f3@hugovil.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220105123532.12586-13-yang.zhong@intel.com>
+In-Reply-To: <20220105153446.82214b48a4c77ec960ce03f3@hugovil.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022, Yang Zhong wrote:
-> @@ -6399,6 +6424,26 @@ static void handle_interrupt_nmi_irqoff(struct kvm_vcpu *vcpu,
->  	kvm_after_interrupt(vcpu);
->  }
->  
-> +static void handle_nm_fault_irqoff(struct kvm_vcpu *vcpu)
-> +{
-> +	/*
-> +	 * Save xfd_err to guest_fpu before interrupt is enabled, so the
-> +	 * MSR value is not clobbered by the host activity before the guest
-> +	 * has chance to consume it.
-> +	 *
-> +	 * We should not blindly read xfd_err here, since this exception
+On 05/01/2022 15:34:46-0500, Hugo Villeneuve wrote:
+> On Wed, 5 Jan 2022 21:01:10 +0100
+> Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+> 
+> > On 05/01/2022 14:34:39-0500, Hugo Villeneuve wrote:
+> > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > 
+> > > The rc variable doesn't need to be tested a second time when the <if> block
+> > > evaluates to false.
+> > > 
+> > 
+> > rc is not tested a second time, here is the relevant listing:
+> > 
+> > -	if (client->irq > 0)
+> > +	if (client->irq > 0) {
+> >  ffffffff81aef647:	41 8b b5 bc 01 00 00 	mov    0x1bc(%r13),%esi
+> >  ffffffff81aef64e:	85 f6                	test   %esi,%esi
+> >  ffffffff81aef650:	0f 8f 35 01 00 00    	jg     ffffffff81aef78b <isl1208_probe+0x314>
+> >  		rc = isl1208_setup_irq(client, client->irq);
+> >  	if (rc)
+> >  		return rc;
+> > +	}
+> >  
+> > -	if (evdet_irq > 0 && evdet_irq != client->irq)
+> > +	if (evdet_irq > 0 && evdet_irq != client->irq) {
+> >  ffffffff81aef656:	85 db                	test   %ebx,%ebx
+> >  ffffffff81aef658:	7e 0d                	jle    ffffffff81aef667 <isl1208_probe+0x1f0>
+> >  ffffffff81aef65a:	41 39 9d bc 01 00 00 	cmp    %ebx,0x1bc(%r13)
+> > @@ -1663,6 +1664,7 @@ ffffffff81aef661:	0f 85 0a 01 00 00
+> >  		rc = isl1208_setup_irq(client, evdet_irq);
+> >  	if (rc)
+> >  		return rc;
+> > +	}
+> > 
+> > As you can see, no change in assembly but it is worse to read. gcc on
+> > arm behaves the same way.
+> 
+> Hi Alexandre,
+> I am not sure that I fully understand your assembly code analysis. Maybe my patch comment was misleading, because I am not talking about a redundant test inside the if block, but ouside of it (after it).
+> 
 
-Nit, avoid "we", and explain what KVM does (or doesn't) do, not what KVM "should"
-do, e.g. just say
+I understood that and what I'm showing is that it doesn't matter to the
+compiler, it will not test the same variable twice if it didn't change.
 
-	 * Do not blindly read ...
+> Here is the original code with my annotations. Let's assume that the variable client->irq = 0:
+> 
+> ---
+> /* If client->irq = 0, then function isl1208_setup_irq() will not be called, and rc will not be modified: */
+> if (client->irq > 0)
+> 	rc = isl1208_setup_irq(client, client->irq);
+> 
+> /* If rc hasn't been modified, there is no need to re-test its value here: */
+> if (rc)
+> 	return rc;
+> ---
+> 
+> After the patch, this code section becomes:
+> 
+> ---
+> if (client->irq > 0) {
+> 	rc = isl1208_setup_irq(client, client->irq);
+> 	if (rc)
+> 		return rc;
+> }
+> ---
+> 
+> For me it is more logical and clearer like this. Moreover, you can see that at line 873 of the original driver, the same kind of mechanism is used:
+> 
+> ---
+> if (isl1208->config->has_timestamp) {
+> 	rc = rtc_add_group(isl1208->rtc, &isl1219_rtc_sysfs_files);
+> 	if (rc)
+> 		return rc;
+> }
+> ---
+> 
+> Regards,
+> Hugo.
+> 
+> 
+> > > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > ---
+> > >  drivers/rtc/rtc-isl1208.c | 14 ++++++++------
+> > >  1 file changed, 8 insertions(+), 6 deletions(-)
+> > > 
+> > > diff --git a/drivers/rtc/rtc-isl1208.c b/drivers/rtc/rtc-isl1208.c
+> > > index 182dfa605515..c7f04df5a0b6 100644
+> > > --- a/drivers/rtc/rtc-isl1208.c
+> > > +++ b/drivers/rtc/rtc-isl1208.c
+> > > @@ -880,15 +880,17 @@ isl1208_probe(struct i2c_client *client, const struct i2c_device_id *id)
+> > >  	if (rc)
+> > >  		return rc;
+> > >  
+> > > -	if (client->irq > 0)
+> > > +	if (client->irq > 0) {
+> > >  		rc = isl1208_setup_irq(client, client->irq);
+> > > -	if (rc)
+> > > -		return rc;
+> > > +		if (rc)
+> > > +			return rc;
+> > > +	}
+> > >  
+> > > -	if (evdet_irq > 0 && evdet_irq != client->irq)
+> > > +	if (evdet_irq > 0 && evdet_irq != client->irq) {
+> > >  		rc = isl1208_setup_irq(client, evdet_irq);
+> > > -	if (rc)
+> > > -		return rc;
+> > > +		if (rc)
+> > > +			return rc;
+> > > +	}
+> > >  
+> > >  	rc = devm_rtc_nvmem_register(isl1208->rtc, &isl1208->nvmem_config);
+> > >  	if (rc)
+> > > -- 
+> > > 2.30.2
+> > > 
+> > 
+> > -- 
+> > Alexandre Belloni, co-owner and COO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
+> > 
+> 
+> 
+> -- 
+> Hugo Villeneuve <hugo@hugovil.com>
 
-> +	 * might be caused by L1 interception on a platform which doesn't
-> +	 * support xfd at all.
-> +	 *
-> +	 * Do it conditionally upon guest_fpu::xfd. xfd_err matters
-> +	 * only when xfd contains a non-zero value.
-> +	 *
-> +	 * Queuing exception is done in vmx_handle_exit. See comment there.
-
-Another nit, it's worth explaining why XFD_ERR needs to be read here regardless
-of is_guest_mode().  E.g.
-
-	 * Injecting the #NM back into the guest is handled in the standard path
-	 * as an #NM in L2 may be reflected into L1 as a VM-Exit.  Read XFD_ERR
-	 * even if the #NM is from L2, as L1 may have exposed XFD to L2.
-
-Side topic, in a follow up series/patch, it's probably worth adding support in
-nested_vmx_prepare_msr_bitmap() to allow passthrough of the MSRs to L2.
-
-> +	 */
-> +	if (vcpu->arch.guest_fpu.fpstate->xfd)
-> +		rdmsrl(MSR_IA32_XFD_ERR, vcpu->arch.guest_fpu.xfd_err);
-> +}
-> +
->  static void handle_exception_nmi_irqoff(struct vcpu_vmx *vmx)
->  {
->  	const unsigned long nmi_entry = (unsigned long)asm_exc_nmi_noist;
-> @@ -6407,6 +6452,9 @@ static void handle_exception_nmi_irqoff(struct vcpu_vmx *vmx)
->  	/* if exit due to PF check for async PF */
->  	if (is_page_fault(intr_info))
->  		vmx->vcpu.arch.apf.host_apf_flags = kvm_read_and_reset_apf_flags();
-> +	/* if exit due to NM, handle before interrupts are enabled */
-
-Nit, drop this comment, it's slightly misleading since the #NM isn't fully handled
-here.  The comment in handle_nm_fault_irqoff() is more than sufficient.
-
-> +	else if (is_nm_fault(intr_info))
-> +		handle_nm_fault_irqoff(&vmx->vcpu);
->  	/* Handle machine checks before interrupts are enabled */
->  	else if (is_machine_check(intr_info))
->  		kvm_machine_check();
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 21ce65220e38..2c988f8ca616 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -9953,6 +9953,9 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
->  	if (test_thread_flag(TIF_NEED_FPU_LOAD))
->  		switch_fpu_return();
->  
-> +	if (vcpu->arch.guest_fpu.xfd_err)
-> +		wrmsrl(MSR_IA32_XFD_ERR, vcpu->arch.guest_fpu.xfd_err);
-> +
->  	if (unlikely(vcpu->arch.switch_db_regs)) {
->  		set_debugreg(0, 7);
->  		set_debugreg(vcpu->arch.eff_db[0], 0);
-> @@ -10016,6 +10019,9 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
->  
->  	static_call(kvm_x86_handle_exit_irqoff)(vcpu);
->  
-> +	if (vcpu->arch.guest_fpu.xfd_err)
-> +		wrmsrl(MSR_IA32_XFD_ERR, 0);
-> +
->  	/*
->  	 * Consume any pending interrupts, including the possible source of
->  	 * VM-Exit on SVM and any ticks that occur between VM-Exit and now.
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

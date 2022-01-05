@@ -2,109 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 220CB4857AC
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 18:51:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A64674857AF
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 18:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242549AbiAERvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 12:51:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60270 "EHLO
+        id S242570AbiAERw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 12:52:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242568AbiAERvT (ORCPT
+        with ESMTP id S242581AbiAERwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 12:51:19 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E5EFC0611FD
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 09:51:19 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id p37so32505pfh.4
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 09:51:19 -0800 (PST)
+        Wed, 5 Jan 2022 12:52:16 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68037C061245
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 09:52:15 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id j18so84622919wrd.2
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 09:52:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=02jPdn5t6Ff/0d55zQvjcjTFcLTmmCYTOM0kxLOQ3iQ=;
-        b=Cueq/b8lSSVzXegMttx9Vx8pSA/UhhD3m1o20cmLoHcVqhZ6XXgaaXVafKRtYqDlyj
-         8IWvTSJ4pZRKFoIIksCwBB2tNfs2J0aGabT4tNvI3Hlm9znMm1dx0KTz0GpJYxFfRyHY
-         jrH0+K1kTBtqfXd1eTy28XjLXNBnJl+uTMPKOOb+xyXPkVBi4JzW3e3Rcs83nN7N7//g
-         6UgSi1nSCBXw0Gt5bX2BgStF2nDTix2tKCIs4SamDY8bgF/zCgAck1Z87gI1rkvMRt5m
-         x9rAHWDk//z8+cJw72x+/WCoqS7t1n0w1qB+W9LfWPbidp95ahJF+UwGN3CcSJCWjYTp
-         Okzg==
+        d=google.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J5GT6AWgowXMeNIuQyJYxsilVHwUS2CUc3fcBKbiq5M=;
+        b=Z4UaC+WcOqG1yJseMWSPH9mDiu4olkW2I0tHm5x4PXwZ413u/NenAQZ5o5LUlc0DTM
+         V2DLOD0kwfnuPlFLo0gcu9GoQXmxww9za1w3i6X9D6XzrQQEGeskyjn2+R6aVc1DryqJ
+         oYGII0Yt336SXJgYycaWvEN2WGURvyyl4wct8xyqE5aLu/jbE25zKgudmOqRJi4VV0gK
+         kg6/61YfaywhiDs0nssIdhcVDzw7pXazrjTsnkqdj0dUU0YY2ac5jkrAgR2nKD1bbNWG
+         0L/K7KzXalozcC5o4pj924GYVepD5oEfTtlj/E3eet8NSjDEsHuNjDwMsSOYgVjHIa7y
+         XpIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=02jPdn5t6Ff/0d55zQvjcjTFcLTmmCYTOM0kxLOQ3iQ=;
-        b=RSlVf0jFpgbyWeqXZ2r5D0gag0PMaIycZNAdn/O5dAOVxfmzsvBfhVBKje+GUe/RvJ
-         iacIEOSJFeLEKuLF5LMPnRxDm3kKep/W8q1X5Qrbajo91Hk2gNiC/UNDZRfrWu7Az8BQ
-         cepZmJ4p6MK9X1nt3/md++T92BB5JytH7xy4dRuj6tsX7tWlf5BZ3KhVG31iuFC8N1nY
-         S9/nF0Jj4wVMD6AK8z+e2M15uVB0gR8MwE0duGHs/M//mHsen0ABF28vuV3oNHhs5ZhE
-         j5McXyNK6tH346mm15/wo7w01LHx5L1yPPzQ/n7AkXvzG9Fsv5VNm3QMPhq7GXhAQUJy
-         29dw==
-X-Gm-Message-State: AOAM533qwH/PE/z+geaHU0bYuYXoi5p3RmZD9bT2bPRl3Cbpj4lNgBlA
-        wZEaa+ARP49pMFwPF8DiQ9zFtWOx2+RP4ZK77sb63Q==
-X-Google-Smtp-Source: ABdhPJzLGp9Lu53gKwRN5ecOY+UDsR90b4q8ivNS1uGwZU7RHIkl+SxX9b3LNJIDkOIJFrv+kyaNYuHnIMw14ADw3RU=
-X-Received: by 2002:a63:854a:: with SMTP id u71mr48636668pgd.201.1641405078557;
- Wed, 05 Jan 2022 09:51:18 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J5GT6AWgowXMeNIuQyJYxsilVHwUS2CUc3fcBKbiq5M=;
+        b=y2mRg/dWAlpYeI67AoA1kC2wUUEuJbnX4kG9mZdL7MoSwYV+YnryMjhBekjsL/AsMq
+         hO3D1kqVV3U5cYe1ddG7sLPNrv4jcK11nZFlvaXFD3o6wC1++biibk4Ze+u+odP74QoL
+         b6FMQeZY+WYnnFSJQBbdB85PImXvYfhVM0hqceJ3T6enlTxyg8WE0W7/WFEx0CTgUA25
+         x+rUCZod1zO9quOGQJg1dMpt6oDFVzCVo9ck/z9x3A9DK77kKbXvjCWvjZNnXOg+o+Op
+         Mk0jiRi/kA9nu3W65tOIVhCqxBp2YpkNxS3VftsS5ys3paEMfkNJXSTUfaGwx0eQuTiD
+         sXew==
+X-Gm-Message-State: AOAM533wWQ/rfypy/ZgV5k40xH0hzkTdkhvoEiEWwiiMiNxkeQPypu17
+        uWfk4qFEzLaZ5YNIADL307dTyA==
+X-Google-Smtp-Source: ABdhPJxkDT3SlyZ2BvvPWw1OKwAZ5KiuQVU4U7TxsMzATu+Vxw+3+4t1wNjyxIq7/1Yldgo+a/ewtA==
+X-Received: by 2002:adf:ef01:: with SMTP id e1mr10927619wro.647.1641405133760;
+        Wed, 05 Jan 2022 09:52:13 -0800 (PST)
+Received: from localhost ([2a02:168:96c5:1:55ed:514f:6ad7:5bcc])
+        by smtp.gmail.com with ESMTPSA id b1sm47085290wrd.92.2022.01.05.09.52.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 09:52:13 -0800 (PST)
+From:   Jann Horn <jannh@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Jann Horn <jannh@google.com>
+Subject: [PATCH] mm, oom: OOM sysrq should always kill a process
+Date:   Wed,  5 Jan 2022 18:51:15 +0100
+Message-Id: <20220105175115.605074-1-jannh@google.com>
+X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
 MIME-Version: 1.0
-References: <20220105104826.1418-1-linmq006@gmail.com>
-In-Reply-To: <20220105104826.1418-1-linmq006@gmail.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Wed, 5 Jan 2022 18:51:07 +0100
-Message-ID: <CAG3jFyvUcGgELW=N4OXwU_SVtV9YpyKQynTj2Oz77P_C1YMOkg@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: nwl-dsi: Fix PM disable depth imbalance in nwl_dsi_probe
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Fabio Estevam <festevam@gmail.com>,
-        =?UTF-8?Q?Guido_G=C3=BCnther?= <agx@sigxcpu.org>,
-        Robert Chiras <robert.chiras@nxp.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Miaoqian,
+The OOM kill sysrq (alt+sysrq+F) should allow the user to kill the
+process with the highest OOM badness with a single execution.
 
-Thanks for submitting this patch!
+However, at the moment, the OOM kill can bail out if an OOM notifier
+(e.g. the i915 one) says that it reclaimed a tiny amount of memory
+from somewhere. That's probably not what the user wants.
 
-On Wed, 5 Jan 2022 at 11:48, Miaoqian Lin <linmq006@gmail.com> wrote:
->
-> The pm_runtime_enable will increase power disable depth.
-> Thus a pairing decrement is needed on the error handling
-> path to keep it balanced according to context.
->
-> Fixes: 44cfc62 ("drm/bridge: Add NWL MIPI DSI host controller support")
+As documented in struct oom_control, order =3D=3D -1 means the oom kill is
+required by sysrq. So check for that, and if it's true, don't bail out
+no matter what the OOM notifiers say.
 
-In the future, please use 12 chars of the hash. I'll fix it this time,
-but please use 12 characters going forward.
+Signed-off-by: Jann Horn <jannh@google.com>
+---
+ mm/oom_kill.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
->  drivers/gpu/drm/bridge/nwl-dsi.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c b/drivers/gpu/drm/bridge/nwl-dsi.c
-> index a7389a0facfb..fc3ad9fab867 100644
-> --- a/drivers/gpu/drm/bridge/nwl-dsi.c
-> +++ b/drivers/gpu/drm/bridge/nwl-dsi.c
-> @@ -1206,6 +1206,7 @@ static int nwl_dsi_probe(struct platform_device *pdev)
->
->         ret = nwl_dsi_select_input(dsi);
->         if (ret < 0) {
-> +               pm_runtime_disable(dev);
->                 mipi_dsi_host_unregister(&dsi->dsi_host);
->                 return ret;
->         }
-> --
-> 2.17.1
->
+diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+index 1ddabefcfb5a..dc645cbc6e0d 100644
+--- a/mm/oom_kill.c
++++ b/mm/oom_kill.c
+@@ -1051,13 +1051,14 @@ EXPORT_SYMBOL_GPL(unregister_oom_notifier);
+ bool out_of_memory(struct oom_control *oc)
+ {
+ 	unsigned long freed =3D 0;
++	bool sysrq_forced =3D oc->order =3D=3D -1;
+=20
+ 	if (oom_killer_disabled)
+ 		return false;
+=20
+ 	if (!is_memcg_oom(oc)) {
+ 		blocking_notifier_call_chain(&oom_notify_list, 0, &freed);
+-		if (freed > 0)
++		if (freed > 0 && !sysrq_forced)
+ 			/* Got some memory back in the last second. */
+ 			return true;
+ 	}
 
-Fixed commit hash length, added my r-b and applied to drm-misc-next.
+base-commit: c9e6606c7fe92b50a02ce51dda82586ebdf99b48
+--=20
+2.34.1.448.ga2b2bfdf31-goog
 
-Reviewed-by: Robert Foss <robert.foss@linaro.org>

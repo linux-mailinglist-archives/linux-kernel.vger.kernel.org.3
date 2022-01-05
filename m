@@ -2,189 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13DB4485610
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:43:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F0A485620
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:44:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241626AbiAEPnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 10:43:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241619AbiAEPmz (ORCPT
+        id S241647AbiAEPoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 10:44:00 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:52162 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241641AbiAEPn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 10:42:55 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A61C061245
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 07:42:54 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id r22so66579941ljk.11
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 07:42:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Kr7Cs8C5JDqK/5RoLYLqaC8cLtS+NDoPpKGlb4+7KJo=;
-        b=qFx3ZGZKQdjNOvISAoeLP2VxbfIl7XdU+OqJ4Le1TDlJ0Hh/0fkqTeyxTHYbim4z9x
-         mm0GLxylsxEvhjMq6b5wpkyQG5LBgHzqCdI5UwJIhmMBDQLkO47n6wOexPuc30/cMvcY
-         yj87K/+EZIeelozZP8C0NiqH56naQ+4Ua4BBBrkbGYtBLrByYCpVlNc3K35yn1PxQkXG
-         P7BSqUe4BmrIuN/Iiz5PMENzK/AIZZtylu0AEs+BOt5ni2YrtDip9Q87yfKgqid9t2gu
-         ouU63dJ8xDmfJMMDhj53CYzLQjNmktNqtlBi9X5XMywk8Y2RtamXQ/AOWQXeh60EV4D/
-         OibQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Kr7Cs8C5JDqK/5RoLYLqaC8cLtS+NDoPpKGlb4+7KJo=;
-        b=WqadP00Y5wpyw9DbIPXryz+H8OL48GctqqnHmu9/sU9IQRWSHMr8sLMAmUVX7zH41A
-         acCEdNh2tuja0X7XKD8TnVzxWgXschgDaR6WH94KJtlxyn6FBkeoyOE9L93zI+AB7wb3
-         dCGrYjVRfucKOoJhkfmKJeDPg8oHZv4Q6KlyfLCjkfvpmNHF1ohhBYBpVyJKnkI8Wi4Z
-         JTz++rsFkthBtyFfpy4LNDFj0FEGMkjhb3utwEuo0Z5kwqyGhwsBq1+rM40c7EIQ8QmC
-         iITnFh1JbLOsYIuppx23HZlJZWbpLePF8eklAc3WdZS9biLGdXgSi5iKdCc/0VwQqjNS
-         5/TQ==
-X-Gm-Message-State: AOAM5318Uo5MjSqYnzPc/I6v1s48/aGhRiY23Hti5lRKzIyADNzM3YJq
-        fFReeMsItVJTRY8KSIhANB3RBg==
-X-Google-Smtp-Source: ABdhPJy+51wxaVYXDVetYUZzwgpTvqLX8A/zHopsV205It4wRyiwRGxWeVCVDuSvHo6XuGWJHMTh7w==
-X-Received: by 2002:a2e:a361:: with SMTP id i1mr39384418ljn.392.1641397372933;
-        Wed, 05 Jan 2022 07:42:52 -0800 (PST)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id g5sm520697lfj.33.2022.01.05.07.42.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 07:42:52 -0800 (PST)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id A63F310425A; Wed,  5 Jan 2022 18:43:11 +0300 (+03)
-Date:   Wed, 5 Jan 2022 18:43:11 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/26] x86/tdx: Handle in-kernel MMIO
-Message-ID: <20220105154311.bocij4mwbga4t2hb@box.shutemov.name>
-References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
- <20211214150304.62613-9-kirill.shutemov@linux.intel.com>
- <YdV1BpMiAUGrwASv@zn.tnic>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdV1BpMiAUGrwASv@zn.tnic>
+        Wed, 5 Jan 2022 10:43:59 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 6C739210FA;
+        Wed,  5 Jan 2022 15:43:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641397437; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xGNAZV+Ukm4Q9gMTGGXq+K89WkwSjReMseOBBO3/woc=;
+        b=QRCcNp+s4MmmV+MiE1NZJUur7eJEisnuJtfHtp0CzZzVsvApNIwxIfjgLUpt+6oNC2KXzm
+        IIni/j13uRYQPlPxyOlvsvwZ2eG/61LHr7ls73HHHADO9SII0DT4joploc1Fl1GZROfSiT
+        pVSFlVSDTQYoiXnq6XHnu8L4EqivU4M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641397437;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xGNAZV+Ukm4Q9gMTGGXq+K89WkwSjReMseOBBO3/woc=;
+        b=NwT1y8RnmrVf4Je0IQTiCvOtqAgL7/fi2CgDznQL8WSE+75yQurQ5nYWy64RdnGDamEwhI
+        h6/nzDA9TaJP4yAA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id E89BDA3B84;
+        Wed,  5 Jan 2022 15:43:56 +0000 (UTC)
+Date:   Wed, 05 Jan 2022 16:43:56 +0100
+Message-ID: <s5hh7aii3wj.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Baole Fang <fbl718@163.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Jeremy Szu <jeremy.szu@canonical.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        Hui Wang <hui.wang@canonical.com>,
+        Cameron Berkenpas <cam@neo-zeon.de>,
+        Kailang Yang <kailang@realtek.com>, Sami Loone <sami@loone.fi>,
+        Elia Devito <eliadevito@gmail.com>,
+        alsa-devel@alsa-project.org (moderated list:SOUND),
+        linux-kernel@vger.kernel.org (open list),
+        gregkh@linuxfoundation.org
+Subject: Re: [PATCH] ALSA: hda/realtek: Add quirk for Legion Y9000X 2020
+In-Reply-To: <20220105140856.4855-1-fbl718@163.com>
+References: <20220105140856.4855-1-fbl718@163.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 11:37:58AM +0100, Borislav Petkov wrote:
-> On Tue, Dec 14, 2021 at 06:02:46PM +0300, Kirill A. Shutemov wrote:
-> > In non-TDX VMs, MMIO is implemented by providing the guest a mapping
-> > which will cause a VMEXIT on access and then the VMM emulating the
-> > instruction that caused the VMEXIT. That's not possible in TDX guests
-> > because it requires exposing guest register and memory state to
-> > potentially malicious VMM.
+On Wed, 05 Jan 2022 15:08:54 +0100,
+Baole Fang wrote:
 > 
-> What does that mean exactly? Aren't TDX registers encrypted just like
-> SEV-ES ones? If so, they can't really be exposed...
+> Legion Y9000X 2020 has a speaker, but the speaker doesn't work.
+> This can be fixed by applying alc285_fixup_ideapad_s740_coef
+> to fix the speaker's coefficients.
+> Besides, to support the transition between the speaker and the headphone,
+> alc287_fixup_legion_15imhg05_speakers needs to be run.
+> 
+> Signed-off-by: Baole Fang <fbl718@163.com>
 
-Not encrypted, saved/restored by TDX module. But yes, cannot be exposed
-(without guest intend).
+Thanks, applied now (with Cc to stable).
 
-I talk here about *why* the traditional way to handle MMIO -- on VMM side
--- doesn't work for TDX. It's not safe with untrusted VMM.
 
-> > In TDX the MMIO regions are instead configured to trigger a #VE
-> > exception in the guest. The guest #VE handler then emulates the MMIO
-> > instruction inside the guest and converts them into a controlled
-> 
-> s/them/it/
-> 
-> > hypercall to the host.
-> > 
-> > MMIO addresses can be used with any CPU instruction that accesses the
-> 
-> s/the //
-> 
-> > memory. This patch, however, covers only MMIO accesses done via io.h
-> 
-> "Here are covered only the MMIO accesses ... "
-> 
-> > helpers, such as 'readl()' or 'writeq()'.
-> > 
-> > MMIO access via other means (like structure overlays) may result in
-> > MMIO_DECODE_FAILED and an oops.
-> 
-> Why? They won't cause a EXIT_REASON_EPT_VIOLATION #VE or?
-
-readX()/writeX() helpers limit the range of instructions which can trigger
-MMIO. It makes MMIO instruction emulation feasible. Raw access to MMIO
-region allows compiler to generate whatever instruction it wants.
-Supporting all possible instructions is a task of a different scope.
-
-> 
-> > AMD SEV has the same limitations to MMIO handling.
-> 
-> See, the other guy is no better here. :-P
-
-... but it works fine :P
-
-> > +static int tdx_handle_mmio(struct pt_regs *regs, struct ve_info *ve)
-> > +{
-> > +	char buffer[MAX_INSN_SIZE];
-> > +	unsigned long *reg, val = 0;
-> > +	struct insn insn = {};
-> > +	enum mmio_type mmio;
-> > +	int size;
-> > +	u8 sign_byte;
-> > +	bool err;
-> > +
-> > +	if (copy_from_kernel_nofault(buffer, (void *)regs->ip, MAX_INSN_SIZE))
-> > +		return -EFAULT;
-> > +
-> > +	insn_init(&insn, buffer, MAX_INSN_SIZE, 1);
-> > +	insn_get_length(&insn);
-> 
-> There is insn_decode() - see how it is used and use it here pls.
-
-Right, missed that.
-
-> > +	case MMIO_READ_SIGN_EXTEND:
-> > +		err = tdx_mmio_read(size, ve->gpa, &val);
-> > +		if (err)
-> > +			break;
-> > +
-> > +		if (size == 1)
-> > +			sign_byte = (val & 0x80) ? 0xff : 0x00;
-> > +		else
-> > +			sign_byte = (val & 0x8000) ? 0xff : 0x00;
-> > +
-> > +		/* Sign extend based on operand size */
-> > +		memset(reg, sign_byte, insn.opnd_bytes);
-> > +		memcpy(reg, &val, size);
-> > +		break;
-> 
-> You can simplify this a bit:
-> 
->         case MMIO_READ_SIGN_EXTEND: {
->                 u8 sign_byte = 0, msb = 7;
-> 
->                 err = tdx_mmio_read(size, ve->gpa, &val);
->                 if (err)
->                         break;
-> 
->                 if (size > 1)
->                         msb = 15;
-> 
->                 if (val & BIT(msb))
->                         sign_byte = -1;
-> 
->                 /* Sign extend based on operand size */
->                 memset(reg, sign_byte, insn.opnd_bytes);
->                 memcpy(reg, &val, size);
->                 break;
->         }
-
-Okay, will do.
-
--- 
- Kirill A. Shutemov
+Takashi

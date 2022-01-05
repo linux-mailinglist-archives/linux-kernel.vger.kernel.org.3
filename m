@@ -2,100 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB76448551B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 15:55:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C859448551E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 15:55:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241144AbiAEOyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 09:54:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48054 "EHLO
+        id S241154AbiAEOzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 09:55:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236032AbiAEOyv (ORCPT
+        with ESMTP id S241148AbiAEOzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 09:54:51 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C473FC061761
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 06:54:50 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1n57gc-0005tC-Sz; Wed, 05 Jan 2022 15:54:46 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-7899-4998-133d-b4b9.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:7899:4998:133d:b4b9])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 271596D1BFB;
-        Wed,  5 Jan 2022 14:54:46 +0000 (UTC)
-Date:   Wed, 5 Jan 2022 15:54:45 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] can: mcp251x: Get rid of duplicate of_node
- assignment
-Message-ID: <20220105145445.fton3qt5szecwy4y@pengutronix.de>
-References: <20211202205855.76946-1-andriy.shevchenko@linux.intel.com>
- <YbHvcDhtZFTyfThT@smile.fi.intel.com>
- <20211210130607.rajkkzr7lf6l4tok@pengutronix.de>
- <YbNT4iOj+jfMiIDu@smile.fi.intel.com>
- <YdWpWSMhzmElnIJH@smile.fi.intel.com>
- <20220105143448.pnckx2wgal2y3rll@pengutronix.de>
- <YdWvfdRTpPZ0YcSD@smile.fi.intel.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="moumr2otajt4bson"
-Content-Disposition: inline
-In-Reply-To: <YdWvfdRTpPZ0YcSD@smile.fi.intel.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+        Wed, 5 Jan 2022 09:55:06 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DFCC061761;
+        Wed,  5 Jan 2022 06:55:04 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id h21so54492302ljh.3;
+        Wed, 05 Jan 2022 06:55:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=vF2Ur+gJNu/g/h2RseWON+i1azy8tz5Gjqu/58crw4w=;
+        b=P0cw6CmbJdzTwWCdut97utaRg06tOvItHw6xqjzQ3HGRhnDwZzoyBAmuXmp56V62LF
+         8kj+MQEWBXvm/Q1YQRXs47h0DSPpkt2HoQUKfFrTWxmRNMpAvbJ95L9zZwJon9HPkeT+
+         g7s0mhhP4QFYPIUAXc6+JOT8XlzN+2wyReaRUdjwbfxK5Osk3AHjE1L8f80fy+6sxXPJ
+         LETFnJG9FAJWbZqAiuWd70EDYrfBQuGSNIjrJEC+YAdqhjiZAH2FRZjMgCpu8GxSdxzL
+         didWz7/dnGA1jznQlGT7/c/FLak96tBBPX1UWqeBThEfsxRtUqXYqQ9Lq8pGpmRYasBT
+         SBFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=vF2Ur+gJNu/g/h2RseWON+i1azy8tz5Gjqu/58crw4w=;
+        b=dSFjQWnHexJIdbXrVNG2mKhi1AR1Etvbk/95aqvd0Tv0n18NKxhzf04W+9GsVNoBFl
+         NZ9QaI3spR8U8UP7Cixc0IskDcOhebIBKTVNxO2vfftJANAwPN0MclSeyybnihwrTf0r
+         +RODazyquZ3fWKE6B+X5zaxw7OK/5su+p2AQf7Sg2TcIqQuWzII4IE5NxC+Rnb02Yxy8
+         tUf1fr4XRcaPkyaRuP/BTBXnJm97fwrWiJBOA0louE+C8XuWgtxxo/CWyckWNXs/huLl
+         qEDGhlNE8KBjqoBcdWKqKJxyH9vLsqmAjD8SDxD++pOgVDRkrb2TxmhcPFg9sODwQxRe
+         C7bg==
+X-Gm-Message-State: AOAM532TJLQqpqO//fdJcG2CRWdmvCGut+yrg4UEK9aF7QYqa09lCSz3
+        2ZV6XcNqSFTXao8mCD3Rs69thg1ggM5UQhsS7UQ=
+X-Google-Smtp-Source: ABdhPJzQn1H73Hr4Vda1J1Ie/6CORlmqbP+9PQdb9ui/o6nqqAKqOhR7RcMLD2m23LtgKeDe5PLlgg==
+X-Received: by 2002:a2e:bc17:: with SMTP id b23mr32262436ljf.365.1641394502333;
+        Wed, 05 Jan 2022 06:55:02 -0800 (PST)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id 194sm3124128ljj.60.2022.01.05.06.54.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 06:55:01 -0800 (PST)
+Message-ID: <61d5b145.1c69fb81.40afb.07d4@mx.google.com>
+Date:   Wed, 05 Jan 2022 06:55:01 -0800 (PST)
+X-Google-Original-Date: Wed, 05 Jan 2022 14:54:57 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220104073845.629257314@linuxfoundation.org>
+Subject: RE: [PATCH 5.15 00/72] 5.15.13-rc2 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org,
+        Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue,  4 Jan 2022 08:41:12 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.15.13 release.
+> There are 72 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 06 Jan 2022 07:38:29 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.13-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
---moumr2otajt4bson
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+5.15.13-rc2 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-On 05.01.2022 16:47:25, Andy Shevchenko wrote:
-> > > Can we have a chance to see it in the v5.17-rc1?
-> >=20
-> > Yes:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/=
-log/?h=3Dlinux-can-next-for-5.17-20220105
-> >=20
-> > 'about to send that PR.
->=20
-> Cool, thanks! Happy new year!
-
-Thanks. Happy new year, too!
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---moumr2otajt4bson
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHVsTIACgkQqclaivrt
-76nPCwf/eCXKkkJEyH0493PhSIQujsikknG1Iml6sqKoFq9rwF4h8mSbRgpaVRIn
-9EGT/EE5mNzFBVUo2B0on2cw/1ygYWkQ5ySj/P9SYw9U1Sx+7RRdBXFt4MKmCmq0
-mKzfAY3quIxmzEiPTegtbcAeN5wN8PiM9G0YvDGbFkEtujd5Z4Ekik8zZ8Sm0Qx7
-G7PJrsFmU0viZU9LrbHwwApLMDwLLuLYZVuCaDCvtDvCjMZIkGs4ywg0k/ZTSjtV
-3W1P+1cBXqcLhRtdKGNCxxpFOYGQrin3smFa7PZPm0l9S734rDCFrCWM5NOkVFG8
-//hgrO50xxttmkQ2c56RsVrLFYUOQg==
-=WWje
------END PGP SIGNATURE-----
-
---moumr2otajt4bson--

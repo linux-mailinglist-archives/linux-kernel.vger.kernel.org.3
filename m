@@ -2,112 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C78DA4859F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:23:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F17A4859FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:26:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244005AbiAEUX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 15:23:29 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:11952 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243981AbiAEUX0 (ORCPT
+        id S244007AbiAEU0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 15:26:44 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:44406
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244008AbiAEUYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 15:23:26 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 205JnIdk023862;
-        Wed, 5 Jan 2022 20:23:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=U6KcrYf76CYBoxXJ2C50jdfzFdGQy4doODkR1eRg3mQ=;
- b=dGQouNd+lrshMLbrL8pfOkowE5G2AXz2pX47JdOUQcaweObQPfXHGB2078Fhy6349Jod
- K2xRUyGc+2sVoG5/mDuR0CzCxnm2NR0VCE1nbxuslhAa5UhPM1cZIw/+ytv3iylXRVYA
- G5598g4N+aa9xpRuwFOTKeFq+laxWCyfPQ4Uu2YFkrbah3k/15TEwN56O+/fO7aE8eun
- X0OcDq2aUsHL0ZL2Fq0obQgQlJZ4YK4kXhYeaz/R3R7R+fGvcJJ6BSqYgqdm5PNQAGgE
- UvgR1KlmfnWYtVGjS/SzN8X6QBQOOLTKc97i8ZW5uKNDbFP7rHkf8nW6fmseyck/JrqE BQ== 
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dck05twdu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jan 2022 20:23:16 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 205KJ7go029542;
-        Wed, 5 Jan 2022 20:23:16 GMT
-Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
-        by ppma02dal.us.ibm.com with ESMTP id 3daekbe78m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jan 2022 20:23:16 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 205KNE5r19792368
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 5 Jan 2022 20:23:14 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BC331BE061;
-        Wed,  5 Jan 2022 20:23:14 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 642DBBE054;
-        Wed,  5 Jan 2022 20:23:14 +0000 (GMT)
-Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.73.224])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed,  5 Jan 2022 20:23:14 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-fsi@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, joel@jms.id.au, jk@ozlabs.org,
-        alistair@popple.id.au, eajames@linux.ibm.com
-Subject: [PATCH] fsi: occ: Fetch OCC response header again to avoid checksum failure
-Date:   Wed,  5 Jan 2022 14:23:13 -0600
-Message-Id: <20220105202313.27510-1-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
+        Wed, 5 Jan 2022 15:24:37 -0500
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E49714002B
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 20:24:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1641414273;
+        bh=Z7Q01MgSEbyZYHT3rk+3A+kephcacvWRoAm/f2TTeCA=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=CwlomVquiDB7eJaEX3kTbcFp0MAequdVgGHnzkdMbn0G1IuDjxAwQCoZ9MQ9MyRJO
+         7PcLlKy5Ox17Tl7VAVsKXHfKOmL/AG0u1GqxbW48PkgExLmwHvqMaSLKT5ucMZ3QL9
+         zSdC49vZNNUUCXe2qPzZTnqN72YgwJYQrhgyWcjKwcliaXFG3EiycnIBLNuD1LHy3y
+         8FIp/WeHruWJU5DUrAMJJVOAlzCgikxfZxQLlkA3nFTcpG6XbawEMyWFFKjJu4A+EQ
+         2HqMXnbdHjaJCuxPXj0WKJyi4u3i3OcWJH9KotpEY+7XggXRh+H1uXsSXFW/nq5Kjx
+         dGHRLFhOAxcbQ==
+Received: by mail-wm1-f70.google.com with SMTP id k40-20020a05600c1ca800b00345bf554707so1191254wms.4
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 12:24:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Z7Q01MgSEbyZYHT3rk+3A+kephcacvWRoAm/f2TTeCA=;
+        b=43u0+EzVait51s7bEaeybVGHMoqCUk5GGjurpyUM/lKc5a955t/OLqxrc5NOniMsV1
+         tiHgGEPzrQhX2uXbNmJWvkauUTIVnuxVjfDlfbb2k4lm6N3VbqFx7znsvMXv0YmcsnkE
+         JI6Q54eznWwXaDBP2zTEv0SVouw3Usez0FNcc6hO5Orpph1ZJLdeMCHPk5mzSPkCa5K6
+         hPTxh6n8joKWSmCFX6dyR5AwdN1qv98pk1m8jupGjLTcvUaljZP826qZJ9PmTFf5EkQY
+         EdE8SXsd519pkxIKKlQqUDs+sahmisLEwdjDEm9oUQfSuR6dfehz9hNWy1FAeXAKmT3i
+         bHfA==
+X-Gm-Message-State: AOAM53166+mGjgOKzU2tkuffDilhMUqV7aNXCNnz0tvLHCBq6UID9Pfn
+        LS/M8VnB9250ZmbvwAsjtVGcxpVDkpBpWicKtBTg09fBPbqmLpYVmvBjg0uX2661VO9O9hhJtow
+        9JcUAb70ZdpiPIAZf918Tv+ShcAyGBkFLRa2rn/HAsw==
+X-Received: by 2002:a1c:9856:: with SMTP id a83mr4298307wme.157.1641414271345;
+        Wed, 05 Jan 2022 12:24:31 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyDOoioCbtDcfutGP5nnn1CRcSrlm9FAZ0/AwZzVCuwcbxtjswiY565cQifCl/khgMGZCxOOw==
+X-Received: by 2002:a1c:9856:: with SMTP id a83mr4298293wme.157.1641414271152;
+        Wed, 05 Jan 2022 12:24:31 -0800 (PST)
+Received: from [192.168.1.124] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id l26sm41211495wrz.44.2022.01.05.12.24.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jan 2022 12:24:30 -0800 (PST)
+Message-ID: <e54c289c-6aeb-fcf4-67fe-fc8e375149f9@canonical.com>
+Date:   Wed, 5 Jan 2022 21:24:29 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: BwhVA-tj4LPKcsNkGKZ2N0wgGfn68tgJ
-X-Proofpoint-GUID: BwhVA-tj4LPKcsNkGKZ2N0wgGfn68tgJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-05_06,2022-01-04_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 mlxscore=0 phishscore=0 adultscore=0 clxscore=1011
- malwarescore=0 bulkscore=0 mlxlogscore=999 impostorscore=0 suspectscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201050130
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 01/24] pinctrl: samsung: drop pin banks references on
+ error paths
+Content-Language: en-US
+To:     Sam Protsenko <semen.protsenko@linaro.org>
+Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        Chanho Park <chanho61.park@samsung.com>, stable@vger.kernel.org
+References: <20211231161930.256733-1-krzysztof.kozlowski@canonical.com>
+ <20211231161930.256733-2-krzysztof.kozlowski@canonical.com>
+ <CAPLW+4mosbk2_NPFFP=sUmKjBoZOG3vNcmT+7sMtTunhbVqcxA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CAPLW+4mosbk2_NPFFP=sUmKjBoZOG3vNcmT+7sMtTunhbVqcxA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the event that the driver state is reset, and the previous OCC
-operation had a sequence number of 1, there is the possibility that
-the SRAM buffer is updated in between fetching the OCC response header
-and the rest of the data (since the sequence number match is really a
-false positive). This results in a checksum failure. To avoid this
-condition, simply fetch the whole response rather than skipping the
-header when fetching the rest of the response.
+On 03/01/2022 15:49, Sam Protsenko wrote:
+> On Fri, 31 Dec 2021 at 18:20, Krzysztof Kozlowski
+> <krzysztof.kozlowski@canonical.com> wrote:
+>>
+>> The driver iterates over its devicetree children with
+>> for_each_child_of_node() and stores for later found node pointer.  This
+>> has to be put in error paths to avoid leak during re-probing.
+>>
+>> Fixes: ab663789d697 ("pinctrl: samsung: Match pin banks with their device nodes")
+>> Cc: <stable@vger.kernel.org>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> ---
+>>  drivers/pinctrl/samsung/pinctrl-samsung.c | 29 +++++++++++++++++------
+>>  1 file changed, 22 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.c b/drivers/pinctrl/samsung/pinctrl-samsung.c
+>> index 8941f658e7f1..f2864a7869b3 100644
+>> --- a/drivers/pinctrl/samsung/pinctrl-samsung.c
+>> +++ b/drivers/pinctrl/samsung/pinctrl-samsung.c
+>> @@ -1002,6 +1002,15 @@ samsung_pinctrl_get_soc_data_for_of_alias(struct platform_device *pdev)
+>>         return &(of_data->ctrl[id]);
+>>  }
+>>
+>> +static void samsung_banks_of_node_put(struct samsung_pinctrl_drv_data *d)
+>> +{
+>> +       struct samsung_pin_bank *bank;
+>> +       unsigned int i;
+>> +
+>> +       for (i = 0; i < d->nr_banks; ++i, ++bank)
+>> +               of_node_put(bank->of_node);
+> 
+> But "bank" variable wasn't actually assigned before, only declared?
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
- drivers/fsi/fsi-occ.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+Good point, bank has to be assigned just like in patch 2/24.
 
-diff --git a/drivers/fsi/fsi-occ.c b/drivers/fsi/fsi-occ.c
-index 7eaab1be0aa4..660c3fc43be5 100644
---- a/drivers/fsi/fsi-occ.c
-+++ b/drivers/fsi/fsi-occ.c
-@@ -546,10 +546,15 @@ int fsi_occ_submit(struct device *dev, const void *request, size_t req_len,
- 	dev_dbg(dev, "resp_status=%02x resp_data_len=%d\n",
- 		resp->return_status, resp_data_length);
- 
--	/* Grab the rest */
-+	/*
-+	 * Grab the rest, including the occ response header again, just in case
-+	 * it changed in between our two getsram operations (this can happen
-+	 * despite the sequence number check if the driver state is reset). The
-+	 * data length shouldn't change at OCC runtime, and the response
-+	 * status, which may have changed, has to be checked by users anyway.
-+	 */
- 	if (resp_data_length > 1) {
--		/* already got 3 bytes resp, also need 2 bytes checksum */
--		rc = occ_getsram(occ, 8, &resp->data[3], resp_data_length - 1);
-+		rc = occ_getsram(occ, 0, resp, resp_data_length + 7);
- 		if (rc)
- 			goto done;
- 	}
--- 
-2.27.0
+> 
+>> +}
+>> +
 
+Best regards,
+Krzysztof

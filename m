@@ -2,122 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CC6484FC8
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 10:08:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 518A6484FCB
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 10:10:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238762AbiAEJIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 04:08:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53456 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238747AbiAEJIO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 04:08:14 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557F2C061761
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 01:08:13 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id AB3D01F4415F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1641373691;
-        bh=I67Uv6Cy2hK+LHIl0VkG9gAWCveyN5g+6PhqqgBQlF4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=deJgGk+aYuWwoE6VD6TD2Y4B1BZNeA1Sxlue3OKercwINlKi16/pp35GMOyxuzgHP
-         M30UWtMgtP1qeMA0y0+Ve710BAPVb0pSvHjIwXoc5mX0be2ywYQB05A8AthH8lKPC8
-         SxZclAuUG9FcLh3pVLetygItZazefrR0cWi8yQA8d6x7OCk+nzcDd8j0SPEniyCXRx
-         uHEZwqKmpSlh7d4d+NXe0J283xlUe/EnV4PvTFEV11YL+yDHCag5RPZNVYf3QkNaCP
-         9AypXaHX3gGG/FCFNK6Gwy8gMqAslv2tELYyTx8DB141fleWTYs4Kj4WyKhWZ3Poya
-         Kjo30kcmFEgzA==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     a.hajda@samsung.com
-Cc:     narmstrong@baylibre.com, robert.foss@linaro.org,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, kernel@collabora.com,
-        linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2] drm/bridge: parade-ps8640: Link device to ensure suspend/resume order
-Date:   Wed,  5 Jan 2022 10:08:02 +0100
-Message-Id: <20220105090802.73564-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.33.1
+        id S238764AbiAEJKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 04:10:09 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:38480 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231499AbiAEJKH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 04:10:07 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowAAnvqZYYNVh7ODRBQ--.11308S2;
+        Wed, 05 Jan 2022 17:09:44 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     Felix.Kuehling@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, airlied@linux.ie, daniel@ffwll.ch
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] drm/amdkfd: Check for null pointer after calling kmemdup
+Date:   Wed,  5 Jan 2022 17:09:43 +0800
+Message-Id: <20220105090943.2434040-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowAAnvqZYYNVh7ODRBQ--.11308S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKFyrKr18uryUWryktFW3Awb_yoWDXwbEk3
+        yxXFsxXr4j9Fn5uFn0vr4rXrySyF4Uurs7ZF1Sga4rJa4xury3W34UWrZ5Xw4fuanrZ3WD
+        Jw1q9a1rAwnrGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbcAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFWl
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUeLvtDUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Entering suspend while the display attached to this bridge is still on
-makes the resume sequence to resume the bridge first, display last:
-when this happens, we get a timeout while resuming the bridge, as its
-MCU will get stuck due to the display being unpowered.
+As the possible failure of the allocation, kmemdup() may return NULL
+pointer.
+Therefore, it should be better to check the 'props2' in order to prevent
+the dereference of NULL pointer.
 
-On the other hand, on mt8173-elm, closing the lid makes the display to
-get powered off first, bridge last, so at resume time the sequence is
-swapped (compared to the first example) and everything just works
-as expected.
-
-Add a stateless device link to the DRM device that this bridge belongs
-to, ensuring a correct resume sequence and solving the unability to
-correctly resume bridge operation in the first mentioned example.
-
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Fixes: 3a87177eb141 ("drm/amdkfd: Add topology support for dGPUs")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
- drivers/gpu/drm/bridge/parade-ps8640.c | 27 ++++++++++++++++++++++++--
- 1 file changed, 25 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/amd/amdkfd/kfd_crat.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bridge/parade-ps8640.c
-index 818704bf5e86..450bc9bdf295 100644
---- a/drivers/gpu/drm/bridge/parade-ps8640.c
-+++ b/drivers/gpu/drm/bridge/parade-ps8640.c
-@@ -102,6 +102,7 @@ struct ps8640 {
- 	struct regulator_bulk_data supplies[2];
- 	struct gpio_desc *gpio_reset;
- 	struct gpio_desc *gpio_powerdown;
-+	struct device_link *link;
- 	bool pre_enabled;
- };
- 
-@@ -456,14 +457,36 @@ static int ps8640_bridge_attach(struct drm_bridge *bridge,
- 		return ret;
- 	}
- 
-+	ps_bridge->link = device_link_add(bridge->dev->dev, dev, DL_FLAG_STATELESS);
-+	if (!ps_bridge->link) {
-+		dev_err(dev, "failed to create device link");
-+		ret = -EINVAL;
-+		goto err_devlink;
-+	}
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_crat.c b/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
+index c60e82697385..d15380c65c6d 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
+@@ -410,6 +410,9 @@ static int kfd_parse_subtype_iolink(struct crat_subtype_iolink *iolink,
+ 			return -ENODEV;
+ 		/* same everything but the other direction */
+ 		props2 = kmemdup(props, sizeof(*props2), GFP_KERNEL);
++		if (!props2)
++			return -ENOMEM;
 +
- 	/* Attach the panel-bridge to the dsi bridge */
--	return drm_bridge_attach(bridge->encoder, ps_bridge->panel_bridge,
-+	ret = drm_bridge_attach(bridge->encoder, ps_bridge->panel_bridge,
- 				 &ps_bridge->bridge, flags);
-+	if (ret)
-+		goto err_bridge_attach;
-+
-+	return 0;
-+
-+err_bridge_attach:
-+	device_link_del(ps_bridge->link);
-+err_devlink:
-+	drm_dp_aux_unregister(&ps_bridge->aux);
-+
-+	return ret;
- }
- 
- static void ps8640_bridge_detach(struct drm_bridge *bridge)
- {
--	drm_dp_aux_unregister(&bridge_to_ps8640(bridge)->aux);
-+	struct ps8640 *ps_bridge = bridge_to_ps8640(bridge);
-+
-+	drm_dp_aux_unregister(&ps_bridge->aux);
-+	if (ps_bridge->link)
-+		device_link_del(ps_bridge->link);
- }
- 
- static struct edid *ps8640_bridge_get_edid(struct drm_bridge *bridge,
+ 		props2->node_from = id_to;
+ 		props2->node_to = id_from;
+ 		props2->kobj = NULL;
 -- 
-2.33.1
+2.25.1
 

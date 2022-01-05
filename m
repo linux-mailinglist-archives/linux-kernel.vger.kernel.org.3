@@ -2,57 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 468B8485C56
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 00:40:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B2A5485C5A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 00:40:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245466AbiAEXjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 18:39:55 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:33802 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S245445AbiAEXjv (ORCPT
+        id S245500AbiAEXkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 18:40:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55506 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245520AbiAEXkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 18:39:51 -0500
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 205Ndl71017585
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 5 Jan 2022 18:39:47 -0500
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id F23F215C339C; Wed,  5 Jan 2022 18:39:46 -0500 (EST)
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     adilger.kernel@dilger.ca, Nghia Le <nghialm78@gmail.com>
-Cc:     "Theodore Ts'o" <tytso@mit.edu>, lukas.bulwahn@gmail.com,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] ext4: remove useless resetting io_end_size in mpage_process_page()
-Date:   Wed,  5 Jan 2022 18:39:45 -0500
-Message-Id: <164142575579.441490.5053656243661327373.b4-ty@mit.edu>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20211025221803.3326-1-nghialm78@gmail.com>
-References: <20211025221803.3326-1-nghialm78@gmail.com>
-MIME-Version: 1.0
+        Wed, 5 Jan 2022 18:40:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9042C034006;
+        Wed,  5 Jan 2022 15:40:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 907AE619AC;
+        Wed,  5 Jan 2022 23:40:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F04A7C36AE9;
+        Wed,  5 Jan 2022 23:40:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641426009;
+        bh=VnB5aRMVZsf+LgbhdEnb7mc/q8PKnT6mmWDJVnaNZD8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=swg6DYRmuYMN0i0hL2QE56Wal/cPnFkpgaHPmRc7KwisrgNHtJ9ABQgodaPc4jCAj
+         /nH4r3XE/WWEabu6MXtygU792V+dpj1HwvQdffMVtWP680XP6YwSWGxFn2fqbZpbm+
+         rc71sG2Z6P4zNpkymCishoPtRjHsYm39jWKYTb90HsgAahAMXnwB28AMLZkiBBFyiK
+         jFUyZImxdb22UovIKvHr4+tkSrklqnNnWi0UHS24Q2+mGAtKwxae1JXFsAdq085BS0
+         A2Ts0gTftwRMKABNpXpDLcBkzKgk061ALCMiWoWvyliuyEuUKgy82Q7h7PaFlBaWcA
+         z7lPM+tT+pgpQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D4EACF7940B;
+        Wed,  5 Jan 2022 23:40:08 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 1/2] libbpf: Use probe_name for legacy kprobe
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164142600886.21166.4094526896575840947.git-patchwork-notify@kernel.org>
+Date:   Wed, 05 Jan 2022 23:40:08 +0000
+References: <20211227130713.66933-1-wangqiang.wq.frank@bytedance.com>
+In-Reply-To: <20211227130713.66933-1-wangqiang.wq.frank@bytedance.com>
+To:     Qiang Wang <wangqiang.wq.frank@bytedance.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        hengqi.chen@gmail.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zhouchengming@bytedance.com,
+        songmuchun@bytedance.com, duanxiongchun@bytedance.com,
+        shekairui@bytedance.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Oct 2021 05:18:03 +0700, Nghia Le wrote:
-> The command "make clang-analyzer" detects dead stores in
-> mpage_process_page() function.
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
+
+On Mon, 27 Dec 2021 21:07:12 +0800 you wrote:
+> Fix a bug in commit 46ed5fc33db9, which wrongly used the
+> func_name instead of probe_name to register legacy kprobe.
 > 
-> Do not reset io_end_size to 0 in the current paths, as the function
-> exits on those paths without further using io_end_size.
-> 
+> Fixes: 46ed5fc33db9 ("libbpf: Refactor and simplify legacy kprobe code")
+> Reviewed-by: Hengqi Chen <hengqi.chen@gmail.com>
+> Tested-by: Hengqi Chen <hengqi.chen@gmail.com>
+> Co-developed-by: Chengming Zhou <zhouchengming@bytedance.com>
+> Signed-off-by: Qiang Wang <wangqiang.wq.frank@bytedance.com>
+> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
 > 
 > [...]
 
-Applied, thanks!
+Here is the summary with links:
+  - [v2,1/2] libbpf: Use probe_name for legacy kprobe
+    https://git.kernel.org/bpf/bpf-next/c/71cff670baff
+  - [v2,2/2] libbpf: Support repeated legacy kprobes on same function
+    https://git.kernel.org/bpf/bpf-next/c/51a33c60f1c2
 
-[1/1] ext4: remove useless resetting io_end_size in mpage_process_page()
-      commit: 2e1a1101de1e37c80c750c2657cc35d7f560756c
-
-Best regards,
+You are awesome, thank you!
 -- 
-Theodore Ts'o <tytso@mit.edu>
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

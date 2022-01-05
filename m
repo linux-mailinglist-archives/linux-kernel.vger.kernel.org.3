@@ -2,109 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F3048526D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:27:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 143FB485271
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:28:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240013AbiAEM1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 07:27:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42088 "EHLO
+        id S240015AbiAEM2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 07:28:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235383AbiAEM1L (ORCPT
+        with ESMTP id S235383AbiAEM2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 07:27:11 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA24C061761;
-        Wed,  5 Jan 2022 04:27:11 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id l10-20020a17090a384a00b001b22190e075so3683891pjf.3;
-        Wed, 05 Jan 2022 04:27:11 -0800 (PST)
+        Wed, 5 Jan 2022 07:28:49 -0500
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB27BC061784
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 04:28:48 -0800 (PST)
+Received: by mail-qv1-xf2e.google.com with SMTP id ke6so37391664qvb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 04:28:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=46NaslxK0CBDuwzO8TgoSL/HvMffOQFuGj0G156NG9Y=;
-        b=AuZGzoAweBdideoPYcdrbQkwx6fL2cTcKzJAX2gyfQjLYRP4dn8i02BYKdOb5vDvvH
-         8jr02hE+gYyX11wKLfkYa5v24SpCdxIqt53VJJuOvoWIFDPnCyOSAKw0I+XmDh5iMUDM
-         8k1JHhDC/kCynJSybsJZP2CJfmScBlFht/usEpADpuTcLNfs0rn5HJDvbaToQADcB/rd
-         /M+xJX7+5/pbJk1AhMAL49nymj3Jw5O3Lsf1GrycseHFydb6NjW2PidXp6HkEiRFf/31
-         cMyZpnurYYr+YRSqk3BZBwLix6K7t4oGnyom4R0jKlssCAIXGmmTAibArHOEf6eh5Uc1
-         9DDw==
+        bh=kSKdFvHyHlkRq5hWk3Gwn5Pq2HHsmkBsyVwESab0Kj4=;
+        b=cwqRgkXGwzTmPi88A2tV4UqKiYfWmPwjREM6TiicmjlgcjtHZxLDLFDrockfM6UI7S
+         AqQ3RQQBd8jhGjCWofyEg92SYG33pZQ3sRW5LftBIWYh/+rLQljrNFT7zlzlvoLiEXgK
+         WpKfE4virtaHY1QDhdGAgxnJ/rvbj6lV9sNlVAaAtohan9Le6INY0OA8o9lKGb8YuWv8
+         9ehcUKckxpZMZ4oGMVjF0WeG6+Xp9AxuL7NbnhcgMT2EezQIQoptbbApA4cIaqttlFVh
+         Ci5muAizHPS2bgoJZD7iuW1U6PjpOawp0FqRxoV893auQ9ysaz2e2jcdVP0MAP/ou55A
+         Sfmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=46NaslxK0CBDuwzO8TgoSL/HvMffOQFuGj0G156NG9Y=;
-        b=mhevZUGtchH67EtnmqjCAo25BLByvmpeQDw99rX5RF/HAWJKE4vf2j0+Q5i6gdgelv
-         oTyTKmhPJBO6TGP+UHc3in9eI2rx9gnDDigksRpWqXOdd/hTIhOKLXBKVbY3OW7LZN1d
-         V76bWLTxYWn3cuvBHtFJtWlCsaDzKhpSX1GA33MPZMNZoYDsrzxbmg0pPPt0Jzw2K/qr
-         QddDXwZXGaRJ0cEtjB0BA+wS2ia7CTf3hRj0zEW4vT06erZJ1gc4IAnJS8TANee1yz+E
-         e+pLX0ckJQrNQNwwefAxS33m+rW+JFSumcMrEil21Vk2yyjVSiBrB0jL8nHMNHqfkBrT
-         mSIg==
-X-Gm-Message-State: AOAM530UavrO92kxajmmE7+llGunh57eHIFk8okEiI7XVN6xh+8zciLl
-        P12Mg4fcMdgkh8ttUqsq4sgnJZMRJEI=
-X-Google-Smtp-Source: ABdhPJyC/OHGcK2uRp88D7Xgu7YxzGc7toAP+uUSoc/+MTPRoOPstE5p7tqoPOqBYflo6CGErcW+LA==
-X-Received: by 2002:a17:90a:c210:: with SMTP id e16mr3836129pjt.90.1641385630830;
-        Wed, 05 Jan 2022 04:27:10 -0800 (PST)
-Received: from shinobu (113x37x72x24.ap113.ftth.ucom.ne.jp. [113.37.72.24])
-        by smtp.gmail.com with ESMTPSA id k8sm49233784pfu.72.2022.01.05.04.27.07
+        bh=kSKdFvHyHlkRq5hWk3Gwn5Pq2HHsmkBsyVwESab0Kj4=;
+        b=wwLA0BWxaVKAln+ErN6XSNnfWvikUsrXNVmcgXrZLWPW6/GS8jR/eaFE3tB4CK1/YS
+         AQOLdijWsT8dgWEjrqHhPjMnao+A/sv2M9mI4aUnpT+2nDkH3G1CoZuThY7/WI9krIvU
+         sOv5HGx7H3727p66mn2SB+E78XGoAAMQopspM9LfORkmhBLasq6Vy0LbWvC2AV+Ht1cd
+         A4raeZH7dy8/FLzt99Yp9uP345SlvB0gmk4x3bTqLhJL3E47OCgFXBHRogu8QMrmA1kw
+         HxWOJrIlZ2Zi6WTwELqsQyt5T2Jo6wJoj186sp1XCQF93VRtP9ZYfsRzCrzR3cRVGR1X
+         Xp+A==
+X-Gm-Message-State: AOAM53267nEtXH2OLAfWX0KHmYtbNClkJOc7C2gnEHhE/zlmLbp2X6Vt
+        OBqA+ilawDpiFb8wu0PlThCuxQ==
+X-Google-Smtp-Source: ABdhPJyww7t4i5QLu5lCh4SClZkrl0LI5RtHqyZuubtgPtqYTXRkU2Gbz6/8PP8duplNKA7hjAke7w==
+X-Received: by 2002:a05:6214:c8c:: with SMTP id r12mr13001003qvr.79.1641385727855;
+        Wed, 05 Jan 2022 04:28:47 -0800 (PST)
+Received: from eze-laptop ([186.122.18.30])
+        by smtp.gmail.com with ESMTPSA id 137sm30706247qkm.69.2022.01.05.04.28.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 04:27:09 -0800 (PST)
-Date:   Wed, 5 Jan 2022 21:26:58 +0900
-From:   William Breathitt Gray <vilhelm.gray@gmail.com>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     linux-iio@vger.kernel.org, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Subject: Re: [PATCH v3 00/23] counter: cleanups and device lifetime fixes
-Message-ID: <YdWOkn2Gtd7FSYmR@shinobu>
-References: <20211229154441.38045-1-u.kleine-koenig@pengutronix.de>
+        Wed, 05 Jan 2022 04:28:44 -0800 (PST)
+Date:   Wed, 5 Jan 2022 09:28:39 -0300
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     mchehab@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, hverkuil-cisco@xs4all.nl,
+        jernej.skrabec@gmail.com, nicolas.dufresne@collabora.co.uk,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-staging@lists.linux.dev, kernel@collabora.com
+Subject: Re: [PATCH v4 2/2] media: hevc: Embedded indexes in RPS
+Message-ID: <YdWO9+6XUh3SFnvj@eze-laptop>
+References: <20220104073842.1791639-1-benjamin.gaignard@collabora.com>
+ <20220104073842.1791639-3-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7aArQOflsA51RSk6"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211229154441.38045-1-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20220104073842.1791639-3-benjamin.gaignard@collabora.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---7aArQOflsA51RSk6
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jan 04, 2022 at 08:38:42AM +0100, Benjamin Gaignard wrote:
+> Reference Picture Set lists provide indexes of short and long term
+> reference in DBP array.
+> Fix Hantro to not do a look up in DBP entries.
+> Make documentation more clear about it.
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 
-On Wed, Dec 29, 2021 at 04:44:18PM +0100, Uwe Kleine-K=C3=B6nig wrote:
->  - I think intel-qep.c makes the counter unfunctional in
->    intel_qep_remove before the counter is unregistered.
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
-Hello Uwe,
-
-Would you elaborate some more on this? I think intel_qep_remove() is
-only called after the counter is unregistered because the struct
-counter_device parent is set to &pci->dev in intel_qep_probe(). Am I
-misunderstanding the removal path?
-
-Thanks,
-
-William Breathitt Gray
-
---7aArQOflsA51RSk6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEk5I4PDJ2w1cDf/bghvpINdm7VJIFAmHVjocACgkQhvpINdm7
-VJLp1Q//ev76+YaOvx1nSrhlqo7QTyCV0pU6DFUBoZu0imahFYInkRiud0z7X/v/
-cc7aNEEbYnb0zJEMDGwgDXthBwkwCoWuLPC90j5b3BqcDE1DcEnDaASIgs2PDpSE
-9bLRfFbJDNqrRzL4rmxyehbbgfjI/o4SH+bp7JzuOck5xAgleCKx1X/KbXW91eec
-BBAZEpy6MH2IM6AX+bPA5pIh75wu1PQt/wLwXMk/ZIK8ATqNxIqlmlzAz8SPnqhj
-6KxXIRZMHHVHcLT3THC6Sn++HHE0UPokF88Zxk5H/QA4aks2RbklzHsxLGsOD/k7
-dCIFqB2Ll3bM4goqKPySVLJMXQmj+nwZENZyy8hpiaMn+ZNjrtkjEPskiUfqwBSe
-DS5xmmHujd1+MEVhSJzqbNFcbR6fnH7BWv8UZNEApA0F1GTLgtWpW4ASMrxm4fsq
-XmOFrjrXNPBtpOGDGAjh2kb/nFQGLKOTi75JhUw5yZKCljNiRUFzfhuiMSUSZLbp
-Rt6tuXe46e5oB8IzHwG9AhcUvwhHlbWPvTWLm+4KeS+5Rxqk6DbVk2sKStJiLTgT
-+reCFi7agu3bEisb+3wA0aEbasqNxozZUWGFmZ1po06G36OD143ZI/FGMf5NUhkZ
-FyOMu441A9SD0Pi5IaXCr5a/L7zOT2ChT9cUKs1Fkx6tyIsXzwc=
-=3xlF
------END PGP SIGNATURE-----
-
---7aArQOflsA51RSk6--
+> ---
+>  .../media/v4l/ext-ctrls-codec.rst             |  6 ++---
+>  .../staging/media/hantro/hantro_g2_hevc_dec.c | 25 +++++--------------
+>  2 files changed, 9 insertions(+), 22 deletions(-)
+> 
+> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> index 38da33e61c3d..b12ad5b3eaba 100644
+> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> @@ -3381,15 +3381,15 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>      * - __u8
+>        - ``poc_st_curr_before[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
+>        - PocStCurrBefore as described in section 8.3.2 "Decoding process for reference
+> -        picture set.
+> +        picture set": provides the index of the short term before references in DPB array.
+>      * - __u8
+>        - ``poc_st_curr_after[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
+>        - PocStCurrAfter as described in section 8.3.2 "Decoding process for reference
+> -        picture set.
+> +        picture set": provides the index of the short term after references in DPB array.
+>      * - __u8
+>        - ``poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
+>        - PocLtCurr as described in section 8.3.2 "Decoding process for reference
+> -        picture set.
+> +        picture set": provides the index of the long term references in DPB array.
+>      * - __u64
+>        - ``flags``
+>        - See :ref:`Decode Parameters Flags <hevc_decode_params_flags>`
+> diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+> index 14e0e6414100..c524af41baf5 100644
+> --- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+> +++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+> @@ -255,24 +255,11 @@ static void set_params(struct hantro_ctx *ctx)
+>  	hantro_reg_write(vpu, &g2_apf_threshold, 8);
+>  }
+>  
+> -static int find_ref_pic_index(const struct v4l2_hevc_dpb_entry *dpb, int pic_order_cnt)
+> -{
+> -	int i;
+> -
+> -	for (i = 0; i < V4L2_HEVC_DPB_ENTRIES_NUM_MAX; i++) {
+> -		if (dpb[i].pic_order_cnt[0] == pic_order_cnt)
+> -			return i;
+> -	}
+> -
+> -	return 0x0;
+> -}
+> -
+>  static void set_ref_pic_list(struct hantro_ctx *ctx)
+>  {
+>  	const struct hantro_hevc_dec_ctrls *ctrls = &ctx->hevc_dec.ctrls;
+>  	struct hantro_dev *vpu = ctx->dev;
+>  	const struct v4l2_ctrl_hevc_decode_params *decode_params = ctrls->decode_params;
+> -	const struct v4l2_hevc_dpb_entry *dpb = decode_params->dpb;
+>  	u32 list0[V4L2_HEVC_DPB_ENTRIES_NUM_MAX] = {};
+>  	u32 list1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX] = {};
+>  	static const struct hantro_reg ref_pic_regs0[] = {
+> @@ -316,11 +303,11 @@ static void set_ref_pic_list(struct hantro_ctx *ctx)
+>  	/* List 0 contains: short term before, short term after and long term */
+>  	j = 0;
+>  	for (i = 0; i < decode_params->num_poc_st_curr_before && j < ARRAY_SIZE(list0); i++)
+> -		list0[j++] = find_ref_pic_index(dpb, decode_params->poc_st_curr_before[i]);
+> +		list0[j++] = decode_params->poc_st_curr_before[i];
+>  	for (i = 0; i < decode_params->num_poc_st_curr_after && j < ARRAY_SIZE(list0); i++)
+> -		list0[j++] = find_ref_pic_index(dpb, decode_params->poc_st_curr_after[i]);
+> +		list0[j++] = decode_params->poc_st_curr_after[i];
+>  	for (i = 0; i < decode_params->num_poc_lt_curr && j < ARRAY_SIZE(list0); i++)
+> -		list0[j++] = find_ref_pic_index(dpb, decode_params->poc_lt_curr[i]);
+> +		list0[j++] = decode_params->poc_lt_curr[i];
+>  
+>  	/* Fill the list, copying over and over */
+>  	i = 0;
+> @@ -329,11 +316,11 @@ static void set_ref_pic_list(struct hantro_ctx *ctx)
+>  
+>  	j = 0;
+>  	for (i = 0; i < decode_params->num_poc_st_curr_after && j < ARRAY_SIZE(list1); i++)
+> -		list1[j++] = find_ref_pic_index(dpb, decode_params->poc_st_curr_after[i]);
+> +		list1[j++] = decode_params->poc_st_curr_after[i];
+>  	for (i = 0; i < decode_params->num_poc_st_curr_before && j < ARRAY_SIZE(list1); i++)
+> -		list1[j++] = find_ref_pic_index(dpb, decode_params->poc_st_curr_before[i]);
+> +		list1[j++] = decode_params->poc_st_curr_before[i];
+>  	for (i = 0; i < decode_params->num_poc_lt_curr && j < ARRAY_SIZE(list1); i++)
+> -		list1[j++] = find_ref_pic_index(dpb, decode_params->poc_lt_curr[i]);
+> +		list1[j++] = decode_params->poc_lt_curr[i];
+>  
+>  	i = 0;
+>  	while (j < ARRAY_SIZE(list1))
+> -- 
+> 2.30.2
+> 

@@ -2,128 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 565E3485808
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:15:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F7A448580A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:17:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242805AbiAESPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 13:15:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242799AbiAESPR (ORCPT
+        id S242812AbiAESR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 13:17:27 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:51134 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242799AbiAESR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 13:15:17 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0299C061201
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 10:15:16 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id u16so199552plg.9
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 10:15:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rajagiritech-edu-in.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=1dZCF8W0sgi/NYKKPCum4a1GBwgmZojpRmdK8UlCwHA=;
-        b=bZCgK7ZVnOlRZoVul9+2QVUo9qPPMqnGMGH/KK4UUOLFgA43P1f9BKM1oIz3WYMacs
-         /llFgaZhbx0nOx/tDjXQlDEfTDYXV1OTy+dTxUXyAzgfPReyJNdR6T4KJ5MB1IsOkvhd
-         VkvMY/5bMKxd8D6unFyYpb9QeZ2wX7dSHL8Day1lkgndAYqbu5GoVJHz/R7s/o/HDA8a
-         FyE+ttd88g1q3oXrQBEiP8IzJo7hsAUVVLJj6sqfu5kaIQMW+wjI/x4UUiIwJxgYoKI3
-         Oym89ryDTYQioz4mewrbqmijurGNaDYj0tSOUkbfJTu78Vyhzjy7H517M5iYeJbPosHr
-         16Lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=1dZCF8W0sgi/NYKKPCum4a1GBwgmZojpRmdK8UlCwHA=;
-        b=vKvQAgFB8CJGv+4Ge8GfdDA9IEK65leP7zCXDUU9iyCaDK2D/5/LvdMyyju/Ti8qIM
-         oyQPaHTlMXNzlrbeCThw+XneGrvrsa/ALculfCQGZ77LeyB688Kx3XSSOe6mvTVwXdd5
-         G1fJgGS4UctM5pmEK+ksP8TkGQV6R/qhCfw33KgSsl8+17LxXS4l0d2hCwEnJnBTQJxZ
-         S4zYkHSuYKHW9c9ef/qkt477SFI0jn/IzCBte7aWYpHlyUhzb6fIWmi0OdY7DKqtVNKd
-         07UsfW1ESz9WO9kIWrwlsDTjVRzCPSsdf0wO7xM8Oxw+70xuBPf7D3K6lcOegZCcA6Tu
-         5h0g==
-X-Gm-Message-State: AOAM531RrBwyLBn4aHWZH1Tv8VUIHhqQriCGUAduNb3+js+cK3AlBU5x
-        +rQgMJPyB6Y2RYp3S3zqyvFYTQ==
-X-Google-Smtp-Source: ABdhPJwzMlHdd6/779thMkHF1YznalbdxyhAOWTirI//SUlpuAVIEAddDmIGcjOXV0Ng/1/iA1JS3w==
-X-Received: by 2002:a17:90b:3808:: with SMTP id mq8mr5490839pjb.85.1641406516439;
-        Wed, 05 Jan 2022 10:15:16 -0800 (PST)
-Received: from [192.168.1.32] ([122.164.22.119])
-        by smtp.gmail.com with ESMTPSA id k18sm45105753pfu.76.2022.01.05.10.15.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 10:15:15 -0800 (PST)
-Message-ID: <b57a54adb349f21888db2efec2e6a6a342044d7e.camel@rajagiritech.edu.in>
-Subject: Re: [PATCH 5.15 00/72] 5.15.13-rc2 review
-From:   Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Date:   Wed, 05 Jan 2022 23:45:11 +0530
-In-Reply-To: <YdWxh/OR0dQDeS9E@kroah.com>
-References: <20220104073845.629257314@linuxfoundation.org>
-         <54461ffb9ebe34e673e6730f3e9cc94218ad2f49.camel@rajagiritech.edu.in>
-         <YdWxh/OR0dQDeS9E@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.1-1 
+        Wed, 5 Jan 2022 13:17:26 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7654B81CE8
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 18:17:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 121E1C36AE0;
+        Wed,  5 Jan 2022 18:17:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641406643;
+        bh=IvYvq2lD1COKHPMNCP7CW/S4RSWAMCAG8xA8pmvjwx4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=EfFr67UqdVrB77F65fhTXrZX6OiWRv1QfiyYsj/2Yh+XznyJSfo2as0euG6md3ACG
+         NToIdKmC7WAgeGJCgNShUCb8HUPHMGixfFZUbFNzuf/fpREYlaq0ThkkuVUHDyYbDg
+         X3VOy2Wzo2IKKj2ivqSHVbz79r0ET5Ox7hByYqqw=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] firmware: dmi-sysfs: use default_groups in kobj_type
+Date:   Wed,  5 Jan 2022 19:17:19 +0100
+Message-Id: <20220105181719.2737782-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1862; h=from:subject; bh=IvYvq2lD1COKHPMNCP7CW/S4RSWAMCAG8xA8pmvjwx4=; b=owGbwMvMwCRo6H6F97bub03G02pJDIlXH6z1PzTl5Jpju+b1bF1wUXzn/4UrZWW/nxVkv+R3ao7/ y9iFCh2xLAyCTAyyYoosX7bxHN1fcUjRy9D2NMwcViaQIQxcnAIwkRPuDHPl7TqXni3/xKjz41ZwVb 3X/eK3W/kZFhw4PM3z/wn96Cp1+y/6qW+NrrEyLQMA
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-01-05 at 15:56 +0100, Greg Kroah-Hartman wrote:
-> On Wed, Jan 05, 2022 at 06:32:43PM +0530, Jeffrin Jose T wrote:
-> > On Tue, 2022-01-04 at 08:41 +0100, Greg Kroah-Hartman wrote:
-> > > This is the start of the stable review cycle for the 5.15.13
-> > > release.
-> > > There are 72 patches in this series, all will be posted as a
-> > > response
-> > > to this one.  If anyone has any issues with these being applied,
-> > > please
-> > > let me know.
-> > > 
-> > > Responses should be made by Thu, 06 Jan 2022 07:38:29 +0000.
-> > > Anything received after that time might be too late.
-> > > 
-> > > The whole patch series can be found in one patch at:
-> > >         
-> > > https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.13-rc2.gz
-> > > or in the git tree and branch at:
-> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linu
-> > > x-
-> > > stable-rc.git linux-5.15.y
-> > > and the diffstat can be found below.
-> > > 
-> > > thanks,
-> > > 
-> > > greg k-h
-> > > 
-> >  hello,
-> > 
-> > There was a compilation error....
-> > 
-> > -----------x--------------x------------------x--
-> > MODPOST vmlinux.symvers
-> >   MODINFO modules.builtin.modinfo
-> >   GEN     modules.builtin
-> > BTF: .tmp_vmlinux.btf: pahole (pahole) is not available
-> > Failed to generate BTF for vmlinux
-> > Try to disable CONFIG_DEBUG_INFO_BTF
-> > make: *** [Makefile:1183: vmlinux] Error 1
-> 
-> Is this a regression?  If so, what commit caused this?
-> 
-> > i did CONFIG_DEBUG_INFO_BTF=n  in .config and then compilation was
-> > success.
-> 
-> Or you can install pahole, right?  That's a requirement for that
-> build
-> option I think.
-> 
-i installed pahole  which is in package "dwarves"  in debian after  
-reading yours and shuah's  message
+There are currently 2 ways to create a set of sysfs files for a
+kobj_type, through the default_attrs field, and the default_groups
+field.  Move the firmware dmi-sysfs sysfs code to use default_groups
+field which has been the preferred way since aa30f47cf666 ("kobject: Add
+support for default attribute groups to kobj_type") so that we can soon
+get rid of the obsolete default_attrs field.
 
-i agree with shuah's  answer. 
-thanks shuah
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/firmware/dmi-sysfs.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/firmware/dmi-sysfs.c b/drivers/firmware/dmi-sysfs.c
+index 8b8127fa8955..3a353776bd34 100644
+--- a/drivers/firmware/dmi-sysfs.c
++++ b/drivers/firmware/dmi-sysfs.c
+@@ -302,12 +302,12 @@ static struct attribute *dmi_sysfs_sel_attrs[] = {
+ 	&dmi_sysfs_attr_sel_per_log_type_descriptor_length.attr,
+ 	NULL,
+ };
+-
++ATTRIBUTE_GROUPS(dmi_sysfs_sel);
+ 
+ static struct kobj_type dmi_system_event_log_ktype = {
+ 	.release = dmi_entry_free,
+ 	.sysfs_ops = &dmi_sysfs_specialize_attr_ops,
+-	.default_attrs = dmi_sysfs_sel_attrs,
++	.default_groups = dmi_sysfs_sel_groups,
+ };
+ 
+ typedef u8 (*sel_io_reader)(const struct dmi_system_event_log *sel,
+@@ -518,6 +518,7 @@ static struct attribute *dmi_sysfs_entry_attrs[] = {
+ 	&dmi_sysfs_attr_entry_position.attr,
+ 	NULL,
+ };
++ATTRIBUTE_GROUPS(dmi_sysfs_entry);
+ 
+ static ssize_t dmi_entry_raw_read_helper(struct dmi_sysfs_entry *entry,
+ 					 const struct dmi_header *dh,
+@@ -565,7 +566,7 @@ static void dmi_sysfs_entry_release(struct kobject *kobj)
+ static struct kobj_type dmi_sysfs_entry_ktype = {
+ 	.release = dmi_sysfs_entry_release,
+ 	.sysfs_ops = &dmi_sysfs_attr_ops,
+-	.default_attrs = dmi_sysfs_entry_attrs,
++	.default_groups = dmi_sysfs_entry_groups,
+ };
+ 
+ static struct kset *dmi_kset;
 -- 
-software engineer
-rajagiri school of engineering and technology - autonomous
+2.34.1
+

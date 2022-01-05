@@ -2,105 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E7A485770
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 18:41:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24BD1485782
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 18:42:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242417AbiAERl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 12:41:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57938 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242430AbiAERlV (ORCPT
+        id S242451AbiAERml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 12:42:41 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4352 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242412AbiAERmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 12:41:21 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27CF3C061201
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 09:41:21 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id rj2-20020a17090b3e8200b001b1944bad25so6909686pjb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 09:41:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gzQ72BBdlbIwljQ9GmIvY1Y0Vph95fp3b2f0mlNY2ig=;
-        b=E8W/mM5tg4uMQl+gYVBTsmLjT8y0cxNDt0JmMghEnL77yQqHQnUAuXH1cOLGRCpVqj
-         MLRzKva/JfvhYIK5VRk+A+nwDfSMdZrPy7W0PoULQn2fZvRFiy3F6cCIcpAgZ5EfsGnj
-         AQOTipQ6XY0wPu3WcTsTGpu1O5KHxTzYWJzB2Y7MZockAGO519UOaSa4WQTKgGyyVitq
-         oNw3kKHcEcpatxlGscm+A6lys3gpHRtzBm5fulOeXypFtty+GT573xjUDkQG2E+NheI4
-         KZJJO4SVSI6xX5583UYEXaPUHbRbKoDpqtQIOr/42ivp6/0yExbE8Qpw0CWX0GEZ1U+O
-         G73Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gzQ72BBdlbIwljQ9GmIvY1Y0Vph95fp3b2f0mlNY2ig=;
-        b=7G0Z2E4KQsgKEVhTrsZaA85EJDHxFO947NO6pruWXHs4M10Su0F9KPPBhx4chQjn3m
-         DZk630qkF27WvUceSQmKrpgCZtvxbOAz4BzqxIIRAwSxD3zs9rC4v+4z4VIgvYCaPRQM
-         2w/7pu6cLYpdb+K/mLqhJzDqv5oZjt3hnFBztkBCDACKboaWn3Ske09VuH76f64tbfTm
-         EMfR0aPE3x3VOK+q13z+FZPPwe6fyczU3pJm3sJ1WYMOYD8ko/GBg3vWz2PVhtHn28ZL
-         S1RBgAtkEv1nwS8frhuhxzqiUN/qDHHnkK+hR0gmL9j1zZjXawEseyP7K7MA1FFouHw9
-         Y+8Q==
-X-Gm-Message-State: AOAM530BzdG7lswvznpf/7CFYhTEnla7RzRATspKYBda8Tq2oi+Pk/ru
-        7TfeQC7K+T85Ic9vz66wIaXj8jxVgoWWRSRjmfODRA==
-X-Google-Smtp-Source: ABdhPJxN8ppKSK8GXuZut/tPMjou6EwYIg6LidumtfgGEZel8tmkV9qHTU80LjGPle7XoYStcasMHA7FIbBkapv5XUA=
-X-Received: by 2002:a17:90a:5295:: with SMTP id w21mr3113121pjh.179.1641404480159;
- Wed, 05 Jan 2022 09:41:20 -0800 (PST)
+        Wed, 5 Jan 2022 12:42:38 -0500
+Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JTcDP1FRwz67w73;
+        Thu,  6 Jan 2022 01:39:17 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 5 Jan 2022 18:42:31 +0100
+Received: from [10.47.27.56] (10.47.27.56) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 5 Jan
+ 2022 17:42:28 +0000
+From:   John Garry <john.garry@huawei.com>
+Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Arnd Bergmann" <arnd@arndb.de>
+CC:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ettore Chimenti <ek5.chimenti@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Ian Abbott" <abbotti@mev.co.uk>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "Karsten Keil" <isdn@linux-pingi.de>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        <GR-QLogic-Storage-Upstream@marvell.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        "Teddy Wang" <teddy.wang@siliconmotion.com>,
+        Forest Bond <forest@alittletooquiet.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "Wim Van Sebroeck" <wim@linux-watchdog.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        "Takashi Iwai" <tiwai@suse.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arch@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-csky@vger.kernel.org>,
+        <linux-ide@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-hwmon@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-input@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <MPT-FusionLinux.pdl@broadcom.com>,
+        <linux-scsi@vger.kernel.org>, <intel-wired-lan@lists.osuosl.org>,
+        <linux-wireless@vger.kernel.org>, <megaraidlinux.pdl@broadcom.com>,
+        <linux-spi@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-watchdog@vger.kernel.org>
+References: <20211229160317.GA1681139@bhelgaas>
+ <e0877e91d7d50299ea5a3ffcee2cf1016458ce10.camel@linux.ibm.com>
+Message-ID: <3f39d8a2-2e57-a671-2926-eb4f2bf20c76@huawei.com>
+Date:   Wed, 5 Jan 2022 17:42:16 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-References: <20220105104113.31415-1-linmq006@gmail.com>
-In-Reply-To: <20220105104113.31415-1-linmq006@gmail.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Wed, 5 Jan 2022 18:41:09 +0100
-Message-ID: <CAG3jFysAF8EvNZYwZYi4XYg9PG9quQCN=rDmsReS=bwvgLJ-Nw@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: Add missing pm_runtime_disable() in __dw_mipi_dsi_probe
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Philippe CORNU <philippe.cornu@st.com>,
-        Archit Taneja <architt@codeaurora.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <e0877e91d7d50299ea5a3ffcee2cf1016458ce10.camel@linux.ibm.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.27.56]
+X-ClientProxiedBy: lhreml736-chm.china.huawei.com (10.201.108.87) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey,
+On 29/12/2021 16:55, Niklas Schnelle wrote:
+> On Wed, 2021-12-29 at 10:03 -0600, Bjorn Helgaas wrote:
+>> On Wed, Dec 29, 2021 at 01:12:07PM +0100, Mauro Carvalho Chehab wrote:
+>>> Em Wed, 29 Dec 2021 12:45:38 +0100
+>>> Niklas Schnelle<schnelle@linux.ibm.com>  escreveu:
+>>>> ...
+>>>> I do think we agree that once done correctly there is value in
+>>>> such an option independent of HAS_IOPORT only gating inb() etc uses.
+>> I'm not sure I'm convinced about this.  For s390, you could do this
+>> patch series, where you don't define inb() at all, and you add new
+>> dependencies to prevent compile errors.  Or you could define inb() to
+>> return ~0, which is what happens on other platforms when the device is
+>> not present.
+>>
+>>> Personally, I don't see much value on a Kconfig var for legacy PCI I/O
+>>> space. From maintenance PoV, bots won't be triggered if someone use
+>>> HAS_IOPORT instead of the PCI specific one - or vice-versa. So, we
+>>> could end having a mix of both at the wrong places, in long term.
+>>>
+>>> Also, assuming that PCIe hardware will some day abandon support for
+>>> "legacy" PCI I/O space, I guess some runtime logic would be needed,
+>>> in order to work with both kinds of PCIe controllers. So, having a
+>>> Kconfig option won't help much, IMO.
+>>>
+>>> So, my personal preference would be to have just one Kconfig var, but
+>>> I'm ok if the PCI maintainers decide otherwise.
+>> I don't really like the "LEGACY_PCI" Kconfig option.  "Legacy" just
+>> means something old and out of favor; it doesn't say*what*  that
+>> something is.
+>>
+>> I think you're specifically interested in I/O port space usage, and it
+>> seems that you want all PCI drivers that*only*  use I/O port space to
+>> depend on LEGACY_PCI?  Drivers that can use either I/O or memory
+>> space or both would not depend on LEGACY_PCI?  This seems a little
+>> murky and error-prone.
+> I'd like to hear Arnd's opinion on this but you're the PCI maintainer
+> so of course your buy-in would be quite important for such an option.
+> 
 
-Thanks for submitting this fix.
+Hi Niklas,
 
-On Wed, 5 Jan 2022 at 11:41, Miaoqian Lin <linmq006@gmail.com> wrote:
->
-> If the probe fails, we should use pm_runtime_disable() to balance
-> pm_runtime_enable().
-> Add missing pm_runtime_disable() for __dw_mipi_dsi_probe.
->
-> Fixes: 46fc515 ("drm/bridge/synopsys: Add MIPI DSI host controller bridge")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
->  drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
-> index e44e18a0112a..56c3fd08c6a0 100644
-> --- a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
-> +++ b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
-> @@ -1199,6 +1199,7 @@ __dw_mipi_dsi_probe(struct platform_device *pdev,
->         ret = mipi_dsi_host_register(&dsi->dsi_host);
->         if (ret) {
->                 dev_err(dev, "Failed to register MIPI host: %d\n", ret);
-> +               pm_runtime_disable(dev);
->                 dw_mipi_dsi_debugfs_remove(dsi);
->                 return ERR_PTR(ret);
->         }
-> --
-> 2.17.1
->
+I can't see the value in the LEGACY_PCI config - however I don't really 
+understand Arnd's original intention.
 
-Added r-b tag and applied to drm-misc-next
+It was written that it would allow us to control "whether we have any 
+pre-PCIe devices or those PCIe drivers that need PIO accessors other 
+than ioport_map()/pci_iomap()".
 
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+However I just don't see why CONFIG_PCI=y and CONFIG_HAS_IOPORT=y aren't 
+always the gating factor here. Arnd?
+
+Thanks,
+John

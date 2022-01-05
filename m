@@ -2,104 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E30485919
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 20:24:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08BB5485921
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 20:25:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243492AbiAETYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 14:24:23 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:37868 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243475AbiAETYU (ORCPT
+        id S243501AbiAETZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 14:25:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243475AbiAETZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 14:24:20 -0500
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 205HhpKd029039;
-        Wed, 5 Jan 2022 19:23:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=un2SwvqOfgwpXgpDgEw1KPu0YtvgczMMQYjNNETeXC0=;
- b=RRXEOqi2lW+lBrWCrhxNUUJ6tY49ZKdBBxZ5zhnQfOSIEzmiIXATwxfviPwB43mjg8a0
- H8wxt6I1fxp7+MoS7q4AnIQhqeDErXgTv5Kk4ntIsyNl8qnYF2o6jYWwFDPlwZOX7Wsc
- kGP+4SZHQ+FH7zpHpUEgaaIgz7z9U1aKw6eLF0YY1EhB9FIqFlE9CWGMzJDqhjy5suyA
- krTJdLrGo8OjC8yUnBa5gBZS6IQouGSfX4Hf5cZBvCD1kPb36McFvQ2W4/ld2ALf0Kx1
- 71c8lHJ+90q22X8l6dt/oB4yS+1MnxTkW3YzsodSanFPydcJrrQQjxqkNpXMt4Ue411T fw== 
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dckgprm3j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jan 2022 19:23:56 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 205JMjwN029613;
-        Wed, 5 Jan 2022 19:23:55 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma01wdc.us.ibm.com with ESMTP id 3daekb4cwj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jan 2022 19:23:55 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 205JNsro6030174
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 5 Jan 2022 19:23:54 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A111728060;
-        Wed,  5 Jan 2022 19:23:54 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4B83728074;
-        Wed,  5 Jan 2022 19:23:53 +0000 (GMT)
-Received: from oc6857751186.ibm.com (unknown [9.160.94.20])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed,  5 Jan 2022 19:23:53 +0000 (GMT)
-Subject: Re: [PATCH] ethernet: ibmveth: use default_groups in kobj_type
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Cristobal Forno <cforno12@linux.ibm.com>, netdev@vger.kernel.org,
-        Paul Mackerras <paulus@samba.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        "David S. Miller" <davem@davemloft.net>
-References: <20220105184101.2859410-1-gregkh@linuxfoundation.org>
-From:   Tyrel Datwyler <tyreld@linux.ibm.com>
-Message-ID: <c4c5ae29-0e09-1970-bac2-cab1f2ae1efc@linux.ibm.com>
-Date:   Wed, 5 Jan 2022 11:23:52 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Wed, 5 Jan 2022 14:25:52 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FFFC061245;
+        Wed,  5 Jan 2022 11:25:52 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id w184so836480ybg.5;
+        Wed, 05 Jan 2022 11:25:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ScRpF0L3adtid+3RTX6vgdBF1ypyGcU5Kx8L1Ltr5uA=;
+        b=Jdf35w27ET/Fc/B01HXTHowcQYrKvVz67xg60p2fo5c8ovGFyEz0HcTvw3cx0wvZ+C
+         oQmWnMZD/Tiwdes8o9OLPivHNBFixh5G5oTeDmjxWtHc4HS5s30zrN6lctFOZMvJjG6G
+         S7YO6BGCTcKJawUgjPjb0mIHkticyfitd1wDSA2ib07xcJVqbdfEBHzCvKYa0h1kCVmS
+         qdKt0mLIGg8+IoMU8MMYJORWX6EmBGZv8TyVoPWgJhJhsgoxlIZ935KeE6e19/IUeTLT
+         +AxMwstkkAOVvhP9IfDwtGe6PTaXZLF/VLY+CrHosX1pLo81m6xujvc3XJ3QFnMI6XUt
+         yFpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ScRpF0L3adtid+3RTX6vgdBF1ypyGcU5Kx8L1Ltr5uA=;
+        b=fF2876ROBhW6KOz1iPXm4p8PU89VI3Qhol4kB5lyjBm8denMBOPwBpJuOvkRJ9pW1p
+         BmLveKmEIlFK4v036oUnsSyEqpQ2qUMk5uCmSk8DONS54D1C2eLzUD1Cl7kLh45/X+Bm
+         /GZOw56TqjBk1r31CK7l6SUmE8vITEONbJ/CQ8PECA+DQfC1vU2BlzytSaPosR80BsWZ
+         ww6z7z9dyBVvy1Ax/oUrmux8U0Fdo6t8yTkDYhz2ZpLkSMXRLSSuu0XqDag6aoSNn1tN
+         WF/1F5uasUm8qiFEvXaU1Thggjysh+N/MtPAlXrZXRis4qCoUBFFYqvBR+e9P44c/5GK
+         4Slw==
+X-Gm-Message-State: AOAM532O1ayZIyzVQWLisL54AnisEJPsMACdAsndogadMZ+qeC+oA/W+
+        sr9pPYaqjfe5pRbN8M9o+eufLsorknghmIVHFyc=
+X-Google-Smtp-Source: ABdhPJwnF6pYIFI0WAD7k8piW0tCxrml4cTJRyqBlXnFuWqIFryGX2Sl67k0oiTKAcy4sUK4n96sTq4JDEIC07sBE4E=
+X-Received: by 2002:a5b:281:: with SMTP id x1mr23440853ybl.41.1641410751548;
+ Wed, 05 Jan 2022 11:25:51 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220105184101.2859410-1-gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: EMpFhwCOKMdlVXR2fLgVVxI86YvvEgHc
-X-Proofpoint-ORIG-GUID: EMpFhwCOKMdlVXR2fLgVVxI86YvvEgHc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-05_05,2022-01-04_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- adultscore=0 spamscore=0 mlxlogscore=999 mlxscore=0 clxscore=1011
- lowpriorityscore=0 impostorscore=0 priorityscore=1501 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201050123
+References: <20220104145212.4608-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <YdXt2mDjZ0zikbt6@oden.dyn.berto.se>
+In-Reply-To: <YdXt2mDjZ0zikbt6@oden.dyn.berto.se>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 5 Jan 2022 19:25:25 +0000
+Message-ID: <CA+V-a8sGh0bCiDu_Eiz3EFgaDPmr-qyz95=dExwf+UvuyA21Cg@mail.gmail.com>
+Subject: Re: [PATCH v3] thermal: rcar_thermal: Use platform_get_irq_optional()
+ to get the interrupt
+To:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/5/22 10:41 AM, Greg Kroah-Hartman wrote:
-> There are currently 2 ways to create a set of sysfs files for a
-> kobj_type, through the default_attrs field, and the default_groups
-> field.  Move the ibmveth sysfs code to use default_groups
-> field which has been the preferred way since aa30f47cf666 ("kobject: Add
-> support for default attribute groups to kobj_type") so that we can soon
-> get rid of the obsolete default_attrs field.
-> 
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> Cc: Paul Mackerras <paulus@samba.org>
-> Cc: Cristobal Forno <cforno12@linux.ibm.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
+Hi Niklas,
 
-Reviewed-by: Tyrel Datwyler <tyreld@linux.ibm.com>
+Thank you for the review.
 
+On Wed, Jan 5, 2022 at 7:13 PM Niklas S=C3=B6derlund
+<niklas.soderlund@ragnatech.se> wrote:
+>
+> Hi Lad,
+>
+> Thanks for your work.
+>
+> On 2022-01-04 14:52:11 +0000, Lad Prabhakar wrote:
+> > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> > allocation of IRQ resources in DT core code, this causes an issue
+> > when using hierarchical interrupt domains using "interrupts" property
+> > in the node as this bypasses the hierarchical setup and messes up the
+> > irq chaining.
+> >
+> > In preparation for removal of static setup of IRQ resource from DT core
+> > code use platform_get_irq_optional().
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> > v2-v3:
+> > * Fixed review comment pointed by Andy
+> >
+> > v1->v2
+> > * Simplified checking error code
+> > * Break loop earlier if no interrupts are seen
+> >
+> > v1: https://lkml.org/lkml/2021/12/18/163
+> > ---
+> >  drivers/thermal/rcar_thermal.c | 17 ++++++++++++-----
+> >  1 file changed, 12 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_ther=
+mal.c
+> > index b49f04daaf47..e480f7290ccf 100644
+> > --- a/drivers/thermal/rcar_thermal.c
+> > +++ b/drivers/thermal/rcar_thermal.c
+> > @@ -445,7 +445,7 @@ static int rcar_thermal_probe(struct platform_devic=
+e *pdev)
+> >       struct rcar_thermal_common *common;
+> >       struct rcar_thermal_priv *priv;
+> >       struct device *dev =3D &pdev->dev;
+> > -     struct resource *res, *irq;
+> > +     struct resource *res;
+> >       const struct rcar_thermal_chip *chip =3D of_device_get_match_data=
+(dev);
+> >       int mres =3D 0;
+> >       int i;
+> > @@ -467,9 +467,16 @@ static int rcar_thermal_probe(struct platform_devi=
+ce *pdev)
+> >       pm_runtime_get_sync(dev);
+> >
+> >       for (i =3D 0; i < chip->nirqs; i++) {
+> > -             irq =3D platform_get_resource(pdev, IORESOURCE_IRQ, i);
+> > -             if (!irq)
+> > -                     continue;
+> > +             int irq;
+> > +
+> > +             irq =3D platform_get_irq_optional(pdev, i);
+> > +             if (irq < 0 && irq !=3D -ENXIO) {
+> > +                     ret =3D irq;
+> > +                     goto error_unregister;
+> > +             }
+> > +             if (!irq || irq =3D=3D -ENXIO)
+> > +                     break;
+>
+> This do not look correct and differs form v1.
+>
+> In the old code if we can't get an IRQ the loop is continued. This is
+> used to detect if interrupts are supported or not on the platform.  This
+> change will fail on all systems that don't describes interrupts in DT
+> while the driver can function without interrupts.
+>
+There are no non-DT users for this driver. Do you see this driver
+being used in a non-DT environment in near future?
+
+> Is there a reason you wish to do this change in addition to the switch
+> to platform_get_irq_optional()? If so I think that should be done in a
+> separate patch.
+>
+No other reason, It was suggested by Gerrt too to use a break instead
+of continue in v1.
+
+Cheers,
+Prabhakar

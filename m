@@ -2,408 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED40485450
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 15:24:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2229485479
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 15:27:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240682AbiAEOYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 09:24:35 -0500
-Received: from mout.gmx.net ([212.227.17.22]:55937 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240668AbiAEOYc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 09:24:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1641392662;
-        bh=UXjxgvou7HWB69opbe9Y/U+7lXIFyBTckVZagiCLLe0=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=fuLqOuenB6QY9eAmUwnfHwsT3dz4qHH4YVYeZH4Q/yPXcHXyFbvMQ+pQTBUmF/p6o
-         23eW6kJfb/0L1j8NNgb/k7rohJqa0k/TkHNtQ8Le7EUVNa1SktFuVaURjXyJo0UC2Y
-         foexP47c4kBBlPO+TANUZjROB0yod7UsNfJdKVF0=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MdNcG-1mVmSc1WjY-00ZOvk; Wed, 05
- Jan 2022 15:24:22 +0100
-Date:   Wed, 5 Jan 2022 15:24:20 +0100
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>
-Subject: Re: [PATCH v3 5/9] pinctrl: nuvoton: Add driver for WPCM450
-Message-ID: <YdWqFC4fub1ztFd0@latitude>
-References: <20211224200935.93817-1-j.neuschaefer@gmx.net>
- <20211224200935.93817-6-j.neuschaefer@gmx.net>
- <CAHp75VdNd5q600qgfxZ+hy0NjpWXrLVycSYt=v6UP7wNd3-TJg@mail.gmail.com>
+        id S240833AbiAEO0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 09:26:35 -0500
+Received: from mail-io1-f72.google.com ([209.85.166.72]:46068 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240728AbiAEOZc (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 09:25:32 -0500
+Received: by mail-io1-f72.google.com with SMTP id y141-20020a6bc893000000b00602098c8ec8so19047824iof.12
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 06:25:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=MYej9f0V1knAmgZWksqkg7FcalnkNH/T2YiXfjlkjw0=;
+        b=FdtYnL7EgUszq+Cebmr8d7d1xjQzMVXjUQBT936gw8SDUqrlkSNdRYWL4oDvXhweHA
+         Mn0v/VxccnZJ0xTJzX0dJFyzLGwhH+4K6gv2R/p8fKnB+Rd4tF8UKRS1JkBq6Y+An7nq
+         BUj34k8xTArLJyliPi6BINYUjY3oZWydFopX1CIsyUTosZzD6/32L4+fJ7A7T68hJEkH
+         qjXyswK+vy0gBGbhkE5xJHoSsxxoaU+sIuXzHL0ZCE9xYIBw0SRa8I5OZeznx/Q2LSSY
+         VZ/lZiovZe/jn/zJ+sg+JMU9hlmm4MMUvHKPvdi769P9wH72s4COyp2Pur5/j4Dpf0U1
+         IMGQ==
+X-Gm-Message-State: AOAM533byN3eiA4Ek6CIVrlN0HwVokuSrANjm38g6MxwSLDnPfbKJgXy
+        s/2Ow1WzTTZQd7yRfZpBHIBiqSFLLs+9/xkkkf6A0gXF7mnB
+X-Google-Smtp-Source: ABdhPJxzUcYLzYmAgXLXJ50Ksi6Msv3ITFrs24KdHJHMtyu/F7k/SMbtXLQSfsGkNOBhHviw7G6VAABHsHvqOj6nYUxCB9zKUUYt
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gEwymEB2acrfHMRY"
-Content-Disposition: inline
-In-Reply-To: <CAHp75VdNd5q600qgfxZ+hy0NjpWXrLVycSYt=v6UP7wNd3-TJg@mail.gmail.com>
-X-Provags-ID: V03:K1:LxQGLzANC43tKLmP4DSVAJIUzL9WzX3G3GVmMFCUFJTVzyOVjIp
- WraxxAmkVKBnZrw/ZkSuqsPGU22/RE4u59vGve6PtGBcWWc4EMfFATIEs4h7vGuQPqWaInp
- 0EhacpEPNt/Bw3Bt4JFceOtx+JUEiHioCdoFQYHQvzxMfxzubvER/wdwuiQUOP8n0PnURDM
- +hPoIQ3jCyi8Oav6WZjvQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:LdFF+p9P/F4=:vlgKfAvriAcBuo/H+zxCfQ
- zIGZd1Y9umV6fAuloPyCIZXbQcAi+PNMpGzWZZgML+/Ah7l20rlk6mz0KGpYspxt+xNlgqvu9
- YOyI+PzO9Afn7Mfq64xOeArNaprHUsQ21QNyPaIz6mLiUQTt5ZEASEdh4FJ3lnkjFZpa9Jkco
- iSAQAdXNf0fdYl6/VY0Xk2wXPKDzKgZhXAxhy3bDL/AsLkZ4cJxD3SFUcekKSOlCBS1FZdcQO
- MKZ+XSz0E9fl0uUtnrXncWcy36CCoNHN7a+5yLDDH5ozTWv0LVnL5NgaEq4oqqbZsdXgaX/2B
- LId7R+I0kCFq1YB0Po2SdzDE0Z4IHMjBFyZGexFm/27BDYkKw+eNeTzH0PIJSLeNDDtYDFXNe
- JmMpscSKHEX66Fqa2uEUWKCrTqWoMOj3izOs3iFTR0xwb1BlmHNiReIy2FR46KPOU1L53OTRb
- gaGG8DiFSKFcNtNszdsGFcU/45wp8BsTx7v6WI7XBHcvpzayHx8hUuBXcITgcd7p0uyVynAkh
- GXuomL5JHae/BCKEQ3ZjO7alegH8LHZ10FcxU7pbFsc4HOIORo2AAAExX39dfEFh/75FGk18W
- ILx8WCx/svQSAIqbSBlrW/Wmq+vNNSqOVWHSAF206R2e5NzClrJWpg/CQOXO5Yta34jo5rKQs
- ZovxiLgjB/c45T4fMVQN3tGj3FROwwYm5/i47i0Zs5ga4Zt9tfPr3WJpqVj0Iq5LVCCA7/TmY
- YdBi67jjIv3m1QhuVPjH2LU2CWSXGe8xgobZU3H4CWtOaeeB3ESHFl+ZXTd8gzKpAlezONUBL
- Q/0Wywz67JN9ksdFBByF+upyQCPBvJSjarwrO5EhGumz7/5by3APLErtxjB01I6517D0sepWg
- SAz1z1I6X2w3vSezC/HWljidkmd1oW7WQXz6DreoBzMbNuRgGo+RiLvKl67Qve1tn+0iD1pcn
- wNEluO7rtXW4NAzCYHtB2Z3wIf3/zjA3oMNaG1sgLD97TFmN3kAeTuQGYujx3aPTHmH7wcTat
- GI1aDo10q5+sjsL06wl4mwyFL7akEfO6b84oXO+r4DTbCWVyrgB9kIcFJkyxvwwvb8lTFsw2V
- tkm9w/mdt2voVY=
+X-Received: by 2002:a05:6638:2188:: with SMTP id s8mr24766622jaj.141.1641392731710;
+ Wed, 05 Jan 2022 06:25:31 -0800 (PST)
+Date:   Wed, 05 Jan 2022 06:25:31 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b5eac805d4d686d4@google.com>
+Subject: [syzbot] general protection fault in nfc_alloc_send_skb
+From:   syzbot <syzbot+7f23bcddf626e0593a39@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, krzysztof.kozlowski@canonical.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, nixiaoming@huawei.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---gEwymEB2acrfHMRY
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+syzbot found the following issue on:
 
-Hello and happy (belated) new year,
+HEAD commit:    eec4df26e24e Merge tag 's390-5.16-6' of git://git.kernel.o..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=149771a5b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=dc943eeb68074e3
+dashboard link: https://syzkaller.appspot.com/bug?extid=7f23bcddf626e0593a39
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=133e5e2bb00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=152e6571b00000
 
-On Fri, Dec 24, 2021 at 11:15:04PM +0200, Andy Shevchenko wrote:
-> On Fri, Dec 24, 2021 at 10:10 PM Jonathan Neusch=C3=A4fer
-> <j.neuschaefer@gmx.net> wrote:
-> >
-> > This driver is based on the one for NPCM7xx, because the WPCM450 is a
-> > predecessor of those SoCs. Notable differences:
-> >
-> > - WPCM450, the GPIO registers are not organized in multiple banks, but
-> >   rather placed continually into the same register block. This affects
-> >   how register offsets are computed.
-> > - Pinmux nodes can explicitly select GPIO mode, whereas, in the npcm7xx
-> >   driver, this happens automatically when a GPIO is requested.
-> >
-> > Some functionality implemented in the hardware was (for now) left unused
-> > in the driver, specifically blinking and pull-up/down.
->=20
-> Overall looks good. Some cosmetic stuff is required, but there are no
-> show stoppers.
+The issue was bisected to:
 
-Good to hear!
+commit c33b1cc62ac05c1dbb1cdafe2eb66da01c76ca8d
+Author: Xiaoming Ni <nixiaoming@huawei.com>
+Date:   Thu Mar 25 03:51:10 2021 +0000
 
-> > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-> > ---
-> >
-> > This patch now depends on gpio/for-next, specifically these patches:
-> > - gpiolib: improve coding style for local variables
-> > - gpiolib: allow to specify the firmware node in struct gpio_chip
-> > - gpiolib: of: make fwnode take precedence in struct gpio_chip
-[...]
-> > +/* GCR registers */
-> > +#define WPCM450_GCR_MFSEL1     0x0C
->=20
-> Be consistent with capitalization
+    nfc: fix refcount leak in llcp_sock_bind()
 
-Oops, will fix.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16b92ba3b00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=15b92ba3b00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=11b92ba3b00000
 
-> > +struct wpcm450_bank {
-> > +       /* Range of GPIOs in this port */
-> > +       u8 base;
-> > +       u8 length;
-> > +
-> > +       /* Register offsets (0 =3D register doesn't exist in this port)=
- */
-> > +       u8 cfg0, cfg1, cfg2;
-> > +       u8 blink;
-> > +       u8 dataout, datain;
-> > +
-> > +       /* Interrupt bit mapping */
-> > +       u8 first_irq_bit;
-> > +       u8 num_irqs;
-> > +       u8 first_irq_gpio;
->=20
-> These three are a bit undocumented.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7f23bcddf626e0593a39@syzkaller.appspotmail.com
+Fixes: c33b1cc62ac0 ("nfc: fix refcount leak in llcp_sock_bind()")
 
-I'll add descriptions.
-
-> > +static const struct wpcm450_bank wpcm450_banks[WPCM450_NUM_BANKS] =3D {
-> > +       /*  range   cfg0  cfg1  cfg2 blink  out   in     IRQ map */
-> > +       {   0, 16,  0x14, 0x18,    0,    0, 0x1c, 0x20,  0, 16, 0 },
-> > +       {  16, 16,  0x24, 0x28, 0x2c, 0x30, 0x34, 0x38, 16,  2, 8 },
->=20
-> So, the first_irq_gpio is used only here and as far as I understood it
-> has only two IRQ capable GPIOs starting from offset 8 in this bank.
-> What I didn't get is the relation on all these three. And could you
-> confirm that hardware indeed doesn't support full range of IRQs (to me
-> these settings look weird a bit)?
-
-The GPIO controller indeed only has 18 interrupt-capable GPIOs,
-16 in the first bank, and 2 in the second.
-
-The full mapping is as follows:
-
-  IRQ*    | int. bits**  | GPIO bank  | offsets
-----------|--------------|------------|-----------
-  2       |  0-3         |  0         |  0-3
-  3       |  4-11        |  0         |  4-11
-  4       |  12-15       |  0         |  12-15
-  5       |  16-17       |  1         |  8-9
-
-*) At the central interrupt controller
-**) In the GPIO controller's interrupt registers such as GPEVST
-
-The hardware is indeed a bit weird.
-
-> > +       {  32, 16,  0x3c, 0x40, 0x44,    0, 0x48, 0x4c,  0,  0, 0 },
-> > +       {  48, 16,  0x50, 0x54, 0x58,    0, 0x5c, 0x60,  0,  0, 0 },
-> > +       {  64, 16,  0x64, 0x68, 0x6c,    0, 0x70, 0x74,  0,  0, 0 },
-> > +       {  80, 16,  0x78, 0x7c, 0x80,    0, 0x84, 0x88,  0,  0, 0 },
-> > +       {  96, 18,     0,    0,    0,    0,    0, 0x8c,  0,  0, 0 },
-> > +       { 114, 14,  0x90, 0x94, 0x98,    0, 0x9c, 0xa0,  0,  0, 0 },
-> > +};
-
-
-> > +static void wpcm450_gpio_irq_ack(struct irq_data *d)
-> > +{
-> > +       struct wpcm450_gpio *gpio =3D gpiochip_get_data(irq_data_get_ir=
-q_chip_data(d));
-> > +       struct wpcm450_pinctrl *pctrl =3D gpio->pctrl;
->=20
->=20
-> > +       unsigned long flags;
->=20
-> Is it in IRQ context or not?
-
-I think ->irq_ack should run in IRQ context, I'm less sure about the
-other irq_chip methods. Unfortunately, linux/irq.h doesn't document
-these details.
-
-To avoid confusing myself and introducing bugs, I think I'll stay with
-spin_lock_irqsave/spin_unlock_irqrestore.
-
->=20
-> > +       int bit;
-> > +
-> > +       bit =3D wpcm450_gpio_irq_bitnum(gpio, d);
-> > +       if (bit < 0)
-> > +               return;
-> > +
-> > +       spin_lock_irqsave(&pctrl->lock, flags);
-> > +       iowrite32(BIT(bit), pctrl->gpio_base + WPCM450_GPEVST);
-> > +       spin_unlock_irqrestore(&pctrl->lock, flags);
-> > +}
+general protection fault, probably for non-canonical address 0xdffffc00000000c2: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000610-0x0000000000000617]
+CPU: 1 PID: 7219 Comm: syz-executor408 Not tainted 5.16.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:nfc_alloc_send_skb+0x3a/0x190 net/nfc/core.c:722
+Code: 54 41 89 d4 55 53 48 89 fb 48 8d ab 10 06 00 00 48 83 ec 08 e8 47 53 92 f8 48 89 ea 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e 14 01 00 00 48 8d bb 14 06 00
+RSP: 0018:ffffc9000ca97888 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 00000000000000c2 RSI: ffffffff88e474b9 RDI: 0000000000000000
+RBP: 0000000000000610 R08: ffffc9000ca97938 R09: 0000000000000880
+R10: ffffffff88e6031d R11: 000000000000087f R12: 0000000000000000
+R13: 0000000000000082 R14: ffff88807ca8b000 R15: ffffc9000ca97938
+FS:  00007f6b81ae2700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fff1b2fd960 CR3: 000000007ca3a000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ nfc_llcp_send_ui_frame+0x2c0/0x430 net/nfc/llcp_commands.c:759
+ llcp_sock_sendmsg+0x2b9/0x3a0 net/nfc/llcp_sock.c:803
+ sock_sendmsg_nosec net/socket.c:704 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:724
+ ____sys_sendmsg+0x331/0x810 net/socket.c:2409
+ ___sys_sendmsg+0xf3/0x170 net/socket.c:2463
+ __sys_sendmmsg+0x195/0x470 net/socket.c:2549
+ __do_sys_sendmmsg net/socket.c:2578 [inline]
+ __se_sys_sendmmsg net/socket.c:2575 [inline]
+ __x64_sys_sendmmsg+0x99/0x100 net/socket.c:2575
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f6b81b51f89
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f6b81ae22f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000133
+RAX: ffffffffffffffda RBX: 0000000000000033 RCX: 00007f6b81b51f89
+RDX: 0000000000000006 RSI: 0000000020004540 RDI: 0000000000000003
+RBP: 00007f6b81bdb3f8 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000040 R11: 0000000000000246 R12: 00007f6b81bdb3f0
+R13: 93cb663f6753dadd R14: 4b973dfbaeacdab3 R15: f981dd66eb1318f7
+ </TASK>
+Modules linked in:
+---[ end trace 570920f865b173be ]---
+RIP: 0010:nfc_alloc_send_skb+0x3a/0x190 net/nfc/core.c:722
+Code: 54 41 89 d4 55 53 48 89 fb 48 8d ab 10 06 00 00 48 83 ec 08 e8 47 53 92 f8 48 89 ea 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e 14 01 00 00 48 8d bb 14 06 00
+RSP: 0018:ffffc9000ca97888 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 00000000000000c2 RSI: ffffffff88e474b9 RDI: 0000000000000000
+RBP: 0000000000000610 R08: ffffc9000ca97938 R09: 0000000000000880
+R10: ffffffff88e6031d R11: 000000000000087f R12: 0000000000000000
+R13: 0000000000000082 R14: ffff88807ca8b000 R15: ffffc9000ca97938
+FS:  00007f6b81ae2700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fff1b2fd960 CR3: 000000007ca3a000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	54                   	push   %rsp
+   1:	41 89 d4             	mov    %edx,%r12d
+   4:	55                   	push   %rbp
+   5:	53                   	push   %rbx
+   6:	48 89 fb             	mov    %rdi,%rbx
+   9:	48 8d ab 10 06 00 00 	lea    0x610(%rbx),%rbp
+  10:	48 83 ec 08          	sub    $0x8,%rsp
+  14:	e8 47 53 92 f8       	callq  0xf8925360
+  19:	48 89 ea             	mov    %rbp,%rdx
+  1c:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  23:	fc ff df
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
+  2e:	84 c0                	test   %al,%al
+  30:	74 08                	je     0x3a
+  32:	3c 03                	cmp    $0x3,%al
+  34:	0f 8e 14 01 00 00    	jle    0x14e
+  3a:	48                   	rex.W
+  3b:	8d                   	.byte 0x8d
+  3c:	bb                   	.byte 0xbb
+  3d:	14 06                	adc    $0x6,%al
 
 
-> > +/*
-> > + * Since the GPIO controller does not support dual-edge triggered inte=
-rrupts
-> > + * (IRQ_TYPE_EDGE_BOTH), they are emulated using rising/falling edge t=
-riggered
-> > + * interrupts. wpcm450_gpio_fix_evpol sets the interrupt polarity for =
-the
-> > + * specified emulated dual-edge triggered interrupts, so that the next=
- edge can
-> > + * be detected.
-> > + */
-> > +static void wpcm450_gpio_fix_evpol(struct wpcm450_gpio *gpio, unsigned=
- long all)
-> > +{
-> > +       struct wpcm450_pinctrl *pctrl =3D gpio->pctrl;
-> > +       unsigned long flags;
-> > +       unsigned int bit;
-> > +
-> > +       for_each_set_bit(bit, &all, 32) {
-> > +               int offset =3D wpcm450_irq_bitnum_to_gpio(gpio, bit);
-> > +               unsigned long evpol;
-> > +               int level;
-> > +
-> > +               spin_lock_irqsave(&gpio->gc.bgpio_lock, flags);
-> > +               do {
-> > +                       evpol =3D ioread32(pctrl->gpio_base + WPCM450_G=
-PEVPOL);
->=20
-> > +                       level =3D gpio->gc.get(&gpio->gc, offset);
->=20
-> I'm not sure why here and below you are using a method via GPIO chip.
-> Why can't you simply call a method directly?
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-The ->get method is defined through bgpio_init, it's probably bgpio_get. The
-bgpio_* methods are private to gpio-mmio.c, so I can't call them directly.
-
-I could theoretically reimplement the functionality here, but I found it
-easier to call the existing ->get function.
-
->=20
-> > +                       /* Switch event polarity to the opposite of the=
- current level */
-> > +                       __assign_bit(bit, &evpol, !level);
-> > +
-> > +                       iowrite32(evpol, pctrl->gpio_base + WPCM450_GPE=
-VPOL);
-> > +               } while (gpio->gc.get(&gpio->gc, offset) !=3D level);
-> > +               spin_unlock_irqrestore(&gpio->gc.bgpio_lock, flags);
-> > +       }
-> > +}
-
-
-> > +static void wpcm450_gpio_irqhandler(struct irq_desc *desc)
-> > +{
-> > +       struct wpcm450_gpio *gpio =3D gpiochip_get_data(irq_desc_get_ha=
-ndler_data(desc));
-> > +       struct wpcm450_pinctrl *pctrl =3D gpio->pctrl;
-> > +       struct irq_chip *chip =3D irq_desc_get_chip(desc);
-> > +       unsigned long pending;
-> > +       unsigned long flags;
-> > +       unsigned long ours;
-> > +       unsigned int bit;
->=20
-> > +       ours =3D GENMASK(gpio->bank->first_irq_bit + gpio->bank->num_ir=
-qs - 1,
-> > +                      gpio->bank->first_irq_bit);
->=20
->        ours =3D GENMASK(gpio->bank->num_irqs - 1, 0) << gpio->bank->first=
-_irq_bit;
->=20
-> is better to read and understand. I think I commented on this.
-
-Fair; I'll change it.
-
-
-> > +static int wpcm450_config_get(struct pinctrl_dev *pctldev, unsigned in=
-t pin,
-> > +                             unsigned long *config)
-> > +{
-> > +       struct wpcm450_pinctrl *pctrl =3D pinctrl_dev_get_drvdata(pctld=
-ev);
-> > +       enum pin_config_param param =3D pinconf_to_config_param(*config=
-);
-> > +       unsigned long flags;
-> > +       int bit;
-> > +       u32 reg;
-> > +
-> > +       switch (param) {
-> > +       case PIN_CONFIG_INPUT_DEBOUNCE:
-> > +               bit =3D debounce_bitnum(pin);
-> > +               if (bit < 0)
-> > +                       return bit;
-> > +
-> > +               spin_lock_irqsave(&pctrl->lock, flags);
-> > +               reg =3D ioread32(pctrl->gpio_base + WPCM450_GPEVDBNC);
-> > +               spin_unlock_irqrestore(&pctrl->lock, flags);
-> > +
-> > +               *config =3D pinconf_to_config_packed(param, !!(reg & BI=
-T(bit)));
-> > +               break;
-> > +       default:
-> > +               return -ENOTSUPP;
-> > +       }
->=20
-> > +
-> > +       return 0;
->=20
-> Why not to return from the case?
-> Ditto for the rest.
-
-I'll change it.
-
-> > +static int wpcm450_gpio_register(struct platform_device *pdev,
-> > +                                struct wpcm450_pinctrl *pctrl)
-> > +{
-> > +       int ret =3D 0;
->=20
-> Redundant assignment.
-
-Indeed, I'll fix it.
-
->=20
-> > +       struct fwnode_handle *child;
-> > +
-> > +       pctrl->gpio_base =3D devm_platform_ioremap_resource(pdev, 0);
-> > +       if (!pctrl->gpio_base)
-> > +               return dev_err_probe(pctrl->dev, -ENOMEM, "Resource fai=
-l for GPIO controller\n");
-> > +
-> > +       device_for_each_child_node(pctrl->dev, child)  {
->=20
-> Please, be consistent with the device pointer you are using here and
-> there, see below as well.
-
-Will do as below.
-
-
-> > +               gpio->gc.fwnode =3D child;
->=20
-> Thanks, but this will make it a material for v5.18 (starting from). I
-> think since you send the v3 just at the holidays season followed by
-> release, it's an intention and we have a few weeks to handle this
-> series.
-
-I don't particularly care about one release or another, so 5.18 is soon
-enough for me.
-
-
-> > +static int wpcm450_pinctrl_probe(struct platform_device *pdev)
-> > +{
-> > +       struct wpcm450_pinctrl *pctrl;
-> > +       int ret;
-> > +
-> > +       pctrl =3D devm_kzalloc(&pdev->dev, sizeof(*pctrl), GFP_KERNEL);
-> > +       if (!pctrl)
-> > +               return -ENOMEM;
-> > +
-> > +       pctrl->dev =3D &pdev->dev;
-> > +       spin_lock_init(&pctrl->lock);
-> > +       dev_set_drvdata(&pdev->dev, pctrl);
-> > +
-> > +       pctrl->gcr_regmap =3D
-> > +               syscon_regmap_lookup_by_compatible("nuvoton,wpcm450-gcr=
-");
-> > +       if (IS_ERR(pctrl->gcr_regmap))
-> > +               return dev_err_probe(pctrl->dev, PTR_ERR(pctrl->gcr_reg=
-map),
->=20
-> Please, use the original device pointer in the ->probe().
-> Sometimes it's good to have
->=20
-> struct device *dev =3D &pdev->dev;
-
-Will do.
-
-
-Thanks,
-Jonathan Neusch=C3=A4fer
-
---gEwymEB2acrfHMRY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmHVqfIACgkQCDBEmo7z
-X9txiA//Ww4AH9Ejw+2lT2uful1cPKbUU9Cg7L7+4C7eX+v5fgqQiUBOcHHDE0bs
-aIZWHsesTvll355cVER8oGvkV4ctMHEFgOAC7dbRxhRcza6Mj9HtDbMgXJ2fihjX
-a2XbOyFueOXBb8F7ccda0gLs2n92G+atpUdvX1tqdIRqlVvgYoRmJMa+zh+baS+w
-VHTqj1lFqXsR6VvHonOUEETYdi60wdtprMjRWWg0Yil+9rMGXqpMnd2By65Ntj+g
-19lH/zNu9ERdcNm9RsdbGTDSL1EAaOlOM0ksdEP6gYKPat6D8vLSEfZYWyuGNYGs
-HHWRNIisKlHdjPuwoDeiL92bc3MxzFBM4+i+ZLJfKkZFtGfvRi8RPQR7xQqEJsru
-sje+V6/nCtq0M/6IKLhSbCmCM+9jo4j70xiL+A49AemUzPgESHdSqqMT3oJcD+kD
-FwYoyQ50NeC8rdsxr31yqfmW8zM0kMVrlTEnP/ZApf4O4fa4PGCkpYDg1o5DMXxa
-x8GRvrRI7GN0bdkMY2IvBP2/mHYmQ3BIXaK+CBJSgoFpLkGKJ/o3vgzwi/uAkVvO
-9pOR0yABi/WLm6RZASEcYP5i5ZMTyYrH3FRU4lRUV6vbiaiU8/ThHLsTFRV6NRNm
-IakhizMlnKsKPFQZnnzK2ZibF/wJlMjic6E7t9kFwB8Xupzgja4=
-=cx6O
------END PGP SIGNATURE-----
-
---gEwymEB2acrfHMRY--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

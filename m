@@ -2,67 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7414485015
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 10:36:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C339348501A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 10:36:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238902AbiAEJgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 04:36:11 -0500
-Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:33436 "EHLO
-        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238896AbiAEJgK (ORCPT
+        id S238914AbiAEJgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 04:36:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59882 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233853AbiAEJge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 04:36:10 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R871e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V10PFNA_1641375366;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V10PFNA_1641375366)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 05 Jan 2022 17:36:07 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     jani.nikula@linux.intel.com, airlied@linux.ie
-Cc:     daniel@ffwll.ch, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next v2] drm/i915/fbc: replace DEFINE_SIMPLE_ATTRIBUTE with DEFINE_DEBUGFS_ATTRIBUTE
-Date:   Wed,  5 Jan 2022 17:36:05 +0800
-Message-Id: <20220105093605.66436-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Wed, 5 Jan 2022 04:36:34 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761EEC061761;
+        Wed,  5 Jan 2022 01:36:34 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id q8so1105745wra.12;
+        Wed, 05 Jan 2022 01:36:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=G5USAhnPcOQaApPKE6/XINe72jhys0o03YHjx6AUo34=;
+        b=fsWL5e4hpoRPKa4AwJGr/Tc3cHHvU0gkNXf8PvPGgQES9lshAdQnBHWxGrKVRaSoeD
+         QIbtT37gS5vxmVvbiZV3EVvYdM7+jMzPD3E/GOpZ0XROV97JnhekX5g6Ua3coVqLmtW+
+         KjQ8vD2Lvsi36leZ/oEhCCqMQoOR95lLSz3imGTZ7HhYRdZPViaJ18wvjktLwD1YJR3R
+         EnBWemFmE2bEue4qHYGk6Rju8zUdR6bkgUwZwrsqwyitlMuyhrHfXiWhYQ/QxRx8yw0A
+         r0Xa69GrdAw/dVFvyYqfno0H7mJsa3AIp6MNG6EeiEJqVnbZV0LTM9jkQyAsTrQL/CvL
+         Hlkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=G5USAhnPcOQaApPKE6/XINe72jhys0o03YHjx6AUo34=;
+        b=jO/XK1NH37LFRPIs912310ujxvLput54GhxLBZPYqc2sNbqY74dtfEh9zGPJN0WaQ4
+         1xs1jjvEyu6bCtFzOV9f4eiNKW/wQ65rjE0PHlay7b9n0fo++OzyboBhu5YEc1k6RMrI
+         W+i3Mk80Mx+w1UAUeqRbrcRYInDigs4akP63TIh/fqL6mb5Ws7HxzFT8Uksm30aLaHA6
+         TLVoQqf2DV/5hnlZzf1l75Phnah90A1A7QO/ZXI3HyECftZH15tEkPSnTP20C/4pj9ws
+         28XxLL/CqI2wZcnewrokz98dTczBncQLHfLpfBgd3xlVg9W5XCn5qY8TSVUwc5gj6P9D
+         mX8Q==
+X-Gm-Message-State: AOAM530N+qEWZuzEr5MtbFXutdSykNVJg83++seCpqNyhNlIr+tpve4U
+        9dQlxRZTLtEq0xpN0ZmYbdw=
+X-Google-Smtp-Source: ABdhPJwdC9wVwlx0zRMBIx7aPepv3lNNgST90u8OkPcKbWGIOrC8BNXztzqtnZWjsOou0V0ougBZNg==
+X-Received: by 2002:a05:6000:156c:: with SMTP id 12mr47004320wrz.502.1641375393109;
+        Wed, 05 Jan 2022 01:36:33 -0800 (PST)
+Received: from debian (host-2-98-43-34.as13285.net. [2.98.43.34])
+        by smtp.gmail.com with ESMTPSA id q3sm4408822wrr.55.2022.01.05.01.36.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 01:36:32 -0800 (PST)
+Date:   Wed, 5 Jan 2022 09:36:30 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 5.4 00/36] 5.4.170-rc2 review
+Message-ID: <YdVmnnqBwYzJy138@debian>
+References: <20220104073839.317902293@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220104073839.317902293@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following coccicheck warning:
-./drivers/gpu/drm/i915/display/intel_fbc.c:1757:0-23: WARNING:
-intel_fbc_debugfs_false_color_fops should be defined with
-DEFINE_DEBUGFS_ATTRIBUTE
+Hi Greg,
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/gpu/drm/i915/display/intel_fbc.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On Tue, Jan 04, 2022 at 08:40:58AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.170 release.
+> There are 36 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 06 Jan 2022 07:38:29 +0000.
+> Anything received after that time might be too late.
 
-diff --git a/drivers/gpu/drm/i915/display/intel_fbc.c b/drivers/gpu/drm/i915/display/intel_fbc.c
-index 160fd2bdafe5..9ab844ea7992 100644
---- a/drivers/gpu/drm/i915/display/intel_fbc.c
-+++ b/drivers/gpu/drm/i915/display/intel_fbc.c
-@@ -1754,10 +1754,10 @@ static int intel_fbc_debugfs_false_color_set(void *data, u64 val)
- 	return 0;
- }
- 
--DEFINE_SIMPLE_ATTRIBUTE(intel_fbc_debugfs_false_color_fops,
--			intel_fbc_debugfs_false_color_get,
--			intel_fbc_debugfs_false_color_set,
--			"%llu\n");
-+DEFINE_DEBUGFS_ATTRIBUTE(intel_fbc_debugfs_false_color_fops,
-+			 intel_fbc_debugfs_false_color_get,
-+			 intel_fbc_debugfs_false_color_set,
-+			 "%llu\n");
- 
- static void intel_fbc_debugfs_add(struct intel_fbc *fbc)
- {
--- 
-2.20.1.7.g153144c
+Build test:
+mips (gcc version 11.2.1 20211214): 65 configs -> no new failure
+arm (gcc version 11.2.1 20211214): 107 configs -> no new failure
+arm64 (gcc version 11.2.1 20211214): 2 configs -> no failure
+x86_64 (gcc version 11.2.1 20211214): 4 configs -> no failure
+
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/587
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip
 

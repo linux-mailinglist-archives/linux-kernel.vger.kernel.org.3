@@ -2,184 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 658BA485A0F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:35:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1959B485A12
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:36:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244069AbiAEUfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 15:35:01 -0500
-Received: from mail.hugovil.com ([162.243.120.170]:38914 "EHLO
-        mail.hugovil.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244036AbiAEUew (ORCPT
+        id S244080AbiAEUgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 15:36:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41570 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244036AbiAEUgG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 15:34:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=H3KgQEFEzlVSWZjCPwUV0O4gZ4vCXsaEZeVb9qiIW98=; b=yggFvQM/T9Q/PSZUyyeD4fhgNt
-        svyrJJ7Laasc4TvmS6WOrceYKymjzNDSadnTiR0q/77L4krS6av5vsUGr5NsT+xJge+bmCtnGUqPv
-        xD/KSpkb19Nz+D44/gtuU8wxN2wcpEd2afqlW7+A2O0b+F2sKD6l2labD0Oy+Qpv10CQ=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:53878 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1n5Cze-0002I5-Ob; Wed, 05 Jan 2022 15:34:47 -0500
-Date:   Wed, 5 Jan 2022 15:34:46 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <20220105153446.82214b48a4c77ec960ce03f3@hugovil.com>
-In-Reply-To: <YdX5BocOfHE/0twa@piout.net>
-References: <20220105193440.151359-1-hugo@hugovil.com>
-        <YdX5BocOfHE/0twa@piout.net>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.hugovil.com
-X-Spam-Level: 
-X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
-        *      blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [URIs: bootlin.com]
-        * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        * -1.1 NICE_REPLY_A Looks like a legit reply (A)
-X-Spam-Status: No, score=-4.0 required=5.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.2
-Subject: Re: [PATCH] rtc: isl1208: avoid unnecessary rc variable tests
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
+        Wed, 5 Jan 2022 15:36:06 -0500
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE47C061245
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 12:36:05 -0800 (PST)
+Received: by mail-ua1-x930.google.com with SMTP id e19so574592uaa.11
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 12:36:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=txVFt3WvA59FUvh3yZRbarAP5GlLro21/acEq3o60II=;
+        b=fb3iexS+tRtn7D63WdqlZpSd2R5xoLO6DahaWHhDUhtVpqWZg69nIqwFN1DOqvpE91
+         kIEHHNa291k7kX2ELX/H/qFPbpgCKdQR4afU1fnx2eNydkIeJ4etnA3cxuQkC1UlNC5q
+         LDiAG6koxNgdCCW4vzWNPWBFzxFNMDEOSUGSHumriaQhWYnMWJBA36fAjZoZgh1CpKPQ
+         uSGn6wGiezElYSjDR6+71eaPiygc0bH2uUJjFUhh+4NZGnm42u4Grc0Q6djSmPoQwzss
+         e2eVUZI6bhuo57u7LMIxb3/P00ge3c1unfq5xauE1EYRurEyy3CZUDpJg6j9bXf68vUj
+         59bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=txVFt3WvA59FUvh3yZRbarAP5GlLro21/acEq3o60II=;
+        b=kRQjLmkBnkVi0KCA6tIa19wfRwjSLlUw3o8QiPXWm/k/LuxJ9guqGx87Gawe9L4NQt
+         1+FS6WnpQGGFTddejxWdLmEbSstWFtXHJdtY6QTdwvd+Fto1rxyYPQRF/SWtciTG3RxD
+         LpWAAsp7w4WFLMkAAcnA8ktfuK/T3yc7kQ5Ymwsfa7IzJKa5RQ+UrxD1Cchc05jNCrDT
+         yL1br79S1k0g1ZN0tFSgUpPjonJebS8PqAHM3TWv2vQESBsiBkL/v4VmMFKTSAKcu1rt
+         1A24bhYL+EVkzK3a+qbFFZU6EjMbUVylPbyHo7SbHnyqhBzYMmKSaXUXsztmQyh7YV0P
+         +JDg==
+X-Gm-Message-State: AOAM531P4gxfTGm/FXR0KxUqxz/hWr7n94bZ25KHWuUk3tkq/Dt98/I6
+        SIzjZhqHzZFHMo/rHv2meKw=
+X-Google-Smtp-Source: ABdhPJzLwCcp0CEqaRVb5IewVUA3D5s31K2+JNLgZ9FRX141o/fKe/iSPr+kNMiBO45GdkSo+EeXyQ==
+X-Received: by 2002:a67:d014:: with SMTP id r20mr11978651vsi.40.1641414965118;
+        Wed, 05 Jan 2022 12:36:05 -0800 (PST)
+Received: from localhost.localdomain ([181.22.170.52])
+        by smtp.gmail.com with ESMTPSA id t130sm7860vkc.32.2022.01.05.12.36.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 12:36:04 -0800 (PST)
+From:   Gaston Gonzalez <gascoar@gmail.com>
+To:     linux-staging@lists.linux.dev
+Cc:     gregkh@linuxfoundation.org, nsaenz@kernel.org,
+        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        juerg.haefliger@canonical.com, rdunlap@infradead.org,
+        dave.stevenson@raspberrypi.com, stefan.wahren@i2se.com,
+        unixbhaskar@gmail.com, mitaliborkar810@gmail.com,
+        phil@raspberrypi.com, len.baker@gmx.com,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-kernel@vger.kernel.org, gascoar@gmail.com
+Subject: [PATCH 0/6] staging: vc04_services: rename ocurrences of 'bm2835*' to 'bcm2835*'
+Date:   Wed,  5 Jan 2022 17:35:41 -0300
+Message-Id: <cover.1641414449.git.gascoar@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Jan 2022 21:01:10 +0100
-Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+This patch set renames ocurrences of 'bm2835*' to 'bcm2835*'.
 
-> On 05/01/2022 14:34:39-0500, Hugo Villeneuve wrote:
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > 
-> > The rc variable doesn't need to be tested a second time when the <if> block
-> > evaluates to false.
-> > 
-> 
-> rc is not tested a second time, here is the relevant listing:
-> 
-> -	if (client->irq > 0)
-> +	if (client->irq > 0) {
->  ffffffff81aef647:	41 8b b5 bc 01 00 00 	mov    0x1bc(%r13),%esi
->  ffffffff81aef64e:	85 f6                	test   %esi,%esi
->  ffffffff81aef650:	0f 8f 35 01 00 00    	jg     ffffffff81aef78b <isl1208_probe+0x314>
->  		rc = isl1208_setup_irq(client, client->irq);
->  	if (rc)
->  		return rc;
-> +	}
->  
-> -	if (evdet_irq > 0 && evdet_irq != client->irq)
-> +	if (evdet_irq > 0 && evdet_irq != client->irq) {
->  ffffffff81aef656:	85 db                	test   %ebx,%ebx
->  ffffffff81aef658:	7e 0d                	jle    ffffffff81aef667 <isl1208_probe+0x1f0>
->  ffffffff81aef65a:	41 39 9d bc 01 00 00 	cmp    %ebx,0x1bc(%r13)
-> @@ -1663,6 +1664,7 @@ ffffffff81aef661:	0f 85 0a 01 00 00
->  		rc = isl1208_setup_irq(client, evdet_irq);
->  	if (rc)
->  		return rc;
-> +	}
-> 
-> As you can see, no change in assembly but it is worse to read. gcc on
-> arm behaves the same way.
+Gaston Gonzalez (6):
+  staging: vc04_services: rename structures bm2835_mmal_dev and
+    bm2835_mmal_v4l2_ctrl
+  staging: vc04_services: rename functions containing bm2835_* to
+    bcm2835_*
+  staging: vc04_services: rename variables containing bm2835_* to
+    bcm2835_*
+  staging: vc04_services: rename string literal containing bm2835_* to
+    bcm2835*_
+  staging: vc04_services: rename macros BM2835_MMAL_VERSION and
+    BM2835_MMAL_MODULE_NAME
+  staging: vc04_services: rename BM2835 to BCM2835 in headers comments
 
-Hi Alexandre,
-I am not sure that I fully understand your assembly code analysis. Maybe my patch comment was misleading, because I am not talking about a redundant test inside the if block, but ouside of it (after it).
-
-Here is the original code with my annotations. Let's assume that the variable client->irq = 0:
-
----
-/* If client->irq = 0, then function isl1208_setup_irq() will not be called, and rc will not be modified: */
-if (client->irq > 0)
-	rc = isl1208_setup_irq(client, client->irq);
-
-/* If rc hasn't been modified, there is no need to re-test its value here: */
-if (rc)
-	return rc;
----
-
-After the patch, this code section becomes:
-
----
-if (client->irq > 0) {
-	rc = isl1208_setup_irq(client, client->irq);
-	if (rc)
-		return rc;
-}
----
-
-For me it is more logical and clearer like this. Moreover, you can see that at line 873 of the original driver, the same kind of mechanism is used:
-
----
-if (isl1208->config->has_timestamp) {
-	rc = rtc_add_group(isl1208->rtc, &isl1219_rtc_sysfs_files);
-	if (rc)
-		return rc;
-}
----
-
-Regards,
-Hugo.
-
-
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > ---
-> >  drivers/rtc/rtc-isl1208.c | 14 ++++++++------
-> >  1 file changed, 8 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/rtc/rtc-isl1208.c b/drivers/rtc/rtc-isl1208.c
-> > index 182dfa605515..c7f04df5a0b6 100644
-> > --- a/drivers/rtc/rtc-isl1208.c
-> > +++ b/drivers/rtc/rtc-isl1208.c
-> > @@ -880,15 +880,17 @@ isl1208_probe(struct i2c_client *client, const struct i2c_device_id *id)
-> >  	if (rc)
-> >  		return rc;
-> >  
-> > -	if (client->irq > 0)
-> > +	if (client->irq > 0) {
-> >  		rc = isl1208_setup_irq(client, client->irq);
-> > -	if (rc)
-> > -		return rc;
-> > +		if (rc)
-> > +			return rc;
-> > +	}
-> >  
-> > -	if (evdet_irq > 0 && evdet_irq != client->irq)
-> > +	if (evdet_irq > 0 && evdet_irq != client->irq) {
-> >  		rc = isl1208_setup_irq(client, evdet_irq);
-> > -	if (rc)
-> > -		return rc;
-> > +		if (rc)
-> > +			return rc;
-> > +	}
-> >  
-> >  	rc = devm_rtc_nvmem_register(isl1208->rtc, &isl1208->nvmem_config);
-> >  	if (rc)
-> > -- 
-> > 2.30.2
-> > 
-> 
-> -- 
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> 
-
+ .../bcm2835-camera/bcm2835-camera.c           | 103 +++++++------
+ .../bcm2835-camera/bcm2835-camera.h           |  12 +-
+ .../vc04_services/bcm2835-camera/controls.c   | 137 ++++++++----------
+ .../vc04_services/vchiq-mmal/mmal-common.h    |   2 +-
+ .../vc04_services/vchiq-mmal/mmal-encodings.h |   2 +-
+ .../vchiq-mmal/mmal-msg-common.h              |   2 +-
+ .../vchiq-mmal/mmal-msg-format.h              |   2 +-
+ .../vc04_services/vchiq-mmal/mmal-msg-port.h  |   2 +-
+ .../vc04_services/vchiq-mmal/mmal-msg.h       |   2 +-
+ .../vchiq-mmal/mmal-parameters.h              |   2 +-
+ .../vc04_services/vchiq-mmal/mmal-vchiq.c     |   2 +-
+ .../vc04_services/vchiq-mmal/mmal-vchiq.h     |   2 +-
+ 12 files changed, 127 insertions(+), 143 deletions(-)
 
 -- 
-Hugo Villeneuve <hugo@hugovil.com>
+2.34.1
+

@@ -2,136 +2,308 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE394855A7
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:17:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 351634855AB
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:18:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237107AbiAEPRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 10:17:41 -0500
-Received: from m43-7.mailgun.net ([69.72.43.7]:58781 "EHLO m43-7.mailgun.net"
+        id S241372AbiAEPSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 10:18:09 -0500
+Received: from mga17.intel.com ([192.55.52.151]:6784 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237011AbiAEPRe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 10:17:34 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1641395854; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=S9AtsjfAyxkE1VRytr2/1sWSS6u/ZAMynfW/PfWhtss=; b=EjQCbvnz8HbyfCIQBB3AY5B/lEKFcHwBEppb7NFldlF4xLOsGM5/B+Ga/ZjGSg+SqS93dpMQ
- nHYuOBk4h24T89RRnQXbVwiR3fijgtYfOZLAi4uENezmCTTc732x8/8h+ORfAzVV8cIj1KrL
- Ye24r9Np7athjpdhqZrkn1NvgPI=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
- 61d5b68d7d878c8ded433e97 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 05 Jan 2022 15:17:33
- GMT
-Sender: charante=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 823A5C4361A; Wed,  5 Jan 2022 15:17:32 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.29.110] (unknown [49.37.146.141])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: charante)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id ED612C4338F;
-        Wed,  5 Jan 2022 15:17:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org ED612C4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Subject: Re: [PATCH v2] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED for
- shmem
-To:     Shakeel Butt <shakeelb@google.com>,
-        Charan Teja Reddy <quic_charante@quicinc.com>
-Cc:     hughd@google.com, akpm@linux-foundation.org, vbabka@suse.cz,
-        rientjes@google.com, david@redhat.com, mhocko@suse.com,
-        surenb@google.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <1638442253-1591-1-git-send-email-quic_charante@quicinc.com>
- <CALvZod6fSkdV6oSyxsv0+gcRfZ=H9Uaw=7=t902U85fWJStuzA@mail.gmail.com>
- <4a5cde83-c673-6af0-702f-f8b59e05a397@codeaurora.org>
-From:   Charan Teja Kalla <charante@codeaurora.org>
-Message-ID: <08d3c298-1568-1ea2-8215-0dffa1c5a089@codeaurora.org>
-Date:   Wed, 5 Jan 2022 20:47:25 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S241246AbiAEPRs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 10:17:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641395868; x=1672931868;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1NcRYDLPyMeiPzV/YtB/iU7nC50xaDwNMEdQMJFCW1Q=;
+  b=YjRzaCd2QWaszlxWlqyuTyPIt5MJgCtBQEXAnvjiq5B0Zu8gR2zBbPre
+   rc3U4v16DJhLKKgzJKYfLPKWI9xNtRVVmcaemv64N2MIxx9VJ3o+OO48p
+   9zcK+5knQS1wObaEyoBGKl0K6hAm1qKFMGBffb4moXr/FeZctUoPHOZJf
+   XlvqZ57OThq9UHEAgoPFEBHTpsiMXqnQZa7zXPna9CcdbH2Zn5axC9yJf
+   09yn8iGLz7LX5r/jmK619AQjxljBknioZbVzWd/xWJ6JPiQTerNysXvmu
+   C60DtZqsJD/Ne0dKGRzGEmr9ZQPcI+m/zMXpNJ8p2AZPfvG/Tb8SWDQtx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="223146628"
+X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
+   d="scan'208";a="223146628"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 07:17:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
+   d="scan'208";a="611500727"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 05 Jan 2022 07:17:44 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n582q-000Gmo-0B; Wed, 05 Jan 2022 15:17:44 +0000
+Date:   Wed, 5 Jan 2022 23:17:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [jolsa-perf:kprobe/multi 4/14] kernel/kprobes.c:1721:10: error:
+ implicit declaration of function 'check_ftrace_multi'
+Message-ID: <202201052322.kMqJ0XlX-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <4a5cde83-c673-6af0-702f-f8b59e05a397@codeaurora.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Firstly, Apologies for taking such a long time for the next spin. Posted
-V3 @
-https://patchwork.kernel.org/project/linux-mm/patch/1641395025-7922-1-git-send-email-quic_charante@quicinc.com/
-. Please provide your comments.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git kprobe/multi
+head:   27d253a29de023f664387fcc049edeeaadf23c8e
+commit: fbf6ec1e4f8e6c1fed1e1d14f16595e2dc01902d [4/14] kprobe: Add support to register multiple ftrace kprobes
+config: i386-randconfig-r021-20220105 (https://download.01.org/0day-ci/archive/20220105/202201052322.kMqJ0XlX-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d5b6e30ed3acad794dd0aec400e617daffc6cc3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=fbf6ec1e4f8e6c1fed1e1d14f16595e2dc01902d
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf kprobe/multi
+        git checkout fbf6ec1e4f8e6c1fed1e1d14f16595e2dc01902d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-On 12/6/2021 12:59 PM, Charan Teja Kalla wrote:
-> Thanks Shakeel for your valuable inputs!!
-> 
-> On 12/2/2021 11:24 PM, Shakeel Butt wrote:
->> On Thu, Dec 2, 2021 at 2:51 AM Charan Teja Reddy
->> <quic_charante@quicinc.com> wrote:
->>>
->>> From: Charan Teja Reddy <charante@codeaurora.org>
->>>
->>> Currently fadvise(2) is supported only for the files that doesn't
->>> associated with noop_backing_dev_info thus for the files, like shmem,
->>> fadvise results into NOP. But then there is file_operations->fadvise()
->>> that lets the file systems to implement their own fadvise
->>> implementation. Use this support to implement some of the POSIX_FADV_XXX
->>> functionality for shmem files.
->>>
->>> This patch aims to implement POSIX_FADV_WILLNEED and POSIX_FADV_DONTNEED
->>> advices to shmem files which can be helpful for the drivers who may want
->>> to manage the shmem pages of the files that are created through
->>> shmem_file_setup[_with_mnt]().  An example usecase may be like, driver
->>> can create the shmem file of the size equal to its requirements and
->>> map the pages for DMA and then pass the fd to user. The user who knows
->>> well about the usage of these pages can now decide when these pages are
->>> not required push them to swap through DONTNEED thus free up memory well
->>> in advance rather than relying on the reclaim and use WILLNEED when it
->>> decide that they are useful in the near future. IOW, it lets the clients
->>> to free up/read the memory when it wants to. Another usecase is that GEM
->>> objets which are currenlty allocated and managed through shmem files can
->>> use vfs_fadvise(DONT|WILLNEED) on shmem fd when the driver comes to
->>> know(like through some hints from user space) that GEM objects are not
->>> going to use/will need in the near future.
->>
->> The proposed semantics of POSIX_FADV_DONTNEED is actually similar to
->> MADV_PAGEOUT and different from MADV_DONTNEED. This is a user facing
->> API and this difference will cause confusion.
-> 
-> man pages [1] says that "POSIX_FADV_DONTNEED attempts to free cached
-> pages associated with the specified region." This statement, IIUC,  on
-> issuing this FADV, it is expected to free the file cache pages. And it
-> is implementation defined If the dirty pages may be attempted to
-> writeback. And the unwritten dirty pages will not be freed.  And thus
-> for Shmem files this is being done by dirtying the page and pushing out
-> to swap.
-> 
-> So, Isn't the FADV_DONTNEED also covers the semantics of MADV_PAGEOUT
-> for file pages? IOW, what is the purpose of PAGEOUT for the file pages.
-> Or I am missing some trivial logic in your comment here?
-> 
-> Coming to MADV_DONTNEED[2], on the mapped shmem files doesn't have any
-> effect as the pages of those shmem files can still be in RAM. Subsequent
-> accesses of pages in the range will succeed from the up-to-date contents
-> of the underlying mapped file. IOW, the pages are still be present in
-> the cache. Am I wrong here?
-> 
-> [1] https://man7.org/linux/man-pages/man2/posix_fadvise.2.html
-> [2] https://man7.org/linux/man-pages/man2/madvise.2.html
-> 
-> 
->>
-> 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora
-Forum, a Linux Foundation Collaborative Project
+All errors (new ones prefixed by >>):
+
+   In file included from kernel/kprobes.c:23:
+   include/linux/kprobes.h:77:21: error: field has incomplete type 'struct ftrace_ops'
+                   struct ftrace_ops ops;
+                                     ^
+   include/linux/ftrace.h:332:8: note: forward declaration of 'struct ftrace_ops'
+   struct ftrace_ops;
+          ^
+>> kernel/kprobes.c:1721:10: error: implicit declaration of function 'check_ftrace_multi' [-Werror,-Wimplicit-function-declaration]
+                   return check_ftrace_multi(p);
+                          ^
+>> kernel/kprobes.c:1916:3: error: implicit declaration of function 'free_ftrace_multi' [-Werror,-Wimplicit-function-declaration]
+                   free_ftrace_multi(ap);
+                   ^
+   kernel/kprobes.c:1916:3: note: did you mean 'kprobe_ftrace_multi'?
+   include/linux/kprobes.h:145:20: note: 'kprobe_ftrace_multi' declared here
+   static inline bool kprobe_ftrace_multi(struct kprobe *p)
+                      ^
+   3 errors generated.
+
+
+vim +/check_ftrace_multi +1721 kernel/kprobes.c
+
+  1713	
+  1714	static int check_addr(struct kprobe *p, struct module **probed_mod)
+  1715	{
+  1716		int ret;
+  1717		kprobe_opcode_t *addr;
+  1718	
+  1719	#ifdef CONFIG_HAVE_KPROBES_MULTI_ON_FTRACE
+  1720		if (p->multi.cnt)
+> 1721			return check_ftrace_multi(p);
+  1722	#endif
+  1723	
+  1724		/* Adjust probe address from symbol */
+  1725		addr = kprobe_addr(p);
+  1726		if (IS_ERR(addr))
+  1727			return PTR_ERR(addr);
+  1728		p->addr = addr;
+  1729		p->func_addr = resolve_func_addr(addr);
+  1730	
+  1731		ret = warn_kprobe_rereg(p);
+  1732		if (ret)
+  1733			return ret;
+  1734		return check_kprobe_address_safe(p, probed_mod);
+  1735	}
+  1736	
+  1737	int register_kprobe(struct kprobe *p)
+  1738	{
+  1739		struct module *probed_mod = NULL;
+  1740		struct kprobe *old_p;
+  1741		int ret;
+  1742	
+  1743		/* User can pass only KPROBE_FLAG_DISABLED to register_kprobe */
+  1744		p->flags &= KPROBE_FLAG_DISABLED;
+  1745		p->nmissed = 0;
+  1746		INIT_LIST_HEAD(&p->list);
+  1747	
+  1748		ret = check_addr(p, &probed_mod);
+  1749		if (ret)
+  1750			return ret;
+  1751	
+  1752		mutex_lock(&kprobe_mutex);
+  1753	
+  1754		old_p = get_kprobe(p->addr);
+  1755		if (old_p) {
+  1756			/* Since this may unoptimize 'old_p', locking 'text_mutex'. */
+  1757			ret = register_aggr_kprobe(old_p, p);
+  1758			goto out;
+  1759		}
+  1760	
+  1761		cpus_read_lock();
+  1762		/* Prevent text modification */
+  1763		mutex_lock(&text_mutex);
+  1764		ret = prepare_kprobe(p);
+  1765		mutex_unlock(&text_mutex);
+  1766		cpus_read_unlock();
+  1767		if (ret)
+  1768			goto out;
+  1769	
+  1770		/*
+  1771		 * Multi ftrace kprobes do not have single address,
+  1772		 * so they are not stored in the kprobe_table hash.
+  1773		 */
+  1774		if (kprobe_single(p)) {
+  1775			INIT_HLIST_NODE(&p->hlist);
+  1776			hlist_add_head_rcu(&p->hlist,
+  1777				       &kprobe_table[hash_ptr(p->addr, KPROBE_HASH_BITS)]);
+  1778		}
+  1779	
+  1780		if (!kprobes_all_disarmed && !kprobe_disabled(p)) {
+  1781			ret = arm_kprobe(p);
+  1782			if (ret) {
+  1783				if (kprobe_single(p))
+  1784					hlist_del_rcu(&p->hlist);
+  1785				synchronize_rcu();
+  1786				goto out;
+  1787			}
+  1788		}
+  1789	
+  1790		/* Try to optimize kprobe */
+  1791		try_to_optimize_kprobe(p);
+  1792	out:
+  1793		mutex_unlock(&kprobe_mutex);
+  1794	
+  1795		if (probed_mod)
+  1796			module_put(probed_mod);
+  1797	
+  1798		return ret;
+  1799	}
+  1800	EXPORT_SYMBOL_GPL(register_kprobe);
+  1801	
+  1802	/* Check if all probes on the 'ap' are disabled. */
+  1803	static bool aggr_kprobe_disabled(struct kprobe *ap)
+  1804	{
+  1805		struct kprobe *kp;
+  1806	
+  1807		lockdep_assert_held(&kprobe_mutex);
+  1808	
+  1809		list_for_each_entry(kp, &ap->list, list)
+  1810			if (!kprobe_disabled(kp))
+  1811				/*
+  1812				 * Since there is an active probe on the list,
+  1813				 * we can't disable this 'ap'.
+  1814				 */
+  1815				return false;
+  1816	
+  1817		return true;
+  1818	}
+  1819	
+  1820	static struct kprobe *__disable_kprobe(struct kprobe *p)
+  1821	{
+  1822		struct kprobe *orig_p;
+  1823		int ret;
+  1824	
+  1825		lockdep_assert_held(&kprobe_mutex);
+  1826	
+  1827		/* Get an original kprobe for return */
+  1828		orig_p = __get_valid_kprobe(p);
+  1829		if (unlikely(orig_p == NULL))
+  1830			return ERR_PTR(-EINVAL);
+  1831	
+  1832		if (!kprobe_disabled(p)) {
+  1833			/* Disable probe if it is a child probe */
+  1834			if (p != orig_p)
+  1835				p->flags |= KPROBE_FLAG_DISABLED;
+  1836	
+  1837			/* Try to disarm and disable this/parent probe */
+  1838			if (p == orig_p || aggr_kprobe_disabled(orig_p)) {
+  1839				/*
+  1840				 * If 'kprobes_all_disarmed' is set, 'orig_p'
+  1841				 * should have already been disarmed, so
+  1842				 * skip unneed disarming process.
+  1843				 */
+  1844				if (!kprobes_all_disarmed) {
+  1845					ret = disarm_kprobe(orig_p, true);
+  1846					if (ret) {
+  1847						p->flags &= ~KPROBE_FLAG_DISABLED;
+  1848						return ERR_PTR(ret);
+  1849					}
+  1850				}
+  1851				orig_p->flags |= KPROBE_FLAG_DISABLED;
+  1852			}
+  1853		}
+  1854	
+  1855		return orig_p;
+  1856	}
+  1857	
+  1858	/*
+  1859	 * Unregister a kprobe without a scheduler synchronization.
+  1860	 */
+  1861	static int __unregister_kprobe_top(struct kprobe *p)
+  1862	{
+  1863		struct kprobe *ap, *list_p;
+  1864	
+  1865		/* Disable kprobe. This will disarm it if needed. */
+  1866		ap = __disable_kprobe(p);
+  1867		if (IS_ERR(ap))
+  1868			return PTR_ERR(ap);
+  1869	
+  1870		if (ap == p)
+  1871			/*
+  1872			 * This probe is an independent(and non-optimized) kprobe
+  1873			 * (not an aggrprobe). Remove from the hash list.
+  1874			 */
+  1875			goto disarmed;
+  1876	
+  1877		/* Following process expects this probe is an aggrprobe */
+  1878		WARN_ON(!kprobe_aggrprobe(ap));
+  1879	
+  1880		if (list_is_singular(&ap->list) && kprobe_disarmed(ap))
+  1881			/*
+  1882			 * !disarmed could be happen if the probe is under delayed
+  1883			 * unoptimizing.
+  1884			 */
+  1885			goto disarmed;
+  1886		else {
+  1887			/* If disabling probe has special handlers, update aggrprobe */
+  1888			if (p->post_handler && !kprobe_gone(p)) {
+  1889				list_for_each_entry(list_p, &ap->list, list) {
+  1890					if ((list_p != p) && (list_p->post_handler))
+  1891						goto noclean;
+  1892				}
+  1893				ap->post_handler = NULL;
+  1894			}
+  1895	noclean:
+  1896			/*
+  1897			 * Remove from the aggrprobe: this path will do nothing in
+  1898			 * __unregister_kprobe_bottom().
+  1899			 */
+  1900			list_del_rcu(&p->list);
+  1901			if (!kprobe_disabled(ap) && !kprobes_all_disarmed)
+  1902				/*
+  1903				 * Try to optimize this probe again, because post
+  1904				 * handler may have been changed.
+  1905				 */
+  1906				optimize_kprobe(ap);
+  1907		}
+  1908		return 0;
+  1909	
+  1910	disarmed:
+  1911		if (kprobe_single(ap))
+  1912			hlist_del_rcu(&ap->hlist);
+  1913	
+  1914	#ifdef CONFIG_HAVE_KPROBES_MULTI_ON_FTRACE
+  1915		if (kprobe_ftrace_multi(ap))
+> 1916			free_ftrace_multi(ap);
+  1917	#endif
+  1918		return 0;
+  1919	}
+  1920	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

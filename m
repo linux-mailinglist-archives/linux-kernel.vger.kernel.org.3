@@ -2,106 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A6E484F93
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 09:51:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E15D3484F96
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 09:53:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238663AbiAEIvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 03:51:41 -0500
-Received: from mga09.intel.com ([134.134.136.24]:12209 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238664AbiAEIvd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 03:51:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641372693; x=1672908693;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4GB6rsCxcMyvreo+aau3rw2RYLpWk7Xrh9vvKs1x03w=;
-  b=Iwb2m189qgmvt4WQLGWObWsxUbf8o4lNmAJns1Pome+tMXU6Uscwq2fT
-   jt6WCKOID7BVJR1Tccj3dVyGqn/T2BGS0wiEPu6oG844pH7zovNnutp9m
-   TqqBqTbk1WmxGwZRDK4rpraWBf/Aam8qd0AVcHiVZesJ5bB8Abzfmeins
-   euwmPB4H0WlZTXfbWw3eRgWypLjwYMm95iAufnTGHwRwsMYr9V5TulgQ7
-   9Xzfw2lHGqhZ4SzZTL4LPRBp/mx3rlZ8zqVvr1KXySb7xvlsGF8r30VKQ
-   b1OjMeLfy+kvWSp6Oyrs8Y3QBnPy8tHlRWVWNhc/CDvyBeNiRaQFflPnY
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242198488"
-X-IronPort-AV: E=Sophos;i="5.88,263,1635231600"; 
-   d="scan'208";a="242198488"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 00:51:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,263,1635231600"; 
-   d="scan'208";a="470472751"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 05 Jan 2022 00:51:30 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n5214-000GR3-8G; Wed, 05 Jan 2022 08:51:30 +0000
-Date:   Wed, 5 Jan 2022 16:51:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [arm-de:upstream/remove_feec_energy_margin_rework 1/11]
- drivers/powercap/dtpm_cpu.c:85:49: error: expected ')'
-Message-ID: <202201051643.2xpTOg7E-lkp@intel.com>
+        id S238671AbiAEIx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 03:53:29 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:32798 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230087AbiAEIx2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 03:53:28 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowAAXHp50XNVh6ZzRBQ--.10901S2;
+        Wed, 05 Jan 2022 16:53:08 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     mika.westerberg@linux.intel.com
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: Re: Re: [PATCH] thunderbolt: Check for null pointer after calling kmemdup
+Date:   Wed,  5 Jan 2022 16:53:07 +0800
+Message-Id: <20220105085307.2410653-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowAAXHp50XNVh6ZzRBQ--.10901S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKF1xJw1rAF1kCrWxtF43ZFb_yoW3AwbEyr
+        W8J3srGw4rZay8tFs0kr4UAry7XrW0g3srXw4xWF48uryY9rW7JrWq9rnxZr1fWay29Fy3
+        KryxJayjqw43XjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb48FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r43
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjNJ55UUUU
+        U==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.gitlab.arm.com/linux-arm/linux-de.git upstream/remove_feec_energy_margin_rework
-head:   8a0bdb78ce1cbb8e5e6768965874226b92b07b0e
-commit: 150e753e861285e82e9d7c593f1f26075c34e124 [1/11] sched, drivers: Remove max param from effective_cpu_util()/sched_cpu_util()
-config: i386-randconfig-a012-20220105 (https://download.01.org/0day-ci/archive/20220105/202201051643.2xpTOg7E-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d5b6e30ed3acad794dd0aec400e617daffc6cc3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add arm-de https://git.gitlab.arm.com/linux-arm/linux-de.git
-        git fetch --no-tags arm-de upstream/remove_feec_energy_margin_rework
-        git checkout 150e753e861285e82e9d7c593f1f26075c34e124
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On Wed, Jan 05, 2022 at 03:30:47PM +0800, Mika Westerberg wrote:
+> This is doing two things so I suggest sending two patches instead.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Fine, I have already sent the patch for icm_handle_event() independently.
 
-All errors (new ones prefixed by >>):
+> However, for the UUID part, I think it works fine if we get NULL (and I
+> think kmemdup() issues warning too).
+>
+> There are probably not needed either since the "fix" here is for pretty
+> rare case of running out of memory. I think there is not even a NULL
+> pointer dereference because UUID is optional.
 
->> drivers/powercap/dtpm_cpu.c:85:49: error: expected ')'
-           return (power * ((sum_util << 10) / max) >> 10 : 0;
-                                                          ^
-   drivers/powercap/dtpm_cpu.c:85:9: note: to match this '('
-           return (power * ((sum_util << 10) / max) >> 10 : 0;
-                  ^
-   1 error generated.
+As for icm_icl_set_uuid(), I think the check for kmemdup() is needed.
+Because users need to know that icm_start() fails, or they will be puzzled
+why the uuid is unsetted.
+So at least it is a cleanup.
+if so, I would like to send patch for icm_icl_set_uuid() without fixes tag.
 
-
-vim +85 drivers/powercap/dtpm_cpu.c
-
-    70	
-    71	static u64 scale_pd_power_uw(struct cpumask *pd_mask, u64 power)
-    72	{
-    73		unsigned long max, sum_util = 0;
-    74		int cpu;
-    75	
-    76		/*
-    77		 * The capacity is the same for all CPUs belonging to
-    78		 * the same perf domain.
-    79		 */
-    80		max = arch_scale_cpu_capacity(cpumask_first(pd_mask));
-    81	
-    82		for_each_cpu_and(cpu, pd_mask, cpu_online_mask)
-    83			sum_util += sched_cpu_util(cpu);
-    84	
-  > 85		return (power * ((sum_util << 10) / max) >> 10 : 0;
-    86	}
-    87	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

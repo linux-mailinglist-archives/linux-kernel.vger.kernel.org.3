@@ -2,165 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA0C485A63
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 22:06:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16934485A67
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 22:07:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244316AbiAEVGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 16:06:07 -0500
-Received: from mga07.intel.com ([134.134.136.100]:49459 "EHLO mga07.intel.com"
+        id S244314AbiAEVHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 16:07:13 -0500
+Received: from mga02.intel.com ([134.134.136.20]:45654 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231715AbiAEVF7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 16:05:59 -0500
+        id S244325AbiAEVG7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 16:06:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641416759; x=1672952759;
+  t=1641416819; x=1672952819;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=hkH35YbzF4YPt3ygjqNj8GfRVNnWzk1Z4UqheHX4CcU=;
-  b=EjRbnF1csDdv6cErtwmoonnGJry40WAdxZi2jcr3KeDxTv8sXvdZU59Z
-   uaRK0w3B6QgZENps76sab8pnCaQZRDKpIHUo9byZQT+8lpNEXecR/6A9K
-   2sp4LCHhE2SJVF5bYH24+D4ZAdYRYQBLsjj8t/C9uecYIv9TVZnx4CY6G
-   nMDkxLwaLNrU/iw8uhF/jYk6crE63Cu2K/8m8bNqMvCq4C6PnLuXCzD7P
-   IPvCWE28gcJ/IOet5HJIoE1AKCuTMrH7qXwYAOdc2NZ2h0l8akygYA7hr
-   ed/Zl5vIt+1PqMyBS3S4ghlzvq511Qknj3GzeoebrBZDeGSMV9I3xqAbB
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="305887357"
+  bh=L6FP8dJmdlUmtztac4+1qDGI/UW+ITXa6OTVsEd7AIw=;
+  b=bCYkPBpB2hMfG4mlHI7kDMTWZ9K9RqA6gxC4vRtzug1UwgNP+Ey79+9F
+   6RawyLXSDqi6mpcI76HY8GW73fyMEK/2CYe9NQeSGbHnW0sFBsJyXR4SY
+   pzs5B+XihOISB9ulp83qLWt9E1yOFA1ikawfXaJxJBIlVcooKtSaQHfbC
+   oMD79tKCZgwkbsSjHkkkmti0P9lbZ9ysFzQoEoEWParBvaHAlb9rwfUE6
+   XE4rcefFhHGQ+DtD5pd1DMgX5zN2BINBMB0bNcXxbFwQRBXvDIPedtLwB
+   m7RlnEfLroEjHOK9QvaHUvO4yKvyKo+16uMq1QxUKCZ+v8nRxCz6fOrC0
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="229859825"
 X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
-   d="scan'208";a="305887357"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 13:05:57 -0800
+   d="scan'208";a="229859825"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 13:06:57 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
-   d="scan'208";a="621280687"
+   d="scan'208";a="611596015"
 Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 05 Jan 2022 13:05:54 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 05 Jan 2022 13:06:54 -0800
 Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1n5DTl-000H2W-QE; Wed, 05 Jan 2022 21:05:53 +0000
-Date:   Thu, 6 Jan 2022 05:05:49 +0800
+        id 1n5DUj-000H2k-RO; Wed, 05 Jan 2022 21:06:53 +0000
+Date:   Thu, 6 Jan 2022 05:05:55 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Caleb Connolly <caleb.connolly@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org
-Subject: Re: [PATCH v2 3/7] iio: adc: qcom-spmi-rradc: introduce round robin
- adc
-Message-ID: <202201060438.QiDzs9rA-lkp@intel.com>
-References: <20220105183353.2505744-4-caleb.connolly@linaro.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Roman Bacik <roman.bacik@broadcom.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        bcm-kernel-feedback-list@broadcom.com, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: iproc: Set all 24 bits of PCI class code
+Message-ID: <202201060511.mczwwaNF-lkp@intel.com>
+References: <20220105093552.27542-1-pali@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220105183353.2505744-4-caleb.connolly@linaro.org>
+In-Reply-To: <20220105093552.27542-1-pali@kernel.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Caleb,
+Hi "Pali,
 
-Thank you for the patch! Yet something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on jic23-iio/togreg lee-mfd/for-mfd-next v5.16-rc8 next-20220105]
+[auto build test ERROR on helgaas-pci/next]
+[also build test ERROR on v5.16-rc8 next-20220105]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Caleb-Connolly/iio-adc-introduce-Qualcomm-SPMI-Round-Robin-ADC/20220106-023716
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220106/202201060438.QiDzs9rA-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.2.0
+url:    https://github.com/0day-ci/linux/commits/Pali-Roh-r/PCI-iproc-Set-all-24-bits-of-PCI-class-code/20220105-173704
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git next
+config: arm-randconfig-r001-20220105 (https://download.01.org/0day-ci/archive/20220106/202201060511.mczwwaNF-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d5b6e30ed3acad794dd0aec400e617daffc6cc3d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/167368793a009e8c1ce75b0b8b0965a4574af527
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/0day-ci/linux/commit/8ef1acfb84c08a0331930f9a60884fdd6d7c5e88
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Caleb-Connolly/iio-adc-introduce-Qualcomm-SPMI-Round-Robin-ADC/20220106-023716
-        git checkout 167368793a009e8c1ce75b0b8b0965a4574af527
+        git fetch --no-tags linux-review Pali-Roh-r/PCI-iproc-Set-all-24-bits-of-PCI-class-code/20220105-173704
+        git checkout 8ef1acfb84c08a0331930f9a60884fdd6d7c5e88
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash drivers/iio/adc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   drivers/iio/adc/qcom-spmi-rradc.c: In function 'rradc_prepare_batt_id_conversion':
->> drivers/iio/adc/qcom-spmi-rradc.c:624:25: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
-     624 |                         FIELD_PREP(BATT_ID_SETTLE_MASK, chip->batt_id_delay);
-         |                         ^~~~~~~~~~
-   cc1: some warnings being treated as errors
+>> drivers/pci/controller/pcie-iproc.c:798:11: error: use of undeclared identifier 'PCI_CLASS_BRIDGE_PCI_NORMAL'
+           class |= PCI_CLASS_BRIDGE_PCI_NORMAL;
+                    ^
+   1 error generated.
 
 
-vim +/FIELD_PREP +624 drivers/iio/adc/qcom-spmi-rradc.c
+vim +/PCI_CLASS_BRIDGE_PCI_NORMAL +798 drivers/pci/controller/pcie-iproc.c
 
-   607	
-   608	static int rradc_prepare_batt_id_conversion(struct rradc_chip *chip,
-   609						    enum rradc_channel_id chan_id,
-   610						    u16 *data)
-   611	{
-   612		int ret, batt_id_delay;
-   613	
-   614		ret = regmap_update_bits(chip->regmap, chip->base + RR_ADC_BATT_ID_CTRL,
-   615					 RR_ADC_BATT_ID_CTRL_CHANNEL_CONV,
-   616					 RR_ADC_BATT_ID_CTRL_CHANNEL_CONV);
-   617		if (ret < 0) {
-   618			dev_err(chip->dev, "Enabling BATT ID channel failed:%d\n", ret);
-   619			return ret;
-   620		}
-   621	
-   622		if (chip->batt_id_delay != -EINVAL) {
-   623			batt_id_delay =
- > 624				FIELD_PREP(BATT_ID_SETTLE_MASK, chip->batt_id_delay);
-   625			ret = regmap_update_bits(chip->regmap,
-   626						 chip->base + RR_ADC_BATT_ID_CFG,
-   627						 batt_id_delay, batt_id_delay);
-   628			if (ret < 0) {
-   629				dev_err(chip->dev,
-   630					"BATT_ID settling time config failed:%d\n",
-   631					ret);
-   632				goto out_disable_batt_id;
-   633			}
-   634		}
-   635	
-   636		ret = regmap_update_bits(chip->regmap,
-   637					 chip->base + RR_ADC_BATT_ID_TRIGGER,
-   638					 RR_ADC_TRIGGER_CTL, RR_ADC_TRIGGER_CTL);
-   639		if (ret < 0) {
-   640			dev_err(chip->dev, "BATT_ID trigger set failed:%d\n", ret);
-   641			goto out_disable_batt_id;
-   642		}
-   643	
-   644		ret = rradc_read_status_in_cont_mode(chip, chan_id);
-   645		if (ret < 0)
-   646			dev_err(chip->dev, "Error reading in continuous mode:%d\n",
-   647				ret);
-   648	
-   649		/*
-   650		 * Reset registers back to default values
-   651		 */
-   652		ret = regmap_update_bits(chip->regmap,
-   653					 chip->base + RR_ADC_BATT_ID_TRIGGER,
-   654					 RR_ADC_TRIGGER_CTL, 0);
-   655		if (ret < 0)
-   656			dev_err(chip->dev, "BATT_ID trigger re-set failed:%d\n", ret);
-   657	
-   658	out_disable_batt_id:
-   659		ret = regmap_update_bits(chip->regmap, chip->base + RR_ADC_BATT_ID_CTRL,
-   660					 RR_ADC_BATT_ID_CTRL_CHANNEL_CONV, 0);
-   661		if (ret < 0)
-   662			dev_err(chip->dev, "Disabling BATT ID channel failed:%d\n",
-   663				ret);
-   664	
-   665		return ret;
-   666	}
-   667	
+   765	
+   766	static int iproc_pcie_check_link(struct iproc_pcie *pcie)
+   767	{
+   768		struct device *dev = pcie->dev;
+   769		u32 hdr_type, link_ctrl, link_status, class, val;
+   770		bool link_is_active = false;
+   771	
+   772		/*
+   773		 * PAXC connects to emulated endpoint devices directly and does not
+   774		 * have a Serdes.  Therefore skip the link detection logic here.
+   775		 */
+   776		if (pcie->ep_is_internal)
+   777			return 0;
+   778	
+   779		val = iproc_pcie_read_reg(pcie, IPROC_PCIE_LINK_STATUS);
+   780		if (!(val & PCIE_PHYLINKUP) || !(val & PCIE_DL_ACTIVE)) {
+   781			dev_err(dev, "PHY or data link is INACTIVE!\n");
+   782			return -ENODEV;
+   783		}
+   784	
+   785		/* make sure we are not in EP mode */
+   786		iproc_pci_raw_config_read32(pcie, 0, PCI_HEADER_TYPE, 1, &hdr_type);
+   787		if ((hdr_type & 0x7f) != PCI_HEADER_TYPE_BRIDGE) {
+   788			dev_err(dev, "in EP mode, hdr=%#02x\n", hdr_type);
+   789			return -EFAULT;
+   790		}
+   791	
+   792		/* force class to PCI_CLASS_BRIDGE_PCI_NORMAL (0x060400) */
+   793	#define PCI_BRIDGE_CTRL_REG_OFFSET	0x43c
+   794	#define PCI_BRIDGE_CTRL_REG_CLASS_MASK	0xffffff
+   795		iproc_pci_raw_config_read32(pcie, 0, PCI_BRIDGE_CTRL_REG_OFFSET,
+   796					    4, &class);
+   797		class &= ~PCI_BRIDGE_CTRL_REG_CLASS_MASK;
+ > 798		class |= PCI_CLASS_BRIDGE_PCI_NORMAL;
+   799		iproc_pci_raw_config_write32(pcie, 0, PCI_BRIDGE_CTRL_REG_OFFSET,
+   800					     4, class);
+   801	
+   802		/* check link status to see if link is active */
+   803		iproc_pci_raw_config_read32(pcie, 0, IPROC_PCI_EXP_CAP + PCI_EXP_LNKSTA,
+   804					    2, &link_status);
+   805		if (link_status & PCI_EXP_LNKSTA_NLW)
+   806			link_is_active = true;
+   807	
+   808		if (!link_is_active) {
+   809			/* try GEN 1 link speed */
+   810	#define PCI_TARGET_LINK_SPEED_MASK	0xf
+   811	#define PCI_TARGET_LINK_SPEED_GEN2	0x2
+   812	#define PCI_TARGET_LINK_SPEED_GEN1	0x1
+   813			iproc_pci_raw_config_read32(pcie, 0,
+   814						    IPROC_PCI_EXP_CAP + PCI_EXP_LNKCTL2,
+   815						    4, &link_ctrl);
+   816			if ((link_ctrl & PCI_TARGET_LINK_SPEED_MASK) ==
+   817			    PCI_TARGET_LINK_SPEED_GEN2) {
+   818				link_ctrl &= ~PCI_TARGET_LINK_SPEED_MASK;
+   819				link_ctrl |= PCI_TARGET_LINK_SPEED_GEN1;
+   820				iproc_pci_raw_config_write32(pcie, 0,
+   821						IPROC_PCI_EXP_CAP + PCI_EXP_LNKCTL2,
+   822						4, link_ctrl);
+   823				msleep(100);
+   824	
+   825				iproc_pci_raw_config_read32(pcie, 0,
+   826						IPROC_PCI_EXP_CAP + PCI_EXP_LNKSTA,
+   827						2, &link_status);
+   828				if (link_status & PCI_EXP_LNKSTA_NLW)
+   829					link_is_active = true;
+   830			}
+   831		}
+   832	
+   833		dev_info(dev, "link: %s\n", link_is_active ? "UP" : "DOWN");
+   834	
+   835		return link_is_active ? 0 : -ENODEV;
+   836	}
+   837	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

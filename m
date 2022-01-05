@@ -2,137 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8966484B89
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 01:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4904484B8C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 01:13:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236671AbiAEALK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 19:11:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
+        id S236681AbiAEANB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 19:13:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231153AbiAEALJ (ORCPT
+        with ESMTP id S234119AbiAEANA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 19:11:09 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC994C061761;
-        Tue,  4 Jan 2022 16:11:08 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id u25so33521037edf.1;
-        Tue, 04 Jan 2022 16:11:08 -0800 (PST)
+        Tue, 4 Jan 2022 19:13:00 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB6DC061761;
+        Tue,  4 Jan 2022 16:13:00 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id c9-20020a17090a1d0900b001b2b54bd6c5so1507812pjd.1;
+        Tue, 04 Jan 2022 16:13:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3vvIpsgXbZgWWzXm7KzAmbmgTQBrk3dhKKJZISsV6s8=;
-        b=TNE0J7CImv7F9A50m31nlkd0NZDnJ5bqEaasfTqAWRPp9pAel1lVnyv3u4t67TSbYj
-         R5l81t+LHrNC6VcOZ2zZMezDRc6msOhZwIiWx4THrc4pv7xOTcN4lxq9qeugYSQauUbF
-         uyw/fZrwG/TNivyzUqsI9OR6b/NPpkNOQhNvCA+l9sevgapf4jA3eY/1ttwSFA4xj6xk
-         8Wb0JVVTDorZWsSPOL5FXc2JoPcfFh39dgQQw5ZCb81hr9kF6teqDF08mWaSP9zEUuZJ
-         WIDa44U9XTrk2kc/efmAF4QOI98jbBmHFNP6N8X6pgwsit8PV/yrM57qjYBtejnHv1TN
-         uGRg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yEEjORyDHr/UE6RbMr2kar9GaUil9VsJ5e9/kxtvdtk=;
+        b=FlrXMiPJxNmwbFLoDC7Hs5wUH07aJa+mVYLGH13U77XLHEOW1o7M9l9a8dtuf/xb8Y
+         EZKjtnvQcnZ49HgQGtgNuiYNPlvEK6mTmZVPRCniaS9wvpcO+AIAh174ZxAdR/E/CIy/
+         Bb8EBXkzb3hqmBq5jq06V7jGeJqe2Aj4Lbmrb76FQ8oM8uVNc8i1N4N/AkdjtKaHJXrc
+         RRXmexTg+I21R8DmwQOetO+2xl0otqimCu+tGN3SLYymaqNtLP0mUWGyZ++NzrSO9il3
+         h0tMuxyxIDKNBZ6F7761/Cjcf4uXjbmhZ0wbuUd8XAxaAiCryEL9EOxjznOhPgCLTzBh
+         /irQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=3vvIpsgXbZgWWzXm7KzAmbmgTQBrk3dhKKJZISsV6s8=;
-        b=Y+x5xEpIcG6fTTvhPdf0O8l7q/Z4+RB/55J2cYrKL64s3buH0j7DzxVH+PEjzuUuGu
-         rrTZKlYS/uZX6uqj96xsWkPhq/VB0t52GUtUnU0vyGrohDXF8cTP1KU3LJRbY4Ixk2NB
-         EjOKJmJZXxj1QJYX69vNJQEbnAhmbmXpca4qL+y1mahDndw1QNgdkf7bjQmi6pMxri+U
-         BuguzJ1l5nFwE4qc7HJyvuPFm03EgbllvsIQ4eGY0q1Do1rN4m9seigog0RpHOedaCSl
-         ZKPheGAPhxANTn1BqjyiK7gzDdfIYD4rYUQN6n7uX0M7XNMrmn+3GqActolmeFGoUbMy
-         Dehw==
-X-Gm-Message-State: AOAM5316P1Jv965lhjJFCVxeRdTKgNVSZX3cUnCOz0hYQH1IPulHeY+t
-        wwsmE9Vqpl8miyGNTQMbZeE=
-X-Google-Smtp-Source: ABdhPJxgnN8lY8PFaKsz/jOTVvlJLHir8PhS1dnXJ6VDvhOay612+jquIdph3FE6Ud6hD5wF6S5rUA==
-X-Received: by 2002:a17:907:7e9e:: with SMTP id qb30mr39505541ejc.348.1641341467532;
-        Tue, 04 Jan 2022 16:11:07 -0800 (PST)
-Received: from gmail.com (0526F11B.dsl.pool.telekom.hu. [5.38.241.27])
-        by smtp.gmail.com with ESMTPSA id d1sm11981894ejo.176.2022.01.04.16.11.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 16:11:07 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Wed, 5 Jan 2022 01:11:03 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH] headers/uninline: Uninline single-use function:
- kobject_has_children()
-Message-ID: <YdTiF5dVeizYtIDS@gmail.com>
-References: <YdIfz+LMewetSaEB@gmail.com>
- <20220103135400.4p5ezn3ntgpefuan@box.shutemov.name>
- <YdQnfyD0JzkGIzEN@gmail.com>
- <YdRM7I9E2WGU4GRg@kroah.com>
- <YdRRl+jeAm/xfU8D@gmail.com>
- <YdRjRWHgvnqVe8UZ@kroah.com>
- <YdRkZqGuKCZcRbov@kroah.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yEEjORyDHr/UE6RbMr2kar9GaUil9VsJ5e9/kxtvdtk=;
+        b=Z3vnmKflXzOc+JLj7HLqy8lXGL8ILVdlBC4w1I8524ALz6/lBDKDuZWwdgSSDjVYrZ
+         KZ2ULKvCHtQPTRBBJO+FkWIZKUloWJUzc5KpbjaQB5y3+N34aaC7okld5v7baRkLi2Hn
+         u4WUpqPjZytp4Y1wWv57Qj2AI788D048zPN2XubnF9zLacXAw0pCapu8P1ckpDCOpMDl
+         sMaQg7NcSsawT4Uc1gztEWCCyW8QrcW6TN9ixKQEpBopRphIt8Rn50t7FPFkM8IO+N2e
+         YGQSQZLF0mrNAgXNgdNnM5K/eXyzWwB3AKDvBtH46u200DaxBhXQTwi7XdZx5iITwcjz
+         stTw==
+X-Gm-Message-State: AOAM530STSLg3k7i+0QBSPef/+n2oNXxuLATMvw2WqtekBUAvNOti0CX
+        QQgSiMPsxBP3Izuor27eyL4ExtAW5yZv4/VDL1I=
+X-Google-Smtp-Source: ABdhPJxGSypl4WHoICJiUI/E0we9KC0f2nA//dCM8Gk8uR0KdRsPmdnHlgQjkmp0+804oDbgNnhPb78KFhhmzDHB1/o=
+X-Received: by 2002:a17:902:7003:b0:149:ba80:8740 with SMTP id
+ y3-20020a170902700300b00149ba808740mr13670625plk.143.1641341580039; Tue, 04
+ Jan 2022 16:13:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdRkZqGuKCZcRbov@kroah.com>
+References: <20211223181741.3999-1-f.fainelli@gmail.com> <CACRpkda_6Uwzoxiq=vpftusKFtQ8_Qbtoau9Wtm_AM8p3BqpVg@mail.gmail.com>
+ <CAJq09z6_o9W8h=UUy7jw+Ngwg26F8pZVRX5p0VYsgoDKFJRgnA@mail.gmail.com> <YdSry15jzwdbh6GO@robh.at.kernel.org>
+In-Reply-To: <YdSry15jzwdbh6GO@robh.at.kernel.org>
+From:   Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Date:   Tue, 4 Jan 2022 21:12:48 -0300
+Message-ID: <CAJq09z5gBwDi+iPGYm0+=HWCiiGUDfLk62fKzwbimzgchLd2Nw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: net: dsa: Fix realtek-smi example
+To:     Rob Herring <robh@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        devicetree@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> Then just fix this in the conversion.
 
-* Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+Hi Rob,
 
-> On Tue, Jan 04, 2022 at 04:09:57PM +0100, Greg Kroah-Hartman wrote:
-> > On Tue, Jan 04, 2022 at 02:54:31PM +0100, Ingo Molnar wrote:
-> > > 
-> > > * Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> > > 
-> > > > On Tue, Jan 04, 2022 at 11:54:55AM +0100, Ingo Molnar wrote:
-> > > > > There's one happy exception though, all the uninlining patches that 
-> > > > > uninline a single-call function are probably fine as-is:
-> > > > 
-> > > > <snip>
-> > > > 
-> > > > >  3443e75fd1f8 headers/uninline: Uninline single-use function: kobject_has_children()
-> > > > 
-> > > > Let me go take this right now, no need for this to wait, it should be
-> > > > out of kobject.h as you rightfully show there is only one user.
-> > > 
-> > > Sure - here you go!
-> > 
-> > I just picked it out of your git tree already :)
-> > 
-> > Along those lines, any objection to me taking at least one other one?
-> > 3f8757078d27 ("headers/prep: usb: gadget: Fix namespace collision") and
+I'm not sure if I got your suggestion. Should I post the new patch
+in-reply to this thread?
+It is related but something completely different.
 
-Ack.
+I sent YAML conversion v1 a little while ago.
+https://lore.kernel.org/netdev/20211228072645.32341-1-luizluca@gmail.com/
 
-> > 6fb993fa3832 ("headers/deps: USB: Optimize <linux/usb/ch9.h>
+I'll send v2 soon. I'll mention it in this thread when I do it.
 
-Ack.
+Best,
 
-> > dependencies, remove <linux/device.h>") look like I can take now into my
-> > USB tree with no problems.
-> 
-> Also these look good to go now:
-> 	bae9ddd98195 ("headers/prep: Fix non-standard header section: drivers/usb/cdns3/core.h")
-
-Ack.
-
-> 	c027175b37e5 ("headers/prep: Fix non-standard header section: drivers/usb/host/ohci-tmio.c")
-
-Ack.
-
-Note that these latter two patches just simplified the task of my 
-(simplistic) tooling, which is basically a shell script that inserts
-header dependencies to the head of .c and .h files, right in front of
-the first #include line it encounters.
-
-These two patches do have some marginal clean-up value too, so I'm not 
-opposed to merging them - just wanted to declare their true role. :-)
-
-Thanks,
-
-	Ingo
+Luiz

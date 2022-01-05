@@ -2,135 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEAD148540A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 15:05:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2BAA485406
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 15:05:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240522AbiAEOFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 09:05:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36420 "EHLO
+        id S237025AbiAEOE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 09:04:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237035AbiAEOFH (ORCPT
+        with ESMTP id S235724AbiAEOEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 09:05:07 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D036C061784
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 06:05:07 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1n56uH-0000CK-Ba; Wed, 05 Jan 2022 15:04:49 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-7899-4998-133d-b4b9.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:7899:4998:133d:b4b9])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 5F8C96D1A43;
-        Wed,  5 Jan 2022 14:04:44 +0000 (UTC)
-Date:   Wed, 5 Jan 2022 15:04:43 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     syzbot <syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com>,
-        anthony.l.nguyen@intel.com, changbin.du@intel.com,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        David Miller <davem@davemloft.net>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        intel-wired-lan-owner@osuosl.org, intel-wired-lan@lists.osuosl.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Yajun Deng <yajun.deng@linux.dev>
-Subject: Re: [syzbot] kernel BUG in pskb_expand_head
-Message-ID: <20220105140443.vwobz3yx4z3rux6a@pengutronix.de>
-References: <0000000000007ea16705d0cfbb53@google.com>
- <000000000000c7845605d4d3f0a0@google.com>
- <CANn89i+LbcWn3xoYU-eMjjmQPz0x1pSAat2OpF=i0+RByc-h4w@mail.gmail.com>
+        Wed, 5 Jan 2022 09:04:55 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60D7C061761
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 06:04:54 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id f134-20020a1c1f8c000000b00345c05bc12dso3383516wmf.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 06:04:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TlXdq9XIB2tOct/lxT5yMZfON3WyyUeXO6bx9SBaYcQ=;
+        b=QVGH2CavroGa9ub7BD08K1VsZ+3acX9pelHho80D7vs1W3IcSGHOVQEX0hVzycRNC9
+         fMw75CB9Gntfe8DMwaHsjvs8EiGyXDzbLXSFOhr6alovpYquhuHScxDzSneABIirafLf
+         LnHMd9coQ1PbpZzCMBoTMPZxIxh3LbJVuIJWzgIrVpiM2Bio9DiWGdCpaYOSy7majDk/
+         gg/dyW0LGNoJ5mHX4O6nCDGKbpuLaSQixLiNEoyb6H1rCsArVg9N4F9zghQjdXvEwBOS
+         ziBrEbJHk9JlYutYLbQIwLgkYfJEDAFdwCtY1UsgRQInOYp1vPBCKL4v6TxvpcBLf5Oe
+         xwiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TlXdq9XIB2tOct/lxT5yMZfON3WyyUeXO6bx9SBaYcQ=;
+        b=52LC01nfHNhy4KvqjpJBaR765meFeX8i1vV+x5mdzOksOjoJpWK4Xx9bIBVNvs6raZ
+         w+Nhm99NQWp5Mn1ebuoy3Ak0PQCBWOmCHkSKYb0OVnZEcP3qeEIpzs/Q+FGTxTa0T+hn
+         OQuQtk2qU9ljws7ZDEJ/rbsPrclpYHeksvLacu9s4Ab7aa75RrObB63594K7TC+AcE1e
+         vH4OxWppQo0vym3xwWPSz6ITea5vGNcwDc2kpdtdNu+SPVtUPE8U0KWLfia4ee4mcObQ
+         ZND94b/S0/oNjNq4VhVQDiOhJ2aav2WRL9bImPcN8DWsPJRG5RtyNQXht3e9RNxcZuax
+         gC1w==
+X-Gm-Message-State: AOAM532gOamyeI/ZcBvDyQduf5OsRy/K12ubp1GoWfY1TaLLXwcRD1DZ
+        oojEWxjV+b5PV1GdNU3zCuD4dQ==
+X-Google-Smtp-Source: ABdhPJz4JzU0XGsLurwqkd+FwWZ5XhCMf965oWMUQsq4Os6meaJmVtbCBFR76f1NEaLqqiKeVVE4/g==
+X-Received: by 2002:a7b:cb83:: with SMTP id m3mr3015819wmi.150.1641391493454;
+        Wed, 05 Jan 2022 06:04:53 -0800 (PST)
+Received: from debian-brgl.home ([2a01:cb1d:334:ac00:7d50:ff5:f5c1:e225])
+        by smtp.gmail.com with ESMTPSA id n9sm3083813wmq.37.2022.01.05.06.04.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 06:04:53 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [GIT PULL] gpio: fixes for v5.16
+Date:   Wed,  5 Jan 2022 15:04:51 +0100
+Message-Id: <20220105140451.200178-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="72ar6nyolsauz65r"
-Content-Disposition: inline
-In-Reply-To: <CANn89i+LbcWn3xoYU-eMjjmQPz0x1pSAat2OpF=i0+RByc-h4w@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Linus,
 
---72ar6nyolsauz65r
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Here are two last fixes for this release cycle from the GPIO subsystem.
 
-On 05.01.2022 05:59:35, Eric Dumazet wrote:
-> On Wed, Jan 5, 2022 at 3:20 AM syzbot
-> <syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com> wrote:
-> >
-> > syzbot has found a reproducer for the following issue on:
-> >
-> > HEAD commit:    c9e6606c7fe9 Linux 5.16-rc8
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D148351c3b00=
-000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D32f9fa260d7=
-413b4
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3D4c63f36709a64=
-2f801c5
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binu=
-tils for Debian) 2.35.2
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D15435e2bb=
-00000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D12f4508db00=
-000
-> >
->=20
-> This C repro looks legit, bug should be in CAN layer.
+Best regards,
+Bartosz Golaszewski
 
-ACK - it's bug in CAN's ISOTP
+The following changes since commit c9e6606c7fe92b50a02ce51dda82586ebdf99b48:
 
-> > The issue was bisected to:
-> >
-> > commit e4b8954074f6d0db01c8c97d338a67f9389c042f
-> > Author: Eric Dumazet <edumazet@google.com>
-> > Date:   Tue Dec 7 01:30:37 2021 +0000
-> >
-> >     netlink: add net device refcount tracker to struct ethnl_req_info
->=20
-> Ignore this bisection, an unrelated commit whent in its way.
+  Linux 5.16-rc8 (2022-01-02 14:23:25 -0800)
 
-ACK - We have a RFC fix for this:
+are available in the Git repository at:
 
-https://lore.kernel.org/all/20220105132429.1170627-1-mkl@pengutronix.de
+  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v5.16
 
-regards,
-Marc
+for you to fetch changes up to 32e246b02f53b2fdaa81ea9f2ca6ff068c017fcb:
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+  MAINTAINERS: update gpio-brcmstb maintainers (2022-01-03 10:53:02 +0100)
 
---72ar6nyolsauz65r
-Content-Type: application/pgp-signature; name="signature.asc"
+----------------------------------------------------------------
+gpio fixes for v5.16
 
------BEGIN PGP SIGNATURE-----
+- fix irq offset calculation in gpio-aspeed-sgpio
+- update the MAINTAINERS entry for gpio-brcmstb
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHVpXkACgkQqclaivrt
-76m+pAf+M8hsvuG1OEtF6bw1HNGyTla1VDEhL4hbgurkpql5872fKSOA+ROtuCKi
-I2gOI0cqp/kJNzH1fdIQuiXuIqaM1f38sXb3q51Ng9TsXpk82Rd3FHpHK698t/Rq
-ImxBIWHEQWzGgIYcRfP/WKh2dsNzLyW4dFo4hmPMuacEluVI7JAmr/dU1OvXebH0
-1D1Z63rR37GOnQL9M/Sh2oY29UC/n5a4BDMC42en3Wb+5vMEPEH5S/AjvG1MBzen
-YlCkkIEhyHM2DqN9jaXG6/rbaz5ckPxaEm+ES3xNDg9aHSS0zLi/Ct9nyrl5tJlm
-KXMaxmP7EmEYr1W9XIVrHhZVs5h2aQ==
-=1PmX
------END PGP SIGNATURE-----
+----------------------------------------------------------------
+Gregory Fong (1):
+      MAINTAINERS: update gpio-brcmstb maintainers
 
---72ar6nyolsauz65r--
+Steven Lee (1):
+      gpio: gpio-aspeed-sgpio: Fix wrong hwirq base in irq handler
+
+ MAINTAINERS                      | 3 ++-
+ drivers/gpio/gpio-aspeed-sgpio.c | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)

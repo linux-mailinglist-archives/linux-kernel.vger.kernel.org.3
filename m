@@ -2,353 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78FEA484EFB
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 09:05:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9C3C484EFE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 09:05:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238301AbiAEIFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 03:05:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbiAEIFG (ORCPT
+        id S238311AbiAEIF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 03:05:27 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:55664 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238303AbiAEIF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 03:05:06 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50BA2C061761;
-        Wed,  5 Jan 2022 00:05:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8B398CE1B19;
-        Wed,  5 Jan 2022 08:05:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB3DEC36AE9;
-        Wed,  5 Jan 2022 08:05:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641369901;
-        bh=+yrla173Hc+EeGA2WY+vT2jwEipKTidLid3MuTj5K7I=;
-        h=From:To:Cc:Subject:Date:From;
-        b=JcEhWAW+Mczv4haLtAbYbBjIQpEXg/qs+qzeCctReW57+z/NtnOV4LAZ1HCF3lZR/
-         2z60n5NqzVsc9uk1zNrfN9DTGcrDHIh1wSRVCy+T+svS9fNJW5Ns4XtMuWF6Nx9+iy
-         eQyMLQF+wvdxCniLhtE/I7ECij46ILoxmK1zyQZDgJJ81MQcsEb7hbpQF+Y1zU8NyR
-         QyMXEXrTV7qmVazQ3XAO+RoChbnkVabBbIiAcBoiOXZAXZZx+TfLUAM8yOE8piwBHU
-         squjFAaXduGZn82GU6k3FlQDuUulkir0NhqJ3T/oSjIFOtOWUDQhbIJCyz9UwuLzsd
-         klejVFNWcBYcw==
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Leon Romanovsky <leonro@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-Subject: [PATCH rdma-next] RDMA/mad: Delete duplicated init_query_mad functions
-Date:   Wed,  5 Jan 2022 10:04:56 +0200
-Message-Id: <af6f35c590ff5ef56d0137351b8b295af0f7c13c.1641369858.git.leonro@nvidia.com>
-X-Mailer: git-send-email 2.33.1
+        Wed, 5 Jan 2022 03:05:26 -0500
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2057xdcu026980;
+        Wed, 5 Jan 2022 09:05:23 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=bJZNGcwWKkd1Jkgo5S1swdvNCZ1uvjdExLTcuT53zEk=;
+ b=Xc2gHp3LzhcrjZjEF+Ya9D+77uptj/6g7O5uOe0gMJnJC/C2ZBxQ1kls4aftAaWy6YiY
+ Igd+wowMWoJ4SyPGEG6BHMHGXa6jEqM0pCxEpVQpE4FMlkydW7GgssmWk/8lRXASjSsD
+ 8DKEiwHeDXnj3WTd6gzNcekJAvh7RtTUJw0zAIU6uhfMepddYWHdA216RUyVPb9fEgSy
+ dOrKdhokjFqYbc2aO5RKxr4EATQzhGGO0TJP+BDPYNcfZwGP31Vmd1s+49xhXl5skN2C
+ FrQVi57TH3AqTKSgjoiXh8MBZRpSluRonRyNypyxijFdTxsuIBR4F8MpLI5uXOoauxx7 +g== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dd5w3ge8x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jan 2022 09:05:23 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 8E9FF10002A;
+        Wed,  5 Jan 2022 09:05:22 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7F3602248A6;
+        Wed,  5 Jan 2022 09:05:22 +0100 (CET)
+Received: from lmecxl0889.lme.st.com (10.75.127.47) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 5 Jan
+ 2022 09:05:21 +0100
+Subject: Re: [RFC PATCH v2 1/6] remoteproc: core: Introduce virtio device
+ add/remove functions
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20211222082349.30378-1-arnaud.pouliquen@foss.st.com>
+ <20211222082349.30378-2-arnaud.pouliquen@foss.st.com>
+ <20220104190810.GB540353@p14s>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Message-ID: <9f047c7b-a91c-9600-cdaf-7984ad7666f3@foss.st.com>
+Date:   Wed, 5 Jan 2022 09:05:21 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220104190810.GB540353@p14s>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-05_02,2022-01-04_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leon Romanovsky <leonro@nvidia.com>
+Hello Mathieu,
 
-Several drivers used same function to initialize query MAD,
-so move that function to global header file.
+On 1/4/22 8:08 PM, Mathieu Poirier wrote:
+> Good morning,
+> 
+> On Wed, Dec 22, 2021 at 09:23:44AM +0100, Arnaud Pouliquen wrote:
+>> In preparation of the migration of the management of rvdev in
+>> remoteproc_virtio.c, this patch spins off new functions to manage the
+>> remoteproc virtio device.
+>>
+>> The rproc_rvdev_add_device and rproc_rvdev_remove_device will be
+>> moved to remoteproc_virtio.c.
+>>
+>> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+>> ---
+>> update vs previous revision:
+>>   - update according to the rebase from v15-rc1 to v16-rc1
+>>   - split patch to introduce rproc_register_rvdev and rproc_unregister_rvdev
+>>     function in a separate patch
+>> ---
+>>   drivers/remoteproc/remoteproc_core.c | 94 +++++++++++++++++-----------
+>>   1 file changed, 57 insertions(+), 37 deletions(-)
+>>
+>> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+>> index 69f51acf235e..d1f1c5c25bd7 100644
+>> --- a/drivers/remoteproc/remoteproc_core.c
+>> +++ b/drivers/remoteproc/remoteproc_core.c
+>> @@ -484,6 +484,61 @@ static int copy_dma_range_map(struct device *to, struct device *from)
+>>   	return 0;
+>>   }
+>>   
+>> +static int rproc_rvdev_add_device(struct rproc_vdev *rvdev)
+>> +{
+>> +	struct rproc *rproc = rvdev->rproc;
+>> +	char name[16];
+>> +	int ret;
+>> +
+>> +	snprintf(name, sizeof(name), "vdev%dbuffer", rvdev->index);
+>> +	rvdev->dev.parent = &rproc->dev;
+>> +	rvdev->dev.release = rproc_rvdev_release;
+>> +	dev_set_name(&rvdev->dev, "%s#%s", dev_name(rvdev->dev.parent), name);
+>> +	dev_set_drvdata(&rvdev->dev, rvdev);
+>> +
+>> +	ret = device_register(&rvdev->dev);
+>> +	if (ret) {
+>> +		put_device(&rvdev->dev);
+>> +		return ret;
+>> +	}
+> 
+> Registering the device here is a problem...  If device_register() fails
+> put_device() is called and we return, only to call device_unregister() on the
+> same device in rproc_handle_vdev().
+> 
+> Moreover in rproc_handle_vdev(), device_unregister() is called in the error
+> path but device_register() is called here in rproc_rvdev_add_device().  This
+> introduces coupling between the two functions, making it hard to maintain from
+> hereon.
 
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
----
- drivers/infiniband/hw/mlx4/main.c            | 24 +++++++-------------
- drivers/infiniband/hw/mlx5/mad.c             | 18 +++++++--------
- drivers/infiniband/hw/mlx5/mlx5_ib.h         |  8 -------
- drivers/infiniband/hw/mthca/mthca_provider.c | 20 +++++-----------
- include/rdma/ib_smi.h                        | 12 +++++++++-
- 5 files changed, 34 insertions(+), 48 deletions(-)
+Very relevant, I need to rework the error management.
 
-diff --git a/drivers/infiniband/hw/mlx4/main.c b/drivers/infiniband/hw/mlx4/main.c
-index d66ce7694bbe..1c3d97229988 100644
---- a/drivers/infiniband/hw/mlx4/main.c
-+++ b/drivers/infiniband/hw/mlx4/main.c
-@@ -85,14 +85,6 @@ static enum rdma_link_layer mlx4_ib_port_link_layer(struct ib_device *device,
- 
- static struct workqueue_struct *wq;
- 
--static void init_query_mad(struct ib_smp *mad)
--{
--	mad->base_version  = 1;
--	mad->mgmt_class    = IB_MGMT_CLASS_SUBN_LID_ROUTED;
--	mad->class_version = 1;
--	mad->method	   = IB_MGMT_METHOD_GET;
--}
--
- static int check_flow_steering_support(struct mlx4_dev *dev)
- {
- 	int eth_num_ports = 0;
-@@ -471,7 +463,7 @@ static int mlx4_ib_query_device(struct ib_device *ibdev,
- 	if (!in_mad || !out_mad)
- 		goto out;
- 
--	init_query_mad(in_mad);
-+	ib_init_query_mad(in_mad);
- 	in_mad->attr_id = IB_SMP_ATTR_NODE_INFO;
- 
- 	err = mlx4_MAD_IFC(to_mdev(ibdev), MLX4_MAD_IFC_IGNORE_KEYS,
-@@ -669,7 +661,7 @@ static int ib_link_query_port(struct ib_device *ibdev, u32 port,
- 	if (!in_mad || !out_mad)
- 		goto out;
- 
--	init_query_mad(in_mad);
-+	ib_init_query_mad(in_mad);
- 	in_mad->attr_id  = IB_SMP_ATTR_PORT_INFO;
- 	in_mad->attr_mod = cpu_to_be32(port);
- 
-@@ -721,7 +713,7 @@ static int ib_link_query_port(struct ib_device *ibdev, u32 port,
- 
- 	/* If reported active speed is QDR, check if is FDR-10 */
- 	if (props->active_speed == IB_SPEED_QDR) {
--		init_query_mad(in_mad);
-+		ib_init_query_mad(in_mad);
- 		in_mad->attr_id = MLX4_ATTR_EXTENDED_PORT_INFO;
- 		in_mad->attr_mod = cpu_to_be32(port);
- 
-@@ -848,7 +840,7 @@ int __mlx4_ib_query_gid(struct ib_device *ibdev, u32 port, int index,
- 	if (!in_mad || !out_mad)
- 		goto out;
- 
--	init_query_mad(in_mad);
-+	ib_init_query_mad(in_mad);
- 	in_mad->attr_id  = IB_SMP_ATTR_PORT_INFO;
- 	in_mad->attr_mod = cpu_to_be32(port);
- 
-@@ -870,7 +862,7 @@ int __mlx4_ib_query_gid(struct ib_device *ibdev, u32 port, int index,
- 		}
- 	}
- 
--	init_query_mad(in_mad);
-+	ib_init_query_mad(in_mad);
- 	in_mad->attr_id  = IB_SMP_ATTR_GUID_INFO;
- 	in_mad->attr_mod = cpu_to_be32(index / 8);
- 
-@@ -917,7 +909,7 @@ static int mlx4_ib_query_sl2vl(struct ib_device *ibdev, u32 port,
- 	if (!in_mad || !out_mad)
- 		goto out;
- 
--	init_query_mad(in_mad);
-+	ib_init_query_mad(in_mad);
- 	in_mad->attr_id  = IB_SMP_ATTR_SL_TO_VL_TABLE;
- 	in_mad->attr_mod = 0;
- 
-@@ -971,7 +963,7 @@ int __mlx4_ib_query_pkey(struct ib_device *ibdev, u32 port, u16 index,
- 	if (!in_mad || !out_mad)
- 		goto out;
- 
--	init_query_mad(in_mad);
-+	ib_init_query_mad(in_mad);
- 	in_mad->attr_id  = IB_SMP_ATTR_PKEY_TABLE;
- 	in_mad->attr_mod = cpu_to_be32(index / 32);
- 
-@@ -1990,7 +1982,7 @@ static int init_node_data(struct mlx4_ib_dev *dev)
- 	if (!in_mad || !out_mad)
- 		goto out;
- 
--	init_query_mad(in_mad);
-+	ib_init_query_mad(in_mad);
- 	in_mad->attr_id = IB_SMP_ATTR_NODE_DESC;
- 	if (mlx4_is_master(dev->dev))
- 		mad_ifc_flags |= MLX4_MAD_IFC_NET_VIEW;
-diff --git a/drivers/infiniband/hw/mlx5/mad.c b/drivers/infiniband/hw/mlx5/mad.c
-index 29a888b22789..293ed709e5ed 100644
---- a/drivers/infiniband/hw/mlx5/mad.c
-+++ b/drivers/infiniband/hw/mlx5/mad.c
-@@ -291,7 +291,7 @@ int mlx5_query_ext_port_caps(struct mlx5_ib_dev *dev, unsigned int port)
- 	if (!in_mad || !out_mad)
- 		goto out;
- 
--	init_query_mad(in_mad);
-+	ib_init_query_mad(in_mad);
- 	in_mad->attr_id = MLX5_ATTR_EXTENDED_PORT_INFO;
- 	in_mad->attr_mod = cpu_to_be32(port);
- 
-@@ -318,7 +318,7 @@ static int mlx5_query_mad_ifc_smp_attr_node_info(struct ib_device *ibdev,
- 	if (!in_mad)
- 		return -ENOMEM;
- 
--	init_query_mad(in_mad);
-+	ib_init_query_mad(in_mad);
- 	in_mad->attr_id = IB_SMP_ATTR_NODE_INFO;
- 
- 	err = mlx5_MAD_IFC(to_mdev(ibdev), 1, 1, 1, NULL, NULL, in_mad,
-@@ -405,7 +405,7 @@ int mlx5_query_mad_ifc_node_desc(struct mlx5_ib_dev *dev, char *node_desc)
- 	if (!in_mad || !out_mad)
- 		goto out;
- 
--	init_query_mad(in_mad);
-+	ib_init_query_mad(in_mad);
- 	in_mad->attr_id = IB_SMP_ATTR_NODE_DESC;
- 
- 	err = mlx5_MAD_IFC(dev, 1, 1, 1, NULL, NULL, in_mad, out_mad);
-@@ -430,7 +430,7 @@ int mlx5_query_mad_ifc_node_guid(struct mlx5_ib_dev *dev, __be64 *node_guid)
- 	if (!in_mad || !out_mad)
- 		goto out;
- 
--	init_query_mad(in_mad);
-+	ib_init_query_mad(in_mad);
- 	in_mad->attr_id = IB_SMP_ATTR_NODE_INFO;
- 
- 	err = mlx5_MAD_IFC(dev, 1, 1, 1, NULL, NULL, in_mad, out_mad);
-@@ -456,7 +456,7 @@ int mlx5_query_mad_ifc_pkey(struct ib_device *ibdev, u32 port, u16 index,
- 	if (!in_mad || !out_mad)
- 		goto out;
- 
--	init_query_mad(in_mad);
-+	ib_init_query_mad(in_mad);
- 	in_mad->attr_id  = IB_SMP_ATTR_PKEY_TABLE;
- 	in_mad->attr_mod = cpu_to_be32(index / 32);
- 
-@@ -485,7 +485,7 @@ int mlx5_query_mad_ifc_gids(struct ib_device *ibdev, u32 port, int index,
- 	if (!in_mad || !out_mad)
- 		goto out;
- 
--	init_query_mad(in_mad);
-+	ib_init_query_mad(in_mad);
- 	in_mad->attr_id  = IB_SMP_ATTR_PORT_INFO;
- 	in_mad->attr_mod = cpu_to_be32(port);
- 
-@@ -496,7 +496,7 @@ int mlx5_query_mad_ifc_gids(struct ib_device *ibdev, u32 port, int index,
- 
- 	memcpy(gid->raw, out_mad->data + 8, 8);
- 
--	init_query_mad(in_mad);
-+	ib_init_query_mad(in_mad);
- 	in_mad->attr_id  = IB_SMP_ATTR_GUID_INFO;
- 	in_mad->attr_mod = cpu_to_be32(index / 8);
- 
-@@ -530,7 +530,7 @@ int mlx5_query_mad_ifc_port(struct ib_device *ibdev, u32 port,
- 
- 	/* props being zeroed by the caller, avoid zeroing it here */
- 
--	init_query_mad(in_mad);
-+	ib_init_query_mad(in_mad);
- 	in_mad->attr_id  = IB_SMP_ATTR_PORT_INFO;
- 	in_mad->attr_mod = cpu_to_be32(port);
- 
-@@ -596,7 +596,7 @@ int mlx5_query_mad_ifc_port(struct ib_device *ibdev, u32 port,
- 	if (props->active_speed == 4) {
- 		if (dev->port_caps[port - 1].ext_port_cap &
- 		    MLX_EXT_PORT_CAP_FLAG_EXTENDED_PORT_INFO) {
--			init_query_mad(in_mad);
-+			ib_init_query_mad(in_mad);
- 			in_mad->attr_id = MLX5_ATTR_EXTENDED_PORT_INFO;
- 			in_mad->attr_mod = cpu_to_be32(port);
- 
-diff --git a/drivers/infiniband/hw/mlx5/mlx5_ib.h b/drivers/infiniband/hw/mlx5/mlx5_ib.h
-index 93065492dcb8..8c6cbf7ec7ec 100644
---- a/drivers/infiniband/hw/mlx5/mlx5_ib.h
-+++ b/drivers/infiniband/hw/mlx5/mlx5_ib.h
-@@ -1456,14 +1456,6 @@ extern const struct uapi_definition mlx5_ib_flow_defs[];
- extern const struct uapi_definition mlx5_ib_qos_defs[];
- extern const struct uapi_definition mlx5_ib_std_types_defs[];
- 
--static inline void init_query_mad(struct ib_smp *mad)
--{
--	mad->base_version  = 1;
--	mad->mgmt_class    = IB_MGMT_CLASS_SUBN_LID_ROUTED;
--	mad->class_version = 1;
--	mad->method	   = IB_MGMT_METHOD_GET;
--}
--
- static inline int is_qp1(enum ib_qp_type qp_type)
- {
- 	return qp_type == MLX5_IB_QPT_HW_GSI || qp_type == IB_QPT_GSI;
-diff --git a/drivers/infiniband/hw/mthca/mthca_provider.c b/drivers/infiniband/hw/mthca/mthca_provider.c
-index ceee23ebc0f2..c46df53f26cf 100644
---- a/drivers/infiniband/hw/mthca/mthca_provider.c
-+++ b/drivers/infiniband/hw/mthca/mthca_provider.c
-@@ -50,14 +50,6 @@
- #include <rdma/mthca-abi.h>
- #include "mthca_memfree.h"
- 
--static void init_query_mad(struct ib_smp *mad)
--{
--	mad->base_version  = 1;
--	mad->mgmt_class    = IB_MGMT_CLASS_SUBN_LID_ROUTED;
--	mad->class_version = 1;
--	mad->method    	   = IB_MGMT_METHOD_GET;
--}
--
- static int mthca_query_device(struct ib_device *ibdev, struct ib_device_attr *props,
- 			      struct ib_udata *uhw)
- {
-@@ -78,7 +70,7 @@ static int mthca_query_device(struct ib_device *ibdev, struct ib_device_attr *pr
- 
- 	props->fw_ver              = mdev->fw_ver;
- 
--	init_query_mad(in_mad);
-+	ib_init_query_mad(in_mad);
- 	in_mad->attr_id = IB_SMP_ATTR_NODE_INFO;
- 
- 	err = mthca_MAD_IFC(mdev, 1, 1,
-@@ -140,7 +132,7 @@ static int mthca_query_port(struct ib_device *ibdev,
- 
- 	/* props being zeroed by the caller, avoid zeroing it here */
- 
--	init_query_mad(in_mad);
-+	ib_init_query_mad(in_mad);
- 	in_mad->attr_id  = IB_SMP_ATTR_PORT_INFO;
- 	in_mad->attr_mod = cpu_to_be32(port);
- 
-@@ -234,7 +226,7 @@ static int mthca_query_pkey(struct ib_device *ibdev,
- 	if (!in_mad || !out_mad)
- 		goto out;
- 
--	init_query_mad(in_mad);
-+	ib_init_query_mad(in_mad);
- 	in_mad->attr_id  = IB_SMP_ATTR_PKEY_TABLE;
- 	in_mad->attr_mod = cpu_to_be32(index / 32);
- 
-@@ -263,7 +255,7 @@ static int mthca_query_gid(struct ib_device *ibdev, u32 port,
- 	if (!in_mad || !out_mad)
- 		goto out;
- 
--	init_query_mad(in_mad);
-+	ib_init_query_mad(in_mad);
- 	in_mad->attr_id  = IB_SMP_ATTR_PORT_INFO;
- 	in_mad->attr_mod = cpu_to_be32(port);
- 
-@@ -274,7 +266,7 @@ static int mthca_query_gid(struct ib_device *ibdev, u32 port,
- 
- 	memcpy(gid->raw, out_mad->data + 8, 8);
- 
--	init_query_mad(in_mad);
-+	ib_init_query_mad(in_mad);
- 	in_mad->attr_id  = IB_SMP_ATTR_GUID_INFO;
- 	in_mad->attr_mod = cpu_to_be32(index / 8);
- 
-@@ -1006,7 +998,7 @@ static int mthca_init_node_data(struct mthca_dev *dev)
- 	if (!in_mad || !out_mad)
- 		goto out;
- 
--	init_query_mad(in_mad);
-+	ib_init_query_mad(in_mad);
- 	in_mad->attr_id = IB_SMP_ATTR_NODE_DESC;
- 
- 	err = mthca_MAD_IFC(dev, 1, 1,
-diff --git a/include/rdma/ib_smi.h b/include/rdma/ib_smi.h
-index fdb8633cbaff..fc16b826b2c1 100644
---- a/include/rdma/ib_smi.h
-+++ b/include/rdma/ib_smi.h
-@@ -144,5 +144,15 @@ ib_get_smp_direction(struct ib_smp *smp)
- #define IB_NOTICE_TRAP_DR_NOTICE	0x80
- #define IB_NOTICE_TRAP_DR_TRUNC		0x40
- 
--
-+/**
-+ * ib_init_query_mad - Initialize query MAD.
-+ * @mad: MAD to initialize.
-+ */
-+static inline void ib_init_query_mad(struct ib_smp *mad)
-+{
-+	mad->base_version = IB_MGMT_BASE_VERSION;
-+	mad->mgmt_class = IB_MGMT_CLASS_SUBN_LID_ROUTED;
-+	mad->class_version = 1;
-+	mad->method = IB_MGMT_METHOD_GET;
-+}
- #endif /* IB_SMI_H */
--- 
-2.33.1
+> 
+> I suggest calling device_register() in rproc_handle_vdev() after
+> rproc_rvdev_add_device() has returned successfully.
 
+One of the goals of this patchset is to move the device_register in 
+remote_proc_virtio.c
+Doing this would not go in this direction.
+
+I need to test but following could be an alternative:
+- Call rproc_rvdev_remove_device in rproc_handle_vdev in case of error.
+- Remove the put_device in rproc_rvdev_add_device.
+
+=> This would be aligned with patch [6/6] implementation
+with rproc_virtio_register_device/rproc_virtio_unregister_device...
+
+Thanks,
+Arnaud
+
+> 
+> More comments to come tomorrow.
+> 
+> Thanks,
+> Mathieu
+> 
+>> +	ret = copy_dma_range_map(&rvdev->dev, rproc->dev.parent);
+>> +	if (ret)
+>> +		goto free_rvdev;
+>> +
+>> +	/* Make device dma capable by inheriting from parent's capabilities */
+>> +	set_dma_ops(&rvdev->dev, get_dma_ops(rproc->dev.parent));
+>> +
+>> +	ret = dma_coerce_mask_and_coherent(&rvdev->dev,
+>> +					   dma_get_mask(rproc->dev.parent));
+>> +	if (ret) {
+>> +		dev_warn(&rvdev->dev,
+>> +			 "Failed to set DMA mask %llx. Trying to continue... (%pe)\n",
+>> +			 dma_get_mask(rproc->dev.parent), ERR_PTR(ret));
+>> +	}
+>> +
+>> +	list_add_tail(&rvdev->node, &rproc->rvdevs);
+>> +
+>> +	rvdev->subdev.start = rproc_vdev_do_start;
+>> +	rvdev->subdev.stop = rproc_vdev_do_stop;
+>> +
+>> +	rproc_add_subdev(rproc, &rvdev->subdev);
+>> +
+>> +	return 0;
+>> +
+>> +free_rvdev:
+>> +	device_unregister(&rvdev->dev);
+>> +	return ret;
+>> +}
+>> +
+>> +static void rproc_rvdev_remove_device(struct rproc_vdev *rvdev)
+>> +{
+>> +	struct rproc *rproc = rvdev->rproc;
+>> +
+>> +	rproc_remove_subdev(rproc, &rvdev->subdev);
+>> +	list_del(&rvdev->node);
+>> +	device_unregister(&rvdev->dev);
+>> +}
+>> +
+>>   /**
+>>    * rproc_handle_vdev() - handle a vdev fw resource
+>>    * @rproc: the remote processor
+>> @@ -519,7 +574,6 @@ static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
+>>   	struct device *dev = &rproc->dev;
+>>   	struct rproc_vdev *rvdev;
+>>   	int i, ret;
+>> -	char name[16];
+>>   
+>>   	/* make sure resource isn't truncated */
+>>   	if (struct_size(rsc, vring, rsc->num_of_vrings) + rsc->config_len >
+>> @@ -553,34 +607,10 @@ static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
+>>   	rvdev->rproc = rproc;
+>>   	rvdev->index = rproc->nb_vdev++;
+>>   
+>> -	/* Initialise vdev subdevice */
+>> -	snprintf(name, sizeof(name), "vdev%dbuffer", rvdev->index);
+>> -	rvdev->dev.parent = &rproc->dev;
+>> -	rvdev->dev.release = rproc_rvdev_release;
+>> -	dev_set_name(&rvdev->dev, "%s#%s", dev_name(rvdev->dev.parent), name);
+>> -	dev_set_drvdata(&rvdev->dev, rvdev);
+>> -
+>> -	ret = device_register(&rvdev->dev);
+>> -	if (ret) {
+>> -		put_device(&rvdev->dev);
+>> -		return ret;
+>> -	}
+>> -
+>> -	ret = copy_dma_range_map(&rvdev->dev, rproc->dev.parent);
+>> +	ret = rproc_rvdev_add_device(rvdev);
+>>   	if (ret)
+>>   		goto free_rvdev;
+>>   
+>> -	/* Make device dma capable by inheriting from parent's capabilities */
+>> -	set_dma_ops(&rvdev->dev, get_dma_ops(rproc->dev.parent));
+>> -
+>> -	ret = dma_coerce_mask_and_coherent(&rvdev->dev,
+>> -					   dma_get_mask(rproc->dev.parent));
+>> -	if (ret) {
+>> -		dev_warn(dev,
+>> -			 "Failed to set DMA mask %llx. Trying to continue... (%pe)\n",
+>> -			 dma_get_mask(rproc->dev.parent), ERR_PTR(ret));
+>> -	}
+>> -
+>>   	/* parse the vrings */
+>>   	for (i = 0; i < rsc->num_of_vrings; i++) {
+>>   		ret = rproc_parse_vring(rvdev, rsc, i);
+>> @@ -598,13 +628,6 @@ static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
+>>   			goto unwind_vring_allocations;
+>>   	}
+>>   
+>> -	list_add_tail(&rvdev->node, &rproc->rvdevs);
+>> -
+>> -	rvdev->subdev.start = rproc_vdev_do_start;
+>> -	rvdev->subdev.stop = rproc_vdev_do_stop;
+>> -
+>> -	rproc_add_subdev(rproc, &rvdev->subdev);
+>> -
+>>   	return 0;
+>>   
+>>   unwind_vring_allocations:
+>> @@ -619,7 +642,6 @@ void rproc_vdev_release(struct kref *ref)
+>>   {
+>>   	struct rproc_vdev *rvdev = container_of(ref, struct rproc_vdev, refcount);
+>>   	struct rproc_vring *rvring;
+>> -	struct rproc *rproc = rvdev->rproc;
+>>   	int id;
+>>   
+>>   	for (id = 0; id < ARRAY_SIZE(rvdev->vring); id++) {
+>> @@ -627,9 +649,7 @@ void rproc_vdev_release(struct kref *ref)
+>>   		rproc_free_vring(rvring);
+>>   	}
+>>   
+>> -	rproc_remove_subdev(rproc, &rvdev->subdev);
+>> -	list_del(&rvdev->node);
+>> -	device_unregister(&rvdev->dev);
+>> +	rproc_rvdev_remove_device(rvdev);
+>>   }
+>>   
+>>   /**
+>> -- 
+>> 2.17.1
+>>

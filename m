@@ -2,79 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 382EF484E89
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 07:57:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05071484E90
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 07:58:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237873AbiAEG5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 01:57:19 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:33140 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229759AbiAEG5S (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 01:57:18 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowACHjlY1QdVh6WzQBQ--.43380S2;
-        Wed, 05 Jan 2022 14:56:53 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] thermal/int340x_thermal: Check for null pointer after calling kmemdup
-Date:   Wed,  5 Jan 2022 14:56:52 +0800
-Message-Id: <20220105065652.2340271-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S237900AbiAEG6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 01:58:40 -0500
+Received: from mga17.intel.com ([192.55.52.151]:59573 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234678AbiAEG6j (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 01:58:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641365919; x=1672901919;
+  h=cc:subject:to:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=yBeZgFZXz0WezV8A7VIFIHNPB9e3L10eKsd6tnEonRs=;
+  b=IbTtRUuDOgIe6lZKuQCCjyynL/b/ah8lDue4fvo/1GCmvUFH3WQnPfmF
+   HTuZLlm5Ybj89Qe1WfuBpxHDJpWn/B2ygtFsAb8v+mhJIRu3+dPkiPfbM
+   ZMYdxlL9TqnU7Dg6DUzBh8g0layqTx+qVzY1NnafrvdPQi8+O2vxaty0a
+   d1nJljJEAbeWe2dE5EvVtg7HG08VTUaWjoRU9JIO8szFwvFeaRfALhQ1+
+   vy/+bkIkbvKQh+24rdlvJDFue5g+r1QH5MQNxQNdZId/6bJrUCA14ru55
+   FSVEmCenNb+FleFD9OuMWQk4FF1nrzUTua/ShQ/GdfA4AiFA5U4qRjeJ4
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="223062697"
+X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
+   d="scan'208";a="223062697"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 22:58:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
+   d="scan'208";a="526392923"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
+  by orsmga008.jf.intel.com with ESMTP; 04 Jan 2022 22:58:32 -0800
+Cc:     baolu.lu@linux.intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 01/14] iommu: Add dma ownership management interfaces
+To:     Christoph Hellwig <hch@infradead.org>
+References: <20220104015644.2294354-1-baolu.lu@linux.intel.com>
+ <20220104015644.2294354-2-baolu.lu@linux.intel.com>
+ <YdQcgFhIMYvUwABV@infradead.org>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+Message-ID: <a95e2aec-aabf-2db1-0d51-a7829c378d47@linux.intel.com>
+Date:   Wed, 5 Jan 2022 14:57:54 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowACHjlY1QdVh6WzQBQ--.43380S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tFy7KFyUKw4UKF4xZF4xZwb_yoW8Jw15pF
-        4rKr1UCr1DWF4xWw17Cr15AFZ8C3WkKay5WFyF9a4YyFnxCFWSqFWFyFyFyry0kr1fK3WY
-        yw1rtF4UAr1DArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r47
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JV
-        WxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjdOz3UUUU
-        U==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+In-Reply-To: <YdQcgFhIMYvUwABV@infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the possible failure of the allocation, kmemdup() may return NULL
-pointer.
-Therefore, it should be better to check the return value of kmemdup().
-If fails, just free 'buffer.pointer' and directly return is enough, same
-as the way that 'obj' fails above.
+Hi Christoph,
 
-Fixes: 0ba13c763aac ("thermal/int340x_thermal: Export GDDV")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 5 +++++
- 1 file changed, 5 insertions(+)
+On 1/4/22 6:08 PM, Christoph Hellwig wrote:
+> On Tue, Jan 04, 2022 at 09:56:31AM +0800, Lu Baolu wrote:
+>> Multiple devices may be placed in the same IOMMU group because they
+>> cannot be isolated from each other. These devices must either be
+>> entirely under kernel control or userspace control, never a mixture.
+>>
+>> This adds dma ownership management in iommu core and exposes several
+>> interfaces for the device drivers and the device userspace assignment
+>> framework (i.e. vfio), so that any conflict between user and kernel
+>> controlled DMA could be detected at the beginning.
+>>
+>> The device driver oriented interfaces are,
+>>
+>> 	int iommu_device_use_dma_api(struct device *dev);
+>> 	void iommu_device_unuse_dma_api(struct device *dev);
+>>
+>> Devices under kernel drivers control must call iommu_device_use_dma_api()
+>> before driver probes. The driver binding process must be aborted if it
+>> returns failure.
+>>
+>> The vfio oriented interfaces are,
+>>
+>> 	int iommu_group_set_dma_owner(struct iommu_group *group,
+>> 				      void *owner);
+>> 	void iommu_group_release_dma_owner(struct iommu_group *group);
+>> 	bool iommu_group_dma_owner_claimed(struct iommu_group *group);
+>>
+>> The device userspace assignment must be disallowed if the set dma owner
+>> interface returns failure.
+>>
+>> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+>> Signed-off-by: Kevin Tian <kevin.tian@intel.com>
+>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+>> ---
+>>   include/linux/iommu.h |  31 ++++++++
+>>   drivers/iommu/iommu.c | 161 +++++++++++++++++++++++++++++++++++++++++-
+>>   2 files changed, 189 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+>> index de0c57a567c8..568f285468cf 100644
+>> --- a/include/linux/iommu.h
+>> +++ b/include/linux/iommu.h
+>> @@ -682,6 +682,13 @@ struct iommu_sva *iommu_sva_bind_device(struct device *dev,
+>>   void iommu_sva_unbind_device(struct iommu_sva *handle);
+>>   u32 iommu_sva_get_pasid(struct iommu_sva *handle);
+>>   
+>> +int iommu_device_use_dma_api(struct device *dev);
+>> +void iommu_device_unuse_dma_api(struct device *dev);
+>> +
+>> +int iommu_group_set_dma_owner(struct iommu_group *group, void *owner);
+>> +void iommu_group_release_dma_owner(struct iommu_group *group);
+>> +bool iommu_group_dma_owner_claimed(struct iommu_group *group);
+>> +
+>>   #else /* CONFIG_IOMMU_API */
+>>   
+>>   struct iommu_ops {};
+>> @@ -1082,6 +1089,30 @@ static inline struct iommu_fwspec *dev_iommu_fwspec_get(struct device *dev)
+>>   {
+>>   	return NULL;
+>>   }
+>> +
+>> +static inline int iommu_device_use_dma_api(struct device *dev)
+>> +{
+>> +	return 0;
+>> +}
+>> +
+>> +static inline void iommu_device_unuse_dma_api(struct device *dev)
+>> +{
+>> +}
+>> +
+>> +static inline int
+>> +iommu_group_set_dma_owner(struct iommu_group *group, void *owner)
+>> +{
+>> +	return -ENODEV;
+>> +}
+>> +
+>> +static inline void iommu_group_release_dma_owner(struct iommu_group *group)
+>> +{
+>> +}
+>> +
+>> +static inline bool iommu_group_dma_owner_claimed(struct iommu_group *group)
+>> +{
+>> +	return false;
+>> +}
+>>   #endif /* CONFIG_IOMMU_API */
+>>   
+>>   /**
+>> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+>> index 8b86406b7162..ff0c8c1ad5af 100644
+>> --- a/drivers/iommu/iommu.c
+>> +++ b/drivers/iommu/iommu.c
+>> @@ -48,6 +48,8 @@ struct iommu_group {
+>>   	struct iommu_domain *default_domain;
+>>   	struct iommu_domain *domain;
+>>   	struct list_head entry;
+>> +	unsigned int owner_cnt;
+>> +	void *owner;
+>>   };
+>>   
+>>   struct group_device {
+>> @@ -289,7 +291,12 @@ int iommu_probe_device(struct device *dev)
+>>   	mutex_lock(&group->mutex);
+>>   	iommu_alloc_default_domain(group, dev);
+>>   
+>> -	if (group->default_domain) {
+>> +	/*
+>> +	 * If device joined an existing group which has been claimed
+>> +	 * for none kernel DMA purpose, avoid attaching the default
+>> +	 * domain.
+>> +	 */
+>> +	if (group->default_domain && !group->owner) {
+>>   		ret = __iommu_attach_device(group->default_domain, dev);
+>>   		if (ret) {
+>>   			mutex_unlock(&group->mutex);
+>> @@ -2320,7 +2327,7 @@ static int __iommu_attach_group(struct iommu_domain *domain,
+>>   {
+>>   	int ret;
+>>   
+>> -	if (group->default_domain && group->domain != group->default_domain)
+>> +	if (group->domain && group->domain != group->default_domain)
+>>   		return -EBUSY;
+>>   
+>>   	ret = __iommu_group_for_each_dev(group, domain,
+>> @@ -2357,7 +2364,11 @@ static void __iommu_detach_group(struct iommu_domain *domain,
+>>   {
+>>   	int ret;
+>>   
+>> -	if (!group->default_domain) {
+>> +	/*
+>> +	 * If group has been claimed for none kernel DMA purpose, avoid
+>> +	 * re-attaching the default domain.
+>> +	 */
+> 
+> none kernel reads odd.  But maybe drop that and just say 'claimed
+> already' ala:
+> 
+> 	/*
+> 	 * If the group has been claimed already, do not re-attach the default
+> 	 * domain.
+> 	 */
+> 
 
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index 823354a1a91a..999b5682c28a 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -462,6 +462,11 @@ static void int3400_setup_gddv(struct int3400_thermal_priv *priv)
- 	priv->data_vault = kmemdup(obj->package.elements[0].buffer.pointer,
- 				   obj->package.elements[0].buffer.length,
- 				   GFP_KERNEL);
-+	if (!priv->data_vault) {
-+		kfree(buffer.pointer);
-+		return;
-+	}
-+
- 	bin_attr_data_vault.private = priv->data_vault;
- 	bin_attr_data_vault.size = obj->package.elements[0].buffer.length;
- 	kfree(buffer.pointer);
--- 
-2.25.1
+Sure!
 
+Best regards,
+baolu

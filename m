@@ -2,76 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3F34851BB
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 12:24:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 782204851BD
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 12:25:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239648AbiAELYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 06:24:02 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4348 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232763AbiAELYB (ORCPT
+        id S239660AbiAELZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 06:25:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56432 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232763AbiAELZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 06:24:01 -0500
-Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JTRqd5ywhz67ZJW;
-        Wed,  5 Jan 2022 19:20:45 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 5 Jan 2022 12:23:59 +0100
-Received: from [10.47.27.56] (10.47.27.56) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 5 Jan
- 2022 11:23:58 +0000
-From:   John Garry <john.garry@huawei.com>
-Subject: PCI MSI issue for maxcpus=1
-To:     Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
-CC:     chenxiang <chenxiang66@hisilicon.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "liuqi (BA)" <liuqi115@huawei.com>
-Message-ID: <78615d08-1764-c895-f3b7-bfddfbcbdfb9@huawei.com>
-Date:   Wed, 5 Jan 2022 11:23:47 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.27.56]
-X-ClientProxiedBy: lhreml736-chm.china.huawei.com (10.201.108.87) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+        Wed, 5 Jan 2022 06:25:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6459C061761;
+        Wed,  5 Jan 2022 03:25:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 34ED6B81A20;
+        Wed,  5 Jan 2022 11:25:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF5E9C36AE9;
+        Wed,  5 Jan 2022 11:25:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641381932;
+        bh=pMGgyT4wR0n1pq4O32zNw0ilrjrmkSRYx/1mYiFCClY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:From;
+        b=L3i7h1Q4SgxY77tkvMvsub8g/k31gW5g1CiIoRdjB+J8uT50TLwCVwtqZvw94SJoS
+         ZG9bXOV8Ls63n5fNCVwiEh9tuPKon+ujytI+yylhsM0uWz/TGXFukoJr+Gmwg7xmbw
+         S3lqMG3k7YS0YePNYl7JP/SSeOQLskPVkwDKttblhNOecyII6RFAXm9efmxzHDi8hg
+         Yp4xhIyWyM8TnhcwaoQGuoixdS7uBuGjmtDTPCNYIDGSU7HfPx6ERWAf/y1Mw1ECUN
+         ipHbGbZDAL0ZkCP3VlSk25WAjxBiGW1Hc3henkpKlyrguX6AbtGecdTV30FxFly7TK
+         ba4rLzNT81PQw==
+From:   SeongJae Park <sj@kernel.org>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     SeongJae Park <sj@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org
+Subject: Re: [PATCH v6 0/9] Multigenerational LRU Framework
+Date:   Wed,  5 Jan 2022 11:25:27 +0000
+Message-Id: <20220105112527.23399-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <YdV4k1+zEbtzmUkK@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+On Wed, 5 Jan 2022 03:53:07 -0700 Yu Zhao <yuzhao@google.com> wrote:
 
-Just a heads up, I noticed that commit 4c457e8cb75e ("genirq/msi: 
-Activate Multi-MSI early when MSI_FLAG_ACTIVATE_EARLY is set") is 
-causing an issue on our arm64 D06 board where the SAS driver probe fails 
-for maxcpus=1.
+> On Wed, Jan 05, 2022 at 08:55:34AM +0000, SeongJae Park wrote:
+> > Hi Yu,
+> > 
+> > On Tue, 4 Jan 2022 13:22:19 -0700 Yu Zhao <yuzhao@google.com> wrote:
+[...]
+> > I think similar works are already available out of the box with the latest
+> > mainline tree, though it might be suboptimal in some cases.
+> 
+> Ok, I will sound harsh because I hate it when people challenge facts
+> while having no idea what they are talking about.
+> 
+> Our jobs are help the leadership make best decisions by providing them
+> with facts, not feeding them crap.
 
-This seems different to issue [0].
+I was using the word "similar", to represent this is only for a rough concept
+level similarity, rather than detailed facts.  But, seems it was not enough,
+sorry.  Anyway, I will not talk more and thus disturb you having the important
+discussion with leaders here, as you are asking.
 
-So it's the driver call to pci_alloc_irq_vectors_affinity() which errors 
-[1]:
+> 
+> Don't get me wrong -- you are welcome to start another thread and have
+> a casual discussion with me. But this thread is not for that; it's for
+> the leadership and stakeholder to make a decision. Check who are in
+> "To" and "Cc" and what my request is.
 
-[    9.619070] hisi_sas_v3_hw: probe of 0000:74:02.0 failed with error -2
+Haha.  Ok, good luck for you.
 
-Some details:
-- device supports 32 MSI
-- min and max msi for that function is 17 and 32, respect.
-- affd pre and post are 16 and 0, respect.
 
-I haven't checked to see what the issue is yet and I think that the 
-pci_alloc_irq_vectors_affinity() usage is ok...
+Thanks,
+SJ
 
-[0] 
-https://lore.kernel.org/lkml/ea730f9b-c635-317d-c70d-4057590b1d1a@huawei.com/
-[1] 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c?h=v5.11#n2388
-
-Cheers,
-John
+[...]

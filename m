@@ -2,133 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D97144858AB
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:51:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBDD4858AC
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:52:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243191AbiAESu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 13:50:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45770 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243180AbiAESu5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 13:50:57 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92838C061201
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 10:50:53 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id b13so141306edd.8
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 10:50:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cfHNQGe03MWFiDjULzVbgtf6gbGg6JH50kN5fzPFHfA=;
-        b=ewSSp59OgURps0hS/LbW55Aq+2LDBhNRyITlsFPwMv1qN0xdjkSe8cJKmF/NCk/WBt
-         R58wzWpaldO8LqJhB/qpMqjiN9D3/kGtQKNirCRALgXZp5BNYKxw1hgUKICOPRv6gKDu
-         Ljv/jlukGMuGKpoZcZe1iXxy98uqcnQ97Dx4g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cfHNQGe03MWFiDjULzVbgtf6gbGg6JH50kN5fzPFHfA=;
-        b=TMsnW3kbZCkKytMrcryP4mXvvDPKGOai6Fyi0BapFDiIsv2xuDK2kXEbdOAafpWU9m
-         6EI1xdfbOMojACDiEO5QRckqsLacIU+Hiu6cWOcChpSH/kxMLp+Pnyuvk4g7kL99iZhh
-         H4iv+QBE+eoB0du0+7yd6CgucVFS7OtlojZVGGVRMqUdBvn7mici/ijjrYQXyCP9drW9
-         lLehxrMd+p8dfCwf2Qkal4zT70V0iINMfrOelqsoz2dKD9Pb+TXtowSCsaDdVo7BRL7b
-         +mdGdAnvyJq7jJ3lig0wn2UcYUQvkEI49VCdLKtaSB68D1t8OO7fd7ngrHpT/nWC+YkN
-         p07g==
-X-Gm-Message-State: AOAM532u3zlYzai6+9/qZXHhFhxSnTgh1p3bZDikiKdcMco3VfAb5RpK
-        Cipn4cECehgrnCgNsDtwTccldl94kT9LKI36+P0=
-X-Google-Smtp-Source: ABdhPJznsZrgDSId6JVGFzXpY8NIc9R3Tnc4pe2X6IOh/n5hthWK7mTwx3ZvuIncX8rbIFWwI+8mRg==
-X-Received: by 2002:a05:6402:3514:: with SMTP id b20mr56004757edd.178.1641408652056;
-        Wed, 05 Jan 2022 10:50:52 -0800 (PST)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
-        by smtp.gmail.com with ESMTPSA id k12sm4385723ejk.188.2022.01.05.10.50.49
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jan 2022 10:50:50 -0800 (PST)
-Received: by mail-wm1-f54.google.com with SMTP id d198-20020a1c1dcf000000b0034569cdd2a2so3815604wmd.5
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 10:50:49 -0800 (PST)
-X-Received: by 2002:a7b:c305:: with SMTP id k5mr4008893wmj.144.1641408649511;
- Wed, 05 Jan 2022 10:50:49 -0800 (PST)
+        id S243198AbiAESwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 13:52:53 -0500
+Received: from mga05.intel.com ([192.55.52.43]:8433 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230295AbiAESww (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 13:52:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641408772; x=1672944772;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gZ4McMNBubaISdcARvxEAF7emVTEAQL3hWd/uJYrtSs=;
+  b=U951IN4R6v1WEMd8Z4Ek+iC0eOfX2kKJQmqCm8M0hNldZwuhKuWkhCqN
+   EdOIXPgkMMTTqY0Hs57sklX0hGS3dMGS77F51LctXeTTeKRuuV99rZkeN
+   udEKU8Fzes21NFxwlXavSQ1xuKo65JvLO6KfNB3hkkxF3y9y/p7B5slsX
+   f9Yb9r8R38VWJIHY+cMhy8Iz0ZBFFm7QF3EwOGbHSz6mz8cpJbfaV1wcv
+   ejyVxNjUxBfXviBj7Pa2E/9IseaN317lzxqzTJgNha+mhKTxWPnv/C9J9
+   FUNpDup2guSYoRr1Xt6UqPOeOcTZZUF2Rp6qbkz+QhvnozP47nStmXXFz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="328862088"
+X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
+   d="scan'208";a="328862088"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 10:52:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
+   d="scan'208";a="574485584"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 05 Jan 2022 10:52:49 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n5BOz-000Gxg-7K; Wed, 05 Jan 2022 18:52:49 +0000
+Date:   Thu, 6 Jan 2022 02:51:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Charan Teja Reddy <quic_charante@quicinc.com>, hughd@google.com,
+        akpm@linux-foundation.org, willy@infradead.org, vbabka@suse.cz,
+        rientjes@google.com, mhocko@suse.com, surenb@google.com,
+        shakeelb@google.com, linux-mm@kvack.org
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED for
+ shmem
+Message-ID: <202201060232.K03lKwTH-lkp@intel.com>
+References: <1641395025-7922-1-git-send-email-quic_charante@quicinc.com>
 MIME-Version: 1.0
-References: <000000000000e8f8f505d0e479a5@google.com> <20211211015620.1793-1-hdanton@sina.com>
- <YbQUSlq76Iv5L4cC@sol.localdomain> <YdW3WfHURBXRmn/6@sol.localdomain>
-In-Reply-To: <YdW3WfHURBXRmn/6@sol.localdomain>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 5 Jan 2022 10:50:33 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjqh_R9w4-=wfegut2C0Bg=sJaPrayk39JRCkZc=O+gsw@mail.gmail.com>
-Message-ID: <CAHk-=wjqh_R9w4-=wfegut2C0Bg=sJaPrayk39JRCkZc=O+gsw@mail.gmail.com>
-Subject: Re: psi_trigger_poll() is completely broken
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Hillf Danton <hdanton@sina.com>,
-        syzbot <syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Linux-MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1641395025-7922-1-git-send-email-quic_charante@quicinc.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 5, 2022 at 7:21 AM Eric Biggers <ebiggers@kernel.org> wrote:
->
-> [changed subject line to hopefully get people to stop ignoring this]
->
-> Please see my message below where I explained the problem in detail.  Any
-> response from the maintainers of kernel/sched/psi.c?  There are a lot of you:
+Hi Charan,
 
-Ok, this one is clearly a kernel/sched/psi.c bug, since the lifetime
-isn't even maintained by the fiel reference.
+Thank you for the patch! Yet something to improve:
 
-I think the proper thing to do is to move the whole "get kref to
-trigger pointer" in the open/close code, and keep the ref around that
-way.
+[auto build test ERROR on hnaz-mm/master]
 
-The natural thing to do would be to look up the trigger at open time,
-save the pointer in seq->private, and release it at close time.
+url:    https://github.com/0day-ci/linux/commits/Charan-Teja-Reddy/mm-shmem-implement-POSIX_FADV_-WILL-DONT-NEED-for-shmem/20220105-230604
+base:   https://github.com/hnaz/linux-mm master
+config: nds32-allnoconfig (https://download.01.org/0day-ci/archive/20220106/202201060232.K03lKwTH-lkp@intel.com/config)
+compiler: nds32le-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/6bdb2636187d2f6cb78d6cdc05f2b7e0b79c750a
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Charan-Teja-Reddy/mm-shmem-implement-POSIX_FADV_-WILL-DONT-NEED-for-shmem/20220105-230604
+        git checkout 6bdb2636187d2f6cb78d6cdc05f2b7e0b79c750a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash
 
-Sadly, right now the code actually uses that 'seq->private' as an
-indirect rcu-pointer to the trigger data, instead of as the trigger
-data itself. And that seems very much on purpose and inherent to that
-'psi_write()' model, where it changes the trigger pointer very much on
-purpose.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-So I agree 100% - the PSI code is fundamentally broken. psi_write()
-seems to be literally _designed_ to do the wrong thing.
+All errors (new ones prefixed by >>):
 
-I don't know who - if anybody - uses this. My preference would be to
-just disable the completely broken poll support.
+>> mm/shmem.c:4000:27: error: 'shmem_fadvise' undeclared here (not in a function); did you mean 'shmem_file'?
+    4000 |         .fadvise        = shmem_fadvise,
+         |                           ^~~~~~~~~~~~~
+         |                           shmem_file
 
-Another alternative is to just make 'psi_write()' return -EBUSY if
-there are existing poll waiters (ie t->event_wait not being empty.  At
-least then the open file would keep the kref to the trigger.
 
-That would require that 'psi_trigger_replace()' serialize with the
-waitqueue lock (easy), but all callers would also have to check the
-return value of it
+vim +4000 mm/shmem.c
 
-The cgroup code does
+  3987	
+  3988	static const struct file_operations shmem_file_operations = {
+  3989		.mmap		= shmem_mmap,
+  3990		.get_unmapped_area = shmem_get_unmapped_area,
+  3991	#ifdef CONFIG_TMPFS
+  3992		.llseek		= shmem_file_llseek,
+  3993		.read_iter	= shmem_file_read_iter,
+  3994		.write_iter	= generic_file_write_iter,
+  3995		.fsync		= noop_fsync,
+  3996		.splice_read	= generic_file_splice_read,
+  3997		.splice_write	= iter_file_splice_write,
+  3998		.fallocate	= shmem_fallocate,
+  3999	#endif
+> 4000		.fadvise	= shmem_fadvise,
+  4001	};
+  4002	
 
-        psi_trigger_replace(&of->priv, NULL);
-
-in the release function, but I guess that might work since at release
-time there shouldn't be any pending polls anyway.
-
-But it would also mean that anybody who can open the file for reading
-(so that they can poll it) would be able to keep people from changing
-it.
-
-But yes, I think that unless we get some reply from the PSI
-maintainers, we will have to just disable polling entirely.
-
-I hope there are no users that would break, but considering that the
-current code is clearly too broken to live, this may be one of those
-"we have no choice" cases.
-
-                         Linus
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

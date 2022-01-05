@@ -2,288 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 081814854C9
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 15:42:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 574DF4854F8
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 15:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240998AbiAEOmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 09:42:33 -0500
-Received: from foss.arm.com ([217.140.110.172]:45062 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236305AbiAEOmb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 09:42:31 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 17E8611D4;
-        Wed,  5 Jan 2022 06:42:31 -0800 (PST)
-Received: from [10.57.36.251] (unknown [10.57.36.251])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3276E3F5A1;
-        Wed,  5 Jan 2022 06:42:30 -0800 (PST)
-Subject: Re: [PATCH 1/1] docs: automarkup.py: Fix invalid HTML link output and
- broken URI fragments
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <n@nfraprado.net>
-Cc:     mchehab+huawei@kernel.org, nfraprado@protonmail.com,
-        corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211216192704.413216-1-james.clark@arm.com>
- <20211216192704.413216-2-james.clark@arm.com>
- <9f490126-ef08-e3f3-3f5b-1a55874d8d7c@arm.com>
- <20220104215858.dugh3er4hn6cwh43@notapiano>
-From:   James Clark <james.clark@arm.com>
-Message-ID: <c67e59d3-e9ca-35f7-7d83-fc3f6738e0ea@arm.com>
-Date:   Wed, 5 Jan 2022 14:42:28 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S241050AbiAEOqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 09:46:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46050 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241016AbiAEOqC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 09:46:02 -0500
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC07C061761;
+        Wed,  5 Jan 2022 06:46:01 -0800 (PST)
+Received: by mail-ed1-x544.google.com with SMTP id n30so50791111eda.13;
+        Wed, 05 Jan 2022 06:46:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tsD8f9xe/yOoJyzdLoBuH5tO2pYgzHZZxGASx3vHHzc=;
+        b=DIxyCLkUahoU3M+mxj7Jnpgjin2quX9tiF8LVbOUOS77Ig8gN6twbyS4ggZgDKGwJp
+         dwkGGjW3obwD/nXAl0hnZuaSkAyRyIm6Q/zAsh7C6ny1yPDD/7J34wmIkTPHNo1qql1s
+         dvzL6xD5oTQdr/sjbmnUrEtAVrxayDvnmxsqHER16jaMiuvuUIwAbXsXOONDIrhJCsIp
+         I6kxo1XZvtJQBqbCavTxSwfjdZhQ11o3x9pGestofLnfbtNZ/rakyIqTAxat4QEYdYgw
+         KqcYECfGxS0GD0mNf0eQHD9BMdD0AobA1c85F5puEmGmmeVzlMCPxJGnweKzBH8rvv+G
+         ryDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tsD8f9xe/yOoJyzdLoBuH5tO2pYgzHZZxGASx3vHHzc=;
+        b=mtKsuGnxc4uTtOEnEyCYOkivgzbw8y35mquhDeBk+S1MPtOqeaKY6qTKJ7vxV8ekWM
+         VmQEHpYk72E5ikn9Mi7tIr/I9v5/lBdBSF16+MyJ4Rcj7DgI9DQ6p/kghWoQdZL3pitt
+         pBrPFazOXXQTNg6jg1kkLjXvxknF46XZAyeNXKy15AaTSUXhJUlYGfka5zKUZTh5B9sT
+         /ldOzYOl18+PtPuQ7JdrRauaHVGcqvXGDYCN4HY2TXq/8bgX4/7M1PRpICuPxIYfeR/4
+         GNR5IQl/ZJdv/xMLJafsT2wMv7b5T9lUChosiyo8fe51434fmjMfu22w2NZA7G7d8pOZ
+         jktA==
+X-Gm-Message-State: AOAM5310caH8mf9ePnHPgtnovPqQdT9eVaoBE2Gq+mvLGaOmfIGpO2Eo
+        sd268EnRGdYbzqfiGDUOCuHl3ewPHwfSj7yTN/s=
+X-Google-Smtp-Source: ABdhPJzqdTl12XqIiJxzbnH7n36IgPGIQLTJWVcS4lHqMHrwIOSL3dEE9I5pAkIRrQootrBZoBpAV7jdyKZtXiGWL6g=
+X-Received: by 2002:a05:6402:40cd:: with SMTP id z13mr52996828edb.103.1641393960293;
+ Wed, 05 Jan 2022 06:46:00 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220104215858.dugh3er4hn6cwh43@notapiano>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20220105131849.2559506-1-imagedong@tencent.com>
+ <20220105131849.2559506-3-imagedong@tencent.com> <CANn89iLMNK0Yo=5LmcV=NMLmAUEZsb1V__V5bY+ZNh347UE-xg@mail.gmail.com>
+In-Reply-To: <CANn89iLMNK0Yo=5LmcV=NMLmAUEZsb1V__V5bY+ZNh347UE-xg@mail.gmail.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Wed, 5 Jan 2022 22:45:48 +0800
+Message-ID: <CADxym3YKfp5=oyJRyM9AVp8GW7+fLuboeW0gs-LagLDy+hfj_g@mail.gmail.com>
+Subject: Re: [PATCH v3 net-next 2/2] bpf: selftests: add bind retry for
+ post_bind{4, 6}
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jan 5, 2022 at 9:57 PM Eric Dumazet <edumazet@google.com> wrote:
+>
+> On Wed, Jan 5, 2022 at 5:21 AM <menglong8.dong@gmail.com> wrote:
+> >
+> > From: Menglong Dong <imagedong@tencent.com>
+> >
+> > With previous patch, kernel is able to 'put_port' after sys_bind()
+> > fails. Add the test for that case: rebind another port after
+> > sys_bind() fails. If the bind success, it means previous bind
+> > operation is already undoed.
+> >
+> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> > ---
+> >  tools/testing/selftests/bpf/test_sock.c | 166 +++++++++++++++++++++---
+> >  1 file changed, 146 insertions(+), 20 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/bpf/test_sock.c b/tools/testing/selftests/bpf/test_sock.c
+> > index e8edd3dd3ec2..68525d68d4e5 100644
+> > --- a/tools/testing/selftests/bpf/test_sock.c
+> > +++ b/tools/testing/selftests/bpf/test_sock.c
+> > @@ -35,12 +35,15 @@ struct sock_test {
+> >         /* Endpoint to bind() to */
+> >         const char *ip;
+> >         unsigned short port;
+> > +       unsigned short port_retry;
+> >         /* Expected test result */
+> >         enum {
+> >                 LOAD_REJECT,
+> >                 ATTACH_REJECT,
+> >                 BIND_REJECT,
+> >                 SUCCESS,
+> > +               RETRY_SUCCESS,
+> > +               RETRY_REJECT
+> >         } result;
+> >  };
+> >
+> > @@ -60,6 +63,7 @@ static struct sock_test tests[] = {
+> >                 0,
+> >                 NULL,
+> >                 0,
+> > +               0,
+> >                 LOAD_REJECT,
+> >         },
+>
+>
+> I assume we tried C99 initializers here, and this failed for some reason ?
+>
 
+Yeah, C99 initializers should be a good choice here, therefore
+I don't need to change every entry here after I add a new field to
+'struct sock_test'.
 
-On 04/01/2022 21:58, Nícolas F. R. A. Prado wrote:
-> Hello James,
-> 
-> On Tue, Jan 04, 2022 at 02:17:43PM +0000, James Clark wrote:
->>
->>
->> On 16/12/2021 19:27, James Clark wrote:
->>> Since commit d18b01789ae5 ("docs: Add automatic cross-reference for
->>> documentation pages"), references that were already explicitly defined
->>> with "ref:" and reffered to other pages with a path have been doubled.
->>> This is reported as the following error by Firefox:
->>>
->>>   Start tag "a" seen but an element of the same type was already open.
->>>   End tag "a" violates nesting rules.
->>>
->>> As well as the invalid HTML, this also obscures the URI fragment links
->>> to subsections because the second link overrides the first. For example
->>> on the page admin-guide/hw-vuln/mds.html the last link should be to the
->>> "Default Mitigations" subsection using a # URI fragment:
->>>
->>>   admin-guide/hw-vuln/l1tf.html#default-mitigations
->>>
->>> But it is obsured by a second link to the whole page:
->>>
->>>   admin-guide/hw-vuln/l1tf.html
->>>
->>
->> Bump. Is there a way this can be merged if there are no objections? It's
->> preventing me from adding links in the docs.
-> 
-> Sorry for the delay, I changed emails and wasn't monitoring that old one.
-> 
-> First of all, thank you for noticing and fixing this issue!
-> 
-> To be honest, it bothered me that you walked upwards on the node tree to figure
-> out if the current node is a child of a reference node instead of figuring that
-> out as the tree is traversed down, so I took a stab at implementing that. The
-> aim was to only consider nodes that are:
-> 
->   1. below a paragraph node, to avoid changing text outside the paragraphs like
->      titles and so on
->   2. not below a literal or reference, to avoid this issue you noticed
-> 
-> However I was not very happy with the end result either. The code got a bit
-> messy, and while I thought it would be a lot faster than the upward walk, in the
-> end it doesn't really make a difference: From my test-run this approach took
-> 10m15s, while yours took 10m49s.
-> 
-> I'll include my patch at the end of this email for reference (to myself and
-> others) if/when we revisit this in the future.
-> 
-> So this is to say that, while I think the best long-term solution would be to
-> only walk the nodes we're interested in from the get go, your solution is way
-> simpler and not noticibly slower, so let's go with it for now. I just have a
-> little nit on the patch, see below.
-> 
+I think C99 initializers should work here, I'll give it a try.
 
-Thanks for reviewing, I've sent V2. Presumably the absolute simplest way is to remove
-that function and do a search and replace to convert all bare page references to real
-ones. Although I assumed that possibility was considered when the auto link function
-was added in the first place.
+Thanks!
+Menglong Dong
 
-James
-
->>
->> Thanks
->> James
->>
->>> The full HTML with the double <a> tags looks like this:
->>>
->>>   <a class="reference internal" href="l1tf.html#default-mitigations">
->>>     <span class="std std-ref">
->>>       <a class="reference internal" href="l1tf.html">
->>>         <span class="doc">L1TF - L1 Terminal Fault</span>
->>>       </a>
->>>     </span>
->>>   </a>
->>>
->>> After this commit, there is only a single link:
->>>
->>>   <a class="reference internal" href="l1tf.html#default-mitigations">
->>>     <span class="std std-ref">Documentation/admin-guide/hw-vuln//l1tf.rst</span>
->>>   </a>
->>>
->>> Now that the second link is removed, the browser correctly jumps to the
->>> default-mitigations subsection when clicking the link.
->>>
->>> The fix is to check that nodes in the document to be modified are not
->>> already references. A reference is counted as any text that is a
->>> descendant of a reference type node. Only plain text should be converted
->>> to new references, otherwise the doubling occurs.
->>>
->>> Testing
->>> =======
->>>
->>>  * Test that the build stdout is the same (ignoring ordering), and that
->>>    no new warnings are printed.
->>>
->>>  * Diff all .html files and check that the only modifications occur
->>>    to the bad double links.
->>>
->>>  * The auto linking of bare references to pages without "ref:" is still
->>>    working.
->>>
->>> Fixes: d18b01789ae5 ("docs: Add automatic cross-reference for
->>>        documentation pages")
->>> Signed-off-by: James Clark <james.clark@arm.com>
->>> ---
->>>  Documentation/sphinx/automarkup.py | 18 +++++++++++++++---
->>>  1 file changed, 15 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/Documentation/sphinx/automarkup.py b/Documentation/sphinx/automarkup.py
->>> index acf5473002f3..3fee247b55b3 100644
->>> --- a/Documentation/sphinx/automarkup.py
->>> +++ b/Documentation/sphinx/automarkup.py
->>> @@ -280,10 +280,22 @@ def auto_markup(app, doctree, name):
->>>      # avoid adding cross-references to functions that have been explicitly
->>>      # marked with cc:func:.
->>>      #
-> 
-> Could you add your function above this comment so it doesn't get separated from
-> the code it's commenting on?
-> 
-> Actually, the comment about the literal could be moved inside your function...
-> 
->>> +    def text_but_not_a_reference(node):
-> 
-> ...here:
->     #
->     # The nodes.literal test catches ``literal text``, its purpose is to
->     # avoid adding cross-references to functions that have been explicitly
->     # marked with cc:func:.
->     #
-> 
->>> +        if not isinstance(node, nodes.Text) or isinstance(node.parent, nodes.literal):
->>> +            return False
->>> +
->>> +        child_of_reference = False
->>> +        parent = node.parent
->>> +        while parent:
->>> +            if isinstance(parent, nodes.Referential):
->>> +                child_of_reference = True
->>> +                break
->>> +            parent = parent.parent
->>> +        return not child_of_reference
->>> +
-> 
-> and the comment about refactoring the loop should be left here:
-> 
->     #
->     # This loop could eventually be improved on.  Someday maybe we
->     # want a proper tree traversal with a lot of awareness of which
->     # kinds of nodes to prune.  But this works well for now.
->     #
-> 
-> With this,
-> 
-> Reviewed-by: Nï¿½colas F. R. A. Prado <n@nfraprado.net>
-> 
-> Thanks,
-> Nï¿½colas
-> 
->>>      for para in doctree.traverse(nodes.paragraph):
->>> -        for node in para.traverse(nodes.Text):
->>> -            if not isinstance(node.parent, nodes.literal):
->>> -                node.parent.replace(node, markup_refs(name, app, node))
->>> +        for node in para.traverse(condition=text_but_not_a_reference):
->>> +            node.parent.replace(node, markup_refs(name, app, node))
->>>  
->>>  def setup(app):
->>>      app.connect('doctree-resolved', auto_markup)
->>>
->>
-> 
-> Uncleaned/unoptimized patch for walking down the tree:
-> 
-> diff --git a/Documentation/sphinx/automarkup.py b/Documentation/sphinx/automarkup.py
-> index acf5473002f3..4738c99bbbfb 100644
-> --- a/Documentation/sphinx/automarkup.py
-> +++ b/Documentation/sphinx/automarkup.py
-> @@ -271,19 +271,48 @@ def get_c_namespace(app, docname):
->  def auto_markup(app, doctree, name):
->      global c_namespace
->      c_namespace = get_c_namespace(app, name)
-> -    #
-> -    # This loop could eventually be improved on.  Someday maybe we
-> -    # want a proper tree traversal with a lot of awareness of which
-> -    # kinds of nodes to prune.  But this works well for now.
-> -    #
-> -    # The nodes.literal test catches ``literal text``, its purpose is to
-> -    # avoid adding cross-references to functions that have been explicitly
-> -    # marked with cc:func:.
-> -    #
-> -    for para in doctree.traverse(nodes.paragraph):
-> -        for node in para.traverse(nodes.Text):
-> -            if not isinstance(node.parent, nodes.literal):
-> -                node.parent.replace(node, markup_refs(name, app, node))
-> +
-> +    def find_suitable_nodes(root):
-> +        pending_nodes = [root]
-> +        top_nodes = []
-> +        final_nodes = []
-> +        index = 0
-> +
-> +        def is_top_node(node):
-> +            return isinstance(node, nodes.paragraph)
-> +
-> +        def is_bottom_node(node):
-> +            return isinstance(node, nodes.Referential) or isinstance(node, nodes.literal)
-> +
-> +        while index < len(pending_nodes):
-> +            current_node = pending_nodes[index]
-> +            if is_top_node(current_node):
-> +                top_nodes.append(current_node)
-> +            else:
-> +                pending_nodes.extend(current_node.children)
-> +            index += 1
-> +
-> +        index = 0
-> +        while index < len(top_nodes):
-> +            current_node = top_nodes[index]
-> +            for child in current_node.children:
-> +                if not is_bottom_node(child):
-> +                    final_nodes.append(child)
-> +            index += 1
-> +
-> +        index = 0
-> +        while index < len(final_nodes):
-> +            current_node = final_nodes[index]
-> +            for child in current_node.children:
-> +                if not is_bottom_node(child):
-> +                    final_nodes.append(child)
-> +            index += 1
-> +
-> +        return final_nodes
-> +
-> +    for node in find_suitable_nodes(doctree):
-> +        if isinstance(node, nodes.Text):
-> +            node.parent.replace(node, markup_refs(name, app, node))
-> 
->  def setup(app):
->      app.connect('doctree-resolved', auto_markup)
-> --
-> 
+> diff --git a/tools/testing/selftests/bpf/test_sock.c
+> b/tools/testing/selftests/bpf/test_sock.c
+> index e8edd3dd3ec2..b57ce9f3eabf 100644
+> --- a/tools/testing/selftests/bpf/test_sock.c
+> +++ b/tools/testing/selftests/bpf/test_sock.c
+> @@ -54,13 +54,13 @@ static struct sock_test tests[] = {
+>                         BPF_MOV64_IMM(BPF_REG_0, 1),
+>                         BPF_EXIT_INSN(),
+>                 },
+> -               BPF_CGROUP_INET4_POST_BIND,
+> -               BPF_CGROUP_INET4_POST_BIND,
+> -               0,
+> -               0,
+> -               NULL,
+> -               0,
+> -               LOAD_REJECT,
+> +               .expected_attach_type = BPF_CGROUP_INET4_POST_BIND,
+> +               .attach_type = BPF_CGROUP_INET4_POST_BIND,
+> +               .domain = 0,
+> +               .type = 0,
+> +               .ip = NULL,
+> +               .port = 0,
+> +               .result = LOAD_REJECT,
+>         },
+>         {
+>                 "bind4 load with invalid access: mark",

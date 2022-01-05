@@ -2,100 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C81DB485725
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 18:21:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFAF348572C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 18:21:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242189AbiAERVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 12:21:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53178 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbiAERVB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 12:21:01 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2552C061245
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 09:21:01 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id jw3so34320537pjb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 09:21:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=xzldlHLX0WLbmbgJQSeuVLDmx33+BJsUhVBrHrI/HwQ=;
-        b=NDKewqkZ4E87rhkXniYiKF9hNJ+Sl9e9LrHJpvlWG+B2F9b/K/eONMcW8ipJ+tI+gy
-         eZgZGkdaV+VevIV8fj55XKcy1wt2HU3mbouQgzvqfNIZ/4znv4cWiLjFAUgsO1Iu/gO/
-         FiaJSlwdSu2iTULAdm9poe3x+eZ28HAC6znkc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=xzldlHLX0WLbmbgJQSeuVLDmx33+BJsUhVBrHrI/HwQ=;
-        b=tL/SIZnuusbjIB2OEbOLM+x/3UQM3DjBnRgdJjUGP0KGa0n3Ygp+rGlPjPikq04BaJ
-         jkLaWnSr4rYXsEFSU3Zk/mEMcasEsz40D/U1fSKr5QP48fodB3eLhvsmYB9KJ8Jc++vg
-         XShqJ4e1dyfbQKzQcxreS6AfkzbEqUoEvtMBndgL0QIQMxJ454qzEeyaThxdyOG9rcf5
-         8kxtVbWSHNoDgLqvNp7KTXDHJVJ0yfDs2ooiHeXKeNdajCqCD73uZHQyPw5znHGyEVMJ
-         QlSLj8gpqSWBzQIoSiAbjyupWyVzYBcCFv+vcKA8e/TPB3Ju07mh7ptyV+Lrogv105Ey
-         +Ixw==
-X-Gm-Message-State: AOAM533CA97WfqDyh6GM/XmH8D5uDbhBkOyZ638aYOzvlhUST12xClCV
-        1rgg2R9X62VTkqU5xu3JOCYfZw==
-X-Google-Smtp-Source: ABdhPJwDQ5Z6I7V0z/hRQp4KKAtm+dG+xHrGnS0RON2vZfGnhC12VVJtwoCqQbcCfyl2a9ptsZQtXw==
-X-Received: by 2002:a17:902:8544:b0:142:66e7:afbb with SMTP id d4-20020a170902854400b0014266e7afbbmr54658947plo.62.1641403260829;
-        Wed, 05 Jan 2022 09:21:00 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k8sm3217358pjj.3.2022.01.05.09.21.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 09:21:00 -0800 (PST)
-Date:   Wed, 5 Jan 2022 09:20:59 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andy Lutomirski <luto@amacapital.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kselftest@vger.kernel.org, Will Drewry <wad@chromium.org>
-Subject: [GIT PULL] seccomp updates for v5.17-rc1
-Message-ID: <202201050919.9DF1B7D60@keescook>
+        id S242198AbiAERVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 12:21:53 -0500
+Received: from mengyan1223.wang ([89.208.246.23]:53730 "EHLO mengyan1223.wang"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230323AbiAERVw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 12:21:52 -0500
+Received: from localhost.localdomain (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@mengyan1223.wang)
+        by mengyan1223.wang (Postfix) with ESMTPSA id E325B65A9A;
+        Wed,  5 Jan 2022 12:21:47 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mengyan1223.wang;
+        s=mail; t=1641403311;
+        bh=lQqSduRsA0o4a6IM8NvLfUF17x9jJ4pL2pbwCbpBxGk=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=CD8a5zlaG4oMTVKQcjfPEvVw3OAsjNPOenLOzpJp4z7vHcJxn5sgd6xK/Bo85swjr
+         NpvPed3l/CMmy6sdRN/f8SJ9Cs6fGOu1CaSkiJxnzkoQSWRORevjPfwDu776xw3Rti
+         T8YRP2GWWHJoHth74vppw0ZMD+p+CKfWp9qz0PLBc3vKzum3Xqxr6dgK1811DLSBSs
+         VYTneXQhGWcwQyQo7mvD54eOyzq0NwOJsO21UQKc3PFAzl3c+ZbuYR6RJh210V0zfI
+         yPfRrzzpfwdi4YDkGOwsNCmawJsbZ0vZW6czapW3ULBgJhXXJnjuVC+mt365heLm+y
+         +K8EgwolkMWKg==
+Message-ID: <211edcb700db30c4a6b37db87139e5fa47aeece0.camel@mengyan1223.wang>
+Subject: Re: [PATCH V5 00/22] arch: Add basic LoongArch support
+From:   Xi Ruoyao <xry111@mengyan1223.wang>
+To:     Huacai Chen <chenhuacai@gmail.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Date:   Thu, 06 Jan 2022 01:21:46 +0800
+In-Reply-To: <6d0169ca8c9e417308d3b9f96cd0ef446ee36fe7.camel@mengyan1223.wang>
+References: <20211013063656.3084555-1-chenhuacai@loongson.cn>
+         <722477bcc461238f96c3b038b2e3379ee49efdac.camel@mengyan1223.wang>
+         <CAAhV-H40oWqkD+tQ3=XA8ijQGukkeG5O1M1JL3v5i402dFLK+Q@mail.gmail.com>
+         <587ab54d77af2fb4cdbe0530cdd5e550c3e968db.camel@mengyan1223.wang>
+         <CAAhV-H6R=xWL18AH7HzeXHOVD_d-5m7RvdQCLkOR1NeDZ_0HMw@mail.gmail.com>
+         <6d0169ca8c9e417308d3b9f96cd0ef446ee36fe7.camel@mengyan1223.wang>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Wed, 2022-01-05 at 19:51 +0800, Xi Ruoyao wrote:
+> On Wed, 2022-01-05 at 17:40 +0800, Huacai Chen wrote:
+> > Hi, Ruoyao,
+> > 
+> > The problem still exists in 5.16-rc8, can you try to change
+> > cpu_relax() definition to smp_mb()? It seems can fix the problem.
+> 
+> Is there any workload which can triggers the panic?  I can't trigger it
+> by building and testing GCC, or building the kernel anymore.
+> 
+> And is your "stable" issue the same one I'd encountered?  To me changing
+> barrier() to smp_mb() may fix some deadlock, but not a panic.  (I'm not
+> an expert on CPU architecture or kernel programming, so maybe I'm wrong
+> here.)
+> 
+> I'll put my 3A5000 machine into a loop building kernel and see if I can
+> trigger the panic again...
 
-Please pull these seccomp selftest updates for v5.17-rc1. The core
-seccomp code hasn't changed for this cycle, but the selftests were
-improved while helping to debug the recent signal handling refactoring
-work Eric did.
+I can't reproduce the issue on 5.16-rc8.  But I can reproduce it on
+5.16-rc5 and the s/barrier/smp_mb/ change fixes the issue.
 
-Thanks!
-
--Kees
-
-The following changes since commit d9bbdbf324cda23aa44873f505be77ed4b61d79c:
-
-  x86: deduplicate the spectre_v2_user documentation (2021-10-04 12:12:57 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/seccomp-v5.17-rc1
-
-for you to fetch changes up to 1e6d69c7b9cd7735bbf4c6754ccbb9cce8bd8ff4:
-
-  selftests/seccomp: Report event mismatches more clearly (2021-11-03 12:02:07 -0700)
-
-----------------------------------------------------------------
-seccomp updates for v5.17-rc1
-
-- Improve seccomp selftests in support of signal handler refactoring (Kees Cook)
-
-----------------------------------------------------------------
-Kees Cook (2):
-      selftests/seccomp: Stop USER_NOTIF test if kcmp() fails
-      selftests/seccomp: Report event mismatches more clearly
-
- tools/testing/selftests/seccomp/seccomp_bpf.c | 56 ++++++++++++++++++++++++---
- 1 file changed, 50 insertions(+), 6 deletions(-)
-
+I'm still puzzled: if there some workload which can reproduce the issue
+more deterministic?
 -- 
-Kees Cook
+Xi Ruoyao <xry111@mengyan1223.wang>
+School of Aerospace Science and Technology, Xidian University

@@ -2,123 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 632E64857DE
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:03:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2554857DF
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:04:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242699AbiAESDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 13:03:34 -0500
-Received: from relmlor1.renesas.com ([210.160.252.171]:38341 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S242686AbiAESDa (ORCPT
+        id S242707AbiAESEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 13:04:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242686AbiAESEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 13:03:30 -0500
-X-IronPort-AV: E=Sophos;i="5.88,264,1635174000"; 
-   d="scan'208";a="105608649"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 06 Jan 2022 03:03:28 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 3E3B140BBDB2;
-        Thu,  6 Jan 2022 03:03:26 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Nishanth Menon <nm@ti.com>, Santosh Shilimkar <ssantosh@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v6] soc: ti: smartreflex: Use platform_get_irq_optional() to get the interrupt
-Date:   Wed,  5 Jan 2022 18:03:22 +0000
-Message-Id: <20220105180323.8563-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 5 Jan 2022 13:04:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE45C061245
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 10:04:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 724A1B81CE7
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 18:04:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13CFCC36AE0;
+        Wed,  5 Jan 2022 18:04:00 +0000 (UTC)
+Date:   Wed, 5 Jan 2022 18:03:57 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Jianyong Wu <jianyong.wu@arm.com>
+Cc:     will@kernel.org, anshuman.khandual@arm.com,
+        akpm@linux-foundation.org, david@redhat.com,
+        quic_qiancai@quicinc.com, ardb@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        gshan@redhat.com, justin.he@arm.com, nd@arm.com
+Subject: Re: [PATCH v3] arm64/mm: avoid fixmap race condition when create pud
+ mapping
+Message-ID: <YdXdjcJ7jbnkFsqp@arm.com>
+References: <20211216082812.165387-1-jianyong.wu@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211216082812.165387-1-jianyong.wu@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-allocation of IRQ resources in DT core code, this causes an issue
-when using hierarchical interrupt domains using "interrupts" property
-in the node as this bypasses the hierarchical setup and messes up the
-irq chaining.
+On Thu, Dec 16, 2021 at 04:28:12PM +0800, Jianyong Wu wrote:
+> The 'fixmap' is a global resource and is used recursively by
+> create pud mapping(), leading to a potential race condition in the
+> presence of a concurrent call to alloc_init_pud():
+> 
+> kernel_init thread                          virtio-mem workqueue thread
+> ==================                          ===========================
+> 
+>   alloc_init_pud(...)                       alloc_init_pud(...)
+>   pudp = pud_set_fixmap_offset(...)         pudp = pud_set_fixmap_offset(...)
+>   READ_ONCE(*pudp)
+>   pud_clear_fixmap(...)
+>                                             READ_ONCE(*pudp) // CRASH!
+> 
+> As kernel may sleep during creating pud mapping, introduce a mutex lock to
+> serialise use of the fixmap entries by alloc_init_pud().
+> 
+> Signed-off-by: Jianyong Wu <jianyong.wu@arm.com>
 
-In preparation for removal of static setup of IRQ resource from DT core
-code use platform_get_irq_optional().
+I tried to queue this patch but with certain configurations it doesn't
+boot under Qemu. Starting from defconfig, update .config with (I had
+this in one of my build scripts):
 
-While at it return 0 instead of returning ret in the probe success path.
+$ ./scripts/config \
+		-e DEBUG_KERNEL \
+		-e DEBUG_PAGEALLOC \
+		-e DEBUG_PAGEALLOC_ENABLE_DEFAULT \
+		-e DEBUG_WX \
+		-e DEBUG_SET_MODULE_RONX \
+		-e DEBUG_ALIGN_RODATA \
+		-e ARM64_PTDUMP_DEBUGFS \
+		-e DEBUG_OBJECTS \
+		-e DEBUG_OBJECTS_FREE \
+		-e DEBUG_OBJECTS_TIMERS \
+		-e DEBUG_KOBJECT_RELEASE \
+		-e DEBUG_LOCKING_API_SELFTESTS \
+		-e DEBUG_PREEMPT \
+		-e DEBUG_TIMEKEEPING \
+		-e DEBUG_VM \
+		-e DEBUG_VM_VMACACHE \
+		-e DEBUG_VM_RB \
+		-e DEBUG_VM_PGFLAGS \
+		-e DEBUG_VIRTUAL \
+		-e DEBUG_LIST \
+		-e DEBUG_PI_LIST \
+		-e DEBUG_SG \
+		-e PROVE_LOCKING \
+		-e DEBUG_RT_MUTEXES \
+		-e DEBUG_ATOMIC_SLEEP \
+		-e ATOMIC64_SELFTEST
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-v5->v6:
-* Dropped printing function name in error message.
+It stop after exiting the EFI boot services. I did not have time to
+debug.
 
-v4->v5:
-* Fixed missing return while using dev_err_probe().
-
-v3->v4:
-* Used dev_err_probe() to print error message
-* Returning 0 in probe success path.
-
-v2->v3
-* Switch back to platform_get_irq_optional()
-* Only print error in case of error, and not when interrupt is missing.
-
-v1->v2
-* Updated commit message
-* Drop check for IRQ0
-* Switched to using platform_get_irq() so that the probe won't
-  fail silently as requested by Nishanth.
-
-v1:
-* https://www.spinics.net/lists/arm-kernel/msg942549.html
----
- drivers/soc/ti/smartreflex.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/soc/ti/smartreflex.c b/drivers/soc/ti/smartreflex.c
-index b5b2fa538d5c..ad2bb72e640c 100644
---- a/drivers/soc/ti/smartreflex.c
-+++ b/drivers/soc/ti/smartreflex.c
-@@ -819,7 +819,7 @@ static int omap_sr_probe(struct platform_device *pdev)
- {
- 	struct omap_sr *sr_info;
- 	struct omap_sr_data *pdata = pdev->dev.platform_data;
--	struct resource *mem, *irq;
-+	struct resource *mem;
- 	struct dentry *nvalue_dir;
- 	int i, ret = 0;
- 
-@@ -844,7 +844,11 @@ static int omap_sr_probe(struct platform_device *pdev)
- 	if (IS_ERR(sr_info->base))
- 		return PTR_ERR(sr_info->base);
- 
--	irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-+	ret = platform_get_irq_optional(pdev, 0);
-+	if (ret < 0 && ret != -ENXIO)
-+		return dev_err_probe(&pdev->dev, ret, "failed to get IRQ resource\n");
-+	if (ret > 0)
-+		sr_info->irq = ret;
- 
- 	sr_info->fck = devm_clk_get(pdev->dev.parent, "fck");
- 	if (IS_ERR(sr_info->fck))
-@@ -870,9 +874,6 @@ static int omap_sr_probe(struct platform_device *pdev)
- 	sr_info->autocomp_active = false;
- 	sr_info->ip_type = pdata->ip_type;
- 
--	if (irq)
--		sr_info->irq = irq->start;
--
- 	sr_set_clk_length(sr_info);
- 
- 	list_add(&sr_info->node, &sr_list);
-@@ -926,7 +927,7 @@ static int omap_sr_probe(struct platform_device *pdev)
- 
- 	}
- 
--	return ret;
-+	return 0;
- 
- err_debugfs:
- 	debugfs_remove_recursive(sr_info->dbg_dir);
 -- 
-2.17.1
-
+Catalin

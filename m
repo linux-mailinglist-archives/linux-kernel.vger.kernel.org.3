@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0074485A15
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:37:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52679485A16
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:37:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244096AbiAEUhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 15:37:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41760 "EHLO
+        id S244145AbiAEUh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 15:37:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244093AbiAEUgy (ORCPT
+        with ESMTP id S244103AbiAEUg5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 15:36:54 -0500
-Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A00C0611FF
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 12:36:53 -0800 (PST)
-Received: by mail-vk1-xa2e.google.com with SMTP id s72so379604vks.9
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 12:36:53 -0800 (PST)
+        Wed, 5 Jan 2022 15:36:57 -0500
+Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B990C061245
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 12:36:57 -0800 (PST)
+Received: by mail-vk1-xa29.google.com with SMTP id l68so396983vkh.4
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 12:36:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=w8EkkzNdsrnEqk2YciotM6EW2MTmAWF34zyjUlKhtkA=;
-        b=ZNc0HGk+uxnzavqym+yTYhAXq6lmiJDpCdpKcUPhQpQ/v2s4ijDX9M5lpO0rIoGrpJ
-         LM7uKW7jEV7HAOHBSFUeXVXpWz64sVUn1X5MKD6cgMaaDg73+OvohMoBQj6LbL8tE1Am
-         Lrs9k7h8tjjT6wj3JHf8VNAECHiuhnZuazD3uMpQ8nb6Sbe+HhcCxNyGTy3/VbJHow0k
-         qjGgN2oGeRHbSncqbVdp8Wk/gf/RBr/87y5qT1nPinyl1+SCL24kBbP27F7+2TTyiTgp
-         gbxEL2khEgn6GbzZHNCV9ey9U2ybbpJ11eIDxpqA3+zAjG+l2pHyHbvtS7FXoF4vybsh
-         WZpg==
+        bh=PFpxL8eNjWfN9L9+3lNFj3nd+2+vNaUo9b7OlF5oUWU=;
+        b=MOzaZyxBX3Mcp7NycsdG6RBaO+0oKmPOdqDAe0sh0Ods0J5BVgNQd6WTsHq2z1dTNR
+         0Hcz5XTpa1HDn+ljXWi3Ene9RxrMrhMORzMtuo07KYswBrsYQoLvVp+VEhJ9G+8W3uTY
+         9Xog4dUYCz+RzTl5ZFiABiDCkHGiIo273jK8g73H+BXwGqg7uzbTyHbGBngCabCI8W1l
+         v08A9+HNolepnYcvf1WKrgMKMDiCBNCWbVXeDBS7/axpTkNuep8e9tVZkSw5oM9qYCkP
+         XTwlaov9v8uFIu1QBUYUc1Cyy5L5gV7G3tGqBci2Ms/IPXOeGkeiISEh7OzAVhDU3Dj5
+         Tg6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=w8EkkzNdsrnEqk2YciotM6EW2MTmAWF34zyjUlKhtkA=;
-        b=UR6aArNOsbq+hO//eOK1UCDdy3uuXlBsyq6P2ogJ+S3AAazY4SJFEdYMdEfrjPRk5U
-         1ZLa9gWp496Zg2FLiIgTqtxd1j0TpnsAynShEQzuhhsxG2zZfrp/M6l3KdKksVgiusXV
-         WUo6v7kM4+i2OSNGpkwQA6/3ersIWWxChrhw1HOTo0GOyoHmz99ymJnucZc15I/peoGa
-         tdob+qHstiu3ESB2JNdIXkiLLT5eAAJgG0eq1BBYTieo2vg2RQuJDESDrBGFQXxqmNKa
-         TjziCVKAjKtVnADqdd5ucRUwlau3P5wqkkrgeeE+Rnxk5gXhdSSxU4tur20CyyY/UGDb
-         9Ghw==
-X-Gm-Message-State: AOAM531eWgD8c4pa7NZidQ7THIgLxTwJmhiCynSNkjrahG5hVMgEND/E
-        PJmnJp6WQEo6nvPGb4CZDsk=
-X-Google-Smtp-Source: ABdhPJwhC9Ue0swAVd5zzL/J9JY/4NkVzVDYQvA6vAzqJIfw57q1jDgz+w3yei7bb9hr/ez3NXKRBg==
-X-Received: by 2002:a05:6122:8c6:: with SMTP id 6mr18487538vkg.33.1641415012981;
-        Wed, 05 Jan 2022 12:36:52 -0800 (PST)
+        bh=PFpxL8eNjWfN9L9+3lNFj3nd+2+vNaUo9b7OlF5oUWU=;
+        b=3OZQj/AJSJ1+pu/kcKeIW7kE7ba4/EPDl5m2EKXJeKL/FGQE4VCQzDP8WlX/oki7ef
+         Wx0iVSWr/uDPR+jIYxzcyT+h7PsP+5AcnazBixDGuvk7wSuw4WmM/ye5rNbJjvQH9nBq
+         bSEz+vXjB2IdxBk8PoXXJedfWbIQ9aNay8gyAjObW8msBHzaDn9jpbEMhDcfO9hv2rhE
+         Q+lleyyAh7vnKX3dpnZvas9eWvAV+7AcLLqUuhq2NuTF7dm5A/fd9u2xGim3SBIONBl4
+         yl5ogMAPspCanRqgjQBMyhyvvqqnJ9JFdB1PGA73eafn4NayzE+QlrOKOwNF9nbYIyFR
+         I1WA==
+X-Gm-Message-State: AOAM531FvqaPy2QXogDZW4xXgPzhPLBnSBKRnZGrtuDsdVOz36QleIVd
+        7H6P53hJjKK7L9Y61YrxnRs=
+X-Google-Smtp-Source: ABdhPJwDAuwT6naxOjUL5AyLq0SJlsEUSbEgq7WuMoQW8aEYk8+Vovkwf4Cg53hxRuabgFrryic7GA==
+X-Received: by 2002:a05:6122:d0f:: with SMTP id az15mr20333761vkb.28.1641415016836;
+        Wed, 05 Jan 2022 12:36:56 -0800 (PST)
 Received: from localhost.localdomain ([181.22.170.52])
-        by smtp.gmail.com with ESMTPSA id t130sm7860vkc.32.2022.01.05.12.36.49
+        by smtp.gmail.com with ESMTPSA id t130sm7860vkc.32.2022.01.05.12.36.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 12:36:52 -0800 (PST)
+        Wed, 05 Jan 2022 12:36:56 -0800 (PST)
 From:   Gaston Gonzalez <gascoar@gmail.com>
 To:     linux-staging@lists.linux.dev
 Cc:     gregkh@linuxfoundation.org, nsaenz@kernel.org,
@@ -60,9 +60,9 @@ Cc:     gregkh@linuxfoundation.org, nsaenz@kernel.org,
         linux-arm-kernel@lists.infradead.org,
         bcm-kernel-feedback-list@broadcom.com,
         linux-kernel@vger.kernel.org, gascoar@gmail.com
-Subject: [PATCH 3/6] staging: vc04_services: rename variables containing bm2835_* to bcm2835_*
-Date:   Wed,  5 Jan 2022 17:35:45 -0300
-Message-Id: <a0af5deacebc2da9b21772c7677e1a9627edbed6.1641414449.git.gascoar@gmail.com>
+Subject: [PATCH 4/6] staging: vc04_services: rename string literal containing bm2835_* to bcm2835*_
+Date:   Wed,  5 Jan 2022 17:35:46 -0300
+Message-Id: <91caae07fce0e4511f283388304e935526ba29ed.1641414449.git.gascoar@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1641414449.git.gascoar@gmail.com>
 References: <cover.1641414449.git.gascoar@gmail.com>
@@ -74,113 +74,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 In the kernel, all names related to the chip BCM2835 are always named
 bcm2835_*. To avoid confusion, and to make things more consistent,
-rename all variables using bm2835_* to bcm2835_*.
+rename the string term bm2835_* to bcm2835_*.
 
 While at it, some realignments were made to improve readability.
 
 Suggested-by: Stefan Wahren <stefan.wahren@i2se.com>
 Signed-off-by: Gaston Gonzalez <gascoar@gmail.com>
 ---
- .../bcm2835-camera/bcm2835-camera.c           |  4 +--
- .../vc04_services/bcm2835-camera/controls.c   | 31 +++++++------------
- 2 files changed, 14 insertions(+), 21 deletions(-)
+ .../staging/vc04_services/bcm2835-camera/bcm2835-camera.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-index 159ac600d11e..cbc881e19f65 100644
+index cbc881e19f65..aaf529f2186c 100644
 --- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
 +++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-@@ -654,7 +654,7 @@ static void stop_streaming(struct vb2_queue *vq)
- 		v4l2_err(&dev->v4l2_dev, "Failed to disable camera\n");
+@@ -884,12 +884,10 @@ static int vidioc_querycap(struct file *file, void *priv,
+ 
+ 	vchiq_mmal_version(dev->instance, &major, &minor);
+ 
+-	strscpy(cap->driver, "bm2835 mmal", sizeof(cap->driver));
+-	snprintf((char *)cap->card, sizeof(cap->card), "mmal service %d.%d",
+-		 major, minor);
++	strscpy(cap->driver, "bcm2835 mmal", sizeof(cap->driver));
++	snprintf((char *)cap->card, sizeof(cap->card), "mmal service %d.%d", major, minor);
+ 
+-	snprintf((char *)cap->bus_info, sizeof(cap->bus_info),
+-		 "platform:%s", dev->v4l2_dev.name);
++	snprintf((char *)cap->bus_info, sizeof(cap->bus_info), "platform:%s", dev->v4l2_dev.name);
+ 	return 0;
  }
  
--static const struct vb2_ops bm2835_mmal_video_qops = {
-+static const struct vb2_ops bcm2835_mmal_video_qops = {
- 	.queue_setup = queue_setup,
- 	.buf_init = buffer_init,
- 	.buf_prepare = buffer_prepare,
-@@ -1930,7 +1930,7 @@ static int bcm2835_mmal_probe(struct platform_device *pdev)
- 		q->io_modes = VB2_MMAP | VB2_USERPTR | VB2_READ;
- 		q->drv_priv = dev;
- 		q->buf_struct_size = sizeof(struct vb2_mmal_buffer);
--		q->ops = &bm2835_mmal_video_qops;
-+		q->ops = &bcm2835_mmal_video_qops;
- 		q->mem_ops = &vb2_vmalloc_memops;
- 		q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
- 		q->lock = &dev->mutex;
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/controls.c b/drivers/staging/vc04_services/bcm2835-camera/controls.c
-index 08fadc164b02..178fb310b89a 100644
---- a/drivers/staging/vc04_services/bcm2835-camera/controls.c
-+++ b/drivers/staging/vc04_services/bcm2835-camera/controls.c
-@@ -58,7 +58,7 @@ static const u32 iso_values[] = {
- 	0, 100, 200, 400, 800,
- };
- 
--enum bm2835_mmal_ctrl_type {
-+enum bcm2835_mmal_ctrl_type {
- 	MMAL_CONTROL_TYPE_STD,
- 	MMAL_CONTROL_TYPE_STD_MENU,
- 	MMAL_CONTROL_TYPE_INT_MENU,
-@@ -67,7 +67,7 @@ enum bm2835_mmal_ctrl_type {
- 
- struct bcm2835_mmal_v4l2_ctrl {
- 	u32 id; /* v4l2 control identifier */
--	enum bm2835_mmal_ctrl_type type;
-+	enum bcm2835_mmal_ctrl_type type;
- 	/* control minimum value or
- 	 * mask for MMAL_CONTROL_TYPE_STD_MENU
- 	 */
-@@ -903,7 +903,7 @@ static int bcm2835_mmal_s_ctrl(struct v4l2_ctrl *ctrl)
- 	return ret;
- }
- 
--static const struct v4l2_ctrl_ops bm2835_mmal_ctrl_ops = {
-+static const struct v4l2_ctrl_ops bcm2835_mmal_ctrl_ops = {
- 	.s_ctrl = bcm2835_mmal_s_ctrl,
- };
- 
-@@ -1323,12 +1323,9 @@ int bcm2835_mmal_init_controls(struct bcm2835_mmal_dev *dev, struct v4l2_ctrl_ha
- 
- 		switch (ctrl->type) {
- 		case MMAL_CONTROL_TYPE_STD:
--			dev->ctrls[c] =
--				v4l2_ctrl_new_std(hdl,
--						  &bm2835_mmal_ctrl_ops,
--						  ctrl->id, ctrl->min,
--						  ctrl->max, ctrl->step,
--						  ctrl->def);
-+			dev->ctrls[c] = v4l2_ctrl_new_std(hdl, &bcm2835_mmal_ctrl_ops,
-+							  ctrl->id, ctrl->min, ctrl->max,
-+							  ctrl->step, ctrl->def);
- 			break;
- 
- 		case MMAL_CONTROL_TYPE_STD_MENU:
-@@ -1352,20 +1349,16 @@ int bcm2835_mmal_init_controls(struct bcm2835_mmal_dev *dev, struct v4l2_ctrl_ha
- 				mask = ~mask;
- 			}
- 
--			dev->ctrls[c] =
--				v4l2_ctrl_new_std_menu(hdl,
--						       &bm2835_mmal_ctrl_ops,
--						       ctrl->id, ctrl->max,
--						       mask, ctrl->def);
-+			dev->ctrls[c] = v4l2_ctrl_new_std_menu(hdl, &bcm2835_mmal_ctrl_ops,
-+							       ctrl->id, ctrl->max, mask,
-+							       ctrl->def);
- 			break;
- 		}
- 
- 		case MMAL_CONTROL_TYPE_INT_MENU:
--			dev->ctrls[c] =
--				v4l2_ctrl_new_int_menu(hdl,
--						       &bm2835_mmal_ctrl_ops,
--						       ctrl->id, ctrl->max,
--						       ctrl->def, ctrl->imenu);
-+			dev->ctrls[c] = v4l2_ctrl_new_int_menu(hdl, &bcm2835_mmal_ctrl_ops,
-+							       ctrl->id, ctrl->max,
-+							       ctrl->def, ctrl->imenu);
- 			break;
- 
- 		case MMAL_CONTROL_TYPE_CLUSTER:
 -- 
 2.34.1
 

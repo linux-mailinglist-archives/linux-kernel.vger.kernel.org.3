@@ -2,105 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB25C485320
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:59:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4EA9485327
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 14:02:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236680AbiAEM7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 07:59:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49716 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236627AbiAEM7e (ORCPT
+        id S236709AbiAENB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 08:01:57 -0500
+Received: from www62.your-server.de ([213.133.104.62]:44172 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236580AbiAENBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 07:59:34 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D172DC061761
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 04:59:33 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: wlozano)
-        with ESMTPSA id DADDD1F44882
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1641387572;
-        bh=lq7iV/TsLUggKJX+Ubg+u0mQpThFvP22cJtIctEiXiU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=otquMosLKJS6FctIj2oCug/sh/Jdj4diN/HJS9WQkEovSsBh7cthzPjH9MyT5SXy9
-         tmvEUnDPYfJLCabTWkfmjgoUDo2xLlKCJwl9NUtGHMY4NsZOgR6eQ1O+r0BJgisjO8
-         5GH0sFEV/eLC4ACGYZOCt/9L/LPCIscEAvx8SQbj+7UlR7He3CJJOCK2tAn3h5gjXX
-         Lf17O99CIYaZ+f5p8TI/g+/jcPZVSebMYtSm9ed+b+6aofTHHVMfsuDCyeQcfU/BVo
-         HUDCFTSnKBsvbWYhHLMWoCtMyUaV8s34/NhEwpEsaFf4JWQMlvfdgC9UJMYg2DI1Tw
-         cjO3UgdZaePTg==
-Message-ID: <5c9b8e61-1158-1004-8280-04cc3c921ad1@collabora.com>
-Date:   Wed, 5 Jan 2022 09:59:25 -0300
+        Wed, 5 Jan 2022 08:01:55 -0500
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1n55vC-0000E1-9Z; Wed, 05 Jan 2022 14:01:42 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1n55vB-000GBK-Rr; Wed, 05 Jan 2022 14:01:41 +0100
+Subject: Re: [PATCH v2 net-next 1/2] net: bpf: handle return value of
+ BPF_CGROUP_RUN_PROG_INET{4,6}_POST_BIND()
+To:     menglong8.dong@gmail.com, kuba@kernel.org
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        edumazet@google.com, ast@kernel.org, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
+References: <20211230080305.1068950-1-imagedong@tencent.com>
+ <20211230080305.1068950-2-imagedong@tencent.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <5cf64605-7005-ac06-6ee1-18547910697a@iogearbox.net>
+Date:   Wed, 5 Jan 2022 14:01:41 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: Occasional hung with UM after enable VMAP_STACK
+In-Reply-To: <20211230080305.1068950-2-imagedong@tencent.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Anton Ivanov <anton.ivanov@kot-begemot.co.uk>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Sjoerd Simons <sjoerd.simons@collabora.com>,
-        ritesh sarraf <ritesh.sarraf@collabora.com>
-References: <be290dc3-db9c-2940-91bb-c91bf42fd8f6@collabora.com>
- <d80e4e760171de3813895e3cbfcadf96aa6c8fb6.camel@sipsolutions.net>
- <8c26a869-0cbe-a38c-8a8d-9f3f171f7e72@collabora.com>
- <94613ccb-ab4d-851d-01d0-dfa72b73fdb0@kot-begemot.co.uk>
-From:   Walter Lozano <walter.lozano@collabora.com>
-In-Reply-To: <94613ccb-ab4d-851d-01d0-dfa72b73fdb0@kot-begemot.co.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.3/26413/Wed Jan  5 10:23:50 2022)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anton,
+On 12/30/21 9:03 AM, menglong8.dong@gmail.com wrote:
+[...]
+> diff --git a/include/net/sock.h b/include/net/sock.h
+> index 44cc25f0bae7..f5fc0432374e 100644
+> --- a/include/net/sock.h
+> +++ b/include/net/sock.h
+> @@ -1209,6 +1209,7 @@ struct proto {
+>   	void			(*unhash)(struct sock *sk);
+>   	void			(*rehash)(struct sock *sk);
+>   	int			(*get_port)(struct sock *sk, unsigned short snum);
+> +	void			(*put_port)(struct sock *sk);
+>   #ifdef CONFIG_BPF_SYSCALL
+>   	int			(*psock_update_sk_prot)(struct sock *sk,
+>   							struct sk_psock *psock,
+> diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+> index 5d18d32557d2..8784e72d4b8b 100644
+> --- a/net/ipv4/af_inet.c
+> +++ b/net/ipv4/af_inet.c
+> @@ -531,6 +531,8 @@ int __inet_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
+>   			err = BPF_CGROUP_RUN_PROG_INET4_POST_BIND(sk);
+>   			if (err) {
+>   				inet->inet_saddr = inet->inet_rcv_saddr = 0;
+> +				if (sk->sk_prot->get_port)
+> +					sk->sk_prot->put_port(sk);
+>   				goto out_release_sock;
+>   			}
+>   		}
+[...]
+> diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
+> index d1636425654e..ddfc6821e682 100644
+> --- a/net/ipv6/af_inet6.c
+> +++ b/net/ipv6/af_inet6.c
+> @@ -413,6 +413,8 @@ static int __inet6_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
+>   			if (err) {
+>   				sk->sk_ipv6only = saved_ipv6only;
+>   				inet_reset_saddr(sk);
+> +				if (sk->sk_prot->get_port)
+> +					sk->sk_prot->put_port(sk);
+>   				goto out;
+>   			}
+>   		}
 
-On 1/4/22 18:39, Anton Ivanov wrote:
-> On 04/01/2022 19:26, Walter Lozano wrote:
->> Hi Johannes,
->>
->> On 1/4/22 16:04, Johannes Berg wrote:
->>> On Tue, 2022-01-04 at 15:10 -0300, Walter Lozano wrote:
->>>> Hi all,
->>>>
->>>> I noticed that after "um: enable VMAP_STACK" [1] I experienced some
->>>> occasional hung in my Gitlab CI jobs that use user-mode-linux to build
->>>> distro images.
->>>>
->>> Did you actually *enable* VMAP_STACK in the config as well? The commit
->>> just makes it *possible* to enable it, you still have to set it
->>> yourself. So you should be able to easily check with/without that
->>> setting.
->>
->> Thank you for your quick response. The Debian configuration on 
->> package user-mode-linux have these settings
->>
->> CONFIG_HAVE_ARCH_VMAP_STACK=y
->> CONFIG_VMAP_STACK=y
->>
->>
->> as you can see in [1]. I did run some tests disabling those settings, 
->> which passed without any hung.
->>
->> Unfortunately the "occasional" behavior makes this issue a bit tricky 
->> to debug.
->>
->> Regards,
->>
->> Walter
->>
->> [1] 
->> https://salsa.debian.org/uml-team/user-mode-linux/-/blob/master/config.amd64#L321 
->>
->>
->
-> Just to narrow things down - 64 bit or 32 bit?
->
-Thank you for commenting on this thread. All my tests were done with 64 
-bits.
+I presume both tests above should test for non-zero sk->sk_prot->put_port
+callback given that is what they end up calling when true, no?
 
-Regards,
-
--- 
-Walter Lozano
-Collabora Ltd.
-
+Thanks,
+Daniel

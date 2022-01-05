@@ -2,63 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 634A4485CAD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 00:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5994485CAF
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 00:56:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245559AbiAEX4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 18:56:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59076 "EHLO
+        id S245626AbiAEX4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 18:56:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245538AbiAEX4E (ORCPT
+        with ESMTP id S245538AbiAEX4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 18:56:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584B4C061201;
-        Wed,  5 Jan 2022 15:56:04 -0800 (PST)
+        Wed, 5 Jan 2022 18:56:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD1FC061201;
+        Wed,  5 Jan 2022 15:56:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBE6E6188C;
-        Wed,  5 Jan 2022 23:56:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47356C36AE9;
-        Wed,  5 Jan 2022 23:56:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641426963;
-        bh=F6GwUBhFCMqgCxke8oC5TlWXvfgRNbOLP789p+6vDH4=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=UbYymUTpDjlUDSWBCc9WgKKqK3jTEKDq+Yt2kZcA21ycGA7moVEAVg3AjOgmN+bXs
-         3jRm8KspFFASv9XiF4fRa1zQEZ1T3cpXG/2g2TdAspfhmWhHZDeNQT6mEdg9sOEhmL
-         3h/yc1YyvGzKTCP+8rBQJLBss9JmSlOFaaHv4kF6Z4Qk/NcNLFQa7amUtzvZkJfTSA
-         QQUpgHYmWcjl8WiZErEiD+O/5lYr36zE6yfg1cEODLDqMmXJs8/YG5e2cogC/V/dcA
-         bEgWMWV6Lb+kfczFG2YWBgOWMSmQNVh9ho5hWyKhSx1fB17PCwd9SyGWOrEcSCRbVd
-         Frwep9CSbaZNw==
-Content-Type: text/plain; charset="utf-8"
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77CD6B81CFF;
+        Wed,  5 Jan 2022 23:56:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B5D5C36AFA;
+        Wed,  5 Jan 2022 23:56:10 +0000 (UTC)
+Date:   Wed, 5 Jan 2022 18:56:09 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH] selftests/ftrace: func_event_triggers: fix typo in user
+ message
+Message-ID: <20220105185609.4ca10a41@gandalf.local.home>
+In-Reply-To: <20211226023204.18315-1-rdunlap@infradead.org>
+References: <20211226023204.18315-1-rdunlap@infradead.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1640018638-19436-2-git-send-email-tdas@codeaurora.org>
-References: <1640018638-19436-1-git-send-email-tdas@codeaurora.org> <1640018638-19436-2-git-send-email-tdas@codeaurora.org>
-Subject: Re: [PATCH v2 1/5] clk: qcom: clk-alpha-pll: Increase PLL lock detect poll time
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh@kernel.org, robh+dt@kernel.org,
-        Taniya Das <tdas@codeaurora.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Taniya Das <tdas@codeaurora.org>
-Date:   Wed, 05 Jan 2022 15:56:02 -0800
-User-Agent: alot/0.9.1
-Message-Id: <20220105235603.47356C36AE9@smtp.kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Taniya Das (2021-12-20 08:43:54)
-> PLL poll for lock detection can take more than 100us for certain type
-> of Lucid PLLs and also the new PLLs types(Lucid EVO), thus update to 200u=
-s.
->=20
-> Signed-off-by: Taniya Das <tdas@codeaurora.org>
-> ---
+On Sat, 25 Dec 2021 18:32:04 -0800
+Randy Dunlap <rdunlap@infradead.org> wrote:
 
-Any Fixes tag?
+> Correct typo of "it's" to "it".
+> 
+
+Shuah, want to take this?
+
+-- Steve
+
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: linux-kselftest@vger.kernel.org
+> ---
+>  tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> --- linux-next-20211224.orig/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc
+> +++ linux-next-20211224/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc
+> @@ -85,7 +85,7 @@ run_enable_disable() {
+>  	echo $check_disable > $EVENT_ENABLE
+>      done
+>      sleep $SLEEP_TIME
+> -    echo " make sure it's still works"
+> +    echo " make sure it still works"
+>      test_event_enabled $check_enable_star
+>  
+>      reset_ftrace_filter
+

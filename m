@@ -2,113 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 127DC484F86
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 09:46:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67090484F88
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 09:47:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238602AbiAEIqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 03:46:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:23609 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233694AbiAEIqK (ORCPT
+        id S238620AbiAEIrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 03:47:01 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:37544 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238594AbiAEIrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 03:46:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641372369;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Wed, 5 Jan 2022 03:47:00 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 9F0762112A;
+        Wed,  5 Jan 2022 08:46:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1641372419; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=NHbWblWLX7w+qNgr4qrq0wrqLLwfMancNfbrSbaZv0U=;
-        b=bPrKDHywmWGEKRTrlCwzVASBl0G9fkwYOotYeodf1XqQK2pvYMiOMA5rAgZEfFu/uatgKu
-        /YzeWTMgh+Kk80O3GSXhXU/96cA0huhwcAM5+gWEUKaC+7ZFALDmFsjwWqQXgZrRFcc6fi
-        ylMPUvIoCYGeRkjVg0SDhJH4VGd4Yow=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-378-EfqD0i9RMIiyIEv9SXuItg-1; Wed, 05 Jan 2022 03:46:08 -0500
-X-MC-Unique: EfqD0i9RMIiyIEv9SXuItg-1
-Received: by mail-wm1-f72.google.com with SMTP id m19-20020a05600c4f5300b00345cb6e8dd4so9983904wmq.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 00:46:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=NHbWblWLX7w+qNgr4qrq0wrqLLwfMancNfbrSbaZv0U=;
-        b=N/ZsbiKSBGJJq3uDmWnlVwuMmsZDMomYNiQW7nbvwbT8uxWB91kJQkWZ1bd0PzJK7b
-         aeY5FictmcvMK4YaRt0R6eeF1d8cWMnEwZZmY0Cnm0FGcag3Z4ZpmqmAcSaln+13qPwL
-         uoefGDiS0XoXV/99hXifF0xhuFW1zxJ3ws0ptk6MJtEBBUHUZtrAPE741ZuPOdLXQa0k
-         P0aOdvYVWzjSsr1pe5kSpJm6OacAdeD1oYKNzt4DdKo56AgvNW4YX1hKuM7vkz/e+d7p
-         +0bsqkmd+KT3UY5iXs4fNUa74jt1MYidkbhRLJMPkJdFOuEV4Ou4hocMbNY96nOMJ51F
-         eMQQ==
-X-Gm-Message-State: AOAM530lc4IWFE66aji0IWI6qaM5PkuTnjMQYuPgxY4A8mSzestOsdDk
-        mdo1iVgCmNmTfpbo75Z1Ei/rHPYjLfIrbUP2NQMubB93s3j5+L30dGXJzTAuujAf5+33ot1bWOy
-        j32eDJR4RwrP9NACaHkmBRHkT
-X-Received: by 2002:a05:600c:4410:: with SMTP id u16mr1885223wmn.46.1641372367327;
-        Wed, 05 Jan 2022 00:46:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxTtf+7plRNRmAYJnxjkla9v82xRqQI6wowda7YsLF+PqrpHkU59+UbgLvlksNTqDo6QkR1BQ==
-X-Received: by 2002:a05:600c:4410:: with SMTP id u16mr1885198wmn.46.1641372367128;
-        Wed, 05 Jan 2022 00:46:07 -0800 (PST)
-Received: from [192.168.3.132] (p5b0c6cd6.dip0.t-ipconnect.de. [91.12.108.214])
-        by smtp.gmail.com with ESMTPSA id c13sm39482052wrt.114.2022.01.05.00.46.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jan 2022 00:46:06 -0800 (PST)
-Message-ID: <93a8e489-5ca5-7593-5d2b-59280187e2a1@redhat.com>
-Date:   Wed, 5 Jan 2022 09:46:05 +0100
+        bh=/AOWs726IPdbXnbVpVSnXPeNpvFG1UBVciPUotuP6LE=;
+        b=mnvS+TEIzPIKkwDgjp5ip2Z1VZ9hBakq06zMZgUS6pX2BqkGCZIXPEg5kv2/F1AEoyVR5O
+        S3ZyQ2+elc2584tDXfD2ErKvQYeKyWOLqdCmJUfUZp3JAdx6WSmt8lBQuHhNlaiBMWUqX0
+        5qosWpNCLsc6+6kIKJXfz206uk4CtlE=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 60508A3B81;
+        Wed,  5 Jan 2022 08:46:59 +0000 (UTC)
+Date:   Wed, 5 Jan 2022 09:46:56 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        John Ogness <john.ogness@linutronix.de>
+Subject: Re: header circular dependencies
+Message-ID: <YdVbAHJfyceA4ZRs@alley>
+References: <CAHp75Vdjp9_67xe0PeZ9LzcJ=eNxB0qVqPJqtFEvh3SDgcdODw@mail.gmail.com>
+ <YdRdhE9z+Yyxwrhj@alley>
+ <CAHp75Vd0-__zV72YGpNqjdV6kOEQYcPkHeyEHPCQ0iL6K8oidQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: remove Xen tmem leftovers
-Content-Language: en-US
-To:     Juergen Gross <jgross@suse.com>, Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
-Cc:     Hugh Dickins <hughd@google.com>,
-        Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Vitaly Wool <vitaly.wool@konsulko.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20211224062246.1258487-1-hch@lst.de>
- <10ec73d4-6658-4f60-abe1-84ece53ca373@redhat.com>
- <82dbdc2c-20c2-d69b-bdc9-efc54939d54c@suse.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <82dbdc2c-20c2-d69b-bdc9-efc54939d54c@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75Vd0-__zV72YGpNqjdV6kOEQYcPkHeyEHPCQ0iL6K8oidQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05.01.22 07:08, Juergen Gross wrote:
-> On 04.01.22 15:31, David Hildenbrand wrote:
->> On 24.12.21 07:22, Christoph Hellwig wrote:
->>> Hi all,
->>>
->>> since the remove of the Xen tmem driver in 2019, the cleancache hooks are
->>> entirely unused, as are large parts of frontswap.  This series against
->>> linux-next (with the folio changes included) removes cleancaches, and cuts
->>> down frontswap to the bits actually used by zswap.
->>>
->>
->> Just out of curiosity, why was tmem removed from Linux (or even Xen?).
->> Do you have any information?
+On Tue 2022-01-04 16:52:25, Andy Shevchenko wrote:
+> On Tue, Jan 4, 2022 at 4:46 PM Petr Mladek <pmladek@suse.com> wrote:
+> >
+> > On Wed 2021-12-22 21:08:39, Andy Shevchenko wrote:
+> > > `make headerdep` is full of printk.h circular dependencies, like
+> > >
+> > > include/kvm/arm_vgic.h:18: warning: recursive header inclusion
+> > > In file included from linux/printk.h,
+> > >                 from linux/dynamic_debug.h:188
+> > >                 from linux/printk.h:555 <-- here
+> >
+> > This one looks like false positive:
+> >
+> >    + printk.h includes dynamic_debug.h when CONFIG_DYNAMIC_DEBUG_CORE
+> >    + dynamic_debug.h includes printk.h when !CONFIG_DYNAMIC_DEBUG_CORE
+> >
+> > But there seem to be other cycles, for example:
+> >
+> >    + printk.h
+> >      + dynamic_debug.h
+> >        + jump_label.h
+> >          + bug.h
+> >            + asm/bug.h
+> >              + printk.h
+> >
+> > I guess that it somehow works _only_ because printk.h includes
+> > dynamic_debug.h late. It probably defines everything that is needed
+> > by bug.h early enough.
+> >
+> > > I'm wondering if it's a false positive?
+> > > In either case, can we teach the headerdep not to complain by fixing
+> > > the culprit?
+> >
+> > I am scratching my head how to clean this up. All the dependencies
+> > make sense. The main problem is that all headers provide a lot of
+> > inlined functionality. The inlining is often important either because
+> > of speed or because every caller needs to have its own data structure
+> > (struct _ddebug, struct static_key).
+> >
+> > I can't find any good solution at the moment. But I am still slowed
+> > down after the holidays.
 > 
-> tmem never made it past the "experimental" state in the Xen hypervisor.
-> Its implementation had some significant security flaws, there was no
-> maintainer left, and nobody stepped up to address those issues.
+> Thanks for looking into this.
 > 
-> As a result tmem was removed from Xen.
+> Meanwhile (I haven't looked at that myself) Ingo announced some of his
+> long work on the topic:
+> https://lore.kernel.org/lkml/YdIfz+LMewetSaEB@gmail.com/
+> 
+> Perhaps he has a solution there.
 
-Interesting, thanks for sharing. I know tmem mostly from the papers and
-thought it was an interesting approach in general. There was even papers
-about a virtio implementation, however, actual code never appeared in
-the wild :)
+Thanks for the pointer. Unfortunately, it seems that Ingo's patchset
+does not solve our problem. It is possible that printk.h did not look
+interesting enough. printk() is used almost anywhere and probably
+does not include that much stuff on its own.
 
--- 
-Thanks,
+Anyway, Ingo's patchset uses many tricks. It might be good inspiration
+how to solve our dependency hell. I am going to think more about it.
 
-David / dhildenb
-
+Best Regards,
+Petr

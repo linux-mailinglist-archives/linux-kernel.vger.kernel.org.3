@@ -2,98 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C876448578F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 18:44:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C6B485795
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 18:45:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242449AbiAERop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 12:44:45 -0500
-Received: from smtp.hosts.co.uk ([85.233.160.19]:23576 "EHLO smtp.hosts.co.uk"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242461AbiAERok (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 12:44:40 -0500
-Received: from host81-132-12-162.range81-132.btcentralplus.com ([81.132.12.162] helo=[192.168.1.218])
-        by smtp.hosts.co.uk with esmtpa (Exim)
-        (envelope-from <antlists@youngman.org.uk>)
-        id 1n5AKx-0000lW-FP; Wed, 05 Jan 2022 17:44:36 +0000
-Message-ID: <96d9e6d4-16e5-6bfe-fc5a-7d0dfbaeadf0@youngman.org.uk>
-Date:   Wed, 5 Jan 2022 17:44:34 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: mdadm regression tests fail
-Content-Language: en-GB
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Bruce Dubbs <bruce.dubbs@gmail.com>,
+        id S242495AbiAERpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 12:45:30 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:58606 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237699AbiAERpU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 12:45:20 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 02AC0CE0451;
+        Wed,  5 Jan 2022 17:45:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C534C36AE0;
+        Wed,  5 Jan 2022 17:45:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641404717;
+        bh=Q3V6GchDz78dmmg78l3g/qEnjx4BoPVZZK1V2rhQnWg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ofv2KE4rUB3IDE5zL0LXmcN71knBnGoHLvDV2Kto/Au/uS6xKi4fnQx0ec7kw172w
+         BbDNFOrbPnuJOnu/tQCE3V9lQ2JSWQ1I1m7/yWycIU8F9uEsfOdXaldGfOgLh1Xgpb
+         D3biVEQT9XNIZXsP9hMsWsnfhqjojMiwV0zHGZ1smVOUaE0AlOMQDfH+Vwpzjde+IZ
+         4EI8Mn5CNoE2cfdgQzkACRm6y5W/dHKF/2rQvfDraCSyxaoyV29AuGF8wzBFLrrjtU
+         Mhcf9BXbMVP9aEwYgBR/xsrhHli0xmRbJ4N5MsmsisGMstkwuV+eqF9nmkciju8Qzq
+         y0rPZl0QRkSeA==
+Date:   Wed, 5 Jan 2022 09:45:17 -0800
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-raid@vger.kernel.org
-Cc:     "Douglas R. Reno" <renodr2002@gmail.com>,
-        Pierre Labastie <pierre.labastie@neuf.fr>
-References: <c4c17b11-16f4-ef70-5897-02f923907963@gmail.com>
- <45492ddd-42f1-674f-af27-5e0a0aace8c9@infradead.org>
-From:   Wols Lists <antlists@youngman.org.uk>
-In-Reply-To: <45492ddd-42f1-674f-af27-5e0a0aace8c9@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        david <david@fromorbit.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jane Chu <jane.chu@oracle.com>
+Subject: Re: [PATCH v9 01/10] dax: Use percpu rwsem for
+ dax_{read,write}_lock()
+Message-ID: <20220105174517.GI31606@magnolia>
+References: <20211226143439.3985960-1-ruansy.fnst@fujitsu.com>
+ <20211226143439.3985960-2-ruansy.fnst@fujitsu.com>
+ <CAPcyv4gkxuFRGh57nYrpS8mXo+5j-7=KGNn-gULgLGthZQPo2g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPcyv4gkxuFRGh57nYrpS8mXo+5j-7=KGNn-gULgLGthZQPo2g@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bear in mind raid superblock v0.9 is deprecated as in "if it breaks it 
-won't be fixed for you".
-
-So I would skip this test, and if you're mentioning raid in the 
-handbook, tell people they need to use one of the v1.x formats.
-
-(NB - you can always point them at the linux raid wiki.)
-
-Cheers,
-Wol
-
-On 05/01/2022 17:12, Randy Dunlap wrote:
-> Hi.
-> [adding linux-raid mailing list]
+On Tue, Jan 04, 2022 at 02:44:08PM -0800, Dan Williams wrote:
+> On Sun, Dec 26, 2021 at 6:35 AM Shiyang Ruan <ruansy.fnst@fujitsu.com> wrote:
+> >
+> > In order to introduce dax holder registration, we need a write lock for
+> > dax.
 > 
+> As far as I can see, no, a write lock is not needed while the holder
+> is being registered.
 > 
-> On 1/4/22 10:55, Bruce Dubbs wrote:
->> I am trying to document the mdadm-4.2 installation procedures for our book,
->> https://www.linuxfromscratch.org/blfs/view/svn/postlfs/mdadm.html
->>
->> For testing, I am doing a simple:
->>
->>    make
->>    sudo ./test --keep-going --logdir=test-logs --save-logs
->>
->> But I get failures for about half the tests.
->>
->> Digging in a bit I just ran:
->>
->>   sudo ./test --tests=00raid0 --logdir=test-logs
->>
->> This is the first test that fails.  With some hacking, it appears that the first portion of this test that fails is:
->>
->>    mdadm -CR $md0 -e0.90 -l0 -n4 $dev0 $dev1 $dev2 $dev3
->>
->> This resolves to
->>
->>    mdadm -CR /dev/md0 -e0.90 -l0 -n4 /dev/loop0 /dev/loop1 /dev/loop2 /dev/loop3
->>
->> There is not a lot of error output in the test, so I manually ran:
->>
->>    dd if=/dev/zero of=/tmp/mdtest0 count=20000 bs=1K
->>    losetup /dev/loop0 /tmp/mdtest0
->>
->> For /dev/loop[0123]
->>
->> Then I ran
->>
->>    mdadm -CR /dev/md0 -e0.90 -l0 -n4 /dev/loop0 /dev/loop1 /dev/loop2 /dev/loop3
->>    mdadm: 0.90 metadata does not support layouts for RAID0
->>
->> My question is whether the regression tests in the tarball are valid for mdadm-4.2?
->>
->>    -- Bruce Dubbs
->>       linuxfromscratch.org
->>
->> Note: The kernel is version 5.15.12.
+> The synchronization that is needed is to make sure that the device
+> stays live over the registration event, and that any in-flight holder
+> operations are flushed before the device transitions from live to
+> dead, and that in turn relates to the live state of the pgmap.
 > 
+> The dax device cannot switch from live to dead without first flushing
+> all readers, so holding dax_read_lock() over the register holder event
+> should be sufficient.
 
+...and perhaps add a comment describing that this is what the
+synchronization primitive is really protecting against?  The first time
+I read through this patchset, I assumed the rwsem was protecting
+&dax_hosts and was confused when I saw the one use of dax_write_lock.
+
+--D
+
+> If you are worried about 2 or more potential
+> holders colliding at registration time, I would expect that's already
+> prevented by block device exclusive holder synchronization, but you
+> could also use cmpxchg and a single pointer to a 'struct dax_holder {
+> void *holder_data, struct dax_holder_operations *holder_ops }'. If you
+> are worried about memory_failure triggering while the filesystem is
+> shutting down it can do a synchronize_srcu(&dax_srcu) if it really
+> needs to ensure that the notify path is idle after removing the holder
+> registration.
+> 
+> ...are there any cases remaining not covered by the above suggestions?

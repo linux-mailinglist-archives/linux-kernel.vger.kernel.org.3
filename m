@@ -2,114 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F0248580C
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:17:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B33D485812
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:20:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242823AbiAESRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 13:17:31 -0500
-Received: from relmlor2.renesas.com ([210.160.252.172]:49096 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S242799AbiAESR3 (ORCPT
+        id S242833AbiAESUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 13:20:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242799AbiAESUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 13:17:29 -0500
-X-IronPort-AV: E=Sophos;i="5.88,264,1635174000"; 
-   d="scan'208";a="106131959"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 06 Jan 2022 03:17:27 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 4EF1240C026A;
-        Thu,  6 Jan 2022 03:17:26 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5] ata: pata_of_platform: Use platform_get_irq_optional() to get the interrupt
-Date:   Wed,  5 Jan 2022 18:17:21 +0000
-Message-Id: <20220105181721.13087-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 5 Jan 2022 13:20:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B607C061245;
+        Wed,  5 Jan 2022 10:20:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1866B61892;
+        Wed,  5 Jan 2022 18:20:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6F791C36AE9;
+        Wed,  5 Jan 2022 18:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641406809;
+        bh=DW3S2gMIxM8Lbfygp1hYOyCa870Kg7987NhtR2TSfbw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=WvxU/8R/fOiFY1oSCV+U1KgA5LSOdWkVHuZKlNkDpmG0XejywqL0hdK6zEOSQvV5m
+         OUDUrVce4Ncy4UgAzP8JkdAGXq2noEXpdr3YkLd/J8Af50V6ohwoZjSlOw4bk8rgqi
+         Cn1AhhBcZ/3LZ8ZjfR+fK25ijxqsJSIPgfE4o6kQQW5XipsWkYkKpnrWdsOd8yzFMB
+         xq25DvKeAK4+HP1GSki7n1sCVwkfrly9weCwLL3a/eJwk9oaaTl4ooLxRF4DFDUcwC
+         JvZTbkB+3KHA7fRoq8Opkzmmj5D4K8WXLSwwxAwzTf+xZWtHiKWEYV+QMdUhgvjPmk
+         b0SoboBuXLRYg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 559BEF7940B;
+        Wed,  5 Jan 2022 18:20:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] Revert "net: usb: r8152: Add MAC passthrough support for more
+ Lenovo Docks"
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164140680934.15806.13427483893385945695.git-patchwork-notify@kernel.org>
+Date:   Wed, 05 Jan 2022 18:20:09 +0000
+References: <20220105155102.8557-1-aaron.ma@canonical.com>
+In-Reply-To: <20220105155102.8557-1-aaron.ma@canonical.com>
+To:     Aaron Ma <aaron.ma@canonical.com>
+Cc:     kuba@kernel.org, henning.schild@siemens.com,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        hayeswang@realtek.com, tiwai@suse.de
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-allocation of IRQ resources in DT core code, this causes an issue
-when using hierarchical interrupt domains using "interrupts" property
-in the node as this bypasses the hierarchical setup and messes up the
-irq chaining.
+Hello:
 
-In preparation for removal of static setup of IRQ resource from DT core
-code use platform_get_irq_optional().
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Note the code does not set the IRQ flags as this is handled automatically
-for DT.
+On Wed,  5 Jan 2022 23:51:02 +0800 you wrote:
+> This reverts commit f77b83b5bbab53d2be339184838b19ed2c62c0a5.
+> 
+> This change breaks multiple usb to ethernet dongles attached on Lenovo
+> USB hub.
+> 
+> Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
+> 
+> [...]
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-Hi All,
+Here is the summary with links:
+  - Revert "net: usb: r8152: Add MAC passthrough support for more Lenovo Docks"
+    https://git.kernel.org/netdev/net/c/00fcf8c7dd56
 
-This patch is part of series [1]. I'll re-visit merging of pata_of_platform
-into pata_platform at later point. As my primary focus is removal of static
-setup of IRQ resource from DT core code.
-
-[1] https://patchwork.ozlabs.org/project/linux-ide/list/?series=278349
-
-v4->v5
-* Set end member of IRQ resource
-* Clear irq_res un-conditionally.
-
-Cheers,
-Prabhakar
----
- drivers/ata/pata_of_platform.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/ata/pata_of_platform.c b/drivers/ata/pata_of_platform.c
-index 35aa158fc976..c3a40b717dcd 100644
---- a/drivers/ata/pata_of_platform.c
-+++ b/drivers/ata/pata_of_platform.c
-@@ -25,11 +25,12 @@ static int pata_of_platform_probe(struct platform_device *ofdev)
- 	struct device_node *dn = ofdev->dev.of_node;
- 	struct resource io_res;
- 	struct resource ctl_res;
--	struct resource *irq_res;
-+	struct resource irq_res;
- 	unsigned int reg_shift = 0;
- 	int pio_mode = 0;
- 	int pio_mask;
- 	bool use16bit;
-+	int irq;
- 
- 	ret = of_address_to_resource(dn, 0, &io_res);
- 	if (ret) {
-@@ -45,7 +46,15 @@ static int pata_of_platform_probe(struct platform_device *ofdev)
- 		return -EINVAL;
- 	}
- 
--	irq_res = platform_get_resource(ofdev, IORESOURCE_IRQ, 0);
-+	memset(&irq_res, 0, sizeof(irq_res));
-+
-+	irq = platform_get_irq_optional(ofdev, 0);
-+	if (irq < 0 && irq != -ENXIO)
-+		return irq;
-+	if (irq > 0) {
-+		irq_res.start = irq;
-+		irq_res.end = irq;
-+	}
- 
- 	of_property_read_u32(dn, "reg-shift", &reg_shift);
- 
-@@ -63,7 +72,7 @@ static int pata_of_platform_probe(struct platform_device *ofdev)
- 	pio_mask = 1 << pio_mode;
- 	pio_mask |= (1 << pio_mode) - 1;
- 
--	return __pata_platform_probe(&ofdev->dev, &io_res, &ctl_res, irq_res,
-+	return __pata_platform_probe(&ofdev->dev, &io_res, &ctl_res, irq > 0 ? &irq_res : NULL,
- 				     reg_shift, pio_mask, &pata_platform_sht,
- 				     use16bit);
- }
+You are awesome, thank you!
 -- 
-2.17.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

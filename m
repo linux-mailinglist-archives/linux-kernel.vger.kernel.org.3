@@ -2,109 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1AF94856D1
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 17:45:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 760884856D7
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 17:48:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242002AbiAEQpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 11:45:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45310 "EHLO
+        id S242012AbiAEQsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 11:48:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235747AbiAEQpp (ORCPT
+        with ESMTP id S235747AbiAEQsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 11:45:45 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FAFC061245
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 08:45:45 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id a11-20020a17090a854b00b001b11aae38d6so6806742pjw.2
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 08:45:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JzhaTzKc19y3Wpdk/3J2jH8xYo/xM6G6LVHFT+aj3mw=;
-        b=aLR3XPzMRrTZJboycEOPjD3N3ADRjWxJrADrUM1vAgyD9yRB/cjUqNuxpD6D1zOAmh
-         OTlxK6M59BBTMdKbHLb9g6+g7lOOh6VZ4/qDWuPwogwqXeIz//BWdDMmse71XKun02Lu
-         G04xPe73oSZqxQ/sy9Lj5nEW4XoOHJ/pcEv6sVHzjo/DrPyZjd3XxDfC4rApX5sJJNuM
-         7NKta/ZTK/r2ZYTqrHgT17CPS9TWRex9/ZhxhmcmEHTpTUtPhnpmYSK9l7CEiPZWu2xz
-         o+vWlB3XVpmKTtJuS6YG2Z7qNp9iowJUszGZWjwe44ltq3lZukQ4WbMgvfWWg0n7//yf
-         aZsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JzhaTzKc19y3Wpdk/3J2jH8xYo/xM6G6LVHFT+aj3mw=;
-        b=PdVJeLhRS71fDZ1NeRD9CzPbncMzeqAL0E2ufucbr4qXT3l4SDWiJ53YnUay4/kpvC
-         TPneYculTjAOwaWMPmsMHFGGMlIZewCWzGBWBn1Fv8YRDDpN4JK5W06qARE0yZRsnr6B
-         nGw0HoGFBgXRf+xP+TYI/dnWQ1iljoXoKYi4ZE+xJ1jCtSd4wmVSIFKN5LrKV4YV7Ove
-         VztKUDiJbWURbl+uKntP/DX+gIPTJy6QgmwvTjpavVEpH3JMVkUKS3GxLZGs+ieD9ZX5
-         firhC4vsQfoccPVmW53R/92SCmyzppYliTJzc+ODE/s5CiZwuacUNZJ2JhSfeT0ejh0w
-         fPKw==
-X-Gm-Message-State: AOAM531AxYdbc5plI0R4ZPS0uh1oM0APL5zqNRP4OF3XX08GCV3x2+s2
-        N/UcyEJq1XDo3AGevmq53cWIdw==
-X-Google-Smtp-Source: ABdhPJyUMGeECuuJZDVhCnWrGj1J1NoGFjgCRrQnkt+A+rXmyUORqD/IbRnzmnd1id6Y/amClQGp1Q==
-X-Received: by 2002:a17:903:11c9:b0:149:bef4:2d7d with SMTP id q9-20020a17090311c900b00149bef42d7dmr13255819plh.48.1641401144538;
-        Wed, 05 Jan 2022 08:45:44 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id m14sm48537966pfk.3.2022.01.05.08.45.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 08:45:43 -0800 (PST)
-Date:   Wed, 5 Jan 2022 16:45:40 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Lai Jiangshan <laijs@linux.alibaba.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [RFC PATCH 5/6] KVM: X86: Alloc pae_root shadow page
-Message-ID: <YdXLNEwCY8cqV7KS@google.com>
-References: <20211210092508.7185-1-jiangshanlai@gmail.com>
- <20211210092508.7185-6-jiangshanlai@gmail.com>
- <YdTCKoTgI5IgOvln@google.com>
- <CAJhGHyAOyR6yGdyxsKydt_+HboGjxc-psbbSCqsrBo4WgUgQsQ@mail.gmail.com>
+        Wed, 5 Jan 2022 11:48:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A97C061245;
+        Wed,  5 Jan 2022 08:48:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 942CBB81C98;
+        Wed,  5 Jan 2022 16:47:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 413E4C36AE9;
+        Wed,  5 Jan 2022 16:47:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641401277;
+        bh=KkkxiAe5xaMqvNuhNFkYY1SOHR4Fhz8f0sfjDPYzRs4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=M3WflBaElaz1VpNs7i2pUiOSurTgEM1BvxAmfM1NCCi1HCoeU9fs7+BNvNLAeA1dR
+         DPnrCX0ycgPJsKWm58dHmNjJU228QEHVAV//IcXJddy8DQ+2OdaKDCWbybua10Qurm
+         F86BPBbr6QE6Ghbomkv2Q8Zc2tGBA1kR2M79umkpgk0mfvUEmHqs5wW5sOcRMQQdui
+         TAZi+e0BIYPd6VKRQ5GMYrGzUAakntSHXXQqL5wPnz+pPVzvJLHi54WK3i3SboAJs2
+         uVtJXxItEw3253fbJZFovM3XhB3UW3CqrPyo4/mWXpsMSVEsdEscOPX1VBY+FL8VXG
+         jTniyWH00lkTQ==
+Received: by mail-ed1-f53.google.com with SMTP id o6so164520322edc.4;
+        Wed, 05 Jan 2022 08:47:57 -0800 (PST)
+X-Gm-Message-State: AOAM530bmARemRxroVwWRMUWLyFEtln83HVRvuDwohJ3zlu/GXxZyohB
+        xfxZQIJYA5Bq1XTEhFSVhk6ZtjbHxN0UP3KUGw==
+X-Google-Smtp-Source: ABdhPJyxjRkqLpooiXPRquUmsgEwwYE6rqtt44FwsBsxebTlGRcHn/lUNboqY0srr5DyCQaqwvBG9pvPQDtRmS627Ws=
+X-Received: by 2002:a17:907:3d94:: with SMTP id he20mr42083173ejc.14.1641401275538;
+ Wed, 05 Jan 2022 08:47:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJhGHyAOyR6yGdyxsKydt_+HboGjxc-psbbSCqsrBo4WgUgQsQ@mail.gmail.com>
+References: <YbufNsBtiIzbm+9k@robh.at.kernel.org> <20211217144544.7147-1-akingchen@vivo.com>
+In-Reply-To: <20211217144544.7147-1-akingchen@vivo.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 5 Jan 2022 10:47:43 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKnGj0ocLS6sOc2aryh4QwQqbO8Zo4CctgfYYWTnbmxNQ@mail.gmail.com>
+Message-ID: <CAL_JsqKnGj0ocLS6sOc2aryh4QwQqbO8Zo4CctgfYYWTnbmxNQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] dt-bindings: usb: document snps,dis_split_quirk
+ property in dwc3
+To:     Yaqin Pan <akingchen@vivo.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel@vivo.com,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022, Lai Jiangshan wrote:
-> On Wed, Jan 5, 2022 at 5:54 AM Sean Christopherson <seanjc@google.com> wrote:
-> 
-> > >
-> > > default_pae_pdpte is needed because the cpu expect PAE pdptes are
-> > > present when VMenter.
+On Fri, Dec 17, 2021 at 8:46 AM Yaqin Pan <akingchen@vivo.com> wrote:
+>
+> >> >> Add snps,dis_split_quirk property for dwc3 controller
+> >> >>
+> >> >> Signed-off-by: Yaqin Pan <akingchen@vivo.com>
+> >> >> ---
+> >> >>   Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 6 ++++++
+> >> >>   1 file changed, 6 insertions(+)
+> >> >>
+> >> >> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> >> >> index 41416fbd92aa..e9615ca8f447 100644
+> >> >> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> >> >> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> >> >> @@ -226,6 +226,12 @@ properties:
+> >> >>         avoid -EPROTO errors with usbhid on some devices (Hikey 970).
+> >> >>       type: boolean
+> >> >>   +  snps,dis_split_quirk:
 > >
-> > That's incorrect.  Neither Intel nor AMD require PDPTEs to be present.  Not present
-> > is perfectly ok, present with reserved bits is what's not allowed.
-> >
-> > Intel SDM:
-> >   A VM entry that checks the validity of the PDPTEs uses the same checks that are
-> >   used when CR3 is loaded with MOV to CR3 when PAE paging is in use[7].  If MOV to CR3
-> >   would cause a general-protection exception due to the PDPTEs that would be loaded
-> >   (e.g., because a reserved bit is set), the VM entry fails.
-> >
-> >   7. This implies that (1) bits 11:9 in each PDPTE are ignored; and (2) if bit 0
-> >      (present) is clear in one of the PDPTEs, bits 63:1 of that PDPTE are ignored.
-> 
-> But in practice, the VM entry fails if the present bit is not set in the
-> PDPTE for the linear address being accessed (when EPT enabled at least).  The
-> host kvm complains and dumps the vmcs state.
+> >I'm tired of the never ending DWC3 quirks. Imply this from the
+> >compatible unless it varies by board.
+>
+> Yes, this is a DWC3 controller compatible issue.
 
-That doesn't make any sense.  If EPT is enabled, KVM should never use a pae_root.
-The vmcs.GUEST_PDPTRn fields are in play, but those shouldn't derive from KVM's
-shadow page tables.
+Again, imply this from the compatible STRING (or the compatible string
+of the parent node). I don't really want to see more quirk properties
+unless they are board or instance specific (meaning for a given SoC,
+the setting varies).
 
-And I doubt there is a VMX ucode bug at play, as KVM currently uses '0' in its
-shadow page tables for not-present PDPTEs.
+What is the downside to always setting this bit in the controller even
+if not needed? Answer that question in your commit message.
 
-If you can post/provide the patches that lead to VM-Fail, I'd be happy to help
-debug.
+Rob

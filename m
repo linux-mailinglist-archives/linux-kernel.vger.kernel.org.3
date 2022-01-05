@@ -2,96 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1BED485A02
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:27:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60382485A05
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:28:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244035AbiAEU10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 15:27:26 -0500
-Received: from mga18.intel.com ([134.134.136.126]:10654 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244017AbiAEU1O (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 15:27:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641414434; x=1672950434;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=FSFWIc4HSv9YdqR3Ma1IzBH4Anr1q7MqPqL/vrhT98M=;
-  b=MDf3a41GWsP02QDmKOrs8kN9dKULQKH+g69N9V/3gBpwK1OYq3xaomyr
-   LiLRPzoZwL9+JeO7Zrh1YESjcvVpJqVIESFzqfhhU48UTagdvuzib1pjL
-   lKx1LOL1Ml/CEkVZGx2A104a1Hvz1DOakoC4s89Y1h8RYlmWPFPgTBPxa
-   sMr1DlI8qVhCLNX2nXpr3iAlhvuaPrHOSQTsLKGiwxdDokBHYpVCFGdi2
-   KxpwcjDRnFmWjH+eYCW1Loghd/7dn5xa/lBCdvaFzxF99Ven/Xo+pYoTG
-   L7f7yLqHjiVgSlqqJCrzI4ZvwgyTi4BHRAIZOQBR3POaYAh+wRI6dKSZG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="229345941"
-X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
-   d="scan'208";a="229345941"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 12:27:12 -0800
-X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
-   d="scan'208";a="760939957"
-Received: from njvora-mobl.amr.corp.intel.com (HELO [10.212.154.74]) ([10.212.154.74])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 12:27:10 -0800
-Message-ID: <acba0832-9b11-c93d-7903-fff33f740605@intel.com>
-Date:   Wed, 5 Jan 2022 12:27:08 -0800
+        id S244046AbiAEU2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 15:28:07 -0500
+Received: from proxima.lasnet.de ([78.47.171.185]:48778 "EHLO
+        proxima.lasnet.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244044AbiAEU1t (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 15:27:49 -0500
+Received: from [IPV6:2003:e9:d722:f5b8:9ccb:8d7f:17cf:c65d] (p200300e9d722f5b89ccb8d7f17cfc65d.dip0.t-ipconnect.de [IPv6:2003:e9:d722:f5b8:9ccb:8d7f:17cf:c65d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: stefan@datenfreihafen.org)
+        by proxima.lasnet.de (Postfix) with ESMTPSA id D7F44C0879;
+        Wed,  5 Jan 2022 21:27:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=datenfreihafen.org;
+        s=2021; t=1641414464;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dpMLHMR//JIi9iap6ZA0k6rlKpmAkoFNdKjlI8yBUV8=;
+        b=j/3cQkOsdp6F3vHHOFYXCmZERpfQYl6N31/6fSnsALAkzOzBrSO8UE5IKpFMZDW0svfl8z
+        BlC/2l5i0ZSWlLnPpo+JoBlFhLYBi26FXUMnfypMLtG1RFOl7Och+d7CDTpjMFra4K2eIk
+        xVJMMvZ5+/H3yfB6YoEmncA+BFl7IG50lBa7fOWVUijZk4WMvQZVjpwiGMA8XVguzWwv86
+        CfYjfSdMiycbCXUrSZOB7Xi6TInzDhRBQ+uOXEEW/VyTbjxPajjTeXOz50lXcRhQOoC7f3
+        2yHLm1/1hDh3ztuRFl7gEQ80Z+FHNsyQn+NRD+uNxUZawydZmMjppRGOGGhqDw==
+Message-ID: <4186d48a-ea7e-39c1-d1fa-1db3f6627a3a@datenfreihafen.org>
+Date:   Wed, 5 Jan 2022 21:27:43 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v8 13/40] x86/kernel: Make the bss.decrypted section
- shared in RMP table
+ Thunderbird/91.1.0
+Subject: Re: [PATCH -next] ieee802154: atusb: move to new USB API
 Content-Language: en-US
-To:     Brijesh Singh <brijesh.singh@amd.com>,
-        Venu Busireddy <venu.busireddy@oracle.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-References: <20211210154332.11526-1-brijesh.singh@amd.com>
- <20211210154332.11526-14-brijesh.singh@amd.com> <YdSKQKSTS83cRzGZ@dt>
- <18eadf9d-8e31-0945-ccf4-2cb72b8e0dd4@amd.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <18eadf9d-8e31-0945-ccf4-2cb72b8e0dd4@amd.com>
+To:     Pavel Skripkin <paskripkin@gmail.com>, alex.aring@gmail.com,
+        davem@davemloft.net, kuba@kernel.org, linux-wpan@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220105144947.12540-1-paskripkin@gmail.com>
+From:   Stefan Schmidt <stefan@datenfreihafen.org>
+In-Reply-To: <20220105144947.12540-1-paskripkin@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/5/22 11:52, Brijesh Singh wrote:
->>>           for (; vaddr < vaddr_end; vaddr += PMD_SIZE) {
->>> +            /*
->>> +             * When SEV-SNP is active then transition the page to shared in the RMP
->>> +             * table so that it is consistent with the page table attribute change.
->>> +             */
->>> +            early_snp_set_memory_shared(__pa(vaddr), __pa(vaddr), PTRS_PER_PMD);
->>
->> Shouldn't the first argument be vaddr as below?
-> 
-> Nope, sme_postprocess_startup() is called while we are fixing the 
-> initial page table and running with identity mapping (so va == pa).
 
-I'm not sure I've ever seen a line of code that wanted a comment so badly.
+Hello.
+
+On 05.01.22 15:49, Pavel Skripkin wrote:
+> Old USB API is prone to uninit value bugs if error handling is not
+> correct. Let's move atusb to use new USB API to
+> 
+> 	1) Make code more simple, since new API does not require memory
+> 	   to be allocates via kmalloc()
+> 
+> 	2) Defend driver from usb-related uninit value bugs.
+> 
+> 	3) Make code more modern and simple
+> 
+> This patch removes atusb usb wrappers as Greg suggested [0], this will make
+> code more obvious and easier to understand over time, and replaces old
+> API calls with new ones.
+> 
+> Also this patch adds and updates usb related error handling to prevent
+> possible uninit value bugs in future
+> 
+> Link: https://lore.kernel.org/all/YdL0GPxy4TdGDzOO@kroah.com/ [0]
+> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+> ---
+> 
+> Only build tested.
+
+Gave it a first quick run on real hardware here. Besides one small bug 
+(see below) it looked good.
+
+Will give it a bit more testing over the next days.
+
+
+
+> @@ -881,14 +819,27 @@ static int atusb_get_and_conf_chip(struct atusb *atusb)
+>   	u8 man_id_0, man_id_1, part_num, version_num;
+>   	const char *chip;
+>   	struct ieee802154_hw *hw = atusb->hw;
+> +	int ret;
+>   
+> -	man_id_0 = atusb_read_reg(atusb, RG_MAN_ID_0);
+> -	man_id_1 = atusb_read_reg(atusb, RG_MAN_ID_1);
+> -	part_num = atusb_read_reg(atusb, RG_PART_NUM);
+> -	version_num = atusb_read_reg(atusb, RG_VERSION_NUM);
+> +	ret = usb_control_msg_recv(usb_dev, 0, ATUSB_REG_READ, ATUSB_REQ_FROM_DEV,
+> +				   0, RG_MAN_ID_0, &man_id_0, 1, 1000, GFP_KERNEL);
+> +	if (ret < 0)
+> +		return ret;
+>   
+> -	if (atusb->err)
+> -		return atusb->err;
+> +	ret = usb_control_msg_recv(usb_dev, 0, ATUSB_REG_READ, ATUSB_REQ_FROM_DEV,
+> +				   0, RG_MAN_ID_1, &man_id_1, 1, 1000, GFP_KERNEL);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = usb_control_msg_recv(usb_dev, 0, ATUSB_REG_READ, ATUSB_REQ_FROM_DEV,
+> +				   0, RG_PART_NUM, &atusb, 1, 1000, GFP_KERNEL);
+
+This needs to be written to &part_num and not &atusb.
+
+Pretty nice for a first blind try without hardware. Thanks.
+
+Will let you know if I find anything else from testing.
+
+regards
+Stefan Schmidt

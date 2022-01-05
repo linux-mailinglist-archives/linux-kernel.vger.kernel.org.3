@@ -2,137 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F8E48548E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 15:31:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EBAE48545B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 15:26:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240864AbiAEOav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 09:30:51 -0500
-Received: from mga14.intel.com ([192.55.52.115]:24288 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240845AbiAEOat (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 09:30:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641393049; x=1672929049;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dRH8ilS94DwdebtNTfOJJdLl0Zq/I3oicrJGE7OIBfc=;
-  b=JqnF8ShPrPTSAf9qrpwIr9FnG3OgT4n+qKCnRKMG1I3sIgdgmyPf5YO6
-   JzahAOA+H1K+WdDPD3ynJw2/WsMC0efI5kirKqE1V7vTwOaYMCY22LGQq
-   Ujodv3jN1Tp1NfcEvH3r7p/PcQWEj062++ipG/p+e3YUXpqg6KtcusZQY
-   GI/rrbszeG/vwvuVRhIf9xIspVl9+AZct/l3rCMX9aZpV86UbowydJU13
-   szC6Hd+qiOu8ieptD3YnRYwF4DbxHoFIUPOf5Ke6rJ2471uoueJjGN/t5
-   1ZqboAyRQDM2l/VRtS8dLj1mC3sQdAq6UJQjw5VBkCnnLbzdJlv2wYakZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242660319"
-X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
-   d="scan'208";a="242660319"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 06:19:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
-   d="scan'208";a="556544892"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 05 Jan 2022 06:19:27 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id B51C649B; Wed,  5 Jan 2022 16:19:37 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Ajay Gupta <ajayg@nvidia.com>,
-        "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
-Subject: [PATCH v3 5/5] i2c: designware-pci: Switch to use i2c_new_ccgx_ucsi()
-Date:   Wed,  5 Jan 2022 16:19:35 +0200
-Message-Id: <20220105141935.24109-5-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220105141935.24109-1-andriy.shevchenko@linux.intel.com>
-References: <20220105141935.24109-1-andriy.shevchenko@linux.intel.com>
+        id S240720AbiAEOZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 09:25:28 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:17326 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240664AbiAEOZU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 09:25:20 -0500
+Received: from kwepemi100002.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JTWvH1wHXz9s0D;
+        Wed,  5 Jan 2022 22:24:11 +0800 (CST)
+Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
+ kwepemi100002.china.huawei.com (7.221.188.188) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 5 Jan 2022 22:25:13 +0800
+Received: from localhost.localdomain (10.67.165.24) by
+ kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 5 Jan 2022 22:25:13 +0800
+From:   Guangbin Huang <huangguangbin2@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>, <wangjie125@huawei.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <lipeng321@huawei.com>, <huangguangbin2@huawei.com>,
+        <chenhao288@hisilicon.com>
+Subject: [PATCH net-next 00/15] net: hns3: refactor rss/tqp stats functions
+Date:   Wed, 5 Jan 2022 22:20:00 +0800
+Message-ID: <20220105142015.51097-1-huangguangbin2@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.24]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600016.china.huawei.com (7.193.23.20)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of open coded variant switch to use i2c_new_ccgx_ucsi().
+From: Jie Wang <wangjie125@huawei.com>
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
----
-v3: added tag (Jarkko)
- drivers/i2c/busses/Kconfig                 |  1 +
- drivers/i2c/busses/i2c-designware-pcidrv.c | 30 ++++------------------
- 2 files changed, 6 insertions(+), 25 deletions(-)
+Currently, hns3 PF and VF module have two sets of rss and tqp stats APIs
+to provide get and set functions. Most of these APIs are the same. There is
+no need to keep these two sets of same functions for double development and
+bugfix work.
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 0c9b089d1456..e2e8ae7ed2a7 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -578,6 +578,7 @@ config I2C_DESIGNWARE_PCI
- 	tristate "Synopsys DesignWare PCI"
- 	depends on PCI
- 	select I2C_DESIGNWARE_CORE
-+	select I2C_CCGX_UCSI
- 	help
- 	  If you say yes to this option, support will be included for the
- 	  Synopsys DesignWare I2C adapter. Only master mode is supported.
-diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-index ef4250f8852b..2782dddfb087 100644
---- a/drivers/i2c/busses/i2c-designware-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-@@ -24,6 +24,7 @@
- #include <linux/slab.h>
- 
- #include "i2c-designware-core.h"
-+#include "i2c-ccgx-ucsi.h"
- 
- #define DRIVER_NAME "i2c-designware-pci"
- #define AMD_CLK_RATE_HZ	100000
-@@ -125,26 +126,6 @@ static int mfld_setup(struct pci_dev *pdev, struct dw_pci_controller *c)
- 	return -ENODEV;
- }
- 
-- /*
--  * TODO find a better way how to deduplicate instantiation
--  * of USB PD slave device from nVidia GPU driver.
--  */
--static int navi_amd_register_client(struct dw_i2c_dev *dev)
--{
--	struct i2c_board_info	info;
--
--	memset(&info, 0, sizeof(struct i2c_board_info));
--	strscpy(info.type, "ccgx-ucsi", I2C_NAME_SIZE);
--	info.addr = 0x08;
--	info.irq = dev->irq;
--
--	dev->slave = i2c_new_client_device(&dev->adapter, &info);
--	if (IS_ERR(dev->slave))
--		return PTR_ERR(dev->slave);
--
--	return 0;
--}
--
- static int navi_amd_setup(struct pci_dev *pdev, struct dw_pci_controller *c)
- {
- 	struct dw_i2c_dev *dev = dev_get_drvdata(&pdev->dev);
-@@ -325,11 +306,10 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 	}
- 
- 	if ((dev->flags & MODEL_MASK) == MODEL_AMD_NAVI_GPU) {
--		r = navi_amd_register_client(dev);
--		if (r) {
--			dev_err(dev->dev, "register client failed with %d\n", r);
--			return r;
--		}
-+		dev->slave = i2c_new_ccgx_ucsi(&dev->adapter, dev->irq, NULL);
-+		if (IS_ERR(dev->slave))
-+			return dev_err_probe(dev->dev, PTR_ERR(dev->slave),
-+					     "register UCSI failed\n");
- 	}
- 
- 	pm_runtime_set_autosuspend_delay(&pdev->dev, 1000);
+This series refactor the rss and tqp stats APIs in hns3 PF and VF by
+implementing one set of common APIs for PF and VF reuse and deleting the
+old APIs.
+
+Jie Wang (15):
+  net: hns3: create new rss common structure hclge_comm_rss_cfg
+  net: hns3: refactor hclge_comm_send function in PF/VF drivers
+  net: hns3: create new set of common rss get APIs for PF and VF rss
+    module
+  net: hns3: refactor PF rss get APIs with new common rss get APIs
+  net: hns3: refactor VF rss get APIs with new common rss get APIs
+  net: hns3: create new set of common rss set APIs for PF and VF module
+  net: hns3: refactor PF rss set APIs with new common rss set APIs
+  net: hns3: refactor VF rss set APIs with new common rss set APIs
+  net: hns3: create new set of common rss init APIs for PF and VF reuse
+  net: hns3: refactor PF rss init APIs with new common rss init APIs
+  net: hns3: refactor VF rss init APIs with new common rss init APIs
+  net: hns3: create new set of common tqp stats APIs for PF and VF reuse
+  net: hns3: refactor PF tqp stats APIs with new common tqp stats APIs
+  net: hns3: refactor VF tqp stats APIs with new common tqp stats APIs
+  net: hns3: create new common cmd code for PF and VF modules
+
+ drivers/net/ethernet/hisilicon/hns3/Makefile  |   5 +-
+ .../hns3/hns3_common/hclge_comm_cmd.c         |  80 +--
+ .../hns3/hns3_common/hclge_comm_cmd.h         | 277 +++++++-
+ .../hns3/hns3_common/hclge_comm_rss.c         | 525 ++++++++++++++
+ .../hns3/hns3_common/hclge_comm_rss.h         | 136 ++++
+ .../hns3/hns3_common/hclge_comm_tqp_stats.c   | 115 ++++
+ .../hns3/hns3_common/hclge_comm_tqp_stats.h   |  39 ++
+ .../hisilicon/hns3/hns3pf/hclge_cmd.h         | 278 +-------
+ .../hisilicon/hns3/hns3pf/hclge_dcb.c         |   2 +-
+ .../hisilicon/hns3/hns3pf/hclge_main.c        | 632 ++---------------
+ .../hisilicon/hns3/hns3pf/hclge_main.h        |  65 +-
+ .../hisilicon/hns3/hns3pf/hclge_mbx.c         |   7 +-
+ .../ethernet/hisilicon/hns3/hns3pf/hclge_tm.c |   2 +-
+ .../hisilicon/hns3/hns3vf/hclgevf_cmd.h       |  71 +-
+ .../hisilicon/hns3/hns3vf/hclgevf_main.c      | 646 ++----------------
+ .../hisilicon/hns3/hns3vf/hclgevf_main.h      |  60 +-
+ 16 files changed, 1243 insertions(+), 1697 deletions(-)
+ create mode 100644 drivers/net/ethernet/hisilicon/hns3/hns3_common/hclge_comm_rss.c
+ create mode 100644 drivers/net/ethernet/hisilicon/hns3/hns3_common/hclge_comm_rss.h
+ create mode 100644 drivers/net/ethernet/hisilicon/hns3/hns3_common/hclge_comm_tqp_stats.c
+ create mode 100644 drivers/net/ethernet/hisilicon/hns3/hns3_common/hclge_comm_tqp_stats.h
+
 -- 
-2.34.1
+2.33.0
 

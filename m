@@ -2,94 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D23054858CD
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 20:03:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B344858CC
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 20:02:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243287AbiAETDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 14:03:00 -0500
-Received: from mga14.intel.com ([192.55.52.115]:51377 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243281AbiAETCw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 14:02:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641409371; x=1672945371;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6RL6i+995RCk1Eg4QyoHBl8zRiaN8zqrZrNQdGFDY3k=;
-  b=APiPNatKkY+YImApBnWR0VUNdw/oTFMEjiM1bgONByM50FQ7wwUKEJXr
-   FkgWAaPs8TPm6MjfE96N359VXuth019unPUB50DcrVkx/K5jgU8QZS//a
-   5ZO9eJaatQzn+Q3vd56GoO/tr51WGig7f4dZ7/qRJMwU0TpLuCdv0YZr9
-   jA0nLnb9KePO0WtWyy+eEKDwJ+0jNnkeQl7SunDw9TsAVJVthVVdeDglp
-   ypEwoJyVSv5PR/LucSJ1HA9P4ni0m4u/o86fmkrsikut7Kzd4uEV+1lvf
-   RSwTvQ4pl696v11ARZTa0y+vMDToD1oBsTBFgDKFeBP2sgWym98F42iJP
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242722705"
-X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
-   d="scan'208";a="242722705"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 11:02:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
-   d="scan'208";a="513099383"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 05 Jan 2022 11:02:50 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n5BYf-000GyH-Qw; Wed, 05 Jan 2022 19:02:49 +0000
-Date:   Thu, 6 Jan 2022 03:02:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nick Terrell <terrelln@fb.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: decompress.c:(.text.FSE_buildDTable_internal+0x2cc): undefined
- reference to `__clzdi2'
-Message-ID: <202201060233.mO6P39bM-lkp@intel.com>
+        id S243272AbiAETCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 14:02:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48428 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243251AbiAETCq (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 14:02:46 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D842EC061201
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 11:02:45 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id i6so361884pla.0
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 11:02:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=C5TGxSihMQO3IXFdvvnm4Z/BjCSMQVybEIBkkH4uWd0=;
+        b=HBJacN4jBaXROANJNZOIsFCQr+cw2jAtH4pkRI5I0lWUCoa92DjpcPfElpngDicJzA
+         0YyiOx5jgXBKIJ5sic5Wlmw5GLmGQaw/f6lvVmLi5zTn618CwkkKi6SqMJfbw9DZaCxa
+         nfyKvwXyGMHeXdC0ZGBuJhg6GdPua+6zJu52b+eSYfcZZz2KeeKkyOdb1ak69MwvXNS7
+         OQJd3WVIpvcprUaSnHlu4JHAKjMloofyJeKbNNo0zyTclI0eQ8VmpfzpTq6iytqyBm2D
+         nq++D6Xs4Gg3FrMu2idotXpK7jS54v9lhWU6lSrkp4qK81/QiMV+fhJaBeOdBhMl8lle
+         /4FQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=C5TGxSihMQO3IXFdvvnm4Z/BjCSMQVybEIBkkH4uWd0=;
+        b=I/bIzbu+4PygFto6X25FdfXXL+7kbpe7H7TygEcf1mUcKkwpRgle8RADmkA5sVSlSb
+         NqOeitfSD5ThqUXngfJW6uiA22wovz1adLCZabJC2ztWEn5gkmTemL8fOd73GkUHsdD7
+         NHYq67jHPlk4YE5qasmXJXwOs3leS++2DU0y5ieFKmNjbDF4qIqrss0+BnNcUPYl/i+M
+         dZeosPHPfBHOJj5WPQL88BXHo3mP9ODuRtgx43FvKfHcr/tFrxqIRxNLScS//8maUOGO
+         A8pxQXvfEf1mnTU1CfbT2ucK5JVtWXgDehZqahk9TG7/Nn2aJs10tO+rtyRxBMVAFdS5
+         CKbA==
+X-Gm-Message-State: AOAM531gOP1AC3C6QWu7CvMqr/8H8JBdEwqkDR1MG7v5c4p61WGlzSi+
+        41SND9Ij+0WZNz+o30FAJSif8Q==
+X-Google-Smtp-Source: ABdhPJxUdnM3b6DqognTobDbG9Dmm0Ti/SDctNLZ/xAkOE4liZ0NPc+FLQpmerY5LVHMbecEx6BgSQ==
+X-Received: by 2002:a17:902:8e84:b0:149:a2cb:4dac with SMTP id bg4-20020a1709028e8400b00149a2cb4dacmr30257117plb.22.1641409365057;
+        Wed, 05 Jan 2022 11:02:45 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id y129sm10931675pfy.164.2022.01.05.11.02.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 11:02:44 -0800 (PST)
+Date:   Wed, 5 Jan 2022 19:02:41 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Stevens <stevensd@chromium.org>
+Cc:     Marc Zyngier <maz@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v5 4/4] KVM: mmu: remove over-aggressive warnings
+Message-ID: <YdXrURHO/R82puD4@google.com>
+References: <20211129034317.2964790-1-stevensd@google.com>
+ <20211129034317.2964790-5-stevensd@google.com>
+ <Yc4G23rrSxS59br5@google.com>
+ <CAD=HUj5Q6rW8UyxAXUa3o93T0LBqGQb7ScPj07kvuM3txHMMrQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAD=HUj5Q6rW8UyxAXUa3o93T0LBqGQb7ScPj07kvuM3txHMMrQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c9e6606c7fe92b50a02ce51dda82586ebdf99b48
-commit: e0c1b49f5b674cca7b10549c53b3791d0bbc90a8 lib: zstd: Upgrade to latest upstream zstd version 1.4.10
-date:   8 weeks ago
-config: mips-randconfig-r025-20220105 (https://download.01.org/0day-ci/archive/20220106/202201060233.mO6P39bM-lkp@intel.com/config)
-compiler: mips64el-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e0c1b49f5b674cca7b10549c53b3791d0bbc90a8
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e0c1b49f5b674cca7b10549c53b3791d0bbc90a8
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+On Wed, Jan 05, 2022, David Stevens wrote:
+> On Fri, Dec 31, 2021 at 4:22 AM Sean Christopherson <seanjc@google.com> wrote:
+> > >        */
+> > > -     if (!pfn_valid(pfn) || WARN_ON_ONCE(!page_count(pfn_to_page(pfn))))
+> > > +     if (!pfn_valid(pfn) || !page_count(pfn_to_page(pfn)))
+> >
+> > Hrm, I know the whole point of this series is to support pages without an elevated
+> > refcount, but this WARN was extremely helpful in catching several use-after-free
+> > bugs in the TDP MMU.  We talked about burying a slow check behind MMU_WARN_ON, but
+> > that isn't very helpful because no one runs with MMU_WARN_ON, and this is also a
+> > type of check that's most useful if it runs in production.
+> >
+> > IIUC, this series explicitly disallows using pfns that have a struct page without
+> > refcounting, and the issue with the WARN here is that kvm_is_zone_device_pfn() is
+> > called by kvm_is_reserved_pfn() before ensure_pfn_ref() rejects problematic pages,
+> > i.e. triggers false positive.
+> >
+> > So, can't we preserve the use-after-free benefits of the check by moving it to
+> > where KVM releases the PFN?  I.e.
+> >
+> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > index fbca2e232e94..675b835525fa 100644
+> > --- a/virt/kvm/kvm_main.c
+> > +++ b/virt/kvm/kvm_main.c
+> > @@ -2904,15 +2904,19 @@ EXPORT_SYMBOL_GPL(kvm_release_pfn_dirty);
+> >
+> >  void kvm_set_pfn_dirty(kvm_pfn_t pfn)
+> >  {
+> > -       if (!kvm_is_reserved_pfn(pfn) && !kvm_is_zone_device_pfn(pfn))
+> > +       if (!kvm_is_reserved_pfn(pfn) && !kvm_is_zone_device_pfn(pfn)) {
+> > +               WARN_ON_ONCE(!page_count(pfn_to_page(pfn)));
+> >                 SetPageDirty(pfn_to_page(pfn));
+> > +       }
+> >  }
+> >  EXPORT_SYMBOL_GPL(kvm_set_pfn_dirty);
+> 
+> I'm still seeing this warning show up via __handle_changed_spte
+> calling kvm_set_pfn_dirty:
+> 
+> [  113.350473]  kvm_set_pfn_dirty+0x26/0x3e
+> [  113.354861]  __handle_changed_spte+0x452/0x4f6
+> [  113.359841]  __handle_changed_spte+0x452/0x4f6
+> [  113.364819]  __handle_changed_spte+0x452/0x4f6
+> [  113.369790]  zap_gfn_range+0x1de/0x27a
+> [  113.373992]  kvm_tdp_mmu_zap_invalidated_roots+0x64/0xb8
+> [  113.379945]  kvm_mmu_zap_all_fast+0x18c/0x1c1
+> [  113.384827]  kvm_page_track_flush_slot+0x55/0x87
+> [  113.390000]  kvm_set_memslot+0x137/0x455
+> [  113.394394]  kvm_delete_memslot+0x5c/0x91
+> [  113.398888]  __kvm_set_memory_region+0x3c0/0x5e6
+> [  113.404061]  kvm_set_memory_region+0x45/0x74
+> [  113.408844]  kvm_vm_ioctl+0x563/0x60c
+> 
+> I wasn't seeing it for my particular test case, but the gfn aging code
+> might trigger the warning as well.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Ah, I got royally confused by ensure_pfn_ref()'s comment
 
-All errors (new ones prefixed by >>):
+  * Certain IO or PFNMAP mappings can be backed with valid
+  * struct pages, but be allocated without refcounting e.g.,
+  * tail pages of non-compound higher order allocations, which
+  * would then underflow the refcount when the caller does the
+  * required put_page. Don't allow those pages here.
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+that doesn't apply here because kvm_faultin_pfn() uses the low level
+__gfn_to_pfn_page_memslot().
 
-   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `FSE_buildDTable_internal':
->> decompress.c:(.text.FSE_buildDTable_internal+0x2cc): undefined reference to `__clzdi2'
-   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `BIT_initDStream':
-   decompress.c:(.text.BIT_initDStream+0x7c): undefined reference to `__clzdi2'
-   mips64el-linux-ld: decompress.c:(.text.BIT_initDStream+0x158): undefined reference to `__clzdi2'
-   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `ZSTD_buildFSETable_body_default.constprop.0':
->> decompress.c:(.text.ZSTD_buildFSETable_body_default.constprop.0+0x2a8): undefined reference to `__clzdi2'
-   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `FSE_readNCount_body_default':
->> decompress.c:(.text.FSE_readNCount_body_default+0x130): undefined reference to `__ctzdi2'
->> mips64el-linux-ld: decompress.c:(.text.FSE_readNCount_body_default+0x1a4): undefined reference to `__ctzdi2'
->> mips64el-linux-ld: decompress.c:(.text.FSE_readNCount_body_default+0x2e4): undefined reference to `__clzdi2'
-   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `HUF_readStats_body_default':
->> decompress.c:(.text.HUF_readStats_body_default+0x184): undefined reference to `__clzdi2'
->> mips64el-linux-ld: decompress.c:(.text.HUF_readStats_body_default+0x1b4): undefined reference to `__clzdi2'
-   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `ZSTD_DCtx_getParameter':
->> decompress.c:(.text.ZSTD_DCtx_getParameter+0x60): undefined reference to `__clzdi2'
+and my understanding is that @page will be non-NULL in ensure_pfn_ref() iff the
+page has an elevated refcount.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Can you update the changelogs for the x86+arm64 "use gfn_to_pfn_page" patches to
+explicitly call out the various ramifications of moving to gfn_to_pfn_page()?
+
+Side topic, s/covert/convert in both changelogs :-)
+
+> I don't know if setting the dirty/accessed bits in non-refcounted
+> struct pages is problematic.
+
+Without knowing exactly what lies behind such pages, KVM needs to set dirty bits,
+otherwise there's a potential for data lost.
+
+> The only way I can see to avoid it would be to try to map from the spte to
+> the vma and then check its flags. If setting the flags is benign, then we'd
+> need to do that lookup to differentiate the safe case from the use-after-free
+> case. Do you have any advice on how to handle this?
+
+Hrm.  I can't think of a clever generic solution.  But for x86-64, we can use a
+software available bit to mark SPTEs as being refcounted use that flag to assert
+the refcount is elevated when marking the backing pfn dirty/accessed.  It'd be
+64-bit only because we're out of software available bits for PAE paging, but (a)
+practically no one cares about 32-bit and (b) odds are slim that a use-after-free
+would be unique to 32-bit KVM.
+
+But that can all go in after your series is merged, e.g. I'd prefer to cleanup
+make_spte()'s prototype to use @fault adding yet another parameter, and that'll
+take a few patches to make happen since FNAME(sync_page) also uses make_spte().
+
+TL;DR: continue as you were, I'll stop whining about this :-)

@@ -2,112 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01CC348503E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 10:42:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F03D3485043
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 10:42:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238990AbiAEJl4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Jan 2022 04:41:56 -0500
-Received: from aposti.net ([89.234.176.197]:39238 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234299AbiAEJlz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 04:41:55 -0500
-Date:   Wed, 05 Jan 2022 09:41:44 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Introduce common properties
-To:     Rob Herring <robh@kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <KLD85R.XE2Q0KBUK4KF1@crapouillou.net>
-In-Reply-To: <YcN+NwFu2m6WZCdE@robh.at.kernel.org>
-References: <20211221175029.144906-1-paul@crapouillou.net>
-        <20211221175029.144906-2-paul@crapouillou.net>
-        <YcN+NwFu2m6WZCdE@robh.at.kernel.org>
+        id S239018AbiAEJmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 04:42:22 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:42060 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234299AbiAEJmS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 04:42:18 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 8A5F61F37B;
+        Wed,  5 Jan 2022 09:42:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1641375736; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=0wbZCxsdWmx4dTqRXixE1C/lWD1GIULVfJO3PjGzP+E=;
+        b=L/Dz3DtZn/wQ4nPfITefAt8Fmqj26qBim+8jxrq2kwYp8Y5H9M/15K9c0EvPXvRE3Uh5dz
+        htfSEEgtECGgDk5YNPznapMx4/oxDlAWNHcsdH6TV1LD2NwEOhZn0IKPjeQREvvjUtUG/T
+        L5yG/NiGaOotEjnXp2Gpxe8+LI7WLsI=
+Received: from alley.suse.cz (unknown [10.100.224.162])
+        by relay2.suse.de (Postfix) with ESMTP id 14789A3B83;
+        Wed,  5 Jan 2022 09:42:16 +0000 (UTC)
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>
+Subject: [PATCH 0/2] MAINTAINERS: Update information about printk git tree
+Date:   Wed,  5 Jan 2022 10:41:55 +0100
+Message-Id: <20220105094157.26216-1-pmladek@suse.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+I have noticed one outdated and one missing link to the printk git tree.
+I am not sure if it is worth sending for review and having two patches.
+I just want to avoid possible complains ;-)
 
-Le mer., déc. 22 2021 at 15:36:23 -0400, Rob Herring <robh@kernel.org> 
-a écrit :
-> On Tue, Dec 21, 2021 at 05:50:28PM +0000, Paul Cercueil wrote:
->>  Introduce a file for common properties of hwmon sensors.
->> 
->>  As of now it contains only the "label" property, which can contain a
->>  descriptive label that allows to uniquely identify a device within 
->> the
->>  system.
-> 
-> I don't think we need this. What we need is a global (in dtschema)
-> type definition and then any users just add 'label: true'.
+Petr Mladek (2):
+  MAINTAINERS/vsprintf: Update link to printk git tree
+  MAINTAIERS/printk: Add link to printk git
 
-I created a PR there: 
-https://github.com/devicetree-org/dt-schema/pull/65
+ MAINTAINERS | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Cheers,
--Paul
-
-> 
->> 
->>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>  ---
->>   .../devicetree/bindings/hwmon/common.yaml     | 31 
->> +++++++++++++++++++
->>   1 file changed, 31 insertions(+)
->>   create mode 100644 
->> Documentation/devicetree/bindings/hwmon/common.yaml
->> 
->>  diff --git a/Documentation/devicetree/bindings/hwmon/common.yaml 
->> b/Documentation/devicetree/bindings/hwmon/common.yaml
->>  new file mode 100644
->>  index 000000000000..997f74127d8c
->>  --- /dev/null
->>  +++ b/Documentation/devicetree/bindings/hwmon/common.yaml
->>  @@ -0,0 +1,31 @@
->>  +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>  +%YAML 1.2
->>  +---
->>  +$id: http://devicetree.org/schemas/hwmon/common.yaml#
->>  +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>  +
->>  +title: Common properties for hwmon sensors
->>  +
->>  +maintainers:
->>  +  - Jean Delvare <jdelvare@suse.com>
->>  +  - Guenter Roeck <linux@roeck-us.net>
->>  +
->>  +description: |
->>  +  This document defines device tree properties common to several 
->> hwmon
->>  +  sensors. It doesn't constitue a device tree binding 
->> specification by itself but
->>  +  is meant to be referenced by device tree bindings.
->>  +
->>  +  When referenced from sensor tree bindings the properties defined 
->> in this
->>  +  document are defined as follows. The sensor tree bindings are 
->> responsible for
->>  +  defining whether each property is required or optional.
->>  +
->>  +properties:
->>  +  label:
->>  +    $ref: /schemas/types.yaml#/definitions/string
->>  +    description: >
->>  +      Descriptive label that allows to uniquely identify a device 
->> within
->>  +      the system.
->>  +
->>  +additionalProperties: true
->>  +
->>  +...
->>  --
->>  2.34.1
->> 
->> 
-
+-- 
+2.26.2
 

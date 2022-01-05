@@ -2,107 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA554859B8
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:01:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 952174859BF
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243794AbiAEUBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 15:01:18 -0500
-Received: from relay11.mail.gandi.net ([217.70.178.231]:60761 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243779AbiAEUBO (ORCPT
+        id S243837AbiAEUF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 15:05:27 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:57384 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243804AbiAEUFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 15:01:14 -0500
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 5811D100004;
-        Wed,  5 Jan 2022 20:01:11 +0000 (UTC)
-Date:   Wed, 5 Jan 2022 21:01:10 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: isl1208: avoid unnecessary rc variable tests
-Message-ID: <YdX5BocOfHE/0twa@piout.net>
-References: <20220105193440.151359-1-hugo@hugovil.com>
+        Wed, 5 Jan 2022 15:05:25 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00ECE618EE;
+        Wed,  5 Jan 2022 20:05:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB47EC36AE9;
+        Wed,  5 Jan 2022 20:05:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641413124;
+        bh=i9ijiSAZhMIkeK5p6Sg4YwWy4SiKzLVwwbjM2KYc+4E=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=XOFlqv6Mxy9ImL6hQxPISDSoP+fCItTHb8u8BzpErtq7di3nm3Z5vS1KTygbRlxaJ
+         8mGFzLLp+/PWyLnspPlJep1/9mEXYxyTV3WbE4PsWDiFiYXUAVs6f4GGNjVLcqoAZI
+         sRMw6dfuh4rcmxnHKMl5L3/aYhVNkXGzlw9IDa0jMtmWj/vIrzOGDuBScxVzP5Iayo
+         wVUuhTFLwBQoOh+bBYb39GkHM+SrA3rXg6H6Kq1sw6S38Ysu1ucpQzIn8UJfY61wsE
+         EBhljGywFKaBS4q1YTZRmKFK+8JOMXasEE0xu0PspD6guWRP0OF54NsMN1Z5B3PQb4
+         R5STTLGlc+6WA==
+Message-ID: <883e4ac1a10dc192824dff3eb6489d027417d1d4.camel@kernel.org>
+Subject: Re: [PATCH v2 1/2] tpm: Fix error handling in async work
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Tadeusz Struk <tstruk@gmail.com>, jarkko@kernel.org
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 05 Jan 2022 22:05:18 +0200
+In-Reply-To: <20211229050655.2030-1-tstruk@gmail.com>
+References: <20211229050655.2030-1-tstruk@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.42.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220105193440.151359-1-hugo@hugovil.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/01/2022 14:34:39-0500, Hugo Villeneuve wrote:
-> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> 
-> The rc variable doesn't need to be tested a second time when the <if> block
-> evaluates to false.
-> 
+On Tue, 2021-12-28 at 21:06 -0800, Tadeusz Struk wrote:
+> When an invalid (non existing) handle is used in a tpm command,
+                                                     ~~~
+                                                     TPM
 
-rc is not tested a second time, here is the relevant listing:
+> that uses the resource manager interface (/dev/tpmrm0) the resource
+> manager tries to load it from its internal cache, but fails and
+> returns an -EINVAL error to the caller. The async handler doesn't
+> handle these error cases currently and the condition in the poll
+> handler never returns mask with EPOLLIN set.
+> The result is that the poll call blocks and the application gets
+> stuck
+> until the user_read_timer wakes it up after 120 sec.
+> Make sure that error conditions also contribute to the poll mask
+> so that a correct error code could passed back to the caller.
 
--	if (client->irq > 0)
-+	if (client->irq > 0) {
- ffffffff81aef647:	41 8b b5 bc 01 00 00 	mov    0x1bc(%r13),%esi
- ffffffff81aef64e:	85 f6                	test   %esi,%esi
- ffffffff81aef650:	0f 8f 35 01 00 00    	jg     ffffffff81aef78b <isl1208_probe+0x314>
- 		rc = isl1208_setup_irq(client, client->irq);
- 	if (rc)
- 		return rc;
-+	}
- 
--	if (evdet_irq > 0 && evdet_irq != client->irq)
-+	if (evdet_irq > 0 && evdet_irq != client->irq) {
- ffffffff81aef656:	85 db                	test   %ebx,%ebx
- ffffffff81aef658:	7e 0d                	jle    ffffffff81aef667 <isl1208_probe+0x1f0>
- ffffffff81aef65a:	41 39 9d bc 01 00 00 	cmp    %ebx,0x1bc(%r13)
-@@ -1663,6 +1664,7 @@ ffffffff81aef661:	0f 85 0a 01 00 00
- 		rc = isl1208_setup_irq(client, evdet_irq);
- 	if (rc)
- 		return rc;
-+	}
+I'm not sure what "making sure" means.
 
-As you can see, no change in assembly but it is worse to read. gcc on
-arm behaves the same way.
-
-> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+>=20
+> Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: <linux-integrity@vger.kernel.org>
+> Cc: <stable@vger.kernel.org>
+> Cc: <linux-kernel@vger.kernel.org>
+> Fixes: 9e1b74a63f77 ("tpm: add support for nonblocking operation")
+> Signed-off-by: Tadeusz Struk <tstruk@gmail.com>
 > ---
->  drivers/rtc/rtc-isl1208.c | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-isl1208.c b/drivers/rtc/rtc-isl1208.c
-> index 182dfa605515..c7f04df5a0b6 100644
-> --- a/drivers/rtc/rtc-isl1208.c
-> +++ b/drivers/rtc/rtc-isl1208.c
-> @@ -880,15 +880,17 @@ isl1208_probe(struct i2c_client *client, const struct i2c_device_id *id)
->  	if (rc)
->  		return rc;
->  
-> -	if (client->irq > 0)
-> +	if (client->irq > 0) {
->  		rc = isl1208_setup_irq(client, client->irq);
-> -	if (rc)
-> -		return rc;
-> +		if (rc)
-> +			return rc;
-> +	}
->  
-> -	if (evdet_irq > 0 && evdet_irq != client->irq)
-> +	if (evdet_irq > 0 && evdet_irq != client->irq) {
->  		rc = isl1208_setup_irq(client, evdet_irq);
-> -	if (rc)
-> -		return rc;
-> +		if (rc)
-> +			return rc;
-> +	}
->  
->  	rc = devm_rtc_nvmem_register(isl1208->rtc, &isl1208->nvmem_config);
->  	if (rc)
-> -- 
-> 2.30.2
-> 
+> Changes in v2:
+> - Updated commit message with better problem description.
+> - Fixed typeos.
+> ---
+> =C2=A0drivers/char/tpm/tpm-dev-common.c | 2 +-
+> =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/char/tpm/tpm-dev-common.c
+> b/drivers/char/tpm/tpm-dev-common.c
+> index c08cbb306636..fe2679f84cb6 100644
+> --- a/drivers/char/tpm/tpm-dev-common.c
+> +++ b/drivers/char/tpm/tpm-dev-common.c
+> @@ -69,7 +69,7 @@ static void tpm_dev_async_work(struct work_struct
+> *work)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D tpm_dev_transmit(=
+priv->chip, priv->space, priv-
+> >data_buffer,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sizeof(priv->data_buffer));
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0tpm_put_ops(priv->chip);
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (ret > 0) {
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (ret !=3D 0) {
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+What if ret < 0?
+
+You should explain this change in the commit message. Also, consider
+adding an inline comment.
+
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0priv->response_length =3D ret;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0mod_timer(&priv->user_read_timer, jiffies + (120 *
+> HZ));
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+
+BR,
+Jarkko

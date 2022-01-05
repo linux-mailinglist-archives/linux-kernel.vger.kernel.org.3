@@ -2,100 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 023D94859FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:26:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1BED485A02
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:27:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244015AbiAEU0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 15:26:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39420 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232650AbiAEU0b (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 15:26:31 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB907C061245
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 12:26:30 -0800 (PST)
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1641414387;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=dAVpE4K9WudDMKF/c5kgCwYBnVKLc4tGyQHTuLgAOqs=;
-        b=h92A85Cpx2DZ4YSM6wX1EkUFaPjESI53bEJVUjHhve2HVB881ZkN/pYh6T6Byu6aDbhT9C
-        ItCIdsc61Izj9kjgTrlkbC4In5Bw8aMtRB8fQs0Z/v0x5TrE3W6VHNf+3FVZdTDeNhjh/p
-        vmuwRxJxl6nKgSfD5kc3gHGaAZOqvfQpKXTRKBdPNGF5Gfgotl/Oe2lmp9huj3/gYkGKrF
-        ikeitTCX+7Eu27c/Rw7jNZYQgtaw7Qzpj1AcB4q2ni+a8wA2e6L6JzyDcQcDxhcbhDP19v
-        5owLcnXQCS+65y5LttYDJp3KfOhhah9hUckw04ri8yyJgfPCfgvSiecc3m11mw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1641414387;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=dAVpE4K9WudDMKF/c5kgCwYBnVKLc4tGyQHTuLgAOqs=;
-        b=P+1fxoNDhHx5DDQ9HXoPDc7G8NmB+gp2A4ce4xyQfp0aq+Ph7cqDfYSBMINGFVUK5ScuVr
-        vACDLleKSAOhbGDA==
-To:     linux-kernel@vger.kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH] locking/local_lock: Make the empty local_lock_*() function a macro.
-Date:   Wed,  5 Jan 2022 21:26:23 +0100
-Message-Id: <20220105202623.1118172-1-bigeasy@linutronix.de>
+        id S244035AbiAEU10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 15:27:26 -0500
+Received: from mga18.intel.com ([134.134.136.126]:10654 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244017AbiAEU1O (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 15:27:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641414434; x=1672950434;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=FSFWIc4HSv9YdqR3Ma1IzBH4Anr1q7MqPqL/vrhT98M=;
+  b=MDf3a41GWsP02QDmKOrs8kN9dKULQKH+g69N9V/3gBpwK1OYq3xaomyr
+   LiLRPzoZwL9+JeO7Zrh1YESjcvVpJqVIESFzqfhhU48UTagdvuzib1pjL
+   lKx1LOL1Ml/CEkVZGx2A104a1Hvz1DOakoC4s89Y1h8RYlmWPFPgTBPxa
+   sMr1DlI8qVhCLNX2nXpr3iAlhvuaPrHOSQTsLKGiwxdDokBHYpVCFGdi2
+   KxpwcjDRnFmWjH+eYCW1Loghd/7dn5xa/lBCdvaFzxF99Ven/Xo+pYoTG
+   L7f7yLqHjiVgSlqqJCrzI4ZvwgyTi4BHRAIZOQBR3POaYAh+wRI6dKSZG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="229345941"
+X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
+   d="scan'208";a="229345941"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 12:27:12 -0800
+X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
+   d="scan'208";a="760939957"
+Received: from njvora-mobl.amr.corp.intel.com (HELO [10.212.154.74]) ([10.212.154.74])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 12:27:10 -0800
+Message-ID: <acba0832-9b11-c93d-7903-fff33f740605@intel.com>
+Date:   Wed, 5 Jan 2022 12:27:08 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v8 13/40] x86/kernel: Make the bss.decrypted section
+ shared in RMP table
+Content-Language: en-US
+To:     Brijesh Singh <brijesh.singh@amd.com>,
+        Venu Busireddy <venu.busireddy@oracle.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+References: <20211210154332.11526-1-brijesh.singh@amd.com>
+ <20211210154332.11526-14-brijesh.singh@amd.com> <YdSKQKSTS83cRzGZ@dt>
+ <18eadf9d-8e31-0945-ccf4-2cb72b8e0dd4@amd.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <18eadf9d-8e31-0945-ccf4-2cb72b8e0dd4@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It has been said that local_lock() does not add any overhead compared to
-preempt_disable() in a !LOCKDEP configuration. A microbenchmark showed
-an unexpected result which can be reduced to the fact that local_lock()
-was not entirely optimized away.
-In the !LOCKDEP configuration local_lock_acquire() is an empty static
-inline function. On x86 the this_cpu_ptr() argument of that function is
-fully evaluated leading to an additional mov+add instructions which are
-not needed and not used.
+On 1/5/22 11:52, Brijesh Singh wrote:
+>>>           for (; vaddr < vaddr_end; vaddr += PMD_SIZE) {
+>>> +            /*
+>>> +             * When SEV-SNP is active then transition the page to shared in the RMP
+>>> +             * table so that it is consistent with the page table attribute change.
+>>> +             */
+>>> +            early_snp_set_memory_shared(__pa(vaddr), __pa(vaddr), PTRS_PER_PMD);
+>>
+>> Shouldn't the first argument be vaddr as below?
+> 
+> Nope, sme_postprocess_startup() is called while we are fixing the 
+> initial page table and running with identity mapping (so va == pa).
 
-Replace the static inline function with a macro. The typecheck() macro
-ensures that the argument is of proper type while the resulting
-disassembly shows no traces of this_cpu_ptr().
-
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
-On -rc8, size says:
-|     text    data     bss      dec     filename
-| 19656718 8681015 3764440 32102173 vmlinux.old
-| 19656218 8681015 3764440 32101673 vmlinux.new
-
-Which is -500 text, not much but still.
-
- include/linux/local_lock_internal.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/include/linux/local_lock_internal.h b/include/linux/local_lock=
-_internal.h
-index 975e33b793a77..6d635e8306d64 100644
---- a/include/linux/local_lock_internal.h
-+++ b/include/linux/local_lock_internal.h
-@@ -44,9 +44,9 @@ static inline void local_lock_debug_init(local_lock_t *l)
- }
- #else /* CONFIG_DEBUG_LOCK_ALLOC */
- # define LOCAL_LOCK_DEBUG_INIT(lockname)
--static inline void local_lock_acquire(local_lock_t *l) { }
--static inline void local_lock_release(local_lock_t *l) { }
--static inline void local_lock_debug_init(local_lock_t *l) { }
-+# define local_lock_acquire(__ll)  do { typecheck(local_lock_t *, __ll); }=
- while (0)
-+# define local_lock_release(__ll)  do { typecheck(local_lock_t *, __ll); }=
- while (0)
-+# define local_lock_debug_init(__ll)  do { typecheck(local_lock_t *, __ll)=
-; } while (0)
- #endif /* !CONFIG_DEBUG_LOCK_ALLOC */
-=20
- #define INIT_LOCAL_LOCK(lockname)	{ LOCAL_LOCK_DEBUG_INIT(lockname) }
---=20
-2.34.1
-
+I'm not sure I've ever seen a line of code that wanted a comment so badly.

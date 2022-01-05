@@ -2,67 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8975C485316
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:57:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C05485318
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235921AbiAEM4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 07:56:31 -0500
-Received: from m12-14.163.com ([220.181.12.14]:2133 "EHLO m12-14.163.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229485AbiAEM43 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 07:56:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Subject:From:Message-ID:Date:MIME-Version; bh=8JL+5
-        tV0OySHqWZPF4qHORWko9npkfbM3ji3E/RcwN8=; b=poHHO9asTjYHqcf7RngaT
-        PEav9gXE49h6m/TZkBsSRcWs3CJ7u0BVm2hkrsQUPvNzNExPwUdudNLJUgj5ka2S
-        wsaDHe2XA87izUCSG9RFoO8aXFbllADtJVEiPzyj7SZy+sQpQqtBv0VUnq0mfZ8Y
-        aGHaMQjnMXnGBRuLHh9xhk=
-Received: from [192.168.31.101] (unknown [183.194.153.98])
-        by smtp10 (Coremail) with SMTP id DsCowADXSM7nlNVhfw4aGQ--.47504S2;
-        Wed, 05 Jan 2022 20:53:59 +0800 (CST)
-Subject: Re: [PATCH] ALSA: hda/realtek: Add quirk for Legion Y9000X 2020
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Takashi Iwai <tiwai@suse.de>, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jeremy Szu <jeremy.szu@canonical.com>,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        Hui Wang <hui.wang@canonical.com>,
-        Cameron Berkenpas <cam@neo-zeon.de>,
-        Kailang Yang <kailang@realtek.com>, Sami Loone <sami@loone.fi>,
-        Elia Devito <eliadevito@gmail.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-References: <20220105034103.12484-1-fbl718@163.com>
- <s5ha6gak2qf.wl-tiwai@suse.de> <YdV5MNWOwgrtH2UC@kroah.com>
- <757a4402-1067-e3c8-8ca3-43ee62047ebe@163.com> <YdWElRjkZ0lybrMJ@kroah.com>
- <6bf35d26-73d4-ba14-f931-8d379c623482@163.com> <YdWQLOtV8Tz8ArrH@kroah.com>
-From:   Baole Fang <fbl718@163.com>
-Message-ID: <7de9fab1-589f-a737-c00e-f98812a23c71@163.com>
-Date:   Wed, 5 Jan 2022 20:53:58 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <YdWQLOtV8Tz8ArrH@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: DsCowADXSM7nlNVhfw4aGQ--.47504S2
-X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUYQ6JUUUUU
-X-Originating-IP: [183.194.153.98]
-X-CM-SenderInfo: 5ieoliqy6rljoofrz/1tbiYwh-6VaEGamGPAAAsl
+        id S236606AbiAEM4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 07:56:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235965AbiAEM4j (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 07:56:39 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3382C061761;
+        Wed,  5 Jan 2022 04:56:39 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id l15so14468216pls.7;
+        Wed, 05 Jan 2022 04:56:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=pPTnnFDZ1+dEAgEFTmiqXGXGW+Zq8maAM3d4dtNv7OA=;
+        b=leB0DAAq2hFztVJ5MxPombH0DHMtJsPeNZcp5d01NlhrPBbKTW3jP6+r2Y28OdSUeF
+         wYbtG1N8aX308FVEcDPsFiSFU3DJIUX9cEOVC0tDVF54rIKPkN95xCfiHgLuMTn1Oupt
+         Zz2WauHS0VjOA5Cbboxq2y/WW5Fla6r1TJSjnnU5N6LNobk57QQeAsb7l3hwWu/yNLrw
+         ryrJWb49cj2r+G+Vmuc9xbWku39dEHl2loZkt0xEb5j1jueJorhoHfEfrlitvBvtSDEa
+         qT8tLw3oc/6H8kYRBjhYRP4Sxo3raluCTXsfE/mFD5/PF1LsdDnqZltuFd99dMNX648D
+         vCtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=pPTnnFDZ1+dEAgEFTmiqXGXGW+Zq8maAM3d4dtNv7OA=;
+        b=uaXyIoAMwq5uBTxwQUdHIWMKAwCN+JQXWMH0A+A4kzC7YSrRlDgG3MKR8HgqTbKTsH
+         p+71pVY5I7rJhAvvcHChBAMVOtwjAbYfmtrLBnlFdBCmO1iCcfS+Ul4VWCMaVV+rmGhi
+         2DpPJdcet/GL7b0G4u2HXvJu4mkwlyQaVIz3ZGevvV9rz/wY+yXQj5DNSa9wbAqONaHd
+         FvHghg9JdEKOibOyMtpR120xVVT67VWH5h+Tg1qwsp8KsjQaULcWIcK4rT7OIaAKua5x
+         fiO22zIJPlGwZ0L1k60jJoJ7dszrd7DuW1st4InBPWgvmqH2MPsd6V+dW1AKzLugCP6s
+         g7SA==
+X-Gm-Message-State: AOAM533HzS4FpOkQ3AN6294kUvgW971A11SRykKw+e5E+MdwstxYkbIz
+        n2yy6NaIeDgASFsboFT5gR8=
+X-Google-Smtp-Source: ABdhPJzb29eoxT4uPyOXr7pcJfdD/DEWfaOS6qbIEeFyE1HmRX//qrtlQRHC37vJBqPyTnGruCZreQ==
+X-Received: by 2002:a17:902:9894:b0:149:8a72:98ae with SMTP id s20-20020a170902989400b001498a7298aemr38401469plp.132.1641387399257;
+        Wed, 05 Jan 2022 04:56:39 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id d17sm42901005pfl.125.2022.01.05.04.56.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 04:56:39 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+Cc:     linmq006@gmail.com, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Adriana Reus <adi.reus@gmail.com>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] iio: gyro: bmg160: Fix error handling in bmg160_core_probe
+Date:   Wed,  5 Jan 2022 12:56:30 +0000
+Message-Id: <20220105125633.21989-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/1/5 下午8:33, Greg Kroah-Hartman wrote:
-> We can not just "ignore" it, you need to fix your change up and resend
-> it in a proper format so that it can be applied.
->
-> As-is, it is not acceptable, sorry.
+The pm_runtime_enable will increase power disable depth.
+If the probe fails, we should use pm_runtime_disable() to balance
+pm_runtime_enable(). In the PM Runtime docs:
+    Drivers in ->remove() callback should undo the runtime PM changes done
+    in ->probe(). Usually this means calling pm_runtime_disable(),
+    pm_runtime_dont_use_autosuspend() etc.
+We should do this in error handling.
 
-Thank you, I'm going to resend the patch.
+Fixes: 7d0ead5 ("iio: Reconcile operation order between iio_register/unregister and pm functions")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/iio/gyro/bmg160_core.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Best Regards,
-
-Baole Fang
+diff --git a/drivers/iio/gyro/bmg160_core.c b/drivers/iio/gyro/bmg160_core.c
+index 17b939a367ad..81a6d09788bd 100644
+--- a/drivers/iio/gyro/bmg160_core.c
++++ b/drivers/iio/gyro/bmg160_core.c
+@@ -1188,11 +1188,14 @@ int bmg160_core_probe(struct device *dev, struct regmap *regmap, int irq,
+ 	ret = iio_device_register(indio_dev);
+ 	if (ret < 0) {
+ 		dev_err(dev, "unable to register iio device\n");
+-		goto err_buffer_cleanup;
++		goto err_pm_cleanup;
+ 	}
+ 
+ 	return 0;
+ 
++err_pm_cleanup:
++	pm_runtime_dont_use_autosuspend(dev);
++	pm_runtime_disable(dev);
+ err_buffer_cleanup:
+ 	iio_triggered_buffer_cleanup(indio_dev);
+ err_trigger_unregister:
+-- 
+2.17.1
 

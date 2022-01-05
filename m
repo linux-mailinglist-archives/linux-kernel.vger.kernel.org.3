@@ -2,175 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF390484F8D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 09:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94C11484F90
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 09:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238636AbiAEIsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 03:48:39 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:29323 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232724AbiAEIsc (ORCPT
+        id S238649AbiAEIsy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Jan 2022 03:48:54 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:51927 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238631AbiAEIsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 03:48:32 -0500
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JTNRJ2SdXzbjr6;
-        Wed,  5 Jan 2022 16:47:56 +0800 (CST)
-Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 5 Jan 2022 16:48:30 +0800
-Received: from [10.174.178.220] (10.174.178.220) by
- dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 5 Jan 2022 16:48:30 +0800
-Subject: Re: [PATCH v2] ata: libata-scsi: Make __ata_scsi_queuecmd()
- parameters check more clearly
-To:     Damien Le Moal <Damien.LeMoal@wdc.com>,
-        "linux-ide@vger.kernel.org" <linux-ide@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>
-CC:     "liuzhiqiang26@huawei.com" <liuzhiqiang26@huawei.com>
-References: <20220105202747.1963919-1-haowenchao@huawei.com>
- <ff55e8d2037fa1f11812329fb8da39e746abe878.camel@wdc.com>
-From:   Wenchao Hao <haowenchao@huawei.com>
-Message-ID: <bbe9581c-1d8e-a1b2-dd5d-60027946941b@huawei.com>
-Date:   Wed, 5 Jan 2022 16:48:29 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        Wed, 5 Jan 2022 03:48:53 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 6914D20000A;
+        Wed,  5 Jan 2022 08:48:50 +0000 (UTC)
+Date:   Wed, 5 Jan 2022 09:48:49 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Alexander Aring <alex.aring@gmail.com>
+Cc:     David Girault <David.Girault@qorvo.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        linux-wpan - ML <linux-wpan@vger.kernel.org>,
+        Romuald Despres <Romuald.Despres@qorvo.com>,
+        Frederic Blain <Frederic.Blain@qorvo.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        kernel list <linux-kernel@vger.kernel.org>
+Subject: Re: [net-next 17/18] net: mac802154: Let drivers provide their own
+ beacons implementation
+Message-ID: <20220105094849.0c7e9b65@xps13>
+In-Reply-To: <CAB_54W6ikdGe=ZYqOsMgBdb9KBtfAphkBeu4LLp6S4R47ZDHgA@mail.gmail.com>
+References: <20211222155743.256280-1-miquel.raynal@bootlin.com>
+ <20211222155743.256280-18-miquel.raynal@bootlin.com>
+ <CAB_54W7o5b7a-2Gg5ZnzPj3o4Yw9FOAxJfykrA=LtpVf9naAng@mail.gmail.com>
+ <SN6PR08MB4464D7124FCB5D0801D26B94E0459@SN6PR08MB4464.namprd08.prod.outlook.com>
+ <CAB_54W6ikdGe=ZYqOsMgBdb9KBtfAphkBeu4LLp6S4R47ZDHgA@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <ff55e8d2037fa1f11812329fb8da39e746abe878.camel@wdc.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.220]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500017.china.huawei.com (7.185.36.178)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/1/5 15:39, Damien Le Moal wrote:
-> On Wed, 2022-01-05 at 15:27 -0500, Wenchao Hao wrote:
->> This is just a clean code. Since each branch of "if" state would check
->> scmd->cmd_len, so move the check of scmd->cmd_len out of "if" state to
->> simplify input parameters check.
->>
->> And remove redundant init of xlat_func at hand
->>
->> The patch do not change origin function logic.
->>
->> Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
->> ---
->>   drivers/ata/libata-scsi.c | 9 ++++-----
->>   1 file changed, 4 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
->> index 313e9475507b..ab8a2833dfec 100644
->> --- a/drivers/ata/libata-scsi.c
->> +++ b/drivers/ata/libata-scsi.c
->> @@ -4023,16 +4023,15 @@ int __ata_scsi_queuecmd(struct scsi_cmnd *scmd, struct ata_device *dev)
->>   	ata_xlat_func_t xlat_func;
->>   	int rc = 0;
->>   
->> +	if (unlikely(!scmd->cmd_len))
->> +		goto bad_cdb_len;
->> +
->>   	if (dev->class == ATA_DEV_ATA || dev->class == ATA_DEV_ZAC) {
->> -		if (unlikely(!scmd->cmd_len || scmd->cmd_len > dev->cdb_len))
->> +		if (unlikely(scmd->cmd_len > dev->cdb_len))
->>   			goto bad_cdb_len;
->>   
->>   		xlat_func = ata_get_xlat_func(dev, scsi_op);
->>   	} else {
->> -		if (unlikely(!scmd->cmd_len))
->> -			goto bad_cdb_len;
->> -
->> -		xlat_func = NULL;
->>   		if (likely((scsi_op != ATA_16) || !atapi_passthru16)) {
->>   			/* relay SCSI command to ATAPI device */
->>   			int len = COMMAND_SIZE(scsi_op);
-> 
-> Did you miss my reply ?
-> This change is OK, but while at it, let's cleanup this function further.
-> I suggested something like this, which includes your changes.
-> 
+Hi Alexander,
 
-Maybe I misunderstood your previous reply. I think you ask me to change 
-prefix.
+alex.aring@gmail.com wrote on Thu, 30 Dec 2021 14:48:41 -0500:
 
-> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
-> index a16ef0030667..ed8be585a98f 100644
-> --- a/drivers/ata/libata-scsi.c
-> +++ b/drivers/ata/libata-scsi.c
-> @@ -3958,42 +3958,39 @@ int __ata_scsi_queuecmd(struct scsi_cmnd *scmd,
-> struct ata_device *dev)
->   {
->   	u8 scsi_op = scmd->cmnd[0];
->   	ata_xlat_func_t xlat_func;
-> -	int rc = 0;
-> +
-> +	if (unlikely(!scmd->cmd_len))
-> +		goto bad_cdb_len;
+> Hi,
 > 
->   	if (dev->class == ATA_DEV_ATA || dev->class == ATA_DEV_ZAC) {
-> -		if (unlikely(!scmd->cmd_len || scmd->cmd_len > dev->cdb_len))
-> +		if (unlikely(scmd->cmd_len > dev->cdb_len))
->   			goto bad_cdb_len;
-> 
->   		xlat_func = ata_get_xlat_func(dev, scsi_op);
-> -	} else {
-> -		if (unlikely(!scmd->cmd_len))
-> -			goto bad_cdb_len;
-> +	} else if (scsi_op != ATA_16 || !atapi_passthru16) {
-> +		/* relay SCSI command to ATAPI device */
-> +		int len = COMMAND_SIZE(scsi_op);
-> 
-> -		xlat_func = NULL;
-> -		if (likely((scsi_op != ATA_16) || !atapi_passthru16)) {
-> -			/* relay SCSI command to ATAPI device */
-> -			int len = COMMAND_SIZE(scsi_op);
-> -			if (unlikely(len > scmd->cmd_len ||
-> -				     len > dev->cdb_len ||
-> -				     scmd->cmd_len > ATAPI_CDB_LEN))
-> -				goto bad_cdb_len;
-> +		if (unlikely(len > scmd->cmd_len ||
-> +			     len > dev->cdb_len ||
-> +			     scmd->cmd_len > ATAPI_CDB_LEN))
-> +			goto bad_cdb_len;
-> 
-> -			xlat_func = atapi_xlat;
-> -		} else {
-> -			/* ATA_16 passthru, treat as an ATA command */
-> -			if (unlikely(scmd->cmd_len > 16))
-> -				goto bad_cdb_len;
-> +		xlat_func = atapi_xlat;
-> +	} else {
-> +		/* ATA_16 passthru, treat as an ATA command */
-> +		if (unlikely(scmd->cmd_len > 16))
-> +			goto bad_cdb_len;
-> 
-> -			xlat_func = ata_get_xlat_func(dev, scsi_op);
-> -		}
-> +		xlat_func = ata_get_xlat_func(dev, scsi_op);
->   	}
-> 
->   	if (xlat_func)
-> -		rc = ata_scsi_translate(dev, scmd, xlat_func);
-> -	else
-> -		ata_scsi_simulate(dev, scmd);
-> +		return ata_scsi_translate(dev, scmd, xlat_func);
-> 
-> -	return rc;
-> +	ata_scsi_simulate(dev, scmd);
-> +
-> +	return 0;
-> 
->    bad_cdb_len:
->   	scmd->result = DID_ERROR << 16;
-> 
-> Do you see any problem with this change ?
-> 
+> On Thu, 30 Dec 2021 at 12:00, David Girault <David.Girault@qorvo.com> wrote:
+> >
+> > Hi Alexander,
+> >
+> > At Qorvo, we have developped a SoftMAC driver for our DW3000 chip that will benefit such API.
+> >  
+> Do you want to bring this driver upstream as well? Currently those
+> callbacks will be introduced but no user is there.
 
-This change looks good to me. Should I include this change in next 
-patch? Or you would do this by youself?
+I think so far the upstream fate of the DW3000 driver has not been ruled
+out so let's assume it won't be upstreamed (at least not fully), that's
+also why we decided to begin with the hwsim driver.
+
+However, when designing this series, it appeared quite clear that any
+hardMAC driver would need this type of interface. The content of the
+interface, I agree, could be further discussed and even edited, but the
+main idea of giving the information to the phy driver about what is
+happening regarding eg. scan operations or beacon frames, might make
+sense regardless of the current users, no?
+
+This being said, if other people decide to upstream a hardMAC driver
+and need these hooks to behave a little bit differently, it's their
+right to tweak them and that would also be part of the game.
+
+Although we might not need these hooks in a near future at all if we
+move to the filtering modes, because the promiscuous call with the
+specific level might indicate to the device how it should configure
+itself already.
+
+> > To be short, beacon sending is controller by our driver to be synchronized chip clock or delayed until
+> > other operation in progress (a ranging for example).
+> >  
+> 
+> ok.
+> 
+> - Alex
+
+Thanks,
+Miquèl

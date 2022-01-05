@@ -2,128 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0B5484C3A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 02:48:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A883484C3D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 02:50:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236970AbiAEBsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 20:48:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40332 "EHLO
+        id S236979AbiAEBt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 20:49:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236962AbiAEBsU (ORCPT
+        with ESMTP id S236962AbiAEBt4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 20:48:20 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713BAC061784
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 17:48:20 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id w13so79575435ybs.13
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 17:48:20 -0800 (PST)
+        Tue, 4 Jan 2022 20:49:56 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D18EC061761;
+        Tue,  4 Jan 2022 17:49:56 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id p14so28271843plf.3;
+        Tue, 04 Jan 2022 17:49:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=S3MV8EDA/gvv4OPelttWmulQGEHAkpGwQXtCt5sJZFc=;
-        b=IjnvSApgYqoCeUI/96H6ZFMo8jneVsZ6oT5EroZA96IcN5y4uOe8HrLGXDKJxB1yk6
-         d5vLYIZFUBUTrW0gABnB1eBHPxLyuRZvLdad3hmu9KQzzZf0qcHYK0P39nBGPE6Ij2+j
-         fw5mlcY27kIOS8nDgHB4bFddbXLmtNRc6H0SFu/kSlRhCWV5/T0q4ajAb1MsRdFoP8+w
-         qT7KTGH5hJpmyPT/we5xRA8bzDDzTdQfQc2LINB8GkvEKhYZqxuAPIssLYGivb0tkMiZ
-         ZMi/Qa5ji/dXu5AxNvUVL2hw6HGZaI9uPYjWETdQX26M7SzUOdx7v0YODSlqllan5NVf
-         HH7A==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=FBngTPEkKGMKclGP0jgxcSSrlzNxGXYaIdpSTFqmKCM=;
+        b=VDLH5aWKyMQjoGskHxiwFVkADFp6eqVezg8OIKixHyk4gGsFxJq2MBl4Gv5Bj6hU9T
+         VxrSCFegiQbvRn5BN6klakMrflTrbHqGZlyNhOVvzQ+Bl8xE2i3NDGm2At0Ev2libubR
+         3wMQF26EeyJmU0NbIoWXfOhAxTafL2oO0XLA6baGtgHBLTZdjeOCr+ioSOkRIY5zlJKC
+         ATeo4Cunl//t5BgXlQqz0ADhc0g8bjVvEc/dcrEIYaIXwLNzCU8FpxFoqxINGSO0rsla
+         2tSkszmTh2z9Mk6X+26XsMIJkKn6cZyj60hkqcoJ4B9IatVZy64shESFf07S/c+zJziH
+         qZKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=S3MV8EDA/gvv4OPelttWmulQGEHAkpGwQXtCt5sJZFc=;
-        b=mnBsG7y1fvtBAr9zN/md/XZR6pC2KGGtm+1okhuu5zjxG490TktxcX/EQ4QSISvxZm
-         BIxVNpEs+wcohn2SoahF2V3ulzXcA8Jmw5LEwRqLiWd4mp3tQ085kSnnLEzU2DegACk4
-         OhLJfpKWFIkfDB3aqkqCZ7d3+m2YXDbmcrEk2Ll6myFKPUKIwyjQ7iQ3sN5aXTN3UjZa
-         qRs4tyS5jTNOwwd6KrkkAZqzZzkUSmVurWaYg4QhtgGoTAuw3tKlO/ek/MeFx2jNetGT
-         lhJa8b7DjOG/jxPcsGTzAWysiPJxLUvYzVQfpdidobSxLxKAlkz3SKu0C97vmPjRVDYg
-         uBOg==
-X-Gm-Message-State: AOAM533QVUxXZDAZIlW1J/SXwDhV5P/Z448AXaR5izj4QOSIi7jVc5cR
-        2aY0N61RqwwCuP1EQnvYshsaHbgHcbe52b6x90zqvg==
-X-Google-Smtp-Source: ABdhPJzgiDx9c56h3HvklU/xl5FU9OHdfrLBiBFcrJF3XAgLqNgRZIx7IBYHVpRBrRyzXDnZFaj8MeQCOxGaEnmrLB0=
-X-Received: by 2002:a25:3745:: with SMTP id e66mr21815632yba.208.1641347299207;
- Tue, 04 Jan 2022 17:48:19 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=FBngTPEkKGMKclGP0jgxcSSrlzNxGXYaIdpSTFqmKCM=;
+        b=GPO2XoUSseITKAHP3SQijhOjE5nKCmN7q1EziSRFymZyw5G7qpsDvNj/IerYCiLdpY
+         G85uS1FB3yBKfIxGtwQTV/77+H36ePBhU5vhJfAjgFGSyAFwTRxu0hGrlNqSePmWFdan
+         kJbcmgM/1dCEc1+p2CrlN5S85fNO/XSVzKm7hAOfQSnnC2f1lcM+cNljEE2yZhL7UBp6
+         //xYzxFOPnJeVDp0iPOFNyt8cyKlwnCvpbGSKP2xwQ+7DjTDFOLIcSmxrNirXuQj7xWP
+         9T7nOCkipXy3xwf9/Rkl9DybUPz7Dpv1Ynuu/FWb5u4T2USlvmq6FW3O2uJ/7X4AbhvX
+         NK4g==
+X-Gm-Message-State: AOAM531UTgf7eIvcchr00WLne7KGlH8+mTiDpm6CJqHs6h+CfnrIoM7x
+        JqqvyhPOopwvnZTA9g21T+E=
+X-Google-Smtp-Source: ABdhPJwpt3SF+XTj3kPEy836ROsz8IVpdU1BSDzuSQGSYszu19SCL991lLNtj+w4O/f27o4SmKFoEA==
+X-Received: by 2002:a17:902:bb87:b0:148:a2f7:9d8e with SMTP id m7-20020a170902bb8700b00148a2f79d8emr50996520pls.173.1641347395650;
+        Tue, 04 Jan 2022 17:49:55 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id 93sm549923pjo.26.2022.01.04.17.49.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jan 2022 17:49:55 -0800 (PST)
+Message-ID: <4a036416-b2db-18b4-25fa-6d4aaddfcdeb@gmail.com>
+Date:   Wed, 5 Jan 2022 09:49:45 +0800
 MIME-Version: 1.0
-References: <1640262603-19339-1-git-send-email-CruzZhao@linux.alibaba.com> <1640262603-19339-2-git-send-email-CruzZhao@linux.alibaba.com>
-In-Reply-To: <1640262603-19339-2-git-send-email-CruzZhao@linux.alibaba.com>
-From:   Josh Don <joshdon@google.com>
-Date:   Tue, 4 Jan 2022 17:48:08 -0800
-Message-ID: <CABk29NvPJ3S1xq5xm+52OoUGDyuMSxGOLJbopPa3+-QmLnVYeQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] sched/core: Cookied forceidle accounting per cpu
-To:     Cruz Zhao <CruzZhao@linux.alibaba.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [PATCH v11 01/17] perf/x86/intel: Add EPT-Friendly PEBS for Ice
+ Lake Server
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Like Xu <likexu@tencent.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211210133525.46465-1-likexu@tencent.com>
+ <20211210133525.46465-2-likexu@tencent.com> <Yc321e9o16luwFK+@google.com>
+ <69ad949e-4788-0f93-46cb-6af6f79a9f24@gmail.com>
+ <YdSDEUJQgJQfZjWD@google.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+Organization: Tencent
+In-Reply-To: <YdSDEUJQgJQfZjWD@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Cruz,
+On 5/1/2022 1:25 am, Sean Christopherson wrote:
+> On Fri, Dec 31, 2021, Like Xu wrote:
+>> On 31/12/2021 2:13 am, Sean Christopherson wrote:
+>>> On Fri, Dec 10, 2021, Like Xu wrote:
+>>>> The new hardware facility supporting guest PEBS is only available on
+>>>> Intel Ice Lake Server platforms for now. KVM will check this field
+>>>> through perf_get_x86_pmu_capability() instead of hard coding the cpu
+>>>> models in the KVM code. If it is supported, the guest PEBS capability
+>>>> will be exposed to the guest.
+>>>
+>>> So what exactly is this new feature?  I've speed read the cover letter and a few
+>>> changelogs and didn't find anything that actually explained when this feature does.
+>>>
+>>
+>> Please check Intel SDM Vol3 18.9.5 for this "EPT-Friendly PEBS" feature.
+>>
+>> I assume when an unfamiliar feature appears in the patch SUBJECT,
+>> the reviewer may search for the exact name in the specification.
+> 
+> C'mon, seriously?  How the blazes am I supposed to know that the feature name
+> is EPT-Friendly PEBS?  Or that it's even in the SDM (it's not in the year-old
+> version of the SDM I currently have open) versus one of the many ISE docs?
 
-Could you add a bit more background to help me understand what case
-this patch solves? Is your issue that you want to be able to
-attribute forced idle time to the specific cpus it happens on, or do
-you simply want a more convenient way of summing forced idle without
-iterating your cookie'd tasks and summing the schedstat manually?
+You're right. The reviewer's time is valuable. Apologies for my wrong assumption.
 
-> @@ -190,6 +202,9 @@ static int show_stat(struct seq_file *p, void *v)
->                 seq_put_decimal_ull(p, " ", nsec_to_clock_t(steal));
->                 seq_put_decimal_ull(p, " ", nsec_to_clock_t(guest));
->                 seq_put_decimal_ull(p, " ", nsec_to_clock_t(guest_nice));
-> +#ifdef CONFIG_SCHED_CORE
-> +               seq_put_decimal_ull(p, " ", nsec_to_clock_t(cookied_forceidle));
-> +#endif
+> 
+> This is not hard.  Please spend the 30 seconds it takes to write a small blurb
+> so that reviewers don't have to spend 5+ minutes wondering WTF this does.
+> 
+>    Add support for EPT-Friendly PEBS, a new CPU feature that enlightens PEBS to
+>    translate guest linear address through EPT, and facilitates handling VM-Exits
+>    that occur when accessing PEBS records.  More information can be found in the
+>    <date> release of Intel's SDM, Volume 3, 18.9.5 "EPT-Friendly PEBS".
 
-IMO it would be better to always print this stat, otherwise it sets a
-weird precedent for new stats added in the future (much more difficult
-for userspace to reason about which column corresponds with which
-field, since it would depend on kernel config).
-
-Also, did you intend to put this in /proc/stat instead of
-/proc/schedstat (the latter of which would be more attractive to
-prevent calculation of these stats unless schestat was enabled)?
-
-> diff --git a/kernel/sched/core_sched.c b/kernel/sched/core_sched.c
-> @@ -260,6 +261,21 @@ void __sched_core_account_forceidle(struct rq *rq)
->
->         rq->core->core_forceidle_start = now;
->
-> +       for_each_cpu(i, smt_mask) {
-> +               rq_i = cpu_rq(i);
-> +               p = rq_i->core_pick ?: rq_i->curr;
-> +
-> +               if (!rq->core->core_cookie)
-> +                       continue;
-
-I see this is temporary given your other patch, but just a note that
-if your other patch is dropped, this check can be pulled outside the
-loop.
-
-> +               if (p == rq_i->idle && rq_i->nr_running) {
-> +                       cpustat = kcpustat_cpu(i).cpustat;
-> +                       cpustat[CPUTIME_COOKIED_FORCEIDLE] += delta;
-> +               }
-> +       }
-
-I don't think this is right. If a cpu was simply idle while some other
-SMT sibling on its core was forced idle, and then a task happens to
-wake on the idle cpu, that cpu will now be charged the full delta here
-as forced idle (when actually it was never forced idle, we just
-haven't been through pick_next_task yet). One workaround would be to
-add a boolean to struct rq to cache whether the rq was in forced idle
-state.
-
-Best,
-Josh
+Applied and thanks.

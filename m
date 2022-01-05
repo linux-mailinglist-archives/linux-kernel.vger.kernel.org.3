@@ -2,249 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49CC6484CE9
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 04:36:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B01484CED
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 04:40:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237229AbiAEDgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 22:36:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
+        id S237239AbiAEDkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 22:40:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236788AbiAEDgk (ORCPT
+        with ESMTP id S237232AbiAEDkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 22:36:40 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DD2C061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 19:36:40 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id y130so89576705ybe.8
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 19:36:40 -0800 (PST)
+        Tue, 4 Jan 2022 22:40:22 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36553C061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 19:40:21 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id bm14so156463440edb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 19:40:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=AqC1IHEx9dQuWnodrHASLopylxT4xjAMf5cAeN6buVM=;
-        b=SN6tc20mOHH701za+plFKttZrD5wwyZ1DdpO6RSof2fzAhHP/DtJy62D768rv4z0Si
-         a+f04aEC0l87hf/mG23OF33dOtzgzELjXOqjspSmVF+Y43DGKdpU3rB5bZk4UreRKwlH
-         SQ/uAV2uhUu5hIlSYPg6e/FOvSKfbfdUpFI602RhSksBvDTHTz1drT2GfthwfDx0jhai
-         A8rEssy1wK+OX3/YPQl8wL5lkyh8hd20illc/ccM3SOIp7srn1oyYAoljO99fNSjOZoK
-         FCLBlGO4yi6clFI8APEI3doBybx4USrtn+qazZhncHFSQFmvrSN9Qj057hQ89hld3W8F
-         rHPg==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=KTcaeyUE28BmaSOq+uqjMm1V5WrWrGA7LzRPLadADs4=;
+        b=G5newrjUWIE8boayQfPvtzlUJ9vKhY0/sihtGaRWaWaA7vTJgZjgnoJ9hZPomqoI5r
+         4fG5XyepYJY8UQsk2ZSt57ThTnGfaWY88ILdrle+B7CQAT1wlKIjt/eR4m25Za6N2gR2
+         pDW7AV4c/3NQDIVcHvL53mL/zIFoKpKfvO+0lP5G8NKklcl+utNQHMayTHnYjz6LY4Zl
+         Qu606/vMc6HgKKtFjcUwOlHLLy6aWPF4kMvk4+uuqZyQJHlTyo1D4+2x+rPVxp00u+3J
+         llziTAZfYcvF+MLKZ9o8rGlAAD4zAl559m21q86FmwN+8xcxBgxXWCZsbfKLNyCJ5Rfz
+         WjTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=AqC1IHEx9dQuWnodrHASLopylxT4xjAMf5cAeN6buVM=;
-        b=s9bMAs4KMkDRYOR1BX5bMXxSAcp/KEdjUDDd9V+NbtdN1nsLw4oMdJ9XxU8D09hOM2
-         YMOr2KMZ7j7xRTOC6n3xWofNnA/9XKFpSjncm4GPm1YTJNxEx21UVQD3v37jQ0QZQIsS
-         aT3cufclUWT74jb796ZrkGCYyzi7CFE9KvZsfvdpgZfIZa9k8KcQsQrfdw0MxHHK+pno
-         EL7kFVekGsidPxOEQj6+GQtY2AAG84/AIxOyF/kiyLHEdU+hYmeALEgl4wATrzpBQC0R
-         LIBCCom9PxYFTeWdoxrxPu/Oq+JdKxoBtXkKJQiB/aHYVPfJtlVywwlwJMnIrqfyZGUG
-         NnJQ==
-X-Gm-Message-State: AOAM532HUy2hZKuArGPsHHnnYiltZ47Gwgbwcop7+/yItS8BfEd7M8nb
-        o2rBMZeMIcgdzy0cD61/9w5qp/VRXC+U/j8+86oSGAN3iz/ETg==
-X-Google-Smtp-Source: ABdhPJwLjfYSwS0nCOh4CQIZacRcEylTSvp+UC4D4cbPWQ+qpH2/2wO3gD0ZZehnT2LhnqwiK4WB5cY8fK4flE+GR3Y=
-X-Received: by 2002:a25:414f:: with SMTP id o76mr52473829yba.146.1641353799617;
- Tue, 04 Jan 2022 19:36:39 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=KTcaeyUE28BmaSOq+uqjMm1V5WrWrGA7LzRPLadADs4=;
+        b=h3SjdRJinTiXO+KEXfLGQ7IJayVUg/PWxqJUeTJlqywncSFDVhH1NP7DJ/K1qvWp59
+         9aL9bH9cPjim/WKtG4xDuQObXYXMfuJxI9n2lahmGj8RwIfl9oFsHuHEbqmgzYa1ihJt
+         c6G4S+ov96oRpmFI+Zmy+JATlyGgRPQO4DM2z5nCRwojuLadQZfVauaKbyNmUWDE03Rt
+         EVMsyw9kPQ9wOjGSrnevX7pFMg71YJUg7zRvHx/IHans0EQvcW5SAFDm8+YHNoeeP2Nn
+         6/A3WflMVVjLTgo/GgSCXjN189Zh+MzaBH7INqvTKKPUSC+/PndCV/f4hUKAigNaA46f
+         A/1g==
+X-Gm-Message-State: AOAM5336l+a+LG88CxuPr6p/TPQ1hDZFg+05yoA40fXnBL+OwAgRFsEA
+        gsW4p0DtIoQ8VcBxSEl5woXhb+vl5onBbeZF4qg=
+X-Google-Smtp-Source: ABdhPJwLzZO++BMFaNV+nLngzfF9HKBd2CImOPkWEPz36rXPl8qwYmr0glKNCNHlvUrJNVfdyzyF8Hm/OiHvKVE4agM=
+X-Received: by 2002:a17:907:7256:: with SMTP id ds22mr41467198ejc.556.1641354019411;
+ Tue, 04 Jan 2022 19:40:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20220104073839.317902293@linuxfoundation.org>
-In-Reply-To: <20220104073839.317902293@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 5 Jan 2022 09:06:28 +0530
-Message-ID: <CA+G9fYvyF=P49vo8EHAGp9gcpjhWhE4AUpP+Hhf9hYc3jdWw3A@mail.gmail.com>
-Subject: Re: [PATCH 5.4 00/36] 5.4.170-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Received: by 2002:aa7:d8d0:0:0:0:0:0 with HTTP; Tue, 4 Jan 2022 19:40:16 -0800 (PST)
+Reply-To: mr.edwinclark@gmail.com
+From:   Edwin Clark <mrkojoadams@gmail.com>
+Date:   Wed, 5 Jan 2022 03:40:16 +0000
+Message-ID: <CAL7V1SjEBH-nvmzCNm-8dENSyxknDU5ojJ-BgAwrL=EmnJwzTg@mail.gmail.com>
+Subject: FROHES NEUES JAHR.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jan 2022 at 13:11, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.4.170 release.
-> There are 36 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 06 Jan 2022 07:38:29 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.4.170-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.4.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
-
-
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.4.170-rc2
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.4.y
-* git commit: 80ddcc564ae91afb9de54b43ffb4b2167a7306a3
-* git describe: v5.4.169-37-g80ddcc564ae9
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.1=
-69-37-g80ddcc564ae9
-
-## Test Regressions (compared to v5.4.169)
-No test regressions found.
-
-## Metric Regressions (compared to v5.4.169)
-No metric regressions found.
-
-## Test Fixes (compared to v5.4.169)
-No test fixes found.
-
-## Metric Fixes (compared to v5.4.169)
-No metric fixes found.
-
-## Test result summary
-total: 89585, pass: 74682, fail: 752, skip: 12738, xfail: 1413
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 258 total, 254 passed, 4 failed
-* arm64: 36 total, 31 passed, 5 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 20 total, 20 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 34 total, 34 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 52 total, 48 passed, 4 failed
-* riscv: 24 total, 24 passed, 0 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 36 total, 36 passed, 0 failed
-
-## Test suites summary
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+FROHES NEUES JAHR.
+Hallo, ich bin Edwin Clark Anwalt Ihres verstorbenen Verwandten. Ich
+kontaktiere Sie jetzt wegen der Forderung Ihres verstorbenen
+Verwandten. Bitte kontaktieren Sie mich f=C3=BCr weitere Informationen.
+Edwin Clark.

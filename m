@@ -2,159 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 574DF4854F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 15:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1001C4854FA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 15:48:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241050AbiAEOqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 09:46:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46050 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241016AbiAEOqC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 09:46:02 -0500
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC07C061761;
-        Wed,  5 Jan 2022 06:46:01 -0800 (PST)
-Received: by mail-ed1-x544.google.com with SMTP id n30so50791111eda.13;
-        Wed, 05 Jan 2022 06:46:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tsD8f9xe/yOoJyzdLoBuH5tO2pYgzHZZxGASx3vHHzc=;
-        b=DIxyCLkUahoU3M+mxj7Jnpgjin2quX9tiF8LVbOUOS77Ig8gN6twbyS4ggZgDKGwJp
-         dwkGGjW3obwD/nXAl0hnZuaSkAyRyIm6Q/zAsh7C6ny1yPDD/7J34wmIkTPHNo1qql1s
-         dvzL6xD5oTQdr/sjbmnUrEtAVrxayDvnmxsqHER16jaMiuvuUIwAbXsXOONDIrhJCsIp
-         I6kxo1XZvtJQBqbCavTxSwfjdZhQ11o3x9pGestofLnfbtNZ/rakyIqTAxat4QEYdYgw
-         KqcYECfGxS0GD0mNf0eQHD9BMdD0AobA1c85F5puEmGmmeVzlMCPxJGnweKzBH8rvv+G
-         ryDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tsD8f9xe/yOoJyzdLoBuH5tO2pYgzHZZxGASx3vHHzc=;
-        b=mtKsuGnxc4uTtOEnEyCYOkivgzbw8y35mquhDeBk+S1MPtOqeaKY6qTKJ7vxV8ekWM
-         VmQEHpYk72E5ikn9Mi7tIr/I9v5/lBdBSF16+MyJ4Rcj7DgI9DQ6p/kghWoQdZL3pitt
-         pBrPFazOXXQTNg6jg1kkLjXvxknF46XZAyeNXKy15AaTSUXhJUlYGfka5zKUZTh5B9sT
-         /ldOzYOl18+PtPuQ7JdrRauaHVGcqvXGDYCN4HY2TXq/8bgX4/7M1PRpICuPxIYfeR/4
-         GNR5IQl/ZJdv/xMLJafsT2wMv7b5T9lUChosiyo8fe51434fmjMfu22w2NZA7G7d8pOZ
-         jktA==
-X-Gm-Message-State: AOAM5310caH8mf9ePnHPgtnovPqQdT9eVaoBE2Gq+mvLGaOmfIGpO2Eo
-        sd268EnRGdYbzqfiGDUOCuHl3ewPHwfSj7yTN/s=
-X-Google-Smtp-Source: ABdhPJzqdTl12XqIiJxzbnH7n36IgPGIQLTJWVcS4lHqMHrwIOSL3dEE9I5pAkIRrQootrBZoBpAV7jdyKZtXiGWL6g=
-X-Received: by 2002:a05:6402:40cd:: with SMTP id z13mr52996828edb.103.1641393960293;
- Wed, 05 Jan 2022 06:46:00 -0800 (PST)
+        id S241056AbiAEOrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 09:47:47 -0500
+Received: from mga11.intel.com ([192.55.52.93]:26189 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240844AbiAEOrq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 09:47:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641394066; x=1672930066;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=d6eTXQUcA7jU2w8PviNLMOMDZGFWBUC58QjrOWlvlVg=;
+  b=LDXgqO7I2mjZPB6esbhgWGQ4cXKJwNuHcOTch78F1h6N960UWWlddpCI
+   YYihCQ0BikG8thL1cVGVXkTWMC9Z31SeQe4mRu4vyXxzP2N2/eqVoQsYq
+   CtXEha88AGJm2OM45GmxqQl6t7WvqZrr7diGzyfpJmwKZoElymgoepoDQ
+   XPne53eQubZXE/hNIj3AmjRaT5ImVow2VnUXoM5GnzNwQJiCUCNuXLC5X
+   AWHIl2yjEo+w1/V6pAseopwRqZDAGaBZGJTLs8Y5fcpv9m4fmzMf6TlSy
+   Or3mX8xirM18i7HMQaB5j1jcwE0mJI+uJ0UfVo1NlVNufggqVDLwi4AgD
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="239998171"
+X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
+   d="scan'208";a="239998171"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 06:47:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
+   d="scan'208";a="472518827"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 05 Jan 2022 06:47:44 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n57Zn-000Gl8-CT; Wed, 05 Jan 2022 14:47:43 +0000
+Date:   Wed, 5 Jan 2022 22:46:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ronak Vijay Raheja <rraheja@codeaurora.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Macpaul Lin <macpaul.lin@mediatek.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Eddie Hung <eddie.hung@mediatek.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android12-5.10-2022-01
+ 5703/9999] drivers/usb/gadget/configfs.c:1620:9: error: implicit declaration
+ of function 'acc_disconnect'
+Message-ID: <202201052253.4WGSj343-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220105131849.2559506-1-imagedong@tencent.com>
- <20220105131849.2559506-3-imagedong@tencent.com> <CANn89iLMNK0Yo=5LmcV=NMLmAUEZsb1V__V5bY+ZNh347UE-xg@mail.gmail.com>
-In-Reply-To: <CANn89iLMNK0Yo=5LmcV=NMLmAUEZsb1V__V5bY+ZNh347UE-xg@mail.gmail.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Wed, 5 Jan 2022 22:45:48 +0800
-Message-ID: <CADxym3YKfp5=oyJRyM9AVp8GW7+fLuboeW0gs-LagLDy+hfj_g@mail.gmail.com>
-Subject: Re: [PATCH v3 net-next 2/2] bpf: selftests: add bind retry for
- post_bind{4, 6}
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Menglong Dong <imagedong@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 5, 2022 at 9:57 PM Eric Dumazet <edumazet@google.com> wrote:
->
-> On Wed, Jan 5, 2022 at 5:21 AM <menglong8.dong@gmail.com> wrote:
-> >
-> > From: Menglong Dong <imagedong@tencent.com>
-> >
-> > With previous patch, kernel is able to 'put_port' after sys_bind()
-> > fails. Add the test for that case: rebind another port after
-> > sys_bind() fails. If the bind success, it means previous bind
-> > operation is already undoed.
-> >
-> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> > ---
-> >  tools/testing/selftests/bpf/test_sock.c | 166 +++++++++++++++++++++---
-> >  1 file changed, 146 insertions(+), 20 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/test_sock.c b/tools/testing/selftests/bpf/test_sock.c
-> > index e8edd3dd3ec2..68525d68d4e5 100644
-> > --- a/tools/testing/selftests/bpf/test_sock.c
-> > +++ b/tools/testing/selftests/bpf/test_sock.c
-> > @@ -35,12 +35,15 @@ struct sock_test {
-> >         /* Endpoint to bind() to */
-> >         const char *ip;
-> >         unsigned short port;
-> > +       unsigned short port_retry;
-> >         /* Expected test result */
-> >         enum {
-> >                 LOAD_REJECT,
-> >                 ATTACH_REJECT,
-> >                 BIND_REJECT,
-> >                 SUCCESS,
-> > +               RETRY_SUCCESS,
-> > +               RETRY_REJECT
-> >         } result;
-> >  };
-> >
-> > @@ -60,6 +63,7 @@ static struct sock_test tests[] = {
-> >                 0,
-> >                 NULL,
-> >                 0,
-> > +               0,
-> >                 LOAD_REJECT,
-> >         },
->
->
-> I assume we tried C99 initializers here, and this failed for some reason ?
->
+Hi Ronak,
 
-Yeah, C99 initializers should be a good choice here, therefore
-I don't need to change every entry here after I add a new field to
-'struct sock_test'.
+FYI, the error/warning still remains.
 
-I think C99 initializers should work here, I'll give it a try.
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.10-2022-01
+head:   47874cc690dc05182eefd0688cc627ffca746b8f
+commit: 80fef39de7e9dbe706d0cbc820a09b5c05dc366f [5703/9999] ANDROID: usb: gadget: Resolve NULL pointer dereference in composite_disconnect
+config: arm-buildonly-randconfig-r002-20220105 (https://download.01.org/0day-ci/archive/20220105/202201052253.4WGSj343-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/80fef39de7e9dbe706d0cbc820a09b5c05dc366f
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.10-2022-01
+        git checkout 80fef39de7e9dbe706d0cbc820a09b5c05dc366f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/usb/gadget/
 
-Thanks!
-Menglong Dong
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> diff --git a/tools/testing/selftests/bpf/test_sock.c
-> b/tools/testing/selftests/bpf/test_sock.c
-> index e8edd3dd3ec2..b57ce9f3eabf 100644
-> --- a/tools/testing/selftests/bpf/test_sock.c
-> +++ b/tools/testing/selftests/bpf/test_sock.c
-> @@ -54,13 +54,13 @@ static struct sock_test tests[] = {
->                         BPF_MOV64_IMM(BPF_REG_0, 1),
->                         BPF_EXIT_INSN(),
->                 },
-> -               BPF_CGROUP_INET4_POST_BIND,
-> -               BPF_CGROUP_INET4_POST_BIND,
-> -               0,
-> -               0,
-> -               NULL,
-> -               0,
-> -               LOAD_REJECT,
-> +               .expected_attach_type = BPF_CGROUP_INET4_POST_BIND,
-> +               .attach_type = BPF_CGROUP_INET4_POST_BIND,
-> +               .domain = 0,
-> +               .type = 0,
-> +               .ip = NULL,
-> +               .port = 0,
-> +               .result = LOAD_REJECT,
->         },
->         {
->                 "bind4 load with invalid access: mark",
+All errors (new ones prefixed by >>):
+
+   drivers/usb/gadget/configfs.c: In function 'configfs_composite_disconnect':
+>> drivers/usb/gadget/configfs.c:1620:9: error: implicit declaration of function 'acc_disconnect' [-Werror=implicit-function-declaration]
+    1620 |         acc_disconnect();
+         |         ^~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for WIRELESS_EXT
+   Depends on NET && WIRELESS
+   Selected by
+   - GKI_LEGACY_WEXT_ALLCONFIG
+   WARNING: unmet direct dependencies detected for WEXT_CORE
+   Depends on NET && WIRELESS && (CFG80211_WEXT || WIRELESS_EXT
+   Selected by
+   - GKI_LEGACY_WEXT_ALLCONFIG
+   WARNING: unmet direct dependencies detected for DRM_TTM
+   Depends on HAS_IOMEM && DRM && MMU
+   Selected by
+   - GKI_HIDDEN_DRM_CONFIGS && HAS_IOMEM && DRM
+   WARNING: unmet direct dependencies detected for WEXT_PROC
+   Depends on NET && WIRELESS && PROC_FS && WEXT_CORE
+   Selected by
+   - GKI_LEGACY_WEXT_ALLCONFIG
+   WARNING: unmet direct dependencies detected for WEXT_PRIV
+   Depends on NET && WIRELESS
+   Selected by
+   - GKI_LEGACY_WEXT_ALLCONFIG
+   WARNING: unmet direct dependencies detected for BALLOON_COMPACTION
+   Depends on COMPACTION && MEMORY_BALLOON
+   Selected by
+   - GKI_HIDDEN_MM_CONFIGS
+   WARNING: unmet direct dependencies detected for WEXT_SPY
+   Depends on NET && WIRELESS
+   Selected by
+   - GKI_LEGACY_WEXT_ALLCONFIG
+
+
+vim +/acc_disconnect +1620 drivers/usb/gadget/configfs.c
+
+  1603	
+  1604	static void configfs_composite_disconnect(struct usb_gadget *gadget)
+  1605	{
+  1606		struct usb_composite_dev *cdev;
+  1607		struct gadget_info *gi;
+  1608		unsigned long flags;
+  1609	
+  1610		cdev = get_gadget_data(gadget);
+  1611		if (!cdev)
+  1612			return;
+  1613	
+  1614	#ifdef CONFIG_USB_CONFIGFS_F_ACC
+  1615		/*
+  1616		 * accessory HID support can be active while the
+  1617		 * accessory function is not actually enabled,
+  1618		 * so we need to inform it when we are disconnected.
+  1619		 */
+> 1620		acc_disconnect();
+  1621	#endif
+  1622		gi = container_of(cdev, struct gadget_info, cdev);
+  1623		spin_lock_irqsave(&gi->spinlock, flags);
+  1624		cdev = get_gadget_data(gadget);
+  1625		if (!cdev || gi->unbind) {
+  1626			spin_unlock_irqrestore(&gi->spinlock, flags);
+  1627			return;
+  1628		}
+  1629	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

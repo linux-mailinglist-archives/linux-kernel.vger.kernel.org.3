@@ -2,110 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F35F3485232
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC20485230
 	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239913AbiAEMDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 07:03:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36760 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235789AbiAEMDW (ORCPT
+        id S239896AbiAEMDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 07:03:21 -0500
+Received: from mail-il1-f197.google.com ([209.85.166.197]:43829 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235789AbiAEMDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 07:03:22 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8158C061761;
-        Wed,  5 Jan 2022 04:03:22 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id iy13so33727100pjb.5;
-        Wed, 05 Jan 2022 04:03:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=cPQoGloZhYJVk/xiShb0qTWLNiy1SKPPjtIRgItHWxw=;
-        b=pjhbK9eruOxcH9XOk6z2rcGYPViKZVirpYhR1CaP50cYQNMpW1TqaAz3yE8u3nVptQ
-         w23Hsy8/Od4kxu0kLLgLmSqJIjpGxg1VHoctk7NJsg4y608A6dgRQHr9nd0APFMsGbmU
-         JPggVkbGTKYUzr4l9QR13pn5jpq5Wve/DoWAWN8dp9ZRZMo3+K5it8kc1M48Iwl65dDR
-         gNDgrKvtLSdkmxUghMwRaiktRYwNDuU1wEr/nQRX1KJma8B4NDl0gwi75JdYvVqm+x0L
-         AdrnLPy2iA3KPD8vIAgOaXc+k6U7ECcsU8TPL8r9GenA46IE1pI8gFMbr/Wq3tr0X8Rg
-         q0aQ==
+        Wed, 5 Jan 2022 07:03:20 -0500
+Received: by mail-il1-f197.google.com with SMTP id l3-20020a056e0212e300b002b5afe23123so6859086iln.10
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 04:03:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=cPQoGloZhYJVk/xiShb0qTWLNiy1SKPPjtIRgItHWxw=;
-        b=3olchAeATKYAm7aqj7/Tv5ra5BJp+6HhkSuTWzp3c5gMzkF3T250hQk7n/D00WIhb6
-         cAcg1UXljjsPsIpardb9ek1czQ/bqzl9Tx9aM4sNllASS9DmjHun0V0VzxPlTB+cvGQ7
-         gPeNBC/SAy1/4Zw5O1B6EWq8Dk3H9JXizVg1gG9yzsQLygCWBtzOfAkiBRP8SjHzIaGb
-         6OPPkVr1EalT8xgW9pyL8jlT2andHqcTDXIIGjzfgxvboHGgFBdLJ5Ps8gaOUUhs16Am
-         5JtGvmi0vlbl4Vp0sdDRJcOOwwHCNAv1DKAsMG6wiN+0JbXgbCo4IaHgj6oUcy+joEHs
-         KIRQ==
-X-Gm-Message-State: AOAM533VDchgKn3DvPFU1F6Bwlr81ZHk+NDQeBzzJhr68xSk/m9qVRYv
-        Qpkg+AbM8f7dicLyPQyv2EE=
-X-Google-Smtp-Source: ABdhPJzV5rfZCZzCvJR8Ywe5FhNbffxNcVOLkO4YAKC04PWSJ9CH+t6rQuuVbCucnGgg6aqwnk7Jjg==
-X-Received: by 2002:a17:90b:1e07:: with SMTP id pg7mr3691486pjb.109.1641384202287;
-        Wed, 05 Jan 2022 04:03:22 -0800 (PST)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id z3sm37580986pgc.45.2022.01.05.04.03.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jan 2022 04:03:21 -0800 (PST)
-Subject: Re: make pdfdocs fails on Debian stable
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mchehab@kernel.org
-References: <20220104064708.GA15446@lst.de>
- <8f21b702-abc2-c9aa-7593-9aff17e61ed1@gmail.com>
- <20220104073625.GA16910@lst.de>
- <02f6aa77-17b7-ed23-8f39-34239ec6e724@gmail.com>
- <20220104131952.GA21933@lst.de>
- <2fb003aa-545c-31a4-1466-8c3c3fc708fb@gmail.com>
- <0ee407a1-ff5a-4c04-a99e-045cfe90d850@gmail.com>
- <20220105073504.GA3524@lst.de>
-From:   Akira Yokosawa <akiyks@gmail.com>
-Message-ID: <48dfca1b-3436-d2b0-0dd1-de6104539c50@gmail.com>
-Date:   Wed, 5 Jan 2022 21:03:18 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=B2ue6rdjnDkmtAxgVcmjk6LtSUfDXVXxXmhyUfE9ElI=;
+        b=DDjsLfmvamFm2HGCmy5hK75iO1ZFFA+Fh+RHfxqWPovQY9jqTl8nKVLOY2dJvcCjlR
+         LsiRwdg4HSxP/4VYvS1doMhak+efwEyZgQsRbpk4OHZfjWzNA2sixUfSR0udHq0hZO/0
+         fGB/Xc3iPd6pWpEThG5UHTqm6n8TQNCY7XjbPWAqjvjR4o9eK8OvUxWm6zirvWFMLvke
+         bxNFSTVi9Cto5KIs2WfNsQ3vj0oBJcL32L85cYWaaGNJgouEezFL+65RvG2uLhp4isUa
+         vgPMMM+zUk96Cc0SWZ2cec4+zulGnGvPFCTVgzHGTayJCGw4gJ/3iYGMUsoUQK3NsP9y
+         zxqw==
+X-Gm-Message-State: AOAM530KGPh8HZS8qH7e0JfLT1a1JV2eCffAyrRXQu67W8TnBX2l3xYG
+        6D2sd4DhGJBPGABpLMNMmdHFMARb8WJx38kRlBv9PGsHQGXI
+X-Google-Smtp-Source: ABdhPJxOfzDp5Usc2hvhmpqMhVJOOCW51JfVCPHBLIi7ZfcGaUG05Tssg94wOvZ92zfJifTHXYHG+OFAecAS8q1EBAS0JI+GjFVu
 MIME-Version: 1.0
-In-Reply-To: <20220105073504.GA3524@lst.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a92:ddc4:: with SMTP id d4mr561543ilr.281.1641384199974;
+ Wed, 05 Jan 2022 04:03:19 -0800 (PST)
+Date:   Wed, 05 Jan 2022 04:03:19 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002df33305d4d48a3c@google.com>
+Subject: [syzbot] KMSAN: uninit-value in cma_make_mc_event
+From:   syzbot <syzbot+8fcbb77276d43cc8b693@syzkaller.appspotmail.com>
+To:     avihaih@nvidia.com, dledford@redhat.com, glider@google.com,
+        haakon.bugge@oracle.com, jgg@ziepe.ca, leon@kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Jan 2022 08:35:04 +0100, Christoph Hellwig wrote:
-> On Wed, Jan 05, 2022 at 10:47:40AM +0900, Akira Yokosawa wrote:
->>> See my pending patch set at:
->>>
->>>     https://lore.kernel.org/linux-doc/e01fe9f9-f600-c2fc-c6b3-ef6395655ffe@gmail.com
->>>     [PATCH v2 0/4] docs: sphinx/kfigure.py: Improve conversion to PDF
->>>
->>> This uses Inkscape if it is available instead of ImageMagick.
->>> No imagemagick nor librsvg2-bin is required.
->>> As long as if you can trust Inkscape...
-> 
-> I haven't gotten to try that yet..
-> 
->> Alternatively, you can avoid ImageMagick by installing
->> graphicsmagick-imagemagick-compat instead of imagemagick.
->>
->> I'm not sure what you think of GraphicsMagick, though.
->>
->> If you'd like to try, do:
->>
->>     $ sudo apt install graphicsmagick-imagemagick-compat ghostscript gsfonts-x11
->>
->> This will remove ImageMagick.
->> (You have ghostscript and gsfonts-x11 already installed, I guess.)
-> 
-> This works just fine, thanks.
+Hello,
 
-Nice!
+syzbot found the following issue on:
 
-Glad to know I could help you.
+HEAD commit:    8b936c96768e kmsan: core: remove the accidentally committe..
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=13420bb9b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e00a8959fdd3f3e8
+dashboard link: https://syzkaller.appspot.com/bug?extid=8fcbb77276d43cc8b693
+compiler:       clang version 14.0.0 (git@github.com:llvm/llvm-project.git 0996585c8e3b3d409494eb5f1cad714b9e1f7fb5), GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
 
-        Thanks, Akira
+Unfortunately, I don't have any reproducer for this issue yet.
 
-> 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8fcbb77276d43cc8b693@syzkaller.appspotmail.com
+
+=====================================================
+BUG: KMSAN: uninit-value in cma_set_qkey drivers/infiniband/core/cma.c:510 [inline]
+BUG: KMSAN: uninit-value in cma_make_mc_event+0xb73/0xe00 drivers/infiniband/core/cma.c:4570
+ cma_set_qkey drivers/infiniband/core/cma.c:510 [inline]
+ cma_make_mc_event+0xb73/0xe00 drivers/infiniband/core/cma.c:4570
+ cma_iboe_join_multicast drivers/infiniband/core/cma.c:4782 [inline]
+ rdma_join_multicast+0x2b83/0x30a0 drivers/infiniband/core/cma.c:4814
+ ucma_process_join+0xa76/0xf60 drivers/infiniband/core/ucma.c:1479
+ ucma_join_multicast+0x1e3/0x250 drivers/infiniband/core/ucma.c:1546
+ ucma_write+0x639/0x6d0 drivers/infiniband/core/ucma.c:1732
+ vfs_write+0x8ce/0x2030 fs/read_write.c:588
+ ksys_write+0x28c/0x520 fs/read_write.c:643
+ __do_sys_write fs/read_write.c:655 [inline]
+ __se_sys_write fs/read_write.c:652 [inline]
+ __ia32_sys_write+0xdb/0x120 fs/read_write.c:652
+ do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
+ __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
+ do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
+ do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
+ entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
+
+Local variable ib.i created at:
+ cma_iboe_join_multicast drivers/infiniband/core/cma.c:4737 [inline]
+ rdma_join_multicast+0x586/0x30a0 drivers/infiniband/core/cma.c:4814
+ ucma_process_join+0xa76/0xf60 drivers/infiniband/core/ucma.c:1479
+
+CPU: 0 PID: 29874 Comm: syz-executor.3 Not tainted 5.16.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+=====================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

@@ -2,88 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6035E484F41
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 09:24:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF9D484F49
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 09:25:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238472AbiAEIYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 03:24:43 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:59604 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238471AbiAEIYe (ORCPT
+        id S238481AbiAEIZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 03:25:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43766 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231680AbiAEIZj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 03:24:34 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 5 Jan 2022 03:25:39 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F792C061761;
+        Wed,  5 Jan 2022 00:25:39 -0800 (PST)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4801760FD2;
-        Wed,  5 Jan 2022 08:24:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA530C36AE9;
-        Wed,  5 Jan 2022 08:24:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641371073;
-        bh=Glpkj1KcZnNZbZ/VBEkml8yh5tq2RrH+wGMUlhm4xr0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Su4fBo4tiV2LtzQZzXRQUmn0MRG3NinY0sl8mNRTF7aj38iJGax1OU79k8Vo86xzm
-         mTUklWGcG0jnpxtWVBR7utItSaqc5xwFi4Z/4uBX/crnNi/fmoftsiV0AvGunRZAAM
-         xyKRVly+TsaFeVeqIo42haTnPK+iNuJrZipWaCf54rSL6oWtnXYY4yS+WqYnipnphx
-         auz3ZT9qlTh+apyho14i1jOQdeNY+c1EMfyKCCXRGa3zQTmPgjHw+vn3l0IkFSNAwd
-         o78eDD/8B7VToOz66JwPcR8O1ju5rJhL/omIJquxJ5wJ1Y+uKSTmwNDLvR9VRVBeFa
-         xgi5v2fkyvikA==
-Message-ID: <73f0b849-223a-11a8-8238-4d29a3ccef0b@kernel.org>
-Date:   Wed, 5 Jan 2022 10:24:28 +0200
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 757D0223EA;
+        Wed,  5 Jan 2022 09:25:30 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1641371133;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fedfQgsr6x9sO3yER1l6Ln3QpkNkKoaDU8cBMzFGN+Q=;
+        b=sY7Ujav2tztK21oJXfBxaCMq+iQ5cXCzRUQAp0RpDAoO7/iKxJbuM12oT/IIq0js0jcnSM
+        YchXyLgsb8/IjCbvNI7vboWmRX0aF1VVMVk6aGYTftIYnObjbnxWI7754yVlDccBYZ70kW
+        wgck4SYQ2XLf90IPCA+qGcF5BVvLUfs=
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 1/3] dt-bindings: interconnect: imx8m-noc: Add
- fsl,icc-id property
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220103192900.946521-1-abel.vesa@nxp.com>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20220103192900.946521-1-abel.vesa@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
+Date:   Wed, 05 Jan 2022 09:25:29 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        netdev@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ansuel Smith <ansuelsmth@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH 2/8] dt-bindings: nvmem: add transformation bindings
+In-Reply-To: <YdRh2lp5Ca08gHtR@robh.at.kernel.org>
+References: <20211228142549.1275412-1-michael@walle.cc>
+ <20211228142549.1275412-3-michael@walle.cc>
+ <YdRh2lp5Ca08gHtR@robh.at.kernel.org>
+User-Agent: Roundcube Webmail/1.4.12
+Message-ID: <084b306b7c49ce8085dd867663945d29@walle.cc>
+X-Sender: michael@walle.cc
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Abel,
-
-On 3.01.22 21:28, Abel Vesa wrote:
-> Add documentation for fsl,icc-id property.
+Am 2022-01-04 16:03, schrieb Rob Herring:
+> On Tue, Dec 28, 2021 at 03:25:43PM +0100, Michael Walle wrote:
+>> Just add a simple list of the supported devices which need a nvmem
+>> transformations.
+>> 
+>> Also, since the compatible string is prepended to the actual nvmem
+>> compatible string, we need to match using "contains" instead of an 
+>> exact
+>> match.
+>> 
+>> Signed-off-by: Michael Walle <michael@walle.cc>
+>> ---
+>>  .../devicetree/bindings/mtd/mtd.yaml          |  7 +--
+>>  .../bindings/nvmem/nvmem-transformations.yaml | 46 
+>> +++++++++++++++++++
+>>  2 files changed, 50 insertions(+), 3 deletions(-)
+>>  create mode 100644 
+>> Documentation/devicetree/bindings/nvmem/nvmem-transformations.yaml
+>> 
+>> diff --git a/Documentation/devicetree/bindings/mtd/mtd.yaml 
+>> b/Documentation/devicetree/bindings/mtd/mtd.yaml
+>> index 376b679cfc70..0291e439b6a6 100644
+>> --- a/Documentation/devicetree/bindings/mtd/mtd.yaml
+>> +++ b/Documentation/devicetree/bindings/mtd/mtd.yaml
+>> @@ -33,9 +33,10 @@ patternProperties:
+>> 
+>>      properties:
+>>        compatible:
+>> -        enum:
+>> -          - user-otp
+>> -          - factory-otp
+>> +        contains:
+>> +          enum:
+>> +            - user-otp
+>> +            - factory-otp
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> ---
->   .../devicetree/bindings/interconnect/fsl,imx8m-noc.yaml      | 5 +++++
+> If the addition is only compatible strings, then I would just add them
+> here. Otherwise this needs to be structured a bit differently. More on
+> that below.
 
-Please CC the DT mailing list.
+I wanted to avoid having these compatible strings "cluttered" all around
+the various files. Esp. having a specific compatible string in a generic
+mtd.yaml. But if everyone is fine with that, I'll just move it here.
 
->   1 file changed, 5 insertions(+)
+>> 
+>>      required:
+>>        - compatible
+>> diff --git 
+>> a/Documentation/devicetree/bindings/nvmem/nvmem-transformations.yaml 
+>> b/Documentation/devicetree/bindings/nvmem/nvmem-transformations.yaml
+>> new file mode 100644
+>> index 000000000000..8c8d85fd6d27
+>> --- /dev/null
+>> +++ 
+>> b/Documentation/devicetree/bindings/nvmem/nvmem-transformations.yaml
+>> @@ -0,0 +1,46 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/nvmem/nvmem-transformations.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: NVMEM transformations Device Tree Bindings
+>> +
+>> +maintainers:
+>> +  - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+>> +
+>> +description: |
+>> +  This is a list NVMEM devices which need transformations.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    oneOf:
+>> +      - items:
+>> +        - enum:
+>> +          - kontron,sl28-vpd
+>> +        - const: user-otp
+>> +      - const: user-otp
 > 
-> diff --git a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
-> index b8204ed22dd5..4924743e8cb1 100644
-> --- a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
-> @@ -47,6 +47,11 @@ properties:
->     operating-points-v2: true
->     opp-table: true
->   
-> +  fsl,icc-id:
-> +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> +    description:
-> +      unique ID used for linking i.MX bus or ddrc node to inteconnect
+> This will be applied to any node containing 'user-otp'. You need a
+> custom 'select' to avoid that.
 
-s/inteconnect/interconnect/
+Out of curiosity, you mean something like:
 
-Thanks,
-Georgi
-
-> +
->     fsl,ddrc:
->       $ref: "/schemas/types.yaml#/definitions/phandle"
->       description:
+select:
+   compatible:
+     contains:
+       enum:
+         - kontron,sl28-vpd
 

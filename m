@@ -2,65 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4194D485B77
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 23:15:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B99485B8B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 23:20:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244766AbiAEWPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 17:15:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35972 "EHLO
+        id S244848AbiAEWUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 17:20:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244590AbiAEWPR (ORCPT
+        with ESMTP id S244826AbiAEWTd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 17:15:17 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEBAC061201
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 14:15:16 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id h5-20020a9d6a45000000b005908066fa64so91506otn.7
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 14:15:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=QGYj/+XQ2z7eIXhM9mDS7+QDSYsDdc7V/43BPrAg8HdImUOtfWZjAqpE/zVP75J2wg
-         Jspkrn0WhcG/CdmfzkmzJ6RtXf74DCgYSjKLWXvDV2G4exqvUE7mO5I+0DrztoM6cI3G
-         cUMDPTuQLBlIkDdQRQg2+zUrviKAdff7+lpajegh+4Kk+LLIPGt6L/NuzK3SqFrO4ERG
-         qkzBb1aUWtz036dFbhpk9iBsF6ABhK3e9G4ojY+IheMq0T/EYpFkWnJ2ZtjL6AYNT5/N
-         WFZFwojHjUHLp0DmmwZs+Ifq04nD3un1D5+dgpKAZGNbM9FgRZJh+CuDGR/vI2Ut73db
-         n1dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=kmK2UoejgXOwE6qtGdWNrmmrfs1yNFOtPYpsMPMkpbwyy5838PSCWqInyDHp9c2Lc7
-         1Cmqy9k3AmQU5imkam3MtrKEUZk/RthTHuVLhup5qn2xGOEYtahCmMMDtCmIkMKG25+s
-         sW2cbA2SLj3HZvna1Edf4fPUhKo8DlSVhT3dJ5MIYylzgWWZZUSbkoL4XPC9MpyboYoR
-         e8/Ew6/0J5Cgs+VRJEj0qRSw2hy0I0IP5m5Bew2SIxI6hWhoNfkdU+obDeTSyc/YT6Up
-         BjRs/9IJ5cOtWgerYG+dFcFLeWlQgzNRh+0USQFMQDj8rXcV2YWkSvFbYTBeVI08mzGe
-         kW6w==
-X-Gm-Message-State: AOAM533xSOtCWf1cearNfvEyXyyslIpH5g63IgXvtDjB76hWAyWtOpSm
-        0f37j0sdapb331zfQw2lHwJptNSdP+ct/VPNoXU=
-X-Google-Smtp-Source: ABdhPJzxYz1ytbrjBz6GFLaLqFZdFpOATO1zj5d/qYs8bI0e4IpUJ9cNUwtzPk67KFvzvQECUUgCRFX6xiIB5dMKL0I=
-X-Received: by 2002:a9d:75d5:: with SMTP id c21mr38581952otl.201.1641420915026;
- Wed, 05 Jan 2022 14:15:15 -0800 (PST)
+        Wed, 5 Jan 2022 17:19:33 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574FDC061245;
+        Wed,  5 Jan 2022 14:19:28 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JTkRb0srmz4xnF;
+        Thu,  6 Jan 2022 09:19:23 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1641421163;
+        bh=QfDjSUj+Bm1/JoRgYzugmB60OsqL++bY3C4BCxzpAVw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=CPNFhlnPI2e/VloHquRN7DqRN9MBDvvHY057ULTc4XqvnT+C9jCWoDXPVG2+SVFQo
+         5acWM/cgVqs8x8hLKp5nRmrhmLaZIstH3Ljv9D3j5yCUXss1mB1qUrq4UjwOJhE51m
+         lyGHoBFUlQ7XS9vbRs+cNBOJMMIq8fyh9dQ6sxVeqYgMzF0Et66J8FF7LMenK9enpV
+         7bD5hPnzelilHl2+gNb1W1HnlmTigbUEFVsp7/UWlfZn6Pp+zNgveBYGIfiATBJ8ip
+         ecsClE9z/oZoXj+ZHf3PL3TVNPLZ5eSQj+cTKT0+N8kEe8JAi+NjprvRy2ScVOSgql
+         IjrD0v8MigTGg==
+Date:   Thu, 6 Jan 2022 09:19:21 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Kajol Jain <kjain@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the perf tree
+Message-ID: <20220106091921.3fa617bc@canb.auug.org.au>
 MIME-Version: 1.0
-Received: by 2002:a05:6830:1d8e:0:0:0:0 with HTTP; Wed, 5 Jan 2022 14:15:14
- -0800 (PST)
-Reply-To: dravasmith27@gmail.com
-From:   Dr Ava Smith <abaulkarimbanneth24@gmail.com>
-Date:   Wed, 5 Jan 2022 14:15:14 -0800
-Message-ID: <CAFOX5LYxsvED5qz4sDOCb-J7RJLWyk+G6g=WwG6u3L4zKjri9w@mail.gmail.com>
-Subject: GREETINGS FROM DR AVA SMITH
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/ad2mF1w6wTRuKxYawgn1ioK";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello Dear,
-how are you today?hope you are fine
-My name is Dr Ava Smith ,Am an English and French nationalities.
-I will give you pictures and more details about me as soon as i hear from you
-Thanks
-Ava
+--Sig_/ad2mF1w6wTRuKxYawgn1ioK
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+After merging the perf tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
+
+In file included from include/linux/perf_event.h:17,
+                 from arch/powerpc/perf/isa207-common.h:12,
+                 from arch/powerpc/perf/isa207-common.c:9:
+arch/powerpc/perf/isa207-common.c: In function 'isa207_find_source':
+include/uapi/linux/perf_event.h:1339:11: error: 'PERF_MEM_HOPS_2' undeclare=
+d (first use in this function); did you mean 'PERF_MEM_HOPS_0'?
+ 1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
+      |           ^~~~~~~~~
+arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF=
+_MEM_S'
+  273 | #define P(a, b)    PERF_MEM_S(a, b)
+      |                    ^~~~~~~~~~
+arch/powerpc/perf/isa207-common.c:240:51: note: in expansion of macro 'P'
+  240 |     ret |=3D PH(LVL, REM_RAM1) | REM | LEVEL(RAM) | P(HOPS, 2);
+      |                                                   ^
+include/uapi/linux/perf_event.h:1339:11: note: each undeclared identifier i=
+s reported only once for each function it appears in
+ 1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
+      |           ^~~~~~~~~
+arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF=
+_MEM_S'
+  273 | #define P(a, b)    PERF_MEM_S(a, b)
+      |                    ^~~~~~~~~~
+arch/powerpc/perf/isa207-common.c:240:51: note: in expansion of macro 'P'
+  240 |     ret |=3D PH(LVL, REM_RAM1) | REM | LEVEL(RAM) | P(HOPS, 2);
+      |                                                   ^
+include/uapi/linux/perf_event.h:1339:11: error: 'PERF_MEM_HOPS_3' undeclare=
+d (first use in this function); did you mean 'PERF_MEM_HOPS_0'?
+ 1339 |  (((__u64)PERF_MEM_##a##_##s) << PERF_MEM_##a##_SHIFT)
+      |           ^~~~~~~~~
+arch/powerpc/perf/isa207-common.h:273:20: note: in expansion of macro 'PERF=
+_MEM_S'
+  273 | #define P(a, b)    PERF_MEM_S(a, b)
+      |                    ^~~~~~~~~~
+arch/powerpc/perf/isa207-common.c:244:51: note: in expansion of macro 'P'
+  244 |     ret |=3D PH(LVL, REM_RAM2) | REM | LEVEL(RAM) | P(HOPS, 3);
+      |                                                   ^
+
+Caused by commit
+
+  af2b24f228a0 ("perf powerpc: Add data source encodings for power10 platfo=
+rm")
+
+It looks like patch 1/4 of this series is missing ...
+
+I have used the perf tree from next-20220105 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ad2mF1w6wTRuKxYawgn1ioK
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHWGWkACgkQAVBC80lX
+0GwPFAf/TiloP1qFatishWP3Y03cnXzCVOaarDGWUcg5mrz+NNa82eqGF/kZaMb5
+bToevb+403g72ChHNdbfR94s+4kSF2rVFimLX2BC++hy0L7i8oHH9AEFek5dammC
+E6I9lnM6OwFaSjs0ugheeD0hszishpQd8zEGs/1kYasz4RsGd2YYtY0vBxIgrIi3
+nCQRSFx5RcFMoZm4CRiIk9f50ePKHhKrvDr11s29J9/NpxPOCorouUIdMpAm2YO6
+OZhArysYQcLadW1di02fKJOStTt+WSbvg09wO1YE3N+Y5hr4BbForZS8UlkNjCMi
+DoWdwOIzaiBapQJMq/BDizUFUXZZkQ==
+=WwQb
+-----END PGP SIGNATURE-----
+
+--Sig_/ad2mF1w6wTRuKxYawgn1ioK--

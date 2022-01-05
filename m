@@ -2,73 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CF3B485C0C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 00:06:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 742AB485C0F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 00:07:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245285AbiAEXGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 18:06:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245277AbiAEXGq (ORCPT
+        id S245295AbiAEXHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 18:07:18 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:34650 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245289AbiAEXHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 18:06:46 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12AA1C061212
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 15:06:46 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id t204so1196775oie.7
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 15:06:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=lU9azqMMeh6DbnZbcl2lSC5dKYwkqe50hupc+vf9d2A=;
-        b=Z9FbV6j7G6xEZbBAvkwVyHKg5BQt5GXvM0+SeRVFiYv6O2H9oIk4aB0sqpDVrsPbiH
-         ypCSlfEsuA1No8hWDK464tQClc9ZqdceuvmvlX6LwjBNeSHUhvWTknpTJyCoO1TTvOtN
-         gAnMT1s1Pwz7ZjXMu+PARjQiTN0MHm17V1YjU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=lU9azqMMeh6DbnZbcl2lSC5dKYwkqe50hupc+vf9d2A=;
-        b=8B014sbUVD+w4Dd7fkFb4lCW32G0V5WmgPgI7c3M922HhuNU/QPNr79zldwyvwQmNQ
-         hSNW/l1zsUEvemvx/JyNXJb+MyjOgzKgjnTFMYWUUFIhzo51VYZdX1JzfYPlMoYsfg3g
-         GSbY6FDbwGIvK2FcJFcYGq2MYc07+y/TVHmrEG/DMz40iQGSo1ehCccnoGnzrYS76jng
-         1P22EB0pCElSa3Dh1euE6EKAyal/h7MXW2DKN4D3iW2AKA3+PbAIykFPEcQc1jhT0fGs
-         oHn5GfOMugscPqiMJdbv+rXWn8cZTqMipRp1GfxL+7W8Zy+efG1VM3vgDqhP/0sIDR2i
-         vykQ==
-X-Gm-Message-State: AOAM532ehpM/dZIhhYtH6HVsAbCwEdTfVbGY0AGVs9ZHUoj1FCvDPtUl
-        Bpy/GZAsNj4D5ygKabJ61i3ZTKUCtV1WimZ5I2ifIQ==
-X-Google-Smtp-Source: ABdhPJzAcJpvSF5lMXKo34QRJSTgW30u7+pLOgzDBuej/puQhjouq1bVASLz+ltH62MKR1xkor5WM7U9YV0dxZ5iFqU=
-X-Received: by 2002:aca:a953:: with SMTP id s80mr4308576oie.164.1641424005319;
- Wed, 05 Jan 2022 15:06:45 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 5 Jan 2022 15:06:44 -0800
+        Wed, 5 Jan 2022 18:07:11 -0500
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 274408AE;
+        Thu,  6 Jan 2022 00:07:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1641424030;
+        bh=zcEWCUHYq5Ga7VssAivavMcr+zeVyIzOyZuqRlRc+2g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OIcIX2nLGSuEYJMNxH6k6/B8kDUqXibqEWI9JK5lrs4jR6zztYNhmLSpZbS4juNWn
+         FpQ7ChQJdBUBL6b/aO2R9RmcfyE1NBGg/ggYuOM4LqLlg0lVVn+dtiycPDV1mkMGS+
+         XOyKHNo59BK2OzWtq4P3TMhMKtgSi/0GGfvuAYsg=
+Date:   Thu, 6 Jan 2022 01:07:05 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Watson Chow <watson.chow@avnet.com>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Subject: Re: [PATCH 2/2] regulator: Add MAX20086-MAX20089 driver
+Message-ID: <YdYkmSAYriUXv71W@pendragon.ideasonboard.com>
+References: <20220102211124.18435-1-laurent.pinchart+renesas@ideasonboard.com>
+ <20220102211124.18435-3-laurent.pinchart+renesas@ideasonboard.com>
+ <YdRWwWmoQGQuUyLz@sirena.org.uk>
+ <YdRa0GoSoX8CP694@pendragon.ideasonboard.com>
+ <YdRd/m3mOwcvvJ2L@sirena.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <dc2d6f535379dd38a5e3f9ba502f1f2b3d1f56b7.1640201523.git.christophe.jaillet@wanadoo.fr>
-References: <dc2d6f535379dd38a5e3f9ba502f1f2b3d1f56b7.1640201523.git.christophe.jaillet@wanadoo.fr>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Wed, 5 Jan 2022 15:06:44 -0800
-Message-ID: <CAE-0n53Rcs+BGgwFy-yB2zT+s=WoK94cZJ6yHYE_od=6K6zbzg@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/dp: Simplify dp_debug_init() and dp_debug_get()
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
-        quic_abhinavk@quicinc.com, robdclark@gmail.com, sean@poorly.run
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YdRd/m3mOwcvvJ2L@sirena.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Christophe JAILLET (2021-12-22 11:33:47)
-> dp_debug_init() always returns 0. So, make it a void function and simplify
-> the only caller accordingly.
->
-> While at it remove a useless 'rc' initialization in dp_debug_get()
->
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
+Hi Mark,
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+On Tue, Jan 04, 2022 at 02:47:26PM +0000, Mark Brown wrote:
+> On Tue, Jan 04, 2022 at 04:33:52PM +0200, Laurent Pinchart wrote:
+> > On Tue, Jan 04, 2022 at 02:16:33PM +0000, Mark Brown wrote:
+> 
+> > > > +	chip->num_outputs = num;
+> 
+> > > The number of regulators the device supports should be known from the
+> > > compatible, I'd expect a data table for this.  It should be possible to
+> > > read the state of regulators not described in the DT.
+> 
+> > Does this mean that the driver should register all regulators, even the
+> > ones not described in DT ? Who would read the state ?
+> 
+> Yes, just register everything.  Someone doing system debugging or
+> bringup might want to read the state, and this also goes along with the
+> ability to have the core pull the constraints out of the DT based on
+> data supplied by the driver - the general goal is to have routine
+> drivers simply register data tables with the core and need minimal code.
+
+OK, that should simplify the driver. I'll give it a try.
+
+> > > > +	/* Get the chip out of low-power shutdown state. */
+> > > > +	chip->gpio_en = devm_gpiod_get(chip->dev, "enable", GPIOD_OUT_HIGH);
+> > > > +	if (IS_ERR(chip->gpio_en)) {
+> > > > +		ret = PTR_ERR(chip->gpio_en);
+> > > > +		dev_err(chip->dev, "Failed to get enable GPIO: %d\n", ret);
+> > > > +		return ret;
+> > > > +	}
+> > >
+> > > This one is more OK - it's changing the state of the outputs that's an
+> > > issue.  I guess this might cause the outputs to come on though if the
+> > > GPIO was left off by the bootloader which is awkward.  If there's
+> > > nothing other than the outputs going on with the chip I would be tempted
+> > > to map this onto the per regulator enable GPIO that the core supports,
+> > > the core will then be able to manage the low power state at runtime.
+> > > That's *probably* the least bad option we have with current interfaces.
+> >
+> > While fishing for code I can copy in the always unfashionable cargocult
+> > style, I came across max8973-regulator.c that handles the enable GPIO in
+> > the following way:
+> >
+> > 		if (ridata && (ridata->constraints.always_on ||
+> > 			       ridata->constraints.boot_on))
+> > 			gflags = GPIOD_OUT_HIGH;
+> > 		else
+> > 			gflags = GPIOD_OUT_LOW;
+> > 		gflags |= GPIOD_FLAGS_BIT_NONEXCLUSIVE;
+> > 		gpiod = devm_gpiod_get_optional(&client->dev,
+> > 						"maxim,enable",
+> > 						gflags);
+> >
+> > Should I try to replicate that ? It gets more difficult with multiple
+> > regulators that share the same GPIO. That's why I left it as-is.
+> 
+> We should really factor that bit out to the core too, though at the
+> minute we pass in a gpio_desc so it's too late.  Doing the above is
+> probably best, though I wouldn't loose any sleep over it being missing.
+> you should definitely set the _NONEXCLUSIVE flag.  If someone specifies
+> an incompatible mix of settings in the machine constraints I wouldn't
+> worry about it too much, there's limits on what we can sort out.
+
+I may skip it in the next version then, to first focus on getting the
+other bits right.
+
+Note that the outputs can be controlled individually over I2C even when
+the enable GPIO is high, so keeping it high unconditionally will only
+incur a bit of extra power consumption, it won't have any adverse effect
+on the ability to control the outputs.
+
+-- 
+Regards,
+
+Laurent Pinchart

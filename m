@@ -2,187 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33E6A4851EB
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 12:35:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7014851ED
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 12:36:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235788AbiAELfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 06:35:43 -0500
-Received: from mga01.intel.com ([192.55.52.88]:55790 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235556AbiAELfk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 06:35:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641382540; x=1672918540;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=pqwSfbPwtwJe1YL6Opa0MCC6cKDRXW63ytA/VbMuSs0=;
-  b=VtPfw6bjNhGLLc6H5kls9sdLZ9c0XqZTISl851LEMvUP60L1syS1iiNl
-   NZ8Y1a37Pg61+RjSl6z37Qygu9SQ3iVJ03eleSo3r83vLMFq5tN8rP1E9
-   V2AAZV8SYNBa+PIjTPK69twd8SyvrUPz7HKj1wPzQBPAza1G4GmebuAhW
-   DmwYnHhzNvRqWHrDNzh17AQouTHxq0OTFRfcTf+wTYhzlCWbStMzFWoC2
-   CBCAQWWV+6ZL1HuSVhgPP22qT0nPMMwWkCLQLCtkntg2AVX50Byf7QLNu
-   aGm2Ev3HLT59Q9Cu8Hc/WTxB9eXzFPPtxm95mclauaf08B+3LizRwh6Lq
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="266698808"
-X-IronPort-AV: E=Sophos;i="5.88,263,1635231600"; 
-   d="scan'208";a="266698808"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 03:35:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,263,1635231600"; 
-   d="scan'208";a="621012076"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 05 Jan 2022 03:35:38 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n54Zt-000GYy-C3; Wed, 05 Jan 2022 11:35:37 +0000
-Date:   Wed, 05 Jan 2022 19:34:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2021.12.20a] BUILD SUCCESS
- 66b153e7e3980067de018ec8c478aa0aaf7ba2bd
-Message-ID: <61d58263.F1O5FUjjNhpcO15h%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S239753AbiAELgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 06:36:23 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:56646 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239750AbiAELgU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 06:36:20 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 79D801F37F;
+        Wed,  5 Jan 2022 11:36:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641382577; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x0jRk6X0KOTdVGVUcTHSEms0Oss8OKc1LnYQlabbBW0=;
+        b=O50A/yhKqaxM8a8VF/C28IjLcXjthAPMQFifhntT+SbwlZp26Ubyg3UgHKO9m8BcmO2IAA
+        g8JoFJWttaD4BPGci+teORdY222ErIC2zywmh/OgtRskP+QJxHHxCudY15xkZ4Z9t0KRSe
+        65fR/z0qzYOAbT7Ey1oLmf9+5U7jG7Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641382577;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x0jRk6X0KOTdVGVUcTHSEms0Oss8OKc1LnYQlabbBW0=;
+        b=7yAZq5767HWY9HDQq7981+rz3whgucSi7eIno6OCzYz3rV24mX0nn/OHhfQK5D3k2apHff
+        5DqKvsHKSK+ByPDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5F97D13BCB;
+        Wed,  5 Jan 2022 11:36:17 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6f3TFbGC1WHofQAAMHmgww
+        (envelope-from <bp@suse.de>); Wed, 05 Jan 2022 11:36:17 +0000
+Date:   Wed, 5 Jan 2022 12:36:18 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Yin Fengwei <fengwei.yin@intel.com>
+Cc:     Marco Elver <elver@google.com>, Carel Si <beibei.si@intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "lkp@lists.01.org" <lkp@lists.01.org>, lkp <lkp@intel.com>,
+        "bfields@fieldses.org" <bfields@fieldses.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: Re: [LKP] Re: [x86/mm/64] f154f29085:
+ BUG:kernel_reboot-without-warning_in_boot_stage - clang KCOV?
+Message-ID: <YdWCstlEW6k45+hH@zn.tnic>
+References: <Ybm96seTxl+pWjTX@zn.tnic>
+ <009391a5-468b-2a5d-1f12-44d2e3104bd6@intel.com>
+ <YbsPwyLnejLQMbTb@zn.tnic>
+ <20211216115838.GA23522@linux.intel.com>
+ <e48b72d4-558a-ed7c-43cd-0cb70091be11@intel.com>
+ <YbyIJYzqtHPKRMFt@zn.tnic>
+ <20211221143153.GA4676@linux.intel.com>
+ <CANpmjNO4hs1B9eDY9edGGOXY45a8smdtYfYfbDRnGWSYch4wGg@mail.gmail.com>
+ <YcHxKzB3WPurKlZ9@zn.tnic>
+ <a5cb8140-5834-7649-e629-f2775cf5b9a9@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a5cb8140-5834-7649-e629-f2775cf5b9a9@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2021.12.20a
-branch HEAD: 66b153e7e3980067de018ec8c478aa0aaf7ba2bd  rcu: Mark writes to the rcu_segcblist structure's ->flags field
+On Wed, Jan 05, 2022 at 10:35:20AM +0800, Yin Fengwei wrote:
+> Did you get update from clang folks for this behavior? Thanks.
 
-elapsed time: 736m
+No. Why?
 
-configs tested: 113
-configs skipped: 3
+-- 
+Regards/Gruss,
+    Boris.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20220105
-powerpc                      bamboo_defconfig
-arc                        nsim_700_defconfig
-sh                        edosk7705_defconfig
-sh                     magicpanelr2_defconfig
-powerpc                      tqm8xx_defconfig
-powerpc                 linkstation_defconfig
-arm                           stm32_defconfig
-powerpc                        warp_defconfig
-arm                          lpd270_defconfig
-arm                        shmobile_defconfig
-mips                      fuloong2e_defconfig
-arm                           u8500_defconfig
-h8300                               defconfig
-powerpc                           allnoconfig
-i386                             alldefconfig
-nds32                               defconfig
-arm                            zeus_defconfig
-mips                  maltasmvp_eva_defconfig
-powerpc                 mpc85xx_cds_defconfig
-arm                  randconfig-c002-20220105
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-x86_64               randconfig-a005-20220105
-x86_64               randconfig-a001-20220105
-x86_64               randconfig-a004-20220105
-x86_64               randconfig-a006-20220105
-x86_64               randconfig-a003-20220105
-x86_64               randconfig-a002-20220105
-i386                 randconfig-a003-20220105
-i386                 randconfig-a005-20220105
-i386                 randconfig-a004-20220105
-i386                 randconfig-a006-20220105
-i386                 randconfig-a002-20220105
-i386                 randconfig-a001-20220105
-arc                  randconfig-r043-20220105
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-mips                 randconfig-c004-20220105
-arm                  randconfig-c002-20220105
-i386                 randconfig-c001-20220105
-riscv                randconfig-c006-20220105
-powerpc              randconfig-c003-20220105
-x86_64               randconfig-c007-20220105
-powerpc                  mpc885_ads_defconfig
-arm                        multi_v5_defconfig
-riscv                          rv32_defconfig
-mips                           ip28_defconfig
-mips                      maltaaprp_defconfig
-powerpc                      obs600_defconfig
-powerpc                          g5_defconfig
-arm                          collie_defconfig
-mips                   sb1250_swarm_defconfig
-x86_64               randconfig-a012-20220105
-x86_64               randconfig-a015-20220105
-x86_64               randconfig-a014-20220105
-x86_64               randconfig-a013-20220105
-x86_64               randconfig-a011-20220105
-x86_64               randconfig-a016-20220105
-i386                 randconfig-a012-20220105
-i386                 randconfig-a016-20220105
-i386                 randconfig-a015-20220105
-i386                 randconfig-a014-20220105
-i386                 randconfig-a011-20220105
-i386                 randconfig-a013-20220105
-hexagon              randconfig-r041-20220105
-hexagon              randconfig-r045-20220105
-riscv                randconfig-r042-20220105
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

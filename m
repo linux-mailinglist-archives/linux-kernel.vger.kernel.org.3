@@ -2,125 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F335848594F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 20:39:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA84485958
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 20:41:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243633AbiAETjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 14:39:14 -0500
-Received: from cloud48395.mywhc.ca ([173.209.37.211]:49804 "EHLO
-        cloud48395.mywhc.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243596AbiAETjN (ORCPT
+        id S243648AbiAETlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 14:41:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57256 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243637AbiAETlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 14:39:13 -0500
-Received: from modemcable064.203-130-66.mc.videotron.ca ([66.130.203.64]:43070 helo=[192.168.1.179])
-        by cloud48395.mywhc.ca with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <olivier@trillion01.com>)
-        id 1n5C7r-0007nD-6h; Wed, 05 Jan 2022 14:39:11 -0500
-Message-ID: <8b6f2ce48c4097a23f5d03d631ed9363ecd45ddf.camel@trillion01.com>
-Subject: Re: [RFC] coredump: Do not interrupt dump for TIF_NOTIFY_SIGNAL
-From:   Olivier Langlois <olivier@trillion01.com>
-To:     Pavel Begunkov <asml.silence@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>, Oleg Nesterov <oleg@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 05 Jan 2022 14:39:09 -0500
-In-Reply-To: <13250a8d-1a59-4b7b-92e4-1231d73cbdda@gmail.com>
-References: <192c9697e379bf084636a8213108be6c3b948d0b.camel@trillion01.com>
-         <9692dbb420eef43a9775f425cb8f6f33c9ba2db9.camel@trillion01.com>
-         <87h7i694ij.fsf_-_@disp2133>
-         <1b519092-2ebf-3800-306d-c354c24a9ad1@gmail.com>
-         <b3e43e07c68696b83a5bf25664a3fa912ba747e2.camel@trillion01.com>
-         <13250a8d-1a59-4b7b-92e4-1231d73cbdda@gmail.com>
-Organization: Trillion01 Inc
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.42.2 
+        Wed, 5 Jan 2022 14:41:02 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3C1C061201
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 11:41:02 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id m1so270682pfk.8
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 11:41:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pZ7Du5aXJypbN5z9JdXaN/bv6j/5WCgbjcAZoOJVTUo=;
+        b=fZrlfDN2fNtW20qRO8Z9+o9nA5CFDsiKwl72mrfDZ538L6+n+8tdbpiIIOCAAtuJ/U
+         kR3kRLZLgvWRszCANN33MnEha5UmcBTrH9HOq653dfDwYe1JNqJKRrbdk9mmWBs3h86k
+         qjo99ocaP1PvNTkh+DsMkxm0dEAh9KCtGCIglmzsyd6gTDNp8Hsp0fZi022Tu+XIZ8IC
+         o79KS8q79BBdJpu2S8Rk7bRM4T+a2Csi/Ew7MqGaW/3MpIp+WIiFc0dwtT0Mw0762+jB
+         J0aW7melAxcapbZXU1N44tXkKhjlm7jCSBWqDErSFgRrhQfQxFBXYId40kXyaBklusJQ
+         xlCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pZ7Du5aXJypbN5z9JdXaN/bv6j/5WCgbjcAZoOJVTUo=;
+        b=yf3sZFu7Dsmrp1QVnOwKpBHY1MkC8qrIpk4W4S9hdCwuB93fKicQO4yBmhwF22kuE+
+         Leh8bp1jUFSUtpvn1vy6qwzPCyVHOtiuqtmK6O2du+E+lbl2Z6Bd4dbPzxkeV6AiKErB
+         LUBUHNBHiwqdD2szzj2JmbskH6NzQphgJRVX0T7V+9uVNT05ha712Kzi9GRcPe7lqa8E
+         Z8ZFr6i21qY2po+oVCJV7eYIy4Cr+hhghx6R4qf3o9iNMEmVPsftlOfceP14gSnr/Ehm
+         /zopd+x2jdkalPXYsQKBh5AsnoPgFrjzyEcgJZRZ/swIcZXpnftxOnK+NxPplPeSlNod
+         zInQ==
+X-Gm-Message-State: AOAM532z6qvdv25riDkGtYVFLqrXA+68GTVchX2s3ZKpLq6tC/TdnFVG
+        rqrDSQbtiDGm2rPZRh7Bjmp4qw==
+X-Google-Smtp-Source: ABdhPJxd23qEySJcCwtTGFUUCnhs0ACGzCCMlTQh0PUWwigVeZbm2WT+JjUT3hpQbEtMvfjsVpFKNw==
+X-Received: by 2002:aa7:8e88:0:b0:4ba:8792:b with SMTP id a8-20020aa78e88000000b004ba8792000bmr56091893pfr.23.1641411661585;
+        Wed, 05 Jan 2022 11:41:01 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id n34sm43708606pfv.129.2022.01.05.11.41.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 11:41:01 -0800 (PST)
+Date:   Wed, 5 Jan 2022 19:40:57 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Nathan Tempelman <natet@google.com>,
+        Marc Orr <marcorr@google.com>,
+        Steve Rutherford <srutherford@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Ricardo Koller <ricarkol@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        kvmarm@lists.cs.columbia.edu
+Subject: Re: [RFC PATCH 00/10] KVM: selftests: Add support for
+ test-selectable ucall implementations
+Message-ID: <YdX0SRoBXReggrVA@google.com>
+References: <20211210164620.11636-1-michael.roth@amd.com>
+ <Yc4gcJdhxthBKUUd@google.com>
+ <20220104233517.kxjbdw4t7taymab5@amd.com>
+ <YdTjnRZQID5IabK0@google.com>
+ <20220105170244.jwr6i2erecbhx3fz@amd.com>
+ <YdXYuaoXJux6lHrF@google.com>
+ <20220105191107.qx67wf2coc3q6giu@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cloud48395.mywhc.ca
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - trillion01.com
-X-Get-Message-Sender-Via: cloud48395.mywhc.ca: authenticated_id: olivier@trillion01.com
-X-Authenticated-Sender: cloud48395.mywhc.ca: olivier@trillion01.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220105191107.qx67wf2coc3q6giu@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2021-12-24 at 10:37 +0000, Pavel Begunkov wrote:
-> On 12/24/21 01:34, Olivier Langlois wrote:
-> > On Fri, 2021-10-22 at 15:13 +0100, Pavel Begunkov wrote:
-> > > On 6/9/21 21:17, Eric W. Biederman wrote:
-> > > In short, a task creates an io_uring worker thread, then the
-> > > worker
-> > > submits a task_work item to the creator task and won't die until
-> > > the item is executed/cancelled. And I found that the creator task
-> > > is
-> > > sleeping in do_coredump() -> wait_for_completion()
-> > > 
-> [...]
-> > > A hack executing tws there helps (see diff below).
-> > > Any chance anyone knows what this is and how to fix it?
-> > > 
-> [...]
-> > Pavel,
-> > 
-> > I cannot comment on the merit of the proposed hack but my proposed
-> > patch to fix the coredump truncation issue when a process using
-> > io_uring core dumps that I submitted back in August is still
-> > unreviewed!
+On Wed, Jan 05, 2022, Michael Roth wrote:
+> On Wed, Jan 05, 2022 at 05:43:21PM +0000, Sean Christopherson wrote:
+> > Because it uses multiple VMs, and my rough sketch only allows for a single VM to
+> > use ucall.  Though I suppose we could simply keep appending to the ucall list for
+> > every VM.  The requirement would then be that all VMs are of the same type, i.e.
+> > utilize the same ucall_ops.
 > 
-> That's unfortunate. Not like I can help in any case, but I assumed
-> it was dealt with by
+> Hmm, maybe I misread your patch. Not supporting multiple VMs was the
+> reason I gave up on having the ucall structs allocated on-demand and
+> went with requiring them to be passed as arguments to ucall().
 > 
-> commit 06af8679449d4ed282df13191fc52d5ba28ec536
-> Author: Eric W. Biederman <ebiederm@xmission.com>
-> Date:   Thu Jun 10 15:11:11 2021 -0500
+> I thought with your patch you had solved that by having each vm have it's
+> own pool, via vm->ucall_list, and then mapping each pool into each guest
+> separately via:
 > 
->      coredump: Limit what can interrupt coredumps
->      
->      Olivier Langlois has been struggling with coredumps being
-> incompletely written in
->      processes using io_uring.
->      ...
+>   ucall_init(vm):
+>     ucall_list = vm->ucall_list
+>     sync_global_to_guest(ucall_list).
 > 
-It was a partial fix only. Oleg Nesterov pointed out that the fix was
-not good if if the core dump was written into a pipe.
+> then as long as that ucall_init() is done *after* the guest calls
+> kvm_vm_elf_load(), it will end up with a 'ucall_list' global that points
+> to it's own specific vm->ucall_list. Then on the test side it doesn't
+> matter what the 'ucall_list' global is currently set to since you have
+> the GPA and know what vm exited.
+> 
+> Or am I missing something there?
 
-https://lore.kernel.org/io-uring/20210614141032.GA13677@redhat.com/
+Ha, that was not at all intented.  But yes, it should work.  I'd rather be lucky
+than good?
 
-> > https://lore.kernel.org/lkml/1625bc89782bf83d9d8c7c63e8ffcb651ccb15
-> > fa.1629655338.git.olivier@trillion01.com/
-> > 
-> > I have been using it since then I must have generated many dozens
-> > of
-> > perfect core dump files with it and I have not seen a single
-> > truncated
-> > core dump files like I used to have prior to the patch.
-> > 
-> > I am bringing back my patch to your attention because one nice side
-> > effect of it is that it would have avoided totally the problem that
-> > you
-> > have encountered in coredump_wait() since it does cancel io_uring
-> > resources before calling coredump_wait()!
-> 
-> FWIW, I worked it around in io_uring back then by breaking the
-> dependency.
-> 
-Yes I have seen your work to fix the problem.
+> Although even if that is the case, now that we're proposing doing the
+> ucall_init() inside vm_create(), then we run the risk of a test calling
+> kvm_vm_elf_load() after, which might clobber the guest's copy of
+> ucall_list global if ucall_init() had since been called for another VM.
+> But that could maybe be worked around by having whatever vm_create()
+> variant we use also do the kvm_vm_elf_load() unconditionally as part of
+> creation.
 
-It just seems to me that there is no good reason to keep io_uring
-process requests once you are generating a core dump and simply
-cancelling io_uring before generating the core dump would have avoided
-the problem that you have encountered plus any other similar issues yet
-to come...
+Will sync_global_to_guest() even work as intended if kvm_vm_elf_load() hasn't
+been called?  If not, then sync_global_{to,from}_guest() should really assert if
+the test hasn't been loaded.
 
-Greetings,
+As for ucall_init(), I think the best approach would be to make kvm_vm_elf_load()
+a static and replace all calls with:
 
+	kvm_vm_load_guest(vm);
+
+where its implementation is:
+
+  void kvm_vm_load_guest(struct kvm_vm *vm)
+  {
+  	kvm_vm_elf_load(vm, program_invocation_name);
+
+	ucall_init(vm);
+  }
+
+The logic being that if a test creates a VM but never loads any code into the guest,
+e.g. kvm_create_max_vcpus, then it _can't_ make ucalls.

@@ -2,99 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF668485031
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 10:39:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 824F1485034
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 10:39:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233819AbiAEJjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 04:39:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60392 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234083AbiAEJif (ORCPT
+        id S239001AbiAEJjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 04:39:24 -0500
+Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:46394 "EHLO
+        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238963AbiAEJjT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 04:38:35 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0237C061784;
-        Wed,  5 Jan 2022 01:38:34 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id o3so23507567wrh.10;
-        Wed, 05 Jan 2022 01:38:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dUITgGtpL31IeX6cwiB/AlKUldEsi1k26xqsJqiQSOM=;
-        b=nRh5YcuZ8DiWWz0Z+4oo3DgEHCGhLb+JBPcwXTWQXoEk1KBCwHueJXc5guFL52Nan6
-         RXheLpr0c3FfYlYWrzuJli+nnKJHC8Qangb7uBRIh1UD338gzSt4BJzJZDeXV1CRFuYx
-         GSdrgKne0zTN72Oz5fcsTIPt218nGGIoq0Gi1eTkmsymKRAwQ4RXGT2EnnpyFjSQPdLD
-         aFC1bWxXF3jslf5nECnJdFxdde9pzncV5UEMeykZaDTJEbnc8f3t4zp+70gcpbV4vkGU
-         AnpoI/Qx5P9acoQzIyX6QygaJLFGHVU4NDxWsxGpjoYVlAU+Hfky9Rg6EwDR2HEZEynp
-         T3Tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dUITgGtpL31IeX6cwiB/AlKUldEsi1k26xqsJqiQSOM=;
-        b=ufZWZmkM+PHVGJDva3t3LjCAAKNe7cdOaMDm71/UMpjFI2/WJOON5ZJx80ukbKvcPh
-         zQmXHnaoRVLkXgbLllnl+MW4TQi1iTWYqMvMfm4HmjVGbJxqex+2CJcFInAxdZLQOdDk
-         SsO2/l6cbAnMTJ9gvrC56YRiBJXDv0lx6b0JKqW92CsaH6k0AEN25PoKpG8/484chibo
-         ET7lcy0FWGl1DuMAMpmmHc7nSFWSR9g75Y54LUqG7vcIuVRokuswzb7hlRCgu0zxZ/hm
-         JjbxMAzcW0Klg0NdExlgAZlJpb2ePLdePo90UhxDG+WOBrIpgsE5EoFBYPUtUjBHcFa+
-         INbA==
-X-Gm-Message-State: AOAM5335O3mOYchEtqmMZUTy4onhMcTHsYgQjg4+TGkZXfNLM/9t9VBv
-        9my1R8sMkfiPbsLYDZBgm60=
-X-Google-Smtp-Source: ABdhPJwGu5yvfwfmJ5cd7qmD4alqvCMEMhR+piYMP7nabQY4YPI5lMNDF6EkNCj+xZQXTnnrFAJ0CA==
-X-Received: by 2002:a05:6000:168e:: with SMTP id y14mr47066460wrd.492.1641375513425;
-        Wed, 05 Jan 2022 01:38:33 -0800 (PST)
-Received: from debian (host-2-98-43-34.as13285.net. [2.98.43.34])
-        by smtp.gmail.com with ESMTPSA id g5sm45240720wrd.100.2022.01.05.01.38.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 01:38:33 -0800 (PST)
-Date:   Wed, 5 Jan 2022 09:38:31 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.10 00/47] 5.10.90-rc2 review
-Message-ID: <YdVnFwpz0zFpv00Z@debian>
-References: <20220104073841.681360658@linuxfoundation.org>
+        Wed, 5 Jan 2022 04:39:19 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R301e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V10dbcD_1641375556;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V10dbcD_1641375556)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 05 Jan 2022 17:39:17 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     sfrench@samba.org
+Cc:     linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] cifs: Fix smb311_update_preauth_hash() kernel-doc comment
+Date:   Wed,  5 Jan 2022 17:39:09 +0800
+Message-Id: <20220105093909.71011-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220104073841.681360658@linuxfoundation.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Add the description of @server in smb311_update_preauth_hash()
+kernel-doc comment to remove warning found by running scripts/kernel-doc,
+which is caused by using 'make W=1'.
+fs/cifs/smb2misc.c:856: warning: Function parameter or member 'server' 
+not described in 'smb311_update_preauth_hash'
 
-On Tue, Jan 04, 2022 at 08:41:05AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.90 release.
-> There are 47 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 06 Jan 2022 07:38:29 +0000.
-> Anything received after that time might be too late.
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ fs/cifs/smb2misc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Build test:
-mips (gcc version 11.2.1 20211214): 63 configs -> no new failure
-arm (gcc version 11.2.1 20211214): 105 configs -> no new failure
-arm64 (gcc version 11.2.1 20211214): 3 configs -> no failure
-x86_64 (gcc version 11.2.1 20211214): 4 configs -> no failure
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/588
-[2]. https://openqa.qa.codethink.co.uk/tests/589
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
+diff --git a/fs/cifs/smb2misc.c b/fs/cifs/smb2misc.c
+index 396d5afa7cf1..b25623e3fe3d 100644
+--- a/fs/cifs/smb2misc.c
++++ b/fs/cifs/smb2misc.c
+@@ -847,6 +847,7 @@ smb2_handle_cancelled_mid(struct mid_q_entry *mid, struct TCP_Server_Info *serve
+  * SMB2 header.
+  *
+  * @ses:	server session structure
++ * @server:	pointer to server info
+  * @iov:	array containing the SMB request we will send to the server
+  * @nvec:	number of array entries for the iov
+  */
+-- 
+2.20.1.7.g153144c
 

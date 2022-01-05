@@ -2,90 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D926485A59
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:58:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D5A485A5C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:59:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244283AbiAEU6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 15:58:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46592 "EHLO
+        id S244285AbiAEU7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 15:59:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231742AbiAEU6H (ORCPT
+        with ESMTP id S231715AbiAEU7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 15:58:07 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED8FC061245;
-        Wed,  5 Jan 2022 12:58:06 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id k27so833504ljc.4;
-        Wed, 05 Jan 2022 12:58:06 -0800 (PST)
+        Wed, 5 Jan 2022 15:59:39 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66334C061245
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 12:59:39 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id k69so1551066ybf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 12:59:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=OuBwVyhaLKrzX8V2kCywchmIuhlf+ueUVQIdWaq/xTo=;
-        b=gN7fMUeZLlKceIPR9LV2wKCRlYF7itBA0+qZ0gBl+jrnEjUYfw1S0mlH1prEU4jzZo
-         qqPD/KKQbCC3S8i10PlUMjYbg5+ns2HwD91GSjtJ5DW8gEi0jXQT2Ra3HRUPjGRdynqm
-         2t+3KJ+gdTpRBvDK9RV+UNX2ol9aFlZImRGtJk6/oYJz7oBlqaDE73juZ9xLr6LhXBb2
-         Tshoqv9Z5Mo3Y8vHlVQAw+qhTxwNO4EWa864qDk74zmzgqZNl5LeQir/gYqeP79g/ycx
-         CfElcKeg2glHc7M9ar3w9RbqhheoabiT8vJSIGSv7R55XbCPbePWEOleO5Q2kiybSzcR
-         vD1g==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SHN3V6rGFAjZqTE98LW5j/OdiBYr+BnRu7fESXZdXAA=;
+        b=EOujwg7Lt+M9kKd1CpYMP2JmoSUOjGqKaNI2ystvZP6dwPdkHzORlbzs+lHMYq3jaX
+         pqf5d9NYuhfKacE6PY5RFB50uONfUWdXocEF/qMzzQ0Ru4mJ87LJd2XsnWLsYd4i0qTh
+         uSRlzGKkV0el1/OB3OoTDO8rn5H3w5j8Oca4AyzXGjhVslDcuPK1Osj2tno4CMZ4oy61
+         AZVebq/fB8ZOg+2QV+u3cWcpBHG4cr/At58SnkiYt9j8cI3i+uRhRQIXyUUJdYuqdVYf
+         9ttIuzanlWDLkFQjCcMWtbUpSiLKV1gCaG+wsCYx03cfBa1q8i33eOWAJznKXquCHmwe
+         hREQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OuBwVyhaLKrzX8V2kCywchmIuhlf+ueUVQIdWaq/xTo=;
-        b=VCnib2MzydqyylmMxlmntS5o2jE0tU912kqLpjD1/WrzGg/Wffv5cMEmPN9zhd1uI5
-         c8PgFSoDxwYH/jKewWyAw0gK+LCUrLPlGQKiKroyH7/JKuRBBl5FFLp986uDzhL11d1O
-         UVVXQd/7feujRNV3+JqnBLbNm+ubPpnmZDG4vK2gS/7JSj8OP56w6TUdGsJ1iF9nGzoG
-         h95RluMRvqGolQ1bFYYRJwVVdNTDgJvTWgW+HO7C6CyjR22dglBMliLQ7zud4NOVTvtu
-         C4R2xuQyfRP3i7sx1IbwnsdOBQjNRcZIjxWvo7U8BwoSDGEz2cvy40whOKCaBQNdusRJ
-         agOg==
-X-Gm-Message-State: AOAM53219/rqKX5aA2TspNT9x3LMsYVokmcwr2/woMGUpX9HiiI6A7D1
-        1fEBlSqYv3baVIljYAFL+7Y=
-X-Google-Smtp-Source: ABdhPJwTKKy1PKfhf5An5kszlTKHG1YQ2C+JWzaDKi1CXN3/nZ66eYhaGh5+GtONrjCdnriMXb2Ddw==
-X-Received: by 2002:a2e:b5a8:: with SMTP id f8mr48237403ljn.130.1641416284784;
-        Wed, 05 Jan 2022 12:58:04 -0800 (PST)
-Received: from [192.168.1.11] ([94.103.227.53])
-        by smtp.gmail.com with ESMTPSA id l5sm2488lfk.167.2022.01.05.12.58.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jan 2022 12:58:04 -0800 (PST)
-Message-ID: <8da136c2-a4f8-bc3b-7c61-de29217153fa@gmail.com>
-Date:   Wed, 5 Jan 2022 23:58:03 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SHN3V6rGFAjZqTE98LW5j/OdiBYr+BnRu7fESXZdXAA=;
+        b=i5xFY/1+ivKZZrAe/xzl++BwW7Lay4cmH76mgb7GgJp1ITQ2IZDcCNbk73jfJrhpOr
+         VfK0juUaGG5/AdOYn+MBaLc3hhjVqoePUlpUU7tqPj5iufeNGyqPfwTnOIaPjuJznLUH
+         oo0i7LXV0ShYmahBQn3Lx2EfNZ5dj5Nwydltn6nkzvOVxHR+pi7INdl2dLevmDtb/HoX
+         FRODtM9XfFoBEYamGbvvRnAE8qT64qeRzcOi6ODGLFG2BzrxA6qgNvzARp5hwpVrqD7N
+         PijTY1zE2sjY9loZXjhx9yCC10cHVoD722wbkZEIPIdzDYrkoSb8e6P2KEbap56Qze7e
+         s29w==
+X-Gm-Message-State: AOAM531Qtd8RQ9HGM0D28rY57BpGAjDrXsDU0ONXXIFqwhWD95GgVm/W
+        qjvDVs7gkzeE48Df/C1DIp2Gse6EuVeO0L4EfEX7cg==
+X-Google-Smtp-Source: ABdhPJww6RfBJZ1OKyIA8XTeoEexUQa1i441gxVOC4qmLVDlvmiHO7KjnA1/srQdLczQ+qS2nbQklUv4hhEW/ZnfRL4=
+X-Received: by 2002:a25:90e:: with SMTP id 14mr53975180ybj.430.1641416378297;
+ Wed, 05 Jan 2022 12:59:38 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH -next] ieee802154: atusb: move to new USB API
-Content-Language: en-US
-To:     Stefan Schmidt <stefan@datenfreihafen.org>, alex.aring@gmail.com,
-        davem@davemloft.net, kuba@kernel.org, linux-wpan@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220105144947.12540-1-paskripkin@gmail.com>
- <4186d48a-ea7e-39c1-d1fa-1db3f6627a3a@datenfreihafen.org>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <4186d48a-ea7e-39c1-d1fa-1db3f6627a3a@datenfreihafen.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <1640262603-19339-1-git-send-email-CruzZhao@linux.alibaba.com>
+ <1640262603-19339-3-git-send-email-CruzZhao@linux.alibaba.com>
+ <CABk29NsP+sMQPRwS2e3zoeBsX1+p2aevFFO+i9GdB5VQ0ujEbA@mail.gmail.com> <8be4679f-632b-97e5-9e48-1e1a37727ddf@linux.alibaba.com>
+In-Reply-To: <8be4679f-632b-97e5-9e48-1e1a37727ddf@linux.alibaba.com>
+From:   Josh Don <joshdon@google.com>
+Date:   Wed, 5 Jan 2022 12:59:27 -0800
+Message-ID: <CABk29Nv4OXnNz5-ZdYmAE8o0YpmhkbH=GooksaKYY7n0YYUQxg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] sched/core: Uncookied force idle accounting per cpu
+To:     cruzzhao <cruzzhao@linux.alibaba.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stefan,
+On Wed, Jan 5, 2022 at 3:33 AM cruzzhao <cruzzhao@linux.alibaba.com> wrote:
+>
+> When we care about capacity loss, we care about all but not some of it.
+> The forced idle time from uncookie'd task is actually caused by the
+> cookie'd task in runqueue indirectly, and it's more accurate to measure
+> the capacity loss with the sum of cookie'd forced idle time and
+> uncookie'd forced idle time, as far as I'm concerned.
+>
+> Assuming cpu x and cpu y are a pair of smt siblings, consider the
+> following scenarios:
+> 1. There's a cookie'd task A running on cpu x, and there're 4 uncookie'd
+> tasks B~E running on cpu y. For cpu x, there will be 80% forced idle
+> time(from uncookie'd task); for cpu y, there will be 20% forced idle
+> time(from cookie'd task).
+> 2. There's a uncookie'd task A running on cpu x, and there're 4 cookie'd
+> tasks B~E running on cpu y. For cpu x, there will be 80% forced idle
+> time(from cookie'd task); for cpu y, there will be 20% forced idle
+> time(from uncookie'd task).
+> The scenario1 can recurrent by stress-ng(scenario2 can recurrent similary):
+> (cookie'd)taskset -c x stress-ng -c 1 -l 100
+> (uncookie'd)taskset -c y stress-ng -c 4 -l 100
+>
+> In the above two scenarios, the capacity loss is 1 cpu, but in
+> scenario1, the cookie'd forced idle time tells us 20%cpu loss, in
+> scenario2, the cookie'd forced idle time tells us 80% forced idle time,
+> which are not accurate. It'll be more accurate with the sum of cookie'd
+> forced idle time and uncookie'd forced idle time.
 
-On 1/5/22 23:27, Stefan Schmidt wrote:
->> +	ret = usb_control_msg_recv(usb_dev, 0, ATUSB_REG_READ, ATUSB_REQ_FROM_DEV,
->> +				   0, RG_PART_NUM, &atusb, 1, 1000, GFP_KERNEL);
-> 
-> This needs to be written to &part_num and not &atusb.
-> 
+Why do you need this separated out into two fields then? Could we just
+combine the uncookie'd and cookie'd forced idle into a single sum?
 
-Oh, stupid copy-paste error :( Thanks for catching this!
-
-> Pretty nice for a first blind try without hardware. Thanks.
-> 
-> Will let you know if I find anything else from testing.
-
-Ok, will wait for test results. Thank you for your time ;)
-
-
-With regards,
-Pavel Skripkin
+IMO it is fine to account the forced idle from uncookie'd tasks, but
+we should then also change the task accounting to do the same, for
+consistency.

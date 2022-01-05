@@ -2,138 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F65485195
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 12:04:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A25F4851EE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 12:37:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239594AbiAELEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 06:04:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51856 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235119AbiAELEn (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 06:04:43 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAA2C061761
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 03:04:42 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1n545t-0008W1-8N; Wed, 05 Jan 2022 12:04:37 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1n545q-0004qQ-DW; Wed, 05 Jan 2022 12:04:34 +0100
-Date:   Wed, 5 Jan 2022 12:04:34 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        David Jander <david@protonic.nl>,
-        Robin van der Gracht <robin@protonic.nl>,
-        dri-devel@lists.freedesktop.org,
-        Jonathan Cameron <jic23@kernel.org>
-Subject: Re: [PATCH v1 4/4] ARM: dts: imx6dl: plym2m, prtvt7, victgo:  make
- use of new resistive-adc-touch driver
-Message-ID: <20220105110434.GG303@pengutronix.de>
-References: <20211122124310.2796505-1-o.rempel@pengutronix.de>
- <20211122124310.2796505-4-o.rempel@pengutronix.de>
- <20211206010627.GK4216@dragon>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211206010627.GK4216@dragon>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 11:58:52 up 25 days, 19:44, 81 users,  load average: 1.02, 1.06,
- 1.07
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+        id S239750AbiAELho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 06:37:44 -0500
+Received: from inva021.nxp.com ([92.121.34.21]:60866 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235184AbiAELhn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 06:37:43 -0500
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id E21BF200635;
+        Wed,  5 Jan 2022 12:37:41 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 7D9392011D1;
+        Wed,  5 Jan 2022 12:37:41 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 51607183F0C0;
+        Wed,  5 Jan 2022 19:37:39 +0800 (+08)
+From:   Shengjiu Wang <shengjiu.wang@nxp.com>
+To:     timur@kernel.org, nicoleotsuka@gmail.com, Xiubo.Lee@gmail.com,
+        festevam@gmail.com, broonie@kernel.org,
+        alsa-devel@alsa-project.org, lgirdwood@gmail.com, perex@perex.cz,
+        tiwai@suse.com
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: fsl_asrc: refine the check of available clock divider
+Date:   Wed,  5 Jan 2022 19:08:03 +0800
+Message-Id: <1641380883-20709-1-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shawn,
+According to RM, the clock divider range is from 1 to 8, clock
+prescaling ratio may be any power of 2 from 1 to 128.
+So the supported divider is not all the value between
+1 and 1024, just limited value in that range.
 
-sorry for the delay, I just came back to work.
+Create table for the supported divder and add function to
+check the clock divider is available by comparing with
+the table.
 
-On Mon, Dec 06, 2021 at 09:06:28AM +0800, Shawn Guo wrote:
-> On Mon, Nov 22, 2021 at 01:43:10PM +0100, Oleksij Rempel wrote:
-> > The tsc2046 is an ADC used as touchscreen controller. To share as mach
-> > code as possible, we should use it as actual ADC + virtual tochscreen
-> > controller.
-> > With this patch we make use of the new kernel IIO and HID infrastructure.
-> > 
-> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> 
-> One space is enough in subject "victgo:  make".
+Fixes: d0250cf4f2ab ("ASoC: fsl_asrc: Add an option to select internal ratio mode")
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+---
+ sound/soc/fsl/fsl_asrc.c | 69 +++++++++++++++++++++++++++++++++-------
+ 1 file changed, 58 insertions(+), 11 deletions(-)
 
-done.
-
-> > ---
-> >  arch/arm/boot/dts/imx6dl-plym2m.dts | 55 ++++++++++++++++++++---------
-> >  arch/arm/boot/dts/imx6dl-prtvt7.dts | 53 ++++++++++++++++++++-------
-> >  arch/arm/boot/dts/imx6dl-victgo.dts | 55 +++++++++++++++++++++--------
-> >  3 files changed, 120 insertions(+), 43 deletions(-)
-> > 
-> > diff --git a/arch/arm/boot/dts/imx6dl-plym2m.dts b/arch/arm/boot/dts/imx6dl-plym2m.dts
-> > index 60fe5f14666e..e2afedae85cb 100644
-> > --- a/arch/arm/boot/dts/imx6dl-plym2m.dts
-> > +++ b/arch/arm/boot/dts/imx6dl-plym2m.dts
-> > @@ -101,6 +101,17 @@ reg_12v0: regulator-12v0 {
-> >  		regulator-min-microvolt = <12000000>;
-> >  		regulator-max-microvolt = <12000000>;
-> >  	};
-> > +
-> > +	touchscreen {
-> > +		compatible = "resistive-adc-touch";
-> > +		io-channels = <&adc 1>, <&adc 3>, <&adc 4>, <&adc 5>;
-> > +		io-channel-names = "y", "z1", "z2", "x";
-> > +		touchscreen-min-pressure = <64687>;
-> > +		touchscreen-inverted-x;
-> > +		touchscreen-inverted-y;
-> > +		touchscreen-x-plate-ohms = <300>;
-> > +		touchscreen-y-plate-ohms = <800>;
-> > +	};
-> >  };
-> >  
-> >  &can1 {
-> > @@ -129,26 +140,38 @@ &ecspi2 {
-> >  	pinctrl-0 = <&pinctrl_ecspi2>;
-> >  	status = "okay";
-> >  
-> > -	touchscreen@0 {
-> > -		compatible = "ti,tsc2046";
-> > +	adc: adc@0 {
-> 
-> Isn't label name "adc" too generic?
-
-I do not have strong opinion about this. Currently we have no
-restrictions for the node names:
-Documentation/devicetree/bindings/iio/adc/ti,tsc2046.yaml
-Documentation/devicetree/bindings/iio/adc/adc.yaml
-
-I can name it touchscreen-adc@0 or something like this. What are your
-preferences?
-
-Regards,
-Oleksij
+diff --git a/sound/soc/fsl/fsl_asrc.c b/sound/soc/fsl/fsl_asrc.c
+index 24b41881a68f..d7d1536a4f37 100644
+--- a/sound/soc/fsl/fsl_asrc.c
++++ b/sound/soc/fsl/fsl_asrc.c
+@@ -19,6 +19,7 @@
+ #include "fsl_asrc.h"
+ 
+ #define IDEAL_RATIO_DECIMAL_DEPTH 26
++#define DIVIDER_NUM  64
+ 
+ #define pair_err(fmt, ...) \
+ 	dev_err(&asrc->pdev->dev, "Pair %c: " fmt, 'A' + index, ##__VA_ARGS__)
+@@ -101,6 +102,55 @@ static unsigned char clk_map_imx8qxp[2][ASRC_CLK_MAP_LEN] = {
+ 	},
+ };
+ 
++/*
++ * According to RM, the divider range is 1 ~ 8,
++ * prescaler is power of 2 from 1 ~ 128.
++ */
++static int asrc_clk_divider[DIVIDER_NUM] = {
++	1,  2,  4,  8,  16,  32,  64,  128,  /* divider = 1 */
++	2,  4,  8, 16,  32,  64, 128,  256,  /* divider = 2 */
++	3,  6, 12, 24,  48,  96, 192,  384,  /* divider = 3 */
++	4,  8, 16, 32,  64, 128, 256,  512,  /* divider = 4 */
++	5, 10, 20, 40,  80, 160, 320,  640,  /* divider = 5 */
++	6, 12, 24, 48,  96, 192, 384,  768,  /* divider = 6 */
++	7, 14, 28, 56, 112, 224, 448,  896,  /* divider = 7 */
++	8, 16, 32, 64, 128, 256, 512, 1024,  /* divider = 8 */
++};
++
++/*
++ * Check if the divider is available for internal ratio mode
++ */
++static bool fsl_asrc_divider_avail(int clk_rate, int rate, int *div)
++{
++	u32 rem, i;
++	u64 n;
++
++	if (div)
++		*div = 0;
++
++	if (clk_rate == 0 || rate == 0)
++		return false;
++
++	n = clk_rate;
++	rem = do_div(n, rate);
++
++	if (div)
++		*div = n;
++
++	if (rem != 0)
++		return false;
++
++	for (i = 0; i < DIVIDER_NUM; i++) {
++		if (n == asrc_clk_divider[i])
++			break;
++	}
++
++	if (i == DIVIDER_NUM)
++		return false;
++
++	return true;
++}
++
+ /**
+  * fsl_asrc_sel_proc - Select the pre-processing and post-processing options
+  * @inrate: input sample rate
+@@ -330,12 +380,12 @@ static int fsl_asrc_config_pair(struct fsl_asrc_pair *pair, bool use_ideal_rate)
+ 	enum asrc_word_width input_word_width;
+ 	enum asrc_word_width output_word_width;
+ 	u32 inrate, outrate, indiv, outdiv;
+-	u32 clk_index[2], div[2], rem[2];
++	u32 clk_index[2], div[2];
+ 	u64 clk_rate;
+ 	int in, out, channels;
+ 	int pre_proc, post_proc;
+ 	struct clk *clk;
+-	bool ideal;
++	bool ideal, div_avail;
+ 
+ 	if (!config) {
+ 		pair_err("invalid pair config\n");
+@@ -415,8 +465,7 @@ static int fsl_asrc_config_pair(struct fsl_asrc_pair *pair, bool use_ideal_rate)
+ 	clk = asrc_priv->asrck_clk[clk_index[ideal ? OUT : IN]];
+ 
+ 	clk_rate = clk_get_rate(clk);
+-	rem[IN] = do_div(clk_rate, inrate);
+-	div[IN] = (u32)clk_rate;
++	div_avail = fsl_asrc_divider_avail(clk_rate, inrate, &div[IN]);
+ 
+ 	/*
+ 	 * The divider range is [1, 1024], defined by the hardware. For non-
+@@ -425,7 +474,7 @@ static int fsl_asrc_config_pair(struct fsl_asrc_pair *pair, bool use_ideal_rate)
+ 	 * only result in different converting speeds. So remainder does not
+ 	 * matter, as long as we keep the divider within its valid range.
+ 	 */
+-	if (div[IN] == 0 || (!ideal && (div[IN] > 1024 || rem[IN] != 0))) {
++	if (div[IN] == 0 || (!ideal && !div_avail)) {
+ 		pair_err("failed to support input sample rate %dHz by asrck_%x\n",
+ 				inrate, clk_index[ideal ? OUT : IN]);
+ 		return -EINVAL;
+@@ -436,13 +485,12 @@ static int fsl_asrc_config_pair(struct fsl_asrc_pair *pair, bool use_ideal_rate)
+ 	clk = asrc_priv->asrck_clk[clk_index[OUT]];
+ 	clk_rate = clk_get_rate(clk);
+ 	if (ideal && use_ideal_rate)
+-		rem[OUT] = do_div(clk_rate, IDEAL_RATIO_RATE);
++		div_avail = fsl_asrc_divider_avail(clk_rate, IDEAL_RATIO_RATE, &div[OUT]);
+ 	else
+-		rem[OUT] = do_div(clk_rate, outrate);
+-	div[OUT] = clk_rate;
++		div_avail = fsl_asrc_divider_avail(clk_rate, outrate, &div[OUT]);
+ 
+ 	/* Output divider has the same limitation as the input one */
+-	if (div[OUT] == 0 || (!ideal && (div[OUT] > 1024 || rem[OUT] != 0))) {
++	if (div[OUT] == 0 || (!ideal && !div_avail)) {
+ 		pair_err("failed to support output sample rate %dHz by asrck_%x\n",
+ 				outrate, clk_index[OUT]);
+ 		return -EINVAL;
+@@ -621,8 +669,7 @@ static void fsl_asrc_select_clk(struct fsl_asrc_priv *asrc_priv,
+ 			clk_index = asrc_priv->clk_map[j][i];
+ 			clk_rate = clk_get_rate(asrc_priv->asrck_clk[clk_index]);
+ 			/* Only match a perfect clock source with no remainder */
+-			if (clk_rate != 0 && (clk_rate / rate[j]) <= 1024 &&
+-			    (clk_rate % rate[j]) == 0)
++			if (fsl_asrc_divider_avail(clk_rate, rate[j], NULL))
+ 				break;
+ 		}
+ 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.17.1
+

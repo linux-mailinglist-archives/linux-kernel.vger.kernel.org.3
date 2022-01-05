@@ -2,81 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0470D485260
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:23:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED3AD485263
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:24:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239990AbiAEMXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 07:23:50 -0500
-Received: from mail-wr1-f54.google.com ([209.85.221.54]:43744 "EHLO
-        mail-wr1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbiAEMXs (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 07:23:48 -0500
-Received: by mail-wr1-f54.google.com with SMTP id o3so24436981wrh.10;
-        Wed, 05 Jan 2022 04:23:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3vGTuWVHs0jAZJPZmVYXJHdNt84L1PDEmSZR/VjnEFM=;
-        b=kLJZFrw/CkL13K1UhXaXfjPYBUz8yi5UCt9bxk5MghqFMhJci9HPWEHy8HPiual5XZ
-         nPi1tAHciUAi0Z/+8q/lC14q54uTONBUSnqTPiWe8Hw7/zlCkKZRY1WVAd8BrkPcjB/w
-         mpDzEtoHPjERAFcis7ndhd7lcqG366Uw7Lpj7r8YWWHzLBLgrYnZt2H1Ize3qv0UkdfK
-         dSbReiGxY0sjrDYMGTVMo8s3rog8o73dST3MsrcGQFyotaS4Yv6FcD9SEJfQhyKf55z1
-         lFcR8Bd5M93bztavw/SoAFyCeU/WXgIE2sGodk9rV0A3Q9d9kCP//sF26/Voj2A0DqGg
-         wgIQ==
-X-Gm-Message-State: AOAM530qOskZlq9P43XhqO6f9lSgoThN/fEkEh7n/iW1PTvN7I6zaApI
-        2WJAGu9MDuLKmjeXczIa5tM=
-X-Google-Smtp-Source: ABdhPJytrxWG4YRfNcP5E3R86MxwQk61VG41q2ECBIwykw2jHAbzUhtzIKzidXOJ6z7sJGugTa1KFw==
-X-Received: by 2002:adf:fbcf:: with SMTP id d15mr34871393wrs.132.1641385427221;
-        Wed, 05 Jan 2022 04:23:47 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id l14sm36041756wrr.53.2022.01.05.04.23.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 04:23:46 -0800 (PST)
-Date:   Wed, 5 Jan 2022 12:23:45 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     YueHaibing <yuehaibing@huawei.com>, kys@microsoft.com,
-        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, jejb@linux.ibm.com, mikelley@microsoft.com,
-        Tianyu.Lan@microsoft.com, longli@microsoft.com,
-        linux-hyperv@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 -next] scsi: storvsc: Fix unsigned comparison to zero
-Message-ID: <20220105122345.f5qlp5ftirglk7og@liuwe-devbox-debian-v2>
-References: <20211227040311.54584-1-yuehaibing@huawei.com>
- <yq135m2zqw1.fsf@ca-mkp.ca.oracle.com>
+        id S240000AbiAEMYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 07:24:47 -0500
+Received: from mga09.intel.com ([134.134.136.24]:6697 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229997AbiAEMYl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 07:24:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641385481; x=1672921481;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=SlgaR6uzmEBK8uFF5uCky/iCc0048T/UdOFjxlvuZG4=;
+  b=CkCSGe8/iGYCCyZeZnNroj1Kog2iHLyBpLdeJY1KqXDEtiA6IK6fcqpD
+   1T9bRA/SccSiuhmAy3gxy1Af0B9Gp/iBlplQFQuXjaY5pLHvywzLBtDuU
+   wzi8ctpCqEON/EvCnA+Pm/DZe1DIhX6lt08jnGdgpcS72UPYYlYHeA9hp
+   iQW3ACDHMakGs6Bdhcx+9qWLTCm38tvAUePQceCltfl/JASQzxBMC8u47
+   91CchnH2vfzAft06k0LJX6ukjkPmiImukRLwbI+8c27KsXjd4I3joPGF0
+   LPsgYNGNAIp2qvqHT7fycYu50m9FtoTqoHQfh0OX2PbXJz6rYT+DbjUTp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242225532"
+X-IronPort-AV: E=Sophos;i="5.88,263,1635231600"; 
+   d="scan'208";a="242225532"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 04:24:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,263,1635231600"; 
+   d="scan'208";a="574371101"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 05 Jan 2022 04:24:38 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n55LK-000GaY-53; Wed, 05 Jan 2022 12:24:38 +0000
+Date:   Wed, 5 Jan 2022 20:24:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH V2 3/3] nvmem: add driver handling U-Boot environment
+ variables
+Message-ID: <202201052036.kcalPY98-lkp@intel.com>
+References: <20211230090449.11808-3-zajec5@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <yq135m2zqw1.fsf@ca-mkp.ca.oracle.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211230090449.11808-3-zajec5@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 12:41:31AM -0500, Martin K. Petersen wrote:
-> 
-> YueHaibing,
-> 
-> > The unsigned variable sg_count is being assigned a return value
-> > from the call to scsi_dma_map() that can return -ENOMEM.
-> >
-> > Fixes: 743b237c3a7b ("scsi: storvsc: Add Isolation VM support for
-> > storvsc driver")
-> 
-> This should probably go through the Hyper-V tree - I presume that's
-> where the offending commit is sitting?
+Hi "Rafał,
 
-Hi Martin
+I love your patch! Yet something to improve:
 
-I will pick this up.
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on mtd/mtd/next mtd/mtd/fixes linus/master v5.16-rc8]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Thanks,
-Wei.
+url:    https://github.com/0day-ci/linux/commits/Rafa-Mi-ecki/mtd-core-call-devm_of_platform_populate-for-MTD-devices/20211230-170531
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: arm64-randconfig-r003-20220105 (https://download.01.org/0day-ci/archive/20220105/202201052036.kcalPY98-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/52f6be4712d04b927cd356dd95940bd76f1f5b97
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Rafa-Mi-ecki/mtd-core-call-devm_of_platform_populate-for-MTD-devices/20211230-170531
+        git checkout 52f6be4712d04b927cd356dd95940bd76f1f5b97
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-> 
-> Otherwise I can take this after -rc1 is out.
-> 
-> -- 
-> Martin K. Petersen	Oracle Linux Engineering
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   aarch64-linux-ld: Unexpected GOT/PLT entries detected!
+   aarch64-linux-ld: Unexpected run-time procedure linkages detected!
+   aarch64-linux-ld: drivers/nvmem/u-boot-env.o: in function `u_boot_env_read':
+>> u-boot-env.c:(.text+0x4c): undefined reference to `mtd_read'
+   aarch64-linux-ld: drivers/nvmem/u-boot-env.o: in function `u_boot_env_probe':
+>> u-boot-env.c:(.text+0x3e0): undefined reference to `get_mtd_device_nm'
+>> aarch64-linux-ld: u-boot-env.c:(.text+0x428): undefined reference to `mtd_read'
+   aarch64-linux-ld: u-boot-env.c:(.text+0x494): undefined reference to `mtd_read'
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,82 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 603BB484EDC
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 08:49:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2781F484F09
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 09:12:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238216AbiAEHth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 02:49:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35550 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238215AbiAEHtf (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 02:49:35 -0500
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74078C061761;
-        Tue,  4 Jan 2022 23:49:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=2szDbwiVK5KeG4XhY1ZLp/nsWXXU2FYHOQjt1VACpXA=;
-        t=1641368974; x=1642578574; b=nPNEOhQZAhOaTuDcCtnoWCTKHDrxygYf2jF8TiuIg/nP7qJ
-        K7pRoDllpdWdL2usU2cQWVrVyWgUIf+p5uIRu+/WPiSQIwTdc9/sZ9LuXsZlIxZPXVuQzUthVNp9n
-        FjdsFZMHeauxJzrw2w+m5Wm8KeWfRMPhN2LTsqjWJ7+6vj9kQ6cUBWLwY62dC/ea9deoTYK3D0Noi
-        8gAra6D5mDkbdNdyLB0OubhyEdu0dzOl7MDZOYFOXlRTTE46veYtgbGGt78eNz+SYkKYuVxtY0f6E
-        NzPX0k6LkZdE3G92vZS1/EOdPPkRAbLVmDZhdIu0wVRd/yTnr5mcsKjh3DgP4h9A==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1n512x-0025QK-Uv;
-        Wed, 05 Jan 2022 08:49:24 +0100
-Message-ID: <c6e52470551dc7802a36c5080c6c61a2ad625e7f.camel@sipsolutions.net>
-Subject: Re: [PATCH v2] mac80211: mlme: check for null after calling kmemdup
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 05 Jan 2022 08:49:22 +0100
-In-Reply-To: <20220105013308.2011586-1-jiasheng@iscas.ac.cn>
-References: <20220105013308.2011586-1-jiasheng@iscas.ac.cn>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+        id S238344AbiAEILl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 03:11:41 -0500
+Received: from mga05.intel.com ([192.55.52.43]:13816 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230005AbiAEILg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 03:11:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641370296; x=1672906296;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=VVpNUBQjFn92mN2xWVrn6+q6FmyXhBeMOJG28wluJ7k=;
+  b=Fb57QO8rKykGuoFKUZbIM5czCvXx+56fXlHzORblv6it/ij1qlUwZ/yy
+   2ffxNHwqYcFyhRpdk0ns9Or720tM5381SN1aWXVBBHx6aPcBHBb2x1IoK
+   BcAENJdWAqvn/N7X95yvRBgTOF4+s4A4CZnwYUu6KmGxIffhncZxVbMHx
+   RdjbIJXv/1QrsDHp3kB9xvDdBLjmGLiJ2lcoNmBQxCQrN6KgIn5vLcSkC
+   RP81TLPBlHgd+3ELjlO4JMZojIhnHlDuC+ezUSnXe0anqd1nd4CXOw1O0
+   l1/ttp1EuGo9N25g36cE2hg2RuDdfKhnXrh2Fq4fzxqxKgkDxJwcSN1xi
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="328737414"
+X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
+   d="scan'208";a="328737414"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 00:11:34 -0800
+X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
+   d="scan'208";a="611379321"
+Received: from yzhao56-desk.sh.intel.com ([10.239.159.43])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 00:11:28 -0800
+Date:   Wed, 5 Jan 2022 15:53:56 +0800
+From:   Yan Zhao <yan.y.zhao@intel.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com
+Subject: Re: [PATCH v3 kvm/queue 14/16] KVM: Handle page fault for private
+ memory
+Message-ID: <20220105075356.GB19947@yzhao56-desk.sh.intel.com>
+Reply-To: Yan Zhao <yan.y.zhao@intel.com>
+References: <20211223123011.41044-1-chao.p.peng@linux.intel.com>
+ <20211223123011.41044-15-chao.p.peng@linux.intel.com>
+ <20220104014629.GA2330@yzhao56-desk.sh.intel.com>
+ <20220104091008.GA21806@chaop.bj.intel.com>
+ <20220104100612.GA19947@yzhao56-desk.sh.intel.com>
+ <20220105062810.GB25283@chaop.bj.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-malware-bazaar: not-scanned
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220105062810.GB25283@chaop.bj.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-01-05 at 09:33 +0800, Jiasheng Jiang wrote:
-> As the possible failure of the alloc, the ifmgd->assoc_req_ies might be
-> NULL pointer returned from kmemdup().
-> Therefore it might be better to free the skb and return in order to fail
-> the association, like ieee80211_assoc_success().
+On Wed, Jan 05, 2022 at 02:28:10PM +0800, Chao Peng wrote:
+> On Tue, Jan 04, 2022 at 06:06:12PM +0800, Yan Zhao wrote:
+> > On Tue, Jan 04, 2022 at 05:10:08PM +0800, Chao Peng wrote:
+<...> 
+> > Thanks. So QEMU will re-generate memslots and set KVM_MEM_PRIVATE
+> > accordingly? Will it involve slot deletion and create?
 > 
-> Fixes: 4d9ec73d2b78 ("cfg80211: Report Association Request frame IEs in association events")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
-> v2: Change to fail the association if kmemdup returns NULL.
-> ---
->  net/mac80211/mlme.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/net/mac80211/mlme.c b/net/mac80211/mlme.c
-> index 9bed6464c5bd..b5dfdf953286 100644
-> --- a/net/mac80211/mlme.c
-> +++ b/net/mac80211/mlme.c
-> @@ -1058,6 +1058,11 @@ static void ieee80211_send_assoc(struct ieee80211_sub_if_data *sdata)
->  	pos = skb_tail_pointer(skb);
->  	kfree(ifmgd->assoc_req_ies);
->  	ifmgd->assoc_req_ies = kmemdup(ie_start, pos - ie_start, GFP_ATOMIC);
-> +	if (!ifmgd->assoc_req_ies) {
-> +		dev_kfree_skb(skb);
-> +		return;
-> +	}
-> 
+> KVM will not re-generate memslots when do the conversion, instead, it
+> does unmap/map a range on the same memslot. For memslot with tag
+> KVM_MEM_PRIVATE, it always have two mappings (private/shared) but at a
+> time only one is effective. What conversion does is to turn off the
+> existing mapping and turn on the other mapping for specified range in
+> that slot.
+>
+got it. thanks!
 
-That doesn't fail, that just doesn't send the frame and will then time
-out later, not very useful?
+<...>
+> > > > > +static bool kvm_faultin_pfn_private(struct kvm_vcpu *vcpu,
+> > > > > +				    struct kvm_page_fault *fault,
+> > > > > +				    bool *is_private_pfn, int *r)
+> > > > > +{
+> > > > > +	int order;
+> > > > > +	int mem_convert_type;
+> > > > > +	struct kvm_memory_slot *slot = fault->slot;
+> > > > > +	long pfn = kvm_memfd_get_pfn(slot, fault->gfn, &order);
+> > > > For private memory slots, it's possible to have pfns backed by
+> > > > backends other than memfd, e.g. devicefd.
+> > > 
+> > > Surely yes, although this patch only supports memfd, but it's designed
+> > > to be extensible to support other memory backing stores than memfd. There
+> > > is one assumption in this design however: one private memslot can be
+> > > backed by only one type of such memory backing store, e.g. if the
+> > > devicefd you mentioned can independently provide memory for a memslot
+> > > then that's no issue.
+> > > 
+> > > >So is it possible to let those
+> > > > private memslots keep private and use traditional hva-based way?
+> > > 
+> > > Typically this fd-based private memory uses the 'offset' as the
+> > > userspace address to get a pfn from the backing store fd. But I believe
+> > > the current code does not prevent you from using the hva as the
+> > By hva-based way, I mean mmap is required for this fd.
+> > 
+> > > userspace address, as long as your memory backing store understand that
+> > > address and can provide the pfn basing on it. But since you already have
+> > > the hva, you probably already mmap-ed the fd to userspace, that seems
+> > > not this private memory patch can protect you. Probably I didn't quite
+> > Yes, for this fd, though mapped in private memslot, there's no need to
+> > prevent QEMU/host from accessing it as it will not cause the severe machine
+> > check.
+> > 
+> > > understand 'keep private' you mentioned here.
+> > 'keep private' means allow this kind of private memslot which does not
+> > require protection from this private memory patch :)
+> 
+> Then I think such memory can be the shared part of memory of the
+> KVM_MEM_PRIVATE memslot. As said above, this is initially supported :)
+>
+Sorry, maybe I didn't express it clearly.
 
-johannes
+As in the kvm_faultin_pfn_private(), 
+static bool kvm_faultin_pfn_private(struct kvm_vcpu *vcpu,
+				    struct kvm_page_fault *fault,
+				    bool *is_private_pfn, int *r)
+{
+	int order;
+	int mem_convert_type;
+	struct kvm_memory_slot *slot = fault->slot;
+	long pfn = kvm_memfd_get_pfn(slot, fault->gfn, &order);
+	...
+}
+Currently, kvm_memfd_get_pfn() is called unconditionally.
+However, if the backend of a private memslot is not memfd, and is device
+fd for example, a different xxx_get_pfn() is required here.
+
+Further, though mapped to a private gfn, it might be ok for QEMU to
+access the device fd in hva-based way (or call it MMU access way, e.g.
+read/write/mmap), it's desired that it could use the traditional to get
+pfn without convert the range to a shared one.
+pfn = __gfn_to_pfn_memslot(slot, fault->gfn, ...)
+	|->addr = __gfn_to_hva_many (slot, gfn,...)
+	|  pfn = hva_to_pfn (addr,...)
+
+
+So, is it possible to recognize such kind of backends in KVM, and to get
+the pfn in traditional way without converting them to shared?
+e.g.
+- specify KVM_MEM_PRIVATE_NONPROTECT to memory regions with such kind
+of backends, or
+- detect the fd type and check if get_pfn is provided. if no, go the
+  traditional way.
+
+Thanks
+Yan
+
+> > > > Reasons below:
+> > > > 1. only memfd is supported in this patch set.
+> > > > 2. qemu/host read/write to those private memslots backing up by devicefd may
+> > > > not cause machine check.
+

@@ -2,123 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A474855C6
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:23:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B284855CB
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:24:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241433AbiAEPXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 10:23:13 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:55974 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241424AbiAEPXM (ORCPT
+        id S241443AbiAEPYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 10:24:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241491AbiAEPYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 10:23:12 -0500
+        Wed, 5 Jan 2022 10:24:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10004C061245;
+        Wed,  5 Jan 2022 07:24:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C7F8617C9;
-        Wed,  5 Jan 2022 15:23:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C31A7C36AE0;
-        Wed,  5 Jan 2022 15:23:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641396191;
-        bh=ee5Owo3zU5vxkUxfJCeUQuvv8yMKNI4iRfO6jmetJQ4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m579DXS9iq/ymOI4ZYUnx7B941if1nNEh9yl45zNk3rugpq+87IPVeo2rjyAAov87
-         EC8zXM51rU4ItLwIGU+yIgBgEJnPsWmWTAlaOT5aLj9O0zt8mF/U7DSr2UClcL9Jzd
-         MpvNjt9QyFcTtQH1nnFyr2juOBZjQMWd82WYYsmw=
-Date:   Wed, 5 Jan 2022 16:23:08 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH] headers/uninline: Uninline single-use function:
- kobject_has_children()
-Message-ID: <YdW33ITu4Hz3+kid@kroah.com>
-References: <YdIfz+LMewetSaEB@gmail.com>
- <20220103135400.4p5ezn3ntgpefuan@box.shutemov.name>
- <YdQnfyD0JzkGIzEN@gmail.com>
- <YdRM7I9E2WGU4GRg@kroah.com>
- <YdRRl+jeAm/xfU8D@gmail.com>
- <YdRjRWHgvnqVe8UZ@kroah.com>
- <YdRkZqGuKCZcRbov@kroah.com>
- <YdTiF5dVeizYtIDS@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdTiF5dVeizYtIDS@gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id C145EB81C24;
+        Wed,  5 Jan 2022 15:24:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12DBAC36AE0;
+        Wed,  5 Jan 2022 15:24:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641396281;
+        bh=uvTf2jfh+MIhZI5PPr+ElM4TeMYS68HmJo8Y431Rbb8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XLLsY6/rbs/SuZzN5aITI0C9UZVuzQzHpif9Moqjc5iDwu95kw4Hm73Dxa0xDHa6S
+         6KuYbA9QF6sCcoolwsAMdFB+RyRMc2TsK7jtJlTkNGpivyufe1kL05FUd9zkL+aVTk
+         PadlCRQm1Lmn0xuvTzkux81vSoTMK86po9OpncyY+lci+XYxQn2x/dcyFtACygXDUu
+         LwBWA4k536qgB8sTP3kpE4zG3qwo/0jPOPcTS0Gxsihzhk3Cw06qrqMXlrNw68whhh
+         Dd9bjgwF9cz5vuDgMs/a8YW357Wi4qvt9BDbrfyzJZeCi70hf0fVgg741RpQI9/ICW
+         Bna8M10ILkbMg==
+Date:   Thu, 6 Jan 2022 00:24:35 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [RFC 00/13] kprobe/bpf: Add support to attach multiple kprobes
+Message-Id: <20220106002435.d73e4010c93462fbee9ef074@kernel.org>
+In-Reply-To: <20220104080943.113249-1-jolsa@kernel.org>
+References: <20220104080943.113249-1-jolsa@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 01:11:03AM +0100, Ingo Molnar wrote:
-> 
-> * Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> 
-> > On Tue, Jan 04, 2022 at 04:09:57PM +0100, Greg Kroah-Hartman wrote:
-> > > On Tue, Jan 04, 2022 at 02:54:31PM +0100, Ingo Molnar wrote:
-> > > > 
-> > > > * Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> > > > 
-> > > > > On Tue, Jan 04, 2022 at 11:54:55AM +0100, Ingo Molnar wrote:
-> > > > > > There's one happy exception though, all the uninlining patches that 
-> > > > > > uninline a single-call function are probably fine as-is:
-> > > > > 
-> > > > > <snip>
-> > > > > 
-> > > > > >  3443e75fd1f8 headers/uninline: Uninline single-use function: kobject_has_children()
-> > > > > 
-> > > > > Let me go take this right now, no need for this to wait, it should be
-> > > > > out of kobject.h as you rightfully show there is only one user.
-> > > > 
-> > > > Sure - here you go!
-> > > 
-> > > I just picked it out of your git tree already :)
-> > > 
-> > > Along those lines, any objection to me taking at least one other one?
-> > > 3f8757078d27 ("headers/prep: usb: gadget: Fix namespace collision") and
-> 
-> Ack.
-> 
-> > > 6fb993fa3832 ("headers/deps: USB: Optimize <linux/usb/ch9.h>
-> 
-> Ack.
+On Tue,  4 Jan 2022 09:09:30 +0100
+Jiri Olsa <jolsa@redhat.com> wrote:
 
-This one required me to fix up a usb core file that was only including
-this .h file and not kernel.h which it also needed.  Now resolved in my
-tree.
+> hi,
+> adding support to attach multiple kprobes within single syscall
+> and speed up attachment of many kprobes.
+> 
+> The previous attempt [1] wasn't fast enough, so coming with new
+> approach that adds new kprobe interface.
 
-> > > dependencies, remove <linux/device.h>") look like I can take now into my
-> > > USB tree with no problems.
-> > 
-> > Also these look good to go now:
-> > 	bae9ddd98195 ("headers/prep: Fix non-standard header section: drivers/usb/cdns3/core.h")
-> 
-> Ack.
-> 
-> > 	c027175b37e5 ("headers/prep: Fix non-standard header section: drivers/usb/host/ohci-tmio.c")
-> 
-> Ack.
-> 
-> Note that these latter two patches just simplified the task of my 
-> (simplistic) tooling, which is basically a shell script that inserts
-> header dependencies to the head of .c and .h files, right in front of
-> the first #include line it encounters.
-> 
-> These two patches do have some marginal clean-up value too, so I'm not 
-> opposed to merging them - just wanted to declare their true role. :-)
+Yes, since register_kprobes() just registers multiple kprobes on
+array. This is designed for dozens of kprobes.
 
-They all are sane cleanups, so I've taken them in my tree now.  Make
-your patchset a bit smaller against 5.17-rc1 when that comes around :)
+> The attachment speed of of this approach (tested in bpftrace)
+> is now comparable to ftrace tracer attachment speed.. fast ;-)
 
-thanks,
+Yes, because that if ftrace, not kprobes.
 
-greg k-h
+> The limit of this approach is forced by using ftrace as attach
+> layer, so it allows only kprobes on function's entry (plus
+> return probes).
+
+Note that you also need to multiply the number of instances.
+
+> 
+> This patchset contains:
+>   - kprobes support to register multiple kprobes with current
+>     kprobe API (patches 1 - 8)
+>   - bpf support ot create new kprobe link allowing to attach
+>     multiple addresses (patches 9 - 14)
+> 
+> We don't need to care about multiple probes on same functions
+> because it's taken care on the ftrace_ops layer.
+
+Hmm, I think there may be a time to split the "kprobe as an 
+interface for the software breakpoint" and "kprobe as a wrapper
+interface for the callbacks of various instrumentations", like
+'raw_kprobe'(or kswbp) and 'kprobes'.
+And this may be called as 'fprobe' as ftrace_ops wrapper.
+(But if the bpf is enough flexible, this kind of intermediate layer
+ may not be needed, it can use ftrace_ops directly, eventually)
+
+Jiri, have you already considered to use ftrace_ops from the
+bpf directly? Are there any issues?
+(bpf depends on 'kprobe' widely?)
+
+Thank you,
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

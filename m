@@ -2,67 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D00484DE1
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 07:02:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83E6B484DE5
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 07:04:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237612AbiAEGC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 01:02:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237605AbiAEGCZ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 01:02:25 -0500
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21846C061761;
-        Tue,  4 Jan 2022 22:02:25 -0800 (PST)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n4zNP-00HOIu-92; Wed, 05 Jan 2022 06:02:23 +0000
-Date:   Wed, 5 Jan 2022 06:02:23 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH 05/10] exit: Stop exporting do_exit
-Message-ID: <YdU0bzBuHCokPgCM@zeniv-ca.linux.org.uk>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
- <20211208202532.16409-5-ebiederm@xmission.com>
+        id S237627AbiAEGD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 01:03:59 -0500
+Received: from box.trvn.ru ([194.87.146.52]:55879 "EHLO box.trvn.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236299AbiAEGD5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 01:03:57 -0500
+Received: from authenticated-user (box.trvn.ru [194.87.146.52])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by box.trvn.ru (Postfix) with ESMTPSA id CA02A403F1;
+        Wed,  5 Jan 2022 11:03:53 +0500 (+05)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
+        t=1641362635; bh=0AK0sJT4llPAlmM503xOe/kxnJz+trGyjkDwN14mYGk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=su4oHd98ySITA8xqDt7pLPqqHdXYW1XCIvfyEnwYTzsqk6vTB9gqCU6/Jl/iGrdfF
+         feRVfrO3DflH0NHeu/DAjy2kqT+QRIXT3CDHaYN85hdlC3/ahDYIe3W2T4BCXnZ1Kd
+         X2TeAYI3xbHY7gVHm4JBprG6+WVdDoLjmoxm4WaB7/oKcknKgMorIviitVl6NlsDNP
+         P/n6nmzIxk5iLdhwFhD7H2VHa8X87a6LZTXec8POYRiawXvIkaKqgs+bWkvmDa0LWY
+         WZOvRzdp7i4bUGPVFejz5E+zzTLsnsyKV4mcFIp/ffLlEop7YVpa9mvjcVjPW1FxE1
+         KIsUssWvWtkPw==
+From:   Nikita Travkin <nikita@trvn.ru>
+To:     dmitry.torokhov@gmail.com
+Cc:     robh+dt@kernel.org, Michael.Srba@seznam.cz,
+        linus.walleij@linaro.org, broonie@kernel.org, luca@z3ntu.xyz,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        phone-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Nikita Travkin <nikita@trvn.ru>
+Subject: [PATCH v2 0/6] Add touch-keys support to the Zinitix touch driver
+Date:   Wed,  5 Jan 2022 11:03:17 +0500
+Message-Id: <20220105060323.7928-1-nikita@trvn.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211208202532.16409-5-ebiederm@xmission.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 02:25:27PM -0600, Eric W. Biederman wrote:
-> Now that there are no more modular uses of do_exit remove the EXPORT_SYMBOL.
-> 
-> Suggested-by: Christoph Hellwig <hch@infradead.org>
-> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-> ---
->  kernel/exit.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/kernel/exit.c b/kernel/exit.c
-> index f975cd8a2ed8..57afac845a0a 100644
-> --- a/kernel/exit.c
-> +++ b/kernel/exit.c
-> @@ -843,7 +843,6 @@ void __noreturn do_exit(long code)
->  	lockdep_free_task(tsk);
->  	do_task_dead();
->  }
-> -EXPORT_SYMBOL_GPL(do_exit);
+This series adds support for the touch-keys that can be present on some
+touchscreen configurations, adds the compatible for bt532 and fixes a
+small race condition bug in the driver probe function.
 
-"Now" in the commit message is misleading, AFAICS - there's no such users
-in the mainline right now (and yes, that one could be moved all the way
-up).
+I also pick up the series that converts the dt bindings to yaml
+initially submitted by Linus Walleij in [1].
+I made some minor changes to those patches:
+ - Fixed dt_schema_check error
+ - Adressed the review comments from Dmitry on the original series
+
+[1] https://lore.kernel.org/linux-input/20210625113435.2539282-1-linus.walleij@linaro.org/
+
+Changes in v2:
+- Use input.yaml in the dt binding for the touchkey
+- Add missing le16_to_cpu()
+
+Linus Walleij (2):
+  dt-bindings: input/ts/zinitix: Convert to YAML, fix and extend
+  Input: zinitix - Handle proper supply names
+
+Nikita Travkin (4):
+  input: zinitix: Make sure the IRQ is allocated before it gets enabled
+  input: zinitix: Add compatible for bt532
+  dt-bindings: input: zinitix: Document touch-keys support
+  input: zinitix: Add touchkey support
+
+ .../input/touchscreen/zinitix,bt400.yaml      | 125 ++++++++++++++++++
+ .../bindings/input/touchscreen/zinitix.txt    |  40 ------
+ drivers/input/touchscreen/zinitix.c           | 101 +++++++++++---
+ 3 files changed, 209 insertions(+), 57 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/input/touchscreen/zinitix,bt400.yaml
+ delete mode 100644 Documentation/devicetree/bindings/input/touchscreen/zinitix.txt
+
+-- 
+2.30.2
+

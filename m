@@ -2,493 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1053484CE4
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 04:34:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49CC6484CE9
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 04:36:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236037AbiAEDeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 22:34:08 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:51250 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230020AbiAEDeH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 22:34:07 -0500
-Received: from [10.180.13.117] (unknown [10.180.13.117])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxidGgEdVh4O0AAA--.2215S2;
-        Wed, 05 Jan 2022 11:33:53 +0800 (CST)
-Subject: Re: [PATCH v2 1/2] modpost: file2alias: fixup mdio alias garbled code
- in modules.alias
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>, davem@davemloft.net,
-        kuba@kernel.org, masahiroy@kernel.org, michal.lkml@markovi.net,
-        ndesaulniers@google.com
-Cc:     hkallweit1@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        masahiroy@kernel.org, michal.lkml@markovi.net,
-        ndesaulniers@google.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        zhuyinbo@loongson.cn, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
-References: <1637919957-21635-1-git-send-email-zhuyinbo@loongson.cn>
- <c6d37ae0-9ccb-a527-4f55-e96972813a53@gmail.com>
- <YaYPMOJ/+OXIWcnj@shell.armlinux.org.uk> <YabEHd+Z5SPAhAT5@lunn.ch>
- <f91f4fff-8bdf-663b-68f5-b8ccbd0c187a@loongson.cn>
- <257a0fbf-941e-2d9e-50b4-6e34d7061405@loongson.cn>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <ba055ee6-9d81-3088-f395-8e4e1d9ba136@loongson.cn>
-Date:   Wed, 5 Jan 2022 11:33:52 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S237229AbiAEDgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 22:36:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236788AbiAEDgk (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 22:36:40 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DD2C061761
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 19:36:40 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id y130so89576705ybe.8
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 19:36:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=AqC1IHEx9dQuWnodrHASLopylxT4xjAMf5cAeN6buVM=;
+        b=SN6tc20mOHH701za+plFKttZrD5wwyZ1DdpO6RSof2fzAhHP/DtJy62D768rv4z0Si
+         a+f04aEC0l87hf/mG23OF33dOtzgzELjXOqjspSmVF+Y43DGKdpU3rB5bZk4UreRKwlH
+         SQ/uAV2uhUu5hIlSYPg6e/FOvSKfbfdUpFI602RhSksBvDTHTz1drT2GfthwfDx0jhai
+         A8rEssy1wK+OX3/YPQl8wL5lkyh8hd20illc/ccM3SOIp7srn1oyYAoljO99fNSjOZoK
+         FCLBlGO4yi6clFI8APEI3doBybx4USrtn+qazZhncHFSQFmvrSN9Qj057hQ89hld3W8F
+         rHPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=AqC1IHEx9dQuWnodrHASLopylxT4xjAMf5cAeN6buVM=;
+        b=s9bMAs4KMkDRYOR1BX5bMXxSAcp/KEdjUDDd9V+NbtdN1nsLw4oMdJ9XxU8D09hOM2
+         YMOr2KMZ7j7xRTOC6n3xWofNnA/9XKFpSjncm4GPm1YTJNxEx21UVQD3v37jQ0QZQIsS
+         aT3cufclUWT74jb796ZrkGCYyzi7CFE9KvZsfvdpgZfIZa9k8KcQsQrfdw0MxHHK+pno
+         EL7kFVekGsidPxOEQj6+GQtY2AAG84/AIxOyF/kiyLHEdU+hYmeALEgl4wATrzpBQC0R
+         LIBCCom9PxYFTeWdoxrxPu/Oq+JdKxoBtXkKJQiB/aHYVPfJtlVywwlwJMnIrqfyZGUG
+         NnJQ==
+X-Gm-Message-State: AOAM532HUy2hZKuArGPsHHnnYiltZ47Gwgbwcop7+/yItS8BfEd7M8nb
+        o2rBMZeMIcgdzy0cD61/9w5qp/VRXC+U/j8+86oSGAN3iz/ETg==
+X-Google-Smtp-Source: ABdhPJwLjfYSwS0nCOh4CQIZacRcEylTSvp+UC4D4cbPWQ+qpH2/2wO3gD0ZZehnT2LhnqwiK4WB5cY8fK4flE+GR3Y=
+X-Received: by 2002:a25:414f:: with SMTP id o76mr52473829yba.146.1641353799617;
+ Tue, 04 Jan 2022 19:36:39 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <257a0fbf-941e-2d9e-50b4-6e34d7061405@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9CxidGgEdVh4O0AAA--.2215S2
-X-Coremail-Antispam: 1UD129KBjvAXoW3uw1UAr45uryxAry8Wr17Wrg_yoW8AF1kZo
-        WfG3WfXa1rKr1j9FnrGw1UJFW3Ja95Ca4kZrWUWrs3uayYqw1Yya4xA3y8XayrJry8WFsr
-        A397tw1akFW3tF95n29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-        AaLaJ3UjIYCTnIWjp_UUUYl7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20EY4v20xva
-        j40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2
-        x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8
-        Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
-        n2IY04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21lc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMx
-        C20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAF
-        wI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20x
-        vE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v2
-        0xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14
-        v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOmhFUUUUU
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+References: <20220104073839.317902293@linuxfoundation.org>
+In-Reply-To: <20220104073839.317902293@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 5 Jan 2022 09:06:28 +0530
+Message-ID: <CA+G9fYvyF=P49vo8EHAGp9gcpjhWhE4AUpP+Hhf9hYc3jdWw3A@mail.gmail.com>
+Subject: Re: [PATCH 5.4 00/36] 5.4.170-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 4 Jan 2022 at 13:11, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.170 release.
+> There are 36 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 06 Jan 2022 07:38:29 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.4.170-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
 
-在 2022/1/4 下午9:11, zhuyinbo 写道:
-> 
-> 
-> 在 2021/12/7 下午5:41, zhuyinbo 写道:
->>
->>
->> 在 2021/12/1 上午8:38, Andrew Lunn 写道:
->>>> However, this won't work for PHY devices created _before_ the kernel
->>>> has mounted the rootfs, whether or not they end up being used. So,
->>>> every PHY mentioned in DT will be created before the rootfs is mounted,
->>>> and none of these PHYs will have their modules loaded.
->>>
->>> Hi Russell
->>>
->>> I think what you are saying here is, if the MAC or MDIO bus driver is
->>> built in, the PHY driver also needs to be built in?
->>>
->>> If the MAC or MDIO bus driver is a module, it means the rootfs has
->>> already been mounted in order to get these modules. And so the PHY
->>> driver as a module will also work.
->>>
->>>> I believe this is the root cause of Yinbo Zhu's issue.
->>
->> I think you should be right and I had did lots of test but use 
->> rquest_module it doesn't load marvell module, and dts does't include 
->> any phy node. even though I was use "marvell" as input's args of 
->> request_module.
->>>
->>> You are speculating that in Yinbo Zhu case, the MAC driver is built
->>> in, the PHY is a module. The initial request for the firmware fails.
->>> Yinbo Zhu would like udev to try again later when the modules are
->>> available.
->>>
->>>> What we _could_ do is review all device trees and PHY drivers to see
->>>> whether DT modaliases are ever used for module loading. If they aren't,
->>>> then we _could_ make the modalias published by the kernel conditional
->>>> on the type of mdio device - continue with the DT approach for non-PHY
->>>> devices, and switch to the mdio: scheme for PHY devices. I repeat, this
->>>> can only happen if no PHY drivers match using the DT scheme, otherwise
->>>> making this change _will_ cause a regression.
->>>
->>
->>> Take a look at
->>> drivers/net/mdio/of_mdio.c:whitelist_phys[] and the comment above it.
->>>
->>> So there are some DT blobs out there with compatible strings for
->>> PHYs. I've no idea if they actually load that way, or the standard PHY
->>> mechanism is used.
->>>
->>>     Andrew
->>>
->>
->>
->>  > That is not true universally for all MDIO though - as
->>  > xilinx_gmii2rgmii.c clearly shows. That is a MDIO driver which uses DT
->>  > the compatible string to do the module load. So, we have proof there
->>  > that Yinbo Zhu's change will definitely cause a regression which we
->>  > can not allow.
->>
->> I don't understand that what you said about regression.  My patch 
->> doesn't cause  xilinx_gmii2rgmii.c driver load fail, in this time that 
->> do_of_table and platform_uevent will be responsible "of" type driver 
->> auto load and my patch was responsible for "mdio" type driver auto load,
->> In default code. There are request_module to load phy driver, but as 
->> Russell King said that request_module doesn't garantee auto load will 
->> always work well, but udev mechanism can garantee it. and udev 
->> mechaism is more mainstream, otherwise mdio_uevent is useless. if use 
->> udev mechanism that my patch was needed. and if apply my patch it 
->> doesn't cause request_module mechaism work bad because I will add 
->> following change:
->>
->>
->>
->> -       ret = request_module(MDIO_MODULE_PREFIX MDIO_ID_FMT,
->> -                            MDIO_ID_ARGS(phy_id));
->> +       ret = request_module(MDIO_MODULE_PREFIX MDIO_ID_FMT, phy_id);
->>          /* We only check for failures in executing the usermode binary,
->>           * not whether a PHY driver module exists for the PHY ID.
->>           * Accept -ENOENT because this may occur in case no initramfs 
->> exists,
->> diff --git a/include/linux/mod_devicetable.h 
->> b/include/linux/mod_devicetable.h
->> index 7bd23bf..bc6ea0d 100644
->> --- a/include/linux/mod_devicetable.h
->> +++ b/include/linux/mod_devicetable.h
->> @@ -600,16 +600,7 @@ struct platform_device_id {
->>   #define MDIO_NAME_SIZE         32
->>   #define MDIO_MODULE_PREFIX     "mdio:"
->>
->> -#define MDIO_ID_FMT 
->> "%u%u%u%u%u%u%u%u%u%u%u%u%u%u%u%u%u%u%u%u%u%u%u%u%u%u%u%u%u%u%u%u"
->> -#define MDIO_ID_ARGS(_id) \
->> -       ((_id)>>31) & 1, ((_id)>>30) & 1, ((_id)>>29) & 1, ((_id)>>28) 
->> & 1, \
->> -       ((_id)>>27) & 1, ((_id)>>26) & 1, ((_id)>>25) & 1, ((_id)>>24) 
->> & 1, \
->> -       ((_id)>>23) & 1, ((_id)>>22) & 1, ((_id)>>21) & 1, ((_id)>>20) 
->> & 1, \
->> -       ((_id)>>19) & 1, ((_id)>>18) & 1, ((_id)>>17) & 1, ((_id)>>16) 
->> & 1, \
->> -       ((_id)>>15) & 1, ((_id)>>14) & 1, ((_id)>>13) & 1, ((_id)>>12) 
->> & 1, \
->> -       ((_id)>>11) & 1, ((_id)>>10) & 1, ((_id)>>9) & 1, ((_id)>>8) & 
->> 1, \
->> -       ((_id)>>7) & 1, ((_id)>>6) & 1, ((_id)>>5) & 1, ((_id)>>4) & 1, \
->> -       ((_id)>>3) & 1, ((_id)>>2) & 1, ((_id)>>1) & 1, (_id) & 1
->> +#define MDIO_ID_FMT "p%08x"
->>
->>
->>
-> 
->  > > > > However, this won't work for PHY devices created _before_ the 
-> kernel
->  > > > > has mounted the rootfs, whether or not they end up being used. So,
->  > > > > every PHY mentioned in DT will be created before the rootfs is 
-> mounted,
->  > > > > and none of these PHYs will have their modules loaded.
->  > > >
->  > > > Hi Russell
->  > > >
->  > > > I think what you are saying here is, if the MAC or MDIO bus 
-> driver is
->  > > > built in, the PHY driver also needs to be built in?
->  > > >
->  > > > If the MAC or MDIO bus driver is a module, it means the rootfs has
->  > > > already been mounted in order to get these modules. And so the PHY
->  > > > driver as a module will also work.
->  > > >
->  > > > > I believe this is the root cause of Yinbo Zhu's issue.
->  > >
->  > > I think you should be right and I had did lots of test but use 
-> rquest_module
->  > > it doesn't load marvell module, and dts does't include any phy 
-> node. even
->  > > though I was use "marvell" as input's args of request_module.
-> 
->  > Please can you report the contents of /proc/sys/kernel/modprobe, and
->  > the kernel configuration of CONFIG_MODPROBE_PATH. I wonder if your
->  > userspace has that module loading mechanism disabled, or your kernel
->  > has CONFIG_MODPROBE_PATH as an empty string.
-> 
->  > If the module is not present by the time this call is made, then
->  > even if you load the appropriate driver module later, that module
->  > will not be used - the PHY will end up being driven by the generic
->  > clause 22 driver.
-> 
->  > > > That is not true universally for all MDIO though - as
->  > > > xilinx_gmii2rgmii.c clearly shows. That is a MDIO driver which 
-> uses DT
->  > > > the compatible string to do the module load. So, we have proof there
->  > > > that Yinbo Zhu's change will definitely cause a regression which we
->  > > > can not allow.
->  > >
->  > > I don't understand that what you said about regression.  My patch 
-> doesn't
->  > > cause  xilinx_gmii2rgmii.c driver load fail, in this time that 
-> do_of_table
->  > >and platform_uevent will be responsible "of" type driver auto load 
-> and my
->  > > patch was responsible for "mdio" type driver auto load,
-> 
->  > xilinx_gmii2rgmii is not a platform driver. It is a mdio driver:
-> 
->  > static struct mdio_driver xgmiitorgmii_driver = {
->                ^^^^^^^^^^^
-> 
->  > Therefore, platform_uevent() is irrelevant since this will never match
->  > a platform device. It will only match mdio devices, and the uevent
->  > generation for that is via mdio_uevent() which is the function you
->  > are changing.
-> 
-> 
-> static const struct of_device_id xgmiitorgmii_of_match[] = {
->          { .compatible = "xlnx,gmii-to-rgmii-1.0" },
->          {},
-> };
-> MODULE_DEVICE_TABLE(of, xgmiitorgmii_of_match);
-> 
-> static struct mdio_driver xgmiitorgmii_driver = {
->          .probe  = xgmiitorgmii_probe,
->          .mdiodrv.driver = {
->                  .name = "xgmiitorgmii",
->                  .of_match_table = xgmiitorgmii_of_match,
->          },
-> };
->  From the present point of view, no matter what the situation, my 
-> supplement can cover udev or request_module for auto load module.
-> 
-> if that phy driver isn't platform driver my patch cover it I think there 
-> is no doubt, if phy driver is platform driver and platform driver udev 
-> will cover it. My only requestion is the request_module not work well.
-> 
-> about xgmiitorgmii_of_match that it belongs to platform driver load, 
-> please you note. and about your doubt usepace whether disable module 
-> load that module load function is okay becuase other device driver auto 
-> load is okay.
-> 
->  > > In default code. There are request_module to load phy driver, but 
-> as > Russell
->  > > King said that request_module doesn't garantee auto load will 
-> always work
->  > > well, but udev mechanism can garantee it. and udev mechaism is more
->  > > mainstream, otherwise mdio_uevent is useless. if use udev mechanism 
-> that my
->  > > patch was needed. and if apply my patch it doesn't cause 
-> request_module
->  > > mechaism work bad because I will add following change:
-> 
->  > Please report back what the following command produces on your
->  > problem system:
-> 
->  > /sbin/modprobe -vn mdio:00000001010000010000110111010001
-> 
->  > Thanks.
-> 
-> [root@localhost ~]# lsmod | grep marvell
-> [root@localhost ~]# ls 
-> /lib/modules/4.19.190+/kernel/drivers/net/phy/marvell.ko
-> /lib/modules/4.19.190+/kernel/drivers/net/phy/marvell.ko
-> [root@localhost ~]# /sbin/modprobe -vn 
-> mdio:00000001010000010000110111010001
-> insmod /lib/modules/4.19.190+/kernel/drivers/net/phy/marvell.ko
-> insmod /lib/modules/4.19.190+/kernel/drivers/net/phy/marvell.ko
-> [root@localhost ~]#
-> [root@localhost ~]# cat /proc/sys/kernel/modprobe
-> /sbin/modprobe
-> 
-> BRs,
-> Yinbo
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
- > On Tue, Jan 04, 2022 at 09:11:56PM +0800, zhuyinbo wrote:
- > > From the present point of view, no matter what the situation, my 
-supplement
- > > can cover udev or request_module for auto load module.
- > >
- > > if that phy driver isn't platform driver my patch cover it I think 
-there is
- > > no doubt, if phy driver is platform driver and platform driver udev 
-will
- > > cover it. My only requestion is the request_module not work well.
- > >
- > > about xgmiitorgmii_of_match that it belongs to platform driver 
-load, please
- > > you note. and about your doubt usepace whether disable module load that
- > > module load function is okay becuase other device driver auto load 
-is okay.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
- > xgmiitorgmii is *not* a platform driver.
+## Build
+* kernel: 5.4.170-rc2
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.4.y
+* git commit: 80ddcc564ae91afb9de54b43ffb4b2167a7306a3
+* git describe: v5.4.169-37-g80ddcc564ae9
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.1=
+69-37-g80ddcc564ae9
 
-For the module loading function, you need to focus on the first args 
-"of" in function MODULE_ DEVICE_TABLE, not the definition type of this 
-driver.  for "of" type that must platform covert it !
+## Test Regressions (compared to v5.4.169)
+No test regressions found.
 
- > > > Please report back what the following command produces on your
- > > > problem system:
- > > >
- > > > /sbin/modprobe -vn mdio:00000001010000010000110111010001
- > > >
- > > > Thanks.
- > >
- > > [root@localhost ~]# lsmod | grep marvell
- > > [root@localhost ~]# ls
- > > /lib/modules/4.19.190+/kernel/drivers/net/phy/marvell.ko
- > > /lib/modules/4.19.190+/kernel/drivers/net/phy/marvell.ko
- > > [root@localhost ~]# /sbin/modprobe -vn 
- >mdio:00000001010000010000110111010001
- > > insmod /lib/modules/4.19.190+/kernel/drivers/net/phy/marvell.ko
- > > insmod /lib/modules/4.19.190+/kernel/drivers/net/phy/marvell.ko
- > > [root@localhost ~]#
- > > [root@localhost ~]# cat /proc/sys/kernel/modprobe
- > > /sbin/modprobe
+## Metric Regressions (compared to v5.4.169)
+No metric regressions found.
 
- > Great, so the current scheme using "mdio:<binary digits>" works
- > perfectly for you. What is missing is having that modalias in the
- > uevent file.
-No, "lsmod | grep marvel" is NULL, so "mdio:<binary digits>" doesn't 
-work well. and that lost information is string that match do_mdio_entry 
-Hexadecimal string or binary digits and I add my patch use hexadecimal 
-and change do_mdio_entry to fix issue was to consider that different 
-"Revision Number" represent that phy hardware may be has some 
-difference, so I think we should not blindly load the corresponding PHY 
-driver. It is appropriate to match the PHY ID exactly. for 
-example,following code is marvell phy for 88e1510, which include it's 
-initial function for phy. and my platform hardware use 88e1512, if 
-doesn't change do_mdio_entry code, use "?" to match it, which represent
-88e1512 hardware to match 881510 driver. of course if 88e1510 driver can 
-compatible with 88e1512 phy, it is okay, but for all kinds of ethernet 
-phy hc and hcd you can ensure it always has a good compatible for that?
-Like 88e1510 driver, it is compatible with 88e1512 and has no problem. 
-In fact, I'm not sure if there is a problem with the 88e1512 loaded 
-88e1510 driver. So I modified do_mdio_entry is used for full matching, 
-and it can cover above all issue.
+## Test Fixes (compared to v5.4.169)
+No test fixes found.
 
-                 .phy_id = MARVELL_PHY_ID_88E1510,
-                 .phy_id_mask = MARVELL_PHY_ID_MASK,
-                 .name = "Marvell 88E1510",
-                 .features = PHY_GBIT_FEATURES | SUPPORTED_FIBRE,
-                 .flags = PHY_HAS_INTERRUPT,
-                 .probe = &m88e1510_probe,
-                 .config_init = &m88e1510_config_init,
-                 .config_aneg = &m88e1510_config_aneg,
-                 .read_status = &marvell_read_status,
+## Metric Fixes (compared to v5.4.169)
+No metric fixes found.
 
+## Test result summary
+total: 89585, pass: 74682, fail: 752, skip: 12738, xfail: 1413
 
- > So, my patch on the 4th December should cause the marvell module to
- > be loaded at boot time. Please test that patch ASAP, which I have
- > already asked you to do. I'll include it again in this email so you
- > don't have to hunt for it.
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 258 total, 254 passed, 4 failed
+* arm64: 36 total, 31 passed, 5 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 20 total, 20 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 34 total, 34 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 52 total, 48 passed, 4 failed
+* riscv: 24 total, 24 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 36 total, 36 passed, 0 failed
 
- > 8<===
- > From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
- > Subject: [PATCH] net: phy: generate PHY mdio modalias
+## Test suites summary
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
 
- > The modalias string provided in the uevent sysfs file does not conform
- > to the format used in PHY driver modules. One of the reasons is that
- > udev loading of PHY driver modules has not been an expected use case.
-
- > This patch changes the MODALIAS entry for only PHY devices from:
- >         MODALIAS=of:Nethernet-phyT(null)
- > to:
- >         MODALIAS=mdio:00000000001000100001010100010011
-
- > Other MDIO devices (such as DSA) remain as before.
-
- > However, having udev automatically load the module has the advantage
- > of making use of existing functionality to have the module loaded
- > before the device is bound to the driver, thus taking advantage of
- > multithreaded boot systems, potentially decreasing the boot time.
-
- > However, this patch will not solve any issues with the driver module
- > not being loaded prior to the network device needing to use the PHY.
- > This is something that is completely out of control of any patch to
- > change the uevent mechanism.
-
- > Reported-by: Yinbo Zhu <zhuyinbo@loongson.cn>
- > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
- > ---
- > drivers/net/phy/mdio_bus.c   |  8 ++++++++
- > drivers/net/phy/phy_device.c | 14 ++++++++++++++
- > include/linux/mdio.h         |  2 ++
- > 3 files changed, 24 insertions(+)
-
- > diff --git a/drivers/net/phy/mdio_bus.c b/drivers/net/phy/mdio_bus.c
- > index 4638d7375943..663bd98760fb 100644
- > --- a/drivers/net/phy/mdio_bus.c
- > +++ b/drivers/net/phy/mdio_bus.c
- > @@ -1010,8 +1010,16 @@ static int mdio_bus_match(struct device *dev, 
- > > struct device_driver *drv)
-
- >  static int mdio_uevent(struct device *dev, struct kobj_uevent_env *env)
-  > {
- > +	struct mdio_device *mdio = to_mdio_device(dev);
- > 	int rc;
- >
- > +	/* Use the device-specific uevent if specified */
- > +	if (mdio->bus_uevent) {
- > +		rc = mdio->bus_uevent(mdio, env);
- > +		if (rc != -ENODEV)
- > +			return rc;
- > +	}
- > +
- > 	/* Some devices have extra OF data and an OF-style MODALIAS */
- >  	rc = of_device_uevent_modalias(dev, env);
- > 	if (rc != -ENODEV)
- > diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
- > index 23667658b9c6..f4c2057f0202 100644
- > --- a/drivers/net/phy/phy_device.c
- > +++ b/drivers/net/phy/phy_device.c
- > @@ -563,6 +563,19 @@ static int phy_request_driver_module(struct 
-phy_device *dev, u32 phy_id)
- >  	return 0;
- >  }
-
- > +static int phy_bus_uevent(struct mdio_device *mdiodev,
- > +			  struct kobj_uevent_env *env)
- > +{
- > +	struct phy_device *phydev;
- > +
- > +	phydev = container_of(mdiodev, struct phy_device, mdio);
- > +
- > +	add_uevent_var(env, "MODALIAS=" MDIO_MODULE_PREFIX MDIO_ID_FMT,
- > +		       MDIO_ID_ARGS(phydev->phy_id));
- > +
- > +	return 0;
- > +}
- > +
- >  struct phy_device *phy_device_create(struct mii_bus *bus, int addr, 
-u32 phy_id,
- >  				     bool is_c45,
- >  				     struct phy_c45_device_ids *c45_ids)
- > @@ -582,6 +595,7 @@ struct phy_device *phy_device_create(struct 
-mii_bus *bus, int addr, u32 phy_id,
- >  	mdiodev->dev.type = &mdio_bus_phy_type;
- >  	mdiodev->bus = bus;
- > 	mdiodev->bus_match = phy_bus_match;
- > +	mdiodev->bus_uevent = phy_bus_uevent;
- > 	mdiodev->addr = addr;
- > 	mdiodev->flags = MDIO_DEVICE_FLAG_PHY;
- > 	mdiodev->device_free = phy_mdio_device_free;
- > diff --git a/include/linux/mdio.h b/include/linux/mdio.h
- > index df9c96e56907..5c6676d3de23 100644
- > --- a/include/linux/mdio.h
- > +++ b/include/linux/mdio.h
- > @@ -38,6 +38,8 @@ struct mdio_device {
- >  	char modalias[MDIO_NAME_SIZE];
-
- >  	int (*bus_match)(struct device *dev, struct device_driver *drv);
- > +	int (*bus_uevent)(struct mdio_device *mdiodev,
- > +			  struct kobj_uevent_env *env);
- > 	void (*device_free)(struct mdio_device *mdiodev);
- > 	void (*device_remove)(struct mdio_device *mdiodev);
-your patch I have a try and it can make marvel driver auto-load. 
-However, you need to evaluate the above compatibility issues !
-in addition, if phy id register work bad or other case, you dont' read 
-phy id from phy.  your patch will not work well. so you shoud definition 
-a any_phy_id, of course, The most critical issue is the above driver 
-compatibility, please you note.
-
-in additon, I have never received your email before. I have to check 
-patchwork every time, so if you have a advice that could you send a mail 
-to zhuyinbo@loongson.cn .
-
-Thanks,
-
-BRs,
-Yinbo Zhu.
-
+--
+Linaro LKFT
+https://lkft.linaro.org

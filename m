@@ -2,123 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 814E448588E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 198A3485892
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:38:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243093AbiAESha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 13:37:30 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:60676 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243042AbiAESh1 (ORCPT
+        id S243108AbiAESim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 13:38:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43068 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243098AbiAESij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 13:37:27 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3EA79B81D38;
-        Wed,  5 Jan 2022 18:37:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71CB0C36AE9;
-        Wed,  5 Jan 2022 18:37:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641407845;
-        bh=yn8IcHE7h9fqD/cjERArRVpjBpyJFcdTE2ffAfx17dA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Th+j2JFrcOlvWm4iIRi+v+gnshmUD7R7VhZ4aYuTxyXU23rvQUJmmVMW4j7dKCLKQ
-         9TObFB23wnhbK+FCSaiQAeJvMEUWZ56Vp3KBGVJPtCqzN8m+4VcInmkcIF71MzsusB
-         sQAE2rf7dBGl2d1yM0DFyaqRCdbF8SabazOIygys=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org
-Subject: [PATCH] efi: use default_groups in kobj_type
-Date:   Wed,  5 Jan 2022 19:37:16 +0100
-Message-Id: <20220105183716.2841210-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 5 Jan 2022 13:38:39 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1677C061245
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 10:38:38 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id o185so380705ybo.12
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 10:38:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KDSSdl8IkbacxfFwsObHrS3PgJqOAa/GBT59WYZWGOY=;
+        b=hUkWbHbz2hswycTdHLnrAm/MuO98IXDtZgYocw1/GhNAggTm949CZWE6RzTXjapTkW
+         VS/DmW3iWzF0xKhT605D1XzwhMahz1ldavEJ2ZiPOQQzZEHJm7O71WALq9e/xkPsHQA4
+         ENSyX5bKdJpqS3MOLxFVwu64vbML9heMh50dW8sH9YnMBKvfUfcsOO8Wz+cVwujxsZ/V
+         Qek2oUB3vP8MzA5MMbz7HhUs52Zm1EXLKmd3xp8VauwoxCaEEjyLisUAc9Fet3GlfJT+
+         x2L3Vjm7P/YbuIV7Wv7W7JxbyKct7n0LHl+DvlGmfCdNG+6DoeOyNtA41DfLDsswyNoH
+         onrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KDSSdl8IkbacxfFwsObHrS3PgJqOAa/GBT59WYZWGOY=;
+        b=wTBCLNziFgZFR8GSFvHlPn2Y9mFO3jU+ULF4GHQdP4hSTVCFF9+4ecQqgpCsUpqcoy
+         DcENN+oq2cqwQEip/90pqAiUWuL+L0CDwDKGnqjur7NwmBFI3eECI9Mg36uaaLLm4HoM
+         WSYqpc14jorjUziBCcMSY1dWyb8w+kCnoMtmG3+B8RncIVoZinfmvUsRq6lE8aD1EYI4
+         F4MofjwShNq5uQftJAt7wI4tKfrpmL5X7KHrpc2kpwC44m1cFYkduGAtMnrObhxtsB8d
+         Qt3Jqkezuz54qJnVvkN44u+SkzQHNqVzdq2dzk4FQpNE23weWA9lMgv9b82OMLq874jT
+         B3Bw==
+X-Gm-Message-State: AOAM530JGvtJWQqYgApuO3TgXZ/GBW2JOy8489cBpfT29DD0f7CAm5PM
+        jGGCHJv39PfDi8uqz8cdic7IHugCmGNQRELdLQQtGg==
+X-Google-Smtp-Source: ABdhPJxb7sBxKDM43T6iP1tu6DArcpsKXXzzig25USibmzC/QeMkWpl4LwfoJZyuV92oHcxUzXWi2NF5BZOIohtw5jg=
+X-Received: by 2002:a25:ae13:: with SMTP id a19mr52540860ybj.327.1641407917644;
+ Wed, 05 Jan 2022 10:38:37 -0800 (PST)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2651; h=from:subject; bh=yn8IcHE7h9fqD/cjERArRVpjBpyJFcdTE2ffAfx17dA=; b=owGbwMvMwCRo6H6F97bub03G02pJDIlXn8ZoG7Upn/qncsTuvXb94TeGu9Q7eh8vv2ud1VKmP3V/ ssPSjlgWBkEmBlkxRZYv23iO7q84pOhlaHsaZg4rE8gQBi5OAZjItD8McwV5FtWKfs3Sbal65vlay/ n0jwm7KhgWLFz2X3j5Rw8Fvevhe35fcLF2vnOAHwA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
+References: <20220104235148.21320-1-hridya@google.com> <YdW1hPRvKYjfORvp@kroah.com>
+In-Reply-To: <YdW1hPRvKYjfORvp@kroah.com>
+From:   Hridya Valsaraju <hridya@google.com>
+Date:   Wed, 5 Jan 2022 10:38:02 -0800
+Message-ID: <CA+wgaPPSO1f=c+jYWqisNy_e8hxuxcr0VtpJcWe+FnKGyC2ZKg@mail.gmail.com>
+Subject: Re: [PATCH] dma-buf: Move sysfs work out of DMA-BUF export/release path
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        john.stultz@linaro.org, surenb@google.com, kaleshsingh@google.com,
+        tjmercier@google.com, keescook@google.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are currently 2 ways to create a set of sysfs files for a
-kobj_type, through the default_attrs field, and the default_groups
-field.  Move the firmware efi sysfs code to use default_groups
-field which has been the preferred way since aa30f47cf666 ("kobject: Add
-support for default attribute groups to kobj_type") so that we can soon
-get rid of the obsolete default_attrs field.
+On Wed, Jan 5, 2022 at 7:13 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Jan 04, 2022 at 03:51:48PM -0800, Hridya Valsaraju wrote:
+> > Recently, we noticed an issue where a process went into direct reclaim
+> > while holding the kernfs rw semaphore for sysfs in write(exclusive)
+> > mode. This caused processes who were doing DMA-BUF exports and releases
+> > to go into uninterruptible sleep since they needed to acquire the same
+> > semaphore for the DMA-BUF sysfs entry creation/deletion. In order to avoid
+> > blocking DMA-BUF export/release for an indeterminate amount of time
+> > while another process is holding the sysfs rw semaphore in exclusive
+> > mode, this patch moves the per-buffer sysfs file creation/deleteion to
+> > a kthread.
+> >
+> > Fixes: bdb8d06dfefd ("dmabuf: Add the capability to expose DMA-BUF stats in sysfs")
+> > Signed-off-by: Hridya Valsaraju <hridya@google.com>
+> > ---
+> >  drivers/dma-buf/dma-buf-sysfs-stats.c | 343 ++++++++++++++++++++++++--
+> >  include/linux/dma-buf.h               |  46 ++++
+> >  2 files changed, 366 insertions(+), 23 deletions(-)
+>
+> Crazy, but if this works in your testing, it looks ok to me.  Nice work.
+>
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: linux-efi@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/firmware/efi/efivars.c     | 3 ++-
- drivers/firmware/efi/esrt.c        | 4 +++-
- drivers/firmware/efi/runtime-map.c | 3 ++-
- 3 files changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/firmware/efi/efivars.c b/drivers/firmware/efi/efivars.c
-index e6b16b3a17a8..ea0bc39dc965 100644
---- a/drivers/firmware/efi/efivars.c
-+++ b/drivers/firmware/efi/efivars.c
-@@ -352,11 +352,12 @@ static struct attribute *def_attrs[] = {
- 	&efivar_attr_raw_var.attr,
- 	NULL,
- };
-+ATTRIBUTE_GROUPS(def);
- 
- static struct kobj_type efivar_ktype = {
- 	.release = efivar_release,
- 	.sysfs_ops = &efivar_attr_ops,
--	.default_attrs = def_attrs,
-+	.default_groups = def_groups,
- };
- 
- static ssize_t efivar_create(struct file *filp, struct kobject *kobj,
-diff --git a/drivers/firmware/efi/esrt.c b/drivers/firmware/efi/esrt.c
-index d5915272141f..2a2f52b017e7 100644
---- a/drivers/firmware/efi/esrt.c
-+++ b/drivers/firmware/efi/esrt.c
-@@ -146,6 +146,8 @@ static struct attribute *esre1_attrs[] = {
- 	&esre_last_attempt_status.attr,
- 	NULL
- };
-+ATTRIBUTE_GROUPS(esre1);
-+
- static void esre_release(struct kobject *kobj)
- {
- 	struct esre_entry *entry = to_entry(kobj);
-@@ -157,7 +159,7 @@ static void esre_release(struct kobject *kobj)
- static struct kobj_type esre1_ktype = {
- 	.release = esre_release,
- 	.sysfs_ops = &esre_attr_ops,
--	.default_attrs = esre1_attrs,
-+	.default_groups = esre1_groups,
- };
- 
- 
-diff --git a/drivers/firmware/efi/runtime-map.c b/drivers/firmware/efi/runtime-map.c
-index ad9ddefc9dcb..92a3d45a795c 100644
---- a/drivers/firmware/efi/runtime-map.c
-+++ b/drivers/firmware/efi/runtime-map.c
-@@ -79,6 +79,7 @@ static struct attribute *def_attrs[] = {
- 	&map_attribute_attr.attr,
- 	NULL
- };
-+ATTRIBUTE_GROUPS(def);
- 
- static const struct sysfs_ops map_attr_ops = {
- 	.show = map_attr_show,
-@@ -94,7 +95,7 @@ static void map_release(struct kobject *kobj)
- 
- static struct kobj_type __refdata map_ktype = {
- 	.sysfs_ops	= &map_attr_ops,
--	.default_attrs	= def_attrs,
-+	.default_groups	= def_groups,
- 	.release	= map_release,
- };
- 
--- 
-2.34.1
-
+Thank you for the review Greg :)

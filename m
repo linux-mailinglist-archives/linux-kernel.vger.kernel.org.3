@@ -2,82 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE35485203
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 12:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5AEA485206
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 12:51:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239798AbiAELvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 06:51:25 -0500
-Received: from mengyan1223.wang ([89.208.246.23]:37506 "EHLO mengyan1223.wang"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239785AbiAELvX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 06:51:23 -0500
-Received: from localhost.localdomain (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@mengyan1223.wang)
-        by mengyan1223.wang (Postfix) with ESMTPSA id 64BB76591B;
-        Wed,  5 Jan 2022 06:51:16 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mengyan1223.wang;
-        s=mail; t=1641383479;
-        bh=Fn7zHOmdeG4QcUKhnX1J7PW2F5GNpl1BqvGNa7CyV7c=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=1ho3+7RhzEeOwU8RUFJlu2+cV483V+bfN7wsB/Cjd85KcaEr+7wlaspHDFcmUrEG0
-         SQf7urJlf7pp5qXRbl7HgdCeRpRnXtEZ09Qz//8dOu0svR2XRIFN+w4v+ucPfHUnFH
-         jUWiZf5DT3923i9WhRmGjRybvb3saO+iogZBJHaw+RKnJl0ECtvTexicaKMcpDk0C4
-         B+PFPa+Pcc4vR6pG1qXmfoQfNcI/fVK0+6FOdbWbf2FCoQH0Zh2L3Rwsrc5PBrmMBA
-         Y8y3vdyhLz+Ima2D5Qc+jD99qAmb8Hod7XakpSUnZJ6T/wmGo3mrHlRMJiC+krAS+x
-         JZgqSW1XxjDIg==
-Message-ID: <6d0169ca8c9e417308d3b9f96cd0ef446ee36fe7.camel@mengyan1223.wang>
-Subject: Re: [PATCH V5 00/22] arch: Add basic LoongArch support
-From:   Xi Ruoyao <xry111@mengyan1223.wang>
-To:     Huacai Chen <chenhuacai@gmail.com>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date:   Wed, 05 Jan 2022 19:51:14 +0800
-In-Reply-To: <CAAhV-H6R=xWL18AH7HzeXHOVD_d-5m7RvdQCLkOR1NeDZ_0HMw@mail.gmail.com>
-References: <20211013063656.3084555-1-chenhuacai@loongson.cn>
-         <722477bcc461238f96c3b038b2e3379ee49efdac.camel@mengyan1223.wang>
-         <CAAhV-H40oWqkD+tQ3=XA8ijQGukkeG5O1M1JL3v5i402dFLK+Q@mail.gmail.com>
-         <587ab54d77af2fb4cdbe0530cdd5e550c3e968db.camel@mengyan1223.wang>
-         <CAAhV-H6R=xWL18AH7HzeXHOVD_d-5m7RvdQCLkOR1NeDZ_0HMw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 
+        id S239810AbiAELvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 06:51:37 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57850 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239802AbiAELvg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 06:51:36 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 901A5B81A96;
+        Wed,  5 Jan 2022 11:51:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBF1DC36AEB;
+        Wed,  5 Jan 2022 11:51:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641383494;
+        bh=L80exkg+JyVXmxcwgt/4UVXd9r21FU3v+spEJTkUfd8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CjU857r5FFX3YWfEMp7P+PdrzOo9zcy+z6MkYPpWwlzYbWQZdJNKrmw2DC92obG0R
+         w/bKkVJsmAzct365bEkm0l4PJXwVgTfjW0IVE7bmNi4OQQvjW5kSL3kwmVSgeHiMVr
+         18iSh7rTab8aLiDnNXVa6Oy9Kgm2kalV56xwCgRk=
+Date:   Wed, 5 Jan 2022 12:51:31 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Michal Suchanek <msuchanek@suse.de>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        James Morris <jmorris@namei.org>,
+        David Howells <dhowells@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        acpi4asus-user@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] debugfs: lockdown: Allow reading debugfs files that are
+ not world readable
+Message-ID: <YdWGQ+Kxeo9Q7Kli@kroah.com>
+References: <20220104170505.10248-1-msuchanek@suse.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220104170505.10248-1-msuchanek@suse.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-01-05 at 17:40 +0800, Huacai Chen wrote:
-> Hi, Ruoyao,
+On Tue, Jan 04, 2022 at 06:05:05PM +0100, Michal Suchanek wrote:
 > 
-> The problem still exists in 5.16-rc8, can you try to change
-> cpu_relax() definition to smp_mb()? It seems can fix the problem.
+> When the kernel is locked down the kernel allows reading only debugfs
+> files with mode 444. Mode 400 is also valid but is not allowed.
+> 
+> Make the 444 into a mask.
+> 
+> Fixes: 5496197f9b08 ("debugfs: Restrict debugfs when the kernel is locked down")
+> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> ---
+>  fs/debugfs/file.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Is there any workload which can triggers the panic?  I can't trigger it
-by building and testing GCC, or building the kernel anymore.
+Why has it taken so long for anyone to notice this (2 years!)?
 
-And is your "stable" issue the same one I'd encountered?  To me changing
-barrier() to smp_mb() may fix some deadlock, but not a panic.  (I'm not
-an expert on CPU architecture or kernel programming, so maybe I'm wrong
-here.)
+Is that because no one uses the lockdown mode and tries to read debugfs
+files?
 
-I'll put my 3A5000 machine into a loop building kernel and see if I can
-trigger the panic again...
--- 
-Xi Ruoyao <xry111@mengyan1223.wang>
-School of Aerospace Science and Technology, Xidian University
+
+> 
+> diff --git a/fs/debugfs/file.c b/fs/debugfs/file.c
+> index 7d162b0efbf0..950c63fa4d0b 100644
+> --- a/fs/debugfs/file.c
+> +++ b/fs/debugfs/file.c
+> @@ -147,7 +147,7 @@ static int debugfs_locked_down(struct inode *inode,
+>  			       struct file *filp,
+>  			       const struct file_operations *real_fops)
+>  {
+> -	if ((inode->i_mode & 07777) == 0444 &&
+> +	if ((inode->i_mode & 07777 & ~0444) == 0 &&
+
+You are now allowing more than just 0400, is that intentional?
+
+I never understood why files that were 0666 were not able to be read
+here as well, why not allow that as well?  What was magic about 0444
+files?
+
+thanks,
+
+greg k-h

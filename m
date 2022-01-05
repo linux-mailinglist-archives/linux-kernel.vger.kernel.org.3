@@ -2,132 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D39974851C5
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 12:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F4304851CA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 12:30:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235521AbiAEL2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 06:28:30 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4349 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233838AbiAEL23 (ORCPT
+        id S239695AbiAELaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 06:30:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235509AbiAELaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 06:28:29 -0500
-Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JTRxf2fn9z67nQW;
-        Wed,  5 Jan 2022 19:25:58 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 5 Jan 2022 12:28:26 +0100
-Received: from [10.47.27.56] (10.47.27.56) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 5 Jan
- 2022 11:28:25 +0000
-Subject: Re: [PATCH RFT] scsi: pm8001: Fix FW crash for maxcpus=1
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <jinpu.wang@cloud.ionos.com>, <Ajish.Koshy@microchip.com>,
-        <Viswas.G@microchip.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <vishakhavc@google.com>, <ipylypiv@google.com>,
-        <Ruksar.devadi@microchip.com>,
-        <Vasanthalakshmi.Tharmarajan@microchip.com>
-References: <1641320780-81620-1-git-send-email-john.garry@huawei.com>
- <d2d3c903-fb91-e218-9e0a-aeb2ff9e401a@opensource.wdc.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <2746563e-28ce-b328-3494-f91ace1599f1@huawei.com>
-Date:   Wed, 5 Jan 2022 11:28:14 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Wed, 5 Jan 2022 06:30:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79B1C061761;
+        Wed,  5 Jan 2022 03:30:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 61EE8616FA;
+        Wed,  5 Jan 2022 11:30:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B8EA4C36AED;
+        Wed,  5 Jan 2022 11:30:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641382211;
+        bh=NXnK29rweR4LUQ4VydBhLmhRcLlfzwpZeWKkeIjmW/4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=shRNi6YH7cKQuVgeFhNXsSXy0bVLVTBzyEh2u2btgqAJrHbaF27taAWaZHTBWkkKT
+         s6M65hCxw5koItsIrrAMIviw7EBsMguC6ulW0xh31TJuOYELh2lEMmXWJtWrSPtn0p
+         H+i9PCBPuPG6b9vy0dbpyJgkSWMYJIbrejsAWdVpTLQ3RR98ztI92rc8Si8BmEx4av
+         9yxf21ZVSmC+IOHHqmDyrrAeVYz3xBS8zFulMdbiBaW/fJfUnBVXmzEZZT/iWxKD2U
+         OPnXqOOMHaA0k/YbeySPMUDtTwpGRTBo1E1ea+OgsxgOAdy4ndHgIwongRJLPUxOEE
+         lU0aNjykHz8BQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9CD0CF79408;
+        Wed,  5 Jan 2022 11:30:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <d2d3c903-fb91-e218-9e0a-aeb2ff9e401a@opensource.wdc.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.27.56]
-X-ClientProxiedBy: lhreml736-chm.china.huawei.com (10.201.108.87) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v12 0/3] net: ethernet: mtk_eth_soc: refactoring and Clause 45
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164138221163.4307.616203536271666789.git-patchwork-notify@kernel.org>
+Date:   Wed, 05 Jan 2022 11:30:11 +0000
+References: <YdQ4HzLjpuVW4YFi@makrotopia.org>
+In-Reply-To: <YdQ4HzLjpuVW4YFi@makrotopia.org>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        nbd@nbd.name, john@phrozen.org, sean.wang@mediatek.com,
+        Mark-MC.Lee@mediatek.com, davem@davemloft.net, kuba@kernel.org,
+        matthias.bgg@gmail.com, linux@armlinux.org.uk, andrew@lunn.ch,
+        hkallweit1@gmail.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/01/2022 04:03, Damien Le Moal wrote:
-> On 1/5/22 03:26, John Garry wrote:
->> According to the comment in check_fw_ready() we should not check the
->> IOP1_READY field in register SCRATCH_PAD_1 for 8008 or 8009 controllers.
->>
->> However we check this very field in process_oq() for processing the highest
->> index interrupt vector. Change that function to not check IOP1_READY for
->> those mentioned controllers, but do check ILA_READY in both cases.
->>
->> The reason I assume that this was not hit earlier was because we always
->> allocated 64 MSI(X), and just did not pass the vector index check in
->> process_oq(), i.e.  the handler never ran for vector index 63.
->>
->> Signed-off-by: John Garry<john.garry@huawei.com>
->>
->> diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
->> index 2101fc5761c3..77b8bb30615b 100644
->> --- a/drivers/scsi/pm8001/pm80xx_hwi.c
->> +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
->> @@ -4162,9 +4162,16 @@ static int process_oq(struct pm8001_hba_info *pm8001_ha, u8 vec)
->>   	u32 regval;
->>   
->>   	if (vec == (pm8001_ha->max_q_num - 1)) {
->> +		u32 mipsall_ready;
->> +
->> +		if ((pm8001_ha->chip_id == chip_8008) ||
->> +		    (pm8001_ha->chip_id == chip_8009))
-> nit: no need for the inner brackets here.
+Hello:
 
-ok, I can fix that.
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-But I would also like opinion from microchip guys/maintainer on why this 
-code is here at all. Seems strange in the way we check in this register 
-in the interrupt handler for only a specific vector and, also, why we 
-check at all in an interrupt handler.
+On Tue, 4 Jan 2022 12:05:51 +0000 you wrote:
+> Rework value and type of mdio read and write functions in mtk_eth_soc
+> and generally clean up and unify both functions.
+> Then add support to access Clause 45 phy registers, using newly
+> introduced helper macros added by a patch Russell King has suggested
+> in a reply to an earlier version of this series [1].
 > 
->> +			mipsall_ready = SCRATCH_PAD_MIPSALL_READY_8PORT;
->> +		else
->> +			mipsall_ready = SCRATCH_PAD_MIPSALL_READY_16PORT;
->> +
->>   		regval = pm8001_cr32(pm8001_ha, 0, MSGU_SCRATCH_PAD_1);
->> -		if ((regval & SCRATCH_PAD_MIPSALL_READY) !=
->> -					SCRATCH_PAD_MIPSALL_READY) {
->> +		if ((regval & mipsall_ready) != mipsall_ready) {
->>   			pm8001_ha->controller_fatal_error = true;
->>   			pm8001_dbg(pm8001_ha, FAIL,
->>   				   "Firmware Fatal error! Regval:0x%x\n",
->> diff --git a/drivers/scsi/pm8001/pm80xx_hwi.h b/drivers/scsi/pm8001/pm80xx_hwi.h
->> index c7e5d93bea92..c41ed039c92a 100644
->> --- a/drivers/scsi/pm8001/pm80xx_hwi.h
->> +++ b/drivers/scsi/pm8001/pm80xx_hwi.h
->> @@ -1405,8 +1405,12 @@ typedef struct SASProtocolTimerConfig SASProtocolTimerConfig_t;
->>   #define SCRATCH_PAD_BOOT_LOAD_SUCCESS	0x0
->>   #define SCRATCH_PAD_IOP0_READY		0xC00
->>   #define SCRATCH_PAD_IOP1_READY		0x3000
->> -#define SCRATCH_PAD_MIPSALL_READY	(SCRATCH_PAD_IOP1_READY | \
->> +#define SCRATCH_PAD_MIPSALL_READY_16PORT	(SCRATCH_PAD_IOP1_READY | \
->>   					SCRATCH_PAD_IOP0_READY | \
->> +					SCRATCH_PAD_ILA_READY | \
->> +					SCRATCH_PAD_RAAE_READY)
->> +#define SCRATCH_PAD_MIPSALL_READY_8PORT	(SCRATCH_PAD_IOP0_READY | \
->> +					SCRATCH_PAD_ILA_READY | \
->>   					SCRATCH_PAD_RAAE_READY)
->>   
->>   /* boot loader state */
-> Otherwise, looks OK to me.
-> I tested with and without max_cpus=1 with a ATTO Technology, Inc.
-> ExpressSAS 12Gb/s SAS/SATA HBA (rev 06) adapter and everything is OK.
-> That adapter uses chip_8072 though, not 8008 or 8009.
+> All three commits are tested on the Bananapi BPi-R64 board having
+> MediaTek MT7531BE DSA gigE switch using clause 22 MDIO and
+> Ubiquiti UniFi 6 LR access point having Aquantia AQR112C PHY using
+> clause 45 MDIO.
 > 
-> Feel free to add:
-> 
-> Reviewed-by: Damien Le Moal<damien.lemoal@opensource.wdc.com>
-> Tested-by: Damien Le Moal<damien.lemoal@opensource.wdc.com>
+> [...]
 
-Thanks!
+Here is the summary with links:
+  - [v12,1/3] net: ethernet: mtk_eth_soc: fix return values and refactor MDIO ops
+    https://git.kernel.org/netdev/net-next/c/eda80b249df7
+  - [v12,2/3] net: mdio: add helpers to extract clause 45 regad and devad fields
+    https://git.kernel.org/netdev/net-next/c/c6af53f038aa
+  - [v12,3/3] net: ethernet: mtk_eth_soc: implement Clause 45 MDIO access
+    https://git.kernel.org/netdev/net-next/c/e2e7f6e29c99
 
-john
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

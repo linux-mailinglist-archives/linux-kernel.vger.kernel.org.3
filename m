@@ -2,60 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F7B8484ECF
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 08:42:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F86F484F11
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 09:13:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238178AbiAEHmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 02:42:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238168AbiAEHmM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 02:42:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B0AC061761;
-        Tue,  4 Jan 2022 23:42:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11150B817C3;
-        Wed,  5 Jan 2022 07:42:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3385C36AE3;
-        Wed,  5 Jan 2022 07:42:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641368528;
-        bh=tah8ZqyBAPZaiCsGR/M7lDgq65lnx8P0HIpYzkp1OAE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u+xIeEvpxk1HyE4dK03D8OWKAw9JGc4CmN2fB3QZZag1mXjZzNmzvFqyLzGiLJ+gp
-         m4+1FYpIhE+r750F785Kdk0s0rvprxFx+JWiIO1CUFe6/W7BYW+vjyIvp9YEq/9OYt
-         +lqFUnS+LgBKtmMKfHqlm9NzNTWjwBGcxsKhob/pws0ju+5nKMEuLK4yi7p6x2yCHT
-         db2KHh6NHVW1thwOoD4hhusg+Dx6ORLisFgwW8r+0PvgpmHrV/Hz8JhaPpepb4BICs
-         SWR5xNJ6OUfVtqhZk4JpeG+1gpNJ90EZELv7cIvVBA86evx6//9IghYxYrv9jY/UVX
-         fnejhvCPwcSWg==
-Date:   Wed, 5 Jan 2022 13:12:04 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org
-Subject: Re: [PATCH] dmaengine: ioatdma: use default_groups in kobj_type
-Message-ID: <YdVLzCAtiZHfdhn9@matsya>
-References: <20220104163330.1338824-1-gregkh@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220104163330.1338824-1-gregkh@linuxfoundation.org>
+        id S238366AbiAEINE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 03:13:04 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:39056 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238354AbiAEIMw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 03:12:52 -0500
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 062E61A163E;
+        Wed,  5 Jan 2022 09:12:51 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id C1BC51A125A;
+        Wed,  5 Jan 2022 09:12:50 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 7D716183ACDE;
+        Wed,  5 Jan 2022 16:12:49 +0800 (+08)
+From:   Richard Zhu <hongxing.zhu@nxp.com>
+To:     l.stach@pengutronix.de, bhelgaas@google.com, broonie@kernel.org,
+        lorenzo.pieralisi@arm.com, jingoohan1@gmail.com, festevam@gmail.com
+Cc:     hongxing.zhu@nxp.com, stable@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-imx@nxp.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH v5 0/6] PCI: imx6: refine codes and add compliance tests mode support 
+Date:   Wed,  5 Jan 2022 15:43:16 +0800
+Message-Id: <1641368602-20401-1-git-send-email-hongxing.zhu@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04-01-22, 17:33, Greg Kroah-Hartman wrote:
-> There are currently 2 ways to create a set of sysfs files for a
-> kobj_type, through the default_attrs field, and the default_groups
-> field.  Move the ioatdma sysfs code to use default_groups field which has
-> been the preferred way since aa30f47cf666 ("kobject: Add support for
-> default attribute groups to kobj_type") so that we can soon get rid of
-> the obsolete default_attrs field.
+This series patches refine pci-imx6 driver and do the following changes.
+- Encapsulate the clock enable into one standalone function
+- Add the error propagation from host_init
+- Balance the usage of the regulator and clocks when link never came up
+- Add the compliance tests mode support
 
-Applied, thanks
+Main changes from v4 to v5:
+- Since i.MX8MM PCIe support had been merged. Based on Lorenzo's git repos,
+  rebase and resend the patch-set.
 
--- 
-~Vinod
+Main changes from v3 to v4:
+- Regarding Mark's comments, delete the regulator_is_enabled() check.
+- Squash #3 and #6 of v3 patch into #5 patch of v4 set.
+
+Main changes from v2 to v3:
+- Add "Reviewed-by: Lucas Stach <l.stach@pengutronix.de>" tag into
+  first two patches.
+- Add a Fixes tag into #3 patch.
+- Split the #4 of v2 to two patches, one is clock disable codes move,
+  the other one is the acutal clock unbalance fix.
+- Add a new host_exit() callback into dw_pcie_host_ops, then it could be
+  invoked to handle the unbalance issue in the error handling after
+  host_init() function when link is down.
+- Add a new host_exit() callback for i.MX PCIe driver to handle this case
+  in the error handling after host_init.
+
+Main changes from v1 to v2:
+Regarding Lucas' comments.
+  - Move the placement of the new imx6_pcie_clk_enable() to avoid the
+    forward declarition.
+  - Seperate the second patch of v1 patch-set to three patches.
+  - Use the module_param to replace the kernel command line.
+Regarding Bjorn's comments:
+  - Use the cover-letter for a multi-patch series.
+  - Correct the subject line, and refine the commit logs. For example,
+    remove the timestamp of the logs.
+
+drivers/pci/controller/dwc/pci-imx6.c             | 197 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++----------------------------------
+drivers/pci/controller/dwc/pcie-designware-host.c |   5 ++-
+drivers/pci/controller/dwc/pcie-designware.h      |   1 +
+3 files changed, 128 insertions(+), 75 deletions(-)
+
+[PATCH v5 1/6] PCI: imx6: Encapsulate the clock enable into one
+[PATCH v5 2/6] PCI: imx6: Add the error propagation from host_init
+[PATCH v5 3/6] PCI: imx6: PCI: imx6: Move imx6_pcie_clk_disable()
+[PATCH v5 4/6] PCI: dwc: Add dw_pcie_host_ops.host_exit() callback
+[PATCH v5 5/6] PCI: imx6: Fix the regulator dump when link never came
+[PATCH v5 6/6] PCI: imx6: Add the compliance tests mode support

@@ -2,335 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C26485C6B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 00:47:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93730485C6E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 00:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245510AbiAEXrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 18:47:02 -0500
-Received: from mail-bn7nam10on2096.outbound.protection.outlook.com ([40.107.92.96]:40032
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S245501AbiAEXq7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 18:46:59 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YtSPmbKn8Q2hw/XlrhWqe19fFhecX2eGemPQqJ6MLRGzQsTL5XeYpm2+hmchClYbeKNyzjr3IedmkZdv/0eA99SiEJGrTR4HOWbY1f6/a8La+UshqJMOZ2/lyCf4o0KGr7/q0XtAG9KQCJxdYoj60X48SVd7S11J42tY25ieQ67w7mDJKidB0/LtnjBj5JDfzS4hzp8LlJSJiSjC/vc1P5YQNT7dSuXPB/nYoHr4ZbcrAEoC7JWWJiIs1XI2FE639cgw9tPsJVAzTXq8xUIsVjxERh8YN7Mj3LkKBasdtNB3xTnWmKaQdIkuod2GF//tjG9Lwt2NQ9CLTNQAuuMn2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k8A4GYR/IyS1+BnpeD4jUIcwF31RWJJEk2Zy9gladBQ=;
- b=h6d2SJbXx4CS/I0PMAp37bgj7Kcb9t9UPPkdu+4S2Yf3M/LQiwg6EvhqJ45yM6nX94gJy9RntJEq4aOm8V7z5zRXSiDe+AYeRjyj8AssmBiQl1v7BT7yphMmga0rNv5TJh2Ja0xsoHlMoU3rjfsBBbylrIBQdqhllsYkkdMZUniGHqE/OpUbiY/RpASw2BgZRO3XOjMR8OddYSPPavqdpF5MCQwK6xvPGqGSSypFFPiB9LF4YZEAIrBedaLXS8l7f/Z2Abs0x/Kdt+INgDdx0f370Xg4CAekmxklhVgr6hvARKpClqgyvtnfqyBt+pLKGMychwEwqkbKv3J46e08KA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k8A4GYR/IyS1+BnpeD4jUIcwF31RWJJEk2Zy9gladBQ=;
- b=eTIbSshAExPcJJUODLBL2PERNroBgyBPDbT3w7lO5pGO8OC6ZfZ3DwUJzOr1U/qa08NmigJk/9SRmwuXf1QPbZ/u7siRGXgTlWl9cnbmnrlD0D8rqW5HTQiX3EGoh+Y7i8UEBc9HY6+AneGMBeTcI/NRXMT+uL9s7XgW+/cqhqk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from DM5PR0102MB3590.prod.exchangelabs.com (2603:10b6:4:a4::25) by
- DM6PR01MB5194.prod.exchangelabs.com (2603:10b6:5:b::19) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4844.14; Wed, 5 Jan 2022 23:46:54 +0000
-Received: from DM5PR0102MB3590.prod.exchangelabs.com
- ([fe80::38b6:2855:7c14:274b]) by DM5PR0102MB3590.prod.exchangelabs.com
- ([fe80::38b6:2855:7c14:274b%3]) with mapi id 15.20.4823.026; Wed, 5 Jan 2022
- 23:46:54 +0000
-Date:   Wed, 5 Jan 2022 15:46:38 -0800 (PST)
-From:   Ilkka Koskinen <ilkka@os.amperecomputing.com>
-X-X-Sender: ikoskine@ubuntu200401
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-cc:     Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        guohanjun@huawei.com, sudeep.holla@arm.com, rafael@kernel.org,
-        linux@armlinux.org.uk, lenb@kernel.org, robert.moore@intel.com,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, patches@amperecomputing.com,
-        scott@os.amperecomputing.com, darren@os.amperecomputing.com,
-        james.morse@arm.com
-Subject: Re: [PATCH v3 2/2] ACPI: AGDI: Add driver for Arm Generic Diagnostic
- Dump and Reset device
-In-Reply-To: <20220105104602.GA4752@lpieralisi>
-Message-ID: <alpine.DEB.2.22.394.2201051530290.2489@ubuntu200401>
-References: <20211231033725.21109-1-ilkka@os.amperecomputing.com> <20211231033725.21109-3-ilkka@os.amperecomputing.com> <20220105104602.GA4752@lpieralisi>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-ClientProxiedBy: MW4PR03CA0063.namprd03.prod.outlook.com
- (2603:10b6:303:b6::8) To DM5PR0102MB3590.prod.exchangelabs.com
- (2603:10b6:4:a4::25)
+        id S245516AbiAEXuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 18:50:03 -0500
+Received: from mga01.intel.com ([192.55.52.88]:54390 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245498AbiAEXuA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 18:50:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641426600; x=1672962600;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yZMDnCkj4r/mhUxsI1H4KLlj/KcYTTwL9dt+tnOjyKQ=;
+  b=Gv2HoF62+W1cJ9KWIzr3p4Hn2xosONZGRrc4o+qz4Pg81Xmjwe8uoEEf
+   DMTg1EVIIyY5Qdka1AGCj+CuQrBuRXGlv1kV3miR8GXmci0WILh50Fczr
+   CAiYW3xoz1sXiteKVB7p12VWiaZCocaGgmtG5j+/RdBy8ntFdb66+ogYU
+   9M2B4q+dyWWspWxh0DV3SV4+zVkLSg+JQ+TxwKpI/5bGn4chSZ30irU9A
+   qN/dak2JSLen0EUF+jxoiNMxcLqPzZIhWdXV2H8VkllgXOGyZjGtXJwH/
+   QAjdzdAb4XWnilNg1kZpLchBVHlTSVqoqmK405ezPz+qxUUTBNVF9pU6N
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="266840603"
+X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
+   d="scan'208";a="266840603"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 15:49:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
+   d="scan'208";a="513192079"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 05 Jan 2022 15:49:56 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n5G2W-000H8d-7e; Wed, 05 Jan 2022 23:49:56 +0000
+Date:   Thu, 6 Jan 2022 07:49:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chevron Li <chevron.li@bayhubtech.com>, agross@kernel.org,
+        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, shirley.her@bayhubtech.com,
+        fred.ai@bayhubtech.com, xiaoguang.yu@bayhubtech.com,
+        shaper.liu@bayhubtech.com, bruce.yang@bayhubtech.com
+Subject: Re: [PATCH V2 1/1] mmc:sdhci-bayhub:fix Qualcomm sd host 7180 SD
+ card compatibility issue
+Message-ID: <202201060751.sKVVMT8D-lkp@intel.com>
+References: <20220105122926.472-1-chevron.li@bayhubtech.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e857a8bd-2394-405e-edaa-08d9d0a5a723
-X-MS-TrafficTypeDiagnostic: DM6PR01MB5194:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR01MB51949F15810EC1FB26C5FAA09D4B9@DM6PR01MB5194.prod.exchangelabs.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jrQKz6VAG/d8qkrPbe397rB9q1jHkZ3y0kInFbtsXd6WSTZobZcuVpZ8ciTOPNfS9ka3PThc4F8T1XUw87raygmyuY8tEUAzsriotjbEXDfp6033EcIv6WA65651NlfO5EYby6cpO9YDR9ixZ0IRQ0bSGZHmbbqO0+HucgDlbBt0hQSxJgeVdKCnuHZsxaN7NBDtDMVysyddO+B5IZXKZ+4kkAoe8oCjS/LwEIiE/jbfr+XxG/b64iAfy0Z2lIhsbw74F36vPQXiMTQuv+gYj0aXNMoyf8hcCo45eN8EmvSwfuF0uVsSKBaULx0D3avCCkP2HMtV6L91ut0jYxwSz40c6V1xi+ego9O0bnXlxvnSdQrdBZm8fAnevX3BAIhRbXdof2l1fQy7OgmYPfZOlhmGJh/xM4CNPtNGRLvPSJ4yRDm0ycFUc+Lnw5hoHLNPQvKtA9KqHsMMQbTpZUlFrV+kG/NG+/TEpAmiWLLIdQwlu9pw3Yzxd4hpijp8a9H4XZ2GiaefrVGEfsejdbLuPXZBNly+LZBzt47ICA8stsFJAacIkHdS0uCJryQlPGL8tDF3RcJGQWGbPz8rpgco2A83OdheAdPpT1Bef3ZRy0q4AT+riZNrviyu1nMRfjJpPAj8mQzTmosLNhiDiWveWsQ6W56cm+fSwMphgnl2Tup+7wf1EpQr1k40UB15yPZstYrgByj084MlExdOhDlGlzgg4zeIvhUD6ZUMTi7JytgHw2bbpg0M0yeWVpxkuS1x8H0MsgJuaRjMlxTH0fRLSjW4OJj7GCuZ+sfe74litxwpnQRGjVZP7qBgQdcOvFlp
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR0102MB3590.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(7916004)(4636009)(366004)(38350700002)(38100700002)(8676002)(6506007)(186003)(5660300002)(966005)(2906002)(6666004)(52116002)(86362001)(4326008)(33716001)(6512007)(9686003)(316002)(83380400001)(66556008)(66476007)(26005)(66946007)(6916009)(7416002)(6486002)(8936002)(508600001)(41533002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?J7biHrW9cqY9+fSoeC0hZcCl/B0Ql/cfjI7SSX29aRxnDzWIlAwQwcNnsKdF?=
- =?us-ascii?Q?E2g/6HrPbuozQDfrG/SAlGLfYcizFLblzKBimdUYvHEYPsdaX/HpknjS3vj2?=
- =?us-ascii?Q?HVWr07HcHb+RJuflKbrx8evOQdVxuTJp/wIISHlId6qML+O0iu62taEiIgrP?=
- =?us-ascii?Q?0shLcv9h+OjbC4TDtdmzJYF5mvsTAmDKJW/drPoOTlZi3w59wMCN+AtxZL3H?=
- =?us-ascii?Q?oeY4YEM20onBiWMA9hXS6xP5702xkJLNbdS0u/y5uOUO7ehYyBfp7iBWEYpC?=
- =?us-ascii?Q?JO0UGslCgx95keWEEaReHKk3Oh0OalA619H0BoQpSaiRaGZ1T6bx6S4hAJpK?=
- =?us-ascii?Q?EF8VDK1YjD8jm3I701LJacahPnnGy3JA+eBuTO8Nox5y5xy2Fb7l1Y6aXE4Q?=
- =?us-ascii?Q?9BnVEsp8q7IwSkeRgZrqk52ZjjlOa5Bo89WHQf6asScxiMpulfa32XhBPw9h?=
- =?us-ascii?Q?gr4PMs+2+T03TFe5nVKaDiVN9MUnU8wglwRSu9ME3YaB1LDv0Q/rt/bsYzxg?=
- =?us-ascii?Q?oBVlsXKw6zl+okT9UB75e17ubu4RDgp5M37Iu3lj0ska4jIrLC3y31lskLsA?=
- =?us-ascii?Q?AWwsRDy2r0T6XW1sARRcpCqnItyBddBJOBBdPlxgshKD3LCycf02QJRmYP4p?=
- =?us-ascii?Q?g05vcaGF2x/hswTvCqi4TPSq2QdJ5RlBMmr5HqFJi8ix6/953K8nTS39FrtK?=
- =?us-ascii?Q?bT4tvD23y5MED/Z97m1sxRji9ZwqI9nvz7GxaxYHdv8glI4INExp8wiJS6kG?=
- =?us-ascii?Q?bD/t9vP+NjMa61CuS+8eWNgVvNiLoOKN3jNBAapwlJDti8eSeD3dGErDgSwC?=
- =?us-ascii?Q?KGi9IIQIEI80AW2vZgKIrdRX5oeO5p0qeDSiqoodzIc7zMz79HXIgm37nTTH?=
- =?us-ascii?Q?XqV630NNVCRsUdc8ANvki+FOpYtr5B9N1gcghvvpJpf5F6Sbaf6Ex1BvqthG?=
- =?us-ascii?Q?WAjPEUEpz4Y7wKA92Zu3EmrwV+pTON3Z5E8qg397b6/4WB7SFvRzoIMtKSF4?=
- =?us-ascii?Q?9jEHp1+QJIkgkzaxedPFWW84L7HSP4Iqz2XedHNaOqXzLMpQHokbjQKk6l2l?=
- =?us-ascii?Q?IDHDvDTW7NgGbTK5ogpoVKcdV1hE/GHtzheeoagEeMdSxhpi3jn3tu6PJlPu?=
- =?us-ascii?Q?SdczCnF//bHPtVTPlMTJGD/v1sN9r/8rVGxjUPDyfrpBiM8DIwGupbSB5Xno?=
- =?us-ascii?Q?UvIfb3LErGgzotccOxbZQUV4y+p4VLG2NSLhBgQJJmgypl/8BNf/V318Lm33?=
- =?us-ascii?Q?jbBm1FUtD35J5dJvoiCYPRo0Q+ZY8od10OdgwOjXjt5V4KaeGA1X8zsxTydt?=
- =?us-ascii?Q?cVfN2trDP2qvYXEqt5hO/NM6knJTpHRVHPdZK4VjTIF8hHsOUxIf6Zhccr+E?=
- =?us-ascii?Q?CTL80HPywu3Ikp2XVSgf+fRZozihyaWUanSlusRcCObTS4aGmig++eWq5FjV?=
- =?us-ascii?Q?7avjqt1aI++r53gs79EpGiq4gIo+WumhExizBznqToRrU571pYxnoThohmcy?=
- =?us-ascii?Q?0LzKHUlOYVmGGY7TAeODNMNYi6v261d3RtGsgg1IjW3lkzGeYZwwGHsmOSub?=
- =?us-ascii?Q?w9qe5qtTlaZPiYoBDM6Ex/AURItVkvhXOPE16zRDeDCuGuflOE68uGPYIO+s?=
- =?us-ascii?Q?XB1Kh1HXcM2A9UQHrDSpbyrYVE1a1x+ciQTdsSBKWOT65dWMuHBiOv9eiZ9b?=
- =?us-ascii?Q?QsnJd+WzqbgNZ7ZbBt0rV7oX4t0kz9joz8WDDl9EvsBaC7bDAY/kYV3L0+H0?=
- =?us-ascii?Q?pxxD71kCdw=3D=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e857a8bd-2394-405e-edaa-08d9d0a5a723
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR0102MB3590.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2022 23:46:54.5560
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3otfF0mg+0yMrvlYhjIRD7sC/WP/Ac/VBKHJUE0+JUuEEtz4l7cmUH+EccGkEHs081ZTpJeNWMj4ih0ZXUiiCFA9ZpWsHvPP4dy+77ANDcYwr3DdgKVyQL2Wx/Z+RT8t
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR01MB5194
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220105122926.472-1-chevron.li@bayhubtech.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Chevron,
 
-Hi Lorenzo,
+Thank you for the patch! Yet something to improve:
 
-On Wed, 5 Jan 2022, Lorenzo Pieralisi wrote:
-> [+James, for SDEI bits]
->
-> On Thu, Dec 30, 2021 at 07:37:25PM -0800, Ilkka Koskinen wrote:
->> ACPI for Arm Components 1.1 Platform Design Document v1.1 [0] specifices
->> Arm Generic Diagnostic Device Interface (AGDI). It allows an admin to
->> issue diagnostic dump and reset via an SDEI event or an interrupt.
->> This patch implements SDEI path.
->>
->> [0] https://developer.arm.com/documentation/den0093/latest/
->>
->> Signed-off-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
->> ---
->>  drivers/acpi/arm64/Kconfig  |   8 +++
->>  drivers/acpi/arm64/Makefile |   1 +
->>  drivers/acpi/arm64/agdi.c   | 125 ++++++++++++++++++++++++++++++++++++
->>  3 files changed, 134 insertions(+)
->>  create mode 100644 drivers/acpi/arm64/agdi.c
->>
->> diff --git a/drivers/acpi/arm64/Kconfig b/drivers/acpi/arm64/Kconfig
->> index 6dba187f4f2e..24869ba5b365 100644
->> --- a/drivers/acpi/arm64/Kconfig
->> +++ b/drivers/acpi/arm64/Kconfig
->> @@ -8,3 +8,11 @@ config ACPI_IORT
->>
->>  config ACPI_GTDT
->>  	bool
->> +
->> +config ACPI_AGDI
->> +	bool "Arm Generic Diagnostic Dump and Reset Device Interface"
->> +	depends on ARM_SDE_INTERFACE
->> +	help
->> +	  Arm Generic Diagnostic Dump and Reset Device Interface (AGDI) is
->> +	  a standard that enables issuing a non-maskable diagnostic dump and
->> +	  reset command.
->> diff --git a/drivers/acpi/arm64/Makefile b/drivers/acpi/arm64/Makefile
->> index 66acbe77f46e..7b9e4045659d 100644
->> --- a/drivers/acpi/arm64/Makefile
->> +++ b/drivers/acpi/arm64/Makefile
->> @@ -1,4 +1,5 @@
->>  # SPDX-License-Identifier: GPL-2.0-only
->> +obj-$(CONFIG_ACPI_AGDI) 	+= agdi.o
->>  obj-$(CONFIG_ACPI_IORT) 	+= iort.o
->>  obj-$(CONFIG_ACPI_GTDT) 	+= gtdt.o
->>  obj-y				+= dma.o
->> diff --git a/drivers/acpi/arm64/agdi.c b/drivers/acpi/arm64/agdi.c
->> new file mode 100644
->> index 000000000000..6525ccbae5c1
->> --- /dev/null
->> +++ b/drivers/acpi/arm64/agdi.c
->> @@ -0,0 +1,125 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * This file implements handling of
->> + * Arm Generic Diagnostic Dump and Reset Interface table (AGDI)
->> + *
->> + * Copyright (c) 2021, Ampere Computing LLC
->> + */
->> +
->> +#define pr_fmt(fmt) "ACPI: AGDI: " fmt
->> +
->> +#include <linux/kernel.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/slab.h>
->> +#include <linux/module.h>
->> +#include <linux/kernel.h>
->> +#include <linux/acpi.h>
->> +#include <linux/arm_sdei.h>
->> +#include <linux/io.h>
->
-> Nit: alphabetical order.
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on linux/master linus/master v5.16-rc8]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I clean them
+url:    https://github.com/0day-ci/linux/commits/Chevron-Li/mmc-sdhci-bayhub-fix-Qualcomm-sd-host-7180-SD-card-compatibility-issue/20220105-203109
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: mips-allmodconfig (https://download.01.org/0day-ci/archive/20220106/202201060751.sKVVMT8D-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/26adf9f047e13b3b5a025c2a4c7eccb1db2af050
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Chevron-Li/mmc-sdhci-bayhub-fix-Qualcomm-sd-host-7180-SD-card-compatibility-issue/20220105-203109
+        git checkout 26adf9f047e13b3b5a025c2a4c7eccb1db2af050
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
 
->
->> +
->> +struct agdi_data {
->> +	int sdei_event;
->> +};
->> +
->> +static int agdi_sdei_handler(u32 sdei_event, struct pt_regs *regs, void *arg)
->> +{
->> +	nmi_panic(regs, "Arm Generic Diagnostic Dump and Reset SDEI event issued");
->> +	return 0;
->> +}
->> +
->> +static int agdi_sdei_probe(struct platform_device *pdev,
->> +			   struct agdi_data *adata)
->> +{
->> +	int err;
->> +
->> +	err = sdei_event_register(adata->sdei_event, agdi_sdei_handler, pdev);
->> +	if (err) {
->> +		dev_err(&pdev->dev, "Failed to register for SDEI event %d",
->> +			adata->sdei_event);
->> +		return err;
->> +	}
->> +
->> +	err = sdei_event_enable(adata->sdei_event);
->> +	if (err)  {
->> +		sdei_event_unregister(adata->sdei_event);
->> +		dev_err(&pdev->dev, "Failed to enable event %d\n",
->> +			adata->sdei_event);
->> +		return err;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static int agdi_probe(struct platform_device *pdev)
->> +{
->> +	struct agdi_data *adata;
->> +
->> +	adata = dev_get_platdata(&pdev->dev);
->> +	if (!adata)
->> +		return -EINVAL;
->> +
->> +	return agdi_sdei_probe(pdev, adata);
->> +}
->> +
->> +static int agdi_remove(struct platform_device *pdev)
->> +{
->> +	struct agdi_data *adata = platform_get_drvdata(pdev);
->> +
->> +	sdei_event_disable(adata->sdei_event);
->> +	sdei_event_unregister(adata->sdei_event);
->> +
->> +	return 0;
->> +}
->> +
->> +static struct platform_driver agdi_driver = {
->> +	.driver = {
->> +		.name = "agdi",
->> +	},
->> +	.probe = agdi_probe,
->> +	.remove = agdi_remove,
->> +};
->
-> May I ask why we need a platform device (and driver) to register
-> an SDEI event ?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Well, I guess I thought to have a device/driver to handle SDEI events and 
-interrupts since the spec calls it a device. I can certainly remove those, 
-if that's preferred.
+All error/warnings (new ones prefixed by >>, old ones prefixed by <<):
 
->
->> +static int __init agdi_init(void)
->> +{
->> +	int ret;
->> +	acpi_status status;
->> +	struct acpi_table_agdi *agdi_table;
->> +	struct agdi_data pdata;
->> +	struct platform_device *pdev;
->> +
->> +	if (acpi_disabled)
->> +		return 0;
->
-> Why don't we call agdi_init() from acpi_init() as we do for IORT/VIOT ?
->
-> I don't think it is necessary to add a device_initcall(), with related
-> ordering dependencies.
+   ERROR: modpost: missing MODULE_LICENSE() in drivers/pci/controller/pcie-mt7621.o
+>> ERROR: modpost: "mmc_attach_mmc" [drivers/mmc/host/sdhci-bayhub.ko] undefined!
+>> ERROR: modpost: "mmc_attach_sdio" [drivers/mmc/host/sdhci-bayhub.ko] undefined!
+>> ERROR: modpost: "mmc_send_if_cond_pcie" [drivers/mmc/host/sdhci-bayhub.ko] undefined!
+>> ERROR: modpost: "sdio_reset" [drivers/mmc/host/sdhci-bayhub.ko] undefined!
+>> ERROR: modpost: "mmc_pwrseq_reset" [drivers/mmc/host/sdhci-bayhub.ko] undefined!
+>> ERROR: modpost: "mmc_power_up" [drivers/mmc/host/sdhci-bayhub.ko] undefined!
+>> ERROR: modpost: "mmc_add_card" [drivers/mmc/host/sdhci-bayhub.ko] undefined!
+>> ERROR: modpost: "mmc_spi_read_ocr" [drivers/mmc/host/sdhci-bayhub.ko] undefined!
+>> ERROR: modpost: "mmc_go_idle" [drivers/mmc/host/sdhci-bayhub.ko] undefined!
+>> ERROR: modpost: "mmc_select_voltage" [drivers/mmc/host/sdhci-bayhub.ko] undefined!
+   WARNING: modpost: suppressed 34 unresolved symbol warnings because there were too many)
+--
+>> drivers/mmc/host/sdhci-bayhub.c:2265:5: warning: no previous prototype for 'mmc_app_set_clr_card_detect' [-Wmissing-prototypes]
+    2265 | int mmc_app_set_clr_card_detect(struct mmc_card *card)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/mmc/host/sdhci-bayhub.c:3291:6: warning: no previous prototype for 'mmc_rescan_bayhub' [-Wmissing-prototypes]
+    3291 | void mmc_rescan_bayhub(struct work_struct *work)
+         |      ^~~~~~~~~~~~~~~~~
+   drivers/mmc/host/sdhci-bayhub.c: In function 'dump_array':
+>> drivers/mmc/host/sdhci-bayhub.c:4154:12: warning: variable 'str' set but not used [-Wunused-but-set-variable]
+    4154 |         u8 str[12] = { 0 };
+         |            ^~~
+   drivers/mmc/host/sdhci-bayhub.c: At top level:
+>> drivers/mmc/host/sdhci-bayhub.c:4232:6: warning: no previous prototype for 'no_fail_p' [-Wmissing-prototypes]
+    4232 | void no_fail_p(u8 *tuning_win, u8 *mid_val, u8 *max_pass_win, u8 *first_val)
+         |      ^~~~~~~~~
+>> drivers/mmc/host/sdhci-bayhub.c:4254:6: warning: no previous prototype for 'tx_selb_calculate_valid_phase_range' [-Wmissing-prototypes]
+    4254 | void tx_selb_calculate_valid_phase_range(u32 val, int *start,
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/mmc/host/sdhci-bayhub.c:4270:6: warning: no previous prototype for 'ggc_update_default_selb_phase_tuning_cnt' [-Wmissing-prototypes]
+    4270 | bool ggc_update_default_selb_phase_tuning_cnt(struct sdhci_host *host, int selb,
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/mmc/host/sdhci-bayhub.c:4310:5: warning: no previous prototype for 'sdhci_bht_sdr50_execute_tuning' [-Wmissing-prototypes]
+    4310 | int sdhci_bht_sdr50_execute_tuning(struct sdhci_host *host, u32 opcode)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/mmc/host/sdhci-bayhub.c:4371:5: warning: no previous prototype for 'get_config_sela_setting' [-Wmissing-prototypes]
+    4371 | int get_config_sela_setting(struct sdhci_host *host)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/mmc/host/sdhci-bayhub.c:4382:5: warning: no previous prototype for 'get_config_selb_setting' [-Wmissing-prototypes]
+    4382 | int get_config_selb_setting(struct sdhci_host *host)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/mmc/host/sdhci-bayhub.c:4393:5: warning: no previous prototype for 'get_all_sela_status' [-Wmissing-prototypes]
+    4393 | u32 get_all_sela_status(struct sdhci_host *host, u32 target_selb)
+         |     ^~~~~~~~~~~~~~~~~~~
+>> drivers/mmc/host/sdhci-bayhub.c:4407:5: warning: no previous prototype for 'get_pass_window_weight' [-Wmissing-prototypes]
+    4407 | int get_pass_window_weight(u32 val)
+         |     ^~~~~~~~~~~~~~~~~~~~~~
+>> drivers/mmc/host/sdhci-bayhub.c:4419:5: warning: no previous prototype for 'get_sela_nearby_pass_window' [-Wmissing-prototypes]
+    4419 | int get_sela_nearby_pass_window(u32 sela, u32 base)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/mmc/host/sdhci-bayhub.c:4457:5: warning: no previous prototype for 'get_left_one_sel' [-Wmissing-prototypes]
+    4457 | int get_left_one_sel(int base)
+         |     ^~~~~~~~~~~~~~~~
+>> drivers/mmc/host/sdhci-bayhub.c:4465:5: warning: no previous prototype for 'get_right_one_sel' [-Wmissing-prototypes]
+    4465 | int get_right_one_sel(int base)
+         |     ^~~~~~~~~~~~~~~~~
+>> drivers/mmc/host/sdhci-bayhub.c:4473:5: warning: no previous prototype for 'get_dif' [-Wmissing-prototypes]
+    4473 | int get_dif(int x, int y)
+         |     ^~~~~~~
+>> drivers/mmc/host/sdhci-bayhub.c:4667:6: warning: no previous prototype for 'tx_selb_inject_policy' [-Wmissing-prototypes]
+    4667 | void tx_selb_inject_policy(struct sdhci_host *host, int tx_selb)
+         |      ^~~~~~~~~~~~~~~~~~~~~
+>> drivers/mmc/host/sdhci-bayhub.c:4686:5: warning: no previous prototype for 'get_selb_failure_point' [-Wmissing-prototypes]
+    4686 | int get_selb_failure_point(int start, u64 raw_tx_selb, int tuning_cnt)
+         |     ^~~~~~~~~~~~~~~~~~~~~~
+>> drivers/mmc/host/sdhci-bayhub.c:4726:6: warning: no previous prototype for 'selx_failure_point_exist' [-Wmissing-prototypes]
+    4726 | bool selx_failure_point_exist(u32 val)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/mmc/host/sdhci-bayhub.c:4736:5: warning: no previous prototype for '_get_best_window_phase' [-Wmissing-prototypes]
+    4736 | int _get_best_window_phase(u32 vct, int *pmax_pass_win, int shif_left_flg)
+         |     ^~~~~~~~~~~~~~~~~~~~~~
+>> drivers/mmc/host/sdhci-bayhub.c:4802:5: warning: no previous prototype for 'get_best_window_phase' [-Wmissing-prototypes]
+    4802 | int get_best_window_phase(u32 vct, int *pmax_pass_win)
+         |     ^~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/host/sdhci-bayhub.c:4845:6: warning: no previous prototype for 'ggc_hw_inject_ext' [-Wmissing-prototypes]
+    4845 | bool ggc_hw_inject_ext(struct sdhci_host *host, bool *card_status,
+         |      ^~~~~~~~~~~~~~~~~
+   drivers/mmc/host/sdhci-bayhub.c:4881:6: warning: no previous prototype for '_ggc_hw_inject_may_recursive' [-Wmissing-prototypes]
+    4881 | bool _ggc_hw_inject_may_recursive(struct sdhci_host *host, u32 sel200,
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/host/sdhci-bayhub.c:4914:6: warning: no previous prototype for 'ggc_hw_inject_may_recursive' [-Wmissing-prototypes]
+    4914 | bool ggc_hw_inject_may_recursive(struct sdhci_host *host, u32 sel200,
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/host/sdhci-bayhub.c:4920:6: warning: no previous prototype for 'get_next_dll_voltage' [-Wmissing-prototypes]
+    4920 | bool get_next_dll_voltage(int cur, int *next, u32 *dll_voltage_unlock_cnt,
+         |      ^~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/host/sdhci-bayhub.c:4963:6: warning: no previous prototype for 'ggc_sw_calc_tuning_result' [-Wmissing-prototypes]
+    4963 | bool ggc_sw_calc_tuning_result(struct sdhci_host *host, bool *card_status,
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/host/sdhci-bayhub.c:5038:6: warning: no previous prototype for '_ggc_calc_cur_sela_tuning_result' [-Wmissing-prototypes]
+    5038 | bool _ggc_calc_cur_sela_tuning_result(struct sdhci_host *host, int cur_sela, int start_selb)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-That's a good point. I change it.
-
->
->> +
->> +	status = acpi_get_table(ACPI_SIG_AGDI, 0,
->> +				(struct acpi_table_header **) &agdi_table);
->> +	if (ACPI_FAILURE(status))
->> +		return -ENODEV;
->> +
->> +	if (agdi_table->flags & ACPI_AGDI_SIGNALING_MODE) {
->
-> Is this because specs need updating ?
-
-Yes, that's the reason. AGDI table is missing flags that would define 
-trigger type and polarity.
-
->
->> +		pr_warn("Interrupt signaling is not supported");
->> +		ret = -ENODEV;
->> +		goto err_put_table;
->> +	}
->> +
->> +	pdata.sdei_event = agdi_table->sdei_event;
->> +
->> +	pdev = platform_device_register_data(NULL, "agdi", 0, &pdata, sizeof(pdata));
->> +	if (IS_ERR(pdev)) {
->> +		ret = PTR_ERR(pdev);
->> +		goto err_put_table;
->> +	}
->> +
->> +	ret = platform_driver_register(&agdi_driver);
->> +	if (ret)
->> +		goto err_device_unregister;
->> +
->> +	acpi_put_table((struct acpi_table_header *)agdi_table);
->> +	return 0;
->> +
->> +err_device_unregister:
->> +	platform_device_unregister(pdev);
->> +err_put_table:
->> +	acpi_put_table((struct acpi_table_header *)agdi_table);
->> +	return ret;
->> +}
->> +device_initcall(agdi_init);
->
-> See above.
->
-> Thanks,
-> Lorenzo
->
-
-Cheers, Ilkka
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

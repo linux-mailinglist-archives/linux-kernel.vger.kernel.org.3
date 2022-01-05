@@ -2,66 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5665484D34
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 06:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA8F484D38
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 06:06:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbiAEFBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 00:01:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54454 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiAEFBq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 00:01:46 -0500
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F514C061761;
-        Tue,  4 Jan 2022 21:01:46 -0800 (PST)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n4yQh-00HNkI-3e; Wed, 05 Jan 2022 05:01:43 +0000
-Date:   Wed, 5 Jan 2022 05:01:43 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>
-Subject: Re: [PATCH 02/10] exit: Add and use make_task_dead.
-Message-ID: <YdUmN7n4W5YETUhW@zeniv-ca.linux.org.uk>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
- <20211208202532.16409-2-ebiederm@xmission.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211208202532.16409-2-ebiederm@xmission.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+        id S231845AbiAEFGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 00:06:15 -0500
+Received: from foss.arm.com ([217.140.110.172]:39148 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229895AbiAEFGO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 00:06:14 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D753C1042;
+        Tue,  4 Jan 2022 21:06:13 -0800 (PST)
+Received: from p8cg001049571a15.arm.com (unknown [10.163.72.138])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 369D03F66F;
+        Tue,  4 Jan 2022 21:06:10 -0800 (PST)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] coresight: trbe: Workaround Cortex-A510 erratas
+Date:   Wed,  5 Jan 2022 10:35:55 +0530
+Message-Id: <1641359159-22726-1-git-send-email-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 08, 2021 at 02:25:24PM -0600, Eric W. Biederman wrote:
-> There are two big uses of do_exit.  The first is it's design use to be
-> the guts of the exit(2) system call.  The second use is to terminate
-> a task after something catastrophic has happened like a NULL pointer
-> in kernel code.
-> 
-> Add a function make_task_dead that is initialy exactly the same as
-> do_exit to cover the cases where do_exit is called to handle
-> catastrophic failure.  In time this can probably be reduced to just a
-> light wrapper around do_task_dead. For now keep it exactly the same so
-> that there will be no behavioral differences introducing this new
-> concept.
-> 
-> Replace all of the uses of do_exit that use it for catastraphic
-> task cleanup with make_task_dead to make it clear what the code
-> is doing.
-> 
-> As part of this rename rewind_stack_do_exit
-> rewind_stack_and_make_dead.
+	This series adds three different workarounds in the TRBE driver for
+Cortex-A510 specific erratas. But first, this adds Cortex-A510 specific cpu
+part number definition in the platform. This series applies on 5.16-rc8.
 
-Umm...   What about .Linvalid_mask: in arch/xtensa/kernel/entry.S?
-That's an obvious case for your make_task_dead().
+Relevant errata documents can be found here.
+
+https://developer.arm.com/documentation/SDEN2397239/900
+https://developer.arm.com/documentation/SDEN2397589/900
+
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Suzuki Poulose <suzuki.poulose@arm.com>
+Cc: coresight@lists.linaro.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+
+Anshuman Khandual (4):
+  arm64: Add Cortex-A510 CPU part definition
+  coresight: trbe: Work around the ignored system register writes
+  coresight: trbe: Work around the invalid prohibited states
+  coresight: trbe: Workaround TRBE trace data corruption
+
+ Documentation/arm64/silicon-errata.rst       |   6 +
+ arch/arm64/Kconfig                           |  57 ++++++++++
+ arch/arm64/include/asm/cputype.h             |   2 +
+ arch/arm64/kernel/cpu_errata.c               |  27 +++++
+ arch/arm64/tools/cpucaps                     |   3 +
+ drivers/hwtracing/coresight/coresight-trbe.c | 111 ++++++++++++++-----
+ drivers/hwtracing/coresight/coresight-trbe.h |   8 --
+ 7 files changed, 181 insertions(+), 33 deletions(-)
+
+-- 
+2.25.1
+

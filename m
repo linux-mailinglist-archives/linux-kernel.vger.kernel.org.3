@@ -2,264 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEA5648507C
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 10:58:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F47B485085
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 10:59:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239113AbiAEJ6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 04:58:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36744 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234548AbiAEJ6g (ORCPT
+        id S239131AbiAEJ7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 04:59:52 -0500
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:53610 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232437AbiAEJ7a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 04:58:36 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBB6C061761;
-        Wed,  5 Jan 2022 01:58:36 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id h7so43345195lfu.4;
-        Wed, 05 Jan 2022 01:58:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fxXH8VI4wZmAXX9m4NvWpw3z/tZg6/iYEenlHFjwdH0=;
-        b=A0QdlXM/UQcCsIPeYRwLvanvCWVtfLTWwePpHr+mJ+mwisjtmg/ZIcsQ3kcNGsJnUk
-         9746F9rO2kxABpWjJrjflsdeQhKKvPpORYGYGG81lMAUisD59uXDlWmGryHMWF6oanQB
-         t2afLs9kHbtSFizvL+eOny8N1pdWs5l+djVvtUbC+MTcmKrnyUzZzWoZ8KZvJxQqyxof
-         fTOvZfRM1qS34QeahT1Ai/TZwkM0Bpitbjzx2S5VWmw0x/e8rSAEn8rxRnoZPsY25h0r
-         rDz3UcurJykHeD4OkyJo+5p8OHc5JqVwdgX/eF1EklQhXA7IHjYn3fgVfvMzw0Gg0yJA
-         GC8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fxXH8VI4wZmAXX9m4NvWpw3z/tZg6/iYEenlHFjwdH0=;
-        b=qPRZfpmUwTG85zPOklZp2wXafVba0zbW+t1ivnZ63aOKF3tpTt985lYylJZXb2v+qd
-         9TTT2lSk+KozMUYJrqIKyh+7sDsjm0hAmmpJ1zaFJwJhfpbubVb6knN3LVcxuaE2L5Ol
-         q3emMnXWgFELqTUsqBktHtrYD7SPsEvGVSoOLKhJkDocY+ag47mjDEK5bdl0FkD/cquT
-         YnaGfdLwObJcHcATdHRSctmybXcDZNDafDgRGmnv1yDGVfk4kqSkYP+jCezLE7+eDvMB
-         QESV+CKjhNOodeXbrpgIj/sk/iMplK95bVv4SVo70iNLoGEMk+qO6+aa1FpB/TxCJjOH
-         pQuQ==
-X-Gm-Message-State: AOAM532tg4WgWXHx6Mg0bfUkON4lb7vgqOridbom9WlE898Au/hFi4+y
-        KvuGtWRDdOHHhEptAvCi9DQJZ1YPXL8JdHtZnrs=
-X-Google-Smtp-Source: ABdhPJzR0mtBwvpmhPcPsOddpOKSSVaBlscNdhkFzqpHE57uKccK9i5ZJ6mtcAMk60MSsvMfXZkYjGeRSztQwvG0IAA=
-X-Received: by 2002:a05:6512:32ca:: with SMTP id f10mr4755826lfg.281.1641376714308;
- Wed, 05 Jan 2022 01:58:34 -0800 (PST)
+        Wed, 5 Jan 2022 04:59:30 -0500
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2058aLLs003317;
+        Wed, 5 Jan 2022 03:58:36 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=MO2PSHj23wq8N+iVx3WZD17yLglCV3U38GihkcUa5JM=;
+ b=hqSwsX9BwItRgwBU2nN+Ky5xxicAB+9sdIKfnsVe6wSEgUbaQEZaINAQZo+AlyRzKLxm
+ Hdx8hRyS9uBv3NuiFssQ9vxMfgztWxRI/ZqlFbMNst7xUeb5JVBiE1m+Gj6mYTLGsufT
+ zAlfysFSYqcY/JqHxLQAoGg8Rny2sRmqbChHW9r1te1+acwutJVtk4BGmfGg6m6sCGa2
+ xukKQTS4C+7lWz1wPwWFbNfpVnui64B3pap/bpzlUoa30LVaQiXswxQSFJORFNpx0ZsI
+ 4AoGxsIdPTIxnbDdg3nw5Zob7tB1hFSg2EsgbeuKOqPbPCglYynK/7sfYsKMRFgglDBf Dg== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3dd7y3g262-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 05 Jan 2022 03:58:35 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Wed, 5 Jan
+ 2022 09:58:34 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Wed, 5 Jan 2022 09:58:34 +0000
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 33897B0E;
+        Wed,  5 Jan 2022 09:58:34 +0000 (UTC)
+Date:   Wed, 5 Jan 2022 09:58:34 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Lucas Tanure <tanureal@opensource.cirrus.com>
+CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        <alsa-devel@alsa-project.org>, <linux-acpi@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        <platform-driver-x86@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 07/10] hda: cs35l41: Add support for CS35L41 in HDA
+ systems
+Message-ID: <20220105095834.GD18506@ediswmail.ad.cirrus.com>
+References: <20211217115708.882525-1-tanureal@opensource.cirrus.com>
+ <20211217115708.882525-8-tanureal@opensource.cirrus.com>
 MIME-Version: 1.0
-References: <c8376d7517aebe7cc851f0baaeef7b13707cf767.1641372460.git.leonro@nvidia.com>
-In-Reply-To: <c8376d7517aebe7cc851f0baaeef7b13707cf767.1641372460.git.leonro@nvidia.com>
-From:   Zhu Yanjun <zyjzyj2000@gmail.com>
-Date:   Wed, 5 Jan 2022 17:58:22 +0800
-Message-ID: <CAD=hENeZC7x9TTDCLkUzTF=+=EAbFX3dWxQB5A3YSaaS2AS8Ng@mail.gmail.com>
-Subject: Re: [PATCH rdma-next] RDMA/rxe: Delete deprecated module parameters interface
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        RDMA mailing list <linux-rdma@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20211217115708.882525-8-tanureal@opensource.cirrus.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: mQd4XZ9zG4wN_6-fzPf2Ov9s2DYnPmTR
+X-Proofpoint-ORIG-GUID: mQd4XZ9zG4wN_6-fzPf2Ov9s2DYnPmTR
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 5, 2022 at 4:50 PM Leon Romanovsky <leon@kernel.org> wrote:
->
-> From: Leon Romanovsky <leonro@nvidia.com>
->
-> Starting from the commit 66920e1b2586 ("rdma_rxe: Use netlink messages
-> to add/delete links") from the 2019, the RXE modules parameters are marked
-> as deprecated in favour of rdmatool. So remove the kernel code too.
->
-> Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-
-Reviewed-by: Zhu Yanjun <zyjzyj2000@gmail.com>
-
-Zhu Yanjun
-
+On Fri, Dec 17, 2021 at 11:57:05AM +0000, Lucas Tanure wrote:
+> Add support for CS35L41 using a new separated driver
+> that can be used in all upcoming designs
+> 
+> Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
 > ---
->  drivers/infiniband/sw/rxe/Makefile    |   1 -
->  drivers/infiniband/sw/rxe/rxe.c       |   4 -
->  drivers/infiniband/sw/rxe/rxe.h       |   2 -
->  drivers/infiniband/sw/rxe/rxe_sysfs.c | 119 --------------------------
->  4 files changed, 126 deletions(-)
->  delete mode 100644 drivers/infiniband/sw/rxe/rxe_sysfs.c
->
-> diff --git a/drivers/infiniband/sw/rxe/Makefile b/drivers/infiniband/sw/rxe/Makefile
-> index 1e24673e9318..5395a581f4bb 100644
-> --- a/drivers/infiniband/sw/rxe/Makefile
-> +++ b/drivers/infiniband/sw/rxe/Makefile
-> @@ -22,5 +22,4 @@ rdma_rxe-y := \
->         rxe_mcast.o \
->         rxe_task.o \
->         rxe_net.o \
-> -       rxe_sysfs.o \
->         rxe_hw_counters.o
-> diff --git a/drivers/infiniband/sw/rxe/rxe.c b/drivers/infiniband/sw/rxe/rxe.c
-> index 8e0f9c489cab..fab291245366 100644
-> --- a/drivers/infiniband/sw/rxe/rxe.c
-> +++ b/drivers/infiniband/sw/rxe/rxe.c
-> @@ -13,8 +13,6 @@ MODULE_AUTHOR("Bob Pearson, Frank Zago, John Groves, Kamal Heib");
->  MODULE_DESCRIPTION("Soft RDMA transport");
->  MODULE_LICENSE("Dual BSD/GPL");
->
-> -bool rxe_initialized;
-> -
->  /* free resources for a rxe device all objects created for this device must
->   * have been destroyed
->   */
-> @@ -290,7 +288,6 @@ static int __init rxe_module_init(void)
->                 return err;
->
->         rdma_link_register(&rxe_link_ops);
-> -       rxe_initialized = true;
->         pr_info("loaded\n");
->         return 0;
->  }
-> @@ -301,7 +298,6 @@ static void __exit rxe_module_exit(void)
->         ib_unregister_driver(RDMA_DRIVER_RXE);
->         rxe_net_exit();
->
-> -       rxe_initialized = false;
->         pr_info("unloaded\n");
->  }
->
-> diff --git a/drivers/infiniband/sw/rxe/rxe.h b/drivers/infiniband/sw/rxe/rxe.h
-> index 1bb3fb618bf5..fb9066e6f5f0 100644
-> --- a/drivers/infiniband/sw/rxe/rxe.h
-> +++ b/drivers/infiniband/sw/rxe/rxe.h
-> @@ -39,8 +39,6 @@
->
->  #define RXE_ROCE_V2_SPORT              (0xc000)
->
-> -extern bool rxe_initialized;
-> -
->  void rxe_set_mtu(struct rxe_dev *rxe, unsigned int dev_mtu);
->
->  int rxe_add(struct rxe_dev *rxe, unsigned int mtu, const char *ibdev_name);
-> diff --git a/drivers/infiniband/sw/rxe/rxe_sysfs.c b/drivers/infiniband/sw/rxe/rxe_sysfs.c
-> deleted file mode 100644
-> index 666202ddff48..000000000000
-> --- a/drivers/infiniband/sw/rxe/rxe_sysfs.c
-> +++ /dev/null
-> @@ -1,119 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0 OR Linux-OpenIB
-> -/*
-> - * Copyright (c) 2016 Mellanox Technologies Ltd. All rights reserved.
-> - * Copyright (c) 2015 System Fabric Works, Inc. All rights reserved.
-> - */
-> -
-> -#include "rxe.h"
-> -#include "rxe_net.h"
-> -
-> -/* Copy argument and remove trailing CR. Return the new length. */
-> -static int sanitize_arg(const char *val, char *intf, int intf_len)
-> -{
-> -       int len;
-> -
-> -       if (!val)
-> -               return 0;
-> -
-> -       /* Remove newline. */
-> -       for (len = 0; len < intf_len - 1 && val[len] && val[len] != '\n'; len++)
-> -               intf[len] = val[len];
-> -       intf[len] = 0;
-> -
-> -       if (len == 0 || (val[len] != 0 && val[len] != '\n'))
-> -               return 0;
-> -
-> -       return len;
-> -}
-> -
-> -static int rxe_param_set_add(const char *val, const struct kernel_param *kp)
-> -{
-> -       int len;
-> -       int err = 0;
-> -       char intf[32];
-> -       struct net_device *ndev;
-> -       struct rxe_dev *exists;
-> -
-> -       if (!rxe_initialized) {
-> -               pr_err("Module parameters are not supported, use rdma link add or rxe_cfg\n");
-> -               return -EAGAIN;
-> -       }
-> -
-> -       len = sanitize_arg(val, intf, sizeof(intf));
-> -       if (!len) {
-> -               pr_err("add: invalid interface name\n");
-> -               return -EINVAL;
-> -       }
-> -
-> -       ndev = dev_get_by_name(&init_net, intf);
-> -       if (!ndev) {
-> -               pr_err("interface %s not found\n", intf);
-> -               return -EINVAL;
-> -       }
-> -
-> -       if (is_vlan_dev(ndev)) {
-> -               pr_err("rxe creation allowed on top of a real device only\n");
-> -               err = -EPERM;
-> -               goto err;
-> -       }
-> -
-> -       exists = rxe_get_dev_from_net(ndev);
-> -       if (exists) {
-> -               ib_device_put(&exists->ib_dev);
-> -               pr_err("already configured on %s\n", intf);
-> -               err = -EINVAL;
-> -               goto err;
-> -       }
-> -
-> -       err = rxe_net_add("rxe%d", ndev);
-> -       if (err) {
-> -               pr_err("failed to add %s\n", intf);
-> -               goto err;
-> -       }
-> -
-> -err:
-> -       dev_put(ndev);
-> -       return err;
-> -}
-> -
-> -static int rxe_param_set_remove(const char *val, const struct kernel_param *kp)
-> -{
-> -       int len;
-> -       char intf[32];
-> -       struct ib_device *ib_dev;
-> -
-> -       len = sanitize_arg(val, intf, sizeof(intf));
-> -       if (!len) {
-> -               pr_err("add: invalid interface name\n");
-> -               return -EINVAL;
-> -       }
-> -
-> -       if (strncmp("all", intf, len) == 0) {
-> -               pr_info("rxe_sys: remove all");
-> -               ib_unregister_driver(RDMA_DRIVER_RXE);
-> -               return 0;
-> -       }
-> -
-> -       ib_dev = ib_device_get_by_name(intf, RDMA_DRIVER_RXE);
-> -       if (!ib_dev) {
-> -               pr_err("not configured on %s\n", intf);
-> -               return -EINVAL;
-> -       }
-> -
-> -       ib_unregister_device_and_put(ib_dev);
-> -
-> -       return 0;
-> -}
-> -
-> -static const struct kernel_param_ops rxe_add_ops = {
-> -       .set = rxe_param_set_add,
-> -};
-> -
-> -static const struct kernel_param_ops rxe_remove_ops = {
-> -       .set = rxe_param_set_remove,
-> -};
-> -
-> -module_param_cb(add, &rxe_add_ops, NULL, 0200);
-> -MODULE_PARM_DESC(add, "DEPRECATED.  Create RXE device over network interface");
-> -module_param_cb(remove, &rxe_remove_ops, NULL, 0200);
-> -MODULE_PARM_DESC(remove, "DEPRECATED.  Remove RXE device over network interface");
-> --
-> 2.33.1
->
+> +	mtl_revid = reg_revid & CS35L41_MTLREVID_MASK;
+> +
+> +	chipid = (mtl_revid % 2) ? CS35L41R_CHIP_ID : CS35L41_CHIP_ID;
+> +	if (regid != chipid) {
+> +		dev_err(cs35l41->dev, "CS35L41 Device ID (%X). Expected ID %X\n", regid, chipid);
+> +		ret = -ENODEV;
+> +		goto err;
+> +	}
+> +
+> +	ret = cs35l41_register_errata_patch(cs35l41->dev, cs35l41->regmap, reg_revid);
+> +	if (ret)
+> +		goto err;
+> +
+> +	ret = cs35l41_otp_unpack(cs35l41->dev, cs35l41->regmap);
+> +	if (ret) {
+> +		dev_err(cs35l41->dev, "OTP Unpack failed: %d\n", ret);
+> +		goto err;
+> +	}
+> +
+> +	ret = cs35l41_hda_apply_properties(cs35l41, acpi_hw_cfg);
+> +	if (ret)
+> +		goto err;
+> +	kfree(acpi_hw_cfg);
+> +
+> +	if (cs35l41->reg_seq->probe) {
+> +		ret = regmap_register_patch(cs35l41->regmap, cs35l41->reg_seq->probe,
+> +					    cs35l41->reg_seq->num_probe);
+> +		if (ret) {
+> +			dev_err(cs35l41->dev, "Fail to apply probe reg patch: %d\n", ret);
+> +			goto err;
+> +		}
+> +	}
+
+Probably shouldn't use regmap_register_patch here,
+cs35l41_register_errata_patch has already registered a patch to
+the regmap, and this will then overwrite that patch. Probably
+better to do this stuff as a multi-write.
+
+Thanks,
+Charles

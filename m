@@ -2,86 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C75E484C1A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 02:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C778484C1E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 02:33:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236893AbiAEB3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 20:29:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236885AbiAEB3E (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 20:29:04 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0755FC061761;
-        Tue,  4 Jan 2022 17:29:04 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id t19so62112213oij.1;
-        Tue, 04 Jan 2022 17:29:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HIHh+sUGeflBLomIavBIFXEOqt2GNmpMWRybbW5mJ7A=;
-        b=lenDvkykoR7Si1pilJm3/1POnEDGNxEBqlCsYpeUhc8rry28X1pZf7ikaQjuk56jr+
-         EQeZ4XcFnKsgWH2pAsqUIewPgqLDt2kX3SI7z6/yG3w6yK/96r4Vie8NsMPUWkm/D2P6
-         kg8usMvcroJRtWPHxOEr+FHU3ynGXp+zHP7GPBZWgFXhNQijgV3vzkJUIepOqUKOrPjx
-         b8gU4St4dQa2lbM9B6Y/hLRHYN82gBB9bwN6BUetV+dJ7W89dVesq2D2JJJd99HuLlBN
-         2Qvjyqxlc+Mfl/kheyDkLBz8+dQvhuyrAyzZkpvH1rwuAfME7KW7klEbN6i0KQvjsIax
-         dVfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=HIHh+sUGeflBLomIavBIFXEOqt2GNmpMWRybbW5mJ7A=;
-        b=0ja8USunf5f2zyER9PJcwmaCLix+PPCe9Pek9C9KaLtnt/F9cpy40xlz2qNtje8uJb
-         Cgq2mlMZRGVDc/deXrqOPoS1XzkPR8bx0bgZ0js+EY7sCivOpW1MF6yIOpR4kbEjPwRS
-         Crhu6/FdSie9+UbaqAvtqRQTyWT+7VTsKThkR2JmpgPQvyc2u+LdHJjch0g/Y3Q5zbJM
-         JEUUFvpChIRBQnenLgYhCmLjkeG5ciZaOr/5RKTfE+yQLxsehAK3zLEO5QMfp7KnvlET
-         NQdGIowPAZRPpr4EIT3xaE+Am22ud1NioHSRQB0xWUZsE3+9nNOL6WA1dh2EcZ0qtVGa
-         CC6w==
-X-Gm-Message-State: AOAM533d1ftfRvnQgq4unVyLD65dQBaawQjQwQzEy5SV0dJjlSnjcsnc
-        jsIScf/ydhDN90Wf8bqQfo0=
-X-Google-Smtp-Source: ABdhPJz5Lzh+WQEckX+/ECoTcsY4v/oZi13rlHGmxIu2p3X8Zs9I2s/Yvkw2bnFFTxVY4CoR/cpk5Q==
-X-Received: by 2002:a05:6808:1709:: with SMTP id bc9mr815546oib.130.1641346143417;
-        Tue, 04 Jan 2022 17:29:03 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c10sm8614741ots.73.2022.01.04.17.29.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 17:29:02 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 4 Jan 2022 17:29:01 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.15 00/72] 5.15.13-rc2 review
-Message-ID: <20220105012901.GB2729171@roeck-us.net>
-References: <20220104073845.629257314@linuxfoundation.org>
+        id S236900AbiAEBdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 20:33:36 -0500
+Received: from smtp23.cstnet.cn ([159.226.251.23]:33104 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234314AbiAEBdf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 20:33:35 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowABHT1tV9dRhfS4gBQ--.25741S2;
+        Wed, 05 Jan 2022 09:33:09 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     johannes@sipsolutions.net, davem@davemloft.net, kuba@kernel.org
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v2] mac80211: mlme: check for null after calling kmemdup
+Date:   Wed,  5 Jan 2022 09:33:08 +0800
+Message-Id: <20220105013308.2011586-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220104073845.629257314@linuxfoundation.org>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowABHT1tV9dRhfS4gBQ--.25741S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Wr1kZFyrAr4xCFykAF4kXrb_yoWkGrg_KF
+        n7Zwn8Zw13trWfArWUKFy5ZayfCrsFqFyftF9IkFZ3A34fJ3y7Gw4fXwnxGr4xC3yYvrZ8
+        G34q934rJwsrZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb48FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
+        KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
+        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbLiSPUUUU
+        U==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 08:41:12AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.13 release.
-> There are 72 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 06 Jan 2022 07:38:29 +0000.
-> Anything received after that time might be too late.
-> 
+As the possible failure of the alloc, the ifmgd->assoc_req_ies might be
+NULL pointer returned from kmemdup().
+Therefore it might be better to free the skb and return in order to fail
+the association, like ieee80211_assoc_success().
 
-Build results:
-	total: 154 pass: 154 fail: 0
-Qemu test results:
-	total: 480 pass: 480 fail: 0
+Fixes: 4d9ec73d2b78 ("cfg80211: Report Association Request frame IEs in association events")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+v2: Change to fail the association if kmemdup returns NULL.
+---
+ net/mac80211/mlme.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+diff --git a/net/mac80211/mlme.c b/net/mac80211/mlme.c
+index 9bed6464c5bd..b5dfdf953286 100644
+--- a/net/mac80211/mlme.c
++++ b/net/mac80211/mlme.c
+@@ -1058,6 +1058,11 @@ static void ieee80211_send_assoc(struct ieee80211_sub_if_data *sdata)
+ 	pos = skb_tail_pointer(skb);
+ 	kfree(ifmgd->assoc_req_ies);
+ 	ifmgd->assoc_req_ies = kmemdup(ie_start, pos - ie_start, GFP_ATOMIC);
++	if (!ifmgd->assoc_req_ies) {
++		dev_kfree_skb(skb);
++		return;
++	}
++
+ 	ifmgd->assoc_req_ies_len = pos - ie_start;
+ 
+ 	drv_mgd_prepare_tx(local, sdata, 0);
+-- 
+2.25.1
 
-Guenter

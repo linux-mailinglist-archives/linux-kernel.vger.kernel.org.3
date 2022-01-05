@@ -2,236 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C6D348515A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:46:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2F6B48515E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239472AbiAEKqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 05:46:11 -0500
-Received: from foss.arm.com ([217.140.110.172]:43194 "EHLO foss.arm.com"
+        id S239483AbiAEKrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 05:47:49 -0500
+Received: from foss.arm.com ([217.140.110.172]:43224 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235139AbiAEKqL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 05:46:11 -0500
+        id S235139AbiAEKrr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 05:47:47 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 738971042;
-        Wed,  5 Jan 2022 02:46:10 -0800 (PST)
-Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AB2583F774;
-        Wed,  5 Jan 2022 02:46:08 -0800 (PST)
-Date:   Wed, 5 Jan 2022 10:46:02 +0000
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Ilkka Koskinen <ilkka@os.amperecomputing.com>
-Cc:     guohanjun@huawei.com, sudeep.holla@arm.com, rafael@kernel.org,
-        linux@armlinux.org.uk, lenb@kernel.org, robert.moore@intel.com,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, patches@amperecomputing.com,
-        scott@os.amperecomputing.com, darren@os.amperecomputing.com,
-        james.morse@arm.com
-Subject: Re: [PATCH v3 2/2] ACPI: AGDI: Add driver for Arm Generic Diagnostic
- Dump and Reset device
-Message-ID: <20220105104602.GA4752@lpieralisi>
-References: <20211231033725.21109-1-ilkka@os.amperecomputing.com>
- <20211231033725.21109-3-ilkka@os.amperecomputing.com>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 241401042;
+        Wed,  5 Jan 2022 02:47:47 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.10.193])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EF87B3F5A1;
+        Wed,  5 Jan 2022 02:47:45 -0800 (PST)
+Date:   Wed, 5 Jan 2022 10:47:35 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     AliOS system security <alios_sys_security@linux.alibaba.com>
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        catalin.marinas@arm.com, will@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: fix build error when use rodata_enabled
+Message-ID: <YdV3RzQcGb2xFPhS@FVFF77S0Q05N>
+References: <1641352075-25200-1-git-send-email-alios_sys_security@linux.alibaba.com>
+ <0432f592-789b-7c92-8d7a-99191d7bc669@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211231033725.21109-3-ilkka@os.amperecomputing.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <0432f592-789b-7c92-8d7a-99191d7bc669@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+James, for SDEI bits]
-
-On Thu, Dec 30, 2021 at 07:37:25PM -0800, Ilkka Koskinen wrote:
-> ACPI for Arm Components 1.1 Platform Design Document v1.1 [0] specifices
-> Arm Generic Diagnostic Device Interface (AGDI). It allows an admin to
-> issue diagnostic dump and reset via an SDEI event or an interrupt.
-> This patch implements SDEI path.
+On Wed, Jan 05, 2022 at 02:51:05PM +0530, Anshuman Khandual wrote:
+> Hello,
 > 
-> [0] https://developer.arm.com/documentation/den0093/latest/
-> 
-> Signed-off-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
-> ---
->  drivers/acpi/arm64/Kconfig  |   8 +++
->  drivers/acpi/arm64/Makefile |   1 +
->  drivers/acpi/arm64/agdi.c   | 125 ++++++++++++++++++++++++++++++++++++
->  3 files changed, 134 insertions(+)
->  create mode 100644 drivers/acpi/arm64/agdi.c
-> 
-> diff --git a/drivers/acpi/arm64/Kconfig b/drivers/acpi/arm64/Kconfig
-> index 6dba187f4f2e..24869ba5b365 100644
-> --- a/drivers/acpi/arm64/Kconfig
-> +++ b/drivers/acpi/arm64/Kconfig
-> @@ -8,3 +8,11 @@ config ACPI_IORT
->  
->  config ACPI_GTDT
->  	bool
-> +
-> +config ACPI_AGDI
-> +	bool "Arm Generic Diagnostic Dump and Reset Device Interface"
-> +	depends on ARM_SDE_INTERFACE
-> +	help
-> +	  Arm Generic Diagnostic Dump and Reset Device Interface (AGDI) is
-> +	  a standard that enables issuing a non-maskable diagnostic dump and
-> +	  reset command.
-> diff --git a/drivers/acpi/arm64/Makefile b/drivers/acpi/arm64/Makefile
-> index 66acbe77f46e..7b9e4045659d 100644
-> --- a/drivers/acpi/arm64/Makefile
-> +++ b/drivers/acpi/arm64/Makefile
-> @@ -1,4 +1,5 @@
->  # SPDX-License-Identifier: GPL-2.0-only
-> +obj-$(CONFIG_ACPI_AGDI) 	+= agdi.o
->  obj-$(CONFIG_ACPI_IORT) 	+= iort.o
->  obj-$(CONFIG_ACPI_GTDT) 	+= gtdt.o
->  obj-y				+= dma.o
-> diff --git a/drivers/acpi/arm64/agdi.c b/drivers/acpi/arm64/agdi.c
-> new file mode 100644
-> index 000000000000..6525ccbae5c1
-> --- /dev/null
-> +++ b/drivers/acpi/arm64/agdi.c
-> @@ -0,0 +1,125 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * This file implements handling of
-> + * Arm Generic Diagnostic Dump and Reset Interface table (AGDI)
-> + *
-> + * Copyright (c) 2021, Ampere Computing LLC
-> + */
-> +
-> +#define pr_fmt(fmt) "ACPI: AGDI: " fmt
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
-> +#include <linux/module.h>
-> +#include <linux/kernel.h>
-> +#include <linux/acpi.h>
-> +#include <linux/arm_sdei.h>
-> +#include <linux/io.h>
+> On 1/5/22 8:37 AM, AliOS system security wrote:
+> > rodata_enabled should be used when CONFIG_STRICT_KERNEL_RWX
+> > or CONFIG_STRICT_MODULE_RWX is selected
 
-Nit: alphabetical order.
+Further to Anshuman's comments here, for a build issue, please include the
+specific build error in the commit log, and describe the configuration where
+this manifests.
 
-> +
-> +struct agdi_data {
-> +	int sdei_event;
-> +};
-> +
-> +static int agdi_sdei_handler(u32 sdei_event, struct pt_regs *regs, void *arg)
-> +{
-> +	nmi_panic(regs, "Arm Generic Diagnostic Dump and Reset SDEI event issued");
-> +	return 0;
-> +}
-> +
-> +static int agdi_sdei_probe(struct platform_device *pdev,
-> +			   struct agdi_data *adata)
-> +{
-> +	int err;
-> +
-> +	err = sdei_event_register(adata->sdei_event, agdi_sdei_handler, pdev);
-> +	if (err) {
-> +		dev_err(&pdev->dev, "Failed to register for SDEI event %d",
-> +			adata->sdei_event);
-> +		return err;
-> +	}
-> +
-> +	err = sdei_event_enable(adata->sdei_event);
-> +	if (err)  {
-> +		sdei_event_unregister(adata->sdei_event);
-> +		dev_err(&pdev->dev, "Failed to enable event %d\n",
-> +			adata->sdei_event);
-> +		return err;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int agdi_probe(struct platform_device *pdev)
-> +{
-> +	struct agdi_data *adata;
-> +
-> +	adata = dev_get_platdata(&pdev->dev);
-> +	if (!adata)
-> +		return -EINVAL;
-> +
-> +	return agdi_sdei_probe(pdev, adata);
-> +}
-> +
-> +static int agdi_remove(struct platform_device *pdev)
-> +{
-> +	struct agdi_data *adata = platform_get_drvdata(pdev);
-> +
-> +	sdei_event_disable(adata->sdei_event);
-> +	sdei_event_unregister(adata->sdei_event);
-> +
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver agdi_driver = {
-> +	.driver = {
-> +		.name = "agdi",
-> +	},
-> +	.probe = agdi_probe,
-> +	.remove = agdi_remove,
-> +};
-
-May I ask why we need a platform device (and driver) to register
-an SDEI event ?
-
-> +static int __init agdi_init(void)
-> +{
-> +	int ret;
-> +	acpi_status status;
-> +	struct acpi_table_agdi *agdi_table;
-> +	struct agdi_data pdata;
-> +	struct platform_device *pdev;
-> +
-> +	if (acpi_disabled)
-> +		return 0;
-
-Why don't we call agdi_init() from acpi_init() as we do for IORT/VIOT ?
-
-I don't think it is necessary to add a device_initcall(), with related
-ordering dependencies.
-
-> +
-> +	status = acpi_get_table(ACPI_SIG_AGDI, 0,
-> +				(struct acpi_table_header **) &agdi_table);
-> +	if (ACPI_FAILURE(status))
-> +		return -ENODEV;
-> +
-> +	if (agdi_table->flags & ACPI_AGDI_SIGNALING_MODE) {
-
-Is this because specs need updating ?
-
-> +		pr_warn("Interrupt signaling is not supported");
-> +		ret = -ENODEV;
-> +		goto err_put_table;
-> +	}
-> +
-> +	pdata.sdei_event = agdi_table->sdei_event;
-> +
-> +	pdev = platform_device_register_data(NULL, "agdi", 0, &pdata, sizeof(pdata));
-> +	if (IS_ERR(pdev)) {
-> +		ret = PTR_ERR(pdev);
-> +		goto err_put_table;
-> +	}
-> +
-> +	ret = platform_driver_register(&agdi_driver);
-> +	if (ret)
-> +		goto err_device_unregister;
-> +
-> +	acpi_put_table((struct acpi_table_header *)agdi_table);
-> +	return 0;
-> +
-> +err_device_unregister:
-> +	platform_device_unregister(pdev);
-> +err_put_table:
-> +	acpi_put_table((struct acpi_table_header *)agdi_table);
-> +	return ret;
-> +}
-> +device_initcall(agdi_init);
-
-See above.
+For the reasons Anshuman gives below I do not see how this can be a problem in
+mainline.
 
 Thanks,
-Lorenzo
+Mark.
+
+> Both these configs get selected invariably with CONFIG_ARM64 in the
+> platform config file (arch/arm64/Kconfig). I guess there can not be
+> any such situation, where both configs will be missing/not selected
+> given ARCH_OPTIONAL_KERNEL_RWX[or _DEFAULT] is not enabled on arm64.
+> 
+> config ARM64
+>         def_bool y
+>         select ACPI_CCA_REQUIRED if ACPI
+> 	.....
+>         select ARCH_HAS_STRICT_KERNEL_RWX
+>         select ARCH_HAS_STRICT_MODULE_RWX
+> 	.....
+> 
+> Hence for all practical purpose, rodata_enabled could be considered
+> always available. I am sure there other similar situations as well,
+> where code elements are not wrapped around if the config option is
+> always present.
+> 
+> > 
+> > Signed-off-by: AliOS system security <alios_sys_security@linux.alibaba.com>
+> 
+> Also please refer Documentation/process/submitting-patches.rst for
+> the rules regarding names, that can be used for a commit sign off.
+> 
+> ------------------------------------------------------------------------
+> then you just add a line saying::
+> 
+>         Signed-off-by: Random J Developer <random@developer.example.org>
+> 
+> using your real name (sorry, no pseudonyms or anonymous contributions.)
+> ------------------------------------------------------------------------
+> 
+> - Anshuman
+> 
+> > ---
+> >  arch/arm64/mm/mmu.c | 14 ++++++++++++--
+> >  1 file changed, 12 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+> > index acfae9b..47f8754 100644
+> > --- a/arch/arm64/mm/mmu.c
+> > +++ b/arch/arm64/mm/mmu.c
+> > @@ -596,6 +596,7 @@ static void __init map_kernel_segment(pgd_t *pgdp, void *va_start, void *va_end,
+> >  	vm_area_add_early(vma);
+> >  }
+> >  
+> > +#if defined(CONFIG_STRICT_KERNEL_RWX) || defined(CONFIG_STRICT_MODULE_RWX)
+> >  static int __init parse_rodata(char *arg)
+> >  {
+> >  	int ret = strtobool(arg, &rodata_enabled);
+> > @@ -613,11 +614,16 @@ static int __init parse_rodata(char *arg)
+> >  	return 0;
+> >  }
+> >  early_param("rodata", parse_rodata);
+> > +#endif
+> >  
+> >  #ifdef CONFIG_UNMAP_KERNEL_AT_EL0
+> >  static int __init map_entry_trampoline(void)
+> >  {
+> > -	pgprot_t prot = rodata_enabled ? PAGE_KERNEL_ROX : PAGE_KERNEL_EXEC;
+> > +	pgprot_t prot = PAGE_KERNEL_EXEC;
+> > +#if defined(CONFIG_STRICT_KERNEL_RWX) || defined(CONFIG_STRICT_MODULE_RWX)
+> > +	if (rodata_enabled)
+> > +		prot = PAGE_KERNEL_ROX;
+> > +#endif
+> >  	phys_addr_t pa_start = __pa_symbol(__entry_tramp_text_start);
+> >  
+> >  	/* The trampoline is always mapped and can therefore be global */
+> > @@ -672,7 +678,11 @@ static void __init map_kernel(pgd_t *pgdp)
+> >  	 * mapping to install SW breakpoints. Allow this (only) when
+> >  	 * explicitly requested with rodata=off.
+> >  	 */
+> > -	pgprot_t text_prot = rodata_enabled ? PAGE_KERNEL_ROX : PAGE_KERNEL_EXEC;
+> > +	pgprot_t text_prot = PAGE_KERNEL_EXEC;
+> > +#if defined(CONFIG_STRICT_KERNEL_RWX) || defined(CONFIG_STRICT_MODULE_RWX)
+> > +	if (rodata_enabled)
+> > +		text_prot = PAGE_KERNEL_ROX;
+> > +#endif
+> >  
+> >  	/*
+> >  	 * If we have a CPU that supports BTI and a kernel built for
+> > 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

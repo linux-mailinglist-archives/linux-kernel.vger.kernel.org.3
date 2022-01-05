@@ -2,38 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0737B484C7E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 03:30:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC2F3484C8A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 03:31:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237094AbiAECaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 21:30:01 -0500
-Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:60996 "EHLO
-        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237084AbiAECaA (ORCPT
+        id S237117AbiAECbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 21:31:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49758 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237110AbiAECbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 21:30:00 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0V1-XTae_1641349797;
-Received: from 30.225.24.102(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V1-XTae_1641349797)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 05 Jan 2022 10:29:58 +0800
-Message-ID: <58e983fa-f913-d663-9719-0111b9130688@linux.alibaba.com>
-Date:   Wed, 5 Jan 2022 10:29:57 +0800
+        Tue, 4 Jan 2022 21:31:18 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A77C061784
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 18:31:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=EsCFlp1h6di6DkZFmQeLKYecbBslAXJD/VJOnuuazog=; b=HCxqpniCNws8BJJRQ8zCslauYc
+        bqJ/HXgOfDVYnihn/y9nDAjs8QZClu0E9JGcSqJnfED/D5JJLHz4PoW/WRGmS8wEkqgekKVVuhjzT
+        1ZPALcke1uPq0bP2qejPlfVbRuewR5Tcnz+BlhGq0bJt2cu11NDw/wg11qLk4DOl6DqQF/Y6HHgmG
+        3+4sDY/kBdMrJmwGDYn05k+zxFzUqhtDAGKuTmjNHiySTn3rnvw2Wcd0ErlU1DvX4Fwlj8I/rRZkk
+        O0q53Cz/joA2qm/5s5+S4GCcnZtBT37N22STMbMrv/djaCw76ib5WerbcrPnvex99u1Fe6Ejym5QC
+        Y956l/HQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n4w4e-00EBlj-FP; Wed, 05 Jan 2022 02:30:48 +0000
+Message-ID: <94566879-d558-909c-7ba7-fbf944a7427b@infradead.org>
+Date:   Tue, 4 Jan 2022 18:30:42 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [PATCH v1 13/23] erofs: implement fscache-based data read
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH -next] notifier: Fix some kernel-doc comments
 Content-Language: en-US
-To:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
-        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
-        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
-        linux-kernel@vger.kernel.org
-References: <20211227125444.21187-1-jefflexu@linux.alibaba.com>
- <20211227125444.21187-14-jefflexu@linux.alibaba.com>
- <YdRcdqIUkqIIw6EP@B-P7TQMD6M-0146.local>
-From:   JeffleXu <jefflexu@linux.alibaba.com>
-In-Reply-To: <YdRcdqIUkqIIw6EP@B-P7TQMD6M-0146.local>
+To:     Yang Li <yang.lee@linux.alibaba.com>, bigeasy@linutronix.de
+Cc:     rafael.j.wysocki@intel.com, stern@rowland.harvard.edu,
+        valentin.schneider@arm.com, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20220105010948.49695-1-yang.lee@linux.alibaba.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220105010948.49695-1-yang.lee@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -42,109 +50,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 1/4/22 10:40 PM, Gao Xiang wrote:
-> On Mon, Dec 27, 2021 at 08:54:34PM +0800, Jeffle Xu wrote:
->> This patch implements the data plane of reading data from bootstrap blob
->> file over fscache.
->>
->> Be noted that currently compressed layout is not supported yet.
->>
->> Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
->> ---
->>  fs/erofs/fscache.c  | 91 +++++++++++++++++++++++++++++++++++++++++++++
->>  fs/erofs/inode.c    |  6 ++-
->>  fs/erofs/internal.h |  1 +
->>  3 files changed, 97 insertions(+), 1 deletion(-)
->>
->> diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
->> index 325f5663836b..bfcec831d58a 100644
->> --- a/fs/erofs/fscache.c
->> +++ b/fs/erofs/fscache.c
->> @@ -65,6 +65,97 @@ struct page *erofs_readpage_from_fscache(struct erofs_cookie_ctx *ctx,
->>  	return page;
->>  }
->>  
->> +static inline void do_copy_page(struct page *from, struct page *to,
->> +				size_t offset, size_t len)
->> +{
->> +	char *vfrom, *vto;
->> +
->> +	vfrom = kmap_atomic(from);
->> +	vto = kmap_atomic(to);
->> +	memcpy(vto, vfrom + offset, len);
->> +	kunmap_atomic(vto);
->> +	kunmap_atomic(vfrom);
->> +}
->> +
->> +static int erofs_fscache_do_readpage(struct file *file, struct page *page)
->> +{
->> +	struct inode *inode = page->mapping->host;
->> +	struct erofs_inode *vi = EROFS_I(inode);
->> +	struct super_block *sb = inode->i_sb;
->> +	struct erofs_map_blocks map;
->> +	erofs_off_t o_la, pa;
->> +	size_t offset, len;
->> +	struct page *ipage;
->> +	int ret;
->> +
->> +	if (erofs_inode_is_data_compressed(vi->datalayout)) {
->> +		erofs_info(sb, "compressed layout not supported yet");
->> +		return -EOPNOTSUPP;
->> +	}
->> +
->> +	o_la = page_offset(page);
->> +	map.m_la = o_la;
->> +
->> +	ret = erofs_map_blocks(inode, &map, EROFS_GET_BLOCKS_RAW);
->> +	if (ret)
->> +		return ret;
->> +
->> +	if (!(map.m_flags & EROFS_MAP_MAPPED)) {
->> +		zero_user(page, 0, PAGE_SIZE);
->> +		return 0;
->> +	}
->> +
->> +	/*
->> +	 * 1) For FLAT_PLAIN/FLAT_INLINE layout, the output map.m_la shall be
->> +	 * equal to o_la, and the output map.m_pa is exactly the physical
->> +	 * address of o_la.
->> +	 * 2) For CHUNK_BASED layout, the output map.m_la is rounded down to the
->> +	 * nearest chunk boundary, and the output map.m_pa is actually the
->> +	 * physical address of this chunk boundary. So we need to recalculate
->> +	 * the actual physical address of o_la.
->> +	 */
->> +	pa = map.m_pa + o_la - map.m_la;
->> +
->> +	ipage = erofs_get_meta_page(sb, erofs_blknr(pa));
->> +	if (IS_ERR(ipage))
->> +		return PTR_ERR(ipage);
->> +
->> +	/*
->> +	 * @offset refers to the page offset inside @ipage.
->> +	 * 1) Except for the inline layout, the offset shall all be 0, and @pa
->> +	 * shall be aligned with EROFS_BLKSIZ in this case. Thus we can
->> +	 * conveniently get the offset from @pa.
->> +	 * 2) While for the inline layout, the offset may be non-zero. Since
->> +	 * currently only flat layout supports inline, we can calculate the
->> +	 * offset from the corresponding physical address.
->> +	 */
->> +	offset = erofs_blkoff(pa);
->> +	len = min_t(u64, map.m_llen, PAGE_SIZE);
->> +
->> +	do_copy_page(ipage, page, offset, len);
+On 1/4/22 17:09, Yang Li wrote:
+> Remove some warnings found by running scripts/kernel-doc,
+> which is caused by using 'make W=1'.
+> kernel/notifier.c:68: warning: Excess function parameter 'returns'
+> description in 'notifier_call_chain'
+> kernel/notifier.c:116: warning: Function parameter or member 'v' not
+> described in 'notifier_call_chain_robust'
 > 
-> If my understanding is correct, I still have no idea why we need to
-> copy data here even if fscache can do direct I/O for us without extra
-> efforts.
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>  kernel/notifier.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 > 
-> I think the only case would be tail-packing inline (which should go
-> through metadata path), otherwise, all data is block-aligned. So
-> fscache can handle it directly.
-> 
+> diff --git a/kernel/notifier.c b/kernel/notifier.c
+> index ba005ebf4730..52b417951c0a 100644
+> --- a/kernel/notifier.c
+> +++ b/kernel/notifier.c
+> @@ -59,8 +59,6 @@ static int notifier_chain_unregister(struct notifier_block **nl,
+>   *			value of this parameter is -1.
+>   *	@nr_calls:	Records the number of notifications sent. Don't care
+>   *			value of this field is NULL.
 
-Right, only tail packing need special handling here. Would be fixed in
-the next version. Thanks.
+For this one, preferably use:
+
+ * Return: the value returned by the last notifier function called.
+
+> - *	@returns:	notifier_call_chain returns the value returned by the
+> - *			last notifier function called.
+>   */
+>  static int notifier_call_chain(struct notifier_block **nl,
+>  			       unsigned long val, void *v,
+> @@ -102,7 +100,7 @@ NOKPROBE_SYMBOL(notifier_call_chain);
+>   * @val_up:	Value passed unmodified to the notifier function
+>   * @val_down:	Value passed unmodified to the notifier function when recovering
+>   *              from an error on @val_up
+> - * @v		Pointer passed unmodified to the notifier function
+> + * @v:		Pointer passed unmodified to the notifier function
+>   *
+>   * NOTE:	It is important the @nl chain doesn't change between the two
+>   *		invocations of notifier_call_chain() such that we visit the
+
+thanks for the patch.
 
 -- 
-Thanks,
-Jeffle
+~Randy

@@ -2,75 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CD20485181
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:56:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA43485184
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:57:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239558AbiAEK4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 05:56:42 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4347 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232847AbiAEK4j (ORCPT
+        id S239568AbiAEK5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 05:57:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:46395 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239561AbiAEK5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 05:56:39 -0500
-Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JTRD40y1Cz67bNC;
-        Wed,  5 Jan 2022 18:53:24 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 5 Jan 2022 11:56:37 +0100
-Received: from [10.47.27.56] (10.47.27.56) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 5 Jan
- 2022 10:56:37 +0000
-Subject: Re: [PATCH -next V2] blk-mq: fix tag_get wait task can't be awakened
-To:     Laibin Qiu <qiulaibin@huawei.com>, <axboe@kernel.dk>,
-        <ming.lei@redhat.com>
-CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220105035644.3311480-1-qiulaibin@huawei.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <ddb3c319-65f3-6045-d0ac-764c7dcc84c2@huawei.com>
-Date:   Wed, 5 Jan 2022 10:56:25 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Wed, 5 Jan 2022 05:57:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641380228;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UBy6hI7L7HTM1Yr+Z3hpduy38cqpSc0OdU4IcEZRTBk=;
+        b=SJq8aw0kbhl/+kOvuOan6RzQsctg+icysAS4wwlA4uULjtOvAM9d1Hrdxdc+54HIkCRDvS
+        4HsGsqVeFSQ6T1tLwjAmwoDRzxkM7HJj73IZJ722maPov3Lr9IqsL3dNLm5yFdEaS4hUdz
+        pnChjzi5PWcuhvlgNPD9/BjtdpUvpyI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-561-5BwaaFdlPVqrFH4JAfhbJg-1; Wed, 05 Jan 2022 05:57:03 -0500
+X-MC-Unique: 5BwaaFdlPVqrFH4JAfhbJg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 96071760C1;
+        Wed,  5 Jan 2022 10:57:01 +0000 (UTC)
+Received: from starship (unknown [10.40.192.177])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D44121F420;
+        Wed,  5 Jan 2022 10:56:53 +0000 (UTC)
+Message-ID: <69ebeb828f92cc01ac74836bd298216b25f68eda.camel@redhat.com>
+Subject: Re: [PATCH v2 4/5] KVM: x86: don't touch irr_pending in
+ kvm_apic_update_apicv when inhibiting it
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Joerg Roedel <joro@8bytes.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Ingo Molnar <mingo@redhat.com>
+Date:   Wed, 05 Jan 2022 12:56:52 +0200
+In-Reply-To: <YdTQ3ewNzNOKoXCN@google.com>
+References: <20211213104634.199141-1-mlevitsk@redhat.com>
+         <20211213104634.199141-5-mlevitsk@redhat.com> <YdTQ3ewNzNOKoXCN@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-In-Reply-To: <20220105035644.3311480-1-qiulaibin@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.27.56]
-X-ClientProxiedBy: lhreml736-chm.china.huawei.com (10.201.108.87) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/01/2022 03:56, Laibin Qiu wrote:
-> +
->   /*
->    * If a previously inactive queue goes active, bump the active user count.
->    * We need to do this before try to allocate driver tag, then even if fail
-> @@ -23,10 +38,16 @@
->    */
->   bool __blk_mq_tag_busy(struct blk_mq_hw_ctx *hctx)
->   {
-> +	unsigned int users;
-> +
->   	if (!test_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state) &&
-> -	    !test_and_set_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state))
-> +	    !test_and_set_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state)) {
->   		atomic_inc(&hctx->tags->active_queues);
->   
-> +		users = atomic_read(&hctx->tags->active_queues);
-> +		blk_mq_update_wake_batch(hctx->tags, users);
-> +	}
-> +
->   	return true;
->   }
->   
+On Tue, 2022-01-04 at 22:57 +0000, Sean Christopherson wrote:
+> On Mon, Dec 13, 2021, Maxim Levitsky wrote:
+> > kvm_apic_update_apicv is called when AVIC is still active, thus IRR bits
+> > can be set by the CPU after it was called, and won't cause the irr_pending
+> > to be set to true.
+> > 
+> > Also the logic in avic_kick_target_vcpu doesn't expect a race with this
+> > function.
+> > 
+> > To make it simple, just keep irr_pending set to true and
+> > let the next interrupt injection to the guest clear it.
+> > 
+> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > ---
+> >  arch/x86/kvm/lapic.c | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> > index baca9fa37a91c..6e1fbbf4c508b 100644
+> > --- a/arch/x86/kvm/lapic.c
+> > +++ b/arch/x86/kvm/lapic.c
+> > @@ -2312,7 +2312,10 @@ void kvm_apic_update_apicv(struct kvm_vcpu *vcpu)
+> >  		apic->irr_pending = true;
+> >  		apic->isr_count = 1;
+> >  	} else {
+> > -		apic->irr_pending = (apic_search_irr(apic) != -1);
+> > +		/*
+> > +		 * Don't touch irr_pending, let it be cleared when
+> > +		 * we process the interrupt
+> 
+> Please don't use pronouns in comments, e.g. who is "we" in this context?  Please
+> also say _why_.  IIUC, this could more precisely be:
 
-This code looks old to me. Which baseline is used here?
+Yes, good point. I will fix this.
 
-Thanks,
-John
+Best regards,
+	Maxim Levitsky
+
+> 
+> 		/*
+> 		 * Don't clear irr_pending, searching the IRR can race with
+> 		 * updates from the CPU as APICv is still active from hardware's
+> 		 * perspective.  The flag will be cleared as appropriate when
+> 		 * KVM injects the interrupt.
+> 		 */
+> 
+> > +		 */
+> >  		apic->isr_count = count_vectors(apic->regs + APIC_ISR);
+> >  	}
+> >  }
+> > -- 
+> > 2.26.3
+> > 
+
+

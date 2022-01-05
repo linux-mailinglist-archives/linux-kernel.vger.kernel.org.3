@@ -2,94 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B989D484E6D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 07:42:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 622EF484E6F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 07:42:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233678AbiAEGmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 01:42:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48884 "EHLO
+        id S236298AbiAEGmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 01:42:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231960AbiAEGl7 (ORCPT
+        with ESMTP id S231960AbiAEGmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 01:41:59 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3DFC061761;
-        Tue,  4 Jan 2022 22:41:59 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id c9-20020a17090a1d0900b001b2b54bd6c5so2538897pjd.1;
-        Tue, 04 Jan 2022 22:41:59 -0800 (PST)
+        Wed, 5 Jan 2022 01:42:18 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0374C061761;
+        Tue,  4 Jan 2022 22:42:18 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id 8so34360748pfo.4;
+        Tue, 04 Jan 2022 22:42:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=80WJqN+L9qqK1VevraDHrAQhOn8fFgJ49Yyqba/kVgE=;
-        b=mLoTP6tD2vbWZRzney5iVFMHPgQX971dvi8PX3x/1spC+nn65T4R/f0p0YtICJMAQF
-         cJXyzL0rsGQA8NHCY9cwA9gmnVQg90koakFiTA3k8FPrbJA0j7UM9hIYKcuhlJN726qN
-         w1+tMGN/lHW9kwkLJT16vJdLl6eiD68nt1vw2MuQgldBbOBd/E45fciYOnwQcNLcF/Md
-         +1Vl0Cog1XEFP2JO0iKY32BNRo7sj/f+FVYSmrwoDwxU2VgIv7a058MWsKjp13kQRCAC
-         NMiDWjUb0vIxavIvQ5MB1NsOhBC3NV1ERRWjkHwl9wGX0idZ5k/iG/Aiy4rrsC4YHmyl
-         LzCw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=2iN9EGLEph4xOa1rzlV6HP0Zqf6BhRdNyhQVEqdz5GI=;
+        b=NKW+mIEvUmLJU0NEiIEDVziEhab0imP627Hag8mPnjIVcMS3DCZ/OuYLGPDOOoAOIk
+         l3YixhtdImUY4IeD9eYH8YHoAUkpFOqMdk0TJokM2kwbJB914YpHMMTNc5GucQzlDwNL
+         iZDGCyGWiR7lr7LhIzEdY4hoxGiDdiJOv4bfA4CQJvTIBBVQfNYHHqiZ4OT4XipYrstj
+         uT8IkBoKzeIN4rL8+OobbNa0kgjcc4uMTIg50P/1VdibiyXoPJPdSin+cIbUAnFb1HE+
+         FYpKZJ2aLtN3XibrwJgGPHPRm4CAmVQSwv+o9WMifYw2+rNE7ONrnJrQYxCeFyDN5dNv
+         o6SQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=80WJqN+L9qqK1VevraDHrAQhOn8fFgJ49Yyqba/kVgE=;
-        b=LM/ZBXWT88aC5m+OCrc/i1WrbnspwSXXdnqKGE3wP6ygujLnaejhld0jPQoWKxHX7G
-         2mrRsth6YgMIY2yN3+8dqmFneroollQ5OhrbT54w3OqsB6L/AzQdBAFr1aOkXjLgYML3
-         ZSbGD0tNyyUHnxho1tEjjKaVoc/CIQ/HT+i/WduXrIb6q6BXA+pPEluXSqZwuNDnhgMs
-         pBEIu5m1raW2zAaNxnjGYZsG9V3y5ZjUWCswSPnrueKNlzV96BSkeGwdiadh/uY2hX9g
-         S3upt5xy41nPd4wDxvAXMBE6Aj+3kJwRY3Z0orhLRZuGk53K9bAFGcyc564kJwwvLTTT
-         Y1+A==
-X-Gm-Message-State: AOAM531SD45BwMf4O+cFgAfenULWPN1+6e/TbC0k7Z6o2GCOd0+MP/p1
-        i6ZpCz0vXtjRsLTv0TD1v1rAqT3zzHSgAg==
-X-Google-Smtp-Source: ABdhPJw9Bg52wHvEKY5b/P79AOJK5xD3jfuvEjIcDXNssNx1K91iEpKUCh/kkBKo2TnKciBgpceaTg==
-X-Received: by 2002:a17:903:2343:b0:149:3d87:c792 with SMTP id c3-20020a170903234300b001493d87c792mr52557130plh.72.1641364918776;
-        Tue, 04 Jan 2022 22:41:58 -0800 (PST)
-Received: from localhost.localdomain ([203.205.141.116])
-        by smtp.googlemail.com with ESMTPSA id gf4sm1259413pjb.56.2022.01.04.22.41.53
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 04 Jan 2022 22:41:58 -0800 (PST)
-From:   Wanpeng Li <kernellwp@gmail.com>
-X-Google-Original-From: Wanpeng Li <wanpengli@tencent.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>
-Subject: [PATCH] KVM: SEV: Add lock subtyping in sev_lock_two_vms so lockdep doesn't report false dependencies
-Date:   Tue,  4 Jan 2022 22:41:03 -0800
-Message-Id: <1641364863-26331-1-git-send-email-wanpengli@tencent.com>
-X-Mailer: git-send-email 2.7.4
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=2iN9EGLEph4xOa1rzlV6HP0Zqf6BhRdNyhQVEqdz5GI=;
+        b=V3wfbcUeBFKRjY/CTONZW1cStLfKLRld+V2os+PISyTTNzvXkTQjzeLDOXeQIE2xKg
+         G923XJLzlPVhjgVxoyTGUKBlsIEb/4bV6Dd0v3VPcU8i/hxH3mElxKxZaO2wO64+v96e
+         goWRo+6jXlB47XabUV/gdOmOWyh1EqR41vr1mZUqYPxdQqj7sOAFjRV2QWHwXo8YvtOY
+         l15sW9QrtCI6TV9LK6O+4EmWSdF2hR+NQmvSxclTSDt5TqdzNnOljCW/dFhiilFc5wO2
+         nJAC1AKCWfq7AHRk0cKpd8ZcQs7QhzBSnT9AJVWgBPpdxjyrjd5vXhXRB47nrfjSeHwL
+         50TA==
+X-Gm-Message-State: AOAM531A4IL9YOcn65uDpDA3/0U7awhD3E/IrCdWcQgyr9RARszKmw+D
+        kOnxf8nw/9tLFQM56Ee+dwE=
+X-Google-Smtp-Source: ABdhPJwWUoYbMtFJirfZTUsl99jYfxQVt6E/K1jaWpkf0WlGDMgCWLERYLQGjhNeKEh7BxYOnzLZrQ==
+X-Received: by 2002:a62:7ed4:0:b0:4bb:5951:aac7 with SMTP id z203-20020a627ed4000000b004bb5951aac7mr54243976pfc.31.1641364938244;
+        Tue, 04 Jan 2022 22:42:18 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id n34sm41687462pfv.129.2022.01.04.22.42.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 22:42:17 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     mathieu.poirier@linaro.org
+Cc:     bjorn.andersson@linaro.org, linmq006@gmail.com,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        ohad@wizery.com
+Subject: [PATCH v2] remoteproc: Fix NULL vs IS_ERR() checking in rproc_create_trace_file
+Date:   Wed,  5 Jan 2022 06:42:01 +0000
+Message-Id: <20220105064201.3907-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220104174623.GA540353@p14s>
+References: <20220104174623.GA540353@p14s>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wanpeng Li <wanpengli@tencent.com>
+The debugfs_create_file() function doesn't return NULL.
+It returns error pointers. Fix check in rproc_create_trace_file
+and make it returns return error pointers.
+Fix check in rproc_handle_trace propagate the error code.
 
-Both source and dest vms' kvm->locks are held in sev_lock_two_vms, 
-we should mark one with different subtype to avoid false positives 
-from lockdep.
-
-Fixes: c9d61dcb0bc26 (KVM: SEV: accept signals in sev_lock_two_vms)
-Reported-by: Yiru Xu <xyru1999@gmail.com>
-Tested-by: Jinrong Liang <cloudliang@tencent.com>
-Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- arch/x86/kvm/svm/sev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v2:
+- return PTR_ERR(tfile) in rproc_create_trace_file
+- fix check in rproc_handle_trace()
+---
+ drivers/remoteproc/remoteproc_core.c    | 6 ++++--
+ drivers/remoteproc/remoteproc_debugfs.c | 4 ++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index 7656a2c..be28831 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -1565,7 +1565,7 @@ static int sev_lock_two_vms(struct kvm *dst_kvm, struct kvm *src_kvm)
- 	r = -EINTR;
- 	if (mutex_lock_killable(&dst_kvm->lock))
- 		goto release_src;
--	if (mutex_lock_killable(&src_kvm->lock))
-+	if (mutex_lock_killable_nested(&src_kvm->lock, SINGLE_DEPTH_NESTING))
- 		goto unlock_dst;
- 	return 0;
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index 775df165eb45..5608408f8eac 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -656,6 +656,7 @@ static int rproc_handle_trace(struct rproc *rproc, void *ptr,
+ 	struct rproc_debug_trace *trace;
+ 	struct device *dev = &rproc->dev;
+ 	char name[15];
++	int ret;
  
+ 	if (sizeof(*rsc) > avail) {
+ 		dev_err(dev, "trace rsc is truncated\n");
+@@ -684,9 +685,10 @@ static int rproc_handle_trace(struct rproc *rproc, void *ptr,
+ 
+ 	/* create the debugfs entry */
+ 	trace->tfile = rproc_create_trace_file(name, rproc, trace);
+-	if (!trace->tfile) {
++	if (IS_ERR(trace->tfile)) {
++		ret = PTR_ERR(trace->tfile);
+ 		kfree(trace);
+-		return -EINVAL;
++		return ret;
+ 	}
+ 
+ 	list_add_tail(&trace->node, &rproc->traces);
+diff --git a/drivers/remoteproc/remoteproc_debugfs.c b/drivers/remoteproc/remoteproc_debugfs.c
+index b5a1e3b697d9..c1aa7272da1e 100644
+--- a/drivers/remoteproc/remoteproc_debugfs.c
++++ b/drivers/remoteproc/remoteproc_debugfs.c
+@@ -390,9 +390,9 @@ struct dentry *rproc_create_trace_file(const char *name, struct rproc *rproc,
+ 
+ 	tfile = debugfs_create_file(name, 0400, rproc->dbg_dir, trace,
+ 				    &trace_rproc_ops);
+-	if (!tfile) {
++	if (IS_ERR(tfile)) {
+ 		dev_err(&rproc->dev, "failed to create debugfs trace entry\n");
+-		return NULL;
++		return PTR_ERR(tfile);
+ 	}
+ 
+ 	return tfile;
 -- 
-2.7.4
+2.17.1
 

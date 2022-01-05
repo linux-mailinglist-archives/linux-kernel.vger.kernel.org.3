@@ -2,127 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0CD14856F9
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 18:00:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF29485701
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 18:03:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242113AbiAERA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 12:00:27 -0500
-Received: from mail-dm6nam08on2077.outbound.protection.outlook.com ([40.107.102.77]:22528
-        "EHLO NAM04-DM6-obe.outbound.protection.outlook.com"
+        id S242117AbiAERDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 12:03:05 -0500
+Received: from mail-bn7nam10on2070.outbound.protection.outlook.com ([40.107.92.70]:5120
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S242098AbiAERAQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 12:00:16 -0500
+        id S242066AbiAERDE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 12:03:04 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F2A3AvhPx/aE+jkLWPZG8NquHdgfbtzmvn8qmUs0ACA4aL+ZBhSVx+cRIjoDmJUOHQ/7UfUYDBQImObXzQIIpG1leaAbcFaMCtEwG3HTg2SrfUHlc6/oX3kEtdYGEBOlmTrdcoUm0lBbzhy/WJ2WG0p1sPqSgZs2YILXRILYD3qlDUd3nnwX6mi0980MA+u+O0MQRXX7GNFdazDDsGizkmJUs6INAdZdcPSm9sJx++rrGO4bxdsp1Oi0nNJQ9HM0nk/VRkHPDn7vih4im3Unkgx3Gj47SE53dQjdPpyjnP0Bzq6pebRRicwy2x7efYaSfQDz5WICuIppuPZ74DCHRw==
+ b=ltj0gxp4f0Ns9bswVemQgUEBA20dYAD0x6dmcajHZ//UYjagy+UZD0N0bKkg/rtOJzsKtwQCdNi5RYPLk7BmKkiCySndjQLJUHfGJmE24oQW1kALSesPVPnI00g6HCzV3ejeYPFNTVKEuYlf6vyWcVGf/oWj4LzlpphX4iKa/04jjOc8x7wqx5UG3NbJtXtFEwmZHVXLTZE4QLyqcEeiCenQbMs2Jnl8atP4cQR/Qmhs1OMqnaOB4xxmqVKOEGJbsRebGsFvLmS8k7Em3OjwfXWpKp/y8aY8f5ZGSdYI12cZ2gur2tNz6+TF5GLUef1rP27kvaQhoLOqWB6cdEI2JQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zMI7f6WYOVkRoDsFBAtFoTrkjHE7EHA1JJzEpqm6Ifc=;
- b=gp3jfGMoD6KwaFRiDsu/GxpykY2kukQHTFprhMNZnSlKALSvIVx5ixetWs1YdmSmiDz0cSgbzkiDFH7APHutMMs9IJUp2zoIomVpHxxn4OHneAa/O02x1Bk3dWdqZGuMKm0urk/7mIrOSSknSddULwOYFYrAYn+t0NAlHryRREgeFI7QU10tnpf1QI5qLfoEOwGn0k8Hvkb/vgsa39fGx/uKWbisLBqC0mHRj08N6IXJuZHPVoGHWYCUCgvA/JDsM5X7GAFcx6OOtxVH5FXFw+En4PTvr3Eg8c+Ulc1ReuxZbTjX/QFECxkKrSygbX/KHjBWWGhzo08dL7E7cbOL5A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ bh=g2s9Z4j0Fuyhd9rzUN4yCZCvYx9VxGT9WK2VS6OKdoo=;
+ b=HWSYQAR38H5ZsghkMpo2LxPvEkLC0NSdQ7VYe4Mk24991EaYc0IwicnC50jSKMy1Vw6dbEYEN5zrqw2ZYcqzMcNLighJWT0fHGBYDSKj2zOusmWNdMShi+U+ueAQ6Oq68cKQejIQyXagKDQsobpAbO0EdrsrOHGpV9s0qs0v9XrM2QFBmwxEpYaBAROUOlnCIIxiJMnJRpYr65oP6yXymiJJTvgaG/OMOWdsspssxq4jwwdqMeKGdOCOTVdAPAU2e4nney+CVWWvhzq9yh3r09Ecyn6RGMSfHKhFTux42J+azVQmgUFMZoiUN5mViRPeEZdSCK57q7oY3es1ARhEnw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zMI7f6WYOVkRoDsFBAtFoTrkjHE7EHA1JJzEpqm6Ifc=;
- b=fYwwQ4oumEDj4o/ur6wKCWIUOW53tNnBOHqC05xQgMi/eROlX+q3ipP8enRYB+KzEj14s+A7IKU0jXBMXmOPMsI0kp8kmSFrS6qIAT/zCoDNr32SBARxUU5Hb7TrQcVHewoQEyGozcd5TZ6+Rc0z5zH2MeEKLxvN/pj5Tuok0cy638Uz6ariDKyYTkRtrq+bLKWVYJB1gT6Hm0tHGFvh4NNdSYnKkFtT/FAI1DsAfBAyZ0udk4mm/ULQKkwkrtVd4aGOCfw0A0EGqN+tgBbKMEBms450Jkl0tv73DPIdlBG7cCMxxCH6zVG30PQORV9hoAneAL6fmGULjm3ydKgZmA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
- by BL1PR12MB5240.namprd12.prod.outlook.com (2603:10b6:208:319::21) with
+ bh=g2s9Z4j0Fuyhd9rzUN4yCZCvYx9VxGT9WK2VS6OKdoo=;
+ b=bJIJbRyb8BSpGOnqOMxo8mXdyJuNLhS8+Bj5AfVOrVT0kocs50ovPa9khP4xLN90CkaL/MSsTICSDHnLJ4+BU750ufK2e5lznhuicngqMJzTus/6bZoZ+Y6TjHXvRRBZCFutYSDjAnHoxvfZjJ0pzV5643slCXRzcfwDRRDhr80=
+Received: from BN7PR06CA0072.namprd06.prod.outlook.com (2603:10b6:408:34::49)
+ by DM6PR12MB3628.namprd12.prod.outlook.com (2603:10b6:5:3d::26) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9; Wed, 5 Jan
- 2022 17:00:15 +0000
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::464:eb3d:1fde:e6af]) by BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::464:eb3d:1fde:e6af%5]) with mapi id 15.20.4867.009; Wed, 5 Jan 2022
- 17:00:14 +0000
-Date:   Wed, 5 Jan 2022 13:00:10 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Maor Gottlieb <maorg@nvidia.com>
-Cc:     alaa@nvidia.com, chuck.lever@oracle.com,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        tonylu@linux.alibaba.com, leon@kernel.org
-Subject: Re: [PATCH rdma-rc] Revert "RDMA/mlx5: Fix releasing unallocated
- memory in dereg MR flow"
-Message-ID: <20220105170010.GA2809962@nvidia.com>
-References: <20211222101312.1358616-1-maorg@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211222101312.1358616-1-maorg@nvidia.com>
-X-ClientProxiedBy: SJ0PR03CA0331.namprd03.prod.outlook.com
- (2603:10b6:a03:39c::6) To BL0PR12MB5506.namprd12.prod.outlook.com
- (2603:10b6:208:1cb::22)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Wed, 5 Jan
+ 2022 17:03:02 +0000
+Received: from BN8NAM11FT024.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:34:cafe::18) by BN7PR06CA0072.outlook.office365.com
+ (2603:10b6:408:34::49) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7 via Frontend
+ Transport; Wed, 5 Jan 2022 17:03:02 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ BN8NAM11FT024.mail.protection.outlook.com (10.13.177.38) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4867.7 via Frontend Transport; Wed, 5 Jan 2022 17:03:02 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Wed, 5 Jan
+ 2022 11:03:01 -0600
+Date:   Wed, 5 Jan 2022 11:02:44 -0600
+From:   Michael Roth <michael.roth@amd.com>
+To:     Sean Christopherson <seanjc@google.com>
+CC:     <linux-kselftest@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
+        Nathan Tempelman <natet@google.com>,
+        Marc Orr <marcorr@google.com>,
+        Steve Rutherford <srutherford@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Ricardo Koller <ricarkol@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        "Janosch Frank" <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        "Claudio Imbrenda" <imbrenda@linux.ibm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        "Suzuki K Poulose" <suzuki.poulose@arm.com>,
+        <kvmarm@lists.cs.columbia.edu>
+Subject: Re: [RFC PATCH 00/10] KVM: selftests: Add support for
+ test-selectable ucall implementations
+Message-ID: <20220105170244.jwr6i2erecbhx3fz@amd.com>
+References: <20211210164620.11636-1-michael.roth@amd.com>
+ <Yc4gcJdhxthBKUUd@google.com>
+ <20220104233517.kxjbdw4t7taymab5@amd.com>
+ <YdTjnRZQID5IabK0@google.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <YdTjnRZQID5IabK0@google.com>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB03.amd.com
+ (10.181.40.144)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ac110c1a-da3c-4d3d-f02d-08d9d06cd7d1
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5240:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB5240A6D1A08C4DA4AC38ED6AC24B9@BL1PR12MB5240.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:126;
+X-MS-Office365-Filtering-Correlation-Id: d185ae54-3443-428d-1736-08d9d06d3bcd
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3628:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB3628C58EC79B17AB334D48DD954B9@DM6PR12MB3628.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1284;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FA3fJFyauRENQhN1robhfviWEj7++vxhiPbQ4njOQUJ6RgtjacDN7yh4+eDWvsng7AEKJmT4H2fkDbId8spLeCvR5NKQUzlFH6OLUP+jLFHW8K2CuR/DEoqmWyS/qPEpAvUxLYhY0MLhUoF+JcV2HqCR9XUOdg3YMr09BJVUVN+RCb1cdwCKEHzsqEjkjLs5I+sU9F1nd5LXvxBCTAnweEsFxAokGfoPsRWjDpUFJQ6Cm3WvU70wSrt1/QnL+WiVk4XWL+WI1pm1RPzJnjv6xZ2FgtwZKeEhPHa5iiIcg8P9aujNfT9+bP0GcSgJoNf82dzrpcjKA9nWtQCUk1FHoM2OGfpX1tXog+Uyc/ziEfWxmJqwSjv4xsrXV7wZjzp+y/5SzHISQcFN6XrUzWipE+fkly3ETHQtZWPaeseA3GxYWnmEt0eTU3KsYFXgPWqgk0I7POhdq80hS5xtVZbCUQpQOZFBi3+tBmT2SDDvCltxQqksHZ70gA4NtjWfp2asm6Dxx6moMjDM/QbG9wk7MfTOQ3NB8oM5HF+UUtuEvCWt7Y5b0e2lopSapYOUp0P1WuY/YGjkSAb2c1f0NBbbOglOLgIWmyU6kgSHegBSyzoznH09LnvrH2RpcTZWPWLSBGx/tk/X6lgep9r4Roz6+Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(2616005)(66946007)(8676002)(37006003)(66476007)(6666004)(36756003)(508600001)(2906002)(5660300002)(1076003)(8936002)(66556008)(33656002)(26005)(4744005)(6512007)(186003)(4326008)(6862004)(6506007)(6636002)(83380400001)(316002)(38100700002)(86362001)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Vi0bVuNarF5ra4qXcs/Nbb7B/50X3Zv/PlE2Xs8i/oRshSFYM9W6p0uezpTz?=
- =?us-ascii?Q?3QBT3MFcs58x2Jx5xTYdHGJOBc/RUu5RLjQByGxHAkh6Wcc0uU0fuNCN5zkn?=
- =?us-ascii?Q?JRVdXqPBO/zMfNwogwCtLWIgEtxNiuSsMlSis3/rdrTW+qyYF1gKYPnhWXD0?=
- =?us-ascii?Q?EppnT/KFD+UC7aHezCAH6s3xY6e1xmynbtab+MJAp1T4jpwd8j7gvvlXNp6+?=
- =?us-ascii?Q?+2+ezhWH4ToMhL3dzhVy3LCCyXeOXcT1Xa4G6prScDbWwujVtdEGcQsv5zxi?=
- =?us-ascii?Q?4HOPJNPLxf0wqA0K5O6chPdSwfXF4YktWPIubI5HzYr3hntrhaOIPIk8fnzY?=
- =?us-ascii?Q?Q8G/0aajuU5KaRNImQ2V80G0Jqmn2gqXjhmYt2iBt1mSNLLlOgRVrneO3q+M?=
- =?us-ascii?Q?vRg67nJU68RjXBwtpvZzpYLBZKeCe7rirUzTMdoTNe7QkzneauLhHwEGX7Yr?=
- =?us-ascii?Q?BHLFQ3wyfr0MRV+4PsVMkw7DSJ91EP6Hrg7yaFifY6I2M5VZCJVSYFqtSMPl?=
- =?us-ascii?Q?+ZGVlgZeqAGbeDdzCHCaEW7HNvVfKiyMhaJC4LUDznsDnW+AeGkgNkWL65Y0?=
- =?us-ascii?Q?TjXAu9EjqyDbRq7L232oVnh1yD6vTSUbXUNkcKAaw1lB8miOOWc1HnepWGsw?=
- =?us-ascii?Q?iM7cT37chcLokmxapevP2pN5c7yJMWqimM+yvNFoLQrCo/kfpCHZEYl5SjIC?=
- =?us-ascii?Q?JWrcE0dJ+RZIAimIvw5LU10+Fva3hO/pgs211LM6ZrezDP+9GjtaME7oSnde?=
- =?us-ascii?Q?irl1DE6Gb6xtaftc9UQHCXchqdjyTVJaKz5ne/0sWXzhIGhgCT47EGnJNxyk?=
- =?us-ascii?Q?uijDHHEkXI00T8Y5fdZE1qHBHJf1pLtvKomz8GPIxcc2N2wJaomCljf3jBCk?=
- =?us-ascii?Q?jjVu4TaPMjJ6txSrFhQ2I853uUMGnX249ZaiI/bLGwBtt7Io2TaSPXE9gCFS?=
- =?us-ascii?Q?C4PI3+6zD8i+Cv5mfF72eX7I7x/SO9YkrVQzFlQq4QxyXGmzxxU9XZHaZIiw?=
- =?us-ascii?Q?SLOiaHpOxTCcT46I2iUK72UdY2uOEN6WvCkVlJ0R1lebeHxrL7TyQNcyL31x?=
- =?us-ascii?Q?xBVaBgB1Ksg42ttIWTmhvF67nEF0BAWcwsZCdhTTMyt7+mW1lUsLpGv11xg4?=
- =?us-ascii?Q?lL4GTHQkx5/o1O5paxzUv5XyK9Wo7SwQ6zoxQfXFAtYtHPVMhYhEgIr4jBTC?=
- =?us-ascii?Q?hOrwIrHyGdNZEUurudLpIKsk3pNRu/QqB86r6MTYhSQgbBs5CNJ+FABy3gmf?=
- =?us-ascii?Q?Xocg67k/KueLtVjcAWylqEAwydiyuPnSGD+cVyMRweDueM0MXWP7etnvNJ6U?=
- =?us-ascii?Q?JxeGD16HLQQHcd0+jRNRLzQU0x2hz4FVe/flI2i+OetpvrtjEpKixg+UU/jh?=
- =?us-ascii?Q?R8v3I2J58R4Ix9z1/gf6YnxeFaRlMGOLwzSQFJCeRxeznasSfF6FjQACKu6z?=
- =?us-ascii?Q?PJv/KbewrQG40h+O+OuWK5RC0QRadvfAb027qWSfPeDyWbg4TbcpmRJcqzHT?=
- =?us-ascii?Q?JpgpBldMqVI+ojQVd9N+r87Oj8FWrALr5+CEcD7MsoWx61wy+6AOdoSLhEb7?=
- =?us-ascii?Q?qoeALa7NL2PdaaoP5LQ=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ac110c1a-da3c-4d3d-f02d-08d9d06cd7d1
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2022 17:00:14.8196
+X-Microsoft-Antispam-Message-Info: ujRaMNgUX0lGMFO0fQYYTLrm68EE+hD8z2BVmsn80Var+TdvPj/GsMKU8ltFcxsszlN9IS49K6DV212R0xDGA3cSxzIwYLN1TtsPKUSBDltNn+LxdjU+zqVl8aGVy8vMHV1YErczuPLPT9iOKZzewmVdvtHwDJE6PPLZm1qxKTAw/XW+EKkcje+TBPv1YT50NxXrUaGEyxSZV5BbXzCIetU49Tae4NHk+NKq4BcY1Lw6KRMiymmHDMKFsjXOi0WcyLQLu/w7FxnyMjZP/Joe4oPT9jVgqFmSeLYQFOg0WeRPbDhLg8MxovtPsE+1ZtwGuE/14LAoOhH90CB+IIHsQh/s21IE5VvBQhh2rlX+qBMFowzxlUdnc4AKLbMSe+MQFKpsdmTRQZn8CS8LlX+43DK1Kkl+63cW1phdR4CUHX5EiuyUnEoYZ+zxtHSyrgCrihyCqaC+kriSBggoO9GL/ZM4ITcEmH0lgPk5OwIUegJKxQO41TEkweySdigAKcnuZduI7ow0yUJB6QH9HLjVZXmuck9hAdyjvpmQRUESeJY2CDqYS/X6HTYVCXDzPJL+0MreLDJCP/jBo5Vhm1ULHaqgbNOD+Zhl2hmIJ6P7pGzbz5mbvrLRI+p1m6x/nB1HG/vYUDyvSQhOY3aPyBnRupvPMgkcdyzPQwrxLpDrQJcW/vVhNNvAW6ZYaZ9cEXQI0T10sdYQIqj3dSSlfWAlQaHu6oHavfepsHd+gctWKgJRuRnYkqOES+jJTVeZVg3WAT6GPrO1fJn4iGTFWAbZTQ0fnm6XZUSyI01kTTqzvgQ=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(40470700002)(36840700001)(46966006)(86362001)(47076005)(508600001)(6916009)(83380400001)(4326008)(81166007)(316002)(54906003)(70586007)(426003)(2906002)(5660300002)(336012)(16526019)(186003)(70206006)(6666004)(44832011)(2616005)(26005)(40460700001)(356005)(8676002)(1076003)(36756003)(8936002)(7416002)(82310400004)(36860700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2022 17:03:02.2476
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oi+ZA/hOMxBo32mSVYd7yQ3ebimfmQHj2Og6vPE92W88kdqYNHFfqLSjJVoUpuPC
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5240
+X-MS-Exchange-CrossTenant-Network-Message-Id: d185ae54-3443-428d-1736-08d9d06d3bcd
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT024.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3628
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 12:13:12PM +0200, Maor Gottlieb wrote:
-> This patch is not the full fix and still causes to call traces
-> during mlx5_ib_dereg_mr().
+On Wed, Jan 05, 2022 at 12:17:33AM +0000, Sean Christopherson wrote:
+> On Tue, Jan 04, 2022, Michael Roth wrote:
+> > On Thu, Dec 30, 2021 at 09:11:12PM +0000, Sean Christopherson wrote:
+> > > not in-kernel.  That is bound to bite someone.  The only issue with SEV is the
+> > > address, not the VM-Exit mechanism.  That doesn't change with SEV-ES, SEV-SNP,
+> > > or TDX, as PIO and HLT will both get reflected as #VC/#VE, i.e. the guest side
+> > > needs to be updated to use VMGEXIT/TDCALL no matter what, at which point having
+> > > the hypercall request PIO emulation is just as easy as requesting HLT.
+> > 
+> > I'm not aware of any #VC handling needed for HLT in the case of
+> > SEV-ES/SEV-SNP. That was one of the reasons for the SEV tests using
+> > this ucall implementation.
 > 
-> This reverts commit f0ae4afe3d35e67db042c58a52909e06262b740f.
+> Ah, you're right, HLT is an "automatic" exit and the CPU takes care of adjusting
+> RIP.  TDX is the only one that requires a hypercall.
 > 
-> Fixes: f0ae4afe3d35 ("RDMA/mlx5: Fix releasing unallocated memory in dereg MR flow")
-> Signed-off-by: Maor Gottlieb <maorg@nvidia.com>
-> Acked-by: Leon Romanovsky <leonro@nvidia.com>
-> ---
->  drivers/infiniband/hw/mlx5/mlx5_ib.h |  6 +++---
->  drivers/infiniband/hw/mlx5/mr.c      | 26 ++++++++++++++------------
->  2 files changed, 17 insertions(+), 15 deletions(-)
+> > Of course, at some point, we'd want full support for PIO/MMIO/etc. in the #VC
+> > handler, but it's not something I'd planned on adding until after the SEV-SNP
+> > tests, since it seems like we'd need to import a bunch of intruction decoding
+> > code from elsewhere in the kernel, which is a lot of churn that's not
+> > immediately necessary for getting at least some basic tests in place. Since
+> > the HLT implementation is only 20 lines of code it seemed like a reasonable
+> > stop-gap until we start getting more CoCo tests in place. But the in-kernel
+> > APIC issue probably needs more consideration...
+> > 
+> > Perhaps for *just* PIO, the intruction decoding can be open-coded so it
+> > can be added to the initial #VC handler implementation, which would avoid the
+> > need for HLT implementation. I'll take a look at that.
+> 
+> PIO shouldn't require instruction decoding or a #VC handler.  What I was thinking
+> is that the guest in the selftest would make a direct #VMGEXIT/TDCALL to request
+> PIO instead of executing an OUT.  
 
-Applied to for-rc, lets get the correct fix for the next cycle.
+That seems like a nicer approach. But it sort of lends itself to having
+test-specific ucall implementations in some form. How are you thinking
+vm_create() should decide what implementation to use? With this series
+in place it could be something like:
 
-Thanks
-Jason
+  vm_create(..., struct ucall_ops *ops)
+    ucall_init_ops(ops)
+
+and with the SEV selftests in their current form it would look something
+like:
+
+  sev_vm_create(...)
+    vm_create_with_ucall(..., ops=ucall_ops_pio_vmgexit)
+      ucall_init_ops(ops)
+
+is that sort of what you're thinking, or something else?
+
+> 
+> > > I also don't like having to differentiate between a "shared" and "regular" ucall.
+> > > I kind of like having to explicitly pass the ucall object being used, but that
+> > > puts undue burden on simple single-vCPU tests.
+> > 
+> > I tried to avoid it, but I got hung up on that fact that pre-allocating
+> > arrays/lists of ucall structs needs to be done for each VM, and so we'd
+> > end up needing some way for a guest to identify which pool it's ucall
+> > struct should be allocated from. But you've gotten around that by just
+> > sync_global_to_guest()'ing for each pool at the time ucall_init() is
+> > called, so the guest only ever sees it's particular pool. Then the switch
+> > from writing GVA to writing GPA solves the translation problem. Nice.
+> > 
+> > > 
+> > > The inability to read guest private memory is really the only issue, and that can
+> > > be easily solved without completely revamping the ucall framework, and without
+> > > having to update a huge pile of tests to make them place nice with private memory.
+> > 
+> > I think the first 5 patches in this series are still relevant cleanups
+> > vs. having a complete standalone ucall implementation for each arch, and Andrew
+> > has also already started looking at other header cleanups related to
+> > patch #1, so maybe Paolo would still like to queue those. Would also
+> > provide a better starting point for having a centralized allocator for
+> > the ucall structs, which you hinted at wanting below.
+> > 
+> > But the subsequent patches that add the ucall_shared() interfaces should
+> > probably be set aside for now in favor of your proposal.
+> > 
+> > > 
+> > > This would also be a good opportunity to clean up the stupidity of tests having to
+> > > manually call ucall_init(), drop the unused/pointless @arg from ucall_init(), and
+> > > maybe even fix arm64's lurking landmine of not being SMP safe (the address is shared
+> > > by all vCPUs).
+> > 
+> > I thought you *didn't* want to update a huge pile of tests :) I suppose
+> > it's unavoidable, since with your proposal, having something like ucall_init()
+> > being called at some point is required, as opposed to the current
+> > implementation where it is optional. Are you intending to have it be
+> > called automatically by vm_create*()?
+> 
+> Yeah, I was thinking it could be done at the lowest level vm_create() helper.
+> We'll need to expand vm_create() (or add yet another layer to avoid modifying a
+> pile of tests) to allow opting out of initializing ucall, e.g. sev_migrate_tests.c
+> needs to create multiple concurrent VMs, but happily doesn't need ucall support.
+
+Why does sev_migrate_tests need to opt out? Couldn't it use
+ucall_ops_pio_vmgexit like that SEV case above?
+
+I ask because there is a ucall() in the exception handling code where
+some unhandled exceptions result in the guest automatically issuing a
+ucall(UCALL_UNHANDLED), so even when tests don't use ucall() they
+might still rely on it if they enable exception handling. So that might
+be an argument for always setting up at least the default ucall_ops_pio
+implementation and creating a pool just in case. (or an argument for
+dropping the UCALL_HANDLED handling).
+
+> 
+> > > To reduce the burden on tests and avoid ordering issues with creating vCPUs,
+> > > allocate a ucall struct for every possible vCPU when the VM is created and stuff
+> > > the GPA of the struct in the struct itself so that the guest can communicate the
+> > > GPA instead of the GVA.  Then confidential VMs just need to make all structs shared.
+> > 
+> > So a separate call like:
+> > 
+> >   ucall_make_shared(vm->ucall_list)
+> > 
+> > ? Might need some good documentation/assertions to make sure it gets
+> > called at the right place for confidential VMs, and may need some extra
+> > hooks in SEV selftest implementation for switching from private to shared
+> > after the memory has already been allocated, but seems reasonable.
+> 
+> Again, I was thinking that it would be done unconditionally by ucall_init(), i.e.
+> would be automatically handled by the selftest framework and would Just Work for
+> individual tests.
+
+Ok, I'll have to think that through more. Currently with the SEV
+selftests as they we have:
+
+  sev_vm_create(policy, npages)
+    vm = vm_create(...)
+    vm_set_memory_encryption(vm, encrypt_by_default, enc_bit)
+    //vm_vaddr_alloc_shared() can be used now
+
+The ucall struct allocations would need to go through
+vm_vaddr_alloc_shared() to make sure the selftest library tracks/maps
+the pages as shared, but that vm_set_memory_encryption() happens too
+late if the ucall_init() stuff is done in vm_create(). It should be
+possible to pass the vm_set_memory_encryption() arguments directly to
+vm_create() to allow for what you're proposing, but I guess we'd need
+a new vm_create() wrapper that handles both the
+vm_set_memory_encryption() args, along with the ucall_ops above,
+something like:
+
+  sev_vm_create(policy, npages)
+    vm = vm_create_coco(..., encrypt_by_default, enc_bit/shared_bit, ucall_ops)
+
+Or were you thinking something else? Just trying to get an idea of how
+this will all need to tie in with the SEV selftests and what needs to
+change on that end.

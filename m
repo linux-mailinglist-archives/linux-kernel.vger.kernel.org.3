@@ -2,141 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E6B485A0A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 658BA485A0F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:35:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244054AbiAEUbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 15:31:43 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:55562
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244036AbiAEUbj (ORCPT
+        id S244069AbiAEUfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 15:35:01 -0500
+Received: from mail.hugovil.com ([162.243.120.170]:38914 "EHLO
+        mail.hugovil.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244036AbiAEUew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 15:31:39 -0500
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 564B33F337
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 20:31:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641414698;
-        bh=V4kULDmcSO9fvI4MXJMndJlczlOJyUZ0Dz0uloeZzoM=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=u9tvnpV1cyQG9gtZEV+OOJ8Grsggg+mX8ZXGy2EB+/q51HtZ9rnk1+NZDvU6fVJm9
-         bzcOJanVviCXhahVlQZ1hSIoxXAFe8tuN9bIlPhLjHGCEEYAXNiL6exxb2OBIutJRc
-         WfLIRwdig8FrdOI6YuJRBnWMKgPbE/2Q2MsJUxV4HgtVJVRkOhZEyarqun8FIIgYvp
-         w2MO0RMY3iVujWz6/Cx9iHZu3aLxobtDKa4MA0PYhHBHHT3Gdc0rUOTDZ/pl2UX/o2
-         gs567RlW0c2ofvPYfdgm8tr7ElNrrRIhjocIFXfmh87rY53Q5Y4n29fEJNtuFVFtOw
-         ALKHGUwOI6mdQ==
-Received: by mail-wr1-f72.google.com with SMTP id v18-20020a5d5912000000b001815910d2c0so147578wrd.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 12:31:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=V4kULDmcSO9fvI4MXJMndJlczlOJyUZ0Dz0uloeZzoM=;
-        b=a45D/oQNUVU5ppNi0O7xQZEervpo+4wj8604q9KluJSW4BHvPCPVn+MM4qB1a7MyzC
-         3Zu4pWVh8TvszURGGmpOxdBJpO/oaVL30T/T6Y44rVRod2H0cvvkHzOBUFwFKdiomxvJ
-         o18Wut8NiVrKmDT9M5A1pUduFJJYjIKF0avUP0bEd7MUiykVlj74lK+lo+6ASKBVT17a
-         tpx3ovkxYgItBUAYjiJrLTBDsKUSW0xFaapAAwlu31qMtuAkp9/zm1pMAjRTC47zlKZp
-         Dy9BDdZXoZuG1UNV21D52wZTwqbOeoPqoY5idXnTJEpp5UAUpXUIUiHVGDXzZLIkZWWF
-         Tgxw==
-X-Gm-Message-State: AOAM531DNsSfXXcrUQjhr1WkdVfkp8rrYKZE9XGswN8sRm/6bZM051HB
-        sA5DuFBXyWWfbvNeZsykg313F52eRH3uz8ujJ7Uw81SyDfb8fZ+j2ptLlqs84wfzmHdqGzocjha
-        SS8wO8F/G3HjwvspkuK4V7OUzmxjDNFSg3OkqOrR8ZA==
-X-Received: by 2002:adf:f8cb:: with SMTP id f11mr47726194wrq.700.1641414698088;
-        Wed, 05 Jan 2022 12:31:38 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwfycNJZSN3SIT7Pdqt18EECjlkeSLsfzV4kAhj6FeSMwg1AcBqMTk4rYmgxR4Fp+L98Z2zeA==
-X-Received: by 2002:adf:f8cb:: with SMTP id f11mr47726180wrq.700.1641414697952;
-        Wed, 05 Jan 2022 12:31:37 -0800 (PST)
-Received: from [192.168.1.124] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id f6sm4185158wmq.6.2022.01.05.12.31.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jan 2022 12:31:37 -0800 (PST)
-Message-ID: <9c4d825a-1f35-3e47-b91c-499525213343@canonical.com>
-Date:   Wed, 5 Jan 2022 21:31:36 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 02/24] pinctrl: samsung: accept GPIO bank nodes with a
- suffix
-Content-Language: en-US
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Chanho Park <chanho61.park@samsung.com>
-References: <20211231161930.256733-1-krzysztof.kozlowski@canonical.com>
- <20211231161930.256733-3-krzysztof.kozlowski@canonical.com>
- <CAPLW+4kVjswvcx7PjkBq_cPrmoi1_yJw9qGOO2tcRCDm27zKmA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <CAPLW+4kVjswvcx7PjkBq_cPrmoi1_yJw9qGOO2tcRCDm27zKmA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+        Wed, 5 Jan 2022 15:34:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=H3KgQEFEzlVSWZjCPwUV0O4gZ4vCXsaEZeVb9qiIW98=; b=yggFvQM/T9Q/PSZUyyeD4fhgNt
+        svyrJJ7Laasc4TvmS6WOrceYKymjzNDSadnTiR0q/77L4krS6av5vsUGr5NsT+xJge+bmCtnGUqPv
+        xD/KSpkb19Nz+D44/gtuU8wxN2wcpEd2afqlW7+A2O0b+F2sKD6l2labD0Oy+Qpv10CQ=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:53878 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1n5Cze-0002I5-Ob; Wed, 05 Jan 2022 15:34:47 -0500
+Date:   Wed, 5 Jan 2022 15:34:46 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <20220105153446.82214b48a4c77ec960ce03f3@hugovil.com>
+In-Reply-To: <YdX5BocOfHE/0twa@piout.net>
+References: <20220105193440.151359-1-hugo@hugovil.com>
+        <YdX5BocOfHE/0twa@piout.net>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.hugovil.com
+X-Spam-Level: 
+X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
+        *      blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [URIs: bootlin.com]
+        * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        * -1.1 NICE_REPLY_A Looks like a legit reply (A)
+X-Spam-Status: No, score=-4.0 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.2
+Subject: Re: [PATCH] rtc: isl1208: avoid unnecessary rc variable tests
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/01/2022 19:43, Sam Protsenko wrote:
-> On Fri, 31 Dec 2021 at 18:20, Krzysztof Kozlowski
-> <krzysztof.kozlowski@canonical.com> wrote:
->>
->> Existing dt-bindings expected that each GPIO/pin bank within pin
->> controller has its own node with name matching the bank (e.g. gpa0,
->> gpx2) and "gpio-controller" property.  The node name is then used for
->> matching between driver data and DTS.
->>
->> Newly introduced dtschema expects to have nodes ending with "-gpio-bank"
->> suffix, so rewrite bank-devicetree matching to look for old and new
->> style of naming.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->> ---
->>  drivers/pinctrl/samsung/pinctrl-samsung.c | 57 ++++++++++++++++++-----
->>  1 file changed, 45 insertions(+), 12 deletions(-)
->>
->> diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.c b/drivers/pinctrl/samsung/pinctrl-samsung.c
->> index f2864a7869b3..561853df8ef7 100644
->> --- a/drivers/pinctrl/samsung/pinctrl-samsung.c
->> +++ b/drivers/pinctrl/samsung/pinctrl-samsung.c
->> @@ -1011,13 +1011,56 @@ static void samsung_banks_of_node_put(struct samsung_pinctrl_drv_data *d)
->>                 of_node_put(bank->of_node);
->>  }
->>
->> +/*
->> + * Iterate over all driver pin banks to find one matching the name of node,
->> + * skipping optional "-gpio" node suffix. When found, assign node to the bank.
->> + */
->> +static void samsung_banks_of_node_get(struct device *dev,
->> +                                     struct samsung_pinctrl_drv_data *d,
->> +                                     struct device_node *node)
->> +{
->> +       const char *suffix = "-gpio-bank";
->> +       struct samsung_pin_bank *bank;
->> +       struct device_node *child;
->> +       /* Pin bank names are up to 4 characters */
->> +       char node_name[20];
->> +       unsigned int i;
->> +       size_t len;
->> +
->> +       bank = d->pin_banks;
->> +       for (i = 0; i < d->nr_banks; ++i, ++bank) {
->> +               strscpy(node_name, bank->name, sizeof(node_name));
->> +               len = strlcat(node_name, suffix, sizeof(node_name));
->> +               if (len == sizeof(sizeof(node_name))) {
+On Wed, 5 Jan 2022 21:01:10 +0100
+Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+
+> On 05/01/2022 14:34:39-0500, Hugo Villeneuve wrote:
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > 
+> > The rc variable doesn't need to be tested a second time when the <if> block
+> > evaluates to false.
+> > 
 > 
-> Double sizeof is probably wrong?
+> rc is not tested a second time, here is the relevant listing:
+> 
+> -	if (client->irq > 0)
+> +	if (client->irq > 0) {
+>  ffffffff81aef647:	41 8b b5 bc 01 00 00 	mov    0x1bc(%r13),%esi
+>  ffffffff81aef64e:	85 f6                	test   %esi,%esi
+>  ffffffff81aef650:	0f 8f 35 01 00 00    	jg     ffffffff81aef78b <isl1208_probe+0x314>
+>  		rc = isl1208_setup_irq(client, client->irq);
+>  	if (rc)
+>  		return rc;
+> +	}
+>  
+> -	if (evdet_irq > 0 && evdet_irq != client->irq)
+> +	if (evdet_irq > 0 && evdet_irq != client->irq) {
+>  ffffffff81aef656:	85 db                	test   %ebx,%ebx
+>  ffffffff81aef658:	7e 0d                	jle    ffffffff81aef667 <isl1208_probe+0x1f0>
+>  ffffffff81aef65a:	41 39 9d bc 01 00 00 	cmp    %ebx,0x1bc(%r13)
+> @@ -1663,6 +1664,7 @@ ffffffff81aef661:	0f 85 0a 01 00 00
+>  		rc = isl1208_setup_irq(client, evdet_irq);
+>  	if (rc)
+>  		return rc;
+> +	}
+> 
+> As you can see, no change in assembly but it is worse to read. gcc on
+> arm behaves the same way.
 
-Thanks, copy-paste error... it should be also "len >= sizeof".
+Hi Alexandre,
+I am not sure that I fully understand your assembly code analysis. Maybe my patch comment was misleading, because I am not talking about a redundant test inside the if block, but ouside of it (after it).
+
+Here is the original code with my annotations. Let's assume that the variable client->irq = 0:
+
+---
+/* If client->irq = 0, then function isl1208_setup_irq() will not be called, and rc will not be modified: */
+if (client->irq > 0)
+	rc = isl1208_setup_irq(client, client->irq);
+
+/* If rc hasn't been modified, there is no need to re-test its value here: */
+if (rc)
+	return rc;
+---
+
+After the patch, this code section becomes:
+
+---
+if (client->irq > 0) {
+	rc = isl1208_setup_irq(client, client->irq);
+	if (rc)
+		return rc;
+}
+---
+
+For me it is more logical and clearer like this. Moreover, you can see that at line 873 of the original driver, the same kind of mechanism is used:
+
+---
+if (isl1208->config->has_timestamp) {
+	rc = rtc_add_group(isl1208->rtc, &isl1219_rtc_sysfs_files);
+	if (rc)
+		return rc;
+}
+---
+
+Regards,
+Hugo.
 
 
-Best regards,
-Krzysztof
+> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > ---
+> >  drivers/rtc/rtc-isl1208.c | 14 ++++++++------
+> >  1 file changed, 8 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/rtc/rtc-isl1208.c b/drivers/rtc/rtc-isl1208.c
+> > index 182dfa605515..c7f04df5a0b6 100644
+> > --- a/drivers/rtc/rtc-isl1208.c
+> > +++ b/drivers/rtc/rtc-isl1208.c
+> > @@ -880,15 +880,17 @@ isl1208_probe(struct i2c_client *client, const struct i2c_device_id *id)
+> >  	if (rc)
+> >  		return rc;
+> >  
+> > -	if (client->irq > 0)
+> > +	if (client->irq > 0) {
+> >  		rc = isl1208_setup_irq(client, client->irq);
+> > -	if (rc)
+> > -		return rc;
+> > +		if (rc)
+> > +			return rc;
+> > +	}
+> >  
+> > -	if (evdet_irq > 0 && evdet_irq != client->irq)
+> > +	if (evdet_irq > 0 && evdet_irq != client->irq) {
+> >  		rc = isl1208_setup_irq(client, evdet_irq);
+> > -	if (rc)
+> > -		return rc;
+> > +		if (rc)
+> > +			return rc;
+> > +	}
+> >  
+> >  	rc = devm_rtc_nvmem_register(isl1208->rtc, &isl1208->nvmem_config);
+> >  	if (rc)
+> > -- 
+> > 2.30.2
+> > 
+> 
+> -- 
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> 
+
+
+-- 
+Hugo Villeneuve <hugo@hugovil.com>

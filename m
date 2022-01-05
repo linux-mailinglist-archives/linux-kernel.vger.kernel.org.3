@@ -2,207 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 163CB485AD6
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 22:39:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 488A7485ADB
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 22:39:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244527AbiAEVjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 16:39:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55788 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231801AbiAEVjN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 16:39:13 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342D2C061245;
-        Wed,  5 Jan 2022 13:39:13 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id bp20so809894lfb.6;
-        Wed, 05 Jan 2022 13:39:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=XuAC60vVYARHTmBQJSyU80swuj8yQQGqnPy63JB/4RI=;
-        b=p1j57YfnfABEqA3UGD+r81Zd9v/l8KYHviC0kssp6kkUZEvyGmwU6vObMH2xq+phy/
-         ghFT4kZhynEYMxAuw6WNTVYEsstZ8NkkUzjOIO3duvlxrKnX8C+XpwE+ccpLcaiq4WsZ
-         Q1WOcEQTH9gQw3CEHin6g8PCjUG9MNwHJrMstHp7MgaiuV28KNaoqjNX6UzFKzAcmGAg
-         WOOU5RXXBLjNmBSAlp0JrZ7MFK2JgRjWSVko949ImH6OscKRBddnU0hO6kMFBQf17cya
-         V+CTM9AzVR+xv6lUyntLwUK4WezuxZLYC1u0Hl/j+IcTz3tkGRS70Dqkx3Zc563PdHzX
-         ZrGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=XuAC60vVYARHTmBQJSyU80swuj8yQQGqnPy63JB/4RI=;
-        b=pUCvbPd0dKmJi5c/fnowQTxIbz6e8V7v4dh/cGTQVHuX0z0B7/WIz3qgLL9uIhyMmN
-         5QiEaKCr5ZEQ3mMiVnlAGjwzhiJx4Xl+s3T3I6pXmF3nZC1ASNDIyiJOVVr4DoFZp8Hv
-         Ht9cbteM+S+kWKi1mGLsX8BXAjLzSqCZ0mRJ4E5U5FYu1h5hTGO15CuLYLqt7oz2MmIs
-         vuuEqoFRjgn1YmBJCKCtf6YUFG+0YchCAZncePFp7EFiUdNGFkbmlEyIjN29laS3bGm/
-         8NaxK1XXjwFEkTHqdpUWe9UjlbKGCGfZu+nSRUvcTCbMMe/XUgddfdPvARrOJwKq39wh
-         hdqg==
-X-Gm-Message-State: AOAM532QKrgJT90qNRohj28WLprhrFSy1EYzfjYjHOTMRV+DX4uUsv3f
-        xHvZpWXQiV8bklvZWzSYQvw=
-X-Google-Smtp-Source: ABdhPJzAB30CbXefi7QC7PUQFz6TqfeC7L472wXrX4EbPudT+VP8+dRCCogpNuX4ME/1y3AE6rclmA==
-X-Received: by 2002:ac2:5109:: with SMTP id q9mr49792866lfb.146.1641418751388;
-        Wed, 05 Jan 2022 13:39:11 -0800 (PST)
-Received: from [192.168.2.145] (94-29-46-141.dynamic.spd-mgts.ru. [94.29.46.141])
-        by smtp.googlemail.com with ESMTPSA id y10sm6213ljp.82.2022.01.05.13.39.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jan 2022 13:39:11 -0800 (PST)
-Subject: Re: [PATCH 1/8] signal: Make SIGKILL during coredumps an explicit
- special case
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@ZenIV.linux.org.uk>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
- <20211213225350.27481-1-ebiederm@xmission.com>
- <9363765f-9883-75ee-70f1-a1a8e9841812@gmail.com>
- <87pmp67y4r.fsf@email.froward.int.ebiederm.org>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <5bbb54c4-7504-cd28-5dde-4e5965496625@gmail.com>
-Date:   Thu, 6 Jan 2022 00:39:10 +0300
+        id S244545AbiAEVjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 16:39:33 -0500
+Received: from mail-mw2nam10on2052.outbound.protection.outlook.com ([40.107.94.52]:55329
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233366AbiAEVja (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 16:39:30 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZSOai9XmCERE0wRhhVp5UbUwgjvDYYoyBcSN3T0MxOCUKbQdn3n0tOJUoj+UPQkexF6JhvirLdlFA0d00CGCsAZld2JyMc1lLj7P9AvuOY2gUwgWEsHcHM4ImsnGdeE0QLsakKHKJLDrKnBGxpSijYBqlpBVWaDd2O7okZLBvHE3F5mdZOgYv3XEl3k6hq8vkh50G/Er3gQZK/Gs9wQa3o5cynjOkeJjwT0Q4NDXu9y8CMYTM4uj2D3rFCacDL9EUh5OM8figWeDjqlpQC4CyB3le6LYX/GFivVbeyknnL9GfyrwVEgxgZuvS9cOs4N2YH9d6eEnU2KPkHd7Wk6KvA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lw8jDW2tXefaWp7g240AwPgDmoJeyI+G52VvkcPUahs=;
+ b=IubpVFZTRakLCjqsLZAVgC41C61vZSVknggT1KSN9D2FUgA5iMzaGDJmb5shay+5isSRLkIOECeoJNNHxlBm7Drse1O0jddMQC+bfFn14KetuhBhhKRf9/tZt6u5R8n0BpAywGm82x4/t2GqY+WItobpLciqhTS0tc+vA3q4u+LR9HhgKWoXCzokrFg4nCDXrwOvDWJ3aYsaj4b/09AfPsi9pKXrLWTCn8MoN8LrjyfDWEnfcvir70+vU9JS1DOCH7gRarCIBm8ei0S7NTMCt4afz1lDyAnSh0gsTdLGlASpt6BjVELC+09mAboqBShhikmyA5XjfWdvLaPUb97+Sw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lw8jDW2tXefaWp7g240AwPgDmoJeyI+G52VvkcPUahs=;
+ b=H+qEjfKkMQqZv32+VW0zwt809nzowQKvi8d8OzUFngaLhi0V0XtuUgQBoEXhxlHgoY1mlznMYLU1YNhYe7XJWIWegO/WVgcRQqqh5yMaw4CWkmiY3vAmaguiuV+oRCQ7YeGrUPT+YZHlmLCVmZ7FSBSDa6svdbKlEhq8C1R8Pks=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from SN6PR12MB2718.namprd12.prod.outlook.com (2603:10b6:805:6f::22)
+ by SN6PR12MB2687.namprd12.prod.outlook.com (2603:10b6:805:73::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Wed, 5 Jan
+ 2022 21:39:27 +0000
+Received: from SN6PR12MB2718.namprd12.prod.outlook.com
+ ([fe80::35:281:b7f8:ed4c]) by SN6PR12MB2718.namprd12.prod.outlook.com
+ ([fe80::35:281:b7f8:ed4c%6]) with mapi id 15.20.4844.017; Wed, 5 Jan 2022
+ 21:39:27 +0000
+Cc:     brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v8 13/40] x86/kernel: Make the bss.decrypted section
+ shared in RMP table
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Venu Busireddy <venu.busireddy@oracle.com>
+References: <20211210154332.11526-1-brijesh.singh@amd.com>
+ <20211210154332.11526-14-brijesh.singh@amd.com> <YdSKQKSTS83cRzGZ@dt>
+ <18eadf9d-8e31-0945-ccf4-2cb72b8e0dd4@amd.com>
+ <acba0832-9b11-c93d-7903-fff33f740605@intel.com>
+From:   Brijesh Singh <brijesh.singh@amd.com>
+Message-ID: <444b6c78-c4d3-f49c-6579-bd28ae32ca3c@amd.com>
+Date:   Wed, 5 Jan 2022 15:39:22 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <87pmp67y4r.fsf@email.froward.int.ebiederm.org>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <acba0832-9b11-c93d-7903-fff33f740605@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CH2PR18CA0029.namprd18.prod.outlook.com
+ (2603:10b6:610:4f::39) To SN6PR12MB2718.namprd12.prod.outlook.com
+ (2603:10b6:805:6f::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0f708ec2-1854-49f5-157f-08d9d093d91c
+X-MS-TrafficTypeDiagnostic: SN6PR12MB2687:EE_
+X-Microsoft-Antispam-PRVS: <SN6PR12MB2687A31F929E37D1EE51F5AEE54B9@SN6PR12MB2687.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4qxpXhC6JGjsKSMk/lmMuOfSjYVrGqaxnXDH6cq+Ev7Otr59LMEKy5/77J+i2g5omS5A2lTDG15gbTGVw7/8vt988Qoxv0ohi7VG0+JXDXNs9uvGHIxwfyxRH8DOEjx3jXoBUf5WjZDvqdutrKHx7RsE2xi2E5EfZpWeNFat/VfJ3g3jKzpCj5G4Mn6dMh8W0TrbtIuJEhO0cM34uvcHPmmOKPmWwX1IZ74pdKai+1DfkyOMhFfE5Z5/IwridI/5YxmmGcpwzH4XSsfSCPbwrzn6Fq7nj3Lyvl6mJwYgziM45XI80NHXL/HWtK5vqFh+DbKDJkZPth02mvK2mKywzD+u8mx8lYDg5DiU433GWwzyyhvoiqWjuLxJOS3VjHdjCZQjD49Xy31XS6KvGOxDlViwTrECEdYfrdY3AO9rA8EaUSssSKiAavrnqlI03SKGlSyMcH6eTvpMABDqHLYMjDdAmoRT5Aai0dyBs2wCX0k0tgSdyNOapvQf90XCr0+5xy4x/xCa08+op7aVL2L+00uxSNsbBnLV96dOfWeBb4UF8+rafCOf5wnADlwgiCKiL8K4bxYwTLNcB6GFw5+5WdBIAZrRkfgXd0EgjqfmmOlsHDtzPPI5iBDp5AHZruZwed26A9vw+ceeN+u4F7XmNEVkyhJljLWoQp3dEFuWwJRl4CjHJ0aBUU9Pi5+6oa6QFIjyX12ZIqN7girGAIaRKPnjBj+vDrkWHrhdrD6vmuTrmQBHlynV0wGEyQwFOUWw
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2718.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6666004)(66556008)(66476007)(66946007)(83380400001)(54906003)(31696002)(38100700002)(36756003)(53546011)(316002)(31686004)(4326008)(86362001)(186003)(8936002)(110136005)(7416002)(7406005)(8676002)(4744005)(6486002)(6512007)(508600001)(6506007)(5660300002)(44832011)(26005)(2906002)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MDVsOEZGOTQxRmVzR1hwN09BVDhRNlJTeThQak5EaGsrTE5MN1ptUkFpcVR6?=
+ =?utf-8?B?UVZzbU1VWmJRbVJjZ0lBd1BvS2FhUVZ3ejE4WlNkM200VWx5Yk1ndHloZDcr?=
+ =?utf-8?B?N1lTRGkvcVcxQy9qZHVFVXBqZnVrWTY5SEhwU0VOZ2p6UWFtcjJiQkt2QW42?=
+ =?utf-8?B?bGpiWU93NTdwOUh0UEJyV0xVOEhSaWZoOVhibitrbVZvWURVQW9EaldnZmxk?=
+ =?utf-8?B?UG9xcyt0NmNKQnJYR2R1Z2l2S01OMHhZS1FKUEl4akJiQzJ6YzZsMzlsU0dk?=
+ =?utf-8?B?eTVmVzZpZjR1ajVHUnJsdGR0a0ExVmNGVXA2Kzk2L20vSk5USnIxTTJ2VGRY?=
+ =?utf-8?B?MjhZZ3ZsQ2JWZ092bEMzOG9kdDlTckpUd3lkUTk1ckZYUWpYVlhFNDgxbzBC?=
+ =?utf-8?B?T054N2VMaGR5a0FybXh4cis4aTlGaVNTZnlMU0taWStPeGplbG5yeVBDZDFH?=
+ =?utf-8?B?UWtHUHlLOFNRdDAwcDk1UGZOOXUrUmNEbEgrZko1NEdNTDZuUjFtRkNieVo4?=
+ =?utf-8?B?enpnV0g5dUQrdjZleG9GMkxZcXp5N1I3NjFaOGlpWm91K0UzUjM1aTV4Z1hD?=
+ =?utf-8?B?R251MkxlUm9IOHNzN3BINy80VFJRRjY2bEw5R2ltY3NGTGNVK3dRenNLSCs5?=
+ =?utf-8?B?TnhMVVFESGZlOTBHSXNrbzRDVGUyZUdZcnZoTTFXbEdTb3g2RWpNTDRHei9v?=
+ =?utf-8?B?dE0zeVNEMEh4R2VGM1Iyek0vZ09OZS81WkJnUElnNWpCNWRQZ0Z5VjNMbkdF?=
+ =?utf-8?B?QzhGZWVrZGhjNmRwVk5ZSnpnMW5QOGVObEk4YWlQQWN3MnYzTlJlMmpENjZ0?=
+ =?utf-8?B?aFB6bDlqQ0lmZ1BYSEc5dFZrUjhZY05TWFp6SGZ6WWhIMXBvZ2JsK1ZsMU1P?=
+ =?utf-8?B?Ym9LWjZTMkcvcll1VlBjcEtwemNkZ2hrL1h0aEo5SjZVTngxajhteGxhNm00?=
+ =?utf-8?B?RStTRVh4SGJtRmJLN09TS1U0MThRZ2hFemljMHNYd0VUWUQ2Q2JPSzdlL1NX?=
+ =?utf-8?B?Y2VFTXJ0VjZvNzRxbVdzeHFZN2NUNnVUM2crRi9tUXllZ1haUWR1STRvUHRx?=
+ =?utf-8?B?VjdzL1lDeFE0MmJNVVQ5cVBKaVlkSXc1TEs0aEhVaXVYWi9vKzYvdUV6a0E2?=
+ =?utf-8?B?Z21jTGlkQmQrUm9FS3AxUysvVjFmVVNLYW1oTEhhelNzUXhzSVdFVDVGemJh?=
+ =?utf-8?B?YXFrc1VPelAvWUhiLzI2UlZsQkJnNmVlNFhiM3Q1WGZkaU56MlhKQ3pNQTJD?=
+ =?utf-8?B?WGxVOFpvNSsvUXJmVVZHTnpXWlllVFFhSll3T2pCVEY5Z1NOWGdsYmEwTlZN?=
+ =?utf-8?B?SUFnWEZLbU1CMnJZWC9RbmQ5MldnU3ppQUxmaEdyNHBQdG02aisvN3p0cVZH?=
+ =?utf-8?B?MlNDelM5b3VXMTlXTmFkVFE3L0hoMGVHcUFGSjk2ME1mdFlmUzBHOVFkTy80?=
+ =?utf-8?B?VHBzek5TMUcveFhIUUZ5VVJ4YjJGVDJNYml5Z2ltMWRlczRPbkp0QVdJVnNl?=
+ =?utf-8?B?ZzBuWkdrb1NWWVhMZVhpM0x0eHFGaWNGK2U5VFptOUJDaENFMzhLeFhYZkFD?=
+ =?utf-8?B?dHZHRkZXVlFsS3dlMVFSRVd2WmZUc2drSTNHRnlrZmVTSDlxZ0p4WUtlZHpI?=
+ =?utf-8?B?YTNUMW1YZm5oTlVUMDQxeDJUTms4YkJzTUVubWliRFlwN3pNQmtaK3VkbjVE?=
+ =?utf-8?B?dVJTTGR3VXkzY0o3ek1WVFVOUHAwdk13eUNkVXZMSWlES3UwTTFtZVVFUjZV?=
+ =?utf-8?B?QjY3cmt6Z0YzeXVxOTRNdWFoS3hUR3ZnU3hySzlaZHhjYTRDTVpqNFJ1N0Z5?=
+ =?utf-8?B?OWRraFNySkFHWk85VDdOYXNGV3RnNklOUmFBZWhQeUpWS0hZeWd3VWdQcmNa?=
+ =?utf-8?B?U0wwN0FEK1UwS0Z0RkFqTHVhdUNKeFNvVmc5QytKeGtKOFRFRzJaVG5ETFpP?=
+ =?utf-8?B?aVozc0MxQnhmSE45Rnh2UXIwdi8zY3poYk9SUk0zN05aOGcvbjZlM0NQSmVl?=
+ =?utf-8?B?bGp0UUNCSXQ0M05KQ2Rqd3QvTkNlSE0rbVpQTjludVRNZkExNzdmQ1ZMQnJC?=
+ =?utf-8?B?VUtHVndSZ3h4Q3VGOVYwQi9IN3VBM1FzbVFiV3FzTEhNZGoraXNraER1blBK?=
+ =?utf-8?B?L0xzVGJXYndUKzJGNGh4YXhLK2Jqa0dsVmk1eHB6N1d1QldlTHp4YmVnSFFv?=
+ =?utf-8?Q?U+GsxvNhfKLkrO+ak1UdlnM=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0f708ec2-1854-49f5-157f-08d9d093d91c
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2718.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2022 21:39:27.5359
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FMeyWrZZls7cRi9IMFhGiJ5cvoga+ZMWo9YL3/B31R3jL7W1me0U8sg9prZcG7VOPXq0omCx+MUpYo26/N9Vjg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2687
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-05.01.2022 22:58, Eric W. Biederman пишет:
-> Dmitry Osipenko <digetx@gmail.com> writes:
-> 
->> 14.12.2021 01:53, Eric W. Biederman пишет:
->>> Simplify the code that allows SIGKILL during coredumps to terminate
->>> the coredump.  As far as I can tell I have avoided breaking it
->>> by dumb luck.
->>>
->>> Historically with all of the other threads stopping in exit_mm the
->>> wants_signal loop in complete_signal would find the dumper task and
->>> then complete_signal would wake the dumper task with signal_wake_up.
->>>
->>> After moving the coredump_task_exit above the setting of PF_EXITING in
->>> commit 92307383082d ("coredump: Don't perform any cleanups before
->>> dumping core") wants_signal will consider all of the threads in a
->>> multi-threaded process for waking up, not just the core dumping task.
->>>
->>> Luckily complete_signal short circuits SIGKILL during a coredump marks
->>> every thread with SIGKILL and signal_wake_up.  This code is arguably
->>> buggy however as it tries to skip creating a group exit when is already
->>> present, and it fails that a coredump is in progress.
->>>
->>> Ever since commit 06af8679449d ("coredump: Limit what can interrupt
->>> coredumps") was added dump_interrupted needs not just TIF_SIGPENDING
->>> set on the dumper task but also SIGKILL set in it's pending bitmap.
->>> This means that if the code is ever fixed not to short-circuit and
->>> kill a process after it has already been killed the special case
->>> for SIGKILL during a coredump will be broken.
->>>
->>> Sort all of this out by making the coredump special case more special,
->>> and perform all of the work in prepare_signal and leave the rest of
->>> the signal delivery path out of it.
->>>
->>> In prepare_signal when the process coredumping is sent SIGKILL find
->>> the task performing the coredump and use sigaddset and signal_wake_up
->>> to ensure that task reports fatal_signal_pending.
->>>
->>> Return false from prepare_signal to tell the rest of the signal
->>> delivery path to ignore the signal.
->>>
->>> Update wait_for_dump_helpers to perform a wait_event_killable wait
->>> so that if signal_pending gets set spuriously the wait will not
->>> be interrupted unless fatal_signal_pending is true.
->>>
->>> I have tested this and verified I did not break SIGKILL during
->>> coredumps by accident (before or after this change).  I actually
->>> thought I had and I had to figure out what I had misread that kept
->>> SIGKILL during coredumps working.
->>>
->>> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
->>> ---
->>>  fs/coredump.c   |  4 ++--
->>>  kernel/signal.c | 11 +++++++++--
->>>  2 files changed, 11 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/fs/coredump.c b/fs/coredump.c
->>> index a6b3c196cdef..7b91fb32dbb8 100644
->>> --- a/fs/coredump.c
->>> +++ b/fs/coredump.c
->>> @@ -448,7 +448,7 @@ static void coredump_finish(bool core_dumped)
->>>  static bool dump_interrupted(void)
->>>  {
->>>  	/*
->>> -	 * SIGKILL or freezing() interrupt the coredumping. Perhaps we
->>> +	 * SIGKILL or freezing() interrupted the coredumping. Perhaps we
->>>  	 * can do try_to_freeze() and check __fatal_signal_pending(),
->>>  	 * but then we need to teach dump_write() to restart and clear
->>>  	 * TIF_SIGPENDING.
->>> @@ -471,7 +471,7 @@ static void wait_for_dump_helpers(struct file *file)
->>>  	 * We actually want wait_event_freezable() but then we need
->>>  	 * to clear TIF_SIGPENDING and improve dump_interrupted().
->>>  	 */
->>> -	wait_event_interruptible(pipe->rd_wait, pipe->readers == 1);
->>> +	wait_event_killable(pipe->rd_wait, pipe->readers == 1);
->>>  
->>>  	pipe_lock(pipe);
->>>  	pipe->readers--;
->>> diff --git a/kernel/signal.c b/kernel/signal.c
->>> index 8272cac5f429..7e305a8ec7c2 100644
->>> --- a/kernel/signal.c
->>> +++ b/kernel/signal.c
->>> @@ -907,8 +907,15 @@ static bool prepare_signal(int sig, struct task_struct *p, bool force)
->>>  	sigset_t flush;
->>>  
->>>  	if (signal->flags & (SIGNAL_GROUP_EXIT | SIGNAL_GROUP_COREDUMP)) {
->>> -		if (!(signal->flags & SIGNAL_GROUP_EXIT))
->>> -			return sig == SIGKILL;
->>> +		struct core_state *core_state = signal->core_state;
->>> +		if (core_state) {
->>> +			if (sig == SIGKILL) {
->>> +				struct task_struct *dumper = core_state->dumper.task;
->>> +				sigaddset(&dumper->pending.signal, SIGKILL);
->>> +				signal_wake_up(dumper, 1);
->>> +			}
->>> +			return false;
->>> +		}
->>>  		/*
->>>  		 * The process is in the middle of dying, nothing to do.
->>>  		 */
->>>
->>
->> Hi,
->>
->> This patch breaks userspace, in particular it breaks gst-plugin-scanner
->> of GStreamer which hangs now on next-20211224. IIUC, this tool builds a
->> registry of good/working GStreamer plugins by loading them and
->> blacklisting those that don't work (crash). Before the hang I see
->> systemd-coredump process running, taking snapshot of gst-plugin-scanner
->> and then gst-plugin-scanner gets stuck.
->>
->> Bisection points at this patch, reverting it restores
->> gst-plugin-scanner. Systemd-coredump still running, but there is no hang
->> anymore and everything works properly as before.
->>
->> I'm seeing this problem on ARM32 and haven't checked other arches.
->> Please fix, thanks in advance.
-> 
-> 
-> I have not yet been able to figure out how to run gst-pluggin-scanner in
-> a way that triggers this yet.  In truth I can't figure out how to
-> run gst-pluggin-scanner in a useful way.
-> 
-> I am going to set up some unit tests and see if I can reproduce your
-> hang another way, but if you could give me some more information on what
-> you are doing to trigger this I would appreciate it.
 
-Thanks, Eric. The distro is Arch Linux, but it's a development
-environment where I'm running latest GStreamer from git master. I'll try
-to figure out the reproduction steps and get back to you.
+
+On 1/5/22 2:27 PM, Dave Hansen wrote:
+> On 1/5/22 11:52, Brijesh Singh wrote:
+>>>>           for (; vaddr < vaddr_end; vaddr += PMD_SIZE) {
+>>>> +            /*
+>>>> +             * When SEV-SNP is active then transition the page to 
+>>>> shared in the RMP
+>>>> +             * table so that it is consistent with the page table 
+>>>> attribute change.
+>>>> +             */
+>>>> +            early_snp_set_memory_shared(__pa(vaddr), __pa(vaddr), 
+>>>> PTRS_PER_PMD);
+>>>
+>>> Shouldn't the first argument be vaddr as below?
+>>
+>> Nope, sme_postprocess_startup() is called while we are fixing the 
+>> initial page table and running with identity mapping (so va == pa).
+> 
+> I'm not sure I've ever seen a line of code that wanted a comment so badly.
+
+The early_snp_set_memory_shared() call the PVALIDATE instruction to 
+clear the validated bit from the BSS region. The PVALIDATE instruction 
+needs a virtual address, so we need to use the identity mapped virtual 
+address so that PVALIDATE can clear the validated bit. I will add more 
+comments to clarify it.
+
+-Brijesh

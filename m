@@ -2,159 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F01485143
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:42:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D9E485135
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:38:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239462AbiAEKmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 05:42:21 -0500
-Received: from cable.insite.cz ([84.242.75.189]:49421 "EHLO cable.insite.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239468AbiAEKmT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 05:42:19 -0500
-X-Greylist: delayed 314 seconds by postgrey-1.27 at vger.kernel.org; Wed, 05 Jan 2022 05:42:19 EST
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id 8CCB8A1A3D405;
-        Wed,  5 Jan 2022 11:37:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1641379022; bh=OrLuKcXAlnnN4decGJViJL+g4ZzqJD2LAN/oShAGcXs=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=mkFVChcOMouuWBUsenhrNpM6mbfqkblC5QALs3iodI+hGJCn+qPHCCqNnsoswbSmX
-         pNaPjf6Z4nK8SFYeJ68Jl3y/JFsWjuyFuCUWFmbNZXbOWsi6etZXFvhBLCKgGEh7Jr
-         XnCIkc3MG2jRkTQUdu6lyEhiiXxnHBk1obMe+jh0=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id C7yyzBA8U1Ng; Wed,  5 Jan 2022 11:36:57 +0100 (CET)
-Received: from [192.168.105.22] (dustin.pilsfree.net [81.201.58.138])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id E02A1A1A3D404;
-        Wed,  5 Jan 2022 11:36:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1641379017; bh=OrLuKcXAlnnN4decGJViJL+g4ZzqJD2LAN/oShAGcXs=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=bFqy0CqIkRqBTIijV6KB/CtSlMhp6tZ34UKUIHpUs/Mi/nNoi21MFJVlXoHsdi8Gv
-         cPvONIDAFlB8go6hbBBj0OYfMNfjn3i7KJElPUcdRq/sVCCr7vSBhXSythaQtO4Jv6
-         XkN2gGYiZTo4z72/uLZRCZQRE/sauvocvL9azuzY=
-Subject: Re: [PATCH] usb: gadget: u_audio: fix calculations for small
- bInterval
-To:     John Keeping <john@metanate.com>, linux-usb@vger.kernel.org
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-References: <20220104183243.718258-1-john@metanate.com>
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-Message-ID: <e3cae3a2-ef5c-2188-7fcf-b5b7dd9e4ba8@ivitera.com>
-Date:   Wed, 5 Jan 2022 11:36:56 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S234943AbiAEKiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 05:38:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45822 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234884AbiAEKiK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 05:38:10 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588DDC061761
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 02:38:10 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C5B1A1EC03AD;
+        Wed,  5 Jan 2022 11:37:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1641379076;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Vff7iMTLGsselRP/thbSRHLq1b+srdSUf9Q+TkKzZJw=;
+        b=p6tuX195O3Ly0UMB/4KN4hb1PYtbrrgrU0g9cj/TKRZQN5NJZXc1pSJHuJ/UIx7sqZDrQF
+        63PTLHaWOlDxIrQvHbDipAMWWS3hrgqRavOjR8EakCBoAlbmzDaj6QljV8byEutjO+VwuM
+        jpoXhNqKE7ebs5h6WFLDp+iVzXK210A=
+Date:   Wed, 5 Jan 2022 11:37:58 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/26] x86/tdx: Handle in-kernel MMIO
+Message-ID: <YdV1BpMiAUGrwASv@zn.tnic>
+References: <20211214150304.62613-1-kirill.shutemov@linux.intel.com>
+ <20211214150304.62613-9-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220104183243.718258-1-john@metanate.com>
-Content-Type: text/plain; charset=iso-8859-2; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211214150304.62613-9-kirill.shutemov@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Dec 14, 2021 at 06:02:46PM +0300, Kirill A. Shutemov wrote:
+> In non-TDX VMs, MMIO is implemented by providing the guest a mapping
+> which will cause a VMEXIT on access and then the VMM emulating the
+> instruction that caused the VMEXIT. That's not possible in TDX guests
+> because it requires exposing guest register and memory state to
+> potentially malicious VMM.
 
-Dne 04. 01. 22 v 19:32 John Keeping napsal(a):
-> If bInterval is 1, then p_interval is 8000 and p_interval_mil is 8E9,
-> which is too big for a 32-bit value.  While the storage is indeed
-> 64-bit, this value is used as the divisor in do_div() which will
-> truncate it into a uint32_t leading to incorrect calculated values.
+What does that mean exactly? Aren't TDX registers encrypted just like
+SEV-ES ones? If so, they can't really be exposed...
+
+> In TDX the MMIO regions are instead configured to trigger a #VE
+> exception in the guest. The guest #VE handler then emulates the MMIO
+> instruction inside the guest and converts them into a controlled
+
+s/them/it/
+
+> hypercall to the host.
 > 
-> Switch back to keeping the base value in struct snd_uac_chip which fits
-> easily into an int, meaning that the division can be done in two steps
-> with the divisor fitting safely into a uint32_t on both steps.
+> MMIO addresses can be used with any CPU instruction that accesses the
+
+s/the //
+
+> memory. This patch, however, covers only MMIO accesses done via io.h
+
+"Here are covered only the MMIO accesses ... "
+
+> helpers, such as 'readl()' or 'writeq()'.
 > 
-> Fixes: 6fec018a7e70 ("usb: gadget: u_audio.c: Adding Playback Pitch ctl for sync playback")
-> Signed-off-by: John Keeping <john@metanate.com>
+> MMIO access via other means (like structure overlays) may result in
+> MMIO_DECODE_FAILED and an oops.
 
+Why? They won't cause a EXIT_REASON_EPT_VIOLATION #VE or?
 
-Tested-by: Pavel Hofman <pavel.hofman@ivitera.com>
+> AMD SEV has the same limitations to MMIO handling.
 
-> ---
->   drivers/usb/gadget/function/u_audio.c | 24 +++++++++++++-----------
->   1 file changed, 13 insertions(+), 11 deletions(-)
+See, the other guy is no better here. :-P
+
+> === Potential alternative approaches ===
 > 
-> diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
-> index c46400be5464..4fb05f9576a6 100644
-> --- a/drivers/usb/gadget/function/u_audio.c
-> +++ b/drivers/usb/gadget/function/u_audio.c
-> @@ -76,8 +76,8 @@ struct snd_uac_chip {
->   	struct snd_pcm *pcm;
->   
->   	/* pre-calculated values for playback iso completion */
-> -	unsigned long long p_interval_mil;
->   	unsigned long long p_residue_mil;
-> +	unsigned int p_interval;
->   	unsigned int p_framesize;
->   };
->   
-> @@ -194,21 +194,24 @@ static void u_audio_iso_complete(struct usb_ep *ep, struct usb_request *req)
->   		 * If there is a residue from this division, add it to the
->   		 * residue accumulator.
->   		 */
-> +		unsigned long long p_interval_mil = uac->p_interval * 1000000ULL;
+> == Paravirtualizing all MMIO ==
+> 
+> An alternative to letting MMIO induce a #VE exception is to avoid
+> the #VE in the first place. Similar to the port I/O case, it is
+> theoretically possible to paravirtualize MMIO accesses.
+> 
+> Like the exception-based approach offered by this patch, a fully
+
+"... offered here, a fully ..."
+
+> paravirtualized approach would be limited to MMIO users that leverage
+> common infrastructure like the io.h macros.
+> 
+> However, any paravirtual approach would be patching approximately
+> 120k call sites. With a conservative overhead estimation of 5 bytes per
+> call site (CALL instruction), it leads to bloating code by 600k.
+> 
+> Many drivers will never be used in the TDX environment and the bloat
+> cannot be justified.
+
+I like the conservative approach here.
+ 
+> == Patching TDX drivers ==
+> 
+> Rather than touching the entire kernel, it might also be possible to
+> just go after drivers that use MMIO in TDX guests.  Right now, that's
+> limited only to virtio and some x86-specific drivers.
+> 
+> All virtio MMIO appears to be done through a single function, which
+> makes virtio eminently easy to patch. Future patches will implement this
+> idea,
+
+"This will be implemented in the future, ... "
+
+> +static int tdx_handle_mmio(struct pt_regs *regs, struct ve_info *ve)
+> +{
+> +	char buffer[MAX_INSN_SIZE];
+> +	unsigned long *reg, val = 0;
+> +	struct insn insn = {};
+> +	enum mmio_type mmio;
+> +	int size;
+> +	u8 sign_byte;
+> +	bool err;
 > +
->   		pitched_rate_mil = (unsigned long long)
->   				params->p_srate * prm->pitch;
->   		div_result = pitched_rate_mil;
-> -		do_div(div_result, uac->p_interval_mil);
-> +		do_div(div_result, uac->p_interval);
-> +		do_div(div_result, 1000000);
->   		frames = (unsigned int) div_result;
->   
->   		pr_debug("p_srate %d, pitch %d, interval_mil %llu, frames %d\n",
-> -				params->p_srate, prm->pitch, uac->p_interval_mil, frames);
-> +				params->p_srate, prm->pitch, p_interval_mil, frames);
->   
->   		p_pktsize = min_t(unsigned int,
->   					uac->p_framesize * frames,
->   					ep->maxpacket);
->   
->   		if (p_pktsize < ep->maxpacket) {
-> -			residue_frames_mil = pitched_rate_mil - frames * uac->p_interval_mil;
-> +			residue_frames_mil = pitched_rate_mil - frames * p_interval_mil;
->   			p_pktsize_residue_mil = uac->p_framesize * residue_frames_mil;
->   		} else
->   			p_pktsize_residue_mil = 0;
-> @@ -222,11 +225,11 @@ static void u_audio_iso_complete(struct usb_ep *ep, struct usb_request *req)
->   		 * size and decrease the accumulator.
->   		 */
->   		div_result = uac->p_residue_mil;
-> -		do_div(div_result, uac->p_interval_mil);
-> +		do_div(div_result, uac->p_interval);
-> +		do_div(div_result, 1000000);
->   		if ((unsigned int) div_result >= uac->p_framesize) {
->   			req->length += uac->p_framesize;
-> -			uac->p_residue_mil -= uac->p_framesize *
-> -					   uac->p_interval_mil;
-> +			uac->p_residue_mil -= uac->p_framesize * p_interval_mil;
->   			pr_debug("increased req length to %d\n", req->length);
->   		}
->   		pr_debug("remains uac->p_residue_mil %llu\n", uac->p_residue_mil);
-> @@ -591,7 +594,7 @@ int u_audio_start_playback(struct g_audio *audio_dev)
->   	unsigned int factor;
->   	const struct usb_endpoint_descriptor *ep_desc;
->   	int req_len, i;
-> -	unsigned int p_interval, p_pktsize;
-> +	unsigned int p_pktsize;
->   
->   	ep = audio_dev->in_ep;
->   	prm = &uac->p_prm;
-> @@ -612,11 +615,10 @@ int u_audio_start_playback(struct g_audio *audio_dev)
->   	/* pre-compute some values for iso_complete() */
->   	uac->p_framesize = params->p_ssize *
->   			    num_channels(params->p_chmask);
-> -	p_interval = factor / (1 << (ep_desc->bInterval - 1));
-> -	uac->p_interval_mil = (unsigned long long) p_interval * 1000000;
-> +	uac->p_interval = factor / (1 << (ep_desc->bInterval - 1));
->   	p_pktsize = min_t(unsigned int,
->   				uac->p_framesize *
-> -					(params->p_srate / p_interval),
-> +					(params->p_srate / uac->p_interval),
->   				ep->maxpacket);
->   
->   	req_len = p_pktsize;
-> 
+> +	if (copy_from_kernel_nofault(buffer, (void *)regs->ip, MAX_INSN_SIZE))
+> +		return -EFAULT;
+> +
+> +	insn_init(&insn, buffer, MAX_INSN_SIZE, 1);
+> +	insn_get_length(&insn);
 
+There is insn_decode() - see how it is used and use it here pls.
+
+> +	case MMIO_READ_SIGN_EXTEND:
+> +		err = tdx_mmio_read(size, ve->gpa, &val);
+> +		if (err)
+> +			break;
+> +
+> +		if (size == 1)
+> +			sign_byte = (val & 0x80) ? 0xff : 0x00;
+> +		else
+> +			sign_byte = (val & 0x8000) ? 0xff : 0x00;
+> +
+> +		/* Sign extend based on operand size */
+> +		memset(reg, sign_byte, insn.opnd_bytes);
+> +		memcpy(reg, &val, size);
+> +		break;
+
+You can simplify this a bit:
+
+        case MMIO_READ_SIGN_EXTEND: {
+                u8 sign_byte = 0, msb = 7;
+
+                err = tdx_mmio_read(size, ve->gpa, &val);
+                if (err)
+                        break;
+
+                if (size > 1)
+                        msb = 15;
+
+                if (val & BIT(msb))
+                        sign_byte = -1;
+
+                /* Sign extend based on operand size */
+                memset(reg, sign_byte, insn.opnd_bytes);
+                memcpy(reg, &val, size);
+                break;
+        }
+
+
+
+> +	case MMIO_MOVS:
+> +	case MMIO_DECODE_FAILED:
+> +		return -EFAULT;
+> +	}
+> +
+> +	if (err)
+> +		return -EFAULT;
+
+
+<---- newline here.
+
+> +	return insn.length;
+> +}
+> +
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

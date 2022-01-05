@@ -2,118 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C5948517A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:54:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 344FF48517E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:55:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239539AbiAEKyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 05:54:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:57329 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232847AbiAEKyh (ORCPT
+        id S239549AbiAEKzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 05:55:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232847AbiAEKzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 05:54:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641380076;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CCm5DtPQVf0xyWNYGicow5IQtvnuRR38jpxIbuWuROY=;
-        b=C98iME7TFkFtRdeTfPPllncs02c2oHDMIdqbE5zSGNjb+b1LILshZdOkDE41e+WsPieyTb
-        UnhVMEImyimlrQn26IGG2my7es9OE6+DHSwO1hzO5nNw86mgPjLEZWkjoNbBZBkVF/hK8P
-        /4XQpmWlg9d8kFBwDdoANfnL38GH4Lg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-610-z8UtHD6IMeqzexi25U1ZyQ-1; Wed, 05 Jan 2022 05:54:31 -0500
-X-MC-Unique: z8UtHD6IMeqzexi25U1ZyQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 5 Jan 2022 05:55:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE7BC061761
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 02:55:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E8FAA801AAB;
-        Wed,  5 Jan 2022 10:54:27 +0000 (UTC)
-Received: from starship (unknown [10.40.192.177])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 84B0372434;
-        Wed,  5 Jan 2022 10:54:20 +0000 (UTC)
-Message-ID: <dd7caa75ae9aef07d51043c01f073c6c23a3a445.camel@redhat.com>
-Subject: Re: [PATCH v2 2/5] KVM: SVM: allow to force AVIC to be enabled
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Joerg Roedel <joro@8bytes.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Ingo Molnar <mingo@redhat.com>
-Date:   Wed, 05 Jan 2022 12:54:19 +0200
-In-Reply-To: <YdTJPTSsM1feVwt/@google.com>
-References: <20211213104634.199141-1-mlevitsk@redhat.com>
-         <20211213104634.199141-3-mlevitsk@redhat.com> <YdTJPTSsM1feVwt/@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 681F0616B8
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 10:55:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44491C36AE9;
+        Wed,  5 Jan 2022 10:55:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641380146;
+        bh=uLT/4ZmZ4gCruF3sfsgP2zbntUDWjS4C+YlQN7+XDZk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RVveCEnsIo/WopjVWPTZVf98pVF4/mTZDkQ8XXdRbSr1qtmxQe+pbTD/nsLJuLFqn
+         ttUwVFG7SusGF7/0u4/we2M+8Xb50pWoXzSCY85HX2154gvSDZTfLoTgjmGtHt52pV
+         RS76wcNUoWSIoykRb0kxqfpdZPeHoJNkTChrdDLw=
+Date:   Wed, 5 Jan 2022 11:55:44 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Baole Fang <fbl718@163.com>, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jeremy Szu <jeremy.szu@canonical.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        Hui Wang <hui.wang@canonical.com>,
+        Cameron Berkenpas <cam@neo-zeon.de>,
+        Kailang Yang <kailang@realtek.com>, Sami Loone <sami@loone.fi>,
+        Elia Devito <eliadevito@gmail.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: hda/realtek: Add quirk for Legion Y9000X 2020
+Message-ID: <YdV5MNWOwgrtH2UC@kroah.com>
+References: <20220105034103.12484-1-fbl718@163.com>
+ <s5ha6gak2qf.wl-tiwai@suse.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <s5ha6gak2qf.wl-tiwai@suse.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-01-04 at 22:25 +0000, Sean Christopherson wrote:
-> On Mon, Dec 13, 2021, Maxim Levitsky wrote:
-> > Apparently on some systems AVIC is disabled in CPUID but still usable.
+On Wed, Jan 05, 2022 at 09:26:16AM +0100, Takashi Iwai wrote:
+> On Wed, 05 Jan 2022 04:41:01 +0100,
+> Baole Fang wrote:
 > > 
-> > Allow the user to override the CPUID if the user is willing to
-> > take the risk.
+> > commit 25960cafa06e6fcd830e6c792e6a7de68c1e25ed upstream.
+> 
+> I couldn't find this commit.  Is this a bogus information?
+> 
+> > Legion Y9000X 2020 has a speaker, but the speaker doesn't work.
+> > This can be fixed by applying alc285_fixup_ideapad_s740_coef
+> >  to fix the speaker's coefficients.
+> > Besides, to support the transition between the speaker and the headphone,
+> > alc287_fixup_legion_15imhg05_speakers needs to be run.
 > > 
-> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > ---
-> >  arch/x86/kvm/svm/svm.c | 11 +++++++++--
-> >  1 file changed, 9 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> > index c9668a3b51011..468cc385c35f0 100644
-> > --- a/arch/x86/kvm/svm/svm.c
-> > +++ b/arch/x86/kvm/svm/svm.c
-> > @@ -206,6 +206,9 @@ module_param(tsc_scaling, int, 0444);
-> >  static bool avic;
-> >  module_param(avic, bool, 0444);
-> >  
-> > +static bool force_avic;
-> > +module_param_unsafe(force_avic, bool, 0444);
-> > +
-> >  bool __read_mostly dump_invalid_vmcb;
-> >  module_param(dump_invalid_vmcb, bool, 0644);
-> >  
-> > @@ -4656,10 +4659,14 @@ static __init int svm_hardware_setup(void)
-> >  			nrips = false;
-> >  	}
-> >  
-> > -	enable_apicv = avic = avic && npt_enabled && boot_cpu_has(X86_FEATURE_AVIC);
-> > +	enable_apicv = avic = avic && npt_enabled && (boot_cpu_has(X86_FEATURE_AVIC) || force_avic);
-> >  
-> >  	if (enable_apicv) {
-> > -		pr_info("AVIC enabled\n");
-> > +		if (!boot_cpu_has(X86_FEATURE_AVIC)) {
-> > +			pr_warn("AVIC is not supported in CPUID but force enabled");
-> > +			pr_warn("Your system might crash and burn");
-> > +		} else
+> > Signed-off-by: Baole Fang <fbl718@163.com>
 > 
-> Needs curly braces, though arguably the "AVIC enabled" part should be printed
-> regardless of boot_cpu_has(X86_FEATURE_AVIC).
-> 
-> > +			pr_info("AVIC enabled\n");
-> 
-> This is all more than a bit terrifying, though I can see the usefuless for a
-> developer.  At the very least, this should taint the kernel.  This should also
-> probably be buried behind a Kconfig that is itself buried behind EXPERT.
-> 
-I used 'module_param_unsafe' which does taint the kernel.
+> The code change itself looks fine, so I'd apply it if the line above
+> can be omitted.
 
-Best regards,
-	Maxim Levitsky
+That commit id comes from 5.15.12, and it is the commit id of the
+release commit:
+	25960cafa06e ("Linux 5.15.12")
+which makes no sense at all.
 
+Baole, why did you add this line?
+
+confused,
+
+greg k-h

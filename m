@@ -2,80 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23CE3484E72
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 07:42:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F36B484E75
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 07:43:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237108AbiAEGm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 01:42:57 -0500
-Received: from todd.t-8ch.de ([159.69.126.157]:41247 "EHLO todd.t-8ch.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231960AbiAEGmz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 01:42:55 -0500
-From:   =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1641364971;
-        bh=Dq3BHuCbeArfebh5gWrRObPgO7rpTfM1CntbrUioOgY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M3LGG4logHlSDHooFM9bvmBY4Yg4NkGRxZKbfsjKpWRvg4qvHvSX+s14V3/wjCnZS
-         HP/T9UKPaXkInSnovq7Un1X7JqUwV2AGrP4ioGdpoDmsdUfpLB4vszycblHgSuaDFf
-         Xxmyx1uiCvP5wLili+KHE2St5wIU6vrdNMe/0Nl0=
-To:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] power: supply: validate size of power_supply_attrs at compiletime
-Date:   Wed,  5 Jan 2022 07:42:39 +0100
-Message-Id: <20220105064239.2689-2-linux@weissschuh.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <52cedbd4-7db2-7d81-f6c6-e6f6b7436545@gmail.com>
-References: <52cedbd4-7db2-7d81-f6c6-e6f6b7436545@gmail.com>
+        id S237753AbiAEGnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 01:43:11 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:56306 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S237734AbiAEGnG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 01:43:06 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowABXXp7lPdVhJ0bQBQ--.60304S2;
+        Wed, 05 Jan 2022 14:42:46 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] thunderbolt:  Check for null pointer after calling kmemdup
+Date:   Wed,  5 Jan 2022 14:42:44 +0800
+Message-Id: <20220105064244.2316847-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1641364918; l=1340; s=20211113; h=from:subject; bh=Dq3BHuCbeArfebh5gWrRObPgO7rpTfM1CntbrUioOgY=; b=iPHtX2pwqf8rgip2aL0uLNjIsBufKsFp4xuH7kdLPtpddXf1fDdOMxWUJkqdGPdqZupejU0IKW3/ HXw4KbdVCRihWNbMp61HmSQDqgeLI5RUVN97DzxZDIpE48d+E7d2
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519; pk=9LP6KM4vD/8CwHW7nouRBhWLyQLcK1MkP6aTZbzUlj4=
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowABXXp7lPdVhJ0bQBQ--.60304S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AF18Cw47CF1DXw18tw1kXwb_yoW5JFWrpF
+        WUJFyYy3Z5KFyUW3Z2krykAFyYv3s7Ka4jkrW7K39Y93ZIkr4rGFy5Aa4Yvr15GryxtFs3
+        Aan2yFWfWFyqy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r47
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUndb1UUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For each member of enum power_supply_property a matching entry in
-power_supply_attrs is needed.
-Add a basic test at compiletime to validate this in addition to the
-existing runtime testing.
+As the possible failure of the allocation, kmemdup() may return NULL
+pointer.
+Like alloc_switch(), it might be better to check it.
+Therefore, icm_icl_set_uuid() and icm_handle_event() should also check
+the return value of kmemdup().
+As for icm_icl_set_uuid(), which is assigned to icm->set_uuid, the
+return value of icm->set_uuid needs to check.
+And for icm_handle_event(), just free 'n' and directly return is enough,
+same as the way to handle the failure of kmalloc().
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Fixes: 3cdb9446a117 ("thunderbolt: Add support for Intel Ice Lake")
+Fixes: f67cf491175a ("thunderbolt: Add support for Internal Connection Manager (ICM)")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
- drivers/power/supply/power_supply_sysfs.c | 2 ++
- include/linux/power_supply.h              | 2 ++
- 2 files changed, 4 insertions(+)
+ drivers/thunderbolt/icm.c | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index 491ffec7bf47..2565052a7a8c 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -403,6 +403,8 @@ void power_supply_init_attrs(struct device_type *dev_type)
+diff --git a/drivers/thunderbolt/icm.c b/drivers/thunderbolt/icm.c
+index 2f30b816705a..09ab31ea9128 100644
+--- a/drivers/thunderbolt/icm.c
++++ b/drivers/thunderbolt/icm.c
+@@ -109,7 +109,7 @@ struct icm {
+ 	int (*driver_ready)(struct tb *tb,
+ 			    enum tb_security_level *security_level,
+ 			    u8 *proto_version, size_t *nboot_acl, bool *rpm);
+-	void (*set_uuid)(struct tb *tb);
++	int (*set_uuid)(struct tb *tb);
+ 	void (*device_connected)(struct tb *tb,
+ 				 const struct icm_pkg_header *hdr);
+ 	void (*device_disconnected)(struct tb *tb,
+@@ -1643,7 +1643,7 @@ icm_icl_driver_ready(struct tb *tb, enum tb_security_level *security_level,
+ 	return 0;
+ }
+ 
+-static void icm_icl_set_uuid(struct tb *tb)
++static int icm_icl_set_uuid(struct tb *tb)
  {
- 	int i;
+ 	struct tb_nhi *nhi = tb->nhi;
+ 	u32 uuid[4];
+@@ -1654,6 +1654,10 @@ static void icm_icl_set_uuid(struct tb *tb)
+ 	uuid[3] = 0xffffffff;
  
-+	BUILD_BUG_ON(ARRAY_SIZE(power_supply_attrs) != __POWER_SUPPLY_PROP_CNT);
+ 	tb->root_switch->uuid = kmemdup(uuid, sizeof(uuid), GFP_KERNEL);
++	if (!tb->root_switch->uuid)
++		return -ENOMEM;
 +
- 	dev_type->groups = power_supply_attr_groups;
++	return 0;
+ }
  
- 	for (i = 0; i < ARRAY_SIZE(power_supply_attrs); i++) {
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index 71f0379c2af8..60853f26e25f 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -172,6 +172,8 @@ enum power_supply_property {
- 	POWER_SUPPLY_PROP_MODEL_NAME,
- 	POWER_SUPPLY_PROP_MANUFACTURER,
- 	POWER_SUPPLY_PROP_SERIAL_NUMBER,
+ static void
+@@ -1739,6 +1743,11 @@ static void icm_handle_event(struct tb *tb, enum tb_cfg_pkg_type type,
+ 
+ 	INIT_WORK(&n->work, icm_handle_notification);
+ 	n->pkg = kmemdup(buf, size, GFP_KERNEL);
++	if (!n->pkg) {
++		kfree(n);
++		return;
++	}
 +
-+	__POWER_SUPPLY_PROP_CNT
- };
+ 	n->tb = tb;
  
- enum power_supply_type {
+ 	queue_work(tb->wq, &n->work);
+@@ -2152,8 +2161,11 @@ static int icm_start(struct tb *tb)
+ 	tb->root_switch->no_nvm_upgrade = !icm->can_upgrade_nvm;
+ 	tb->root_switch->rpm = icm->rpm;
+ 
+-	if (icm->set_uuid)
+-		icm->set_uuid(tb);
++	if (icm->set_uuid) {
++		ret = icm->set_uuid(tb);
++		if (ret)
++			return ret;
++	}
+ 
+ 	ret = tb_switch_add(tb->root_switch);
+ 	if (ret) {
 -- 
-2.34.1
+2.25.1
 

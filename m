@@ -2,549 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 118F3485B29
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 22:55:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E607485B2A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 22:55:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244645AbiAEVz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 16:55:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59464 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244686AbiAEVzQ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 16:55:16 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C41FC061245
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 13:55:16 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id c9-20020a17090a1d0900b001b2b54bd6c5so5779279pjd.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 13:55:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=ciX3uTDCu326l8TNzw/8XpSaS/5U0qWrrgIyCD/73P0=;
-        b=IyWehO8GHZcLp8y0W9PabJd1D/qGwdOm4TkSt3tfpsxbqBOOZBO10Eh5cjcMxMzqrI
-         buKo2DDXF7X4IjlzRA0ooygPMzz+vpRBCdgT82w1ZwPvk5H+RQfWswUARwOij3LKU+Rm
-         aE6XnWDWkY4rEIJe8DDleM4kurEjO1sbnrXaTAr4Dq98SKxUNKT8Edq2caa6tS5M5i6w
-         8oiuOkhTOCX3GxRHSLx9uz3Ll2qVLdAFW7eMKakBkBDPo1jClc36cqP7uW+YnLAZPvSU
-         VrLyushNnx6NBaUOsC2oVvjHIu/a16CSi21CMAxQzNf956g10pDvQ8vPEgIDgu5+SL/Z
-         Y3PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=ciX3uTDCu326l8TNzw/8XpSaS/5U0qWrrgIyCD/73P0=;
-        b=Nrk7OQJlT/cgN3SMrlLWbKwSy4YP1cvl/zRTqt+7cnFkdmCkPofm8PH6Yahp5c+dqt
-         S7hFAw42h1ao8RYl7I23Fp/efnCuha/rvLT+ujSGk9pEHMzFhjQR7RiHS5tSAWPVAMrG
-         +fkakJ1r9cn9r7PBNKanGOzfMIPEimPe9Zx+VFiX3xXv8s+GIgJGNXe3a0QT3TGNNTv9
-         1dZ9ajpdXDu1RbnLE8EOqisskPxzWvCzk3xwlp9Touk7pEpqXg3Ts6GcrvipDPEtKZHQ
-         giPEGSMVgXVleyF7oltgv1bK3TQQQnrk8dg7fXyEZVbS08MgOfnKrVxXCk28BgXXu4Qm
-         x5yg==
-X-Gm-Message-State: AOAM531m2dQZJBgE8wCQ9OmIDhG5cuLv+JAGwW5wSaRj3knRWtuXtExj
-        PCm5zR5u490kFpIX0LzeZ972HzQnp4c=
-X-Google-Smtp-Source: ABdhPJyX7i7K/8PhMxnjTo+0FQ2kSaLe0soXJCTqclqNQ6Zgrmzlo8dFWR/hkxniTv1/UfOcaHTaWg==
-X-Received: by 2002:a17:90b:4c48:: with SMTP id np8mr6463901pjb.51.1641419715526;
-        Wed, 05 Jan 2022 13:55:15 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:9104:9918:8b48:863c])
-        by smtp.gmail.com with ESMTPSA id il18sm3777418pjb.37.2022.01.05.13.55.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 13:55:14 -0800 (PST)
-Date:   Wed, 5 Jan 2022 13:55:12 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>, Jessica Yu <jeyu@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH v5] module: add in-kernel support for decompressing
-Message-ID: <YdYTwFhmB53l2JVE@google.com>
+        id S244672AbiAEVzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 16:55:38 -0500
+Received: from mga11.intel.com ([192.55.52.93]:34178 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244693AbiAEVzU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 16:55:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641419720; x=1672955720;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=H2bG+GBK3wnONJQZTTol3xg3NQf/KDOT2qM85nBtrWU=;
+  b=O8QaBegmyseCVmfFffL7n1NkxvQGowVIfGoiRAzsTFdk4InJl2mfacLo
+   SXVvEBQbevQHLD63W9FcgGeKvCCTyLNPhs1maktw2Sw2xbEao5ahtzZrT
+   z5sNjsRnA/Ft9HY8ftShjFh8SS3OFIbpb0fgZgF2IQLJzdwQxvtDCxwKW
+   s0Zi4/e6251DwmGTCFVf+ET1v0flxkMPEk+wDpRaDEu2FVGKHdG/7bxA7
+   SwxeqN4kE614MGKWvNCDV/GqQR0IMBvwwbRsCqkx2BKCt0hd2kTft6guM
+   buCh3bmiu48G6fnUjwxe6T558uZNopNmQ9qX3rY1VwkhbduTUQhWNeABL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="240088196"
+X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
+   d="scan'208";a="240088196"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 13:55:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
+   d="scan'208";a="618110417"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmsmga002.fm.intel.com with ESMTP; 05 Jan 2022 13:55:19 -0800
+Received: from orsmsx604.amr.corp.intel.com (10.22.229.17) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 5 Jan 2022 13:55:19 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Wed, 5 Jan 2022 13:55:19 -0800
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.105)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Wed, 5 Jan 2022 13:55:19 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MPddmNrN3sGdRq5rtGyS/7PFT4Z3MSMVg7NriTnj0yFVeoAxecXZJaRzvTmjmIfW/Mx/tpj/GrdE2BhOI0bGprFGALI1usMGW6FmE2yZwCva9QO113EchTbRintyc8UueAr0khQbXpYji9jIprQ5g1O4Ri2l+TpxITdZmngxaYwoxbMDqkcZlEqXr6Gj89a70+01QfADOqlDSxDF759X2o1pDwG8jULocw4DMQtSN5UsyIIJd0BNzrz/fKcsol8c8Ekc4ghUqv2mxLlE4u3/9ZwSbdVuA6AJB28nfGc5yEgWJLZRSnsGctjdiR31gsLaHIW8E/doOsXFfFdxxOMO4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=H2bG+GBK3wnONJQZTTol3xg3NQf/KDOT2qM85nBtrWU=;
+ b=P6x/dwS9jYriMqWdX2a3kIMGSFf/zsHvCy6dF5UpMW3H24CfcsCYrzmis8B/hFegAwjKaHd0r0SteKCD9YUyrPSInGOKYieHNYXdU1eqFqo1KsANwmSakSRcNrwt3ptwWZ5FJdy099Z87s3SO7EfKLGXnqnP+ycZvYSBqR3/+6gVeFLskuhKk93IFv8XVcfdUQZxUu+wZm3B7zCAxxc4IRFndg3QsOhSEjqehbcx3dnDeMPyVWVnLE2m/kCJqPFq2MBKxYhY1TdE3xNq8+z5k1nORm6iifcytFq9CaELidyIb+wFFgWPJW0a5t0G6E2iSLZMY62O6XB70sG6XNBAug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from PH0PR11MB4855.namprd11.prod.outlook.com (2603:10b6:510:41::12)
+ by PH0PR11MB5808.namprd11.prod.outlook.com (2603:10b6:510:129::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Wed, 5 Jan
+ 2022 21:55:17 +0000
+Received: from PH0PR11MB4855.namprd11.prod.outlook.com
+ ([fe80::38cc:22c0:928a:95b7]) by PH0PR11MB4855.namprd11.prod.outlook.com
+ ([fe80::38cc:22c0:928a:95b7%9]) with mapi id 15.20.4844.016; Wed, 5 Jan 2022
+ 21:55:17 +0000
+From:   "Bae, Chang Seok" <chang.seok.bae@intel.com>
+To:     Eric Biggers <ebiggers@kernel.org>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>
+CC:     Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@suse.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Gairuboyina, Charishma1" <charishma1.gairuboyina@intel.com>,
+        "Dwarakanath, Kumar N" <kumar.n.dwarakanath@intel.com>,
+        "Krishnakumar, Lalithambika" <lalithambika.krishnakumar@intel.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
+Subject: Re: [PATCH v4 00/13] x86: Support Key Locker
+Thread-Topic: [PATCH v4 00/13] x86: Support Key Locker
+Thread-Index: AQHX8IXgPtLMRzOkzUOX4xWFKhqGg6w0Uf6AgCDKzgA=
+Date:   Wed, 5 Jan 2022 21:55:17 +0000
+Message-ID: <4101B942-6327-49A9-BE8B-9E51F0427F50@intel.com>
+References: <20211214005212.20588-1-chang.seok.bae@intel.com>
+ <YbqRseO+TtuGQk5x@sol.localdomain>
+In-Reply-To: <YbqRseO+TtuGQk5x@sol.localdomain>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3608.120.23.2.7)
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2c960268-86f1-4ae0-ab1d-08d9d0960fd8
+x-ms-traffictypediagnostic: PH0PR11MB5808:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr,ExtFwd
+x-microsoft-antispam-prvs: <PH0PR11MB58083747BFC77D0C77711A9AD84B9@PH0PR11MB5808.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6430;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: zMlOl7SHv60/Am7lPgx3B4fcgN1k7+WIFZo1+EfSvBy6A4t00oPGlwnAyS1wWbbP96ueK+1YbVASDCeQUwozwMiS0MRDCxiXhV61ejYcIAjP+n07JkYgM6Xma73nYcGDUs1JQg5k3ngZ3MX7MLYxJw3AdSuaC6Gwh9zaZVuc/PGOoey6kx2ge9xFgLrY4nFci8QjvAYE1ZdaTW3TfC0JHFR5jbAMCBSqqjmoHZZCQI7KAu51L01SOQcN5DwUmVtyR2jORy+MgdtXVjqffWP/8hW57IDGr83TKFuCRd0CjGb5zdUGxJZF/+1/N3p34YamEbcgmui9wwOt+yxi04rQ7y3AvrCSO6yLUgYKWasguLsklb67EcSugQEY2dmJ2ehDfa5G8kohZ+8QgstFfS03BG5WnfQn2xtX8okOwxCDxKtd0u5rB2wwx5YKq4Cg8BBY0NUumKACeoBfcFDxkYwImWW2DboNGM7SJZu98sk1RazGXC0UGC77jP0qiiCk2QEwYSlcCKkllX3wOkO664Rrvo61OTZksIy9sI6oCLBjHMpB2cNpfNr29g+vnPfhQNm7S84F1MPy8O0yErwA3E9YnqWS49uY5pS41l3U55Hvi+UUte/UCliLni0BnBiEPpp476Lr2+3Kk6b7FgP3Wp3007VNsAaXKlEP8zX5vfHmFLWD1WI5QxQUJW94F4M0hEIcBGi0VaS3teBPykfYSFrsk5lTsy6ET/oKs+12ignujmecsJQaYGFuAaLWbp8WNmaHOUHsiASVjGEEowpXX8pS/Tya0RwcsDUexF4HvkMomUQidQWXtxPNyjNT6WtKGUsO4ZHyV7xuY4IG9686A/+OyA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4855.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(6486002)(110136005)(6512007)(8676002)(122000001)(26005)(38070700005)(83380400001)(186003)(8936002)(5660300002)(71200400001)(76116006)(54906003)(6506007)(66946007)(66446008)(66476007)(7416002)(33656002)(36756003)(82960400001)(316002)(2616005)(64756008)(4326008)(966005)(86362001)(508600001)(38100700002)(66556008)(2906002)(53546011)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?M3VFazRBRTg3ZUQ3cW9HNUp6TFJPTmdpZmM5bDQ5RFU3c05vMkd5Y1VITUxx?=
+ =?utf-8?B?MmRXTnRha2FoeStBK2dKT3oyeTU4NVdlRmE0dkplcXdtTlNnUG5CL2h2MkJp?=
+ =?utf-8?B?RmVUODJjZlFaejcvZkZXOHl4bXZKK1FvaTZmZVNtL2lya25BVHRKU1QzMmc2?=
+ =?utf-8?B?b0lHZVFPQ0Z6OEwxdVgxSEJOdlFmOVRjZ2VZdUNNazMrSURVR1BuQXlUM1RQ?=
+ =?utf-8?B?aDZ1T2lIa2NaS2N6Sk5NdnFDRDRsVWJnWEJQQWQ3WmRlRzE5bGZDZGMzVWFK?=
+ =?utf-8?B?Q2VXcUV1a3pEeThFclN4ZC8vbDI4Y3BpdnBXS1FGcG1GdWdhQjRsTk5acHNr?=
+ =?utf-8?B?dzR0czVVNmtXRGpDMGRqUXFKdHBUTjllTm1DWXlOY25xMjgzYzBsRXhEeUZD?=
+ =?utf-8?B?cFh1UzhPTGhxcUNhMDh5d3grdFliMHNVbG13YlF0c2FaWDhPVzRnNUNVbHE2?=
+ =?utf-8?B?YnhMZnBCUzY3T3BZaXNFeXo1cnNZQmJHQlcwZ3FuRG5BRGpmWGIvY3ZKVTdR?=
+ =?utf-8?B?Z1RQNERJZzc2amZ2bmdJRWw1VUlQYWdSQmdNem1YL1c0YVUrSkR0cW9pejBG?=
+ =?utf-8?B?VmxIblZqMEkwVmI2TlpNR1VTcFd0OVNSK2Y3T1hSK3E0alpqR1c1MHdycE5W?=
+ =?utf-8?B?dzIrYm5xS1prWWlvQzFiby9LK01qbHM2Nlhjb1hrcmJJUVpJd2ZvcVA4cGQr?=
+ =?utf-8?B?K1o3SEhqWEpzTkIzUFJUYVhySWF4TzFHVmpOck5uUm8rK2hXcGdTdUJOL2Yx?=
+ =?utf-8?B?eG92elhVRXdTaGkvazJDRVVFS3B6eWsvVFBXdWFSNWpQdlBaa09Ja3BtbjhY?=
+ =?utf-8?B?d1dGWG9vV3ZVVWRrNHhqTThUakROamtRcVRhMnNVMTBYdVpJaFp1UXBOWnpM?=
+ =?utf-8?B?UnFLbGYwRVZnK2UwUEdOQndRd0I0bno4TnJFWUhWN2pVcFVwS2NMUzJ1UmNC?=
+ =?utf-8?B?Zk56b1ZGaUtvdTh0U21jOFppMmVGY0Q3T1pXczIxVG9ZazdSYWprcVg1VXdn?=
+ =?utf-8?B?amt0TTQ3QkxFSlNYUEFKNXFEMEpFVTd6WWU1a2dGeldCODZKUmZMUkVjWEwr?=
+ =?utf-8?B?ZlZ5d2dWOTVlNFZQdW1hOG1ON2JKaXR3SEY4Sy9lc0pXeVRZNWk2Y2gwelZy?=
+ =?utf-8?B?SjF2ci9oemlrbEhIRU84cWJXenBJV0FQZkQvaElSVkYwZ0FLYWlBOVVOc2J4?=
+ =?utf-8?B?amJIUzhkMHI0bTE0aC9YM2tCS0o2ZWIyL3ZONjdLZlh2dDVrTVRTOGdBWFhX?=
+ =?utf-8?B?V1NRR01oR1kycG9KV0F2aFQ4Wk8zc1NQUVBBLzI0NUdsd0VCL1QwQkhyalRX?=
+ =?utf-8?B?MmJ2ZzZtMFV1UVErS0hFUFBVVmhjVE1LN2hmOEpuM3ZicGRhMy9jcXlJQkg4?=
+ =?utf-8?B?WGw3djcvN0pKYXdPdW9obGU4TE5wc0JuMm1FWno5RjJVYkhDVGl0YzNhZjRx?=
+ =?utf-8?B?VlZUV0puUU5lSFZIRzhpNjBlcVl5MjE1eDRYVE9ncGtURkVEVnRKQW81TlR1?=
+ =?utf-8?B?L0xDSGlzVkFzNFl4QzZwOEZJcFV5VlpzelVURlhSYnZKNi8vejIrSEJMVGpC?=
+ =?utf-8?B?dy9vZ3VlVGJtZ1V2ZnhzU2VzR2VVRXBWakVYZnNwVG5rdzBmQ25IV3JyYjBF?=
+ =?utf-8?B?VGc4UVJHZ0h5aFhlWDlNNXVKS1lVREZDcDB1TlF1cTlja2oyVHFTVFdad1Jk?=
+ =?utf-8?B?c3l0c2ZuTFljbHF5TFZtb0I1QytGdm5vYTk4d0dxU1p1QmlZUlZNUnlpTVh6?=
+ =?utf-8?B?a3VsOEZGUWtUYklQeXkxb05hZE5pRXdnYXVCRW5HczM3Wk8vUzl1T3d4TlIr?=
+ =?utf-8?B?R3FrWTY4VGY3QUZDMHZnT2h5aC9qTHFXL0ZCamx5cXIrYysySjIvSGZiVnhs?=
+ =?utf-8?B?dGllZGQrbytBV2xNZEdrYUEwT1Y0MXpaeDhVMCtKUDNhNXRmY0NQcmwyWjBk?=
+ =?utf-8?B?T0o1WWlFb1oyTloyNEZQVTQ4Z1cyWXdWRk9vdWluUGhqdnpZL1YyZXd4MnU4?=
+ =?utf-8?B?NGdEMXZMbVd6K3ZReUlJcHF5eC9mZ2tvYlRtTkhPSzdjQVpqUE9rY0ZubDBn?=
+ =?utf-8?B?OVFmZjJ4MEYybW94RW8ySjJoem5kcWdDTXd6M2ZLWG5VMzBiTGFtc2tBdkdB?=
+ =?utf-8?B?cnB3TWJyZldySjlTK1pNa0RLb01oMDRzNWVxRTBHVTFLWmZtOE90TDhTZ2lL?=
+ =?utf-8?B?cGZxUHNSMWlHaHE5amxWYmMrbEl5ZHdBa1BzUEF0VFd6d29oRG1uOExhc21a?=
+ =?utf-8?Q?x1RZhb4OViKwRxWSk1rAXhzUrINPsFdT5vvW6S/XXg=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <345CA196D9EA76419281CD0D66F5200C@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4855.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2c960268-86f1-4ae0-ab1d-08d9d0960fd8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jan 2022 21:55:17.8071
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pkjJkT5hoD4iJOn1gFaYE012dq0Rf3tKbOpZv/on8ZRPKlY0a7jQXeoEja69UWGQmt3LD5672nCsV1tyA+9zeehSTGe9UPcnxNUrD5w0xnA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5808
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current scheme of having userspace decompress kernel modules before
-loading them into the kernel runs afoul of LoadPin security policy, as
-it loses link between the source of kernel module on the disk and binary
-blob that is being loaded into the kernel. To solve this issue let's
-implement decompression in kernel, so that we can pass a file descriptor
-of compressed module file into finit_module() which will keep LoadPin
-happy.
-
-To let userspace know what compression/decompression scheme kernel
-supports it will create /sys/module/compression attribute. kmod can read
-this attribute and decide if it can pass compressed file to
-finit_module(). New MODULE_INIT_COMPRESSED_DATA flag indicates that the
-kernel should attempt to decompress the data read from file descriptor
-prior to trying load the module.
-
-To simplify things kernel will only implement single decompression
-method matching compression method selected when generating modules.
-This patch implements gzip and xz; more can be added later,
-
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
----
-
-v5:
- - mark decomoression stubs as "static inline" to avoid warnings as
-	noticed by  kernel test robot <lkp@intel.com>
-
-v4:
- - use late_initcall() instead of module_init() for setting up
-	'compression' sysfs attribute per Luis' request
-
-v3:
- - fix missing Kconfig dependency
-
-v2:
- - changed flag MODULE_INIT_COMPRESSED_DATA ->
-	MODULE_INIT_COMPRESSED_FLAG per Kees' request
-
-
- include/uapi/linux/module.h |   1 +
- init/Kconfig                |  13 ++
- kernel/Makefile             |   1 +
- kernel/module-internal.h    |  19 +++
- kernel/module.c             |  35 +++--
- kernel/module_decompress.c  | 271 ++++++++++++++++++++++++++++++++++++
- 6 files changed, 329 insertions(+), 11 deletions(-)
-
-diff --git a/include/uapi/linux/module.h b/include/uapi/linux/module.h
-index 50d98ec5e866..03a33ffffcba 100644
---- a/include/uapi/linux/module.h
-+++ b/include/uapi/linux/module.h
-@@ -5,5 +5,6 @@
- /* Flags for sys_finit_module: */
- #define MODULE_INIT_IGNORE_MODVERSIONS	1
- #define MODULE_INIT_IGNORE_VERMAGIC	2
-+#define MODULE_INIT_COMPRESSED_FILE	4
- 
- #endif /* _UAPI_LINUX_MODULE_H */
-diff --git a/init/Kconfig b/init/Kconfig
-index cd23faa163d1..d90774ff7610 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -2305,6 +2305,19 @@ config MODULE_COMPRESS_ZSTD
- 
- endchoice
- 
-+config MODULE_DECOMPRESS
-+	bool "Support in-kernel module decompression"
-+	depends on MODULE_COMPRESS_GZIP || MODULE_COMPRESS_XZ
-+	select ZLIB_INFLATE if MODULE_COMPRESS_GZIP
-+	select XZ_DEC if MODULE_COMPRESS_XZ
-+	help
-+
-+	  Support for decompressing kernel modules by the kernel itself
-+	  instead of relying on userspace to perform this task. Useful when
-+	  load pinning security policy is enabled.
-+
-+	  If unsure, say N.
-+
- config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
- 	bool "Allow loading of modules with missing namespace imports"
- 	help
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 186c49582f45..56f4ee97f328 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -67,6 +67,7 @@ obj-y += up.o
- endif
- obj-$(CONFIG_UID16) += uid16.o
- obj-$(CONFIG_MODULES) += module.o
-+obj-$(CONFIG_MODULE_DECOMPRESS) += module_decompress.o
- obj-$(CONFIG_MODULE_SIG) += module_signing.o
- obj-$(CONFIG_MODULE_SIG_FORMAT) += module_signature.o
- obj-$(CONFIG_KALLSYMS) += kallsyms.o
-diff --git a/kernel/module-internal.h b/kernel/module-internal.h
-index 33783abc377b..8c381c99062f 100644
---- a/kernel/module-internal.h
-+++ b/kernel/module-internal.h
-@@ -22,6 +22,11 @@ struct load_info {
- 	bool sig_ok;
- #ifdef CONFIG_KALLSYMS
- 	unsigned long mod_kallsyms_init_off;
-+#endif
-+#ifdef CONFIG_MODULE_DECOMPRESS
-+	struct page **pages;
-+	unsigned int max_pages;
-+	unsigned int used_pages;
- #endif
- 	struct {
- 		unsigned int sym, str, mod, vers, info, pcpu;
-@@ -29,3 +34,17 @@ struct load_info {
- };
- 
- extern int mod_verify_sig(const void *mod, struct load_info *info);
-+
-+#ifdef CONFIG_MODULE_DECOMPRESS
-+int module_decompress(struct load_info *info, const void *buf, size_t size);
-+void module_decompress_cleanup(struct load_info *info);
-+#else
-+static inline int module_decompress(struct load_info *info,
-+				    const void *buf, size_t size)
-+{
-+	return -EOPNOTSUPP;
-+}
-+static inline void module_decompress_cleanup(struct load_info *info)
-+{
-+}
-+#endif
-diff --git a/kernel/module.c b/kernel/module.c
-index 84a9141a5e15..a7c5490b41e9 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -3174,9 +3174,12 @@ static int copy_module_from_user(const void __user *umod, unsigned long len,
- 	return err;
- }
- 
--static void free_copy(struct load_info *info)
-+static void free_copy(struct load_info *info, int flags)
- {
--	vfree(info->hdr);
-+	if (flags & MODULE_INIT_COMPRESSED_FILE)
-+		module_decompress_cleanup(info);
-+	else
-+		vfree(info->hdr);
- }
- 
- static int rewrite_section_headers(struct load_info *info, int flags)
-@@ -4125,7 +4128,7 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 	}
- 
- 	/* Get rid of temporary copy. */
--	free_copy(info);
-+	free_copy(info, flags);
- 
- 	/* Done! */
- 	trace_module_load(mod);
-@@ -4174,7 +4177,7 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 
- 	module_deallocate(mod, info);
-  free_copy:
--	free_copy(info);
-+	free_copy(info, flags);
- 	return err;
- }
- 
-@@ -4201,7 +4204,8 @@ SYSCALL_DEFINE3(init_module, void __user *, umod,
- SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
- {
- 	struct load_info info = { };
--	void *hdr = NULL;
-+	void *buf = NULL;
-+	int len;
- 	int err;
- 
- 	err = may_init_module();
-@@ -4211,15 +4215,24 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
- 	pr_debug("finit_module: fd=%d, uargs=%p, flags=%i\n", fd, uargs, flags);
- 
- 	if (flags & ~(MODULE_INIT_IGNORE_MODVERSIONS
--		      |MODULE_INIT_IGNORE_VERMAGIC))
-+		      |MODULE_INIT_IGNORE_VERMAGIC
-+		      |MODULE_INIT_COMPRESSED_FILE))
- 		return -EINVAL;
- 
--	err = kernel_read_file_from_fd(fd, 0, &hdr, INT_MAX, NULL,
-+	len = kernel_read_file_from_fd(fd, 0, &buf, INT_MAX, NULL,
- 				       READING_MODULE);
--	if (err < 0)
--		return err;
--	info.hdr = hdr;
--	info.len = err;
-+	if (len < 0)
-+		return len;
-+
-+	if (flags & MODULE_INIT_COMPRESSED_FILE) {
-+		err = module_decompress(&info, buf, len);
-+		vfree(buf); /* compressed data is no longer needed */
-+		if (err)
-+			return err;
-+	} else {
-+		info.hdr = buf;
-+		info.len = len;
-+	}
- 
- 	return load_module(&info, uargs, flags);
- }
-diff --git a/kernel/module_decompress.c b/kernel/module_decompress.c
-new file mode 100644
-index 000000000000..aeefd95a3337
---- /dev/null
-+++ b/kernel/module_decompress.c
-@@ -0,0 +1,271 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Copyright 2021 Google LLC.
-+ */
-+
-+#include <linux/init.h>
-+#include <linux/highmem.h>
-+#include <linux/kobject.h>
-+#include <linux/mm.h>
-+#include <linux/module.h>
-+#include <linux/slab.h>
-+#include <linux/sysfs.h>
-+#include <linux/vmalloc.h>
-+
-+#include "module-internal.h"
-+
-+static int module_extend_max_pages(struct load_info *info, unsigned int extent)
-+{
-+	struct page **new_pages;
-+
-+	new_pages = kvmalloc_array(info->max_pages + extent,
-+				   sizeof(info->pages), GFP_KERNEL);
-+	if (!new_pages)
-+		return -ENOMEM;
-+
-+	memcpy(new_pages, info->pages, info->max_pages * sizeof(info->pages));
-+	kvfree(info->pages);
-+	info->pages = new_pages;
-+	info->max_pages += extent;
-+
-+	return 0;
-+}
-+
-+static struct page *module_get_next_page(struct load_info *info)
-+{
-+	struct page *page;
-+	int error;
-+
-+	if (info->max_pages == info->used_pages) {
-+		error = module_extend_max_pages(info, info->used_pages);
-+		if (error)
-+			return ERR_PTR(error);
-+	}
-+
-+	page = alloc_page(GFP_KERNEL | __GFP_HIGHMEM);
-+	if (!page)
-+		return ERR_PTR(-ENOMEM);
-+
-+	info->pages[info->used_pages++] = page;
-+	return page;
-+}
-+
-+#ifdef CONFIG_MODULE_COMPRESS_GZIP
-+#include <linux/zlib.h>
-+#define MODULE_COMPRESSION	gzip
-+#define MODULE_DECOMPRESS_FN	module_gzip_decompress
-+
-+/*
-+ * Calculate length of the header which consists of signature, header
-+ * flags, time stamp and operating system ID (10 bytes total), plus
-+ * an optional filename.
-+ */
-+static size_t module_gzip_header_len(const u8 *buf, size_t size)
-+{
-+	const u8 signature[] = { 0x1f, 0x8b, 0x08 };
-+	size_t len = 10;
-+
-+	if (size < len || memcmp(buf, signature, sizeof(signature)))
-+		return 0;
-+
-+	if (buf[3] & 0x08) {
-+		do {
-+			/*
-+			 * If we can't find the end of the file name we must
-+			 * be dealing with a corrupted file.
-+			 */
-+			if (len == size)
-+				return 0;
-+		} while (buf[len++] != '\0');
-+	}
-+
-+	return len;
-+}
-+
-+static ssize_t module_gzip_decompress(struct load_info *info,
-+				      const void *buf, size_t size)
-+{
-+	struct z_stream_s s = { 0 };
-+	size_t new_size = 0;
-+	size_t gzip_hdr_len;
-+	ssize_t retval;
-+	int rc;
-+
-+	gzip_hdr_len = module_gzip_header_len(buf, size);
-+	if (!gzip_hdr_len) {
-+		pr_err("not a gzip compressed module\n");
-+		return -EINVAL;
-+	}
-+
-+	s.next_in = buf + gzip_hdr_len;
-+	s.avail_in = size - gzip_hdr_len;
-+
-+	s.workspace = kmalloc(zlib_inflate_workspacesize(), GFP_KERNEL);
-+	if (!s.workspace)
-+		return -ENOMEM;
-+
-+	rc = zlib_inflateInit2(&s, -MAX_WBITS);
-+	if (rc != Z_OK) {
-+		pr_err("failed to initialize decompresser: %d\n", rc);
-+		retval = -EINVAL;
-+		goto out;
-+	}
-+
-+	do {
-+		struct page *page = module_get_next_page(info);
-+		if (!page) {
-+			retval = -ENOMEM;
-+			goto out_inflate_end;
-+		}
-+
-+		s.next_out = kmap(page);
-+		s.avail_out = PAGE_SIZE;
-+		rc = zlib_inflate(&s, 0);
-+		kunmap(page);
-+
-+		new_size += PAGE_SIZE - s.avail_out;
-+	} while (rc == Z_OK);
-+
-+	if (rc != Z_STREAM_END) {
-+		pr_err("decompression failed with status %d\n", rc);
-+		retval = -EINVAL;
-+		goto out_inflate_end;
-+	}
-+
-+	retval = new_size;
-+
-+out_inflate_end:
-+	zlib_inflateEnd(&s);
-+out:
-+	kfree(s.workspace);
-+	return retval;
-+}
-+#elif CONFIG_MODULE_COMPRESS_XZ
-+#include <linux/xz.h>
-+#define MODULE_COMPRESSION	xz
-+#define MODULE_DECOMPRESS_FN	module_xz_decompress
-+
-+static ssize_t module_xz_decompress(struct load_info *info,
-+				    const void *buf, size_t size)
-+{
-+	static const u8 signature[] = { 0xfd, '7', 'z', 'X', 'Z', 0 };
-+	struct xz_dec *xz_dec;
-+	struct xz_buf xz_buf;
-+	enum xz_ret xz_ret;
-+	size_t new_size = 0;
-+	ssize_t retval;
-+
-+	if (size < sizeof(signature) ||
-+	    memcmp(buf, signature, sizeof(signature))) {
-+		pr_err("not an xz compressed module\n");
-+		return -EINVAL;
-+	}
-+
-+	xz_dec = xz_dec_init(XZ_DYNALLOC, (u32)-1);
-+	if (!xz_dec)
-+		return -ENOMEM;
-+
-+	xz_buf.in_size = size;
-+	xz_buf.in = buf;
-+	xz_buf.in_pos = 0;
-+
-+	do {
-+		struct page *page = module_get_next_page(info);
-+		if (!page) {
-+			retval = -ENOMEM;
-+			goto out;
-+		}
-+
-+		xz_buf.out = kmap(page);
-+		xz_buf.out_pos = 0;
-+		xz_buf.out_size = PAGE_SIZE;
-+		xz_ret = xz_dec_run(xz_dec, &xz_buf);
-+		kunmap(page);
-+
-+		new_size += xz_buf.out_pos;
-+	} while (xz_buf.out_pos == PAGE_SIZE && xz_ret == XZ_OK);
-+
-+	if (xz_ret != XZ_STREAM_END) {
-+		pr_err("decompression failed with status %d\n", xz_ret);
-+		retval = -EINVAL;
-+		goto out;
-+	}
-+
-+	retval = new_size;
-+
-+ out:
-+	xz_dec_end(xz_dec);
-+	return retval;
-+}
-+#else
-+#error "Unexpected configuration for CONFIG_MODULE_DECOMPRESS"
-+#endif
-+
-+int module_decompress(struct load_info *info, const void *buf, size_t size)
-+{
-+	unsigned int n_pages;
-+	ssize_t data_size;
-+	int error;
-+
-+	/*
-+	 * Start with number of pages twice as big as needed for
-+	 * compressed data.
-+	 */
-+	n_pages = DIV_ROUND_UP(size, PAGE_SIZE) * 2;
-+	error = module_extend_max_pages(info, n_pages);
-+
-+	data_size = MODULE_DECOMPRESS_FN(info, buf, size);
-+	if (data_size < 0) {
-+		error = data_size;
-+		goto err;
-+	}
-+
-+	info->hdr = vmap(info->pages, info->used_pages, VM_MAP, PAGE_KERNEL);
-+	if (!info->hdr) {
-+		error = -ENOMEM;
-+		goto err;
-+	}
-+
-+	info->len = data_size;
-+	return 0;
-+
-+err:
-+	module_decompress_cleanup(info);
-+	return error;
-+}
-+
-+void module_decompress_cleanup(struct load_info *info)
-+{
-+	int i;
-+
-+	if (info->hdr)
-+		vunmap(info->hdr);
-+
-+	for (i = 0; i < info->used_pages; i++)
-+		__free_page(info->pages[i]);
-+
-+	kvfree(info->pages);
-+
-+	info->pages = NULL;
-+	info->max_pages = info->used_pages = 0;
-+}
-+
-+static ssize_t compression_show(struct kobject *kobj,
-+				struct kobj_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%s\n", __stringify(MODULE_COMPRESSION));
-+}
-+static struct kobj_attribute module_compression_attr = __ATTR_RO(compression);
-+
-+static int __init module_decompress_sysfs_init(void)
-+{
-+	int error;
-+
-+	error = sysfs_create_file(&module_kset->kobj,
-+				  &module_compression_attr.attr);
-+	if (error)
-+		pr_warn("Failed to create 'compression' attribute");
-+
-+	return 0;
-+}
-+late_initcall(module_decompress_sysfs_init);
--- 
-2.34.1.448.ga2b2bfdf31-goog
-
-
--- 
-Dmitry
+T24gRGVjIDE1LCAyMDIxLCBhdCAxNzowOSwgRXJpYyBCaWdnZXJzIDxlYmlnZ2Vyc0BrZXJuZWwu
+b3JnPiB3cm90ZToNCj4gT24gTW9uLCBEZWMgMTMsIDIwMjEgYXQgMDQ6NTE6NTlQTSAtMDgwMCwg
+Q2hhbmcgUy4gQmFlIHdyb3RlOg0KPj4gPT0gRGlzayBFbmNyeXB0aW9uIFVzZSBDYXNlID09DQo8
+c25pcD4NCj4+ICAgJCBjcnlwdHNldHVwIGx1a3NGb3JtYXQgLS1jaXBoZXI9ImNhcGk6eHRzLWFl
+cy1hZXNrbC1wbGFpbiIgPGRldmljZT4NCj4gDQo+IHBsYWluNjQgaXMgc3VwcG9zZWQgdG8gYmUg
+dXNlZCB0aGVzZSBkYXlzLCBub3QgcGxhaW4uDQoNCkkgc2VlLg0KDQo+PiA9PSBOb24gVXNlIENh
+c2VzID09DQo+PiANCj4+IEJhcmUgbWV0YWwgZGlzayBlbmNyeXB0aW9uIGlzIHRoZSBvbmx5IHVz
+ZSBjYXNlIGludGVuZGVkIGJ5IHRoZXNlIHBhdGNoZXMuDQo+IA0KPiBTaW5jZSBkbS1jcnlwdCBp
+cyB0aGUgdXNlIGNhc2UgZm9yIHRoZXNlIHBhdGNoZXMsIHlvdSBwcm9iYWJseSBzaG91bGQgQ0Mg
+dGhpcw0KPiBwYXRjaHNldCB0byBkbS1kZXZlbEByZWRoYXQuY29tIHNvIHRoYXQgdGhlIGRtLWNy
+eXB0IGRldmVsb3BlcnMgYXJlIGF3YXJlIG9mIGl0Lg0KDQpPaCwgSSBzaG91bGQgaGF2ZSBpbmNs
+dWRlZCB0aGVtLiBJIHdhcyBub3QgYXdhcmUgb2YgdGhpcyBtYWlsaW5nIGFkZHJlc3MuDQoNCkhp
+IERNLWNyeXB0IGZvbGtzLA0KDQpIZXJlIGlzIHRoZSBwYXRjaCBzZXJpZXM6DQogICAgaHR0cHM6
+Ly9sb3JlLmtlcm5lbC5vcmcvbGttbC8yMDIxMTIxNDAwNTIxMi4yMDU4OC0xLWNoYW5nLnNlb2su
+YmFlQGludGVsLmNvbS90Lw0KDQpJIHdvdWxkIGFwcHJlY2lhdGUgaWYgeW91IGdpdmUgYW55IGZl
+ZWRiYWNrIG9uIHRoaXMgZmVhdHVyZeKAmXMgdXNlIGNhc2Ugd2l0aCB5b3Vycy4NCg0KPj4gKy0t
+LS0tLS0tLS0tKy0tLS0tLS0tLS0tLS0tLSstLS0tLS0tLS0tLS0tLS0rDQo+PiB8IENpcGhlciAg
+ICB8ICAgRW5jcnlwdGlvbiAgfCBEZWNyeXB0aW9uICAgIHwNCj4+IHwgKEFFUy1LTCkgIHwgICAg
+KE1pQi9zKSAgICB8IChNaUIvcykgICAgICAgfA0KPj4gKy0tLS0tLS0tLS0tKy0tLS0tLS0tLS0t
+LS0tLSstLS0tLS0tLS0tLS0tLS0rDQo+PiB8IEFFUy1DQkMgICB8ICAgICA1MDUuMyAgICAgfCAg
+IDIwOTcuOCAgICAgIHwNCj4+IHwgQUVTLVhUUyAgIHwgICAgIDExMzAgICAgICB8ICAgNjk2LjQg
+ICAgICAgfA0KPj4gKy0tLS0tLS0tLS0tKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0r
+DQo+IA0KPiBXaHkgaXMgQUVTLVhUUyBkZWNyeXB0aW9uIHNvIG11Y2ggc2xvd2VyIHRoYW4gQUVT
+LVhUUyBlbmNyeXB0aW9uPyAgVGhleSBzaG91bGQNCj4gYmUgYWJvdXQgdGhlIHNhbWUuDQoNCkFu
+YWx5emluZyBhbmQgdW5kZXJzdGFuZGluZyB0aGlzIHdpdGggc3BlY2lmaWMgaGFyZHdhcmUgaW1w
+bGVtZW50YXRpb24gdGFrZXMNCnRpbWUgZm9yIHVzLiBXaWxsIGNvbWUgYmFjayBhbmQgdXBkYXRl
+IHlvdSB3aGVuIHdlIGhhdmUgYW55dGhpbmcgdG8gc2hhcmUgaGVyZS4NCg0KPiBBbHNvLCBpcyB0
+aGUgQUVTLUNCQyBzdXBwb3J0IHJlYWxseSB1c2VmdWwsIGdpdmVuIHRoYXQgZm9yIGRpc2sgZW5j
+cnlwdGlvbiwNCj4gQUVTLVhUUyBpcyByZWNvbW1lbmRlZCBvdmVyIEFFUy1DQkMgdGhlc2UgZGF5
+cz8NCg0KWWVzLCB3ZSB1bmRlcnN0YW5kIHRoYXQgQUVTLVhUUyBpcyB0aGUgcHJpbWFyeSBvcHRp
+b24gZm9yIGRpc2sgZW5jcnlwdGlvbi4NCg0KQnV0IGl0IHNlZW1zIHRoYXQgQUVTLUNCQyBoYWQg
+YmVlbiB1c2VkIGZvciBkaXNrIGVuY3J5cHRpb24sIFsxXToNCg0KICAgIENvbXBhcmluZyBYVFMg
+dG8gQ0JDIGZvciBoYXJkIGRpc2sgZW5jcnlwdGlvbg0KICAgICAgICBJZiBhIHN0b3JhZ2UgZGV2
+aWNlIHZlbmRvciBpcyBzZWVraW5nIEZJUFMgMTQwLTIgY2VydGlmaWNhdGlvbiB0b2RheSwNCiAg
+ICAgICAgdGhleSB3aWxsIHR5cGljYWxseSB1c2UgQ0JDIGVuY3J5cHRpb24sIG9yIGV2ZW4gRUNC
+LiBDQkMgaXMgYSBnb29kDQogICAgICAgIG1vZGUsIC4uLg0KDQpBcyBsb25nIGFzIGl0IGlzIGZh
+Y3R1YWwgdGhhdCB0aGUgbW9kZSB3YXMgb25jZSBwb3B1bGFyLCBpdCBjYW4gaGVscCBzb21lYm9k
+eQ0Kd2hvIHdhbnRzIHRvIHVzZSBLZXkgTG9ja2VyIGZvciBhbiBvbGQgZGlzayBpbWFnZSBJIHRo
+aW5rLg0KDQpUaGFua3MsDQpDaGFuZw0KDQpbMV0gaHR0cHM6Ly9jc3JjLm5pc3QuZ292L0NTUkMv
+bWVkaWEvUHJvamVjdHMvQmxvY2stQ2lwaGVyLVRlY2huaXF1ZXMvZG9jdW1lbnRzL0JDTS9Db21t
+ZW50cy9YVFMvWFRTX2NvbW1lbnRzLUJhbGwucGRmDQoNCg0K

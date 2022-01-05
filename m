@@ -2,80 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B33D485812
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62575485814
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242833AbiAESUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 13:20:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38670 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242799AbiAESUK (ORCPT
+        id S242842AbiAESVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 13:21:19 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42468 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242836AbiAESVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 13:20:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B607C061245;
-        Wed,  5 Jan 2022 10:20:10 -0800 (PST)
+        Wed, 5 Jan 2022 13:21:12 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1866B61892;
-        Wed,  5 Jan 2022 18:20:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6F791C36AE9;
-        Wed,  5 Jan 2022 18:20:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641406809;
-        bh=DW3S2gMIxM8Lbfygp1hYOyCa870Kg7987NhtR2TSfbw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=WvxU/8R/fOiFY1oSCV+U1KgA5LSOdWkVHuZKlNkDpmG0XejywqL0hdK6zEOSQvV5m
-         OUDUrVce4Ncy4UgAzP8JkdAGXq2noEXpdr3YkLd/J8Af50V6ohwoZjSlOw4bk8rgqi
-         Cn1AhhBcZ/3LZ8ZjfR+fK25ijxqsJSIPgfE4o6kQQW5XipsWkYkKpnrWdsOd8yzFMB
-         xq25DvKeAK4+HP1GSki7n1sCVwkfrly9weCwLL3a/eJwk9oaaTl4ooLxRF4DFDUcwC
-         JvZTbkB+3KHA7fRoq8Opkzmmj5D4K8WXLSwwxAwzTf+xZWtHiKWEYV+QMdUhgvjPmk
-         b0SoboBuXLRYg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 559BEF7940B;
-        Wed,  5 Jan 2022 18:20:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C650F61893
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 18:21:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49583C36AE3;
+        Wed,  5 Jan 2022 18:21:09 +0000 (UTC)
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Joe Perches <joe@perches.com>, Will Deacon <will@kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, James Morse <james.morse@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Fuad Tabba <tabba@google.com>,
+        Russell King <linux@armlinux.org.uk>
+Subject: Re: [PATCH] arm64: Drop outdated links in comments
+Date:   Wed,  5 Jan 2022 18:21:07 +0000
+Message-Id: <164140680919.1009829.13407592428112416247.b4-ty@arm.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211215191835.1420010-1-keescook@chromium.org>
+References: <20211215191835.1420010-1-keescook@chromium.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] Revert "net: usb: r8152: Add MAC passthrough support for more
- Lenovo Docks"
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164140680934.15806.13427483893385945695.git-patchwork-notify@kernel.org>
-Date:   Wed, 05 Jan 2022 18:20:09 +0000
-References: <20220105155102.8557-1-aaron.ma@canonical.com>
-In-Reply-To: <20220105155102.8557-1-aaron.ma@canonical.com>
-To:     Aaron Ma <aaron.ma@canonical.com>
-Cc:     kuba@kernel.org, henning.schild@siemens.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        hayeswang@realtek.com, tiwai@suse.de
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Wed,  5 Jan 2022 23:51:02 +0800 you wrote:
-> This reverts commit f77b83b5bbab53d2be339184838b19ed2c62c0a5.
+On Wed, 15 Dec 2021 11:18:35 -0800, Kees Cook wrote:
+> As started by commit 05a5f51ca566 ("Documentation: Replace lkml.org links
+> with lore"), an effort was made to replace lkml.org links with lore to
+> better use a single source that's more likely to stay available long-term.
+> However, it seems these links don't offer much value here, so just
+> remove them entirely.
 > 
-> This change breaks multiple usb to ethernet dongles attached on Lenovo
-> USB hub.
-> 
-> Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
 > 
 > [...]
 
-Here is the summary with links:
-  - Revert "net: usb: r8152: Add MAC passthrough support for more Lenovo Docks"
-    https://git.kernel.org/netdev/net/c/00fcf8c7dd56
+Applied to arm64 (for-next/misc) but without the arch/arm changes.
+Please send them separately to Russell's patch system. Thanks!
 
-You are awesome, thank you!
+[1/1] arm64: Drop outdated links in comments
+      https://git.kernel.org/arm64/c/89d30b11507d
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Catalin
 

@@ -2,213 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E80485141
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:42:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9797048514D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235024AbiAEKmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 05:42:12 -0500
-Received: from outbound-smtp12.blacknight.com ([46.22.139.17]:40993 "EHLO
-        outbound-smtp12.blacknight.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233526AbiAEKmL (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 05:42:11 -0500
-Received: from mail.blacknight.com (pemlinmail03.blacknight.ie [81.17.254.16])
-        by outbound-smtp12.blacknight.com (Postfix) with ESMTPS id B16881C39A4
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 10:42:09 +0000 (GMT)
-Received: (qmail 22542 invoked from network); 5 Jan 2022 10:42:09 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.197.169])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 5 Jan 2022 10:42:09 -0000
-Date:   Wed, 5 Jan 2022 10:42:07 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Valentin Schneider <Valentin.Schneider@arm.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Mike Galbraith <efault@gmx.de>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] sched/fair: Adjust the allowed NUMA imbalance when
- SD_NUMA spans multiple LLCs
-Message-ID: <20220105104207.GV3366@techsingularity.net>
-References: <20211210093307.31701-1-mgorman@techsingularity.net>
- <20211210093307.31701-3-mgorman@techsingularity.net>
- <YbcEE/mgIAhWuS+A@BLR-5CG11610CF.amd.com>
- <20211213130131.GQ3366@techsingularity.net>
- <YbddCcGJUpcPc8nS@BLR-5CG11610CF.amd.com>
- <YbnW/vLgE8MmQopN@BLR-5CG11610CF.amd.com>
- <20211215122550.GR3366@techsingularity.net>
- <YbuGYtxRSqVkOdbj@BLR-5CG11610CF.amd.com>
- <20211220111243.GS3366@techsingularity.net>
- <CAKfTPtARUODOnL9X-X+09cCu_BeMbZsW9U=kHX2vrXor7Du6qQ@mail.gmail.com>
+        id S235102AbiAEKnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 05:43:14 -0500
+Received: from mx.socionext.com ([202.248.49.38]:49315 "EHLO mx.socionext.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233068AbiAEKnI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 05:43:08 -0500
+Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
+  by mx.socionext.com with ESMTP; 05 Jan 2022 19:43:06 +0900
+Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
+        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id BCB8320584CE;
+        Wed,  5 Jan 2022 19:43:06 +0900 (JST)
+Received: from 172.31.9.53 (172.31.9.53) by m-FILTER with ESMTP; Wed, 5 Jan 2022 19:43:06 +0900
+Received: from yuzu2.css.socionext.com (yuzu2 [172.31.9.57])
+        by iyokan2.css.socionext.com (Postfix) with ESMTP id 2EDCEB6325;
+        Wed,  5 Jan 2022 19:43:06 +0900 (JST)
+Received: from [10.212.182.75] (unknown [10.212.182.75])
+        by yuzu2.css.socionext.com (Postfix) with ESMTP id 0A907214F;
+        Wed,  5 Jan 2022 19:43:04 +0900 (JST)
+Subject: Re: [PATCH v2 2/2] PCI: designware-ep: Fix the access to DBI/iATU
+ registers before enabling controller
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+Cc:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Xiaowei Bao <xiaowei.bao@nxp.com>,
+        Om Prakash Singh <omp@nvidia.com>,
+        Vidya Sagar <vidyas@nvidia.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1630473361-27198-1-git-send-email-hayashi.kunihiko@socionext.com>
+ <1630473361-27198-3-git-send-email-hayashi.kunihiko@socionext.com>
+ <576457dd-3e66-a3b9-f51c-ea94bc267fdb@ti.com>
+ <20211206112335.GA18520@lpieralisi>
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Message-ID: <f4037b9c-9957-8d4c-d2e0-63bb53d5e7ee@socionext.com>
+Date:   Wed, 5 Jan 2022 19:43:04 +0900
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtARUODOnL9X-X+09cCu_BeMbZsW9U=kHX2vrXor7Du6qQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211206112335.GA18520@lpieralisi>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 06:13:15PM +0100, Vincent Guittot wrote:
-> > <SNIP>
-> >
-> > @@ -9050,9 +9054,9 @@ static bool update_pick_idlest(struct sched_group *idlest,
-> >   * This is an approximation as the number of running tasks may not be
-> >   * related to the number of busy CPUs due to sched_setaffinity.
-> >   */
-> > -static inline bool allow_numa_imbalance(int dst_running, int dst_weight)
-> > +static inline bool allow_numa_imbalance(int dst_running, int imb_numa_nr)
-> >  {
-> > -       return (dst_running < (dst_weight >> 2));
-> > +       return dst_running < imb_numa_nr;
-> >  }
-> >
-> >  /*
-> >
-> > <SNIP>
-> >
-> > @@ -9280,19 +9285,13 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
-> >         }
-> >  }
-> >
-> > -#define NUMA_IMBALANCE_MIN 2
-> > -
-> >  static inline long adjust_numa_imbalance(int imbalance,
-> > -                               int dst_running, int dst_weight)
-> > +                               int dst_running, int imb_numa_nr)
-> >  {
-> > -       if (!allow_numa_imbalance(dst_running, dst_weight))
-> > +       if (!allow_numa_imbalance(dst_running, imb_numa_nr))
-> >                 return imbalance;
-> >
-> > -       /*
-> > -        * Allow a small imbalance based on a simple pair of communicating
-> > -        * tasks that remain local when the destination is lightly loaded.
-> > -        */
-> > -       if (imbalance <= NUMA_IMBALANCE_MIN)
-> > +       if (imbalance <= imb_numa_nr)
+Hi Kishon, Lorenzo,
+
+Thank you and sorry for late reply.
+
+On 2021/12/06 20:23, Lorenzo Pieralisi wrote:
+> On Fri, Dec 03, 2021 at 10:36:00AM +0530, Kishon Vijay Abraham I wrote:
+>> Hi Kunihiko,
+>>
+>> On 01/09/21 10:46 am, Kunihiko Hayashi wrote:
+>>> The driver using core_init_notifier, e.g. pcie-tegra194.c, runs
+> according
+>>> to the following sequence:
+>>>
+>>>      probe()
+>>>          dw_pcie_ep_init()
+>>>
+>>>      bind()
+>>>          dw_pcie_ep_start()
+>>>              enable_irq()
+>>>
+>>>      (interrupt occurred)
+>>>      handler()
+>>>          [enable controller]
+>>>          dw_pcie_ep_init_complete()
+>>>          dw_pcie_ep_init_notify()
+>>>
+>>> After receiving an interrupt from RC, the handler enables the
+> controller
+>>> and the controller registers can be accessed.
+>>> So accessing the registers should do in dw_pcie_ep_init_complete().
+>>>
+>>> Currently dw_pcie_ep_init() has functions dw_iatu_detect() and
+>>> dw_pcie_ep_find_capability() that include accesses to DWC registers.
+>>> As a result, accessing the registers before enabling the controller,
+>>> the access will fail.
+>>>
+>>> The function dw_pcie_ep_init() shouldn't have any access to DWC
+> registers
+>>> if the controller is enabled after calling bind(). This moves access
+> codes
+>>> to DBI/iATU registers and depending variables from dw_pcie_ep_init()
+> to
+>>> dw_pcie_ep_init_complete().
+>>
+>> Ideally pci_epc_create() should be the last step by the controller
+>> driver before handing the control to the core EPC framework. Since
+>> after this step the EPC framework can start invoking the epc_ops.
+>>
+>> Here more stuff is being added to dw_pcie_ep_init_complete() which is
+>> required for epc_ops and this could result in aborts for platforms
+>> which does not add core_init_notifier.
 > 
-> Isn't this always true ?
-> 
-> imbalance is "always" < dst_running as imbalance is usually the number
-> of these tasks that we would like to migrate
-> 
+> This patch needs rework, I will mark the series as "Changes requested".
 
-It's not necessarily true. allow_numa_imbalanced is checking if
-dst_running < imb_numa_nr and adjust_numa_imbalance is checking the
-imbalance.
+I understand that relocation of dwc register accesses isn't appropriate,
+but I couldn't think of any other rework to dwc, and I confirmed
+pcie-qcom-ep driver using core_init_notifier.
 
-imb_numa_nr = 4
-dst_running = 2
-imbalance   = 1
+In pcie-qcom-ep driver, probe() enables clock and deasserts reset first,
+and when PERST# interrupt arrives, the handler enables clock and deasserts
+reset again. So, dw_pcie_ep_init() can access DBI registers.
 
-In that case, imbalance of 1 is ok, but 2 is not.
+In pcie-tegra194 driver, I think the issue will be solved if probe() also
+handles clock and reset control. However, the driver has other register
+access between core_clk, core_apb_rst, and core_rst controls.
+I think that it's appropriate to leave this fix to the developer at this
+point.
 
-> 
-> >                 return 0;
-> >
-> >         return imbalance;
-> > @@ -9397,7 +9396,7 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
-> >                 /* Consider allowing a small imbalance between NUMA groups */
-> >                 if (env->sd->flags & SD_NUMA) {
-> >                         env->imbalance = adjust_numa_imbalance(env->imbalance,
-> > -                               busiest->sum_nr_running, env->sd->span_weight);
-> > +                               busiest->sum_nr_running, env->sd->imb_numa_nr);
-> >                 }
-> >
-> >                 return;
-> > diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> > index d201a7052a29..1fa3e977521d 100644
-> > --- a/kernel/sched/topology.c
-> > +++ b/kernel/sched/topology.c
-> > @@ -2242,6 +2242,55 @@ build_sched_domains(const struct cpumask *cpu_map, struct sched_domain_attr *att
-> >                 }
-> >         }
-> >
-> > +       /*
-> > +        * Calculate an allowed NUMA imbalance such that LLCs do not get
-> > +        * imbalanced.
-> > +        */
-> > +       for_each_cpu(i, cpu_map) {
-> > +               unsigned int imb = 0;
-> > +               unsigned int imb_span = 1;
-> > +
-> > +               for (sd = *per_cpu_ptr(d.sd, i); sd; sd = sd->parent) {
-> > +                       struct sched_domain *child = sd->child;
-> > +
-> > +                       if (!(sd->flags & SD_SHARE_PKG_RESOURCES) && child &&
-> > +                           (child->flags & SD_SHARE_PKG_RESOURCES)) {
-> 
-> sched_domains have not been degenerated yet so you found here the DIE domain
-> 
+As this patch series, I'll resend 1/2 patch only and expect pcie-tegra194
+driver to be fixed.
 
-Yes
+Thank you,
 
-> > +                               struct sched_domain *top, *top_p;
-> > +                               unsigned int llc_sq;
-> > +
-> > +                               /*
-> > +                                * nr_llcs = (sd->span_weight / llc_weight);
-> > +                                * imb = (llc_weight / nr_llcs) >> 2
-> 
-> it would be good to add a comment to explain why 25% of LLC weight /
-> number of LLC in a node is the right value.
-
-This?
-
-                                 * The 25% imbalance is an arbitrary cutoff
-                                 * based on SMT-2 to balance between memory
-                                 * bandwidth and avoiding premature sharing
-                                 * of HT resources and SMT-4 or SMT-8 *may*
-                                 * benefit from a different cutoff. nr_llcs
-                                 * are accounted for to mitigate premature
-                                 * cache eviction due to multiple tasks
-                                 * using one cache while a sibling cache
-                                 * remains relatively idle.
-
-> For example, why is it better than just 25% of the LLC weight ?
-
-Because lets say there are 2 LLCs then an imbalance based on just the LLC
-weight might allow 2 tasks to share one cache while another is idle. This
-is the original problem whereby the vanilla imbalance allowed multiple
-LLCs on the same node to be overloaded which hurt workloads that prefer
-to spread wide.
-
-> Do you want to allow the same imbalance at node level whatever the
-> number of LLC in the node ?
-> 
-
-At this point, it's less clear how the larger domains should be
-balanced and the initial scaling is as good an option as any.
-
-> > +                                *
-> > +                                * is equivalent to
-> > +                                *
-> > +                                * imb = (llc_weight^2 / sd->span_weight) >> 2
-> > +                                *
-> > +                                */
-> > +                               llc_sq = child->span_weight * child->span_weight;
-> > +
-> > +                               imb = max(2U, ((llc_sq / sd->span_weight) >> 2));
-> > +                               sd->imb_numa_nr = imb;
-> > +
-> > +                               /*
-> > +                                * Set span based on top domain that places
-> > +                                * tasks in sibling domains.
-> > +                                */
-> > +                               top = sd;
-> > +                               top_p = top->parent;
-> > +                               while (top_p && (top_p->flags & SD_PREFER_SIBLING)) {
-> 
-> Why are you looping on SD_PREFER_SIBLING  instead of SD_NUMA  ?
-
-Because on AMD Zen3, I saw inconsistent treatment of SD_NUMA prior to
-degeneration depending on whether it was NPS-1, NPS-2 or NPS-4 and only
-SD_PREFER_SIBLING gave the current results.
-
--- 
-Mel Gorman
-SUSE Labs
+---
+Best Regards
+Kunihiko Hayashi

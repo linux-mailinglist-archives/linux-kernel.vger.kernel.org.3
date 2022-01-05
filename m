@@ -2,115 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B6C04855A9
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E12E94855AA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:18:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241302AbiAEPRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 10:17:55 -0500
-Received: from mga07.intel.com ([134.134.136.100]:17779 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237011AbiAEPRr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 10:17:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641395867; x=1672931867;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hpKl/9ZkBTGQ5ElBaYyYUoe3zIlQdBS1rTdYZzRiWqE=;
-  b=jOXJgm2o0Y+5BnxwC6hTcOIpFiee6BjINDrOVHEYEwgeh4UIcSDS/tW+
-   kpmu7xqiJYYq0jcmiqRqXR8DkLdOmR0cB19KV1eofqlVo6LP8T3YU5m8t
-   jgBRhJvtNEdDsJhhFSNBrRE1Oh8GI/6sybUuDiYwDgVe7l2+V6ufeP/mW
-   5xZ1F6u+yu+11+KxoXxiaUBbU6BXs7JTBKAX/TDoFlKspJlTjcVclMeSO
-   6+ig2eAh2ziijMm9T28hDhGphxzL6Vh9+zRWjOtNtJ7gP54wT9LBbh2yd
-   Sy2xCeAu+2uSSHr3GhZ0TqzFYKQdeOknVnew2JOVNtG/osewGXkfoHc8L
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="305813232"
-X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
-   d="scan'208";a="305813232"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 07:17:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
-   d="scan'208";a="470602837"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 05 Jan 2022 07:17:44 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n582p-000Gmj-U6; Wed, 05 Jan 2022 15:17:43 +0000
-Date:   Wed, 5 Jan 2022 23:17:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Michael Zaidman <michael.zaidman@gmail.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Jiri Kosina <jkosina@suse.cz>
-Subject: drivers/hid/hid-ft260.c:879:1: warning: taking address of packed
- member 'clock' of class or structure 'ft260_get_i2c_status_report' may
- result in an unaligned pointer value
-Message-ID: <202201052330.GECx4YSO-lkp@intel.com>
+        id S241266AbiAEPSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 10:18:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53326 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241250AbiAEPRs (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 10:17:48 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C35EC0611FD
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 07:17:48 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id v10so31247023ilj.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 07:17:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=QaOzKmh/45r78gZKU4j1aKbGW0eNXE2J7cm64/2dxCk=;
+        b=K5RNtelQspgwCLSZiD4EbOVrNMX5nQK1yUidJKPMcSRrM6B9HjQv76qhptfUsurjyQ
+         9rnU+FDMGGp4uKnXQ47hS/kAfQCMRrjGwaeNe+3InQBK53orKK8EuN6COcJ8QK3HHDBL
+         0CNUcMOEnBqLVMImvZ8PRRWK0oYYdNtOCla2Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=QaOzKmh/45r78gZKU4j1aKbGW0eNXE2J7cm64/2dxCk=;
+        b=d0mD22cgCc0XoTPclUujl4FC7WKtBqBL59bZE/MpwHMCkJ93wHjZDmuE1K5aEKcYpZ
+         B9HioSZDt9uXJHAM2muevrXZ5uM0GCPlXKwNoHQBSQobVR5KwjszNCwu/EagoqMXc32g
+         0wyBf0mJWyOqpN/w8/tewbuDp4Ai1v5UY32dYudb9nnbMIbjZr1bLdF+ndUD7NwNlimN
+         G4UDKpMSppN5PgKq2iRWCa8H3z8OKKiQi11HQ5DhbUwwyxzPWrxZ7LwUtyBcs1wGQeVg
+         2HmoMNvbDLyJa35BdoLbtQgPVGf9xXyh2Q0MawYhoSi1TqiQg4JKhtQAH8+496+Up7Jm
+         Mxbw==
+X-Gm-Message-State: AOAM533MGHJyHa/4QJ9T9mmqEwyC87CUn52uztKv7o7BK/bZ+W4y79k2
+        /uGlUuLT6MvvcH/6RCZeCI2RJg==
+X-Google-Smtp-Source: ABdhPJxvefzoIF7Q/OwzbSZ1Hp0o/UnKPfkzM1v9TBRTzXmEXtYvV5LElJNYL5VFD84/w5Tsod2sJQ==
+X-Received: by 2002:a05:6e02:148a:: with SMTP id n10mr21526451ilk.142.1641395867321;
+        Wed, 05 Jan 2022 07:17:47 -0800 (PST)
+Received: from [192.168.1.128] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id g1sm27236084ila.26.2022.01.05.07.17.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jan 2022 07:17:47 -0800 (PST)
+Subject: Re: [PATCH 5.15 00/72] 5.15.13-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220104073845.629257314@linuxfoundation.org>
+ <54461ffb9ebe34e673e6730f3e9cc94218ad2f49.camel@rajagiritech.edu.in>
+ <YdWxh/OR0dQDeS9E@kroah.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <b7a7543d-2e18-93fb-7a7d-791a8030d347@linuxfoundation.org>
+Date:   Wed, 5 Jan 2022 08:17:43 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YdWxh/OR0dQDeS9E@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c9e6606c7fe92b50a02ce51dda82586ebdf99b48
-commit: 6a82582d9fa438045191074856f47165334f2777 HID: ft260: add usb hid to i2c host bridge driver
-date:   10 months ago
-config: mips-randconfig-r036-20220105 (https://download.01.org/0day-ci/archive/20220105/202201052330.GECx4YSO-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d5b6e30ed3acad794dd0aec400e617daffc6cc3d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6a82582d9fa438045191074856f47165334f2777
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 6a82582d9fa438045191074856f47165334f2777
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/hid/ drivers/usb/gadget/ fs/
+On 1/5/22 7:56 AM, Greg Kroah-Hartman wrote:
+> On Wed, Jan 05, 2022 at 06:32:43PM +0530, Jeffrin Jose T wrote:
+>> On Tue, 2022-01-04 at 08:41 +0100, Greg Kroah-Hartman wrote:
+>>> This is the start of the stable review cycle for the 5.15.13 release.
+>>> There are 72 patches in this series, all will be posted as a response
+>>> to this one.  If anyone has any issues with these being applied, please
+>>> let me know.
+>>>
+>>> Responses should be made by Thu, 06 Jan 2022 07:38:29 +0000.
+>>> Anything received after that time might be too late.
+>>>
+>>> The whole patch series can be found in one patch at:
+>>>          
+>>> https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.13-rc2.gz
+>>> or in the git tree and branch at:
+>>>          git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-
+>>> stable-rc.git linux-5.15.y
+>>> and the diffstat can be found below.
+>>>
+>>> thanks,
+>>>
+>>> greg k-h
+>>>
+>>   hello,
+>>
+>> There was a compilation error....
+>>
+>> -----------x--------------x------------------x--
+>> MODPOST vmlinux.symvers
+>>    MODINFO modules.builtin.modinfo
+>>    GEN     modules.builtin
+>> BTF: .tmp_vmlinux.btf: pahole (pahole) is not available
+>> Failed to generate BTF for vmlinux
+>> Try to disable CONFIG_DEBUG_INFO_BTF
+>> make: *** [Makefile:1183: vmlinux] Error 1
+> 
+> Is this a regression?  If so, what commit caused this?
+> 
+>> i did CONFIG_DEBUG_INFO_BTF=n  in .config and then compilation was
+>> success.
+> 
+> Or you can install pahole, right?  That's a requirement for that build
+> option I think.
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Looks like some distros enabled this option - either disable the
+option or install pahole. Not a regression.
 
-All warnings (new ones prefixed by >>):
+Keep in mind that CONFIG_DEBUG_INFO_BTF is a dependency to build
+bpf tests. bpf build pulls kernel defines from BTF to generate a
+header file. Not desirable to generate header that conflicts with
+standard libgcc defines which is not relevant to this conversation.
 
-   drivers/hid/hid-ft260.c:515:59: warning: variable 'len' is uninitialized when used here [-Wuninitialized]
-                   hid_err(hdev, "%s: unsupported wr len: %d\n", __func__, len);
-                                                                           ^~~
-   include/linux/hid.h:1190:30: note: expanded from macro 'hid_err'
-           dev_err(&(hid)->dev, fmt, ##__VA_ARGS__)
-                                       ^~~~~~~~~~~
-   include/linux/dev_printk.h:112:32: note: expanded from macro 'dev_err'
-           _dev_err(dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                         ^~~~~~~~~~~
-   drivers/hid/hid-ft260.c:507:9: note: initialize the variable 'len' to silence this warning
-           int len, ret;
-                  ^
-                   = 0
->> drivers/hid/hid-ft260.c:879:1: warning: taking address of packed member 'clock' of class or structure 'ft260_get_i2c_status_report' may result in an unaligned pointer value [-Waddress-of-packed-member]
-   FT260_I2CST_ATTR_SHOW(clock);
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hid/hid-ft260.c:814:3: note: expanded from macro 'FT260_I2CST_ATTR_SHOW'
-                   FT260_ATTR_SHOW(name, ft260_get_i2c_status_report,             \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hid/hid-ft260.c:803:18: note: expanded from macro 'FT260_ATTR_SHOW'
-                   type *field = &rep.name;                                       \
-                                  ^~~~~~~~
-   2 warnings generated.
-
-
-vim +879 drivers/hid/hid-ft260.c
-
-   878	
- > 879	FT260_I2CST_ATTR_SHOW(clock);
-   880	FT260_WORD_ATTR_STORE(clock, ft260_set_i2c_speed_report,
-   881			      FT260_SET_I2C_CLOCK_SPEED);
-   882	static DEVICE_ATTR_RW(clock);
-   883	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+thanks,
+-- Shuah

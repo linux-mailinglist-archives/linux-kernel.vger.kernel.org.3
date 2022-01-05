@@ -2,485 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B63D04858B2
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D304858B8
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:55:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243214AbiAESxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 13:53:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbiAESxg (ORCPT
+        id S243224AbiAESzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 13:55:15 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:56842 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230295AbiAESzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 13:53:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A107CC061245;
-        Wed,  5 Jan 2022 10:53:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 32A2D618D6;
-        Wed,  5 Jan 2022 18:53:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F118C36AE9;
-        Wed,  5 Jan 2022 18:53:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641408815;
-        bh=UStcD7k87L/W/ztPnGciJzAOvy1mDGIphuNwjX6oCHs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YaO5rzUT8N7iJIzKYNwvy7gN46P+dYenyL4dEzsCdtnTMMJb3g73vrb4/mQHzQLwT
-         Cnrh/iSIxuRIo9+6eaDDMh6eBsT4Achf3MOm4xxyFNxTAcaNlDjVI4xx/qU/Xq7xEx
-         DPq1N3Q58KO96UII+QauAYAc95lWLy0MqCxne9GzVL7QsTgqGh9EVz+8TkZBbNDQM7
-         fgap0niYQqKnBDsDkhRqkpJMiau0fSEO8EidByT9kUhV1XAOtm6BRIV3lDc3T7eZTu
-         BoI2y/GXdYYqLbVGl1X8FKA3iaoMnap3gHf8G2XLkcD1+9lz0ES3x8wX9SKRZtdfIo
-         I1tnik7yjXQTA==
-Date:   Wed, 5 Jan 2022 10:53:34 -0800
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Cc:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        nvdimm@lists.linux.dev, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, dan.j.williams@intel.com,
-        david@fromorbit.com, hch@infradead.org, jane.chu@oracle.com
-Subject: Re: [PATCH v9 09/10] xfs: Implement ->notify_failure() for XFS
-Message-ID: <20220105185334.GD398655@magnolia>
-References: <20211226143439.3985960-1-ruansy.fnst@fujitsu.com>
- <20211226143439.3985960-10-ruansy.fnst@fujitsu.com>
-MIME-Version: 1.0
+        Wed, 5 Jan 2022 13:55:11 -0500
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 205Ii9Fs008248;
+        Wed, 5 Jan 2022 18:54:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=lpjtdUyjBYmwRh+vLkoU4AeemHv3f9xhPl5IkY+cQaA=;
+ b=FRL/gv23WVfAnONqDiQsJTAG3gZbAfP3D4GFsTCdSYojt+6/66RvMtl67YRKg5ELuOvP
+ 3S8DEiuceGY4vPyP6hpYJQZOLKF5TkdvqgNac1x5ACXeH+JabJoWRPqxrfrYRClHAVbC
+ cXu1vhriTvuQ82z/X+Ndlyg7Xlxm7XtJYfTantHihaWfFp+8t4HHzOccqn6zz97vX9c7
+ mPlsBCtmhLlb5TEhUB0vrP3yDEXuHbtNEvieYTngMF0gYq03CNYLs9ax+1Hp7M8d+oeC
+ MMJyAHS7Qhfv/K9WPv4TTrnLGNhJaRw85sO9i+RnOJGJUkziWmQk1IakoKSTqSNx6C2d ig== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dc3st5pbv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 05 Jan 2022 18:54:43 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 205Ipnq1004317;
+        Wed, 5 Jan 2022 18:54:42 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2046.outbound.protection.outlook.com [104.47.66.46])
+        by userp3030.oracle.com with ESMTP id 3dac2ytqw7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 05 Jan 2022 18:54:42 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KcnyOdtp0B0tEPLU9d2GfYRdJvDz5husooERsrwVcyj5oBByMZ/f+2JuefKoYQvkkas24+xvaclyNZOPY9PbI41nvgJ2QVzKepyOlhslDGWUKUQH8IRZp846c+jCsoLy4mJknndgfn7pWkt//cTgLqp8zao5BF816mKkLFIbI49w7gGWaUVzxbJxgHJx/2DntLpdOLoQMD1tRg/FudtX3jwqUBRzA/Ogip0w0UuiTsIqpw7jkrmtpb4S1kRKvxLcSmX/sXgJwppf47CL/S37nW7TW7qPr3csA0p/JE9pjLQKCTK85Cfy9iE2LF8o+fq4c2OBWjgYXdsHJgA4PNb9fA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lpjtdUyjBYmwRh+vLkoU4AeemHv3f9xhPl5IkY+cQaA=;
+ b=VGFruCzyM6v1NfEyiU9jiPNSORgszCMfxY5zSRyBgw6ZtuzKaYzWKJK+NZcJfSA0l01GN1qFSaiZ8zKZjjrSl6czS1ZNoa06JcbdihojoJBcVbX+TyEO/u32xj3avorBdsLx0yl5TuU4I2WSw3JqTIP+8Og2AQU5X8HptF8h+BEIDRh9Uojzq17TNF6zM1W7ODE6xgYyNOyTaoNtOp6Vvou+0dYI2uUviP5dQMrh+Tz7XOY75caAUx6SFmlVb9TB2lY8CIbylAhLrnYyXnvqGep9yr5k1aG1IqQITbnpo/485BN+XmU2/A9E9CqVkrc9pftr/HelqSG21DnsDkMlDg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lpjtdUyjBYmwRh+vLkoU4AeemHv3f9xhPl5IkY+cQaA=;
+ b=gt5QFm7nUzUpskZGKHFsholkJAJpn+4BMuPjNVAWlUFdtudSQmPTFmefj76gAAtviz/G4hEaU6WX+IGS2pP0L7VRn8Rmiezv2mnL5pPtaN2VIYeEvWPZ9Uo9LLIh8I9viS4nH7HfHIeP+427YH7hGo3Z4JOOi5CpLTJFCMwafxo=
+Received: from SN6PR10MB2576.namprd10.prod.outlook.com (2603:10b6:805:44::15)
+ by SA1PR10MB5511.namprd10.prod.outlook.com (2603:10b6:806:1e6::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9; Wed, 5 Jan
+ 2022 18:54:39 +0000
+Received: from SN6PR10MB2576.namprd10.prod.outlook.com
+ ([fe80::4c8c:47df:f81e:f412]) by SN6PR10MB2576.namprd10.prod.outlook.com
+ ([fe80::4c8c:47df:f81e:f412%5]) with mapi id 15.20.4867.009; Wed, 5 Jan 2022
+ 18:54:39 +0000
+Date:   Wed, 5 Jan 2022 12:54:34 -0600
+From:   Venu Busireddy <venu.busireddy@oracle.com>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v8 19/40] KVM: SVM: Update the SEV-ES save area mapping
+Message-ID: <YdXpapl9MMKb6H68@dt>
+References: <20211210154332.11526-1-brijesh.singh@amd.com>
+ <20211210154332.11526-20-brijesh.singh@amd.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211226143439.3985960-10-ruansy.fnst@fujitsu.com>
+In-Reply-To: <20211210154332.11526-20-brijesh.singh@amd.com>
+X-ClientProxiedBy: SJ0PR03CA0005.namprd03.prod.outlook.com
+ (2603:10b6:a03:33a::10) To SN6PR10MB2576.namprd10.prod.outlook.com
+ (2603:10b6:805:44::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 321fcb2d-a93b-4920-d631-08d9d07cd3a7
+X-MS-TrafficTypeDiagnostic: SA1PR10MB5511:EE_
+X-Microsoft-Antispam-PRVS: <SA1PR10MB5511FD9B942CD1F0729F112AE64B9@SA1PR10MB5511.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /a3LAPARJ3aIDgzk3RToPW6fbPPreq8a7xyfmYRFoECQQ94yQ/ralmG5SxTt1qKTnTD8MuI1JOV6JJf8XyRshjwchy7omF+/sWg+94XZT3IKeiR28o0stgiNpK7y346K6CF1Snr4OW7JwGS4N9IAAnfn3RdHHIOwLl3wjUmCf4aEdFd+Pj9W9CSbe+PlU8OK0hyItc3OKLU/1FlaHZPbJy0j/Jgu4Z361eHyFyR9Ubs0CVqx+Zx+GSX+RJyg2skjGw19PT44L5T3Mrfe5kdsN1pAgV+ekPxheYWda+8r0vktHs1wBm3yo21XYpZnqs3GWHhd/IOmphs4J+3xQh+3Z+MxlaD5bwTRFcDgKKgFi9jwFS8gXVwMfQ5Zxc/aEnQDr48P+dtQX1DC4zBSNiiKKsXo6hqcQu84z6Pn9jHGsXbwSPgDfB1aAHnOInZV07lMuHp+JHAAdlu0fLMC9J8Mwe5yKBifocG7FIt1WosCm0DAMED3NkBdFU4XXBFW/SkZ8H1MuChKhVjIAKjOcNLhDgqFg/pvg72vuFHJun9+t8Ef0t6tXOhaiCnRaZ8Bi2GRxY3rWoaUj6uy98C9YdV6cgReqSW+RS0Zq2yx7M01tzL2utFVOq4g2NUvIVFpfhJMyN4eMwYoRbPyqDi5N4x60Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB2576.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(366004)(54906003)(15650500001)(6486002)(7416002)(7406005)(508600001)(6666004)(2906002)(186003)(26005)(38100700002)(8676002)(4326008)(9686003)(4001150100001)(6512007)(66946007)(66556008)(8936002)(44832011)(53546011)(86362001)(66476007)(6506007)(83380400001)(33716001)(6916009)(4744005)(316002)(5660300002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?f3l2yyO0bEqcTnd6PlKD1CaqOqNI/7EjL9wzrGHAO1lNYA6MRyCAqMI/1KRT?=
+ =?us-ascii?Q?kuWfRVSWA4lL6/vK0ldBD5bmgzsOefNg4/n1GyJIVSVpe7wkkOir6Dhjx2JS?=
+ =?us-ascii?Q?4Ul8DKSCF83onwgg+DRCrxr6znM7kXYRmjpd7q7bo/G7/G4eRy+FGNOSfHOV?=
+ =?us-ascii?Q?UusBA93MF0utrunhEov56eKT179SoHZmU7U+qNQLC0kvhfErQ60xqbXNWqu8?=
+ =?us-ascii?Q?7hs3SX5AczlGRPkJsbeOM90LTGOhmcSO114AV/DvPE+YwH7KpmctZKPDlQJf?=
+ =?us-ascii?Q?bBT4FT55E27LIcMRibTI+zc1n6+uhWnkf4Jdjx9iLE/nV0eU9G+QR7GHzHh/?=
+ =?us-ascii?Q?M6FgjFTuXcc3QnxGeiG+jVUfnVvkzIPEYKhrmJojxQ05TV8nTwACHHqmUaRr?=
+ =?us-ascii?Q?0dxPiaWKryIUTuEp6m7S8pLbvHbvByjHkQg+rKPbim1w63nZ6Z9mroSGDh3X?=
+ =?us-ascii?Q?GVx9blt4TRT4QbKyYkEksX+JKknCWtSKvehiRH03YZ/YS7IjnQfD39IoOVTo?=
+ =?us-ascii?Q?4m59++RXsYr31as4cQdKGnt4qSahwelGd+jV5iDtH+KQlWhLc21U40RqJO7i?=
+ =?us-ascii?Q?yIz0QnLUw+Y6LzZlmUc6k5HQgaz85VqQkf//XRHZB7rnuRjR4Msa/28jomLo?=
+ =?us-ascii?Q?svx+nFHnxTWiHAVPIHqfleWw2oLScLCkJhW3ACBcEHoSPIUQ8REz668dOh1A?=
+ =?us-ascii?Q?We4rI7m+UwvPqtf+02pSLfcQRu52woWlbrQYb1NFhhDBkgIL28nu0GrYxODm?=
+ =?us-ascii?Q?PQSNgbwnC5Rmf0JPR78ahOJBp2nxlw2RvRoMUL9BbidS55vg52SwfUVn3rzI?=
+ =?us-ascii?Q?qg+JvRv6XReropdbGUQaliSgMxnn0Fmx99Gc6x1gfbzxnzYoLzn7ZSePJAYQ?=
+ =?us-ascii?Q?nUR4K0W18f22UCKMahhQSHj56R3mgUs/8y3s3ELNadNELYaucZspoQ5Me1TX?=
+ =?us-ascii?Q?L6cEUzfEz8hlqN8YF5tv6B1bjKjXTQTtRXBawPygVyXU0xVryLATeLTh//Xr?=
+ =?us-ascii?Q?tsT0KuObv/9XmPBk5eaBPmyZIcTCt1cRhwVRLWBJgFKAPTz3TGfeCqkv6VRY?=
+ =?us-ascii?Q?FI0GcMnM2N6F6PZd891XFOfUvdu8lw5B+5fxmTBMk+Mjlk0CqMy+j4pWh3a/?=
+ =?us-ascii?Q?1h4aBBvRWoHpn3uld/gFKTHmuPyVb079MSYgh+dtMOLM7keOeMF5yLmWLrkW?=
+ =?us-ascii?Q?uqnrlnZi+BNO7Z5xwqrxGBE57b0vTCfA5/e2oOFTDWO4bEbxZs4gzI+d2oJT?=
+ =?us-ascii?Q?DImcbKp1WNeUpayfpsKRlvMVczumHPSY4k3TXkaR2VPi4XuNwB7tI75WfPtN?=
+ =?us-ascii?Q?kRj/q52bVaqR6RfHTbvqqY0W375Wr+bY4Rv5AXP4oILYyUQMpiuCMEfPfeFh?=
+ =?us-ascii?Q?aR8IxoVg58T2KNopdm/qde3J5j1cK2dsYcUfeiS9OIOYJBJ0j2hKG4nh1hGY?=
+ =?us-ascii?Q?3KlIDeZDDC6d+uMkQ6dI7aBtpb6ZEaiWInJQYvc6N1MyvO+mkI2FnqA+gN+R?=
+ =?us-ascii?Q?u985y56ZNo+AqpmVabhSGEpLryiEq0DTTZOQF6GnZCIE2kTdlFkClPFDUSov?=
+ =?us-ascii?Q?Yt70KON6GpAsBmpgmNm8wZU19GD1rLyCwbkjeZJUhEbm71uQerkizbw8ZRoA?=
+ =?us-ascii?Q?EOYyq7riInmIzaNdI9wSSsPW5CsFO7gUXk17vP/x5BQ2nPnSNmQ7xwrT6V0l?=
+ =?us-ascii?Q?cPmn6A=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 321fcb2d-a93b-4920-d631-08d9d07cd3a7
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB2576.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2022 18:54:39.6928
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2dflt1ouX2z8WnAoO+Q39N2V+fB0r1+rJIDHoAdeqIhTakKsJUyhRE8PbA7gBtevA8dXumndlZPKNxVYWcQOrHStVLJgAcudNCJyjB2GemI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB5511
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10218 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999 mlxscore=0
+ suspectscore=0 spamscore=0 phishscore=0 malwarescore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2201050121
+X-Proofpoint-GUID: dpA_8y2WaHjZT0fz-VbkKra7F450xeZf
+X-Proofpoint-ORIG-GUID: dpA_8y2WaHjZT0fz-VbkKra7F450xeZf
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 26, 2021 at 10:34:38PM +0800, Shiyang Ruan wrote:
-> Introduce xfs_notify_failure.c to handle failure related works, such as
-> implement ->notify_failure(), register/unregister dax holder in xfs, and
-> so on.
+On 2021-12-10 09:43:11 -0600, Brijesh Singh wrote:
+> From: Tom Lendacky <thomas.lendacky@amd.com>
 > 
-> If the rmap feature of XFS enabled, we can query it to find files and
-> metadata which are associated with the corrupt data.  For now all we do
-> is kill processes with that file mapped into their address spaces, but
-> future patches could actually do something about corrupt metadata.
+> This is the final step in defining the multiple save areas to keep them
+> separate and ensuring proper operation amongst the different types of
+> guests. Update the SEV-ES/SEV-SNP save area to match the APM. This save
+> area will be used for the upcoming SEV-SNP AP Creation NAE event support.
 > 
-> After that, the memory failure needs to notify the processes who are
-> using those files.
-> 
-> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+> Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+
+Reviewed-by: Venu Busireddy <venu.busireddy@oracle.com>
+
 > ---
->  fs/xfs/Makefile             |   1 +
->  fs/xfs/xfs_buf.c            |  15 +++
->  fs/xfs/xfs_fsops.c          |   3 +
->  fs/xfs/xfs_mount.h          |   1 +
->  fs/xfs/xfs_notify_failure.c | 189 ++++++++++++++++++++++++++++++++++++
->  fs/xfs/xfs_notify_failure.h |  10 ++
->  6 files changed, 219 insertions(+)
->  create mode 100644 fs/xfs/xfs_notify_failure.c
->  create mode 100644 fs/xfs/xfs_notify_failure.h
-> 
-> diff --git a/fs/xfs/Makefile b/fs/xfs/Makefile
-> index 04611a1068b4..389970b3e13b 100644
-> --- a/fs/xfs/Makefile
-> +++ b/fs/xfs/Makefile
-> @@ -84,6 +84,7 @@ xfs-y				+= xfs_aops.o \
->  				   xfs_message.o \
->  				   xfs_mount.o \
->  				   xfs_mru_cache.o \
-> +				   xfs_notify_failure.o \
->  				   xfs_pwork.o \
->  				   xfs_reflink.o \
->  				   xfs_stats.o \
-> diff --git a/fs/xfs/xfs_buf.c b/fs/xfs/xfs_buf.c
-> index bbb0fbd34e64..d0df7604fa9e 100644
-> --- a/fs/xfs/xfs_buf.c
-> +++ b/fs/xfs/xfs_buf.c
-> @@ -19,6 +19,7 @@
->  #include "xfs_errortag.h"
->  #include "xfs_error.h"
->  #include "xfs_ag.h"
-> +#include "xfs_notify_failure.h"
->  
->  static struct kmem_cache *xfs_buf_cache;
->  
-> @@ -1892,6 +1893,8 @@ xfs_free_buftarg(
->  	list_lru_destroy(&btp->bt_lru);
->  
->  	blkdev_issue_flush(btp->bt_bdev);
-> +	if (btp->bt_daxdev)
-> +		dax_unregister_holder(btp->bt_daxdev);
->  	fs_put_dax(btp->bt_daxdev);
->  
->  	kmem_free(btp);
-> @@ -1946,6 +1949,18 @@ xfs_alloc_buftarg(
->  	btp->bt_dev =  bdev->bd_dev;
->  	btp->bt_bdev = bdev;
->  	btp->bt_daxdev = fs_dax_get_by_bdev(bdev, &btp->bt_dax_part_off);
-> +	if (btp->bt_daxdev) {
-> +		dax_write_lock(btp->bt_daxdev);
-> +		if (dax_get_holder(btp->bt_daxdev)) {
-> +			dax_write_unlock(btp->bt_daxdev);
-> +			xfs_err(mp, "DAX device already in use?!");
-> +			goto error_free;
-> +		}
-> +
-> +		dax_register_holder(btp->bt_daxdev, mp,
-> +				&xfs_dax_holder_operations);
-> +		dax_write_unlock(btp->bt_daxdev);
-> +	}
->  
->  	/*
->  	 * Buffer IO error rate limiting. Limit it to no more than 10 messages
-> diff --git a/fs/xfs/xfs_fsops.c b/fs/xfs/xfs_fsops.c
-> index 33e26690a8c4..d4d36c5bef11 100644
-> --- a/fs/xfs/xfs_fsops.c
-> +++ b/fs/xfs/xfs_fsops.c
-> @@ -542,6 +542,9 @@ xfs_do_force_shutdown(
->  	} else if (flags & SHUTDOWN_CORRUPT_INCORE) {
->  		tag = XFS_PTAG_SHUTDOWN_CORRUPT;
->  		why = "Corruption of in-memory data";
-> +	} else if (flags & SHUTDOWN_CORRUPT_ONDISK) {
-> +		tag = XFS_PTAG_SHUTDOWN_CORRUPT;
-> +		why = "Corruption of on-disk metadata";
->  	} else {
->  		tag = XFS_PTAG_SHUTDOWN_IOERROR;
->  		why = "Metadata I/O Error";
-> diff --git a/fs/xfs/xfs_mount.h b/fs/xfs/xfs_mount.h
-> index 00720a02e761..47ff4ac53c4c 100644
-> --- a/fs/xfs/xfs_mount.h
-> +++ b/fs/xfs/xfs_mount.h
-> @@ -435,6 +435,7 @@ void xfs_do_force_shutdown(struct xfs_mount *mp, int flags, char *fname,
->  #define SHUTDOWN_LOG_IO_ERROR	0x0002	/* write attempt to the log failed */
->  #define SHUTDOWN_FORCE_UMOUNT	0x0004	/* shutdown from a forced unmount */
->  #define SHUTDOWN_CORRUPT_INCORE	0x0008	/* corrupt in-memory data structures */
-> +#define SHUTDOWN_CORRUPT_ONDISK	0x0010  /* corrupt metadata on device */
->  
->  #define XFS_SHUTDOWN_STRINGS \
->  	{ SHUTDOWN_META_IO_ERROR,	"metadata_io" }, \
-> diff --git a/fs/xfs/xfs_notify_failure.c b/fs/xfs/xfs_notify_failure.c
-> new file mode 100644
-> index 000000000000..a87bd08365f4
-> --- /dev/null
-> +++ b/fs/xfs/xfs_notify_failure.c
-> @@ -0,0 +1,189 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2021 Fujitsu.  All Rights Reserved.
-> + */
-> +
-> +#include "xfs.h"
-> +#include "xfs_shared.h"
-> +#include "xfs_format.h"
-> +#include "xfs_log_format.h"
-> +#include "xfs_trans_resv.h"
-> +#include "xfs_mount.h"
-> +#include "xfs_alloc.h"
-> +#include "xfs_bit.h"
-> +#include "xfs_btree.h"
-> +#include "xfs_inode.h"
-> +#include "xfs_icache.h"
-> +#include "xfs_rmap.h"
-> +#include "xfs_rmap_btree.h"
-> +#include "xfs_rtalloc.h"
-> +#include "xfs_trans.h"
-> +
-> +#include <linux/mm.h>
-> +#include <linux/dax.h>
-> +
-> +struct failure_info {
-> +	xfs_agblock_t		startblock;
-> +	xfs_filblks_t		blockcount;
-> +	int			mf_flags;
-
-Why is blockcount a 64-bit quantity, when the failure information is
-dealt with on a per-AG basis?  I think "xfs_extlen_t blockcount" should
-be large enough here.  (I'll get back to this further down.)
-
-> +};
-> +
-> +static pgoff_t
-> +xfs_failure_pgoff(
-> +	struct xfs_mount		*mp,
-> +	const struct xfs_rmap_irec	*rec,
-> +	const struct failure_info	*notify)
-> +{
-> +	uint64_t pos = rec->rm_offset;
-
-Nit: indenting ^^^^^ here.
-
-> +
-> +	if (notify->startblock > rec->rm_startblock)
-> +		pos += XFS_FSB_TO_B(mp,
-> +				notify->startblock - rec->rm_startblock);
-> +	return pos >> PAGE_SHIFT;
-> +}
-> +
-> +static unsigned long
-> +xfs_failure_pgcnt(
-> +	struct xfs_mount		*mp,
-> +	const struct xfs_rmap_irec	*rec,
-> +	const struct failure_info	*notify)
-> +{
-> +	xfs_agblock_t start_rec = rec->rm_startblock;
-> +	xfs_agblock_t end_rec = rec->rm_startblock + rec->rm_blockcount;
-> +	xfs_agblock_t start_notify = notify->startblock;
-> +	xfs_agblock_t end_notify = notify->startblock + notify->blockcount;
-> +	xfs_agblock_t start_cross = max(start_rec, start_notify);
-> +	xfs_agblock_t end_cross = min(end_rec, end_notify);
-
-Indenting and rather more local variables than we need?
-
-static unsigned long
-xfs_failure_pgcnt(
-	struct xfs_mount		*mp,
-	const struct xfs_rmap_irec	*rec,
-	const struct failure_info	*notify)
-{
-	xfs_agblock_t			end_rec;
-	xfs_agblock_t			end_notify;
-	xfs_agblock_t			start_cross;
-	xfs_agblock_t			end_cross;
-
-	start_cross = max(rec->rm_startblock, notify->startblock);
-
-	end_rec = rec->rm_startblock + rec->rm_blockcount;
-	end_notify = notify->startblock + notify->blockcount;
-	end_cross = min(end_rec, end_notify);
-
-	return XFS_FSB_TO_B(mp, end_cross - start_cross) >> PAGE_SHIFT;
-}
-
-> +
-> +	return XFS_FSB_TO_B(mp, end_cross - start_cross) >> PAGE_SHIFT;
-> +}
-> +
-> +static int
-> +xfs_dax_failure_fn(
-> +	struct xfs_btree_cur		*cur,
-> +	const struct xfs_rmap_irec	*rec,
-> +	void				*data)
-> +{
-> +	struct xfs_mount		*mp = cur->bc_mp;
-> +	struct xfs_inode		*ip;
-> +	struct address_space		*mapping;
-> +	struct failure_info		*notify = data;
-> +	int				error = 0;
-> +
-> +	if (XFS_RMAP_NON_INODE_OWNER(rec->rm_owner) ||
-> +	    (rec->rm_flags & (XFS_RMAP_ATTR_FORK | XFS_RMAP_BMBT_BLOCK))) {
-> +		/* TODO check and try to fix metadata */
-> +		xfs_force_shutdown(mp, SHUTDOWN_CORRUPT_ONDISK);
-> +		return -EFSCORRUPTED;
-> +	}
-> +
-> +	/* Get files that incore, filter out others that are not in use. */
-> +	error = xfs_iget(mp, cur->bc_tp, rec->rm_owner, XFS_IGET_INCORE,
-> +			 0, &ip);
-> +	/* Continue the rmap query if the inode isn't incore */
-> +	if (error == -ENODATA)
-> +		return 0;
-> +	if (error)
-> +		return error;
-> +
-> +	mapping = VFS_I(ip)->i_mapping;
-> +	if (IS_ENABLED(CONFIG_MEMORY_FAILURE)) {
-
-Is there a situation where we can receive media failure notices from DAX
-but CONFIG_MEMORY_FAILURE is not enabled?  (I think the answer is yes?)
-
-> +		pgoff_t off = xfs_failure_pgoff(mp, rec, notify);
-> +		unsigned long cnt = xfs_failure_pgcnt(mp, rec, notify);
-> +
-> +		error = mf_dax_kill_procs(mapping, off, cnt, notify->mf_flags);
-> +	}
-
-If so, then we ought to do /something/ besides silently dropping the
-error, right?  Even if that something is rudely shutting down the fs,
-like we do for attr/bmbt mappings above?
-
-What I'm getting at is that I think this function should be:
-
-#if IS_ENABLED(CONFIG_MEMORY_FAILURE)
-static int
-xfs_dax_failure_fn(
-	struct xfs_btree_cur		*cur,
-	const struct xfs_rmap_irec	*rec,
-	void				*data)
-{
-	/* shut down if attr/bmbt record like above */
-
-	error = xfs_iget(...);
-	if (error == -ENODATA)
-		return 0;
-	if (error)
-		return error;
-
-	off = xfs_failure_pgoff(mp, rec, notify);
-	cnt = xfs_failure_pgcnt(mp, rec, notify);
-
-	error = mf_dax_kill_procs(mapping, off, cnt, notify->mf_flags);
-	xfs_irele(ip);
-	return error;
-}
-#else
-static int
-xfs_dax_failure_fn(
-	struct xfs_btree_cur		*cur,
-	const struct xfs_rmap_irec	*rec,
-	void				*data)
-{
-	/* No other option besides shutting down the fs. */
-	xfs_force_shutdown(mp, SHUTDOWN_CORRUPT_ONDISK);
-	return -EFSCORRUPTED;
-}
-#endif /* CONFIG_MEMORY_FAILURE */
-
-> +	/* TODO try to fix data */
-> +	xfs_irele(ip);
-> +
-> +	return error;
-> +}
-> +
-> +static int
-> +xfs_dax_notify_ddev_failure(
-> +	struct xfs_mount	*mp,
-> +	xfs_daddr_t		daddr,
-> +	xfs_daddr_t		bblen,
-> +	int			mf_flags)
-> +{
-> +	struct xfs_trans	*tp = NULL;
-> +	struct xfs_btree_cur	*cur = NULL;
-> +	struct xfs_buf		*agf_bp = NULL;
-> +	struct failure_info	notify = { .mf_flags = mf_flags };
-> +	int			error = 0;
-> +	xfs_fsblock_t		fsbno = XFS_DADDR_TO_FSB(mp, daddr);
-> +	xfs_agnumber_t		agno = XFS_FSB_TO_AGNO(mp, fsbno);
-> +	xfs_fsblock_t		end_fsbno = XFS_DADDR_TO_FSB(mp, daddr + bblen);
-> +	xfs_agnumber_t		end_agno = XFS_FSB_TO_AGNO(mp, end_fsbno);
-> +
-> +	error = xfs_trans_alloc_empty(mp, &tp);
-> +	if (error)
-> +		return error;
-> +
-> +	for (; agno <= end_agno; agno++) {
-> +		struct xfs_rmap_irec	ri_low = { };
-> +		struct xfs_rmap_irec	ri_high;
-> +
-> +		notify.startblock = XFS_FSB_TO_AGBNO(mp, fsbno);
-> +		notify.blockcount = XFS_BB_TO_FSB(mp, bblen);
-
-This isn't correct.  This sets notify.blockcount to the fsbcount of the
-entire failed area, but it sets notify.startblock either to the start
-of the failed area OR the start of some AG within the failed area.
-
-If the failed area was blocks 80-119 and each AG is 100 blocks, then
-this means we'll probe AG 0 (blocks 0-99) with notify spanning 80-119.
-Those last 20 blocks are outside AG 0, but the rmap query range won't
-return anything outside that range, so it doesn't really matter.
-
-Next time through the loop, though, we're dealing with AG 1 (blocks
-100-199).  Now notify spans blocks 100-139, because bblen hasn't been
-updated!  If there's a file with an extent that maps blocks 115-125 and
-a process that has only block 124 mmap'd, we'll kill that process
-incorrectly because of the accounting error.
-
-> +
-> +		error = xfs_alloc_read_agf(mp, tp, agno, 0, &agf_bp);
-> +		if (error)
-> +			break;
-> +
-> +		cur = xfs_rmapbt_init_cursor(mp, tp, agf_bp, agf_bp->b_pag);
-> +
-> +		memset(&ri_high, 0xFF, sizeof(ri_high));
-> +		ri_low.rm_startblock = XFS_FSB_TO_AGBNO(mp, fsbno);
-> +		if (agno == end_agno)
-> +			ri_high.rm_startblock = XFS_FSB_TO_AGBNO(mp, end_fsbno);
-
-I think what you really want is to set notify.blockcount to
-min(agf_length, ri_high.rm_startblock).  That also means that
-notify.blockcount can be xfs_extlen_t, which is the norm for per-AG
-extent operations.
-
-> +
-> +		error = xfs_rmap_query_range(cur, &ri_low, &ri_high,
-> +				xfs_dax_failure_fn, &notify);
-> +		xfs_btree_del_cursor(cur, error);
-> +		xfs_trans_brelse(tp, agf_bp);
-> +		if (error)
-> +			break;
-> +
-> +		fsbno = XFS_AGB_TO_FSB(mp, agno + 1, 0);
-> +	}
-> +
-> +	xfs_trans_cancel(tp);
-> +	return error;
-> +}
-> +
-> +static int
-> +xfs_dax_notify_failure(
-> +	struct dax_device	*dax_dev,
-> +	u64			offset,
-> +	u64			len,
-> +	int			mf_flags)
-> +{
-> +	struct xfs_mount	*mp = dax_get_holder(dax_dev);
-> +
-> +	if (mp->m_rtdev_targp && mp->m_rtdev_targp->bt_daxdev == dax_dev) {
-> +		xfs_warn(mp,
-> +			 "notify_failure() not supported on realtime device!");
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	if (mp->m_logdev_targp && mp->m_logdev_targp->bt_daxdev == dax_dev &&
-> +	    mp->m_logdev_targp != mp->m_ddev_targp) {
-
-Technically speaking, if offset/len are beyond mp->m_sb.sb_logblocks
-then we can return 0 since the log isn't using the failed part of the
-external log.
-
-Buuuut there are a lot of subtleties to the log, so maybe we (that is,
-one of the more experienced xfs people) should implement a generic
-handler for the log that will DTRT.
-
-> +		xfs_err(mp, "ondisk log corrupt, shutting down fs!");
-> +		xfs_force_shutdown(mp, SHUTDOWN_CORRUPT_ONDISK);
-> +		return -EFSCORRUPTED;
-> +	}
-> +
-> +	if (!xfs_has_rmapbt(mp)) {
-> +		xfs_warn(mp, "notify_failure() needs rmapbt enabled!");
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	offset -= mp->m_ddev_targp->bt_dax_part_off;
-
-Don't we need to check offset/len to make sure they're still within the
-boundaries of the data device?
-
---D
-
-> +	return xfs_dax_notify_ddev_failure(mp, BTOBB(offset), BTOBB(len),
-> +			mf_flags);
-> +}
-> +
-> +const struct dax_holder_operations xfs_dax_holder_operations = {
-> +	.notify_failure		= xfs_dax_notify_failure,
-> +};
-> diff --git a/fs/xfs/xfs_notify_failure.h b/fs/xfs/xfs_notify_failure.h
-> new file mode 100644
-> index 000000000000..f40cb315e7ce
-> --- /dev/null
-> +++ b/fs/xfs/xfs_notify_failure.h
-> @@ -0,0 +1,10 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2021 Fujitsu.  All Rights Reserved.
-> + */
-> +#ifndef __XFS_NOTIFY_FAILURE_H__
-> +#define __XFS_NOTIFY_FAILURE_H__
-> +
-> +extern const struct dax_holder_operations xfs_dax_holder_operations;
-> +
-> +#endif  /* __XFS_NOTIFY_FAILURE_H__ */
-> -- 
-> 2.34.1
-> 
-> 
+>  arch/x86/include/asm/svm.h | 66 +++++++++++++++++++++++++++++---------
+>  1 file changed, 50 insertions(+), 16 deletions(-)
 > 

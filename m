@@ -2,102 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9DEF4859D2
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:12:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 773284859D7
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:12:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243891AbiAEUMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 15:12:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36200 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243875AbiAEUMb (ORCPT
+        id S243907AbiAEUMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 15:12:35 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60114 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243875AbiAEUMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 15:12:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80249C061245;
-        Wed,  5 Jan 2022 12:12:31 -0800 (PST)
+        Wed, 5 Jan 2022 15:12:33 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F837B81DAA;
-        Wed,  5 Jan 2022 20:12:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C3BEC36AE0;
-        Wed,  5 Jan 2022 20:12:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9F256183C;
+        Wed,  5 Jan 2022 20:12:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFB3DC36AE0;
+        Wed,  5 Jan 2022 20:12:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641413548;
-        bh=aoT7jaRko+6ZGLXRm+aXf3D/to9iVhBzT5qX2rl90Ro=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=U01p7xAKIWH5sQG9+hCQuJf9tTjh8wjX3EBhSkvrzUqDUUG75BstHi9HzCzBFhSdi
-         QhMHGH/srOcsUTUMMxlFiQHtbIzN3Jlc0um1wtgAnRKLim7rIAhCBgtc6We+w5y78J
-         LMxBTysLSz8r7+Ug+QhiCYyp3YSvMG8wc9M3PK+tpF1yEhMuVKouBjg1jC5luASCsK
-         VTcAxu+TtSTluAH69ZnLVUFx4rnEnEU97a5nZlsq2/12F/9uyoJOdO+dTcFwM+GigK
-         br5BJWpDn2R85xCbtvcA33idFhcH2DzSAmV81fbz43QPK9N1jIYvCrvsegW4ZnIHER
-         uMByyRs80SKTQ==
-Date:   Wed, 5 Jan 2022 14:12:26 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     bhelgaas@google.com, mika.westerberg@linux.intel.com,
-        koba.ko@canonical.com, Lukas Wunner <lukas@wunner.de>,
-        Stuart Hayes <stuart.w.hayes@gmail.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI/portdrv: Skip enabling AER on external facing ports
-Message-ID: <20220105201226.GA218998@bhelgaas>
+        s=k20201202; t=1641413552;
+        bh=VKtAIConpbBFA6GqxUHN4Ht5xmPdKeItLVEssC8Va1I=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=Isjb6nB8batMswToanbNXUml8r8wH4WSeugz+Hr84UYHiH7dlo9tjAhZwx+ClrmeK
+         ahBbeCGAqlVNrB7ke+ptPWuZ2OD2SnZdTbRrPTBiqbF9IUZikURO17wUyUjjDSlnZ3
+         qsu2kITz6cxMK0ovuobEdC/TmBfFTDtWjNuV+J1HP6tSHQB6dylKSECi66sTAMb/TD
+         p5muKmpGAobQUUHg38SbLzBCFIbJ0+tZ2CsFFJ865Z93mynpn7FKoDCMbbbO6ADvqI
+         aP5g06Nnjx9lusr4vte/UdNcSTx6kbXekd4EcWgdBW7sOMQVtt9Bo/L+QIPxumegzG
+         UWXrD0Zb+Aiog==
+Message-ID: <db88a381739e08806e2370e8fbe8fdde82731464.camel@kernel.org>
+Subject: Re: [PATCH v4] KEYS: encrypted: Instantiate key with user-provided
+ decrypted data
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Yael Tiomkin <yaelt@google.com>, linux-integrity@vger.kernel.org
+Cc:     jejb@linux.ibm.com, zohar@linux.ibm.com, corbet@lwn.net,
+        dhowells@redhat.com, jmorris@namei.org, serge@hallyn.com,
+        keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Date:   Wed, 05 Jan 2022 22:12:27 +0200
+In-Reply-To: <20211229215330.4134835-1-yaelt@google.com>
+References: <20211229215330.4134835-1-yaelt@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.42.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220105060643.822111-1-kai.heng.feng@canonical.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 02:06:41PM +0800, Kai-Heng Feng wrote:
-> The Thunderbolt root ports may constantly spew out uncorrected errors
-> from AER service:
-> [   30.100211] pcieport 0000:00:1d.0: AER: Uncorrected (Non-Fatal) error received: 0000:00:1d.0
-> [   30.100251] pcieport 0000:00:1d.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-> [   30.100256] pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00100000/00004000
-> [   30.100262] pcieport 0000:00:1d.0:    [20] UnsupReq               (First)
-> [   30.100267] pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 08000052 00000000 00000000
-> [   30.100372] thunderbolt 0000:0a:00.0: AER: can't recover (no error_detected callback)
-> [   30.100401] xhci_hcd 0000:3e:00.0: AER: can't recover (no error_detected callback)
-> [   30.100427] pcieport 0000:00:1d.0: AER: device recovery failed
+On Wed, 2021-12-29 at 16:53 -0500, Yael Tiomkin wrote:
+> The encrypted.c class supports instantiation of encrypted keys with
+> either an already-encrypted key material, or by generating new key
+> material based on random numbers. This patch defines a new datablob
+> format: [<format>] <master-key name> <decrypted data length>
+> <decrypted data> that allows to instantiate encrypted keys using
+> user-provided decrypted data, and therefore allows to perform key
+> encryption from userspace. The decrypted key material will be
+> inaccessible from userspace.
 
-No timestamps needed here; they don't add to understanding the
-problem.
+The 2nd to last sentence is essentially a tautology but fails to
+be even that, as you can already "perform key encryption" from user
+space, just not with arbitrary key material.
 
-> The link may not be reliable on external facing ports, so don't enable
-> AER on those ports.
+It does not elighten any applications of this feature.
 
-I'm not sure what you want to accomplish here.  If the errors are
-legitimate and the result of some hardware issue like a bad cable, why
-should we ignore them?  If they're caused by a software problem, we
-should figure that out and fix it.
-
-Does this occur on a specific instance of possibly flaky hardware?
-
-You mention a spew of errors; do you think this is a single error that
-we fail to clear correctly?  Or is it really many separate errors?
-
-> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215453
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
->  drivers/pci/pcie/portdrv_core.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/pcie/portdrv_core.c b/drivers/pci/pcie/portdrv_core.c
-> index bda630889f955..d464d00ade8f2 100644
-> --- a/drivers/pci/pcie/portdrv_core.c
-> +++ b/drivers/pci/pcie/portdrv_core.c
-> @@ -219,7 +219,8 @@ static int get_port_device_capability(struct pci_dev *dev)
->  
->  #ifdef CONFIG_PCIEAER
->  	if (dev->aer_cap && pci_aer_available() &&
-> -	    (pcie_ports_native || host->native_aer)) {
-> +	    (pcie_ports_native || host->native_aer) &&
-> +	    !dev->external_facing) {
->  		services |= PCIE_PORT_SERVICE_AER;
->  
->  		/*
-> -- 
-> 2.33.1
-> 
+/Jarkko

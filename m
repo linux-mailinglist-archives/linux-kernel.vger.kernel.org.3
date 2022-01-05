@@ -2,191 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A58548522E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:00:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F35F3485232
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239891AbiAEL7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 06:59:47 -0500
-Received: from foss.arm.com ([217.140.110.172]:43880 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239893AbiAEL7f (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 06:59:35 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 20E7A1FB;
-        Wed,  5 Jan 2022 03:59:34 -0800 (PST)
-Received: from [10.57.85.117] (unknown [10.57.85.117])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D179F3F5A1;
-        Wed,  5 Jan 2022 03:59:32 -0800 (PST)
-Message-ID: <adbe2a0a-4ed8-4b86-453d-94fec96757e2@arm.com>
-Date:   Wed, 5 Jan 2022 11:59:31 +0000
+        id S239913AbiAEMDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 07:03:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36760 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235789AbiAEMDW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 07:03:22 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8158C061761;
+        Wed,  5 Jan 2022 04:03:22 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id iy13so33727100pjb.5;
+        Wed, 05 Jan 2022 04:03:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=cPQoGloZhYJVk/xiShb0qTWLNiy1SKPPjtIRgItHWxw=;
+        b=pjhbK9eruOxcH9XOk6z2rcGYPViKZVirpYhR1CaP50cYQNMpW1TqaAz3yE8u3nVptQ
+         w23Hsy8/Od4kxu0kLLgLmSqJIjpGxg1VHoctk7NJsg4y608A6dgRQHr9nd0APFMsGbmU
+         JPggVkbGTKYUzr4l9QR13pn5jpq5Wve/DoWAWN8dp9ZRZMo3+K5it8kc1M48Iwl65dDR
+         gNDgrKvtLSdkmxUghMwRaiktRYwNDuU1wEr/nQRX1KJma8B4NDl0gwi75JdYvVqm+x0L
+         AdrnLPy2iA3KPD8vIAgOaXc+k6U7ECcsU8TPL8r9GenA46IE1pI8gFMbr/Wq3tr0X8Rg
+         q0aQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=cPQoGloZhYJVk/xiShb0qTWLNiy1SKPPjtIRgItHWxw=;
+        b=3olchAeATKYAm7aqj7/Tv5ra5BJp+6HhkSuTWzp3c5gMzkF3T250hQk7n/D00WIhb6
+         cAcg1UXljjsPsIpardb9ek1czQ/bqzl9Tx9aM4sNllASS9DmjHun0V0VzxPlTB+cvGQ7
+         gPeNBC/SAy1/4Zw5O1B6EWq8Dk3H9JXizVg1gG9yzsQLygCWBtzOfAkiBRP8SjHzIaGb
+         6OPPkVr1EalT8xgW9pyL8jlT2andHqcTDXIIGjzfgxvboHGgFBdLJ5Ps8gaOUUhs16Am
+         5JtGvmi0vlbl4Vp0sdDRJcOOwwHCNAv1DKAsMG6wiN+0JbXgbCo4IaHgj6oUcy+joEHs
+         KIRQ==
+X-Gm-Message-State: AOAM533VDchgKn3DvPFU1F6Bwlr81ZHk+NDQeBzzJhr68xSk/m9qVRYv
+        Qpkg+AbM8f7dicLyPQyv2EE=
+X-Google-Smtp-Source: ABdhPJzV5rfZCZzCvJR8Ywe5FhNbffxNcVOLkO4YAKC04PWSJ9CH+t6rQuuVbCucnGgg6aqwnk7Jjg==
+X-Received: by 2002:a17:90b:1e07:: with SMTP id pg7mr3691486pjb.109.1641384202287;
+        Wed, 05 Jan 2022 04:03:22 -0800 (PST)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id z3sm37580986pgc.45.2022.01.05.04.03.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jan 2022 04:03:21 -0800 (PST)
+Subject: Re: make pdfdocs fails on Debian stable
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mchehab@kernel.org
+References: <20220104064708.GA15446@lst.de>
+ <8f21b702-abc2-c9aa-7593-9aff17e61ed1@gmail.com>
+ <20220104073625.GA16910@lst.de>
+ <02f6aa77-17b7-ed23-8f39-34239ec6e724@gmail.com>
+ <20220104131952.GA21933@lst.de>
+ <2fb003aa-545c-31a4-1466-8c3c3fc708fb@gmail.com>
+ <0ee407a1-ff5a-4c04-a99e-045cfe90d850@gmail.com>
+ <20220105073504.GA3524@lst.de>
+From:   Akira Yokosawa <akiyks@gmail.com>
+Message-ID: <48dfca1b-3436-d2b0-0dd1-de6104539c50@gmail.com>
+Date:   Wed, 5 Jan 2022 21:03:18 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [PATCH 4/4] coresight: trbe: Workaround TRBE trace data
- corruption
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        coresight@lists.linaro.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1641359159-22726-1-git-send-email-anshuman.khandual@arm.com>
- <1641359159-22726-5-git-send-email-anshuman.khandual@arm.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <1641359159-22726-5-git-send-email-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20220105073504.GA3524@lst.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/01/2022 05:05, Anshuman Khandual wrote:
-> TRBE implementations affected by Arm erratum #1902691 might corrupt trace
-> data or deadlock, when it's being written into the memory. Workaround this
-> problem in the driver, by preventing TRBE initialization on affected cpus.
-> This adds a new cpu errata in arm64 errata framework and also updates TRBE
-> driver as required.
+On Wed, 5 Jan 2022 08:35:04 +0100, Christoph Hellwig wrote:
+> On Wed, Jan 05, 2022 at 10:47:40AM +0900, Akira Yokosawa wrote:
+>>> See my pending patch set at:
+>>>
+>>>     https://lore.kernel.org/linux-doc/e01fe9f9-f600-c2fc-c6b3-ef6395655ffe@gmail.com
+>>>     [PATCH v2 0/4] docs: sphinx/kfigure.py: Improve conversion to PDF
+>>>
+>>> This uses Inkscape if it is available instead of ImageMagick.
+>>> No imagemagick nor librsvg2-bin is required.
+>>> As long as if you can trust Inkscape...
 > 
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Suzuki Poulose <suzuki.poulose@arm.com>
-> Cc: coresight@lists.linaro.org
-> Cc: linux-doc@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
->   Documentation/arm64/silicon-errata.rst       |  2 ++
->   arch/arm64/Kconfig                           | 16 ++++++++++++++++
->   arch/arm64/kernel/cpu_errata.c               |  9 +++++++++
->   arch/arm64/tools/cpucaps                     |  1 +
->   drivers/hwtracing/coresight/coresight-trbe.c | 12 ++++++++++++
->   5 files changed, 40 insertions(+)
+> I haven't gotten to try that yet..
 > 
-> diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
-> index e0ef3e9a4b8b..50018f60c4d4 100644
-> --- a/Documentation/arm64/silicon-errata.rst
-> +++ b/Documentation/arm64/silicon-errata.rst
-> @@ -56,6 +56,8 @@ stable kernels.
->   +----------------+-----------------+-----------------+-----------------------------+
->   | ARM            | Cortex-A510     | #2038923        | ARM64_ERRATUM_2038923       |
->   +----------------+-----------------+-----------------+-----------------------------+
-> +| ARM            | Cortex-A510     | #1902691        | ARM64_ERRATUM_1902691       |
-> ++----------------+-----------------+-----------------+-----------------------------+
->   | ARM            | Cortex-A53      | #826319         | ARM64_ERRATUM_826319        |
->   +----------------+-----------------+-----------------+-----------------------------+
->   | ARM            | Cortex-A53      | #827319         | ARM64_ERRATUM_827319        |
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 026e34fb6fad..1ea5c3b4aac0 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -819,6 +819,22 @@ config ARM64_ERRATUM_2038923
->   
->   	  If unsure, say Y.
->   
-> +config ARM64_ERRATUM_1902691
-> +	bool "Cortex-A510: 1902691: workaround TRBE trace corruption"
-> +	depends on CORESIGHT_TRBE
-> +	default y
-> +	help
-> +	  This option adds the workaround for ARM Cortex-A510 erratum 1902691.
-> +
-> +	  Affected Cortex-A510 core might cause trace data corruption, when being written
-> +	  into the memory. Effectively TRBE is broken and hence cannot be used to capture
-> +	  trace data.
-> +
-> +	  Work around this problem in the driver by just preventing TRBE initialization on
-> +	  affected cpus.
-> +
-> +	  If unsure, say Y.
-> +
+>> Alternatively, you can avoid ImageMagick by installing
+>> graphicsmagick-imagemagick-compat instead of imagemagick.
+>>
+>> I'm not sure what you think of GraphicsMagick, though.
+>>
+>> If you'd like to try, do:
+>>
+>>     $ sudo apt install graphicsmagick-imagemagick-compat ghostscript gsfonts-x11
+>>
+>> This will remove ImageMagick.
+>> (You have ghostscript and gsfonts-x11 already installed, I guess.)
+> 
+> This works just fine, thanks.
 
-It might be better to add :
+Nice!
 
-"The firmware must have disabled the access to TRBE for the kernel on 
-such implementations. This will cover the kernel for any firmware that
-doesn't do this already"
+Glad to know I could help you.
 
+        Thanks, Akira
 
->   config CAVIUM_ERRATUM_22375
->   	bool "Cavium erratum 22375, 24313"
->   	default y
-> diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
-> index 60b0c1f1d912..a3336dfb5a8a 100644
-> --- a/arch/arm64/kernel/cpu_errata.c
-> +++ b/arch/arm64/kernel/cpu_errata.c
-> @@ -615,6 +615,15 @@ const struct arm64_cpu_capabilities arm64_errata[] = {	
->   		/* Cortex-A510 r0p0 - r0p2 */
->   		ERRATA_MIDR_REV_RANGE(MIDR_CORTEX_A510, 0, 0, 2)
->   	},
-> +#endif
-> +#ifdef CONFIG_ARM64_ERRATUM_1902691
-> +	{
-> +		.desc = "ARM erratum 1902691",
-> +		.capability = ARM64_WORKAROUND_1902691,
-> +
-> +		/* Cortex-A510 r0p0 - r0p1 */
-> +		ERRATA_MIDR_REV_RANGE(MIDR_CORTEX_A510, 0, 0, 1)
-> +	},
->   #endif
->   	{
->   	}
-> diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
-> index 45a06d36d080..e7719e8f18de 100644
-> --- a/arch/arm64/tools/cpucaps
-> +++ b/arch/arm64/tools/cpucaps
-> @@ -57,6 +57,7 @@ WORKAROUND_1508412
->   WORKAROUND_1542419
->   WORKAROUND_2064142
->   WORKAROUND_2038923
-> +WORKAROUND_1902691
->   WORKAROUND_TRBE_OVERWRITE_FILL_MODE
->   WORKAROUND_TSB_FLUSH_FAILURE
->   WORKAROUND_TRBE_WRITE_OUT_OF_RANGE
-> diff --git a/drivers/hwtracing/coresight/coresight-trbe.c b/drivers/hwtracing/coresight/coresight-trbe.c
-> index 0689c6dab96d..b9b4e34fac15 100644
-> --- a/drivers/hwtracing/coresight/coresight-trbe.c
-> +++ b/drivers/hwtracing/coresight/coresight-trbe.c
-> @@ -93,12 +93,14 @@ struct trbe_buf {
->   #define TRBE_WORKAROUND_WRITE_OUT_OF_RANGE	1
->   #define TRBE_WORKAROUND_SYSREG_WRITE_FAILURE	2
->   #define TRBE_WORKAROUND_CORRUPTION_WITH_ENABLE	3
-> +#define TRBE_IS_BROKEN	4
->   
->   static int trbe_errata_cpucaps[] = {
->   	[TRBE_WORKAROUND_OVERWRITE_FILL_MODE] = ARM64_WORKAROUND_TRBE_OVERWRITE_FILL_MODE,
->   	[TRBE_WORKAROUND_WRITE_OUT_OF_RANGE] = ARM64_WORKAROUND_TRBE_WRITE_OUT_OF_RANGE,
->   	[TRBE_WORKAROUND_SYSREG_WRITE_FAILURE] = ARM64_WORKAROUND_2064142,
->   	[TRBE_WORKAROUND_CORRUPTION_WITH_ENABLE] = ARM64_WORKAROUND_2038923,
-> +	[TRBE_IS_BROKEN] = ARM64_WORKAROUND_1902691,
->   	-1,		/* Sentinel, must be the last entry */
->   };
->   
-> @@ -181,6 +183,11 @@ static inline bool trbe_may_corrupt_with_enable(struct trbe_cpudata *cpudata)
->   	return trbe_has_erratum(cpudata, TRBE_WORKAROUND_CORRUPTION_WITH_ENABLE);
->   }
->   
-> +static inline bool trbe_is_broken(struct trbe_cpudata *cpudata)
-> +{
-> +	return trbe_has_erratum(cpudata, TRBE_IS_BROKEN);
-> +}
-> +
->   static int trbe_alloc_node(struct perf_event *event)
->   {
->   	if (event->cpu == -1)
-> @@ -1291,6 +1298,11 @@ static void arm_trbe_probe_cpu(void *info)
->   	 */
->   	trbe_check_errata(cpudata);
->   
-> +	if (trbe_is_broken(cpudata)) {
-> +		pr_err("TRBE might corrupt the trace on cpu %d\n", cpu);
-
-It may be better to say:
-
-		"Disabling TRBE on CPU%d due to erratum"
-
-Otherwise looks good to me.
-
-Suzuki
+> 

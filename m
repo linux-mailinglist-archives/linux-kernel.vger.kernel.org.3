@@ -2,110 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26BC5484BD3
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 01:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E5D484BD5
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 01:43:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236794AbiAEAnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 19:43:14 -0500
-Received: from mga14.intel.com ([192.55.52.115]:45242 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232884AbiAEAnN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 19:43:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641343393; x=1672879393;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=MpCEBVcUt3q1JbwjRMgMygRha3aI3StRnlj8zP5uAKo=;
-  b=ecZ2bJew75EqPoHPlU4rv7r2Ww1n3LESb6qq1N5DheJ3Wbsgifk0IcvV
-   ITIddcfk2I7vin14mxXQbN8Wp96Iy+TAhI6fPUVIBwHuqTqvSQysesPr5
-   zl3WOfS5T/EsaDx3yFsM5Il5RdAOiceTivTecZcnhVlB7lMg2xfNa69EG
-   6ZHcmXr+ucCvOGWabu5hbFCmrqW/HhijH87yMRKZCaMmuiSRykTKHMHLa
-   6dN0ftf0JksAY8XJjf2Q9HZ+6KwPH/HyIhj8zm++DiHWhLF4uIzwEpyth
-   WbPDcNsy0JEQ8XMthr9fkmPJXhDEmmbPUg4L/322tNvcp0ep4IYBd69qh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242545407"
-X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
-   d="scan'208";a="242545407"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 16:43:12 -0800
-X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
-   d="scan'208";a="556351348"
-Received: from mncallah-mobl.amr.corp.intel.com (HELO [10.209.35.108]) ([10.209.35.108])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 16:43:12 -0800
-Subject: Re: [PATCH 19/26] x86/tdx: Make pages shared in ioremap()
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, tglx@linutronix.de,
-        mingo@redhat.com, luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-References: <YcTlhp1PUfrMOelI@zn.tnic>
- <20211224110300.7zj3nc5nbbv7jobp@black.fi.intel.com>
- <33914dc1-37e8-f0bb-6468-71c3b5f4169d@amd.com>
- <20220103141705.6hqflhwykqmtfim6@black.fi.intel.com>
- <YdMIWAT42el4D6wJ@zn.tnic>
- <20220103151516.pfcz2pap5l7r2rzv@box.shutemov.name>
- <b4b54116-1cd7-468a-0889-d497268cbfb2@intel.com>
- <20220103181059.ui5eloufw5gsojcb@box.shutemov.name>
- <20220104191424.oly2gqm4ltzj5wo3@box.shutemov.name>
- <0e0c38e2-67ad-1f51-c44b-d3c3d505e40a@intel.com>
- <20220105003108.mr7zyd5oyaaxmnmv@box.shutemov.name>
-From:   Dave Hansen <dave.hansen@intel.com>
-Message-ID: <50dfa0db-fcd1-3c54-d982-237d2c9df431@intel.com>
-Date:   Tue, 4 Jan 2022 16:43:09 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S236802AbiAEAnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 19:43:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232884AbiAEAnk (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 19:43:40 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD15C061761;
+        Tue,  4 Jan 2022 16:43:40 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id j6so155029437edw.12;
+        Tue, 04 Jan 2022 16:43:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZsER8dwM6Zj8zfdZ7MJqQNqpLImA5s2mJr5orsE/+Bk=;
+        b=ZhvMcWxgJor4nybVVrUbIe5NBi5OKCxqmARkFVb5Rorit+kIiFmb4Y3/Jy9UpfHXEW
+         NpEOr01dKcg/4AaUdaAXRgozlZ3/AbywrnV/O4J4XuIfao/vg6FylL0//PiTy+7KC5B+
+         o4vfZ/9b8bypNFiysKhKD+Fg+VqvLXwJbU9eYhnpRPCODW2mush8yhAPzcDDereAtjiS
+         YUFd70AFAb777UTf3tiZ+fATKqj6NpcwaAuGVqQaYasAdheGMd8tvnB4r5lf5UJbRGMq
+         +4UVW+csoEOon7832sAqoYfx/+RTT4uLAbYjjMD1HQQWz63AKFZg+NZAMZaHzpAWUsuF
+         kGmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=ZsER8dwM6Zj8zfdZ7MJqQNqpLImA5s2mJr5orsE/+Bk=;
+        b=OX9imp/U/5ZUnEB/IkAEdTROAh9Zwtka7wzXD3/qC7C3uKrR/bEqF7q9x10vggj4SF
+         dy9v5eqxZGII0rK3PKfmo8zgI+RhdLACHQ8J4nVmATMhe8xodyNzVci/pH8fXriXXthz
+         NgHx6Rpg9SFqJctp6l0BmLdW6KLYM3i1WYbwQN1F6BchZtGzVDpSIsKGnL6ipXLPh1Z7
+         vo7y65NM8Tidx4vd1kdf3JruNI/DfuNqMXHSIQev+ulzWpCacCgP9alI+KVPMoUZt13Y
+         zgI/RIZ3qfQ+MgM/anBdxIFUAmq1Hi3xbqCehFgJkxLmm8Uq51rhgSBi2ikS8knSoPr0
+         MXXA==
+X-Gm-Message-State: AOAM532U+c6ZHzCdXC+PByXvuBi5dKIaOg7REvwlFa01tHrvgC3Phlej
+        rPVmTTNs5wEjqufXlNBi4MI=
+X-Google-Smtp-Source: ABdhPJw3I9BUZcOKnkxGmUz3P2/vk0P4+LzIfz/TxlqdZXCA/+6DM99o8TqM6SLPv7NxMJbXPx8sfA==
+X-Received: by 2002:a05:6402:b18:: with SMTP id bm24mr49783061edb.324.1641343419119;
+        Tue, 04 Jan 2022 16:43:39 -0800 (PST)
+Received: from gmail.com (0526F11B.dsl.pool.telekom.hu. [5.38.241.27])
+        by smtp.gmail.com with ESMTPSA id p7sm15196127edu.84.2022.01.04.16.43.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 16:43:38 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Wed, 5 Jan 2022 01:43:36 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Al Viro <viro@zeniv.linux.org.uk>, llvm@lists.linux.dev,
+        ashimida <ashimida@linux.alibaba.com>,
+        Arnd Bergmann <arnd@kernel.org>
+Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
+ -v1: Eliminate the Linux kernel's "Dependency Hell"
+Message-ID: <YdTpuNrF2QxRzszb@gmail.com>
+References: <YdIfz+LMewetSaEB@gmail.com>
+ <YdM4Z5a+SWV53yol@archlinux-ax161>
+ <YdQlwnDs2N9a5Reh@gmail.com>
+ <CAKwvOdmCgBKiikP2Ja4PfJmVEnzNPGYe19MNd++a5D-asCBG2w@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20220105003108.mr7zyd5oyaaxmnmv@box.shutemov.name>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdmCgBKiikP2Ja4PfJmVEnzNPGYe19MNd++a5D-asCBG2w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/4/22 4:31 PM, Kirill A. Shutemov wrote:
-> On Tue, Jan 04, 2022 at 12:36:06PM -0800, Dave Hansen wrote:
->> @@ -57,7 +58,6 @@ typedef struct { unsigned long iopte; }
->>  typedef struct { unsigned long pmd; } pmd_t;
->>  typedef struct { unsigned long pgd; } pgd_t;
->>  typedef struct { unsigned long ctxd; } ctxd_t;
->> -typedef struct { unsigned long pgprot; } pgprot_t;
->>  typedef struct { unsigned long iopgprot; } iopgprot_t;
->>  
->>  #define pte_val(x)	((x).pte)
->> @@ -85,7 +85,6 @@ typedef unsigned long iopte_t;
->>  typedef unsigned long pmd_t;
->>  typedef unsigned long pgd_t;
->>  typedef unsigned long ctxd_t;
->> -typedef unsigned long pgprot_t;
->>  typedef unsigned long iopgprot_t;
->>  
->>  #define pte_val(x)	(x)
+
+* Nick Desaulniers <ndesaulniers@google.com> wrote:
+
+> > Can this Clang warning be disabled?
 > 
-> Any arch that use STRICT_MM_TYPECHECKS hacks will get broken if compiled
-> without the define (as sparc by default).
+> Clang is warning that the attribute will be ignored because of that 
+> positioning. If you disable the warning, code will probably stop working 
+> as intended.  This warning has at least been helping us make the kernel 
+> coding style more consistent.
 
-My read of STRICT_MM_TYPECHECKS was that "typedef unsigned long
-pgprot_t" produces better code, but "typedef struct { unsigned long
-pgprot; } pgprot_t;" produces better type checking.
+Yeah, indeed, Clang is fully correct to warn here, and these changes in my 
+tree are outright bugs (which bugs Clang found & reported :-).
 
-I just compiled these patches on sparc with no issues.
+See the fixes below - by doing it this way the 'spurious link failure' 
+problem when a header include is missing should be fixed as well.
 
-...
-> Is it the way to go we want?
+Thanks,
 
-I _think_ this was all a result of some review feedback from Tom
-Lendacky about where the encryption-modifying pgprot helpers got placed
-in the code.  I don't feel strongly about it, but I'm not quite sure
-that this is worth the trouble.
+	Ingo
+---
+ include/linux/dcache.h        | 3 +--
+ include/linux/fs_types.h      | 3 +--
+ include/linux/netdevice_api.h | 2 +-
+ include/net/xdp_types.h       | 2 +-
+ 4 files changed, 4 insertions(+), 6 deletions(-)
 
-I'd be curious what Tom thinks now that he's gotten a peek at what it's
-going to take to address his concerns.
+diff --git a/include/linux/dcache.h b/include/linux/dcache.h
+index 520daf638d06..da7e77a7cede 100644
+--- a/include/linux/dcache.h
++++ b/include/linux/dcache.h
+@@ -127,8 +127,7 @@ enum dentry_d_lock_class
+ 	DENTRY_D_LOCK_NESTED
+ };
+ 
+-____cacheline_aligned
+-struct dentry_operations {
++struct ____cacheline_aligned dentry_operations {
+ 	int (*d_revalidate)(struct dentry *, unsigned int);
+ 	int (*d_weak_revalidate)(struct dentry *, unsigned int);
+ 	int (*d_hash)(const struct dentry *, struct qstr *);
+diff --git a/include/linux/fs_types.h b/include/linux/fs_types.h
+index b53aadafab1b..e2e1c0827183 100644
+--- a/include/linux/fs_types.h
++++ b/include/linux/fs_types.h
+@@ -994,8 +994,7 @@ struct file_operations {
+ 	int (*fadvise)(struct file *, loff_t, loff_t, int);
+ } __randomize_layout;
+ 
+-____cacheline_aligned
+-struct inode_operations {
++struct ____cacheline_aligned inode_operations {
+ 	struct dentry * (*lookup) (struct inode *,struct dentry *, unsigned int);
+ 	const char * (*get_link) (struct dentry *, struct inode *, struct delayed_call *);
+ 	int (*permission) (struct user_namespace *, struct inode *, int);
+diff --git a/include/linux/netdevice_api.h b/include/linux/netdevice_api.h
+index 4a8d7688e148..0e5e08dcbb2a 100644
+--- a/include/linux/netdevice_api.h
++++ b/include/linux/netdevice_api.h
+@@ -49,7 +49,7 @@
+ #endif
+ 
+ /* This structure contains an instance of an RX queue. */
+-____cacheline_aligned_in_smp struct netdev_rx_queue {
++struct ____cacheline_aligned_in_smp netdev_rx_queue {
+ 	struct xdp_rxq_info		xdp_rxq;
+ #ifdef CONFIG_RPS
+ 	struct rps_map __rcu		*rps_map;
+diff --git a/include/net/xdp_types.h b/include/net/xdp_types.h
+index 442028626b35..accc12372bca 100644
+--- a/include/net/xdp_types.h
++++ b/include/net/xdp_types.h
+@@ -56,7 +56,7 @@ struct xdp_mem_info {
+ struct page_pool;
+ 
+ /* perf critical, avoid false-sharing */
+-____cacheline_aligned struct xdp_rxq_info {
++struct ____cacheline_aligned xdp_rxq_info {
+ 	struct net_device *dev;
+ 	u32 queue_index;
+ 	u32 reg_state;
+

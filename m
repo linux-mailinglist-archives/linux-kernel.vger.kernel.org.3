@@ -2,56 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8888348556A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:06:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54245485572
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:08:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241230AbiAEPG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 10:06:27 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56768 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241223AbiAEPGT (ORCPT
+        id S236650AbiAEPIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 10:08:17 -0500
+Received: from out30-131.freemail.mail.aliyun.com ([115.124.30.131]:42899 "EHLO
+        out30-131.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230413AbiAEPIO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 10:06:19 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D716B81BAB;
-        Wed,  5 Jan 2022 15:06:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 934F2C36AE3;
-        Wed,  5 Jan 2022 15:06:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641395177;
-        bh=UIMuHgAxGtmW/3NYX9jsHCAzjvSGeEibGzFXjWcp5U4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tBWt6dijSGAkY3Y4euUFdC7AMhAxRKWpVum08lL61C74BxuWmpODIjLb26JkbrUX8
-         q2JtteucOdf0A5owqkSgY1/PQuEv7SyQ+T8uAB+O3tO31vTAvm1/sX/BblW3oDWe3F
-         7iQtihlTsep6l46OHL19lhm6FCQJLLK1zTk5C5Ao=
-Date:   Wed, 5 Jan 2022 16:06:14 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Aaron Ma <aaron.ma@canonical.com>, kuba@kernel.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        hayeswang@realtek.com, tiwai@suse.de
-Subject: Re: [PATCH 3/3] net: usb: r8152: remove unused definition
-Message-ID: <YdWz5h3UmTuR9PHZ@kroah.com>
-References: <20220105142351.8026-1-aaron.ma@canonical.com>
- <20220105142351.8026-3-aaron.ma@canonical.com>
- <20220105155106.400e0285@md1za8fc.ad001.siemens.net>
+        Wed, 5 Jan 2022 10:08:14 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V11dny9_1641395280;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V11dny9_1641395280)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 05 Jan 2022 23:08:12 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     clm@fb.com
+Cc:     josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        chongjiapeng <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH v2] btrfs: Remove redundant assignment of slot and leaf
+Date:   Wed,  5 Jan 2022 23:07:58 +0800
+Message-Id: <20220105150758.29670-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220105155106.400e0285@md1za8fc.ad001.siemens.net>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 03:51:06PM +0100, Henning Schild wrote:
-> Am Wed,  5 Jan 2022 22:23:51 +0800
-> schrieb Aaron Ma <aaron.ma@canonical.com>:
-> 
-> Maybe add a 
-> Fixes: f77b83b5bbab ("net: usb: r8152: Add MAC passthrough support for more Lenovo Docks")
+From: chongjiapeng <jiapeng.chong@linux.alibaba.com>
 
-How can removing an unused #define fix anything?
+slot and leaf are being initialized to path->slots[0] and
+path->nodes[0], but this is never read as slot and leaf
+is overwritten later on. Remove the redundant assignment.
+
+Cleans up the following clang-analyzer warning:
+
+fs/btrfs/tree-log.c:6125:7: warning: Value stored to 'slot' during its
+initialization is never read [clang-analyzer-deadcode.DeadStores].
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: chongjiapeng <jiapeng.chong@linux.alibaba.com>
+---
+Changes in v2:
+  -Remove redundant assignment of leaf.
+
+ fs/btrfs/tree-log.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
+index 4b89ac769347..d99cda0acd95 100644
+--- a/fs/btrfs/tree-log.c
++++ b/fs/btrfs/tree-log.c
+@@ -6188,8 +6188,6 @@ static int log_new_ancestors(struct btrfs_trans_handle *trans,
+ 		if (ret < 0)
+ 			return ret;
+ 
+-		leaf = path->nodes[0];
+-		slot = path->slots[0];
+ 		if (slot >= btrfs_header_nritems(leaf)) {
+ 			ret = btrfs_next_leaf(root, path);
+ 			if (ret < 0)
+-- 
+2.19.1.6.gb485710b
 

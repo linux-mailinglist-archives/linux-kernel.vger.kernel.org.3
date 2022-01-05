@@ -2,115 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9522E485A65
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 22:06:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58559485A6A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 22:07:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244319AbiAEVGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 16:06:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48498 "EHLO
+        id S244329AbiAEVHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 16:07:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244310AbiAEVG3 (ORCPT
+        with ESMTP id S244333AbiAEVHn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 16:06:29 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9900EC061245
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 13:06:29 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id y18so652855iob.8
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 13:06:29 -0800 (PST)
+        Wed, 5 Jan 2022 16:07:43 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197D8C061201
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 13:07:43 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id t204so801527oie.7
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 13:07:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EolGbdgsNcnhwpXhAEL04icCDLJTUPTjvI9j2SgExNc=;
-        b=hjEtr3Wm65nDdvFeBKPgdi6ecGQx2AMgYvAL1GIG2JFvfaR8bvZfXlr+3C4UNqtgCY
-         tGt3ZR+DCES7x1oweqv+V/SjgIyUD3XBY51D+qf75Jsp5ToIn5bKz+rb8akGq8GGCtM1
-         7/s4sRtkED0EZ1tg3lSmLccqe9B+JYGumPgJnNSSlCUirczEknhsSFuBlBTHRsdJhneo
-         4UgUt5FMJDlj2rRm5gQVs814iwNGWTfWnfpoKGZfgk1DcIsnwyTH9WP1mZbR4IuWEzAR
-         uO9IasOlN41P1Yuaf1EzsVl1R0piiDZ99wNbzK7chG/GzLlkDdVEprhucf9ThCq5c326
-         Pj1Q==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=PpDjDQ0Z79SEzn7VTSB0P0l9isRbUhXOzNth2TsOPjg=;
+        b=CvSYazyKDMOUtrjmU/TOamyLERCVnlRPhk2UWeaLQEFMYqL6IvRmMkycP//LeP21tn
+         YQfAS3dhwjNdbgCt/FoJJq0q6ocKxF93oE3uR09AfoFnvgszwqd2Cfox+NyWpKll3b6f
+         9PVCsGtBSvz9Y7D+pLluCQuvpiSFy6z2P0PlI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EolGbdgsNcnhwpXhAEL04icCDLJTUPTjvI9j2SgExNc=;
-        b=FgHF7+ajonEOj/e6v2mFhtBzLnPPFxVaCH7aPK1sUXxie1yeaAzXKs0Yus2AKYxgHg
-         LDejnflpRO+CmW/zmKodx7Q2+z436q7iQIdhR52Jw5h9IFtbYF94Fh9AtO5EpRtBdyc4
-         gFPcUjdWAsLH20dyPIARV8sQzgyJuelPMNjt7haymLlfF8+nzyUyoCVAJHwxTdF7x7xJ
-         zdHJGq8kEGvy81p7fOyOs9JrHhJOsD4m7Lwg/FX2QU9R9X/a7M9ELqVwjMV5TNf+TYkU
-         RB4jpGHy562YVny0D+6zpkHrmCkbrKQTI98acVNL91wBCfYSw2geUV0toZ9gXIUaCqfv
-         4SJQ==
-X-Gm-Message-State: AOAM532bGggGj0BeXcuKRUCJmNROF2mTqekdtCMdwAn3Z9IdQUJBwtHU
-        7dOif1vZkS5lTh0XTJO8XioS4w==
-X-Google-Smtp-Source: ABdhPJzylreqnU7T8VfsIRP9gdym6+PSAMgz3s5D6kp+H/7MxNiBwyiVi2f3QxuAuHm3sb7CQnNMDg==
-X-Received: by 2002:a02:a40a:: with SMTP id c10mr23211642jal.18.1641416788894;
-        Wed, 05 Jan 2022 13:06:28 -0800 (PST)
-Received: from google.com ([2620:15c:183:200:5b02:855e:267d:5b0])
-        by smtp.gmail.com with ESMTPSA id f2sm22517868iow.33.2022.01.05.13.06.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 13:06:28 -0800 (PST)
-Date:   Wed, 5 Jan 2022 14:06:24 -0700
-From:   Yu Zhao <yuzhao@google.com>
-To:     SeongJae Park <sj@kernel.org>, Borislav Petkov <bp@alien8.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org
-Subject: Re: [PATCH v6 0/9] Multigenerational LRU Framework
-Message-ID: <YdYIUAC0gopuy8r/@google.com>
-References: <YdV4k1+zEbtzmUkK@google.com>
- <20220105112527.23399-1-sj@kernel.org>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=PpDjDQ0Z79SEzn7VTSB0P0l9isRbUhXOzNth2TsOPjg=;
+        b=TaA1+/lkfoFX16u8VFZ891CTDKLnbN10n96sn3nUAJaONBO5J8/WPsmSoonrXYKmj2
+         KU06Iard1KgPj4c4/NSEH0Pb7mO2EACOiqcxVdRLYsjM7u4vpb8uHKM+rYh2tmFJGLHt
+         xPuY1M0WwP3LfM0aptQ3gJ/hH/brg054YZWxFygFP+nBXBhkxG7tiXi4YbPsbv6DknZX
+         qGLI771cthfVhKT1gP35NaLj8ejLedX+lFHzdtyEemlnRSM5jbYgpBn+GscyuS4+Wt3f
+         ackJ3Zgntgv9flWjxU/6+NhGxYbYZRW42BlkxWQjaPbUwcXTvd01KOjwTNg0/VQEikbP
+         uN/g==
+X-Gm-Message-State: AOAM530PQs/dFs9yfQaauDphRDYUxuU1fjf6l9Viyy3h0V7SdCBg2p9w
+        vYRVjRc0LvylUZZtWTiF+BN4PyZvln+7EYOR3CNoYg==
+X-Google-Smtp-Source: ABdhPJwq7ROdWEu2C2UDt68Bywy/sRKVp6YDj3fImBJxbCHcoDnsJd0SyOIaso9Uiwev9rxexyDz4KI5zo4Z7/NdAhE=
+X-Received: by 2002:aca:4382:: with SMTP id q124mr3952010oia.64.1641416862460;
+ Wed, 05 Jan 2022 13:07:42 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 5 Jan 2022 13:07:41 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220105112527.23399-1-sj@kernel.org>
+In-Reply-To: <1641208380-15510-3-git-send-email-quic_srivasam@quicinc.com>
+References: <1641208380-15510-1-git-send-email-quic_srivasam@quicinc.com> <1641208380-15510-3-git-send-email-quic_srivasam@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Wed, 5 Jan 2022 13:07:41 -0800
+Message-ID: <CAE-0n51QAJFBALV7eEKLDunQaCNqPyTmdHRRUt7Khvkt8st=_g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] arm64: dts: qcom: sc7280: Add lpass cpu node
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        devicetree@vger.kernel.org, dianders@chromium.org,
+        judyhsiao@chromium.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        rohitkr@codeaurora.org, srinivas.kandagatla@linaro.org
+Cc:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 11:25:27AM +0000, SeongJae Park wrote:
-> On Wed, 5 Jan 2022 03:53:07 -0700 Yu Zhao <yuzhao@google.com> wrote:
-> 
-> > On Wed, Jan 05, 2022 at 08:55:34AM +0000, SeongJae Park wrote:
-> > > Hi Yu,
-> > > 
-> > > On Tue, 4 Jan 2022 13:22:19 -0700 Yu Zhao <yuzhao@google.com> wrote:
-> [...]
-> > > I think similar works are already available out of the box with the latest
-> > > mainline tree, though it might be suboptimal in some cases.
-> > 
-> > Ok, I will sound harsh because I hate it when people challenge facts
-> > while having no idea what they are talking about.
-> > 
-> > Our jobs are help the leadership make best decisions by providing them
-> > with facts, not feeding them crap.
-> 
-> I was using the word "similar", to represent this is only for a rough concept
-> level similarity, rather than detailed facts.  But, seems it was not enough,
-> sorry.  Anyway, I will not talk more and thus disturb you having the important
-> discussion with leaders here, as you are asking.
+Quoting Srinivasa Rao Mandadapu (2022-01-03 03:12:59)
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index c0d9de3..68c7755 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -17,6 +17,7 @@
+>  #include <dt-bindings/reset/qcom,sdm845-aoss.h>
+>  #include <dt-bindings/reset/qcom,sdm845-pdc.h>
+>  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
+> +#include <dt-bindings/sound/qcom,lpass.h>
+>  #include <dt-bindings/thermal/thermal.h>
+>
+>  / {
+> @@ -1840,6 +1841,62 @@
+>                         #size-cells = <0>;
+>                 };
+>
+> +               lpass_cpu: qcom,lpass@3260000 {
 
-First of all, I want to apologize.
+audio-subsystem@3260000?
 
-I detested what I read, and I still don't like "a rough concept level
-similarity" sitting next to a factual statement. But as Borislav has
-reminded me, my tone did cross the line. I should have had used an
-objective approach to express my (very) different views.
+> +                       compatible = "qcom,sc7280-lpass-cpu";
+> +                       reg = <0 0x3260000 0 0xC000>,
+> +                               <0 0x3280000 0 0x29000>,
+> +                               <0 0x3340000 0 0x29000>,
+> +                               <0 0x336C000 0 0x3000>,
+> +                               <0 0x3987000 0 0x68000>,
+> +                               <0 0x3B00000 0 0x29000>;
+> +                       reg-names = "lpass-rxtx-cdc-dma-lpm",
+> +                                       "lpass-rxtx-lpaif",
+> +                                       "lpass-va-lpaif",
+> +                                       "lpass-va-cdc-dma-lpm",
+> +                                       "lpass-hdmiif",
+> +                                       "lpass-lpaif";
+> +
+> +                       iommus = <&apps_smmu 0x1820 0>,
+> +                               <&apps_smmu 0x1821 0>,
+> +                               <&apps_smmu 0x1832 0>;
+> +                       status = "disabled";
+> +
+> +                       power-domains = <&rpmhpd SC7280_LCX>;
+> +                       power-domain-names = "lcx";
+> +                       required-opps = <&rpmhpd_opp_nom>;
+> +
+> +                       clocks = <&lpass_aon LPASS_AON_CC_AUDIO_HM_H_CLK>,
+> +                                       <&lpasscc LPASS_CORE_CC_SYSNOC_MPORT_CORE_CLK>,
+> +                                       <&lpass_audiocc LPASS_AUDIO_CC_CODEC_MEM0_CLK>,
+> +                                       <&lpass_audiocc LPASS_AUDIO_CC_CODEC_MEM1_CLK>,
+> +                                       <&lpass_audiocc LPASS_AUDIO_CC_CODEC_MEM2_CLK>,
+> +                                       <&lpasscc LPASS_CORE_CC_EXT_IF0_IBIT_CLK>,
+> +                                       <&lpasscc LPASS_CORE_CC_EXT_IF1_IBIT_CLK>,
+> +                                       <&lpass_aon LPASS_AON_CC_VA_MEM0_CLK>;
+> +                       clock-names = "aon_cc_audio_hm_h",
+> +                                       "core_cc_sysnoc_mport_core",
+> +                                       "audio_cc_codec_mem0",
+> +                                       "audio_cc_codec_mem1",
+> +                                       "audio_cc_codec_mem2",
+> +                                       "core_cc_ext_if0_ibit",
+> +                                       "core_cc_ext_if1_ibit",
+> +                                       "aon_cc_va_mem0";
 
-I hope that's all water under the bridge now. And I do plan to carry
-on with what I should have had done.
+Please align these things on " and <.
+
+> +
+> +                       #sound-dai-cells = <1>;
+> +                       #address-cells = <1>;
+> +                       #size-cells = <0>;
+> +
+> +                       interrupts = <GIC_SPI 160 IRQ_TYPE_LEVEL_HIGH>,
+> +                                               <GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>,
+> +                                               <GIC_SPI 180 IRQ_TYPE_LEVEL_HIGH>,
+> +                                               <GIC_SPI 268 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +                       interrupt-names = "lpass-irq-lpaif",
+> +                                       "lpass-irq-vaif",
+> +                                       "lpass-irq-rxtxif",
+> +                                       "lpass-irq-hdmi";
+
+Same.
+
+> +               };
+> +
+>                 vamacro: codec@3370000 {
+>                         compatible = "qcom,sc7280-lpass-va-macro";
+>                         pinctrl-0 = <&dmic01_active>;
+> --
+> 2.7.4
+>

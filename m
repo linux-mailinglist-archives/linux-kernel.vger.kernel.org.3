@@ -2,85 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F1AD4850CF
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:12:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5E548510F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:21:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239287AbiAEKMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 05:12:42 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4342 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239267AbiAEKMh (ORCPT
+        id S239407AbiAEKVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 05:21:20 -0500
+Received: from prt-mail.chinatelecom.cn ([42.123.76.226]:37797 "EHLO
+        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S239406AbiAEKVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 05:12:37 -0500
-Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JTQCK6yfQz67MtS;
-        Wed,  5 Jan 2022 18:07:41 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 5 Jan 2022 11:12:34 +0100
-Received: from localhost (10.47.83.118) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 5 Jan
- 2022 10:12:33 +0000
-Date:   Wed, 5 Jan 2022 10:12:39 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        "Lars-Peter Clausen" <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Arnd Bergmann" <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, <list@opendingux.net>,
-        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mips@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 7/8] mmc: jz4740: Make dev_pm_ops struct static
-Message-ID: <20220105101239.00004f04@Huawei.com>
-In-Reply-To: <20220104214214.198843-8-paul@crapouillou.net>
-References: <20220104214214.198843-1-paul@crapouillou.net>
-        <20220104214214.198843-8-paul@crapouillou.net>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
-MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.83.118]
-X-ClientProxiedBy: lhreml704-chm.china.huawei.com (10.201.108.53) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+        Wed, 5 Jan 2022 05:21:18 -0500
+HMM_SOURCE_IP: 172.18.0.218:48684.1571331312
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-110.86.5.92 (unknown [172.18.0.218])
+        by chinatelecom.cn (HERMES) with SMTP id 6225E2800AA;
+        Wed,  5 Jan 2022 18:13:07 +0800 (CST)
+X-189-SAVE-TO-SEND: +zhenggy@chinatelecom.cn
+Received: from  ([172.18.0.218])
+        by app0025 with ESMTP id 97814b44f502412390feeacc96d5d9cd for axboe@kernel.dk;
+        Wed, 05 Jan 2022 18:13:09 CST
+X-Transaction-ID: 97814b44f502412390feeacc96d5d9cd
+X-Real-From: zhenggy@chinatelecom.cn
+X-Receive-IP: 172.18.0.218
+X-MEDUSA-Status: 0
+Sender: zhenggy@chinatelecom.cn
+From:   GuoYong Zheng <zhenggy@chinatelecom.cn>
+To:     axboe@kernel.dk, asml.silence@gmail.com
+Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        GuoYong Zheng <zhenggy@chinatelecom.cn>
+Subject: [PATCH] io_uring: remove redundant tap space
+Date:   Wed,  5 Jan 2022 18:13:05 +0800
+Message-Id: <1641377585-1891-1-git-send-email-zhenggy@chinatelecom.cn>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jan 2022 21:42:13 +0000
-Paul Cercueil <paul@crapouillou.net> wrote:
+When show fdinfo, SqMask follow two tap space, Inconsistent with
+other paras, remove one.
 
-> The new DEFINE_SIMPLE_DEV_PM_OPS() macro does not set the "static"
-> qualifier anymore, so we can add it here, as the underlying dev_pm_ops
-> struct is only used in this file.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: GuoYong Zheng <zhenggy@chinatelecom.cn>
+---
+ fs/io_uring.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->  drivers/mmc/host/jz4740_mmc.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/mmc/host/jz4740_mmc.c b/drivers/mmc/host/jz4740_mmc.c
-> index 7693236c946f..7ab1b38a7be5 100644
-> --- a/drivers/mmc/host/jz4740_mmc.c
-> +++ b/drivers/mmc/host/jz4740_mmc.c
-> @@ -1128,8 +1128,8 @@ static int jz4740_mmc_resume(struct device *dev)
->  	return pinctrl_select_default_state(dev);
->  }
->  
-> -DEFINE_SIMPLE_DEV_PM_OPS(jz4740_mmc_pm_ops, jz4740_mmc_suspend,
-> -	jz4740_mmc_resume);
-> +static DEFINE_SIMPLE_DEV_PM_OPS(jz4740_mmc_pm_ops, jz4740_mmc_suspend,
-> +				jz4740_mmc_resume);
->  
->  static struct platform_driver jz4740_mmc_driver = {
->  	.probe = jz4740_mmc_probe,
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index e6fb1bb..78a6181 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -10553,7 +10553,7 @@ static __cold void __io_uring_show_fdinfo(struct io_ring_ctx *ctx,
+ 	 * and sq_tail and cq_head are changed by userspace. But it's ok since
+ 	 * we usually use these info when it is stuck.
+ 	 */
+-	seq_printf(m, "SqMask:\t\t0x%x\n", sq_mask);
++	seq_printf(m, "SqMask:\t0x%x\n", sq_mask);
+ 	seq_printf(m, "SqHead:\t%u\n", sq_head);
+ 	seq_printf(m, "SqTail:\t%u\n", sq_tail);
+ 	seq_printf(m, "CachedSqHead:\t%u\n", ctx->cached_sq_head);
+-- 
+1.8.3.1
 

@@ -2,133 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 841D1484F29
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 09:17:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3117D484F2D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 09:18:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238351AbiAEIRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 03:17:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:44093 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229821AbiAEIR3 (ORCPT
+        id S238379AbiAEISh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 03:18:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42128 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229821AbiAEISh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 03:17:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641370648;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yvW/DnCdE78aEIkeksaSIoN+DLz7taEJ8XulSnNVAMM=;
-        b=EVzwz1wczyqvNT/qhHA3nYzjoxPRfRq4V/uYNwChOi2jNyvCsDAQQhGS0PqzNnDCPNPJkZ
-        /V9vgcviENGUEyNW35xLZ6BNcV+QNsPWIqNn1vnomrcA+b1TiZg8p+lqgPoBFzWBabSevz
-        +qXW9Fn7kqkPZ36k7421c5hm2XCFVJU=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-637-md_frSzIOAW8g5gBDN01mA-1; Wed, 05 Jan 2022 03:17:27 -0500
-X-MC-Unique: md_frSzIOAW8g5gBDN01mA-1
-Received: by mail-wr1-f72.google.com with SMTP id x20-20020adfbb54000000b001a0d044e20fso12372893wrg.11
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 00:17:27 -0800 (PST)
+        Wed, 5 Jan 2022 03:18:37 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F61C061761;
+        Wed,  5 Jan 2022 00:18:36 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id s15so34565880pfk.6;
+        Wed, 05 Jan 2022 00:18:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FFsJx+BDuRlyVeYwoEzaPa8mVFd69YYv6X2ZGS6nCzE=;
+        b=qSR5zuKU2WZ7mlQGVNsYELhW60JXHddsp2rOjVncAxGBNSGnc0vd4e5jjcJEBaoATX
+         aaPVhSGQObw6z6meYtFQ+UfvaJn0inxkUt3eurbhaXZ6iDLINz/t2GP0WFKXJpwV1tzS
+         YNPybmVOSFoCXNuXkRMYHXfBl8pTpFxPK78rGtOrHinMGG4d1RL8pzVvs0YB7X/YBOF9
+         Jh0pWCyvLlLYr6LiWaq1JXm4NyWA+Z6DspXXmK3KXSWojB3wspxN1BtSOfEiAhvZcy+j
+         U3spg6bbbTqO7OFqEdJZOTi9r5PmsTuHNDUo0xB7p2ZlAV0nUIOCgTP9VmK+RkXsWV6K
+         vInw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=yvW/DnCdE78aEIkeksaSIoN+DLz7taEJ8XulSnNVAMM=;
-        b=Mp/E8GE/WWusn1lvFEBxoPko4lzVGHg2Eoy7Au5au+SZ5SlkoPLfKUDbNM+0IOEYfM
-         xy2+DSc3btmsJw0FJOmBl1OQElY1Xq/7aNSnp5q35fK3/O16csjLVpRlyeGwG5iYaI6k
-         sB/zKwAyAycNq29u6Sx/B/fVdmJQwUmze89Dd5H49kpUxreAPZQSFX3z/p+ZXJa3O2hK
-         hXwFju4DC0Aq1PA69b6bqLOKRXcZ9GGOpOPIX+yOdZJEHUxU36ONIiA5bYprh6LA8q9a
-         GGcXaNOtWgW/e7OqL5MLCPxOsPErRi9EZSrUuBtuVf/mSPo/ljXIvM/guOnotfdDdjA7
-         qbHw==
-X-Gm-Message-State: AOAM530+gJfV8MrJzs6ljqDetePsbkqgdl+iNje19ya5zA3yVNZ305+b
-        hIOO6XT6zDTQYto1YIBBxgrDJzzd1JPpUkewJ5yYDh5d0W84Pa9UP4yWEo5J2OVyRR+pVTpbdu8
-        XcFlBxmvv/7gWsmzcv8V9I5LK
-X-Received: by 2002:adf:9ccf:: with SMTP id h15mr1569438wre.120.1641370646396;
-        Wed, 05 Jan 2022 00:17:26 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxkGfAtxJCsf+CSfHihfWoWkwEHWAyZHDoSUQBjRCCkE7SpfgywhIzhn9HMa1uEmnFoEkacvg==
-X-Received: by 2002:adf:9ccf:: with SMTP id h15mr1569425wre.120.1641370646168;
-        Wed, 05 Jan 2022 00:17:26 -0800 (PST)
-Received: from localhost (nat-pool-brq-t.redhat.com. [213.175.37.10])
-        by smtp.gmail.com with ESMTPSA id l16sm45540855wrx.117.2022.01.05.00.17.25
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FFsJx+BDuRlyVeYwoEzaPa8mVFd69YYv6X2ZGS6nCzE=;
+        b=dif2HwZ2vW02W+lNfOvJYqb/FzYxoxDHHh92+Fe5O+4OymK29mkCn49qwRw+wcdscT
+         qp4tkh+Fxb+mG54WclOYs65tL4bowg59RTzJ0eP9pvpFvchuBMa5A4DI+jR/Pfk0YKg/
+         oAPIciN3Grz860+i6XjcGU+qH3jQaU3s6IKjAXLClBbc0W4OsUtpyUfhCnOcVsj3CfXw
+         FknZPljW7ZXADj5TdhXzfqSE0X8rfPWWrQ20Qdze1936OBCbFb/0ia++I5rsrF/vC3rz
+         MyQ3EfZOP/iUFzIBDL71OqIwTgPsBlpBstGzshIqkRyv5NPWkCOv5B1jS/04/iEZFst6
+         LC6Q==
+X-Gm-Message-State: AOAM531OBo8fN1eozFUxjG4n2JcMMRIZQHMF4UzTZpzO2NLcDfXjurou
+        r6XB7ypnlEEmSe41vug0e7c=
+X-Google-Smtp-Source: ABdhPJyAPXf3vZ9IB8INOlsrKvyYJbaLIMxqOy7h5fPJ4nL6uEFEhMF2he/2mWLrpEyzS86oTUo0Pw==
+X-Received: by 2002:a63:117:: with SMTP id 23mr6574679pgb.398.1641370715794;
+        Wed, 05 Jan 2022 00:18:35 -0800 (PST)
+Received: from localhost.localdomain (61-231-122-238.dynamic-ip.hinet.net. [61.231.122.238])
+        by smtp.gmail.com with ESMTPSA id s7sm22115809pfu.133.2022.01.05.00.18.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 00:17:25 -0800 (PST)
-Date:   Wed, 5 Jan 2022 09:17:24 +0100
-From:   Igor Mammedov <imammedo@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN
-Message-ID: <20220105091724.1a667275@redhat.com>
-In-Reply-To: <875yr1q8oa.fsf@redhat.com>
-References: <20211122175818.608220-1-vkuznets@redhat.com>
-        <20211122175818.608220-3-vkuznets@redhat.com>
-        <16368a89-99ea-e52c-47b6-bd006933ec1f@redhat.com>
-        <20211227183253.45a03ca2@redhat.com>
-        <61325b2b-dc93-5db2-2d0a-dd0900d947f2@redhat.com>
-        <87mtkdqm7m.fsf@redhat.com>
-        <20220103104057.4dcf7948@redhat.com>
-        <875yr1q8oa.fsf@redhat.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        Wed, 05 Jan 2022 00:18:35 -0800 (PST)
+From:   Joseph CHAMG <josright123@gmail.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Joseph CHANG <josright123@gmail.com>,
+        joseph_chang@davicom.com.tw
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v10, 0/2] ADD DM9051 ETHERNET DRIVER
+Date:   Wed,  5 Jan 2022 16:17:26 +0800
+Message-Id: <20220105081728.4289-1-josright123@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 03 Jan 2022 13:56:53 +0100
-Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+DM9051 is a spi interface chip,
+need cs/mosi/miso/clock with an interrupt gpio pin
 
-> Igor Mammedov <imammedo@redhat.com> writes:
-> 
-> > On Mon, 03 Jan 2022 09:04:29 +0100
-> > Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
-> >  
-> >> Paolo Bonzini <pbonzini@redhat.com> writes:
-> >>   
-> >> > On 12/27/21 18:32, Igor Mammedov wrote:    
-> >> >>> Tweaked and queued nevertheless, thanks.    
-> >> >> it seems this patch breaks VCPU hotplug, in scenario:
-> >> >> 
-> >> >>    1. hotunplug existing VCPU (QEMU stores VCPU file descriptor in parked cpus list)
-> >> >>    2. hotplug it again (unsuspecting QEMU reuses stored file descriptor when recreating VCPU)
-> >> >> 
-> >> >> RHBZ:https://bugzilla.redhat.com/show_bug.cgi?id=2028337#c11
-> >> >>     
-> >> >
-> >> > The fix here would be (in QEMU) to not call KVM_SET_CPUID2 again. 
-> >> > However, we need to work around it in KVM, and allow KVM_SET_CPUID2 if 
-> >> > the data passed to the ioctl is the same that was set before.    
-> >> 
-> >> Are we sure the data is going to be *exactly* the same? In particular,
-> >> when using vCPU fds from the parked list, do we keep the same
-> >> APIC/x2APIC id when hotplugging? Or can we actually hotplug with a
-> >> different id?  
-> >
-> > If I recall it right, it can be a different ID easily.
-> >  
-> 
-> It's broken then. I'd suggest we revert the patch from KVM and think
-> about the strategy how to proceed.
+Joseph CHAMG (1):
+  net: Add dm9051 driver
 
-Can you post a patch, then?
+JosephCHANG (1):
+  yaml: Add dm9051 SPI network yaml file
+  net: Add dm9051 driver
 
-> Going forward, we really want to ban
-> KVM_SET_CPUID{,2} after KVM_RUN (see the comment which my patch moves).
-> E.g. we can have an 'allowlist' of things which can change (and put
-> *APICids there) and only fail KVM_SET_CPUID{,2} when we see something
-> else changing.
+ .../bindings/net/davicom,dm9051.yaml          |   62 +
+ drivers/net/ethernet/davicom/Kconfig          |   29 +
+ drivers/net/ethernet/davicom/Makefile         |    1 +
+ drivers/net/ethernet/davicom/dm9051.c         | 1302 +++++++++++++++++
+ drivers/net/ethernet/davicom/dm9051.h         |  198 +++
+ 5 files changed, 1592 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/davicom,dm9051.yaml
+ create mode 100644 drivers/net/ethernet/davicom/dm9051.c
+ create mode 100644 drivers/net/ethernet/davicom/dm9051.h
 
-It might work, at least on QEMU side we do not allow mixing up CPU models
-within VM instance (so far). So aside of APICid (and related leafs
-(extended APIC ID/possibly other topo related stuff)) nothing else should
-change ever when a new vCPU is hotplugged.
 
-> In QEMU, we can search the parked CPUs list for an entry
-> with the right *APICid and reuse it only if we manage to find one.
-In QEMU, 'parked cpus' fd list is a generic code shared by all supported
-archs. And I'm reluctant to push something x86 specific there (it's not
-impossible, but it's a crutch to workaround forbidden KVM_SET_CPUID{,2}).
+base-commit: 9d922f5df53844228b9f7c62f2593f4f06c0b69b
+-- 
+2.20.1
 

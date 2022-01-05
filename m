@@ -2,125 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 840B1485A3B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:48:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63AFD485A43
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:52:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244232AbiAEUsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 15:48:13 -0500
-Received: from mail-bn7nam10on2047.outbound.protection.outlook.com ([40.107.92.47]:60513
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S244235AbiAEUru (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 15:47:50 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GqPCD6384jduK2/Vep/fKTVaR+i709Qb5/jtDrVLBuDb+PGBOtuLU7uX1L9qbH58gwAsYEKLDD7/FufuMP/dAwMJz8StYTuhF/iuj5zK64M7I2v60tRo+ve1xV28zZA1+nHnEH2Wzpb0X3cg1e5LreA6DK+P/HoqUndJq2FQ0A9l529Eyo4954cS2Ajvqp8eF50TT5GHQlkG2VhN/PHZL2yFTWmHWgJaLzp/z1heZi67D6MQl56EpHuHDL7Ov7wRHrcpU4Hxr8JKUshARgLgq+gu2IMoaMWqO4stYy0bYk3UvabL5L47sQay4khNK0I3Bam0E+tyGqDNJ7YIaYagVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mixSQ0GWTykY8sgk12EFcmKIKznoqC27gPpyuMGN2z4=;
- b=dDvz68wLC2P4HQNZFUf7qlGMfgj02DmCpZ75FBb2wZnctChcKLnYipiCD3trsJbxtt0UMJv9wDwUV5OnrrADFv1tjR5F5DFoj2a6u6NpuyUw9f30pDpbRSmuwzNC8eB/ioR/hq14gDyWxk2/11eW2+pMyllTJgp7g/Rrlv7px0zJNvDFTyJQp63sstVEC2SZt+4aq0TrRW/Mac3AawCJHTvbVoYtgze8DomIIjvQr4sW1lNdyD7F4+RW5KQ6SbAPjrQy2A4pgwoqdK0tNFXEuTCsQAk2L9cSw7diCTxnfGlzdXDjt4Q9AMPbT9QGzgRugyQx/60uJxelnI+uiQh7Lg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mixSQ0GWTykY8sgk12EFcmKIKznoqC27gPpyuMGN2z4=;
- b=rHd9pu7JITzNeiV1nW5SczvUnWOCIk7JIHh0q4deUsy89K8PfQd/ROhuJt0NUZTl1EpKH8jP/hwLQapcL1FrEFF0zVTLIT0eqDF3H1Cp1nOJXzooMO+mDQW5dF+OYPv7afIv0m34s9wy19jjwWpdObWCijTHaNPTKDUXPYcwC+6XFi7+rv9w/0jL6xkf0c6HScAE7cpTNoOUq6HyB+Pj40tzDWbla2mCUDdhHD6GTdN1afPoDroZGMqLIjXyK8VsblKn9x0JmSY24mNSCdMVpuHv5uKKvYVgSvk9OaSuX6sFX48xVef1EtEDftg+1irfMN8xNrwqOs9zIHFMWirTpg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
- by BL1PR12MB5141.namprd12.prod.outlook.com (2603:10b6:208:309::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.14; Wed, 5 Jan
- 2022 20:47:49 +0000
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::464:eb3d:1fde:e6af]) by BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::464:eb3d:1fde:e6af%5]) with mapi id 15.20.4867.009; Wed, 5 Jan 2022
- 20:47:48 +0000
-Date:   Wed, 5 Jan 2022 16:47:42 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Maher Sanalla <msanalla@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org,
-        Michael Guralnik <michaelgur@nvidia.com>
-Subject: Re: [PATCH rdma-next] IB/mlx5: Expose NDR speed through MAD
-Message-ID: <20220105204742.GA2896982@nvidia.com>
-References: <a2ab630d2a634547db9b581faa9d65da2edb9d05.1639554831.git.leonro@nvidia.com>
+        id S244231AbiAEUwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 15:52:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45354 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244213AbiAEUwo (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 15:52:44 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA9EC061212
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 12:52:44 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id c9-20020a17090a1d0900b001b2b54bd6c5so5639245pjd.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 12:52:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JbxoBomdcCqOqJFCBjDh/uGAgy3A+q4n81f2FmBqdOo=;
+        b=lcHlW5fa9jFHIO/4BxpYp/Tmy5m91nF1IHDBqc7vkJc8rcl2mWmRRDknMp0CMLyVxf
+         XG6AinG8ofa2FW/grJcmrznnxnQHMXttxllF9zF1ag/Jj8VLCCwLTO3HY4SCjlg2UOKE
+         a+kMrofibgpexqlucg3jyspkX/e8zA6WbfAoOCzZ+l5q9hnkZ4u1+hn00u80p+ugmte0
+         FA+8o29Vyy3Jr5vKE3NEi0QEsEVR0MmdN6Ji77oqhe7fzz96jVnlyjBGeGVvEoGdMfXC
+         VfzL8p3VVm36IH4JWgcFPStvAK81KBpBDqAZYWu4llyuPioega3WxWx8dVpGNUCvWcfd
+         19CA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JbxoBomdcCqOqJFCBjDh/uGAgy3A+q4n81f2FmBqdOo=;
+        b=ssCyLbLDPcs74PGJYestaJLArx/sXNQHBMnqx/mhW4FhM06nhgcLztdpJ//AN1O0Cu
+         M9kjcOc9fLevQZjUUEVVPY9HR77Ofqg7mDmSEEjIKtaSoFLF0M5ZYnd9PohITsJmgAiW
+         LtYFe0bqXTyBS6B2GdZjD0LxiNN3gC+wIvuhlSvIKvK0GsJZQTlrRPkyasizTPYRPGym
+         PvZq/Vn9AWM+AvmdxzPQ+ttJdlxKdPSDkxGCPfxoY592HfMhbqFifprTyEy2Wj4CuXKD
+         HuL9zvHn7aPTWPr20Cu1G1haIjAEYvK/Vr5XUYofF0bKa4Thj6ykFL+D0JKOAkO4SzMB
+         b4Ug==
+X-Gm-Message-State: AOAM532xal+CVe0Up9mmlLEFKLbnxhIh/wU7ABV/RuSutfHh+zhs23jY
+        tDEzdt3KR7nHrB7b2F/+EdI9Sw==
+X-Google-Smtp-Source: ABdhPJyR0C1DrkXymrvkpk2S7sD/y26XNYIobEYJs+EPEbw+DMrYoag4fnJJYUy5LWVuQEwzegRnSA==
+X-Received: by 2002:a17:90a:ad07:: with SMTP id r7mr6153665pjq.67.1641415963380;
+        Wed, 05 Jan 2022 12:52:43 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id h7sm28516pfv.35.2022.01.05.12.52.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 12:52:42 -0800 (PST)
+Date:   Wed, 5 Jan 2022 20:52:39 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yan Zhao <yan.y.zhao@intel.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com
+Subject: Re: [PATCH v3 kvm/queue 14/16] KVM: Handle page fault for private
+ memory
+Message-ID: <YdYFFzlPTvgFdSXL@google.com>
+References: <20211223123011.41044-1-chao.p.peng@linux.intel.com>
+ <20211223123011.41044-15-chao.p.peng@linux.intel.com>
+ <20220104014629.GA2330@yzhao56-desk.sh.intel.com>
+ <20220104091008.GA21806@chaop.bj.intel.com>
+ <20220104100612.GA19947@yzhao56-desk.sh.intel.com>
+ <20220105062810.GB25283@chaop.bj.intel.com>
+ <20220105075356.GB19947@yzhao56-desk.sh.intel.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a2ab630d2a634547db9b581faa9d65da2edb9d05.1639554831.git.leonro@nvidia.com>
-X-ClientProxiedBy: YT3PR01CA0060.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:82::18) To BL0PR12MB5506.namprd12.prod.outlook.com
- (2603:10b6:208:1cb::22)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ce286f7f-83c9-45c1-37c5-08d9d08ca25e
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5141:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB51413F8E81A9BA57CAB4DB1EC24B9@BL1PR12MB5141.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:459;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IlMkiGd95VDZ1eLpAa7ngSkVos42HJNkUlXiXuC7KaD7THD1opjiM54bxndQgNcboRzrFQNJ47d3Ll1rCzEnXFPyqHgiUhNiA+SI6va/+OAg7vaVxb6qu06TGOVjq43qHeXpc8Vho1lRhIdb3f6WE6mQKndH0Faf0RFHkbVrT9rMEoVPAfzo9Ssaty2KU18ryVBGQNiJieUncwZrEd7EMBkb7vsHCvlTWUYYzZDyxYxguv/Q8BOTQz9ZDZCmtjyAgr06GCoOMckfhC4fNkWd8eL0Cl8TrOGZSpbvFX+r7K3pXe5Cq/8az5XpTvAsvaYkpA1vvhq4BW0SL0PUpHmfPSYYRzc4Zpza2lJ5tUUWunaBcnDKSdxJJNsGPqSppAlHQjH0eYL+RGE4RRCJNN/sHTkueFU8FmRLiFTvUCREwo2y6A3Uh+mBRrvZxXgSD7mXiy7Vz2idHx/mwxpEZ2DBzmXeg2yjwEjzkbxSApRplq5PZpgIlTRdk+EnIwhG7xaJbnjcIY68RiMVwWxHmjXqKh9bsc7idzZrzFJISLDZdwDFiYvI7H0IDSMP89naWHYnO9iY+Lm6xCI7ynsE9uRjamkVML6+7WKSqGaBLXH6AbVx3st+e16BVcP2ZnHAiGhLGRrQ/1Ar1mTY3JY75wCMFA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(316002)(6666004)(4744005)(54906003)(6486002)(8676002)(107886003)(33656002)(66946007)(66556008)(6506007)(508600001)(66476007)(4326008)(38100700002)(2906002)(36756003)(186003)(6916009)(86362001)(2616005)(8936002)(6512007)(5660300002)(26005)(1076003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+lPC9jBb604erTrY68DOftH9HzjgSy5N7qO2BVRrpHgxPN1pIL+uV/sXGeeC?=
- =?us-ascii?Q?WtWB6WeCVF4by0YTryVEUxHsNQjtAc8v/fcikC7B83VMYYFg0uoLLNZL4jVI?=
- =?us-ascii?Q?LsvflmibDqVObLJTbibIs2C0vaLr8YuvL4FXxVE2y725j9I7ae+fir9VKyjr?=
- =?us-ascii?Q?C5abaa0FBBEGl9KVKydGUtJCwloUi+quIavw1GysHvQEGbJ+1w4uCb3818x6?=
- =?us-ascii?Q?hTAwj1LncPXFM0zm9vN7KQHIKcfChnBeFzWWk5OZ5D9oFCrm7U/acUS7qtEg?=
- =?us-ascii?Q?FrmMjx1QEvIyZOVZLwEf8GTohkzsAJaYFITupRazasMUHTSfMWXesv8pZiJr?=
- =?us-ascii?Q?9Ma5ywbh3dTyGV15iDrPqbj0L1fBwrL9mlruvYl+f8gulbnS/qhXR5SYBGoj?=
- =?us-ascii?Q?jQa8M5OyM07V6mQDTO1UoHya0+pqOf/cObE8Em+zz8t5yPpxHqigVVEJlnRg?=
- =?us-ascii?Q?3p2eOXyLyjw9MC/yqlooBztu5ve+RRpiBoEtzVmfZXsMMlTwkwd09goIIZuI?=
- =?us-ascii?Q?dQCQtoyqQrdMfNN9rGBdmhwW7N1DvfvROL6xqa/Z+4aKIcut2202186UCldY?=
- =?us-ascii?Q?oAc+ngYr7eJNqCqliTMTtRBU/dLD1JcPmH1U+Wyv9Jg99z90meU9K2Aonkus?=
- =?us-ascii?Q?IeGKjT4S5WhtSnPkDPiig7MKLKoGsugXbPiSjXSFONe7T+LrCWN1dMIbe/m/?=
- =?us-ascii?Q?NB0RGa5/JRyBAMmZCUads90gApHgYRgUrSsT+BBEWeMHrree2t/hHf2hyKM+?=
- =?us-ascii?Q?UtnrolEKCtVam/HGdr0hJJnX2oVXiWmXocgKpliAUhzl3IWW7+ZQKG0IaWp+?=
- =?us-ascii?Q?6BGOgVEvFW9ZQeB4A56TD9Ly8LS8l0V8bdgoFKWOiAEydFZ8Xbyq4olUBqHK?=
- =?us-ascii?Q?Sb6MNXlOXpNcO2fUyTmABRHlcdaLMTTg2ug8XRH4eAWrTt6kwIeBSvsBv26T?=
- =?us-ascii?Q?+ccjest4LXuKEAyQTM0UgEt+o7vnnNKlJXQoDzUKDMUWJNLOFXfgEzJMkRj/?=
- =?us-ascii?Q?k0MowaTf9/1n+WXXAgFjDKGgBEsw9NLJaVt5lh52KQZXeviFyHjnEaYhsRtc?=
- =?us-ascii?Q?aH0kdBTJMvUkeLhvnu74qaqdmkWowwTygeh5SeKQtlSch2wQqQmj5smbnruv?=
- =?us-ascii?Q?uHSujivupNzyTcyvJ9h2W4Wu5kQJ5INgyFsScfUBK1YEw989FhuLozR/5Nd7?=
- =?us-ascii?Q?e+vMpvlntnJNeK9vzfmbSzZmI7Sxs/X8llnVy4KpqehQZTlx+UXS3eYkjy5e?=
- =?us-ascii?Q?OtDx0scwFD0OWOeMyhZ37sUkThab8L6iHwbplb4BvQ1IDBxdbpJU8uvYfxxa?=
- =?us-ascii?Q?IZLI+GOgS0HVcgvNjAlYtaPQlwmkLFitud2NbJGOrpawsMJ7R5vEZX/w4SXU?=
- =?us-ascii?Q?tZd6I6j/lFhUAixiR+5kWgGUL99vc9ZgYKXnDpfwInDc0ZdZwROUlpJWBRmk?=
- =?us-ascii?Q?AmDtvlw6gLaAvx98deGoiwuWiFAuY9EQw21aEoLKV3ORTsNEPZ7RFuL1SCdZ?=
- =?us-ascii?Q?CpOxU8oYoar8WYvwsfSO1hIlJYVIu+EbpPLeY2jOn8rnD52TvFc/ci7Ny3gc?=
- =?us-ascii?Q?BBK9dSA8iBsl/30weMw=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ce286f7f-83c9-45c1-37c5-08d9d08ca25e
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2022 20:47:48.9436
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Os2tprKSIDWQ/9aLloJeqpU+LcllXMAqoAx107mtRbjXdzrufcSEUCP8OajgJIj1
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5141
+In-Reply-To: <20220105075356.GB19947@yzhao56-desk.sh.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 09:54:31AM +0200, Leon Romanovsky wrote:
-> From: Maher Sanalla <msanalla@nvidia.com>
+On Wed, Jan 05, 2022, Yan Zhao wrote:
+> Sorry, maybe I didn't express it clearly.
 > 
-> Under MAD query port, Report NDR speed when NDR is supported
-> in the port capability mask.
+> As in the kvm_faultin_pfn_private(), 
+> static bool kvm_faultin_pfn_private(struct kvm_vcpu *vcpu,
+> 				    struct kvm_page_fault *fault,
+> 				    bool *is_private_pfn, int *r)
+> {
+> 	int order;
+> 	int mem_convert_type;
+> 	struct kvm_memory_slot *slot = fault->slot;
+> 	long pfn = kvm_memfd_get_pfn(slot, fault->gfn, &order);
+> 	...
+> }
+> Currently, kvm_memfd_get_pfn() is called unconditionally.
+> However, if the backend of a private memslot is not memfd, and is device
+> fd for example, a different xxx_get_pfn() is required here.
+
+Ya, I've complained about this in a different thread[*].  This should really be
+something like kvm_private_fd_get_pfn(), where the underlying ops struct can point
+at any compatible backing store.
+
+https://lore.kernel.org/all/YcuMUemyBXFYyxCC@google.com/
+
+> Further, though mapped to a private gfn, it might be ok for QEMU to
+> access the device fd in hva-based way (or call it MMU access way, e.g.
+> read/write/mmap), it's desired that it could use the traditional to get
+> pfn without convert the range to a shared one.
+
+No, this is expressly forbidden.  The backing store for a private gfn must not
+be accessible by userspace.  It's possible a backing store could support both, but
+not concurrently, and any conversion must be done without KVM being involved.
+In other words, resolving a private gfn must either succeed or fail (exit to
+userspace), KVM cannot initiate any conversions.
+
+> pfn = __gfn_to_pfn_memslot(slot, fault->gfn, ...)
+> 	|->addr = __gfn_to_hva_many (slot, gfn,...)
+> 	|  pfn = hva_to_pfn (addr,...)
 > 
-> Signed-off-by: Maher Sanalla <msanalla@nvidia.com>
-> Reviewed-by: Michael Guralnik <michaelgur@nvidia.com>
-> Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-> ---
->  drivers/infiniband/hw/mlx5/mad.c | 5 +++++
->  include/rdma/ib_mad.h            | 1 +
->  2 files changed, 6 insertions(+)
+> 
+> So, is it possible to recognize such kind of backends in KVM, and to get
+> the pfn in traditional way without converting them to shared?
+> e.g.
+> - specify KVM_MEM_PRIVATE_NONPROTECT to memory regions with such kind
+> of backends, or
+> - detect the fd type and check if get_pfn is provided. if no, go the
+>   traditional way.
 
-Applied to for-next, thanks
-
-Jason
+No, because the whole point of this is to make guest private memory inaccessible
+to host userspace.  Or did I misinterpret your questions?

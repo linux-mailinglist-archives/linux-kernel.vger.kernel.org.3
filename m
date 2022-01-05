@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11A1E485B54
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 23:08:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45481485B55
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 23:09:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244797AbiAEWIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 17:08:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34060 "EHLO
+        id S244987AbiAEWIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 17:08:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244803AbiAEWH1 (ORCPT
+        with ESMTP id S244806AbiAEWH1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 5 Jan 2022 17:07:27 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678FCC034001
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 14:07:23 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id v13so572228pfi.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 14:07:23 -0800 (PST)
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69843C034003
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 14:07:25 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id u20so533055pfi.12
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 14:07:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/IuSp3Y38S2vt00bgOi6OL/cnqEjvY89FjrAH96lLck=;
-        b=Hh0FkNaCuRsotDlfcIZfsT5NLuKqITOrrht3qbo39j2JGeXryuoDkg7fHQ0kVthveD
-         cwjbsbTUO7pqTF1rZXCtf+CwhYrV6TmweMDUdSW5TjjpC/+kwD08reF0rJ/R2jOLgQMX
-         zMkv9zvVferEtkW0DGLiVeRLEUrlWtxOw3pD8=
+        bh=VwHCgu3nA5zqvhpihq1aWR3KXP3h6zIlCwkSG2KH8PM=;
+        b=fe0q7N9+J4wnhicw8nDDKBLnkvlLKWmNPsic/8nCu4lCwXrFopROPpadW7IifA3RUG
+         Ro9hdFOpyNpkj0WGcHthyDAYKRMS8jxm7xZ6An3LkUzmO0OqeSq2+kmN6AJcY1Dgw7DF
+         8J4+FUacr37W6uthJvIBu1KNX0yNdmyuxtSt4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/IuSp3Y38S2vt00bgOi6OL/cnqEjvY89FjrAH96lLck=;
-        b=q8eZlSfs6xZ253LmigY4zCTVEJlhsQGTMBli1zibASYWn39xEaW17T+2l1dm7jndWK
-         /W7GFJnf4fMInbLfdOfF8rEHI3+m3/9tV3T855po1Ah1+/vUnL3iwo6ocxs3lAlo61tY
-         3ak6OjoEYQzCxQWIeVYJqKzJ1dwjMuCbNrhWXaM+tskfXCBzy3uw1WdY3YO70l0/214F
-         E7jdknFYm20vmrTIUThONGKRY/76WIKZYqWOrfB45nqTrmgE7awo0nFdRkU8zQMtpOQ8
-         Lb22+2om4Sln5L4jNQ3nFp6vs3ZNus2iZ3jnwrfbwMO/OZ+drccfEUy/gBupLGI3mm8O
-         4syw==
-X-Gm-Message-State: AOAM5316iePGXvHk2fjoO+pADrLLA4CgDUYLMPeoLSUq8QBzL1vwdEmw
-        Sip/xd5LieAQbUb6Ih4PmuwFTw==
-X-Google-Smtp-Source: ABdhPJwTwZqb5UvU/zSHL/zlEI8zfQWAg6dlq2gWNR0Z1SnHhiignHs5ZnXRdUX8MZnGWqL1foiDrQ==
-X-Received: by 2002:a63:920e:: with SMTP id o14mr15565315pgd.216.1641420442965;
-        Wed, 05 Jan 2022 14:07:22 -0800 (PST)
+        bh=VwHCgu3nA5zqvhpihq1aWR3KXP3h6zIlCwkSG2KH8PM=;
+        b=tMAGHqq8SU1myWR4IrXyuFforTAJnvcuOtzaMgI0q1yqC6bp9LdaBwrVNzyPKzQq6x
+         oRKQwS0vTMtRYkLT9yOTv287gySGNz/bHDYXInRehneBRHsSGse4MIaY6eQtKIf18bWL
+         1JQeBhdM1m8Ln7xsmizxJpnRpxkuAEsjb7cpDBICEDeC7mlT6rjSnQPl5RixgFkmBtt2
+         3hwQi/zT47GhRd9YRaOFK2zuDSJB3Yt/uSz8JDLG2fU80h0ZJ8jfdi3HliaoTG3vTPYN
+         zKegjgUtC0T3O/JHlFCB0C0R77sdjuFkm/aN+0nPzyJr/iHkhKsDLM0Zh2BxBUpWGdUF
+         C/Bw==
+X-Gm-Message-State: AOAM533HOUf9jWvED+ydPLx+OceKlcYPwIADW+HTGWH187HYVuNczhzL
+        FJ8ST8/2ZmwE6SHU55IVbLvfhw==
+X-Google-Smtp-Source: ABdhPJzOUqm5qMuC9x9PT+ByRJI6fZDbopiBi9xYB4vqKDGpoCtqEyRt7WDvJ9HrHjU8NWr2Ee4agA==
+X-Received: by 2002:a63:7a05:: with SMTP id v5mr49603763pgc.83.1641420444972;
+        Wed, 05 Jan 2022 14:07:24 -0800 (PST)
 Received: from localhost ([2620:15c:202:201:7fcd:6709:f1b5:a22a])
-        by smtp.gmail.com with UTF8SMTPSA id j206sm98255pfd.94.2022.01.05.14.07.21
+        by smtp.gmail.com with UTF8SMTPSA id g5sm95108pfj.143.2022.01.05.14.07.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jan 2022 14:07:22 -0800 (PST)
+        Wed, 05 Jan 2022 14:07:24 -0800 (PST)
 From:   Gwendal Grignou <gwendal@chromium.org>
 To:     bleung@chromium.org, groeck@chromium.org, myungjoo.ham@samsung.com,
         cw00.choi@samsung.com, benjamin.tissoires@redhat.com,
@@ -55,9 +55,9 @@ To:     bleung@chromium.org, groeck@chromium.org, myungjoo.ham@samsung.com,
         a.zummo@towertech.it, cychiang@chromium.org, perex@perex.cz
 Cc:     linux-kernel@vger.kernel.org,
         Gwendal Grignou <gwendal@chromium.org>
-Subject: [PATCH 10/17] HID: google: Add PL_CHROMEOS dependency
-Date:   Wed,  5 Jan 2022 14:06:46 -0800
-Message-Id: <20220105220653.122451-11-gwendal@chromium.org>
+Subject: [PATCH 11/17] i2c: cros-ec-tunnel: Add PL_CHROMEOS dependency
+Date:   Wed,  5 Jan 2022 14:06:47 -0800
+Message-Id: <20220105220653.122451-12-gwendal@chromium.org>
 X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
 In-Reply-To: <20220105220653.122451-1-gwendal@chromium.org>
 References: <20220105220653.122451-1-gwendal@chromium.org>
@@ -71,18 +71,20 @@ Use 'make nsdeps' to add missing dependencies.
 
 Signed-off-by: Gwendal Grignou <gwendal@chromium.org>
 ---
- drivers/hid/hid-google-hammer.c | 1 +
+ drivers/i2c/busses/i2c-cros-ec-tunnel.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/hid/hid-google-hammer.c b/drivers/hid/hid-google-hammer.c
-index 0403beb3104b9e..b5d3fa1097a97d 100644
---- a/drivers/hid/hid-google-hammer.c
-+++ b/drivers/hid/hid-google-hammer.c
-@@ -640,3 +640,4 @@ static void __exit hammer_exit(void)
- module_exit(hammer_exit);
+diff --git a/drivers/i2c/busses/i2c-cros-ec-tunnel.c b/drivers/i2c/busses/i2c-cros-ec-tunnel.c
+index 790ea3fda693b4..05a4eeae362100 100644
+--- a/drivers/i2c/busses/i2c-cros-ec-tunnel.c
++++ b/drivers/i2c/busses/i2c-cros-ec-tunnel.c
+@@ -317,5 +317,6 @@ static struct platform_driver ec_i2c_tunnel_driver = {
+ module_platform_driver(ec_i2c_tunnel_driver);
  
  MODULE_LICENSE("GPL");
 +MODULE_IMPORT_NS(PL_CHROMEOS);
+ MODULE_DESCRIPTION("EC I2C tunnel driver");
+ MODULE_ALIAS("platform:cros-ec-i2c-tunnel");
 -- 
 2.34.1.448.ga2b2bfdf31-goog
 

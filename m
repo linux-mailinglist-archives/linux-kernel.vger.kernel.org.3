@@ -2,165 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD599484CBB
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 04:13:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B57484CD2
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 04:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237209AbiAEDNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 22:13:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58918 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237196AbiAEDNV (ORCPT
+        id S237219AbiAEDUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 22:20:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48538 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234507AbiAEDUi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 22:13:21 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950C6C061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 19:13:21 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id a1so36182327qtx.11
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 19:13:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=howett-net.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=x2aLfuFCUBuE8UDjNrDJd69eskK7afYXIDfF2xwCx/k=;
-        b=scyKv0LYLY1sy4CUnszbnaBg87nSFiZ9zph8mHIm6HGa/VwVkfN3x7M2pOYss+F8NT
-         WkJFVcFpL8OpQPye7vbkrmo4Oqqcuk0AoJ+6mv7bsaXXNkAQY0VqkKKYn+4ToKbAoPHX
-         VBHqeF2jciTYqpdihj09Nasj+EQUHVJrgaOwT20Rk2FSOPNwclGzTjmfITMimxH0keG8
-         hSmuRKUd8F2zzEKxb7pjZz6ofrGklMW90iTnH9W3w2QqzqzSSjok0gqajiOIHBnn4nVR
-         j3lCgrG9fo8azWrb417n25+G4V9jljZBOK0u7S2H3QU140yYZugE7eh9o0PeFRKZ3bOr
-         BPgA==
+        Tue, 4 Jan 2022 22:20:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641352835;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EV+4L4V3EbdXjbiDS2bLBmpAyubhZUkCxgXn/7JcQ3s=;
+        b=FRlknS2CovWQ50MnffuSrJU62pPgJ0YzsGz49CXCq6Pz+KV3hXneZT4QCelH5TZWiwxMni
+        eZCes2eRP/0OtWvTFLS4T0+cSRnedC54tEQJXFojLlcUQtvPihXvqyIKL7LzW/uTh3Hr/5
+        dpuT0N4ruZy49AtAD8B2n5rmnKUcooI=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-260-ZmlV0xsLPx-Wzl3AbSLwgQ-1; Tue, 04 Jan 2022 22:20:34 -0500
+X-MC-Unique: ZmlV0xsLPx-Wzl3AbSLwgQ-1
+Received: by mail-lf1-f70.google.com with SMTP id a28-20020ac2505c000000b0042524c397cfso8733819lfm.1
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 19:20:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=x2aLfuFCUBuE8UDjNrDJd69eskK7afYXIDfF2xwCx/k=;
-        b=GdgnB/WUtxDIw25hUx0CRBMjGWcuQ7scqBv0+kDYvY55jMRDBBbXwvsBFl/m2SJXt0
-         NPrbQOYqWmByT3M/tYhgLW9MdpEIxGfDOguwB1PSGYsr9uWneetDnA9h0c8UJMiULuF/
-         vFuStq2DxmH8lIes6TQLCyH+y+zAZxcC2RLgcIfkilraYXeadD8F9DVG0oX+i+X9497L
-         DN21O1gOmx2FMy67ltBZ07HLJK7qnrnvKcej04djYR+zBPkxpxNx85qqlT4mU4Ouc/x6
-         k7qzxNyiQhqnnojaDC1HFl5nFgllSvAC4tk+WHE0F+gLqQeT6zIsmusrCMKGhGMU6MoH
-         0UIw==
-X-Gm-Message-State: AOAM533z/pGhStIpaQ0J70WjZTt/9NzrKTHXq3Z/Zp99qYTVAn92LZ2X
-        EGIiNG3nbNnSkbKM9CyeR0W8X36MisUcCg==
-X-Google-Smtp-Source: ABdhPJy5nRzomOipRnlclsRvwahR3C0E28eEcO24eqwBzOMQiQpw+pkqgmT27Gk/YiVjar56MXwZFQ==
-X-Received: by 2002:a05:622a:548:: with SMTP id m8mr30413350qtx.126.1641352400478;
-        Tue, 04 Jan 2022 19:13:20 -0800 (PST)
-Received: from rigel.delfino.n.howett.net ([2600:1700:df50:a7cf::725])
-        by smtp.googlemail.com with ESMTPSA id s6sm32629632qki.23.2022.01.04.19.13.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 19:13:20 -0800 (PST)
-From:   "Dustin L. Howett" <dustin@howett.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "Dustin L. Howett" <dustin@howett.net>
-Subject: [PATCH 2/2] platform/chrome: reserve only the I/O ports required for the MEC EC
-Date:   Tue,  4 Jan 2022 21:12:42 -0600
-Message-Id: <20220105031242.287751-3-dustin@howett.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220105031242.287751-1-dustin@howett.net>
-References: <20220105031242.287751-1-dustin@howett.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EV+4L4V3EbdXjbiDS2bLBmpAyubhZUkCxgXn/7JcQ3s=;
+        b=wKK1o+H/RmRoEnWNZzrlv+jOpjGWVlOPd0hiCKOksCM4C8pddSoYu9C1EUVc091Wph
+         gsQ74Cnv6qy8nkM6r/xyj5AMqeCVKud0gLvpiVUGxMd8nuxjuuFCZK4UaWocOCnW8n+q
+         2sj1lq0xYjEvBO2rrkyYcV7WS6toAbmpowZQwdggWk2iuSfbrZHZ4juO4W9C2ifDC60A
+         uO7lXpACUBTzA9aXa6Z9GA+0kuRsDxyO2oH3SpskgS9EzHF0+0j6DL7ynKUZPrVeI76q
+         MwUwULTJWh1gfgXhkqrIHLtOa4Lu2NzEK7n5pybyaEl4JV8z2EWTcCKFwDrlKd3RRJzo
+         sroA==
+X-Gm-Message-State: AOAM532/7HWyjWbRD8up3uzDzTYCAJZ74RMUlqMuWDfwUgPRwZX93PiJ
+        NXii3za7vzKRaxDYT1IXvz16THQduyFha3b0S+5pCLfKHrIPg2ZY4tfiusnbANedLXQD6IPPS1S
+        1CDB+LqzZCO/HHDlWhMClFIfhgvBSYn76r31PEy02
+X-Received: by 2002:a2e:a177:: with SMTP id u23mr16009623ljl.217.1641352832648;
+        Tue, 04 Jan 2022 19:20:32 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzUQbE7b2+xQ4lqIM1r/2/rFDsfrFuYo71pp02AsvjbJyrfkhtBFuB2kvLjfNaqo/yGETaXf2YgGdMIUwsDKZY=
+X-Received: by 2002:a2e:a177:: with SMTP id u23mr16009618ljl.217.1641352832413;
+ Tue, 04 Jan 2022 19:20:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220104151251.1988036-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20220104151251.1988036-1-jiasheng@iscas.ac.cn>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 5 Jan 2022 11:20:21 +0800
+Message-ID: <CACGkMEtZsBPnzLiTnMGAwrbC2Sjqj2mh6+L56BR4qqLyDXrxTQ@mail.gmail.com>
+Subject: Re: [PATCH v2] virtio_ring: Check null pointer
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     mst <mst@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some ChromeOS EC devices (such as the Framework Laptop) only map I/O
-ports 0x800-0x807. Making the larger reservation required by the non-MEC
-LPC (the 0xFF ports for the memory map, and the 0xFF ports for the
-parameter region) is non-viable on these devices.
+On Tue, Jan 4, 2022 at 11:13 PM Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
+>
+> As the alloc_indirect_packed() returns kmalloc_array() that could
+> allocation fail and return null pointer, it should be check in order to
+> prevent the dereference of null pointer.
+>
+> Fixes: 1ce9e6055fa0 ("virtio_ring: introduce packed ring support")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+> v2: Remove the redundant empty line.
+> ---
+>  drivers/virtio/virtio_ring.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> index 71e16b53e9c1..2923d8a68dc3 100644
+> --- a/drivers/virtio/virtio_ring.c
+> +++ b/drivers/virtio/virtio_ring.c
+> @@ -992,6 +992,10 @@ static int virtqueue_add_indirect_packed(struct vring_virtqueue *vq,
+>
+>         head = vq->packed.next_avail_idx;
+>         desc = alloc_indirect_packed(total_sg, gfp);
+> +       if (!desc) {
+> +               END_USE(vq);
+> +               return -ENOMEM;
 
-Since we probe the MEC EC first, we can get away with a smaller
-reservation that covers the MEC EC ports. If we fall back to classic
-LPC, we can grow the reservation to cover the memory map and the
-parameter region.
+Just notice this:
 
-Signed-off-by: Dustin L. Howett <dustin@howett.net>
----
- drivers/platform/chrome/cros_ec_lpc.c         | 39 ++++++++++++-------
- .../linux/platform_data/cros_ec_commands.h    |  4 ++
- 2 files changed, 30 insertions(+), 13 deletions(-)
+My tree contains this commit: fc6d70f40b3d0 ("virtio_ring: check desc
+== NULL when using indirect with packed"). It has fixed the wrong
+error value but not the END_USE().
 
-diff --git a/drivers/platform/chrome/cros_ec_lpc.c b/drivers/platform/chrome/cros_ec_lpc.c
-index 458eb59db2ff..06fdfe365710 100644
---- a/drivers/platform/chrome/cros_ec_lpc.c
-+++ b/drivers/platform/chrome/cros_ec_lpc.c
-@@ -341,9 +341,14 @@ static int cros_ec_lpc_probe(struct platform_device *pdev)
- 	u8 buf[2];
- 	int irq, ret;
- 
--	if (!devm_request_region(dev, EC_LPC_ADDR_MEMMAP, EC_MEMMAP_SIZE,
--				 dev_name(dev))) {
--		dev_err(dev, "couldn't reserve memmap region\n");
-+	/*
-+	 * The Framework Laptop (and possibly other non-ChromeOS devices)
-+	 * only exposes the eight I/O ports that are required for the Microchip EC.
-+	 * Requesting a larger reservation will fail.
-+	 */
-+	if (!devm_request_region(dev, EC_HOST_CMD_REGION0,
-+				 EC_HOST_CMD_MEC_REGION_SIZE, dev_name(dev))) {
-+		dev_err(dev, "couldn't reserve MEC region\n");
- 		return -EBUSY;
- 	}
- 
-@@ -357,6 +362,12 @@ static int cros_ec_lpc_probe(struct platform_device *pdev)
- 	cros_ec_lpc_ops.write = cros_ec_lpc_mec_write_bytes;
- 	cros_ec_lpc_ops.read(EC_LPC_ADDR_MEMMAP + EC_MEMMAP_ID, 2, buf);
- 	if (buf[0] != 'E' || buf[1] != 'C') {
-+		if (!devm_request_region(dev, EC_LPC_ADDR_MEMMAP, EC_MEMMAP_SIZE,
-+					 dev_name(dev))) {
-+			dev_err(dev, "couldn't reserve memmap region\n");
-+			return -EBUSY;
-+		}
-+
- 		/* Re-assign read/write operations for the non MEC variant */
- 		cros_ec_lpc_ops.read = cros_ec_lpc_read_bytes;
- 		cros_ec_lpc_ops.write = cros_ec_lpc_write_bytes;
-@@ -366,17 +377,19 @@ static int cros_ec_lpc_probe(struct platform_device *pdev)
- 			dev_err(dev, "EC ID not detected\n");
- 			return -ENODEV;
- 		}
--	}
- 
--	if (!devm_request_region(dev, EC_HOST_CMD_REGION0,
--				 EC_HOST_CMD_REGION_SIZE, dev_name(dev))) {
--		dev_err(dev, "couldn't reserve region0\n");
--		return -EBUSY;
--	}
--	if (!devm_request_region(dev, EC_HOST_CMD_REGION1,
--				 EC_HOST_CMD_REGION_SIZE, dev_name(dev))) {
--		dev_err(dev, "couldn't reserve region1\n");
--		return -EBUSY;
-+		/* Reserve the remaining I/O ports required by the non-MEC protocol. */
-+		if (!devm_request_region(dev, EC_HOST_CMD_REGION0 + EC_HOST_CMD_MEC_REGION_SIZE,
-+					 EC_HOST_CMD_REGION_SIZE - EC_HOST_CMD_MEC_REGION_SIZE,
-+					 dev_name(dev))) {
-+			dev_err(dev, "couldn't reserve remainder of region0\n");
-+			return -EBUSY;
-+		}
-+		if (!devm_request_region(dev, EC_HOST_CMD_REGION1,
-+					 EC_HOST_CMD_REGION_SIZE, dev_name(dev))) {
-+			dev_err(dev, "couldn't reserve region1\n");
-+			return -EBUSY;
-+		}
- 	}
- 
- 	ec_dev = devm_kzalloc(dev, sizeof(*ec_dev), GFP_KERNEL);
-diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/linux/platform_data/cros_ec_commands.h
-index 271bd87bff0a..a85b1176e6c0 100644
---- a/include/linux/platform_data/cros_ec_commands.h
-+++ b/include/linux/platform_data/cros_ec_commands.h
-@@ -55,6 +55,10 @@
- #define EC_HOST_CMD_REGION0    0x800
- #define EC_HOST_CMD_REGION1    0x880
- #define EC_HOST_CMD_REGION_SIZE 0x80
-+/*
-+ * Other machines report only the region spanned by the Microchip MEC EC.
-+ */
-+#define EC_HOST_CMD_MEC_REGION_SIZE 0x08
- 
- /* EC command register bit functions */
- #define EC_LPC_CMDR_DATA	BIT(0)  /* Data ready for host to read */
--- 
-2.34.1
+Thanks
+
+> +       }
+>
+>         if (unlikely(vq->vq.num_free < 1)) {
+>                 pr_debug("Can't add buf len 1 - avail = 0\n");
+> --
+> 2.25.1
+>
 

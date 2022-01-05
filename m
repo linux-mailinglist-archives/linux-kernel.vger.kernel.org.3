@@ -2,124 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5341D485BEF
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 23:56:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF18E485BF6
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 23:57:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245185AbiAEW4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 17:56:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:60393 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S245153AbiAEW4d (ORCPT
+        id S245248AbiAEW5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 17:57:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245203AbiAEW52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 17:56:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641423392;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=V6m8u3gzEN+5Gs0rFxJGhSiVfAzF8qa8gCDneBudXU0=;
-        b=dyV1wxPBjhlfxEU+yhirXalTtci2+fr28WiKYr84hRIXI/VS4gj+6XFcWkACtIlt0GAQQp
-        0EGFecxvpheDRAHhAAbZ0eeMO4L9b/eKGZv6DWxAkaWHc0w4r0gvU84Kn4CCLwwGesikcn
-        mf1NgbR/TH4qDDO0m5zVEHHoXsmayOQ=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-638-HksmvOi6MsGmhwwKTjdxYg-1; Wed, 05 Jan 2022 17:56:31 -0500
-X-MC-Unique: HksmvOi6MsGmhwwKTjdxYg-1
-Received: by mail-wm1-f70.google.com with SMTP id ay41-20020a05600c1e2900b00345a568e6b2so30565wmb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 14:56:31 -0800 (PST)
+        Wed, 5 Jan 2022 17:57:28 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE55C061245;
+        Wed,  5 Jan 2022 14:57:28 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id c2so659122pfc.1;
+        Wed, 05 Jan 2022 14:57:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=DlCMujE1/OmNnvwwZTqguq1pdTbjjaD9QBsoFGAZY5o=;
+        b=Hod97O7eHY5pJOJOH1z0I335xtcE3oGtGAqR59E0P0HcffpgVcr2pyWgwcR0D7lWzB
+         pUBOAkJNBw8TlfxhtNkA5EYUxUIN4dBMy52tTrBztsRmh9SEiJCj8rNtKVv49MPtwTKO
+         MuiVzoNhLVf9a6XDXvArPYrzvBIfviYT/GlCG27dDu11eJu4cwRTXB2vnP8KYPkgF/vD
+         wF1dGygeIYHwFaGgBGaqtK9bxnfaMKRD9zKQ6u8Mq2Fjug+fN49oxyT+KYdjJfFR8iis
+         xR2x0KbYmFxEq3Ejrz8se1V2DXmGEWApikbikZho4MLPgqto1Sh7qu2NgOqoD8rx3TTW
+         Pv2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=V6m8u3gzEN+5Gs0rFxJGhSiVfAzF8qa8gCDneBudXU0=;
-        b=yZEybXMmU/JWEM6KMZNMkR2bLpXYRXvPCfBrRrvzPvqt60tMqEwR4DsrT9iNgSTftk
-         QXfqZyE311e7sf1KZ+AzsQrYev3Ay/kYvBZLktFCnGflZ/Ltchdx5VWsC97oV9i3zRBx
-         1Z8P8Y41YZmaPjGi/DsNFWsqJKDQAXvtuPLyL6We2KcJxB5xVWg4p3qjnsZ4RWcIO/OX
-         zG1JEndMMbZKyTZ5ZNrYabetfS+3bgRwKu36JQR1jHYzO5MA1fnsLWqWdR0WNPKllxQp
-         nOsyLfZer7zt8uo2qARmJ9zSjHbSwRlHP0yHqlJXX/yz//w+ow7K8/8fV2RQnWMDMIKm
-         NRXw==
-X-Gm-Message-State: AOAM530TaaVOLlywIELPHL5YOiEkSA7DfJhPKs8tRmLaskRWpHIFI0rM
-        rf/XzeR0HX8POgy9Ra5Yj/Sp/8u1ILli12b2a/WrgcG7xumlqUDRSCL+CtEkcnJrlboM0K4mG3q
-        /H5zFELf6qqmsOd6BOhapaSms
-X-Received: by 2002:a7b:c7d0:: with SMTP id z16mr4740045wmk.76.1641423390204;
-        Wed, 05 Jan 2022 14:56:30 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw6GS056LJrsFPlX+DWzR8kOeOYzSJU+SzRdhlUHdc4WnX+EscgIicaxJi8rPTXUjW1xh071w==
-X-Received: by 2002:a7b:c7d0:: with SMTP id z16mr4740039wmk.76.1641423390058;
-        Wed, 05 Jan 2022 14:56:30 -0800 (PST)
-Received: from redhat.com ([2a03:c5c0:207e:991b:6857:5652:b903:a63b])
-        by smtp.gmail.com with ESMTPSA id r9sm284494wrm.76.2022.01.05.14.56.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 14:56:29 -0800 (PST)
-Date:   Wed, 5 Jan 2022 17:56:26 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Gabriel Somlo <somlo@cmu.edu>,
-        qemu-devel@nongnu.org
-Subject: Re: [PATCH] qemu_fw_cfg: use default_groups in kobj_type
-Message-ID: <20220105175546-mutt-send-email-mst@kernel.org>
-References: <20220105183133.2812848-1-gregkh@linuxfoundation.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=DlCMujE1/OmNnvwwZTqguq1pdTbjjaD9QBsoFGAZY5o=;
+        b=Sd/FOFjpqYJiOw2q+J8iJFinJg9ndUnKQAV8SFT5JFl13oYRyUbDTd8QaPzk0bo5dx
+         ocdiP7ZCYRdtqH7HHdd9PO8pTxMwvu+wxwUUfOM/wfwQmHCWlRUmLmo9DyhjUcWH9im6
+         DAOwRbsgR1YLFS+ySqe8XYf79sVi70cv8CVKRnSfkTo3Z7EYzNSRNtn/x3+zovLVIS9Q
+         esyPDBfz7+WicwnVlhlqdivn1FPUTIGoTPaGtGZIqRwUE1EUO43bx411W/s+YfZ9w3p4
+         T/cu1v5bFiSYIVTuhbVKWGk2lemslqbUNQIfXnm5yQe9E738euUCOXbMnKQKwjSzvatO
+         zGfA==
+X-Gm-Message-State: AOAM530BOK0aEL+GdQLHTV+9yikfVfYVdiWbG7dGidqwyhYTc85/c7pZ
+        7w7hgoacsV75hKU+/kiMG/79wzuRsBk=
+X-Google-Smtp-Source: ABdhPJwPgbApNZNhCp7Y2clmVhB/DVQ5vm7YxX5Jqp6RXmiRXEUZ9J9pJzcDY18nZbYi6aSsnE1dhQ==
+X-Received: by 2002:a63:9049:: with SMTP id a70mr50526530pge.625.1641423447988;
+        Wed, 05 Jan 2022 14:57:27 -0800 (PST)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id t8sm140372pfj.114.2022.01.05.14.57.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jan 2022 14:57:27 -0800 (PST)
+Subject: Re: [PATCH 1/1] scripts: sphinx-pre-install: add required ctex
+ dependency
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     hch@lst.de, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, corbet@lwn.net
+References: <87mtkcxws9.fsf@meer.lwn.net>
+ <eeb773ef-0354-be1f-8438-07e3324fa9f6@gmail.com>
+ <07f8cf68-525b-4fca-a1f9-fd40150fc6e1@gmail.com>
+ <20220104090548.76112534@coco.lan>
+ <73e62b16-7685-ace2-18d4-e1b79f543caf@gmail.com>
+ <20220105084809.157e3f34@coco.lan>
+ <241d31e4-5447-a075-69b6-11c14427582d@gmail.com>
+ <20220105224230.0700351f@coco.lan>
+From:   Akira Yokosawa <akiyks@gmail.com>
+Message-ID: <84f90b41-7a18-d83c-8739-1d394175f74a@gmail.com>
+Date:   Thu, 6 Jan 2022 07:57:22 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220105183133.2812848-1-gregkh@linuxfoundation.org>
+In-Reply-To: <20220105224230.0700351f@coco.lan>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 07:31:33PM +0100, Greg Kroah-Hartman wrote:
-> There are currently 2 ways to create a set of sysfs files for a
-> kobj_type, through the default_attrs field, and the default_groups
-> field.  Move the firmware qemu_fw_cfg sysfs code to use default_groups
-> field which has been the preferred way since aa30f47cf666 ("kobject: Add
-> support for default attribute groups to kobj_type") so that we can soon
-> get rid of the obsolete default_attrs field.
+On Wed, 5 Jan 2022 22:42:30 +0100, Mauro Carvalho Chehab wrote:
+> Em Wed, 5 Jan 2022 21:09:59 +0900
+> Akira Yokosawa <akiyks@gmail.com> escreveu:
 > 
-> Cc: Gabriel Somlo <somlo@cmu.edu>
-> Cc: "Michael S. Tsirkin" <mst@redhat.com>
-> Cc: qemu-devel@nongnu.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+[...]
+>>
+>> I'll test it under various distros/setups.
+>> It may take a while.
+> 
+> Did a quick test here with this lxc container:
+> 
+> 	$ OS=debian REL=bullseye ;lxc-create -n ${OS} -t /usr/share/lxc/templates/lxc-download -- --dist ${OS} --release ${REL} --arch amd64
+> 
+> If we add check_missing_tex(), it will then complain about lots
+> of packages that don't exist in Debian (se logs at the end).
 
-OK then you know best I guess
+Now I think I understand what kind of tests we need.
 
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
+My plan was to intentionally uninstall texlive-ctex (or whichever
+package contains ctexhook.sty) and see if the lack of ctexhook.sty
+is detected or not.
 
-feel free to queue.
+Apparently, such a test would mean little for sphinx_pre_install.
 
+> 
+> That's one of the biggest issue with texlive: each distro splits it on
+> different ways. So, basically, the %texlive hash at the script is meant
+> to the way Fedora and openSuse distros usually map packages. I would
+> expect that Mageia would also be similar if not identical, but other
+> distros map packages on different ways.
+> 
+> I'll prepare another patch for fixing the debian issue.
+
+Then I'll wait for it.
+
+        Thanks, Akira
+
+> 
+> Regards,
+> Mauro
+> 
 > ---
->  drivers/firmware/qemu_fw_cfg.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/firmware/qemu_fw_cfg.c b/drivers/firmware/qemu_fw_cfg.c
-> index 172c751a4f6c..c62f05420d32 100644
-> --- a/drivers/firmware/qemu_fw_cfg.c
-> +++ b/drivers/firmware/qemu_fw_cfg.c
-> @@ -395,7 +395,7 @@ static void fw_cfg_sysfs_cache_cleanup(void)
->  	}
->  }
->  
-> -/* default_attrs: per-entry attributes and show methods */
-> +/* per-entry attributes and show methods */
->  
->  #define FW_CFG_SYSFS_ATTR(_attr) \
->  struct fw_cfg_sysfs_attribute fw_cfg_sysfs_attr_##_attr = { \
-> @@ -428,6 +428,7 @@ static struct attribute *fw_cfg_sysfs_entry_attrs[] = {
->  	&fw_cfg_sysfs_attr_name.attr,
->  	NULL,
->  };
-> +ATTRIBUTE_GROUPS(fw_cfg_sysfs_entry);
->  
->  /* sysfs_ops: find fw_cfg_[entry, attribute] and call appropriate show method */
->  static ssize_t fw_cfg_sysfs_attr_show(struct kobject *kobj, struct attribute *a,
-> @@ -454,7 +455,7 @@ static void fw_cfg_sysfs_release_entry(struct kobject *kobj)
->  
->  /* kobj_type: ties together all properties required to register an entry */
->  static struct kobj_type fw_cfg_sysfs_entry_ktype = {
-> -	.default_attrs = fw_cfg_sysfs_entry_attrs,
-> +	.default_groups = fw_cfg_sysfs_entry_groups,
->  	.sysfs_ops = &fw_cfg_sysfs_attr_ops,
->  	.release = fw_cfg_sysfs_release_entry,
->  };
-> -- 
-> 2.34.1
+> mchehab@debian:~/docs$ make pdfdocs
+> Documentation/Makefile:41: The 'sphinx-build' command was not found. Make sure you have Sphinx installed and in PATH, or set the SPHINXBUILD make variable to point to the full path of the 'sphinx-build' executable.
+> 
+> Detected OS: Debian GNU/Linux 11.
+> Warning: better to also install "convert".
+> Warning: better to also install "dot".
+> Warning: better to also install "dvipng".
+> Warning: better to also install "fonts-dejavu".
+> Warning: better to also install "fonts-noto-cjk".
+> ERROR: please install "gcc", otherwise, build won't work.
+> Warning: better to also install "latexmk".
+> ERROR: please install "python", otherwise, build won't work.
+> Warning: better to also install "rsvg-convert".
+> Warning: better to also install "texlive-amscls".
+> Warning: better to also install "texlive-amsfonts".
+> Warning: better to also install "texlive-amsmath".
+> Warning: better to also install "texlive-anyfontsize".
+> Warning: better to also install "texlive-capt-of".
+> Warning: better to also install "texlive-cmap".
+> Warning: better to also install "texlive-ctex".
+[...]
 

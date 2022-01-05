@@ -2,180 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 934EB48568C
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 17:14:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4339F48569B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 17:24:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241879AbiAEQON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 11:14:13 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:46872 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231216AbiAEQOM (ORCPT
+        id S241906AbiAEQYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 11:24:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231290AbiAEQYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 11:14:12 -0500
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 205FCm2K027500;
-        Wed, 5 Jan 2022 16:14:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=6eTp/MWldCknR3BxbRr2//E7agbIxaGW9bm0MMpaJt8=;
- b=G5a/cLDnTIWiJydmDdx8eC68sTZWw89xm5tf3B0pDcEWdFgYTC1lg0ntyR/8tCMhrTbE
- oyLMqwtaTjIqUT+t+tPdyC/n5q/mnWIxM8M3KKhLMOV9Sojfzo65ZMM1ybp/SxgEM9Xp
- guw2m8vfcjWNm099CjO6v6+yBkVxPf2gSGM5w/Vz6ABlhVWes8JEoaGtZVwJrsT1S5f6
- u4ZM+otZ9rz2tYugkcoQvqI1CiY+ALRNXs7tsV3/f+C8aMSi8B5AaikbicgUF3ewlIfP
- dBB5W/rYaYJs/LGMBPUhtJb8gUhA7SBCDK+pUy9GbVhxtXgWXaeNqRT/6boUTbwQ/ly/ aw== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dcnpbk4rg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jan 2022 16:14:04 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 205GE14r015203;
-        Wed, 5 Jan 2022 16:14:02 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03ams.nl.ibm.com with ESMTP id 3daek9u5f9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jan 2022 16:14:02 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 205GE0gx43319656
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 5 Jan 2022 16:14:00 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EBD625204E;
-        Wed,  5 Jan 2022 16:13:59 +0000 (GMT)
-Received: from [9.145.180.154] (unknown [9.145.180.154])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id BA99F52054;
-        Wed,  5 Jan 2022 16:13:59 +0000 (GMT)
-Message-ID: <25527544-b0ac-596c-3876-560493b99f6b@linux.ibm.com>
-Date:   Wed, 5 Jan 2022 17:13:59 +0100
+        Wed, 5 Jan 2022 11:24:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97270C061245;
+        Wed,  5 Jan 2022 08:24:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3719A61804;
+        Wed,  5 Jan 2022 16:24:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9488CC36AEF;
+        Wed,  5 Jan 2022 16:24:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641399846;
+        bh=D0rtMVXuXMmUWBMa4J5OtDKJwvzjFcYkZkPaaIZc6mM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=XXxEs+bvODAOdzI/uFkSnfQrBoH2EClb57Ao0xFI3dtfvKAEM3Z2X11qWdNn5VYr5
+         +YbYcjVDB5pQuvYEN9mgDNc30c4pvWgHAAKM2NSJkbfxAdTXlj26MKXFYNHLQlZNDb
+         7txpG9hDFQU3sB+QN8ls/pfSVeeUIrofA0V0r6yINi8ibhEUSdpqEeKC/Fqn9hhVYF
+         3zRagylZF/bd865vYLIq/NM7km+dwB0sV5cZEkQj84Lu9pNb73T6Rze7Tkx5l2cyBF
+         YKzCJi1E0iVlF8sMUsb57XuLrcQW0Xib59tetmhl32p2dJPM6BlB+Q9IFxqbg2CMTF
+         HXQEGlofjSEKQ==
+Received: by mail-ed1-f53.google.com with SMTP id k15so1149935edk.13;
+        Wed, 05 Jan 2022 08:24:06 -0800 (PST)
+X-Gm-Message-State: AOAM5324dNGYnxEWAr3okmEZgWzalOo9xE31d9eVzu1i4rxCrYmm15Uf
+        lU/M+cN6bbBqk+4m4EGoVqTPSjrnchiMdQixwQ==
+X-Google-Smtp-Source: ABdhPJz5VVwi03tRm0U13TScGgTT7GNYvhHXOBDK8IpQTLIsJYlrKfqJYWDuhEBYHgXnTXGmYNJNekP/aGrkJ6tqO6E=
+X-Received: by 2002:a17:906:229b:: with SMTP id p27mr43028591eja.264.1641399844761;
+ Wed, 05 Jan 2022 08:24:04 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [PATCH v4] powerpc/pseries: read the lpar name from the firmware
-Content-Language: en-US
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Nathan Lynch <nathanl@linux.ibm.com>, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-References: <20211207171109.22793-1-ldufour@linux.ibm.com>
-In-Reply-To: <20211207171109.22793-1-ldufour@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: P15voHhJVxlRPFlDjZE2izYBYt0jT4rt
-X-Proofpoint-GUID: P15voHhJVxlRPFlDjZE2izYBYt0jT4rt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-05_03,2022-01-04_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0 adultscore=0
- mlxscore=0 malwarescore=0 lowpriorityscore=0 phishscore=0 impostorscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201050108
+References: <20210906102837.2190387-1-martin.kepplinger@puri.sm>
+ <20210906102837.2190387-3-martin.kepplinger@puri.sm> <CAL_JsqJQAutUp9cB2LaoOQQX7mToCc5MkGm59oOmh65yZG0xZQ@mail.gmail.com>
+In-Reply-To: <CAL_JsqJQAutUp9cB2LaoOQQX7mToCc5MkGm59oOmh65yZG0xZQ@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 5 Jan 2022 10:23:53 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKzaZC0A4OwnMyAuEWm2pCcHyQxHyrBVtkiPNUeMDd+oA@mail.gmail.com>
+Message-ID: <CAL_JsqKzaZC0A4OwnMyAuEWm2pCcHyQxHyrBVtkiPNUeMDd+oA@mail.gmail.com>
+Subject: Re: [PATCH v9 2/4] dt-bindings: media: document SK Hynix Hi-846 MIPI
+ CSI-2 8M pixel sensor
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Pavel Machek <pavel@ucw.cz>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@iki.fi>, devicetree@vger.kernel.org,
+        Purism Kernel Team <kernel@puri.sm>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        phone-devel@vger.kernel.org, Shawn Tu <shawnx.tu@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Happy New Year, Michael!
+On Fri, Dec 3, 2021 at 10:19 AM Rob Herring <robh@kernel.org> wrote:
+>
+> On Mon, Sep 6, 2021 at 5:29 AM Martin Kepplinger
+> <martin.kepplinger@puri.sm> wrote:
+> >
+> > Document the bindings used for the SK Hynix Hi-846 CMOS camera driver.
+> >
+> > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  .../bindings/media/i2c/hynix,hi846.yaml       | 120 ++++++++++++++++++
+> >  1 file changed, 120 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
+> > new file mode 100644
+> > index 000000000000..85a8877c2f38
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
+> > @@ -0,0 +1,120 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/media/i2c/hynix,hi846.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: SK Hynix Hi-846 1/4" 8M Pixel MIPI CSI-2 sensor
+> > +
+> > +maintainers:
+> > +  - Martin Kepplinger <martin.kepplinger@puri.sm>
+> > +
+> > +description: |-
+> > +  The Hi-846 is a raw image sensor with an MIPI CSI-2 image data
+> > +  interface and CCI (I2C compatible) control bus. The output format
+> > +  is raw Bayer.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: hynix,hi846
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description: Reference to the mclk clock.
+> > +
+> > +  assigned-clocks:
+> > +    maxItems: 1
+> > +
+> > +  assigned-clock-rates:
+> > +    maxItems: 1
+> > +
+> > +  reset-gpios:
+> > +    description: Reference to the GPIO connected to the RESETB pin. Active low.
+> > +    maxItems: 1
+> > +
+> > +  shutdown-gpios:
+> > +    description: Reference to the GPIO connected to the XSHUTDOWN pin. Active low.
+> > +    maxItems: 1
+> > +
+> > +  vddio-supply:
+> > +    description: Definition of the regulator used for the VDDIO power supply.
+> > +
+> > +  vdda-supply:
+> > +    description: Definition of the regulator used for the VDDA power supply.
+> > +
+> > +  vddd-supply:
+> > +    description: Definition of the regulator used for the VDDD power supply.
+> > +
+> > +  port:
+> > +    $ref: /schemas/graph.yaml#/properties/port
+>
+> This needs to be:
+>
+> $ref: /schemas/graph.yaml#/$defs/port-base
+>
+> to fix the warning reported. You have to use the 'main' branch of
+> dtschema which has unevaluatedProperties support. I'll be making a
+> release soonish.
 
-Do you consider taking that patch soon?
+This is still failing, can you please fix it.
 
-Thanks,
-Laurent.
-
-On 07/12/2021, 18:11:09, Laurent Dufour wrote:
-> The LPAR name may be changed after the LPAR has been started in the HMC.
-> In that case lparstat command is not reporting the updated value because it
-> reads it from the device tree which is read at boot time.
-> 
-> However this value could be read from RTAS.
-> 
-> Adding this value in the /proc/powerpc/lparcfg output allows to read the
-> updated value.
-> 
-> Cc: Nathan Lynch <nathanl@linux.ibm.com>
-> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
-> ---
-> v4:
->  address Nathan's new comments limiting size of the buffer.
-> v3:
->  address Michael's comments.
-> v2:
->  address Nathan's comments.
->  change title to partition_name aligning with existing partition_id
-> ---
->  arch/powerpc/platforms/pseries/lparcfg.c | 54 ++++++++++++++++++++++++
->  1 file changed, 54 insertions(+)
-> 
-> diff --git a/arch/powerpc/platforms/pseries/lparcfg.c b/arch/powerpc/platforms/pseries/lparcfg.c
-> index f71eac74ea92..058d9a5fe545 100644
-> --- a/arch/powerpc/platforms/pseries/lparcfg.c
-> +++ b/arch/powerpc/platforms/pseries/lparcfg.c
-> @@ -311,6 +311,59 @@ static void parse_mpp_x_data(struct seq_file *m)
->  		seq_printf(m, "coalesce_pool_spurr=%ld\n", mpp_x_data.pool_spurr_cycles);
->  }
->  
-> +/*
-> + * PAPR defines, in section "7.3.16 System Parameters Option", the token 55 to
-> + * read the LPAR name, and the largest output data to 4000 + 2 bytes length.
-> + */
-> +#define SPLPAR_LPAR_NAME_TOKEN	55
-> +#define GET_SYS_PARM_BUF_SIZE	4002
-> +#if GET_SYS_PARM_BUF_SIZE > RTAS_DATA_BUF_SIZE
-> +#error "GET_SYS_PARM_BUF_SIZE is larger than RTAS_DATA_BUF_SIZE"
-> +#endif
-> +static void read_lpar_name(struct seq_file *m)
-> +{
-> +	int rc, len, token;
-> +	union {
-> +		char raw_buffer[GET_SYS_PARM_BUF_SIZE];
-> +		struct {
-> +			__be16 len;
-> +			char name[GET_SYS_PARM_BUF_SIZE-2];
-> +		};
-> +	} *local_buffer;
-> +
-> +	token = rtas_token("ibm,get-system-parameter");
-> +	if (token == RTAS_UNKNOWN_SERVICE)
-> +		return;
-> +
-> +	local_buffer = kmalloc(sizeof(*local_buffer), GFP_KERNEL);
-> +	if (!local_buffer)
-> +		return;
-> +
-> +	do {
-> +		spin_lock(&rtas_data_buf_lock);
-> +		memset(rtas_data_buf, 0, sizeof(*local_buffer));
-> +		rc = rtas_call(token, 3, 1, NULL, SPLPAR_LPAR_NAME_TOKEN,
-> +			       __pa(rtas_data_buf), sizeof(*local_buffer));
-> +		if (!rc)
-> +			memcpy(local_buffer->raw_buffer, rtas_data_buf,
-> +			       sizeof(local_buffer->raw_buffer));
-> +		spin_unlock(&rtas_data_buf_lock);
-> +	} while (rtas_busy_delay(rc));
-> +
-> +	if (!rc) {
-> +		/* Force end of string */
-> +		len = min((int) be16_to_cpu(local_buffer->len),
-> +			  (int) sizeof(local_buffer->name)-1);
-> +		local_buffer->name[len] = '\0';
-> +
-> +		seq_printf(m, "partition_name=%s\n", local_buffer->name);
-> +	} else
-> +		pr_err_once("Error calling get-system-parameter (0x%x)\n", rc);
-> +
-> +	kfree(local_buffer);
-> +}
-> +
-> +
->  #define SPLPAR_CHARACTERISTICS_TOKEN 20
->  #define SPLPAR_MAXLENGTH 1026*(sizeof(char))
->  
-> @@ -496,6 +549,7 @@ static int pseries_lparcfg_data(struct seq_file *m, void *v)
->  
->  	if (firmware_has_feature(FW_FEATURE_SPLPAR)) {
->  		/* this call handles the ibm,get-system-parameter contents */
-> +		read_lpar_name(m);
->  		parse_system_parameter_string(m);
->  		parse_ppp_data(m);
->  		parse_mpp_data(m);
-
+Rob

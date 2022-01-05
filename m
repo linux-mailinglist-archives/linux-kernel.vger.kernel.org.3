@@ -2,153 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0E1485098
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23AEB4850A4
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 11:05:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239169AbiAEKDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 05:03:32 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4337 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239176AbiAEKD3 (ORCPT
+        id S239197AbiAEKFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 05:05:34 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:36882 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229611AbiAEKFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 05:03:29 -0500
-Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JTQ0n6CRPz67lT1;
-        Wed,  5 Jan 2022 17:58:33 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 5 Jan 2022 11:03:26 +0100
-Received: from localhost (10.47.83.118) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 5 Jan
- 2022 10:03:25 +0000
-Date:   Wed, 5 Jan 2022 10:03:32 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        "Lars-Peter Clausen" <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Arnd Bergmann" <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, <list@opendingux.net>,
-        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mips@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 3/8] PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS macros
-Message-ID: <20220105100332.000001c1@Huawei.com>
-In-Reply-To: <20220104214214.198843-4-paul@crapouillou.net>
-References: <20220104214214.198843-1-paul@crapouillou.net>
-        <20220104214214.198843-4-paul@crapouillou.net>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Wed, 5 Jan 2022 05:05:32 -0500
+X-UUID: a09af30e4ac24a13b418a88d4c7a6b71-20220105
+X-UUID: a09af30e4ac24a13b418a88d4c7a6b71-20220105
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <sam.shih@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 687003723; Wed, 05 Jan 2022 18:05:29 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 5 Jan 2022 18:05:28 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 5 Jan 2022 18:05:28 +0800
+From:   Sam Shih <sam.shih@mediatek.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Ryder Lee <ryder.lee@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>
+CC:     John Crispin <john@phrozen.org>, Sam Shih <sam.shih@mediatek.com>
+Subject: [PATCH 0/2] Add toprgu reset-controller support for MT7986
+Date:   Wed, 5 Jan 2022 18:04:54 +0800
+Message-ID: <20220105100456.7126-1-sam.shih@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.83.118]
-X-ClientProxiedBy: lhreml704-chm.china.huawei.com (10.201.108.53) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jan 2022 21:42:09 +0000
-Paul Cercueil <paul@crapouillou.net> wrote:
+These patches aim to add watchdog toprgu reset-controller support
+for MT7986.
 
-> These macros are defined conditionally, according to CONFIG_PM:
-> - if CONFIG_PM is enabled, these macros resolve to
->   DEFINE_SIMPLE_DEV_PM_OPS(), and the dev_pm_ops symbol will be
->   exported.
-> 
-> - if CONFIG_PM is disabled, these macros will result in a dummy static
->   dev_pm_ops to be created with the __maybe_unused flag. The dev_pm_ops
->   will then be discarded by the compiler, along with the provided
->   callback functions if they are not used anywhere else.
-> 
-> In the second case, the symbol is not exported, which should be
-> perfectly fine - users of the symbol should all use the pm_ptr() or
-> pm_sleep_ptr() macro, so the dev_pm_ops marked as "extern" in the
-> client's code will never be accessed.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->  include/linux/pm.h | 33 ++++++++++++++++++++++++++++++---
->  1 file changed, 30 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/pm.h b/include/linux/pm.h
-> index 389e600df233..a1ce29566aea 100644
-> --- a/include/linux/pm.h
-> +++ b/include/linux/pm.h
-> @@ -8,6 +8,7 @@
->  #ifndef _LINUX_PM_H
->  #define _LINUX_PM_H
->  
-> +#include <linux/export.h>
->  #include <linux/list.h>
->  #include <linux/workqueue.h>
->  #include <linux/spinlock.h>
-> @@ -357,14 +358,40 @@ struct dev_pm_ops {
->  #define SET_RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
->  #endif
->  
-> +#define _DEFINE_DEV_PM_OPS(name, \
-> +			   suspend_fn, resume_fn, \
-> +			   runtime_suspend_fn, runtime_resume_fn, idle_fn) \
-> +const struct dev_pm_ops name = { \
-> +	SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
-> +	RUNTIME_PM_OPS(runtime_suspend_fn, runtime_resume_fn, idle_fn) \
-> +}
-> +
+Sam Shih (2):
+  dt-bindings: reset: mt7986: Add reset-controller header file
+  watchdog: mtk_wdt: mt7986: Add toprgu reset controller support
 
-one blank line probably enough.
+ drivers/watchdog/mtk_wdt.c                |  6 +++
+ include/dt-bindings/reset/mt7986-resets.h | 55 +++++++++++++++++++++++
+ 2 files changed, 61 insertions(+)
+ create mode 100644 include/dt-bindings/reset/mt7986-resets.h
 
-> +
->  /*
->   * Use this if you want to use the same suspend and resume callbacks for suspend
->   * to RAM and hibernation.
->   */
->  #define DEFINE_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> -const struct dev_pm_ops name = { \
-> -	SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
-> -}
-> +	_DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL)
-> +
-> +#ifdef CONFIG_PM
-> +#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-> +			   runtime_resume_fn, idle_fn, sec) \
-> +	_DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-> +			   runtime_resume_fn, idle_fn); \
-> +	_EXPORT_SYMBOL(name, sec)
-> +#else
-> +#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-> +			   runtime_resume_fn, idle_fn, sec) \
-> +static __maybe_unused _DEFINE_DEV_PM_OPS(__static_##name, suspend_fn, \
-> +					 resume_fn, runtime_suspend_fn, \
-> +					 runtime_resume_fn, idle_fn)
-> +#endif
-> +
-> +#define EXPORT_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> +	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "")
-> +#define EXPORT_GPL_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> +	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "_gpl")
-
-So you can get away with these two cases because the SYSTEM_SLEEP_PM_OPS() all have
-pm_sleep_ptr() wrappers.  However, _EXPORT_DEV_PM_OPS() could be used directly and
-would require __maybe_unused for the RUNTIME_PM_OPS() parameters which isn't ideal.
-
-Maybe I'm missing some reason that isn't a problem though as easy to get lost in
-these macros. :)
-
-You could argue that the _ is meant to indicate that macro shouldn't be used directly
-but I'm not that optimistic.
-
-Jonathan
-
-
-
->  
->  /* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
->  #define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+-- 
+2.29.2
 

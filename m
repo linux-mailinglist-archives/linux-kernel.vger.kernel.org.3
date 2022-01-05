@@ -2,152 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AF9D484F49
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 09:25:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEAD0484F4C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 09:26:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238481AbiAEIZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 03:25:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231680AbiAEIZj (ORCPT
+        id S238489AbiAEI00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 03:26:26 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:34076 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238488AbiAEI0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 03:25:39 -0500
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F792C061761;
-        Wed,  5 Jan 2022 00:25:39 -0800 (PST)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 757D0223EA;
-        Wed,  5 Jan 2022 09:25:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1641371133;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Wed, 5 Jan 2022 03:26:18 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 7FAA12110B;
+        Wed,  5 Jan 2022 08:26:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641371177; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=fedfQgsr6x9sO3yER1l6Ln3QpkNkKoaDU8cBMzFGN+Q=;
-        b=sY7Ujav2tztK21oJXfBxaCMq+iQ5cXCzRUQAp0RpDAoO7/iKxJbuM12oT/IIq0js0jcnSM
-        YchXyLgsb8/IjCbvNI7vboWmRX0aF1VVMVk6aGYTftIYnObjbnxWI7754yVlDccBYZ70kW
-        wgck4SYQ2XLf90IPCA+qGcF5BVvLUfs=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Wed, 05 Jan 2022 09:25:29 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ansuel Smith <ansuelsmth@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH 2/8] dt-bindings: nvmem: add transformation bindings
-In-Reply-To: <YdRh2lp5Ca08gHtR@robh.at.kernel.org>
-References: <20211228142549.1275412-1-michael@walle.cc>
- <20211228142549.1275412-3-michael@walle.cc>
- <YdRh2lp5Ca08gHtR@robh.at.kernel.org>
-User-Agent: Roundcube Webmail/1.4.12
-Message-ID: <084b306b7c49ce8085dd867663945d29@walle.cc>
-X-Sender: michael@walle.cc
+        bh=8BTn9OHjjMCrJse7Li5PSSD6rwP+GHrRSbqMFkBmUqU=;
+        b=2YxoxVF3v6em3vN/afcDLZyg1kW4iJ86bymz+2px4WNn6eqrNrHiAh+YwfyQJ77gZbqAfb
+        gbTWmsN70um5n0FVACFNRYBoUzT0uISHRblqI9xEBayvWcvry/1b0qNJ4v0+ESmbbSUWI4
+        eWTIRAOs9B1sX4/GWjOwOpTOV4fkyt8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641371177;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8BTn9OHjjMCrJse7Li5PSSD6rwP+GHrRSbqMFkBmUqU=;
+        b=sVcmYaeIyY11AMDNSijyN/PGjrezA65TKokI1yF6rKI8GzBaRFc+Bv2HQ0hj8WC3r2AYyW
+        wNPNxQ65GN9wiXBQ==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 33F92A3B84;
+        Wed,  5 Jan 2022 08:26:16 +0000 (UTC)
+Date:   Wed, 05 Jan 2022 09:26:16 +0100
+Message-ID: <s5ha6gak2qf.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Baole Fang <fbl718@163.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Jeremy Szu <jeremy.szu@canonical.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        Hui Wang <hui.wang@canonical.com>,
+        Cameron Berkenpas <cam@neo-zeon.de>,
+        Kailang Yang <kailang@realtek.com>, Sami Loone <sami@loone.fi>,
+        Elia Devito <eliadevito@gmail.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: hda/realtek: Add quirk for Legion Y9000X 2020
+In-Reply-To: <20220105034103.12484-1-fbl718@163.com>
+References: <20220105034103.12484-1-fbl718@163.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-01-04 16:03, schrieb Rob Herring:
-> On Tue, Dec 28, 2021 at 03:25:43PM +0100, Michael Walle wrote:
->> Just add a simple list of the supported devices which need a nvmem
->> transformations.
->> 
->> Also, since the compatible string is prepended to the actual nvmem
->> compatible string, we need to match using "contains" instead of an 
->> exact
->> match.
->> 
->> Signed-off-by: Michael Walle <michael@walle.cc>
->> ---
->>  .../devicetree/bindings/mtd/mtd.yaml          |  7 +--
->>  .../bindings/nvmem/nvmem-transformations.yaml | 46 
->> +++++++++++++++++++
->>  2 files changed, 50 insertions(+), 3 deletions(-)
->>  create mode 100644 
->> Documentation/devicetree/bindings/nvmem/nvmem-transformations.yaml
->> 
->> diff --git a/Documentation/devicetree/bindings/mtd/mtd.yaml 
->> b/Documentation/devicetree/bindings/mtd/mtd.yaml
->> index 376b679cfc70..0291e439b6a6 100644
->> --- a/Documentation/devicetree/bindings/mtd/mtd.yaml
->> +++ b/Documentation/devicetree/bindings/mtd/mtd.yaml
->> @@ -33,9 +33,10 @@ patternProperties:
->> 
->>      properties:
->>        compatible:
->> -        enum:
->> -          - user-otp
->> -          - factory-otp
->> +        contains:
->> +          enum:
->> +            - user-otp
->> +            - factory-otp
+On Wed, 05 Jan 2022 04:41:01 +0100,
+Baole Fang wrote:
 > 
-> If the addition is only compatible strings, then I would just add them
-> here. Otherwise this needs to be structured a bit differently. More on
-> that below.
+> commit 25960cafa06e6fcd830e6c792e6a7de68c1e25ed upstream.
 
-I wanted to avoid having these compatible strings "cluttered" all around
-the various files. Esp. having a specific compatible string in a generic
-mtd.yaml. But if everyone is fine with that, I'll just move it here.
+I couldn't find this commit.  Is this a bogus information?
 
->> 
->>      required:
->>        - compatible
->> diff --git 
->> a/Documentation/devicetree/bindings/nvmem/nvmem-transformations.yaml 
->> b/Documentation/devicetree/bindings/nvmem/nvmem-transformations.yaml
->> new file mode 100644
->> index 000000000000..8c8d85fd6d27
->> --- /dev/null
->> +++ 
->> b/Documentation/devicetree/bindings/nvmem/nvmem-transformations.yaml
->> @@ -0,0 +1,46 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/nvmem/nvmem-transformations.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: NVMEM transformations Device Tree Bindings
->> +
->> +maintainers:
->> +  - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->> +
->> +description: |
->> +  This is a list NVMEM devices which need transformations.
->> +
->> +properties:
->> +  compatible:
->> +    oneOf:
->> +      - items:
->> +        - enum:
->> +          - kontron,sl28-vpd
->> +        - const: user-otp
->> +      - const: user-otp
+> Legion Y9000X 2020 has a speaker, but the speaker doesn't work.
+> This can be fixed by applying alc285_fixup_ideapad_s740_coef
+>  to fix the speaker's coefficients.
+> Besides, to support the transition between the speaker and the headphone,
+> alc287_fixup_legion_15imhg05_speakers needs to be run.
 > 
-> This will be applied to any node containing 'user-otp'. You need a
-> custom 'select' to avoid that.
+> Signed-off-by: Baole Fang <fbl718@163.com>
 
-Out of curiosity, you mean something like:
+The code change itself looks fine, so I'd apply it if the line above
+can be omitted.
 
-select:
-   compatible:
-     contains:
-       enum:
-         - kontron,sl28-vpd
 
+thanks,
+
+Takashi

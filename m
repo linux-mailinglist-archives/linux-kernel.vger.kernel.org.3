@@ -2,57 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D7A4855EC
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A6C4855F2
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:36:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232671AbiAEPeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 10:34:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231684AbiAEPeU (ORCPT
+        id S241526AbiAEPgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 10:36:23 -0500
+Received: from mail-yb1-f175.google.com ([209.85.219.175]:42936 "EHLO
+        mail-yb1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241518AbiAEPgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 10:34:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BCBC061245;
-        Wed,  5 Jan 2022 07:34:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 505B0B81C27;
-        Wed,  5 Jan 2022 15:34:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C01C8C36AE3;
-        Wed,  5 Jan 2022 15:34:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641396858;
-        bh=77yhxiPBsVwvy/onUduoU4gPKD2EE/6DrFz1KbKsSzI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ur+1dLA6bqx+tlZnx1bSVs1Z6p+6vnFyJ8JzUPbRvua2ZVM0nbJtvePttPBRsO8WQ
-         +5qhKX+KKrCRVEYDRm0X1yJiy94yc/wbocac4lV6ncX4/CPr5PzxpOC99vJl5P7F1w
-         PfRBRCgZHbMZJCreGJiP8yrTiDtMyW4FeKPGHITU=
-Date:   Wed, 5 Jan 2022 16:34:15 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Aaron Ma <aaron.ma@canonical.com>
-Cc:     kuba@kernel.org, henning.schild@siemens.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        hayeswang@realtek.com, tiwai@suse.de
-Subject: Re: [PATCH 3/3] net: usb: r8152: remove unused definition
-Message-ID: <YdW6d0O1hB1dIh5l@kroah.com>
-References: <20220105151427.8373-1-aaron.ma@canonical.com>
- <20220105151427.8373-3-aaron.ma@canonical.com>
+        Wed, 5 Jan 2022 10:36:22 -0500
+Received: by mail-yb1-f175.google.com with SMTP id m19so101609192ybf.9;
+        Wed, 05 Jan 2022 07:36:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uBMNSgExD0Tj/azeAle5jU9X1q6jJgFdJEmqq1NLnrI=;
+        b=cUJqW7BG+k3RyB5PZX4J0IWnM3p03Fmfu5zV3hH/VV66Rv3K4OVjQKJ6ScjRHX3hqP
+         UL6LFUbMcGjW7VBX1byeflQ4iuliGXEdFN1jaRThZvCCR/Q5s0E3B7hHvkgqfT2qsZVv
+         bb/CNr59tgWsofvuul9Oo9u2pD9EQpOi7kM/42nEz+uE0FoL7LcY4QDluxLpzO+wpVUk
+         EiSUOehHjW0MYwGNgeafwOFTWhN15WDNX0nuL9v+OHqijeSCLi3PFbSOshV7VV1fcS5C
+         853ug5/pAXsNg7nN/Z0q4PZENPoyg1AoYcQp0XrzTTi1kJjQqi8oN0thUEwprKdVsdXZ
+         CL2w==
+X-Gm-Message-State: AOAM531O2g65bZDYCYn9dRq0dg6/Ok6UPyrbQlTwmgFsb/qXV+Q0ObSB
+        Yam+huxA8xvuSTUMbjJ6/R3NXSmOdkq6ss5FjMU=
+X-Google-Smtp-Source: ABdhPJxGf4OaoMBrYLsJqTLS30iSdml+T4x9C3fleAwlc1jgt4xSCjbaYI+Txsz65y3G81aSx2FenzJ7Y69VIbmo9WU=
+X-Received: by 2002:a25:6884:: with SMTP id d126mr43732815ybc.355.1641396981809;
+ Wed, 05 Jan 2022 07:36:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220105151427.8373-3-aaron.ma@canonical.com>
+References: <20211230063444.586292-1-luo.penghao@zte.com.cn>
+In-Reply-To: <20211230063444.586292-1-luo.penghao@zte.com.cn>
+From:   Anna Schumaker <anna.schumaker@netapp.com>
+Date:   Wed, 5 Jan 2022 10:36:05 -0500
+Message-ID: <CAFX2Jfk3B_sWRsLKu4GZb5NyWVFGUX-s5fX2SSyfFyeQ6MS4VA@mail.gmail.com>
+Subject: Re: [PATCH linux] nfs: Remove unnecessary ret assignment
+To:     cgel.zte@gmail.com
+Cc:     Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        luo penghao <luo.penghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 11:14:27PM +0800, Aaron Ma wrote:
-> Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
+Hi Luo,
 
-Again, not good, you know better than to not provide a changelog text.
+On Fri, Dec 31, 2021 at 5:05 AM <cgel.zte@gmail.com> wrote:
+>
+> From: luo penghao <luo.penghao@zte.com.cn>
+>
+> Subsequent if judgments will assign new values to ret, so the
+> statement here should be deleted
+>
+> The clang_analyzer complains as follows:
+>
+> fs/nfs/callback.c:
+>
+> Value stored to 'ret' is never read
 
-thanks,
+The "else if (xprt->ops->bc_setup)" branch doesn't touch 'ret', so it
+seems to me like the clang_analyzer is falsely reporting this.
 
-greg k-h
+Thanks,
+Anna
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: luo penghao <luo.penghao@zte.com.cn>
+> ---
+>  fs/nfs/callback.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/fs/nfs/callback.c b/fs/nfs/callback.c
+> index 86d856d..1c1c82a 100644
+> --- a/fs/nfs/callback.c
+> +++ b/fs/nfs/callback.c
+> @@ -209,7 +209,6 @@ static int nfs_callback_up_net(int minorversion, struct svc_serv *serv,
+>                 goto err_bind;
+>         }
+>
+> -       ret = 0;
+>         if (!IS_ENABLED(CONFIG_NFS_V4_1) || minorversion == 0)
+>                 ret = nfs4_callback_up_net(serv, net);
+>         else if (xprt->ops->bc_setup)
+> --
+> 2.15.2
+>
+>

@@ -2,100 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8093C484DD9
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 06:54:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 293C1484DDB
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 06:58:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237600AbiAEFyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 00:54:40 -0500
-Received: from rap-us.hgst.com ([199.255.44.250]:25437 "EHLO
-        usg-ed-osssrv.wdc.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S236285AbiAEFye (ORCPT
+        id S236335AbiAEF6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 00:58:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38836 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236216AbiAEF6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 00:54:34 -0500
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JTJbD6R3cz1VSkY
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 21:54:32 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1641362072; x=1643954073; bh=xuCmyDGhvyJFCsL4s5cvZihbfP6PUKIW5b/
-        jvDxGmjQ=; b=SeKWOguEPu6LeTYieltrzdQbfuBZ0FwOxsBpP9wmNmwqy0fok7B
-        oblMBYBIFyMj0C+0r1xiODdiTLwLzmHkCIrd3svF7qPS0RQCf1VfVwoT3uteo0Ic
-        rfutZgP5oK5TpFaEUxdFZTSOnQUJ1pCCZfM+ER3JuXVoN2PR+SHojjFb8e4Ln6Gz
-        l1k79TB+UePXP1N8U3wKiMAzWyGCoAGYPC3HOK+X1MlJLH7NZN3OEAVj3LBlgsi9
-        3k83NXUHjV/8z/7XCV3unGtTB2z3yt3QZhssWaw9wNxme5GhMxSWeRYx3Kmby0ex
-        0gQQ2dyIQnjvCV6Mued+JsPkr6f2+pWaY/w==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id EWQuWihEFGO2 for <linux-kernel@vger.kernel.org>;
-        Tue,  4 Jan 2022 21:54:32 -0800 (PST)
-Received: from [10.225.163.43] (unknown [10.225.163.43])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JTJbC5b3xz1VSkV;
-        Tue,  4 Jan 2022 21:54:31 -0800 (PST)
-Message-ID: <e0dcea41-9be3-1555-90a0-eb977c1ea799@opensource.wdc.com>
-Date:   Wed, 5 Jan 2022 14:54:30 +0900
+        Wed, 5 Jan 2022 00:58:40 -0500
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05720C061761;
+        Tue,  4 Jan 2022 21:58:39 -0800 (PST)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n4zJm-00HOGU-6X; Wed, 05 Jan 2022 05:58:38 +0000
+Date:   Wed, 5 Jan 2022 05:58:38 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>
+Subject: Re: [PATCH 04/10] exit: Stop poorly open coding do_task_dead in
+ make_task_dead
+Message-ID: <YdUzjrLAlRiNLQp2@zeniv-ca.linux.org.uk>
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+ <20211208202532.16409-4-ebiederm@xmission.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] drivers/ata: remove redundant val variable
-Content-Language: en-US
-To:     cgel.zte@gmail.com
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20220104112545.601962-1-chi.minghao@zte.com.cn>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220104112545.601962-1-chi.minghao@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211208202532.16409-4-ebiederm@xmission.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/4/22 20:25, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+On Wed, Dec 08, 2021 at 02:25:26PM -0600, Eric W. Biederman wrote:
+> When the kernel detects it is oops or otherwise force killing a task
+> while it exits the code poorly attempts to permanently stop the task
+> from scheduling.
 > 
-> Return value from DIV_ROUND_UP() directly instead
-> of taking this in another redundant variable.
+> I say poorly because it is possible for a task in TASK_UINTERRUPTIBLE
+> to be woken up.
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
+> As it makes no sense for the task to continue call do_task_dead
+> instead which actually does the work and permanently removes the task
+> from the scheduler.  Guaranteeing the task will never be woken
+> up again.
+
+NAK.  This is not all do_task_dead() leads to - see what finish_task_switch()
+does upon seeing TASK_DEAD:
+                /* Task is done with its stack. */
+		put_task_stack(prev);
+		put_task_struct_rcu_user(prev);
+
+
+Now take a look at the comment just before that check for PF_EXITING -
+the point is to leave the task leaked, rather than proceeding with
+freeing the sucker.
+
+We are not going through the normal "turn zombie" motions, including
+waking wait(2) callers up, etc.  Going ahead and freeing it could
+fuck the things up quite badly.
+
+> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 > ---
->  drivers/ata/pata_octeon_cf.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
+>  kernel/exit.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/drivers/ata/pata_octeon_cf.c b/drivers/ata/pata_octeon_cf.c
-> index b5a3f710d76d..70f91800fe9e 100644
-> --- a/drivers/ata/pata_octeon_cf.c
-> +++ b/drivers/ata/pata_octeon_cf.c
-> @@ -73,16 +73,12 @@ MODULE_PARM_DESC(enable_dma,
->   */
->  static unsigned int ns_to_tim_reg(unsigned int tim_mult, unsigned int nsecs)
->  {
-> -	unsigned int val;
-> -
->  	/*
->  	 * Compute # of eclock periods to get desired duration in
->  	 * nanoseconds.
->  	 */
-> -	val = DIV_ROUND_UP(nsecs * (octeon_get_io_clock_rate() / 1000000),
-> +	return DIV_ROUND_UP(nsecs * (octeon_get_io_clock_rate() / 1000000),
->  			  1000 * tim_mult);
-> -
-> -	return val;
->  }
+> diff --git a/kernel/exit.c b/kernel/exit.c
+> index d0ec6f6b41cb..f975cd8a2ed8 100644
+> --- a/kernel/exit.c
+> +++ b/kernel/exit.c
+> @@ -886,8 +886,7 @@ void __noreturn make_task_dead(int signr)
+>  	if (unlikely(tsk->flags & PF_EXITING)) {
+>  		pr_alert("Fixing recursive fault but reboot is needed!\n");
+>  		futex_exit_recursive(tsk);
+> -		set_current_state(TASK_UNINTERRUPTIBLE);
+> -		schedule();
+> +		do_task_dead();
+>  	}
 >  
->  static void octeon_cf_set_boot_reg_cfg(int cs, unsigned int multiplier)
-
-Applied to for-5.17. Thanks.
-
--- 
-Damien Le Moal
-Western Digital Research
+>  	do_exit(signr);
+> -- 
+> 2.29.2
+> 

@@ -2,237 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F36484C24
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 02:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B87484C27
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 02:37:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236909AbiAEBfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 20:35:02 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:34875 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234314AbiAEBfB (ORCPT
+        id S236914AbiAEBhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 20:37:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37846 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234314AbiAEBhH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 20:35:01 -0500
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JTBq538Nnzcbxj;
-        Wed,  5 Jan 2022 09:34:25 +0800 (CST)
-Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 5 Jan 2022 09:34:58 +0800
-Received: from [10.174.178.247] (10.174.178.247) by
- dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 5 Jan 2022 09:34:58 +0800
-Subject: Re: [PATCH v3 2/2] ACPI: AGDI: Add driver for Arm Generic Diagnostic
- Dump and Reset device
-To:     Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        <lorenzo.pieralisi@arm.com>, <sudeep.holla@arm.com>,
-        <rafael@kernel.org>, <linux@armlinux.org.uk>
-CC:     <lenb@kernel.org>, <robert.moore@intel.com>,
-        <linux-acpi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <patches@amperecomputing.com>,
-        <scott@os.amperecomputing.com>, <darren@os.amperecomputing.com>
-References: <20211231033725.21109-1-ilkka@os.amperecomputing.com>
- <20211231033725.21109-3-ilkka@os.amperecomputing.com>
-From:   Hanjun Guo <guohanjun@huawei.com>
-Message-ID: <f0fecf95-0b7d-eeec-94fd-76bea61fdd0f@huawei.com>
-Date:   Wed, 5 Jan 2022 09:34:57 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Tue, 4 Jan 2022 20:37:07 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512E7C061761;
+        Tue,  4 Jan 2022 17:37:07 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id s1so79680905wra.6;
+        Tue, 04 Jan 2022 17:37:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=w9H0RMHXELZxjWd3I/ACDf9VOqwYsckamevzKs/JT8s=;
+        b=QwBRAKR5sb+6JmBfKpWx5MBc+gE5TWrIBys7KQDlz1SdYJ3j7yco4WoU7dJWv80E2P
+         kPadU7lZDdnDwMlpwgCjXBcBQ3YBxCSE5XMUoP55ikCCpcxMxpelm7mRnEt2HDOLnsPl
+         oOv0/xMA2hWKYMeszkt05Yu3bNwD/c1jC3uTjhSxf/bNQgQwep0vStLn1DIcR32d7EOs
+         vT3kQ/feKUhXilEcfYK0/5kdyFUO9QqDGMIOvJAI9GhO7bjbit4zCTrJ0sgUSuKbpkoQ
+         ZnN+bjLVWa9Y+mXdHxYNwRQdQpdl/wEZz+LbGjxFEh37lHDDIwYMk3RypUWCfDaWn19m
+         i8oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=w9H0RMHXELZxjWd3I/ACDf9VOqwYsckamevzKs/JT8s=;
+        b=rzgcbkrNcrLSErikZHG+F7q02PV6fLsDzKAeJq0JHKUELkmkm32UWtLWOLPl7TIJ8T
+         0QqRzqgoMGUYhKDHx8egDqB1YBMhwsBkOgmzkjz18SEVkSFWguNemX+HehOn8ICNhHq5
+         GH43eD6O0tm9gqjjVVzc2bcAv5n8rz+JnXY5LHG7zJunDgoI1pTEdPgUPzfdlSYR4uKu
+         oRxAWqU+bZ1Vmkwcpkj1e0yRSzX5ihd3favSW2qV7rJM+efCBQ9Msu784X69bvIFEbZU
+         RTpvSZXkaCC8DQdx74r2v/+oYGNo339nQKcRyDbsf1B83IEp+z5dpfsCbL15SZ8O5pQG
+         po+g==
+X-Gm-Message-State: AOAM5308/RQq1hjJO0kS4NLTFRlHs5p47F21UOlNNbYnCxIj5DSrDyYJ
+        t3pEufI10tZwvFS52ZBx6EsfSs2CDuf0xbhXcFFHIcN/
+X-Google-Smtp-Source: ABdhPJxvOweL2Cw7kHuiYcMnJpRRLSuLqIN75VpNLpydDefvmhD15Z2ghun+6TAPgmvm+Z2GE6RDojAZxbnc3VEgZk8=
+X-Received: by 2002:adf:d1c2:: with SMTP id b2mr45141599wrd.81.1641346625949;
+ Tue, 04 Jan 2022 17:37:05 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211231033725.21109-3-ilkka@os.amperecomputing.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.247]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500002.china.huawei.com (7.185.36.229)
-X-CFilter-Loop: Reflected
+References: <20211222155743.256280-1-miquel.raynal@bootlin.com>
+ <20211222155743.256280-13-miquel.raynal@bootlin.com> <CAB_54W6AZ+LGTcFsQjNx7uq=+R5v_kdF0Xm5kwWQ8ONtfOrmAw@mail.gmail.com>
+ <Ycx0mwQcFsmVqWVH@ni.fr.eu.org> <CAB_54W41ZEoXzoD2_wadfMTY8anv9D9e2T5wRckdXjs7jKTTCA@mail.gmail.com>
+ <20220104184340.0e977727@xps13>
+In-Reply-To: <20220104184340.0e977727@xps13>
+From:   Alexander Aring <alex.aring@gmail.com>
+Date:   Tue, 4 Jan 2022 20:36:54 -0500
+Message-ID: <CAB_54W6sfWfYNNx9vG2_ZQK2nA86O8-L5RiG-Qg8Dibq2HG7Yg@mail.gmail.com>
+Subject: Re: [net-next 12/18] net: mac802154: Handle scan requests
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Nicolas Schodet <nico@ni.fr.eu.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        linux-wpan - ML <linux-wpan@vger.kernel.org>,
+        David Girault <david.girault@qorvo.com>,
+        Romuald Despres <romuald.despres@qorvo.com>,
+        Frederic Blain <frederic.blain@qorvo.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        kernel list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ilkka,
+Hi,
 
-On 2021/12/31 11:37, Ilkka Koskinen wrote:
-> ACPI for Arm Components 1.1 Platform Design Document v1.1 [0] specifices
-> Arm Generic Diagnostic Device Interface (AGDI). It allows an admin to
-> issue diagnostic dump and reset via an SDEI event or an interrupt.
-> This patch implements SDEI path.
-> 
-> [0] https://developer.arm.com/documentation/den0093/latest/
-> 
-> Signed-off-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
-> ---
->   drivers/acpi/arm64/Kconfig  |   8 +++
->   drivers/acpi/arm64/Makefile |   1 +
->   drivers/acpi/arm64/agdi.c   | 125 ++++++++++++++++++++++++++++++++++++
->   3 files changed, 134 insertions(+)
->   create mode 100644 drivers/acpi/arm64/agdi.c
-> 
-> diff --git a/drivers/acpi/arm64/Kconfig b/drivers/acpi/arm64/Kconfig
-> index 6dba187f4f2e..24869ba5b365 100644
-> --- a/drivers/acpi/arm64/Kconfig
-> +++ b/drivers/acpi/arm64/Kconfig
-> @@ -8,3 +8,11 @@ config ACPI_IORT
->   
->   config ACPI_GTDT
->   	bool
-> +
-> +config ACPI_AGDI
-> +	bool "Arm Generic Diagnostic Dump and Reset Device Interface"
-> +	depends on ARM_SDE_INTERFACE
-> +	help
-> +	  Arm Generic Diagnostic Dump and Reset Device Interface (AGDI) is
-> +	  a standard that enables issuing a non-maskable diagnostic dump and
-> +	  reset command.
-> diff --git a/drivers/acpi/arm64/Makefile b/drivers/acpi/arm64/Makefile
-> index 66acbe77f46e..7b9e4045659d 100644
-> --- a/drivers/acpi/arm64/Makefile
-> +++ b/drivers/acpi/arm64/Makefile
-> @@ -1,4 +1,5 @@
->   # SPDX-License-Identifier: GPL-2.0-only
-> +obj-$(CONFIG_ACPI_AGDI) 	+= agdi.o
->   obj-$(CONFIG_ACPI_IORT) 	+= iort.o
->   obj-$(CONFIG_ACPI_GTDT) 	+= gtdt.o
->   obj-y				+= dma.o
-> diff --git a/drivers/acpi/arm64/agdi.c b/drivers/acpi/arm64/agdi.c
-> new file mode 100644
-> index 000000000000..6525ccbae5c1
-> --- /dev/null
-> +++ b/drivers/acpi/arm64/agdi.c
-> @@ -0,0 +1,125 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * This file implements handling of
-> + * Arm Generic Diagnostic Dump and Reset Interface table (AGDI)
-> + *
-> + * Copyright (c) 2021, Ampere Computing LLC
-> + */
-> +
-> +#define pr_fmt(fmt) "ACPI: AGDI: " fmt
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
-> +#include <linux/module.h>
-> +#include <linux/kernel.h>
-> +#include <linux/acpi.h>
-> +#include <linux/arm_sdei.h>
-> +#include <linux/io.h>
+On Tue, 4 Jan 2022 at 12:43, Miquel Raynal <miquel.raynal@bootlin.com> wrot=
+e:
+>
+> Hi Alexander,
+>
+> > I see that beacons are sent out with
+> > "local->beacon.mhr.fc.dest_addr_mode =3D IEEE802154_NO_ADDRESSING;"
+> > shouldn't that be a broadcast destination?
+>
+> In the case of a beacon, 7.3.1.2 Beacon frame MHR field indicate:
+>
+>         When the Frame Version field is 0b00=E2=80=930b01:
+>                 =E2=80=94 The Destination Addressing mode field shall be =
+set to
+>                 indicated that the Destination Address and Destination
+>                 PAN ID fields are not present.
+>
+> So I think the NO_ADDRESSING choice here is legit. The destination
+> field however is useful in the Enhanced beacon frame case, but that's
+> not yet supported.
 
-Please keep the head files in alphabetical order.
+ok, yes I agree.
 
-> +
-> +struct agdi_data {
-> +	int sdei_event;
-> +};
-> +
-> +static int agdi_sdei_handler(u32 sdei_event, struct pt_regs *regs, void *arg)
-> +{
-> +	nmi_panic(regs, "Arm Generic Diagnostic Dump and Reset SDEI event issued");
-> +	return 0;
-> +}
-> +
-> +static int agdi_sdei_probe(struct platform_device *pdev,
-> +			   struct agdi_data *adata)
-> +{
-> +	int err;
-> +
-> +	err = sdei_event_register(adata->sdei_event, agdi_sdei_handler, pdev);
-> +	if (err) {
-> +		dev_err(&pdev->dev, "Failed to register for SDEI event %d",
-> +			adata->sdei_event);
-> +		return err;
-> +	}
-> +
-> +	err = sdei_event_enable(adata->sdei_event);
-> +	if (err)  {
-> +		sdei_event_unregister(adata->sdei_event);
-> +		dev_err(&pdev->dev, "Failed to enable event %d\n",
-> +			adata->sdei_event);
-> +		return err;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int agdi_probe(struct platform_device *pdev)
-> +{
-> +	struct agdi_data *adata;
-> +
-> +	adata = dev_get_platdata(&pdev->dev);
-> +	if (!adata)
-> +		return -EINVAL;
-> +
-> +	return agdi_sdei_probe(pdev, adata);
-> +}
-> +
-> +static int agdi_remove(struct platform_device *pdev)
-> +{
-> +	struct agdi_data *adata = platform_get_drvdata(pdev);
-> +
-> +	sdei_event_disable(adata->sdei_event);
-> +	sdei_event_unregister(adata->sdei_event);
-> +
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver agdi_driver = {
-> +	.driver = {
-> +		.name = "agdi",
-> +	},
-> +	.probe = agdi_probe,
-> +	.remove = agdi_remove,
-> +};
-> +
-> +static int __init agdi_init(void)
-> +{
-> +	int ret;
-> +	acpi_status status;
-> +	struct acpi_table_agdi *agdi_table;
-> +	struct agdi_data pdata;
-> +	struct platform_device *pdev;
-> +
-> +	if (acpi_disabled)
-> +		return 0;
-> +
-> +	status = acpi_get_table(ACPI_SIG_AGDI, 0,
-> +				(struct acpi_table_header **) &agdi_table);
-> +	if (ACPI_FAILURE(status))
-> +		return -ENODEV;
-> +
-> +	if (agdi_table->flags & ACPI_AGDI_SIGNALING_MODE) {
-> +		pr_warn("Interrupt signaling is not supported");
-> +		ret = -ENODEV;
-> +		goto err_put_table;
-> +	}
-> +
-> +	pdata.sdei_event = agdi_table->sdei_event;
-> +
-> +	pdev = platform_device_register_data(NULL, "agdi", 0, &pdata, sizeof(pdata));
-> +	if (IS_ERR(pdev)) {
-> +		ret = PTR_ERR(pdev);
-> +		goto err_put_table;
-> +	}
-> +
-> +	ret = platform_driver_register(&agdi_driver);
-> +	if (ret)
-> +		goto err_device_unregister;
-> +
-> +	acpi_put_table((struct acpi_table_header *)agdi_table);
-> +	return 0;
-> +
-> +err_device_unregister:
-> +	platform_device_unregister(pdev);
-> +err_put_table:
-> +	acpi_put_table((struct acpi_table_header *)agdi_table);
-> +	return ret;
-> +}
-> +device_initcall(agdi_init);
+Thanks.
 
-The rest are looking good to me.
-
-Thanks
-Hanjun
+- Alex

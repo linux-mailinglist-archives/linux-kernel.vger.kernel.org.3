@@ -2,15 +2,15 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31444485849
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:30:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 361B348584F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 19:31:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242911AbiAESae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 13:30:34 -0500
-Received: from aposti.net ([89.234.176.197]:41778 "EHLO aposti.net"
+        id S242938AbiAESao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 13:30:44 -0500
+Received: from aposti.net ([89.234.176.197]:41826 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242971AbiAESaW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 13:30:22 -0500
+        id S242931AbiAESak (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 13:30:40 -0500
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     "Rafael J . Wysocki" <rafael@kernel.org>
 Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
@@ -23,9 +23,9 @@ Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
         linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-pm@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v2 3/6] PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS macros
-Date:   Wed,  5 Jan 2022 18:29:36 +0000
-Message-Id: <20220105182939.106885-4-paul@crapouillou.net>
+Subject: [PATCH v2 4/6] PM: runtime: Add DEFINE_RUNTIME_DEV_PM_OPS() macro
+Date:   Wed,  5 Jan 2022 18:29:37 +0000
+Message-Id: <20220105182939.106885-5-paul@crapouillou.net>
 In-Reply-To: <20220105182939.106885-1-paul@crapouillou.net>
 References: <20220105182939.106885-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -34,86 +34,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These macros are defined conditionally, according to CONFIG_PM:
-- if CONFIG_PM is enabled, these macros resolve to
-  DEFINE_SIMPLE_DEV_PM_OPS(), and the dev_pm_ops symbol will be
-  exported.
+A lot of drivers create a dev_pm_ops struct with the system sleep
+suspend/resume callbacks set to pm_runtime_force_suspend() and
+pm_runtime_force_resume().
 
-- if CONFIG_PM is disabled, these macros will result in a dummy static
-  dev_pm_ops to be created with the __maybe_unused flag. The dev_pm_ops
-  will then be discarded by the compiler, along with the provided
-  callback functions if they are not used anywhere else.
-
-In the second case, the symbol is not exported, which should be
-perfectly fine - users of the symbol should all use the pm_ptr() or
-pm_sleep_ptr() macro, so the dev_pm_ops marked as "extern" in the
-client's code will never be accessed.
+These drivers can now use the DEFINE_RUNTIME_DEV_PM_OPS() macro, which
+will use pm_runtime_force_{suspend,resume}() as the system sleep
+callbacks, while having the same dead code removal characteristic that
+is already provided by DEFINE_SIMPLE_DEV_PM_OPS().
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
 
 Notes:
-    v2: Remove useless empty line
+    v2: No change
 
- include/linux/pm.h | 32 +++++++++++++++++++++++++++++---
- 1 file changed, 29 insertions(+), 3 deletions(-)
+ include/linux/pm.h         |  3 +++
+ include/linux/pm_runtime.h | 14 ++++++++++++++
+ 2 files changed, 17 insertions(+)
 
 diff --git a/include/linux/pm.h b/include/linux/pm.h
-index 389e600df233..b82f40e701ab 100644
+index b82f40e701ab..43fa4f828a62 100644
 --- a/include/linux/pm.h
 +++ b/include/linux/pm.h
-@@ -8,6 +8,7 @@
- #ifndef _LINUX_PM_H
- #define _LINUX_PM_H
- 
-+#include <linux/export.h>
- #include <linux/list.h>
- #include <linux/workqueue.h>
- #include <linux/spinlock.h>
-@@ -357,14 +358,39 @@ struct dev_pm_ops {
- #define SET_RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
- #endif
- 
-+#define _DEFINE_DEV_PM_OPS(name, \
-+			   suspend_fn, resume_fn, \
-+			   runtime_suspend_fn, runtime_resume_fn, idle_fn) \
-+const struct dev_pm_ops name = { \
-+	SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
-+	RUNTIME_PM_OPS(runtime_suspend_fn, runtime_resume_fn, idle_fn) \
-+}
-+
- /*
-  * Use this if you want to use the same suspend and resume callbacks for suspend
-  * to RAM and hibernation.
+@@ -410,6 +410,9 @@ const struct dev_pm_ops __maybe_unused name = { \
+  * suspend and "early" resume callback pointers, .suspend_late() and
+  * .resume_early(), to the same routines as .runtime_suspend() and
+  * .runtime_resume(), respectively (and analogously for hibernation).
++ *
++ * Deprecated. You most likely don't want this macro. Use
++ * DEFINE_RUNTIME_DEV_PM_OPS() instead.
   */
- #define DEFINE_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
--const struct dev_pm_ops name = { \
--	SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
--}
-+	_DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL)
-+
-+#ifdef CONFIG_PM
-+#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-+			   runtime_resume_fn, idle_fn, sec) \
-+	_DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-+			   runtime_resume_fn, idle_fn); \
-+	_EXPORT_SYMBOL(name, sec)
-+#else
-+#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-+			   runtime_resume_fn, idle_fn, sec) \
-+static __maybe_unused _DEFINE_DEV_PM_OPS(__static_##name, suspend_fn, \
-+					 resume_fn, runtime_suspend_fn, \
-+					 runtime_resume_fn, idle_fn)
-+#endif
-+
-+#define EXPORT_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-+	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "")
-+#define EXPORT_GPL_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-+	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "_gpl")
+ #define UNIVERSAL_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
+ const struct dev_pm_ops __maybe_unused name = { \
+diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+index 016de5776b6d..4af454d29281 100644
+--- a/include/linux/pm_runtime.h
++++ b/include/linux/pm_runtime.h
+@@ -22,6 +22,20 @@
+ 					    usage_count */
+ #define RPM_AUTO		0x08	/* Use autosuspend_delay */
  
- /* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
- #define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
++/*
++ * Use this for defining a set of PM operations to be used in all situations
++ * (system suspend, hibernation or runtime PM).
++ *
++ * Note that the behaviour differs from the deprecated UNIVERSAL_DEV_PM_OPS()
++ * macro, which uses the provided callbacks for both runtime PM and system
++ * sleep, while DEFINE_RUNTIME_DEV_PM_OPS() uses pm_runtime_force_suspend()
++ * and pm_runtime_force_resume() for its system sleep callbacks.
++ */
++#define DEFINE_RUNTIME_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
++	_DEFINE_DEV_PM_OPS(name, pm_runtime_force_suspend, \
++			   pm_runtime_force_resume, suspend_fn, \
++			   resume_fn, idle_fn)
++
+ #ifdef CONFIG_PM
+ extern struct workqueue_struct *pm_wq;
+ 
 -- 
 2.34.1
 

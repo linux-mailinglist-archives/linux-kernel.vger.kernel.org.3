@@ -2,78 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A90484EAB
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 08:20:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 327FB484EAE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 08:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238037AbiAEHUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 02:20:03 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57078 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234872AbiAEHUB (ORCPT
+        id S238047AbiAEHUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 02:20:13 -0500
+Received: from cavan.codon.org.uk ([176.126.240.207]:57250 "EHLO
+        cavan.codon.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234872AbiAEHUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 02:20:01 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5D4D9B818F9;
-        Wed,  5 Jan 2022 07:20:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D528CC36AE9;
-        Wed,  5 Jan 2022 07:19:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641367198;
-        bh=+5D2LgPMmG2tuY/rNi5bQY6f9qdsVjrr+jSwcS7aJAE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tCGZlrXMAlaoI6DT5P656pS324kcS3Akfoz/IgyqFPHewbKvpXsWT35pjTx5vrqrm
-         16dtw2NbOw1/3A2acehF3kdBe3qENZEBAhL7X8wII/wP4XCC22daDB1gewAHXoM/i3
-         CjEEDmT1KmcEjV6FLQmpzL2x/Q7vKctHsuJdfskTAkN9playa6LkK7H9HNxCJC3JQ/
-         XGUMvxDTUlKSN8qknEa8C0pNkk84Cl5oN3IMNvy8+DY0oBDAFxiuYCP307LmFANzYE
-         vEhB0O5j/sXTZQQhw1GRtQPJlWhXW9GSWi4Toq3/dWHXUa/JE6S3V7FkcP9CP+46Ve
-         kfi7PQsoEfJbw==
-Date:   Wed, 5 Jan 2022 12:49:54 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Dave Jiang <dave.jiang@intel.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: linux-next: manual merge of the dmaengine tree with the
- dmaengine-fixes tree
-Message-ID: <YdVGmkzgUmvPDmlE@matsya>
-References: <20211214172437.1552740-1-broonie@kernel.org>
- <CAMuHMdUQjKOp6B7_-pG8t8OzrH=H+dYjn65YMHHy7CLaw6OU1g@mail.gmail.com>
- <36975790-c9f8-a6f6-cbc2-493da4bdd8c1@intel.com>
- <20220105100407.69b16fe2@canb.auug.org.au>
+        Wed, 5 Jan 2022 02:20:12 -0500
+Received: by cavan.codon.org.uk (Postfix, from userid 1000)
+        id 9E43A4250A; Wed,  5 Jan 2022 07:20:10 +0000 (GMT)
+Date:   Wed, 5 Jan 2022 07:20:10 +0000
+From:   Matthew Garrett <mjg59@srcf.ucam.org>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     jmorris@namei.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Kees Cook <keescook@chromium.org>, x86@kernel.org
+Subject: Re: [PATCH V40 12/29] x86: Lock down IO port access when the kernel
+ is locked down
+Message-ID: <20220105072010.GA31134@srcf.ucam.org>
+References: <20190820001805.241928-1-matthewgarrett@google.com>
+ <20190820001805.241928-13-matthewgarrett@google.com>
+ <CAAd53p6d2CsZcwaX0ZtjmOmQv1Dru4qmM-uRxtHJi0k5PnFMFQ@mail.gmail.com>
+ <20220105064827.GA30988@srcf.ucam.org>
+ <CAAd53p5A9ajyP=8edXW20MB1eLRAF3SsmXfdnkA2isBJD2Bd+w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220105100407.69b16fe2@canb.auug.org.au>
+In-Reply-To: <CAAd53p5A9ajyP=8edXW20MB1eLRAF3SsmXfdnkA2isBJD2Bd+w@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05-01-22, 10:04, Stephen Rothwell wrote:
-> Hi Dave,
-> 
-> On Tue, 4 Jan 2022 14:41:00 -0700 Dave Jiang <dave.jiang@intel.com> wrote:
-> >
-> > >>   +       */
-> > >>   +      list_for_each_entry_safe(d, t, &flist, list) {
-> > >>   +              list_del_init(&d->list);
-> > >> -               complete_desc(d, IDXD_COMPLETE_NORMAL);
-> > >> ++              idxd_dma_complete_txd(d, IDXD_COMPLETE_NORMAL, false);  
-> > > Is "false" correct here?  
-> > 
-> > Hi Geert, took a closer look today. I believe it should be 'true'
-> > here since this is a normal completion that needs to release the
-> > descriptors. Sorry about the previous incorrect response.
-> 
-> I have updated my resolution from today.  Thanks for the feedback.
+On Wed, Jan 05, 2022 at 02:57:57PM +0800, Kai-Heng Feng wrote:
 
-I have merged fixes into next as well, so this should not be required
-tomorrow.
+> The affected system from the customer has SecureBoot enabled (and
+> hence lockdown), and the kernel upgrade surprisingly broke ioperm()
+> usage.
 
-Dave pls test..
+Which kernel was being used that was signed but didn't implement 
+lockdown? That sounds, uh, bad.
 
--- 
-~Vinod
+> The userspace program is proprietary so I can't share it here.
+
+Ok. Are you able to describe anything about what it does so we can 
+figure out a better solution?
+
+> Basically this patch makes ioperm() a noop on SecureBoot enabled x86 systems.
+> If reverting is not an option, what else can we do to circumvent the regression?
+
+There's two main choices:
+
+1) Disable secure boot on the system in question - if there's a need to 
+run userland that can do arbitrary port IO then secure boot isn't 
+providing any meaningful security benefit in any case.
+
+2) Implement a kernel driver that abstracts the hardware access away 
+from userland, and ensures that all the accesses are performed in a safe 
+way.
+
+Doing port IO from userland is almost always a terrible idea - it 
+usually involves indexed accesses (you write an address to one port and 
+then write or read data from another), and if two processes are trying 
+to do this simultaneously (either because SMP or because one process 
+gets preempted after writing the address but before accessing the data 
+register), and in that case you can end up with accesses to the wrong 
+register as a result. You really want this sort of thing to be mediated 
+by the kernel, both from a safety perspective and to ensure appropriate 
+synchronisation.

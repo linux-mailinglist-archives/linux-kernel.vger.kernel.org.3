@@ -2,74 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51895484CFA
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 04:59:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D822C484CFC
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 04:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237277AbiAED6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 22:58:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40614 "EHLO
+        id S237287AbiAED7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 22:59:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230284AbiAED6S (ORCPT
+        with ESMTP id S230284AbiAED7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 22:58:18 -0500
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99713C061761;
-        Tue,  4 Jan 2022 19:58:18 -0800 (PST)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n4xRD-00HN5S-UP; Wed, 05 Jan 2022 03:58:12 +0000
-Date:   Wed, 5 Jan 2022 03:58:11 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Subject: Re: [PATCH v8 01/19] securityfs: Extend securityfs with namespacing
- support
-Message-ID: <YdUXU3XIzhxFUfVB@zeniv-ca.linux.org.uk>
-References: <20220104170416.1923685-1-stefanb@linux.vnet.ibm.com>
- <20220104170416.1923685-2-stefanb@linux.vnet.ibm.com>
+        Tue, 4 Jan 2022 22:59:01 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDEFFC061761;
+        Tue,  4 Jan 2022 19:59:00 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id v10so30014695ilj.3;
+        Tue, 04 Jan 2022 19:59:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jSwc2gpQd+XchfSgUCHEUu47Nw0ikHAolADuPyx1fW4=;
+        b=JQLEffMcvVi35oJNSVtnoUxz8KS1/rNwy3x0riOo8BFtkI3Yp0tgBLTIRrZqHEfqKj
+         KJNmQD+zbfxVgynsrpzNXFeIYZRvjHsk52mnvM1vHeoZ/YyrXP3TF1CzBNLusOdntNvC
+         sznf53oJhvUrhKz/D3PUbMyFI/o3fYwXljrR94LW59fZCLjX1PzsNrwsBj5dBJaaCm26
+         K7RbzPznlaNvKcz2smYZORA0F413PaO6u62aOQzuDMjbEzdW1BZz5WThfkRWCycCpJq8
+         xz1ehtLzTF9AqEQuSD85krcS+SRMZMn+NNYfivGO/WoUkMb4QeywAmZ6Jo7Z0L9SevOw
+         7+6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jSwc2gpQd+XchfSgUCHEUu47Nw0ikHAolADuPyx1fW4=;
+        b=R+oAQY8Ns+IGRIYxbAvgI756gBbFO5lxO1rYpdk+352htp1vAdIC5qTCWj5qWL9l9E
+         rV/VxYFVpW2gAynOA6qCEIWTJRdgqzbNF4X54MO9Ujdl6hwqn/P0sk/NfAerdKfPUjWP
+         R2LU39EONQTNvW76FPxItgCBF3osJwB/JZL2G+EH4E3Thwil1WmgBmCVA5fP50AVcR3r
+         u9vdXejt/CiSEv/zeiP/Zlry0tdiAzD58HcsKj5jx7a2PjWovlZIWa9pSU2eIQHt4S+n
+         t0x5yUznUxeJ9qHuwPS0cKoTi1mp1LqLUcpgjjYBrUF/svCIwTimUsgToNlRn4oWlsF3
+         Ntyg==
+X-Gm-Message-State: AOAM5311b8q5dTnq4x3qPmvEhxAwDDhmPUFQt5Zy4qsZgEypFElWkXyy
+        +6yndEgIsuSXQ1tFdMkKVlJtUs3eCbS1Jw1z6L0=
+X-Google-Smtp-Source: ABdhPJwRYQoLHcO3SGaObxJrTeYphaYT3xCNsnxJt8WhO0u2xYbH9soYju+FkZ0EABT2Y8jUCGlwDb8QcSfI9Nsc3JY=
+X-Received: by 2002:a92:d2cc:: with SMTP id w12mr26339642ilg.303.1641355140381;
+ Tue, 04 Jan 2022 19:59:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220104170416.1923685-2-stefanb@linux.vnet.ibm.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+References: <20220104073845.629257314@linuxfoundation.org>
+In-Reply-To: <20220104073845.629257314@linuxfoundation.org>
+From:   Zan Aziz <zanaziz313@gmail.com>
+Date:   Tue, 4 Jan 2022 20:58:49 -0700
+Message-ID: <CAFU3qoYZcNjFa1tSdA-L16LzdWN8s_dMNHuJtELqMbEhJXfGgQ@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/72] 5.15.13-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org,
+        Zan Aziz <zanaziz313@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 12:03:58PM -0500, Stefan Berger wrote:
-> From: Stefan Berger <stefanb@linux.ibm.com>
-> 
-> To prepare for virtualization of SecurityFS, use simple_pin_fs and
-> simpe_release_fs only when init_user_ns is active.
-> 
-> Extend 'securityfs' for support of IMA namespacing so that each
-> IMA (user) namespace can have its own front-end for showing the currently
-> active policy, the measurement list, number of violations and so on.
-> 
-> Enable multiple instances of securityfs by keying each instance with a
-> pointer to the user namespace it belongs to.
-> 
-> Drop the additional dentry reference to enable simple cleanup of dentries
-> upon umount. Now the dentries do not need to be explicitly freed anymore
-> but we can just rely on d_genocide() and the dcache shrinker to do all
-> the required work.
+ On Tue, Jan 4, 2022 at 7:47 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.13 release.
+> There are 72 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 06 Jan 2022 07:38:29 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.13-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+>
 
-Looks brittle...  What are the new rules for securityfs_remove()?  Is it
-still paired with securityfs_create_...()?  When is removal done?  On
-securityfs instance shutdown?  What about the underlying data structures, BTW?
-When can they be freed?
+Compiled and booted on my test system Lenovo P50s: Intel Core i7
+No emergency and critical messages in the dmesg
 
-That kind of commit message is asking for trouble down the road; please,
-document the rules properly.
+I am a high school student and this is the first kernel I tested.
+Please let me know if you
+would like to know more information about my test system or dmesg.
 
-Incidentally, what happens if you open a file, pass it to somebody in a
-different userns and try to shut the opener's userns down?
+Tested-by: Zan Aziz <zanaziz313@gmail.com>
+
+Thanks
+-Zan

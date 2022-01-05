@@ -2,97 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C339348501A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 10:36:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 187C548501F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 10:37:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238914AbiAEJgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 04:36:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59882 "EHLO
+        id S238922AbiAEJhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 04:37:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233853AbiAEJge (ORCPT
+        with ESMTP id S233853AbiAEJhj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 04:36:34 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761EEC061761;
-        Wed,  5 Jan 2022 01:36:34 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id q8so1105745wra.12;
-        Wed, 05 Jan 2022 01:36:34 -0800 (PST)
+        Wed, 5 Jan 2022 04:37:39 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90682C061761;
+        Wed,  5 Jan 2022 01:37:39 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id z29so159448954edl.7;
+        Wed, 05 Jan 2022 01:37:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=G5USAhnPcOQaApPKE6/XINe72jhys0o03YHjx6AUo34=;
-        b=fsWL5e4hpoRPKa4AwJGr/Tc3cHHvU0gkNXf8PvPGgQES9lshAdQnBHWxGrKVRaSoeD
-         QIbtT37gS5vxmVvbiZV3EVvYdM7+jMzPD3E/GOpZ0XROV97JnhekX5g6Ua3coVqLmtW+
-         KjQ8vD2Lvsi36leZ/oEhCCqMQoOR95lLSz3imGTZ7HhYRdZPViaJ18wvjktLwD1YJR3R
-         EnBWemFmE2bEue4qHYGk6Rju8zUdR6bkgUwZwrsqwyitlMuyhrHfXiWhYQ/QxRx8yw0A
-         r0Xa69GrdAw/dVFvyYqfno0H7mJsa3AIp6MNG6EeiEJqVnbZV0LTM9jkQyAsTrQL/CvL
-         Hlkg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dL91I39WiegFKoqzSuVIyhjC/bBYZXjgDxDNGZC9bm8=;
+        b=fWMphfJ+kLKLffih2SVQPP/xYmhpN3b8zFsaeobSyWWLngI6sZdubmjQAKy/3+jnuZ
+         sBCNH3vjN2FaV80qbDf2h7IG0Z0vKbusXE2kfrQYP2nOQ9D+tbZ8VhUFDK+MpxA3S3lR
+         rEYFjX5jPQWASaWRnr8PWAjWbXeWInKv8UWtqVE4HCWLwKJKz61050SkhW5CiINRbHDi
+         U1PUoD9QlCa5UHh+RYx2zVh3Muxr15vCVF2mru3sOSyznomfetWuGL+h+a+ySQWn9LF9
+         NzVpbxhpv9Fko9xhtf9r5Wdv2/8KT2vKW0dMeYKSb3g7p2q2bzqAATNej1CE/EcRK5Vv
+         VX8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=G5USAhnPcOQaApPKE6/XINe72jhys0o03YHjx6AUo34=;
-        b=jO/XK1NH37LFRPIs912310ujxvLput54GhxLBZPYqc2sNbqY74dtfEh9zGPJN0WaQ4
-         1xs1jjvEyu6bCtFzOV9f4eiNKW/wQ65rjE0PHlay7b9n0fo++OzyboBhu5YEc1k6RMrI
-         W+i3Mk80Mx+w1UAUeqRbrcRYInDigs4akP63TIh/fqL6mb5Ws7HxzFT8Uksm30aLaHA6
-         TLVoQqf2DV/5hnlZzf1l75Phnah90A1A7QO/ZXI3HyECftZH15tEkPSnTP20C/4pj9ws
-         28XxLL/CqI2wZcnewrokz98dTczBncQLHfLpfBgd3xlVg9W5XCn5qY8TSVUwc5gj6P9D
-         mX8Q==
-X-Gm-Message-State: AOAM530N+qEWZuzEr5MtbFXutdSykNVJg83++seCpqNyhNlIr+tpve4U
-        9dQlxRZTLtEq0xpN0ZmYbdw=
-X-Google-Smtp-Source: ABdhPJwdC9wVwlx0zRMBIx7aPepv3lNNgST90u8OkPcKbWGIOrC8BNXztzqtnZWjsOou0V0ougBZNg==
-X-Received: by 2002:a05:6000:156c:: with SMTP id 12mr47004320wrz.502.1641375393109;
-        Wed, 05 Jan 2022 01:36:33 -0800 (PST)
-Received: from debian (host-2-98-43-34.as13285.net. [2.98.43.34])
-        by smtp.gmail.com with ESMTPSA id q3sm4408822wrr.55.2022.01.05.01.36.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 01:36:32 -0800 (PST)
-Date:   Wed, 5 Jan 2022 09:36:30 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.4 00/36] 5.4.170-rc2 review
-Message-ID: <YdVmnnqBwYzJy138@debian>
-References: <20220104073839.317902293@linuxfoundation.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dL91I39WiegFKoqzSuVIyhjC/bBYZXjgDxDNGZC9bm8=;
+        b=PWv5RcLr1UfK+UlmU819gswC1yLvip38be260e1qsUB3n8b0s0LizKX7zLo+oUMi4/
+         +vZCJ6O1Bf972EqNedm8cLROtzP4HCjAxgss/qPzxMYATix2M2FxmgbDgysrWoLewMBz
+         qTDbDpZN2k6MofmoagCth1TMmNag9oFcMyJO3gtwk59X3Pnfl1oM66JfcuXDFZOEa5o/
+         N6lso4y/+Ziy4FXCxnjoKSMrr0hxSjHYhOVxCHKML3TnD6S9SjhLPC7HrPxV/F3Yg7Ew
+         DkQdKYsjsINX8GOJAGVyeafdelMeXssTKCJuctg1I7I+WlLKcVKfDNClwFy5X9+fC0GF
+         BY6g==
+X-Gm-Message-State: AOAM532R4MmqjZ+RJDvbyNcz+Fxh6kvOEcWfgQxk+6PYKcNkN28VDGUF
+        Y4TQaotTYCXZ6LwhG8wCzlJjmUa87rcZzGi1LozF1/MNk8A=
+X-Google-Smtp-Source: ABdhPJz4YUuG5ppYtnGubuFGj+9zCXzK5uVlZcH4ghXBCpXx5EQpWUTzkQoLaoldbJaplWAP//W3E7yCbd/CGaVJ2/Q=
+X-Received: by 2002:a05:6402:4301:: with SMTP id m1mr50710493edc.125.1641375458165;
+ Wed, 05 Jan 2022 01:37:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220104073839.317902293@linuxfoundation.org>
+References: <YdIfz+LMewetSaEB@gmail.com> <YdLL0kaFhm6rp9NS@kroah.com>
+ <YdLaMvaM9vq4W6f1@gmail.com> <CAK8P3a3Q4faZvgVXoCALXiEn9WTunwZy__TjkiHGRQgtK9Uocw@mail.gmail.com>
+In-Reply-To: <CAK8P3a3Q4faZvgVXoCALXiEn9WTunwZy__TjkiHGRQgtK9Uocw@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 5 Jan 2022 11:37:02 +0200
+Message-ID: <CAHp75VeUmg73d6gua+LoHiyihMW3tqexTYe4QvKXS8gbXZP15w@mail.gmail.com>
+Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree -v1:
+ Eliminate the Linux kernel's "Dependency Hell"
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Wed, Jan 5, 2022 at 4:08 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> On Mon, Jan 3, 2022 at 6:12 AM Ingo Molnar <mingo@kernel.org> wrote:
 
-On Tue, Jan 04, 2022 at 08:40:58AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.170 release.
-> There are 36 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 06 Jan 2022 07:38:29 +0000.
-> Anything received after that time might be too late.
+...
 
-Build test:
-mips (gcc version 11.2.1 20211214): 65 configs -> no new failure
-arm (gcc version 11.2.1 20211214): 107 configs -> no new failure
-arm64 (gcc version 11.2.1 20211214): 2 configs -> no failure
-x86_64 (gcc version 11.2.1 20211214): 4 configs -> no failure
+> Most of the patches should be the same either way (adding back
+> missing includes to drivers, and doing cleanups to commonly
+> included headers to avoid the deep nesting), the interesting bit
+> will be how to properly define the larger structures without pulling
+> in the rest of the world.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/587
+I'm wondering if the compiler can provide us the statistics of usage
+on a per custom type basis. In this case the highest frequency will
+probably mean that we better have that type in a separate header or
+tree of _independent_ headers.
 
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
-
+-- 
+With Best Regards,
+Andy Shevchenko

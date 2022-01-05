@@ -2,224 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D402485276
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:30:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 495AB48527E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:33:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbiAEMat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 07:30:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:20329 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230010AbiAEMas (ORCPT
+        id S240036AbiAEMc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 07:32:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43360 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231857AbiAEMcz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 07:30:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641385848;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VgG4KK5XY7QuLFhMaH2G4gMvFu7AUMJFT8YUBr9jjwA=;
-        b=a254q8fig8gXHKzxxOecQoRowU4o/Qv2B+yjYpVHjKT9/ggZA4MN4EOGXBcHjUugu1J0Zr
-        jNaMLMUAOuIzvmTfrOKtuKsHWRfwVqCnFUUYBKJHQf+p5YDAX/Y5++iHe5Knk1pUiNnZ20
-        8D+r3AO9B7/+vvSJMwwxq8rAEJyq5uM=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-586-izl_hyqcNvOXgttsep7rxA-1; Wed, 05 Jan 2022 07:30:47 -0500
-X-MC-Unique: izl_hyqcNvOXgttsep7rxA-1
-Received: by mail-ed1-f72.google.com with SMTP id o20-20020a056402439400b003f83cf1e472so27871830edc.18
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 04:30:46 -0800 (PST)
+        Wed, 5 Jan 2022 07:32:55 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D64C061761;
+        Wed,  5 Jan 2022 04:32:54 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id bm14so161387980edb.5;
+        Wed, 05 Jan 2022 04:32:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=t2mRxwjJ3sQ6LACbsnguwAozobHd6VsPoNd7LZmiFH8=;
+        b=Gc+xy4XeAGiqi248XRuvU7yJpAmaMiA5H8262nmKxtobB7ij3DX8Qrhws3D4rAt3zi
+         mTVPx1vQcJRURCG5AffiAt6LXHFSLzO6kuL05mspsfVG7DFfPJxKkvblZJmrQ+SH+1/E
+         /G5Ixyd79qvJrr2Huf26ff6m83j0b09/zvFVJAU/iHAGDHs3Te798GkSFpdlHwxD8wac
+         qqxJs5DuwskCpZiVV10i8Y6PwaY0zjtwlVo+ttVSxqIsqCS9ELJq7YSFfXAyVKSh/Ot/
+         8QSeqyR1JxQiYca9NEsuy9z9mBb3LktOkOKrbvGux3V8lnBlTj+SCSwjt79WkOyo7hEH
+         Q8jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=VgG4KK5XY7QuLFhMaH2G4gMvFu7AUMJFT8YUBr9jjwA=;
-        b=8HethmvtTpobvA7inttvwKBw5Jj0MzBXX1zOsnbaGIb/8MsV2ExnxFXdxinEzWW5lW
-         G0+Ry5/CFV9v7JxA867qJlujiIf1ALXgSEazrs1vfDxgMJQXzScLB4UeJJBXmaIfziE1
-         b0XMZEE3VIt7+xPkgB2+xw6dxAJpSXk5bWMv+H2RvWcEDu8nMNHW2RIYrkCZ/gVHruO0
-         cLaI+DASNeqveBZfh2hVqOJHdiLF4U+4HQZkn36arOtxPeU+OKhMy4BFN3lvXcH1Akde
-         KVFjXJmEH9QJnv7zdMYlegNgjxvQWNkZiThF7+NnIPsvdOs4+cqmIwqsVzWfTkkDFAAb
-         jseQ==
-X-Gm-Message-State: AOAM531qsyKgIR2ZjfQtCfLIydk3ePXR9a/2loR6Ydd2yQ5pMXIC6lva
-        qImBB4ZnECm9+0ryV+CZswZgx6X7Qg86s8514pEM7GPRc7YnR1T4Y4MRXrJ26qyWExPJ6YrBCJ+
-        z6AOk5fvzODe5gTtsH40lVV3dfGZLNCGKe9mUjX1/
-X-Received: by 2002:aa7:dc14:: with SMTP id b20mr51495138edu.133.1641385845678;
-        Wed, 05 Jan 2022 04:30:45 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxn5wSYRg5Hc12Tj64aOJqnCZak+k9m9EDAOK1D9iUwQAE8yNA3zYNOXHxCp/L/Dw+sRnf2Rc0DEXU9s4wPSbE=
-X-Received: by 2002:aa7:dc14:: with SMTP id b20mr51495123edu.133.1641385845382;
- Wed, 05 Jan 2022 04:30:45 -0800 (PST)
+        bh=t2mRxwjJ3sQ6LACbsnguwAozobHd6VsPoNd7LZmiFH8=;
+        b=7SG2UE0D3WIxZr0DjQp0S4Y97PfPbHs30/DH1mzJK9Tbu9IrXEFxlV3mlvmasC7ApQ
+         Ren6oB1lWFtbgXtbjBWeOEjiVQYUtkqH29Au72tVeT2dESut1ICAy82WA7Ay7oDH/XL1
+         kANxlqX3llE4tk98iS/+s1v55CtVWQb/85X+IVijbLwYChl0na1KnDt2VcYlNsX8CBpE
+         a5CQhyMU0V961Xh9citIEYULnbpHVAQYkT5C7zr1O6K07QCYQtRyJj2z7Jm2xp+yZv8e
+         sdvQM7h+kj0MMWsyE3NGfo33AYIi0fTwCsBFP409m9DToofSBQIwlEIojWzj1gOdFB3K
+         /VHw==
+X-Gm-Message-State: AOAM533jfclnXivHNTtOsFVhPblSEHifIxOaZUChyBNUGcaFEj3xozVf
+        Hfg4b23eK8PSyBSccVWfuZw+Vs6bXyQmewiuLTSgcX56oyVmCQ==
+X-Google-Smtp-Source: ABdhPJxCcTzYQ8gzNKvJSHl5U+/0RhZrs7GOUhVB7k0QWptqTCxlUgnqDLVOqTtGCaNRjudmOu5S/qocH8xDMc8XFGk=
+X-Received: by 2002:a17:906:a3c6:: with SMTP id ca6mr41898560ejb.639.1641385973243;
+ Wed, 05 Jan 2022 04:32:53 -0800 (PST)
 MIME-Version: 1.0
-References: <20211228170910.623156-1-wander@redhat.com> <87ilv0mput.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <87ilv0mput.fsf@email.froward.int.ebiederm.org>
-From:   Wander Costa <wcosta@redhat.com>
-Date:   Wed, 5 Jan 2022 09:30:33 -0300
-Message-ID: <CAAq0SUmw3fGtwDifbBMrD7jgPBGQb7uC0K9hJetVTRQO7boPtA@mail.gmail.com>
-Subject: Re: [PATCH RFC v2 0/4] coredump: mitigate privilege escalation of
- process coredump
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Wander Lairson Costa <wander@redhat.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Laurent Vivier <laurent@vivier.eu>,
-        YunQiang Su <ysu@wavecomp.com>, Helge Deller <deller@gmx.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Alexey Gladkov <legion@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Rolf Eike Beer <eb@emlix.com>,
-        "open list:FILESYSTEMS (VFS and infrastructure)" 
-        <linux-fsdevel@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Waiman Long <longman@redhat.com>, Willy Tarreau <w@1wt.eu>,
-        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20220105081728.4289-1-josright123@gmail.com> <20220105081728.4289-3-josright123@gmail.com>
+In-Reply-To: <20220105081728.4289-3-josright123@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 5 Jan 2022 14:31:02 +0200
+Message-ID: <CAHp75VfvfokzL2anenFKGyLE68RJfJ7ktSGhh3q7rsi5woLaxg@mail.gmail.com>
+Subject: Re: [PATCH v10, 2/2] net: Add dm9051 driver
+To:     Joseph CHAMG <josright123@gmail.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, joseph_chang@davicom.com.tw,
+        netdev <netdev@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>, Leon Romanovsky <leon@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 3, 2022 at 7:54 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
->
-> Wander Lairson Costa <wander@redhat.com> writes:
->
-> Have you seen the discussion at:
-> https://lkml.kernel.org/r/20211221021744.864115-1-longman@redhat.com
-> ?
->
+On Wed, Jan 5, 2022 at 10:18 AM Joseph CHAMG <josright123@gmail.com> wrote:
 
-No, I wasn't aware of this, thanks.
+Missed commit message.
 
-> Adding a few people from that conversation.
+> v1-v4
 >
-> > v2
-> > ==
-> >
-> > Patch 02 conflicted with commit 92307383082d("coredump:  Don't perform
-> > any cleanups before dumping core") which I didn't have in my tree. V2
-> > just changes the hunk
-> >
-> > +#define PF_SUID   0x00000008
-> >
-> > To
-> >
-> > +#define PF_SUID   0x01000000
-> >
-> > To merge cleanly. Other than that, it is the same patch as v1.
-> >
-> > v1
-> > ==
-> >
-> > A set-uid executable might be a vector to privilege escalation if the
-> > system configures the coredump file name pattern as a relative
-> > directory destiny. The full description of the vulnerability and
-> > a demonstration of how we can exploit it can be found at [1].
-> >
-> > This patch series adds a PF_SUID flag to the process in execve if it is
-> > set-[ug]id binary and elevates the new image's privileges.
-> >
-> > In the do_coredump function, we check if:
-> >
-> > 1) We have the SUID_FLAG set
-> > 2) We have CAP_SYS_ADMIN (the process might have decreased its
-> >    privileges)
-> > 3) The current directory is owned by root (the current code already
-> >    checks for core_pattern being a relative path).
-> > 4) non-privileged users don't have permission to write to the current
-> >    directory.
+> Add davicom dm9051 spi ethernet driver. The driver work for the
+> device platform with spi master
 >
-> Which is a slightly different approach than we have discussed
-> previously.
+> Test ok with raspberry pi 2 and pi 4, the spi configure used in
+> my raspberry pi 4 is spi0.1, spi speed 31200000, and INT by pin 26.
 >
-> Something persistent to mark the processes descended from the suid exec
-> is something commonly agreed upon.
+> v5
 >
-> How we can dump core after that (with the least disruption is the
-> remaining question).
+> Work to eliminate the wrappers to be clear for read, swapped to
+> phylib for phy connection tasks.
 >
-> You would always allow coredumps unless the target directory is
-> problematic.  I remember it being suggested that even dumping to a pipe
-> might not be safe in practice.  Can someone remember why?
+> Tested with raspberry pi 4. Test for netwroking function, CAT5
+> cable unplug/plug and also ethtool detect for link state, and
+> all are ok.
 >
-> The other approach we have discussed is simply not allowing coredumps
-> unless the target process takes appropriate action to reenable them.
+> v6
 >
-> Willy posted a patch to that effect.
+> remove the redundant code that phylib has support,
+> adjust to be the reasonable sequence,
+> fine tune comments, add comments for pause function support
 >
+> Tested with raspberry pi 4. Test for netwroking function, CAT5
+> cable unplug/plug and also ethtool detect for link state, and
+> all are ok.
 >
-> From a proof of concept perspective PF_SUID and your directory checks look
-> like fine.  From a production implementation standpoint I think we would
-> want to make them a bit more general.  PF_SUID because it is more than
-> uid changes that can grant privilege during exec.  We especially want to
-> watch out for setcap executables.  The directory checks similarly look
-> very inflexible.  I think what we want is to test if the process before
-> the privilege change of the exec could write to the directory.
+> v7
 >
-> Even with your directory test approach you are going to run into
-> the semi-common idio of becomming root and then starting a daemon
-> in debugging mode so you can get a core dump.
+> read/write registers must return error code to the callet,
+> add to enable pause processing
 >
-> > If all four conditions match, we set the need_suid_safe flag.
-> >
-> > An alternative implementation (and more elegant IMO) would be saving
-> > the fsuid and fsgid of the process in the task_struct before loading the
-> > new image to the memory. But this approach would add eight bytes to all
-> > task_struct instances where only a tiny fraction of the processes need
-> > it and under a configuration that not all (most?) distributions don't
-> > adopt by default.
+> v8
 >
-> One possibility is to save a struct cred on the mm_struct.  If done
-> carefully I think that would allow commit_creds to avoid the need
-> for dumpability changes (there would always be enough information to
-> directly compute it).
+> not parmanently set MAC by .ndo_set_mac_address
 >
-> I can see that working for detecting dropped privileges.  I don't know
-> if that would work for raised privileges.
+> correct rx function such as clear ISR,
+> inblk avoid stack buffer,
+> simple skb buffer process and
+> easy use netif_rx_ni.
 >
-> Definitely focusing in on the mm_struct for where to save the needed
-> information seems preferable, as in general it is an mm property not a
-> per task property.
+> simplely queue init and wake the queues,
+> limit the start_xmit function use netif_stop_queue.
 >
+> descript that schedule delay is essential
+> for tx_work and rxctrl_work
+>
+> eliminate ____cacheline_aligned and
+> add static int msg_enable.
+>
+> v9
+>
+> use phylib, no need 'select MII' in Kconfig,
+> make it clear in dm9051_xfer when using spi_sync,
+> improve the registers read/write so that error code
+> return as far as possible up the call stack.
+>
+> v10
+>
+> use regmap APIs for SPI and MDIO,
+> modify to correcting such as include header files
+> and program check styles
 
-After reading the other thread and your comments, I came up with the
-following idea:
+Changelog should go after the cutter '--- ' line below...
 
-- Create fields coredump_uid and coredump_gid in the mm_struct
-- At fork time, copy the euid and egid to coredump_uid and coredump_gid.
-- Only change coredump_uid/coredump_gid when the process changes its euid/egid.
-- The do_coredump function already creates a local creds struct.
-Change the code to set
-its fsuid and fsgid to coredump_uid and coredump_gid.
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Andrew Lunn <andrew@lunn.ch>
+> Cc: Leon Romanovsky <leon@kernel.org>
+> Cc: andy Shevchenko <andy.shevchenko@gmail.com>
+> Signed-off-by: Joseph CHAMG <josright123@gmail.com>
+> ---
 
-This solution still has the inconvenience that a suid daemon probably
-won't have the permission to
-core dump by default. We can fix this by changing the setsid system
-call to assign coredump_uid and coredump_gid
-to euid and egid.
+...somewhere here.
 
-If it sounds reasonable, I can give this idea a try.
+...
 
+> +#include <linux/etherdevice.h>
+> +#include <linux/ethtool.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/iopoll.h>
+> +#include <linux/mii.h>
+> +#include <linux/module.h>
+> +#include <linux/netdevice.h>
+> +#include <linux/phy.h>
+> +#include <linux/regmap.h>
+> +#include <linux/skbuff.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/spi/spi.h>
 
-> Eric
->
->
->
-> > Wander Lairson Costa (4):
-> >   exec: add a flag indicating if an exec file is a suid/sgid
-> >   process: add the PF_SUID flag
-> >   coredump: mitigate privilege escalation of process coredump
-> >   exec: only set the suid flag if the current proc isn't root
-> >
-> >  fs/coredump.c           | 15 +++++++++++++++
-> >  fs/exec.c               | 10 ++++++++++
-> >  include/linux/binfmts.h |  6 +++++-
-> >  include/linux/sched.h   |  1 +
-> >  kernel/fork.c           |  2 ++
-> >  5 files changed, 33 insertions(+), 1 deletion(-)
->
+...
 
+> +/* spi master low level code */
+> +static int hw_dm9051_spi_write(void *context, u8 reg, const u8 *data, size_t count)
+
+> +static int hw_dm9051_spi_read(void *context, u8 reg, u8 *data, size_t count)
+
+> +static int regmap_dm9051_reg_write(void *context, const void *data, size_t len)
+
+> +static int regmap_dm9051_reg_read(void *context, const void *reg_buf, size_t reg_size,
+> +                                 void *val, size_t val_size)
+
+> +static int regmap_dm9051_reg_update_bits(void *context, unsigned int reg,
+> +                                        unsigned int mask,
+> +                                        unsigned int val)
+
+All these are implemented by regmap SPI API. Why don't you use it?
+
+...
+
+> +static bool dm9051_regmap_readable(struct device *dev, unsigned int reg)
+> +{
+> +       return true;
+> +}
+> +
+> +static bool dm9051_regmap_writeable(struct device *dev, unsigned int reg)
+> +{
+> +       return true;
+> +}
+> +
+> +static bool dm9051_regmap_volatile(struct device *dev, unsigned int reg)
+> +{
+> +       return true; /* optional false */
+> +}
+> +
+> +static bool dm9051_regmap_precious(struct device *dev, unsigned int reg)
+> +{
+> +       return true; /* optional false */
+> +}
+
+These stubs are redundant.
+
+...
+
+> +static void regmap_lock_mutex(void *context)
+> +{
+> +       struct board_info *db = context;
+> +
+> +       mutex_lock(&db->regmap_mutex);
+> +}
+> +
+> +static void regmap_unlock_mutex(void *context)
+> +{
+> +       struct board_info *db = context;
+> +
+> +       mutex_unlock(&db->regmap_mutex);
+> +}
+
+Why do you need this? Either you use lock provided by regmap, or you
+disable locking for regmap and provide your own locking scheme (should
+be justified in the commit message).
+
+...
+
+> +static struct regmap_config regconfig = {
+
+> +       .name = "reg",
+
+Do you need this?
+
+> +       .reg_bits = 8,
+> +       .val_bits = 8,
+> +       .max_register = 0xff,
+> +       .reg_stride = 1,
+> +       .cache_type = REGCACHE_RBTREE,
+> +       .val_format_endian = REGMAP_ENDIAN_LITTLE,
+
+> +};
+
+...
+
+> +static int dm9051_map_poll(struct board_info *db)
+> +{
+> +       unsigned int mval;
+> +       int ret;
+> +
+> +       ret = read_poll_timeout(regmap_read, ret, !ret || !(mval & EPCR_ERRE),
+> +                               100, 10000, true, db->regmap, DM9051_EPCR, &mval);
+> +       if (ret)
+> +               netdev_err(db->ndev, "timeout in processing for phy/eeprom accessing\n");
+> +       return ret;
+> +}
+
+regmap has a corresponding API, i.e. regmap_read_poll_timeout().
+
+...
+
+> +static int regmap_dm9051_phy_reg_write(void *context, unsigned int reg, unsigned int val)
+> +{
+> +       struct board_info *db = context;
+> +       int ret;
+> +
+> +       regmap_write(db->regmap, DM9051_EPAR, DM9051_PHY | reg);
+
+> +       regmap_write(db->regmap, DM9051_EPDRL, val & 0xff);
+> +       regmap_write(db->regmap, DM9051_EPDRH, (val >> 8) && 0xff);
+
+Shouldn't be this a bulk write?
+Ditto for all other cases where you need to write 16-bit values in
+sequential addresses.
+
+> +       regmap_write(db->regmap, DM9051_EPCR, EPCR_EPOS | EPCR_ERPRW);
+> +       ret = dm9051_map_poll(db);
+> +       regmap_write(db->regmap, DM9051_EPCR, 0x0);
+> +
+> +       if (reg == MII_BMCR && !(val & 0x0800))
+> +               mdelay(1); /* need for if activate phyxcer */
+> +
+> +       return ret;
+> +}
+
+...
+
+> +static int devm_regmap_init_dm9051(struct device *dev, struct board_info *db)
+> +{
+> +       mutex_init(&db->regmap_mutex);
+> +
+> +       regconfig.lock_arg = db;
+> +
+> +       db->regmap = devm_regmap_init(dev, &regmap_spi, db, &regconfig);
+> +       if (IS_ERR(db->regmap))
+> +               return PTR_ERR(db->regmap);
+> +       db->phymap = devm_regmap_init(dev, &phymap_mdio, db, &phyconfig);
+> +       if (IS_ERR(db->phymap))
+> +               return PTR_ERR(db->phymap);
+
+Use corresponding regmap APIs, i.e. MDIO, SPI, etc.
+
+> +       return 0;
+> +}
+
+...
+
+> +{
+> +       int ret;
+> +       u8 rxb[1];
+> +
+> +       while (len--) {
+> +               ret = hw_dm9051_spi_read(db, DM_SPI_MRCMD, rxb, 1);
+> +               if (ret < 0)
+> +                       return ret;
+> +       }
+> +       return ret;
+> +}
+
+I believe the regmap API provides this kind of read (bulk with no
+increment addresses or so).
+
+I stopped here, because it's enough for now. Just take your time to
+see how other (recent) drivers are implemented.
+
+-- 
+With Best Regards,
+Andy Shevchenko

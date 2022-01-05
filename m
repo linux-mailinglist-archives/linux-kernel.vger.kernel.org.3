@@ -2,145 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2829C484F26
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 09:16:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 841D1484F29
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 09:17:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232164AbiAEIQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 03:16:29 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:52198 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229821AbiAEIQ1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 03:16:27 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowACHjlbAU9Vhsz3RBQ--.44200S2;
-        Wed, 05 Jan 2022 16:16:01 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     johannes@sipsolutions.net, davem@davemloft.net, kuba@kernel.org
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v3] mac80211: mlme: check for null after calling kmemdup
-Date:   Wed,  5 Jan 2022 16:15:59 +0800
-Message-Id: <20220105081559.2387083-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S238351AbiAEIRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 03:17:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:44093 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229821AbiAEIR3 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 03:17:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641370648;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yvW/DnCdE78aEIkeksaSIoN+DLz7taEJ8XulSnNVAMM=;
+        b=EVzwz1wczyqvNT/qhHA3nYzjoxPRfRq4V/uYNwChOi2jNyvCsDAQQhGS0PqzNnDCPNPJkZ
+        /V9vgcviENGUEyNW35xLZ6BNcV+QNsPWIqNn1vnomrcA+b1TiZg8p+lqgPoBFzWBabSevz
+        +qXW9Fn7kqkPZ36k7421c5hm2XCFVJU=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-637-md_frSzIOAW8g5gBDN01mA-1; Wed, 05 Jan 2022 03:17:27 -0500
+X-MC-Unique: md_frSzIOAW8g5gBDN01mA-1
+Received: by mail-wr1-f72.google.com with SMTP id x20-20020adfbb54000000b001a0d044e20fso12372893wrg.11
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 00:17:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=yvW/DnCdE78aEIkeksaSIoN+DLz7taEJ8XulSnNVAMM=;
+        b=Mp/E8GE/WWusn1lvFEBxoPko4lzVGHg2Eoy7Au5au+SZ5SlkoPLfKUDbNM+0IOEYfM
+         xy2+DSc3btmsJw0FJOmBl1OQElY1Xq/7aNSnp5q35fK3/O16csjLVpRlyeGwG5iYaI6k
+         sB/zKwAyAycNq29u6Sx/B/fVdmJQwUmze89Dd5H49kpUxreAPZQSFX3z/p+ZXJa3O2hK
+         hXwFju4DC0Aq1PA69b6bqLOKRXcZ9GGOpOPIX+yOdZJEHUxU36ONIiA5bYprh6LA8q9a
+         GGcXaNOtWgW/e7OqL5MLCPxOsPErRi9EZSrUuBtuVf/mSPo/ljXIvM/guOnotfdDdjA7
+         qbHw==
+X-Gm-Message-State: AOAM530+gJfV8MrJzs6ljqDetePsbkqgdl+iNje19ya5zA3yVNZ305+b
+        hIOO6XT6zDTQYto1YIBBxgrDJzzd1JPpUkewJ5yYDh5d0W84Pa9UP4yWEo5J2OVyRR+pVTpbdu8
+        XcFlBxmvv/7gWsmzcv8V9I5LK
+X-Received: by 2002:adf:9ccf:: with SMTP id h15mr1569438wre.120.1641370646396;
+        Wed, 05 Jan 2022 00:17:26 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxkGfAtxJCsf+CSfHihfWoWkwEHWAyZHDoSUQBjRCCkE7SpfgywhIzhn9HMa1uEmnFoEkacvg==
+X-Received: by 2002:adf:9ccf:: with SMTP id h15mr1569425wre.120.1641370646168;
+        Wed, 05 Jan 2022 00:17:26 -0800 (PST)
+Received: from localhost (nat-pool-brq-t.redhat.com. [213.175.37.10])
+        by smtp.gmail.com with ESMTPSA id l16sm45540855wrx.117.2022.01.05.00.17.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 00:17:25 -0800 (PST)
+Date:   Wed, 5 Jan 2022 09:17:24 +0100
+From:   Igor Mammedov <imammedo@redhat.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN
+Message-ID: <20220105091724.1a667275@redhat.com>
+In-Reply-To: <875yr1q8oa.fsf@redhat.com>
+References: <20211122175818.608220-1-vkuznets@redhat.com>
+        <20211122175818.608220-3-vkuznets@redhat.com>
+        <16368a89-99ea-e52c-47b6-bd006933ec1f@redhat.com>
+        <20211227183253.45a03ca2@redhat.com>
+        <61325b2b-dc93-5db2-2d0a-dd0900d947f2@redhat.com>
+        <87mtkdqm7m.fsf@redhat.com>
+        <20220103104057.4dcf7948@redhat.com>
+        <875yr1q8oa.fsf@redhat.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowACHjlbAU9Vhsz3RBQ--.44200S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCrW5WFyxCrWkXF4kWF48JFb_yoW5tF4rpF
-        WUZ3yUtr4UJF1DZF1rAr45XFyfCF4UAa4Sy34xAa1kZF9YgF1kGF48u3yvvF10yF4kGa43
-        ZrZ5tF45Ww1DCrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r43
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjNJ55UUUU
-        U==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the possible failure of the alloc, the ifmgd->assoc_req_ies might be
-NULL pointer returned from kmemdup().
-Therefore it might be better to free the skb and return error in order
-to fail the association, like ieee80211_assoc_success().
-Also, the caller, ieee80211_do_assoc(), needs to deal with the return
-value from ieee80211_send_assoc().
+On Mon, 03 Jan 2022 13:56:53 +0100
+Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
 
-Fixes: 4d9ec73d2b78 ("cfg80211: Report Association Request frame IEs in association events")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-v3: Return error if fails and deal with the error in ieee80211_do_assoc.
-v2: Change to fail the association if kmemdup returns NULL.
----
- net/mac80211/mlme.c | 20 +++++++++++++++-----
- 1 file changed, 15 insertions(+), 5 deletions(-)
+> Igor Mammedov <imammedo@redhat.com> writes:
+> 
+> > On Mon, 03 Jan 2022 09:04:29 +0100
+> > Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+> >  
+> >> Paolo Bonzini <pbonzini@redhat.com> writes:
+> >>   
+> >> > On 12/27/21 18:32, Igor Mammedov wrote:    
+> >> >>> Tweaked and queued nevertheless, thanks.    
+> >> >> it seems this patch breaks VCPU hotplug, in scenario:
+> >> >> 
+> >> >>    1. hotunplug existing VCPU (QEMU stores VCPU file descriptor in parked cpus list)
+> >> >>    2. hotplug it again (unsuspecting QEMU reuses stored file descriptor when recreating VCPU)
+> >> >> 
+> >> >> RHBZ:https://bugzilla.redhat.com/show_bug.cgi?id=2028337#c11
+> >> >>     
+> >> >
+> >> > The fix here would be (in QEMU) to not call KVM_SET_CPUID2 again. 
+> >> > However, we need to work around it in KVM, and allow KVM_SET_CPUID2 if 
+> >> > the data passed to the ioctl is the same that was set before.    
+> >> 
+> >> Are we sure the data is going to be *exactly* the same? In particular,
+> >> when using vCPU fds from the parked list, do we keep the same
+> >> APIC/x2APIC id when hotplugging? Or can we actually hotplug with a
+> >> different id?  
+> >
+> > If I recall it right, it can be a different ID easily.
+> >  
+> 
+> It's broken then. I'd suggest we revert the patch from KVM and think
+> about the strategy how to proceed.
 
-diff --git a/net/mac80211/mlme.c b/net/mac80211/mlme.c
-index 9bed6464c5bd..e4bb7e290828 100644
---- a/net/mac80211/mlme.c
-+++ b/net/mac80211/mlme.c
-@@ -695,7 +695,7 @@ static void ieee80211_add_he_ie(struct ieee80211_sub_if_data *sdata,
- 	ieee80211_ie_build_he_6ghz_cap(sdata, skb);
- }
- 
--static void ieee80211_send_assoc(struct ieee80211_sub_if_data *sdata)
-+static int ieee80211_send_assoc(struct ieee80211_sub_if_data *sdata)
- {
- 	struct ieee80211_local *local = sdata->local;
- 	struct ieee80211_if_managed *ifmgd = &sdata->u.mgd;
-@@ -725,7 +725,7 @@ static void ieee80211_send_assoc(struct ieee80211_sub_if_data *sdata)
- 	chanctx_conf = rcu_dereference(sdata->vif.chanctx_conf);
- 	if (WARN_ON(!chanctx_conf)) {
- 		rcu_read_unlock();
--		return;
-+		return 0;
- 	}
- 	chan = chanctx_conf->def.chan;
- 	rcu_read_unlock();
-@@ -773,7 +773,7 @@ static void ieee80211_send_assoc(struct ieee80211_sub_if_data *sdata)
- 			9, /* WMM */
- 			GFP_KERNEL);
- 	if (!skb)
--		return;
-+		return 0;
- 
- 	skb_reserve(skb, local->hw.extra_tx_headroom);
- 
-@@ -1052,12 +1052,17 @@ static void ieee80211_send_assoc(struct ieee80211_sub_if_data *sdata)
- 	if (assoc_data->fils_kek_len &&
- 	    fils_encrypt_assoc_req(skb, assoc_data) < 0) {
- 		dev_kfree_skb(skb);
--		return;
-+		return 0;
- 	}
- 
- 	pos = skb_tail_pointer(skb);
- 	kfree(ifmgd->assoc_req_ies);
- 	ifmgd->assoc_req_ies = kmemdup(ie_start, pos - ie_start, GFP_ATOMIC);
-+	if (!ifmgd->assoc_req_ies) {
-+		dev_kfree_skb(skb);
-+		return -ENOMEM;
-+	}
-+
- 	ifmgd->assoc_req_ies_len = pos - ie_start;
- 
- 	drv_mgd_prepare_tx(local, sdata, 0);
-@@ -1067,6 +1072,8 @@ static void ieee80211_send_assoc(struct ieee80211_sub_if_data *sdata)
- 		IEEE80211_SKB_CB(skb)->flags |= IEEE80211_TX_CTL_REQ_TX_STATUS |
- 						IEEE80211_TX_INTFL_MLME_CONN_TX;
- 	ieee80211_tx_skb(sdata, skb);
-+
-+	return 0;
- }
- 
- void ieee80211_send_pspoll(struct ieee80211_local *local,
-@@ -4470,6 +4477,7 @@ static int ieee80211_do_assoc(struct ieee80211_sub_if_data *sdata)
- {
- 	struct ieee80211_mgd_assoc_data *assoc_data = sdata->u.mgd.assoc_data;
- 	struct ieee80211_local *local = sdata->local;
-+	int ret;
- 
- 	sdata_assert_lock(sdata);
- 
-@@ -4490,7 +4498,9 @@ static int ieee80211_do_assoc(struct ieee80211_sub_if_data *sdata)
- 	sdata_info(sdata, "associate with %pM (try %d/%d)\n",
- 		   assoc_data->bss->bssid, assoc_data->tries,
- 		   IEEE80211_ASSOC_MAX_TRIES);
--	ieee80211_send_assoc(sdata);
-+	ret = ieee80211_send_assoc(sdata);
-+	if (ret)
-+		return ret;
- 
- 	if (!ieee80211_hw_check(&local->hw, REPORTS_TX_ACK_STATUS)) {
- 		assoc_data->timeout = jiffies + IEEE80211_ASSOC_TIMEOUT;
--- 
-2.25.1
+Can you post a patch, then?
+
+> Going forward, we really want to ban
+> KVM_SET_CPUID{,2} after KVM_RUN (see the comment which my patch moves).
+> E.g. we can have an 'allowlist' of things which can change (and put
+> *APICids there) and only fail KVM_SET_CPUID{,2} when we see something
+> else changing.
+
+It might work, at least on QEMU side we do not allow mixing up CPU models
+within VM instance (so far). So aside of APICid (and related leafs
+(extended APIC ID/possibly other topo related stuff)) nothing else should
+change ever when a new vCPU is hotplugged.
+
+> In QEMU, we can search the parked CPUs list for an entry
+> with the right *APICid and reuse it only if we manage to find one.
+In QEMU, 'parked cpus' fd list is a generic code shared by all supported
+archs. And I'm reluctant to push something x86 specific there (it's not
+impossible, but it's a crutch to workaround forbidden KVM_SET_CPUID{,2}).
 

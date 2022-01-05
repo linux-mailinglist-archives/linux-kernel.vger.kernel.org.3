@@ -2,68 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A714859F2
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:20:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5BEB4859F5
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 21:22:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243986AbiAEUUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 15:20:40 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35292 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243981AbiAEUUi (ORCPT
+        id S243998AbiAEUWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 15:22:13 -0500
+Received: from mail-wm1-f52.google.com ([209.85.128.52]:35483 "EHLO
+        mail-wm1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243981AbiAEUWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 15:20:38 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FFA9618CB;
-        Wed,  5 Jan 2022 20:20:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E9DD7C36AE0;
-        Wed,  5 Jan 2022 20:20:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641414037;
-        bh=+p6/6aARwgNrgvWtJNFIfRIwQj44DfT5tRVRvqfPB0I=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=GRjzFN1H5ePRI6eNdDwMkn9C1G5hHPBQsXef3CR7UGBVTrFsUCNlOkd/PZUuY66ZV
-         r1D4m6+qXT1aAwa1FNGi+o+eVgXCiTFY1beJHVBOKsL0nnLJ86f1mL5Fw44mTsCeyY
-         jGHnaFmkUHWBUzzaxktmXh2DIE/RZMI5RC1kWCZ+oI5lNLSiA2InNFeq8vpbsGlO8U
-         l+7J9vJqNNOwfKjT/MIiG8pzAftPlZC+HY3QisJ0i7IZ4rAu8kmCg4YEd+/OrtkOz4
-         9rjNtgOh5ufC0oAv53prGVQLCYr8LPFvFPEVRjDj1xYW5beFbghrKuTMqp0CtQzy5z
-         Em4kL+9NKVUxg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D4906F79408;
-        Wed,  5 Jan 2022 20:20:36 +0000 (UTC)
-Subject: Re: [GIT PULL] gpio: fixes for v5.16
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220105140451.200178-1-brgl@bgdev.pl>
-References: <20220105140451.200178-1-brgl@bgdev.pl>
-X-PR-Tracked-List-Id: <linux-gpio.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220105140451.200178-1-brgl@bgdev.pl>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v5.16
-X-PR-Tracked-Commit-Id: 32e246b02f53b2fdaa81ea9f2ca6ff068c017fcb
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 49ef78e59b0749814d79eed156dcfc175fbd2f74
-Message-Id: <164141403686.15010.3548239880143343777.pr-tracker-bot@kernel.org>
-Date:   Wed, 05 Jan 2022 20:20:36 +0000
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
+        Wed, 5 Jan 2022 15:22:06 -0500
+Received: by mail-wm1-f52.google.com with SMTP id v10-20020a05600c214a00b00345e59928eeso2622774wml.0;
+        Wed, 05 Jan 2022 12:22:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UK+yHTCDLoYvdAcJv06f7NV5dgtFwTsJAMI8c0LxaJI=;
+        b=eWYmg/lBBDEsxBRWdD/P7o9LOUwmlHD0F2DYeQB3ZEolqV3StuQlN6inc4g949mhiv
+         N5lD1Vd29PrxqA4kTkcKTi9QIl+hyKzVNA2PKd7yccFk+7GnK94Juq8fOAwUfgHCl2mD
+         Yx0ARVw7SFlLcmetYWF8aBsvtZFVCGpngTRQFxw2e7mb0x5BUC4t9BnhNJacHU0fHtbx
+         R7kX7gSEd0/3jd1KJlS9ks4FFUz36kRUDLIdeC17RpoZZVO50JhingYjOhJTxXV4lH7k
+         Cd3RbSJfuGV6NUaCk8LHFIkGGIPhPlXiJSjhSWQ1E8I5hUjYaERqg9lRq5FuadXJsVGr
+         K/Cg==
+X-Gm-Message-State: AOAM533v+RZdV5KPdADZB2SnHRS0XO7OZjmb6aq/JcTFC7zUwA8XK/jE
+        VgXEzrfGq1LuPRmQ+0gy0z4=
+X-Google-Smtp-Source: ABdhPJzKuTpU4FH0VhdYUuruenzfWqA2Yp7Scnif9ohKWhVGSldrl9gDCARTHFH7xUu7WhmyXkLNqw==
+X-Received: by 2002:a05:600c:1f19:: with SMTP id bd25mr4338996wmb.42.1641414125375;
+        Wed, 05 Jan 2022 12:22:05 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id u12sm41306599wrf.60.2022.01.05.12.22.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 12:22:04 -0800 (PST)
+Date:   Wed, 5 Jan 2022 20:22:03 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     linux-hyperv@vger.kernel.org,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC] Drivers: hv: balloon: Temporary disable the driver
+ on ARM64 when PAGE_SIZE != 4k
+Message-ID: <20220105202203.evk7uckmephnu3ev@liuwe-devbox-debian-v2>
+References: <20220105165028.1343706-1-vkuznets@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220105165028.1343706-1-vkuznets@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed,  5 Jan 2022 15:04:51 +0100:
+On Wed, Jan 05, 2022 at 05:50:28PM +0100, Vitaly Kuznetsov wrote:
+> Hyper-V ballooning and memory hotplug protocol always seems to assume
+> 4k page size so all PFNs in the structures used for communication are
+> 4k PFNs. In case a different page size is in use on the guest (e.g.
+> 64k), things go terribly wrong all over:
+> - When reporting statistics, post_status() reports them in guest pages
+> and hypervisor sees very low memory usage.
+> - When ballooning, guest reports back PFNs of the allocated pages but
+> the hypervisor treats them as 4k PFNs.
+> - When unballooning or memory hotplugging, PFNs coming from the host
+> are 4k PFNs and they may not even be 64k aligned making it difficult
+> to handle.
+> 
+> While statistics and ballooning requests would be relatively easy to
+> handle by converting between guest and hypervisor page sizes in the
+> communication structures, handling unballooning and memory hotplug
+> requests seem to be harder. In particular, when ballooning up
+> alloc_balloon_pages() shatters huge pages so unballooning request can
+> be handled for any part of it. It is not possible to shatter a 64k
+> page into 4k pages so it's unclear how to handle unballooning for a
+> sub-range if such request ever comes so we can't just report a 64k
+> page as 16 separate 4k pages.
+> 
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v5.16
+How does virtio-balloon handle it? Does its protocol handle different
+page sizes?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/49ef78e59b0749814d79eed156dcfc175fbd2f74
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> Ideally, the protocol between the guest and the host should be changed
+> to allow for different guest page sizes.
+> 
+> While there's no solution for the above mentioned problems, it seems
+> we're better off without the driver in problematic cases.
+> 
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  drivers/hv/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hv/Kconfig b/drivers/hv/Kconfig
+> index 0747a8f1fcee..fb353a13e5c4 100644
+> --- a/drivers/hv/Kconfig
+> +++ b/drivers/hv/Kconfig
+> @@ -25,7 +25,7 @@ config HYPERV_UTILS
+>  
+>  config HYPERV_BALLOON
+>  	tristate "Microsoft Hyper-V Balloon driver"
+> -	depends on HYPERV
+> +	depends on HYPERV && (X86 || (ARM64 && ARM64_4K_PAGES))
+>  	select PAGE_REPORTING
+>  	help
+>  	  Select this option to enable Hyper-V Balloon driver.
+> -- 
+> 2.33.1
+> 

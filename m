@@ -2,146 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C77C48590A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 20:19:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E26348590D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 20:20:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243451AbiAETTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 14:19:15 -0500
-Received: from mga17.intel.com ([192.55.52.151]:31169 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243460AbiAETTF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 14:19:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641410345; x=1672946345;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=8DgziH0WFP49C0kGqzf2uBEI/O4bSOCsl5hhKmIa6O0=;
-  b=mzFf7s+9g4PpgCAE7WeJro6WdfIpJ5ChyxRjdf4MbfC4OcNcgFPWj3PH
-   GNmDk7q7DWooSENDGoTwNF1tEEJqJoPhdp4hcFxOpjaSRjyo/wa9t/bON
-   JuqN1Xq1XvqBLkQlY5QI+wqSDF/wMfST9Bt4u+1aHkajf6mGkQXnoMWNL
-   4YsU8LmEJnOwbtNIpd9V7W30dIIn0O6aVS318Q3kDsG/nA6M+5klxrZ8i
-   n5ELQDlUObJfgv7NIEcsAufMweWSjsHOyhd3xz6Q8Sh3y2LCI1/OMUOsY
-   ll+oNiOEe4vB8m3K+uTnSWwWjv4FuinXJWP0AHD5cPP7doGjZkIH4LXL6
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="223202982"
-X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
-   d="scan'208";a="223202982"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 11:19:05 -0800
-X-IronPort-AV: E=Sophos;i="5.88,264,1635231600"; 
-   d="scan'208";a="621236959"
-Received: from schen9-mobl.amr.corp.intel.com ([10.212.137.150])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 11:19:04 -0800
-Message-ID: <2ddaf5e732c48f74a3758484869c81195adbc47a.camel@linux.intel.com>
-Subject: Re: [PATCH RESEND 1/1] x86/smpboot: check cpu_initialized_mask
- first after returning from schedule()
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     Dongli Zhang <dongli.zhang@oracle.com>, x86@kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, peterz@infradead.org,
-        rafael.j.wysocki@intel.com, vkuznets@redhat.com,
-        alison.schofield@intel.com, boris.ostrovsky@oracle.com,
-        joe.jin@oracle.com, longpeng2@huawei.com, bigeasy@linutronix.de,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 05 Jan 2022 11:19:04 -0800
-In-Reply-To: <20211223210343.1116-1-dongli.zhang@oracle.com>
-References: <20211223210343.1116-1-dongli.zhang@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        id S243468AbiAETUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 14:20:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52424 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243500AbiAETTu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 14:19:50 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57A7C061201
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 11:19:49 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id r5so77249pgi.6
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 11:19:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qoub34JKMYw80YSVF2J+hWLmoHzppRyhKwTIl4ud58A=;
+        b=eJrm9vSQlYbjzA48SXuyQTX4vpv+0waa/m6b4+CGvv+TU/vaqalx+wW2nsSxEQ/9vt
+         A1suumBCxyzaCyNgn32IdqREfwZqOk/nXRQaoAh5CC60NGExeXlyi31EGxNmYxTQEX4E
+         sQifAS+vZypu+S3JY78d2kp/YnmHYIUm5hak6fwjzowpaKSAXq5lBDIqAjzDrUlgI6lA
+         KZYptrb10ts7MYcBXTd91Zphk5IkT12dQBvNVkTmAySlUziWKC75l3HxKYPl617awyGC
+         o8+l5yF/ne1DrgpDW61L5Cb9yCX34IVOYNXYh6PnfvMZk7x3F7tG0p/lLsdCZ42dXxXJ
+         EFLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qoub34JKMYw80YSVF2J+hWLmoHzppRyhKwTIl4ud58A=;
+        b=j15PTWIMecSJgidDhKszd3gfOSX5OtOh9tRMF0T+5ibKPmw+fxXumV/vKXmzUPBJMj
+         dVN1WJllx4r1NNRYzzo42dvR4SX3xG3tQzm1im6E9sxgcTJOX2sGj/IuIztZpxRX8BOV
+         XEBmXTKcHwmk95vR31QieOukeei1CFK4mMjmLpkxGnXUyM5mIO6pqNO05DnHnxRGhKA6
+         zCZBwUD7jSTgTfLuk0MaIaQ8TtEwI+qn+AQbiGV4DTiz33G0BwOO4/xsmdworzLK1r/T
+         3mfX2zDIY8pdYnBuoyDvh9EyZNSqDoVoQMLlEYLcPMJomWJFG6vVodXyxcZvSCPQhJeT
+         DY4A==
+X-Gm-Message-State: AOAM531rSZMazJRpVKtWtAOvb3nYq6eT5sPDX4CsQbimwjOnjWwI/r5R
+        7hKzkM0ggoPHB/BczL9tSL+ZQw==
+X-Google-Smtp-Source: ABdhPJxye1sjvjOvj00utsHDdoqYNY5iCIYZuac2xNc6/XTpseq2jJOALu2rGleR4A8aeXodNqfdiQ==
+X-Received: by 2002:a63:1422:: with SMTP id u34mr49958790pgl.135.1641410389102;
+        Wed, 05 Jan 2022 11:19:49 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id a17sm3400933pjs.23.2022.01.05.11.19.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 11:19:48 -0800 (PST)
+Date:   Wed, 5 Jan 2022 19:19:45 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Stevens <stevensd@chromium.org>
+Cc:     Marc Zyngier <maz@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v5 4/4] KVM: mmu: remove over-aggressive warnings
+Message-ID: <YdXvUaBUvaRPsv6m@google.com>
+References: <20211129034317.2964790-1-stevensd@google.com>
+ <20211129034317.2964790-5-stevensd@google.com>
+ <Yc4G23rrSxS59br5@google.com>
+ <CAD=HUj5Q6rW8UyxAXUa3o93T0LBqGQb7ScPj07kvuM3txHMMrQ@mail.gmail.com>
+ <YdXrURHO/R82puD4@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdXrURHO/R82puD4@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2021-12-23 at 13:03 -0800, Dongli Zhang wrote:
-> To online a new CPU, the master CPU signals the secondary and waits
-> for at
-> most 10 seconds until cpu_initialized_mask is set by the secondary
-> CPU.
-> There is a case that the master CPU fails the online when it takes
-> 10+
-> seconds for schedule() to return (although the cpu_initialized_mask
-> is
-> already set by the secondary CPU).
+On Wed, Jan 05, 2022, Sean Christopherson wrote:
+> Ah, I got royally confused by ensure_pfn_ref()'s comment
 > 
-> 1. The master CPU signals the secondary CPU in do_boot_cpu().
-> 
-> 2. As the cpu_initialized_mask is still not set, the master CPU
-> reschedules
-> via schedule().
-> 
-> 3. Suppose it takes 10+ seconds until schedule() returns due to
-> performance
-> issue. The secondary CPU sets the cpu_initialized_mask during those
-> 10+
-> seconds.
+>   * Certain IO or PFNMAP mappings can be backed with valid
+>   * struct pages, but be allocated without refcounting e.g.,
+>   * tail pages of non-compound higher order allocations, which
+>   * would then underflow the refcount when the caller does the
+>   * required put_page. Don't allow those pages here.
+>                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> that doesn't apply here because kvm_faultin_pfn() uses the low level
+> __gfn_to_pfn_page_memslot().
 
-The patch seems reasonable. But do you know what other task got run
-and caused such long delay (>10 sec), preventing switch
-back to in the master CPU?  It seems like there could be some problem
-causing the long delay. It is better if we understand the root cause
-of that.
+On fifth thought, I think this is wrong and doomed to fail.  By mapping these pages
+into the guest, KVM is effectively saying it supports these pages.  But if the guest
+uses the corresponding gfns for an action that requires KVM to access the page,
+e.g. via kvm_vcpu_map(), ensure_pfn_ref() will reject the access and all sorts of
+bad things will happen to the guest.
 
-Tim
-
-> 
-> 4. Once the schedule() at the master CPU returns, although the
-> cpu_initialized_mask is set, the time_before(jiffies, timeout) fails.
-> As a
-> result, the master CPU regards this as failure.
-> 
-> [   51.983296] smpboot: do_boot_cpu failed(-1) to wakeup CPU#4
-> 
-> 5. Since the secondary CPU is stuck at state CPU_UP_PREPARE, any
-> further
-> online operation will fail by cpu_check_up_prepare(), unless the
-> below
-> patch set is applied.
-> 
-> https://lore.kernel.org/all/20211206152034.2150770-1-bigeasy@linutronix.de/
-> 
-> This issue is resolved by always first checking whether the secondary
-> CPU
-> has set cpu_initialized_mask.
-> 
-> Cc: Longpeng(Mike) <longpeng2@huawei.com>
-> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Cc: Joe Jin <joe.jin@oracle.com>
-> Signed-off-by: Dongli Zhang <dongli.zhang@oracle.com>
-> ---
-> To resend by Cc linux-kernel@vger.kernel.org as well.
-> 
->  arch/x86/kernel/smpboot.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-> index 617012f4619f..faad4fcf67eb 100644
-> --- a/arch/x86/kernel/smpboot.c
-> +++ b/arch/x86/kernel/smpboot.c
-> @@ -1145,7 +1145,7 @@ static int do_boot_cpu(int apicid, int cpu,
-> struct task_struct *idle,
->  		 */
->  		boot_error = -1;
->  		timeout = jiffies + 10*HZ;
-> -		while (time_before(jiffies, timeout)) {
-> +		while (true) {
->  			if (cpumask_test_cpu(cpu,
-> cpu_initialized_mask)) {
->  				/*
->  				 * Tell AP to proceed with
-> initialization
-> @@ -1154,6 +1154,10 @@ static int do_boot_cpu(int apicid, int cpu,
-> struct task_struct *idle,
->  				boot_error = 0;
->  				break;
->  			}
-> +
-> +			if (time_after_eq(jiffies, timeout))
-> +				break;
-> +
->  			schedule();
->  		}
->  	}
-
+So, why not fully reject these types of pages?  If someone is relying on KVM to
+support these types of pages, then we'll fail fast and get a bug report letting us
+know we need to properly support these types of pages.  And if not, then we reduce
+KVM's complexity and I get to keep my precious WARN :-)

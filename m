@@ -2,71 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA825485005
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 10:29:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEEE9485007
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 10:29:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238877AbiAEJ3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 04:29:22 -0500
-Received: from elvis.franken.de ([193.175.24.41]:58347 "EHLO elvis.franken.de"
+        id S238885AbiAEJ3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 04:29:24 -0500
+Received: from elvis.franken.de ([193.175.24.41]:58348 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232432AbiAEJ3V (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 04:29:21 -0500
+        id S238878AbiAEJ3X (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 04:29:23 -0500
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1n52be-0006hW-00; Wed, 05 Jan 2022 10:29:18 +0100
+        id 1n52be-0006hW-01; Wed, 05 Jan 2022 10:29:18 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 21937C0D5D; Wed,  5 Jan 2022 09:54:52 +0100 (CET)
-Date:   Wed, 5 Jan 2022 09:54:52 +0100
+        id 6969AC0DBB; Wed,  5 Jan 2022 09:55:05 +0100 (CET)
+Date:   Wed, 5 Jan 2022 09:55:05 +0100
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     cgel.zte@gmail.com
-Cc:     maz@kernel.org, ilya.lipnitskiy@gmail.com, chi.minghao@zte.com.cn,
-        ryazanov.s.a@gmail.com, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] mips/pci: remove redundant ret variable
-Message-ID: <20220105085452.GA5406@alpha.franken.de>
-References: <20220104112024.601765-1-chi.minghao@zte.com.cn>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        zhangqing@loongson.cn
+Subject: Re: [PATCH -next] MIPS: Loongson64: Add missing of_node_put() in
+ ls2k_reset_init()
+Message-ID: <20220105085505.GB5406@alpha.franken.de>
+References: <20220104133415.805209-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220104112024.601765-1-chi.minghao@zte.com.cn>
+In-Reply-To: <20220104133415.805209-1-yangyingliang@huawei.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 11:20:24AM +0000, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+On Tue, Jan 04, 2022 at 09:34:15PM +0800, Yang Yingliang wrote:
+> This node pointer is returned by of_find_compatible_node() with
+> refcount incremented in ls2k_reset_init(). Calling of_node_put()
+> to aovid the refcount leak.
 > 
-> Return value from rt3883_pci_r32() directly instead
-> of taking this in another redundant variable.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
+> Fixes: 7eb7819a2e12 ("MIPS: Loongson64: Add Loongson-2K1000 reset platform driver")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 > ---
->  arch/mips/pci/pci-rt3883.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+>  drivers/platform/mips/ls2k-reset.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/mips/pci/pci-rt3883.c b/arch/mips/pci/pci-rt3883.c
-> index d3c947fa2969..e07ae098bdd8 100644
-> --- a/arch/mips/pci/pci-rt3883.c
-> +++ b/arch/mips/pci/pci-rt3883.c
-> @@ -102,14 +102,12 @@ static u32 rt3883_pci_read_cfg32(struct rt3883_pci_controller *rpc,
->  			       unsigned func, unsigned reg)
->  {
->  	u32 address;
-> -	u32 ret;
+> diff --git a/drivers/platform/mips/ls2k-reset.c b/drivers/platform/mips/ls2k-reset.c
+> index b70e7b8a092c..8f42d5d16480 100644
+> --- a/drivers/platform/mips/ls2k-reset.c
+> +++ b/drivers/platform/mips/ls2k-reset.c
+> @@ -38,6 +38,7 @@ static int ls2k_reset_init(void)
+>  	}
 >  
->  	address = rt3883_pci_get_cfgaddr(bus, slot, func, reg);
+>  	base = of_iomap(np, 0);
+> +	of_node_put(np);
+>  	if (!base) {
+>  		pr_info("Failed to map PM register base address\n");
+>  		return -ENOMEM;
+> @@ -46,7 +47,6 @@ static int ls2k_reset_init(void)
+>  	_machine_restart = ls2k_restart;
+>  	pm_power_off = ls2k_poweroff;
 >  
->  	rt3883_pci_w32(rpc, address, RT3883_PCI_REG_CFGADDR);
-> -	ret = rt3883_pci_r32(rpc, RT3883_PCI_REG_CFGDATA);
->  
-> -	return ret;
-> +	return rt3883_pci_r32(rpc, RT3883_PCI_REG_CFGDATA);
+> -	of_node_put(np);
+>  	return 0;
 >  }
 >  
->  static void rt3883_pci_write_cfg32(struct rt3883_pci_controller *rpc,
 > -- 
 > 2.25.1
 

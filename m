@@ -2,151 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D98E484BBB
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 01:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 417D6484BC1
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 01:35:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236750AbiAEAaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 19:30:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51544 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233341AbiAEAax (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 19:30:53 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340C9C061761
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 16:30:52 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id i31so85275093lfv.10
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 16:30:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pGn8mwWk9uFwVH9e4BklaIBK8QVpJDJCTI25vnyWF88=;
-        b=W/Y6SsiyTwKDnreLyzcOc74AOcq4l5zMNgG6d/tR+L1hY3tg/R37MN4MB1zyzzKurP
-         J6tKLC1QURxJrM6Q/XFWwLYxtwDp2t/RtApiYsiwlAYmBBnQaZY0gafJwhnNGfZLobF+
-         NL1PpSyY2ICmofuY7AvVt2bAZ876cvlt9q/AtCSLv7EeszaHRwqYJ6Br71hJwaK5wuS4
-         f4yiIKwHrNv0JiYkK3Dhl6VFzREDNy+2MRQxaB2qaeJz5ep0OcNPw2Rf5Ky0j5DJhNtu
-         noD4oJzHEbViH1dlo3oLogZBp/Ugk21FHHxSSPEkueVih8gbUw9BK7qp4yCwB9kvY3y+
-         Ab4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pGn8mwWk9uFwVH9e4BklaIBK8QVpJDJCTI25vnyWF88=;
-        b=kMyZqOrQOdEANQ03sv9Rx4KhBB6M9uUFjUsRjb+h2kkuskuzltp/Sb/LQJPdkMCqDj
-         W3Lx08XhxU1jPVeAEiNmGEqNl1a1srKg3VQkoVr4aey3CQSWZ8UkCNU4uLQF+vOEs+q8
-         m8jQuUIGeR7gB9R24t9wIAiwXchSIqIt8oEXpsLdQZ4N1T6dLUFtjViPFNnGXqxQKGfX
-         +K1/zYu35jfql8Hl+PjnjOZD1tlo+bdzoLgmuzFynTdYVBQ4Du0Gun+lF1OKqDivGBB2
-         z7k6Rc7zuWn2aV/CEWucmA+KvuPBavm5+VMnsJO4EbIzAGLKynH6cp0rtrgaM2lXJN7l
-         b9uQ==
-X-Gm-Message-State: AOAM530Y9TZ+iAx+t/T3T3eadW2coqVCU7GfW3a3H98Oz3lFp19J3qZd
-        50CDbV3OG73X6OZwmEJnKLdOpQ==
-X-Google-Smtp-Source: ABdhPJyluQBOx8lnlXExv7zkOndN0b/9ZpokfXexflY7JYGRQNKBdMqXFXqfCGlyUbD3Ck6RvSOhgA==
-X-Received: by 2002:ac2:52a3:: with SMTP id r3mr45430778lfm.580.1641342650509;
-        Tue, 04 Jan 2022 16:30:50 -0800 (PST)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id b3sm4063894lfp.48.2022.01.04.16.30.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 16:30:49 -0800 (PST)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id B59B7103147; Wed,  5 Jan 2022 03:31:08 +0300 (+03)
-Date:   Wed, 5 Jan 2022 03:31:08 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, tglx@linutronix.de,
-        mingo@redhat.com, luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 19/26] x86/tdx: Make pages shared in ioremap()
-Message-ID: <20220105003108.mr7zyd5oyaaxmnmv@box.shutemov.name>
-References: <YcTlhp1PUfrMOelI@zn.tnic>
- <20211224110300.7zj3nc5nbbv7jobp@black.fi.intel.com>
- <33914dc1-37e8-f0bb-6468-71c3b5f4169d@amd.com>
- <20220103141705.6hqflhwykqmtfim6@black.fi.intel.com>
- <YdMIWAT42el4D6wJ@zn.tnic>
- <20220103151516.pfcz2pap5l7r2rzv@box.shutemov.name>
- <b4b54116-1cd7-468a-0889-d497268cbfb2@intel.com>
- <20220103181059.ui5eloufw5gsojcb@box.shutemov.name>
- <20220104191424.oly2gqm4ltzj5wo3@box.shutemov.name>
- <0e0c38e2-67ad-1f51-c44b-d3c3d505e40a@intel.com>
-MIME-Version: 1.0
+        id S236768AbiAEAfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 19:35:22 -0500
+Received: from mail-dm6nam12on2073.outbound.protection.outlook.com ([40.107.243.73]:51935
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233341AbiAEAfV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 19:35:21 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N/aPacn20pPCqdrBmiQdoZHRC3qvECPlnRN/JUqzmyPhHVu5Sevkj4Us7wWT/SyHJcHD+uMvyD7aYH5FsG2epsBK2SuJPKbiPlA+gYkOMwrbY1WDU73pSYxUx+assV/3OzjKkJiXb3mHzDi/qvi6MfAW2dGCTrFyWzpW/m96MEMk52//F3VDrvX7oyDijJGI8jKl19a3T/g54nfU7RfEMEzvG9iGpXVsGAHdwHwinNesWweg9Biow8pUCrd0KFwpxSkGQPEGtQOrKIoFO9nm9Qk7I5zMmsvH4S1YylQy5I5zmaKzmeZ++bui3brZkQMnzC1t1RtUatF+b0zwTWLpeg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7HCt1endtkLN0WZobU041Cj/u6/PSXscaHa8oJmIOSA=;
+ b=oXQT/ntefneElREHkwlP9Vp5606B3gdlx7GXXEx2hAiRc8+XlnhQpFIcLBMcp56MZnr7NbzeiMUGpqB9QY8JeEMU1HfagXzYDBLgWoZPGl0r0wp37L5KKLFhMMsoo4xzJ5aq4HHkRMYjv8p4R2JNs2c92mQ5hFBVbdVkW2VxzY2kSzVVnVIXV7qPt10BpEnxkx730yMvmjTAwx+d1+k5yoZlM7paq0svfSTLBE3StDoomE/qiSrYenclM4aBQtaQFRQJnSbYHCj2sIIta9kplECdcm4cZoL3qDPVESvZrLm3NyLcisbnKjyBsb//UQmcSx7i8F940gGdFCalY6CR1Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7HCt1endtkLN0WZobU041Cj/u6/PSXscaHa8oJmIOSA=;
+ b=oW3wcVtQ16KY/Xy/kkM4D+rMqfQ9zNpouKFLEUo7L1Zx5TkARalZ3+3bNCfRdQ0WfI6O+TcNk0PCWF2D1Oxhcer98LQUVuNGKNJVEDbdAVZD1ZcSwO4Qa5l45Dd4QfKhj0F6iGQuAIuKllqLCkDlYBtIdeM5TNHR1gBfdXeggGLuBb/L3Do//JrIMwD4zOBViLulNKoaLolyf0JlAVKPAz//VN822Z0QqbnBtbO+ioDERjcUO2FERmZNFdi+6nenmWc5CRnbuMkmHw9WobFdCvW2VqRxqLe96tpUtjqa1t4sCqo05l54skANqkZNpf8IBFQ0b1QCUOlifvgFnupK7g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM6PR12MB5520.namprd12.prod.outlook.com (2603:10b6:5:208::9) by
+ DM8PR12MB5494.namprd12.prod.outlook.com (2603:10b6:8:24::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4844.15; Wed, 5 Jan 2022 00:35:19 +0000
+Received: from DM6PR12MB5520.namprd12.prod.outlook.com
+ ([fe80::218e:ede8:15a4:f00d]) by DM6PR12MB5520.namprd12.prod.outlook.com
+ ([fe80::218e:ede8:15a4:f00d%4]) with mapi id 15.20.4844.016; Wed, 5 Jan 2022
+ 00:35:19 +0000
+Date:   Tue, 4 Jan 2022 20:35:16 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 09/14] PCI: portdrv: Suppress kernel DMA ownership
+ auto-claiming
+Message-ID: <20220105003516.GN2328285@nvidia.com>
+References: <20220104192614.GL2328285@nvidia.com>
+ <20220104195130.GA117830@bhelgaas>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0e0c38e2-67ad-1f51-c44b-d3c3d505e40a@intel.com>
+In-Reply-To: <20220104195130.GA117830@bhelgaas>
+X-ClientProxiedBy: BY3PR05CA0019.namprd05.prod.outlook.com
+ (2603:10b6:a03:254::24) To DM6PR12MB5520.namprd12.prod.outlook.com
+ (2603:10b6:5:208::9)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1cbd900a-686a-4fc5-36c2-08d9cfe33ff4
+X-MS-TrafficTypeDiagnostic: DM8PR12MB5494:EE_
+X-Microsoft-Antispam-PRVS: <DM8PR12MB5494D8DD1C823FE8DB9DC17FC24B9@DM8PR12MB5494.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3631;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5uz+jICspxd6KiYmf/Ais0HyhuciS0BISd8+diD/c6KWiijrySwhuumK1Dn4oBehGvKWpbKvIxso+ZvSH9peLK/QZlBGbT4ugcXusvk3J/2ameVaje2DPz56fkZcMoYbUGFC8TwFjGRBaYFsJg7accE3YodSEkom0KMlWQdo9oJJXMc2vzqiU+C/fgdTRLWrdQYrPAQZgP23eqtgaxA0/Tt+QgxE2mLotOt1pwjbyAQdA9Yy02aGqBtdM2UwE0zejItnRkS3zTlEKu8YtCcv0hyJRaBX2p40BBLXgTIeO5R7WKJO4vUK+MnC/anq/5mkZRMRnACD4SkiM+RJoeNtGwsIXrXpCpo1Xcb+fMjYWpk5fDRTCOf6vWuPhabnASgFdwMng5ZiyVqEEncUAt5FWTXt4Wudfd5kYBmvp6FMYoPvKGNlYVzrFCPQx2G/ApimDEThqx79uTDrYWoONR6UIyHiVBUOn2nKX2ZTHAb44tNzwXJTicwT2/XJhiRM+LneWA12zt+oBsottYdXMP9fpT42QJto39A7xhDhrWJyC/DCQ02fyYLb9hi6yHt9CkJHt0eUtiDrQJpaBoWPbm1VUhlVc+TMDcG6Kx4SaQdnLCQVtmnuQobjQ5/JAW/95XcfRjE2rD/taHOUh5Tkhcc9rA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB5520.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(186003)(6506007)(66946007)(6486002)(2616005)(36756003)(6666004)(83380400001)(2906002)(6916009)(1076003)(6512007)(7416002)(66476007)(66556008)(26005)(316002)(508600001)(8676002)(4326008)(54906003)(5660300002)(8936002)(38100700002)(86362001)(33656002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hqLtM4LV5HnjtSNcf7TZkJccrBATc3Hux1HB8AJGOlPze2X12Y8M94p41pME?=
+ =?us-ascii?Q?Y2DbWjchiyCZFzk/XpikSoVOLKKZvwMc7fdNPQdl3WWDZmqcp2yWXnKVp7zc?=
+ =?us-ascii?Q?sgp1rmuMyzw5cQrG8RAxVIrjimfmBIj6LFd9AQLATc+OtQKMfWLKEpX+9MAW?=
+ =?us-ascii?Q?xLuEdpr+LG9xLndS7+NHTp546TOfeZVFVGtVOhELrQLp8x5/5QGq4rGwxSGS?=
+ =?us-ascii?Q?0G7PFgeUK4vijf6PzdX6kBJ1leIXtLTj5Wdm2mqEO2yloAiSSwg8RGmfphov?=
+ =?us-ascii?Q?hd0JsQmGgIVb1+VrxKG/BJutaWhsJicfH0Le68/SVT7xpV/GcDoGbjrp7aOX?=
+ =?us-ascii?Q?qSq/fQeovC+ZxGdkuO7w/b51d5v5WEc54EdSkvt+VHfj9Oj/2meZwK8n0AQC?=
+ =?us-ascii?Q?0X/pC6oZVh9Aq7vht48e13Onz7bfqAv+GvvLQSOmNnoHx5YXqO+TRFXxMtfI?=
+ =?us-ascii?Q?MXtxyvFkO26bfKWPJxnumjySMudZy30U8A62YQCNz1RqHOHQnqY1ILXJlNrJ?=
+ =?us-ascii?Q?xGFk2USvlPeQKYoBqxjG7L+xzju9azTjAJCYEe3F3FBhBQ/W6aqmBnnvwrl4?=
+ =?us-ascii?Q?POz+7CIbXZe6KzkE412vvLB8cKdwkgh9UZE8Ydh/GsGnOUr8SadatRq/xV6e?=
+ =?us-ascii?Q?PUiLIcwJbbeujueBhjkZk3n8Go0K5v70Q99RR0JA+hi/tVR3HAfdN8lSPI58?=
+ =?us-ascii?Q?xzqewHTIYb++7HrrsrRpIcxv69rAfoSSJJ5EtT71YQ0wjx9YruryKGFKObh0?=
+ =?us-ascii?Q?x0tJSVZn3P7a5PPTb4nw5f5lMzVYbw9KIOsU9tkit9fXLq73QraAGv4BgUGp?=
+ =?us-ascii?Q?rI3gsI5WJer2INhjRwWoMWC5uFHgSyCjrl737fO7y62Y/EK1R4oTLXYLgNy0?=
+ =?us-ascii?Q?T7iClbNlCKKG24DMO+57YVtDKwhpXvZlwEJFRqAymuDZmCun6grN/m+Zc5lS?=
+ =?us-ascii?Q?DPFPdYseOzeTkrCG5xNVidHpQuQfSESlmOxZdps/yMBx39FFtAutyQTGUnkp?=
+ =?us-ascii?Q?9pCXl/19MWTEzYE9VvqwqWVvgdvylwWyhQupm/sfshvD0q23MmLMYLyHxSdC?=
+ =?us-ascii?Q?DANTfyYPEdkwnKSHexaybkoZwZEKfZ0SdtEUAS9EjB3BjMt/2l47Sd0Ohk0q?=
+ =?us-ascii?Q?wfTmPY6PqMn/x/ocq7B4a91luLpSX0w5SHaaJrzG72wyOFeGFLPe1c7G/Fx1?=
+ =?us-ascii?Q?gbHVaAUep6+kT1AcR+w5/lKHQBie0LgHYNBEBqDZ5FaQY1YFEnJSteo7a4dO?=
+ =?us-ascii?Q?tU18rYRskEW5kuNECjqBCe+t8SgUTxVj0DKI5aYagoLb2VN4UlLdmLvConjF?=
+ =?us-ascii?Q?+rYrCMNkPXFe3DWwSAhJ0MRZHFDEGO+Lu/LjaB/LpaL1bo7YLI8HVpygWi2T?=
+ =?us-ascii?Q?jOKyE+iUedUNUnaf/LPfl7ZZd84ETb21X93e6Y7yMOyPuIws4fsQ+M5AoJkv?=
+ =?us-ascii?Q?eidWjL80cn9EWY6wr1V3VsygOrEIUBfXnmeRcvAByNAOwjAG+IMUac8VSSLh?=
+ =?us-ascii?Q?IxvihXkMiDigXUfoJKz6i8icfgcl4+k35TRSe0mYYwSxyM4W/JaT44nHh+O3?=
+ =?us-ascii?Q?wLGLUCn23mAzzrPp1dQ=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1cbd900a-686a-4fc5-36c2-08d9cfe33ff4
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB5520.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2022 00:35:19.3080
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zEXkkHblMyiOGb5q6WgUByJpXb/UmAviozTxVh2RRYliQUDRbZ65oOAXiRA1EXuD
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5494
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 12:36:06PM -0800, Dave Hansen wrote:
-> On 1/4/22 11:14 AM, Kirill A. Shutemov wrote:
-> > I see two possible options (I hate both): leave it defined in per-arch
-> > <asm/pgtable.h> or move it to <linux/mm.h> next to user in
-> > io_remap_pfn_range().
+On Tue, Jan 04, 2022 at 01:51:30PM -0600, Bjorn Helgaas wrote:
+> On Tue, Jan 04, 2022 at 03:26:14PM -0400, Jason Gunthorpe wrote:
+> > On Tue, Jan 04, 2022 at 11:06:31AM -0600, Bjorn Helgaas wrote:
+> > 
+> > > > The existing vfio framework allows the portdrv driver to be bound
+> > > > to the bridge while its downstream devices are assigned to user space.
+> > > 
+> > > I.e., the existing VFIO framework allows a switch to be in the same
+> > > IOMMU group as the devices below it, even though the switch has a
+> > > kernel driver and the other devices may have userspace drivers?
+> > 
+> > Yes, this patch exists to maintain current VFIO behavior which has this
+> > same check.
+> > 
+> > I belive the basis for VFIO doing this is that the these devices
+> > cannot do DMA, so don't care about the DMA API or the group->domain,
+> > and do not expose MMIO memory so do not care about the P2P attack.
 > 
-> Could we do an asm-generic/pgprot.h that was basically just:
-> 
-> 	typedef struct { unsigned long pgprot; } pgprot_t;
-> 
-> That would cover probably 80% of the of the architectures.  The rest of
-> them could define an actual asm/pgprot.h.
+> "These devices" means bridges, right?  Not sure why we wouldn't care
+> about the P2P attack.
 
-A file per typedef looks like an overkill.
+Yes bridges. I said "I belive" because VFIO was changed to ignore
+bridges a long time ago and the security rational was a bit unclear in
+the commit.
 
-Maybe <asm-generic/types.h> that included from <asm/types.h> would be
-easier to justify. Some archs already have <asm/types.h>
+See 5f096b14d421 ("vfio: Whitelist PCI bridges")
 
-Although, it is not as simple as your patches. See below.
+> PCIe switches use MSI or MSI-X for hotplug, PME, etc, so they do DMA
+> for that.  Is that not relevant here?
 
-> 
-> It doesn't seem to be *that* much work, although it is a bit of a shame
-> that pgtable-types.h doesn't fix this already.  I've attached something
-> that compiles on s390 (representing a random non-x86 architecture) and x86.
+Alex's comment in the above commit notes about interrupts, but I think
+the answer today is that it does not matter.
 
+For platforms like x86 that keep interrupts and DMA seperate it
+works fine.
 
+For platforms that comingle the iommu_domain and interrupts (do some
+exist?) we expect the platform to do whatever is necessary at
+iommu_domain attach time to ensure interrupts continue to
+work. (AFAICT at least)
 
-> diff -puN arch/sparc/include/asm/page_32.h~pgprot-generic arch/sparc/include/asm/page_32.h
-> --- a/arch/sparc/include/asm/page_32.h~pgprot-generic	2022-01-04 12:00:31.651180536 -0800
-> +++ b/arch/sparc/include/asm/page_32.h	2022-01-04 12:00:31.659180446 -0800
-> @@ -10,6 +10,7 @@
->  #define _SPARC_PAGE_H
->  
->  #include <linux/const.h>
-> +#include <asm-generic/pgprot.h>
->  
->  #define PAGE_SHIFT   12
->  #define PAGE_SIZE    (_AC(1, UL) << PAGE_SHIFT)
-> @@ -57,7 +58,6 @@ typedef struct { unsigned long iopte; }
->  typedef struct { unsigned long pmd; } pmd_t;
->  typedef struct { unsigned long pgd; } pgd_t;
->  typedef struct { unsigned long ctxd; } ctxd_t;
-> -typedef struct { unsigned long pgprot; } pgprot_t;
->  typedef struct { unsigned long iopgprot; } iopgprot_t;
->  
->  #define pte_val(x)	((x).pte)
-> @@ -85,7 +85,6 @@ typedef unsigned long iopte_t;
->  typedef unsigned long pmd_t;
->  typedef unsigned long pgd_t;
->  typedef unsigned long ctxd_t;
-> -typedef unsigned long pgprot_t;
->  typedef unsigned long iopgprot_t;
->  
->  #define pte_val(x)	(x)
+In other words we don't have an API restriction to use
+iommu_device_use_dma_api() to use request_irq().
 
-Any arch that use STRICT_MM_TYPECHECKS hacks will get broken if compiled
-without the define (as sparc by default).
+So the main concern should be P2P attacks on bridge MMIO registers.
 
-It's fixable with more crunch (and more build bugs). I think we can use
-approach from posix_types.h where asm-generic version defines the type if
-it was not defined by the arch code.
+> Is there something that *prohibits* a bridge from having
+> device-specific functionality including DMA?
 
-Is it the way to go we want?
+I'm not sure, I think not, but the 'Bus Master Enable' language does
+have a different definition for Type 1..
 
--- 
- Kirill A. Shutemov
+However, it doesn't matter - the question here is not about what the
+device HW is capable of, but what does the kernel driver do. The
+portdrv does not use the DMA API, so that alone is half the
+requirement to skip the iommu_device_use_dma_api() call.
+
+Some future device-specific bridge driver that is able to issue the
+device-specific MMIO's and operate the DMA API should be coded to use
+iommu_device_use_dma_api(), probably by using a different
+device_driver for the bridge.
+
+> I know some bridges have device-specific BARs for performance counters
+> and the like.
+
+Yep.
+
+IMHO it is probably not so great as-is..
+
+However, this patch is just porting the status-quo of commit 5f09 into
+this new framework.
+
+What this new framework does allow is for portdrv to police itself. eg
+it could check if there is a MMIO BAR and call
+iommu_device_use_dma_api() out of caution. It could also have an
+allowance list of devices where we know hostile writes to the MMIO are
+known harmless.
+
+Without knowing more about what motivated 5f09 it is hard to say,
+other than it has been 7 years like this and nobody has complained
+yet :)
+
+Jason

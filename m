@@ -2,168 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F110548526A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:26:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F3048526D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 13:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240001AbiAEM0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 07:26:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41974 "EHLO
+        id S240013AbiAEM1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 07:27:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235925AbiAEM0n (ORCPT
+        with ESMTP id S235383AbiAEM1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 07:26:43 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E202C061761
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 04:26:43 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id q4so37366517qvh.9
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 04:26:43 -0800 (PST)
+        Wed, 5 Jan 2022 07:27:11 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA24C061761;
+        Wed,  5 Jan 2022 04:27:11 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id l10-20020a17090a384a00b001b22190e075so3683891pjf.3;
+        Wed, 05 Jan 2022 04:27:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=+6zUFKikZ5uI7X+WBRedpvpkwDXnTgkeRYffGhJplBQ=;
-        b=v0GeznWOJp1intYhv38FsyRKC2LY+s7ndDGtu8347+i9nbXXv04HckdcZQOYkPKp90
-         /jX/cn0VqKe2GUgFg8xH4/RRsX2gOU2vi4YIq2jnAXgtJFu8NKWOmv5UTm7JKOBG3wVd
-         yX9NM8tByP/uwWU3/WPQ7QTsUzFb47l90lqhxnFgpjcN80pQu3wHho0EGORmw4jD4Hze
-         2N7+JCrk4rGAxSTsjSt08zwMWj9DQKe79mw7iOhhxX8p6AUqdjfORxMRC/f4QgTqsNJB
-         wYnJmPOreCRXYJ/LqiEG5E0tR+gwvKZVim6Fcfba4VyFEW0Zya6GV1LFeZO/aFjf05Op
-         DDbw==
+        bh=46NaslxK0CBDuwzO8TgoSL/HvMffOQFuGj0G156NG9Y=;
+        b=AuZGzoAweBdideoPYcdrbQkwx6fL2cTcKzJAX2gyfQjLYRP4dn8i02BYKdOb5vDvvH
+         8jr02hE+gYyX11wKLfkYa5v24SpCdxIqt53VJJuOvoWIFDPnCyOSAKw0I+XmDh5iMUDM
+         8k1JHhDC/kCynJSybsJZP2CJfmScBlFht/usEpADpuTcLNfs0rn5HJDvbaToQADcB/rd
+         /M+xJX7+5/pbJk1AhMAL49nymj3Jw5O3Lsf1GrycseHFydb6NjW2PidXp6HkEiRFf/31
+         cMyZpnurYYr+YRSqk3BZBwLix6K7t4oGnyom4R0jKlssCAIXGmmTAibArHOEf6eh5Uc1
+         9DDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=+6zUFKikZ5uI7X+WBRedpvpkwDXnTgkeRYffGhJplBQ=;
-        b=p8N4U1GnGlC5MuyzfpO9CnrYBHz+fUIBO6sXTY0dBjTjRA8h/kad99EuCBS/c6mQPU
-         I5GTCrnvwuo4OIK4qDgAAP3EJT/ZSzkV7YSJqG85FxCsG3DZvjkuzJaaM7IQtXm2KLUR
-         7fOVeSHiyN7p2E5oZQGqeyC0LMvAcV/G1KwYktg+Z8Q6Z+5dvP3lZjhj2pGYwcNZfR6+
-         FEI+do1bQ5sLfElY4fyLzrIbpTgvnnULKvuBs9vAns66PjvBOAGC1I/EwSXTzJY9R0I6
-         38CwxyrTxdrcK7nTTmu6yMGa4CMCdM78YJAKfnfa/vEOpMOSI4NNrydAHOM+T4j5x1lA
-         JUdA==
-X-Gm-Message-State: AOAM530s6s/AyQ+1HrlgGgr5mQTeFpUOxkuMm22XUlgJamWOMReERfx7
-        YDuKMgqwU3rCEeZz/knqJ+VXuQ==
-X-Google-Smtp-Source: ABdhPJxqbVB7XWk6LPZe9NdWapRfu4IObMFem/esLdwpybt5KuvKvaxSKJK/v6LXDUp/1xX65da8KA==
-X-Received: by 2002:a05:6214:262d:: with SMTP id gv13mr49591568qvb.23.1641385601790;
-        Wed, 05 Jan 2022 04:26:41 -0800 (PST)
-Received: from eze-laptop ([186.122.18.30])
-        by smtp.gmail.com with ESMTPSA id a15sm36481925qtb.5.2022.01.05.04.26.36
+        bh=46NaslxK0CBDuwzO8TgoSL/HvMffOQFuGj0G156NG9Y=;
+        b=mhevZUGtchH67EtnmqjCAo25BLByvmpeQDw99rX5RF/HAWJKE4vf2j0+Q5i6gdgelv
+         oTyTKmhPJBO6TGP+UHc3in9eI2rx9gnDDigksRpWqXOdd/hTIhOKLXBKVbY3OW7LZN1d
+         V76bWLTxYWn3cuvBHtFJtWlCsaDzKhpSX1GA33MPZMNZoYDsrzxbmg0pPPt0Jzw2K/qr
+         QddDXwZXGaRJ0cEtjB0BA+wS2ia7CTf3hRj0zEW4vT06erZJ1gc4IAnJS8TANee1yz+E
+         e+pLX0ckJQrNQNwwefAxS33m+rW+JFSumcMrEil21Vk2yyjVSiBrB0jL8nHMNHqfkBrT
+         mSIg==
+X-Gm-Message-State: AOAM530UavrO92kxajmmE7+llGunh57eHIFk8okEiI7XVN6xh+8zciLl
+        P12Mg4fcMdgkh8ttUqsq4sgnJZMRJEI=
+X-Google-Smtp-Source: ABdhPJyC/OHGcK2uRp88D7Xgu7YxzGc7toAP+uUSoc/+MTPRoOPstE5p7tqoPOqBYflo6CGErcW+LA==
+X-Received: by 2002:a17:90a:c210:: with SMTP id e16mr3836129pjt.90.1641385630830;
+        Wed, 05 Jan 2022 04:27:10 -0800 (PST)
+Received: from shinobu (113x37x72x24.ap113.ftth.ucom.ne.jp. [113.37.72.24])
+        by smtp.gmail.com with ESMTPSA id k8sm49233784pfu.72.2022.01.05.04.27.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 04:26:39 -0800 (PST)
-Date:   Wed, 5 Jan 2022 09:26:33 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     mchehab@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, hverkuil-cisco@xs4all.nl,
-        jernej.skrabec@gmail.com, nicolas.dufresne@collabora.co.uk,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev, kernel@collabora.com
-Subject: Re: [PATCH v4 1/2] media: hevc: Remove RPS named flags
-Message-ID: <YdWOecbZHO+Skbnn@eze-laptop>
-References: <20220104073842.1791639-1-benjamin.gaignard@collabora.com>
- <20220104073842.1791639-2-benjamin.gaignard@collabora.com>
+        Wed, 05 Jan 2022 04:27:09 -0800 (PST)
+Date:   Wed, 5 Jan 2022 21:26:58 +0900
+From:   William Breathitt Gray <vilhelm.gray@gmail.com>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     linux-iio@vger.kernel.org, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Subject: Re: [PATCH v3 00/23] counter: cleanups and device lifetime fixes
+Message-ID: <YdWOkn2Gtd7FSYmR@shinobu>
+References: <20211229154441.38045-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7aArQOflsA51RSk6"
 Content-Disposition: inline
-In-Reply-To: <20220104073842.1791639-2-benjamin.gaignard@collabora.com>
+In-Reply-To: <20211229154441.38045-1-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin,
 
-On Tue, Jan 04, 2022 at 08:38:41AM +0100, Benjamin Gaignard wrote:
-> Marking a picture as long-term reference is valid for DPB but not for RPS.
-> Change flag name to match with it description in HEVC spec chapiter
-> "8.3.2 Decoding process for reference picture set".
-> Remove the other unused RPS flags.
-> 
+--7aArQOflsA51RSk6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-A change like this, which is affecting a kernel interface and has impact
-on userspace and drivers, requires a lot more attention in the commit description.
+On Wed, Dec 29, 2021 at 04:44:18PM +0100, Uwe Kleine-K=C3=B6nig wrote:
+>  - I think intel-qep.c makes the counter unfunctional in
+>    intel_qep_remove before the counter is unregistered.
 
-If I understand correctly, this change is related to how HEVC was first
-introduced and how the DPB was originally represented in V4L2.
+Hello Uwe,
 
-Originally, a DPB entry struct v4l2_hevc_dpb_entry had an rps field
-which can be:
-
-  V4L2_HEVC_DPB_ENTRY_RPS_ST_CURR_BEFORE
-  V4L2_HEVC_DPB_ENTRY_RPS_ST_CURR_AFTER
-  V4L2_HEVC_DPB_ENTRY_RPS_LT_CURR
-
-Perhaps this idea followed libva, where a VAPictureHEVC has flags field
-which can be:
-
-  VA_PICTURE_HEVC_RPS_ST_CURR_BEFORE, 
-  VA_PICTURE_HEVC_RPS_ST_CURR_AFTER,
-  VA_PICTURE_HEVC_RPS_LT_CURR,
-  VA_PICTURE_HEVC_LONG_TERM_REFERENCE
-
-In this representation, the sets PocStCurrBefore, PocStCurrAfter,
-PocLtCurr are implicit, and must be built by the kernel from the DPB
-entries struct v4l2_hevc_dpb_entry, using the information in the rps field.
-
-Last year, we changed this with your commit:
-
-commit d395a78db9eabd12633b39e05c80e803543b6590
-Author: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Date:   Thu Jun 3 13:49:57 2021 +0200
-
-    media: hevc: Add decode params control
-
-Which added the control v4l2_ctrl_hevc_decode_params, which includes
-the sets PocStCurrBefore, PocStCurrAfter, PocLtCurr explicitly and therefore
-moved the responsability of creating and maintaining the sets to userspace.
-
-This effectively made the rps field in the struct v4l2_hevc_dpb_entry
-useless. The longterm flag is still needed though for a DPB entry.
-
-With this in mind, you could even say this commit is doing actually two
-things:
-
-1. Removes the unused rps field.
-2. Adds a flag field, for the longterm DPB entry boolean.
-
-Do you think a single byte of flags will be OK for a DPB entry?
-I think so, but I'd love yours/others input here.
-
-If the above is more or less accurate then, and provided you
-submit a new version with a more detailed commit description:
-
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-
-Also, a small question:
-
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> ---
-> version 4:
-> - check flags with & and not ==
-> 
->  Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 8 +++-----
->  drivers/staging/media/hantro/hantro_g2_hevc_dec.c         | 2 +-
->  drivers/staging/media/sunxi/cedrus/cedrus_h265.c          | 2 +-
->  include/media/hevc-ctrls.h                                | 6 ++----
->  4 files changed, 7 insertions(+), 11 deletions(-)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> index e141f0e4eec9..38da33e61c3d 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> @@ -3166,11 +3166,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->  	:c:func:`v4l2_timeval_to_ns()` function to convert the struct
->  	:c:type:`timeval` in struct :c:type:`v4l2_buffer` to a __u64.
->      * - __u8
-> -      - ``rps``
-> -      - The reference set for the reference frame
-> -        (V4L2_HEVC_DPB_ENTRY_RPS_ST_CURR_BEFORE,
-> -        V4L2_HEVC_DPB_ENTRY_RPS_ST_CURR_AFTER or
-> -        V4L2_HEVC_DPB_ENTRY_RPS_LT_CURR)
-> +      - ``flags``
-> +      - Long term flag for the reference frame
-> +        (V4L2_HEVC_DPB_ENTRY_LONG_TERM_REFERENCE)
-
-Is this longterm flag associated in any way to a syntax element
-or an HEVC process? If so, please document that.
+Would you elaborate some more on this? I think intel_qep_remove() is
+only called after the counter is unregistered because the struct
+counter_device parent is set to &pci->dev in intel_qep_probe(). Am I
+misunderstanding the removal path?
 
 Thanks,
-Ezequiel
+
+William Breathitt Gray
+
+--7aArQOflsA51RSk6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEk5I4PDJ2w1cDf/bghvpINdm7VJIFAmHVjocACgkQhvpINdm7
+VJLp1Q//ev76+YaOvx1nSrhlqo7QTyCV0pU6DFUBoZu0imahFYInkRiud0z7X/v/
+cc7aNEEbYnb0zJEMDGwgDXthBwkwCoWuLPC90j5b3BqcDE1DcEnDaASIgs2PDpSE
+9bLRfFbJDNqrRzL4rmxyehbbgfjI/o4SH+bp7JzuOck5xAgleCKx1X/KbXW91eec
+BBAZEpy6MH2IM6AX+bPA5pIh75wu1PQt/wLwXMk/ZIK8ATqNxIqlmlzAz8SPnqhj
+6KxXIRZMHHVHcLT3THC6Sn++HHE0UPokF88Zxk5H/QA4aks2RbklzHsxLGsOD/k7
+dCIFqB2Ll3bM4goqKPySVLJMXQmj+nwZENZyy8hpiaMn+ZNjrtkjEPskiUfqwBSe
+DS5xmmHujd1+MEVhSJzqbNFcbR6fnH7BWv8UZNEApA0F1GTLgtWpW4ASMrxm4fsq
+XmOFrjrXNPBtpOGDGAjh2kb/nFQGLKOTi75JhUw5yZKCljNiRUFzfhuiMSUSZLbp
+Rt6tuXe46e5oB8IzHwG9AhcUvwhHlbWPvTWLm+4KeS+5Rxqk6DbVk2sKStJiLTgT
++reCFi7agu3bEisb+3wA0aEbasqNxozZUWGFmZ1po06G36OD143ZI/FGMf5NUhkZ
+FyOMu441A9SD0Pi5IaXCr5a/L7zOT2ChT9cUKs1Fkx6tyIsXzwc=
+=3xlF
+-----END PGP SIGNATURE-----
+
+--7aArQOflsA51RSk6--

@@ -2,130 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81183484BCF
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 01:40:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26BC5484BD3
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 01:43:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236787AbiAEAkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 19:40:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53740 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235357AbiAEAkp (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 19:40:45 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A57C061784
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 16:40:45 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id c14-20020a17090a674e00b001b31e16749cso75432pjm.4
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 16:40:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lixom-net.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M+QqjubRXMhaOO4Im1+kXv4s6y4fFwhi8A1rks4WSNk=;
-        b=OAk4wXvl42AsV0OgVKihUBANkadpnqLzbM5lLR7TYgqaZJmPb117e1b+cj4mf5i99U
-         LHlz8PLnNYadlPYRwsUcw+tTQHZpRQlD7UWIH1mzV+RmB1Tg36eEjZ7nzl0VJNiPiP7+
-         EiE6woRb9XV+jFoRU1HIots89H6g8RjObfHt4aWvhMenhpOZJk1svUfLaLAhRSpVXGGf
-         rE9E/cvBgRqg1RdSGCGSuWFq5O4kWZHkasR1JeojUZ7V/RlwPXwpWDLhKghCpLS1/j/Z
-         afLcLZWBNbVfK5a1dg+mHfUvmbpCw5y3XfkX/QAsIp7V68n9aKuoUQPPi6xB+QcOgIbW
-         B58A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=M+QqjubRXMhaOO4Im1+kXv4s6y4fFwhi8A1rks4WSNk=;
-        b=b8yfY0ZFiFW3Ja2ZriJ/mxT9HVFJqwLj5ikU7Z4gzCo8l2pY2c3Pjn9rNn+t73o0d3
-         9JUq4aWzLIix3NaB+l+Y37/bj2kDteK7IVVsWocQfwI4WK7U5kI/xjZ5NXt0KmHNBPWg
-         JM5GSH3l4ETQzJcy7rnAuRAJmvEui+hC2v2rLyBBG/Iyw84PlocRCPr3yOHQnh8/1gnf
-         hyv0D9Z+yyJWGXdgNnGCyqdfuMkfnMClcDU99GOll5JH+DroC6HpgPOhV3sYzLqNVDLW
-         TOCTrj9TJbqtvSByccM1FnMqW42cQQR7gGzo2NF+ELlNGbWKBBJxUQTgvFvUKaOEVdb/
-         6m4A==
-X-Gm-Message-State: AOAM532fBJRzN2It5Gust0vgahHSFu0mylmuCDtEtDQ0LNW8PWPKDk3D
-        usfmztho88WeldmfzKSLh/qIQCpSBTMGPJE4mzIbgw==
-X-Google-Smtp-Source: ABdhPJzAR8BXRI9t45W3S6Ga+iKqottCy1N8a/hjba/fckLGAl6sxvFZkGRjZwL6qdQfmKZpByykP1PNdJ7IIngCHHk=
-X-Received: by 2002:a17:90b:3143:: with SMTP id ip3mr1168992pjb.34.1641343245158;
- Tue, 04 Jan 2022 16:40:45 -0800 (PST)
+        id S236794AbiAEAnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 19:43:14 -0500
+Received: from mga14.intel.com ([192.55.52.115]:45242 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232884AbiAEAnN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 4 Jan 2022 19:43:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641343393; x=1672879393;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=MpCEBVcUt3q1JbwjRMgMygRha3aI3StRnlj8zP5uAKo=;
+  b=ecZ2bJew75EqPoHPlU4rv7r2Ww1n3LESb6qq1N5DheJ3Wbsgifk0IcvV
+   ITIddcfk2I7vin14mxXQbN8Wp96Iy+TAhI6fPUVIBwHuqTqvSQysesPr5
+   zl3WOfS5T/EsaDx3yFsM5Il5RdAOiceTivTecZcnhVlB7lMg2xfNa69EG
+   6ZHcmXr+ucCvOGWabu5hbFCmrqW/HhijH87yMRKZCaMmuiSRykTKHMHLa
+   6dN0ftf0JksAY8XJjf2Q9HZ+6KwPH/HyIhj8zm++DiHWhLF4uIzwEpyth
+   WbPDcNsy0JEQ8XMthr9fkmPJXhDEmmbPUg4L/322tNvcp0ep4IYBd69qh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242545407"
+X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
+   d="scan'208";a="242545407"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 16:43:12 -0800
+X-IronPort-AV: E=Sophos;i="5.88,262,1635231600"; 
+   d="scan'208";a="556351348"
+Received: from mncallah-mobl.amr.corp.intel.com (HELO [10.209.35.108]) ([10.209.35.108])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 16:43:12 -0800
+Subject: Re: [PATCH 19/26] x86/tdx: Make pages shared in ioremap()
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>, tglx@linutronix.de,
+        mingo@redhat.com, luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+References: <YcTlhp1PUfrMOelI@zn.tnic>
+ <20211224110300.7zj3nc5nbbv7jobp@black.fi.intel.com>
+ <33914dc1-37e8-f0bb-6468-71c3b5f4169d@amd.com>
+ <20220103141705.6hqflhwykqmtfim6@black.fi.intel.com>
+ <YdMIWAT42el4D6wJ@zn.tnic>
+ <20220103151516.pfcz2pap5l7r2rzv@box.shutemov.name>
+ <b4b54116-1cd7-468a-0889-d497268cbfb2@intel.com>
+ <20220103181059.ui5eloufw5gsojcb@box.shutemov.name>
+ <20220104191424.oly2gqm4ltzj5wo3@box.shutemov.name>
+ <0e0c38e2-67ad-1f51-c44b-d3c3d505e40a@intel.com>
+ <20220105003108.mr7zyd5oyaaxmnmv@box.shutemov.name>
+From:   Dave Hansen <dave.hansen@intel.com>
+Message-ID: <50dfa0db-fcd1-3c54-d982-237d2c9df431@intel.com>
+Date:   Tue, 4 Jan 2022 16:43:09 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <CAK8P3a0RDZpLtWjMEU1QVWSjOoqRAH6QxQ+ZQnJc8LwaV7m+JQ@mail.gmail.com>
- <7e480da8-0d54-2d62-0a8e-184901c974b6@gmail.com> <ee2c92da-030c-b92f-0f41-1fdbbeed47c7@gmail.com>
-In-Reply-To: <ee2c92da-030c-b92f-0f41-1fdbbeed47c7@gmail.com>
-From:   Olof Johansson <olof@lixom.net>
-Date:   Tue, 4 Jan 2022 16:40:34 -0800
-Message-ID: <CAOesGMgx99GJ3gQmdgauSs3aF8xr4FgcgsELRz4HSVXmujHJnQ@mail.gmail.com>
-Subject: Re: [GIT PULL 0/5] SoC changes for 5.17
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        SoC Team <soc@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20220105003108.mr7zyd5oyaaxmnmv@box.shutemov.name>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Florian,
+On 1/4/22 4:31 PM, Kirill A. Shutemov wrote:
+> On Tue, Jan 04, 2022 at 12:36:06PM -0800, Dave Hansen wrote:
+>> @@ -57,7 +58,6 @@ typedef struct { unsigned long iopte; }
+>>  typedef struct { unsigned long pmd; } pmd_t;
+>>  typedef struct { unsigned long pgd; } pgd_t;
+>>  typedef struct { unsigned long ctxd; } ctxd_t;
+>> -typedef struct { unsigned long pgprot; } pgprot_t;
+>>  typedef struct { unsigned long iopgprot; } iopgprot_t;
+>>  
+>>  #define pte_val(x)	((x).pte)
+>> @@ -85,7 +85,6 @@ typedef unsigned long iopte_t;
+>>  typedef unsigned long pmd_t;
+>>  typedef unsigned long pgd_t;
+>>  typedef unsigned long ctxd_t;
+>> -typedef unsigned long pgprot_t;
+>>  typedef unsigned long iopgprot_t;
+>>  
+>>  #define pte_val(x)	(x)
+> 
+> Any arch that use STRICT_MM_TYPECHECKS hacks will get broken if compiled
+> without the define (as sparc by default).
 
-On Tue, Jan 4, 2022 at 1:58 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
->
-> On 12/24/21 9:11 AM, Florian Fainelli wrote:
-> > Hi Arnd, Olof,
-> >
-> > On 12/23/2021 13:31, Arnd Bergmann wrote:
-> >> I'm sending out the pull requests for 5.17 early, as I won't have
-> >> access to
-> >> my workstation for the next two weeks. With only 760 non-merge commits,
-> >> this again feels quieter than the massive previous merge window, but the
-> >> number of changed lines was actually slightly higher.
-> >>
-> >> There are very few changes aside from devicetree patches, most of
-> >> which are for the i.MX, Tegra, Qualcomm, Apple, K3 and Aspeed
-> >> platforms.
-> >>
-> >> We have a couple of new SoCs in existing families:
-> >>
-> >>   - Qualcomm Snapdragon 8 Gen1
-> >>   - Qualcomm Snapdragon SDX65
-> >>   - NXP i.MX8ULP
-> >>   - Texas Instruments j721s2
-> >>   - Renesas R-Car S4-8
-> >>
-> >> The time between product announcement and kernel support is fairly short
-> >> for all of these, which is nice. In particular the two Snapdragons
-> >> were only
-> >> announced this month and are the current high end of Qualcomm's products.
-> >> On the other end of the spectrum, we also add support for ST SPEAr320s,
-> >> which was launched 10 years ago.
-> >>
-> >> Aside from the Arm chips, there is also a pull request for a new
-> >> RISC-V SoC,
-> >> the Starfive JH7100, including some of the basic drivers to make it boot.
-> >
-> > There seems to half of the submitted Broadcom SoCs pull request missing
-> > in this one, was there issues with those below:
-> >
-> > defconfigs:
-> >
-> > https://lore.kernel.org/linux-arm-kernel/20211221220642.2862218-1-f.fainelli@gmail.com/
-> >
-> > https://lore.kernel.org/linux-arm-kernel/20211221220642.2862218-2-f.fainelli@gmail.com/
-> >
-> >
-> > drivers:
-> >
-> > https://lore.kernel.org/linux-arm-kernel/20211221220642.2862218-5-f.fainelli@gmail.com/
-> >
-> >
-> > Should I resend or fix something in those? Thanks!
->
->
-> Arnd, Olof, do I need to resend the 3 pull requests mentioned above?
-> Thanks and happy new year.
+My read of STRICT_MM_TYPECHECKS was that "typedef unsigned long
+pgprot_t" produces better code, but "typedef struct { unsigned long
+pgprot; } pgprot_t;" produces better type checking.
 
-I'm about to make a pass of merges, likely tomorrow -- I had to get my
-Honeycomb working again since it hosts all the trees and mailboxes for
-me.
+I just compiled these patches on sparc with no issues.
 
-No need to resend at this time.
+...
+> Is it the way to go we want?
 
+I _think_ this was all a result of some review feedback from Tom
+Lendacky about where the encryption-modifying pgprot helpers got placed
+in the code.  I don't feel strongly about it, but I'm not quite sure
+that this is worth the trouble.
 
--Olof
+I'd be curious what Tom thinks now that he's gotten a peek at what it's
+going to take to address his concerns.

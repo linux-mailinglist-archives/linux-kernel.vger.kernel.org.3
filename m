@@ -2,65 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A753485331
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 14:05:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3359F485336
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 14:06:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236788AbiAENFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 08:05:09 -0500
-Received: from mail-il1-f198.google.com ([209.85.166.198]:45736 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236072AbiAENFH (ORCPT
+        id S235575AbiAENGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 08:06:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42016 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236072AbiAENGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 08:05:07 -0500
-Received: by mail-il1-f198.google.com with SMTP id k14-20020a056e021a8e00b002b4b2388c48so20930437ilv.12
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 05:05:07 -0800 (PST)
+        Wed, 5 Jan 2022 08:06:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641388012;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qPbUxj6ghyTrgwhNP+U3qhJU5iyb67zbb1namC5tcQQ=;
+        b=Nlnz7EQHx2PLHuoPXmt7IuQw77twpUosRrHwQbfOatzcDJzXxhgFME1deVQxKIYstfhMGJ
+        y2c+wE13Q6J2SqBynsvOXadijawRhWn414echOXt1MzEtRM13YTqjYyVpGDsIP1+BLxhDs
+        FnlL4P/giHUZzoUSiMa3KP0JuOyUmGA=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-636-0RM6QwQyMtqIaMXfqgNDGA-1; Wed, 05 Jan 2022 08:06:51 -0500
+X-MC-Unique: 0RM6QwQyMtqIaMXfqgNDGA-1
+Received: by mail-ed1-f70.google.com with SMTP id z8-20020a056402274800b003f8580bfb99so27935972edd.11
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 05:06:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=HSRdWTMwZ0NVGbhn82fv0ZdfTEVZeKB9Mpbh30gZMkU=;
-        b=SSRHAyWTfS7g7Zn5uduoscuUBmvrpK+quXyJCUDVvqaBCcA4Zd3A8hl3FFEOWaeEiu
-         foo0ThcI6hQv7AXNWEnK6p17mxBWsZZqFdHVOjrgh6pJlm4q9vwCFKY5Wt7MlB5YvrbS
-         OU3I79EzpUgnJLyhIMpp6AfPVfg7299YNUnRDXnRPDJ5eiq1latqhkF1tYJAFDf7iXQq
-         Av7KSHo6jGHhX3eso/qXIJ0RwG5KO+GoMmHwvMk6FhZVplFNR09vES/KLjt76rgdrM6U
-         RlEoHw4GxdD7spWZwtRjo3CQPNDVbWaPw1jKJXGv0bYIsiyFnW6Bt23jMbHaYhsV/VP4
-         Z5DQ==
-X-Gm-Message-State: AOAM533JBB3U23wN86hxCK3oJ1q6jzzOXiE5LR3Ru/PRPqBsvt3xGYkc
-        jX4V5QBBXG/wi0YmjdHyGrczC/98SFnS70mD7/vEpFzR6rLJ
-X-Google-Smtp-Source: ABdhPJy5x96xjIKmmkdWPCYacNAFMeYNDaWDDSM8GrSzjPCLFjWw7wZ0/pJUL3qkYuuidqhU5Y+GAzF7q6+5X9nh6352KMTjpd7z
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qPbUxj6ghyTrgwhNP+U3qhJU5iyb67zbb1namC5tcQQ=;
+        b=KZc9fX8iO6AQ1Zjd5td+QFtDU3WIWOPZPTmGPU3GuqjrNgULckPdt/Qx/nHc/CVXVM
+         alMPUat4zT/9tzBbLPtjqI45ayE/MxDNIU4qwqt5C3fTPXNKTegbKwERjEiAUIlQfE2M
+         AzhpfnB6eGcrG13/gZLRsuhtbvlJ4fBNWOv00oy9Jc2hNwia4CBTIaYmXM7oPHqVnU5h
+         jbWbCAEhU/RX6wk+eLfKfVB2JxY+z1Nch04ix4m+sqvi5qGQQ0QjYfSA4WX5hpKVNa3J
+         YBW9tPjocmspwmax0jMxLeVQO2e5sIvbpRIqAuBlAx+Qjg6tUn4JbwHRqCWdCkiwpamL
+         /9Pw==
+X-Gm-Message-State: AOAM533+KplyieFOl5eMZt4P9nwFgdsWYSdEQ2mq9vZOw5HKwYAKfYpb
+        O8KiYXj4G3oUzrkJifdXtxiqADw/yQfSTvXqTe4zTik5Epyj242Dz9WXNNSyb0f3oGCLQF73jgp
+        JRNJMn1ba94c0nn+WlVkGQRFa
+X-Received: by 2002:a17:907:7f9e:: with SMTP id qk30mr40517155ejc.313.1641388010200;
+        Wed, 05 Jan 2022 05:06:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz2kvcaNQ8zr5/pOMq5wIiwszyeeQoUKvE+rInBlWiKyo00Mr1ysjR1/zCjvH1iUYUbX+TRaQ==
+X-Received: by 2002:a17:907:7f9e:: with SMTP id qk30mr40517123ejc.313.1641388009929;
+        Wed, 05 Jan 2022 05:06:49 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id o12sm15956818edz.71.2022.01.05.05.06.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jan 2022 05:06:49 -0800 (PST)
+Message-ID: <c99d0b82-a44f-db8e-3f81-93d2394f9a02@redhat.com>
+Date:   Wed, 5 Jan 2022 14:06:40 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a02:cf82:: with SMTP id w2mr24004765jar.314.1641387906942;
- Wed, 05 Jan 2022 05:05:06 -0800 (PST)
-Date:   Wed, 05 Jan 2022 05:05:06 -0800
-In-Reply-To: <66341bb1-a479-cdc8-0928-3c882ac77712@gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000021c8c305d4d56799@google.com>
-Subject: Re: [syzbot] KMSAN: uninit-value in ax88178_reset
-From:   syzbot <syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com>
-To:     andrew@lunn.ch, davem@davemloft.net, glider@google.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux@rempel-privat.de,
-        netdev@vger.kernel.org, paskripkin@gmail.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v5 07/21] x86/fpu: Provide fpu_enable_guest_xfd_features()
+ for KVM
+Content-Language: en-US
+To:     Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, corbet@lwn.net, shuah@kernel.org,
+        seanjc@google.com
+Cc:     jun.nakajima@intel.com, kevin.tian@intel.com,
+        jing2.liu@linux.intel.com, jing2.liu@intel.com,
+        guang.zeng@intel.com, wei.w.wang@intel.com
+References: <20220105123532.12586-1-yang.zhong@intel.com>
+ <20220105123532.12586-8-yang.zhong@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220105123532.12586-8-yang.zhong@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 1/5/22 13:35, Yang Zhong wrote:
+> +int fpu_enable_guest_xfd_features(struct fpu_guest *guest_fpu, u64 xfeatures)
+> +{
+> +	lockdep_assert_preemption_enabled();
+> +
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+The old fpu_update_guest_perm_features(guest_fpu) is equivalent to
 
-Reported-and-tested-by: syzbot+6ca9f7867b77c2d316ac@syzkaller.appspotmail.com
+	fpu_enable_guest_xfd_features(guest_fpu, guest_fpu->perm);
 
-Tested on:
+Missing doc comment:
 
-commit:         81c325bb kmsan: hooks: do not check memory in kmsan_in..
-git tree:       https://github.com/google/kmsan.git master
-kernel config:  https://syzkaller.appspot.com/x/.config?x=46a956fc7a887c60
-dashboard link: https://syzkaller.appspot.com/bug?extid=6ca9f7867b77c2d316ac
-compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=10d0da73b00000
+/*
+  * fpu_enable_guest_xfd_features - Enable xfeatures according to guest perm
+  * @guest_fpu:         Pointer to the guest FPU container
+  * @xfeatures:         Features requested by guest CPUID
+  *
+  * Enable all dynamic xfeatures according to guest perm and requested CPUID.
+  * Invoked if the caller wants to conservatively expand fpstate buffer instead
+  * of waiting until XCR0 or XFD MSR is written.
+  *
+  * Return: 0 on success, error code otherwise
+  */
 
-Note: testing is done by a robot and is best-effort only.
+Also, the check for 32-bit is slightly imprecise:
+
+	/* Dynamic xfeatures are not supported with 32-bit kernels. */
+	if (!IS_ENABLED(CONFIG_X86_64))
+-		return 0;
++		return -EINVAL;
+
+since we only get here with xfeatures != 0 (if it compiles, just removing
+the IS_ENABLED check altogether would be even better).  With these changes,
+
+Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+
+Thanks,
+
+Paolo
+

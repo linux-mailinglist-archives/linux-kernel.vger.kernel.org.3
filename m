@@ -2,98 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 829C5485685
+	by mail.lfdr.de (Postfix) with ESMTP id 397C6485684
 	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 17:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241866AbiAEQLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 11:11:42 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:46674 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241849AbiAEQLf (ORCPT
+        id S241858AbiAEQLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 11:11:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37444 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241848AbiAEQLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 11:11:35 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 34CD36164D;
-        Wed,  5 Jan 2022 16:11:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FC5CC36AE0;
-        Wed,  5 Jan 2022 16:11:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641399094;
-        bh=ZKKlCVjotxQ/mWW+wBX7WNgKdj9sFqeaW4C5i3zAAK8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U6CTWgBp2mHIz528O9KmNIS/Lo349/KB4sc5YDeWhjmTVRBNElXaHcuj6qF5z/XzK
-         8nlMoczvRyJPEqTWZUt7fCnWcL+HWQfFlkhc/66vz9ZssFWyDdfyuRQIEBR4QekWpZ
-         D98i7JXIYWZqMBzg+NSTqniWxvjEwakxV/+7MQwJdS1B9qdAtVpHaSkwoP3wCNL5M2
-         eTQIp4MKdS9syGrutbWyBsBzZ877pK/nFsuSfp5yMHPi1r7jxJGUAN4DhsAyP7CPc6
-         ggLTN/96IU9htJM4m0s4NkZzd7upk5myqkogSpei6fy185zAa5OCao3KRebfjUXJXP
-         sCOnLPTwoiXng==
-Date:   Wed, 5 Jan 2022 16:11:30 +0000
-From:   Filipe Manana <fdmanana@kernel.org>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH v2] btrfs: Remove redundant assignment of slot and leaf
-Message-ID: <YdXDMjJcUKLwJdiW@debian9.Home>
-References: <20220105150758.29670-1-jiapeng.chong@linux.alibaba.com>
+        Wed, 5 Jan 2022 11:11:34 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728E3C061212
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 08:11:34 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id o7so47169723ioo.9
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 08:11:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=jhqeMcG2tRiIaFP/5tlL9AeEOUXxieFWeJV5lNZQQTo=;
+        b=kAX8kDcSz0UK2eUUa2bgD+twqctqIEEtpzqJq2WtfO+Co/Vr5ubyxTimR7JrHwlONb
+         TwL/i6CM4r6IR9oEz6CUCctIAedmOCv1+RjoveQHxzH94esjtPC3KXF5neJEc0I8Gxmi
+         kVnwcx6ZO4XJfei76juANG1zmH7GtVT7zK6GXos1XVOdilv7/5wTnv14qhTWCit0HA/D
+         0QPIXMqECsUm98uFHzj6dm1HMLsL3/LYgPnMpb+7ia2sQ45HgB2rEscaQZNOIx60nfDq
+         y/9Wunbr8Th4R64alhLOSPCFWTSXe3zZ9hW54qTWGkdR70KkL/7v5JCivrOCUvfthxsv
+         m60g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=jhqeMcG2tRiIaFP/5tlL9AeEOUXxieFWeJV5lNZQQTo=;
+        b=J5QY6q9lr4+4IlQ3Bpx5b7Loo7k72+oxupXircnRWvE03Tr6j1TQ5TYA7ed23yUer7
+         C7SChiyi0iItcTjY8LJ8dUS8O5rOOdSWWSl8ytEFbk7+g3RnSs1SFoATI/WK7n6BsK6f
+         IC6J8xLK/S7JBcn8oOZYqp+maKBsJyb5nTvz1tKaAQ6ySx7CjhpJ63Y6mKvQzLW6SEkm
+         zpYvYRq7l+N97AlCSx293BFpm+0jJdLl6RLHUd5CikWzD4PPHmjFoCc9u985mgdn3uSc
+         tfkyNKoiSvY5WldNHU83OR7tTxIku6SKlh9kZbxsWHJAKamyL4K66oDCTrjl3yWORWKo
+         r7gw==
+X-Gm-Message-State: AOAM533wdqn+E+c+tCNyWIWPodjBLM8p6av7g2kDBT+wvIUy0Sqba+o8
+        aLNJRUxi2w1WRdU4r2SJtiRyFg==
+X-Google-Smtp-Source: ABdhPJy5WyTP6kBKm3mZ7Q+fKR6ckyKxiZ3Qrefqhp65+jXCj3qTmYGpSMbFfk2FHQlAwM3ioVSbJQ==
+X-Received: by 2002:a05:6638:1302:: with SMTP id r2mr24186773jad.37.1641399093189;
+        Wed, 05 Jan 2022 08:11:33 -0800 (PST)
+Received: from [192.168.1.30] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id j2sm24138705ilr.71.2022.01.05.08.11.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jan 2022 08:11:32 -0800 (PST)
+Subject: Re: [PATCH v3 0/5] aio: fix use-after-free and missing wakeups
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Benjamin LaHaise <bcrl@kvack.org>, linux-aio@kvack.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ramji Jiyani <ramjiyani@google.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Martijn Coenen <maco@android.com>,
+        stable <stable@vger.kernel.org>
+References: <20211209010455.42744-1-ebiggers@kernel.org>
+ <CAHk-=wjkXez+ugCbF3YpODQQS-g=-4poCwXaisLW4p2ZN_=hxw@mail.gmail.com>
+ <4a472e72-d527-db79-d46e-efa9d4cad5bb@kernel.dk>
+ <YdW4sApUUBi/5UHh@sol.localdomain>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <8289804d-dc19-2ecd-d03e-d4af97b5ee18@kernel.dk>
+Date:   Wed, 5 Jan 2022 09:11:31 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220105150758.29670-1-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <YdW4sApUUBi/5UHh@sol.localdomain>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 11:07:58PM +0800, Jiapeng Chong wrote:
-> From: chongjiapeng <jiapeng.chong@linux.alibaba.com>
+On 1/5/22 7:26 AM, Eric Biggers wrote:
+> On Thu, Dec 09, 2021 at 02:46:45PM -0700, Jens Axboe wrote:
+>> On 12/9/21 11:00 AM, Linus Torvalds wrote:
+>>> On Wed, Dec 8, 2021 at 5:06 PM Eric Biggers <ebiggers@kernel.org> wrote:
+>>>>
+>>>> Careful review is appreciated; the aio poll code is very hard to work
+>>>> with, and it doesn't appear to have many tests.  I've verified that it
+>>>> passes the libaio test suite, which provides some coverage of poll.
+>>>>
+>>>> Note, it looks like io_uring has the same bugs as aio poll.  I haven't
+>>>> tried to fix io_uring.
+>>>
+>>> I'm hoping Jens is looking at the io_ring case, but I'm also assuming
+>>> that I'll just get a pull request for this at some point.
+>>
+>> Yes, when I saw this original posting I did discuss it with Pavel as
+>> well, and we agree that the same issue exists there. Which isn't too
+>> surprising, as that's where the io_uring poll code from originally.
+>>
 > 
-> slot and leaf are being initialized to path->slots[0] and
-> path->nodes[0], but this is never read as slot and leaf
-> is overwritten later on. Remove the redundant assignment.
-> 
-> Cleans up the following clang-analyzer warning:
-> 
-> fs/btrfs/tree-log.c:6125:7: warning: Value stored to 'slot' during its
-> initialization is never read [clang-analyzer-deadcode.DeadStores].
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: chongjiapeng <jiapeng.chong@linux.alibaba.com>
-> ---
-> Changes in v2:
->   -Remove redundant assignment of leaf.
-> 
->  fs/btrfs/tree-log.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
-> index 4b89ac769347..d99cda0acd95 100644
-> --- a/fs/btrfs/tree-log.c
-> +++ b/fs/btrfs/tree-log.c
-> @@ -6188,8 +6188,6 @@ static int log_new_ancestors(struct btrfs_trans_handle *trans,
->  		if (ret < 0)
->  			return ret;
->  
-> -		leaf = path->nodes[0];
-> -		slot = path->slots[0];
+> Jens, any update on fixing the io_uring version of the bug?  Note,
+> syzbot has managed to use io_uring poll to hit the WARN_ON_ONCE() that
+> I added in __wake_up_pollfree(), which proves that it is broken.
 
-No, this is not correct.
+There are two parts to this, first part is queued up for 5.17 for a few
+weeks. Work in progress...
 
-Right before those assignments we called btrfs_search_slot(), which updates
-path->nodes and path->slots, and we need those updated values below.
+-- 
+Jens Axboe
 
-The redundant assignments are not these two, but instead the ones when the
-variables are declared at the top of the loop:
-
-   struct extent_buffer *leaf = path->nodes[0];
-   int slot = path->slots[0];
-
-Thanks.
-
->  		if (slot >= btrfs_header_nritems(leaf)) {
->  			ret = btrfs_next_leaf(root, path);
->  			if (ret < 0)
-> -- 
-> 2.19.1.6.gb485710b
-> 

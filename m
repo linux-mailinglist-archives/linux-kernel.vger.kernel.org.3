@@ -2,122 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60EC0484C38
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 02:47:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0B5484C3A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 02:48:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236960AbiAEBrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Jan 2022 20:47:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40194 "EHLO
+        id S236970AbiAEBsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Jan 2022 20:48:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234393AbiAEBrp (ORCPT
+        with ESMTP id S236962AbiAEBsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Jan 2022 20:47:45 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0B0C061761;
-        Tue,  4 Jan 2022 17:47:44 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id c9-20020a17090a1d0900b001b2b54bd6c5so1754579pjd.1;
-        Tue, 04 Jan 2022 17:47:44 -0800 (PST)
+        Tue, 4 Jan 2022 20:48:20 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713BAC061784
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Jan 2022 17:48:20 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id w13so79575435ybs.13
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Jan 2022 17:48:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=imp118HYV1DWxGEsD11+Hr9WN13p66zmRTK4oaqzyEI=;
-        b=QeeZJC10u29P10Hhw8hCsqdJCccO1JRoyF5h5i7jm928CC1V1UDbtKcFHGLWuyBxs6
-         EtskkFxpJDjxbo5oa1uZHWrMFOVuleTNBE5ArMkE//ycbuwyTa++2sbtNpqy3U/Q83bV
-         /8IPeNnjvimLuuLcrqbiqjaLKSkZ5Stb9AiBVL3ar4RKWZODNckvdQuLf9kYpDiCTyt1
-         MEAIDkaronOAExex4xhY5bR+5U8O0J3c6BWWl1Gq2Q8ekWGezqXLc6R7kq974jsfZ9zJ
-         H0a5uvjHF9W8pm7u3NKkZ6bQcam+0h7Iq2NyeIJmAH79PRQTKKos8ZPq//SZCfaisXlL
-         zA4g==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=S3MV8EDA/gvv4OPelttWmulQGEHAkpGwQXtCt5sJZFc=;
+        b=IjnvSApgYqoCeUI/96H6ZFMo8jneVsZ6oT5EroZA96IcN5y4uOe8HrLGXDKJxB1yk6
+         d5vLYIZFUBUTrW0gABnB1eBHPxLyuRZvLdad3hmu9KQzzZf0qcHYK0P39nBGPE6Ij2+j
+         fw5mlcY27kIOS8nDgHB4bFddbXLmtNRc6H0SFu/kSlRhCWV5/T0q4ajAb1MsRdFoP8+w
+         qT7KTGH5hJpmyPT/we5xRA8bzDDzTdQfQc2LINB8GkvEKhYZqxuAPIssLYGivb0tkMiZ
+         ZMi/Qa5ji/dXu5AxNvUVL2hw6HGZaI9uPYjWETdQX26M7SzUOdx7v0YODSlqllan5NVf
+         HH7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=imp118HYV1DWxGEsD11+Hr9WN13p66zmRTK4oaqzyEI=;
-        b=Xn8kEbGjJiYXbpFVpNonhXi2flnrTH3O5h1iBNvNCkdiBxmhVXOu9a6O2SAqpx2Px8
-         i8jpHtDON6gQ7gdnLuaxljt1LRL6PtdDXkvD18uI4kDtguCVnQheKOo6VgGpSmQiXmnJ
-         UNG5/wH6UxJJ4AjlnLaUeq/0iT9tY9xo3rIFKbYqbR6xpUx6tbklyINeSa5I1CZMY8Yv
-         42bzcypta13/tJSRdqfy7YKkOzchYm0+RN1KYX2k2odQMflZuMXVXTm5XIbFaYEOycjB
-         iJxqpr8qSB/XkuuwSPS8LB1aLcktILwceESQYu1D77pQ9ywAnQicgUA2gSiY628Qwgul
-         HqrQ==
-X-Gm-Message-State: AOAM531iUPeK7AFeXbjdE+uHmSyZWSkw15bSes2W1YE7SsXRdivtJrjn
-        Ijm+MxIJObrO5jot7tnSZfk=
-X-Google-Smtp-Source: ABdhPJxK+SOHC1JtJMLS7Q3ZUg+dFjbvROILI6t0Jv6yyGDaUlnlIGok24OG4JES6cx9cLqBVKru+g==
-X-Received: by 2002:a17:903:22ca:b0:149:b1e2:a8ca with SMTP id y10-20020a17090322ca00b00149b1e2a8camr17704930plg.46.1641347263445;
-        Tue, 04 Jan 2022 17:47:43 -0800 (PST)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id h5sm524862pjc.27.2022.01.04.17.47.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 17:47:43 -0800 (PST)
-Subject: Re: make pdfdocs fails on Debian stable
-From:   Akira Yokosawa <akiyks@gmail.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mchehab@kernel.org
-References: <20220104064708.GA15446@lst.de>
- <8f21b702-abc2-c9aa-7593-9aff17e61ed1@gmail.com>
- <20220104073625.GA16910@lst.de>
- <02f6aa77-17b7-ed23-8f39-34239ec6e724@gmail.com>
- <20220104131952.GA21933@lst.de>
- <2fb003aa-545c-31a4-1466-8c3c3fc708fb@gmail.com>
-Message-ID: <0ee407a1-ff5a-4c04-a99e-045cfe90d850@gmail.com>
-Date:   Wed, 5 Jan 2022 10:47:40 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=S3MV8EDA/gvv4OPelttWmulQGEHAkpGwQXtCt5sJZFc=;
+        b=mnBsG7y1fvtBAr9zN/md/XZR6pC2KGGtm+1okhuu5zjxG490TktxcX/EQ4QSISvxZm
+         BIxVNpEs+wcohn2SoahF2V3ulzXcA8Jmw5LEwRqLiWd4mp3tQ085kSnnLEzU2DegACk4
+         OhLJfpKWFIkfDB3aqkqCZ7d3+m2YXDbmcrEk2Ll6myFKPUKIwyjQ7iQ3sN5aXTN3UjZa
+         qRs4tyS5jTNOwwd6KrkkAZqzZzkUSmVurWaYg4QhtgGoTAuw3tKlO/ek/MeFx2jNetGT
+         lhJa8b7DjOG/jxPcsGTzAWysiPJxLUvYzVQfpdidobSxLxKAlkz3SKu0C97vmPjRVDYg
+         uBOg==
+X-Gm-Message-State: AOAM533QVUxXZDAZIlW1J/SXwDhV5P/Z448AXaR5izj4QOSIi7jVc5cR
+        2aY0N61RqwwCuP1EQnvYshsaHbgHcbe52b6x90zqvg==
+X-Google-Smtp-Source: ABdhPJzgiDx9c56h3HvklU/xl5FU9OHdfrLBiBFcrJF3XAgLqNgRZIx7IBYHVpRBrRyzXDnZFaj8MeQCOxGaEnmrLB0=
+X-Received: by 2002:a25:3745:: with SMTP id e66mr21815632yba.208.1641347299207;
+ Tue, 04 Jan 2022 17:48:19 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <2fb003aa-545c-31a4-1466-8c3c3fc708fb@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <1640262603-19339-1-git-send-email-CruzZhao@linux.alibaba.com> <1640262603-19339-2-git-send-email-CruzZhao@linux.alibaba.com>
+In-Reply-To: <1640262603-19339-2-git-send-email-CruzZhao@linux.alibaba.com>
+From:   Josh Don <joshdon@google.com>
+Date:   Tue, 4 Jan 2022 17:48:08 -0800
+Message-ID: <CABk29NvPJ3S1xq5xm+52OoUGDyuMSxGOLJbopPa3+-QmLnVYeQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] sched/core: Cookied forceidle accounting per cpu
+To:     Cruz Zhao <CruzZhao@linux.alibaba.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jan 2022 22:46:57 +0900, Akira Yokosawa wrote:
-> On Tue, 4 Jan 2022 14:19:52 +0100, Christoph Hellwig wrote:
->> On Tue, Jan 04, 2022 at 06:31:01PM +0900, Akira Yokosawa wrote:
->>> Hi, getting back to the error message, I remember seeing a similar error
->>> when I failed to permit PDF output of ImageMagick.
->>>
->>> What I did back then was this (as root):
->>>
->>>  # cd /etc/ImageMagick-6  
->>>  # sed -i 's+policy domain="coder" rights="none" pattern="PDF"+policy domain="coder" rights="read|write" pattern="PDF"+' policy.xml ; \
->>>
->>> In case this resolves your issue.
->>
->> I've definitively seen permission denied errors earlier in the (rather
->> noisy) build log.  But I absolutely do not feel comfortable changing
->> global security policies for a kernel build, especially for something
->> like ImageMagic that had its fair share of security issues.  Is there any
->> way to side step this by using a different tool?
->>
-> 
-> See my pending patch set at:
-> 
->     https://lore.kernel.org/linux-doc/e01fe9f9-f600-c2fc-c6b3-ef6395655ffe@gmail.com
->     [PATCH v2 0/4] docs: sphinx/kfigure.py: Improve conversion to PDF
-> 
-> This uses Inkscape if it is available instead of ImageMagick.
-> No imagemagick nor librsvg2-bin is required.
-> As long as if you can trust Inkscape...
-> 
-> Good luck!
+Hi Cruz,
 
-Alternatively, you can avoid ImageMagick by installing
-graphicsmagick-imagemagick-compat instead of imagemagick.
+Could you add a bit more background to help me understand what case
+this patch solves? Is your issue that you want to be able to
+attribute forced idle time to the specific cpus it happens on, or do
+you simply want a more convenient way of summing forced idle without
+iterating your cookie'd tasks and summing the schedstat manually?
 
-I'm not sure what you think of GraphicsMagick, though.
+> @@ -190,6 +202,9 @@ static int show_stat(struct seq_file *p, void *v)
+>                 seq_put_decimal_ull(p, " ", nsec_to_clock_t(steal));
+>                 seq_put_decimal_ull(p, " ", nsec_to_clock_t(guest));
+>                 seq_put_decimal_ull(p, " ", nsec_to_clock_t(guest_nice));
+> +#ifdef CONFIG_SCHED_CORE
+> +               seq_put_decimal_ull(p, " ", nsec_to_clock_t(cookied_forceidle));
+> +#endif
 
-If you'd like to try, do:
+IMO it would be better to always print this stat, otherwise it sets a
+weird precedent for new stats added in the future (much more difficult
+for userspace to reason about which column corresponds with which
+field, since it would depend on kernel config).
 
-    $ sudo apt install graphicsmagick-imagemagick-compat ghostscript gsfonts-x11
+Also, did you intend to put this in /proc/stat instead of
+/proc/schedstat (the latter of which would be more attractive to
+prevent calculation of these stats unless schestat was enabled)?
 
-This will remove ImageMagick.
-(You have ghostscript and gsfonts-x11 already installed, I guess.)
+> diff --git a/kernel/sched/core_sched.c b/kernel/sched/core_sched.c
+> @@ -260,6 +261,21 @@ void __sched_core_account_forceidle(struct rq *rq)
+>
+>         rq->core->core_forceidle_start = now;
+>
+> +       for_each_cpu(i, smt_mask) {
+> +               rq_i = cpu_rq(i);
+> +               p = rq_i->core_pick ?: rq_i->curr;
+> +
+> +               if (!rq->core->core_cookie)
+> +                       continue;
 
-        Thanks, Akira
+I see this is temporary given your other patch, but just a note that
+if your other patch is dropped, this check can be pulled outside the
+loop.
 
-> 
->         Thanks, Akira
-> 
+> +               if (p == rq_i->idle && rq_i->nr_running) {
+> +                       cpustat = kcpustat_cpu(i).cpustat;
+> +                       cpustat[CPUTIME_COOKIED_FORCEIDLE] += delta;
+> +               }
+> +       }
+
+I don't think this is right. If a cpu was simply idle while some other
+SMT sibling on its core was forced idle, and then a task happens to
+wake on the idle cpu, that cpu will now be charged the full delta here
+as forced idle (when actually it was never forced idle, we just
+haven't been through pick_next_task yet). One workaround would be to
+add a boolean to struct rq to cache whether the rq was in forced idle
+state.
+
+Best,
+Josh

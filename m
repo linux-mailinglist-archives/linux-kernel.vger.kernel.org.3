@@ -2,118 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 742AB485C0F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 00:07:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63DD1485C11
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 00:10:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245295AbiAEXHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 18:07:18 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:34650 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245289AbiAEXHL (ORCPT
+        id S245304AbiAEXKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 18:10:36 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60752 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231896AbiAEXKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 18:07:11 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 274408AE;
-        Thu,  6 Jan 2022 00:07:10 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1641424030;
-        bh=zcEWCUHYq5Ga7VssAivavMcr+zeVyIzOyZuqRlRc+2g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OIcIX2nLGSuEYJMNxH6k6/B8kDUqXibqEWI9JK5lrs4jR6zztYNhmLSpZbS4juNWn
-         FpQ7ChQJdBUBL6b/aO2R9RmcfyE1NBGg/ggYuOM4LqLlg0lVVn+dtiycPDV1mkMGS+
-         XOyKHNo59BK2OzWtq4P3TMhMKtgSi/0GGfvuAYsg=
-Date:   Thu, 6 Jan 2022 01:07:05 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Watson Chow <watson.chow@avnet.com>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Subject: Re: [PATCH 2/2] regulator: Add MAX20086-MAX20089 driver
-Message-ID: <YdYkmSAYriUXv71W@pendragon.ideasonboard.com>
-References: <20220102211124.18435-1-laurent.pinchart+renesas@ideasonboard.com>
- <20220102211124.18435-3-laurent.pinchart+renesas@ideasonboard.com>
- <YdRWwWmoQGQuUyLz@sirena.org.uk>
- <YdRa0GoSoX8CP694@pendragon.ideasonboard.com>
- <YdRd/m3mOwcvvJ2L@sirena.org.uk>
+        Wed, 5 Jan 2022 18:10:34 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1864B81E1F
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 23:10:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00ED8C36AE9;
+        Wed,  5 Jan 2022 23:10:30 +0000 (UTC)
+Date:   Wed, 5 Jan 2022 18:10:29 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Xiangyang Zhang <xyz.sun.ok@gmail.com>, mingo@redhat.com,
+        oleg@redhat.com, namhyung.kim@lge.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tracing/kprobes: 'nmissed' not showed correctly for
+ kretprobe
+Message-ID: <20220105181029.4fa08f6a@gandalf.local.home>
+In-Reply-To: <20220106073203.123c4f7e38cc07eccd02aa9b@kernel.org>
+References: <20211211150032.7568-1-xyz.sun.ok@gmail.com>
+        <20220105141556.12fb2ceb@gandalf.local.home>
+        <20220105142208.1dbc20cc@gandalf.local.home>
+        <20220106073203.123c4f7e38cc07eccd02aa9b@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YdRd/m3mOwcvvJ2L@sirena.org.uk>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+On Thu, 6 Jan 2022 07:32:03 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-On Tue, Jan 04, 2022 at 02:47:26PM +0000, Mark Brown wrote:
-> On Tue, Jan 04, 2022 at 04:33:52PM +0200, Laurent Pinchart wrote:
-> > On Tue, Jan 04, 2022 at 02:16:33PM +0000, Mark Brown wrote:
+> OK, this is a good catch :), but there are 2 issues.
 > 
-> > > > +	chip->num_outputs = num;
+> 1. kretprobe can be skipped by 2 reasons, shortage of kretprobe_instance which
+> is counted by rp.nmissed, and kprobe itself is missed by some reason (this
+> can be happen if KPROBE_EVENTS_ON_NOTRACE=n. Thus, better solution is to show
+> 'tk->rp.nmissed + tk->rp.kp.nmissed'.
 > 
-> > > The number of regulators the device supports should be known from the
-> > > compatible, I'd expect a data table for this.  It should be possible to
-> > > read the state of regulators not described in the DT.
+> 2. the commit c31ffb3ff633 is not actual commit which introduce this issue.
+>   this was introduced by 4a846b443b4e ("tracing/kprobes: Cleanup kprobe tracer code.")
 > 
-> > Does this mean that the driver should register all regulators, even the
-> > ones not described in DT ? Who would read the state ?
-> 
-> Yes, just register everything.  Someone doing system debugging or
-> bringup might want to read the state, and this also goes along with the
-> ability to have the core pull the constraints out of the DT based on
-> data supplied by the driver - the general goal is to have routine
-> drivers simply register data tables with the core and need minimal code.
+> 'git blame' tells you the commit which changes that line, but that can be just
+> a refactoring (renaming). I recommend you to search the correct one by 'git log -p'.
 
-OK, that should simplify the driver. I'll give it a try.
+Masami, thanks for the review.
 
-> > > > +	/* Get the chip out of low-power shutdown state. */
-> > > > +	chip->gpio_en = devm_gpiod_get(chip->dev, "enable", GPIOD_OUT_HIGH);
-> > > > +	if (IS_ERR(chip->gpio_en)) {
-> > > > +		ret = PTR_ERR(chip->gpio_en);
-> > > > +		dev_err(chip->dev, "Failed to get enable GPIO: %d\n", ret);
-> > > > +		return ret;
-> > > > +	}
-> > >
-> > > This one is more OK - it's changing the state of the outputs that's an
-> > > issue.  I guess this might cause the outputs to come on though if the
-> > > GPIO was left off by the bootloader which is awkward.  If there's
-> > > nothing other than the outputs going on with the chip I would be tempted
-> > > to map this onto the per regulator enable GPIO that the core supports,
-> > > the core will then be able to manage the low power state at runtime.
-> > > That's *probably* the least bad option we have with current interfaces.
-> >
-> > While fishing for code I can copy in the always unfashionable cargocult
-> > style, I came across max8973-regulator.c that handles the enable GPIO in
-> > the following way:
-> >
-> > 		if (ridata && (ridata->constraints.always_on ||
-> > 			       ridata->constraints.boot_on))
-> > 			gflags = GPIOD_OUT_HIGH;
-> > 		else
-> > 			gflags = GPIOD_OUT_LOW;
-> > 		gflags |= GPIOD_FLAGS_BIT_NONEXCLUSIVE;
-> > 		gpiod = devm_gpiod_get_optional(&client->dev,
-> > 						"maxim,enable",
-> > 						gflags);
-> >
-> > Should I try to replicate that ? It gets more difficult with multiple
-> > regulators that share the same GPIO. That's why I left it as-is.
-> 
-> We should really factor that bit out to the core too, though at the
-> minute we pass in a gpio_desc so it's too late.  Doing the above is
-> probably best, though I wouldn't loose any sleep over it being missing.
-> you should definitely set the _NONEXCLUSIVE flag.  If someone specifies
-> an incompatible mix of settings in the machine constraints I wouldn't
-> worry about it too much, there's limits on what we can sort out.
+Xiangyang, can you please send a v2 with Masami's suggestions?
 
-I may skip it in the next version then, to first focus on getting the
-other bits right.
-
-Note that the outputs can be controlled individually over I2C even when
-the enable GPIO is high, so keeping it high unconditionally will only
-incur a bit of extra power consumption, it won't have any adverse effect
-on the ability to control the outputs.
-
--- 
-Regards,
-
-Laurent Pinchart
+-- Steve

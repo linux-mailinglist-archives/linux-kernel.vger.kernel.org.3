@@ -2,70 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42376485588
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:13:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65F9B485591
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 16:14:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236775AbiAEPNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 10:13:13 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:51674 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbiAEPNM (ORCPT
+        id S236863AbiAEPOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 10:14:50 -0500
+Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:55740
+        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230064AbiAEPOt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 10:13:12 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 5 Jan 2022 10:14:49 -0500
+Received: from localhost.localdomain (unknown [222.129.35.96])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93F4A61796;
-        Wed,  5 Jan 2022 15:13:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56238C36AE3;
-        Wed,  5 Jan 2022 15:13:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641395591;
-        bh=csHd2/XILH40OtDlIaymp0IPflgaFvIcWeXacWTGf88=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qIm66gBBLhBxMefhANoTb1PxtN7iaJ8FKqlY0bi88E2irezQd9yT6f26Xth+cC8dp
-         Lej17FBhU8KKBDCE+PQdCdVnQQW+1aJS5wOR06l76gXG3b7x7MdxEtgswElM7eZXuB
-         pQ8ee1pUlmh3Wf65OXlQyoXfIXAk1noEqLrfxEa0=
-Date:   Wed, 5 Jan 2022 16:13:08 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Hridya Valsaraju <hridya@google.com>
-Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        john.stultz@linaro.org, surenb@google.com, kaleshsingh@google.com,
-        tjmercier@google.com, keescook@google.com
-Subject: Re: [PATCH] dma-buf: Move sysfs work out of DMA-BUF export/release
- path
-Message-ID: <YdW1hPRvKYjfORvp@kroah.com>
-References: <20220104235148.21320-1-hridya@google.com>
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 1D37B40037;
+        Wed,  5 Jan 2022 15:14:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1641395687;
+        bh=0ahgBxDMV/FnSQcDRoTIL2XGBuHehdIW2pip+BQAyX4=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=Z6PVJZY7dhgs+tApSi3JC4Wp0iCANL67jSngJvDD0RUunWYkhaOhr0II0D5nBXOCo
+         SZD9yvSVszfnPyZfptbdovyx4UvpWTqYTyI82m2nlbwdphu7kKoVZbZVopzMHsmkyZ
+         bMPTArT23NQvv8BXKwqCmu9yHxKdOTp9DcGSSfd/75HAQZ/Cw0D7cqCp2uIcPYmrN9
+         cp8xP2kLXbQcDyDUSaj4CblUczhcvSxcek3yMXXdonAc8QfRrH2gwrh4eRECiSikji
+         TUoDrXDm3vOvw7p3EEqncgFjCc0sG/nIvtDEvX/32Bkl7r94sVoUhlAy2kchQfvGv0
+         /+gVQhzbYNG6w==
+From:   Aaron Ma <aaron.ma@canonical.com>
+To:     aaron.ma@canonical.com, kuba@kernel.org,
+        henning.schild@siemens.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     davem@davemloft.net, hayeswang@realtek.com, tiwai@suse.de
+Subject: [PATCH 1/3 v3] net: usb: r8152: Check used MAC passthrough address
+Date:   Wed,  5 Jan 2022 23:14:25 +0800
+Message-Id: <20220105151427.8373-1-aaron.ma@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220104235148.21320-1-hridya@google.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 03:51:48PM -0800, Hridya Valsaraju wrote:
-> Recently, we noticed an issue where a process went into direct reclaim
-> while holding the kernfs rw semaphore for sysfs in write(exclusive)
-> mode. This caused processes who were doing DMA-BUF exports and releases
-> to go into uninterruptible sleep since they needed to acquire the same
-> semaphore for the DMA-BUF sysfs entry creation/deletion. In order to avoid
-> blocking DMA-BUF export/release for an indeterminate amount of time
-> while another process is holding the sysfs rw semaphore in exclusive
-> mode, this patch moves the per-buffer sysfs file creation/deleteion to
-> a kthread.
-> 
-> Fixes: bdb8d06dfefd ("dmabuf: Add the capability to expose DMA-BUF stats in sysfs")
-> Signed-off-by: Hridya Valsaraju <hridya@google.com>
-> ---
->  drivers/dma-buf/dma-buf-sysfs-stats.c | 343 ++++++++++++++++++++++++--
->  include/linux/dma-buf.h               |  46 ++++
->  2 files changed, 366 insertions(+), 23 deletions(-)
+When plugin multiple r8152 ethernet dongles to Lenovo Docks
+or USB hub, MAC passthrough address from BIOS should be
+checked if it had been used to avoid using on other dongles.
 
-Crazy, but if this works in your testing, it looks ok to me.  Nice work.
+Currently builtin r8152 on Dock still can't be identified.
+First detected r8152 will use the MAC passthrough address.
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+v2:
+Skip builtin PCI MAC address which is share MAC address with
+passthrough MAC.
+Check thunderbolt based ethernet.
+
+v3:
+Add return value.
+
+Fixes: f77b83b5bbab ("net: usb: r8152: Add MAC passthrough support for
+more Lenovo Docks")
+Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
+---
+ drivers/net/usb/r8152.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index f9877a3e83ac..2483dc421dff 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -25,6 +25,7 @@
+ #include <linux/atomic.h>
+ #include <linux/acpi.h>
+ #include <linux/firmware.h>
++#include <linux/pci.h>
+ #include <crypto/hash.h>
+ #include <linux/usb/r8152.h>
+ 
+@@ -1605,6 +1606,7 @@ static int vendor_mac_passthru_addr_read(struct r8152 *tp, struct sockaddr *sa)
+ 	char *mac_obj_name;
+ 	acpi_object_type mac_obj_type;
+ 	int mac_strlen;
++	struct net_device *ndev;
+ 
+ 	if (tp->lenovo_macpassthru) {
+ 		mac_obj_name = "\\MACA";
+@@ -1662,6 +1664,19 @@ static int vendor_mac_passthru_addr_read(struct r8152 *tp, struct sockaddr *sa)
+ 		ret = -EINVAL;
+ 		goto amacout;
+ 	}
++	rcu_read_lock();
++	for_each_netdev_rcu(&init_net, ndev) {
++		if (ndev->dev.parent && dev_is_pci(ndev->dev.parent) &&
++				!pci_is_thunderbolt_attached(to_pci_dev(ndev->dev.parent)))
++			continue;
++		if (strncmp(buf, ndev->dev_addr, 6) == 0) {
++			ret = -EINVAL;
++			rcu_read_unlock();
++			goto amacout;
++		}
++	}
++	rcu_read_unlock();
++
+ 	memcpy(sa->sa_data, buf, 6);
+ 	netif_info(tp, probe, tp->netdev,
+ 		   "Using pass-thru MAC addr %pM\n", sa->sa_data);
+-- 
+2.30.2
+

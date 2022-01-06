@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C40C486540
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 14:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C963486542
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 14:25:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239524AbiAFNZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 08:25:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42738 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239337AbiAFNZU (ORCPT
+        id S239559AbiAFNZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 08:25:36 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43828 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239534AbiAFNZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 08:25:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F859C061245;
-        Thu,  6 Jan 2022 05:25:20 -0800 (PST)
+        Thu, 6 Jan 2022 08:25:35 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF9BE61BFE;
-        Thu,  6 Jan 2022 13:25:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C7BAC36AE3;
-        Thu,  6 Jan 2022 13:25:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641475519;
-        bh=Qg1lAw3HV9Pyh+Etyu2GDYQ2qErqgznXZ6FUS+WxFO8=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=V6v/Q2enmnYXbfiUrRN9ouN7n3hkeqmF0nO40YWZutuzGou8hYkAQhEIql28NWXv4
-         zrJcp/MY+wKGgFM6eIic4bUJl0Ku8Nb+HTEppigOrm2ZgZlFU9pH63Anb1C4uqEs5C
-         U51iuSTU1FwTnuKLb6+Awea14Wy7v4N12OfeH+pI9yfFbiAiYGwi/wI+QkRje05VuZ
-         zoLdMGg/Mt0S+Pq755z3TEObCxho8XgNDN1Vh/Nwa8MHkg22iCudlBdU21BjcSxy1I
-         4bYyXir39KfZlqbOtxo85mUnXe18A11DDBNNVbFMv/DL4ErR1FPw11ciCTDh382P0N
-         8wxxh/RpLqPmA==
-Date:   Thu, 6 Jan 2022 14:25:16 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Kortan <kortanzh@gmail.com>
-cc:     benjamin.tissoires@redhat.com, s.parschauer@gmx.de,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] HID: quirks: Always poll Anne Pro 2(C15) Keyboard
-In-Reply-To: <61b44512.1c69fb81.a2de3.f58a@mx.google.com>
-Message-ID: <nycvar.YFH.7.76.2201061424460.16505@cbobk.fhfr.pm>
-References: <61b44512.1c69fb81.a2de3.f58a@mx.google.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F1FE61C15
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 13:25:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8685EC36AE3;
+        Thu,  6 Jan 2022 13:25:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641475535;
+        bh=buV0gYWbk3HVWfvOrcfUs3J4fxNfedsrK8daEDtIzx0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hD91Fm1JArQgrZOznJTSwWQEL/6hIlrqxutgzox5t1nFaTWlgdyHlSKHCIk29EqM7
+         q0jq3/k1z/szOUrbA/H2GMjBYnnw9U2nKArcAeNP1QtN6yHgHcGAduWoZsob0X+1CW
+         /ZGsqaX0JXae6lNEvno75wK3IZ5gebq9lSaltiYg=
+Date:   Thu, 6 Jan 2022 14:25:32 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Gabriel Somlo <somlo@cmu.edu>,
+        qemu-devel@nongnu.org
+Subject: Re: [PATCH] qemu_fw_cfg: use default_groups in kobj_type
+Message-ID: <YdbtzL59aCePeDnt@kroah.com>
+References: <20220105183133.2812848-1-gregkh@linuxfoundation.org>
+ <20220105175546-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220105175546-mutt-send-email-mst@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Dec 2021, kortanzh@gmail.com wrote:
-
-> From: Kortan <kortanzh@gmail.com>
+On Wed, Jan 05, 2022 at 05:56:26PM -0500, Michael S. Tsirkin wrote:
+> On Wed, Jan 05, 2022 at 07:31:33PM +0100, Greg Kroah-Hartman wrote:
+> > There are currently 2 ways to create a set of sysfs files for a
+> > kobj_type, through the default_attrs field, and the default_groups
+> > field.  Move the firmware qemu_fw_cfg sysfs code to use default_groups
+> > field which has been the preferred way since aa30f47cf666 ("kobject: Add
+> > support for default attribute groups to kobj_type") so that we can soon
+> > get rid of the obsolete default_attrs field.
+> > 
+> > Cc: Gabriel Somlo <somlo@cmu.edu>
+> > Cc: "Michael S. Tsirkin" <mst@redhat.com>
+> > Cc: qemu-devel@nongnu.org
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > 
-> According to https://openannepro.github.io/ap2_revisions, Anne Pro 2
-> keyboard has two hardware revisions, C15(04d9:a292) and C18(04d9:a293).
+> OK then you know best I guess
 > 
-> Previous patch submitted by Sebastian only fix the C18 revision. This
-> patch add missing C15 revision support.
+> Acked-by: Michael S. Tsirkin <mst@redhat.com>
 > 
-> Fixes: ca28aff0e1dc ("HID: quirks: Always poll Obins Anne Pro 2 keyboard")
-> Signed-off-by: Kortan <kortanzh@gmail.com>
+> feel free to queue.
 
-Thanks for the fix. Could you however, please, resubmit the patch with the 
-full name, as outlined in Documentation/process/submitting-patches.rst ?
+Thanks, will do!
 
--- 
-Jiri Kosina
-SUSE Labs
-
+greg k-h

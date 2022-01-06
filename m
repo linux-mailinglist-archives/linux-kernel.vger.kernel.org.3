@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95361486B62
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:46:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 135D1486B5C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:45:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243952AbiAFUqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 15:46:48 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:47201 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243919AbiAFUqr (ORCPT
+        id S243941AbiAFUpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 15:45:04 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:60936 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243932AbiAFUpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 15:46:47 -0500
+        Thu, 6 Jan 2022 15:45:03 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1641502007; x=1673038007;
+  t=1641501903; x=1673037903;
   h=from:to:cc:subject:date:message-id:mime-version;
   bh=OVjfgTPsU90JleNOuXTplCawmPMZLSFg76Is1FvE+d4=;
-  b=qwtKUPgDN3kxSH+KzlK6g0rPBHKOb7bVneEurqSV7FmE6yiBK6YuGbXt
-   UfMALIvhuQirkUBPt0MwRgeaQg9AFig7Ey15Mr/8Ziw6g2EHbnsV+Fbg8
-   YphCZTVW+FLOVg5LpzN3eQPotUssDXbC7no01nP6DssHnTwDbiKb8+eI5
-   s=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 06 Jan 2022 12:46:47 -0800
+  b=Ur1Hg1dQT1LfUPrSEGF6Rnp8e5QJkPbT1i5PwRB4/YtQRgoBFVGRCOfN
+   SDI127HTPQ91XVU6t1dXSw5X4XQApUNpdpSDkSAHk//XEMorgP8VVs3dO
+   hU5Y6n+GWeO8VkaD/wNrF37qEUIjiLTYEH3psNDRnJxVrUQ58Z+/thhH6
+   I=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 06 Jan 2022 12:45:03 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 12:46:45 -0800
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 12:45:03 -0800
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 6 Jan 2022 12:46:45 -0800
+ 15.2.922.19; Thu, 6 Jan 2022 12:45:02 -0800
 Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 6 Jan 2022 12:44:32 -0800
+ 15.2.922.19; Thu, 6 Jan 2022 12:45:02 -0800
 From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
 To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
         <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
@@ -45,13 +45,13 @@ CC:     <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
         <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 Subject: [PATCH v4] drm/msm/dp:  populate connector of struct  dp_panel
-Date:   Thu, 6 Jan 2022 12:44:22 -0800
-Message-ID: <1641501862-17499-1-git-send-email-quic_khsieh@quicinc.com>
+Date:   Thu, 6 Jan 2022 12:44:54 -0800
+Message-ID: <1641501894-17563-1-git-send-email-quic_khsieh@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>

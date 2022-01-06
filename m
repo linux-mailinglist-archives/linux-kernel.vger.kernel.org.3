@@ -2,130 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34489486257
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 10:49:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E4A48625B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 10:49:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237553AbiAFJtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 04:49:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50514 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237370AbiAFJtN (ORCPT
+        id S237563AbiAFJt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 04:49:56 -0500
+Received: from out30-131.freemail.mail.aliyun.com ([115.124.30.131]:58237 "EHLO
+        out30-131.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237370AbiAFJty (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 04:49:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55E0C061245;
-        Thu,  6 Jan 2022 01:49:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9EF47B81FF3;
-        Thu,  6 Jan 2022 09:49:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C89F4C36AED;
-        Thu,  6 Jan 2022 09:49:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641462550;
-        bh=7ejwUR9khVOjvQTZ+7t0xh+E3D7/OAI8BpAO2s7ThFg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=2Foe+lNDoAeCr2DYY0gxvT80gvfSo3yBN3fIzCbdSbN0dsS5Uyu8TKi0xI0MnEe+W
-         2YMgGXsxp3yEZ0kMFivtCHowRkuUvOnmHT7u/+w5et7hWvZJ1K7fmElADmhheec2qp
-         bCTKD86u7kP1NkekSnRuq90FybO/90tJ7+MK3TDQ=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-omap@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH] omapfb: use default_groups in kobj_type
-Date:   Thu,  6 Jan 2022 10:49:06 +0100
-Message-Id: <20220106094906.3272287-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 6 Jan 2022 04:49:54 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R851e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=zhangliguang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0V15ZUv-_1641462571;
+Received: from 30.225.24.17(mailfrom:zhangliguang@linux.alibaba.com fp:SMTPD_---0V15ZUv-_1641462571)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 06 Jan 2022 17:49:32 +0800
+Message-ID: <bfdb3ed9-7c68-f7c5-63e6-40d18d9e8fd6@linux.alibaba.com>
+Date:   Thu, 6 Jan 2022 17:49:32 +0800
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3322; h=from:subject; bh=7ejwUR9khVOjvQTZ+7t0xh+E3D7/OAI8BpAO2s7ThFg=; b=owGbwMvMwCRo6H6F97bub03G02pJDInXdgs4/CgV3/D1Z8vNd80Rn0qMzpzI5G5YNt0mvyGS18dv zSP1jlgWBkEmBlkxRZYv23iO7q84pOhlaHsaZg4rE8gQBi5OAZhIdRXDgsatMe/vyWVHFHSETVI1ff 7ZZ87bEIbZLFPkL8WxJb7ew7Zncr/zNs2fCcsvAgA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+To:     Frederic Weisbecker <fweisbec@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+From:   luanshi <zhangliguang@linux.alibaba.com>
+Subject: tick/sched: iowait_sleeptime resides in tick_cpu_sched structure is a
+ negative value
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are currently 2 ways to create a set of sysfs files for a
-kobj_type, through the default_attrs field, and the default_groups
-field.  Move the omapfb sysfs code to use default_groups field which has
-been the preferred way since aa30f47cf666 ("kobject: Add support for
-default attribute groups to kobj_type") so that we can soon get rid of
-the obsolete default_attrs field.
+Hi All,
 
-Cc: linux-omap@vger.kernel.org
-Cc: linux-fbdev@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/video/fbdev/omap2/omapfb/dss/display-sysfs.c | 3 ++-
- drivers/video/fbdev/omap2/omapfb/dss/manager-sysfs.c | 3 ++-
- drivers/video/fbdev/omap2/omapfb/dss/overlay-sysfs.c | 3 ++-
- 3 files changed, 6 insertions(+), 3 deletions(-)
+We encounted a hardlockup problem on ARM server, after some debug found 
+that:
 
-diff --git a/drivers/video/fbdev/omap2/omapfb/dss/display-sysfs.c b/drivers/video/fbdev/omap2/omapfb/dss/display-sysfs.c
-index 6dbe265b312d..f43394d52ba2 100644
---- a/drivers/video/fbdev/omap2/omapfb/dss/display-sysfs.c
-+++ b/drivers/video/fbdev/omap2/omapfb/dss/display-sysfs.c
-@@ -265,6 +265,7 @@ static struct attribute *display_sysfs_attrs[] = {
- 	&display_attr_wss.attr,
- 	NULL
- };
-+ATTRIBUTE_GROUPS(display_sysfs);
- 
- static ssize_t display_attr_show(struct kobject *kobj, struct attribute *attr,
- 		char *buf)
-@@ -303,7 +304,7 @@ static const struct sysfs_ops display_sysfs_ops = {
- 
- static struct kobj_type display_ktype = {
- 	.sysfs_ops = &display_sysfs_ops,
--	.default_attrs = display_sysfs_attrs,
-+	.default_groups = display_sysfs_groups,
- };
- 
- int display_init_sysfs(struct platform_device *pdev)
-diff --git a/drivers/video/fbdev/omap2/omapfb/dss/manager-sysfs.c b/drivers/video/fbdev/omap2/omapfb/dss/manager-sysfs.c
-index b52cc1af0959..3addbcfdad87 100644
---- a/drivers/video/fbdev/omap2/omapfb/dss/manager-sysfs.c
-+++ b/drivers/video/fbdev/omap2/omapfb/dss/manager-sysfs.c
-@@ -457,6 +457,7 @@ static struct attribute *manager_sysfs_attrs[] = {
- 	&manager_attr_cpr_coef.attr,
- 	NULL
- };
-+ATTRIBUTE_GROUPS(manager_sysfs);
- 
- static ssize_t manager_attr_show(struct kobject *kobj, struct attribute *attr,
- 		char *buf)
-@@ -495,7 +496,7 @@ static const struct sysfs_ops manager_sysfs_ops = {
- 
- static struct kobj_type manager_ktype = {
- 	.sysfs_ops = &manager_sysfs_ops,
--	.default_attrs = manager_sysfs_attrs,
-+	.default_groups = manager_sysfs_groups,
- };
- 
- int dss_manager_kobj_init(struct omap_overlay_manager *mgr,
-diff --git a/drivers/video/fbdev/omap2/omapfb/dss/overlay-sysfs.c b/drivers/video/fbdev/omap2/omapfb/dss/overlay-sysfs.c
-index 36acf366213a..26644a108180 100644
---- a/drivers/video/fbdev/omap2/omapfb/dss/overlay-sysfs.c
-+++ b/drivers/video/fbdev/omap2/omapfb/dss/overlay-sysfs.c
-@@ -390,6 +390,7 @@ static struct attribute *overlay_sysfs_attrs[] = {
- 	&overlay_attr_zorder.attr,
- 	NULL
- };
-+ATTRIBUTE_GROUPS(overlay_sysfs);
- 
- static ssize_t overlay_attr_show(struct kobject *kobj, struct attribute *attr,
- 		char *buf)
-@@ -428,7 +429,7 @@ static const struct sysfs_ops overlay_sysfs_ops = {
- 
- static struct kobj_type overlay_ktype = {
- 	.sysfs_ops = &overlay_sysfs_ops,
--	.default_attrs = overlay_sysfs_attrs,
-+	.default_groups = overlay_sysfs_groups,
- };
- 
- int dss_overlay_kobj_init(struct omap_overlay *ovl,
--- 
-2.34.1
+PID: 0      TASK: ffff0400064de300  CPU: 126  COMMAND: "swapper/126"
+  #0 [ffff8000250f3c90] __crash_kexec at ffff80001013a064
+  #1 [ffff8000250f3e30] panic at ffff800010afd028
+  #2 [ffff8000250f3f10] nmi_panic at ffff80001004a9e0
+  #3 [ffff8000250f3f20] watchdog_hardlockup_check at ffff80001017b7f0
+  #4 [ffff8000250f3f40] sdei_watchdog_callback at ffff80001003c9a4
+  #5 [ffff8000250f3f50] sdei_event_handler at ffff8000108816b8
+  #6 [ffff8000250f3f80] _sdei_handler at ffff800010b1c2e4
+  #7 [ffff8000250f3fd0] __sdei_handler at ffff800010b139b0
+  #8 [ffff8000250f3ff0] __sdei_asm_handler at ffff800010014c18
+--- <IRQ stack> ---
+  #9 [ffff800013973f10] __cpu_do_idle at ffff800010b13764
+#10 [ffff800013973f20] arch_cpu_idle at ffff800010b137ec
+#11 [ffff800013973f30] default_idle_call at ffff800010b1b5cc
+#12 [ffff800013973f50] cpuidle_idle_call at ffff80001009648c
+#13 [ffff800013973f90] do_idle at ffff8000100965b0
+#14 [ffff800013973fc0] cpu_startup_entry at ffff8000100967d4
+#15 [ffff800013973fe0] secondary_start_kernel at ffff800010026bb0
+
+
+per_cpu(tick_cpu_sched, 126) = $1 = {
+   sched_timer = {
+     node = {
+       node = {
+         __rb_parent_color = 18446603337117384112,
+         rb_right = 0x0,
+         rb_left = 0x0
+       },
+       expires = 6108564000000
+     },
+     _softexpires = 6108564000000,
+     function = 0xffff800010122ec0 <tick_sched_timer>,
+     base = 0xffff04473bbcc780,
+     state = 1 '\001',
+     is_rel = 0 '\000',
+     is_soft = 0 '\000',
+     is_hard = 1 '\001'
+   },
+   check_clocks = 0,
+   nohz_mode = NOHZ_MODE_INACTIVE,
+   inidle = 1,
+   tick_stopped = 0,
+   idle_active = 1,
+   do_timer_last = 0,
+   got_idle_tick = 1,
+   last_tick = 0,
+   next_tick = 0,
+   idle_jiffies = 0,
+   idle_calls = 0,
+   idle_sleeps = 0,
+   idle_entrytime = 5012087709249,
+   idle_waketime = 0,
+   idle_exittime = 0,
+   idle_sleeptime = 4936136669951,
+   iowait_sleeptime = -1942739704,
+   last_jiffies = 0,
+   timer_expires = 0,
+   timer_expires_base = 0,
+   next_timer = 0,
+   idle_expires = 0,
+   tick_dep_mask = {
+     counter = 0
+   }
+}
+
+iowait_sleeptime = -1942739704,
+----------
+iowait_sleeptime is monotonically increasing, under what circumstances 
+iowait_sleeptime
+can be a negative value?
+
+For detailed information:
+https://bugzilla.kernel.org/show_bug.cgi?id=215458
+
+
+Can you give me some suggestions for debugging.
+
+
+
+Thanks,
+Liguang
 

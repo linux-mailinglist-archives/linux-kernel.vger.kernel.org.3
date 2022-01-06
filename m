@@ -2,90 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6997248621E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 10:29:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E01D486220
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 10:30:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237417AbiAFJ3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 04:29:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46180 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237186AbiAFJ3p (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 04:29:45 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95EDC061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 01:29:44 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id n30-20020a17090a5aa100b001b2b6509685so2552245pji.3
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 01:29:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fPr1nBHiTSgph/tTGH5kJPnXHbDmfAq4bys7S0VY+v0=;
-        b=aM/LrGv2rQk/Pv4J+BPxttat1R8Ou8GuDntATvl1kGiENNx9xqFxp5OI8SbG06Trai
-         fk80sMZVXCI1GVpWV4iBHN3dYBZvzCvkBnTd9vO7kZ2VLi/q0oHJC9UDyTiD3yHbHwbP
-         iZCM7ZrPfybKTDeSjf1yIDrdG273/VFpjnQswo0LmO+3qu//py7U4Jomi/wWazGa0qca
-         UniZR83cSOTj+l302efM3g3UtL2R6f7/m5/kVWYZaq645a8vzmvCPNMZq5GjxC7FN5Wu
-         UL6y6EyaRccNwxjGdQXq8kNe/mNFrMdaazyQJyNWVjnbU2LkXFhlG/236myRLA2ospE9
-         kUrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fPr1nBHiTSgph/tTGH5kJPnXHbDmfAq4bys7S0VY+v0=;
-        b=gb1a9ZRziiTrx+xxOwoUUbTQwevfb/LRDTTBKJBWgPBZf/ifztLCavZJUxbCe36P5F
-         hamuC3wKgZC/ytI+lFHYJqAFyUaaArfA635UuLH2/ohJLn19ZPV4qdYdvctBeWPLfGRi
-         UGy4N2cofL2Kv2y3u5/RwjOtDQrRPcokA49Pt03RathS9gJkQsrWGjcRA/ZlNm/YwgZI
-         QBl42WmQRCJwhVmFgREAjl6tPdS9VcaYn6wgMeH1YvIjNvOmq4o+7xW1BO+PJLF15cq1
-         7wpWRaW4rHb8UkCN1LiBFff/7G+2smWcvhcQSppiIZ0AmcNW1r7L1EdkbDGoCqFft1jI
-         BJLg==
-X-Gm-Message-State: AOAM530WMXfcdKyMQPmKG9sTaJ8+dAgzMEF3JWtt0igSq8/JkazES8wY
-        Nw6PbEtDVH23D/43BDqJqZI=
-X-Google-Smtp-Source: ABdhPJwf73l4jLY2UjJyhmnaA/8ASiTX8YUzJY3tfkfrZJHHEdLXj8Qe9C34SXMZigHJaNJ/vXgxAg==
-X-Received: by 2002:a17:902:ab85:b0:149:ca14:4a15 with SMTP id f5-20020a170902ab8500b00149ca144a15mr7738385plr.169.1641461384280;
-        Thu, 06 Jan 2022 01:29:44 -0800 (PST)
-Received: from localhost.localdomain ([94.177.118.151])
-        by smtp.googlemail.com with ESMTPSA id rm6sm5712002pjb.35.2022.01.06.01.29.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 01:29:44 -0800 (PST)
-From:   Qinghua Jin <qhjin.dev@gmail.com>
-Cc:     Qinghua Jin <qhjin.dev@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ASoC: topology: Fix typo
-Date:   Thu,  6 Jan 2022 17:28:47 +0800
-Message-Id: <20220106092847.357035-1-qhjin.dev@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        id S237224AbiAFJaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 04:30:20 -0500
+Received: from mga12.intel.com ([192.55.52.136]:44861 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237421AbiAFJaO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 04:30:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641461414; x=1672997414;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=w8I0J4izNXxXkIN6vEUQC3vPe1VVLMTNagn0bV6wM8o=;
+  b=AGy1iNJl20d4RqTcb7tnyTBsGp+9XpJQXquKW3awi5cphUmcRmXd9SVM
+   PQ+/5NhHSSXSnw8t9bZPLb6umfWa/8Jd2yFQwtSNiXdDw0s0JR6CXh295
+   wVOEul2IdPq0UWD9KoQWWAdXPo4AyKliYBe0HCxFjWtIBGuhVu2z/NcyZ
+   j4Fn3jaZ8Ne3XCA0+O6qMfYpChoaA9wsqAG5s8HMYFsIYu4w917P5msNm
+   +bUSv465BcgbLOjf4ZE6R75RiDJmL55OAAfl09AsmUJElHaJ1dneauxYj
+   X4at8u2SahfxSTsQt8gSO+4q3qDmDC9jPJFl4G0+ksFCjOrnACJ6rJ55A
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="222622318"
+X-IronPort-AV: E=Sophos;i="5.88,266,1635231600"; 
+   d="scan'208";a="222622318"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 01:30:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,266,1635231600"; 
+   d="scan'208";a="488884424"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 06 Jan 2022 01:30:11 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n5P62-000HX7-Sx; Thu, 06 Jan 2022 09:30:10 +0000
+Date:   Thu, 6 Jan 2022 17:29:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Prasad Sodagudi <psodagud@codeaurora.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Yogesh Lal <quic_ylal@quicinc.com>,
+        Elliot Berman <eberman@codeaurora.org>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.15
+ 1113/2496] kernel/module.c:4789:6: warning: no previous prototype for
+ function 'android_debug_for_each_module'
+Message-ID: <202201061725.15rSGzxq-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-change 'postion' to 'position'
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.15
+head:   f8bd6cf70dec3961c8b15b987866af33be2ce82b
+commit: b2df67a932b5cbd6535de9f1a6e63004992ad014 [1113/2496] ANDROID: android: Create debug_symbols driver
+config: i386-randconfig-a006-20220106 (https://download.01.org/0day-ci/archive/20220106/202201061725.15rSGzxq-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project ca7ffe09dc6e525109e3cd570cc5182ce568be13)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/b2df67a932b5cbd6535de9f1a6e63004992ad014
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.15
+        git checkout b2df67a932b5cbd6535de9f1a6e63004992ad014
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Signed-off-by: Qinghua Jin <qhjin.dev@gmail.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/module.c:4789:6: warning: no previous prototype for function 'android_debug_for_each_module' [-Wmissing-prototypes]
+   void android_debug_for_each_module(int (*fn)(const char *mod_name, void *mod_addr, void *data),
+        ^
+   kernel/module.c:4789:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void android_debug_for_each_module(int (*fn)(const char *mod_name, void *mod_addr, void *data),
+   ^
+   static 
+   1 warning generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DRM_MIPI_DSI
+   Depends on HAS_IOMEM && DRM
+   Selected by
+   - GKI_HIDDEN_DRM_CONFIGS
+   WARNING: unmet direct dependencies detected for SND_JACK
+   Depends on SOUND && !UML && SND
+   Selected by
+   - GKI_HIDDEN_SND_CONFIGS
+   WARNING: unmet direct dependencies detected for DRM_KMS_CMA_HELPER
+   Depends on HAS_IOMEM && DRM
+   Selected by
+   - GKI_HIDDEN_DRM_CONFIGS
+   WARNING: unmet direct dependencies detected for SND_VMASTER
+   Depends on SOUND && !UML && SND
+   Selected by
+   - GKI_HIDDEN_SND_CONFIGS
+   WARNING: unmet direct dependencies detected for SND_PCM_IEC958
+   Depends on SOUND && !UML && SND
+   Selected by
+   - GKI_HIDDEN_SND_SOC_CONFIGS
+   WARNING: unmet direct dependencies detected for SND_JACK_INPUT_DEV
+   Depends on SOUND && !UML && SND && SND_JACK
+   Selected by
+   - GKI_HIDDEN_SND_CONFIGS
+   WARNING: unmet direct dependencies detected for SND_PCM_ELD
+   Depends on SOUND && !UML && SND
+   Selected by
+   - GKI_HIDDEN_SND_CONFIGS
+   WARNING: unmet direct dependencies detected for DRM_GEM_CMA_HELPER
+   Depends on HAS_IOMEM && DRM
+   Selected by
+   - GKI_HIDDEN_DRM_CONFIGS
+   WARNING: unmet direct dependencies detected for SND_INTEL_NHLT
+   Depends on SOUND && !UML && SND
+   Selected by
+   - GKI_HIDDEN_SND_CONFIGS && ACPI
+
+
+vim +/android_debug_for_each_module +4789 kernel/module.c
+
+  4787	
+  4788	#ifdef CONFIG_ANDROID_DEBUG_SYMBOLS
+> 4789	void android_debug_for_each_module(int (*fn)(const char *mod_name, void *mod_addr, void *data),
+  4790		void *data)
+  4791	{
+  4792		struct module *module;
+  4793		preempt_disable();
+  4794		list_for_each_entry_rcu(module, &modules, list) {
+  4795			if (fn(module->name, module->core_layout.base, data))
+  4796				goto out;
+  4797		}
+  4798	out:
+  4799		preempt_enable();
+  4800	}
+  4801	EXPORT_SYMBOL_NS_GPL(android_debug_for_each_module, MINIDUMP);
+  4802	#endif
+  4803	
+
 ---
- sound/soc/soc-topology.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/sound/soc/soc-topology.c b/sound/soc/soc-topology.c
-index f5b9e66ac3b8..2630df024dff 100644
---- a/sound/soc/soc-topology.c
-+++ b/sound/soc/soc-topology.c
-@@ -56,7 +56,7 @@ struct soc_tplg {
- 	const struct firmware *fw;
- 
- 	/* runtime FW parsing */
--	const u8 *pos;		/* read postion */
-+	const u8 *pos;		/* read position */
- 	const u8 *hdr_pos;	/* header position */
- 	unsigned int pass;	/* pass number */
- 
--- 
-2.30.2
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

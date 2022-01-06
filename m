@@ -2,128 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E7884861C4
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 10:02:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7164861D2
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 10:06:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237178AbiAFJC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 04:02:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40088 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236715AbiAFJC0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 04:02:26 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA66C061245;
-        Thu,  6 Jan 2022 01:02:26 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id h23so3488376wrc.1;
-        Thu, 06 Jan 2022 01:02:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=1U4NWLNw6loRYINOoYaOJrgBMNRCXi8c1uaneowkkyM=;
-        b=DVNC7xy3HgBwZub9F0uqPgsOH4Bl+fd4+Up3YuzSdLzxT2+/j2hC3PUQjBvJ6KU9ec
-         rK8oWDVrHQ58N3sa6NzXVCQWPhutHW9xjheUzScoB83CeconuROWMiMh3MsTg6rO909V
-         zOxLHyzhERuaB5u/0eooUAwJKNRvdQeT2URemmG/W4NjI6zAlgEkR2M6p2UBKEMavLoJ
-         SbCliWPHCnFygbeNlplYOwvl3BFQl7OuQUH5xEo7WY7iuG4OQBvCUfzmK1Rn+m8vITQR
-         6VxMsU0qjpLgniWTOb1BXGtZWAlRgTwo3XeUfU+6W2KNQWPkh8UyvwxYixyStDx4iDvx
-         +TQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to:user-agent;
-        bh=1U4NWLNw6loRYINOoYaOJrgBMNRCXi8c1uaneowkkyM=;
-        b=t3FwtaekywieKZUk6SplJ5vUVClv3AT7/ySZLVNqalKo8dm7547wo/8wjq+MXxf8kj
-         tVKti7JqqUYmRalRl2Z9HP++1kGGMHAi/9nPc0kCKz17tQLswPTqdwRqxWYMeNMB1frE
-         1eKYEATvy/yUr/+3eQ9oIbyfUEjXCxoQHI/x0DX5DWVJhfUV6r55PJQ/+ekp6lS4wwgl
-         LSuvyXg9AiF7cOmeiQ86NFLMJFLaa0vxHl+jata7tdq8o2bhDT0mX++C6XvL4NtSpPXE
-         DYXGSdoFZQgbogRAQAMU84Attfb1E+/x1u9h7jbIN7QK/sYrn94fp04NMTqePkWZm+VH
-         gCSA==
-X-Gm-Message-State: AOAM533LyhDWapKFQP9D/hdA1WywX//VhOnG2228ZLuUPNL3WYcRdJBW
-        0nFxS3/pk6D/QT8IzAHLvgV968a8D4I=
-X-Google-Smtp-Source: ABdhPJxAt03KsiKP5A5YtrODkSW/XT6NqwjWsSsFj86xX714IoiLZQtZsYxlh0h9rtDZO208KTaWEw==
-X-Received: by 2002:a5d:48c2:: with SMTP id p2mr43326425wrs.543.1641459744879;
-        Thu, 06 Jan 2022 01:02:24 -0800 (PST)
-Received: from gmail.com ([81.168.73.77])
-        by smtp.gmail.com with ESMTPSA id o3sm1188505wmr.15.2022.01.06.01.02.23
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 06 Jan 2022 01:02:24 -0800 (PST)
-Date:   Thu, 6 Jan 2022 09:02:21 +0000
-From:   Martin Habets <habetsm.xilinx@gmail.com>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     ecree.xilinx@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-        john.fastabend@gmail.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] sfc: Use swap() instead of open coding it
-Message-ID: <20220106090221.4gj6cevh2sb7hrfb@gmail.com>
-Mail-Followup-To: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        ecree.xilinx@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-        john.fastabend@gmail.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-References: <20220105152237.45991-1-jiapeng.chong@linux.alibaba.com>
+        id S237184AbiAFJG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 04:06:56 -0500
+Received: from smtp25.cstnet.cn ([159.226.251.25]:39792 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236715AbiAFJGz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 04:06:55 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowAA3GRYYsdZhSWS1BQ--.58555S2;
+        Thu, 06 Jan 2022 17:06:32 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] tty/serial: Check for null pointer after calling devm_ioremap
+Date:   Thu,  6 Jan 2022 17:06:31 +0800
+Message-Id: <20220106090631.2714586-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220105152237.45991-1-jiapeng.chong@linux.alibaba.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowAA3GRYYsdZhSWS1BQ--.58555S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7JFWruF4UZrWxZw1fKF48WFg_yoWDCrX_C3
+        Z5ua1kAr18CF10va17JryfuFW0q398Zay8Wr1Igr9aq3s5AFs7XFZrWrnIvw4UW3yqvF1U
+        G39rur47Ar409jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbckFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8uwCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUOo7ZUUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 11:22:37PM +0800, Jiapeng Chong wrote:
-> Clean the following coccicheck warning:
-> 
-> ./drivers/net/ethernet/sfc/efx_channels.c:870:36-37: WARNING opportunity
-> for swap().
-> 
-> ./drivers/net/ethernet/sfc/efx_channels.c:824:36-37: WARNING opportunity
-> for swap().
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+As the possible failure of the allocation, the devm_ioremap() may return
+NULL pointer.
+And the 'port->membase' will be directly used in mlb_usio_startup().
+Therefore, in order to avoid the dereference of the NULL pointer, it
+should be better to add the sanity check.
 
-Acked-by: Martin Habets <habetsm.xilinx@gmail.com>
+Fixes: ba44dc043004 ("serial: Add Milbeaut serial control")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/tty/serial/milbeaut_usio.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> ---
->  drivers/net/ethernet/sfc/efx_channels.c | 14 ++++----------
->  1 file changed, 4 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/sfc/efx_channels.c b/drivers/net/ethernet/sfc/efx_channels.c
-> index b015d1f2e204..ead550ae2709 100644
-> --- a/drivers/net/ethernet/sfc/efx_channels.c
-> +++ b/drivers/net/ethernet/sfc/efx_channels.c
-> @@ -819,11 +819,8 @@ int efx_realloc_channels(struct efx_nic *efx, u32 rxq_entries, u32 txq_entries)
->  	old_txq_entries = efx->txq_entries;
->  	efx->rxq_entries = rxq_entries;
->  	efx->txq_entries = txq_entries;
-> -	for (i = 0; i < efx->n_channels; i++) {
-> -		channel = efx->channel[i];
-> -		efx->channel[i] = other_channel[i];
-> -		other_channel[i] = channel;
-> -	}
-> +	for (i = 0; i < efx->n_channels; i++)
-> +		swap(efx->channel[i], other_channel[i]);
->  
->  	/* Restart buffer table allocation */
->  	efx->next_buffer_table = next_buffer_table;
-> @@ -865,11 +862,8 @@ int efx_realloc_channels(struct efx_nic *efx, u32 rxq_entries, u32 txq_entries)
->  	/* Swap back */
->  	efx->rxq_entries = old_rxq_entries;
->  	efx->txq_entries = old_txq_entries;
-> -	for (i = 0; i < efx->n_channels; i++) {
-> -		channel = efx->channel[i];
-> -		efx->channel[i] = other_channel[i];
-> -		other_channel[i] = channel;
-> -	}
-> +	for (i = 0; i < efx->n_channels; i++)
-> +		swap(efx->channel[i], other_channel[i]);
->  	goto out;
->  }
->  
-> -- 
-> 2.20.1.7.g153144c
+diff --git a/drivers/tty/serial/milbeaut_usio.c b/drivers/tty/serial/milbeaut_usio.c
+index 8f2cab7f66ad..1ecbf6d0dc79 100644
+--- a/drivers/tty/serial/milbeaut_usio.c
++++ b/drivers/tty/serial/milbeaut_usio.c
+@@ -523,6 +523,10 @@ static int mlb_usio_probe(struct platform_device *pdev)
+ 	}
+ 	port->membase = devm_ioremap(&pdev->dev, res->start,
+ 				resource_size(res));
++	if (!port->membase) {
++		ret = -ENOMEM;
++		goto failed;
++	}
+ 
+ 	ret = platform_get_irq_byname(pdev, "rx");
+ 	mlb_usio_irq[index][RX] = ret;
+-- 
+2.25.1
+

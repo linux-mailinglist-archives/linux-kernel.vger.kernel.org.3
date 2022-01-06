@@ -2,165 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1725F4866D2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 16:40:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C19584866D5
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 16:40:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240548AbiAFPkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 10:40:01 -0500
-Received: from mout.gmx.net ([212.227.15.18]:35575 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240507AbiAFPkA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 10:40:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1641483579;
-        bh=vIrJWvg04ZaFIVyjjc5fJS3aJR7MuLf8gGPQLxNZun0=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=hA613tt0yMEnkLqhskIv+EFijhS6slo3ysvAOnSkip4cTTRvZeTMvxP0deiiVNGMD
-         OewXmKCTZufbL406zaC7NMgN0MKjgzQE+a/H9TbsOmxQbqx+I2UQEScxvmNO3EbWv5
-         ZRHa6DNZsL4iOETM9fEl0g9OtI+llUvJmZ0y7g5I=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [91.65.60.26] ([91.65.60.26]) by web-mail.gmx.net
- (3c-app-gmx-bs50.server.lan [172.19.170.103]) (via HTTP); Thu, 6 Jan 2022
- 16:39:39 +0100
+        id S240554AbiAFPkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 10:40:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240462AbiAFPkR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 10:40:17 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DACC061245;
+        Thu,  6 Jan 2022 07:40:17 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id w184so8498806ybg.5;
+        Thu, 06 Jan 2022 07:40:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=YKFqbxqRhSrpS10gEKkdq6zgQ77RwI60JI4NhfOBth8=;
+        b=GQlTSEtVjB8pz+9yfl1zRN8k9cSW8tlJTk/60O1OSAab9wXsSzSR2AfP1SyTPghggm
+         R3H2jCiuw2uo1+suvE7iAHJMv+YMN0zp9rL/KgzE39VhtRYzEyMA3rW/aJTelzXrz1hW
+         a6B854t6NyMsVWD3a1Zh7KlIzkkHjArhxStrPgL9EdYhzLQYb0XfetkARgtPdTvHLQvw
+         6ET7InaKrLehHVlH+DS/MXyncL6EQm+6uVLRwee59/MiII3cUpHa3tZIPw09g7+kCwQ3
+         1N1ZIa5l6ULYQcgkPCVqiiYMjuVgbg/D3cqfAoQmmUUlJejodPr4JWcjjQmBLFWz7Q4F
+         0VGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=YKFqbxqRhSrpS10gEKkdq6zgQ77RwI60JI4NhfOBth8=;
+        b=Lpb8S52npMzYFZKBK7rWfWt3BhWGEei7FyjqBarUSnc1ts/2uaEnnX/NGG0BJZ+igg
+         Z4M8pGt4CAxx/Irlx+ZvWsuScLav4i78opaCvgC9WqAgtN/yd8luqbv0kywx+x+pP6b0
+         KXxZU2ONoUqO/58W1DyCrc6wKgWCV8J1rNv70BiKbjLnTcnyuu+X4mBbxaQ9N+Ab5wt1
+         8ljXxaXesKPPz3Hgg7i+oZrbuhnkgg4uEQHe2oRuykG7UZMxTOa000HZrUJd9LuJFzWD
+         jiHUEehP+G6yRMAW3wbXjQJTFW54CR9RnZil8wJXwDjSAuhPKQrmAejBPbDN49u7SKQ3
+         rkFg==
+X-Gm-Message-State: AOAM532BOWud52NJK8jo/6T3N871/Ixw+lG4ZtkFQ3bI6e910hxxlZqL
+        Ln+oHvoDQjDHv91p9CTO6wngdLtvf9zd53MOrZk=
+X-Google-Smtp-Source: ABdhPJzIA3AtEQTXGqxbgw11u0GELqS4RKSp/Z6gEhPYVGeQrt+BzeRO1+w3fxGgvXIigvfwxF0XzUN+inh/Ab9jfQM=
+X-Received: by 2002:a25:98c4:: with SMTP id m4mr75641857ybo.613.1641483616417;
+ Thu, 06 Jan 2022 07:40:16 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <trinity-b5cc1284-ccc2-477c-ac90-56ee40da91af-1641483579446@3c-app-gmx-bs50>
-From:   Robert Schlabbach <Robert.Schlabbach@gmx.net>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     mauro.chehab@huawei.com, Antti Palosaari <crope@iki.fi>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH 2/3] media: si2157: add support for 1.7MHz and 6.1 MHz
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 6 Jan 2022 16:39:39 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <76c2ea87882c87bd35066a85cb48292a36a79fce.1639140967.git.mchehab+huawei@kernel.org>
-References: <cover.1639140967.git.mchehab+huawei@kernel.org>
- <76c2ea87882c87bd35066a85cb48292a36a79fce.1639140967.git.mchehab+huawei@kernel.org>
+References: <20220104145212.4608-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <YdXt2mDjZ0zikbt6@oden.dyn.berto.se> <CA+V-a8sGh0bCiDu_Eiz3EFgaDPmr-qyz95=dExwf+UvuyA21Cg@mail.gmail.com>
+ <YdcK5WWnEtEQk0Fp@oden.dyn.berto.se>
+In-Reply-To: <YdcK5WWnEtEQk0Fp@oden.dyn.berto.se>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Thu, 6 Jan 2022 15:39:50 +0000
+Message-ID: <CA+V-a8v1ijFVVh91eHTD2uSGcinD46Hs9LDV125+_dfmvj6vYw@mail.gmail.com>
+Subject: Re: [PATCH v3] thermal: rcar_thermal: Use platform_get_irq_optional()
+ to get the interrupt
+To:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:kldg5sfH0lV7+OmAzzqHh7Fc/OmVasLESqyiyvqWj5bm2mYaY/6veO5+h93IbIu37QZp8
- ypnvoaMfT9+dRWcPxlOnlL6sKsqs4pAqoYdgx/M+alOiJhM+kHcKGTtVh/mf6hsMWR7LZ+WO0iLY
- QE8F7q/qhKNetVw2usxYHCEQAW2D15d5PPr0OdLyY70EEY0mmmp13YfL0FU/R7J2RahGzQc/WfWN
- mUXABJSI9miE2c1qBu6XpNnMVVn4NERNPbsfl85os579ho2ep7xgMqeAOtQDJaKScM/Rv7YK2nsG
- Ww=
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:8z48HhBFc3k=:oCq2ZPzR0F1BBdFEgwbG8F
- pzosLK3kqzFB+jfWKh9t6cEqH8NATdYZZY/yzayzZTaYPGeoqiqNVBK451MIuXGqborfUpy6A
- sIqd4EFCNH6Atl8rYpKtk7YzsPchiQPR1kg3wcu3QY8h1/J+l/D8+L0pu5OclkDkEVlCPmvEr
- imS487EhFYAahFWHhnguby1XzNzkV8wjPlGqaxJVUP84DO3psEhqVhnbcGpk1bXYkUSXtrRxg
- 4/e4LoRhW3mZTRtq6C3u5l43aTcQpnNhRUtfbwWPfUUeEIWMyNk1Wiu8u34cIZK0bmngf09wx
- ZHAP0mNY1rIaZOzX4BUsUxchE4BcT9eXj5dojYXah+ZnVkJBlv6924jkLvI0adK1eJm/bJ1tv
- kWYh6EleVFKVu1TccAnGXU0isIjDgmG8uCIIzHji/OD0aP/z4CHcDINTzoadi40CyRjGMvnaX
- FP2GtNGFmOWIMWGk4EzasceoPoUsiq+1c3KxkKdQeLt+TWeiB3irNegtynLZusoHgqwGaH0z2
- zDabRn2lg9OXZ7HAb+YUHKeY2Yl13XqF8C5LevC9c98cbdG2sL8kdHt9zk5TDTarFlYSdfIvy
- cQr2u5QpBV1fe9EuwW7ELD75CeXV06mjTAqmvt2GXQYqvHgUjX4aW39cDF5c4ToaJwURhtlTM
- sk/O77QQ6El7/d2z53ZF2r6K3MEve3DvckGqQ2n0Lp6iyeWvgtZUmLcJVIv3O4N4qyok+rPal
- s2+j4mCybDmh6YbfthCi/vJk8Y4iVHPTVJxYfcioptaqMzeppjsdI4e+r5/9ojFmY9lku78Zc
- rvk+bmQ
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry for the late test and response, but there is a BAD BUG in this patch:
-=C2=A0
-+ if (SUPPORTS_1700KHz(dev) && c->bandwidth_hz <=3D 1700000)
-+ bandwidth =3D 0x09;
-if (c->bandwidth_hz <=3D 6000000)
-bandwidth =3D 0x06;
-+ if (SUPPORTS_1700KHz(dev) && c->bandwidth_hz <=3D 6100000)
-+ bandwidth =3D 0x10;
-else if (c->bandwidth_hz <=3D 7000000)
-bandwidth =3D 0x07;
-else if (c->bandwidth_hz <=3D 8000000)
+Hi Niklas,
 
-The additions omitted the "else", which resulted in the bandwidth setting =
-for
-6MHz being overwritten with the one for 6=2E1MHz - and that completely bre=
-aks
-6MHz channels, as the tuner then refuses to accept the tune command!
+On Thu, Jan 6, 2022 at 3:29 PM Niklas S=C3=B6derlund
+<niklas.soderlund@ragnatech.se> wrote:
+>
+> Hi Lad,
+>
+> On 2022-01-05 19:25:25 +0000, Lad, Prabhakar wrote:
+> > Hi Niklas,
+> >
+> > Thank you for the review.
+> >
+> > On Wed, Jan 5, 2022 at 7:13 PM Niklas S=C3=B6derlund
+> > <niklas.soderlund@ragnatech.se> wrote:
+> > >
+> > > Hi Lad,
+> > >
+> > > Thanks for your work.
+> > >
+> > > On 2022-01-04 14:52:11 +0000, Lad Prabhakar wrote:
+> > > > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> > > > allocation of IRQ resources in DT core code, this causes an issue
+> > > > when using hierarchical interrupt domains using "interrupts" proper=
+ty
+> > > > in the node as this bypasses the hierarchical setup and messes up t=
+he
+> > > > irq chaining.
+> > > >
+> > > > In preparation for removal of static setup of IRQ resource from DT =
+core
+> > > > code use platform_get_irq_optional().
+> > > >
+> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.c=
+om>
+> > > > ---
+> > > > v2-v3:
+> > > > * Fixed review comment pointed by Andy
+> > > >
+> > > > v1->v2
+> > > > * Simplified checking error code
+> > > > * Break loop earlier if no interrupts are seen
+> > > >
+> > > > v1: https://lkml.org/lkml/2021/12/18/163
+> > > > ---
+> > > >  drivers/thermal/rcar_thermal.c | 17 ++++++++++++-----
+> > > >  1 file changed, 12 insertions(+), 5 deletions(-)
+> > > >
+> > > > diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_=
+thermal.c
+> > > > index b49f04daaf47..e480f7290ccf 100644
+> > > > --- a/drivers/thermal/rcar_thermal.c
+> > > > +++ b/drivers/thermal/rcar_thermal.c
+> > > > @@ -445,7 +445,7 @@ static int rcar_thermal_probe(struct platform_d=
+evice *pdev)
+> > > >       struct rcar_thermal_common *common;
+> > > >       struct rcar_thermal_priv *priv;
+> > > >       struct device *dev =3D &pdev->dev;
+> > > > -     struct resource *res, *irq;
+> > > > +     struct resource *res;
+> > > >       const struct rcar_thermal_chip *chip =3D of_device_get_match_=
+data(dev);
+> > > >       int mres =3D 0;
+> > > >       int i;
+> > > > @@ -467,9 +467,16 @@ static int rcar_thermal_probe(struct platform_=
+device *pdev)
+> > > >       pm_runtime_get_sync(dev);
+> > > >
+> > > >       for (i =3D 0; i < chip->nirqs; i++) {
+> > > > -             irq =3D platform_get_resource(pdev, IORESOURCE_IRQ, i=
+);
+> > > > -             if (!irq)
+> > > > -                     continue;
+> > > > +             int irq;
+> > > > +
+> > > > +             irq =3D platform_get_irq_optional(pdev, i);
+> > > > +             if (irq < 0 && irq !=3D -ENXIO) {
+> > > > +                     ret =3D irq;
+> > > > +                     goto error_unregister;
+> > > > +             }
+> > > > +             if (!irq || irq =3D=3D -ENXIO)
+> > > > +                     break;
+> > >
+> > > This do not look correct and differs form v1.
+> > >
+> > > In the old code if we can't get an IRQ the loop is continued. This is
+> > > used to detect if interrupts are supported or not on the platform.  T=
+his
+> > > change will fail on all systems that don't describes interrupts in DT
+> > > while the driver can function without interrupts.
+> > >
+> > There are no non-DT users for this driver. Do you see this driver
+> > being used in a non-DT environment in near future?
+>
+> No, maybe I was unclear sorry about that. What I intended to say was
+> that this change will break platforms that that make use of this driver
+> but do not describe interrupts in its DT description. As with this
+> change not describing interrupts is consider an error.
+>
+> For example checkout thermal@ffc48000 in arch/arm/boot/dts/r8a7779.dtsi.
+>
+If the interrupts are missing in DT (for example in [1])
+platform_get_irq_optional() will return -ENXIO with this patch this
+error code is handled gracefully i.e. it doesn't return error and
+breaks instead keeping the orignal behavior of the driver.
 
-As a result, e=2Eg=2E MCNS aka ClearQAM aka DVB-C Annex B no longer works =
-after
-this patch=2E
+[1] arch/arm/boot/dts/r8a7779.dtsi
 
-I don't know if the 1=2E7Mhz and 6=2E1MHz settings are even usable, if the=
- tuner
-(in my case, the Si2157-A30) then no longer accepts the tune command=2E Ma=
-ybe
-they're not suited for frequency-based tuning, but only for channel-based
-tuning? That would not fit the DVB-API, I think=2E
-
-And the 1=2E7MHz bandwidth setting currently can't do any harm, as it is a=
-lways
-overwritten by the 6MHz bandwidth setting, also due to an "else" missing=
-=2E
-
-Best Regards,
--Robert Schlabbach
-=C2=A0
-=C2=A0
-
-Gesendet:=C2=A0Freitag, 10=2E Dezember 2021 um 13:59 Uhr
-Von:=C2=A0"Mauro Carvalho Chehab" <mchehab+huawei@kernel=2Eorg>
-An:=C2=A0unlisted-recipients:;
-Cc:=C2=A0linuxarm@huawei=2Ecom, mauro=2Echehab@huawei=2Ecom, "Mauro Carval=
-ho Chehab" <mchehab+huawei@kernel=2Eorg>, "Antti Palosaari" <crope@iki=2Efi=
->, "Mauro Carvalho Chehab" <mchehab@kernel=2Eorg>, linux-kernel@vger=2Ekern=
-el=2Eorg, linux-media@vger=2Ekernel=2Eorg
-Betreff:=C2=A0[PATCH 2/3] media: si2157: add support for 1=2E7MHz and 6=2E=
-1 MHz
-Some tuners allow setting the bandwidth filter to 1=2E7MHz and
-6=2E1 MHz=2E Add support for it upstream, as the narrower is the
-bandwidth filter, the better=2E
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel=2Eorg>
----
-
-To avoid mailbombing on a large number of people, only mailing lists were =
-C/C on the cover=2E
-See [PATCH 0/3] at: https://lore=2Ekernel=2Eorg/all/cover=2E1639140967=2Eg=
-it=2Emchehab+huawei@kernel=2Eorg/
-
-drivers/media/tuners/si2157=2Ec | 4 ++++
-drivers/media/tuners/si2157_priv=2Eh | 5 +++++
-2 files changed, 9 insertions(+)
-
-diff --git a/drivers/media/tuners/si2157=2Ec b/drivers/media/tuners/si2157=
-=2Ec
-index aeecb38b147f=2E=2E2d3937af4f5f 100644
---- a/drivers/media/tuners/si2157=2Ec
-+++ b/drivers/media/tuners/si2157=2Ec
-@@ -458,8 +458,12 @@ static int si2157_set_params(struct dvb_frontend *fe)
-goto err;
-}
-
-+ if (SUPPORTS_1700KHz(dev) && c->bandwidth_hz <=3D 1700000)
-+ bandwidth =3D 0x09;
-if (c->bandwidth_hz <=3D 6000000)
-bandwidth =3D 0x06;
-+ if (SUPPORTS_1700KHz(dev) && c->bandwidth_hz <=3D 6100000)
-+ bandwidth =3D 0x10;
-else if (c->bandwidth_hz <=3D 7000000)
-bandwidth =3D 0x07;
-else if (c->bandwidth_hz <=3D 8000000)
-diff --git a/drivers/media/tuners/si2157_priv=2Eh b/drivers/media/tuners/s=
-i2157_priv=2Eh
-index df17a5f03561=2E=2E24849c8ed398 100644
---- a/drivers/media/tuners/si2157_priv=2Eh
-+++ b/drivers/media/tuners/si2157_priv=2Eh
-@@ -66,6 +66,11 @@ struct si2157_cmd {
-unsigned rlen;
-};
-
-+#define SUPPORTS_1700KHz(dev) (((dev)->part_id =3D=3D SI2141) || \
-+ ((dev)->part_id =3D=3D SI2147) || \
-+ ((dev)->part_id =3D=3D SI2157) || \
-+ ((dev)->part_id =3D=3D SI2177))
-+
-/* Old firmware namespace */
-#define SI2158_A20_FIRMWARE "dvb-tuner-si2158-a20-01=2Efw"
-#define SI2141_A10_FIRMWARE "dvb-tuner-si2141-a10-01=2Efw"
---
-2=2E33=2E1
-=C2=A0
+Cheers,
+Prabhakar

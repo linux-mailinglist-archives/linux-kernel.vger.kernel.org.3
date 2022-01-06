@@ -2,103 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2CD448668D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 16:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C05F6486696
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 16:14:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240393AbiAFPLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 10:11:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38184 "EHLO
+        id S240406AbiAFPO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 10:14:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240300AbiAFPLK (ORCPT
+        with ESMTP id S240346AbiAFPOZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 10:11:10 -0500
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D18EC061201
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 07:11:10 -0800 (PST)
-Received: by mail-il1-x144.google.com with SMTP id m4so2344078ilf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 07:11:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=6VA2nNhw86JzejaPzJ17MeUqpGjec4CrVrDeoAq5rvA=;
-        b=p6n/n80Qerrd8Acn2idrOjvkVILMVEipkPCy6Ri7s2eoNNGYO9Uj+YH7ugM+tsl/sr
-         CAkku35dxWukC7Qm7JFcy+cX6YtQuTcrACRS1daOsfkrUO/3nEiahM7j7tcnLPo3i72q
-         ERWJ8kUCv6LwB/AC9s9upk91jzfuaOKCTIuu3ZYsfdtol5hUzoRrIil1xpHYFxsc1nxB
-         b4Y8qDAdHUCkEcC0D6K7Tied+h0qHiagvRCKRSMUYian9dlydbgR78U5ZRLI0FAksejr
-         VVutkXS1H/geqQQr6+xXksco7nHOwJE7mEtcNDs0jhsi7wsxF7KOu/LCkRedU4UcuBWN
-         W/Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=6VA2nNhw86JzejaPzJ17MeUqpGjec4CrVrDeoAq5rvA=;
-        b=uZnVkUp4kJrE/AaBHTBIGxGVIhq7R6R9PJjYttejyjvqQxwxkvRHRYT+qP86l/Q82w
-         N2tyeP5NufIVuR3jfmENf8kojsdOG5i2m0Gbf3m+sWoYh8wmuJbn3tXr0KygZB4+v7ta
-         jddGc+bNGzOxyfbVCq3gp8BK1tKLzE3+2/F9r/WYJdXbGLryE6I7L9iapKpOawFi9rkE
-         OMaovJfmKNoW9l9CDFQkAjyhuKCfhCxIfMvEgfNrhUWHtGF2qRbLLj54dJJmDR1qYEkA
-         hFYbVFv2iGwZyvLZWIgkFUntATdELn2Y4c3UZnmCIadjF4CzI/Y06JvdJG9rqjm1PjE0
-         P37g==
-X-Gm-Message-State: AOAM530+Xg1CBEmk7qTZg1XJdk0z67oDLUvkZ+3SPysKFZXtKiYIouGw
-        vZgEnIGOQUWPyMQfZcKiFIJ1L2u7Nm11H1G6rCU=
-X-Google-Smtp-Source: ABdhPJz6Pc/ACdV9paDsqlPxPbti1ft4xL2ViaxDXBwuF2S+dpUqcfAzQF014MaPp03kJ91USaGDjWpiLbZc81T7U8Y=
-X-Received: by 2002:a05:6e02:1b05:: with SMTP id i5mr29733432ilv.60.1641481869335;
- Thu, 06 Jan 2022 07:11:09 -0800 (PST)
+        Thu, 6 Jan 2022 10:14:25 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21AF2C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 07:14:25 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n5UT6-0006jK-MO; Thu, 06 Jan 2022 16:14:20 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n5UT6-008oNH-6w; Thu, 06 Jan 2022 16:14:19 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n5UT5-0005yt-63; Thu, 06 Jan 2022 16:14:19 +0100
+Date:   Thu, 6 Jan 2022 16:13:55 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     William Breathitt Gray <vilhelm.gray@gmail.com>
+Cc:     linux-iio@vger.kernel.org,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH v3 00/23] counter: cleanups and device lifetime fixes
+Message-ID: <20220106151355.d4ogjpo3y5qnkrgs@pengutronix.de>
+References: <20211229154441.38045-1-u.kleine-koenig@pengutronix.de>
+ <YdWOkn2Gtd7FSYmR@shinobu>
 MIME-Version: 1.0
-Received: by 2002:a05:6638:204a:0:0:0:0 with HTTP; Thu, 6 Jan 2022 07:11:08
- -0800 (PST)
-Reply-To: alhouttta@gmail.com
-From:   Al Haji Ouattara <bankbankb38@gmail.com>
-Date:   Thu, 6 Jan 2022 16:11:08 +0100
-Message-ID: <CAHJX93aQn4gi6hAYMo4pSgZ_-evS+vvP7bBCnbPLEMJhnyssLA@mail.gmail.com>
-Subject: Assalam alaikum
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jxec66yc4jlaswjp"
+Content-Disposition: inline
+In-Reply-To: <YdWOkn2Gtd7FSYmR@shinobu>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Assalam alaikum,
 
-I am an active banker,  I saw your email address while browsing
-through the bank DTC Screen in my office yesterday. now  I am in a
-better position to transfer about $8.3 million US Dollars into a
-foreign account. If you are willing and capable to work with me to
-receive this fund into a personal or company's account, I will give
-you the full detailed information. No risk is involved as it will pass
-through normal banking procedures.
+--jxec66yc4jlaswjp
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hence, I am inviting you for a business deal where this money can be
-transfer to your account which we will shared between us in the ratio
-of 50% for me,50% for you and both of us will share any expenses that
-will come during the release/transfer from our bank to your bank
-account, if you agree to my business proposal. Further details of this
-Fund release and transfer will be forwarded to you as soon as I
-receive your detail Mail.
+On Wed, Jan 05, 2022 at 09:26:58PM +0900, William Breathitt Gray wrote:
+> On Wed, Dec 29, 2021 at 04:44:18PM +0100, Uwe Kleine-K=F6nig wrote:
+> >  - I think intel-qep.c makes the counter unfunctional in
+> >    intel_qep_remove before the counter is unregistered.
+>=20
+> Hello Uwe,
+>=20
+> Would you elaborate some more on this? I think intel_qep_remove() is
+> only called after the counter is unregistered because the struct
+> counter_device parent is set to &pci->dev in intel_qep_probe(). Am I
+> misunderstanding the removal path?
 
-1)Your Full Names. (2)Your country. (3)Your Telephone
-(4)Your Occupation .(5)Your Age. (6) Your full Address.
-I will use these detail information=E2=80=99s to fill a release/transfer an=
-d
-arrange some documents on your behalf in our bank here as the
-beneficiary owner of this fund abandoned in our bank
+If the counter device is unbound (e.g. via sysfs), the following calls
+are made:
 
+	intel_qep_remove() (stopping the hardware?)
+	devm_counter_release (devm callback of devm_counter_register or ..._add)
+	then the release callbacks of the earlier devm functions
 
-I want you to reply urgently so I will give you full details on how
-this business transaction will be executed. Please listen, this is
-real and goes on in Banks all over the world without people knowing.
-Let us utilize this opportunity because it does not always come, A lot
-of customers open private accounts with different Banks without the
-knowledge of their families and when they die, the money will be lost
-to the Bank unless someone comes to claim it. This is how a lot of
-Bank Directors make so much money silently. Also note I have the
-ability to conduct this transaction with total confidentiality with
-any company or individual involved, and both of us will share any
-expenses that will come during the release/transfer Anticipating your
-communication.
+My concern is, that in the timeslot between intel_qep_remove() and
+devm_counter_release() the device looks like a functional device and
+might be queried/reconfigured/... while the hardware is already dead.
 
-Please contact me through my private Email:  alhouttta@gmail.com
+It's probably not a big issue (unless for example reading the counter
+this race window makes the hardware hang?), but it's at least ugly.
+Maybe the worst effect is that a counter value is missed (which is OK at
+unregister time). Still it would be nicer to first take down the counter
+device and only then stop the hardware.
 
-All THE BEST Thanks
-Alh Idriss Akim Outta
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--jxec66yc4jlaswjp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHXByoACgkQwfwUeK3K
+7AlBJgf+Nbzmm7XXPcWM7auKes2hySGGhU5UfmlLbmulrmatVNuSO4r+4ucNP7Mk
+ffadE0d0xjCEw0e83P1Oae89yVEVCjRElgJWgqUMTKHDnL30agDSdP5NaHfOt8kB
+UjNBA91Yb1ksnhMkZTai8D8rLgqkrnqHU+ehr+V1p5PRL9IwSeQYUobRADJxGaqG
+Rd/iyKeeZA+ZLu4DCsOWY9wAuxrJXM91mKyMlkv+/MFbi3k3ljYppm4ndpfJbqU6
+dMTsIRa1dHVdLbh0CgXnBq/oI1qJIXPf2TcC9v5VGnEE50yI894djMAqtdQJpP20
+KOhu/emXrsuMxQGCCvdxk/mIlJur0Q==
+=4L9X
+-----END PGP SIGNATURE-----
+
+--jxec66yc4jlaswjp--

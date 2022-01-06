@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34841486B17
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:28:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA66F486B18
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:28:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243755AbiAFU2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 15:28:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54422 "EHLO
+        id S243772AbiAFU2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 15:28:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243754AbiAFU2Q (ORCPT
+        with ESMTP id S243740AbiAFU2S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 15:28:16 -0500
+        Thu, 6 Jan 2022 15:28:18 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8812C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 12:28:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46921C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 12:28:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 75CC161E16
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 20:28:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE3B5C36AED;
-        Thu,  6 Jan 2022 20:28:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DADEA61E15
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 20:28:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B656C36AE3;
+        Thu,  6 Jan 2022 20:28:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641500894;
-        bh=BGqh5w32AtbQBoQuseqpX+P4H5soTGDf7+fuVcRonE0=;
+        s=k20201202; t=1641500897;
+        bh=21uqmI0sF0iqFXzWvfwSr8yWzQwcFoXEvQOSpJlA73Q=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=dYXzcPsdPgpX4KDM3EK5x+hbwj6AXsuXwNTu6T8A7o40nVnVxTp0DUmqPMXwW69X5
-         SB9pN7XIF8rVr2iomTtzBbZ28X4b+bqMpGtuCLP71H8dKA+HiO1tS3uxdrRw05YyWF
-         h+5Wbw/fPsKNOXfjWB4Agj6ZDqO5yj7SM5KSPoJ/ASnXwZydNzkUgMkjvdFc9K4YPL
-         cQTBYmWEhZi5xR6SrKx5TyfBZdoi45nDng+FUrgLAycY9d2OvZ44zZ2c2bV/kb2Eb2
-         YT6G1/WPAQOgZGe3ajonlC0OrwCDl8Td9JOPmp9/aaCVp2L0NoBegqnG7vzxWBlmcR
-         H0fogSQz5UgWQ==
+        b=F+qwbyGHuzSd59HvZAdcWL05m/1dwoHw0g/OWlN9NjtsNLYA9CjiZ2ElVAOi8ifoU
+         nwjK6pBaLzl9SFkc64aiFm9xXA/60dEPD5gfqwFNH9Ja1YK+GMSCdk5QV54Gm3K5Lq
+         x9wN2hC7VsVxD8mKZpexdSqzLaCZoixn7AOiYc1YrO1/PSpONTvYJtNOCNe76RdbWL
+         00LAaDGFeYt1WoPPpAmE0J8p5+xuLVnLB7jyIwYoJydwywAweOIBdZ5DmzezjNWGTV
+         6/WHdrxYrWqndNnjrbAlWzgPj4yMz7CWcbQyHCiYvRGKunDcR+7p3bQmPPBO9u/ZM2
+         SBTXbdFyaBxBg==
 From:   Mark Brown <broonie@kernel.org>
-To:     perex@perex.cz, tiwai@suse.com,
-        Shengjiu Wang <shengjiu.wang@nxp.com>, Xiubo.Lee@gmail.com,
+To:     perex@perex.cz, tiwai@suse.com, Xiubo.Lee@gmail.com,
         alsa-devel@alsa-project.org, festevam@gmail.com,
-        nicoleotsuka@gmail.com, timur@kernel.org, lgirdwood@gmail.com
+        nicoleotsuka@gmail.com, timur@kernel.org,
+        Shengjiu Wang <shengjiu.wang@nxp.com>
 Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-In-Reply-To: <1641380883-20709-1-git-send-email-shengjiu.wang@nxp.com>
-References: <1641380883-20709-1-git-send-email-shengjiu.wang@nxp.com>
-Subject: Re: [PATCH] ASoC: fsl_asrc: refine the check of available clock divider
-Message-Id: <164150089249.2243486.14713961651621458604.b4-ty@kernel.org>
-Date:   Thu, 06 Jan 2022 20:28:12 +0000
+In-Reply-To: <1641292835-19085-1-git-send-email-shengjiu.wang@nxp.com>
+References: <1641292835-19085-1-git-send-email-shengjiu.wang@nxp.com>
+Subject: Re: [PATCH 0/3] ASoC: imx-card: several improvement and fixes
+Message-Id: <164150089509.2243486.810361187856950551.b4-ty@kernel.org>
+Date:   Thu, 06 Jan 2022 20:28:15 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -50,15 +50,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Jan 2022 19:08:03 +0800, Shengjiu Wang wrote:
-> According to RM, the clock divider range is from 1 to 8, clock
-> prescaling ratio may be any power of 2 from 1 to 128.
-> So the supported divider is not all the value between
-> 1 and 1024, just limited value in that range.
+On Tue, 4 Jan 2022 18:40:32 +0800, Shengjiu Wang wrote:
+> Several improvement and fixes for AK codecs supported on i.MX platfroms
 > 
-> Create table for the supported divder and add function to
-> check the clock divider is available by comparing with
-> the table.
+> Shengjiu Wang (3):
+>   ASoC: imx-card: Need special setting for ak4497 on i.MX8MQ
+>   ASoC: imx-card: Fix mclk calculation issue for akcodec
+>   ASoC: imx-card: improve the sound quality for low rate
 > 
 > [...]
 
@@ -68,8 +66,12 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: fsl_asrc: refine the check of available clock divider
-      commit: 320386343451ab6a3577e0ee200dac56a6182944
+[1/3] ASoC: imx-card: Need special setting for ak4497 on i.MX8MQ
+      commit: 3349b3d0c63b8b6fcca58156d72407f0b2e101ac
+[2/3] ASoC: imx-card: Fix mclk calculation issue for akcodec
+      commit: f331ae5fa59fbfb748317b290648fc3f1a50d932
+[3/3] ASoC: imx-card: improve the sound quality for low rate
+      commit: 3969341813eb56d2dfc39bb64229359a6ae3c195
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

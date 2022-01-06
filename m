@@ -2,155 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1DEE4867AE
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:30:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06DE14867B8
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:31:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241252AbiAFQaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 11:30:39 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42164 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241130AbiAFQai (ORCPT
+        id S241130AbiAFQbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 11:31:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241273AbiAFQbl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 11:30:38 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D59461D17;
-        Thu,  6 Jan 2022 16:30:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DBB8C36AEB;
-        Thu,  6 Jan 2022 16:30:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641486637;
-        bh=VwzxlywbuRFhErv9Kwojn/ALeD7Ym5OuRWIkT52COFc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=s1Ds1PuDWp54mthBB3Df0U9FaSLR9yMCFT3ojsHwiDSV0W1Z/Wkh9LdnU9fHAB/3K
-         OsCXSgobyd0UcosuOCuxzxpkNWf/ZOm21I30sn/nTY1v1M6xxZyUvj5u5HIC2NgiWD
-         ueKUj0Q7P9WyUgQOFFCeWaaaB2UANG2GyZhgeZ/iRMNucL77k96CqbIq0DBmGWrX9I
-         cRow3owjVT+86SwnhZ9Pjjd9oVdNNNcBV/1o4gBEy2SqBT42x5NqGS/Pc2fx5QI78i
-         8FE11YudQrYNDflkIK9FuJWiVsyGIRhRLPam5I27dQANSUVTEb99fJJmB+OIn7gxZa
-         Zi/PMpXjwWw+Q==
-Date:   Thu, 6 Jan 2022 10:30:35 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-pci@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v8 00/10] vgaarb: Rework default VGA device selection
-Message-ID: <20220106163035.GA292309@bhelgaas>
+        Thu, 6 Jan 2022 11:31:41 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CF4C061245;
+        Thu,  6 Jan 2022 08:31:40 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id d1so8971582ybh.6;
+        Thu, 06 Jan 2022 08:31:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ZM6UOM3FnObRgkqEaRi7ZwsD77LyLEAv2E7+Qwz8Kpo=;
+        b=VFCxEpktrpxVRGftdbTMwrw0K0F4iRBgf/FyutcTsvjBshi4XyaAR9z8aQ1XSsuPMW
+         XZwBWhC7xGFrRA7qJ7ZCdRCnCl3IG07J41NrYQOdtNeZqyCkfb5gxVv2gzovjf1S25Cj
+         nJ29mE0DJcinUaYPSRFG5CMLPZ07BcCe7mxdeI68C44G5pvX4NxPtvOQ8OJOdUKqp5MW
+         C5sEj1X1RkO53v91PxhkmXXMFrJzFHg/ztn4QrrH3hd7EKUzxrmaIm7JXC15fZEf4G8u
+         1vEdnf77nA9yfZBXMbnpXAZTi/STZdYof23Fsi08VjH8kIwtknhGklWB+Jhh+1ZfaWgr
+         yZlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ZM6UOM3FnObRgkqEaRi7ZwsD77LyLEAv2E7+Qwz8Kpo=;
+        b=HAdMAA8PwLOscZQ1cBHKBbmtEetjaQkccNhmX3OmmySSveXYpCVn55Qmea+JvOHcyL
+         i9zwFgiooAKkZfJDkwLeenoanmhziH/BM07k/fC7JaLnwWibeUeJMEn7J6i5ZdZmmOwC
+         v7/feSSDHLTXmFqipKdgrrg6wiNr5Askimj6jN+KoR9oB7+vj/yL3DC5gHnvEHn6LZRO
+         txf8LpW99zF22cTMUPSL9UoK4nYKQ8Pb+luPox5ssuGH34ScOV5ZJ7tvuAfepDdo+JwI
+         I6NPyiDTyIls8FpNdi69pf+3SWmfnGe65mWHYeTnPw1mXTp3ndC1BDZqFWSmF91qFB9w
+         EcpA==
+X-Gm-Message-State: AOAM5307/5xI4K8ylF/TDg6t99mx9yasnwJRzmXVJB/rgVw077Mq5cJk
+        lFX/cYYM6fJ1X361g/vSpuzm8qkHWwidlRETCTM=
+X-Google-Smtp-Source: ABdhPJzNdTP4XFd9P9NPS3ZzTPTsau2wGRp5cUn725XM9mHDW1ZcoJ4wEL3J1x4enMFKNDk4Az+hl/frDFPXPcgZERY=
+X-Received: by 2002:a25:d708:: with SMTP id o8mr65492245ybg.582.1641486699930;
+ Thu, 06 Jan 2022 08:31:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220106000658.243509-1-helgaas@kernel.org>
+References: <a16c31f3caf448dda5d9315e056585b6fafc22c5.1623302442.git.christophe.leroy@csgroup.eu>
+ <6c7a6762-6bec-842b-70b4-4a53297687d1@gmx.com>
+In-Reply-To: <6c7a6762-6bec-842b-70b4-4a53297687d1@gmx.com>
+From:   Neal Gompa <ngompa13@gmail.com>
+Date:   Thu, 6 Jan 2022 11:31:04 -0500
+Message-ID: <CAEg-Je9UJDJ=hvLLqQDsHijWnxh1Z1CwaLKCFm+-bLTfCFingg@mail.gmail.com>
+Subject: Re: [PATCH] fs: btrfs: Disable BTRFS on platforms having 256K pages
+To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
+        linux-hexagon@vger.kernel.org, Hector Martin <marcan@marcan.st>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+to Maarten, Maxime, Thomas: sorry, I forgot to use
-get_maintainer.pl so I missed you the first time.  Beginning of thread:
-https://lore.kernel.org/all/20220106000658.243509-1-helgaas@kernel.org/#t
-Git branch with this v8 + a couple trivial renames, based on v5.16-rc1:
-https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/log/?h=0f4caffa1297]
+On Wed, Jan 5, 2022 at 7:05 AM Qu Wenruo <quwenruo.btrfs@gmx.com> wrote:
+>
+> Hi Christophe,
+>
+> I'm recently enhancing the subpage support for btrfs, and my current
+> branch should solve the problem for btrfs to support larger page sizes.
+>
+> But unfortunately my current test environment can only provide page size
+> with 64K or 4K, no 16K or 128K/256K support.
+>
+> Mind to test my new branch on 128K page size systems?
+> (256K page size support is still lacking though, which will be addressed
+> in the future)
+>
+> https://github.com/adam900710/linux/tree/metadata_subpage_switch
+>
 
-On Wed, Jan 05, 2022 at 06:06:48PM -0600, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> Current default VGA device selection fails in some cases because part of it
-> is done in the vga_arb_device_init() subsys_initcall, and some arches
-> enumerate PCI devices in pcibios_init(), which runs *after* that.
-> 
-> For example:
-> 
->   - On BMC system, the AST2500 bridge [1a03:1150] does not implement
->     PCI_BRIDGE_CTL_VGA.  This is perfectly legal but means the legacy VGA
->     resources won't reach downstream devices unless they're included in the
->     usual bridge windows.
-> 
->   - vga_arb_select_default_device() will set a device below such a bridge
->     as the default VGA device as long as it has PCI_COMMAND_IO and
->     PCI_COMMAND_MEMORY enabled.
-> 
->   - vga_arbiter_add_pci_device() is called for every VGA device, either at
->     boot-time or at hot-add time, and it will also set the device as the
->     default VGA device, but ONLY if all bridges leading to it implement
->     PCI_BRIDGE_CTL_VGA.
-> 
->   - This difference between vga_arb_select_default_device() and
->     vga_arbiter_add_pci_device() means that a device below an AST2500 or
->     similar bridge can only be set as the default if it is enumerated
->     before vga_arb_device_init().
-> 
->   - On ACPI-based systems, PCI devices are enumerated by acpi_init(), which
->     runs before vga_arb_device_init().
-> 
->   - On non-ACPI systems, like on MIPS system, they are enumerated by
->     pcibios_init(), which typically runs *after* vga_arb_device_init().
-> 
-> This series consolidates all the default VGA device selection in
-> vga_arbiter_add_pci_device(), which is always called after enumerating a
-> PCI device.
-> 
-> Almost all the work here is Huacai's.  I restructured it a little bit and
-> added a few trivial patches on top.
-> 
-> I'd like to move vgaarb.c to drivers/pci eventually, but there's another
-> initcall ordering snag that needs to be resolved first, so this leaves 
-> it where it is.
-> 
-> Bjorn
-> 
-> Version history:
-> V0 original implementation as final quirk to set default device.
-> https://lore.kernel.org/r/20210514080025.1828197-6-chenhuacai@loongson.cn
-> 
-> V1 rework vgaarb to do all default device selection in
-> vga_arbiter_add_pci_device().
-> https://lore.kernel.org/r/20210705100503.1120643-1-chenhuacai@loongson.cn
-> 
-> V2 move arbiter to PCI subsystem, fix nits.
-> https://lore.kernel.org/r/20210722212920.347118-1-helgaas@kernel.org
-> 
-> V3 rewrite the commit log of the last patch (which is also summarized
-> by Bjorn).
-> https://lore.kernel.org/r/20210820100832.663931-1-chenhuacai@loongson.cn
-> 
-> V4 split the last patch to two steps.
-> https://lore.kernel.org/r/20210827083129.2781420-1-chenhuacai@loongson.cn
-> 
-> V5 split Patch-9 again and sort the patches.
-> https://lore.kernel.org/r/20210911093056.1555274-1-chenhuacai@loongson.cn
-> 
-> V6 split Patch-5 again and sort the patches again.
-> https://lore.kernel.org/r/20210916082941.3421838-1-chenhuacai@loongson.cn
-> 
-> V7 stop moving vgaarb to drivers/pci because of ordering issues with
-> misc_init().
-> https://lore.kernel.org/r/20211015061512.2941859-1-chenhuacai@loongson.cn
-> https://lore.kernel.org/r/CAAhV-H7FhAjM-Ha42Z1dLrE4PvC9frfyeU27KHWcyWKkMftEsA@mail.gmail.com
-> 
-> 
-> Bjorn Helgaas (8):
->   vgaarb: Factor out vga_select_framebuffer_device()
->   vgaarb: Factor out default VGA device selection
->   vgaarb: Move framebuffer detection to ADD_DEVICE path
->   vgaarb: Move non-legacy VGA detection to ADD_DEVICE path
->   vgaarb: Move disabled VGA device detection to ADD_DEVICE path
->   vgaarb: Remove empty vga_arb_device_card_gone()
->   vgaarb: Use unsigned format string to print lock counts
->   vgaarb: Replace full MIT license text with SPDX identifier
-> 
-> Huacai Chen (2):
->   vgaarb: Move vga_arb_integrated_gpu() earlier in file
->   vgaarb: Log bridge control messages when adding devices
-> 
->  drivers/gpu/vga/vgaarb.c | 311 +++++++++++++++++++--------------------
->  1 file changed, 154 insertions(+), 157 deletions(-)
-> 
-> -- 
-> 2.25.1
-> 
-> 
+The Linux Asahi folks have a 16K page environment (M1 Macs)...
+
+Hector, could you look at it too?
+
+
+
+--=20
+=E7=9C=9F=E5=AE=9F=E3=81=AF=E3=81=84=E3=81=A4=E3=82=82=E4=B8=80=E3=81=A4=EF=
+=BC=81/ Always, there's only one truth!

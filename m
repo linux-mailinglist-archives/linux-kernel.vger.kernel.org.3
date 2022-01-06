@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A10A4868AB
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:32:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0504868A7
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241868AbiAFRcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 12:32:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41818 "EHLO
+        id S241932AbiAFRcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 12:32:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242011AbiAFRb6 (ORCPT
+        with ESMTP id S242023AbiAFRb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 12:31:58 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B95AC034002
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 09:31:57 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id t26so6228753wrb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 09:31:57 -0800 (PST)
+        Thu, 6 Jan 2022 12:31:59 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750F6C034005
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 09:31:58 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id i22so6170610wrb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 09:31:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=W8/SX4B6pGqMw5D9hjNeLzM7aFQMvNtbchzA9WgHZ3g=;
-        b=gZEEmPS8SGAOQYH+sjnifr3Nfd+ubwj/AhpgTcBWcrdH1HqHgy+ewiVfoHCBOmPUvz
-         Z7OGdyATPNWtqC4HdfehVruP+ujJ1kn9MQ05vAZ89GWuelTm/87B2zEw6ogAp/ZQROEg
-         MbPpUGNl6aW3z3f91fOZJhe5pHAE1mgfp70u0hlLKXbCMW77IDn1FjshVSmHhoo+Q8GB
-         KJBO6qDTeS/qRKCA2cU2gB5Ih0KTVA/72FZxQn6L5KRvlYThkqyadYo0gchYzvM+O+Rz
-         W8xfrbJhBmRj62dtdW4cPkuXsipce+afJPUrOSSYQ3RbrvOrh1y1doJO1v8QPGDsDetR
-         QfCQ==
+        bh=2VD8BhFQsi1gAqizHlVU3fMYSmPUmL03WAYruvW0snE=;
+        b=m0HegGbWAjKeIsRoARzohUa1OFMBWmXZPnpb5wapIM9mm6FBTq1HEOGWlGenaN3qdn
+         TvWeF9SIpEDEC5m9jk5Kp9vi1+dvoGcUPJgdxkFcFmhdle1fNu+aEc5p9h1nShqrcPr9
+         cuHbe9jDYKohD+V842KPRBr2Nb5OtDaemIUGCatFdFOslDRAjkL4HblA+hNxDcKNuAHO
+         LXfQ1zU2ZPkOf0SsV4iTWTKHlU+3kgzp5gxCXxiZcnAzaWwY1vdjk+tTYHN2MZ9tMz0b
+         O28XacDMJHSYjxjiu7EjHdJ6QMQTFZ93yg2mNQzGXvgLBqR1OwAWiBV8/Sf3GpKubiF8
+         /fXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=W8/SX4B6pGqMw5D9hjNeLzM7aFQMvNtbchzA9WgHZ3g=;
-        b=NG9MLl0Q05zgTFzNVh8Lxm9FcM1wRjiuNPiDpNEEiGDJr8yVCczGTfuxUzaPyTIDSZ
-         iR2tCq5F/1ujbxeLaCyN1lZIgJqZEnQO5ofnz8O2orVsQ9irH2/SchqBdNQcKf6Axs8m
-         eaVtQFVxqsaMWmrA3+D9I1AMhvz7ERVRewNHyiRTiLHQXagZpJsurZmoibnSCoOS8EZ/
-         LZ1DWrcub6Z2Djt9PmYERjsV+lEzuYJq3COHeSntkPQyMrjCt3cx/5YvynL7an9sCpd9
-         vrQl/tHaRJbkw87NfChJAoYIWLv8fBuQij4ZdlhaxTXpi9VlNMulk4dWPxvEWUj5bRIr
-         yhRQ==
-X-Gm-Message-State: AOAM5314St3BuK7X8qlA0QppSL3xw7IN2yRCatxVy8Tzj+5hWOlt081f
-        DYnj9eDKWYHQswezSYx4VKsFmQ==
-X-Google-Smtp-Source: ABdhPJz8oLt7aOGYnbbUJf1Gzv8cuR4T8aezYAt90i1MF5S1G4nUy+WQpTR+IoF9URlEZYY2QtBTUw==
-X-Received: by 2002:a5d:6685:: with SMTP id l5mr2944681wru.588.1641490316145;
-        Thu, 06 Jan 2022 09:31:56 -0800 (PST)
+        bh=2VD8BhFQsi1gAqizHlVU3fMYSmPUmL03WAYruvW0snE=;
+        b=0qqL0WD5u42sszd4FxYjTU8+Ny8Dt+rqP9ZEGecI369+6q/4lGMU7lokP/H74DTEMS
+         CdY0nkbnPPKz/kg0FmLkMEM64yzmXtIoCd94wKoIgegkh35hxresvda5U64LQ+I2MQHh
+         Dqoc5es6tE2W8zgisgi0dgrnchqHu8EXlx3j3rkPj0pcUpGgkX7GAd2pPpwa+R7jmIeu
+         6i/0stl1YobtiHVhZqLxyCAKei5pJDAQsjaX1kuSmWMHtClq5ICOHHRv7XLotlFUhMoB
+         PUDjb7kMPyX9che9I7hOIE26B2NVQgNY/JE8ucmFohk6Sm4Y3wnIyiUvheG4+5zIJ54q
+         qwww==
+X-Gm-Message-State: AOAM532PoubGUl0vOc+U2wl8ddjALSo3kDkJ6stVZD23fC7HLh5sL5hG
+        L66SqFs/zELl2YDskVlt7z+eng==
+X-Google-Smtp-Source: ABdhPJy11EzN1DwExZ7UdzsyYAs7SBnwijjhuNVuuoC9cCSTKSH3NTcmkInYclaSjfV1HMK9sX5vSA==
+X-Received: by 2002:a5d:6f02:: with SMTP id ay2mr14004127wrb.269.1641490317063;
+        Thu, 06 Jan 2022 09:31:57 -0800 (PST)
 Received: from localhost.localdomain ([81.178.195.252])
-        by smtp.gmail.com with ESMTPSA id b16sm2575594wmq.41.2022.01.06.09.31.55
+        by smtp.gmail.com with ESMTPSA id b16sm2575594wmq.41.2022.01.06.09.31.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 09:31:55 -0800 (PST)
+        Thu, 06 Jan 2022 09:31:56 -0800 (PST)
 From:   Caleb Connolly <caleb.connolly@linaro.org>
 To:     caleb.connolly@linaro.org, Jonathan Cameron <jic23@kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
@@ -59,9 +59,9 @@ To:     caleb.connolly@linaro.org, Jonathan Cameron <jic23@kernel.org>,
         linux-arm-msm@vger.kernel.org
 Cc:     sumit.semwal@linaro.org, amit.pundir@linaro.org,
         john.stultz@linaro.org
-Subject: [PATCH v3 6/7] arm64: dts: qcom: sdm845-db845c: enable rradc
-Date:   Thu,  6 Jan 2022 17:31:30 +0000
-Message-Id: <20220106173131.3279580-7-caleb.connolly@linaro.org>
+Subject: [PATCH v3 7/7] arm64: dts: qcom: sdm845-xiaomi-beryllium: enable RRADC
+Date:   Thu,  6 Jan 2022 17:31:31 +0000
+Message-Id: <20220106173131.3279580-8-caleb.connolly@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220106173131.3279580-1-caleb.connolly@linaro.org>
 References: <20220106173131.3279580-1-caleb.connolly@linaro.org>
@@ -71,18 +71,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the Round Robin ADC for the db845c.
+Enable the PMI8998 RRADC.
 
 Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 4 ++++
+ arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-index 13f80a0b6faa..1c452b458121 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-@@ -595,6 +595,10 @@ resin {
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts
+index 580d4cc1296f..481132b0cee4 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts
++++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts
+@@ -312,6 +312,10 @@ resin {
  	};
  };
  
@@ -90,7 +90,7 @@ index 13f80a0b6faa..1c452b458121 100644
 +	status = "okay";
 +};
 +
- /* QUAT I2S Uses 4 I2S SD Lines for audio on LT9611 HDMI Bridge */
+ /* QUAT I2S Uses 1 I2S SD Line for audio on TAS2559/60 amplifiers */
  &q6afedai {
  	qi2s@22 {
 -- 

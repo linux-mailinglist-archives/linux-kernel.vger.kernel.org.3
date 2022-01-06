@@ -2,84 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0C9485F2B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 04:22:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BA38485F2E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 04:24:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiAFDWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 22:22:20 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:59668 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229773AbiAFDWT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 22:22:19 -0500
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2063MBO3016171
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 5 Jan 2022 22:22:11 -0500
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id BDDED15C00E1; Wed,  5 Jan 2022 22:22:10 -0500 (EST)
-Date:   Wed, 5 Jan 2022 22:22:10 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Xin Yin <yinxin.x@bytedance.com>
-Cc:     harshadshirwadkar@gmail.com, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND] ext4:fix different behavior of fsync when use
- fast commit
-Message-ID: <YdZgYvC4K87PiMfO@mit.edu>
-References: <20211224065728.5820-1-yinxin.x@bytedance.com>
+        id S230049AbiAFDYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 22:24:06 -0500
+Received: from mga09.intel.com ([134.134.136.24]:9768 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229694AbiAFDYG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 22:24:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641439446; x=1672975446;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=P3sSACmSpQXLtf2LZOVO9lkkPSb6OkBFtsV4kzyxeYM=;
+  b=nt1cCDVWlXRsnpjMaoB7as/kgJ/pun9HCOw+Q63F5MV+4HduGw2reHJc
+   4x7EeMdyMhOKpN6FQWfbsTnQyk0gH8+UBXQbNSa3HahTbYMzviTkyU/3R
+   wN/y8bUIdFfLd+0adVOzErTU6OD6Bvd3oxHH+xbqgX9UYQClOVvfIz1mX
+   Bw6l8K1YOOa82S1jHmpeI+mik75bubAN/haUmNGMdacYN+u7jlC/VMze1
+   7gEe+kyWuCZSwS6RdElcol2/xbwAc0efW+wGNiX9xm4JpJ+NMAWLJHh3F
+   H9voCtBzTvZxdFC2om1BR7FjE9V7/mzMMt+GRXj/1egCk04pBnPLZeupn
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242378039"
+X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
+   d="scan'208";a="242378039"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 19:24:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
+   d="scan'208";a="689245195"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 05 Jan 2022 19:24:04 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n5JNj-000HI1-Je; Thu, 06 Jan 2022 03:24:03 +0000
+Date:   Thu, 6 Jan 2022 11:23:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jonas =?iso-8859-1?Q?Dre=DFler?= <verdre@v0yd.nl>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Kalle Valo <kvalo@codeaurora.org>
+Subject: drivers/net/wireless/marvell/mwifiex/pcie.c:659:13: warning:
+ variable 'retval' set but not used
+Message-ID: <202201061102.dFgIQVH0-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211224065728.5820-1-yinxin.x@bytedance.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 24, 2021 at 02:57:28PM +0800, Xin Yin wrote:
-> For the follow test example:
-> -mkdir test/
-> -create&write test/a.txt
-> -fsync test/a.txt
-> -crash (before a full commit)
-> 
-> If fast commit is used then "a.txt" will lost, while the normal
-> journaling can recover it.
+Hi Jonas,
 
-The problem is that your proposed fix: 
+FYI, the error/warning still remains.
 
-> diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
-> index 3deb97b22ca4..4b843648ffe5 100644
-> --- a/fs/ext4/fast_commit.c
-> +++ b/fs/ext4/fast_commit.c
-> @@ -423,7 +423,7 @@ void __ext4_fc_track_create(handle_t *handle, struct inode *inode,
->  	args.op = EXT4_FC_TAG_CREAT;
->  
->  	ret = ext4_fc_track_template(handle, inode, __track_dentry_update,
-> -					(void *)&args, 0);
-> +					(void *)&args, 1);
->  	trace_ext4_fc_track_create(inode, dentry, ret);
->  }
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   75acfdb6fd922598a408a0d864486aeb167c1a97
+commit: 8e3e59c31fea5de95ffc52c46f0c562c39f20c59 mwifiex: Try waking the firmware until we get an interrupt
+date:   3 months ago
+config: ia64-randconfig-r001-20220106 (https://download.01.org/0day-ci/archive/20220106/202201061102.dFgIQVH0-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8e3e59c31fea5de95ffc52c46f0c562c39f20c59
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 8e3e59c31fea5de95ffc52c46f0c562c39f20c59
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/net/wireless/marvell/mwifiex/
 
-affects both file creations as well as directory creations (mkdir).
-Putting the inode on the fast commit list is something that is meant
-for files, and means that on a fast commit we need to force the data
-blocks out.  So it seems that isn't the right fix for the problem.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Why do something really simple?  Look at the parent directory's inode,
-and check its i_sync_tid.  If it's not equal to
-handle->h_transaction->t_tid, then it's safe to do the fast commit.
-If it's equal to the current transaction, we can either force a full
-commit.
+All warnings (new ones prefixed by >>):
 
-Optionally, in the case where i_sync_tid == current tid, since there's
-a chance that the parent directory's inode could have been freshly
-fetched from disk (see __ext4_iget() in fs/ext4/inode.c), we could
-compare its i_crtime against ktime_get_real_seconds(), and if the
-inode was created in the last 2*journal->j_commit_interval/HZ seconds,
-it's safe to do a fast commit; otherwise do a full commit.
+   drivers/net/wireless/marvell/mwifiex/pcie.c: In function 'mwifiex_pm_wakeup_card':
+>> drivers/net/wireless/marvell/mwifiex/pcie.c:659:13: warning: variable 'retval' set but not used [-Wunused-but-set-variable]
+     659 |         int retval;
+         |             ^~~~~~
 
-Cheers,
 
-					- Ted
+vim +/retval +659 drivers/net/wireless/marvell/mwifiex/pcie.c
+
+   653	
+   654	/* This function wakes up the card by reading fw_status register. */
+   655	static int mwifiex_pm_wakeup_card(struct mwifiex_adapter *adapter)
+   656	{
+   657		struct pcie_service_card *card = adapter->card;
+   658		const struct mwifiex_pcie_card_reg *reg = card->pcie.reg;
+ > 659		int retval;
+   660	
+   661		mwifiex_dbg(adapter, EVENT,
+   662			    "event: Wakeup device...\n");
+   663	
+   664		if (reg->sleep_cookie)
+   665			mwifiex_pcie_dev_wakeup_delay(adapter);
+   666	
+   667		/* The 88W8897 PCIe+USB firmware (latest version 15.68.19.p21) sometimes
+   668		 * appears to ignore or miss our wakeup request, so we continue trying
+   669		 * until we receive an interrupt from the card.
+   670		 */
+   671		if (read_poll_timeout(mwifiex_write_reg, retval,
+   672				      READ_ONCE(adapter->int_status) != 0,
+   673				      500, 500 * N_WAKEUP_TRIES_SHORT_INTERVAL,
+   674				      false,
+   675				      adapter, reg->fw_status, FIRMWARE_READY_PCIE)) {
+   676			if (read_poll_timeout(mwifiex_write_reg, retval,
+   677					      READ_ONCE(adapter->int_status) != 0,
+   678					      10000, 10000 * N_WAKEUP_TRIES_LONG_INTERVAL,
+   679					      false,
+   680					      adapter, reg->fw_status, FIRMWARE_READY_PCIE)) {
+   681				mwifiex_dbg(adapter, ERROR,
+   682					    "Firmware didn't wake up\n");
+   683				return -EIO;
+   684			}
+   685		}
+   686	
+   687		if (reg->sleep_cookie) {
+   688			mwifiex_pcie_dev_wakeup_delay(adapter);
+   689			mwifiex_dbg(adapter, INFO,
+   690				    "PCIE wakeup: Setting PS_STATE_AWAKE\n");
+   691			adapter->ps_state = PS_STATE_AWAKE;
+   692		}
+   693	
+   694		return 0;
+   695	}
+   696	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

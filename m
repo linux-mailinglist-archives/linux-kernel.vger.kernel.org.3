@@ -2,112 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1227448683C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:15:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A86D48683D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:15:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241612AbiAFRPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 12:15:47 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:55492 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241570AbiAFRPn (ORCPT
+        id S241626AbiAFRPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 12:15:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37948 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241570AbiAFRPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 12:15:43 -0500
+        Thu, 6 Jan 2022 12:15:50 -0500
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37473C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 09:15:50 -0800 (PST)
+Received: by mail-vk1-xa35.google.com with SMTP id w206so1170757vkd.10
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 09:15:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1641489343; x=1673025343;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=cykvwp8vzwvD4aN72B0mMnrqtEJ+xaw+0nAWMKLhHEc=;
-  b=cy8jQU4cP+W/6vrBGG9gNdVOqQKwKNYw7ffBIxtRXNY6I40O3QEL4C5g
-   Q57jyi4i7CsEun3Myg8gXEJhk7ERoyHj2HgDGRM4/wUHw/VY3S8d4UC/6
-   4i6hPNgfxtUwaIN+66xN7XkvzN1KilBwTwJlZs2tW5ACKRpcNGagmBK2D
-   g=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 06 Jan 2022 09:15:43 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 09:15:43 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 6 Jan 2022 09:15:42 -0800
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 6 Jan 2022 09:15:41 -0800
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <bjorn.andersson@linaro.org>
-CC:     <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
-        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3] drm/msm/dp:  populate connector of struct  dp_panel
-Date:   Thu, 6 Jan 2022 09:15:35 -0800
-Message-ID: <1641489335-20975-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bv1uj9SjD53aGmIbUH8n5Q+U8y7s+fziMRLJmeNdKdM=;
+        b=gCs3l7JycTeYC6LcXnl6STuvVtHSNa+4B7/LnDkjTYZRyjv5hXIzW0af16BserSJbg
+         bHzo9udqKoNEb4MC69rkm/tdKG5bXn+6agS5X+ly7RugJJSDXlnyansBTOj+I8iu1sOe
+         s8eqx9Io/8BXo4aRXQO7ammsAu/lBJ/DH4TG517SmK89vldrLbzf6FSnHh4IJqtZpzhJ
+         KZf04E5nMS8mBv4VEqwaWddK9L0pKHMSz0O/n7VCWw4kyE1jlY8VaaOJfhwGkEEwfO9d
+         Ne8/xm0hcZGh5zhazmtkMslgl2kyURPHUJU6/Q6nzjt2FnZTSVz1Oy1JDJ/YtW1KcLCg
+         5TsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bv1uj9SjD53aGmIbUH8n5Q+U8y7s+fziMRLJmeNdKdM=;
+        b=QlAA3r/JvrDPoDseTSTR74Z4b5Q5JntqMYG0XU80kfdWBkWH9rxSZTRpH4YbcJFWuP
+         cv4luXCgb4dkZooTC8oLfTE1qG1JiBPDGQw58J/dyMVYPFbGRW049Hb7fkLY+6s1KtMO
+         tUg7bzHb6WTeqEjZinzsOXb7gRh8JOUT08QYBAyd4qyTUOmTw7xbxztZQFKEdX1ZC5DZ
+         Z9EtFxmVZ9kkVMbcREWizQRqSm9riedGzj/lQxlyxAI+NxoTyYmKHod1kQuzQHIxvw2e
+         nEEP5pGCKI5KrW8ZfQnfu5IKcL3BI3rFHz2cIeO1nwuhUgRczh25Yns/5uoYfJpy5pzx
+         5o+g==
+X-Gm-Message-State: AOAM530R6BedmPJAusmh8NZrMrac4h4Eu9oAGPUSam446C4j6YdR19Li
+        MdlLvNma3jpzCBveXidt8lo=
+X-Google-Smtp-Source: ABdhPJxSewBmlC+0VLJW9Al5oy6koPdY9GkUNqaPKUqpTHXDum6L2xtcmtSL7GsG8KHccVPpkXBFZA==
+X-Received: by 2002:a05:6122:88b:: with SMTP id 11mr21281956vkf.10.1641489349280;
+        Thu, 06 Jan 2022 09:15:49 -0800 (PST)
+Received: from localhost.localdomain ([2804:14c:485:504a:2169:9589:878d:2b28])
+        by smtp.gmail.com with ESMTPSA id u26sm1871781vsj.9.2022.01.06.09.15.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 09:15:48 -0800 (PST)
+From:   Fabio Estevam <festevam@gmail.com>
+To:     broonie@kernel.org
+Cc:     matthias.schiffer@ew.tq-group.com, linux-kernel@vger.kernel.org,
+        Fabio Estevam <festevam@gmail.com>
+Subject: [PATCH] regmap: debugfs: Free the previous allocated debugfs_name buffer
+Date:   Thu,  6 Jan 2022 14:15:37 -0300
+Message-Id: <20220106171537.3091643-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We never assign struct dp_panel::connector, instead the connector is
-stored in struct msm_dp::connector. When we run compliance testing test
-case 4.2.2.6 dp_panel_handle_sink_request() won't have a valid edid set
-in struct dp_panel::edid so we'll try to use the connectors
-real_edid_checksum and hit a NULL pointer dereference error because the
-connector pointer is never assigned.
+The following error message is seen when booting an imx6q-sabresd:
 
-Changes in V2:
--- populate panel connector at msm_dp_modeset_init() instead of at dp_panel_read_sink_caps()
+debugfs: Directory 'dummy-iomuxc-gpr@20e0000' with parent 'regmap' already present!
 
-Changes in V3:
--- remove unhelpful kernel crash trace commit text
--- remove renaming dp_display parameter to dp
+By inspecting the duplicate directory name: 
 
-Fixes: 7948fe12d47 ("drm/msm/dp: return correct edid checksum after corrupted edid checksum read")
-Signee-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+[    0.274418] platform panel: Fixing up cyclic dependency with ldb
+[    0.276896] ************ 1: devname is dummy
+[    0.276926] ************ 2: name is iomuxc-gpr@20e0000
+[    0.276951] ************ 3: Forming the final name
+[    0.276979] ************ 3a: Name from map->debugfs_name dummy-iomuxc-gpr@20e0000
+[    0.277001] ************ 4: name is dummy-iomuxc-gpr@20e0000
+[    0.277022] ************ 5: Final name is dummy-iomuxc-gpr@20e0000
+[    0.277746] No ATAGs?
+[    0.278355] hw-breakpoint: found 5 (+1 reserved) breakpoint and 1 watchpoint registers.
+[    0.278469] hw-breakpoint: maximum watchpoint size is 4 bytes.
+[    0.282007] ********** gpr succeeded
+[    0.282042] ************ 1: devname is 20e0000.pinctrl
+[    0.282070] ************ 2: name is gpr
+[    0.282093] ************ 3a: Name from map->debugfs_name dummy-iomuxc-gpr@20e0000
+[    0.282115] ************ 4: name is dummy-iomuxc-gpr@20e0000
+[    0.282138] ************ 5: Final name is dummy-iomuxc-gpr@20e0000
+[    0.282185] debugfs: Directory 'dummy-iomuxc-gpr@20e0000' with parent 'regmap' already present!
+
+
+The 'dummy-iomuxc-gpr@20e0000' name is caused by a non-freed map->debugfs_name
+buffer.
+
+After calling kfree(map->debugfs_name), no more duplicate naming is seen:
+
+After:
+
+[    0.257135] platform 2800000.ipu: Fixing up cyclic dependency with 120000.hdmi
+[    0.257460] platform 2800000.ipu: Fixing up cyclic dependency with 20e0000.iomuxc-gpr:ipu2_csi1_mux
+[    0.257782] platform 2800000.ipu: Fixing up cyclic dependency with 21dc000.mipi
+[    0.273536] platform panel: Fixing up cyclic dependency with ldb
+[    0.276013] ************ 1: devname is dummy
+[    0.276043] ************ 2: name is iomuxc-gpr@20e0000
+[    0.276067] ************ 3: Forming the final name
+[    0.276097] ************ 3a: Name from map->debugfs_name dummy-iomuxc-gpr@20e0000
+[    0.276119] ************ 4: name is dummy-iomuxc-gpr@20e0000
+[    0.276141] ************ 5: Final name is dummy-iomuxc-gpr@20e0000
+[    0.276859] No ATAGs?
+[    0.277468] hw-breakpoint: found 5 (+1 reserved) breakpoint and 1 watchpoint registers.
+[    0.277580] hw-breakpoint: maximum watchpoint size is 4 bytes.
+[    0.281122] ********** gpr succeeded
+[    0.281156] ************ 1: devname is 20e0000.pinctrl
+[    0.281184] ************ 2: name is gpr
+[    0.281206] ************ 3a: Name from map->debugfs_name 20e0000.pinctrl
+[    0.281228] ************ 4: name is 20e0000.pinctrl
+[    0.281251] ************ 5: Final name is 20e0000.pinctrl
+
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- drivers/gpu/drm/msm/dp/dp_display.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/base/regmap/regmap-debugfs.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index 3449d3f..40a059d 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -1499,6 +1499,7 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
- 			struct drm_encoder *encoder)
- {
- 	struct msm_drm_private *priv;
-+	struct dp_display_private *dp_priv;
- 	int ret;
- 
- 	if (WARN_ON(!encoder) || WARN_ON(!dp_display) || WARN_ON(!dev))
-@@ -1507,6 +1508,8 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
- 	priv = dev->dev_private;
- 	dp_display->drm_dev = dev;
- 
-+	dp_priv = container_of(dp_display, struct dp_display_private, dp_display);
-+
- 	ret = dp_display_request_irq(dp_display);
- 	if (ret) {
- 		DRM_ERROR("request_irq failed, ret=%d\n", ret);
-@@ -1524,6 +1527,8 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
- 		return ret;
+diff --git a/drivers/base/regmap/regmap-debugfs.c b/drivers/base/regmap/regmap-debugfs.c
+index ad684d37c2da..18f0c7223082 100644
+--- a/drivers/base/regmap/regmap-debugfs.c
++++ b/drivers/base/regmap/regmap-debugfs.c
+@@ -589,6 +589,7 @@ void regmap_debugfs_init(struct regmap *map)
+ 				return;
+ 		}
+ 		name = map->debugfs_name;
++		kfree(map->debugfs_name);
+ 	} else {
+ 		name = devname;
+ 	}
+@@ -600,6 +601,7 @@ void regmap_debugfs_init(struct regmap *map)
+ 		if (!map->debugfs_name)
+ 				return;
+ 		name = map->debugfs_name;
++		kfree(map->debugfs_name);
+ 		dummy_index++;
  	}
  
-+	dp_priv->panel->connector = dp_display->connector;
-+
- 	priv->connectors[priv->num_connectors++] = dp_display->connector;
- 	return 0;
- }
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.25.1
 

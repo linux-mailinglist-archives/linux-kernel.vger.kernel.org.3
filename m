@@ -2,85 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D22BD486007
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 05:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B781486011
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 06:07:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234106AbiAFE5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 23:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42426 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231971AbiAFE5C (ORCPT
+        id S230024AbiAFFHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 00:07:48 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:42490 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229585AbiAFFHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 23:57:02 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6C6C061245
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 20:57:01 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id i31so2526087lfv.10
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 20:57:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=X65NEiUhvsFDtwD4k9Vu0C+bnvktzcqLB3dP+94RGJs=;
-        b=NIMCcquVCvNxGlFGb6/GQMGWd2D067Y7MeBLj/gPZz7xYMYqIjUpW5zJwUPmgI6vY/
-         RudweBe5e4cfOdpsetAy+29RwUYLvIHLVLpiTJApzr1UAxvn9SOuWW9SiYFSta6eJ0RN
-         RXpuJf61C7bB3GWa1tvW0YwJcTbSuixCOiNyeN97bFRls/sBIl1qg3fEOiJTjBrhCawa
-         JgYAN1/wgWKVb38VTLNdmajzlp4LCAtPp0X6kipORO+XyC1nYcv4e7P6Qf7SwPU3Obsm
-         riTVXmyeAojmJNGLXxEYceVZCqZq41CpPEq4qSDfsPahtHC8jiomu9IeUvwKOOKunKSl
-         GlGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=X65NEiUhvsFDtwD4k9Vu0C+bnvktzcqLB3dP+94RGJs=;
-        b=rIbCltZbe2tCJzE6yhOQcciir0k4J29gGd+WEBTysRd/hVtP+NKa+ngVVF1iWwC6ow
-         L5nCCbWHvhMjyAiKUz5SIyWjMQexkqca116AkAuTeGHENwZRx6Au75c5AHHT39+hQ6AC
-         ppM+1J41wz4f9vWs2zv6izCJenHD869SFjxCT5N1aWnV6oUuUWUfwDsZMReDhX/PTc/u
-         486RjKBsKNyFDzsLYvWeFnPK5rRM7CXf0v99Xc+x7jzwY8vJIKwAocGs6SrQL1s3yifr
-         a5pzP6VG3CEfpeUDd/cyHtEx/G6GTRJdidhK4i4AptiasQcmZg+5a1P3x6rWpsY1bdhx
-         Mr6Q==
-X-Gm-Message-State: AOAM5331SvATb64It9sy4sWAesd1IJczv3qXXermsavWWVRoPmjzC7Qk
-        m7WQuYfwD5bbwH7iEMhJ261HVanuJ1mxG9+GD4Q=
-X-Google-Smtp-Source: ABdhPJxyl5bA94crTb+/s6JW/ECU62gC5eWwnzANGAvQcmwgEepU17ZrB+Lcr+BdaMxNBvJYM3j+kenhNJuJ/qaCUWA=
-X-Received: by 2002:a05:6512:3095:: with SMTP id z21mr31189970lfd.466.1641445019984;
- Wed, 05 Jan 2022 20:56:59 -0800 (PST)
+        Thu, 6 Jan 2022 00:07:47 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 207EEB819BC;
+        Thu,  6 Jan 2022 05:07:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E16EC36AE5;
+        Thu,  6 Jan 2022 05:07:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641445664;
+        bh=D7iMPaQNW7tDdQiXC0UqtchlPiGk1xwtrROv6L/y5+A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZVIVTkIogNCJmdRqyC16r7sV+7EmNPiy06RMjCkcTMetZohSe7UVGz5An/w/kXMOh
+         YGqy9ZBx/wOYNC8dGgEJzBN9LnCD8yCx/IhjoTvCGFAsAVRZn10cy4/vOeiUNB7z2T
+         /n7vcg2xiFFG3FYN4/kxk6gf3AJmZp3fmxoT8QJZW/XzQvLbNUrma8PUy+ViuT3uWF
+         Env82KZExxiKU+TYSdeRQeKyu3vdAigu+aGkz425jyTCAy4Gepzf0SaoRWLy8jKwzW
+         9tEUA3RlxVx2wv/LP265jkNimJOtoKlItGxAGaz2El4kIqFwVobCqLDQrni4uQHzDl
+         QY+5Pj19EEh2Q==
+Date:   Wed, 5 Jan 2022 21:07:42 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Bae, Chang Seok" <chang.seok.bae@intel.com>
+Cc:     "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@suse.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Gairuboyina, Charishma1" <charishma1.gairuboyina@intel.com>,
+        "Dwarakanath, Kumar N" <kumar.n.dwarakanath@intel.com>,
+        "Krishnakumar, Lalithambika" <lalithambika.krishnakumar@intel.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
+Subject: Re: [PATCH v4 00/13] x86: Support Key Locker
+Message-ID: <YdZ5HrOKEffBrQIm@sol.localdomain>
+References: <20211214005212.20588-1-chang.seok.bae@intel.com>
+ <YbqRseO+TtuGQk5x@sol.localdomain>
+ <4101B942-6327-49A9-BE8B-9E51F0427F50@intel.com>
 MIME-Version: 1.0
-Received: by 2002:a05:651c:514:0:0:0:0 with HTTP; Wed, 5 Jan 2022 20:56:59
- -0800 (PST)
-Reply-To: drbellomusa009@gmail.com
-From:   "Dr.Bello Musa" <wamadirector514@gmail.com>
-Date:   Thu, 6 Jan 2022 05:56:59 +0100
-Message-ID: <CANrnDxHgQTqNz6nnnhYJC3SU8D4__AHA8HavYmKU1RUz6BB38A@mail.gmail.com>
-Subject: ATTENTION FROM REPUBLIC OF BURKINA FASO IN WEST AFRICA.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4101B942-6327-49A9-BE8B-9E51F0427F50@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- REPUBLIC OF BURKINA FASO IN WEST AFRICA
-01 BP OUAGA BURKINA FASO OUAGADOUGOU.
+On Wed, Jan 05, 2022 at 09:55:17PM +0000, Bae, Chang Seok wrote:
+> >> +-----------+---------------+---------------+
+> >> | Cipher    |   Encryption  | Decryption    |
+> >> | (AES-KL)  |    (MiB/s)    | (MiB/s)       |
+> >> +-----------+---------------+---------------+
+> >> | AES-CBC   |     505.3     |   2097.8      |
+> >> | AES-XTS   |     1130      |   696.4       |
+> >> +-----------+-------------------------------+
+> > 
+> > Why is AES-XTS decryption so much slower than AES-XTS encryption?  They should
+> > be about the same.
+> 
+> Analyzing and understanding this with specific hardware implementation takes
+> time for us. Will come back and update you when we have anything to share here.
 
-ATTENTION FUND OWNER:
+Note that for disk encryption, decryption performance is usually more important
+than encryption performance.  So your performance results are strange.
 
-THE  REPUBLIC OF BURKINA FASO IN WEST AFRICA WRITES TO LET TO YOUR
-NOTICE THAT  SOME FUND HAS BEEN APPROVED BY THE WORLD BANK
-ORGANIZATION AND WORLD  PRESIDENCY UNION TO BE RECEIVED BY YOU AS FORM
-OF COMPENSATION FOR  BEING A SCAM VICTIM IN THE PAST YEARS OR YOUR
-FAMILY BEING BADLY  AFFECTED BY COVID-19..
+> > Also, is the AES-CBC support really useful, given that for disk encryption,
+> > AES-XTS is recommended over AES-CBC these days?
+> 
+> Yes, we understand that AES-XTS is the primary option for disk encryption.
+> 
+> But it seems that AES-CBC had been used for disk encryption, [1]:
+> 
+>     Comparing XTS to CBC for hard disk encryption
+>         If a storage device vendor is seeking FIPS 140-2 certification today,
+>         they will typically use CBC encryption, or even ECB. CBC is a good
+>         mode, ...
 
-NOTE: YOU ARE REQUESTED TO CONFIRM YOUR VALID INFORMATION SO AS TO
-ENABLE THE BANK REACHING THROUGH TO YOU TO BE SURE WE ARE DEALING WITH
- THE AFFECTED PERSON OR THE FAMILY..
+That document is very old.  XTS has been NIST-approved for over a decade now.
 
-CONFIRM BELOW INFORMATION;
+> 
+> As long as it is factual that the mode was once popular, it can help somebody
+> who wants to use Key Locker for an old disk image I think.
 
-COMPLETE NAME AS STATED ON YOUR ID CARD:
-PHONE NUMBER AND FAX  NUMBER TO QUICKLY REACH OUT TO YOU: ADDRESS:  ID
-CARD FOR VERIFICATION PURPOSE :
+AES-CBC is/was usually used with ESSIV, in which case the key cannot be fully
+protected by Key Locker.
 
-YOUR URGENT RESPONSE IS WELCOMED AS WE ARE OPEN TO RECEIVE ANY
-QUESTION THAT MIGHT DISTURB YOU..
+I'm not sure you should bother to support legacy use cases, especially since it
+might mislead users into choosing a worse algorithm.
 
-YOURS FAITHFULLY.
-DR.BELLO MUSA.
-GENERAL OVERSEAS  PAYMENT DIRECTOR.
+- Eric

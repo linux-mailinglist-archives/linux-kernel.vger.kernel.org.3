@@ -2,118 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FC6B486B98
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:05:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C47DD486B95
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244106AbiAFVFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 16:05:42 -0500
-Received: from fanzine2.igalia.com ([213.97.179.56]:50348 "EHLO
-        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244069AbiAFVFj (ORCPT
+        id S244098AbiAFVFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 16:05:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38428 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244069AbiAFVFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 16:05:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version
-        :Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=RjinO8IcnDpJH9TEhia5kvOwgPh5fe8QqWyiQwb8cvs=; b=sBFtvIF22PUjiVd/XPbex2QJQ5
-        MRs0oYEzTOjyNJQZCln6UYBHHYd9T0RsH4LLYSf9T09nKu8sYU/by3yzsKjsrpJ/1RwCuK+vddmR0
-        IS9CMOrz3qWAIGsbG+b6Xb9i6w/dA1VgVoJWD0JXYi2n23dWR6VHMRdQY2HGnl/32cIAUesVVq9KM
-        XNgK53P9NaMD2a0xL2tB4dYO7T5YWgE0LSmnZ7p7+xTyF5mj4QjWOHIuPxItYyicCyCSsptaY9753
-        8aYDdL5XEH+VYDxUmR9i4zARuz7Dsc4InRLBYaDi2kZszBQ14SVwFmu5Y2dEmcN5zDCY1v6wFU1ON
-        s+yaYRkg==;
-Received: from [179.113.53.20] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1n5Zws-000BUL-D4; Thu, 06 Jan 2022 22:05:26 +0100
-Subject: Re: [PATCH V2] notifier/panic: Introduce panic_notifier_filter
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dyoung@redhat.com, linux-doc@vger.kernel.org, bhe@redhat.com,
-        vgoyal@redhat.com, akpm@linux-foundation.org,
-        andriy.shevchenko@linux.intel.com, corbet@lwn.net,
-        halves@canonical.com, kernel@gpiccoli.net
-References: <20220106200007.112357-1-gpiccoli@igalia.com>
- <YddQOFye7Rhr9NDl@rowland.harvard.edu>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Message-ID: <4e416d20-13f2-25ea-6ff7-b8c0c1818eac@igalia.com>
-Date:   Thu, 6 Jan 2022 18:05:09 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 6 Jan 2022 16:05:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641503131;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bfNEPHx1xDfNOOR4ZfuMpjosG1jEJyn3a9yDJ8UdTKY=;
+        b=ZLKlFr4C/HWFUXDCwBLknBS18TzBJ+XskL5d1Hnof86EIpIEekJe3iETWUWYExBBJa/ij8
+        +GjsmuBJiEPKvOmpR3rBCWf9Ldd9bpFWSRP5b0T/uvz4M0itp66FBberIwK7o1ZBDQvAn5
+        qaaG5lSjzI8I4ns2NNmRjzuMa7XXSb4=
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
+ [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-436-Ar8RuZ7ROFSlzKCAzmGNmg-1; Thu, 06 Jan 2022 16:05:30 -0500
+X-MC-Unique: Ar8RuZ7ROFSlzKCAzmGNmg-1
+Received: by mail-oo1-f69.google.com with SMTP id r25-20020a4ae5d9000000b002c9ad00c5a5so2215538oov.22
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 13:05:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=bfNEPHx1xDfNOOR4ZfuMpjosG1jEJyn3a9yDJ8UdTKY=;
+        b=R9QKhd6w6yjeZRRfYvPYdwdg1qM7gG2e3Nsjz0jeYei0swJBGKXmUa0+5VvR/HH8m7
+         shEDlfHyke4OlJMuFnXma8PfYIaDTxMUSzRY+tvJjNVdF6Yr2dqhqCZpGYDob+Na7tJW
+         a+vIBvv0QywfWfRZWt59iDQCrqXeXWQYRjlT1VYTDN4/QXYACbYrYuKymsXcstJLkTWM
+         NWCZDLBBdDjcje4zYRtaTpITqysaTlq5K+AH4JOiFdSsD/Lw/lhuQVOxZ1VFJ755wo8P
+         25uPakmxDBv1IpDEtPLR8Eg12eiDMiH5TWQJyFb6kOz8WTiDzUlZ+7alxz4KfjIhRvEz
+         v3IA==
+X-Gm-Message-State: AOAM532f6fUJ6lrEWlqMcrdzo+hV2T9d13aW7U63QbsLsHzKD2KQTR9d
+        t+S76hQbZWR2XIM/mVBL+vFYzRssrDd5bsGpi0ZWo+Wm8Ho9nh/c2X9nqLAhpdPVXOuDm7UQVQ5
+        or1Wu8h100Ti8mbbKw3MMEgIr
+X-Received: by 2002:a4a:dd08:: with SMTP id m8mr37690417oou.25.1641503129793;
+        Thu, 06 Jan 2022 13:05:29 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxJJHuHyvhX6fNO7GsfowW/AaCDltzBsOD9eqaeIHK+3O5wnNGjVkNDhjuWIf6dAb0cTtDPNA==
+X-Received: by 2002:a4a:dd08:: with SMTP id m8mr37690401oou.25.1641503129553;
+        Thu, 06 Jan 2022 13:05:29 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id r23sm615480oiw.20.2022.01.06.13.05.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 13:05:29 -0800 (PST)
+Date:   Thu, 6 Jan 2022 14:05:27 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Daniel Jordan <daniel.m.jordan@oracle.com>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ben Segall <bsegall@google.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ingo Molnar <mingo@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Steve Sistare <steven.sistare@oracle.com>,
+        Tejun Heo <tj@kernel.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-mm@kvack.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+Subject: Re: [RFC 08/16] vfio/type1: Cache locked_vm to ease mmap_lock
+ contention
+Message-ID: <20220106140527.5c292d34.alex.williamson@redhat.com>
+In-Reply-To: <20220106123456.GZ2328285@nvidia.com>
+References: <20220106004656.126790-1-daniel.m.jordan@oracle.com>
+        <20220106004656.126790-9-daniel.m.jordan@oracle.com>
+        <20220106005339.GX2328285@nvidia.com>
+        <20220106011708.6ajbhzgreevu62gl@oracle.com>
+        <20220106123456.GZ2328285@nvidia.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <YddQOFye7Rhr9NDl@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/01/2022 17:25, Alan Stern wrote:
-> [...]
->> +	if (unlikely(panic_nf_count) && nh == &panic_notifier_list)
->> +		if (!is_panic_notifier_filtered(n))
->> +			goto panic_filtered_out;
+On Thu, 6 Jan 2022 08:34:56 -0400
+Jason Gunthorpe <jgg@nvidia.com> wrote:
+
+> On Wed, Jan 05, 2022 at 08:17:08PM -0500, Daniel Jordan wrote:
+> > On Wed, Jan 05, 2022 at 08:53:39PM -0400, Jason Gunthorpe wrote:  
+> > > On Wed, Jan 05, 2022 at 07:46:48PM -0500, Daniel Jordan wrote:  
+> > > > padata threads hold mmap_lock as reader for the majority of their
+> > > > runtime in order to call pin_user_pages_remote(), but they also
+> > > > periodically take mmap_lock as writer for short periods to adjust
+> > > > mm->locked_vm, hurting parallelism.
+> > > > 
+> > > > Alleviate the write-side contention with a per-thread cache of locked_vm
+> > > > which allows taking mmap_lock as writer far less frequently.
+> > > > 
+> > > > Failure to refill the cache due to insufficient locked_vm will not cause
+> > > > the entire pinning operation to error out.  This avoids spurious failure
+> > > > in case some pinned pages aren't accounted to locked_vm.
+> > > > 
+> > > > Cache size is limited to provide some protection in the unlikely event
+> > > > of a concurrent locked_vm accounting operation in the same address space
+> > > > needlessly failing in case the cache takes more locked_vm than it needs.  
+> > > 
+> > > Why not just do the pinned page accounting once at the start? Why does
+> > > it have to be done incrementally?  
+> > 
+> > Yeah, good question.  I tried doing it that way recently and it did
+> > improve performance a bit, but I thought it wasn't enough of a gain to
+> > justify how it overaccounted by the size of the entire pin.  
 > 
-> Forget the unlikely(); this is not a hot path.
-> 
+> Why would it over account?
 
-Thanks for the review Alan! Sure, I can remove that in the V3 - good point.
+We'd be guessing that the entire virtual address mapping counts against
+locked memory limits, but it might include PFNMAP pages or pages that
+are already account via the page pinning interface that mdev devices
+use.  At that point we're risking that the user isn't concurrently
+doing something else that could fail as a result of pre-accounting and
+fixup later schemes like this.  Thanks,
 
+Alex
 
->> +
->>  	ret = notifier_chain_register(&nh->head, n);
->> +
->> +panic_filtered_out:
->>  	spin_unlock_irqrestore(&nh->lock, flags);
->>  	return ret;
->>  }
-> 
-> It would be simpler to do:
-> 
-> 	if (!(nh == &panic_notifier_list && panic_nf_count > 0 &&
-> 			is_panic_notifier_filtered(n)))
-> 		ret = notifier_chain_register(&nh->head, n);
-> 
-> If there were special-purpose functions just for registering and 
-> unregistering callbacks on the panic_notifier_list, the design would be 
-> cleaner (no need to modify core notifier code).  But making that change 
-> would mean altering a lot of call sites.  :-(
-> 
-
-Good suggestion, I'll change the code with your suggestion in the V3.
-
-And I agree, I considered something like that when writing this "hijack"
-into core code just for the sake of panic notifier filtering...
-I'm not sure though it worth the effort and code addition, to change all
-the call sites and add a special register mechanism to the panic
-notifier only. Let's see what the others think...
-
-Cheers,
-
-
-Guilherme
-
-
->> @@ -162,10 +194,16 @@ int atomic_notifier_chain_unregister(struct atomic_notifier_head *nh,
->>  		struct notifier_block *n)
->>  {
->>  	unsigned long flags;
->> -	int ret;
->> +	int ret = 0;
->>  
->>  	spin_lock_irqsave(&nh->lock, flags);
->> +	if (unlikely(panic_nf_count) && nh == &panic_notifier_list)
->> +		if (!is_panic_notifier_filtered(n))
->> +			goto panic_filtered_out;
->> +
->>  	ret = notifier_chain_unregister(&nh->head, n);
->> +
->> +panic_filtered_out:
-> 
-> Same idea here.
-> 
-> Alan Stern
-> 

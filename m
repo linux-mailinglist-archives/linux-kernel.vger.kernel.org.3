@@ -2,104 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF1A4867C2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:37:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 548CD4867C4
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241308AbiAFQh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 11:37:29 -0500
-Received: from mga02.intel.com ([134.134.136.20]:6450 "EHLO mga02.intel.com"
+        id S241300AbiAFQhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 11:37:33 -0500
+Received: from foss.arm.com ([217.140.110.172]:56466 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230168AbiAFQh1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 11:37:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641487047; x=1673023047;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IY+x5+Bi9WHheE8MaU5V/6TIuVLUykcq99+tMu0sLLY=;
-  b=bQWFYetEj3N8lSftE39hHCQ7T8XSCtJivRpw5k3L4ayGXKHW0EU+DnMh
-   0MfLQtIerd2XsK2WFbfbw7lqq1ZbRtW0tun6I5QQ69dq0obP1OuLqJwX6
-   AgsKLyNYU7SSQ8jR46UZklB0etC4VoD+gP7pSxeosHC6CNPjmq9a3/A2X
-   ZuqSKfhlVq4xhtCO4dQaZYaEmpwfWc3lOhBKEozZvvwJbrywwaeyEEXXA
-   J9guC679FxPDzIK2UkcupIpuOZdqLW2GlNmbuGgH++e0QXg+L01UXUWPq
-   KpOz4oiZf97+20J/RmpSEEJ6qFavp0jTHflDK9Nt1nu+crPAlxcSsuz2d
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="230015869"
-X-IronPort-AV: E=Sophos;i="5.88,267,1635231600"; 
-   d="scan'208";a="230015869"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 08:37:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,267,1635231600"; 
-   d="scan'208";a="621571332"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 06 Jan 2022 08:37:24 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n5VlU-000Hn4-1Q; Thu, 06 Jan 2022 16:37:24 +0000
-Date:   Fri, 7 Jan 2022 00:36:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-        Robert Richter <rric@kernel.org>
-Subject: drivers/pci/controller/pci-xgene.c:626:34: warning: unused variable
- 'xgene_pcie_match_table'
-Message-ID: <202201070057.wNIXLTxV-lkp@intel.com>
+        id S241323AbiAFQhc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 11:37:32 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C37291042;
+        Thu,  6 Jan 2022 08:37:31 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.10.56])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D09E43F5A1;
+        Thu,  6 Jan 2022 08:37:29 -0800 (PST)
+Date:   Thu, 6 Jan 2022 16:37:27 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     madvenka@linux.microsoft.com
+Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
+        linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 05/10] arm64: Copy unwind arguments to unwind_state
+Message-ID: <Ydcax2E9u4D4/3Q9@FVFF77S0Q05N>
+References: <0d0eb36f348fb5a6af6eb592c0525f6e94007328>
+ <20220103165212.9303-1-madvenka@linux.microsoft.com>
+ <20220103165212.9303-6-madvenka@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220103165212.9303-6-madvenka@linux.microsoft.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Mon, Jan 03, 2022 at 10:52:07AM -0600, madvenka@linux.microsoft.com wrote:
+> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+> 
+> Copy the following arguments passed to arch_stack_walk() to unwind_state
+> so that they can be passed to unwind functions via unwind_state rather
+> than as separate arguments:
+> 
+> 	- task
 
-First bad commit (maybe != root cause):
+I agree the task should be placed in the unwind state, since it's a key part of
+the environment for the unwind.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   75acfdb6fd922598a408a0d864486aeb167c1a97
-commit: 6e5a1fff9096ecd259dedcbbdc812aa90986a40e PCI: Avoid building empty drivers
-date:   10 months ago
-config: x86_64-buildonly-randconfig-r001-20220106 (https://download.01.org/0day-ci/archive/20220107/202201070057.wNIXLTxV-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project ca7ffe09dc6e525109e3cd570cc5182ce568be13)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6e5a1fff9096ecd259dedcbbdc812aa90986a40e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 6e5a1fff9096ecd259dedcbbdc812aa90986a40e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/pci/controller/ drivers/scsi/
+> 	- regs
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This isn't relevant in all cases, and so for now I'd strongly prefer *not* to
+have this in the unwind state as it's liable to lead to confusion and get
+misused.
 
-All warnings (new ones prefixed by >>):
+> 	- consume_entry
+> 	- cookie
 
->> drivers/pci/controller/pci-xgene.c:626:34: warning: unused variable 'xgene_pcie_match_table' [-Wunused-const-variable]
-   static const struct of_device_id xgene_pcie_match_table[] = {
-                                    ^
-   1 warning generated.
+These are only relevant for the invocation of the consume_entry() function, and
+so similarly I do not think they should be part of the state. It's simpler for
+these to be local variables.
 
+> 
+> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
+> ---
+>  arch/arm64/include/asm/stacktrace.h | 12 ++++++++
+>  arch/arm64/kernel/stacktrace.c      | 45 ++++++++++++++++-------------
+>  2 files changed, 37 insertions(+), 20 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/stacktrace.h b/arch/arm64/include/asm/stacktrace.h
+> index fc828c3c5dfd..322817d40a75 100644
+> --- a/arch/arm64/include/asm/stacktrace.h
+> +++ b/arch/arm64/include/asm/stacktrace.h
+> @@ -51,6 +51,14 @@ struct stack_info {
+>   * @kr_cur:      When KRETPOLINES is selected, holds the kretprobe instance
+>   *               associated with the most recently encountered replacement lr
+>   *               value.
+> + *
+> + * @task:        Pointer to the task structure.
+> + *
+> + * @regs:        Registers, if any.
+> + *
+> + * @consume_pc   Consume PC function pointer.
+> + *
+> + * @cookie       Argument to consume_pc().
+>   */
+>  struct unwind_state {
+>  	unsigned long fp;
+> @@ -61,6 +69,10 @@ struct unwind_state {
+>  #ifdef CONFIG_KRETPROBES
+>  	struct llist_node *kr_cur;
+>  #endif
+> +	struct task_struct *task;
+> +	struct pt_regs *regs;
+> +	stack_trace_consume_fn consume_pc;
+> +	void *cookie;
+>  };
+>  
+>  extern void dump_backtrace(struct pt_regs *regs, struct task_struct *tsk,
+> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+> index bd797e3f7789..3ecb8242caa5 100644
+> --- a/arch/arm64/kernel/stacktrace.c
+> +++ b/arch/arm64/kernel/stacktrace.c
+> @@ -33,8 +33,17 @@
+>   */
+>  
+>  
+> -static void unwind_init_common(struct unwind_state *state)
+> +static void unwind_init_common(struct unwind_state *state,
+> +			       struct task_struct *task,
+> +			       struct pt_regs *regs,
+> +			       stack_trace_consume_fn consume_pc,
+> +			       void *cookie)
+>  {
+> +	state->task = task;
+> +	state->regs = regs;
+> +	state->consume_pc = consume_pc;
+> +	state->cookie = cookie;
+> +
+>  #ifdef CONFIG_KRETPROBES
+>  	state->kr_cur = NULL;
+>  #endif
+> @@ -56,11 +65,10 @@ static void unwind_init_common(struct unwind_state *state)
+>  /*
+>   * TODO: document requirements here.
+>   */
+> -static inline void unwind_init_regs(struct unwind_state *state,
+> -				    struct pt_regs *regs)
+> +static inline void unwind_init_regs(struct unwind_state *state)
+>  {
+> -	state->fp = regs->regs[29];
+> -	state->pc = regs->pc;
+> +	state->fp = state->regs->regs[29];
+> +	state->pc = state->regs->pc;
+>  }
+>  
+>  /*
+> @@ -80,11 +88,10 @@ static __always_inline void unwind_init_current(struct unwind_state *state)
+>   *
+>   * The caller guarantees that the task is not running.
+>   */
+> -static inline void unwind_init_task(struct unwind_state *state,
+> -				    struct task_struct *task)
+> +static inline void unwind_init_task(struct unwind_state *state)
+>  {
+> -	state->fp = thread_saved_fp(task);
+> -	state->pc = thread_saved_pc(task);
+> +	state->fp = thread_saved_fp(state->task);
+> +	state->pc = thread_saved_pc(state->task);
+>  }
+>  
+>  /*
+> @@ -94,9 +101,9 @@ static inline void unwind_init_task(struct unwind_state *state,
+>   * records (e.g. a cycle), determined based on the location and fp value of A
+>   * and the location (but not the fp value) of B.
+>   */
+> -static int notrace unwind_next(struct task_struct *tsk,
+> -			       struct unwind_state *state)
+> +static int notrace unwind_next(struct unwind_state *state)
+>  {
+> +	struct task_struct *tsk = state->task;
+>  	unsigned long fp = state->fp;
+>  	struct stack_info info;
+>  
+> @@ -170,16 +177,14 @@ static int notrace unwind_next(struct task_struct *tsk,
+>  }
+>  NOKPROBE_SYMBOL(unwind_next);
+>  
+> -static void notrace unwind(struct task_struct *tsk,
+> -			   struct unwind_state *state,
+> -			   bool (*fn)(void *, unsigned long), void *data)
+> +static void notrace unwind(struct unwind_state *state)
+>  {
+>  	while (1) {
+>  		int ret;
+>  
+> -		if (!fn(data, state->pc))
+> +		if (!state->consume_pc(state->cookie, state->pc))
+>  			break;
+> -		ret = unwind_next(tsk, state);
+> +		ret = unwind_next(state);
+>  		if (ret < 0)
+>  			break;
+>  	}
+> @@ -225,14 +230,14 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
+>  {
+>  	struct unwind_state state;
+>  
+> -	unwind_init_common(&state);
+> +	unwind_init_common(&state, task, regs, consume_entry, cookie);
+>  
+>  	if (regs)
+> -		unwind_init_regs(&state, regs);
+> +		unwind_init_regs(&state);
+>  	else if (task == current)
+>  		unwind_init_current(&state);
+>  	else
+> -		unwind_init_task(&state, task);
+> +		unwind_init_task(&state);
+>  
+> -	unwind(task, &state, consume_entry, cookie);
+> +	unwind(&state);
 
-vim +/xgene_pcie_match_table +626 drivers/pci/controller/pci-xgene.c
+I don't like the changes here in particular since they hide the information
+flow relevant to each case.
 
-5f6b6ccdbe1cdf drivers/pci/host/pci-xgene.c Tanmay Inamdar 2014-10-01  625  
-5f6b6ccdbe1cdf drivers/pci/host/pci-xgene.c Tanmay Inamdar 2014-10-01 @626  static const struct of_device_id xgene_pcie_match_table[] = {
-5f6b6ccdbe1cdf drivers/pci/host/pci-xgene.c Tanmay Inamdar 2014-10-01  627  	{.compatible = "apm,xgene-pcie",},
-5f6b6ccdbe1cdf drivers/pci/host/pci-xgene.c Tanmay Inamdar 2014-10-01  628  	{},
-5f6b6ccdbe1cdf drivers/pci/host/pci-xgene.c Tanmay Inamdar 2014-10-01  629  };
-5f6b6ccdbe1cdf drivers/pci/host/pci-xgene.c Tanmay Inamdar 2014-10-01  630  
+Thanks,
+Mark.
 
-:::::: The code at line 626 was first introduced by commit
-:::::: 5f6b6ccdbe1cdfa5aa4347ec5412509b8995db27 PCI: xgene: Add APM X-Gene PCIe driver
-
-:::::: TO: Tanmay Inamdar <tinamdar@apm.com>
-:::::: CC: Bjorn Helgaas <bhelgaas@google.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>  }
+> -- 
+> 2.25.1
+> 

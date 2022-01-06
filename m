@@ -2,112 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37F8F485CD0
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 01:05:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7313C485CD2
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 01:07:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245742AbiAFAFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 19:05:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
+        id S245750AbiAFAHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 19:07:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245727AbiAFAFc (ORCPT
+        with ESMTP id S245727AbiAFAHN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 19:05:32 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2475C061245;
-        Wed,  5 Jan 2022 16:05:31 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id j18so1456580wrd.2;
-        Wed, 05 Jan 2022 16:05:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FnzkRWLzepXxAMjNVjPvfR47H7qbw8DB459JXttSo+A=;
-        b=CJJfnt7VeK3fYXD3SpfRjfSmqXHgP6N1vPY8mD2BxMo+pvMF9qQGOOg/dY5ymD6xda
-         WoG3d5YWo4kXAWPdBFVWLPHyeCL/oLzjH+PvIQlb3tZgOaqJ1/zcdPdVQ4Ctwhsbee06
-         Wma1Fp32WTFooABjENT+3vNnoYoprisJ/gWxTMHINOaFGOUNhhtxUs9LqVranj35b1ki
-         Rm2dzjq2kGnRmcFaLtOlkAi6GUkMxE3jEmyNH4Hgsob2gJe922VFqFSG1iJO9LvSuzBm
-         XXgjH1u0/9j/VvWUWlJAD5Vm4xN583dAcDbbjq4ckR0kmnegqQ1IaVYOFUXbcdASrfw4
-         f7EA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FnzkRWLzepXxAMjNVjPvfR47H7qbw8DB459JXttSo+A=;
-        b=bg0lJogCBMPcD/Dkj2hUULyuQIcAXkTHvYpo/8IyzxNqaM3ON6OozwDeuibKigdFka
-         nkBm3TWv1LC2yUw3hezyX0QiKYKD8ZJOo6hAVUiKu5v1fJ2tqcU64XQPwVqqOGDsh2Tw
-         hdPo2lrj3iKpk7un781j/thUYFme/jhmfXOWm9MuX/sYpKSalwt7wNwS3hqVy73ZCNzh
-         aAhg2NhI470OZFfAh3wgW1L9iHZug1cCC54rbsmK1XrHnEx71ccfqwWV0R4UNGYvU3NT
-         U/cpG9cEWM2qvrZ6EiBdNLz1t6o2nkTAA4vvDE5nkXq+Wougknhq8ZXVfRcAgaKHpU9b
-         p0+w==
-X-Gm-Message-State: AOAM531KWtuDYjM1SN6K0CQJYk6hZm6noAZz82nimRDHZbZ0+Cgfewtn
-        jyXrWCZBRjJUAGzAVQ93PLasdEKrhM5xruZed1A=
-X-Google-Smtp-Source: ABdhPJwro27l6KBxlFDbtFIo70Bq9eBSR2wpwEGNQmMlA3WxGM2eaUM5zUlezl6osUooqtBVyRRDHw==
-X-Received: by 2002:a5d:598c:: with SMTP id n12mr50424122wri.541.1641427530374;
-        Wed, 05 Jan 2022 16:05:30 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id ba18sm412779wrb.40.2022.01.05.16.05.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 16:05:29 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Steve French <sfrench@samba.org>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH][next] cifs: remove unused variable ses_selected
-Date:   Thu,  6 Jan 2022 00:05:28 +0000
-Message-Id: <20220106000528.1104337-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        Wed, 5 Jan 2022 19:07:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40891C061245;
+        Wed,  5 Jan 2022 16:07:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D247A619AC;
+        Thu,  6 Jan 2022 00:07:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC323C36AE9;
+        Thu,  6 Jan 2022 00:07:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641427632;
+        bh=QkmWR8jOZfsoz9AfOFqa0DRvfcUZSPmcIrXXakZWhTg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bD7l2zPBD+FVFyMhuyn1JR30B2VDAEvl/qVMTbxCtvl1EPvDKaL8x207hCulQRYbD
+         mt5oljuFdWaefcTFn41v/eaPAZt9oiLHSd3VFFBXW5GVrdgJOwCI99XZbRIRQVuww7
+         PvF0N+rDjzw8XLQ57I1YriLebZ0pzaeq88tQVvWjhpy6H/ZwCv1WU7QG/dA1dcUXbi
+         GESc0dlaGBtF70qBUaxvnVDFZm+hBAXV0bOwJXLcND3S1WaTXtT9GextdVGusVcqer
+         VLS2/8KobZTBqZ4OTNf2f/hI5q2lulO6A+SAL5qBPCsptjVpkczEZK+WvY63fFOr/q
+         nw+4kU7lNyo6Q==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>
+Cc:     Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        linux-pci@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH v8 00/10] vgaarb: Rework default VGA device selection
+Date:   Wed,  5 Jan 2022 18:06:48 -0600
+Message-Id: <20220106000658.243509-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable ses_selected is being assigned values but it is never
-being used. The variable is redundant and can be removed.
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-Cleans up clang scan build warning:
-fs/cifs/smb2pdu.c:3810:19: warning: Although the value stored
-to 'ses_selected' is used in the enclosing expression, the value is
-never actually read from 'ses_selected' [deadcode.DeadStores]
+Current default VGA device selection fails in some cases because part of it
+is done in the vga_arb_device_init() subsys_initcall, and some arches
+enumerate PCI devices in pcibios_init(), which runs *after* that.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- fs/cifs/smb2pdu.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+For example:
 
-diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
-index 19c54b309e39..9a72c22bb189 100644
---- a/fs/cifs/smb2pdu.c
-+++ b/fs/cifs/smb2pdu.c
-@@ -3790,7 +3790,7 @@ void smb2_reconnect_server(struct work_struct *work)
- 	struct cifs_tcon *tcon, *tcon2;
- 	struct list_head tmp_list, tmp_ses_list;
- 	bool tcon_exist = false, ses_exist = false;
--	bool tcon_selected = false, ses_selected = false;
-+	bool tcon_selected = false;
- 	int rc;
- 	bool resched = false;
- 
-@@ -3807,7 +3807,7 @@ void smb2_reconnect_server(struct work_struct *work)
- 	spin_lock(&cifs_tcp_ses_lock);
- 	list_for_each_entry(ses, &pserver->smb_ses_list, smb_ses_list) {
- 
--		tcon_selected = ses_selected = false;
-+		tcon_selected = false;
- 
- 		list_for_each_entry(tcon, &ses->tcon_list, tcon_list) {
- 			if (tcon->need_reconnect || tcon->need_reopen_files) {
-@@ -3833,7 +3833,7 @@ void smb2_reconnect_server(struct work_struct *work)
- 		spin_lock(&ses->chan_lock);
- 		if (!tcon_selected && cifs_chan_needs_reconnect(ses, server)) {
- 			list_add_tail(&ses->rlist, &tmp_ses_list);
--			ses_selected = ses_exist = true;
-+			ses_exist = true;
- 			ses->ses_count++;
- 		}
- 		spin_unlock(&ses->chan_lock);
+  - On BMC system, the AST2500 bridge [1a03:1150] does not implement
+    PCI_BRIDGE_CTL_VGA.  This is perfectly legal but means the legacy VGA
+    resources won't reach downstream devices unless they're included in the
+    usual bridge windows.
+
+  - vga_arb_select_default_device() will set a device below such a bridge
+    as the default VGA device as long as it has PCI_COMMAND_IO and
+    PCI_COMMAND_MEMORY enabled.
+
+  - vga_arbiter_add_pci_device() is called for every VGA device, either at
+    boot-time or at hot-add time, and it will also set the device as the
+    default VGA device, but ONLY if all bridges leading to it implement
+    PCI_BRIDGE_CTL_VGA.
+
+  - This difference between vga_arb_select_default_device() and
+    vga_arbiter_add_pci_device() means that a device below an AST2500 or
+    similar bridge can only be set as the default if it is enumerated
+    before vga_arb_device_init().
+
+  - On ACPI-based systems, PCI devices are enumerated by acpi_init(), which
+    runs before vga_arb_device_init().
+
+  - On non-ACPI systems, like on MIPS system, they are enumerated by
+    pcibios_init(), which typically runs *after* vga_arb_device_init().
+
+This series consolidates all the default VGA device selection in
+vga_arbiter_add_pci_device(), which is always called after enumerating a
+PCI device.
+
+Almost all the work here is Huacai's.  I restructured it a little bit and
+added a few trivial patches on top.
+
+I'd like to move vgaarb.c to drivers/pci eventually, but there's another
+initcall ordering snag that needs to be resolved first, so this leaves 
+it where it is.
+
+Bjorn
+
+Version history:
+V0 original implementation as final quirk to set default device.
+https://lore.kernel.org/r/20210514080025.1828197-6-chenhuacai@loongson.cn
+
+V1 rework vgaarb to do all default device selection in
+vga_arbiter_add_pci_device().
+https://lore.kernel.org/r/20210705100503.1120643-1-chenhuacai@loongson.cn
+
+V2 move arbiter to PCI subsystem, fix nits.
+https://lore.kernel.org/r/20210722212920.347118-1-helgaas@kernel.org
+
+V3 rewrite the commit log of the last patch (which is also summarized
+by Bjorn).
+https://lore.kernel.org/r/20210820100832.663931-1-chenhuacai@loongson.cn
+
+V4 split the last patch to two steps.
+https://lore.kernel.org/r/20210827083129.2781420-1-chenhuacai@loongson.cn
+
+V5 split Patch-9 again and sort the patches.
+https://lore.kernel.org/r/20210911093056.1555274-1-chenhuacai@loongson.cn
+
+V6 split Patch-5 again and sort the patches again.
+https://lore.kernel.org/r/20210916082941.3421838-1-chenhuacai@loongson.cn
+
+V7 stop moving vgaarb to drivers/pci because of ordering issues with
+misc_init().
+https://lore.kernel.org/r/20211015061512.2941859-1-chenhuacai@loongson.cn
+https://lore.kernel.org/r/CAAhV-H7FhAjM-Ha42Z1dLrE4PvC9frfyeU27KHWcyWKkMftEsA@mail.gmail.com
+
+
+Bjorn Helgaas (8):
+  vgaarb: Factor out vga_select_framebuffer_device()
+  vgaarb: Factor out default VGA device selection
+  vgaarb: Move framebuffer detection to ADD_DEVICE path
+  vgaarb: Move non-legacy VGA detection to ADD_DEVICE path
+  vgaarb: Move disabled VGA device detection to ADD_DEVICE path
+  vgaarb: Remove empty vga_arb_device_card_gone()
+  vgaarb: Use unsigned format string to print lock counts
+  vgaarb: Replace full MIT license text with SPDX identifier
+
+Huacai Chen (2):
+  vgaarb: Move vga_arb_integrated_gpu() earlier in file
+  vgaarb: Log bridge control messages when adding devices
+
+ drivers/gpu/vga/vgaarb.c | 311 +++++++++++++++++++--------------------
+ 1 file changed, 154 insertions(+), 157 deletions(-)
+
 -- 
-2.33.1
+2.25.1
 

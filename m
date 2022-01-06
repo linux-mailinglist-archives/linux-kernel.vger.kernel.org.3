@@ -2,269 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63907486475
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 13:37:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC3B0486477
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 13:38:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238935AbiAFMhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 07:37:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59950 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238923AbiAFMhW (ORCPT
+        id S238943AbiAFMh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 07:37:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32562 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238877AbiAFMh5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 07:37:22 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DF0C061201
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 04:37:22 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id r16-20020a17090a0ad000b001b276aa3aabso8381151pje.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 04:37:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to;
-        bh=1/c2URoDFnIklZqHtR1tpJeTQO8/FdysKzUXb65IMB0=;
-        b=JW48fkvlcrWBGX9Xk9c64lUJcXF4aq/QimJZiSTHBTX1c+5TP1dU8L7KZxIvupLksE
-         MP15lCETlX/6QNElIm10bIpPjlA7H06b7JZv51o7INCNKomz9Prj2enx1xr+xjTUihrm
-         8eaped5P9quBBaPWlvSLBffIpU+JamXZUqC6Q=
+        Thu, 6 Jan 2022 07:37:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641472676;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jJ4AegNPO6vsl4abN8kyuyyI2P0Z3WaDeYeMCwwoYiM=;
+        b=Vs2qLuQQxlkXzZMV/pNkI49uEKH4oJHTZN0LYKPUBOPe/mZC5VWhk2aHz2nDdRpCQz/koz
+        CpoLSp2R1Oi/wI8pwGBC/kEJgjuYYzu3to3YpWkv33iNTmOo49cg90VvyOd2ZzJaDkuLkU
+        kr+EOiTgi2O++LV7obHJfL5ckXVTEAM=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-556-VZgTAjCrNpGDSrCxYY2yfQ-1; Thu, 06 Jan 2022 07:37:55 -0500
+X-MC-Unique: VZgTAjCrNpGDSrCxYY2yfQ-1
+Received: by mail-wr1-f70.google.com with SMTP id i20-20020adfaad4000000b001a483095eafso1220162wrc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 04:37:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to;
-        bh=1/c2URoDFnIklZqHtR1tpJeTQO8/FdysKzUXb65IMB0=;
-        b=5zJHNHTUg1DhRT15dTwzJRvSCn7lLGDOnfai0XyEEBovU218ut3hi4wQD1oOXkH7cq
-         8HN+5zqDR/KosX227VbD8a3yqOD1AIKo1XMjUoZIcYIyPy0hjGu7m0T8g9aTjlQa+O4+
-         GYovQ12RuAGgEPWcIetW3HRsebhWxz7LvbQU6HZzZYR/hTVHogIM1TLPL2oe3Zihaf4M
-         ZMc93/Ne7CaPkoIfXqeRhku/BnVT++H64c8s+PfovpoF89ILRUadWJ5/P5/vOeZZRgJ0
-         c9bNe2/biW+Mkh9SoCv9cuDtjiqqBadJrvnDFCoccgiG0CD0GMrWp9P0WjBxr9FPZHlA
-         2CEg==
-X-Gm-Message-State: AOAM532JYu+w4GWftdhJQDjIuVKYO1X6qiIsVXZEcA49ecXmPb0kecz9
-        z8HgbGZavSHRt9XlDaDo/a/Lfw==
-X-Google-Smtp-Source: ABdhPJwUvuDg/GlVO/nYV2qck27f6jzXfGtqzuc/w6pNYyNbCSjeqKhdYsDx6DNPcHglp9D/t+K+VA==
-X-Received: by 2002:a17:903:234a:b0:148:a94a:7e3c with SMTP id c10-20020a170903234a00b00148a94a7e3cmr59304992plh.121.1641472641672;
-        Thu, 06 Jan 2022 04:37:21 -0800 (PST)
-Received: from [192.168.178.136] (f140230.upc-f.chello.nl. [80.56.140.230])
-        by smtp.gmail.com with ESMTPSA id y11sm2395995pfn.7.2022.01.06.04.37.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jan 2022 04:37:21 -0800 (PST)
-Message-ID: <3dfb1a06-4474-4614-08e5-b09f0977e03c@broadcom.com>
-Date:   Thu, 6 Jan 2022 13:37:12 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jJ4AegNPO6vsl4abN8kyuyyI2P0Z3WaDeYeMCwwoYiM=;
+        b=r2DQsKvtTjRYq2m+J0PHW4gyfz0e7YY6JJgacign0H8lT8Lnuj8EwMBt5YRZs4+jdW
+         Lsf0HOzNMtWhCwrvrcU3WXtFzDluYF2npdZ7yRjxvBaDvMNExD6SbQkCRIQrQSYG0k0J
+         aRjIbrMIoTjLp+zJTe5wqgRyrf0njW0GK/2nkBQZUM4gg/634g4IZ/pKpRM8vR8TrlDW
+         PUDndW30mOb3nu6TENPySe+Zrn2714dPciz8YbnjG2MasuJ8d/FmrRsU4x2uk4j+pq+2
+         NKGaZ6A/ljW0Irpl4J35dXtSPeAHaYpoihPiZCDZnj99vj8LINiQEx1qfsWVDD5y1VUA
+         3m3g==
+X-Gm-Message-State: AOAM533rocVcyEZQ6mIsuPiUCbQk9E9GRjcXLe6MFON8ROOS1znuf8Qj
+        Qu5rVh0EbBPxbrzAt6GdjZW95Z9uDoeGFGXVfmZbpYihhS20zdombNzw5P4jEI0JwgF4mH6MR6R
+        GGiHcTggcm8Mf+zGQcQD0nnlh
+X-Received: by 2002:a05:6000:1e07:: with SMTP id bj7mr1146116wrb.126.1641472674122;
+        Thu, 06 Jan 2022 04:37:54 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyG/A1BqNVd1haFJ0iTmtQlqq3s/ApDw8YMYUayVU1H5zCFU1DjFGkVukDo66U7gSx2OBM3Fg==
+X-Received: by 2002:a05:6000:1e07:: with SMTP id bj7mr1146101wrb.126.1641472673917;
+        Thu, 06 Jan 2022 04:37:53 -0800 (PST)
+Received: from redhat.com ([2a03:c5c0:207e:991b:6857:5652:b903:a63b])
+        by smtp.gmail.com with ESMTPSA id j11sm35455wrx.5.2022.01.06.04.37.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 04:37:53 -0800 (PST)
+Date:   Thu, 6 Jan 2022 07:37:50 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com
+Subject: Re: [PATCH -next] Bluetooth: virtio_bt: fix error return code in
+ virtbt_probe()
+Message-ID: <20220106073725-mutt-send-email-mst@kernel.org>
+References: <20211213082751.745001-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2 07/35] brcmfmac: pcie: Read Apple OTP information
-To:     Hector Martin <marcan@marcan.st>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com
-References: <20220104072658.69756-1-marcan@marcan.st>
- <20220104072658.69756-8-marcan@marcan.st>
-From:   Arend van Spriel <arend.vanspriel@broadcom.com>
-In-Reply-To: <20220104072658.69756-8-marcan@marcan.st>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000bb82cd05d4e9217d"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211213082751.745001-1-yangyingliang@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000bb82cd05d4e9217d
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-
-On 1/4/2022 8:26 AM, Hector Martin wrote:
-> On Apple platforms, the One Time Programmable ROM in the Broadcom chips
-> contains information about the specific board design (module, vendor,
-> version) that is required to select the correct NVRAM file. Parse this
-> OTP ROM and extract the required strings.
+On Mon, Dec 13, 2021 at 04:27:51PM +0800, Yang Yingliang wrote:
+> Fix to return a negative error code from the error handling
+> case in virtbt_probe().
 > 
-> Note that the user OTP offset/size is per-chip. This patch does not add
-> any chips yet.
+> Fixes: 212a6e51a630 ("Bluetooth: virtio_bt: fix device removal")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 
-Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
-> Signed-off-by: Hector Martin <marcan@marcan.st>
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
+
+same patch was also posted by Dan Carpenter.
+
 > ---
->   .../broadcom/brcm80211/brcmfmac/pcie.c        | 219 ++++++++++++++++++
->   include/linux/bcma/bcma_driver_chipcommon.h   |   1 +
->   2 files changed, 220 insertions(+)
+>  drivers/bluetooth/virtio_bt.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-> index a52a6f8081eb..74c9a4f74813 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> diff --git a/drivers/bluetooth/virtio_bt.c b/drivers/bluetooth/virtio_bt.c
+> index 1dd734aef87b..f6d699fed139 100644
+> --- a/drivers/bluetooth/virtio_bt.c
+> +++ b/drivers/bluetooth/virtio_bt.c
+> @@ -362,7 +362,8 @@ static int virtbt_probe(struct virtio_device *vdev)
+>  	}
+>  
+>  	virtio_device_ready(vdev);
+> -	if (virtbt_open_vdev(vbt))
+> +	err = virtbt_open_vdev(vbt);
+> +	if (err)
+>  		goto open_failed;
+>  
+>  	return 0;
+> -- 
+> 2.25.1
 
-[...]
-
-> +static int brcmf_pcie_read_otp(struct brcmf_pciedev_info *devinfo)
-> +{
-> +	const struct pci_dev *pdev = devinfo->pdev;
-> +	struct brcmf_bus *bus = dev_get_drvdata(&pdev->dev);
-> +	u32 coreid, base, words, idx, sromctl;
-> +	u16 *otp;
-> +	struct brcmf_core *core;
-> +	int ret;
-> +
-> +	switch (devinfo->ci->chip) {
-> +	default:
-> +		/* OTP not supported on this chip */
-> +		return 0;
-> +	}
-
-Does not seem this code is put to work yet. Will dive into it later on.
-
-> +	core = brcmf_chip_get_core(devinfo->ci, coreid);
-> +	if (!core) {
-> +		brcmf_err(bus, "No OTP core\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	if (coreid == BCMA_CORE_CHIPCOMMON) {
-> +		/* Chips with OTP accessed via ChipCommon need additional
-> +		 * handling to access the OTP
-> +		 */
-> +		brcmf_pcie_select_core(devinfo, coreid);
-> +		sromctl = READCC32(devinfo, sromcontrol);
-> +
-> +		if (!(sromctl & BCMA_CC_SROM_CONTROL_OTP_PRESENT)) {
-> +			/* Chip lacks OTP, try without it... */
-> +			brcmf_err(bus,
-> +				  "OTP unavailable, using default firmware\n");
-> +			return 0;
-> +		}
-> +
-> +		/* Map OTP to shadow area */
-> +		WRITECC32(devinfo, sromcontrol,
-> +			  sromctl | BCMA_CC_SROM_CONTROL_OTPSEL);
-> +	}
-> +
-> +	otp = kzalloc(sizeof(u16) * words, GFP_KERNEL);
-> +
-> +	/* Map bus window to SROM/OTP shadow area in core */
-> +	base = brcmf_pcie_buscore_prep_addr(devinfo->pdev, base + core->base);
-
-I guess this changes the bar window...
-
-> +	brcmf_dbg(PCIE, "OTP data:\n");
-> +	for (idx = 0; idx < words; idx++) {
-> +		otp[idx] = brcmf_pcie_read_reg16(devinfo, base + 2 * idx);
-> +		brcmf_dbg(PCIE, "[%8x] 0x%04x\n", base + 2 * idx, otp[idx]);
-> +	}
-> +
-> +	if (coreid == BCMA_CORE_CHIPCOMMON) {
-> +		brcmf_pcie_select_core(devinfo, coreid);
-
-... which is why you need to reselect the core. Otherwise it makes no 
-sense to me.
-
-> +		WRITECC32(devinfo, sromcontrol, sromctl);
-> +	}
-> +
-> +	ret = brcmf_pcie_parse_otp(devinfo, (u8 *)otp, 2 * words);
-> +	kfree(otp);
-> +
-> +	return ret;
-> +}
-
---000000000000bb82cd05d4e9217d
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-XSlOP9s1dqWlRRnnNxV7BVC87lkKKy0+1M2DOF6qRYQlnW4EfOyCToYLAG5zeV+AjepMoX6J9bUz
-yj4BlDtwH4HFjaRIlPPbdLshUA54/tV84x8woATuLGBq+hTZEpkZAgMBAAGjggHdMIIB2TAOBgNV
-HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
-KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
-Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
-dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
-OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
-MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
-BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFKb+3b9pz8zo
-0QsCHGb/p0UrBlU+MA0GCSqGSIb3DQEBCwUAA4IBAQCHisuRNqP0NfYfG3U3XF+bocf//aGLOCGj
-NvbnSbaUDT/ZkRFb9dQfDRVnZUJ7eDZWHfC+kukEzFwiSK1irDPZQAG9diwy4p9dM0xw5RXSAC1w
-FzQ0ClJvhK8PsjXF2yzITFmZsEhYEToTn2owD613HvBNijAnDDLV8D0K5gtDnVqkVB9TUAGjHsmo
-aAwIDFKdqL0O19Kui0WI1qNsu1tE2wAZk0XE9FG0OKyY2a2oFwJ85c5IO0q53U7+YePIwv4/J5aP
-OGM6lFPJCVnfKc3H76g/FyPyaE4AL/hfdNP8ObvCB6N/BVCccjNdglRsL2ewttAG3GM06LkvrLhv
-UCvjMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
-YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMMSnY
-h9J/RI6gsHbuMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAwCLuTWPDd6sJ1aedc
-3QzshqKorWL5BuFxaC4OsLLOHDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yMjAxMDYxMjM3MjFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
-AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
-BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAAXVT2jdlmW5hTCUkLIwngMADNcY8TQ11Gw5f
-54RhV1LapqTigM4h+HZFZ8EDRyjUhIgMKnEQw8BH1m24dj3mGyhXZNHSIU//h3QBtbbyvAUFrq7m
-E7q9QsWH0iRYHwy3B6tp1c25uODSzM5vI/gm7I0ofhZFUV70UK4cyg4T9QgkVWYiD9cw4tNutUiB
-D1wcAwKsE4hb7dlxh4dcX1CY1LXqmXqTjkMqQ5m7Iov8vykJ2EXbE43OsVtnT/XA3ueCAthVrtsz
-+s2Z+cFZcEJ0lWbvlltUBIBIlfCOffnC10UqFvFfmm7atHeEVTLIcQ3pzh5yI6YqRvTvCZvuitMb
-Vg==
---000000000000bb82cd05d4e9217d--

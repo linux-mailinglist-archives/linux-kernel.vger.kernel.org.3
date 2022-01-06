@@ -2,465 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF51486D56
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 23:44:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B80486D60
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 23:49:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245260AbiAFWoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 17:44:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57522 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245242AbiAFWoL (ORCPT
+        id S245261AbiAFWtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 17:49:32 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:61902 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S245167AbiAFWta (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 17:44:11 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D55C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 14:44:10 -0800 (PST)
-Received: from pendragon.lan (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B99F914C3;
-        Thu,  6 Jan 2022 23:44:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1641509048;
-        bh=PMoQ3qm9V9YbbkBVH0MolpRSxLTqQoE2BG2WWs2FpEY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mI6p8jZ8kYf/Xu0LoE6Uv4bJErSFud3jxSZJeAe6gUtumXQBfO+A/TfT5mleeItWJ
-         5jVqnY6q6HkQt7bZsNJdRPmz7gTykbEByd9aHvR/woVcXNwl1W+JaAQJxtnPs4rEn/
-         c1ZH6IlDXSNa6/06wrBdWfRGsVJPwAldGhHtHyUo=
-From:   Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Watson Chow <watson.chow@avnet.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2 2/2] regulator: Add MAX20086-MAX20089 driver
-Date:   Fri,  7 Jan 2022 00:43:50 +0200
-Message-Id: <20220106224350.16957-3-laurent.pinchart+renesas@ideasonboard.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220106224350.16957-1-laurent.pinchart+renesas@ideasonboard.com>
-References: <20220106224350.16957-1-laurent.pinchart+renesas@ideasonboard.com>
+        Thu, 6 Jan 2022 17:49:30 -0500
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 206KoXr1014686;
+        Thu, 6 Jan 2022 22:48:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=uV9w/rG3QsXszUxB4sbKPMLRApxEe9KQiNuD8hpK3ao=;
+ b=hRRzIsxonh1I76pK+fd4woxIE7wakFcgdu3elASg1jkgUwHk3fDhxZOZE/vv1J0HuOIm
+ msE/w6wes6rUiufDxNUqAgMJct9Q9T+x5jJ81UhvGrckK4uP82wMS8VeceNglGfm4g/j
+ 05/VFzkcrn6mLz8znYXCObHQIdajP1WhLmxNw4w8EXqZefo51ctDbdJX9PjVk+M5Trjl
+ ubS8auyoMMuBZaWkvX2uMTfXaulHA4+o9bnUdbO1p0Z0aOC/yM/fiPbn21EpK3iFQmXb
+ OgBGLOGSy+vshJrQjdvlLw/jHHWEzq/mcV1QIq0ogWkdGjI4nk1S1DmoNKVutVYVN8Ij IQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3de4v8gpe6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 06 Jan 2022 22:48:49 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 206MeCxM117844;
+        Thu, 6 Jan 2022 22:48:48 GMT
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam08lp2043.outbound.protection.outlook.com [104.47.73.43])
+        by aserp3030.oracle.com with ESMTP id 3de4w25u16-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 06 Jan 2022 22:48:48 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PEp7Yc4fgr8a96og3cRF/xERbNM3E/AZ2B0Qp+nEFkR5/BaOftGblS63Xk7jw3+K0ygK3Nb79pf9Czhw/vHgiB9XxxTlQ4J0u9F41+4+gyPPCt9oWXthKtNkNkAvQgX6DWJU7fU6ydrGIG/L/UrCVhw0kgCNUGaENPbOusC7f+YMvop7q47WZYWdErjxsJ3O6P+tWJ1s9Me5Hr1wL+Yt2tMc//hHX3e+nv0mFW4t1S9IJ12zW2J1xH98P/S0Tx7GzmROb/EFKpj3La4P8NRYodHzmWtfxYnASBd16lflmwy/JucVHFPyBqcsAldsUJpKShV6LP+Rww8AiJXPwsQrWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uV9w/rG3QsXszUxB4sbKPMLRApxEe9KQiNuD8hpK3ao=;
+ b=mueTF5uXimQrxUI2gIM/MUyLD/3PpMaN+Kqf85nDLkdQplSttu8TiEqVoV56Q0YNwmfQo4iJ9Cts1VF5bNhpKvj8kvqeASwdKs3uBPcCATo1sz5u789xbWv4saliIodPmv6UEihGd5gZpp6XM2/OKC3Bbdb4m9vZPzIKRMkQuN3tpdLfrZpVP20Wh/JfnSDBLTIvK1arysBEpuEEFVctQbh+ejC5oarHfGZhdmG7nqTY1yYJMgtbp4t4W5LGkk7zKNa5V+kRcbfY9/oEDxtnC6eOp7GELERMYcswK03TTHGdVQxopRj3ev5XEovnfPrbIu9yOniS0quPSTh4jJEj7A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uV9w/rG3QsXszUxB4sbKPMLRApxEe9KQiNuD8hpK3ao=;
+ b=ruRaO51l5XgJZOVA5Ifsar8TTXjsdhok2VhYZ0Wd7KQ1jaX/Q/t5tGnex7MePSLsMrJCWGzqLVt5UGnJKkgK5v+QGQy9HZDJEUqMM2HceFpKu1b3wlP4x1snUUb0I9yO87QQZWG8HzO7fdJh0C9R7saHKCw3b8vNMGpVF7xr6xM=
+Received: from SN6PR10MB2576.namprd10.prod.outlook.com (2603:10b6:805:44::15)
+ by SA2PR10MB4762.namprd10.prod.outlook.com (2603:10b6:806:114::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9; Thu, 6 Jan
+ 2022 22:48:46 +0000
+Received: from SN6PR10MB2576.namprd10.prod.outlook.com
+ ([fe80::4c8c:47df:f81e:f412]) by SN6PR10MB2576.namprd10.prod.outlook.com
+ ([fe80::4c8c:47df:f81e:f412%5]) with mapi id 15.20.4867.010; Thu, 6 Jan 2022
+ 22:48:46 +0000
+Date:   Thu, 6 Jan 2022 16:48:38 -0600
+From:   Venu Busireddy <venu.busireddy@oracle.com>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v8 27/40] x86/boot: Add Confidential Computing type to
+ setup_data
+Message-ID: <Yddxxihyz+TQGqRG@dt>
+References: <20211210154332.11526-1-brijesh.singh@amd.com>
+ <20211210154332.11526-28-brijesh.singh@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211210154332.11526-28-brijesh.singh@amd.com>
+X-ClientProxiedBy: SA0PR11CA0101.namprd11.prod.outlook.com
+ (2603:10b6:806:d1::16) To SN6PR10MB2576.namprd10.prod.outlook.com
+ (2603:10b6:805:44::15)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c3023b0e-4267-4201-1eac-08d9d166b281
+X-MS-TrafficTypeDiagnostic: SA2PR10MB4762:EE_
+X-Microsoft-Antispam-PRVS: <SA2PR10MB4762EB17F2FD72E6098F5A21E64C9@SA2PR10MB4762.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3OZ9dw/IsZkUgH6XCaiyqtPdmzPx+P2QYUhKw2YjdOvTsjRFEOkcjIefLpOwJUQlSLmL4UnTlkXBkIn7YySBNgFBxFmbmvueaAOwYRlGBI/H2z8x1XP8fwAvfoye6Raw5zgz1+b9C5NOSRdK9tYlSbt7X5KXy0lTP7SDa6pPkkqjV6+Xu8GwsY4Abg1YbwUmj6z2obsSxod8pq9S+dPlBowSlM/EGuadNZRUqABhTduD+s6SlrEnK7RxxGRvJmpjYR48aeh73omiGKOQ9z7DxOD3tXaG3lRXend6vLItHuifcnXemaaMDOCXAe0yVP6LnrECySQb/9MX0IJZ513CJV4gXYds1K3/Udx2Bg4iofGPfV0fmnh1EMkrjXoHKGD9PXf0JScMsapUW7RcGnhmZSNUO5Jcw8DQ3UKGxxDBnQ2REeaTSadlSn+nNeEA8Ta5NCMnp0bBL0U2CLYJD0aP59nJMEPlNOi9umOdGr+m+X6nvCK/Mnrg2t9bwL0r+lrjiedeZffc5GR21p+aAG/CXfy0X4wdp3/r4NX69fblAgqPT7BHgY30cqiy124eFI1fbE9+vQoL3NzJ5gzxnIOTXO4gFQMZTWRJOjr0LvSN/JJOfqz9G3K55Bpxfu6KUdMAt9WaQ5iNHQDQ8VyjszSZc8/flYETrqNUN7cP9WOsoVW5OffVL75K+bT2nZxTrPIN
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB2576.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(366004)(54906003)(6486002)(66946007)(508600001)(6666004)(2906002)(4326008)(38100700002)(186003)(8676002)(26005)(9686003)(7416002)(66556008)(8936002)(6506007)(66476007)(4001150100001)(86362001)(7406005)(33716001)(6916009)(5660300002)(316002)(44832011)(53546011)(6512007)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?25MyC9d791eAvI8noyW8xMVOxAgpz71zUqVO9lHSgZCYhB/mezA+g72R7yG0?=
+ =?us-ascii?Q?WOALmuc7exNXLYtysHKvc7rny48YlQXoPXQ2UnCccyB5vBFbDXM9epmuN2hj?=
+ =?us-ascii?Q?/Q4rqxd5k1F+53aV47bj7QA1S3Zq53NX6t3OBkQLyN8/cBQMSCsExndb2SxC?=
+ =?us-ascii?Q?wzTCYqwmLLWXa46IiSFOCZXZGdfeDW+N3DixSzLHISwjH/pDZgnlXboAjJGs?=
+ =?us-ascii?Q?yRJTuWKFdCNt1SvSyLa7tkzcvA1/zj29LOAgTo45jZp6Qrlvcw5rCbMnV129?=
+ =?us-ascii?Q?HsY+pERA3EdQFFNJ90UjxvozduPWWOJ32Kx5UerjcotrSJiTOkmCVPXvPt+T?=
+ =?us-ascii?Q?/A5mnjjfsOlc9fY8CcKnWjp0p3GfGjK/rypK3TbvU2mDe5/wIgEfvsRwLF8S?=
+ =?us-ascii?Q?FvC7QpDmcC/33n5l8E3GHvNPdHIA6Q+i+U+btUQcp02/Y76rhckbwj9Y6RKt?=
+ =?us-ascii?Q?G+0JH3vfI1KgasIWDIrhJpI5MRa9Cnlf4vrBwSJ3K0/FetG0FkGWGVqlCuTY?=
+ =?us-ascii?Q?+LgtjIEzzpBZxsrJs/cU8Fzq0oNgvwDGJ2jVvlRlwJ1YxxjOGZFRNSKMkvmH?=
+ =?us-ascii?Q?rBgTd03CDU2v3oI6RgBcgqBjKlSCXJHkvhtjmcvWJhm8G1jXOVX6NcG9bD83?=
+ =?us-ascii?Q?jcBEzbzuIG+9CzP82rflgfRQM7EBUlMfg2dvQeMn2irlIGqaUV2dNbQBkGrw?=
+ =?us-ascii?Q?uaDyX3sEg0te05WlLL7B4VpCrfoMFCQEVDCPez0cMTvwCDWLl6B+gBqpsYkT?=
+ =?us-ascii?Q?LLuCn7J80K7Yve08MfHM/oItm4nKf3jCaNRXbie3uVTRdgso2FxwVTTnu/xx?=
+ =?us-ascii?Q?z/Lx/ESraUaQXsMy/prhAih23AaMdYdyXaFpT81bvadO2+didGNMB/0bZMKb?=
+ =?us-ascii?Q?W00zl+tySu41JgYtHROlCsYKSEUKHwhJabsfe3fpUlcrBUdeZdSLvsvKTZ9U?=
+ =?us-ascii?Q?xrvkDtvE2lfFM9kjqHBaBIjTEArBbeVhz6JQzM5jfNF04EEHrg/9IyBqD31r?=
+ =?us-ascii?Q?DXdNo+9DcrGokBzXvX7+XOOo7UnIdMmj4HQcIlr8GiPCJq/daFTKcMmgU6FI?=
+ =?us-ascii?Q?OG+GQYGvTrGz4HgF0TBDEF0/j2ZMjuur132Dv6kpzu9/tNQ94nNNweoHn+Z5?=
+ =?us-ascii?Q?4XXfr/tvBF/bVAiFIJSag9XYwocg0wDCjDv/T74/q/vu7sDboR2gS/7Hb6hI?=
+ =?us-ascii?Q?e4xZvszSLpqls0s7NfXZSiFn1aw2EKH1GfLl9NmKhOw8mIanwEFuorwNpaeX?=
+ =?us-ascii?Q?AnmzTzCrUcw5ngJWbj335QQEbNdUFjJ27ccyXFYlnrrIZndzGnMkQPXPDDUr?=
+ =?us-ascii?Q?aOwuL/4y1vcd4fZaWBbeVIUE1Cz1wUjqsbInYoZR/dioL7FWpfcto+nxmedI?=
+ =?us-ascii?Q?KBdTW2xkaXSGxGctoQsUDMXRQN+Nn4GyfRfqh3F6inDxv3d1DzdUdKgsoa6v?=
+ =?us-ascii?Q?ubCs6MdeMkhuIl+SQYAaUo4w0BTMkW4TccensRfEqds17wrXzRX7OorIojH4?=
+ =?us-ascii?Q?lRk/g4ONCf/KG5/qwnbOaFHqnQTaPmtHCyadPKoFwv8gh1kTw60YBLsSHuW1?=
+ =?us-ascii?Q?8RtcQEe4TgGdoDZVC9zfB+J+PMSmBXtlAsrOMFfpFI/3blE9W8V9nlTvrFsL?=
+ =?us-ascii?Q?XS+I2/YELnHIzBHt56mvD/70IN4SZcx+g+r0Lk1Qc5Bh0/zKuJTmawYA+PM6?=
+ =?us-ascii?Q?Fiftdg=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c3023b0e-4267-4201-1eac-08d9d166b281
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB2576.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2022 22:48:46.2421
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UVlKLFpR2z8+DNCxUlx3C/+KMqakENofWEubyQsPCFT/x6jf7X2jW5hPkiuK+u2H9UK+HOiWZs1BONvFt21uvoeDy38MqHg39R1oEP+qSIs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4762
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10219 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=999
+ suspectscore=0 phishscore=0 spamscore=0 bulkscore=0 adultscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201060138
+X-Proofpoint-ORIG-GUID: vTskAwG4vPioZVYneogPdubVIPsgitpJ
+X-Proofpoint-GUID: vTskAwG4vPioZVYneogPdubVIPsgitpJ
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Watson Chow <watson.chow@avnet.com>
+On 2021-12-10 09:43:19 -0600, Brijesh Singh wrote:
+> While launching the encrypted guests, the hypervisor may need to provide
+> some additional information during the guest boot. When booting under the
+> EFI based BIOS, the EFI configuration table contains an entry for the
+> confidential computing blob that contains the required information.
+> 
+> To support booting encrypted guests on non-EFI VM, the hypervisor needs to
+> pass this additional information to the kernel with a different method.
+> 
+> For this purpose, introduce SETUP_CC_BLOB type in setup_data to hold the
+> physical address of the confidential computing blob location. The boot
+> loader or hypervisor may choose to use this method instead of EFI
+> configuration table. The CC blob location scanning should give preference
+> to setup_data data over the EFI configuration table.
+> 
+> In AMD SEV-SNP, the CC blob contains the address of the secrets and CPUID
+> pages. The secrets page includes information such as a VM to PSP
+> communication key and CPUID page contains PSP filtered CPUID values.
+> Define the AMD SEV confidential computing blob structure.
+> 
+> While at it, define the EFI GUID for the confidential computing blob.
+> 
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
 
-The MAX20086-MAX20089 are dual/quad power protectors for cameras. Add a
-driver that supports controlling the outputs individually. Additional
-features, such as overcurrent detection, may be added later if needed.
+Reviewed-by: Venu Busireddy <venu.busireddy@oracle.com>
 
-Signed-off-by: Watson Chow <watson.chow@avnet.com>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
-Changes since v1:
-
-- Use C++ comment style for top header
-- Unconditionally register all outputs
-- Fix W=1 warning
-- Don't disable all outputs at probe time
-- Wire up enable GPIO to regulators
----
- MAINTAINERS                            |   7 +
- drivers/regulator/Kconfig              |  10 +-
- drivers/regulator/Makefile             |   1 +
- drivers/regulator/max20086-regulator.c | 332 +++++++++++++++++++++++++
- 4 files changed, 349 insertions(+), 1 deletion(-)
- create mode 100644 drivers/regulator/max20086-regulator.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 79fd8a012893..2891e71c0b9e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11577,6 +11577,13 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
- F:	drivers/power/supply/max17042_battery.c
- 
-+MAXIM MAX20086 CAMERA POWER PROTECTOR DRIVER
-+M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-+L:	linux-kernel@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/regulator/maxim,max20086.yaml
-+F:	drivers/regulator/max20086-regulator.c
-+
- MAXIM MAX77650 PMIC MFD DRIVER
- M:	Bartosz Golaszewski <brgl@bgdev.pl>
- L:	linux-kernel@vger.kernel.org
-diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-index 6be9b1c8a615..dd5c70fe7438 100644
---- a/drivers/regulator/Kconfig
-+++ b/drivers/regulator/Kconfig
-@@ -636,6 +636,15 @@ config REGULATOR_MAX8998
- 	  via I2C bus. The provided regulator is suitable for S3C6410
- 	  and S5PC1XX chips to control VCC_CORE and VCC_USIM voltages.
- 
-+config REGULATOR_MAX20086
-+	tristate "Maxim MAX20086-MAX20089 Camera Power Protectors"
-+	depends on I2C
-+	select REGMAP_I2C
-+	help
-+	  This driver controls a Maxim MAX20086-MAX20089 camera power
-+	  protectorvia I2C bus. The regulator has 2 or 4 outputs depending on
-+	  the device model. This driver is only capable to turn on/off them.
-+
- config REGULATOR_MAX77686
- 	tristate "Maxim 77686 regulator"
- 	depends on MFD_MAX77686 || COMPILE_TEST
-@@ -1415,4 +1424,3 @@ config REGULATOR_QCOM_LABIBB
- 	  for LCD display panel.
- 
- endif
--
-diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
-index b07d2a22df0b..a9e986231eb8 100644
---- a/drivers/regulator/Makefile
-+++ b/drivers/regulator/Makefile
-@@ -78,6 +78,7 @@ obj-$(CONFIG_REGULATOR_MAX8952) += max8952.o
- obj-$(CONFIG_REGULATOR_MAX8973) += max8973-regulator.o
- obj-$(CONFIG_REGULATOR_MAX8997) += max8997-regulator.o
- obj-$(CONFIG_REGULATOR_MAX8998) += max8998.o
-+obj-$(CONFIG_REGULATOR_MAX20086) += max20086-regulator.o
- obj-$(CONFIG_REGULATOR_MAX77686) += max77686-regulator.o
- obj-$(CONFIG_REGULATOR_MAX77693) += max77693-regulator.o
- obj-$(CONFIG_REGULATOR_MAX77802) += max77802-regulator.o
-diff --git a/drivers/regulator/max20086-regulator.c b/drivers/regulator/max20086-regulator.c
-new file mode 100644
-index 000000000000..fbc56b043071
---- /dev/null
-+++ b/drivers/regulator/max20086-regulator.c
-@@ -0,0 +1,332 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+//
-+// max20086-regulator.c - MAX20086-MAX20089 camera power protector driver
-+//
-+// Copyright (C) 2022 Laurent Pinchart <laurent.pinchart@idesonboard.com>
-+// Copyright (C) 2018 Avnet, Inc.
-+
-+#include <linux/err.h>
-+#include <linux/gpio.h>
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/regmap.h>
-+#include <linux/regulator/driver.h>
-+#include <linux/regulator/machine.h>
-+#include <linux/regulator/of_regulator.h>
-+#include <linux/slab.h>
-+
-+/* Register Offset */
-+#define MAX20086_REG_MASK		0x00
-+#define MAX20086_REG_CONFIG		0x01
-+#define	MAX20086_REG_ID			0x02
-+#define	MAX20086_REG_STAT1		0x03
-+#define	MAX20086_REG_STAT2_L		0x04
-+#define	MAX20086_REG_STAT2_H		0x05
-+#define	MAX20086_REG_ADC1		0x06
-+#define	MAX20086_REG_ADC2		0x07
-+#define	MAX20086_REG_ADC3		0x08
-+#define	MAX20086_REG_ADC4		0x09
-+
-+/* DEVICE IDs */
-+#define MAX20086_DEVICE_ID_MAX20086	0x40
-+#define MAX20086_DEVICE_ID_MAX20087	0x20
-+#define MAX20086_DEVICE_ID_MAX20088	0x10
-+#define MAX20086_DEVICE_ID_MAX20089	0x00
-+#define DEVICE_ID_MASK			0xf0
-+
-+/* Register bits */
-+#define MAX20086_EN_MASK		0x0f
-+#define MAX20086_EN_OUT1		0x01
-+#define MAX20086_EN_OUT2		0x02
-+#define MAX20086_EN_OUT3		0x04
-+#define MAX20086_EN_OUT4		0x08
-+#define MAX20086_INT_DISABLE_ALL	0x3f
-+
-+#define MAX20086_MAX_REGULATORS		4
-+
-+struct max20086_chip_info {
-+	u8 id;
-+	unsigned int num_outputs;
-+};
-+
-+struct max20086_regulator {
-+	struct device_node *of_node;
-+	struct regulator_init_data *init_data;
-+	const struct regulator_desc *desc;
-+	struct regulator_dev *rdev;
-+};
-+
-+struct max20086 {
-+	struct device *dev;
-+	struct regmap *regmap;
-+	struct gpio_desc *ena_gpiod;
-+
-+	const struct max20086_chip_info *info;
-+
-+	struct max20086_regulator regulators[MAX20086_MAX_REGULATORS];
-+};
-+
-+static const struct regulator_ops max20086_buck_ops = {
-+	.enable = regulator_enable_regmap,
-+	.disable = regulator_disable_regmap,
-+	.is_enabled = regulator_is_enabled_regmap,
-+};
-+
-+#define MAX20086_REGULATOR_DESC(n)		\
-+{						\
-+	.name = "OUT"#n,			\
-+	.supply_name = "in",			\
-+	.id = (n) - 1,				\
-+	.ops = &max20086_buck_ops,		\
-+	.type = REGULATOR_VOLTAGE,		\
-+	.owner = THIS_MODULE,			\
-+	.enable_reg = MAX20086_REG_CONFIG,	\
-+	.enable_mask = 1 << ((n) - 1),		\
-+	.enable_val = 1 << ((n) - 1),		\
-+	.disable_val = 0,			\
-+}
-+
-+static const char * const max20086_output_names[] = {
-+	"OUT1",
-+	"OUT2",
-+	"OUT3",
-+	"OUT4",
-+};
-+
-+static const struct regulator_desc max20086_regulators[] = {
-+	MAX20086_REGULATOR_DESC(1),
-+	MAX20086_REGULATOR_DESC(2),
-+	MAX20086_REGULATOR_DESC(3),
-+	MAX20086_REGULATOR_DESC(4),
-+};
-+
-+static int max20086_regulators_register(struct max20086 *chip)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < chip->info->num_outputs; i++) {
-+		struct max20086_regulator *reg = &chip->regulators[i];
-+		struct regulator_config config = { };
-+		struct regulator_dev *rdev;
-+
-+		config.dev = chip->dev;
-+		config.init_data = reg->init_data;
-+		config.driver_data = chip;
-+		config.of_node = reg->of_node;
-+		config.regmap = chip->regmap;
-+		config.ena_gpiod = chip->ena_gpiod;
-+
-+		rdev = devm_regulator_register(chip->dev, reg->desc, &config);
-+		if (IS_ERR(rdev)) {
-+			dev_err(chip->dev,
-+				"Failed to register regulator output %s\n",
-+				reg->desc->name);
-+			return PTR_ERR(rdev);
-+		}
-+
-+		reg->rdev = rdev;
-+	}
-+
-+	return 0;
-+}
-+
-+static int max20086_parse_regulators_dt(struct max20086 *chip, bool *boot_on)
-+{
-+	struct of_regulator_match matches[MAX20086_MAX_REGULATORS] = { };
-+	struct device_node *node;
-+	unsigned int i;
-+	int ret;
-+
-+	node = of_get_child_by_name(chip->dev->of_node, "regulators");
-+	if (!node) {
-+		dev_err(chip->dev, "regulators node not found\n");
-+		return PTR_ERR(node);
-+	}
-+
-+	for (i = 0; i < chip->info->num_outputs; ++i)
-+		matches[i].name = max20086_output_names[i];
-+
-+	ret = of_regulator_match(chip->dev, node, matches,
-+				 chip->info->num_outputs);
-+	of_node_put(node);
-+	if (ret < 0) {
-+		dev_err(chip->dev, "Failed to match regulators\n");
-+		return -EINVAL;
-+	}
-+
-+	*boot_on = false;
-+
-+	for (i = 0; i < chip->info->num_outputs; i++) {
-+		struct max20086_regulator *reg = &chip->regulators[i];
-+
-+		reg->init_data = matches[i].init_data;
-+		reg->of_node = matches[i].of_node;
-+		reg->desc = &max20086_regulators[i];
-+
-+		if (reg->init_data) {
-+			if (reg->init_data->constraints.always_on ||
-+			    reg->init_data->constraints.boot_on)
-+				*boot_on = true;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int max20086_detect(struct max20086 *chip)
-+{
-+	unsigned int data;
-+	int ret;
-+
-+	ret = regmap_read(chip->regmap, MAX20086_REG_ID, &data);
-+	if (ret < 0) {
-+		dev_err(chip->dev, "Failed to read DEVICE_ID reg: %d\n", ret);
-+		return ret;
-+	}
-+
-+	if ((data & DEVICE_ID_MASK) != chip->info->id) {
-+		dev_err(chip->dev, "Invalid device ID 0x%02x\n", data);
-+		return -ENXIO;
-+	}
-+
-+	return 0;
-+}
-+
-+static bool max20086_gen_is_writeable_reg(struct device *dev, unsigned int reg)
-+{
-+	switch (reg) {
-+	case MAX20086_REG_MASK:
-+	case MAX20086_REG_CONFIG:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
-+static const struct regmap_config max20086_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.writeable_reg = max20086_gen_is_writeable_reg,
-+	.max_register = 0x9,
-+	.cache_type = REGCACHE_NONE,
-+};
-+
-+static int max20086_i2c_probe(struct i2c_client *i2c)
-+{
-+	struct max20086 *chip;
-+	enum gpiod_flags flags;
-+	bool boot_on;
-+	int ret;
-+
-+	chip = devm_kzalloc(&i2c->dev, sizeof(*chip), GFP_KERNEL);
-+	if (!chip)
-+		return -ENOMEM;
-+
-+	chip->dev = &i2c->dev;
-+	chip->info = device_get_match_data(chip->dev);
-+
-+	i2c_set_clientdata(i2c, chip);
-+
-+	chip->regmap = devm_regmap_init_i2c(i2c, &max20086_regmap_config);
-+	if (IS_ERR(chip->regmap)) {
-+		ret = PTR_ERR(chip->regmap);
-+		dev_err(chip->dev, "Failed to allocate register map: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = max20086_parse_regulators_dt(chip, &boot_on);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = max20086_detect(chip);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Until IRQ support is added, just disable all interrupts. */
-+	ret = regmap_update_bits(chip->regmap, MAX20086_REG_MASK,
-+				 MAX20086_INT_DISABLE_ALL,
-+				 MAX20086_INT_DISABLE_ALL);
-+	if (ret < 0) {
-+		dev_err(chip->dev, "Failed to disable interrupts: %d\n", ret);
-+		return ret;
-+	}
-+
-+	/*
-+	 * Get the enable GPIO. If any of the outputs is marked as being
-+	 * enabled at boot, request the GPIO with an initial high state to
-+	 * avoid disabling outputs that may have been turned on by the boot
-+	 * loader. Otherwise, request it with a low state to enter lower-power
-+	 * shutdown.
-+	 */
-+	flags = boot_on ? GPIOD_OUT_HIGH : GPIOD_OUT_LOW;
-+	chip->ena_gpiod = devm_gpiod_get(chip->dev, "enable", flags);
-+	if (IS_ERR(chip->ena_gpiod)) {
-+		ret = PTR_ERR(chip->ena_gpiod);
-+		dev_err(chip->dev, "Failed to get enable GPIO: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = max20086_regulators_register(chip);
-+	if (ret < 0) {
-+		dev_err(chip->dev, "Failed to register regulators: %d\n", ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct i2c_device_id max20086_i2c_id[] = {
-+	{ "max20086" },
-+	{ "max20087" },
-+	{ "max20088" },
-+	{ "max20089" },
-+	{ /* Sentinel */ },
-+};
-+
-+MODULE_DEVICE_TABLE(i2c, max20086_i2c_id);
-+
-+static const struct of_device_id max20086_dt_ids[] = {
-+	{
-+		.compatible = "maxim,max20086",
-+		.data = &(const struct max20086_chip_info) {
-+			.id = MAX20086_DEVICE_ID_MAX20086,
-+			.num_outputs = 4,
-+		}
-+	}, {
-+		.compatible = "maxim,max20087",
-+		.data = &(const struct max20086_chip_info) {
-+			.id = MAX20086_DEVICE_ID_MAX20087,
-+			.num_outputs = 4,
-+		}
-+	}, {
-+		.compatible = "maxim,max20088",
-+		.data = &(const struct max20086_chip_info) {
-+			.id = MAX20086_DEVICE_ID_MAX20088,
-+			.num_outputs = 2,
-+		}
-+	}, {
-+		.compatible = "maxim,max20089",
-+		.data = &(const struct max20086_chip_info) {
-+			.id = MAX20086_DEVICE_ID_MAX20089,
-+			.num_outputs = 2,
-+		}
-+	},
-+	{ /* Sentinel */ },
-+};
-+
-+MODULE_DEVICE_TABLE(of, max20086_dt_ids);
-+
-+static struct i2c_driver max20086_regulator_driver = {
-+	.driver = {
-+		.name = "max20086",
-+		.of_match_table = of_match_ptr(max20086_dt_ids),
-+	},
-+	.probe_new = max20086_i2c_probe,
-+	.id_table = max20086_i2c_id,
-+};
-+
-+module_i2c_driver(max20086_regulator_driver);
-+
-+MODULE_AUTHOR("Watson Chow <watson.chow@avnet.com>");
-+MODULE_DESCRIPTION("MAX20086-MAX20089 Camera Power Protector Driver");
-+MODULE_LICENSE("GPL");
--- 
-Regards,
-
-Laurent Pinchart
-
+> ---
+>  arch/x86/include/asm/sev.h            | 12 ++++++++++++
+>  arch/x86/include/uapi/asm/bootparam.h |  1 +
+>  include/linux/efi.h                   |  1 +
+>  3 files changed, 14 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
+> index f7cbd5164136..f42fbe3c332f 100644
+> --- a/arch/x86/include/asm/sev.h
+> +++ b/arch/x86/include/asm/sev.h
+> @@ -44,6 +44,18 @@ struct es_em_ctxt {
+>  
+>  void do_vc_no_ghcb(struct pt_regs *regs, unsigned long exit_code);
+>  
+> +/* AMD SEV Confidential computing blob structure */
+> +#define CC_BLOB_SEV_HDR_MAGIC	0x45444d41
+> +struct cc_blob_sev_info {
+> +	u32 magic;
+> +	u16 version;
+> +	u16 reserved;
+> +	u64 secrets_phys;
+> +	u32 secrets_len;
+> +	u64 cpuid_phys;
+> +	u32 cpuid_len;
+> +};
+> +
+>  static inline u64 lower_bits(u64 val, unsigned int bits)
+>  {
+>  	u64 mask = (1ULL << bits) - 1;
+> diff --git a/arch/x86/include/uapi/asm/bootparam.h b/arch/x86/include/uapi/asm/bootparam.h
+> index b25d3f82c2f3..1ac5acca72ce 100644
+> --- a/arch/x86/include/uapi/asm/bootparam.h
+> +++ b/arch/x86/include/uapi/asm/bootparam.h
+> @@ -10,6 +10,7 @@
+>  #define SETUP_EFI			4
+>  #define SETUP_APPLE_PROPERTIES		5
+>  #define SETUP_JAILHOUSE			6
+> +#define SETUP_CC_BLOB			7
+>  
+>  #define SETUP_INDIRECT			(1<<31)
+>  
+> diff --git a/include/linux/efi.h b/include/linux/efi.h
+> index dbd39b20e034..a022aed7adb3 100644
+> --- a/include/linux/efi.h
+> +++ b/include/linux/efi.h
+> @@ -344,6 +344,7 @@ void efi_native_runtime_setup(void);
+>  #define EFI_CERT_SHA256_GUID			EFI_GUID(0xc1c41626, 0x504c, 0x4092, 0xac, 0xa9, 0x41, 0xf9, 0x36, 0x93, 0x43, 0x28)
+>  #define EFI_CERT_X509_GUID			EFI_GUID(0xa5c059a1, 0x94e4, 0x4aa7, 0x87, 0xb5, 0xab, 0x15, 0x5c, 0x2b, 0xf0, 0x72)
+>  #define EFI_CERT_X509_SHA256_GUID		EFI_GUID(0x3bd2a492, 0x96c0, 0x4079, 0xb4, 0x20, 0xfc, 0xf9, 0x8e, 0xf1, 0x03, 0xed)
+> +#define EFI_CC_BLOB_GUID			EFI_GUID(0x067b1f5f, 0xcf26, 0x44c5, 0x85, 0x54, 0x93, 0xd7, 0x77, 0x91, 0x2d, 0x42)
+>  
+>  /*
+>   * This GUID is used to pass to the kernel proper the struct screen_info
+> -- 
+> 2.25.1
+> 

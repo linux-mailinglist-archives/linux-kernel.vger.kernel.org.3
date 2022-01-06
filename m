@@ -2,97 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4EA9485327
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 14:02:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC449485192
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Jan 2022 12:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236709AbiAENB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 08:01:57 -0500
-Received: from www62.your-server.de ([213.133.104.62]:44172 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236580AbiAENBz (ORCPT
+        id S235163AbiAELEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 06:04:20 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:31141 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235066AbiAELES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 08:01:55 -0500
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1n55vC-0000E1-9Z; Wed, 05 Jan 2022 14:01:42 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1n55vB-000GBK-Rr; Wed, 05 Jan 2022 14:01:41 +0100
-Subject: Re: [PATCH v2 net-next 1/2] net: bpf: handle return value of
- BPF_CGROUP_RUN_PROG_INET{4,6}_POST_BIND()
-To:     menglong8.dong@gmail.com, kuba@kernel.org
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        edumazet@google.com, ast@kernel.org, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
-References: <20211230080305.1068950-1-imagedong@tencent.com>
- <20211230080305.1068950-2-imagedong@tencent.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <5cf64605-7005-ac06-6ee1-18547910697a@iogearbox.net>
-Date:   Wed, 5 Jan 2022 14:01:41 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Wed, 5 Jan 2022 06:04:18 -0500
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JTRPd5krbzRhds;
+        Wed,  5 Jan 2022 19:01:41 +0800 (CST)
+Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 5 Jan 2022 19:04:16 +0800
+Received: from huawei.com (10.175.101.6) by dggpemm500017.china.huawei.com
+ (7.185.36.178) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 5 Jan
+ 2022 19:04:16 +0800
+From:   Wenchao Hao <haowenchao@huawei.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Zhiqiang Liu <liuzhiqiang26@huawei.com>,
+        Wenchao Hao <haowenchao@huawei.com>
+Subject: [PATCH v3] ata: libata-scsi: simplify __ata_scsi_queuecmd()
+Date:   Wed, 5 Jan 2022 19:13:54 -0500
+Message-ID: <20220106001354.2029046-1-haowenchao@huawei.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <20211230080305.1068950-2-imagedong@tencent.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.3/26413/Wed Jan  5 10:23:50 2022)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500017.china.huawei.com (7.185.36.178)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/30/21 9:03 AM, menglong8.dong@gmail.com wrote:
-[...]
-> diff --git a/include/net/sock.h b/include/net/sock.h
-> index 44cc25f0bae7..f5fc0432374e 100644
-> --- a/include/net/sock.h
-> +++ b/include/net/sock.h
-> @@ -1209,6 +1209,7 @@ struct proto {
->   	void			(*unhash)(struct sock *sk);
->   	void			(*rehash)(struct sock *sk);
->   	int			(*get_port)(struct sock *sk, unsigned short snum);
-> +	void			(*put_port)(struct sock *sk);
->   #ifdef CONFIG_BPF_SYSCALL
->   	int			(*psock_update_sk_prot)(struct sock *sk,
->   							struct sk_psock *psock,
-> diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-> index 5d18d32557d2..8784e72d4b8b 100644
-> --- a/net/ipv4/af_inet.c
-> +++ b/net/ipv4/af_inet.c
-> @@ -531,6 +531,8 @@ int __inet_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
->   			err = BPF_CGROUP_RUN_PROG_INET4_POST_BIND(sk);
->   			if (err) {
->   				inet->inet_saddr = inet->inet_rcv_saddr = 0;
-> +				if (sk->sk_prot->get_port)
-> +					sk->sk_prot->put_port(sk);
->   				goto out_release_sock;
->   			}
->   		}
-[...]
-> diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
-> index d1636425654e..ddfc6821e682 100644
-> --- a/net/ipv6/af_inet6.c
-> +++ b/net/ipv6/af_inet6.c
-> @@ -413,6 +413,8 @@ static int __inet6_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len,
->   			if (err) {
->   				sk->sk_ipv6only = saved_ipv6only;
->   				inet_reset_saddr(sk);
-> +				if (sk->sk_prot->get_port)
-> +					sk->sk_prot->put_port(sk);
->   				goto out;
->   			}
->   		}
+This is just a clean code. Since each branch of "if" state would check
+scmd->cmd_len, so move the check of scmd->cmd_len out of "if" state to
+simplify parameters check.
 
-I presume both tests above should test for non-zero sk->sk_prot->put_port
-callback given that is what they end up calling when true, no?
+After the check of scmd->cmd_len is out of "if" state, we can remove
+one redundant "if" state.
 
-Thanks,
-Daniel
+Remove a redundant variable "rc" by hand.
+
+This patch do not change origin function logic.
+
+Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
+---
+ drivers/ata/libata-scsi.c | 45 ++++++++++++++++++---------------------
+ 1 file changed, 21 insertions(+), 24 deletions(-)
+
+diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
+index a16ef0030..ed8be585a 100644
+--- a/drivers/ata/libata-scsi.c
++++ b/drivers/ata/libata-scsi.c
+@@ -3958,42 +3958,39 @@ int __ata_scsi_queuecmd(struct scsi_cmnd *scmd, struct ata_device *dev)
+ {
+ 	u8 scsi_op = scmd->cmnd[0];
+ 	ata_xlat_func_t xlat_func;
+-	int rc = 0;
++
++	if (unlikely(!scmd->cmd_len))
++		goto bad_cdb_len;
+ 
+ 	if (dev->class == ATA_DEV_ATA || dev->class == ATA_DEV_ZAC) {
+-		if (unlikely(!scmd->cmd_len || scmd->cmd_len > dev->cdb_len))
++		if (unlikely(scmd->cmd_len > dev->cdb_len))
+ 			goto bad_cdb_len;
+ 
+ 		xlat_func = ata_get_xlat_func(dev, scsi_op);
+-	} else {
+-		if (unlikely(!scmd->cmd_len))
+-			goto bad_cdb_len;
++	} else if (likely((scsi_op != ATA_16) || !atapi_passthru16)) {
++		/* relay SCSI command to ATAPI device */
++		int len = COMMAND_SIZE(scsi_op);
+ 
+-		xlat_func = NULL;
+-		if (likely((scsi_op != ATA_16) || !atapi_passthru16)) {
+-			/* relay SCSI command to ATAPI device */
+-			int len = COMMAND_SIZE(scsi_op);
+-			if (unlikely(len > scmd->cmd_len ||
+-				     len > dev->cdb_len ||
+-				     scmd->cmd_len > ATAPI_CDB_LEN))
+-				goto bad_cdb_len;
++		if (unlikely(len > scmd->cmd_len ||
++			     len > dev->cdb_len ||
++			     scmd->cmd_len > ATAPI_CDB_LEN))
++			goto bad_cdb_len;
+ 
+-			xlat_func = atapi_xlat;
+-		} else {
+-			/* ATA_16 passthru, treat as an ATA command */
+-			if (unlikely(scmd->cmd_len > 16))
+-				goto bad_cdb_len;
++		xlat_func = atapi_xlat;
++	} else {
++		/* ATA_16 passthru, treat as an ATA command */
++		if (unlikely(scmd->cmd_len > 16))
++			goto bad_cdb_len;
+ 
+-			xlat_func = ata_get_xlat_func(dev, scsi_op);
+-		}
++		xlat_func = ata_get_xlat_func(dev, scsi_op);
+ 	}
+ 
+ 	if (xlat_func)
+-		rc = ata_scsi_translate(dev, scmd, xlat_func);
+-	else
+-		ata_scsi_simulate(dev, scmd);
++		return ata_scsi_translate(dev, scmd, xlat_func);
+ 
+-	return rc;
++	ata_scsi_simulate(dev, scmd);
++
++	return 0;
+ 
+  bad_cdb_len:
+ 	scmd->result = DID_ERROR << 16;
+-- 
+2.32.0
+

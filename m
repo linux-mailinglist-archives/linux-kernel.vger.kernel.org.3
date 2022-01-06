@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64549486A15
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:43:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1B4486A1A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:45:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242975AbiAFSnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 13:43:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58642 "EHLO
+        id S242979AbiAFSpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 13:45:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242965AbiAFSm7 (ORCPT
+        with ESMTP id S242923AbiAFSpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 13:42:59 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7A3C061245;
-        Thu,  6 Jan 2022 10:42:58 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id 19so4231376ioz.4;
-        Thu, 06 Jan 2022 10:42:58 -0800 (PST)
+        Thu, 6 Jan 2022 13:45:19 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1429CC061212;
+        Thu,  6 Jan 2022 10:45:19 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id q5so4225166ioj.7;
+        Thu, 06 Jan 2022 10:45:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=3BKBH7bXrSa7D2NBRCF3DtqxqnTEQJ2QlSdlcjBQtLw=;
-        b=IaIzfOAl83AKok3656+22nOkSeCWmg/58JB1QkmQly1kVVCt6224b2hTbv6Xq6u5D7
-         BnvuIKLeZmFRsPx17I5vU2GxscZimDwMpjlrmCCAR5lOrp1Izbb01IFuOhWhXGA8aCnR
-         EWZFobsvA1cBQB3ddFx6ja5M1JDApPhxPvBoFDsmwqRpol0iM38HN4q++EmLmnDsANfs
-         GyaClzSPmIQf7REvFw0QrqkSzA83iQ39+KaMiZAxSS/SPeVYY5darGRa58XRyqXw7Miu
-         1h3jP8mN9ZSS2QhHU7sJz1b+rUlSaXTOLBGim8Y9alPZNNWIMKqCud60SUsAHc3Lpu51
-         dCMA==
+        bh=7dnIFML0XXbzLzl6ahAwfiIzM7A+DB0qKUmtJEHOD5g=;
+        b=pVhNnYu9T3TRsvFR/+G90wNHq9KW1yfMGySOaTJ2eGKZ7c4trvoUfoNBzUZ+Dw4N4y
+         JfAOtcylDyioVvQVE/cuoldoDrqoprFYN8+6xhE6mFrULdkJ8NkFAUi730TGjG+wSGEg
+         qtf++8E9kbMwOLEyhOt5pYHXVsSSvVZncLrR5cU+XTFHHPCrgbkzkhB0csDRywM1Rw4R
+         DveLX6Xr0k7tmzhRSjImpZyte1zxsje0ob4eUWdUcgAfcdvmpW+DVfZadJOxvLHkM8u5
+         J35z3GRkMjtiod9GKhAMfvHF2wrTjyapjd3Vs7bZ8uVt1IIFpbywmvFlrvxkmAk0UGIT
+         xa1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3BKBH7bXrSa7D2NBRCF3DtqxqnTEQJ2QlSdlcjBQtLw=;
-        b=0w4YDY1zzbgVhYYj195aGjihbAwg32FCGSeT/kef2jRU9nUcYXUiZNzYgnPMuCtQeE
-         3aSS683WtwaamDAaZW0eOVKPruRWcpkl6DgNNrKpHjInDNuMRinofyCpgzHbo8rlgh+m
-         Zo27toHSEYqyFQNvM10JO/FHUmHvc7jlerWWb0ODFAi9yotiEx6ImeVzLiGeAoTG5R4C
-         eivn3oWUnZr0BiVtukFYNEvhLJz6tKXmJsM2A4Q3mTLrrMKFKmmAIgomAU8M38/vvQeJ
-         SEBVI4ayjrftOHScm8GizrtCC+8huBeJO4j04fw+HYvIIlUMHkWH0UsXiLNnyqMt/01O
-         yQaA==
-X-Gm-Message-State: AOAM532QO53nUJNORW+cdEk4Xhn1lI8DdDHq5iiLhzhDDAK86dTQHhbp
-        MaFs/SNo7GYcKqILNwYbYu1Kgndwc2PJz8pJrZM=
-X-Google-Smtp-Source: ABdhPJww3eQIXfkqUkfXk7et0oXtpkP9Zj5ynkVb1R886yXUB/7KMk919g2ZzLham/tTXHlfUcUR5cB/fjLK0IlvfpE=
-X-Received: by 2002:a02:b384:: with SMTP id p4mr26830812jan.167.1641494578260;
- Thu, 06 Jan 2022 10:42:58 -0800 (PST)
+        bh=7dnIFML0XXbzLzl6ahAwfiIzM7A+DB0qKUmtJEHOD5g=;
+        b=d6/giCxviiwUE0EUn0GIu5bOCOrBLSHgSjA4DI/kUp9XzVlfjatrxlarK4yIFqeYRj
+         a8zVxmKeQKnRAxacArns0NBcqyo8XIJLJUdv8NPXcZT7A0N3yqgzeHYGzx4NjfwlRL0r
+         p0p55SYyIE01AsWp5VDeN5pP0D+juFNlAR/2i5ygHlXFbXQ7n1Sj/ZsDjPlmAncWDLwc
+         V7rikcMhr1fGe1fjm20XUHuKF0XElsi+eujaRQvEUhvrIvVqZXm8FzeIlQFvJ1G/+bux
+         +v18Zt0pkAX5ni6uIX1LV8W4dyU/GBx4TAtr1zlQfjkGizPdUO6Byi3ISd7qmjIkIZvD
+         8XVA==
+X-Gm-Message-State: AOAM533hBp0sXlgHpclvz+aSOAFZ6jFi3zDkeCWRcB2JtdSgG4aKSR3u
+        sZvfOb6OZEzkUIjhUVCU/JrkuvYvL3VDke1kDWE=
+X-Google-Smtp-Source: ABdhPJyxbhLrlvwUx8rhBldxtrE9tUViP0hpYejaLS/1+8omT4qRBLq/vOXMTTQWgZ20Lb4Bgj6lmVzE7yHjUtSKJa0=
+X-Received: by 2002:a02:878b:: with SMTP id t11mr28599248jai.226.1641494718449;
+ Thu, 06 Jan 2022 10:45:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20211231161930.256733-1-krzysztof.kozlowski@canonical.com> <20211231161930.256733-6-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211231161930.256733-6-krzysztof.kozlowski@canonical.com>
+References: <20211231161930.256733-1-krzysztof.kozlowski@canonical.com> <20211231162207.257478-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211231162207.257478-1-krzysztof.kozlowski@canonical.com>
 From:   Alim Akhtar <alim.akhtar@gmail.com>
-Date:   Fri, 7 Jan 2022 00:12:22 +0530
-Message-ID: <CAGOxZ52LR5vA-taBHhwBXaXYciKoOVN3MaWcB3_RsNcFcnO+6w@mail.gmail.com>
-Subject: Re: [PATCH 05/24] ARM: dts: exynos: override pins by label in Peach Pit
+Date:   Fri, 7 Jan 2022 00:14:42 +0530
+Message-ID: <CAGOxZ51cEZ2SV=GYdjFEFFhKqp0+KxWcmA0VJx7C1z=UdFqW=Q@mail.gmail.com>
+Subject: Re: [PATCH 07/24] ARM: dts: exynos: override pins by label in Peach Pi
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
         Sylwester Nawrocki <s.nawrocki@samsung.com>,
@@ -69,9 +69,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof
+Hi Krzysztof,
 
-On Sat, Jan 1, 2022 at 11:15 AM Krzysztof Kozlowski
+On Sat, Jan 1, 2022 at 1:15 PM Krzysztof Kozlowski
 <krzysztof.kozlowski@canonical.com> wrote:
 >
 > Using node paths to extend or override a device tree node is error
@@ -82,22 +82,18 @@ On Sat, Jan 1, 2022 at 11:15 AM Krzysztof Kozlowski
 > A mistyped label on the other hand, will cause a dtc compile error
 > (during build time).
 >
-While it makes sense to do this, was wondering if you faced any issue
-with the current implementation?
-
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
-Feel free to add
 Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
 
->  arch/arm/boot/dts/exynos5420-peach-pit.dts | 44 +++++++++++-----------
->  1 file changed, 22 insertions(+), 22 deletions(-)
+>  arch/arm/boot/dts/exynos5800-peach-pi.dts | 33 +++++++++++------------
+>  1 file changed, 16 insertions(+), 17 deletions(-)
 >
-> diff --git a/arch/arm/boot/dts/exynos5420-peach-pit.dts b/arch/arm/boot/dts/exynos5420-peach-pit.dts
-> index e76fb104db19..1ae5528e9ebf 100644
-> --- a/arch/arm/boot/dts/exynos5420-peach-pit.dts
-> +++ b/arch/arm/boot/dts/exynos5420-peach-pit.dts
-> @@ -868,27 +868,26 @@ pmic_dvs_1: pmic-dvs-1 {
+> diff --git a/arch/arm/boot/dts/exynos5800-peach-pi.dts b/arch/arm/boot/dts/exynos5800-peach-pi.dts
+> index 77013ee586f8..6bf3fd37fb2b 100644
+> --- a/arch/arm/boot/dts/exynos5800-peach-pi.dts
+> +++ b/arch/arm/boot/dts/exynos5800-peach-pi.dts
+> @@ -850,27 +850,26 @@ pmic_dvs_1: pmic-dvs-1 {
 >         };
 >  };
 >
@@ -141,25 +137,6 @@ Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
 >  };
 >
 >  &pinctrl_2 {
-> @@ -907,12 +906,13 @@ pmic_dvs_3: pmic-dvs-3 {
->         };
->  };
->
-> -&pinctrl_3 {
-> -       /* Drive SPI lines at x2 for better integrity */
-> -       spi2-bus {
-> -               samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV3>;
-> -       };
-> +/* pinctrl_3*/
-> +/* Drive SPI lines at x2 for better integrity */
-> +&spi2_bus {
-> +       samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV3>;
-> +};
->
-> +&pinctrl_3 {
->         /* Drive SPI chip select at x2 for better integrity */
->         ec_spi_cs: ec-spi-cs {
->                 samsung,pins = "gpb1-2";
 > --
 > 2.32.0
 >

@@ -2,121 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E38485E2B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 02:36:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 396C6485E36
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 02:44:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344421AbiAFBgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 20:36:15 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:46136 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1344417AbiAFBgN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 20:36:13 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 205NjB4V016227;
-        Thu, 6 Jan 2022 01:36:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=q5yghDeQHt8sShVlxRUFq7DVvVeGozRb7/rcSirOcI0=;
- b=D3Mq016AF5mLSawvoX1A/APq3I6ixfc2qQj9Wks1hs/3MI1EKFiNiOl2KggCYnm+CmMS
- kpGugngko2okJu41rwNRiuEehULrrco0si8Huo5b/akL/1jp9uEBkVEFGIdcPrRnN21G
- otNVxWuH2MrPy+qCiEVgHvtlQl24+CIF8/fIjV3CFGvsJLf5E0qwMY/dGfGagovekSOv
- FQRk1fUct315eYS9XIAtXAQpDLYGRvwUSdveKSn8Vo1L8XXVrGr7HY5SI2eYrGLbLPiS
- 82iYPGjz0VkAzYaBeYqfj6wfQh2uAeH0bd+c6lIrCkbFgOwjkZG33MixbWMQ2kviaa2Y 9w== 
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3ddn99he23-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jan 2022 01:36:05 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2061WJJt032038;
-        Thu, 6 Jan 2022 01:36:05 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma02dal.us.ibm.com with ESMTP id 3ddn1xa2st-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jan 2022 01:36:05 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2061a4F132571678
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 6 Jan 2022 01:36:04 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E11DB124055;
-        Thu,  6 Jan 2022 01:36:03 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B7BFF124062;
-        Thu,  6 Jan 2022 01:36:03 +0000 (GMT)
-Received: from localhost (unknown [9.160.191.186])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Thu,  6 Jan 2022 01:36:03 +0000 (GMT)
-From:   Nathan Lynch <nathanl@linux.ibm.com>
-To:     Tyrel Datwyler <tyreld@linux.ibm.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: Re: [PATCH v4] powerpc/pseries: read the lpar name from the firmware
-In-Reply-To: <ac208963-d334-1f46-0db2-4a8d073b2963@linux.ibm.com>
-References: <20211207171109.22793-1-ldufour@linux.ibm.com>
- <25527544-b0ac-596c-3876-560493b99f6b@linux.ibm.com>
- <8735m1ixd6.fsf@li-e15d104c-2135-11b2-a85c-d7ef17e56be6.ibm.com>
- <ac208963-d334-1f46-0db2-4a8d073b2963@linux.ibm.com>
-Date:   Wed, 05 Jan 2022 19:36:03 -0600
-Message-ID: <87ee5lve64.fsf@li-e15d104c-2135-11b2-a85c-d7ef17e56be6.ibm.com>
+        id S1344438AbiAFBon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 20:44:43 -0500
+Received: from mga03.intel.com ([134.134.136.65]:61907 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344427AbiAFBoh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 20:44:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641433477; x=1672969477;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=G6ngbjkjBS0fxtFM+fJf7muqpnq1GWTrwIY3RJJ+2bY=;
+  b=Ve5Wj5SBolIv6xtu75v1ijux3SeXdHPisp5mfaLCnGveRT60T6KhNnn/
+   q0CJrBGxzdEDvXZx+4OVVqt7uvQMk2zXWSCW/zh6fB6+OY1xOB8wHQ3hl
+   r/mdy8LMJaeS2HxhydDP4GutTKMovx4kvSgS4yljcx+3q+XgXZh0YNiKa
+   lNTH+qz4dFpJgZuPuyvVTkMx4rL/3oerGgyiusRTheS4Y5o/kqrQCTzz5
+   O1Ejy+bMxHOrsF6K3vsmMsih7VdWIL6JxNfUYx+wVbTRhH+/Yu+zv6l7R
+   DupgdHc5jIHih+lIfCV4r3dULkTQG4vJSegYiquX/sE72e6ZYw1P5GTFV
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242526991"
+X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
+   d="scan'208";a="242526991"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 17:44:36 -0800
+X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
+   d="scan'208";a="526785362"
+Received: from zengguan-mobl.ccr.corp.intel.com (HELO [10.238.0.214]) ([10.238.0.214])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 17:44:31 -0800
+Message-ID: <4eee5de5-ab76-7094-17aa-adc552032ba0@intel.com>
+Date:   Thu, 6 Jan 2022 09:44:20 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: w6k5B5hqEdd8kytWyNlpUML8zSfwL0O-
-X-Proofpoint-ORIG-GUID: w6k5B5hqEdd8kytWyNlpUML8zSfwL0O-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-05_08,2022-01-04_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 impostorscore=0 spamscore=0 clxscore=1015 phishscore=0
- adultscore=0 lowpriorityscore=0 mlxscore=0 suspectscore=0 mlxlogscore=839
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2112160000 definitions=main-2201060005
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.4.1
+Subject: Re: [PATCH v5 7/8] KVM: VMX: Update PID-pointer table entry when APIC
+ ID is changed
+Content-Language: en-US
+To:     Tom Lendacky <thomas.lendacky@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "Huang, Kai" <kai.huang@intel.com>
+Cc:     "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hu, Robert" <robert.hu@intel.com>,
+        "Gao, Chao" <chao.gao@intel.com>
+References: <20211231142849.611-1-guang.zeng@intel.com>
+ <20211231142849.611-8-guang.zeng@intel.com>
+ <640e82f3-489d-60af-1d31-25096bef1a46@amd.com>
+From:   Zeng Guang <guang.zeng@intel.com>
+In-Reply-To: <640e82f3-489d-60af-1d31-25096bef1a46@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tyrel Datwyler <tyreld@linux.ibm.com> writes:
-> On 1/5/22 3:19 PM, Nathan Lynch wrote:
->> Laurent Dufour <ldufour@linux.ibm.com> writes:
->>> On 07/12/2021, 18:11:09, Laurent Dufour wrote:
->>>> The LPAR name may be changed after the LPAR has been started in the HMC.
->>>> In that case lparstat command is not reporting the updated value because it
->>>> reads it from the device tree which is read at boot time.
->>>>
->>>> However this value could be read from RTAS.
->>>>
->>>> Adding this value in the /proc/powerpc/lparcfg output allows to read the
->>>> updated value.
->>>
->>> Do you consider taking that patch soon?
->> 
->> This version prints an error on non-PowerVM guests the first time
->> lparcfg is read.
+On 1/6/2022 3:13 AM, Tom Lendacky wrote:
+> On 12/31/21 8:28 AM, Zeng Guang wrote:
+>> In xAPIC mode, guest is allowed to modify APIC ID at runtime.
+>> If IPI virtualization is enabled, corresponding entry in
+>> PID-pointer table need change accordingly.
+>>
+>> Signed-off-by: Zeng Guang <guang.zeng@intel.com>
+>> ---
+>>    arch/x86/include/asm/kvm_host.h |  1 +
+>>    arch/x86/kvm/lapic.c            |  7 +++++--
+>>    arch/x86/kvm/vmx/vmx.c          | 12 ++++++++++++
+>>    3 files changed, 18 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+>> index 2164b9f4c7b0..753bf2a7cebc 100644
+>> --- a/arch/x86/include/asm/kvm_host.h
+>> +++ b/arch/x86/include/asm/kvm_host.h
+>> @@ -1493,6 +1493,7 @@ struct kvm_x86_ops {
+>>    	int (*complete_emulated_msr)(struct kvm_vcpu *vcpu, int err);
+>>    
+>>    	void (*vcpu_deliver_sipi_vector)(struct kvm_vcpu *vcpu, u8 vector);
+>> +	void (*update_ipiv_pid_entry)(struct kvm_vcpu *vcpu, u8 old_id, u8 new_id);
+>>    };
+>>    
+>>    struct kvm_x86_nested_ops {
+>> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+>> index 3ce7142ba00e..83c2c7594bcd 100644
+>> --- a/arch/x86/kvm/lapic.c
+>> +++ b/arch/x86/kvm/lapic.c
+>> @@ -2007,9 +2007,12 @@ int kvm_lapic_reg_write(struct kvm_lapic *apic, u32 reg, u32 val)
+>>    
+>>    	switch (reg) {
+>>    	case APIC_ID:		/* Local APIC ID */
+>> -		if (!apic_x2apic_mode(apic))
+>> +		if (!apic_x2apic_mode(apic)) {
+>> +			u8 old_id = kvm_lapic_get_reg(apic, APIC_ID) >> 24;
+>> +
+>>    			kvm_apic_set_xapic_id(apic, val >> 24);
+>> -		else
+>> +			kvm_x86_ops.update_ipiv_pid_entry(apic->vcpu, old_id, val >> 24);
+> Won't this blow up on AMD since there is no corresponding SVM op?
 >
-> I assume because QEMU doesn't implement the LPAR_NAME token for
-> get_sysparm.
-
-Correct.
-
-
->> And I still contend that having this function fall back to reporting the
->> partition name in the DT would provide a beneficial consistency in the
->> user-facing API, allowing programs to avoid hypervisor-specific branches
->> in their code. 
->
-> Agreed, if the get_sysparm fails just report the lpar-name from the device tree.
->
->> I don't understand the resistance I've encountered here.
->> The fallback I'm suggesting (a root node property lookup) is certainly
->> not more complex than the RTAS call sequence you've already implemented.
->> 
->
-> Is there benefit of adding a partition_name field/value pair to lparcfg? The
-> lparstat utility can just as easily make the get_sysparm call via librtas.
-> Further, rtas_filters allows this particular RTAS call from userspace.
-
-The RTAS syscall is root-only, but we want the partition name (whether
-supplied by RTAS or the device tree) to be available to unprivileged
-programs.
+> Thanks,
+> Tom
+Right, need check ops validness to avoid ruining AMD system. Same 
+consideration on ops "update_ipiv_pid_table" in patch8.
+I will revise in next version. Thanks.
+>> +		} else
+>>    			ret = 1;
+>>    		break;
+>>    
+>>

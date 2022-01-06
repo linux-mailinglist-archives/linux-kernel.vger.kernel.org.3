@@ -2,170 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA355486CEF
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:55:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB15486CF1
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244967AbiAFVzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 16:55:05 -0500
-Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:52910 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245072AbiAFVyo (ORCPT
+        id S244930AbiAFVza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 16:55:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46606 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239471AbiAFVz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 16:54:44 -0500
-Received: from pop-os.home ([90.11.185.88])
-        by smtp.orange.fr with ESMTPA
-        id 5aiVntWht2lVY5aiWnSlhj; Thu, 06 Jan 2022 22:54:42 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 06 Jan 2022 22:54:42 +0100
-X-ME-IP: 90.11.185.88
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     arnd@arndb.de, hch@infradead.org, akpm@linux-foundation.org,
-        sathya.prakash@broadcom.com, sreekanth.reddy@broadcom.com,
-        suganath-prabu.subramani@broadcom.com
-Cc:     MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH 15/16] scsi: mptctl: Use dma_alloc_coherent()
-Date:   Thu,  6 Jan 2022 22:54:39 +0100
-Message-Id: <516375d6d06114484533baf03aae351306100246.1641500561.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
-References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
+        Thu, 6 Jan 2022 16:55:28 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332A4C061245;
+        Thu,  6 Jan 2022 13:55:28 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id v11so3625317pfu.2;
+        Thu, 06 Jan 2022 13:55:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=baLlX8J8fiaO85yjXAAqEuWMCG9f2mB0MZtSG6XCtsI=;
+        b=cxw8HDbt/q+HOmPJeOndfMSKKs6qZF3mxJR8F51mdDj4j41LtWMxrhBRGgusQeuiA+
+         8bQ4nmKVrXwHsfSeYSA7gN9CtfGmQOvXdkTzxErRCKb8KjLk9S6WiaLSx3PsKeDuhqla
+         4No7o5oXOXihiQTjKOZ+jS0+OKu+JsAND8bD0TvKCnnorVyItdSSqwqGg+ZITAuzUsH4
+         ZbNu5RlF8ZEfPjqYKHQp83YwcTH0jvtqz+5el0wNpk5mIQLwlUEmBPiCziNgE5PRcy/V
+         D6ybDhDIir0dtCMSEoBH/Cp4tOee6377q65jjrojwDpO0p/h8aIosrbQPX7hiBe2+RqZ
+         hb0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=baLlX8J8fiaO85yjXAAqEuWMCG9f2mB0MZtSG6XCtsI=;
+        b=fG+gz6oJ1pZ1rtFCZiaSb9F0jt3u/CnUtXi3GiKK/48L7yyF6z3iTGCucCXbanNG54
+         fe0sv8D5JQqooUmMx9/dlYKHWBSc6hpP1uDRCQHFQ6XsHe4RkatFvoObRp0BsYpN8dQg
+         e6DnDHyQdCnYb0A8mylFv+WYMJhhNfz+FjUEzsj68WfDO/wDMnodbiM6jM7YrARmGms2
+         O7hQf5QxvZGoIEya3UZzVXyn6kBBwe21WxmOp2fYWVxSFiIG7GHBwHzK+4A0te/pHX1d
+         OcPntKeRqRWvkZELaSZfiVt2oZUBPbnvyxrwOFJQEIbI/kZ/HRuDISGs4rE/f5DhAYlm
+         LzBw==
+X-Gm-Message-State: AOAM533z2qL0R9b2HyjCYPnW6Q7pl972xuYDAa7QdZ3KrLevL9hd2AA/
+        tBQ+bM/koPeIODTDk+LM+0g=
+X-Google-Smtp-Source: ABdhPJy3EFXHBDOQH4AF0zGAFOCziAz4u+v91tVS0wlLJX/gbwDWepm05nFGg4CUudYPKGJ0Ck2YAw==
+X-Received: by 2002:aa7:9705:0:b0:4bb:6897:6b80 with SMTP id a5-20020aa79705000000b004bb68976b80mr62265172pfg.21.1641506127644;
+        Thu, 06 Jan 2022 13:55:27 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id o27sm2769514pgm.1.2022.01.06.13.55.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 13:55:26 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 6 Jan 2022 11:55:24 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Wei Yang <richard.weiyang@gmail.com>
+Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] cgroup/rstat: check updated_next only for root
+Message-ID: <YddlTA/+sBAHGGYo@slm.duckdns.org>
+References: <20211225000932.7253-1-richard.weiyang@gmail.com>
+ <20211225000932.7253-2-richard.weiyang@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211225000932.7253-2-richard.weiyang@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In [1], Christoph Hellwig has proposed to remove the wrappers in
-include/linux/pci-dma-compat.h.
+On Sat, Dec 25, 2021 at 12:09:32AM +0000, Wei Yang wrote:
+> After commit dc26532aed0a ("cgroup: rstat: punt root-level optimization to
+> individual controllers"), each rstat on updated_children list has its
+> ->updated_next not NULL.
+> 
+> This means we can remove the check on ->updated_next, if we make sure
+> the subtree from @root is on list, which could be done by checking
+> updated_next for root.
+> 
+> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
 
-Some reasons why this API should be removed have been given by Julia
-Lawall in [2].
+Applied to cgroup/for-5.17 w/ coding style fixes.
 
+Thanks.
 
-When memory is allocated in kbuf_alloc_2_sgl() GFP_KERNEL can be used
-because this function already uses the GFP_USER flag for some memory
-allocation and not spin_lock is taken in the between.
-
-When memory is allocated in mptctl_do_mpt_command() GFP_KERNEL can be
-used because this function already uses copy_from_user() and this
-function can sleep.
-
-When memory is allocated in mptctl_hp_hostinfo() GFP_KERNEL can be used
-because this function already uses mpt_config() and this function has
-an explicit might_sleep().
-
-When memory is allocated in mptctl_hp_targetinfo() GFP_KERNEL can be used
-because this function already uses mpt_config() and this function has
-an explicit might_sleep().
-
-
-[1]: https://lore.kernel.org/kernel-janitors/20200421081257.GA131897@infradead.org/
-[2]: https://lore.kernel.org/kernel-janitors/alpine.DEB.2.22.394.2007120902170.2424@hadrien/
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-I'm a bit unsure about the use of GFP_KERNEL in kbuf_alloc_2_sgl().
-
-In all conversion that I've done, GFP_USER was never used. I don't fully
-understand the difference between GFP_USER and GFP_KERNEL.
----
- drivers/message/fusion/mptctl.c | 31 +++++++++++++++++++------------
- 1 file changed, 19 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/message/fusion/mptctl.c b/drivers/message/fusion/mptctl.c
-index 0f447179e3f5..03c8fb1795c2 100644
---- a/drivers/message/fusion/mptctl.c
-+++ b/drivers/message/fusion/mptctl.c
-@@ -1041,7 +1041,8 @@ kbuf_alloc_2_sgl(int bytes, u32 sgdir, int sge_offset, int *frags,
- 	 * copying the data in this array into the correct place in the
- 	 * request and chain buffers.
- 	 */
--	sglbuf = pci_alloc_consistent(ioc->pcidev, MAX_SGL_BYTES, sglbuf_dma);
-+	sglbuf = dma_alloc_coherent(&ioc->pcidev->dev, MAX_SGL_BYTES,
-+				    sglbuf_dma, GFP_KERNEL);
- 	if (sglbuf == NULL)
- 		goto free_and_fail;
- 
-@@ -1062,9 +1063,9 @@ kbuf_alloc_2_sgl(int bytes, u32 sgdir, int sge_offset, int *frags,
- 	while (bytes_allocd < bytes) {
- 		this_alloc = min(alloc_sz, bytes-bytes_allocd);
- 		buflist[buflist_ent].len = this_alloc;
--		buflist[buflist_ent].kptr = pci_alloc_consistent(ioc->pcidev,
--								 this_alloc,
--								 &pa);
-+		buflist[buflist_ent].kptr = dma_alloc_coherent(&ioc->pcidev->dev,
-+							       this_alloc,
-+							       &pa, GFP_KERNEL);
- 		if (buflist[buflist_ent].kptr == NULL) {
- 			alloc_sz = alloc_sz / 2;
- 			if (alloc_sz == 0) {
-@@ -2105,8 +2106,9 @@ mptctl_do_mpt_command (MPT_ADAPTER *ioc, struct mpt_ioctl_command karg, void __u
- 			}
- 			flagsLength |= karg.dataOutSize;
- 			bufOut.len = karg.dataOutSize;
--			bufOut.kptr = pci_alloc_consistent(
--					ioc->pcidev, bufOut.len, &dma_addr_out);
-+			bufOut.kptr = dma_alloc_coherent(&ioc->pcidev->dev,
-+							 bufOut.len,
-+							 &dma_addr_out, GFP_KERNEL);
- 
- 			if (bufOut.kptr == NULL) {
- 				rc = -ENOMEM;
-@@ -2139,8 +2141,9 @@ mptctl_do_mpt_command (MPT_ADAPTER *ioc, struct mpt_ioctl_command karg, void __u
- 			flagsLength |= karg.dataInSize;
- 
- 			bufIn.len = karg.dataInSize;
--			bufIn.kptr = pci_alloc_consistent(ioc->pcidev,
--					bufIn.len, &dma_addr_in);
-+			bufIn.kptr = dma_alloc_coherent(&ioc->pcidev->dev,
-+							bufIn.len,
-+							&dma_addr_in, GFP_KERNEL);
- 
- 			if (bufIn.kptr == NULL) {
- 				rc = -ENOMEM;
-@@ -2400,7 +2403,9 @@ mptctl_hp_hostinfo(MPT_ADAPTER *ioc, unsigned long arg, unsigned int data_size)
- 			/* Issue the second config page request */
- 			cfg.action = MPI_CONFIG_ACTION_PAGE_READ_CURRENT;
- 
--			pbuf = pci_alloc_consistent(ioc->pcidev, hdr.PageLength * 4, &buf_dma);
-+			pbuf = dma_alloc_coherent(&ioc->pcidev->dev,
-+						  hdr.PageLength * 4,
-+						  &buf_dma, GFP_KERNEL);
- 			if (pbuf) {
- 				cfg.physAddr = buf_dma;
- 				if (mpt_config(ioc, &cfg) == 0) {
-@@ -2477,7 +2482,7 @@ mptctl_hp_hostinfo(MPT_ADAPTER *ioc, unsigned long arg, unsigned int data_size)
- 	else
- 		IstwiRWRequest->DeviceAddr = 0xB0;
- 
--	pbuf = pci_alloc_consistent(ioc->pcidev, 4, &buf_dma);
-+	pbuf = dma_alloc_coherent(&ioc->pcidev->dev, 4, &buf_dma, GFP_KERNEL);
- 	if (!pbuf)
- 		goto out;
- 	ioc->add_sge((char *)&IstwiRWRequest->SGL,
-@@ -2592,7 +2597,8 @@ mptctl_hp_targetinfo(MPT_ADAPTER *ioc, unsigned long arg)
-        /* Get the data transfer speeds
-         */
- 	data_sz = ioc->spi_data.sdp0length * 4;
--	pg0_alloc = pci_alloc_consistent(ioc->pcidev, data_sz, &page_dma);
-+	pg0_alloc = dma_alloc_coherent(&ioc->pcidev->dev, data_sz, &page_dma,
-+				       GFP_KERNEL);
- 	if (pg0_alloc) {
- 		hdr.PageVersion = ioc->spi_data.sdp0version;
- 		hdr.PageLength = data_sz;
-@@ -2657,7 +2663,8 @@ mptctl_hp_targetinfo(MPT_ADAPTER *ioc, unsigned long arg)
- 		/* Issue the second config page request */
- 		cfg.action = MPI_CONFIG_ACTION_PAGE_READ_CURRENT;
- 		data_sz = (int) cfg.cfghdr.hdr->PageLength * 4;
--		pg3_alloc = pci_alloc_consistent(ioc->pcidev, data_sz, &page_dma);
-+		pg3_alloc = dma_alloc_coherent(&ioc->pcidev->dev, data_sz,
-+					       &page_dma, GFP_KERNEL);
- 		if (pg3_alloc) {
- 			cfg.physAddr = page_dma;
- 			cfg.pageAddr = (karg.hdr.channel << 8) | karg.hdr.id;
 -- 
-2.32.0
-
+tejun

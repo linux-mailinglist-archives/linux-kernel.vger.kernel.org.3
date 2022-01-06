@@ -2,105 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1BB148644B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 13:21:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8CF486455
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 13:25:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238785AbiAFMVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 07:21:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56230 "EHLO
+        id S238795AbiAFMZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 07:25:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238475AbiAFMVD (ORCPT
+        with ESMTP id S238788AbiAFMZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 07:21:03 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB473C061245;
-        Thu,  6 Jan 2022 04:21:03 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id 200so2400336pgg.3;
-        Thu, 06 Jan 2022 04:21:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=As/WjEKqZAy9F1nGpQ4wmkL2ydVFs9ke/kDtTsLl3ko=;
-        b=fgfMaPlTT/8Blrv/OqQ/yZSJfsN0vxrYUY9J2/BGcF8fbAVz0doYCXy/sDKxBDhGSJ
-         b1kk/JmEv3pW6qya4XIJ0eHfJAzvuRCNsf24LLSb+pVFJ4KoIrYtx5eNaO39a/HmB2yQ
-         NRKAMMX390p00lskO6FFLUVKoqLXjK9jId7zdIp8XQV4rWtq3VX512L+jAGfrbkiE2H7
-         UQA96Ezq22gYI1c7whHu/v52WCRJt/jhSRT335oElYFsoPZO70PQCv/tUW+2XsteLi8z
-         iDL51bqZeN3y5JhGDYqC5TNzDbzlCfv8pNKZiRcADZiM7e1NqNtaxnIPZwxZlv9fkefc
-         DoZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=As/WjEKqZAy9F1nGpQ4wmkL2ydVFs9ke/kDtTsLl3ko=;
-        b=qrqBkgdJgxWabNyvyoVgHtwvCnb0XeZ5ADVfTNQHx1Fe6MBkYv7uhBxw3NFkNhBejm
-         3+/wom4ZynZpRK1caAqvhywav2P2gsOn/AfWgBE9+U2uIP7P030emQjNOcHJCNKHySYB
-         t6SCPnOTKa0mOu1vUd4+IJWeOlL24Ensj2l3LO3YumM+6oYO+YYqIulem2zL29LSfHTr
-         DPslC52mewmh+MJCyKQ4D+cLfrwwnQs1iFeiw20Rsnyl9HYFgpsGPlBlTfxMnvmAJG5r
-         Ctoip13zc74zWnEEx6yV8onerWEMNgHtJBSJOgqlFhCnqvmgSYAGAZmSwB0xA5b2yhOz
-         K/Yw==
-X-Gm-Message-State: AOAM532JWYQdPQSqL3M0uAeU4lp7W8MNIrXcGoPgUCyUE/7QBz3/e2a9
-        YMF2dfFPWXPivd7E+dUPwTlMNGH4R3oKAA==
-X-Google-Smtp-Source: ABdhPJwVewV3z8nurVP0GLH6N1Gf3aznKRES4C3kmjNaG8WzE/y43HvRgUrHdLmwP/0sx4lECsG8MQ==
-X-Received: by 2002:a63:6687:: with SMTP id a129mr51265949pgc.477.1641471662936;
-        Thu, 06 Jan 2022 04:21:02 -0800 (PST)
-Received: from localhost.localdomain ([203.205.141.111])
-        by smtp.googlemail.com with ESMTPSA id my5sm2859974pjb.5.2022.01.06.04.21.00
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 06 Jan 2022 04:21:02 -0800 (PST)
-From:   Wanpeng Li <kernellwp@gmail.com>
-X-Google-Original-From: Wanpeng Li <wanpengli@tencent.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, Aili Yao <yaoaili@kingsoft.com>
-Subject: [PATCH v2] KVM: LAPIC: Enable timer posted-interrupt when mwait/hlt is advertised
-Date:   Thu,  6 Jan 2022 04:20:12 -0800
-Message-Id: <1641471612-34483-1-git-send-email-wanpengli@tencent.com>
-X-Mailer: git-send-email 2.7.4
+        Thu, 6 Jan 2022 07:25:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517A7C061245;
+        Thu,  6 Jan 2022 04:25:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 19C4AB81E8B;
+        Thu,  6 Jan 2022 12:25:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E69CBC36AE5;
+        Thu,  6 Jan 2022 12:24:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641471900;
+        bh=7GTTtf7eu4RoZ9dWQBGOYY0gMIrhN8Iyq+VpX5N94Jo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Gft7t8m6QsRRVsarlT4YIejzSI8Na0Dyo3ua3VrXwRPErKEhrwwM6Sq5+D/GxMwXm
+         aSCtmOaAU8kMfYju2aKU7NFbxwk+Vy7t9aE7hEUOBeKIF1W51xTxyR/TJYReZ4zk7w
+         UvgFnscY4mNBk2mEWnCEgCzfM91HBV+/mqmMijmdASooVSN32K4alumsZ1SAUZ39QB
+         lfGB7VW6eAQtjk+wk5RAoD8Zk/KurxxvMasY2euW+/uLNOsnaGvtCEZHYZiB+/xUst
+         KYQ70RqFU+KuIhCzMsAIoX3tab5SKnIeaum/7K7VOi+GVhPu16gnKDTBA739jM/+hT
+         4998/AaxIMtTA==
+From:   Wolfram Sang <wsa@kernel.org>
+To:     linux-i2c@vger.kernel.org
+Cc:     "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>,
+        Konstantin Kharlamov <hi-angel@yandex.ru>,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        Bibby Hsieh <bibby.hsieh@mediatek.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH] Revert "i2c: core: support bus regulator controlling in adapter"
+Date:   Thu,  6 Jan 2022 13:24:52 +0100
+Message-Id: <20220106122452.18719-1-wsa@kernel.org>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wanpeng Li <wanpengli@tencent.com>
+This largely reverts commit 5a7b95fb993ec399c8a685552aa6a8fc995c40bd. It
+breaks suspend with AMD GPUs, and we couldn't incrementally fix it. So,
+let's remove the code and go back to the drawing board. We keep the
+header extension to not break drivers already populating the regulator.
+We expect to re-add the code handling it soon.
 
-As commit 0c5f81dad46 (KVM: LAPIC: Inject timer interrupt via posted interrupt) 
-mentioned that the host admin should well tune the guest setup, so that vCPUs 
-are placed on isolated pCPUs, and with several pCPUs surplus for *busy* housekeeping.
-It is better to disable mwait/hlt/pause vmexits to keep the vCPUs in non-root 
-mode. However, we may isolate pCPUs for other purpose like DPDK or we can make 
-some guests isolated and others not, we may lose vmx preemption timer/timer fastpath 
-due to not well tuned setup, and the checking in kvm_can_post_timer_interrupt() 
-is not enough. Let's guarantee mwait/hlt is advertised before enabling posted-interrupt 
-interrupt. vmx preemption timer/timer fastpath can continue to work if both of them 
-are not advertised.
-
-Reported-by: Aili Yao <yaoaili@kingsoft.com>
-Cc: Aili Yao <yaoaili@kingsoft.com>
-Cc: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+Reported-by: "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>
+Link: https://lore.kernel.org/r/1295184560.182511.1639075777725@mail.yahoo.com
+Reported-by: Konstantin Kharlamov <hi-angel@yandex.ru>
+Link: https://lore.kernel.org/r/7143a7147978f4104171072d9f5225d2ce355ec1.camel@yandex.ru
+BugLink: https://gitlab.freedesktop.org/drm/amd/-/issues/1850
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 ---
-v1 -> v2:
- * also check kvm_hlt_in_guest since sometime mwait is disabled on host
 
- arch/x86/kvm/lapic.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+So far, I tested it on a Renesas R-Car M3-N board verifying that I2C
+still works. I'll apply it to my for-next branch right away to get the
+buildbots involved as well. But I am still open for comments until I
+apply it to my for-current branch, probably tomorrow.
 
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index f206fc3..fdb7c81 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -113,7 +113,8 @@ static inline u32 kvm_x2apic_id(struct kvm_lapic *apic)
- 
- static bool kvm_can_post_timer_interrupt(struct kvm_vcpu *vcpu)
+ drivers/i2c/i2c-core-base.c | 95 -------------------------------------
+ 1 file changed, 95 deletions(-)
+
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index f193f9058584..73253e667de1 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -466,14 +466,12 @@ static int i2c_smbus_host_notify_to_irq(const struct i2c_client *client)
+ static int i2c_device_probe(struct device *dev)
  {
--	return pi_inject_timer && kvm_vcpu_apicv_active(vcpu);
-+	return pi_inject_timer && kvm_vcpu_apicv_active(vcpu) &&
-+		(kvm_mwait_in_guest(vcpu->kvm) || kvm_hlt_in_guest(vcpu->kvm));
+ 	struct i2c_client	*client = i2c_verify_client(dev);
+-	struct i2c_adapter	*adap;
+ 	struct i2c_driver	*driver;
+ 	int status;
+ 
+ 	if (!client)
+ 		return 0;
+ 
+-	adap = client->adapter;
+ 	client->irq = client->init_irq;
+ 
+ 	if (!client->irq) {
+@@ -539,14 +537,6 @@ static int i2c_device_probe(struct device *dev)
+ 
+ 	dev_dbg(dev, "probe\n");
+ 
+-	if (adap->bus_regulator) {
+-		status = regulator_enable(adap->bus_regulator);
+-		if (status < 0) {
+-			dev_err(&adap->dev, "Failed to enable bus regulator\n");
+-			goto err_clear_wakeup_irq;
+-		}
+-	}
+-
+ 	status = of_clk_set_defaults(dev->of_node, false);
+ 	if (status < 0)
+ 		goto err_clear_wakeup_irq;
+@@ -605,10 +595,8 @@ static int i2c_device_probe(struct device *dev)
+ static void i2c_device_remove(struct device *dev)
+ {
+ 	struct i2c_client	*client = to_i2c_client(dev);
+-	struct i2c_adapter      *adap;
+ 	struct i2c_driver	*driver;
+ 
+-	adap = client->adapter;
+ 	driver = to_i2c_driver(dev->driver);
+ 	if (driver->remove) {
+ 		int status;
+@@ -623,8 +611,6 @@ static void i2c_device_remove(struct device *dev)
+ 	devres_release_group(&client->dev, client->devres_group_id);
+ 
+ 	dev_pm_domain_detach(&client->dev, !i2c_acpi_waive_d0_probe(dev));
+-	if (!pm_runtime_status_suspended(&client->dev) && adap->bus_regulator)
+-		regulator_disable(adap->bus_regulator);
+ 
+ 	dev_pm_clear_wake_irq(&client->dev);
+ 	device_init_wakeup(&client->dev, false);
+@@ -634,86 +620,6 @@ static void i2c_device_remove(struct device *dev)
+ 		pm_runtime_put(&client->adapter->dev);
  }
  
- bool kvm_can_use_hv_timer(struct kvm_vcpu *vcpu)
+-#ifdef CONFIG_PM_SLEEP
+-static int i2c_resume_early(struct device *dev)
+-{
+-	struct i2c_client *client = i2c_verify_client(dev);
+-	int err;
+-
+-	if (!client)
+-		return 0;
+-
+-	if (pm_runtime_status_suspended(&client->dev) &&
+-		client->adapter->bus_regulator) {
+-		err = regulator_enable(client->adapter->bus_regulator);
+-		if (err)
+-			return err;
+-	}
+-
+-	return pm_generic_resume_early(&client->dev);
+-}
+-
+-static int i2c_suspend_late(struct device *dev)
+-{
+-	struct i2c_client *client = i2c_verify_client(dev);
+-	int err;
+-
+-	if (!client)
+-		return 0;
+-
+-	err = pm_generic_suspend_late(&client->dev);
+-	if (err)
+-		return err;
+-
+-	if (!pm_runtime_status_suspended(&client->dev) &&
+-		client->adapter->bus_regulator)
+-		return regulator_disable(client->adapter->bus_regulator);
+-
+-	return 0;
+-}
+-#endif
+-
+-#ifdef CONFIG_PM
+-static int i2c_runtime_resume(struct device *dev)
+-{
+-	struct i2c_client *client = i2c_verify_client(dev);
+-	int err;
+-
+-	if (!client)
+-		return 0;
+-
+-	if (client->adapter->bus_regulator) {
+-		err = regulator_enable(client->adapter->bus_regulator);
+-		if (err)
+-			return err;
+-	}
+-
+-	return pm_generic_runtime_resume(&client->dev);
+-}
+-
+-static int i2c_runtime_suspend(struct device *dev)
+-{
+-	struct i2c_client *client = i2c_verify_client(dev);
+-	int err;
+-
+-	if (!client)
+-		return 0;
+-
+-	err = pm_generic_runtime_suspend(&client->dev);
+-	if (err)
+-		return err;
+-
+-	if (client->adapter->bus_regulator)
+-		return regulator_disable(client->adapter->bus_regulator);
+-	return 0;
+-}
+-#endif
+-
+-static const struct dev_pm_ops i2c_device_pm = {
+-	SET_LATE_SYSTEM_SLEEP_PM_OPS(i2c_suspend_late, i2c_resume_early)
+-	SET_RUNTIME_PM_OPS(i2c_runtime_suspend, i2c_runtime_resume, NULL)
+-};
+-
+ static void i2c_device_shutdown(struct device *dev)
+ {
+ 	struct i2c_client *client = i2c_verify_client(dev);
+@@ -773,7 +679,6 @@ struct bus_type i2c_bus_type = {
+ 	.probe		= i2c_device_probe,
+ 	.remove		= i2c_device_remove,
+ 	.shutdown	= i2c_device_shutdown,
+-	.pm		= &i2c_device_pm,
+ };
+ EXPORT_SYMBOL_GPL(i2c_bus_type);
+ 
 -- 
-2.7.4
+2.30.2
 

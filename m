@@ -2,51 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53B6A486B19
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:28:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF95486B1A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:28:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243796AbiAFU20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 15:28:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
+        id S243816AbiAFU22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 15:28:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243787AbiAFU2W (ORCPT
+        with ESMTP id S243788AbiAFU2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 15:28:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57170C061212
+        Thu, 6 Jan 2022 15:28:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE99C0611FD
         for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 12:28:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 207ADB823F5
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 20:28:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C19B8C36AE5;
-        Thu,  6 Jan 2022 20:28:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CC1A61E24
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 20:28:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60040C36AE3;
+        Thu,  6 Jan 2022 20:28:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641500899;
-        bh=WJ2sfcxn6GVvDjVhkMuBqAzdc3GwgvrPGmKcfFu60ec=;
+        s=k20201202; t=1641500902;
+        bh=/HeOpyMdXJEm0oJ6Rb/pWakA0Uu7ogZ2rdPbVlKI3hg=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=K0B2TiIiP/OB5JpWTBCGOLDpev+HYLQW3HR3vjJ/2pGG53/TaYk6exXM6T+eC4waY
-         LFxUtOajGRr09bpzsDMVd5Qc96WRBKtIwqEFN3FbmYLs/3PPd+dgOclOkSrrP94uck
-         VgDPzDToBHma7GfPRq9f70p+oneyV0plwFq/U6KEeeF4xw3HAVt47VAJ9jM1s/4uLG
-         nL5rhGF4jICnLDgHqoJbX+5wvo+bV9uU+Xpp5UHJiqS2r6PU+EJtIXFSpIH5owaJov
-         7KRjcn9+EoZFPcLgTT67d3zIQ9KljRzNCveEel6n/l4SnfQrCD2GLRNNhX6FQgAK/l
-         51DNYDa/ZVEzg==
+        b=Pp7rwB+liL//1RFg9Fhzw5ISNYvnCdxiYgkFVq56vKyd9GFwvMuRK2Ru2pu8jRBHg
+         pMf8s88ooC0x26yOTxwvpjRSnno4PyGLYgPAblEEUjOTgwXQb/eiuTwOpenXQrxhgV
+         p5BiTTOAu8P7Tn+yJUEbe83TetluzlpDIwg9Y3I0lVYz3PoaMqR0WqLn10GkvjLwvu
+         QpMDvKs7aq8Aw87Letr/v0B21CvWpCMKQlSWW90Q4W2WvC7PqssQfE8hi4UryR0InP
+         Uv3JGWU3lhOP+zyiSe2HlmA8sy9Vqxc/xdNorYqocYD5xNz8K2u1akiNTxvRo/f08U
+         vwPHIQjFxCpTQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        alsa-devel@alsa-project.org
-Cc:     Jaroslav Kysela <perex@perex.cz>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Basavaraj.Hiregoudar@amd.com, Takashi Iwai <tiwai@suse.com>,
-        Alexander.Deucher@amd.com, Sunil-kumar.Dommati@amd.com,
-        V sujith kumar Reddy <vsujithkumar.reddy@amd.com>,
-        Vijendar.Mukunda@amd.com
-In-Reply-To: <20220106150525.396170-1-AjitKumar.Pandey@amd.com>
-References: <20220106150525.396170-1-AjitKumar.Pandey@amd.com>
-Subject: Re: [PATCH] ASoC: amd: acp: acp-mach: Change default RT1019 amp dev id
-Message-Id: <164150089750.2243486.8547152917333843393.b4-ty@kernel.org>
-Date:   Thu, 06 Jan 2022 20:28:17 +0000
+To:     Jaroslav Kysela <perex@perex.cz>, alsa-devel@alsa-project.org,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Banajit Goswami <bgoswami@codeaurora.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>
+In-Reply-To: <20220104033356.343685-1-y.oudjana@protonmail.com>
+References: <20220104033356.343685-1-y.oudjana@protonmail.com>
+Subject: Re: [PATCH] ASoC: wcd9335: Keep a RX port value for each SLIM RX mux
+Message-Id: <164150090010.2243486.16272491720524163841.b4-ty@kernel.org>
+Date:   Thu, 06 Jan 2022 20:28:20 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,14 +51,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Jan 2022 20:35:21 +0530, Ajit Kumar Pandey wrote:
-> RT1019 components was initially registered with i2c1 and i2c2 but
-> now changed to i2c0 and i2c1 in most of our AMD platforms. Change
-> default rt1019 components to 10EC1019:00 and 10EC1019:01 which is
-> aligned with most of AMD machines.
+On Tue, 04 Jan 2022 03:35:36 +0000, Yassine Oudjana wrote:
+> Currently, rx_port_value is a single unsigned int that gets overwritten
+> when slim_rx_mux_put() is called for any RX mux, then the same value is
+> read when slim_rx_mux_get() is called for any of them. This results in
+> slim_rx_mux_get() reporting the last value set by slim_rx_mux_put()
+> regardless of which SLIM RX mux is in question.
 > 
-> Any exception to rt1019 device ids in near future board design can
-> be handled using dmi based quirk for that machine.
+> Turn rx_port_value into an array and store a separate value for each
+> SLIM RX mux.
 > 
 > [...]
 
@@ -71,8 +69,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: amd: acp: acp-mach: Change default RT1019 amp dev id
-      commit: 7112550890d7e415188a3351ec0a140be60f6deb
+[1/1] ASoC: wcd9335: Keep a RX port value for each SLIM RX mux
+      commit: 3b247eeaecfefe35ecca1578b0ed48be65bc6ca3
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

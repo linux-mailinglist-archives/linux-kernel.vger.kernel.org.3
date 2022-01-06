@@ -2,163 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 456D8485CC4
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 01:02:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E973485CCC
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 01:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245716AbiAFACs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 19:02:48 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:39740 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239653AbiAFACk (ORCPT
+        id S245729AbiAFADp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 19:03:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245713AbiAFADh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 19:02:40 -0500
+        Wed, 5 Jan 2022 19:03:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46C5C061245;
+        Wed,  5 Jan 2022 16:03:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 68E46619AC;
-        Thu,  6 Jan 2022 00:02:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6D33C36AEB;
-        Thu,  6 Jan 2022 00:02:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 81EC2619B2;
+        Thu,  6 Jan 2022 00:03:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8364C36AEB;
+        Thu,  6 Jan 2022 00:03:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641427359;
-        bh=LgWpScTlaLqYHFK8lobVRo2ot5LNdzJ8EJo8mKwcmbw=;
+        s=k20201202; t=1641427416;
+        bh=To/H3NokkHFtvWoYEsZUlwbam8b8aQ4ZguL5QsrFWD8=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=Y8J2O8Zp8lwwSv9TL1P4m2ZUQL20fqJs5IlKmJ1Io7eLzeOFPEMO4XuEhNaXr0ZwI
-         U87Pcn9teJWabi9W/lmj/Ct5fUa6afHAeVc8uInJe5lHi1VP0/DAzo+FJgi/rxrHyk
-         K3yjvsXQPXnuziGln7CnYEUm+HuRiynUFR/OrdEKfPaA9L4PI27GrnP2F38wEl1Ere
-         O0xHGR9Lq9nl0bIh/VIwpz8nSqTXHFjwfRUXFR3JW9LpgPjJATSjeUWQ0WlJK3Ei7g
-         0lNVOeAPar90tYvnzsl2YSQnbcCjglY/4i1hpwre+69KrNJ3UHnBVsuYlDe3V2HLh9
-         eJEw14YLoCYYw==
+        b=Su/KlbJ7ag469KjwxTh0oFlyISEe6/xOxBYgXvM7pvwzXBGS8fLV2dZ8QXSOjxjoZ
+         AmgYbUKj4VtL0WQVv4mIW/i53B21G1R1oPwcbWMp4QeOfdgV9pqS5Tj0NvX5hV4mdw
+         BqQ9CpB57fT2/zDfcqVIRtqYdYUusc9moTqM7CturLpCs67D5a8zMzddor9v1qONtH
+         RdlMSNngV9Nu1h2PQDebZVOf93Y/Ptp+yd2yKTjOgxaO+rbTBhbXSyTX7Kz2ZHE9al
+         EbE6UYIen8sabd6r40k/BxnlxfWoVa6xHAyuDnhRN4iCkQHL9KxfiGYLdNA1Zgnijb
+         Wjhs3IZy9bA7A==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1640018638-19436-6-git-send-email-tdas@codeaurora.org>
-References: <1640018638-19436-1-git-send-email-tdas@codeaurora.org> <1640018638-19436-6-git-send-email-tdas@codeaurora.org>
+In-Reply-To: <202112210805.wI87zJw0-lkp@intel.com>
+References: <1640018638-19436-6-git-send-email-tdas@codeaurora.org> <202112210805.wI87zJw0-lkp@intel.com>
 Subject: Re: [PATCH v2 5/5] clk: qcom: lpass: Add support for LPASS clock controller for SC7280
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
+Cc:     kbuild-all@lists.01.org, Rajendra Nayak <rnayak@codeaurora.org>,
         linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh@kernel.org, robh+dt@kernel.org,
-        Taniya Das <tdas@codeaurora.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Taniya Das <tdas@codeaurora.org>
-Date:   Wed, 05 Jan 2022 16:02:38 -0800
+        devicetree@vger.kernel.org, robh@kernel.org, robh+dt@kernel.org
+To:     Michael Turquette =?utf-8?q?=C2=A0?= <mturquette@baylibre.com>,
+        Taniya Das <tdas@codeaurora.org>,
+        kernel test robot <lkp@intel.com>
+Date:   Wed, 05 Jan 2022 16:03:34 -0800
 User-Agent: alot/0.9.1
-Message-Id: <20220106000239.B6D33C36AEB@smtp.kernel.org>
+Message-Id: <20220106000335.D8364C36AEB@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Taniya Das (2021-12-20 08:43:58)
-> diff --git a/drivers/clk/qcom/lpasscorecc-sc7280.c b/drivers/clk/qcom/lpa=
-sscorecc-sc7280.c
-> new file mode 100644
-> index 0000000..dd79847
-> --- /dev/null
-> +++ b/drivers/clk/qcom/lpasscorecc-sc7280.c
-> @@ -0,0 +1,433 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-> + */
-> +
-[...]
-> +       [LPASS_CORE_CC_EXT_IF0_CLK_SRC] =3D &lpass_core_cc_ext_if0_clk_sr=
-c.clkr,
-> +       [LPASS_CORE_CC_EXT_IF0_IBIT_CLK] =3D &lpass_core_cc_ext_if0_ibit_=
-clk.clkr,
-> +       [LPASS_CORE_CC_EXT_IF1_CLK_SRC] =3D &lpass_core_cc_ext_if1_clk_sr=
-c.clkr,
-> +       [LPASS_CORE_CC_EXT_IF1_IBIT_CLK] =3D &lpass_core_cc_ext_if1_ibit_=
-clk.clkr,
-> +       [LPASS_CORE_CC_LPM_CORE_CLK] =3D &lpass_core_cc_lpm_core_clk.clkr,
-> +       [LPASS_CORE_CC_LPM_MEM0_CORE_CLK] =3D &lpass_core_cc_lpm_mem0_cor=
-e_clk.clkr,
-> +       [LPASS_CORE_CC_SYSNOC_MPORT_CORE_CLK] =3D &lpass_core_cc_sysnoc_m=
-port_core_clk.clkr,
-> +};
-> +
-> +static struct regmap_config lpass_core_cc_sc7280_regmap_config =3D {
+Quoting kernel test robot (2021-12-20 17:02:06)
+> Hi Taniya,
+>=20
+> Thank you for the patch! Perhaps something to improve:
+>=20
+> [auto build test WARNING on clk/clk-next]
+> [also build test WARNING on robh/for-next linus/master v5.16-rc6 next-202=
+11220]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+>=20
+> url:    https://github.com/0day-ci/linux/commits/Taniya-Das/Add-support-f=
+or-LPASS-Core-and-Audio-Clock-for-SC7280/20211221-004818
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk=
+-next
+> config: parisc-allyesconfig (https://download.01.org/0day-ci/archive/2021=
+1221/202112210805.wI87zJw0-lkp@intel.com/config)
+> compiler: hppa-linux-gcc (GCC) 11.2.0
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/0day-ci/linux/commit/fec640fab5ec498e79475ec=
+d4b15bc95035a76b1
+>         git remote add linux-review https://github.com/0day-ci/linux
+>         git fetch --no-tags linux-review Taniya-Das/Add-support-for-LPASS=
+-Core-and-Audio-Clock-for-SC7280/20211221-004818
+>         git checkout fec640fab5ec498e79475ecd4b15bc95035a76b1
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-11.2.0 make.cro=
+ss O=3Dbuild_dir ARCH=3Dparisc SHELL=3D/bin/bash drivers/clk/qcom/
+>=20
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>=20
+> All warnings (new ones prefixed by >>):
+>=20
+> >> drivers/clk/qcom/lpassaudiocc-sc7280.c:39:9: warning: this decimal con=
+stant is unsigned only in ISO C90
+>       39 |         { 595200000, 3600000000, 0 },
 
-Can this be const?
+This should be easy to fix.
 
-> +       .reg_bits =3D 32,
-> +       .reg_stride =3D 4,
-> +       .val_bits =3D 32,
-> +       .fast_io =3D true,
+>          |         ^
+>    In file included from include/uapi/linux/posix_types.h:5,
+>                     from include/uapi/linux/types.h:14,
+>                     from include/linux/types.h:6,
+>                     from include/linux/of.h:14,
+>                     from include/linux/clk-provider.h:9,
+>                     from drivers/clk/qcom/lpassaudiocc-sc7280.c:6:
+>    drivers/clk/qcom/lpassaudiocc-sc7280.c: In function 'lpass_audio_cc_sc=
+7280_probe':
+>    include/linux/stddef.h:8:14: error: called object is not a function or=
+ function pointer
+>        8 | #define NULL ((void *)0)
+>          |              ^
+>    include/linux/pm_clock.h:82:25: note: in expansion of macro 'NULL'
+>       82 | #define pm_clk_suspend  NULL
 
-Any .max_register?
+This one looks like the driver needs some #ifdef CONFIG_PM somewhere.
 
-> +};
-> +
-> +static const struct qcom_cc_desc lpass_core_cc_sc7280_desc =3D {
-> +       .config =3D &lpass_core_cc_sc7280_regmap_config,
-> +       .clks =3D lpass_core_cc_sc7280_clocks,
-> +       .num_clks =3D ARRAY_SIZE(lpass_core_cc_sc7280_clocks),
-> +};
-> +
-> +static const struct of_device_id lpass_core_cc_sc7280_match_table[] =3D {
-> +       { .compatible =3D "qcom,sc7280-lpasscorecc" },
-> +       { }
-> +};
-> +MODULE_DEVICE_TABLE(of, lpass_core_cc_sc7280_match_table);
-> +
-> +static struct gdsc *lpass_core_hm_sc7280_gdscs[] =3D {
-> +       [LPASS_CORE_CC_LPASS_CORE_HM_GDSC] =3D &lpass_core_cc_lpass_core_=
-hm_gdsc,
-> +};
-> +
-> +static const struct qcom_cc_desc lpass_core_hm_sc7280_desc =3D {
-> +       .config =3D &lpass_core_cc_sc7280_regmap_config,
-> +       .gdscs =3D lpass_core_hm_sc7280_gdscs,
-> +       .num_gdscs =3D ARRAY_SIZE(lpass_core_hm_sc7280_gdscs),
-> +};
-> +
-> +static int lpass_core_cc_sc7280_probe(struct platform_device *pdev)
-> +{
-> +       struct regmap *regmap;
-> +
-> +       regmap =3D qcom_cc_map(pdev, &lpass_core_cc_sc7280_desc);
-> +       if (IS_ERR(regmap))
-> +               return PTR_ERR(regmap);
-> +
-> +       clk_lucid_pll_configure(&lpass_core_cc_dig_pll, regmap, &lpass_co=
-re_cc_dig_pll_config);
-> +
-> +       return qcom_cc_really_probe(pdev, &lpass_core_cc_sc7280_desc, reg=
-map);
-> +}
-> +
-> +static struct platform_driver lpass_core_cc_sc7280_driver =3D {
-> +       .probe =3D lpass_core_cc_sc7280_probe,
-> +       .driver =3D {
-> +               .name =3D "lpass_core_cc-sc7280",
-> +               .of_match_table =3D lpass_core_cc_sc7280_match_table,
-> +       },
-> +};
-> +
-> +static int lpass_hm_core_probe(struct platform_device *pdev)
-> +{
-> +       const struct qcom_cc_desc *desc;
-> +       int ret;
-> +
-> +       lpass_core_cc_sc7280_regmap_config.name =3D "lpass_hm_core";
-> +       desc =3D &lpass_core_hm_sc7280_desc;
-> +
-> +       ret =3D qcom_cc_probe_by_index(pdev, 0, desc);
-
-Why don't we use the desc directly here?
-
-> +       if (ret)
-> +               goto destroy_clk;
-> +
-> +       return 0;
-> +
-> +destroy_clk:
-> +       return ret;
-
-This can be simplified and the goto removed.
-
-> +}
-> +
+>          |                         ^~~~
+>    drivers/clk/qcom/lpassaudiocc-sc7280.c:740:9: note: in expansion of ma=
+cro 'pm_clk_suspend'
+>      740 |         pm_clk_suspend(&pdev->dev);
+>          |         ^~~~~~~~~~~~~~
+>    drivers/clk/qcom/lpassaudiocc-sc7280.c: In function 'lpass_aon_cc_sc72=
+80_probe':
+>    include/linux/stddef.h:8:14: error: called object is not a function or=
+ function pointer
+>        8 | #define NULL ((void *)0)
+>          |              ^
+>    include/linux/pm_clock.h:82:25: note: in expansion of macro 'NULL'
+>       82 | #define pm_clk_suspend  NULL
+>          |                         ^~~~
+>    drivers/clk/qcom/lpassaudiocc-sc7280.c:798:9: note: in expansion of ma=
+cro 'pm_clk_suspend'
+>      798 |         pm_clk_suspend(&pdev->dev);
+>          |         ^~~~~~~~~~~~~~
+>=20
+>=20
+> vim +39 drivers/clk/qcom/lpassaudiocc-sc7280.c
+>=20
+>     37 =20
+>     38  static const struct pll_vco zonda_vco[] =3D {
+>   > 39          { 595200000, 3600000000, 0 },
+>     40  };
+>     41 =20
+>=20
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

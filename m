@@ -2,210 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA06485DD2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 02:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B669485DDC
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 02:12:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344031AbiAFBEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 20:04:08 -0500
-Received: from mga18.intel.com ([134.134.136.126]:40083 "EHLO mga18.intel.com"
+        id S1344090AbiAFBMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 20:12:13 -0500
+Received: from mga17.intel.com ([192.55.52.151]:2015 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240018AbiAFBEG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 20:04:06 -0500
+        id S240018AbiAFBMG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 20:12:06 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641431046; x=1672967046;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=xUuCrTK7WOeaYmchr2QxKYWkY/x7udGeJvvUBvkCtPo=;
-  b=JHFu5rwDTxC4W3cS2qm46FxQRSVqfwKTimYLfMtI5bxldFlXzXLUHxQs
-   R7aSB6cyU3QnQiqF7noQxzSXDLyoqGty+EDYsFkv72CytAWOB73UcDBxI
-   hQqGu7LiNPm55tBmezC6Bdg2DdCrt+w826j45msKHdriJa/02DkdrTHHW
-   ux7FFIEB8lmetlFBVaOusANgllXCeGC6JGHrrxICP/U6ymiS8NpyfikQz
-   xq+8J/BQlxSb1VsX1tAvcr9khFr74Z/Vf34txm6y37kSyZaWLxqPKUQ/W
-   aeGO/GT0HwyR2o5v5yI34blgvpTfg3j89mHEmn40pZbmCWphTU4MRaucX
+  t=1641431526; x=1672967526;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=a9cgR3ZklLRLXSGatWcixupy5U4iqX77Qg420ljyNvY=;
+  b=WK3cuGwdrd0NmqsDPFpNHvZGyC27NZW5A1n1W5jsMP/oCywq3u1/1knR
+   /ry9QbWBaam39pWKDOES2VxRN3njxAMmg9nanoZNK9HZiuMkahk6TOTvi
+   VuTJLiz7DzZ1n2KMftVBDT3STq31A5RIytRF8Q7pjf8alpyom/5opJAes
+   vsr73NANnXp2XQdrzGlcgHkAPU0gpoqo4ZqBY0SVAXo2F+cuGP5ApeSkF
+   0q1uEYtlYrkEcn1FgsMKMEMnyg/T2yeqVc8JV4Yei12HXHceT740rSsgi
+   IN8oFdH7nfWCiT0vLo3IpxGa3mHXFGEzmAkxX6PmjHRkO5FXmqlktwzce
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="229379505"
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="223250966"
 X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
-   d="scan'208";a="229379505"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 17:04:05 -0800
+   d="scan'208";a="223250966"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 17:12:04 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
-   d="scan'208";a="574574169"
-Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
-  by fmsmga008.fm.intel.com with ESMTP; 05 Jan 2022 17:04:05 -0800
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 5 Jan 2022 17:04:04 -0800
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 5 Jan 2022 17:04:04 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Wed, 5 Jan 2022 17:04:04 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.175)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Wed, 5 Jan 2022 17:04:04 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LQ0zFwmpZ/PaVHWD/WMZ4yLU/+Ktd0WS6zU3gnQieQ8umR8n0v3O3w16209bp+l7LNyuy9IiCpsm9GMzTgGcZIaO+bcyawb44VlRLCNwtUrjW0Z5e7YSPUhaqlN1MOZKbgrcL2QO7UnCeDa6Nq1sKz3+9u4y/GEir0opqoXfcoW11amPbYEW+8pomCrniuj3x9ieioNAZoM9e0lxsmR7uSFxlSx64N8FOAPfZVLvXvW3w2SiMq0zq2YRjCpGXcgMG4oyK+n3jWeiV1YL7yub9knlVk4kj5atqhHEk/J4NWcb0hLCauicn/nknHpuAFiDBcFIHfOLt6LewKAHPOgFzA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xUuCrTK7WOeaYmchr2QxKYWkY/x7udGeJvvUBvkCtPo=;
- b=dN1wCn0NcuKShBpYvW1K1BlOt/3mWv7m6UIlQH3XfZINJivJEaPZiiTkiQn8kr/PpTkQSPGKvUj1xshuu8vuFwPf0sIHUPp3QDmahcPTnwRkp2GPJzok3H8UtlKLH1TU2RVot9WQsNjXJ7mQJACJvZDAr3CaLJY5Kk7+pv/zGMz6rKFQXM+pPlNHYH0sOdD28SDTHpG9nX5r2vV39QrMd0fqu9YCeYFfyUB0VQOeQk7MgVDQGJsSIxzum2wupTW7vqBVUgWth/fdV1KsgIZIjRwyBngoEbEo0z4LU+25D/jUR2eGkQv2llyrd9BQCM+WlscRugTovP01sG4p7f7zdw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by BN7PR11MB2803.namprd11.prod.outlook.com (2603:10b6:406:b5::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7; Thu, 6 Jan
- 2022 01:04:01 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::5c8a:9266:d416:3e04]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::5c8a:9266:d416:3e04%2]) with mapi id 15.20.4867.009; Thu, 6 Jan 2022
- 01:04:01 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Jim Mattson <jmattson@google.com>,
-        "Christopherson,, Sean" <seanjc@google.com>
-CC:     "Zhong, Yang" <yang.zhong@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "jing2.liu@linux.intel.com" <jing2.liu@linux.intel.com>,
-        "Liu, Jing2" <jing2.liu@intel.com>,
-        "Zeng, Guang" <guang.zeng@intel.com>,
-        "Wang, Wei W" <wei.w.wang@intel.com>
-Subject: RE: [PATCH v5 12/21] kvm: x86: Intercept #NM for saving IA32_XFD_ERR
-Thread-Topic: [PATCH v5 12/21] kvm: x86: Intercept #NM for saving IA32_XFD_ERR
-Thread-Index: AQHYAjDG3grRPUB6WkKC4V40NrLWoqxVAQqAgAACVoCAACiN8A==
-Date:   Thu, 6 Jan 2022 01:04:01 +0000
-Message-ID: <BN9PR11MB527690FEDDB3A46EF2986E258C4C9@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20220105123532.12586-1-yang.zhong@intel.com>
- <20220105123532.12586-13-yang.zhong@intel.com> <YdYaH7buoApEVPOg@google.com>
- <CALMp9eQi1xU_YgYBTa=zvAkD8=4WAntSFt6V2zcR6G9eQFg2GQ@mail.gmail.com>
-In-Reply-To: <CALMp9eQi1xU_YgYBTa=zvAkD8=4WAntSFt6V2zcR6G9eQFg2GQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: aa35eb8d-6666-4fc5-46f2-08d9d0b06d1d
-x-ms-traffictypediagnostic: BN7PR11MB2803:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <BN7PR11MB2803E616B1B3F2764F748DF58C4C9@BN7PR11MB2803.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: KC7kD9dSnu8rozVsRNjYLWC9duvRj5DoTeTBfDGqZO+Nj+XbrVethHFa1LaSxFVa87t8b3sQC83Ofia+bXWzsWgRsZzjb5FOvEd99rkyvii/tM8YkOm37Hn5g1raPfJN4fHVNvjNy8Fg0F0rtarCqc5F08gg4YH4QkHRLYB26S4dEdXJktuHGxLeHhkw7zg8azMWgR+E2D3eC+IP/bMvQT0imBAPva5FAZ7pKxguC50RmxqCIx/61XATstCCw9ib2gP9obH/HWq/ZlMHM566c5es025/osHN5R53u8g7u1Bz5wxfiQ240mcssAoyWqhDKoGh1FW70PjTOtuLmgvU7UK7UK01Hz/cb6XRDSFRggD/T7grpNbTpL5Izq40tODpQ1wcgL07ZfjslnJKf42qGWkMvY3jOZoR63hlj0p4pts8vzkGVJH9mMGNEkO1ueFjZjgRlwHtGoROaUcalo2wxT+T5wCq909mhFXkUSyof2BP9i1B4MRl7X9wPoVvarYsJvjAlgg7hZMBEs/dXrMmQ6cjBVOUT9prsuTQnydqiIF8vD1wEcwV8FP7QzTIYIbGnCGapCB7JwQT25S/6QQ8s2mnYbdIpRBlcmnNvP3+sZ5hAcD4sbg+2vKUGYeZZ5axEQhyxkRLloeyHZF+1v+IAiTh3REbozVddVQ542DGnu0YDcOH9utxoLYpeG18kQ3YZU7xD//64jEg5kkZGcISOA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(71200400001)(4326008)(33656002)(55016003)(38070700005)(5660300002)(76116006)(508600001)(9686003)(53546011)(7416002)(6506007)(110136005)(7696005)(316002)(2906002)(8936002)(8676002)(26005)(186003)(54906003)(38100700002)(122000001)(66556008)(64756008)(66946007)(52536014)(82960400001)(66476007)(66446008)(86362001)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aWZCS21IbUJOcHFsUDNNdnB2OWdzUFZoUTBYOXYrWFp1NzNBQVptQysxM0FG?=
- =?utf-8?B?K1U4aWdYMUNpYTI2U2RScG9PVUJZeUFuandLV1hDL1B0aTlwbEs5S25hZVdG?=
- =?utf-8?B?LzFIbEs4WU1Ja1I2aFgybEFiSzVVV2hUMWNQSkRCR0NNdXFVMDAvRnBDc2Fq?=
- =?utf-8?B?OWtxVFpPUVBoR0ZmSml0VllCVjdxZjE5ckhmcENvWGppTHZ6UEdlcFZGREkz?=
- =?utf-8?B?YWtXOW9XM1lJck95Rnp2eFZLZjJTaXJDWGhHOE4yaTJRQlBSakRTZTVmZVJE?=
- =?utf-8?B?MVFNQXIzUGJxTklPTVBJUnp2MnN2Q2VZS0JUTUd1VXluWFdHdHVPRm1idUFB?=
- =?utf-8?B?N2oxaEFlU1lpbXBDQmhBcG9Fc3RGZkxFeXR0Wlh0em5tWEN4K1FrTGd5ZVRH?=
- =?utf-8?B?dGZoWGNjdjEreGhDL2cwdGF4bkRZU05zVTR4QmR6VWRxK29RT3g1dGl6RVVP?=
- =?utf-8?B?alliQWE4V3VBZ1V1QzJXMDlwMXlCU3I4aTQwdmJCd2JidHozUmFjWXlVSGFJ?=
- =?utf-8?B?TC93dDh3UjAwQjBPU091Y1J0UmpSOGcxdnBiZ2tXcE4wUG02bnJDdGppVVRJ?=
- =?utf-8?B?RGtOYmhXSS9jQkdJV3c1QlExMGpUSS8wVEIxc3Q5UkludkZkTE5iMmJyeEU2?=
- =?utf-8?B?bGRhY3AwUTNSSExPOUk4aFlodC9iNm0vZVF3TTc1VjcvdkJhWksyWG1SQ0Jk?=
- =?utf-8?B?bVROdEdZcHFzUHdXalF2cHZPL2JyQ0tTWVEyV0VXakFzSXJiYU1XRmJDTDA3?=
- =?utf-8?B?SEVUdHQxMkJjSjhzK29iMnlTT1phdUNLMXdkclBzQU9VM28xZGxMc21QL2hD?=
- =?utf-8?B?T2xLSkt4dUo4UnR5dUwzZ1QxdU9UakJOcklsSjM4MHVmM3hvTGVhSlpmbkt5?=
- =?utf-8?B?b2JWWEo4eVBCVmxuNEE3OXBKS1V6cTd3SHBsWmlIcWZJU2ZzcmNwdmVTekpu?=
- =?utf-8?B?YzNVZVVWREFPZjdlaTROSkVERHd2VjFJTnNyYnQ4NGNaNm4xRkRWeTNURHhN?=
- =?utf-8?B?RWsrSHQxRG1VamtQZ25odWhmeFpKZCtCdGZvMDhIRWZzSHhFWXRXZExTdGY1?=
- =?utf-8?B?OHhxZElwZHp6NjlCMGY5N3RMRzQ5QVhJTGRrTldaaWhPL3M2ZWUxK1lpblRU?=
- =?utf-8?B?aSs0U2Z0UlBVQ1hlN0o4VHlqeTIrNU9BSDFvenZkaEdrUEg5dU04Rm4rSzdz?=
- =?utf-8?B?cldoUTF5M1QrdU91ZG5vMXlOMXU3VThXR1puekJySlUyQVVLUDhPRkxmUW5l?=
- =?utf-8?B?Z2FvZ1dPZUREZnFoNG5vdDMzcHFxUFBYVjEzRjZzTFRoQjJOckJmejk2MFlP?=
- =?utf-8?B?YUhER05PV3JHaUIzeE1NczhYKzhaV29hSE95QWpza2NlQ1BMYVNYa1BUdkJr?=
- =?utf-8?B?QkFFK2huSnltVDFiTDZsazBiTmhEeUU0dmdrSUpZY0ZjbnBXVmFlQlFlNDdV?=
- =?utf-8?B?V0ZxcXZRd1FrWksvaDVvZnp4TU5WSmlHaXVLSkh2NlBkenU3ZHNLVjJaUlZJ?=
- =?utf-8?B?MHBld3dTSXZ5SVVKTkdjVzN3TnBhVUpheXBhTXcxSDJlZFdReUxHOEtLZFRU?=
- =?utf-8?B?Z1hsamZQRXpxVGQvRi9DSitWSWpJRnhmejlHZXJJN2x2NFVZQmU1M3I5aktn?=
- =?utf-8?B?UzlLTFB2bVZWVjFCbjJiTTVmWUZDeStLNklyREx0ckdHeUhoVG01V0RlREVF?=
- =?utf-8?B?QnNndVZVMmlydUhUVDY4ak05ckZnQytVYzl3OVNUa3JncisyMEFkUTdpSXYv?=
- =?utf-8?B?V3ZIaVpobFc5NG9yM1lwQUs3c29ZalBVM0UzdWZKTmQzQW5DU0hZYWUxMWtI?=
- =?utf-8?B?VllvR0w0NFdPK0NYUHZyOFBYWllDN0c5cmI4bXRoSlhEUGtUcXorWDlsMy9X?=
- =?utf-8?B?YTkzVU1QVlBmeG1raGtLVHhQWFlQZVhtMDJ6THVldU1ZeHUrcnZ3ZGM1bUFs?=
- =?utf-8?B?L0RnRlVSNHpwb0NmNkd1Ry8zOTJZSkhjc3JaSm4rRXZmVzJWWFMwbWNZRFQy?=
- =?utf-8?B?dVRVUEdGSTIzOS8wbzBNbTcxckowNUVaeEFnRDFpNFNGbks3bDJ5TjJYY1dO?=
- =?utf-8?B?cjBxWUVMWXhDVjJMckdGV3BHV3A4ekxzdWtGaXdHT2ZVT3pMZ29MQTB3NVhK?=
- =?utf-8?B?YXFNVUk5eXA1VlVXK0IxSWJiV2JEWTJJUTF3OXdObUVBYkhTQkdQK1k2TkNm?=
- =?utf-8?Q?XlsjO9VxyG4yz0a1pETOPyQ=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+   d="scan'208";a="668287898"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 05 Jan 2022 17:12:01 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n5HJw-000HCW-VW; Thu, 06 Jan 2022 01:12:00 +0000
+Date:   Thu, 6 Jan 2022 09:11:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Subject: Re: [PATCH v1 1/5] nvmem: core: Remove unused devm_nvmem_unregister()
+Message-ID: <202201060932.tcQFIVfQ-lkp@intel.com>
+References: <20220104133843.44272-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aa35eb8d-6666-4fc5-46f2-08d9d0b06d1d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jan 2022 01:04:01.1798
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: uC46zEyA7BK/qMl0cdlzsZAX6MBOThcmvinf2p20v/gCwguT1lVQiYkSJ6y0Ur49db9/MAThi14HMaekHzqiCg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR11MB2803
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220104133843.44272-1-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBKaW0gTWF0dHNvbiA8am1hdHRzb25AZ29vZ2xlLmNvbT4NCj4gU2VudDogVGh1cnNk
-YXksIEphbnVhcnkgNiwgMjAyMiA2OjMxIEFNDQo+IA0KPiBPbiBXZWQsIEphbiA1LCAyMDIyIGF0
-IDI6MjIgUE0gU2VhbiBDaHJpc3RvcGhlcnNvbiA8c2VhbmpjQGdvb2dsZS5jb20+DQo+IHdyb3Rl
-Og0KPiA+DQo+ID4gT24gV2VkLCBKYW4gMDUsIDIwMjIsIFlhbmcgWmhvbmcgd3JvdGU6DQo+ID4g
-PiBAQCAtNjM5OSw2ICs2NDI0LDI2IEBAIHN0YXRpYyB2b2lkIGhhbmRsZV9pbnRlcnJ1cHRfbm1p
-X2lycW9mZihzdHJ1Y3QNCj4ga3ZtX3ZjcHUgKnZjcHUsDQo+ID4gPiAgICAgICBrdm1fYWZ0ZXJf
-aW50ZXJydXB0KHZjcHUpOw0KPiA+ID4gIH0NCj4gPiA+DQo+ID4gPiArc3RhdGljIHZvaWQgaGFu
-ZGxlX25tX2ZhdWx0X2lycW9mZihzdHJ1Y3Qga3ZtX3ZjcHUgKnZjcHUpDQo+ID4gPiArew0KPiA+
-ID4gKyAgICAgLyoNCj4gPiA+ICsgICAgICAqIFNhdmUgeGZkX2VyciB0byBndWVzdF9mcHUgYmVm
-b3JlIGludGVycnVwdCBpcyBlbmFibGVkLCBzbyB0aGUNCj4gPiA+ICsgICAgICAqIE1TUiB2YWx1
-ZSBpcyBub3QgY2xvYmJlcmVkIGJ5IHRoZSBob3N0IGFjdGl2aXR5IGJlZm9yZSB0aGUgZ3Vlc3QN
-Cj4gPiA+ICsgICAgICAqIGhhcyBjaGFuY2UgdG8gY29uc3VtZSBpdC4NCj4gPiA+ICsgICAgICAq
-DQo+ID4gPiArICAgICAgKiBXZSBzaG91bGQgbm90IGJsaW5kbHkgcmVhZCB4ZmRfZXJyIGhlcmUs
-IHNpbmNlIHRoaXMgZXhjZXB0aW9uDQo+ID4NCj4gPiBOaXQsIGF2b2lkICJ3ZSIsIGFuZCBleHBs
-YWluIHdoYXQgS1ZNIGRvZXMgKG9yIGRvZXNuJ3QpIGRvLCBub3Qgd2hhdCBLVk0NCj4gInNob3Vs
-ZCINCj4gPiBkbywgZS5nLiBqdXN0IHNheQ0KPiA+DQo+ID4gICAgICAgICAgKiBEbyBub3QgYmxp
-bmRseSByZWFkIC4uLg0KPiA+DQo+ID4gPiArICAgICAgKiBtaWdodCBiZSBjYXVzZWQgYnkgTDEg
-aW50ZXJjZXB0aW9uIG9uIGEgcGxhdGZvcm0gd2hpY2ggZG9lc24ndA0KPiA+ID4gKyAgICAgICog
-c3VwcG9ydCB4ZmQgYXQgYWxsLg0KPiA+ID4gKyAgICAgICoNCj4gPiA+ICsgICAgICAqIERvIGl0
-IGNvbmRpdGlvbmFsbHkgdXBvbiBndWVzdF9mcHU6OnhmZC4geGZkX2VyciBtYXR0ZXJzDQo+ID4g
-PiArICAgICAgKiBvbmx5IHdoZW4geGZkIGNvbnRhaW5zIGEgbm9uLXplcm8gdmFsdWUuDQo+ID4g
-PiArICAgICAgKg0KPiA+ID4gKyAgICAgICogUXVldWluZyBleGNlcHRpb24gaXMgZG9uZSBpbiB2
-bXhfaGFuZGxlX2V4aXQuIFNlZSBjb21tZW50IHRoZXJlLg0KPiA+DQo+ID4gQW5vdGhlciBuaXQs
-IGl0J3Mgd29ydGggZXhwbGFpbmluZyB3aHkgWEZEX0VSUiBuZWVkcyB0byBiZSByZWFkIGhlcmUN
-Cj4gcmVnYXJkbGVzcw0KPiA+IG9mIGlzX2d1ZXN0X21vZGUoKS4gIEUuZy4NCj4gPg0KPiA+ICAg
-ICAgICAgICogSW5qZWN0aW5nIHRoZSAjTk0gYmFjayBpbnRvIHRoZSBndWVzdCBpcyBoYW5kbGVk
-IGluIHRoZSBzdGFuZGFyZCBwYXRoDQo+ID4gICAgICAgICAgKiBhcyBhbiAjTk0gaW4gTDIgbWF5
-IGJlIHJlZmxlY3RlZCBpbnRvIEwxIGFzIGEgVk0tRXhpdC4gIFJlYWQNCj4gWEZEX0VSUg0KPiA+
-ICAgICAgICAgICogZXZlbiBpZiB0aGUgI05NIGlzIGZyb20gTDIsIGFzIEwxIG1heSBoYXZlIGV4
-cG9zZWQgWEZEIHRvIEwyLg0KPiANCj4gRG8gd2UgaGF2ZSB0ZXN0cyBvZiBMMSBwYXNzaW5nIHRo
-cm91Z2ggWEZEIHRvIEwyPw0KDQpBcyBTZWFuIG1lbnRpb25lZCBwYXNzaW5nIHRocm91Z2ggWEZE
-IHRvIEwyIHN0aWxsIG5lZWRzIG9uZSBtb3JlIGNoYW5nZQ0KaW4gbmVzdGVkX3ZteF9wcmVwYXJl
-X21zcl9iaXRtYXAoKS4gVGhpcyB3aWxsIGJlIGRvbmUgaW4gYSBmb2xsb3ctdXAgcGF0Y2guDQoN
-CmJ0dyB3ZSBkaWQgdmVyaWZ5IGhhdmluZyBMMSBlbXVsYXRlIFhGRCBmb3IgTDIsIGJ5IHJ1bm5p
-bmcgdGhlIGFteCBzZWxmdGVzdA0KaW4gTDEuIEJ1dCBvdmVyYWxsIG5lc3RlZCBjb25maWd1cmF0
-aW9uIHdpbGwgbmVlZCBtb3JlIHRlc3QgYW5kIHBvbGlzaCBhZnRlcg0KdGhpcyBzZXJpZXMuDQoN
-ClRoYW5rcw0KS2V2aW4NCg==
+Hi Andy,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on mtd/mtd/next]
+[also build test WARNING on mtd/mtd/fixes char-misc/char-misc-testing linus=
+/master v5.16-rc8 next-20220105]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Andy-Shevchenko/nvmem-core=
+-Remove-unused-devm_nvmem_unregister/20220104-213933
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/n=
+ext
+config: mips-randconfig-r002-20220105 (https://download.01.org/0day-ci/arch=
+ive/20220106/202201060932.tcQFIVfQ-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d5b6e3=
+0ed3acad794dd0aec400e617daffc6cc3d)
+reproduce (this is a W=3D1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/=
+make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/0day-ci/linux/commit/7877de3d47433a75d2beea38b=
+696b3c4fde62082
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/nvmem-core-Remove-=
+unused-devm_nvmem_unregister/20220104-213933
+        git checkout 7877de3d47433a75d2beea38b696b3c4fde62082
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=3D=
+1 O=3Dbuild_dir ARCH=3Dmips SHELL=3D/bin/bash drivers/nvmem/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/nvmem/core.c:946:12: warning: unused function 'devm_nvmem_match'
+   static int devm_nvmem_match(struct device void void
+   ^
+   fatal error: error in backend: Nested variants found in inline asm strin=
+g: ' .set push
+   .set mips64r2
+   .if ( 0x00 ) !=3D -1)) 0x00 ) !=3D -1)) : ($( static struct ftrace_branc=
+h_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_=
+branch"))) __if_trace =3D $( .func =3D __func__, .file =3D "arch/mips/inclu=
+de/asm/atomic.h", .line =3D 157, $); 0x00 ) !=3D -1)) : $))) ) && ( 0 ); .s=
+et push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
+   1: ll $1, $2 # atomic_fetch_sub
+   subu $0, $1, $3
+   sc $0, $2
+   beqz $0, 1b
+   .set pop
+   move $0, $1
+   '
+   PLEASE submit a bug report to https://bugs.llvm.org/ and include the cra=
+sh backtrace, preprocessed source, and associated run script.
+   Stack dump:
+   0. Program arguments: clang -Wp,-MMD,drivers/nvmem/.core.o.d -nostdinc -=
+Iarch/mips/include -I./arch/mips/include/generated -Iinclude -I./include -I=
+arch/mips/include/uapi -I./arch/mips/include/generated/uapi -Iinclude/uapi =
+-I./include/generated/uapi -include include/linux/compiler-version.h -inclu=
+de include/linux/kconfig.h -include include/linux/compiler_types.h -D__KERN=
+EL__ -DVMLINUX_LOAD_ADDRESS=3D0xffffffff84000000 -DLINKER_LOAD_ADDRESS=3D0x=
+84000000 -DDATAOFFSET=3D0 -Qunused-arguments -fmacro-prefix-map=3D=3D -DKBU=
+ILD_EXTRA_WARN1 -Wall -Wundef -Werror=3Dstrict-prototypes -Wno-trigraphs -f=
+no-strict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=3Dimplicit-fu=
+nction-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -Wno-format=
+-security -std=3Dgnu89 --target=3Dmipsel-linux -fintegrated-as -Werror=3Dun=
+known-warning-option -Werror=3Dignored-optimization-argument -mno-check-zer=
+o-division -mabi=3D32 -G 0 -mno-abicalls -fno-pic -pipe -msoft-float -DGAS_=
+HAS_SET_HARDFLOAT -Wa,-msoft-float -ffreestanding -EL -fno-stack-check -mar=
+ch=3Dmips32 -Wa,--trap -DTOOLCHAIN_SUPPORTS_VIRT -Iarch/mips/include/asm/ma=
+ch-au1x00 -Iarch/mips/include/asm/mach-generic -fno-asynchronous-unwind-tab=
+les -fno-delete-null-pointer-checks -Wno-frame-address -Wno-address-of-pack=
+ed-member -O2 -Wframe-larger-than=3D1024 -fno-stack-protector -Wimplicit-fa=
+llthrough -Wno-gnu -mno-global-merge -Wno-unused-but-set-variable -Wno-unus=
+ed-const-variable -ftrivial-auto-var-init=3Dpattern -fno-stack-clash-protec=
+tion -pg -falign-functions=3D64 -Wdeclaration-after-statement -Wvla -Wno-po=
+inter-sign -Wno-array-bounds -fno-strict-overflow -fno-stack-check -Werror=
+=3Ddate-time -Werror=3Dincompatible-pointer-types -Wextra -Wunused -Wno-unu=
+sed-parameter -Wmissing-declarations -Wmissing-format-attribute -Wmissing-p=
+rototypes -Wold-style-definition -Wmissing-include-dirs -Wunused-but-set-va=
+riable -Wunused-const-variable -Wno-missing-field-initializers -Wno-sign-co=
+mpare -Wno-type-limits -fsanitize=3Darray-bounds -fsanitize=3Dunreachable -=
+fsanitize=3Dobject-size -fsanitize=3Denum -fsanitize-coverage=3Dtrace-pc -I=
+ drivers/nvmem -I ./drivers/nvmem -ffunction-sections -fdata-sections -DKBU=
+ILD_MODFILE=3D"drivers/nvmem/nvmem_core" -DKBUILD_BASENAME=3D"core" -DKBUIL=
+D_MODNAME=3D"nvmem_core" -D__KBUILD_MODNAME=3Dkmod_nvmem_core -c -o drivers=
+/nvmem/core.o drivers/nvmem/core.c
+   1. <eof> parser at end of file
+   2. Code generation
+   3. Running pass 'Function Pass Manager' on module 'drivers/nvmem/core.c'.
+   4. Running pass 'Mips Assembly Printer' on function '@kref_put'
+   #0 0x000055c30463cb3f Signals.cpp:0:0
+   #1 0x000055c30463aa8c llvm::sys::CleanupOnSignal(unsigned long) (/opt/cr=
+oss/clang-d5b6e30ed3/bin/clang-14+0x3401a8c)
+   #2 0x000055c30457e667 llvm::CrashRecoveryContext::HandleExit(int) (/opt/=
+cross/clang-d5b6e30ed3/bin/clang-14+0x3345667)
+   #3 0x000055c30463313e llvm::sys::Process::Exit(int, bool) (/opt/cross/cl=
+ang-d5b6e30ed3/bin/clang-14+0x33fa13e)
+   #4 0x000055c3022b933b (/opt/cross/clang-d5b6e30ed3/bin/clang-14+0x108033=
+b)
+   #5 0x000055c30458510c llvm::report_fatal_error(llvm::Twine const&, bool)=
+ (/opt/cross/clang-d5b6e30ed3/bin/clang-14+0x334c10c)
+   #6 0x000055c3052679b8 llvm::AsmPrinter::emitInlineAsm(llvm::MachineInstr=
+ const (/opt/cross/clang-d5b6e30ed3/bin/clang-14+0x402e9b8)
+   #7 0x000055c305263759 llvm::AsmPrinter::emitFunctionBody() (/opt/cross/c=
+lang-d5b6e30ed3/bin/clang-14+0x402a759)
+   #8 0x000055c302d1482e llvm::MipsAsmPrinter::runOnMachineFunction(llvm::M=
+achineFunction&) (/opt/cross/clang-d5b6e30ed3/bin/clang-14+0x1adb82e)
+   #9 0x000055c3039ab2fd llvm::MachineFunctionPass::runOnFunction(llvm::Fun=
+ction&) (.part.53) MachineFunctionPass.cpp:0:0
+   #10 0x000055c303de3867 llvm::FPPassManager::runOnFunction(llvm::Function=
+&) (/opt/cross/clang-d5b6e30ed3/bin/clang-14+0x2baa867)
+   #11 0x000055c303de39e1 llvm::FPPassManager::runOnModule(llvm::Module&) (=
+/opt/cross/clang-d5b6e30ed3/bin/clang-14+0x2baa9e1)
+   #12 0x000055c303de4cbf llvm::legacy::PassManagerImpl::run(llvm::Module&)=
+ (/opt/cross/clang-d5b6e30ed3/bin/clang-14+0x2babcbf)
+   #13 0x000055c30494e4fa clang::EmitBackendOutput(clang::DiagnosticsEngine=
+&, clang::HeaderSearchOptions const&, clang::CodeGenOptions const&, clang::=
+TargetOptions const&, clang::LangOptions const&, llvm::StringRef, clang::Ba=
+ckendAction, std::unique_ptr<llvm::raw_pwrite_stream, std::default_delete<l=
+lvm::raw_pwrite_stream> >) (/opt/cross/clang-d5b6e30ed3/bin/clang-14+0x3715=
+4fa)
+   #14 0x000055c30557bea3 clang::BackendConsumer::HandleTranslationUnit(cla=
+ng::ASTContext&) (/opt/cross/clang-d5b6e30ed3/bin/clang-14+0x4342ea3)
+   #15 0x000055c30607ffd9 clang::ParseAST(clang::Sema&, bool, bool) (/opt/c=
+ross/clang-d5b6e30ed3/bin/clang-14+0x4e46fd9)
+   #16 0x000055c30557acff clang::CodeGenAction::ExecuteAction() (/opt/cross=
+/clang-d5b6e30ed3/bin/clang-14+0x4341cff)
+   #17 0x000055c304f7a001 clang::FrontendAction::Execute() (/opt/cross/clan=
+g-d5b6e30ed3/bin/clang-14+0x3d41001)
+   #18 0x000055c304f11bda clang::CompilerInstance::ExecuteAction(clang::Fro=
+ntendAction&) (/opt/cross/clang-d5b6e30ed3/bin/clang-14+0x3cd8bda)
+   #19 0x000055c30504307b (/opt/cross/clang-d5b6e30ed3/bin/clang-14+0x3e0a0=
+7b)
+   #20 0x000055c3022ba084 cc1_main(llvm::ArrayRef<char char (/opt/cross/cla=
+ng-d5b6e30ed3/bin/clang-14+0x1081084)
+   #21 0x000055c3022b75cb ExecuteCC1Tool(llvm::SmallVectorImpl<char driver.=
+cpp:0:0
+   #22 0x000055c304daeb15 void llvm::function_ref<void ()>::callback_fn<cla=
+ng::driver::CC1Command::Execute(llvm::ArrayRef<llvm::Optional<llvm::StringR=
+ef> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::alloca=
+tor<char> const::'lambda'()>(long) Job.cpp:0:0
+   #23 0x000055c30457e523 llvm::CrashRecoveryContext::RunSafely(llvm::funct=
+ion_ref<void ()>) (/opt/cross/clang-d5b6e30ed3/bin/clang-14+0x3345523)
+   #24 0x000055c304daf40e clang::driver::CC1Command::Execute(llvm::ArrayRef=
+<llvm::Optional<llvm::StringRef> >, std::__cxx11::basic_string<char, std::c=
+har_traits<char>, std::allocator<char> const (.part.216) Job.cpp:0:0
+   #25 0x000055c304d85ee7 clang::driver::Compilation::ExecuteCommand(clang:=
+:driver::Command const&, clang::driver::Command const (/opt/cross/clang-d5b=
+6e30ed3/bin/clang-14+0x3b4cee7)
+   #26 0x000055c304d868c7 clang::driver::Compilation::ExecuteJobs(clang::dr=
+iver::JobList const&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
+ommand >&) const (/opt/cross/clang-d5b6e30ed3/bin/clang-14+0x3b4d8c7)
+   #27 0x000055c304d90139 clang::driver::Driver::ExecuteCompilation(clang::=
+driver::Compilation&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
+ommand >&) (/opt/cross/clang-d5b6e30ed3/bin/clang-14+0x3b57139)
+   #28 0x000055c3021e219f main (/opt/cross/clang-d5b6e30ed3/bin/clang-14+0x=
+fa919f)
+   #29 0x00007fcd1a9e4d0a __libc_start_main (/lib/x86_64-linux-gnu/libc.so.=
+6+0x26d0a)
+   #30 0x000055c3022b70ea _start (/opt/cross/clang-d5b6e30ed3/bin/clang-14+=
+0x107e0ea)
+   clang-14: error: clang frontend command failed with exit code 70 (use -v=
+ to see invocation)
+   clang version 14.0.0 (git://gitmirror/llvm_project d5b6e30ed3acad794dd0a=
+ec400e617daffc6cc3d)
+   Target: mipsel-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-d5b6e30ed3/bin
+   clang-14: note: diagnostic msg:
+   Makefile arch drivers include kernel nr_bisected scripts security source=
+ usr
+
+
+vim +/devm_nvmem_match +946 drivers/nvmem/core.c
+
+f1f50eca5f9052 Andrey Smirnov 2018-03-09  945 =20
+f1f50eca5f9052 Andrey Smirnov 2018-03-09 @946  static int devm_nvmem_match(=
+struct device *dev, void *res, void *data)
+f1f50eca5f9052 Andrey Smirnov 2018-03-09  947  {
+f1f50eca5f9052 Andrey Smirnov 2018-03-09  948  	struct nvmem_device **r =3D=
+ res;
+f1f50eca5f9052 Andrey Smirnov 2018-03-09  949 =20
+f1f50eca5f9052 Andrey Smirnov 2018-03-09  950  	return *r =3D=3D data;
+f1f50eca5f9052 Andrey Smirnov 2018-03-09  951  }
+f1f50eca5f9052 Andrey Smirnov 2018-03-09  952 =20
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

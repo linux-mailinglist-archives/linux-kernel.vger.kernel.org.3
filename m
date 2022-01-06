@@ -2,111 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C98054865BA
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 15:01:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E15EC4865BF
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 15:03:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239854AbiAFOBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 09:01:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50908 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239827AbiAFOBt (ORCPT
+        id S239898AbiAFODH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jan 2022 09:03:07 -0500
+Received: from coyote.holtmann.net ([212.227.132.17]:38310 "EHLO
+        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231916AbiAFODG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 09:01:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F339DC061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 06:01:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E37A61C3D
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 14:01:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39B99C36AE3;
-        Thu,  6 Jan 2022 14:01:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641477708;
-        bh=LnhcNm2woC798UYuUxRQnM+UQkBAfsqI/F0kZU392K4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mLzUFTW3qiEI4/gtlhZxkE3ALcpStfnFvDFyLab7sjbb77kWohSZ3VqifA28Ztfkm
-         jKkdVAOI6zNuFwASw/6NbmrGGlO9rAy+95kFzISKA3FDxe5j2gecx99Z8w4/RKlXmA
-         kNtYk3dPxr/lH07D7DWHOqv88f+9w39M2sJ1iwl8=
-Date:   Thu, 6 Jan 2022 15:01:44 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     knv418@gmail.com, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: kpc2000: kpc2000_spi: Check for null pointer
- after calling devm_ioremap
-Message-ID: <Ydb2SLUZ25skxLZd@kroah.com>
-References: <20220106092257.2738018-1-jiasheng@iscas.ac.cn>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220106092257.2738018-1-jiasheng@iscas.ac.cn>
+        Thu, 6 Jan 2022 09:03:06 -0500
+Received: from smtpclient.apple (p4fefca45.dip0.t-ipconnect.de [79.239.202.69])
+        by mail.holtmann.org (Postfix) with ESMTPSA id B44E8CECD5;
+        Thu,  6 Jan 2022 15:03:04 +0100 (CET)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
+Subject: Re: [PATCH v4 2/3] Bluetooth: mt7921s: Enable SCO over I2S
+From:   Marcel Holtmann <marcel@holtmann.org>
+In-Reply-To: <b12d6dce30c1eeb1dfff2b80b64bdedc0803f40b.1640334021.git.sean.wang@kernel.org>
+Date:   Thu, 6 Jan 2022 15:03:04 +0100
+Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
+        =?utf-8?B?Ik1hcmstWVcgQ2hlbiAo6Zmz5o+a5paHKSI=?= 
+        <Mark-YW.Chen@mediatek.com>, Soul.Huang@mediatek.com,
+        YN.Chen@mediatek.com, Leon.Yen@mediatek.com,
+        Eric-SY.Chang@mediatek.com, Deren.Wu@mediatek.com,
+        km.lin@mediatek.com, robin.chiu@mediatek.com,
+        Eddie.Chen@mediatek.com, ch.yeh@mediatek.com,
+        posh.sun@mediatek.com, ted.huang@mediatek.com,
+        Eric.Liang@mediatek.com, Stella.Chang@mediatek.com,
+        Tom.Chou@mediatek.com, steve.lee@mediatek.com, jsiuda@google.com,
+        frankgor@google.com, jemele@google.com, abhishekpandit@google.com,
+        michaelfsun@google.com, mcchou@chromium.org, shawnku@google.com,
+        linux-bluetooth@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <6DDA9D10-3001-4A57-B2F4-9712732868AC@holtmann.org>
+References: <91dfa736b7629cdb94bd2029f05717eeae77b07d.1640334021.git.sean.wang@kernel.org>
+ <b12d6dce30c1eeb1dfff2b80b64bdedc0803f40b.1640334021.git.sean.wang@kernel.org>
+To:     Sean Wang <sean.wang@mediatek.com>
+X-Mailer: Apple Mail (2.3693.40.0.1.81)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 05:22:57PM +0800, Jiasheng Jiang wrote:
-> As the possible failure of the allocation, the devm_ioremap() may return
-> NULL pointer.
-> Then the kpspi->base is assigned to cs->base in kp_spi_setup() and used
-> in kp_spi_read_reg() and kp_spi_write_reg().
-> Therefore, it should be better to add the sanity check and return error
-> in order to avoid the dereference of the NULL pointer.
+Hi Sean,
+
+> The driver has to issue the specific command to enable Bluetooth SCO over
+> the I2S/PCM interface on mt7921s, that is supported since the firmware
+> with version 20211222191101 was added, and the patch would not cause any
+> harm even when the old firmware is applied.
 > 
-> Fixes: 677b993a5749 ("staging: kpc2000: kpc_spi: use devm_* API to manage mapped I/O space")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> The SCO profile with the patch was tested by setting up a VOIP application,
+> connected to HFP device, checked telephony function can work normally.
+> 
+> Co-developed-by: Sean Wang <sean.wang@mediatek.com>
+> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+> Signed-off-by: Mark Chen <mark-yw.chen@mediatek.com>
 > ---
->  drivers/staging/kpc2000/kpc2000_spi.c | 4 ++++
->  1 file changed, 4 insertions(+)
+> v2: refine git message and fix typo
+> v3:
+>    1. free skb after calling  __hci_cmd_sync
+>    2. make bt_awake as const struct btmtk_sco
+> v4:
+>    1. update git message
+>    2. drop a few redundant error messages
+> ---
+> drivers/bluetooth/btmtk.h     | 20 +++++++++++
+> drivers/bluetooth/btmtksdio.c | 68 +++++++++++++++++++++++++++++++++++
+> 2 files changed, 88 insertions(+)
 > 
-> diff --git a/drivers/staging/kpc2000/kpc2000_spi.c b/drivers/staging/kpc2000/kpc2000_spi.c
-> index 16ca18b8aa15..ead4aa0c988c 100644
-> --- a/drivers/staging/kpc2000/kpc2000_spi.c
-> +++ b/drivers/staging/kpc2000/kpc2000_spi.c
-> @@ -466,6 +466,10 @@ kp_spi_probe(struct platform_device *pldev)
->  
->  	kpspi->base = devm_ioremap(&pldev->dev, r->start,
->  				   resource_size(r));
-> +	if (!kpspi->base) {
-> +		status = -ENOMEM;
-> +		goto free_master;
-> +	}
->  
->  	status = spi_register_master(master);
->  	if (status < 0) {
-> -- 
-> 2.25.1
+> diff --git a/drivers/bluetooth/btmtk.h b/drivers/bluetooth/btmtk.h
+> index 2be1d2680ad8..fc57ef09d132 100644
+> --- a/drivers/bluetooth/btmtk.h
+> +++ b/drivers/bluetooth/btmtk.h
+> @@ -7,8 +7,12 @@
 > 
+> #define HCI_WMT_MAX_EVENT_SIZE		64
 > 
+> +#define BTMTK_WMT_REG_WRITE 0x1
+> #define BTMTK_WMT_REG_READ 0x2
+> 
+> +#define MT7921_PINMUX_0 0x70005050
+> +#define MT7921_PINMUX_1 0x70005054
+> +
+> enum {
+> 	BTMTK_WMT_PATCH_DWNLD = 0x1,
+> 	BTMTK_WMT_TEST = 0x2,
+> @@ -76,6 +80,22 @@ struct btmtk_wakeon {
+> 	__le16 wakeup_delay;
+> } __packed;
+> 
+> +struct btmtk_sco {
+> +	u8 clock_config;
+> +	u8 transmit_format_config;
+> +	u8 channel_format_config;
+> +	u8 channel_select_config;
+> +} __packed;
+> +
+> +struct reg_write_cmd {
+> +	u8 type;
+> +	u8 rsv;
+> +	u8 num;
+> +	__le32 addr;
+> +	__le32 data;
+> +	__le32 mask;
+> +} __packed;
+> +
+> struct btmtk_hci_wmt_params {
+> 	u8 op;
+> 	u8 flag;
+> diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
+> index 89bd70651e9e..f6fb82b317de 100644
+> --- a/drivers/bluetooth/btmtksdio.c
+> +++ b/drivers/bluetooth/btmtksdio.c
+> @@ -830,6 +830,66 @@ static int btsdio_mtk_reg_read(struct hci_dev *hdev, u32 reg, u32 *val)
+> 	return err;
+> }
+> 
+> +static int btsdio_mtk_reg_write(struct hci_dev *hdev, u32 reg, u32 val, u32 mask)
+> +{
+> +	struct btmtk_hci_wmt_params wmt_params;
+> +	struct reg_write_cmd reg_write = {
+> +		.type = 1,
+> +		.num = 1,
+> +		.addr = cpu_to_le32(reg),
+> +		.data = cpu_to_le32(val),
+> +		.mask = cpu_to_le32(mask),
+> +	};
 
+Maybe a good idea to make this const as well.
 
-Hi,
+> +	int err, status;
+> +
+> +	wmt_params.op = BTMTK_WMT_REGISTER;
+> +	wmt_params.flag = BTMTK_WMT_REG_WRITE;
+> +	wmt_params.dlen = sizeof(reg_write);
+> +	wmt_params.data = &reg_write;
+> +	wmt_params.status = &status;
+> +
+> +	err = mtk_hci_wmt_sync(hdev, &wmt_params);
+> +	if (err < 0)
+> +		bt_dev_err(hdev, "Failed to write reg(%d)", err);
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+The please “..reg (%d)” as you have for the other error message.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+> +
+> +	return err;
+> +}
+> +
+> +static int btsdio_mtk_sco_setting(struct hci_dev *hdev)
+> +{
+> +	const struct btmtk_sco sco_setting = {
+> +		.clock_config = 0x49,
+> +		.channel_format_config = 0x80,
+> +	};
+> +	struct sk_buff *skb;
+> +	u32 val;
+> +	int err;
+> +
+> +	/* Enable SCO over I2S/PCM for MediaTek chipset */
+> +	skb =  __hci_cmd_sync(hdev, 0xfc72, sizeof(sco_setting),
+> +			      &sco_setting, HCI_CMD_TIMEOUT);
+> +	if (IS_ERR(skb))
+> +		return PTR_ERR(skb);
+> +
+> +	kfree_skb(skb);
+> +
+> +	err = btsdio_mtk_reg_read(hdev, MT7921_PINMUX_0, &val);
+> +	if (err < 0)
+> +		return err;
+> +
+> +	val |= 0x11000000;
+> +	err = btsdio_mtk_reg_write(hdev, MT7921_PINMUX_0, val, ~0);
+> +	if (err < 0)
+> +		return err;
+> +
+> +	err = btsdio_mtk_reg_read(hdev, MT7921_PINMUX_1, &val);
+> +	if (err < 0)
+> +		return err;
+> +
+> +	val |= 0x00000101;
+> +	return btsdio_mtk_reg_write(hdev, MT7921_PINMUX_1, val, ~0);
+> +}
+> +
+> static int btmtksdio_setup(struct hci_dev *hdev)
+> {
+> 	struct btmtksdio_dev *bdev = hci_get_drvdata(hdev);
+> @@ -862,6 +922,14 @@ static int btmtksdio_setup(struct hci_dev *hdev)
+> 		err = mt79xx_setup(hdev, fwname);
+> 		if (err < 0)
+> 			return err;
+> +
+> +		/* Enable SCO over I2S/PCM */
+> +		err = btsdio_mtk_sco_setting(hdev);
+> +		if (err < 0) {
+> +			bt_dev_err(hdev, "Failed to enable SCO setting (%d)", err);
+> +			return err;
+> +		}
+> +
 
-- Your patch did not apply to any known trees that Greg is in control
-  of.  Possibly this is because you made it against Linus's tree, not
-  the linux-next tree, which is where all of the development for the
-  next version of the kernel is at.  Please refresh your patch against
-  the linux-next tree, or even better yet, the development tree
-  specified in the MAINTAINERS file for the subsystem you are submitting
-  a patch for, and resend it.
+Is this really a failure or could the chip continue to operate? It just means it falls back to SCO over HCI?
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+> 		break;
+> 	case 0x7663:
+> 	case 0x7668:
 
-thanks,
+Regards
 
-greg k-h's patch email bot
+Marcel
+

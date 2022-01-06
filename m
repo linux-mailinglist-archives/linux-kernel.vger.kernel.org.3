@@ -2,108 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2C2486A4A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 20:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63ECD486A4E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 20:06:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243159AbiAFTGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 14:06:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35966 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232414AbiAFTGM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 14:06:12 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 074C9C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 11:06:12 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id z3so3117208plg.8
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 11:06:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=Zsjxxw6pd4DdvZ9ARrFvDZnuIXFpfJxLz7WO0wCernQ=;
-        b=aPDN54U5pkO5HHNN6o/d+Wa46jM8wSiiODG4x4hx33hrw4OfsqihQg6zGV32Nj2zax
-         JanNwsFLN7TQup4lMAwYXzxS84trjw6x7/2pIIngpus6+Hssuuj1jxFjOt1qcbui6bpZ
-         6AmUuehvcx4mr6QOG8ewp7Cb1IlOODwTu/hDVjZ4VR9tvO5+MY+aNXQ0Fo730QUdACHZ
-         Yow2dzJLGzg4AcMPAWd4xVEUGzJVD6GxhcxA90amuZ5C5hseVYIVuBRtwS00ZZe/bpWb
-         lAY4zAiuU3op47BJHysCARxVDHEyM4Xy+uuTB+N6Qiz2ZVnKNLkTCZe7ks1VM2zVWO8x
-         D8aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=Zsjxxw6pd4DdvZ9ARrFvDZnuIXFpfJxLz7WO0wCernQ=;
-        b=mx08lQ0mgp9hN7FMGH0xeh6iOUZdNzXChHziyWA1FYMlNUNiKMxEJpj6q11T5KHeAn
-         f3XT844xsi24k6LYKCwUS7l5VfBc0k5RIChc8zx7SoS/2EK0U94bp6RTdJKSU1FocUGx
-         sfoT0c3slsw5RsOLPpvRPXHRF4TS7xFuuW0SIu5dMI16KtsHgwmNEFZb1Ju0Wjn80jYZ
-         QQok7UTO8Sdp2+AUnxgTFhaauAC1a6OWiXqVy2H+42SxDudn41rhZVU7xNHdiXi+cYMD
-         iCO0RV99jsk+Thj2xu7YFNpndZH7T6pWiV9UKHV01aEP0ygjL6KGXZaiMJOnC2MXYECC
-         pVhA==
-X-Gm-Message-State: AOAM5303eeGAumArArhGwRHym0ckY97e0CqWoUwCuOsp3WxtlRrHe61e
-        Y+PSYYdysVKLnYzLzf/Sdhc1fg==
-X-Google-Smtp-Source: ABdhPJyxOxZKTJqgzSxRXlJWQk0gUdFo548NlJxlwKKYwpOb8FAbfo+BhY8W4Pz7mnZZ/bRCO95gCA==
-X-Received: by 2002:a17:903:24d:b0:149:b68f:579 with SMTP id j13-20020a170903024d00b00149b68f0579mr24075313plh.1.1641495971463;
-        Thu, 06 Jan 2022 11:06:11 -0800 (PST)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id z18sm3468833pfe.146.2022.01.06.11.06.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 11:06:10 -0800 (PST)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Cc:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        p.zabel@pengutronix.de, balbi@kernel.org, jbrunet@baylibre.com,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v5 0/3] usb: meson: fix shared reset control use
-In-Reply-To: <20211212201844.114949-1-aouledameur@baylibre.com>
-References: <20211212201844.114949-1-aouledameur@baylibre.com>
-Date:   Thu, 06 Jan 2022 11:06:10 -0800
-Message-ID: <7hv8ywr8f1.fsf@baylibre.com>
+        id S243174AbiAFTGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 14:06:23 -0500
+Received: from mail-dm6nam08on2067.outbound.protection.outlook.com ([40.107.102.67]:13920
+        "EHLO NAM04-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S243164AbiAFTGT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 14:06:19 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ayi+GOFFbrVsOrf+CIK9h8JjGg5KhyDm59JzjjAnN7NUVbqF8TX5qLc/5lkqbCfQ9exTig9D1M628bgm0BHXbdjrc+9HkKTw7/Ib0/7B0YmdxHSQjrR8kdrknb0Ed1+a+kw92Zpepdi5h04fABQhfkN8tKNoRMNGQUvu5XBkOFv08zllJfey7JrCUmuLsI4bEmywZw7ODkhFdokqVaEBQOwNTb8gRBOR0fDyXHnx0b4AKgDc1w3gWSWLpqIupsNlv7ZRKgpJjL2d1SUGVAghtfKJ7O9JHIi9bazRk7XYbtcz2uACma0PKDZRIBr+5ulurGlzDh/gwYDPfspTAZn7AA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4QGms3cmUNrPLlWzLscxRS2YM0ZwWB3JdMk4Vgiv3x0=;
+ b=ZjW06HgLGInZJZE7/qrJG33OXiaCSfq/I9XdPFmnUKNvNu1eaVyqBx2j3J+MsnXOwZXgviMWQ8E9owkY4ZW+KWAjKxXF5H+O7wXhn5VM9DLjl4MsREMbMY6kCMmd4HIcfU93oCzaQt7VmLkWrtsQ5VTaeAgcgMPrUGD0b9sn9B/QzWP95OMz4ee4TtZPAMxPeqQcnIIa/5Q34i7KArhvzVI/+hgGEWjvDJCl9edM8QBufeJ7WP0mahl/sw93EbhRn3DS7WUFeKW+fW298aT5dIDW6fZ/sDQ3EkyHNCzXpAm02pagUcBt+mLgE/Wy5s3ns/wryYlNnMJxPxEcjTLu7A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4QGms3cmUNrPLlWzLscxRS2YM0ZwWB3JdMk4Vgiv3x0=;
+ b=VOeu8qwhXrZvvCMgD8L66yD8UsifoxbYB0qxFtwhD0w2Xdj1d7qc9UHaS5ERYOyVfBp9Xh3JCFEklo6JzOUwWTi3cVUqZtTzz5IU5spXbLWtlVFY5mhBVBY0EedaiIBz1FlbZOnH6GyZWZAh5eAeFXBlfMM1lbU1WV7/mufkqRg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by DM6PR12MB5549.namprd12.prod.outlook.com (2603:10b6:5:209::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7; Thu, 6 Jan
+ 2022 19:06:17 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::ccd7:e520:c726:d0b]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::ccd7:e520:c726:d0b%5]) with mapi id 15.20.4867.010; Thu, 6 Jan 2022
+ 19:06:17 +0000
+Subject: Re: [PATCH v8 13/40] x86/kernel: Make the bss.decrypted section
+ shared in RMP table
+To:     Venu Busireddy <venu.busireddy@oracle.com>,
+        Brijesh Singh <brijesh.singh@amd.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+References: <20211210154332.11526-1-brijesh.singh@amd.com>
+ <20211210154332.11526-14-brijesh.singh@amd.com> <YdSKQKSTS83cRzGZ@dt>
+ <18eadf9d-8e31-0945-ccf4-2cb72b8e0dd4@amd.com>
+ <acba0832-9b11-c93d-7903-fff33f740605@intel.com>
+ <444b6c78-c4d3-f49c-6579-bd28ae32ca3c@amd.com> <YdcpnHrRoJJFWWel@dt>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+Message-ID: <bf226dc6-4aef-b7c2-342d-0167362272ea@amd.com>
+Date:   Thu, 6 Jan 2022 13:06:13 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+In-Reply-To: <YdcpnHrRoJJFWWel@dt>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CH0PR03CA0353.namprd03.prod.outlook.com
+ (2603:10b6:610:11a::15) To DM4PR12MB5229.namprd12.prod.outlook.com
+ (2603:10b6:5:398::12)
 MIME-Version: 1.0
-Content-Type: text/plain
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1a88149d-c968-464d-1ad4-08d9d1479dbb
+X-MS-TrafficTypeDiagnostic: DM6PR12MB5549:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB5549CDBB705408B846D70C6DEC4C9@DM6PR12MB5549.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fGF51/lZ3fvCP1+VexDAEpd0QBHcIdZZVjk5f/M4tG7tft/1KQMsJSI9vyUEzdGT9/2GocdSGv3Gjdh9wb3GV2w8LupwvKszO0ouhBglymrdPAAQqW+ZFalzrRQnSZJ3KO4UxhRS+Vq3pa8c9J0q06Li8Bxm4IQiprWzIuKewAAkN9lIjYk2S+yB96ofYq3u//Px841q3gguLjYVHmQcDXkrBh6MQG483c2VdRhveA6e6WmCP5Qf67oqO86FdiVnHlKLrQmq7dTYs8UNMU9LVL/M5+TgzFPztPdqhB92XNUMR8dzAlaHdqXijkcezXJSgPrs8XxOkr80oB+Qv9/bT75+4XRN/oFEi/D1VevwYDVhbb4gwQQSMA/UWB6AlOpUBP4f9xZosjER6OMnUGf6dewcDvVbxkzLX7O7oFY+kXv9/n+W5s1lhtnYY+ZbEgeLjLe9ycSBurKlpyy84nRzTOCLja28ZuL++4OnHX4+t6XzPKI1VXIMmXoW1b4UEFAPj7CzZfdCTG4dx9JcyHID3aOFiNZwUzBiSIES6e5nzbHcBblmzPOcgXs9+qjoTs7RkT4nhxhqZwKqNkuQo0Tis7Uv0nDXkcxaqXrUfD3eVk/iIMhwl6vq+6esdu+tgyh/WdVCvqp8uVmxVive4vxgGr175BtnnAV70ESe9j01hK2GnPzFOPvwagUBRa1jc0fqbibl2w5DQKDm/v3M4AkCe+iSzyyYquOKdbrYo7pCSd3IrtD8Apq5tpI8UNPtnZV/
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38100700002)(6636002)(6666004)(66946007)(66476007)(66556008)(54906003)(8676002)(8936002)(2906002)(316002)(31696002)(2616005)(53546011)(110136005)(6506007)(26005)(5660300002)(7406005)(86362001)(7416002)(83380400001)(4326008)(508600001)(36756003)(31686004)(6512007)(6486002)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cU52M2VzWDBRdXJjVWlHdlVGTmlOR3FJb29MM29lODBJbXpFOHVka2ZwMi8x?=
+ =?utf-8?B?dlJBaDBVYWdXK2crZTJ1c2FWMUM1OVE4M05NL2ptWk1lN3RyVnB6cStpWHFT?=
+ =?utf-8?B?THVBbVVsWUh1TEVaWlJ6L3RxQnNxK2JuWWU5RnZ5VG5iWjU0dGliODE0NTBk?=
+ =?utf-8?B?UmVGUDJVWmhvWXdvbGVuVU5wQ0pqVVhtU3VjYStGWG9ZZURuZVQ3c05XMUVH?=
+ =?utf-8?B?TWJ3Z2hua0ZrZ2NpWFJlUng2SHFJa0t6Tm92eitEQm41ZXZvd0lnb0VkM1Fl?=
+ =?utf-8?B?Vmg4eXJRZUptLzNZbFAxazBYQ1F5ZVdJM0Vmb3RsZXlNQ2IyVk1JVVFKanZq?=
+ =?utf-8?B?ejJWdTZMY3ZaT2kzSk9BYWtHejBrWnhpZjJjMVQ4eUVRRG9pamV4ZHovZm1H?=
+ =?utf-8?B?NS9RYlRXUkRidm4rL1NnTlVGMUo5Ti9JZmRKbXJqWmc1aDFSdGM2bG9mY2Fx?=
+ =?utf-8?B?dnM4QUZLcmRUSXpHTzhlWHpzMHNuc1hRdFUxdTdUcGM1Uktib1RkVUJzeEQy?=
+ =?utf-8?B?RUZCY3M4cytHN2x5c2ZqdUVkQlpPQkQ4b0N3ejFyN1VZMlhkSGZlZjRhZTEw?=
+ =?utf-8?B?T1h4UkJ1YThoR2U2M3VCQ2dnbHJkWHNXRHBHWGdybGVpOUtFMjJZRU9UaEZK?=
+ =?utf-8?B?UzJFQ3o3QzR0alNTd05yQ2kxMlZ6dyt0eXVrU3Bsdjk4R0VQUmEyZTI2bXlw?=
+ =?utf-8?B?UTM0NVRxQVVUcGpJYkU0UkJWTFdiWGFoRGVGRGtRV1lLNXpyY1pPTEF1Y1Za?=
+ =?utf-8?B?dDVTeXJnamlnY1gwL2JzMlVHTWFFaEE1alY0U0VmMzVraXlGTnF2OFIxeGtN?=
+ =?utf-8?B?VDNlSUhUa3pFZ0lxODk2RVNXM01ZSXBmYWN6SWtidGg0ZnE1UmFoYlFpWlRo?=
+ =?utf-8?B?Umc2Qmx0RzdZWXFBY3o0NXY5TkpJMnhOWEsreHN4dFc1M0hKM3FIMDVRMUh3?=
+ =?utf-8?B?OG9haHUrY2N2b2lyNW1EdzFKcHgxK1hsanFWK0FTdDFNem5GclRkRTVHblNZ?=
+ =?utf-8?B?WlAyYUd4d3p6d0xZMkp0cFE1TXFNb1cxL29XY0MxeCtwYXNuVWpIcTNuU1VB?=
+ =?utf-8?B?a2U0QU1KNnlSZi81cXJzWW1OUE1SdUlBdEZrbjl1b1pLSHM0Z2ZybElzaVVY?=
+ =?utf-8?B?VERDU0gzSGcrNThSbTJES09sdGlDVDVCR1lzRDEvdldXQm4yWDNPOFFVdWY3?=
+ =?utf-8?B?eHgvTVRrOFhySEZzalkyT2lxMHc2RWE4MmxnU1oxN3oyU0RBd2JsdmFkSDV6?=
+ =?utf-8?B?WVVyRmxRZWYxcFd5cU5MWnN4NzROckMrcGpqeFk5elNYMFFqVVdEaEJFWGI2?=
+ =?utf-8?B?S2VidmNDamIwSHBMcmo1WDMwYVRhK09nUmpHY1graXR3RVVlSjVNdDZZa0ta?=
+ =?utf-8?B?TkxWTGZ0eUJsZFYzSnlaaHBGc0IzajZtVFB5bFo2eW15bVlsMnRrb3NMckZQ?=
+ =?utf-8?B?TzJ5R09HYlN1NzdhMGVvZjZJQXEwZGJKMHVPVjl1TUFhN1VTTThmTlhRbFI0?=
+ =?utf-8?B?cG5CeWN4Q2VXMGdEUTBHOUtEaEQ4dnJMNlIwa0x6djVvNUhtK2xtQ3pEUU96?=
+ =?utf-8?B?VFNyQ2RSdWdRNWtUQW5YWEl0VGpwVzIrTWpEVXF0eExkSGQ5ZmlTclRtd0Z6?=
+ =?utf-8?B?VGxZTWRiV2VxL3FWZGFZc2c4NG5iY3lLOCtBQUxtTnhwTjI3MEl4VWs5ZFp1?=
+ =?utf-8?B?ODF2cnV5Umcvdkk4VlpHajlWc1Raa1FrcGdacE9icm13Rlp1N1l1bU1SS09U?=
+ =?utf-8?B?Nm9RQzBmRklEc2FUbTFZeFdnMVl1WE1IcVVHTnZZaUd5bStyM1RqWnNCZjdH?=
+ =?utf-8?B?S093V2l1bk01NncrOFZzY25WUm10Y2FxdWFNaFBVWWRudjc0YjRmSWFjZ1hQ?=
+ =?utf-8?B?Q3R6L0ZGSlc0T1drR01Hc2dLWG05eUoxSkt3dHdUNGczN3drRTFFRmRscml4?=
+ =?utf-8?B?MjRnYW5rVDY3N1pFMnVQOC9udWEyTHppYTE3QU0yV1F2YUhDNTRWcEkxSDJB?=
+ =?utf-8?B?N3gvS3NxYTl0aVdkS1ZYTDM5SWU1MS8vY2RrZWhGVHIwZVFzaWpwSjZOT1Iz?=
+ =?utf-8?B?SHkwVnVGbGtNS1pNOE9zU3RsNS9NanRoSnBIR2hiMFBhS0lDK0E1RHUwV2lr?=
+ =?utf-8?B?R3kyejlzNEJsRzFiYjZVSGVWNlFQdi8rZU5QakU1cjAzUlpiM0ZBZENOOWh2?=
+ =?utf-8?Q?a7rv7SBes/SkpprR3GAOnz8=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a88149d-c968-464d-1ad4-08d9d1479dbb
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2022 19:06:17.0679
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yQd+F8wxG5aJ1Rs4hbd4bsaHUaD+rO04ASkGy4d2nMIiakbig+gEhdGQxT4MtfaBaQdsvAM3XkxjYkZtne34Pg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB5549
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Amjad,
+On 1/6/22 11:40 AM, Venu Busireddy wrote:
+> On 2022-01-05 15:39:22 -0600, Brijesh Singh wrote:
+>>
+>>
+>> On 1/5/22 2:27 PM, Dave Hansen wrote:
+>>> On 1/5/22 11:52, Brijesh Singh wrote:
+>>>>>>            for (; vaddr < vaddr_end; vaddr += PMD_SIZE) {
+>>>>>> +            /*
+>>>>>> +             * When SEV-SNP is active then transition the
+>>>>>> page to shared in the RMP
+>>>>>> +             * table so that it is consistent with the page
+>>>>>> table attribute change.
+>>>>>> +             */
+>>>>>> +            early_snp_set_memory_shared(__pa(vaddr),
+>>>>>> __pa(vaddr), PTRS_PER_PMD);
+>>>>>
+>>>>> Shouldn't the first argument be vaddr as below?
+>>>>
+>>>> Nope, sme_postprocess_startup() is called while we are fixing the
+>>>> initial page table and running with identity mapping (so va == pa).
+>>>
+>>> I'm not sure I've ever seen a line of code that wanted a comment so badly.
+>>
+>> The early_snp_set_memory_shared() call the PVALIDATE instruction to clear
+>> the validated bit from the BSS region. The PVALIDATE instruction needs a
+>> virtual address, so we need to use the identity mapped virtual address so
+>> that PVALIDATE can clear the validated bit. I will add more comments to
+>> clarify it.
+> 
+> Looking forward to see your final comments explaining this. I can't
+> still follow why, when PVALIDATE needs the virtual address, we are doing
+> a __pa() on the vaddr.
 
-Amjad Ouled-Ameur <aouledameur@baylibre.com> writes:
+It's because of the phase of booting that the kernel is in. At this point, 
+the kernel is running in identity mapped mode (VA == PA). The 
+__start_bss_decrypted address is a regular kernel address, e.g. for the 
+kernel I'm on it is 0xffffffffa7600000. Since the PVALIDATE instruction 
+requires a valid virtual address, the code needs to perform a __pa() 
+against __start_bss_decrypted to get the identity mapped virtual address 
+that is currently in place.
 
-> This patchset fixes a usb suspend warning seen on the libretech-cc by
-> using reset_control_rearm() call of the reset framework API. 
-> This call allows a reset consummer to release the reset line even when 
-> just triggered so that it may be triggered again by other reset
-> consummers.
->
-> reset_control_(de)assert() calls are called, in some meson usb drivers, 
-> on a shared reset line when reset_control_reset has been used. This is not
-> allowed by the reset framework.
->
-> Finally the meson usb drivers are updated to use this new call, which
-> solves the suspend issue addressed by the previous reverted 
-> commit 7a410953d1fb ("usb: dwc3: meson-g12a: fix shared reset control
-> use").
->
-> changes since v4:
-> - call reset_control_rearm() after clk_prepare_enable() fails
->
-> Amjad Ouled-Ameur (3):
->   phy: amlogic: phy-meson-gxl-usb2: fix shared reset controller use
->   phy: amlogic: meson8b-usb2: Use dev_err_probe()
->   phy: amlogic: meson8b-usb2: fix shared reset control use
->
->  drivers/phy/amlogic/phy-meson-gxl-usb2.c | 5 ++++-
->  drivers/phy/amlogic/phy-meson8b-usb2.c   | 9 +++++++--
->  2 files changed, 11 insertions(+), 3 deletions(-)
-
-The cover letter prefix is "usb: meson" but all the patches are for
-drivers/phy.
-
-Could you collect the reviewed-by etc tags and resend to the PHY
-maintainers and linux-phy list?
+It is not until the .Ljump_to_C_code label in head_64.S that the 
+addressing switches from identity mapped to kernel addresses.
 
 Thanks,
+Tom
 
-Kevin
-
-
+> 
+> Venu
+> 

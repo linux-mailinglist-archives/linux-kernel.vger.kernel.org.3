@@ -2,74 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE39486399
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 12:18:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2634863A9
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 12:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238388AbiAFLSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 06:18:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42450 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238372AbiAFLSq (ORCPT
+        id S238391AbiAFLWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 06:22:21 -0500
+Received: from mail-sh.amlogic.com ([58.32.228.43]:52049 "EHLO
+        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238363AbiAFLWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 06:18:46 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA244C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 03:18:45 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id u13so4195784lff.12
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 03:18:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=L77wWZOzoJ83FWnS0rTBXLliJsYhOTdAIZIl+/oApzA=;
-        b=HgcUz15pyjKYWI645y2J987EUrFW4zfxXsa0o4Rnrg9J+ndr06PAV7WPVi5fYmvtNN
-         4dxnCklAbW/5FyLREOew00iYLU611Vl69KabQao0APrZJieLVdsYshW1L09VwOMqntYd
-         gWFuixoZCRicwTXyEMbYjLyDVPfJnIrPYdjLoJZ1tXtLr8HcIdnTJAPHXsRbZgsrf9iU
-         v/p/lCOLqUEzzG0bWXHNXS7oJIM+YgM6P21/bgbL6i4zvOv5CP4CkclsAGzZEkT5xGvB
-         ewM8k6IVnpl2DiGijL0weES8ZONYZr1ayhvNx57fSIe9M+m3nrrFrwXfvYZv+DWo1Zsf
-         rNiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=L77wWZOzoJ83FWnS0rTBXLliJsYhOTdAIZIl+/oApzA=;
-        b=BNn9rgthL3vPIqBma7nNUA5UCccp5yIXPW0X6MYxBxMeAA7ShefB52v6R1kb9Fj0W3
-         JC7MFnnakZv9IV9K4ExLpkxlzTeG9Pp/yEKUKq7dUAyJWTnRa66ouOVb+kUatIyC0hIq
-         Y8nFkzDQ5utTU7MX7LuumIAh9uNNNwLJWoeNuGx/5kFI99P15DXb5a+O6DlZ709AtqWl
-         yHDy5MmLdKmgAzmffA51eSTNnWKzInGJkiNuO4qNSXIDCUSbgY/PqP7tS/jGkDHSIXGm
-         JiIb0Fk0OAIetmNJRGBnIQLu6B9hRY7ylGUMbbWM1t8qZaq2x3t5/IuLKbm399TmdFRf
-         99nQ==
-X-Gm-Message-State: AOAM532gzDIiYHFS6U6D4DJG9mc3t8h8mWWyt4BBbcAxAPLmrYVERaLn
-        VKKF66fOXpkCGdL66smWZ6Pgw6GsAY0s2L1n2uA=
-X-Google-Smtp-Source: ABdhPJzNflJmgrVD2BKYGkETRXs7ylSXHxFkCJMWqywpHoRzuOGNWnuAgn/UbjF2Z0C+oUn64SzByUvp903beFp8hLI=
-X-Received: by 2002:a05:6512:1116:: with SMTP id l22mr51260834lfg.253.1641467924102;
- Thu, 06 Jan 2022 03:18:44 -0800 (PST)
+        Thu, 6 Jan 2022 06:22:18 -0500
+Received: from droid04.amlogic.com (10.18.11.246) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server id 15.1.2176.14; Thu, 6 Jan 2022
+ 19:22:15 +0800
+From:   Xianwei Zhao <xianwei.zhao@amlogic.com>
+To:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Xianwei Zhao <xianwei.zhao@amlogic.com>
+Subject: [PATCH V4] arm64: dts: add support for S4 based Amlogic AQ222
+Date:   Thu, 6 Jan 2022 19:22:14 +0800
+Message-ID: <20220106112214.6987-1-xianwei.zhao@amlogic.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Received: by 2002:a2e:8195:0:0:0:0:0 with HTTP; Thu, 6 Jan 2022 03:18:43 -0800 (PST)
-Reply-To: gabrieledgal47@gmail.com
-From:   Gabriel Edgal <yazakpe8@gmail.com>
-Date:   Thu, 6 Jan 2022 03:18:43 -0800
-Message-ID: <CAORnRWQZKnffyQV-BWxFZA734km+uqfuh2cPL2FknoQNd4tDCw@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.18.11.246]
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add basic support for the Amlogic S4 based Amlogic AQ222 board:
+which describe components as follows: CPU, GIC, IRQ, Timer, UART.
+It's capable of booting up into the serial console.
+
+Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
+---
+V3 -> V4: cleaned up coding style.
+V2 -> V3: add of dts board  compatible family.
+V1 -> V2: cleaned up coding style, modify CPU affinity of timer interrups,
+          and modify GIC reg defintions.
+---
+ arch/arm64/boot/dts/amlogic/Makefile          |  1 +
+ .../dts/amlogic/meson-s4-s805x2-aq222.dts     | 30 ++++++
+ arch/arm64/boot/dts/amlogic/meson-s4.dtsi     | 99 +++++++++++++++++++
+ 3 files changed, 130 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts
+ create mode 100644 arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+
+diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
+index 5148cd9e5146..faea74a45994 100644
+--- a/arch/arm64/boot/dts/amlogic/Makefile
++++ b/arch/arm64/boot/dts/amlogic/Makefile
+@@ -57,3 +57,4 @@ dtb-$(CONFIG_ARCH_MESON) += meson-sm1-odroid-c4.dtb
+ dtb-$(CONFIG_ARCH_MESON) += meson-sm1-odroid-hc4.dtb
+ dtb-$(CONFIG_ARCH_MESON) += meson-sm1-sei610.dtb
+ dtb-$(CONFIG_ARCH_MESON) += meson-a1-ad401.dtb
++dtb-$(CONFIG_ARCH_MESON) += meson-s4-s805x2-aq222.dtb
+diff --git a/arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts b/arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts
+new file mode 100644
+index 000000000000..a942d7e06d6e
+--- /dev/null
++++ b/arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
++ */
++
++/dts-v1/;
++
++#include "meson-s4.dtsi"
++
++/ {
++	model = "Amlogic Meson S4 AQ222 Development Board";
++	compatible = "amlogic,aq222", "amlogic,s4";
++	interrupt-parent = <&gic>;
++	#address-cells = <2>;
++	#size-cells = <2>;
++
++	aliases {
++		serial0 = &uart_B;
++	};
++
++	memory@00000000 {
++		device_type = "memory";
++		reg = <0x0 0x0 0x0 0x40000000>;
++	};
++
++};
++
++&uart_B {
++	status = "okay";
++};
+diff --git a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+new file mode 100644
+index 000000000000..bf9ae1e1016b
+--- /dev/null
++++ b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+@@ -0,0 +1,99 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
++ */
++
++#include <dt-bindings/interrupt-controller/irq.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++
++/ {
++	cpus {
++		#address-cells = <2>;
++		#size-cells = <0>;
++
++		cpu0: cpu@0 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a35","arm,armv8";
++			reg = <0x0 0x0>;
++			enable-method = "psci";
++		};
++
++		cpu1: cpu@1 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a35","arm,armv8";
++			reg = <0x0 0x1>;
++			enable-method = "psci";
++		};
++
++		cpu2: cpu@2 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a35","arm,armv8";
++			reg = <0x0 0x2>;
++			enable-method = "psci";
++		};
++
++		cpu3: cpu@3 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a35","arm,armv8";
++			reg = <0x0 0x3>;
++			enable-method = "psci";
++		};
++	};
++
++	timer {
++		compatible = "arm,armv8-timer";
++		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
++	};
++
++	psci {
++		compatible = "arm,psci-1.0";
++		method = "smc";
++	};
++
++	xtal: xtal-clk {
++		compatible = "fixed-clock";
++		clock-frequency = <24000000>;
++		clock-output-names = "xtal";
++		#clock-cells = <0>;
++	};
++
++	soc {
++		compatible = "simple-bus";
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++
++		gic: interrupt-controller@fff01000 {
++			compatible = "arm,gic-400";
++			#interrupt-cells = <3>;
++			#address-cells = <0>;
++			interrupt-controller;
++			reg = <0x0 0xfff01000 0 0x1000>,
++			      <0x0 0xfff02000 0 0x2000>,
++			      <0x0 0xfff04000 0 0x2000>,
++			      <0x0 0xfff06000 0 0x2000>;
++			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
++		};
++
++		apb4: apb4@fe000000 {
++			compatible = "simple-bus";
++			reg = <0x0 0xfe000000 0x0 0x480000>;
++			#address-cells = <2>;
++			#size-cells = <2>;
++			ranges = <0x0 0x0 0x0 0xfe000000 0x0 0x480000>;
++
++			uart_B: serial@7a000 {
++				compatible = "amlogic,meson-s4-uart",
++					     "amlogic,meson-ao-uart";
++				reg = <0x0 0x7a000 0x0 0x18>;
++				interrupts = <GIC_SPI 169 IRQ_TYPE_EDGE_RISING>;
++				status = "disabled";
++				clocks = <&xtal>, <&xtal>, <&xtal>;
++				clock-names = "xtal", "pclk", "baud";
++			};
++		};
++	};
++};
+
+base-commit: c5468e3c930d4d2937d3a842a85df0f74e95e152
 -- 
-Dear friend.
+2.30.2
 
-I'm Mr. Gabriel Edgal, I'm the chief internal auditor of Btci Bank, I have
-an abandoned fund $ 9.5 million dollars to transfer to you, as we shall
-parts 50:50. You will only stand as a relative of my deceased client as
-bears the same surname as you, the fund was deposited in our bank for
-many years back by my deceased client who died with his whole
-family in a car accident in 2010. I would like to invite you as a foreigner
-partner to stand as the next of kin of the deceased client, so that we
-will place a claim on the deposited fund and divide it between the two
-of
-us 50:50 each. I want you to answer me immediately for more information
-
-
-With best regards,
-Mr. Gabriel Edgal

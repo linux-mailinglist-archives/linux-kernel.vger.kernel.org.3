@@ -2,87 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5869548618F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 09:42:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AFE948618D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 09:42:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236892AbiAFImm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 03:42:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
+        id S236845AbiAFIme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 03:42:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236839AbiAFImc (ORCPT
+        with ESMTP id S236797AbiAFIm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 03:42:32 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51ABC061245;
-        Thu,  6 Jan 2022 00:42:31 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id u20so1929139pfi.12;
-        Thu, 06 Jan 2022 00:42:31 -0800 (PST)
+        Thu, 6 Jan 2022 03:42:28 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125CEC061212
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 00:42:28 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id y22so6836388edq.2
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 00:42:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yt0rtZoVf/LFU96gxwDi5D6C9OB9ceL1t7u8+Oncfhg=;
-        b=XNb74cgNPAWvdk2PghjCprJe0xxYmSb0Ayh8CJ46Tro1mzO6k22rEpFuPHtTM7N9G7
-         GinjHvictuSMtNiPpvZjG+YtIY6ZMqchNfmyFqdxVqM2mCuyNwmYV0ei4gYDbhbzBel4
-         nDvKCiWpew53QXCEznn1oaY3yJkD7JIzVRqtivRcVlAElDi2B5r/8OE7lqv85qavUM96
-         FHXEqQxg+9Wrx/ECeInAxD3Lvgk+SQVrQ5eILQCyfzud6FxLHKWQRQJV6fEjyTkxqQy8
-         kg04OuG3P5UZO3Jm35wIGvjCJRoq8wWlISvxQUHC4ED6yZkmEmUJYi5smefHDszg49tT
-         Jk7w==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/au2t0n9VIeyTxqbpNihOs1HXF/Qnzq9Nav0Zut7TVY=;
+        b=K7UYXAi1Eop0upWJUh77qE3m1OyyQmIkT3i1vRFge93o4wGmoBn8rPz9PJgS3CRTR0
+         N7etZasKwFKeCiWLvwPbB63BrexoooWHypXU/f1Vi6Pd8XJn3laf+XVYNtuvukQ5ZUlI
+         QsiDydKY4/XUsbAiyRHWf0DyXZh2aad0q+LtpjMnro0khMITM10XSin4EgjSIxzTSSOT
+         tN6HnWiCUUe1mQvhKg9iH93MIqAfzlaRZe7PEv06HVIsyJW2HTFIP5NVGL2UdJ4OUfTs
+         Bq6DaFYHiZ9+N+rvE6TAtzFQs0F+ha1ErZ5BxGR4va0pZOAt3G99Z/5oaMuHNJMlR0u8
+         +1Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yt0rtZoVf/LFU96gxwDi5D6C9OB9ceL1t7u8+Oncfhg=;
-        b=MJm/yjFskb3SJiLxVvMLoGH9af19dFiMeapDns5JGJAS/B1hJc3TIx+AbyrL1XwJta
-         CZPaGxP8RuiO7LbJ9nXEUjVFFiFOn2k975M0fZkmtS0Pr4mnBuaqdCOMxJ/SOd1gz8JJ
-         tmCGUlYZDHReDb6bwfRgfKRhpCNavX4ppcjMGAjXTVz6isqVyf1s34YcrVmcuLKLSXIP
-         J+n3jdggNBDOl0/Y5OR4tcNh+01Mm/UX5KpUuMpPGLkf5rPe8KnZP8pj7nCdwBgIg+6D
-         ec7vtYmncDIQ6zziojyZJhqYlq81yWAr0lZEY1T82cpyPnk/BrmQ4cEdJoF0BTn27EIu
-         INVQ==
-X-Gm-Message-State: AOAM532/3+wgbGwr1u+0Sge3G/0BcARLDUmxcxBpADwS/vusmBlILpSu
-        K18tqDgIA/8K2ob4uMU4Efg=
-X-Google-Smtp-Source: ABdhPJxiL4Id4MVmdReZ96UdALca1Yhtw4nImcfjBO2n/RsuyBNfCPuGMPqyd87/59K92lRspbn//g==
-X-Received: by 2002:a63:b245:: with SMTP id t5mr5981223pgo.231.1641458551416;
-        Thu, 06 Jan 2022 00:42:31 -0800 (PST)
-Received: from localhost.localdomain ([94.177.118.151])
-        by smtp.googlemail.com with ESMTPSA id mu2sm1696200pjb.43.2022.01.06.00.42.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 00:42:31 -0800 (PST)
-From:   Qinghua Jin <qhjin.dev@gmail.com>
-Cc:     Qinghua Jin <qhjin.dev@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] Input: ti_am335x_tsc: Fix typo
-Date:   Thu,  6 Jan 2022 16:42:14 +0800
-Message-Id: <20220106084215.355295-1-qhjin.dev@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/au2t0n9VIeyTxqbpNihOs1HXF/Qnzq9Nav0Zut7TVY=;
+        b=jE9fJklLhqwCZkgrBJh5fg79piweUcujWJgCdSO/gDmz23lfWnBW31uANshoFtk6e4
+         /d1ipRIu19spU/jisRgd+hbhluY0BNmnj8/n3u0gu2PwXjZQREQgP3dsctcEB8r8bG4X
+         9dWGFptbqFwGDF+d5lalb43UcexjWLg6Nx4Pq/oOVa3Gt50SO55eGDRwVgZliWh78pq2
+         pYTnQGCN/gLLFgCV2y56HqylPWqxnwh8qeVOYTEAApt/Dv7BMFr7Cro85UM6P5dLR4sS
+         L7te8piPEim9XqNel4WuwBWNE1EclUYrlXGT1q7ddUHU1Npf+95oQwpDOrkrwk+GycNQ
+         btmw==
+X-Gm-Message-State: AOAM531mryNAvFgBd9TLFyvnOKGcWbikpl9lzsAA6tYS97GXPtq6FsTn
+        lq6GIJiV1zksqthFTgz8hr9tg9U+EEnJBCq6OhULUQ==
+X-Google-Smtp-Source: ABdhPJwz3SBdeElQDXb8HB+0rOFnGBs2qr+FlINLy3eYTny8r4pAogIXFdY34hulIQntnBIwJ5temFHTmYc9MMHQ8us=
+X-Received: by 2002:a17:907:7208:: with SMTP id dr8mr47093600ejc.697.1641458546603;
+ Thu, 06 Jan 2022 00:42:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+References: <20211223122639.86923-1-andriy.shevchenko@linux.intel.com> <YdWp09bj4SP5oNvc@smile.fi.intel.com>
+In-Reply-To: <YdWp09bj4SP5oNvc@smile.fi.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 6 Jan 2022 09:42:15 +0100
+Message-ID: <CAMRc=McdH7EebcM5AJb1jT2T_cP_yXyS7t+TP675f6kw92wbRA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] gpio: tegra: Get rid of duplicate of_node assignment
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Thierry Reding <treding@nvidia.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-tegra@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-change 'postion' to 'position'
+On Wed, Jan 5, 2022 at 3:33 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Thu, Dec 23, 2021 at 02:26:39PM +0200, Andy Shevchenko wrote:
+> > GPIO library does copy the of_node from the parent device of
+> > the GPIO chip, there is no need to repeat this in the individual
+> > drivers. Remove these assignment all at once.
+> >
+> > For the details one may look into the of_gpio_dev_init() implementation.
+>
+> Any comments on this one?
+>
 
-Signed-off-by: Qinghua Jin <qhjin.dev@gmail.com>
----
- drivers/input/touchscreen/ti_am335x_tsc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It looks good to me but I wanted to wait for Thierry's ack.
 
-diff --git a/drivers/input/touchscreen/ti_am335x_tsc.c b/drivers/input/touchscreen/ti_am335x_tsc.c
-index 83e685557a19..d77555e0571e 100644
---- a/drivers/input/touchscreen/ti_am335x_tsc.c
-+++ b/drivers/input/touchscreen/ti_am335x_tsc.c
-@@ -310,7 +310,7 @@ static irqreturn_t titsc_irq(int irq, void *dev)
- 			/*
- 			 * Calculate pressure using formula
- 			 * Resistance(touch) = x plate resistance *
--			 * x postion/4096 * ((z2 / z1) - 1)
-+			 * x position/4096 * ((z2 / z1) - 1)
- 			 */
- 			z = z1 - z2;
- 			z *= x;
--- 
-2.30.2
-
+Bart

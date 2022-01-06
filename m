@@ -2,158 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05057486D8F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 00:09:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CB19486D8D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 00:09:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245394AbiAFXJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 18:09:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35060 "EHLO
+        id S245385AbiAFXJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 18:09:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234795AbiAFXJg (ORCPT
+        with ESMTP id S234795AbiAFXJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 18:09:36 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7909BC061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 15:09:35 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JVMW130qnz4xts;
-        Fri,  7 Jan 2022 10:09:33 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1641510573;
-        bh=B+bWhhgzDSj+fEAQVcMQLTtKkWLuJI8V8ABaSomc3R0=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=eaYopRoHSCly3KuF1RT//gnvMY/nRhG9qGnvHOkbkpX7NPp5Xxe0QcnEwTKkzN2Wb
-         ODNKaaPw4toaKi0gfn4+x1NuQklg4fDWzSzBgQS/IGBmHBmZfjp7XfLkLgwUWvlLW4
-         XkWM+3p9ajCtUQaKZ+q+do3N0kOLvmEX4SNu+TdhifWylLLmcwMmuenroD09gQoE7g
-         2B91JXTz63WNhPGFFYNGl3XE1Tgr1TlS5vKqsdFgEcnIJlHBwnqiJob7VtintImJ28
-         izl6Ejt73W3dUop4dWdtufMHjsVWCHprr0x4/KFRMehDZIh6WF3yAD3xXPnL+X9BkX
-         rAun794XQgv/w==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Laurent Dufour <ldufour@linux.ibm.com>
-Cc:     Nathan Lynch <nathanl@linux.ibm.com>, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v4] powerpc/pseries: read the lpar name from the firmware
-In-Reply-To: <25527544-b0ac-596c-3876-560493b99f6b@linux.ibm.com>
-References: <20211207171109.22793-1-ldufour@linux.ibm.com>
- <25527544-b0ac-596c-3876-560493b99f6b@linux.ibm.com>
-Date:   Fri, 07 Jan 2022 10:09:32 +1100
-Message-ID: <87h7ag31hv.fsf@mpe.ellerman.id.au>
+        Thu, 6 Jan 2022 18:09:21 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3709C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 15:09:20 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id j124so5839547oih.12
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 15:09:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Ellt6MjzLF5sLUldei4o9NxlFsmkksIJlVQvjDivSks=;
+        b=CqQBSA9Fycf49Rqosg7w2As6sk5LjhU7gBBtMELfqTFoE5LTYaH0EAFx5MJJc1MISu
+         /QlNcmT56A3epX0FVXHwV5WiJS6EiLIVIqyP4Ew5UvnPEeL95DYBjlcIVZmDa32IZofs
+         hzTKsy+r1Ypb/I8H5g9k3AVOzr4FKAlnk4Bx9EShJ7lRADBi38f62utDApMIKae6o90B
+         CzoehUttwZFiHdFzhqFJuy3vzUHPIz/dpp/lC2UjiY9uQfBjszH7Kb6Vthawtk8RYCo3
+         ZYz6eicpbT/KC8zEJQtnob7ZRuKwU8pfwakGC88KPDYRORNCDFipx8gzoJ1a3XkopGpU
+         TXXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Ellt6MjzLF5sLUldei4o9NxlFsmkksIJlVQvjDivSks=;
+        b=PuyIH9VMGSddWxhAYXJX4f8htLQwmHvA+YzBW4GmZdW9j6A2QhF9mLte+SLFwviAgS
+         TtiDp5yw0bft86oxNFflC3O9XN2guccCPXCc53iaA1q1hWoKfsRvLxED5AG37j4LB2A+
+         mkm7uPtoCDmREAGW1cL5dgP21CSCr/Q4IFkjrI8vixUl6z799FPhkX9AZieBtuZYaUp1
+         nlvW1fuYpNZ0A+OOBnuISdAmnocDt2D7yoTbp/EyjsDfQH40MydNQEPwKiiN+73QYAGw
+         xUzxzEG85Je7/TmnXNjF/UwefT+96KVsNzwSpY4XVgLkqI0s/qbMBXa5ZGzj7sK4nmuk
+         eoxg==
+X-Gm-Message-State: AOAM530baj9d0UUMAczJahtvRDglPOVp4zYYajL3QGZa+AnkeiLezUVo
+        F5iMP0kq9tixSfvJPdNELtl/gA==
+X-Google-Smtp-Source: ABdhPJyq6sRzUeRRegPHrbZlM4MOy++XyhVktPJ6AqBMtRYyZCcV2eNcaXx6iApBKxUIexhmB6lTPg==
+X-Received: by 2002:a54:4493:: with SMTP id v19mr2915886oiv.61.1641510560064;
+        Thu, 06 Jan 2022 15:09:20 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id n26sm574272ooc.48.2022.01.06.15.09.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 15:09:19 -0800 (PST)
+Date:   Thu, 6 Jan 2022 15:10:08 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     robdclark@gmail.com, sean@poorly.run, swboyd@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
+        agross@kernel.org, dmitry.baryshkov@linaro.org,
+        quic_abhinavk@quicinc.com, aravindh@codeaurora.org,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] drm/msm/dp:  populate connector of struct  dp_panel
+Message-ID: <Ydd20C+YP2w060Tn@ripper>
+References: <1641501894-17563-1-git-send-email-quic_khsieh@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1641501894-17563-1-git-send-email-quic_khsieh@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Laurent Dufour <ldufour@linux.ibm.com> writes:
-> Happy New Year, Michael!
->
-> Do you consider taking that patch soon?
+On Thu 06 Jan 12:44 PST 2022, Kuogee Hsieh wrote:
 
-I did but I was hoping you and Nathan could come to an agreement.
+> DP CTS test case 4.2.2.6 has valid edid with bad checksum on purpose
+> and expect DP source return correct checksum. During drm edid read,
+> correct edid checksum is calculated and stored at
+> connector::real_edid_checksum.
+> 
 
-Looks like you did while I was sleeping, perfect :)
+Interesting, thanks for adding this!
 
-I'll pick up v5.
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-cheers
+Regards,
+Bjorn
 
-
-> On 07/12/2021, 18:11:09, Laurent Dufour wrote:
->> The LPAR name may be changed after the LPAR has been started in the HMC.
->> In that case lparstat command is not reporting the updated value because it
->> reads it from the device tree which is read at boot time.
->> 
->> However this value could be read from RTAS.
->> 
->> Adding this value in the /proc/powerpc/lparcfg output allows to read the
->> updated value.
->> 
->> Cc: Nathan Lynch <nathanl@linux.ibm.com>
->> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
->> ---
->> v4:
->>  address Nathan's new comments limiting size of the buffer.
->> v3:
->>  address Michael's comments.
->> v2:
->>  address Nathan's comments.
->>  change title to partition_name aligning with existing partition_id
->> ---
->>  arch/powerpc/platforms/pseries/lparcfg.c | 54 ++++++++++++++++++++++++
->>  1 file changed, 54 insertions(+)
->> 
->> diff --git a/arch/powerpc/platforms/pseries/lparcfg.c b/arch/powerpc/platforms/pseries/lparcfg.c
->> index f71eac74ea92..058d9a5fe545 100644
->> --- a/arch/powerpc/platforms/pseries/lparcfg.c
->> +++ b/arch/powerpc/platforms/pseries/lparcfg.c
->> @@ -311,6 +311,59 @@ static void parse_mpp_x_data(struct seq_file *m)
->>  		seq_printf(m, "coalesce_pool_spurr=%ld\n", mpp_x_data.pool_spurr_cycles);
->>  }
->>  
->> +/*
->> + * PAPR defines, in section "7.3.16 System Parameters Option", the token 55 to
->> + * read the LPAR name, and the largest output data to 4000 + 2 bytes length.
->> + */
->> +#define SPLPAR_LPAR_NAME_TOKEN	55
->> +#define GET_SYS_PARM_BUF_SIZE	4002
->> +#if GET_SYS_PARM_BUF_SIZE > RTAS_DATA_BUF_SIZE
->> +#error "GET_SYS_PARM_BUF_SIZE is larger than RTAS_DATA_BUF_SIZE"
->> +#endif
->> +static void read_lpar_name(struct seq_file *m)
->> +{
->> +	int rc, len, token;
->> +	union {
->> +		char raw_buffer[GET_SYS_PARM_BUF_SIZE];
->> +		struct {
->> +			__be16 len;
->> +			char name[GET_SYS_PARM_BUF_SIZE-2];
->> +		};
->> +	} *local_buffer;
->> +
->> +	token = rtas_token("ibm,get-system-parameter");
->> +	if (token == RTAS_UNKNOWN_SERVICE)
->> +		return;
->> +
->> +	local_buffer = kmalloc(sizeof(*local_buffer), GFP_KERNEL);
->> +	if (!local_buffer)
->> +		return;
->> +
->> +	do {
->> +		spin_lock(&rtas_data_buf_lock);
->> +		memset(rtas_data_buf, 0, sizeof(*local_buffer));
->> +		rc = rtas_call(token, 3, 1, NULL, SPLPAR_LPAR_NAME_TOKEN,
->> +			       __pa(rtas_data_buf), sizeof(*local_buffer));
->> +		if (!rc)
->> +			memcpy(local_buffer->raw_buffer, rtas_data_buf,
->> +			       sizeof(local_buffer->raw_buffer));
->> +		spin_unlock(&rtas_data_buf_lock);
->> +	} while (rtas_busy_delay(rc));
->> +
->> +	if (!rc) {
->> +		/* Force end of string */
->> +		len = min((int) be16_to_cpu(local_buffer->len),
->> +			  (int) sizeof(local_buffer->name)-1);
->> +		local_buffer->name[len] = '\0';
->> +
->> +		seq_printf(m, "partition_name=%s\n", local_buffer->name);
->> +	} else
->> +		pr_err_once("Error calling get-system-parameter (0x%x)\n", rc);
->> +
->> +	kfree(local_buffer);
->> +}
->> +
->> +
->>  #define SPLPAR_CHARACTERISTICS_TOKEN 20
->>  #define SPLPAR_MAXLENGTH 1026*(sizeof(char))
->>  
->> @@ -496,6 +549,7 @@ static int pseries_lparcfg_data(struct seq_file *m, void *v)
->>  
->>  	if (firmware_has_feature(FW_FEATURE_SPLPAR)) {
->>  		/* this call handles the ibm,get-system-parameter contents */
->> +		read_lpar_name(m);
->>  		parse_system_parameter_string(m);
->>  		parse_ppp_data(m);
->>  		parse_mpp_data(m);
+> The problem is struct dp_panel::connector never be assigned, instead the
+> connector is stored in struct msm_dp::connector. When we run compliance
+> testing test case 4.2.2.6 dp_panel_handle_sink_request() won't have a valid
+> edid set in struct dp_panel::edid so we'll try to use the connectors
+> real_edid_checksum and hit a NULL pointer dereference error because the
+> connector pointer is never assigned.
+> 
+> Changes in V2:
+> -- populate panel connector at msm_dp_modeset_init() instead of at dp_panel_read_sink_caps()
+> 
+> Changes in V3:
+> -- remove unhelpful kernel crash trace commit text
+> -- remove renaming dp_display parameter to dp
+> 
+> Changes in V4:
+> -- add more details to commit text
+> 
+> Fixes: 7948fe12d47 ("drm/msm/dp: return correct edid checksum after corrupted edid checksum read")
+> Signee-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>  drivers/gpu/drm/msm/dp/dp_display.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index 3449d3f..40a059d 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -1499,6 +1499,7 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
+>  			struct drm_encoder *encoder)
+>  {
+>  	struct msm_drm_private *priv;
+> +	struct dp_display_private *dp_priv;
+>  	int ret;
+>  
+>  	if (WARN_ON(!encoder) || WARN_ON(!dp_display) || WARN_ON(!dev))
+> @@ -1507,6 +1508,8 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
+>  	priv = dev->dev_private;
+>  	dp_display->drm_dev = dev;
+>  
+> +	dp_priv = container_of(dp_display, struct dp_display_private, dp_display);
+> +
+>  	ret = dp_display_request_irq(dp_display);
+>  	if (ret) {
+>  		DRM_ERROR("request_irq failed, ret=%d\n", ret);
+> @@ -1524,6 +1527,8 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
+>  		return ret;
+>  	}
+>  
+> +	dp_priv->panel->connector = dp_display->connector;
+> +
+>  	priv->connectors[priv->num_connectors++] = dp_display->connector;
+>  	return 0;
+>  }
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+> 

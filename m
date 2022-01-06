@@ -2,96 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76CD2486A00
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5748A486A04
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:36:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242914AbiAFSd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 13:33:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56620 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242731AbiAFSd7 (ORCPT
+        id S242923AbiAFSgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 13:36:05 -0500
+Received: from smtp02.smtpout.orange.fr ([80.12.242.124]:52079 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242731AbiAFSgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 13:33:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8522C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 10:33:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39D0EB8205D
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 18:33:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F84CC36AEB;
-        Thu,  6 Jan 2022 18:33:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641494036;
-        bh=+XEjbfwoO8OLHSnfZYwgQrnldEDT5sKXi+2iaAXT/7E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S/TD3rX5YBISPIlLbiNdavtyjs/4LZDms0wX9+IYtKnopzmK5jmk5V0ugzxpGX5Ps
-         8RkivDuddzfuiciSragsCeE0msTUTOpWewFscITApM49bZDXF2Ue2CcTbcvqA+xz3w
-         bNjwTQ62ZyDEPpQNbZtufxrI9Bdnd5e6DYk1mO+lSFZtIZd4WYoayVxsK6/FiK7ne/
-         x0XcIzo4mzLqttiyLhsMY4QMsartzA/Jp7RGsxvI6BZJjoEsTVYLsNYKPyjsB22JjM
-         SVwfgMSUD/WG3rZEL3+ZwjE4a0Z8dXweeeRtXuHnKoVBWDFYXc1keK69c09VKTt1u2
-         AYGyg06bKt7Dw==
-Date:   Thu, 6 Jan 2022 18:33:52 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     matthias.schiffer@ew.tq-group.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] regmap: debugfs: Free debugfs_name buffer after usage
-Message-ID: <Ydc2EHf5f12w4YcW@sirena.org.uk>
-References: <20220106175019.3116389-1-festevam@gmail.com>
+        Thu, 6 Jan 2022 13:36:04 -0500
+Received: from [192.168.1.18] ([90.11.185.88])
+        by smtp.orange.fr with ESMTPA
+        id 5XcCn6oLyBazo5XcDn2y4b; Thu, 06 Jan 2022 19:36:03 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Thu, 06 Jan 2022 19:36:03 +0100
+X-ME-IP: 90.11.185.88
+Message-ID: <edd19014-3b99-fa0b-912b-e058c14401d8@wanadoo.fr>
+Date:   Thu, 6 Jan 2022 19:35:56 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oNEgbt41o7xMIY3M"
-Content-Disposition: inline
-In-Reply-To: <20220106175019.3116389-1-festevam@gmail.com>
-X-Cookie: I think we're in trouble.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH] fsi: Aspeed: Fix a potential double free
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     kernel-janitors@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        alistair@popple.id.au, linux-kernel@vger.kernel.org,
+        linux-fsi@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
+References: <2cafa0607ca171ebd00ac6c7e073b46808e24f00.1640537669.git.christophe.jaillet@wanadoo.fr>
+ <YcldM9sgYdjMYMtH@kroah.com> <20220106081418.GH7674@kadam>
+ <f2ba50fd-5c6b-e905-17ed-541dcc98c6c1@roeck-us.net>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <f2ba50fd-5c6b-e905-17ed-541dcc98c6c1@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Le 06/01/2022 à 18:25, Guenter Roeck a écrit :
+> On 1/6/22 12:14 AM, Dan Carpenter wrote:
+>> On Mon, Dec 27, 2021 at 07:29:07AM +0100, Greg KH wrote:
+>>> On Sun, Dec 26, 2021 at 05:56:02PM +0100, Christophe JAILLET wrote:
+>>>> 'aspeed' is a devm_alloc'ed, so there is no need to free it 
+>>>> explicitly or
+>>>> there will be a double free().
+>>>
+>>> A struct device can never be devm_alloced for obvious reasons.  Perhaps
+>>> that is the real problem here?
+>>>
+>>
+>> I don't understand how "aspeed" is a struct device.
+>>
+> 
+> -static void aspeed_master_release(struct device *dev)
+> -{
+> -    struct fsi_master_aspeed *aspeed =
+> -        to_fsi_master_aspeed(dev_to_fsi_master(dev));
+> -
+> -    kfree(aspeed);
+> -}
+> 
+> So "dev" is embedded in struct fsi_master, and struct fsi_master is 
+> embedded
+> in struct fsi_master_aspeed. Since "struct device" is embedded, the data
+> structure embedding it must be released with the release function, as is 
+> done
+> here. The problem is indeed that the data structure is allocated with
+> devm_kzalloc(), which as Greg points out must not be devm_ allocated
+> (because its lifetime does not match the lifetime of devm_ allocated
+> memory).
 
---oNEgbt41o7xMIY3M
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks a lot for the detailed explanation.
+Crystal clear for me now.
 
-On Thu, Jan 06, 2022 at 02:50:19PM -0300, Fabio Estevam wrote:
+Do you want me to send a patch to remove the devm_ or will you?
 
-> The reason for the duplicate name is that map->debugfs_name is never freed,
-> which can cause a directory to be created with the same name used in the
-> previous debugfs entry allocation.
+CJ
 
-> Fix this problem by freeing map->debugfs_name and setting it to NULL
-> after its usage.
+> 
+>> I've been working on understanding device managed memory recently for
+>> Smatch.  It's really complicated.  There are a bunch of rules/heuristics
+>> that I'm slowly creating to generate new warnings but I'm a long way
+>> from understanding it well myself.
+>>
+> 
+> A data structure embedding struct device must not be devm_ allocated,
+> and it must be released with the release callback. Maybe there is
+> a means to flag that somehow ?
+> 
+> Guenter
+> 
 
-OK, but what's the logic here?  The name is getting thrown away here but
-clearly there is a file still so I'm not seeing how anything is going to
-clean that file up.  That means that if the device gets freed we'll end
-up with the old debugfs file hanging around pointing at nothing.  Like I
-said (originally in response to Matthias' patch but pasted in this
-thread as well):
-
-| (we should probably clean up the one with no device but that's not what
-| your commit does).  I think what you need to look at here is that we
-
-The use after free extends beyond just the filename, we're also loosing
-track of the already created file, which does seem to be an existing
-bug.  To be more explicit this means we need a call to regmap_debugfs_exit()
-which will clean up all the existing debugfs stuff before we loose
-references to it.
-
---oNEgbt41o7xMIY3M
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHXNg8ACgkQJNaLcl1U
-h9AczQf+MWrIXa2mSNXhkoiFt3mCkFFC/wxFGchHjw6pGzL66+e5JdeHDqa2EjWH
-WjDlxHsv+5zWF6tiJT4c5oNZNE3MYpHp63SMkIKnlCow4KLYcuTQtk3Lxz+nPzGF
-PoMiIPG387pXVxP1DvNfzOHqXfLXPllVHs2AlEKPTpd7v2gAgvexZjMnVD9SMBb2
-7hMSdaroeULHWTTlvnuI+b3mEV2OmP1A8ApiPwByaSANgLBtnIg5wyrzWMJ6CRXM
-yxSDc0krbxQnaBAdGBAZN//R3KLU5h4c55gDu5NlK4GnxKEgcY0l4adfyL9in9ZL
-V9xV/7AMSR/pVKhu8lZfB5TNiLe+4Q==
-=qp/v
------END PGP SIGNATURE-----
-
---oNEgbt41o7xMIY3M--

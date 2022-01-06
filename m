@@ -2,205 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9393D4869D3
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:25:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5937E4869DC
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:27:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242932AbiAFSZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 13:25:48 -0500
-Received: from mout.gmx.net ([212.227.17.20]:40229 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242804AbiAFSZh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 13:25:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1641493525;
-        bh=mC8sD6/rtcD8JtEMZrKMAq28bMVHVi0Aa915QHg3OCE=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=B4q2c5Bx81oslkkmHZ5q9K/Wd/pgyZYZWjPvU6uQ7S3zCZkYWrs5eqSMbROjWHIfq
-         Ghq/eyAjJTbsTWXACRy00x06uD4hoVLP1aL7Ne3gbeRLcCItYOARB42XaRe+9kYzOm
-         IPZfvIQ5jQaxRlPsvGqHQCeG+GsI/Wxw7PuZsshE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [91.65.60.26] ([91.65.60.26]) by web-mail.gmx.net
- (3c-app-gmx-bap38.server.lan [172.19.172.108]) (via HTTP); Thu, 6 Jan 2022
- 19:25:25 +0100
+        id S242883AbiAFS07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 13:26:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54780 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243061AbiAFS0N (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 13:26:13 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6FEC034004
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 10:26:13 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id s6so4247278ioj.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 10:26:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cEePo0A7WHWrnyag19ujaD72v/1Fwgdi8AhN3U4zmn4=;
+        b=GyONKi3dyoK/bVjT7TNjaddSrAe2FBg0MqkBT5V1RNvfLIheuspaUVLyX2nBLBwzHC
+         g4J36kOL48BzfrJdH+erkzTnrB4AN933FO5MSkGZeHyni0TyRsXBa4nppQLfouWscgFD
+         Xyuka+7riIsoXfxLxDIci0wVDm9Yw+eddCZQiTCHOzFBaLLrByo98ilp1bRjeMtdAuz5
+         GWKNLdXt2//PqeQvBijCD5i9q2jxWm97gC8yC8GCyzZQGX66wOM8SN/TZXdns2AsPEyD
+         xuAmCbdLMKm3f1vlsf9yWJU+91XTGe+3IRXOcbIHSidnVdME7Pb0svmTLOouWzd8jcr5
+         n01A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cEePo0A7WHWrnyag19ujaD72v/1Fwgdi8AhN3U4zmn4=;
+        b=Ze+G32WLfQ1UGcuKGDe9O8I7n1RYNxUzQcxciFvIT99gAzffbWvDRWcZCIiMbDUOLX
+         m0Q3hZiSakKijbpAsdd9/nMNfEQU2KTQp6WNoUpdWREh6YKbusySFoxmWvCllpl/B95O
+         A1PtCai6r97kiQYzT6Xbf0p9Gj3xiIhIJpiC2u7xJSeswKBl2s8eqXtvVP2LQ5kZaOHQ
+         PZFw3qRxCDuyuFyhdxzQJFCPzNTlMyMQO5Uo16kby2Aq3ywI+1+FcH3Pox5JGYvbrXy4
+         3pcP5oUYeuaxejvkuFGZgI8lCHmvn1r6wT9zP5r95QyuJcr55ob3tw/N85LfnY5NKDjw
+         0ZMA==
+X-Gm-Message-State: AOAM530pEyhNqIJTakoKUQn70azW6CKFX2tkn8EAbD/xLb8kWYO29HN3
+        C9bGT9tQ84DbKXsBAaGwk85sOSG/WJJF2g2BX0Zing==
+X-Google-Smtp-Source: ABdhPJwpqiavJjQnNN1lJnXMEuQDSftQJ9vHHePZDWQzyx8IJ0gLnhDIsC/JAPTri4EYrttHy8cHs9V+Y/M5sOIgpaQ=
+X-Received: by 2002:a02:b384:: with SMTP id p4mr26804990jan.167.1641493572689;
+ Thu, 06 Jan 2022 10:26:12 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <trinity-59d726d3-993c-43c9-9e44-5be5cdfae74d-1641493525223@3c-app-gmx-bap38>
-From:   Robert Schlabbach <Robert.Schlabbach@gmx.net>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Antti Palosaari <crope@iki.fi>, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH 2/3] media: si2157: add support for 1.7MHz and 6.1 MHz
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 6 Jan 2022 19:25:25 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <trinity-b5cc1284-ccc2-477c-ac90-56ee40da91af-1641483579446@3c-app-gmx-bs50>
-References: <cover.1639140967.git.mchehab+huawei@kernel.org>
- <76c2ea87882c87bd35066a85cb48292a36a79fce.1639140967.git.mchehab+huawei@kernel.org>
- <trinity-b5cc1284-ccc2-477c-ac90-56ee40da91af-1641483579446@3c-app-gmx-bs50>
-Content-Transfer-Encoding: quoted-printable
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:kIiuH7K4RPeU4wYVbB2/6TWJKHpFJwHBqKitCCeSTmdBvilKvklwlFZpYJY6gfJN5w2K+
- UbWN8Kijohb8z5ZV4HAXyObOZjgUKcRkWmc5W38UPFvmyVENcoWUkPqTvtLsCzbk0XddCRQPODiC
- piPVzeyo5DM1OUM23PJlZwh2JIctcVB2lxRKQPcB7+jj/9TRnmii2/OLvuSTmkPQoxq/l6eR811Y
- FHiv/JWtWOSwMEmUdYjbrVf/x06UWBRDdbmcVaJrnElkyF27K3fo1ZjHssDN9OVBLdKMUtyCCN9W
- Rg=
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2wmkk7kkf1k=:ecIAMKYQp7bOuIK+ImVpuh
- Z66eOQ9coWpZ9jrkudeek7EgWnniUO+fi1WDLr3UQWwYjGLS0TDmBdFerd00W1lrm2k32QFgK
- 29eyj9CebzopuvrDoMoJcZKuZ//GPegSfcS7DQfkD0fficxlYu/DVdcHzmgOaTbgpTAwsFRFH
- a6ArstouscTwUkRAvgZQ7M8ULsvcnaT4dW2zbpO2bprBP3VTIDDLI5/T8OhRUInwHco9jrGDa
- nNL9BzMR+sN9rkIy5qYfs3/WDVlj1y1HNiQzW/EnWJe4jCv6mzcmM4kAPkBxtkmgsH6226SmQ
- YeBVcsE4C7zd/Yxf3lOKQNt6hiK+pYkApFK1u0K0Z6bKovPbtDd4ABgdJOpKjCU7xfKErog9V
- dfY8VFrTVExi6FxKneDEZOaHhIQSIVVyltdbLKzaHLde0exRv4VqPQAi+jKw2YXWFZfrkjCsS
- +hB52dq998NQ16iLH4TrZCwvBpd2V2FDODa/D6c6CN4yxCPHZk4GYUsIaFTCenkKOvmdhDiVU
- LfTM5dyIQeL/xwWMmLm2nVvGS/DBRwmvZqra9QfW4QBBY4LBm1Ji+Tq23JA0lJECsal7A+afP
- /DBgmg2cojwHHAsJEp1ALa+Ia125W509VoYwqlftkomugtCFsUlReUiEsDgFd7jdB4phRwJmH
- DEHiRAu99Y1DzngPhZGvcmOUeCnz3RefnyW9NA7XAf65Bh64dRRE5I1e3lr+0tx3ndfvYe6hw
- Us7gq5upjBGAY6LTPWGAr8sl2g5TJXkOPegVlZWzf7ut++hDxESyR+B7gyiXx2uiJuf8O/Ds3
- 8UOG0kW
+References: <20220104021729.111006-1-mike.kravetz@oracle.com>
+ <CAJHvVci5sSC-1TEiCBKe8uKQ=0uwCsoBJT_fsG1Rfq6ffy6Obg@mail.gmail.com>
+ <20220105155613.45d7dcb81e19bd42deefab79@linux-foundation.org> <92ad1cf1-cd73-c3f8-44b6-6eb917b94693@oracle.com>
+In-Reply-To: <92ad1cf1-cd73-c3f8-44b6-6eb917b94693@oracle.com>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Thu, 6 Jan 2022 10:25:36 -0800
+Message-ID: <CAJHvVchqFiYMAvTkYZpQ0j6CYFRdzOgBB=CESf06NUbongPbEw@mail.gmail.com>
+Subject: Re: [PATCH] userfaultfd/selftests: clean up hugetlb allocation code
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>, Peter Xu <peterx@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It turns out there are actually two bugs in there:
-=C2=A0
-+ if (SUPPORTS_1700KHz(dev) && c->bandwidth_hz <=3D 6100000)
-+ bandwidth =3D 0x10;
+On Thu, Jan 6, 2022 at 9:43 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+>
+> On 1/5/22 15:56, Andrew Morton wrote:
+> > On Tue, 4 Jan 2022 14:35:34 -0800 Axel Rasmussen <axelrasmussen@google.com> wrote:
+> >
+> >> On Mon, Jan 3, 2022 at 6:17 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+> >>>
+> >>> The message for commit f5c73297181c ("userfaultfd/selftests: fix hugetlb
+> >>> area allocations") says there is no need to create a hugetlb file in the
+> >>> non-shared testing case.  However, the commit did not actually change
+> >>> the code to prevent creation of the file.
+> >>>
+> >>> While it is technically true that there is no need to create and use a
+> >>> hugetlb file in the case of non-shared-testing, it is useful.  This is
+> >>> because 'hole punching' of a hugetlb file has the potentially incorrect
+> >>> side effect of also removing pages from private mappings.  The
+> >>> userfaultfd test relies on this side effect for removing pages from the
+> >>> destination buffer during rounds of stress testing.
+> >>>
+> >>> Remove the incomplete code that was added to deal with no hugetlb file.
+> >>> Just keep the code that prevents reserves from being created for the
+> >>> destination area.
+> >>>
+> >>>         *alloc_area = mmap(NULL, nr_pages * page_size, PROT_READ | PROT_WRITE,
+> >>> -                          map_shared ? MAP_SHARED :
+> >>> -                          MAP_PRIVATE | MAP_HUGETLB |
+> >>> +                          (map_shared ? MAP_SHARED : MAP_PRIVATE) |
+> >>> +                          MAP_HUGETLB |
+> >>>                            (*alloc_area == area_src ? 0 : MAP_NORESERVE),
+> >>> -                          huge_fd,
+> >>> -                          *alloc_area == area_src ? 0 : nr_pages * page_size);
+> >>> +                          huge_fd, *alloc_area == area_src ? 0 :
+> >>> +                          nr_pages * page_size);
+> >>
+> >> Sorry to nitpick, but I think it was slightly more readable when the
+> >> ternary was all on one line.
+> >
+> > When you have that many arguments I think it's clearer to put one per
+> > line, viz.
+> >
+> >       *alloc_area = mmap(NULL,
+> >                          nr_pages * page_size,
+> >                          PROT_READ | PROT_WRITE,
+> >                          (map_shared ? MAP_SHARED : MAP_PRIVATE) |
+> >                               MAP_HUGETLB |
+> >                               (*alloc_area == area_src ? 0 : MAP_NORESERVE),
+> >                          huge_fd,
+> >                          *alloc_area == area_src ? 0 : nr_pages * page_size);
+> >
+> >
+> > But whatever...
+> I agree, and also agree with Axel's comment about keeping the ternary all on
+> one line.  However, there are examples of breaking both these conventions throughout the file.
 
-The si2157 code for bandwidth 6=2E1MHz is _decimal_ 10, not
-hexadecimal 0x10=2E Removing the "0x" from the above line makes
-the tuner work again, even with the other bug that makes it use
-the 6=2E1MHz setting when 6MHz is requested=2E
+For what it's worth, I don't at all mind Andrew's way either, where
+the two "outcomes" of the ternary are indented a bit.
 
-Another issue with the bandwidth setting: The si2157 code is
-also stored in dev->bandwidth and returned in the get_bandwidth()
-call=2E Now this was not well before, because the call is supposed
-to return the bandwidth in Hz, not in MHz, but now it can return
-9 and 10, but those do not correspond to 9 and 10MHz=2E
+Not a big deal though, whatever you'd prefer is fine. :)
 
-Also, the default case uses si2157 code 0x0f, which also seems
-like a bad idea=2E
+>
+> My intention here was just to clean up the mess I created with the previous
+> patch.  As such, I would prefer to leave this patch as is.  If someone really
+> wants this modified, I will.  However, IMO if we make this one call easier
+> to read, we should use the same convention throughout the file.  I can do that
+> as well, but would prefer to first try to enable using mremap with hugetlb
+> within the test.
 
-And another, unrelated issue: The delivery_system switch is
-missing case DVBC_ANNEX_C, even though it should operate just as
-DVBC_ANNEX_A=2E
++1, sounds like a good plan.
 
-I'll see if I can come up with a patch which addresses all of the
-above=2E
-
-Best Regards,
--Robert Schlabbach=C2=A0
-
-
-Gesendet:=C2=A0Donnerstag, 06=2E Januar 2022 um 16:39 Uhr
-Von:=C2=A0"Robert Schlabbach" <Robert=2ESchlabbach@gmx=2Enet>
-An:=C2=A0"Mauro Carvalho Chehab" <mchehab+huawei@kernel=2Eorg>
-Cc:=C2=A0mauro=2Echehab@huawei=2Ecom, "Antti Palosaari" <crope@iki=2Efi>, =
-linux-kernel@vger=2Ekernel=2Eorg, linux-media@vger=2Ekernel=2Eorg
-Betreff:=C2=A0Re: [PATCH 2/3] media: si2157: add support for 1=2E7MHz and =
-6=2E1 MHz
-
-Sorry for the late test and response, but there is a BAD BUG in this patch=
-:
-=C2=A0
-+ if (SUPPORTS_1700KHz(dev) && c->bandwidth_hz <=3D 1700000)
-+ bandwidth =3D 0x09;
-if (c->bandwidth_hz <=3D 6000000)
-bandwidth =3D 0x06;
-+ if (SUPPORTS_1700KHz(dev) && c->bandwidth_hz <=3D 6100000)
-+ bandwidth =3D 0x10;
-else if (c->bandwidth_hz <=3D 7000000)
-bandwidth =3D 0x07;
-else if (c->bandwidth_hz <=3D 8000000)
-
-The additions omitted the "else", which resulted in the bandwidth setting =
-for
-6MHz being overwritten with the one for 6=2E1MHz - and that completely bre=
-aks
-6MHz channels, as the tuner then refuses to accept the tune command!
-
-As a result, e=2Eg=2E MCNS aka ClearQAM aka DVB-C Annex B no longer works =
-after
-this patch=2E
-
-I don't know if the 1=2E7Mhz and 6=2E1MHz settings are even usable, if the=
- tuner
-(in my case, the Si2157-A30) then no longer accepts the tune command=2E Ma=
-ybe
-they're not suited for frequency-based tuning, but only for channel-based
-tuning? That would not fit the DVB-API, I think=2E
-
-And the 1=2E7MHz bandwidth setting currently can't do any harm, as it is a=
-lways
-overwritten by the 6MHz bandwidth setting, also due to an "else" missing=
-=2E
-
-Best Regards,
--Robert Schlabbach
-=C2=A0
-=C2=A0
-
-Gesendet:=C2=A0Freitag, 10=2E Dezember 2021 um 13:59 Uhr
-Von:=C2=A0"Mauro Carvalho Chehab" <mchehab+huawei@kernel=2Eorg>
-An:=C2=A0unlisted-recipients:;
-Cc:=C2=A0linuxarm@huawei=2Ecom, mauro=2Echehab@huawei=2Ecom, "Mauro Carval=
-ho Chehab" <mchehab+huawei@kernel=2Eorg>, "Antti Palosaari" <crope@iki=2Efi=
->, "Mauro Carvalho Chehab" <mchehab@kernel=2Eorg>, linux-kernel@vger=2Ekern=
-el=2Eorg, linux-media@vger=2Ekernel=2Eorg
-Betreff:=C2=A0[PATCH 2/3] media: si2157: add support for 1=2E7MHz and 6=2E=
-1 MHz
-Some tuners allow setting the bandwidth filter to 1=2E7MHz and
-6=2E1 MHz=2E Add support for it upstream, as the narrower is the
-bandwidth filter, the better=2E
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel=2Eorg>
----
-
-To avoid mailbombing on a large number of people, only mailing lists were =
-C/C on the cover=2E
-See [PATCH 0/3] at: https://lore=2Ekernel=2Eorg/all/cover=2E1639140967=2Eg=
-it=2Emchehab+huawei@kernel=2Eorg/
-
-drivers/media/tuners/si2157=2Ec | 4 ++++
-drivers/media/tuners/si2157_priv=2Eh | 5 +++++
-2 files changed, 9 insertions(+)
-
-diff --git a/drivers/media/tuners/si2157=2Ec b/drivers/media/tuners/si2157=
-=2Ec
-index aeecb38b147f=2E=2E2d3937af4f5f 100644
---- a/drivers/media/tuners/si2157=2Ec
-+++ b/drivers/media/tuners/si2157=2Ec
-@@ -458,8 +458,12 @@ static int si2157_set_params(struct dvb_frontend *fe)
-goto err;
-}
-
-+ if (SUPPORTS_1700KHz(dev) && c->bandwidth_hz <=3D 1700000)
-+ bandwidth =3D 0x09;
-if (c->bandwidth_hz <=3D 6000000)
-bandwidth =3D 0x06;
-+ if (SUPPORTS_1700KHz(dev) && c->bandwidth_hz <=3D 6100000)
-+ bandwidth =3D 0x10;
-else if (c->bandwidth_hz <=3D 7000000)
-bandwidth =3D 0x07;
-else if (c->bandwidth_hz <=3D 8000000)
-diff --git a/drivers/media/tuners/si2157_priv=2Eh b/drivers/media/tuners/s=
-i2157_priv=2Eh
-index df17a5f03561=2E=2E24849c8ed398 100644
---- a/drivers/media/tuners/si2157_priv=2Eh
-+++ b/drivers/media/tuners/si2157_priv=2Eh
-@@ -66,6 +66,11 @@ struct si2157_cmd {
-unsigned rlen;
-};
-
-+#define SUPPORTS_1700KHz(dev) (((dev)->part_id =3D=3D SI2141) || \
-+ ((dev)->part_id =3D=3D SI2147) || \
-+ ((dev)->part_id =3D=3D SI2157) || \
-+ ((dev)->part_id =3D=3D SI2177))
-+
-/* Old firmware namespace */
-#define SI2158_A20_FIRMWARE "dvb-tuner-si2158-a20-01=2Efw"
-#define SI2141_A10_FIRMWARE "dvb-tuner-si2141-a10-01=2Efw"
---
-2=2E33=2E1
-=C2=A0
+> --
+> Mike Kravetz

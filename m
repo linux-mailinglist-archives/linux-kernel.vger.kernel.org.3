@@ -2,74 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49CAF48649C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 13:51:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE454864A9
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 13:58:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239082AbiAFMvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 07:51:48 -0500
-Received: from mail.wizzup.org ([95.217.97.174]:45560 "EHLO wizzup.org"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229795AbiAFMvr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 07:51:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wizzup.org;
-        s=mail; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:
-        Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=nxhH/ukA9KWfY1p+zkFD+7VrSnCLJzCz3XNlG4Obn3w=; b=IvmV79CkASz7lYETsk4Z/zNT3g
-        +/xWGuiHSS9+cmLLkodm18hu5EMb3afWn5eZGkdOC0AliZQdFBTyv+S8r8VjJ7zJ2U2zH3keizYpF
-        FuxjokRZWtSRq7MzAJndfpwSfedgi9ojTfiitiwNySC8BWlkChl+wvstWdYaJtVy9SDW0bW8t6zPx
-        mr4mBP7L7548WHnXdrsnIXcUMwcjuYc3D4BGcjPCG1HWOPCDMJ1iAx0lONQBnDMfQwKwvOIY1Eu/j
-        p3PEriurY3/8Ep3pG7LlHvEYCR8DXA/29WmcKjUAZzXxBMkdGXHRRESqmADXnFHvyCOzsiP44vjFz
-        W86gE3/w==;
-Received: from [45.83.235.159] (helo=[0.0.0.0])
-        by wizzup.org with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <merlijn@wizzup.org>)
-        id 1n5SF2-00046Q-S3; Thu, 06 Jan 2022 12:51:40 +0000
-Subject: Re: [Openpvrsgx-devgroup] [PATCH] drm: omapdrm: Fix implicit dma_buf
- fencing
-To:     Tony Lindgren <tony@atomide.com>,
-        OpenPVRSGX Linux Driver Group <openpvrsgx-devgroup@letux.org>,
-        Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-Cc:     tomba@kernel.org, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, philipp@uvos.xyz, airlied@linux.ie,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        daniel@ffwll.ch, linux-omap@vger.kernel.org,
-        linux-media@vger.kernel.org
-References: <1641397018-29872-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
- <Yda6VhRLHw06yVst@atomide.com>
-From:   Merlijn Wajer <merlijn@wizzup.org>
-Message-ID: <7edd09bf-7f2c-3ffd-b3ee-c0daaf0d6e37@wizzup.org>
-Date:   Thu, 6 Jan 2022 13:51:39 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S239102AbiAFM6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 07:58:02 -0500
+Received: from outbound-smtp30.blacknight.com ([81.17.249.61]:57559 "EHLO
+        outbound-smtp30.blacknight.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239070AbiAFM6B (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 07:58:01 -0500
+Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
+        by outbound-smtp30.blacknight.com (Postfix) with ESMTPS id 8CB8ABABCE
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 12:58:00 +0000 (GMT)
+Received: (qmail 5988 invoked from network); 6 Jan 2022 12:58:00 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.197.169])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 6 Jan 2022 12:58:00 -0000
+Date:   Thu, 6 Jan 2022 12:57:58 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     DaeRo Lee <skseofh@gmail.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/vmscan.c: no need to double-check if free pages are
+ under high-watermark
+Message-ID: <20220106125758.GY3366@techsingularity.net>
+References: <20220102033129.12913-1-skseofh@gmail.com>
+ <20220106094650.GX3366@techsingularity.net>
+ <CAATEi5=Cmt__5mQLcis5dO9ncc5nyQgiGD22UXtLsgJH5ZbwkA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <Yda6VhRLHw06yVst@atomide.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <CAATEi5=Cmt__5mQLcis5dO9ncc5nyQgiGD22UXtLsgJH5ZbwkA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 06/01/2022 10:45, Tony Lindgren wrote:
-> * Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com> [220105 15:38]:
->> Fix that by initializing dma_buf resv to the resv of the gem object being
->> exported.
+On Thu, Jan 06, 2022 at 09:03:34PM +0900, DaeRo Lee wrote:
+> > > @@ -4355,7 +4355,7 @@ static enum zone_type kswapd_highest_zoneidx(pg_data_t *pgdat,
+> > >  static void kswapd_try_to_sleep(pg_data_t *pgdat, int alloc_order, int reclaim_order,
+> > >                               unsigned int highest_zoneidx)
+> > >  {
+> > > -     long remaining = 0;
+> > > +     long remaining = ~0;
+> > >       DEFINE_WAIT(wait);
+> > >
+> > >       if (freezing(current) || kthread_should_stop())
+> >
+> > While this does avoid calling prepare_kswapd_sleep() twice if the pgdat
+> > is balanced on the first try, it then does not restore the vmstat
+> > thresholds and doesn't call schedul() for kswapd to go to sleep.
 > 
-> Nice find! This also fixes my wlroots test case with termite running on
-> sway where termite would only partially update when switching between
-> desktops, so:
+> I intended not to call prepare_kswapd_sleep() twice when the pgdat is NOT
+> balanced on the first try:)
 > 
-> Tested-by: Tony Lindgren <tony@atomide.com>
 
-You can also add my:
+Stupid typo on my part.
 
-Tested-by: Merlijn Wajer <merlijn@wizzup.org>
+> > @@ -4406,11 +4412,11 @@ static void kswapd_try_to_sleep(pg_data_t *pgdat, int alloc_order, int reclaim_o
+> >         }
+> >
+> >         /*
+> > -        * After a short sleep, check if it was a premature sleep. If not, then
+> > -        * go fully to sleep until explicitly woken up.
+> > +        * If balanced to the high watermark, restore vmstat thresholds and
+> > +        * kswapd goes to sleep. If kswapd remains awake, account whether
+> > +        * the low or high watermark was hit quickly.
+> >          */
+> > -       if (!remaining &&
+> > -           prepare_kswapd_sleep(pgdat, reclaim_order, highest_zoneidx)) {
+> > +       if (balanced) {
+> >                 trace_mm_vmscan_kswapd_sleep(pgdat->node_id);
+> >
+> >                 /*
+> 
+> But, I think what you did is more readable and nice.
+> Thanks!
+> 
 
-Cheers,
-Merlijn
+Feel free to pick it up, rerun your tests to ensure it's behaving as
+expected and resend! Include something in the changelog about user-visible
+effects if any (or a note saying that it reduces unnecssary overhead)
+and resend with me added to the cc.
+
+> > > @@ -4331,7 +4331,7 @@ static int balance_pgdat(pg_data_t *pgdat, int order, int highest_zoneidx)
+> > >       /*
+> > >        * Return the order kswapd stopped reclaiming at as
+> > >        * prepare_kswapd_sleep() takes it into account. If another caller
+> > > -      * entered the allocator slow path while kswapd was awake, order will
+> > > +      * entered the allqocator slow path while kswapd was awake, order will
+> > >        * remain at the higher level.
+> > >        */
+> > >       return sc.order;
+> >
+> > This hunk just adds a typo, drop it.
+> 
+> Sorry about that;;
+
+No need to be sorry, it happens :)
+
+Thanks!
+
+-- 
+Mel Gorman
+SUSE Labs

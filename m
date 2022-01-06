@@ -2,59 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BBCC4867C7
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F564867C8
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:39:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241336AbiAFQiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 11:38:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57784 "EHLO
+        id S241344AbiAFQjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 11:39:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241317AbiAFQiM (ORCPT
+        with ESMTP id S241313AbiAFQjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 11:38:12 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA53DC061201
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 08:38:11 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id g79-20020a9d12d5000000b0058f08f31338so3706202otg.2
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 08:38:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=1kQ3eDdhnxCQwAfzT9bsx6Py44Jw3Hg7SXX1XBgnPlY=;
-        b=Xc1evd/a26dwvbsfAWOAfJlrqznHqKWOEYSDs55w4P2a9zmLXkXNHZJgOBFN0DQ+Nr
-         mLp/UZiWDq3OlyqHEKK6+rPb8OQfdxEhR4wwiGj0BxZqUNPc6XRnySLdxtNipR3Zm9KD
-         loFpTB/8Vn9Vxxvn7gXC2lPfFljgz1dJPnRB7SBmErkMeW2Th589kliOzTH96ZDij2Yl
-         LWJaE2vsoLJbPpQXZm8B274wgINLIAK2cr9W4PnMQBdtdpn16NtbhGli+WSuv0RqtEZX
-         Vl0ppLLsEGL5swGSvk2X4F/kc+oL9PJuu9MGdzfBTXjeMJI3zJ94CaeM3JohDhgrPz4i
-         cBng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=1kQ3eDdhnxCQwAfzT9bsx6Py44Jw3Hg7SXX1XBgnPlY=;
-        b=C7/8QmN/VeiUHJU+qZicTj6+j7jOFo4uXsrRYLCIDiSpuCXtOH6V7MrOJLbbNQKXTV
-         vGARZc50QqXI2ot+a3PqEMt5/lYoZrLsm+fImo+kwI3qxVXkdDRNOq1taf8WA5WH8Ve9
-         n3dE9LZgohju9pL2s7i6PVo+t30f9szmMJQ5eNLVh3EuqppUHcGZ6n2rgv3dfS6jcpB8
-         J56m2C64qAdO3rrShxCnHnS1PtormDQvLpvWadiS824FjrXIoO3HEyoGEIdGQli3XB9v
-         QxfRBIcP+EtFrJJMEKvdARoTk9z8Ej9iutDahiAZRGSQ/F8A+VBsv11hX0Gw7fA1sdYV
-         7ITQ==
-X-Gm-Message-State: AOAM530J820hYymKZ3oHg+qY2TfyXUL9jCOgFuSLIPgbH9wBA3qs0hyr
-        TkvwEFS1eH2cEviZOv0V4hUtxc/bj1FrlT/jnGI=
-X-Google-Smtp-Source: ABdhPJySwE13s+imLGE5frX3kp72DpnVQbkiD4zPHWmjxoPbWn5g9YNPTf5Iu8J1Keho4ujHVqxUPurjoWf4Ton/OWY=
-X-Received: by 2002:a9d:2cd:: with SMTP id 71mr41244999otl.107.1641487091157;
- Thu, 06 Jan 2022 08:38:11 -0800 (PST)
+        Thu, 6 Jan 2022 11:39:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B757C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 08:39:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CC4761D18
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 16:39:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79C3BC36AEB;
+        Thu,  6 Jan 2022 16:39:12 +0000 (UTC)
+Date:   Thu, 6 Jan 2022 11:39:11 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>
+Cc:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <dietmar.eggemann@arm.com>, <bsegall@google.com>,
+        <mgorman@suse.de>, <bristot@redhat.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH -next] sched: Use struct_size() helper in
+ task_numa_group()
+Message-ID: <20220106113911.6ffb7fd0@gandalf.local.home>
+In-Reply-To: <20211221132138.49464-1-xiujianfeng@huawei.com>
+References: <20211221132138.49464-1-xiujianfeng@huawei.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Received: by 2002:a05:6839:2802:0:0:0:0 with HTTP; Thu, 6 Jan 2022 08:38:10
- -0800 (PST)
-Reply-To: mr.damitartpaullarenoel2022@gmail.com
-From:   "Mr. Damitart Paul Lare" <damitartdamitart4000@gmail.com>
-Date:   Thu, 6 Jan 2022 08:38:10 -0800
-Message-ID: <CAKzORxFNVu9qtNSc_7nrRHayxkBtHg9qfSoeJ__ZjjQsBdJ4ww@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings and how are you doing today?
+On Tue, 21 Dec 2021 21:21:38 +0800
+Xiu Jianfeng <xiujianfeng@huawei.com> wrote:
+
+> Make use of struct_size() helper instead of an open-coded calculation.
+> There is no functional change in this patch.
+
+I'm all for this clean up, but...
+
+> 
+> Link: https://github.com/KSPP/linux/issues/160
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> ---
+>  kernel/sched/fair.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+> 
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 095b0aa378df..265e37be0c92 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -2437,11 +2437,8 @@ static void task_numa_group(struct task_struct *p, int cpupid, int flags,
+>  	int i;
+>  
+>  	if (unlikely(!deref_curr_numa_group(p))) {
+> -		unsigned int size = sizeof(struct numa_group) +
+> -				    NR_NUMA_HINT_FAULT_STATS *
+> -				    nr_node_ids * sizeof(unsigned long);
+> -
+> -		grp = kzalloc(size, GFP_KERNEL | __GFP_NOWARN);
+> +		grp = kzalloc(struct_size(grp, faults, NR_NUMA_HINT_FAULT_STATS * nr_node_ids),
+> +			      GFP_KERNEL | __GFP_NOWARN);
+
+Ug, the above is so ugly. Why remove the size variable?
+
+		unsigned int size  = struct_size(grp, faults,
+					         NR_NUMA_HINT_FAULT_STATS * nr_node_ids);
+
+-- Steve
+
+
+>  		if (!grp)
+>  			return;
+>  
+

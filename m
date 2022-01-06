@@ -2,78 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6A4486BAC
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:10:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 254A2486BB2
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:13:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244131AbiAFVKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 16:10:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35862 "EHLO
+        id S244151AbiAFVNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 16:13:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244039AbiAFVKg (ORCPT
+        with ESMTP id S244039AbiAFVNd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 16:10:36 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AB8C061245;
-        Thu,  6 Jan 2022 13:10:36 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id q14so3362565plx.4;
-        Thu, 06 Jan 2022 13:10:36 -0800 (PST)
+        Thu, 6 Jan 2022 16:13:33 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F66C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 13:13:32 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id a18so13333421edj.7
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 13:13:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MJG9lGZ6QLSV3BSYotGztqDw0fy0Zwnl6zTi3BAaNIs=;
-        b=B1XPEpvAtkf3Q1a5/T7kG5xY8AU6SOVPZ1+GtVa82Sbi26LKm4UyCC7TliLFocG7cW
-         huTZjXszQXSttUSSFiURgxdLRC6X7MW0YdVervf5CdOz0Q1iq7SpLuKXF0Q2PMKPPgzg
-         NledNo2s88DkvZf76UPIJ4VwgTBDpkJp9Z5vbXeRKJqgQaJPZb9K1cpOIZwYyATsmBC9
-         jJKa1nWLk1o24FDfnMjSux2DUWnVQynLrsbNyAH0Skb6sSOspjtXRRiE8DzA6c0uZr5S
-         jqvlNpzMg9FyJrRqlN0ieSn14DWPER0NZKovM99TQzxnzGCEWIRENTbNbro3f2qXlveX
-         t7NQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7Uo3zrvjs6l5Jch3xWP8LMBVP8GHSaGKJV7WhF6qa1w=;
+        b=bEcm+18jIgP7S0xmkuW/1Q15uSKoVSBzIXjUF8iFJdQC/7AfjIZTaomrGFrd3XI12w
+         a3BKwczI6UNtMWCLe8xw5+hpKmZ1aVeUzUOJ8shZtPWcgDF/eREJLs5OoqDb9MTX7rMv
+         BsqNN08ybKlO2ULIQJih+DEsdoiYdx8JrnBkHQh7HFdhiz4ff9yYYCz3dj8KFhBbmoXT
+         8buZPkVFvsAicnNCQS5d5Omqy8EE6iPMTdZZw/65u67tG75iNGz5OdJX3SIF+KsH6Vpu
+         aBuvbgAhNC3RC2H0EdfjsYnLaX413L8Iq0rHoiMHJUcC5vhO8wIy6sQ3MQDWivvXSjk7
+         KXqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=MJG9lGZ6QLSV3BSYotGztqDw0fy0Zwnl6zTi3BAaNIs=;
-        b=UuN+JETLwvpLC2mYwujGB+w4LE94sNPrizS3Nc9ae/N2hhrOgTjuVhH9tWsuxlrqBx
-         IJOYbE4XKeGvkH1PQ7XjmAa2ecvO6HfdW3ecvIoJXukhs1+JzQQG/83X2459tSrOOfTy
-         mLqu4TkfzpW1QWe1mF9/DM/xL+UfGhLSdrg1OynRAqeqUtBMLXEpTdz8/DMY0SVyjs5G
-         Y9glvU1qWb3NqZtRpeq6CWPoNdJpg9DRBJlFEE+OIkgX0sC5UCZOcgVxfv72wLM4J91d
-         IdHzwnqUG6JgYaC1kFAdN7i8wk54JXkM9pvpUIe+RZpCtgfBxOgnTK8qJ1d+GI0Pc1QJ
-         9vBQ==
-X-Gm-Message-State: AOAM531AJo2eshgmX57EXG80hwE9L/2ESYPi0YWZG8VEWc5sGUKno9Gh
-        +MeGHxyBOZVCicVwMYIZpn/yOokk/AW4rw==
-X-Google-Smtp-Source: ABdhPJwioexe+oZfUL4Cmjysw3LKkZzIipK86Q8a80piE+NgY9kNq63ShAJHnvDJ+Eg8xewjlryLww==
-X-Received: by 2002:a17:902:6ac1:b0:149:7087:7b8a with SMTP id i1-20020a1709026ac100b0014970877b8amr53932997plt.174.1641503435494;
-        Thu, 06 Jan 2022 13:10:35 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id s12sm3662385pfg.148.2022.01.06.13.10.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 13:10:34 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 6 Jan 2022 11:10:33 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Wei Yang <richard.weiyang@gmail.com>
-Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] cgroup: rstat: explicitly put loop variant in while
-Message-ID: <YddayTDXQd21lxvt@slm.duckdns.org>
-References: <20211225000932.7253-1-richard.weiyang@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7Uo3zrvjs6l5Jch3xWP8LMBVP8GHSaGKJV7WhF6qa1w=;
+        b=eUG5q/L/cNpwfGrBwp1pD/EIZ1YLqRgzxD2vnuBhOpEmx3FjcrOkKBwP8xyAmMxfaf
+         zzmdL93N4YLmTJWZ0mdQTYTma4DP/7Y1aCdGgdXnnvTycGV4KXB6NZlR7EW2/FrYfLFe
+         0YXnAJ6qOvz2kdM0xwFMQvtCkujYMqfbXt8uwQjGgtiOBKYVBH+pnI/xr1jTx3LMy20C
+         Y7ssWdMu/s4FKIEcu8rV2bPSGc4MqoOgDxQMEQDiHjPzBDBHCVJhmJYi28H4QYtUcnJs
+         fQgkOGDcRYfXUotb54BGxIOJWtRqcFQcsOgvWQST2arL3yV/yxD93XE22g0KyS1BK2Ya
+         bhjw==
+X-Gm-Message-State: AOAM530PpAp8qa29u97u4EyyQZpmJsJ3UFI13bkx6+RaiCwuXzIlPX8F
+        ZDOWCo5GCH/1KcSD6EuCrvC5RVSNSnJUOQrWy4MIDXNO
+X-Google-Smtp-Source: ABdhPJwW0I2gFdo2lb3NgI3Cc2FFm64EQc4xUiosUseOqyYcf/X4k18twKL06XkaAfi/v6V4zRL2uwTdcoI0Gs/HtXg=
+X-Received: by 2002:a17:906:5948:: with SMTP id g8mr47408005ejr.4.1641503610850;
+ Thu, 06 Jan 2022 13:13:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211225000932.7253-1-richard.weiyang@gmail.com>
+References: <20220106175019.3116389-1-festevam@gmail.com> <Ydc2EHf5f12w4YcW@sirena.org.uk>
+ <CAOMZO5Czbr=vuvZdqc6+odAQv0M-LJEQVz6uke8OXnoG6wLqwA@mail.gmail.com> <YddLe8cCvj5fVBTQ@sirena.org.uk>
+In-Reply-To: <YddLe8cCvj5fVBTQ@sirena.org.uk>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Thu, 6 Jan 2022 18:13:19 -0300
+Message-ID: <CAOMZO5B63zHEiZc-Z1AR8za6eWXX8y0wbYLmrVkXC85ewFSqbg@mail.gmail.com>
+Subject: Re: [PATCH v2] regmap: debugfs: Free debugfs_name buffer after usage
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 25, 2021 at 12:09:31AM +0000, Wei Yang wrote:
-> Instead of do while unconditionally, let's put the loop variant in
-> while.
-> 
-> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+Hi Mark,
 
-Applied to cgorup/for-5.17.
+On Thu, Jan 6, 2022 at 5:05 PM Mark Brown <broonie@kernel.org> wrote:
 
-Thanks.
+> > Where exactly would you like me to call regmap_debugfs_exit()?
+>
+> Before we try to reinitialise debugfs for the new name seems like the
+> obvious place.
 
--- 
-tejun
+I am afraid I am not enough familiar with regmap to fix this problem.
+
+If you could please submit a patch, I will be glad to test it.
+
+Thanks

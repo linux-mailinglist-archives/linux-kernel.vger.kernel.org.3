@@ -2,99 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D947D48620D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 10:24:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5411486215
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 10:26:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237380AbiAFJYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 04:24:13 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:55166 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S237364AbiAFJYM (ORCPT
+        id S237383AbiAFJ0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 04:26:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45372 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233813AbiAFJ0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 04:24:12 -0500
-X-UUID: 945a0748c908428b9978267c7bd64838-20220106
-X-UUID: 945a0748c908428b9978267c7bd64838-20220106
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 467672720; Thu, 06 Jan 2022 17:24:09 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 6 Jan 2022 17:24:07 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 6 Jan 2022 17:24:07 +0800
-Message-ID: <3a1bffc6f677ef9790749a366424fe5effda90f7.camel@mediatek.com>
-Subject: Re: [PATCH 2/4] phy: mediatek: phy-mtk-hdmi: Reorder to remove
- forward declarations
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <chunkuang.hu@kernel.org>
-CC:     <p.zabel@pengutronix.de>, <kishon@ti.com>, <vkoul@kernel.org>,
-        <matthias.bgg@gmail.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Date:   Thu, 6 Jan 2022 17:24:07 +0800
-In-Reply-To: <20220103153055.50473-2-angelogioacchino.delregno@collabora.com>
-References: <20220103153055.50473-1-angelogioacchino.delregno@collabora.com>
-         <20220103153055.50473-2-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 6 Jan 2022 04:26:05 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49E2C061201
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 01:26:04 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id g80so5867745ybf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 01:26:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=1qCNKBijl+qhalBNqXGw/nmUY/wmEYIr8f+v0ZZhmlI=;
+        b=AMA8DX0auN2ez9j7TDDHCNP2XuOF4AMWVgkALWHapySXLQPy8AN68ezCoUNKOShE95
+         Jutrutgtz4ylk+WSDiGR0q4CfJpwEHGlJFu2A1d0R8AFBNro2IyWUhy6maZN2u4zQTRG
+         V3aRSPU8fIwehB3tM4ZvDXeKQWijeR6reFCjSW1z9SjpVUdaqt1osuBtT5dPhNoQTUX4
+         mtNPnu5jk1S6mCQeqRAYE1fR77Q7j//ekBLPWh12H+k+RI6J/L4MVD1rM2qITg70kpHk
+         I8qpzs0ZbuXp/Sl1PwYUpAcQjy2oiOz++pt25Q4rnEQZc7dQgWccIZ4PNFuFDguMiQnp
+         t6AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=1qCNKBijl+qhalBNqXGw/nmUY/wmEYIr8f+v0ZZhmlI=;
+        b=rUSKn0wF/ck/0+zOPwEjd+6vlddPAKhiy4fEXm+PJy0+8zvwJBu0TJSE/mn6ODlURC
+         blTP+s8JktusYtthWmaQw4Fw2qdjyztGzAbE95rBDevI03vBJosaAldIMJ2lWNcYtkCT
+         G0yGK+szt6ByOS8l3ZBfUVbiiSEHk9xIX40uOZ9AkkuaqKsHiADv1uUtjToBc9Kh8poV
+         UTb03DB4yExeWqdmS1E+YsPK/+Iq+GBuhlknBnDmGlzVfIHZ+tPeJb7q5zFgJ/D1T9MM
+         URNH9UMaJdyQECVrMPdAFdd4sUzxqI3HJNr6vaI/Pkl2AVbO6jaQp0JcPl8SaxASoTXX
+         Qodg==
+X-Gm-Message-State: AOAM530QDDn+fx4I4lO0xY+zm+OKKkXQ+NHzurynbNVeb+OCWP3BdRho
+        ry9S/MJidIjn7RPomtU2XYzp166fxEfuMjb1YL2JLQ==
+X-Google-Smtp-Source: ABdhPJxjtb00LDV2rNHY9CDeOBp8VVAoGTticmpTULfvTnd1Pgpwq9UEA8zCqiWrjoZIj9/i4i+s32db9OPvMibVvtE=
+X-Received: by 2002:a25:414f:: with SMTP id o76mr60050604yba.146.1641461163899;
+ Thu, 06 Jan 2022 01:26:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 6 Jan 2022 14:55:53 +0530
+Message-ID: <CA+G9fYvUu9+68mkCT0S8L0gL28jc5MXGQqOGH6ObciK72FbD8A@mail.gmail.com>
+Subject: test_vsyscall.c:500:22: warning: '__builtin_memcmp_eq' specified
+ bound 4096 exceeds source size 0
+To:     linux-stable <stable@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, X86 ML <x86@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jann Horn <jannh@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-01-03 at 16:30 +0100, AngeloGioacchino Del Regno wrote:
-> Forward declarations for mtk_hdmi_power_{on,off} aren't necessary:
-> move mtk_hdmi_phy_dev_ops down to remove forward declarations.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/phy/mediatek/phy-mtk-hdmi.c | 15 ++++++---------
->  1 file changed, 6 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/phy/mediatek/phy-mtk-hdmi.c
-> b/drivers/phy/mediatek/phy-mtk-hdmi.c
-> index 707e90691e6e..b4193cb4e4e3 100644
-> --- a/drivers/phy/mediatek/phy-mtk-hdmi.c
-> +++ b/drivers/phy/mediatek/phy-mtk-hdmi.c
-> @@ -6,15 +6,6 @@
->  
->  #include "phy-mtk-hdmi.h"
->  
-> -static int mtk_hdmi_phy_power_on(struct phy *phy);
-> -static int mtk_hdmi_phy_power_off(struct phy *phy);
-> -
-> -static const struct phy_ops mtk_hdmi_phy_dev_ops = {
-> -	.power_on = mtk_hdmi_phy_power_on,
-> -	.power_off = mtk_hdmi_phy_power_off,
-> -	.owner = THIS_MODULE,
-> -};
-> -
->  inline struct mtk_hdmi_phy *to_mtk_hdmi_phy(struct clk_hw *hw)
->  {
->  	return container_of(hw, struct mtk_hdmi_phy, pll_hw);
-> @@ -43,6 +34,12 @@ static int mtk_hdmi_phy_power_off(struct phy *phy)
->  	return 0;
->  }
->  
-> +static const struct phy_ops mtk_hdmi_phy_dev_ops = {
-> +	.power_on = mtk_hdmi_phy_power_on,
-> +	.power_off = mtk_hdmi_phy_power_off,
-> +	.owner = THIS_MODULE,
-> +};
-> +
->  static const struct phy_ops *
->  mtk_hdmi_phy_dev_get_ops(const struct mtk_hdmi_phy *hdmi_phy)
->  {
-Reviewed-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+While building selftests the following warnings were noticed for x86_64
+architecture on Linux stable v5.15.13 kernel.
 
-Thanks a lot
+metadata:
+  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+  git commit: 734eb1fd2073f503f5c6b44f1c0d453ca6986b84
+  git describe: v5.15.13
+  toolchain":  gcc-11
+  kernel-config: https://builds.tuxbuild.com/23HFo8abXIL6i4FFfSYiJlqAYMW/config
+
+x86_64-linux-gnu-gcc -m64 -o \
+/home/tuxbuild/.cache/tuxmake/builds/current/kselftest/x86/test_vsyscall_64 \
+ -O2 -g -std=gnu99 -pthread -Wall -no-pie \
+ -DCAN_BUILD_64 test_vsyscall.c helpers.h -lrt -ldl
+
+test_vsyscall.c: In function 'test_process_vm_readv':
+test_vsyscall.c:500:22: warning: '__builtin_memcmp_eq' specified bound
+4096 exceeds source size 0 [-Wstringop-overread]
+  500 |                 if (!memcmp(buf, (const void
+*)0xffffffffff600000, 4096)) {
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+Build link:
+https://builds.tuxbuild.com/23HFo8abXIL6i4FFfSYiJlqAYMW/
+
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+
+tuxmake --runtime podman --target-arch x86_64 --toolchain gcc-11 \
+ --kconfig https://builds.tuxbuild.com/23HFo8abXIL6i4FFfSYiJlqAYMW/config \
+ cpupower headers kernel kselftest kselftest-merge modules
 
 
+--
+Linaro LKFT
+https://lkft.linaro.org

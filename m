@@ -2,162 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F78485F94
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 05:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A96B485F9B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 05:19:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbiAFENx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 23:13:53 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:2062 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232228AbiAFENv (ORCPT
+        id S232615AbiAFETW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 23:19:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33696 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232430AbiAFETT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 23:13:51 -0500
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 205N504D009819;
-        Thu, 6 Jan 2022 04:13:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2021-07-09;
- bh=qrPZjOZsQGGb3jXZ9pR5oZCJNJNE0oUCh/dFWQpTJJo=;
- b=kozaveN2qpTmJs8ULhDRaYATJB0z3SqY6vFOuVyv/C4oaSHy2uiylVjwu6xpCoHVGZpc
- lRV06AE8U4v6lSXhv6P7dOr2j8/94+CgZHWBdDRCQWBlWnnbBlodGLR/ZjSP8cX3F2cS
- BWprJ4dzcRYE2BMUMnK+YMDZ1BRdtLQS5LZlTr6Zp9hYlacTBInhNRMkXP1GLNGDue+0
- /rMdcMiiMT/Y+i0w2YOtP2ZdP+Pcp0C+JKoofm40Wel7U0eiRwAlBFpoP/P0tr/ILwq5
- liQTP+wRmsRkGC89ge5EDC7snxUmTiz/0GYOmY2MHv+vqnTupy+AaJfIfQS1w+JyWUAn /A== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ddmpp8d5u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 06 Jan 2022 04:13:39 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2064BnfA041084;
-        Thu, 6 Jan 2022 04:13:38 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2101.outbound.protection.outlook.com [104.47.58.101])
-        by userp3030.oracle.com with ESMTP id 3ddmqc4131-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 06 Jan 2022 04:13:38 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e2pU7itpueiM4G6exC6muAMOGH0KfKK72xzy9RIBveyU1GHO2jbzUgHzrSOwhuRVFNaCcQrFPJcdIuE6YaIm+4UGX61Yex7FpLOLFjO7ARzJ444TpUPRy+nlNG0+tEXu32XY+R28rEz6mOHrf7hQ/HnfbQAyIy2tQj8AFUkNpEAON3BA4cp1de7H2geB8EgHyOfU+BpE+A6kNAae7xMPwGm6mlSDIhzx2eMqNpWFduMgnmNDsW4s1oa5XDA5Q8EaPlo5TcQJDS4Y8iHYi3Y751p6wXLg6QwZKsyhy83FeXsC2tPScAaDAytJ/EBiKRG67cLYUIyi4OhL01BGKsSnlw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qrPZjOZsQGGb3jXZ9pR5oZCJNJNE0oUCh/dFWQpTJJo=;
- b=dU6RA2V33eVZuAMBykt9tNXoZCVcbg4050CvUoZQ2pQs972hxRnisdr4Re6vvIhblowNcfn3IVVJyZNRLa37V8I7IbMdm5WhQbZXza5rkv4g+ijBTBiLamQ2L61mah3tpr71xrIZrAFQ2pc8NxiIWDnl9uTjSCnp06QCNB/Y9hnKpFS+ZjLw36re/XG6ReC6Fh2QRiGhV9krS72+v9Dv+y/glp3wUkv2kD9nTxI/Th9Ox5C3Cwwp0xz4zXroPenNz+cvBLlyGyClz/X5OmvPHfTOChtXKdp0vZ2ED/jB9mlKBZ96tPI5lyGqVJ+g6+wfOuwCOQmm6hlsLEfjs2oFUw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qrPZjOZsQGGb3jXZ9pR5oZCJNJNE0oUCh/dFWQpTJJo=;
- b=a7x/2YgIgL5P91fb+PH1SWAvNBtKEPRPV86SZh3pCUjrfVpvm1letsDgTQpIh8ML6iQFhpAb9Ko7fDat0xiQ/8Tb3ijpCDQeRaXQ/XAGIlx76xnT46KyypfP0rg61lWR9SnMh8Z6IsXBe2uQOTktsqc1NWxFyIj9K82LS3aSgb4=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by PH0PR10MB5683.namprd10.prod.outlook.com (2603:10b6:510:148::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7; Thu, 6 Jan
- 2022 04:13:36 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::1053:7ae3:932b:f166]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::1053:7ae3:932b:f166%5]) with mapi id 15.20.4844.017; Thu, 6 Jan 2022
- 04:13:36 +0000
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Douglas Gilbert <dgilbert@interlog.com>,
-        Khalid Aziz <khalid@gonehiking.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Christoph Hellwig <hch@lst.de>, Nix <nix@esperi.org.uk>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] scsi: Set allocation length to 255 for ATA
- Information VPD page
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1lezty169.fsf@ca-mkp.ca.oracle.com>
-References: <alpine.DEB.2.21.2201020010540.56863@angie.orcam.me.uk>
-        <alpine.DEB.2.21.2201020030130.56863@angie.orcam.me.uk>
-        <d9eaa1f8-7abb-645b-d624-5069205c6983@interlog.com>
-        <alpine.DEB.2.21.2201032017290.56863@angie.orcam.me.uk>
-        <yq1tuek347m.fsf@ca-mkp.ca.oracle.com>
-        <alpine.DEB.2.21.2201032324230.56863@angie.orcam.me.uk>
-        <yq1tuej1j22.fsf@ca-mkp.ca.oracle.com>
-Date:   Wed, 05 Jan 2022 23:13:34 -0500
-In-Reply-To: <yq1tuej1j22.fsf@ca-mkp.ca.oracle.com> (Martin K. Petersen's
-        message of "Tue, 04 Jan 2022 12:57:22 -0500")
-Content-Type: text/plain
-X-ClientProxiedBy: BL1PR13CA0189.namprd13.prod.outlook.com
- (2603:10b6:208:2be::14) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
+        Wed, 5 Jan 2022 23:19:19 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2907C061245;
+        Wed,  5 Jan 2022 20:19:18 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JTtQr1fKpz4xsl;
+        Thu,  6 Jan 2022 15:19:16 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1641442757;
+        bh=yydQ6GGs4qIt6f6LLOvnqm9PBKT62boPSR81EcFr8ss=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=f2HdYsV5Yw/XWcjGLKvKT/4bj9DW80Z1dYqTJ77ROO+gpM5atifN3GfZMAgHF2ik0
+         Ibu9yupX7EsQOwJ4VRw5cbpswhOX58ij0qoQG9K2vO4e6D4nblq2VJDYMqKLMOaGKK
+         jJNRdv4POygl2eFTXwFmH9pai2ZAp2QyYVCdk9PNlBiA+NKQH3O+bqgTufZGL5fPU8
+         2x2J3Z/6bp8KOBPE5Lt9GxBdtfEv/nCevh2CHJUqdIl4KXqtxgN9lrVn+rw0TxK62e
+         Is40WK9/ymClxO5NQ8ZzCTUdl4t/Ja6SsRJbZLFf8/IOaJJsHnFks5WWYW/JwfyYTK
+         80BlHhJs92cmQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Abdul Haleem <abdhalee@linux.vnet.ibm.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        alexandr.lobakin@intel.com, dumazet@google.com,
+        brian King <brking@linux.vnet.ibm.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        netdev <netdev@vger.kernel.org>,
+        Sukadev Bhattiprolu <sukadev@linux.ibm.com>,
+        Dany Madden <drt@linux.ibm.com>
+Subject: Re: [5.16.0-rc5][ppc][net] kernel oops when hotplug remove of vNIC
+ interface
+In-Reply-To: <20220105102625.2738186e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+References: <63380c22-a163-2664-62be-2cf401065e73@linux.vnet.ibm.com>
+ <20220105102625.2738186e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Date:   Thu, 06 Jan 2022 15:19:15 +1100
+Message-ID: <87lezt3398.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: af87e8d6-dbda-44eb-9343-08d9d0cae952
-X-MS-TrafficTypeDiagnostic: PH0PR10MB5683:EE_
-X-Microsoft-Antispam-PRVS: <PH0PR10MB56837620AF9C56015E8C17008E4C9@PH0PR10MB5683.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 78WQ6sNUYbbU+DkeT1GYx7zgR17NDivQhp1vlbcTNjh8OMDWGEJFX4nsPRIXh8gKaku88lGqckVav/Ou5zu32mCCMKly0XfQWWT4Bf/M+l6N19Pcn9A9RFY0rWzENR2I+tQTYiGrC50hQTfS3X5xTGonS+rA8TRha48Lvhbdd0EWHLFqDRaLpUMI0Cv3/AGBHRA9LVr1WgAsorNXYtNHrlVlwQOKI1UAZg/uQAmSGFqb2Y56J0eT4ajVvjnoMdfGTER31vYB29zQeLc3V5KnCw4aj4io5sKTh2X6MN6O4MvLT4uxaDK9w/fX5guJ9GyPP0X+sNZOtsaOdtlhOARn5BtAKh6m8wV2XvXX5shaYQF39gNh1WwWfOZKW7rl1npK6tB4w9FoVIsyiSCCSKXPRUJParGKxq7ISeD8fLVD4h4S5GcwXnKXosiZGS6GJBjnWaVySlPBwrys1Ft6ejlJ6LanA/qccRN0z/dZPo+/zR/H95t3+2I8mv/bXQ81I7ru930ntxG33XXwuSrGSLQK497/qRHg3XOxE1VzNH7xOIEyouqulxfzGyv5/By6Ez9dmYaofe+9dHoajIZ0rYhHGAYcdwnRq01f6tEAWwVq7vB/Y3AMXHz4H01H/kiYExERn9JDL21SSY+SJYaCIl8WWO/gjbB/0eavopL+FxOuHl+nBeXljWHpHVusdOibky9VbigElhmouUadHWbGvgI9uXIQbLzNXffbHIx9EFjaLSaOwqTDfMAH+YDaWjcgdD6m6Wrqd+sYFbH/hJ2KweZBAlevKg5GEqiVd5cfZLGKtrg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(36916002)(6506007)(38350700002)(186003)(26005)(52116002)(966005)(8676002)(508600001)(4744005)(8936002)(2906002)(54906003)(86362001)(4326008)(5660300002)(66556008)(66946007)(66476007)(6512007)(6486002)(316002)(6916009)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3ro5OySj/1+lIw9NjILlPQ2bAmP71oQwK0pvaBUYYOGRpnNif8BGLwMbYPi0?=
- =?us-ascii?Q?bip33bKJi16t8NDQ06luCE1qfNDjw1x+/UL9ROROwcln3Mzkl7OjeHvCUPZU?=
- =?us-ascii?Q?RAFKxHd1xcgINLWLxO5R66z+5GHQGYLD/tkxhSj7i0XheufZ5Xntw7ie6v0S?=
- =?us-ascii?Q?TnGFmqS0CP19xwoWhIJO8dEmEkg+WqERFio+1v158hvEi976Ut8tBEapIQsZ?=
- =?us-ascii?Q?CUe7AI45vmDACCdeKQ3gt+stjDhyGkYmYQVqa6Q1343Zbz8I9pRv24wZ7tOQ?=
- =?us-ascii?Q?JC0nzUujUCWtg/Q0O1qpBKJa9f6bNmgs4k2QBSOtyP1bLrrd8UN+XoMbbuKh?=
- =?us-ascii?Q?TX1OHpP7N6beDLp//gaQmvXxIBc2zq8k6L2DHr5U8u3Z4srs5YBqY78EFbjR?=
- =?us-ascii?Q?2ynDJgFq/yezSwfwau7q4MV4gvsffW11nUsImvUOt9ntkqzrG43hQ5bfmyHP?=
- =?us-ascii?Q?eH8LwoP5GwJGey86W1jihskRPku+ntMq5FH+zffuE6PaWKt9lLU37MOVhrtJ?=
- =?us-ascii?Q?8j2hsq3gL/1hb0T1XBFuOLUTr8IEyurUB0Hj0zm3O+sp55whQcUpoG00D1lg?=
- =?us-ascii?Q?GrVp8ij8GISQU1JLtyuhX8u+Q7DchD0LjTkxIIuhyW9S0QurFhHXZDH+/ymh?=
- =?us-ascii?Q?6yCamsB9uH3ZMkz/65JNZ+tcaGemBt4wkdguCIZeHub0iUrotYYKjUiinEC8?=
- =?us-ascii?Q?UwPKMPbnLXBNK2+yy8bETyVKloPvHrxKKUUs19XQsyZs0tGj26IHhMZsZvlM?=
- =?us-ascii?Q?rVVyQrTcvVBEzyQ7l+fvwAVne52488nNtNhczLYh79b22OidJTyaFJcFA+GN?=
- =?us-ascii?Q?EVojByOl5MI5J2Vye1RJbYfouGrt5wP3sqChNVfQV8PfX9zwWw3mSNHUjv9V?=
- =?us-ascii?Q?3rwxFzKl+U2Eg4m3s2w1ckaGNOjQkF96tt8E20c203djflNomNgWJGI6xRrW?=
- =?us-ascii?Q?cYi3xTMXQrR/0nvxFp/Bbg8qOzXlHvcYzUwuEqZE9LRQOG4mEnOpLnT7BERg?=
- =?us-ascii?Q?K8RcyWDK/wZpMFXqVvgU0tmcXPJqZSIdBTfskff3yBevMdvdDr/vQXuyIJBW?=
- =?us-ascii?Q?hXLxgI4HN/5ikj4McM/oySDZNAdkjBjf161kmqZFkr5sfMw1Pj935CVaaBkv?=
- =?us-ascii?Q?8Wiz3K+MjBNa+iqcjn5TlYbNP8B/Iy4K890H23n3NASkTO2wQVEzCa0itTq0?=
- =?us-ascii?Q?kRkiTHZqLcP/CR+S8Du7L91taT48V9FA01x1R1T1APUUqyFVMbEoXgCHvYSz?=
- =?us-ascii?Q?531qoZZePq0c/rHfSMAV+yxU19xMpebCe4cnDX9NJS2D456w5ue7wxWmJ/4n?=
- =?us-ascii?Q?AI6IHxuDBIy3F0MnQxxDlIaRQBUAmFcY7+1scO6OJczz/Pq3hK8KqmnoZIPH?=
- =?us-ascii?Q?2a9wExmEqwbPu1jbVFltb1JJDVLOnHiRSwXD2AxDm59IUBb3qLMNkh0tyQIK?=
- =?us-ascii?Q?LQ8eVXjcx8u8HKIByuMRs7/z3ZoRmzkGh/pWBBSCYDqtpwb/b4EQpLxCWwbV?=
- =?us-ascii?Q?XDnFOQeg+y+P8AWObdqZoXgMvPvGs8Nu6YcMMDBpwmV0rJPHF89OiJ08GK5x?=
- =?us-ascii?Q?JVSKRqOCKRM5hNu6suF1z/1cJjjjp67Yd9h9AFv5QMExrs0HfH/Bw4q9zK9S?=
- =?us-ascii?Q?o2xa3lbyZuvrMR7mOveaXrh58chtKsxWwen8TeenVL3u8BMOPMcFXfSgE+/S?=
- =?us-ascii?Q?j3KvJw=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: af87e8d6-dbda-44eb-9343-08d9d0cae952
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2022 04:13:36.7671
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1XNjWQMsWiMY/uHq3LqgjiqhC7re6rTR2hn94cG97x0kc2l8u6CZ0ERtSAMpUbcLw41QjRdJY1vvY3AVtOTj2fiWMXYd8tijy2TNQ3UKUeM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5683
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10218 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 mlxscore=0
- malwarescore=0 suspectscore=0 mlxlogscore=498 spamscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2112160000
- definitions=main-2201060024
-X-Proofpoint-ORIG-GUID: we6fs_iAYLcdqZ5sisLOCod83R2b6Nea
-X-Proofpoint-GUID: we6fs_iAYLcdqZ5sisLOCod83R2b6Nea
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Jakub Kicinski <kuba@kernel.org> writes:
+> On Wed, 5 Jan 2022 13:56:53 +0530 Abdul Haleem wrote:
+>> Greeting's
+>>=20
+>> Mainline kernel 5.16.0-rc5 panics when DLPAR ADD of vNIC device on my=20
+>> Powerpc LPAR
+>>=20
+>> Perform below dlpar commands in a loop from linux OS
+>>=20
+>> drmgr -r -c slot -s U9080.HEX.134C488-V1-C3 -w 5 -d 1
+>> drmgr -a -c slot -s U9080.HEX.134C488-V1-C3 -w 5 -d 1
+>>=20
+>> after 7th iteration, the kernel panics with below messages
+>>=20
+>> console messages:
+>> [102056] ibmvnic 30000003 env3: Sending CRQ: 801e000864000000=20
+>> 0060000000000000
+>> <intr> ibmvnic 30000003 env3: Handling CRQ: 809e000800000000=20
+>> 0000000000000000
+>> [102056] ibmvnic 30000003 env3: Disabling tx_scrq[0] irq
+>> [102056] ibmvnic 30000003 env3: Disabling tx_scrq[1] irq
+>> [102056] ibmvnic 30000003 env3: Disabling rx_scrq[0] irq
+>> [102056] ibmvnic 30000003 env3: Disabling rx_scrq[1] irq
+>> [102056] ibmvnic 30000003 env3: Disabling rx_scrq[2] irq
+>> [102056] ibmvnic 30000003 env3: Disabling rx_scrq[3] irq
+>> [102056] ibmvnic 30000003 env3: Disabling rx_scrq[4] irq
+>> [102056] ibmvnic 30000003 env3: Disabling rx_scrq[5] irq
+>> [102056] ibmvnic 30000003 env3: Disabling rx_scrq[6] irq
+>> [102056] ibmvnic 30000003 env3: Disabling rx_scrq[7] irq
+>> [102056] ibmvnic 30000003 env3: Replenished 8 pools
+>> Kernel attempted to read user page (10) - exploit attempt? (uid: 0)
+>> BUG: Kernel NULL pointer dereference on read at 0x00000010
+>> Faulting instruction address: 0xc000000000a3c840
+>> Oops: Kernel access of bad area, sig: 11 [#1]
+>> LE PAGE_SIZE=3D64K MMU=3DRadix SMP NR_CPUS=3D2048 NUMA pSeries
+>> Modules linked in: bridge stp llc ib_core rpadlpar_io rpaphp nfnetlink=20
+>> tcp_diag udp_diag inet_diag unix_diag af_packet_diag netlink_diag=20
+>> bonding rfkill ibmvnic sunrpc pseries_rng xts vmx_crypto gf128mul=20
+>> sch_fq_codel binfmt_misc ip_tables ext4 mbcache jbd2 dm_service_time=20
+>> sd_mod t10_pi sg ibmvfc scsi_transport_fc ibmveth dm_multipath dm_mirror=
+=20
+>> dm_region_hash dm_log dm_mod fuse
+>> CPU: 9 PID: 102056 Comm: kworker/9:2 Kdump: loaded Not tainted=20
+>> 5.16.0-rc5-autotest-g6441998e2e37 #1
+>> Workqueue: events_long __ibmvnic_reset [ibmvnic]
+>> NIP:=C2=A0 c000000000a3c840 LR: c0080000029b5378 CTR: c000000000a3c820
+>> REGS: c0000000548e37e0 TRAP: 0300=C2=A0=C2=A0 Not tainted=20
+>> (5.16.0-rc5-autotest-g6441998e2e37)
+>> MSR:=C2=A0 8000000000009033 <SF,EE,ME,IR,DR,RI,LE>=C2=A0 CR: 28248484=C2=
+=A0 XER: 00000004
+>> CFAR: c0080000029bdd24 DAR: 0000000000000010 DSISR: 40000000 IRQMASK: 0
+>> GPR00: c0080000029b55d0 c0000000548e3a80 c0000000028f0200 00000000000000=
+00
+>> GPR04: c000000c7d1a7e00 fffffffffffffff6 0000000000000027 c000000c7d1a7e=
+08
+>> GPR08: 0000000000000023 0000000000000000 0000000000000010 c0080000029bdd=
+10
+>> GPR12: c000000000a3c820 c000000c7fca6680 0000000000000000 c000000133016b=
+f8
+>> GPR16: 00000000000003fe 0000000000001000 0000000000000002 00000000000000=
+08
+>> GPR20: c000000133016eb0 0000000000000000 0000000000000000 00000000000000=
+03
+>> GPR24: c000000133016000 c000000133017168 0000000020000000 c000000133016a=
+00
+>> GPR28: 0000000000000006 c000000133016a00 0000000000000001 c0000001330160=
+00
+>> NIP [c000000000a3c840] napi_enable+0x20/0xc0
+>> LR [c0080000029b5378] __ibmvnic_open+0xf0/0x430 [ibmvnic]
+>> Call Trace:
+>> [c0000000548e3a80] [0000000000000006] 0x6 (unreliable)
+>> [c0000000548e3ab0] [c0080000029b55d0] __ibmvnic_open+0x348/0x430 [ibmvni=
+c]
+>> [c0000000548e3b40] [c0080000029bcc28] __ibmvnic_reset+0x500/0xdf0 [ibmvn=
+ic]
+>> [c0000000548e3c60] [c000000000176228] process_one_work+0x288/0x570
+>> [c0000000548e3d00] [c000000000176588] worker_thread+0x78/0x660
+>> [c0000000548e3da0] [c0000000001822f0] kthread+0x1c0/0x1d0
+>> [c0000000548e3e10] [c00000000000cf64] ret_from_kernel_thread+0x5c/0x64
+>> Instruction dump:
+>> 7d2948f8 792307e0 4e800020 60000000 3c4c01eb 384239e0 f821ffd1 39430010
+>> 38a0fff6 e92d1100 f9210028 39200000 <e9030010> f9010020 60420000 e9210020
+>> ---[ end trace 5f8033b08fd27706 ]---
+>> radix-mmu: Page sizes from device-tree:
+>>=20
+>> the fault instruction points to
+>>=20
+>> [root@ltcden11-lp1 boot]# gdb -batch=20
+>> vmlinuz-5.16.0-rc5-autotest-g6441998e2e37 -ex 'list *(0xc000000000a3c840=
+)'
+>> 0xc000000000a3c840 is in napi_enable (net/core/dev.c:6966).
+>> 6961=C2=A0=C2=A0=C2=A0 void napi_enable(struct napi_struct *n)
+>> 6962=C2=A0=C2=A0=C2=A0 {
+>> 6963=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 unsigned long val, new;
+>> 6964
+>> 6965=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 do {
+>> 6966=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 val =3D REA=
+D_ONCE(n->state);
+>
+> If n is NULL here that's gotta be a driver problem.
 
-Maciej,
+Definitely looks like it, the disassembly is:
 
-> Oh, you'll also need a follow-on patch that uses the cached ATA
-> Information VPD page. I'll try to get my full series out today.
+  not     r9,r9
+  clrldi  r3,r9,63
+  blr				# end of previous function
+  nop
+  addis   r2,r12,491		# function entry
+  addi    r2,r2,14816
+  stdu    r1,-48(r1)		# stack frame creation
+  li      r5,-10
+  ld      r9,4352(r13)
+  std     r9,40(r1)
+  li      r9,0
+  ld      r8,16(r3)		# load from r3 (n) + 16
 
-I would really appreciate it if you would be willing give this a whirl:
 
-	https://git.kernel.org/mkp/h/5.18/discovery
+The register dump shows that r3 is NULL, and it comes directly from the
+caller. So we've been called with n =3D NULL.
 
-Thanks!
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+cheers

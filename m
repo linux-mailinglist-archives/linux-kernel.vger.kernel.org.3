@@ -2,224 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC1F4486B33
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 953F6486B38
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:32:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243823AbiAFUax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 15:30:53 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:51710 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243719AbiAFUaw (ORCPT
+        id S243849AbiAFUcL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jan 2022 15:32:11 -0500
+Received: from coyote.holtmann.net ([212.227.132.17]:38311 "EHLO
+        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243793AbiAFUcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 15:30:52 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D7E84B823E0;
-        Thu,  6 Jan 2022 20:30:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FEA9C36AE3;
-        Thu,  6 Jan 2022 20:30:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641501049;
-        bh=K8mTTccfCj509MFPxiApJokBHf56ZuhckMHO+0tHFVs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VBHhjFHLgckiN9DF1RAqUQyHflKADFj7JiQG6B+vWXMb0unQLsZmiAFLUpnADQlD1
-         TYQZbgssqP5myvzSm4LkuDvcyD+oLGzcpLpsCkf8EimWcDxC8Nv5Bssm2hKZYkgPU6
-         aCnTmggn9tXCh6qdHt4GWi7NngM20juQlKMSAZsAV6Iw/ppHuAAG+e0TJ/gH7FuCbo
-         F1iMO7iINSenb2emWbAoK9/Tv0uDHv/SwG3JhUn5A6CZyvR3A7noUKq33Fpl0FM976
-         6FjaCJ66eEfYXR2SAft+EYLcLKhusbnh5d31jnB+KzIjmyfk8bN41OSsRp4vDlvUa1
-         +R+1tGtubTtHQ==
-Date:   Thu, 6 Jan 2022 21:30:45 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Robert Schlabbach <Robert.Schlabbach@gmx.net>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Antti Palosaari <crope@iki.fi>, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH 2/3] media: si2157: add support for 1.7MHz and 6.1 MHz
-Message-ID: <20220106213045.6afe5a35@coco.lan>
-In-Reply-To: <trinity-59d726d3-993c-43c9-9e44-5be5cdfae74d-1641493525223@3c-app-gmx-bap38>
-References: <cover.1639140967.git.mchehab+huawei@kernel.org>
-        <76c2ea87882c87bd35066a85cb48292a36a79fce.1639140967.git.mchehab+huawei@kernel.org>
-        <trinity-b5cc1284-ccc2-477c-ac90-56ee40da91af-1641483579446@3c-app-gmx-bs50>
-        <trinity-59d726d3-993c-43c9-9e44-5be5cdfae74d-1641493525223@3c-app-gmx-bap38>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+        Thu, 6 Jan 2022 15:32:10 -0500
+Received: from smtpclient.apple (p4fefca45.dip0.t-ipconnect.de [79.239.202.69])
+        by mail.holtmann.org (Postfix) with ESMTPSA id 9FEFCCECDD;
+        Thu,  6 Jan 2022 21:32:08 +0100 (CET)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
+Subject: Re: [PATCH] Bluetooth: btusb: Add a new quirk to skip
+ HCI_FLT_CLEAR_ALL on fake CSR controllers
+From:   Marcel Holtmann <marcel@holtmann.org>
+In-Reply-To: <6a3f5e8b-fbc1-bad8-aef0-3e2cf9be364e@gmail.com>
+Date:   Thu, 6 Jan 2022 21:32:08 +0100
+Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>
+Content-Transfer-Encoding: 8BIT
+Message-Id: <3BCA0ABD-6BFC-4487-A5DE-3AF043A6ADE0@holtmann.org>
+References: <6a3f5e8b-fbc1-bad8-aef0-3e2cf9be364e@gmail.com>
+To:     Ismael Ferreras Morezuelas <swyterzone@gmail.com>
+X-Mailer: Apple Mail (2.3693.40.0.1.81)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, 6 Jan 2022 19:25:25 +0100
-Robert Schlabbach <Robert.Schlabbach@gmx.net> escreveu:
+Hi Ismael,
 
-> It turns out there are actually two bugs in there:
-> =C2=A0
-> + if (SUPPORTS_1700KHz(dev) && c->bandwidth_hz <=3D 6100000)
-> + bandwidth =3D 0x10;
->=20
-> The si2157 code for bandwidth 6.1MHz is _decimal_ 10, not
-> hexadecimal 0x10. Removing the "0x" from the above line makes
-> the tuner work again, even with the other bug that makes it use
-> the 6.1MHz setting when 6MHz is requested.
-
-Gah, true.
-
-> Another issue with the bandwidth setting: The si2157 code is
-> also stored in dev->bandwidth and returned in the get_bandwidth()
-> call. Now this was not well before, because the call is supposed
-> to return the bandwidth in Hz, not in MHz, but now it can return
-> 9 and 10, but those do not correspond to 9 and 10MHz.
-
-I suspect that the entire get_bandwidth() code on drivers are
-dead code, as the core doesn't call it anymore. This used to be
-needed before DVBv5 API.
-
-Probably, the right fix here would be to simply strip this function
-from all drivers.
-
-> Also, the default case uses si2157 code 0x0f, which also seems
-> like a bad idea.
-
-Yes. it should default to the maximum bandwidth (8MHz on those
-chipsets).
-
-> And another, unrelated issue: The delivery_system switch is
-> missing case DVBC_ANNEX_C, even though it should operate just as
-> DVBC_ANNEX_A.
-
-The rolloff is different for Annex/A and Annex/C. Annex/A uses
-1.15, while Annex/C uses 1.13.
-
-The DVB core already handles it when it calculates the bandwidth
-for a given symbol rate, though, so, it shouldn't make any
-difference at the tuner, except if the rolloff filter there
-can be adjusted.
-
-Btw, I suspect that the 6.1 MHz bandwidth could be there due to
-Annex/A and Annex/C differences.
-
-> I'll see if I can come up with a patch which addresses all of the
-> above.
-
-OK! I'll wait for your patch.
-
->=20
-> Best Regards,
-> -Robert Schlabbach=C2=A0
->=20
->=20
-> Gesendet:=C2=A0Donnerstag, 06. Januar 2022 um 16:39 Uhr
-> Von:=C2=A0"Robert Schlabbach" <Robert.Schlabbach@gmx.net>
-> An:=C2=A0"Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>
-> Cc:=C2=A0mauro.chehab@huawei.com, "Antti Palosaari" <crope@iki.fi>, linux=
--kernel@vger.kernel.org, linux-media@vger.kernel.org
-> Betreff:=C2=A0Re: [PATCH 2/3] media: si2157: add support for 1.7MHz and 6=
-.1 MHz
->=20
-> Sorry for the late test and response, but there is a BAD BUG in this patc=
-h:
-> =C2=A0
-> + if (SUPPORTS_1700KHz(dev) && c->bandwidth_hz <=3D 1700000)
-> + bandwidth =3D 0x09;
-> if (c->bandwidth_hz <=3D 6000000)
-> bandwidth =3D 0x06;
-> + if (SUPPORTS_1700KHz(dev) && c->bandwidth_hz <=3D 6100000)
-> + bandwidth =3D 0x10;
-> else if (c->bandwidth_hz <=3D 7000000)
-> bandwidth =3D 0x07;
-> else if (c->bandwidth_hz <=3D 8000000)
->=20
-> The additions omitted the "else", which resulted in the bandwidth setting=
- for
-> 6MHz being overwritten with the one for 6.1MHz - and that completely brea=
-ks
-> 6MHz channels, as the tuner then refuses to accept the tune command!
->=20
-> As a result, e.g. MCNS aka ClearQAM aka DVB-C Annex B no longer works aft=
-er
-> this patch.
->=20
-> I don't know if the 1.7Mhz and 6.1MHz settings are even usable, if the tu=
-ner
-> (in my case, the Si2157-A30) then no longer accepts the tune command. May=
-be
-> they're not suited for frequency-based tuning, but only for channel-based
-> tuning? That would not fit the DVB-API, I think.
->=20
-> And the 1.7MHz bandwidth setting currently can't do any harm, as it is al=
-ways
-> overwritten by the 6MHz bandwidth setting, also due to an "else" missing.
->=20
-> Best Regards,
-> -Robert Schlabbach
-> =C2=A0
-> =C2=A0
->=20
-> Gesendet:=C2=A0Freitag, 10. Dezember 2021 um 13:59 Uhr
-> Von:=C2=A0"Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>
-> An:=C2=A0unlisted-recipients:;
-> Cc:=C2=A0linuxarm@huawei.com, mauro.chehab@huawei.com, "Mauro Carvalho Ch=
-ehab" <mchehab+huawei@kernel.org>, "Antti Palosaari" <crope@iki.fi>, "Mauro=
- Carvalho Chehab" <mchehab@kernel.org>, linux-kernel@vger.kernel.org, linux=
--media@vger.kernel.org
-> Betreff:=C2=A0[PATCH 2/3] media: si2157: add support for 1.7MHz and 6.1 M=
-Hz
-> Some tuners allow setting the bandwidth filter to 1.7MHz and
-> 6.1 MHz. Add support for it upstream, as the narrower is the
-> bandwidth filter, the better.
->=20
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> Another subset of the more recent batch of Chinese clones aren't
+> specs-compliant and seem to lock up whenever they receive a
+> HCI_OP_SET_EVENT_FLT with flt_type set to zero/HCI_FLT_CLEAR_ALL,
+> which on Linux happens right at BR/EDR setup.
+> 
+> So, while all the previous efforts to wrangle the herd of fake CSRs
+> seem to be paying off (and these also get detected as such) we
+> still need to take care of this quirk; testers seem to agree
+> that these dongles tend to work well enough afterwards.
+> 
+> From some cursory USB packet capture on Windows it seems like
+> that driver doesn't appear to use this clear-all functionality at all.
+> 
+> This patch was tested on some really popular AliExpress-style
+> dongles, in my case marked as "V5.0". Chip markings: UG8413,
+> the backside of the PCB says "USB Dangel" (sic).
+> 
+> Here is the `hciconfig -a` output; for completeness:
+> 
+> hci0:	Type: Primary  Bus: USB
+> 	BD Address: 00:1A:7D:DA:7X:XX  ACL MTU: 679:8  SCO MTU: 48:16
+> 	UP RUNNING PSCAN ISCAN 
+> 	Features: 0xbf 0x3e 0x4d 0xfa 0xdb 0x3d 0x7b 0xc7
+> 	Packet type: DM1 DM3 DM5 DH1 DH3 DH5 HV1 HV2 HV3 
+> 	Link policy: RSWITCH SNIFF 
+> 	Link mode: PERIPHERAL ACCEPT 
+> 	Name: 'CSR8510 A10.'
+> 	Class: 0x7c0104
+> 	Service Classes: Rendering, Capturing, Object Transfer, Audio, Telephony
+> 	Device Class: Computer, Desktop workstation
+> 	HCI Version: 4.0 (0x6)  Revision: 0x3120
+> 	LMP Version: 4.0 (0x6)  Subversion: 0x22bb
+> 	Manufacturer: Cambridge Silicon Radio (10)
+> 
+> 
+> As well as the `lsusb -vv -d 0a12:0001`:
+> 
+> ID 0a12:0001 Cambridge Silicon Radio, Ltd Bluetooth Dongle (HCI mode)
+> Device Descriptor:
+>  bLength                18
+>  bDescriptorType         1
+>  bcdUSB               2.00
+>  bDeviceClass          224 Wireless
+>  bDeviceSubClass         1 Radio Frequency
+>  bDeviceProtocol         1 Bluetooth
+>  bMaxPacketSize0        64
+>  idVendor           0x0a12 Cambridge Silicon Radio, Ltd
+>  idProduct          0x0001 Bluetooth Dongle (HCI mode)
+>  bcdDevice           88.91
+>  iManufacturer           0 
+>  iProduct                2 BT DONGLE10
+>  iSerial                 0 
+>  bNumConfigurations      1
+> 
+> Also, changed the benign dmesg print that shows up whenever the
+> generic force-suspend fails from bt_dev_err to bt_dev_warn;
+> it's okay and done on a best-effort basis, not a problem
+> if that does not work.
+> 
+> Also, swapped the HCI subver and LMP subver numbers for the Barrot
+> in the comment, which I copied wrong the last time around.
+> 
+> Fixes: 81cac64ba258a ("Bluetooth: Deal with USB devices that are faking CSR vendor")
+> Fixes: cde1a8a992875 ("Bluetooth: btusb: Fix and detect most of the Chinese Bluetooth controllers")
+> Fixes: d74e0ae7e0303 ("Bluetooth: btusb: Fix detection of some fake CSR controllers with a bcdDevice val of 0x0134")
+> Fixes: 0671c0662383e ("Bluetooth: btusb: Add workaround for remote-wakeup issues with Barrot 8041a02 fake CSR controllers")
+> Fixes: f4292e2faf522 ("Bluetooth: btusb: Make the CSR clone chip force-suspend workaround more generic")
+> 
+> https://bugzilla.kernel.org/show_bug.cgi?id=60824
+> https://gist.github.com/nevack/6b36b82d715dc025163d9e9124840a07
+> 
+> Cc: stable@vger.kernel.org
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Tested-by: Gonzalo Tornaría <tornaria@cmat.edu.uy>
+> Tested-by: Mateus Lemos <lemonsmateus@gmail.com>
+> Tested-by: Ismael Ferreras Morezuelas <swyterzone@gmail.com>
+> Signed-off-by: Ismael Ferreras Morezuelas <swyterzone@gmail.com>
+> 
 > ---
->=20
-> To avoid mailbombing on a large number of people, only mailing lists were=
- C/C on the cover.
-> See [PATCH 0/3] at: https://lore.kernel.org/all/cover.1639140967.git.mche=
-hab+huawei@kernel.org/
->=20
-> drivers/media/tuners/si2157.c | 4 ++++
-> drivers/media/tuners/si2157_priv.h | 5 +++++
-> 2 files changed, 9 insertions(+)
->=20
-> diff --git a/drivers/media/tuners/si2157.c b/drivers/media/tuners/si2157.c
-> index aeecb38b147f..2d3937af4f5f 100644
-> --- a/drivers/media/tuners/si2157.c
-> +++ b/drivers/media/tuners/si2157.c
-> @@ -458,8 +458,12 @@ static int si2157_set_params(struct dvb_frontend *fe)
-> goto err;
-> }
->=20
-> + if (SUPPORTS_1700KHz(dev) && c->bandwidth_hz <=3D 1700000)
-> + bandwidth =3D 0x09;
-> if (c->bandwidth_hz <=3D 6000000)
-> bandwidth =3D 0x06;
-> + if (SUPPORTS_1700KHz(dev) && c->bandwidth_hz <=3D 6100000)
-> + bandwidth =3D 0x10;
-> else if (c->bandwidth_hz <=3D 7000000)
-> bandwidth =3D 0x07;
-> else if (c->bandwidth_hz <=3D 8000000)
-> diff --git a/drivers/media/tuners/si2157_priv.h b/drivers/media/tuners/si=
-2157_priv.h
-> index df17a5f03561..24849c8ed398 100644
-> --- a/drivers/media/tuners/si2157_priv.h
-> +++ b/drivers/media/tuners/si2157_priv.h
-> @@ -66,6 +66,11 @@ struct si2157_cmd {
-> unsigned rlen;
-> };
->=20
-> +#define SUPPORTS_1700KHz(dev) (((dev)->part_id =3D=3D SI2141) || \
-> + ((dev)->part_id =3D=3D SI2147) || \
-> + ((dev)->part_id =3D=3D SI2157) || \
-> + ((dev)->part_id =3D=3D SI2177))
+> 
+> drivers/bluetooth/btusb.c   | 11 ++++++-----
+> include/net/bluetooth/hci.h |  6 ++++++
+> net/bluetooth/hci_core.c    | 11 ++++++++---
+> net/bluetooth/hci_request.c |  8 ++++++--
+> 4 files changed, 26 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+> index 75c83768c..42c909c24 100644
+> --- a/drivers/bluetooth/btusb.c
+> +++ b/drivers/bluetooth/btusb.c
+> @@ -1932,6 +1932,7 @@ static int btusb_setup_csr(struct hci_dev *hdev)
+> 		 */
+> 		set_bit(HCI_QUIRK_BROKEN_STORED_LINK_KEY, &hdev->quirks);
+> 		set_bit(HCI_QUIRK_BROKEN_ERR_DATA_REPORTING, &hdev->quirks);
+> +		set_bit(HCI_QUIRK_BROKEN_FILTER_CLEAR_ALL, &hdev->quirks);
+> 
+> 		/* Clear the reset quirk since this is not an actual
+> 		 * early Bluetooth 1.1 device from CSR.
+> @@ -1942,16 +1943,16 @@ static int btusb_setup_csr(struct hci_dev *hdev)
+> 		/*
+> 		 * Special workaround for these BT 4.0 chip clones, and potentially more:
+> 		 *
+> -		 * - 0x0134: a Barrot 8041a02                 (HCI rev: 0x1012 sub: 0x0810)
+> +		 * - 0x0134: a Barrot 8041a02                 (HCI rev: 0x0810 sub: 0x1012)
+
+Don’t get this change.
+
+> 		 * - 0x7558: IC markings FR3191AHAL 749H15143 (HCI rev/sub-version: 0x0709)
+> 		 *
+> 		 * These controllers are really messed-up.
+> 		 *
+> 		 * 1. Their bulk RX endpoint will never report any data unless
+> -		 * the device was suspended at least once (yes, really).
+> +		 *    the device was suspended at least once (yes, really).
+> 		 * 2. They will not wakeup when autosuspended and receiving data
+> -		 * on their bulk RX endpoint from e.g. a keyboard or mouse
+> -		 * (IOW remote-wakeup support is broken for the bulk endpoint).
+> +		 *    on their bulk RX endpoint from e.g. a keyboard or mouse
+> +		 *    (IOW remote-wakeup support is broken for the bulk endpoint).
+
+Fix the style issues separately.
+
+> 		 *
+> 		 * To fix 1. enable runtime-suspend, force-suspend the
+> 		 * HCI and then wake-it up by disabling runtime-suspend.
+> @@ -1971,7 +1972,7 @@ static int btusb_setup_csr(struct hci_dev *hdev)
+> 		if (ret >= 0)
+> 			msleep(200);
+> 		else
+> -			bt_dev_err(hdev, "CSR: Failed to suspend the device for our Barrot 8041a02 receive-issue workaround");
+> +			bt_dev_warn(hdev, "CSR: Couldn't suspend the device for our Barrot 8041a02 receive-issue workaround");
+
+Why change this?
+
+> 
+> 		pm_runtime_forbid(&data->udev->dev);
+> 
+> diff --git a/include/net/bluetooth/hci.h b/include/net/bluetooth/hci.h
+> index 63065bc01..4e5d5979d 100644
+> --- a/include/net/bluetooth/hci.h
+> +++ b/include/net/bluetooth/hci.h
+> @@ -246,6 +246,12 @@ enum {
+> 	 * HCI after resume.
+> 	 */
+> 	HCI_QUIRK_NO_SUSPEND_NOTIFIER,
 > +
-> /* Old firmware namespace */
-> #define SI2158_A20_FIRMWARE "dvb-tuner-si2158-a20-01.fw"
-> #define SI2141_A10_FIRMWARE "dvb-tuner-si2141-a10-01.fw"
-> --
-> 2.33.1
-> =C2=A0
+> +	/* When this quirk is set, HCI_OP_SET_EVENT_FLT requests with
+> +	 * HCI_FLT_CLEAR_ALL are ignored. A subset of the CSR controller
+> +	 * clones struggle with this and instantly lock up.
+> +	 */
+> +	HCI_QUIRK_BROKEN_FILTER_CLEAR_ALL,
+> };
+> 
+> /* HCI device flags */
+> diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+> index 8d33aa648..7af649afc 100644
+> --- a/net/bluetooth/hci_core.c
+> +++ b/net/bluetooth/hci_core.c
+> @@ -150,6 +150,7 @@ static void bredr_setup(struct hci_request *req)
+> {
+> 	__le16 param;
+> 	__u8 flt_type;
+> +	struct hci_dev *hdev = req->hdev;
 
+This should always go first in a function.
 
+> 
+> 	/* Read Buffer Size (ACL mtu, max pkt, etc.) */
+> 	hci_req_add(req, HCI_OP_READ_BUFFER_SIZE, 0, NULL);
+> @@ -169,9 +170,13 @@ static void bredr_setup(struct hci_request *req)
+> 	/* Read Current IAC LAP */
+> 	hci_req_add(req, HCI_OP_READ_CURRENT_IAC_LAP, 0, NULL);
+> 
+> -	/* Clear Event Filters */
+> -	flt_type = HCI_FLT_CLEAR_ALL;
+> -	hci_req_add(req, HCI_OP_SET_EVENT_FLT, 1, &flt_type);
+> +	/* Clear Event Filters; some fake CSR controllers lock up after setting
+> +	 * this type of filter, so avoid sending the request altogether.
+> +	 */
+> +	if (!test_bit(HCI_QUIRK_BROKEN_FILTER_CLEAR_ALL, &hdev->quirks)) {
+> +		flt_type = HCI_FLT_CLEAR_ALL;
+> +		hci_req_add(req, HCI_OP_SET_EVENT_FLT, 1, &flt_type);
+> +	}
+> 
+> 	/* Connection accept timeout ~20 secs */
+> 	param = cpu_to_le16(0x7d00);
+> diff --git a/net/bluetooth/hci_request.c b/net/bluetooth/hci_request.c
+> index 92611bfc0..cfcf64c0c 100644
+> --- a/net/bluetooth/hci_request.c
+> +++ b/net/bluetooth/hci_request.c
+> @@ -980,11 +980,15 @@ void hci_req_add_le_passive_scan(struct hci_request *req)
+> static void hci_req_clear_event_filter(struct hci_request *req)
+> {
+> 	struct hci_cp_set_event_filter f;
+> +	struct hci_dev *hdev = req->hdev;
+> +
+> +	if (!hci_dev_test_flag(hdev, HCI_BREDR_ENABLED))
+> +		return;
+> 
+> -	if (!hci_dev_test_flag(req->hdev, HCI_BREDR_ENABLED))
+> +	if (test_bit(HCI_QUIRK_BROKEN_FILTER_CLEAR_ALL, &hdev->quirks))
+> 		return;
+> 
+> -	if (hci_dev_test_flag(req->hdev, HCI_EVENT_FILTER_CONFIGURED)) {
+> +	if (hci_dev_test_flag(hdev, HCI_EVENT_FILTER_CONFIGURED)) {
+> 		memset(&f, 0, sizeof(f));
+> 		f.flt_type = HCI_FLT_CLEAR_ALL;
+> 		hci_req_add(req, HCI_OP_SET_EVENT_FLT, 1, &f);
 
-Thanks,
-Mauro
+This is not enough. If you do not have clear event filter, we need to disable suspend/resume support. These device can for obvious reason not sleep accordingly.
+
+Regards
+
+Marcel
+

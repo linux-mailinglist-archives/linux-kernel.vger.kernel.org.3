@@ -2,67 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C963486542
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 14:25:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4F4486548
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 14:28:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239559AbiAFNZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 08:25:36 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43828 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239534AbiAFNZf (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 08:25:35 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F1FE61C15
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 13:25:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8685EC36AE3;
-        Thu,  6 Jan 2022 13:25:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641475535;
-        bh=buV0gYWbk3HVWfvOrcfUs3J4fxNfedsrK8daEDtIzx0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hD91Fm1JArQgrZOznJTSwWQEL/6hIlrqxutgzox5t1nFaTWlgdyHlSKHCIk29EqM7
-         q0jq3/k1z/szOUrbA/H2GMjBYnnw9U2nKArcAeNP1QtN6yHgHcGAduWoZsob0X+1CW
-         /ZGsqaX0JXae6lNEvno75wK3IZ5gebq9lSaltiYg=
-Date:   Thu, 6 Jan 2022 14:25:32 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Gabriel Somlo <somlo@cmu.edu>,
-        qemu-devel@nongnu.org
-Subject: Re: [PATCH] qemu_fw_cfg: use default_groups in kobj_type
-Message-ID: <YdbtzL59aCePeDnt@kroah.com>
-References: <20220105183133.2812848-1-gregkh@linuxfoundation.org>
- <20220105175546-mutt-send-email-mst@kernel.org>
+        id S239572AbiAFN2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 08:28:04 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:54438 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230323AbiAFN2D (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 08:28:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=Dc13GhzV7GMpFHXLCvgCedftWg7T/tGeHO9kPVdise8=; b=naWyluOJhBleVVZMCq3CJ3uvEk
+        GkFmtvQdmb2RyZPhH1q4YsoRZbcasi2b1ojlATohPQHSvnYRALJGJpS79zr6FuD15LJGB7ElQTz1M
+        PXanW1Pbc0zm0RDnzRV1+b0VUL4LbiI3El0+2C2O6LsU30KDWQElrZWgUJLy0o/O58GU=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1n5So9-000eji-G1; Thu, 06 Jan 2022 14:27:57 +0100
+Date:   Thu, 6 Jan 2022 14:27:57 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        Aaron Ma <aaron.ma@canonical.com>, kuba@kernel.org,
+        henning.schild@siemens.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, hayeswang@realtek.com, tiwai@suse.de
+Subject: Re: [PATCH 1/3 v3] net: usb: r8152: Check used MAC passthrough
+ address
+Message-ID: <YdbuXbtc64+Knbhm@lunn.ch>
+References: <20220105151427.8373-1-aaron.ma@canonical.com>
+ <YdXVoNFB/Asq6bc/@lunn.ch>
+ <bb6d8bc4-abee-8536-ca5b-bac11d1ecd53@suse.com>
+ <YdYbZne6pBZzxSxA@lunn.ch>
+ <CAAd53p52uGFjbiuOWAA-1dN7mTqQ0KFe9PxWvPL+fjfQb9K5vQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220105175546-mutt-send-email-mst@kernel.org>
+In-Reply-To: <CAAd53p52uGFjbiuOWAA-1dN7mTqQ0KFe9PxWvPL+fjfQb9K5vQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 05:56:26PM -0500, Michael S. Tsirkin wrote:
-> On Wed, Jan 05, 2022 at 07:31:33PM +0100, Greg Kroah-Hartman wrote:
-> > There are currently 2 ways to create a set of sysfs files for a
-> > kobj_type, through the default_attrs field, and the default_groups
-> > field.  Move the firmware qemu_fw_cfg sysfs code to use default_groups
-> > field which has been the preferred way since aa30f47cf666 ("kobject: Add
-> > support for default attribute groups to kobj_type") so that we can soon
-> > get rid of the obsolete default_attrs field.
-> > 
-> > Cc: Gabriel Somlo <somlo@cmu.edu>
-> > Cc: "Michael S. Tsirkin" <mst@redhat.com>
-> > Cc: qemu-devel@nongnu.org
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-> OK then you know best I guess
-> 
-> Acked-by: Michael S. Tsirkin <mst@redhat.com>
-> 
-> feel free to queue.
+> Can udev in current form really handle the MAC race? Unless there's a
+> new uevent right before ndo_open() so udev can decide which MAC to
+> assign? Even with that, the race can still happen...
 
-Thanks, will do!
+There will always be a race, since the kernel can start using the
+interface before register_netdev() has even finished, before user
+space is running. Take a look at how NFS root works.
 
-greg k-h
+But in general, you can change the MAC address at any time. Some MAC
+drivers will return -EBUSY if the interface is up, but that is
+generally artificial. After a change of MAC address ARP will time out
+after a while and the link peers will get the new MAC address.
+
+> 
+> So what if we keep the existing behavior (i.e. copy MAC from ACPI),
+> and let userspace daemon like NetworkManager to give the second NIC
+> (r8152 in this case) a random MAC if the main NIC (I219 in this case)
+> is already in use? Considering the userspace daemon has the all the
+> information required and it's the policy maker here.
+
+You should be thinking of this in more general terms. You want to
+design a system that will work for any vendors laptop and dock.
+
+You need to describe the two interfaces using some sort of bus
+address, be it PCIe, USB, or a platform device address as used by
+device tree etc.
+
+Let the kernel do whatever it wants with MAC addresses for these two
+interfaces. The only requirement you have is that the laptop internal
+interface gets the vendor allocated MAC address, and that the dock get
+some sort of MAC address, even if it is random.
+
+On device creation, udev can check if it now has both interfaces? If
+the internal interface is up, it is probably in use. Otherwise, take
+its MAC address and assign it to the dock interface, and give the
+internal interface a random MAC address, just in case.
+
+You probably need to delay NetworkManager, systemd-networkkd,
+/etc/network/interfaces etc, so that they don't do anything until
+after udevd has settled, indicating all devices have probably been
+found.
+
+I suspect you will never get a 100% robust design, but you can
+probably get it working enough for the cleaning staff and the CEO, who
+have very simple setups. Power users are going to find all the corner
+cases and will want to disable the udev rule.
+
+     Andrew

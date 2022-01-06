@@ -2,81 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D3AA486A87
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 20:31:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B975486A89
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 20:34:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243365AbiAFTbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 14:31:03 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57098 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243346AbiAFTbC (ORCPT
+        id S243373AbiAFTew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 14:34:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42388 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231801AbiAFTev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 14:31:02 -0500
+        Thu, 6 Jan 2022 14:34:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB951C061245;
+        Thu,  6 Jan 2022 11:34:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 431EEB8236B;
-        Thu,  6 Jan 2022 19:31:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4556C36AE3;
-        Thu,  6 Jan 2022 19:30:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E2A92B82354;
+        Thu,  6 Jan 2022 19:34:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CE9EC36AE3;
+        Thu,  6 Jan 2022 19:34:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641497459;
-        bh=m9VkCCeOS9J9JZLXoM12fx8/yYtmjC+12pg7Y/NuWOU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H4Cf4e1NZGE8ustwCkfwIOfX94jxYT/+Lora66GaUFUso/D0DECIuGVPaiD9aMJBs
-         6dt+yhQdXeeaphLWhcSie+FRDIyNwUzRBE3JPH6V/mptYSGicB9VxCYiXRSLxdhGtU
-         Ihc28to3tMu9Di2e9lZY625DAdEZOD8m6ZJFOwZGZW4gRQdJNzKUJgGSAdh8k9lBJB
-         PPvqT7dl9S/5bBB0n37ZENETIao3uyZvRdw8PpGUK+6139MJmKJWcgqu4ztF4YJ4uu
-         7fyoCSWrkF9UilSI5VdFTbbSZStKcHA81MsGwdsaD/J4CYF2tI6M+LNWLGekuwvoj1
-         Kfa0lGHIe/bqw==
+        s=k20201202; t=1641497688;
+        bh=7Go2vgeGYWubnF+82VhrywldXz4Xvt6wmXlJuZcLP5k=;
+        h=Date:From:To:Cc:Subject:From;
+        b=uUgcB6kp1S6wPwOPmN/OgWmvBByQt5QLnNiae0S/B9SRr9IA+Q21BOW/bVyBllhPI
+         rWrtp6hVH/WMiatRHXy7kVE9Dhjc2Uqj/36kS0ohLquFnkhrOxPHfe+vHh4hAYo8Qg
+         A6ADJq+ycNHXu2gLc/1Yq8ba5X5vIkeHHtI4N5TBaO8z8LKhsie91uTgPsdBbS7wml
+         FUvJG3myCjTQIOdnL611pwv4efYEqABmURpcrQvOYZ3W6otnZ1yqp4rjQXn4j9HN7v
+         uhbKXj2+p96GNlb0RQqADTGHgbZDI0aCzcJZL6Tw/ezl53smz3d593OnmNOQ25Wlfl
+         B0M02F6IBQYsA==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 325D840B92; Thu,  6 Jan 2022 16:30:58 -0300 (-03)
-Date:   Thu, 6 Jan 2022 16:30:58 -0300
+        id 677E240B92; Thu,  6 Jan 2022 16:34:46 -0300 (-03)
+Date:   Thu, 6 Jan 2022 16:34:46 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        linux-trace-devel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
-        torvalds@linux-foundation.org, eranian@google.com
-Subject: Re: [PATCH] perf build: Lower the priority of tools/lib includes
-Message-ID: <YddDcqxtDrPDSAVi@kernel.org>
-References: <20220106072627.476524-1-irogers@google.com>
- <YddC+lzAO1Urj0TF@kernel.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Song Liu <songliubraving@fb.com>, Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>, bpf@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: perf build broken seemingly due to libbpf changes, checking...
+Message-ID: <YddEVgNKBJiqcV6Y@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YddC+lzAO1Urj0TF@kernel.org>
+Content-Transfer-Encoding: 8bit
 X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Jan 06, 2022 at 04:28:58PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Wed, Jan 05, 2022 at 11:26:27PM -0800, Ian Rogers escreveu:
-> > tools/lib has a 1.1.0 copy of libtraceevent. If a newer system
-> > version is installed then its headers will go in /usr/include. As -I has
-> > priority over system headers the 1.1.0 version gets used in preference
-> > to the system one, which isn't what is wanted. To make the behavior
-> > match expectations use -idirafter so that any system headers have priority
-> > over the tools/lib version.
-> > 
-> > Fixes: 08efcb4a638d ("libtraceevent: Increase libtraceevent logging when verbose")
-> 
-> Hi,
-> 
-> 	You forgot to add your Signed-off-by:, I'm adding it as you
-> usually provide it, ok?
+After merging torvalds/master to perf/urgent I'm getting this:
 
-Also adding:
+util/bpf-event.c:25:21: error: no previous prototype for ‘btf__load_from_kernel_by_id’ [-Werror=missing-prototypes]
+   25 | struct btf * __weak btf__load_from_kernel_by_id(__u32 id)
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+util/bpf-event.c:37:1: error: no previous prototype for ‘bpf_object__next_program’ [-Werror=missing-prototypes]
+   37 | bpf_object__next_program(const struct bpf_object *obj, struct bpf_program *prev)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~
+util/bpf-event.c:46:1: error: no previous prototype for ‘bpf_object__next_map’ [-Werror=missing-prototypes]
+   46 | bpf_object__next_map(const struct bpf_object *obj, const struct bpf_map *prev)
+      | ^~~~~~~~~~~~~~~~~~~~
+util/bpf-event.c:55:1: error: no previous prototype for ‘btf__raw_data’ [-Werror=missing-prototypes]
+   55 | btf__raw_data(const struct btf *btf_ro, __u32 *size)
+      | ^~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+make[4]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:96: /tmp/build/perf/util/bpf-event.o] Error 1
+make[4]: *** Waiting for unfinished jobs....
+util/bpf_counter.c: In function ‘bpf_target_prog_name’:
+util/bpf_counter.c:82:15: error: implicit declaration of function ‘btf__load_from_kernel_by_id’ [-Werror=implicit-function-declaration]
+   82 |         btf = btf__load_from_kernel_by_id(info_linear->info.btf_id);
+      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+util/bpf_counter.c:82:13: error: assignment to ‘struct btf *’ from ‘int’ makes pointer from integer without a cast [-Werror=int-conversion]
+   82 |         btf = btf__load_from_kernel_by_id(info_linear->info.btf_id);
+      |             ^
+cc1: all warnings being treated as errors
+make[4]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:96: /tmp/build/perf/util/bpf_counter.o] Error 1
 
-Reported-by: Jiri Slaby <jirislaby@kernel.org>
+I'm checking now...
+
+BTW I test perf builds with:
+
+make -k BUILD_BPF_SKEL=1 CORESIGHT=1 PYTHON=python3 O=/tmp/build/perf -C tools/perf install-bin && git status && perf test python
+
+
+-- 
 
 - Arnaldo

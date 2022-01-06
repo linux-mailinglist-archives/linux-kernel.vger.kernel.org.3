@@ -2,138 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5FDD486777
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:13:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0897148677A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241092AbiAFQNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 11:13:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52204 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240952AbiAFQNR (ORCPT
+        id S241052AbiAFQNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 11:13:52 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:39000 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241085AbiAFQNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 11:13:17 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EACAC061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 08:13:17 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id d14so2481508ila.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 08:13:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=X5QlOKATkg+9Prd2ezRheoLg8bFfRjYXz/Me8Di8F7c=;
-        b=k3wV17DuYBAKkilG5F4sMKLPdAc/udCpFB4Zg7vUaNdHN9hLlS8Y1+LLFS/kzWWNo7
-         duV9yRWDKNuuxZ1SkusEk0Bhv/5JHdNKZ3HxDCsIxAvd9u3pgSsGI/9gsKfK3GJP8Zt1
-         27kQpJbUxRuz+hcivXUoaFvU8CcUr15OTJpEY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X5QlOKATkg+9Prd2ezRheoLg8bFfRjYXz/Me8Di8F7c=;
-        b=WfCRzeHTkwXRR/z+W7IpjePzHlGpl4CME/dEt3oKnEaHHWdufSmZXCcgv4VvAz6hHF
-         fdCh8WGDf0Dw43UZ5oaxXAnqyzYPgV36wiDJDyGwKsnCQxSbzH8I+vJ6b5nBd6SWy4h+
-         6Pwkq1BT/P85XBOaLhqeUqSx/SlxWCRMi0zkbN/J+J4JcqJFrck7O6EVE1JeHe/VKDLl
-         MBymHsRHuDB0Oi0enEOBt8UGUPt63Aky16SIjULrjvo1Y8v/yfSQo0tOmJCxgYRI/Rkd
-         o5/L3NeCXacFkOw41jHRo/hcz3Wnnz/+N2W39a7xJKZdRbXnjIYS6jkBz3t71FPnghL9
-         zpeg==
-X-Gm-Message-State: AOAM530tYFLZuv6AVM88k2yR6N5kSIEcu6L5hecy6BPr/G9LQzeS1Y5t
-        pTApdaZyjbcTMHgX5+89MjxdUnzCpst0FA==
-X-Google-Smtp-Source: ABdhPJwV5WmwebO3LU5xdGQ/a9+pcHpWngUm4xU5uzYl8GRFsRD2ayaLYjbDgAu02IrUX1/q9W6xJA==
-X-Received: by 2002:a05:6e02:f45:: with SMTP id y5mr522513ilj.96.1641485596293;
-        Thu, 06 Jan 2022 08:13:16 -0800 (PST)
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com. [209.85.166.180])
-        by smtp.gmail.com with ESMTPSA id n10sm542450ioz.17.2022.01.06.08.13.15
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jan 2022 08:13:15 -0800 (PST)
-Received: by mail-il1-f180.google.com with SMTP id d3so2430642ilr.10
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 08:13:15 -0800 (PST)
-X-Received: by 2002:a05:6e02:2187:: with SMTP id j7mr27894010ila.120.1641485595294;
- Thu, 06 Jan 2022 08:13:15 -0800 (PST)
+        Thu, 6 Jan 2022 11:13:51 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 206EbCbi000345;
+        Thu, 6 Jan 2022 16:13:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=M236Z2TBaBwKO1irAKzWxmDNxZ6IyGDotrQxPcwRSSU=;
+ b=YFnTdoTUI1D+wjzjH6de+oxx1sbuEU1eJWT45rp1qwqiaRMlSrpXNVIuPJfyD3hAZ2ej
+ vtbaEDKShtDGJvgmHJUAZhQSklkfYgI3Ag6ok3xcHaNfq1Hd3L4pChhUiLW/4a9fkP0T
+ y6izWC7UATc7+uJVJiWPn31ruR2iQgYuh86OUZ85adL8kp/YbcyD0vkJ1vFBqrPTpRq+
+ eiCbbf4j/OVAqj76k3Fqa/8DRB7SLN0U/kY6724oFSBfTi/pzJI1Z/TfVpMa8ARr4d5B
+ jfqS6vuhFIkElp4X26PBgOScn+OR1DIzFuD4WN0KyTHgYahjcpYHjtThEpndaVcI2O1O OA== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3de1hj3nkx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jan 2022 16:13:47 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 206G9Fi3024040;
+        Thu, 6 Jan 2022 16:13:45 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 3ddmrr6vjp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jan 2022 16:13:45 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 206GDgef36700442
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 6 Jan 2022 16:13:42 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 21C7C42045;
+        Thu,  6 Jan 2022 16:13:42 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D62F342042;
+        Thu,  6 Jan 2022 16:13:41 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.145.164.165])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  6 Jan 2022 16:13:41 +0000 (GMT)
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+To:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Cc:     tyreld@linux.ibm.com, Nathan Lynch <nathanl@linux.ibm.com>
+Subject: [PATCH v5] powerpc/pseries: read the lpar name from the firmware
+Date:   Thu,  6 Jan 2022 17:13:39 +0100
+Message-Id: <20220106161339.74656-1-ldufour@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220103071118.27220-1-vkoul@kernel.org>
-In-Reply-To: <20220103071118.27220-1-vkoul@kernel.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 6 Jan 2022 08:13:03 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=Ue9Z+NmqviCXEN2pHxWZaAcTbFzzn=xxfg8d8QzPwp4A@mail.gmail.com>
-Message-ID: <CAD=FV=Ue9Z+NmqviCXEN2pHxWZaAcTbFzzn=xxfg8d8QzPwp4A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] spi: qcom: geni: set the error code for gpi transfer
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: tdYeJyteI3OpmBfnlxuuErlnDwEGMpk9
+X-Proofpoint-ORIG-GUID: tdYeJyteI3OpmBfnlxuuErlnDwEGMpk9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-06_06,2022-01-06_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ priorityscore=1501 clxscore=1015 adultscore=0 mlxscore=0 bulkscore=0
+ malwarescore=0 suspectscore=0 phishscore=0 impostorscore=0 spamscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2112160000 definitions=main-2201060112
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The LPAR name may be changed after the LPAR has been started in the HMC.
+In that case lparstat command is not reporting the updated value because it
+reads it from the device tree which is read at boot time.
 
-On Sun, Jan 2, 2022 at 11:11 PM Vinod Koul <vkoul@kernel.org> wrote:
->
-> Before we invoke spi_finalize_current_transfer() in
-> spi_gsi_callback_result() we should set the spi->cur_msg->status as
-> appropriate (0 for success, error otherwise).
->
-> The helps to return error on transfer and not wait till it timesout on
-> error
->
-> Fixes: b59c122484ec ("spi: spi-geni-qcom: Add support for GPI dma")
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> ---
->
-> Changes in v2:
->  - add missing spi_finalize_current_transfer() for dma error case
->
->  drivers/spi/spi-geni-qcom.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-> index 413fa1a7a936..b82f3ddff0f4 100644
-> --- a/drivers/spi/spi-geni-qcom.c
-> +++ b/drivers/spi/spi-geni-qcom.c
-> @@ -346,17 +346,21 @@ spi_gsi_callback_result(void *cb, const struct dmaengine_result *result)
->  {
->         struct spi_master *spi = cb;
->
-> +       spi->cur_msg->status = -EIO;
->         if (result->result != DMA_TRANS_NOERROR) {
->                 dev_err(&spi->dev, "DMA txn failed: %d\n", result->result);
-> +               spi_finalize_current_transfer(spi);
->                 return;
->         }
->
->         if (!result->residue) {
-> +               spi->cur_msg->status = 0;
->                 dev_dbg(&spi->dev, "DMA txn completed\n");
-> -               spi_finalize_current_transfer(spi);
->         } else {
->                 dev_err(&spi->dev, "DMA xfer has pending: %d\n", result->residue);
->         }
-> +
-> +       spi_finalize_current_transfer(spi);
->  }
+However this value could be read from RTAS.
 
-What you have here should work and seems fine, though it's a bit
-awkward. Every exit path now calls spi_finalize_current_transfer().
-IMO this would be slightly cleaner like this (also moving the error
-cases to both be first)
+Adding this value in the /proc/powerpc/lparcfg output allows to read the
+updated value.
 
-if (result->result != DMA_TRANS_NOERROR) {
-  dev_err(...);
-} else if (result->residue)
-  dev_err(...);
-} else {
-  spi->cur_msg->status = 0;
-  dev_dbg(...);
-}
+However the hypervisor, like Qemu/KVM, may not support this RTAS
+parameter. In that case the value reported in lparcfg is read from the
+device tree and so is not updated accordingly.
 
-spi_finalize_current_transfer(spi);
+Cc: Nathan Lynch <nathanl@linux.ibm.com>
+Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
+---
+v5:
+ fallback to the device tree value if RTAS is not providing the value.
+v4:
+ address Nathan's new comments limiting size of the buffer.
+v3:
+ address Michael's comments.
+v2:
+ address Nathan's comments.
+ change title to partition_name aligning with existing partition_id
+---
+ arch/powerpc/platforms/pseries/lparcfg.c | 93 ++++++++++++++++++++++++
+ 1 file changed, 93 insertions(+)
 
-I'll let Mark decide if he wants it to be respun with the above, wants
-a follow-on patch, or doesn't care either way. In any case:
+diff --git a/arch/powerpc/platforms/pseries/lparcfg.c b/arch/powerpc/platforms/pseries/lparcfg.c
+index c7940fcfc911..8ca08fc306e7 100644
+--- a/arch/powerpc/platforms/pseries/lparcfg.c
++++ b/arch/powerpc/platforms/pseries/lparcfg.c
+@@ -311,6 +311,98 @@ static void parse_mpp_x_data(struct seq_file *m)
+ 		seq_printf(m, "coalesce_pool_spurr=%ld\n", mpp_x_data.pool_spurr_cycles);
+ }
+ 
++/*
++ * PAPR defines, in section "7.3.16 System Parameters Option", the token 55 to
++ * read the LPAR name, and the largest output data to 4000 + 2 bytes length.
++ */
++#define SPLPAR_LPAR_NAME_TOKEN	55
++#define GET_SYS_PARM_BUF_SIZE	4002
++#if GET_SYS_PARM_BUF_SIZE > RTAS_DATA_BUF_SIZE
++#error "GET_SYS_PARM_BUF_SIZE is larger than RTAS_DATA_BUF_SIZE"
++#endif
++
++/**
++ * Read the lpar name using the RTAS ibm,get-system-parameter call.
++ *
++ * The name read through this call is updated if changes are made by the end
++ * user on the hypervisor side.
++ *
++ * Some hypervisor (like Qemu) may not provide this value. In that case, a non
++ * null value is returned.
++ */
++static int read_RTAS_lpar_name(struct seq_file *m)
++{
++	int rc, len, token;
++	union {
++		char raw_buffer[GET_SYS_PARM_BUF_SIZE];
++		struct {
++			__be16 len;
++			char name[GET_SYS_PARM_BUF_SIZE-2];
++		};
++	} *local_buffer;
++
++	token = rtas_token("ibm,get-system-parameter");
++	if (token == RTAS_UNKNOWN_SERVICE)
++		return -EINVAL;
++
++	local_buffer = kmalloc(sizeof(*local_buffer), GFP_KERNEL);
++	if (!local_buffer)
++		return -ENOMEM;
++
++	do {
++		spin_lock(&rtas_data_buf_lock);
++		memset(rtas_data_buf, 0, sizeof(*local_buffer));
++		rc = rtas_call(token, 3, 1, NULL, SPLPAR_LPAR_NAME_TOKEN,
++			       __pa(rtas_data_buf), sizeof(*local_buffer));
++		if (!rc)
++			memcpy(local_buffer->raw_buffer, rtas_data_buf,
++			       sizeof(local_buffer->raw_buffer));
++		spin_unlock(&rtas_data_buf_lock);
++	} while (rtas_busy_delay(rc));
++
++	if (!rc) {
++		/* Force end of string */
++		len = min((int) be16_to_cpu(local_buffer->len),
++			  (int) sizeof(local_buffer->name)-1);
++		local_buffer->name[len] = '\0';
++
++		seq_printf(m, "partition_name=%s\n", local_buffer->name);
++	} else
++		rc = -ENODATA;
++
++	kfree(local_buffer);
++	return rc;
++}
++
++/**
++ * Read the LPAR name from the Device Tree.
++ *
++ * The value read in the DT is not updated if the end-user is touching the LPAR
++ * name on the hypervisor side.
++ */
++static int read_DT_lpar_name(struct seq_file *m)
++{
++	struct device_node *rootdn;
++	const char *name;
++
++	rootdn = of_find_node_by_path("/");
++	if (!rootdn)
++		return -ENOENT;
++
++	name = of_get_property(rootdn, "ibm,partition-name", NULL);
++	if (!name)
++		return -ENOENT;
++
++	seq_printf(m, "partition_name=%s\n", name);
++	return 0;
++}
++
++static void read_lpar_name(struct seq_file *m)
++{
++	if (read_RTAS_lpar_name(m) && read_DT_lpar_name(m))
++		pr_err_once("Error can't get the LPAR name");
++}
++
+ #define SPLPAR_CHARACTERISTICS_TOKEN 20
+ #define SPLPAR_MAXLENGTH 1026*(sizeof(char))
+ 
+@@ -496,6 +588,7 @@ static int pseries_lparcfg_data(struct seq_file *m, void *v)
+ 
+ 	if (firmware_has_feature(FW_FEATURE_SPLPAR)) {
+ 		/* this call handles the ibm,get-system-parameter contents */
++		read_lpar_name(m);
+ 		parse_system_parameter_string(m);
+ 		parse_ppp_data(m);
+ 		parse_mpp_data(m);
+-- 
+2.34.1
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>

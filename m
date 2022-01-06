@@ -2,58 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D949486D41
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 23:35:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36270486D4C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 23:41:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245158AbiAFWfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 17:35:18 -0500
-Received: from ms.lwn.net ([45.79.88.28]:51094 "EHLO ms.lwn.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245175AbiAFWfQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 17:35:16 -0500
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 8D6415BF;
-        Thu,  6 Jan 2022 22:35:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 8D6415BF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1641508515; bh=Y0LmZfNZgo9tJ08FAwoxR+CuTUO2Jk0oHi6rBTGQGbg=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=H9neEsESaj4jc3YJO4tDXA4NGKycjEAE1ylPEVUsu34Xjrhi9QyEdhrKFyaNTV5RG
-         Fgsaj61HzabWMvjOtzHGirfJ3BqaFDUU6Lo0mvL2ZWMmXNZM2grD4/ilhXaV6uRka+
-         Do1ocWMA6C1CIpPkd/YCVdVY35YnXhE1Ye2EIM86x05zyGFqsiOHcpeMl2RlPnfbgV
-         51nxnWYwLt6EbNnntUGV/GSHz+FdV2aVjEmzGp6/E3RHA6J7n7kCXFK792cmJDikGl
-         j6VfDJZz2mgf/wfwFMFZOb7uMUbT7Ypuxe8jNqj7FerEzVO8y4hU9lI/7pleiAiZe+
-         +e2AlBs/xFVMQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] scripts: sphinx-pre-install: Fix ctex support on Debian
-In-Reply-To: <63882425609a2820fac78f5e94620abeb7ed5f6f.1641429634.git.mchehab@kernel.org>
-References: <84f90b41-7a18-d83c-8739-1d394175f74a@gmail.com>
- <63882425609a2820fac78f5e94620abeb7ed5f6f.1641429634.git.mchehab@kernel.org>
-Date:   Thu, 06 Jan 2022 15:35:21 -0700
-Message-ID: <878rvspk5y.fsf@meer.lwn.net>
+        id S245167AbiAFWkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 17:40:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56638 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245125AbiAFWki (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 17:40:38 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC32C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 14:40:38 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id y130so11640412ybe.8
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 14:40:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=T8Bm7CygjTGgEMVBB1B2E0cRX2/Il9msHfdFW1Y79Qo=;
+        b=Ed3YAPdj2nEu2JSblAiHXE40vi8mPab8V38uoKlGV4epD1GRW4ahXjGV2ARZmS6X8X
+         h2GpNqHMCwf+evEyqQLsxtD6sWAp996J5TIgYQJ6pBLL98ma7DR0epaK/angcOr84A7E
+         yXRqDfoE85RA65SfNaR/1o3bNvg7YBEwB3cpk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=T8Bm7CygjTGgEMVBB1B2E0cRX2/Il9msHfdFW1Y79Qo=;
+        b=YqoaBVvf3W3SrVymx57QPTz39YK669ptNlZk5gt5LwD7//YWnRJO+Gsb5yCIZj3f2P
+         1wZDCc+2SSEN5U1Awd16fNwIJAnw4BJFoEubsgiFeTv8jb7CEzaESqwf4KHAW6LCV+nb
+         UbYQDsQS3GCXNBo5reZzYup9edD7ET++/g863bCF19iYAiM44icrAg0s5Cr5ZJRhnhUR
+         wY0fvKNxVsIT203dyZqrO2+MTqw0ALdipKOcsONzwt7ILvrl3PWhewKGrgeqqk2X2oSK
+         oF+EeMp/i3dz8Ex5cTCb/fLFRD80psZhjLoWWyVL3OPqZu8KomBTvhc/7qTWqcQlPXGQ
+         mDPQ==
+X-Gm-Message-State: AOAM530HU25WD9I8JbiqAsMxG2DN5/RvWdU3Wb7Jej8G4ECZgW/l+OZU
+        ZjURhQuEJCNe/V0t+gsQWP07WLAuOr4NeTIKdDu9ww==
+X-Google-Smtp-Source: ABdhPJzSEl5VqGPLI20K6ZFBSbCucyxCYfEgZbLdx1+62/yvopTctlFRbLUENR9CEa+JBi7GNo2U3ZCfoCaO3xFe6pY=
+X-Received: by 2002:a25:4d46:: with SMTP id a67mr72261904ybb.217.1641508837347;
+ Thu, 06 Jan 2022 14:40:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20220104003722.73982-1-ivan@cloudflare.com> <20220103164443.53b7b8d5@hermes.local>
+ <CANn89i+bLN4=mHxQoWg88_MTaFRkn9FAeCy9dn3b9W+x=jowRQ@mail.gmail.com>
+ <CABWYdi2oapjDMSJb+8T7BXMM6h+ftCQCSpPPePXaS3MyS4hD+w@mail.gmail.com> <CANn89i+9cOC4Ftnh2q7SZ+iP7-qe2jkFW3NtvFGzXLxoGUOsiA@mail.gmail.com>
+In-Reply-To: <CANn89i+9cOC4Ftnh2q7SZ+iP7-qe2jkFW3NtvFGzXLxoGUOsiA@mail.gmail.com>
+From:   Ivan Babrou <ivan@cloudflare.com>
+Date:   Thu, 6 Jan 2022 14:40:26 -0800
+Message-ID: <CABWYdi26jxzzYPJoN3mrPaXny7FKAmZ61oitSYwuvauGCo+4NA@mail.gmail.com>
+Subject: Re: [PATCH net] tcp: note that tcp_rmem[1] has a limited range
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Stephen Hemminger <stephen@networkplumber.org>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mauro Carvalho Chehab <mchehab@kernel.org> writes:
+On Thu, Jan 6, 2022 at 12:25 AM Eric Dumazet <edumazet@google.com> wrote:
 
-> The name of the package with ctexhook.sty is different on
-> Debian/Ubuntu.
->
-> Reported-by: Akira Yokosawa <akiyks@gmail.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> ---
->  scripts/sphinx-pre-install | 3 +++
->  1 file changed, 3 insertions(+)
+> Just to clarify, normal TCP 3WHS has a final ACK packet, where window
+> scaling is enabled.
 
-Applied, thanks.
+Correct, yet this final ACK packet won't signal the initial scaled
+window above 64k. That's what I'm trying to document, as it seems like
+a useful thing to keep in mind. If this statement is incorrect, then
+I'm definitely missing something very basic. Let me know if that's the
+case.
 
-jon
+> You describe a possible issue of passive connections.
+> Most of the time, servers want some kind of control before allowing a
+> remote peer to send MB of payload in the first round trip.
+
+Let's focus purely on the client side of it. The client is willing to
+receive the large payload (let's say 250K), yet it cannot signal this
+fact to the server.
+
+> However, a typical connection starts with IW10 (rfc 6928), and
+> standard TCP congestion
+> control would implement Slow Start, doubling the payload at every round trip,
+> so this is not an issue.
+
+It's not an issue on a low latency link, but when a latency sensitive
+client is trying to retrieve something across a 300ms RTT link, extra
+round trips to stretch the window add a lot of latency.
+
+> If you want to enable bigger than 65535 RWIN for passive connections,
+> this would violate standards and should be discussed first at IETF.
+
+I understand this and I don't intend to do this.
+
+> If you want to enable bigger than 65535 RWIN for passive connections
+> in a controlled environment, I suggest using an eBPF program to do so.
+
+Right, ebpf was your suggestion: https://lkml.org/lkml/2021/12/22/668
+
+The intention of this patch is to say that you can't achieve this even
+for active connections with the client that is willing to advertise a
+larger window in the first non-SYN ACK. Currently even with ebpf you
+cannot do this, but I'm happy to add the support.

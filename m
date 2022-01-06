@@ -2,116 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 834B6486724
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 16:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 609B6486727
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 16:55:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240789AbiAFPzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 10:55:18 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:55946 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240757AbiAFPzQ (ORCPT
+        id S240851AbiAFPz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 10:55:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48022 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240792AbiAFPzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 10:55:16 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 523EC61CCD;
-        Thu,  6 Jan 2022 15:55:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EA9EC36AED;
-        Thu,  6 Jan 2022 15:55:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641484515;
-        bh=Zs49UM4op7FhcCag8kpRl0gmJmPkQMG6LyUseoRbg+0=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=u/X2RYkCkXWlEbdzZylMfFjFSEVyRT5Ca3qVn7cp9C12kkSDpjgzNfNvUmOCIJizx
-         DommcboOU+mfgMmoOi08pZRyP+WiWUHP2RIG7uehFtB1oWZtypyF8sWK4S/xTD38sh
-         Y1XgFY7Ix5jLFUTR/9KYwRCm4cHtFN4stWf7TxUjUkUiy5DK4m/VEiFiF0MUQQtwM5
-         CO6xPJVth9K2ogc2C0OdzBJPzd9r7HwWMa3eqeonRWKWg2fW5fpAghr2pKvhzexsb+
-         afyqg3LXWlrEtyE5ww0K0lsmykZcj63W0+M+mg0S4X+1a8SAezzwD6LHmxXCGzt6RL
-         uY4rs4xgdqKUA==
-Message-ID: <043a206f03929c2667a465314144e518070a9b2d.camel@kernel.org>
-Subject: Re: [PATCH v4 28/68] fscache: Provide a function to note the
- release of a page
-From:   Jeff Layton <jlayton@kernel.org>
-To:     David Howells <dhowells@redhat.com>, linux-cachefs@redhat.com
-Cc:     Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        JeffleXu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 06 Jan 2022 10:55:12 -0500
-In-Reply-To: <164021525963.640689.9264556596205140044.stgit@warthog.procyon.org.uk>
-References: <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk>
-         <164021525963.640689.9264556596205140044.stgit@warthog.procyon.org.uk>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+        Thu, 6 Jan 2022 10:55:20 -0500
+Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A822DC061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 07:55:19 -0800 (PST)
+Received: by mail-ot1-x344.google.com with SMTP id w19-20020a056830061300b0058f1dd48932so3485056oti.11
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 07:55:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Tw8dbN6LTxQWfiKFnX9KbeZopZ4r1xaWZ10BszxRW60=;
+        b=mTG4nG2/jDeNIY4TsL+foyrjjhHZihe/vURCOjfAXjQTXaf3nZc0KjjukNJokHAapS
+         T+pYrCGTGhPW52gU326/f6NE0G1cGsG07HfXtLnn4jtftVm4rtb8SXXHAr3ivi58Wtzl
+         uucig6PYL7Zjb4wa8RD6YOKCP7Dlg0qIQlZZnQDhBoXcJjotftNO9Y8DijgsyTGAnioT
+         +cs6UJLdUyeY6zg1r2uFqy+AwzZP3Tqgt8477d6OwKoLIzam7vVXsO0sus2I/K5eSd0C
+         gUn75t4TF7XqzhWm0ZQOHSe5JKuLhKgDlB1vMRWoSyPIf6eFrOV7K9emwpV2z2Ogw3YH
+         e3IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=Tw8dbN6LTxQWfiKFnX9KbeZopZ4r1xaWZ10BszxRW60=;
+        b=vgjcLQ11yDpz4MqIejfj3MlRwDT6V+bHhmT5+peXEzHQMUhxgXRZTXhLjHA+e2+48Q
+         w4kNikNXwnR2XG6pXozJ6iavh/xrnzwvC0/Nc1xpekI06hrOuzzsLV2/u5/QxJwb+fqK
+         EU0+nM2DZB38iP5M088dgtMB6NiubKjUwYAlWVVqnSEJgxNpwzb9ijS1t7cHY4Td+pqr
+         rEeYtprgnw/B6xGQ2so5Q5MnlD3um0sXwuRXkx6QFPZnsuLBzIGu1j1P5oiqIj/cwvta
+         qMnYQ2dU0/NTmK4nl6ZLW3jbUmW8q0riCXyQvfUKYfEdwGJ7elNjX3lbwKK02xH3wqbd
+         Q1JA==
+X-Gm-Message-State: AOAM531WDHEekje8MfszzWuXuevLm4EEEP3FSFqwgcIHeqIT0xBSNU8w
+        kHVdU/rpEqLfq4HeFNGcIJSSt9ZKZEbN5x71Jxo=
+X-Google-Smtp-Source: ABdhPJyUOcrE75V4+Fe04DlaEC37l3ua3xNDvywQvLcNHB2xBTDCNdHkAbZqykjRSUne6nihUwFPho1YSvlfxJwQvQc=
+X-Received: by 2002:a9d:4c15:: with SMTP id l21mr43406598otf.127.1641484519049;
+ Thu, 06 Jan 2022 07:55:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a4a:2c15:0:0:0:0:0 with HTTP; Thu, 6 Jan 2022 07:55:18 -0800 (PST)
+Reply-To: crisstinacampell@gmail.com
+From:   "Mrs. Cristina Campbell" <sp0276303@gmail.com>
+Date:   Thu, 6 Jan 2022 15:55:18 +0000
+Message-ID: <CAMZ1grS66SgLfEwgT8+mnXyJD81St0aPFZf=SSfhEgFw1QJBgw@mail.gmail.com>
+Subject: =?UTF-8?B?Q3p5IG1vxbxlc3ogbWkgcG9tw7NjPw==?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2021-12-22 at 23:20 +0000, David Howells wrote:
-> Provide a function to be called from a network filesystem's releasepage
-> method to indicate that a page has been released that might have been a
-> reflection of data upon the server - and now that data must be reloaded
-> from the server or the cache.
-> 
-> This is used to end an optimisation for empty files, in particular files
-> that have just been created locally, whereby we know there cannot yet be
-> any data that we would need to read from the server or the cache.
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: linux-cachefs@redhat.com
-> Link: https://lore.kernel.org/r/163819617128.215744.4725572296135656508.stgit@warthog.procyon.org.uk/ # v1
-> Link: https://lore.kernel.org/r/163906920354.143852.7511819614661372008.stgit@warthog.procyon.org.uk/ # v2
-> Link: https://lore.kernel.org/r/163967128061.1823006.611781655060034988.stgit@warthog.procyon.org.uk/ # v3
-> ---
-> 
->  include/linux/fscache.h |   16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/include/linux/fscache.h b/include/linux/fscache.h
-> index 18e725671594..28ce258c1f87 100644
-> --- a/include/linux/fscache.h
-> +++ b/include/linux/fscache.h
-> @@ -607,4 +607,20 @@ static inline void fscache_clear_inode_writeback(struct fscache_cookie *cookie,
->  	}
->  }
->  
-> +/**
-> + * fscache_note_page_release - Note that a netfs page got released
-> + * @cookie: The cookie corresponding to the file
-> + *
-> + * Note that a page that has been copied to the cache has been released.  This
-> + * means that future reads will need to look in the cache to see if it's there.
-> + */
-> +static inline
-> +void fscache_note_page_release(struct fscache_cookie *cookie)
-> +{
-> +	if (cookie &&
-> +	    test_bit(FSCACHE_COOKIE_HAVE_DATA, &cookie->flags) &&
-> +	    test_bit(FSCACHE_COOKIE_NO_DATA_TO_READ, &cookie->flags))
-> +		clear_bit(FSCACHE_COOKIE_NO_DATA_TO_READ, &cookie->flags);
-> +}
-> +
->  #endif /* _LINUX_FSCACHE_H */
-> 
-> 
+Drodzy Umi=C5=82owani,
 
-Is this logic correct?
+Przeczytaj to powoli i uwa=C5=BCnie, poniewa=C5=BC mo=C5=BCe to by=C4=87 je=
+den z
+najwa=C5=BCniejszych e-maili, jakie kiedykolwiek dostaniesz. Nazywam si=C4=
+=99
+Cristina Campbell, by=C5=82am =C5=BCon=C4=85 zmar=C5=82ego Edwarda Campbell=
+a. Pracowa=C5=82 w
+Shell Petroleum Development Company London i by=C5=82 r=C3=B3wnie=C5=BC do=
+=C5=9Bwiadczony
+wykonawca w regionie Azji Wschodniej. Zmar=C5=82 w poniedzia=C5=82ek 31 lip=
+ca
+2003 r. w Pary=C5=BCu. Byli=C5=9Bmy ma=C5=82=C5=BCe=C5=84stwem przez siedem=
+ lat bez dziecka.
 
-FSCACHE_COOKIE_HAVE_DATA gets set in cachefiles_write_complete, but will
-that ever be called on a cookie that has no data? Will we ever call
-cachefiles_write at all when there is no data to be written?
+Czytaj=C4=85c to, nie chc=C4=99, =C5=BCeby=C5=9B mi wsp=C3=B3=C5=82czu=C5=
+=82a, poniewa=C5=BC wierz=C4=99, =C5=BCe kiedy=C5=9B
+wszyscy umr=C4=85. Zdiagnozowano u mnie raka prze=C5=82yku i m=C3=B3j lekar=
+z
+powiedzia=C5=82 mi, =C5=BCe nie wytrzymam d=C5=82ugo z powodu moich skompli=
+kowanych
+problem=C3=B3w zdrowotnych.
 
---
-Jeff Layton <jlayton@kernel.org>
+Chc=C4=99, aby B=C3=B3g by=C5=82 dla mnie mi=C5=82osierny i przyj=C4=85=C5=
+=82 moj=C4=85 dusz=C4=99, wi=C4=99c
+postanowi=C5=82am dawa=C4=87 ja=C5=82mu=C5=BCn=C4=99 organizacjom
+charytatywnym/ko=C5=9Bcio=C5=82om/=C5=9Bwi=C4=85tyniom buddyjskim/meczetom/=
+dzieciom bez
+matki/mniej uprzywilejowanych i wdowom, poniewa=C5=BC chc=C4=99, aby to by=
+=C5=82
+jeden z ostatnich dobrych uczynk=C3=B3w Robi=C4=99 to na ziemi, zanim umr=
+=C4=99. Do
+tej pory rozdawa=C5=82em pieni=C4=85dze niekt=C3=B3rym organizacjom charyta=
+tywnym w
+Szkocji, Walii, Panamie, Finlandii i Grecji. Teraz, kiedy moje zdrowie
+tak bardzo si=C4=99 pogorszy=C5=82o, nie mog=C4=99 ju=C5=BC tego robi=C4=87=
+.
+
+Kiedy=C5=9B poprosi=C5=82am cz=C5=82onk=C3=B3w rodziny, aby zamkn=C4=99li j=
+edno z moich kont i
+przekazali pieni=C4=85dze, kt=C3=B3re tam mam, na organizacje charytatywne =
+w
+Austrii, Polsce, Niemczech, W=C5=82oszech i Szwajcarii, odm=C3=B3wili i
+zatrzymali pieni=C4=85dze dla siebie. Dlatego nie ufam im wi=C4=99cej, poni=
+ewa=C5=BC
+wydaje si=C4=99, =C5=BCe nie maj=C4=85 do czynienia z tym, co im zostawi=C5=
+=82em. Ostatnie
+z moich pieni=C4=99dzy, o kt=C3=B3rych nikt nie wie, to ogromny depozyt
+got=C3=B3wkowy w wysoko=C5=9Bci 6 milion=C3=B3w dolar=C3=B3w ameryka=C5=84s=
+kich, kt=C3=B3ry mam w
+banku w Tajlandii, gdzie zdeponowa=C5=82em fundusz. B=C4=99d=C4=99 chcia=C5=
+=82, =C5=BCeby=C5=9B
+wykorzysta=C5=82 ten fundusz na programy charytatywne i wspiera=C5=82 ludzk=
+o=C5=9B=C4=87 w
+swoim kraju, je=C5=9Bli tylko b=C4=99dziesz szczery.
+
+Podj=C4=99=C5=82am t=C4=99 decyzj=C4=99, bo nie mam dziecka, kt=C3=B3re odz=
+iedziczy te
+pieni=C4=85dze, nie boj=C4=99 si=C4=99 =C5=9Bmierci st=C4=85d wiem dok=C4=
+=85d id=C4=99. Wiem, =C5=BCe b=C4=99d=C4=99 na
+=C5=82onie Pana. Jak tylko otrzymam Twoj=C4=85 odpowied=C5=BA, podam Ci kon=
+takt z
+Bankiem i wydam upowa=C5=BCnienie, kt=C3=B3re upowa=C5=BCni Ci=C4=99 jako p=
+ierwotnego
+beneficjenta tego funduszu do natychmiastowego rozpocz=C4=99cia programu
+charytatywnego w Twoim kraju.
+
+Tylko =C5=BCycie prze=C5=BCyte dla innych jest warte zachodu. Chc=C4=99, =
+=C5=BCeby=C5=9B zawsze
+si=C4=99 za mnie modli=C5=82. Ka=C5=BCda zw=C5=82oka w Twojej odpowiedzi da=
+ mi miejsce na
+poszukiwanie innej osoby w tym samym celu. Je=C5=9Bli nie jeste=C5=9B
+zainteresowany, przepraszam za kontakt. Mo=C5=BCesz si=C4=99 ze mn=C4=85 sk=
+ontaktowa=C4=87
+lub odpowiedzie=C4=87 na m=C3=B3j prywatny e-mail: (crisstinacampell@gmail.=
+com).
+
+Dzi=C4=99kuj=C4=99,
+Z powa=C5=BCaniem,
+Pani Cristina Campbell
+E-mail; crisstinacampell@gmail.com

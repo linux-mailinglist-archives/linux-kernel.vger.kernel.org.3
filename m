@@ -2,201 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9FF486B83
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:00:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC6B486B98
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:05:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244055AbiAFVA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 16:00:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244010AbiAFVA0 (ORCPT
+        id S244106AbiAFVFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 16:05:42 -0500
+Received: from fanzine2.igalia.com ([213.97.179.56]:50348 "EHLO
+        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244069AbiAFVFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 16:00:26 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3AFC061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 13:00:26 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id p65so4692776iof.3
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 13:00:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AmzdgAiuO/8SZ4ChbNLcS7C9Wx3iWh+y/OvXPCFKxrw=;
-        b=bF0zHrf6cn7DZ9x7Pn4rON78LlB/Hv4SZOT1CUj/MS6/n3ZRZRuCOzw38oA9zXUnUq
-         bmPYvez6eiYkBvk7XWVrAWDC9k/UQm1G+UlfndAwfmWfa9a8OmebJf30pHRvKVOH7vLs
-         jt6bGvG2Aqd9ZHc94cDDGoxmgy4g8E5zyYL9iT0hbk68Fbwp9h6N8bAzGBvI8eheAF4z
-         FcEVNjkDqF28luZRsiDiFQOfedRFwy+Cm991Ddau75kShcGF2h70VZ4zhwsPu2abAa0c
-         bafGpZZYjVq8h0wtrhrDmHrDlIiTeia1yeNt14TfbkApq+o7nqg88SGsPY1GhFNAVaZV
-         RgNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AmzdgAiuO/8SZ4ChbNLcS7C9Wx3iWh+y/OvXPCFKxrw=;
-        b=bFsH37ONWXG+3tk2stl8YrX2ZYAthSROLFFrayN2D2gzDQw7uP8wKrvaiSitA22sBA
-         8cQSKJX5nPUtCLu321kalCP/7mzrGAypKTUft/fhMUtsU2PTiUuMcQVyxt8aTxjkg/ML
-         7lxu907rGJvt9rk0SHLghiH35ok8yWCJAly5EXlC4mVn4X2l0K3HemM4Tz+TyR0X1Hc/
-         tiwumAtCU9iNXBJMUq9zevYgsE47FMlpR6BOB6ruIOEriQagKz4b4y+ku3KYCZEmkA6e
-         KL7ElsAHiMV8I6M9dHGzO8iqofsF74JN81xQFcTQ6g3EviJhOwYYApt96R/7KMpc81MB
-         DFCQ==
-X-Gm-Message-State: AOAM533KwhW90+zX2Al5jTQ09GIYoJ3ZCtjBE1n7ELJH33Ri5FaCMTZW
-        eGy93Ka/rCJ3POJ4E4n0qj69SaCXf9Ux37OVur4=
-X-Google-Smtp-Source: ABdhPJyMPlDYOazAJHlrg63PALPvUxYHWGsXkLSVu4lQmb//VCulO817Wx8LlBVYawaWZLOwDu/PsbsVmaBAVu8/IEM=
-X-Received: by 2002:a05:6638:33a6:: with SMTP id h38mr28475446jav.194.1641502825423;
- Thu, 06 Jan 2022 13:00:25 -0800 (PST)
+        Thu, 6 Jan 2022 16:05:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version
+        :Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=RjinO8IcnDpJH9TEhia5kvOwgPh5fe8QqWyiQwb8cvs=; b=sBFtvIF22PUjiVd/XPbex2QJQ5
+        MRs0oYEzTOjyNJQZCln6UYBHHYd9T0RsH4LLYSf9T09nKu8sYU/by3yzsKjsrpJ/1RwCuK+vddmR0
+        IS9CMOrz3qWAIGsbG+b6Xb9i6w/dA1VgVoJWD0JXYi2n23dWR6VHMRdQY2HGnl/32cIAUesVVq9KM
+        XNgK53P9NaMD2a0xL2tB4dYO7T5YWgE0LSmnZ7p7+xTyF5mj4QjWOHIuPxItYyicCyCSsptaY9753
+        8aYDdL5XEH+VYDxUmR9i4zARuz7Dsc4InRLBYaDi2kZszBQ14SVwFmu5Y2dEmcN5zDCY1v6wFU1ON
+        s+yaYRkg==;
+Received: from [179.113.53.20] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1n5Zws-000BUL-D4; Thu, 06 Jan 2022 22:05:26 +0100
+Subject: Re: [PATCH V2] notifier/panic: Introduce panic_notifier_filter
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dyoung@redhat.com, linux-doc@vger.kernel.org, bhe@redhat.com,
+        vgoyal@redhat.com, akpm@linux-foundation.org,
+        andriy.shevchenko@linux.intel.com, corbet@lwn.net,
+        halves@canonical.com, kernel@gpiccoli.net
+References: <20220106200007.112357-1-gpiccoli@igalia.com>
+ <YddQOFye7Rhr9NDl@rowland.harvard.edu>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Message-ID: <4e416d20-13f2-25ea-6ff7-b8c0c1818eac@igalia.com>
+Date:   Thu, 6 Jan 2022 18:05:09 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211201180653.35097-1-alcooperx@gmail.com> <20211201180653.35097-2-alcooperx@gmail.com>
- <YahNIinbEwB569C1@matsya>
-In-Reply-To: <YahNIinbEwB569C1@matsya>
-From:   Alan Cooper <alcooperx@gmail.com>
-Date:   Thu, 6 Jan 2022 16:01:53 -0500
-Message-ID: <CAOGqxeVS0sQg=vAQKOC3ksuGfdCO-TzgMdOmhtQJZBcuj3YFdg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] phy: usb: Leave some clocks running during suspend
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     ": Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-phy@lists.infradead.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YddQOFye7Rhr9NDl@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 11:35 PM Vinod Koul <vkoul@kernel.org> wrote:
->
-> On 01-12-21, 13:06, Al Cooper wrote:
-> > The PHY client driver does a phy_exit() call on suspend or rmmod and
-> > the PHY driver needs to know the difference because some clocks need
-> > to be kept running for suspend but can be shutdown on unbind/rmmod
-> > (or if there are no PHY clients at all).
-> >
-> > The fix is to use a PM notifier so the driver can tell if a PHY
-> > client is calling exit() because of a system suspend or a driver
-> > unbind/rmmod.
-> >
-> > Signed-off-by: Al Cooper <alcooperx@gmail.com>
-> > ---
-> >  drivers/phy/broadcom/phy-brcm-usb.c | 38 +++++++++++++++++++++++++++++
-> >  1 file changed, 38 insertions(+)
-> >
-> > diff --git a/drivers/phy/broadcom/phy-brcm-usb.c b/drivers/phy/broadcom/phy-brcm-usb.c
-> > index 116fb23aebd9..0f1deb6e0eab 100644
-> > --- a/drivers/phy/broadcom/phy-brcm-usb.c
-> > +++ b/drivers/phy/broadcom/phy-brcm-usb.c
-> > @@ -18,6 +18,7 @@
-> >  #include <linux/soc/brcmstb/brcmstb.h>
-> >  #include <dt-bindings/phy/phy.h>
-> >  #include <linux/mfd/syscon.h>
-> > +#include <linux/suspend.h>
-> >
-> >  #include "phy-brcm-usb-init.h"
-> >
-> > @@ -70,12 +71,35 @@ struct brcm_usb_phy_data {
-> >       int                     init_count;
-> >       int                     wake_irq;
-> >       struct brcm_usb_phy     phys[BRCM_USB_PHY_ID_MAX];
-> > +     struct notifier_block   pm_notifier;
-> > +     bool                    pm_active;
-> >  };
-> >
-> >  static s8 *node_reg_names[BRCM_REGS_MAX] = {
-> >       "crtl", "xhci_ec", "xhci_gbl", "usb_phy", "usb_mdio", "bdc_ec"
-> >  };
-> >
-> > +static int brcm_pm_notifier(struct notifier_block *notifier,
-> > +                         unsigned long pm_event,
-> > +                         void *unused)
-> > +{
-> > +     struct brcm_usb_phy_data *priv =
-> > +             container_of(notifier, struct brcm_usb_phy_data, pm_notifier);
-> > +
-> > +     switch (pm_event) {
-> > +     case PM_HIBERNATION_PREPARE:
-> > +     case PM_SUSPEND_PREPARE:
-> > +             priv->pm_active = true;
-> > +             break;
-> > +     case PM_POST_RESTORE:
-> > +     case PM_POST_HIBERNATION:
-> > +     case PM_POST_SUSPEND:
-> > +             priv->pm_active = false;
-> > +             break;
-> > +     }
-> > +     return NOTIFY_DONE;
-> > +}
-> > +
-> >  static irqreturn_t brcm_usb_phy_wake_isr(int irq, void *dev_id)
-> >  {
-> >       struct phy *gphy = dev_id;
-> > @@ -91,6 +115,9 @@ static int brcm_usb_phy_init(struct phy *gphy)
-> >       struct brcm_usb_phy_data *priv =
-> >               container_of(phy, struct brcm_usb_phy_data, phys[phy->id]);
-> >
-> > +     if (priv->pm_active)
-> > +             return 0;
-> > +
-> >       /*
-> >        * Use a lock to make sure a second caller waits until
-> >        * the base phy is inited before using it.
-> > @@ -120,6 +147,9 @@ static int brcm_usb_phy_exit(struct phy *gphy)
-> >       struct brcm_usb_phy_data *priv =
-> >               container_of(phy, struct brcm_usb_phy_data, phys[phy->id]);
-> >
-> > +     if (priv->pm_active)
-> > +             return 0;
-> > +
-> >       dev_dbg(&gphy->dev, "EXIT\n");
-> >       if (phy->id == BRCM_USB_PHY_2_0)
-> >               brcm_usb_uninit_eohci(&priv->ini);
-> > @@ -488,6 +518,9 @@ static int brcm_usb_phy_probe(struct platform_device *pdev)
-> >       if (err)
-> >               return err;
-> >
-> > +     priv->pm_notifier.notifier_call = brcm_pm_notifier;
-> > +     register_pm_notifier(&priv->pm_notifier);
-> > +
-> >       mutex_init(&priv->mutex);
-> >
-> >       /* make sure invert settings are correct */
-> > @@ -528,7 +561,10 @@ static int brcm_usb_phy_probe(struct platform_device *pdev)
-> >
-> >  static int brcm_usb_phy_remove(struct platform_device *pdev)
-> >  {
-> > +     struct brcm_usb_phy_data *priv = dev_get_drvdata(&pdev->dev);
-> > +
-> >       sysfs_remove_group(&pdev->dev.kobj, &brcm_usb_phy_group);
-> > +     unregister_pm_notifier(&priv->pm_notifier);
-> >
-> >       return 0;
-> >  }
-> > @@ -539,6 +575,7 @@ static int brcm_usb_phy_suspend(struct device *dev)
-> >       struct brcm_usb_phy_data *priv = dev_get_drvdata(dev);
-> >
-> >       if (priv->init_count) {
-> > +             dev_dbg(dev, "SUSPEND\n");
->
-> debug artifact?
->
-> >               priv->ini.wake_enabled = device_may_wakeup(dev);
-> >               if (priv->phys[BRCM_USB_PHY_3_0].inited)
-> >                       brcm_usb_uninit_xhci(&priv->ini);
-> > @@ -578,6 +615,7 @@ static int brcm_usb_phy_resume(struct device *dev)
-> >        * Uninitialize anything that wasn't previously initialized.
-> >        */
-> >       if (priv->init_count) {
-> > +             dev_dbg(dev, "RESUME\n");
->
-> here too
+On 06/01/2022 17:25, Alan Stern wrote:
+> [...]
+>> +	if (unlikely(panic_nf_count) && nh == &panic_notifier_list)
+>> +		if (!is_panic_notifier_filtered(n))
+>> +			goto panic_filtered_out;
+> 
+> Forget the unlikely(); this is not a hot path.
+> 
 
-I left these in intentionally because they are very useful for debug.
+Thanks for the review Alan! Sure, I can remove that in the V3 - good point.
 
->
-> >               if (priv->wake_irq >= 0)
-> >                       disable_irq_wake(priv->wake_irq);
-> >               brcm_usb_init_common(&priv->ini);
-> > --
-> > 2.17.1
->
-> --
-> ~Vinod
+
+>> +
+>>  	ret = notifier_chain_register(&nh->head, n);
+>> +
+>> +panic_filtered_out:
+>>  	spin_unlock_irqrestore(&nh->lock, flags);
+>>  	return ret;
+>>  }
+> 
+> It would be simpler to do:
+> 
+> 	if (!(nh == &panic_notifier_list && panic_nf_count > 0 &&
+> 			is_panic_notifier_filtered(n)))
+> 		ret = notifier_chain_register(&nh->head, n);
+> 
+> If there were special-purpose functions just for registering and 
+> unregistering callbacks on the panic_notifier_list, the design would be 
+> cleaner (no need to modify core notifier code).  But making that change 
+> would mean altering a lot of call sites.  :-(
+> 
+
+Good suggestion, I'll change the code with your suggestion in the V3.
+
+And I agree, I considered something like that when writing this "hijack"
+into core code just for the sake of panic notifier filtering...
+I'm not sure though it worth the effort and code addition, to change all
+the call sites and add a special register mechanism to the panic
+notifier only. Let's see what the others think...
+
+Cheers,
+
+
+Guilherme
+
+
+>> @@ -162,10 +194,16 @@ int atomic_notifier_chain_unregister(struct atomic_notifier_head *nh,
+>>  		struct notifier_block *n)
+>>  {
+>>  	unsigned long flags;
+>> -	int ret;
+>> +	int ret = 0;
+>>  
+>>  	spin_lock_irqsave(&nh->lock, flags);
+>> +	if (unlikely(panic_nf_count) && nh == &panic_notifier_list)
+>> +		if (!is_panic_notifier_filtered(n))
+>> +			goto panic_filtered_out;
+>> +
+>>  	ret = notifier_chain_unregister(&nh->head, n);
+>> +
+>> +panic_filtered_out:
+> 
+> Same idea here.
+> 
+> Alan Stern
+> 

@@ -2,96 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DDC8486078
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 07:04:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 522B9486085
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 07:18:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234346AbiAFGCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 01:02:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiAFGCs (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 01:02:48 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3268C061245;
-        Wed,  5 Jan 2022 22:02:47 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id g80so4680033ybf.0;
-        Wed, 05 Jan 2022 22:02:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nS2yMVkGz+ps+zT6am8AF/1mxQGXi0VAWBoJudmXHPc=;
-        b=HPhlvhwnoZsWjZ39b/M1Qkh2gF/e9cUKF7B/ThBVMIFie1XWAteoYg6OLDih9uZbWl
-         bq5ozFyoBIUS4xvLmhqVB43gNd56C9JME8hfNh/Y17bifPQ7W1zeisEKpI3BjzJIZrxC
-         TLAG5kbT13DU5uH5nJin6FGECvFm+AGSmR7i5uM/45J5LOKa6T9gnp2g7l2Knd89Gmij
-         2GA8FnsNd4/mKGqr1Jy5L1faMdNyE7QFZy8BdSWSVAcD3XLKJWV9+Hyx2K6QB7MJRTKp
-         CtQqKEWnVMVet0uSVgDyLmV+toll2PL26CKEwmUz4gRuzHSZP24g08WQorM5k12BA+Dw
-         odpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nS2yMVkGz+ps+zT6am8AF/1mxQGXi0VAWBoJudmXHPc=;
-        b=Wj9riMcA4oXAmK5vTLLkBiHd9sp76eHbTqGpsi7ImBJ7glYGM0JXwlPSPCQQji8z2n
-         F0+/KJ8llsJ3IrmA0n82zhExhzI2ETKjs4ivQI2YiAep/J4FoD8+rqTWPaVmCreP9pfT
-         Uy13A2X9CTShpFphAMe9oIxBfA2j8t4h3f+JlFIGPXHPX/ZdEs56hKQNK9FposcC4b80
-         MafqW0gOdLtaB69omhrLTngE8WzRdNC7mNWTHz8wC3m7HwW4Dt6T5a7E29tCAyntCHmk
-         grUFSCQlxFoLSFosHWRiTI7+mpkiUek7P4A2LymhvyZsMtELVzK48AMY+xHZ5xYAfOoR
-         9Dkw==
-X-Gm-Message-State: AOAM5318SzBxs1hV27PxAZuhUV6BU3qmVwVosmXhNuYk1wiMx15fzf4k
-        FUPcSER/3hZEIYbTeRx7eQsl/egDv/5j2YRpd7w5LtP5cAA=
-X-Google-Smtp-Source: ABdhPJy7iUitjcn5oppNAM26KLOKBXIs4/V+QaoDLcXzbV9JP4wn+ooEMLT/JRhoo9LdAuLJ9hjFRVfhWvvZWFHGdrk=
-X-Received: by 2002:a05:6902:120d:: with SMTP id s13mr201994ybu.498.1641448967089;
- Wed, 05 Jan 2022 22:02:47 -0800 (PST)
+        id S234561AbiAFGSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 01:18:15 -0500
+Received: from mga17.intel.com ([192.55.52.151]:15450 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229560AbiAFGSN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 01:18:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641449893; x=1672985893;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/3jkJMJJH3hTPBzfkr/jc+jsdiPQPPhIDNwCKzGk62U=;
+  b=VRspQErV2neUJm/dcNgfM5X+DU9vllirHCYOCrTKZwnUagvnm5mma+Ie
+   ZGflDaAVIvO/b/sXJe4dHaMEcfUAiaukQp1YPo4Hzd0plsS8Pi9dAc8TR
+   xs0zcRv0iFSC2iqIc9cdK9zB2Rm+MPEV1zUuU8B9ZiP4NZsI/xu+n6rNy
+   BMZxhMJ/17IzZjWI81DhuUc4ihXDcBH8x0oSJtYCXVgFpteGIQPg9a1F2
+   TNbQcmOwORMYMMtDhnu8GrgryzS2UmMkIuyONOxO020Z2bT+zMlhoFb8I
+   X/vDNPBY+Sub7k2eNtv/zvjBTzUZ0wNfcM0ez60cdgnmqL54U5naqi4Ai
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="223283124"
+X-IronPort-AV: E=Sophos;i="5.88,266,1635231600"; 
+   d="scan'208";a="223283124"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 22:18:09 -0800
+X-IronPort-AV: E=Sophos;i="5.88,266,1635231600"; 
+   d="scan'208";a="621413992"
+Received: from yangzhon-virtual.bj.intel.com (HELO yangzhon-Virtual) ([10.238.145.56])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-SHA256; 05 Jan 2022 22:18:04 -0800
+Date:   Thu, 6 Jan 2022 14:02:55 +0800
+From:   Yang Zhong <yang.zhong@intel.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, corbet@lwn.net, shuah@kernel.org,
+        seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
+        jing2.liu@linux.intel.com, jing2.liu@intel.com,
+        guang.zeng@intel.com, wei.w.wang@intel.com, yang.zhong@intel.com
+Subject: Re: [PATCH v5 07/21] x86/fpu: Provide
+ fpu_enable_guest_xfd_features() for KVM
+Message-ID: <20220106060255.GA2395@yangzhon-Virtual>
+References: <20220105123532.12586-1-yang.zhong@intel.com>
+ <20220105123532.12586-8-yang.zhong@intel.com>
+ <c99d0b82-a44f-db8e-3f81-93d2394f9a02@redhat.com>
 MIME-Version: 1.0
-References: <CAFcO6XMpbL4OsWy1Pmsnvf8zut7wFXdvY_KofR-m0WK1Bgutpg@mail.gmail.com>
- <CAADnVQJK5mPOB7B4KBa6q1NRYVQx1Eya5mtNb6=L0p-BaCxX=w@mail.gmail.com>
- <CAFcO6XMxZqQo4_C7s0T2dv3JRn4Vq4RDFqJO6ZQFr6kZzsnx9g@mail.gmail.com> <CAADnVQ+HJnZOqGjXKXut51BUqi=+na4cj=PFaE35u9QwZDgeVQ@mail.gmail.com>
-In-Reply-To: <CAADnVQ+HJnZOqGjXKXut51BUqi=+na4cj=PFaE35u9QwZDgeVQ@mail.gmail.com>
-From:   butt3rflyh4ck <butterflyhuangxx@gmail.com>
-Date:   Thu, 6 Jan 2022 14:02:36 +0800
-Message-ID: <CAFcO6XP6+=S1C_m28JF_aA5az=WiswS-J3d8X2dBsYyQ4nwzkg@mail.gmail.com>
-Subject: Re: A slab-out-of-bounds Read bug in __htab_map_lookup_and_delete_batch
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c99d0b82-a44f-db8e-3f81-93d2394f9a02@redhat.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> >
-> > Hi, the attachment is a reproducer. Enjoy it.
->
-> Please do not top-post.
-> Forwarding a syzbot reproducer with zero effort to analyze
-> what's going on is kinda lame.
+On Wed, Jan 05, 2022 at 02:06:40PM +0100, Paolo Bonzini wrote:
+> On 1/5/22 13:35, Yang Zhong wrote:
+> >+int fpu_enable_guest_xfd_features(struct fpu_guest *guest_fpu, u64 xfeatures)
+> >+{
+> >+	lockdep_assert_preemption_enabled();
+> >+
+> 
+> The old fpu_update_guest_perm_features(guest_fpu) is equivalent to
+> 
+> 	fpu_enable_guest_xfd_features(guest_fpu, guest_fpu->perm);
+> 
+> Missing doc comment:
+> 
+> /*
+>  * fpu_enable_guest_xfd_features - Enable xfeatures according to guest perm
+>  * @guest_fpu:         Pointer to the guest FPU container
+>  * @xfeatures:         Features requested by guest CPUID
+>  *
+>  * Enable all dynamic xfeatures according to guest perm and requested CPUID.
+>  * Invoked if the caller wants to conservatively expand fpstate buffer instead
+>  * of waiting until XCR0 or XFD MSR is written.
+>  *
+>  * Return: 0 on success, error code otherwise
+>  */
+> 
+> Also, the check for 32-bit is slightly imprecise:
+> 
+> 	/* Dynamic xfeatures are not supported with 32-bit kernels. */
+> 	if (!IS_ENABLED(CONFIG_X86_64))
+> -		return 0;
+> +		return -EINVAL;
+> 
+> since we only get here with xfeatures != 0 (if it compiles, just removing
+> the IS_ENABLED check altogether would be even better).  With these changes,
+> 
 
-Hi, I am sorry for that.
+  Paolo, I did 32 bit kernel build tests
 
-> Maybe try harder and come up with a fix?
-> Or at least try git bisect and based on a commit find and
-> cc an author so it can be fixed (assuming issue still exists
-> in bpf-next) ?
->
+  (1). w/ IS_ENABLED(CONFIG_X86_64)
 
-Thank you for your suggestions.
-I spent a few days on git bisect and locked the bad commit, the commit
-is d635a69dd4981cc51f90293f5f64268620ed1565.
-The commit is a Merge tag 'net-next-5.11' and Contains multiple
-commits, currently not locked to a single commit.
+      if (!IS_ENABLED(CONFIG_X86_64))
+      	return -EINVAL; 
+    
+     This 32 bit kernel can successfully build.
+
+  (2). remove IS_ENABLED(CONFIG_X86_64)
+
+      The 32 bit kernel build is failed, and the error as:
+
+      ld: arch/x86/kernel/fpu/core.o: in function `fpu_enable_guest_xfd_features':
+/root/amx/v5/kvm/arch/x86/kernel/fpu/core.c:278: undefined reference to `__xfd_enable_feature'
+
+      Seems we need define 32 bit API for __xfd_enable_feature().
+
+   I also tried (1) in desktop, but I could not reboot the machine after installed 32 bit kernel.
+
+   thanks a lot!
+
+   Yang 
 
 
-Regards,
- but3rflyh4ck.
 
---
-Active Defense Lab of Venustech
+
+
+> Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+> 
+> Thanks,
+> 
+> Paolo

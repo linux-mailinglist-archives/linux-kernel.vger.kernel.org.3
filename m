@@ -2,217 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B62D4860CF
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 08:02:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E184860E0
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 08:08:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235357AbiAFHCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 02:02:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41264 "EHLO
+        id S235499AbiAFHIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 02:08:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235098AbiAFHCG (ORCPT
+        with ESMTP id S234429AbiAFHIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 02:02:06 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1638C061201
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 23:02:05 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id o7so1996056ioo.9
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 23:02:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PvsDlgxcfQ/R1kwgYEBZAicIwglz/cP+ScMeIdW/5hM=;
-        b=p1teQc3orRQ3/WEdaMOFmwX6AvtV4IoXGWWDd9+JLchubbEEb9Qaks136IT0PbI+v9
-         HrFj0babR3z5+eOsT1h+eUEeFhKc/lh9k0sDEP6wJhYppk9/GK3+dZQ83RSHtMe30sia
-         IzO3H/v2hOUGpl1r6+pf+vWpCj0saLvVallxn22KF1u2g1B361ogklLf+11g46Nt9WGs
-         EsfHEKXeMiflrJZFxfXLQ/dvMQ12RK3SJ5RuwCITzYfqwDOM17rr3scGRzQTaNPcsa8i
-         Ds0ljjshxvvmSWz7HnSdp6f3alXUavzQNBIN9QtRSZtwjrhUZ/nQFToc19o2Od/lXDgH
-         0rKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PvsDlgxcfQ/R1kwgYEBZAicIwglz/cP+ScMeIdW/5hM=;
-        b=IYDqrzNJVy5id0Yf7uv5aqx7P18yM1Huu+O0CVB2rAnLOU3vwarmykhECcGdJtk8S7
-         rhzkRBQffeZnwXzs3zOtl+ARqmOn9u6ZA6CrHlxe+/b3dUTfxWkoRMvUQhB4tT8hOeK9
-         EoBHqGptISC6GSrbIr/rN1zBlJH+XUaGQjLtHpufnPi8JeFUy33rD/Nr69kh4Nr9duxX
-         ZSg63pOoNu60xf3/o45Gjlw47ZUJUthunrfrp/mlSDc39OuJo/XCsuH50pW0uyPhdjpO
-         BFGPbe/wWXV/qDTK4WHUGzGjhRsoKG3+Yt8+Ap1P/Fzq+Mq+7Iiqkpiggn6JVpHT93mA
-         uwAg==
-X-Gm-Message-State: AOAM533Uhlln0rBdc5tigRl1m5EZyPYOkRdGNUxmM/k88f+XDZDiXs6w
-        ynTlx5Ww2ufBZ4cNdtC1sSGAa8I+ecFM9gdp2/gCOw==
-X-Google-Smtp-Source: ABdhPJyaBWybR/0lru64WXfgIRiL6d8fVWv/wUbrers4AuukbshclvvreoyzcSBQcLIMNTPNm9rL0yP9sxPBfml9owc=
-X-Received: by 2002:a05:6602:1484:: with SMTP id a4mr27107590iow.35.1641452524766;
- Wed, 05 Jan 2022 23:02:04 -0800 (PST)
+        Thu, 6 Jan 2022 02:08:20 -0500
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4641C061245;
+        Wed,  5 Jan 2022 23:08:19 -0800 (PST)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n5Msj-00048K-Er; Thu, 06 Jan 2022 07:08:17 +0000
+Date:   Thu, 6 Jan 2022 07:08:17 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>
+Subject: Re: [PATCH 03/10] exit: Move oops specific logic from do_exit into
+ make_task_dead
+Message-ID: <YdaVYeHWIjAR7mhp@zeniv-ca.linux.org.uk>
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+ <20211208202532.16409-3-ebiederm@xmission.com>
+ <YdUxGKRcSiDy8jGg@zeniv-ca.linux.org.uk>
 MIME-Version: 1.0
-References: <20210923001024.550263-1-irogers@google.com> <20210923001024.550263-4-irogers@google.com>
- <bc2b0786-8965-1bcd-2316-9d9bb37b9c31@kernel.org> <c19ca2a2-54c9-88b1-b705-5a2cd4dd9580@kernel.org>
- <YdMTIl7jn25XrUn8@kernel.org> <44a258b0-048d-9e32-1583-ae52aaee0a1a@kernel.org>
-In-Reply-To: <44a258b0-048d-9e32-1583-ae52aaee0a1a@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 5 Jan 2022 23:01:52 -0800
-Message-ID: <CAP-5=fWhvTCNR9Orjw4vvrrV_GV27V4rRTnym9qWaNtMdOJpjw@mail.gmail.com>
-Subject: Re: [was: libtraceevent: Increase libtraceevent logging when verbose]
-To:     Jiri Slaby <jirislaby@kernel.org>,
-        linux-trace-devel@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        eranian@google.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdUxGKRcSiDy8jGg@zeniv-ca.linux.org.uk>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 3, 2022 at 10:17 PM Jiri Slaby <jirislaby@kernel.org> wrote:
->
-> On 03. 01. 22, 16:15, Arnaldo Carvalho de Melo wrote:
-> > Tried reproducing here on fedora 34 but it is at 1.1.1:
->
-> FWIW, it's openSUSE Tumbleweed:
-> $ rpm -q libtraceevent1
-> libtraceevent1-1.3.0-1.3.x86_64
+On Wed, Jan 05, 2022 at 05:48:08AM +0000, Al Viro wrote:
+> On Wed, Dec 08, 2021 at 02:25:25PM -0600, Eric W. Biederman wrote:
+> > The beginning of do_exit has become cluttered and difficult to read as
+> > it is filled with checks to handle things that can only happen when
+> > the kernel is operating improperly.
+> > 
+> > Now that we have a dedicated function for cleaning up a task when the
+> > kernel is operating improperly move the checks there.
+> 
+> Umm...  I would probably take profile_task_exit() crap out before that
+> point.
+> 	1) the damn thing is dead - nothing registers notifiers there
+> 	2) blocking_notifier_call_chain() is not a nice thing to do on oops...
+> 
+> I'll post a patch ripping the dead parts of kernel/profile.c out tomorrow
+> morning (there's also profile_handoff_task(), equally useless these days
+> and complicating things for __put_task_struct()).
 
-I was able to reproduce in an opensuse tumbleweed container.
+Ugh...  Forgot to post, sorry.
 
-$ pkg-config --modversion libtraceevent
-1.3.0
+[PATCH] get rid of dead machinery in kernel/profile.c
 
-$ make -C tools/perf O=/tmp/perf V=1 LIBTRACEEVENT_DYNAMIC=1
-...
-util/debug.c:245:34: error: 'TEP_LOG_DEBUG' undeclared (first use in
-this function)
-  245 |                 tep_set_loglevel(TEP_LOG_DEBUG);
-      |                                  ^~~~~~~~~~~~~
-util/debug.c:247:34: error: 'TEP_LOG_ALL' undeclared (first use in
-this function)
-  247 |                 tep_set_loglevel(TEP_LOG_ALL);
-      |                                  ^~~~~~~~~~~
+Nothing is placed on the call chains in there, now that oprofile is
+gone.  Remove them, along with the hooks for calling them.
 
-When I look at libtraceevent tagged as 1.3.0 I see TEP_LOG_ALL and
-TEP_LOG_DEBUG:
-https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/tree/src/event-parse.h?h=libtraceevent-1.3.0#n760
-
-and checking opensuse's event-parse.h I see the values there. This
-makes it look like we're using the kernel libtraceevent header file
-(version 1.1.0) rather than the system one.
-
-The command line is:
-
-gcc -Wp,-MD,/tmp/perf/util/.debug.o.d -Wp,-MT,/tmp/perf/util/debug.o
--Wbad-function-cast -Wdeclaration-after-statement -Wformat-security
--Wformat-y2k -Winit-self -Wmissing-declarations -Wmissing-prototypes
--Wno-system-headers -Wold-style-definition -Wpacked -Wredundant-decls
--Wstrict-prototypes -Wswitch-default -Wswitch-enum -Wundef
--Wwrite-strings -Wformat -Wno-type-limits -Wstrict-aliasing=3 -Wshadow
--DHAVE_SYSCALL_TABLE_SUPPORT -DHAVE_ARCH_X86_64_SUPPORT
--I/tmp/perf/arch/x86/include/generated -DHAVE_PERF_REGS_SUPPORT
--DHAVE_ARCH_REGS_QUERY_REGISTER_OFFSET -Werror -O6
--fno-omit-frame-pointer -ggdb3 -funwind-tables -Wall -Wextra
--std=gnu99 -fstack-protector-all -D_FORTIFY_SOURCE=2
--D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE
--I/kernel-src/tools/lib/perf/include
--I/kernel-src/tools/perf/util/include
--I/kernel-src/tools/perf/arch/x86/include -I/kernel-src/tools/include/
--I/kernel-src/tools/arch/x86/include/uapi
--I/kernel-src/tools/include/uapi -I/kernel-src/tools/arch/x86/include/
--I/kernel-src/tools/arch/x86/ -I/tmp/perf//util -I/tmp/perf/
--I/kernel-src/tools/perf/util -I/kernel-src/tools/perf
--I/kernel-src/tools/lib/ -DHAVE_PTHREAD_ATTR_SETAFFINITY_NP
--DHAVE_PTHREAD_BARRIER -DHAVE_EVENTFD_SUPPORT
--DHAVE_GET_CURRENT_DIR_NAME -DHAVE_GETTID -DHAVE_FILE_HANDLE
--DHAVE_GLIBC_SUPPORT -DHAVE_AIO_SUPPORT -DHAVE_SCHED_GETCPU_SUPPORT
--DHAVE_SETNS_SUPPORT -DHAVE_LIBELF_SUPPORT
--DHAVE_ELF_GETPHDRNUM_SUPPORT -DHAVE_GELF_GETNOTE_SUPPORT
--DHAVE_ELF_GETSHDRSTRNDX_SUPPORT -DHAVE_LIBBPF_SUPPORT -DHAVE_JITDUMP
--DHAVE_LIBPERL_SUPPORT -DHAVE_TIMERFD_SUPPORT -DNO_LIBPYTHON
--DNO_DEMANGLE -DHAVE_ZLIB_SUPPORT -DHAVE_BACKTRACE_SUPPORT
--DHAVE_KVM_STAT_SUPPORT -DHAVE_AUXTRACE_SUPPORT
--DLIBTRACEEVENT_VERSION=65790 -I/tmp/perf/ -D"BUILD_STR(s)=#s" -c -o
-/tmp/perf/util/debug.o util/debug.c
-
-The #include is:
-#include <traceevent/event-parse.h>
-
-The system header is at:
-/usr/include/traceevent/event-parse.h
-The kernel one is at /kernel-src/tools/lib/traceevent/event-parse.h.
-Adding a #error to that confirms it is indeed being picked up.
-
-Checking with:
-https://gcc.gnu.org/onlinedocs/gcc/Directory-Options.html
-it is true from case 3 that -I:
-3. Directories specified with -I options are scanned in left-to-right order.
-has priority over system:
-4. Directories specified with -isystem options are scanned in
-left-to-right order.
-5. Standard system directories are scanned.
-
-Which means we need to lower the priority of
-/kernel-src/tools/lib/traceevent or raise the priority of
-/usr/include/traceevent/. I thought I might be able to hack this with
-EXTRA_CFLAGS="-I/usr/include"
-but it still fails even though the -I is by my reading on the left of tools/lib:
-
-gcc -Wp,-MD,/tmp/perf/util/.debug.o.d -Wp,-MT,/tmp/perf/util/debug.o
--I/usr/include -Wbad-function-cast -Wdeclaration-after-statement
--Wformat-security -Wformat-y2k -Winit-self -Wmissing-declarations
--Wmissing-prototypes -Wno-system-headers -Wold-style-definition
--Wpacked -Wredundant-decls -Wstrict-prototypes -Wswitch-default
--Wswitch-enum -Wundef -Wwrite-strings -Wformat -Wno-type-limits
--Wstrict-aliasing=3 -Wshadow -DHAVE_SYSCALL_TABLE_SUPPORT
--DHAVE_ARCH_X86_64_SUPPORT -I/tmp/perf/arch/x86/include/generated
--DHAVE_PERF_REGS_SUPPORT -DHAVE_ARCH_REGS_QUERY_REGISTER_OFFSET
--Werror -O6 -fno-omit-frame-pointer -ggdb3 -funwind-tables -Wall
--Wextra -std=gnu99 -fstack-protector-all -D_FORTIFY_SOURCE=2
--D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE
--I/kernel-src/tools/lib/perf/include
--I/kernel-src/tools/perf/util/include
--I/kernel-src/tools/perf/arch/x86/include -I/kernel-src/tools/include/
--I/kernel-src/tools/arch/x86/include/uapi
--I/kernel-src/tools/include/uapi -I/kernel-src/tools/arch/x86/include/
--I/kernel-src/tools/arch/x86/ -I/tmp/perf//util -I/tmp/perf/
--I/kernel-src/tools/perf/util -I/kernel-src/tools/perf
--I/kernel-src/tools/lib/ -DHAVE_PTHREAD_ATTR_SETAFFINITY_NP
--DHAVE_PTHREAD_BARRIER -DHAVE_EVENTFD_SUPPORT
--DHAVE_GET_CURRENT_DIR_NAME -DHAVE_GETTID -DHAVE_FILE_HANDLE
--DHAVE_GLIBC_SUPPORT -DHAVE_AIO_SUPPORT -DHAVE_SCHED_GETCPU_SUPPORT
--DHAVE_SETNS_SUPPORT -DHAVE_LIBELF_SUPPORT
--DHAVE_ELF_GETPHDRNUM_SUPPORT -DHAVE_GELF_GETNOTE_SUPPORT
--DHAVE_ELF_GETSHDRSTRNDX_SUPPORT -DHAVE_LIBBPF_SUPPORT -DHAVE_JITDUMP
--DHAVE_LIBPERL_SUPPORT -DHAVE_TIMERFD_SUPPORT -DNO_LIBPYTHON
--DNO_DEMANGLE -DHAVE_ZLIB_SUPPORT -DHAVE_BACKTRACE_SUPPORT
--DHAVE_KVM_STAT_SUPPORT -DHAVE_AUXTRACE_SUPPORT
--DLIBTRACEEVENT_VERSION=65790 -I/tmp/perf/ -D"BUILD_STR(s)=#s" -c -o
-/tmp/perf/util/debug.o util/debug.c
-
-Probably some sysroot related magic. Anyway, doing this 1 line fix
-solves it for me:
------
-$ git diff
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 96ad944ca6a8..0627286380fa 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -346,7 +346,7 @@ endif
-
- INC_FLAGS += -I$(src-perf)/util
- INC_FLAGS += -I$(src-perf)
--INC_FLAGS += -I$(srctree)/tools/lib/
-+INC_FLAGS += -idirafter$(srctree)/tools/lib/
-
- CORE_CFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE
- -----
-
-I'll send out a patch.
-
-Sorry for the trouble. Thanks,
-Ian
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+---
+diff --git a/include/linux/profile.h b/include/linux/profile.h
+index fd18ca96f5574..88dfb0543ea63 100644
+--- a/include/linux/profile.h
++++ b/include/linux/profile.h
+@@ -63,26 +63,6 @@ static inline void profile_hit(int type, void *ip)
+ 		profile_hits(type, ip, 1);
+ }
+ 
+-struct task_struct;
+-struct mm_struct;
+-
+-/* task is in do_exit() */
+-void profile_task_exit(struct task_struct * task);
+-
+-/* task is dead, free task struct ? Returns 1 if
+- * the task was taken, 0 if the task should be freed.
+- */
+-int profile_handoff_task(struct task_struct * task);
+-
+-/* sys_munmap */
+-void profile_munmap(unsigned long addr);
+-
+-int task_handoff_register(struct notifier_block * n);
+-int task_handoff_unregister(struct notifier_block * n);
+-
+-int profile_event_register(enum profile_type, struct notifier_block * n);
+-int profile_event_unregister(enum profile_type, struct notifier_block * n);
+-
+ #else
+ 
+ #define prof_on 0
+@@ -107,30 +87,6 @@ static inline void profile_hit(int type, void *ip)
+ 	return;
+ }
+ 
+-static inline int task_handoff_register(struct notifier_block * n)
+-{
+-	return -ENOSYS;
+-}
+-
+-static inline int task_handoff_unregister(struct notifier_block * n)
+-{
+-	return -ENOSYS;
+-}
+-
+-static inline int profile_event_register(enum profile_type t, struct notifier_block * n)
+-{
+-	return -ENOSYS;
+-}
+-
+-static inline int profile_event_unregister(enum profile_type t, struct notifier_block * n)
+-{
+-	return -ENOSYS;
+-}
+-
+-#define profile_task_exit(a) do { } while (0)
+-#define profile_handoff_task(a) (0)
+-#define profile_munmap(a) do { } while (0)
+-
+ #endif /* CONFIG_PROFILING */
+ 
+ #endif /* _LINUX_PROFILE_H */
+diff --git a/kernel/exit.c b/kernel/exit.c
+index f702a6a63686e..5086a5e9d02de 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -765,7 +765,6 @@ void __noreturn do_exit(long code)
+ 		preempt_count_set(PREEMPT_ENABLED);
+ 	}
+ 
+-	profile_task_exit(tsk);
+ 	kcov_task_exit(tsk);
+ 
+ 	coredump_task_exit(tsk);
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 3244cc56b697d..496c0b6c8cb83 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -754,9 +754,7 @@ void __put_task_struct(struct task_struct *tsk)
+ 	delayacct_tsk_free(tsk);
+ 	put_signal_struct(tsk->signal);
+ 	sched_core_free(tsk);
+-
+-	if (!profile_handoff_task(tsk))
+-		free_task(tsk);
++	free_task(tsk);
+ }
+ EXPORT_SYMBOL_GPL(__put_task_struct);
+ 
+diff --git a/kernel/profile.c b/kernel/profile.c
+index eb9c7f0f5ac52..37640a0bd8a3c 100644
+--- a/kernel/profile.c
++++ b/kernel/profile.c
+@@ -133,79 +133,6 @@ int __ref profile_init(void)
+ 	return -ENOMEM;
+ }
+ 
+-/* Profile event notifications */
+-
+-static BLOCKING_NOTIFIER_HEAD(task_exit_notifier);
+-static ATOMIC_NOTIFIER_HEAD(task_free_notifier);
+-static BLOCKING_NOTIFIER_HEAD(munmap_notifier);
+-
+-void profile_task_exit(struct task_struct *task)
+-{
+-	blocking_notifier_call_chain(&task_exit_notifier, 0, task);
+-}
+-
+-int profile_handoff_task(struct task_struct *task)
+-{
+-	int ret;
+-	ret = atomic_notifier_call_chain(&task_free_notifier, 0, task);
+-	return (ret == NOTIFY_OK) ? 1 : 0;
+-}
+-
+-void profile_munmap(unsigned long addr)
+-{
+-	blocking_notifier_call_chain(&munmap_notifier, 0, (void *)addr);
+-}
+-
+-int task_handoff_register(struct notifier_block *n)
+-{
+-	return atomic_notifier_chain_register(&task_free_notifier, n);
+-}
+-EXPORT_SYMBOL_GPL(task_handoff_register);
+-
+-int task_handoff_unregister(struct notifier_block *n)
+-{
+-	return atomic_notifier_chain_unregister(&task_free_notifier, n);
+-}
+-EXPORT_SYMBOL_GPL(task_handoff_unregister);
+-
+-int profile_event_register(enum profile_type type, struct notifier_block *n)
+-{
+-	int err = -EINVAL;
+-
+-	switch (type) {
+-	case PROFILE_TASK_EXIT:
+-		err = blocking_notifier_chain_register(
+-				&task_exit_notifier, n);
+-		break;
+-	case PROFILE_MUNMAP:
+-		err = blocking_notifier_chain_register(
+-				&munmap_notifier, n);
+-		break;
+-	}
+-
+-	return err;
+-}
+-EXPORT_SYMBOL_GPL(profile_event_register);
+-
+-int profile_event_unregister(enum profile_type type, struct notifier_block *n)
+-{
+-	int err = -EINVAL;
+-
+-	switch (type) {
+-	case PROFILE_TASK_EXIT:
+-		err = blocking_notifier_chain_unregister(
+-				&task_exit_notifier, n);
+-		break;
+-	case PROFILE_MUNMAP:
+-		err = blocking_notifier_chain_unregister(
+-				&munmap_notifier, n);
+-		break;
+-	}
+-
+-	return err;
+-}
+-EXPORT_SYMBOL_GPL(profile_event_unregister);
+-
+ #if defined(CONFIG_SMP) && defined(CONFIG_PROC_FS)
+ /*
+  * Each cpu has a pair of open-addressed hashtables for pending
+diff --git a/mm/mmap.c b/mm/mmap.c
+index bfb0ea164a90a..70318c2a47c39 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -2928,7 +2928,6 @@ EXPORT_SYMBOL(vm_munmap);
+ SYSCALL_DEFINE2(munmap, unsigned long, addr, size_t, len)
+ {
+ 	addr = untagged_addr(addr);
+-	profile_munmap(addr);
+ 	return __vm_munmap(addr, len, true);
+ }
+ 

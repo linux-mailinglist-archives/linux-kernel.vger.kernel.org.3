@@ -2,516 +2,701 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B161485D21
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 01:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D804485D1D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 01:27:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343751AbiAFA1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 19:27:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38024 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343690AbiAFA1H (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1343658AbiAFA1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 5 Jan 2022 19:27:07 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690EDC061245
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 16:27:07 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id i8so823931pgt.13
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 16:27:07 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37968 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343678AbiAFA0y (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 19:26:54 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5032CC061245
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 16:26:54 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id l17so727450qtk.7
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 16:26:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bluerivertech.com; s=google;
-        h=from:to:cc:subject:date:message-id:reply-to:mime-version
-         :content-transfer-encoding;
-        bh=J4DVZfSEHc+5lwv7xu8XA+IYBgCz30iR8NpK/PggUiU=;
-        b=e/KtI/dthbUT5strgq7i/oCnNUR28WLY2PI6kprFOLnhJG0NYtSAOhzL9t91+q7vtO
-         X/6XBbmb/ml4JI05ax97C/zI+KfHaJ1ussMxSNVouHCoe2rWo98A0mHTFgB0s1c7GJK5
-         nEa1sSwZGkz1D4KMMUrXZ6beNqj9+UXrg2ybSmZLSQ3xED743VQNR3V85kAeGs7xxGJO
-         xlwxxbtaYiXPhWfVh3DKRMhKH0tOSzlysypPv+1xqD9sOl1VhGtDL84GNShHXJZqMr6c
-         8+y+BGPLF/LMZhofq/qlOb3OVPQzBjufdkanTTcmm6FVNCDREx4H/tjp2ObMhU3CNqtw
-         YgPw==
+        d=ieee.org; s=google;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=xtfMYg0qpd+PPYfGHhyPVRhZrpKzif8o21JgiOWqJi0=;
+        b=E7xui/oRvnyez/u1GzKzLU+SaSjXO7FBTa/Ke8XnVkEaLbtu38JQzwR/zZrZ/+WGW7
+         KZV/cKI+bvYJQRxEoMzNMQWGYaDYVxMSdos24+au/yT7dMGLLcm0y4pCKoEVUToKqx5k
+         rdHlOiL7CuwYHSIlQlX0dUcot/abXgTTo89TI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :mime-version:content-transfer-encoding;
-        bh=J4DVZfSEHc+5lwv7xu8XA+IYBgCz30iR8NpK/PggUiU=;
-        b=rvhWOboiTer1K4XUMyOdUW88ppXZk3cipfQhLIHnwTn9Evo0t786eUflx7o/iwmEG7
-         /E9WdSwyYiLvrBB4DOoZuzEb+VfM8xVmTVJrcfVm2+9sR2HBO9Vud16ATAV3JTmc1d3+
-         36MCVoRhHnHhosLWqheB0r/ajEVPfrpOsDokoeHqynYqAy5xUGCOtlG6/RdnyQ3MQktR
-         KDqLnubOx+eNEEqBpb2QBVOaFO/u1hEH6yZppGfwi2fxdr3w0SBr3NqME+HWV0GMAkLy
-         3qpdeHd83cw/I2Ss5TzIhhCtT/F+eqAWR0tcoUC9wdRF0EbbHXZNqktITvGRAOXFvLYi
-         r4cw==
-X-Gm-Message-State: AOAM531v/Dnkx96HLRW6TTSm6Y7E7zLmrDMze+OmfbY302F1VZxFlxKN
-        IQHJ0Z32mr3Uk9eTX+TZWl7Z7g==
-X-Google-Smtp-Source: ABdhPJw7FJNHh3B4AmQureIxpKhsaNHdS5jphlEqWHnuN8cumYwSsJ9KI2AN2uFHmZoSc77wMfZyAA==
-X-Received: by 2002:a65:6853:: with SMTP id q19mr50700441pgt.612.1641428826848;
-        Wed, 05 Jan 2022 16:27:06 -0800 (PST)
-Received: from localhost.localdomain (c-73-231-33-37.hsd1.ca.comcast.net. [73.231.33.37])
-        by smtp.gmail.com with ESMTPSA id c9sm230622pfc.61.2022.01.05.16.27.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 16:27:06 -0800 (PST)
-From:   Brian Silverman <brian.silverman@bluerivertech.com>
-Cc:     Brian Silverman <bsilver16384@gmail.com>,
-        Brian Silverman <brian.silverman@bluerivertech.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Dan Murphy <dmurphy@ti.com>,
-        linux-kernel@vger.kernel.org (open list),
-        linux-can@vger.kernel.org (open list:CAN NETWORK DRIVERS),
-        netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
-        linux-tegra@vger.kernel.org (open list:TEGRA ARCHITECTURE SUPPORT)
-Subject: [RFC PATCH] can: m_can: Add driver for M_CAN hardware in NVIDIA devices
-Date:   Wed,  5 Jan 2022 16:25:09 -0800
-Message-Id: <20220106002514.24589-1-brian.silverman@bluerivertech.com>
-X-Mailer: git-send-email 2.20.1
-Reply-To: Brian Silverman <bsilver16384@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=xtfMYg0qpd+PPYfGHhyPVRhZrpKzif8o21JgiOWqJi0=;
+        b=ijh/JqUZLlsxsmzoPUZVDpJVJYcrQxyO0v0qxP9qnVdd4JY0JGabYWwy5u+wcvkUKZ
+         gDAGVPJuAM9yvjqBXZaEYLTXXHGF/NvPJVsxODmsbpIEqv7naSKMHIdrc4n1E5O/brFM
+         LgQY81Iob530PN1a+lKl/bkTSIv9cE9pDh+qbcOLiDfYwe8sl+cds6qewALYqfFyUzQc
+         hNk9m9zoEH8ESI4bmHBSJXh91si2X5mugfTOrx3Ppi8COspyhikPk/uck/InuHx7fAuu
+         bX/DPTi6Qgli1vkgg7Xas0bla3ztQ4YmDlo9K3by4MXq5mOaA0bIJAOOmw+Cm4tpQzUl
+         UoXg==
+X-Gm-Message-State: AOAM532QIJs8KWr3yLs/pNUg8zKScCPBStzxcZTrrBztBiwEWxotWX9m
+        M4wvqNGY1YKYwI56UrRu7FML3Jx+bgkaQA==
+X-Google-Smtp-Source: ABdhPJwRlNDHU/le0EvBpDU4xaY5NEITxAUWvOkv6+P4OunwV+Ebpo2L1GtKOQm88um6eEn8SQCxzw==
+X-Received: by 2002:a05:622a:3c7:: with SMTP id k7mr51131025qtx.307.1641428813308;
+        Wed, 05 Jan 2022 16:26:53 -0800 (PST)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id o9sm345122qtk.81.2022.01.05.16.26.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jan 2022 16:26:52 -0800 (PST)
+Message-ID: <dc338eb3-0c11-450f-bce0-9b515a969390@ieee.org>
+Date:   Wed, 5 Jan 2022 18:26:51 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+From:   Alex Elder <elder@ieee.org>
+Subject: Re: [PATCH 05/20] bus: mhi: ep: Add support for registering MHI
+ endpoint controllers
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        mhi@lists.linux.dev
+Cc:     hemantk@codeaurora.org, bbhatt@codeaurora.org,
+        quic_jhugo@quicinc.com, vinod.koul@linaro.org,
+        bjorn.andersson@linaro.org, dmitry.baryshkov@linaro.org,
+        skananth@codeaurora.org, vpernami@codeaurora.org,
+        vbadigan@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211202113553.238011-1-manivannan.sadhasivam@linaro.org>
+ <20211202113553.238011-6-manivannan.sadhasivam@linaro.org>
+Content-Language: en-US
+In-Reply-To: <20211202113553.238011-6-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's a M_TTCAN with some NVIDIA-specific glue logic and clocks. The
-existing m_can driver works with it after handling the glue logic.
+On 12/2/21 5:35 AM, Manivannan Sadhasivam wrote:
+> This commit adds support for registering MHI endpoint controller drivers
+> with the MHI endpoint stack. MHI endpoint controller drivers manages
+> the interaction with the host machines such as x86. They are also the
+> MHI endpoint bus master in charge of managing the physical link between the
+> host and endpoint device.
+> 
+> The endpoint controller driver encloses all information about the
+> underlying physical bus like PCIe. The registration process involves
+> parsing the channel configuration and allocating an MHI EP device.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-The code is a combination of pieces from m_can_platform and NVIDIA's
-driver [1].
+See below.  Lots of little things, some I've said before.
 
-[1] https://github.com/hartkopp/nvidia-t18x-can/blob/master/r32.2.1/nvidia/drivers/net/can/mttcan/hal/m_ttcan.c
+> ---
+>   drivers/bus/mhi/Kconfig       |   1 +
+>   drivers/bus/mhi/Makefile      |   3 +
+>   drivers/bus/mhi/ep/Kconfig    |  10 ++
+>   drivers/bus/mhi/ep/Makefile   |   2 +
+>   drivers/bus/mhi/ep/internal.h | 158 +++++++++++++++++++++++
+>   drivers/bus/mhi/ep/main.c     | 231 ++++++++++++++++++++++++++++++++++
+>   include/linux/mhi_ep.h        | 140 +++++++++++++++++++++
+>   7 files changed, 545 insertions(+)
+>   create mode 100644 drivers/bus/mhi/ep/Kconfig
+>   create mode 100644 drivers/bus/mhi/ep/Makefile
+>   create mode 100644 drivers/bus/mhi/ep/internal.h
+>   create mode 100644 drivers/bus/mhi/ep/main.c
+>   create mode 100644 include/linux/mhi_ep.h
+> 
+> diff --git a/drivers/bus/mhi/Kconfig b/drivers/bus/mhi/Kconfig
+> index 4748df7f9cd5..b39a11e6c624 100644
+> --- a/drivers/bus/mhi/Kconfig
+> +++ b/drivers/bus/mhi/Kconfig
+> @@ -6,3 +6,4 @@
+>   #
+>   
+>   source "drivers/bus/mhi/host/Kconfig"
+> +source "drivers/bus/mhi/ep/Kconfig"
+> diff --git a/drivers/bus/mhi/Makefile b/drivers/bus/mhi/Makefile
+> index 5f5708a249f5..46981331b38f 100644
+> --- a/drivers/bus/mhi/Makefile
+> +++ b/drivers/bus/mhi/Makefile
+> @@ -1,2 +1,5 @@
+>   # Host MHI stack
+>   obj-y += host/
+> +
+> +# Endpoint MHI stack
+> +obj-y += ep/
+> diff --git a/drivers/bus/mhi/ep/Kconfig b/drivers/bus/mhi/ep/Kconfig
+> new file mode 100644
+> index 000000000000..229c71397b30
+> --- /dev/null
+> +++ b/drivers/bus/mhi/ep/Kconfig
+> @@ -0,0 +1,10 @@
+> +config MHI_BUS_EP
+> +	tristate "Modem Host Interface (MHI) bus Endpoint implementation"
+> +	help
+> +	  Bus driver for MHI protocol. Modem Host Interface (MHI) is a
+> +	  communication protocol used by the host processors to control
+> +	  and communicate with modem devices over a high speed peripheral
+> +	  bus or shared memory.
+> +
+> +	  MHI_BUS_EP implements the MHI protocol for the endpoint devices
+> +	  like SDX55 modem connected to the host machine over PCIe.
+> diff --git a/drivers/bus/mhi/ep/Makefile b/drivers/bus/mhi/ep/Makefile
+> new file mode 100644
+> index 000000000000..64e29252b608
+> --- /dev/null
+> +++ b/drivers/bus/mhi/ep/Makefile
+> @@ -0,0 +1,2 @@
+> +obj-$(CONFIG_MHI_BUS_EP) += mhi_ep.o
+> +mhi_ep-y := main.o
+> diff --git a/drivers/bus/mhi/ep/internal.h b/drivers/bus/mhi/ep/internal.h
+> new file mode 100644
+> index 000000000000..7b164daf4332
+> --- /dev/null
+> +++ b/drivers/bus/mhi/ep/internal.h
+> @@ -0,0 +1,158 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2021, Linaro Ltd.
+> + *
+> + */
+> +
+> +#ifndef _MHI_EP_INTERNAL_
+> +#define _MHI_EP_INTERNAL_
+> +
+> +#include <linux/bitfield.h>
+> +
+> +#include "../common.h"
+> +
+> +extern struct bus_type mhi_ep_bus_type;
+> +
+> +/* MHI register definitions */
+> +#define MHIREGLEN				0x100
 
-Signed-off-by: Brian Silverman <brian.silverman@bluerivertech.com>
----
-I ran into bugs with the error handling in NVIDIA's m_ttcan driver, so I
-switched to m_can which has been much better. I'm looking for feedback
-on whether I should ensure rebasing hasn't broken anything, write up DT
-documentation, and submit this patch for real. The driver works great,
-but I've got some questions about submitting it.
+I really think it would be nice if these could be common between the
+host and endpoint.
 
-question: This has liberal copying of GPL code from NVIDIA's
-non-upstreamed m_ttcan driver. Is that OK?
+> +#define MHIVER					0x108
+> +#define MHICFG					0x110
+> +#define CHDBOFF					0x118
+> +#define ERDBOFF					0x120
+> +#define BHIOFF					0x128
+> +#define DEBUGOFF				0x130
+> +#define MHICTRL					0x138
+> +#define MHISTATUS				0x148
+> +#define CCABAP_LOWER				0x158
+> +#define CCABAP_HIGHER				0x15c
+> +#define ECABAP_LOWER				0x160
+> +#define ECABAP_HIGHER				0x164
+> +#define CRCBAP_LOWER				0x168
+> +#define CRCBAP_HIGHER				0x16c
+> +#define CRDB_LOWER				0x170
+> +#define CRDB_HIGHER				0x174
+> +#define MHICTRLBASE_LOWER			0x180
+> +#define MHICTRLBASE_HIGHER			0x184
+> +#define MHICTRLLIMIT_LOWER			0x188
+> +#define MHICTRLLIMIT_HIGHER			0x18c
+> +#define MHIDATABASE_LOWER			0x198
+> +#define MHIDATABASE_HIGHER			0x19c
+> +#define MHIDATALIMIT_LOWER			0x1a0
+> +#define MHIDATALIMIT_HIGHER			0x1a4
 
-corollary: I don't know what any of this glue logic does. I do know the
-device doesn't work without it. I can't find any documentation of what
-these addresses do.
+It wouldn't hurt to have a one or two line comment explaining how
+these compute the offset for a given channel or event ring's
+doorbell register.
 
-question: There is some duplication between this and m_can_platform. It
-doesn't seem too bad to me, but is this the preferred way to do it or is
-there another alternative?
+I think you could use decimal for the multiplier (8 rather than 0x8),
+but maybe you prefer not mixing that with a hex base offset.
 
-question: Do new DT bindings need to be in the YAML format, or is the
-.txt one OK?
+Overall though, take a look at the macros you define like this.
+See if you can decide on whether you can settle on a consistent
+form.  Some places you use decimal, others hex.  It's not a
+big deal, but consistency always helps.
 
- drivers/net/can/m_can/Kconfig       |  10 +
- drivers/net/can/m_can/Makefile      |   1 +
- drivers/net/can/m_can/m_can_tegra.c | 362 ++++++++++++++++++++++++++++
- 3 files changed, 373 insertions(+)
- create mode 100644 drivers/net/can/m_can/m_can_tegra.c
+> +#define CHDB_LOWER_n(n)				(0x400 + 0x8 * (n))
+> +#define CHDB_HIGHER_n(n)			(0x404 + 0x8 * (n))
+> +#define ERDB_LOWER_n(n)				(0x800 + 0x8 * (n))
+> +#define ERDB_HIGHER_n(n)			(0x804 + 0x8 * (n))
+> +#define BHI_INTVEC				0x220
+> +#define BHI_EXECENV				0x228
+> +#define BHI_IMGTXDB				0x218
+> +
 
-diff --git a/drivers/net/can/m_can/Kconfig b/drivers/net/can/m_can/Kconfig
-index 45ad1b3f0cd0..00e042cb7d33 100644
---- a/drivers/net/can/m_can/Kconfig
-+++ b/drivers/net/can/m_can/Kconfig
-@@ -22,6 +22,16 @@ config CAN_M_CAN_PLATFORM
- 	  This support is for devices that have the Bosch M_CAN controller
- 	  IP embedded into the device and the IP is IO Mapped to the processor.
- 
-+config CAN_M_CAN_TEGRA
-+	tristate "Bosch M_CAN support for io-mapped devices on NVIDIA Tegra"
-+	depends on HAS_IOMEM
-+	---help---
-+	  Say Y here if you want support for IO Mapped Bosch M_CAN controller,
-+	  with additional NVIDIA Tegra-specific glue logic.
-+	  This support is for Tegra devices that have the Bosch M_CAN/M_TTCAN
-+		controller IP embedded into the device and the IP is IO Mapped to the
-+		processor.
-+
- config CAN_M_CAN_TCAN4X5X
- 	depends on SPI
- 	select REGMAP_SPI
-diff --git a/drivers/net/can/m_can/Makefile b/drivers/net/can/m_can/Makefile
-index d717bbc9e033..36360c1c5eca 100644
---- a/drivers/net/can/m_can/Makefile
-+++ b/drivers/net/can/m_can/Makefile
-@@ -6,6 +6,7 @@
- obj-$(CONFIG_CAN_M_CAN) += m_can.o
- obj-$(CONFIG_CAN_M_CAN_PCI) += m_can_pci.o
- obj-$(CONFIG_CAN_M_CAN_PLATFORM) += m_can_platform.o
-+obj-$(CONFIG_CAN_M_CAN_TEGRA) += m_can_tegra.o
- obj-$(CONFIG_CAN_M_CAN_TCAN4X5X) += tcan4x5x.o
- 
- tcan4x5x-objs :=
-diff --git a/drivers/net/can/m_can/m_can_tegra.c b/drivers/net/can/m_can/m_can_tegra.c
-new file mode 100644
-index 000000000000..3739b92b4540
---- /dev/null
-+++ b/drivers/net/can/m_can/m_can_tegra.c
-@@ -0,0 +1,362 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// IOMapped CAN bus driver for Bosch M_CAN controller on NVIDIA Tegra
-+
-+#include <linux/platform_device.h>
-+#include <linux/reset.h>
-+
-+#include "m_can.h"
-+
-+struct m_can_tegra_priv {
-+	struct m_can_classdev cdev;
-+
-+	void __iomem *base;
-+	void __iomem *mram_base;
-+	void __iomem *glue_base;
-+	// cclk is core_clk if it exists, otherwise can_clk.
-+	struct clk *core_clk, *can_clk, *pll_clk;
-+};
-+
-+static inline struct m_can_tegra_priv *cdev_to_priv(struct m_can_classdev *cdev)
-+{
-+	return container_of(cdev, struct m_can_tegra_priv, cdev);
-+}
-+
-+static u32 iomap_read_reg(struct m_can_classdev *cdev, int reg)
-+{
-+	struct m_can_tegra_priv *priv = cdev_to_priv(cdev);
-+
-+	return readl(priv->base + reg);
-+}
-+
-+static u32 iomap_read_fifo(struct m_can_classdev *cdev, int offset)
-+{
-+	struct m_can_tegra_priv *priv = cdev_to_priv(cdev);
-+
-+	return readl(priv->mram_base + offset);
-+}
-+
-+static u32 iomap_read_glue(struct m_can_classdev *cdev, int reg)
-+{
-+	struct m_can_tegra_priv *priv = cdev_to_priv(cdev);
-+
-+	return readl(priv->glue_base + reg);
-+}
-+
-+static int iomap_write_reg(struct m_can_classdev *cdev, int reg, int val)
-+{
-+	struct m_can_tegra_priv *priv = cdev_to_priv(cdev);
-+
-+	writel(val, priv->base + reg);
-+
-+	return 0;
-+}
-+
-+static int iomap_write_fifo(struct m_can_classdev *cdev, int offset, int val)
-+{
-+	struct m_can_tegra_priv *priv = cdev_to_priv(cdev);
-+
-+	writel(val, priv->mram_base + offset);
-+
-+	return 0;
-+}
-+
-+static int iomap_write_glue(struct m_can_classdev *cdev, int reg, int val)
-+{
-+	struct m_can_tegra_priv *priv = cdev_to_priv(cdev);
-+
-+	writel(val, priv->glue_base + reg);
-+
-+	return 0;
-+}
-+
-+static struct m_can_ops m_can_tegra_ops = {
-+	.read_reg = iomap_read_reg,
-+	.write_reg = iomap_write_reg,
-+	.write_fifo = iomap_write_fifo,
-+	.read_fifo = iomap_read_fifo,
-+};
-+
-+/* Glue logic apperature */
-+#define ADDR_M_TTCAN_IR          0x00
-+#define ADDR_M_TTCAN_TTIR        0x04
-+#define ADDR_M_TTCAN_TXBRP       0x08
-+#define ADDR_M_TTCAN_FD_DATA     0x0C
-+#define ADDR_M_TTCAN_STATUS_REG  0x10
-+#define ADDR_M_TTCAN_CNTRL_REG   0x14
-+#define ADDR_M_TTCAN_DMA_INTF0   0x18
-+#define ADDR_M_TTCAN_CLK_STOP    0x1C
-+#define ADDR_M_TTCAN_HSM_MASK0   0x20
-+#define ADDR_M_TTCAN_HSM_MASK1   0x24
-+#define ADDR_M_TTCAN_EXT_SYC_SLT 0x28
-+#define ADDR_M_TTCAN_HSM_SW_OVRD 0x2C
-+#define ADDR_M_TTCAN_TIME_STAMP  0x30
-+
-+#define M_TTCAN_CNTRL_REG_COK           (1<<3)
-+#define M_TTCAN_TIME_STAMP_OFFSET_SEL   4
-+
-+static void tegra_can_set_ok(struct m_can_classdev *cdev)
-+{
-+	u32 val;
-+
-+	val = iomap_read_glue(cdev, ADDR_M_TTCAN_CNTRL_REG);
-+	val |= M_TTCAN_CNTRL_REG_COK;
-+	iomap_write_glue(cdev, ADDR_M_TTCAN_CNTRL_REG, val);
-+}
-+
-+
-+static int m_can_tegra_probe(struct platform_device *pdev)
-+{
-+	struct m_can_classdev *mcan_class;
-+	struct m_can_tegra_priv *priv;
-+	struct resource *res;
-+	void __iomem *addr;
-+	void __iomem *mram_addr;
-+	void __iomem *glue_addr;
-+	struct reset_control *rstc;
-+	struct clk *host_clk = NULL, *can_clk = NULL, *core_clk = NULL, *pclk = NULL;
-+	int irq, ret = 0;
-+	u32 rate;
-+	unsigned long new_rate;
-+
-+	mcan_class = m_can_class_allocate_dev(&pdev->dev,
-+					      sizeof(struct m_can_tegra_priv));
-+	if (!mcan_class)
-+		return -ENOMEM;
-+
-+	priv = cdev_to_priv(mcan_class);
-+
-+	host_clk = devm_clk_get(&pdev->dev, "can_host");
-+	if (IS_ERR(host_clk)) {
-+		ret = PTR_ERR(host_clk);
-+		goto probe_fail;
-+	}
-+	can_clk = devm_clk_get(&pdev->dev, "can");
-+	if (IS_ERR(can_clk)) {
-+		ret = PTR_ERR(can_clk);
-+		goto probe_fail;
-+	}
-+
-+	core_clk = devm_clk_get(&pdev->dev, "can_core");
-+	if (IS_ERR(core_clk)) {
-+		core_clk = NULL;
-+	}
-+
-+	pclk = clk_get(&pdev->dev, "pll");
-+	if (IS_ERR(pclk)) {
-+		ret = PTR_ERR(pclk);
-+		goto probe_fail;
-+	}
-+
-+	ret = clk_set_parent(can_clk, pclk);
-+	if (ret) {
-+		goto probe_fail;
-+	}
-+
-+	ret = fwnode_property_read_u32(dev_fwnode(&pdev->dev), "can-clk-rate", &rate);
-+	if (ret) {
-+		goto probe_fail;
-+	}
-+
-+	new_rate = clk_round_rate(can_clk, rate);
-+	if (!new_rate)
-+		dev_warn(&pdev->dev, "incorrect CAN clock rate\n");
-+
-+	ret = clk_set_rate(can_clk, new_rate > 0 ? new_rate : rate);
-+	if (ret) {
-+		goto probe_fail;
-+	}
-+
-+	ret = clk_set_rate(host_clk, new_rate > 0 ? new_rate : rate);
-+	if (ret) {
-+		goto probe_fail;
-+	}
-+
-+	if (core_clk) {
-+		ret = fwnode_property_read_u32(dev_fwnode(&pdev->dev), "core-clk-rate", &rate);
-+		if (ret) {
-+			goto probe_fail;
-+		}
-+		new_rate = clk_round_rate(core_clk, rate);
-+		if (!new_rate)
-+			dev_warn(&pdev->dev, "incorrect CAN_CORE clock rate\n");
-+
-+		ret = clk_set_rate(core_clk, new_rate > 0 ? new_rate : rate);
-+		if (ret) {
-+			goto probe_fail;
-+		}
-+	}
-+
-+	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "m_can");
-+	addr = devm_ioremap_resource(&pdev->dev, res);
-+	if (IS_ERR(addr)) {
-+		ret = PTR_ERR(addr);
-+		goto probe_fail;
-+	}
-+
-+	irq = platform_get_irq_byname(pdev, "int0");
-+	if (irq < 0) {
-+		ret = -ENODEV;
-+		goto probe_fail;
-+	}
-+
-+	/* message ram could be shared */
-+	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "message_ram");
-+	mram_addr = devm_ioremap(&pdev->dev, res->start, resource_size(res));
-+	if (!mram_addr) {
-+		ret = -ENOMEM;
-+		goto probe_fail;
-+	}
-+
-+	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "glue_regs");
-+	glue_addr = devm_ioremap(&pdev->dev, res->start, resource_size(res));
-+	if (!glue_addr) {
-+		ret = -ENOMEM;
-+		goto probe_fail;
-+	}
-+
-+	rstc = devm_reset_control_get(&pdev->dev, "can");
-+	if (IS_ERR(rstc)) {
-+		ret = PTR_ERR(rstc);
-+		goto probe_fail;
-+	}
-+	reset_control_reset(rstc);
-+
-+	priv->can_clk = can_clk;
-+	mcan_class->hclk = host_clk;
-+
-+	if (core_clk) {
-+		mcan_class->cclk = core_clk;
-+	} else {
-+		mcan_class->cclk = can_clk;
-+	}
-+	priv->core_clk = core_clk;
-+
-+	priv->base = addr;
-+	priv->mram_base = mram_addr;
-+	priv->glue_base = glue_addr;
-+
-+	mcan_class->net->irq = irq;
-+	mcan_class->pm_clock_support = 1;
-+	mcan_class->can.clock.freq = clk_get_rate(mcan_class->cclk);
-+	mcan_class->dev = &pdev->dev;
-+
-+	mcan_class->ops = &m_can_tegra_ops;
-+
-+	mcan_class->is_peripheral = false;
-+
-+	platform_set_drvdata(pdev, mcan_class);
-+
-+	pm_runtime_enable(mcan_class->dev);
-+
-+	ret = pm_runtime_get_sync(mcan_class->dev);
-+	if (ret < 0) {
-+		pm_runtime_put_noidle(mcan_class->dev);
-+		goto out_runtime_disable;
-+	}
-+	tegra_can_set_ok(mcan_class);
-+	m_can_init_ram(mcan_class);
-+	pm_runtime_put_sync(mcan_class->dev);
-+
-+	ret = m_can_class_register(mcan_class);
-+	if (ret)
-+		goto out_runtime_disable;
-+
-+	return ret;
-+
-+out_runtime_disable:
-+	pm_runtime_disable(mcan_class->dev);
-+probe_fail:
-+	m_can_class_free_dev(mcan_class->net);
-+	return ret;
-+}
-+
-+static __maybe_unused int m_can_suspend(struct device *dev)
-+{
-+	return m_can_class_suspend(dev);
-+}
-+
-+static __maybe_unused int m_can_resume(struct device *dev)
-+{
-+	return m_can_class_resume(dev);
-+}
-+
-+static int m_can_tegra_remove(struct platform_device *pdev)
-+{
-+	struct m_can_tegra_priv *priv = platform_get_drvdata(pdev);
-+	struct m_can_classdev *mcan_class = &priv->cdev;
-+
-+	m_can_class_unregister(mcan_class);
-+
-+	m_can_class_free_dev(mcan_class->net);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused m_can_runtime_suspend(struct device *dev)
-+{
-+	struct m_can_tegra_priv *priv = dev_get_drvdata(dev);
-+	struct m_can_classdev *mcan_class = &priv->cdev;
-+
-+	if (priv->core_clk)
-+		clk_disable_unprepare(priv->core_clk);
-+
-+	clk_disable_unprepare(mcan_class->hclk);
-+	clk_disable_unprepare(priv->can_clk);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused m_can_runtime_resume(struct device *dev)
-+{
-+	struct m_can_tegra_priv *priv = dev_get_drvdata(dev);
-+	struct m_can_classdev *mcan_class = &priv->cdev;
-+	int err;
-+
-+	err = clk_prepare_enable(priv->can_clk);
-+	if (err) {
-+		return err;
-+	}
-+
-+	err = clk_prepare_enable(mcan_class->hclk);
-+	if (err) {
-+		clk_disable_unprepare(priv->can_clk);
-+	}
-+
-+	if (priv->core_clk) {
-+		err = clk_prepare_enable(priv->core_clk);
-+		if (err) {
-+			clk_disable_unprepare(mcan_class->hclk);
-+			clk_disable_unprepare(priv->can_clk);
-+		}
-+	}
-+
-+	return err;
-+}
-+
-+static const struct dev_pm_ops m_can_pmops = {
-+	SET_RUNTIME_PM_OPS(m_can_runtime_suspend,
-+			   m_can_runtime_resume, NULL)
-+	SET_SYSTEM_SLEEP_PM_OPS(m_can_suspend, m_can_resume)
-+};
-+
-+static const struct of_device_id m_can_of_table[] = {
-+	{ .compatible = "nvidia,tegra194-m_can", .data = NULL },
-+	{ /* sentinel */ },
-+};
-+MODULE_DEVICE_TABLE(of, m_can_of_table);
-+
-+static struct platform_driver m_can_tegra_driver = {
-+	.driver = {
-+		.name = KBUILD_MODNAME,
-+		.of_match_table = m_can_of_table,
-+		.pm     = &m_can_pmops,
-+	},
-+	.probe = m_can_tegra_probe,
-+	.remove = m_can_tegra_remove,
-+};
-+
-+module_platform_driver(m_can_tegra_driver);
-+
-+MODULE_AUTHOR("Brian Silverman <brian.silverman@bluerivertech.com>");
-+MODULE_LICENSE("GPL v2");
-+MODULE_DESCRIPTION("M_CAN driver for IO Mapped Bosch controllers on NVIDIA Tegra");
--- 
-2.20.1
+Will the AP always be an "A7"?
+
+> +#define MHI_CTRL_INT_STATUS_A7			0x4
+> +#define MHI_CTRL_INT_STATUS_A7_MSK		BIT(0)
+> +#define MHI_CTRL_INT_STATUS_CRDB_MSK		BIT(1)
+> +#define MHI_CHDB_INT_STATUS_A7_n(n)		(0x28 + 0x4 * (n))
+> +#define MHI_ERDB_INT_STATUS_A7_n(n)		(0x38 + 0x4 * (n))
+> +
+> +#define MHI_CTRL_INT_CLEAR_A7			0x4c
+> +#define MHI_CTRL_INT_MMIO_WR_CLEAR		BIT(2)
+> +#define MHI_CTRL_INT_CRDB_CLEAR			BIT(1)
+> +#define MHI_CTRL_INT_CRDB_MHICTRL_CLEAR		BIT(0)
+> +
+> +#define MHI_CHDB_INT_CLEAR_A7_n(n)		(0x70 + 0x4 * (n))
+> +#define MHI_CHDB_INT_CLEAR_A7_n_CLEAR_ALL	GENMASK(31, 0)
+> +#define MHI_ERDB_INT_CLEAR_A7_n(n)		(0x80 + 0x4 * (n))
+> +#define MHI_ERDB_INT_CLEAR_A7_n_CLEAR_ALL	GENMASK(31, 0)
+> +
+
+The term "MASK" here might be confusing.  Does a bit set in
+this mask register indicate an interrupt is enabled, or
+disabled (masked)?  A comment (here or where used) could
+clear it up without renaming the symbol.
+
+> +#define MHI_CTRL_INT_MASK_A7			0x94
+> +#define MHI_CTRL_INT_MASK_A7_MASK_MASK		GENMASK(1, 0)
+> +#define MHI_CTRL_MHICTRL_MASK			BIT(0)
+> +#define MHI_CTRL_MHICTRL_SHFT			0
+> +#define MHI_CTRL_CRDB_MASK			BIT(1)
+> +#define MHI_CTRL_CRDB_SHFT			1
+
+Use SHIFT or SHFT (not both), consistently.  (But get rid of
+this shift definition, and others like it...)
+
+> +#define MHI_CHDB_INT_MASK_A7_n(n)		(0xb8 + 0x4 * (n))
+> +#define MHI_CHDB_INT_MASK_A7_n_EN_ALL		GENMASK(31, 0)
+> +#define MHI_ERDB_INT_MASK_A7_n(n)		(0xc8 + 0x4 * (n))
+> +#define MHI_ERDB_INT_MASK_A7_n_EN_ALL		GENMASK(31, 0)
+> +
+> +#define NR_OF_CMD_RINGS				1
+
+Is there ever any reason to believe there will be more than one
+command ring for a given MHI instance?  I kept seeing loops over
+NR_OF_CMD_RINGS, and it just seemed silly.
+
+> +#define MHI_MASK_ROWS_CH_EV_DB			4
+> +#define MHI_MASK_CH_EV_LEN			32
+> +
+> +/* Generic context */
+
+Maybe define the entire structure as packed and aligned.
+
+> +struct mhi_generic_ctx {
+> +	__u32 reserved0;
+> +	__u32 reserved1;
+> +	__u32 reserved2;
+> +
+> +	__u64 rbase __packed __aligned(4);
+> +	__u64 rlen __packed __aligned(4);
+> +	__u64 rp __packed __aligned(4);
+> +	__u64 wp __packed __aligned(4);
+> +};
+
+Are these structures defined separately for host and endpoint?
+(I've lost track...  If they are, it would be better to define
+them in common.)
+
+> +
+> +enum mhi_ep_ring_state {
+> +	RING_STATE_UINT = 0,
+
+I think "UINT" is a *terrible* abbreviation to represent
+"uninitialized".
+
+> +	RING_STATE_IDLE,
+
+Since there are only two states, uninitialized or idle, maybe
+you can get rid of this enum definition and just define the
+ring state with "bool initialized".
+
+> +};
+> +
+> +enum mhi_ep_ring_type {
+
+Is the value 0 significant to hardware?  If not, there's no need
+to define the numeric value on this first symbol.
+
+> +	RING_TYPE_CMD = 0,
+> +	RING_TYPE_ER,
+> +	RING_TYPE_CH,
+
+I don't think you ever use RING_TYPE_INVALID, so it does
+not need to be defined.
+
+> +	RING_TYPE_INVALID,
+> +};
+> +
+
+I prefer a more meaningful structure definition than this (as
+mentioned in I think the first patch).
+
+> +struct mhi_ep_ring_element {
+> +	u64 ptr;
+> +	u32 dword[2];
+> +};
+> +
+> +/* Transfer ring element type */
+
+Not transfer ring, just ring.  Command, transfer, and event
+ring descriptors are different things.
+
+> +union mhi_ep_ring_ctx {
+> +	struct mhi_cmd_ctxt cmd;
+> +	struct mhi_event_ctxt ev;
+> +	struct mhi_chan_ctxt ch;
+> +	struct mhi_generic_ctx generic;
+> +};
+> +
+> +struct mhi_ep_ring {
+> +	struct list_head list;
+> +	struct mhi_ep_cntrl *mhi_cntrl;
+> +	int (*ring_cb)(struct mhi_ep_ring *ring, struct mhi_ep_ring_element *el);
+> +	union mhi_ep_ring_ctx *ring_ctx;
+> +	struct mhi_ep_ring_element *ring_cache;
+> +	enum mhi_ep_ring_type type;
+> +	enum mhi_ep_ring_state state;
+> +	size_t rd_offset;
+> +	size_t wr_offset;
+> +	size_t ring_size;
+> +	u32 db_offset_h;
+> +	u32 db_offset_l;
+> +	u32 ch_id;
+> +};
+> +
+> +struct mhi_ep_cmd {
+> +	struct mhi_ep_ring ring;
+> +};
+> +
+> +struct mhi_ep_event {
+> +	struct mhi_ep_ring ring;
+> +};
+> +
+> +struct mhi_ep_chan {
+> +	char *name;
+> +	struct mhi_ep_device *mhi_dev;
+> +	struct mhi_ep_ring ring;
+> +	struct mutex lock;
+> +	void (*xfer_cb)(struct mhi_ep_device *mhi_dev, struct mhi_result *result);
+> +	enum mhi_ch_state state;
+> +	enum dma_data_direction dir;
+> +	u64 tre_loc;
+> +	u32 tre_size;
+> +	u32 tre_bytes_left;
+> +	u32 chan;
+> +	bool skip_td;
+> +};
+> +
+> +#endif
+> diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
+> new file mode 100644
+> index 000000000000..db664360c8ab
+> --- /dev/null
+> +++ b/drivers/bus/mhi/ep/main.c
+> @@ -0,0 +1,231 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * MHI Bus Endpoint stack
+> + *
+> + * Copyright (C) 2021 Linaro Ltd.
+> + * Author: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/delay.h>
+> +#include <linux/dma-direction.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/io.h>
+> +#include <linux/mhi_ep.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include "internal.h"
+> +
+> +static DEFINE_IDA(mhi_ep_cntrl_ida);
+> +
+> +static void mhi_ep_release_device(struct device *dev)
+> +{
+> +	struct mhi_ep_device *mhi_dev = to_mhi_ep_device(dev);
+> +
+> +	/*
+> +	 * We need to set the mhi_chan->mhi_dev to NULL here since the MHI
+> +	 * devices for the channels will only get created if the mhi_dev
+> +	 * associated with it is NULL.
+
+Maybe say where in the code what the comment above says happens.
+
+> +	 */
+> +	if (mhi_dev->ul_chan)
+> +		mhi_dev->ul_chan->mhi_dev = NULL;
+> +
+> +	if (mhi_dev->dl_chan)
+> +		mhi_dev->dl_chan->mhi_dev = NULL;
+> +
+> +	kfree(mhi_dev);
+> +}
+> +
+> +static struct mhi_ep_device *mhi_ep_alloc_device(struct mhi_ep_cntrl *mhi_cntrl)
+> +{
+> +	struct mhi_ep_device *mhi_dev;
+> +	struct device *dev;
+> +
+> +	mhi_dev = kzalloc(sizeof(*mhi_dev), GFP_KERNEL);
+> +	if (!mhi_dev)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	dev = &mhi_dev->dev;
+> +	device_initialize(dev);
+> +	dev->bus = &mhi_ep_bus_type;
+> +	dev->release = mhi_ep_release_device;
+> +
+
+I think you should pass the MHI device type as argument here, and
+set it within this function.  Then use it in the test below, rather
+than assuming the mhi_dev pointer will be NULL for the controller
+only.  Maybe you should set the mhi_dev pointer here as well.
+
+> +	if (mhi_cntrl->mhi_dev) {
+> +		/* for MHI client devices, parent is the MHI controller device */
+> +		dev->parent = &mhi_cntrl->mhi_dev->dev;
+> +	} else {
+> +		/* for MHI controller device, parent is the bus device (e.g. PCI EPF) */
+> +		dev->parent = mhi_cntrl->cntrl_dev;
+> +	}
+> +
+> +	mhi_dev->mhi_cntrl = mhi_cntrl;
+> +
+> +	return mhi_dev;
+> +}
+> +
+> +static int parse_ch_cfg(struct mhi_ep_cntrl *mhi_cntrl,
+> +			const struct mhi_ep_cntrl_config *config)
+> +{
+> +	const struct mhi_ep_channel_config *ch_cfg;
+> +	struct device *dev = mhi_cntrl->cntrl_dev;
+> +	u32 chan, i;
+> +	int ret = -EINVAL;
+> +
+> +	mhi_cntrl->max_chan = config->max_channels;
+> +
+> +	/*
+> +	 * Allocate max_channels supported by the MHI endpoint and populate
+> +	 * only the defined channels
+> +	 */
+> +	mhi_cntrl->mhi_chan = kcalloc(mhi_cntrl->max_chan, sizeof(*mhi_cntrl->mhi_chan),
+> +				      GFP_KERNEL);
+> +	if (!mhi_cntrl->mhi_chan)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < config->num_channels; i++) {
+> +		struct mhi_ep_chan *mhi_chan;
+> +
+> +		ch_cfg = &config->ch_cfg[i];
+> +
+> +		chan = ch_cfg->num;
+> +		if (chan >= mhi_cntrl->max_chan) {
+> +			dev_err(dev, "Channel %d not available\n", chan);
+> +			goto error_chan_cfg;
+> +		}
+> +
+> +		mhi_chan = &mhi_cntrl->mhi_chan[chan];
+> +		mhi_chan->name = ch_cfg->name;
+> +		mhi_chan->chan = chan;
+> +		mhi_chan->dir = ch_cfg->dir;
+> +		mutex_init(&mhi_chan->lock);
+
+Move the error check below earlier, before assigning other values.
+
+> +		/* Bi-directional and direction less channels are not supported */
+> +		if (mhi_chan->dir == DMA_BIDIRECTIONAL || mhi_chan->dir == DMA_NONE) {
+> +			dev_err(dev, "Invalid channel configuration\n");
+> +			goto error_chan_cfg;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +
+> +error_chan_cfg:
+> +	kfree(mhi_cntrl->mhi_chan);
+> +
+> +	return ret;
+> +}
+> +
+> +/*
+> + * Allocate channel and command rings here. Event rings will be allocated
+> + * in mhi_ep_power_up() as the config comes from the host.
+> + */
+> +int mhi_ep_register_controller(struct mhi_ep_cntrl *mhi_cntrl,
+> +				const struct mhi_ep_cntrl_config *config)
+> +{
+> +	struct mhi_ep_device *mhi_dev;
+
+Perhaps you could use a convention like "ep_dev" (and later, "ep_drv")
+to represent an mhi_ep_device, different from "mhi_dev" representing
+an mhi_device.
+
+> +	int ret;
+> +
+> +	if (!mhi_cntrl || !mhi_cntrl->cntrl_dev)
+> +		return -EINVAL;
+> +
+> +	ret = parse_ch_cfg(mhi_cntrl, config);
+> +	if (ret)
+> +		return ret;
+> +
+
+NR_OF_CMD_RINGS is 1, and I think always will be, right?  This and
+elsewhere could be simplified if we just accept that.
+
+> +	mhi_cntrl->mhi_cmd = kcalloc(NR_OF_CMD_RINGS, sizeof(*mhi_cntrl->mhi_cmd), GFP_KERNEL);
+> +	if (!mhi_cntrl->mhi_cmd) {
+> +		ret = -ENOMEM;
+> +		goto err_free_ch;
+> +	}
+> +
+> +	/* Set controller index */
+> +	mhi_cntrl->index = ida_alloc(&mhi_ep_cntrl_ida, GFP_KERNEL);
+> +	if (mhi_cntrl->index < 0) {
+> +		ret = mhi_cntrl->index;
+> +		goto err_free_cmd;
+> +	}
+> +
+> +	/* Allocate the controller device */
+> +	mhi_dev = mhi_ep_alloc_device(mhi_cntrl);
+> +	if (IS_ERR(mhi_dev)) {
+> +		dev_err(mhi_cntrl->cntrl_dev, "Failed to allocate controller device\n");
+> +		ret = PTR_ERR(mhi_dev);
+> +		goto err_ida_free;
+> +	}
+> +
+> +	mhi_dev->dev_type = MHI_DEVICE_CONTROLLER;
+> +	dev_set_name(&mhi_dev->dev, "mhi_ep%d", mhi_cntrl->index);
+> +	mhi_dev->name = dev_name(&mhi_dev->dev);
+> +
+> +	ret = device_add(&mhi_dev->dev);
+> +	if (ret)
+> +		goto err_release_dev;
+
+goto err_put_device?
+
+> +
+> +	mhi_cntrl->mhi_dev = mhi_dev;
+> +
+> +	dev_dbg(&mhi_dev->dev, "MHI EP Controller registered\n");
+> +
+> +	return 0;
+> +
+> +err_release_dev:
+> +	put_device(&mhi_dev->dev);
+> +err_ida_free:
+> +	ida_free(&mhi_ep_cntrl_ida, mhi_cntrl->index);
+> +err_free_cmd:
+> +	kfree(mhi_cntrl->mhi_cmd);
+> +err_free_ch:
+> +	kfree(mhi_cntrl->mhi_chan);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(mhi_ep_register_controller);
+> +
+> +void mhi_ep_unregister_controller(struct mhi_ep_cntrl *mhi_cntrl)
+> +{
+> +	struct mhi_ep_device *mhi_dev = mhi_cntrl->mhi_dev;
+> +
+> +	kfree(mhi_cntrl->mhi_cmd);
+> +	kfree(mhi_cntrl->mhi_chan);
+> +
+> +	device_del(&mhi_dev->dev);
+> +	put_device(&mhi_dev->dev);
+> +
+> +	ida_free(&mhi_ep_cntrl_ida, mhi_cntrl->index);
+> +}
+> +EXPORT_SYMBOL_GPL(mhi_ep_unregister_controller);
+> +
+> +static int mhi_ep_match(struct device *dev, struct device_driver *drv)
+> +{
+> +	struct mhi_ep_device *mhi_dev = to_mhi_ep_device(dev);
+> +
+> +	/*
+> +	 * If the device is a controller type then there is no client driver
+> +	 * associated with it
+> +	 */
+> +	if (mhi_dev->dev_type == MHI_DEVICE_CONTROLLER)
+> +		return 0;
+> +
+> +	return 0;
+> +};
+> +
+> +struct bus_type mhi_ep_bus_type = {
+> +	.name = "mhi_ep",
+> +	.dev_name = "mhi_ep",
+> +	.match = mhi_ep_match,
+> +};
+> +
+> +static int __init mhi_ep_init(void)
+> +{
+> +	return bus_register(&mhi_ep_bus_type);
+> +}
+> +
+> +static void __exit mhi_ep_exit(void)
+> +{
+> +	bus_unregister(&mhi_ep_bus_type);
+> +}
+> +
+> +postcore_initcall(mhi_ep_init);
+> +module_exit(mhi_ep_exit);
+> +
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_DESCRIPTION("MHI Bus Endpoint stack");
+> +MODULE_AUTHOR("Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>");
+> diff --git a/include/linux/mhi_ep.h b/include/linux/mhi_ep.h
+> new file mode 100644
+> index 000000000000..14fd40af8974
+> --- /dev/null
+> +++ b/include/linux/mhi_ep.h
+
+. . .
+
+> +/**
+> + * struct mhi_ep_device - Structure representing an MHI Endpoint device that binds
+> + *                     to channels or is associated with controllers
+> + * @dev: Driver model device node for the MHI Endpoint device
+> + * @mhi_cntrl: Controller the device belongs to
+> + * @id: Pointer to MHI Endpoint device ID struct
+> + * @name: Name of the associated MHI Endpoint device
+> + * @ul_chan: UL channel for the device
+> + * @dl_chan: DL channel for the device
+> + * @dev_type: MHI device type
+> + * @ul_chan_id: Channel id for UL transfer
+> + * @dl_chan_id: Channel id for DL transfer
+> + */
+> +struct mhi_ep_device {
+> +	struct device dev;
+> +	struct mhi_ep_cntrl *mhi_cntrl;
+> +	const struct mhi_device_id *id;
+> +	const char *name;
+> +	struct mhi_ep_chan *ul_chan;
+> +	struct mhi_ep_chan *dl_chan;
+
+Could the dev_type just be:    bool controller?
+
+> +	enum mhi_device_type dev_type;
+> +	int ul_chan_id;
+
+Can't you ust use ul_chan->chan and dl_chan->chan?
+
+In any case, I think the channel ids should be u32.
+
+					-Alex
+
+> +	int dl_chan_id;
+> +};
+> +
+> +#define to_mhi_ep_device(dev) container_of(dev, struct mhi_ep_device, dev)
+> +
+> +/**
+> + * mhi_ep_register_controller - Register MHI Endpoint controller
+> + * @mhi_cntrl: MHI Endpoint controller to register
+> + * @config: Configuration to use for the controller
+> + *
+> + * Return: 0 if controller registrations succeeds, a negative error code otherwise.
+> + */
+> +int mhi_ep_register_controller(struct mhi_ep_cntrl *mhi_cntrl,
+> +			       const struct mhi_ep_cntrl_config *config);
+> +
+> +/**
+> + * mhi_ep_unregister_controller - Unregister MHI Endpoint controller
+> + * @mhi_cntrl: MHI Endpoint controller to unregister
+> + */
+> +void mhi_ep_unregister_controller(struct mhi_ep_cntrl *mhi_cntrl);
+> +
+> +#endif
+> 
 

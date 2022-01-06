@@ -2,124 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A149D4861AF
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 09:55:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C0A84861B3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 09:55:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237128AbiAFIzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 03:55:11 -0500
-Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:59072 "EHLO
-        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236914AbiAFIzK (ORCPT
+        id S237168AbiAFIzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 03:55:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38600 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237035AbiAFIzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 03:55:10 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R771e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=zhangliguang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V15fpOu_1641459307;
-Received: from 30.225.24.17(mailfrom:zhangliguang@linux.alibaba.com fp:SMTPD_---0V15fpOu_1641459307)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 06 Jan 2022 16:55:08 +0800
-Message-ID: <9a40adbb-bb83-701e-c2eb-0f80b618f159@linux.alibaba.com>
-Date:   Thu, 6 Jan 2022 16:55:08 +0800
+        Thu, 6 Jan 2022 03:55:45 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADEBC061245;
+        Thu,  6 Jan 2022 00:55:44 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id l10-20020a17090a384a00b001b22190e075so7687638pjf.3;
+        Thu, 06 Jan 2022 00:55:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l6AC26P5A6p2PYSNfsM3OeICvH034ha9iztPzeXC2KE=;
+        b=junyQPmsGv9qRZxRZ14fSV/UV4SkPFjzw7Fs9NYBI+iy840C6htKqDWzf2O3SbWfqS
+         qI7L4ptVuEqZgWWQ0dvgHVb58GV8PEZRp2CyMNF8CZLnebbiTsJ+UYrrCET8/tHAgBDs
+         aOvCInDbC/0lz7byrD2TviMaQjiN5RVdq8vl3miTncRc78KF+xZQ0pqtdXxpnkP+SX9T
+         vdxnwE1RujxY9215qw14Hw183AZdRJ6acsY3UVI9XNYwa4w3Y1LD6JizFhc/K8iBwnF+
+         naP8FiLLMHZz+WykYjVkzfLsYPcMtdQ9IvAs/v8Zkx24Cz5jlYdTHLhlnItga/HfPxct
+         uX7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l6AC26P5A6p2PYSNfsM3OeICvH034ha9iztPzeXC2KE=;
+        b=qdGjTRI8z4ar57W0WZtCJhoDXHtkAk+nQUwBJQ+TjQ/7D0+J5auRQn0HO+1p43jYxp
+         KsP76gtqCg0NiY+jQz2cduMvgxNuvWLuW9gJGTcSJvU/0wSpLQkz8a1rOAszUmY/envH
+         t+1AB84j42RUD16gFKda5NeK7a6IYbttyCEoNmF5nZaddCpGJJOpmt0kvnUPCqt+cuDf
+         FxPXNJnKErBc8lgdWeI97RlTE0TRamKlNZp7pv46MTQv1Wg4+GiH/tidO+btNYBtsZvM
+         SOB0aBCmzNEx3YdMs/rT+qPpiw2dZ87eFfT8qf3aK0Cq5OU9VDQmQEoETbthbl8c6lBk
+         /ibw==
+X-Gm-Message-State: AOAM533WqcFUF+prg2HiFbT4mEQ7brqdOMFFcK2rdLNuW4dFslgI/dzs
+        wBTJESWeAHl3CBShKBA1Qn4=
+X-Google-Smtp-Source: ABdhPJwN4aeg1Mq4mkU4DhpPUKCXV/JpNiHzTkbXWDemFa2C0X1MHLfcbqbsYqlZWCjugX8dbXVSZw==
+X-Received: by 2002:a17:903:32c9:b0:149:7d71:c235 with SMTP id i9-20020a17090332c900b001497d71c235mr47235609plr.58.1641459344086;
+        Thu, 06 Jan 2022 00:55:44 -0800 (PST)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id d14sm1594223pfl.132.2022.01.06.00.55.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 00:55:43 -0800 (PST)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86/pt: Do not advertise Intel PT Event Trace capability
+Date:   Thu,  6 Jan 2022 16:55:33 +0800
+Message-Id: <20220106085533.84356-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] PCI: pciehp: clear cmd_busy bit when Command Completed in
- polling mode
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Amey Narkhede <ameynarkhede03@gmail.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211111054258.7309-1-zhangliguang@linux.alibaba.com>
- <20211126173309.GA12255@wunner.de>
-From:   luanshi <zhangliguang@linux.alibaba.com>
-In-Reply-To: <20211126173309.GA12255@wunner.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn & Lukas & Kuppuswamy & Amey,
+From: Like Xu <likexu@tencent.com>
 
-Gentle ping! Any comments on this patch，should be merged?
+The Inte PT Event Trace capability (Intel SDM Vol3, 32.2.4 Event Tracing)
+is a new CPU feature that "exposes details about the asynchronous events,
+when they are generated, and when their corresponding software event
+handler completes execution".
 
+It is not possible for KVM to emulate all events including interrupts,
+VM exits, VM entries, INIT, SIPI events and etc. for guests and to
+emulate the simultaneous writing of Control Flow Events and Event Data
+packets generated by the KVM to the guest PT buffer.
 
-Thanks,
+For KVM, it is best not to advertise the Event Trace feature and just
+let it be a system-wide-only tracing capability.
 
-Liguang
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+Off topic, other new PT features such as "PSB and PMI Preservation Supported"
+and "TNT disable" are under investigation or awaiting host support to move on.
 
-在 2021/11/27 1:33, Lukas Wunner 写道:
-> On Thu, Nov 11, 2021 at 01:42:58PM +0800, Liguang Zhang wrote:
->> This patch fixes this problem that on driver probe from system startup,
->> pciehp checks the Presence Detect State bit in the Slot Status register
->> to bring up an occupied slot or bring down an unoccupied slot. If empty
->> slot's power status is on, turn power off. The Hot-Plug interrupt isn't
->> requested yet, so avoid triggering a notification by calling
->> pcie_disable_notification().
->>
->> Both the CCIE and HPIE bits are masked in pcie_disable_notification(),
->> when we issue a hotplug command, pcie_wait_cmd() will polling the
->> Command Completed bit instead of waiting for an interrupt. But cmd_busy
->> bit was not cleared when Command Completed which results in timeouts
->> like this in pciehp_power_off_slot() and pcie_init_notification():
->>
->>    pcieport 0000:00:03.0: pciehp: Timeout on hotplug command 0x01c0
->> (issued 2264 msec ago)
->>    pcieport 0000:00:03.0: pciehp: Timeout on hotplug command 0x05c0
->> (issued 2288 msec ago)
->>
->> Signed-off-by: Liguang Zhang <zhangliguang@linux.alibaba.com>
-> Fixes: a5dd4b4b0570 ("PCI: pciehp: Wait for hotplug command completion where necessary")
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215143
-> Reviewed-by: Lukas Wunner <lukas@wunner.de>
-> Cc: stable@vger.kernel.org # v4.19+
->
-> Thanks a lot, that's a really good catch.
->
-> It's a somewhat intricate bug, so I'll try to explain in my own words:
->
-> If notification is disabled (HPIE or CCIE not set in the Slot Status
-> register), we rely on pcie_poll_cmd() to poll for Command Completed.
-> But once it's signaled, we neglect to clear ctrl->cmd_busy.
-> (Normally it is cleared by the hardirq handler pciehp_isr() if
-> notification is enabled.)
->
-> The result is that starting with the second Slot Control write,
-> pciehp will gratuitously wait for a command to finish which has
-> already finished and it will incorrectly report a timeout.
->
-> The bug was originally introduced in 2015 by commit a5dd4b4b0570
-> ("PCI: pciehp: Wait for hotplug command completion where necessary"),
-> but didn't manifest itself because the first Slot Control Write already
-> enabled notification and from that point on the hardirq handler would
-> clear ctrl->cmd_busy.  However I think the bug may have manifested
-> itself with pciehp_poll_mode=1.
->
-> It wasn't until commit 4e6a13356f1c ("PCI: pciehp: Deduplicate presence
-> check on probe & resume") that multiple consecutive Slot Control writes
-> were performed on ->probe with notification disabled, so that's the
-> commit which first exposed the bug with pciehp_poll_mode=0.
->
-> Thanks,
->
-> Lukas
->
->> ---
->>   drivers/pci/hotplug/pciehp_hpc.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/pci/hotplug/pciehp_hpc.c b/drivers/pci/hotplug/pciehp_hpc.c
->> index 83a0fa119cae..8698aefc6041 100644
->> --- a/drivers/pci/hotplug/pciehp_hpc.c
->> +++ b/drivers/pci/hotplug/pciehp_hpc.c
->> @@ -98,6 +98,8 @@ static int pcie_poll_cmd(struct controller *ctrl, int timeout)
->>   		if (slot_status & PCI_EXP_SLTSTA_CC) {
->>   			pcie_capability_write_word(pdev, PCI_EXP_SLTSTA,
->>   						   PCI_EXP_SLTSTA_CC);
->> +			ctrl->cmd_busy = 0;
->> +			smp_mb();
->>   			return 1;
->>   		}
->>   		msleep(10);
->> -- 
->> 2.19.1.6.gb485710b
+ arch/x86/kvm/cpuid.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 0b920e12bb6d..1028c57377e9 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -901,6 +901,8 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+ 			break;
+ 		}
+ 
++		/* Not advertise Event Trace capability due to endless emulation */
++		entry->ebx &= ~BIT(7);
+ 		for (i = 1, max_idx = entry->eax; i <= max_idx; ++i) {
+ 			if (!do_host_cpuid(array, function, i))
+ 				goto out;
+-- 
+2.33.1
+

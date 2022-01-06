@@ -2,99 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D6D486A6B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 20:16:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D59486A70
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 20:18:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243267AbiAFTQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 14:16:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38320 "EHLO
+        id S243280AbiAFTSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 14:18:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243235AbiAFTQe (ORCPT
+        with ESMTP id S243235AbiAFTSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 14:16:34 -0500
+        Thu, 6 Jan 2022 14:18:04 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093EDC061245;
-        Thu,  6 Jan 2022 11:16:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F105C061245;
+        Thu,  6 Jan 2022 11:18:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F33F61DD7;
-        Thu,  6 Jan 2022 19:16:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84290C36AE3;
-        Thu,  6 Jan 2022 19:16:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A512561DBC;
+        Thu,  6 Jan 2022 19:18:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A74DC36AE3;
+        Thu,  6 Jan 2022 19:18:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641496593;
-        bh=G97zcGNT4PSbx/Vz5SKLIe9/ZkwzVvng4rdqvkDNeyA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NbeFU9IuZUqE3+Wn52ChE76+yv2AL2GQdBNaoiivlrSvryNCyQY21FqLQe6K+jJHB
-         bBlixQTvP4SrR8rysdXniug7GNWXUEjWEZdq75nQO6++f39ejwKJv+1wsy2og9MmP8
-         3mkKpVJA3sWMED9YqsnWU8zIYdMSonvWqnoSNdhRdz+aoQ82aVkxeyJuqqYbTJVPo0
-         +mfNp+er94q7FOkF4I5ABc8yb7Y/1isZXWOsFUqT6VqPhlMU4w9T5/7fc6CR1NQUoH
-         dawHt/4qG0OFNY5PCsOyvVIORGJJlQIb/YasjoncGij6U4rvYEdkETHpoRalJQRjEi
-         gpDXnRbul2wPg==
-Date:   Thu, 6 Jan 2022 21:16:28 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        James Morris <jmorris@namei.org>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Andreas Rammhold <andreas@rammhold.de>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>
-Subject: Re: [PATCH v8 0/5] Enable root to update the blacklist keyring
-Message-ID: <YddADJJNLDlQAYRW@iki.fi>
-References: <20210712170313.884724-1-mic@digikod.net>
- <7e8d27da-b5d4-e42c-af01-5c03a7f36a6b@digikod.net>
- <YcGVZitNa23PCSFV@iki.fi>
- <5030a9ff-a1d1-a9bd-902a-77c3d1d87446@digikod.net>
- <Ydc/E3S2vmtDOnpw@iki.fi>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ydc/E3S2vmtDOnpw@iki.fi>
+        s=k20201202; t=1641496683;
+        bh=uKGcXun6owxUUnGntWPjyYCMk1Vtn2mFD8KZo8viyOY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rHvdeX4hmE13KmhTaXrf7Q0rnZFc9KhcB5vSXP7mL/TToofgacHnvXJ40y5aYN+8U
+         kYd2aEUx4n07qFqZ3g26JBzyOCoX3Q++kyeFU2d7KQXRpiSQP0DfGpzuDV6hCvM5Fx
+         OELtNMx+Fh3vnueCpMeszNc0ea6rwMxSrrqLqcI1GmGA4Ag/MYqFZtuX9iIdCBCj0W
+         rhDs32VV8PH7Z/hjtNZpEo4fL5csdrSvYZEQOQDuMcS7Bsg0RsGnT/1NQcHEUBs3v0
+         PSWt+1rGdEW2lHDeVn1bH5Av5u8EjnduenCHYUWHs9QFY8A4+yZ2y74C6l+oHoEq9N
+         pZmV5OKiqUX6w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1n5YGu-00GPx7-Ra; Thu, 06 Jan 2022 19:18:01 +0000
+Date:   Thu, 06 Jan 2022 19:18:02 +0000
+Message-ID: <875yqwzn9x.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <marc.zyngier@arm.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: interrupt-controller: arm,gic-v3: Fix 'interrupts'
+In-Reply-To: <20220106182518.1435497-5-robh@kernel.org>
+References: <20220106182518.1435497-5-robh@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: robh@kernel.org, tglx@linutronix.de, marc.zyngier@arm.com, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 09:12:22PM +0200, Jarkko Sakkinen wrote:
-> On Tue, Jan 04, 2022 at 04:56:36PM +0100, Mickaël Salaün wrote:
-> > 
-> > On 21/12/2021 09:50, Jarkko Sakkinen wrote:
-> > > On Mon, Dec 13, 2021 at 04:30:29PM +0100, Mickaël Salaün wrote:
-> > > > Hi Jarkko,
-> > > > 
-> > > > Since everyone seems OK with this and had plenty of time to complain, could
-> > > > you please take this patch series in your tree? It still applies on
-> > > > v5.16-rc5 and it is really important to us. Please let me know if you need
-> > > > something more.
-> > > > 
-> > > > Regards,
-> > > >   Mickaël
-> > > 
-> > > I'm off-work up until end of the year, i.e. I will address only important
-> > > bug fixes and v5.16 up until that.
-> > > 
-> > > If any of the patches is yet missing my ack, feel free to
-> > > 
-> > > Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > 
-> > Thanks Jarkko. Can you please take it into your tree?
+On Thu, 06 Jan 2022 18:25:13 +0000,
+Rob Herring <robh@kernel.org> wrote:
 > 
-> I can yes, as I need to anyway do a revised PR for v5.17, as one commit
-> in my first trial had a truncated fixes tag.
+> The 2nd example has an interrupts cells size of 4, but the 'interrupts'
+> property has 3 cells. The example should also be separate since the cell
+> size differs in each example.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Please check:
+Acked-by: Marc Zyngier <maz@kernel.org>
 
-git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+	M.
 
-/Jarkko
+-- 
+Without deviation from the norm, progress is not possible.

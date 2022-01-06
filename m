@@ -2,181 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6B8486B3B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:34:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AEAE486B3C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243866AbiAFUeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 15:34:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55856 "EHLO
+        id S243882AbiAFUeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 15:34:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243810AbiAFUeN (ORCPT
+        with ESMTP id S243881AbiAFUeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 15:34:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA893C061245;
-        Thu,  6 Jan 2022 12:34:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7402B823F6;
-        Thu,  6 Jan 2022 20:34:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DB9AC36AE5;
-        Thu,  6 Jan 2022 20:34:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641501250;
-        bh=4wGBE9mrFvNDIODFoW8NjbIzKgcrJgzvtmSYFts9dtY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qTeS5TwtFbKtDqhox8GYq8van3xCGC4ovwzr9fPk8znyoeuh8HUcRy+sXC5yf3D7D
-         0H+XDXTQGf4EooH0dIxXYqg4KjLCyAkJXerBJ8MNeDzEhm5EqISWtBXYrUjcWw4P1k
-         njbpByBxUUN50qjfurm/pRYD0bqbLEp/YHJnQhpnIkt5LaSt8qM2IdQ9ESA4UpVekB
-         HljzyV2+0xcEBP6d2KRX9h/8I2ILUFoVw+rqySKizA6uME/XbKLPi0AlvnO2vldT1c
-         zyM7LCa7iK47LV8XSiwlwi6I4L6vC9jyk+iE/dJXAEPu7qKxdhtvcHDFrqAIPaxqoH
-         LKP3R9blq853g==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 3959440B92; Thu,  6 Jan 2022 17:34:08 -0300 (-03)
-Date:   Thu, 6 Jan 2022 17:34:08 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Krister Johansen <kjlx@templeofstupid.com>
-Cc:     Riccardo Mancini <rickyman7@gmail.com>,
-        Ian Rogers <irogers@google.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH 01/20] perf nsinfo: fix refcounting
-Message-ID: <YddSQB8Sztuf053g@kernel.org>
-References: <cover.1626343282.git.rickyman7@gmail.com>
- <55223bc8821b34ccb01f92ef1401c02b6a32e61f.1626343282.git.rickyman7@gmail.com>
- <YPCGONcQx5SxEKdY@kernel.org>
- <YPCKeDvyLOQzKTln@kernel.org>
- <20220105061942.GA20464@templeofstupid.com>
- <YddQv1O057Mw5Whv@kernel.org>
+        Thu, 6 Jan 2022 15:34:21 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC72AC061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 12:34:21 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id z30so92319pge.4
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 12:34:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=Ln44DHb8404iMOxunr6mPX5EmgsiBEwipUEXxbuVNjI=;
+        b=DQrvlfvktSk4zjpicBjma9GVINQJNuLF504O+C1wLw0IQRkMxxwyk6W76HniW1nIH8
+         xegCovbKM+QxUcnfMd9+gR+k/dsyOmNls8cueebFTnxo+GfGGSkhGIL0e5hrkboYNPXf
+         wU3U/VhL3cJYxQKvtwaHqP+toY2nEHRfdCI/PF1u6ickuy6uPCPmeh5HEfOyBvq49qvU
+         PbmevCtM2Pg6DLhSVsSJCdgbwYCYX9PceekJEsDWOkxEb9GoK/9mYgW4tj3EXWik3pQb
+         XAL/hXMIC3Jf0IEvopQJltZ5mSI+pDeFz3Khnqz9WiilBFZssm3jQvgmXo17F/Ph0pJF
+         3u9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=Ln44DHb8404iMOxunr6mPX5EmgsiBEwipUEXxbuVNjI=;
+        b=XIJD2ZB6CubOYzay6ms3Cx/EuI/E4tgUD2uXZeYJv1mEZynE4XstKuk+AC09FUhLWN
+         RVnE3V6/d10WIFAD1XW41Hy6wWZE3nJGABRZrdGtoHYMJttCbgzgltVWfBNTuUxwoJxa
+         id0A8hJE4TF7YocJldoSlTtfwoqqvCyIANhbH/7Om3t6IKwTrbrsuJYLM0jR/wBt1Kon
+         f5ghm4P1K9Qhrb3ERQEEEslsu+/PcAcpuLJEZDu1oKPZqpetgRnf/qF/wCcUzjtBTQ0v
+         XuI2EwZMXvt4Pw3xujj5O/bsqsKZpfgnX6aKI6ymQqIZoNHnRjrbjP/GBh47t0vk/bel
+         Ytig==
+X-Gm-Message-State: AOAM531RJVktV7yl25d7UY9825LIKQJy8mRUJd0o/F5h9gTz3gJOX42z
+        Y8OO5yR+qSUrpVzG7iZFRvwZTd+xLwXERQ==
+X-Google-Smtp-Source: ABdhPJyGTR+KVRoGhIAPgPcaQMJKQNKtBUHSqZ6DnPnVDBl1oXoNx7YTmFVUCdNvp55qp6uxKlNOcw==
+X-Received: by 2002:a05:6a00:1305:b0:4a2:75cd:883b with SMTP id j5-20020a056a00130500b004a275cd883bmr61255458pfu.44.1641501261123;
+        Thu, 06 Jan 2022 12:34:21 -0800 (PST)
+Received: from [2620:15c:29:204:6f61:b5ab:91b3:14d7] ([2620:15c:29:204:6f61:b5ab:91b3:14d7])
+        by smtp.gmail.com with ESMTPSA id m14sm3458417pfk.3.2022.01.06.12.34.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 12:34:20 -0800 (PST)
+Date:   Thu, 6 Jan 2022 12:34:19 -0800 (PST)
+From:   David Rientjes <rientjes@google.com>
+To:     Jann Horn <jannh@google.com>
+cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH v3] mm, oom: OOM sysrq should always kill a process
+In-Reply-To: <20220106102605.635656-1-jannh@google.com>
+Message-ID: <ae727710-7298-ca63-fcb0-9f8b84d94bee@google.com>
+References: <20220106102605.635656-1-jannh@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YddQv1O057Mw5Whv@kernel.org>
-X-Url:  http://acmel.wordpress.com
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Jan 06, 2022 at 05:27:43PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Tue, Jan 04, 2022 at 10:19:42PM -0800, Krister Johansen escreveu:
-> > On Thu, Jul 15, 2021 at 04:20:24PM -0300, Arnaldo Carvalho de Melo wrote:
-> > > Em Thu, Jul 15, 2021 at 04:02:16PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > > Em Thu, Jul 15, 2021 at 06:07:06PM +0200, Riccardo Mancini escreveu:
-> > > > > ASan reports a memory leak of nsinfo during the execution of the perf
-> > > > > test "31: Lookup mmap thread".
-> > > > > The leak is caused by a refcounted variable being replaced without
-> > > > > dropping the refcount.
-> > > 
-> > > > > This patch makes sure that the refcnt of nsinfo is decreased whenever
-> > > > > a refcounted variable is replaced with a new value.
-> > > 
-> > > > So, there are multiple fixes in just one patch, I'll split it into
-> > > > three, no need to resend.
-> > > 
-> > > > I'll try and check if finding Fixes: for the three is easy, that way
-> > > > stable@vger.kernel.org will figure out which of the supported releases
-> > > > need each of them.
-> > > 
-> > > The second is at the end of this message, and looking at it I think
-> > > there is a problem with where this nsinfo reference is stored, it should
-> > > be in the 'struct map', that is per-thread, not in the 'struct dso',
-> > > that may be shared by multiple 'struct map's in different cgroups, so we
-> > > can't set dso->nsinfo in map__new(), right? Kristen?
-> > 
-> > Apologies for the long delayed reply, and for the hassle that this has
-> > caused.
-> > 
-> > You're right, Arnaldo, that namespace mapping could differ on a per
-> > thread basis.  If the dso objects are intended to be read by multiple
-> > threads with different views of the target process's namespaces.  With
-> > containers, though, there might be many different versions of the same
-> > object with the same filename, and the only ways we can disambiguate are
-> > through the build-ids or by ensuring that the dso refers to a single
-> > pid and mount namespace.  I may have erred in assuming that all of
-> > perf's threads would be able to access the target namespace via the same
-> > identifiers.  Is that what's going on here?
+On Thu, 6 Jan 2022, Jann Horn wrote:
+
+> The OOM kill sysrq (alt+sysrq+F) should allow the user to kill the
+> process with the highest OOM badness with a single execution.
 > 
-> yeah, I think using build-ids, when available is the way to go, and
-> since we can almost take it for granted (haven't checked) that it will
-> be present, as I think gcc/clang adds them by default, seems the way to
-> go.
+> However, at the moment, the OOM kill can bail out if an OOM notifier
+> (e.g. the i915 one) says that it reclaimed a tiny amount of memory
+> from somewhere. That's probably not what the user wants, so skip the
+> bailout if the OOM was triggered via sysrq.
 > 
-> That or somehow have the DSO list to be perf namespace.
+> Acked-by: Michal Hocko <mhocko@suse.com>
+> Signed-off-by: Jann Horn <jannh@google.com>
 
-To be by namespace, sorry.
-
-But having it by build-id seems the more sensible way to go, so that we
-can avoid having multiple instances of the same DSO in multiple
-namespaces, which should be common.
-
-I.e. continue to have a perf 'struct machine' DSO list instead of moving
-to having the namespace hierarchy represented under 'struct machine'
-since we have a way to uniquify DSOs, the build id.
-
-One way or the other, nsinfo shouldn't be stored in DSOs, its a map
-property, which in turn is a thread property.
-
-I.e. please consider thinking about moving it to 'struct map', would you
-try it, please?
-
-- Arnaldo
- 
-> - Arnaldo
->  
-> > -K
-> > 
-> > 
-> > > commit 280f3933661f9ca9563ed04ce82313fdbcbb8f75
-> > > Author: Riccardo Mancini <rickyman7@gmail.com>
-> > > Date:   Thu Jul 15 18:07:06 2021 +0200
-> > > 
-> > >     perf map: Fix dso->nsinfo refcounting
-> > >     
-> > >     ASan reports a memory leak of nsinfo during the execution of
-> > >     
-> > >       # perf test "31: Lookup mmap thread"
-> > >     
-> > >     The leak is caused by a refcounted variable being replaced without
-> > >     dropping the refcount.
-> > >     
-> > >     This patch makes sure that the refcnt of nsinfo is decreased whenever a
-> > >     refcounted variable is replaced with a new value.
-> > >     
-> > >     Signed-off-by: Riccardo Mancini <rickyman7@gmail.com>
-> > >     Fixes: bf2e710b3cb8445c ("perf maps: Lookup maps in both intitial mountns and inner mountns.")
-> > >     Cc: Ian Rogers <irogers@google.com>
-> > >     Cc: Jiri Olsa <jolsa@redhat.com>
-> > >     Cc: Krister Johansen <kjlx@templeofstupid.com>
-> > >     Cc: Mark Rutland <mark.rutland@arm.com>
-> > >     Cc: Namhyung Kim <namhyung@kernel.org>
-> > >     Cc: Peter Zijlstra <peterz@infradead.org>
-> > >     Link: http://lore.kernel.org/lkml/55223bc8821b34ccb01f92ef1401c02b6a32e61f.1626343282.git.rickyman7@gmail.com
-> > >     Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > > 
-> > > diff --git a/tools/perf/util/map.c b/tools/perf/util/map.c
-> > > index 8af693d9678cefe0..72e7f3616157ead4 100644
-> > > --- a/tools/perf/util/map.c
-> > > +++ b/tools/perf/util/map.c
-> > > @@ -192,6 +192,8 @@ struct map *map__new(struct machine *machine, u64 start, u64 len,
-> > >  			if (!(prot & PROT_EXEC))
-> > >  				dso__set_loaded(dso);
-> > >  		}
-> > > +
-> > > +		nsinfo__put(dso->nsinfo);
-> > >  		dso->nsinfo = nsi;
-> > >  
-> > >  		if (build_id__is_defined(bid))
-> > > 
-> 
-> -- 
-> 
-> - Arnaldo
-
--- 
-
-- Arnaldo
+Acked-by: David Rientjes <rientjes@google.com>

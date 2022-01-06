@@ -2,134 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8613D4869B6
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:25:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6FC4869BA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:25:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242711AbiAFSZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 13:25:02 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56858 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240698AbiAFSZB (ORCPT
+        id S242731AbiAFSZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 13:25:30 -0500
+Received: from mail-oo1-f51.google.com ([209.85.161.51]:39435 "EHLO
+        mail-oo1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242685AbiAFSZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 13:25:01 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 527FEB82300;
-        Thu,  6 Jan 2022 18:25:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7061DC36AEB;
-        Thu,  6 Jan 2022 18:24:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641493499;
-        bh=9GaARdco9wd21+mN5BPDwOHzbkJBPWLuHC4uImRkdBc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EtdZFzxVU+CRuORFheo4CeymdCoKqwQsEjrSiG+7rh9HNKa5EyrlN4sZ67kHAeYra
-         c9i4Oa9HXDWXutc7m5EWInTsmBti9OpqCJKDCDdlFjfICKD6ZYP2F6dIctcs+FCcIR
-         oQILuPwvbzoAGEYw8+wgcUXRW5ZhsdmaMlF2+1FmBqphsePKvpdakpeiRcVobKxeof
-         0rq0VSXeROnWWYz9NZF8i3g26SIb6AfMzZXHNvEvdb1jZQy1tQlGCmx4RvJFbQv5o5
-         QqautvsisAq+aklvteB4YsnA49bXOc7ai/Z0rD0sVydOBpm5Wo1sAAv6rJ2Rv3qF09
-         X1NMHer40s50g==
-Date:   Thu, 6 Jan 2022 20:24:51 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        syzbot+8fcbb77276d43cc8b693@syzkaller.appspotmail.com
-Subject: Re: [PATCH rdma-rc] RDMA/cma: Clear all multicast request fields
-Message-ID: <Ydcz87l4S+iZIjE6@unreal>
-References: <1876bacbbcb6f82af3948e5c37a09da6ea3fcae5.1641474841.git.leonro@nvidia.com>
- <20220106173941.GA2963550@nvidia.com>
+        Thu, 6 Jan 2022 13:25:29 -0500
+Received: by mail-oo1-f51.google.com with SMTP id t13-20020a4a760d000000b002dab4d502dfso864913ooc.6;
+        Thu, 06 Jan 2022 10:25:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WtCQ64pgnWNLBdjxVsdLoyMOG4H3ImMrrn1XpG3ExcA=;
+        b=4YpOrtgsYqKG+ThblPcG/YT7aaNA/Qt7pvIaFEIBRUxeh7wFSzdoFKP3tamUxzcKzY
+         Y3jUGlVbL/sb6IA0CiUkjIp9CFLISdJWyK0FvUnVL/7PDmLc7FCS29MFX6FHEtX3RfyY
+         nBwfs5gHjWXKqeCeXiFEG70rdb/hjresHF1gSybEUk6b4VY4yT337Cecou+EYs593xuM
+         P5ZVIg9GuYvomLEFwtwxyOc01brH60ROdcjS506LID16daz+DGNTuYvRTl7cJO4O4FJo
+         a9UrpbytMTib4iUBIxkmjy+tYzwyt5UZq5e8y42N4vcYWBXUqrRUnuNOf+IFITTA7T92
+         LDEw==
+X-Gm-Message-State: AOAM530l1voEnnpQbHCMhsnUKVLJy8GSVdor/R9z0ABmqtfF4YB1TTG0
+        ZyrfJzqQHpd+m4DlFG2R7g==
+X-Google-Smtp-Source: ABdhPJzKDWd6vBFFNsqBd4lZyEsZpnUl3yI1fJXxIsRANiAi/P4L/f0feB7E4LSMjdWW3N4GAg6dLg==
+X-Received: by 2002:a4a:2f81:: with SMTP id p123mr36268575oop.77.1641493528400;
+        Thu, 06 Jan 2022 10:25:28 -0800 (PST)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id r13sm484949oth.21.2022.01.06.10.25.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 10:25:27 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: clock: imx5: Drop clock consumer node from example
+Date:   Thu,  6 Jan 2022 12:25:09 -0600
+Message-Id: <20220106182518.1435497-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220106173941.GA2963550@nvidia.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 01:39:41PM -0400, Jason Gunthorpe wrote:
-> On Thu, Jan 06, 2022 at 03:15:07PM +0200, Leon Romanovsky wrote:
-> > From: Leon Romanovsky <leonro@nvidia.com>
-> > 
-> > The ib->rec.qkey field is accessed without being initialized.
-> > Clear the ib_sa_multicast struct to fix the following syzkaller error/.
-> > 
-> > =====================================================
-> > BUG: KMSAN: uninit-value in cma_set_qkey drivers/infiniband/core/cma.c:510 [inline]
-> > BUG: KMSAN: uninit-value in cma_make_mc_event+0xb73/0xe00 drivers/infiniband/core/cma.c:4570
-> >  cma_set_qkey drivers/infiniband/core/cma.c:510 [inline]
-> >  cma_make_mc_event+0xb73/0xe00 drivers/infiniband/core/cma.c:4570
-> >  cma_iboe_join_multicast drivers/infiniband/core/cma.c:4782 [inline]
-> >  rdma_join_multicast+0x2b83/0x30a0 drivers/infiniband/core/cma.c:4814
-> >  ucma_process_join+0xa76/0xf60 drivers/infiniband/core/ucma.c:1479
-> >  ucma_join_multicast+0x1e3/0x250 drivers/infiniband/core/ucma.c:1546
-> >  ucma_write+0x639/0x6d0 drivers/infiniband/core/ucma.c:1732
-> >  vfs_write+0x8ce/0x2030 fs/read_write.c:588
-> >  ksys_write+0x28c/0x520 fs/read_write.c:643
-> >  __do_sys_write fs/read_write.c:655 [inline]
-> >  __se_sys_write fs/read_write.c:652 [inline]
-> >  __ia32_sys_write+0xdb/0x120 fs/read_write.c:652
-> >  do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
-> >  __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
-> >  do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
-> >  do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
-> >  entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
-> > 
-> > Local variable ib.i created at:
-> >  cma_iboe_join_multicast drivers/infiniband/core/cma.c:4737 [inline]
-> >  rdma_join_multicast+0x586/0x30a0 drivers/infiniband/core/cma.c:4814
-> >  ucma_process_join+0xa76/0xf60 drivers/infiniband/core/ucma.c:1479
-> > 
-> > CPU: 0 PID: 29874 Comm: syz-executor.3 Not tainted 5.16.0-rc3-syzkaller #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> > =====================================================
-> > 
-> > Fixes: b5de0c60cc30 ("RDMA/cma: Fix use after free race in roce multicast join")
-> > Reported-by: syzbot+8fcbb77276d43cc8b693@syzkaller.appspotmail.com
-> > Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-> >  drivers/infiniband/core/cma.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
-> > index 69c9a12dd14e..9c53e1e7de50 100644
-> > +++ b/drivers/infiniband/core/cma.c
-> > @@ -4737,7 +4737,7 @@ static int cma_iboe_join_multicast(struct rdma_id_private *id_priv,
-> >  	int err = 0;
-> >  	struct sockaddr *addr = (struct sockaddr *)&mc->addr;
-> >  	struct net_device *ndev = NULL;
-> > -	struct ib_sa_multicast ib;
-> > +	struct ib_sa_multicast ib = {};
-> >  	enum ib_gid_type gid_type;
-> >  	bool send_only;
-> 
-> We shouldn't be able to join anything except a RDMA_PS_UDP to a
-> multicast in the first place:
-> 
-> 	if (id_priv->id.ps == RDMA_PS_UDP)
-> 		ib.rec.qkey = cpu_to_be32(RDMA_UDP_QKEY);
-> 
-> Multicast RC/etc is meaningless. So I guess it should be like this:
+The example nodes have different sized interrupt cells which is not valid
+given no interrupt-parent is specified. As provider examples don't need to
+show the consumer side in the first place, just drop the consumer node.
 
-Strange that we don't have repro for such deterministic flow.
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/clock/imx5-clock.yaml | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-> 
-> --- a/drivers/infiniband/core/cma.c
-> +++ b/drivers/infiniband/core/cma.c
-> @@ -4744,7 +4744,7 @@ static int cma_iboe_join_multicast(struct rdma_id_private *id_priv,
->  
->         send_only = mc->join_state == BIT(SENDONLY_FULLMEMBER_JOIN);
->  
-> -       if (cma_zero_addr(addr))
-> +       if (cma_zero_addr(addr) || id_priv->id.ps != RDMA_PS_UDP)
->                 return -EINVAL;
->  
->         gid_type = id_priv->cma_dev->default_gid_type[id_priv->id.port_num -
-> @@ -4752,8 +4752,7 @@ static int cma_iboe_join_multicast(struct rdma_id_private *id_priv,
->         cma_iboe_set_mgid(addr, &ib.rec.mgid, gid_type);
->  
->         ib.rec.pkey = cpu_to_be16(0xffff);
-> -       if (id_priv->id.ps == RDMA_PS_UDP)
-> -               ib.rec.qkey = cpu_to_be32(RDMA_UDP_QKEY);
-> +       ib.rec.qkey = cpu_to_be32(RDMA_UDP_QKEY);
->  
->         if (dev_addr->bound_dev_if)
->                 ndev = dev_get_by_index(dev_addr->net, dev_addr->bound_dev_if);
+diff --git a/Documentation/devicetree/bindings/clock/imx5-clock.yaml b/Documentation/devicetree/bindings/clock/imx5-clock.yaml
+index b1740d7abe68..c0e19ff92c76 100644
+--- a/Documentation/devicetree/bindings/clock/imx5-clock.yaml
++++ b/Documentation/devicetree/bindings/clock/imx5-clock.yaml
+@@ -55,11 +55,4 @@ examples:
+                      <0 72 IRQ_TYPE_LEVEL_HIGH>;
+         #clock-cells = <1>;
+     };
+-
+-    can@53fc8000 {
+-        compatible = "fsl,imx53-flexcan", "fsl,imx25-flexcan";
+-        reg = <0x53fc8000 0x4000>;
+-        interrupts = <82>;
+-        clocks = <&clks IMX5_CLK_CAN1_IPG_GATE>, <&clks IMX5_CLK_CAN1_SERIAL_GATE>;
+-        clock-names = "ipg", "per";
+-    };
++...
+-- 
+2.32.0
+

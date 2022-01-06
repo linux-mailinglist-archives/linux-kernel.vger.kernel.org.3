@@ -2,97 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F26BB4869ED
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:30:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DFEC4869F2
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:30:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242811AbiAFSam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 13:30:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55828 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242748AbiAFSal (ORCPT
+        id S242856AbiAFSau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 13:30:50 -0500
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:46802 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242813AbiAFSat (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 13:30:41 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592C3C061212
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 10:30:41 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id o185so9852457ybo.12
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 10:30:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=g/xBmitbOHdtVQAn4LWhzl9UDVKn43GVAgVY+5ZmJg0=;
-        b=lm4tCA4hSwJFZzf7M1gFEOFx/YaTAqH2uGxpeuV7H+Y+iFmSf3jqiINBDiM8dotE1g
-         vh0i54AmsJdL94uLVUBeVn1plrq+pe0i4/s7wbo0u5kxm9Pg854TAdAgPziVoECNfuOh
-         HNCVktu2dX/G3rQcE4kat9b/UOwrGrwCN3f609XUrSceea00L2mZ6+E3AoU5paWh7ZGM
-         wRsCRhPvJ+24K79euDokqYoF8DBWbx39PWvVKhNGsyL4E8PsVByTd5TespNnQL3WRhOD
-         UZVoDaaWi/McJeOCkN5unWvQI1dJcQZRgo8Xgfl0srCXW4S/hXkDHymr1f7YKmlVqfsa
-         O9Ww==
+        Thu, 6 Jan 2022 13:30:49 -0500
+Received: by mail-ot1-f43.google.com with SMTP id j97-20020a9d17ea000000b0059069215e85so3998623otj.13;
+        Thu, 06 Jan 2022 10:30:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=g/xBmitbOHdtVQAn4LWhzl9UDVKn43GVAgVY+5ZmJg0=;
-        b=UOMKtWdOu6BtUOYD0rKHjREePJKaubtMa5snv+5n4hKqTBPG5xI5IJWVLXmtSEg8sW
-         pjm04sYDeRn/ebTmd02t5mXCfQApM7rIhdUn740gY0msfw/ENMzR5Tev7lJP1rnz+9SQ
-         VntTx76tA9iEkahwjiaeGF+BYe6FUibWzT9aP6i9g4YV8KHIbXK4T2+f43/suOgRa3Bw
-         L2E39jFkuQwsxcl17/Q6E6qHUyeN3TIJ5rFAn56jxyaXkVX2xtDSBxesJ5GMAnCZRJDh
-         P58jE3y2bNLSz6e2rZJ3+9gjU9q6X0wi3lf/2oSgjFP/Bvc10aF4RQI6Zew8lQmnMGGL
-         GMPA==
-X-Gm-Message-State: AOAM531KvbfAYBisznHXVCUX9Uy2h0f/BR15QTV7SKbQh7JmOV/vnIrX
-        zPuCyOd3yOFEpEXd0pjM74kSulQkkT6WmkLExR/4WA==
-X-Google-Smtp-Source: ABdhPJwIzJFCyAw+ArQRHeCJK7ZFP38UP4LYuFJ8oyZ4oXkOfDCeI4LeSPJ2rHk53N7EWrs6fXvjAHblXMh9kMG3QTk=
-X-Received: by 2002:a25:d0d1:: with SMTP id h200mr8701861ybg.489.1641493840385;
- Thu, 06 Jan 2022 10:30:40 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jO+eguqfmGf5pi00MAsfJ6vjkTO2C4qOS/bN4M0iDpw=;
+        b=DAi5yAWkHRAgn2uX/yqRKRnEs45zdtib/RtgtzJRQm0W6MZHbZUNEtPaPd7Bo/Ekzx
+         mYBUjtVhp9Bfv9P2i712k7jbueNx8XLZq2/7nsqjyNYHqbtPZUF9nPIqN8ECaneei7zc
+         zolziRZiIVwNb278GNplPJMB3GPfKUVMlBboGVcMCYCc7DTTuEUaYVKKlZxaiSPWr0Pj
+         kA7VsMIGzQWGLguGKEC9CBvBUaBbZ0EoaytfRw6jzmxkHgH7ScacI+/BY7Ug6PBuOHyb
+         JKRy3H8igNid/G7L9+vSw2/H33J9eWyMNTff6+rlCwrmkTkloouCwSlk2MYlScrfjmBx
+         DOPQ==
+X-Gm-Message-State: AOAM530B4Ijf6dTa5x0n4oSB43QHLnvZS8HYMsz5YUiTS3HSpiYC/kBN
+        ANgBc8uz1d6oP2kiDPYBNA==
+X-Google-Smtp-Source: ABdhPJwRHmskJrvolKwtpLzlY7qGfudTL81YkdkwIKjkAYmdjppy/ap0Pp1Ye0/aRlf02WmvHRa6gA==
+X-Received: by 2002:a9d:70d1:: with SMTP id w17mr7228971otj.100.1641493848891;
+        Thu, 06 Jan 2022 10:30:48 -0800 (PST)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id g2sm472767oos.47.2022.01.06.10.30.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 10:30:48 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: i2c: st,stm32-i2c: Make each example a separate entry
+Date:   Thu,  6 Jan 2022 12:30:36 -0600
+Message-Id: <20220106183037.1443931-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20211229215330.4134835-1-yaelt@google.com> <db88a381739e08806e2370e8fbe8fdde82731464.camel@kernel.org>
-In-Reply-To: <db88a381739e08806e2370e8fbe8fdde82731464.camel@kernel.org>
-From:   Yael Tiomkin <yaelt@google.com>
-Date:   Thu, 6 Jan 2022 13:30:29 -0500
-Message-ID: <CAKoutNvX3S=TmhLFg9UVQaUjFbdp3brN5tUM3_QqBo=9d2Dw+w@mail.gmail.com>
-Subject: Re: [PATCH v4] KEYS: encrypted: Instantiate key with user-provided
- decrypted data
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
-        Mimi Zohar <zohar@linux.ibm.com>, corbet@lwn.net,
-        dhowells@redhat.com, jmorris@namei.org, serge@hallyn.com,
-        keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 5, 2022 at 3:12 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
->
-> On Wed, 2021-12-29 at 16:53 -0500, Yael Tiomkin wrote:
-> > The encrypted.c class supports instantiation of encrypted keys with
-> > either an already-encrypted key material, or by generating new key
-> > material based on random numbers. This patch defines a new datablob
-> > format: [<format>] <master-key name> <decrypted data length>
-> > <decrypted data> that allows to instantiate encrypted keys using
-> > user-provided decrypted data, and therefore allows to perform key
-> > encryption from userspace. The decrypted key material will be
-> > inaccessible from userspace.
->
-> The 2nd to last sentence is essentially a tautology but fails to
-> be even that, as you can already "perform key encryption" from user
-> space, just not with arbitrary key material.
->
-> It does not elighten any applications of this feature.
->
-> /Jarkko
+Each independent example should be a separate entry. This allows for
+'interrupts' to have different cell sizes.
 
-Sure. Please look at the modification below.
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-The encrypted.c class supports instantiation of encrypted keys with
-either an already-encrypted key material, or by generating new key
-material based on random numbers. This patch defines a new datablob
-format: [<format>] <master-key name> <decrypted data length>
-<decrypted data> that allows to inject (and encrypt) user-provided
-decrypted data. The decrypted key material will be inaccessible from
-userspace. This feature also acts as a building block for a userspace
-envelope encryption capability.
+diff --git a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
+index c07289a643d8..46b62e1c9273 100644
+--- a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
++++ b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
+@@ -112,6 +112,9 @@ examples:
+           clocks = <&rcc 0 149>;
+       };
+ 
++  - |
++    #include <dt-bindings/mfd/stm32f7-rcc.h>
++    #include <dt-bindings/clock/stm32fx-clock.h>
+     //Example 2 (with st,stm32f7-i2c compatible)
+       i2c@40005800 {
+           compatible = "st,stm32f7-i2c";
+@@ -124,6 +127,9 @@ examples:
+           clocks = <&rcc 1 CLK_I2C1>;
+       };
+ 
++  - |
++    #include <dt-bindings/mfd/stm32f7-rcc.h>
++    #include <dt-bindings/clock/stm32fx-clock.h>
+     //Example 3 (with st,stm32mp15-i2c compatible on stm32mp)
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+     #include <dt-bindings/clock/stm32mp1-clks.h>
+-- 
+2.32.0
 
-Yael

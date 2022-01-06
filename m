@@ -2,117 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 181F14866A6
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 16:21:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD7474866A9
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 16:22:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240432AbiAFPU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 10:20:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:48385 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240393AbiAFPU5 (ORCPT
+        id S240444AbiAFPWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 10:22:06 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:49569 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240393AbiAFPWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 10:20:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641482456;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2YqsIWQ53eG2PDcqAucmDLmwn9f5p0XCph507eireqE=;
-        b=MbV4RbxIi0SW1AJKc9frYo8x0dHoD/88ZHqwj/d4+H2QxfjELRJiBPx+WjYqkDLopifIKO
-        zTNfvAaxPQXflSeso2dgmjmOCbde6PXw78HOajzlWieGOOPtDuE5PDzrsBOCI52VUPZiFr
-        m5PP9LNf2dWFTZPd2lmXd0tSYv0vBYU=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-639--A69SwpmPtGmOBk2HOdXrA-1; Thu, 06 Jan 2022 10:20:53 -0500
-X-MC-Unique: -A69SwpmPtGmOBk2HOdXrA-1
-Received: by mail-qt1-f200.google.com with SMTP id j26-20020ac8405a000000b002c472361f33so2178563qtl.16
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 07:20:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2YqsIWQ53eG2PDcqAucmDLmwn9f5p0XCph507eireqE=;
-        b=FdM4LXvSMlGdnyqN9ajNi6cZ+eDi99bKr9e0YbkagmdvGB+NTMH6qG5V8diOCOByaK
-         YDOyRzO4jP4Rvc62NTE19DSXOWOa1ypbaQtm0Ihnd46QqEnVKfWqUYa1AZ//gSsSG/ae
-         unfQD402aWNEOhxSv682T73DM46z2Z7vW+7Jzrark26EsNH+UMtyUuFZpjnKvP5jc+Np
-         tUp25OLCJjD1llu6wgUQsy5S+52CETBVD7RauN8JQAJkJjDZ+VyfBbwrKvSkKsnaPvcc
-         fGjPG250e8KW3y7RyEgZ6Enza9C0nBx5Vfx6mnl8r8duOAQXDrZLyZOq4kSSwrPcjku1
-         Y8QQ==
-X-Gm-Message-State: AOAM5315bR22lX/22qjKh+2Q/I3sLZiqqRjTk9FwXrQeNes8DrncfMMh
-        29AfRQ6Rwm2s7iV81DQ0giHi1W/1DBws3KLMhDnjTAbOu1ltvAwU0qgoZvHuJF4cM7gbCvMY1ek
-        Al8InIzKa+em8axNXaqsVZ98=
-X-Received: by 2002:a37:a8c3:: with SMTP id r186mr41125582qke.17.1641482453029;
-        Thu, 06 Jan 2022 07:20:53 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyFM593HrigTWcxavtgf6tlraL5xApzNd6Y/8YuQALyJTC0/s7sqWNFOjYapn01OHOTMHltcQ==
-X-Received: by 2002:a37:a8c3:: with SMTP id r186mr41125573qke.17.1641482452828;
-        Thu, 06 Jan 2022 07:20:52 -0800 (PST)
-Received: from localhost (pool-68-160-176-52.bstnma.fios.verizon.net. [68.160.176.52])
-        by smtp.gmail.com with ESMTPSA id r8sm1561658qkk.91.2022.01.06.07.20.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 07:20:52 -0800 (PST)
-Date:   Thu, 6 Jan 2022 10:20:51 -0500
-From:   Mike Snitzer <snitzer@redhat.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Alasdair Kergon <agk@redhat.com>,
-        dm-devel@redhat.com
-Subject: Re: dm sysfs: use default_groups in kobj_type
-Message-ID: <YdcI02dcV2aj1x/L@redhat.com>
-References: <20220106100231.3278554-1-gregkh@linuxfoundation.org>
- <Ydb7xzmOC8VN8miQ@redhat.com>
- <YdcE+9ppXYnPzijZ@kroah.com>
+        Thu, 6 Jan 2022 10:22:05 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-132-q9hJDqqMPxmmiZ5MKZZQew-1; Thu, 06 Jan 2022 15:21:52 +0000
+X-MC-Unique: q9hJDqqMPxmmiZ5MKZZQew-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Thu, 6 Jan 2022 15:21:51 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Thu, 6 Jan 2022 15:21:51 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Eric Dumazet' <edumazet@google.com>,
+        'Peter Zijlstra' <peterz@infradead.org>
+CC:     "'tglx@linutronix.de'" <tglx@linutronix.de>,
+        "'mingo@redhat.com'" <mingo@redhat.com>,
+        'Borislav Petkov' <bp@alien8.de>,
+        "'dave.hansen@linux.intel.com'" <dave.hansen@linux.intel.com>,
+        'X86 ML' <x86@kernel.org>, "'hpa@zytor.com'" <hpa@zytor.com>,
+        "'alexanderduyck@fb.com'" <alexanderduyck@fb.com>,
+        'open list' <linux-kernel@vger.kernel.org>,
+        'netdev' <netdev@vger.kernel.org>,
+        "'Noah Goldstein'" <goldstein.w.n@gmail.com>
+Subject: [PATCH ] x86/lib: Simplify code for !CONFIG_DCACHE_WORD_ACCESS in
+ csum-partial_64.c
+Thread-Topic: [PATCH ] x86/lib: Simplify code for !CONFIG_DCACHE_WORD_ACCESS
+ in csum-partial_64.c
+Thread-Index: AdgDEH+mtMhrZ9ynRvybrK9s3y5Pbw==
+Date:   Thu, 6 Jan 2022 15:21:51 +0000
+Message-ID: <5f848b1cd6f844f6bc66fbec44237e08@AcuMS.aculab.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdcE+9ppXYnPzijZ@kroah.com>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06 2022 at 10:04P -0500,
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-
-> On Thu, Jan 06, 2022 at 09:25:11AM -0500, Mike Snitzer wrote:
-> > On Thu, Jan 06 2022 at  5:02P -0500,
-> > Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> > 
-> > > There are currently 2 ways to create a set of sysfs files for a
-> > > kobj_type, through the default_attrs field, and the default_groups
-> > > field.  Move the dm sysfs code to use default_groups field which has
-> > > been the preferred way since aa30f47cf666 ("kobject: Add support for
-> > > default attribute groups to kobj_type") so that we can soon get rid of
-> > > the obsolete default_attrs field.
-> > > 
-> > > Cc: Alasdair Kergon <agk@redhat.com>
-> > > Cc: Mike Snitzer <snitzer@redhat.com>
-> > > Cc: dm-devel@redhat.com
-> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > ---
-> > >  drivers/md/dm-sysfs.c | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/md/dm-sysfs.c b/drivers/md/dm-sysfs.c
-> > > index a05fcd50e1b9..e28c92478536 100644
-> > > --- a/drivers/md/dm-sysfs.c
-> > > +++ b/drivers/md/dm-sysfs.c
-> > > @@ -112,6 +112,7 @@ static struct attribute *dm_attrs[] = {
-> > >  	&dm_attr_rq_based_seq_io_merge_deadline.attr,
-> > >  	NULL,
-> > >  };
-> > > +ATTRIBUTE_GROUPS(dm);
-> > 
-> > Bit strange to pass "dm" but then have ATTRIBUTE_GROUPS assume dm_attrs defined.
-> > Feels like it'll invite janitors sending patches, that they never
-> > compile, to remove dm_attrs.
-> 
-> 0-day would instantly catch that :)
-> 
-> That's the way the ATTRIBUTE_GROUPS() macro works.  It's tricky, yes,
-> and I don't like it all that much, but couldn't come up with a better
-> way at the time.  It saves lots and lots of boiler-plate code from
-> having to be typed all the time.
-
-OK, thanks for the insight.
-
-Mike
+SWYgbG9hZF91bmFsaWduZWRfemVyb3BhZCgpIGNhbid0IGJlIHVzZWQgKHVtIGJ1aWxkcykNCnRo
+ZW4ganVzdCBhZGQgdG9nZXRoZXIgdGhlIGZpbmFsIGJ5dGVzIGFuZCBkbyBhIHNpbmdsZSAnYWRj
+Jw0KdG8gYWRkIHRvIHRoZSA2NGJpdCBzdW0uDQoNClNpZ25lZC1vZmYtYnk6IERhdmlkIExhaWdo
+dCA8ZGF2aWQubGFpZ2h0QGFjdWxhYi5jb20+DQotLS0NCg0KSXQgaXMgYSBzaGFtZSB0aGF0IHRo
+aXMgY29kZSBpcyBuZWVkZWQgYXQgYWxsLg0KSSBkb3VidCB1bSB3b3VsZCBldmVyIGZhdWx0IGp1
+c3QgcmVhZGluZyB0aGUgMzJiaXQgdmFsdWUuDQoNCiBhcmNoL3g4Ni9saWIvY3N1bS1wYXJ0aWFs
+XzY0LmMgfCAzMyArKysrKysrKysrLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCiAxIGZpbGUgY2hh
+bmdlZCwgMTAgaW5zZXJ0aW9ucygrKSwgMjMgZGVsZXRpb25zKC0pDQoNCmRpZmYgLS1naXQgYS9h
+cmNoL3g4Ni9saWIvY3N1bS1wYXJ0aWFsXzY0LmMgYi9hcmNoL3g4Ni9saWIvY3N1bS1wYXJ0aWFs
+XzY0LmMNCmluZGV4IDA2MWIxZWQ3NGQ2YS4uZWRkM2U1NzljMmE3IDEwMDY0NA0KLS0tIGEvYXJj
+aC94ODYvbGliL2NzdW0tcGFydGlhbF82NC5jDQorKysgYi9hcmNoL3g4Ni9saWIvY3N1bS1wYXJ0
+aWFsXzY0LmMNCkBAIC03Myw0MSArNzMsMjggQEAgX193c3VtIGNzdW1fcGFydGlhbChjb25zdCB2
+b2lkICpidWZmLCBpbnQgbGVuLCBfX3dzdW0gc3VtKQ0KIAkJYnVmZiArPSA4Ow0KIAl9DQogCWlm
+IChsZW4gJiA3KSB7DQorCQl1bnNpZ25lZCBsb25nIHRyYWlsOw0KICNpZmRlZiBDT05GSUdfRENB
+Q0hFX1dPUkRfQUNDRVNTDQogCQl1bnNpZ25lZCBpbnQgc2hpZnQgPSAoOCAtIChsZW4gJiA3KSkg
+KiA4Ow0KLQkJdW5zaWduZWQgbG9uZyB0cmFpbDsNCiANCiAJCXRyYWlsID0gKGxvYWRfdW5hbGln
+bmVkX3plcm9wYWQoYnVmZikgPDwgc2hpZnQpID4+IHNoaWZ0Ow0KLQ0KLQkJYXNtKCJhZGRxICVb
+dHJhaWxdLCVbcmVzXVxuXHQiDQotCQkgICAgImFkY3EgJDAsJVtyZXNdIg0KLQkJCTogW3Jlc10g
+IityIiAodGVtcDY0KQ0KLQkJCTogW3RyYWlsXSAiciIgKHRyYWlsKSk7DQogI2Vsc2UNCisJCXRy
+YWlsID0gMDsNCiAJCWlmIChsZW4gJiA0KSB7DQotCQkJYXNtKCJhZGRxICVbdmFsXSwlW3Jlc11c
+blx0Ig0KLQkJCSAgICAiYWRjcSAkMCwlW3Jlc10iDQotCQkJCTogW3Jlc10gIityIiAodGVtcDY0
+KQ0KLQkJCQk6IFt2YWxdICJyIiAoKHU2NCkqKHUzMiAqKWJ1ZmYpDQotCQkJCTogIm1lbW9yeSIp
+Ow0KKwkJCXRyYWlsICs9ICoodTMyICopYnVmZjsNCiAJCQlidWZmICs9IDQ7DQogCQl9DQogCQlp
+ZiAobGVuICYgMikgew0KLQkJCWFzbSgiYWRkcSAlW3ZhbF0sJVtyZXNdXG5cdCINCi0JCQkgICAg
+ImFkY3EgJDAsJVtyZXNdIg0KLQkJCQk6IFtyZXNdICIrciIgKHRlbXA2NCkNCi0JCQkJOiBbdmFs
+XSAiciIgKCh1NjQpKih1MTYgKilidWZmKQ0KLQkJCQk6ICJtZW1vcnkiKTsNCisJCQl0cmFpbCAr
+PSAqKHUxNiAqKWJ1ZmY7DQogCQkJYnVmZiArPSAyOw0KIAkJfQ0KLQkJaWYgKGxlbiAmIDEpIHsN
+Ci0JCQlhc20oImFkZHEgJVt2YWxdLCVbcmVzXVxuXHQiDQotCQkJICAgICJhZGNxICQwLCVbcmVz
+XSINCi0JCQkJOiBbcmVzXSAiK3IiICh0ZW1wNjQpDQotCQkJCTogW3ZhbF0gInIiICgodTY0KSoo
+dTggKilidWZmKQ0KLQkJCQk6ICJtZW1vcnkiKTsNCi0JCX0NCisJCWlmIChsZW4gJiAxKQ0KKwkJ
+CXRyYWlsICs9ICoodTggKilidWZmOw0KICNlbmRpZg0KKwkJYXNtKCJhZGRxICVbdHJhaWxdLCVb
+cmVzXVxuXHQiDQorCQkgICAgImFkY3EgJDAsJVtyZXNdIg0KKwkJCTogW3Jlc10gIityIiAodGVt
+cDY0KQ0KKwkJCTogW3RyYWlsXSAiciIgKHRyYWlsKSk7DQogCX0NCiAJcmVzdWx0ID0gYWRkMzJf
+d2l0aF9jYXJyeSh0ZW1wNjQgPj4gMzIsIHRlbXA2NCAmIDB4ZmZmZmZmZmYpOw0KIAlyZXR1cm4g
+KF9fZm9yY2UgX193c3VtKXJlc3VsdDsNCi0tIA0KMi4xNy4xDQoNCi0NClJlZ2lzdGVyZWQgQWRk
+cmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBN
+SzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 

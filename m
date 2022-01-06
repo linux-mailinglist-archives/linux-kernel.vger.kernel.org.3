@@ -2,148 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57BD448648E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 13:46:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12FCA48648F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 13:47:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239025AbiAFMqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 07:46:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32365 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239012AbiAFMqr (ORCPT
+        id S239039AbiAFMrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 07:47:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33894 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239012AbiAFMrE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 07:46:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641473206;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QIcy/hKgWsl8HLsYFT8VKTJz9iU+YZ837pHBIwXvv1Q=;
-        b=IhKCWiVxKmma4hx7vqrpgPZKqQEgMlj0ozvKJe1VJnjX1UKqK4Vo1Eb3Q3VBdB29U53/dL
-        guRtLa6WXqXbsn/BhSr2Xi+y3+B+TMzJ8pd95v797/h0PURVRwYIPEfxMbxrvE9GLMM1o4
-        MmLb/c1sb9eBxA1lvZm9atUNeX5H+Bo=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-56-5Q5Kid_tMxGfbsHzbmaxTQ-1; Thu, 06 Jan 2022 07:46:45 -0500
-X-MC-Unique: 5Q5Kid_tMxGfbsHzbmaxTQ-1
-Received: by mail-wr1-f71.google.com with SMTP id h12-20020adfa4cc000000b001a22dceda69so1202470wrb.16
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 04:46:45 -0800 (PST)
+        Thu, 6 Jan 2022 07:47:04 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A045DC061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 04:47:04 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id d10-20020a17090a498a00b001b33bc40d01so1187426pjh.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 04:47:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=KC71YFeX/q04GJdG17HRfq7w1PJzIDF05zCtW/8mUOM=;
+        b=bMDvI1kcrkJ3iJg0CGOv2rdlnLJnTBwb4NtL6IQwgw5bGEe9T++vt2HuqCJwFP4Cvs
+         jphp29b2+sg1wef2muOM2Zu8t0np4Sez61/xnBIYygcs60/7rQZe/BciDtqNYvgxh+M4
+         ENZRiEgWPAx11hfXmIb2GomZzD2zivpf1d5/rgeu/4fhyjRUAJtwhcFlYL72iJFArxy+
+         YrwX1GhJLgMJrJxxgGU9qDHz3brDt666/o8XUseGlZMhc01BQ4WCWxZUSGp2uN4BC8jO
+         /3/u5fU0lnZuvyruxHbxIX39mYRX5RE8HSRbzQTFU2aWTWDOUeqU7h22Lw0KdoLHXEUm
+         eg+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QIcy/hKgWsl8HLsYFT8VKTJz9iU+YZ837pHBIwXvv1Q=;
-        b=xskPsQoIaQDpQ+Vn5zo9bk5ySmfkyoVGiDjG+t7RSzgV8ddHFxSJA/5xkvdkDupIkb
-         cQE4ol0UvTanvC5gtwDo4zkIcUtAWWPCTYsJymfGwA0U58/H1I6R7/FsU4aouHZpfu4G
-         4w8zaRO6OlTxWYj2XvOmoVzl1jnGFDFZ4X20E/d/yX+vlGL8muNG/FTlgy+wiTOnLeed
-         2ry3luNVBWkxThvVC1+z7BJ3l+EGqxHB8lk0Y/QlBIABfTdeVZYQmG02BrTNiMcMLF5Y
-         OHQKw7QUriUM4XTy82Cj2NVr+PVeOB6IxmtEZFn9VZ+qKZNcY6tklBSO5ei4POSkgIU9
-         g2vQ==
-X-Gm-Message-State: AOAM532ys8Ix0b4Asmxm2176hT35l+LmCLl67dwjKafIJGkEmDPLWHtv
-        zIwLu3j1Dl5ODrdLrlEr0KvbCZiBlqebEIvhn4ccOEkChnbxHA+N27oay9vqbbF5qKkKer18TQ6
-        M4RzKwlIKd5vrQ2JbPkFp/870
-X-Received: by 2002:a05:600c:1e05:: with SMTP id ay5mr6993338wmb.131.1641473204126;
-        Thu, 06 Jan 2022 04:46:44 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxIetGTra+THB/8z93McN+42aVUsQxDpvJa2rz7fYmmyJpcjeJUiqxg8dTKkWQkvBsgXuZRAA==
-X-Received: by 2002:a05:600c:1e05:: with SMTP id ay5mr6993312wmb.131.1641473203945;
-        Thu, 06 Jan 2022 04:46:43 -0800 (PST)
-Received: from redhat.com ([2a03:c5c0:207e:991b:6857:5652:b903:a63b])
-        by smtp.gmail.com with ESMTPSA id g12sm2308053wrd.71.2022.01.06.04.46.39
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=KC71YFeX/q04GJdG17HRfq7w1PJzIDF05zCtW/8mUOM=;
+        b=ffyf2qr9JSVF97HuU2bMejhbIPksaEyhmXP9/4NRzIqTMkjk6FiFnyasDEyOsGoePF
+         gCS8+JWuKGou3ZneEBZocb6F5KaO75Ms6jDkIs3bjrc17NsIfUjWM5IRsTAiPkptIUzK
+         KqmgwosSH/joxEyB0hgk0aHv6NQwqT00fpqeZg2DqNT+iR1cHhc0QleOPokx59UikDTv
+         UUcvIL2kFt9cHgeYXUvh4uBMwerWVz9ck+e7xbki0mNf6YXCkkgrwJuxMKe4ITE6W5r0
+         rvek+9YNIvI+zyVQTf0QtpTq5bNJrtQtWZg/KaB0xCDO3zFFc7a5xzUGvIHw2sfO+EM3
+         /W3Q==
+X-Gm-Message-State: AOAM531BzFPbffihlUPXa6XyibYfaXESNeHPNLOQknG68gVpv2xmMEaI
+        q80ZAix7jObOdEotx4gRoeU=
+X-Google-Smtp-Source: ABdhPJzwNEzZRoPa0ZqQQ22MGbHsrSeP/vhR18csyuIzZMnAb9nSDti1FixA+AbzoStGlKdJUYigoQ==
+X-Received: by 2002:a17:903:120a:b0:149:8b16:ee19 with SMTP id l10-20020a170903120a00b001498b16ee19mr43022958plh.11.1641473224231;
+        Thu, 06 Jan 2022 04:47:04 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id a17sm2214409pjh.11.2022.01.06.04.47.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 04:46:43 -0800 (PST)
-Date:   Thu, 6 Jan 2022 07:46:37 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 26/43] kmsan: virtio: check/unpoison scatterlist in
- vring_map_one_sg()
-Message-ID: <20220106074032-mutt-send-email-mst@kernel.org>
-References: <20211214162050.660953-1-glider@google.com>
- <20211214162050.660953-27-glider@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211214162050.660953-27-glider@google.com>
+        Thu, 06 Jan 2022 04:47:04 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     dave.stevenson@raspberrypi.com
+Cc:     airlied@linux.ie, dri-devel@lists.freedesktop.org, emma@anholt.net,
+        eric@anholt.net, linmq006@gmail.com, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] drm/v3d: Fix PM disable depth imbalance in v3d_platform_drm_probe
+Date:   Thu,  6 Jan 2022 12:46:57 +0000
+Message-Id: <20220106124657.32737-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <CAPY8ntAdknutH=OmV1dWPbez1ZqLgaOj-BoQQkZAu0WbhbE6nQ@mail.gmail.com>
+References: <CAPY8ntAdknutH=OmV1dWPbez1ZqLgaOj-BoQQkZAu0WbhbE6nQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 05:20:33PM +0100, Alexander Potapenko wrote:
-> If vring doesn't use the DMA API, KMSAN is unable to tell whether the
-> memory is initialized by hardware. Explicitly call kmsan_handle_dma()
-> from vring_map_one_sg() in this case to prevent false positives.
-> 
-> Signed-off-by: Alexander Potapenko <glider@google.com>
+The pm_runtime_enable will increase power disable depth.
+If the probe fails, we should use pm_runtime_disable() to balance
+pm_runtime_enable().
 
-OK I guess
+Fixes: 57692c9 ("drm/v3d: Introduce a new DRM driver for Broadcom V3D V3.x+")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+Changes in v2
+- put pm_runtime_disable before dma_free_wc
+- rename dma_free to pm_disable
+---
+ drivers/gpu/drm/v3d/v3d_drv.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
-
-IIUC this depends on the rest of the patchset, so feel free to
-merge.
-
-> ---
-> Link: https://linux-review.googlesource.com/id/I211533ecb86a66624e151551f83ddd749536b3af
-> ---
->  drivers/virtio/virtio_ring.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> index 6d2614e34470f..bf4d5b331e99d 100644
-> --- a/drivers/virtio/virtio_ring.c
-> +++ b/drivers/virtio/virtio_ring.c
-> @@ -11,6 +11,7 @@
->  #include <linux/module.h>
->  #include <linux/hrtimer.h>
->  #include <linux/dma-mapping.h>
-> +#include <linux/kmsan-checks.h>
->  #include <linux/spinlock.h>
->  #include <xen/xen.h>
->  
-> @@ -331,8 +332,15 @@ static dma_addr_t vring_map_one_sg(const struct vring_virtqueue *vq,
->  				   struct scatterlist *sg,
->  				   enum dma_data_direction direction)
->  {
-> -	if (!vq->use_dma_api)
-> +	if (!vq->use_dma_api) {
-> +		/*
-> +		 * If DMA is not used, KMSAN doesn't know that the scatterlist
-> +		 * is initialized by the hardware. Explicitly check/unpoison it
-> +		 * depending on the direction.
-> +		 */
-> +		kmsan_handle_dma(sg_page(sg), sg->offset, sg->length, direction);
->  		return (dma_addr_t)sg_phys(sg);
-> +	}
->  
->  	/*
->  	 * We can't use dma_map_sg, because we don't use scatterlists in
-> -- 
-> 2.34.1.173.g76aa8bc2d0-goog
+diff --git a/drivers/gpu/drm/v3d/v3d_drv.c b/drivers/gpu/drm/v3d/v3d_drv.c
+index bd46396a1ae0..7d500dd5314e 100644
+--- a/drivers/gpu/drm/v3d/v3d_drv.c
++++ b/drivers/gpu/drm/v3d/v3d_drv.c
+@@ -282,7 +282,7 @@ static int v3d_platform_drm_probe(struct platform_device *pdev)
+ 
+ 	ret = v3d_gem_init(drm);
+ 	if (ret)
+-		goto dma_free;
++		goto pm_disable;
+ 
+ 	ret = v3d_irq_init(v3d);
+ 	if (ret)
+@@ -298,7 +298,8 @@ static int v3d_platform_drm_probe(struct platform_device *pdev)
+ 	v3d_irq_disable(v3d);
+ gem_destroy:
+ 	v3d_gem_destroy(drm);
+-dma_free:
++pm_disable:
++	pm_runtime_disable(dev);
+ 	dma_free_wc(dev, 4096, v3d->mmu_scratch, v3d->mmu_scratch_paddr);
+ 	return ret;
+ }
+-- 
+2.17.1
 

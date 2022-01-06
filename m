@@ -2,207 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8D948676C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:11:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E418148676E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241041AbiAFQLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 11:11:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51714 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241031AbiAFQLO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 11:11:14 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A9BC061245;
-        Thu,  6 Jan 2022 08:11:14 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id y130so8762408ybe.8;
-        Thu, 06 Jan 2022 08:11:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=XvSsMCLogFe3D5aW/knGLRzhhrYq3IReN0YLQDq/yDc=;
-        b=QW/AKSUexoaYJJ+nb4h2WgcsFcslnhOaLB0qtD3oYf+c4T+9W4o2WPi24NKS3qkQL2
-         F+IOsn2Pex3DATl/KbSDZh9TlrfyaGso1/ZJ9Vh/II/Rcum8tIJXFypjXGA0eXoa3Oiz
-         02aqf/P6M12NRvGr9/MyAZPgH4UG98AkeFfGS4c9u0oE3LWP/7O3/UIhI66CyurfuHIq
-         WnJ5kTZnv3YFtkNdgnRoukvJSnzDEeVecL8/aQ5k8hQt71CXYgEPWNhJSAz//oo1haxU
-         DBExs4k4OB0Yb6PZozER/vjfp4bv8IQ64tpKjBpuzg9IBaKP71W42atZS1WU3XSW5dkE
-         CfsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=XvSsMCLogFe3D5aW/knGLRzhhrYq3IReN0YLQDq/yDc=;
-        b=ZBitxmVDLPwa3ZC0bi43cm55sngXwc85osd6hsGqj/PvbX1XndXVbiRk1KlxNigZAZ
-         w6owmGSywPeJSL/khR11F4khntBXH+BEBX/nPZeiyeXM6dhxmIvXTMTfcvTAKizr8wTR
-         jChPGpxuqNrg0OORkqBXhhMvidHAIth5lI9WROAlvzpuwZhxG+H6lJyITgJMDhYl+yRj
-         twSUxqoYs8amFzZH46dt95f5twS4YPrYIaET1Ms4xnPuqKAli+hDrE39q2WTTv++HTWH
-         kZU50JD7XJCqDJkn+MNMHa3OVAlAG3IBCsO04ivu6/JRKZQ5DOI+UMv5pBUb//tLWxTc
-         OJxQ==
-X-Gm-Message-State: AOAM531qCRK/2vU9XCLUtAbUmUYasodOb2+Gr+dhCStkpZMK/AXFL9U3
-        dXFRUzMN0TbScpZ2k8ksEBC+yZ8q3KJ+MbNPR+ImCGwIk5He9w==
-X-Google-Smtp-Source: ABdhPJwNH6AGPwkLCQVEPge9bIMxQ1PEykUJVFWzZxm+4APTsakBiJ+bztbJiRXfhwUloIiV2G3K/kAzMzxc/xXFZto=
-X-Received: by 2002:a25:98c4:: with SMTP id m4mr75809982ybo.613.1641485473351;
- Thu, 06 Jan 2022 08:11:13 -0800 (PST)
+        id S241052AbiAFQLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 11:11:37 -0500
+Received: from foss.arm.com ([217.140.110.172]:56086 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241031AbiAFQLg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 11:11:36 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C85871042;
+        Thu,  6 Jan 2022 08:11:35 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.10.56])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CD1853F5A1;
+        Thu,  6 Jan 2022 08:11:33 -0800 (PST)
+Date:   Thu, 6 Jan 2022 16:11:31 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     madvenka@linux.microsoft.com
+Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
+        linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 03/10] arm64: Rename stackframe to unwind_state
+Message-ID: <YdcUsyNmALulzj3/@FVFF77S0Q05N>
+References: <0d0eb36f348fb5a6af6eb592c0525f6e94007328>
+ <20220103165212.9303-1-madvenka@linux.microsoft.com>
+ <20220103165212.9303-4-madvenka@linux.microsoft.com>
 MIME-Version: 1.0
-References: <20211223173015.22251-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211223173015.22251-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAHp75VeCwR-eP930s3miv-ux8=_P+vmdkhN+K=weTL1nwNA1ig@mail.gmail.com>
- <CA+V-a8snJU6YYtfcN_mWCJGxYnbNGrLdU+Y5g06mjV4dhsABMw@mail.gmail.com>
- <CAHp75Vck43wj650k70MsUNvmb+_-PUCd5mSy=dvmuX7MaAwr2w@mail.gmail.com>
- <CA+V-a8uRqfs2h82_y6yk7MZnt8K5iKii5DZZpFgDDy0Hw2ieXA@mail.gmail.com>
- <CAHp75VdiTw7R=MSM=4nzn8m863tomSza+yxx7pXLU-Xj8aouOg@mail.gmail.com>
- <CAHp75VexoYCBBJ1BFgnsb38Q79jG6NB2xBBHmAafTK2FHkTsbQ@mail.gmail.com>
- <CA+V-a8sbcebVnqGaLOxVhG_0wm3cM4bu0SebAa1Mkuv9GNBGnQ@mail.gmail.com> <CAHp75Vfy0M_mF0+2V0dzrQNnZ2wz4bSEnvUj=WeQ7EgwwVy_CA@mail.gmail.com>
-In-Reply-To: <CAHp75Vfy0M_mF0+2V0dzrQNnZ2wz4bSEnvUj=WeQ7EgwwVy_CA@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Thu, 6 Jan 2022 16:10:47 +0000
-Message-ID: <CA+V-a8sYQ+7Wcsh5qyPjcQbJ8UGpBXoecqC3Vhqvn_3tsTMN2Q@mail.gmail.com>
-Subject: Re: [PATCH 06/13] media: davinci: vpif: Use platform_get_irq_optional()
- to get the interrupt
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220103165212.9303-4-madvenka@linux.microsoft.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On Mon, Jan 03, 2022 at 10:52:05AM -0600, madvenka@linux.microsoft.com wrote:
+> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+> 
+> Rename "struct stackframe" to "struct unwind_state" for consistency and
+> better naming. Accordingly, rename variable/argument "frame" to "state".
+> 
+> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
 
-On Thu, Jan 6, 2022 at 4:02 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Thu, Jan 6, 2022 at 5:27 PM Lad, Prabhakar
-> <prabhakar.csengg@gmail.com> wrote:
-> > On Thu, Jan 6, 2022 at 2:15 PM Andy Shevchenko
-> > <andy.shevchenko@gmail.com> wrote:
-> > > On Thu, Jan 6, 2022 at 3:43 PM Andy Shevchenko
-> > > <andy.shevchenko@gmail.com> wrote:
-> > > > On Wed, Jan 5, 2022 at 7:41 PM Lad, Prabhakar
-> > > > <prabhakar.csengg@gmail.com> wrote:
-> > > > > On Wed, Jan 5, 2022 at 9:43 AM Andy Shevchenko
->
-> ...
->
-> > > > >  #define DEFINE_RES_NAMED(_start, _size, _name, _flags)          =
-       \
-> > > > > -       {                                                        =
-       \
-> > > > > +       (struct resource) {                                     \
-> > > >
-> > > > Yep, that's it.
-> > > >
-> > > > >                 .start =3D (_start),                             =
-         \
-> > > > >                 .end =3D (_start) + (_size) - 1,                 =
-         \
-> > > > >                 .name =3D (_name),                               =
-         \
-> > > > >
-> > > > > But there are some instances which need to be touched, for exampl=
-e
-> > > > > vexpress-sysreg.c [1]. Are you OK with files to be changed?
-> > > >
-> > > > Nice! That's exactly my point and you can sell it to the community
-> > > > because there are already users of it like this.
-> > > >
-> > > > Yes, I'm fine, but it seems it needs to be done treewide in one pat=
-ch.
-> > > > Btw, how many of those already in use?
-> > >
-> > > Actually you don't need to change that. It's an array of resources an=
-d
-> > > everything should be kept as is there.
-> > >
-> > I do get below build failures, with the above literal change for
-> > vexpress-sysreg.c.
-> >
-> > drivers/mfd/vexpress-sysreg.c: At top level:
-> > drivers/mfd/vexpress-sysreg.c:64:37: error: initialiser element is not =
-constant
-> >    64 |   .resources =3D (struct resource []) {
-> >       |                                     ^
-> > drivers/mfd/vexpress-sysreg.c:64:37: note: (near initialisation for
-> > =E2=80=98vexpress_sysreg_cells[0]=E2=80=99)
-> > drivers/mfd/vexpress-sysreg.c:73:37: error: initialiser element is not =
-constant
-> >    73 |   .resources =3D (struct resource []) {
-> >       |                                     ^
-> > drivers/mfd/vexpress-sysreg.c:73:37: note: (near initialisation for
-> > =E2=80=98vexpress_sysreg_cells[1]=E2=80=99)
-> > drivers/mfd/vexpress-sysreg.c:82:37: error: initialiser element is not =
-constant
-> >    82 |   .resources =3D (struct resource []) {
-> >       |                                     ^
-> > drivers/mfd/vexpress-sysreg.c:82:37: note: (near initialisation for
-> > =E2=80=98vexpress_sysreg_cells[2]=E2=80=99)
-> > drivers/mfd/vexpress-sysreg.c:90:37: error: initialiser element is not =
-constant
-> >    90 |   .resources =3D (struct resource []) {
-> >       |                                     ^
-> > drivers/mfd/vexpress-sysreg.c:90:37: note: (near initialisation for
-> > =E2=80=98vexpress_sysreg_cells[3]=E2=80=99)
-> > drivers/mfd/vexpress-sysreg.c:93:2: warning: missing initialiser for
-> > field =E2=80=98ignore_resource_conflicts=E2=80=99 of =E2=80=98struct mf=
-d_cell=E2=80=99
-> > [-Wmissing-field-initializers]
-> >    93 |  }
->
-> Hmm... Interesting, so I suppose the fix is to drop (struct resource
-> []) parts from the driver?
->
-A bit more than that like something below:
+Thanks for this!
 
-diff --git a/drivers/mfd/vexpress-sysreg.c b/drivers/mfd/vexpress-sysreg.c
-index aaf24af287dd..eab82619ec31 100644
---- a/drivers/mfd/vexpress-sysreg.c
-+++ b/drivers/mfd/vexpress-sysreg.c
-@@ -61,35 +61,27 @@ static struct mfd_cell vexpress_sysreg_cells[] =3D {
-  .name =3D "basic-mmio-gpio",
-  .of_compatible =3D "arm,vexpress-sysreg,sys_led",
-  .num_resources =3D 1,
-- .resources =3D (struct resource []) {
-- DEFINE_RES_MEM_NAMED(SYS_LED, 0x4, "dat"),
-- },
-+ .resources =3D &DEFINE_RES_MEM_NAMED(SYS_LED, 0x4, "dat"),
-  .platform_data =3D &vexpress_sysreg_sys_led_pdata,
-  .pdata_size =3D sizeof(vexpress_sysreg_sys_led_pdata),
-  }, {
-  .name =3D "basic-mmio-gpio",
-  .of_compatible =3D "arm,vexpress-sysreg,sys_mci",
-  .num_resources =3D 1,
-- .resources =3D (struct resource []) {
-- DEFINE_RES_MEM_NAMED(SYS_MCI, 0x4, "dat"),
-- },
-+ .resources =3D &DEFINE_RES_MEM_NAMED(SYS_MCI, 0x4, "dat"),
-  .platform_data =3D &vexpress_sysreg_sys_mci_pdata,
-  .pdata_size =3D sizeof(vexpress_sysreg_sys_mci_pdata),
-  }, {
-  .name =3D "basic-mmio-gpio",
-  .of_compatible =3D "arm,vexpress-sysreg,sys_flash",
-  .num_resources =3D 1,
-- .resources =3D (struct resource []) {
-- DEFINE_RES_MEM_NAMED(SYS_FLASH, 0x4, "dat"),
-- },
-+ .resources =3D &DEFINE_RES_MEM_NAMED(SYS_FLASH, 0x4, "dat"),
-  .platform_data =3D &vexpress_sysreg_sys_flash_pdata,
-  .pdata_size =3D sizeof(vexpress_sysreg_sys_flash_pdata),
-  }, {
-  .name =3D "vexpress-syscfg",
-  .num_resources =3D 1,
-- .resources =3D (struct resource []) {
-- DEFINE_RES_MEM(SYS_MISC, 0x4c),
-- },
-+ .resources =3D &DEFINE_RES_MEM(SYS_MISC, 0x4c),
-  }
- };
+Reviewed-by: Mark Rutland <mark.rutland@arm.com>
 
-Cheers,
-Prabhakar
+Mark.
+
+> ---
+>  arch/arm64/include/asm/stacktrace.h |  2 +-
+>  arch/arm64/kernel/stacktrace.c      | 66 ++++++++++++++---------------
+>  2 files changed, 34 insertions(+), 34 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/stacktrace.h b/arch/arm64/include/asm/stacktrace.h
+> index 3a15d376ab36..fc828c3c5dfd 100644
+> --- a/arch/arm64/include/asm/stacktrace.h
+> +++ b/arch/arm64/include/asm/stacktrace.h
+> @@ -52,7 +52,7 @@ struct stack_info {
+>   *               associated with the most recently encountered replacement lr
+>   *               value.
+>   */
+> -struct stackframe {
+> +struct unwind_state {
+>  	unsigned long fp;
+>  	unsigned long pc;
+>  	DECLARE_BITMAP(stacks_done, __NR_STACK_TYPES);
+> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+> index b980d96dccfc..a1a7ff93b84f 100644
+> --- a/arch/arm64/kernel/stacktrace.c
+> +++ b/arch/arm64/kernel/stacktrace.c
+> @@ -33,13 +33,13 @@
+>   */
+>  
+>  
+> -static void unwind_init(struct stackframe *frame, unsigned long fp,
+> +static void unwind_init(struct unwind_state *state, unsigned long fp,
+>  			unsigned long pc)
+>  {
+> -	frame->fp = fp;
+> -	frame->pc = pc;
+> +	state->fp = fp;
+> +	state->pc = pc;
+>  #ifdef CONFIG_KRETPROBES
+> -	frame->kr_cur = NULL;
+> +	state->kr_cur = NULL;
+>  #endif
+>  
+>  	/*
+> @@ -51,9 +51,9 @@ static void unwind_init(struct stackframe *frame, unsigned long fp,
+>  	 * prev_fp value won't be used, but we set it to 0 such that it is
+>  	 * definitely not an accessible stack address.
+>  	 */
+> -	bitmap_zero(frame->stacks_done, __NR_STACK_TYPES);
+> -	frame->prev_fp = 0;
+> -	frame->prev_type = STACK_TYPE_UNKNOWN;
+> +	bitmap_zero(state->stacks_done, __NR_STACK_TYPES);
+> +	state->prev_fp = 0;
+> +	state->prev_type = STACK_TYPE_UNKNOWN;
+>  }
+>  
+>  /*
+> @@ -64,9 +64,9 @@ static void unwind_init(struct stackframe *frame, unsigned long fp,
+>   * and the location (but not the fp value) of B.
+>   */
+>  static int notrace unwind_next(struct task_struct *tsk,
+> -			       struct stackframe *frame)
+> +			       struct unwind_state *state)
+>  {
+> -	unsigned long fp = frame->fp;
+> +	unsigned long fp = state->fp;
+>  	struct stack_info info;
+>  
+>  	/* Final frame; nothing to unwind */
+> @@ -79,7 +79,7 @@ static int notrace unwind_next(struct task_struct *tsk,
+>  	if (!on_accessible_stack(tsk, fp, 16, &info))
+>  		return -EINVAL;
+>  
+> -	if (test_bit(info.type, frame->stacks_done))
+> +	if (test_bit(info.type, state->stacks_done))
+>  		return -EINVAL;
+>  
+>  	/*
+> @@ -95,27 +95,27 @@ static int notrace unwind_next(struct task_struct *tsk,
+>  	 * stack to another, it's never valid to unwind back to that first
+>  	 * stack.
+>  	 */
+> -	if (info.type == frame->prev_type) {
+> -		if (fp <= frame->prev_fp)
+> +	if (info.type == state->prev_type) {
+> +		if (fp <= state->prev_fp)
+>  			return -EINVAL;
+>  	} else {
+> -		set_bit(frame->prev_type, frame->stacks_done);
+> +		set_bit(state->prev_type, state->stacks_done);
+>  	}
+>  
+>  	/*
+>  	 * Record this frame record's values and location. The prev_fp and
+>  	 * prev_type are only meaningful to the next unwind_next() invocation.
+>  	 */
+> -	frame->fp = READ_ONCE_NOCHECK(*(unsigned long *)(fp));
+> -	frame->pc = READ_ONCE_NOCHECK(*(unsigned long *)(fp + 8));
+> -	frame->prev_fp = fp;
+> -	frame->prev_type = info.type;
+> +	state->fp = READ_ONCE_NOCHECK(*(unsigned long *)(fp));
+> +	state->pc = READ_ONCE_NOCHECK(*(unsigned long *)(fp + 8));
+> +	state->prev_fp = fp;
+> +	state->prev_type = info.type;
+>  
+> -	frame->pc = ptrauth_strip_insn_pac(frame->pc);
+> +	state->pc = ptrauth_strip_insn_pac(state->pc);
+>  
+>  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+>  	if (tsk->ret_stack &&
+> -		(frame->pc == (unsigned long)return_to_handler)) {
+> +		(state->pc == (unsigned long)return_to_handler)) {
+>  		unsigned long orig_pc;
+>  		/*
+>  		 * This is a case where function graph tracer has
+> @@ -123,16 +123,16 @@ static int notrace unwind_next(struct task_struct *tsk,
+>  		 * to hook a function return.
+>  		 * So replace it to an original value.
+>  		 */
+> -		orig_pc = ftrace_graph_ret_addr(tsk, NULL, frame->pc,
+> -						(void *)frame->fp);
+> -		if (WARN_ON_ONCE(frame->pc == orig_pc))
+> +		orig_pc = ftrace_graph_ret_addr(tsk, NULL, state->pc,
+> +						(void *)state->fp);
+> +		if (WARN_ON_ONCE(state->pc == orig_pc))
+>  			return -EINVAL;
+> -		frame->pc = orig_pc;
+> +		state->pc = orig_pc;
+>  	}
+>  #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
+>  #ifdef CONFIG_KRETPROBES
+> -	if (is_kretprobe_trampoline(frame->pc))
+> -		frame->pc = kretprobe_find_ret_addr(tsk, (void *)frame->fp, &frame->kr_cur);
+> +	if (is_kretprobe_trampoline(state->pc))
+> +		state->pc = kretprobe_find_ret_addr(tsk, (void *)state->fp, &state->kr_cur);
+>  #endif
+>  
+>  	return 0;
+> @@ -140,15 +140,15 @@ static int notrace unwind_next(struct task_struct *tsk,
+>  NOKPROBE_SYMBOL(unwind_next);
+>  
+>  static void notrace unwind(struct task_struct *tsk,
+> -			   struct stackframe *frame,
+> +			   struct unwind_state *state,
+>  			   bool (*fn)(void *, unsigned long), void *data)
+>  {
+>  	while (1) {
+>  		int ret;
+>  
+> -		if (!fn(data, frame->pc))
+> +		if (!fn(data, state->pc))
+>  			break;
+> -		ret = unwind_next(tsk, frame);
+> +		ret = unwind_next(tsk, state);
+>  		if (ret < 0)
+>  			break;
+>  	}
+> @@ -192,17 +192,17 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
+>  			      void *cookie, struct task_struct *task,
+>  			      struct pt_regs *regs)
+>  {
+> -	struct stackframe frame;
+> +	struct unwind_state state;
+>  
+>  	if (regs)
+> -		unwind_init(&frame, regs->regs[29], regs->pc);
+> +		unwind_init(&state, regs->regs[29], regs->pc);
+>  	else if (task == current)
+> -		unwind_init(&frame,
+> +		unwind_init(&state,
+>  				(unsigned long)__builtin_frame_address(1),
+>  				(unsigned long)__builtin_return_address(0));
+>  	else
+> -		unwind_init(&frame, thread_saved_fp(task),
+> +		unwind_init(&state, thread_saved_fp(task),
+>  				thread_saved_pc(task));
+>  
+> -	unwind(task, &frame, consume_entry, cookie);
+> +	unwind(task, &state, consume_entry, cookie);
+>  }
+> -- 
+> 2.25.1
+> 

@@ -2,97 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A6D4486403
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 12:57:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BACA48641A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 13:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238696AbiAFL5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 06:57:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
+        id S238702AbiAFMDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 07:03:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238675AbiAFL5q (ORCPT
+        with ESMTP id S232367AbiAFMDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 06:57:46 -0500
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC6CC061245;
-        Thu,  6 Jan 2022 03:57:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Message-Id:Date:
-        Subject:Cc:To:From:Content-Type:Reply-To:Content-ID:Content-Description:
-        In-Reply-To:References; bh=OQyuT4pT54pQ4S9p9yyplQ8JURCOyNDdWpEzq3+9i4M=; b=X7
-        9MMWYZEuKW/SM409E9lESHIJSdjbs7ghY+YRm7xiwo0CKaJhxZFVRxyKwJjn590gA93mGE6jFO/O8
-        s0z8zZTcVtdDNwXB8WGBb3vsgK05ihIkFlrkkDoCbQxlNJJvuwu+a421r23eZJarM53kBc9A+YrbM
-        xYdahsCByQQ0JoU2FBdIk0MM+SZGt3xhv3YnQc/SNrsCRqeL3ePSkTH1YqRMegnIT4ZF2qUSftof4
-        wu18los1mjblFlCESDAHf2vhwIoVnhbvHBZ1dXmz+oId5i0PZlW1z+8vxFp69Wd7ClWSkdryx1tcV
-        Pj3VykRXHZneEnzjB1bgqvmNxOccgQpA==;
-Received: from [81.174.171.191] (helo=donbot.metanate.com)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1n5ROl-0004gI-7v; Thu, 06 Jan 2022 11:57:39 +0000
-From:   John Keeping <john@metanate.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     John Keeping <john@metanate.com>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Argishti Aleksanyan <Argishti.Aleksanyan@synopsys.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] usb: dwc2: gadget: initialize max_speed from params
-Date:   Thu,  6 Jan 2022 11:57:31 +0000
-Message-Id: <20220106115731.1473909-1-john@metanate.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 6 Jan 2022 07:03:47 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA79C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 04:03:47 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id t26so4327083wrb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 04:03:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=npqnSRFaqTG8o+cxUeN3GZfyCv3xZD6P4Yk0HwVV8bQ=;
+        b=KE4Xp00e/JzUe50/FTAnwwVdW+9ao6IQv2wjaX8p+tQbSpU4z4UnH6POGxtRjDKLkp
+         DNjYATk++cxEC577Zm3WjP7H5QBZQaHXsYhMUHIVT/IZQfIXrb8ylvU5by0S0bnQJEa7
+         19IjpJxYk2SHvEI5m0MtvAHHD1etKI0lGxC1rGlTzG3UIPwp/hEtCxYVNtrqCGLW4Lhs
+         26LM8nCOc/LpqB1JN1YcnBYiE6pJzOhWWVxJUBV6TF0fUCcIG0uuKVSCMOFpz4GUkvVi
+         M6fef0qm+bjS4n5Oob80i2R+5Ly2lpcDFweciXMLWqrutz2zbA7MpMgUiu5zIRUpVW7e
+         u37g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=npqnSRFaqTG8o+cxUeN3GZfyCv3xZD6P4Yk0HwVV8bQ=;
+        b=X0FW5zchIwY+O/ML+x/cP2lYiHjecQypysBtRi4tIz0++60JdusUDbcUbQiUgNZtxT
+         SyW6jdMcyG6pzl7VM+YbGboqQaQXdJwalUrM42oIO+adtMDBnKGL2tTUZ326NFrRVJzN
+         KjgU3RoCpudjcBOWfCryjvXc6WDTUx4ge6JK7JwMnDCpMxEnc1/BA/S2pSRKGHTpPfym
+         Zi7quYCwabTgeeF4Vh4wx3p/GP0azl5//AO9eXaXtGX3ijLh5RvzdJ83+ssEVnyhH1+c
+         3qYgNnbiItwE73fceoHjjAQ5XdhIvn85GXgkFjMPPdOjq5tbtapuziVrJcTW2AofGpsY
+         rY4A==
+X-Gm-Message-State: AOAM532gRELhGe4qDy/TzGvePhLba7ZoorG089lyUaDJVTwuvkri07XR
+        /yqTFuT3q0q6N4TJdHKEoQoNy9EuzMJ+CWyMY38=
+X-Google-Smtp-Source: ABdhPJyBOyB7PdKBHGSsXV4wwFxJBkvHHrU7Rz8Cv5j+BgIyvaW8RjMtw06EmnHNLgokIw1a6YHuBW3stkzyrMVouN8=
+X-Received: by 2002:a5d:55c2:: with SMTP id i2mr38717983wrw.216.1641470625631;
+ Thu, 06 Jan 2022 04:03:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated: YES
+References: <20220102033129.12913-1-skseofh@gmail.com> <20220106094650.GX3366@techsingularity.net>
+In-Reply-To: <20220106094650.GX3366@techsingularity.net>
+From:   DaeRo Lee <skseofh@gmail.com>
+Date:   Thu, 6 Jan 2022 21:03:34 +0900
+Message-ID: <CAATEi5=Cmt__5mQLcis5dO9ncc5nyQgiGD22UXtLsgJH5ZbwkA@mail.gmail.com>
+Subject: Re: [PATCH] mm/vmscan.c: no need to double-check if free pages are
+ under high-watermark
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DWC2 may be paired with a full-speed PHY which is not capable of
-high-speed operation.  Report this correctly to the gadget core by
-setting max_speed from the core parameters.
+> > @@ -4355,7 +4355,7 @@ static enum zone_type kswapd_highest_zoneidx(pg_data_t *pgdat,
+> >  static void kswapd_try_to_sleep(pg_data_t *pgdat, int alloc_order, int reclaim_order,
+> >                               unsigned int highest_zoneidx)
+> >  {
+> > -     long remaining = 0;
+> > +     long remaining = ~0;
+> >       DEFINE_WAIT(wait);
+> >
+> >       if (freezing(current) || kthread_should_stop())
+>
+> While this does avoid calling prepare_kswapd_sleep() twice if the pgdat
+> is balanced on the first try, it then does not restore the vmstat
+> thresholds and doesn't call schedul() for kswapd to go to sleep.
 
-Prior to commit 5324bad66f09f ("usb: dwc2: gadget: implement
-udc_set_speed()") this didn't cause the hardware to be configured
-incorrectly, although the speed may have been reported incorrectly.  But
-after that commit params.speed is updated based on a value passed in by
-the gadget core which may set it to a faster speed than is supported by
-the hardware.  Initialising the max_speed parameter ensures the speed
-passed to dwc2_gadget_set_speed() will be one supported by the hardware.
+I intended not to call prepare_kswapd_sleep() twice when the pgdat is NOT
+balanced on the first try:)
 
-Fixes: 5324bad66f09f ("usb: dwc2: gadget: implement udc_set_speed()")
-Acked-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Signed-off-by: John Keeping <john@metanate.com>
----
-v2:
-- Add Minas' ack
----
- drivers/usb/dwc2/gadget.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 700434db5735..40784693c840 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -4355,7 +4355,8 @@ static enum zone_type kswapd_highest_zoneidx(pg_data_t *pgdat,
+>  static void kswapd_try_to_sleep(pg_data_t *pgdat, int alloc_order, int reclaim_order,
+>                                 unsigned int highest_zoneidx)
+>  {
+> -       long remaining = 0;
+> +       long remaining;
+> +       bool balanced;
+>         DEFINE_WAIT(wait);
+>
+>         if (freezing(current) || kthread_should_stop())
+> @@ -4370,7 +4371,8 @@ static void kswapd_try_to_sleep(pg_data_t *pgdat, int alloc_order, int reclaim_o
+>          * eligible zone balanced that it's also unlikely that compaction will
+>          * succeed.
+>          */
+> -       if (prepare_kswapd_sleep(pgdat, reclaim_order, highest_zoneidx)) {
+> +       balanced = prepare_kswapd_sleep(pgdat, reclaim_order, highest_zoneidx);
+> +       if (balanced) {
+>                 /*
+>                  * Compaction records what page blocks it recently failed to
+>                  * isolate pages from and skips them in the future scanning.
+> @@ -4387,6 +4389,10 @@ static void kswapd_try_to_sleep(pg_data_t *pgdat, int alloc_order, int reclaim_o
+>
+>                 remaining = schedule_timeout(HZ/10);
+>
+> +               /* Is pgdat balanced after a short sleep? */
+> +               balanced = prepare_kswapd_sleep(pgdat, reclaim_order,
+> +                                                       highest_zoneidx);
+> +
+>                 /*
+>                  * If woken prematurely then reset kswapd_highest_zoneidx and
+>                  * order. The values will either be from a wakeup request or
+> @@ -4406,11 +4412,11 @@ static void kswapd_try_to_sleep(pg_data_t *pgdat, int alloc_order, int reclaim_o
+>         }
+>
+>         /*
+> -        * After a short sleep, check if it was a premature sleep. If not, then
+> -        * go fully to sleep until explicitly woken up.
+> +        * If balanced to the high watermark, restore vmstat thresholds and
+> +        * kswapd goes to sleep. If kswapd remains awake, account whether
+> +        * the low or high watermark was hit quickly.
+>          */
+> -       if (!remaining &&
+> -           prepare_kswapd_sleep(pgdat, reclaim_order, highest_zoneidx)) {
+> +       if (balanced) {
+>                 trace_mm_vmscan_kswapd_sleep(pgdat->node_id);
+>
+>                 /*
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index b884a83b26a6..2bc03f41c70a 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -4974,7 +4974,18 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
- 		hsotg->params.g_np_tx_fifo_size);
- 	dev_dbg(dev, "RXFIFO size: %d\n", hsotg->params.g_rx_fifo_size);
- 
--	hsotg->gadget.max_speed = USB_SPEED_HIGH;
-+	switch (hsotg->params.speed) {
-+	case DWC2_SPEED_PARAM_LOW:
-+		hsotg->gadget.max_speed = USB_SPEED_LOW;
-+		break;
-+	case DWC2_SPEED_PARAM_FULL:
-+		hsotg->gadget.max_speed = USB_SPEED_FULL;
-+		break;
-+	default:
-+		hsotg->gadget.max_speed = USB_SPEED_HIGH;
-+		break;
-+	}
-+
- 	hsotg->gadget.ops = &dwc2_hsotg_gadget_ops;
- 	hsotg->gadget.name = dev_name(dev);
- 	hsotg->gadget.otg_caps = &hsotg->params.otg_caps;
--- 
-2.34.1
+But, I think what you did is more readable and nice.
+Thanks!
 
+> > diff --git a/mm/vmscan.c b/mm/vmscan.c
+> > index 700434db5735..1217ecec5bbb 100644
+> > --- a/mm/vmscan.c
+> > +++ b/mm/vmscan.c
+> > @@ -4331,7 +4331,7 @@ static int balance_pgdat(pg_data_t *pgdat, int order, int highest_zoneidx)
+> >       /*
+> >        * Return the order kswapd stopped reclaiming at as
+> >        * prepare_kswapd_sleep() takes it into account. If another caller
+> > -      * entered the allocator slow path while kswapd was awake, order will
+> > +      * entered the allqocator slow path while kswapd was awake, order will
+> >        * remain at the higher level.
+> >        */
+> >       return sc.order;
+>
+> This hunk just adds a typo, drop it.
+
+Sorry about that;;

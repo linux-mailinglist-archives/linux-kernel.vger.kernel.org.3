@@ -2,130 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EEAD4869AC
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:21:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A91B54869B2
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:23:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242671AbiAFSVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 13:21:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53612 "EHLO
+        id S242685AbiAFSXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 13:23:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242610AbiAFSVd (ORCPT
+        with ESMTP id S240698AbiAFSXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 13:21:33 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E87C061245;
-        Thu,  6 Jan 2022 10:21:32 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id p65so4179401iof.3;
-        Thu, 06 Jan 2022 10:21:32 -0800 (PST)
+        Thu, 6 Jan 2022 13:23:02 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD48C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 10:23:01 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id 8so3289581pgc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 10:23:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=u8PUM8urpd0DlumCQ6HFzJRnLfbm6k/u/SEQzO1ZixQ=;
-        b=JSO6SdtWZPDHtHmO9+Gd4ccCnwDAdiwIw83TCUdJm4givFE6rNf+5bx8Hb13PRHvX1
-         kZDIE/WxOomL6ZkJaqMJ3fTIvoEAHHYlY88B9yNJkSNyTkiKMRVeuwOhGl1byQlbTYIh
-         s+6HatHxg2Ma5NqFf3WyhsbmYtvobug7eaMzm4atAIwACA1YTtpR7PqAX/cIXrO5gXA7
-         z5FPqCnlyZuMWQtoNQTENppMZ7wREFEiYI7GE0kCST0Z/Iy5PPpFNm6JZv/M3TqXzLp4
-         UCmJ8w2xgraE34WqSXFrWDMnLWPV7UBViGHYP3DriB2DZ9+pxPfpHAE+JU/Xcjn4InPY
-         fu7Q==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=I6+gV85PzROEGlYJM3N+KOto4KJj2e4PqdsLK48TsUs=;
+        b=qvHLaU3I3YHDRWNvqsGcro4TTgHFq2pBWDkhh+5jgB4eOqgbpj5ZCHLIQ0V7nJil/u
+         BD5adDExOHzqInisF7KA4q8Tz7Cx5KPp3CZ1a5IgJm1Gon01ol41Ls1ekUgfhNeH4Q6g
+         AcDFmuyhPhazBpQv/9E3VnzrPp9DhAmW6LGIL+dXfICMpOLUYv9Sleqyc5fvTo8cJfql
+         Qo5HXw15lB60EWDFs6KPA4Yk2B7keLcBFBd+rUzQOEaznukkXCTIcByhnz1pOXswuD44
+         JSXRCJwuqN9ISpUcHUY2LcMe9riJaB+pCbsAcUpi33/HnQIJMojMK60TS1knUVuChIwL
+         Mxhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=u8PUM8urpd0DlumCQ6HFzJRnLfbm6k/u/SEQzO1ZixQ=;
-        b=wsrJwWZrRgcneY7jvj+V6G5kxbpbGSVrvoAfdJIQ/yB3WngHyEJDR1o8fNYUalNnci
-         F7DZA1J4PJNprxhOcHMu8BDOTOiAp5kyXYJkvTnBySUM3o2hXBHDIiK7hZlgbkiJfUhl
-         Hf9hio+981OagQEDji8UiGgWBb9mR33+ZCu1GRb1HyU5/yAmu5Wp1SMrdIWgKegF5dxg
-         Bcnh+vfgMny/6IeRri8jxh2VtihUE8sw+0MJZZJjsez3vcQez68PGPAG+GfPMDpEgOyb
-         04dH4PBEgU9h+Nt67y1z7w322mnsDRtPteNXTF69xJLaNdjp0ovJgFx4N0U9Ab9OdbEG
-         47mQ==
-X-Gm-Message-State: AOAM531p9lh4bgGcSCURNUl71FCkA8xKm/eBeqjSEXkLjbBCsm50bJpO
-        2hQu5jR/VdZfVybF2ViXY7VmVrW0s2+IdAXM8rk=
-X-Google-Smtp-Source: ABdhPJzY3+2ThXwMJw9yk0og+D6oKUxAyjl8KnT5uG3I140A+SYP0sC3mm/izURJuOZOF9vwnYg9BstEsPptSKj1Azk=
-X-Received: by 2002:a02:b384:: with SMTP id p4mr26798509jan.167.1641493292213;
- Thu, 06 Jan 2022 10:21:32 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=I6+gV85PzROEGlYJM3N+KOto4KJj2e4PqdsLK48TsUs=;
+        b=ijC4Qm3CCFiQiCC47/rt4TRPxPFMA5SblznLmCZyTPAHsMblyPGfhiBILna7ITwHbf
+         BOWQABy46GaBt6rbmSLWB95atD56G86N0pvqygNNnrWvgo52dj65dPA0FxIJPKu2rTBW
+         zbwlngMzWHDW9G+FD3ILFkiqqsZZZVHtNEObejdsXw/Sbncx5PDxUkmDPsQsI7pPidUs
+         TY4ot8MfaDnd7k+3EE7NDfzWBfJ6SZPHmG48UsT8ThiSS1/bsIDe0CIW9q8jOCI1+1Yd
+         eUAlp50PPoVZC4eBPEYBsHXs/XWE4L9l9Nw5KXqI6v8ezgDw3aeemwWdaffZDDslyhJg
+         58xw==
+X-Gm-Message-State: AOAM530aj86jgSOuK1Gn0ZcxFdh5rMON/uUjJDuanVAWS0Wja3SrHihl
+        XFyYV4sK5iZGGqrjgGp9ktPObPIKr7i5vg==
+X-Google-Smtp-Source: ABdhPJweRsimwQSAjoYAJsBtwWD4QinEfZXmqu0x7zDDpGDGjuPdd9wgT90Qo4sNJ3RXACOsdEu6vQ==
+X-Received: by 2002:a05:6a00:1509:b0:4ba:f004:e3af with SMTP id q9-20020a056a00150900b004baf004e3afmr61701114pfu.32.1641493381292;
+        Thu, 06 Jan 2022 10:23:01 -0800 (PST)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id z23sm3173944pfr.189.2022.01.06.10.22.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 10:23:00 -0800 (PST)
+Date:   Thu, 6 Jan 2022 11:22:58 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [RFC PATCH v2 5/6] remoteproc: virtio: Add helper to create
+ platform device
+Message-ID: <20220106182258.GA642186@p14s>
+References: <20211222082349.30378-1-arnaud.pouliquen@foss.st.com>
+ <20211222082349.30378-6-arnaud.pouliquen@foss.st.com>
 MIME-Version: 1.0
-References: <20211231161930.256733-1-krzysztof.kozlowski@canonical.com> <20211231161930.256733-4-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211231161930.256733-4-krzysztof.kozlowski@canonical.com>
-From:   Alim Akhtar <alim.akhtar@gmail.com>
-Date:   Thu, 6 Jan 2022 23:50:56 +0530
-Message-ID: <CAGOxZ51OdwYFpzz1JaqHRUi3ruwqgEkLiQCCz+Yg9ROCHSQBeQ@mail.gmail.com>
-Subject: Re: [PATCH 03/24] ARM: dts: exynos: drop unused pinctrl defines in Exynos3250
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Chanho Park <chanho61.park@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211222082349.30378-6-arnaud.pouliquen@foss.st.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Krzysztof
+Hi Arnaud,
 
-On Sat, Jan 1, 2022 at 10:42 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> The PIN_OUT/PIN_OUT_SET/PIN_CFG defines for pin controller pin
-> configuration are not used.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+On Wed, Dec 22, 2021 at 09:23:48AM +0100, Arnaud Pouliquen wrote:
+> Add capability to create platform device for the rproc virtio.
+> This is a step to move forward the management of the rproc virtio
+> as an independent device.
+> 
+> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
 > ---
-Thanks!
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+>  drivers/remoteproc/remoteproc_internal.h |  3 ++
+>  drivers/remoteproc/remoteproc_virtio.c   | 36 ++++++++++++++++++++++++
+>  2 files changed, 39 insertions(+)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
+> index 6f511c50a15d..3007d29a26e1 100644
+> --- a/drivers/remoteproc/remoteproc_internal.h
+> +++ b/drivers/remoteproc/remoteproc_internal.h
+> @@ -37,6 +37,9 @@ int rproc_of_parse_firmware(struct device *dev, int index,
+>  
+>  /* from remoteproc_virtio.c */
+>  int rproc_rvdev_add_device(struct rproc_vdev *rvdev);
+> +struct platform_device *
+> +rproc_virtio_register_device(struct rproc *rproc, struct rproc_vdev_pdata *vdev_data);
+> +void rproc_virtio_unregister_device(struct rproc_vdev *rvdev);
+>  irqreturn_t rproc_vq_interrupt(struct rproc *rproc, int vq_id);
+>  void rproc_vdev_release(struct kref *ref);
+>  
+> diff --git a/drivers/remoteproc/remoteproc_virtio.c b/drivers/remoteproc/remoteproc_virtio.c
+> index 5f8005caeb6e..5eef679cc520 100644
+> --- a/drivers/remoteproc/remoteproc_virtio.c
+> +++ b/drivers/remoteproc/remoteproc_virtio.c
+> @@ -578,6 +578,42 @@ void rproc_vdev_release(struct kref *ref)
+>  	rproc_rvdev_remove_device(rvdev);
+>  }
+>  
+> +/**
+> + * rproc_virtio_register_device() - register a remoteproc virtio device
+> + * @rproc: rproc handle to add the remoteproc virtio device to
+> + * @vdev_data: platform device data
+> + *
+> + * Return: 0 on success, and an appropriate error value otherwise
+> + */
+> +struct platform_device *
+> +rproc_virtio_register_device(struct rproc *rproc, struct rproc_vdev_pdata *vdev_data)
+> +{
+> +	struct device *dev = &rproc->dev;
+> +	struct platform_device *pdev;
+> +
+> +	pdev = platform_device_register_data(dev, "rproc-virtio", vdev_data->index, vdev_data,
+> +					     sizeof(*vdev_data));
+> +	if (PTR_ERR_OR_ZERO(pdev)) {
 
->  arch/arm/boot/dts/exynos3250-pinctrl.dtsi | 25 -----------------------
->  1 file changed, 25 deletions(-)
->
-> diff --git a/arch/arm/boot/dts/exynos3250-pinctrl.dtsi b/arch/arm/boot/dts/exynos3250-pinctrl.dtsi
-> index dff3c6e3aa1f..a616cb1aca29 100644
-> --- a/arch/arm/boot/dts/exynos3250-pinctrl.dtsi
-> +++ b/arch/arm/boot/dts/exynos3250-pinctrl.dtsi
-> @@ -19,31 +19,6 @@ _pin {                                                               \
->                 samsung,pin-drv = <EXYNOS4_PIN_DRV_ ##_drv>;            \
->         }
->
-> -#define PIN_OUT(_pin, _drv)                                            \
-> -       _pin {                                                          \
-> -               samsung,pins = #_pin;                                   \
-> -               samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;        \
-> -               samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;               \
-> -               samsung,pin-drv = <EXYNOS4_PIN_DRV_ ##_drv>;            \
-> -       }
-> -
-> -#define PIN_OUT_SET(_pin, _val, _drv)                                  \
-> -       _pin {                                                          \
-> -               samsung,pins = #_pin;                                   \
-> -               samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;        \
-> -               samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;               \
-> -               samsung,pin-drv = <EXYNOS4_PIN_DRV_ ##_drv>;            \
-> -               samsung,pin-val = <_val>;                               \
-> -       }
-> -
-> -#define PIN_CFG(_pin, _sel, _pull, _drv)                               \
-> -       _pin {                                                          \
-> -               samsung,pins = #_pin;                                   \
-> -               samsung,pin-function = <_sel>;                          \
-> -               samsung,pin-pud = <EXYNOS_PIN_PULL_ ##_pull>;           \
-> -               samsung,pin-drv = <EXYNOS4_PIN_DRV_ ##_drv>;            \
-> -       }
-> -
->  #define PIN_SLP(_pin, _mode, _pull)                                    \
->         _pin {                                                          \
->                 samsung,pins = #_pin;                                   \
-> --
-> 2.32.0
->
+Can you expand on the reason to use PTR_ERR_OR_ZERO() rather than IS_ERR()?
+Looking at the documentation for platform_device_register_data(), it should not
+return 0...
 
-
--- 
-Regards,
-Alim
+> +		dev_err(rproc->dev.parent,
+> +			"failed to create rproc-virtio device\n");
+> +	}
+> +
+> +	return  pdev;
+> +}
+> +EXPORT_SYMBOL(rproc_virtio_register_device);
+> +
+> +/**
+> + * rproc_virtio_unregister_device() - unregister a remoteproc virtio device
+> + * @rvdev: remote proc virtio handle to unregister
+> + *
+> + */
+> +void rproc_virtio_unregister_device(struct rproc_vdev *rvdev)
+> +{
+> +	if (rvdev->pdev)
+> +		platform_device_unregister(rvdev->pdev);
+> +}
+> +EXPORT_SYMBOL(rproc_virtio_unregister_device);
+> +
+>  static int rproc_virtio_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> -- 
+> 2.17.1
+> 

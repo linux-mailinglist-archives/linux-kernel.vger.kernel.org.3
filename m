@@ -2,139 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3CD1486965
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:09:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA8F348696F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242564AbiAFSJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 13:09:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50760 "EHLO
+        id S242112AbiAFSNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 13:13:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232609AbiAFSJh (ORCPT
+        with ESMTP id S241192AbiAFSNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 13:09:37 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC7BC061201
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 10:09:37 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id n16so3046392plc.2
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 10:09:37 -0800 (PST)
+        Thu, 6 Jan 2022 13:13:42 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBADC061245;
+        Thu,  6 Jan 2022 10:13:41 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id 19so4134684ioz.4;
+        Thu, 06 Jan 2022 10:13:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2N5PsN4yRBv182yZ587F2v21F6mIINdXvLaeARO6uyM=;
-        b=TUqmPBLA6ycP01HdBSbz6azNMU2nPE3QbDiI1CmHqGDm4c/hRtVJA/jYvC9W/6Qxsk
-         L7EkckDD59MYtfzrQ4gYmLzSchMBwA5oonJTyogozcLAzSt2zo5Oc9wxMjizxWpEZ/JH
-         Lxjk8/cafgPzuF5pD4nxjh7EBVTYsFUwW3zrbXJS6ENGcN5MCC0voweGwG97mABPgVYY
-         UN1kR/Rl95BkdmhJ0mCczsTEJF6a4hukxWo4rmWRL9c9yXxv3kwf5ktlOxAxdxFSO3DF
-         ea5PhjJyEnlps6QZdsTR7qUMpuucG09JYoRtd9j3Ne3YyvBAdfVvxUX8b6+dnXjUDgP5
-         qFMg==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qEtJLoaA5iONOvnEVWtg5iP2Ussm1/FGTAkvl8oexE4=;
+        b=DU+rXY8T5G10Gr4qPrA8xqxZOy3OkFDI5RIxobVhOj0lBBWQpL2HI/Mfjt1tvGc9LP
+         U+1NePR+011SMkc/U3NJCZCscp/bkCkRRQQetZ78Y7Qycks2Si2+uDn7Nt3Bc00VsBUf
+         svS/n/rJa1kvYx0KDyAilDYl8qSL+ZE44aVmB4T40m3+9BkkV2eazFqDKacPxQkH5RfQ
+         l7Ug+5eMDF/84sr7U6+qabi2CqMr+twhuLitR7OlMHs4ogCzqZ8901VleubUayxML//J
+         eGdd+NgMRCwQrHdZdGTVxIjlsEPoMZntjKncXXbG7tCRi8aBpYohgyEyw4uJ29trCxBS
+         bqtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2N5PsN4yRBv182yZ587F2v21F6mIINdXvLaeARO6uyM=;
-        b=oyy7MQueT6TTEbhnSDTn5XTHXGI8Q0Z/KkGk8UjCMEtGteDp6U3Uriy2higIBiSn/G
-         CoQJTP3BEfzjND3/lXv0cGcocZcaxyf3z3lMwOTvHm3XRpKmIWuC24yqT/4WRjNxhYH/
-         qcN7KA1S21xvcNyLCxjgx9RuLhC0+9lKeyfw9mG4Tegjv2D2TnpCI6V99hd7D49aFs2o
-         PJFdx94YD0DCp2kgmuRktnecsDD9unAvoVr1wk1aLXYpwQT4KEHjWAFoclM0wPpzEuvo
-         pmvnp27WarPT0/z9UFcOseWW8IkU7aDjoQQACRbESxarGuyF/7fJJ7zvoaDuN0ySppGP
-         Ztow==
-X-Gm-Message-State: AOAM533ljoZzp1q8GGVNyTG3soA06VtzmCHB7wPBNRX/DTMwk5xtLZ0U
-        BF6/nqDagCSbB3xQZAnFzqBwGg==
-X-Google-Smtp-Source: ABdhPJw8atVMtICb9c1YLZCpBibCoH+yi3yhmDOixHPJtX9JF743KsJ0NSzm3tTbFYtITDXckMq7kw==
-X-Received: by 2002:a17:902:aa95:b0:149:7c20:bb6f with SMTP id d21-20020a170902aa9500b001497c20bb6fmr48758743plr.170.1641492575874;
-        Thu, 06 Jan 2022 10:09:35 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id m14sm3309040pfk.3.2022.01.06.10.09.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 10:09:35 -0800 (PST)
-Date:   Thu, 6 Jan 2022 18:09:32 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] KVM: x86/pmu: Make top-down.slots event unavailable
- in supported leaf
-Message-ID: <YdcwXIANeB3fOWOI@google.com>
-References: <20220106032118.34459-1-likexu@tencent.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qEtJLoaA5iONOvnEVWtg5iP2Ussm1/FGTAkvl8oexE4=;
+        b=NFa6mI0k7QqMpRFj4N9j453i7Cyrh0q8QjGgzblcfwmNzxc1PbcK1yPh2cmh64uAM2
+         GbJ4Eop9Fwz5AtSeuXxJQ5foz+wT9IcSx+INDUnjRoAvejyTkO2y2y1qLfIbC7PdtiEb
+         AH6pvO6eGAncfhO9BtUw9kFHI6Hg2KB4xuPmO3plrbz+LowPoz0j76LPlJz2YLXeVB/w
+         6PN8uaCawuNJ38YRbqXKFFtQ+M1+W9cvpxyhTQo1K/kwIqPRrXgTAkDY6EhPHOYdjhC7
+         Vc589c0KmxBh3eURXe8IZrwJjXDjHSVuBiSHEZWECElItvQ5euhC7qmiQP+37EC5pqPA
+         /QiQ==
+X-Gm-Message-State: AOAM532fR6/33BGnuhwBs0e/pAdX3hLiHtG55SpcBcfMlAM2qljFpsOo
+        BYuEoXjELljMyKoWO/sGIOyN6RbEAgetsgPc2tP427hk
+X-Google-Smtp-Source: ABdhPJyhr3snTkGgNEkVx77B7Srk7PUlnDiZW9SzjEH7pRqrqPmlLFCj8DeDA6goEYe4mUJvzOfpnE0tQxhwUNteq5A=
+X-Received: by 2002:a05:6638:14c2:: with SMTP id l2mr28020601jak.276.1641492821017;
+ Thu, 06 Jan 2022 10:13:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220106032118.34459-1-likexu@tencent.com>
+References: <20211230195325.328220-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211230195325.328220-1-krzysztof.kozlowski@canonical.com>
+From:   Alim Akhtar <alim.akhtar@gmail.com>
+Date:   Thu, 6 Jan 2022 23:43:05 +0530
+Message-ID: <CAGOxZ52GgtkJ6RStGXik7PmMNfaisrqRojmsvQZWUPaNR8Qp+g@mail.gmail.com>
+Subject: Re: [RFT][PATCH 1/3] ARM: dts: exynos: fix UART3 pins configuration
+ in Exynos5250
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
-> 
-> When we choose to disable the fourth fixed counter TOPDOWN.SLOTS,
-> we also need to comply with the specification and set 0AH.EBX.[bit 7]
-> to 1 if the guest (e.g. on the ICX) has a value of 0AH.EAX[31:24] > 7.
-> 
-> Fixes: 2e8cd7a3b8287 ("kvm: x86: limit the maximum number of vPMU fixed counters to 3")
-> Signed-off-by: Like Xu <likexu@tencent.com>
+Hi Krzysztof
+
+On Fri, Dec 31, 2021 at 4:02 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> The gpa1-4 pin was put twice in UART3 pin configuration of Exynos5250,
+> instead of proper pin gpa1-5.
+>
+> Fixes: f8bfe2b050f3 ("ARM: dts: add pin state information in client nodes for Exynos5 platforms")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
-> v1 -> v2 Changelog:
-> - Make it simpler to keep forward compatibility; (Sean)
-> - Wrap related comment at ~80 chars; (Sean)
-> 
-> Previous:
-> https://lore.kernel.org/kvm/20220105050711.67280-1-likexu@tencent.com/
-> 
->  arch/x86/kvm/cpuid.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index 0b920e12bb6d..4fe17a537084 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -782,6 +782,18 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->  		eax.split.mask_length = cap.events_mask_len;
->  
->  		edx.split.num_counters_fixed = min(cap.num_counters_fixed, MAX_FIXED_COUNTERS);
-> +
-> +		/*
-> +		 * The 8th Intel architectural event (Topdown Slots) will be supported
+Thanks for fixing this.
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
 
-Nit, the "8th" part is unnecessary information.  
+>  arch/arm/boot/dts/exynos5250-pinctrl.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/arm/boot/dts/exynos5250-pinctrl.dtsi b/arch/arm/boot/dts/exynos5250-pinctrl.dtsi
+> index d31a68672bfa..d7d756614edd 100644
+> --- a/arch/arm/boot/dts/exynos5250-pinctrl.dtsi
+> +++ b/arch/arm/boot/dts/exynos5250-pinctrl.dtsi
+> @@ -260,7 +260,7 @@ i2c3_hs_bus: i2c3-hs-bus {
+>         };
+>
+>         uart3_data: uart3-data {
+> -               samsung,pins = "gpa1-4", "gpa1-4";
+> +               samsung,pins = "gpa1-4", "gpa1-5";
+>                 samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+>                 samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+>                 samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
+> --
+> 2.32.0
+>
 
-> +		 * if the 4th fixed counter exists && EAX[31:24] > 7 && EBX[7] = 0.
-> +		 *
-> +		 * Currently, KVM needs to set EAX[31:24] < 8 or EBX[7] == 1
-> +		 * to make this event unavailable in a consistent way.
-> +		 */
 
-This comment is now slightly stale.  It also doesn't say why the event is made
-unavailable.
-
-> +		if (edx.split.num_counters_fixed < 4 &&
-
-Rereading the changelog and the changelog of the Fixed commit, I don't think KVM
-should bother checking num_counters_fixed.  IIUC, cap.events_mask[7] should already
-be '1' if there are less than 4 fixed counters in hardware, but at the same time
-there's no harm in being a bit overzealous.  That would help simplifiy the comment
-as there's no need to explain why num_counters_fixed is checked, e.g. the fact that
-Topdown Slots uses the 4th fixed counter is irrelevant with respect to the legality
-of setting EBX[7]=1 to hide an unsupported event.
-
-		/*
-		 * Hide Intel's Topdown Slots architectural event, it's not yet
-		 * supported by KVM.
-		 */
-		if (eax.split.mask_length > 7)
-			cap.events_mask |= BIT_ULL(7);
-
-> +		    eax.split.mask_length > 7)
-> +			cap.events_mask |= BIT_ULL(7);
-> +
->  		edx.split.bit_width_fixed = cap.bit_width_fixed;
->  		if (cap.version)
->  			edx.split.anythread_deprecated = 1;
-> -- 
-> 2.33.1
-> 
+-- 
+Regards,
+Alim

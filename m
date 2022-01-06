@@ -2,181 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF67B48628D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 11:00:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F15486293
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 11:00:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237682AbiAFKAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 05:00:11 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:37180 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236540AbiAFKAK (ORCPT
+        id S237702AbiAFKAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 05:00:23 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:27090 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236540AbiAFKAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 05:00:10 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFF7861ACA;
-        Thu,  6 Jan 2022 10:00:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAA93C36AE5;
-        Thu,  6 Jan 2022 10:00:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641463209;
-        bh=2SfoZ7s/DXTSWQQdTkTc5e/8vCvnSQo3Ptn6kJrFTnE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=sKrluFRafEGQ4JFr1/jbzcp7imZgDqVIixTPQIsM42R4EF2HPJ4fmQL5LaQOC95BX
-         tyhCRxkvGmMPHtNRxJSnHC9vlRlolL4759uTAiC5dpwuLZTmSRvw3nieXsTbFGnKrd
-         YYi2pGRGIYQkknh9SnIm58hPwM4wZhDhzT7Dz5FA=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Coly Li <colyli@suse.de>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        linux-bcache@vger.kernel.org
-Subject: [PATCH] bcache: use default_groups in kobj_type
-Date:   Thu,  6 Jan 2022 11:00:04 +0100
-Message-Id: <20220106100004.3277439-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 6 Jan 2022 05:00:22 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2067BaLf012346;
+        Thu, 6 Jan 2022 10:00:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=SDJWgGctbuYhUnOsL3nfXe6Xk0un0bxz1Ugrkwlp8Kk=;
+ b=tsWp+sE+yIRX0ylYthW7VbAZCeCBTL+/NfVQrfqfB/gAzXpbNnHqEjriVZqsGn2+GaZM
+ UNxcTP6o58/1WhkIxidFkYnrMVHlm2ofJWTfEL9ZArhCAwHDIWwTh/WqBuEv4W2guFET
+ bdMFMVRQHvOsTKR40XaEtUQWrwJ72wbE0UL02kxNp2jBD/whwABKZO3tDmKG1qiQJ+Qq
+ 5YFzlxSBEallvNNCaV3od0rWxNNqAeu63fnTXO5v+cPhxN+Q+TVK4G0AT/0cdO1PvanH
+ Co9p4vey/Kab0N5WiRXgtHE2+xm5BoCK+tEQCf7DkEQ53O1+D18nZuL7KaUHOggtw6CI WA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ddutpjnd9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jan 2022 10:00:15 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 206A0Eht006113;
+        Thu, 6 Jan 2022 10:00:14 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ddutpjnbg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jan 2022 10:00:14 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2069rXuN016364;
+        Thu, 6 Jan 2022 10:00:12 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 3ddmsvkt24-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Jan 2022 10:00:11 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2069pJoP41026032
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 6 Jan 2022 09:51:19 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F14F842061;
+        Thu,  6 Jan 2022 10:00:08 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9D11342064;
+        Thu,  6 Jan 2022 10:00:08 +0000 (GMT)
+Received: from [9.145.54.64] (unknown [9.145.54.64])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  6 Jan 2022 10:00:08 +0000 (GMT)
+Message-ID: <96521e26-7d51-7451-3cf4-cca37da9dc24@linux.ibm.com>
+Date:   Thu, 6 Jan 2022 11:00:12 +0100
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4187; h=from:subject; bh=2SfoZ7s/DXTSWQQdTkTc5e/8vCvnSQo3Ptn6kJrFTnE=; b=owGbwMvMwCRo6H6F97bub03G02pJDInX9i6JF5DS2JM6K3CGhuXT2w8v2fmU3Jqw9d7bp8/SHH/c Oifs3xHLwiDIxCArpsjyZRvP0f0VhxS9DG1Pw8xhZQIZwsDFKQATSTnFMD91veKFuMz4R2IbFf3yvn PM+unPdJZhnsGmiFdnp0/x3C9nfOrsXKvnkQZVewA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH net v4] net/smc: Reset conn->lgr when link group
+ registration fails
+Content-Language: en-US
+To:     Wen Gu <guwen@linux.alibaba.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1641451455-41647-1-git-send-email-guwen@linux.alibaba.com>
+From:   Karsten Graul <kgraul@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <1641451455-41647-1-git-send-email-guwen@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: k7ioqxigDw1RKCfrfZyPEI740sFFEXmt
+X-Proofpoint-ORIG-GUID: IXF1DaRezTXYSJs5r5zvgThajOXdDYE2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-06_03,2022-01-04_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ mlxlogscore=904 bulkscore=0 clxscore=1015 mlxscore=0 spamscore=0
+ priorityscore=1501 suspectscore=0 lowpriorityscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2112160000 definitions=main-2201060067
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are currently 2 ways to create a set of sysfs files for a
-kobj_type, through the default_attrs field, and the default_groups
-field.  Move the bcache sysfs code to use default_groups field which has
-been the preferred way since aa30f47cf666 ("kobject: Add support for
-default attribute groups to kobj_type") so that we can soon get rid of
-the obsolete default_attrs field.
+On 06/01/2022 07:44, Wen Gu wrote:
+> @@ -630,10 +630,11 @@ static int smc_connect_decline_fallback(struct smc_sock *smc, int reason_code,
+>  
+>  static void smc_conn_abort(struct smc_sock *smc, int local_first)
+>  {
+> +	struct smc_connection *conn = &smc->conn;
+> +
+> +	smc_conn_free(conn);
+>  	if (local_first)
+> -		smc_lgr_cleanup_early(&smc->conn);
+> -	else
+> -		smc_conn_free(&smc->conn);
+> +		smc_lgr_cleanup_early(conn->lgr);
+>  }
 
-Cc: Coly Li <colyli@suse.de>
-Cc: Kent Overstreet <kent.overstreet@gmail.com>
-Cc: linux-bcache@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/md/bcache/stats.c |  3 ++-
- drivers/md/bcache/sysfs.c | 15 ++++++++++-----
- drivers/md/bcache/sysfs.h |  2 +-
- 3 files changed, 13 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/md/bcache/stats.c b/drivers/md/bcache/stats.c
-index 4c7ee5fedb9d..68b02216033d 100644
---- a/drivers/md/bcache/stats.c
-+++ b/drivers/md/bcache/stats.c
-@@ -78,7 +78,7 @@ static void bch_stats_release(struct kobject *k)
- {
- }
- 
--static struct attribute *bch_stats_files[] = {
-+static struct attribute *bch_stats_attrs[] = {
- 	&sysfs_cache_hits,
- 	&sysfs_cache_misses,
- 	&sysfs_cache_bypass_hits,
-@@ -88,6 +88,7 @@ static struct attribute *bch_stats_files[] = {
- 	&sysfs_bypassed,
- 	NULL
- };
-+ATTRIBUTE_GROUPS(bch_stats);
- static KTYPE(bch_stats);
- 
- int bch_cache_accounting_add_kobjs(struct cache_accounting *acc,
-diff --git a/drivers/md/bcache/sysfs.c b/drivers/md/bcache/sysfs.c
-index 1f0dce30fa75..d1029d71ff3b 100644
---- a/drivers/md/bcache/sysfs.c
-+++ b/drivers/md/bcache/sysfs.c
-@@ -500,7 +500,7 @@ STORE(bch_cached_dev)
- 	return size;
- }
- 
--static struct attribute *bch_cached_dev_files[] = {
-+static struct attribute *bch_cached_dev_attrs[] = {
- 	&sysfs_attach,
- 	&sysfs_detach,
- 	&sysfs_stop,
-@@ -543,6 +543,7 @@ static struct attribute *bch_cached_dev_files[] = {
- 	&sysfs_backing_dev_uuid,
- 	NULL
- };
-+ATTRIBUTE_GROUPS(bch_cached_dev);
- KTYPE(bch_cached_dev);
- 
- SHOW(bch_flash_dev)
-@@ -600,7 +601,7 @@ STORE(__bch_flash_dev)
- }
- STORE_LOCKED(bch_flash_dev)
- 
--static struct attribute *bch_flash_dev_files[] = {
-+static struct attribute *bch_flash_dev_attrs[] = {
- 	&sysfs_unregister,
- #if 0
- 	&sysfs_data_csum,
-@@ -609,6 +610,7 @@ static struct attribute *bch_flash_dev_files[] = {
- 	&sysfs_size,
- 	NULL
- };
-+ATTRIBUTE_GROUPS(bch_flash_dev);
- KTYPE(bch_flash_dev);
- 
- struct bset_stats_op {
-@@ -955,7 +957,7 @@ static void bch_cache_set_internal_release(struct kobject *k)
- {
- }
- 
--static struct attribute *bch_cache_set_files[] = {
-+static struct attribute *bch_cache_set_attrs[] = {
- 	&sysfs_unregister,
- 	&sysfs_stop,
- 	&sysfs_synchronous,
-@@ -980,9 +982,10 @@ static struct attribute *bch_cache_set_files[] = {
- 	&sysfs_clear_stats,
- 	NULL
- };
-+ATTRIBUTE_GROUPS(bch_cache_set);
- KTYPE(bch_cache_set);
- 
--static struct attribute *bch_cache_set_internal_files[] = {
-+static struct attribute *bch_cache_set_internal_attrs[] = {
- 	&sysfs_active_journal_entries,
- 
- 	sysfs_time_stats_attribute_list(btree_gc, sec, ms)
-@@ -1022,6 +1025,7 @@ static struct attribute *bch_cache_set_internal_files[] = {
- 	&sysfs_feature_incompat,
- 	NULL
- };
-+ATTRIBUTE_GROUPS(bch_cache_set_internal);
- KTYPE(bch_cache_set_internal);
- 
- static int __bch_cache_cmp(const void *l, const void *r)
-@@ -1182,7 +1186,7 @@ STORE(__bch_cache)
- }
- STORE_LOCKED(bch_cache)
- 
--static struct attribute *bch_cache_files[] = {
-+static struct attribute *bch_cache_attrs[] = {
- 	&sysfs_bucket_size,
- 	&sysfs_block_size,
- 	&sysfs_nbuckets,
-@@ -1196,4 +1200,5 @@ static struct attribute *bch_cache_files[] = {
- 	&sysfs_cache_replacement_policy,
- 	NULL
- };
-+ATTRIBUTE_GROUPS(bch_cache);
- KTYPE(bch_cache);
-diff --git a/drivers/md/bcache/sysfs.h b/drivers/md/bcache/sysfs.h
-index c1752ba2e05b..a2ff6447b699 100644
---- a/drivers/md/bcache/sysfs.h
-+++ b/drivers/md/bcache/sysfs.h
-@@ -9,7 +9,7 @@ struct kobj_type type ## _ktype = {					\
- 		.show	= type ## _show,				\
- 		.store	= type ## _store				\
- 	}),								\
--	.default_attrs	= type ## _files				\
-+	.default_groups	= type ## _groups				\
- }
- 
- #define SHOW(fn)							\
--- 
-2.34.1
-
+Looks like I missed a prereq patch here, but wo'nt conn->lgr be set to NULL
+after smc_conn_free() called smc_lgr_unregister_conn()?

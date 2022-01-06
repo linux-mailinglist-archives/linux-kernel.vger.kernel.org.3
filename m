@@ -2,163 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62733486188
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 09:41:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD4F5486191
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 09:42:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236823AbiAFIlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 03:41:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:24666 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236793AbiAFIlw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 03:41:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641458511;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=B6cO0By3xfU7a9n6TEUm5Q0O0rT0zqzS45h4TsZ5dLM=;
-        b=Bl7gttkmQZHecyTqB0Nh6cJmBusFYbgq+Hm2PeN9Kv6s3bUXPqz6A/x75H1+d2MmyRom33
-        c3VCTKn647eoLrpzEphdTGutft0KAbKAk3+wA3BqZ8INmc0igwsMBA/xpMw8sxpT3fvA1T
-        u137Ze9YnVCSjWDe0CnYxImy9ME/cpo=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-393-j3qihre0N5eM6wn0FIUM3g-1; Thu, 06 Jan 2022 03:41:50 -0500
-X-MC-Unique: j3qihre0N5eM6wn0FIUM3g-1
-Received: by mail-ed1-f70.google.com with SMTP id w6-20020a05640234c600b003f916e1b615so1407428edc.17
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 00:41:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=B6cO0By3xfU7a9n6TEUm5Q0O0rT0zqzS45h4TsZ5dLM=;
-        b=HdM9nZ2O+wlOub6CPiq/lVODNFMkVQ+WCrRHmLd+JOdmhcqHkyD1ZtrcjjT6Swvb0e
-         o+u2s1d6QhgdpqbAwUm1Dwz5ruyUQ7m2aGqasPEf2BmpffvRVRw0mEmTVoU9gNWufycI
-         5DxqmSQAb7VOyFl7Yl4AB2q64/x+3MAo5oETJLHJQqTGUCmL4+iNWYnM6XLidCDjkSrA
-         7tgQzSA+7OGJ2vHFJKOfQ9XojIVoBySq85UV4T2lIwCIdVPEIFWKE7BzUcVhHIl38Url
-         m194H9hBP0yM2yXrF/z6Ka0UEYrL6vBwtZX1yDU3vmrjndp5nuLStv+hJ+j1Isxjo+IU
-         WO+Q==
-X-Gm-Message-State: AOAM530x70ZmI9e9ChTlC7cZmVgFtrAcBLR/ZLuqAp4gJp9aSsMtF7dL
-        ibfSNGknbljngyyIaSclcxmL6hofLmb+hK4xTmJ1PxWONLd+XwgS08fwo7V9UBZsdJWDV9a0+zC
-        AhC0TWu5USzEH4UjGVAvpzZL7
-X-Received: by 2002:a05:6402:b41:: with SMTP id bx1mr55483119edb.292.1641458509066;
-        Thu, 06 Jan 2022 00:41:49 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyQIYkJhAAbOd6J0hHVNMxZpM46ATJPB6IQAd2TD7n+qeYiIloSdNHNaqNQIwh69l8u33Z77A==
-X-Received: by 2002:a05:6402:b41:: with SMTP id bx1mr55483112edb.292.1641458508882;
-        Thu, 06 Jan 2022 00:41:48 -0800 (PST)
-Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id q20sm479615edt.13.2022.01.06.00.41.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 00:41:47 -0800 (PST)
-Date:   Thu, 6 Jan 2022 09:41:46 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 08/13] bpf: Add kprobe link for attaching raw kprobes
-Message-ID: <YdarSovbcmoY9lI6@krava>
-References: <20220104080943.113249-1-jolsa@kernel.org>
- <20220104080943.113249-9-jolsa@kernel.org>
- <CAEf4BzZ7s=Pp+2xY3qKX9u6KrPdGW9NNfoiep7nGW+=_s=JJJA@mail.gmail.com>
+        id S236939AbiAFImp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 03:42:45 -0500
+Received: from mga12.intel.com ([192.55.52.136]:41317 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236880AbiAFImm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 03:42:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641458562; x=1672994562;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sM6TJCgT/V+yPkhx/XfyARE+SklzEJnXQgkZSxob+5M=;
+  b=Vmj4HOgl4Mer0ALKoutHEoY+sHvk65d70bIaLYYs11OcwbkEMHU7w/YQ
+   jNFBvBzREck/WN7GODzXdD7z5KdRzWQRJelwRSYZZ53VQvk+G/ETMBbIM
+   /DHVrrNOLlU0faQ0GDisMy7QakyK6nDCQbGbqPwN5+LMtItCXSoYhATVQ
+   fuGdUhVTFGPwXDCQ0/McCcPz+FDTKib4nFJ5AhtK9GfRw6ptGwgke0dCE
+   /aMWNVsH9sCCnhVe6MG36wr18IIN2E2tRl6PpHHzCqYrHzDvNDHHNf0ea
+   I+WyiEoNFPEpyiB2VkXbQcQN9fOc7cwnEWQEqGwuYO4EK9nHwyD5YSn0s
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="222616209"
+X-IronPort-AV: E=Sophos;i="5.88,266,1635231600"; 
+   d="scan'208";a="222616209"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 00:42:40 -0800
+X-IronPort-AV: E=Sophos;i="5.88,266,1635231600"; 
+   d="scan'208";a="513334267"
+Received: from chenyu-desktop.sh.intel.com (HELO chenyu-desktop) ([10.239.158.186])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 00:42:37 -0800
+Date:   Thu, 6 Jan 2022 16:42:07 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        rafael@kernel.org, lenb@kernel.org
+Subject: Re: [PATCH -next] ACPI: pfr_update: Fix return value check in
+ pfru_write()
+Message-ID: <20220106084207.GA865257@chenyu-desktop>
+References: <20220106075448.3215141-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEf4BzZ7s=Pp+2xY3qKX9u6KrPdGW9NNfoiep7nGW+=_s=JJJA@mail.gmail.com>
+In-Reply-To: <20220106075448.3215141-1-yangyingliang@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 08:30:56PM -0800, Andrii Nakryiko wrote:
-> On Tue, Jan 4, 2022 at 12:10 AM Jiri Olsa <jolsa@redhat.com> wrote:
-> >
-> > Adding new link type BPF_LINK_TYPE_KPROBE to attach kprobes
-> > directly through register_kprobe/kretprobe API.
-> >
-> > Adding new attach type BPF_TRACE_RAW_KPROBE that enables
-> > such link for kprobe program.
-> >
-> > The new link allows to create multiple kprobes link by using
-> > new link_create interface:
-> >
-> >   struct {
-> >     __aligned_u64   addrs;
-> >     __u32           cnt;
-> >     __u64           bpf_cookie;
+On Thu, Jan 06, 2022 at 03:54:48PM +0800, Yang Yingliang wrote:
+> In case of error, memremap() returns NULL pointer not
+> ERR_PTR(). The IS_ERR() test in the return value check
+> should be replaced with NULL test.
 > 
-> I'm afraid bpf_cookie has to be different for each addr, otherwise
-> it's severely limiting. So it would be an array of cookies alongside
-> an array of addresses
+> Fixes: 0db89fa243e5 ("ACPI: Introduce Platform Firmware Runtime Update device driver")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  drivers/acpi/pfr_update.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/acpi/pfr_update.c b/drivers/acpi/pfr_update.c
+> index 149b5b2530b9..6bb0b778b5da 100644
+> --- a/drivers/acpi/pfr_update.c
+> +++ b/drivers/acpi/pfr_update.c
+> @@ -460,8 +460,8 @@ static ssize_t pfru_write(struct file *file, const char __user *buf,
+>  	/* map the communication buffer */
+>  	phy_addr = (phys_addr_t)((buf_info.addr_hi << 32) | buf_info.addr_lo);
+>  	buf_ptr = memremap(phy_addr, buf_info.buf_size, MEMREMAP_WB);
+> -	if (IS_ERR(buf_ptr))
+> -		return PTR_ERR(buf_ptr);
+> +	if (!buf_ptr)
+> +		return -ENOMEM;
+>  
+>  	if (!copy_from_iter_full(buf_ptr, len, &iter)) {
+>  		ret = -EINVAL;
+> -- 
+> 2.25.1
+>
+Acked-by: Chen Yu <yu.c.chen@intel.com>
 
-ok
-
-> 
-> >   } kprobe;
-> >
-> > Plus new flag BPF_F_KPROBE_RETURN for link_create.flags to
-> > create return probe.
-> >
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  include/linux/bpf_types.h      |   1 +
-> >  include/uapi/linux/bpf.h       |  12 +++
-> >  kernel/bpf/syscall.c           | 191 ++++++++++++++++++++++++++++++++-
-> >  tools/include/uapi/linux/bpf.h |  12 +++
-> >  4 files changed, 211 insertions(+), 5 deletions(-)
-> >
-> 
-> [...]
-> 
-> > @@ -1111,6 +1113,11 @@ enum bpf_link_type {
-> >   */
-> >  #define BPF_F_SLEEPABLE                (1U << 4)
-> >
-> > +/* link_create flags used in LINK_CREATE command for BPF_TRACE_RAW_KPROBE
-> > + * attach type.
-> > + */
-> > +#define BPF_F_KPROBE_RETURN    (1U << 0)
-> > +
-> 
-> we have plenty of flexibility to have per-link type fields, so why not
-> add `bool is_retprobe` next to addrs and cnt?
-
-well I thought if I do that, people would suggest to use the empty
-flags field instead ;-) 
-
-we can move it there as you suggest, but I wonder it's good idea to
-use bool in uapi headers, because the bool size definition is vague
-
-jirka
-
-> 
-> >  /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
-> >   * the following extensions:
-> >   *
-> > @@ -1465,6 +1472,11 @@ union bpf_attr {
-> >                                  */
-> >                                 __u64           bpf_cookie;
-> >                         } perf_event;
-> > +                       struct {
-> > +                               __aligned_u64   addrs;
-> > +                               __u32           cnt;
-> > +                               __u64           bpf_cookie;
-> > +                       } kprobe;
-> >                 };
-> >         } link_create;
-> >
-> 
-> [...]
-> 
-
+thanks,
+Chenyu

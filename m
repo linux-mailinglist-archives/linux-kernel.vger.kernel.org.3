@@ -2,131 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F74486196
+	by mail.lfdr.de (Postfix) with ESMTP id 4ED61486197
 	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 09:44:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236914AbiAFIox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 03:44:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36152 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236860AbiAFIow (ORCPT
+        id S236953AbiAFIoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 03:44:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40168 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236905AbiAFIox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 03:44:52 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6964EC061245;
-        Thu,  6 Jan 2022 00:44:52 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id d201so5395555ybc.7;
-        Thu, 06 Jan 2022 00:44:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oh23BjoKFzAkuG9NnxICbp39CiGWdcw5gpXaXCR0gv4=;
-        b=SDoA0JU56MlWxVUqde4e+r/Qk/EhEUwnd157f6jKhWFrQhlnRaGdHmY5Hgt6HE/LtN
-         H3JR8g6ajSPTD54T1IFH25bcu/wBh2cnFsigURyxJjOF8EykEgXUvwURqZGEQpkP5QM0
-         U31VLkZU3F0DhluyoOCeFJ7wnCssDevX8PF4LVkIiIRpnUdMnrSqTA/FlGRzKi8Cu0OQ
-         MTEN2Gwz6tQJlMkoCosohaBGLn+CR6IPpfOF06D8fDH99fyZW6iK6SgCWgfPZU/O/BvU
-         PEpdfDuk+9+ctgdfP5iF1FbQuGYsNvIdgHV9DPR7YnV3eZiemvcoWvUB0K6mgIP658KD
-         lc9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oh23BjoKFzAkuG9NnxICbp39CiGWdcw5gpXaXCR0gv4=;
-        b=Pc0gpbT+0SBhVq54faPltjArYchcyammic5YkHN/KU4ti24afpbe5SBbMqfv/YEoJ8
-         yfAoD1ndL0S9syAGT2vuFuODe4DinoTgRiQP+YEYO3OhWg946gNUQOaMq08+2CaCSEIn
-         leufiOzX0ffal0S1FVayqzNqEJNgHRZBTmofp6o8EZwJVh3U5QbJwwXOnfHW3lhOjSv4
-         ToJku4Peq2k2c0jhsPRXJfz1Y0su+S4tu06SCP0rcvtQvjS6s+qTYY5+aBNg2sC3hqGM
-         QmCdFsWdQvdYipjhaFA2J2GQ//MzcvDoo/f1sAzE+Zbguez9/Kfp+U0nYfnRO4QzQP3t
-         OWmg==
-X-Gm-Message-State: AOAM531OVFAg4Ib3j+78OGw+yfrquqNYaREoQUgqnyUfNc16huUnuD7b
-        UjTygIbR5fks2v4o3QWvKZ5ygd88ZbvdtfyqSGs=
-X-Google-Smtp-Source: ABdhPJw9vxajmAvvj3b+nKVLj9oHrVmIGPAkG7ay1+DYFjTGWUO3lmz8SjL8jkJOZNrqNJ0ZIDUOCTX4Hf4zjwdy7vQ=
-X-Received: by 2002:a25:98c4:: with SMTP id m4mr73638815ybo.613.1641458691689;
- Thu, 06 Jan 2022 00:44:51 -0800 (PST)
-MIME-Version: 1.0
-References: <20220104163519.21929-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220104163519.21929-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <YdZ9rDvYtdu8L8Vb@matsya>
-In-Reply-To: <YdZ9rDvYtdu8L8Vb@matsya>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Thu, 6 Jan 2022 08:44:25 +0000
-Message-ID: <CA+V-a8sO0AioGJh23jdFWoN_Qx9rm_3skYcCeyrWZVAuRtuOSw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] dmaengine: mediatek: mtk-hsdma: Use
- platform_get_irq() to get the interrupt
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        dmaengine <dmaengine@vger.kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        Thu, 6 Jan 2022 03:44:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641458693;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gxzoQoAWsckj3O4bq1MbuFoX5uVZ/0SJ0i7zSUWX8zY=;
+        b=cC/kXj/924WAWrjE3Ut9Oo9G9m36Csdfkq/0rUtU65/KPihKe2IIT6MmSR7HU3fkgvxKm1
+        qpwZT40vcbmE9sJiEdBtpuR/Eyx8GCu+6HXJSm/D+FGHJrouxCa50AR4pQ6nAe8SrS5/tD
+        xjI8IsFuZ7oMb4RoGf0K4ctwMUv5Tf0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-472-CBzk3zfqNDq1hHV86Jz5Lg-1; Thu, 06 Jan 2022 03:44:49 -0500
+X-MC-Unique: CBzk3zfqNDq1hHV86Jz5Lg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CB2071800D50;
+        Thu,  6 Jan 2022 08:44:47 +0000 (UTC)
+Received: from starship (unknown [10.40.192.177])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 959467CAD1;
+        Thu,  6 Jan 2022 08:44:38 +0000 (UTC)
+Message-ID: <21d662162bfa7a5ba9ba2833cc607828b36480ca.camel@redhat.com>
+Subject: Re: [PATCH v2 5/5] KVM: SVM: allow AVIC to co-exist with a nested
+ guest running
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Joerg Roedel <joro@8bytes.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Ingo Molnar <mingo@redhat.com>
+Date:   Thu, 06 Jan 2022 10:44:37 +0200
+In-Reply-To: <YdYUD22otUIF3fqR@google.com>
+References: <20211213104634.199141-1-mlevitsk@redhat.com>
+         <20211213104634.199141-6-mlevitsk@redhat.com> <YdYUD22otUIF3fqR@google.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vinod,
+On Wed, 2022-01-05 at 21:56 +0000, Sean Christopherson wrote:
+> On Mon, Dec 13, 2021, Maxim Levitsky wrote:
+> > @@ -1486,6 +1485,12 @@ struct kvm_x86_ops {
+> >  	int (*complete_emulated_msr)(struct kvm_vcpu *vcpu, int err);
+> >  
+> >  	void (*vcpu_deliver_sipi_vector)(struct kvm_vcpu *vcpu, u8 vector);
+> > +
+> > +	/*
+> > +	 * Returns false if for some reason APICv (e.g guest mode)
+> > +	 * must be inhibited on this vCPU
+> 
+> Comment is wrong, code returns 'true' if AVIC is inhibited due to is_guest_mode().
+> Even better, rename the hook to something that's more self-documenting.
+> 
+> vcpu_is_apicv_inhibited() jumps to mind, but that's a bad name since it's not
+> called by kvm_vcpu_apicv_active().  Maybe vcpu_has_apicv_inhibit_condition()?
 
-Thank you for the review.
+Yep. I also kind of don't like the name, but I didn't though of anything better.
+vcpu_has_apicv_inhibit_condition seems a good idea.
 
-On Thu, Jan 6, 2022 at 5:27 AM Vinod Koul <vkoul@kernel.org> wrote:
->
-> On 04-01-22, 16:35, Lad Prabhakar wrote:
-> > platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> > allocation of IRQ resources in DT core code, this causes an issue
-> > when using hierarchical interrupt domains using "interrupts" property
-> > in the node as this bypasses the hierarchical setup and messes up the
-> > irq chaining.
-> >
-> > In preparation for removal of static setup of IRQ resource from DT core
-> > code use platform_get_irq().
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> > v1->v2
-> > * No change
-> > ---
-> >  drivers/dma/mediatek/mtk-hsdma.c | 11 ++++-------
-> >  1 file changed, 4 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/drivers/dma/mediatek/mtk-hsdma.c b/drivers/dma/mediatek/mtk-hsdma.c
-> > index 6ad8afbb95f2..c0fffde7fe08 100644
-> > --- a/drivers/dma/mediatek/mtk-hsdma.c
-> > +++ b/drivers/dma/mediatek/mtk-hsdma.c
-> > @@ -923,13 +923,10 @@ static int mtk_hsdma_probe(struct platform_device *pdev)
-> >               return PTR_ERR(hsdma->clk);
-> >       }
-> >
-> > -     res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-> > -     if (!res) {
-> > -             dev_err(&pdev->dev, "No irq resource for %s\n",
-> > -                     dev_name(&pdev->dev));
-> > -             return -EINVAL;
-> > -     }
-> > -     hsdma->irq = res->start;
-> > +     err = platform_get_irq(pdev, 0);
->
-> why not platform_get_irq_optional() here and 3rd patch ?
->
-For patches #2 and #3 the driver expects the IRQ to be present
-strictly, that is the reason platform_get_irq_optional() isn't used so
-that the behavior of the driver is unchanged with this patch.
+> 
+> > +	 */
+> > +	bool (*apicv_check_inhibit)(struct kvm_vcpu *vcpu);
+> >  };
+> >  
+> >  struct kvm_x86_nested_ops {
+> > diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> > index 34f62da2fbadd..5a8304938f51e 100644
+> > --- a/arch/x86/kvm/svm/avic.c
+> > +++ b/arch/x86/kvm/svm/avic.c
+> > @@ -734,6 +734,11 @@ int svm_deliver_avic_intr(struct kvm_vcpu *vcpu, int vec)
+> >  	return 0;
+> >  }
+> >  
+> > +bool avic_is_vcpu_inhibited(struct kvm_vcpu *vcpu)
+> 
+> This should follow whatever wording we decide on for the kvm_x86_ops hook.  In
+> isolation, this name is too close to kvm_vcpu_apicv_active() and could be wrongly
+> assumed to mean that APICv is not inhibited for _any_ reason on this vCPU if it
+> returns false.
+I will think of a better name.
 
-Cheers,
-Prabhakar
 
-> > +     if (err < 0)
-> > +             return err;
-> > +     hsdma->irq = err;
-> >
-> >       refcount_set(&hsdma->pc_refcnt, 0);
-> >       spin_lock_init(&hsdma->lock);
-> > --
-> > 2.17.1
->
-> --
-> ~Vinod
+> 
+> > +{
+> > +	return is_guest_mode(vcpu);
+> > +}
+> > +
+> >  bool svm_dy_apicv_has_pending_interrupt(struct kvm_vcpu *vcpu)
+> >  {
+> >  	return false;
+> 
+> ...
+> 
+> > @@ -4486,6 +4493,7 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+> >  	.complete_emulated_msr = svm_complete_emulated_msr,
+> >  
+> >  	.vcpu_deliver_sipi_vector = svm_vcpu_deliver_sipi_vector,
+> > +	.apicv_check_inhibit = avic_is_vcpu_inhibited,
+> 
+> This can technically be NULL if nested=0.
+Good idea, now it is possible to after recent refactoring.
+
+> 
+> >  };
+> >  
+> >  /*
+> > diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> > index daa8ca84afccd..545684ea37353 100644
+> > --- a/arch/x86/kvm/svm/svm.h
+> > +++ b/arch/x86/kvm/svm/svm.h
+> > @@ -590,6 +590,7 @@ void svm_load_eoi_exitmap(struct kvm_vcpu *vcpu, u64 *eoi_exit_bitmap);
+> >  void svm_hwapic_irr_update(struct kvm_vcpu *vcpu, int max_irr);
+> >  void svm_hwapic_isr_update(struct kvm_vcpu *vcpu, int max_isr);
+> >  int svm_deliver_avic_intr(struct kvm_vcpu *vcpu, int vec);
+> > +bool avic_is_vcpu_inhibited(struct kvm_vcpu *vcpu);
+> >  bool svm_dy_apicv_has_pending_interrupt(struct kvm_vcpu *vcpu);
+> >  int svm_update_pi_irte(struct kvm *kvm, unsigned int host_irq,
+> >  		       uint32_t guest_irq, bool set);
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > index 81a74d86ee5eb..125599855af47 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -9161,6 +9161,10 @@ static int inject_pending_event(struct kvm_vcpu *vcpu, bool *req_immediate_exit)
+> >  		r = kvm_check_nested_events(vcpu);
+> >  		if (r < 0)
+> >  			goto out;
+> > +
+> > +		/* Nested VM exit might need to update APICv status */
+> > +		if (kvm_check_request(KVM_REQ_APICV_UPDATE, vcpu))
+> > +			kvm_vcpu_update_apicv(vcpu);
+> >  	}
+> >  
+> >  	/* try to inject new event if pending */
+> > @@ -9538,6 +9542,10 @@ void kvm_vcpu_update_apicv(struct kvm_vcpu *vcpu)
+> >  	down_read(&vcpu->kvm->arch.apicv_update_lock);
+> >  
+> >  	activate = kvm_apicv_activated(vcpu->kvm);
+> > +
+> > +	if (kvm_x86_ops.apicv_check_inhibit)
+> > +		activate = activate && !kvm_x86_ops.apicv_check_inhibit(vcpu);
+> 
+> Might as well use Use static_call().  This would also be a candidate for
+> DEFINE_STATIC_CALL_RET0, though that's overkill if this is the only call site.
+This is also something that should be done, but I prefer to do this in one go.
+There are several nested related functions that were not converted to static_call
+(like .check_nested_events).
+
+Also I recently found that we have KVM_X86_OP and KVM_X86_OP_NULL which are the
+same thing - another thing for refactoring, so I prefer to refactor this
+in one patch series.
+
+
+
+> 
+> > +
+> >  	if (vcpu->arch.apicv_active == activate)
+> >  		goto out;
+> >  
+> > @@ -9935,7 +9943,10 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+> >  		 * per-VM state, and responsing vCPUs must wait for the update
+> >  		 * to complete before servicing KVM_REQ_APICV_UPDATE.
+> >  		 */
+> > -		WARN_ON_ONCE(kvm_apicv_activated(vcpu->kvm) != kvm_vcpu_apicv_active(vcpu));
+> > +		if (!is_guest_mode(vcpu))
+> > +			WARN_ON_ONCE(kvm_apicv_activated(vcpu->kvm) != kvm_vcpu_apicv_active(vcpu));
+> > +		else
+> > +			WARN_ON(kvm_vcpu_apicv_active(vcpu));
+> 
+> Won't this fire on VMX?
+
+Yes it will! Good catch. It almost like I would like to have .apicv_is_avic boolean,
+for such cases :-) I'll think of something.
+
+Best regards,
+	Maxim Levitsky
+
+> 
+> >  
+> >  		exit_fastpath = static_call(kvm_x86_run)(vcpu);
+> >  		if (likely(exit_fastpath != EXIT_FASTPATH_REENTER_GUEST))
+> > -- 
+> > 2.26.3
+> > 
+
+

@@ -2,187 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A7248691B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:48:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC556486913
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:48:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242419AbiAFRsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 12:48:35 -0500
-Received: from mga05.intel.com ([192.55.52.43]:61566 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242413AbiAFRs1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 12:48:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641491307; x=1673027307;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=L69EiUxvnkMtOLzS9y6Y326FWiPueb6iTyzdswTejP8=;
-  b=dm5dwGxz9ZCFDIXtqcABoqB4UDcrLWg5i0bqDSfFiPRE7WP5vv5vNafj
-   +s6gpXF86OaYoRxxeKS/MUhYYzTYo/FbdLMHIeIqMD/n+/ef3L9GriktK
-   UPL/RxQ78VzRcBTEgL+3JBmH4vVcQV11adXYEGyVmChogL7aDuN138ecb
-   uGN/8GSop15XZPdyJAurtN3Mak5dWe/Nzfb9oAQl7zWlvOMjODfvam6Nr
-   yyFmMaZuxpGnVcYZuR3TjlqdZ1vT/mgWiCBg1cb/QA1KWx1yJmertX1qk
-   6GKAKAjdqPmOi42tLfe6DGoI7QwIt/yRJruc1qo/FzYp0EdT5Qchyae57
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="329046553"
-X-IronPort-AV: E=Sophos;i="5.88,267,1635231600"; 
-   d="scan'208";a="329046553"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 09:48:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,267,1635231600"; 
-   d="scan'208";a="621592276"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 06 Jan 2022 09:48:25 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n5WsD-000HpS-85; Thu, 06 Jan 2022 17:48:25 +0000
-Date:   Fri, 7 Jan 2022 01:47:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Trond Myklebust <trond.myklebust@hammerspace.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>
-Subject: [anna-nfs:linux-next 12/21] fs/nfs/callback_xdr.c:274:8: warning:
- result of comparison of constant 658812288346769700 with expression of type
- 'uint32_t' (aka 'unsigned int') is always false
-Message-ID: <202201070108.OWIDTV5G-lkp@intel.com>
+        id S242350AbiAFRsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 12:48:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45846 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242286AbiAFRsL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 12:48:11 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88948C061245;
+        Thu,  6 Jan 2022 09:48:11 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id q14so3004942qtx.10;
+        Thu, 06 Jan 2022 09:48:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JzeqOhWeVQiSHelvYCvShiD3mFgyW2CwssuqprC+wZc=;
+        b=idGNcipYL7yVkj1KzDHsazAHCepCXgh/Bo2nuVTxkrM9Bziv1HKEOT5SQqW/pwvnpc
+         yRiefEmmyfh1sePVatXXthUrqrHYXtj8isuXkfSMdeQDpSI6DS79XI7U9F8SQQndCgOu
+         vZ/wkUf6LSRfwe1CIwl+p0/hZ5xq6tRO2+moHyGCOg6epczgFoD2zFHaU4BieAIAQ9zK
+         zf1uOlRAdIqXLT5pMG4jKbiFoKwtVIS4sM92/OVgeVnpGOmlOJDB4j7Z9uOzZ2HoApdE
+         gotUV7BDJoj6k6V6FyBajvKhf5XdM+oA0NYG7RSuLmoA5wblnghtO7SMCJJWq7mT7hdZ
+         mXUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JzeqOhWeVQiSHelvYCvShiD3mFgyW2CwssuqprC+wZc=;
+        b=zXbnjDaCw6V8x7SvAMF6/oP6OwfjdvqBlmgsH6xYQ0e6/grIeMR4H2AqGJFaqcN8uD
+         idBAiItuB3kCou4dvt7wJGw35uTylO17om+5py7WEqj16emC9bUZC3RqJeeEEKIsH+4Y
+         OL1uyWpvtpY53TxSa0ohC+4oUo+BLtR3GAUQhJz5+nTWNb95TsC1bWOhDkO7d6W0Qdz2
+         vjOKvyGSrVMqbbG+J/ShQtMQf2pzKeqISfqMOo8s33T2HJJTHExkflGY83zNllWgqLmA
+         0Oyy0zpxF93zHU28FiTBQXvIJWm4aiY6l8fftT2hC5YmxeNLZm411ukpyA5bedHNQ3gd
+         9XNg==
+X-Gm-Message-State: AOAM531urMBRLJx/jOXWqqPIFoJXz1/RuyZm+vkJFnL7sKeFf+IIZha+
+        TfsiKBxtPr179IesGSKoCrVhdhyKNZGpYQ==
+X-Google-Smtp-Source: ABdhPJxy81icM8T2h1gX796roVS9zK67zGnXuHaXxmfAAYS9UyrQ8kHbjxVbW6iV2h9TgzYC2YJVLg==
+X-Received: by 2002:ac8:5f84:: with SMTP id j4mr53732481qta.271.1641491290443;
+        Thu, 06 Jan 2022 09:48:10 -0800 (PST)
+Received: from glsvmlin.ini.cmu.edu (GLSVMLIN.INI.CMU.EDU. [128.2.16.9])
+        by smtp.gmail.com with ESMTPSA id u19sm1709227qke.1.2022.01.06.09.48.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 09:48:10 -0800 (PST)
+From:   Gabriel Somlo <gsomlo@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
+        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        kgugala@antmicro.com, mholenko@antmicro.com, krakoczy@antmicro.com,
+        mdudek@internships.antmicro.com, paulus@ozlabs.org, joel@jms.id.au,
+        shorne@gmail.com, geert@linux-m68k.org,
+        david.abdurachmanov@sifive.com, florent@enjoy-digital.fr,
+        rdunlap@infradead.org, andy.shevchenko@gmail.com
+Subject: [PATCH v6 0/3] mmc: Add LiteSDCard mmc driver
+Date:   Thu,  6 Jan 2022 12:48:00 -0500
+Message-Id: <20220106174803.1773876-1-gsomlo@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.linux-nfs.org/projects/anna/linux-nfs.git linux-next
-head:   3e0a5877834cb4899478873b0f6ccc604ab33d28
-commit: 9c2f14caf2bfc8b25b9d755aa77a37355d00c7ce [12/21] NFSv4.1: Fix uninitialised variable in devicenotify
-config: x86_64-buildonly-randconfig-r001-20220106 (https://download.01.org/0day-ci/archive/20220107/202201070108.OWIDTV5G-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project ca7ffe09dc6e525109e3cd570cc5182ce568be13)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add anna-nfs git://git.linux-nfs.org/projects/anna/linux-nfs.git
-        git fetch --no-tags anna-nfs linux-next
-        git checkout 9c2f14caf2bfc8b25b9d755aa77a37355d00c7ce
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/nfs/ sound/x86/
+Add support for the LiteX SD-Card device, LiteSDCard.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+LiteSDCard is a simple SD-Card interface available as part of the LiteX
+environment, used with various RISC-V and other FPGA based SoCs.
 
-All warnings (new ones prefixed by >>):
+New in v6:
 
->> fs/nfs/callback_xdr.c:274:8: warning: result of comparison of constant 658812288346769700 with expression of type 'uint32_t' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-           if (n > ULONG_MAX / sizeof(*args->devs)) {
-               ~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+drivers/mmc/host/litex_mmc.c:
+  - fix handling of deferred probe vs. platform_get_irq_optional()
+  - don't #ifdef dma_set_mask_and_coherent(), since it automatically
+    does the right thing on both 32- and 64-bit DMA capable arches
+  - remove MMC_CAP2_FULL_PWR_CYCLE, add MMC_CAP2_NO_MMC to list of
+    hardcoded capabilities during litex_mmc_probe()
+  - hardcode mmc->ocr_avail to the full 2.7-3.6V range allowed by the
+    SDCard spec (the LiteSDCard device doesn't accept software
+    configuration)
 
+>New in v5:
+>
+>MAINTAINERS:
+>
+>  - picked up a/b Mateusz
+>
+>Doc/dt/bindings/mmc/litex,mmc.yaml:
+>
+>  - picked up r/b Rob, Joel
+>
+>drivers/mmc/host/litex_mmc.c:
+>
+>  - shorten #define constant names (cosmetic, make them less unwieldy)
+>  - picked up r/b Joel
+>
+>>New in v4:
+>>
+>>Doc/dt/bindings/mmc/litex,mmc.yaml:
+>>
+>>  - fixed `dt_binding_check` errors uncovered by Rob's script
+>>
+>>drivers/mmc/host/litex_mmc.c:
+>>
+>>  - struct litex_mmc_host fields re-ordered so that `pahole` reports
+>>    no holes in either 32- or 64-bit builds
+>>  - litex_mmc_set_bus_width() now encapsulates check for
+>>    host->is_bus_width_set
+>>  - litex_mmc_request() - factor out dma data setup into separate
+>>    helper function: litex_mmc_do_dma()
+>>
+>>>New in v3:
+>>>
+>>>  MAINTAINERS:
+>>>
+>>>  - picked up acked-by Joel
+>>>  - added listing for liteeth driver
+>>>  - added Joel as additional co-maintainer (thanks!)
+>>>
+>>>  Doc/dt/bindings/mmc/litex,mmc.yaml:
+>>>
+>>>  - picked up r/b Geert Uytterhoeven <geert@linux-m68k.org> in DT
+>>>    bindings document (please let me know if that was premature, and
+>>>    happy to take further review if needed :)
+>>>  - add dedicated DT property for source clock frequency
+>>>
+>>>  drivers/mmc/host/litex_mmc.c:
+>>>
+>>>  - fixed function signature (no line split), and naming (litex_mmc_*)
+>>>  - more informative MODULE_AUTHOR() entries
+>>>    - also added matching "Copyright" entries in file header
+>>>  - fixed description in Kconfig
+>>>  - fixed DT documentation
+>>>  - removed magic constants
+>>>  - removed litex_map_status(), have sdcard_wait_done() return *real*
+>>>    error codes directly instead.
+>>>  - streamlined litex_mmc_reponse_len()
+>>>  - call litex_mmc_set_bus_width() only once, and ensure it returns
+>>>    correct error code(s)
+>>>  - use readx_poll_timeout() -- more concise -- instead of
+>>>    read_poll_timeout()
+>>>  - use dev_err() in litex_mmc_send_cmd() (instead of pr_err())
+>>>  - litex_mmc_setclk() will update host->clock before returning
+>>>  - separate irq initialization into its own function,
+>>>    litex_mmc_irq_init()
+>>>  - document rationale for f_min, f_max
+>>>  - use dmam_alloc_coherent(), which simplifies cleanup significantly
+>>>  - large `if (data) { ... }` block in litex_mmc_request() left as-is,
+>>>    there are too many variables shared with the rest of the parent
+>>>    function body to easily separate (e.g., `len`, `transfer`, `direct`).
+>>>    If this is indeed a blocker, I can take another shot at refactoring
+>>>    it in a future revision!
+>>>  - bump dma_set_mask_and_coherent() to 64-bits on suitable
+>>>    architectures
+>>>  - clock source picked up from dedicated DT clock reference property
+>>>  - remove gpio card-detect logic (needs testing and a dt binding
+>>>    example before being eligible for upstream inclusion)
+>>>
+>>>> New in v2:
+>>>>   - reword info message in litex_set_clk()
+>>>>   - streamline code in litex_map_status()
+>>>>   - fix typos in Kconfig (thanks Randy Dunlap <rdunlap@infradead.org>)
+>>>>   - improvements suggested by Stafford Horne <shorne@gmail.com>
+>>>>     - allow COMPILE_TEST in Kconfig
+>>>>     - use read_poll_timeout() when waiting for cmd/data/DMA
+>>>>       xfer completion
+>>>>   - include interrupt.h (thanks kernel test robot <lkp@intel.com>)
 
-vim +274 fs/nfs/callback_xdr.c
+Gabriel Somlo (3):
+  MAINTAINERS: co-maintain LiteX platform
+  dt-bindings: mmc: Add bindings for LiteSDCard
+  mmc: Add driver for LiteX's LiteSDCard interface
 
-f2a625616045fe Fred Isaman       2011-01-06  254  
-1be5683b03a766 Marc Eshel        2011-05-22  255  static
-1be5683b03a766 Marc Eshel        2011-05-22  256  __be32 decode_devicenotify_args(struct svc_rqst *rqstp,
-1be5683b03a766 Marc Eshel        2011-05-22  257  				struct xdr_stream *xdr,
-f4dac4ade5ba4e Christoph Hellwig 2017-05-11  258  				void *argp)
-1be5683b03a766 Marc Eshel        2011-05-22  259  {
-f4dac4ade5ba4e Christoph Hellwig 2017-05-11  260  	struct cb_devicenotifyargs *args = argp;
-9c2f14caf2bfc8 Trond Myklebust   2022-01-03  261  	uint32_t tmp, n, i;
-1be5683b03a766 Marc Eshel        2011-05-22  262  	__be32 *p;
-1be5683b03a766 Marc Eshel        2011-05-22  263  	__be32 status = 0;
-1be5683b03a766 Marc Eshel        2011-05-22  264  
-1be5683b03a766 Marc Eshel        2011-05-22  265  	/* Num of device notifications */
-eb72f484a5eb94 Chuck Lever       2019-02-11  266  	p = xdr_inline_decode(xdr, sizeof(uint32_t));
-1be5683b03a766 Marc Eshel        2011-05-22  267  	if (unlikely(p == NULL)) {
-1be5683b03a766 Marc Eshel        2011-05-22  268  		status = htonl(NFS4ERR_BADXDR);
-1be5683b03a766 Marc Eshel        2011-05-22  269  		goto out;
-1be5683b03a766 Marc Eshel        2011-05-22  270  	}
-1be5683b03a766 Marc Eshel        2011-05-22  271  	n = ntohl(*p++);
-9c2f14caf2bfc8 Trond Myklebust   2022-01-03  272  	if (n == 0)
-1be5683b03a766 Marc Eshel        2011-05-22  273  		goto out;
-363e0df057ea8d Dan Carpenter     2012-01-12 @274  	if (n > ULONG_MAX / sizeof(*args->devs)) {
-363e0df057ea8d Dan Carpenter     2012-01-12  275  		status = htonl(NFS4ERR_BADXDR);
-363e0df057ea8d Dan Carpenter     2012-01-12  276  		goto out;
-363e0df057ea8d Dan Carpenter     2012-01-12  277  	}
-1be5683b03a766 Marc Eshel        2011-05-22  278  
-a4f743a6bb2016 Trond Myklebust   2015-02-11  279  	args->devs = kmalloc_array(n, sizeof(*args->devs), GFP_KERNEL);
-1be5683b03a766 Marc Eshel        2011-05-22  280  	if (!args->devs) {
-1be5683b03a766 Marc Eshel        2011-05-22  281  		status = htonl(NFS4ERR_DELAY);
-1be5683b03a766 Marc Eshel        2011-05-22  282  		goto out;
-1be5683b03a766 Marc Eshel        2011-05-22  283  	}
-1be5683b03a766 Marc Eshel        2011-05-22  284  
-1be5683b03a766 Marc Eshel        2011-05-22  285  	/* Decode each dev notification */
-1be5683b03a766 Marc Eshel        2011-05-22  286  	for (i = 0; i < n; i++) {
-1be5683b03a766 Marc Eshel        2011-05-22  287  		struct cb_devicenotifyitem *dev = &args->devs[i];
-1be5683b03a766 Marc Eshel        2011-05-22  288  
-eb72f484a5eb94 Chuck Lever       2019-02-11  289  		p = xdr_inline_decode(xdr, (4 * sizeof(uint32_t)) +
-eb72f484a5eb94 Chuck Lever       2019-02-11  290  				      NFS4_DEVICEID4_SIZE);
-1be5683b03a766 Marc Eshel        2011-05-22  291  		if (unlikely(p == NULL)) {
-1be5683b03a766 Marc Eshel        2011-05-22  292  			status = htonl(NFS4ERR_BADXDR);
-1be5683b03a766 Marc Eshel        2011-05-22  293  			goto err;
-1be5683b03a766 Marc Eshel        2011-05-22  294  		}
-1be5683b03a766 Marc Eshel        2011-05-22  295  
-1be5683b03a766 Marc Eshel        2011-05-22  296  		tmp = ntohl(*p++);	/* bitmap size */
-1be5683b03a766 Marc Eshel        2011-05-22  297  		if (tmp != 1) {
-1be5683b03a766 Marc Eshel        2011-05-22  298  			status = htonl(NFS4ERR_INVAL);
-1be5683b03a766 Marc Eshel        2011-05-22  299  			goto err;
-1be5683b03a766 Marc Eshel        2011-05-22  300  		}
-1be5683b03a766 Marc Eshel        2011-05-22  301  		dev->cbd_notify_type = ntohl(*p++);
-1be5683b03a766 Marc Eshel        2011-05-22  302  		if (dev->cbd_notify_type != NOTIFY_DEVICEID4_CHANGE &&
-1be5683b03a766 Marc Eshel        2011-05-22  303  		    dev->cbd_notify_type != NOTIFY_DEVICEID4_DELETE) {
-1be5683b03a766 Marc Eshel        2011-05-22  304  			status = htonl(NFS4ERR_INVAL);
-1be5683b03a766 Marc Eshel        2011-05-22  305  			goto err;
-1be5683b03a766 Marc Eshel        2011-05-22  306  		}
-1be5683b03a766 Marc Eshel        2011-05-22  307  
-1be5683b03a766 Marc Eshel        2011-05-22  308  		tmp = ntohl(*p++);	/* opaque size */
-1be5683b03a766 Marc Eshel        2011-05-22  309  		if (((dev->cbd_notify_type == NOTIFY_DEVICEID4_CHANGE) &&
-1be5683b03a766 Marc Eshel        2011-05-22  310  		     (tmp != NFS4_DEVICEID4_SIZE + 8)) ||
-1be5683b03a766 Marc Eshel        2011-05-22  311  		    ((dev->cbd_notify_type == NOTIFY_DEVICEID4_DELETE) &&
-1be5683b03a766 Marc Eshel        2011-05-22  312  		     (tmp != NFS4_DEVICEID4_SIZE + 4))) {
-1be5683b03a766 Marc Eshel        2011-05-22  313  			status = htonl(NFS4ERR_INVAL);
-1be5683b03a766 Marc Eshel        2011-05-22  314  			goto err;
-1be5683b03a766 Marc Eshel        2011-05-22  315  		}
-1be5683b03a766 Marc Eshel        2011-05-22  316  		dev->cbd_layout_type = ntohl(*p++);
-1be5683b03a766 Marc Eshel        2011-05-22  317  		memcpy(dev->cbd_dev_id.data, p, NFS4_DEVICEID4_SIZE);
-1be5683b03a766 Marc Eshel        2011-05-22  318  		p += XDR_QUADLEN(NFS4_DEVICEID4_SIZE);
-1be5683b03a766 Marc Eshel        2011-05-22  319  
-1be5683b03a766 Marc Eshel        2011-05-22  320  		if (dev->cbd_layout_type == NOTIFY_DEVICEID4_CHANGE) {
-eb72f484a5eb94 Chuck Lever       2019-02-11  321  			p = xdr_inline_decode(xdr, sizeof(uint32_t));
-1be5683b03a766 Marc Eshel        2011-05-22  322  			if (unlikely(p == NULL)) {
-1be5683b03a766 Marc Eshel        2011-05-22  323  				status = htonl(NFS4ERR_BADXDR);
-1be5683b03a766 Marc Eshel        2011-05-22  324  				goto err;
-1be5683b03a766 Marc Eshel        2011-05-22  325  			}
-1be5683b03a766 Marc Eshel        2011-05-22  326  			dev->cbd_immediate = ntohl(*p++);
-1be5683b03a766 Marc Eshel        2011-05-22  327  		} else {
-1be5683b03a766 Marc Eshel        2011-05-22  328  			dev->cbd_immediate = 0;
-1be5683b03a766 Marc Eshel        2011-05-22  329  		}
-1be5683b03a766 Marc Eshel        2011-05-22  330  
-1be5683b03a766 Marc Eshel        2011-05-22  331  		dprintk("%s: type %d layout 0x%x immediate %d\n",
-1be5683b03a766 Marc Eshel        2011-05-22  332  			__func__, dev->cbd_notify_type, dev->cbd_layout_type,
-1be5683b03a766 Marc Eshel        2011-05-22  333  			dev->cbd_immediate);
-1be5683b03a766 Marc Eshel        2011-05-22  334  	}
-9c2f14caf2bfc8 Trond Myklebust   2022-01-03  335  	args->ndevs = n;
-9c2f14caf2bfc8 Trond Myklebust   2022-01-03  336  	dprintk("%s: ndevs %d\n", __func__, args->ndevs);
-9c2f14caf2bfc8 Trond Myklebust   2022-01-03  337  	return 0;
-9c2f14caf2bfc8 Trond Myklebust   2022-01-03  338  err:
-9c2f14caf2bfc8 Trond Myklebust   2022-01-03  339  	kfree(args->devs);
-1be5683b03a766 Marc Eshel        2011-05-22  340  out:
-9c2f14caf2bfc8 Trond Myklebust   2022-01-03  341  	args->devs = NULL;
-9c2f14caf2bfc8 Trond Myklebust   2022-01-03  342  	args->ndevs = 0;
-1be5683b03a766 Marc Eshel        2011-05-22  343  	dprintk("%s: status %d ndevs %d\n",
-1be5683b03a766 Marc Eshel        2011-05-22  344  		__func__, ntohl(status), args->ndevs);
-1be5683b03a766 Marc Eshel        2011-05-22  345  	return status;
-1be5683b03a766 Marc Eshel        2011-05-22  346  }
-1be5683b03a766 Marc Eshel        2011-05-22  347  
+ .../devicetree/bindings/mmc/litex,mmc.yaml    |  72 ++
+ MAINTAINERS                                   |   9 +-
+ drivers/mmc/host/Kconfig                      |   9 +
+ drivers/mmc/host/Makefile                     |   1 +
+ drivers/mmc/host/litex_mmc.c                  | 659 ++++++++++++++++++
+ 5 files changed, 748 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mmc/litex,mmc.yaml
+ create mode 100644 drivers/mmc/host/litex_mmc.c
 
-:::::: The code at line 274 was first introduced by commit
-:::::: 363e0df057ea8da539645fe4c3c227e3d44054cc nfs: check for integer overflow in decode_devicenotify_args()
+-- 
+2.31.1
 
-:::::: TO: Dan Carpenter <dan.carpenter@oracle.com>
-:::::: CC: Trond Myklebust <Trond.Myklebust@netapp.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

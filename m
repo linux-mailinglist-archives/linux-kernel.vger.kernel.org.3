@@ -2,194 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6B7486D05
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 23:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC473486D08
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 23:05:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244692AbiAFWEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 17:04:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48656 "EHLO
+        id S244807AbiAFWFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 17:05:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244462AbiAFWEj (ORCPT
+        with ESMTP id S244462AbiAFWFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 17:04:39 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E463C061201
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 14:04:39 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id b1so3202154ilj.2
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 14:04:39 -0800 (PST)
+        Thu, 6 Jan 2022 17:05:48 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50BCCC061245;
+        Thu,  6 Jan 2022 14:05:48 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id lr15-20020a17090b4b8f00b001b19671cbebso4601895pjb.1;
+        Thu, 06 Jan 2022 14:05:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=5lCMFrmKhRkcXXvDt5cwlZjJinUAktC4NqCvpS04174=;
-        b=pD1rFucmR46qqxkXoaSy+x+Q68ByrPXZh6xWdlE74Hj9mIC0VXltNLqQ88I/xWdglD
-         iJdVcL8F3HZfeChQ/0X2+ClqV8RvGQI9ADtSfznZWr7tylswqN0WeXrkImoitvKuOq/r
-         7LjiZstSSYgxWeWeZDgVWZUHggdqwlFd2uzkadgzQBgGvxwctaZo7VEMjm/asziO32GN
-         1EPueFX8h9RWS+3nTWwKMPoQjSOgq8T4ZcysL9EQv/mdRgogvicJPG5d3UW6ZTUFH2LA
-         8xriR0KFf4UBxjhDsKST9Sbr0CAXLCkvm/q7HQ2BFrWKel+diYAnjfBkpW0/7/0tpxI6
-         zQ6w==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=g2O7xnrLPpqXXwOCapU3Xp7r0vQceHZ0G5UiRjpq8YU=;
+        b=T5y8RqSbxZC8esbKQZXw4JqYsM/uqWOXxZ7+KJmj6LC1SPZCOyFwLoe7oEEQ7c6RYK
+         nIJRb6O6w+g3z+0NSdHRkUiLoBlvNlN7J8gWt4t6KQNCtnKIzQfvYSnyx0jB0h4gP7eY
+         tSMsnQD8PDUyExKJvp/uYW/0IW6DLVZPDYcpz/KVWAcNBzMaB4U+dd9TA5HYVLIC1+vP
+         XkGC2IQnIAEg5MRd6fuhFGpWRjiT7066ciz0sX39wqVV7U6AEAD6bYwcuyTnoqRscyiI
+         BfN/zDC30gUAqEDmfvtG0zh/V9axSPRv4CokOCyAfAV8a7+fQIAuD4UWdx/eUJet4bgD
+         rCRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5lCMFrmKhRkcXXvDt5cwlZjJinUAktC4NqCvpS04174=;
-        b=Z8veR9TcZLlBHm/uNcZ7z0ueQ5Ohr+NLqoSSB8T3mlIBP/SSWV5rSZTLQcTKUsK6jI
-         NqK4sb7Xof2+LagQdpAS+boSOHQXp+WPwrPl2n86+kmQdi5vVwsWkq4VRiD8bLjgqmga
-         IiNJOgyCkn+XPI1sSkW8Wl6z8VkhCi2I+7sYQLpbHbSJ8TKVhu7EFafxrjsbmUk+lRj0
-         cD7wkkHgO76eHBjjXWjo7Nv2PA1frmE+s53yzxuoEWTshUdBRPcWnaa/u/4p9WuqQnb0
-         lO0I12/2CB+fwhc2+sdiuUJ3rKVG4GZQOKP9v0RFQqkv800dkOkBVOE4+jUrG+nic1Pa
-         K0QQ==
-X-Gm-Message-State: AOAM533JrVgo6PbkI5meTWXA0XDWpb7qsP0rrIakf9PD979raXim/yNT
-        KU/UitL+pF0lXdQUSpGhuRk3XnYArD+LNibpMoiwYA==
-X-Google-Smtp-Source: ABdhPJzAMAQgMooGtqRDN40j09UsYvwRjjhj9krflCLslxZqCmlo0k1UyQ8SX0b/aozYQqrCNQo4a6eaX9DRQi9ppgM=
-X-Received: by 2002:a92:dd87:: with SMTP id g7mr5165224iln.174.1641506678460;
- Thu, 06 Jan 2022 14:04:38 -0800 (PST)
-MIME-Version: 1.0
-References: <YddEVgNKBJiqcV6Y@kernel.org> <YddGjjmlMZzxUZbN@kernel.org>
- <YddHmYhvtVvgqZb/@kernel.org> <CAP-5=fU2QAr9BMHqm9i6uDKPaUFsY2EAqt+oO1AO8ovBXCh5xQ@mail.gmail.com>
- <CAEf4BzbbOHQZUAe6iWaehKCPQAf3VC=hq657buqe2_yRKxaK-A@mail.gmail.com>
-In-Reply-To: <CAEf4BzbbOHQZUAe6iWaehKCPQAf3VC=hq657buqe2_yRKxaK-A@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 6 Jan 2022 14:04:25 -0800
-Message-ID: <CAP-5=fUN+XqrSmwqab9DyGtvpZ7iZkfnUNwBfK1CDA_iX+aF0Q@mail.gmail.com>
-Subject: Re: perf build broken seemingly due to libbpf changes, checking...
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Song Liu <songliubraving@fb.com>, Jiri Olsa <jolsa@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>, bpf <bpf@vger.kernel.org>,
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=g2O7xnrLPpqXXwOCapU3Xp7r0vQceHZ0G5UiRjpq8YU=;
+        b=jteUuDfvdqTAn0Ml8auZ5kePIbN3FDb9+M1Nn2obTTjxpKRdbTBHy23gmQYN3ZvZYT
+         z8KLQ+X2khVyyEH3UOxGqGmZCDkkAkbuZx0iHq6Da4cZyxgjoIVbqAHW5uh7tq4XnZDK
+         awvJr338YE2HAIKrQ+pjrEVksbTi7QgDSIEo6yy7r4B5HjZTQMzqSEC5ckUqU4bc2t/c
+         Q06WpxF/lVKZnb0k6P+iAFqcTW0BRYeX2INm8Ul/153Q8uph4cwakwoTzYc/ntqjmgxt
+         3NAI/sRiWQu/Bzh/woGcV/WpK4lGZOCeW0iJr0kx44TV7owO07qmDrLrovXtjV6irbjx
+         rGWA==
+X-Gm-Message-State: AOAM5312ZotRBiXl+STvvFNWtjqDcqBq685y8H/MvJYA3eULAE4tanvX
+        45v3XV97Re4od0182EUzwsA=
+X-Google-Smtp-Source: ABdhPJzxXkAt0X3wMEjyDjnGygiMMan8y3eiebKhXSdK7HpNq+PQfq27Y1el0Y2io4yaCknV2yFQwg==
+X-Received: by 2002:a17:90a:8983:: with SMTP id v3mr5723579pjn.11.1641506747772;
+        Thu, 06 Jan 2022 14:05:47 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id h7sm3598689pfc.152.2022.01.06.14.05.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 14:05:46 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 6 Jan 2022 12:05:45 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Hillf Danton <hdanton@sina.com>,
+        syzbot <syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Linux-MM <linux-mm@kvack.org>
+Subject: Re: psi_trigger_poll() is completely broken
+Message-ID: <YddnuSh15BAGdjAD@slm.duckdns.org>
+References: <000000000000e8f8f505d0e479a5@google.com>
+ <20211211015620.1793-1-hdanton@sina.com>
+ <YbQUSlq76Iv5L4cC@sol.localdomain>
+ <YdW3WfHURBXRmn/6@sol.localdomain>
+ <CAHk-=wjqh_R9w4-=wfegut2C0Bg=sJaPrayk39JRCkZc=O+gsw@mail.gmail.com>
+ <CAHk-=wjddvNbZBuvh9m_2VYFC1W7HvbP33mAzkPGOCHuVi5fJg@mail.gmail.com>
+ <CAHk-=wjn5xkLWaF2_4pMVEkZrTA=LiOH=_pQK0g-_BMSE-8Jxg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjn5xkLWaF2_4pMVEkZrTA=LiOH=_pQK0g-_BMSE-8Jxg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 1:44 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Thu, Jan 6, 2022 at 1:42 PM Ian Rogers <irogers@google.com> wrote:
-> >
-> > On Thu, Jan 6, 2022 at 11:48 AM Arnaldo Carvalho de Melo
-> > <acme@kernel.org> wrote:
-> > >
-> > > Em Thu, Jan 06, 2022 at 04:44:14PM -0300, Arnaldo Carvalho de Melo es=
-creveu:
-> > > > Em Thu, Jan 06, 2022 at 04:34:46PM -0300, Arnaldo Carvalho de Melo =
-escreveu:
-> > > > > After merging torvalds/master to perf/urgent I'm getting this:
-> > > > >
-> > > > > util/bpf-event.c:25:21: error: no previous prototype for =E2=80=
-=98btf__load_from_kernel_by_id=E2=80=99 [-Werror=3Dmissing-prototypes]
-> > > > >    25 | struct btf * __weak btf__load_from_kernel_by_id(__u32 id)
-> > > > >       |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > > > util/bpf-event.c:37:1: error: no previous prototype for =E2=80=98=
-bpf_object__next_program=E2=80=99 [-Werror=3Dmissing-prototypes]
-> > > > >    37 | bpf_object__next_program(const struct bpf_object *obj, st=
-ruct bpf_program *prev)
-> > > > >       | ^~~~~~~~~~~~~~~~~~~~~~~~
-> > > > > util/bpf-event.c:46:1: error: no previous prototype for =E2=80=98=
-bpf_object__next_map=E2=80=99 [-Werror=3Dmissing-prototypes]
-> > > > >    46 | bpf_object__next_map(const struct bpf_object *obj, const =
-struct bpf_map *prev)
-> > > > >       | ^~~~~~~~~~~~~~~~~~~~
-> > > > > util/bpf-event.c:55:1: error: no previous prototype for =E2=80=98=
-btf__raw_data=E2=80=99 [-Werror=3Dmissing-prototypes]
-> > > > >    55 | btf__raw_data(const struct btf *btf_ro, __u32 *size)
-> > > > >       | ^~~~~~~~~~~~~
-> > > > > cc1: all warnings being treated as errors
-> > > > > make[4]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:=
-96: /tmp/build/perf/util/bpf-event.o] Error 1
-> > > > > make[4]: *** Waiting for unfinished jobs....
-> > > > > util/bpf_counter.c: In function =E2=80=98bpf_target_prog_name=E2=
-=80=99:
-> > > > > util/bpf_counter.c:82:15: error: implicit declaration of function=
- =E2=80=98btf__load_from_kernel_by_id=E2=80=99 [-Werror=3Dimplicit-function=
--declaration]
-> > > > >    82 |         btf =3D btf__load_from_kernel_by_id(info_linear->=
-info.btf_id);
-> > > > >       |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > > > util/bpf_counter.c:82:13: error: assignment to =E2=80=98struct bt=
-f *=E2=80=99 from =E2=80=98int=E2=80=99 makes pointer from integer without =
-a cast [-Werror=3Dint-conversion]
-> > > > >    82 |         btf =3D btf__load_from_kernel_by_id(info_linear->=
-info.btf_id);
-> > > > >       |             ^
-> > > > > cc1: all warnings being treated as errors
-> > > > > make[4]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:=
-96: /tmp/build/perf/util/bpf_counter.o] Error 1
-> > > > >
-> > > > > I'm checking now...
-> > > > >
-> > > > > BTW I test perf builds with:
-> > > > >
-> > > > > make -k BUILD_BPF_SKEL=3D1 CORESIGHT=3D1 PYTHON=3Dpython3 O=3D/tm=
-p/build/perf -C tools/perf install-bin && git status && perf test python
-> > > >
-> > > > Nevermind, this was due to a patch by Ian Rogers I was testing,
-> > > > bisecting get up to the last patch, since I had merged torvalds/mas=
-ter
-> > > > today it got me to a wrong correlation, sorry for the disturbance.
-> > > >
-> > > > For reference, this is the patch:
-> > > >
-> > > > http://lore.kernel.org/lkml/20220106072627.476524-1-irogers@google.=
-com
-> > >
-> > > Ian, I have libbpf-devel installed:
-> > >
-> > > =E2=AC=A2[acme@toolbox perf]$ rpm -qa | grep libbpf
-> > > libbpf-0.4.0-1.fc34.x86_64
-> > > libbpf-devel-0.4.0-1.fc34.x86_64
-> > > =E2=AC=A2[acme@toolbox perf]$
-> > >
-> > > But I'm not using LIBBPF_DYNAMIC=3D1, so you can't just give preceden=
-ce to
-> > > system headers for all of the homies in tools/lib/.
-> > >
-> > > I bet that if I remove the libbpf-devel package it works, yeah, just
-> > > tested. So we need to make those overrides dependent on using
-> > > LIBBPF_DYNAMIC=3D1, LIBTRACEEVENT_DYNAMIC=3D1, etc and avoid the big =
-hammer
-> > > that is -Itools/lib/, using a more finegrained approach, right?
-> >
-> > Ugh, this is messy. The -I for tools/lib is overloaded and being used
-> > in tools/perf/util/bpf-event.c so that bpf/bpf.h, bpf/btf.h and
->
-> can you do `make install` for libbpf instead and have it install
-> headers into a dedicated target directory which can be added into -I
-> search path. Quentin did this for all the other libbpf users in kernel
-> tree (bpftool, resolve_btfids, etc) and it works great.
+Happy new year,
 
-This sounds good to me, and being able to borrow code from bpftool
-should make writing it is straightforward. I'll try to find time to do
-a patch, but I don't mind someone getting there before me :-)
+On Wed, Jan 05, 2022 at 11:13:30AM -0800, Linus Torvalds wrote:
+> On Wed, Jan 5, 2022 at 11:07 AM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > Whoever came up with that stupid "replace existing trigger with a
+> > write()" model should feel bad. It's garbage, and it's actively buggy
+> > in multiple ways.
+> 
+> What are the users? Can we make the rule for -EBUSY simply be that you
+> can _install_ a trigger, but you can't replace an existing one (except
+> with NULL, when you close it).
 
-Thanks,
-Ian
+I don't have enough context here and Johannes seems offline today. Let's
+wait for him to chime in.
 
-> > bpf/libbpf.h can be found. Likewise, for tools/perf/util/debug.c it is
-> > used to pick up traceevent/event-parse.h.
-> >
-> > Assuming  LIBBPF_DYNAMIC=3D1 and LIBTRACEEVENT_DYNAMIC=3D1 then we get
-> > different combinations of:
-> > libtraceevent >=3D 1.3 && libbpf >=3D 0.6 - -I is broken for debug.c,
-> > -idirafter okay
-> > libtraceevent >=3D 1.3 && libbpf < 0.6 - -I is broken for debug.c,
-> > -idirafter broken for bpf-event.c
-> > libtraceevent < 1.3 && libbpf >=3D 0.6 - -I should build okay but
-> > headers mismatched, -idirafter okay
-> > libtraceevent < 1.3 && libbpf < 0.6 - -I will fail to link
-> > bpf-event.c, -idirafter broken for bpf-event.c
-> >
-> > As the choice of -I and -idirafter are binary then there will always
-> > be a way to break the build. We could modify the build so that the
-> > -I/-idirafter only applies to the affected C files. This postpones the
-> > problem to when libbpf and libtracevent are in the same file, which
-> > doesn't happen currently. I think if you want the dynamic behavior
-> > then you need to use idirafter.
-> >
-> > Thanks,
-> > Ian
+> That would fix the poll() lifetime issue, and would make the
+> psi_trigger_replace() races fairly easy to fix - just use
+> 
+>         if (cmpxchg(trigger_ptr, NULL, new) != NULL) {
+>                 ... free 'new', return -EBUSY ..
+> 
+> to install the new one, instead of
+> 
+>         rcu_assign_pointer(*trigger_ptr, new);
+> 
+> or something like that. No locking necessary.
+> 
+> But I assume people actually end up re-writing triggers, because
+> people are perverse and have taken advantage of this completely broken
+> API.
+
+IIRC, the rationale for the shared trigger at the time was around the
+complexities of preventing it from devolving into O(N) trigger checks on
+every pressure update. If the overriding behavior is something that can be
+changed, I'd prefer going for per-opener triggers even if that involves
+adding complexities (maybe a rbtree w/ prev/next links for faster sweeps?).
+
+Thanks.
+
+-- 
+tejun

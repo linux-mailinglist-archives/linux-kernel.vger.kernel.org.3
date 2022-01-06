@@ -2,165 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD6CD48613C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 09:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF3248613E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 09:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236295AbiAFII2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 03:08:28 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:45646 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S236238AbiAFII1 (ORCPT
+        id S236313AbiAFIIi convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jan 2022 03:08:38 -0500
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:36839 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236238AbiAFIIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 03:08:27 -0500
-X-UUID: 77c016db4dcc4592a6865c034e7c0b92-20220106
-X-UUID: 77c016db4dcc4592a6865c034e7c0b92-20220106
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2011487937; Thu, 06 Jan 2022 16:08:22 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 6 Jan 2022 16:08:21 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 6 Jan 2022 16:08:20 +0800
-Message-ID: <f53b48c05d38c75c1e02ca5189ed19a36d13bd44.camel@mediatek.com>
-Subject: Re: [PATCH v2 3/5] phy: mediatek: add helpers to update bits of
- registers
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Vinod Koul <vkoul@kernel.org>
-CC:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thu, 6 Jan 2022 03:08:37 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 92F5AFF80C;
+        Thu,  6 Jan 2022 08:08:33 +0000 (UTC)
+Date:   Thu, 6 Jan 2022 09:08:32 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Liang Yang <liang.yang@amlogic.com>
+Cc:     <linux-mtd@lists.infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        XianWei Zhao <xianwei.zhao@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        BiChao Zheng <bichao.zheng@amlogic.com>,
+        YongHui Yu <yonghui.yu@amlogic.com>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Date:   Thu, 6 Jan 2022 16:08:20 +0800
-In-Reply-To: <821f9e8b-cf35-2e53-e64f-c19e7bde957b@collabora.com>
-References: <20211218082802.5256-1-chunfeng.yun@mediatek.com>
-         <20211218082802.5256-3-chunfeng.yun@mediatek.com>
-         <047803b9-d09f-d4f8-a674-317cc19dd055@collabora.com>
-         <75b2773d1d170f42bae0774dbc58d1458cb25502.camel@mediatek.com>
-         <821f9e8b-cf35-2e53-e64f-c19e7bde957b@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: Re: [PATCH] mtd: rawnand: meson: fix the clock after discarding
+ sd_emmc_c_clkc
+Message-ID: <20220106090832.42225c49@xps13>
+In-Reply-To: <20220106032504.23310-1-liang.yang@amlogic.com>
+References: <20220106032504.23310-1-liang.yang@amlogic.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-01-03 at 09:59 +0100, AngeloGioacchino Del Regno wrote:
-> Il 30/12/21 03:06, Chunfeng Yun ha scritto:
-> > On Fri, 2021-12-24 at 11:10 +0100, AngeloGioacchino Del Regno
-> > wrote:
-> > > Il 18/12/21 09:28, Chunfeng Yun ha scritto:
-> > > > Add three helpers mtk_phy_clear/set/update_bits() for registers
-> > > > operation
-> > > > 
-> > > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > > > ---
-> > > > v2: new patch, add register access helpers,
-> > > >       Add updatel() macro suggested by Vinod, here add more
-> > > > ones
-> > > > instead.
-> > > > ---
-> > > >    drivers/phy/mediatek/phy-mtk-io.h | 38
-> > > > +++++++++++++++++++++++++++++++
-> > > >    1 file changed, 38 insertions(+)
-> > > >    create mode 100644 drivers/phy/mediatek/phy-mtk-io.h
-> > > > 
-> > > > diff --git a/drivers/phy/mediatek/phy-mtk-io.h
-> > > > b/drivers/phy/mediatek/phy-mtk-io.h
-> > > > new file mode 100644
-> > > > index 000000000000..500fcdab165d
-> > > > --- /dev/null
-> > > > +++ b/drivers/phy/mediatek/phy-mtk-io.h
-> > > > @@ -0,0 +1,38 @@
-> > > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > > +/*
-> > > > + * Copyright (C) 2021 MediaTek Inc.
-> > > > + *
-> > > > + * Author: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > > > + */
-> > > > +
-> > > > +#ifndef __PHY_MTK_H__
-> > > > +#define __PHY_MTK_H__
-> > > > +
-> > > > +#include <linux/io.h>
-> > > > +
-> > > > +static inline void mtk_phy_clear_bits(void __iomem *reg, u32
-> > > > bits)
-> > > > +{
-> > > > +	u32 tmp = readl(reg);
-> > > > +
-> > > > +	tmp &= ~bits;
-> > > > +	writel(tmp, reg);
-> > > > +}
-> > > > +
-> > > > +static inline void mtk_phy_set_bits(void __iomem *reg, u32
-> > > > bits)
-> > > > +{
-> > > > +	u32 tmp = readl(reg);
-> > > > +
-> > > > +	tmp |= bits;
-> > > > +	writel(tmp, reg);
-> > > > +}
-> > > > +
-> > > > +static inline void mtk_phy_update_bits(void __iomem *reg, u32
-> > > > mask, u32 val)
-> > > > +{
-> > > > +	u32 tmp = readl(reg);
-> > > > +
-> > > > +	tmp &= ~mask;
-> > > > +	tmp |= val & mask;
-> > > > +	writel(tmp, reg);
-> > > > +}
-> > > > +
-> > > > +#endif
-> > > > 
-> > > 
-> > > These helpers are almost exactly duplicating what
-> > > regmap_update_bits() is doing.
-> > > I appreciate the effort to stop open-coding the same sequences
-> > > over
-> > > and over by
-> > > adding such helper functions,
-> > 
-> > I agree with you.
-> > > but I think that the proper way of doing what you
-> > > are proposing is not to add custom functions but rather reuse
-> > > what
-> > > the Linux APIs
-> > > give you.
-> > 
-> > I also like to use common APIs ASAP, but not found suitable ones.
-> > This may be a problem, I found that some similar custom helps
-> > already
-> > added under phy fold.
-> > 
-> > > 
-> > > What about doing a conversion to use regmap on this driver?
-> > 
-> > No, we don't use regmap here, these registers are monopolized by t-
-> > phy,
-> > it's not syscon.
-> > 
-> > 
+Hi Liang,
+
+liang.yang@amlogic.com wrote on Thu, 6 Jan 2022 11:25:04 +0800:
+
+> Because EMMC and NAND have the same control clock register, so we
+> implement a 'sd_emmc_c_clkc'. Previously DTS is defined as below:
 > 
-> Hello,
+> 	sd_emmc_c_clkc: mmc@7000 {
+> 		compatible = "amlogic,meson-axg-mmc-clkc", "syscon";
+> 		reg = <0x0 0x7000 0x0 0x800>;
+> 	};
 > 
-> The regmap API allows this kind of usage, registers don't necessarily
-> have
-> to be part of a syscon.
-I'm sorry, I don't want to make it more complex
+> 	nand-controller@7800 {
+> 		......
+> 
+> 		clocks = <&clkc CLKID_SD_EMMC_C>,
+> 			<&sd_emmc_c_clkc CLKID_MMC_DIV>,
+> 			<&sd_emmc_c_clkc CLKID_MMC_PHASE_RX>,
+> 			<&sd_emmc_c_clkc CLKID_MMC_PHASE_TX>;
+> 		clock-names = "core", "device", "rx", "tx";
+> 		amlogic,mmc-syscon = <&sd_emmc_c_clkc>;
+> 
+> 		......
+> 	}
+> 
+> but in fact, above implementation is rejected. so now registering
+> a nand_divider.
+
+What is rejected?
+Why is it rejected?
+What is nand_divider?
+
 
 > 
-> Regards,
-> - Angelo
+> Change-Id: Ibeb4c7ff886f5886aac4d6c664d7bbd1b1bcb997
 
+Change Ids are not expected in the upstream kernel.
+
+But if you fix something you should have a Fixes:.
+
+> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
+> ---
+>  drivers/mtd/nand/raw/meson_nand.c | 88 +++++++++++++++++--------------
+>  1 file changed, 49 insertions(+), 39 deletions(-)
+> 
+> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
+> index ac3be92872d0..4472363059c2 100644
+> --- a/drivers/mtd/nand/raw/meson_nand.c
+> +++ b/drivers/mtd/nand/raw/meson_nand.c
+> @@ -2,7 +2,7 @@
+>  /*
+>   * Amlogic Meson Nand Flash Controller Driver
+>   *
+> - * Copyright (c) 2018 Amlogic, inc.
+> + * Copyright (c) 2018-2021 Amlogic, inc.
+>   * Author: Liang Yang <liang.yang@amlogic.com>
+>   */
+>  
+> @@ -10,6 +10,7 @@
+>  #include <linux/dma-mapping.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/clk.h>
+> +#include <linux/clk-provider.h>
+>  #include <linux/mtd/rawnand.h>
+>  #include <linux/mtd/mtd.h>
+>  #include <linux/mfd/syscon.h>
+> @@ -55,6 +56,7 @@
+>  #define NFC_REG_VER		0x38
+>  
+>  #define NFC_RB_IRQ_EN		BIT(21)
+> +#define NFC_CMD_FIFO_RESET	BIT(31)
+>  
+>  #define CMDRWGEN(cmd_dir, ran, bch, short_mode, page_size, pages)	\
+>  	(								\
+> @@ -104,6 +106,9 @@
+>  
+>  #define PER_INFO_BYTE		8
+>  
+> +#define CLK_DIV_SHIFT		0
+> +#define CLK_DIV_WIDTH		6
+> +
+>  struct meson_nfc_nand_chip {
+>  	struct list_head node;
+>  	struct nand_chip nand;
+> @@ -151,15 +156,15 @@ struct meson_nfc {
+>  	struct nand_controller controller;
+>  	struct clk *core_clk;
+>  	struct clk *device_clk;
+> -	struct clk *phase_tx;
+> -	struct clk *phase_rx;
+> +	struct clk *nand_clk;
+> +	struct clk_divider nand_divider;
+>  
+>  	unsigned long clk_rate;
+>  	u32 bus_timing;
+>  
+>  	struct device *dev;
+>  	void __iomem *reg_base;
+> -	struct regmap *reg_clk;
+> +	void __iomem *reg_clk;
+>  	struct completion completion;
+>  	struct list_head chips;
+>  	const struct meson_nfc_data *data;
+> @@ -406,12 +411,14 @@ static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
+>  	cmd = NFC_CMD_RB | NFC_CMD_RB_INT
+>  		| nfc->param.chip_select | nfc->timing.tbers_max;
+>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+> -
+> +	meson_nfc_drain_cmd(nfc);
+>  	ret = wait_for_completion_timeout(&nfc->completion,
+>  					  msecs_to_jiffies(timeout_ms));
+>  	if (ret == 0)
+>  		ret = -1;
+>  
+> +	/* reset command fifo to avoid lock */
+> +	writel(NFC_CMD_FIFO_RESET, nfc->reg_base + NFC_REG_CMD);
+>  	return ret;
+>  }
+>  
+> @@ -988,8 +995,9 @@ static const struct mtd_ooblayout_ops meson_ooblayout_ops = {
+>  static int meson_nfc_clk_init(struct meson_nfc *nfc)
+>  {
+>  	int ret;
+> +	struct clk_init_data init = {0};
+> +	const char *fix_div2_pll_name[1];
+>  
+> -	/* request core clock */
+>  	nfc->core_clk = devm_clk_get(nfc->dev, "core");
+>  	if (IS_ERR(nfc->core_clk)) {
+>  		dev_err(nfc->dev, "failed to get core clock\n");
+> @@ -1002,21 +1010,25 @@ static int meson_nfc_clk_init(struct meson_nfc *nfc)
+>  		return PTR_ERR(nfc->device_clk);
+>  	}
+>  
+> -	nfc->phase_tx = devm_clk_get(nfc->dev, "tx");
+> -	if (IS_ERR(nfc->phase_tx)) {
+> -		dev_err(nfc->dev, "failed to get TX clk\n");
+> -		return PTR_ERR(nfc->phase_tx);
+> -	}
+> -
+> -	nfc->phase_rx = devm_clk_get(nfc->dev, "rx");
+> -	if (IS_ERR(nfc->phase_rx)) {
+> -		dev_err(nfc->dev, "failed to get RX clk\n");
+> -		return PTR_ERR(nfc->phase_rx);
+> -	}
+> +	init.name = devm_kstrdup(nfc->dev, "nfc#div", GFP_KERNEL);
+> +	init.ops = &clk_divider_ops;
+> +	fix_div2_pll_name[0] = __clk_get_name(nfc->device_clk);
+> +	init.parent_names = fix_div2_pll_name;
+> +	init.num_parents = 1;
+> +	nfc->nand_divider.reg = nfc->reg_clk;
+> +	nfc->nand_divider.shift = CLK_DIV_SHIFT;
+> +	nfc->nand_divider.width = CLK_DIV_WIDTH;
+> +	nfc->nand_divider.hw.init = &init;
+> +	nfc->nand_divider.flags = CLK_DIVIDER_ONE_BASED |
+> +				  CLK_DIVIDER_ROUND_CLOSEST |
+> +          			  CLK_DIVIDER_ALLOW_ZERO;
+> +
+> +	nfc->nand_clk = devm_clk_register(nfc->dev, &nfc->nand_divider.hw);
+> +	if (IS_ERR(nfc->nand_clk))
+> +		return PTR_ERR(nfc->nand_clk);
+>  
+>  	/* init SD_EMMC_CLOCK to sane defaults w/min clock rate */
+> -	regmap_update_bits(nfc->reg_clk,
+> -			   0, CLK_SELECT_NAND, CLK_SELECT_NAND);
+> +	writel(CLK_SELECT_NAND | readl(nfc->reg_clk), nfc->reg_clk);
+>  
+>  	ret = clk_prepare_enable(nfc->core_clk);
+>  	if (ret) {
+> @@ -1030,29 +1042,21 @@ static int meson_nfc_clk_init(struct meson_nfc *nfc)
+>  		goto err_device_clk;
+>  	}
+>  
+> -	ret = clk_prepare_enable(nfc->phase_tx);
+> +	ret = clk_prepare_enable(nfc->nand_clk);
+>  	if (ret) {
+> -		dev_err(nfc->dev, "failed to enable TX clock\n");
+> -		goto err_phase_tx;
+> -	}
+> -
+> -	ret = clk_prepare_enable(nfc->phase_rx);
+> -	if (ret) {
+> -		dev_err(nfc->dev, "failed to enable RX clock\n");
+> -		goto err_phase_rx;
+> +		dev_err(nfc->dev, "pre enable NFC divider fail\n");
+> +		goto err_nand_clk;
+>  	}
+>  
+>  	ret = clk_set_rate(nfc->device_clk, 24000000);
+>  	if (ret)
+> -		goto err_disable_rx;
+> +		goto err_disable_clk;
+>  
+>  	return 0;
+>  
+> -err_disable_rx:
+> -	clk_disable_unprepare(nfc->phase_rx);
+> -err_phase_rx:
+> -	clk_disable_unprepare(nfc->phase_tx);
+> -err_phase_tx:
+> +err_disable_clk:
+> +	clk_disable_unprepare(nfc->nand_clk);
+> +err_nand_clk:
+>  	clk_disable_unprepare(nfc->device_clk);
+>  err_device_clk:
+>  	clk_disable_unprepare(nfc->core_clk);
+> @@ -1061,8 +1065,7 @@ static int meson_nfc_clk_init(struct meson_nfc *nfc)
+>  
+>  static void meson_nfc_disable_clk(struct meson_nfc *nfc)
+>  {
+> -	clk_disable_unprepare(nfc->phase_rx);
+> -	clk_disable_unprepare(nfc->phase_tx);
+> +	clk_disable_unprepare(nfc->nand_clk);
+>  	clk_disable_unprepare(nfc->device_clk);
+>  	clk_disable_unprepare(nfc->core_clk);
+>  }
+> @@ -1375,6 +1378,7 @@ static int meson_nfc_probe(struct platform_device *pdev)
+>  	struct device *dev = &pdev->dev;
+>  	struct meson_nfc *nfc;
+>  	struct resource *res;
+> +	u32 ext_clk_reg;
+>  	int ret, irq;
+>  
+>  	nfc = devm_kzalloc(dev, sizeof(*nfc), GFP_KERNEL);
+> @@ -1396,9 +1400,15 @@ static int meson_nfc_probe(struct platform_device *pdev)
+>  	if (IS_ERR(nfc->reg_base))
+>  		return PTR_ERR(nfc->reg_base);
+>  
+> -	nfc->reg_clk =
+> -		syscon_regmap_lookup_by_phandle(dev->of_node,
+> -						"amlogic,mmc-syscon");
+> +	ret = of_property_read_u32(pdev->dev.of_node,
+> +				   "sd_emmc_c_clkc",
+> +				   &ext_clk_reg);
+> +	if (ret) {
+> +		dev_err(dev, "failed to get NAND external clock register\n");
+> +		return ret;
+> +	}
+> +
+> +	nfc->reg_clk = devm_ioremap(&pdev->dev, ext_clk_reg, sizeof(int));
+>  	if (IS_ERR(nfc->reg_clk)) {
+>  		dev_err(dev, "Failed to lookup clock base\n");
+>  		return PTR_ERR(nfc->reg_clk);
+
+
+Thanks,
+Miquèl

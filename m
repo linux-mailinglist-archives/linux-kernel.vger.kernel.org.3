@@ -2,129 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0199D486219
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 10:28:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6997248621E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 10:29:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237395AbiAFJ2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 04:28:43 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:43690 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233813AbiAFJ2j (ORCPT
+        id S237417AbiAFJ3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 04:29:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237186AbiAFJ3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 04:28:39 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 56FE12113A;
-        Thu,  6 Jan 2022 09:28:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1641461318; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0MpX4yMyDeZs/NVgBMJHdJP+mUfr/vDic6nYvSu/5AA=;
-        b=h42UkRjr7FV6muRVxZJ+5XyOCRuKTi+lJmlRcU0j4mn5+/2HPHIar/7Ot7TkNi6auC25KW
-        +3DhOt7GO+bELpuz7i1jXsd2Vcq45QTLWNOc5wl6o/WgroTWk289XoX0Sq2wxwDYlfqvyJ
-        rK5qxiMgXKl1y40MwurtJdL8rGdef4U=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1641461318;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0MpX4yMyDeZs/NVgBMJHdJP+mUfr/vDic6nYvSu/5AA=;
-        b=uEXlYtlK3Ot7mtR/v7z/qt4KCZVr8XUSEZDaiUnqUAxMZVRH4mwPKd/k8degLlFg2r/Qke
-        WRLEEKA125qTwTBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2B19613BFF;
-        Thu,  6 Jan 2022 09:28:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id DcbDCEa21mG2aAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 06 Jan 2022 09:28:38 +0000
-Message-ID: <6d61449c-50dc-e832-3cdc-ade6edfb6307@suse.de>
-Date:   Thu, 6 Jan 2022 10:28:37 +0100
+        Thu, 6 Jan 2022 04:29:45 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95EDC061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 01:29:44 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id n30-20020a17090a5aa100b001b2b6509685so2552245pji.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 01:29:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fPr1nBHiTSgph/tTGH5kJPnXHbDmfAq4bys7S0VY+v0=;
+        b=aM/LrGv2rQk/Pv4J+BPxttat1R8Ou8GuDntATvl1kGiENNx9xqFxp5OI8SbG06Trai
+         fk80sMZVXCI1GVpWV4iBHN3dYBZvzCvkBnTd9vO7kZ2VLi/q0oHJC9UDyTiD3yHbHwbP
+         iZCM7ZrPfybKTDeSjf1yIDrdG273/VFpjnQswo0LmO+3qu//py7U4Jomi/wWazGa0qca
+         UniZR83cSOTj+l302efM3g3UtL2R6f7/m5/kVWYZaq645a8vzmvCPNMZq5GjxC7FN5Wu
+         UL6y6EyaRccNwxjGdQXq8kNe/mNFrMdaazyQJyNWVjnbU2LkXFhlG/236myRLA2ospE9
+         kUrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fPr1nBHiTSgph/tTGH5kJPnXHbDmfAq4bys7S0VY+v0=;
+        b=gb1a9ZRziiTrx+xxOwoUUbTQwevfb/LRDTTBKJBWgPBZf/ifztLCavZJUxbCe36P5F
+         hamuC3wKgZC/ytI+lFHYJqAFyUaaArfA635UuLH2/ohJLn19ZPV4qdYdvctBeWPLfGRi
+         UGy4N2cofL2Kv2y3u5/RwjOtDQrRPcokA49Pt03RathS9gJkQsrWGjcRA/ZlNm/YwgZI
+         QBl42WmQRCJwhVmFgREAjl6tPdS9VcaYn6wgMeH1YvIjNvOmq4o+7xW1BO+PJLF15cq1
+         7wpWRaW4rHb8UkCN1LiBFff/7G+2smWcvhcQSppiIZ0AmcNW1r7L1EdkbDGoCqFft1jI
+         BJLg==
+X-Gm-Message-State: AOAM530WMXfcdKyMQPmKG9sTaJ8+dAgzMEF3JWtt0igSq8/JkazES8wY
+        Nw6PbEtDVH23D/43BDqJqZI=
+X-Google-Smtp-Source: ABdhPJwf73l4jLY2UjJyhmnaA/8ASiTX8YUzJY3tfkfrZJHHEdLXj8Qe9C34SXMZigHJaNJ/vXgxAg==
+X-Received: by 2002:a17:902:ab85:b0:149:ca14:4a15 with SMTP id f5-20020a170902ab8500b00149ca144a15mr7738385plr.169.1641461384280;
+        Thu, 06 Jan 2022 01:29:44 -0800 (PST)
+Received: from localhost.localdomain ([94.177.118.151])
+        by smtp.googlemail.com with ESMTPSA id rm6sm5712002pjb.35.2022.01.06.01.29.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 01:29:44 -0800 (PST)
+From:   Qinghua Jin <qhjin.dev@gmail.com>
+Cc:     Qinghua Jin <qhjin.dev@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: topology: Fix typo
+Date:   Thu,  6 Jan 2022 17:28:47 +0800
+Message-Id: <20220106092847.357035-1-qhjin.dev@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] drm/ast: Enable the supporting of wide screen on AST2600
-Content-Language: en-US
-To:     KuoHsiang Chou <kuohsiang_chou@aspeedtech.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     airlied@linux.ie, airlied@redhat.com, arc_sung@aspeedtech.com
-References: <20211229082749.5415-1-kuohsiang_chou@aspeedtech.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20211229082749.5415-1-kuohsiang_chou@aspeedtech.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------uEBuZiefC1d4a10K7Nm6q56D"
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------uEBuZiefC1d4a10K7Nm6q56D
-Content-Type: multipart/mixed; boundary="------------PtgtRcG6SDB5eWg7OPJHh1MF";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: KuoHsiang Chou <kuohsiang_chou@aspeedtech.com>,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc: airlied@linux.ie, airlied@redhat.com, arc_sung@aspeedtech.com
-Message-ID: <6d61449c-50dc-e832-3cdc-ade6edfb6307@suse.de>
-Subject: Re: [PATCH] drm/ast: Enable the supporting of wide screen on AST2600
-References: <20211229082749.5415-1-kuohsiang_chou@aspeedtech.com>
-In-Reply-To: <20211229082749.5415-1-kuohsiang_chou@aspeedtech.com>
+change 'postion' to 'position'
 
---------------PtgtRcG6SDB5eWg7OPJHh1MF
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Signed-off-by: Qinghua Jin <qhjin.dev@gmail.com>
+---
+ sound/soc/soc-topology.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-SGkNCg0KQW0gMjkuMTIuMjEgdW0gMDk6Mjcgc2NocmllYiBLdW9Ic2lhbmcgQ2hvdToNCj4g
-RW5hYmxlIHRoZSBzdXBwb3J0aW5nIG9mIHdpZGUgc3NjcmVlbiBvbiBBU1QyNjAwLCBzbyB0
-aGF0IHRoZSByZXNvbHV0aW9uDQo+IG9mIDE2OjkgYW5kIDE2OjEwIGFyZSBhYmxlIHRvIGJl
-IHNlbGVjdGVkIG9uIERpc3BsYXkgU2V0dGluZ3MuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBL
-dW9Ic2lhbmcgQ2hvdSA8a3VvaHNpYW5nX2Nob3VAYXNwZWVkdGVjaC5jb20+DQoNCkFkZGVk
-IHRvIGRybS1taXNjLW5leHQuIFRoYW5rcyBmb3IgdGhlIHBhdGNoLg0KDQpCZXN0IHJlZ2Fy
-ZHMNClRob21hcw0KDQo+IC0tLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9hc3QvYXN0X21haW4u
-YyB8IDIgKysNCj4gICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspDQo+IA0KPiBk
-aWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbWFpbi5jIGIvZHJpdmVycy9n
-cHUvZHJtL2FzdC9hc3RfbWFpbi5jDQo+IGluZGV4IDlmMjVmYTJjOC4uMTExM2VlMWNiIDEw
-MDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9tYWluLmMNCj4gKysrIGIv
-ZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbWFpbi5jDQo+IEBAIC0yMDksNiArMjA5LDggQEAg
-c3RhdGljIGludCBhc3RfZGV0ZWN0X2NoaXAoc3RydWN0IGRybV9kZXZpY2UgKmRldiwgYm9v
-bCAqbmVlZF9wb3N0KQ0KPiAgIAkJCWlmIChhc3QtPmNoaXAgPT0gQVNUMjUwMCAmJg0KPiAg
-IAkJCSAgICBzY3VfcmV2ID09IDB4MTAwKSAgICAgICAgICAgLyogYXN0MjUxMCAqLw0KPiAg
-IAkJCQlhc3QtPnN1cHBvcnRfd2lkZV9zY3JlZW4gPSB0cnVlOw0KPiArCQkJaWYgKGFzdC0+
-Y2hpcCA9PSBBU1QyNjAwKQkJLyogYXN0MjYwMCAqLw0KPiArCQkJCWFzdC0+c3VwcG9ydF93
-aWRlX3NjcmVlbiA9IHRydWU7DQo+ICAgCQl9DQo+ICAgCQlicmVhazsNCj4gICAJfQ0KPiAt
-LQ0KPiAyLjI3LjANCj4gDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERy
-aXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0K
-TWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBB
-RyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
+diff --git a/sound/soc/soc-topology.c b/sound/soc/soc-topology.c
+index f5b9e66ac3b8..2630df024dff 100644
+--- a/sound/soc/soc-topology.c
++++ b/sound/soc/soc-topology.c
+@@ -56,7 +56,7 @@ struct soc_tplg {
+ 	const struct firmware *fw;
+ 
+ 	/* runtime FW parsing */
+-	const u8 *pos;		/* read postion */
++	const u8 *pos;		/* read position */
+ 	const u8 *hdr_pos;	/* header position */
+ 	unsigned int pass;	/* pass number */
+ 
+-- 
+2.30.2
 
---------------PtgtRcG6SDB5eWg7OPJHh1MF--
-
---------------uEBuZiefC1d4a10K7Nm6q56D
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmHWtkUFAwAAAAAACgkQlh/E3EQov+C6
-iA/7BaRYi4Uiappu9xJ0l5oHH9O4K8RFQE/58GJ4QGSO4khELwnjZA6dfzCw5xwAcO9rZSrjnKgR
-II7u5iTx+hYN/rUzYb7etEd11lmkq2OCsTnv9MrSizsGsx6YhfVCBYY71aZOFjz0OOSiALHlfZh8
-tmgqdjA2v6WYB/ZfGZ42+O3h179Jv2zj2pkOaQABm9NH4b+30uOkE3hbPekx6KMCs/gCZp7X6z3w
-egcT5ibM7NkTMOeuVNL1XweTu6uS+AlIw6JBI+ZpeERH+9uB0ar2heJrxGZF4QJKmpUdyxiF8MCX
-xVJwG1Uy/1xiGo41xu+I9Add1nLe/0Sxr9imq4eJ1y3jlW6gvQ0A5tLVvhplLI+VUoF92CVaOtbN
-bLfvR4rqVZPaCNNy0nw/HGc/8WPKtLWmolSHPD32LEyQphNGfoqCU1Nu5uSU+CrfosaX5b7z7j7Z
-/c4BkK9OHptx8S88jQRlR+/8y1sVxK4YcrOc3Ch4yIv0Jt5nuJJ1V+QwilKebF2J983wIEnqNxkX
-6E+aejWAcu4vg/rmdrFZdIY0eIwOjC9ZyP7OkkJ4cIXVIr53PhDCL7rFxMw1KuNOu8AGYW3080An
-Ze7eSfiYkjuDuY03KKF6j/TS/luQBMmQPAgdZTNE96jD7b+hG/wPfntSmsBfqAZjKr4cZl9ivXOc
-hms=
-=z1DL
------END PGP SIGNATURE-----
-
---------------uEBuZiefC1d4a10K7Nm6q56D--

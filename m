@@ -2,87 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A43F2486184
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 09:38:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C7B7486182
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 09:38:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236775AbiAFIip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 03:38:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34750 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236767AbiAFIio (ORCPT
+        id S236757AbiAFIij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 03:38:39 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:51946 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S236650AbiAFIig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 03:38:44 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D61C061201;
-        Thu,  6 Jan 2022 00:38:44 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id x194so2006494pgx.4;
-        Thu, 06 Jan 2022 00:38:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yt0rtZoVf/LFU96gxwDi5D6C9OB9ceL1t7u8+Oncfhg=;
-        b=O/0Wl3v+9hbC+RnCJ546mxl6K1tSclLOXBGw9w5EpYj0Q094ok9SA3wlVwOA9huBnw
-         Fl6J5pdXnPDxpcFhIH91bf45J55AHm2Vo3SVtb7QKACmX4gqwvxB8YNMa14YMyyYPK/n
-         xUKPDjXqzrbePkPdLpP9RkCIJs0ev0/BljVQah3gw/GLyVGZA4cbw+LptPGmhTQMROUZ
-         VaF9qq1qSgBYrZGFjnHjQdhElNwT0q5vkYQPWtGwHV/g5KKWSOHpcvFD6xgYOENo1nY/
-         vOKjGmqhFJIEU6u6Ve8bmdCusYdoT6vwsIZj3C2skafK/SsgVtE2NhIy/kP3p7+pq+Ud
-         3+SA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yt0rtZoVf/LFU96gxwDi5D6C9OB9ceL1t7u8+Oncfhg=;
-        b=DnIjpe0n7oO41NtmgpbBmGOCE35mN+nR202DQS8GLhqJrcTG6FD11QBUaaObPZ97T2
-         7Op1sb5WemWi/es1FiQrIZ5mM9M2qTE3XAWtJoiVPidaH1KKztI9/B4eLpzXO2rXIai7
-         +MRGh58U1XwxVays6MWjNTGWaa+5oLK2Wq3VXhrFowhmML3yfmDw1xkVadOl4Q1vTH67
-         DI6UcBb4eYPFjaF+UwjMxuUg6CSkWkuzJ3myqS3YV2cG248c51LLx+SCi4ww+6gAv1UL
-         xngFSGB2jvcHCKpPH3xv+bzGn8uEVOq+kDwiTjinoSRnz4Ziro9GPek0J8vUejpJG6rI
-         9B5g==
-X-Gm-Message-State: AOAM533J8uteH1IXb7G8X9tiyKFhLIUjPYE4tMPSoIDK0Tlfw5h1LVnO
-        YEs8YCrA/mmKbIX0X00VYo0V8N2MtAorRQ==
-X-Google-Smtp-Source: ABdhPJxDaZ9mvHwlhAGvE5275tgoDp8/T+GoPAe9hOw2K/beUFq7GK3XZI0Wx+7penfRBeWXl0cOjQ==
-X-Received: by 2002:aa7:8c05:0:b0:4bc:a73a:dc9f with SMTP id c5-20020aa78c05000000b004bca73adc9fmr17340160pfd.75.1641458324145;
-        Thu, 06 Jan 2022 00:38:44 -0800 (PST)
-Received: from localhost.localdomain ([94.177.118.151])
-        by smtp.googlemail.com with ESMTPSA id v12sm1329538pgc.13.2022.01.06.00.38.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 00:38:43 -0800 (PST)
-From:   Qinghua Jin <qhjin.dev@gmail.com>
-Cc:     Qinghua Jin <qhjin.dev@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] Input: ti_am335x_tsc: Fix type
-Date:   Thu,  6 Jan 2022 16:38:02 +0800
-Message-Id: <20220106083803.355106-1-qhjin.dev@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Thu, 6 Jan 2022 03:38:36 -0500
+X-UUID: defbefcfb5d74b27b84f2dc6dd8a30f8-20220106
+X-UUID: defbefcfb5d74b27b84f2dc6dd8a30f8-20220106
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 940994645; Thu, 06 Jan 2022 16:38:34 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 6 Jan 2022 16:38:33 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 6 Jan
+ 2022 16:38:33 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 6 Jan 2022 16:38:32 +0800
+Message-ID: <509b82079256ffaa0d844ae5a79a436fced16f3f.camel@mediatek.com>
+Subject: Re: [PATCH 2/3] phy: mediatek: phy-mtk-mipi-dsi: Reorder and stop
+ implicit header inclusion
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <chunkuang.hu@kernel.org>
+CC:     <p.zabel@pengutronix.de>, <kishon@ti.com>, <vkoul@kernel.org>,
+        <matthias.bgg@gmail.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Date:   Thu, 6 Jan 2022 16:38:32 +0800
+In-Reply-To: <20220103145324.48008-2-angelogioacchino.delregno@collabora.com>
+References: <20220103145324.48008-1-angelogioacchino.delregno@collabora.com>
+         <20220103145324.48008-2-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-change 'postion' to 'position'
+On Mon, 2022-01-03 at 15:53 +0100, AngeloGioacchino Del Regno wrote:
+> All the headers for phy-mtk-mipi-{dsi,dsi-mt8173,dsi-mt8183}.c were
+> included from phy-mtk-mipi-dsi.h, but this isn't optimal: in order to
+> increase readability and sensibly reduce build times, the inclusions
+> should be done per-file, also avoiding to include unused headers and
+> should not be implicit.
+> 
+> For this reason, move the inclusions to each file and remove unused
+> ones.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/phy/mediatek/phy-mtk-mipi-dsi-mt8173.c |  4 ++++
+>  drivers/phy/mediatek/phy-mtk-mipi-dsi-mt8183.c |  4 ++++
+>  drivers/phy/mediatek/phy-mtk-mipi-dsi.c        |  7 +++++++
+>  drivers/phy/mediatek/phy-mtk-mipi-dsi.h        | 10 ++--------
+>  4 files changed, 17 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/phy/mediatek/phy-mtk-mipi-dsi-mt8173.c
+> b/drivers/phy/mediatek/phy-mtk-mipi-dsi-mt8173.c
+> index 95a0d9a3cca7..59f028da9d3e 100644
+> --- a/drivers/phy/mediatek/phy-mtk-mipi-dsi-mt8173.c
+> +++ b/drivers/phy/mediatek/phy-mtk-mipi-dsi-mt8173.c
+> @@ -4,7 +4,11 @@
+>   * Author: jitao.shi <jitao.shi@mediatek.com>
+>   */
+>  
+> +#include <linux/clk-provider.h>
+> +#include <linux/delay.h>
+> +#include <linux/module.h>
+>  #include <linux/regmap.h>
+> +#include <linux/phy/phy.h>
+>  #include "phy-mtk-mipi-dsi.h"
+>  
+>  #define MIPITX_DSI_CON		0x00
+> diff --git a/drivers/phy/mediatek/phy-mtk-mipi-dsi-mt8183.c
+> b/drivers/phy/mediatek/phy-mtk-mipi-dsi-mt8183.c
+> index 01b59527669e..6c6b192485ba 100644
+> --- a/drivers/phy/mediatek/phy-mtk-mipi-dsi-mt8183.c
+> +++ b/drivers/phy/mediatek/phy-mtk-mipi-dsi-mt8183.c
+> @@ -4,7 +4,11 @@
+>   * Author: jitao.shi <jitao.shi@mediatek.com>
+>   */
+>  
+> +#include <linux/clk-provider.h>
+> +#include <linux/delay.h>
+> +#include <linux/module.h>
+>  #include <linux/regmap.h>
+> +#include <linux/phy/phy.h>
+>  #include "phy-mtk-mipi-dsi.h"
+>  
+>  #define MIPITX_LANE_CON		0x000c
+> diff --git a/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
+> b/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
+> index 51b1b1d4ad38..6f7425b0bf5b 100644
+> --- a/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
+> +++ b/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
+> @@ -3,7 +3,14 @@
+>   * Copyright (c) 2015 MediaTek Inc.
+>   */
+>  
+> +#include <linux/clk.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/module.h>
+> +#include <linux/nvmem-consumer.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+> +#include <linux/phy/phy.h>
+>  #include "phy-mtk-mipi-dsi.h"
+>  
+>  inline struct mtk_mipi_tx *mtk_mipi_tx_from_clk_hw(struct clk_hw
+> *hw)
+> diff --git a/drivers/phy/mediatek/phy-mtk-mipi-dsi.h
+> b/drivers/phy/mediatek/phy-mtk-mipi-dsi.h
+> index 8d32e9027a15..4eb5fc91e083 100644
+> --- a/drivers/phy/mediatek/phy-mtk-mipi-dsi.h
+> +++ b/drivers/phy/mediatek/phy-mtk-mipi-dsi.h
+> @@ -7,16 +7,10 @@
+>  #ifndef _MTK_MIPI_TX_H
+>  #define _MTK_MIPI_TX_H
+>  
+> -#include <linux/clk.h>
+>  #include <linux/clk-provider.h>
+> -#include <linux/delay.h>
+> -#include <linux/io.h>
+> -#include <linux/module.h>
+> -#include <linux/nvmem-consumer.h>
+> -#include <linux/of_device.h>
+> -#include <linux/platform_device.h>
+> +#include <linux/types.h>
+> +#include <linux/regmap.h>
+>  #include <linux/phy/phy.h>
+> -#include <linux/slab.h>
+>  
+I don't think it's good idea to move the common headers into .c files
 
-Signed-off-by: Qinghua Jin <qhjin.dev@gmail.com>
----
- drivers/input/touchscreen/ti_am335x_tsc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/input/touchscreen/ti_am335x_tsc.c b/drivers/input/touchscreen/ti_am335x_tsc.c
-index 83e685557a19..d77555e0571e 100644
---- a/drivers/input/touchscreen/ti_am335x_tsc.c
-+++ b/drivers/input/touchscreen/ti_am335x_tsc.c
-@@ -310,7 +310,7 @@ static irqreturn_t titsc_irq(int irq, void *dev)
- 			/*
- 			 * Calculate pressure using formula
- 			 * Resistance(touch) = x plate resistance *
--			 * x postion/4096 * ((z2 / z1) - 1)
-+			 * x position/4096 * ((z2 / z1) - 1)
- 			 */
- 			z = z1 - z2;
- 			z *= x;
--- 
-2.30.2
+>  struct mtk_mipitx_data {
+>  	const u32 mppll_preserve;
 

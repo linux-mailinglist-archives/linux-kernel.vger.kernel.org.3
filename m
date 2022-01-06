@@ -2,209 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08880486A96
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 20:41:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 885F3486A9C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 20:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243403AbiAFTlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 14:41:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43948 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243378AbiAFTlv (ORCPT
+        id S243415AbiAFToV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 14:44:21 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33118 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243373AbiAFToU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 14:41:51 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DD2C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 11:41:51 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id r5so3471604pgi.6
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 11:41:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wg/B46QMv3R7zr0QCFORSpHyZLNN6fOU3xOXq9jFLYw=;
-        b=c5ksrlJPpX9PdvH/3R2QtOWfU37xk8l7O9jVTBWzUNt21fs7Z8LHBuHijy8QeMyQN6
-         xqNpsYdVwWApFZJGGRCXpQ0/dVZAIhEpEfbfMx+TH748oOdB5Eu8YMDpcQuim6iPHb/J
-         3WQVJMVsBu8eS0SJ05J7udAw365Re8j8PNo2KPW4idW3vFPvIf8a9zlbLThawiJmm4Y2
-         /2d231gDHNm+KytNI9iADRycxWWRrAYX89Fm6KN2jPLMe2K5zPLUIeakw5FBkMAChYUB
-         Pw4ySgOeNV0o8EslunUe2vP5GYHALYVt15ZFYAHdkbzs2Gp7IbPkHpkt+SWyQi+npdtX
-         Wa3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wg/B46QMv3R7zr0QCFORSpHyZLNN6fOU3xOXq9jFLYw=;
-        b=7RXPrtCQ223nPBmoPn693M8te0uaAjHzRb9yozdepeAEzHEj47EilJkjEq0fyPi1F/
-         z0erUUJepWRE7xNwuuy7t3DmmrhPdSt7ZOnNW0tHdWG4FUw4P3Weh+8wdsytAUWUrLtK
-         OoCmPNeNyPwLi1eOaE4PcwHFfluXrnhD3M1wwX23n4lGVSdAqwDaSXJZt2ZzVShdOs4x
-         sD34MCj5GiKtd2/a+iiJUsghgFST/r2gA4xd1AynqJUe4lGu1DeSkZQKuXQAi7i17jxl
-         uIVcdLGiUmWhaIDGayl21MRUDG09thl+LKDyUfBLpVesYnU+4jKIPqBmceruj8899vx5
-         eHcA==
-X-Gm-Message-State: AOAM533oVK8cakq99o7w5G0Bua/ivRy0G9px5rBCZ3CCFFu31jY/ZWqM
-        JrKY5qQ3DybYpa17Lx8XEJWetA==
-X-Google-Smtp-Source: ABdhPJx9G+sPMdnrpTnRmmEeCI++OhxIq0kPCbp7OcaZPsazED5Ch/cTtBZjp6msYZTEGuoCP9uVfA==
-X-Received: by 2002:a05:6a00:847:b0:4ba:f004:e380 with SMTP id q7-20020a056a00084700b004baf004e380mr61094005pfk.42.1641498111066;
-        Thu, 06 Jan 2022 11:41:51 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id q2sm3551041pfu.66.2022.01.06.11.41.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 11:41:50 -0800 (PST)
-Date:   Thu, 6 Jan 2022 19:41:47 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Lai Jiangshan <laijs@linux.alibaba.com>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [RFC PATCH 5/6] KVM: X86: Alloc pae_root shadow page
-Message-ID: <YddF+6eX7ycAsZLr@google.com>
-References: <20211210092508.7185-1-jiangshanlai@gmail.com>
- <20211210092508.7185-6-jiangshanlai@gmail.com>
- <YdTCKoTgI5IgOvln@google.com>
- <CAJhGHyAOyR6yGdyxsKydt_+HboGjxc-psbbSCqsrBo4WgUgQsQ@mail.gmail.com>
- <YdXLNEwCY8cqV7KS@google.com>
- <dc8f2508-35ac-0dee-2465-4b5a8e3879ca@linux.alibaba.com>
+        Thu, 6 Jan 2022 14:44:20 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C56CEB82391;
+        Thu,  6 Jan 2022 19:44:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 649E8C36AE3;
+        Thu,  6 Jan 2022 19:44:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641498257;
+        bh=T6INKLj+ULtVr0TPsyZhCQXTtWGYB45Nxl4YMvhDTUA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K2rxMowkLDs+cKQpxKrz9Ut/j2aY0fE8WSagESuWvUTrBYoGDEerxnn9eLHe9Wt/i
+         SkA5X86J8W9hXXrO3ARoEsGXRLPJpzTda99RS93xCjKv6j1hxSRwdlM1txAyd6+fc1
+         kBqSeaCMadJ3RXslYo8azJ+OQtYCcxbgN4K6xycr7DhHvqZ4fYeR8J7UHI+V5vqzw5
+         UExP3ZUGbK6KCLgILYbu0/DIChy4NtlmFojMIM14lq5yDi9W/ypek4IcAZWUiYeQ5D
+         UzBn/d+m7ZyNf0dzfGeKO5rn+wdCtbbW3JVN/MA1TSRODJpkRGv3TuwOM9QyHTV3IB
+         3BBZnUpeiacYQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id CA1DB40B92; Thu,  6 Jan 2022 16:44:14 -0300 (-03)
+Date:   Thu, 6 Jan 2022 16:44:14 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Ian Rogers <irogers@google.com>
+Cc:     Song Liu <songliubraving@fb.com>, Jiri Olsa <jolsa@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>, bpf@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: perf build broken seemingly due to libbpf changes, checking...
+Message-ID: <YddGjjmlMZzxUZbN@kernel.org>
+References: <YddEVgNKBJiqcV6Y@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <dc8f2508-35ac-0dee-2465-4b5a8e3879ca@linux.alibaba.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YddEVgNKBJiqcV6Y@kernel.org>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022, Lai Jiangshan wrote:
+Em Thu, Jan 06, 2022 at 04:34:46PM -0300, Arnaldo Carvalho de Melo escreveu:
+> After merging torvalds/master to perf/urgent I'm getting this:
 > 
+> util/bpf-event.c:25:21: error: no previous prototype for ‘btf__load_from_kernel_by_id’ [-Werror=missing-prototypes]
+>    25 | struct btf * __weak btf__load_from_kernel_by_id(__u32 id)
+>       |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> util/bpf-event.c:37:1: error: no previous prototype for ‘bpf_object__next_program’ [-Werror=missing-prototypes]
+>    37 | bpf_object__next_program(const struct bpf_object *obj, struct bpf_program *prev)
+>       | ^~~~~~~~~~~~~~~~~~~~~~~~
+> util/bpf-event.c:46:1: error: no previous prototype for ‘bpf_object__next_map’ [-Werror=missing-prototypes]
+>    46 | bpf_object__next_map(const struct bpf_object *obj, const struct bpf_map *prev)
+>       | ^~~~~~~~~~~~~~~~~~~~
+> util/bpf-event.c:55:1: error: no previous prototype for ‘btf__raw_data’ [-Werror=missing-prototypes]
+>    55 | btf__raw_data(const struct btf *btf_ro, __u32 *size)
+>       | ^~~~~~~~~~~~~
+> cc1: all warnings being treated as errors
+> make[4]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:96: /tmp/build/perf/util/bpf-event.o] Error 1
+> make[4]: *** Waiting for unfinished jobs....
+> util/bpf_counter.c: In function ‘bpf_target_prog_name’:
+> util/bpf_counter.c:82:15: error: implicit declaration of function ‘btf__load_from_kernel_by_id’ [-Werror=implicit-function-declaration]
+>    82 |         btf = btf__load_from_kernel_by_id(info_linear->info.btf_id);
+>       |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> util/bpf_counter.c:82:13: error: assignment to ‘struct btf *’ from ‘int’ makes pointer from integer without a cast [-Werror=int-conversion]
+>    82 |         btf = btf__load_from_kernel_by_id(info_linear->info.btf_id);
+>       |             ^
+> cc1: all warnings being treated as errors
+> make[4]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:96: /tmp/build/perf/util/bpf_counter.o] Error 1
 > 
-> On 2022/1/6 00:45, Sean Christopherson wrote:
-> > On Wed, Jan 05, 2022, Lai Jiangshan wrote:
-> > > On Wed, Jan 5, 2022 at 5:54 AM Sean Christopherson <seanjc@google.com> wrote:
-> > > 
-> > > > > 
-> > > > > default_pae_pdpte is needed because the cpu expect PAE pdptes are
-> > > > > present when VMenter.
-> > > > 
-> > > > That's incorrect.  Neither Intel nor AMD require PDPTEs to be present.  Not present
-> > > > is perfectly ok, present with reserved bits is what's not allowed.
-> > > > 
-> > > > Intel SDM:
-> > > >    A VM entry that checks the validity of the PDPTEs uses the same checks that are
-> > > >    used when CR3 is loaded with MOV to CR3 when PAE paging is in use[7].  If MOV to CR3
-> > > >    would cause a general-protection exception due to the PDPTEs that would be loaded
-> > > >    (e.g., because a reserved bit is set), the VM entry fails.
-> > > > 
-> > > >    7. This implies that (1) bits 11:9 in each PDPTE are ignored; and (2) if bit 0
-> > > >       (present) is clear in one of the PDPTEs, bits 63:1 of that PDPTE are ignored.
-> > > 
-> > > But in practice, the VM entry fails if the present bit is not set in the
-> > > PDPTE for the linear address being accessed (when EPT enabled at least).  The
-> > > host kvm complains and dumps the vmcs state.
-> > 
-> > That doesn't make any sense.  If EPT is enabled, KVM should never use a pae_root.
-> > The vmcs.GUEST_PDPTRn fields are in play, but those shouldn't derive from KVM's
-> > shadow page tables.
+> I'm checking now...
 > 
-> Oh, I wrote the negative what I want to say again when I try to emphasis
-> something after I wrote a sentence and modified it several times.
+> BTW I test perf builds with:
 > 
-> I wanted to mean "EPT not enabled" when vmx.
+> make -k BUILD_BPF_SKEL=1 CORESIGHT=1 PYTHON=python3 O=/tmp/build/perf -C tools/perf install-bin && git status && perf test python
 
-Heh, that makes a lot more sense.
+Nevermind, this was due to a patch by Ian Rogers I was testing,
+bisecting get up to the last patch, since I had merged torvalds/master
+today it got me to a wrong correlation, sorry for the disturbance.
 
-> The VM entry fails when the guest is in very early stage when booting which
-> might be still in real mode.
-> 
-> VMEXIT: intr_info=00000000 errorcode=0000000 ilen=00000000
-> reason=80000021 qualification=0000000000000002
+For reference, this is the patch:
 
-Yep, that's the signature for an illegal PDPTE at VM-Enter.  But as noted above,
-a not-present PDPTE is perfectly legal, VM-Enter should failed if and only if a
-PDPTE is present and has reserved bits set.
+http://lore.kernel.org/lkml/20220106072627.476524-1-irogers@google.com
 
-> IDTVectoring: info=00000000 errorcode=00000000
-> 
-> > 
-> > And I doubt there is a VMX ucode bug at play, as KVM currently uses '0' in its
-> > shadow page tables for not-present PDPTEs.
-> > 
-> > If you can post/provide the patches that lead to VM-Fail, I'd be happy to help
-> > debug.
-> 
-> If you can try this patchset, you can just set the default_pae_pdpte to 0 to test
-> it.
-
-I can't reproduce the failure with this on top of your series + kvm/queue (commit
-cc0e35f9c2d4 ("KVM: SVM: Nullify vcpu_(un)blocking() hooks if AVIC is disabled")).
-
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index f6f7caf76b70..b7170a840330 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -728,22 +728,11 @@ static u64 default_pae_pdpte;
-
- static void free_default_pae_pdpte(void)
- {
--       free_page((unsigned long)__va(default_pae_pdpte & PAGE_MASK));
-        default_pae_pdpte = 0;
- }
-
- static int alloc_default_pae_pdpte(void)
- {
--       unsigned long p = __get_free_page(GFP_KERNEL | __GFP_ZERO);
--
--       if (!p)
--               return -ENOMEM;
--       default_pae_pdpte = __pa(p) | PT_PRESENT_MASK | shadow_me_mask;
--       if (WARN_ON(is_shadow_present_pte(default_pae_pdpte) ||
--                   is_mmio_spte(default_pae_pdpte))) {
--               free_default_pae_pdpte();
--               return -EINVAL;
--       }
-        return 0;
- }
-
-Are you using a different base and/or running with other changes?
-
-To aid debug, the below patch will dump the PDPTEs from the current MMU root on
-failure (I'll also submit this as a formal patch).  On failure, I would expect
-that at least one of the PDPTEs will be present with reserved bits set.
-
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index fe06b02994e6..c13f37ef1bbc 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -5773,11 +5773,19 @@ void dump_vmcs(struct kvm_vcpu *vcpu)
-        pr_err("CR4: actual=0x%016lx, shadow=0x%016lx, gh_mask=%016lx\n",
-               cr4, vmcs_readl(CR4_READ_SHADOW), vmcs_readl(CR4_GUEST_HOST_MASK));
-        pr_err("CR3 = 0x%016lx\n", vmcs_readl(GUEST_CR3));
--       if (cpu_has_vmx_ept()) {
-+       if (enable_ept) {
-                pr_err("PDPTR0 = 0x%016llx  PDPTR1 = 0x%016llx\n",
-                       vmcs_read64(GUEST_PDPTR0), vmcs_read64(GUEST_PDPTR1));
-                pr_err("PDPTR2 = 0x%016llx  PDPTR3 = 0x%016llx\n",
-                       vmcs_read64(GUEST_PDPTR2), vmcs_read64(GUEST_PDPTR3));
-+       } else if (vcpu->arch.mmu->shadow_root_level == PT32E_ROOT_LEVEL &&
-+                  VALID_PAGE(vcpu->arch.mmu->root_hpa)) {
-+               u64 *pdpte = __va(vcpu->arch.mmu->root_hpa);
-+
-+               pr_err("PDPTE0 = 0x%016llx  PDPTE1 = 0x%016llx\n",
-+                      pdpte[0], pdpte[1]);
-+               pr_err("PDPTE2 = 0x%016llx  PDPTE3 = 0x%016llx\n",
-+                      pdpte[2], pdpte[3]);
-        }
-        pr_err("RSP = 0x%016lx  RIP = 0x%016lx\n",
-               vmcs_readl(GUEST_RSP), vmcs_readl(GUEST_RIP));
-
-> If you can't try this patchset, the mmu->pae_root can be possible to be modified
-> to test it.
-> 
-> I guess the vmx fails to translate %rip when VMentry in this case.
-
-No, the CPU doesn't translate RIP at VM-Enter, vmcs.GUEST_RIP is only checked for
-legality, e.g. that it's canonical.  Translating RIP through page tables is firmly
-a post-VM-Enter code fetch action.
+- Arnaldo

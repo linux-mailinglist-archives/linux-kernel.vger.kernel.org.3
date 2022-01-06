@@ -2,144 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D21E64864F1
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 14:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DB5D4864F3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 14:09:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239357AbiAFNIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 08:08:25 -0500
-Received: from marcansoft.com ([212.63.210.85]:58358 "EHLO mail.marcansoft.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238990AbiAFNIX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 08:08:23 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S239368AbiAFNJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 08:09:18 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45076 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238990AbiAFNJR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 08:09:17 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id DDDF442165;
-        Thu,  6 Jan 2022 13:08:13 +0000 (UTC)
-To:     Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        "brian m. carlson" <sandals@crustytoothpaste.net>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com
-References: <20220104072658.69756-1-marcan@marcan.st>
- <20220104072658.69756-8-marcan@marcan.st>
- <3dfb1a06-4474-4614-08e5-b09f0977e03c@broadcom.com>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH v2 07/35] brcmfmac: pcie: Read Apple OTP information
-Message-ID: <7b3e7ae0-5791-f4ad-619a-a3cc3f913a44@marcan.st>
-Date:   Thu, 6 Jan 2022 22:08:11 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        by ams.source.kernel.org (Postfix) with ESMTPS id C4DFBB8210A;
+        Thu,  6 Jan 2022 13:09:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8421C36AE3;
+        Thu,  6 Jan 2022 13:09:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641474555;
+        bh=2l1DW87RTLjlD5d4ykrkd+Y9uf5zuDC4YTgmnjRDJGU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qjFJuSsW+qB9yjNh9gbpGsIDAHDGRNhLiaLFMbx8hI8Y4Rt9/2a6+EkkcAvMoHQPl
+         sVBF2IjGic2E0IbxbCdA733iwMJQJayHKTOYO85f93AY7+kXiosMV05GsMUVWVOIht
+         X9D9QP9Mog0CEmlBXenlk0WuO06yFEO6Tdkd7esnVDWhflTFL84RIzSq6xA5Z9MEJT
+         pLhpOH5D0f31i5cY8H70hzzmPzS7GGIGGM/3urrHnc1AFs+YMvDMdp2OwdzRAlyqIq
+         iVasunEKNRvcLaSevU/LqAP73c31+cHe8kbGwNumDLkTWHiA0YvMd7QqqHA/pGulOn
+         mQgxEt30PhbDw==
+Date:   Thu, 6 Jan 2022 13:09:10 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Johnson Wang <johnson.wang@mediatek.com>
+Cc:     lee.jones@linaro.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH 4/4] dt-bindings: regulator: Add MT6358 regulators
+Message-ID: <Ydbp9jFDLcvpiPxa@sirena.org.uk>
+References: <20220106065407.16036-1-johnson.wang@mediatek.com>
+ <20220106065407.16036-5-johnson.wang@mediatek.com>
 MIME-Version: 1.0
-In-Reply-To: <3dfb1a06-4474-4614-08e5-b09f0977e03c@broadcom.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: es-ES
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/S1CJoVPmII153IL"
+Content-Disposition: inline
+In-Reply-To: <20220106065407.16036-5-johnson.wang@mediatek.com>
+X-Cookie: I think we're in trouble.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/01/2022 21.37, Arend van Spriel wrote:
-> On 1/4/2022 8:26 AM, Hector Martin wrote:
->> +static int brcmf_pcie_read_otp(struct brcmf_pciedev_info *devinfo)
->> +{
->> +	const struct pci_dev *pdev = devinfo->pdev;
->> +	struct brcmf_bus *bus = dev_get_drvdata(&pdev->dev);
->> +	u32 coreid, base, words, idx, sromctl;
->> +	u16 *otp;
->> +	struct brcmf_core *core;
->> +	int ret;
->> +
->> +	switch (devinfo->ci->chip) {
->> +	default:
->> +		/* OTP not supported on this chip */
->> +		return 0;
->> +	}
-> 
-> Does not seem this code is put to work yet. Will dive into it later on.
 
-The specific OTP ranges and cores are added by the subsequent patches
-that add support for individual chips, once all the scaffolding is in place.
+--/S1CJoVPmII153IL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> 
->> +	core = brcmf_chip_get_core(devinfo->ci, coreid);
->> +	if (!core) {
->> +		brcmf_err(bus, "No OTP core\n");
->> +		return -ENODEV;
->> +	}
->> +
->> +	if (coreid == BCMA_CORE_CHIPCOMMON) {
->> +		/* Chips with OTP accessed via ChipCommon need additional
->> +		 * handling to access the OTP
->> +		 */
->> +		brcmf_pcie_select_core(devinfo, coreid);
->> +		sromctl = READCC32(devinfo, sromcontrol);
->> +
->> +		if (!(sromctl & BCMA_CC_SROM_CONTROL_OTP_PRESENT)) {
->> +			/* Chip lacks OTP, try without it... */
->> +			brcmf_err(bus,
->> +				  "OTP unavailable, using default firmware\n");
->> +			return 0;
->> +		}
->> +
->> +		/* Map OTP to shadow area */
->> +		WRITECC32(devinfo, sromcontrol,
->> +			  sromctl | BCMA_CC_SROM_CONTROL_OTPSEL);
->> +	}
->> +
->> +	otp = kzalloc(sizeof(u16) * words, GFP_KERNEL);
->> +
->> +	/* Map bus window to SROM/OTP shadow area in core */
->> +	base = brcmf_pcie_buscore_prep_addr(devinfo->pdev, base + core->base);
-> 
-> I guess this changes the bar window...
-> 
->> +	brcmf_dbg(PCIE, "OTP data:\n");
->> +	for (idx = 0; idx < words; idx++) {
->> +		otp[idx] = brcmf_pcie_read_reg16(devinfo, base + 2 * idx);
->> +		brcmf_dbg(PCIE, "[%8x] 0x%04x\n", base + 2 * idx, otp[idx]);
->> +	}
->> +
->> +	if (coreid == BCMA_CORE_CHIPCOMMON) {
->> +		brcmf_pcie_select_core(devinfo, coreid);
-> 
-> ... which is why you need to reselect the core. Otherwise it makes no 
-> sense to me.
+On Thu, Jan 06, 2022 at 02:54:07PM +0800, Johnson Wang wrote:
+> Add buck_vcore_sshub and ldo_vsram_others_sshub
+> regulators to binding document for MT6358 and MT6366.
 
-Yes; *technically* with the BCMA_CORE_CHIPCOMMON core the OTP is always
-within the first 0x1000 and so I wouldn't have to reselect it, since
-it'd end up with the same window, but that is not the case with
-BCMA_CORE_GCI used on other chips (where the OTP offset is >0x1000),
-although those don't hit this code path. So while this line could be
-removed without causing any issues, I find it more orthogonal and safer
-to keep the pattern where I select the core before accessing
-core-relative fixed registers, and treat brcmf_pcie_buscore_prep_addr as
-invalidating the BAR window for all intents and purposes.
+Reviwed-by: Mark Brown <broonie@kernel.org>
 
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+Please submit patches using subject lines reflecting the style for the
+subsystem, this makes it easier for people to identify relevant patches.
+Look at what existing commits in the area you're changing are doing and
+make sure your subject lines visually resemble what they're doing.
+There's no need to resubmit to fix this alone.
+
+--/S1CJoVPmII153IL
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHW6fUACgkQJNaLcl1U
+h9Bd3Qf/VGYYlc0k3nHmljIk50ogNHmedMadR2yeoWKgB/fCuVp8D2jvPh0K2NQb
+YcEL+4v7nnw01FwsMhLWNoKTMwpGREfLJrsGCHPAujHXB0EqN/rMybXrU0F3wsWj
+lFlxsttjSiO0iQk0UBrqOj27hztfeUwWRwqydFVvfo47HcUkxnXg7cJga60utgRi
+WNx+jtcYP4XNrXGjhRogoGEnyB5VeHaZpumlfRDjrkc4BHq53uJqrGyymNsajXNY
+3nj18IKxKe61lBXwWoCKgXve5i0P5Vo/li6x8jrCBYSpjhvmEn9mQq6P/bp6IaMU
+jxooUQBFW1i9mFWrle1hZhzGF7qpAw==
+=6BYs
+-----END PGP SIGNATURE-----
+
+--/S1CJoVPmII153IL--

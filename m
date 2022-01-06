@@ -2,125 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 261E7485F38
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 04:29:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C270485F3D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 04:31:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbiAFD3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 22:29:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
+        id S230257AbiAFDb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 22:31:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbiAFD3d (ORCPT
+        with ESMTP id S230249AbiAFDb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 22:29:33 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECF3C061245;
-        Wed,  5 Jan 2022 19:29:33 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id i8so1405383pgt.13;
-        Wed, 05 Jan 2022 19:29:33 -0800 (PST)
+        Wed, 5 Jan 2022 22:31:56 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FB3C061245
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 19:31:56 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id l10-20020a17090a384a00b001b22190e075so6978276pjf.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 19:31:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:organization:subject:in-reply-to
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=tjtACa9dE3yrERfBZgjLjugoAKnm+TzTAioGUarOG2g=;
-        b=fdS0Ewrp3lhlDeRpuNhaM+HtKAAd+U6bqXE1bMfSzOMQ3CWl/qmkGHFQzkKuqztQME
-         K1tkCMVKmkFeQUjteo4qeP2cyEEd0CFuez/MABKMNbsw79Dee9LJRKkZLBcOjC4wfh5S
-         vdbNrTJTec01DKgu7PLdeXwjZtcskgDkvwa6TR+D9ruruROpFAqjkvqcjFnqlfPpLHEq
-         bhqD5bohcM4BzZ9D2nmqJwIDxHeM8PmdTfG7cXRDdt3GwBZ4YPiMISjLOn9PvZicTUZY
-         jP7WQbRcws+35uLRSv0jifzphpZSZdPTa4q4H666+dVMPxDpMrHx525zzitj3qo0+b/P
-         igMg==
+        bh=+8eYojNJYLQOipkO9gITipj00BcP7O4ubmxOAp8bOKE=;
+        b=Nqv9gnCWhDZsJ1FPK4p8Jc6YoQwRzALCu1rhlSydt2o68RF3hRR0sJnirV2XSn4fNE
+         UxLeg/Ksk9fIibRq523VJN3CCoZZqzwrLzMACMyST7cZ4c9Y4C6mEIgU4ZnmXiViiPws
+         ufeKPHJ4LOFfVdq6dX5+bvsIIbWNvI7ShsjW7FYDHW09w8OZs5vyCt61pZu56FCSs91U
+         LGglcMwuQr2tysZeMq1IQDSPPPNGtv65Bqlm8AScXY/tPxDNpZxXApH4YDuckCZ2/Ha8
+         r97o81vxF1qunQNXzQEyp+Edw2ZhG+UjnI8UTQp4dXmrVcf1x9cUdBnGGnb2K+N64plM
+         BvRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=tjtACa9dE3yrERfBZgjLjugoAKnm+TzTAioGUarOG2g=;
-        b=UL2et+RxXZ+OcPKy6bwnsjlm3e9vcqIhnWK+WgKv4x8uaf9ldLd8QY3ZwjxKZKS3fF
-         XKLaI8l/GO/nijapgwMPi7Y0zEpDFrem7qv7pMq/mgDPyNRcydo3B3IZCjpSaY7SilAk
-         W0QA3gY/DN+Qp4Glje1dtUUmuSIRajwkO3DoLhgZqC/82q6IXSofEvMMcjaNotksqfhn
-         PBMn6uFS0dtPTvdNsz4SaPEqFOjQwFNpHrVQjXe+AxbAUG+KStmYDyYr4i0BsziEal/R
-         YjVoJ9FqPgvFMCoaOCjzFYnlxkkjCXFaYy4nBHQKL0h6/gJ9WbOoaPFosjKldCZhzVeg
-         RkOQ==
-X-Gm-Message-State: AOAM532zgoIp7q0pYAtDYMMZjHiBzbq60cp5UA7FeBdMuIq3p1l5MbF5
-        PMlbulwBvv14s3yWhMx60yeeR9O9ESfzeOO4yo215w==
-X-Google-Smtp-Source: ABdhPJywRfexzWwcSLBCIzGj14LT9dcmfvwd6/YztzU5gZr7oIKz4U/00eaD51mR7yNqrz+DWI7Lpw==
-X-Received: by 2002:a63:d046:: with SMTP id s6mr50389112pgi.367.1641439770484;
-        Wed, 05 Jan 2022 19:29:30 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id k3sm372968pgq.54.2022.01.05.19.29.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jan 2022 19:29:30 -0800 (PST)
-Message-ID: <212cea42-e445-d6f2-2730-88ccaa65b2cb@gmail.com>
-Date:   Thu, 6 Jan 2022 11:29:19 +0800
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+8eYojNJYLQOipkO9gITipj00BcP7O4ubmxOAp8bOKE=;
+        b=VVvsehGizFPGgtFqHLB/klUKOZUepoKjpBPXIwXdZuBFnfJ8O6tbwc61rZ2DpETSrJ
+         Sk6GboqTkFg54hwv8/bsE6Rg/sC72SM5r+fq17ANx477hsmsjlOPMuGGBTAeF4z8pOQ2
+         qXmAg6eTOdONTQ43luumyICrhPIzbk4DP7StC7QWd1V/PMQm8atw2Gjk2JEVpTpCZVMX
+         z1VCWGMw6qZ6Fi2sc8vrytHrGBvIe5SujLVunstyu5vokataiWZ5UisLURvjqQTQ5P1M
+         50KFb6LVt4t5G9nn13oIImHDbzPahaFRTuYIW2HY94xG8Y9XkViFIDQNl4SCfOsphZgx
+         88zg==
+X-Gm-Message-State: AOAM530aHCMRqfO3nwaSw6Byr8Hu32qxkzPcPFtOOLBGpa9aRA6HpIpb
+        JKL/oNmbgQYS7aqX2fGnGaWUjUntCFwvNvOG
+X-Google-Smtp-Source: ABdhPJz+K29wFZXLK2QGxwTLcyGnrL8jXJ1YP8ZlMELFQK6OiBBXH8oXBosONEY7i7JcffxQ4dLsvw==
+X-Received: by 2002:a17:90b:4b41:: with SMTP id mi1mr7858842pjb.213.1641439915616;
+        Wed, 05 Jan 2022 19:31:55 -0800 (PST)
+Received: from localhost.localdomain ([94.177.118.151])
+        by smtp.googlemail.com with ESMTPSA id t31sm458612pfg.184.2022.01.05.19.31.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jan 2022 19:31:55 -0800 (PST)
+From:   Qinghua Jin <qhjin.dev@gmail.com>
+To:     christian.brauner@ubuntu.com
+Cc:     qhjin_dev@163.com, Qinghua Jin <qhjin.dev@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jan Kara <jack@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] minix: fix bug when opening a file with O_DIRECT will
+Date:   Thu,  6 Jan 2022 11:30:41 +0800
+Message-Id: <20220106033042.347301-1-qhjin.dev@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Content-Language: en-US
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Like Xu <likexu@tencent.com>,
-        Dongli Cao <caodongli@kingsoft.com>,
-        Li RongQing <lirongqing@baidu.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        "Thomas Gleixner (kernel-recipes.org)" <tglx@linutronix.de>,
-        "Borislav Petkov (kernel-recipes.org)" <bp@alien8.de>,
-        Sean Christopherson <seanjc@google.com>
-References: <20211222133428.59977-1-likexu@tencent.com>
- <CALMp9eTgO4XuNHwuxWahZc7jQqZ10DchW8xXvecBH2ovGPLU9g@mail.gmail.com>
- <d3a9a73f-cdc2-bce0-55e6-e4c9f5c237de@gmail.com>
- <CALMp9eTm7R-69p3z9P37yXmD6QpzJhEJO564czqHQtDdCRK-SQ@mail.gmail.com>
- <CALMp9eTVjKztZC_11-DZo4MFhpxoVa31=p7Am2LYnEPuYBV8aw@mail.gmail.com>
- <22776732-0698-c61b-78d9-70db7f1b907d@gmail.com>
- <CALMp9eQQ7SvDNy3iKSrRTn9QUR9h1M-tSnuYO0Y4_-+bgV72sg@mail.gmail.com>
- <bf7fc07f-d49c-1c73-9a31-03585e99ff09@gmail.com>
- <CALMp9eQmO1zS9urH_B8DeoLp30P7Yxxp9qMwavjmoyt_BSC23A@mail.gmail.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-Organization: Tencent
-Subject: Re: [PATCH v2] KVM: X86: Emulate APERF/MPERF to report actual vCPU
- frequency
-In-Reply-To: <CALMp9eQmO1zS9urH_B8DeoLp30P7Yxxp9qMwavjmoyt_BSC23A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/1/2022 6:51 am, Jim Mattson wrote:
-> On Thu, Dec 30, 2021 at 11:48 PM Like Xu <like.xu.linux@gmail.com> wrote:
->>
->> On 31/12/2021 9:29 am, Jim Mattson wrote:
-> 
->>> At sched-in:
->>> 1. Save host APERF/MPERF values from the MSRs.
->>> 2. Load the "current" guest APERF/MPERF values into the MSRs (if the
->>> vCPU configuration allows for unintercepted reads).
->>>
->>> At sched-out:
->>> 1. Calculate the guest APERF/MPERF deltas for use in step 3.
->>> 2. Save the "current" guest APERF/MPERF values.
->>> 3. "Restore" the host APERF/MPERF values, but add in the deltas from step 1.
->>>
->>> Without any writes to IA32_MPERF, I would expect these MSRs to be
->>> synchronized across all logical processors, and the proposal above
->>> would break that synchronization.
-> 
-> I am learning more about IA32_APERF and IA32_MPERF this year. :-)
+Testcase:
+1. create a minix file system and mount it
+2. open a file on the file system with O_RDWR|O_CREAT|O_TRUNC|O_DIRECT
+3. open fails with -EINVAL but leaves an empty file behind. All other
+open() failures don't leave the failed open files behind.
 
-Uh, thanks for your attention.
+It is hard to check the direct_IO op before creating the inode. Just as
+ext4 and btrfs do, this patch will resolve the issue by allowing to 
+create the file with O_DIRECT but returning error when writing the file.
 
-> 
-> My worry above is unfounded. These MSRs only increment in C0, so they
-> are not likely to be synchronized.
-> 
-> This also raises another issue with your original fast-path
-> implementation: the host MSRs will continue to count while the guest
-> is halted. However, the guest MSRs should not count while the guest is
-> halted.
-> 
+Signed-off-by: Qinghua Jin <qhjin.dev@gmail.com>
+---
+ fs/minix/inode.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-The emulation based on guest TSC semantics w/ low precision may work it out.
-TBH, I still haven't given up on the idea of a pass-through approach.
+diff --git a/fs/minix/inode.c b/fs/minix/inode.c
+index a71f1cf894b9..d4bd94234ef7 100644
+--- a/fs/minix/inode.c
++++ b/fs/minix/inode.c
+@@ -447,7 +447,8 @@ static const struct address_space_operations minix_aops = {
+ 	.writepage = minix_writepage,
+ 	.write_begin = minix_write_begin,
+ 	.write_end = generic_write_end,
+-	.bmap = minix_bmap
++	.bmap = minix_bmap,
++	.direct_IO = noop_direct_IO
+ };
+ 
+ static const struct inode_operations minix_symlink_inode_operations = {
+-- 
+2.30.2
 

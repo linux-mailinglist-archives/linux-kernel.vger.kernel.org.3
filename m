@@ -2,87 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DFEC4869F2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:30:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2774869FB
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:32:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242856AbiAFSau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 13:30:50 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:46802 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242813AbiAFSat (ORCPT
+        id S242909AbiAFSc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 13:32:29 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34342 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242799AbiAFSc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 13:30:49 -0500
-Received: by mail-ot1-f43.google.com with SMTP id j97-20020a9d17ea000000b0059069215e85so3998623otj.13;
-        Thu, 06 Jan 2022 10:30:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jO+eguqfmGf5pi00MAsfJ6vjkTO2C4qOS/bN4M0iDpw=;
-        b=DAi5yAWkHRAgn2uX/yqRKRnEs45zdtib/RtgtzJRQm0W6MZHbZUNEtPaPd7Bo/Ekzx
-         mYBUjtVhp9Bfv9P2i712k7jbueNx8XLZq2/7nsqjyNYHqbtPZUF9nPIqN8ECaneei7zc
-         zolziRZiIVwNb278GNplPJMB3GPfKUVMlBboGVcMCYCc7DTTuEUaYVKKlZxaiSPWr0Pj
-         kA7VsMIGzQWGLguGKEC9CBvBUaBbZ0EoaytfRw6jzmxkHgH7ScacI+/BY7Ug6PBuOHyb
-         JKRy3H8igNid/G7L9+vSw2/H33J9eWyMNTff6+rlCwrmkTkloouCwSlk2MYlScrfjmBx
-         DOPQ==
-X-Gm-Message-State: AOAM530B4Ijf6dTa5x0n4oSB43QHLnvZS8HYMsz5YUiTS3HSpiYC/kBN
-        ANgBc8uz1d6oP2kiDPYBNA==
-X-Google-Smtp-Source: ABdhPJwRHmskJrvolKwtpLzlY7qGfudTL81YkdkwIKjkAYmdjppy/ap0Pp1Ye0/aRlf02WmvHRa6gA==
-X-Received: by 2002:a9d:70d1:: with SMTP id w17mr7228971otj.100.1641493848891;
-        Thu, 06 Jan 2022 10:30:48 -0800 (PST)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id g2sm472767oos.47.2022.01.06.10.30.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 10:30:48 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: i2c: st,stm32-i2c: Make each example a separate entry
-Date:   Thu,  6 Jan 2022 12:30:36 -0600
-Message-Id: <20220106183037.1443931-1-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Thu, 6 Jan 2022 13:32:28 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C008B8230F;
+        Thu,  6 Jan 2022 18:32:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93DE9C36AE3;
+        Thu,  6 Jan 2022 18:32:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641493946;
+        bh=5lY+HI8ihg/c9/B+VNUfvaxm/xosjyotG49pQ10u82w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=XirhBewNwMlp7K0TCeGeOUGw2hgP2JEu1cZv3AQV10PBvw4ZYBsmz1pS++baJq9Jo
+         Ww61H9RCyVHw3Jrl2sXCb1ZpBTdnroTskdtVAeNshmtbcDd7nlb/0XYkyhoR5QrKVJ
+         ZwBCnVA7Kpd/0ysferdN+9JZ9Q1XD6YGR43u+rzEXz6f+yzhZDs5aMEwxyE7Uobcf/
+         N/UZzPr5bseDS1LN3Kzfaebpd8kC2ZQ3iw5nipIQOwDwjWO1el3C8Y4IX+ur6mWwCM
+         s8UxZTMQAIYCBcEiAOVMEn7Hz32j1uXUqSo0YisNm9Ieomh0FRj7R7dgkX6s231e08
+         Y/edU4bUVxa2w==
+Date:   Thu, 6 Jan 2022 12:32:24 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 09/14] PCI: portdrv: Suppress kernel DMA ownership
+ auto-claiming
+Message-ID: <20220106183224.GA298861@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <039bbcf3-ccc6-f3b0-172e-9caa0866bb9e@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Each independent example should be a separate entry. This allows for
-'interrupts' to have different cell sizes.
+On Thu, Jan 06, 2022 at 12:12:35PM +0800, Lu Baolu wrote:
+> On 1/5/22 1:06 AM, Bjorn Helgaas wrote:
+> > On Tue, Jan 04, 2022 at 09:56:39AM +0800, Lu Baolu wrote:
+> > > If a switch lacks ACS P2P Request Redirect, a device below the switch can
+> > > bypass the IOMMU and DMA directly to other devices below the switch, so
+> > > all the downstream devices must be in the same IOMMU group as the switch
+> > > itself.
+> > Help me think through what's going on here.  IIUC, we put devices in
+> > the same IOMMU group when they can interfere with each other in any
+> > way (DMA, config access, etc).
+> > 
+> > (We said "DMA" above, but I guess this would also apply to config
+> > requests, right?)
+> 
+> I am not sure whether devices could interfere each other through config
+> space access. The IOMMU hardware only protects and isolates DMA
+> accesses, so that userspace could control DMA directly. The config
+> accesses will always be intercepted by VFIO. Hence, I don't see a
+> problem.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+I was wondering about config accesses generated by an endpoint, e.g.,
+an endpoint doing config writes to a peer or the upstream bridge.
 
-diff --git a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-index c07289a643d8..46b62e1c9273 100644
---- a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-@@ -112,6 +112,9 @@ examples:
-           clocks = <&rcc 0 149>;
-       };
- 
-+  - |
-+    #include <dt-bindings/mfd/stm32f7-rcc.h>
-+    #include <dt-bindings/clock/stm32fx-clock.h>
-     //Example 2 (with st,stm32f7-i2c compatible)
-       i2c@40005800 {
-           compatible = "st,stm32f7-i2c";
-@@ -124,6 +127,9 @@ examples:
-           clocks = <&rcc 1 CLK_I2C1>;
-       };
- 
-+  - |
-+    #include <dt-bindings/mfd/stm32f7-rcc.h>
-+    #include <dt-bindings/clock/stm32fx-clock.h>
-     //Example 3 (with st,stm32mp15-i2c compatible on stm32mp)
-     #include <dt-bindings/interrupt-controller/arm-gic.h>
-     #include <dt-bindings/clock/stm32mp1-clks.h>
--- 
-2.32.0
+But I think that is prohibited by spec - PCIe r5.0, sec 7.3.3, says
+"Propagation of Configuration Requests from Downstream to Upstream as
+well as peer-to-peer are not supported" and "Configuration Requests
+are initiated only by the Host Bridge, including those passed through
+the SFI CAM mechanism."
 
+Bjorn

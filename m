@@ -2,61 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D35A486AC8
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:01:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4502486AD6
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:03:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243549AbiAFUBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 15:01:48 -0500
-Received: from fanzine2.igalia.com ([213.97.179.56]:40320 "EHLO
-        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235093AbiAFUBq (ORCPT
+        id S243573AbiAFUDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 15:03:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48838 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243557AbiAFUDe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 15:01:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version
-        :Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=o8kRybl/YJgPm/1Ty3u9DM+5Rzg6IGnfZRnQegwM+t4=; b=gPQNFgKAS4rglFYgGNu7VAjybC
-        2w+rucssHo907rCMWYFlfg8SsR1JzGhpQu2NFFiHmgEV5w7yK47x6cMxi4Pp4PEyoaIEmFCfvkE+/
-        VfQralstZerzNmH5TlDrUg75Njo83K6XQhk6BDxPZKEL3Rbya+MsbBXHq8L+mfmQA4CcdnI3HCej8
-        mM/uKwhd+s1hmwVltoHls3Dbu/GmpsnUX7jNKrsEHBrwwqlIGTLoQg6R5wobQKqNJ/RRFdtwhdW23
-        JR0Fz5e1/rK3gvdUOcz5WXq7m3RSmhiDy6PkUlrdHhnxLbDqS/YpTMw2o+SwO0dZvQtGGIpbJahUT
-        0M/iC3CA==;
-Received: from [179.113.53.20] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1n5Yx7-0009bd-JD; Thu, 06 Jan 2022 21:01:37 +0100
-Subject: Re: [PATCH] notifier/panic: Introduce panic_notifier_filter
-To:     kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dyoung@redhat.com
-Cc:     linux-doc@vger.kernel.org, bhe@redhat.com, vgoyal@redhat.com,
-        stern@rowland.harvard.edu, akpm@linux-foundation.org,
-        andriy.shevchenko@linux.intel.com, corbet@lwn.net,
-        halves@canonical.com, kernel@gpiccoli.net
-References: <20220106162710.97544-1-gpiccoli@igalia.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Message-ID: <1615e409-aa19-a798-03e6-d0abb111bd7d@igalia.com>
-Date:   Thu, 6 Jan 2022 17:01:21 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 6 Jan 2022 15:03:34 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6ED2C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 12:03:33 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id g80so10850328ybf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 12:03:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=70M1OWXHUOeWdY5V1Tvpq+AtYB0saWSNzIdMX2VjKV4=;
+        b=FyG8ekLLjhoijZqWPDM5xPKidzow7y2C6Ghx4Crbe/H4WXNYhX6AJNZ/eewiTFKQQ7
+         gH/zkJ3x1MFlh0OrE5YxD856aXUdBRxUF1se1lYzrnF4dbUYeoSXor+BggdCb5e66B6L
+         E9DhYVtaaky+sFf3AHSZjnwLT+qxukUdl8Hi9EDpQb8TiW0tyIWRXEwa+O7nASYwwOeh
+         /oJ62TYI+AG58XWdi5mmhcYW0pCmsgPMuxvTooCZb/3pNtj4+K7jhXSdSoUCdiOQ7TZ/
+         Y333pa6ThaXI3AoRDfjoSGUr43quAxhrvSEX8HClVWmIgs20SSQETMFff/qdVNz+OZ2v
+         ka+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=70M1OWXHUOeWdY5V1Tvpq+AtYB0saWSNzIdMX2VjKV4=;
+        b=hhFO6+rhFvaM1jLtAlhDLrV8jiGQEVaba0Dvb0dSFXITN41ONGMvKhN/E8TMqqA5GM
+         XbUDyH20m6lP755madMzF6jiU0zMyIkPPGyhjkhS/cXb4BW7BbbYKcI7HC+DIc+OOuDJ
+         kDw95NK4Zo/ocAr3Z8QeLu9qwvQhsp1NcxlbwCkUk92DC+zc5gJmylmHmO9DHsCxdBD3
+         rHeV5BWL4vDEq9JGFcRW+BvX39p6os41MBdFPWflP5St4eyuLYLGGiVLK/EJlSscO7dl
+         6lPazHFvwvXYeVKA2jrRURx2b+08gd82dVd9BYinokBS64YZJFA4ys2CyRqtbuJ8EJTN
+         6gTw==
+X-Gm-Message-State: AOAM5311vz/nz+WCi15gthq4wnn9HMeyoHKNdfVGSSY2Kxb+KtOgQasF
+        kAnWSXoxyP3K9+lBoJDd7eqOfoP3xZU+LlOgE8MUoQ==
+X-Google-Smtp-Source: ABdhPJw89k9TysJGaev98wXI7WHOMoJOINGotZBTI7r+WMM8saSahB1ZI0vIe7f8uCizsk36XxZfXd2qerxSwUqhmYo=
+X-Received: by 2002:a25:7754:: with SMTP id s81mr69645942ybc.9.1641499412571;
+ Thu, 06 Jan 2022 12:03:32 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220106162710.97544-1-gpiccoli@igalia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <1640262603-19339-1-git-send-email-CruzZhao@linux.alibaba.com>
+ <1640262603-19339-3-git-send-email-CruzZhao@linux.alibaba.com>
+ <CABk29NsP+sMQPRwS2e3zoeBsX1+p2aevFFO+i9GdB5VQ0ujEbA@mail.gmail.com>
+ <8be4679f-632b-97e5-9e48-1e1a37727ddf@linux.alibaba.com> <CABk29Nv4OXnNz5-ZdYmAE8o0YpmhkbH=GooksaKYY7n0YYUQxg@mail.gmail.com>
+ <3dc03eec-e88c-f886-efd5-81162350f12c@linux.alibaba.com>
+In-Reply-To: <3dc03eec-e88c-f886-efd5-81162350f12c@linux.alibaba.com>
+From:   Josh Don <joshdon@google.com>
+Date:   Thu, 6 Jan 2022 12:03:21 -0800
+Message-ID: <CABk29Nt9TMyQJWSYRzWMmmHpT5z85npganZKAF9vkBqJWDhx6Q@mail.gmail.com>
+Subject: Re: [PATCH 2/2] sched/core: Uncookied force idle accounting per cpu
+To:     cruzzhao <cruzzhao@linux.alibaba.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/01/2022 13:27, Guilherme G. Piccoli wrote:
-> [...]
+On Thu, Jan 6, 2022 at 4:05 AM cruzzhao <cruzzhao@linux.alibaba.com> wrote:
+>
+>
+> =E5=9C=A8 2022/1/6 =E4=B8=8A=E5=8D=884:59, Josh Don =E5=86=99=E9=81=93:
+>
+> It's a good idea to combine them into a single sum. I separated them in
+> order to be consistent with the task accounting and for easy to understan=
+d.
+> As for change the task accounting, I've tried but I haven't found a
+> proper method to do so. I've considered the following methods:
+> 1. Account the uncookie'd force idle time to the uncookie'd task, but
+> it'll be hard to trace the uncookie'd task.
 
-I'm sorry, I've made a mistake in the header file - just sent a V2.
+Not sure what you mean there, I think you just need to add
 
-Please *ignore* this version.
-Apologies,
+--- a/kernel/sched/core_sched.c
++++ b/kernel/sched/core_sched.c
+@@ -294,7 +294,7 @@ void sched_core_account_forceidle(struct rq *rq)
+                rq_i =3D cpu_rq(i);
+                p =3D rq_i->core_pick ?: rq_i->curr;
 
+-               if (!p->core_cookie)
++               if (p =3D=3D rq_i->idle)
+                        continue;
 
-Guilherme
+                __schedstat_add(p->stats.core_forceidle_sum, delta)
+
+> 2. Account the uncookie'd force idle time to the cookie'd task in the
+> core_tree of the core, but it will cost a lot on traversing the core_tree=
+.
+>
+> Many thanks for suggestions.
+> Best,
+> Cruz Zhao
+>
+> > Why do you need this separated out into two fields then? Could we just
+> > combine the uncookie'd and cookie'd forced idle into a single sum?
+> >
+> > IMO it is fine to account the forced idle from uncookie'd tasks, but
+> > we should then also change the task accounting to do the same, for
+> > consistency.

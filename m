@@ -2,153 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A20924868BC
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:38:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1545A4868C0
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241989AbiAFRir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 12:38:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43498 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbiAFRiq (ORCPT
+        id S242002AbiAFRjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 12:39:44 -0500
+Received: from mail-oo1-f54.google.com ([209.85.161.54]:42684 "EHLO
+        mail-oo1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242182AbiAFRjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 12:38:46 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3583AC061201
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 09:38:46 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id c9-20020a17090a1d0900b001b2b54bd6c5so9426716pjd.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 09:38:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GYSLa7pA0gp7wUV13RWv0MqLP9/s7fLzmxP/zsHVRcY=;
-        b=j41IMR6KZD4U5nPOCrxqCiJ3wofNvmQirr4AuGkd9syR7UwLMOkJGZE8Du7VF6G8CM
-         oun7bZn44mafPumkXhw8PTvxpax0sh0VY1fW5SVDZPC0Bm4HeRPdVihDD7b+4Tjn5ZRs
-         FAak69mzOIRufLQhcgc/XRF+u7Fmdo/1GoESmVcW7qq2ZL0grgEGzWcqLW6Qx5BDLsCv
-         Uoal1Nh1zhGGNw8z9slwCJRoz+Cf+iuRjqBzcK3D+Z3Vlne8u6qwnyQmeUR2C69blu5R
-         00hcEFLtFOFtpTR3FxUuDkOfxvbx4VLlRmYFvzbcq4ph7/i2sYx2rqq6XnUdC4voOKmx
-         pcjw==
+        Thu, 6 Jan 2022 12:39:42 -0500
+Received: by mail-oo1-f54.google.com with SMTP id y13-20020a4a624d000000b002daae38b0b5so824124oog.9;
+        Thu, 06 Jan 2022 09:39:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GYSLa7pA0gp7wUV13RWv0MqLP9/s7fLzmxP/zsHVRcY=;
-        b=11NtJ/HZ34PdpgIcd2Mmd3U5dj3ahGHUlTf9NojHVzZ4FAsPs8V3eFXCCjlMj0Fg7O
-         7P1I6Dmqf6ux6kQ5a3R7KuwLD8rKPV8M9MZb8YF81NWCpQ8KGE1I6/rG4QAFe4HdPIhh
-         yrrbsvHQ1LV/6YmTmfwJ9aI/E0yuWa4XX4sJoZ9jbrbQ2o8bFpBRpgcgnPhWpTlYBD+V
-         4wPs61BwWAnw2xSWly+s4nJLq+vWl9WKr5zUUkjwAfsYaKBMtgdMqlCXRGv6kd+6A8Uk
-         jpQc5FOF02+dTYWHMa+pvcYv6HUKTS7lWaTSaxvbLJtYj3qN2n6VbA8pwMkY2MOuQoDy
-         jmgA==
-X-Gm-Message-State: AOAM531qt9bCOo4GFaxBet4tKDznz9m2sG9Pdlm1KUUNyyyWglLL18Y1
-        agFHNZZYVyGF/fGD7AkYHnoc0Q==
-X-Google-Smtp-Source: ABdhPJzk/FdRU8abIcTFrHj96waF/NHjFtuzEZL1JeXq9Pfy+bowljtCmFDhyszaZc3ia0wyc8/eDQ==
-X-Received: by 2002:a17:902:8a94:b0:149:218c:b10a with SMTP id p20-20020a1709028a9400b00149218cb10amr58950325plo.114.1641490725484;
-        Thu, 06 Jan 2022 09:38:45 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id p22sm3271867pfo.57.2022.01.06.09.38.44
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=LTH0gxxPTzrpGqblk9l5CWXYgHHQ9ZotfUBcWF1DvpM=;
+        b=oPpV4Y9EFDQGG+sNCKhwvw9xkckE6JV2ESvWBcGsnosKOsGIYmE4oxYnnoYZntTQVE
+         Yg8lIsH0IyC5qduo+wYguNX0YoF3tWGR+lYLbhC7W9bfkoYWhetTOXfpaecvnOT0mCVK
+         Bd4XMX/kYcBRWtatqkpBHI9Fi3TErhbehB8VnN5OarU6DVTewIfwX9qMIFNM76h0W4py
+         N9X6NDoBb3JAL9vJ2VeNx0j2OnsfLOKYLDDJUo4vfMYahVVuRffBS71Hd1rokzmDbdwz
+         y/jNss7AemLJGpbMQ2niF5qbrwR+ozeESzUgAgfWUraI1UPOxXSXy15RcAPIVXeyaaql
+         xmKA==
+X-Gm-Message-State: AOAM532TlL8WoXXHFreSYqqOJcTUyVMX/B+gqx/EUpjPtZS/BH4Z6yBH
+        V/QcRdnp/eOublANOx4KccQORv+XbA==
+X-Google-Smtp-Source: ABdhPJzyP3uuOjPrPqhC3d1Qqu7NKHHwGoHsgf/2aYa8QFCfQy1jTMC6nDHxXabAKYUx+wyz030djA==
+X-Received: by 2002:a4a:8701:: with SMTP id z1mr38966341ooh.68.1641490781532;
+        Thu, 06 Jan 2022 09:39:41 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id u14sm449787ote.62.2022.01.06.09.39.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 09:38:44 -0800 (PST)
-Date:   Thu, 6 Jan 2022 17:38:41 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Stevens <stevensd@chromium.org>
-Cc:     Marc Zyngier <maz@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Chia-I Wu <olv@chromium.org>
-Subject: Re: [PATCH v5 4/4] KVM: mmu: remove over-aggressive warnings
-Message-ID: <YdcpIQgMZJrqswKU@google.com>
-References: <20211129034317.2964790-1-stevensd@google.com>
- <20211129034317.2964790-5-stevensd@google.com>
- <Yc4G23rrSxS59br5@google.com>
- <CAD=HUj5Q6rW8UyxAXUa3o93T0LBqGQb7ScPj07kvuM3txHMMrQ@mail.gmail.com>
- <YdXrURHO/R82puD4@google.com>
- <YdXvUaBUvaRPsv6m@google.com>
- <CAD=HUj736L5oxkzeL2JoPV8g1S6Rugy_TquW=PRt73YmFzP6Jw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD=HUj736L5oxkzeL2JoPV8g1S6Rugy_TquW=PRt73YmFzP6Jw@mail.gmail.com>
+        Thu, 06 Jan 2022 09:39:41 -0800 (PST)
+Received: (nullmailer pid 1361796 invoked by uid 1000);
+        Thu, 06 Jan 2022 17:39:39 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Cixi Geng <gengcixi@gmail.com>
+Cc:     lgirdwood@gmail.com, lars@metafoo.de, jic23@kernel.org,
+        baolin.wang7@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, zhang.lyra@gmail.com,
+        orsonzhai@gmail.com, yuming.zhu1@unisoc.com
+In-Reply-To: <20220106125947.139523-2-gengcixi@gmail.com>
+References: <20220106125947.139523-1-gengcixi@gmail.com> <20220106125947.139523-2-gengcixi@gmail.com>
+Subject: Re: [PATCH 1/7] dt-bindings:iio:adc: add sprd,ump9620-adc dtbindings
+Date:   Thu, 06 Jan 2022 11:39:39 -0600
+Message-Id: <1641490779.987704.1361793.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022, David Stevens wrote:
-> On Thu, Jan 6, 2022 at 4:19 AM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > On Wed, Jan 05, 2022, Sean Christopherson wrote:
-> > > Ah, I got royally confused by ensure_pfn_ref()'s comment
-> > >
-> > >   * Certain IO or PFNMAP mappings can be backed with valid
-> > >   * struct pages, but be allocated without refcounting e.g.,
-> > >   * tail pages of non-compound higher order allocations, which
-> > >   * would then underflow the refcount when the caller does the
-> > >   * required put_page. Don't allow those pages here.
-> > >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> > > that doesn't apply here because kvm_faultin_pfn() uses the low level
-> > > __gfn_to_pfn_page_memslot().
-> >
-> > On fifth thought, I think this is wrong and doomed to fail.  By mapping these pages
-> > into the guest, KVM is effectively saying it supports these pages.  But if the guest
-> > uses the corresponding gfns for an action that requires KVM to access the page,
-> > e.g. via kvm_vcpu_map(), ensure_pfn_ref() will reject the access and all sorts of
-> > bad things will happen to the guest.
-> >
-> > So, why not fully reject these types of pages?  If someone is relying on KVM to
-> > support these types of pages, then we'll fail fast and get a bug report letting us
-> > know we need to properly support these types of pages.  And if not, then we reduce
-> > KVM's complexity and I get to keep my precious WARN :-)
+On Thu, 06 Jan 2022 20:59:41 +0800, Cixi Geng wrote:
+> From: Cixi Geng <cixi.geng1@unisoc.com>
 > 
-> Our current use case here is virtio-gpu blob resources [1]. Blob
-> resources are useful because they avoid a guest shadow buffer and the
-> associated memcpys, and as I understand it they are also required for
-> virtualized vulkan.
+> sprd,ump9620-adc is one variant of sc27xx series, add ump9620 in
+> dtbindings.
 > 
-> One type of blob resources requires mapping dma-bufs allocated by the
-> host directly into the guest. This works on Intel platforms and the
-> ARM platforms I've tested. However, the amdgpu driver sometimes
-> allocates higher order, non-compound pages via ttm_pool_alloc_page.
+> Signed-off-by: Chunyan Zhang <zhang.lyra@gmail.com>
+> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+> ---
+>  .../bindings/iio/adc/sprd,sc2720-adc.yaml     | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+> 
 
-Ah.  In the future, please provide this type of information in the cover letter,
-and in this case, a paragraph in patch 01 is also warranted.  The context of _why_
-is critical information, e.g. having something in the changelog explaining the use
-case is very helpful for future developers wondering why on earth KVM supports
-this type of odd behavior.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> These are the type of pages which KVM is currently rejecting. Is this
-> something that KVM can support?
+yamllint warnings/errors:
 
-I'm not opposed to it.  My complaint is that this series is incomplete in that it
-allows mapping the memory into the guest, but doesn't support accessing the memory
-from KVM itself.  That means for things to work properly, KVM is relying on the
-guest to use the memory in a limited capacity, e.g. isn't using the memory as
-general purpose RAM.  That's not problematic for your use case, because presumably
-the memory is used only by the vGPU, but as is KVM can't enforce that behavior in
-any way.
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/sprd,sc2720-adc.yaml: else: 'nvmem-cell-names' is not one of ['$ref', 'additionalItems', 'additionalProperties', 'allOf', 'anyOf', 'const', 'contains', 'default', 'dependencies', 'dependentRequired', 'dependentSchemas', 'deprecated', 'description', 'else', 'enum', 'exclusiveMaximum', 'exclusiveMinimum', 'items', 'if', 'minItems', 'minimum', 'maxItems', 'maximum', 'multipleOf', 'not', 'oneOf', 'pattern', 'patternProperties', 'properties', 'required', 'then', 'type', 'typeSize', 'unevaluatedProperties', 'uniqueItems']
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/sprd,sc2720-adc.yaml: then: 'nvmem-cell-names' is not one of ['$ref', 'additionalItems', 'additionalProperties', 'allOf', 'anyOf', 'const', 'contains', 'default', 'dependencies', 'dependentRequired', 'dependentSchemas', 'deprecated', 'description', 'else', 'enum', 'exclusiveMaximum', 'exclusiveMinimum', 'items', 'if', 'minItems', 'minimum', 'maxItems', 'maximum', 'multipleOf', 'not', 'oneOf', 'pattern', 'patternProperties', 'properties', 'required', 'then', 'type', 'typeSize', 'unevaluatedProperties', 'uniqueItems']
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/sprd,sc2720-adc.yaml: ignoring, error in schema: else
+Documentation/devicetree/bindings/iio/adc/sprd,sc2720-adc.example.dt.yaml:0:0: /example-0/pmic/adc@480: failed to match any schema with compatible: ['sprd,sc2731-adc']
 
-The really gross part is that failures are not strictly punted to userspace;
-the resulting error varies significantly depending on how the guest "illegally"
-uses the memory.
+doc reference errors (make refcheckdocs):
 
-My first choice would be to get the amdgpu driver "fixed", but that's likely an
-unreasonable request since it sounds like the non-KVM behavior is working as intended.
+See https://patchwork.ozlabs.org/patch/1576074
 
-One thought would be to require userspace to opt-in to mapping this type of memory
-by introducing a new memslot flag that explicitly states that the memslot cannot
-be accessed directly by KVM, i.e. can only be mapped into the guest.  That way,
-KVM has an explicit ABI with respect to how it handles this type of memory, even
-though the semantics of exactly what will happen if userspace/guest violates the
-ABI are not well-defined.  And internally, KVM would also have a clear touchpoint
-where it deliberately allows mapping such memslots, as opposed to the more implicit
-behavior of bypassing ensure_pfn_ref().
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-If we're clever, we might even be able to share the flag with the "guest private
-memory"[*] concept being pursued for confidential VMs.
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-[*] https://lore.kernel.org/all/20211223123011.41044-1-chao.p.peng@linux.intel.com
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

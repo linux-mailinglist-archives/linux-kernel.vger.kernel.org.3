@@ -2,101 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FBB0485EDD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 03:39:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E14A485EE3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 03:43:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344892AbiAFCi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 21:38:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39614 "EHLO
+        id S1344925AbiAFCm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 21:42:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231967AbiAFCiy (ORCPT
+        with ESMTP id S1344895AbiAFCmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 21:38:54 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EC6C061245;
-        Wed,  5 Jan 2022 18:38:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=IoUlGEH/xqrV07najlhYyl2fC5yKIy9uFAiZQwDiAD4=; b=bH8zsFsvZVmlTk7euNsOfQBiQy
-        TQG3pk1XOSzYDEkc/ki9qtzAVIbGUWlaDz6Guy056ifz2+S4b9EvsiGgVeHzDk2rXHOJicCR9Fykk
-        m0mbNZX5slU0SGxqmbPvJnjsrmKUxp/z0XUro94iOFwFGX69JSqqVO07MOJT5U3SxUejjO3lNgHOF
-        6RZ8gdfKASIPL1KtKQ9VLKljlOdtgwO1sIzuUDM/udldJC09Tny1xFFSPWFhoemZ5lcVf+raH36Nh
-        453Vs1AcAZSjN/t7jSR74ynziDELJ9m7sUg9hmSpP1vPDVOrTcj6rAXPiIfFlvNCJ8azuxUoEaICv
-        vQC4Z+mA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n5Ifv-00F5zd-GZ; Thu, 06 Jan 2022 02:38:47 +0000
-Message-ID: <8b423739-abe6-7e48-1a20-149ae56df108@infradead.org>
-Date:   Wed, 5 Jan 2022 18:38:42 -0800
+        Wed, 5 Jan 2022 21:42:52 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFEE5C061201
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 18:42:51 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id o185so3321314ybo.12
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 18:42:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VUrh3Npgeap/8EiEtwRjncA+1oSJVR1QQxVGHBNvM04=;
+        b=f6EQYO79bUXprc7mhn+5kkGk7QaNhdm6TSnLti6itS7mqSCQT6sQjiGOBku7WoX188
+         vPdqu9VcHqayR/unWn8Q1ICELVnmKRotk6JQfhShEKTlwYXcQmP7i4wWQTx3chDRDI7A
+         4kBgcl+GK+bigbshUapujhp4+UlbLV1/GOkiY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VUrh3Npgeap/8EiEtwRjncA+1oSJVR1QQxVGHBNvM04=;
+        b=eyh3T3+cKjo9UzmRAfGex+XxI7as/UYyBQ9slmogf32xLFcxod4ktS7LDBxskxrLfR
+         qdVvEeYHHRFNDq5cj0iTr5/3KMqXzkwE9AopljWpYMYl6aHpz/yb5XsrU9QgSWDD/dW2
+         NtX4z7QnH9wOqOpDYYqbVnWvLEhxuoa4UV517iQRrOSuE5SkL/qed9VjcIYCalnl4f5p
+         kz/bEJirWYmaSq0EZrZ2op1Auw0FxCSXFsXkjN6X0J97Izx/4wNUhslJPaqnTEuw4l6y
+         6dRlK3sAj6zoYs/lcNIt3OHsR/nKcvKUoOqZ3Cp6RT9voTmWtQPCiGekQu1TXp5z6RBB
+         6O5A==
+X-Gm-Message-State: AOAM532JEY/hDsEZKLxL/Gdkyy61EDBTxOQhV4LWrGJF9him3sAvfJ5W
+        oXl5lEOo22/ACogfcq+NrTvFc6o+Ji/GJVyhDK8KPA==
+X-Google-Smtp-Source: ABdhPJySN8UQBiLK5ZELedz9aMDOihftjIfvLaugncGmaT2wHj67/GId/mm7KBCgharYeRmCbxfpR9IivB+Tgad8EI0=
+X-Received: by 2002:a25:5ca:: with SMTP id 193mr64959101ybf.406.1641436971074;
+ Wed, 05 Jan 2022 18:42:51 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [next] mm/shmem.c:3993:5: error: conflicting types for
- 'shmem_unuse'; have 'int(unsigned int, long unsigned int *)'
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     linux-mm <linux-mm@kvack.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Christoph Hellwig <hch@lst.de>,
-        Juergen Gross <jgross@suse.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Seth Jennings <sjenning@redhat.com>,
-        Vitaly Wool <vitaly.wool@konsulko.com>,
-        lkft-triage@lists.linaro.org
-References: <CA+G9fYvXfD3wS8eJV6A6GygqhJb3AUF9OROQAkBRRTN+thVo-g@mail.gmail.com>
- <YdXYHP5gPMRzmv0B@casper.infradead.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <YdXYHP5gPMRzmv0B@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20211129034317.2964790-1-stevensd@google.com> <20211129034317.2964790-5-stevensd@google.com>
+ <Yc4G23rrSxS59br5@google.com> <CAD=HUj5Q6rW8UyxAXUa3o93T0LBqGQb7ScPj07kvuM3txHMMrQ@mail.gmail.com>
+ <YdXrURHO/R82puD4@google.com> <YdXvUaBUvaRPsv6m@google.com>
+In-Reply-To: <YdXvUaBUvaRPsv6m@google.com>
+From:   David Stevens <stevensd@chromium.org>
+Date:   Thu, 6 Jan 2022 11:42:39 +0900
+Message-ID: <CAD=HUj736L5oxkzeL2JoPV8g1S6Rugy_TquW=PRt73YmFzP6Jw@mail.gmail.com>
+Subject: Re: [PATCH v5 4/4] KVM: mmu: remove over-aggressive warnings
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Chia-I Wu <olv@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 6, 2022 at 4:19 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Wed, Jan 05, 2022, Sean Christopherson wrote:
+> > Ah, I got royally confused by ensure_pfn_ref()'s comment
+> >
+> >   * Certain IO or PFNMAP mappings can be backed with valid
+> >   * struct pages, but be allocated without refcounting e.g.,
+> >   * tail pages of non-compound higher order allocations, which
+> >   * would then underflow the refcount when the caller does the
+> >   * required put_page. Don't allow those pages here.
+> >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> > that doesn't apply here because kvm_faultin_pfn() uses the low level
+> > __gfn_to_pfn_page_memslot().
+>
+> On fifth thought, I think this is wrong and doomed to fail.  By mapping these pages
+> into the guest, KVM is effectively saying it supports these pages.  But if the guest
+> uses the corresponding gfns for an action that requires KVM to access the page,
+> e.g. via kvm_vcpu_map(), ensure_pfn_ref() will reject the access and all sorts of
+> bad things will happen to the guest.
+>
+> So, why not fully reject these types of pages?  If someone is relying on KVM to
+> support these types of pages, then we'll fail fast and get a bug report letting us
+> know we need to properly support these types of pages.  And if not, then we reduce
+> KVM's complexity and I get to keep my precious WARN :-)
 
+Our current use case here is virtio-gpu blob resources [1]. Blob
+resources are useful because they avoid a guest shadow buffer and the
+associated memcpys, and as I understand it they are also required for
+virtualized vulkan.
 
-On 1/5/22 09:40, Matthew Wilcox wrote:
-> On Wed, Jan 05, 2022 at 08:01:19PM +0530, Naresh Kamboju wrote:
->> mm/shmem.c:3993:5: error: conflicting types for 'shmem_unuse'; have
->> 'int(unsigned int,  long unsigned int *)'
->>  3993 | int shmem_unuse(unsigned int type, unsigned long *fs_pages_to_unuse)
->>       |     ^~~~~~~~~~~
->> In file included from include/linux/khugepaged.h:6,
->>                  from mm/shmem.c:37:
->> include/linux/shmem_fs.h:86:5: note: previous declaration of
->> 'shmem_unuse' with type 'int(unsigned int)'
->>    86 | int shmem_unuse(unsigned int type);
->>       |     ^~~~~~~~~~~
-> 
-> This is "mm: simplify try_to_unuse" in akpm's tree.
-> 
-> It needs a fix that looks something like this:
+One type of blob resources requires mapping dma-bufs allocated by the
+host directly into the guest. This works on Intel platforms and the
+ARM platforms I've tested. However, the amdgpu driver sometimes
+allocates higher order, non-compound pages via ttm_pool_alloc_page.
+These are the type of pages which KVM is currently rejecting. Is this
+something that KVM can support?
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
++olv, who has done some of the blob resource work.
 
-thanks.
+[1] https://patchwork.kernel.org/project/dri-devel/cover/20200814024000.2485-1-gurchetansingh@chromium.org/
 
-> 
-> +++ b/mm/shmem.c
-> @@ -3990,7 +3990,7 @@ int __init shmem_init(void)
->         return 0;
->  }
-> 
-> -int shmem_unuse(unsigned int type, unsigned long *fs_pages_to_unuse)
-> +int shmem_unuse(unsigned int type)
->  {
->         return 0;
->  }
-> 
-
--- 
-~Randy
+-David

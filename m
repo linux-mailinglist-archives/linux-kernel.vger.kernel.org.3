@@ -2,152 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B84C44867AA
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:28:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1DEE4867AE
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:30:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241244AbiAFQ2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 11:28:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241184AbiAFQ2j (ORCPT
+        id S241252AbiAFQaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 11:30:39 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42164 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241130AbiAFQai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 11:28:39 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B717BC061245;
-        Thu,  6 Jan 2022 08:28:38 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id f5so11523372edq.6;
-        Thu, 06 Jan 2022 08:28:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=lxUlFxhMptAz9Y42Hx9rEfu5hiDbmB6V0YZynYTL0KE=;
-        b=TQrpGlJ7gsdhZeZ1M52sjuU754jaQTIwE8zDnuWEu8oskraOLs7pNEpDhwjIFVf7Tf
-         d0u8z6u6p8+O5tnXPlMjVkSfG5aka/hJDXnzA0qRofWhlErqA0Umo5TJv2KfpI5/3BkO
-         rwN4txYbKzalVKc1f+6EhjrH1K2lGoiXPjTdYPfbeBZllxfCMKPq4UMz6C5VXBrgyhCw
-         cdaVlF/BjNfv5z3UvMT8xaPOpQu3+WjC64EyPG1aicTuDibKpsLWUYfDwfUAy+cSEh/M
-         fUFe0vS7CKjCTMjo/yXLThAUCZ0PrzTYGTRo/un8qhhQ/gwdVQE9KEqGhomRxtvcZJ71
-         5YAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=lxUlFxhMptAz9Y42Hx9rEfu5hiDbmB6V0YZynYTL0KE=;
-        b=h5zM3ziyvxmiWxo8sOoNFsN33HcZXc5r37HmYbJlzIabJSK+yfqMdkflHR76z/m3io
-         mFh99nodUmneyVKbIOS+8MVOtx2hjG+0ieOqLGbsnh1Z6AgvptMc/drzCI940FV/xL/C
-         hO9LldI2VLtPZh8DQFNKS2WRAVP7f/Oa6FrIwoDGfMKjjxSHXkLdaX0DqivtiavSVogx
-         7/r1FX+u3tXmQpRaBGfXGo6Z7fK8+eAApWXq6u8ATacVSaUpiK5l4q2qho0qehUL8AHg
-         ntXr63ztOPt6huZmOeSHEcS3lCRcFHq2XlRW76BzRnrlXmmNJDwjUFOQl/CVPKmkfK6J
-         FgJA==
-X-Gm-Message-State: AOAM532wTi65TVfdT1XmkjeHoEXhNJJHUkd5hZDeyH7rj0D1FBMSVNv1
-        v2K/5l7E0cDSRG96PYjbgBK4Z37ZDqm9iEG7auM=
-X-Google-Smtp-Source: ABdhPJwf8yHoBNRpb1iHsXoi8J//mRIdxf3aTT0rBnwnGuuZx9X73J2rmsBP7OKjPp5XrfHuurk+hewgv4zTTdNAV0o=
-X-Received: by 2002:a17:907:76d4:: with SMTP id kf20mr46651675ejc.44.1641486517285;
- Thu, 06 Jan 2022 08:28:37 -0800 (PST)
+        Thu, 6 Jan 2022 11:30:38 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D59461D17;
+        Thu,  6 Jan 2022 16:30:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DBB8C36AEB;
+        Thu,  6 Jan 2022 16:30:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641486637;
+        bh=VwzxlywbuRFhErv9Kwojn/ALeD7Ym5OuRWIkT52COFc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=s1Ds1PuDWp54mthBB3Df0U9FaSLR9yMCFT3ojsHwiDSV0W1Z/Wkh9LdnU9fHAB/3K
+         OsCXSgobyd0UcosuOCuxzxpkNWf/ZOm21I30sn/nTY1v1M6xxZyUvj5u5HIC2NgiWD
+         ueKUj0Q7P9WyUgQOFFCeWaaaB2UANG2GyZhgeZ/iRMNucL77k96CqbIq0DBmGWrX9I
+         cRow3owjVT+86SwnhZ9Pjjd9oVdNNNcBV/1o4gBEy2SqBT42x5NqGS/Pc2fx5QI78i
+         8FE11YudQrYNDflkIK9FuJWiVsyGIRhRLPam5I27dQANSUVTEb99fJJmB+OIn7gxZa
+         Zi/PMpXjwWw+Q==
+Date:   Thu, 6 Jan 2022 10:30:35 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        linux-pci@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v8 00/10] vgaarb: Rework default VGA device selection
+Message-ID: <20220106163035.GA292309@bhelgaas>
 MIME-Version: 1.0
-References: <20211223173015.22251-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211223173015.22251-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAHp75VeCwR-eP930s3miv-ux8=_P+vmdkhN+K=weTL1nwNA1ig@mail.gmail.com>
- <CA+V-a8snJU6YYtfcN_mWCJGxYnbNGrLdU+Y5g06mjV4dhsABMw@mail.gmail.com>
- <CAHp75Vck43wj650k70MsUNvmb+_-PUCd5mSy=dvmuX7MaAwr2w@mail.gmail.com>
- <CA+V-a8uRqfs2h82_y6yk7MZnt8K5iKii5DZZpFgDDy0Hw2ieXA@mail.gmail.com>
- <CAHp75VdiTw7R=MSM=4nzn8m863tomSza+yxx7pXLU-Xj8aouOg@mail.gmail.com>
- <CAHp75VexoYCBBJ1BFgnsb38Q79jG6NB2xBBHmAafTK2FHkTsbQ@mail.gmail.com>
- <CA+V-a8sbcebVnqGaLOxVhG_0wm3cM4bu0SebAa1Mkuv9GNBGnQ@mail.gmail.com>
- <CAHp75Vfy0M_mF0+2V0dzrQNnZ2wz4bSEnvUj=WeQ7EgwwVy_CA@mail.gmail.com> <CA+V-a8sYQ+7Wcsh5qyPjcQbJ8UGpBXoecqC3Vhqvn_3tsTMN2Q@mail.gmail.com>
-In-Reply-To: <CA+V-a8sYQ+7Wcsh5qyPjcQbJ8UGpBXoecqC3Vhqvn_3tsTMN2Q@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 6 Jan 2022 18:28:00 +0200
-Message-ID: <CAHp75Vcxrq+zNuAe7Lr+=BeXLUnpQpLLTik1UGe-sZRcH7uWHg@mail.gmail.com>
-Subject: Re: [PATCH 06/13] media: davinci: vpif: Use platform_get_irq_optional()
- to get the interrupt
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220106000658.243509-1-helgaas@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 6:11 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
-> On Thu, Jan 6, 2022 at 4:02 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Thu, Jan 6, 2022 at 5:27 PM Lad, Prabhakar
-> > <prabhakar.csengg@gmail.com> wrote:
-> > > On Thu, Jan 6, 2022 at 2:15 PM Andy Shevchenko
-> > > <andy.shevchenko@gmail.com> wrote:
-> > > > On Thu, Jan 6, 2022 at 3:43 PM Andy Shevchenko
-> > > > <andy.shevchenko@gmail.com> wrote:
-> > > > > On Wed, Jan 5, 2022 at 7:41 PM Lad, Prabhakar
-> > > > > <prabhakar.csengg@gmail.com> wrote:
-> > > > > > On Wed, Jan 5, 2022 at 9:43 AM Andy Shevchenko
-> >
-> > ...
-> >
-> > > > > >  #define DEFINE_RES_NAMED(_start, _size, _name, _flags)        =
-         \
-> > > > > > -       {                                                      =
-         \
-> > > > > > +       (struct resource) {                                    =
- \
-> > > > >
-> > > > > Yep, that's it.
-> > > > >
-> > > > > >                 .start =3D (_start),                           =
-           \
-> > > > > >                 .end =3D (_start) + (_size) - 1,               =
-           \
-> > > > > >                 .name =3D (_name),                             =
-           \
-> > > > > >
-> > > > > > But there are some instances which need to be touched, for exam=
-ple
-> > > > > > vexpress-sysreg.c [1]. Are you OK with files to be changed?
-> > > > >
-> > > > > Nice! That's exactly my point and you can sell it to the communit=
-y
-> > > > > because there are already users of it like this.
-> > > > >
-> > > > > Yes, I'm fine, but it seems it needs to be done treewide in one p=
-atch.
-> > > > > Btw, how many of those already in use?
-> > > >
-> > > > Actually you don't need to change that. It's an array of resources =
-and
-> > > > everything should be kept as is there.
-> > > >
-> > > I do get below build failures, with the above literal change for
-> > > vexpress-sysreg.c.
-> > >
-> > > drivers/mfd/vexpress-sysreg.c: At top level:
-> > > drivers/mfd/vexpress-sysreg.c:64:37: error: initialiser element is no=
-t constant
-> > >    64 |   .resources =3D (struct resource []) {
-> > >       |                                     ^
-> > > drivers/mfd/vexpress-sysreg.c:64:37: note: (near initialisation for
-> > > =E2=80=98vexpress_sysreg_cells[0]=E2=80=99)
+[+to Maarten, Maxime, Thomas: sorry, I forgot to use
+get_maintainer.pl so I missed you the first time.  Beginning of thread:
+https://lore.kernel.org/all/20220106000658.243509-1-helgaas@kernel.org/#t
+Git branch with this v8 + a couple trivial renames, based on v5.16-rc1:
+https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/log/?h=0f4caffa1297]
 
-> > Hmm... Interesting, so I suppose the fix is to drop (struct resource
-> > []) parts from the driver?
-> >
-> A bit more than that like something below:
-
-> - .resources =3D (struct resource []) {
-> - DEFINE_RES_MEM_NAMED(SYS_LED, 0x4, "dat"),
-> - },
-> + .resources =3D &DEFINE_RES_MEM_NAMED(SYS_LED, 0x4, "dat"),
-
-This is not an equivalent change.
-The warning is about const qualifier. Can it rather be  const struct
-resource [] ?
-
---=20
-With Best Regards,
-Andy Shevchenko
+On Wed, Jan 05, 2022 at 06:06:48PM -0600, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> Current default VGA device selection fails in some cases because part of it
+> is done in the vga_arb_device_init() subsys_initcall, and some arches
+> enumerate PCI devices in pcibios_init(), which runs *after* that.
+> 
+> For example:
+> 
+>   - On BMC system, the AST2500 bridge [1a03:1150] does not implement
+>     PCI_BRIDGE_CTL_VGA.  This is perfectly legal but means the legacy VGA
+>     resources won't reach downstream devices unless they're included in the
+>     usual bridge windows.
+> 
+>   - vga_arb_select_default_device() will set a device below such a bridge
+>     as the default VGA device as long as it has PCI_COMMAND_IO and
+>     PCI_COMMAND_MEMORY enabled.
+> 
+>   - vga_arbiter_add_pci_device() is called for every VGA device, either at
+>     boot-time or at hot-add time, and it will also set the device as the
+>     default VGA device, but ONLY if all bridges leading to it implement
+>     PCI_BRIDGE_CTL_VGA.
+> 
+>   - This difference between vga_arb_select_default_device() and
+>     vga_arbiter_add_pci_device() means that a device below an AST2500 or
+>     similar bridge can only be set as the default if it is enumerated
+>     before vga_arb_device_init().
+> 
+>   - On ACPI-based systems, PCI devices are enumerated by acpi_init(), which
+>     runs before vga_arb_device_init().
+> 
+>   - On non-ACPI systems, like on MIPS system, they are enumerated by
+>     pcibios_init(), which typically runs *after* vga_arb_device_init().
+> 
+> This series consolidates all the default VGA device selection in
+> vga_arbiter_add_pci_device(), which is always called after enumerating a
+> PCI device.
+> 
+> Almost all the work here is Huacai's.  I restructured it a little bit and
+> added a few trivial patches on top.
+> 
+> I'd like to move vgaarb.c to drivers/pci eventually, but there's another
+> initcall ordering snag that needs to be resolved first, so this leaves 
+> it where it is.
+> 
+> Bjorn
+> 
+> Version history:
+> V0 original implementation as final quirk to set default device.
+> https://lore.kernel.org/r/20210514080025.1828197-6-chenhuacai@loongson.cn
+> 
+> V1 rework vgaarb to do all default device selection in
+> vga_arbiter_add_pci_device().
+> https://lore.kernel.org/r/20210705100503.1120643-1-chenhuacai@loongson.cn
+> 
+> V2 move arbiter to PCI subsystem, fix nits.
+> https://lore.kernel.org/r/20210722212920.347118-1-helgaas@kernel.org
+> 
+> V3 rewrite the commit log of the last patch (which is also summarized
+> by Bjorn).
+> https://lore.kernel.org/r/20210820100832.663931-1-chenhuacai@loongson.cn
+> 
+> V4 split the last patch to two steps.
+> https://lore.kernel.org/r/20210827083129.2781420-1-chenhuacai@loongson.cn
+> 
+> V5 split Patch-9 again and sort the patches.
+> https://lore.kernel.org/r/20210911093056.1555274-1-chenhuacai@loongson.cn
+> 
+> V6 split Patch-5 again and sort the patches again.
+> https://lore.kernel.org/r/20210916082941.3421838-1-chenhuacai@loongson.cn
+> 
+> V7 stop moving vgaarb to drivers/pci because of ordering issues with
+> misc_init().
+> https://lore.kernel.org/r/20211015061512.2941859-1-chenhuacai@loongson.cn
+> https://lore.kernel.org/r/CAAhV-H7FhAjM-Ha42Z1dLrE4PvC9frfyeU27KHWcyWKkMftEsA@mail.gmail.com
+> 
+> 
+> Bjorn Helgaas (8):
+>   vgaarb: Factor out vga_select_framebuffer_device()
+>   vgaarb: Factor out default VGA device selection
+>   vgaarb: Move framebuffer detection to ADD_DEVICE path
+>   vgaarb: Move non-legacy VGA detection to ADD_DEVICE path
+>   vgaarb: Move disabled VGA device detection to ADD_DEVICE path
+>   vgaarb: Remove empty vga_arb_device_card_gone()
+>   vgaarb: Use unsigned format string to print lock counts
+>   vgaarb: Replace full MIT license text with SPDX identifier
+> 
+> Huacai Chen (2):
+>   vgaarb: Move vga_arb_integrated_gpu() earlier in file
+>   vgaarb: Log bridge control messages when adding devices
+> 
+>  drivers/gpu/vga/vgaarb.c | 311 +++++++++++++++++++--------------------
+>  1 file changed, 154 insertions(+), 157 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 
+> 

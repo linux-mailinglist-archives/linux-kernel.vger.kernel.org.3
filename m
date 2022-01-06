@@ -2,129 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC02C485F41
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 04:34:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63699485F44
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 04:35:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbiAFDen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 22:34:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:58324 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229593AbiAFDem (ORCPT
+        id S230417AbiAFDfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 22:35:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52064 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230364AbiAFDff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 22:34:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641440081;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=u+HGFdmIXdJmHP9QK0j9Uw9SU9GiyJhQU7QWjrfmCXg=;
-        b=EAJMAW41+ondLxzg7y98tDV7b2VW9PlChi/KFMDwdG5JA4vXdJg96vULfXE4mvHm3K88xy
-        3w/5Juy0wZjQiE5h+5hJn8oLCGTYbSL3n96bySExioPkqlzpg/HYkpQcTptiD8w7PQwLh4
-        2GZCjQrsWAq2d71qB9EFR8lpvgyQ/wc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-350-TIruUn19OxG2DzyDCxiCEw-1; Wed, 05 Jan 2022 22:34:38 -0500
-X-MC-Unique: TIruUn19OxG2DzyDCxiCEw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2BDA61083F68;
-        Thu,  6 Jan 2022 03:34:37 +0000 (UTC)
-Received: from [10.22.16.135] (unknown [10.22.16.135])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 914EAE2FF;
-        Thu,  6 Jan 2022 03:34:31 +0000 (UTC)
-Message-ID: <00c4c55b-7fa6-d29c-4a80-c196922ef527@redhat.com>
-Date:   Wed, 5 Jan 2022 22:34:31 -0500
+        Wed, 5 Jan 2022 22:35:35 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1681C061212
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Jan 2022 19:35:34 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id w13so3590625ybs.13
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Jan 2022 19:35:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=VhCtBh9G+9Rq3UzhrUmX4qOWZGDQBagUdx1KxmXNCUU=;
+        b=Unx7MsOTF3iBIkzcDjUGc/Hwk1xF3imXeLxXvHDk3YAGS/3Q1gvF0MmE2Gz+qlqSKf
+         UimyQLdx13fXmvEnS7nvvLDfUXqbqkKPQuyb/StgtYIogr5z2y37q7eN3BK68GOoP7D0
+         BQTDY1+UtpFGDwOWQ2Y79VEfk1Po8m3bCB6Qq0RSduk0Bpn4kk0uYvPEpfYe/FMbW+oQ
+         yKI14c1UJXhWmMFMLGm/yldfRNvJD3aJaYaDonTthjth8433U+wEco2cmgNjPb1lLk+D
+         FU0xnMSpGtIqeZZ2VJbilITNZvItjLMKlMIpid+Xvf+25diKXAEYiFKMoBym3Iwqhcta
+         iCdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=VhCtBh9G+9Rq3UzhrUmX4qOWZGDQBagUdx1KxmXNCUU=;
+        b=sd6a0Idb/V5Evd8fhHgK+pF2TOt85tYqzOjxM/46SHAM7RMxS6yc2x/cML3uxxI5Ec
+         gfpepHJt8K39mmVldnPR4LcfVCaq7jriWOgw/m++S4ZP4UEaLBHG+Ftijzf22ibd/0dO
+         GL+T1bOSXfE75RRIxoEuZujjoVP6g4k7ZTeOzlXGuz+csKODFXJPfB4raH1+XBTe0+DI
+         6Hd0nihku6h0BgPlGy6NNnenA1jRGUA9eARpSB4S6Hunyt7+9JP/e0vWS2s/MCrm9eBN
+         o/bz6c1CuhgKaFOrUM1FlWfmXv/3kwnEAVWYIZNZBRaIjSO3Y2OpO/dg6dfbx4Qi/x8F
+         rnbw==
+X-Gm-Message-State: AOAM532TmvA+zk9Wp+dDVW68dCsIbHi+sVvMsdaa9VfNby7Aj3XKhCDT
+        5M8TgF1aFGxe8oH4rdXe2qdwnQD5p+cd8cgVrMu8nQ==
+X-Google-Smtp-Source: ABdhPJxLB871qfyaC0YcbeoW0XO6II0Pr+i3wgfkb5I1MNAgQRDDpwl/ZkNrhj0iJGor2gwCYyskjboIbezk1yYDgxI=
+X-Received: by 2002:a25:3890:: with SMTP id f138mr63404636yba.703.1641440134052;
+ Wed, 05 Jan 2022 19:35:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] locking/local_lock: Make the empty local_lock_*()
- function a macro.
-Content-Language: en-US
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <20220105202623.1118172-1-bigeasy@linutronix.de>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20220105202623.1118172-1-bigeasy@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+References: <20211220085649.8196-1-songmuchun@bytedance.com>
+ <20211220085649.8196-14-songmuchun@bytedance.com> <20220105170348.GA21070@blackbody.suse.cz>
+In-Reply-To: <20220105170348.GA21070@blackbody.suse.cz>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Thu, 6 Jan 2022 11:34:58 +0800
+Message-ID: <CAMZfGtWhYOFCKtFoHB7vsKmpEdj9F-axkba6p9EpuPUp3BK-ag@mail.gmail.com>
+Subject: Re: [PATCH v5 13/16] mm: memcontrol: reuse memory cgroup ID for kmem ID
+To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        =?UTF-8?Q?Mika_Penttil=C3=A4?= <mika.penttila@nextfour.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <guro@fb.com>, Yang Shi <shy828301@gmail.com>,
+        Alex Shi <alexs@kernel.org>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        Dave Chinner <david@fromorbit.com>,
+        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
+        jaegeuk@kernel.org, chao@kernel.org,
+        Kari Argillander <kari.argillander@gmail.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-nfs@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>,
+        Xiongchun duan <duanxiongchun@bytedance.com>,
+        Fam Zheng <fam.zheng@bytedance.com>,
+        Muchun Song <smuchun@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/5/22 15:26, Sebastian Andrzej Siewior wrote:
-> It has been said that local_lock() does not add any overhead compared to
-> preempt_disable() in a !LOCKDEP configuration. A microbenchmark showed
-> an unexpected result which can be reduced to the fact that local_lock()
-> was not entirely optimized away.
-> In the !LOCKDEP configuration local_lock_acquire() is an empty static
-> inline function. On x86 the this_cpu_ptr() argument of that function is
-> fully evaluated leading to an additional mov+add instructions which are
-> not needed and not used.
+On Thu, Jan 6, 2022 at 1:03 AM Michal Koutn=C3=BD <mkoutny@suse.com> wrote:
 >
-> Replace the static inline function with a macro. The typecheck() macro
-> ensures that the argument is of proper type while the resulting
-> disassembly shows no traces of this_cpu_ptr().
+> On Mon, Dec 20, 2021 at 04:56:46PM +0800, Muchun Song <songmuchun@bytedan=
+ce.com> wrote:
+> > There are two idrs being used by memory cgroup, one is for kmem ID,
+> > another is for memory cgroup ID. The maximum ID of both is 64Ki.
+> > Both of them can limit the total number of memory cgroups.
+> > Actually, we can reuse memory cgroup ID for kmem ID to simplify the
+> > code.
 >
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> ---
-> On -rc8, size says:
-> |     text    data     bss      dec     filename
-> | 19656718 8681015 3764440 32102173 vmlinux.old
-> | 19656218 8681015 3764440 32101673 vmlinux.new
+> An interesting improvement.
 >
-> Which is -500 text, not much but still.
+> I'm a bit dense -- what's the purpose the MEM_CGROUP_ID_DIFF offset?
+
+Hi Michal and Mika,
+
+MEM_CGROUP_ID_DIFF is introduced to be consistent with before
+that kmem ID starts with -1 and has no holes. Actually, it can be dropped
+and make memcg->kmemcg_id equal to memcg->id.id directly.
+
+> Couldn't this deduplication be extended to only use mem_cgroup.id.id
+> instead of mem_cgroup.kmemcg_id? (With a boolean telling whether kmem
+> accounting is active.)
 >
->   include/linux/local_lock_internal.h | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/include/linux/local_lock_internal.h b/include/linux/local_lock_internal.h
-> index 975e33b793a77..6d635e8306d64 100644
-> --- a/include/linux/local_lock_internal.h
-> +++ b/include/linux/local_lock_internal.h
-> @@ -44,9 +44,9 @@ static inline void local_lock_debug_init(local_lock_t *l)
->   }
->   #else /* CONFIG_DEBUG_LOCK_ALLOC */
->   # define LOCAL_LOCK_DEBUG_INIT(lockname)
-> -static inline void local_lock_acquire(local_lock_t *l) { }
-> -static inline void local_lock_release(local_lock_t *l) { }
-> -static inline void local_lock_debug_init(local_lock_t *l) { }
-> +# define local_lock_acquire(__ll)  do { typecheck(local_lock_t *, __ll); } while (0)
-> +# define local_lock_release(__ll)  do { typecheck(local_lock_t *, __ll); } while (0)
-> +# define local_lock_debug_init(__ll)  do { typecheck(local_lock_t *, __ll); } while (0)
->   #endif /* !CONFIG_DEBUG_LOCK_ALLOC */
->   
->   #define INIT_LOCAL_LOCK(lockname)	{ LOCAL_LOCK_DEBUG_INIT(lockname) }
 
-I try out this patch and it indeed helps to reduce the object size of 
-functions that use local_lock(). However, the extra code isn't an 
-additional mov+add.
+Not easy to completely remove memcg->kmemcg_id since this filed
+will be used to sync list_lru reparenting which will change
+memcg->kmemcg_id to its parent's kmem ID (more details refers to
+memcg_drain_all_list_lrus() in patch 10 of this series).
 
-Using folio_add_lru() as an example,
-
-Without the patch:
-
-466        local_lock(&lru_pvecs.lock);
-    0x00000000000032ee <+14>:    mov    $0x1,%edi
-    0x00000000000032f3 <+19>:    callq  0x32f8 <folio_add_lru+24>
-    0x00000000000032f8 <+24>:    callq  0x32fd <folio_add_lru+29>
-
-With the patch:
-
-466             local_lock(&lru_pvecs.lock);
-    0x00000000000032ae <+14>:    mov    $0x1,%edi
-    0x00000000000032b3 <+19>:    callq  0x32b8 <folio_add_lru+24>
-
-There is one less placeholder for tracing. Maybe it depends on the 
-compiler and the exact config options.
-
-Anyway,
-
-Reviewed-by: Waiman Long <longman@redhat.com>
-
+Thanks.

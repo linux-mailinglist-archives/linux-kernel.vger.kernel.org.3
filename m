@@ -2,147 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB064864EC
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 14:07:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D21E64864F1
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 14:08:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239142AbiAFNHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 08:07:30 -0500
-Received: from mga02.intel.com ([134.134.136.20]:52817 "EHLO mga02.intel.com"
+        id S239357AbiAFNIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 08:08:25 -0500
+Received: from marcansoft.com ([212.63.210.85]:58358 "EHLO mail.marcansoft.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238990AbiAFNH1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 08:07:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641474447; x=1673010447;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=znSuPJrdIfXZBPs+/0Wp7F8ajuSAzZTJWGMLAVEn470=;
-  b=J7UQ3iBlX/ns0+EBmP4pNHhPYCJLE93lhvX/1yFvND8RSL+b9V2gpA71
-   PX8Lup/pq8aQzdTO5EqmZOOAK90upvhyGPcgxCjJxg7icL6IVCBbT5qQY
-   rbF/DVURDTVaozqT6vhFfRAOgoBapRCWevuKTQZ2F4V5oxEiCz3qofm8d
-   9YYdam3B2TSW6LzYXQ45CJmE4ndsUdqV/pfiKtvw0BwYuY1EHhvhTlkqu
-   v9p2QB4G0SOqEaz0W9ugzvvILCvjozjopjBQfzLSZfBG751v+NAKBMsqF
-   XkdlHURoXqy1NPSZQWN/sLhkznkAmL0hRrRakDzcxxukhaMUAF14Al5cG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="229980549"
-X-IronPort-AV: E=Sophos;i="5.88,267,1635231600"; 
-   d="scan'208";a="229980549"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 05:07:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,267,1635231600"; 
-   d="scan'208";a="526972284"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
-  by orsmga008.jf.intel.com with ESMTP; 06 Jan 2022 05:07:19 -0800
-Date:   Thu, 6 Jan 2022 21:06:38 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, john.ji@intel.com, susie.li@intel.com,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com
-Subject: Re: [PATCH v3 kvm/queue 01/16] mm/shmem: Introduce
- F_SEAL_INACCESSIBLE
-Message-ID: <20220106130638.GB43371@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20211223123011.41044-1-chao.p.peng@linux.intel.com>
- <20211223123011.41044-2-chao.p.peng@linux.intel.com>
- <7eb40902-45dd-9193-37f1-efaca381529b@redhat.com>
+        id S238990AbiAFNIX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 08:08:23 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id DDDF442165;
+        Thu,  6 Jan 2022 13:08:13 +0000 (UTC)
+To:     Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com
+References: <20220104072658.69756-1-marcan@marcan.st>
+ <20220104072658.69756-8-marcan@marcan.st>
+ <3dfb1a06-4474-4614-08e5-b09f0977e03c@broadcom.com>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH v2 07/35] brcmfmac: pcie: Read Apple OTP information
+Message-ID: <7b3e7ae0-5791-f4ad-619a-a3cc3f913a44@marcan.st>
+Date:   Thu, 6 Jan 2022 22:08:11 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7eb40902-45dd-9193-37f1-efaca381529b@redhat.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <3dfb1a06-4474-4614-08e5-b09f0977e03c@broadcom.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: es-ES
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 03:22:07PM +0100, David Hildenbrand wrote:
-> On 23.12.21 13:29, Chao Peng wrote:
-> > From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> > 
-> > Introduce a new seal F_SEAL_INACCESSIBLE indicating the content of
-> > the file is inaccessible from userspace in any possible ways like
-> > read(),write() or mmap() etc.
-> > 
-> > It provides semantics required for KVM guest private memory support
-> > that a file descriptor with this seal set is going to be used as the
-> > source of guest memory in confidential computing environments such
-> > as Intel TDX/AMD SEV but may not be accessible from host userspace.
-> > 
-> > At this time only shmem implements this seal.
-> > 
-> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> > ---
-> >  include/uapi/linux/fcntl.h |  1 +
-> >  mm/shmem.c                 | 37 +++++++++++++++++++++++++++++++++++--
-> >  2 files changed, 36 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/include/uapi/linux/fcntl.h b/include/uapi/linux/fcntl.h
-> > index 2f86b2ad6d7e..e2bad051936f 100644
-> > --- a/include/uapi/linux/fcntl.h
-> > +++ b/include/uapi/linux/fcntl.h
-> > @@ -43,6 +43,7 @@
-> >  #define F_SEAL_GROW	0x0004	/* prevent file from growing */
-> >  #define F_SEAL_WRITE	0x0008	/* prevent writes */
-> >  #define F_SEAL_FUTURE_WRITE	0x0010  /* prevent future writes while mapped */
-> > +#define F_SEAL_INACCESSIBLE	0x0020  /* prevent file from accessing */
+On 06/01/2022 21.37, Arend van Spriel wrote:
+> On 1/4/2022 8:26 AM, Hector Martin wrote:
+>> +static int brcmf_pcie_read_otp(struct brcmf_pciedev_info *devinfo)
+>> +{
+>> +	const struct pci_dev *pdev = devinfo->pdev;
+>> +	struct brcmf_bus *bus = dev_get_drvdata(&pdev->dev);
+>> +	u32 coreid, base, words, idx, sromctl;
+>> +	u16 *otp;
+>> +	struct brcmf_core *core;
+>> +	int ret;
+>> +
+>> +	switch (devinfo->ci->chip) {
+>> +	default:
+>> +		/* OTP not supported on this chip */
+>> +		return 0;
+>> +	}
 > 
-> I think this needs more clarification: the file content can still be
-> accessed using in-kernel mechanisms such as MEMFD_OPS for KVM. It
-> effectively disallows traditional access to a file (read/write/mmap)
-> that will result in ordinary MMU access to file content.
-> 
-> Not sure how to best clarify that: maybe, prevent ordinary MMU access
-> (e.g., read/write/mmap) to file content?
+> Does not seem this code is put to work yet. Will dive into it later on.
 
-Or: prevent userspace access (e.g., read/write/mmap) to file content?
-> 
-> >  /* (1U << 31) is reserved for signed error codes */
-> >  
-> >  /*
-> > diff --git a/mm/shmem.c b/mm/shmem.c
-> > index 18f93c2d68f1..faa7e9b1b9bc 100644
-> > --- a/mm/shmem.c
-> > +++ b/mm/shmem.c
-> > @@ -1098,6 +1098,10 @@ static int shmem_setattr(struct user_namespace *mnt_userns,
-> >  		    (newsize > oldsize && (info->seals & F_SEAL_GROW)))
-> >  			return -EPERM;
-> >  
-> > +		if ((info->seals & F_SEAL_INACCESSIBLE) &&
-> > +		    (newsize & ~PAGE_MASK))
-> > +			return -EINVAL;
-> > +
-> 
-> What happens when sealing and there are existing mmaps?
+The specific OTP ranges and cores are added by the subsequent patches
+that add support for individual chips, once all the scaffolding is in place.
 
-I think this is similar to ftruncate, in either case we just allow that.
-The existing mmaps will be unmapped and KVM will be notified to
-invalidate the mapping in the secondary MMU as well. This assume we
-trust the userspace even though it can not access the file content.
+> 
+>> +	core = brcmf_chip_get_core(devinfo->ci, coreid);
+>> +	if (!core) {
+>> +		brcmf_err(bus, "No OTP core\n");
+>> +		return -ENODEV;
+>> +	}
+>> +
+>> +	if (coreid == BCMA_CORE_CHIPCOMMON) {
+>> +		/* Chips with OTP accessed via ChipCommon need additional
+>> +		 * handling to access the OTP
+>> +		 */
+>> +		brcmf_pcie_select_core(devinfo, coreid);
+>> +		sromctl = READCC32(devinfo, sromcontrol);
+>> +
+>> +		if (!(sromctl & BCMA_CC_SROM_CONTROL_OTP_PRESENT)) {
+>> +			/* Chip lacks OTP, try without it... */
+>> +			brcmf_err(bus,
+>> +				  "OTP unavailable, using default firmware\n");
+>> +			return 0;
+>> +		}
+>> +
+>> +		/* Map OTP to shadow area */
+>> +		WRITECC32(devinfo, sromcontrol,
+>> +			  sromctl | BCMA_CC_SROM_CONTROL_OTPSEL);
+>> +	}
+>> +
+>> +	otp = kzalloc(sizeof(u16) * words, GFP_KERNEL);
+>> +
+>> +	/* Map bus window to SROM/OTP shadow area in core */
+>> +	base = brcmf_pcie_buscore_prep_addr(devinfo->pdev, base + core->base);
+> 
+> I guess this changes the bar window...
+> 
+>> +	brcmf_dbg(PCIE, "OTP data:\n");
+>> +	for (idx = 0; idx < words; idx++) {
+>> +		otp[idx] = brcmf_pcie_read_reg16(devinfo, base + 2 * idx);
+>> +		brcmf_dbg(PCIE, "[%8x] 0x%04x\n", base + 2 * idx, otp[idx]);
+>> +	}
+>> +
+>> +	if (coreid == BCMA_CORE_CHIPCOMMON) {
+>> +		brcmf_pcie_select_core(devinfo, coreid);
+> 
+> ... which is why you need to reselect the core. Otherwise it makes no 
+> sense to me.
 
-Thanks,
-Chao
-> 
-> 
-> -- 
-> Thanks,
-> 
-> David / dhildenb
+Yes; *technically* with the BCMA_CORE_CHIPCOMMON core the OTP is always
+within the first 0x1000 and so I wouldn't have to reselect it, since
+it'd end up with the same window, but that is not the case with
+BCMA_CORE_GCI used on other chips (where the OTP offset is >0x1000),
+although those don't hit this code path. So while this line could be
+removed without causing any issues, I find it more orthogonal and safer
+to keep the pattern where I select the core before accessing
+core-relative fixed registers, and treat brcmf_pcie_buscore_prep_addr as
+invalidating the BAR window for all intents and purposes.
+
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

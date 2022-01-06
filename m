@@ -2,127 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 396C6485E36
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 02:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7AC0485E3C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 02:51:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344438AbiAFBon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 20:44:43 -0500
-Received: from mga03.intel.com ([134.134.136.65]:61907 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344427AbiAFBoh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 20:44:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641433477; x=1672969477;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=G6ngbjkjBS0fxtFM+fJf7muqpnq1GWTrwIY3RJJ+2bY=;
-  b=Ve5Wj5SBolIv6xtu75v1ijux3SeXdHPisp5mfaLCnGveRT60T6KhNnn/
-   q0CJrBGxzdEDvXZx+4OVVqt7uvQMk2zXWSCW/zh6fB6+OY1xOB8wHQ3hl
-   r/mdy8LMJaeS2HxhydDP4GutTKMovx4kvSgS4yljcx+3q+XgXZh0YNiKa
-   lNTH+qz4dFpJgZuPuyvVTkMx4rL/3oerGgyiusRTheS4Y5o/kqrQCTzz5
-   O1Ejy+bMxHOrsF6K3vsmMsih7VdWIL6JxNfUYx+wVbTRhH+/Yu+zv6l7R
-   DupgdHc5jIHih+lIfCV4r3dULkTQG4vJSegYiquX/sE72e6ZYw1P5GTFV
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="242526991"
-X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
-   d="scan'208";a="242526991"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 17:44:36 -0800
-X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
-   d="scan'208";a="526785362"
-Received: from zengguan-mobl.ccr.corp.intel.com (HELO [10.238.0.214]) ([10.238.0.214])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 17:44:31 -0800
-Message-ID: <4eee5de5-ab76-7094-17aa-adc552032ba0@intel.com>
-Date:   Thu, 6 Jan 2022 09:44:20 +0800
+        id S1344449AbiAFBvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 20:51:51 -0500
+Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:54689 "EHLO
+        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1344427AbiAFBvt (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 20:51:49 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R451e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V13wOxI_1641433907;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V13wOxI_1641433907)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 06 Jan 2022 09:51:48 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     anton@tuxera.com
+Cc:     linux-ntfs-dev@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] NTFS: Fix one kernel-doc comment
+Date:   Thu,  6 Jan 2022 09:51:45 +0800
+Message-Id: <20220106015145.67067-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.4.1
-Subject: Re: [PATCH v5 7/8] KVM: VMX: Update PID-pointer table entry when APIC
- ID is changed
-Content-Language: en-US
-To:     Tom Lendacky <thomas.lendacky@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "Huang, Kai" <kai.huang@intel.com>
-Cc:     "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hu, Robert" <robert.hu@intel.com>,
-        "Gao, Chao" <chao.gao@intel.com>
-References: <20211231142849.611-1-guang.zeng@intel.com>
- <20211231142849.611-8-guang.zeng@intel.com>
- <640e82f3-489d-60af-1d31-25096bef1a46@amd.com>
-From:   Zeng Guang <guang.zeng@intel.com>
-In-Reply-To: <640e82f3-489d-60af-1d31-25096bef1a46@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/6/2022 3:13 AM, Tom Lendacky wrote:
-> On 12/31/21 8:28 AM, Zeng Guang wrote:
->> In xAPIC mode, guest is allowed to modify APIC ID at runtime.
->> If IPI virtualization is enabled, corresponding entry in
->> PID-pointer table need change accordingly.
->>
->> Signed-off-by: Zeng Guang <guang.zeng@intel.com>
->> ---
->>    arch/x86/include/asm/kvm_host.h |  1 +
->>    arch/x86/kvm/lapic.c            |  7 +++++--
->>    arch/x86/kvm/vmx/vmx.c          | 12 ++++++++++++
->>    3 files changed, 18 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
->> index 2164b9f4c7b0..753bf2a7cebc 100644
->> --- a/arch/x86/include/asm/kvm_host.h
->> +++ b/arch/x86/include/asm/kvm_host.h
->> @@ -1493,6 +1493,7 @@ struct kvm_x86_ops {
->>    	int (*complete_emulated_msr)(struct kvm_vcpu *vcpu, int err);
->>    
->>    	void (*vcpu_deliver_sipi_vector)(struct kvm_vcpu *vcpu, u8 vector);
->> +	void (*update_ipiv_pid_entry)(struct kvm_vcpu *vcpu, u8 old_id, u8 new_id);
->>    };
->>    
->>    struct kvm_x86_nested_ops {
->> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
->> index 3ce7142ba00e..83c2c7594bcd 100644
->> --- a/arch/x86/kvm/lapic.c
->> +++ b/arch/x86/kvm/lapic.c
->> @@ -2007,9 +2007,12 @@ int kvm_lapic_reg_write(struct kvm_lapic *apic, u32 reg, u32 val)
->>    
->>    	switch (reg) {
->>    	case APIC_ID:		/* Local APIC ID */
->> -		if (!apic_x2apic_mode(apic))
->> +		if (!apic_x2apic_mode(apic)) {
->> +			u8 old_id = kvm_lapic_get_reg(apic, APIC_ID) >> 24;
->> +
->>    			kvm_apic_set_xapic_id(apic, val >> 24);
->> -		else
->> +			kvm_x86_ops.update_ipiv_pid_entry(apic->vcpu, old_id, val >> 24);
-> Won't this blow up on AMD since there is no corresponding SVM op?
->
-> Thanks,
-> Tom
-Right, need check ops validness to avoid ruining AMD system. Same 
-consideration on ops "update_ipiv_pid_table" in patch8.
-I will revise in next version. Thanks.
->> +		} else
->>    			ret = 1;
->>    		break;
->>    
->>
+/**
+ * attrib.c - NTFS attribute operations.  Part of the Linux-NTFS
+
+The comments for the file should not be in kernel-doc format, which causes
+it to be incorrectly identified for function ntfs_map_runlist_nolock(),
+causing some warnings found by running scripts/kernel-doc.
+
+fs/ntfs/attrib.c:25: warning: Incorrect use of kernel-doc format:  *
+ntfs_map_runlist_nolock - map (a part of) a runlist of an ntfs inode
+fs/ntfs/attrib.c:71: warning: Function parameter or member 'ni' not
+described in 'ntfs_map_runlist_nolock'
+fs/ntfs/attrib.c:71: warning: Function parameter or member 'vcn' not
+described in 'ntfs_map_runlist_nolock'
+fs/ntfs/attrib.c:71: warning: Function parameter or member 'ctx' not
+described in 'ntfs_map_runlist_nolock'
+fs/ntfs/attrib.c:71: warning: expecting prototype for attrib.c - NTFS
+attribute operations.  Part of the Linux(). Prototype was for
+ntfs_map_runlist_nolock() instead
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ fs/ntfs/attrib.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/ntfs/attrib.c b/fs/ntfs/attrib.c
+index d563abc3e136..2911c04a33e0 100644
+--- a/fs/ntfs/attrib.c
++++ b/fs/ntfs/attrib.c
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+-/**
++/*
+  * attrib.c - NTFS attribute operations.  Part of the Linux-NTFS project.
+  *
+  * Copyright (c) 2001-2012 Anton Altaparmakov and Tuxera Inc.
+-- 
+2.20.1.7.g153144c
+

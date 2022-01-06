@@ -2,104 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B16D248684B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:19:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFF4048684E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:20:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241650AbiAFRTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 12:19:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38872 "EHLO
+        id S241661AbiAFRUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 12:20:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241633AbiAFRTy (ORCPT
+        with ESMTP id S241627AbiAFRUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 12:19:54 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABBAC061245;
-        Thu,  6 Jan 2022 09:19:54 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id h1so2909620pls.11;
-        Thu, 06 Jan 2022 09:19:54 -0800 (PST)
+        Thu, 6 Jan 2022 12:20:54 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EBEC061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 09:20:54 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id s7-20020a5b0447000000b005fb83901511so6214618ybp.11
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 09:20:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2b/20xiMTEmtimxOT1Bzfz18t2DbkOsAhWklByj61+4=;
-        b=Tkmd3CiWT/pLVRsCGoObyBA6LGVVvMuE1vw6Neso3hyQbfl76BMOo7s1S2esVqznK1
-         BiG2BueQuqQAX98X/1poE/bJ151CtuQIevAJpof/uO6Sb3b08WobMOGKurt0Y/CY9M2y
-         f6cjprwbKYZDCWFLCVntwj/xw4fY6Q23QXrH3VIADsbEpKcAFIOH/CvOqqr5aHW213bR
-         Ci39e3pOJHo6qRgbTbZOs8wZ3oiB2oK5PSSXPsHNxvJF71a2badysf6MJTneWNrL6WTA
-         kt4wAOZAATG/QzlMo7lWciQQqege6Suvns6Xm3HWc3C8l41TP9pB2oJLGFlODW56REXN
-         d3cQ==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=K9TUtPModkAHXBzXcKkpf5OJ1aK/jrUSBQ4bJOlGXG0=;
+        b=iOTK/PFVTzyNu9OwQgW24CE8GR020/SHk0H9p2OonGZSfh7bmq7NbT/QB88vX0hfmT
+         TISep02s7agJ2wHlM+rJN55KFszZxm1b2oS6YoM7HhjgGt5wraTeG4pg5BuHHlVAVKSN
+         jjN2LaaIxZNU7G3fS3jA78oJX4oLn64yL3ny7QpnDT1j/d8yB3b7jGLZV5ZFfWh21zZC
+         SDmDtVqLN6CMatDd9yv94DnTDB9oBiCG5t9QqmyPLyaKRpivPHGGicUCsNs3NldQCnYE
+         MOASyEcqNpYnn5gOvL0jhupn7d2AI/QAa8JcFLB6zB5L/m2p04UGt6Wbw3Xs94j1aJ9T
+         gz5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2b/20xiMTEmtimxOT1Bzfz18t2DbkOsAhWklByj61+4=;
-        b=V00GQ41M4k6UiAaX/VaYUUSAqh2UxUWT6myHsHZiOLAdFg7+Mm1UZfcS51U1s3NjKK
-         lvI1D8O/tqlNDFQcLgrALsONfWh/xiBCLEUUyarFulUP3ZIBGIH1J4WQGGIaib0J8MYQ
-         ezOQTILhW/HsfBUXl86F5BaSy7sTmLBMAU0QQDNXkKJ5YbPEvpqcaY0ScPAsZgQ3NG3g
-         xXqMMNKOhqPuxHGJG2KGxGxiugJ1I+I53OqDk2Xc9nBhe4VIfofTmwK4uuaC7c9sAIhZ
-         eGjtJ0UUX3lrNotVzRo4fYILsdoroCCClvRfPNPR+OvryhPo3YnkwaudOleKcvfm4JVS
-         G39Q==
-X-Gm-Message-State: AOAM531l/qVDOPvysT+6HHYA3l32f76ctrU/SrQbRPpBhMPDLV0O90DN
-        oCC30tvXUp492g4YWf2ajrqhQEMCmdc=
-X-Google-Smtp-Source: ABdhPJw5hjCfSx/QUZdiJEVCEI+C9od2l9CHZvZ4A6EzxMUlcYZc60Urw9PIaRqF3JnSWfMSmkUIYQ==
-X-Received: by 2002:a17:902:9698:b0:149:b7bf:9925 with SMTP id n24-20020a170902969800b00149b7bf9925mr22337460plp.49.1641489593433;
-        Thu, 06 Jan 2022 09:19:53 -0800 (PST)
-Received: from laptop.hsd1.wa.comcast.net ([2601:600:8500:5f14:bd71:fea:c430:7b0a])
-        by smtp.gmail.com with ESMTPSA id z2sm2510744pge.86.2022.01.06.09.19.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 09:19:53 -0800 (PST)
-From:   Andrei Vagin <avagin@gmail.com>
-To:     linux-kernel@vger.kernel.org,
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=K9TUtPModkAHXBzXcKkpf5OJ1aK/jrUSBQ4bJOlGXG0=;
+        b=gpno5SSN90WvKg65O8S7Lu5QRgQA77D9hNtUrM1duYbddvwqO/H/RibEnql5bjf+Bx
+         1e2lS5Z/C3P6Nx2q07ZKKax078Cp/Byo7fsZE2pmldq6GMHMoJQFTonAQyLosf7o3tKP
+         mUA/a20Awk50osETGxMned4lrGstAz6ZuXJhnA6Ig2Y0DEcAFj19Ngur+jiX6THMz+vn
+         suuI8u6yqnSBYFeGCggaS9nA9lpWa3kLlQkrb3paRrKJhYBnLPZXjJTqweO7lDPBPM/N
+         bGnL+5YKixsO0QetccHhfrkAbAB6dgqg4LEXVqFNqIhjLv/7Yauhxep4ojOUwlDMEePW
+         Lmjg==
+X-Gm-Message-State: AOAM531J/rB0EfmiX091el3TX1fM3hhRHpRnlVlDIo+tiDPtiMOYFQbX
+        9vshUu7XF1N+d3wJY6retjtZetXc
+X-Google-Smtp-Source: ABdhPJyG8PYtAw2y8kUall7irnMe7o7v/8DM1FFtEAANjOeQ3txDb4Gt7BEWxPFRvml6nXlwKuqFeHly
+X-Received: from gnomeregan.cam.corp.google.com ([2620:15c:6:412:f130:19b6:8678:c9d1])
+ (user=brho job=sendgmr) by 2002:a5b:38b:: with SMTP id k11mr70987955ybp.220.1641489653264;
+ Thu, 06 Jan 2022 09:20:53 -0800 (PST)
+Date:   Thu,  6 Jan 2022 12:20:38 -0500
+Message-Id: <20220106172041.522167-1-brho@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.448.ga2b2bfdf31-goog
+Subject: [PATCH v3 0/3] prlimit and set/getpriority tasklist_lock optimizations
+From:   Barret Rhoden <brho@google.com>
+To:     ebiederm@xmission.com
+Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-fsdevel@vger.kernel.org, Andrei Vagin <avagin@gmail.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>
-Subject: [PATCH] fs/pipe: local vars has to match types of proper pipe_inode_info fields
-Date:   Thu,  6 Jan 2022 09:19:46 -0800
-Message-Id: <20220106171946.36128-1-avagin@gmail.com>
-X-Mailer: git-send-email 2.33.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Alexey Gladkov <legion@kernel.org>,
+        William Cohen <wcohen@redhat.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Chris Hyser <chris.hyser@oracle.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Xiaofeng Cao <caoxiaofeng@yulong.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-head, tail, ring_size are declared as unsigned int, so all local
-variables that operate with these fields have to be unsigned to avoid
-signed integer overflow.
+The tasklist_lock popped up as a scalability bottleneck on some testing
+workloads.  The readlocks in do_prlimit and set/getpriority are not
+necessary in all cases.
 
-Right now, it isn't an issue because the maximum pipe size is limited by
-1U<<31.
+Based on a cycles profile, it looked like ~87% of the time was spent in
+the kernel, ~42% of which was just trying to get *some* spinlock
+(queued_spin_lock_slowpath, not necessarily the tasklist_lock).
 
-Cc: Dmitry Safonov <0x7f454c46@gmail.com>
-Suggested-by: Dmitry Safonov <0x7f454c46@gmail.com>
-Signed-off-by: Andrei Vagin <avagin@gmail.com>
----
- fs/pipe.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+The big offenders (with rough percentages in cycles of the overall trace):
 
-diff --git a/fs/pipe.c b/fs/pipe.c
-index 45565773ec33..b4ccafffa350 100644
---- a/fs/pipe.c
-+++ b/fs/pipe.c
-@@ -605,7 +605,7 @@ pipe_write(struct kiocb *iocb, struct iov_iter *from)
- static long pipe_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- {
- 	struct pipe_inode_info *pipe = filp->private_data;
--	int count, head, tail, mask;
-+	unsigned int count, head, tail, mask;
- 
- 	switch (cmd) {
- 	case FIONREAD:
-@@ -827,7 +827,7 @@ struct pipe_inode_info *alloc_pipe_info(void)
- 
- void free_pipe_info(struct pipe_inode_info *pipe)
- {
--	int i;
-+	unsigned int i;
- 
- #ifdef CONFIG_WATCH_QUEUE
- 	if (pipe->watch_queue) {
+- do_wait 11%
+- setpriority 8% (this patchset)
+- kill 8%
+- do_exit 5%
+- clone 3%
+- prlimit64 2%   (this patchset)
+- getrlimit 1%   (this patchset)
+
+I can't easily test this patchset on the original workload for various
+reasons.  Instead, I used the microbenchmark below to at least verify
+there was some improvement.  This patchset had a 28% speedup (12% from
+baseline to set/getprio, then another 14% for prlimit).
+
+One interesting thing is that my libc's getrlimit() was calling
+prlimit64, so hoisting the read_lock(tasklist_lock) into sys_prlimit64
+had no effect - it essentially optimized the older syscalls only.  I
+didn't do that in this patchset, but figured I'd mention it since it was
+an option from the previous patch's discussion.
+
+v2: https://lore.kernel.org/lkml/20220105212828.197013-1-brho@google.com/
+- update_rlimit_cpu on the group_leader instead of for_each_thread.
+- update_rlimit_cpu still returns 0 or -ESRCH, even though we don't care
+  about the error here.  it felt safer that way in case someone uses
+  that function again.
+
+v1: https://lore.kernel.org/lkml/20211213220401.1039578-1-brho@google.com/
+
+#include <sys/resource.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+int main(int argc, char **argv)
+{
+	pid_t child;
+	struct rlimit rlim[1];
+
+	fork(); fork(); fork(); fork(); fork(); fork();
+
+	for (int i = 0; i < 5000; i++) {
+		child = fork();
+		if (child < 0)
+			exit(1);
+		if (child > 0) {
+			usleep(1000);
+			kill(child, SIGTERM);
+			waitpid(child, NULL, 0);
+		} else {
+			for (;;) {
+				setpriority(PRIO_PROCESS, 0,
+					    getpriority(PRIO_PROCESS, 0));
+				getrlimit(RLIMIT_CPU, rlim);
+			}
+		}
+	}
+
+	return 0;
+}
+
+
+
+Barret Rhoden (3):
+  setpriority: only grab the tasklist_lock for PRIO_PGRP
+  prlimit: make do_prlimit() static
+  prlimit: do not grab the tasklist_lock
+
+ include/linux/posix-timers.h   |   2 +-
+ include/linux/resource.h       |   2 -
+ kernel/sys.c                   | 127 +++++++++++++++++----------------
+ kernel/time/posix-cpu-timers.c |  12 +++-
+ 4 files changed, 76 insertions(+), 67 deletions(-)
+
 -- 
-2.33.1
+2.34.1.448.ga2b2bfdf31-goog
 

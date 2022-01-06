@@ -2,64 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 150D3485E13
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 02:22:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88262485E18
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 02:25:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344354AbiAFBWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 20:22:22 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:54344 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344334AbiAFBWJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 20:22:09 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D12DB81ED1;
-        Thu,  6 Jan 2022 01:22:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2B6CC36AEB;
-        Thu,  6 Jan 2022 01:22:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641432126;
-        bh=LDsuddmVyCNfFam0Jb1mRZ6bRN9QVH2bjAXJWN1eGQk=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=KcjEPO7k3QiOQMIzaE1RM63tbZXUWDq12drzA2tnZXeZ+OplhJjS9fYr7j9CLVHXY
-         YN0WDI3KcKdO1hcbmYB1mOmVdzWSbRQR6u8X0/3zofg6GFfqKCSIzM6ZtPFCqrTSeI
-         J93aOOH9reZLQvAqeWwaezpOzHboVE5wWGhmBvraMhb6XIP115M6lfHtleXbSKKHBh
-         R9C8gn7k5dNo6byiYpjhC8rlhaguqzioCAaKemArAGoB7A+oY4ftsNbsXaXxxqV9EA
-         T2Z8b8lJuklPLkctte2Gedsz+flXntqQorOYGaUS91aIZK54yLqr4HJQs6vE8P01Xn
-         ZE9UVH21ywEeg==
-Content-Type: text/plain; charset="utf-8"
+        id S1344364AbiAFBZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 20:25:07 -0500
+Received: from smtp25.cstnet.cn ([159.226.251.25]:44134 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1344334AbiAFBZB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 20:25:01 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowADXtxTNRNZh0FSvBQ--.57286S2;
+        Thu, 06 Jan 2022 09:24:29 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     perex@perex.cz, tiwai@suse.com, leon@kernel.org,
+        broonie@kernel.org, joe@perches.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] ALSA: intel_hdmi: Check for error num after setting mask
+Date:   Thu,  6 Jan 2022 09:24:28 +0800
+Message-Id: <20220106012428.2504003-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20211218211157.188214-3-avolmat@me.com>
-References: <20211218211157.188214-1-avolmat@me.com> <20211218211157.188214-3-avolmat@me.com>
-Subject: Re: [PATCH v2 2/2] clk: st: clkgen-mux: search reg within node or parent
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Lee Jones <lee.jones@linaro.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Alain Volmat <avolmat@me.com>
-To:     Alain Volmat <avolmat@me.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 05 Jan 2022 17:22:05 -0800
-User-Agent: alot/0.9.1
-Message-Id: <20220106012206.A2B6CC36AEB@smtp.kernel.org>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowADXtxTNRNZh0FSvBQ--.57286S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZw1fXFy8uF45uryfCryrtFb_yoWfZFX_Kw
+        1xZr4kWFyrAFWFvw43C3y3Cr9a9wn7ZrZY9ryrKFn7Ka4DJ39Fyw1UXrZ3Wr1ru3ySgry7
+        WwnrtrWSy34IgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb48FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
+        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVWk
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbLiSPUUUU
+        U==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Alain Volmat (2021-12-18 13:11:57)
-> In order to avoid having duplicated addresses within the DT,
-> only have one unit-address per clockgen and each driver within
-> the clockgen should look at the parent node (overall clockgen)
-> to figure out the reg property.  Such behavior is already in
-> place in other STi platform clock drivers such as clk-flexgen
-> and clkgen-pll.  Keep backward compatibility by first looking
-> at reg within the node before looking into the parent node.
->=20
-> Signed-off-by: Alain Volmat <avolmat@me.com>
-> ---
+As the dma_supported() may fail, the dma_set_mask_and_coherent() may
+fail too.
+Therefore, it should be better to check it and return error if fails.
 
-Applied to clk-next
+Fixes: da8648097497 ("ALSA: x86: Flatten two abstraction layers")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ sound/x86/intel_hdmi_audio.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/sound/x86/intel_hdmi_audio.c b/sound/x86/intel_hdmi_audio.c
+index 33b12aa67cf5..6caea517f07f 100644
+--- a/sound/x86/intel_hdmi_audio.c
++++ b/sound/x86/intel_hdmi_audio.c
+@@ -1770,7 +1770,9 @@ static int hdmi_lpe_audio_probe(struct platform_device *pdev)
+ 	card_ctx->irq = irq;
+ 
+ 	/* only 32bit addressable */
+-	dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
++	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
++	if (ret)
++		goto err;
+ 
+ 	init_channel_allocations();
+ 
+-- 
+2.25.1
+

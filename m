@@ -2,99 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52AFD486931
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:50:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E41486938
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:55:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242437AbiAFRu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 12:50:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242380AbiAFRu2 (ORCPT
+        id S242453AbiAFRzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 12:55:23 -0500
+Received: from mail-qt1-f182.google.com ([209.85.160.182]:37815 "EHLO
+        mail-qt1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241987AbiAFRzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 12:50:28 -0500
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D56C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 09:50:27 -0800 (PST)
-Received: by mail-ua1-x936.google.com with SMTP id u6so5884566uaq.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 09:50:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=S83gmKJRxga8KxgoTETTyTXBpVOJ+3/hmOtKLK+avWs=;
-        b=XpjP3vG7EcRJL+aACAtzRzmKttuB/qwkhoyevL79eIdEViN8G2kxEkms8m2aKOK1pL
-         CWUGhGDBsGi26Bk0HdZt/cL0TukxbumzFHRb3VHTygc7EoVh9wh4yMgxiJz/13GD4PkT
-         v31Ib8gakyzuwGrv+4HxmumSTggyDcYWSt12392Oh37D8LS7OSS4Pmn4XZu1dOl52erk
-         jvtvz7+86+J7IzM8C4tpwNxhhdBPMBRj9Ri+NHfQd/7Ch26/lEqTB7/esgNhs7pAfM90
-         HI6DUdSaFt3pEsY+6XqvlpFNjyQJsBdFDwCRAapWS9u7Ry77PX50FXyQTUvIrzEcfTUw
-         80jg==
+        Thu, 6 Jan 2022 12:55:22 -0500
+Received: by mail-qt1-f182.google.com with SMTP id c15so2659623qtc.4;
+        Thu, 06 Jan 2022 09:55:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=S83gmKJRxga8KxgoTETTyTXBpVOJ+3/hmOtKLK+avWs=;
-        b=JF7fBO/yUsSqZRv4i1oRkBtXW121V3JVaiQtFnFOfZeDvAJC2D06Sm9GFlNLOlewFn
-         bznp9YDNy3yU47gY1xjFh2QPDXSvQNYN5cTkngH0Dk/MboXkbkqMqYA9Mig+KvigkFdH
-         aK6ENFIM5KiY6YgNv6kQZPnXFZtYLfZUhl/8LSBcIx2U4IrPCsqGM2qNk8U63OjjtCHV
-         3EIClWEcOmgIyw1She215Xuvj3uFkxuEK5aFw3In0Vq8STeJUhZHzbsP1kLqsRRBO9RH
-         mpH7IPIf7O69KJBxtpwcQ93Pv7WtEzSodvGRsdANHlm1ndQM2jIaB3/SS2CXacJwdquL
-         Ec8w==
-X-Gm-Message-State: AOAM5311QhlsiRmReLiGYZFZupdWcFyZr69sUTDtlhl2cJNS8fr12L+E
-        rk5f0+Yc5t1MIFAks5QqvXDHoX7oH0I=
-X-Google-Smtp-Source: ABdhPJzrRje7YaTLedRE35KL9FoDlPAkmevAD6ytIrg+CT2LsNe/YBjedHy4S1rBS7zXO7jr/hVM8Q==
-X-Received: by 2002:a67:e94f:: with SMTP id p15mr18990364vso.11.1641491426947;
-        Thu, 06 Jan 2022 09:50:26 -0800 (PST)
-Received: from localhost.localdomain ([2804:14c:485:504a:2169:9589:878d:2b28])
-        by smtp.gmail.com with ESMTPSA id az22sm1608061vkb.15.2022.01.06.09.50.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 09:50:26 -0800 (PST)
-From:   Fabio Estevam <festevam@gmail.com>
-To:     broonie@kernel.org
-Cc:     matthias.schiffer@ew.tq-group.com, linux-kernel@vger.kernel.org,
-        Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH v2] regmap: debugfs: Free debugfs_name buffer after usage
-Date:   Thu,  6 Jan 2022 14:50:19 -0300
-Message-Id: <20220106175019.3116389-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ox3rPC9dAJrohl85LiIr9TxRU2+Tpf4TawpkA4ZLMwY=;
+        b=yKaLSYq02AjsfK125WQSrda6ZzeuJe4vCJq2WiYs5qkpEKg+BisqCw0CyS3p32YEfp
+         Hnm8M+feS1N2z5MPr8k59iNItCT/7fgpspWK3SEywnsf35OgZtPcnec6mH00jbQd7sM9
+         V6jJAfn8EkWCxgky/mut1CzWs/u2SfxB2Hh30O1fYhSTR+8MQa6x2ydwQYU1JZdgPKlQ
+         +3CbmGgv6PHdLAURgonJNj5jCTlxyngE2M2jWWex3OhxDKT2ymFYUrA2+5vLkNpNP4Wd
+         tJRo8hckIq13Bv/Zz37gio55rYbwnuUlD4NjxIiGmPfDECmjKvvDT01MAtAx3oThjbh5
+         ZEyA==
+X-Gm-Message-State: AOAM5314DIS5+D5LCxaKR97e+I/6TfTWfAy5OkdXkbA00HEGOJ6qETKf
+        Ri5Y94hSwahooybMhfDh7ZYpvzf4KRYSyh5igNc=
+X-Google-Smtp-Source: ABdhPJwYNeFYQxoDVUz//hM8GmP2HPaR/FE+YwTYKJG9R5D++RSQa6alF+L3/8lQypXXDtVMhzwdPBKoUAqNnnVW8So=
+X-Received: by 2002:ac8:7c4e:: with SMTP id o14mr52864128qtv.80.1641491721157;
+ Thu, 06 Jan 2022 09:55:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220106075448.3215141-1-yangyingliang@huawei.com> <20220106084207.GA865257@chenyu-desktop>
+In-Reply-To: <20220106084207.GA865257@chenyu-desktop>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 6 Jan 2022 18:55:10 +0100
+Message-ID: <CAJZ5v0iDVLhDbJZXsoOQ915O4X3MVxHeQx=3Y=1+AYYa5=WgPw@mail.gmail.com>
+Subject: Re: [PATCH -next] ACPI: pfr_update: Fix return value check in pfru_write()
+To:     Chen Yu <yu.c.chen@intel.com>,
+        Yang Yingliang <yangyingliang@huawei.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following error message is seen when booting an imx6q-sabresd:
+On Thu, Jan 6, 2022 at 9:42 AM Chen Yu <yu.c.chen@intel.com> wrote:
+>
+> On Thu, Jan 06, 2022 at 03:54:48PM +0800, Yang Yingliang wrote:
+> > In case of error, memremap() returns NULL pointer not
+> > ERR_PTR(). The IS_ERR() test in the return value check
+> > should be replaced with NULL test.
+> >
+> > Fixes: 0db89fa243e5 ("ACPI: Introduce Platform Firmware Runtime Update device driver")
+> > Reported-by: Hulk Robot <hulkci@huawei.com>
+> > Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> > ---
+> >  drivers/acpi/pfr_update.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/acpi/pfr_update.c b/drivers/acpi/pfr_update.c
+> > index 149b5b2530b9..6bb0b778b5da 100644
+> > --- a/drivers/acpi/pfr_update.c
+> > +++ b/drivers/acpi/pfr_update.c
+> > @@ -460,8 +460,8 @@ static ssize_t pfru_write(struct file *file, const char __user *buf,
+> >       /* map the communication buffer */
+> >       phy_addr = (phys_addr_t)((buf_info.addr_hi << 32) | buf_info.addr_lo);
+> >       buf_ptr = memremap(phy_addr, buf_info.buf_size, MEMREMAP_WB);
+> > -     if (IS_ERR(buf_ptr))
+> > -             return PTR_ERR(buf_ptr);
+> > +     if (!buf_ptr)
+> > +             return -ENOMEM;
+> >
+> >       if (!copy_from_iter_full(buf_ptr, len, &iter)) {
+> >               ret = -EINVAL;
+> > --
+> > 2.25.1
+> >
+> Acked-by: Chen Yu <yu.c.chen@intel.com>
 
-debugfs: Directory 'dummy-iomuxc-gpr@20e0000' with parent 'regmap' already present!
-
-The reason for the duplicate name is that map->debugfs_name is never freed,
-which can cause a directory to be created with the same name used in the
-previous debugfs entry allocation.
-
-Fix this problem by freeing map->debugfs_name and setting it to NULL
-after its usage.
-
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
-Changes since v1:
-- Avoid use after free (Mark).
-
- drivers/base/regmap/regmap-debugfs.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/base/regmap/regmap-debugfs.c b/drivers/base/regmap/regmap-debugfs.c
-index ad684d37c2da..e1017ca65be0 100644
---- a/drivers/base/regmap/regmap-debugfs.c
-+++ b/drivers/base/regmap/regmap-debugfs.c
-@@ -605,6 +605,9 @@ void regmap_debugfs_init(struct regmap *map)
- 
- 	map->debugfs = debugfs_create_dir(name, regmap_debugfs_root);
- 
-+	kfree(map->debugfs_name);
-+	map->debugfs_name = NULL;
-+
- 	debugfs_create_file("name", 0400, map->debugfs,
- 			    map, &regmap_name_fops);
- 
--- 
-2.25.1
-
+Applied, thanks!

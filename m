@@ -2,47 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA66F486B18
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:28:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B6A486B19
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:28:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243772AbiAFU2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 15:28:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54432 "EHLO
+        id S243796AbiAFU20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 15:28:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243740AbiAFU2S (ORCPT
+        with ESMTP id S243787AbiAFU2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 15:28:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46921C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 12:28:18 -0800 (PST)
+        Thu, 6 Jan 2022 15:28:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57170C061212
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 12:28:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DADEA61E15
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 20:28:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B656C36AE3;
-        Thu,  6 Jan 2022 20:28:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 207ADB823F5
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 20:28:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C19B8C36AE5;
+        Thu,  6 Jan 2022 20:28:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641500897;
-        bh=21uqmI0sF0iqFXzWvfwSr8yWzQwcFoXEvQOSpJlA73Q=;
+        s=k20201202; t=1641500899;
+        bh=WJ2sfcxn6GVvDjVhkMuBqAzdc3GwgvrPGmKcfFu60ec=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=F+qwbyGHuzSd59HvZAdcWL05m/1dwoHw0g/OWlN9NjtsNLYA9CjiZ2ElVAOi8ifoU
-         nwjK6pBaLzl9SFkc64aiFm9xXA/60dEPD5gfqwFNH9Ja1YK+GMSCdk5QV54Gm3K5Lq
-         x9wN2hC7VsVxD8mKZpexdSqzLaCZoixn7AOiYc1YrO1/PSpONTvYJtNOCNe76RdbWL
-         00LAaDGFeYt1WoPPpAmE0J8p5+xuLVnLB7jyIwYoJydwywAweOIBdZ5DmzezjNWGTV
-         6/WHdrxYrWqndNnjrbAlWzgPj4yMz7CWcbQyHCiYvRGKunDcR+7p3bQmPPBO9u/ZM2
-         SBTXbdFyaBxBg==
+        b=K0B2TiIiP/OB5JpWTBCGOLDpev+HYLQW3HR3vjJ/2pGG53/TaYk6exXM6T+eC4waY
+         LFxUtOajGRr09bpzsDMVd5Qc96WRBKtIwqEFN3FbmYLs/3PPd+dgOclOkSrrP94uck
+         VgDPzDToBHma7GfPRq9f70p+oneyV0plwFq/U6KEeeF4xw3HAVt47VAJ9jM1s/4uLG
+         nL5rhGF4jICnLDgHqoJbX+5wvo+bV9uU+Xpp5UHJiqS2r6PU+EJtIXFSpIH5owaJov
+         7KRjcn9+EoZFPcLgTT67d3zIQ9KljRzNCveEel6n/l4SnfQrCD2GLRNNhX6FQgAK/l
+         51DNYDa/ZVEzg==
 From:   Mark Brown <broonie@kernel.org>
-To:     perex@perex.cz, tiwai@suse.com, Xiubo.Lee@gmail.com,
-        alsa-devel@alsa-project.org, festevam@gmail.com,
-        nicoleotsuka@gmail.com, timur@kernel.org,
-        Shengjiu Wang <shengjiu.wang@nxp.com>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-In-Reply-To: <1641292835-19085-1-git-send-email-shengjiu.wang@nxp.com>
-References: <1641292835-19085-1-git-send-email-shengjiu.wang@nxp.com>
-Subject: Re: [PATCH 0/3] ASoC: imx-card: several improvement and fixes
-Message-Id: <164150089509.2243486.810361187856950551.b4-ty@kernel.org>
-Date:   Thu, 06 Jan 2022 20:28:15 +0000
+To:     Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        alsa-devel@alsa-project.org
+Cc:     Jaroslav Kysela <perex@perex.cz>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Basavaraj.Hiregoudar@amd.com, Takashi Iwai <tiwai@suse.com>,
+        Alexander.Deucher@amd.com, Sunil-kumar.Dommati@amd.com,
+        V sujith kumar Reddy <vsujithkumar.reddy@amd.com>,
+        Vijendar.Mukunda@amd.com
+In-Reply-To: <20220106150525.396170-1-AjitKumar.Pandey@amd.com>
+References: <20220106150525.396170-1-AjitKumar.Pandey@amd.com>
+Subject: Re: [PATCH] ASoC: amd: acp: acp-mach: Change default RT1019 amp dev id
+Message-Id: <164150089750.2243486.8547152917333843393.b4-ty@kernel.org>
+Date:   Thu, 06 Jan 2022 20:28:17 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -50,13 +54,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Jan 2022 18:40:32 +0800, Shengjiu Wang wrote:
-> Several improvement and fixes for AK codecs supported on i.MX platfroms
+On Thu, 6 Jan 2022 20:35:21 +0530, Ajit Kumar Pandey wrote:
+> RT1019 components was initially registered with i2c1 and i2c2 but
+> now changed to i2c0 and i2c1 in most of our AMD platforms. Change
+> default rt1019 components to 10EC1019:00 and 10EC1019:01 which is
+> aligned with most of AMD machines.
 > 
-> Shengjiu Wang (3):
->   ASoC: imx-card: Need special setting for ak4497 on i.MX8MQ
->   ASoC: imx-card: Fix mclk calculation issue for akcodec
->   ASoC: imx-card: improve the sound quality for low rate
+> Any exception to rt1019 device ids in near future board design can
+> be handled using dmi based quirk for that machine.
 > 
 > [...]
 
@@ -66,12 +71,8 @@ Applied to
 
 Thanks!
 
-[1/3] ASoC: imx-card: Need special setting for ak4497 on i.MX8MQ
-      commit: 3349b3d0c63b8b6fcca58156d72407f0b2e101ac
-[2/3] ASoC: imx-card: Fix mclk calculation issue for akcodec
-      commit: f331ae5fa59fbfb748317b290648fc3f1a50d932
-[3/3] ASoC: imx-card: improve the sound quality for low rate
-      commit: 3969341813eb56d2dfc39bb64229359a6ae3c195
+[1/1] ASoC: amd: acp: acp-mach: Change default RT1019 amp dev id
+      commit: 7112550890d7e415188a3351ec0a140be60f6deb
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

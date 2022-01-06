@@ -2,105 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A47764868B6
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:34:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D510B4868B5
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:34:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241987AbiAFRe2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jan 2022 12:34:28 -0500
-Received: from mail-qv1-f44.google.com ([209.85.219.44]:46750 "EHLO
-        mail-qv1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241922AbiAFReY (ORCPT
+        id S241961AbiAFReZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 12:34:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42472 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241910AbiAFReY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 6 Jan 2022 12:34:24 -0500
-Received: by mail-qv1-f44.google.com with SMTP id r6so2981325qvr.13;
-        Thu, 06 Jan 2022 09:34:24 -0800 (PST)
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01489C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 09:34:24 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id k18so6184994wrg.11
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 09:34:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JalXs1SUuXVQQVLwIaQtmRZLi1BohZR8fOLhkJS63Tw=;
+        b=MR4STbvXS+3rXyp82H98sp3EO4ZUq27df1Qn/BrvWYiSAeU6jegL0zloXPH8yU4mhI
+         lqFEB/akq+MXtN2Cm9qp+F+4uLhTtRKiiL0tEnfSTf2JV5ce4QgJ0i2koEh+WqCEzN4f
+         M3zvh0njgV6KocfAMVbApiSqAguzHJkpXJDGRsQ7gOinjxaqVDwqYL7Q2IvN6Fh09y2x
+         +HYWJvH/PlGcPsWMDUIPQWU6yOIu5Yv6TQsZX3DAW3N+tcqxKGukbOhhmOQu5a1oeU0P
+         OjiNHDLE+olhwx5xnRzR6/C87qigFr8dlWCkLtJFTDsBKaMuMDbzMqmYOL0pMc2LhR7/
+         St3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=PrrcpSOjpVBQjfLKYFTKueeToB19AVYUAAYHWQfgysI=;
-        b=mQRYzmewiWv7qumzannnbrYXeo3AHwkoXkd5TuCwkm02EifG5u55TKwDJDQjx6qahO
-         UJBetc1o3ebszxvsKchssZnPwrLxLNXKtO3iRbJQGBp5Ldq5XTESjQp9e+WiOcgG39w4
-         PMMA45H28z6HMLkNS7hZBwfIR7Mdpudne8srHd3wArXD1jFUCVaPWpIjRNFAibY66df6
-         /zXrGILtyfeqyAGm6PJk9ZKIB04m5mbx/CteBycZVf8bSeGwL07BsO6BMrQZfOU7QT0Y
-         6ZoFzecWlCynjyKEh5Dz6TaglM+zFopgPMQ6OVr5q4Bxng2Io22eLsFi1mhQEl8bzU1N
-         JcUw==
-X-Gm-Message-State: AOAM532qZvUK16UzGny4Odg/p4L+/5Pdz8yBVLUSDE1w/OsPzpYAp9bK
-        fDoISUnKzZMS3X183C+zQYpSr1xDe2PD93orQZ0=
-X-Google-Smtp-Source: ABdhPJwDxMHP0IkOGxFap2RTf2cnVE9AHI228gO5l/l0V9RmqWOeSM9M4liwZOxkXXXZDtiVphrxEUuIBDiaHoluwEs=
-X-Received: by 2002:a05:6214:20a2:: with SMTP id 2mr54554275qvd.52.1641490464220;
- Thu, 06 Jan 2022 09:34:24 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JalXs1SUuXVQQVLwIaQtmRZLi1BohZR8fOLhkJS63Tw=;
+        b=6eRu3wvFAAfhv1YHXkt2VBW+qTI/cSXDM0uy8hZn+3FMLCHMLAfwDmhbi3lNSCm6jb
+         EowN7P8dK1VvOj34JKcBebaKRj22RuZzBSCuP8ixrIvY5oIZLX6cc4ikQOkCxwTiwrXe
+         U1uSSlxlVufPlgbHWF0tVHf4Q0jlhcpeXhYHWd6DWJyvolTlEzCDERyVRA3TjaPsOnZd
+         9+j9rmoxH6mg/57DzHzjF/fno/2cE8fEbEEdLFAT7iomqLiJlLT2DC7Sbtrg0/hipUch
+         ERpxZshkUfB6httnL9wKS8hNzII9aOP5FB+rXyIjwEhlHxhFBEjE36Ul9k3OQ8tA2hnn
+         9jIQ==
+X-Gm-Message-State: AOAM532iuq7psC6s/QkM0nQ+/95UwIa/edkQvEOG1m7TOHEP1lMU1fIh
+        6AzWjz5mMi40XVrwq9Mj1hGREw==
+X-Google-Smtp-Source: ABdhPJx9iYStpt8aY2s+c1BpyXLIHS9zyXbLIJ3SrCw6EPPUlNmVdtoiDIy7wHPmnHzyEKWL/Ok+kw==
+X-Received: by 2002:adf:dc92:: with SMTP id r18mr51298550wrj.584.1641490462372;
+        Thu, 06 Jan 2022 09:34:22 -0800 (PST)
+Received: from google.com ([2a00:79e0:d:209:800e:fc7:4177:c8b2])
+        by smtp.gmail.com with ESMTPSA id o11sm6424030wmq.15.2022.01.06.09.34.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 09:34:21 -0800 (PST)
+Date:   Thu, 6 Jan 2022 17:34:16 +0000
+From:   David Brazdil <dbrazdil@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Wedson Almeida Filho <wedsonaf@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Scull <ascull@google.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] misc: open-dice: Add driver to expose DICE data
+ to userspace
+Message-ID: <YdcoGGg9bDbQh0ll@google.com>
+References: <20211221174502.63891-1-dbrazdil@google.com>
+ <20211221174502.63891-3-dbrazdil@google.com>
+ <YdXM44q07C5iQydu@google.com>
+ <YdbJgf+IWnlCHQA7@google.com>
+ <YdbSi+ANXw1JRkUj@kroah.com>
+ <Ydch333UxlCKO8Wa@google.com>
+ <Ydcl3XjGhVh33Txi@kroah.com>
 MIME-Version: 1.0
-References: <20220106074306.2712090-1-ray.huang@amd.com>
-In-Reply-To: <20220106074306.2712090-1-ray.huang@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 6 Jan 2022 18:34:13 +0100
-Message-ID: <CAJZ5v0iHo9JMggbJmyFL9XoWS2oTWSugbMtD_C2OBHpmw+ePCQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] cpufreq: amd-pstate: Fix the dependence issue of AMD P-State
-To:     Huang Rui <ray.huang@amd.com>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ydcl3XjGhVh33Txi@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 8:43 AM Huang Rui <ray.huang@amd.com> wrote:
->
-> The AMD P-State driver is based on ACPI CPPC function, so ACPI should be
-> dependence of this driver in the kernel config.
->
-> In file included from ../drivers/cpufreq/amd-pstate.c:40:0:
-> ../include/acpi/processor.h:226:2: error: unknown type name ‘phys_cpuid_t’
->   phys_cpuid_t phys_id; /* CPU hardware ID such as APIC ID for x86 */
->   ^~~~~~~~~~~~
-> ../include/acpi/processor.h:355:1: error: unknown type name ‘phys_cpuid_t’; did you mean ‘phys_addr_t’?
->  phys_cpuid_t acpi_get_phys_id(acpi_handle, int type, u32 acpi_id);
->  ^~~~~~~~~~~~
->  phys_addr_t
->   CC      drivers/rtc/rtc-rv3029c2.o
-> ../include/acpi/processor.h:356:1: error: unknown type name ‘phys_cpuid_t’; did you mean ‘phys_addr_t’?
->  phys_cpuid_t acpi_map_madt_entry(u32 acpi_id);
->  ^~~~~~~~~~~~
->  phys_addr_t
-> ../include/acpi/processor.h:357:20: error: unknown type name ‘phys_cpuid_t’; did you mean ‘phys_addr_t’?
->  int acpi_map_cpuid(phys_cpuid_t phys_id, u32 acpi_id);
->                     ^~~~~~~~~~~~
->                     phys_addr_t
->
-> See https://lore.kernel.org/lkml/20e286d4-25d7-fb6e-31a1-4349c805aae3@infradead.org/.
->
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Huang Rui <ray.huang@amd.com>
-> ---
->  drivers/cpufreq/Kconfig.x86 | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/cpufreq/Kconfig.x86 b/drivers/cpufreq/Kconfig.x86
-> index a951768c3ebb..55516043b656 100644
-> --- a/drivers/cpufreq/Kconfig.x86
-> +++ b/drivers/cpufreq/Kconfig.x86
-> @@ -36,9 +36,9 @@ config X86_PCC_CPUFREQ
->
->  config X86_AMD_PSTATE
->         tristate "AMD Processor P-State driver"
-> -       depends on X86
-> -       select ACPI_PROCESSOR if ACPI
-> -       select ACPI_CPPC_LIB if X86_64 && ACPI
-> +       depends on X86 && ACPI
-> +       select ACPI_PROCESSOR
-> +       select ACPI_CPPC_LIB if X86_64
->         select CPU_FREQ_GOV_SCHEDUTIL if SMP
->         help
->           This driver adds a CPUFreq driver which utilizes a fine grain
-> --
+On Thu, Jan 06, 2022 at 06:24:45PM +0100, Greg Kroah-Hartman wrote:
+> On Thu, Jan 06, 2022 at 05:07:43PM +0000, David Brazdil wrote:
+> > Hi Greg,
+> > 
+> > On Thu, Jan 06, 2022 at 12:29:15PM +0100, Greg Kroah-Hartman wrote:
+> > > On Thu, Jan 06, 2022 at 10:50:41AM +0000, David Brazdil wrote:
+> > > > Hi Wedson,
+> > > > 
+> > > > On Wed, Jan 05, 2022 at 04:52:51PM +0000, Wedson Almeida Filho wrote:
+> > > > > On Tue, Dec 21, 2021 at 05:45:02PM +0000, David Brazdil wrote:
+> > > > > > Open Profile for DICE is an open protocol for measured boot compatible
+> > > > > > with the Trusted Computing Group's Device Identifier Composition
+> > > > > > Engine (DICE) specification. The generated Compound Device Identifier
+> > > > > > (CDI) certificates represent the hardware/software combination measured
+> > > > > > by DICE, and can be used for remote attestation and sealing.
+> > > > > > 
+> > > > > > Add a driver that exposes reserved memory regions populated by firmware
+> > > > > > with DICE CDIs and exposes them to userspace via a character device.
+> > > > > > 
+> > > > > > Userspace obtains the memory region's size from read() and calls mmap()
+> > > > > > to create a mapping of the memory region in its address space. The
+> > > > > > mapping is not allowed to be write+shared, giving userspace a guarantee
+> > > > > > that the data were not overwritten by another process.
+> > > > > > 
+> > > > > > Userspace can also call write(), which triggers a wipe of the DICE data
+> > > > > > by the driver. Because both the kernel and userspace mappings use
+> > > > > > write-combine semantics, all clients observe the memory as zeroed after
+> > > > > > the syscall has returned.
+> > > > > > 
+> > > > > > Cc: Andrew Scull <ascull@google.com>
+> > > > > > Cc: Will Deacon <will@kernel.org>
+> > > > > > Signed-off-by: David Brazdil <dbrazdil@google.com>
+> > > > > > ---
+> > > > > >  drivers/misc/Kconfig     |  12 +++
+> > > > > >  drivers/misc/Makefile    |   1 +
+> > > > > >  drivers/misc/open-dice.c | 188 +++++++++++++++++++++++++++++++++++++++
+> > > > > >  drivers/of/platform.c    |   1 +
+> > > > > >  4 files changed, 202 insertions(+)
+> > > > > >  create mode 100644 drivers/misc/open-dice.c
+> > > > > > 
+> > > > > > diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+> > > > > > index 0f5a49fc7c9e..a2b26426efba 100644
+> > > > > > --- a/drivers/misc/Kconfig
+> > > > > > +++ b/drivers/misc/Kconfig
+> > > > > > @@ -470,6 +470,18 @@ config HISI_HIKEY_USB
+> > > > > >  	  switching between the dual-role USB-C port and the USB-A host ports
+> > > > > >  	  using only one USB controller.
+> > > > > >  
+> > > > > > +config OPEN_DICE
+> > > > > > +	tristate "Open Profile for DICE driver"
+> > > > > > +	depends on OF_RESERVED_MEM
+> > > > > > +	help
+> > > > > > +	  This driver exposes a DICE reserved memory region to userspace via
+> > > > > > +	  a character device. The memory region contains Compound Device
+> > > > > > +	  Identifiers (CDIs) generated by firmware as an output of DICE
+> > > > > > +	  measured boot flow. Userspace can use CDIs for remote attestation
+> > > > > > +	  and sealing.
+> > > > > > +
+> > > > > > +	  If unsure, say N.
+> > > > > > +
+> > > > > >  source "drivers/misc/c2port/Kconfig"
+> > > > > >  source "drivers/misc/eeprom/Kconfig"
+> > > > > >  source "drivers/misc/cb710/Kconfig"
+> > > > > > diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+> > > > > > index a086197af544..70e800e9127f 100644
+> > > > > > --- a/drivers/misc/Makefile
+> > > > > > +++ b/drivers/misc/Makefile
+> > > > > > @@ -59,3 +59,4 @@ obj-$(CONFIG_UACCE)		+= uacce/
+> > > > > >  obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
+> > > > > >  obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
+> > > > > >  obj-$(CONFIG_HI6421V600_IRQ)	+= hi6421v600-irq.o
+> > > > > > +obj-$(CONFIG_OPEN_DICE)		+= open-dice.o
+> > > > > > diff --git a/drivers/misc/open-dice.c b/drivers/misc/open-dice.c
+> > > > > > new file mode 100644
+> > > > > > index 000000000000..f1819f951173
+> > > > > > --- /dev/null
+> > > > > > +++ b/drivers/misc/open-dice.c
+> > > > > > @@ -0,0 +1,188 @@
+> > > > > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > > > > +/*
+> > > > > > + * Copyright (C) 2021 - Google LLC
+> > > > > > + * Author: David Brazdil <dbrazdil@google.com>
+> > > > > > + *
+> > > > > > + * Driver for Open Profile for DICE.
+> > > > > > + *
+> > > > > > + * This driver takes ownership of a reserved memory region containing data
+> > > > > > + * generated by the Open Profile for DICE measured boot protocol. The memory
+> > > > > > + * contents are not interpreted by the kernel but can be mapped into a userspace
+> > > > > > + * process via a misc device. Userspace can also request a wipe of the memory.
+> > > > > > + *
+> > > > > > + * Userspace can access the data with (w/o error handling):
+> > > > > > + *
+> > > > > > + *     fd = open("/dev/open-dice0", O_RDWR);
+> > > > > > + *     read(fd, &size, sizeof(unsigned long));
+> > > > > > + *     data = mmap(NULL, size, PROT_READ, MAP_PRIVATE, fd, 0);
+> > > > > > + *     write(fd, NULL, 0); // wipe
+> > > > > > + *     close(fd);
+> > > > > > + */
+> > > > > > +
+> > > > > > +#include <linux/io.h>
+> > > > > > +#include <linux/miscdevice.h>
+> > > > > > +#include <linux/mm.h>
+> > > > > > +#include <linux/module.h>
+> > > > > > +#include <linux/of_reserved_mem.h>
+> > > > > > +#include <linux/platform_device.h>
+> > > > > > +
+> > > > > > +#define DRIVER_NAME "open-dice"
+> > > > > > +
+> > > > > > +struct open_dice_drvdata {
+> > > > > > +	spinlock_t lock;
+> > > > > > +	char name[16];
+> > > > > > +	struct reserved_mem *rmem;
+> > > > > > +	struct miscdevice misc;
+> > > > > > +};
+> > > > > > +
+> > > > > > +static inline struct open_dice_drvdata *to_open_dice_drvdata(struct file *filp)
+> > > > > > +{
+> > > > > > +	return container_of(filp->private_data, struct open_dice_drvdata, misc);
+> > > > > > +}
+> > > > > > +
+> > > > > > +static int open_dice_wipe(struct open_dice_drvdata *drvdata)
+> > > > > > +{
+> > > > > > +	void *kaddr;
+> > > > > > +
+> > > > > > +	spin_lock(&drvdata->lock);
+> > > > > > +	kaddr = devm_memremap(drvdata->misc.this_device, drvdata->rmem->base,
+> > > > > > +			      drvdata->rmem->size, MEMREMAP_WC);
+> > > > > > +	if (IS_ERR(kaddr)) {
+> > > > > > +		spin_unlock(&drvdata->lock);
+> > > > > > +		return PTR_ERR(kaddr);
+> > > > > > +	}
+> > > > > > +
+> > > > > > +	memset(kaddr, 0, drvdata->rmem->size);
+> > > > > > +	devm_memunmap(drvdata->misc.this_device, kaddr);
+> > > > > > +	spin_unlock(&drvdata->lock);
+> > > > > > +	return 0;
+> > > > > > +}
+> > > > > > +
+> > > > > > +/*
+> > > > > > + * Copies the size of the reserved memory region to the user-provided buffer.
+> > > > > > + */
+> > > > > > +static ssize_t open_dice_read(struct file *filp, char __user *ptr, size_t len,
+> > > > > > +			      loff_t *off)
+> > > > > > +{
+> > > > > > +	unsigned long val = to_open_dice_drvdata(filp)->rmem->size;
+> > > > > 
+> > > > > There's a UAF issue here (and in all file operations that call
+> > > > > to_open_dice_drvdata) when the platform device in unbounded from the driver
+> > > > > while userspace has an instance of the misc device open: after open_dice_remove
+> > > > > is called, all managed resources are freed (which includes this
+> > > > > open_dice_drvdata allocation).
+> > > > > 
+> > > > > No new miscdev files can be created, but the existing ones continue to exist
+> > > > > with a now dangling pointer stored in private_data. So read/write/mmap syscalls
+> > > > > from userspace will lead to dereferencing this dangling pointer.
+> > > > 
+> > > > Please correct me if I'm wrong, but I don't think this can happen
+> > > > without tainting the kernel.
+> > > > 
+> > > > To call open_dice_remove, we have to remove the module. And any process
+> > > > holding an FD of the misc device will increase the module's refcounter,
+> > > > which is zero-checked in SYS_delete_module. The only way to get past
+> > > > that check is by compiling the kernel with CONFIG_MODULE_FORCE_UNLOAD,
+> > > > which changes the implementation of try_force_unload (kernel/module.c)
+> > > > and adds taint. Otherwise SYS_delete_module returns an error.
+> > > > 
+> > > > Unless there is another way how to trigger this situation, I think the
+> > > > existing protection is sufficient. The user cannot force the removal of
+> > > > the module without agreeing to the consequences.
+> > > 
+> > > You can remove the driver from the device by writing to the "unbind"
+> > > file in sysfs for this driver.
+> > > 
+> > > Otherwise, yes, you are correct, you can not remove the module from the
+> > > system if the file is open, but that does not prevent the driver from
+> > > being unbound from the device.
+> > > 
+> > > Yes, it is rare, and only able to be done by root, and even then is
+> > > something that many drivers fail at.  But for new ones, when we notice
+> > > it, it should be fixed up before merging just to prevent any future
+> > > problems.
+> > 
+> > Ah, I see. I'd opt for just setting 'suppress_bind_attrs=true' to
+> > prevent that, unless you think unbinding needs to be supported. I don't
+> > see a use for that on our side and would prefer to keep the code simple.
+> 
+> No objection from me, that solves it easily :)
+> 
+> > > > > > +	/* Create write-combine mapping so all clients observe a wipe. */
+> > > > > > +	vma->vm_page_prot = pgprot_writecombine(vma->vm_page_prot);
+> > > > > > +	vma->vm_flags |= VM_DONTCOPY | VM_DONTDUMP;
+> > > > > > +	return vm_iomap_memory(vma, drvdata->rmem->base, drvdata->rmem->size);
+> > > > > > +}
+> > > > > 
+> > > > > Is there a reason for mapping this memory instead of, say, copying it to
+> > > > > userspace via read?
+> > > > 
+> > > > The data should be treated as secret, so the idea is that avoiding
+> > > > reading it in the kernel means we don't need to worry about it leakage
+> > > > via the stack, etc. The reason for this is that the DICE derivation
+> > > > chain may continue in userspace, so we want to minimize the chance of
+> > > > a child process getting the parent secret from the kernel.
+> > > 
+> > > The kernel stack is already secret, this should not be an issue.  And
+> > > even then, you can always erase it before the call returns to ensure
+> > > that it does not stick around, like many crypto functions do.
+> > 
+> > I can rewrite it and memzero_explicit the memory if you or Wedson feel
+> > strongly about this, but I actually really like mmap() because it avoids
+> > the need for dealing with that.
+> 
+> I think if we remove the ability for userspace to unbind the device from
+> the driver with the file handle open like above, all should be ok to
+> keep this as a mmap thing.
+> 
+> Wedson, any objection?
+> 
+> David, I pointed Wedson as this driver as an example of maybe something
+> that might be possible to write in Rust instead, which is why he looked
+> at it.  I don't recommend doing that just now, but we are feeling out
+> what types of drivers would be good examples in that language.
 
-Applied (under a modified subject), thanks!
+Wedson already reached out to me about that. 100% agree that this is a
+good candidate and happy to help test it if needed. Thanks for making
+the connection, Greg.

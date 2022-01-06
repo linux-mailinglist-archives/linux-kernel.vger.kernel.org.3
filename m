@@ -2,220 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E71B486B74
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:51:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD3E486B7C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:57:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244010AbiAFUvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 15:51:04 -0500
-Received: from mail-mw2nam10on2059.outbound.protection.outlook.com ([40.107.94.59]:52192
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S243992AbiAFUvD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 15:51:03 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TZ+pLzc8dPkE1Pry2NzOm7EHU9d2u5soMidy7cJO2ZQ7bcN/xEdhQ914LdwejbEnz22xZ7lenxPiuU9Y8KQU3xN7DMjejOTTN/xI76srbZbp7elW1pXdcUp6S4qMWFVHFbBG0wzwFc5nKdwMA63UQXxxCGkv779cc5uLdEABjnXeQyCWPzklPUZyV4LFM/z91kZ3AHHrr6dl77EhixIz0LKlto/H4wmeMBF7MBE31gWzrx5GGMVk8nUyBP/mEa8wMsnsrlqlj4zKLeazmAXzbyMHuSXDqY1BCHwbPsyZL4DKo80GV1IvTXImONJOgfUSbYn1wUpT6bSFpjePqZgw/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=coqJMrBLSVlyYomoj08zUQx+rIVlaKWAofBhboH4tgc=;
- b=A2nPcTGrcQPzRiEEWFI6ZEpOkj1ITiFF/69MsGUw6ftSE1o0IJtLxz3CCjjV2I1MwIdy2BwkOJlk9SfxHIitqT0cllZJ01Jhr7np2ppg/FUt4iMRteho0bV6RHk/8m8vit6hKVirpzxi7bNW8v6GzpMKMJO6Qe40hLukA3SaAhZyc+iU+BtaxXi/+Yc3z+HOiycmR0oColK88ygy7R4AgP9dwbjD+Gu7t/uWRcMMz/XQ/O9hfLSmKG93AGAGBCQcHNBYCb9cTzjLMtpwawa6pp1DuiYgCWKFSpHn2eg1YTso6Qnadb0ur8RXsIJE/R6s7MQnWdUlue5X+hdXQA5w4g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=coqJMrBLSVlyYomoj08zUQx+rIVlaKWAofBhboH4tgc=;
- b=rmA1fkE7S467QUwn9YZivkFBmkkefUAI+0JqP+uJ7PeMkUlSp+sm22bv/ztgTpeY7iq7iilchcsgeNtJsIK5p7jje8Ayj8/OH9XDuUcPZdghec+EijtiDrwlUpIP89qiu9RHZtdveM/PFWZLrlwCFXaf58C8VZPVF5/+Ax4z3TI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by DM4PR12MB5247.namprd12.prod.outlook.com (2603:10b6:5:39b::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.13; Thu, 6 Jan
- 2022 20:51:00 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::ccd7:e520:c726:d0b]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::ccd7:e520:c726:d0b%5]) with mapi id 15.20.4867.010; Thu, 6 Jan 2022
- 20:51:00 +0000
-Subject: Re: [PATCH v8 13/40] x86/kernel: Make the bss.decrypted section
- shared in RMP table
-To:     Venu Busireddy <venu.busireddy@oracle.com>
-Cc:     Brijesh Singh <brijesh.singh@amd.com>,
-        Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-References: <20211210154332.11526-1-brijesh.singh@amd.com>
- <20211210154332.11526-14-brijesh.singh@amd.com> <YdSKQKSTS83cRzGZ@dt>
- <18eadf9d-8e31-0945-ccf4-2cb72b8e0dd4@amd.com>
- <acba0832-9b11-c93d-7903-fff33f740605@intel.com>
- <444b6c78-c4d3-f49c-6579-bd28ae32ca3c@amd.com> <YdcpnHrRoJJFWWel@dt>
- <bf226dc6-4aef-b7c2-342d-0167362272ea@amd.com> <YddODkUvhbWbhS3/@dt>
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-Message-ID: <4c1067c7-a85f-79fe-38a8-2f68a94a358a@amd.com>
-Date:   Thu, 6 Jan 2022 14:50:56 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-In-Reply-To: <YddODkUvhbWbhS3/@dt>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: CH0PR03CA0006.namprd03.prod.outlook.com
- (2603:10b6:610:b0::11) To DM4PR12MB5229.namprd12.prod.outlook.com
- (2603:10b6:5:398::12)
+        id S244026AbiAFU47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 15:56:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60980 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244011AbiAFU46 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 15:56:58 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED3BC061245;
+        Thu,  6 Jan 2022 12:56:58 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id a83-20020a1c9856000000b00344731e044bso1872168wme.1;
+        Thu, 06 Jan 2022 12:56:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bdqvWYumEYAYUfm3ohPhm7+uhGU2pFpSxC/NR5mWVfA=;
+        b=nxfjaFxwLg6IZZQrz8H+CSGoxMdTDs5Z0LbbN1YwsN8phwG1U/PfjYS0gmMm64d58f
+         l60AZ6tglq1mVCaNHjmGkRLWtuVBGaDb4OxhjmcSEXGl1iZKKW6iE1W1qY8zmXSOevTx
+         lFUfepbPvF1/GTDRu2uO6zQxo8Gidzlzs0qxsOnn1Z6+OXd5jrBZXz4i+CR0w5ENWPG7
+         7r95rE8P3GU8pr5Nn35qfVC74ch66sc0kysUD/Y++nfq7Jvw9HkhQ+8eo3tA9j3g3za+
+         dSudlGzDHqie1+3j9/p1vNeHMw7ESTMXRQN2USaHeCEj5YfMPhUeSKvQKELNOiGB1D5q
+         crBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bdqvWYumEYAYUfm3ohPhm7+uhGU2pFpSxC/NR5mWVfA=;
+        b=Fo1OhzA4rtt4zk0clVXT4lfBMJ5CVyD7+QJSHacns+gVV2WoFaR3tNLYah4e9G8azr
+         PL1h/Zwg/XRcQj8961WLBi/rU9cbuP2Va5QA9SccApxw3lckKvb0X8VWivbtb0r96Kle
+         wSUQV2O3iyh0+XZJNT+Z+/ZdgT6DufErE5nUfwJw+kr52NYf/jUd5lYXXs57mKn24guT
+         CmHMxk4gR0LvnPakJLBoTlebsZ48LKF/2vNpDdUlb2MANRNShoc9KqTnhFt+Gtyw3qlx
+         P+zF1g0ZGluJncNWYx8M4tPY4A7trfQalZnsdwO09Kg3m31U4ciLnFatbW2uWQpYP/qz
+         7JUg==
+X-Gm-Message-State: AOAM530Sv2M/6VQsZ9PW+V6RIK8b4n1meUBqnW37kVt5L3R81RqNU94/
+        BggOPGwATjPG5xyw0gq5jdk=
+X-Google-Smtp-Source: ABdhPJzN1suhftq1EGwGPA+hNGAOYTHiXRimUyq8HwQm2qmY0EGzDB8tylSzA3ZSiub1zOL/tTiqbg==
+X-Received: by 2002:a1c:44d7:: with SMTP id r206mr1817920wma.79.1641502616462;
+        Thu, 06 Jan 2022 12:56:56 -0800 (PST)
+Received: from Ansuel-xps. (host-212-171-171-10.pool212171.interbusiness.it. [212.171.171.10])
+        by smtp.gmail.com with ESMTPSA id n8sm3436705wri.47.2022.01.06.12.56.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 12:56:56 -0800 (PST)
+Message-ID: <61d75798.1c69fb81.53557.d018@mx.google.com>
+X-Google-Original-Message-ID: <YddXmDNUdJ6Qp+TL@Ansuel-xps.>
+Date:   Thu, 6 Jan 2022 21:56:56 +0100
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next PATCH RFC v6 00/16] Add support for qca8k mdio rw in
+ Ethernet packet
+References: <20211214224409.5770-1-ansuelsmth@gmail.com>
+ <20211215102629.75q6odnxetitfl3w@skbuf>
+ <61ba1928.1c69fb81.4ef9.360b@mx.google.com>
+ <20211216233812.rpalegklcrd4ifzs@skbuf>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2232576a-d440-4832-8c11-08d9d1563f0f
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5247:EE_
-X-Microsoft-Antispam-PRVS: <DM4PR12MB5247DC4B111E321E9C38117FEC4C9@DM4PR12MB5247.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mO9bNiWihNDXTZqksmJyqityQPTcW9e4xHIta8DetpEUC9zyg0RtfPgeYH6OE1v0wO2no2aXoP9lc2Q6m4Wup3l22QOWNWXVxmdOBYvggwlENpClh9CkWvqQJLl/TT3qtG9Net/NbbuaDdMXOdetmkagPpRr0GOLqNEE0qQ8d85clPblLHqyRGc+1cbgTYTkRFIjP0bJcC3omg+aGQ4DfQf3yPWeElhdTfIHGaN1LlAKJuf2vXoYBCh3T4TlcQbgQOWobtAtCjHhAylJpFgelvCAB/d74RCC6AE9h/kiY3DnoZBQQVRTqqqgWdfm+LEAyZJWZ5no1CYqd955g6OUAEI+2ogNu4xr9VnjpmNUYHwHovQcpwe/5otDU5pkbB8bF4NucFNzgLM+g6fIohs3E6saL+DJ30RUkvwYEmcOAwycOmaUyXSKubQ0a+uabotgtkbiN+dG6/MFi222w9sWrjE/z24eVojKawSTTpZkLMiNjVodq+LREeoPhXt57KJAp8vvQV3WZhMTtafDwRbcrFont+MAXge0NJz+hKCAmneDkAFa8nM3tBJp10zBwMu5YSi96/0nInJaRbPvSSRg7HTICxY4qvnXiG+nJzp0xri03Z713vdIEAHlHygJRPrezcphBkX8X1c7LVNzas+5+xXpwTZBFHtPrXZa43ToDk7HY6eN8YwET6Ak/ycEGKpAvDJe18Si83Tq725wEQCo39TOIeIfD9HMWNp0F0dwjDh6AyY87pPttITJho4Md1se
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(2906002)(38100700002)(8676002)(186003)(4326008)(5660300002)(86362001)(6512007)(2616005)(8936002)(54906003)(66946007)(36756003)(31696002)(83380400001)(6916009)(26005)(53546011)(316002)(31686004)(66556008)(7406005)(7416002)(508600001)(6666004)(66476007)(6486002)(6506007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eVVybjRlVENtRHMzL1ZzdWIrRVFMRjlBOGpyOVVJNXVQVEZHTFlDbXl0NW9i?=
- =?utf-8?B?ZnhlL1FlL0lrNUdqWGlqdnVid1VCRFc5aFdFVTJvZmpKenBlTEN0QzdGUUZZ?=
- =?utf-8?B?YTk2bjAxelBXbS9hK2k2YnE3ZmJiRVZFR2pYVjA3WXF1WksxaDh6SW1BeHlK?=
- =?utf-8?B?VllDSkZBaUw3YVpBRVJzOW0zdi9jaXBhcE5zNUZRcTd4TXdPd0Q2WnVPclBS?=
- =?utf-8?B?RXZSU2hiZ2NQMkRldGpkVitZWkVNVk1oWVh5djcvYzBIQ3A3c1RrZkIwUWpy?=
- =?utf-8?B?MGZSeGdOU0dGbWdpbTdyTEhRdWpzbTRUV25PZ0dCdkczZTBoN2ZRS0YrdGJj?=
- =?utf-8?B?WmRVV05HeVdOc2FkNi9HbzR6ZkRzdWJndWUrUWJRc1hzd01NUHVMeTBjU2p6?=
- =?utf-8?B?YmJIUjVhNWV2SW8wSVBqY2VrMEJNaEtpVHYxMTN6RENkRC9mQXUvL2J5UzdK?=
- =?utf-8?B?N25GaUlqZ21FYi9BOTQyN1B0alNJcXZoK1Fpd05Ma2FZK1ZlSU9lSCs3YkFW?=
- =?utf-8?B?SFdTYlExYTlhSDhZK3M1NGlENDB6Q0tmcDFtUjVEWDJLbFdqaUk0SjNKMllJ?=
- =?utf-8?B?cmViM1FpMTdRL0QvM3craFM0d1lLcW4wcXJrQWtOMDVYT2RER3hpOHJxcXhF?=
- =?utf-8?B?SExIRExkVGZvTExsRCtac2h1YkdSbkZLcHNnY2dhdWlqNGJRTlNwRStaV3F3?=
- =?utf-8?B?alJJNFZyOUpQdlBzaSt3Slc1aXNOY3JFRzVodlJNdDVJdVJSdTBNNjJhdVNo?=
- =?utf-8?B?N3grYmNJa2xNblNuYlQvRkI3OHNIMGQ5VzYycXcxcmlNc0IwUVFvNEJSKzRh?=
- =?utf-8?B?YTcxdXVKR01RS1dwcDdnQVZ2NlM2YzZTM2xRSzZMYnNvcTN3SkhoTHNGbnFs?=
- =?utf-8?B?Y0tIclBIbzRtZms3SHZldkVVSXM2NEp1Sm9SSzVQL3kvRnRRVExKZ2tidEdw?=
- =?utf-8?B?UzhsbDhIbUtseDc5NWEvRTRlKy9lRjd0TDV5bzVmRDlvQ3d6NUFNcWpBZjRV?=
- =?utf-8?B?bm9jMWlXaEZxVVRGR0p1bE5DOEZlWldFaGFBSnRJUnhPSFZzbTYvN0QrdVo4?=
- =?utf-8?B?b3VyQktpNW1hTmZHU0dNaDRPa3RqM0w0VWU0dVI5THNxd3BHanBJcXNHRGtn?=
- =?utf-8?B?RTUxVGp4WXJNeUV4UllnbnFTUGhRdkxvUVhBMVJVV1ZKTDUrOXNuRnd4SmdL?=
- =?utf-8?B?bVRhbWJsbVgwVlV4TWRSL0JSRW4vZTcwKzZUaWV5WTdjR0ZPQnBXL2dTOW5s?=
- =?utf-8?B?cVAwelFNcFFFVkhCczNPT3NRbUVwaFJXQ0xFY09jVThvR1VRcWhWbzZNamlP?=
- =?utf-8?B?Mi9OY1AzbWpUSHFMek9US2JHNzNIS3dUeCtiSlMzazVCZDF2WitucEt4d3FR?=
- =?utf-8?B?bE5KRmI1NFRoYlhDYU9aOURwVk5jcGJWQTJkQXFlWUxhcys5enpPVVYrS1p0?=
- =?utf-8?B?cUpCRGpnOW1VOGxDczJtVjdUejNETGVPSS9DMjNuQkpkTVpIMisyUTRXSTFm?=
- =?utf-8?B?ZFIxdGZRR2JYeWlKd0JqNTVZRU9uMHF4R0NZT0YyOVVzSlJOaDVrMnRDekx2?=
- =?utf-8?B?T2hKSEJIdGxQWGF5SEIyakY5bElLNGdKTmlaczN2akRiYkRZYU8rbi9qKzIr?=
- =?utf-8?B?bXVBVVVqWWJRd2t6Mm8ySjFYL2dVSG9zbGZHOG5oRDQvL3F1emEyNU1ESkxL?=
- =?utf-8?B?S0FUWFZ1eVdUenpNVk9ua2VEQ2pvVnl6WW1mejRZUnpwekhxZ1FKTVVJK1pz?=
- =?utf-8?B?YnRkV2g1RnFBcGI1VTVhK2FySlRTUnFxZDBVbzgvSXlaRk91bVdudkQxTURF?=
- =?utf-8?B?ZEJGeStBSVRldE11U0FtY3hhU3JNWkpzVUNocnNHQlpSM3F6c05Sd0pNTjZT?=
- =?utf-8?B?NndxLzlzbE1UR0tRVThac1JJUDg2bWRKYmlCak16M29rYlYyTTllN2E0ODY2?=
- =?utf-8?B?NlJ6SjcvR1lSalArZWx5N1ZSb3dWaGkxekZySWVwb2JWNWxxcWIwaFlYalVT?=
- =?utf-8?B?L0JsWTVpcmplSy84QjVLcllKbFpjb1Q5TG9aZjRZQWNaTEdaUXF4YmJGditT?=
- =?utf-8?B?MzZwampLdFdaQ016cVlZdUV4eU9aUFlvazNhaXBDUjczK2U0bThiTEN3L0Fm?=
- =?utf-8?B?WDdNbFAveitXRUQxMGcyNGZsRGtGeHdjOU51TVBURzgrbWpEcTRTQlFnTXVY?=
- =?utf-8?Q?SihKnaCAJULa09ALyTGvpy4=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2232576a-d440-4832-8c11-08d9d1563f0f
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2022 20:51:00.6730
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 26eYZljRejg1wzq2R1hYQDqrfTLxj89YZ4DWrUINsD7c0lE4KCi8XpCFyB/aI3NyX51yiUXKcWCjYgVAKorbIQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5247
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211216233812.rpalegklcrd4ifzs@skbuf>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/6/22 2:16 PM, Venu Busireddy wrote:
-> On 2022-01-06 13:06:13 -0600, Tom Lendacky wrote:
->> On 1/6/22 11:40 AM, Venu Busireddy wrote:
->>> On 2022-01-05 15:39:22 -0600, Brijesh Singh wrote:
->>>>
->>>>
->>>> On 1/5/22 2:27 PM, Dave Hansen wrote:
->>>>> On 1/5/22 11:52, Brijesh Singh wrote:
->>>>>>>>             for (; vaddr < vaddr_end; vaddr += PMD_SIZE) {
->>>>>>>> +            /*
->>>>>>>> +             * When SEV-SNP is active then transition the
->>>>>>>> page to shared in the RMP
->>>>>>>> +             * table so that it is consistent with the page
->>>>>>>> table attribute change.
->>>>>>>> +             */
->>>>>>>> +            early_snp_set_memory_shared(__pa(vaddr),
->>>>>>>> __pa(vaddr), PTRS_PER_PMD);
->>>>>>>
->>>>>>> Shouldn't the first argument be vaddr as below?
->>>>>>
->>>>>> Nope, sme_postprocess_startup() is called while we are fixing the
->>>>>> initial page table and running with identity mapping (so va == pa).
->>>>>
->>>>> I'm not sure I've ever seen a line of code that wanted a comment so badly.
->>>>
->>>> The early_snp_set_memory_shared() call the PVALIDATE instruction to clear
->>>> the validated bit from the BSS region. The PVALIDATE instruction needs a
->>>> virtual address, so we need to use the identity mapped virtual address so
->>>> that PVALIDATE can clear the validated bit. I will add more comments to
->>>> clarify it.
->>>
->>> Looking forward to see your final comments explaining this. I can't
->>> still follow why, when PVALIDATE needs the virtual address, we are doing
->>> a __pa() on the vaddr.
->>
->> It's because of the phase of booting that the kernel is in. At this point,
->> the kernel is running in identity mapped mode (VA == PA). The
->> __start_bss_decrypted address is a regular kernel address, e.g. for the
->> kernel I'm on it is 0xffffffffa7600000. Since the PVALIDATE instruction
->> requires a valid virtual address, the code needs to perform a __pa() against
->> __start_bss_decrypted to get the identity mapped virtual address that is
->> currently in place.
+On Fri, Dec 17, 2021 at 01:38:12AM +0200, Vladimir Oltean wrote:
+> On Wed, Dec 15, 2021 at 05:34:45PM +0100, Ansuel Smith wrote:
+> > > > I tested this with multicpu port and with port6 set as the unique port and
+> > > > it's sad.
+> > > > It seems they implemented this feature in a bad way and this is only
+> > > > supported with cpu port0. When cpu port6 is the unique port, the switch
+> > > > doesn't send ack packet. With multicpu port, packet ack are not duplicated
+> > > > and only cpu port0 sends them. This is the same for the MIB counter.
+> > > > For this reason this feature is enabled only when cpu port0 is enabled and
+> > > > operational.
+> > > 
+> > > Let's discuss this a bit (not the hardware limitation, that one is what
+> > > it is). When DSA has multiple CPU ports, right now both host-side
+> > > Ethernet ports are set up as DSA masters. By being a DSA master, I mean
+> > > that dev->dsa_ptr is a non-NULL pointer, so these interfaces expect to
+> > > receive packets that are trapped by the DSA packet_type handlers.
+> > > But due to the way in which dsa_tree_setup_default_cpu() is written,
+> > > by default only the first CPU port will be used. So the host port
+> > > attached to the second CPU port will be a DSA master technically, but it
+> > > will be an inactive one and won't be anyone's master (no dp->cpu_dp will
+> > > point to this master's dev->dsa_ptr). My idea of DSA support for
+> > > multiple CPU ports would be to be able to change the dp->cpu_dp mapping
+> > > through rtnetlink, on a per user port basis (yes, this implies we don't
+> > > have a solution for DSA ports).
+> > 
+> > I have a similar implementation that was proposed as RFC many times ago.
 > 
-> Perhaps  my confusion stems from the fact that __pa(x) is defined either
-> as "((unsigned long ) (x))" (for the cases where paddr and vaddr are
-> same), or as "__phys_addr((unsigned long )(x))", where a vaddr needs to
-> be converted to a paddr. If the paddr and vaddr are same in our case,
-> what exactly is the _pa(vaddr) doing to the vaddr?
+> Yes, well, how to assign a user port to a CPU port seems not to be the
+> biggest problem that needs to be solved before support for multiple CPU
+> ports can fully go in.
+>
 
-But they are not the same and the head64.c file is compiled without 
-defining a value for __pa(), so __pa() is __phys_addr((unsigned long)(x)). 
-The virtual address value of __start_bss_decrypted, for me, is 
-0xffffffffa7600000, and that does not equal the physical address (take a 
-look at your /proc/kallsyms). However, since the code is running identity 
-mapped and with a page table without kernel virtual addresses, it cannot 
-use that value. It needs to convert that value to the identity mapped 
-virtual address and that is done using __pa(). Only after using __pa() on 
-__start_bss_decrypted, do you get a virtual address that maps to and is 
-equal to the physical address.
+Hi,
+sorry for the delay.
 
-You may want to step through the boot code using KVM to see what the 
-environment is and why things are done the way they are.
+I honestly think a start for multicpu that would improve the state would
+be start adding support to iproute for changing the master port.
 
-Thanks,
-Tom
-
+> > > My second observation is based on the fact that some switches support a
+> > > single CPU port, yet they are wired using two Ethernet ports towards the
+> > > host. The Felix and Seville switches are structured this way. I think
+> > > some Broadcom switches too.
+> > > Using the rtnetlink user API, a user could be able to migrate all user
+> > > ports between one CPU port and the other, and as long as the
+> > > configuration is valid, the switch driver should accept this (we perform
+> > > DSA master changing while all ports are down, and we could refuse going
+> > > up if e.g. some user ports are assigned to CPU port A and some user
+> > > ports to CPU port B). Nonetheless, the key point is that when a single
+> > > CPU port is used, the other CPU port kinda sits there doing nothing. So
+> > > I also have some patches that make the host port attached to this other
+> > > CPU port be a normal interface (not a DSA master).
+> > > The switch side of things is still a CPU port (not a user port, since
+> > > there still isn't any net device registered for it), but nonetheless, it
+> > > is a CPU port with no DSA tagging over it, hence the reason why the host
+> > > port isn't a DSA master. The patch itself that changes this behavior
+> > > sounds something like "only set up a host port as a DSA master if some
+> > > user ports are assigned to it".
+> > > As to why I'm doing it this way: the device tree should be fixed, and I
+> > > do need to describe the connection between the switch CPU ports and the
+> > > DSA masters via the 'ethernet = <&phandle>;' property. From a hardware
+> > > perspective, both switch ports A and B are CPU ports, equally. But this
+> > > means that DSA won't create a user port for the CPU port B, which would
+> > > be the more natural way to use it.
+> > > Now why this pertains to you: Vivien's initial stab at management over
+> > > Ethernet wanted to decouple a bit the concept of a DSA master (used for
+> > > the network stack) from the concept of a host port used for in-band
+> > > management (used for register access). Whereas our approach here is to
+> > > keep the two coupled, due to us saying "hey, if there's a direct
+> > > connection to the switch, this is a DSA master anyway, is it not?".
+> > > Well, here's one thing which you wouldn't be able to do if I pursue my
+> > > idea with lazy DSA master setup: if you decide to move all your user
+> > > ports using rtnetlink to CPU port 6, then the DSA master of CPU port 0
+> > > will cease to be a DSA master. So that will also prevent the management
+> > > protocol from working.
+> > 
+> > About the migration problem, wonder if we can just use a refcount that
+> > would represent the user of the master port. The port won't be DSA
+> > master anymore if no user are connected. A switch can increase this ref
+> > if the port is mandatory for some operation. (qca8k on state change
+> > operational would increase the ref and decrease and then the port can be
+> > removed from a DSA master) That should handle all the other switch and
+> > still permit a driver to ""bypass"" this behaviour.
 > 
-> Venu
+> Maybe. Although not quite like the way in which you propose. Remember
+> that the idea is for a DSA master to be a regular interface until it
+> gains a user. So there's the chicken and egg problem if you want to
+> become a user on ->master_state_change()... because it's not a master.
+> You'd have to specify upfront.
 > 
+
+I mean we can really think of adding an option or a flag for the port
+that will be used to declare a cpu port as to be ignored by any disable
+procedure. From what I can remember some broadcom switch have some
+management port that can't be disabled for example so I can see an use
+where a flag of this kind would be useful. Some thing like declaring a
+port as a managament port and with this case any ""cleanup"" function
+will be ignored? That would solve the chicken-egg problem and dts won't
+have to be changed.
+
+> > > I don't want to break your use case, but then again, I'm wondering what
+> > > we could do to support the second CPU port working without DSA tagging,
+> > > without changing the device trees to declare it as a user port (which in
+> > > itself isn't bad, it's just that we need to support all use cases with a
+> > > single, unified device tree).
+> > 
+> > Just some info about the secondary CPU port.
+> > From Documentation the second cpu port in sgmii mode can be used also for
+> > other task so yes we should understand how to handle this. (base-x, mac
+> > and phy) This mode is set based on the phy mode and if the dsa port is a
+> > cpu port. Device tree changes can be accepted as AFAIK due to DSA not
+> > supporting multi cpu, CPU port 6 was never used/defined. (But I'm
+> > not sure... that is the case for all the device we have on openwrt)
+> 
+> What do you mean exactly by "other tasks"?
+> 
+
+I never notice a device with this (actually we just find one that has 2
+qca8k switch that seems to be connected with the port6 port) but other
+task are for example interconnecting 2 switch or attach some external
+port like sfp. (I assume?)
+
+> > Considering that introducing multicpu port would require a
+> > bit of rework, wonder if we should introduce some new bindings/node and
+> > fallback to a legacy (aka force first cpu port as the unique cpu port
+> > and ignore others) in the absence of this new implementation. (Hoping I
+> > didn't get all wrong with the main problem here)
+> 
+> The defaults would stay the same. (I've no idea why we would introduce
+> new device tree bindings? the only device tree change IMO would be to
+> declare the link between the second CPU port and its DSA master, if you
+> haven't done that already) But my key point was that, to some extent,
+> some change to the current behavior will still be required. Like right
+> now, a kernel 5.15 when it sees a device tree with 2 CPU ports will have
+> 2 DSA masters. Maybe kernel 5.17 will only start off with the first port
+> as a DSA master, and the other just a candidate. I'm hoping this won't
+
+IMHO that would be the correct way. Just offer a secondary port and
+leave the user decide to use it or not. (Single CPU port by default and
+leave the user the choice to use the second with an init script)
+
+> change observable behavior for the worse for anyone, because device
+> trees are supposed to be there to stay, not change on a whim. My hope is
+> based on the fact that as far as I can see, that second DSA master is
+> effectively useless. Which in fact creates the second problem: exactly
+> because the second host port is useless with the current code structure,
+> I can see people describing it as a user rather than CPU port in current
+> device trees, just to make some use out of it. But that restricts the
+> potential user base (and therefore appeal) of my change of behavior or
+> of multi-CPU port support in general, and this is a bit sad. I think we
+> should be all spending a bit more time with current-generation kernels
+> on "updated" device trees with multiple CPU ports defined, and see
+> what's broken and what could be improved, because otherwise we could be
+> leaving behind a huge mess when the device trees get updated, and we
+> need to run the occasional old kernel on them.
+> 
+
+Anyway I think I didn't understand you from the start. Your problem was
+with user declaring any additional cpu port as an user port (that is not
+usable?) and not declaring the needed master.
+
+Something like
+
+port@6 {
+				reg = <6>;
+				label = "swp6";
+				phy-mode = "sgmii"
+			};
+
+instead of (current way we use to declare secondary port on qca8k)
+
+port@6 {
+				reg = <6>;
+				label = "cpu";
+				ethernet = <&gmac2>;
+				phy-mode = "sgmii";
+
+				fixed-link {
+					speed = <1000>;
+					full-duplex;
+				};
+			};
+
+> > But if I'm not wrong there was at the start some years ago an idea of a
+> > node used to declare master port separate from the generic port node but
+> > it was rejected?
+> 
+> I don't know anything about this.
+
+One of the first RFC for multicpu port (somethin many years ago) from
+some Marvell devs was to declare an additional node (separate from the
+current one) that would declare cpu ports. But it was a bit useless and
+was dropped after some version.
+
+Aside from these concern how should we proceed with this series? Should
+we first understand the multicpu problem?
+
+Again sorry for the dealy.
+-- 
+	Ansuel

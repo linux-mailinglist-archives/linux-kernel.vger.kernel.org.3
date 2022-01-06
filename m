@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 526804867D2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:42:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C42844867D3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:42:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241389AbiAFQmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 11:42:07 -0500
+        id S241357AbiAFQmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 11:42:11 -0500
 Received: from mail-am6eur05on2044.outbound.protection.outlook.com ([40.107.22.44]:18017
         "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S241308AbiAFQmE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 11:42:04 -0500
+        id S241367AbiAFQmF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 11:42:05 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JX5duIqwDft/1biSJyq4P6cve4t8lD0dNsmLda02krIeXuYwcdedSPfNG3exq3xcSf5Nv8ZW5s2RtQPoPN18M/1w6jz9wCiEbwJUAsSHX0Dg07RHVTGEYqaXVYgBjwKo5tv6Pw0WCSmikhcTeb4B31TJa/YdwHrz/D3LF2x+RYjjbzQfj/n/KF0tTaRuyn95dM8r6FHtj+gVwS01dR4HSEYTu2I8KRgkBk/bB4Yf/7zH12CqvXZlb+iffWu0MDdpBgUfgZcJ7GwInUUNZpGbx1HoypPzmzHl7ZA9LOR6gJmRbAtRJlfP6798237ofZepNoQinZPImEXm6S2GKR/v+Q==
+ b=E78x16zrDulaJ0av3WVc3pHzQU6eN7XowiLuUKILe3rBSC4Q+QkTP3Dr5GGEUjrphstaEBUtJ9kUUbLGbY7ekMf7OTPO0f8JgdpzW/npWFEhKcGR7qqIsQ7hyw7jKfS2I05LkyMEB+qa0l79CEU3CxqxKrBW4nzrQSq5LjDT+8PehRdVhit11YrcCMrW32YyWxerh9RMoTuto5ubARerxDqgdgRVvQYCITZ/8K1PzkMvtXc1Z/p+RtZIbXwiSQZ1RwmC1QAjIF9h9wli5J+34meBI+Jl/FOBqBGEXm3VetHZiSdpgUKDoh1bqIscqYyXkh6tpRf3DMd7H472Vuv/2A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nQD79r1qU3WTMkVCcPdvmg1gt+M77HKjCRcpsFfrFqM=;
- b=XIfxGJuOwGtTGUExjt8Zc++3YaRzlOxwGuFwNEA2g3RHhHRse+Ll28QHYgErXGy35pcXn3qCY3g6ntssXvxJEwfU8//OfKARsNdA3uF/cEABsBGSU/48xFNFtyqTGFsuiHFRFqfT1Nsv0WWXLbjxtdhizLXtpl+92kp8E4u5S3oHj1nzgXX0hae6PKq3/j3aIbrws31j0mwpTf78g2gU2HSycyo296kpqC9YQpy3CyUpgeR+zbIhG4/QYoh/c62ztTfUqxQztj+Fd/QFVKhWUeiIGJSdbPva9NonXjotLHUNcGOSX7oREh0ufVtgW1PBJOvC+z7eCNuK3PxZV6UC3g==
+ bh=ZsfVulp2W03e6NGLFHQToVhMlO76NSvLIOSe8hAqpyY=;
+ b=kp1tMJfl62OBANkWE8jj+9OB+GEBVlIKmqTvCDFM26EPgDwrQyikDJyQFLS9T45uQaFxaJvE2CbuimjKARuXcPhxTpGUGakQZFtt3hneD5uEATS8cju+ZYpBoZKX7YMbCnIdlK/WyrQP64XLZnIheIfoBjitjOt+0U0ERHpWsbUFZAlV3bnSf0dYUShOz89cl9+zyTFMwT1zhGzMJ8WjcWcBVspFW3IWaRKUiS2l6rTaR9NIm4Wp6sXk9Fv6Sa2F6O/ZPEmz6aLwt+cI9L/6P/9cZVaFljiJFDguUlcYJPhiFlz0QrlgZB7i20uN0jbSXfcAZMSmqjEYr23FetBk1w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nQD79r1qU3WTMkVCcPdvmg1gt+M77HKjCRcpsFfrFqM=;
- b=nnd8QEEAUt+oyw7AHP8CSWgFcYssdPwa7jb1gdU3Sn0duQTXDhzn0xtMxQsZWJ6wB3VdNKSoxqt2l2zR742StzZUUHdUwKoy8yazlvWvQ/r+0yVgPwHhLwxRJJ1L0GnHD7k9irifkqHKPdIFt1hYrTZ+f1kbCmpri91SctZn1AM=
+ bh=ZsfVulp2W03e6NGLFHQToVhMlO76NSvLIOSe8hAqpyY=;
+ b=paZFDp8C5WhMHU8RHRsqED/kp9mOr1MWd94sP2xuCj8mqOGwC9RW01epUfJTdU3E0kDTeWYK+LOL3Y3qiJB5YbI0f7ZlDFYf/VYkG6PxG170L5l4Z2UrKQAVIiTHos122pTwYJw1ernGK37Pm71b+ExaJYqb5n5R5UK8S3S5hhs=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from VI1PR04MB4688.eurprd04.prod.outlook.com (2603:10a6:803:6a::30)
@@ -46,9 +46,9 @@ Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
         linux-arm-kernel@lists.infradead.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         devicetree@vger.kernel.org
-Subject: [PATCH v4 2/3] interconnect: imx: Switch from imx_icc_node_adj_desc to fsl,icc-id node assignment
-Date:   Thu,  6 Jan 2022 18:41:49 +0200
-Message-Id: <20220106164150.3474048-2-abel.vesa@nxp.com>
+Subject: [PATCH v4 3/3] interconnect: imx: Remove the imx_icc_node_adj_desc
+Date:   Thu,  6 Jan 2022 18:41:50 +0200
+Message-Id: <20220106164150.3474048-3-abel.vesa@nxp.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220106164150.3474048-1-abel.vesa@nxp.com>
 References: <20220106164150.3474048-1-abel.vesa@nxp.com>
@@ -59,66 +59,62 @@ X-ClientProxiedBy: VI1PR04CA0046.eurprd04.prod.outlook.com
  (2603:10a6:803:6a::30)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: de1872ff-9bc3-4ca8-c6c8-08d9d1337664
+X-MS-Office365-Filtering-Correlation-Id: 01be0678-a8b8-4ecd-1305-08d9d13376bd
 X-MS-TrafficTypeDiagnostic: VI1PR0402MB3837:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR0402MB3837E1271A8E6DF781803819F64C9@VI1PR0402MB3837.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:541;
+X-Microsoft-Antispam-PRVS: <VI1PR0402MB3837F10713C1775B615C8685F64C9@VI1PR0402MB3837.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4502;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KY5MPElWpqDHPZguOhthu+iGeiQ3c9Vwj4Ebj4B7gWOMrqmwaWgRIu5iNo3VNBWKdmkbOqnH1tEB142ngo/yYxS8IlRMxwTswnkGM3SuIfRBrvcMm8Jti58Dql6ZvGosZx0C+fAz9iv/CIGKlR8MDPQUyisHFPfLcA6dKGxl9iv8Y/nIWDoQcV1cOSbREx/m97/Gk8BsmBDoB2Hi6MxoP7exfDYkehXVhjGl31t/yjeKYyiWBMeGwj1UAEs2nVa6O3hGOCbMJmDGI7nqOLDru+rhcmje3QOPm1tRL4Ipt9E3804vYmzkEGm4PiWdUQgYllAlWeRrs2F5fDIbcaHlAAEETJf99RK/BzXypeGvjzp4LHpcS0eKH/cnDAjHsC+otSS14fAMVy9JcdWsCGMT46MMyqXwzU8AVur+UpEW4x81hNG3gWXnvVNs8zDU78Ou49qdIHhUT+vjA6tfNvIg2mV/7cgwsRppDuVkaojztENlA8HEiP6lpKRQgeDit3XTlVEi7zqigw3lqOZj4QUJTLIrEY209eeUHuAnY8AeqfspnKEs6S1UTdKe4RQipc44cbRm4AaCsG5ZMnDjjy7CY+6uWfyuVLelLUNFk/fDxv/H9Umg31AwzIcs1OiOf+opCBUHvDrHW6ymQ/PaFqAZEn6s3cK3b76KypFZTfOZonefhojB66T/Iv94XGUMslKMLLjaH9XY6+mJlgy8iwMlPw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4688.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8676002)(6506007)(8936002)(52116002)(110136005)(54906003)(26005)(6512007)(508600001)(2906002)(2616005)(6486002)(4326008)(6666004)(1076003)(186003)(66946007)(86362001)(66556008)(44832011)(66476007)(5660300002)(316002)(36756003)(38100700002)(83380400001)(38350700002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: RgzLTToCATdiQVGeXcSjqSvtBElzYq4T6enfoHNOWmbV5yXLOk+VNqtHNhczbgLTdHi2jSRQJ3AZOqqYAnD5+CGojX3x8SjOWnSopW9mlWFoWiXcuX4jxp4To21BCoIcR7q+Chd79QPoPG1kt7gMJN3kvQvx8fWS7cDwOFh0gxUh6wbD7ll7Y9WBeIBxZt3j133FeP4u0nC2IKGBXLS/CiIkZTsmpCrzepcw1VR4xN32aHr8SaaUqtR3fdRJ9QWDto5t59r/787Scy7/CpL2ZJtWrXfHIlwO6Y3mPs42Dn6HNBpbQML3V5NU+ehnXAS116+6qULdgz5zN/gtNIFpEanEV6SfwvVZzcYCwJdt1Z/uZw3L7r5aVGVQ0KDi6r0WCgpxw0ffZakX6xBFagEnWP3TX3Jt08mG+3BOsBLiyZ7b0FZbLoyYHuJLTlMDvqvjlO3nKswiH0sphFGRecs0wcOhoTuCKEbrtkEB+YE6S2SAuXkN/4Q9IdS5juAAje+/MYcCgDdw5uUXubi7OepQtf8JiMVG2eLgj6Hr/Ac6rdV8EMVV0EHDA4fhEbW8vdxGbtGh+04JwgNcX6IysftjbZdApfYkPF1J6rvAXx4uhDoSbWub13xGogHhOmbl7Tc3rY6LkAhhZBpiwxkHnEzd6sZeXk/chXm2sRQork2YnVrZyRQ2vrZFoYqO+Ukws2Tv70PJZh4EjC9mE+0zt5JGjQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4688.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8676002)(6506007)(8936002)(52116002)(110136005)(54906003)(26005)(6512007)(508600001)(2906002)(2616005)(6486002)(4326008)(30864003)(6666004)(1076003)(186003)(66946007)(86362001)(66556008)(44832011)(66476007)(5660300002)(316002)(36756003)(38100700002)(83380400001)(38350700002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vdVIey4MdNobZtf42UHk7/gwGFehhrYkCytJpClx9vZowNHPhAJUaB5B0BK1?=
- =?us-ascii?Q?Hw2w+o0eyR7GvFJd93TzSi6EJSP9xt0YMru4EPV4+RWUd/yRGtQ7A8lt/C66?=
- =?us-ascii?Q?V8UN/JIja32EmyK5hBjXMrp8t0uorKDcZ46+xHJVwlnxUsf2rzFoXZdpKIGT?=
- =?us-ascii?Q?J1nSkK8p/y+uSAG0+BnH/Hkicj2dtpRFpOhawc0TU94MRuilsjp9WsZcPtwX?=
- =?us-ascii?Q?SZq3W+ncVs7Wz0KGTb7n/qWkf0px7CdatGIp5OqXAlGqyK7MXp7dDMBFS28Y?=
- =?us-ascii?Q?+1588NCOhT+yrqbWFgM87uvS1n8a3ucAkRY0jzIjEbfOary9yRGtm+KD9YLF?=
- =?us-ascii?Q?43vXLkhq86lPRCz5eZAv9y2r1vwlgA7Q0VKIoy1W4SIcKhfu2K6q7tV7y/vV?=
- =?us-ascii?Q?Bh3BOMrDmFpNGKr2RdKgZea6gItsHtTVJ28Ii9uuHunyMXF94aK5DXc7KBdT?=
- =?us-ascii?Q?B+fScpqIzbmASl+xEHpENeoLBZ3sjqV2GRS3CGpJ5HghjCvg79lJhHu7koqB?=
- =?us-ascii?Q?FHZQ/f5CV1CAnYQQDD01psavbtJVl7FVsetrj32RQh4zKar1HGSePwEnydGp?=
- =?us-ascii?Q?imlsr3cknhctC5XuoJD2CYJqoJ9EGAaMg/fOSmxygcZ/Yqu45uwEz/0Butvy?=
- =?us-ascii?Q?AeAamKsMoUFG1eCdw6+FHDqkAhtY1GEPxwTfcWLsLEdLLkRG/UZeRF14Y6up?=
- =?us-ascii?Q?vtnEXn+dzwvgJ1xjE1ybcS7O+TlbDrSCShlq+NCzoIKe2gJlZGsnFHfhrid9?=
- =?us-ascii?Q?IRjbYYwG5rdF9rGq9CDB3WAbsdHPWtE8ETnew0IiDJ7L7AgrIRJ6CPnjgbtn?=
- =?us-ascii?Q?G1BHIxyiP6ZefYur0BsQvtVrB9GQRVAWjn0O/HnMJyWiWr7NwmXOX5KbeRFp?=
- =?us-ascii?Q?BYEc0Jd+ftLDK7Z1Mz9Lo1D7+WnWkkepdT4LsYUEgao7006MiYzsSaGfc00u?=
- =?us-ascii?Q?Vu9+uIma77ABtXRgP/m+xHSB4q0XggfGvT/51azN8YoNwrr1rNY4ihceoaqG?=
- =?us-ascii?Q?BEqiHHS3GqSOfhcTbobWzVZgmewEuz1tHkaMsp4dQoPkRZDNt6s/EgSXClU6?=
- =?us-ascii?Q?GxcvmNK8C59QQs1o3SAAcovt9m/J2K/2HPhc1JxVQ9C2hS76ifa84wHhuidk?=
- =?us-ascii?Q?HRkYPflN6lfyW2DtAVl8e+JXgwAxaMbk2Ve1G3M9f5jnUhyNaVAW/kKEBTou?=
- =?us-ascii?Q?DUlgdyx0KpI3DSzbERMHkE1UvHD4F5P7txBHYCjAvTdePsH8mKNdTaTVS5rq?=
- =?us-ascii?Q?VrxmP8KjryG+KiTdMGK3iy9Ba+wEsmxPJHRLA+IrtvQAih4ueA4bDvZH/vrH?=
- =?us-ascii?Q?oV8mpin43TGwFOPOJal+YNVNqxY4GBa3LwMmuLL4ed9uGK2O7GFVRJBEMyjt?=
- =?us-ascii?Q?1Ydjc3apqIab/0X4JuZj/VAXprnAXVIY2/Yql8rtx8KuZgL4WEIbvh7YHYvY?=
- =?us-ascii?Q?onUsMdGP/QnFJTUszhROg6ZPNWlnDFjy8UP8RtnrAlpRTJPCVj6zKEI33KkS?=
- =?us-ascii?Q?vsBNspGzVhjmuLINrrJxAGLbomDinL4LpNtqglfLdobnRxxPVIaAxheedlTE?=
- =?us-ascii?Q?2w0mCb0e2+tM07kaJfe+brXRXWaLhgrVKUc9BGKlivweiuWzCEqM345mQi4p?=
- =?us-ascii?Q?Zs+jo8H++LLkt3hD+cYZEK0=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KH5vZYnKmZrdyklhrNtgBgFHZSRNJ2pYwO0t+M/ZfFycHRzNbLswaBhVTvAz?=
+ =?us-ascii?Q?4jipCiS5S7hz4mQtPyaFXIx0heSilr1gUFsfXJyTqntkqJsH/Qioiyqq8Ej7?=
+ =?us-ascii?Q?/PGk1rvWdyepMIXxrt2w36fOhDY+TQEAitm81+bQmHBzxvJTDHZJWL4IN6Ns?=
+ =?us-ascii?Q?N5H1/0TyNT1UV30VCRI4PHV7zr6ldRt2yw4KFZe1wmdgjiyLXbzMvNfoLu4q?=
+ =?us-ascii?Q?6L2tg63YyzedyJu+tO2ZGCtkdiDOc1OjL4S6HP0793afivCtvL5gxWn60sZu?=
+ =?us-ascii?Q?kh9UQhMYIs691XTRMRISOC1gk8wHLa4SmKtilDxwYSDnJ1vLvaLumFcMxecg?=
+ =?us-ascii?Q?J7lGvP6wK3lQ3cYHc2L4fNoxa29vYBo6k0c14wEFgjneRl3gAZmzHjDaTsyg?=
+ =?us-ascii?Q?JMfrQoqdEmhxdhCaFRfhzUBw2v7VVjqb/Yn03vbn67LWLWElwIjA5+UMKChz?=
+ =?us-ascii?Q?fFTEGUCx3q+Wip+h96uN6EZfsgpesPw1GTT1wfBnyKJC2SLsqVIlnnkfQhWq?=
+ =?us-ascii?Q?3Rie/CjUfD1y0YA/xlUyoq6Ti8LplLdL+JHu8UjudQ5270QuQWcB1jOgUdkg?=
+ =?us-ascii?Q?OIzd+tNV5JU3KpnQ4H3V16ggknjeq6mjTYKY00JjcPC+XtVhRshDSGfa3z1L?=
+ =?us-ascii?Q?t4ZFcJm01+PnpPpixShOe0DTiO43SYx7jghnFxYLYr0l1SYGqetuzvEWEsBn?=
+ =?us-ascii?Q?kMx/VrQYRXA5sCjt2fYiQLr15bPIPyGQEX/KN8FrPt6FqdFKp363o6vLkHmE?=
+ =?us-ascii?Q?qXTMjftwhkYQEEadyOsiUg38XdBgGB7oxQWQ9lDFP35E/oQcEc4D0thP2TMz?=
+ =?us-ascii?Q?uHp33C3YfQiGT9sYlSbJNKU9LV3kYHXbFsiE1oxSZ7lMjjkGxD1fEujQmnWx?=
+ =?us-ascii?Q?Cev02B/0A3BwG3vJmxfext27XriI978FalalCD1KzjrG6sqXYU/vRLzjnlI3?=
+ =?us-ascii?Q?JkNOGlqOKOHUga7cv8BmMBGjFcwXj6NvQTcldWtMrUut9esBGxPuhTiSM4vF?=
+ =?us-ascii?Q?mSalM13tIdlZsDyV0Kfra2XSLtTnXrFX+D+bEviGB17i3YW+W0+OTD9U5TVw?=
+ =?us-ascii?Q?tdv/bNJvkaKE4J8A9F9yK90aA5ByDTnNyx/HB5gW2HtVNAUbjgy8RYSc9WB5?=
+ =?us-ascii?Q?cZjfvocqPHdgAnriGsQewa8NW4C8mzP5e2MlW6buap8gdpekpthbjNQaK4yx?=
+ =?us-ascii?Q?HRtOCLaS1qsgmpA31VsSwJrf4FWABgtNe457PdQIHPiyvVSlXdTmZE2kTPAX?=
+ =?us-ascii?Q?Prs1sg7cBw4mCjPWsVWURXhUrgWOKjFJOjOOgdZa7gxGFZz+G5C0ARg/P/0J?=
+ =?us-ascii?Q?krYqARSLWRXIg02YVFeFnFzQyDp+4/6XukOAEUEAYmvEkfaI8ucVUL+eHJh4?=
+ =?us-ascii?Q?XBCRUOpDZpwusAubHcI0WpKm3ve9NWYq73bQf5rnr67Ax6ftcBDGBvWXp4Ou?=
+ =?us-ascii?Q?3A3VoDNZuLay7XVIuxhzr4mkQkx9VNj1rYi6k1q2zNf8NgTt8jwMq8hT6rWd?=
+ =?us-ascii?Q?MGXais0obVmc/aAVTtALYbSCMtL93TT7DKAgjdHDjQWmxOkQoXpI2kHX22NW?=
+ =?us-ascii?Q?KycF3RTg6X46PZzT0RvBA50OziWU1m7kZ6Z89j+S83BbEocsnD2e83MC7Z6t?=
+ =?us-ascii?Q?nqJ/LnNd67LcLG0Gq8AEtiw=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: de1872ff-9bc3-4ca8-c6c8-08d9d1337664
+X-MS-Exchange-CrossTenant-Network-Message-Id: 01be0678-a8b8-4ecd-1305-08d9d13376bd
 X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4688.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2022 16:42:01.1487
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2022 16:42:01.6635
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: j9bbHRKDsxUZ+8APkSa5AWad0NXRBbacbMALIsyRiwlRPKsJYDFVkokhARIuJkuj7YYlKmRwqIPvMlF7Kv187g==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6wFWrCHQGmjlGOgrWxkm0aaQ08qrJYjKTeyhsn1f2dqvDKBgKG0boRBmQr2XMS4F4Cib6vC3BbXiVZUABbaBKg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3837
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to be able to have more than one NoCs in the interconnect net
-we need to decouple the NoC from the dram. So instead of using the
-imx_icc_node_adj_desc, we use the fsl,icc-id property that is in
-each NoC (or pl301) to the icc node (based on the id) to it.
-Along with all the NoC and pl301 nodes in the dts we will have a
-interconnect dedicated node. This node will be the actual device of the
-icc provider.
+Now that the imx generic interconnect doesn't use the
+imx_icc_node_adj_desc, we remove it from all the i.MX8M
+platform drivers.
 
 Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
 ---
@@ -126,116 +122,306 @@ Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
 Changes since v3:
  * none
 
- drivers/interconnect/imx/imx.c | 70 +++++++++++++++-------------------
- 1 file changed, 31 insertions(+), 39 deletions(-)
+ drivers/interconnect/imx/imx.h    | 19 ++++-------------
+ drivers/interconnect/imx/imx8mm.c | 32 +++++++++-------------------
+ drivers/interconnect/imx/imx8mn.c | 28 +++++++------------------
+ drivers/interconnect/imx/imx8mq.c | 35 ++++++++++---------------------
+ 4 files changed, 33 insertions(+), 81 deletions(-)
 
-diff --git a/drivers/interconnect/imx/imx.c b/drivers/interconnect/imx/imx.c
-index c770951a909c..d5b36c478911 100644
---- a/drivers/interconnect/imx/imx.c
-+++ b/drivers/interconnect/imx/imx.c
-@@ -34,8 +34,8 @@ static int imx_icc_node_set(struct icc_node *node)
- 	if (!node_data->qos_dev)
- 		return 0;
+diff --git a/drivers/interconnect/imx/imx.h b/drivers/interconnect/imx/imx.h
+index 75da51076c68..5c9f5138f6aa 100644
+--- a/drivers/interconnect/imx/imx.h
++++ b/drivers/interconnect/imx/imx.h
+@@ -14,15 +14,6 @@
  
--	freq = (node->avg_bw + node->peak_bw) * node_data->desc->adj->bw_mul;
--	do_div(freq, node_data->desc->adj->bw_div);
-+	freq = node->peak_bw;
-+
- 	dev_dbg(dev, "node %s device %s avg_bw %ukBps peak_bw %ukBps min_freq %llukHz\n",
- 		node->name, dev_name(node_data->qos_dev),
- 		node->avg_bw, node->peak_bw, freq);
-@@ -79,41 +79,35 @@ static int imx_icc_node_init_qos(struct icc_provider *provider,
- 				 struct icc_node *node)
- {
- 	struct imx_icc_node *node_data = node->data;
--	const struct imx_icc_node_adj_desc *adj = node_data->desc->adj;
- 	struct device *dev = provider->dev;
--	struct device_node *dn = NULL;
- 	struct platform_device *pdev;
-+	struct device_node *np = NULL, *dn = NULL;
-+	int idx;
+ #define IMX_ICC_MAX_LINKS	4
  
--	if (adj->main_noc) {
--		node_data->qos_dev = dev;
--		dev_dbg(dev, "icc node %s[%d] is main noc itself\n",
--			node->name, node->id);
--	} else {
--		dn = of_parse_phandle(dev->of_node, adj->phandle_name, 0);
--		if (!dn) {
--			dev_warn(dev, "Failed to parse %s\n",
--				 adj->phandle_name);
--			return -ENODEV;
--		}
--		/* Allow scaling to be disabled on a per-node basis */
--		if (!of_device_is_available(dn)) {
--			dev_warn(dev, "Missing property %s, skip scaling %s\n",
--				 adj->phandle_name, node->name);
--			of_node_put(dn);
--			return 0;
--		}
-+	for_each_node_with_property(np, "fsl,icc-id") {
-+		of_property_read_u32(np, "fsl,icc-id", &idx);
-+		if (idx == node_data->desc->id)
-+			dn = np;
-+	}
+-/*
+- * struct imx_icc_node_adj - Describe a dynamic adjustable node
+- */
+-struct imx_icc_node_adj_desc {
+-	unsigned int bw_mul, bw_div;
+-	const char *phandle_name;
+-	bool main_noc;
+-};
+-
+ /*
+  * struct imx_icc_node - Describe an interconnect node
+  * @name: name of the node
+@@ -35,23 +26,21 @@ struct imx_icc_node_desc {
+ 	u16 id;
+ 	u16 links[IMX_ICC_MAX_LINKS];
+ 	u16 num_links;
+-	const struct imx_icc_node_adj_desc *adj;
+ };
  
--		pdev = of_find_device_by_node(dn);
--		of_node_put(dn);
--		if (!pdev) {
--			dev_warn(dev, "node %s[%d] missing device for %pOF\n",
--				 node->name, node->id, dn);
--			return -EPROBE_DEFER;
--		}
--		node_data->qos_dev = &pdev->dev;
--		dev_dbg(dev, "node %s[%d] has device node %pOF\n",
--			node->name, node->id, dn);
-+	if (!dn)
-+		return 0;
-+
-+	if (!of_device_is_available(dn)) {
-+		dev_warn(dev, "%pOF is disabled\n", dn);
-+		return 0;
-+	}
-+
-+	pdev = of_find_device_by_node(dn);
-+	of_node_put(dn);
-+	if (!pdev) {
-+		dev_warn(dev, "node %s[%d] missing device for %pOF\n",
-+			 node->name, node->id, dn);
-+		return -EPROBE_DEFER;
- 	}
-+	node_data->qos_dev = &pdev->dev;
-+	dev_dbg(dev, "node %s[%d] has device node %pOF\n", node->name,
-+							node->id, dn);
- 
- 	return dev_pm_qos_add_request(node_data->qos_dev,
- 				      &node_data->qos_req,
-@@ -151,12 +145,10 @@ static struct icc_node *imx_icc_node_add(struct icc_provider *provider,
- 	node_data->desc = node_desc;
- 	icc_node_add(node, provider);
- 
--	if (node_desc->adj) {
--		ret = imx_icc_node_init_qos(provider, node);
--		if (ret < 0) {
--			imx_icc_node_destroy(node);
--			return ERR_PTR(ret);
--		}
-+	ret = imx_icc_node_init_qos(provider, node);
-+	if (ret < 0) {
-+		imx_icc_node_destroy(node);
-+		return ERR_PTR(ret);
+-#define DEFINE_BUS_INTERCONNECT(_name, _id, _adj, ...)			\
++#define DEFINE_BUS_INTERCONNECT(_name, _id, ...)			\
+ 	{								\
+ 		.id = _id,						\
+ 		.name = _name,						\
+-		.adj = _adj,						\
+ 		.num_links = ARRAY_SIZE(((int[]){ __VA_ARGS__ })),	\
+ 		.links = { __VA_ARGS__ },				\
  	}
  
- 	return node;
-@@ -244,7 +236,7 @@ int imx_icc_register(struct platform_device *pdev,
- 	provider->aggregate = icc_std_aggregate;
- 	provider->xlate = of_icc_xlate_onecell;
- 	provider->data = data;
--	provider->dev = dev->parent;
-+	provider->dev = dev;
- 	platform_set_drvdata(pdev, provider);
+ #define DEFINE_BUS_MASTER(_name, _id, _dest_id)				\
+-	DEFINE_BUS_INTERCONNECT(_name, _id, NULL, _dest_id)
++	DEFINE_BUS_INTERCONNECT(_name, _id, _dest_id)
  
- 	ret = icc_provider_add(provider);
+-#define DEFINE_BUS_SLAVE(_name, _id, _adj)				\
+-	DEFINE_BUS_INTERCONNECT(_name, _id, _adj)
++#define DEFINE_BUS_SLAVE(_name, _id)					\
++	DEFINE_BUS_INTERCONNECT(_name, _id)
+ 
+ int imx_icc_register(struct platform_device *pdev,
+ 		     struct imx_icc_node_desc *nodes,
+diff --git a/drivers/interconnect/imx/imx8mm.c b/drivers/interconnect/imx/imx8mm.c
+index 1083490bb391..0c16110bef9d 100644
+--- a/drivers/interconnect/imx/imx8mm.c
++++ b/drivers/interconnect/imx/imx8mm.c
+@@ -14,18 +14,6 @@
+ 
+ #include "imx.h"
+ 
+-static const struct imx_icc_node_adj_desc imx8mm_dram_adj = {
+-	.bw_mul = 1,
+-	.bw_div = 16,
+-	.phandle_name = "fsl,ddrc",
+-};
+-
+-static const struct imx_icc_node_adj_desc imx8mm_noc_adj = {
+-	.bw_mul = 1,
+-	.bw_div = 16,
+-	.main_noc = true,
+-};
+-
+ /*
+  * Describe bus masters, slaves and connections between them
+  *
+@@ -33,43 +21,43 @@ static const struct imx_icc_node_adj_desc imx8mm_noc_adj = {
+  * PL301 nics which are skipped/merged into PL301_MAIN
+  */
+ static struct imx_icc_node_desc nodes[] = {
+-	DEFINE_BUS_INTERCONNECT("NOC", IMX8MM_ICN_NOC, &imx8mm_noc_adj,
++	DEFINE_BUS_INTERCONNECT("NOC", IMX8MM_ICN_NOC,
+ 			IMX8MM_ICS_DRAM, IMX8MM_ICN_MAIN),
+ 
+-	DEFINE_BUS_SLAVE("DRAM", IMX8MM_ICS_DRAM, &imx8mm_dram_adj),
+-	DEFINE_BUS_SLAVE("OCRAM", IMX8MM_ICS_OCRAM, NULL),
++	DEFINE_BUS_SLAVE("DRAM", IMX8MM_ICS_DRAM),
++	DEFINE_BUS_SLAVE("OCRAM", IMX8MM_ICS_OCRAM),
+ 	DEFINE_BUS_MASTER("A53", IMX8MM_ICM_A53, IMX8MM_ICN_NOC),
+ 
+ 	/* VPUMIX */
+ 	DEFINE_BUS_MASTER("VPU H1", IMX8MM_ICM_VPU_H1, IMX8MM_ICN_VIDEO),
+ 	DEFINE_BUS_MASTER("VPU G1", IMX8MM_ICM_VPU_G1, IMX8MM_ICN_VIDEO),
+ 	DEFINE_BUS_MASTER("VPU G2", IMX8MM_ICM_VPU_G2, IMX8MM_ICN_VIDEO),
+-	DEFINE_BUS_INTERCONNECT("PL301_VIDEO", IMX8MM_ICN_VIDEO, NULL, IMX8MM_ICN_NOC),
++	DEFINE_BUS_INTERCONNECT("PL301_VIDEO", IMX8MM_ICN_VIDEO, IMX8MM_ICN_NOC),
+ 
+ 	/* GPUMIX */
+ 	DEFINE_BUS_MASTER("GPU 2D", IMX8MM_ICM_GPU2D, IMX8MM_ICN_GPU),
+ 	DEFINE_BUS_MASTER("GPU 3D", IMX8MM_ICM_GPU3D, IMX8MM_ICN_GPU),
+-	DEFINE_BUS_INTERCONNECT("PL301_GPU", IMX8MM_ICN_GPU, NULL, IMX8MM_ICN_NOC),
++	DEFINE_BUS_INTERCONNECT("PL301_GPU", IMX8MM_ICN_GPU, IMX8MM_ICN_NOC),
+ 
+ 	/* DISPLAYMIX */
+ 	DEFINE_BUS_MASTER("CSI", IMX8MM_ICM_CSI, IMX8MM_ICN_MIPI),
+ 	DEFINE_BUS_MASTER("LCDIF", IMX8MM_ICM_LCDIF, IMX8MM_ICN_MIPI),
+-	DEFINE_BUS_INTERCONNECT("PL301_MIPI", IMX8MM_ICN_MIPI, NULL, IMX8MM_ICN_NOC),
++	DEFINE_BUS_INTERCONNECT("PL301_MIPI", IMX8MM_ICN_MIPI, IMX8MM_ICN_NOC),
+ 
+ 	/* HSIO */
+ 	DEFINE_BUS_MASTER("USB1", IMX8MM_ICM_USB1, IMX8MM_ICN_HSIO),
+ 	DEFINE_BUS_MASTER("USB2", IMX8MM_ICM_USB2, IMX8MM_ICN_HSIO),
+ 	DEFINE_BUS_MASTER("PCIE", IMX8MM_ICM_PCIE, IMX8MM_ICN_HSIO),
+-	DEFINE_BUS_INTERCONNECT("PL301_HSIO", IMX8MM_ICN_HSIO, NULL, IMX8MM_ICN_NOC),
++	DEFINE_BUS_INTERCONNECT("PL301_HSIO", IMX8MM_ICN_HSIO, IMX8MM_ICN_NOC),
+ 
+ 	/* Audio */
+ 	DEFINE_BUS_MASTER("SDMA2", IMX8MM_ICM_SDMA2, IMX8MM_ICN_AUDIO),
+ 	DEFINE_BUS_MASTER("SDMA3", IMX8MM_ICM_SDMA3, IMX8MM_ICN_AUDIO),
+-	DEFINE_BUS_INTERCONNECT("PL301_AUDIO", IMX8MM_ICN_AUDIO, NULL, IMX8MM_ICN_MAIN),
++	DEFINE_BUS_INTERCONNECT("PL301_AUDIO", IMX8MM_ICN_AUDIO, IMX8MM_ICN_MAIN),
+ 
+ 	/* Ethernet */
+ 	DEFINE_BUS_MASTER("ENET", IMX8MM_ICM_ENET, IMX8MM_ICN_ENET),
+-	DEFINE_BUS_INTERCONNECT("PL301_ENET", IMX8MM_ICN_ENET, NULL, IMX8MM_ICN_MAIN),
++	DEFINE_BUS_INTERCONNECT("PL301_ENET", IMX8MM_ICN_ENET, IMX8MM_ICN_MAIN),
+ 
+ 	/* Other */
+ 	DEFINE_BUS_MASTER("SDMA1", IMX8MM_ICM_SDMA1, IMX8MM_ICN_MAIN),
+@@ -77,7 +65,7 @@ static struct imx_icc_node_desc nodes[] = {
+ 	DEFINE_BUS_MASTER("USDHC1", IMX8MM_ICM_USDHC1, IMX8MM_ICN_MAIN),
+ 	DEFINE_BUS_MASTER("USDHC2", IMX8MM_ICM_USDHC2, IMX8MM_ICN_MAIN),
+ 	DEFINE_BUS_MASTER("USDHC3", IMX8MM_ICM_USDHC3, IMX8MM_ICN_MAIN),
+-	DEFINE_BUS_INTERCONNECT("PL301_MAIN", IMX8MM_ICN_MAIN, NULL,
++	DEFINE_BUS_INTERCONNECT("PL301_MAIN", IMX8MM_ICN_MAIN,
+ 			IMX8MM_ICN_NOC, IMX8MM_ICS_OCRAM),
+ };
+ 
+diff --git a/drivers/interconnect/imx/imx8mn.c b/drivers/interconnect/imx/imx8mn.c
+index ad97e55fd4e5..f03f8db00917 100644
+--- a/drivers/interconnect/imx/imx8mn.c
++++ b/drivers/interconnect/imx/imx8mn.c
+@@ -11,18 +11,6 @@
+ 
+ #include "imx.h"
+ 
+-static const struct imx_icc_node_adj_desc imx8mn_dram_adj = {
+-	.bw_mul = 1,
+-	.bw_div = 4,
+-	.phandle_name = "fsl,ddrc",
+-};
+-
+-static const struct imx_icc_node_adj_desc imx8mn_noc_adj = {
+-	.bw_mul = 1,
+-	.bw_div = 4,
+-	.main_noc = true,
+-};
+-
+ /*
+  * Describe bus masters, slaves and connections between them
+  *
+@@ -30,23 +18,23 @@ static const struct imx_icc_node_adj_desc imx8mn_noc_adj = {
+  * PL301 nics which are skipped/merged into PL301_MAIN
+  */
+ static struct imx_icc_node_desc nodes[] = {
+-	DEFINE_BUS_INTERCONNECT("NOC", IMX8MN_ICN_NOC, &imx8mn_noc_adj,
++	DEFINE_BUS_INTERCONNECT("NOC", IMX8MN_ICN_NOC,
+ 			IMX8MN_ICS_DRAM, IMX8MN_ICN_MAIN),
+ 
+-	DEFINE_BUS_SLAVE("DRAM", IMX8MN_ICS_DRAM, &imx8mn_dram_adj),
+-	DEFINE_BUS_SLAVE("OCRAM", IMX8MN_ICS_OCRAM, NULL),
++	DEFINE_BUS_SLAVE("DRAM", IMX8MN_ICS_DRAM),
++	DEFINE_BUS_SLAVE("OCRAM", IMX8MN_ICS_OCRAM),
+ 	DEFINE_BUS_MASTER("A53", IMX8MN_ICM_A53, IMX8MN_ICN_NOC),
+ 
+ 	/* GPUMIX */
+ 	DEFINE_BUS_MASTER("GPU", IMX8MN_ICM_GPU, IMX8MN_ICN_GPU),
+-	DEFINE_BUS_INTERCONNECT("PL301_GPU", IMX8MN_ICN_GPU, NULL, IMX8MN_ICN_NOC),
++	DEFINE_BUS_INTERCONNECT("PL301_GPU", IMX8MN_ICN_GPU, IMX8MN_ICN_NOC),
+ 
+ 	/* DISPLAYMIX */
+ 	DEFINE_BUS_MASTER("CSI1", IMX8MN_ICM_CSI1, IMX8MN_ICN_MIPI),
+ 	DEFINE_BUS_MASTER("CSI2", IMX8MN_ICM_CSI2, IMX8MN_ICN_MIPI),
+ 	DEFINE_BUS_MASTER("ISI", IMX8MN_ICM_ISI, IMX8MN_ICN_MIPI),
+ 	DEFINE_BUS_MASTER("LCDIF", IMX8MN_ICM_LCDIF, IMX8MN_ICN_MIPI),
+-	DEFINE_BUS_INTERCONNECT("PL301_MIPI", IMX8MN_ICN_MIPI, NULL, IMX8MN_ICN_NOC),
++	DEFINE_BUS_INTERCONNECT("PL301_MIPI", IMX8MN_ICN_MIPI, IMX8MN_ICN_NOC),
+ 
+ 	/* USB goes straight to NOC */
+ 	DEFINE_BUS_MASTER("USB", IMX8MN_ICM_USB, IMX8MN_ICN_NOC),
+@@ -54,11 +42,11 @@ static struct imx_icc_node_desc nodes[] = {
+ 	/* Audio */
+ 	DEFINE_BUS_MASTER("SDMA2", IMX8MN_ICM_SDMA2, IMX8MN_ICN_AUDIO),
+ 	DEFINE_BUS_MASTER("SDMA3", IMX8MN_ICM_SDMA3, IMX8MN_ICN_AUDIO),
+-	DEFINE_BUS_INTERCONNECT("PL301_AUDIO", IMX8MN_ICN_AUDIO, NULL, IMX8MN_ICN_MAIN),
++	DEFINE_BUS_INTERCONNECT("PL301_AUDIO", IMX8MN_ICN_AUDIO, IMX8MN_ICN_MAIN),
+ 
+ 	/* Ethernet */
+ 	DEFINE_BUS_MASTER("ENET", IMX8MN_ICM_ENET, IMX8MN_ICN_ENET),
+-	DEFINE_BUS_INTERCONNECT("PL301_ENET", IMX8MN_ICN_ENET, NULL, IMX8MN_ICN_MAIN),
++	DEFINE_BUS_INTERCONNECT("PL301_ENET", IMX8MN_ICN_ENET, IMX8MN_ICN_MAIN),
+ 
+ 	/* Other */
+ 	DEFINE_BUS_MASTER("SDMA1", IMX8MN_ICM_SDMA1, IMX8MN_ICN_MAIN),
+@@ -66,7 +54,7 @@ static struct imx_icc_node_desc nodes[] = {
+ 	DEFINE_BUS_MASTER("USDHC1", IMX8MN_ICM_USDHC1, IMX8MN_ICN_MAIN),
+ 	DEFINE_BUS_MASTER("USDHC2", IMX8MN_ICM_USDHC2, IMX8MN_ICN_MAIN),
+ 	DEFINE_BUS_MASTER("USDHC3", IMX8MN_ICM_USDHC3, IMX8MN_ICN_MAIN),
+-	DEFINE_BUS_INTERCONNECT("PL301_MAIN", IMX8MN_ICN_MAIN, NULL,
++	DEFINE_BUS_INTERCONNECT("PL301_MAIN", IMX8MN_ICN_MAIN,
+ 			IMX8MN_ICN_NOC, IMX8MN_ICS_OCRAM),
+ };
+ 
+diff --git a/drivers/interconnect/imx/imx8mq.c b/drivers/interconnect/imx/imx8mq.c
+index d7768d3c6d8a..b8c36d668946 100644
+--- a/drivers/interconnect/imx/imx8mq.c
++++ b/drivers/interconnect/imx/imx8mq.c
+@@ -12,18 +12,6 @@
+ 
+ #include "imx.h"
+ 
+-static const struct imx_icc_node_adj_desc imx8mq_dram_adj = {
+-	.bw_mul = 1,
+-	.bw_div = 4,
+-	.phandle_name = "fsl,ddrc",
+-};
+-
+-static const struct imx_icc_node_adj_desc imx8mq_noc_adj = {
+-	.bw_mul = 1,
+-	.bw_div = 4,
+-	.main_noc = true,
+-};
+-
+ /*
+  * Describe bus masters, slaves and connections between them
+  *
+@@ -31,43 +19,42 @@ static const struct imx_icc_node_adj_desc imx8mq_noc_adj = {
+  * PL301 nics which are skipped/merged into PL301_MAIN
+  */
+ static struct imx_icc_node_desc nodes[] = {
+-	DEFINE_BUS_INTERCONNECT("NOC", IMX8MQ_ICN_NOC, &imx8mq_noc_adj,
+-			IMX8MQ_ICS_DRAM, IMX8MQ_ICN_MAIN),
++	DEFINE_BUS_INTERCONNECT("NOC", IMX8MQ_ICN_NOC, IMX8MQ_ICS_DRAM, IMX8MQ_ICN_MAIN),
+ 
+-	DEFINE_BUS_SLAVE("DRAM", IMX8MQ_ICS_DRAM, &imx8mq_dram_adj),
+-	DEFINE_BUS_SLAVE("OCRAM", IMX8MQ_ICS_OCRAM, NULL),
++	DEFINE_BUS_SLAVE("DRAM", IMX8MQ_ICS_DRAM),
++	DEFINE_BUS_SLAVE("OCRAM", IMX8MQ_ICS_OCRAM),
+ 	DEFINE_BUS_MASTER("A53", IMX8MQ_ICM_A53, IMX8MQ_ICN_NOC),
+ 
+ 	/* VPUMIX */
+ 	DEFINE_BUS_MASTER("VPU", IMX8MQ_ICM_VPU, IMX8MQ_ICN_VIDEO),
+-	DEFINE_BUS_INTERCONNECT("PL301_VIDEO", IMX8MQ_ICN_VIDEO, NULL, IMX8MQ_ICN_NOC),
++	DEFINE_BUS_INTERCONNECT("PL301_VIDEO", IMX8MQ_ICN_VIDEO, IMX8MQ_ICN_NOC),
+ 
+ 	/* GPUMIX */
+ 	DEFINE_BUS_MASTER("GPU", IMX8MQ_ICM_GPU, IMX8MQ_ICN_GPU),
+-	DEFINE_BUS_INTERCONNECT("PL301_GPU", IMX8MQ_ICN_GPU, NULL, IMX8MQ_ICN_NOC),
++	DEFINE_BUS_INTERCONNECT("PL301_GPU", IMX8MQ_ICN_GPU, IMX8MQ_ICN_NOC),
+ 
+ 	/* DISPMIX (only for DCSS) */
+ 	DEFINE_BUS_MASTER("DC", IMX8MQ_ICM_DCSS, IMX8MQ_ICN_DCSS),
+-	DEFINE_BUS_INTERCONNECT("PL301_DC", IMX8MQ_ICN_DCSS, NULL, IMX8MQ_ICN_NOC),
++	DEFINE_BUS_INTERCONNECT("PL301_DC", IMX8MQ_ICN_DCSS, IMX8MQ_ICN_NOC),
+ 
+ 	/* USBMIX */
+ 	DEFINE_BUS_MASTER("USB1", IMX8MQ_ICM_USB1, IMX8MQ_ICN_USB),
+ 	DEFINE_BUS_MASTER("USB2", IMX8MQ_ICM_USB2, IMX8MQ_ICN_USB),
+-	DEFINE_BUS_INTERCONNECT("PL301_USB", IMX8MQ_ICN_USB, NULL, IMX8MQ_ICN_NOC),
++	DEFINE_BUS_INTERCONNECT("PL301_USB", IMX8MQ_ICN_USB, IMX8MQ_ICN_NOC),
+ 
+ 	/* PL301_DISPLAY (IPs other than DCSS, inside SUPERMIX) */
+ 	DEFINE_BUS_MASTER("CSI1", IMX8MQ_ICM_CSI1, IMX8MQ_ICN_DISPLAY),
+ 	DEFINE_BUS_MASTER("CSI2", IMX8MQ_ICM_CSI2, IMX8MQ_ICN_DISPLAY),
+ 	DEFINE_BUS_MASTER("LCDIF", IMX8MQ_ICM_LCDIF, IMX8MQ_ICN_DISPLAY),
+-	DEFINE_BUS_INTERCONNECT("PL301_DISPLAY", IMX8MQ_ICN_DISPLAY, NULL, IMX8MQ_ICN_MAIN),
++	DEFINE_BUS_INTERCONNECT("PL301_DISPLAY", IMX8MQ_ICN_DISPLAY, IMX8MQ_ICN_MAIN),
+ 
+ 	/* AUDIO */
+ 	DEFINE_BUS_MASTER("SDMA2", IMX8MQ_ICM_SDMA2, IMX8MQ_ICN_AUDIO),
+-	DEFINE_BUS_INTERCONNECT("PL301_AUDIO", IMX8MQ_ICN_AUDIO, NULL, IMX8MQ_ICN_DISPLAY),
++	DEFINE_BUS_INTERCONNECT("PL301_AUDIO", IMX8MQ_ICN_AUDIO, IMX8MQ_ICN_DISPLAY),
+ 
+ 	/* ENET */
+ 	DEFINE_BUS_MASTER("ENET", IMX8MQ_ICM_ENET, IMX8MQ_ICN_ENET),
+-	DEFINE_BUS_INTERCONNECT("PL301_ENET", IMX8MQ_ICN_ENET, NULL, IMX8MQ_ICN_MAIN),
++	DEFINE_BUS_INTERCONNECT("PL301_ENET", IMX8MQ_ICN_ENET, IMX8MQ_ICN_MAIN),
+ 
+ 	/* OTHER */
+ 	DEFINE_BUS_MASTER("SDMA1", IMX8MQ_ICM_SDMA1, IMX8MQ_ICN_MAIN),
+@@ -76,7 +63,7 @@ static struct imx_icc_node_desc nodes[] = {
+ 	DEFINE_BUS_MASTER("USDHC2", IMX8MQ_ICM_USDHC2, IMX8MQ_ICN_MAIN),
+ 	DEFINE_BUS_MASTER("PCIE1", IMX8MQ_ICM_PCIE1, IMX8MQ_ICN_MAIN),
+ 	DEFINE_BUS_MASTER("PCIE2", IMX8MQ_ICM_PCIE2, IMX8MQ_ICN_MAIN),
+-	DEFINE_BUS_INTERCONNECT("PL301_MAIN", IMX8MQ_ICN_MAIN, NULL,
++	DEFINE_BUS_INTERCONNECT("PL301_MAIN", IMX8MQ_ICN_MAIN,
+ 			IMX8MQ_ICN_NOC, IMX8MQ_ICS_OCRAM),
+ };
+ 
 -- 
 2.31.1
 

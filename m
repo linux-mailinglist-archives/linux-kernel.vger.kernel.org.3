@@ -2,104 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF9444868B2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:33:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A47764868B6
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:34:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241913AbiAFRdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 12:33:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42310 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241861AbiAFRdu (ORCPT
+        id S241987AbiAFRe2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jan 2022 12:34:28 -0500
+Received: from mail-qv1-f44.google.com ([209.85.219.44]:46750 "EHLO
+        mail-qv1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241922AbiAFReY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 12:33:50 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E9FC061201
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 09:33:50 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id c9-20020a17090a1d0900b001b2b54bd6c5so9409157pjd.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 09:33:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SVU9ojxKh3KV/GkNCH2U8jLzNnNx2BrytGLDVlfM2n4=;
-        b=B7uhyCQuWye9aBf8yPcxb8+lyR96aaQke/GnM1Lg02NwGIbHRbmz4KClAxslwbq7U4
-         Yebv3rE7W75n0qCr4B1yNF0W+BOhQUuc64tplojX1gSd1ODhjw11QN/e6aeUwDBlNx0h
-         bh1dxebH0y7DIlnsUH9/9L7tptxPiYlQ+MGC44/aH55Grc/D0PciIW6R7bG7OT9T8+1j
-         uQIEyqiFgMEl0bAHBBRzwMzQCbLDyUed4PqBcENUbl7LhcZXdtdaw5dkA33E7Nr4+czL
-         4P4mEVEsj97UwkqlV2Xx1QadRt2QpvFJlmlsUkDyY+InxvI2q13Ja5cJoKNCGbZDOWgD
-         3OIQ==
+        Thu, 6 Jan 2022 12:34:24 -0500
+Received: by mail-qv1-f44.google.com with SMTP id r6so2981325qvr.13;
+        Thu, 06 Jan 2022 09:34:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SVU9ojxKh3KV/GkNCH2U8jLzNnNx2BrytGLDVlfM2n4=;
-        b=nm1O+JdQurIjM2XhIwBQa7hqtOr88wCgvN8wSgLTXETMNIePM9Stq1bY54DFlomHs7
-         YpDw/79rzJq74YxJOQBTq/uC6lOU2h4juf6zOu0fhU2sA309kkQHm9TOqlunp+nbX7LF
-         UlYGYu7S4J1GkgFhZr+oCM0ZrFkL3j2mq1bxqHRBPi0aSgDg7EHTvXKTFxUxeVg6d64A
-         pie7AYrVWJ6kbbYloNzL/kauXKlb+1XXxKt7C2J1Hb+e+CTWf8j5mqsoWj0p9/r6x8Yw
-         u+H8jMRsHi6rpsCYQ8lcHuC0q2jIB6xZ9yzIY7Y4IO5WBKm7FhP46KYSNCxuLrdmCUxp
-         wiMA==
-X-Gm-Message-State: AOAM533LRNFr3jx+eaFNonmMOu+X2hxDn9ojZvzk8EG7ucALRjSxJdrO
-        w8vXZhZE3jHl8D0H4wOrlB+QPA==
-X-Google-Smtp-Source: ABdhPJyZaTVYpO1ItL4ZGLZUkEwmwFKFW3I/igBkCy9iAG62enlQpIFkRSuiwUlPtU89+7Kwcm6jMg==
-X-Received: by 2002:a17:902:8505:b0:149:ac79:d8d6 with SMTP id bj5-20020a170902850500b00149ac79d8d6mr28217912plb.170.1641490429554;
-        Thu, 06 Jan 2022 09:33:49 -0800 (PST)
-Received: from ziepe.ca ([206.223.160.26])
-        by smtp.gmail.com with ESMTPSA id ng7sm3343172pjb.41.2022.01.06.09.33.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 09:33:48 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1n5We2-00CQtq-FZ; Thu, 06 Jan 2022 13:33:46 -0400
-Date:   Thu, 6 Jan 2022 13:33:46 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
-Cc:     "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "zyjzyj2000@gmail.com" <zyjzyj2000@gmail.com>,
-        "aharonl@nvidia.com" <aharonl@nvidia.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mbloch@nvidia.com" <mbloch@nvidia.com>,
-        "liweihang@huawei.com" <liweihang@huawei.com>,
-        "liangwenpeng@huawei.com" <liangwenpeng@huawei.com>,
-        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
-        "rpearsonhpe@gmail.com" <rpearsonhpe@gmail.com>,
-        "y-goto@fujitsu.com" <y-goto@fujitsu.com>
-Subject: Re: [RFC PATCH rdma-next 08/10] RDMA/rxe: Implement flush execution
- in responder side
-Message-ID: <20220106173346.GU6467@ziepe.ca>
-References: <20211228080717.10666-1-lizhijian@cn.fujitsu.com>
- <20211228080717.10666-9-lizhijian@cn.fujitsu.com>
- <20220106002804.GS6467@ziepe.ca>
- <347eb51d-6b0c-75fb-e27f-6bf4969125fe@fujitsu.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=PrrcpSOjpVBQjfLKYFTKueeToB19AVYUAAYHWQfgysI=;
+        b=mQRYzmewiWv7qumzannnbrYXeo3AHwkoXkd5TuCwkm02EifG5u55TKwDJDQjx6qahO
+         UJBetc1o3ebszxvsKchssZnPwrLxLNXKtO3iRbJQGBp5Ldq5XTESjQp9e+WiOcgG39w4
+         PMMA45H28z6HMLkNS7hZBwfIR7Mdpudne8srHd3wArXD1jFUCVaPWpIjRNFAibY66df6
+         /zXrGILtyfeqyAGm6PJk9ZKIB04m5mbx/CteBycZVf8bSeGwL07BsO6BMrQZfOU7QT0Y
+         6ZoFzecWlCynjyKEh5Dz6TaglM+zFopgPMQ6OVr5q4Bxng2Io22eLsFi1mhQEl8bzU1N
+         JcUw==
+X-Gm-Message-State: AOAM532qZvUK16UzGny4Odg/p4L+/5Pdz8yBVLUSDE1w/OsPzpYAp9bK
+        fDoISUnKzZMS3X183C+zQYpSr1xDe2PD93orQZ0=
+X-Google-Smtp-Source: ABdhPJwDxMHP0IkOGxFap2RTf2cnVE9AHI228gO5l/l0V9RmqWOeSM9M4liwZOxkXXXZDtiVphrxEUuIBDiaHoluwEs=
+X-Received: by 2002:a05:6214:20a2:: with SMTP id 2mr54554275qvd.52.1641490464220;
+ Thu, 06 Jan 2022 09:34:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <347eb51d-6b0c-75fb-e27f-6bf4969125fe@fujitsu.com>
+References: <20220106074306.2712090-1-ray.huang@amd.com>
+In-Reply-To: <20220106074306.2712090-1-ray.huang@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 6 Jan 2022 18:34:13 +0100
+Message-ID: <CAJZ5v0iHo9JMggbJmyFL9XoWS2oTWSugbMtD_C2OBHpmw+ePCQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] cpufreq: amd-pstate: Fix the dependence issue of AMD P-State
+To:     Huang Rui <ray.huang@amd.com>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 06:42:57AM +0000, lizhijian@fujitsu.com wrote:
-> 
-> 
-> On 06/01/2022 08:28, Jason Gunthorpe wrote:
-> > On Tue, Dec 28, 2021 at 04:07:15PM +0800, Li Zhijian wrote:
-> >> +	while (length > 0) {
-> >> +		va	= (u8 *)(uintptr_t)buf->addr + offset;
-> >> +		bytes	= buf->size - offset;
-> >> +
-> >> +		if (bytes > length)
-> >> +			bytes = length;
-> >> +
-> >> +		arch_wb_cache_pmem(va, bytes);
-> > So why did we need to check that the va was pmem to call this?
-> Sorry, i didn't get you.
-> 
-> I didn't check whether va is pmem, since only MR registered with PERSISTENCE(only pmem can
-> register this access flag) can reach here.
+On Thu, Jan 6, 2022 at 8:43 AM Huang Rui <ray.huang@amd.com> wrote:
+>
+> The AMD P-State driver is based on ACPI CPPC function, so ACPI should be
+> dependence of this driver in the kernel config.
+>
+> In file included from ../drivers/cpufreq/amd-pstate.c:40:0:
+> ../include/acpi/processor.h:226:2: error: unknown type name ‘phys_cpuid_t’
+>   phys_cpuid_t phys_id; /* CPU hardware ID such as APIC ID for x86 */
+>   ^~~~~~~~~~~~
+> ../include/acpi/processor.h:355:1: error: unknown type name ‘phys_cpuid_t’; did you mean ‘phys_addr_t’?
+>  phys_cpuid_t acpi_get_phys_id(acpi_handle, int type, u32 acpi_id);
+>  ^~~~~~~~~~~~
+>  phys_addr_t
+>   CC      drivers/rtc/rtc-rv3029c2.o
+> ../include/acpi/processor.h:356:1: error: unknown type name ‘phys_cpuid_t’; did you mean ‘phys_addr_t’?
+>  phys_cpuid_t acpi_map_madt_entry(u32 acpi_id);
+>  ^~~~~~~~~~~~
+>  phys_addr_t
+> ../include/acpi/processor.h:357:20: error: unknown type name ‘phys_cpuid_t’; did you mean ‘phys_addr_t’?
+>  int acpi_map_cpuid(phys_cpuid_t phys_id, u32 acpi_id);
+>                     ^~~~~~~~~~~~
+>                     phys_addr_t
+>
+> See https://lore.kernel.org/lkml/20e286d4-25d7-fb6e-31a1-4349c805aae3@infradead.org/.
+>
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Huang Rui <ray.huang@amd.com>
+> ---
+>  drivers/cpufreq/Kconfig.x86 | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/cpufreq/Kconfig.x86 b/drivers/cpufreq/Kconfig.x86
+> index a951768c3ebb..55516043b656 100644
+> --- a/drivers/cpufreq/Kconfig.x86
+> +++ b/drivers/cpufreq/Kconfig.x86
+> @@ -36,9 +36,9 @@ config X86_PCC_CPUFREQ
+>
+>  config X86_AMD_PSTATE
+>         tristate "AMD Processor P-State driver"
+> -       depends on X86
+> -       select ACPI_PROCESSOR if ACPI
+> -       select ACPI_CPPC_LIB if X86_64 && ACPI
+> +       depends on X86 && ACPI
+> +       select ACPI_PROCESSOR
+> +       select ACPI_CPPC_LIB if X86_64
+>         select CPU_FREQ_GOV_SCHEDUTIL if SMP
+>         help
+>           This driver adds a CPUFreq driver which utilizes a fine grain
+> --
 
-Yes, that is what I mean, why did we need to check anything to call
-this API - it should work on any CPU mapped address.
-
-Jason
+Applied (under a modified subject), thanks!

@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F26FA486B16
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:28:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34841486B17
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:28:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243733AbiAFU2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 15:28:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54400 "EHLO
+        id S243755AbiAFU2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 15:28:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235638AbiAFU2L (ORCPT
+        with ESMTP id S243754AbiAFU2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 15:28:11 -0500
+        Thu, 6 Jan 2022 15:28:16 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3997BC061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 12:28:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8812C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 12:28:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB87C61CF3
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 20:28:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 074E9C36AED;
-        Thu,  6 Jan 2022 20:28:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 75CC161E16
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 20:28:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE3B5C36AED;
+        Thu,  6 Jan 2022 20:28:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641500890;
-        bh=AAcqZiHkbGXIszcYuW9CrI5KI51itS0JI9XIaGI3/R0=;
+        s=k20201202; t=1641500894;
+        bh=BGqh5w32AtbQBoQuseqpX+P4H5soTGDf7+fuVcRonE0=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=QlSrKt2PXNHMmqFbLpaqXkS5xUHppUORFKOzb21q2zpPlZoUNEeiw5C0M1Cq5MfRj
-         sDOmLa4WOfx9rdqQzURh5YpJmw5bURozKKiXH777FAnBg6nteGLoq8rdw1mX3YmZPU
-         4tcPFI63u/ThxbzKpWn6qrI0NWTUWjJrYez0ZoOIQbivLvqV3KzORf3cZnGcsX2i4v
-         Q5ZwA18cvK+jJ3UCquSKdwmfDpbhPpTUsJZ6OHtqWblVKhX+tRAxIgXTif/HfS3tTW
-         Cxe4EUimM9UyEBn1idRTE9EykQQDpCbch8Z3mAbVu7wVxYVVYrTEOngcIspndwhxCU
-         CAS64mIO7xoJQ==
+        b=dYXzcPsdPgpX4KDM3EK5x+hbwj6AXsuXwNTu6T8A7o40nVnVxTp0DUmqPMXwW69X5
+         SB9pN7XIF8rVr2iomTtzBbZ28X4b+bqMpGtuCLP71H8dKA+HiO1tS3uxdrRw05YyWF
+         h+5Wbw/fPsKNOXfjWB4Agj6ZDqO5yj7SM5KSPoJ/ASnXwZydNzkUgMkjvdFc9K4YPL
+         cQTBYmWEhZi5xR6SrKx5TyfBZdoi45nDng+FUrgLAycY9d2OvZ44zZ2c2bV/kb2Eb2
+         YT6G1/WPAQOgZGe3ajonlC0OrwCDl8Td9JOPmp9/aaCVp2L0NoBegqnG7vzxWBlmcR
+         H0fogSQz5UgWQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Qinghua Jin <qhjin.dev@gmail.com>
-Cc:     Jaroslav Kysela <perex@perex.cz>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Takashi Iwai <tiwai@suse.com>
-In-Reply-To: <20220106092847.357035-1-qhjin.dev@gmail.com>
-References: <20220106092847.357035-1-qhjin.dev@gmail.com>
-Subject: Re: [PATCH] ASoC: topology: Fix typo
-Message-Id: <164150088874.2243486.7338777476299923707.b4-ty@kernel.org>
-Date:   Thu, 06 Jan 2022 20:28:08 +0000
+To:     perex@perex.cz, tiwai@suse.com,
+        Shengjiu Wang <shengjiu.wang@nxp.com>, Xiubo.Lee@gmail.com,
+        alsa-devel@alsa-project.org, festevam@gmail.com,
+        nicoleotsuka@gmail.com, timur@kernel.org, lgirdwood@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+In-Reply-To: <1641380883-20709-1-git-send-email-shengjiu.wang@nxp.com>
+References: <1641380883-20709-1-git-send-email-shengjiu.wang@nxp.com>
+Subject: Re: [PATCH] ASoC: fsl_asrc: refine the check of available clock divider
+Message-Id: <164150089249.2243486.14713961651621458604.b4-ty@kernel.org>
+Date:   Thu, 06 Jan 2022 20:28:12 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -50,10 +50,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Jan 2022 17:28:47 +0800, Qinghua Jin wrote:
-> change 'postion' to 'position'
+On Wed, 5 Jan 2022 19:08:03 +0800, Shengjiu Wang wrote:
+> According to RM, the clock divider range is from 1 to 8, clock
+> prescaling ratio may be any power of 2 from 1 to 128.
+> So the supported divider is not all the value between
+> 1 and 1024, just limited value in that range.
 > 
+> Create table for the supported divder and add function to
+> check the clock divider is available by comparing with
+> the table.
 > 
+> [...]
 
 Applied to
 
@@ -61,8 +68,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: topology: Fix typo
-      commit: 00ac838924f73b51e82994c7fc870f0a994e4d34
+[1/1] ASoC: fsl_asrc: refine the check of available clock divider
+      commit: 320386343451ab6a3577e0ee200dac56a6182944
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

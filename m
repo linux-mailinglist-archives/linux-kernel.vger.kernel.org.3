@@ -2,103 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77ED448620B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 10:23:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D947D48620D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 10:24:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237368AbiAFJXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 04:23:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44790 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237327AbiAFJX2 (ORCPT
+        id S237380AbiAFJYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 04:24:13 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:55166 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S237364AbiAFJYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 04:23:28 -0500
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA97C061245;
-        Thu,  6 Jan 2022 01:23:28 -0800 (PST)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id C769122236;
-        Thu,  6 Jan 2022 10:23:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1641461005;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=H5FnMDn1LTfHXy/mkIpjundiwjDbx0D7XiU772NlIxs=;
-        b=r5YTQ6wZBG7ALB9aK9XdT2tKxJ+4T18RQ9V2jQzs5uOPyyQWE16qyueLEiAXOsNbj6sSnI
-        G/yDajHfKdAiAzDzmE6N5j1AEC1wv3Co5ZZPGi09BPopA40n6B56Jhl6purANqyKkwSbRq
-        o11aEGcMQOQW8SUYGdP1DGE4dRhGohQ=
+        Thu, 6 Jan 2022 04:24:12 -0500
+X-UUID: 945a0748c908428b9978267c7bd64838-20220106
+X-UUID: 945a0748c908428b9978267c7bd64838-20220106
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 467672720; Thu, 06 Jan 2022 17:24:09 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 6 Jan 2022 17:24:07 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 6 Jan 2022 17:24:07 +0800
+Message-ID: <3a1bffc6f677ef9790749a366424fe5effda90f7.camel@mediatek.com>
+Subject: Re: [PATCH 2/4] phy: mediatek: phy-mtk-hdmi: Reorder to remove
+ forward declarations
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <chunkuang.hu@kernel.org>
+CC:     <p.zabel@pengutronix.de>, <kishon@ti.com>, <vkoul@kernel.org>,
+        <matthias.bgg@gmail.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Date:   Thu, 6 Jan 2022 17:24:07 +0800
+In-Reply-To: <20220103153055.50473-2-angelogioacchino.delregno@collabora.com>
+References: <20220103153055.50473-1-angelogioacchino.delregno@collabora.com>
+         <20220103153055.50473-2-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Thu, 06 Jan 2022 10:23:22 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     zajec5@gmail.com
-Cc:     andrew@lunn.ch, davem@davemloft.net, devicetree@vger.kernel.org,
-        hkallweit1@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
-        netdev@vger.kernel.org, rafal@milecki.pl, robh+dt@kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: Re: [PATCH] of: net: support NVMEM cells with MAC in text format
-In-Reply-To: <20211229124047.1286965-1-michael@walle.cc>
-References: <20211223122747.30448-1-zajec5@gmail.com>
- <20211229124047.1286965-1-michael@walle.cc>
-User-Agent: Roundcube Webmail/1.4.12
-Message-ID: <4ce6539e8b7f2486b4c63a45e464da50@walle.cc>
-X-Sender: michael@walle.cc
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2021-12-29 13:40, schrieb Michael Walle:
->> Some NVMEM devices have text based cells. In such cases MAC is stored 
->> in
->> a XX:XX:XX:XX:XX:XX format. Use mac_pton() to parse such data and
->> support those NVMEM cells. This is required to support e.g. a very
->> popular U-Boot and its environment variables.
->> 
->> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
->> ---
->> Please let me know if checking NVMEM cell length (6 B vs. 17 B) can be
->> considered a good enough solution. Alternatively we could use some DT
->> property to make it explicity, e.g. something like:
->> 
->> ethernet@18024000 {
->> 	compatible = "brcm,amac";
->> 	reg = <0x18024000 0x800>;
->> 
->> 	nvmem-cells = <&mac_addr>;
->> 	nvmem-cell-names = "mac-address";
->> 	nvmem-mac-format = "text";
->> };
+On Mon, 2022-01-03 at 16:30 +0100, AngeloGioacchino Del Regno wrote:
+> Forward declarations for mtk_hdmi_power_{on,off} aren't necessary:
+> move mtk_hdmi_phy_dev_ops down to remove forward declarations.
 > 
-> Please note, that there is also this proposal, which had such a 
-> conversion
-> in mind:
-> https://lore.kernel.org/linux-devicetree/20211228142549.1275412-1-michael@walle.cc/
+> Signed-off-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/phy/mediatek/phy-mtk-hdmi.c | 15 ++++++---------
+>  1 file changed, 6 insertions(+), 9 deletions(-)
 > 
-> With this patch, there are now two different places where a mac address
-> format is converted. In of_get_mac_addr_nvmem() and in the imx otp 
-> driver.
-> And both have their shortcomings and aren't really flexible. Eg. this 
-> one
-> magically detects the format by comparing the length, but can't be used 
-> for
-> to swap bytes (because the length is also ETH_ALEN), which apparently 
-> is a
-> use case in the imx otp driver. And having the conversion in an nvmem
-> provider device driver is still a bad thing IMHO.
-> 
-> I'd really like to see all these kind of transformations in one place.
+> diff --git a/drivers/phy/mediatek/phy-mtk-hdmi.c
+> b/drivers/phy/mediatek/phy-mtk-hdmi.c
+> index 707e90691e6e..b4193cb4e4e3 100644
+> --- a/drivers/phy/mediatek/phy-mtk-hdmi.c
+> +++ b/drivers/phy/mediatek/phy-mtk-hdmi.c
+> @@ -6,15 +6,6 @@
+>  
+>  #include "phy-mtk-hdmi.h"
+>  
+> -static int mtk_hdmi_phy_power_on(struct phy *phy);
+> -static int mtk_hdmi_phy_power_off(struct phy *phy);
+> -
+> -static const struct phy_ops mtk_hdmi_phy_dev_ops = {
+> -	.power_on = mtk_hdmi_phy_power_on,
+> -	.power_off = mtk_hdmi_phy_power_off,
+> -	.owner = THIS_MODULE,
+> -};
+> -
+>  inline struct mtk_hdmi_phy *to_mtk_hdmi_phy(struct clk_hw *hw)
+>  {
+>  	return container_of(hw, struct mtk_hdmi_phy, pll_hw);
+> @@ -43,6 +34,12 @@ static int mtk_hdmi_phy_power_off(struct phy *phy)
+>  	return 0;
+>  }
+>  
+> +static const struct phy_ops mtk_hdmi_phy_dev_ops = {
+> +	.power_on = mtk_hdmi_phy_power_on,
+> +	.power_off = mtk_hdmi_phy_power_off,
+> +	.owner = THIS_MODULE,
+> +};
+> +
+>  static const struct phy_ops *
+>  mtk_hdmi_phy_dev_get_ops(const struct mtk_hdmi_phy *hdmi_phy)
+>  {
+Reviewed-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-Unfortunately, there were no replies yet. Can we revert this patch
-until there was a discussion and before there are any users of it.
-Esp. the latter is hard to track and then it might be impossible
-to change them to a better solution.
+Thanks a lot
 
-Any optionions?
 
--michael

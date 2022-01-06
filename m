@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C2EE486CEA
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:55:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91BE5486CEE
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:55:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244880AbiAFVyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 16:54:35 -0500
-Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:64027 "EHLO
+        id S244951AbiAFVzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 16:55:03 -0500
+Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:57105 "EHLO
         smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244871AbiAFVy2 (ORCPT
+        with ESMTP id S244851AbiAFVyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 16:54:28 -0500
+        Thu, 6 Jan 2022 16:54:35 -0500
 Received: from pop-os.home ([90.11.185.88])
         by smtp.orange.fr with ESMTPA
-        id 5aiIntWdi2lVY5aiJnSlgt; Thu, 06 Jan 2022 22:54:27 +0100
+        id 5aiPntWfy2lVY5aiPnSlhK; Thu, 06 Jan 2022 22:54:34 +0100
 X-ME-Helo: pop-os.home
 X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 06 Jan 2022 22:54:27 +0100
+X-ME-Date: Thu, 06 Jan 2022 22:54:34 +0100
 X-ME-IP: 90.11.185.88
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 To:     arnd@arndb.de, hch@infradead.org, akpm@linux-foundation.org,
@@ -26,9 +26,9 @@ To:     arnd@arndb.de, hch@infradead.org, akpm@linux-foundation.org,
 Cc:     MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
         linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH 13/16] scsi: mptsas: Use dma_alloc_coherent() in mptsas_exp_repmanufacture_info()
-Date:   Thu,  6 Jan 2022 22:54:26 +0100
-Message-Id: <d78d4a5b096897932808ed7e3a4540db1687c25d.1641500561.git.christophe.jaillet@wanadoo.fr>
+Subject: [PATCH 14/16] scsi: mptsas: Use dma_alloc_coherent()
+Date:   Thu,  6 Jan 2022 22:54:33 +0100
+Message-Id: <443b81ecb08b2fe6f789bb2fdff13a53c809e401.1641500561.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
 References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
@@ -45,12 +45,8 @@ Some reasons why this API should be removed have been given by Julia
 Lawall in [2].
 
 
-The only caller of mptsas_exp_repmanufacture_info() is
-mptsas_probe_one_phy(). This function already calls sas_end_device_alloc()
-or sas_expander_alloc(). They both already use GFP_KERNEL.
-
-As no spin_lock is held at this point, it is safe to also use GFP_KERNEL
-here.
+In all these places where some memory is allocated GFP_KERNEL can be used
+because they already call mpt_config() which has an explicit might_sleep().
 
 
 [1]: https://lore.kernel.org/kernel-janitors/20200421081257.GA131897@infradead.org/
@@ -58,23 +54,123 @@ here.
 
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/message/fusion/mptsas.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/message/fusion/mptsas.c | 40 ++++++++++++++++-----------------
+ 1 file changed, 20 insertions(+), 20 deletions(-)
 
 diff --git a/drivers/message/fusion/mptsas.c b/drivers/message/fusion/mptsas.c
-index 0363b2a2264d..9b40be04710c 100644
+index 9b40be04710c..4acd8f9a48e1 100644
 --- a/drivers/message/fusion/mptsas.c
 +++ b/drivers/message/fusion/mptsas.c
-@@ -2896,7 +2896,8 @@ mptsas_exp_repmanufacture_info(MPT_ADAPTER *ioc,
+@@ -702,8 +702,8 @@ mptsas_add_device_component_starget_ir(MPT_ADAPTER *ioc,
+ 	if (!hdr.PageLength)
+ 		goto out;
  
- 	sz = sizeof(struct rep_manu_request) + sizeof(struct rep_manu_reply);
+-	buffer = pci_alloc_consistent(ioc->pcidev, hdr.PageLength * 4,
+-	    &dma_handle);
++	buffer = dma_alloc_coherent(&ioc->pcidev->dev, hdr.PageLength * 4,
++				    &dma_handle, GFP_KERNEL);
  
--	data_out = pci_alloc_consistent(ioc->pcidev, sz, &data_out_dma);
-+	data_out = dma_alloc_coherent(&ioc->pcidev->dev, sz, &data_out_dma,
-+				      GFP_KERNEL);
- 	if (!data_out) {
- 		printk(KERN_ERR "Memory allocation failure at %s:%d/%s()!\n",
- 			__FILE__, __LINE__, __func__);
+ 	if (!buffer)
+ 		goto out;
+@@ -1399,8 +1399,8 @@ mptsas_sas_enclosure_pg0(MPT_ADAPTER *ioc, struct mptsas_enclosure *enclosure,
+ 		goto out;
+ 	}
+ 
+-	buffer = pci_alloc_consistent(ioc->pcidev, hdr.ExtPageLength * 4,
+-			&dma_handle);
++	buffer = dma_alloc_coherent(&ioc->pcidev->dev, hdr.ExtPageLength * 4,
++				    &dma_handle, GFP_KERNEL);
+ 	if (!buffer) {
+ 		error = -ENOMEM;
+ 		goto out;
+@@ -2058,8 +2058,8 @@ static int mptsas_get_linkerrors(struct sas_phy *phy)
+ 	if (!hdr.ExtPageLength)
+ 		return -ENXIO;
+ 
+-	buffer = pci_alloc_consistent(ioc->pcidev, hdr.ExtPageLength * 4,
+-				      &dma_handle);
++	buffer = dma_alloc_coherent(&ioc->pcidev->dev, hdr.ExtPageLength * 4,
++				    &dma_handle, GFP_KERNEL);
+ 	if (!buffer)
+ 		return -ENOMEM;
+ 
+@@ -2412,8 +2412,8 @@ mptsas_sas_io_unit_pg0(MPT_ADAPTER *ioc, struct mptsas_portinfo *port_info)
+ 		goto out;
+ 	}
+ 
+-	buffer = pci_alloc_consistent(ioc->pcidev, hdr.ExtPageLength * 4,
+-					    &dma_handle);
++	buffer = dma_alloc_coherent(&ioc->pcidev->dev, hdr.ExtPageLength * 4,
++				    &dma_handle, GFP_KERNEL);
+ 	if (!buffer) {
+ 		error = -ENOMEM;
+ 		goto out;
+@@ -2487,8 +2487,8 @@ mptsas_sas_io_unit_pg1(MPT_ADAPTER *ioc)
+ 		goto out;
+ 	}
+ 
+-	buffer = pci_alloc_consistent(ioc->pcidev, hdr.ExtPageLength * 4,
+-					    &dma_handle);
++	buffer = dma_alloc_coherent(&ioc->pcidev->dev, hdr.ExtPageLength * 4,
++				    &dma_handle, GFP_KERNEL);
+ 	if (!buffer) {
+ 		error = -ENOMEM;
+ 		goto out;
+@@ -2551,8 +2551,8 @@ mptsas_sas_phy_pg0(MPT_ADAPTER *ioc, struct mptsas_phyinfo *phy_info,
+ 		goto out;
+ 	}
+ 
+-	buffer = pci_alloc_consistent(ioc->pcidev, hdr.ExtPageLength * 4,
+-				      &dma_handle);
++	buffer = dma_alloc_coherent(&ioc->pcidev->dev, hdr.ExtPageLength * 4,
++				    &dma_handle, GFP_KERNEL);
+ 	if (!buffer) {
+ 		error = -ENOMEM;
+ 		goto out;
+@@ -2614,8 +2614,8 @@ mptsas_sas_device_pg0(MPT_ADAPTER *ioc, struct mptsas_devinfo *device_info,
+ 		goto out;
+ 	}
+ 
+-	buffer = pci_alloc_consistent(ioc->pcidev, hdr.ExtPageLength * 4,
+-				      &dma_handle);
++	buffer = dma_alloc_coherent(&ioc->pcidev->dev, hdr.ExtPageLength * 4,
++				    &dma_handle, GFP_KERNEL);
+ 	if (!buffer) {
+ 		error = -ENOMEM;
+ 		goto out;
+@@ -2697,8 +2697,8 @@ mptsas_sas_expander_pg0(MPT_ADAPTER *ioc, struct mptsas_portinfo *port_info,
+ 		goto out;
+ 	}
+ 
+-	buffer = pci_alloc_consistent(ioc->pcidev, hdr.ExtPageLength * 4,
+-				      &dma_handle);
++	buffer = dma_alloc_coherent(&ioc->pcidev->dev, hdr.ExtPageLength * 4,
++				    &dma_handle, GFP_KERNEL);
+ 	if (!buffer) {
+ 		error = -ENOMEM;
+ 		goto out;
+@@ -2777,8 +2777,8 @@ mptsas_sas_expander_pg1(MPT_ADAPTER *ioc, struct mptsas_phyinfo *phy_info,
+ 		goto out;
+ 	}
+ 
+-	buffer = pci_alloc_consistent(ioc->pcidev, hdr.ExtPageLength * 4,
+-				      &dma_handle);
++	buffer = dma_alloc_coherent(&ioc->pcidev->dev, hdr.ExtPageLength * 4,
++				    &dma_handle, GFP_KERNEL);
+ 	if (!buffer) {
+ 		error = -ENOMEM;
+ 		goto out;
+@@ -4273,8 +4273,8 @@ mptsas_adding_inactive_raid_components(MPT_ADAPTER *ioc, u8 channel, u8 id)
+ 	if (!hdr.PageLength)
+ 		goto out;
+ 
+-	buffer = pci_alloc_consistent(ioc->pcidev, hdr.PageLength * 4,
+-	    &dma_handle);
++	buffer = dma_alloc_coherent(&ioc->pcidev->dev, hdr.PageLength * 4,
++				    &dma_handle, GFP_KERNEL);
+ 
+ 	if (!buffer)
+ 		goto out;
 -- 
 2.32.0
 

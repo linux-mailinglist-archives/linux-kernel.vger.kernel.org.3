@@ -2,203 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D22CF48681E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:06:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E91E486824
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:07:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241542AbiAFRGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 12:06:13 -0500
-Received: from mail-dm6nam11on2082.outbound.protection.outlook.com ([40.107.223.82]:15595
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S241500AbiAFRGM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 12:06:12 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VXk2r9xYFNLxvlk7/AAo8Ls77zQ6WaTBIDqENYibt7nB1IdBgULGJB+jB2heNsitkItZGDvnktPrheaWqGxSIquPsEAJ1PbKux2DErPTjP0oReL0BAQrjvHQPJhxfgNgNbgfmLZJOgHAQhBvLJxsT1J4zktcDmvdDz/s/0iDab0MxxiRR6UbKNaC/PKxme5h7xoa8s9gKRxpdRubTAwVHFfG++14yfz/NYCyWhQg5ttsDiGRma72t3OKHTqjplDjdVdSIhR5pw82h19FSLzjaFZtL1viZ5LBMeLEG6tkRfPseq3/ZvBz0puMAMY3q+jadh7qSpn4iZvhdpe7JQc3LQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8ysKE/w9/wTjfrhNi27h9c3SdhKzczQ4LaUmH0DzTjs=;
- b=jFPWA+yNY0ebaIh9Z10x7fIBd0u3rA3xC0aSEkZ6i0Pmrh3fGRLDemfVS1El7KQdv4/ffwYZMYY8qKBo+8vC4nX5PheDU2uKMtPnqPMRktaydIgAthUMYn1QUw9IzNw3aHwGixFeedn6K01N//8TAyTMIiNbzFgfLKlfBdwOak4JwRh1zRUxRhreZIVgDeqqsXWvroEolI2AEvm8pRDniLA0mhteHPOs7j7UGvRjV64IMri4tKpU1kKUIVKuYqRCi5wc9z3+5qP32J5lzd/otzYHhcHw+9TajMAW9psZz0VDT7HZp7HqXb5abLKkvOD6zFF+ypPNBxhuudPwjdLLAw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8ysKE/w9/wTjfrhNi27h9c3SdhKzczQ4LaUmH0DzTjs=;
- b=Yndn8ENvSPbfpDoOnRW9UD7kDm83/QoWCVoq3a9SaK2NqWQ6PhN/+kb+C8T/IFrbOCKp3Yzaqbar+jn51UVTlgyDfxdooi2ruOMTRdA4upZSOpb+muJE9Pf77ji0tnDpVGBhSsz4UhzCT13+3mZFH4kvBN85nWvaAdUegATa3/hYeJgLRkAloV2JC5GW9fcEo32NRv/w0rhV7FfTMGv6v3zBZCj//7AlrIkti6ab/Ei+XVAyhZaEkVwMKvQcvfw57GaondnMJPfQuQIxW4z3Ul36GIkXWs4qDDSDARS3cUPwAmRckYuj/JdqQy9PTwl4bbhA/hW0qszeW+LVGoQU8g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
- by BL0PR12MB5508.namprd12.prod.outlook.com (2603:10b6:208:1c1::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.9; Thu, 6 Jan
- 2022 17:06:11 +0000
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::464:eb3d:1fde:e6af]) by BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::464:eb3d:1fde:e6af%5]) with mapi id 15.20.4867.009; Thu, 6 Jan 2022
- 17:06:10 +0000
-Date:   Thu, 6 Jan 2022 13:06:08 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
+        id S241562AbiAFRHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 12:07:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36136 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241500AbiAFRHu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 12:07:50 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92CCC061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 09:07:49 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id r17so6111526wrc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 09:07:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=q5W5GNbNv+lNqJbdK7nMqxroMio7ZmtRhFKmthSKK6c=;
+        b=kfMpKi9FrkUiUYYqINHwXVQDqPCGAzqmW9cyt0+EJzJFUnASbgjmlnPuAqG3YWMn1X
+         XSyf54/y/6uUeIt0bsYB76umnOgpBfOceS9lHSCPbQ50thPZ9HqaC8Xu45ZfOtFMJoFD
+         qah3nc1uK0lmuYTC0Aq7eMJF7pLYhVrjFmz3SdeZv9uku4xGUWGihoFfxMULg60UDojr
+         sG0cNrjSMBtvGnoejW7h5sI7bSkImfh3cNoR9i9382E0HainFEnpETeJaleU0p8ABxi3
+         gsqE2OFWgQiIJ4MuonXM/danat92kUMjfJB8ugsPhy0Gx1w9DBU1bD1ZKhFQmAXb24dK
+         aS1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=q5W5GNbNv+lNqJbdK7nMqxroMio7ZmtRhFKmthSKK6c=;
+        b=kmxLa9kqI2V/ukhHL0lbedOXvfyKiAcl5ZpZr2AnEejmmG4w1NVdDpzP2AYMU0koyA
+         GSRVwxNhlxzlXdIHB/UMkIXF1CnQU5VQEavFaBhdJ3DQumFd1CdST0dGqiREeEKDw8i1
+         PvUIvxuReI4MuVI/f7KXzm8qwC+LzKuopvS1citrAFVHrRc5fNUvvZNO6Ycxbm0QHgcC
+         8ewHHVq57vEA/5sSr7iMTbVlYhCSVoQjk3c0jjcZ6a0j3uAe1+JcihWNADEw2Pj9VvOQ
+         978RnRRcWllwochg3jBT4uK+VDyyN7dLnBvs2w+uoeDsUAIYWvF9s7KH/OLO1AUBK+0Y
+         cNCg==
+X-Gm-Message-State: AOAM532iNGR7zVgK3olxs+aajKaVUnyVii5zDy/ns5qmATzFX5Lj915l
+        5igTzsN12UQj9dGIzTEQKZzLfQ==
+X-Google-Smtp-Source: ABdhPJx0IDUhsF3g7P5ZHSdVvDnLqGq9g07WaXYqgjEGd+nmwNNJUjDi0oj6dUlNpk1Uw8HhROwaEw==
+X-Received: by 2002:a05:6000:18a2:: with SMTP id b2mr53070435wri.277.1641488868173;
+        Thu, 06 Jan 2022 09:07:48 -0800 (PST)
+Received: from google.com ([2a00:79e0:d:209:800e:fc7:4177:c8b2])
+        by smtp.gmail.com with ESMTPSA id z9sm2790652wmk.0.2022.01.06.09.07.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 09:07:47 -0800 (PST)
+Date:   Thu, 6 Jan 2022 17:07:43 +0000
+From:   David Brazdil <dbrazdil@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Wedson Almeida Filho <wedsonaf@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Frank Rowand <frowand.list@gmail.com>,
         Will Deacon <will@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/8] iommu: Add iommu_group_replace_domain()
-Message-ID: <20220106170608.GI2328285@nvidia.com>
-References: <20220106022053.2406748-1-baolu.lu@linux.intel.com>
- <20220106022053.2406748-2-baolu.lu@linux.intel.com>
+        Andrew Scull <ascull@google.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] misc: open-dice: Add driver to expose DICE data
+ to userspace
+Message-ID: <Ydch333UxlCKO8Wa@google.com>
+References: <20211221174502.63891-1-dbrazdil@google.com>
+ <20211221174502.63891-3-dbrazdil@google.com>
+ <YdXM44q07C5iQydu@google.com>
+ <YdbJgf+IWnlCHQA7@google.com>
+ <YdbSi+ANXw1JRkUj@kroah.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220106022053.2406748-2-baolu.lu@linux.intel.com>
-X-ClientProxiedBy: CH0PR03CA0324.namprd03.prod.outlook.com
- (2603:10b6:610:118::18) To BL0PR12MB5506.namprd12.prod.outlook.com
- (2603:10b6:208:1cb::22)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1053064c-5cc7-4327-7b93-08d9d136d642
-X-MS-TrafficTypeDiagnostic: BL0PR12MB5508:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR12MB55080D1690B14FDE9F121EAEC24C9@BL0PR12MB5508.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8rB8XNFRkzR0kdmqwihZ+B18+O+0gU3kFdp/r1+pDb1uaX/qMgfZiDVk/zUFbKjbtS9f8yhtB6uUh+kguJt1q6EAcaZxD2YvJPVK+aVaNmGP575KIfVyVP7p3uHQP/0rF70MdqASP4Q5beMAn7B6uuIP1VlMbd9fC1j4n9MD68wj0XEW84+uVc2q+GKSGqgFa9faGbTzhW7CexNX4ckgVxrrzXH8m6geHKkjtjrsbr3+H3MqW0QnjUfNZUUXUW87H72pLrcj7ruo9YgjO97KZtCEPmmlnmGDRLWB+0KnKojZQH6cXEH7ato0zPRQeXNTbWcvcZXJdeaxlBYG5+695dTyIjE+E50W/U+sXVFYith4Ijmf2iqy4X5S8TM3jRxpJ76nIEHtVkacRAd5sdknr9zvOcfBz0s5GjQzDrqLGrZb5TMvljPo/oKtjVgudStkucHkU4qVEHWNpeWVSE7rQ7O47cw9gNGaTy14MY8qfJyBuOJRp5E3ntw1jjimbDG0vYxoJI4EALP/ZxQa2DJHEduLmm8KCBCTyk/qGjAB59Djf70J3vJAqs3cM2WBecjO44qcAoToFsuRdApQgNlYQKO6qNPvFCCuzwQ8IS1LpAOu9vnrSIwVO1VukI2ckPRf+jQ/0jbpD2AsaAAOJIgV4A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(54906003)(33656002)(6486002)(8936002)(508600001)(5660300002)(186003)(2906002)(38100700002)(8676002)(26005)(4326008)(66946007)(6512007)(7416002)(66476007)(6506007)(2616005)(86362001)(1076003)(83380400001)(36756003)(6916009)(66556008)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kJbI9KLTDBTVVI4yqx99S3VkI5YkQYTPo43BbR8C0GHOToZSA33pzh3zJtUj?=
- =?us-ascii?Q?y2ha9ng3/tTIPejoZCy2/IGb0cYIgsiRpwu6meqThVguoalNEPeg/ThMdAFW?=
- =?us-ascii?Q?Zm13MuuB8kdXyL9eXQFS+kuXMfJbAFIA8okmzLSPuH/Q8hVqAaqonLeQpujI?=
- =?us-ascii?Q?VKKufpNWuGE4L12vr5XVKqO8EKM5t449R57Mc8VWC+5G+jQojsW8IqxZGD9/?=
- =?us-ascii?Q?SClS84j0M0u7/rvRX2q2aMXh6fDc1DblE7IC50hiDVWq2OnMWfJR2k4kgeCt?=
- =?us-ascii?Q?rz2vjGIiHCbNR/fJdR6FatU6LmlYjrIeb1+BjJMiAgKlZSHIPyd9Fpw+AcCY?=
- =?us-ascii?Q?Bn4yywDjyozGaA4Ehfs8OFvapzppzQtc4cm/vA9QHdB5UdRFR9PCBtoNnjY2?=
- =?us-ascii?Q?VpbGa0LmTMZpuPajA/vDFb65V3sJA7Lzyg8kb6GRL9ogk0FAgYhIMX/UqNZF?=
- =?us-ascii?Q?WtHtW3gfwZn/iEDNHLtZhzEQPQ8nLoRMIGhUQ55jMm/hNCuLyt/Ame689usJ?=
- =?us-ascii?Q?14Op0VqhsuLipf4UOdlHXpARgM3nW2fIga7GI1FB6ZOmOlDU2akndCdLvxK9?=
- =?us-ascii?Q?/olAM9GE45985ZsMs8p0rfbU4bDfibw4mHX3GwJFAND+IHgXRcsR45DgPPpT?=
- =?us-ascii?Q?6/VDIhw8qxwqUrY1ywTKJPW+8BDWYMIDpo/BN3xjh5mI4Oay4Q6rwDzgXEsT?=
- =?us-ascii?Q?0YkTlb5cRnOsQgP4ANk4HDJCVpqYrrkuEBJCDC7IPPowF05pG8R0HCBxVv/X?=
- =?us-ascii?Q?NT6SXWCrycD+1lRa2GF3kYNbPfeURPE0iFMcgG1KgIKfnFyH2MoktRIPm/R6?=
- =?us-ascii?Q?D5ezWzp4XWSe28pvDtEGaVqNBbhnvHym8y8DrTIwViCJR8BlnZ5cQ2s13tyA?=
- =?us-ascii?Q?l7r46H0eeQayVTHPZt0l7Toz4l7nOf8JoseabVG75h1iC+l6Jw0OjiJkaMlM?=
- =?us-ascii?Q?wJ0RvghMgZc2qGMDE6i0ZMLCHknYk6Sw+NMIh22yB/GnmgnU34KpNZJu7ynO?=
- =?us-ascii?Q?rc7yPWGytUQZFHzacv9i6ZXv0fIQ4yEuGTuzIpECCPtTVKlB2jHtp9BMBpkD?=
- =?us-ascii?Q?JHNfEVZCK9X2bXLoMUogoNLzbSSdkPW1xN0fXxMIuELz0T/sNOf+nd0zpHLg?=
- =?us-ascii?Q?D3xI2ZuT/ik00rknil/Ho4b19QbY4yEEnZNKqBG1VNT85LblqGCsZl1nAWK5?=
- =?us-ascii?Q?c9YLPylge9Q9LxwXCjhWSA+7gkclhJnbZskN2UAEjVAyqkThUNK9GCtQsHOE?=
- =?us-ascii?Q?lXII0EVlYVyvkTxjN4/d+P5Y6nyKX2aKyCyYJuzKA4Sjdd90LPL1CPOkcahs?=
- =?us-ascii?Q?3WJJoJ5DZSqJoQBVPhQhdwXzxFQoMeoEdLrn5xvyET8G8ZJCVJIDQ8t0AYPX?=
- =?us-ascii?Q?WH1FCL3PT+c02CHMyoO8Okwz63bMUOsFs6tBmppRl0PBeQhp1SbKQ0nk2rSi?=
- =?us-ascii?Q?keVIb2Xh7yDpDNIVGHiHB7uk5K7+t8blNsSmqct96MkGYBYbpgXRXpWIDkbl?=
- =?us-ascii?Q?d2w/uy/QqpkIfYj3mSOphp2jdkB1J/Tgae9AHoWS+xHklg59vf1I14+b+wns?=
- =?us-ascii?Q?j9ZlfQdvATyiinmh4gc=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1053064c-5cc7-4327-7b93-08d9d136d642
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2022 17:06:10.6050
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NYbmpdyGFota9hUPWkUDQ/udmdPirjV5yq1elHp3oD5jayzHraTtIiB5ynXnpIRz
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB5508
+In-Reply-To: <YdbSi+ANXw1JRkUj@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 10:20:46AM +0800, Lu Baolu wrote:
-> Expose an interface to replace the domain of an iommu group for frameworks
-> like vfio which claims the ownership of the whole iommu group.
+Hi Greg,
+
+On Thu, Jan 06, 2022 at 12:29:15PM +0100, Greg Kroah-Hartman wrote:
+> On Thu, Jan 06, 2022 at 10:50:41AM +0000, David Brazdil wrote:
+> > Hi Wedson,
+> > 
+> > On Wed, Jan 05, 2022 at 04:52:51PM +0000, Wedson Almeida Filho wrote:
+> > > On Tue, Dec 21, 2021 at 05:45:02PM +0000, David Brazdil wrote:
+> > > > Open Profile for DICE is an open protocol for measured boot compatible
+> > > > with the Trusted Computing Group's Device Identifier Composition
+> > > > Engine (DICE) specification. The generated Compound Device Identifier
+> > > > (CDI) certificates represent the hardware/software combination measured
+> > > > by DICE, and can be used for remote attestation and sealing.
+> > > > 
+> > > > Add a driver that exposes reserved memory regions populated by firmware
+> > > > with DICE CDIs and exposes them to userspace via a character device.
+> > > > 
+> > > > Userspace obtains the memory region's size from read() and calls mmap()
+> > > > to create a mapping of the memory region in its address space. The
+> > > > mapping is not allowed to be write+shared, giving userspace a guarantee
+> > > > that the data were not overwritten by another process.
+> > > > 
+> > > > Userspace can also call write(), which triggers a wipe of the DICE data
+> > > > by the driver. Because both the kernel and userspace mappings use
+> > > > write-combine semantics, all clients observe the memory as zeroed after
+> > > > the syscall has returned.
+> > > > 
+> > > > Cc: Andrew Scull <ascull@google.com>
+> > > > Cc: Will Deacon <will@kernel.org>
+> > > > Signed-off-by: David Brazdil <dbrazdil@google.com>
+> > > > ---
+> > > >  drivers/misc/Kconfig     |  12 +++
+> > > >  drivers/misc/Makefile    |   1 +
+> > > >  drivers/misc/open-dice.c | 188 +++++++++++++++++++++++++++++++++++++++
+> > > >  drivers/of/platform.c    |   1 +
+> > > >  4 files changed, 202 insertions(+)
+> > > >  create mode 100644 drivers/misc/open-dice.c
+> > > > 
+> > > > diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+> > > > index 0f5a49fc7c9e..a2b26426efba 100644
+> > > > --- a/drivers/misc/Kconfig
+> > > > +++ b/drivers/misc/Kconfig
+> > > > @@ -470,6 +470,18 @@ config HISI_HIKEY_USB
+> > > >  	  switching between the dual-role USB-C port and the USB-A host ports
+> > > >  	  using only one USB controller.
+> > > >  
+> > > > +config OPEN_DICE
+> > > > +	tristate "Open Profile for DICE driver"
+> > > > +	depends on OF_RESERVED_MEM
+> > > > +	help
+> > > > +	  This driver exposes a DICE reserved memory region to userspace via
+> > > > +	  a character device. The memory region contains Compound Device
+> > > > +	  Identifiers (CDIs) generated by firmware as an output of DICE
+> > > > +	  measured boot flow. Userspace can use CDIs for remote attestation
+> > > > +	  and sealing.
+> > > > +
+> > > > +	  If unsure, say N.
+> > > > +
+> > > >  source "drivers/misc/c2port/Kconfig"
+> > > >  source "drivers/misc/eeprom/Kconfig"
+> > > >  source "drivers/misc/cb710/Kconfig"
+> > > > diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+> > > > index a086197af544..70e800e9127f 100644
+> > > > --- a/drivers/misc/Makefile
+> > > > +++ b/drivers/misc/Makefile
+> > > > @@ -59,3 +59,4 @@ obj-$(CONFIG_UACCE)		+= uacce/
+> > > >  obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
+> > > >  obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
+> > > >  obj-$(CONFIG_HI6421V600_IRQ)	+= hi6421v600-irq.o
+> > > > +obj-$(CONFIG_OPEN_DICE)		+= open-dice.o
+> > > > diff --git a/drivers/misc/open-dice.c b/drivers/misc/open-dice.c
+> > > > new file mode 100644
+> > > > index 000000000000..f1819f951173
+> > > > --- /dev/null
+> > > > +++ b/drivers/misc/open-dice.c
+> > > > @@ -0,0 +1,188 @@
+> > > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > > +/*
+> > > > + * Copyright (C) 2021 - Google LLC
+> > > > + * Author: David Brazdil <dbrazdil@google.com>
+> > > > + *
+> > > > + * Driver for Open Profile for DICE.
+> > > > + *
+> > > > + * This driver takes ownership of a reserved memory region containing data
+> > > > + * generated by the Open Profile for DICE measured boot protocol. The memory
+> > > > + * contents are not interpreted by the kernel but can be mapped into a userspace
+> > > > + * process via a misc device. Userspace can also request a wipe of the memory.
+> > > > + *
+> > > > + * Userspace can access the data with (w/o error handling):
+> > > > + *
+> > > > + *     fd = open("/dev/open-dice0", O_RDWR);
+> > > > + *     read(fd, &size, sizeof(unsigned long));
+> > > > + *     data = mmap(NULL, size, PROT_READ, MAP_PRIVATE, fd, 0);
+> > > > + *     write(fd, NULL, 0); // wipe
+> > > > + *     close(fd);
+> > > > + */
+> > > > +
+> > > > +#include <linux/io.h>
+> > > > +#include <linux/miscdevice.h>
+> > > > +#include <linux/mm.h>
+> > > > +#include <linux/module.h>
+> > > > +#include <linux/of_reserved_mem.h>
+> > > > +#include <linux/platform_device.h>
+> > > > +
+> > > > +#define DRIVER_NAME "open-dice"
+> > > > +
+> > > > +struct open_dice_drvdata {
+> > > > +	spinlock_t lock;
+> > > > +	char name[16];
+> > > > +	struct reserved_mem *rmem;
+> > > > +	struct miscdevice misc;
+> > > > +};
+> > > > +
+> > > > +static inline struct open_dice_drvdata *to_open_dice_drvdata(struct file *filp)
+> > > > +{
+> > > > +	return container_of(filp->private_data, struct open_dice_drvdata, misc);
+> > > > +}
+> > > > +
+> > > > +static int open_dice_wipe(struct open_dice_drvdata *drvdata)
+> > > > +{
+> > > > +	void *kaddr;
+> > > > +
+> > > > +	spin_lock(&drvdata->lock);
+> > > > +	kaddr = devm_memremap(drvdata->misc.this_device, drvdata->rmem->base,
+> > > > +			      drvdata->rmem->size, MEMREMAP_WC);
+> > > > +	if (IS_ERR(kaddr)) {
+> > > > +		spin_unlock(&drvdata->lock);
+> > > > +		return PTR_ERR(kaddr);
+> > > > +	}
+> > > > +
+> > > > +	memset(kaddr, 0, drvdata->rmem->size);
+> > > > +	devm_memunmap(drvdata->misc.this_device, kaddr);
+> > > > +	spin_unlock(&drvdata->lock);
+> > > > +	return 0;
+> > > > +}
+> > > > +
+> > > > +/*
+> > > > + * Copies the size of the reserved memory region to the user-provided buffer.
+> > > > + */
+> > > > +static ssize_t open_dice_read(struct file *filp, char __user *ptr, size_t len,
+> > > > +			      loff_t *off)
+> > > > +{
+> > > > +	unsigned long val = to_open_dice_drvdata(filp)->rmem->size;
+> > > 
+> > > There's a UAF issue here (and in all file operations that call
+> > > to_open_dice_drvdata) when the platform device in unbounded from the driver
+> > > while userspace has an instance of the misc device open: after open_dice_remove
+> > > is called, all managed resources are freed (which includes this
+> > > open_dice_drvdata allocation).
+> > > 
+> > > No new miscdev files can be created, but the existing ones continue to exist
+> > > with a now dangling pointer stored in private_data. So read/write/mmap syscalls
+> > > from userspace will lead to dereferencing this dangling pointer.
+> > 
+> > Please correct me if I'm wrong, but I don't think this can happen
+> > without tainting the kernel.
+> > 
+> > To call open_dice_remove, we have to remove the module. And any process
+> > holding an FD of the misc device will increase the module's refcounter,
+> > which is zero-checked in SYS_delete_module. The only way to get past
+> > that check is by compiling the kernel with CONFIG_MODULE_FORCE_UNLOAD,
+> > which changes the implementation of try_force_unload (kernel/module.c)
+> > and adds taint. Otherwise SYS_delete_module returns an error.
+> > 
+> > Unless there is another way how to trigger this situation, I think the
+> > existing protection is sufficient. The user cannot force the removal of
+> > the module without agreeing to the consequences.
 > 
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
->  include/linux/iommu.h | 10 ++++++++++
->  drivers/iommu/iommu.c | 37 +++++++++++++++++++++++++++++++++++++
->  2 files changed, 47 insertions(+)
+> You can remove the driver from the device by writing to the "unbind"
+> file in sysfs for this driver.
 > 
-> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-> index 408a6d2b3034..66ebce3d1e11 100644
-> +++ b/include/linux/iommu.h
-> @@ -677,6 +677,9 @@ void iommu_device_unuse_dma_api(struct device *dev);
->  int iommu_group_set_dma_owner(struct iommu_group *group, void *owner);
->  void iommu_group_release_dma_owner(struct iommu_group *group);
->  bool iommu_group_dma_owner_claimed(struct iommu_group *group);
-> +int iommu_group_replace_domain(struct iommu_group *group,
-> +			       struct iommu_domain *old,
-> +			       struct iommu_domain *new);
->  
->  #else /* CONFIG_IOMMU_API */
->  
-> @@ -1090,6 +1093,13 @@ static inline bool iommu_group_dma_owner_claimed(struct iommu_group *group)
->  {
->  	return false;
->  }
-> +
-> +static inline int
-> +iommu_group_replace_domain(struct iommu_group *group, struct iommu_domain *old,
-> +			   struct iommu_domain *new)
-> +{
-> +	return -ENODEV;
-> +}
->  #endif /* CONFIG_IOMMU_API */
->  
->  /**
-> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-> index 72a95dea688e..ab8ab95969f5 100644
-> +++ b/drivers/iommu/iommu.c
-> @@ -3431,3 +3431,40 @@ bool iommu_group_dma_owner_claimed(struct iommu_group *group)
->  	return user;
->  }
->  EXPORT_SYMBOL_GPL(iommu_group_dma_owner_claimed);
-> +
-> +/**
-> + * iommu_group_replace_domain() - Replace group's domain
-> + * @group: The group.
-> + * @old: The previous attached domain. NULL for none.
-> + * @new: The new domain about to be attached.
-> + *
-> + * This is to support backward compatibility for vfio which manages the dma
-> + * ownership in iommu_group level.
+> Otherwise, yes, you are correct, you can not remove the module from the
+> system if the file is open, but that does not prevent the driver from
+> being unbound from the device.
+> 
+> Yes, it is rare, and only able to be done by root, and even then is
+> something that many drivers fail at.  But for new ones, when we notice
+> it, it should be fixed up before merging just to prevent any future
+> problems.
 
-This should mention it can only be used with iommu_group_set_dma_owner()
+Ah, I see. I'd opt for just setting 'suppress_bind_attrs=true' to
+prevent that, unless you think unbinding needs to be supported. I don't
+see a use for that on our side and would prefer to keep the code simple.
 
-> +	if (old)
-> +		__iommu_detach_group(old, group);
-> +
-> +	if (new) {
-> +		ret = __iommu_attach_group(new, group);
-> +		if (ret && old)
-> +			__iommu_attach_group(old, group);
-> +	}
+> 
+> > > > +	/* Create write-combine mapping so all clients observe a wipe. */
+> > > > +	vma->vm_page_prot = pgprot_writecombine(vma->vm_page_prot);
+> > > > +	vma->vm_flags |= VM_DONTCOPY | VM_DONTDUMP;
+> > > > +	return vm_iomap_memory(vma, drvdata->rmem->base, drvdata->rmem->size);
+> > > > +}
+> > > 
+> > > Is there a reason for mapping this memory instead of, say, copying it to
+> > > userspace via read?
+> > 
+> > The data should be treated as secret, so the idea is that avoiding
+> > reading it in the kernel means we don't need to worry about it leakage
+> > via the stack, etc. The reason for this is that the DICE derivation
+> > chain may continue in userspace, so we want to minimize the chance of
+> > a child process getting the parent secret from the kernel.
+> 
+> The kernel stack is already secret, this should not be an issue.  And
+> even then, you can always erase it before the call returns to ensure
+> that it does not stick around, like many crypto functions do.
 
-The sketchy error unwind here gives me some pause for sure. Maybe we
-should define that on error this leaves the domain as NULL
+I can rewrite it and memzero_explicit the memory if you or Wedson feel
+strongly about this, but I actually really like mmap() because it avoids
+the need for dealing with that.
 
-Complicates vfio a tiny bit to cope with this failure but seems
-cleaner than leaving it indeterminate.
-
-Jason
+David

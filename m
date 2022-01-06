@@ -2,117 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1723F486798
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:26:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90AA448679E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241200AbiAFQ0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 11:26:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55166 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241167AbiAFQ0g (ORCPT
+        id S241167AbiAFQ1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 11:27:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:40588 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241210AbiAFQ1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 11:26:36 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133A7C061245;
-        Thu,  6 Jan 2022 08:26:36 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id a18so10464221edj.7;
-        Thu, 06 Jan 2022 08:26:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=M3WBgNvuzR0WIM72X4IIZhdl+Kt7G0oeF/Hg+m6AnQQ=;
-        b=fgiBBLNYIvYGIfdhyPt4wlDj5rXuxLmRzyNOioyVzzAUKj4l3Caq6fqK9F2EsIHX4I
-         X4HlCLY/Z0X8Imh4hK8c/IUQPlTTteF7PV185QA3p/gtCMS8jBTLoWndm5NQzRo/HhKl
-         Nfzm/wEL6Ug8PUl+nFhKfaKS3Cpa6qigrWMjJAfV+Xa4uF1t37FKDYU6hygy3FTxu6EW
-         WFKpGeFU44cT3zVqQYXSpvR9MVqTYHAxqj0OSdHqrtgmm7ILScJav6crXJFK1Vdfcy2z
-         L4MlteqfpRl/3cODA32ciAsahNPrTnXuUftywFoc6esuJKy8l5MlM+G4Gzn7okOim+Wz
-         xnYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=M3WBgNvuzR0WIM72X4IIZhdl+Kt7G0oeF/Hg+m6AnQQ=;
-        b=gl6vccp8vhMkyaFnzhryIv0zTKbG9F2bRVHYoGVX4B/6FsJ9L9xUbLjfg44oE3vPGM
-         zeRKsnWewTPDuE1XgEasY4M9iTku1MU9QcHenBsHU5IKRikuMB1dI7TsrLx/NoK0KcPI
-         1scnwZ2lr8yqlJpk09qFJV9cnw2XP+kUyXzqmpRbAuBduott6M1qJmG1RbGqYGKzNUKV
-         KkzcBzTGJLmAdwswaBDjjRPWARBNhb051g68FWdCGay34DKBAQvTZqPVLLY75k6n/cxt
-         nUjLklx/93emLmQeVWMu2p3GcWILP3KqR9KsBD01U07lRXyk1YqrMNo6s3vSDzB/2Siy
-         PXSQ==
-X-Gm-Message-State: AOAM530nbyUAdq2KRkbWt0E8plkEqKimv4YilvjCVvrf7V9MPCwcDoGv
-        P7wB+34pT0p5jm0C68jvfZ01NEIQrco=
-X-Google-Smtp-Source: ABdhPJzkLPEDxZ+Q9y6t19YtLkNWFcwnXI5cBQncyffs1BgDiayMRg1pyYzUb7voCgh6Ar0CWePj4w==
-X-Received: by 2002:a17:907:97cd:: with SMTP id js13mr46470367ejc.497.1641486388365;
-        Thu, 06 Jan 2022 08:26:28 -0800 (PST)
-Received: from [192.168.1.10] ([46.249.74.23])
-        by smtp.googlemail.com with ESMTPSA id p8sm889653edq.46.2022.01.06.08.26.26
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 06 Jan 2022 08:26:27 -0800 (PST)
-Subject: Re: [PATCH] drm: omapdrm: Fix implicit dma_buf fencing
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        sumit.semwal@linaro.org, christian.koenig@amd.com
-Cc:     openpvrsgx-devgroup@letux.org, merlijn@wizzup.org,
-        philipp@uvos.xyz, airlied@linux.ie, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-omap@vger.kernel.org
-References: <1641397018-29872-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
- <0ba4b947-57e0-8a80-68d6-a481d5145ab4@ideasonboard.com>
-From:   Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-Message-ID: <e55b3d0f-2217-c949-f166-63ca738b44f6@gmail.com>
-Date:   Thu, 6 Jan 2022 18:26:22 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Firefox/60.0 Thunderbird/60.6.1
+        Thu, 6 Jan 2022 11:27:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641486428;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bqGE+ogCsKbt8jpL4JhbwafMN3V+xGn5LKE8WlKnEkY=;
+        b=ce7pGtsfNZDeJO6s6JQ8CD3awfoUf57lnxst1+IWZcJL2BE7Qc+jDXV8kg+gMtf+rGyIue
+        ujoYT1ZEOElqydN82qilJ9Y9dhxn3KpplbjkZj/+G/O4iwwbfqezhmb4GqY9MYVmxkoEIV
+        iBRBIRHv7MXDrkSXSShikoeAPgvcj54=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-215-2bLqDce9NF-N5Qh7l0pIvA-1; Thu, 06 Jan 2022 11:27:04 -0500
+X-MC-Unique: 2bLqDce9NF-N5Qh7l0pIvA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CF7AD92500;
+        Thu,  6 Jan 2022 16:27:01 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.165])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 26CED70D3D;
+        Thu,  6 Jan 2022 16:26:57 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <043a206f03929c2667a465314144e518070a9b2d.camel@kernel.org>
+References: <043a206f03929c2667a465314144e518070a9b2d.camel@kernel.org> <164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk> <164021525963.640689.9264556596205140044.stgit@warthog.procyon.org.uk>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        JeffleXu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 28/68] fscache: Provide a function to note the release of a page
 MIME-Version: 1.0
-In-Reply-To: <0ba4b947-57e0-8a80-68d6-a481d5145ab4@ideasonboard.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2848130.1641486417.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Thu, 06 Jan 2022 16:26:57 +0000
+Message-ID: <2848131.1641486417@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Jeff Layton <jlayton@kernel.org> wrote:
 
-On 6.01.22 г. 15:43 ч., Tomi Valkeinen wrote:
-> Hi,
-> 
-> On 05/01/2022 17:36, Ivaylo Dimitrov wrote:
->> Currently omapdrm driver does not initialize dma_buf_export_info resv
->> member, which leads to a new dma_resv being allocated and attached to
->> the exported dma_buf. This leads to the issue that fences created on
->> dma_buf objects imported by other drivers are ignored by omapdrm, as only
->> fences in gem object resv are waited on. This leads to various issues 
->> like
->> displaying incomplete frames.
->>
->> Fix that by initializing dma_buf resv to the resv of the gem object being
->> exported.
->>
->> Signed-off-by: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
->> ---
->>   drivers/gpu/drm/omapdrm/omap_gem_dmabuf.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/gpu/drm/omapdrm/omap_gem_dmabuf.c 
->> b/drivers/gpu/drm/omapdrm/omap_gem_dmabuf.c
->> index f1f93cabb61e..a111e5c91925 100644
->> --- a/drivers/gpu/drm/omapdrm/omap_gem_dmabuf.c
->> +++ b/drivers/gpu/drm/omapdrm/omap_gem_dmabuf.c
->> @@ -88,6 +88,7 @@ struct dma_buf *omap_gem_prime_export(struct 
->> drm_gem_object *obj, int flags)
->>       exp_info.size = omap_gem_mmap_size(obj);
->>       exp_info.flags = flags;
->>       exp_info.priv = obj;
->> +    exp_info.resv = obj->resv;
->>       return drm_gem_dmabuf_export(obj->dev, &exp_info);
->>   }
-> 
-> Thanks! Pushed to drm-misc-next.
-> 
+> > +/**
+> > + * fscache_note_page_release - Note that a netfs page got released
+> > + * @cookie: The cookie corresponding to the file
+> > + *
+> > + * Note that a page that has been copied to the cache has been releas=
+ed.  This
+> > + * means that future reads will need to look in the cache to see if i=
+t's there.
+> > + */
+> > +static inline
+> > +void fscache_note_page_release(struct fscache_cookie *cookie)
+> > +{
+> > +	if (cookie &&
+> > +	    test_bit(FSCACHE_COOKIE_HAVE_DATA, &cookie->flags) &&
+> > +	    test_bit(FSCACHE_COOKIE_NO_DATA_TO_READ, &cookie->flags))
+> > +		clear_bit(FSCACHE_COOKIE_NO_DATA_TO_READ, &cookie->flags);
+> > +}
+> > +
+> >  #endif /* _LINUX_FSCACHE_H */
+> > =
 
-Thanks,
+> > =
 
-I think lts kernels shall get that fix too, but I have no idea how :) .
+> =
 
-Ivo.
+> Is this logic correct?
+> =
+
+> FSCACHE_COOKIE_HAVE_DATA gets set in cachefiles_write_complete, but will
+> that ever be called on a cookie that has no data? Will we ever call
+> cachefiles_write at all when there is no data to be written?
+
+FSCACHE_COOKIE_NO_DATA_TO_READ is set if we have no data in the cache yet
+(ie. the backing file lookup was negative, the file is 0 length or the coo=
+kie
+got invalidated).  It means that we have no data in the cache, not that th=
+e
+file is necessarily empty on the server.
+
+FSCACHE_COOKIE_HAVE_DATA is set once we've stored data in the backing file=
+.
+=46rom that point on, we have data we *could* read - however, it's covered=
+ by
+pages in the netfs pagecache until at such time one of those covering page=
+s is
+released.
+
+So if we've written data to the cache (HAVE_DATA) and there wasn't any dat=
+a in
+the cache when we started (NO_DATA_TO_READ), it may no longer be true that=
+ we
+can skip reading from the cache.
+
+Read skipping is done by cachefiles_prepare_read().
+
+Note that I'm not doing tracking on a per-page basis, but only on a per-fi=
+le
+basis.
+
+David
+

@@ -2,142 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB19486D8D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 00:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA42486D93
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 00:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245385AbiAFXJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 18:09:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34994 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234795AbiAFXJV (ORCPT
+        id S245408AbiAFXLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 18:11:22 -0500
+Received: from www62.your-server.de ([213.133.104.62]:47918 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234795AbiAFXLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 18:09:21 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3709C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 15:09:20 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id j124so5839547oih.12
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 15:09:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Ellt6MjzLF5sLUldei4o9NxlFsmkksIJlVQvjDivSks=;
-        b=CqQBSA9Fycf49Rqosg7w2As6sk5LjhU7gBBtMELfqTFoE5LTYaH0EAFx5MJJc1MISu
-         /QlNcmT56A3epX0FVXHwV5WiJS6EiLIVIqyP4Ew5UvnPEeL95DYBjlcIVZmDa32IZofs
-         hzTKsy+r1Ypb/I8H5g9k3AVOzr4FKAlnk4Bx9EShJ7lRADBi38f62utDApMIKae6o90B
-         CzoehUttwZFiHdFzhqFJuy3vzUHPIz/dpp/lC2UjiY9uQfBjszH7Kb6Vthawtk8RYCo3
-         ZYz6eicpbT/KC8zEJQtnob7ZRuKwU8pfwakGC88KPDYRORNCDFipx8gzoJ1a3XkopGpU
-         TXXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ellt6MjzLF5sLUldei4o9NxlFsmkksIJlVQvjDivSks=;
-        b=PuyIH9VMGSddWxhAYXJX4f8htLQwmHvA+YzBW4GmZdW9j6A2QhF9mLte+SLFwviAgS
-         TtiDp5yw0bft86oxNFflC3O9XN2guccCPXCc53iaA1q1hWoKfsRvLxED5AG37j4LB2A+
-         mkm7uPtoCDmREAGW1cL5dgP21CSCr/Q4IFkjrI8vixUl6z799FPhkX9AZieBtuZYaUp1
-         nlvW1fuYpNZ0A+OOBnuISdAmnocDt2D7yoTbp/EyjsDfQH40MydNQEPwKiiN+73QYAGw
-         xUzxzEG85Je7/TmnXNjF/UwefT+96KVsNzwSpY4XVgLkqI0s/qbMBXa5ZGzj7sK4nmuk
-         eoxg==
-X-Gm-Message-State: AOAM530baj9d0UUMAczJahtvRDglPOVp4zYYajL3QGZa+AnkeiLezUVo
-        F5iMP0kq9tixSfvJPdNELtl/gA==
-X-Google-Smtp-Source: ABdhPJyq6sRzUeRRegPHrbZlM4MOy++XyhVktPJ6AqBMtRYyZCcV2eNcaXx6iApBKxUIexhmB6lTPg==
-X-Received: by 2002:a54:4493:: with SMTP id v19mr2915886oiv.61.1641510560064;
-        Thu, 06 Jan 2022 15:09:20 -0800 (PST)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id n26sm574272ooc.48.2022.01.06.15.09.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 15:09:19 -0800 (PST)
-Date:   Thu, 6 Jan 2022 15:10:08 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     robdclark@gmail.com, sean@poorly.run, swboyd@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
-        agross@kernel.org, dmitry.baryshkov@linaro.org,
-        quic_abhinavk@quicinc.com, aravindh@codeaurora.org,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] drm/msm/dp:  populate connector of struct  dp_panel
-Message-ID: <Ydd20C+YP2w060Tn@ripper>
-References: <1641501894-17563-1-git-send-email-quic_khsieh@quicinc.com>
+        Thu, 6 Jan 2022 18:11:20 -0500
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1n5bue-000436-GF; Fri, 07 Jan 2022 00:11:16 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1n5bue-000LZU-3b; Fri, 07 Jan 2022 00:11:16 +0100
+Subject: Re: [PATCH bpf-next v4 1/3] bpf: Add map tracing functions and call
+ sites
+To:     Joe Burton <jevburton.kernel@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org, ppenkov@google.com,
+        sdf@google.com, haoluo@google.com
+Cc:     Joe Burton <jevburton@google.com>
+References: <20220105030345.3255846-1-jevburton.kernel@gmail.com>
+ <20220105030345.3255846-2-jevburton.kernel@gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <52eb82c3-2272-1707-9de7-8347b57b933c@iogearbox.net>
+Date:   Fri, 7 Jan 2022 00:11:15 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1641501894-17563-1-git-send-email-quic_khsieh@quicinc.com>
+In-Reply-To: <20220105030345.3255846-2-jevburton.kernel@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.3/26414/Thu Jan  6 10:26:00 2022)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 06 Jan 12:44 PST 2022, Kuogee Hsieh wrote:
-
-> DP CTS test case 4.2.2.6 has valid edid with bad checksum on purpose
-> and expect DP source return correct checksum. During drm edid read,
-> correct edid checksum is calculated and stored at
-> connector::real_edid_checksum.
+On 1/5/22 4:03 AM, Joe Burton wrote:
+> From: Joe Burton <jevburton@google.com>
 > 
-
-Interesting, thanks for adding this!
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-Regards,
-Bjorn
-
-> The problem is struct dp_panel::connector never be assigned, instead the
-> connector is stored in struct msm_dp::connector. When we run compliance
-> testing test case 4.2.2.6 dp_panel_handle_sink_request() won't have a valid
-> edid set in struct dp_panel::edid so we'll try to use the connectors
-> real_edid_checksum and hit a NULL pointer dereference error because the
-> connector pointer is never assigned.
+> Add two functions that fentry/fexit/fmod_ret programs can attach to:
+> 	bpf_map_trace_update_elem
+> 	bpf_map_trace_delete_elem
+> These functions have the same arguments as bpf_map_{update,delete}_elem.
 > 
-> Changes in V2:
-> -- populate panel connector at msm_dp_modeset_init() instead of at dp_panel_read_sink_caps()
+> Invoke these functions from the following map types:
+> 	BPF_MAP_TYPE_ARRAY
+> 	BPF_MAP_TYPE_PERCPU_ARRAY
+> 	BPF_MAP_TYPE_HASH
+> 	BPF_MAP_TYPE_PERCPU_HASH
+> 	BPF_MAP_TYPE_LRU_HASH
+> 	BPF_MAP_TYPE_LRU_PERCPU_HASH
 > 
-> Changes in V3:
-> -- remove unhelpful kernel crash trace commit text
-> -- remove renaming dp_display parameter to dp
+> The only guarantee about these functions is that they are invoked before
+> the corresponding action occurs. Other conditions may prevent the
+> corresponding action from occurring after the function is invoked.
 > 
-> Changes in V4:
-> -- add more details to commit text
-> 
-> Fixes: 7948fe12d47 ("drm/msm/dp: return correct edid checksum after corrupted edid checksum read")
-> Signee-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> Signed-off-by: Joe Burton <jevburton@google.com>
 > ---
->  drivers/gpu/drm/msm/dp/dp_display.c | 5 +++++
->  1 file changed, 5 insertions(+)
+>   kernel/bpf/Makefile    |  2 +-
+>   kernel/bpf/arraymap.c  |  4 +++-
+>   kernel/bpf/hashtab.c   | 20 +++++++++++++++++++-
+>   kernel/bpf/map_trace.c | 17 +++++++++++++++++
+>   kernel/bpf/map_trace.h | 19 +++++++++++++++++++
+>   5 files changed, 59 insertions(+), 3 deletions(-)
+>   create mode 100644 kernel/bpf/map_trace.c
+>   create mode 100644 kernel/bpf/map_trace.h
 > 
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index 3449d3f..40a059d 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -1499,6 +1499,7 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
->  			struct drm_encoder *encoder)
->  {
->  	struct msm_drm_private *priv;
-> +	struct dp_display_private *dp_priv;
->  	int ret;
->  
->  	if (WARN_ON(!encoder) || WARN_ON(!dp_display) || WARN_ON(!dev))
-> @@ -1507,6 +1508,8 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
->  	priv = dev->dev_private;
->  	dp_display->drm_dev = dev;
->  
-> +	dp_priv = container_of(dp_display, struct dp_display_private, dp_display);
+> diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+> index c1a9be6a4b9f..0cf38dab339a 100644
+> --- a/kernel/bpf/Makefile
+> +++ b/kernel/bpf/Makefile
+> @@ -9,7 +9,7 @@ CFLAGS_core.o += $(call cc-disable-warning, override-init) $(cflags-nogcse-yy)
+>   obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o bpf_iter.o map_iter.o task_iter.o prog_iter.o
+>   obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o bloom_filter.o
+>   obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o
+> -obj-$(CONFIG_BPF_SYSCALL) += bpf_local_storage.o bpf_task_storage.o
+> +obj-$(CONFIG_BPF_SYSCALL) += bpf_local_storage.o bpf_task_storage.o map_trace.o
+>   obj-${CONFIG_BPF_LSM}	  += bpf_inode_storage.o
+>   obj-$(CONFIG_BPF_SYSCALL) += disasm.o
+>   obj-$(CONFIG_BPF_JIT) += trampoline.o
+> diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+> index c7a5be3bf8be..e9e7bd27ffad 100644
+> --- a/kernel/bpf/arraymap.c
+> +++ b/kernel/bpf/arraymap.c
+> @@ -13,6 +13,7 @@
+>   #include <linux/rcupdate_trace.h>
+>   
+>   #include "map_in_map.h"
+> +#include "map_trace.h"
+>   
+>   #define ARRAY_CREATE_FLAG_MASK \
+>   	(BPF_F_NUMA_NODE | BPF_F_MMAPABLE | BPF_F_ACCESS_MASK | \
+> @@ -329,7 +330,8 @@ static int array_map_update_elem(struct bpf_map *map, void *key, void *value,
+>   			copy_map_value(map, val, value);
+>   		check_and_free_timer_in_array(array, val);
+>   	}
+> -	return 0;
 > +
->  	ret = dp_display_request_irq(dp_display);
->  	if (ret) {
->  		DRM_ERROR("request_irq failed, ret=%d\n", ret);
-> @@ -1524,6 +1527,8 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
->  		return ret;
->  	}
->  
-> +	dp_priv->panel->connector = dp_display->connector;
+> +	return bpf_map_trace_update_elem(map, key, value, map_flags);
+
+Given post-update, do you have a use case where you make use of the fmod_ret for
+propagating non-zero ret codes?
+
+Could you also extend commit description on rationale to not add these dummy
+funcs more higher level, e.g. into map_update_elem() upon success?
+
+[...]
+> @@ -1133,6 +1137,10 @@ static int htab_lru_map_update_elem(struct bpf_map *map, void *key, void *value,
+>   		/* unknown flags */
+>   		return -EINVAL;
+>   
+> +	ret = bpf_map_trace_update_elem(map, key, value, map_flags);
+> +	if (unlikely(ret))
+> +		return ret;
 > +
->  	priv->connectors[priv->num_connectors++] = dp_display->connector;
->  	return 0;
->  }
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
-> 
+>   	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_trace_held() &&
+>   		     !rcu_read_lock_bh_held());
+>   
+> @@ -1182,6 +1190,8 @@ static int htab_lru_map_update_elem(struct bpf_map *map, void *key, void *value,
+>   	else if (l_old)
+>   		htab_lru_push_free(htab, l_old);
+>   
+> +	if (!ret)
+> +		ret = bpf_map_trace_update_elem(map, key, value, map_flags);
+>   	return ret;
+>   }
+
+Here, it's pre and post update, is that intentional?
+
+Thanks,
+Daniel

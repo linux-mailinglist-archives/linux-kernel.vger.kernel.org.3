@@ -2,66 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4F3E4869B7
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D6EC4869C3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:25:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242723AbiAFSZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 13:25:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54472 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240698AbiAFSZN (ORCPT
+        id S242779AbiAFSZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 13:25:34 -0500
+Received: from mail-oo1-f42.google.com ([209.85.161.42]:45604 "EHLO
+        mail-oo1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242739AbiAFSZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 13:25:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46208C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 10:25:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3CBF61D69
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 18:25:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DB0BC36AEB;
-        Thu,  6 Jan 2022 18:25:11 +0000 (UTC)
-Date:   Thu, 6 Jan 2022 13:25:10 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Thu, 6 Jan 2022 13:25:31 -0500
+Received: by mail-oo1-f42.google.com with SMTP id l10-20020a4a840a000000b002dc09752694so852250oog.12;
+        Thu, 06 Jan 2022 10:25:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+1b8xpRYxZ8vmZgumm9JuvwJZHTxs74RlVPJnbYxN54=;
+        b=6LQ8G/u5/vITcAYomYrGqQaDApTOEOLmMl3h7OnqqropHSE7xvNWq63vaBLvtwXswF
+         FfEzdIWy0ekLFia7xkKe2l0c2RYSO31UPFpArrjo7L9v2K+ncZn85NBqc+KeCB6i30Uc
+         yP64NfxASa/44MvvqS8auIUn/4c58h8h6jkAtBbho4pgdI3JLu+Orp3379tTIYOYCuy5
+         X4OohLx9VxFitUpeV044pr7vyWdiR1G31hTBF+s6L2ts/1SQ5J+eTWMy/chUITm0qWeX
+         K6KpV32nUImzqAtYIMl7iHkXCPiexX9Ljnq4cA8XNod020y1KFy+CJVkJ5inUaJAGdMo
+         IakA==
+X-Gm-Message-State: AOAM531byy0GLEkxd1eN53FW/Imem5cGprnGFM4zGWLiTr9qz7untqmc
+        ZvfxUawAROYDRyVBvQ8nTLlgdDakUQ==
+X-Google-Smtp-Source: ABdhPJxOg9d7S+nH7Ow7Pl1QUcRGuNmgke+MFJ4NpJB8DgqESzYqHfSD7oJu/egfBzNw/9xjD79V1A==
+X-Received: by 2002:a4a:be90:: with SMTP id o16mr36439739oop.28.1641493531034;
+        Thu, 06 Jan 2022 10:25:31 -0800 (PST)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id r13sm484949oth.21.2022.01.06.10.25.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 10:25:30 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Tony Lindgren <tony@atomide.com>
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] MAINTAINERS: Update information about printk git
- tree
-Message-ID: <20220106132510.0a460fed@gandalf.local.home>
-In-Reply-To: <20220105094157.26216-1-pmladek@suse.com>
-References: <20220105094157.26216-1-pmladek@suse.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Subject: [PATCH] dt-bindings: iio/adc: ti,palmas-gpadc: Split interrupt fields in example
+Date:   Thu,  6 Jan 2022 12:25:11 -0600
+Message-Id: <20220106182518.1435497-3-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  5 Jan 2022 10:41:55 +0100
-Petr Mladek <pmladek@suse.com> wrote:
+Best practice for multi-cell property values is to bracket each multi-cell
+value.
 
-> I have noticed one outdated and one missing link to the printk git tree.
-> I am not sure if it is worth sending for review and having two patches.
-> I just want to avoid possible complains ;-)
-> 
-> Petr Mladek (2):
->   MAINTAINERS/vsprintf: Update link to printk git tree
->   MAINTAIERS/printk: Add link to printk git
-> 
->  MAINTAINERS | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ .../devicetree/bindings/iio/adc/ti,palmas-gpadc.yaml        | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Acked-by: Steven Rostedt <rostedt@goodmis.org>
+diff --git a/Documentation/devicetree/bindings/iio/adc/ti,palmas-gpadc.yaml b/Documentation/devicetree/bindings/iio/adc/ti,palmas-gpadc.yaml
+index 7b895784e008..57a31356082e 100644
+--- a/Documentation/devicetree/bindings/iio/adc/ti,palmas-gpadc.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/ti,palmas-gpadc.yaml
+@@ -74,9 +74,9 @@ examples:
+         compatible = "ti,twl6035-pmic", "ti,palmas-pmic";
+         adc {
+             compatible = "ti,palmas-gpadc";
+-            interrupts = <18 0
+-                          16 0
+-                          17 0>;
++            interrupts = <18 0>,
++                         <16 0>,
++                         <17 0>;
+             #io-channel-cells = <1>;
+             ti,channel0-current-microamp = <5>;
+             ti,channel3-current-microamp = <10>;
+-- 
+2.32.0
 
-for both patches.
-
-Thanks Petr,
-
--- Steve

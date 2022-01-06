@@ -2,118 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19927486954
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:01:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA16486955
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:01:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242509AbiAFSBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 13:01:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48880 "EHLO
+        id S242523AbiAFSB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 13:01:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242493AbiAFSBU (ORCPT
+        with ESMTP id S242493AbiAFSBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 13:01:20 -0500
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98CCDC061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 10:01:20 -0800 (PST)
-Received: by mail-oo1-xc36.google.com with SMTP id w15-20020a4a9d0f000000b002c5cfa80e84so842066ooj.5
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 10:01:20 -0800 (PST)
+        Thu, 6 Jan 2022 13:01:55 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6118EC061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 10:01:55 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id 8so3236358pgc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 10:01:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yd72dqLGjywYZ5iurvaOMSLfaNBW11uoIMA6hBdzT+w=;
-        b=Ix3i8LiyqKdcPsMVObpv10gDeddenlWw1CHrRBunNHwQS5LCbLhaXIl8WaWSMYlGUY
-         dC5EQeiJ/7xdSOF9JcQVBOYNnzBJuLAZWmZfWv5JGSzgXRniyow7HEWeRQu10Txkuanz
-         17spWXZt+ul01MTwowzgzrkQ6RRcpS5SXUYaUSWmDSj32G4GB8ZD/Zv6+sCnu5bXyPcC
-         vDmOgnHBW3YCC9egG/Str4FgSdAhWcQkPG0mDBPiCJvRDkvoFskfhbNqm+YkRxWqi6B9
-         pEUj9CcSQwFyufZuyld70+9awo1aSY+frJfP8NL+fV44qXsTcnQH6Dr0payE780n1Ds9
-         7TcQ==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XgTsSDw/cwN0SZ5s5fkZLZ3uXbTWYqRAbY7QRxHVY18=;
+        b=8JVlsFdlqxOaS82s31Ts55+GXRP8BLCxJJgLC9uDmZ4opT+mG0Jzng218K3mB+rZRZ
+         cilULMNS51t5yA/qi20o6ha5xXhwRk6k1VhWaaKxwW9TBYySNmC3rfQmamPTmO/JIsPI
+         spQGwdlmCY7JEvXEBOeYnJORd7X8klyiUimItQ4tZgdKcpwdVknPK6Eah/OMHavBIyqt
+         tOK8+uTnaXF9JflPvbX0hOr5y2T1VVxjRPtLka3jxwWkG07iFgMnGCU+I9cYXwnjDOTy
+         JC/EdA2QACjR1vT9FER48Bl4XuVmrl5tCiLnrUP6xtzDcRiNrYZoAXsJPmyTS6eeZjDk
+         wj3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yd72dqLGjywYZ5iurvaOMSLfaNBW11uoIMA6hBdzT+w=;
-        b=u7dXkcT7plo34mUGVDzU+qJHiT9drNajEsczHsjvIyezsVymUR2rQd9XY3UMWwZVFq
-         poKJpYqiZ5YnjePFx2/55bNJTwID6pjTkNMLNzMipDIjaDZXRttQHm4aIfjr5mw/5UIq
-         f+Q0nN9IuJbyF076sUf4iCAU//Wyo0Riw8MKJLdSInLuFwohNYunM9pQLFPXlTwROC0v
-         YAATk+hR9CQxkVGoH6bL5Q7p4+IAwjiAFN4Ifs7mq83tG9afx79fKIh7JyiJwHm+fxNE
-         k1EyA5kTgZOri3JFwy26cdVBzIfPCYfac5rFMIHn8tAIWLtQl233n3shG9GGtOGFgA9L
-         6tfQ==
-X-Gm-Message-State: AOAM530XGhWQXWONqlUS6B9+IjVCh8CPZHgpD0ETObcO4sNGSO09rv/6
-        EZZ2g/QhSsqN65fs5bhfSRQbHUQquvh7Fbr+/hj35w==
-X-Google-Smtp-Source: ABdhPJyruBzm9/8La0+52GslZWVrbis9fZrQAm0L5We+2hwsH+ZB9RbSZIde7gM5agGitMuOTFOyk37AI17MI50O+vg=
-X-Received: by 2002:a4a:ac0a:: with SMTP id p10mr37659104oon.96.1641492078304;
- Thu, 06 Jan 2022 10:01:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20211222133428.59977-1-likexu@tencent.com> <CALMp9eTgO4XuNHwuxWahZc7jQqZ10DchW8xXvecBH2ovGPLU9g@mail.gmail.com>
- <d3a9a73f-cdc2-bce0-55e6-e4c9f5c237de@gmail.com> <CALMp9eTm7R-69p3z9P37yXmD6QpzJhEJO564czqHQtDdCRK-SQ@mail.gmail.com>
- <CALMp9eTVjKztZC_11-DZo4MFhpxoVa31=p7Am2LYnEPuYBV8aw@mail.gmail.com>
- <22776732-0698-c61b-78d9-70db7f1b907d@gmail.com> <CALMp9eQQ7SvDNy3iKSrRTn9QUR9h1M-tSnuYO0Y4_-+bgV72sg@mail.gmail.com>
- <bf7fc07f-d49c-1c73-9a31-03585e99ff09@gmail.com> <CALMp9eQmO1zS9urH_B8DeoLp30P7Yxxp9qMwavjmoyt_BSC23A@mail.gmail.com>
- <212cea42-e445-d6f2-2730-88ccaa65b2cb@gmail.com>
-In-Reply-To: <212cea42-e445-d6f2-2730-88ccaa65b2cb@gmail.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Thu, 6 Jan 2022 10:01:07 -0800
-Message-ID: <CALMp9eQck0dPHU9qyY-kDE+mQWK4PUuhpkEFW7PH5BbCaptJ+g@mail.gmail.com>
-Subject: Re: [PATCH v2] KVM: X86: Emulate APERF/MPERF to report actual vCPU frequency
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Like Xu <likexu@tencent.com>,
-        Dongli Cao <caodongli@kingsoft.com>,
-        Li RongQing <lirongqing@baidu.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        "Thomas Gleixner (kernel-recipes.org)" <tglx@linutronix.de>,
-        "Borislav Petkov (kernel-recipes.org)" <bp@alien8.de>,
-        Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=XgTsSDw/cwN0SZ5s5fkZLZ3uXbTWYqRAbY7QRxHVY18=;
+        b=ZH6rByCQ1txXYwJ2zDEtXdtaa94g2B4CmLLXM4sKmETEdTDTqZ/qzh9leNz+9b57rv
+         6zYBdFPEY3YbRd7A4SoHMoL86mK2XmhqpAd/BwT1Ys1OO2obtd40S7/1UF3T/pUcAsuj
+         fCXt0SUS744yl2tGuNUathx026r56tbd5uNjLIy2wGwDD/NlGHukSWmc8fyddZHUglhP
+         OdNzs+OwgmBMafTFmLxGrvUL/Y+dM8+xdPKTkyH8hJSC2OMbSvtUPyhijRuKqqX49sBp
+         +wmtIUSYrXxdGXm2GtQ+3xKbqoBCKfexzLeVfFSctYHnjulYQ9ayQZY2JKJLN/zlhx+J
+         vNhA==
+X-Gm-Message-State: AOAM531FNXfuSTIsa+xVbS5gHMEn2hFwk6+v3pdka9QN7ysoS/CLR987
+        lTfpGEECKXihRop8UcpGPxSUKA==
+X-Google-Smtp-Source: ABdhPJwT1LjozBUHdb4tR7Ch6r8coyZ3NWcoe4v9PJh1J2xlNchg8+tOBsAnqgBCccZL2ctKWhCpuA==
+X-Received: by 2002:a63:43c6:: with SMTP id q189mr53653779pga.424.1641492114780;
+        Thu, 06 Jan 2022 10:01:54 -0800 (PST)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id z13sm3123044pjq.0.2022.01.06.10.01.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 10:01:54 -0800 (PST)
+Date:   Thu, 06 Jan 2022 10:01:54 -0800 (PST)
+X-Google-Original-Date: Thu, 06 Jan 2022 10:01:12 PST (-0800)
+Subject:     Re: [PATCH 0/12] RISC-V: Clean up the defconfigs
+In-Reply-To: <CAEUhbmWP_e3_UWf-mO8AFwECw5Li0L=4Ywjb00jUHy2J1RX5Yg@mail.gmail.com>
+CC:     anup@brainfault.org, linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, anup@brainfault.org,
+        heinrich.schuchardt@canonical.com, bin.meng@windriver.com,
+        sagar.kadam@sifive.com, damien.lemoal@wdc.com, axboe@kernel.dk,
+        linux-kernel@vger.kernel.org, atishp@atishpatra.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     bmeng.cn@gmail.com
+Message-ID: <mhng-b74a848e-3cd7-4cd9-8831-d66c12b41aae@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 5, 2022 at 7:29 PM Like Xu <like.xu.linux@gmail.com> wrote:
+On Sun, 21 Nov 2021 18:45:24 PST (-0800), bmeng.cn@gmail.com wrote:
+> On Sat, Nov 20, 2021 at 12:32 PM Anup Patel <anup@brainfault.org> wrote:
+>>
+>> On Fri, Nov 19, 2021 at 10:14 PM Palmer Dabbelt <palmer@rivosinc.com> wrote:
+>> >
+>> > It's been a while since updating the defconfigs, so I figured it would
+>> > be good to go through all the diff to make sure nothing was lurking.  It
+>> > turns out there were two minor issues, which I've fixed with the first
+>> > two patches.  The rest of these are just cleanups that should have no
+>> > functional change.
+>> >
+>> > I don't have a K210 (I might somewhere, but I've yet to boot it) so I
+>> > can't test this to make sure, but I think patch 2 is the reason we have
+>> > a special !MMU PAGE_OFFSET config.  If someone does have one it'd be
+>> > nice to be able to remove that special case.
+>> >
+>> >
+>>
+>> Using savedefconfig, I used to always get a huge diff so thanks for
+>> doing this cleanups. Going forward, I suggest that we insiste everyone
+>> to always use "make savedefconfig" for creating defconfig patches.
 >
-> On 6/1/2022 6:51 am, Jim Mattson wrote:
-> > On Thu, Dec 30, 2021 at 11:48 PM Like Xu <like.xu.linux@gmail.com> wrote:
-> >>
-> >> On 31/12/2021 9:29 am, Jim Mattson wrote:
-> >
-> >>> At sched-in:
-> >>> 1. Save host APERF/MPERF values from the MSRs.
-> >>> 2. Load the "current" guest APERF/MPERF values into the MSRs (if the
-> >>> vCPU configuration allows for unintercepted reads).
-> >>>
-> >>> At sched-out:
-> >>> 1. Calculate the guest APERF/MPERF deltas for use in step 3.
-> >>> 2. Save the "current" guest APERF/MPERF values.
-> >>> 3. "Restore" the host APERF/MPERF values, but add in the deltas from step 1.
-> >>>
-> >>> Without any writes to IA32_MPERF, I would expect these MSRs to be
-> >>> synchronized across all logical processors, and the proposal above
-> >>> would break that synchronization.
-> >
-> > I am learning more about IA32_APERF and IA32_MPERF this year. :-)
->
-> Uh, thanks for your attention.
->
-> >
-> > My worry above is unfounded. These MSRs only increment in C0, so they
-> > are not likely to be synchronized.
-> >
-> > This also raises another issue with your original fast-path
-> > implementation: the host MSRs will continue to count while the guest
-> > is halted. However, the guest MSRs should not count while the guest is
-> > halted.
-> >
->
-> The emulation based on guest TSC semantics w/ low precision may work it out.
-> TBH, I still haven't given up on the idea of a pass-through approach.
+> Yep, using "savedefconfig" is always required by U-Boot maintainers. I
+> thought that's always the case for the Linux kernel but it seems it is
+> not the case.
 
-I believe that pass-through can work for IA32_APERF. It can also work
-for IA32_MPERF on AMD hosts or when the TSC multiplier is 1 on Intel
-hosts. However, I also believe that it requires KVM to load the
-hardware MSRs with the guest's values prior to VM-entry, and to update
-the hardware MSRs with newly calculated host values before any other
-consumers on the host may read them.
+It's actually a bit more complicated than that, as the results of
+savedefconfig change to track Kconfig updates.  I'd mostly been running
+savedefconfig and tossing the extra diff for people, but that led to a
+bit of a mess here.
+
+There's no way we can require everyone to run savedefconfig on our tree 
+(and even if we could, it'd be a merge nightmare).  IIUC what most folks 
+do is regularly re-spin the defconfigs, now that they're clean that 
+should be easy.  I'm going to start doing that, the best I can come up 
+with is in the second week of the merge window -- that way we'll have 
+both fixes and for-next based on the newer defconfigs, along with all 
+the WIP branches that folks base on rc1.  If anyone's got a better 
+scheme then I'm all ears, though.
+
+This patch set is on for-next.
+
+Thanks!

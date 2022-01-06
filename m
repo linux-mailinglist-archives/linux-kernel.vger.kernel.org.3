@@ -2,175 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6EE4867B5
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:31:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B6224867BB
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:32:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241261AbiAFQbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 11:31:34 -0500
-Received: from foss.arm.com ([217.140.110.172]:56360 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241130AbiAFQbd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 11:31:33 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4C51D1042;
-        Thu,  6 Jan 2022 08:31:33 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.10.56])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 583883F5A1;
-        Thu,  6 Jan 2022 08:31:31 -0800 (PST)
-Date:   Thu, 6 Jan 2022 16:31:28 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     madvenka@linux.microsoft.com
-Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
-        linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v12 04/10] arm64: Split unwind_init()
-Message-ID: <YdcZYGI42h7zybqo@FVFF77S0Q05N>
-References: <0d0eb36f348fb5a6af6eb592c0525f6e94007328>
- <20220103165212.9303-1-madvenka@linux.microsoft.com>
- <20220103165212.9303-5-madvenka@linux.microsoft.com>
+        id S241289AbiAFQcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 11:32:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230168AbiAFQca (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 11:32:30 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95171C061245;
+        Thu,  6 Jan 2022 08:32:30 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id c9-20020a17090a1d0900b001b2b54bd6c5so9227405pjd.1;
+        Thu, 06 Jan 2022 08:32:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kMqP5DUrb/FAT7MeAYvxaJ3PDFZQ/9iFD97ycYbpY3w=;
+        b=SbxvszxmEkR5o/vuM3SIOGno9fRLHzd1ao6VAMPym8DUs2HbF+9nN2w9ZyN1pl7MFf
+         1GropGXfAe6oLxqaCmJmJJR0PIOXIs9r0+ybK5J9nCYA36glhKlzjG+ex10ftNNphrWK
+         zeIxoJHI9lZmbpNYGma/z+1lVMMkDVcc7Dz94y46DaepmmfgDo2XEA3X9e57M4ZmjW6Q
+         Qmt94XXBEho1FIpap+KBIN4yQO3LuguHsP/tk2EZ9rv4FHiplLP3sG2rrsLpWKRG8l5N
+         WEobYnzb2l9phlg/UmmP5vYTgmpMK0/gkaTpwGjuUO17P+Au1kiWLVbI3YKIvA049oOR
+         PeQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kMqP5DUrb/FAT7MeAYvxaJ3PDFZQ/9iFD97ycYbpY3w=;
+        b=K73fcoXOeJmaW2L8ENKTmbWGKpDItBEEO+tp6nVcZLMJMv6MmMCyo4fCjqRvvLHLZ6
+         lfJzT/IWjtclwZLHqMRSqzbLU7VAxyVfj7Nz3M30bu2uF47dPZu6Tcp0TRX+hiz2DSzP
+         133LERLOg+bcVdO/T6XcD+6wa8SMe36Lqe915gNiLuPRnv6X786Bf2by1Ml+LOc4xabu
+         K1rbO7z6wL7efFV7+ra3VRGcM7+1Gdz/9wLaeC+G4h0aKfD0saicicu5u93ChGBoVGyr
+         B8gv0mJBIunWqPJLXvJshaeA00gNcMNm3fLRRLkp+kmnC6vqrg95h1739eUKtpu4hdUW
+         8MkA==
+X-Gm-Message-State: AOAM532emcM+C7CsgqCxNJEFWz9n9/z9w+D5mVLI/TCkmaI2qp4nbYg4
+        U5DTdFNIOgKijSNKq85Oqqq488jjeg9/VfZWSQI=
+X-Google-Smtp-Source: ABdhPJxHk4+FJEzOOWKpDqO9+LXypuP8eFgev5ToUUXb5mS8bVuvbibHMRkWyz/Rerpju51XjyJnKqWVsmy99UOTVEY=
+X-Received: by 2002:a17:902:6502:b0:149:1162:f0b5 with SMTP id
+ b2-20020a170902650200b001491162f0b5mr58474182plk.126.1641486750040; Thu, 06
+ Jan 2022 08:32:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220103165212.9303-5-madvenka@linux.microsoft.com>
+References: <20220104080943.113249-1-jolsa@kernel.org> <20220104080943.113249-9-jolsa@kernel.org>
+ <CAEf4BzZ7s=Pp+2xY3qKX9u6KrPdGW9NNfoiep7nGW+=_s=JJJA@mail.gmail.com> <YdarSovbcmoY9lI6@krava>
+In-Reply-To: <YdarSovbcmoY9lI6@krava>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 6 Jan 2022 08:32:18 -0800
+Message-ID: <CAADnVQJdgt41wprEmCdEgpQMii-AHm9ZesZX6gypNuTefntmEA@mail.gmail.com>
+Subject: Re: [PATCH 08/13] bpf: Add kprobe link for attaching raw kprobes
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 03, 2022 at 10:52:06AM -0600, madvenka@linux.microsoft.com wrote:
-> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-> 
-> unwind_init() is currently a single function that initializes all of the
-> unwind state. Split it into the following functions and call them
-> appropriately:
-> 
-> 	- unwind_init_regs() - initialize from regs passed by caller.
-> 
-> 	- unwind_init_current() - initialize for the current task from the
-> 	  caller of arch_stack_walk().
-> 
-> 	- unwind_init_from_task() - initialize from the saved state of a
-> 	  task other than the current task. In this case, the other
-> 	  task must not be running.
-> 
-> 	- unwind_init_common() - initialize fields that are common across
-> 	  the above 3 cases.
-> 
-> This is done so that specialized initialization can be added to each case
-> in the future.
-> 
-> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
-> ---
->  arch/arm64/kernel/stacktrace.c | 50 +++++++++++++++++++++++++++-------
->  1 file changed, 40 insertions(+), 10 deletions(-)
-> 
-> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
-> index a1a7ff93b84f..bd797e3f7789 100644
-> --- a/arch/arm64/kernel/stacktrace.c
-> +++ b/arch/arm64/kernel/stacktrace.c
-> @@ -33,11 +33,8 @@
->   */
->  
->  
-> -static void unwind_init(struct unwind_state *state, unsigned long fp,
-> -			unsigned long pc)
-> +static void unwind_init_common(struct unwind_state *state)
->  {
-> -	state->fp = fp;
-> -	state->pc = pc;
->  #ifdef CONFIG_KRETPROBES
->  	state->kr_cur = NULL;
->  #endif
-> @@ -56,6 +53,40 @@ static void unwind_init(struct unwind_state *state, unsigned long fp,
->  	state->prev_type = STACK_TYPE_UNKNOWN;
->  }
->  
-> +/*
-> + * TODO: document requirements here.
-> + */
-> +static inline void unwind_init_regs(struct unwind_state *state,
-> +				    struct pt_regs *regs)
-> +{
-> +	state->fp = regs->regs[29];
-> +	state->pc = regs->pc;
-> +}
-
-When I suggested this back in:
-
-  https://lore.kernel.org/linux-arm-kernel/20211123193723.12112-1-madvenka@linux.microsoft.com/T/#md91fbfe08ceab2a02d9f5c326e17997786e53208
-
-... my intent was that each unwind_init_from_*() helpers was the sole
-initializer of the structure, and the caller only had to call one function.
-That way it's not possible to construct an object with an erroneous combination
-of arguments because the prototype enforces the set of arguments, and the
-helper function can operate on a consistent snapshot of those arguments.
-
-So I'd much prefer that each of these helpers called unwind_init_common(),
-rather than leaving that to the caller to do. I don't mind if those pass
-arguments to unwind_init_common(), or explciitly initialize their respective
-fields, but I don' think the caller should have to care about unwind_init_common().
-
-I'd also prefer the unwind_init_from*() naming I'd previously suggested, so
-that it's clear which direction information is flowing.
-
+On Thu, Jan 6, 2022 at 12:41 AM Jiri Olsa <jolsa@redhat.com> wrote:
 >
-> +
-> +/*
-> + * TODO: document requirements here.
-> + *
-> + * Note: this is always inlined, and we expect our caller to be a noinline
-> + * function, such that this starts from our caller's caller.
-> + */
-> +static __always_inline void unwind_init_current(struct unwind_state *state)
-> +{
-> +	state->fp = (unsigned long)__builtin_frame_address(1);
-> +	state->pc = (unsigned long)__builtin_return_address(0);
-> +}
-> +
-> +/*
-> + * TODO: document requirements here.
-> + *
-> + * The caller guarantees that the task is not running.
-> + */
-> +static inline void unwind_init_task(struct unwind_state *state,
-> +				    struct task_struct *task)
-> +{
-> +	state->fp = thread_saved_fp(task);
-> +	state->pc = thread_saved_pc(task);
-> +}
-> +
->  /*
->   * Unwind from one frame record (A) to the next frame record (B).
->   *
-> @@ -194,15 +225,14 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
->  {
->  	struct unwind_state state;
->  
-> +	unwind_init_common(&state);
+> On Wed, Jan 05, 2022 at 08:30:56PM -0800, Andrii Nakryiko wrote:
+> > On Tue, Jan 4, 2022 at 12:10 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> > >
+> > > Adding new link type BPF_LINK_TYPE_KPROBE to attach kprobes
+> > > directly through register_kprobe/kretprobe API.
+> > >
+> > > Adding new attach type BPF_TRACE_RAW_KPROBE that enables
+> > > such link for kprobe program.
+> > >
+> > > The new link allows to create multiple kprobes link by using
+> > > new link_create interface:
+> > >
+> > >   struct {
+> > >     __aligned_u64   addrs;
+> > >     __u32           cnt;
+> > >     __u64           bpf_cookie;
+> >
+> > I'm afraid bpf_cookie has to be different for each addr, otherwise
+> > it's severely limiting. So it would be an array of cookies alongside
+> > an array of addresses
+>
+> ok
+>
+> >
+> > >   } kprobe;
+> > >
+> > > Plus new flag BPF_F_KPROBE_RETURN for link_create.flags to
+> > > create return probe.
+> > >
+> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > > ---
+> > >  include/linux/bpf_types.h      |   1 +
+> > >  include/uapi/linux/bpf.h       |  12 +++
+> > >  kernel/bpf/syscall.c           | 191 ++++++++++++++++++++++++++++++++-
+> > >  tools/include/uapi/linux/bpf.h |  12 +++
+> > >  4 files changed, 211 insertions(+), 5 deletions(-)
+> > >
+> >
+> > [...]
+> >
+> > > @@ -1111,6 +1113,11 @@ enum bpf_link_type {
+> > >   */
+> > >  #define BPF_F_SLEEPABLE                (1U << 4)
+> > >
+> > > +/* link_create flags used in LINK_CREATE command for BPF_TRACE_RAW_KPROBE
+> > > + * attach type.
+> > > + */
+> > > +#define BPF_F_KPROBE_RETURN    (1U << 0)
+> > > +
+> >
+> > we have plenty of flexibility to have per-link type fields, so why not
+> > add `bool is_retprobe` next to addrs and cnt?
+>
+> well I thought if I do that, people would suggest to use the empty
+> flags field instead ;-)
+>
+> we can move it there as you suggest, but I wonder it's good idea to
+> use bool in uapi headers, because the bool size definition is vague
 
-As above, I really don't like that the caller has to call both the common
-initializer and a specialized initializer here.
-
-Thanks,
-Mark.
-
-> +
->  	if (regs)
-> -		unwind_init(&state, regs->regs[29], regs->pc);
-> +		unwind_init_regs(&state, regs);
->  	else if (task == current)
-> -		unwind_init(&state,
-> -				(unsigned long)__builtin_frame_address(1),
-> -				(unsigned long)__builtin_return_address(0));
-> +		unwind_init_current(&state);
->  	else
-> -		unwind_init(&state, thread_saved_fp(task),
-> -				thread_saved_pc(task));
-> +		unwind_init_task(&state, task);
->  
->  	unwind(task, &state, consume_entry, cookie);
->  }
-> -- 
-> 2.25.1
-> 
+Good point. No 'bool' please.
+grep bool include/uapi/linux/
+Only gives openvswitch.h and it's guarded by ifdef KERNEL
+So not a single uapi header has bool in it.

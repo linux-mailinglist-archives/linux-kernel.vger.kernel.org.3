@@ -2,89 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E727C4863D1
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 12:43:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B1834863E5
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 12:47:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238619AbiAFLno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 06:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47992 "EHLO
+        id S238638AbiAFLru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 06:47:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232322AbiAFLnn (ORCPT
+        with ESMTP id S238456AbiAFLrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 06:43:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD68C061245;
-        Thu,  6 Jan 2022 03:43:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83DF0B82072;
-        Thu,  6 Jan 2022 11:43:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2F00C36AE5;
-        Thu,  6 Jan 2022 11:43:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641469420;
-        bh=I2aHLNpSbtDknB3iBi0Mt5srrLAzwYs3Vfj7t28MM1E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bT7ApK0OCOWO1jD4+661OlccaQwj4f1QlYbntqRaTvQo2eLHKUMbrTf38cgJcdBrh
-         IS0aS76q3f1NeVO12QmwD34HCQYZWDexlPBZW0s8+GcZ/GTlfsP3G8HZet8+ofXrnk
-         6uSyyif03uiKX+ekG3ymdFQ+stehKttUUX7Yg8AV0g1mH7EiiNoa4R2j5MeNh+pRL3
-         1OPyr637EtYIKPwj0HIJVmakjSLb5ahOP/C8z/wj4pnmLoHluy8GZ/xtiX67g1NB+f
-         pag2WU4yz3TQHc13x2rHV/BLHOlW6sUGPVfIhl3WUDXAHBBPfcLFqP0cpSR1qed2Po
-         sjn8u9uxw1IUQ==
-Date:   Thu, 6 Jan 2022 11:43:34 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-Cc:     mark.rutland@arm.com, jpoimboe@redhat.com, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
-        linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v12 07/10] arm64: Introduce stack trace reliability
- checks in the unwinder
-Message-ID: <YdbV5p9ZF3qjb1dc@sirena.org.uk>
-References: <0d0eb36f348fb5a6af6eb592c0525f6e94007328>
- <20220103165212.9303-1-madvenka@linux.microsoft.com>
- <20220103165212.9303-8-madvenka@linux.microsoft.com>
- <YdXOQTXscVaVFMJ3@sirena.org.uk>
- <85156eb8-df63-29c0-cbfc-37bc0356d9e8@linux.microsoft.com>
+        Thu, 6 Jan 2022 06:47:49 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0156CC061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 03:47:49 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id z9so8324094edm.10
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 03:47:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=fuYmQ09kebTGgQ/GK7r+JGLw9yYnF/KkITIwYbv8h8s=;
+        b=hHhZ6fM67akVkyGgK/euqcLPjrBqR+nLz69Sl0IYo3asE0UPliJMugLM1EMHpH571t
+         fmIkXRB6eHgfDrtUc0RWOXmr+BnR+C9JmOMah3vj6Sh7pKAC68LSaMDvfbb2GlpCk9Z8
+         LD+VH7DkdhPqhtpdtJ2vbdpe3+3l/B15Nvy+3YU+5izusKFPe4kyPFLn3p3pLwlXss4d
+         xhbcpt55SUmR1DWm8AFb98Q6A5Sl91/fAyUPOWPWD/Yl8ZiAsLCQ3Usod3uD9hdkxiet
+         W+Uo3qKrNdbAl0oOIXakmCK+vEpYFIxo+M+SrWLPlOKHm5AUlULMQ921FXPf0lHsZS+2
+         K3MQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=fuYmQ09kebTGgQ/GK7r+JGLw9yYnF/KkITIwYbv8h8s=;
+        b=jz5ga270ncC3cOepSamqKOJcH1+XWyFgzu4786IXuoBTGxjsgoCvforUY6uDcVjSv3
+         hxRvxAKfFMQow8xVqu/q3Gd4UotUfWvRyLCJwzpWXbf5GByPMjTJZtawG9PJiTiKUKQR
+         SL6/HkBAduqTQlIrONmKT1Ufsgip65FtROUeQKip+hN2LJSip6/fpHa3cW86dI9ReXh3
+         k/LWQrShl21Tv4kkB1srC1NftMB4I/NwvwnQFU5W4N6nPhDceHbPeNJ/dqWeZNE/U5DB
+         DfM9vO0y3u3QWefbyHGTkcHevsDMDZQUa8fDUIv56jACYjuKclt4lhEmVWXTKbf+feC5
+         gsBA==
+X-Gm-Message-State: AOAM533ZzZ1aDCRKChYUnViKuJh3YuoS0liXxcYi1hf/LZnAuORDpwEb
+        TI2ia3dH4YFwssKeXekB7w/TdqmvaZqkXAkDRt0=
+X-Google-Smtp-Source: ABdhPJzxdLfhXcKS39TbX5xCH2h/gifiQdZHtpksJgiLeA6YpQjcJrTYk64Tn1+Iqsn6iPJ09ubWNmYw9VRjb3rjgVc=
+X-Received: by 2002:a50:da48:: with SMTP id a8mr56186341edk.155.1641469667571;
+ Thu, 06 Jan 2022 03:47:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nkAb5dHSgKTMYvOv"
-Content-Disposition: inline
-In-Reply-To: <85156eb8-df63-29c0-cbfc-37bc0356d9e8@linux.microsoft.com>
-X-Cookie: I think we're in trouble.
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Thu, 6 Jan 2022 08:47:36 -0300
+Message-ID: <CAOMZO5A5H7HrCXoTAK98dkT0wEybcnuazPVxZeHvu78Nq7Qm4g@mail.gmail.com>
+Subject: debugfs: Directory with parent 'regmap' already present!
+To:     Mark Brown <broonie@kernel.org>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Mark and Matthias,
 
---nkAb5dHSgKTMYvOv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On an imx6q-sabresd board, I am still seeing:
 
-On Wed, Jan 05, 2022 at 05:58:59PM -0600, Madhavan T. Venkataraman wrote:
-> Thanks for the review. Do you have any comments on:
->=20
-> [PATCH v12 04/10] arm64: Split unwind_init()
-> [PATCH v12 10/10] arm64: Select HAVE_RELIABLE_STACKTRACE
+debugfs: Directory 'dummy-iomuxc-gpr@20e0000' with parent 'regmap'
+already present!
 
-Not yet. =20
+There was an earlier thread about this issue:
+https://lkml.org/lkml/2021/7/26/95
 
---nkAb5dHSgKTMYvOv
-Content-Type: application/pgp-signature; name="signature.asc"
+but I am not sure what was the conclusion.
 
------BEGIN PGP SIGNATURE-----
+Any suggestions as to how to fix this warning?
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHW1eUACgkQJNaLcl1U
-h9CPVAf/QaMTLGTeMvBiS5vqudjFC9nBuusjkrEo8aDfS0ykawOlusSdW4bgjQNS
-nfUwlMS+QNR3tXocVKS6VCnJokflrSxsAz/eXYgXxt+98xnNoaaYx06I6IQsxVcX
-ekJu9P8Ouyunc//7TxagxveOwsaLr53/wv8kKAyYGIZTj9JZHvG8v3JOKf1Xdcas
-6Z64w1XOvbDweyfZQtD/A+VXqlX0tVZ0z9wtqbMppxivRYdE0h/yUxekNQ1gzz8S
-du5wxUo6r3tE39IMFrKimQjjSErL5lOdul/PNS22BFQO5XmWEjD5aGz34krYXtEh
-RsJ+kfSlx277uL8V4zo4Zx/WIFdYNg==
-=mryq
------END PGP SIGNATURE-----
+Thanks,
 
---nkAb5dHSgKTMYvOv--
+Fabio Estevam

@@ -2,85 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 814D3486B28
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:29:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A93C486B2F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243908AbiAFU2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 15:28:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54550 "EHLO
+        id S243806AbiAFUaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 15:30:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243853AbiAFU2h (ORCPT
+        with ESMTP id S243719AbiAFUaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 15:28:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A670C06118A;
-        Thu,  6 Jan 2022 12:28:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B6FB61E16;
-        Thu,  6 Jan 2022 20:28:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF730C36AE5;
-        Thu,  6 Jan 2022 20:28:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641500916;
-        bh=b/lnSyPUZvmRkpkf3M9HGG79TwkLoB+cQSoOb4PH7Ec=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=qtGk2179/FtqC4QB0oJSeU9ORB8b6AkTj8Uu/cjbWBOesVnIv6M1j51qdox3CyQZU
-         yUqH/OYdl2+fLjx6Yu9iXaj/VRjvCSIMPBaXLaP0iwA2/m1JYfEBAH2QJySWNUt5Fn
-         VROc59x/OES7coCycWFV4u6KTQ8Y5JGfXeRSzwh27KOFSv/F68ITLR9hjApzvm4tfi
-         xSa966zi0N8LwR0wfDogdIzmmCMSefu3kUseKTgFyloiZJ9nPzoziOpdtt0vhGNT6p
-         0UNoq6XCW3UDcjhI+G70PmXnYbzWtzrb0OVRyrSmQb+c/h3d2ox6AUf19UZ2uhbzxe
-         TBXtK5zzFRtJA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Chuanhong Guo <gch981213@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Bayi Cheng <bayi.cheng@mediatek.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-In-Reply-To: <20220106182518.1435497-9-robh@kernel.org>
-References: <20220106182518.1435497-9-robh@kernel.org>
-Subject: Re: [PATCH] spi: dt-bindings: mediatek,spi-mtk-nor: Fix example 'interrupts' property
-Message-Id: <164150091444.2243644.7719770746568612726.b4-ty@kernel.org>
-Date:   Thu, 06 Jan 2022 20:28:34 +0000
+        Thu, 6 Jan 2022 15:30:15 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083E4C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 12:30:15 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id i30so3615781pgl.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 12:30:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1dYDq292X5AvCNhfISqHxRCZk5rNTqVWjLVXkC8P+XE=;
+        b=RPOKSS2OwpHLKmLaka43HEcnkD3JnYseEF3zcqfNm+FemYU3qtPCRyaELkYSk/kO8T
+         e8c6Aghz3i0nwAHFwRpJaYEihxJxJIsyKrzCiEDaknA7qaPanUvDdM5dXQDDUy8raTLm
+         L9Mbem9IgA2KKk3xoI69GgEa+X8PBowYK2PJgiTH5P2Ze2wMdOarbdLKVOZcYWo0F4BF
+         VBy7+oKB7NMuJtMmlquYrFWmkmo3nt9mY8YIUWGD0cRaH2LoZquMedy/ANFDEc4MMEOe
+         JTKqyyvydFRIB/AdNFR9+LwJPmNHPEL3FPwvUtLeQPZjzt9M7VmvdyOQUhdkQs020NZU
+         okmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=1dYDq292X5AvCNhfISqHxRCZk5rNTqVWjLVXkC8P+XE=;
+        b=i6slikRCXReLeMt4lTHa8ksMqEmmSSutrHG5q4xBprfOvaHyIBs8xn9i5tcLXRlgdg
+         nDvWRCYXN+A2wSNDh99LhvDXvGEkKhAnG0N5AG5j3NKRJCCxkBqayIEJ4VOjBQnnMaUJ
+         E7nv2x9iwX9FyASvPjBVIlt7vwJtNO23HY4lGwU2iyZ275ma6mtsSfgAwro9jf4g+qb0
+         n3V9UBnZ/254fEuFcsQKMvi9lU9vXqPL5uLQar50lvqTnN1TlGBgivhUnO7DxXggddHi
+         JhIsgVIFTEXijjRmPHQFFbzx/XNEn1L4jgwq9b2F6kssoieziwSYMkwwPDy+c7x/c6Rj
+         CCAA==
+X-Gm-Message-State: AOAM531ygL32reoHSS8uFlZOJe3qXxmRdsyHMXMIPebXgwdhHIUy6lAA
+        c2kV53lWbPOEwipaw9GVVUw=
+X-Google-Smtp-Source: ABdhPJyPiTLzyC5vvir92C94KqSMAd3WfsMnYXWMmoDUEPpHnIydy5LysotC3iNMKGDpNskEzIzt+g==
+X-Received: by 2002:a63:9dc8:: with SMTP id i191mr5390358pgd.601.1641501014489;
+        Thu, 06 Jan 2022 12:30:14 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id o7sm3290500pfu.108.2022.01.06.12.30.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 12:30:13 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 6 Jan 2022 10:30:12 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Imran Khan <imran.f.khan@oracle.com>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 1/2] kernfs: use kernfs_node specific mutex and
+ spinlock.
+Message-ID: <YddRVH4r6uNHt3xa@slm.duckdns.org>
+References: <20220103084544.1109829-1-imran.f.khan@oracle.com>
+ <20220103084544.1109829-2-imran.f.khan@oracle.com>
+ <YdLH6qQNxa11YmRO@kroah.com>
+ <719eb5d2-680c-e596-1446-3ca8f47c3aea@oracle.com>
+ <YdP57ij4JxahpdnC@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdP57ij4JxahpdnC@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Jan 2022 12:25:17 -0600, Rob Herring wrote:
-> A phandle for 'interrupts' value is wrong and should be one or more numbers.
+Hello,
+
+On Tue, Jan 04, 2022 at 08:40:30AM +0100, Greg KH wrote:
+> > We are seeing the launch time of some DB workloads adversely getting
+> > affected with this contention.
 > 
-> 
+> What workloads?  sysfs should NEVER be in the fast-path of any normal
+> operation, including booting.  What benchmark or real-work is having
+> problems here?
 
-Applied to
+In most systems, this shouldn't matter at all but sysfs and cgroupfs host a
+lot of statistics files which may be read regularly. It is conceivable that
+in large enough systems, the current locking scheme doesn't scale well
+enough. We should definitely measure the overhead and gains tho.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+If this is something necessary, I think one possible solution is using
+hashed locks. I know that it isn't a popular choice but it makes sense given
+the constraints.
 
-Thanks!
+Thanks.
 
-[1/1] spi: dt-bindings: mediatek,spi-mtk-nor: Fix example 'interrupts' property
-      commit: 3e718b44756e2829e7189a9504aa7a6d7f394d6c
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+tejun

@@ -2,232 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E418148676E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:11:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 367A648676F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:11:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241052AbiAFQLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 11:11:37 -0500
-Received: from foss.arm.com ([217.140.110.172]:56086 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241031AbiAFQLg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 11:11:36 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C85871042;
-        Thu,  6 Jan 2022 08:11:35 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.10.56])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CD1853F5A1;
-        Thu,  6 Jan 2022 08:11:33 -0800 (PST)
-Date:   Thu, 6 Jan 2022 16:11:31 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     madvenka@linux.microsoft.com
-Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
-        linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v12 03/10] arm64: Rename stackframe to unwind_state
-Message-ID: <YdcUsyNmALulzj3/@FVFF77S0Q05N>
-References: <0d0eb36f348fb5a6af6eb592c0525f6e94007328>
- <20220103165212.9303-1-madvenka@linux.microsoft.com>
- <20220103165212.9303-4-madvenka@linux.microsoft.com>
+        id S241075AbiAFQLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 11:11:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51810 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241031AbiAFQLi (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 11:11:38 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16692C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 08:11:38 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id j11so6001639lfg.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 08:11:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=UweD5BJ4DKQCz9vlPdatipHmRP/OHAThtxD90vvKQYs=;
+        b=VMBXuw310pEBE0hRKuhM5FjpdbHWyARebd7bXxHSCQMKbEEfGfHJivVMia0R9uQPCb
+         2d9aj90JU8m59mfIHl3+hL5Vn4DpsKYdRAtgTLJxYF8ivzTWHLsPxgFqyJ6CXDLEULzd
+         WI5MbRyzIL3jRwV+eplpbRPn4ARPWfHhhh7W7HEXpwDqn2Xn+jgK6aGlP/GUf2r6CsPa
+         zfm0Z18ub2H0ooIFrU/XE/Uz/DOmz+k/e4JgQRIW16TJgOx2ezoJjZr2HWUe7Vo3g22G
+         87gsDiMSTjrcNetqjQxCoc3XnpWiKblgIN0fIXYP8Ybu8syo2A07wxohzqa4LLeBCfq+
+         W7iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=UweD5BJ4DKQCz9vlPdatipHmRP/OHAThtxD90vvKQYs=;
+        b=jJHhJAyh89gXkSUzy2FrT+i30ZV6Q2ZAYp3qGpODEtQQFN/HXaQING8mNwtsm3+6Jo
+         /w/+yoml5KFC/wrJofl/CkQ/l52/NdPu1rprIlS347JarE4zUFdHrZv+1Vox2ZNQ3n6O
+         gfbGZJZiDBOiVMQQU6f3fMnucnUys74ufdcRS4twLocZhZWI56PdtzxYWVYSIZRo6otu
+         ogG9bCPbJHp9Ha2lJf8TiHxz6As32gJEX6QG1PLpuu+Lsl3C3p+KG+Wbfphf5khzVRLI
+         kP80w/pjKWW4mShD9N1HgqdbgNabezquMKTb50Jf5RpVbiMeHe0XFypFri3OwGYPfEqW
+         uxbA==
+X-Gm-Message-State: AOAM530IRovCx4gMhyebtS+R3Hj6bTMdvI2B91T8BXXa8J3WLwlC+Wgl
+        rzGs2ml1RZ2OGjQeN8c77ts=
+X-Google-Smtp-Source: ABdhPJxncGOMXL666kdVArKsvJheKvIRNs4K0S0x16vtIctFIiKdHrJu38Q1dxdsqTcS9HrJe3PQwA==
+X-Received: by 2002:ac2:46d1:: with SMTP id p17mr54816098lfo.578.1641485496348;
+        Thu, 06 Jan 2022 08:11:36 -0800 (PST)
+Received: from grain.localdomain ([5.18.251.97])
+        by smtp.gmail.com with ESMTPSA id u26sm213623lfi.62.2022.01.06.08.11.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 08:11:34 -0800 (PST)
+Received: by grain.localdomain (Postfix, from userid 1000)
+        id 3A60A5A0020; Thu,  6 Jan 2022 19:11:34 +0300 (MSK)
+Date:   Thu, 6 Jan 2022 19:11:34 +0300
+From:   Cyrill Gorcunov <gorcunov@gmail.com>
+To:     Pintu Kumar <quic_pintu@quicinc.com>
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        linux-mm@kvack.org, ebiederm@xmission.com,
+        christian.brauner@ubuntu.com, sfr@canb.auug.org.au,
+        legion@kernel.org, sashal@kernel.org, chris.hyser@oracle.com,
+        ccross@google.com, pcc@google.com, dave@stgolabs.net,
+        caoxiaofeng@yulong.com, david@redhat.com, pintu.ping@gmail.com
+Subject: Re: [PATCH] sysinfo: include availram field in sysinfo struct
+Message-ID: <YdcUttZWaqYQpR1K@grain>
+References: <1641483250-18839-1-git-send-email-quic_pintu@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220103165212.9303-4-madvenka@linux.microsoft.com>
+In-Reply-To: <1641483250-18839-1-git-send-email-quic_pintu@quicinc.com>
+User-Agent: Mutt/2.0.7 (2021-05-04)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 03, 2022 at 10:52:05AM -0600, madvenka@linux.microsoft.com wrote:
-> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+On Thu, Jan 06, 2022 at 09:04:10PM +0530, Pintu Kumar wrote:
+> The sysinfo member does not have any "available ram" field and
+> the bufferram field is not much helpful either, to get a rough
+> estimate of available ram needed for allocation.
 > 
-> Rename "struct stackframe" to "struct unwind_state" for consistency and
-> better naming. Accordingly, rename variable/argument "frame" to "state".
+> One needs to parse MemAvailable field separately from /proc/meminfo
+> to get this info instead of directly getting if from sysinfo itself.
 > 
-> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
-
-Thanks for this!
-
-Reviewed-by: Mark Rutland <mark.rutland@arm.com>
-
-Mark.
-
+> Thus, this patch introduce a new field as availram in sysinfo
+> so that all the info total/free/available can be retrieved from
+> one place itself.
+> 
+> There are couple of places in kernel as well where this can be improved.
+> For example:
+> In fs/proc/meminfo.c:
+> meminfo_proc_show:
+>    si_meminfo(&i);
+>    available = si_mem_available();
+> Now with this change the second call be avoided.
+> Thus, we can directly do:
+> show_val_kb(m, "MemAvailable:   ", i.availram);
+> 
+> Note, this also requires update in procfs for free and other commands.
+> Like in free command as well we frist call sysinfo then again parse
+> /proc/meminfo to get available field.
+> This can be avoided too with higher kernel version.
+> 
+> A sample output with single sysinfo call is shown below:
+> Total RAM: 248376 kB
+>  Free RAM: 231540 kB
+> Avail RAM: 230448 kB
+> 
+> Signed-off-by: Pintu Kumar <quic_pintu@quicinc.com>
+> Signed-off-by: Pintu Agarwal <pintu.ping@gmail.com>
 > ---
->  arch/arm64/include/asm/stacktrace.h |  2 +-
->  arch/arm64/kernel/stacktrace.c      | 66 ++++++++++++++---------------
->  2 files changed, 34 insertions(+), 34 deletions(-)
+>  include/uapi/linux/sysinfo.h | 1 +
+>  kernel/sys.c                 | 4 ++++
+>  mm/page_alloc.c              | 2 ++
+>  3 files changed, 7 insertions(+)
 > 
-> diff --git a/arch/arm64/include/asm/stacktrace.h b/arch/arm64/include/asm/stacktrace.h
-> index 3a15d376ab36..fc828c3c5dfd 100644
-> --- a/arch/arm64/include/asm/stacktrace.h
-> +++ b/arch/arm64/include/asm/stacktrace.h
-> @@ -52,7 +52,7 @@ struct stack_info {
->   *               associated with the most recently encountered replacement lr
->   *               value.
->   */
-> -struct stackframe {
-> +struct unwind_state {
->  	unsigned long fp;
->  	unsigned long pc;
->  	DECLARE_BITMAP(stacks_done, __NR_STACK_TYPES);
-> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
-> index b980d96dccfc..a1a7ff93b84f 100644
-> --- a/arch/arm64/kernel/stacktrace.c
-> +++ b/arch/arm64/kernel/stacktrace.c
-> @@ -33,13 +33,13 @@
->   */
->  
->  
-> -static void unwind_init(struct stackframe *frame, unsigned long fp,
-> +static void unwind_init(struct unwind_state *state, unsigned long fp,
->  			unsigned long pc)
->  {
-> -	frame->fp = fp;
-> -	frame->pc = pc;
-> +	state->fp = fp;
-> +	state->pc = pc;
->  #ifdef CONFIG_KRETPROBES
-> -	frame->kr_cur = NULL;
-> +	state->kr_cur = NULL;
->  #endif
->  
->  	/*
-> @@ -51,9 +51,9 @@ static void unwind_init(struct stackframe *frame, unsigned long fp,
->  	 * prev_fp value won't be used, but we set it to 0 such that it is
->  	 * definitely not an accessible stack address.
->  	 */
-> -	bitmap_zero(frame->stacks_done, __NR_STACK_TYPES);
-> -	frame->prev_fp = 0;
-> -	frame->prev_type = STACK_TYPE_UNKNOWN;
-> +	bitmap_zero(state->stacks_done, __NR_STACK_TYPES);
-> +	state->prev_fp = 0;
-> +	state->prev_type = STACK_TYPE_UNKNOWN;
->  }
->  
->  /*
-> @@ -64,9 +64,9 @@ static void unwind_init(struct stackframe *frame, unsigned long fp,
->   * and the location (but not the fp value) of B.
->   */
->  static int notrace unwind_next(struct task_struct *tsk,
-> -			       struct stackframe *frame)
-> +			       struct unwind_state *state)
->  {
-> -	unsigned long fp = frame->fp;
-> +	unsigned long fp = state->fp;
->  	struct stack_info info;
->  
->  	/* Final frame; nothing to unwind */
-> @@ -79,7 +79,7 @@ static int notrace unwind_next(struct task_struct *tsk,
->  	if (!on_accessible_stack(tsk, fp, 16, &info))
->  		return -EINVAL;
->  
-> -	if (test_bit(info.type, frame->stacks_done))
-> +	if (test_bit(info.type, state->stacks_done))
->  		return -EINVAL;
->  
->  	/*
-> @@ -95,27 +95,27 @@ static int notrace unwind_next(struct task_struct *tsk,
->  	 * stack to another, it's never valid to unwind back to that first
->  	 * stack.
->  	 */
-> -	if (info.type == frame->prev_type) {
-> -		if (fp <= frame->prev_fp)
-> +	if (info.type == state->prev_type) {
-> +		if (fp <= state->prev_fp)
->  			return -EINVAL;
->  	} else {
-> -		set_bit(frame->prev_type, frame->stacks_done);
-> +		set_bit(state->prev_type, state->stacks_done);
->  	}
->  
->  	/*
->  	 * Record this frame record's values and location. The prev_fp and
->  	 * prev_type are only meaningful to the next unwind_next() invocation.
->  	 */
-> -	frame->fp = READ_ONCE_NOCHECK(*(unsigned long *)(fp));
-> -	frame->pc = READ_ONCE_NOCHECK(*(unsigned long *)(fp + 8));
-> -	frame->prev_fp = fp;
-> -	frame->prev_type = info.type;
-> +	state->fp = READ_ONCE_NOCHECK(*(unsigned long *)(fp));
-> +	state->pc = READ_ONCE_NOCHECK(*(unsigned long *)(fp + 8));
-> +	state->prev_fp = fp;
-> +	state->prev_type = info.type;
->  
-> -	frame->pc = ptrauth_strip_insn_pac(frame->pc);
-> +	state->pc = ptrauth_strip_insn_pac(state->pc);
->  
->  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
->  	if (tsk->ret_stack &&
-> -		(frame->pc == (unsigned long)return_to_handler)) {
-> +		(state->pc == (unsigned long)return_to_handler)) {
->  		unsigned long orig_pc;
->  		/*
->  		 * This is a case where function graph tracer has
-> @@ -123,16 +123,16 @@ static int notrace unwind_next(struct task_struct *tsk,
->  		 * to hook a function return.
->  		 * So replace it to an original value.
->  		 */
-> -		orig_pc = ftrace_graph_ret_addr(tsk, NULL, frame->pc,
-> -						(void *)frame->fp);
-> -		if (WARN_ON_ONCE(frame->pc == orig_pc))
-> +		orig_pc = ftrace_graph_ret_addr(tsk, NULL, state->pc,
-> +						(void *)state->fp);
-> +		if (WARN_ON_ONCE(state->pc == orig_pc))
->  			return -EINVAL;
-> -		frame->pc = orig_pc;
-> +		state->pc = orig_pc;
->  	}
->  #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
->  #ifdef CONFIG_KRETPROBES
-> -	if (is_kretprobe_trampoline(frame->pc))
-> -		frame->pc = kretprobe_find_ret_addr(tsk, (void *)frame->fp, &frame->kr_cur);
-> +	if (is_kretprobe_trampoline(state->pc))
-> +		state->pc = kretprobe_find_ret_addr(tsk, (void *)state->fp, &state->kr_cur);
->  #endif
->  
->  	return 0;
-> @@ -140,15 +140,15 @@ static int notrace unwind_next(struct task_struct *tsk,
->  NOKPROBE_SYMBOL(unwind_next);
->  
->  static void notrace unwind(struct task_struct *tsk,
-> -			   struct stackframe *frame,
-> +			   struct unwind_state *state,
->  			   bool (*fn)(void *, unsigned long), void *data)
->  {
->  	while (1) {
->  		int ret;
->  
-> -		if (!fn(data, frame->pc))
-> +		if (!fn(data, state->pc))
->  			break;
-> -		ret = unwind_next(tsk, frame);
-> +		ret = unwind_next(tsk, state);
->  		if (ret < 0)
->  			break;
->  	}
-> @@ -192,17 +192,17 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
->  			      void *cookie, struct task_struct *task,
->  			      struct pt_regs *regs)
->  {
-> -	struct stackframe frame;
-> +	struct unwind_state state;
->  
->  	if (regs)
-> -		unwind_init(&frame, regs->regs[29], regs->pc);
-> +		unwind_init(&state, regs->regs[29], regs->pc);
->  	else if (task == current)
-> -		unwind_init(&frame,
-> +		unwind_init(&state,
->  				(unsigned long)__builtin_frame_address(1),
->  				(unsigned long)__builtin_return_address(0));
->  	else
-> -		unwind_init(&frame, thread_saved_fp(task),
-> +		unwind_init(&state, thread_saved_fp(task),
->  				thread_saved_pc(task));
->  
-> -	unwind(task, &frame, consume_entry, cookie);
-> +	unwind(task, &state, consume_entry, cookie);
->  }
-> -- 
-> 2.25.1
-> 
+> diff --git a/include/uapi/linux/sysinfo.h b/include/uapi/linux/sysinfo.h
+> index 435d5c2..6e77e90 100644
+> --- a/include/uapi/linux/sysinfo.h
+> +++ b/include/uapi/linux/sysinfo.h
+> @@ -12,6 +12,7 @@ struct sysinfo {
+>  	__kernel_ulong_t freeram;	/* Available memory size */
+>  	__kernel_ulong_t sharedram;	/* Amount of shared memory */
+>  	__kernel_ulong_t bufferram;	/* Memory used by buffers */
+> +	__kernel_ulong_t availram;	/* Memory available for allocation */
+>  	__kernel_ulong_t totalswap;	/* Total swap space size */
+>  	__kernel_ulong_t freeswap;	/* swap space still available */
+>  	__u16 procs;		   	/* Number of current processes */
+
+Hi! Sorry, but I don't understand -- the sysinfo structure seems to
+be part of user API, no? Don't we break it up here?

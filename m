@@ -2,102 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2647486A3E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 20:00:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90BC6486A3F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 20:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243114AbiAFTAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 14:00:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34716 "EHLO
+        id S243120AbiAFTCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 14:02:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243089AbiAFTAg (ORCPT
+        with ESMTP id S232414AbiAFTCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 14:00:36 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6BBC061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 11:00:35 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id r17so6698094wrc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 11:00:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=GApfuZwSa5gLOrIFUv10Q+jwtcI8XokWaaN8Migozt0=;
-        b=dMDoD0wS6wkdT73t6n4lqSz7LXjMF7Q7BT7h93ZCspVO/J4lDUWaVkxIcFoC6OgoAi
-         LigYS4Jq37nDgH+w6B2NbBsSIW/LRqSOgz3qzzuUNNFblYlo+kRARb4jMBBU6VsLoH7M
-         Xrx0oX0t/8P4UoP8nvMb4Zk9NY0cTouVYAGe3BmCcHf2ybJ3mEjE7jYsIQSmsCGlz4b2
-         8/RMbC9xojPbfPWnXb8ILLkhXAJcFy6Z2WmlrJRIlADOrDfEbjZvYaR/DKU+x3DdU6xO
-         vmMPZiNxd82uy+v/u5C3BINmzXCV4HBEwmv5mIDEmzIajBbjxdo+2xXDkD84XKvr6f0T
-         pBRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=GApfuZwSa5gLOrIFUv10Q+jwtcI8XokWaaN8Migozt0=;
-        b=ISUHGhg1mWAWKP8s/TNaiZwiKGrdFw8w5laofBTNAaMo/FjGhGWW1iSpDywaNUW92I
-         YcN+Ly0cjTSq5fH5TfjynAdKI5UUNGTHIbydn5+nUB5G7pNDxyBO4V0ObA/SinxC4fVa
-         PdvBQfEsU/ueFixnAzGQ+x4N3SmO36o/OoE++Xu19OGFnUTAA8b+mHBjziUwxB0PvzhG
-         cpdiKXhqWFqpHlV/o+PifP08PUgvCZRCaPbvLbsRJlnND1xs4dahFKxfVtWrfz4+q7Z/
-         PMZYaXzXuCqQGenyZ/4d3XZ0Rii3PVEQ/BzzzgYzQfa044GDKrU4474sresSjGzAjGSm
-         wrKQ==
-X-Gm-Message-State: AOAM531ecJHScen9uVYCFYo+BX7tt9ZHxQMT3b4xt4xuA7/6osH6sy/a
-        nHmtkekZtpA3hC9xLvhA+eo=
-X-Google-Smtp-Source: ABdhPJzRBPgEFjde8rkHAuo7tRsgCjXw/CujtSuspjwJoOEksMbs2rdDHQQmiMDdOjSh4GHnkx1B0Q==
-X-Received: by 2002:a5d:4a8e:: with SMTP id o14mr50283333wrq.441.1641495634341;
-        Thu, 06 Jan 2022 11:00:34 -0800 (PST)
-Received: from localhost.localdomain (37.212.broadband9.iol.cz. [90.176.212.37])
-        by smtp.gmail.com with ESMTPSA id n41sm6835638wms.32.2022.01.06.11.00.33
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 06 Jan 2022 11:00:33 -0800 (PST)
-From:   Jiri Vanek <jirivanek1@gmail.com>
-To:     Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>
-Cc:     Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Vinay Simha B N <simhavcs@gmail.com>,
-        Jiri Vanek <jirivanek1@gmail.com>
-Subject: [PATCH v2] drm/bridge/tc358775: Fix for dual-link LVDS
-Date:   Thu,  6 Jan 2022 20:00:27 +0100
-Message-Id: <20220106190027.1498-1-jirivanek1@gmail.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20211110220050.2854-1-jirivanek1@gmail.com>
-References: <20211110220050.2854-1-jirivanek1@gmail.com>
+        Thu, 6 Jan 2022 14:02:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBC8C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 11:02:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9261261DC6
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 19:02:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C613FC36AE3;
+        Thu,  6 Jan 2022 19:02:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641495750;
+        bh=IqP7QXUL9LFG3ia0D8c1Aev+d0u20cfMfNFsFYRSzQI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uOYl83ayf1ArpqJd6tWq+dd4SxlCR8MknGbybO9QqyYWlZsWoL4RH/uQioNbWcsEf
+         pQ+FJGyV9s0IxBOoGAjHS29qc5t05qPTb/VbWIUPu1ph+Mhqv7BAeb9ju4PUqOyRV+
+         KUysHm9TD0ci2bscMiu+VF5mXdmGAyiai1tGQ2+njzzGs8mt2pScTz6utsX4bsbkcb
+         i2DEI5ODuDc3DWUxEBKHeQV+xoYNYd08I/bn+GDIhAWsImM0JewoW0gGcFGYtDAJ9D
+         lVb/0DNuB03fr8k9KUUH3zvGOXHMAz1xicVapMhzeJOYudv6e+CkQXO+ZjJisjl7mj
+         A10S2F0qHgFRA==
+Date:   Thu, 6 Jan 2022 12:02:25 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Samuel Zeter <samuelzeter@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH 0/2] *** Fix reformat_objdump.awk ***
+Message-ID: <Ydc8wUjX4hnHg7ZE@archlinux-ax161>
+References: <20220106023606.283953-1-samuelzeter@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220106023606.283953-1-samuelzeter@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixed wrong register shift for single/dual link LVDS output.
+On Thu, Jan 06, 2022 at 01:36:03PM +1100, Samuel Zeter wrote:
+> These are two small patches which originally dealt with
+> the problem found at:
+> 
+> https://github.com/ClangBuiltLinux/linux/issues/1364
+> 
+> The original steps to reproduce were:
+> $ make -skj"$(nproc)" LLVM=1 LLVM_IAS=1 defconfig
+> $ scripts/config -e X86_DECODER_SELFTEST
+> $ make -skj"$(nproc)" LLVM=1 LLVM_IAS=1 olddefconfig bzImage
+> 
+> Which resulted in the error:
+> arch/x86/tools/insn_decoder_test: warning: objdump says 0 bytes, but
+> insn_get_length() says 2
+> 
+> Upon inspection it turned out llvm-objdump was formatting its
+> output differently, which caused objdump_reformat.awk to incorrectly
+> output its values.
+> 
+> After fixing that bug, a second one was seen where the instruction
+> "wait" was incorrectly matched with "fwait", which again caused
+> insn_decoder_test to fail.
 
-Tested-by: Jiri Vanek <jirivanek1@gmail.com>
-Signed-off-by: Jiri Vanek <jirivanek1@gmail.com>
+Thanks a lot for sending these fixes!
 
----
-v1:
-* Initial version
+I can confirm with this series and the removal of chkobjdump.awk [1] on
+top of v5.16-rc8, the insn_decoder_test now passes with LLVM 11 through
+14.
 
-v2:
-* Tested-by tag added
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
----
- drivers/gpu/drm/bridge/tc358775.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+For the future, I recommend putting the maintainers in the "To" field,
+rather than "Cc", to ensure they actually see it. Additionally, I see
+some small nits in the commit message that the tip maintainers might
+comment on, see
 
-diff --git a/drivers/gpu/drm/bridge/tc358775.c b/drivers/gpu/drm/bridge/tc358775.c
-index 2272adcc5b4a..1d6ec1baeff2 100644
---- a/drivers/gpu/drm/bridge/tc358775.c
-+++ b/drivers/gpu/drm/bridge/tc358775.c
-@@ -241,7 +241,7 @@ static inline u32 TC358775_LVCFG_PCLKDIV(uint32_t val)
- }
- 
- #define TC358775_LVCFG_LVDLINK__MASK                         0x00000002
--#define TC358775_LVCFG_LVDLINK__SHIFT                        0
-+#define TC358775_LVCFG_LVDLINK__SHIFT                        1
- static inline u32 TC358775_LVCFG_LVDLINK(uint32_t val)
- {
- 	return ((val) << TC358775_LVCFG_LVDLINK__SHIFT) &
--- 
-2.30.2
+https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#changelog
 
+for some more info.
+
+Masami Hiramatsu originally wrote this file and has a few fixes to it
+since, adding him now for review. The original thread is available at:
+
+https://lore.kernel.org/r/20220106023606.283953-1-samuelzeter@gmail.com/
+
+[1]: https://git.kernel.org/nathan/c/2f137c324b21f1c21b8830d8896cb9957009f969
+
+Cheers,
+Nathan

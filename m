@@ -2,132 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF6C4861E0
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 10:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 417F64861ED
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 10:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237244AbiAFJNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 04:13:48 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:55138 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S237200AbiAFJNq (ORCPT
+        id S237287AbiAFJOM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jan 2022 04:14:12 -0500
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:37289 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237223AbiAFJOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 04:13:46 -0500
-X-UUID: 62544c99526148f1927aa3ecadaeb912-20220106
-X-UUID: 62544c99526148f1927aa3ecadaeb912-20220106
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1000888201; Thu, 06 Jan 2022 17:13:44 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 6 Jan 2022 17:13:44 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 6 Jan 2022 17:13:43 +0800
-Message-ID: <4d7195c3ac9bc63a5f980548f0c880484403346d.camel@mediatek.com>
-Subject: Re: [PATCH 3/3] phy: mediatek: phy-mtk-mipi-dsi: Simplify with
- dev_err_probe()
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <chunkuang.hu@kernel.org>
-CC:     <p.zabel@pengutronix.de>, <kishon@ti.com>, <vkoul@kernel.org>,
-        <matthias.bgg@gmail.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Date:   Thu, 6 Jan 2022 17:13:43 +0800
-In-Reply-To: <20220103145324.48008-3-angelogioacchino.delregno@collabora.com>
-References: <20220103145324.48008-1-angelogioacchino.delregno@collabora.com>
-         <20220103145324.48008-3-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 6 Jan 2022 04:14:06 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 08820E0016;
+        Thu,  6 Jan 2022 09:14:02 +0000 (UTC)
+Date:   Thu, 6 Jan 2022 10:14:01 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Stefan Schmidt <stefan@datenfreihafen.org>
+Cc:     Alexander Aring <alex.aring@gmail.com>,
+        Nicolas Schodet <nico@ni.fr.eu.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        linux-wpan - ML <linux-wpan@vger.kernel.org>,
+        David Girault <david.girault@qorvo.com>,
+        Romuald Despres <romuald.despres@qorvo.com>,
+        Frederic Blain <frederic.blain@qorvo.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        kernel list <linux-kernel@vger.kernel.org>
+Subject: Re: [net-next 12/18] net: mac802154: Handle scan requests
+Message-ID: <20220106101401.4ada5b80@xps13>
+In-Reply-To: <57f0e761-db5a-86f6-ab27-c0943d3e7805@datenfreihafen.org>
+References: <20211222155743.256280-1-miquel.raynal@bootlin.com>
+        <20211222155743.256280-13-miquel.raynal@bootlin.com>
+        <CAB_54W6AZ+LGTcFsQjNx7uq=+R5v_kdF0Xm5kwWQ8ONtfOrmAw@mail.gmail.com>
+        <Ycx0mwQcFsmVqWVH@ni.fr.eu.org>
+        <CAB_54W41ZEoXzoD2_wadfMTY8anv9D9e2T5wRckdXjs7jKTTCA@mail.gmail.com>
+        <CAB_54W6gHE1S9Q+-SVbrnAWPxBxnvf54XVTCmddtj8g-bZzMRA@mail.gmail.com>
+        <20220104191802.2323e44a@xps13>
+        <CAB_54W5quZz8rVrbdx+cotTRZZpJ4ouRDZkxeW6S1L775Si=cw@mail.gmail.com>
+        <20220105215551.1693eba4@xps13>
+        <CAB_54W7zDXfybMZZo8QPwRCxX8-BbkQdznwEkLEWeW+E3k2dNg@mail.gmail.com>
+        <57f0e761-db5a-86f6-ab27-c0943d3e7805@datenfreihafen.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-01-03 at 15:53 +0100, AngeloGioacchino Del Regno wrote:
-> Use the dev_err_probe() helper to simplify error handling during
-> probe.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/phy/mediatek/phy-mtk-mipi-dsi.c | 29 +++++++++------------
-> ----
->  1 file changed, 10 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
-> b/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
-> index 6f7425b0bf5b..4b77508f5241 100644
-> --- a/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
-> +++ b/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
-> @@ -148,11 +148,9 @@ static int mtk_mipi_tx_probe(struct
-> platform_device *pdev)
->  		return PTR_ERR(mipi_tx->regmap);
->  
->  	ref_clk = devm_clk_get(dev, NULL);
-> -	if (IS_ERR(ref_clk)) {
-> -		ret = PTR_ERR(ref_clk);
-> -		dev_err(dev, "Failed to get reference clock: %d\n",
-> ret);
-> -		return ret;
-> -	}
-> +	if (IS_ERR(ref_clk))
-> +		return dev_err_probe(dev, PTR_ERR(ref_clk),
-> +				     "Failed to get reference
-> clock\n");
->  
->  	ret = of_property_read_u32(dev->of_node, "drive-strength-
-> microamp",
->  				   &mipi_tx->mipitx_drive);
-> @@ -172,27 +170,20 @@ static int mtk_mipi_tx_probe(struct
-> platform_device *pdev)
->  
->  	ret = of_property_read_string(dev->of_node, "clock-output-
-> names",
->  				      &clk_init.name);
-> -	if (ret < 0) {
-> -		dev_err(dev, "Failed to read clock-output-names: %d\n",
-> ret);
-> -		return ret;
-> -	}
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "Failed to read clock-
-> output-names\n");
-Seems no need change it here. (no EPROBE_DEFER error)
+Hi Stefan,
 
-Thanks
->  
->  	clk_init.ops = mipi_tx->driver_data->mipi_tx_clk_ops;
->  
->  	mipi_tx->pll_hw.init = &clk_init;
->  	mipi_tx->pll = devm_clk_register(dev, &mipi_tx->pll_hw);
-> -	if (IS_ERR(mipi_tx->pll)) {
-> -		ret = PTR_ERR(mipi_tx->pll);
-> -		dev_err(dev, "Failed to register PLL: %d\n", ret);
-> -		return ret;
-> -	}
-> +	if (IS_ERR(mipi_tx->pll))
-> +		return dev_err_probe(dev, PTR_ERR(mipi_tx->pll),
-> "Cannot register PLL\n");
->  
->  	phy = devm_phy_create(dev, NULL, &mtk_mipi_tx_ops);
-> -	if (IS_ERR(phy)) {
-> -		ret = PTR_ERR(phy);
-> -		dev_err(dev, "Failed to create MIPI D-PHY: %d\n", ret);
-> -		return ret;
-> -	}
-> +	if (IS_ERR(phy))
-> +		return dev_err_probe(dev, PTR_ERR(phy), "Failed to
-> create MIPI D-PHY\n");
-> +
->  	phy_set_drvdata(phy, mipi_tx);
->  
->  	phy_provider = devm_of_phy_provider_register(dev,
-> of_phy_simple_xlate);
+stefan@datenfreihafen.org wrote on Thu, 6 Jan 2022 09:44:50 +0100:
 
+> Hello.
+> 
+> On 06.01.22 01:38, Alexander Aring wrote:
+> > Hi,
+> > 
+> > 
+> > On Wed, 5 Jan 2022 at 15:55, Miquel Raynal <miquel.raynal@bootlin.com> wrote:
+> > ...  
+> 
+> >> Also, just for the record,
+> >> - should I keep copying the netdev list for v2?  
+> > 
+> > yes, why not.  
+> 
+> >> - should I monitor if net-next is open before sending or do you have
+> >>    your own set of rules?
+> >>  
+> > 
+> > I need to admit, Stefan is the "Thanks, applied." hero here and he
+> > should answer this question.  
+> 
+> No need to monitor if net-next is open for these patches (just don't add a net-next patch subject prefix as this would confuse Jakub and Dave. wpan-next would be more appropriate).
+
+Sure! It might be worth updating [1] to tell people about this prefix?
+(only the userspace tools prefix is mentioned).
+
+[1] https://linux-wpan.org/contributing.html 
+
+> I am following this patchset and the review from Alex. I have not done a full in depth review myself yet, its on my list.
+
+Yeah sure, no problem.
+
+> Basically keep working with Alex and use the wpan-next prefix and I will pick up the patches to my wpan-next tree and sent a pull to net-next when we are happy with it. Does that sound good to you?
+
+Yes of course, that's ideal.
+
+Thanks,
+Miquèl

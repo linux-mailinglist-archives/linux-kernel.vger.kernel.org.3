@@ -2,97 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C927486227
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 10:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2C6486228
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 10:34:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237435AbiAFJcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 04:32:36 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:53548 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236552AbiAFJcf (ORCPT
+        id S237352AbiAFJeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 04:34:03 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:43960 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236552AbiAFJeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 04:32:35 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0912961B13;
-        Thu,  6 Jan 2022 09:32:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B921DC36AE5;
-        Thu,  6 Jan 2022 09:32:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641461554;
-        bh=ftjlVIE88difaa6YOW416g8IrMlFSVbJJ74FffwzjNg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OCsHU/ICJmjDVlFG0oUKGtRXwCPFqounhngvPBM+nR183prLmf3MsSxBjChc1IkJE
-         9h58560a9all1SuCeHO5dH73N/J8tgzF0ENNo3to3Yy7aCUJg2FCaFObJvSDq2GKzq
-         avsOHaik5aEo5uM59sRSZL/RE9NtZhz1UZd7uRFg=
-Date:   Thu, 6 Jan 2022 10:32:31 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     linux-stable <stable@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, X86 ML <x86@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jann Horn <jannh@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: test_vsyscall.c:500:22: warning: '__builtin_memcmp_eq' specified
- bound 4096 exceeds source size 0
-Message-ID: <Yda3L0givFBDZtXs@kroah.com>
-References: <CA+G9fYvUu9+68mkCT0S8L0gL28jc5MXGQqOGH6ObciK72FbD8A@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYvUu9+68mkCT0S8L0gL28jc5MXGQqOGH6ObciK72FbD8A@mail.gmail.com>
+        Thu, 6 Jan 2022 04:34:02 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 4E3AF21117;
+        Thu,  6 Jan 2022 09:34:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641461641; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0zxIfZmibHX/exQ0Rrvi3hxwdxSFLGsv3o1M5NyM+Tk=;
+        b=n5LD3yzGprslziATi+axrddjcCrvMseufaFwcmmUO595kc4qdEBQUNg+SW3faFf0Ob1tf/
+        vcGieSCvkNUXRWFt4vvirHLKfX9B5NAPtP4xLdAImCrOcQ3l9glXNFN+4268HEkHxX7tha
+        I41ZFK+I9VEt+u0+2cUKEF5MWIqSLDI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641461641;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0zxIfZmibHX/exQ0Rrvi3hxwdxSFLGsv3o1M5NyM+Tk=;
+        b=Vzodz3N+QvYbmJrobQp7Ax8IHbyzWRnBC7qh8ML7LjWlgkLJr+RaH1mEOOrJ8c4B7IsNQf
+        kUMv+BEXDilkceBg==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 23021A3B81;
+        Thu,  6 Jan 2022 09:34:01 +0000 (UTC)
+Date:   Thu, 06 Jan 2022 10:34:01 +0100
+Message-ID: <s5hr19lgqd2.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     perex@perex.cz, tiwai@suse.com, leon@kernel.org,
+        broonie@kernel.org, joe@perches.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: intel_hdmi: Check for error num after setting mask
+In-Reply-To: <20220106084110.2691207-1-jiasheng@iscas.ac.cn>
+References: <20220106084110.2691207-1-jiasheng@iscas.ac.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 02:55:53PM +0530, Naresh Kamboju wrote:
-> While building selftests the following warnings were noticed for x86_64
-> architecture on Linux stable v5.15.13 kernel.
+On Thu, 06 Jan 2022 09:41:10 +0100,
+Jiasheng Jiang wrote:
 > 
-> metadata:
->   git repo: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
->   git commit: 734eb1fd2073f503f5c6b44f1c0d453ca6986b84
->   git describe: v5.15.13
->   toolchain":  gcc-11
->   kernel-config: https://builds.tuxbuild.com/23HFo8abXIL6i4FFfSYiJlqAYMW/config
+> On Thu, Jan 06, 2022 at 04:18:01PM +0800, Takashi Iwai wrote:
+> > Well, 32bit DMA mask practically never fails on x86 (and other
+> > architectures, IIRC).  It's fine to add a sanity check, but it's
+> > better to be mentioned that it never fails.
 > 
-> x86_64-linux-gnu-gcc -m64 -o \
-> /home/tuxbuild/.cache/tuxmake/builds/current/kselftest/x86/test_vsyscall_64 \
->  -O2 -g -std=gnu99 -pthread -Wall -no-pie \
->  -DCAN_BUILD_64 test_vsyscall.c helpers.h -lrt -ldl
-> 
-> test_vsyscall.c: In function 'test_process_vm_readv':
-> test_vsyscall.c:500:22: warning: '__builtin_memcmp_eq' specified bound
-> 4096 exceeds source size 0 [-Wstringop-overread]
->   500 |                 if (!memcmp(buf, (const void
-> *)0xffffffffff600000, 4096)) {
->       |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> Build link:
-> https://builds.tuxbuild.com/23HFo8abXIL6i4FFfSYiJlqAYMW/
-> 
-> # To install tuxmake on your system globally:
-> # sudo pip3 install -U tuxmake
-> 
-> tuxmake --runtime podman --target-arch x86_64 --toolchain gcc-11 \
->  --kconfig https://builds.tuxbuild.com/23HFo8abXIL6i4FFfSYiJlqAYMW/config \
->  cpupower headers kernel kselftest kselftest-merge modules
+> Actually, I have already found many place check the 32bit DMA mask.
+> For example:
+> snd_ad1889_create() in `sound/pci/ad1889.c`, 
+> snd_vortex_create() in `sound/pci/au88x0/au88x0.c`
+> tegra_pcm_dma_allocate() in `sound/soc/tegra/tegra_pcm.c`.
+> Therefore, I think there must be some reason that 32bit may fail.
+> So, to make the system more robust, it should be better to add the
+> sanity check.
 
-Is this a new regression from 5.15.0?  Is it also present on Linus's tree?
+Yes, as mentioned, it's fine to add a sanity check, but it's rather
+for consistency of the code, not actually fixing any real issue.
+At least it's better to rephrase the commit message for avoiding
+confusion for readers.
+
 
 thanks,
 
-greg k-h
+Takashi

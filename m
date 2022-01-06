@@ -2,269 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAB72486D78
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 00:00:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76564486D7F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 00:03:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245329AbiAFW76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 17:59:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32908 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245283AbiAFW75 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 17:59:57 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C80CC061201
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 14:59:57 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id m21so15436070edc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 14:59:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wedonS74gSWJnWpiXoYzW3anrg5nrcdUbA3vzIQ0zdg=;
-        b=YqDAvXZPBulnnBvCotyMwVEWL6pXP60KznBnmr5m42MhDlzU59XaS7BaCJ+Jm6Jgr0
-         0vHrsoBhKD6A4bK8ZwRX5g9nH9BgRpMVOoma7/M8qyJ1UT2Af7lRhjQfSLOgZJlKhJD3
-         o7iWCNOa7dUy9yaD5IBTHFYWQQk1d5xgGZofk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wedonS74gSWJnWpiXoYzW3anrg5nrcdUbA3vzIQ0zdg=;
-        b=vNopL8RpHiyRdeIPqqMsPP2eeuITPWQ9DHdHh2+IfD6BzCFr47AKI6daarxkguRBKr
-         Ssu7B1xus+bsf0vx5BUdk40D0fScAqIyEy7UUqExFnDaX7ga8Ouh4v5U6CAr2v6Sfxwy
-         qcN1dJCh69UMBVKWp7tnqKGND2URZnqfjFL6sLMlTbuxJZxvccjeE+Ut5YBrvI64UcBj
-         c8ltKbQRCWQWmuG9Z6U5TK612h9RetiID+NYdgWkWy1DqsXfuqMaPkjas9SgovLU0CJ2
-         gH91UTT/NuOCCfYG6v7MZQ3TpQ6n+TMmbacJIJwcuoyjJ7mfCdcyJmF6FZlpqoOEYPQe
-         XnLg==
-X-Gm-Message-State: AOAM533vEZWBvhYwjbvbYOmVYWy3v1GR1WXWxo42H8snsURHFSwJU/uv
-        hRM90S63PrZBr4Ye2G5UecDNP/FVecE11Swb
-X-Google-Smtp-Source: ABdhPJx0GaCUpGaNUth/Bzt6TrEbXUwEBAeU+1bJCYQRHuD1o1522ZPSiSfrvObJKf1WgPUKJpTV8w==
-X-Received: by 2002:a17:907:6ea1:: with SMTP id sh33mr46828660ejc.131.1641509995559;
-        Thu, 06 Jan 2022 14:59:55 -0800 (PST)
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
-        by smtp.gmail.com with ESMTPSA id qp24sm854437ejb.84.2022.01.06.14.59.53
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jan 2022 14:59:53 -0800 (PST)
-Received: by mail-wm1-f43.google.com with SMTP id az31-20020a05600c601f00b003475c3c3d03so541798wmb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 14:59:52 -0800 (PST)
-X-Received: by 2002:a7b:c305:: with SMTP id k5mr8692804wmj.144.1641509992696;
- Thu, 06 Jan 2022 14:59:52 -0800 (PST)
+        id S245347AbiAFXDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 18:03:43 -0500
+Received: from mga04.intel.com ([192.55.52.120]:14524 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245283AbiAFXDg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 18:03:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641510216; x=1673046216;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ah2QyRooiK1gL7AYen1FZ3/+RGTMz2Tq/LATd+ALnUk=;
+  b=UeIT8T4Vbqa2IEJ1JZp6ftV9AoBCvednkJm7S5E/85V/pi2iMrc00Q7n
+   zVAbiWlGqv602hVQYfYpAbTUfRoDCUDn8IbPWmlFYY5FwQ7ZzQXVSQe3m
+   khQw1SeT5nCiBXUiw6wQmcmUqfE/ZfWH+Z7luVlBUfgTcpt3UWuXNm4YZ
+   /Ccm3yB/Cmkvouc3DK+n5Y6EA0BoM0CF2tXH2QS3FdsR6jBxJGDmoJoZf
+   tQrpzQ19MpWfC6fARWxleV4jnZxunD1hoH/GBtUPqkrUrtHzdZ+3bPIbU
+   PEKwj3sJjgS4XpYmHennMRkOKNChA7yNDGzjLlPFU5lX6J8hnxq9U+hM8
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="241573416"
+X-IronPort-AV: E=Sophos;i="5.88,268,1635231600"; 
+   d="scan'208";a="241573416"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 15:03:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,268,1635231600"; 
+   d="scan'208";a="513571266"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 06 Jan 2022 15:03:33 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n5bnA-000I4a-TD; Thu, 06 Jan 2022 23:03:32 +0000
+Date:   Fri, 7 Jan 2022 07:03:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mark:kvm/entry-rework 1/5] include/linux/kvm_host.h:434:37: error:
+ 'CALLER_ADDR0' undeclared
+Message-ID: <202201070743.bpqNr207-lkp@intel.com>
 MIME-Version: 1.0
-References: <000000000000e8f8f505d0e479a5@google.com> <20211211015620.1793-1-hdanton@sina.com>
- <YbQUSlq76Iv5L4cC@sol.localdomain> <YdW3WfHURBXRmn/6@sol.localdomain>
- <CAHk-=wjqh_R9w4-=wfegut2C0Bg=sJaPrayk39JRCkZc=O+gsw@mail.gmail.com>
- <CAHk-=wjddvNbZBuvh9m_2VYFC1W7HvbP33mAzkPGOCHuVi5fJg@mail.gmail.com>
- <CAHk-=wjn5xkLWaF2_4pMVEkZrTA=LiOH=_pQK0g-_BMSE-8Jxg@mail.gmail.com> <YddnuSh15BAGdjAD@slm.duckdns.org>
-In-Reply-To: <YddnuSh15BAGdjAD@slm.duckdns.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 6 Jan 2022 14:59:36 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whhcoeTOZB_de-Nh28Fy4iNTu2DXzKXEPOubzL36+ME=A@mail.gmail.com>
-Message-ID: <CAHk-=whhcoeTOZB_de-Nh28Fy4iNTu2DXzKXEPOubzL36+ME=A@mail.gmail.com>
-Subject: Re: psi_trigger_poll() is completely broken
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Eric Biggers <ebiggers@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Hillf Danton <hdanton@sina.com>,
-        syzbot <syzbot+cdb5dd11c97cc532efad@syzkaller.appspotmail.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Linux-MM <linux-mm@kvack.org>
-Content-Type: multipart/mixed; boundary="00000000000002b22d05d4f1d4eb"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000002b22d05d4f1d4eb
-Content-Type: text/plain; charset="UTF-8"
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git kvm/entry-rework
+head:   8d884276f428cde5dbdcf197ba94ed5b2461c4c1
+commit: 0515c622963b34a5fc0aeee6dbd18f47b7e40563 [1/5] kvm: add exit_to_guest_mode() and enter_from_guest_mode()
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220107/202201070743.bpqNr207-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=0515c622963b34a5fc0aeee6dbd18f47b7e40563
+        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
+        git fetch --no-tags mark kvm/entry-rework
+        git checkout 0515c622963b34a5fc0aeee6dbd18f47b7e40563
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips prepare
 
-On Thu, Jan 6, 2022 at 2:05 PM Tejun Heo <tj@kernel.org> wrote:
->
-> On Wed, Jan 05, 2022 at 11:13:30AM -0800, Linus Torvalds wrote:
-> >
-> > What are the users? Can we make the rule for -EBUSY simply be that you
-> > can _install_ a trigger, but you can't replace an existing one (except
-> > with NULL, when you close it).
->
-> I don't have enough context here and Johannes seems offline today. Let's
-> wait for him to chime in.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Context here:
+All errors (new ones prefixed by >>):
 
-    https://lore.kernel.org/all/YdW3WfHURBXRmn%2F6@sol.localdomain/
+   In file included from arch/mips/kernel/asm-offsets.c:24:
+   include/linux/kvm_host.h: In function 'exit_to_guest_mode':
+>> include/linux/kvm_host.h:434:37: error: 'CALLER_ADDR0' undeclared (first use in this function)
+     434 |         lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+         |                                     ^~~~~~~~~~~~
+   include/linux/kvm_host.h:434:37: note: each undeclared identifier is reported only once for each function it appears in
+   include/linux/kvm_host.h: In function 'enter_from_guest_mode':
+   include/linux/kvm_host.h:502:30: error: 'CALLER_ADDR0' undeclared (first use in this function)
+     502 |         lockdep_hardirqs_off(CALLER_ADDR0);
+         |                              ^~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c: At top level:
+   arch/mips/kernel/asm-offsets.c:26:6: warning: no previous prototype for 'output_ptreg_defines' [-Wmissing-prototypes]
+      26 | void output_ptreg_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:78:6: warning: no previous prototype for 'output_task_defines' [-Wmissing-prototypes]
+      78 | void output_task_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:92:6: warning: no previous prototype for 'output_thread_info_defines' [-Wmissing-prototypes]
+      92 | void output_thread_info_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:108:6: warning: no previous prototype for 'output_thread_defines' [-Wmissing-prototypes]
+     108 | void output_thread_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:136:6: warning: no previous prototype for 'output_thread_fpu_defines' [-Wmissing-prototypes]
+     136 | void output_thread_fpu_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:179:6: warning: no previous prototype for 'output_mm_defines' [-Wmissing-prototypes]
+     179 | void output_mm_defines(void)
+         |      ^~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:218:6: warning: no previous prototype for 'output_sc_defines' [-Wmissing-prototypes]
+     218 | void output_sc_defines(void)
+         |      ^~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:253:6: warning: no previous prototype for 'output_signal_defined' [-Wmissing-prototypes]
+     253 | void output_signal_defined(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:320:6: warning: no previous prototype for 'output_pbe_defines' [-Wmissing-prototypes]
+     320 | void output_pbe_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:332:6: warning: no previous prototype for 'output_pm_defines' [-Wmissing-prototypes]
+     332 | void output_pm_defines(void)
+         |      ^~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:346:6: warning: no previous prototype for 'output_kvm_defines' [-Wmissing-prototypes]
+     346 | void output_kvm_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:390:6: warning: no previous prototype for 'output_cps_defines' [-Wmissing-prototypes]
+     390 | void output_cps_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~
+   make[2]: *** [scripts/Makefile.build:121: arch/mips/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1197: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-> IIRC, the rationale for the shared trigger at the time was around the
-> complexities of preventing it from devolving into O(N) trigger checks on
-> every pressure update. If the overriding behavior is something that can be
-> changed, I'd prefer going for per-opener triggers even if that involves
-> adding complexities (maybe a rbtree w/ prev/next links for faster sweeps?).
 
-So here's a COMPLETELY UNTESTED patch to try to fix the lifetime and locking.
+vim +/CALLER_ADDR0 +434 include/linux/kvm_host.h
 
-The locking was completely broken, in that psi_trigger_replace()
-expected that the caller would hold some exclusive lock so that it
-would release the correct previous trigger. The cgroup code doesn't
-seem to have any such exclusion.
+   413	
+   414	/**
+   415	 * exit_to_guest_mode - Fixup state when exiting to guest mode
+   416	 *
+   417	 * This is analagous to exit_to_user_mode(), and ensures we perform the
+   418	 * following in order:
+   419	 *
+   420	 * 1) Trace interrupts on state
+   421	 * 2) Invoke context tracking if enabled to adjust RCU state
+   422	 * 3) Tell lockdep that interrupts are enabled
+   423	 *
+   424	 * Invoked from architecture specific code as the last step before entering a
+   425	 * guest. Must be invoked with interrupts disabled and the caller must be
+   426	 * non-instrumentable.
+   427	 *
+   428	 * This must be called after guest_timing_enter_irqoff().
+   429	 */
+   430	static __always_inline void exit_to_guest_mode(void)
+   431	{
+   432		instrumentation_begin();
+   433		trace_hardirqs_on_prepare();
+ > 434		lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+   435		instrumentation_end();
+   436	
+   437		guest_context_enter_irqoff();
+   438		lockdep_hardirqs_on(CALLER_ADDR0);
+   439	}
+   440	
 
-This (UNTESTED!) patch fixes that breakage by just using a cmpxchg loop.
-
-And the lifetime was completely broken (and that's Eric's email)
-because psi_trigger_replace() would drop the refcount to the old
-trigger - assuming it got the right one - even though the old trigger
-could still have active waiters on the waitqueue due to poll() or
-select().
-
-This (UNTESTED!) patch fixes _that_ breakage by making
-psi_trigger_replace() instead just put the previous trigger on the
-"stale_trigger" linked list, and never release it at all.
-
-It now gets released by "psi_trigger_release()" instead, which walks
-the list at file release time. Doing "psi_trigger_replace(.., NULL)"
-is not valid any more.
-
-And because the reference cannot go away, we now can throw away all
-the incorrect temporary kref_get/put games from psi_trigger_poll(),
-which didn't actually fix the race at all, only limited it to the poll
-waitqueue.
-
-That also means we can remove the "synchronize_rcu()" from
-psi_trigger_destroy(), since that was trying to hide all the problems
-with the "take rcu lock and then do kref_get()" thing not having
-locking. The locking still doesn't exist, but since we don't release
-the old one when replacing it, the issue is moot.
-
-NOTE NOTE NOTE! Not only is this patch entirely untested, there are
-optimizations you could do if there was some sane synchronization
-between psi_trigger_poll() and psi_trigger_replace(). I put comments
-about it in the code, but right now the code just assumes that
-replacing a trigger is fairly rare (and since it requires write
-permissions, it's not something random users can do).
-
-I'm not proud of this patch, but I think it might fix the fundamental
-bugs in the code for now.
-
-It's not lovely, it has room for improvement, and I wish we didn't
-need this kind of thing, but it looks superficially sane as a fix to
-me.
-
-Comments?
-
-And once again: this is UNTESTED. I've compiled-tested it, it looks
-kind of sane to me, but honestly, I don't know the code very well.
-
-Also, I'm not super-happy with how that 'psi_disabled' static branch
-works.  If somebody switches it off after it has been on, that will
-also disable the freeing code, so now you'll be leaking memory.
-
-I couldn't find it in myself to care.
-
-Eric - you have the test-case, and the eagle-eyes that found this
-problem in the first place. As such, your opinion and comments count
-more than most...
-
-               Linus
-
---00000000000002b22d05d4f1d4eb
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_ky3kj4wz0>
-X-Attachment-Id: f_ky3kj4wz0
-
-IGluY2x1ZGUvbGludXgvcHNpLmggICAgICAgfCAgMSArCiBpbmNsdWRlL2xpbnV4L3BzaV90eXBl
-cy5oIHwgIDMgKysKIGtlcm5lbC9jZ3JvdXAvY2dyb3VwLmMgICAgfCAgMiArLQoga2VybmVsL3Nj
-aGVkL3BzaS5jICAgICAgICB8IDcxICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0t
-LS0tLS0tLS0tLS0tCiA0IGZpbGVzIGNoYW5nZWQsIDU0IGluc2VydGlvbnMoKyksIDIzIGRlbGV0
-aW9ucygtKQoKZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGludXgvcHNpLmggYi9pbmNsdWRlL2xpbnV4
-L3BzaS5oCmluZGV4IDY1ZWIxNDc2YWM3MC4uOWVjOTQ2OGQ2MDY4IDEwMDY0NAotLS0gYS9pbmNs
-dWRlL2xpbnV4L3BzaS5oCisrKyBiL2luY2x1ZGUvbGludXgvcHNpLmgKQEAgLTMzLDYgKzMzLDcg
-QEAgdm9pZCBjZ3JvdXBfbW92ZV90YXNrKHN0cnVjdCB0YXNrX3N0cnVjdCAqcCwgc3RydWN0IGNz
-c19zZXQgKnRvKTsKIHN0cnVjdCBwc2lfdHJpZ2dlciAqcHNpX3RyaWdnZXJfY3JlYXRlKHN0cnVj
-dCBwc2lfZ3JvdXAgKmdyb3VwLAogCQkJY2hhciAqYnVmLCBzaXplX3QgbmJ5dGVzLCBlbnVtIHBz
-aV9yZXMgcmVzKTsKIHZvaWQgcHNpX3RyaWdnZXJfcmVwbGFjZSh2b2lkICoqdHJpZ2dlcl9wdHIs
-IHN0cnVjdCBwc2lfdHJpZ2dlciAqdCk7Cit2b2lkIHBzaV90cmlnZ2VyX3JlbGVhc2Uodm9pZCAq
-KnRyaWdnZXJfcHRyKTsKIAogX19wb2xsX3QgcHNpX3RyaWdnZXJfcG9sbCh2b2lkICoqdHJpZ2dl
-cl9wdHIsIHN0cnVjdCBmaWxlICpmaWxlLAogCQkJcG9sbF90YWJsZSAqd2FpdCk7CmRpZmYgLS1n
-aXQgYS9pbmNsdWRlL2xpbnV4L3BzaV90eXBlcy5oIGIvaW5jbHVkZS9saW51eC9wc2lfdHlwZXMu
-aAppbmRleCAwYTIzMzAwZDQ5YWYuLmVhYjc5ZTY4YmY1NiAxMDA2NDQKLS0tIGEvaW5jbHVkZS9s
-aW51eC9wc2lfdHlwZXMuaAorKysgYi9pbmNsdWRlL2xpbnV4L3BzaV90eXBlcy5oCkBAIC0xMzIs
-NiArMTMyLDkgQEAgc3RydWN0IHBzaV90cmlnZ2VyIHsKIAogCS8qIFJlZmNvdW50aW5nIHRvIHBy
-ZXZlbnQgcHJlbWF0dXJlIGRlc3RydWN0aW9uICovCiAJc3RydWN0IGtyZWYgcmVmY291bnQ7CisK
-KwkvKiBQcmV2aW91cyB0cmlnZ2VyIHRoYXQgdGhpcyBvbmUgcmVwbGFjZWQgKi8KKwlzdHJ1Y3Qg
-cHNpX3RyaWdnZXIgKnN0YWxlX3RyaWdnZXI7CiB9OwogCiBzdHJ1Y3QgcHNpX2dyb3VwIHsKZGlm
-ZiAtLWdpdCBhL2tlcm5lbC9jZ3JvdXAvY2dyb3VwLmMgYi9rZXJuZWwvY2dyb3VwL2Nncm91cC5j
-CmluZGV4IDkxOTE5NGRlMzljOC4uODAxZDBhZWMwNDQzIDEwMDY0NAotLS0gYS9rZXJuZWwvY2dy
-b3VwL2Nncm91cC5jCisrKyBiL2tlcm5lbC9jZ3JvdXAvY2dyb3VwLmMKQEAgLTM2ODQsNyArMzY4
-NCw3IEBAIHN0YXRpYyBfX3BvbGxfdCBjZ3JvdXBfcHJlc3N1cmVfcG9sbChzdHJ1Y3Qga2VybmZz
-X29wZW5fZmlsZSAqb2YsCiAKIHN0YXRpYyB2b2lkIGNncm91cF9wcmVzc3VyZV9yZWxlYXNlKHN0
-cnVjdCBrZXJuZnNfb3Blbl9maWxlICpvZikKIHsKLQlwc2lfdHJpZ2dlcl9yZXBsYWNlKCZvZi0+
-cHJpdiwgTlVMTCk7CisJcHNpX3RyaWdnZXJfcmVsZWFzZSgmb2YtPnByaXYpOwogfQogCiBib29s
-IGNncm91cF9wc2lfZW5hYmxlZCh2b2lkKQpkaWZmIC0tZ2l0IGEva2VybmVsL3NjaGVkL3BzaS5j
-IGIva2VybmVsL3NjaGVkL3BzaS5jCmluZGV4IDE2NTJmMmJiNTRiNy4uMTA0MzBmNzVmMjFhIDEw
-MDY0NAotLS0gYS9rZXJuZWwvc2NoZWQvcHNpLmMKKysrIGIva2VybmVsL3NjaGVkL3BzaS5jCkBA
-IC0xMTUyLDYgKzExNTIsNyBAQCBzdHJ1Y3QgcHNpX3RyaWdnZXIgKnBzaV90cmlnZ2VyX2NyZWF0
-ZShzdHJ1Y3QgcHNpX2dyb3VwICpncm91cCwKIAl0LT5sYXN0X2V2ZW50X3RpbWUgPSAwOwogCWlu
-aXRfd2FpdHF1ZXVlX2hlYWQoJnQtPmV2ZW50X3dhaXQpOwogCWtyZWZfaW5pdCgmdC0+cmVmY291
-bnQpOworCXQtPnN0YWxlX3RyaWdnZXIgPSBOVUxMOwogCiAJbXV0ZXhfbG9jaygmZ3JvdXAtPnRy
-aWdnZXJfbG9jayk7CiAKQEAgLTEyMjMsMTIgKzEyMjQsNiBAQCBzdGF0aWMgdm9pZCBwc2lfdHJp
-Z2dlcl9kZXN0cm95KHN0cnVjdCBrcmVmICpyZWYpCiAKIAltdXRleF91bmxvY2soJmdyb3VwLT50
-cmlnZ2VyX2xvY2spOwogCi0JLyoKLQkgKiBXYWl0IGZvciBib3RoICp0cmlnZ2VyX3B0ciBmcm9t
-IHBzaV90cmlnZ2VyX3JlcGxhY2UgYW5kCi0JICogcG9sbF90YXNrIFJDVXMgdG8gY29tcGxldGUg
-dGhlaXIgcmVhZC1zaWRlIGNyaXRpY2FsIHNlY3Rpb25zCi0JICogYmVmb3JlIGRlc3Ryb3lpbmcg
-dGhlIHRyaWdnZXIgYW5kIG9wdGlvbmFsbHkgdGhlIHBvbGxfdGFzawotCSAqLwotCXN5bmNocm9u
-aXplX3JjdSgpOwogCS8qCiAJICogU3RvcCBrdGhyZWFkICdwc2ltb24nIGFmdGVyIHJlbGVhc2lu
-ZyB0cmlnZ2VyX2xvY2sgdG8gcHJldmVudCBhCiAJICogZGVhZGxvY2sgd2hpbGUgd2FpdGluZyBm
-b3IgcHNpX3BvbGxfd29yayB0byBhY3F1aXJlIHRyaWdnZXJfbG9jawpAQCAtMTI0MywxNiArMTIz
-OCw0OCBAQCBzdGF0aWMgdm9pZCBwc2lfdHJpZ2dlcl9kZXN0cm95KHN0cnVjdCBrcmVmICpyZWYp
-CiAJa2ZyZWUodCk7CiB9CiAKKy8qCisgKiBSZXBsYWNpbmcgYSB0cmlnZ2VyIG11c3Qgbm90IHRo
-cm93IGF3YXkgdGhlIG9sZCBvbmUsIHNpbmNlIGl0CisgKiBjYW4gc3RpbGwgaGF2ZSBwZW5kaW5n
-IHdhaXRlcnMuCisgKgorICogUG9zc2libGUgb3B0aW1pemF0aW9uOiBhZnRlciBzdWNjZXNzZnVs
-bHkgaW5zdGFsbGluZyBhIG5ldworICogdHJpZ2dlciwgd2UgY291bGQgcmVsZWFzZSB0aGUgb2xk
-IG9uZSBmcm9tIHRoZSBzdGFsZSBsaXN0CisgKiBlYXJseS4gTm90IGRvbmUgaGVyZSB5ZXQgLSBu
-ZWVkcyBsb2NraW5nIHdpdGggcHNpX3RyaWdnZXJfcG9sbC4KKyAqLwogdm9pZCBwc2lfdHJpZ2dl
-cl9yZXBsYWNlKHZvaWQgKip0cmlnZ2VyX3B0ciwgc3RydWN0IHBzaV90cmlnZ2VyICpuZXcpCiB7
-Ci0Jc3RydWN0IHBzaV90cmlnZ2VyICpvbGQgPSAqdHJpZ2dlcl9wdHI7CisJaWYgKHN0YXRpY19i
-cmFuY2hfbGlrZWx5KCZwc2lfZGlzYWJsZWQpKQorCQlyZXR1cm47CisKKwlmb3IgKDs7KSB7CisJ
-CXN0cnVjdCBwc2lfdHJpZ2dlciAqb2xkID0gKnRyaWdnZXJfcHRyOworCisJCW5ldy0+c3RhbGVf
-dHJpZ2dlciA9IG9sZDsKKwkJaWYgKHRyeV9jbXB4Y2hnKHRyaWdnZXJfcHRyLCBvbGQsIG5ldykp
-CisJCQlicmVhazsKKwl9CisKKwkvKgorCSAqIE5vdyB0aGF0IHRoZSBuZXcgb25lIGhhcyBiZWVu
-IGluc3RhbGxlZCwgd2UgY291bGQKKwkgKiBjaGVjayBpZiB0aGUgc3RhbGUgb25lIGhhcyBhbiBl
-bXB0eSB3YWl0LXF1ZXVlCisJICogYW5kIHJlbGVhc2UgaXQgZWFybHkuLi4gQnV0IHdlJ2QgbmVl
-ZCBzb21lIGxvY2tpbmcKKwkgKiB3aXRoIGVudyBwb2xsIHVzZXJzIHRvIGJlIHN1cmUuCisJICov
-Cit9CisKKy8qIE5vIGxvY2tpbmcgbmVlZGVkIGZvciBmaW5hbCByZWxlYXNlICovCit2b2lkIHBz
-aV90cmlnZ2VyX3JlbGVhc2Uodm9pZCAqKnRyaWdnZXJfcHRyKQoreworCXN0cnVjdCBwc2lfdHJp
-Z2dlciAqdHJpZ2dlcjsKIAogCWlmIChzdGF0aWNfYnJhbmNoX2xpa2VseSgmcHNpX2Rpc2FibGVk
-KSkKIAkJcmV0dXJuOwogCi0JcmN1X2Fzc2lnbl9wb2ludGVyKCp0cmlnZ2VyX3B0ciwgbmV3KTsK
-LQlpZiAob2xkKQotCQlrcmVmX3B1dCgmb2xkLT5yZWZjb3VudCwgcHNpX3RyaWdnZXJfZGVzdHJv
-eSk7CisJd2hpbGUgKHRyaWdnZXIpIHsKKwkJc3RydWN0IHBzaV90cmlnZ2VyICpuZXh0ID0gdHJp
-Z2dlci0+c3RhbGVfdHJpZ2dlcjsKKwkJa3JlZl9wdXQoJnRyaWdnZXItPnJlZmNvdW50LCBwc2lf
-dHJpZ2dlcl9kZXN0cm95KTsKKwkJdHJpZ2dlciA9IG5leHQ7CisJfQogfQogCiBfX3BvbGxfdCBw
-c2lfdHJpZ2dlcl9wb2xsKHZvaWQgKip0cmlnZ2VyX3B0ciwKQEAgLTEyNjQsMjQgKzEyOTEsMjQg
-QEAgX19wb2xsX3QgcHNpX3RyaWdnZXJfcG9sbCh2b2lkICoqdHJpZ2dlcl9wdHIsCiAJaWYgKHN0
-YXRpY19icmFuY2hfbGlrZWx5KCZwc2lfZGlzYWJsZWQpKQogCQlyZXR1cm4gREVGQVVMVF9QT0xM
-TUFTSyB8IEVQT0xMRVJSIHwgRVBPTExQUkk7CiAKLQlyY3VfcmVhZF9sb2NrKCk7Ci0KLQl0ID0g
-cmN1X2RlcmVmZXJlbmNlKCoodm9pZCBfX3JjdSBfX2ZvcmNlICoqKXRyaWdnZXJfcHRyKTsKLQlp
-ZiAoIXQpIHsKLQkJcmN1X3JlYWRfdW5sb2NrKCk7CisJLyoKKwkgKiBTZWUgcHNpX3RyaWdnZXJf
-cmVwbGFjZSgpOiBmaW5kaW5nIGEgdHJpZ2dlciBtZWFucworCSAqIHRoYXQgaXQgaXMgZ3VhcmFu
-dGVlZCB0byBoYXZlIGFuIGVsZXZhdGVkIHJlZmNvdW50CisJICogZm9yIHRoZSBsaWZldGltZSBv
-ZiB0aGlzIGZpbGUgZGVzY3JpcHRvci4KKwkgKgorCSAqIElmIHdlIGhhZCBsb2NraW5nLCB3ZSBj
-b3VsZCByZWxlYXNlIGl0IGVhcmx5LiBBcyBpdAorCSAqIGlzLCB3ZSdsbCBvbmx5IHJlbGVhc2Ug
-aXQgd2l0aCBwc2lfdHJpZ2dlcl9yZWxlYXNlKCkKKwkgKiBhdCB0aGUgdmVyeSBlbmQuCisJICov
-CisJdCA9IFJFQURfT05DRSgqdHJpZ2dlcl9wdHIpOworCWlmICghdCkKIAkJcmV0dXJuIERFRkFV
-TFRfUE9MTE1BU0sgfCBFUE9MTEVSUiB8IEVQT0xMUFJJOwotCX0KLQlrcmVmX2dldCgmdC0+cmVm
-Y291bnQpOwotCi0JcmN1X3JlYWRfdW5sb2NrKCk7CiAKIAlwb2xsX3dhaXQoZmlsZSwgJnQtPmV2
-ZW50X3dhaXQsIHdhaXQpOwogCiAJaWYgKGNtcHhjaGcoJnQtPmV2ZW50LCAxLCAwKSA9PSAxKQog
-CQlyZXQgfD0gRVBPTExQUkk7CiAKLQlrcmVmX3B1dCgmdC0+cmVmY291bnQsIHBzaV90cmlnZ2Vy
-X2Rlc3Ryb3kpOwotCiAJcmV0dXJuIHJldDsKIH0KIApAQCAtMTM0Nyw3ICsxMzc0LDcgQEAgc3Rh
-dGljIGludCBwc2lfZm9wX3JlbGVhc2Uoc3RydWN0IGlub2RlICppbm9kZSwgc3RydWN0IGZpbGUg
-KmZpbGUpCiB7CiAJc3RydWN0IHNlcV9maWxlICpzZXEgPSBmaWxlLT5wcml2YXRlX2RhdGE7CiAK
-LQlwc2lfdHJpZ2dlcl9yZXBsYWNlKCZzZXEtPnByaXZhdGUsIE5VTEwpOworCXBzaV90cmlnZ2Vy
-X3JlbGVhc2UoJnNlcS0+cHJpdmF0ZSk7CiAJcmV0dXJuIHNpbmdsZV9yZWxlYXNlKGlub2RlLCBm
-aWxlKTsKIH0KIAo=
---00000000000002b22d05d4f1d4eb--
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

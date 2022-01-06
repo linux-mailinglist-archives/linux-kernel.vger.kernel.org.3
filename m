@@ -2,93 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06DE14867B8
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:31:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6EE4867B5
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:31:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241130AbiAFQbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 11:31:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241273AbiAFQbl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 11:31:41 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CF4C061245;
-        Thu,  6 Jan 2022 08:31:40 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id d1so8971582ybh.6;
-        Thu, 06 Jan 2022 08:31:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ZM6UOM3FnObRgkqEaRi7ZwsD77LyLEAv2E7+Qwz8Kpo=;
-        b=VFCxEpktrpxVRGftdbTMwrw0K0F4iRBgf/FyutcTsvjBshi4XyaAR9z8aQ1XSsuPMW
-         XZwBWhC7xGFrRA7qJ7ZCdRCnCl3IG07J41NrYQOdtNeZqyCkfb5gxVv2gzovjf1S25Cj
-         nJ29mE0DJcinUaYPSRFG5CMLPZ07BcCe7mxdeI68C44G5pvX4NxPtvOQ8OJOdUKqp5MW
-         C5sEj1X1RkO53v91PxhkmXXMFrJzFHg/ztn4QrrH3hd7EKUzxrmaIm7JXC15fZEf4G8u
-         1vEdnf77nA9yfZBXMbnpXAZTi/STZdYof23Fsi08VjH8kIwtknhGklWB+Jhh+1ZfaWgr
-         yZlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ZM6UOM3FnObRgkqEaRi7ZwsD77LyLEAv2E7+Qwz8Kpo=;
-        b=HAdMAA8PwLOscZQ1cBHKBbmtEetjaQkccNhmX3OmmySSveXYpCVn55Qmea+JvOHcyL
-         i9zwFgiooAKkZfJDkwLeenoanmhziH/BM07k/fC7JaLnwWibeUeJMEn7J6i5ZdZmmOwC
-         v7/feSSDHLTXmFqipKdgrrg6wiNr5Askimj6jN+KoR9oB7+vj/yL3DC5gHnvEHn6LZRO
-         txf8LpW99zF22cTMUPSL9UoK4nYKQ8Pb+luPox5ssuGH34ScOV5ZJ7tvuAfepDdo+JwI
-         I6NPyiDTyIls8FpNdi69pf+3SWmfnGe65mWHYeTnPw1mXTp3ndC1BDZqFWSmF91qFB9w
-         EcpA==
-X-Gm-Message-State: AOAM5307/5xI4K8ylF/TDg6t99mx9yasnwJRzmXVJB/rgVw077Mq5cJk
-        lFX/cYYM6fJ1X361g/vSpuzm8qkHWwidlRETCTM=
-X-Google-Smtp-Source: ABdhPJzNdTP4XFd9P9NPS3ZzTPTsau2wGRp5cUn725XM9mHDW1ZcoJ4wEL3J1x4enMFKNDk4Az+hl/frDFPXPcgZERY=
-X-Received: by 2002:a25:d708:: with SMTP id o8mr65492245ybg.582.1641486699930;
- Thu, 06 Jan 2022 08:31:39 -0800 (PST)
+        id S241261AbiAFQbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 11:31:34 -0500
+Received: from foss.arm.com ([217.140.110.172]:56360 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241130AbiAFQbd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 11:31:33 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4C51D1042;
+        Thu,  6 Jan 2022 08:31:33 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.10.56])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 583883F5A1;
+        Thu,  6 Jan 2022 08:31:31 -0800 (PST)
+Date:   Thu, 6 Jan 2022 16:31:28 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     madvenka@linux.microsoft.com
+Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
+        linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 04/10] arm64: Split unwind_init()
+Message-ID: <YdcZYGI42h7zybqo@FVFF77S0Q05N>
+References: <0d0eb36f348fb5a6af6eb592c0525f6e94007328>
+ <20220103165212.9303-1-madvenka@linux.microsoft.com>
+ <20220103165212.9303-5-madvenka@linux.microsoft.com>
 MIME-Version: 1.0
-References: <a16c31f3caf448dda5d9315e056585b6fafc22c5.1623302442.git.christophe.leroy@csgroup.eu>
- <6c7a6762-6bec-842b-70b4-4a53297687d1@gmx.com>
-In-Reply-To: <6c7a6762-6bec-842b-70b4-4a53297687d1@gmx.com>
-From:   Neal Gompa <ngompa13@gmail.com>
-Date:   Thu, 6 Jan 2022 11:31:04 -0500
-Message-ID: <CAEg-Je9UJDJ=hvLLqQDsHijWnxh1Z1CwaLKCFm+-bLTfCFingg@mail.gmail.com>
-Subject: Re: [PATCH] fs: btrfs: Disable BTRFS on platforms having 256K pages
-To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
-        linux-hexagon@vger.kernel.org, Hector Martin <marcan@marcan.st>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220103165212.9303-5-madvenka@linux.microsoft.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 5, 2022 at 7:05 AM Qu Wenruo <quwenruo.btrfs@gmx.com> wrote:
->
-> Hi Christophe,
->
-> I'm recently enhancing the subpage support for btrfs, and my current
-> branch should solve the problem for btrfs to support larger page sizes.
->
-> But unfortunately my current test environment can only provide page size
-> with 64K or 4K, no 16K or 128K/256K support.
->
-> Mind to test my new branch on 128K page size systems?
-> (256K page size support is still lacking though, which will be addressed
-> in the future)
->
-> https://github.com/adam900710/linux/tree/metadata_subpage_switch
->
+On Mon, Jan 03, 2022 at 10:52:06AM -0600, madvenka@linux.microsoft.com wrote:
+> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+> 
+> unwind_init() is currently a single function that initializes all of the
+> unwind state. Split it into the following functions and call them
+> appropriately:
+> 
+> 	- unwind_init_regs() - initialize from regs passed by caller.
+> 
+> 	- unwind_init_current() - initialize for the current task from the
+> 	  caller of arch_stack_walk().
+> 
+> 	- unwind_init_from_task() - initialize from the saved state of a
+> 	  task other than the current task. In this case, the other
+> 	  task must not be running.
+> 
+> 	- unwind_init_common() - initialize fields that are common across
+> 	  the above 3 cases.
+> 
+> This is done so that specialized initialization can be added to each case
+> in the future.
+> 
+> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
+> ---
+>  arch/arm64/kernel/stacktrace.c | 50 +++++++++++++++++++++++++++-------
+>  1 file changed, 40 insertions(+), 10 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+> index a1a7ff93b84f..bd797e3f7789 100644
+> --- a/arch/arm64/kernel/stacktrace.c
+> +++ b/arch/arm64/kernel/stacktrace.c
+> @@ -33,11 +33,8 @@
+>   */
+>  
+>  
+> -static void unwind_init(struct unwind_state *state, unsigned long fp,
+> -			unsigned long pc)
+> +static void unwind_init_common(struct unwind_state *state)
+>  {
+> -	state->fp = fp;
+> -	state->pc = pc;
+>  #ifdef CONFIG_KRETPROBES
+>  	state->kr_cur = NULL;
+>  #endif
+> @@ -56,6 +53,40 @@ static void unwind_init(struct unwind_state *state, unsigned long fp,
+>  	state->prev_type = STACK_TYPE_UNKNOWN;
+>  }
+>  
+> +/*
+> + * TODO: document requirements here.
+> + */
+> +static inline void unwind_init_regs(struct unwind_state *state,
+> +				    struct pt_regs *regs)
+> +{
+> +	state->fp = regs->regs[29];
+> +	state->pc = regs->pc;
+> +}
 
-The Linux Asahi folks have a 16K page environment (M1 Macs)...
+When I suggested this back in:
 
-Hector, could you look at it too?
+  https://lore.kernel.org/linux-arm-kernel/20211123193723.12112-1-madvenka@linux.microsoft.com/T/#md91fbfe08ceab2a02d9f5c326e17997786e53208
 
+... my intent was that each unwind_init_from_*() helpers was the sole
+initializer of the structure, and the caller only had to call one function.
+That way it's not possible to construct an object with an erroneous combination
+of arguments because the prototype enforces the set of arguments, and the
+helper function can operate on a consistent snapshot of those arguments.
 
+So I'd much prefer that each of these helpers called unwind_init_common(),
+rather than leaving that to the caller to do. I don't mind if those pass
+arguments to unwind_init_common(), or explciitly initialize their respective
+fields, but I don' think the caller should have to care about unwind_init_common().
 
---=20
-=E7=9C=9F=E5=AE=9F=E3=81=AF=E3=81=84=E3=81=A4=E3=82=82=E4=B8=80=E3=81=A4=EF=
-=BC=81/ Always, there's only one truth!
+I'd also prefer the unwind_init_from*() naming I'd previously suggested, so
+that it's clear which direction information is flowing.
+
+>
+> +
+> +/*
+> + * TODO: document requirements here.
+> + *
+> + * Note: this is always inlined, and we expect our caller to be a noinline
+> + * function, such that this starts from our caller's caller.
+> + */
+> +static __always_inline void unwind_init_current(struct unwind_state *state)
+> +{
+> +	state->fp = (unsigned long)__builtin_frame_address(1);
+> +	state->pc = (unsigned long)__builtin_return_address(0);
+> +}
+> +
+> +/*
+> + * TODO: document requirements here.
+> + *
+> + * The caller guarantees that the task is not running.
+> + */
+> +static inline void unwind_init_task(struct unwind_state *state,
+> +				    struct task_struct *task)
+> +{
+> +	state->fp = thread_saved_fp(task);
+> +	state->pc = thread_saved_pc(task);
+> +}
+> +
+>  /*
+>   * Unwind from one frame record (A) to the next frame record (B).
+>   *
+> @@ -194,15 +225,14 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
+>  {
+>  	struct unwind_state state;
+>  
+> +	unwind_init_common(&state);
+
+As above, I really don't like that the caller has to call both the common
+initializer and a specialized initializer here.
+
+Thanks,
+Mark.
+
+> +
+>  	if (regs)
+> -		unwind_init(&state, regs->regs[29], regs->pc);
+> +		unwind_init_regs(&state, regs);
+>  	else if (task == current)
+> -		unwind_init(&state,
+> -				(unsigned long)__builtin_frame_address(1),
+> -				(unsigned long)__builtin_return_address(0));
+> +		unwind_init_current(&state);
+>  	else
+> -		unwind_init(&state, thread_saved_fp(task),
+> -				thread_saved_pc(task));
+> +		unwind_init_task(&state, task);
+>  
+>  	unwind(task, &state, consume_entry, cookie);
+>  }
+> -- 
+> 2.25.1
+> 

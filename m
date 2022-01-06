@@ -2,53 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 909334863C5
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 12:33:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA204863CA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 12:39:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238551AbiAFLdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 06:33:46 -0500
-Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:50647 "EHLO
-        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238526AbiAFLdo (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 06:33:44 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R961e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V15yeda_1641468821;
-Received: from 30.225.24.14(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0V15yeda_1641468821)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 06 Jan 2022 19:33:42 +0800
-Message-ID: <998065f4-eb0e-3799-4bdb-345daf2d963d@linux.alibaba.com>
-Date:   Thu, 6 Jan 2022 19:33:41 +0800
+        id S238570AbiAFLjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 06:39:37 -0500
+Received: from foss.arm.com ([217.140.110.172]:52276 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238526AbiAFLjg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 06:39:36 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8744811D4;
+        Thu,  6 Jan 2022 03:39:35 -0800 (PST)
+Received: from e123427-lin.Home (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 034723F774;
+        Thu,  6 Jan 2022 03:39:30 -0800 (PST)
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     bp@alien8.de, robh@kernel.org, arnd@arndb.de, bhelgaas@google.com,
+        tglx@linutronix.de, maz@kernel.org, wei.liu@kernel.org,
+        Sunil Muthuswamy <sunilmut@linux.microsoft.com>,
+        sthemmin@microsoft.com, decui@microsoft.com,
+        haiyangz@microsoft.com, kw@linux.com, hpa@zytor.com,
+        mingo@redhat.com, kys@microsoft.com
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-hyperv@vger.kernel.org,
+        Sunil Muthuswamy <sunilmut@microsoft.com>,
+        linux-arch@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v8 0/2] PCI: hv: Hyper-V vPCI for arm64
+Date:   Thu,  6 Jan 2022 11:39:24 +0000
+Message-Id: <164146914675.4069.11121648725605783394.b4-ty@arm.com>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <1641411156-31705-1-git-send-email-sunilmut@linux.microsoft.com>
+References: <1641411156-31705-1-git-send-email-sunilmut@linux.microsoft.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.0
-Subject: Re: [PATCH net v4] net/smc: Reset conn->lgr when link group
- registration fails
-To:     Karsten Graul <kgraul@linux.ibm.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1641451455-41647-1-git-send-email-guwen@linux.alibaba.com>
- <96521e26-7d51-7451-3cf4-cca37da9dc24@linux.ibm.com>
-From:   Wen Gu <guwen@linux.alibaba.com>
-In-Reply-To: <96521e26-7d51-7451-3cf4-cca37da9dc24@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 5 Jan 2022 11:32:34 -0800, Sunil Muthuswamy wrote:
+> From: Sunil Muthuswamy <sunilmut@microsoft.com>
+> 
+> Current Hyper-V vPCI code only compiles and works for x86. There are some
+> hardcoded assumptions about the architectural IRQ chip and other arch
+> defines.
+> 
+> Add support for Hyper-V vPCI for arm64 by first breaking the current hard
+> coded dependency using a set of new interfaces and implementing those for
+> x86 first. That is in the first patch. The second patch adds support for
+> Hyper-V vPCI for arm64 by implementing the above mentioned interfaces. That
+> is done by introducing a Hyper-V vPCI specific MSI IRQ domain & chip for
+> allocating SPI vectors.
+> 
+> [...]
 
+Applied to pci/hv, thanks!
 
-On 2022/1/6 6:00 pm, Karsten Graul wrote:
+[1/2] PCI: hv: Make the code arch neutral by adding arch specific interfaces
+      https://git.kernel.org/lpieralisi/pci/c/6c63f4da30
+[2/2] PCI: hv: Add arm64 Hyper-V vPCI support
+      https://git.kernel.org/lpieralisi/pci/c/c10bdb758c
 
-> Looks like I missed a prereq patch here, but wo'nt conn->lgr be set to NULL
-> after smc_conn_free() called smc_lgr_unregister_conn()?
-
-Right... I should hold a local copy of lgr in smc_conn_abort().
-
-My another RFC patch removes 'conn->lgr = NULL' from smc_lgr_unregister_conn(),
-so I make a mistake here...
-
-I will fix this. Thank you.
-
-Wen Gu
+Thanks,
+Lorenzo

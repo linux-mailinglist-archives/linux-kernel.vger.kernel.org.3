@@ -2,213 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E15EC4865BF
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 15:03:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3CF4865C3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 15:04:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239898AbiAFODH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jan 2022 09:03:07 -0500
-Received: from coyote.holtmann.net ([212.227.132.17]:38310 "EHLO
-        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231916AbiAFODG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 09:03:06 -0500
-Received: from smtpclient.apple (p4fefca45.dip0.t-ipconnect.de [79.239.202.69])
-        by mail.holtmann.org (Postfix) with ESMTPSA id B44E8CECD5;
-        Thu,  6 Jan 2022 15:03:04 +0100 (CET)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
-Subject: Re: [PATCH v4 2/3] Bluetooth: mt7921s: Enable SCO over I2S
-From:   Marcel Holtmann <marcel@holtmann.org>
-In-Reply-To: <b12d6dce30c1eeb1dfff2b80b64bdedc0803f40b.1640334021.git.sean.wang@kernel.org>
-Date:   Thu, 6 Jan 2022 15:03:04 +0100
-Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
-        =?utf-8?B?Ik1hcmstWVcgQ2hlbiAo6Zmz5o+a5paHKSI=?= 
-        <Mark-YW.Chen@mediatek.com>, Soul.Huang@mediatek.com,
-        YN.Chen@mediatek.com, Leon.Yen@mediatek.com,
-        Eric-SY.Chang@mediatek.com, Deren.Wu@mediatek.com,
-        km.lin@mediatek.com, robin.chiu@mediatek.com,
-        Eddie.Chen@mediatek.com, ch.yeh@mediatek.com,
-        posh.sun@mediatek.com, ted.huang@mediatek.com,
-        Eric.Liang@mediatek.com, Stella.Chang@mediatek.com,
-        Tom.Chou@mediatek.com, steve.lee@mediatek.com, jsiuda@google.com,
-        frankgor@google.com, jemele@google.com, abhishekpandit@google.com,
-        michaelfsun@google.com, mcchou@chromium.org, shawnku@google.com,
-        linux-bluetooth@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <6DDA9D10-3001-4A57-B2F4-9712732868AC@holtmann.org>
-References: <91dfa736b7629cdb94bd2029f05717eeae77b07d.1640334021.git.sean.wang@kernel.org>
- <b12d6dce30c1eeb1dfff2b80b64bdedc0803f40b.1640334021.git.sean.wang@kernel.org>
-To:     Sean Wang <sean.wang@mediatek.com>
-X-Mailer: Apple Mail (2.3693.40.0.1.81)
+        id S239853AbiAFOE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 09:04:29 -0500
+Received: from mga12.intel.com ([192.55.52.136]:31806 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231302AbiAFOE1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 09:04:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641477867; x=1673013867;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=AJJ5hf9CBghkofZiP0xA3u2+hnoV2c0O4gDjNdgRCEo=;
+  b=j7uRH/P38XEAmh5rWELIs5jrOEqCNbmLK2XgTT3JwILo17sRa5S7lnnt
+   RVTko5VqWo3jT60N4vS/UQ06V9zYUvoPVdnvvPMk+aoj6f3uMjSOO0Pny
+   F5SzOPYS1pEVD6pw0JeAj/t/3gluDwj6c1ZlV02QJWNPktE5zUJ12FrzN
+   VBafkGbOMLGNsYE7M5JKVcl7NpDwuWc5khag+9MFZyImziNYSEvXW+eD2
+   heKf5msQMnYS+PtDSjhuzhy75FRfC/UH2Kotanw7oDqjjqY7kdoOhtCk4
+   t9/jBYYE+RB7SlQNzmTL/g3o+hqEOwYNaPqe5GhuGMAtLD1TNyjQhOvPJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="222654603"
+X-IronPort-AV: E=Sophos;i="5.88,267,1635231600"; 
+   d="scan'208";a="222654603"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 06:04:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,267,1635231600"; 
+   d="scan'208";a="472914332"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 06 Jan 2022 06:04:22 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n5TNN-000HhY-Os; Thu, 06 Jan 2022 14:04:21 +0000
+Date:   Thu, 6 Jan 2022 22:03:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Gwendal Grignou <gwendal@chromium.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Subject: powerpc-linux-ld: warning: orphan section `.ftrace.tramp' from
+ `drivers/platform/chrome/cros_ec_trace.o' being placed in section
+ `.ftrace.tramp'
+Message-ID: <202201062107.ubU9XXN2-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
+Hi Gwendal,
 
-> The driver has to issue the specific command to enable Bluetooth SCO over
-> the I2S/PCM interface on mt7921s, that is supported since the firmware
-> with version 20211222191101 was added, and the patch would not cause any
-> harm even when the old firmware is applied.
-> 
-> The SCO profile with the patch was tested by setting up a VOIP application,
-> connected to HFP device, checked telephony function can work normally.
-> 
-> Co-developed-by: Sean Wang <sean.wang@mediatek.com>
-> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-> Signed-off-by: Mark Chen <mark-yw.chen@mediatek.com>
-> ---
-> v2: refine git message and fix typo
-> v3:
->    1. free skb after calling  __hci_cmd_sync
->    2. make bt_awake as const struct btmtk_sco
-> v4:
->    1. update git message
->    2. drop a few redundant error messages
-> ---
-> drivers/bluetooth/btmtk.h     | 20 +++++++++++
-> drivers/bluetooth/btmtksdio.c | 68 +++++++++++++++++++++++++++++++++++
-> 2 files changed, 88 insertions(+)
-> 
-> diff --git a/drivers/bluetooth/btmtk.h b/drivers/bluetooth/btmtk.h
-> index 2be1d2680ad8..fc57ef09d132 100644
-> --- a/drivers/bluetooth/btmtk.h
-> +++ b/drivers/bluetooth/btmtk.h
-> @@ -7,8 +7,12 @@
-> 
-> #define HCI_WMT_MAX_EVENT_SIZE		64
-> 
-> +#define BTMTK_WMT_REG_WRITE 0x1
-> #define BTMTK_WMT_REG_READ 0x2
-> 
-> +#define MT7921_PINMUX_0 0x70005050
-> +#define MT7921_PINMUX_1 0x70005054
-> +
-> enum {
-> 	BTMTK_WMT_PATCH_DWNLD = 0x1,
-> 	BTMTK_WMT_TEST = 0x2,
-> @@ -76,6 +80,22 @@ struct btmtk_wakeon {
-> 	__le16 wakeup_delay;
-> } __packed;
-> 
-> +struct btmtk_sco {
-> +	u8 clock_config;
-> +	u8 transmit_format_config;
-> +	u8 channel_format_config;
-> +	u8 channel_select_config;
-> +} __packed;
-> +
-> +struct reg_write_cmd {
-> +	u8 type;
-> +	u8 rsv;
-> +	u8 num;
-> +	__le32 addr;
-> +	__le32 data;
-> +	__le32 mask;
-> +} __packed;
-> +
-> struct btmtk_hci_wmt_params {
-> 	u8 op;
-> 	u8 flag;
-> diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
-> index 89bd70651e9e..f6fb82b317de 100644
-> --- a/drivers/bluetooth/btmtksdio.c
-> +++ b/drivers/bluetooth/btmtksdio.c
-> @@ -830,6 +830,66 @@ static int btsdio_mtk_reg_read(struct hci_dev *hdev, u32 reg, u32 *val)
-> 	return err;
-> }
-> 
-> +static int btsdio_mtk_reg_write(struct hci_dev *hdev, u32 reg, u32 val, u32 mask)
-> +{
-> +	struct btmtk_hci_wmt_params wmt_params;
-> +	struct reg_write_cmd reg_write = {
-> +		.type = 1,
-> +		.num = 1,
-> +		.addr = cpu_to_le32(reg),
-> +		.data = cpu_to_le32(val),
-> +		.mask = cpu_to_le32(mask),
-> +	};
+FYI, the error/warning still remains.
 
-Maybe a good idea to make this const as well.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   75acfdb6fd922598a408a0d864486aeb167c1a97
+commit: d453ceb6549af8798913de6a20444cb7200fdb69 platform/chrome: sensorhub: Add trace events for sample
+date:   5 months ago
+config: powerpc-randconfig-r024-20220106 (https://download.01.org/0day-ci/archive/20220106/202201062107.ubU9XXN2-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d453ceb6549af8798913de6a20444cb7200fdb69
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout d453ceb6549af8798913de6a20444cb7200fdb69
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-> +	int err, status;
-> +
-> +	wmt_params.op = BTMTK_WMT_REGISTER;
-> +	wmt_params.flag = BTMTK_WMT_REG_WRITE;
-> +	wmt_params.dlen = sizeof(reg_write);
-> +	wmt_params.data = &reg_write;
-> +	wmt_params.status = &status;
-> +
-> +	err = mtk_hci_wmt_sync(hdev, &wmt_params);
-> +	if (err < 0)
-> +		bt_dev_err(hdev, "Failed to write reg(%d)", err);
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The please “..reg (%d)” as you have for the other error message.
+All warnings (new ones prefixed by >>):
 
-> +
-> +	return err;
-> +}
-> +
-> +static int btsdio_mtk_sco_setting(struct hci_dev *hdev)
-> +{
-> +	const struct btmtk_sco sco_setting = {
-> +		.clock_config = 0x49,
-> +		.channel_format_config = 0x80,
-> +	};
-> +	struct sk_buff *skb;
-> +	u32 val;
-> +	int err;
-> +
-> +	/* Enable SCO over I2S/PCM for MediaTek chipset */
-> +	skb =  __hci_cmd_sync(hdev, 0xfc72, sizeof(sco_setting),
-> +			      &sco_setting, HCI_CMD_TIMEOUT);
-> +	if (IS_ERR(skb))
-> +		return PTR_ERR(skb);
-> +
-> +	kfree_skb(skb);
-> +
-> +	err = btsdio_mtk_reg_read(hdev, MT7921_PINMUX_0, &val);
-> +	if (err < 0)
-> +		return err;
-> +
-> +	val |= 0x11000000;
-> +	err = btsdio_mtk_reg_write(hdev, MT7921_PINMUX_0, val, ~0);
-> +	if (err < 0)
-> +		return err;
-> +
-> +	err = btsdio_mtk_reg_read(hdev, MT7921_PINMUX_1, &val);
-> +	if (err < 0)
-> +		return err;
-> +
-> +	val |= 0x00000101;
-> +	return btsdio_mtk_reg_write(hdev, MT7921_PINMUX_1, val, ~0);
-> +}
-> +
-> static int btmtksdio_setup(struct hci_dev *hdev)
-> {
-> 	struct btmtksdio_dev *bdev = hci_get_drvdata(hdev);
-> @@ -862,6 +922,14 @@ static int btmtksdio_setup(struct hci_dev *hdev)
-> 		err = mt79xx_setup(hdev, fwname);
-> 		if (err < 0)
-> 			return err;
-> +
-> +		/* Enable SCO over I2S/PCM */
-> +		err = btsdio_mtk_sco_setting(hdev);
-> +		if (err < 0) {
-> +			bt_dev_err(hdev, "Failed to enable SCO setting (%d)", err);
-> +			return err;
-> +		}
-> +
+   powerpc-linux-ld: warning: orphan section `.init.plt' from `drivers/platform/chrome/cros_ec_trace.o' being placed in section `.init.plt'
+>> powerpc-linux-ld: warning: orphan section `.ftrace.tramp' from `drivers/platform/chrome/cros_ec_trace.o' being placed in section `.ftrace.tramp'
+   powerpc-linux-ld: warning: orphan section `.init.plt' from `drivers/platform/chrome/cros_ec_trace.o' being placed in section `.init.plt'
+>> powerpc-linux-ld: warning: orphan section `.ftrace.tramp' from `drivers/platform/chrome/cros_ec_trace.o' being placed in section `.ftrace.tramp'
+   powerpc-linux-ld: warning: orphan section `.init.plt' from `drivers/platform/chrome/cros_ec_trace.o' being placed in section `.init.plt'
+>> powerpc-linux-ld: warning: orphan section `.ftrace.tramp' from `drivers/platform/chrome/cros_ec_trace.o' being placed in section `.ftrace.tramp'
 
-Is this really a failure or could the chip continue to operate? It just means it falls back to SCO over HCI?
-
-> 		break;
-> 	case 0x7663:
-> 	case 0x7668:
-
-Regards
-
-Marcel
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

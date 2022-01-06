@@ -2,165 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 056A5486B09
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:24:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B03486B0A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:24:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243685AbiAFUYI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jan 2022 15:24:08 -0500
-Received: from coyote.holtmann.net ([212.227.132.17]:48250 "EHLO
-        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243662AbiAFUYH (ORCPT
+        id S243697AbiAFUYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 15:24:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53548 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243662AbiAFUYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 15:24:07 -0500
-Received: from smtpclient.apple (p4fefca45.dip0.t-ipconnect.de [79.239.202.69])
-        by mail.holtmann.org (Postfix) with ESMTPSA id 46150CECDC;
-        Thu,  6 Jan 2022 21:24:05 +0100 (CET)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
-Subject: Re: [PATCH v4] Bluetooth: btqca: sequential validation
-From:   Marcel Holtmann <marcel@holtmann.org>
-In-Reply-To: <1640174444-28561-1-git-send-email-quic_saluvala@quicinc.com>
-Date:   Thu, 6 Jan 2022 21:24:04 +0100
-Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-        quic_hemantg@quicinc.com, MSM <linux-arm-msm@vger.kernel.org>,
-        quic_bgodavar@quicinc.com, rjliao@codeaurora.org,
-        hbandi@codeaurora.org, abhishekpandit@chromium.org,
-        mcchou@chromium.org, quic_pharish@quicinc.com
-Content-Transfer-Encoding: 8BIT
-Message-Id: <3E84ACC3-BF17-4E7B-AA57-CDCA86549813@holtmann.org>
-References: <1640174444-28561-1-git-send-email-quic_saluvala@quicinc.com>
-To:     Sai Teja Aluvala <quic_saluvala@quicinc.com>
-X-Mailer: Apple Mail (2.3693.40.0.1.81)
+        Thu, 6 Jan 2022 15:24:32 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D9CC061212
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 12:24:32 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id m4so3040281ilf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 12:24:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1hwwvjlhtkCgnYzKELSHOhx4GC796dq3UFrZuDKUjZw=;
+        b=pjeWTfqAAFn0D70nVe2H8jxZ56DPQQM86g1itSPNeUWz0Df2BWfBY2oSYu3YeKIbpf
+         feXVe/PqKsxq+OmDKcwNK5HNjhEgvGGDSpQD8UKTVmvvBE9gFTvufl0oFWxHiN94cZ1E
+         NHxtLrx3cyPsG4Re3rh5WX0osECP0cWJTpyC1DOdxUEbCueEoJG0zgPta22rWR8+bHwo
+         nCthVCGSANxLMbHt6sTLddyqzYrkW8UrZWiPk+NNFFu+W1AmM50LOqk+SpAoZt8gn/2H
+         xHaTQeju4IED99/3Jel58xaJn32WAeCrGthgnUc2Pd6BjhYWOenTFQ5L5Ce4dSgyiNRY
+         rf3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1hwwvjlhtkCgnYzKELSHOhx4GC796dq3UFrZuDKUjZw=;
+        b=sgmjufa3bUGK9GTvqqNagRUBBtMOI53PLhqQ52Bb42/ll2hPwdHSBs1st/cUFgvuUN
+         hLH+QcYHNj0qPJ5uJXkih0DPIgQjXPlASTlT0EmGIAw4dpXyiIX5G9gI2EfkoEP8+BMc
+         Nv2/rJ2HzeDcsiaxYBYqnn2EdQKRGyqjKG543kK2F6AvVT1ZHvUXTRt7q8u2VTwGsxBH
+         /Zd3ljPCD9wZ6uNZIio9Hwb94ZmJcIVJACyQjdzM54mcXynKfK2xJaUtCcT4Y8Jiff5g
+         ygaAvzh0+vNDsGbMHEY13owA+gtMtW67a64LU9Hnb03l9WB5BRUFKCaWo1lslaBK8aGd
+         HaJg==
+X-Gm-Message-State: AOAM532tBM4A4uRBrpex8YfGHQt9t8PU23guyC7A39GaAsnOaIZG9WWI
+        K+ZvRJtQ+RULN/yhr6fI7dB+zHHAw6xR4IGEIo8nCg==
+X-Google-Smtp-Source: ABdhPJyQRHDqkZiMGNUXLizaclzFo6BOctys0w1THIbnIioQgwHfzgOf6Sh8VTpnDMkncqh8Z3v4x/MxVtKxkvvwFxs=
+X-Received: by 2002:a05:6e02:170c:: with SMTP id u12mr28684525ill.53.1641500671458;
+ Thu, 06 Jan 2022 12:24:31 -0800 (PST)
+MIME-Version: 1.0
+References: <20220106072627.476524-1-irogers@google.com> <YddC+lzAO1Urj0TF@kernel.org>
+ <YddDcqxtDrPDSAVi@kernel.org>
+In-Reply-To: <YddDcqxtDrPDSAVi@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 6 Jan 2022 12:24:18 -0800
+Message-ID: <CAP-5=fWNfB6g0Bk2zPH3yYuvcDQG7TGQ7DBsnkTc3pZF0jKoHA@mail.gmail.com>
+Subject: Re: [PATCH] perf build: Lower the priority of tools/lib includes
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        linux-trace-devel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
+        torvalds@linux-foundation.org, eranian@google.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sai,
+On Thu, Jan 6, 2022 at 11:31 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Thu, Jan 06, 2022 at 04:28:58PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > Em Wed, Jan 05, 2022 at 11:26:27PM -0800, Ian Rogers escreveu:
+> > > tools/lib has a 1.1.0 copy of libtraceevent. If a newer system
+> > > version is installed then its headers will go in /usr/include. As -I has
+> > > priority over system headers the 1.1.0 version gets used in preference
+> > > to the system one, which isn't what is wanted. To make the behavior
+> > > match expectations use -idirafter so that any system headers have priority
+> > > over the tools/lib version.
+> > >
+> > > Fixes: 08efcb4a638d ("libtraceevent: Increase libtraceevent logging when verbose")
+> >
+> > Hi,
+> >
+> >       You forgot to add your Signed-off-by:, I'm adding it as you
+> > usually provide it, ok?
+>
+> Also adding:
+>
+> Reported-by: Jiri Slaby <jirislaby@kernel.org>
+>
+> - Arnaldo
 
-> This change will have sequential validation support
-> & patch config command is added
-> 
-> Signed-off-by: Sai Teja Aluvala <quic_saluvala@quicinc.com>
-> 
-> v4:
-> * addressed the change from u8 cmd to const u8 cmd
-> 
-> v3:
-> * removed rlen,rtype
-> * Replaced kfree with kfree_skb
-> 
-> v2:
-> * Added static declaration
-> * Addressed wrong indentation
-> * Removed EDL_PATCH_CONFIG_CMD_LEN
-> 
-> v1:
-> *Initial patch
-> ---
-> drivers/bluetooth/btqca.c | 48 +++++++++++++++++++++++++++++++++++++++++++++++
-> drivers/bluetooth/btqca.h |  2 ++
-> 2 files changed, 50 insertions(+)
-> 
-> diff --git a/drivers/bluetooth/btqca.c b/drivers/bluetooth/btqca.c
-> index be04d74..9091a88 100644
-> --- a/drivers/bluetooth/btqca.c
-> +++ b/drivers/bluetooth/btqca.c
-> @@ -141,6 +141,51 @@ static int qca_read_fw_build_info(struct hci_dev *hdev)
-> 	return err;
-> }
-> 
-> +static int qca_send_patch_config_cmd(struct hci_dev *hdev)
-> +{
-> +	struct sk_buff *skb;
-> +	int err = 0;
-> +	const u8 cmd[] = {EDL_PATCH_CONFIG_CMD, 0x01, 0, 0, 0};
-> +	struct edl_event_hdr *edl;
+Thanks Arnaldo! Both good with me.
 
-I said this many times before. = {[SPACE], a, b, c[SPACE]};
-
-And I prefer the const pieces first, and int err last.
-
-> +
-> +	bt_dev_dbg(hdev, "QCA Patch config");
-> +
-> +	skb = __hci_cmd_sync_ev(hdev, EDL_PATCH_CMD_OPCODE, sizeof(cmd),
-> +				cmd, HCI_EV_VENDOR, HCI_INIT_TIMEOUT);
-> +	if (IS_ERR(skb)) {
-> +		err = PTR_ERR(skb);
-> +		bt_dev_err(hdev, "Sending QCA Patch config failed (%d)", err);
-> +		return err;
-> +	}
-> +
-> +	if (skb->len != 2) {
-> +		bt_dev_err(hdev, "QCA Patch config cmd size mismatch len %d", skb->len);
-> +		err = -EILSEQ;
-> +		goto out;
-> +	}
-> +
-> +	edl = (struct edl_event_hdr *)(skb->data);
-> +	if (!edl) {
-> +		bt_dev_err(hdev, "QCA Patch config with no header");
-> +		err = -EILSEQ;
-> +		goto out;
-> +	}
-> +
-> +	if (edl->cresp != EDL_PATCH_CONFIG_RES_EVT || edl->rtype != EDL_PATCH_CONFIG_CMD) {
-> +		bt_dev_err(hdev, "QCA Wrong packet received %d %d", edl->cresp,
-> +			   edl->rtype);
-> +		err = -EIO;
-> +		goto out;
-> +	}
-> +
-> +out:
-> +	kfree_skb(skb);
-> +	if (err)
-> +		bt_dev_err(hdev, "QCA Patch config cmd failed (%d)", err);
-
-It is rather pointless to print two error. So just scrap this one.
-
-> +
-> +	return err;
-> +}
-> +
-> static int qca_send_reset(struct hci_dev *hdev)
-> {
-> 	struct sk_buff *skb;
-> @@ -551,6 +596,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
-> 	 */
-> 	rom_ver = ((soc_ver & 0x00000f00) >> 0x04) | (soc_ver & 0x0000000f);
-> 
-> +	if (soc_type == QCA_WCN6750)
-> +		qca_send_patch_config_cmd(hdev);
-> +
-> 	/* Download rampatch file */
-> 	config.type = TLV_TYPE_PATCH;
-> 	if (qca_is_wcn399x(soc_type)) {
-> diff --git a/drivers/bluetooth/btqca.h b/drivers/bluetooth/btqca.h
-> index 30afa77..61e9a50 100644
-> --- a/drivers/bluetooth/btqca.h
-> +++ b/drivers/bluetooth/btqca.h
-> @@ -13,6 +13,7 @@
-> #define EDL_PATCH_TLV_REQ_CMD		(0x1E)
-> #define EDL_GET_BUILD_INFO_CMD		(0x20)
-> #define EDL_NVM_ACCESS_SET_REQ_CMD	(0x01)
-> +#define EDL_PATCH_CONFIG_CMD		(0x28)
-> #define MAX_SIZE_PER_TLV_SEGMENT	(243)
-> #define QCA_PRE_SHUTDOWN_CMD		(0xFC08)
-> #define QCA_DISABLE_LOGGING		(0xFC17)
-> @@ -24,6 +25,7 @@
-> #define EDL_CMD_EXE_STATUS_EVT		(0x00)
-> #define EDL_SET_BAUDRATE_RSP_EVT	(0x92)
-> #define EDL_NVM_ACCESS_CODE_EVT		(0x0B)
-> +#define EDL_PATCH_CONFIG_RES_EVT	(0x00)
-> #define QCA_DISABLE_LOGGING_SUB_OP	(0x14)
-> 
-> #define EDL_TAG_ID_HCI			(17)
-
-Regards
-
-Marcel
-
+Ian

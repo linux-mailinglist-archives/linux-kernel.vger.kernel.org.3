@@ -2,76 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE881485F89
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 05:10:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A62485F90
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 05:13:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232301AbiAFEKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 23:10:15 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:48387 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiAFEKO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 23:10:14 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JTtDN3fjjz4xd4;
-        Thu,  6 Jan 2022 15:10:12 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641442212;
-        bh=Ved6JHdmzhtZe5QjKz9X6ODAkx9dqx1to5coknU5gdk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Uwj77FXqfXLH3HbsO3/ufvHvTCHnOJXk1MddT+beRtdhO3WNZt1NtZe2EP01aF6iZ
-         w8P9/tvLX/PiKy9EW9+SqGWjv1CDZd5go8gAlDGKlL+4nCG7IQIjBy1rKSqSAsCVto
-         JEImhtXaI5Bjo4JnHYZ/N/lkP6XfdhareHo290gXzddNp0NJydsr+5FgT8uMX9yevY
-         SbzgNgAHBYaTmJi9vCjfwhoaflLLszrBTpH5UfaLvW4UM0q5hkFFPYjWyDhQYI8q6x
-         fg6z3H9Fx98/mnLIJV1FpR5GHgFB9dsRwth7PDheBLabUe/1piKPWO7QPnHECKMOa6
-         ck4DAIdaKNYGw==
-Date:   Thu, 6 Jan 2022 15:10:10 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: please clean up the keys tree
-Message-ID: <20220106151010.500e4f83@canb.auug.org.au>
+        id S232394AbiAFENX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 23:13:23 -0500
+Received: from mga05.intel.com ([192.55.52.43]:24432 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232336AbiAFENW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 23:13:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641442402; x=1672978402;
+  h=cc:subject:to:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=BPPq4Hy0QzoEWhfAavsXwLKXm6OXAgY5VvZzVitwyEM=;
+  b=NxUsfKuULM6x1H6eZh/lLrRja8Pd4HWLBuyiFklaJ1kCvFgyZjFAathL
+   Q6SMC4DMebADFW+4KBp9Xt5dXwsTApip2BkEkRH4Qf6XxbNoKf+clBssn
+   XQZdTI6MIeUgziXv/08oE6bJzc/ALLRr94qITz5P8zbcotRe5rycYOtK6
+   viR7X2jLgMrvOhPTQIVoyL2tvnQwI69eNV83K3ue33IzscdABLgZHCI6N
+   JjhzMwwY4JfSQCVwzMCpO721qLFHM7J9OxrNDsGnjFuCAqdVVhsMvYyfx
+   xkZEBEoKXqpjp2Go3A24YpV27Nus42VRwow7u44YmPn95MO2APnxBxOcu
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="328934820"
+X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
+   d="scan'208";a="328934820"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 20:13:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,265,1635231600"; 
+   d="scan'208";a="526821695"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
+  by orsmga008.jf.intel.com with ESMTP; 05 Jan 2022 20:13:14 -0800
+Cc:     baolu.lu@linux.intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 09/14] PCI: portdrv: Suppress kernel DMA ownership
+ auto-claiming
+To:     Bjorn Helgaas <helgaas@kernel.org>
+References: <20220104170631.GA99771@bhelgaas>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+Message-ID: <039bbcf3-ccc6-f3b0-172e-9caa0866bb9e@linux.intel.com>
+Date:   Thu, 6 Jan 2022 12:12:35 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8MBV+HpNehm5g+O9jpIX3OM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20220104170631.GA99771@bhelgaas>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/8MBV+HpNehm5g+O9jpIX3OM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Bjorn,
 
-Hi David,
+On 1/5/22 1:06 AM, Bjorn Helgaas wrote:
+> On Tue, Jan 04, 2022 at 09:56:39AM +0800, Lu Baolu wrote:
+>> If a switch lacks ACS P2P Request Redirect, a device below the switch can
+>> bypass the IOMMU and DMA directly to other devices below the switch, so
+>> all the downstream devices must be in the same IOMMU group as the switch
+>> itself.
+> Help me think through what's going on here.  IIUC, we put devices in
+> the same IOMMU group when they can interfere with each other in any
+> way (DMA, config access, etc).
+> 
+> (We said "DMA" above, but I guess this would also apply to config
+> requests, right?)
 
-All the commits in the keys tree
-(git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git#keys-n=
-ext)
-are also in Linus' tree as different commits.  Please clean that up as
-it is causing merge conflicts against later work.
+I am not sure whether devices could interfere each other through config
+space access. The IOMMU hardware only protects and isolates DMA
+accesses, so that userspace could control DMA directly. The config
+accesses will always be intercepted by VFIO. Hence, I don't see a
+problem.
 
---=20
-Cheers,
-Stephen Rothwell
+> 
+> *This*  patch doesn't check for any ACS features.  Can you connect the
+> dots for me?  I guess the presence or absence of P2P Request Redirect
+> determines the size of the IOMMU group.  And the following says
 
---Sig_/8MBV+HpNehm5g+O9jpIX3OM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+It's done in iommu core (drivers/iommu/iommu.c):
 
------BEGIN PGP SIGNATURE-----
+/*
+  * Use standard PCI bus topology, isolation features, and DMA alias quirks
+  * to find or create an IOMMU group for a device.
+  */
+struct iommu_group *pci_device_group(struct device *dev)
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHWa6IACgkQAVBC80lX
-0Gy9kAgAi8L+l7i56isbP6GaPUpJpoYNea+b/MlrO1Uf3c8CwbNWws2ypFvv1A7y
-YZ1qmc+bCWo4yqa5ca0ia+9k5hWq7oJ5ZQxvVun74MZn+XGx5trq3t2LdIWd9vz4
-FGQ/Js/hOyx8+O1L2zlWaHYrOjT9g0TxBYdVsMRcI+oTqp+U/OoZRPzZA7hBQbah
-VdVRlyKp0iRpTjZPzg5Os/rt0gGIAUWXB2K9hcq+a2r2LGgisqH+NkUlwd4mZma4
-oI9ALV3oz+Fmxo08o0R/oQ34R3vtzT55HvrEr3PAcHanlM406VPrHwi7ggkrVvBH
-zpfZKgadHTphi9kJCCrC7b/cCKABgA==
-=zHbj
------END PGP SIGNATURE-----
 
---Sig_/8MBV+HpNehm5g+O9jpIX3OM--
+> something about what is allowed in the group?  And .no_kernel_api_dma
+> allows an exception to the general rule?
+> 
+
+Yes.
+
+>> The pci_dma_configure() marks the iommu_group as containing only devices
+>> with kernel drivers that manage DMA. Avoid this default behavior for the
+>> portdrv driver in order for compatibility with the current vfio policy.
+> I assume "IOMMU group" means the same as "iommu_group"; maybe we can
+> use one of them consistently?
+
+Sure.
+
+Best regards,
+baolu

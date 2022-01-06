@@ -2,258 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E184860E0
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 08:08:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF0D04860E2
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 08:10:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235499AbiAFHIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 02:08:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234429AbiAFHIU (ORCPT
+        id S235521AbiAFHKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 02:10:13 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:38260 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S234429AbiAFHKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 02:08:20 -0500
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4641C061245;
-        Wed,  5 Jan 2022 23:08:19 -0800 (PST)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n5Msj-00048K-Er; Thu, 06 Jan 2022 07:08:17 +0000
-Date:   Thu, 6 Jan 2022 07:08:17 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>
-Subject: Re: [PATCH 03/10] exit: Move oops specific logic from do_exit into
- make_task_dead
-Message-ID: <YdaVYeHWIjAR7mhp@zeniv-ca.linux.org.uk>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
- <20211208202532.16409-3-ebiederm@xmission.com>
- <YdUxGKRcSiDy8jGg@zeniv-ca.linux.org.uk>
+        Thu, 6 Jan 2022 02:10:12 -0500
+X-UUID: 8ea96f7b9d844bf38ad79796b36d1f34-20220106
+X-UUID: 8ea96f7b9d844bf38ad79796b36d1f34-20220106
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <yc.hung@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1291158459; Thu, 06 Jan 2022 15:10:09 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 6 Jan 2022 15:10:08 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 6 Jan 2022 15:10:08 +0800
+Message-ID: <3e00db1d4fe71938b0274331cd49b96bdddccea4.camel@mediatek.com>
+Subject: Re: [PATCH v3] dt-bindings: dsp: mediatek: add mt8195 dsp document
+From:   YC Hung <yc.hung@mediatek.com>
+To:     Daniel Baluta <daniel.baluta@gmail.com>
+CC:     Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        "Rob Herring" <robh+dt@kernel.org>, <matthias.bgg@gmail.com>,
+        Linux-ALSA <alsa-devel@alsa-project.org>,
+        <linux-mediatek@lists.infradead.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        <trevor.wu@mediatek.com>, <allen-kh.cheng@mediatek.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>
+Date:   Thu, 6 Jan 2022 15:10:08 +0800
+In-Reply-To: <CAEnQRZBH4uwMmyBLY2bCtY9QZooBiK5PqF3T+4K8WAtQV1QN-Q@mail.gmail.com>
+References: <20220103043202.6524-1-yc.hung@mediatek.com>
+         <CAEnQRZBH4uwMmyBLY2bCtY9QZooBiK5PqF3T+4K8WAtQV1QN-Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdUxGKRcSiDy8jGg@zeniv-ca.linux.org.uk>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 05:48:08AM +0000, Al Viro wrote:
-> On Wed, Dec 08, 2021 at 02:25:25PM -0600, Eric W. Biederman wrote:
-> > The beginning of do_exit has become cluttered and difficult to read as
-> > it is filled with checks to handle things that can only happen when
-> > the kernel is operating improperly.
+Hi Daniel,
+
+My mistake. Thanks for review and comments. I have updated v4 to fix
+it. Thanks
+On Wed, 2022-01-05 at 17:53 +0200, Daniel Baluta wrote:
+> On Mon, Jan 3, 2022 at 1:00 PM YC Hung <yc.hung@mediatek.com> wrote:
 > > 
-> > Now that we have a dedicated function for cleaning up a task when the
-> > kernel is operating improperly move the checks there.
+> > From: "YC Hung" <yc.hung@mediatek.com>
+> > 
+> > This patch adds mt8195 dsp document. The dsp is used for Sound Open
+> > Firmware driver node. It includes registers,  clocks, memory
+> > regions,
+> > and mailbox for dsp.
+> > 
+> > Signed-off-by: yc.hung <yc.hung@mediatek.com>
 > 
-> Umm...  I would probably take profile_task_exit() crap out before that
-> point.
-> 	1) the damn thing is dead - nothing registers notifiers there
-> 	2) blocking_notifier_call_chain() is not a nice thing to do on oops...
+> The code patch should be created against original source code from
+> Rob's tree. Here it seems the patch is against v2.
 > 
-> I'll post a patch ripping the dead parts of kernel/profile.c out tomorrow
-> morning (there's also profile_handoff_task(), equally useless these days
-> and complicating things for __put_task_struct()).
+> This isn't going to work! Because when Rob will try to apply the
+> patch
+> it will fail since he doesn't have (and doesnt need to have)
+> your previous versions.
+> 
+> So, please keep the changes history (that's a good thing!) but always
+> rebase your patch on maintainer's tree.
+> 
+> 
+> > ---
+> > Changes since v2:
+> >   Remove useless watchdog interrupt.
+> >   Add commit message more detail description.
+> > 
+> > Changes since v1:
+> >   Rename yaml file name as mediatek,mt8195-dsp.yaml
+> >   Refine descriptions for mailbox, memory-region and drop unused
+> > labels
+> >   in examples.
+> > ---
+> > ---
+> >  .../devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml | 12 --------
+> > ----
+> >  1 file changed, 12 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/dsp/mediatek,mt8195-
+> > dsp.yaml b/Documentation/devicetree/bindings/dsp/mediatek,mt8195-
+> > dsp.yaml
+> > index bde763191d86..779daa786739 100644
+> > --- a/Documentation/devicetree/bindings/dsp/mediatek,mt8195-
+> > dsp.yaml
+> > +++ b/Documentation/devicetree/bindings/dsp/mediatek,mt8195-
+> > dsp.yaml
+> > @@ -27,14 +27,6 @@ properties:
+> >        - const: cfg
+> >        - const: sram
+> > 
+> > -  interrupts:
+> > -    items:
+> > -      - description: watchdog interrupt
+> > -
+> > -  interrupt-names:
+> > -    items:
+> > -      - const: wdt
+> > -
+> >    clocks:
+> >      items:
+> >        - description: mux for audio dsp clock
+> > @@ -75,8 +67,6 @@ required:
+> >    - compatible
+> >    - reg
+> >    - reg-names
+> > -  - interrupts
+> > -  - interrupt-names
+> >    - clocks
+> >    - clock-names
+> >    - memory-region
+> > @@ -95,8 +85,6 @@ examples:
+> >         reg = <0x10803000  0x1000>,
+> >               <0x10840000  0x40000>;
+> >         reg-names = "cfg", "sram";
+> > -       interrupts = <GIC_SPI 694 IRQ_TYPE_LEVEL_HIGH 0>;
+> > -       interrupt-names = "wdt";
+> >         clocks = <&topckgen 10>, //CLK_TOP_ADSP
+> >                  <&clk26m>,
+> >                  <&topckgen 107>, //CLK_TOP_AUDIO_LOCAL_BUS
+> > --
+> > 2.18.0
+> > 
 
-Ugh...  Forgot to post, sorry.
-
-[PATCH] get rid of dead machinery in kernel/profile.c
-
-Nothing is placed on the call chains in there, now that oprofile is
-gone.  Remove them, along with the hooks for calling them.
-
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
----
-diff --git a/include/linux/profile.h b/include/linux/profile.h
-index fd18ca96f5574..88dfb0543ea63 100644
---- a/include/linux/profile.h
-+++ b/include/linux/profile.h
-@@ -63,26 +63,6 @@ static inline void profile_hit(int type, void *ip)
- 		profile_hits(type, ip, 1);
- }
- 
--struct task_struct;
--struct mm_struct;
--
--/* task is in do_exit() */
--void profile_task_exit(struct task_struct * task);
--
--/* task is dead, free task struct ? Returns 1 if
-- * the task was taken, 0 if the task should be freed.
-- */
--int profile_handoff_task(struct task_struct * task);
--
--/* sys_munmap */
--void profile_munmap(unsigned long addr);
--
--int task_handoff_register(struct notifier_block * n);
--int task_handoff_unregister(struct notifier_block * n);
--
--int profile_event_register(enum profile_type, struct notifier_block * n);
--int profile_event_unregister(enum profile_type, struct notifier_block * n);
--
- #else
- 
- #define prof_on 0
-@@ -107,30 +87,6 @@ static inline void profile_hit(int type, void *ip)
- 	return;
- }
- 
--static inline int task_handoff_register(struct notifier_block * n)
--{
--	return -ENOSYS;
--}
--
--static inline int task_handoff_unregister(struct notifier_block * n)
--{
--	return -ENOSYS;
--}
--
--static inline int profile_event_register(enum profile_type t, struct notifier_block * n)
--{
--	return -ENOSYS;
--}
--
--static inline int profile_event_unregister(enum profile_type t, struct notifier_block * n)
--{
--	return -ENOSYS;
--}
--
--#define profile_task_exit(a) do { } while (0)
--#define profile_handoff_task(a) (0)
--#define profile_munmap(a) do { } while (0)
--
- #endif /* CONFIG_PROFILING */
- 
- #endif /* _LINUX_PROFILE_H */
-diff --git a/kernel/exit.c b/kernel/exit.c
-index f702a6a63686e..5086a5e9d02de 100644
---- a/kernel/exit.c
-+++ b/kernel/exit.c
-@@ -765,7 +765,6 @@ void __noreturn do_exit(long code)
- 		preempt_count_set(PREEMPT_ENABLED);
- 	}
- 
--	profile_task_exit(tsk);
- 	kcov_task_exit(tsk);
- 
- 	coredump_task_exit(tsk);
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 3244cc56b697d..496c0b6c8cb83 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -754,9 +754,7 @@ void __put_task_struct(struct task_struct *tsk)
- 	delayacct_tsk_free(tsk);
- 	put_signal_struct(tsk->signal);
- 	sched_core_free(tsk);
--
--	if (!profile_handoff_task(tsk))
--		free_task(tsk);
-+	free_task(tsk);
- }
- EXPORT_SYMBOL_GPL(__put_task_struct);
- 
-diff --git a/kernel/profile.c b/kernel/profile.c
-index eb9c7f0f5ac52..37640a0bd8a3c 100644
---- a/kernel/profile.c
-+++ b/kernel/profile.c
-@@ -133,79 +133,6 @@ int __ref profile_init(void)
- 	return -ENOMEM;
- }
- 
--/* Profile event notifications */
--
--static BLOCKING_NOTIFIER_HEAD(task_exit_notifier);
--static ATOMIC_NOTIFIER_HEAD(task_free_notifier);
--static BLOCKING_NOTIFIER_HEAD(munmap_notifier);
--
--void profile_task_exit(struct task_struct *task)
--{
--	blocking_notifier_call_chain(&task_exit_notifier, 0, task);
--}
--
--int profile_handoff_task(struct task_struct *task)
--{
--	int ret;
--	ret = atomic_notifier_call_chain(&task_free_notifier, 0, task);
--	return (ret == NOTIFY_OK) ? 1 : 0;
--}
--
--void profile_munmap(unsigned long addr)
--{
--	blocking_notifier_call_chain(&munmap_notifier, 0, (void *)addr);
--}
--
--int task_handoff_register(struct notifier_block *n)
--{
--	return atomic_notifier_chain_register(&task_free_notifier, n);
--}
--EXPORT_SYMBOL_GPL(task_handoff_register);
--
--int task_handoff_unregister(struct notifier_block *n)
--{
--	return atomic_notifier_chain_unregister(&task_free_notifier, n);
--}
--EXPORT_SYMBOL_GPL(task_handoff_unregister);
--
--int profile_event_register(enum profile_type type, struct notifier_block *n)
--{
--	int err = -EINVAL;
--
--	switch (type) {
--	case PROFILE_TASK_EXIT:
--		err = blocking_notifier_chain_register(
--				&task_exit_notifier, n);
--		break;
--	case PROFILE_MUNMAP:
--		err = blocking_notifier_chain_register(
--				&munmap_notifier, n);
--		break;
--	}
--
--	return err;
--}
--EXPORT_SYMBOL_GPL(profile_event_register);
--
--int profile_event_unregister(enum profile_type type, struct notifier_block *n)
--{
--	int err = -EINVAL;
--
--	switch (type) {
--	case PROFILE_TASK_EXIT:
--		err = blocking_notifier_chain_unregister(
--				&task_exit_notifier, n);
--		break;
--	case PROFILE_MUNMAP:
--		err = blocking_notifier_chain_unregister(
--				&munmap_notifier, n);
--		break;
--	}
--
--	return err;
--}
--EXPORT_SYMBOL_GPL(profile_event_unregister);
--
- #if defined(CONFIG_SMP) && defined(CONFIG_PROC_FS)
- /*
-  * Each cpu has a pair of open-addressed hashtables for pending
-diff --git a/mm/mmap.c b/mm/mmap.c
-index bfb0ea164a90a..70318c2a47c39 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -2928,7 +2928,6 @@ EXPORT_SYMBOL(vm_munmap);
- SYSCALL_DEFINE2(munmap, unsigned long, addr, size_t, len)
- {
- 	addr = untagged_addr(addr);
--	profile_munmap(addr);
- 	return __vm_munmap(addr, len, true);
- }
- 

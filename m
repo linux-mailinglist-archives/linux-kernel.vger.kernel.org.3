@@ -2,148 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB0548625E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 10:50:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54223486265
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 10:51:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237576AbiAFJuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 04:50:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50744 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237565AbiAFJuM (ORCPT
+        id S237591AbiAFJvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 04:51:24 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55276 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237581AbiAFJvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 04:50:12 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D44CC061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 01:50:12 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id m19so5783946ybf.9
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 01:50:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=K8lARk+9aIceWETxoJnQyDEyoZX3xAzp3WCfINwI6nM=;
-        b=k9xVZQ7F0zo07Vy5vxEiX15gDzQ/J8WPpVLEcmZcOxvEOEsxI+uA1tbFmD+ryerBQ0
-         URYkWpkO5NPe8ZSXPNUkrBq/p2p0rJSi0Ov36BZOIU8dEawNxkcz9sYrOqcA2OLqVQfa
-         Pmc9+UZcwCm4VWtjOUkjlrUYb3HwrsKVH5hr9yfBKjSQUY9mAJ3VGuCg/quT70qVEent
-         fDsWG7UQJw/f31HDqod4tRJZQqgIA93DaBgNfs3+dq6O96ASSnc7BeE9lpmq5feoZQP1
-         bOHqkfgUamss86JkpTaTdp6Gezl2oT5a650xuUO9ugsdZ7k4iT8laMAXOnWCYbweLk9a
-         UlSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=K8lARk+9aIceWETxoJnQyDEyoZX3xAzp3WCfINwI6nM=;
-        b=a3OnRSeYnhtyjeQYFCyhkdip0PnTQDDQLj8BHvFcfuDJw5/n1VYU4E/koCfrYHi+SM
-         hPqpDquGB59VIvzYbZT5f0aTOPYQB75QakjE51GXUscZBjAZzZWBvbDpEWxRZjcismQL
-         OmyE5lufxbfN86d3tFnAG5p/ju7vS6BbgYGUi2cCh0xENDs6p8oY/FMUC7Hsc163tGo5
-         1d7pUbdQIIII6DiXzRhx67TyBXDZC2Z2FayMIY33bK6WG7CMS9hQyvmKdoo67zADTrwZ
-         kclWxbch4TW9NAo3DtVurbyThZY6XNbyLU/nNVtqiSFbo1HoEj1icna3rEaEjUfoywg1
-         ri6w==
-X-Gm-Message-State: AOAM531cQaZ6s4lG79CDQuHimQ21nTPEZXXaC0ac/v0rWcUyjyk8JIlc
-        b7nO38m/kZf3YLTxgCL9f86dlJdTbhaJoTFQa3E8cA==
-X-Google-Smtp-Source: ABdhPJwuRNMrNbvBg4YjrN/D91Fr46dhfxItlTDQnp7sGMJmAh0rX6MJOEXcWkd8jZEKIJV+FKdae74tO2GnvWwMyBA=
-X-Received: by 2002:a25:73c7:: with SMTP id o190mr23381904ybc.108.1641462611076;
- Thu, 06 Jan 2022 01:50:11 -0800 (PST)
+        Thu, 6 Jan 2022 04:51:23 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2384B81FFA;
+        Thu,  6 Jan 2022 09:51:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A594C36AE5;
+        Thu,  6 Jan 2022 09:51:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641462680;
+        bh=PMPnhquV4QwPaJwJNCUlbGJ4KmAUZao9eZBzGe90ndw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ndfMl4cVMv17FSPS8mYxbLWa6t8eZtWn1pPf7YIHZ3Y8dGF5WR5O08OkHX73D2+D8
+         m7+jpNJx+CkcR//fevYrq89437PhPmiVQ7sfTTogRPpEnqfKrJxvLS/bhXxGtiDTwP
+         yhG+rvGAdjkDt3ADqJFLdK7sek6yRAKMDlYk0hpw=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org
+Subject: [PATCH] parisc: pdc_stable: use default_groups in kobj_type
+Date:   Thu,  6 Jan 2022 10:51:17 +0100
+Message-Id: <20220106095117.3273204-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <CA+G9fYvUu9+68mkCT0S8L0gL28jc5MXGQqOGH6ObciK72FbD8A@mail.gmail.com>
- <Yda3L0givFBDZtXs@kroah.com>
-In-Reply-To: <Yda3L0givFBDZtXs@kroah.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 6 Jan 2022 15:19:59 +0530
-Message-ID: <CA+G9fYuRUsmsj+f3RXAKpvX2k=YJwxj4-_MqWzi1L-D9YdE5Cg@mail.gmail.com>
-Subject: Re: test_vsyscall.c:500:22: warning: '__builtin_memcmp_eq' specified
- bound 4096 exceeds source size 0
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        skhan@linuxfoundation.org
-Cc:     linux-stable <stable@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, X86 ML <x86@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jann Horn <jannh@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1318; h=from:subject; bh=PMPnhquV4QwPaJwJNCUlbGJ4KmAUZao9eZBzGe90ndw=; b=owGbwMvMwCRo6H6F97bub03G02pJDInXdk/tEsxYZcX7UIC9aNe0pc+XnfyuvGt2SEp3zw828cWn Hs/i64hlYRBkYpAVU2T5so3n6P6KQ4pehranYeawMoEMYeDiFICJcP9mmCsZ7fNSvPrQYavruv7f4z XumcZM38swP/zKD1Xd68n9zxL/i3//PqXge3iRGAA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Jan 2022 at 15:02, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Thu, Jan 06, 2022 at 02:55:53PM +0530, Naresh Kamboju wrote:
-> > While building selftests the following warnings were noticed for x86_64
-> > architecture on Linux stable v5.15.13 kernel.
-> >
-> > metadata:
-> >   git repo: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linu=
-x.git
-> >   git commit: 734eb1fd2073f503f5c6b44f1c0d453ca6986b84
-> >   git describe: v5.15.13
-> >   toolchain":  gcc-11
-> >   kernel-config: https://builds.tuxbuild.com/23HFo8abXIL6i4FFfSYiJlqAYM=
-W/config
-> >
-> > x86_64-linux-gnu-gcc -m64 -o \
-> > /home/tuxbuild/.cache/tuxmake/builds/current/kselftest/x86/test_vsyscal=
-l_64 \
-> >  -O2 -g -std=3Dgnu99 -pthread -Wall -no-pie \
-> >  -DCAN_BUILD_64 test_vsyscall.c helpers.h -lrt -ldl
-> >
-> > test_vsyscall.c: In function 'test_process_vm_readv':
-> > test_vsyscall.c:500:22: warning: '__builtin_memcmp_eq' specified bound
-> > 4096 exceeds source size 0 [-Wstringop-overread]
-> >   500 |                 if (!memcmp(buf, (const void
-> > *)0xffffffffff600000, 4096)) {
-> >       |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > Build link:
-> > https://builds.tuxbuild.com/23HFo8abXIL6i4FFfSYiJlqAYMW/
-> >
-> > # To install tuxmake on your system globally:
-> > # sudo pip3 install -U tuxmake
-> >
-> > tuxmake --runtime podman --target-arch x86_64 --toolchain gcc-11 \
-> >  --kconfig https://builds.tuxbuild.com/23HFo8abXIL6i4FFfSYiJlqAYMW/conf=
-ig \
-> >  cpupower headers kernel kselftest kselftest-merge modules
->
-> Is this a new regression from 5.15.0?  Is it also present on Linus's tree=
-?
+There are currently 2 ways to create a set of sysfs files for a
+kobj_type, through the default_attrs field, and the default_groups
+field.  Move the parisc pdc_stable sysfs code to use default_groups
+field which has been the preferred way since aa30f47cf666 ("kobject: Add
+support for default attribute groups to kobj_type") so that we can soon
+get rid of the obsolete default_attrs field.
 
-This build warning is not present in Linus's tree.
-Following patch to be backported to 5.15.x
-
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: linux-parisc@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
-From dd40f44eabe1e122c6852fabb298aac05b083fce Mon Sep 17 00:00:00 2001
-From: Shuah Khan <skhan@linuxfoundation.org>
-Date: Thu, 21 Oct 2021 15:33:33 -0600
-Subject: selftests: x86: fix [-Wstringop-overread] warn in
- test_process_vm_readv()
+ drivers/parisc/pdc_stable.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Fix the following [-Wstringop-overread] by passing in the variable
-instead of the value.
+diff --git a/drivers/parisc/pdc_stable.c b/drivers/parisc/pdc_stable.c
+index e090978518f1..9513c39719d1 100644
+--- a/drivers/parisc/pdc_stable.c
++++ b/drivers/parisc/pdc_stable.c
+@@ -482,11 +482,12 @@ static struct attribute *paths_subsys_attrs[] = {
+ 	&paths_attr_layer.attr,
+ 	NULL,
+ };
++ATTRIBUTE_GROUPS(paths_subsys);
+ 
+ /* Specific kobject type for our PDC paths */
+ static struct kobj_type ktype_pdcspath = {
+ 	.sysfs_ops = &pdcspath_attr_ops,
+-	.default_attrs = paths_subsys_attrs,
++	.default_groups = paths_subsys_groups,
+ };
+ 
+ /* We hard define the 4 types of path we expect to find */
+-- 
+2.34.1
 
-test_vsyscall.c: In function =E2=80=98test_process_vm_readv=E2=80=99:
-test_vsyscall.c:500:22: warning: =E2=80=98__builtin_memcmp_eq=E2=80=99 spec=
-ified bound
-4096 exceeds source size 0 [-Wstringop-overread]
-  500 |                 if (!memcmp(buf, (const void
-*)0xffffffffff600000, 4096)) {
-      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~
-
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-
-- Naresh

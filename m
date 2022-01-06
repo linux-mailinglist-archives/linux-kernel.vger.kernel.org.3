@@ -2,144 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 064E94868B9
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:37:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A20924868BC
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 18:38:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241993AbiAFRhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 12:37:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43116 "EHLO
+        id S241989AbiAFRir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 12:38:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbiAFRhG (ORCPT
+        with ESMTP id S232127AbiAFRiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 12:37:06 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9ACC061245;
-        Thu,  6 Jan 2022 09:37:06 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id l10so6234042wrh.7;
-        Thu, 06 Jan 2022 09:37:06 -0800 (PST)
+        Thu, 6 Jan 2022 12:38:46 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3583AC061201
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 09:38:46 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id c9-20020a17090a1d0900b001b2b54bd6c5so9426716pjd.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 09:38:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Ry/dF88PTy02tpmQFCDT4lut/V2odoR2lVy1eBjvFOM=;
-        b=TwTt5e/bkrr+wupAzj3tvQ1jkAt/WrTFkAxHBvC939gqG+TpULELbrK+zK2XEv3G7W
-         GK0eXbJRTvRsT55vMO+hIRCs+bc8De4+CJUdjQID/aLfipfzxOHQToJ40fq71Kdlcmfg
-         7i+Fziwy/4YsIqI2sgsaVnE2I090/QIEp7Bln4BOGxIkFL2zh+ff9gF1HRkFsmVjI35B
-         FEPly37vOgQ8Kjs774COjjpWU0dBhI2yWxhqnBd9nOChZBRBFt1OQTYiB+Ra9k3BXdwQ
-         Nu2aZtEK1fiB0Xu7lbCT4L4hYCFd1bYMibIkH4wZo3nXQXIXI4DqZ/AKJciC4nicR36M
-         Axhg==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GYSLa7pA0gp7wUV13RWv0MqLP9/s7fLzmxP/zsHVRcY=;
+        b=j41IMR6KZD4U5nPOCrxqCiJ3wofNvmQirr4AuGkd9syR7UwLMOkJGZE8Du7VF6G8CM
+         oun7bZn44mafPumkXhw8PTvxpax0sh0VY1fW5SVDZPC0Bm4HeRPdVihDD7b+4Tjn5ZRs
+         FAak69mzOIRufLQhcgc/XRF+u7Fmdo/1GoESmVcW7qq2ZL0grgEGzWcqLW6Qx5BDLsCv
+         Uoal1Nh1zhGGNw8z9slwCJRoz+Cf+iuRjqBzcK3D+Z3Vlne8u6qwnyQmeUR2C69blu5R
+         00hcEFLtFOFtpTR3FxUuDkOfxvbx4VLlRmYFvzbcq4ph7/i2sYx2rqq6XnUdC4voOKmx
+         pcjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Ry/dF88PTy02tpmQFCDT4lut/V2odoR2lVy1eBjvFOM=;
-        b=bBBCKlVc3A2Th/LpxQkja0ug9zSzf3YyMaKP6JCF/dhGvSt3I/9fjgLyTZidZZOD8a
-         i2HKHVn6oXUz4BJnLSeyIEw6y5+TFk0SAMkIKpRV1wIApO3XewuUU+rp4zc2P2PLtgqW
-         ISo7NlL/JZkBpUwo9A4mJo3JLw4dDmCmZjd2rF8YjPTm913WKohpFWrnAhxCtRIJT/8q
-         f1zbnCw9/2Yy7V7onaG98ldG2vjx1cXa8+OxOWEy1KtDxrBeCsdigko+VahEaQdKmvvK
-         3bMRD/OObKEn9dkjZJoYjbBfRYO+31oeUayoFomiyWJ1NzA+MW4pRKkzsL7FUI+nZqu8
-         Ep+Q==
-X-Gm-Message-State: AOAM530jGDdipIYuFxFmoP24hK8rmy2qkMN8m4bRQou9qaXzo8/wejaI
-        02g18YNOM6HCn6vaA0bfRoxje/KOHjM=
-X-Google-Smtp-Source: ABdhPJzSbjwbuSrhJMIj7kP/McRnBrqbUod/sggbFruV8Aju6efyojnp8xMG78570N9BHK/ZAdFfyA==
-X-Received: by 2002:a5d:5887:: with SMTP id n7mr51262442wrf.510.1641490624860;
-        Thu, 06 Jan 2022 09:37:04 -0800 (PST)
-Received: from ?IPV6:2a02:8084:e84:2480:228:f8ff:fe6f:83a8? ([2a02:8084:e84:2480:228:f8ff:fe6f:83a8])
-        by smtp.gmail.com with ESMTPSA id s22sm5960468wmc.1.2022.01.06.09.37.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jan 2022 09:37:04 -0800 (PST)
-Message-ID: <cbe26979-15cd-a460-7f9d-6035f8862073@gmail.com>
-Date:   Thu, 6 Jan 2022 17:37:03 +0000
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GYSLa7pA0gp7wUV13RWv0MqLP9/s7fLzmxP/zsHVRcY=;
+        b=11NtJ/HZ34PdpgIcd2Mmd3U5dj3ahGHUlTf9NojHVzZ4FAsPs8V3eFXCCjlMj0Fg7O
+         7P1I6Dmqf6ux6kQ5a3R7KuwLD8rKPV8M9MZb8YF81NWCpQ8KGE1I6/rG4QAFe4HdPIhh
+         yrrbsvHQ1LV/6YmTmfwJ9aI/E0yuWa4XX4sJoZ9jbrbQ2o8bFpBRpgcgnPhWpTlYBD+V
+         4wPs61BwWAnw2xSWly+s4nJLq+vWl9WKr5zUUkjwAfsYaKBMtgdMqlCXRGv6kd+6A8Uk
+         jpQc5FOF02+dTYWHMa+pvcYv6HUKTS7lWaTSaxvbLJtYj3qN2n6VbA8pwMkY2MOuQoDy
+         jmgA==
+X-Gm-Message-State: AOAM531qt9bCOo4GFaxBet4tKDznz9m2sG9Pdlm1KUUNyyyWglLL18Y1
+        agFHNZZYVyGF/fGD7AkYHnoc0Q==
+X-Google-Smtp-Source: ABdhPJzk/FdRU8abIcTFrHj96waF/NHjFtuzEZL1JeXq9Pfy+bowljtCmFDhyszaZc3ia0wyc8/eDQ==
+X-Received: by 2002:a17:902:8a94:b0:149:218c:b10a with SMTP id p20-20020a1709028a9400b00149218cb10amr58950325plo.114.1641490725484;
+        Thu, 06 Jan 2022 09:38:45 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id p22sm3271867pfo.57.2022.01.06.09.38.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 09:38:44 -0800 (PST)
+Date:   Thu, 6 Jan 2022 17:38:41 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Stevens <stevensd@chromium.org>
+Cc:     Marc Zyngier <maz@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Chia-I Wu <olv@chromium.org>
+Subject: Re: [PATCH v5 4/4] KVM: mmu: remove over-aggressive warnings
+Message-ID: <YdcpIQgMZJrqswKU@google.com>
+References: <20211129034317.2964790-1-stevensd@google.com>
+ <20211129034317.2964790-5-stevensd@google.com>
+ <Yc4G23rrSxS59br5@google.com>
+ <CAD=HUj5Q6rW8UyxAXUa3o93T0LBqGQb7ScPj07kvuM3txHMMrQ@mail.gmail.com>
+ <YdXrURHO/R82puD4@google.com>
+ <YdXvUaBUvaRPsv6m@google.com>
+ <CAD=HUj736L5oxkzeL2JoPV8g1S6Rugy_TquW=PRt73YmFzP6Jw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] fs/pipe: use kvcalloc to allocate a pipe_buffer array
-Content-Language: en-US
-To:     Andrei Vagin <avagin@gmail.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-References: <20220104171058.22580-1-avagin@gmail.com>
-From:   Dmitry Safonov <0x7f454c46@gmail.com>
-In-Reply-To: <20220104171058.22580-1-avagin@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAD=HUj736L5oxkzeL2JoPV8g1S6Rugy_TquW=PRt73YmFzP6Jw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/4/22 17:10, Andrei Vagin wrote:
-> Right now, kcalloc is used to allocate a pipe_buffer array.  The size of
-> the pipe_buffer struct is 40 bytes. kcalloc allows allocating reliably
-> chunks with sizes less or equal to PAGE_ALLOC_COSTLY_ORDER (3). It means
-> that the maximum pipe size is 3.2MB in this case.
+On Thu, Jan 06, 2022, David Stevens wrote:
+> On Thu, Jan 6, 2022 at 4:19 AM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > On Wed, Jan 05, 2022, Sean Christopherson wrote:
+> > > Ah, I got royally confused by ensure_pfn_ref()'s comment
+> > >
+> > >   * Certain IO or PFNMAP mappings can be backed with valid
+> > >   * struct pages, but be allocated without refcounting e.g.,
+> > >   * tail pages of non-compound higher order allocations, which
+> > >   * would then underflow the refcount when the caller does the
+> > >   * required put_page. Don't allow those pages here.
+> > >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> > > that doesn't apply here because kvm_faultin_pfn() uses the low level
+> > > __gfn_to_pfn_page_memslot().
+> >
+> > On fifth thought, I think this is wrong and doomed to fail.  By mapping these pages
+> > into the guest, KVM is effectively saying it supports these pages.  But if the guest
+> > uses the corresponding gfns for an action that requires KVM to access the page,
+> > e.g. via kvm_vcpu_map(), ensure_pfn_ref() will reject the access and all sorts of
+> > bad things will happen to the guest.
+> >
+> > So, why not fully reject these types of pages?  If someone is relying on KVM to
+> > support these types of pages, then we'll fail fast and get a bug report letting us
+> > know we need to properly support these types of pages.  And if not, then we reduce
+> > KVM's complexity and I get to keep my precious WARN :-)
 > 
-> In CRIU, we use pipes to dump processes memory. CRIU freezes a target
-> process, injects a parasite code into it and then this code splices
-> memory into pipes. If a maximum pipe size is small, we need to
-> do many iterations or create many pipes.
+> Our current use case here is virtio-gpu blob resources [1]. Blob
+> resources are useful because they avoid a guest shadow buffer and the
+> associated memcpys, and as I understand it they are also required for
+> virtualized vulkan.
 > 
-> kvcalloc attempt to allocate physically contiguous memory, but upon
-> failure, fall back to non-contiguous (vmalloc) allocation and so it
-> isn't limited by PAGE_ALLOC_COSTLY_ORDER.
-> 
-> The maximum pipe size for non-root users is limited by
-> the /proc/sys/fs/pipe-max-size sysctl that is 1MB by default, so only
-> the root user will be able to trigger vmalloc allocations.
-> 
-> Cc: Dmitry Safonov <0x7f454c46@gmail.com>
-> Signed-off-by: Andrei Vagin <avagin@gmail.com>
+> One type of blob resources requires mapping dma-bufs allocated by the
+> host directly into the guest. This works on Intel platforms and the
+> ARM platforms I've tested. However, the amdgpu driver sometimes
+> allocates higher order, non-compound pages via ttm_pool_alloc_page.
 
-Reviewed-by: Dmitry Safonov <0x7f454c46@gmail.com>
+Ah.  In the future, please provide this type of information in the cover letter,
+and in this case, a paragraph in patch 01 is also warranted.  The context of _why_
+is critical information, e.g. having something in the changelog explaining the use
+case is very helpful for future developers wondering why on earth KVM supports
+this type of odd behavior.
 
+> These are the type of pages which KVM is currently rejecting. Is this
+> something that KVM can support?
 
-> ---
->  fs/pipe.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
-> 
-> diff --git a/fs/pipe.c b/fs/pipe.c
-> index 6d4342bad9f1..45565773ec33 100644
-> --- a/fs/pipe.c
-> +++ b/fs/pipe.c
-> @@ -802,7 +802,7 @@ struct pipe_inode_info *alloc_pipe_info(void)
->  	if (too_many_pipe_buffers_hard(user_bufs) && pipe_is_unprivileged_user())
->  		goto out_revert_acct;
->  
-> -	pipe->bufs = kcalloc(pipe_bufs, sizeof(struct pipe_buffer),
-> +	pipe->bufs = kvcalloc(pipe_bufs, sizeof(struct pipe_buffer),
->  			     GFP_KERNEL_ACCOUNT);
->  
->  	if (pipe->bufs) {
-> @@ -845,7 +845,7 @@ void free_pipe_info(struct pipe_inode_info *pipe)
->  	}
->  	if (pipe->tmp_page)
->  		__free_page(pipe->tmp_page);
-> -	kfree(pipe->bufs);
-> +	kvfree(pipe->bufs);
->  	kfree(pipe);
->  }
->  
-> @@ -1260,8 +1260,7 @@ int pipe_resize_ring(struct pipe_inode_info *pipe, unsigned int nr_slots)
->  	if (nr_slots < n)
->  		return -EBUSY;
->  
-> -	bufs = kcalloc(nr_slots, sizeof(*bufs),
-> -		       GFP_KERNEL_ACCOUNT | __GFP_NOWARN);
-> +	bufs = kvcalloc(nr_slots, sizeof(*bufs), GFP_KERNEL_ACCOUNT);
->  	if (unlikely(!bufs))
->  		return -ENOMEM;
->  
-> @@ -1288,7 +1287,7 @@ int pipe_resize_ring(struct pipe_inode_info *pipe, unsigned int nr_slots)
->  	head = n;
->  	tail = 0;
->  
-> -	kfree(pipe->bufs);
-> +	kvfree(pipe->bufs);
->  	pipe->bufs = bufs;
->  	pipe->ring_size = nr_slots;
->  	if (pipe->max_usage > nr_slots)
+I'm not opposed to it.  My complaint is that this series is incomplete in that it
+allows mapping the memory into the guest, but doesn't support accessing the memory
+from KVM itself.  That means for things to work properly, KVM is relying on the
+guest to use the memory in a limited capacity, e.g. isn't using the memory as
+general purpose RAM.  That's not problematic for your use case, because presumably
+the memory is used only by the vGPU, but as is KVM can't enforce that behavior in
+any way.
 
+The really gross part is that failures are not strictly punted to userspace;
+the resulting error varies significantly depending on how the guest "illegally"
+uses the memory.
 
-Thanks,
-          Dmitry
+My first choice would be to get the amdgpu driver "fixed", but that's likely an
+unreasonable request since it sounds like the non-KVM behavior is working as intended.
+
+One thought would be to require userspace to opt-in to mapping this type of memory
+by introducing a new memslot flag that explicitly states that the memslot cannot
+be accessed directly by KVM, i.e. can only be mapped into the guest.  That way,
+KVM has an explicit ABI with respect to how it handles this type of memory, even
+though the semantics of exactly what will happen if userspace/guest violates the
+ABI are not well-defined.  And internally, KVM would also have a clear touchpoint
+where it deliberately allows mapping such memslots, as opposed to the more implicit
+behavior of bypassing ensure_pfn_ref().
+
+If we're clever, we might even be able to share the flag with the "guest private
+memory"[*] concept being pursued for confidential VMs.
+
+[*] https://lore.kernel.org/all/20211223123011.41044-1-chao.p.peng@linux.intel.com

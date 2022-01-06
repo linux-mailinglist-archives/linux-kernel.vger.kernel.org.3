@@ -2,164 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7CC4866A3
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 16:20:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 181F14866A6
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 16:21:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240421AbiAFPUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 10:20:11 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:63968 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240393AbiAFPUK (ORCPT
+        id S240432AbiAFPU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 10:20:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:48385 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240393AbiAFPU5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 10:20:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1641482410; x=1673018410;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=VdhC7mh1p8Y8MIPqArIrmPlsIZq0Rjq9uAm2FjmLFsw=;
-  b=GXuVoPMnTTPrrvzgbxe8Z1Rgf7HgXuN9mqz9Nr4AE5dvG4CHf3c3fiC3
-   Lkmlljv6KcIJUFzOCTFAusgQn9uyEspluMzmXrMJNiOaY084lzJw/t4XJ
-   ReVcwvrnf94Ys7bG72203ykgBq2No/l2/KllOGs0zjjrr5a3olFRYVWam
-   w=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 06 Jan 2022 07:20:10 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 07:20:10 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 6 Jan 2022 07:20:09 -0800
-Received: from [10.50.52.105] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 6 Jan 2022
- 07:20:04 -0800
-Message-ID: <705c280b-bced-476d-8e21-1a5afbf3d2f3@quicinc.com>
-Date:   Thu, 6 Jan 2022 20:50:00 +0530
+        Thu, 6 Jan 2022 10:20:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641482456;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2YqsIWQ53eG2PDcqAucmDLmwn9f5p0XCph507eireqE=;
+        b=MbV4RbxIi0SW1AJKc9frYo8x0dHoD/88ZHqwj/d4+H2QxfjELRJiBPx+WjYqkDLopifIKO
+        zTNfvAaxPQXflSeso2dgmjmOCbde6PXw78HOajzlWieGOOPtDuE5PDzrsBOCI52VUPZiFr
+        m5PP9LNf2dWFTZPd2lmXd0tSYv0vBYU=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-639--A69SwpmPtGmOBk2HOdXrA-1; Thu, 06 Jan 2022 10:20:53 -0500
+X-MC-Unique: -A69SwpmPtGmOBk2HOdXrA-1
+Received: by mail-qt1-f200.google.com with SMTP id j26-20020ac8405a000000b002c472361f33so2178563qtl.16
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 07:20:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2YqsIWQ53eG2PDcqAucmDLmwn9f5p0XCph507eireqE=;
+        b=FdM4LXvSMlGdnyqN9ajNi6cZ+eDi99bKr9e0YbkagmdvGB+NTMH6qG5V8diOCOByaK
+         YDOyRzO4jP4Rvc62NTE19DSXOWOa1ypbaQtm0Ihnd46QqEnVKfWqUYa1AZ//gSsSG/ae
+         unfQD402aWNEOhxSv682T73DM46z2Z7vW+7Jzrark26EsNH+UMtyUuFZpjnKvP5jc+Np
+         tUp25OLCJjD1llu6wgUQsy5S+52CETBVD7RauN8JQAJkJjDZ+VyfBbwrKvSkKsnaPvcc
+         fGjPG250e8KW3y7RyEgZ6Enza9C0nBx5Vfx6mnl8r8duOAQXDrZLyZOq4kSSwrPcjku1
+         Y8QQ==
+X-Gm-Message-State: AOAM5315bR22lX/22qjKh+2Q/I3sLZiqqRjTk9FwXrQeNes8DrncfMMh
+        29AfRQ6Rwm2s7iV81DQ0giHi1W/1DBws3KLMhDnjTAbOu1ltvAwU0qgoZvHuJF4cM7gbCvMY1ek
+        Al8InIzKa+em8axNXaqsVZ98=
+X-Received: by 2002:a37:a8c3:: with SMTP id r186mr41125582qke.17.1641482453029;
+        Thu, 06 Jan 2022 07:20:53 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyFM593HrigTWcxavtgf6tlraL5xApzNd6Y/8YuQALyJTC0/s7sqWNFOjYapn01OHOTMHltcQ==
+X-Received: by 2002:a37:a8c3:: with SMTP id r186mr41125573qke.17.1641482452828;
+        Thu, 06 Jan 2022 07:20:52 -0800 (PST)
+Received: from localhost (pool-68-160-176-52.bstnma.fios.verizon.net. [68.160.176.52])
+        by smtp.gmail.com with ESMTPSA id r8sm1561658qkk.91.2022.01.06.07.20.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 07:20:52 -0800 (PST)
+Date:   Thu, 6 Jan 2022 10:20:51 -0500
+From:   Mike Snitzer <snitzer@redhat.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Alasdair Kergon <agk@redhat.com>,
+        dm-devel@redhat.com
+Subject: Re: dm sysfs: use default_groups in kobj_type
+Message-ID: <YdcI02dcV2aj1x/L@redhat.com>
+References: <20220106100231.3278554-1-gregkh@linuxfoundation.org>
+ <Ydb7xzmOC8VN8miQ@redhat.com>
+ <YdcE+9ppXYnPzijZ@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH V6 0/7] Add driver support for Data Capture and Compare
- Engine(DCC) for SM8150,SC7280,SC7180,SDM845
-Content-Language: en-CA
-To:     Thara Gopinath <thara.gopinath@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        "Sai Prakash Ranjan" <saiprakash.ranjan@codeaurora.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>, <vkoul@kernel.org>
-References: <cover.1628617260.git.schowdhu@codeaurora.org>
- <396edd95-4f38-6830-99da-11e73d62a0cf@linaro.org>
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-In-Reply-To: <396edd95-4f38-6830-99da-11e73d62a0cf@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdcE+9ppXYnPzijZ@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 06 2022 at 10:04P -0500,
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
 
-On 12/16/2021 9:18 PM, Thara Gopinath wrote:
->
->
-> On 8/10/21 1:54 PM, Souradeep Chowdhury wrote:
->> DCC(Data Capture and Compare) is a DMA engine designed for debugging 
->> purposes.In case of a system
->> crash or manual software triggers by the user the DCC hardware stores 
->> the value at the register
->> addresses which can be used for debugging purposes.The DCC driver 
->> provides the user with sysfs
->> interface to configure the register addresses.The options that the 
->> DCC hardware provides include
->> reading from registers,writing to registers,first reading and then 
->> writing to registers and looping
->> through the values of the same register.
->>
->> In certain cases a register write needs to be executed for accessing 
->> the rest of the registers,
->> also the user might want to record the changing values of a register 
->> with time for which he has the
->> option to use the loop feature.
->
-> Hello Souradeep,
->
-> First of all, I think this is very a useful feature to have. I have 
-> some generic design related queries/comments on driver and the 
-> interface exposed to the user space. Also, I do not understand the h/w 
-> well here, so feel free to correct me if I am wrong.
->
-> 1. Linked list looks like a very internal feature to the h/w. It 
-> really is not an info that user should be aware of. I tried reading 
-> the code a bit. IUC, every time a s/w trigger is issued the configs in 
-> all the enabled linked lists are executed. The final ram dump that you 
-> get from /dev/dcc_sram is a dump of contents from all the enabled 
-> list? Is this understanding correct ? And we are talking of at-most 4 
-> linked list?
-> If yes, I think it might be better to have a folder per linked list 
-> with config, config_write etc. Also if possible it will be better to 
-> dump the results to a file in the specific folder instead of reading 
-> from /dev/dcc_sram.
-> If no, there is no real need for user to know the linked list, right? 
-> Choosing of linked list can be done by kernel driver in this case with 
-> no input needed from user.
->
-> 2. Now to the sysfs interface itself, I know lot of thought has gone 
-> into sysfs vs debugfs considerations. But, have you considered using 
-> netlink interface instead of sysfs. Netlink interface is used for 
-> asynchronous communication between kernel and user space. In case of 
-> DCC, the communication appears to be asynchronous, where in user asks 
-> the kernel to capture some info and kernel can indicate back to user 
-> when the info is captured. Also the entire mess surrounding echoing 
-> addr / value / offset repeatedly into a sysfs entry can be avoided 
-> using netlink interface.
->
-Hello Thara,
+> On Thu, Jan 06, 2022 at 09:25:11AM -0500, Mike Snitzer wrote:
+> > On Thu, Jan 06 2022 at  5:02P -0500,
+> > Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> > 
+> > > There are currently 2 ways to create a set of sysfs files for a
+> > > kobj_type, through the default_attrs field, and the default_groups
+> > > field.  Move the dm sysfs code to use default_groups field which has
+> > > been the preferred way since aa30f47cf666 ("kobject: Add support for
+> > > default attribute groups to kobj_type") so that we can soon get rid of
+> > > the obsolete default_attrs field.
+> > > 
+> > > Cc: Alasdair Kergon <agk@redhat.com>
+> > > Cc: Mike Snitzer <snitzer@redhat.com>
+> > > Cc: dm-devel@redhat.com
+> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > ---
+> > >  drivers/md/dm-sysfs.c | 3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/md/dm-sysfs.c b/drivers/md/dm-sysfs.c
+> > > index a05fcd50e1b9..e28c92478536 100644
+> > > --- a/drivers/md/dm-sysfs.c
+> > > +++ b/drivers/md/dm-sysfs.c
+> > > @@ -112,6 +112,7 @@ static struct attribute *dm_attrs[] = {
+> > >  	&dm_attr_rq_based_seq_io_merge_deadline.attr,
+> > >  	NULL,
+> > >  };
+> > > +ATTRIBUTE_GROUPS(dm);
+> > 
+> > Bit strange to pass "dm" but then have ATTRIBUTE_GROUPS assume dm_attrs defined.
+> > Feels like it'll invite janitors sending patches, that they never
+> > compile, to remove dm_attrs.
+> 
+> 0-day would instantly catch that :)
+> 
+> That's the way the ATTRIBUTE_GROUPS() macro works.  It's tricky, yes,
+> and I don't like it all that much, but couldn't come up with a better
+> way at the time.  It saves lots and lots of boiler-plate code from
+> having to be typed all the time.
 
-Thanks for your review comments. Following are some points from my end
+OK, thanks for the insight.
 
-
-1) Each linked list represent a particular block of memory in DCC_SRAM 
-which is preserved for that particular list. That is why offset 
-calculation is done on the driver based on the linked list chosen by the 
-user.
-
-     This choice needs to be made by the user since the number for the 
-linked list chosen is specific to the registers used to debug a 
-particular component.  Also we are giving the user flexibility to 
-configure multiple
-
-     linked lists at one go so that even if we don't have a separate 
-folder for it , the dumps are collected as a separate list of registers. 
-Also there are certain curr_list values which may be supported by the dcc
-
-     hardware but may not be accessible to the user and so the choice 
-cannot be made arbitrarily from the driver.
-
-
-2) From opensource, I can see that Netlink has been used in most of the 
-cases where we need to notify stats to the user by taking the advantage 
-of asynchronous communication. In this case, that requirement is not
-
-     there since it is mostly one way communication from user to kernel. 
-Also since this is used for debugging purposes perhaps sysfs adds more 
-reliability than Netlink. In case of Netlink we have the additional
-
-      overhead of dealing with socket calls. Let me know otherwise.
-
-
-Thanks,
-
-Souradeep
-
-
-
-
+Mike
 

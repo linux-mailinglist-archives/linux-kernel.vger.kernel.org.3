@@ -2,128 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 551A148697F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E3CC486985
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:14:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242582AbiAFSOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 13:14:17 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57816 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241192AbiAFSOM (ORCPT
+        id S241192AbiAFSOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 13:14:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51878 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242600AbiAFSOV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 13:14:12 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4870561D17;
-        Thu,  6 Jan 2022 18:14:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A780C36AEB;
-        Thu,  6 Jan 2022 18:14:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641492850;
-        bh=pk9c3vFsS24A9H9YRNmuoLU04tTgveyiSfxz/RguLrg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=tWL9ah320xPJ7ZLvQrLFkjIeV1LTlPrJ2qSY/t0fKFbU+5MxnpWBBUesVfIjO0xOO
-         l+Yvi8TANgRjNK2vReZYRlLqehfzP4qE2oNJarfvWixIS0OfQkuKWpI6rrQEfWGn25
-         oroVHI/IQA8JEpMkHqxWMkHxAKg+IVXn/Zqji7RoVtpWyymeRt5WcM4qay0A7EFOWe
-         jnI4JpbaAmAttF9a/Yhl/wWUUgx6A1s8zF9Wpc8ft5Y9hFSMLv91rRujQQ/od6scnA
-         LsHiF+8iYMGoQ6RcvIn/+ZU8WqHN0Y3LnsXMJdYHRbXi/+K/WGfnGi+pM9zExj10bs
-         +smYL/+iBYHZg==
-Date:   Thu, 6 Jan 2022 12:14:09 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     John Garry <john.garry@huawei.com>
-Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ettore Chimenti <ek5.chimenti@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Ian Abbott <abbotti@mev.co.uk>,
-        H Hartley Sweeten <hsweeten@visionengravers.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        Mark Brown <broonie@kernel.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Teddy Wang <teddy.wang@siliconmotion.com>,
-        Forest Bond <forest@alittletooquiet.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, netdev@vger.kernel.org,
-        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
-        linux-scsi@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-wireless@vger.kernel.org, megaraidlinux.pdl@broadcom.com,
-        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-serial@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
-Message-ID: <20220106181409.GA297735@bhelgaas>
+        Thu, 6 Jan 2022 13:14:21 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D72C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 10:14:21 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id gp5so3170230pjb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 10:14:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GoH2UN/8qkqabVyCewCEHBZi5Bqh3qhRr5ggOkTJFF4=;
+        b=aQxvqSJhcL4KnFJO2E6onDSXG/6X25osguzKHpo2otgIlcDIu7jxz8hG4q7woDNfc3
+         ohTukTjB82nmeIRDqvrrOTmeaa0mILoVUemZ8wK/FjPJ1pzXBej44p5GNDLJQwVjc4Bb
+         2lYlh5Q4lIkvYynjiPb48LG7zS0HTbAyJb038jyJQC64PI4PiaWzNxpFRD/nIJxCN1ST
+         So8uX/VfsET5sQymJzbQ6gki1PDxvdfLl5ltlriMOe+C1LfsSSl7t3C4vXTOVGPo3EOy
+         NEb6djaIB22chEKBFUQUoE6AoYRGwXLeaR1T41NzfdDr9xa3XNGYktwSuCzUKHNyomrZ
+         7n9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=GoH2UN/8qkqabVyCewCEHBZi5Bqh3qhRr5ggOkTJFF4=;
+        b=OFSMP9KmNCrC7h+DRVeWykM2fd3HnkROpPmzLlg6XpbWppflKhbxpVVkg/+/pUHkHx
+         BTydo8nkFU6i6uqFLGqhsdQTHjHKEg9isomLIJoCeR5+ixw8XKiZ41UKKpCfvHlC/+Eu
+         sVeAfRMK0gww3EdhArBPJ0x2GHzlEulIXgJSZjVB5IP5M5iFU6slgsfmEAORjfhd8REU
+         DKLsblFa5BjQLWpRYH1DbakSE5c+AN82eTgnKA6ljAyFzm1cGld6oYz4xd3vXNGD4SYS
+         DGlvpnMwUsewMNqj3+L+tcmzj7zQpNngbrrwtOGFpP5wEytdjBL+GxBFNguzhRynjrnv
+         iJhA==
+X-Gm-Message-State: AOAM532gkPWv07EpWKcbLfezfF3NRGDk8qU2zTQEbcJEHcM+c3dREOiv
+        f2HiMwDJnHb+wcPMpesR9qsXB8go+Pc=
+X-Google-Smtp-Source: ABdhPJzWO9L/JV+JRJxU8f2mZoQwRPPTOlhPOIY/mp+2/vFRiWi5b7QYr/uMrLmIH8AlJDVCRRpWtw==
+X-Received: by 2002:a17:90b:688:: with SMTP id m8mr5421498pjz.62.1641492860292;
+        Thu, 06 Jan 2022 10:14:20 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:e32:b92d:27fe:aa55])
+        by smtp.gmail.com with ESMTPSA id mw8sm2992238pjb.42.2022.01.06.10.14.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 10:14:19 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Thu, 6 Jan 2022 10:14:17 -0800
+From:   Minchan Kim <minchan@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        David Hildenbrand <david@redhat.com>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        John Dias <joaodias@google.com>
+Subject: Re: [RESEND][PATCH v2] mm: don't call lru draining in the nested
+ lru_cache_disable
+Message-ID: <YdcxeaO+mSnAUqwf@google.com>
+References: <20211230193627.495145-1-minchan@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <74bf4fde-3972-1c36-ca04-58089da0d82b@huawei.com>
+In-Reply-To: <20211230193627.495145-1-minchan@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 05:41:00PM +0000, John Garry wrote:
-> On 05/01/2022 19:47, Bjorn Helgaas wrote:
-
-> > IMO inb() should
-> > be present but do something innocuous like return ~0, as it would if
-> > I/O port space is supported but there's no device at that address.
-> > 
-> > [1]https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/megaraid.c?id=v5.15#n4210
-> > 
+On Thu, Dec 30, 2021 at 11:36:27AM -0800, Minchan Kim wrote:
+> lru_cache_disable involves IPIs to drain pagevec of each core,
+> which sometimes takes quite long time to complete depending
+> on cpu's business, which makes allocation too slow up to
+> sveral hundredth milliseconds. Furthermore, the repeated draining
+> in the alloc_contig_range makes thing worse considering caller
+> of alloc_contig_range usually tries multiple times in the loop.
 > 
-> That driver would prob not be used on systems which does not support PIO,
-> and so could have a HAS_IOPORT dependency. But it is not strictly necessary.
+> This patch makes the lru_cache_disable aware of the fact the
+> pagevec was already disabled. With that, user of alloc_contig_range
+> can disable the lru cache in advance in their context during the
+> repeated trial so they can avoid the multiple costly draining
+> in cma allocation.
 
-I don't want the path of "this driver isn't needed because the device
-is unlikely to be used on this arch."
+Hi Folks,
 
-Maybe it's not _always_ possible, but if the device can be plugged
-into the platform, I think we should be able to build the driver for
-it.
+Any comment to proceed the work?
 
-If the device requires I/O port space and the platform doesn't support
-it, the PCI core or the driver should detect that and give a useful
-diagnostic.
-
-Bjorn
+> 
+> Signed-off-by: Minchan Kim <minchan@kernel.org>
+> ---
+>  * from v1 - https://lore.kernel.org/lkml/20211206221006.946661-1-minchan@kernel.org/
+>    * fix lru_cache_disable race - akpm
+> 
+>  include/linux/swap.h | 14 ++------------
+>  mm/cma.c             |  5 +++++
+>  mm/swap.c            | 30 ++++++++++++++++++++++++++++--
+>  3 files changed, 35 insertions(+), 14 deletions(-)
+> 
+> diff --git a/include/linux/swap.h b/include/linux/swap.h
+> index ba52f3a3478e..fe18e86a4f13 100644
+> --- a/include/linux/swap.h
+> +++ b/include/linux/swap.h
+> @@ -348,19 +348,9 @@ extern void lru_note_cost_page(struct page *);
+>  extern void lru_cache_add(struct page *);
+>  extern void mark_page_accessed(struct page *);
+>  
+> -extern atomic_t lru_disable_count;
+> -
+> -static inline bool lru_cache_disabled(void)
+> -{
+> -	return atomic_read(&lru_disable_count);
+> -}
+> -
+> -static inline void lru_cache_enable(void)
+> -{
+> -	atomic_dec(&lru_disable_count);
+> -}
+> -
+> +extern bool lru_cache_disabled(void);
+>  extern void lru_cache_disable(void);
+> +extern void lru_cache_enable(void);
+>  extern void lru_add_drain(void);
+>  extern void lru_add_drain_cpu(int cpu);
+>  extern void lru_add_drain_cpu_zone(struct zone *zone);
+> diff --git a/mm/cma.c b/mm/cma.c
+> index 995e15480937..60be555c5b95 100644
+> --- a/mm/cma.c
+> +++ b/mm/cma.c
+> @@ -30,6 +30,7 @@
+>  #include <linux/cma.h>
+>  #include <linux/highmem.h>
+>  #include <linux/io.h>
+> +#include <linux/swap.h>
+>  #include <linux/kmemleak.h>
+>  #include <trace/events/cma.h>
+>  
+> @@ -453,6 +454,8 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
+>  	if (bitmap_count > bitmap_maxno)
+>  		goto out;
+>  
+> +	lru_cache_disable();
+> +
+>  	for (;;) {
+>  		spin_lock_irq(&cma->lock);
+>  		bitmap_no = bitmap_find_next_zero_area_off(cma->bitmap,
+> @@ -492,6 +495,8 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
+>  		start = bitmap_no + mask + 1;
+>  	}
+>  
+> +	lru_cache_enable();
+> +
+>  	trace_cma_alloc_finish(cma->name, pfn, page, count, align);
+>  
+>  	/*
+> diff --git a/mm/swap.c b/mm/swap.c
+> index af3cad4e5378..5f89d7c9a54e 100644
+> --- a/mm/swap.c
+> +++ b/mm/swap.c
+> @@ -847,7 +847,17 @@ void lru_add_drain_all(void)
+>  }
+>  #endif /* CONFIG_SMP */
+>  
+> -atomic_t lru_disable_count = ATOMIC_INIT(0);
+> +static atomic_t lru_disable_count = ATOMIC_INIT(0);
+> +
+> +bool lru_cache_disabled(void)
+> +{
+> +	return atomic_read(&lru_disable_count) != 0;
+> +}
+> +
+> +void lru_cache_enable(void)
+> +{
+> +	atomic_dec(&lru_disable_count);
+> +}
+>  
+>  /*
+>   * lru_cache_disable() needs to be called before we start compiling
+> @@ -859,7 +869,21 @@ atomic_t lru_disable_count = ATOMIC_INIT(0);
+>   */
+>  void lru_cache_disable(void)
+>  {
+> -	atomic_inc(&lru_disable_count);
+> +	static DEFINE_MUTEX(lock);
+> +
+> +	/*
+> +	 * The lock gaurantees lru_cache is drained when the function
+> +	 * returned.
+> +	 */
+> +	mutex_lock(&lock);
+> +	/*
+> +	 * If someone is already disabled lru_cache, just return with
+> +	 * increasing the lru_disable_count.
+> +	 */
+> +	if (atomic_inc_not_zero(&lru_disable_count)) {
+> +		mutex_unlock(&lock);
+> +		return;
+> +	}
+>  #ifdef CONFIG_SMP
+>  	/*
+>  	 * lru_add_drain_all in the force mode will schedule draining on
+> @@ -873,6 +897,8 @@ void lru_cache_disable(void)
+>  #else
+>  	lru_add_and_bh_lrus_drain();
+>  #endif
+> +	atomic_inc(&lru_disable_count);
+> +	mutex_unlock(&lock);
+>  }
+>  
+>  /**
+> -- 
+> 2.34.1.448.ga2b2bfdf31-goog
+> 

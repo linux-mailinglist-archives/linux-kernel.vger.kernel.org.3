@@ -2,65 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE46486186
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 09:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62733486188
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 09:41:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236788AbiAFIlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 03:41:49 -0500
-Received: from smtp25.cstnet.cn ([159.226.251.25]:57248 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236746AbiAFIlr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 03:41:47 -0500
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowAAnLwMnq9Zh9Ae1BQ--.62457S2;
-        Thu, 06 Jan 2022 16:41:11 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     tiwai@suse.de
-Cc:     perex@perex.cz, tiwai@suse.com, leon@kernel.org,
-        broonie@kernel.org, joe@perches.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: Re: Re: [PATCH] ALSA: intel_hdmi: Check for error num after setting mask
-Date:   Thu,  6 Jan 2022 16:41:10 +0800
-Message-Id: <20220106084110.2691207-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S236823AbiAFIlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 03:41:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:24666 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236793AbiAFIlw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 03:41:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641458511;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=B6cO0By3xfU7a9n6TEUm5Q0O0rT0zqzS45h4TsZ5dLM=;
+        b=Bl7gttkmQZHecyTqB0Nh6cJmBusFYbgq+Hm2PeN9Kv6s3bUXPqz6A/x75H1+d2MmyRom33
+        c3VCTKn647eoLrpzEphdTGutft0KAbKAk3+wA3BqZ8INmc0igwsMBA/xpMw8sxpT3fvA1T
+        u137Ze9YnVCSjWDe0CnYxImy9ME/cpo=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-393-j3qihre0N5eM6wn0FIUM3g-1; Thu, 06 Jan 2022 03:41:50 -0500
+X-MC-Unique: j3qihre0N5eM6wn0FIUM3g-1
+Received: by mail-ed1-f70.google.com with SMTP id w6-20020a05640234c600b003f916e1b615so1407428edc.17
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 00:41:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=B6cO0By3xfU7a9n6TEUm5Q0O0rT0zqzS45h4TsZ5dLM=;
+        b=HdM9nZ2O+wlOub6CPiq/lVODNFMkVQ+WCrRHmLd+JOdmhcqHkyD1ZtrcjjT6Swvb0e
+         o+u2s1d6QhgdpqbAwUm1Dwz5ruyUQ7m2aGqasPEf2BmpffvRVRw0mEmTVoU9gNWufycI
+         5DxqmSQAb7VOyFl7Yl4AB2q64/x+3MAo5oETJLHJQqTGUCmL4+iNWYnM6XLidCDjkSrA
+         7tgQzSA+7OGJ2vHFJKOfQ9XojIVoBySq85UV4T2lIwCIdVPEIFWKE7BzUcVhHIl38Url
+         m194H9hBP0yM2yXrF/z6Ka0UEYrL6vBwtZX1yDU3vmrjndp5nuLStv+hJ+j1Isxjo+IU
+         WO+Q==
+X-Gm-Message-State: AOAM530x70ZmI9e9ChTlC7cZmVgFtrAcBLR/ZLuqAp4gJp9aSsMtF7dL
+        ibfSNGknbljngyyIaSclcxmL6hofLmb+hK4xTmJ1PxWONLd+XwgS08fwo7V9UBZsdJWDV9a0+zC
+        AhC0TWu5USzEH4UjGVAvpzZL7
+X-Received: by 2002:a05:6402:b41:: with SMTP id bx1mr55483119edb.292.1641458509066;
+        Thu, 06 Jan 2022 00:41:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyQIYkJhAAbOd6J0hHVNMxZpM46ATJPB6IQAd2TD7n+qeYiIloSdNHNaqNQIwh69l8u33Z77A==
+X-Received: by 2002:a05:6402:b41:: with SMTP id bx1mr55483112edb.292.1641458508882;
+        Thu, 06 Jan 2022 00:41:48 -0800 (PST)
+Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
+        by smtp.gmail.com with ESMTPSA id q20sm479615edt.13.2022.01.06.00.41.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 00:41:47 -0800 (PST)
+Date:   Thu, 6 Jan 2022 09:41:46 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 08/13] bpf: Add kprobe link for attaching raw kprobes
+Message-ID: <YdarSovbcmoY9lI6@krava>
+References: <20220104080943.113249-1-jolsa@kernel.org>
+ <20220104080943.113249-9-jolsa@kernel.org>
+ <CAEf4BzZ7s=Pp+2xY3qKX9u6KrPdGW9NNfoiep7nGW+=_s=JJJA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowAAnLwMnq9Zh9Ae1BQ--.62457S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Xry8Gw47Jw45CFWfKFWruFg_yoWxAwb_W3
-        48X3s5Xw4DtFy7Z34vyrn3Zry2qayjvr1xXrsYqF47Xw15ZFW8XrWUCr4ak3WxG34jyFZx
-        Cr4fZw45Xrya9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbckFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFyl
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU4a0PUUUUU=
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZ7s=Pp+2xY3qKX9u6KrPdGW9NNfoiep7nGW+=_s=JJJA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 04:18:01PM +0800, Takashi Iwai wrote:
-> Well, 32bit DMA mask practically never fails on x86 (and other
-> architectures, IIRC).  It's fine to add a sanity check, but it's
-> better to be mentioned that it never fails.
+On Wed, Jan 05, 2022 at 08:30:56PM -0800, Andrii Nakryiko wrote:
+> On Tue, Jan 4, 2022 at 12:10 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> >
+> > Adding new link type BPF_LINK_TYPE_KPROBE to attach kprobes
+> > directly through register_kprobe/kretprobe API.
+> >
+> > Adding new attach type BPF_TRACE_RAW_KPROBE that enables
+> > such link for kprobe program.
+> >
+> > The new link allows to create multiple kprobes link by using
+> > new link_create interface:
+> >
+> >   struct {
+> >     __aligned_u64   addrs;
+> >     __u32           cnt;
+> >     __u64           bpf_cookie;
+> 
+> I'm afraid bpf_cookie has to be different for each addr, otherwise
+> it's severely limiting. So it would be an array of cookies alongside
+> an array of addresses
 
-Actually, I have already found many place check the 32bit DMA mask.
-For example:
-snd_ad1889_create() in `sound/pci/ad1889.c`, 
-snd_vortex_create() in `sound/pci/au88x0/au88x0.c`
-tegra_pcm_dma_allocate() in `sound/soc/tegra/tegra_pcm.c`.
-Therefore, I think there must be some reason that 32bit may fail.
-So, to make the system more robust, it should be better to add the
-sanity check.
+ok
 
-Sincerely thanks,
-Jiang
+> 
+> >   } kprobe;
+> >
+> > Plus new flag BPF_F_KPROBE_RETURN for link_create.flags to
+> > create return probe.
+> >
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  include/linux/bpf_types.h      |   1 +
+> >  include/uapi/linux/bpf.h       |  12 +++
+> >  kernel/bpf/syscall.c           | 191 ++++++++++++++++++++++++++++++++-
+> >  tools/include/uapi/linux/bpf.h |  12 +++
+> >  4 files changed, 211 insertions(+), 5 deletions(-)
+> >
+> 
+> [...]
+> 
+> > @@ -1111,6 +1113,11 @@ enum bpf_link_type {
+> >   */
+> >  #define BPF_F_SLEEPABLE                (1U << 4)
+> >
+> > +/* link_create flags used in LINK_CREATE command for BPF_TRACE_RAW_KPROBE
+> > + * attach type.
+> > + */
+> > +#define BPF_F_KPROBE_RETURN    (1U << 0)
+> > +
+> 
+> we have plenty of flexibility to have per-link type fields, so why not
+> add `bool is_retprobe` next to addrs and cnt?
+
+well I thought if I do that, people would suggest to use the empty
+flags field instead ;-) 
+
+we can move it there as you suggest, but I wonder it's good idea to
+use bool in uapi headers, because the bool size definition is vague
+
+jirka
+
+> 
+> >  /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
+> >   * the following extensions:
+> >   *
+> > @@ -1465,6 +1472,11 @@ union bpf_attr {
+> >                                  */
+> >                                 __u64           bpf_cookie;
+> >                         } perf_event;
+> > +                       struct {
+> > +                               __aligned_u64   addrs;
+> > +                               __u32           cnt;
+> > +                               __u64           bpf_cookie;
+> > +                       } kprobe;
+> >                 };
+> >         } link_create;
+> >
+> 
+> [...]
+> 
 

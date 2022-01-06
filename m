@@ -2,99 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4568486E11
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 00:52:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07DF3486E12
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 00:52:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343516AbiAFXwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 18:52:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44676 "EHLO
+        id S1343531AbiAFXw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 18:52:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245586AbiAFXwM (ORCPT
+        with ESMTP id S245661AbiAFXwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 18:52:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81F6C061245;
-        Thu,  6 Jan 2022 15:52:11 -0800 (PST)
+        Thu, 6 Jan 2022 18:52:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584CAC061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 15:52:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80FD3B8248C;
-        Thu,  6 Jan 2022 23:52:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B68BC36AE0;
-        Thu,  6 Jan 2022 23:52:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ECF6361DA3
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 23:52:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 632B4C36AE0;
+        Thu,  6 Jan 2022 23:52:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641513129;
-        bh=VzdssKBsKk7ql2J3op87GHuQU0+WMaZqZn3eCOALKqY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=aphWZ8SsaGIWBqMqJ9z9YkF62sPs4y/85qzCZ8YpNbjjV/KPvgL6HJfCH1DKGow0P
-         ipY+zYcJr3if5+gWaaYxenC59nNOpgcmha/2YZKAi0RyuWAwnnlpiotuf1NNblIJI5
-         V0VhWSLFOCj2liwNqCaAcPjtxVI/N2G/ZmDsl7fR27/fSCPjxTOcgtDA1Dy3q2QTIW
-         m7MkdfC4/hijA0DqbtezkrOKOrj+07FQE40Ka9DIinpW+l2mvNg5FgFZDSRCM03FJQ
-         2EdI87ovGmcvprMA8xxoxJ6oqEML7gOv0kZxupA0tW6SRza0KDUTac7ubWO2KjCOo7
-         JWyIKXDcvscDQ==
-Date:   Fri, 7 Jan 2022 08:52:03 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [RFC 00/13] kprobe/bpf: Add support to attach multiple kprobes
-Message-Id: <20220107085203.14f9c06e0537ea6b00779842@kernel.org>
-In-Reply-To: <CAADnVQLjjcsckQVqaSB8ODB4FKdVUt-PB9xyJ3FAa2GWGLbHgA@mail.gmail.com>
-References: <20220104080943.113249-1-jolsa@kernel.org>
-        <20220106002435.d73e4010c93462fbee9ef074@kernel.org>
-        <YdaoTuWjEeT33Zzm@krava>
-        <20220106225943.87701fcc674202dc3e172289@kernel.org>
-        <CAADnVQLjjcsckQVqaSB8ODB4FKdVUt-PB9xyJ3FAa2GWGLbHgA@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        s=k20201202; t=1641513174;
+        bh=1P9rbQ7ckjdDra6B6VUQvGOc6Qllb1PtOtTkRYELTCk=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=aZlrcdHkrNCAqg1fBeI3Q1Bdi1vXJDvOxo0tJ4mTpqMRn8AQrDUya8Nzi9wEdlI/y
+         TM3Pp5nje+g5n+IsnBmig1T0SMTH99679Dv7wvc0YXEPFomnPPqhxSaDucrQv7j4fB
+         9YXxbFhV+e5Cxrls1RtqyHojRREPHJNP7S7BIGzqn8IzFYcRTz4F8ourKlWMF4r6Ze
+         i26tOwnXTJxtduVYAKPVpkDCGwtlPDazIG6bwT0D2tBCqzeHp1pyBFv5dE41UzzIZw
+         CTiNPF1vBnDIv1P34cjnZ9upFPJSmVAX7xTwg/f02eMfs1B8LeqX5iYgqyZjIyXspr
+         hYiM5d+maarZA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 52263F79403;
+        Thu,  6 Jan 2022 23:52:54 +0000 (UTC)
+Subject: Re: [GIT PULL] tracing: Minor fixes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220106155842.57b7b4f3@gandalf.local.home>
+References: <20220106155842.57b7b4f3@gandalf.local.home>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220106155842.57b7b4f3@gandalf.local.home>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git trace-v5.16-rc8
+X-PR-Tracked-Commit-Id: f28439db470cca8b6b082239314e9fd10bd39034
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b2b436ec0205abde78ef8fd438758125ffbb0fec
+Message-Id: <164151317432.22138.1760896661865573376.pr-tracker-bot@kernel.org>
+Date:   Thu, 06 Jan 2022 23:52:54 +0000
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Jan 2022 09:40:17 -0800
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+The pull request you sent on Thu, 6 Jan 2022 15:58:42 -0500:
 
-> On Thu, Jan 6, 2022 at 5:59 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > That seems to bind your mind. The program type is just a programing
-> > 'model' of the bpf. You can choose the best implementation to provide
-> > equal functionality. 'kprobe' in bpf is just a name that you call some
-> > instrumentations which can probe kernel code.
-> 
-> No. We're not going to call it "fprobe" or any other name.
-> From bpf user's pov it's going to be "multi attach kprobe",
-> because this is how everyone got to know kprobes.
-> The 99% usage is at the beginning of the funcs.
-> When users say "kprobe" they don't care how kernel attaches it.
-> The func entry limitation for "multi attach kprobe" is a no-brainer.
+> git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git trace-v5.16-rc8
 
-Agreed. I think I might mislead you. From the bpf user pov, it always be
-shown as 'multi attached kprobes (but only for the function entry)'
-the 'fprobe' is kernel internal API name.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b2b436ec0205abde78ef8fd438758125ffbb0fec
 
-> And we need both "multi attach kprobe" and "multi attach kretprobe"
-> at the same time. It's no go to implement one first and the other
-> some time later.
-
-You can provide the interface to user space, but the kernel implementation
-is optimized step by step. We can start it with using real multiple
-kretprobes, and then, switch to 'fprobe' after integrating fgraph
-callback. :)
-
-Thank you,
+Thank you!
 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

@@ -2,182 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F01FD486A72
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 20:21:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB0E2486A76
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 20:27:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243292AbiAFTVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 14:21:20 -0500
-Received: from out02.mta.xmission.com ([166.70.13.232]:39562 "EHLO
-        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243233AbiAFTVS (ORCPT
+        id S243307AbiAFT1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 14:27:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243233AbiAFT1p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 14:21:18 -0500
-Received: from in01.mta.xmission.com ([166.70.13.51]:43200)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1n5YK2-00FHHU-Py; Thu, 06 Jan 2022 12:21:14 -0700
-Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:53282 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1n5YJy-00EYlo-V1; Thu, 06 Jan 2022 12:21:13 -0700
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Pintu Agarwal <pintu.ping@gmail.com>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Pintu Kumar <quic_pintu@quicinc.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        "christian.brauner\@ubuntu.com" <christian.brauner@ubuntu.com>,
-        "sfr\@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "legion\@kernel.org" <legion@kernel.org>,
-        "sashal\@kernel.org" <sashal@kernel.org>,
-        "chris.hyser\@oracle.com" <chris.hyser@oracle.com>,
-        "ccross\@google.com" <ccross@google.com>,
-        "pcc\@google.com" <pcc@google.com>,
-        "dave\@stgolabs.net" <dave@stgolabs.net>,
-        "caoxiaofeng\@yulong.com" <caoxiaofeng@yulong.com>,
-        "david\@redhat.com" <david@redhat.com>
-References: <1641483250-18839-1-git-send-email-quic_pintu@quicinc.com>
-        <YdcUttZWaqYQpR1K@grain>
-        <CAOuPNLifYFPU4Gt2+1sOSsYNNLQq7U2aGVaYknrhaMc-CVx8vg@mail.gmail.com>
-        <14316cf852784a32b5214119a9d976cf@AcuMS.aculab.com>
-        <CAOuPNLjh+OhnqqGWWj015eQmwGqp96iu2zycVq4sM+K7JjxumQ@mail.gmail.com>
-Date:   Thu, 06 Jan 2022 13:20:05 -0600
-In-Reply-To: <CAOuPNLjh+OhnqqGWWj015eQmwGqp96iu2zycVq4sM+K7JjxumQ@mail.gmail.com>
-        (Pintu Agarwal's message of "Thu, 6 Jan 2022 23:29:02 +0530")
-Message-ID: <87lezs4qoq.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Thu, 6 Jan 2022 14:27:45 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E5BC061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 11:27:44 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id c71so1847689edf.6
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 11:27:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pLU+4pXKXLqbKm6pb0YwpMhniA0RhW86iVzjkY/V/yU=;
+        b=OR0e+UsSNT7ozFA7ZLEtZnBWZsn8uNW2OFZwrpOOBSjNQhIQ7bAc2yTekhocTSyQgN
+         r+GTr6VIUQSDhtqEhs21F6JPZz6OyW7Is0QyBdvgiKo2cbAelC7SEttqLsaeK2oONGgA
+         K4uYMU9/b9XB2uxycgZ9YT99bF/xbUnsasTMFR8sdZAWxq+OgJR5BnGQdFordTfseTuc
+         dRmewWmXkMzQ+eSIvwKtq6mei2B6oq4pf7WlqAsvIJfnRp4sM7JuCty5eeFvHJmqeERk
+         teTNwA2XMD3JWvnr96YUV/HM8CYI0j3VbVyyefFv90s43yruvrP2JPqy0JhNNuS7Bd9l
+         nuSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pLU+4pXKXLqbKm6pb0YwpMhniA0RhW86iVzjkY/V/yU=;
+        b=ueBgSya7fge/zq4n61FZAZ3UyvhtqxpMFNDLWUkQQw/OfhkQrjoTPTMyAKbdsPbcl0
+         K843ZKobO7wWrC4iSjvBOtDr58PuTdY7wAgaacLT5zRVigk85pFoTqYF6NXwLH7IGj3u
+         hOQ1RWVFMn6BTFCrSr6QFNI6l4a/Y0y7Znjh2xHQJC1gr4xUALq3WlAF3hUJz9j9RBGO
+         RajZi8OPNFgE7LbEqwHRJuxZpJg9Ae/Nuq2x8upsoEb7JWeMH8a9mCqz1OBG1XzeryM1
+         qDqErJgY8fENSVgIOy0Ykje44kT0s9hKqU4UHcFGl4y7VOfTN/regjCE3LCxNs5VSb6Z
+         dUsA==
+X-Gm-Message-State: AOAM531CHCqiKzvLgMtAsdVo3HP6ZFigANGleA0rw5tvucUvg/I4kkIr
+        08FxbFFBlYJGwy6ptBQY8iCuEeRD5i+YagRUIrzvP44T94Q=
+X-Google-Smtp-Source: ABdhPJyHu9mjyJqIsE15eieR2GKUAnQrHM2DBhDius93D+UNYMgPzTbkuErO9hI24l5i8UEmxS2/4SBlKWeQUagIoWk=
+X-Received: by 2002:a05:6402:354d:: with SMTP id f13mr51460949edd.135.1641497263269;
+ Thu, 06 Jan 2022 11:27:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1n5YJy-00EYlo-V1;;;mid=<87lezs4qoq.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/mqfe7CWdGqQOSOMJXSThU0zvAUZRJ1ig=
-X-SA-Exim-Connect-IP: 68.110.24.146
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
-X-Spam-Level: *
-X-Spam-Status: No, score=1.5 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_XMDrugObfuBody_08,XMSubLong
-        autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4998]
-        *  0.7 XMSubLong Long Subject
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  1.0 T_XMDrugObfuBody_08 obfuscated drug references
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *;Pintu Agarwal <pintu.ping@gmail.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 2031 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 11 (0.5%), b_tie_ro: 10 (0.5%), parse: 0.87
-        (0.0%), extract_message_metadata: 16 (0.8%), get_uri_detail_list: 2.7
-        (0.1%), tests_pri_-1000: 26 (1.3%), tests_pri_-950: 1.20 (0.1%),
-        tests_pri_-900: 1.10 (0.1%), tests_pri_-90: 99 (4.9%), check_bayes: 97
-        (4.8%), b_tokenize: 12 (0.6%), b_tok_get_all: 12 (0.6%), b_comp_prob:
-        3.4 (0.2%), b_tok_touch_all: 65 (3.2%), b_finish: 0.92 (0.0%),
-        tests_pri_0: 1865 (91.8%), check_dkim_signature: 0.55 (0.0%),
-        check_dkim_adsp: 3.1 (0.2%), poll_dns_idle: 1.40 (0.1%), tests_pri_10:
-        2.2 (0.1%), tests_pri_500: 7 (0.3%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH] sysinfo: include availram field in sysinfo struct
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+References: <20220106175019.3116389-1-festevam@gmail.com> <Ydc2EHf5f12w4YcW@sirena.org.uk>
+In-Reply-To: <Ydc2EHf5f12w4YcW@sirena.org.uk>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Thu, 6 Jan 2022 16:27:32 -0300
+Message-ID: <CAOMZO5Czbr=vuvZdqc6+odAQv0M-LJEQVz6uke8OXnoG6wLqwA@mail.gmail.com>
+Subject: Re: [PATCH v2] regmap: debugfs: Free debugfs_name buffer after usage
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pintu Agarwal <pintu.ping@gmail.com> writes:
+Hi Mark,
 
-> On Thu, 6 Jan 2022 at 23:12, David Laight <David.Laight@aculab.com> wrote:
->>
->> From: Pintu Agarwal
->> > Sent: 06 January 2022 16:50
->> >
->> > On Thu, 6 Jan 2022 at 21:41, Cyrill Gorcunov <gorcunov@gmail.com> wrote:
->> > >
->> > > On Thu, Jan 06, 2022 at 09:04:10PM +0530, Pintu Kumar wrote:
->> > > > The sysinfo member does not have any "available ram" field and
->> > > > the bufferram field is not much helpful either, to get a rough
->> > > > estimate of available ram needed for allocation.
->> > > >
->> > > > One needs to parse MemAvailable field separately from /proc/meminfo
->> > > > to get this info instead of directly getting if from sysinfo itself.
->> > > >
->> > > > Thus, this patch introduce a new field as availram in sysinfo
->> > > > so that all the info total/free/available can be retrieved from
->> > > > one place itself.
->> > > >
->> > > > There are couple of places in kernel as well where this can be improved.
->> > > > For example:
->> > > > In fs/proc/meminfo.c:
->> > > > meminfo_proc_show:
->> > > >    si_meminfo(&i);
->> > > >    available = si_mem_available();
->> > > > Now with this change the second call be avoided.
->> > > > Thus, we can directly do:
->> > > > show_val_kb(m, "MemAvailable:   ", i.availram);
->> > > >
->> > > > Note, this also requires update in procfs for free and other commands.
->> > > > Like in free command as well we frist call sysinfo then again parse
->> > > > /proc/meminfo to get available field.
->> > > > This can be avoided too with higher kernel version.
->> > > >
->> > > > A sample output with single sysinfo call is shown below:
->> > > > Total RAM: 248376 kB
->> > > >  Free RAM: 231540 kB
->> > > > Avail RAM: 230448 kB
->> > > >
->> > > > Signed-off-by: Pintu Kumar <quic_pintu@quicinc.com>
->> > > > Signed-off-by: Pintu Agarwal <pintu.ping@gmail.com>
->> > > > ---
->> > > >  include/uapi/linux/sysinfo.h | 1 +
->> > > >  kernel/sys.c                 | 4 ++++
->> > > >  mm/page_alloc.c              | 2 ++
->> > > >  3 files changed, 7 insertions(+)
->> > > >
->> > > > diff --git a/include/uapi/linux/sysinfo.h b/include/uapi/linux/sysinfo.h
->> > > > index 435d5c2..6e77e90 100644
->> > > > --- a/include/uapi/linux/sysinfo.h
->> > > > +++ b/include/uapi/linux/sysinfo.h
->> > > > @@ -12,6 +12,7 @@ struct sysinfo {
->> > > >       __kernel_ulong_t freeram;       /* Available memory size */
->> > > >       __kernel_ulong_t sharedram;     /* Amount of shared memory */
->> > > >       __kernel_ulong_t bufferram;     /* Memory used by buffers */
->> > > > +     __kernel_ulong_t availram;      /* Memory available for allocation */
->> > > >       __kernel_ulong_t totalswap;     /* Total swap space size */
->> > > >       __kernel_ulong_t freeswap;      /* swap space still available */
->> > > >       __u16 procs;                    /* Number of current processes */
->> > >
->> > > Hi! Sorry, but I don't understand -- the sysinfo structure seems to
->> > > be part of user API, no? Don't we break it up here?
->> >
->> > Yes, the corresponding user space header /usr/include/linux/sysinfo.h
->> > also needs to be updated.
->> > When we generate the kernel header it will be updated automatically.
->>
->> You can't add a field in the middle of a UAPI structure.
->> It breaks compatibility for old binaries.
->>
->> Depending on the interface definition you may be able to add one at the end.
->>
-> oh okay thank you for your feedback. I will move to the end and check again.
-> But my doubt is, whether I should move before this
-> char _f[20-2*sizeof(__kernel_ulong_t)-sizeof(__u32)];
-> or after this ?
+On Thu, Jan 6, 2022 at 3:33 PM Mark Brown <broonie@kernel.org> wrote:
 
-Before the padding and you should reduce the size of the padding by the
-size of your new field.
+> OK, but what's the logic here?  The name is getting thrown away here but
 
-> Also, I could not understand what this is for ?
-> Do we need to update this since sture is changed ?
+I did more debugging and this is what I found:
+The 'debugfs: Directory 'dummy-iomuxc-gpr@20e0000' with parent
+'regmap' already present!' message
+happens since commit cffa4b2122f5 ("regmap: debugfs: Fix a memory leak
+when calling regmap_attach_dev").
 
-In general padding like that is so new fields can be added.  The
-comment about libc5 makes me a wonder a bit, but I expect libc5 just
-added the padding in it's copy of the structure that it exported to
-userspace many many years ago so that new fields could be added.
+Prior to this commit map->debugfs_name would always be allocated via
+kasprintf().
 
-Eric
+After this commit, the allocation only happens when !map->debugfs_name.
 
+This matches with my observations:
+
+- The first allocation for dummy-iomuxc-gpr@20e0000 works as
+map->debugfs_name is NULL.
+- The second time map->debugfs_name is not NULL, so there is no allocation
+via kasprintf(), and the map->debugfs_name uses the 'old' entry from
+the previous buffer.
+
+This causes the directory name to be duplicated and fails to be created.
+
+That's why clearing map->debugfs_name causes a new kasprintf()
+allocation and restores the correct behavior.
+
+Prior to  cffa4b2122f5 ("regmap: debugfs: Fix a memory leak when
+calling regmap_attach_dev"):
+
+# mount -t debugfs none /sys/kernel/debug/
+# cat /sys/kernel/debug/regmap/dummy-iomuxc-gpr@20e0000/registers
+00: 00000000
+04: 48611005
+08: 0000000c
+0c: 01e00000
+10: f00000cf
+14: 0000000e
+18: 007f007f
+1c: 007f007f
+20: fffd4000
+24: 00000000
+28: 00003800
+2c: 00000000
+30: 0f004490
+34: 0593e4a4
+# cat /sys/kernel/debug/regmap/20e0000.pinctrl-gpr/registers
+00: 00000000
+04: 48611005
+08: 0000000c
+0c: 01e00000
+10: f00000cf
+14: 00000007
+18: 007f007f
+1c: 007f007f
+20: fffd4000
+24: 00000000
+28: 00003800
+2c: 00000000
+30: 0f004490
+34: 0593e4a4
+
+After commit cffa4b2122f5 ("regmap: debugfs: Fix a memory leak when
+calling regmap_attach_dev):
+
+The 'debugfs: Directory 'dummy-iomuxc-gpr@20e0000' with parent
+'regmap' already present!' message is seen.
+
+# cat /sys/kernel/debug/regmap/20e0000.pinctrl-gpr/registers
+cat: can't open
+'/sys/kernel/debug/regmap/20e0000.pinctrl-gpr/registers': No such file
+or directory
+
+# cat /sys/kernel/debug/regmap/dummy-iomuxc-gpr@20e0000/registers
+00: 00000000
+04: 48611005
+08: 0000000c
+0c: 01e00000
+10: f00000cf
+14: 00000009
+18: 007f007f
+1c: 007f007f
+20: fffd4000
+24: 00000000
+28: 00003800
+2c: 00000000
+30: 0f004490
+34: 0593e4a4
+
+> clearly there is a file still so I'm not seeing how anything is going to
+> clean that file up.  That means that if the device gets freed we'll end
+> up with the old debugfs file hanging around pointing at nothing.  Like I
+> said (originally in response to Matthias' patch but pasted in this
+> thread as well):
+>
+> | (we should probably clean up the one with no device but that's not what
+> | your commit does).  I think what you need to look at here is that we
+>
+> The use after free extends beyond just the filename, we're also loosing
+> track of the already created file, which does seem to be an existing
+> bug.  To be more explicit this means we need a call to regmap_debugfs_exit()
+> which will clean up all the existing debugfs stuff before we loose
+> references to it.
+
+As shown above, I don't see the '
+/sys/kernel/debug/regmap/20e0000.pinctrl-gpr' directory being created,
+so there is nothing to clean.
+
+Where exactly would you like me to call regmap_debugfs_exit()?
+
+Thanks

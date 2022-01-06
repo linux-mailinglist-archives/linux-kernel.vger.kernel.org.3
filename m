@@ -2,147 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD03486576
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 14:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D87C0486579
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 14:45:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239687AbiAFNoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 08:44:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46888 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239492AbiAFNoJ (ORCPT
+        id S239703AbiAFNpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 08:45:02 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58680 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239694AbiAFNpB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 08:44:09 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C89C061245;
-        Thu,  6 Jan 2022 05:44:08 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id u25so9687226edf.1;
-        Thu, 06 Jan 2022 05:44:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Y5A9mGGvtCL8KjNqbB8PGWobWw1mgwe2RmV+RRDZFaU=;
-        b=Ni83hCEHfmFk7JRu4YiqUZevlSpB3ScQL6i1gIeZAqU9fRP+O1lzZH1tdYmTf6SP/8
-         /iCIrauqgocfQGs7/o46Jl0F32R78TcK46Qne0ZsBeKS4bfPOxtLm3X2JlBmn3v+kpwT
-         PRytcO+tvC57Wro7jf+GAWiuJxpAwkwk5A6munwojm+PavVQNjYsVv7c1i3b5TYDHhih
-         10ipzWIoz+NyPYLQGc6bW/4Pd2esHDqDl1K37YR1NcVdOqn4/EqfYKjTZ1peYqxg47+P
-         qgYtOCZKOfe56MPbvQKSMRMbmDVUkLQ3yiw8Gl+JA9sNUfYUZi0btCFWo4rrziVoPJ2M
-         6obQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Y5A9mGGvtCL8KjNqbB8PGWobWw1mgwe2RmV+RRDZFaU=;
-        b=wG0DgSg9nX274s26Mmui6dYoh+gVo6Bg0WmPt3Q9wvO8YnVpFY0oICoxDGLSqtv7pW
-         cel1HEMOtQ6c+s/agTP0+6ZK9gneIhnVm967Ib4SXJXVqGPtczezDvB6lUbLwFGgeY53
-         a1Z4gfi4qcb6be5GqOPo0uKzpZJjgh7h7qlqUnyXCkfhdwMudEVIkSe1UDGwCU+HNcfx
-         FwB5rqw+cvcxOkYx8fEJSIN5vHDnFnZ30/7qWIPSzQ041jiHytjf8a8Amlimi7JNlt+O
-         6TVMxd0Yq3govCnksNEsp82BeAzJBb6RXwx6jansxECWGds5ehMXxbEaMTxEeAa0Rp1Y
-         FihQ==
-X-Gm-Message-State: AOAM532sMZ0vwX3kkoKwMt0SIpM//pbynG9+N/KRNuOrjkJQfhCM4M05
-        SQ/7TEv/k1qaYFk90EJxva3FLO/ciwAsElsaL/YDDLLLSkc=
-X-Google-Smtp-Source: ABdhPJxEgnbIiTuMaDLJ9hSWMKW+bqEp0qzDY7GQdauyxnGRAdLsWS49IkBK4dqTAEPzogWxptfnRw5gIhfYDukX7KM=
-X-Received: by 2002:a05:6402:2ce:: with SMTP id b14mr58529758edx.122.1641476647308;
- Thu, 06 Jan 2022 05:44:07 -0800 (PST)
+        Thu, 6 Jan 2022 08:45:01 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 843A1B82105;
+        Thu,  6 Jan 2022 13:45:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A505EC36AE3;
+        Thu,  6 Jan 2022 13:44:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641476699;
+        bh=ntE/Y+7o0IsGTHSw+lmJdSWw0JHksN40xWyROfk/54U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ELqzr9C8O0LJsCjiNHU36w+YcUGG9BIWHkyY4JOpY33l1yPDztjNi9c9zBna9C66x
+         stgAppO8kNN3QlcPkknPvywO0mRGGn1HuZxjSJpOkE8pylh2M9X8nS2AkMP9gPZ3YL
+         5VkYqTqM5HRE5qn1Rt0ndr3L47sQQuaYSofmzCGqTFDpfXql4ghd3EYj3fkNCCGauc
+         VgcJnHp5/0VBWeNuT3MNwHLH1/ou30yaiuyUm2qbmxfaks2GbahBdct8RF/TnLltGI
+         QFlKj0vTWQ4LRLffqgH2jpAtkp5vAHkUxDgbs7PvX1sl+j5PDXxYr8E6LbRawhDiZn
+         Z9DDFSHVToEWQ==
+Date:   Thu, 6 Jan 2022 14:44:56 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     mbizon@freebox.fr, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: mpc: Avoid out of bounds memory access
+Message-ID: <YdbyWBujbFNde6K6@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        mbizon@freebox.fr, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220105015304.1368234-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-References: <20211223173015.22251-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211223173015.22251-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAHp75VeCwR-eP930s3miv-ux8=_P+vmdkhN+K=weTL1nwNA1ig@mail.gmail.com>
- <CA+V-a8snJU6YYtfcN_mWCJGxYnbNGrLdU+Y5g06mjV4dhsABMw@mail.gmail.com>
- <CAHp75Vck43wj650k70MsUNvmb+_-PUCd5mSy=dvmuX7MaAwr2w@mail.gmail.com> <CA+V-a8uRqfs2h82_y6yk7MZnt8K5iKii5DZZpFgDDy0Hw2ieXA@mail.gmail.com>
-In-Reply-To: <CA+V-a8uRqfs2h82_y6yk7MZnt8K5iKii5DZZpFgDDy0Hw2ieXA@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 6 Jan 2022 15:43:30 +0200
-Message-ID: <CAHp75VdiTw7R=MSM=4nzn8m863tomSza+yxx7pXLU-Xj8aouOg@mail.gmail.com>
-Subject: Re: [PATCH 06/13] media: davinci: vpif: Use platform_get_irq_optional()
- to get the interrupt
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/JNsJdIKddWpXUvk"
+Content-Disposition: inline
+In-Reply-To: <20220105015304.1368234-1-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 5, 2022 at 7:41 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
-> On Wed, Jan 5, 2022 at 9:43 AM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Tue, Jan 4, 2022 at 7:23 PM Lad, Prabhakar
-> > <prabhakar.csengg@gmail.com> wrote:
-> > > On Sat, Dec 25, 2021 at 5:32 PM Andy Shevchenko
-> > > <andy.shevchenko@gmail.com> wrote:
-> > > > On Sat, Dec 25, 2021 at 3:04 AM Lad Prabhakar
-> > > > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> >
-> > ...
-> >
-> > > > > +       res_irq->flags = IORESOURCE_IRQ | irq_get_trigger_type(irq);
-> > > > > +       res_irq->start = irq;
-> > > > > +       res_irq->end = irq;
-> > > > > +       res_irq->name = dev_of_node(&pdev->dev) ? of_node_full_name(pdev->dev.of_node) : NULL;
-> > > >
-> > > > If you convert DEFINE_RES_NAMED() to return a compound literal, then
-> > > > you may use it here like
-> > > >
-> > > > res_irq = DEFINE_RES_NAMED(...);
-> > > >
-> > > > or even do like this
-> > > >
-> > > > if (dev_of_node(...))
-> > > >   res_irq = DEFINE_RES_IRQ_NAMED(...)
-> > > > else
-> > > >   res_irq = DEFINE_RES_IRQ(...);
-> > > > res_irq->flags |= irq_get_trigger_type(irq);
-> > > >
-> > > There are quite a few users of DEFINE_RES_IRQ_NAMED()/DEFINE_RES_IRQ()
-> > > changing this macos just for this single user tree wide doesn't make
-> > > sense. Let me know if you think otherwise.
-> >
-> > Converting them to produce compound literal is straightforward and
-> > does not require changes in the users. But on the other hand it allows
-> > you to use it and convert existing users to use that form directly.
-> > You may conduct research on how macros in the property.h were morphing
-> > towards that.
-> >
-> Thank you for the pointer. I did the below change for this.
->
-> diff --git a/include/linux/ioport.h b/include/linux/ioport.h
-> index 8359c50f9988..da1208e8f164 100644
-> --- a/include/linux/ioport.h
-> +++ b/include/linux/ioport.h
-> @@ -153,7 +153,7 @@ enum {
->
->  /* helpers to define resources */
->  #define DEFINE_RES_NAMED(_start, _size, _name, _flags)                 \
-> -       {                                                               \
-> +       (struct resource) {                                     \
 
-Yep, that's it.
+--/JNsJdIKddWpXUvk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->                 .start = (_start),                                      \
->                 .end = (_start) + (_size) - 1,                          \
->                 .name = (_name),                                        \
->
-> But there are some instances which need to be touched, for example
-> vexpress-sysreg.c [1]. Are you OK with files to be changed?
+On Wed, Jan 05, 2022 at 02:53:04PM +1300, Chris Packham wrote:
+> When performing an I2C transfer where the last message was a write KASAN
+> would complain:
+>=20
+>   BUG: KASAN: slab-out-of-bounds in mpc_i2c_do_action+0x154/0x630
+>   Read of size 2 at addr c814e310 by task swapper/2/0
+>=20
+>   CPU: 2 PID: 0 Comm: swapper/2 Tainted: G    B             5.16.0-rc8 #1
+>   Call Trace:
+>   [e5ee9d50] [c08418e8] dump_stack_lvl+0x4c/0x6c (unreliable)
+>   [e5ee9d70] [c02f8a14] print_address_description.constprop.13+0x64/0x3b0
+>   [e5ee9da0] [c02f9030] kasan_report+0x1f0/0x204
+>   [e5ee9de0] [c0c76ee4] mpc_i2c_do_action+0x154/0x630
+>   [e5ee9e30] [c0c782c4] mpc_i2c_isr+0x164/0x240
+>   [e5ee9e60] [c00f3a04] __handle_irq_event_percpu+0xf4/0x3b0
+>   [e5ee9ec0] [c00f3d40] handle_irq_event_percpu+0x80/0x110
+>   [e5ee9f40] [c00f3e48] handle_irq_event+0x78/0xd0
+>   [e5ee9f60] [c00fcfec] handle_fasteoi_irq+0x19c/0x370
+>   [e5ee9fa0] [c00f1d84] generic_handle_irq+0x54/0x80
+>   [e5ee9fc0] [c0006b54] __do_irq+0x64/0x200
+>   [e5ee9ff0] [c0007958] __do_IRQ+0xe8/0x1c0
+>   [c812dd50] [e3eaab20] 0xe3eaab20
+>   [c812dd90] [c0007a4c] do_IRQ+0x1c/0x30
+>   [c812dda0] [c0000c04] ExternalInput+0x144/0x160
+>   --- interrupt: 500 at arch_cpu_idle+0x34/0x60
+>   NIP:  c000b684 LR: c000b684 CTR: c0019688
+>   REGS: c812ddb0 TRAP: 0500   Tainted: G    B              (5.16.0-rc8)
+>   MSR:  00029002 <CE,EE,ME>  CR: 22000488  XER: 20000000
+>=20
+>   GPR00: c10ef7fc c812de90 c80ff200 c2394718 00000001 00000001 c10e3f90 0=
+0000003
+>   GPR08: 00000000 c0019688 c2394718 fc7d625b 22000484 00000000 21e17000 c=
+208228c
+>   GPR16: e3e99284 00000000 ffffffff c2390000 c001bac0 c2082288 c812df60 c=
+001ba60
+>   GPR24: c23949c0 00000018 00080000 00000004 c80ff200 00000002 c2348ee4 c=
+2394718
+>   NIP [c000b684] arch_cpu_idle+0x34/0x60
+>   LR [c000b684] arch_cpu_idle+0x34/0x60
+>   --- interrupt: 500
+>   [c812de90] [c10e3f90] rcu_eqs_enter.isra.60+0xc0/0x110 (unreliable)
+>   [c812deb0] [c10ef7fc] default_idle_call+0xbc/0x230
+>   [c812dee0] [c00af0e8] do_idle+0x1c8/0x200
+>   [c812df10] [c00af3c0] cpu_startup_entry+0x20/0x30
+>   [c812df20] [c001e010] start_secondary+0x5d0/0xba0
+>   [c812dff0] [c00028a0] __secondary_start+0x90/0xdc
+>=20
+> This happened because we would overrun the i2c->msgs array on the final
+> interrupt for the I2C STOP. This didn't happen if the last message was a
+> read because there is no interrupt in that case. Ensure that we only
+> access the current message if we are not processing a I2C STOP
+> condition.
+>=20
+> Fixes: 1538d82f4647 ("i2c: mpc: Interrupt driven transfer")
+> Reported-by: Maxime Bizon <mbizon@freebox.fr>
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 
-Nice! That's exactly my point and you can sell it to the community
-because there are already users of it like this.
-
-Yes, I'm fine, but it seems it needs to be done treewide in one patch.
-Btw, how many of those already in use?
+Applied to for-current, thanks!
 
 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/mfd/vexpress-sysreg.c?h=v5.16-rc8#n65
+--/JNsJdIKddWpXUvk
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHW8lcACgkQFA3kzBSg
+KbZI1RAAtAxtz3HaWUcwPjkaJUoIoFIOImetynn7oGfWyVLlxeWDnvfvrj+i6nTW
+vTnplfVPhplqSzsQvRVuRJrrGsgeSrMLBTFdtQZEG5b6CaYMOuCdvwoCGOxXZMxR
+dnFySLFH4evLGd9zQAOT0uP69hZ1vmvu7ZoYIVuq8cm+8Q98IgWRfmudSnDSkoB/
+1TBGkesCVqe37uOn9jk7FCF85ZEp9K5bVqhYyjGiZindn45A45lmdkvmPWiWlmxN
+GCZBPOBwAjKLMdS41WvAYVxcfbo2mEqZpRnhuSkvAc6PKNYAMHVBe2oDou7NLaKE
+UHXkBdjlSXO4rwovFMm8L/BWp6Rmqz/UKvdON6Oj4yiHmGE6HryZ7AhRf8Mh/c5K
+vbQxyUJ3iu7rW3OA+EMxM2fXq8P7QtMJcb/otPU/woD/2OeqRUqvkZ9YJ8k81ipc
+qeqaBoArNYsFdw7YhNBwoNyge65I99M3qiL/G23dtnoZ9YJdYlLu5CMxtTdWRKsp
+y9EC1KH4kbTsNYxirmDrvJCLU12Ljl+eqsV5VsQKo9GcVwGSYjVV9WUibX5gcaNH
+2Fnb9zgbkVLwFmh2U+vT29RyKzze1qp6llXXkna5QAlFotD8l2EGuWL52phlZclg
+6EF68jg0IDqJLUdT7IJcXBnUj3lyqsDMXMpvsXF+N3vLYrHW7pM=
+=6n2h
+-----END PGP SIGNATURE-----
 
--- 
-With Best Regards,
-Andy Shevchenko
+--/JNsJdIKddWpXUvk--

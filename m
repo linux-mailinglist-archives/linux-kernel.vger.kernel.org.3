@@ -2,107 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0903B486CFD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:58:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6B7486D05
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 23:04:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245005AbiAFV6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 16:58:34 -0500
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:6406 "EHLO
-        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244452AbiAFV6d (ORCPT
+        id S244692AbiAFWEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 17:04:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48656 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244462AbiAFWEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 16:58:33 -0500
-IronPort-Data: =?us-ascii?q?A9a23=3A4pmjAa7dpiWGzQaQOcLcDQxRtCnGchMFZxGqfqr?=
- =?us-ascii?q?LsXjdYENS0jAEn2UWWmGCafeDZWvzKNxyati0oE8Hu5XRxoRhTwQ5pCpnJ55og?=
- =?us-ascii?q?ZqcVI7Bdi8cHAvLc5adFBo/hykmh2ipwPkcFhcwnT/wdOixxZVA/fvQHOCkUba?=
- =?us-ascii?q?aYnoZqTJME0/NtzoywobVvaY42bBVMyvV0T/Di5W31G2Ng1aYAUpIg063ky6Di?=
- =?us-ascii?q?dyp0N8uUvPSUtgQ1LPWvyF94JvyvshdJVOgKmVfNrbSq+ouUNiEEm3lExcFUrt?=
- =?us-ascii?q?Jk577e0EQQ7PUVeSMoioLHfbyxEEY/2prjf1T2Pk0MC+7jx2LgtRwwZNJvIO5T?=
- =?us-ascii?q?QMBP6vWme1bXQMw/yRWZPEeqeGefCjXXcu7iheun2HX6+50DUc3I4QDvP5+B21?=
- =?us-ascii?q?U6OIRJDklahGFmvLwwbSnR+0qjcMmROHgIZkFvXNt1zzLJewnWp3eW+PM6MMw9?=
- =?us-ascii?q?C05iMlDGd7datAfZD4paw7PCzVLN1EdIJEzhuGlgj/4aTIwgEyUv6cs4y7Q0Ql?=
- =?us-ascii?q?4ypDpMdzcYNvMQt9a9m6cp2Tb7yHhBzkEO9GFjzmI6HShgqnIhyyTcIYTEqCos?=
- =?us-ascii?q?/1nmluewkQNBxAME1i2u/+0jgi5Qd03A0kV/CUphbI/+EyiUp/2WBjQiGaJohM?=
- =?us-ascii?q?GSfJRFeMg4Q2Aw6aS5ByWbkAGUyRALtgrsMs3bSYn2l+Ag5XiAjkHmKOUT3mQ8?=
- =?us-ascii?q?KvSoi6zJTQSMUcGZCkNVwxD5MPsyLzfJDqnos1LSfHuyISvQHeuk3ba8W4kiqt?=
- =?us-ascii?q?VlsARkaO24Tj6b/uXjsChZmYICs//BwpJNj9EWbM=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3Apm75iqrGaGOg290oRao8Q90aV5oseYIsimQD?=
- =?us-ascii?q?101hICG9E/bo8/xG885x6faZslwssTQb+OxoW5PwJE80l6QU3WB5B97LYOClgh?=
- =?us-ascii?q?rKEGgI1+XfKlPbdxEWutQtt5tIQuxOTOf9ClV3lq/BjTWQGdxI+ra6zJw=3D?=
-X-IronPort-AV: E=Sophos;i="5.88,267,1635199200"; 
-   d="scan'208";a="14096158"
-Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Jan 2022 22:58:32 +0100
-Date:   Thu, 6 Jan 2022 22:58:31 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-cc:     Francisco Jerez <currojerez@riseup.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: cpufreq: intel_pstate: map utilization into the pstate range
-In-Reply-To: <a14c639df462ead1cca4da20203eb1283f4d6cb5.camel@linux.intel.com>
-Message-ID: <alpine.DEB.2.22.394.2201062258090.3098@hadrien>
-References: <alpine.DEB.2.22.394.2112132215060.215073@hadrien>   <alpine.DEB.2.22.394.2112291012030.24929@hadrien>   <CAJZ5v0g5wDxYXA-V=Ex_Md82hgnj5K6Vr0tavFFVz=uBqo8wag@mail.gmail.com>   <alpine.DEB.2.22.394.2112301840360.15550@hadrien>  
- <CAJZ5v0h38jh3gyTp9W0ws0yXyfK=F+TQ7VYRVx4aGXhNeSObEg@mail.gmail.com>   <alpine.DEB.2.22.394.2112301919240.15550@hadrien>   <CAJZ5v0haa5QWvTUUg+wwSHvuWyk8pic1N0kox=E1ZKNrHSFuzw@mail.gmail.com>   <alpine.DEB.2.22.394.2112301942360.15550@hadrien>  
- <CAJZ5v0im+Cke7tcNRav2VCyf5Qvi7qC29aF+9A1kVZZmt7cu6g@mail.gmail.com>   <alpine.DEB.2.22.394.2201031922110.3020@hadrien>   <CAJZ5v0hsCjKA3EisK9s_S8Vb9Tgm4eps1FTKvUSfd9_JPh5wBQ@mail.gmail.com>   <alpine.DEB.2.22.394.2201032110590.3020@hadrien>  
- <CAJZ5v0hFcRWPO859YWUKLdqkTrVA1WLqRjFWg1=WS8qGG5CTkQ@mail.gmail.com>   <alpine.DEB.2.22.394.2201041643520.3020@hadrien>   <CAJZ5v0i9Rh0Cm3Mbu3N8w6UmgJEnmThk4znWVcp9qeroabjsNw@mail.gmail.com>   <alpine.DEB.2.22.394.2201052107280.48852@hadrien>  
- <87a6g9rbje.fsf@riseup.net>  <alpine.DEB.2.22.394.2201062044340.3098@hadrien>  <1b2be990d5c31f62d9ce33aa2eb2530708d5607a.camel@linux.intel.com>  <alpine.DEB.2.22.394.2201062141290.3098@hadrien>
- <a14c639df462ead1cca4da20203eb1283f4d6cb5.camel@linux.intel.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Thu, 6 Jan 2022 17:04:39 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E463C061201
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 14:04:39 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id b1so3202154ilj.2
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 14:04:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=5lCMFrmKhRkcXXvDt5cwlZjJinUAktC4NqCvpS04174=;
+        b=pD1rFucmR46qqxkXoaSy+x+Q68ByrPXZh6xWdlE74Hj9mIC0VXltNLqQ88I/xWdglD
+         iJdVcL8F3HZfeChQ/0X2+ClqV8RvGQI9ADtSfznZWr7tylswqN0WeXrkImoitvKuOq/r
+         7LjiZstSSYgxWeWeZDgVWZUHggdqwlFd2uzkadgzQBgGvxwctaZo7VEMjm/asziO32GN
+         1EPueFX8h9RWS+3nTWwKMPoQjSOgq8T4ZcysL9EQv/mdRgogvicJPG5d3UW6ZTUFH2LA
+         8xriR0KFf4UBxjhDsKST9Sbr0CAXLCkvm/q7HQ2BFrWKel+diYAnjfBkpW0/7/0tpxI6
+         zQ6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=5lCMFrmKhRkcXXvDt5cwlZjJinUAktC4NqCvpS04174=;
+        b=Z8veR9TcZLlBHm/uNcZ7z0ueQ5Ohr+NLqoSSB8T3mlIBP/SSWV5rSZTLQcTKUsK6jI
+         NqK4sb7Xof2+LagQdpAS+boSOHQXp+WPwrPl2n86+kmQdi5vVwsWkq4VRiD8bLjgqmga
+         IiNJOgyCkn+XPI1sSkW8Wl6z8VkhCi2I+7sYQLpbHbSJ8TKVhu7EFafxrjsbmUk+lRj0
+         cD7wkkHgO76eHBjjXWjo7Nv2PA1frmE+s53yzxuoEWTshUdBRPcWnaa/u/4p9WuqQnb0
+         lO0I12/2CB+fwhc2+sdiuUJ3rKVG4GZQOKP9v0RFQqkv800dkOkBVOE4+jUrG+nic1Pa
+         K0QQ==
+X-Gm-Message-State: AOAM533JrVgo6PbkI5meTWXA0XDWpb7qsP0rrIakf9PD979raXim/yNT
+        KU/UitL+pF0lXdQUSpGhuRk3XnYArD+LNibpMoiwYA==
+X-Google-Smtp-Source: ABdhPJzAMAQgMooGtqRDN40j09UsYvwRjjhj9krflCLslxZqCmlo0k1UyQ8SX0b/aozYQqrCNQo4a6eaX9DRQi9ppgM=
+X-Received: by 2002:a92:dd87:: with SMTP id g7mr5165224iln.174.1641506678460;
+ Thu, 06 Jan 2022 14:04:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-486851-1641506311=:3098"
+References: <YddEVgNKBJiqcV6Y@kernel.org> <YddGjjmlMZzxUZbN@kernel.org>
+ <YddHmYhvtVvgqZb/@kernel.org> <CAP-5=fU2QAr9BMHqm9i6uDKPaUFsY2EAqt+oO1AO8ovBXCh5xQ@mail.gmail.com>
+ <CAEf4BzbbOHQZUAe6iWaehKCPQAf3VC=hq657buqe2_yRKxaK-A@mail.gmail.com>
+In-Reply-To: <CAEf4BzbbOHQZUAe6iWaehKCPQAf3VC=hq657buqe2_yRKxaK-A@mail.gmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 6 Jan 2022 14:04:25 -0800
+Message-ID: <CAP-5=fUN+XqrSmwqab9DyGtvpZ7iZkfnUNwBfK1CDA_iX+aF0Q@mail.gmail.com>
+Subject: Re: perf build broken seemingly due to libbpf changes, checking...
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Song Liu <songliubraving@fb.com>, Jiri Olsa <jolsa@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-486851-1641506311=:3098
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-
-
-On Thu, 6 Jan 2022, srinivas pandruvada wrote:
-
-> On Thu, 2022-01-06 at 21:43 +0100, Julia Lawall wrote:
-> > > > All the turbostat output and graphs I have sent recently were
-> > > > just
-> > > > for
-> > > > continuous spinning:
-> > > >
-> > > > for(;;);
-> > > >
-> > > > Now I am trying running for the percentage of the time
-> > > > corresponding
-> > > > to
-> > > > 10 / P for pstate P (ie 0.5 of the time for pstate 20), and then
-> > > > sleeping,
-> > > > to see whether one can just add the sleeping power consumption of
-> > > > the
-> > > > machine to compute the efficiency as Rafael suggested.
-> > > >
-> > > Before doing comparison try freezing uncore.
-> > >
-> > > wrmsr -a 0x620 0x0808
-> > >
-> > > to Freeze uncore at 800MHz. Any other value is fine.
+On Thu, Jan 6, 2022 at 1:44 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Thu, Jan 6, 2022 at 1:42 PM Ian Rogers <irogers@google.com> wrote:
 > >
-> > Thanks for the suggestion.  What is the impact of this?
-> Uncore scales based on its own heuristics based in P-state change and
-> works in package scope. So to actually see the effect of P-state change
-> on energy you can remove variability of uncore power.
+> > On Thu, Jan 6, 2022 at 11:48 AM Arnaldo Carvalho de Melo
+> > <acme@kernel.org> wrote:
+> > >
+> > > Em Thu, Jan 06, 2022 at 04:44:14PM -0300, Arnaldo Carvalho de Melo es=
+creveu:
+> > > > Em Thu, Jan 06, 2022 at 04:34:46PM -0300, Arnaldo Carvalho de Melo =
+escreveu:
+> > > > > After merging torvalds/master to perf/urgent I'm getting this:
+> > > > >
+> > > > > util/bpf-event.c:25:21: error: no previous prototype for =E2=80=
+=98btf__load_from_kernel_by_id=E2=80=99 [-Werror=3Dmissing-prototypes]
+> > > > >    25 | struct btf * __weak btf__load_from_kernel_by_id(__u32 id)
+> > > > >       |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > util/bpf-event.c:37:1: error: no previous prototype for =E2=80=98=
+bpf_object__next_program=E2=80=99 [-Werror=3Dmissing-prototypes]
+> > > > >    37 | bpf_object__next_program(const struct bpf_object *obj, st=
+ruct bpf_program *prev)
+> > > > >       | ^~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > util/bpf-event.c:46:1: error: no previous prototype for =E2=80=98=
+bpf_object__next_map=E2=80=99 [-Werror=3Dmissing-prototypes]
+> > > > >    46 | bpf_object__next_map(const struct bpf_object *obj, const =
+struct bpf_map *prev)
+> > > > >       | ^~~~~~~~~~~~~~~~~~~~
+> > > > > util/bpf-event.c:55:1: error: no previous prototype for =E2=80=98=
+btf__raw_data=E2=80=99 [-Werror=3Dmissing-prototypes]
+> > > > >    55 | btf__raw_data(const struct btf *btf_ro, __u32 *size)
+> > > > >       | ^~~~~~~~~~~~~
+> > > > > cc1: all warnings being treated as errors
+> > > > > make[4]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:=
+96: /tmp/build/perf/util/bpf-event.o] Error 1
+> > > > > make[4]: *** Waiting for unfinished jobs....
+> > > > > util/bpf_counter.c: In function =E2=80=98bpf_target_prog_name=E2=
+=80=99:
+> > > > > util/bpf_counter.c:82:15: error: implicit declaration of function=
+ =E2=80=98btf__load_from_kernel_by_id=E2=80=99 [-Werror=3Dimplicit-function=
+-declaration]
+> > > > >    82 |         btf =3D btf__load_from_kernel_by_id(info_linear->=
+info.btf_id);
+> > > > >       |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > util/bpf_counter.c:82:13: error: assignment to =E2=80=98struct bt=
+f *=E2=80=99 from =E2=80=98int=E2=80=99 makes pointer from integer without =
+a cast [-Werror=3Dint-conversion]
+> > > > >    82 |         btf =3D btf__load_from_kernel_by_id(info_linear->=
+info.btf_id);
+> > > > >       |             ^
+> > > > > cc1: all warnings being treated as errors
+> > > > > make[4]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:=
+96: /tmp/build/perf/util/bpf_counter.o] Error 1
+> > > > >
+> > > > > I'm checking now...
+> > > > >
+> > > > > BTW I test perf builds with:
+> > > > >
+> > > > > make -k BUILD_BPF_SKEL=3D1 CORESIGHT=3D1 PYTHON=3Dpython3 O=3D/tm=
+p/build/perf -C tools/perf install-bin && git status && perf test python
+> > > >
+> > > > Nevermind, this was due to a patch by Ian Rogers I was testing,
+> > > > bisecting get up to the last patch, since I had merged torvalds/mas=
+ter
+> > > > today it got me to a wrong correlation, sorry for the disturbance.
+> > > >
+> > > > For reference, this is the patch:
+> > > >
+> > > > http://lore.kernel.org/lkml/20220106072627.476524-1-irogers@google.=
+com
+> > >
+> > > Ian, I have libbpf-devel installed:
+> > >
+> > > =E2=AC=A2[acme@toolbox perf]$ rpm -qa | grep libbpf
+> > > libbpf-0.4.0-1.fc34.x86_64
+> > > libbpf-devel-0.4.0-1.fc34.x86_64
+> > > =E2=AC=A2[acme@toolbox perf]$
+> > >
+> > > But I'm not using LIBBPF_DYNAMIC=3D1, so you can't just give preceden=
+ce to
+> > > system headers for all of the homies in tools/lib/.
+> > >
+> > > I bet that if I remove the libbpf-devel package it works, yeah, just
+> > > tested. So we need to make those overrides dependent on using
+> > > LIBBPF_DYNAMIC=3D1, LIBTRACEEVENT_DYNAMIC=3D1, etc and avoid the big =
+hammer
+> > > that is -Itools/lib/, using a more finegrained approach, right?
+> >
+> > Ugh, this is messy. The -I for tools/lib is overloaded and being used
+> > in tools/perf/util/bpf-event.c so that bpf/bpf.h, bpf/btf.h and
+>
+> can you do `make install` for libbpf instead and have it install
+> headers into a dedicated target directory which can be added into -I
+> search path. Quentin did this for all the other libbpf users in kernel
+> tree (bpftool, resolve_btfids, etc) and it works great.
 
-OK, thanks.  I will try both options.
+This sounds good to me, and being able to borrow code from bpftool
+should make writing it is straightforward. I'll try to find time to do
+a patch, but I don't mind someone getting there before me :-)
 
-julia
---8323329-486851-1641506311=:3098--
+Thanks,
+Ian
+
+> > bpf/libbpf.h can be found. Likewise, for tools/perf/util/debug.c it is
+> > used to pick up traceevent/event-parse.h.
+> >
+> > Assuming  LIBBPF_DYNAMIC=3D1 and LIBTRACEEVENT_DYNAMIC=3D1 then we get
+> > different combinations of:
+> > libtraceevent >=3D 1.3 && libbpf >=3D 0.6 - -I is broken for debug.c,
+> > -idirafter okay
+> > libtraceevent >=3D 1.3 && libbpf < 0.6 - -I is broken for debug.c,
+> > -idirafter broken for bpf-event.c
+> > libtraceevent < 1.3 && libbpf >=3D 0.6 - -I should build okay but
+> > headers mismatched, -idirafter okay
+> > libtraceevent < 1.3 && libbpf < 0.6 - -I will fail to link
+> > bpf-event.c, -idirafter broken for bpf-event.c
+> >
+> > As the choice of -I and -idirafter are binary then there will always
+> > be a way to break the build. We could modify the build so that the
+> > -I/-idirafter only applies to the affected C files. This postpones the
+> > problem to when libbpf and libtracevent are in the same file, which
+> > doesn't happen currently. I think if you want the dynamic behavior
+> > then you need to use idirafter.
+> >
+> > Thanks,
+> > Ian

@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2101B4869D4
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE744869D5
 	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 19:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242972AbiAFSZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 13:25:56 -0500
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:41594 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242817AbiAFSZi (ORCPT
+        id S243019AbiAFS0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 13:26:02 -0500
+Received: from mail-oi1-f180.google.com ([209.85.167.180]:41608 "EHLO
+        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242766AbiAFSZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 13:25:38 -0500
-Received: by mail-oi1-f169.google.com with SMTP id j185so4885309oif.8;
-        Thu, 06 Jan 2022 10:25:38 -0800 (PST)
+        Thu, 6 Jan 2022 13:25:40 -0500
+Received: by mail-oi1-f180.google.com with SMTP id j185so4885433oif.8;
+        Thu, 06 Jan 2022 10:25:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=0GqoTWktQCAeb/b2q3miftVXfpqdRPH7Wi0Ph2/me+8=;
-        b=d0RQCgzXIEX0YxqURDpRGyDwXeZBuSwXxOAiabNZsuI+XpICNmRP8Tz6HxXwJbDmbK
-         ciAhX8pvggfycZIL9wi+o4+mngrMItPy0PdfU6Ez1/KFa1DCHnEwbDid/0ekA/mo9AF9
-         6t3QV83MZSYcItTchE0F2bgVoUIHxe6lRIQbZ1a4ixjysHuqmVeX/YeWM9SibZtL2LeH
-         xbmxDZJJfkosgSYnLllHC3kIcoLq0BpHuuPCh6WdiZpNiQdSOedaZUeb680O2c7CuT9v
-         pbJBwEOMBio7d4fy5BMGK5vMemJTnlr9RDyfkiQIUWQMT3ODfjEQedIsWf1SO9ue3DMj
-         Ibow==
-X-Gm-Message-State: AOAM53164GhH6VA4s7sUkBTp5xu0OPQ9l4DfN7c9mSVQWLIj0nmbrXyI
-        R62PbHMJhMSHe7xE5SroHA==
-X-Google-Smtp-Source: ABdhPJx0/7FuhIt5ZofcvReC3m8vHWsc5MYNpHeEWkedihlt3E7Ykuzt1p4+IbAXWN4jmADlwgW3Aw==
-X-Received: by 2002:a54:450b:: with SMTP id l11mr7108210oil.139.1641493537898;
-        Thu, 06 Jan 2022 10:25:37 -0800 (PST)
+        bh=TNd0yX/eMqLTp7SQM3Mb8ivKu6Zp4HcxMj8tE/O94/0=;
+        b=aczFB4dnGsMt9Y3SGOhxMzZKw7abB7r4tkZrovHq9EKtYswwgLT3iCIeabbyDOZ06c
+         oEViA6NWIGjbB3bayBOAYtVVci9bhGD1jnLutschC0p78498ctiISLFcmFHvx+CiMJg9
+         hL00SPjgMkHVl1XAdHcAx4QJTLsfsZ7ACd3/pfqBXXJJs4toq21estgOYRFL16nKUc9A
+         UXMypVjhMJXLYkHTVMjLR+ahu+ucVz0usQtGcLs5pJ7ElUnDMZ7LgSQXmcmgSbpxrAUK
+         6Lfu5i3EBIb9VSN10DzdpFBaGhVyISO18OdiNGIB0kpHmyT47OaVTs51pISN4Gf8/8lC
+         3iWw==
+X-Gm-Message-State: AOAM533OomQGroLlT87OTT2CkN9iQxSE8enqWmxB7wRu77mWhtSyVm3b
+        mSVfY58c/+6suEwrPaEhNg==
+X-Google-Smtp-Source: ABdhPJxma2BhQyJhOIcE9VJ4imQvWZ18uqwZtw6d3pT5EmqAKuK+QWuVszmPcgCB3vD+YwhKi4+WGw==
+X-Received: by 2002:a05:6808:1914:: with SMTP id bf20mr7192851oib.7.1641493539303;
+        Thu, 06 Jan 2022 10:25:39 -0800 (PST)
 Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id r13sm484949oth.21.2022.01.06.10.25.36
+        by smtp.googlemail.com with ESMTPSA id r13sm484949oth.21.2022.01.06.10.25.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 10:25:37 -0800 (PST)
+        Thu, 06 Jan 2022 10:25:38 -0800 (PST)
 From:   Rob Herring <robh@kernel.org>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Christophe Roullier <christophe.roullier@foss.st.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: net: stm32-dwmac: Make each example a separate entry
-Date:   Thu,  6 Jan 2022 12:25:16 -0600
-Message-Id: <20220106182518.1435497-8-robh@kernel.org>
+To:     Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bayi Cheng <bayi.cheng@mediatek.com>,
+        Chuanhong Guo <gch981213@gmail.com>
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: dt-bindings: mediatek,spi-mtk-nor: Fix example 'interrupts' property
+Date:   Thu,  6 Jan 2022 12:25:17 -0600
+Message-Id: <20220106182518.1435497-9-robh@kernel.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -53,45 +52,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Each independent example should be a separate entry. This allows for
-'interrupts' to have different cell sizes.
-
-The first example also has a phandle in 'interrupts', so drop the phandle.
+A phandle for 'interrupts' value is wrong and should be one or more numbers.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/net/stm32-dwmac.yaml | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ .../devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml          | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
-index 577f4e284425..f41d5e386080 100644
---- a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
-+++ b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
-@@ -102,7 +102,7 @@ examples:
-            compatible = "st,stm32mp1-dwmac", "snps,dwmac-4.20a";
-            reg = <0x5800a000 0x2000>;
-            reg-names = "stmmaceth";
--           interrupts = <&intc GIC_SPI 61 IRQ_TYPE_LEVEL_HIGH>;
-+           interrupts = <GIC_SPI 61 IRQ_TYPE_LEVEL_HIGH>;
-            interrupt-names = "macirq";
-            clock-names = "stmmaceth",
-                      "mac-clk-tx",
-@@ -121,6 +121,7 @@ examples:
-            phy-mode = "rgmii";
-        };
- 
-+  - |
-     //Example 2 (MCU example)
-      ethernet1: ethernet@40028000 {
-            compatible = "st,stm32-dwmac", "snps,dwmac-3.50a";
-@@ -136,6 +137,7 @@ examples:
-            phy-mode = "mii";
-        };
- 
-+  - |
-     //Example 3
-      ethernet2: ethernet@40027000 {
-            compatible = "st,stm32-dwmac", "snps,dwmac-4.10a";
+diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
+index 7393f30535df..da43a545614f 100644
+--- a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
++++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
+@@ -72,7 +72,7 @@ examples:
+       nor_flash: spi@1100d000 {
+         compatible = "mediatek,mt8173-nor";
+         reg = <0 0x1100d000 0 0xe0>;
+-        interrupts = <&spi_flash_irq>;
++        interrupts = <1>;
+         clocks = <&pericfg CLK_PERI_SPI>, <&topckgen CLK_TOP_SPINFI_IFR_SEL>;
+         clock-names = "spi", "sf";
+         #address-cells = <1>;
+@@ -84,4 +84,3 @@ examples:
+         };
+       };
+     };
+-
 -- 
 2.32.0
 

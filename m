@@ -2,277 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82134485F4B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 04:40:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7745E485F40
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 04:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbiAFDkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Jan 2022 22:40:23 -0500
-Received: from mail-sz.amlogic.com ([211.162.65.117]:15813 "EHLO
-        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbiAFDkX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Jan 2022 22:40:23 -0500
-Received: from droid11-sz.amlogic.com (10.28.8.21) by mail-sz.amlogic.com
- (10.28.11.5) with Microsoft SMTP Server id 15.1.2176.2; Thu, 6 Jan 2022
- 11:25:18 +0800
-From:   Liang Yang <liang.yang@amlogic.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        <linux-mtd@lists.infradead.org>
-CC:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        XianWei Zhao <xianwei.zhao@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        BiChao Zheng <bichao.zheng@amlogic.com>,
-        YongHui Yu <yonghui.yu@amlogic.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH] mtd: rawnand: meson: fix the clock after discarding sd_emmc_c_clkc
-Date:   Thu, 6 Jan 2022 11:25:04 +0800
-Message-ID: <20220106032504.23310-1-liang.yang@amlogic.com>
-X-Mailer: git-send-email 2.34.1
+        id S230274AbiAFDej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Jan 2022 22:34:39 -0500
+Received: from mx.ewheeler.net ([173.205.220.69]:33318 "EHLO mx.ewheeler.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229593AbiAFDei (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Jan 2022 22:34:38 -0500
+X-Greylist: delayed 325 seconds by postgrey-1.27 at vger.kernel.org; Wed, 05 Jan 2022 22:34:38 EST
+Received: from localhost (localhost [127.0.0.1])
+        by mx.ewheeler.net (Postfix) with ESMTP id 1D16141;
+        Wed,  5 Jan 2022 19:29:13 -0800 (PST)
+X-Virus-Scanned: amavisd-new at ewheeler.net
+Received: from mx.ewheeler.net ([127.0.0.1])
+        by localhost (mx.ewheeler.net [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id EF3nXm4EoBAl; Wed,  5 Jan 2022 19:29:08 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx.ewheeler.net (Postfix) with ESMTPSA id 32F2439;
+        Wed,  5 Jan 2022 19:29:08 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx.ewheeler.net 32F2439
+Date:   Wed, 5 Jan 2022 19:29:05 -0800 (PST)
+From:   Eric Wheeler <bcache@lists.ewheeler.net>
+To:     Coly Li <colyli@suse.de>
+cc:     linux-block@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:BCACHE (BLOCK LAYER CACHE)" <linux-bcache@vger.kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH] bcache: make stripe_size configurable and persistent
+ for hardware raid5/6
+In-Reply-To: <8a9131dc-9bf7-a24a-f7b8-35e0c019e905@suse.de>
+Message-ID: <fdb85dc1-eee6-e55e-8e9c-fa1f36b4a37@ewheeler.net>
+References: <d3f7fd44-9287-c7fa-ee95-c3b8a4d56c93@suse.de> <1561245371-10235-1-git-send-email-bcache@lists.ewheeler.net> <200638b0-7cba-38b4-20c4-b325f3cfe862@suse.de> <alpine.LRH.2.11.1906241800350.1114@mx.ewheeler.net>
+ <8a9131dc-9bf7-a24a-f7b8-35e0c019e905@suse.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.28.8.21]
+Content-Type: multipart/mixed; boundary="8323328-1944457719-1641439748=:4450"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Because EMMC and NAND have the same control clock register, so we
-implement a 'sd_emmc_c_clkc'. Previously DTS is defined as below:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-	sd_emmc_c_clkc: mmc@7000 {
-		compatible = "amlogic,meson-axg-mmc-clkc", "syscon";
-		reg = <0x0 0x7000 0x0 0x800>;
-	};
+--8323328-1944457719-1641439748=:4450
+Content-Type: text/plain; charset=iso-2022-jp
 
-	nand-controller@7800 {
-		......
+On Tue, 25 Jun 2019, Coly Li wrote:
+> On 2019/6/25 2:14 上午, Eric Wheeler wrote:
+> > On Mon, 24 Jun 2019, Coly Li wrote:
+> > 
+> >> On 2019/6/23 7:16 上午, Eric Wheeler wrote:
+> >>> From: Eric Wheeler <git@linux.ewheeler.net>
+> >>>
+> >>> While some drivers set queue_limits.io_opt (e.g., md raid5), there are
+> >>> currently no SCSI/RAID controller drivers that do.  Previously stripe_size
+> >>> and partial_stripes_expensive were read-only values and could not be
+> >>> tuned by users (eg, for hardware RAID5/6).
+> >>>
+> >>> This patch enables users to save the optimal IO size via sysfs through
+> >>> the backing device attributes stripe_size and partial_stripes_expensive
+> >>> into the bcache superblock.
+> >>>
+> >>> Superblock changes are backwards-compatable:
+> >>>
+> >>> *  partial_stripes_expensive: One bit was used in the superblock flags field
+> >>>
+> >>> *  stripe_size: There are eight 64-bit "pad" fields for future use in
+> >>>    the superblock which default to 0; from those, 32-bits are now used
+> >>>    to save the stripe_size and load at device registration time.
+> >>>
+> >>> Signed-off-by: Eric Wheeler <bcache@linux.ewheeler.net>
+> >>
+> >> Hi Eric,
+> >>
+> >> In general I am OK with this patch. Since Peter comments lots of SCSI
+> >> RAID devices reports a stripe width, could you please list the hardware
+> >> raid devices which don't list stripe size ? Then we can make decision
+> >> whether it is necessary to have such option enabled.
+> > 
+> > Perhaps they do not set stripe_width using io_opt? I did a grep to see if 
+> > any of them did, but I didn't see them. How is stripe_width indicated by 
+> > RAID controllers? 
+> > 
+> > If they do set io_opt, then at least my Areca 1883 does not set io_opt as 
+> > of 4.19.x. I also have a LSI MegaRAID 3108 which does not report io_opt as 
+> > of 4.1.x, but that is an older kernel so maybe support has been added 
+> > since then.
+> > 
+> > Martin,
+> > 
+> > Where would stripe_width be configured in the SCSI drivers? Is it visible 
+> > through sysfs or debugfs so I can check my hardware support without 
+> > hacking debugging the kernel?
+> > 
+> >>
+> >> Another point is, this patch changes struct cache_sb, it is no problem
+> >> to change on-disk format. I plan to update the super block version soon,
+> >> to store more configuration persistently into super block. stripe_size
+> >> can be added to cache_sb with other on-disk changes.
+> > 
+> 
+> Hi Eric,
+> 
+> > Maybe bumping version makes sense, but even if you do not, this is safe to 
+> > use on systems without bumping the version because the values are unused 
+> > and default to 0.
+> 
+> Yes, I understand you, it works as you suggested. I need to think how to
+> organize all options in struct cache_sb, stripe_size will be arranged
+> then. And I will ask help to you for reviewing the changes of on-disk
+> format.
 
-		clocks = <&clkc CLKID_SD_EMMC_C>,
-			<&sd_emmc_c_clkc CLKID_MMC_DIV>,
-			<&sd_emmc_c_clkc CLKID_MMC_PHASE_RX>,
-			<&sd_emmc_c_clkc CLKID_MMC_PHASE_TX>;
-		clock-names = "core", "device", "rx", "tx";
-		amlogic,mmc-syscon = <&sd_emmc_c_clkc>;
+Hi Coli,
 
-		......
-	}
+Just checking in, its been a while and I didn't see any more discussion on 
+the topic:
 
-but in fact, above implementation is rejected. so now registering
-a nand_divider.
+This would benefit users with older RAID controllers using RAID-5/6 that 
+don't set io_opt.
 
-Change-Id: Ibeb4c7ff886f5886aac4d6c664d7bbd1b1bcb997
-Signed-off-by: Liang Yang <liang.yang@amlogic.com>
----
- drivers/mtd/nand/raw/meson_nand.c | 88 +++++++++++++++++--------------
- 1 file changed, 49 insertions(+), 39 deletions(-)
+Even new new RAID controlers that _do_ provide `io_opt` still do _not_ 
+indicate partial_stripes_expensive (which is an mdraid feature, but Martin 
+please correct me if I'm wrong here).  Thus, all hardware RAID-5/6 users 
+could benefit by manually flagging partial_stripes_expensive to get burst 
+writes out of bcache that fit their stride width.
 
-diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
-index ac3be92872d0..4472363059c2 100644
---- a/drivers/mtd/nand/raw/meson_nand.c
-+++ b/drivers/mtd/nand/raw/meson_nand.c
-@@ -2,7 +2,7 @@
- /*
-  * Amlogic Meson Nand Flash Controller Driver
-  *
-- * Copyright (c) 2018 Amlogic, inc.
-+ * Copyright (c) 2018-2021 Amlogic, inc.
-  * Author: Liang Yang <liang.yang@amlogic.com>
-  */
- 
-@@ -10,6 +10,7 @@
- #include <linux/dma-mapping.h>
- #include <linux/interrupt.h>
- #include <linux/clk.h>
-+#include <linux/clk-provider.h>
- #include <linux/mtd/rawnand.h>
- #include <linux/mtd/mtd.h>
- #include <linux/mfd/syscon.h>
-@@ -55,6 +56,7 @@
- #define NFC_REG_VER		0x38
- 
- #define NFC_RB_IRQ_EN		BIT(21)
-+#define NFC_CMD_FIFO_RESET	BIT(31)
- 
- #define CMDRWGEN(cmd_dir, ran, bch, short_mode, page_size, pages)	\
- 	(								\
-@@ -104,6 +106,9 @@
- 
- #define PER_INFO_BYTE		8
- 
-+#define CLK_DIV_SHIFT		0
-+#define CLK_DIV_WIDTH		6
-+
- struct meson_nfc_nand_chip {
- 	struct list_head node;
- 	struct nand_chip nand;
-@@ -151,15 +156,15 @@ struct meson_nfc {
- 	struct nand_controller controller;
- 	struct clk *core_clk;
- 	struct clk *device_clk;
--	struct clk *phase_tx;
--	struct clk *phase_rx;
-+	struct clk *nand_clk;
-+	struct clk_divider nand_divider;
- 
- 	unsigned long clk_rate;
- 	u32 bus_timing;
- 
- 	struct device *dev;
- 	void __iomem *reg_base;
--	struct regmap *reg_clk;
-+	void __iomem *reg_clk;
- 	struct completion completion;
- 	struct list_head chips;
- 	const struct meson_nfc_data *data;
-@@ -406,12 +411,14 @@ static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
- 	cmd = NFC_CMD_RB | NFC_CMD_RB_INT
- 		| nfc->param.chip_select | nfc->timing.tbers_max;
- 	writel(cmd, nfc->reg_base + NFC_REG_CMD);
--
-+	meson_nfc_drain_cmd(nfc);
- 	ret = wait_for_completion_timeout(&nfc->completion,
- 					  msecs_to_jiffies(timeout_ms));
- 	if (ret == 0)
- 		ret = -1;
- 
-+	/* reset command fifo to avoid lock */
-+	writel(NFC_CMD_FIFO_RESET, nfc->reg_base + NFC_REG_CMD);
- 	return ret;
- }
- 
-@@ -988,8 +995,9 @@ static const struct mtd_ooblayout_ops meson_ooblayout_ops = {
- static int meson_nfc_clk_init(struct meson_nfc *nfc)
- {
- 	int ret;
-+	struct clk_init_data init = {0};
-+	const char *fix_div2_pll_name[1];
- 
--	/* request core clock */
- 	nfc->core_clk = devm_clk_get(nfc->dev, "core");
- 	if (IS_ERR(nfc->core_clk)) {
- 		dev_err(nfc->dev, "failed to get core clock\n");
-@@ -1002,21 +1010,25 @@ static int meson_nfc_clk_init(struct meson_nfc *nfc)
- 		return PTR_ERR(nfc->device_clk);
- 	}
- 
--	nfc->phase_tx = devm_clk_get(nfc->dev, "tx");
--	if (IS_ERR(nfc->phase_tx)) {
--		dev_err(nfc->dev, "failed to get TX clk\n");
--		return PTR_ERR(nfc->phase_tx);
--	}
--
--	nfc->phase_rx = devm_clk_get(nfc->dev, "rx");
--	if (IS_ERR(nfc->phase_rx)) {
--		dev_err(nfc->dev, "failed to get RX clk\n");
--		return PTR_ERR(nfc->phase_rx);
--	}
-+	init.name = devm_kstrdup(nfc->dev, "nfc#div", GFP_KERNEL);
-+	init.ops = &clk_divider_ops;
-+	fix_div2_pll_name[0] = __clk_get_name(nfc->device_clk);
-+	init.parent_names = fix_div2_pll_name;
-+	init.num_parents = 1;
-+	nfc->nand_divider.reg = nfc->reg_clk;
-+	nfc->nand_divider.shift = CLK_DIV_SHIFT;
-+	nfc->nand_divider.width = CLK_DIV_WIDTH;
-+	nfc->nand_divider.hw.init = &init;
-+	nfc->nand_divider.flags = CLK_DIVIDER_ONE_BASED |
-+				  CLK_DIVIDER_ROUND_CLOSEST |
-+          			  CLK_DIVIDER_ALLOW_ZERO;
-+
-+	nfc->nand_clk = devm_clk_register(nfc->dev, &nfc->nand_divider.hw);
-+	if (IS_ERR(nfc->nand_clk))
-+		return PTR_ERR(nfc->nand_clk);
- 
- 	/* init SD_EMMC_CLOCK to sane defaults w/min clock rate */
--	regmap_update_bits(nfc->reg_clk,
--			   0, CLK_SELECT_NAND, CLK_SELECT_NAND);
-+	writel(CLK_SELECT_NAND | readl(nfc->reg_clk), nfc->reg_clk);
- 
- 	ret = clk_prepare_enable(nfc->core_clk);
- 	if (ret) {
-@@ -1030,29 +1042,21 @@ static int meson_nfc_clk_init(struct meson_nfc *nfc)
- 		goto err_device_clk;
- 	}
- 
--	ret = clk_prepare_enable(nfc->phase_tx);
-+	ret = clk_prepare_enable(nfc->nand_clk);
- 	if (ret) {
--		dev_err(nfc->dev, "failed to enable TX clock\n");
--		goto err_phase_tx;
--	}
--
--	ret = clk_prepare_enable(nfc->phase_rx);
--	if (ret) {
--		dev_err(nfc->dev, "failed to enable RX clock\n");
--		goto err_phase_rx;
-+		dev_err(nfc->dev, "pre enable NFC divider fail\n");
-+		goto err_nand_clk;
- 	}
- 
- 	ret = clk_set_rate(nfc->device_clk, 24000000);
- 	if (ret)
--		goto err_disable_rx;
-+		goto err_disable_clk;
- 
- 	return 0;
- 
--err_disable_rx:
--	clk_disable_unprepare(nfc->phase_rx);
--err_phase_rx:
--	clk_disable_unprepare(nfc->phase_tx);
--err_phase_tx:
-+err_disable_clk:
-+	clk_disable_unprepare(nfc->nand_clk);
-+err_nand_clk:
- 	clk_disable_unprepare(nfc->device_clk);
- err_device_clk:
- 	clk_disable_unprepare(nfc->core_clk);
-@@ -1061,8 +1065,7 @@ static int meson_nfc_clk_init(struct meson_nfc *nfc)
- 
- static void meson_nfc_disable_clk(struct meson_nfc *nfc)
- {
--	clk_disable_unprepare(nfc->phase_rx);
--	clk_disable_unprepare(nfc->phase_tx);
-+	clk_disable_unprepare(nfc->nand_clk);
- 	clk_disable_unprepare(nfc->device_clk);
- 	clk_disable_unprepare(nfc->core_clk);
- }
-@@ -1375,6 +1378,7 @@ static int meson_nfc_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct meson_nfc *nfc;
- 	struct resource *res;
-+	u32 ext_clk_reg;
- 	int ret, irq;
- 
- 	nfc = devm_kzalloc(dev, sizeof(*nfc), GFP_KERNEL);
-@@ -1396,9 +1400,15 @@ static int meson_nfc_probe(struct platform_device *pdev)
- 	if (IS_ERR(nfc->reg_base))
- 		return PTR_ERR(nfc->reg_base);
- 
--	nfc->reg_clk =
--		syscon_regmap_lookup_by_phandle(dev->of_node,
--						"amlogic,mmc-syscon");
-+	ret = of_property_read_u32(pdev->dev.of_node,
-+				   "sd_emmc_c_clkc",
-+				   &ext_clk_reg);
-+	if (ret) {
-+		dev_err(dev, "failed to get NAND external clock register\n");
-+		return ret;
-+	}
-+
-+	nfc->reg_clk = devm_ioremap(&pdev->dev, ext_clk_reg, sizeof(int));
- 	if (IS_ERR(nfc->reg_clk)) {
- 		dev_err(dev, "Failed to lookup clock base\n");
- 		return PTR_ERR(nfc->reg_clk);
--- 
-2.34.1
+This patch probably needs rebased and documentation updated about io_opt, 
+but here is the original patch with documentation for your reference:
+	https://lkml.org/lkml/2019/6/22/298
 
+What do you think?
+
+-Eric
+
+> 
+> Thanks.
+> 
+> [snipped]
+> 
+> -- 
+> 
+> Coly Li
+> 
+--8323328-1944457719-1641439748=:4450--

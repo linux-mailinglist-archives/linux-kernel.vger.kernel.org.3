@@ -2,84 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB15486CF1
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:55:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38E50486CF4
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 22:55:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244930AbiAFVza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 16:55:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46606 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239471AbiAFVz2 (ORCPT
+        id S244982AbiAFVzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 16:55:38 -0500
+Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:52877 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244947AbiAFVzg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 16:55:28 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332A4C061245;
-        Thu,  6 Jan 2022 13:55:28 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id v11so3625317pfu.2;
-        Thu, 06 Jan 2022 13:55:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=baLlX8J8fiaO85yjXAAqEuWMCG9f2mB0MZtSG6XCtsI=;
-        b=cxw8HDbt/q+HOmPJeOndfMSKKs6qZF3mxJR8F51mdDj4j41LtWMxrhBRGgusQeuiA+
-         8bQ4nmKVrXwHsfSeYSA7gN9CtfGmQOvXdkTzxErRCKb8KjLk9S6WiaLSx3PsKeDuhqla
-         4No7o5oXOXihiQTjKOZ+jS0+OKu+JsAND8bD0TvKCnnorVyItdSSqwqGg+ZITAuzUsH4
-         ZbNu5RlF8ZEfPjqYKHQp83YwcTH0jvtqz+5el0wNpk5mIQLwlUEmBPiCziNgE5PRcy/V
-         D6ybDhDIir0dtCMSEoBH/Cp4tOee6377q65jjrojwDpO0p/h8aIosrbQPX7hiBe2+RqZ
-         hb0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=baLlX8J8fiaO85yjXAAqEuWMCG9f2mB0MZtSG6XCtsI=;
-        b=fG+gz6oJ1pZ1rtFCZiaSb9F0jt3u/CnUtXi3GiKK/48L7yyF6z3iTGCucCXbanNG54
-         fe0sv8D5JQqooUmMx9/dlYKHWBSc6hpP1uDRCQHFQ6XsHe4RkatFvoObRp0BsYpN8dQg
-         e6DnDHyQdCnYb0A8mylFv+WYMJhhNfz+FjUEzsj68WfDO/wDMnodbiM6jM7YrARmGms2
-         O7hQf5QxvZGoIEya3UZzVXyn6kBBwe21WxmOp2fYWVxSFiIG7GHBwHzK+4A0te/pHX1d
-         OcPntKeRqRWvkZELaSZfiVt2oZUBPbnvyxrwOFJQEIbI/kZ/HRuDISGs4rE/f5DhAYlm
-         LzBw==
-X-Gm-Message-State: AOAM533z2qL0R9b2HyjCYPnW6Q7pl972xuYDAa7QdZ3KrLevL9hd2AA/
-        tBQ+bM/koPeIODTDk+LM+0g=
-X-Google-Smtp-Source: ABdhPJy3EFXHBDOQH4AF0zGAFOCziAz4u+v91tVS0wlLJX/gbwDWepm05nFGg4CUudYPKGJ0Ck2YAw==
-X-Received: by 2002:aa7:9705:0:b0:4bb:6897:6b80 with SMTP id a5-20020aa79705000000b004bb68976b80mr62265172pfg.21.1641506127644;
-        Thu, 06 Jan 2022 13:55:27 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id o27sm2769514pgm.1.2022.01.06.13.55.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 13:55:26 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 6 Jan 2022 11:55:24 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Wei Yang <richard.weiyang@gmail.com>
-Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] cgroup/rstat: check updated_next only for root
-Message-ID: <YddlTA/+sBAHGGYo@slm.duckdns.org>
-References: <20211225000932.7253-1-richard.weiyang@gmail.com>
- <20211225000932.7253-2-richard.weiyang@gmail.com>
+        Thu, 6 Jan 2022 16:55:36 -0500
+Received: from pop-os.home ([90.11.185.88])
+        by smtp.orange.fr with ESMTPA
+        id 5ajNntWzf2lVY5ajOnSlmM; Thu, 06 Jan 2022 22:55:34 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Thu, 06 Jan 2022 22:55:34 +0100
+X-ME-IP: 90.11.185.88
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     arnd@arndb.de, hch@infradead.org, akpm@linux-foundation.org,
+        bhelgaas@google.com
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH 16/16] PCI: Remove usage of the deprecated "pci-dma-compat.h" API
+Date:   Thu,  6 Jan 2022 22:55:33 +0100
+Message-Id: <e965573211f8c81c8ba978cfbc21925810a662b1.1641500561.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
+References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211225000932.7253-2-richard.weiyang@gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 25, 2021 at 12:09:32AM +0000, Wei Yang wrote:
-> After commit dc26532aed0a ("cgroup: rstat: punt root-level optimization to
-> individual controllers"), each rstat on updated_children list has its
-> ->updated_next not NULL.
-> 
-> This means we can remove the check on ->updated_next, if we make sure
-> the subtree from @root is on list, which could be done by checking
-> updated_next for root.
-> 
-> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+Final step, remove pci-dma-compat.h
 
-Applied to cgroup/for-5.17 w/ coding style fixes.
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ include/linux/pci-dma-compat.h | 129 ---------------------------------
+ include/linux/pci.h            |   3 -
+ 2 files changed, 132 deletions(-)
+ delete mode 100644 include/linux/pci-dma-compat.h
 
-Thanks.
-
+diff --git a/include/linux/pci-dma-compat.h b/include/linux/pci-dma-compat.h
+deleted file mode 100644
+index 249d4d7fbf18..000000000000
+--- a/include/linux/pci-dma-compat.h
++++ /dev/null
+@@ -1,129 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/* include this file if the platform implements the dma_ DMA Mapping API
+- * and wants to provide the pci_ DMA Mapping API in terms of it */
+-
+-#ifndef _ASM_GENERIC_PCI_DMA_COMPAT_H
+-#define _ASM_GENERIC_PCI_DMA_COMPAT_H
+-
+-#include <linux/dma-mapping.h>
+-
+-/* This defines the direction arg to the DMA mapping routines. */
+-#define PCI_DMA_BIDIRECTIONAL	DMA_BIDIRECTIONAL
+-#define PCI_DMA_TODEVICE	DMA_TO_DEVICE
+-#define PCI_DMA_FROMDEVICE	DMA_FROM_DEVICE
+-#define PCI_DMA_NONE		DMA_NONE
+-
+-static inline void *
+-pci_alloc_consistent(struct pci_dev *hwdev, size_t size,
+-		     dma_addr_t *dma_handle)
+-{
+-	return dma_alloc_coherent(&hwdev->dev, size, dma_handle, GFP_ATOMIC);
+-}
+-
+-static inline void *
+-pci_zalloc_consistent(struct pci_dev *hwdev, size_t size,
+-		      dma_addr_t *dma_handle)
+-{
+-	return dma_alloc_coherent(&hwdev->dev, size, dma_handle, GFP_ATOMIC);
+-}
+-
+-static inline void
+-pci_free_consistent(struct pci_dev *hwdev, size_t size,
+-		    void *vaddr, dma_addr_t dma_handle)
+-{
+-	dma_free_coherent(&hwdev->dev, size, vaddr, dma_handle);
+-}
+-
+-static inline dma_addr_t
+-pci_map_single(struct pci_dev *hwdev, void *ptr, size_t size, int direction)
+-{
+-	return dma_map_single(&hwdev->dev, ptr, size, (enum dma_data_direction)direction);
+-}
+-
+-static inline void
+-pci_unmap_single(struct pci_dev *hwdev, dma_addr_t dma_addr,
+-		 size_t size, int direction)
+-{
+-	dma_unmap_single(&hwdev->dev, dma_addr, size, (enum dma_data_direction)direction);
+-}
+-
+-static inline dma_addr_t
+-pci_map_page(struct pci_dev *hwdev, struct page *page,
+-	     unsigned long offset, size_t size, int direction)
+-{
+-	return dma_map_page(&hwdev->dev, page, offset, size, (enum dma_data_direction)direction);
+-}
+-
+-static inline void
+-pci_unmap_page(struct pci_dev *hwdev, dma_addr_t dma_address,
+-	       size_t size, int direction)
+-{
+-	dma_unmap_page(&hwdev->dev, dma_address, size, (enum dma_data_direction)direction);
+-}
+-
+-static inline int
+-pci_map_sg(struct pci_dev *hwdev, struct scatterlist *sg,
+-	   int nents, int direction)
+-{
+-	return dma_map_sg(&hwdev->dev, sg, nents, (enum dma_data_direction)direction);
+-}
+-
+-static inline void
+-pci_unmap_sg(struct pci_dev *hwdev, struct scatterlist *sg,
+-	     int nents, int direction)
+-{
+-	dma_unmap_sg(&hwdev->dev, sg, nents, (enum dma_data_direction)direction);
+-}
+-
+-static inline void
+-pci_dma_sync_single_for_cpu(struct pci_dev *hwdev, dma_addr_t dma_handle,
+-		    size_t size, int direction)
+-{
+-	dma_sync_single_for_cpu(&hwdev->dev, dma_handle, size, (enum dma_data_direction)direction);
+-}
+-
+-static inline void
+-pci_dma_sync_single_for_device(struct pci_dev *hwdev, dma_addr_t dma_handle,
+-		    size_t size, int direction)
+-{
+-	dma_sync_single_for_device(&hwdev->dev, dma_handle, size, (enum dma_data_direction)direction);
+-}
+-
+-static inline void
+-pci_dma_sync_sg_for_cpu(struct pci_dev *hwdev, struct scatterlist *sg,
+-		int nelems, int direction)
+-{
+-	dma_sync_sg_for_cpu(&hwdev->dev, sg, nelems, (enum dma_data_direction)direction);
+-}
+-
+-static inline void
+-pci_dma_sync_sg_for_device(struct pci_dev *hwdev, struct scatterlist *sg,
+-		int nelems, int direction)
+-{
+-	dma_sync_sg_for_device(&hwdev->dev, sg, nelems, (enum dma_data_direction)direction);
+-}
+-
+-static inline int
+-pci_dma_mapping_error(struct pci_dev *pdev, dma_addr_t dma_addr)
+-{
+-	return dma_mapping_error(&pdev->dev, dma_addr);
+-}
+-
+-#ifdef CONFIG_PCI
+-static inline int pci_set_dma_mask(struct pci_dev *dev, u64 mask)
+-{
+-	return dma_set_mask(&dev->dev, mask);
+-}
+-
+-static inline int pci_set_consistent_dma_mask(struct pci_dev *dev, u64 mask)
+-{
+-	return dma_set_coherent_mask(&dev->dev, mask);
+-}
+-#else
+-static inline int pci_set_dma_mask(struct pci_dev *dev, u64 mask)
+-{ return -EIO; }
+-static inline int pci_set_consistent_dma_mask(struct pci_dev *dev, u64 mask)
+-{ return -EIO; }
+-#endif
+-
+-#endif
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index d4308f847e58..ba8771eaf380 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -2455,9 +2455,6 @@ static inline bool pci_is_thunderbolt_attached(struct pci_dev *pdev)
+ void pci_uevent_ers(struct pci_dev *pdev, enum  pci_ers_result err_type);
+ #endif
+ 
+-/* Provide the legacy pci_dma_* API */
+-#include <linux/pci-dma-compat.h>
+-
+ #define pci_printk(level, pdev, fmt, arg...) \
+ 	dev_printk(level, &(pdev)->dev, fmt, ##arg)
+ 
 -- 
-tejun
+2.32.0
+

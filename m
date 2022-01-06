@@ -2,231 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4D3486AF9
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:17:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFBB7486B00
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:21:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243650AbiAFURd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 15:17:33 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:43578 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243582AbiAFURc (ORCPT
+        id S243661AbiAFUVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 15:21:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243652AbiAFUVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 15:17:32 -0500
-Received: from [192.168.254.32] (unknown [47.187.212.181])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 75A7B20B7179;
-        Thu,  6 Jan 2022 12:17:31 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 75A7B20B7179
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1641500252;
-        bh=Hh0ZW8EfXcZcHkCAjia0bYshL301LrZuYH2kh2Opuv0=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=P5EypePoLb/EQ/hWUmzTdmQ10elVlRKQ4nJDP8rp15UUW/IYDaGZzF+TfBN7tUKn6
-         KYIyVpFHZJn4qzA+2oaWffU7HDILuzyN7wklK5CzF6kIZczInrF+LEK4dQUjzNE9qb
-         lS4aIl5BTRtupLc1iqy0UVhZa3SchawkJHKkJrQA=
-Subject: Re: [PATCH v12 05/10] arm64: Copy unwind arguments to unwind_state
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
-        linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <0d0eb36f348fb5a6af6eb592c0525f6e94007328>
- <20220103165212.9303-1-madvenka@linux.microsoft.com>
- <20220103165212.9303-6-madvenka@linux.microsoft.com>
- <Ydcax2E9u4D4/3Q9@FVFF77S0Q05N>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-Message-ID: <6fce7dd5-2f45-5034-bdf8-6c3a3499e9e7@linux.microsoft.com>
-Date:   Thu, 6 Jan 2022 14:17:30 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 6 Jan 2022 15:21:47 -0500
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E99C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 12:21:47 -0800 (PST)
+Received: by mail-ua1-x92e.google.com with SMTP id o20so6592714uat.2
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 12:21:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TsNggRXYkwV4EUR9Ok29kqBUnZM3s7RXs5GPcRvP5bA=;
+        b=QURTZ5evJ1YW/IO1Blizmr5ol7XadBDlAr3gAsHzRzmWyPahRo6daBfqWicPAoCORh
+         FRNwZ1ayYFfTQc/EiGApBPDjjccy87v0oItyC4AuAkdssyGcG+FFgiC+KinME422CSSu
+         6kvNSr98Yq7+p9iJ7bTmWyQpCYpWfwBR8a9+EpxgSAtGrLs5JnpAF6eVSHvXJAVYLCyK
+         TlQGfEAImvJw5xoAZKN3fQJTri+FCqMqmtZp06a1oaViYnvhyJCOlcKdTIZsL4MPlgH9
+         OsTYsbgv4oIh7A27qQabDEn9MOEuvITSFRuWp98w2RxhINCS7ltPI2XoJvOmiagsRffz
+         X++g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TsNggRXYkwV4EUR9Ok29kqBUnZM3s7RXs5GPcRvP5bA=;
+        b=hbJmq4hvEZF90Wr2qZdzoty81dliOrRR72Mz9OgbOPTYwfL+F62UPToC582tu6y5bD
+         2ClnXljHfC98n1OcjpYZSEpvHTVEehNT+iGmLlNfbAhEcm3I59SQZ0oDtzitiA8SXN+N
+         3eiyz7eoM2YAC7OxeEcI+SOGLC8KqgMS/2RM9ESoGG1A6VOMClBrDG/BaFanYAiNTw0r
+         uguBjV62Lzh5wM6rYgY/jLSVap+6j8vFB3YzLOv0mlJfJ/h9DqRpCahAufJgbjAhf/2S
+         0pnZM2qR27KGRwsMmzNLI1QHy3fksTEn4rFmolbbapegEFIv8pNl6gB4j4Q7dKBoUPFm
+         V+zg==
+X-Gm-Message-State: AOAM531Ac8qcCWcl9C6kXROtsQps89QkWqWCZZJNhT4aYclN/gcl0BKY
+        eyw9izLCieXXPrZE/AonAmR/PCoNTabDMkwD/vudpA==
+X-Google-Smtp-Source: ABdhPJzxS3KUNw3tMwcrQJ3mdU2fzU0rZ/yi/kaPmi9KKMyMy9+ysGpHcGAVx5HN1pdKrJLf6dIaVj+7VV2O0XGWm70=
+X-Received: by 2002:ab0:2a48:: with SMTP id p8mr20072842uar.125.1641500506544;
+ Thu, 06 Jan 2022 12:21:46 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <Ydcax2E9u4D4/3Q9@FVFF77S0Q05N>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20220106201359.1646575-1-longman@redhat.com>
+In-Reply-To: <20220106201359.1646575-1-longman@redhat.com>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Thu, 6 Jan 2022 12:21:35 -0800
+Message-ID: <CAHS8izMArAqzt_hNdw=84Te1RHXkBmMmHXVwHazhkFL60Mx4tw@mail.gmail.com>
+Subject: Re: [PATCH] selftests/vm: Make charge_reserved_hugetlb.sh work with
+ existing cgroup setting
+To:     Waiman Long <longman@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 6, 2022 at 12:14 PM Waiman Long <longman@redhat.com> wrote:
+>
+> The hugetlb cgroup reservation test charge_reserved_hugetlb.sh assume
+> that no cgroup filesystems are mounted before running the test. That is
+> not true in many cases. As a result, the test fails to run. Fix that by
+> querying the current cgroup mount setting and using the existing cgroup
+> setup instead before attempting to freshly mount a cgroup filesystem.
+>
+> Similar change is also made for hugetlb_reparenting_test.sh as well,
+> though it still has problem if cgroup v2 isn't used.
+>
+> The patched test scripts were run on a centos 8 based system to verify
+> that they ran properly.
+>
+> Fixes: 29750f71a9b4 ("hugetlb_cgroup: add hugetlb_cgroup reservation tests")
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
+Thank you very much.
 
-On 1/6/22 10:37 AM, Mark Rutland wrote:
-> On Mon, Jan 03, 2022 at 10:52:07AM -0600, madvenka@linux.microsoft.com wrote:
->> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
->>
->> Copy the following arguments passed to arch_stack_walk() to unwind_state
->> so that they can be passed to unwind functions via unwind_state rather
->> than as separate arguments:
->>
->> 	- task
-> 
-> I agree the task should be placed in the unwind state, since it's a key part of
-> the environment for the unwind.
-> 
->> 	- regs
-> 
-> This isn't relevant in all cases, and so for now I'd strongly prefer *not* to
-> have this in the unwind state as it's liable to lead to confusion and get
-> misused.
-> 
->> 	- consume_entry
->> 	- cookie
-> 
-> These are only relevant for the invocation of the consume_entry() function, and
-> so similarly I do not think they should be part of the state. It's simpler for
-> these to be local variables.
-> 
+Acked-by: Mina Almasry <almasrymina@google.com>
 
-OK.
-
->>
->> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
->> ---
->>  arch/arm64/include/asm/stacktrace.h | 12 ++++++++
->>  arch/arm64/kernel/stacktrace.c      | 45 ++++++++++++++++-------------
->>  2 files changed, 37 insertions(+), 20 deletions(-)
->>
->> diff --git a/arch/arm64/include/asm/stacktrace.h b/arch/arm64/include/asm/stacktrace.h
->> index fc828c3c5dfd..322817d40a75 100644
->> --- a/arch/arm64/include/asm/stacktrace.h
->> +++ b/arch/arm64/include/asm/stacktrace.h
->> @@ -51,6 +51,14 @@ struct stack_info {
->>   * @kr_cur:      When KRETPOLINES is selected, holds the kretprobe instance
->>   *               associated with the most recently encountered replacement lr
->>   *               value.
->> + *
->> + * @task:        Pointer to the task structure.
->> + *
->> + * @regs:        Registers, if any.
->> + *
->> + * @consume_pc   Consume PC function pointer.
->> + *
->> + * @cookie       Argument to consume_pc().
->>   */
->>  struct unwind_state {
->>  	unsigned long fp;
->> @@ -61,6 +69,10 @@ struct unwind_state {
->>  #ifdef CONFIG_KRETPROBES
->>  	struct llist_node *kr_cur;
->>  #endif
->> +	struct task_struct *task;
->> +	struct pt_regs *regs;
->> +	stack_trace_consume_fn consume_pc;
->> +	void *cookie;
->>  };
->>  
->>  extern void dump_backtrace(struct pt_regs *regs, struct task_struct *tsk,
->> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
->> index bd797e3f7789..3ecb8242caa5 100644
->> --- a/arch/arm64/kernel/stacktrace.c
->> +++ b/arch/arm64/kernel/stacktrace.c
->> @@ -33,8 +33,17 @@
->>   */
->>  
->>  
->> -static void unwind_init_common(struct unwind_state *state)
->> +static void unwind_init_common(struct unwind_state *state,
->> +			       struct task_struct *task,
->> +			       struct pt_regs *regs,
->> +			       stack_trace_consume_fn consume_pc,
->> +			       void *cookie)
->>  {
->> +	state->task = task;
->> +	state->regs = regs;
->> +	state->consume_pc = consume_pc;
->> +	state->cookie = cookie;
->> +
->>  #ifdef CONFIG_KRETPROBES
->>  	state->kr_cur = NULL;
->>  #endif
->> @@ -56,11 +65,10 @@ static void unwind_init_common(struct unwind_state *state)
->>  /*
->>   * TODO: document requirements here.
->>   */
->> -static inline void unwind_init_regs(struct unwind_state *state,
->> -				    struct pt_regs *regs)
->> +static inline void unwind_init_regs(struct unwind_state *state)
->>  {
->> -	state->fp = regs->regs[29];
->> -	state->pc = regs->pc;
->> +	state->fp = state->regs->regs[29];
->> +	state->pc = state->regs->pc;
->>  }
->>  
->>  /*
->> @@ -80,11 +88,10 @@ static __always_inline void unwind_init_current(struct unwind_state *state)
->>   *
->>   * The caller guarantees that the task is not running.
->>   */
->> -static inline void unwind_init_task(struct unwind_state *state,
->> -				    struct task_struct *task)
->> +static inline void unwind_init_task(struct unwind_state *state)
->>  {
->> -	state->fp = thread_saved_fp(task);
->> -	state->pc = thread_saved_pc(task);
->> +	state->fp = thread_saved_fp(state->task);
->> +	state->pc = thread_saved_pc(state->task);
->>  }
->>  
->>  /*
->> @@ -94,9 +101,9 @@ static inline void unwind_init_task(struct unwind_state *state,
->>   * records (e.g. a cycle), determined based on the location and fp value of A
->>   * and the location (but not the fp value) of B.
->>   */
->> -static int notrace unwind_next(struct task_struct *tsk,
->> -			       struct unwind_state *state)
->> +static int notrace unwind_next(struct unwind_state *state)
->>  {
->> +	struct task_struct *tsk = state->task;
->>  	unsigned long fp = state->fp;
->>  	struct stack_info info;
->>  
->> @@ -170,16 +177,14 @@ static int notrace unwind_next(struct task_struct *tsk,
->>  }
->>  NOKPROBE_SYMBOL(unwind_next);
->>  
->> -static void notrace unwind(struct task_struct *tsk,
->> -			   struct unwind_state *state,
->> -			   bool (*fn)(void *, unsigned long), void *data)
->> +static void notrace unwind(struct unwind_state *state)
->>  {
->>  	while (1) {
->>  		int ret;
->>  
->> -		if (!fn(data, state->pc))
->> +		if (!state->consume_pc(state->cookie, state->pc))
->>  			break;
->> -		ret = unwind_next(tsk, state);
->> +		ret = unwind_next(state);
->>  		if (ret < 0)
->>  			break;
->>  	}
->> @@ -225,14 +230,14 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
->>  {
->>  	struct unwind_state state;
->>  
->> -	unwind_init_common(&state);
->> +	unwind_init_common(&state, task, regs, consume_entry, cookie);
->>  
->>  	if (regs)
->> -		unwind_init_regs(&state, regs);
->> +		unwind_init_regs(&state);
->>  	else if (task == current)
->>  		unwind_init_current(&state);
->>  	else
->> -		unwind_init_task(&state, task);
->> +		unwind_init_task(&state);
->>  
->> -	unwind(task, &state, consume_entry, cookie);
->> +	unwind(&state);
-> 
-> I don't like the changes here in particular since they hide the information
-> flow relevant to each case.
-> 
-
-Per previous comment I agreed to, I will pass all the arguments other than task
-directly.
-
-Thanks.
-
-Madhavan
+> ---
+>  .../selftests/vm/charge_reserved_hugetlb.sh   | 34 +++++++++++--------
+>  .../selftests/vm/hugetlb_reparenting_test.sh  | 21 +++++++-----
+>  .../selftests/vm/write_hugetlb_memory.sh      |  2 +-
+>  3 files changed, 34 insertions(+), 23 deletions(-)
+>  mode change 100644 => 100755 tools/testing/selftests/vm/charge_reserved_hugetlb.sh
+>  mode change 100644 => 100755 tools/testing/selftests/vm/hugetlb_reparenting_test.sh
+>  mode change 100644 => 100755 tools/testing/selftests/vm/write_hugetlb_memory.sh
+>
+> diff --git a/tools/testing/selftests/vm/charge_reserved_hugetlb.sh b/tools/testing/selftests/vm/charge_reserved_hugetlb.sh
+> old mode 100644
+> new mode 100755
+> index fe8fcfb334e0..a5cb4b09a46c
+> --- a/tools/testing/selftests/vm/charge_reserved_hugetlb.sh
+> +++ b/tools/testing/selftests/vm/charge_reserved_hugetlb.sh
+> @@ -24,19 +24,23 @@ if [[ "$1" == "-cgroup-v2" ]]; then
+>    reservation_usage_file=rsvd.current
+>  fi
+>
+> -cgroup_path=/dev/cgroup/memory
+> -if [[ ! -e $cgroup_path ]]; then
+> -  mkdir -p $cgroup_path
+> -  if [[ $cgroup2 ]]; then
+> +if [[ $cgroup2 ]]; then
+> +  cgroup_path=$(mount -t cgroup2 | head -1 | awk -e '{print $3}')
+> +  if [[ -z "$cgroup_path" ]]; then
+> +    cgroup_path=/dev/cgroup/memory
+>      mount -t cgroup2 none $cgroup_path
+> -  else
+> +    do_umount=1
+> +  fi
+> +  echo "+hugetlb" >$cgroup_path/cgroup.subtree_control
+> +else
+> +  cgroup_path=$(mount -t cgroup | grep ",hugetlb" | awk -e '{print $3}')
+> +  if [[ -z "$cgroup_path" ]]; then
+> +    cgroup_path=/dev/cgroup/memory
+>      mount -t cgroup memory,hugetlb $cgroup_path
+> +    do_umount=1
+>    fi
+>  fi
+> -
+> -if [[ $cgroup2 ]]; then
+> -  echo "+hugetlb" >/dev/cgroup/memory/cgroup.subtree_control
+> -fi
+> +export cgroup_path
+>
+>  function cleanup() {
+>    if [[ $cgroup2 ]]; then
+> @@ -108,7 +112,7 @@ function setup_cgroup() {
+>
+>  function wait_for_hugetlb_memory_to_get_depleted() {
+>    local cgroup="$1"
+> -  local path="/dev/cgroup/memory/$cgroup/hugetlb.${MB}MB.$reservation_usage_file"
+> +  local path="$cgroup_path/$cgroup/hugetlb.${MB}MB.$reservation_usage_file"
+>    # Wait for hugetlbfs memory to get depleted.
+>    while [ $(cat $path) != 0 ]; do
+>      echo Waiting for hugetlb memory to get depleted.
+> @@ -121,7 +125,7 @@ function wait_for_hugetlb_memory_to_get_reserved() {
+>    local cgroup="$1"
+>    local size="$2"
+>
+> -  local path="/dev/cgroup/memory/$cgroup/hugetlb.${MB}MB.$reservation_usage_file"
+> +  local path="$cgroup_path/$cgroup/hugetlb.${MB}MB.$reservation_usage_file"
+>    # Wait for hugetlbfs memory to get written.
+>    while [ $(cat $path) != $size ]; do
+>      echo Waiting for hugetlb memory reservation to reach size $size.
+> @@ -134,7 +138,7 @@ function wait_for_hugetlb_memory_to_get_written() {
+>    local cgroup="$1"
+>    local size="$2"
+>
+> -  local path="/dev/cgroup/memory/$cgroup/hugetlb.${MB}MB.$fault_usage_file"
+> +  local path="$cgroup_path/$cgroup/hugetlb.${MB}MB.$fault_usage_file"
+>    # Wait for hugetlbfs memory to get written.
+>    while [ $(cat $path) != $size ]; do
+>      echo Waiting for hugetlb memory to reach size $size.
+> @@ -574,5 +578,7 @@ for populate in "" "-o"; do
+>    done     # populate
+>  done       # method
+>
+> -umount $cgroup_path
+> -rmdir $cgroup_path
+> +if [[ $do_umount ]]; then
+> +  umount $cgroup_path
+> +  rmdir $cgroup_path
+> +fi
+> diff --git a/tools/testing/selftests/vm/hugetlb_reparenting_test.sh b/tools/testing/selftests/vm/hugetlb_reparenting_test.sh
+> old mode 100644
+> new mode 100755
+> index 4a9a3afe9fd4..bf2d2a684edf
+> --- a/tools/testing/selftests/vm/hugetlb_reparenting_test.sh
+> +++ b/tools/testing/selftests/vm/hugetlb_reparenting_test.sh
+> @@ -18,19 +18,24 @@ if [[ "$1" == "-cgroup-v2" ]]; then
+>    usage_file=current
+>  fi
+>
+> -CGROUP_ROOT='/dev/cgroup/memory'
+> -MNT='/mnt/huge/'
+>
+> -if [[ ! -e $CGROUP_ROOT ]]; then
+> -  mkdir -p $CGROUP_ROOT
+> -  if [[ $cgroup2 ]]; then
+> +if [[ $cgroup2 ]]; then
+> +  CGROUP_ROOT=$(mount -t cgroup2 | head -1 | awk -e '{print $3}')
+> +  if [[ -z "$CGROUP_ROOT" ]]; then
+> +    CGROUP_ROOT=/dev/cgroup/memory
+>      mount -t cgroup2 none $CGROUP_ROOT
+> -    sleep 1
+> -    echo "+hugetlb +memory" >$CGROUP_ROOT/cgroup.subtree_control
+> -  else
+> +    do_umount=1
+> +  fi
+> +  echo "+hugetlb +memory" >$CGROUP_ROOT/cgroup.subtree_control
+> +else
+> +  CGROUP_ROOT=$(mount -t cgroup | grep ",hugetlb" | awk -e '{print $3}')
+> +  if [[ -z "$CGROUP_ROOT" ]]; then
+> +    CGROUP_ROOT=/dev/cgroup/memory
+>      mount -t cgroup memory,hugetlb $CGROUP_ROOT
+> +    do_umount=1
+>    fi
+>  fi
+> +MNT='/mnt/huge/'
+>
+>  function get_machine_hugepage_size() {
+>    hpz=$(grep -i hugepagesize /proc/meminfo)
+> diff --git a/tools/testing/selftests/vm/write_hugetlb_memory.sh b/tools/testing/selftests/vm/write_hugetlb_memory.sh
+> old mode 100644
+> new mode 100755
+> index d3d0d108924d..70a02301f4c2
+> --- a/tools/testing/selftests/vm/write_hugetlb_memory.sh
+> +++ b/tools/testing/selftests/vm/write_hugetlb_memory.sh
+> @@ -14,7 +14,7 @@ want_sleep=$8
+>  reserve=$9
+>
+>  echo "Putting task in cgroup '$cgroup'"
+> -echo $$ > /dev/cgroup/memory/"$cgroup"/cgroup.procs
+> +echo $$ > ${cgroup_path:-/dev/cgroup/memory}/"$cgroup"/cgroup.procs
+>
+>  echo "Method is $method"
+>
+> --
+> 2.27.0
+>

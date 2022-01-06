@@ -2,226 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFBB7486B00
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:21:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E34C486B04
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 21:21:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243661AbiAFUVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 15:21:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243652AbiAFUVr (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 15:21:47 -0500
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E99C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 12:21:47 -0800 (PST)
-Received: by mail-ua1-x92e.google.com with SMTP id o20so6592714uat.2
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 12:21:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TsNggRXYkwV4EUR9Ok29kqBUnZM3s7RXs5GPcRvP5bA=;
-        b=QURTZ5evJ1YW/IO1Blizmr5ol7XadBDlAr3gAsHzRzmWyPahRo6daBfqWicPAoCORh
-         FRNwZ1ayYFfTQc/EiGApBPDjjccy87v0oItyC4AuAkdssyGcG+FFgiC+KinME422CSSu
-         6kvNSr98Yq7+p9iJ7bTmWyQpCYpWfwBR8a9+EpxgSAtGrLs5JnpAF6eVSHvXJAVYLCyK
-         TlQGfEAImvJw5xoAZKN3fQJTri+FCqMqmtZp06a1oaViYnvhyJCOlcKdTIZsL4MPlgH9
-         OsTYsbgv4oIh7A27qQabDEn9MOEuvITSFRuWp98w2RxhINCS7ltPI2XoJvOmiagsRffz
-         X++g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TsNggRXYkwV4EUR9Ok29kqBUnZM3s7RXs5GPcRvP5bA=;
-        b=hbJmq4hvEZF90Wr2qZdzoty81dliOrRR72Mz9OgbOPTYwfL+F62UPToC582tu6y5bD
-         2ClnXljHfC98n1OcjpYZSEpvHTVEehNT+iGmLlNfbAhEcm3I59SQZ0oDtzitiA8SXN+N
-         3eiyz7eoM2YAC7OxeEcI+SOGLC8KqgMS/2RM9ESoGG1A6VOMClBrDG/BaFanYAiNTw0r
-         uguBjV62Lzh5wM6rYgY/jLSVap+6j8vFB3YzLOv0mlJfJ/h9DqRpCahAufJgbjAhf/2S
-         0pnZM2qR27KGRwsMmzNLI1QHy3fksTEn4rFmolbbapegEFIv8pNl6gB4j4Q7dKBoUPFm
-         V+zg==
-X-Gm-Message-State: AOAM531Ac8qcCWcl9C6kXROtsQps89QkWqWCZZJNhT4aYclN/gcl0BKY
-        eyw9izLCieXXPrZE/AonAmR/PCoNTabDMkwD/vudpA==
-X-Google-Smtp-Source: ABdhPJzxS3KUNw3tMwcrQJ3mdU2fzU0rZ/yi/kaPmi9KKMyMy9+ysGpHcGAVx5HN1pdKrJLf6dIaVj+7VV2O0XGWm70=
-X-Received: by 2002:ab0:2a48:: with SMTP id p8mr20072842uar.125.1641500506544;
- Thu, 06 Jan 2022 12:21:46 -0800 (PST)
+        id S243679AbiAFUVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 15:21:53 -0500
+Received: from mail-mw2nam08on2042.outbound.protection.outlook.com ([40.107.101.42]:15841
+        "EHLO NAM04-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S243663AbiAFUVw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 15:21:52 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=h+aGlSJmViAEq4XSOQsKr+GMDgOUtARNe+YTuW7KeugWF3tiaxIxA6kMpc+TeOR+tRrpuVLppSqZBu0WWPIlBjhzUcQYpToQRxeFbo1Ujk9YK1DYXhELi5K7AQN03bIgmlwmLN74+jWSI+OWnD2Np6/FAImFOm/rAGlEaqU3VCrfS6NB69J/Op5B7t9t2MhQJqWmWQ8YZTtBwfiQ0rO/VRzytw1xbH1I1vnfQAVLs+AQk07k5VfkI3QiB6WbLasEbs8r10Wpb/hlg4VJp/0xRFqKlQY37yoq6Kqo6gYR4HmDrfSe8wHnd1hycxgyeRpTyEdiojRennbhI9b3Zn3mWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RTqyjelPXfJqTpXMbXhE3kSd3zQ3G7qGrMHkFADQ9ew=;
+ b=dkVuqG72N6TPO4UjN35TC0rkCz5NJwF6dIM08PGIAao86r6blSmau/lPMptOeqotLFIpaCeDiNuMEPxMyhIDjkPxWQo1tCknmAda3LJ78JkLXsMVPgriRO1NZQPx2vY4Keuwi7AVrm0M4cyI0a/nHfgojT1mLbLSfJiPjKBCrjpwmPH+cLaIRtItkIenrT7yA2OpNhkcbshI+XkgPc+3X+eaYglPsszd2vhpSy9aS1ZmFsUq4wKjlCYhRLtSKegUstg8ThcR7iMEpNX1NNAMY0BJzvUDHrBkvLJMmrrY8HO3+fU2sB9sxlhTB6TWOOzTYy+x0NyrJN4L2FqK7cb5GQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=oracle.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RTqyjelPXfJqTpXMbXhE3kSd3zQ3G7qGrMHkFADQ9ew=;
+ b=sZ96fq198Gl60KtpYb50t0Uy/SzjC3l2FmtwpnsfoCfmmtZFLX4j1U6KcBc0iJlFGlWogJZsnxiRHVis8DS0FmF5m8iVncuvi+I1ztg7BT+dTUvpXsMzqx9f2cRVPwxlFx6GsUoJzGrn8xWzjRs2dGIxOBxEloxYvih74oLxfkI=
+Received: from MW4PR04CA0267.namprd04.prod.outlook.com (2603:10b6:303:88::32)
+ by DM4PR12MB5133.namprd12.prod.outlook.com (2603:10b6:5:390::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4844.15; Thu, 6 Jan
+ 2022 20:21:50 +0000
+Received: from CO1NAM11FT056.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:88:cafe::6f) by MW4PR04CA0267.outlook.office365.com
+ (2603:10b6:303:88::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7 via Frontend
+ Transport; Thu, 6 Jan 2022 20:21:50 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT056.mail.protection.outlook.com (10.13.175.107) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4867.7 via Frontend Transport; Thu, 6 Jan 2022 20:21:50 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Thu, 6 Jan
+ 2022 14:21:49 -0600
+Date:   Thu, 6 Jan 2022 14:21:35 -0600
+From:   Michael Roth <michael.roth@amd.com>
+To:     Venu Busireddy <venu.busireddy@oracle.com>
+CC:     Brijesh Singh <brijesh.singh@amd.com>, <x86@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <linux-efi@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
+        <linux-coco@lists.linux.dev>, <linux-mm@kvack.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        <tony.luck@intel.com>, <marcorr@google.com>,
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: Re: [PATCH v8 22/40] x86/sev: move MSR-based VMGEXITs for CPUID to
+ helper
+Message-ID: <20220106202135.in72kejithub33s6@amd.com>
+References: <20211210154332.11526-1-brijesh.singh@amd.com>
+ <20211210154332.11526-23-brijesh.singh@amd.com>
+ <Ydc3Lbx2O00an/xj@dt>
 MIME-Version: 1.0
-References: <20220106201359.1646575-1-longman@redhat.com>
-In-Reply-To: <20220106201359.1646575-1-longman@redhat.com>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Thu, 6 Jan 2022 12:21:35 -0800
-Message-ID: <CAHS8izMArAqzt_hNdw=84Te1RHXkBmMmHXVwHazhkFL60Mx4tw@mail.gmail.com>
-Subject: Re: [PATCH] selftests/vm: Make charge_reserved_hugetlb.sh work with
- existing cgroup setting
-To:     Waiman Long <longman@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Ydc3Lbx2O00an/xj@dt>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2ee2fa30-ea49-4d36-10b4-08d9d1522c0e
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5133:EE_
+X-Microsoft-Antispam-PRVS: <DM4PR12MB51331070BE1D35FF598862C2954C9@DM4PR12MB5133.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: EC2v8UoYPSc+2L7uKO5D83mmXhl2eUjGILPnZmVR1ScABxOvswlXFaSmBh8bY+qe6HXFTXImEnWy3DyLlE5xoCYDymbbQ+jhZW7roO+a+YrhuNytuRqmSRv0ocKKxaT/+6ZMteVhtSHZKvgkrxTNyFKbOPhrspeQ+ZxWoKrmpDjyeJ2RSJngP9VgRx3isxumpxLOsGVdu+6QTENYHwyxpMcwLZfpz073B5YvPUb7xgbmz91+SujbeEHUrYNYtGrIp4rkeubp2puiC9Qpp2FNpJPHNyh7XyFzhQD8NRbjrjMSBBvTEpWmeMTp8fNzGv5B/gLDu+k4LlzteJw8VFQoc5r3qKdocfXQih0+rt81K/zk37nFkijYbJFepABL05OHXPk3YYqA2pOKJC7zw86NpWTvragh2npN23Am8fBHBPn52MdPFFdmZMEH9sO+A/wsNr+oulBP8PldCf+fWnCVf2qyzvFd7O2Et7q0hWnP4JIa46z+vUnvLsI4CwRAywKYOuxPcqyChd0DEsSIRm1qLZszz15Sgfpu167dItwp68NajNKtKhR2zHIiT5XHvmZX3jmQFmOPLSnbdr4VCPvg3llnRJSfCi7zv2ZVX2/GKsFX6++ZH1SpoVagk1EWKsq79OhIcMIVmT//fI6WCSQR9UwWtn8Pg9WCstnDqkXOyofOcRXZu0KYxjenpZ0t38y63RhZ2FilF62insyCEcK0n0iAXJyyyqA9QEoQHece6DdzBvb2UWLe9o/mO9YulRaGLzH+ijXCPwv+HiapRD00v+JwFkMTNzZU+Wvp8ODCAqI=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(40470700002)(46966006)(36840700001)(2616005)(5660300002)(426003)(336012)(47076005)(356005)(16526019)(36860700001)(26005)(53546011)(4001150100001)(86362001)(70206006)(6666004)(6916009)(70586007)(186003)(82310400004)(54906003)(8936002)(8676002)(2906002)(81166007)(44832011)(316002)(83380400001)(40460700001)(7416002)(4326008)(7406005)(1076003)(508600001)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2022 20:21:50.4559
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2ee2fa30-ea49-4d36-10b4-08d9d1522c0e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT056.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5133
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 6, 2022 at 12:14 PM Waiman Long <longman@redhat.com> wrote:
->
-> The hugetlb cgroup reservation test charge_reserved_hugetlb.sh assume
-> that no cgroup filesystems are mounted before running the test. That is
-> not true in many cases. As a result, the test fails to run. Fix that by
-> querying the current cgroup mount setting and using the existing cgroup
-> setup instead before attempting to freshly mount a cgroup filesystem.
->
-> Similar change is also made for hugetlb_reparenting_test.sh as well,
-> though it still has problem if cgroup v2 isn't used.
->
-> The patched test scripts were run on a centos 8 based system to verify
-> that they ran properly.
->
-> Fixes: 29750f71a9b4 ("hugetlb_cgroup: add hugetlb_cgroup reservation tests")
-> Signed-off-by: Waiman Long <longman@redhat.com>
+On Thu, Jan 06, 2022 at 12:38:37PM -0600, Venu Busireddy wrote:
+> On 2021-12-10 09:43:14 -0600, Brijesh Singh wrote:
+> > From: Michael Roth <michael.roth@amd.com>
+> > 
+> > This code will also be used later for SEV-SNP-validated CPUID code in
+> > some cases, so move it to a common helper.
+> > 
+> > Signed-off-by: Michael Roth <michael.roth@amd.com>
+> > Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> > ---
+> >  arch/x86/kernel/sev-shared.c | 84 +++++++++++++++++++++++++-----------
+> >  1 file changed, 58 insertions(+), 26 deletions(-)
+> > 
+> > diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
+> > index 3aaef1a18ffe..d89481b31022 100644
+> > --- a/arch/x86/kernel/sev-shared.c
+> > +++ b/arch/x86/kernel/sev-shared.c
+> > @@ -194,6 +194,58 @@ enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb, bool set_ghcb_msr,
+> >  	return verify_exception_info(ghcb, ctxt);
+> >  }
+> >  
+> > +static int sev_cpuid_hv(u32 func, u32 subfunc, u32 *eax, u32 *ebx,
+> > +			u32 *ecx, u32 *edx)
+> > +{
+> > +	u64 val;
+> > +
+> > +	if (eax) {
+> > +		sev_es_wr_ghcb_msr(GHCB_CPUID_REQ(func, GHCB_CPUID_REQ_EAX));
+> > +		VMGEXIT();
+> > +		val = sev_es_rd_ghcb_msr();
+> > +
+> > +		if (GHCB_RESP_CODE(val) != GHCB_MSR_CPUID_RESP)
+> > +			return -EIO;
+> > +
+> > +		*eax = (val >> 32);
+> > +	}
+> > +
+> > +	if (ebx) {
+> > +		sev_es_wr_ghcb_msr(GHCB_CPUID_REQ(func, GHCB_CPUID_REQ_EBX));
+> > +		VMGEXIT();
+> > +		val = sev_es_rd_ghcb_msr();
+> > +
+> > +		if (GHCB_RESP_CODE(val) != GHCB_MSR_CPUID_RESP)
+> > +			return -EIO;
+> > +
+> > +		*ebx = (val >> 32);
+> > +	}
+> > +
+> > +	if (ecx) {
+> > +		sev_es_wr_ghcb_msr(GHCB_CPUID_REQ(func, GHCB_CPUID_REQ_ECX));
+> > +		VMGEXIT();
+> > +		val = sev_es_rd_ghcb_msr();
+> > +
+> > +		if (GHCB_RESP_CODE(val) != GHCB_MSR_CPUID_RESP)
+> > +			return -EIO;
+> > +
+> > +		*ecx = (val >> 32);
+> > +	}
+> > +
+> > +	if (edx) {
+> > +		sev_es_wr_ghcb_msr(GHCB_CPUID_REQ(func, GHCB_CPUID_REQ_EDX));
+> > +		VMGEXIT();
+> > +		val = sev_es_rd_ghcb_msr();
+> > +
+> > +		if (GHCB_RESP_CODE(val) != GHCB_MSR_CPUID_RESP)
+> > +			return -EIO;
+> > +
+> > +		*edx = (val >> 32);
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  /*
+> >   * Boot VC Handler - This is the first VC handler during boot, there is no GHCB
+> >   * page yet, so it only supports the MSR based communication with the
+> > @@ -202,39 +254,19 @@ enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb, bool set_ghcb_msr,
+> >  void __init do_vc_no_ghcb(struct pt_regs *regs, unsigned long exit_code)
+> >  {
+> >  	unsigned int fn = lower_bits(regs->ax, 32);
+> > -	unsigned long val;
+> > +	u32 eax, ebx, ecx, edx;
+> >  
+> >  	/* Only CPUID is supported via MSR protocol */
+> >  	if (exit_code != SVM_EXIT_CPUID)
+> >  		goto fail;
+> >  
+> > -	sev_es_wr_ghcb_msr(GHCB_CPUID_REQ(fn, GHCB_CPUID_REQ_EAX));
+> > -	VMGEXIT();
+> > -	val = sev_es_rd_ghcb_msr();
+> > -	if (GHCB_RESP_CODE(val) != GHCB_MSR_CPUID_RESP)
+> > +	if (sev_cpuid_hv(fn, 0, &eax, &ebx, &ecx, &edx))
+> >  		goto fail;
+> > -	regs->ax = val >> 32;
+> >  
+> > -	sev_es_wr_ghcb_msr(GHCB_CPUID_REQ(fn, GHCB_CPUID_REQ_EBX));
+> > -	VMGEXIT();
+> > -	val = sev_es_rd_ghcb_msr();
+> > -	if (GHCB_RESP_CODE(val) != GHCB_MSR_CPUID_RESP)
+> > -		goto fail;
+> > -	regs->bx = val >> 32;
+> > -
+> > -	sev_es_wr_ghcb_msr(GHCB_CPUID_REQ(fn, GHCB_CPUID_REQ_ECX));
+> > -	VMGEXIT();
+> > -	val = sev_es_rd_ghcb_msr();
+> > -	if (GHCB_RESP_CODE(val) != GHCB_MSR_CPUID_RESP)
+> > -		goto fail;
+> > -	regs->cx = val >> 32;
+> > -
+> > -	sev_es_wr_ghcb_msr(GHCB_CPUID_REQ(fn, GHCB_CPUID_REQ_EDX));
+> > -	VMGEXIT();
+> > -	val = sev_es_rd_ghcb_msr();
+> > -	if (GHCB_RESP_CODE(val) != GHCB_MSR_CPUID_RESP)
+> > -		goto fail;
+> > -	regs->dx = val >> 32;
+> > +	regs->ax = eax;
+> > +	regs->bx = ebx;
+> > +	regs->cx = ecx;
+> > +	regs->dx = edx;
+> 
+> What is the intent behind declaring e?x as local variables, instead
+> of passing the addresses of regs->?x to sev_cpuid_hv()? Is it to
+> prevent touching any of the regs->?x unless there is no error from
+> sev_cpuid_hv()? If so, wouldn't it be better to hide this logic from
+> the callers by declaring the local variables in sev_cpuid_hv() itself,
+> and moving the four "*e?x = (val >> 32);" statements there to the end
+> of the function (just before last the return)? With that change, the
+> callers can safely pass the addresses of regs->?x to do_vc_no_ghcb(),
+> knowing that the values will only be touched if there is no error?
 
-Thank you very much.
+For me it was more about readability. E?X are well-defined as 32-bit
+values, whereas regs->?x are longs. It seemed more readable to me to
+have sev_cpuid_hv()/snp_cpuid() expect/return the actual native types,
+and leave it up to the caller to cast/shift if necessary.
 
-Acked-by: Mina Almasry <almasrymina@google.com>
+It also seems more robust for future re-use, since, for instance, if we
+ever introduced another callsite that happened to already use u32 locally,
+it seems like it would be a mess trying to setup up temp long* args or do
+casts to pass them into these functions and then shift/cast them back just
+so we could save a few lines at this particular callsite.
 
-> ---
->  .../selftests/vm/charge_reserved_hugetlb.sh   | 34 +++++++++++--------
->  .../selftests/vm/hugetlb_reparenting_test.sh  | 21 +++++++-----
->  .../selftests/vm/write_hugetlb_memory.sh      |  2 +-
->  3 files changed, 34 insertions(+), 23 deletions(-)
->  mode change 100644 => 100755 tools/testing/selftests/vm/charge_reserved_hugetlb.sh
->  mode change 100644 => 100755 tools/testing/selftests/vm/hugetlb_reparenting_test.sh
->  mode change 100644 => 100755 tools/testing/selftests/vm/write_hugetlb_memory.sh
->
-> diff --git a/tools/testing/selftests/vm/charge_reserved_hugetlb.sh b/tools/testing/selftests/vm/charge_reserved_hugetlb.sh
-> old mode 100644
-> new mode 100755
-> index fe8fcfb334e0..a5cb4b09a46c
-> --- a/tools/testing/selftests/vm/charge_reserved_hugetlb.sh
-> +++ b/tools/testing/selftests/vm/charge_reserved_hugetlb.sh
-> @@ -24,19 +24,23 @@ if [[ "$1" == "-cgroup-v2" ]]; then
->    reservation_usage_file=rsvd.current
->  fi
->
-> -cgroup_path=/dev/cgroup/memory
-> -if [[ ! -e $cgroup_path ]]; then
-> -  mkdir -p $cgroup_path
-> -  if [[ $cgroup2 ]]; then
-> +if [[ $cgroup2 ]]; then
-> +  cgroup_path=$(mount -t cgroup2 | head -1 | awk -e '{print $3}')
-> +  if [[ -z "$cgroup_path" ]]; then
-> +    cgroup_path=/dev/cgroup/memory
->      mount -t cgroup2 none $cgroup_path
-> -  else
-> +    do_umount=1
-> +  fi
-> +  echo "+hugetlb" >$cgroup_path/cgroup.subtree_control
-> +else
-> +  cgroup_path=$(mount -t cgroup | grep ",hugetlb" | awk -e '{print $3}')
-> +  if [[ -z "$cgroup_path" ]]; then
-> +    cgroup_path=/dev/cgroup/memory
->      mount -t cgroup memory,hugetlb $cgroup_path
-> +    do_umount=1
->    fi
->  fi
-> -
-> -if [[ $cgroup2 ]]; then
-> -  echo "+hugetlb" >/dev/cgroup/memory/cgroup.subtree_control
-> -fi
-> +export cgroup_path
->
->  function cleanup() {
->    if [[ $cgroup2 ]]; then
-> @@ -108,7 +112,7 @@ function setup_cgroup() {
->
->  function wait_for_hugetlb_memory_to_get_depleted() {
->    local cgroup="$1"
-> -  local path="/dev/cgroup/memory/$cgroup/hugetlb.${MB}MB.$reservation_usage_file"
-> +  local path="$cgroup_path/$cgroup/hugetlb.${MB}MB.$reservation_usage_file"
->    # Wait for hugetlbfs memory to get depleted.
->    while [ $(cat $path) != 0 ]; do
->      echo Waiting for hugetlb memory to get depleted.
-> @@ -121,7 +125,7 @@ function wait_for_hugetlb_memory_to_get_reserved() {
->    local cgroup="$1"
->    local size="$2"
->
-> -  local path="/dev/cgroup/memory/$cgroup/hugetlb.${MB}MB.$reservation_usage_file"
-> +  local path="$cgroup_path/$cgroup/hugetlb.${MB}MB.$reservation_usage_file"
->    # Wait for hugetlbfs memory to get written.
->    while [ $(cat $path) != $size ]; do
->      echo Waiting for hugetlb memory reservation to reach size $size.
-> @@ -134,7 +138,7 @@ function wait_for_hugetlb_memory_to_get_written() {
->    local cgroup="$1"
->    local size="$2"
->
-> -  local path="/dev/cgroup/memory/$cgroup/hugetlb.${MB}MB.$fault_usage_file"
-> +  local path="$cgroup_path/$cgroup/hugetlb.${MB}MB.$fault_usage_file"
->    # Wait for hugetlbfs memory to get written.
->    while [ $(cat $path) != $size ]; do
->      echo Waiting for hugetlb memory to reach size $size.
-> @@ -574,5 +578,7 @@ for populate in "" "-o"; do
->    done     # populate
->  done       # method
->
-> -umount $cgroup_path
-> -rmdir $cgroup_path
-> +if [[ $do_umount ]]; then
-> +  umount $cgroup_path
-> +  rmdir $cgroup_path
-> +fi
-> diff --git a/tools/testing/selftests/vm/hugetlb_reparenting_test.sh b/tools/testing/selftests/vm/hugetlb_reparenting_test.sh
-> old mode 100644
-> new mode 100755
-> index 4a9a3afe9fd4..bf2d2a684edf
-> --- a/tools/testing/selftests/vm/hugetlb_reparenting_test.sh
-> +++ b/tools/testing/selftests/vm/hugetlb_reparenting_test.sh
-> @@ -18,19 +18,24 @@ if [[ "$1" == "-cgroup-v2" ]]; then
->    usage_file=current
->  fi
->
-> -CGROUP_ROOT='/dev/cgroup/memory'
-> -MNT='/mnt/huge/'
->
-> -if [[ ! -e $CGROUP_ROOT ]]; then
-> -  mkdir -p $CGROUP_ROOT
-> -  if [[ $cgroup2 ]]; then
-> +if [[ $cgroup2 ]]; then
-> +  CGROUP_ROOT=$(mount -t cgroup2 | head -1 | awk -e '{print $3}')
-> +  if [[ -z "$CGROUP_ROOT" ]]; then
-> +    CGROUP_ROOT=/dev/cgroup/memory
->      mount -t cgroup2 none $CGROUP_ROOT
-> -    sleep 1
-> -    echo "+hugetlb +memory" >$CGROUP_ROOT/cgroup.subtree_control
-> -  else
-> +    do_umount=1
-> +  fi
-> +  echo "+hugetlb +memory" >$CGROUP_ROOT/cgroup.subtree_control
-> +else
-> +  CGROUP_ROOT=$(mount -t cgroup | grep ",hugetlb" | awk -e '{print $3}')
-> +  if [[ -z "$CGROUP_ROOT" ]]; then
-> +    CGROUP_ROOT=/dev/cgroup/memory
->      mount -t cgroup memory,hugetlb $CGROUP_ROOT
-> +    do_umount=1
->    fi
->  fi
-> +MNT='/mnt/huge/'
->
->  function get_machine_hugepage_size() {
->    hpz=$(grep -i hugepagesize /proc/meminfo)
-> diff --git a/tools/testing/selftests/vm/write_hugetlb_memory.sh b/tools/testing/selftests/vm/write_hugetlb_memory.sh
-> old mode 100644
-> new mode 100755
-> index d3d0d108924d..70a02301f4c2
-> --- a/tools/testing/selftests/vm/write_hugetlb_memory.sh
-> +++ b/tools/testing/selftests/vm/write_hugetlb_memory.sh
-> @@ -14,7 +14,7 @@ want_sleep=$8
->  reserve=$9
->
->  echo "Putting task in cgroup '$cgroup'"
-> -echo $$ > /dev/cgroup/memory/"$cgroup"/cgroup.procs
-> +echo $$ > ${cgroup_path:-/dev/cgroup/memory}/"$cgroup"/cgroup.procs
->
->  echo "Method is $method"
->
-> --
-> 2.27.0
->
+> 
+> Venu

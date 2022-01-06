@@ -2,113 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF68486140
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 09:08:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0809D486144
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 09:09:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236359AbiAFIIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 03:08:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56298 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236238AbiAFIIk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 03:08:40 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA9CC061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 00:08:40 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id i8so1925683pgt.13
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 00:08:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=BgQn8eJjH64JPbz4yLqo05eN+vssmbVyS+BB98Rvfwk=;
-        b=nEUnRUEAUbbNxDaoGbEcLd6j1UEhajs5aNy8yaI877EFRCdgpIaqWwjWHf1KchkmrT
-         ORFp7BoIouFXs69HbjUyvbKprgr5yhFJZBXIH/jVB0arINh9Av96mJYN6ofd61iQ22TN
-         3/MJvyTJ0MvKMP7h9iVF3DJ4ZCgEQpMOz0QnqrRmcol6534zHOZBSTqamqp4uyLpF7qG
-         YInUlFno/2Aeufeu50mv1Ad3Z9sRtP/pTx6xsmLattLWxjYZ6NjAMZWJMiUucYlpnEqN
-         Z83yzVt+qAUlNghopLf0MJuwAzPqj+KudSw2db7CrTY3XZ/24l5ShSW1WwwG0eiFeH0G
-         LLhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=BgQn8eJjH64JPbz4yLqo05eN+vssmbVyS+BB98Rvfwk=;
-        b=5RtsdMIMnCDq2jSfMwX1t0c6r7NhPuB/u1KkvPezTF8vhp+2BfUPkZvDJQChe4QCkF
-         UJO9FR441vXJYQXoTjQd9MqBI4opGfwiL6BAnPutQrBeqA2KKyOFSFXVN8uYKSqITeCw
-         +flcQvRUbjNgxVmwMlQEMUteV5uJ1/14M79q9rUuzhohRljl+f2dWNOl7xWdSdUcf8aE
-         zdS13+KoU1u/fSyRAvokPwrLI+1QFoLKekMruEhEFREFHmROYqNFTiN80p+MIYveJ0QS
-         BmgFV0jAH9wpAkoSBzA+8GgD1YQzwurnHleGeFFG0PM/O7eXfWfYsqgjTdBxGxIiCrdL
-         MbdQ==
-X-Gm-Message-State: AOAM530mB0HFSYDFt4PAtn/in6GdmwtoCf2pCvtHcCANEdA+JbKkHyO6
-        c6r7VuuWTrxmhkjC5YOvkaIXjDBFCqaDgjz50Qg=
-X-Google-Smtp-Source: ABdhPJzQkMM/MKNQVkT5Sz2qk9lHKabp/ZITvKam3lnONUYRDj+7fr0JQRHbWj1FisObXtGzSL69lA==
-X-Received: by 2002:a63:81c1:: with SMTP id t184mr51078790pgd.481.1641456520298;
-        Thu, 06 Jan 2022 00:08:40 -0800 (PST)
-Received: from [10.254.5.219] ([139.177.225.246])
-        by smtp.gmail.com with ESMTPSA id j11sm1367504pfn.199.2022.01.06.00.08.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jan 2022 00:08:39 -0800 (PST)
-Message-ID: <cf52d7d3-e7f8-2b4e-a752-8be8d95b31fb@bytedance.com>
-Date:   Thu, 6 Jan 2022 16:08:35 +0800
+        id S236394AbiAFIJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 03:09:24 -0500
+Received: from mx3.molgen.mpg.de ([141.14.17.11]:42419 "EHLO mx1.molgen.mpg.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236364AbiAFIJX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 03:09:23 -0500
+Received: from [192.168.0.3] (ip5f5aed2d.dynamic.kabel-deutschland.de [95.90.237.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 68CD961E64846;
+        Thu,  6 Jan 2022 09:09:22 +0100 (CET)
+Message-ID: <734cc427-eee0-89e0-1edd-6b483191c502@molgen.mpg.de>
+Date:   Thu, 6 Jan 2022 09:09:22 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [PATCH v3] sched/numa: add per-process numa_balancing
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v4 1/2] ahci: Rename flag `ATA_LFLAG_NO_DB_DELAY` to
+ `ATA_LFLAG_NO_DEBOUNCE_DELAY`
 Content-Language: en-US
-To:     Mel Gorman <mgorman@suse.de>
-Cc:     linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
-        songmuchun@bytedance.com, zhengqi.arch@bytedance.com
-References: <20211206024530.11336-1-ligang.bdlg@bytedance.com>
-From:   Gang Li <ligang.bdlg@bytedance.com>
-In-Reply-To: <20211206024530.11336-1-ligang.bdlg@bytedance.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220105153618.2395-1-pmenzel@molgen.mpg.de>
+ <d5130eed-d881-f654-3e24-b552609abce9@opensource.wdc.com>
+ <e19a8764-2943-f370-f1d9-bb399a2aa1ac@molgen.mpg.de>
+ <1665d5a4-994a-b9df-33a9-c748bd5c17be@opensource.wdc.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <1665d5a4-994a-b9df-33a9-c748bd5c17be@opensource.wdc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-Any comments please?
+Dear Damien,
 
-;)
 
-On 2021/12/6 10:45, Gang Li wrote:
-> This patch add a new api PR_NUMA_BALANCING in prctl.
-> 
-> A large number of page faults will cause performance loss when numa
-> balancing is performing. Thus those processes which care about worst-case
-> performance need numa balancing disabled. Others, on the contrary, allow a
-> temporary performance loss in exchange for higher average performance, so
-> enable numa balancing is better for them.
-> 
-> Numa balancing can only be controlled globally by
-> /proc/sys/kernel/numa_balancing. Due to the above case, we want to
-> disable/enable numa_balancing per-process instead.
-> 
-> Add numa_balancing under mm_struct. Then use it in task_tick_fair.
-> 
-> Set per-process numa balancing:
-> 	prctl(PR_NUMA_BALANCING, PR_SET_NUMAB_DISABLE); //disable
-> 	prctl(PR_NUMA_BALANCING, PR_SET_NUMAB_ENABLE);  //enable
-> 	prctl(PR_NUMA_BALANCING, PR_SET_NUMAB_DEFAULT); //follow global
-> Get numa_balancing state:
-> 	prctl(PR_NUMA_BALANCING, PR_GET_NUMAB, &ret);
-> 	cat /proc/<pid>/status | grep NumaB_enabled
-> 
-> Cc: linux-api@vger.kernel.org
-> Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
-> ---
-> 
-> Changes in v3:
-> - Fix compile error.
-> 
-> Changes in v2:
-> - Now PR_NUMA_BALANCING support three states: enabled, disabled, default.
->    enabled and disabled will ignore global setting, and default will follow
->    global setting.
--- 
-Thanks
-Gang Li
+Am 06.01.22 um 08:55 schrieb Damien Le Moal:
+> On 1/6/22 16:35, Paul Menzel wrote:
 
+>> Am 06.01.22 um 03:52 schrieb Damien Le Moal:
+>>> On 1/6/22 00:36, Paul Menzel wrote:
+>>>> The new name is longer, but clearer.
+>>>
+>>> It looks like you sent an incremental change on top of your previous
+>>> patches. Please send a cleaned up series. One patch to introduce the
+>>> ATA_LFLAG_NO_DEBOUNCE_DELAY flag & msleep bypass and another to add the
+>>> AMD chipset.
+>>>
+>>> The commit message of this version patch 2 should be the explanation for
+>>> the ATA_LFLAG_NO_DEBOUNCE_DELAY flag, not for adding a new chipset ID.
+>>
+>> Sorry, but I think you misread the patch. The flag
+>> `ATA_LFLAG_NO_DB_DELAY` exists since commit e39b2bb3b7 (libata: skip
+>> debounce delay on link resume).
+> 
+> Arg. Indeed. Ignore my comment :)
+> 
+> Let's wait to see if there are any more comments and I will queue this
+> up for 5.17.
+
+Thank you. In the second patch, I should have probably mentioned, that 
+the flag already exists. Maybe you can amend that before applying them.
+
+> Going forward, it would be interesting to work on reversing the default:
+> no delay by default and mark all old & unknown adapters as needing the
+> delay. As you mentioned, most modern AHCI adapters most likely do not
+> need it.
+> 
+> Are you willing to take this and send a patches ?
+
+Yes, I have it on my to-do list, but cannot promise anything.
+
+
+Kind regards,
+
+Paul
+
+
+>>>> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+>>>> ---
+>>>>    drivers/ata/ahci_brcm.c   | 2 +-
+>>>>    drivers/ata/libata-sata.c | 2 +-
+>>>>    include/linux/libata.h    | 2 +-
+>>>>    3 files changed, 3 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/drivers/ata/ahci_brcm.c b/drivers/ata/ahci_brcm.c
+>>>> index 6e9c5ade4c2ea..649815c196ed0 100644
+>>>> --- a/drivers/ata/ahci_brcm.c
+>>>> +++ b/drivers/ata/ahci_brcm.c
+>>>> @@ -333,7 +333,7 @@ static struct ata_port_operations ahci_brcm_platform_ops = {
+>>>>    
+>>>>    static const struct ata_port_info ahci_brcm_port_info = {
+>>>>    	.flags		= AHCI_FLAG_COMMON | ATA_FLAG_NO_DIPM,
+>>>> -	.link_flags	= ATA_LFLAG_NO_DB_DELAY,
+>>>> +	.link_flags	= ATA_LFLAG_NO_DEBOUNCE_DELAY,
+>>>>    	.pio_mask	= ATA_PIO4,
+>>>>    	.udma_mask	= ATA_UDMA6,
+>>>>    	.port_ops	= &ahci_brcm_platform_ops,
+>>>> diff --git a/drivers/ata/libata-sata.c b/drivers/ata/libata-sata.c
+>>>> index b9c77885b8726..67b2e7cf3cc4e 100644
+>>>> --- a/drivers/ata/libata-sata.c
+>>>> +++ b/drivers/ata/libata-sata.c
+>>>> @@ -317,7 +317,7 @@ int sata_link_resume(struct ata_link *link, const unsigned long *params,
+>>>>    		 * immediately after resuming.  Delay 200ms before
+>>>>    		 * debouncing.
+>>>>    		 */
+>>>> -		if (!(link->flags & ATA_LFLAG_NO_DB_DELAY))
+>>>> +		if (!(link->flags & ATA_LFLAG_NO_DEBOUNCE_DELAY))
+>>>>    			ata_msleep(link->ap, 200);
+>>>>    
+>>>>    		/* is SControl restored correctly? */
+>>>> diff --git a/include/linux/libata.h b/include/linux/libata.h
+>>>> index 2a8404b26083c..15802e644962d 100644
+>>>> --- a/include/linux/libata.h
+>>>> +++ b/include/linux/libata.h
+>>>> @@ -191,7 +191,7 @@ enum {
+>>>>    	ATA_LFLAG_NO_LPM	= (1 << 8), /* disable LPM on this link */
+>>>>    	ATA_LFLAG_RST_ONCE	= (1 << 9), /* limit recovery to one reset */
+>>>>    	ATA_LFLAG_CHANGED	= (1 << 10), /* LPM state changed on this link */
+>>>> -	ATA_LFLAG_NO_DB_DELAY	= (1 << 11), /* no debounce delay on link resume */
+>>>> +	ATA_LFLAG_NO_DEBOUNCE_DELAY = (1 << 11), /* no debounce delay on link resume */
+>>>>    
+>>>>    	/* struct ata_port flags */
+>>>>    	ATA_FLAG_SLAVE_POSS	= (1 << 0), /* host supports slave dev */
+>>>
+>>>

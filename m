@@ -2,183 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6314E48665D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 15:55:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E22486661
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 15:57:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240242AbiAFOzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 09:55:47 -0500
-Received: from mail-bn8nam11on2080.outbound.protection.outlook.com ([40.107.236.80]:21344
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231788AbiAFOzp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 09:55:45 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eLKrmRIgoY/0+a98ihcYzwupzIpxR8OweYHrVXANpAYbzxWO/uEd6qrrSwmzce6m453kfQYTYc199SxYva1ImzshRHaQeAHHLxcw1ek14gkip7aLhQAs1uH4j09TyUhgXJiHonEkUCJDhbs8X/XF1gc1GMok/yvug0oxGZNEbqTLDck/ewYUdu5rIh2odvM/46kACUJwvsT8lCwY3SjKr0r9s2ioPkvhgr5VCkN2OaebHQSXMFBEqepKVw/Z7oQuHcbO/to5F/9oGkb0enq1Y8lBsIc3r3EErVPN7u6ey8ZSYAfFkBzjNUpIvp+vKw/A0sF62PysI3aBZg52uKr2BA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=G9tOyxAbfOIz8mIkiDs8QFB0ukPYRsb3G9s46NALK1M=;
- b=apG/tmw1Mwl9PbFC2k+4LnOUuTmo1Hc5HlF0KS+QMqqpPK/kTMORUXws5iT6QZHSx5uOqInCnSSX9Rryvbqo/G5yQ3C+roNts4skEb8MloQXbEfiEZMmw2Cp/D9ex2trBhkt3/u5suTcMRKMyAZyzKfcxhgxU6DMsC6bku4CNxQlBWFvw0rdEwQ2Xir+9vPRfNJDdjBNZDqjiQp/Ds8FXJQVIs7WHBwUJlFSy5tR4JZ2aubxGByd+nfeqSXjTl1Q5T7TH5xgLQ69taDLw26BqXhZG6peyhwltsbUglPGtfkmSNEAMFeZ5epylX/RYnbJo8R8bv0eeBAxFrg6YhfQ4Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=G9tOyxAbfOIz8mIkiDs8QFB0ukPYRsb3G9s46NALK1M=;
- b=nP0lc/ecc0M9sWTkJr5YYOkXug1byHTqfPeYlTvVj37Uaa4f8+Vc2EvQ1k6fZf4nLmecrGsvr//F0wdU8CQ9HWVhfboKt2rJHNQElhWL9PF7t6RFixT8By06jFY5Mt9HHTR+ALld85uCWevPJNe/gKv1AdDWA41kmRwdQFYyw6o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
- DM5PR12MB1867.namprd12.prod.outlook.com (2603:10b6:3:10d::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4844.14; Thu, 6 Jan 2022 14:55:42 +0000
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::f02e:2cba:7c63:e368]) by DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::f02e:2cba:7c63:e368%4]) with mapi id 15.20.4844.017; Thu, 6 Jan 2022
- 14:55:42 +0000
-Date:   Thu, 6 Jan 2022 22:55:20 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        kernel test robot <lkp@intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH 2/2] x86, sched: Fix the undefined reference building
- error of init_freq_invariance_cppc
-Message-ID: <YdcC2JK7sOFs292B@amd.com>
-References: <20220106074306.2712090-1-ray.huang@amd.com>
- <20220106074306.2712090-2-ray.huang@amd.com>
- <Ydbdq6lXPKFG98MY@zn.tnic>
- <Ydb+rHXsXqxzmR0V@amd.com>
+        id S240257AbiAFO5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 09:57:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:47292 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240245AbiAFO5P (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 09:57:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641481035;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WyQPJI+hEo4Yj1jUmLhmtNkYsUJguWTxcYd9w3Q6E2E=;
+        b=Hj3M9L31BkQmB+oQQpWAw4pWvQ8hoDBzORVWL/T6G9+JZPOupNzpKqDahSttJFe9SgnbQk
+        7iNOxLNnMkTq+Suvh5lGBiyN8iJYRO/v5gRxzP+toWlApNoaSlW1DRorOYSgbLu/+SXojw
+        Qty/zYogpL+ae+CVhqlw6irNeHx2IQ0=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-75-GyBpHlYmNsS3UzW6Pv4z0g-1; Thu, 06 Jan 2022 09:57:14 -0500
+X-MC-Unique: GyBpHlYmNsS3UzW6Pv4z0g-1
+Received: by mail-ed1-f70.google.com with SMTP id y18-20020a056402271200b003fa16a5debcso2125500edd.14
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 06:57:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WyQPJI+hEo4Yj1jUmLhmtNkYsUJguWTxcYd9w3Q6E2E=;
+        b=Agho+WvRs0yI3qPlXHXHxTZHZgDXU2POMYbH1WE//yJNBUFb/rt2c9Sh1ZxZUPY/+R
+         q8CU0llm1q2faaqbw+yuWdPrJkqBGlQv+9wYayMF8AzPy1k59wlDYdbJNTxDxcckI9Kr
+         s7Z0G6TOgylyaVPuD7JutHpZqXrNfr0gHs0vckrRsj/gLZHg5zFtbUdPKF7kDSmBruqA
+         m/Gp5yzs27yeNrFAQ3PK2jkxPvUyxmHxuv0vKwnxvjVmB3X4fvTSiBtyJzncmRHDnZD+
+         IRLiEhWlyGHEZKEtFd3V67SogYyj2+5kYWZNXwsMFMToC6amoLYYETv/9DlVWUiVYkmv
+         iVvA==
+X-Gm-Message-State: AOAM532ifRFZTtpQYjeCYMWyxtHzUluWWT6CwAt30mm9LUJc8ceuMyT2
+        zmhXYU5tl5lSJ1X8Zkivx07kru5VRIVK1FpqkIGAatceQFoHsPJmOCxwbtr1ROTL5RU528sQ0pO
+        kwuRk+/GtNQWJDCh29Rco4DXF
+X-Received: by 2002:a17:907:628d:: with SMTP id nd13mr5474694ejc.431.1641481032747;
+        Thu, 06 Jan 2022 06:57:12 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyoyE70BXRIKkWTb3eHQNX6/HYfwE4FUA5F++leaCr2dgmba8ya+07Av/6pViQ02HNwmLs5Ig==
+X-Received: by 2002:a17:907:628d:: with SMTP id nd13mr5474680ejc.431.1641481032497;
+        Thu, 06 Jan 2022 06:57:12 -0800 (PST)
+Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
+        by smtp.gmail.com with ESMTPSA id o25sm804427edr.20.2022.01.06.06.57.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 06:57:12 -0800 (PST)
+Date:   Thu, 6 Jan 2022 15:57:10 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [RFC 00/13] kprobe/bpf: Add support to attach multiple kprobes
+Message-ID: <YdcDRqmgOeOMmyoM@krava>
+References: <20220104080943.113249-1-jolsa@kernel.org>
+ <20220106002435.d73e4010c93462fbee9ef074@kernel.org>
+ <YdaoTuWjEeT33Zzm@krava>
+ <20220106225943.87701fcc674202dc3e172289@kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ydb+rHXsXqxzmR0V@amd.com>
-X-ClientProxiedBy: HK2PR03CA0053.apcprd03.prod.outlook.com
- (2603:1096:202:17::23) To DM5PR12MB2504.namprd12.prod.outlook.com
- (2603:10b6:4:b5::19)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1a575e14-38a1-430e-853b-08d9d1249c85
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1867:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR12MB18671869066874ED80C4BDC6EC4C9@DM5PR12MB1867.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cA2LsF4LkUOXwDa7yoQX0WPbnUquNeBhx907VumzWvnW/+UuFzZVpSuvMv5oIwqOMuVISvPkLoCNxVxYb3AYI5n82a65PfK0CbLLV8HHVPzZMmaiUqNX+EoZ1at2CRXUnVQchy2SYTFctu+i7piq2p7h7WyxPVTip93JRSZPA2+ZcWvoEHOb+vAWmlNEJtThvZvEpOhzUgE4xKXW6APB3GWzlLNsXMyjfX6cyJ0V1vDd/iZPrWIsArO5sQhBUT0AE7bCRIF5Ku56sO86goDeXcB+1flMfYlxD9//vpgogpA7ePH7SSXhwrSrYpDxiex9cM/k2gT2W5sTVsPiL3yqKufIVHcbfonjuZ4+cN5sGvs/H7f3K41Lfskf/wfAxGzM1lf980svhO0czpMGupqSNkguDHQ7x/NdL1EjFlHQGzXNINQAlU6gJ+4oyKJsdvDBxi70GqIqJ0ooBwhLSGNFqMtJx+vF755ae3rD81D95XwIEsmk0CPnyPEAhf20xms7WBy88DLobzTqxNqv8jSeUWdhP+WgCNbplGYoMm/Pw67Owg8Ohy7cWB9Y7Nso+yzGa9G7L5i2E/Etu57oHq/qhO/TcRccGZw8fV+d/U6uVUNFMHDuzKDyt9eT6spLTXtA6i6PFoRcnolzn10c4g8L0vgLWEvlJT3etINGrLIbFEQWMhyyqTZVg5JTtHr3uxTMt0JObD7w5SesSsCICEUosDpkmeChLN07zF4x+0BFNmY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66946007)(966005)(2906002)(508600001)(86362001)(66476007)(6916009)(66556008)(7416002)(8676002)(6506007)(6666004)(26005)(8936002)(316002)(4326008)(186003)(6486002)(2616005)(5660300002)(45080400002)(6512007)(38100700002)(83380400001)(36756003)(54906003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3wGEHWxYI2AWHeIuFkirtlCeXWzb3Q5MIBfr0pG5c9PIPEbOiPC4XJnqypY7?=
- =?us-ascii?Q?YfP2tbIbINr48oyJvlcq+lJw0AOxr17YlNhKWI9kcmSelgFSX0JvckCaIAD5?=
- =?us-ascii?Q?NZTz2d/z1TGTGKxajD7vMLUQYaVqla5fVZfdVldUKHdP9n3nVhhoqj1+Qzc7?=
- =?us-ascii?Q?xHUajJ7ywINhP6KkFW8wOC/elW1O8w0y1+hGQTUgr78O5CqdSW1yJhyHnc4p?=
- =?us-ascii?Q?9GwTyRRNWfLYXeGbRjzAKvwJawTcJ0zgMoqzhLrEHofRQvD98vY7XTLX5nb8?=
- =?us-ascii?Q?0uPUuqZCb2PTUw8aSwk+OG7/CwTiHciaDnQBSVA8DEF7DaNvOHqwvJyvPd4g?=
- =?us-ascii?Q?Ocx1C09OcR9I2FXYQuJ/l0z/fYndtiLIvPkTiy9JQ6x8tBFCqGkhqQM+tFFj?=
- =?us-ascii?Q?NH4NyQL64sI5n5NRac1dPn5sq/s0x+j248RgvBBweTRc9BxlwuWoFvgvyZu+?=
- =?us-ascii?Q?Tf+Hym0lKIuO801p1uVF0Qi4eEjtFF1L+of4pZn4FxC2s9HVh5CdXI3IGhqs?=
- =?us-ascii?Q?7pqfS/pczAcDhMd//ByWAyFj+PaKwKnONk9LqIiLTiIH11jA57zXYMO+rvId?=
- =?us-ascii?Q?NMtyPawXz6fTZvyBIt0NlWG//xdaimOno4ohjTzQ9q95d20PhC4/McRK+MJe?=
- =?us-ascii?Q?WtiQJHLwO4mEAF/+S6LcEXZQbtRg3xC5lCsyR3IiKZSmSB/BEbRjd4Wm073p?=
- =?us-ascii?Q?0gExZmQpA/RXZm1J2GfNJI5Hqf+v04CGKm8c6cdi6sylo/z/Pot0A8VlVg5i?=
- =?us-ascii?Q?u/BDH3xIREEgTFP7inElLCZoDYxF591BMDkF0YuITaVFWg47GNUN7xY0WYqv?=
- =?us-ascii?Q?sblpJsAHpQjAfEmcSLhXVDByI1fI6r9yeTkmg0WgmlRr/fpBa4UByGSLGTqq?=
- =?us-ascii?Q?bMJt5bR/F/G3xvuFRu9ZynOf7GanstVF3Agimiuf0eIaN6dPSkkf+1x25ZYF?=
- =?us-ascii?Q?t5hp3ggEVOMCAs66UILP2T5XBOxYEhIIsaXB3Nf6idPmaSyAltPUpNwqcjBO?=
- =?us-ascii?Q?e0kFOZTnLbY1dDiCrGCXLtvz+Wi9wb3TlcTQhlnBsJffbWtBmbkf95H/uiet?=
- =?us-ascii?Q?8mH4u1UEIHVK41RfPxRuSM4Ia6hvjywYyn3AjNNQKtj9kNSznh0cm9Ms7ZGP?=
- =?us-ascii?Q?Vndx+fVCAVQDSsh9t23zJz0+8KQswdwwOIFENKDLv7+sgc5zNjl7jUEYjA6H?=
- =?us-ascii?Q?Kixs0QMUgR9VQzNjgNFjp1d5QTb55LZJqtemWruAgfjXj+YM07UtXYjyP7UC?=
- =?us-ascii?Q?sDDyIYG/iX5u8zWOGGzPpblJt1fdoW1H/NgG1c4eN1BzWB2NZY0qcX+Ab0hc?=
- =?us-ascii?Q?ouFyeY8uAri2HHO7//iuGc/IXp8bCIqOWrKN1pyibe1TyOxCk+04DvXYrt0n?=
- =?us-ascii?Q?tqVGibKczvuWJbhlRg61bgXFPeIecDg2GeYPrw0FGf3IsMkmiLXoyelQqjYi?=
- =?us-ascii?Q?I4fKFXx1h1nGtFQDhKLGvdrALOm2SAAsaCV0WkxgpuoWaUtDSXhwBKVkSZRo?=
- =?us-ascii?Q?r1ODSVoE8g8w2ieRnGpzq48bX39C01mxkAOHwTnkR2hgfW+9AIzF0Wbngsjz?=
- =?us-ascii?Q?v3jztKp6c3CziAkNl014AGR6J/kSx+zdUA52cYCsS/bfdO2INHGIMCjK0Wnq?=
- =?us-ascii?Q?tb/WcE1rHqsmC7WqrYc35v4=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1a575e14-38a1-430e-853b-08d9d1249c85
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2022 14:55:42.7003
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zhGBixWhr7jOO5hFbabPaaV3VmC6o9pxph/T0UbEHZzFwSYGBdtSvhJnbYPYETXDqkR4ceR0/khFdayxqOJ7Xg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1867
+In-Reply-To: <20220106225943.87701fcc674202dc3e172289@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 10:37:59PM +0800, Huang Rui wrote:
-> On Thu, Jan 06, 2022 at 08:16:43PM +0800, Borislav Petkov wrote:
-> > On Thu, Jan 06, 2022 at 03:43:06PM +0800, Huang Rui wrote:
-> > > The init_freq_invariance_cppc function is implemented in smpboot and depends on
-> > > CONFIG_SMP.
+On Thu, Jan 06, 2022 at 10:59:43PM +0900, Masami Hiramatsu wrote:
+
+SNIP
+
 > > > 
-> > >   MODPOST vmlinux.symvers
-> > >   MODINFO modules.builtin.modinfo
-> > >   GEN     modules.builtin
-> > >   LD      .tmp_vmlinux.kallsyms1
-> > > ld: drivers/acpi/cppc_acpi.o: in function `acpi_cppc_processor_probe':
-> > > /home/ray/brahma3/linux/drivers/acpi/cppc_acpi.c:819: undefined reference to `init_freq_invariance_cppc'
-> > > make: *** [Makefile:1161: vmlinux] Error 1
+> > > Hmm, I think there may be a time to split the "kprobe as an 
+> > > interface for the software breakpoint" and "kprobe as a wrapper
+> > > interface for the callbacks of various instrumentations", like
+> > > 'raw_kprobe'(or kswbp) and 'kprobes'.
+> > > And this may be called as 'fprobe' as ftrace_ops wrapper.
+> > > (But if the bpf is enough flexible, this kind of intermediate layer
+> > >  may not be needed, it can use ftrace_ops directly, eventually)
 > > > 
-> > > See https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flkml%2F484af487-7511-647e-5c5b-33d4429acdec%40infradead.org%2F&amp;data=04%7C01%7Cray.huang%40amd.com%7C4c696d3f23ac4479dda108d9d10e6a53%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637770682133383506%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=9lC2az1xGeYn7fNputkUMsy7PIhmkqW8jdpDUsaWthI%3D&amp;reserved=0.
-> > > 
-> > > Fixes: 41ea667227ba ("x86, sched: Calculate frequency invariance for AMD systems")
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> > > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > Signed-off-by: Huang Rui <ray.huang@amd.com>
-> > > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > Cc: Borislav Petkov <bp@alien8.de>
-> > > Cc: Ingo Molnar <mingo@kernel.org>
-> > > Cc: Peter Zijlstra <peterz@infradead.org>
-> > > Cc: x86@kernel.org
-> > > Cc: stable@vger.kernel.org
-> > > ---
-> > >  arch/x86/include/asm/topology.h | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
-> > > index cc164777e661..2f0b6be8eaab 100644
-> > > --- a/arch/x86/include/asm/topology.h
-> > > +++ b/arch/x86/include/asm/topology.h
-> > > @@ -221,7 +221,7 @@ static inline void arch_set_max_freq_ratio(bool turbo_disabled)
-> > >  }
-> > >  #endif
-> > >  
-> > > -#ifdef CONFIG_ACPI_CPPC_LIB
-> > > +#if defined(CONFIG_ACPI_CPPC_LIB) && defined(CONFIG_SMP)
-> > >  void init_freq_invariance_cppc(void);
-> > >  #define init_freq_invariance_cppc init_freq_invariance_cppc
-> > >  #endif
-> > > -- 
+> > > Jiri, have you already considered to use ftrace_ops from the
+> > > bpf directly? Are there any issues?
+> > > (bpf depends on 'kprobe' widely?)
 > > 
-> > Well, since that function is in smpboot.c then the logic should be that
-> > CPPC depends on functionality in smpboot.c for proper operation.
-> > 
-> > IOW, ACPI_CPPC_LIB should have "depends on CONFIG_SMP" in Kconfig, no?
-> > 
-> > Instead of adding more ifdeffery around...
-> > 
+> > at the moment there's not ftrace public interface for the return
+> > probe merged in, so to get the kretprobe working I had to use
+> > kprobe interface
 > 
-> Hmm, yes, that's fine. I will modify it in V2.
+> Yeah, I found that too. We have to ask Steve to salvage it ;)
+
+I got those patches rebased like half a year ago upstream code,
+so should be easy to revive them
+
+> 
+> > but.. there are patches Steven shared some time ago, that do that
+> > and make graph_ops available as kernel interface
+> > 
+> > I recall we considered graph_ops interface before as common attach
+> > layer for trampolines, which was bad, but it might actually make
+> > sense for kprobes
+> 
+> I started working on making 'fprobe' which will provide multiple
+> function probe with similar interface of kprobes. See attached
+> patch. Then you can use it in bpf, maybe with an union like
+> 
+> union {
+> 	struct kprobe kp;	// for function body
+> 	struct fprobe fp;	// for function entry and return
+> };
+> 
+> At this moment, fprobe only support entry_handler, but when we
+> re-start the generic graph_ops interface, it is easy to expand
+> to support exit_handler.
+> If this works, I think kretprobe can be phased out, since at that
+> moment, kprobe_event can replace it with the fprobe exit_handler.
+> (This is a benefit of decoupling the instrumentation layer from
+> the event layer. It can choose the best way without changing
+> user interface.)
 > 
 
-I just thought the CPPC function should be able to work on single core even
-SMP is disabled.
+I can resend out graph_ops patches if you want to base
+it directly on that
 
-Thanks,
-Ray
+> > I'll need to check it in more details but I think both graph_ops and
+> > kprobe do about similar thing wrt hooking return probe, so it should
+> > be comparable.. and they are already doing the same for the entry hook,
+> > because kprobe is mostly using ftrace for that
+> > 
+> > we would not need to introduce new program type - kprobe programs
+> > should be able to run from ftrace callbacks just fine
+> 
+> That seems to bind your mind. The program type is just a programing
+> 'model' of the bpf. You can choose the best implementation to provide
+> equal functionality. 'kprobe' in bpf is just a name that you call some
+> instrumentations which can probe kernel code.
+
+I don't want to introduce new type, there's some dependencies
+in bpf verifier and helpers code we'd need to handle for that
+
+I'm looking for solution for current kprobe bpf program type
+to be registered for multiple addresses quickly
+
+> 
+> Thank you,
+> 
+> > 
+> > so we would have:
+> >   - kprobe type programs attaching to:
+> >   - new BPF_LINK_TYPE_FPROBE link using the graph_ops as attachment layer
+> > 
+> > jirka
+> > 
+> 
+> 
+> -- 
+> Masami Hiramatsu <mhiramat@kernel.org>
+
+> From 269b86597c166d6d4c5dd564168237603533165a Mon Sep 17 00:00:00 2001
+> From: Masami Hiramatsu <mhiramat@kernel.org>
+> Date: Thu, 6 Jan 2022 15:40:36 +0900
+> Subject: [PATCH] fprobe: Add ftrace based probe APIs
+> 
+> The fprobe is a wrapper API for ftrace function tracer.
+> Unlike kprobes, this probes only supports the function entry, but
+> it can probe multiple functions by one fprobe. The usage is almost
+> same as the kprobe, user will specify the function names by
+> fprobe::syms, the number of syms by fprobe::nsyms, and the user
+> handler by fprobe::handler.
+> 
+> struct fprobe = { 0 };
+> const char *targets[] = {"func1", "func2", "func3"};
+> 
+> fprobe.handler = user_handler;
+> fprobe.nsyms = ARRAY_SIZE(targets);
+> fprobe.syms = targets;
+> 
+> ret = register_fprobe(&fprobe);
+> ...
+> 
+> 
+> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> ---
+>  include/linux/fprobes.h |  52 ++++++++++++++++
+>  kernel/trace/Kconfig    |  10 ++++
+>  kernel/trace/Makefile   |   1 +
+>  kernel/trace/fprobes.c  | 128 ++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 191 insertions(+)
+>  create mode 100644 include/linux/fprobes.h
+>  create mode 100644 kernel/trace/fprobes.c
+> 
+> diff --git a/include/linux/fprobes.h b/include/linux/fprobes.h
+> new file mode 100644
+> index 000000000000..22db748bf491
+> --- /dev/null
+> +++ b/include/linux/fprobes.h
+> @@ -0,0 +1,52 @@
+> +#ifndef _LINUX_FPROBES_H
+> +#define _LINUX_FPROBES_H
+> +/* Simple ftrace probe wrapper */
+> +
+> +#include <linux/compiler.h>
+> +#include <linux/ftrace.h>
+> +
+> +struct fprobe {
+> +	const char		**syms;
+> +	unsigned long		*addrs;
+
+could you add array of user data for each addr/sym?
+
+SNIP
+
+> +static int populate_func_addresses(struct fprobe *fp)
+> +{
+> +	unsigned int i;
+> +
+> +	fp->addrs = kmalloc(sizeof(void *) * fp->nsyms, GFP_KERNEL);
+> +	if (!fp->addrs)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < fp->nsyms; i++) {
+> +		fp->addrs[i] = kallsyms_lookup_name(fp->syms[i]);
+> +		if (!fp->addrs[i]) {
+> +			kfree(fp->addrs);
+> +			fp->addrs = NULL;
+> +			return -ENOENT;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * register_fprobe - Register fprobe to ftrace
+> + * @fp: A fprobe data structure to be registered.
+> + *
+> + * This expects the user set @fp::syms or @fp::addrs (not both),
+> + * @fp::nsyms (number of entries of @fp::syms or @fp::addrs) and
+> + * @fp::handler. Other fields are initialized by this function.
+> + */
+> +int register_fprobe(struct fprobe *fp)
+> +{
+> +	unsigned int i;
+> +	int ret;
+> +
+> +	if (!fp)
+> +		return -EINVAL;
+> +
+> +	if (!fp->nsyms || (!fp->syms && !fp->addrs) || (fp->syms && fp->addrs))
+> +		return -EINVAL;
+> +
+> +	if (fp->syms) {
+> +		ret = populate_func_addresses(fp);
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+> +
+> +	fp->ftrace.func = fprobe_handler;
+> +	fp->ftrace.flags = FTRACE_OPS_FL_SAVE_REGS;
+> +
+> +	for (i = 0; i < fp->nsyms; i++) {
+> +		ret = ftrace_set_filter_ip(&fp->ftrace, fp->addrs[i], 0, 0);
+> +		if (ret < 0)
+> +			goto error;
+> +	}
+
+I introduced ftrace_set_filter_ips, because loop like above was slow:
+  https://lore.kernel.org/bpf/20211118112455.475349-4-jolsa@kernel.org/
+
+thanks,
+jirka
+
+> +
+> +	fp->nmissed = 0;
+> +	ret = register_ftrace_function(&fp->ftrace);
+> +	if (!ret)
+> +		return ret;
+> +
+> +error:
+> +	if (fp->syms) {
+> +		kfree(fp->addrs);
+> +		fp->addrs = NULL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +/**
+> + * unregister_fprobe - Unregister fprobe from ftrace
+> + * @fp: A fprobe data structure to be unregistered.
+> + */
+> +int unregister_fprobe(struct fprobe *fp)
+> +{
+> +	int ret;
+> +
+> +	if (!fp)
+> +		return -EINVAL;
+> +
+> +	if (!fp->nsyms || !fp->addrs)
+> +		return -EINVAL;
+> +
+> +	ret = unregister_ftrace_function(&fp->ftrace);
+> +
+> +	if (fp->syms) {
+> +		/* fp->addrs is allocated by register_fprobe() */
+> +		kfree(fp->addrs);
+> +		fp->addrs = NULL;
+> +	}
+> +
+> +	return ret;
+> +}
+> -- 
+> 2.25.1
+> 
+

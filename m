@@ -2,215 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0897148677A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F65486783
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 17:17:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241052AbiAFQNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 11:13:52 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:39000 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241085AbiAFQNv (ORCPT
+        id S241113AbiAFQRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 11:17:43 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:48812 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241052AbiAFQRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 11:13:51 -0500
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 206EbCbi000345;
-        Thu, 6 Jan 2022 16:13:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=M236Z2TBaBwKO1irAKzWxmDNxZ6IyGDotrQxPcwRSSU=;
- b=YFnTdoTUI1D+wjzjH6de+oxx1sbuEU1eJWT45rp1qwqiaRMlSrpXNVIuPJfyD3hAZ2ej
- vtbaEDKShtDGJvgmHJUAZhQSklkfYgI3Ag6ok3xcHaNfq1Hd3L4pChhUiLW/4a9fkP0T
- y6izWC7UATc7+uJVJiWPn31ruR2iQgYuh86OUZ85adL8kp/YbcyD0vkJ1vFBqrPTpRq+
- eiCbbf4j/OVAqj76k3Fqa/8DRB7SLN0U/kY6724oFSBfTi/pzJI1Z/TfVpMa8ARr4d5B
- jfqS6vuhFIkElp4X26PBgOScn+OR1DIzFuD4WN0KyTHgYahjcpYHjtThEpndaVcI2O1O OA== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3de1hj3nkx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jan 2022 16:13:47 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 206G9Fi3024040;
-        Thu, 6 Jan 2022 16:13:45 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06ams.nl.ibm.com with ESMTP id 3ddmrr6vjp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jan 2022 16:13:45 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 206GDgef36700442
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 6 Jan 2022 16:13:42 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 21C7C42045;
-        Thu,  6 Jan 2022 16:13:42 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D62F342042;
-        Thu,  6 Jan 2022 16:13:41 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.145.164.165])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  6 Jan 2022 16:13:41 +0000 (GMT)
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-To:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Cc:     tyreld@linux.ibm.com, Nathan Lynch <nathanl@linux.ibm.com>
-Subject: [PATCH v5] powerpc/pseries: read the lpar name from the firmware
-Date:   Thu,  6 Jan 2022 17:13:39 +0100
-Message-Id: <20220106161339.74656-1-ldufour@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 6 Jan 2022 11:17:42 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6FED71F37F;
+        Thu,  6 Jan 2022 16:17:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1641485861; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jiujcEw1K7Aihwam1nGHQCL1WPhq/6cKdLiFVo++R3c=;
+        b=ufwsRGd/FAFSnNurr1idklThXc8LwBLYgJV1EMzyI+FcwXo4765ZgS1rrPr2SeIcuIzAnr
+        Qz4oPL+EShKMJyF/TCs94cyS3cFUxMuOwWgiXtUwbuPcHE6tPcT5sfgFyaEmSqXyyPurGp
+        WTGPEzwD6r+hPpBJqRPJK6LRMaR/z5k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1641485861;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jiujcEw1K7Aihwam1nGHQCL1WPhq/6cKdLiFVo++R3c=;
+        b=226XJuqQmhTHAxGxJccyOlu2FmeDoOd5e59bAFWXy3zITmcJmXbjP4qXgwZ7rlGZs25eRZ
+        SylzAKQ0qBaZkMBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2A6C113C5E;
+        Thu,  6 Jan 2022 16:17:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id rt3wOCIW12FhCgAAMHmgww
+        (envelope-from <colyli@suse.de>); Thu, 06 Jan 2022 16:17:38 +0000
+Message-ID: <bd98488b-dbb8-0510-3ccc-f80cbfe5e3ff@suse.de>
+Date:   Fri, 7 Jan 2022 00:17:36 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [PATCH] bcache: make stripe_size configurable and persistent for
+ hardware raid5/6
+Content-Language: en-US
+To:     Eric Wheeler <bcache@lists.ewheeler.net>
+Cc:     linux-block@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:BCACHE (BLOCK LAYER CACHE)" <linux-bcache@vger.kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+References: <d3f7fd44-9287-c7fa-ee95-c3b8a4d56c93@suse.de>
+ <1561245371-10235-1-git-send-email-bcache@lists.ewheeler.net>
+ <200638b0-7cba-38b4-20c4-b325f3cfe862@suse.de>
+ <alpine.LRH.2.11.1906241800350.1114@mx.ewheeler.net>
+ <8a9131dc-9bf7-a24a-f7b8-35e0c019e905@suse.de>
+ <fdb85dc1-eee6-e55e-8e9c-fa1f36b4a37@ewheeler.net>
+From:   Coly Li <colyli@suse.de>
+In-Reply-To: <fdb85dc1-eee6-e55e-8e9c-fa1f36b4a37@ewheeler.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: tdYeJyteI3OpmBfnlxuuErlnDwEGMpk9
-X-Proofpoint-ORIG-GUID: tdYeJyteI3OpmBfnlxuuErlnDwEGMpk9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-06_06,2022-01-06_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- priorityscore=1501 clxscore=1015 adultscore=0 mlxscore=0 bulkscore=0
- malwarescore=0 suspectscore=0 phishscore=0 impostorscore=0 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2112160000 definitions=main-2201060112
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The LPAR name may be changed after the LPAR has been started in the HMC.
-In that case lparstat command is not reporting the updated value because it
-reads it from the device tree which is read at boot time.
+On 1/6/22 11:29 AM, Eric Wheeler wrote:
+> On Tue, 25 Jun 2019, Coly Li wrote:
+>> On 2019/6/25 2:14 上午, Eric Wheeler wrote:
+>>> On Mon, 24 Jun 2019, Coly Li wrote:
+>>>
+>>>> On 2019/6/23 7:16 上午, Eric Wheeler wrote:
+>>>>> From: Eric Wheeler <git@linux.ewheeler.net>
+>>>>>
+>>>>> While some drivers set queue_limits.io_opt (e.g., md raid5), there are
+>>>>> currently no SCSI/RAID controller drivers that do.  Previously stripe_size
+>>>>> and partial_stripes_expensive were read-only values and could not be
+>>>>> tuned by users (eg, for hardware RAID5/6).
+>>>>>
+>>>>> This patch enables users to save the optimal IO size via sysfs through
+>>>>> the backing device attributes stripe_size and partial_stripes_expensive
+>>>>> into the bcache superblock.
+>>>>>
+>>>>> Superblock changes are backwards-compatable:
+>>>>>
+>>>>> *  partial_stripes_expensive: One bit was used in the superblock flags field
+>>>>>
+>>>>> *  stripe_size: There are eight 64-bit "pad" fields for future use in
+>>>>>     the superblock which default to 0; from those, 32-bits are now used
+>>>>>     to save the stripe_size and load at device registration time.
+>>>>>
+>>>>> Signed-off-by: Eric Wheeler <bcache@linux.ewheeler.net>
+>>>> Hi Eric,
+>>>>
+>>>> In general I am OK with this patch. Since Peter comments lots of SCSI
+>>>> RAID devices reports a stripe width, could you please list the hardware
+>>>> raid devices which don't list stripe size ? Then we can make decision
+>>>> whether it is necessary to have such option enabled.
+>>> Perhaps they do not set stripe_width using io_opt? I did a grep to see if
+>>> any of them did, but I didn't see them. How is stripe_width indicated by
+>>> RAID controllers?
+>>>
+>>> If they do set io_opt, then at least my Areca 1883 does not set io_opt as
+>>> of 4.19.x. I also have a LSI MegaRAID 3108 which does not report io_opt as
+>>> of 4.1.x, but that is an older kernel so maybe support has been added
+>>> since then.
+>>>
+>>> Martin,
+>>>
+>>> Where would stripe_width be configured in the SCSI drivers? Is it visible
+>>> through sysfs or debugfs so I can check my hardware support without
+>>> hacking debugging the kernel?
+>>>
+>>>> Another point is, this patch changes struct cache_sb, it is no problem
+>>>> to change on-disk format. I plan to update the super block version soon,
+>>>> to store more configuration persistently into super block. stripe_size
+>>>> can be added to cache_sb with other on-disk changes.
+>> Hi Eric,
+>>
+>>> Maybe bumping version makes sense, but even if you do not, this is safe to
+>>> use on systems without bumping the version because the values are unused
+>>> and default to 0.
+>> Yes, I understand you, it works as you suggested. I need to think how to
+>> organize all options in struct cache_sb, stripe_size will be arranged
+>> then. And I will ask help to you for reviewing the changes of on-disk
+>> format.
+> Hi Coli,
+>
+> Just checking in, its been a while and I didn't see any more discussion on
+> the topic:
 
-However this value could be read from RTAS.
+Hi Eric,
 
-Adding this value in the /proc/powerpc/lparcfg output allows to read the
-updated value.
+Thank you for reminding me. The persistent on-disk options were that 
+much as I thought, so using a reserved space from the on-disk super 
+block is fine.
 
-However the hypervisor, like Qemu/KVM, may not support this RTAS
-parameter. In that case the value reported in lparcfg is read from the
-device tree and so is not updated accordingly.
+> This would benefit users with older RAID controllers using RAID-5/6 that
+> don't set io_opt.
+>
+> Even new new RAID controlers that _do_ provide `io_opt` still do _not_
+> indicate partial_stripes_expensive (which is an mdraid feature, but Martin
+> please correct me if I'm wrong here).  Thus, all hardware RAID-5/6 users
+> could benefit by manually flagging partial_stripes_expensive to get burst
+> writes out of bcache that fit their stride width.
 
-Cc: Nathan Lynch <nathanl@linux.ibm.com>
-Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
----
-v5:
- fallback to the device tree value if RTAS is not providing the value.
-v4:
- address Nathan's new comments limiting size of the buffer.
-v3:
- address Michael's comments.
-v2:
- address Nathan's comments.
- change title to partition_name aligning with existing partition_id
----
- arch/powerpc/platforms/pseries/lparcfg.c | 93 ++++++++++++++++++++++++
- 1 file changed, 93 insertions(+)
+Yeah, I agree with you.
 
-diff --git a/arch/powerpc/platforms/pseries/lparcfg.c b/arch/powerpc/platforms/pseries/lparcfg.c
-index c7940fcfc911..8ca08fc306e7 100644
---- a/arch/powerpc/platforms/pseries/lparcfg.c
-+++ b/arch/powerpc/platforms/pseries/lparcfg.c
-@@ -311,6 +311,98 @@ static void parse_mpp_x_data(struct seq_file *m)
- 		seq_printf(m, "coalesce_pool_spurr=%ld\n", mpp_x_data.pool_spurr_cycles);
- }
- 
-+/*
-+ * PAPR defines, in section "7.3.16 System Parameters Option", the token 55 to
-+ * read the LPAR name, and the largest output data to 4000 + 2 bytes length.
-+ */
-+#define SPLPAR_LPAR_NAME_TOKEN	55
-+#define GET_SYS_PARM_BUF_SIZE	4002
-+#if GET_SYS_PARM_BUF_SIZE > RTAS_DATA_BUF_SIZE
-+#error "GET_SYS_PARM_BUF_SIZE is larger than RTAS_DATA_BUF_SIZE"
-+#endif
-+
-+/**
-+ * Read the lpar name using the RTAS ibm,get-system-parameter call.
-+ *
-+ * The name read through this call is updated if changes are made by the end
-+ * user on the hypervisor side.
-+ *
-+ * Some hypervisor (like Qemu) may not provide this value. In that case, a non
-+ * null value is returned.
-+ */
-+static int read_RTAS_lpar_name(struct seq_file *m)
-+{
-+	int rc, len, token;
-+	union {
-+		char raw_buffer[GET_SYS_PARM_BUF_SIZE];
-+		struct {
-+			__be16 len;
-+			char name[GET_SYS_PARM_BUF_SIZE-2];
-+		};
-+	} *local_buffer;
-+
-+	token = rtas_token("ibm,get-system-parameter");
-+	if (token == RTAS_UNKNOWN_SERVICE)
-+		return -EINVAL;
-+
-+	local_buffer = kmalloc(sizeof(*local_buffer), GFP_KERNEL);
-+	if (!local_buffer)
-+		return -ENOMEM;
-+
-+	do {
-+		spin_lock(&rtas_data_buf_lock);
-+		memset(rtas_data_buf, 0, sizeof(*local_buffer));
-+		rc = rtas_call(token, 3, 1, NULL, SPLPAR_LPAR_NAME_TOKEN,
-+			       __pa(rtas_data_buf), sizeof(*local_buffer));
-+		if (!rc)
-+			memcpy(local_buffer->raw_buffer, rtas_data_buf,
-+			       sizeof(local_buffer->raw_buffer));
-+		spin_unlock(&rtas_data_buf_lock);
-+	} while (rtas_busy_delay(rc));
-+
-+	if (!rc) {
-+		/* Force end of string */
-+		len = min((int) be16_to_cpu(local_buffer->len),
-+			  (int) sizeof(local_buffer->name)-1);
-+		local_buffer->name[len] = '\0';
-+
-+		seq_printf(m, "partition_name=%s\n", local_buffer->name);
-+	} else
-+		rc = -ENODATA;
-+
-+	kfree(local_buffer);
-+	return rc;
-+}
-+
-+/**
-+ * Read the LPAR name from the Device Tree.
-+ *
-+ * The value read in the DT is not updated if the end-user is touching the LPAR
-+ * name on the hypervisor side.
-+ */
-+static int read_DT_lpar_name(struct seq_file *m)
-+{
-+	struct device_node *rootdn;
-+	const char *name;
-+
-+	rootdn = of_find_node_by_path("/");
-+	if (!rootdn)
-+		return -ENOENT;
-+
-+	name = of_get_property(rootdn, "ibm,partition-name", NULL);
-+	if (!name)
-+		return -ENOENT;
-+
-+	seq_printf(m, "partition_name=%s\n", name);
-+	return 0;
-+}
-+
-+static void read_lpar_name(struct seq_file *m)
-+{
-+	if (read_RTAS_lpar_name(m) && read_DT_lpar_name(m))
-+		pr_err_once("Error can't get the LPAR name");
-+}
-+
- #define SPLPAR_CHARACTERISTICS_TOKEN 20
- #define SPLPAR_MAXLENGTH 1026*(sizeof(char))
- 
-@@ -496,6 +588,7 @@ static int pseries_lparcfg_data(struct seq_file *m, void *v)
- 
- 	if (firmware_has_feature(FW_FEATURE_SPLPAR)) {
- 		/* this call handles the ibm,get-system-parameter contents */
-+		read_lpar_name(m);
- 		parse_system_parameter_string(m);
- 		parse_ppp_data(m);
- 		parse_mpp_data(m);
--- 
-2.34.1
+> This patch probably needs rebased and documentation updated about io_opt,
+> but here is the original patch with documentation for your reference:
+> 	https://lkml.org/lkml/2019/6/22/298
+>
+> What do you think?
 
+Yes please rebase the patch with latest mainline kernel and let's start 
+the review.
+
+Thank you.
+
+Coly Li

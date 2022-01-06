@@ -2,78 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B236486445
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 13:19:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1BB148644B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 13:21:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238766AbiAFMTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 07:19:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55812 "EHLO
+        id S238785AbiAFMVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 07:21:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237905AbiAFMTN (ORCPT
+        with ESMTP id S238475AbiAFMVD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 07:19:13 -0500
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570E8C061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 04:19:13 -0800 (PST)
-Received: by mail-ot1-x343.google.com with SMTP id w19-20020a056830061300b0058f1dd48932so2796273oti.11
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 04:19:13 -0800 (PST)
+        Thu, 6 Jan 2022 07:21:03 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB473C061245;
+        Thu,  6 Jan 2022 04:21:03 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id 200so2400336pgg.3;
+        Thu, 06 Jan 2022 04:21:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=+OhYyTKGmAf5Y61RBhMkXMlQv+hOjswu4u5NSWPSjMI=;
-        b=ctr+L+dn2N4xI0C3C5r5N4IkGgp+sHSgiU/AbglTTZYxBk4eHN4f1+I+P2mjvic+D+
-         NtwK84150Fc4gKG+f9ljUH9/7t+3c6kxjLz+OV6mAO+M1fPiYl45N65+TY+KoV43dX9H
-         SmknGL3i8Wo3XSOKyNJOmtNo/OTslTCybLZtwxAner4Sdqvewalsnvor+fS53dmt2DYp
-         L0Y2fg/xFnm+V1X+OxZYHzZSl0ynIIV/6PjKmjF8Wy8aOhr6HS8MoLlaXX4n/LCjh1wi
-         3rKMFIDXA0e+pAXNOLGSOSTAsxvyfUSFRquC9JnmRUv6xH2pYLO+8V3y6LehzKGsCQyQ
-         tLEg==
+        h=from:to:cc:subject:date:message-id;
+        bh=As/WjEKqZAy9F1nGpQ4wmkL2ydVFs9ke/kDtTsLl3ko=;
+        b=fgfMaPlTT/8Blrv/OqQ/yZSJfsN0vxrYUY9J2/BGcF8fbAVz0doYCXy/sDKxBDhGSJ
+         b1kk/JmEv3pW6qya4XIJ0eHfJAzvuRCNsf24LLSb+pVFJ4KoIrYtx5eNaO39a/HmB2yQ
+         NRKAMMX390p00lskO6FFLUVKoqLXjK9jId7zdIp8XQV4rWtq3VX512L+jAGfrbkiE2H7
+         UQA96Ezq22gYI1c7whHu/v52WCRJt/jhSRT335oElYFsoPZO70PQCv/tUW+2XsteLi8z
+         iDL51bqZeN3y5JhGDYqC5TNzDbzlCfv8pNKZiRcADZiM7e1NqNtaxnIPZwxZlv9fkefc
+         DoZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=+OhYyTKGmAf5Y61RBhMkXMlQv+hOjswu4u5NSWPSjMI=;
-        b=GLbRWmTURpGrOqWcGp9lY3P9B0IK4SHOlU4bfWkGfWvdyih8inpaBn707iNHtL0GaC
-         VqIrPBNPe2ZsV2mfvhTtZ2dkpEzypxLUf6mwtNu0UUzg2n4wj+s3EQrTaHLWqJePljd6
-         vzPVJ5fIUq/rntqYnyz2BLnABw8R5h00XQ6qT1B/uWEBhzWp5NLm9KcWPRrg4b00T7ZO
-         m3oNfeB9RRxUyoHL2GMFxhFXf6EUZpga1r/Ik7+KRs7s8ZSQGcmLtV9ac9aSHYKlJ9yq
-         8FMQzKBpv70ItxWhiJyYKCcz5WFKIzWfylIpQxYtI6ZqJJdPXepmE/JK9z4Z/t9Mj2ub
-         4Cgw==
-X-Gm-Message-State: AOAM5325lcOlvmREIQxsgBdG3W2si6bcC6zVOgRjviKognNbZRxB3agu
-        Ts4TQLiQ1zQREk2YcvZATwNIZSONcqDHz8qiC9I=
-X-Google-Smtp-Source: ABdhPJzZwUWec0mmjZ99lUvutT9/mrw62xJyU/bLnVvfhgCfVvOyKvhJ9ILZI48V40b3avm7t8gVOoy+wNniL+5bCOs=
-X-Received: by 2002:a05:6830:440f:: with SMTP id q15mr40798206otv.373.1641471552561;
- Thu, 06 Jan 2022 04:19:12 -0800 (PST)
-MIME-Version: 1.0
-Sender: dd16978@gmail.com
-Received: by 2002:a4a:4b47:0:0:0:0:0 with HTTP; Thu, 6 Jan 2022 04:19:12 -0800 (PST)
-From:   "Mr. Mustafa Ali." <mustafaliali85@gmail.com>
-Date:   Thu, 6 Jan 2022 13:19:12 +0100
-X-Google-Sender-Auth: y1z3PJMs48Meo33_p2YhGiztey4
-Message-ID: <CA+qKLffYwMJrpzw2k6dyx8FaGVMaK63ehg+T=w8cA4wzA5_caw@mail.gmail.com>
-Subject: Greetings Dear Friend.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=As/WjEKqZAy9F1nGpQ4wmkL2ydVFs9ke/kDtTsLl3ko=;
+        b=qrqBkgdJgxWabNyvyoVgHtwvCnb0XeZ5ADVfTNQHx1Fe6MBkYv7uhBxw3NFkNhBejm
+         3+/wom4ZynZpRK1caAqvhywav2P2gsOn/AfWgBE9+U2uIP7P030emQjNOcHJCNKHySYB
+         t6SCPnOTKa0mOu1vUd4+IJWeOlL24Ensj2l3LO3YumM+6oYO+YYqIulem2zL29LSfHTr
+         DPslC52mewmh+MJCyKQ4D+cLfrwwnQs1iFeiw20Rsnyl9HYFgpsGPlBlTfxMnvmAJG5r
+         Ctoip13zc74zWnEEx6yV8onerWEMNgHtJBSJOgqlFhCnqvmgSYAGAZmSwB0xA5b2yhOz
+         K/Yw==
+X-Gm-Message-State: AOAM532JWYQdPQSqL3M0uAeU4lp7W8MNIrXcGoPgUCyUE/7QBz3/e2a9
+        YMF2dfFPWXPivd7E+dUPwTlMNGH4R3oKAA==
+X-Google-Smtp-Source: ABdhPJwVewV3z8nurVP0GLH6N1Gf3aznKRES4C3kmjNaG8WzE/y43HvRgUrHdLmwP/0sx4lECsG8MQ==
+X-Received: by 2002:a63:6687:: with SMTP id a129mr51265949pgc.477.1641471662936;
+        Thu, 06 Jan 2022 04:21:02 -0800 (PST)
+Received: from localhost.localdomain ([203.205.141.111])
+        by smtp.googlemail.com with ESMTPSA id my5sm2859974pjb.5.2022.01.06.04.21.00
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 06 Jan 2022 04:21:02 -0800 (PST)
+From:   Wanpeng Li <kernellwp@gmail.com>
+X-Google-Original-From: Wanpeng Li <wanpengli@tencent.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, Aili Yao <yaoaili@kingsoft.com>
+Subject: [PATCH v2] KVM: LAPIC: Enable timer posted-interrupt when mwait/hlt is advertised
+Date:   Thu,  6 Jan 2022 04:20:12 -0800
+Message-Id: <1641471612-34483-1-git-send-email-wanpengli@tencent.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Friend,
+From: Wanpeng Li <wanpengli@tencent.com>
 
-This message might meet you in utmost surprise. However, It's just my
-urgent need for a foreign partner that made me contact you for this
-transaction. I assured you of honesty and reliability to champion this
-business opportunity. I am a banker by profession in Turkey, and
-currently holding the post of Auditor in Standard Chartered Bank.
+As commit 0c5f81dad46 (KVM: LAPIC: Inject timer interrupt via posted interrupt) 
+mentioned that the host admin should well tune the guest setup, so that vCPUs 
+are placed on isolated pCPUs, and with several pCPUs surplus for *busy* housekeeping.
+It is better to disable mwait/hlt/pause vmexits to keep the vCPUs in non-root 
+mode. However, we may isolate pCPUs for other purpose like DPDK or we can make 
+some guests isolated and others not, we may lose vmx preemption timer/timer fastpath 
+due to not well tuned setup, and the checking in kvm_can_post_timer_interrupt() 
+is not enough. Let's guarantee mwait/hlt is advertised before enabling posted-interrupt 
+interrupt. vmx preemption timer/timer fastpath can continue to work if both of them 
+are not advertised.
 
-I have the opportunity of transferring the leftover funds ($15 Million
-Dollars) of one of my clients who died along with his entire family in
-a crisis in Myanmar Asia. I am inviting you for a business deal where
-this money can be shared between us if you agree to my business
-proposal.
+Reported-by: Aili Yao <yaoaili@kingsoft.com>
+Cc: Aili Yao <yaoaili@kingsoft.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+---
+v1 -> v2:
+ * also check kvm_hlt_in_guest since sometime mwait is disabled on host
 
-Further details of the transfer will be forwarded to you immediately
-after I receive your return letter.
+ arch/x86/kvm/lapic.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Best Regards,
-Mr. Mustafa Ali.
-mustafa.ali@rahroco.com
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index f206fc3..fdb7c81 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -113,7 +113,8 @@ static inline u32 kvm_x2apic_id(struct kvm_lapic *apic)
+ 
+ static bool kvm_can_post_timer_interrupt(struct kvm_vcpu *vcpu)
+ {
+-	return pi_inject_timer && kvm_vcpu_apicv_active(vcpu);
++	return pi_inject_timer && kvm_vcpu_apicv_active(vcpu) &&
++		(kvm_mwait_in_guest(vcpu->kvm) || kvm_hlt_in_guest(vcpu->kvm));
+ }
+ 
+ bool kvm_can_use_hv_timer(struct kvm_vcpu *vcpu)
+-- 
+2.7.4
+

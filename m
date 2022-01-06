@@ -2,87 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4C5486DDA
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 00:36:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80B23486DDF
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Jan 2022 00:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245638AbiAFXgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 18:36:55 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:41147 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245626AbiAFXgy (ORCPT
+        id S245644AbiAFXkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 18:40:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:52016 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S245583AbiAFXkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 18:36:54 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 6 Jan 2022 18:40:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641512402;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=snfAN0ArrPjFN7o3z+hAO2zHFv1mtZb/ukDqj+26TZQ=;
+        b=F7jjXeLXWDn/8/utgdff7e1xGbocVig+kGYLAIll5fHqI1axeT1aAOQcFSXIFXfmgdyedf
+        7hL+PKLcJ9O/EQO69bYB+KnCGg19J044K8/VarZHlN+mD7yUb+vypEw7YeEYh05YWI6gpx
+        EMgz60v0R1vhnjAmUzafUYnI2sllMnE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-424-Qh24qR7gOLWqCBPV1rCZmw-1; Thu, 06 Jan 2022 18:39:57 -0500
+X-MC-Unique: Qh24qR7gOLWqCBPV1rCZmw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JVN6X22yLz4xgr;
-        Fri,  7 Jan 2022 10:36:52 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1641512212;
-        bh=ra/S1AZUdgEtZEUsntqIzIz4E26NHONUheQ0Umcisxk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=LAdAelGPTvPDHzz34R8KNreBoWUqWLD94j7UCdcGbbiVETJEA3GjGiSh9hjjNyF76
-         Yrk+2JxaD/3bLQcq6acmFuWqHbKG9e8u6v0x71o7RGQzzj4CCQR3ZDoTADJtxab9ZW
-         L3XfWcoCsJJ6UB8RPmUYsGYr+U5Nu5vibKm89ycvyVa3BSjbyr7cFeqOuKsG0XjsMO
-         2NR1fFoZatkt6ma/+cKixKaNz/8SAqG233sXQghhqOeiShQ7HHeQ8Lw6VY5TIhHQOs
-         ssxoKFOIl9od+6okVQeDf6IxFzH79ogFPKVwQJ1p00alhGcDZovMq6aA/383oZOWZu
-         3L9mJ2QnDv52w==
-Date:   Fri, 7 Jan 2022 10:36:49 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     James Clark <james.clark@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the jc_docs tree
-Message-ID: <20220107103649.53774b30@canb.auug.org.au>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B82188015CD;
+        Thu,  6 Jan 2022 23:39:55 +0000 (UTC)
+Received: from localhost (unknown [10.22.8.179])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6588F104F6;
+        Thu,  6 Jan 2022 23:39:54 +0000 (UTC)
+Date:   Thu, 6 Jan 2022 20:39:53 -0300
+From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        stable-rt@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Luis Goncalves <lgoncalv@redhat.com>
+Subject: [ANNOUNCE] 4.14.261-rt127
+Message-ID: <Ydd9yTTun4Wzcka/@uudg.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/P_hZfvUFFMhrxBxeT5=ylIR";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/P_hZfvUFFMhrxBxeT5=ylIR
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello RT-list!
 
-Hi all,
+I'm pleased to announce the 4.14.261-rt127 stable release.
 
-In commit
+This release is just an update to the new stable 4.14.261
+version and no RT specific changes have been performed.
 
-  e94f43ea200a ("docs: automarkup.py: Fix invalid HTML link output and brok=
-en URI fragments")
+You can get this release via the git tree at:
 
-Fixes tag
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 
-  Fixes: d18b01789ae5 ("docs: Add automatic cross-reference for
+  branch: v4.14-rt
+  Head SHA1: f0e3531534b936c7cc2a171dffd21ee5c95edb44
 
-has these problem(s):
+Or to build 4.14.261-rt127 directly, the following patches should be applied:
 
-  - Subject has leading but no trailing parentheses
-  - Subject has leading but no trailing quotes
+  https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.14.tar.xz
 
-Please do not split Fixes tags across more than one line.
+  https://www.kernel.org/pub/linux/kernel/v4.x/patch-4.14.261.xz
 
---=20
-Cheers,
-Stephen Rothwell
+  https://www.kernel.org/pub/linux/kernel/projects/rt/4.14/patch-4.14.261-rt127.patch.xz
 
---Sig_/P_hZfvUFFMhrxBxeT5=ylIR
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
+All keys used for the uploads can be found on the following git repository:
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHXfREACgkQAVBC80lX
-0GzS9AgAl9H1SfYCyfxPuUVHAOiHn7k8s79sIQcgJfGWpBZWb2HcFtB1svHnkOz5
-g56VWqQvOeezxoRk4g38VuZrrHcfqgz/zHYIOczmYg7BBQbjkrSj8ooe3YTh9uMx
-ERDWo9s3tt/eUplGtrZNdur8Kdt9rvZhrBDokI3dyAYWlK9VKPc1qLyBj8qsHfP8
-LIwspjbQ4+qeubZTzhes8Q64fyPuyaUiGfiL2NLmyPbJOO0CXt/fqOBtaRdT/vWK
-+ZRsJaVpCLCCLMRjZZ9CDW7f8ORYf6VSV7GBgHx0jkoMCY3HfjC89Q7/F2hqCt5y
-RmnZoqdJLbsi1CO+3qhPi6DC1ZYwVg==
-=HvBp
------END PGP SIGNATURE-----
+   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
 
---Sig_/P_hZfvUFFMhrxBxeT5=ylIR--
+
+Enjoy!
+Luis
+

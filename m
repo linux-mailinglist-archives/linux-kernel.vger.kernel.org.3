@@ -2,129 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A01B486351
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 11:58:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33F75486356
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 12:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238213AbiAFK64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 05:58:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:39730 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238102AbiAFK6z (ORCPT
+        id S238228AbiAFLAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 06:00:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238102AbiAFK77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 05:58:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641466735;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vIytc1jgI2/NZ+AETmDB2hLnS+2e0hrq7D/0F+5lakk=;
-        b=Ve0aeKX1Pj4cVLQf9Z4heqAdtmDhIDh0/4W5uhwR/1Zp5/9T3+3+R8cuzxkAjqI4f6q+kh
-        8LsUl0QSfDGCqjvSujqI2qWhy/Z6dBEcgob61o73IYpWH4IbeWOyGp/d3RhZHM1/vewD8M
-        Erz6juZSNolzGt7D1fDMy5b7DxgYkYY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-657-4ZBzAYbiNHuldmZTFD74AA-1; Thu, 06 Jan 2022 05:58:51 -0500
-X-MC-Unique: 4ZBzAYbiNHuldmZTFD74AA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 6 Jan 2022 05:59:59 -0500
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3C9C061245;
+        Thu,  6 Jan 2022 02:59:59 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EC8BE18C8C00;
-        Thu,  6 Jan 2022 10:58:49 +0000 (UTC)
-Received: from work (unknown [10.40.194.183])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 23A1A752AC;
-        Thu,  6 Jan 2022 10:58:47 +0000 (UTC)
-Date:   Thu, 6 Jan 2022 11:58:43 +0100
-From:   Lukas Czerner <lczerner@redhat.com>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     cgel.zte@gmail.com, Andreas Dilger <adilger.kernel@dilger.ca>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        luo penghao <luo.penghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>
-Subject: Re: [PATCH linux] ext4: Delete useless ret assignment
-Message-ID: <20220106105843.comh4jk3krxppgbp@work>
-References: <20211230062905.586150-1-luo.penghao@zte.com.cn>
- <YdZzt0LF/ajTGNXo@mit.edu>
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 1413A41F5D;
+        Thu,  6 Jan 2022 10:59:47 +0000 (UTC)
+Message-ID: <c23cb138-e32f-d770-6fab-4a3ae5c23ea1@marcan.st>
+Date:   Thu, 6 Jan 2022 19:59:44 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdZzt0LF/ajTGNXo@mit.edu>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.4.1
+Subject: Re: [PATCH v2 03/35] brcmfmac: firmware: Handle per-board clm_blob
+ files
+Content-Language: en-US
+To:     Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
+        Wright Feng <wright.feng@infineon.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        "brian m. carlson" <sandals@crustytoothpaste.net>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com
+References: <20220104072658.69756-1-marcan@marcan.st>
+ <20220104072658.69756-4-marcan@marcan.st>
+ <955f3b68-f1aa-767c-2539-7b8362372a60@broadcom.com>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <955f3b68-f1aa-767c-2539-7b8362372a60@broadcom.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 11:44:39PM -0500, Theodore Ts'o wrote:
-> On Thu, Dec 30, 2021 at 06:29:05AM +0000, cgel.zte@gmail.com wrote:
-> > From: luo penghao <luo.penghao@zte.com.cn>
-> > 
-> > The assignments in these two places will be overwritten by new
-> > assignments later, so they should be deleted.
-> > 
-> > The clang_analyzer complains as follows:
-> > 
-> > fs/ext4/fast_commit.c
-> > 
-> > Value stored to 'ret' is never read
+On 2022/01/06 19:19, Arend van Spriel wrote:
+> On 1/4/2022 8:26 AM, Hector Martin wrote:
+>> Teach brcm_alt_fw_paths to correctly split off variable length
+>> extensions, and enable alt firmware lookups for the CLM blob firmware
+>> requests.
+>>
+>> Apple platforms have per-board CLM blob files.
 > 
-> I suspect the right answer here is that we *should* be checking the
-> return value, and reflecting the error up to caller, if appropriate.
-> 
-> Harshad, what do you think?
+> Are you sure? I am not involved in development for Apple platforms, but 
+> in general we build a CLM blob specific for a chip revision. As always 
+> with the blobs they are created at a certain point in time and that is 
+> mostly why you need another one for a newer platform. Apple tends to do 
+> things a bit different so you could be right though. Anyway, despite my 
+> doubts on this it does not change the need for per-board firmware files.
 
-Indeed we absolutely *must* be checking the return value and bail out
-otherwise we risk overwriting kernel memory among other possible
-problems.
+Yup, I'm sure. The 2021 MacBook Pro 14" and the MacBook Pro 16", both
+using BCM4387 and both released simultaneously, have different CLM
+blobs; they're even a significantly different size. Running `strings` on
+the files yields:
 
-See ext4_fc_record_modified_inode() where we increment
-fc_modified_inodes_size before the actual reallocation which in case of
-allocation failure will leave us with elevated fc_modified_inodes_size
-and the next call to ext4_fc_record_modified_inode() can modify
-fc_modified_inodes[] out of bounds.
+CLM DATA
+Oly.Maldives
+1.61.4
+ClmImport: 1.63.1
+v3 Final 210923
 
-In addition to checking the return value we should probably also move
-incrementing the fc_modified_inodes_size until after the successful
-reallocation in order to avoid such pitfalls.
+CLM DATA
+Oly.Madagascar
+1.61.4
+ClmImport: 1.63.1
+v4 Final 210923
 
-Thanks!
--Lukas
+The data shows significant differences and since the file format is
+opaque I can't know what's going on. Even if it's safe to use one file
+for both, unless there is some way for me to programmatically identify
+this fact so I can incorporate that logic into my firmware copier, I
+would much rather just keep them separate like Apple does.
 
-> 
-> 					- Ted
-> 
-> > 
-> > Reported-by: Zeal Robot <zealci@zte.com.cn>
-> > Signed-off-by: luo penghao <luo.penghao@zte.com.cn>
-> > ---
-> >  fs/ext4/fast_commit.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
-> > index 8ea5a81..8d5d044 100644
-> > --- a/fs/ext4/fast_commit.c
-> > +++ b/fs/ext4/fast_commit.c
-> > @@ -1660,7 +1660,7 @@ static int ext4_fc_replay_add_range(struct super_block *sb,
-> >  		return 0;
-> >  	}
-> >  
-> > -	ret = ext4_fc_record_modified_inode(sb, inode->i_ino);
-> > +	ext4_fc_record_modified_inode(sb, inode->i_ino);
-> >  
-> >  	start = le32_to_cpu(ex->ee_block);
-> >  	start_pblk = ext4_ext_pblock(ex);
-> > @@ -1785,7 +1785,7 @@ ext4_fc_replay_del_range(struct super_block *sb, struct ext4_fc_tl *tl,
-> >  		return 0;
-> >  	}
-> >  
-> > -	ret = ext4_fc_record_modified_inode(sb, inode->i_ino);
-> > +	ext4_fc_record_modified_inode(sb, inode->i_ino);
-> >  
-> >  	jbd_debug(1, "DEL_RANGE, inode %ld, lblk %d, len %d\n",
-> >  			inode->i_ino, le32_to_cpu(lrange.fc_lblk),
-> > -- 
-> > 2.15.2
-> > 
-> > 
-> 
+> So all firmware files are attempted with board-specific path now.
 
+Yes, I figured I'd keep things uniform. Technically for Apple platforms
+the CLM blob and firmware are only per-board and possibly per-antenna
+(they don't need the module variants, those are for nvram only), but
+there's no real harm in unifying it and using the same firmware naming
+alt path list for everything.
+
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

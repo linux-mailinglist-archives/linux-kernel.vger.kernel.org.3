@@ -2,119 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D57C4861F8
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 10:18:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E3B486202
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 10:20:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237294AbiAFJSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 04:18:05 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:30806 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237096AbiAFJSE (ORCPT
+        id S237311AbiAFJUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 04:20:35 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:48304 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S237096AbiAFJUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 04:18:04 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2068k8It032626;
-        Thu, 6 Jan 2022 09:17:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=6mPRnE6+2xuMk0noay7O8DNg6N5oeLW8WKLFFk+4tc4=;
- b=FpQdolhYo/+dgp/hof0CAcMaK5EeOux4neugv6ZKMXMo8JcBjUKCoXdS2twXfHQSWxw3
- MLK+Onkvm3+FnjhDW86pQJjoPjWbPcSJgYnpNfCrALsFQuOwTTWLwDjNQDPybaZUndji
- ZUUZRCXUotdN8K4iQDXCodh/zeJwGhC5PzMFsYVMUMlhgavxxPXBIgSyuNzO3yF7YMaL
- rgH9s9JVTFCdMx79vCCRO1xZTfSwziIMf0kzOovOQpZfhqFEEGwMXwTEveAyF9SwV8Ul
- 9SQSj4ukirestj7x1Uw447g/Yiog6nh62dGSFnWNLEWEGZlEKoPTKoB6y373EBaHtNbw Wg== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ddw73rgaw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jan 2022 09:17:54 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2069E1PR001052;
-        Thu, 6 Jan 2022 09:17:52 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3ddn4e3dad-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jan 2022 09:17:52 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2069Hmrp46399748
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 6 Jan 2022 09:17:48 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AF9C452065;
-        Thu,  6 Jan 2022 09:17:48 +0000 (GMT)
-Received: from [9.145.164.165] (unknown [9.145.164.165])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 771F95204F;
-        Thu,  6 Jan 2022 09:17:48 +0000 (GMT)
-Message-ID: <da130af8-5434-0768-661f-7a6a7e417567@linux.ibm.com>
-Date:   Thu, 6 Jan 2022 10:17:48 +0100
+        Thu, 6 Jan 2022 04:20:34 -0500
+X-UUID: 5b426ca88863486097a4b926f03b43eb-20220106
+X-UUID: 5b426ca88863486097a4b926f03b43eb-20220106
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1492587014; Thu, 06 Jan 2022 17:20:24 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 6 Jan 2022 17:20:23 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 6 Jan
+ 2022 17:20:23 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 6 Jan 2022 17:20:22 +0800
+Message-ID: <78652a88b24bb4c4660d7c7fa31d4dd7b9fe5a46.camel@mediatek.com>
+Subject: Re: [PATCH 4/4] phy: mediatek: phy-mtk-hdmi: Simplify with
+ dev_err_probe()
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <chunkuang.hu@kernel.org>
+CC:     <p.zabel@pengutronix.de>, <kishon@ti.com>, <vkoul@kernel.org>,
+        <matthias.bgg@gmail.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Date:   Thu, 6 Jan 2022 17:20:22 +0800
+In-Reply-To: <20220103153055.50473-4-angelogioacchino.delregno@collabora.com>
+References: <20220103153055.50473-1-angelogioacchino.delregno@collabora.com>
+         <20220103153055.50473-4-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.1
-Subject: Re: [PATCH v4] powerpc/pseries: read the lpar name from the firmware
-Content-Language: en-US
-To:     Tyrel Datwyler <tyreld@linux.ibm.com>,
-        Nathan Lynch <nathanl@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20211207171109.22793-1-ldufour@linux.ibm.com>
- <25527544-b0ac-596c-3876-560493b99f6b@linux.ibm.com>
- <8735m1ixd6.fsf@li-e15d104c-2135-11b2-a85c-d7ef17e56be6.ibm.com>
- <ac208963-d334-1f46-0db2-4a8d073b2963@linux.ibm.com>
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-In-Reply-To: <ac208963-d334-1f46-0db2-4a8d073b2963@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: UCWffUqHUMm6qLy2yd-E9PoaJM5zEwib
-X-Proofpoint-ORIG-GUID: UCWffUqHUMm6qLy2yd-E9PoaJM5zEwib
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-06_03,2022-01-04_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=999 clxscore=1015 priorityscore=1501 phishscore=0
- lowpriorityscore=0 adultscore=0 mlxscore=0 suspectscore=0 bulkscore=0
- impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2112160000 definitions=main-2201060065
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/01/2022, 02:17:21, Tyrel Datwyler wrote:
-> On 1/5/22 3:19 PM, Nathan Lynch wrote:
->> Laurent Dufour <ldufour@linux.ibm.com> writes:
->>> On 07/12/2021, 18:11:09, Laurent Dufour wrote:
->>>> The LPAR name may be changed after the LPAR has been started in the HMC.
->>>> In that case lparstat command is not reporting the updated value because it
->>>> reads it from the device tree which is read at boot time.
->>>>
->>>> However this value could be read from RTAS.
->>>>
->>>> Adding this value in the /proc/powerpc/lparcfg output allows to read the
->>>> updated value.
->>>
->>> Do you consider taking that patch soon?
->>
->> This version prints an error on non-PowerVM guests the first time
->> lparcfg is read.
+On Mon, 2022-01-03 at 16:30 +0100, AngeloGioacchino Del Regno wrote:
+> Use the dev_err_probe() helper to simplify error handling during
+> probe.
 > 
-> I assume because QEMU doesn't implement the LPAR_NAME token for get_sysparm.
+> Signed-off-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/phy/mediatek/phy-mtk-hdmi.c | 50 +++++++++++--------------
+> ----
+>  1 file changed, 19 insertions(+), 31 deletions(-)
 > 
->>
->> And I still contend that having this function fall back to reporting the
->> partition name in the DT would provide a beneficial consistency in the
->> user-facing API, allowing programs to avoid hypervisor-specific branches
->> in their code. 
-> 
-> Agreed, if the get_sysparm fails just report the lpar-name from the device tree.
+> diff --git a/drivers/phy/mediatek/phy-mtk-hdmi.c
+> b/drivers/phy/mediatek/phy-mtk-hdmi.c
+> index e037fa89696c..4f40a6eea004 100644
+> --- a/drivers/phy/mediatek/phy-mtk-hdmi.c
+> +++ b/drivers/phy/mediatek/phy-mtk-hdmi.c
+> @@ -104,20 +104,16 @@ static int mtk_hdmi_phy_probe(struct
+> platform_device *pdev)
+>  		return PTR_ERR(hdmi_phy->regmap);
+>  
+>  	ref_clk = devm_clk_get(dev, "pll_ref");
+> -	if (IS_ERR(ref_clk)) {
+> -		ret = PTR_ERR(ref_clk);
+> -		dev_err(&pdev->dev, "Failed to get PLL reference clock:
+> %d\n",
+> -			ret);
+> -		return ret;
+> -	}
+> +	if (IS_ERR(ref_clk))
+> +		return dev_err_probe(dev, PTR_ERR(ref_clk),
+> +				     "Failed to get PLL reference
+> clock\n");
+> +
+>  	ref_clk_name = __clk_get_name(ref_clk);
+>  
+>  	ret = of_property_read_string(dev->of_node, "clock-output-
+> names",
+>  				      &clk_init.name);
+> -	if (ret < 0) {
+> -		dev_err(dev, "Failed to read clock-output-names: %d\n",
+> ret);
+> -		return ret;
+> -	}
+> +	if (ret < 0)
+> +		return dev_err_probe(dev, ret, "Failed to read clock-
+> output-names\n");
+Seems no need change it if no EPROBE_DEFER happens
 
-My aim is to not do in the kernel what can be easily done in user space but
-avoiding user space program hypervisor-specific branches is a good point.
+>  
+>  	hdmi_phy->dev = dev;
+>  	hdmi_phy->conf =
+> @@ -125,25 +121,19 @@ static int mtk_hdmi_phy_probe(struct
+> platform_device *pdev)
+>  	mtk_hdmi_phy_clk_get_data(hdmi_phy, &clk_init);
+>  	hdmi_phy->pll_hw.init = &clk_init;
+>  	hdmi_phy->pll = devm_clk_register(dev, &hdmi_phy->pll_hw);
+> -	if (IS_ERR(hdmi_phy->pll)) {
+> -		ret = PTR_ERR(hdmi_phy->pll);
+> -		dev_err(dev, "Failed to register PLL: %d\n", ret);
+> -		return ret;
+> -	}
+> +	if (IS_ERR(hdmi_phy->pll))
+> +		return dev_err_probe(dev, PTR_ERR(hdmi_phy->pll),
+> +				    "Failed to register PLL\n");
+>  
+>  	ret = of_property_read_u32(dev->of_node, "mediatek,ibias",
+>  				   &hdmi_phy->ibias);
+> -	if (ret < 0) {
+> -		dev_err(&pdev->dev, "Failed to get ibias: %d\n", ret);
+> -		return ret;
+> -	}
+> +	if (ret < 0)
+> +		return dev_err_probe(dev, ret, "Failed to get
+> ibias\n");
+ditto
 
-Note that if the RTAS call has been available to unprivileged user, all
-that stuff would have been made in user space, so hypervisor-specific...
+Thanks
+>  
+>  	ret = of_property_read_u32(dev->of_node, "mediatek,ibias_up",
+>  				   &hdmi_phy->ibias_up);
+> -	if (ret < 0) {
+> -		dev_err(&pdev->dev, "Failed to get ibias up: %d\n",
+> ret);
+> -		return ret;
+> -	}
+> +	if (ret < 0)
+> +		return dev_err_probe(dev, ret, "Failed to get
+> ibias_up\n");
+>  
+>  	dev_info(dev, "Using default TX DRV impedance: 4.2k/36\n");
+>  	hdmi_phy->drv_imp_clk = 0x30;
+> @@ -152,17 +142,15 @@ static int mtk_hdmi_phy_probe(struct
+> platform_device *pdev)
+>  	hdmi_phy->drv_imp_d0 = 0x30;
+>  
+>  	phy = devm_phy_create(dev, NULL,
+> mtk_hdmi_phy_dev_get_ops(hdmi_phy));
+> -	if (IS_ERR(phy)) {
+> -		dev_err(dev, "Failed to create HDMI PHY\n");
+> -		return PTR_ERR(phy);
+> -	}
+> +	if (IS_ERR(phy))
+> +		return dev_err_probe(dev, PTR_ERR(phy), "Cannot create
+> HDMI PHY\n");
+> +
+>  	phy_set_drvdata(phy, hdmi_phy);
+>  
+>  	phy_provider = devm_of_phy_provider_register(dev,
+> of_phy_simple_xlate);
+> -	if (IS_ERR(phy_provider)) {
+> -		dev_err(dev, "Failed to register HDMI PHY\n");
+> -		return PTR_ERR(phy_provider);
+> -	}
+> +	if (IS_ERR(phy_provider))
+> +		return dev_err_probe(dev, PTR_ERR(phy_provider),
+> +				     "Failed to register HDMI PHY\n");
+>  
+>  	if (hdmi_phy->conf->pll_default_off)
+>  		hdmi_phy->conf->hdmi_phy_disable_tmds(hdmi_phy);
 
-Anyway, I'll work on a new version fetching the DT value in the case the
-RTAS call is failing.
-
-Thanks,
-Laurent.

@@ -2,111 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1FF74862C4
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 11:16:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E9C4862CA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 11:18:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237810AbiAFKQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 05:16:22 -0500
-Received: from jabberwock.ucw.cz ([46.255.230.98]:39046 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233080AbiAFKQV (ORCPT
+        id S237794AbiAFKS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 05:18:26 -0500
+Received: from fanzine2.igalia.com ([213.97.179.56]:44376 "EHLO
+        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233080AbiAFKSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 05:16:21 -0500
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 398E61C0B79; Thu,  6 Jan 2022 11:16:20 +0100 (CET)
-Date:   Thu, 6 Jan 2022 11:16:19 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.10 000/132] 5.10.85-rc1 review
-Message-ID: <20220106101618.GA13602@amd>
-References: <20211213092939.074326017@linuxfoundation.org>
- <20211213103536.GC17683@duo.ucw.cz>
- <YbdAE9r9GXZlnyfr@kroah.com>
- <CAEUSe794fvuFwWPDvTeK1TRZw3OizSWOdDsVzVdj+SuWZA_LxA@mail.gmail.com>
- <CAEUSe7-CD5jvro+7DgM-6N_G-Ab_ovNFLG1b_F_ZsTAYJ23D-A@mail.gmail.com>
+        Thu, 6 Jan 2022 05:18:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=7i7XAAK0gPmIhkmXE6jFLxZui1WnKsNUo3yJxvi12Ak=; b=U+iLCtc6Zt2m5oe2Mw7NQALOuE
+        Py9O3jKTTutdlCmdlvF04Xe29A22A6ubl9YEsXpL+mVb+ERNRfzSct5FM4FUc1MeXteZtfDYU7CMb
+        nsHtoCjj8Zo0AATNMB/vjq5LkfGZump7PCrgqROVqMDjHK8ORutU+qt2EJk0jzRGJUPB/LDPDv4j1
+        cNiLryTz7nmCNMYPm48DFYQyuORjwzqcRXOfauED+kyIAUcUAf0wPdnwXzQBmg12s9UU/Sc3ckrmt
+        4Pk+vLJxsJy8drQlyNP2+Zr1iP/0Ff9cjWg7ETB+K749WfymgRd7hcdfhMT6yfFWp6DIw9aJ/j0xx
+        W7AFykvw==;
+Received: from [165.90.113.117] (helo=mail.igalia.com)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1n5PqY-0004Rq-LM; Thu, 06 Jan 2022 11:18:14 +0100
+Date:   Thu, 6 Jan 2022 09:17:57 -0100
+From:   Melissa Wen <mwen@igalia.com>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     emma@anholt.net, airlied@linux.ie, daniel@ffwll.ch,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH] drm/v3d/v3d_drv: Check for error num after setting mask
+Message-ID: <20220106101757.4sd7d3nvoeatjzuq@mail.igalia.com>
+References: <20220106025539.2597562-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="fdj2RfSjLxBAspz7"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="s3thnckzmlsys6w7"
 Content-Disposition: inline
-In-Reply-To: <CAEUSe7-CD5jvro+7DgM-6N_G-Ab_ovNFLG1b_F_ZsTAYJ23D-A@mail.gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20220106025539.2597562-1-jiasheng@iscas.ac.cn>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---fdj2RfSjLxBAspz7
+--s3thnckzmlsys6w7
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi!
-
-> I wonder if you saw this message of mine the other day.
-
-Seen the message.
-
-> > > > I'm getting a lot of build failures -- missing gmp.h:
-> > > >
-> > > >   UPD     include/generated/utsrelease.h
-> > > > 1317In file included from /builds/hVatwYBy/68/cip-project/cip-testi=
-ng/linux-stable-rc-ci/gcc/gcc-8.1.0-nolibc/arm-linux-gnueabi/bin/../lib/gcc=
-/arm-linux-gnueabi/8.1.0/plugin/include/gcc-plugin.h:28:0,
-> > > > 1318                 from scripts/gcc-plugins/gcc-common.h:7,
-> > > > 1319                 from scripts/gcc-plugins/arm_ssp_per_task_plug=
-in.c:3:
-> > > > 1320/builds/hVatwYBy/68/cip-project/cip-testing/linux-stable-rc-ci/=
-gcc/gcc-8.1.0-nolibc/arm-linux-gnueabi/bin/../lib/gcc/arm-linux-gnueabi/8.1=
-=2E0/plugin/include/system.h:687:10: fatal error: gmp.h: No such file or di=
-rectory
-> > > > 1321 #include <gmp.h>
-> > > > 1322          ^~~~~~~
-> > > > 1323compilation terminated.
-> > > > 1324scripts/gcc-plugins/Makefile:47: recipe for target 'scripts/gcc=
--plugins/arm_ssp_per_task_plugin.so' failed
-> > > > 1325
-> > > >
-> > > > https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tre=
-e/linux-5.10.y
-> > >
-> > > What gcc plugins are you trying to build with?
-> >
-> > We saw a similar problem with mainline/next about a year ago, after
-> > v5.10 was released. In our case it failed with gmp.h because
-> > libmpc-dev was not installed on the host; then libiberty-dev was
-> > needed too
-> [...]
+On 01/06, Jiasheng Jiang wrote:
+> Because of the possible failure of the dma_supported(), the
+> dma_set_mask_and_coherent() may return error num.
+> Therefore, it should be better to check it and return the error if
+> fails.
 >=20
-> We installed libgmp-dev, libmpc-dev and libiberty-dev. That generally
-> helps. FWIW, this is needed for 5.11+.
+> Fixes: 334dd38a3878 ("drm/v3d: Set dma_mask as well as coherent_dma_mask")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+>  drivers/gpu/drm/v3d/v3d_drv.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/gpu/drm/v3d/v3d_drv.c b/drivers/gpu/drm/v3d/v3d_drv.c
+> index 99e22beea90b..bedd52195723 100644
+> --- a/drivers/gpu/drm/v3d/v3d_drv.c
+> +++ b/drivers/gpu/drm/v3d/v3d_drv.c
+> @@ -232,8 +232,11 @@ static int v3d_platform_drm_probe(struct platform_de=
+vice *pdev)
+>  		return ret;
+> =20
+>  	mmu_debug =3D V3D_READ(V3D_MMU_DEBUG_INFO);
+> -	dma_set_mask_and_coherent(dev,
+> +	ret =3D dma_set_mask_and_coherent(dev,
+>  		DMA_BIT_MASK(30 + V3D_GET_FIELD(mmu_debug, V3D_MMU_PA_WIDTH)));
+> +	if (ret)
+> +		return ret;
+> +
+lgtm, thanks!
 
-Yep, but I'm not the one that can do the installation, our q&a team
-does that. They are aware of the problem now, but it may take a while
-to solve due to holidays etc.
+Reviewed-by: Melissa Wen <mwen@igalia.com>
 
-I believe -stable team should be more conservative and should not
-introduce regressions like this.
+>  	v3d->va_width =3D 30 + V3D_GET_FIELD(mmu_debug, V3D_MMU_VA_WIDTH);
+> =20
+>  	ident1 =3D V3D_READ(V3D_HUB_IDENT1);
+> --=20
+> 2.25.1
+>=20
 
-Best regards,
-								Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---fdj2RfSjLxBAspz7
+--s3thnckzmlsys6w7
 Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
 
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
 
-iEYEARECAAYFAmHWwXIACgkQMOfwapXb+vK72gCgswvnB1KvNlN6zFVbXeHfvM9J
-kz0AoKqaz1qJDBeVL9LFHN4/h8Wz23gK
-=aB+j
+iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmHWwdAACgkQwqF3j0dL
+ehy2gw//ZJ0z5G9jOTYd6pvNxGfdywfficIfI1XLM+vWjR0di6fVZZOA9o3C4Npn
+TosqzsaxxSvRcXbEnmdrpx8/MdlID3/EAGWYtRgC9Du14CPi2nygQXHCsgBHaZhZ
+vkpTr7s/+V9BNeHaNz3owp+x4HxWCDNugTHxDYb+c4o1xe3mfISwl6b5gp2UlEd8
+2ihBGAzd2k1k2j4X+qcH+icMqfY9wVdNvvdxARxYgoRhawKFGzwRM/B9NPlOAl3m
+smMZZP7xEdmzAm+56zMU0EOkeDHyzrXRdXhSAIuSbn8OvB2fm5PNcIJbrzZfSO+p
+eQjpV7Bha7sSpAHJItdbd/HfODhj6TFr6+m0JbvMfLLF1oFIL+bTeLeSYaMoa/Ak
+fzAYK3qE7DsKtcSZIO3ukvpQP87CUZEW+06exs3iOUiGY543shXrRADQwzvt5n6D
+rYgm4r6cA5Y+I9s4fFJzrilIkwh3wjsT2t5bXix+Wu9rbR86Su9Qh789dECYe1YN
+BzqxoatFOoDbGLD+yVUAeG2mDfQgAXGTUNLwssBTNKzlsrHiUuhtGoG08/u6tal2
+mGNeVYElJk8Bql+13B/Gvch5tNmtgVafIZ2WXuXk5cFjo9+OYcXlx4I3d2itXq8Z
+2zMaLmWLq3gTteGu/e5pQLOxUu0B3Zfh5mlLqPV1zEXSXNguJz4=
+=tP5D
 -----END PGP SIGNATURE-----
 
---fdj2RfSjLxBAspz7--
+--s3thnckzmlsys6w7--

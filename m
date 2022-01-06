@@ -2,127 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3045486A65
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 20:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D6D486A6B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 20:16:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243250AbiAFTPd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Jan 2022 14:15:33 -0500
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:34181 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243146AbiAFTPb (ORCPT
+        id S243267AbiAFTQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 14:16:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38320 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243235AbiAFTQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 14:15:31 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 71CA0E0008;
-        Thu,  6 Jan 2022 19:15:28 +0000 (UTC)
-Date:   Thu, 6 Jan 2022 20:15:26 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Alexander Aring <alex.aring@gmail.com>
-Cc:     David Girault <David.Girault@qorvo.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        linux-wpan - ML <linux-wpan@vger.kernel.org>,
-        Romuald Despres <Romuald.Despres@qorvo.com>,
-        Frederic Blain <Frederic.Blain@qorvo.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        kernel list <linux-kernel@vger.kernel.org>
-Subject: Re: [net-next 17/18] net: mac802154: Let drivers provide their own
- beacons implementation
-Message-ID: <20220106201526.7e513f2f@xps13>
-In-Reply-To: <CAB_54W4Z1KgT+Cx0SXptvkwYK76wDOFTueFUFF4e7G_ABP7kkA@mail.gmail.com>
-References: <20211222155743.256280-1-miquel.raynal@bootlin.com>
-        <20211222155743.256280-18-miquel.raynal@bootlin.com>
-        <CAB_54W7o5b7a-2Gg5ZnzPj3o4Yw9FOAxJfykrA=LtpVf9naAng@mail.gmail.com>
-        <SN6PR08MB4464D7124FCB5D0801D26B94E0459@SN6PR08MB4464.namprd08.prod.outlook.com>
-        <CAB_54W6ikdGe=ZYqOsMgBdb9KBtfAphkBeu4LLp6S4R47ZDHgA@mail.gmail.com>
-        <20220105094849.0c7e9b65@xps13>
-        <CAB_54W4Z1KgT+Cx0SXptvkwYK76wDOFTueFUFF4e7G_ABP7kkA@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Thu, 6 Jan 2022 14:16:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093EDC061245;
+        Thu,  6 Jan 2022 11:16:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F33F61DD7;
+        Thu,  6 Jan 2022 19:16:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84290C36AE3;
+        Thu,  6 Jan 2022 19:16:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641496593;
+        bh=G97zcGNT4PSbx/Vz5SKLIe9/ZkwzVvng4rdqvkDNeyA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NbeFU9IuZUqE3+Wn52ChE76+yv2AL2GQdBNaoiivlrSvryNCyQY21FqLQe6K+jJHB
+         bBlixQTvP4SrR8rysdXniug7GNWXUEjWEZdq75nQO6++f39ejwKJv+1wsy2og9MmP8
+         3mkKpVJA3sWMED9YqsnWU8zIYdMSonvWqnoSNdhRdz+aoQ82aVkxeyJuqqYbTJVPo0
+         +mfNp+er94q7FOkF4I5ABc8yb7Y/1isZXWOsFUqT6VqPhlMU4w9T5/7fc6CR1NQUoH
+         dawHt/4qG0OFNY5PCsOyvVIORGJJlQIb/YasjoncGij6U4rvYEdkETHpoRalJQRjEi
+         gpDXnRbul2wPg==
+Date:   Thu, 6 Jan 2022 21:16:28 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        James Morris <jmorris@namei.org>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Andreas Rammhold <andreas@rammhold.de>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>
+Subject: Re: [PATCH v8 0/5] Enable root to update the blacklist keyring
+Message-ID: <YddADJJNLDlQAYRW@iki.fi>
+References: <20210712170313.884724-1-mic@digikod.net>
+ <7e8d27da-b5d4-e42c-af01-5c03a7f36a6b@digikod.net>
+ <YcGVZitNa23PCSFV@iki.fi>
+ <5030a9ff-a1d1-a9bd-902a-77c3d1d87446@digikod.net>
+ <Ydc/E3S2vmtDOnpw@iki.fi>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Ydc/E3S2vmtDOnpw@iki.fi>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexander,
-
-alex.aring@gmail.com wrote on Wed, 5 Jan 2022 19:23:04 -0500:
-
-> Hi,
+On Thu, Jan 06, 2022 at 09:12:22PM +0200, Jarkko Sakkinen wrote:
+> On Tue, Jan 04, 2022 at 04:56:36PM +0100, MickaÎl Sala¸n wrote:
+> > 
+> > On 21/12/2021 09:50, Jarkko Sakkinen wrote:
+> > > On Mon, Dec 13, 2021 at 04:30:29PM +0100, MickaÎl Sala¸n wrote:
+> > > > Hi Jarkko,
+> > > > 
+> > > > Since everyone seems OK with this and had plenty of time to complain, could
+> > > > you please take this patch series in your tree? It still applies on
+> > > > v5.16-rc5 and it is really important to us. Please let me know if you need
+> > > > something more.
+> > > > 
+> > > > Regards,
+> > > >   MickaÎl
+> > > 
+> > > I'm off-work up until end of the year, i.e. I will address only important
+> > > bug fixes and v5.16 up until that.
+> > > 
+> > > If any of the patches is yet missing my ack, feel free to
+> > > 
+> > > Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > 
+> > Thanks Jarkko. Can you please take it into your tree?
 > 
-> On Wed, 5 Jan 2022 at 03:48, Miquel Raynal <miquel.raynal@bootlin.com> wrote:
-> >
-> > Hi Alexander,
-> >
-> > alex.aring@gmail.com wrote on Thu, 30 Dec 2021 14:48:41 -0500:
-> >  
-> > > Hi,
-> > >
-> > > On Thu, 30 Dec 2021 at 12:00, David Girault <David.Girault@qorvo.com> wrote:  
-> > > >
-> > > > Hi Alexander,
-> > > >
-> > > > At Qorvo, we have developped a SoftMAC driver for our DW3000 chip that will benefit such API.
-> > > >  
-> > > Do you want to bring this driver upstream as well? Currently those
-> > > callbacks will be introduced but no user is there.  
-> >
-> > I think so far the upstream fate of the DW3000 driver has not been ruled
-> > out so let's assume it won't be upstreamed (at least not fully), that's
-> > also why we decided to begin with the hwsim driver.
-> >  
-> 
-> ok.
-> 
-> > However, when designing this series, it appeared quite clear that any
-> > hardMAC driver would need this type of interface. The content of the
-> > interface, I agree, could be further discussed and even edited, but the
-> > main idea of giving the information to the phy driver about what is
-> > happening regarding eg. scan operations or beacon frames, might make
-> > sense regardless of the current users, no?
-> >  
-> 
-> A HardMAC driver does not use this driver interface... but there
-> exists a SoftMAC driver for a HardMAC transceiver. This driver
-> currently works because we use dataframes only... It will not support
-> scanning currently and somehow we should make iit not available for
-> drivers like that and for drivers which don't set symbol duration.
-> They need to be fixed.
+> I can yes, as I need to anyway do a revised PR for v5.17, as one commit
+> in my first trial had a truncated fixes tag.
 
-My bad. I did not look at it correctly. I made a mistake when talking
-about a hardMAC.
+Please check:
 
-Instead, it is a "custom" low level MAC layer. I believe we can compare
-the current mac802154 layer mostly to the MLME that is mentioned in the
-spec. Well here the additional layer that needs these hooks would be
-the MCPS. I don't know if this will be upstreamed or not, but the need
-for these hooks is real if such an intermediate low level MAC layer
-gets introduced.
+git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
 
-In v2 I will get rid of the two patches adding "driver access" to scans
-and beacons in order to facilitate the merge of the big part. Then we
-will have plenty of time to discuss how we can create such an interface.
-Perhaps I'll be able to propose more code as well to make use of these
-hooks, we will see.
-
-> > This being said, if other people decide to upstream a hardMAC driver
-> > and need these hooks to behave a little bit differently, it's their
-> > right to tweak them and that would also be part of the game.
-> >
-> > Although we might not need these hooks in a near future at all if we
-> > move to the filtering modes, because the promiscuous call with the
-> > specific level might indicate to the device how it should configure
-> > itself already.
-> >  
-> 
-> My concern is that somebody else might want to remove those callbacks
-> because they are not used.
-
-Yes, this is likely to happen quickly because of robots :)
-
-Thanks,
-Miqu√®l
+/Jarkko

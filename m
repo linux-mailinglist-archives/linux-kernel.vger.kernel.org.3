@@ -2,128 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 522B9486085
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 07:18:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35E46486079
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 07:07:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234561AbiAFGSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 01:18:15 -0500
-Received: from mga17.intel.com ([192.55.52.151]:15450 "EHLO mga17.intel.com"
+        id S234378AbiAFGHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 01:07:12 -0500
+Received: from mga07.intel.com ([134.134.136.100]:19763 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229560AbiAFGSN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 01:18:13 -0500
+        id S229560AbiAFGHM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Jan 2022 01:07:12 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641449893; x=1672985893;
+  t=1641449232; x=1672985232;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=/3jkJMJJH3hTPBzfkr/jc+jsdiPQPPhIDNwCKzGk62U=;
-  b=VRspQErV2neUJm/dcNgfM5X+DU9vllirHCYOCrTKZwnUagvnm5mma+Ie
-   ZGflDaAVIvO/b/sXJe4dHaMEcfUAiaukQp1YPo4Hzd0plsS8Pi9dAc8TR
-   xs0zcRv0iFSC2iqIc9cdK9zB2Rm+MPEV1zUuU8B9ZiP4NZsI/xu+n6rNy
-   BMZxhMJ/17IzZjWI81DhuUc4ihXDcBH8x0oSJtYCXVgFpteGIQPg9a1F2
-   TNbQcmOwORMYMMtDhnu8GrgryzS2UmMkIuyONOxO020Z2bT+zMlhoFb8I
-   X/vDNPBY+Sub7k2eNtv/zvjBTzUZ0wNfcM0ez60cdgnmqL54U5naqi4Ai
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="223283124"
+  bh=TavuDjlr6ehK951KTTK7qs2mHQh60DUn8Pis0q2fbio=;
+  b=IyF6opBv4wxA3IyUfhSh5rTjG61aQM0BsVy+wrfiGKvWcc29d9Fc/cmU
+   dxPDJqJzF26eFF1jBkhs5yJwf/egoTo+DJuwkXnRzXPqpeGF/rOoITJ+E
+   8nmRg/+HstpzyDX/2+IhgoBKy7prVzZazox+Oy+c2Qa9xTHbDlzgOs5KU
+   nom2QeGYm/dYMoICdX402a6ihHnH6WxCABfP8Ofqzg2pL4wavHpxsHAWX
+   u3+Ow701hI3cXWpSwJJ8Rd41UPHXq7jHBnSxu7pgSRiWLrEMfLqGn/6DI
+   T/+1S39A7n2lfWkvMYQYRF8YWQpulRylOYOVXeCo9fIxu1pN/CQ24U7TH
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="305951829"
 X-IronPort-AV: E=Sophos;i="5.88,266,1635231600"; 
-   d="scan'208";a="223283124"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 22:18:09 -0800
+   d="scan'208";a="305951829"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 22:07:10 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,266,1635231600"; 
-   d="scan'208";a="621413992"
-Received: from yangzhon-virtual.bj.intel.com (HELO yangzhon-Virtual) ([10.238.145.56])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-SHA256; 05 Jan 2022 22:18:04 -0800
-Date:   Thu, 6 Jan 2022 14:02:55 +0800
-From:   Yang Zhong <yang.zhong@intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, corbet@lwn.net, shuah@kernel.org,
-        seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, jing2.liu@intel.com,
-        guang.zeng@intel.com, wei.w.wang@intel.com, yang.zhong@intel.com
-Subject: Re: [PATCH v5 07/21] x86/fpu: Provide
- fpu_enable_guest_xfd_features() for KVM
-Message-ID: <20220106060255.GA2395@yangzhon-Virtual>
-References: <20220105123532.12586-1-yang.zhong@intel.com>
- <20220105123532.12586-8-yang.zhong@intel.com>
- <c99d0b82-a44f-db8e-3f81-93d2394f9a02@redhat.com>
+   d="scan'208";a="611725351"
+Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 05 Jan 2022 22:07:07 -0800
+Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n5LvX-000HOj-7V; Thu, 06 Jan 2022 06:07:07 +0000
+Date:   Thu, 6 Jan 2022 14:06:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Charan Teja Reddy <quic_charante@quicinc.com>, hughd@google.com,
+        akpm@linux-foundation.org, willy@infradead.org, vbabka@suse.cz,
+        rientjes@google.com, mhocko@suse.com, surenb@google.com,
+        shakeelb@google.com, linux-mm@kvack.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED for
+ shmem
+Message-ID: <202201061353.4vrJlOAk-lkp@intel.com>
+References: <1641395025-7922-1-git-send-email-quic_charante@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c99d0b82-a44f-db8e-3f81-93d2394f9a02@redhat.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+In-Reply-To: <1641395025-7922-1-git-send-email-quic_charante@quicinc.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 02:06:40PM +0100, Paolo Bonzini wrote:
-> On 1/5/22 13:35, Yang Zhong wrote:
-> >+int fpu_enable_guest_xfd_features(struct fpu_guest *guest_fpu, u64 xfeatures)
-> >+{
-> >+	lockdep_assert_preemption_enabled();
-> >+
-> 
-> The old fpu_update_guest_perm_features(guest_fpu) is equivalent to
-> 
-> 	fpu_enable_guest_xfd_features(guest_fpu, guest_fpu->perm);
-> 
-> Missing doc comment:
-> 
-> /*
->  * fpu_enable_guest_xfd_features - Enable xfeatures according to guest perm
->  * @guest_fpu:         Pointer to the guest FPU container
->  * @xfeatures:         Features requested by guest CPUID
->  *
->  * Enable all dynamic xfeatures according to guest perm and requested CPUID.
->  * Invoked if the caller wants to conservatively expand fpstate buffer instead
->  * of waiting until XCR0 or XFD MSR is written.
->  *
->  * Return: 0 on success, error code otherwise
->  */
-> 
-> Also, the check for 32-bit is slightly imprecise:
-> 
-> 	/* Dynamic xfeatures are not supported with 32-bit kernels. */
-> 	if (!IS_ENABLED(CONFIG_X86_64))
-> -		return 0;
-> +		return -EINVAL;
-> 
-> since we only get here with xfeatures != 0 (if it compiles, just removing
-> the IS_ENABLED check altogether would be even better).  With these changes,
-> 
+Hi Charan,
 
-  Paolo, I did 32 bit kernel build tests
+Thank you for the patch! Yet something to improve:
 
-  (1). w/ IS_ENABLED(CONFIG_X86_64)
+[auto build test ERROR on hnaz-mm/master]
 
-      if (!IS_ENABLED(CONFIG_X86_64))
-      	return -EINVAL; 
-    
-     This 32 bit kernel can successfully build.
+url:    https://github.com/0day-ci/linux/commits/Charan-Teja-Reddy/mm-shmem-implement-POSIX_FADV_-WILL-DONT-NEED-for-shmem/20220105-230604
+base:   https://github.com/hnaz/linux-mm master
+config: hexagon-randconfig-r013-20220105 (https://download.01.org/0day-ci/archive/20220106/202201061353.4vrJlOAk-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d5b6e30ed3acad794dd0aec400e617daffc6cc3d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/6bdb2636187d2f6cb78d6cdc05f2b7e0b79c750a
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Charan-Teja-Reddy/mm-shmem-implement-POSIX_FADV_-WILL-DONT-NEED-for-shmem/20220105-230604
+        git checkout 6bdb2636187d2f6cb78d6cdc05f2b7e0b79c750a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-  (2). remove IS_ENABLED(CONFIG_X86_64)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-      The 32 bit kernel build is failed, and the error as:
+All errors (new ones prefixed by >>):
 
-      ld: arch/x86/kernel/fpu/core.o: in function `fpu_enable_guest_xfd_features':
-/root/amx/v5/kvm/arch/x86/kernel/fpu/core.c:278: undefined reference to `__xfd_enable_feature'
-
-      Seems we need define 32 bit API for __xfd_enable_feature().
-
-   I also tried (1) in desktop, but I could not reboot the machine after installed 32 bit kernel.
-
-   thanks a lot!
-
-   Yang 
+>> mm/shmem.c:4000:13: error: use of undeclared identifier 'shmem_fadvise'; did you mean 'shmem_file'?
+           .fadvise        = shmem_fadvise,
+                             ^~~~~~~~~~~~~
+                             shmem_file
+   include/linux/shmem_fs.h:118:20: note: 'shmem_file' declared here
+   static inline bool shmem_file(struct file *file)
+                      ^
+>> mm/shmem.c:4000:13: error: incompatible function pointer types initializing 'int (*)(struct file *, loff_t, loff_t, int)' (aka 'int (*)(struct file *, long long, long long, int)') with an expression of type 'bool (struct file *)' (aka '_Bool (struct file *)') [-Werror,-Wincompatible-function-pointer-types]
+           .fadvise        = shmem_fadvise,
+                             ^~~~~~~~~~~~~
+   2 errors generated.
 
 
+vim +4000 mm/shmem.c
 
+  3987	
+  3988	static const struct file_operations shmem_file_operations = {
+  3989		.mmap		= shmem_mmap,
+  3990		.get_unmapped_area = shmem_get_unmapped_area,
+  3991	#ifdef CONFIG_TMPFS
+  3992		.llseek		= shmem_file_llseek,
+  3993		.read_iter	= shmem_file_read_iter,
+  3994		.write_iter	= generic_file_write_iter,
+  3995		.fsync		= noop_fsync,
+  3996		.splice_read	= generic_file_splice_read,
+  3997		.splice_write	= iter_file_splice_write,
+  3998		.fallocate	= shmem_fallocate,
+  3999	#endif
+> 4000		.fadvise	= shmem_fadvise,
+  4001	};
+  4002	
 
-
-> Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
-> 
-> Thanks,
-> 
-> Paolo
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

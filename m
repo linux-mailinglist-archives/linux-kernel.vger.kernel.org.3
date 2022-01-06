@@ -2,92 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D1404862C2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 11:15:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1FF74862C4
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 11:16:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237794AbiAFKPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 05:15:21 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43242 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236733AbiAFKPV (ORCPT
+        id S237810AbiAFKQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 05:16:22 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:39046 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233080AbiAFKQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 05:15:21 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A801D61ACC;
-        Thu,  6 Jan 2022 10:15:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B729C36AE5;
-        Thu,  6 Jan 2022 10:15:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641464120;
-        bh=Acccc+nQYIhw1wmhujPhT2Fi30D77KhYzu2eqMM2vHI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=gqdE1X9fm8lPRpZHMl5rUKVqs6uamWqYw4J3kN6i7l3ODxldjcohD0akPTV7fB2f+
-         a9noXQUHOSLFx4toY9Vv31+JeEeiYS3AIrTJny7Q1xXAM61WtlRWxerypr+lOh81a7
-         GqBm7TV4x7ILJJ3Z/keyeG6AUX4L64eZVNKLznXg=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-edac@vger.kernel.org
-Subject: [PATCH] x86/CPU/AMD: use default_groups in kobj_type
-Date:   Thu,  6 Jan 2022 11:15:16 +0100
-Message-Id: <20220106101516.3309908-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 6 Jan 2022 05:16:21 -0500
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 398E61C0B79; Thu,  6 Jan 2022 11:16:20 +0100 (CET)
+Date:   Thu, 6 Jan 2022 11:16:19 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 5.10 000/132] 5.10.85-rc1 review
+Message-ID: <20220106101618.GA13602@amd>
+References: <20211213092939.074326017@linuxfoundation.org>
+ <20211213103536.GC17683@duo.ucw.cz>
+ <YbdAE9r9GXZlnyfr@kroah.com>
+ <CAEUSe794fvuFwWPDvTeK1TRZw3OizSWOdDsVzVdj+SuWZA_LxA@mail.gmail.com>
+ <CAEUSe7-CD5jvro+7DgM-6N_G-Ab_ovNFLG1b_F_ZsTAYJ23D-A@mail.gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1638; h=from:subject; bh=Acccc+nQYIhw1wmhujPhT2Fi30D77KhYzu2eqMM2vHI=; b=owGbwMvMwCRo6H6F97bub03G02pJDInXDhremXUofHt1vJxpx91svfq4c4Jsn9mEz1lP+HTjgtuV vSIrOmJZGASZGGTFFFm+bOM5ur/ikKKXoe1pmDmsTCBDGLg4BWAin0IYFmzfwNcmysV1/fgKoYLuU8 W7inm0tjDMD9p0VHTJ0vSTeduTYxd/EA+sbfzYBgA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="fdj2RfSjLxBAspz7"
+Content-Disposition: inline
+In-Reply-To: <CAEUSe7-CD5jvro+7DgM-6N_G-Ab_ovNFLG1b_F_ZsTAYJ23D-A@mail.gmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are currently 2 ways to create a set of sysfs files for a
-kobj_type, through the default_attrs field, and the default_groups
-field.  Move the AMD mce sysfs code to use default_groups field which
-has been the preferred way since aa30f47cf666 ("kobject: Add support for
-default attribute groups to kobj_type") so that we can soon get rid of
-the obsolete default_attrs field.
 
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: linux-edac@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- arch/x86/kernel/cpu/mce/amd.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+--fdj2RfSjLxBAspz7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index fc85eb17cb6d..08c64884b0a5 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -1171,6 +1171,7 @@ static struct attribute *default_attrs[] = {
- 	NULL,	/* possibly interrupt_enable if supported, see below */
- 	NULL,
- };
-+ATTRIBUTE_GROUPS(default);
- 
- #define to_block(k)	container_of(k, struct threshold_block, kobj)
- #define to_attr(a)	container_of(a, struct threshold_attr, attr)
-@@ -1207,7 +1208,7 @@ static void threshold_block_release(struct kobject *kobj);
- 
- static struct kobj_type threshold_ktype = {
- 	.sysfs_ops		= &threshold_ops,
--	.default_attrs		= default_attrs,
-+	.default_groups		= default_groups,
- 	.release		= threshold_block_release,
- };
- 
--- 
-2.34.1
+Hi!
 
+> I wonder if you saw this message of mine the other day.
+
+Seen the message.
+
+> > > > I'm getting a lot of build failures -- missing gmp.h:
+> > > >
+> > > >   UPD     include/generated/utsrelease.h
+> > > > 1317In file included from /builds/hVatwYBy/68/cip-project/cip-testi=
+ng/linux-stable-rc-ci/gcc/gcc-8.1.0-nolibc/arm-linux-gnueabi/bin/../lib/gcc=
+/arm-linux-gnueabi/8.1.0/plugin/include/gcc-plugin.h:28:0,
+> > > > 1318                 from scripts/gcc-plugins/gcc-common.h:7,
+> > > > 1319                 from scripts/gcc-plugins/arm_ssp_per_task_plug=
+in.c:3:
+> > > > 1320/builds/hVatwYBy/68/cip-project/cip-testing/linux-stable-rc-ci/=
+gcc/gcc-8.1.0-nolibc/arm-linux-gnueabi/bin/../lib/gcc/arm-linux-gnueabi/8.1=
+=2E0/plugin/include/system.h:687:10: fatal error: gmp.h: No such file or di=
+rectory
+> > > > 1321 #include <gmp.h>
+> > > > 1322          ^~~~~~~
+> > > > 1323compilation terminated.
+> > > > 1324scripts/gcc-plugins/Makefile:47: recipe for target 'scripts/gcc=
+-plugins/arm_ssp_per_task_plugin.so' failed
+> > > > 1325
+> > > >
+> > > > https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tre=
+e/linux-5.10.y
+> > >
+> > > What gcc plugins are you trying to build with?
+> >
+> > We saw a similar problem with mainline/next about a year ago, after
+> > v5.10 was released. In our case it failed with gmp.h because
+> > libmpc-dev was not installed on the host; then libiberty-dev was
+> > needed too
+> [...]
+>=20
+> We installed libgmp-dev, libmpc-dev and libiberty-dev. That generally
+> helps. FWIW, this is needed for 5.11+.
+
+Yep, but I'm not the one that can do the installation, our q&a team
+does that. They are aware of the problem now, but it may take a while
+to solve due to holidays etc.
+
+I believe -stable team should be more conservative and should not
+introduce regressions like this.
+
+Best regards,
+								Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--fdj2RfSjLxBAspz7
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAmHWwXIACgkQMOfwapXb+vK72gCgswvnB1KvNlN6zFVbXeHfvM9J
+kz0AoKqaz1qJDBeVL9LFHN4/h8Wz23gK
+=aB+j
+-----END PGP SIGNATURE-----
+
+--fdj2RfSjLxBAspz7--

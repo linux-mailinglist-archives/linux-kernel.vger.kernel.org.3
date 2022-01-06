@@ -2,99 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 078D048642E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 13:16:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA99486430
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Jan 2022 13:16:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238551AbiAFMQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Jan 2022 07:16:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55072 "EHLO
+        id S238598AbiAFMQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Jan 2022 07:16:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238347AbiAFMQK (ORCPT
+        with ESMTP id S238347AbiAFMQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Jan 2022 07:16:10 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5290CC061245
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 04:16:10 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id c9-20020a17090a1d0900b001b2b54bd6c5so8277266pjd.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 04:16:10 -0800 (PST)
+        Thu, 6 Jan 2022 07:16:32 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E21C061245
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Jan 2022 04:16:31 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id r17so4420426wrc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Jan 2022 04:16:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ezhOL9IQmLkdhn7bT2hYUZscONiXzj3Zulc4AqaqV74=;
-        b=VWuYcofoSfJWAV4N8jaIG1D93UCOzzLF4pnjMZckQdHuwfgaz+x204qWdN4QF4YoRD
-         jjXdv6nQCa0cdQvhgmsH706TQG5JQqC2UipfolVHtapLb6VJ6mjx3mvAMAvJ9Ooi5nB6
-         CRsCNuUmRVJtehrSnmYuebPoAmJSgHGuYmCNi47cAYBd27WmmUPIrHfBja4EQVUVAYvE
-         xHEMWdoc093Hihp5ksbATTC/pSlSafiFyvDCnDXh1YrfV/2OCzLMdP60JaQ0C2aNaVkj
-         tim9w33+IK49XDuWb+ftGMo9xZMAsOF+xNjlHqYS+VRwvF0me3YYKY1Vt79vdnY/4VeR
-         RXUg==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=cNva4ekHb1mto7cd3Pts0E9i1PphtyKKgu0TDFlUPns=;
+        b=G4tRh5hznsgzcdqlGnLe0CSzoY/y4QeBNHlOI2isfo1K5/YCCbdCXv3DKH/Isknxnd
+         jDa1w7eLk6V1S9OIbL7MS7Nq0vFNaBEkWpedPldd4HCthxVhqgEF0JP2PMHor9yBfk2p
+         BQvE7Y+nwGtrcfRE+KBDeyY73rWdnx9DCmd/lnwpYBceSDRLd1D5b1kArMuQdjnVNbrG
+         ABxnagK3qAIBepgCiLfcPgQUqo+pdKs+cY5FEFOMABbDnxEV/F3bHqMOtcaOnWR5KYbW
+         MTM1wdJxXHwbi+1LTB8TkdsUKFSBqdUiPs7Fjb3ORyWKBYp5grEq1kxzNz6002KB9hd5
+         Iuqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ezhOL9IQmLkdhn7bT2hYUZscONiXzj3Zulc4AqaqV74=;
-        b=Culg7lFyMKDcs8HuFmsqvCSAlrFMKxrfPrWzWgKwmM+rv6F1KlAzESfzhEncBrV6Dk
-         PQ4bPiciWc8pdxyyOZeYJ44KXHpaL5b8DFyRXg5eBlHEF75MhbOucu374w/MKbWybmiv
-         9XCzvoy4Aho5p0O/SPTyR6Xk0PG28EXNzmqAAlrJh+21LUu73wZ+lDgrizG7slep0ipe
-         6FXzhQmkT9Jcw7zjnjQOcnkExlC9VfY5JpVo9rcPwbDdr5zsoN5L+O68XmtIectWfvwh
-         QaIlOCUqd61wkM9dWmIFtxGZTs5huqZkRkBpwwF81ud0dTrjP2syOoz3WiRJ82K5ZknE
-         GacA==
-X-Gm-Message-State: AOAM531JHOyjCDm9+5oWr/Hrx4863R4WAZr1u1WN2A5jUZYJUGJI2PU5
-        QuwE+AhK0m08oTcvyLSOz6s=
-X-Google-Smtp-Source: ABdhPJzV2qd7Kyc2ZIOHuzuuD3AFWMO67x7jgDMNj2Z9+hCizMBZuXOekzZfGXgf9RDEl+VUGs7ztA==
-X-Received: by 2002:a17:90b:4f4a:: with SMTP id pj10mr9731709pjb.112.1641471369839;
-        Thu, 06 Jan 2022 04:16:09 -0800 (PST)
-Received: from 8345e2a12d0c ([159.226.95.43])
-        by smtp.gmail.com with ESMTPSA id b5sm2401828pfm.155.2022.01.06.04.16.07
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 06 Jan 2022 04:16:09 -0800 (PST)
-Date:   Thu, 6 Jan 2022 12:16:05 +0000
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-phy@lists.infradead.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] phy: mediatek: Fix missing check in mtk_mipi_tx_probe
-Message-ID: <20220106121524.GA25165@8345e2a12d0c>
-References: <20211224082103.7658-1-linmq006@gmail.com>
- <CAAOTY_-7-BrnkPk_5V5y20F6fX3X8Vm0tcYAA=1DNCnxjvNF8A@mail.gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=cNva4ekHb1mto7cd3Pts0E9i1PphtyKKgu0TDFlUPns=;
+        b=mhOzRm09SGACp2jSE+JBQDakLMg+GG6QPeFxNEUyLHEDmvZdaGPZ2n+Fq0JqNXOZSo
+         5HJstrDrzKdY7iiKi+yfRnVCN7CCvMpepjVvuYnB4Q4dAQek3V52IPnLpKflW3QnQMVE
+         u803BmQRnUMthaikDfVChxYeINkY0xDXanQbZ3U9CThSwxsyVSj7RwobNkZNFC/Abdo8
+         8Gm03VTcpdgk8PAGSZfBUyf0woqwz189iuUIPjiNUQVCtb6eqrPxzEMnQyL5xfWlyfIV
+         ww1MeaEVGiDoSIlHv6yPzuU15qxbf7u3eWxYjIcVM7V12JhqcU3kd+EMJoBHUETzfV5P
+         oxkg==
+X-Gm-Message-State: AOAM532QpB14+VZPOM7bGUtU4yY7/PFsg/C9W+731fR8Z4nl7hpeJvW3
+        ZtUInxqpMrZzCOgTT8HZznuKpA==
+X-Google-Smtp-Source: ABdhPJxHDBAyaNAFX27yjyxA6SMn1pal0lkcgvL88/SE4KwSXlVeA4BwtxXmxMNy3Fc5XfZbpxkZgw==
+X-Received: by 2002:a05:6000:1210:: with SMTP id e16mr1798084wrx.434.1641471390233;
+        Thu, 06 Jan 2022 04:16:30 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:499e:b45e:e5e1:2c33? ([2a01:e34:ed2f:f020:499e:b45e:e5e1:2c33])
+        by smtp.googlemail.com with ESMTPSA id b2sm2076441wrd.35.2022.01.06.04.16.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jan 2022 04:16:29 -0800 (PST)
+Subject: Re: [PATCH v2][RFC 1/2] Implement Ziegler-Nichols Heuristic
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org, amitk@kernel.org,
+        Chetankumar Mistry <chetan.mistry@arm.com>,
+        rui.zhang@intel.com, linux-pm@vger.kernel.org
+References: <20211217184907.2103677-1-chetan.mistry@arm.com>
+ <23c3480a-c46b-f049-5758-d11124367190@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <1b6047eb-2f14-ddde-4712-145a26dc8aa5@linaro.org>
+Date:   Thu, 6 Jan 2022 13:16:28 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAOTY_-7-BrnkPk_5V5y20F6fX3X8Vm0tcYAA=1DNCnxjvNF8A@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <23c3480a-c46b-f049-5758-d11124367190@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Chun-Kuang:
 
-On Fri, Dec 31, 2021 at 12:31:33AM +0800, Chun-Kuang Hu wrote:
-> > diff --git a/drivers/phy/mediatek/phy-mtk-mipi-dsi.c b/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
-> > index 28ad9403c441..67b005d5b9e3 100644
-> > --- a/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
-> > +++ b/drivers/phy/mediatek/phy-mtk-mipi-dsi.c
-> > @@ -146,6 +146,8 @@ static int mtk_mipi_tx_probe(struct platform_device *pdev)
-> >                 return -ENOMEM;
-> >
-> >         mipi_tx->driver_data = of_device_get_match_data(dev);
-> > +       if (!mipi_tx->driver_data)
+Hi Lukasz,
+
+On 06/01/2022 12:54, Lukasz Luba wrote:
+> Hi Daniel,
 > 
-> I'm confused. mtk_mipi_tx_probe() is called because this device node's
-> compatible match one in mtk_mipi_tx_match[]. So I think the return
-> value of of_device_get_match_data(dev) would not be NULL. If this is
-> true, this checking is redundant.
->
-I think your are right, this checking is redundant. Thanks for your
-reply.
+> Could you have a look at this, please?
 
-Regards,
-Miaoqian.
+Yes, I had a quick look at the code and went to the algorithm description.
+
+Still digesting ...
+
+> On 12/17/21 6:49 PM, Chetankumar Mistry wrote:
+>> Implement the Ziegler-Nichols Heuristic algorithm to better
+>> estimate the PID Coefficients for a running platform.
+>> The values are tuned to minimuse the amount of overshoot in
+>> the temperature of the platform and subsequently minimise
+>> the number of switches for cdev states.
+>>
+>> Signed-off-by: Chetankumar Mistry <chetan.mistry@arm.com>
+> 
+> 
+> This is the continuation of the previous idea to have
+> better k_* values. You might remember this conversation [1].
+> 
+> I've spent some time researching papers how and what can be done
+> in this field and if possible to plumb in to the kernel.
+> We had internal discussions (~2017) of one method fuzzy-logic that I
+> found back then, but died at the begging not fitting into this
+> IPA kernel specific environment and user-space. Your suggestion with
+> observing undershooting and overshooting results sparked better idea.
+> I thought it's worth to invest in it but I didn't have
+> time. We are lucky, Chetan was designated to help me and
+> experiment/implement/test these ideas and here is the patch set.
+> 
+> He's chosen the Ziegler-Nichols method, which shows really
+> good results in benchmarks (Geekbench and GFXbench on hikey960 Android).
+> The improved performance in Geekbench is ~10% (vs. old IPA).
+
++10% perf improvements sounds great. What about the temperature
+mitigation (temp avg + stddev) ?
+
+> The main question from our side is the sysfs interface
+> which we could be used to trigger this algorithm for
+> better coefficients estimations.
+> We ask user to echo to some sysfs files in thermal zone
+> and start his/her workload. This new IPA 'learns' the system
+> utilization and reaction in temperature. After a few rounds,
+> we get better fitted coefficients.
+> If you need more background about the code or mechanisms, or tests,
+> I'm sure Chetan is happy to provide you those.
+
+I'm worried about the complexity of the algorithm and the overhead implied.
+
+The k_* factors are tied with the system and the thermal setup (fan,
+heatsink, processor, opp, ...). So IIUC when the factors are found, they
+should not change and could be part of the system setup.
+
+Would the algorithm fit better in a separate userspace kernel tooling?
+So we can run it once and find the k_* for a board.
+
+Additionally, the values can be stored in the Documentation for
+different board and a documentation on how to use the tool.
+
+Then up to the SoC vendor to setup the k_* in sysfs, so no need to
+change any interface.
+
+> If you are interested in those analyses we can find a way to share a> .html file with the results from LISA notebook.
+
+Yes,
+
+> We are waiting for your decision regarding the design and user
+> interface.
+> 
+> Regards,
+> Lukasz
+> 
+> [1]
+> https://lore.kernel.org/lkml/42360f0f-5d53-085b-536f-33df93b787ca@arm.com/
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
